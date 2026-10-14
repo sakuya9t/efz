@@ -28,11 +28,41 @@ OBJECTS = {
     }),
 }
 
+# Character classes: (object, class, first address, end address, vtable, constructor,
+# size from the scene code's `new`). Each derives from CPlayer and overrides its virtual
+# slots (named VfN after the slot).
+CHARACTERS = [
+    ('shiori', 'CShiori', 0x4136d0, 0x434060, 0x787df8, 0x422d70, 0x3458),
+]
+
+CPLAYER_SLOT11 = 0x410b70     # the one slot characters inherit
+
+
+def _vtable(addr, n=13):
+    import os
+    import struct
+    import pefile
+    global _IMAGE
+    if '_IMAGE' not in globals():
+        pe = pefile.PE(os.path.join(os.environ['EFZ_DIR'], 'efz.exe'))
+        _IMAGE = pe.get_memory_mapped_image()
+    return [struct.unpack_from('<I', _IMAGE, addr - 0x400000 + 4 * k)[0] for k in range(n)]
+
+
+for _obj, _cls, _lo, _hi, _vt, _ctor, _size in CHARACTERS:
+    _names = {_ctor: f'{_cls}::{_cls}'}
+    for _k, _a in enumerate(_vtable(_vt)):
+        if _a != CPLAYER_SLOT11:
+            _names[_a] = f'{_cls}::Vf{_k}'
+    OBJECTS[_obj] = (_lo, _hi, _cls, _names)
+
 # Inline functions, emitted after the object's other functions: they are defined in a
 # header, and the generator writes them as such.
+INLINE_FROM = {'player': 0x412820}
+
+
 def is_inline(obj, addr):
-    lo, hi, cls, names = OBJECTS[obj]
-    return obj == 'player' and addr >= 0x412820
+    return obj in INLINE_FROM and addr >= INLINE_FROM[obj]
 
 
 # Base classes at a nonzero offset: converting a pointer to them is a null-checked
@@ -43,4 +73,6 @@ BASES = {('CPlayer', 8): 'ObjBase'}
 SIGNATURES = {
     0x412930: ('void', ['ObjBase*']),
     0x412a10: ('void', ['ObjBase*', 'char']),
+    0x412b10: ('void', ['EffectDesc*']),     # CPlayer::Vf9 spawns an object
+    0x413090: ('void', ['EffectDesc*']),
 }

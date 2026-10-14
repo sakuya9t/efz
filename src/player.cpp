@@ -143,7 +143,7 @@ void CPlayer::Unk40e740()
     }
 }
 
-CPlayer::CPlayer(int p1, int p2, int p3, int p4, int p5, char p6)
+CPlayer::CPlayer(int p1, int p2, int p3, int p4, int p5, BYTE p6)
     : unk78(p1)
 {
     int v4;
@@ -373,23 +373,23 @@ void CPlayer::Unk40f580()
 
     v4 = *(short*)((char*)this + 0x2cc);
     if (*(short*)((char*)this + 0x14a) == 0 && *(short*)(*(char**)*(char**)((char*)this + 0x78) + 0x14c) == 0) {
-        if ((double)((char)Unk40ff70() * *((char*)this + 0x50)) * (*(double*)((char*)this + 0x30) + *(double*)((char*)this + 0xb0) + *(double*)(*(char**)*(char**)((char*)this + 0x78) + 0xb8) * (double)(*(int*)(*(char**)*(char**)((char*)this + 0x78) + 0xd0) != 0 && *(short*)((char*)this + 0x14c) == 0)) >= 0.0) {
-            *(double*)((char*)this + 0x20) = (*(double*)((char*)this + 0x30) + *(double*)((char*)this + 0xb0) + *(double*)(*(char**)*(char**)((char*)this + 0x78) + 0xb8) * (double)(*(int*)(*(char**)*(char**)((char*)this + 0x78) + 0xd0) != 0 && *(short*)((char*)this + 0x14c) == 0)) * (double)*((char*)this + 0x50) + *(double*)((char*)this + 0x20);
+        if ((char)Unk40ff70() * *((char*)this + 0x50) * (*(double*)((char*)this + 0x30) + *(double*)((char*)this + 0xb0) + *(double*)(*(char**)*(char**)((char*)this + 0x78) + 0xb8) * (*(int*)(*(char**)*(char**)((char*)this + 0x78) + 0xd0) != 0 && *(short*)((char*)this + 0x14c) == 0)) >= 0.0) {
+            *(double*)((char*)this + 0x20) = (*(double*)((char*)this + 0x30) + *(double*)((char*)this + 0xb0) + *(double*)(*(char**)*(char**)((char*)this + 0x78) + 0xb8) * (*(int*)(*(char**)*(char**)((char*)this + 0x78) + 0xd0) != 0 && *(short*)((char*)this + 0x14c) == 0)) * *((char*)this + 0x50) + *(double*)((char*)this + 0x20);
         }
         if ((double)(((char)((CPlayer*)*(int*)*(char**)((char*)this + 0x78))->Unk40ff70() == 1 && *(double*)(*(char**)*(char**)((char*)this + 0x78) + 0x20) <= 20.0) + 0x14) > *(double*)((char*)this + 0x20)) {
             *(double*)((char*)this + 0x20) = (double)(((char)((CPlayer*)*(int*)*(char**)((char*)this + 0x78))->Unk40ff70() == 1 && *(double*)(*(char**)*(char**)((char*)this + 0x78) + 0x20) <= 20.0) + 0x14);
         } else if ((double)(0x26b - ((char)((CPlayer*)*(int*)*(char**)((char*)this + 0x78))->Unk40ff70() == -1 && *(double*)(*(char**)*(char**)((char*)this + 0x78) + 0x20) >= 619.0)) < *(double*)((char*)this + 0x20)) {
             *(double*)((char*)this + 0x20) = (double)(0x26b - ((char)((CPlayer*)*(int*)*(char**)((char*)this + 0x78))->Unk40ff70() == -1 && *(double*)(*(char**)*(char**)((char*)this + 0x78) + 0x20) >= 619.0));
         }
-        *(double*)((char*)this + 0x28) += *(double*)((char*)this + 0x38);
+        *(double*)((char*)this + 0x28) = *(double*)((char*)this + 0x28) + *(double*)((char*)this + 0x38);
         if (*(double*)((char*)this + 0x28) > 0.0) {
             *(double*)((char*)this + 0x28) = 0.0;
         }
     }
     while (v4 != *(short*)((char*)this + 0x2ca)) {
         if (*(int*)((char*)this + v4 * 4 + 0x3d0) != 0 && (*(short*)((char*)this + 0x14c) <= 0 || *(int*)((char*)this + v4 * 0x98 + 0x558) != 0) && *(short*)((char*)this + v4 * 0x98 + 0x556) == 0 && *(short*)(*(char**)*(char**)((char*)this + 0x78) + 0x14c) == 0) {
-            *(double*)((char*)this + v4 * 0x98 + 0x4e8) += (*(double*)((char*)this + v4 * 0x98 + 0x4f8) + 0.0 * *(double*)((char*)this + v4 * 0x98 + 0x540)) * (double)*((char*)this + v4 * 0x98 + 0x518);
-            *(double*)((char*)this + v4 * 0x98 + 0x4f0) += *(double*)((char*)this + v4 * 0x98 + 0x500);
+            *(double*)((char*)this + v4 * 0x98 + 0x4e8) += (*(double*)((char*)this + v4 * 0x98 + 0x4f8) + 0.0 * *(double*)((char*)this + v4 * 0x98 + 0x540)) * *((char*)this + v4 * 0x98 + 0x518);
+            *(double*)((char*)this + v4 * 0x98 + 0x4f0) = *(double*)((char*)this + v4 * 0x98 + 0x4f0) + *(double*)((char*)this + v4 * 0x98 + 0x500);
         }
         v4++;
         if (v4 >= 0x40) {
@@ -411,7 +411,7 @@ void CPlayer::Unk40f980()
         }
         if (Unk410340() == 0) {
             if (Unk4103a0() != 0) {
-                *(float*)((char*)this + 0x134) -= (float)(1.0 / (double)((*(double*)((char*)this + 0x28) == 0.0) * 4 + 1));
+                *(float*)((char*)this + 0x134) = *(float*)((char*)this + 0x134) - (float)(1.0 / ((*(double*)((char*)this + 0x28) == 0.0) * 4 + 1));
             } else {
                 *(float*)((char*)this + 0x134) -= 0.075f;
             }
@@ -452,7 +452,7 @@ void CPlayer::Unk40f980()
         } else {
             *(short*)((char*)this + 0x140) = 0;
         }
-        *(double*)((char*)this + 0x118) = (double)((Unk410340() + 1) * (Unk4103a0() == 0 && *((char*)this + 0x120) == 0) * ((*(double*)((char*)this + 0x118) < 500.0) * 2 + 1)) / 10.0 + *(double*)((char*)this + 0x118);
+        *(double*)((char*)this + 0x118) = (Unk410340() + 1) * (Unk4103a0() == 0 && *((char*)this + 0x120) == 0) * ((*(double*)((char*)this + 0x118) < 500.0) * 2 + 1) / 10.0 + *(double*)((char*)this + 0x118);
         if (*(double*)((char*)this + 0x118) >= 1000.0 && *((char*)this + 0x120) == 0) {
             *((char*)this + 0x120) = 1;
             *(double*)((char*)this + 0x118) = 1000.0;
@@ -609,7 +609,7 @@ double CPlayer::Unk410480()
 
 double CPlayer::Unk410530()
 {
-    return ((double)*(int*)((char*)this + 0x108) * 0.5 / 10000.0 + 0.5) * *(double*)((char*)this + 0x180);
+    return (*(int*)((char*)this + 0x108) * 0.5 / 10000.0 + 0.5) * *(double*)((char*)this + 0x180);
 }
 
 double CPlayer::Unk410560()
@@ -695,7 +695,7 @@ void CPlayer::Unk410940()
     }
 }
 
-void CPlayer::Unk4109d0(char p1)
+void CPlayer::Unk4109d0(BYTE p1)
 {
     ((Afterimages*)((char*)this + 0x2bc0))->Unk412a10((ObjBase*)this, p1);
 }
@@ -718,7 +718,7 @@ void CPlayer::Unk410a80(int p1, int p2)
     *(int*)(*(char**)((char*)this + 0x7c) + 0x14244) = p2;
 }
 
-void CPlayer::Unk410ac0(char p1, int p2)
+void CPlayer::Unk410ac0(BYTE p1, int p2)
 {
     *((char*)this + 0x30b8) = p1;
     *(int*)((char*)this + 0x30bc) = p2;
@@ -727,7 +727,7 @@ void CPlayer::Unk410ac0(char p1, int p2)
     }
 }
 
-void CPlayer::Unk410b10(char p1, int p2)
+void CPlayer::Unk410b10(BYTE p1, int p2)
 {
     *((char*)this + 0x30c0) = p1;
     *(int*)((char*)this + 0x30c4) = p2;

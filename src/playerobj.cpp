@@ -5,7 +5,7 @@
 #include <string.h>
 #include "efz.h"
 
-void CPlayer::Vf9(int p1)
+void CPlayer::Vf9(EffectDesc* p1)
 {
     *(int*)((char*)this + *(short*)((char*)this + 0x2ca) * 4 + 0x3d0) = 1;
     *(int*)((char*)this + *(short*)((char*)this + 0x2ca) * 4 + 0x2d0) = *(int*)(char*)p1;
@@ -27,7 +27,7 @@ void CPlayer::Vf9(int p1)
     *(int*)((char*)this + *(short*)((char*)this + 0x2ca) * 0x98 + 0x528) = *(int*)((char*)p1 + 0x28);
     *(int*)((char*)this + *(short*)((char*)this + 0x2ca) * 0x98 + 0x558) = *(int*)((char*)p1 + 0x30);
     *(int*)((char*)this + *(short*)((char*)this + 0x2ca) * 0x98 + 0x55c) = 0;
-    *(RECT*)((char*)this + *(short*)((char*)this + 0x2ca) * 0x98 + 0x52c) = *(RECT*)(char*)(p1 + 0x34);
+    *(RECT*)(char*)((char*)this + *(short*)((char*)this + 0x2ca) * 0x98 + 0x52c) = *(RECT*)((char*)p1 + 0x34);
     *(int*)((char*)this + *(short*)((char*)this + 0x2ca) * 0x98 + 0x550) = 0;
     *(short*)((char*)this + *(short*)((char*)this + 0x2ca) * 0x98 + 0x554) = 0;
     *(short*)((char*)this + *(short*)((char*)this + 0x2ca) * 0x98 + 0x556) = 0;
@@ -87,7 +87,7 @@ void CPlayer::Unk413040()
     }
 }
 
-void CPlayer::Unk413090(int p1)
+void CPlayer::Unk413090(EffectDesc* p1)
 {
     *(int*)(char*)p1 = 0;
     *((char*)p1 + 0x20) = 0;

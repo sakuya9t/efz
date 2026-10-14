@@ -17,6 +17,8 @@
 #include <dsound.h>
 #include <string.h>
 
+struct EffectDesc;
+
 // A frame of an effect animation, read from system\effect\effect.pat.
 struct EffectFrame {
     WORD duration; // in game frames
@@ -522,7 +524,7 @@ public:
     // FUNCTION: 0x40e740
     void Unk40e740();
     // FUNCTION: 0x40eae0
-    CPlayer(int p1, int p2, int p3, int p4, int p5, char p6);
+    CPlayer(int p1, int p2, int p3, int p4, int p5, BYTE p6);
     // FUNCTION: 0x40ecb0
     ~CPlayer();
     // FUNCTION: 0x40f170
@@ -570,7 +572,7 @@ public:
     // FUNCTION: 0x410940
     void Unk410940();
     // FUNCTION: 0x4109d0
-    void Unk4109d0(char p1);
+    void Unk4109d0(BYTE p1);
     // FUNCTION: 0x410a10
     void Unk410a10(int p1, int p2);
     // FUNCTION: 0x410a40
@@ -578,9 +580,9 @@ public:
     // FUNCTION: 0x410a80
     void Unk410a80(int p1, int p2);
     // FUNCTION: 0x410ac0
-    void Unk410ac0(char p1, int p2);
+    void Unk410ac0(BYTE p1, int p2);
     // FUNCTION: 0x410b10
-    void Unk410b10(char p1, int p2);
+    void Unk410b10(BYTE p1, int p2);
     // FUNCTION: 0x411080
     void Unk411080();
     // FUNCTION: 0x4116a0
@@ -596,7 +598,7 @@ public:
     // FUNCTION: 0x413040
     void Unk413040();
     // FUNCTION: 0x413090
-    void Unk413090(int p1);
+    void Unk413090(EffectDesc* p1);
     // FUNCTION: 0x413100
     void Unk413100(int p1, int p2, BYTE p3);
 
@@ -611,7 +613,7 @@ public:
     virtual void Vf7() = 0;
     virtual void Vf8() = 0;
     // FUNCTION: 0x412b10
-    virtual void Vf9(int p1);
+    virtual void Vf9(EffectDesc* p1);
     // FUNCTION: 0x412e60
     virtual void Vf10(short p1);
     // FUNCTION: 0x410b70
@@ -893,5 +895,41 @@ DECLARE_SCENE(CScene6, 0x760);
 DECLARE_SCENE(CScene7, 0x448);
 // FUNCTION: 0x76e480
 DECLARE_SCENE(CScene8, 0x758);
+
+// Shiori: one of the character classes.
+// SIZE: 0x3458
+class CShiori : public CPlayer {
+public:
+    // FUNCTION: 0x4136d0
+    virtual void Vf6();
+    // FUNCTION: 0x422d70
+    CShiori(int p1, int p2, int p3, int p4, int p5, BYTE p6);
+    // FUNCTION: 0x422f40
+    virtual void Vf12();
+    // FUNCTION: 0x423090
+    virtual void Vf0();
+    // FUNCTION: 0x4230d0
+    virtual void Vf10(short p1);
+    // FUNCTION: 0x423120
+    virtual void Vf3();
+    // FUNCTION: 0x423140
+    virtual void Vf4();
+    // FUNCTION: 0x425d70
+    virtual void Vf1();
+    // FUNCTION: 0x4261b0
+    virtual void Vf8();
+    // FUNCTION: 0x4261c0
+    virtual void Vf9(EffectDesc* p1);
+    // FUNCTION: 0x4261f0
+    virtual void Vf2();
+    // FUNCTION: 0x4276b0
+    virtual void Vf5();
+    // FUNCTION: 0x42b190
+    virtual void Vf7();
+    // FUNCTION: 0x434010
+    void Unk434010(double p1, double p2);
+
+    BYTE unk3138[0x3458 - 0x3138];
+};
 
 #endif

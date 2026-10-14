@@ -101,6 +101,30 @@ Consequences for a byte-identical rebuild:
   - `x += e` works out `x`'s address first and loads `x` last. `x = e + x` doesn't.
   - `==` and `!=` on doubles compile to `fucompp` with the *right* operand loaded first.
     The relational operators load the left one first and use `fcomp`/`fcompp`.
+  More, **observed** while matching Shiori:
+  - `lea r, [x + y + K]` folds a constant into the addition that follows it in the
+    source: `x + K + y`. If `y` is computed first, the source is `x + y + K`, since
+    `(x + K) + y` always computes `x + K` first. A plain load next to a call has the call
+    evaluated first; anything heavier is evaluated in source order.
+  - `imul r, [m]` with `r` copied from another register just before (or the product moved
+    to `eax` for a division afterwards) is `m * x`, not `x * m`.
+  - `float + int` compiles to `fiadd`, `double + int` to `fild` and `faddp`. So
+    `25.0f * f + i * f + n` stays `float` and keeps `fiadd`, and an explicit
+    `(double)` on an `int` operand changes later instructions. Write int-to-float
+    conversions implicitly.
+  - Comparing doubles, `a > b - c` against `m` in memory: the side that is a plain load
+    can have its address worked out first just because it is heavier. Against an
+    arithmetic expression, a memory operand whose address comes first was the left
+    operand.
+  - A `short` or `char` incremented at its own width (`mov cx,[m]; add cx,1`) is `x++`.
+    After `movsx`/`movzx` it is `x = x + 1`.
+  - A `char` constant argument of 0x80 or more pushed as `0xb0` (not `0xffffffb0`) means
+    an unsigned `BYTE` parameter.
+- **Register choice rotates through `eax`, `ecx`, `edx`** across statements, calls and
+  labels alike. **Observed:** in Shiori's `Vf6` (`0x4136d0`) the original restarts the
+  rotation one step early in three places, each right after an `int` member's `x--` or a
+  store and before `timer++`. No source form tried so far reproduces this; that is the
+  only difference left in the function.
 - **Some expressions always go through unnamed temporaries.** **Observed:**
   - A boolean used as a value (`return a && b;`, `x * (y > 0)`) is materialised as 0 or 1
     in a temporary by an `if`/`else` diamond. The diamond is hoisted in front of the
@@ -167,10 +191,12 @@ Consequences for a byte-identical rebuild:
   | `sound.cpp` | `0x40d810`–`0x40e62f` | 15 | `CSound`: DirectSound, `.wav` loading, music loop points |
   | `player.cpp` | `0x40e630`–`0x412b0f` | 49 | `CPlayer`, the base of the character classes; inline `PatternData` and `Afterimages` methods |
   | `playerobj.cpp` | `0x412b10`–`0x4136cf` | 6 | `CPlayer`'s table of 64 spawned objects and drawing them |
+  | `shiori.cpp` | `0x4136d0`–`0x43405f` | 13 of 14 | `CShiori`, the first character class; `Vf6` still differs |
 
   The boundaries come from each object's string literals, which are contiguous in
-  `.rdata`, and from where inline functions are emitted. The first character class,
-  Shiori (`"shiori"`), starts at `0x4136d0`; its constructor is at `0x422d70`.
+  `.rdata`, and from where inline functions are emitted. Each character class is one
+  object: the constructor copies the character's folder name (`"shiori"`, `"sayuri"`,
+  ...) into `CPlayer`'s name field, and the objects run in reverse alphabetical order.
 - **String literals are not pooled.** **Observed:** `/GF` is off, and `WinMain`'s four
   identical `"ETENAL FIGHTER ZERO"` literals each get their own copy. (The typo is the
   original's.)

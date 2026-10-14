@@ -328,7 +328,9 @@ class Cast(E):
 
 class Bin(E):
     def __init__(self, op, a, b, ty):
-        if op in ('+', '-') and isinstance(a, ThisVar):
+        if op in ('+', '-') and (isinstance(a, ThisVar) or
+                                 (a.ty != 'char*' and is_pointer_type(a.ty))):
+            # byte offsets from a typed pointer
             a, ty = Cast('char*', a), 'char*'
         elif op == '+' and isinstance(b, ThisVar):
             b, ty = Cast('char*', b), 'char*'
@@ -671,11 +673,16 @@ class Lifter:
         base = self.reg_value(op.base) if op.base else None
         if isinstance(base, StructResult):
             return StructField(base, op.disp, ty)
+        index = self.reg_value(op.index) if op.index else None
+        if base is not None and index is not None and op.scale == 1 \
+                and is_offset(base) and not is_offset(index):
+            # [ecx+eax]: the compiler put the offset in the base register
+            base, index = index, base
         addr = None
         if base is not None:
             addr = as_pointer(base)
         if op.index:
-            term = self.reg_value(op.index)
+            term = index
             if op.scale != 1:
                 term = Bin('*', term, Const(op.scale), 'int')
             if addr is not None and op.disp and not isinstance(base, ThisVar) \
@@ -820,6 +827,9 @@ def field_ref(st, off, member):
     fields = STRUCT_FIELDS.get(getattr(st, 'struct_type', None), {})
     if off in fields:
         return f'{name}.{fields[off]}'
+    f = layouts().field(getattr(st, 'struct_type', None) or getattr(st, 'cls', None), off)
+    if f:
+        return f'{name}.{f}'
     ty = member.ctype() if member is not st else 'int'
     return f'*({ty}*)((char*)&{name} + {off})'
 
@@ -835,6 +845,13 @@ class Index(E):
 
     def render(self):
         return f'{self.arr.text(PREC["post"])}[{self.idx.text()}]'
+
+
+def is_offset(v):
+    """An index computation rather than a pointer: i * size, or a constant."""
+    if isinstance(v, Const):
+        return True
+    return isinstance(v, Bin) and v.op in ('*', '<<') and v.ty != 'char*'
 
 
 def is_this_field(lv, off):
@@ -1162,6 +1179,16 @@ class Lifter2(Lifter):
                     term = self.reg_value(src.index)
                     if src.scale != 1:
                         term = Bin('*', term, Const(src.scale), 'int')
+                    if v is not None and v.ty != 'char*' and src.disp:
+                        # lea r, [x + y + K]: the compiler folds a constant into the
+                        # addition after it, so this is x + K + y, unless y was computed
+                        # first, which (x + K) + y would not do: then x + y + K.
+                        if term.first_time() < v.first_time():
+                            v = Bin('+', Bin('+', v, term, 'int'), Const(src.disp), 'int')
+                        else:
+                            v = Bin('+', Bin('+', v, Const(src.disp), 'int'), term, 'int')
+                        self.set_reg(dst.reg, v)
+                        return k + 1
                     v = term if v is None else Bin('+', v, term, v.ty if v.ty == 'char*' else 'int')
                 if src.disp:
                     d = Const(src.disp & 0xFFFFFFFF if v is None else src.disp)
@@ -1199,7 +1226,19 @@ class Lifter2(Lifter):
             if m in ('add', 'imul', 'and', 'or', 'xor') and src.kind == 'mem' and dst.kind == 'reg' \
                     and (src.base in REG32 or src.index in REG32):
                 regs_t = [self.regs[r].first_time() for r in (src.base, src.index) if r in REG32]
-                if min(regs_t) < a.first_time():
+                prev = self.ins[k - 1]
+                copied = prev.m == 'mov' and prev.ops[0].kind == 'reg' and prev.ops[1].kind == 'reg' \
+                    and prev.ops[0].reg == dst.reg
+                # ... or the product is moved to eax for a division afterwards
+                after = self.ins[k + 1] if k + 1 < len(self.ins) else None
+                if m == 'imul' and dst.reg != 'eax' and after is not None and after.m == 'mov' \
+                        and after.ops[0].kind == 'reg' and after.ops[0].reg == 'eax' \
+                        and after.ops[1].kind == 'reg' and after.ops[1].reg == dst.reg \
+                        and self.ins[k + 2].m == 'cdq':
+                    copied = True
+                if min(regs_t) < a.first_time() or copied:
+                    # (or the register operand was copied first: `mem * x` loads x and
+                    # copies it into the result register)
                     a, b = b, a
             v = Bin(ARITH[m], a, b, 'int')
             if dst.size < 4:
@@ -1212,15 +1251,27 @@ class Lifter2(Lifter):
             self.flags = ('res', v)
             return k + 1
         if m == 'neg':
-            # sub eax, C; neg eax; sbb eax, eax; inc eax  ->  x == C
-            if nxt and nxt.m == 'sbb' and self.ins[k + 2].m == 'inc':
-                v = self.reg_value(ops[0].reg)
+            # sub eax, C; neg eax; sbb eax, eax  ->  (x == C) - 1, then
+            # inc eax  ->  x == C;   add eax, K  ->  (x == C) + (K - 1)
+            r = ops[0].reg
+            if nxt and nxt.m == 'sbb' and nxt.ops[0].kind == 'reg' and nxt.ops[0].reg == r \
+                    and nxt.ops[1].kind == 'reg' and nxt.ops[1].reg == r:
+                v = self.reg_value(r)
                 if isinstance(v, Bin) and v.op == '-':
                     c = Cond('==', v.a, v.b)
                 else:
                     c = Cond('==', v, Const(0))
-                self.set_reg(ops[0].reg, c)
-                return k + 3
+                after = self.ins[k + 2] if k + 2 < len(self.ins) else None
+                if after is not None and after.ops and after.ops[0].kind == 'reg' and after.ops[0].reg == r:
+                    if after.m == 'inc':
+                        self.set_reg(r, c)
+                        return k + 3
+                    if after.m == 'add' and after.ops[1].kind == 'imm':
+                        kk = after.ops[1].imm - (1 << 32 if after.ops[1].imm & 0x80000000 else 0)
+                        self.set_reg(r, c if kk == 1 else Bin('+', c, Const(kk - 1), 'int'))
+                        return k + 3
+                self.set_reg(r, Bin('-', c, Const(1), 'int'))
+                return k + 2
             self.set_reg(ops[0].reg, Un('-', self.reg_value(ops[0].reg), 'int'))
             return k + 1
         if m == 'not':
@@ -1364,8 +1415,17 @@ class Lifter2(Lifter):
             lhs.ty = ITYPE.get((size, lhs.ty in SIGNED), lhs.ty)
         op = ''
         if isinstance(rhs, Bin) and rhs.op in '+-*&|^<<>>' and same(rhs.a, lhs):
-            if getattr(rhs, 'narrow', None) or compound or isinstance(lhs, (SlotVar, Index)) \
-                    or True:
+            if lhs.ty in ('double', 'float'):
+                # x += e works out x's address first and loads x last; x = x + e loads
+                # x first. With a constant both compile the same.
+                ok = getattr(rhs, 'mem_left', False) or isinstance(rhs.b, Const)
+            elif size < 4:
+                # a short or char done at its own width is x += k; promoted to int
+                # first (movsx/movzx) it is x = x + k
+                ok = getattr(rhs, 'narrow', None) or compound
+            else:
+                ok = True
+            if ok:
                 op, rhs = rhs.op, rhs.b
         self.emit(Assign(lhs, rhs, op))
         self.dirty = set()
@@ -1463,6 +1523,9 @@ class Lifter2(Lifter):
                 return consumed
             if thiscall and isinstance(this, ThisVar):
                 c.this = None          # a call to another method of this class
+                own = getattr(self, 'cls', None)
+                if own and '::' in name and name.rsplit('::', 1)[0] != own:
+                    c.fn = name        # a base class's version: no virtual dispatch
             self.after_call(c)
             return consumed
         if op.kind == 'mem' and op.base is None and op.index is None:
@@ -1668,7 +1731,9 @@ class Lifter2(Lifter):
             v = self.value(ops[0])
             if isinstance(v, SlotVar):
                 v.slot.sizes[ops[0].size] += 1
-            st.append(Cast('double', v))
+            c = Cast('double', v)
+            c.fild = True
+            st.append(c)
             self.dirty.add('st0')
             self.last = 'st0'
             return k + 1
@@ -1708,21 +1773,23 @@ class Lifter2(Lifter):
                 b = self.fload(ops[0]) if not m.startswith('fi') else self.value(ops[0])
                 a = st.pop()
                 if m in FARITH_R:
-                    st.append(Bin(FARITH_R[m], b, a, 'double'))
+                    st.append(fbin(FARITH_R[m], b, a))
                 elif FARITH[m] in ('+', '*') and b.first_time() < a.first_time() \
                         and not isinstance(a, Const):
                     # the memory operand's address was worked out first: it is the left
                     # operand, kept in memory while the right one was loaded
-                    st.append(Bin(FARITH[m], b, a, 'double'))
+                    v = fbin(FARITH[m], b, a)
+                    v.mem_left = True
+                    st.append(v)
                 else:
-                    st.append(Bin(FARITH[m], a, b, 'double'))
+                    st.append(fbin(FARITH[m], a, b))
             elif m.endswith('p') and m not in ('fsubr', 'fdivr'):
                 # fXXXp st(i), st(0): st(i) = st(i) op st(0), then pop
                 i = int(ops[0].reg[3]) if ops else 1
                 b = st.pop()
                 a = st[-i]
-                st[-i] = Bin(FARITH_R[m], b, a, 'double') if m in FARITH_R \
-                    else Bin(FARITH[m], a, b, 'double')
+                st[-i] = fbin(FARITH_R[m], b, a, reg_form=True) if m in FARITH_R \
+                    else fbin(FARITH[m], a, b, reg_form=True)
             else:
                 # fXXX st(i), st(j): st(i) = st(i) op st(j), one of them st(0)
                 i, j = int(ops[0].reg[3]), int(ops[1].reg[3])
@@ -1730,9 +1797,9 @@ class Lifter2(Lifter):
                 if i == j and m == 'fadd':
                     v = Bin('*', a, Const(2.0, 'double'), 'double')   # x * 2.0
                 elif m in FARITH_R:
-                    v = Bin(FARITH_R[m], b, a, 'double')
+                    v = fbin(FARITH_R[m], b, a, reg_form=True)
                 else:
-                    v = Bin(FARITH[m], a, b, 'double')
+                    v = fbin(FARITH[m], a, b, reg_form=True)
                 st[-1 - i] = v
             self.dirty.add('st0')
             return k + 1
@@ -1759,6 +1826,12 @@ class Lifter2(Lifter):
                 b = self.fload(ops[0]) if m != 'ficomp' else self.value(ops[0])
                 if m != 'fcom':
                     st.pop()
+                if b.first_time() < a.first_time() and isinstance(a, Bin):
+                    # The memory operand's address came first. Against an arithmetic
+                    # expression that means it was the left operand; against a plain
+                    # load it can just be the heavier right operand.
+                    a, b = b, a
+                    self.fswap = True
             swap = getattr(self, 'fswap', False)
             self.fswap = False
             self.flags = ('fcmp', a, b)
@@ -1776,6 +1849,39 @@ class Lifter2(Lifter):
             st[-1], st[-2] = st[-2], st[-1]
             return k + 1
         raise LiftError(f'unhandled fpu {ins}')
+
+
+def fprec(e):
+    """'int' for an integer (or an int converted by fild), else 'float' or 'double'."""
+    if isinstance(e, Cast) and getattr(e, 'fild', False):
+        return 'int'
+    if e.ty in ('float', 'double'):
+        return e.ty
+    if e.ty in ITYPE.values() or e.ty in ('int', 'DWORD'):
+        return 'int'
+    return 'double'
+
+
+def fbin(op, a, b, reg_form=False):
+    """A floating-point operation. Converting an int next to a floating operand is left
+    implicit, as the source most likely had it: (double)i * f is double but i * f is
+    float, which decides how later operations compile (float + int is fiadd, double +
+    int is fild and faddp). The exception is the register form with a float left
+    operand, which needs the explicit cast."""
+    pa, pb = fprec(a), fprec(b)
+    if pa == 'int' and pb in ('float', 'double') and isinstance(a, Cast):
+        a = a.e
+    if pb == 'int' and pa in ('float', 'double') and isinstance(b, Cast) \
+            and not (reg_form and pa == 'float'):
+        b = b.e
+    kinds = []
+    for e in (a, b):
+        if isinstance(e, Cast) and e.ty == 'double':
+            kinds.append('double')
+        elif e.ty in ('float', 'double'):
+            kinds.append(e.ty)
+    ty = 'double' if 'double' in kinds or not kinds else 'float'
+    return Bin(op, a, b, ty)
 
 
 class ArgBlock(E):
@@ -1863,6 +1969,11 @@ class AddrOfVar(E):
     def render(self):
         if isinstance(self.v, SlotVar) and self.v.slot.array:
             return self.v.text()
+        if isinstance(self.v, SlotVar) and getattr(self.v.slot, 'struct_size', None) \
+                and getattr(self.v.slot, 'parent', None) is None:
+            whole = SlotVar(self.v.slot)
+            whole.whole = True
+            return f'&{whole.text(PREC["unary"])}'
         return f'&{self.v.text(PREC["unary"])}'
 
 
@@ -2271,13 +2382,23 @@ class Structurer:
         _, expr, cases, default, addr = self.items[k]
         starts = sorted(set(cases) | {default})
         last_case = max(cases) if cases else default
-        end = default
         excluded = (ctx.get('brk'), ctx.get('cont'), self.epilogue)
+        if default > last_case:
+            end = default          # no default case: `ja` goes to the end of the switch
+        else:
+            # the default case is a body among the others; the end is where the breaks
+            # go, or, if every case returns, the end of the range
+            end = None
         for x in range(k + 1, hi):
             it = self.items[x]
             if it[0] == 'jump' and it[1] > last_case and it[1] not in excluded:
-                end = max(end, it[1])
-        ek = self.idx(end)
+                end = it[1] if end is None else max(end, it[1])
+        if end is None:
+            end = self.items[hi][1] if hi < len(self.items) and self.items[hi][0] == 'label' \
+                else self.epilogue
+            ek = hi
+        else:
+            ek = self.idx(end)
         inner = dict(ctx, brk=end)
         body_starts = sorted(set(cases) | ({default} if default != end else set()))
         out = []
@@ -2335,7 +2456,8 @@ def render(nodes, indent=1, gotos=()):
                     lines.append(f'{pad}case {fmt_int(v) if v >= 0 else v}:')
                 if is_default:
                     lines.append(f'{pad}default:')
-                lines += render(body, indent + 1, gotos)
+                sub = render(body, indent + 1, gotos)
+                lines += sub if sub else [f'{pad}    break;']
             lines.append(f'{pad}}}')
         elif isinstance(n, Jmp):
             lines.append(f'{pad}{n.kind}{f" L{n.target:x}" if n.kind == "goto" else ""};')
@@ -2364,15 +2486,17 @@ def array_bytes(space):
 def lift(img, syms, start, ret_type=None, this_type=None, qual=None):
     lf = Lifter2(img, syms, start, function_end(syms, start), this_type)
     qual = qual or syms.func_name(start)
+    lf.cls = qual.rsplit('::', 1)[0] if qual and '::' in qual else None
     if qual:
         proto = syms.protos.lookup(qual)
         if proto:
             if ret_type is None:
                 ret_type = proto[0]
             off = 8 + (4 if STRUCT_SIZES.get(proto[0]) else 0)
-            for t in proto[1]:
+            for n, t in enumerate(proto[1]):
                 sl = lf.slot(off)
                 sl.declared = t
+                sl.name = f'p{n + 1}'
                 off += STRUCT_SIZES.get(t, 8 if t == 'double' else 4)
     items = lf.execute(ret_type)
     st = Structurer(items, lf.epilogue)
@@ -2381,8 +2505,10 @@ def lift(img, syms, start, ret_type=None, this_type=None, qual=None):
                    if qual and '::' in qual else False}
     ctx['gotos'] = st.gotos
     ctx['top'] = body
+    ctx['lf'] = lf
     body = rewrite_patterns(body, syms, ctx)
     lf.initializers = ctx.get('initializers', [])
+    lf.base_init = ctx.get('base_init')
     if lf.this_slot is not None:
         temps = {sl for sl in lf.slots.values() if sl.off < lf.this_slot}
         body = fold_temps(body, temps, qual.rsplit('::', 1)[0] if qual and '::' in qual else None)
@@ -2525,6 +2651,93 @@ def preprocess_headers(pre):
                        stdout=out, stderr=subprocess.DEVNULL, check=True)
 
 
+# --- struct layouts ------------------------------------------------------------------
+
+BASIC_SIZES = {'char': 1, 'BYTE': 1, 'bool': 1, 'short': 2, 'WORD': 2, 'int': 4, 'DWORD': 4,
+               'BOOL': 4, 'long': 4, 'float': 4, 'double': 8, 'HWND': 4, 'HANDLE': 4,
+               'RECT': 16, 'POINT': 8, 'GUID': 16}
+
+
+class Layouts:
+    """Field offsets of the POD structs declared in src/*.h, computed with natural
+    alignment: {struct: (size, align, {offset: (name, type, count)})}."""
+
+    def __init__(self):
+        self.structs = {}
+        for fn in sorted(os.listdir(os.path.join(REPO, 'src'))):
+            if fn.endswith('.h'):
+                self.parse(open(os.path.join(REPO, 'src', fn), encoding='utf-8').read())
+
+    def type_info(self, t):
+        t = t.strip()
+        if t.endswith('*'):
+            return 4, 4
+        if t in BASIC_SIZES:
+            n = BASIC_SIZES[t]
+            return n, min(n, 4) if t in ('RECT', 'POINT', 'GUID') else n
+        if t in self.structs:
+            size, align, _ = self.structs[t]
+            return size, align
+        return None
+
+    def parse(self, text):
+        text = re.sub(r'//[^\n]*', '', text)
+        for m in re.finditer(r'^struct (\w+) \{\n(.*?)^\};', text, re.S | re.M):
+            name, body = m.group(1), m.group(2)
+            # drop inline method bodies
+            while True:
+                b = re.sub(r'\{[^{}]*\}', ';', body)
+                if b == body:
+                    break
+                body = b
+            fields, off, align, ok = {}, 0, 1, True
+            for decl in body.split(';'):
+                decl = ' '.join(decl.split())
+                if not decl or '(' in decl:
+                    continue
+                fm = re.match(r'^(.*?)\s*\b(\w+)(?:\[(\w+)\])?$', decl)
+                if not fm:
+                    ok = False
+                    break
+                ty, fname, count = fm.group(1).replace(' *', '*'), fm.group(2), fm.group(3)
+                info = self.type_info(ty)
+                if info is None:
+                    ok = False
+                    break
+                fsize, falign = info
+                n = int(count, 0) if count else 1
+                off = (off + falign - 1) // falign * falign
+                fields[off] = (fname, ty, n)
+                off += fsize * n
+                align = max(align, falign)
+            if ok and fields:
+                size = (off + align - 1) // align * align
+                self.structs[name] = (size, align, fields)
+
+    def field(self, struct, off, ty=None):
+        """The name of the field at `off`, or None."""
+        info = self.structs.get(struct)
+        if not info:
+            return None
+        f = info[2].get(off)
+        if f is None:
+            return None
+        name, fty, n = f
+        if n != 1:
+            return None
+        return name
+
+
+_LAYOUTS = None
+
+
+def layouts():
+    global _LAYOUTS
+    if _LAYOUTS is None:
+        _LAYOUTS = Layouts()
+    return _LAYOUTS
+
+
 class Protos:
     def __init__(self):
         cache = os.path.join(REPO, 'build', 'protos.json')
@@ -2645,7 +2858,9 @@ class DeclStmt(S):
     def lines(self):
         args = Call('', self.call.args)
         args.ptypes = getattr(self.call, 'ptypes', None)
-        name = SlotVar(self.slot).render()
+        v = SlotVar(self.slot)
+        v.whole = True
+        name = v.render()
         a = args.render()[1:-1]
         return [f'{self.cls} {name}({a});' if a else f'{self.cls} {name};']
 
@@ -2742,6 +2957,9 @@ def rewrite_patterns(nodes, syms, ctx):
                 sl = obj.v.slot
                 if cls and c.fn == cls.split('::')[-1]:
                     sl.cls = cls
+                    info = layouts().structs.get(cls)
+                    if info and ctx.get('lf') is not None:
+                        ctx['lf'].struct_slot(sl.off, info[0], cls)
                     ctx.setdefault('inline_decls', []).append(sl)
                     out.append(StmtNode(DeclStmt(sl, cls, c)))
                     k += 1
@@ -2753,6 +2971,16 @@ def rewrite_patterns(nodes, syms, ctx):
         if ctx.get('ctor') and isinstance(st, Return) and isinstance(st.e, ThisVar):
             k += 1
             continue
+        if ctx.get('ctor') and isinstance(st, ExprStmt) and ctx.get('top') is nodes:
+            c = call_of(st.e)
+            name = syms.funcs.get(getattr(c, 'target', None)) if c is not None else None
+            if c is not None and c.this is None and name:
+                cls, _, meth = name.rpartition('::')
+                if cls and meth == cls.split('::')[-1]:
+                    # the base class constructor
+                    ctx['base_init'] = (cls, c)
+                    k += 1
+                    continue
         if ctx.get('ctor') and isinstance(st, ExprStmt):
             c = call_of(st.e)
             if c is not None and c.this is not None and getattr(c, 'target', None) in syms.funcs:
@@ -2800,7 +3028,7 @@ def subst_expr(e, slot, val):
     if isinstance(e, SlotVar) and e.slot is slot and not getattr(e, 'whole', False):
         return val
     if isinstance(e, Bin) and e.op in ('+', '*') and e.ty in ('double', 'float') \
-            and isinstance(e.b, SlotVar) and e.b.slot is slot:
+            and isinstance(e.b, SlotVar) and e.b.slot is slot and slot.float:
         # an FPU value spilled while the other operand (a call) was evaluated: it was
         # the left operand
         e.a, e.b = e.b, e.a
@@ -2906,37 +3134,41 @@ def fold_temps(nodes, temps, this_class=None):
             b[:] = fold_block(b, temps, this_class)
     nodes[:] = fold_block(nodes, temps, this_class)
     writes, reads = slot_counts(nodes)
-    changed = True
-    while changed:
-        changed = False
-        for lst in [nodes] + [b for n in all_nodes(nodes) for b in blocks_of(n)]:
-            for k in range(len(lst) - 1):
-                n = lst[k]
-                if not (isinstance(n, StmtNode) and isinstance(n.s, Assign) and not n.s.op
-                        and isinstance(n.s.lhs, SlotVar) and n.s.lhs.slot in temps):
-                    continue
-                sl = n.s.lhs.slot
-                if writes[sl] != 1 or reads[sl] != 1:
-                    continue
-                nxt = lst[k + 1]
-                found = None
-                for holder, attr in node_exprs(nxt):
-                    if any(isinstance(e, SlotVar) and e.slot is sl for e in reads_of(holder, attr)):
-                        found = (holder, attr)
-                if found is None:
-                    continue
-                holder, attr = found
-                v = getattr(holder, attr)
-                if isinstance(v, list):
-                    setattr(holder, attr, [subst_expr(x, sl, n.s.rhs) for x in v])
-                else:
-                    setattr(holder, attr, subst_expr(v, sl, n.s.rhs))
+    # The compiler reuses a temporary's slot from one statement to the next, so a slot can
+    # be written several times; each value is read once, in the statement that follows.
+    for lst in [nodes] + [b for n in all_nodes(nodes) for b in blocks_of(n)]:
+        k = 0
+        while k < len(lst) - 1:
+            n = lst[k]
+            if not (isinstance(n, StmtNode) and isinstance(n.s, Assign) and not n.s.op
+                    and isinstance(n.s.lhs, SlotVar) and n.s.lhs.slot in temps):
+                k += 1
+                continue
+            sl = n.s.lhs.slot
+            if reads[sl] != writes[sl]:
+                k += 1
+                continue
+            nxt = lst[k + 1]
+            found, count = None, 0
+            for holder, attr in node_exprs(nxt):
+                hits = sum(1 for e in reads_of(holder, attr) if isinstance(e, SlotVar) and e.slot is sl)
+                if hits:
+                    found, count = (holder, attr), count + hits
+            if found is None or count != 1:
+                k += 1
+                continue
+            holder, attr = found
+            v = getattr(holder, attr)
+            if isinstance(v, list):
+                setattr(holder, attr, [subst_expr(x, sl, n.s.rhs) for x in v])
+            else:
+                setattr(holder, attr, subst_expr(v, sl, n.s.rhs))
+            writes[sl] -= 1
+            reads[sl] -= 1
+            if writes[sl] == 0:
                 sl.temp = True
-                del lst[k]
-                changed = True
-                break
-            if changed:
-                break
+            del lst[k]
+            k = max(k - 1, 0)      # the statement before may now feed this one
     return nodes
 
 
@@ -3035,6 +3267,10 @@ def infer_signature(lf):
             t = sl.declared
         elif sl is not None:
             t = sl.ctype()
+            if t == 'char' and not sl.signed:
+                # only ever copied, never widened: callers push constants of 0x80 and
+                # up unextended, so take it as unsigned
+                t = 'BYTE'
         else:
             t = 'int'
         params.append(t)
@@ -3063,8 +3299,12 @@ def lift_object(img, syms, lo, hi, cls, names=None, passes=2):
                 sigs[a] = (True, 'void', [], f'{type(e).__name__}: {e} at {getattr(lf, "pc", 0):#x}')
                 continue
             this, ret, params = infer_signature(lf)
+            meth = qual.rsplit('::', 1)[-1]
             if a in objdefs.SIGNATURES:
                 ret, params = objdefs.SIGNATURES[a]
+                params = list(params)
+            elif re.match(r'Vf\d+$', meth) and syms.protos.lookup('CPlayer::' + meth):
+                ret, params = syms.protos.lookup('CPlayer::' + meth)
                 params = list(params)
             sigs[a] = (this, ret, params, None)
             syms.protos.methods[qual] = [ret, params]
@@ -3075,10 +3315,14 @@ def lift_object(img, syms, lo, hi, cls, names=None, passes=2):
         try:
             lf, body, st = lift(img, syms, a, qual=qual)
             text = body_text(lf, body, st)
-            if lf.initializers:
-                # the fields must be declared as unkXX in the class
-                text = '    : ' + ', '.join(f'unk{off:x}({rhs.text()})'
-                                           for off, ty, rhs in lf.initializers) + '\n' + text
+            inits = []
+            if lf.base_init:
+                cls_, call = lf.base_init
+                inits.append(cls_.split('::')[-1] + call.render()[len(call.fn):])
+            # member fields must be declared as unkXX in the class
+            inits += [f'unk{off:x}({rhs.text()})' for off, ty, rhs in lf.initializers]
+            if inits:
+                text = '    : ' + ', '.join(inits) + '\n' + text
             err = None
         except Exception as e:
             import traceback
@@ -3126,6 +3370,25 @@ def gen_object(img, syms, obj):
     return results
 
 
+def add_class(header, obj):
+    """Declare a character class in efz.h if it isn't there yet."""
+    import objdefs
+    for o, cls, lo, hi, vt, ctor, size in objdefs.CHARACTERS:
+        if o != obj or re.search(rf'^class {cls}\b', header, re.M):
+            continue
+        gen = open(os.path.join(REPO, 'build', 'gen', obj + '.h')).read()
+        body = gen.split(f'// {cls}\n', 1)[1].split('\n\n', 1)[0]
+        body = re.sub(r'^(    )(\w[^(\n]* Vf\d+\()', r'\1virtual \2', body, flags=re.M)
+        name = obj[0].upper() + obj[1:]
+        block = (f'// {name}: one of the character classes.\n'
+                 f'// SIZE: {size:#x}\n'
+                 f'class {cls} : public CPlayer {{\npublic:\n{body}\n\n'
+                 f'    BYTE unk3138[{size:#x} - 0x3138];\n}};\n\n')
+        k = header.rindex('#endif')
+        header = header[:k] + block + header[k:]
+    return header
+
+
 def signature_text(qual, ret, params, decl=False):
     name = qual.split('::')[-1] if decl else qual
     args = ', '.join(f'{t} p{n + 1}' for n, t in enumerate(params))
@@ -3163,11 +3426,15 @@ def main():
             decl = signature_text(qual, ret, params, decl=True)
             header = re.sub(rf'(// FUNCTION: {a:#x}\n[ \t]*(?:virtual )?)[^\n;]*;',
                             lambda m: m.group(1) + decl + ';', header)
+        header = add_class(header, obj)
         open(hpath, 'w', encoding='utf-8').write(header)
         path = os.path.join(REPO, 'src', obj + '.cpp')
         old = open(path, encoding='utf-8').read() if os.path.exists(path) else ''
         incs = list(re.finditer(r'^#include .*\n', old, re.M))
-        prefix = old[:incs[-1].end()] if incs else ''
+        lo, hi, cls, _names = objdefs.OBJECTS[obj]
+        prefix = old[:incs[-1].end()] if incs else (
+            f'// {cls} ({lo:#x}-{hi - 1:#x}).\n'
+            '#include <stdlib.h>\n#include <string.h>\n#include <math.h>\n#include "efz.h"\n')
         body = open(os.path.join(REPO, 'build', 'gen', obj + '.cpp')).read()
         # methods are annotated in the header
         body = re.sub(r'^// FUNCTION: 0x[0-9a-f]+\n(?=[^\n]*\b\w+::~?\w+\()', '', body, flags=re.M)

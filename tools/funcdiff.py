@@ -270,6 +270,10 @@ def check(obj_path, original, known, flt=''):
         lines += ['   reloc ' + p for p in problems]
         if mine != orig:
             a, b = disasm(orig, addr), disasm(mine, addr)
+            if os.environ.get('FUNCDIFF_MASK'):
+                # hide code addresses, which all shift once the size differs
+                mask = lambda l: re.sub(r'0x4[0-9a-f]{5}\b|0x[5-7][0-9a-f]{5}\b', '<code>', l)
+                a, b = [mask(l) for l in a], [mask(l) for l in b]
             lines += ['   ' + l for l in difflib.unified_diff(a, b, 'original', 'recompiled', n=2,
                                                             lineterm='')]
         yield qual, addr, size, ok, lines

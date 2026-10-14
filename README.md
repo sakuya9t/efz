@@ -23,6 +23,7 @@ follow are huge.
 | `src/sound.cpp` | `CSound`: DirectSound buffers, `.wav` loading, music loop points |
 | `src/player.cpp` | `CPlayer`, the base of the character classes: movement, guard and damage, the `.pal`/`.dat`/`.pat`/`.wav` loaders, round reset |
 | `src/playerobj.cpp` | `CPlayer`'s table of 64 spawned objects (projectiles and the like) |
+| `src/shiori.cpp` | `CShiori`, the first character class (one function still differs) |
 
 `tools/progress.py` prints the current numbers.
 
@@ -120,7 +121,7 @@ See [docs/recon.md](docs/recon.md). In short:
    1. platform layer and file loaders. *Done:* `0x401000`–`0x40e62f`, 8 objects.
    2. shared base classes. *Done:* `CPlayer`, `0x40e630`–`0x4136cf`, 2 objects.
    3. effects and projectiles
-   4. the 22 character classes
+   4. the 22 character classes. *In progress:* Shiori 13 of 14 functions.
 4. **Byte-identical exe.** Link with the original CRT and libraries, set the post-link header
    fields (timestamp, RSDS record, Rich header), and check the SHA-256 in CI.
 5. **Modern fork.** Starting from the matched source:
