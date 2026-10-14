@@ -205,3 +205,13 @@ DWORD WINAPI FrameTimerThread(LPVOID param)
 // `delete` expressions in WndProc.
 // FUNCTION: 0x4018f0 ??_GCGame@@QAEPAXI@Z
 // FUNCTION: 0x401920 ??_GCPlayer@@QAEPAXI@Z
+
+// Dynamic initializers ($E1, $E4, $E7) and the atexit destructors they register ($E2,
+// $E5, $E8) for the three subsystem globals. The compiler puts them in .text$yc and
+// .text$yd, which the linker sorts to the end of .text.
+// FUNCTION: 0x786420 _$E1
+// FUNCTION: 0x786440 _$E4
+// FUNCTION: 0x786460 _$E7
+// FUNCTION: 0x786480 _$E2
+// FUNCTION: 0x786490 _$E5
+// FUNCTION: 0x7864a0 _$E8

@@ -4,9 +4,6 @@
 #   make diff F=X   only functions whose name contains X
 # One-time setup: toolchain/setup.sh
 
-EFZ_DIR ?= $(error set EFZ_DIR to the folder containing the original efz.exe)
-export EFZ_DIR
-
 # Compiler flags confirmed by matching WinMain (0x401000).  The original was built by
 # the Standard Edition compiler, which has no optimiser, so /Od reproduces its code.
 CFLAGS = /nologo /c /Od /GS /W3 /Zi /D WIN32 /D NDEBUG /D _WINDOWS /D _MBCS
@@ -23,7 +20,10 @@ build:
 	mkdir -p build
 
 diff: $(OBJS)
-	@status=0; for obj in $(OBJS); do python3 tools/funcdiff.py $$obj $(F) || status=1; done; exit $$status
+	@test -n "$(EFZ_DIR)" || { echo 'set EFZ_DIR to the folder containing the original efz.exe' >&2; exit 1; }
+	@status=0; for obj in $(OBJS); do \
+		EFZ_DIR='$(EFZ_DIR)' python3 tools/funcdiff.py $$obj $(F) || status=1; \
+	done; exit $$status
 
 clean:
 	rm -rf build

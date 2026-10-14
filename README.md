@@ -5,9 +5,11 @@ C++ source that the original compiler, Visual C++ .NET 2003, builds back into a 
 `efz.exe` (SHA-256 `3a1616d6…6dd66481`). The recovered source is then the base for a maintained,
 modernised version of the game.
 
-**Status:** 5 of ~622 game functions matched. That covers the whole first object file
-(`0x401000`–`0x40194f`): `WinMain`, `WndProc`, the frame-timer thread, and two
-compiler-generated destructors.
+**Status:** 19 of ~622 game functions match, covering the first two object files
+(`0x401000`–`0x4054af`, plus their init stubs at the end of `.text`):
+- `src/main.cpp`: `WinMain`, the window procedure, the frame-timer thread
+- `src/effect.cpp`: `CGame::UpdateEffect`, the 14 KB per-frame update for all 640 effect
+  slots
 
 ## Game files
 
@@ -50,8 +52,11 @@ that container; `tools/msvc <tool> <args>` runs any of the tools.
    It prints an instruction diff of whatever differs, plus the addresses of symbols that
    aren't annotated yet (`learned:`).
 4. **Fix stack-layout differences by renaming.** This compiler orders stack variables by a
-   hash of their names, not by declaration order. If only `[ebp-N]` offsets differ, rename
-   locals. `WinMain` matched once its window handle was called `hwnd`.
+   hash of their names, not by declaration order. If only `[ebp-N]` offsets differ:
+   - list each local's slot in the original, top of the frame first
+   - run `tools/stackorder.py solve` with a few candidate names per local; one probe
+     compile ranks all candidates
+   - use the names and declaration order it prints
 
 ## Tools
 
@@ -61,6 +66,7 @@ that container; `tools/msvc <tool> <args>` runs any of the tools.
 | `tools/inventory.py` | Function, vtable and region inventory, used to size and split the work |
 | `tools/compid.py` | `@comp.id` build stamps in `.lib`/`.obj` files, to match the SDKs |
 | `tools/funcdiff.py` | Per-function byte and relocation comparison |
+| `tools/stackorder.py` | Picks local names that reproduce the original stack layout |
 | `tools/msvc` | Run `cl`, `link` or `lib` in the container |
 
 ## Findings so far

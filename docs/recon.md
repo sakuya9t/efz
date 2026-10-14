@@ -47,16 +47,45 @@ Consequences for a byte-identical rebuild:
   With `/EHsc`, every `new T(...)` would get an exception frame, and the original has none.
 - **Stack layout follows a hash of local-variable names, not declaration order.**
   **Observed:** reordering `WinMain`'s locals changed nothing, but renaming `hWnd` to
-  `hwnd` moved it to the original slot. Several other names also fit, so a match doesn't
-  prove the developer's spelling.
+  `hwnd` moved it to the original slot. Probe compiles show how it works:
+  - Locals go into a **16-bucket hash table**.
+  - The table is laid out bucket by bucket from the top of the frame.
+  - Within a bucket, the later declaration sits higher.
+  - Nothing outside the function matters, and neither does declaration order across
+    buckets.
+  - **The hash function itself is unknown.** CRC-32, FNV, djb2 and linear and shift-xor
+    hashes all fail to fit.
+
+  `tools/stackorder.py` works around the unknown hash by measuring ranks directly. Several
+  names usually fit, so a match doesn't prove the developer's spelling.
+- **`/GS` doesn't reorder locals.** **Observed:** the cookie is placed directly above
+  whichever array comes first in hash order. In the original converter
+  (`0x4019b0`), both arrays happen to rank above every scalar.
+- **Block-scope locals get their own slots.** **Observed:** in `UpdateEffect`, each
+  `case` block's `double`s get fresh slots below the function-scope locals, one block
+  after another in code order.
+- **Evaluation is left to right.** **Observed:** in floating-point expressions, the left
+  operand is evaluated first and spilled to a temporary when the right one contains a
+  call. Operand order in the original source can therefore be read off the binary.
+- **Inline functions are COMDATs placed after the object that first uses them, in that
+  object's emission order.** **Observed:** `effect.obj` emits `fabs(float)`, `fabsf`,
+  `sin(float)`, `sinf` and `EffectDesc::EffectDesc` in the original's address order.
 - **The compiler pads functions to 16 bytes with `int3` inside one `.text` section;
   `/Gy` is not involved.** **Observed:** in the recompiled `main.obj`, `WndProc` sits at
   `+0x670` and `FrameTimerThread` at `+0x850`. Compiler-generated functions (scalar
   deleting destructors) go in COMDAT sections, which the linker places right after the
   object's code.
-- **The first object file is `0x401000`–`0x40194f`, and `src/main.cpp` matches all of it:**
-  `WinMain`, `WndProc`, `FrameTimerThread`, and the `CGame` and `CPlayer` deleting
-  destructors. The second object starts at `0x401950`.
+- **The first object file is `src/main.cpp`, and all of it matches:**
+  - `0x401000`–`0x40194f`: `WinMain`, `WndProc`, `FrameTimerThread`, and the `CGame` and
+    `CPlayer` deleting destructors.
+  - The inline `CGraphics` constructor (`0x401950`).
+  - Dynamic initializers and `atexit` destructors for `g_graphics`, `g_input` and
+    `g_sound`, which the linker sorts to the end of `.text` (`0x786420`–`0x7864af`).
+- **The second object file is `src/effect.cpp` (`0x4019b0`–`0x4054af`), and all of it
+  matches:**
+  - a dead `.bmp`→`.dat` converter
+  - `CGame::UpdateEffect`
+  - five inline helpers
 - **String literals are not pooled.** **Observed:** `/GF` is off, and `WinMain`'s four
   identical `"ETENAL FIGHTER ZERO"` literals each get their own copy. (The typo is the
   original's.)
@@ -134,6 +163,26 @@ Each line below is **observed**, read from the matched `WinMain` in `src/main.cp
   and its return value is the next scene index (`BYTE` at `0x790148`). Constructors and
   sizes are listed in `src/efz.h`.
 
+## Effect system (from `CGame::UpdateEffect`, matched)
+
+**Observed:**
+- **Ring buffer.** `CGame` holds 640 effects in a ring buffer: head `+0x1380`, tail
+  `+0x1382`, active flags `+0x1384`, and `0x70`-byte records at `+0x2a08`.
+- **Creating and removing.** `CreateEffect` (`0x407100`) copies an `EffectDesc` built on
+  the caller's stack into the next slot; `RemoveEffect` (`0x4072a0`) frees a slot. Many
+  game functions call `CreateEffect` (1268 call sites).
+- **Animation table.** Each effect has a type, frame and timer. The table at `+0x14208`
+  gives each type's frame count and per-frame durations. An effect is removed after its
+  last frame.
+- **Behaviours by type:**
+  - particle bursts, spawned on the first frame
+  - straight-line motion at a random angle and speed
+  - debris that bounces on `y = 0`: gravity `0.2`, damping `0.6`–`0.9`
+  - orbiting points on a rotated ellipse, slowed by `0.94` each frame
+  - screen-centre (160, 120) follow-ups when an animation ends
+- **All randomness is `rand()`.** A rollback-netplay port must keep the CRT's `rand()`
+  sequence and call order identical.
+
 ## Engine facts worth preserving
 
 - **The game runs at 64 FPS, not 60.** Source: the EfzRevival changelog.
@@ -157,6 +206,9 @@ Each line below is **observed**, read from the matched `WinMain` in `src/main.cp
 - **`replay/*.rep`** files are replays. EfzRevival extends the format.
 
 ## Not yet established
+
+- **The stack-order hash function.** It's measured empirically for now; recovering it
+  from `c1xx.dll` would let tools predict layouts without compiling.
 
 - **The function list is approximate.** It comes from objdump with heuristics; it needs
   a Ghidra or IDA database and a reconciled function list.

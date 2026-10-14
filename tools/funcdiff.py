@@ -75,10 +75,10 @@ def parse_file(path, found):
 
 
 def infer_name(kind, lines, start, cls):
-    for line in lines[start:start + 3]:
+    for line in lines[start:start + 12]:
         code = line.split('//')[0].strip()
         if not code:
-            continue
+            continue  # comments between the annotation and the code
         m = MACRO_CLASS.match(code)
         if m and kind == 'FUNCTION' and '(' in code and code.split('(')[0].isupper():
             return f'{m.group(1)}::{m.group(1)}'  # DECLARE_X(Class, ...) declares a constructor
@@ -95,10 +95,12 @@ def infer_name(kind, lines, start, cls):
 def mangled_prefixes(name):
     """Possible MSVC decorated-name prefixes for a qualified C++ name.
 
-    An annotation can also give the decorated name itself (for compiler-generated
-    functions such as `??_GCGame@@QAEPAXI@Z`, the scalar deleting destructor).
+    An annotation can also give the decorated name itself, for compiler-generated
+    functions such as `??_GCGame@@QAEPAXI@Z` (a scalar deleting destructor) or `_$E1`
+    (VC 7.1's name for a TU's first dynamic initializer), and for extern "C" inlines
+    such as `_fabsf`.
     """
-    if name.startswith('?'):
+    if name.startswith(('?', '_')):
         return [name + '\0']
     parts = name.split('::')
     if len(parts) == 1:
@@ -190,7 +192,11 @@ def compare(obj, sym, sec, off, size, addr, pe, image, iat, known, learned):
             problems.append(f'+{o:#x}: unsupported relocation type {typ:#x}')
             continue
         name = target['name']
-        expected = resolve(obj, target, actual, image, base, iat, known, learned)
+        if target['section'] == sec + 1:
+            # A label in this function's own section (jump table, case target).
+            expected = addr - off + target['value']
+        else:
+            expected = resolve(obj, target, actual, image, base, iat, known, learned)
         if expected is None:
             problems.append(f'+{o:#x}: {name} -> original has {actual:#x}, which does not match')
             expected = actual
@@ -230,6 +236,8 @@ def main():
     pe = pefile.PE(exe)
     image = pe.get_memory_mapped_image()
     base = pe.OPTIONAL_HEADER.ImageBase
+    text = next(s for s in pe.sections if s.Name.startswith(b'.text'))
+    text_end = base + text.VirtualAddress + text.Misc_VirtualSize
     iat = {i.address: (i.name.decode() if i.name else f'#{i.ordinal}')
            for d in pe.DIRECTORY_ENTRY_IMPORT for i in d.imports}
     known = read_annotations(os.path.join(REPO, 'src'))
@@ -247,7 +255,7 @@ def main():
         mine, orig, problems = compare(obj, sym, sec, off, size, addr, pe, image, iat, known, learned)
         same = sum(a == b for a, b in zip(mine, orig))
         after = image[addr - base + size:addr - base + size + 3]
-        ends = after[:1] == b'\xcc' or after == b'\x55\x8b\xec'
+        ends = after[:1] == b'\xcc' or after == b'\x55\x8b\xec' or addr + size == text_end
         ok = mine == orig and not problems and ends
         matched += ok
         print(f'{"MATCH" if ok else "DIFF "} {qual} {addr:#x}: {same}/{size} bytes'
