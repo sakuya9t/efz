@@ -10,6 +10,7 @@
 #define EFZ_H
 
 #include <windows.h>
+#include <ddraw.h>
 #include <string.h>
 
 // A frame of an effect animation, read from system\effect\effect.pat.
@@ -159,59 +160,152 @@ public:
     DWORD m_read;
 };
 
-// DirectDraw wrapper.
+// DirectDraw wrapper: a 320x240 or 640x480 8-bit palettised screen with one back buffer.
+// Sprites are system-memory surfaces that the Blit functions copy to the back buffer in
+// software, through inline assembly loops.
 class CGraphics {
 public:
     // FUNCTION: 0x401950
     // Defined inline, so the copy main.obj uses is placed right after main.obj's code.
     CGraphics()
     {
-        unk4 = 0;
+        m_mode = 0;
         for (int i = 0; i < 0x200; i++)
-            quarterSquares[i] = (i - 0x100) * (i - 0x100) / 4;
+            m_quarterSquares[i] = (i - 0x100) * (i - 0x100) / 4;
     }
     // FUNCTION: 0x408b50
     ~CGraphics();
     // FUNCTION: 0x4083b0
-    void Init(HWND hWnd, BYTE mode);
+    // mode 0: 320x240, 1: 640x480. Shows a message and closes the window on failure.
+    BOOL Init(HWND hWnd, BYTE mode);
+    // FUNCTION: 0x408640
+    // Recreates the screen surfaces in 8-bit colour.
+    BOOL SetMode8();
+    // FUNCTION: 0x408850
+    // Recreates the screen surfaces in 16-bit colour.
+    BOOL SetMode16();
     // FUNCTION: 0x408a60
     // Restores the display mode and releases the DirectDraw objects.
     void Shutdown();
+    // FUNCTION: 0x408c40
+    void ReleaseSurface(IDirectDrawSurface** surface);
+    // FUNCTION: 0x408c70
+    // Posts WM_CLOSE to the game window.
+    BOOL Close();
+    // FUNCTION: 0x408ca0
+    BOOL RestorePrimary();
+    // FUNCTION: 0x408cd0
+    BOOL RestoreSurface(IDirectDrawSurface** surface);
     // FUNCTION: 0x408d00
-    RECT LoadBmp(IUnknown** surface, const char* name, BYTE unk);
+    // Loads an 8-bit .bmp into a new surface, adding `base` to every pixel; returns
+    // the image's rectangle.
+    RECT LoadBmp(IDirectDrawSurface** surface, const char* name, BYTE base);
+    // FUNCTION: 0x409090
+    // The same, but pixels 40 and above map to 175 and up instead of having base added.
+    RECT LoadBmpHigh(IDirectDrawSurface** surface, const char* name, BYTE base);
     // FUNCTION: 0x409470
     // Creates a surface from an image inside a .dat file; returns the bytes consumed,
-    // or 0 on failure.
-    int LoadSurface(IUnknown** surface, BYTE* data, BYTE unk1, BYTE unk2);
+    // or 0 on failure. With rle nonzero, a byte above rle repeats the previous colour
+    // (byte - rle) more times.
+    int LoadSurface(IDirectDrawSurface** surface, BYTE* data, BYTE rle, BYTE base);
+    // FUNCTION: 0x409740
+    // LoadSurface with LoadBmpHigh's mapping.
+    int LoadSurfaceHigh(IDirectDrawSurface** surface, BYTE* data, BYTE rle, BYTE base);
     // FUNCTION: 0x409a90
-    void Blit(RECT dst, IUnknown* surface, RECT src, BYTE unk, BOOL flip);
+    // Copies `src` of `surface` to `dst` on the back buffer, clipped to 320x240, skipping
+    // pixels equal to `key` (if nonzero), mirrored if `flip`. Returns FALSE if a surface
+    // was lost.
+    BOOL Blit(RECT dst, IDirectDrawSurface* surface, RECT src, BYTE key, BOOL flip);
+    // FUNCTION: 0x409db0
+    // Blit onto any surface, clipped to 640x480. Unused.
+    BOOL BlitTo(IDirectDrawSurface* target, RECT dst, IDirectDrawSurface* surface, RECT src,
+                BYTE key, BOOL flip);
     // FUNCTION: 0x40a0b0
-    void BlitEx(RECT dst, IUnknown* surface, RECT src, BYTE unk, BOOL flip, int mode);
+    // Blit through blend table `mode` (0 or 1): each pixel becomes
+    // m_blend[mode][source][destination].
+    BOOL BlitEx(RECT dst, IDirectDrawSurface* surface, RECT src, BYTE key, BOOL flip,
+                char mode);
+    // FUNCTION: 0x40a440
+    // Paints the sprite's shape: each pixel becomes m_blend[1][source][color].
+    BOOL BlitTint(RECT dst, IDirectDrawSurface* surface, RECT src, BYTE key, BOOL flip,
+                  BYTE color);
+    // FUNCTION: 0x40a7b0
+    // Draws the sprite's shadow: squashed to a third of its height and upside down,
+    // darkening the back buffer through m_blend[0][destination][shade].
+    BOOL BlitShadow(RECT dst, IDirectDrawSurface* surface, RECT src, BYTE key, BOOL flip,
+                    BYTE shade);
+    // FUNCTION: 0x40aae0
+    // Smears the back buffer under the sprite's shape: each pixel copies the one 3 to
+    // its left.
+    BOOL BlitSmear(RECT dst, IDirectDrawSurface* surface, RECT src, BYTE key, BOOL flip);
+    // FUNCTION: 0x40ae10
+    // Darkens a line from (x1, y1) to (x2, y2) through m_blend[1][0xe2].
+    BOOL DrawLine(int x1, int y1, int x2, int y2);
+    // FUNCTION: 0x40b110
+    // Outlines `rc` in `color`, clamped to the screen.
+    BOOL DrawFrame(RECT rc, BYTE color);
+    // FUNCTION: 0x40b300
+    BOOL FillRect(RECT rc, BYTE color);
+    // FUNCTION: 0x40b440
+    // In 640x480 mode, doubles the 320x240 image in the back buffer to fill it.
+    BOOL Upscale();
+    // FUNCTION: 0x40b5e0
+    // Presents the back buffer; returns FALSE if the surface was lost.
+    BOOL Flip();
     // FUNCTION: 0x40b640
-    void LoadPaletteBmp(BYTE* palette, const char* name, BYTE unk1, BYTE unk2, BYTE unk3);
+    // Reads `count` colours of an 8-bit .bmp's palette, from entry `from`, into
+    // palette[to]...
+    BOOL LoadPaletteBmp(PALETTEENTRY* palette, const char* name, int from, int to, int count);
     // FUNCTION: 0x40b760
-    void LoadPaletteDat(BYTE* palette, const char* name, BYTE unk1, BYTE unk2, BYTE unk3);
+    // The same from a .dat file, whose palette is stored as 3-byte entries after the
+    // first byte.
+    BOOL LoadPaletteDat(PALETTEENTRY* palette, const char* name, int from, int to, int count);
+    // FUNCTION: 0x40b8a0
+    // Fills m_blend from `palette`: [0][a][b] is the colour nearest to the average of a
+    // and b, [1][a][b] the colour nearest to their sum.
+    void BuildBlendTables(PALETTEENTRY* palette);
     // FUNCTION: 0x40bcc0
-    BYTE Unk40bcc0(IUnknown* surface);
+    // Returns the surface's top-left pixel, which the game uses as its transparent colour.
+    BYTE GetColorKey(IDirectDrawSurface* surface);
+    // FUNCTION: 0x40bd30
+    // Sets the screen palette; entry 255 is left out.
+    BOOL SetPalette(PALETTEENTRY* palette);
+    // FUNCTION: 0x40bd70
+    BOOL SetPaletteRange(PALETTEENTRY* palette, BYTE start, BYTE count);
+    // FUNCTION: 0x40bdc0
+    BOOL ClearPalette(PALETTEENTRY* palette);
     // FUNCTION: 0x40be20
-    void Unk40be20(BYTE* palette, int unk1, int unk2, int amount);
+    // Sets screen palette entries from..to-1 to `percent` of `palette`'s brightness.
+    void Darken(PALETTEENTRY* palette, BYTE from, BYTE to, BYTE percent);
     // FUNCTION: 0x40bf20
-    void Unk40bf20(BYTE* palette, int unk1, int unk2, int amount);
+    // Sets screen palette entries from..to-1 to `palette` blended with white; 100 keeps
+    // the colours, 0 is white.
+    void Brighten(PALETTEENTRY* palette, BYTE from, BYTE to, BYTE percent);
+    // FUNCTION: 0x40c070
+    // Sets screen palette entries from..to-1 to `palette` moved `percent` of the way to
+    // its negative.
+    void Invert(PALETTEENTRY* palette, BYTE from, BYTE to, BYTE percent);
+    // FUNCTION: 0x40c1c0
+    // Saves the 320x240 screen as snap\snNNNN.bmp.
+    void Screenshot(int number, PALETTEENTRY* palette);
 
-    int unk0;
-    BYTE unk4;
-    char unk5[0x20406 - 5];
+    HWND m_hwnd;
+    BYTE m_mode;
+    PALETTEENTRY m_palette[0x100];
+    BYTE m_blend[2][0x100][0x100]; // [table][source][destination]
+    BYTE unk20405;
     // (i - 256)^2 / 4 for i in 0..511: a quarter-squares table, so that
-    // a * b == quarterSquares[256 + a + b] - quarterSquares[256 + a - b].
-    short quarterSquares[0x200];
-    IUnknown* unk20808; // IDirectDraw7, judging by RestoreDisplayMode at vtable +0x4c
-    IUnknown* unk2080c;
-    IUnknown* unk20810;
-    IUnknown* unk20814;
+    // a * b == m_quarterSquares[256 + a + b] - m_quarterSquares[256 + a - b].
+    // BuildBlendTables uses it for squared colour distances.
+    WORD m_quarterSquares[0x200];
+    IDirectDraw* m_dd;
+    IDirectDrawSurface* m_primary;
+    IDirectDrawSurface* m_back;
+    IDirectDrawPalette* m_ddpal;
 };
 
 // FUNCTION: 0x40c590
-RECT MakeRect(int left, int top, int right, int bottom);
+RECT MakeRect(int x, int y, int width, int height);
 
 // DirectInput wrapper.
 class CInput {
@@ -382,7 +476,7 @@ public:
     // Loads the 920 effect sprites from system\effect\effect.dat, then system\object.dat.
     void LoadEffects();
     // FUNCTION: 0x406db0
-    void LoadDat(IUnknown** surface, const char* name, BYTE unk1, BYTE unk2);
+    void LoadDat(IDirectDrawSurface** surface, const char* name, BYTE rle, BYTE offset);
     // FUNCTION: 0x406e60
     // Reads the effect animations from system\effect\effect.pat.
     void LoadEffectAnims();
@@ -414,15 +508,15 @@ public:
     // FUNCTION: 0x407ce0
     void Unk407ce0(BYTE value);
     // FUNCTION: 0x407d10
-    // Steps the palette fade started by FadeUp or FadeDown.
+    // Steps the palette fade started by FlashWhite or FlashBlack.
     void UpdateFade();
     // FUNCTION: 0x408040
-    // Fades the palette over `in` frames, holds `hold` frames, then fades back over
-    // `out` frames, through CGraphics::Unk40bf20.
-    void FadeUp(int in, int hold, int out);
+    // Fades the screen to white over `in` frames, holds it `hold` frames, then fades back
+    // over `out` frames.
+    void FlashWhite(int in, int hold, int out);
     // FUNCTION: 0x408080
-    // The same through CGraphics::Unk40be20.
-    void FadeDown(int in, int hold, int out);
+    // The same with black.
+    void FlashBlack(int in, int hold, int out);
     // FUNCTION: 0x4080c0
     void Unk4080c0(int value);
     // FUNCTION: 0x408100
@@ -445,10 +539,10 @@ public:
     BOOL m_holdB[2];
     BOOL m_holdC[2];
     BOOL m_holdD[2];
-    IUnknown* m_surfaces[0x398];  // effect sprites
-    IUnknown* unke98;
-    IUnknown* unke9c;
-    IUnknown* m_objectSurface;    // system\object.dat
+    IDirectDrawSurface* m_surfaces[0x398]; // effect sprites
+    IDirectDrawSurface* unke98;
+    IDirectDrawSurface* unke9c;
+    IDirectDrawSurface* m_objectSurface;   // system\object.dat
     WORD m_sounds[0x41];          // sound IDs; 0x96 means none
     WORD m_music;                 // sound ID of the music; passed to the sound system every frame
     int m_musicTarget;
@@ -456,8 +550,9 @@ public:
     short m_musicStep;
     BYTE unkf32;
     BYTE unkf33;
-    BYTE unkf34;
-    BYTE m_palette[0x40c];
+    BYTE m_colorKey;              // the object sprite's transparent colour
+    PALETTEENTRY m_palette[0x100];
+    char unk1335[0xc];
     char m_extraChars;
     char unk1342[3];
     BYTE unk1345;
@@ -501,7 +596,7 @@ public:
     char unk14238[0x14260 - 0x14238];
     double m_fade;                // -100 to 100
     int m_fadeHold;
-    char m_fadeDir;               // 1: FadeUp, -1: FadeDown, 0: none
+    char m_fadeDir;               // 1: FlashWhite, -1: FlashBlack, 0: none
     int m_fadeIn;
     int m_fadeOut;
     int unk14278;

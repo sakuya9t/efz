@@ -280,10 +280,10 @@ void CGame::LoadEffects()
         m_graphics->LoadBmp(&m_objectSurface, "system\\object.bmp", 0xaf);
         m_graphics->LoadPaletteBmp(m_palette, "system\\object.bmp", 0, 0xaf, 0x50);
     }
-    unkf34 = m_graphics->Unk40bcc0(m_objectSurface);
+    m_colorKey = m_graphics->GetColorKey(m_objectSurface);
 }
 
-void CGame::LoadDat(IUnknown** surface, const char* name, BYTE unk1, BYTE unk2)
+void CGame::LoadDat(IDirectDrawSurface** surface, const char* name, BYTE rle, BYTE offset)
 {
     BYTE* data;
     DWORD dwRead;
@@ -294,7 +294,7 @@ void CGame::LoadDat(IUnknown** surface, const char* name, BYTE unk1, BYTE unk2)
     size = GetFileSize(hFile, NULL);
     data = new BYTE[size];
     ReadFile(hFile, data, size, &dwRead, NULL);
-    m_graphics->LoadSurface(surface, data + data[0] * 3 + 1, unk1, unk2);
+    m_graphics->LoadSurface(surface, data + data[0] * 3 + 1, rle, offset);
     CloseHandle(hFile);
     delete data;
 }
@@ -468,10 +468,10 @@ void CGame::DrawEffects(int x, int y, BYTE layer)
                 dest.bottom = frame->height + dest.top;
             }
             if (m_effects[i].scale > 0)
-                m_graphics->BlitEx(dest, m_surfaces[frame->surface], src, unkf34,
+                m_graphics->BlitEx(dest, m_surfaces[frame->surface], src, m_colorKey,
                                    m_effects[i].side, m_effects[i].scale - 1);
             else
-                m_graphics->Blit(dest, m_surfaces[frame->surface], src, unkf34,
+                m_graphics->Blit(dest, m_surfaces[frame->surface], src, m_colorKey,
                                  m_effects[i].side);
         }
         i++;
@@ -545,7 +545,7 @@ void CGame::UpdateFade()
             if (m_fade > 100.0)
                 m_fade = 100.0;
             if (m_fade > 0.0)
-                m_graphics->Unk40bf20(m_palette, 1, 0xff, 100 - (int)m_fade);
+                m_graphics->Brighten(m_palette, 1, 0xff, 100 - (int)m_fade);
             m_fadeIn--;
         } else if (m_fadeHold > 0) {
             m_fadeHold--;
@@ -553,7 +553,7 @@ void CGame::UpdateFade()
             m_fade = m_fade - 100.0 / m_fadeOut;
             if (m_fade <= 0.0)
                 m_fade = 0.0;
-            m_graphics->Unk40bf20(m_palette, 1, 0xff, 100 - (int)m_fade);
+            m_graphics->Brighten(m_palette, 1, 0xff, 100 - (int)m_fade);
         } else {
             m_fadeDir = 0;
         }
@@ -563,7 +563,7 @@ void CGame::UpdateFade()
             if (m_fade < -100.0)
                 m_fade = -100.0;
             if (m_fade < 0.0)
-                m_graphics->Unk40be20(m_palette, 1, 0xff, (int)m_fade + 100);
+                m_graphics->Darken(m_palette, 1, 0xff, (int)m_fade + 100);
             m_fadeIn--;
         } else if (m_fadeHold > 0) {
             m_fadeHold--;
@@ -571,14 +571,14 @@ void CGame::UpdateFade()
             m_fade = 100.0 / m_fadeOut + m_fade;
             if (m_fade >= 0.0)
                 m_fade = 0.0;
-            m_graphics->Unk40be20(m_palette, 1, 0xff, (int)m_fade + 100);
+            m_graphics->Darken(m_palette, 1, 0xff, (int)m_fade + 100);
         } else {
             m_fadeDir = 0;
         }
     }
 }
 
-void CGame::FadeUp(int in, int hold, int out)
+void CGame::FlashWhite(int in, int hold, int out)
 {
     m_fadeDir = 1;
     m_fadeIn = in;
@@ -586,7 +586,7 @@ void CGame::FadeUp(int in, int hold, int out)
     m_fadeOut = out;
 }
 
-void CGame::FadeDown(int in, int hold, int out)
+void CGame::FlashBlack(int in, int hold, int out)
 {
     m_fadeDir = -1;
     m_fadeIn = in;

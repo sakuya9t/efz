@@ -71,23 +71,32 @@ def rank(names):
 
 
 def solve(variables):
-    """variables: [(label, [candidates])] from the top of the frame down."""
+    """variables: [(label, [candidates])] from the top of the frame down.
+
+    Returns the assignment whose candidates are earliest in their lists overall (the
+    sum of their positions is minimal), so that preferred names win where they can.
+    """
     groups = rank([c for _, cands in variables for c in cands])
     level = {n: i for i, g in enumerate(groups) for n in g}
-
-    def search(k, floor, used):
-        if k == len(variables):
-            return []
-        for cand in variables[k][1]:
-            # Same bucket as the variable above is fine: declaring bottom-up puts
-            # the upper one later, and later declarations sit higher.
-            if cand not in used and level[cand] >= floor:
-                rest = search(k + 1, level[cand], used | {cand})
-                if rest is not None:
-                    return [cand] + rest
-        return None
-
-    return search(0, 0, frozenset()), groups
+    # best[k][lv]: (cost, names) of the cheapest assignment of variables k.. whose
+    # first name has a level of at least lv. Same bucket as the variable above is
+    # fine: declaring bottom-up puts the upper one later, and later declarations sit
+    # higher.
+    nlevels = len(groups)
+    best = [[None] * (nlevels + 1) for _ in range(len(variables) + 1)]
+    for lv in range(nlevels + 1):
+        best[len(variables)][lv] = (0, [])
+    for k in range(len(variables) - 1, -1, -1):
+        for lv in range(nlevels - 1, -1, -1):
+            options = [best[k][lv + 1]] if lv + 1 <= nlevels else []
+            for cost, cand in enumerate(variables[k][1]):
+                rest = best[k + 1][level[cand]]
+                if level[cand] == lv and rest is not None and cand not in rest[1]:
+                    options.append((cost + rest[0], [cand] + rest[1]))
+            options = [o for o in options if o is not None]
+            best[k][lv] = min(options, key=lambda o: o[0]) if options else None
+    result = best[0][0]
+    return (result[1] if result else None), groups
 
 
 def main():
