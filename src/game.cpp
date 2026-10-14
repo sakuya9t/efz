@@ -32,7 +32,7 @@ CGame::CGame(CGraphics* graphics, CInput* input, CSound* sound)
     unke9c = NULL;
     for (i = 0; i < 0x398; i++)
         m_surfaces[i] = NULL;
-    unk137c = NULL;
+    m_background = NULL;
     m_effectAnims = NULL;
     unk1374 = ReadConfigByte(0x21) > 0;
     if (unk1374) {
@@ -84,9 +84,9 @@ CGame::~CGame()
         m_sound->Release(m_music);
     if (m_effectAnims)
         delete[] m_effectAnims;
-    if (unk137c) {
-        delete unk137c;
-        unk137c = NULL;
+    if (m_background) {
+        delete m_background;
+        m_background = NULL;
     }
 }
 

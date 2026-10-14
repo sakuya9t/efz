@@ -19,6 +19,7 @@
 #include <math.h>
 
 struct EffectDesc;
+class CAnimBg;
 
 // A frame of an effect animation, read from system\effect\effect.pat.
 struct EffectFrame {
@@ -407,6 +408,43 @@ public:
     BYTE* m_data[0x96];
     DWORD m_size[0x96];
     IDirectSoundBuffer* m_buffers[0x96];
+};
+
+// One frame of a pattern's data (boxes, physics values), copied whole by some scenes.
+// No byte arrays in here: /GS would then protect every function with one as a local.
+struct PatternFrame {
+    RECT boxes[5];      // probably hurtboxes
+    RECT attackBoxes[4];
+    RECT box90;
+    short unka0;
+    short unka2;
+    float unka4;
+    short unka8;
+    WORD flagsAA;
+    short unkac;
+    short unkae;
+    WORD flagsB0;
+    short unkb2;
+    short unkb4;
+    short unkb6;
+    float unkb8;
+    float unkbc;
+    char unkc0;
+    char unkc1;
+    short unkc2;
+    short unkc4;
+    short unkc6;
+};
+
+// A player's frame, position and facing, gathered for CScene3's collision checks.
+struct CollisionInfo {
+    PatternFrame frame;
+    EffectFrame anim;
+    double x;
+    double y;
+    char facing;        // CPlayer+0x50
+    char unke9;         // CPlayer+0x168
+    short unkea;        // CPlayer+0x16c
 };
 
 // Per-pattern data read from <name>.pat beside the sprite frames, one per pattern
@@ -844,7 +882,7 @@ public:
     char unk1371[3];
     BOOL unk1374;
     int unk1378;
-    void* unk137c;
+    CAnimBg* m_background;        // the stage's animated background, if it has one
     short m_effectHead;           // next slot CreateEffect uses
     short m_effectTail;           // oldest live slot
     int m_effectActive[0x280];
@@ -879,40 +917,431 @@ public:
     char unk142a8[0x142f0 - 0x142a8];
 };
 
-// Base of the top-level game states. Update() runs one frame and returns the
-// index of the state to run next.
+// Base of the scenes WinMain runs: Update returns the index of the next scene. The
+// constructor and the fades are inline; their copies follow the first scene object.
 class CScene {
 public:
-    virtual void Unk0();
-    virtual BYTE Update();
+    // FUNCTION: 0x759c10
+    CScene(HWND p1, CPlayer** p2, CPlayer** p3, CGame* p4, CGraphics* p5, CInput* p6,
+           CSound* p7)
+    {
+        *(int*)((char*)this + 0x14) = (int)p2;
+        *(int*)((char*)this + 0x18) = (int)p3;
+        *(int*)((char*)this + 8) = (int)p1;
+        *(int*)((char*)this + 0xc) = *(int*)(char*)p2;
+        *(int*)((char*)this + 0x10) = *(int*)(char*)p3;
+        *(int*)((char*)this + 0x1c) = (int)p4;
+        *(int*)((char*)this + 0x20) = (int)p5;
+        *(int*)((char*)this + 0x24) = (int)p6;
+        *(int*)((char*)this + 0x28) = (int)p7;
+        *((char*)this + 0x2c) = -1;
+        *((char*)this + 0x2d) = 0;
+    }
+    // FUNCTION: 0x759c90
+    // Darkens (p2 0) or brightens (p2 1) the palette over 21 frames, drawing each one, and
+    // fades the music volume with it.
+    void Unk759c90(PALETTEENTRY* p1, BYTE p2, int p3, int p4)
+    {
+        int l10;
+        int vc;
+        int x8;
+        int l4;
 
-    UINT lastMessage; // set by WndProc to the message it is handling
-};
+        x8 = timeGetTime();
+        l4 = 0;
+        if (p2 == 0) {
+            vc = 0x14;
+            for (; vc >= 0; vc--) {
+                Draw();
+                ((CGraphics*)*(int*)((char*)this + 0x20))->Darken(p1, 0, 0xff, vc * 5);
+                ((CSound*)*(int*)((char*)this + 0x28))->SetVolume(*(short*)(*(char**)((char*)this + 0x1c) + 0xf26), p3 - (0x14 - vc) * p4 / 2);
+                while ((DWORD)(timeGetTime() - x8) < (BYTE)(0x10 - l4)) {
+                }
+                x8 = timeGetTime();
+                l4 = l4 == 0;
+            }
+        }
+        if (p2 == 1) {
+            l10 = 0x14;
+            for (; l10 >= 0; l10--) {
+                Draw();
+                ((CGraphics*)*(int*)((char*)this + 0x20))->Brighten(p1, 0, 0xff, l10 * 5);
+                ((CSound*)*(int*)((char*)this + 0x28))->SetVolume(*(short*)(*(char**)((char*)this + 0x1c) + 0xf26), p3 - (0x14 - l10) * p4 / 2);
+                while ((DWORD)(timeGetTime() - x8) < (BYTE)(0x10 - l4)) {
+                }
+                x8 = timeGetTime();
+                l4 = l4 == 0;
+            }
+        }
+    }
+    // FUNCTION: 0x759e20
+    // The same without the music.
+    void Unk759e20(PALETTEENTRY* p1, BYTE p2)
+    {
+        int l10;
+        int vc;
+        int x8;
+        int l4;
 
-#define DECLARE_SCENE(name, size)                                                           \
-    class name : public CScene {                                                            \
-    public:                                                                                 \
-        name(HWND hWnd, CPlayer** player1, CPlayer** player2, CGame* game,                  \
-             CGraphics* graphics, CInput* input, CSound* sound);                            \
-        char unk[size - 8];                                                                 \
+        x8 = timeGetTime();
+        l4 = 0;
+        if (p2 == 0) {
+            vc = 0;
+            for (; vc <= 0x14; vc++) {
+                Draw();
+                ((CGraphics*)*(int*)((char*)this + 0x20))->Darken(p1, 0, 0xff, vc * 5);
+                while ((DWORD)(timeGetTime() - x8) < (BYTE)(0x10 - l4)) {
+                }
+                x8 = timeGetTime();
+                l4 = l4 == 0;
+            }
+        }
+        if (p2 == 1) {
+            l10 = 0;
+            for (; l10 <= 0x14; l10++) {
+                Draw();
+                ((CGraphics*)*(int*)((char*)this + 0x20))->Brighten(p1, 0, 0xff, l10 * 5);
+                while ((DWORD)(timeGetTime() - x8) < (BYTE)(0x10 - l4)) {
+                }
+                x8 = timeGetTime();
+                l4 = l4 == 0;
+            }
+        }
     }
 
-// FUNCTION: 0x775d60
-DECLARE_SCENE(CScene0, 0x44c);
-// FUNCTION: 0x753260
-DECLARE_SCENE(CScene1, 0x560);
-// FUNCTION: 0x76c6f0
-DECLARE_SCENE(CScene2, 0x438);
-// FUNCTION: 0x7633a0
-DECLARE_SCENE(CScene3, 0x598);
-// FUNCTION: 0x7712f0
-DECLARE_SCENE(CScene5, 0x474);
-// FUNCTION: 0x759f30
-DECLARE_SCENE(CScene6, 0x760);
-// FUNCTION: 0x7758b0
-DECLARE_SCENE(CScene7, 0x448);
-// FUNCTION: 0x76e480
-DECLARE_SCENE(CScene8, 0x758);
+    virtual void Draw() = 0;
+    virtual BYTE Update() = 0;
+    virtual void Vf2() = 0;
+
+    UINT lastMessage;       // set by WndProc to the message it is handling
+    HWND m_hwnd;
+    CPlayer* m_player1;     // the players when the scene was made
+    CPlayer* m_player2;
+    CPlayer** m_player1Ref; // WinMain's g_player1 and g_player2
+    CPlayer** m_player2Ref;
+    CGame* m_game;
+    CGraphics* m_graphics;
+    CInput* m_input;
+    CSound* m_sound;
+    char unk2c;
+    char unk2d;
+    BYTE unk2e[2];
+};
+
+// An animated stage background: its frames are system\bg\bgNN\MMM.dat, with NN at +4
+// and the frame count at +6.
+class CAnimBg {
+public:
+    // FUNCTION: 0x7519f0
+    CAnimBg() {}
+    // FUNCTION: 0x750d30
+    void Load();
+    // FUNCTION: 0x751030
+    void Unk751030();
+
+    virtual void Vf0() = 0;
+    virtual void Vf1(int p1, int p2, char p3) = 0;
+
+    BYTE data[0x18];
+};
+
+// Bg01: derived from CAnimBg.
+// SIZE: 0x1c
+class CBg01 : public CAnimBg {
+public:
+    // FUNCTION: 0x751370
+    CBg01(int p1);
+    // FUNCTION: 0x751500
+    ~CBg01();
+    // FUNCTION: 0x7515d0
+    virtual void Vf0();
+    // FUNCTION: 0x751730
+    virtual void Vf1(int p1, int p2, char p3);
+
+    BYTE unk[0x1c - sizeof(CAnimBg)];
+};
+
+// Bg10: derived from CAnimBg.
+// SIZE: 0x1c
+class CBg10 : public CAnimBg {
+public:
+    // FUNCTION: 0x751a40
+    CBg10(int p1);
+    // FUNCTION: 0x751bc0
+    ~CBg10();
+    // FUNCTION: 0x751c90
+    virtual void Vf0();
+    // FUNCTION: 0x751df0
+    virtual void Vf1(int p1, int p2, char p3);
+
+    BYTE unk[0x1c - sizeof(CAnimBg)];
+};
+
+// Bg12: derived from CAnimBg.
+// SIZE: 0x1c
+class CBg12 : public CAnimBg {
+public:
+    // FUNCTION: 0x7520b0
+    CBg12(int p1);
+    // FUNCTION: 0x752240
+    ~CBg12();
+    // FUNCTION: 0x752310
+    virtual void Vf0();
+    // FUNCTION: 0x752470
+    virtual void Vf1(int p1, int p2, char p3);
+
+    BYTE unk[0x1c - sizeof(CAnimBg)];
+};
+
+// Bg16: derived from CAnimBg.
+// SIZE: 0x1c
+class CBg16 : public CAnimBg {
+public:
+    // FUNCTION: 0x752900
+    CBg16(int p1);
+    // FUNCTION: 0x752a90
+    ~CBg16();
+    // FUNCTION: 0x752b60
+    virtual void Vf0();
+    // FUNCTION: 0x752dc0
+    virtual void Vf1(int p1, int p2, char p3);
+
+    BYTE unk[0x1c - sizeof(CAnimBg)];
+};
+
+// Scene1: derived from CScene.
+// SIZE: 0x560
+class CScene1 : public CScene {
+public:
+    // FUNCTION: 0x753260
+    CScene1(HWND p1, CPlayer** p2, CPlayer** p3, CGame* p4, CGraphics* p5, CInput* p6, CSound* p7);
+    // FUNCTION: 0x7538b0
+    ~CScene1();
+    // FUNCTION: 0x7539f0
+    virtual BYTE Update();
+    // FUNCTION: 0x755500
+    virtual void Draw();
+    // FUNCTION: 0x7586b0
+    void Unk7586b0(int p1, int p2, char p3);
+    // FUNCTION: 0x759460
+    void Unk759460();
+    // FUNCTION: 0x7595d0
+    void Unk7595d0(char p1);
+    // FUNCTION: 0x759770
+    virtual void Vf2();
+    // FUNCTION: 0x7598d0
+    void Unk7598d0();
+
+    BYTE unk[0x560 - sizeof(CScene)];
+};
+
+// Scene6: derived from CScene.
+// SIZE: 0x760
+class CScene6 : public CScene {
+public:
+    // FUNCTION: 0x759f30
+    CScene6(HWND p1, CPlayer** p2, CPlayer** p3, CGame* p4, CGraphics* p5, CInput* p6, CSound* p7);
+    // FUNCTION: 0x75a3b0
+    ~CScene6();
+    // FUNCTION: 0x75a4c0
+    virtual BYTE Update();
+    // FUNCTION: 0x75b0a0
+    virtual void Draw();
+    // FUNCTION: 0x75d260
+    void Unk75d260(int p1, int p2, int p3);
+    // FUNCTION: 0x75d350
+    virtual void Vf2();
+    // FUNCTION: 0x75d400
+    void Unk75d400();
+    // FUNCTION: 0x75d580
+    void Unk75d580();
+    // FUNCTION: 0x75d660
+    void Unk75d660();
+    // FUNCTION: 0x75d8d0
+    void Unk75d8d0(int p1);
+    // FUNCTION: 0x75d970
+    void Unk75d970(BYTE p1);
+    // FUNCTION: 0x75da30
+    void Unk75da30(BYTE p1);
+
+    BYTE unk[0x760 - sizeof(CScene)];
+};
+
+// Scene3: derived from CScene.
+// SIZE: 0x598
+class CScene3 : public CScene {
+public:
+    // FUNCTION: 0x75db70
+    void Unk75db70(int p1, int p2, int p3, BYTE p4, BYTE p5, int p6);
+    // FUNCTION: 0x75dd50
+    void Unk75dd50();
+    // FUNCTION: 0x75e240
+    void Unk75e240();
+    // FUNCTION: 0x760060
+    void Unk760060();
+    // FUNCTION: 0x7623b0
+    void Unk7623b0(int p1);
+    // FUNCTION: 0x762c50
+    void Unk762c50();
+    // FUNCTION: 0x7631f0
+    void Unk7631f0();
+    // FUNCTION: 0x7633a0
+    CScene3(HWND p1, CPlayer** p2, CPlayer** p3, CGame* p4, CGraphics* p5, CInput* p6, CSound* p7);
+    // FUNCTION: 0x763c00
+    ~CScene3();
+    // FUNCTION: 0x763c20
+    virtual BYTE Update();
+    // FUNCTION: 0x7642a0
+    virtual void Draw();
+    // FUNCTION: 0x7647b0
+    void Unk7647b0();
+    // FUNCTION: 0x764db0
+    void Unk764db0();
+    // FUNCTION: 0x764f10
+    void Unk764f10();
+    // FUNCTION: 0x765040
+    void Unk765040();
+    // FUNCTION: 0x765660
+    virtual void Vf2();
+    // FUNCTION: 0x765fa0
+    int Unk765fa0();
+    // FUNCTION: 0x766070
+    void Unk766070();
+    // FUNCTION: 0x7661a0
+    void Unk7661a0();
+    // FUNCTION: 0x766480
+    void Unk766480();
+    // FUNCTION: 0x766b50
+    void Unk766b50();
+    // FUNCTION: 0x767600
+    RECT Unk767600(int p1, int p2);
+    // FUNCTION: 0x7677a0
+    RECT Unk7677a0(int p1, int p2);
+    // FUNCTION: 0x767930
+    int Unk767930(int p1, int p2);
+    // FUNCTION: 0x7679b0
+    int Unk7679b0(int p1, int p2, CollisionInfo* p3, CollisionInfo* p4);
+    // FUNCTION: 0x767f60
+    void Unk767f60(int p1, int p2, CollisionInfo* p3, CollisionInfo* p4);
+    // FUNCTION: 0x7697d0
+    void Unk7697d0(int p1, int p2, int p3, CollisionInfo* p4);
+    // FUNCTION: 0x76b090
+    void Unk76b090(int p1, int p2, int p3, int p4);
+    // FUNCTION: 0x76bab0
+    void Unk76bab0(int p1, int p2, int p3, int p4);
+    // FUNCTION: 0x76bd40
+    void Unk76bd40(int p1, int p2, CollisionInfo* p3, CollisionInfo* p4, int p5);
+
+    BYTE unk[0x598 - sizeof(CScene)];
+};
+
+// Scene2: derived from CScene.
+// SIZE: 0x438
+class CScene2 : public CScene {
+public:
+    // FUNCTION: 0x76c6f0
+    CScene2(HWND p1, CPlayer** p2, CPlayer** p3, CGame* p4, CGraphics* p5, CInput* p6, CSound* p7);
+    // FUNCTION: 0x76c740
+    ~CScene2();
+    // FUNCTION: 0x76c790
+    virtual BYTE Update();
+    // FUNCTION: 0x76c980
+    virtual void Draw();
+    // FUNCTION: 0x76ca50
+    void Unk76ca50();
+    // FUNCTION: 0x76da10
+    virtual void Vf2();
+    // FUNCTION: 0x76da20
+    void Unk76da20(int p1, int p2, char p3, char p4);
+
+    BYTE unk[0x438 - sizeof(CScene)];
+};
+
+// Scene8: derived from CScene.
+// SIZE: 0x758
+class CScene8 : public CScene {
+public:
+    // FUNCTION: 0x76e480
+    CScene8(HWND p1, CPlayer** p2, CPlayer** p3, CGame* p4, CGraphics* p5, CInput* p6, CSound* p7);
+    // FUNCTION: 0x76efe0
+    ~CScene8();
+    // FUNCTION: 0x76f060
+    virtual BYTE Update();
+    // FUNCTION: 0x76f780
+    virtual void Draw();
+    // FUNCTION: 0x770d80
+    virtual void Vf2();
+    // FUNCTION: 0x770e30
+    void Unk770e30();
+    // FUNCTION: 0x771170
+    void Unk771170();
+    // FUNCTION: 0x771230
+    void Unk771230();
+
+    BYTE unk[0x758 - sizeof(CScene)];
+};
+
+// Scene5: derived from CScene.
+// SIZE: 0x474
+class CScene5 : public CScene {
+public:
+    // FUNCTION: 0x7712f0
+    CScene5(HWND p1, CPlayer** p2, CPlayer** p3, CGame* p4, CGraphics* p5, CInput* p6, CSound* p7);
+    // FUNCTION: 0x771400
+    ~CScene5();
+    // FUNCTION: 0x7714e0
+    virtual BYTE Update();
+    // FUNCTION: 0x772800
+    virtual void Draw();
+    // FUNCTION: 0x774a10
+    void Unk774a10(int p1, int p2, int p3);
+    // FUNCTION: 0x774b00
+    void Unk774b00();
+    // FUNCTION: 0x775750
+    virtual void Vf2();
+
+    BYTE unk[0x474 - sizeof(CScene)];
+};
+
+// Scene7: derived from CScene.
+// SIZE: 0x448
+class CScene7 : public CScene {
+public:
+    // FUNCTION: 0x7758b0
+    CScene7(HWND p1, CPlayer** p2, CPlayer** p3, CGame* p4, CGraphics* p5, CInput* p6, CSound* p7);
+    // FUNCTION: 0x7759a0
+    ~CScene7();
+    // FUNCTION: 0x7759f0
+    virtual BYTE Update();
+    // FUNCTION: 0x775b80
+    virtual void Draw();
+    // FUNCTION: 0x775d50
+    virtual void Vf2();
+
+    BYTE unk[0x448 - sizeof(CScene)];
+};
+
+// Scene0: derived from CScene.
+// SIZE: 0x44c
+class CScene0 : public CScene {
+public:
+    // FUNCTION: 0x775d60
+    CScene0(HWND p1, CPlayer** p2, CPlayer** p3, CGame* p4, CGraphics* p5, CInput* p6, CSound* p7);
+    // FUNCTION: 0x775f30
+    ~CScene0();
+    // FUNCTION: 0x775fb0
+    virtual BYTE Update();
+    // FUNCTION: 0x7764b0
+    virtual void Draw();
+    // FUNCTION: 0x776760
+    virtual void Vf2();
+    // FUNCTION: 0x776820
+    void Unk776820();
+    // FUNCTION: 0x7768d0
+    void Unk7768d0();
+
+    BYTE unk[0x44c - sizeof(CScene)];
+};
 
 // Shiori: one of the character classes.
 // SIZE: 0x3458

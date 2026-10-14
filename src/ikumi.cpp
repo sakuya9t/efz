@@ -11917,15 +11917,15 @@ void CIkumi::Unk6a5eb0()
             *(short*)(v28 + 0xa8) = v10.ReadInt();
             *(short*)(v28 + 0xb4) = v10.ReadInt();
             *(short*)(v28 + 0xb6) = v10.ReadInt();
-            *(float*)(v28 + 0xbc) = (double)(short)v10.ReadShort();
+            *(float*)(v28 + 0xbc) = (short)v10.ReadShort();
             *(float*)(v28 + 0xbc) = *(float*)(v28 + 0xbc) / 1e+02f;
-            *(float*)(v28 + 0xb8) = (double)(short)v10.ReadShort();
+            *(float*)(v28 + 0xb8) = (short)v10.ReadShort();
             *(float*)(v28 + 0xb8) = *(float*)(v28 + 0xb8) / -1e+02f;
             *(v28 + 0xc1) = v10.ReadShort();
             *(v28 + 0xc0) = v10.ReadShort();
             *(short*)(v28 + 0xc2) = v10.ReadInt();
             *(short*)(v28 + 0xc4) = v10.ReadInt();
-            *(float*)(v28 + 0xa4) = (double)v10.ReadInt();
+            *(float*)(v28 + 0xa4) = v10.ReadInt();
             *(short*)(v28 + 0xae) = v10.ReadInt();
             v10.Read((void*)(v28 + 0x90), 0x10);
             k2c = 0;

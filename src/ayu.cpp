@@ -4177,7 +4177,7 @@ void CAyu::Vf6()
                 Vf0();
                 *(short*)((char*)this + 8) = 7;
                 *((char*)this + 0x189) = 1;
-                if (1 != 0) {
+                if (1) {
                     *(short*)((char*)this + 8) = 3;
                 }
             }

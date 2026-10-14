@@ -176,7 +176,6 @@ CPlayer::CPlayer(int p1, int p2, int p3, int p4, int p5, BYTE p6)
 
 CPlayer::~CPlayer()
 {
-    int v8;
     int v4;
 
     if (*(int*)((char*)this + 0x14) != 0) {
@@ -187,8 +186,7 @@ CPlayer::~CPlayer()
                 *(int*)(*(char**)((char*)this + 0x14) + v4 * 4) = 0;
             }
         }
-        v8 = *(int*)((char*)this + 0x14);
-        operator delete((void*)v8);
+        delete (char*)*(int*)((char*)this + 0x14);
     }
     v4 = 0;
     for (; v4 < 0x32; v4++) {
@@ -204,7 +202,7 @@ void CPlayer::Vf12()
 {
     int v4;
 
-    *(double*)((char*)this + 0x20) = (double)(*((char*)this + 0x8c) * 0xa0 + 0xf0);
+    *(double*)((char*)this + 0x20) = *((char*)this + 0x8c) * 0xa0 + 0xf0;
     *(double*)((char*)this + 0x28) = 0.0;
     *((char*)this + 0x50) = 1 - (*((char*)this + 0x8c) << 1);
     Unk40f1e0();
@@ -328,10 +326,10 @@ void CPlayer::Unk40f230()
                 *(int*)((char*)this + 0x108) = *(short*)((char*)this + 0x30ee);
                 if (*(short*)((char*)this + 0x30ec) > 0) {
                     if (*(short*)((char*)this + 0x30ec) < 0x3e8) {
-                        *(double*)((char*)this + 0x118) = (double)*(short*)((char*)this + 0x30ec);
+                        *(double*)((char*)this + 0x118) = *(short*)((char*)this + 0x30ec);
                         *((char*)this + 0x120) = 0;
                     } else {
-                        *(double*)((char*)this + 0x118) = (double)(0x7d0 - *(short*)((char*)this + 0x30ec));
+                        *(double*)((char*)this + 0x118) = 0x7d0 - *(short*)((char*)this + 0x30ec);
                         *((char*)this + 0x120) = 1;
                     }
                 }
@@ -377,9 +375,9 @@ void CPlayer::Unk40f580()
             *(double*)((char*)this + 0x20) = (*(double*)((char*)this + 0x30) + *(double*)((char*)this + 0xb0) + *(double*)(*(char**)*(char**)((char*)this + 0x78) + 0xb8) * (*(int*)(*(char**)*(char**)((char*)this + 0x78) + 0xd0) != 0 && *(short*)((char*)this + 0x14c) == 0)) * *((char*)this + 0x50) + *(double*)((char*)this + 0x20);
         }
         if (((char)((CPlayer*)*(int*)*(char**)((char*)this + 0x78))->Unk40ff70() == 1 && *(double*)(*(char**)*(char**)((char*)this + 0x78) + 0x20) <= 20.0) + 0x14 > *(double*)((char*)this + 0x20)) {
-            *(double*)((char*)this + 0x20) = (double)(((char)((CPlayer*)*(int*)*(char**)((char*)this + 0x78))->Unk40ff70() == 1 && *(double*)(*(char**)*(char**)((char*)this + 0x78) + 0x20) <= 20.0) + 0x14);
+            *(double*)((char*)this + 0x20) = ((char)((CPlayer*)*(int*)*(char**)((char*)this + 0x78))->Unk40ff70() == 1 && *(double*)(*(char**)*(char**)((char*)this + 0x78) + 0x20) <= 20.0) + 0x14;
         } else if (0x26b - ((char)((CPlayer*)*(int*)*(char**)((char*)this + 0x78))->Unk40ff70() == -1 && *(double*)(*(char**)*(char**)((char*)this + 0x78) + 0x20) >= 619.0) < *(double*)((char*)this + 0x20)) {
-            *(double*)((char*)this + 0x20) = (double)(0x26b - ((char)((CPlayer*)*(int*)*(char**)((char*)this + 0x78))->Unk40ff70() == -1 && *(double*)(*(char**)*(char**)((char*)this + 0x78) + 0x20) >= 619.0));
+            *(double*)((char*)this + 0x20) = 0x26b - ((char)((CPlayer*)*(int*)*(char**)((char*)this + 0x78))->Unk40ff70() == -1 && *(double*)(*(char**)*(char**)((char*)this + 0x78) + 0x20) >= 619.0);
         }
         *(double*)((char*)this + 0x28) = *(double*)((char*)this + 0x28) + *(double*)((char*)this + 0x38);
         if (*(double*)((char*)this + 0x28) > 0.0) {
@@ -702,7 +700,7 @@ void CPlayer::Unk4109d0(BYTE p1)
 
 void CPlayer::Unk410a10(int p1, int p2)
 {
-    *(double*)(*(char**)((char*)this + 0x7c) + 0x14210) = (double)p1;
+    *(double*)(*(char**)((char*)this + 0x7c) + 0x14210) = p1;
     *(int*)(*(char**)((char*)this + 0x7c) + 0x14218) = p2;
 }
 
@@ -747,7 +745,7 @@ void CPlayer::Vf11()
         Unk4116a0();
         Unk411ae0();
         *(int*)((char*)this + 0x30e8) = 1;
-    } else if (1 != 0) {
+    } else if (1) {
         if (*(int*)(*(char**)((char*)this + 0x7c) + 0x1338 + *((char*)this + 0x8c) * 4) != 0) {
             strcpy(v2c, (const char*)((char*)this + 0x94));
             strcat(v2c, "\\");
@@ -804,7 +802,6 @@ void CPlayer::Vf11()
 
 void CPlayer::Unk411080()
 {
-    int x78;
     int x74;
     int v70;
     int a6c;
@@ -821,7 +818,7 @@ void CPlayer::Unk411080()
 
     v70 = (int)operator new(*(WORD*)((char*)this + 0x18) * 4 + 4);
     *(int*)((char*)this + 0x14) = v70;
-    if (1 != 0) {
+    if (1) {
         n38 = 0;
         strcpy(x2c, (const char*)((char*)this + 0x94));
         strcat(x2c, "\\");
@@ -844,8 +841,7 @@ void CPlayer::Unk411080()
             }
         }
         CloseHandle((HANDLE)d30);
-        x78 = (int)x44;
-        operator delete((void*)x78);
+        delete (char*)x44;
         if (*(int*)(*(char**)((char*)this + 0x7c) + 0x1338 + *((char*)this + 0x8c) * 4) != 0) {
             strcpy(x2c, (const char*)((char*)this + 0x94));
             strcat(x2c, "\\");
@@ -943,15 +939,15 @@ void CPlayer::Unk4116a0()
             *(short*)(l4c + 0xa8) = k10.ReadInt();
             *(short*)(l4c + 0xb4) = k10.ReadInt();
             *(short*)(l4c + 0xb6) = k10.ReadInt();
-            *(float*)(l4c + 0xbc) = (double)(short)k10.ReadShort();
+            *(float*)(l4c + 0xbc) = (short)k10.ReadShort();
             *(float*)(l4c + 0xbc) = *(float*)(l4c + 0xbc) / 1e+02f;
-            *(float*)(l4c + 0xb8) = (double)(short)k10.ReadShort();
+            *(float*)(l4c + 0xb8) = (short)k10.ReadShort();
             *(float*)(l4c + 0xb8) = *(float*)(l4c + 0xb8) / -1e+02f;
             *(l4c + 0xc1) = k10.ReadShort();
             *(l4c + 0xc0) = k10.ReadShort();
             *(short*)(l4c + 0xc2) = k10.ReadInt();
             *(short*)(l4c + 0xc4) = k10.ReadInt();
-            *(float*)(l4c + 0xa4) = (double)k10.ReadInt();
+            *(float*)(l4c + 0xa4) = k10.ReadInt();
             *(short*)(l4c + 0xae) = k10.ReadInt();
             k10.Read((void*)(l4c + 0x90), 0x10);
             c50 = 0;

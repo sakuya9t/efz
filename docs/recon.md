@@ -20,7 +20,7 @@ Rich header, decoded by `tools/peinfo.py` (**observed**):
 
 | Tool | Build | Objects | Reading |
 |---|---|---|---|
-| `Utc1310_CPP_Std` | 13.10.3077 | 152 | **The game.** C++ compiled by Visual C++ .NET 2003 *Standard Edition* |
+| `Utc1310_CPP_Std` | 13.10.3077 | 152 | **The game.** C++ compiled by Visual C++ .NET 2003 *Standard Edition*. Its code is in 46 of them (see *Matched objects*) |
 | `Utc1310_C` | 13.10.3077 | 112 | Static CRT (Microsoft's prebuilt, optimised) |
 | `Utc1310_CPP` | 13.10.3077 | 4 | Static CRT C++ support |
 | `Masm710` | 7.10.3077 | 31 | CRT assembly helpers |
@@ -140,6 +140,35 @@ Consequences for a byte-identical rebuild:
     loads, the heavier address comes first whatever the order.
   - A base-class method called from a derived class adjusts `this` by the base's offset
     without the null check an explicit cast adds (`ObjBase` methods from `CPlayer`).
+- **More forms, observed in the scenes:**
+  - A `switch` with few cases compiles to compares on its temporary (`cmp [t], 1; je`
+    ... `jmp default`), not a jump table. Consecutive cases sharing one body become a
+    range check: `cmp [t], 0; jl default; cmp [t], 1; jle body`.
+  - `/GS` protects `char` and `short` arrays, also inside a struct, but not `int`
+    arrays or arrays of `RECT`. A 0xc8-byte frame record declared as `BYTE[0xc8]`
+    brought in a cookie the original doesn't have; as `RECT`s and scalars it doesn't.
+  - A comparison whose value is dropped, `(int)(a <= b);`, still computes 0 or 1 into a
+    temporary that nothing reads. Assigned to a variable, the value is copied out of
+    that temporary instead.
+  - An `unsigned` converted to `double` is stored as a 64-bit value with a zero high
+    dword and loaded with `fild qword`.
+  - A struct returned by value goes to a hidden temporary. `r = f()` copies it once into
+    `r`; `this->r = f()` copies it into a second temporary first; `g(f())` pushes it
+    straight from the first.
+  - `delete` of a pointer to a type without a destructor (`delete (char*)p`) stores the
+    pointer in a temporary and calls `operator delete`; the temporaries of a function's
+    `delete`s are laid out in source order.
+  - `new T[n]` keeps `n` in a temporary of its own.
+  - A two-dimensional member array is indexed row first: `lea r, [this + i*R + K]` and
+    then `[r + j*s]`. The flat form `*((char*)this + i*R + K + j*s)` puts `K` in the last
+    addressing mode instead.
+  - Folded memory operands: for `M + a` with `a` a plain load the compiler loads `M` and
+    folds `a`. So a folded `M` whose address was worked out before `a` was loaded is the
+    right operand, `a + M`, unless the result is stored back to `M` (`M += a`).
+  - A `short` or `char` `x += y` evaluates `y` before loading `x`; `x = x + y` loads `x`
+    first. In both, `x`'s address can be worked out before `y`.
+  - An `(expression) * m / k` keeps the expression's register as the product's:
+    `imul edi, [m]; mov eax, edi; cdq`.
 - **Some expressions always go through unnamed temporaries.** **Observed:**
   - A boolean used as a value (`return a && b;`, `x * (y > 0)`) is materialised as 0 or 1
     in a temporary by an `if`/`else` diamond. The diamond is hoisted in front of the
@@ -191,8 +220,9 @@ Consequences for a byte-identical rebuild:
   `+0x670` and `FrameTimerThread` at `+0x850`. Compiler-generated functions (scalar
   deleting destructors) go in COMDAT sections, which the linker places right after the
   object's code.
-- **Matched objects.** All game code from `0x401000` to `0x750d2f` matches, object by
-  object: the platform layer, `CPlayer` and the 24 character classes. Run `tools/progress.py` for current numbers.
+- **Matched objects.** All game code from `0x401000` to `0x77697e` matches, object by
+  object: the platform layer, `CPlayer`, the 24 character classes, four animated stage
+  backgrounds and the eight scenes. Run `tools/progress.py` for current numbers.
 
   | Source | Range | Functions | Contents |
   |---|---|---|---|
@@ -230,6 +260,16 @@ Consequences for a byte-identical rebuild:
   | `akane.cpp` | `0x6f2f20`–`0x7124ff` | all | `CAkane` |
   | `akiko.cpp` | `0x712500`–`0x73070f` | all | `CAkiko` |
   | `nayukib.cpp` | `0x730710`–`0x750d2f` | all | `CNayukiB` |
+  | `bg01.cpp` | `0x750d30`–`0x751a3f` | all | `CAnimBg`, the animated backgrounds' base (frames and `.pat` animations), and `CBg01`; inline `CAnimBg` constructor |
+  | `bg10.cpp`, `bg12.cpp`, `bg16.cpp` | `0x751a40`–`0x75325f` | all | `CBg10`, `CBg12`, `CBg16` |
+  | `scene1.cpp` | `0x753260`–`0x759f2f` | all | Scene 1, character and stage select; inline `CScene` constructor and palette fades |
+  | `scene6.cpp` | `0x759f30`–`0x75db6f` | all | Scene 6, the config menu |
+  | `scene3.cpp` | `0x75db70`–`0x76c6ef` | all | Scene 3, the fight: collisions, camera, gauges, replay recording and playback |
+  | `scene2.cpp` | `0x76c6f0`–`0x76e47f` | all | Scene 2, setting up a match: random picks, backgrounds, loading |
+  | `scene8.cpp` | `0x76e480`–`0x7712ef` | all | Scene 8, the replay browser; two uncalled functions |
+  | `scene5.cpp` | `0x7712f0`–`0x7758af` | all | Scene 5, the result screen; `pow(int, int)` from `<math.h>` |
+  | `scene7.cpp` | `0x7758b0`–`0x775d5f` | all | Scene 7, the staff roll |
+  | `scene0.cpp` | `0x775d60`–`0x77697d` | all | Scene 0, the title screen; two uncalled functions |
 
   The boundaries come from each object's string literals, which are contiguous in
   `.rdata`, and from where inline functions are emitted. Each character class is one
@@ -246,7 +286,7 @@ Consequences for a byte-identical rebuild:
   include `CreateThread` and `Tls*`, so it is probably the multithreaded `libcmt.lib`
   (**inferred**). The CRT should be linked from VS .NET 2003's own libraries, not decompiled.
 - **Header fields** must be set after linking: the timestamp, the RSDS GUID/age/path, and
-  the Rich header (its count of 152 also confirms the number of game translation units).
+  the Rich header.
 
 ## Imports
 
@@ -315,7 +355,11 @@ Each line below is **observed**, read from the matched `WinMain` in `src/main.cp
 - **Scenes:** eight objects in `g_scenes[9]` at `0x790110` (slot 4 is unused); slots 6–8
   sit behind an `if (1)`. Each frame calls `g_scenes[g_scene]->Update()` (vtable slot 1),
   and its return value is the next scene index (`BYTE` at `0x790148`). Constructors and
-  sizes are listed in `src/efz.h`.
+  sizes are listed in `src/efz.h`. The scenes are 0 title, 1 character and stage select,
+  2 match setup, 3 the fight, 5 results, 6 config, 7 staff roll and 8 replays.
+- **Stage backgrounds:** stages 01, 10, 12 and 16 have an animated background object
+  (`CAnimBg`), which scene 2 creates and keeps at `CGame+0x137c`. The fight draws it
+  behind and in front of the players through its second virtual method.
 
 ## Effect system (from `CGame::UpdateEffect`, matched)
 
@@ -411,19 +455,28 @@ Each line below is **observed**, read from the matched `WinMain` in `src/main.cp
 - **`*.wav`:** PCM only. Music loop points come from the `cue ` and `adtl` chunks in
   the file's last 320 bytes (`u32` at chunk + `0x10`, times 4).
 - **`*.pat` character files** (31) start with a `u32` count (`akane.pat`: 223)
-  (**inferred** layout beyond that).
+  (**inferred** layout beyond that). In memory each pattern frame is 0xc8 bytes:
+  five `RECT`s at `+0x00` and four at `+0x50` (probably hurt and attack boxes, going by
+  how the fight's collision checks use them), one more at `+0x90`, then flags
+  (`+0xaa`, `+0xb0`) and other shorts, floats and chars up to `+0xc6` (`PatternFrame` in
+  `src/efz.h`).
+- **Animated backgrounds:** `system\bg\bgNN\MMM.dat` frames (or `.bmp`) and a
+  `bgNN.pat` animation table in the effect `.pat` format.
 
 ## Not yet established
 
 - **The stack-order hash function.** It's measured empirically for now; recovering it
   from `c1xx.dll` would let tools predict layouts without compiling.
 
-- **The function list is approximate.** It comes from objdump with heuristics; it needs
-  a Ghidra or IDA database and a reconciled function list.
-- **Most translation-unit boundaries are unknown.** There are 152 objects; the first 8 are
-  established (see *Matched objects*). The rest follow the same method.
+- **The function list comes from scanning.** `tools/inventory.py` finds functions by
+  their `push ebp; mov ebp, esp` prologues and by vtables. Every one it finds matches,
+  and the matched objects cover the game's code without gaps, but the final link is what
+  will prove nothing is missing.
+- **106 of the 152 game objects are unidentified.** The code splits into 46 objects (see
+  *Matched objects*). The others may hold only data, or code the linker dropped as
+  unreferenced.
 - **Some compiler flags are unconfirmed.** `/Od /GS` without `/EHsc` is settled by
   `WinMain`. `/Zp`, `/J` and `/GR` still need a function that depends on them.
 - **Import hints are unchecked.** Byte-identical `.idata` needs import libraries whose
   hints match the original; the SDK libraries' hints haven't been compared yet.
-- **The character `.pat` record layout** beyond the effect frames is not decoded yet.
+- **The character `.pat` record layout** is decoded only as far as the frame boxes.

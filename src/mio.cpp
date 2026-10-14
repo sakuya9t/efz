@@ -2477,7 +2477,7 @@ void CMio::Vf6()
     case 0xaa:
         if (*(WORD*)((char*)this + 0xa) == 0 && *(WORD*)((char*)this + 0xc) == 0) {
             *(int*)((char*)this + 0x3138) = (int)(*(double*)((char*)this + 0x30) * 100.0);
-            *(double*)((char*)this + 0x3140) = (double)(int)(*(double*)((char*)this + 0x38) * 100.0);
+            *(double*)((char*)this + 0x3140) = (int)(*(double*)((char*)this + 0x38) * 100.0);
             *(double*)((char*)this + 0x30) = 0.0;
             *(double*)((char*)this + 0x38) = 0.0;
             *(short*)((char*)this + 0x14e) = 0;
@@ -2514,7 +2514,7 @@ void CMio::Vf6()
     case 0xab:
         if (*(WORD*)((char*)this + 0xa) == 0 && *(WORD*)((char*)this + 0xc) == 0) {
             *(int*)((char*)this + 0x3138) = (int)(*(double*)((char*)this + 0x30) * 100.0);
-            *(double*)((char*)this + 0x3140) = (double)(int)(*(double*)((char*)this + 0x38) * 100.0);
+            *(double*)((char*)this + 0x3140) = (int)(*(double*)((char*)this + 0x38) * 100.0);
             *(double*)((char*)this + 0x30) = 0.0;
             *(double*)((char*)this + 0x38) = 0.0;
             if (*((char*)this + 0x120) == 1) {
@@ -4227,8 +4227,8 @@ void CMio::Vf6()
             l50.unk20 = 2;
             l50.unk21 = 1;
             ((CGame*)*(int*)((char*)this + 0x7c))->CreateEffect((EffectDesc*)&l50);
-            *(double*)(*(char**)*(char**)((char*)this + 0x78) + 0x20) = (double)((int)*(double*)((char*)this + 0x20) + *((char*)this + 0x50) * 0x23);
-            *(double*)(*(char**)*(char**)((char*)this + 0x78) + 0x28) = (double)((int)*(double*)((char*)this + 0x28) - 0x3a);
+            *(double*)(*(char**)*(char**)((char*)this + 0x78) + 0x20) = (int)*(double*)((char*)this + 0x20) + *((char*)this + 0x50) * 0x23;
+            *(double*)(*(char**)*(char**)((char*)this + 0x78) + 0x28) = (int)*(double*)((char*)this + 0x28) - 0x3a;
             CPlayer::Unk410a40(0x32, 3);
             CPlayer::Unk410a80(0x32, 3);
             break;
@@ -4265,8 +4265,8 @@ void CMio::Vf6()
             l50.unk20 = 2;
             l50.unk21 = 1;
             ((CGame*)*(int*)((char*)this + 0x7c))->CreateEffect((EffectDesc*)&l50);
-            *(double*)(*(char**)*(char**)((char*)this + 0x78) + 0x20) = (double)((int)*(double*)((char*)this + 0x20) + *((char*)this + 0x50) * 0x23);
-            *(double*)(*(char**)*(char**)((char*)this + 0x78) + 0x28) = (double)((int)*(double*)((char*)this + 0x28) - 0x3a);
+            *(double*)(*(char**)*(char**)((char*)this + 0x78) + 0x20) = (int)*(double*)((char*)this + 0x20) + *((char*)this + 0x50) * 0x23;
+            *(double*)(*(char**)*(char**)((char*)this + 0x78) + 0x28) = (int)*(double*)((char*)this + 0x28) - 0x3a;
             CPlayer::Unk410a40(0x32, 3);
             CPlayer::Unk410a80(0x32, 3);
             break;

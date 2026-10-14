@@ -7273,7 +7273,7 @@ void CMai::Vf7()
                 break;
             case 0x19a:
                 if (*(WORD*)((char*)this + v4 * 0x98 + 0x4d2) == 0 && *(WORD*)((char*)this + v4 * 0x98 + 0x4d4) == 0 && *(int*)((char*)this + v4 * 4 + 0x3158) == 0) {
-                    *(double*)((char*)this + v4 * 0x98 + 0x4f8) = (double)*(int*)((char*)this + 0x3140);
+                    *(double*)((char*)this + v4 * 0x98 + 0x4f8) = *(int*)((char*)this + 0x3140);
                     (*(int*)((char*)this + v4 * 4 + 0x3158))++;
                     *(short*)((char*)this + v4 * 0x98 + 0x554) = 1;
                 }
@@ -7577,7 +7577,7 @@ void CMai::Vf7()
                 break;
             case 0x1a7:
                 if (*(WORD*)((char*)this + v4 * 0x98 + 0x4d2) == 0 && *(WORD*)((char*)this + v4 * 0x98 + 0x4d4) == 0 && *(int*)((char*)this + v4 * 4 + 0x3158) == 0) {
-                    *(double*)((char*)this + v4 * 0x98 + 0x4f8) = (double)*(int*)((char*)this + 0x3140);
+                    *(double*)((char*)this + v4 * 0x98 + 0x4f8) = *(int*)((char*)this + 0x3140);
                     (*(int*)((char*)this + v4 * 4 + 0x3158))++;
                     *(short*)((char*)this + v4 * 0x98 + 0x554) = 1;
                 }
@@ -7617,7 +7617,7 @@ void CMai::Vf7()
                 break;
             case 0x1a9:
                 if (*(WORD*)((char*)this + v4 * 0x98 + 0x4d2) == 0 && *(WORD*)((char*)this + v4 * 0x98 + 0x4d4) == 0 && *(int*)((char*)this + v4 * 4 + 0x3158) == 0) {
-                    *(double*)((char*)this + v4 * 0x98 + 0x4f8) = (double)(*(int*)((char*)this + 0x3140) - (*(int*)((char*)this + 0x3140) > 5) * 5);
+                    *(double*)((char*)this + v4 * 0x98 + 0x4f8) = *(int*)((char*)this + 0x3140) - (*(int*)((char*)this + 0x3140) > 5) * 5;
                     (*(int*)((char*)this + v4 * 4 + 0x3158))++;
                     *(short*)((char*)this + v4 * 0x98 + 0x554) = 1;
                 }

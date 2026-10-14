@@ -7112,8 +7112,8 @@ void CMisuzu::Vf7()
                 }
                 break;
             case 0x19c:
-                *(double*)((char*)this + v4 * 0x98 + 0x4e8) = (double)*(int*)((char*)this + 0x3148);
-                *(double*)((char*)this + v4 * 0x98 + 0x4f0) = (double)*(int*)((char*)this + 0x314c);
+                *(double*)((char*)this + v4 * 0x98 + 0x4e8) = *(int*)((char*)this + 0x3148);
+                *(double*)((char*)this + v4 * 0x98 + 0x4f0) = *(int*)((char*)this + 0x314c);
                 if (*(int*)((char*)this + 0x314c) > 0) {
                     Vf10(v4);
                     break;

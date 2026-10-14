@@ -9284,7 +9284,7 @@ void CMinagi::Vf7()
                 }
                 break;
             case 0x1b0:
-                *(double*)((char*)this + v4 * 0x98 + 0x4e8) = (double)*(int*)((char*)this + 0x3150);
+                *(double*)((char*)this + v4 * 0x98 + 0x4e8) = *(int*)((char*)this + 0x3150);
                 if ((*(int*)((char*)this + 0x314c) == 2 || *(int*)((char*)this + 0x314c) == 0) && *(WORD*)((char*)this + v4 * 0x98 + 0x4d2) < 0x18) {
                     *(short*)((char*)this + v4 * 0x98 + 0x4d2) = 0x18;
                     *(short*)((char*)this + v4 * 0x98 + 0x4d4) = 0;

@@ -10065,15 +10065,15 @@ void CNanase::Unk48d940()
             *(short*)(v28 + 0xa8) = v10.ReadInt();
             *(short*)(v28 + 0xb4) = v10.ReadInt();
             *(short*)(v28 + 0xb6) = v10.ReadInt();
-            *(float*)(v28 + 0xbc) = (double)(short)v10.ReadShort();
+            *(float*)(v28 + 0xbc) = (short)v10.ReadShort();
             *(float*)(v28 + 0xbc) = *(float*)(v28 + 0xbc) / 1e+02f;
-            *(float*)(v28 + 0xb8) = (double)(short)v10.ReadShort();
+            *(float*)(v28 + 0xb8) = (short)v10.ReadShort();
             *(float*)(v28 + 0xb8) = *(float*)(v28 + 0xb8) / -1e+02f;
             *(v28 + 0xc1) = v10.ReadShort();
             *(v28 + 0xc0) = v10.ReadShort();
             *(short*)(v28 + 0xc2) = v10.ReadInt();
             *(short*)(v28 + 0xc4) = v10.ReadInt();
-            *(float*)(v28 + 0xa4) = (double)v10.ReadInt();
+            *(float*)(v28 + 0xa4) = v10.ReadInt();
             *(short*)(v28 + 0xae) = v10.ReadInt();
             v10.Read((void*)(v28 + 0x90), 0x10);
             k2c = 0;
@@ -11829,8 +11829,8 @@ void CNanase::Vf7()
                 }
                 break;
             case 0x1a7:
-                *(double*)((char*)this + v4 * 0x98 + 0x4e8) = (double)*(int*)((char*)this + 0x3450);
-                *(double*)((char*)this + v4 * 0x98 + 0x4f0) = (double)*(int*)((char*)this + 0x3454);
+                *(double*)((char*)this + v4 * 0x98 + 0x4e8) = *(int*)((char*)this + 0x3450);
+                *(double*)((char*)this + v4 * 0x98 + 0x4f0) = *(int*)((char*)this + 0x3454);
                 if (*(int*)((char*)this + 0x3454) == 0) {
                     Vf10(v4);
                     break;
@@ -12933,8 +12933,8 @@ void CNanase::Unk497540()
                 }
                 break;
             case 0x1a7:
-                *(double*)((char*)this + v4 * 0x98 + 0x4e8) = (double)*(int*)((char*)this + 0x3450);
-                *(double*)((char*)this + v4 * 0x98 + 0x4f0) = (double)*(int*)((char*)this + 0x3454);
+                *(double*)((char*)this + v4 * 0x98 + 0x4e8) = *(int*)((char*)this + 0x3450);
+                *(double*)((char*)this + v4 * 0x98 + 0x4f0) = *(int*)((char*)this + 0x3454);
                 l50.type = 0x22;
                 l50.x = (double)((int)*(double*)((char*)this + v4 * 0x98 + 0x4e8) + 0x28 - (WORD)CPlayer::Unk4108a0(0, 0x50));
                 l50.y = (double)((int)*(double*)((char*)this + v4 * 0x98 + 0x4f0) + 0x14 - (WORD)CPlayer::Unk4108a0(0, 0x28));

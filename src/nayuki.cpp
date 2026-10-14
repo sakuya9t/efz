@@ -7518,8 +7518,8 @@ void CNayuki::Vf7()
                 break;
             case 0x19f:
                 if (*(WORD*)((char*)this + 8) == 0x12f || *(WORD*)((char*)this + 8) == 0x130 || *(WORD*)((char*)this + 8) == 0x131) {
-                    *(double*)((char*)this + v4 * 0x98 + 0x4e8) = (double)*(int*)((char*)this + 0x314c);
-                    *(double*)((char*)this + v4 * 0x98 + 0x4f0) = (double)*(int*)((char*)this + 0x3154);
+                    *(double*)((char*)this + v4 * 0x98 + 0x4e8) = *(int*)((char*)this + 0x314c);
+                    *(double*)((char*)this + v4 * 0x98 + 0x4f0) = *(int*)((char*)this + 0x3154);
                 }
                 if (*(WORD*)((char*)this + v4 * 0x98 + 0x4d2) == 0 && *(WORD*)((char*)this + v4 * 0x98 + 0x4d4) == 0) {
                     *(short*)((char*)this + v4 * 0x98 + 0x554) = 1;
@@ -7537,8 +7537,8 @@ void CNayuki::Vf7()
                 break;
             case 0x1a0:
                 if (*(WORD*)((char*)this + 8) == 0x12f || *(WORD*)((char*)this + 8) == 0x130 || *(WORD*)((char*)this + 8) == 0x131) {
-                    *(double*)((char*)this + v4 * 0x98 + 0x4e8) = (double)*(int*)((char*)this + 0x3150);
-                    *(double*)((char*)this + v4 * 0x98 + 0x4f0) = (double)*(int*)((char*)this + 0x3158);
+                    *(double*)((char*)this + v4 * 0x98 + 0x4e8) = *(int*)((char*)this + 0x3150);
+                    *(double*)((char*)this + v4 * 0x98 + 0x4f0) = *(int*)((char*)this + 0x3158);
                 }
                 if (*(WORD*)((char*)this + v4 * 0x98 + 0x4d2) == 0 && *(WORD*)((char*)this + v4 * 0x98 + 0x4d4) == 0) {
                     *(short*)((char*)this + v4 * 0x98 + 0x554) = 1;

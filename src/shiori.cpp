@@ -8091,8 +8091,8 @@ void CShiori::Vf7()
                     (*(short*)((char*)this + v4 * 0x98 + 0x4d2))++;
                     *(int*)((char*)this + v4 * 0x98 + 0x550) = 0;
                     if (*(WORD*)((char*)this + v4 * 0x98 + 0x4d2) < 7) {
-                        *(double*)(*(char**)*(char**)((char*)this + 0x78) + 0x20) = (double)(*(int*)((char*)this + 0x3150) + (WORD)CPlayer::Unk4108a0(0, 0x50) + -0x28);
-                        *(double*)(*(char**)*(char**)((char*)this + 0x78) + 0x28) = (double)(*(int*)((char*)this + 0x3154) - (WORD)CPlayer::Unk4108a0(0xa, 0x3c));
+                        *(double*)(*(char**)*(char**)((char*)this + 0x78) + 0x20) = *(int*)((char*)this + 0x3150) + (WORD)CPlayer::Unk4108a0(0, 0x50) + -0x28;
+                        *(double*)(*(char**)*(char**)((char*)this + 0x78) + 0x28) = *(int*)((char*)this + 0x3154) - (WORD)CPlayer::Unk4108a0(0xa, 0x3c);
                         if (*(double*)(*(char**)*(char**)((char*)this + 0x78) + 0x20) > 620.0) {
                             *(double*)(*(char**)*(char**)((char*)this + 0x78) + 0x20) = 620.0;
                         }
@@ -8146,8 +8146,8 @@ void CShiori::Vf7()
                     *(short*)((char*)this + v4 * 0x98 + 0x4d4) = 0;
                     (*(short*)((char*)this + v4 * 0x98 + 0x4d2))++;
                     *(int*)((char*)this + v4 * 0x98 + 0x550) = 0;
-                    *(double*)(*(char**)*(char**)((char*)this + 0x78) + 0x20) = (double)(*(int*)((char*)this + 0x3150) + (WORD)CPlayer::Unk4108a0(0, 0x50) + -0x28);
-                    *(double*)(*(char**)*(char**)((char*)this + 0x78) + 0x28) = (double)(*(int*)((char*)this + 0x3154) - (WORD)CPlayer::Unk4108a0(0xa, 0x3c));
+                    *(double*)(*(char**)*(char**)((char*)this + 0x78) + 0x20) = *(int*)((char*)this + 0x3150) + (WORD)CPlayer::Unk4108a0(0, 0x50) + -0x28;
+                    *(double*)(*(char**)*(char**)((char*)this + 0x78) + 0x28) = *(int*)((char*)this + 0x3154) - (WORD)CPlayer::Unk4108a0(0xa, 0x3c);
                     if (*(double*)(*(char**)*(char**)((char*)this + 0x78) + 0x20) > 620.0) {
                         *(double*)(*(char**)*(char**)((char*)this + 0x78) + 0x20) = 620.0;
                     }

@@ -6099,8 +6099,8 @@ void CMizukaB::Vf6()
                 *(short*)((char*)this + 0xa) = 2;
                 *(short*)((char*)this + 0xc) = 0;
                 *((char*)this + 0x50) = -*(*(char**)*(char**)((char*)this + 0x78) + 0x50);
-                *(double*)((char*)this + 0x20) = (double)*(int*)((char*)this + 0x313c);
-                *(double*)((char*)this + 0x28) = (double)*(int*)((char*)this + 0x3140);
+                *(double*)((char*)this + 0x20) = *(int*)((char*)this + 0x313c);
+                *(double*)((char*)this + 0x28) = *(int*)((char*)this + 0x3140);
                 *(double*)((char*)this + 0x30) = -0.9;
                 *(double*)((char*)this + 0x38) = -1.5;
             }

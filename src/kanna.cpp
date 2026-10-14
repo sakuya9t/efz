@@ -7359,7 +7359,7 @@ void CKanna::Vf7()
                 }
                 break;
             case 0x1ac:
-                *(double*)((char*)this + v4 * 0x98 + 0x4e8) = (double)*(int*)(*(char**)((char*)this + 0x7c) + 0x14248);
+                *(double*)((char*)this + v4 * 0x98 + 0x4e8) = *(int*)(*(char**)((char*)this + 0x7c) + 0x14248);
                 (*(short*)((char*)this + v4 * 0x98 + 0x4d4))++;
                 if (*(WORD*)((char*)this + v4 * 0x98 + 0x4d4) >= v54) {
                     *(short*)((char*)this + v4 * 0x98 + 0x4d4) = 0;

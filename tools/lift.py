@@ -294,6 +294,16 @@ class Deref(E):
 
     def render(self):
         a = self.addr
+        r = row_access(self)
+        if r is not None:
+            e = elem_of(r[0])
+            if e is not None and e[1] == 0 and isinstance(e[2], tuple):
+                return f'{e[0]}[{r[1].text()}]'
+        b = a.e if isinstance(a, Cast) else a
+        if isinstance(b, AddrOfVar):
+            e = elem_of(b.v)
+            if e is not None and e[1] == 0 and e[2] == self.ty:
+                return e[0]
         if a.ty == f'{self.ty}*':
             return f'*{a.text(PREC["unary"])}'
         return f'*({self.ty}*){a.text(PREC["cast"])}'
@@ -334,6 +344,8 @@ class Bin(E):
             a, ty = Cast('char*', a), 'char*'
         elif op == '+' and isinstance(b, ThisVar):
             b, ty = Cast('char*', b), 'char*'
+        elif op == '+' and b.ty == 'char*' and a.ty != 'char*':
+            ty = 'char*'          # int + pointer
         self.op, self.a, self.b, self.ty = op, a, b, ty
         self.prec = PREC[op]
 
@@ -382,7 +394,9 @@ class Call(E):
             obj = self.this
             if isinstance(obj, AddrOfVar) and isinstance(obj.v, SlotVar) \
                     and getattr(obj.v.slot, 'cls', None):
-                return f'{obj.v.text(PREC["post"])}.{self.fn}({args})'
+                whole = SlotVar(obj.v.slot)
+                whole.whole = True
+                return f'{whole.text(PREC["post"])}.{self.fn}({args})'
             if cls and not isinstance(obj, ThisVar) and obj.ty != cls + '*':
                 return f'(({cls}*){obj.text(PREC["cast"])})->{self.fn}({args})'
             return f'{obj.text(PREC["post"])}->{self.fn}({args})'
@@ -401,9 +415,22 @@ def arg_text(a, t):
         if a.ty == t:
             return a.text(PREC['='] + 1)
         return f'({t}){a.text(PREC["cast"])}'
-    if a.ty in ('char*',) or is_pointer_type(a.ty):
+    if a.ty in ('char*',) or is_pointer_type(a.ty) or is_pointer_type(late_type(a)):
         return f'({t}){a.text(PREC["cast"])}'
     return a.text(PREC['='] + 1)
+
+
+def late_type(a):
+    """The type of an expression as rendered: locals' types are only settled after
+    lifting (a pointer local plus an offset is a pointer)."""
+    if isinstance(a, SlotVar):
+        return a.ty
+    if isinstance(a, Bin) and a.op in ('+', '-'):
+        if is_pointer_type(late_type(a.a)):
+            return late_type(a.a)
+        if a.op == '+' and is_pointer_type(late_type(a.b)):
+            return late_type(a.b)
+    return a.ty
 
 
 class Cond(E):
@@ -420,7 +447,30 @@ class Cond(E):
     def render(self):
         if self.op == '!':
             return f'!{self.a.text(PREC["unary"])}'
+        if isinstance(self.a, Const) and isinstance(self.b, Const) and self.op in NEGATE:
+            # a constant condition: `if (0)` around code left in
+            v = {'==': self.a.v == self.b.v, '!=': self.a.v != self.b.v}.get(self.op)
+            if v is not None:
+                return '1' if v else '0'
         return f'{self.a.text(self.prec)} {self.op} {self.b.text(self.prec + 1)}'
+
+
+class AssignExpr(E):
+    """An assignment used as a value: (x = e)."""
+    prec = PREC['=']
+
+    def __init__(self, lhs, rhs):
+        self.lhs, self.rhs = lhs, rhs
+        self.ty = rhs.ty
+
+    def uses(self):
+        return [self.lhs, self.rhs]
+
+    def has_side_effects(self):
+        return True
+
+    def render(self):
+        return f'{self.lhs.text(PREC["="] + 1)} = {self.rhs.text(PREC["="])}'
 
 
 class Ternary(E):
@@ -479,6 +529,8 @@ class Assign(S):
                 and not (isinstance(rhs, Const) and rhs.v == 0) and lt not in ('double', 'float') \
                 and rt not in ('double', 'float'):
             rhs = Cast(lt, rhs)
+        elif lt == 'char*' and is_pointer_type(rt) and rt != 'char*' and not self.op:
+            rhs = Cast(lt, rhs)       # a typed pointer into a byte pointer
         return [f'{self.lhs.text(PREC["="])} {self.op}= {rhs.text(PREC["="])};']
 
 
@@ -616,6 +668,12 @@ class Lifter:
         s = self.slots.get(off)
         if s is None:
             s = self.slots[off] = Slot(off)
+            # inside a struct local of a declared type: one of its fields
+            for t in self.slots.values():
+                if getattr(t, 'struct_type', None) in layouts().structs \
+                        and t.off < off < t.off + t.struct_size:
+                    s.parent = t
+                    break
         return s
 
     def analyze_frame(self):
@@ -643,18 +701,24 @@ class Lifter:
                     and b.ops[0].kind == 'mem' and b.ops[0].base == 'ebp':
                 self.cookie_slot = b.ops[0].disp
                 self.cookie_range = (a.addr, b.end)
+        if self.cookie_slot is not None and ins[body].addr == self.cookie_range[0]:
+            body += 2          # the cookie is stored before the registers are saved
         while ins[body].m == 'push' and ins[body].ops[0].kind == 'reg' \
                 and ins[body].ops[0].reg in ('ebx', 'esi', 'edi'):
             self.saved.append(ins[body].ops[0].reg)
             body += 1
         self.body_start = body
-        # `this`: mov [ebp-x], ecx in the first instructions
+        # `this`: mov [ebp-x], ecx in the first instructions, before anything else writes
+        # ecx or jumps
         for j in range(k, min(k + 8, len(ins))):
             a = ins[j]
             if a.m == 'mov' and a.ops[0].kind == 'mem' and a.ops[0].base == 'ebp' \
                     and a.ops[1].kind == 'reg' and a.ops[1].reg == 'ecx':
                 self.this_slot = a.ops[0].disp
                 self.this_store = a.addr
+                break
+            if a.m.startswith('j') or (a.ops and a.ops[0].kind == 'reg'
+                                       and SUBREG.get(a.ops[0].reg, (a.ops[0].reg,))[0] == 'ecx'):
                 break
         # epilogue: the last `mov esp, ebp; pop ebp; ret`
         for j in range(len(ins) - 1, 0, -1):
@@ -705,6 +769,11 @@ class Lifter:
         base = self.reg_value(op.base) if op.base else None
         if isinstance(base, StructResult):
             return StructField(base, op.disp, ty)
+        row = getattr(base, 'row', None)
+        if row is not None and op.index and size:
+            r = Row2D.make(row, self.reg_value(op.index), op.scale, ty, size, op.disp)
+            if r is not None:
+                return r
         index = self.reg_value(op.index) if op.index else None
         if base is not None and index is not None and op.scale == 1 \
                 and is_offset(base) and not is_offset(index):
@@ -761,7 +830,11 @@ class Lifter:
 
     def imm_value(self, v, size=4):
         if 0x787000 <= v < 0x7b4000:
-            if v in self.syms.vtables:
+            first = self.img.u32(v) if self.img.section_of(v) == '.rdata' else 0
+            if v in self.syms.vtables or (0x401000 <= first < 0x786500 and (
+                    first in self.syms.funcs
+                    or self.img.data[first - 0x400000:first - 0x400000 + 3] == b'\x55\x8b\xec')):
+                self.syms.vtables.add(v)       # a table of code pointers: a vtable
                 return Cast('char*', Const(v))
             if v in self.syms.globals:
                 return AddrOf(self.global_var(v, 'int'))
@@ -798,7 +871,11 @@ class Lifter:
                     + list(self.args) + list(self.forward.values())
                 if any(contains(v, c) for v in held if isinstance(v, E)):
                     continue
-                self.emit(ExprStmt(c))
+                self.incoming = new     # (other calls inside the new value stay pending)
+                try:
+                    self.emit(ExprStmt(c))
+                finally:
+                    self.incoming = None
 
     def emit(self, stmt):
         stmt.addr = self.cur_stmt_addr
@@ -810,7 +887,7 @@ class Lifter:
         rest = list(self.pending)
         self.pending = []
         held = list(self.regs.values()) + list(self.fpu) + list(self.args) \
-            + list(self.forward.values())
+            + list(self.forward.values()) + [getattr(self, 'incoming', None)]
         for c in rest:
             # (a register holding just the call's return value is the normal pending
             # state; an expression built on it is still being evaluated)
@@ -855,6 +932,12 @@ class SlotVar(E):
             return field_ref(parent, off, self.slot)
         if getattr(self.slot, 'struct_size', None) and not getattr(self, 'whole', False):
             return field_ref(self.slot, 0, self.slot)
+        ct = getattr(self, 'copy_type', None)
+        if ct and getattr(self.slot, 'struct_type', None) not in (None, ct):
+            # a struct copied into a struct local's first member
+            f = layouts().field(self.slot.struct_type, 0)
+            if f:
+                return f'{self.slot.name or f"l_{-self.slot.off:x}"}.{f}'
         if self.slot.name:
             return self.slot.name
         if self.slot.off > 0:
@@ -867,6 +950,13 @@ RECT_FIELDS = {0: 'left', 4: 'top', 8: 'right', 12: 'bottom'}
 
 def field_ref(st, off, member):
     name = st.name or f'l_{-st.off:x}'
+    S = getattr(st, 'elem_stride', None)
+    if S:
+        t = member_text(f'{name}[{off // S}]', off % S, st.elem)
+        if t:
+            return t
+    if st.array and getattr(st, 'fixed_len', None) and off % st.array == 0:
+        return f'{name}[{off // st.array}]'
     fields = STRUCT_FIELDS.get(getattr(st, 'struct_type', None), {})
     if off in fields:
         return f'{name}.{fields[off]}'
@@ -875,6 +965,36 @@ def field_ref(st, off, member):
         return f'{name}.{f}'
     ty = member.ctype() if member is not st else 'int'
     return f'*({ty}*)((char*)&{name} + {off})'
+
+
+class Row2D(E):
+    """((T(*)[n])(p + K))[i][j]: a two-dimensional array member, its row's address
+    worked out first (lea r, [p + i*R + K]) and then indexed."""
+    prec = PREC['post']
+
+    @staticmethod
+    def make(row, j, scale, ty, size, extra=0):
+        base, term, disp = row
+        if not (isinstance(term, Bin) and term.op == '*' and isinstance(term.b, Const)):
+            return None
+        rbytes = term.b.v
+        if rbytes % size or scale % size or extra % size:
+            return None
+        r = Row2D()
+        r.base, r.i, r.j, r.ty = base, term.a, j, ty
+        r.n, r.k, r.mul, r.add = rbytes // size, disp, scale // size, extra // size
+        return r
+
+    def uses(self):
+        return [self.base, self.i, self.j]
+
+    def render(self):
+        b = self.base
+        bt = b.text(PREC['cast']) if b.ty == 'char*' else f'(char*){b.text(PREC["cast"])}'
+        j = self.j.text(PREC['+']) if self.mul == 1 else f'{self.j.text(PREC["*"])} * {self.mul}'
+        if self.add:
+            j = f'{j} + {self.add}'
+        return f'(({self.ty}(*)[{fmt_int(self.n)}])({bt} + {fmt_int(self.k)}))[{self.i.text()}][{j}]'
 
 
 class Index(E):
@@ -887,6 +1007,11 @@ class Index(E):
         return [self.arr, self.idx]
 
     def render(self):
+        e = elem_of(self)
+        if e is not None:
+            t = member_text(e[0], e[1], e[2])
+            if t:
+                return t
         return f'{self.arr.text(PREC["post"])}[{self.idx.text()}]'
 
 
@@ -899,6 +1024,43 @@ def base_call(obj, name):
         return False
     base = name.rsplit('::', 1)[0]
     return any(off == obj.b.v and b == base for (_c, off), b in objdefs.BASES.items())
+
+
+# structs whose locals are recognized by their address being passed for a parameter
+# of that type (their fields are other locals until then)
+LOCAL_STRUCTS = {'CollisionInfo'}
+
+# COM methods that fill a caller's buffer: (buffer argument, size argument)
+BUFFER_ARGS = {'GetDeviceState': (1, 0)}
+BUFFER_CALLS = {'CFile::Read': (0, 1)}
+
+
+def load_cost(e):
+    """Memory loads in an expression (a rough measure of how heavy it is to evaluate)."""
+    n = 0
+    for x in walk_expr(e):
+        if isinstance(x, (Deref, SlotVar, Var, ThisVar, Index)):
+            n += 1
+    return n
+
+
+def static_type(e, own):
+    """The declared type of an expression built from `this` by field loads, as far as
+    the layouts in efz.h tell (or None)."""
+    if isinstance(e, ThisVar):
+        return own + '*' if own else None
+    if isinstance(e, Cast):
+        if e.ty not in ('char*', 'int', 'DWORD'):
+            return e.ty
+        return static_type(e.e, own)
+    if isinstance(e, Deref):
+        a, off = e.addr, 0
+        if isinstance(a, Bin) and a.op == '+' and isinstance(a.b, Const):
+            a, off = a.a, a.b.v
+        base = static_type(a, own)
+        if base and base.endswith('*'):
+            return layouts().field_type(base[:-1], off)
+    return None
 
 
 def is_offset(v):
@@ -1109,6 +1271,10 @@ class Lifter2(Lifter):
         self.finish_return(self.epilogue)
         if self.epilogue in self.targets:
             self.items.append(('label', self.epilogue))
+        for sl in list(self.slots.values()):
+            src = getattr(sl, 'provisional_src', None)
+            if src is not None and not getattr(src, 'consumed', False):
+                sl.temp = False     # r = f(); r used as itself
         return self.items
 
     def finish_return(self, at):
@@ -1160,11 +1326,15 @@ class Lifter2(Lifter):
                     and b.ops[0].kind == 'mem' and b.ops[1].kind == 'reg'
                     and a.ops[0].reg == b.ops[1].reg and a.ops[0].size == 4
                     and a.ops[1].index is None and b.ops[0].index is None
-                    and a.ops[1].base not in (None, 'ebp', 'esp') and b.ops[0].base not in (None, 'esp')
-                    and a.ops[1].disp == n):
+                    and a.ops[1].base not in (None, 'esp') and b.ops[0].base not in (None, 'esp')
+                    and not (a.ops[1].base == 'ebp' and b.ops[0].base == 'ebp')):
                 break
             if d0 is None:
-                d0 = b.ops[0].disp
+                d0, s0 = b.ops[0].disp, a.ops[1].disp
+                if a.ops[1].base != 'ebp' and s0 != 0:
+                    break
+            if a.ops[1].disp != s0 + n:
+                break
             if b.ops[0].disp != d0 + n or (b.ops[0].base != 'ebp' and d0 != 0):
                 break
             if n and (a.ops[1].base != self.ins[k - 2].ops[1].base
@@ -1176,25 +1346,141 @@ class Lifter2(Lifter):
                 break     # the address register was reused: this was the last pair
         return n
 
+    def compare_chain(self, k):
+        """mov [tmp], r; cmp [tmp], v1; je c1; cmp [tmp], v2; je c2; ...; jmp d: a switch
+        compiled as compares. Returns (cases, default, next k) or None."""
+        ins = self.ins[k]
+        tmp = ins.ops[0]
+        if not (ins.m == 'cmp' and tmp.kind == 'mem' and tmp.base == 'ebp' and tmp.index is None
+                and ins.ops[1].kind == 'imm' and k > 0):
+            return None
+        prev = self.ins[k - 1]
+        if not (prev.m == 'mov' and prev.ops[0].kind == 'mem' and prev.ops[0].base == 'ebp'
+                and prev.ops[0].disp == tmp.disp and prev.ops[1].kind == 'reg'):
+            return None
+        def is_cmp(j):
+            x = self.ins[j] if j < len(self.ins) else None
+            return x is not None and x.m == 'cmp' and x.ops[0].kind == 'mem' \
+                and x.ops[0].base == 'ebp' and x.ops[0].disp == tmp.disp and x.ops[1].kind == 'imm'
+
+        def val(j):
+            v = self.ins[j].ops[1].imm & ((1 << (8 * tmp.size)) - 1)
+            return v - (1 << (8 * tmp.size)) if v >= 1 << (8 * tmp.size - 1) else v
+
+        cases, j, outs = [], k, []
+        while j + 1 < len(self.ins) and is_cmp(j):
+            if self.ins[j + 1].m == 'je':
+                cases.append((val(j), self.ins[j + 1].ops[0].imm))
+                j += 2
+            elif self.ins[j + 1].m == 'jl' and is_cmp(j + 2) and self.ins[j + 3].m == 'jle':
+                # case lo: ... case hi: (one body): a range check
+                lo, hi = val(j), val(j + 2)
+                outs.append(self.ins[j + 1].ops[0].imm)
+                cases += [(v, self.ins[j + 3].ops[0].imm) for v in range(lo, hi + 1)]
+                j += 4
+            else:
+                break
+        if not cases or j >= len(self.ins) or self.ins[j].m != 'jmp' \
+                or self.ins[j].ops[0].kind != 'imm' \
+                or any(o != self.ins[j].ops[0].imm for o in outs):
+            return None
+        # the temporary is read by these compares only
+        for x in self.ins:
+            if x.addr in (self.ins[i].addr for i in range(k - 1, j)):
+                continue
+            if any(o.kind == 'mem' and o.base == 'ebp' and o.disp == tmp.disp for o in x.ops):
+                return None
+        return cases, self.ins[j].ops[0].imm, j + 1
+
+    def chain_switch(self, k, chain):
+        cases_list, default, nk = chain
+        slot = self.slot(self.ins[k].ops[0].disp)
+        slot.temp = True
+        expr = None
+        while self.items and self.items[-1][0] == 'stmt' and isinstance(self.items[-1][1], Assign) \
+                and isinstance(self.items[-1][1].lhs, SlotVar) and self.items[-1][1].lhs.slot is slot:
+            st = self.items.pop()[1]
+            if st.op == '':
+                expr = st.rhs
+        if expr is None:
+            raise LiftError(f'switch value not found at {self.pc:#x}')
+        cases = collections.defaultdict(list)
+        for v, target in cases_list:
+            cases[target].append(v)
+        self.items.append(('switch', expr, dict(cases), default, self.pc))
+        self.cur_stmt_addr = None
+        self.dirty = set()
+        return nk
+
     def step(self, k, tables):
         _CLOCK[0] = k
         self.k = k
         ins = self.ins[k]
         m, ops = ins.m, ins.ops
+        if m == 'cmp':
+            chain = self.compare_chain(k)
+            if chain is not None:
+                return self.chain_switch(k, chain)
+        if m == 'rep movsd' and isinstance(self.regs.get('ecx'), Const):
+            # a struct copy of ecx dwords from [esi] to [edi]
+            n = self.regs['ecx'].v * 4
+            ty = STRUCT_BY_SIZE.get(n)
+            if ty is None:
+                raise LiftError(f'struct copy of {n:#x} bytes at {self.pc:#x}')
+            src = as_pointer(self.reg_value('esi'))
+            dst = self.reg_value('edi')
+            if isinstance(dst, AddrOfVar) and isinstance(dst.v, SlotVar):
+                st = self.struct_slot(dst.v.slot.off, n, ty)
+                lhs = SlotVar(st)
+                lhs.whole = True
+                lhs.copy_type = ty
+            else:
+                lhs = Deref(as_pointer(dst), ty)
+            self.emit(Assign(lhs, Deref(src, ty)))
+            self.dirty = set()
+            return k + 1
         nxt = self.ins[k + 1] if k + 1 < len(self.ins) else None
         if m == 'mov' and ops[0].kind == 'reg' and ops[1].kind == 'mem' and ops[1].disp == 0 \
-                and not isinstance(self.regs.get(ops[1].base), StructResult):
+                and isinstance(self.regs.get(ops[1].base), StructResult) \
+                and nxt is not None and nxt.ops and nxt.ops[0].kind == 'mem' \
+                and nxt.ops[0].base not in ('ebp', 'esp', None) \
+                and not isinstance(self.regs.get(nxt.ops[0].base), ArgBlock):
+            # a struct-returning call's result copied straight into memory: p[i] = f()
+            res = self.regs[ops[1].base]
+            n = self.mem_copy(k)
+            if n == res.size and n in STRUCT_BY_SIZE:
+                res.copied = res.consumed = True
+                lhs = Deref(as_pointer(self.reg_value(nxt.ops[0].base)), STRUCT_BY_SIZE[n])
+                self.emit(Assign(lhs, res.call))
+                self.dirty = set()
+                return k + 2 * (n // 4)
+        if m == 'mov' and ops[0].kind == 'reg' and ops[1].kind == 'mem' \
+                and (ops[1].disp == 0 or ops[1].base == 'ebp') \
+                and not isinstance(self.regs.get(ops[1].base), StructResult) \
+                and nxt is not None and nxt.ops and nxt.ops[0].kind == 'mem' \
+                and not isinstance(self.regs.get(nxt.ops[0].base), ArgBlock):
             n = self.mem_copy(k)
             if n in STRUCT_BY_SIZE:
                 ty = STRUCT_BY_SIZE[n]
-                src = as_pointer(self.reg_value(ops[1].base))
+                if ops[1].base == 'ebp':
+                    sst = self.struct_slot(ops[1].disp, n, ty)      # a struct local
+                    src = None
+                    whole = SlotVar(sst)
+                    whole.whole = True
+                    res = getattr(self.slot(ops[1].disp), 'copy_of', None)
+                    if isinstance(res, StructResult) and getattr(sst, 'temp', False):
+                        # the temporary a struct-returning call's result went to
+                        whole = self.take_temp(res)
+                else:
+                    src = as_pointer(self.reg_value(ops[1].base))
                 if nxt.ops[0].base == 'ebp':
                     st = self.struct_slot(nxt.ops[0].disp, n, ty)
                     lhs = SlotVar(st)
                     lhs.whole = True
+                    lhs.copy_type = ty
                 else:
                     lhs = Deref(as_pointer(self.reg_value(nxt.ops[0].base)), ty)
-                self.emit(Assign(lhs, Deref(src, ty)))
+                self.emit(Assign(lhs, Deref(src, ty) if src is not None else whole))
                 self.dirty = set()
                 return k + 2 * (n // 4)
         if m == 'sub' and ops[0].kind == 'reg' and ops[0].reg == 'esp':
@@ -1259,10 +1545,15 @@ class Lifter2(Lifter):
                         # lea r, [x + y + K]: the compiler folds a constant into the
                         # addition after it, so this is x + K + y, unless y was computed
                         # first, which (x + K) + y would not do: then x + y + K.
-                        if term.first_time() < v.first_time():
+                        # (a load whose address was worked out first but which was only
+                        # loaded after y is x + y too: x + K would have needed it at once)
+                        base0 = v
+                        if term.first_time() < v.first_time() or \
+                                (isinstance(v, Deref) and term.first_time() < v.t):
                             v = Bin('+', Bin('+', v, term, 'int'), Const(src.disp), 'int')
                         else:
                             v = Bin('+', Bin('+', v, Const(src.disp), 'int'), term, 'int')
+                        v.row = (base0, term, src.disp)     # maybe &rows[i] of a 2D array
                         self.set_reg(dst.reg, v)
                         return k + 1
                     v = term if v is None else Bin('+', v, term, v.ty if v.ty == 'char*' else 'int')
@@ -1274,6 +1565,7 @@ class Lifter2(Lifter):
         if m in ('xor', 'sub') and ops[0].kind == 'reg' and ops[1].kind == 'reg' \
                 and ops[0].reg == ops[1].reg:
             self.set_reg(ops[0].reg, Const(0))
+            self.flags = ('res', Const(0))      # `xor edx,edx; je`: if (0) { ... }
             return k + 1
         if m == 'or' and ops[0].kind == 'reg' and ops[1].kind == 'imm' \
                 and ops[1].imm & ((1 << 8 * ops[0].size) - 1) == (1 << 8 * ops[0].size) - 1:
@@ -1310,9 +1602,25 @@ class Lifter2(Lifter):
                 if m == 'imul' and dst.reg != 'eax' and after is not None and after.m == 'mov' \
                         and after.ops[0].kind == 'reg' and after.ops[0].reg == 'eax' \
                         and after.ops[1].kind == 'reg' and after.ops[1].reg == dst.reg \
-                        and self.ins[k + 2].m == 'cdq':
-                    copied = True
-                if min(regs_t) < a.first_time() or copied:
+                        and self.ins[k + 2].m == 'cdq' \
+                        and isinstance(a, (SlotVar, Var, ThisVar, Deref, Index)):
+                    copied = True       # (an expression in the register was the left one)
+                # (unless the register holds a plain load: for M + a the compiler would
+                # have loaded M and folded a, so M here is the heavier right operand,
+                # evaluated first)
+                heavier = isinstance(a, (SlotVar, Var, ThisVar, Deref, Index))
+                # ... except in M op= a, where M's address is worked out first as the
+                # left operand and the result is stored back to M
+                for x in self.ins[k + 1:k + 6]:
+                    if x.m == 'mov' and x.ops[0].kind == 'mem' and x.ops[1].kind == 'reg' \
+                            and x.ops[1].reg == dst.reg:
+                        if x.ops[0].disp == src.disp and x.ops[0].index == src.index \
+                                and src.index is None:
+                            heavier = False
+                        break
+                    if x.ops and x.ops[0].kind == 'reg' and x.ops[0].reg == dst.reg:
+                        break
+                if (min(regs_t) < a.first_time() and not heavier) or copied:
                     # (or the register operand was copied first: `mem * x` loads x and
                     # copies it into the result register)
                     a, b = b, a
@@ -1363,11 +1671,30 @@ class Lifter2(Lifter):
                 sh = self.ins[k + 2].ops[1].imm
                 self.set_reg('eax', Bin('/', self.reg_value('eax'), Const(1 << sh), 'int'))
                 return k + 3
+            # cdq; sub eax, edx; mov r, eax; sar r, 1  ->  r = eax / 2
+            t = self.ins[k + 2] if k + 2 < len(self.ins) else None
+            u = self.ins[k + 3] if k + 3 < len(self.ins) else None
+            if nxt.m == 'sub' and nxt.ops[1].kind == 'reg' and nxt.ops[1].reg == 'edx' \
+                    and t is not None and t.m == 'mov' and t.ops[1].kind == 'reg' \
+                    and t.ops[1].reg == 'eax' and u is not None and u.m == 'sar' \
+                    and u.ops[0].kind == 'reg' and u.ops[0].reg == t.ops[0].reg:
+                v = Bin('/', self.reg_value('eax'), Const(1 << u.ops[1].imm), 'int')
+                self.set_reg(t.ops[0].reg, v)
+                return k + 4
             # cdq; and edx, 2^n - 1; add eax, edx; sar eax, n  ->  eax / 2^n
             if nxt.m == 'and' and self.ins[k + 2].m == 'add' and self.ins[k + 3].m == 'sar':
                 sh = self.ins[k + 3].ops[1].imm
                 self.set_reg('eax', Bin('/', self.reg_value('eax'), Const(1 << sh), 'int'))
                 return k + 4
+            # ... with the sum moved to another register before the shift
+            if nxt.m == 'and' and self.ins[k + 2].m == 'add' and self.ins[k + 3].m == 'mov' \
+                    and self.ins[k + 4].m == 'sar' and self.ins[k + 3].ops[1].kind == 'reg' \
+                    and self.ins[k + 3].ops[1].reg == 'eax' \
+                    and self.ins[k + 4].ops[0].reg == self.ins[k + 3].ops[0].reg:
+                sh = self.ins[k + 4].ops[1].imm
+                v = Bin('/', self.reg_value('eax'), Const(1 << sh), 'int')
+                self.set_reg(self.ins[k + 3].ops[0].reg, v)
+                return k + 5
             self.set_reg('edx', SignOf(self.reg_value('eax')))
             return k + 1
         if m in ('idiv', 'div'):
@@ -1421,6 +1748,13 @@ class Lifter2(Lifter):
             tbl = next((t for t in tables.values() if t['ja'] == ins.addr), None)
             if tbl is not None:
                 return self.switch_jump(k, tbl)
+            f = self.flags
+            if f is not None and f[0] == 'res' and self.items and self.items[-1][0] == 'stmt' \
+                    and isinstance(self.items[-1][1], Assign) and not self.items[-1][1].op \
+                    and self.items[-1][1].rhs is f[1]:
+                # if ((x = e) < 0): the flags of e's arithmetic, with the store in between
+                st = self.items.pop()[1]
+                self.flags = ('res', AssignExpr(st.lhs, st.rhs))
             c = self.condition(m)
             self.consume(c)
             self.flush_pending()
@@ -1448,9 +1782,51 @@ class Lifter2(Lifter):
             if isinstance(v, Index):
                 v.arr.slot.signed[signed] += 1
 
+    def take_temp(self, src):
+        """A struct-returning call's first copy was to a compiler temporary after all:
+        its value goes on to where the caller uses it."""
+        call = src.call
+        src.consumed = True
+        if call in self.pending:
+            self.pending.remove(call)
+        prov = getattr(src, 'provisional', None)
+        self.items[:] = [it for it in self.items if not (
+            it[0] == 'stmt' and (it[1] is prov or isinstance(it[1], ExprStmt) and it[1].e is call))]
+        return call
+
+    def mem_struct_copy(self, lhs, rhs):
+        """A struct-returning call's temporary copied field by field into memory:
+        *(RECT*)p = MakeRect(...)."""
+        if not (isinstance(lhs, Deref) and isinstance(rhs, SlotVar)):
+            return False
+        src = getattr(rhs.slot, 'copy_of', None)
+        if not isinstance(src, StructResult):
+            return False
+        off = rhs.slot.off - rhs.slot.copy_base
+        a, d = lhs.addr, 0
+        while isinstance(a, Bin) and a.op == '+' and isinstance(a.b, Const):
+            a, d = a.a, d + a.b.v
+        cp = self.__dict__.get('mcopy')
+        if off == 0:
+            cp = self.mcopy = {'src': src, 'base': a, 'disp': d, 'next': 4}
+        elif cp is None or cp['src'] is not src or off != cp['next'] or not same(cp['base'], a) \
+                or d != cp['disp'] + off:
+            return False
+        else:
+            cp['next'] = off + 4
+        if cp['next'] >= src.size:
+            self.mcopy = None
+            base = cp['base'] if not cp['disp'] else Bin('+', cp['base'], Const(cp['disp']), 'char*')
+            ty = STRUCT_BY_SIZE.get(src.size, 'RECT')
+            self.emit(Assign(Deref(base, ty), self.take_temp(src)))
+            self.dirty = set()
+        return True
+
     def struct_copy(self, lhs, rhs):
         """Field-by-field copies of a struct into consecutive slots. Returns True if the
         store was taken."""
+        if self.mem_struct_copy(lhs, rhs):
+            return True
         if not isinstance(lhs, SlotVar):
             return False
         src = None
@@ -1476,13 +1852,22 @@ class Lifter2(Lifter):
                 self.slot(o).copy_of = src
                 self.slot(o).copy_base = cp['base']
             if isinstance(src, StructResult) and not getattr(src, 'copied', False):
-                # the first copy goes to a compiler temporary
+                # the first copy: into a local (r = f()), or into a compiler temporary
+                # that a later copy or argument takes (decided there, by take_temp)
                 src.copied = True
                 dst.temp = True
                 dst.copy_of = src
+                dst.provisional_src = src
                 for o in range(cp['base'], cp['base'] + size, 4):
                     self.slot(o).copy_of = src
+                whole = SlotVar(dst)
+                whole.whole = True
+                src.provisional = Assign(whole, src.call)
+                self.emit(src.provisional)
+                self.dirty = set()
                 return True
+            if isinstance(src, StructResult):
+                self.take_temp(src)
             whole = SlotVar(dst)
             whole.whole = True
             self.emit(Assign(whole, src.call if isinstance(src, StructResult) else src))
@@ -1523,6 +1908,9 @@ class Lifter2(Lifter):
                 # a short or char done at its own width is x += k; promoted to int
                 # first (movsx/movzx) it is x = x + k
                 ok = getattr(rhs, 'narrow', None) or compound
+                # x += y evaluates y before loading x; x = x + y loads x first
+                if not isinstance(rhs.b, Const) and rhs.b.first_time() < rhs.a.t:
+                    ok = True
             else:
                 ok = True
             if ok:
@@ -1582,7 +1970,8 @@ class Lifter2(Lifter):
             target = op.imm
             crt = CRT.get(target)
             if crt is not None:
-                name, kind = crt
+                name, kind = crt[:2]
+                fixed = crt[2] if len(crt) > 2 else None
                 if kind == 'ftol':
                     self.set_reg('eax', Cast('int', self.fpu.pop()))
                     self.dirty.add('eax')
@@ -1599,6 +1988,8 @@ class Lifter2(Lifter):
                 proto = self.syms.protos.lookup(name)
                 if proto:
                     c.ptypes = proto[1]
+                if fixed:
+                    c.ptypes = fixed
                 if kind == 'fpu':
                     c.ty = 'double'
                     self.fpu.append(c)
@@ -1656,20 +2047,38 @@ class Lifter2(Lifter):
             if args and obj is not None and same(args[0], obj):
                 slot = op.disp // 4
                 name = {0: 'QueryInterface', 1: 'AddRef', 2: 'Release'}.get(slot, f'vtbl[{slot}]')
+                iface = (static_type(obj, self.own_class()) or '').rstrip('*')
+                methods = interfaces().get(iface)
                 c = Call(name, args[1:], args[0], virtual=True)
                 c.com = True
                 c.cls = 'IUnknown' if slot <= 2 else None
+                if methods and slot < len(methods):
+                    c.fn, c.cls = methods[slot], iface
+                    if c.fn in BUFFER_ARGS:
+                        bi, si = BUFFER_ARGS[c.fn]
+                        self.fixed_buffer(c.args[bi] if bi < len(c.args) else None,
+                                          c.args[si] if si < len(c.args) else None)
             else:
                 slot = op.disp // 4
                 obj = self.reg_value('ecx')
-                nbytes = self.vslot_bytes(slot)
+                if isinstance(obj, ThisVar):
+                    fam = getattr(self, 'vfamily', (self.syms.vclass, None, None))
+                else:
+                    # another object: its declared class's family, or most often a player
+                    t = (static_type(obj, self.own_class()) or '').rstrip('*')
+                    fam = vfamily(f'{t}::x') if t else ('CPlayer', None, None)
+                    if fam[0] == 'CPlayer':
+                        fam = ('CPlayer', None, None)
+                nbytes = self.vslot_bytes(slot, fam)
                 if nbytes is not None:
                     self.args = list(reversed(args))
                     args = self.pop_args(nbytes)
                 else:
                     self.args = []
-                c = Call(f'Vf{slot}', args, obj, virtual=True)
-                c.cls = self.syms.vclass
+                vclass, vnames, _vt = fam
+                c = Call(vnames[slot] if vnames and slot < len(vnames) else f'Vf{slot}', args, obj,
+                         virtual=True)
+                c.cls = vclass
                 c.vslot = slot
                 if isinstance(obj, ThisVar):
                     c.this = None
@@ -1678,14 +2087,41 @@ class Lifter2(Lifter):
             return consumed
         raise LiftError(f'call form {ins}')
 
+    def fixed_buffer(self, buf, n):
+        """A local buffer of n bytes filled by a call: a char array, or above the /GS
+        cookie (which only char arrays sit below) an int array."""
+        if not (isinstance(buf, AddrOfVar) and isinstance(buf.v, SlotVar) and isinstance(n, Const)):
+            return
+        sl = buf.v.slot
+        if sl.array or getattr(sl, 'struct_size', None) or getattr(sl, 'cls', None):
+            return
+        above = self.cookie_slot is not None and sl.off > self.cookie_slot
+        sl.array = 4 if above and n.v % 4 == 0 else 1
+        sl.signed[True] += 1
+        sl.fixed_len = n.v
+
+    def own_class(self):
+        """The class whose layout describes `this` (a base class's for derived ones whose
+        fields are raw offsets)."""
+        cls = getattr(self, 'cls', None)
+        if cls and cls not in layouts().structs:
+            cls = base_of(f'{cls}::x')
+        return cls
+
     def type_args(self, c, params):
-        """Locals whose address is passed for a string or buffer are char arrays."""
+        """Locals whose address is passed for a string or buffer are char arrays; for a
+        struct declared in efz.h, locals of that struct."""
         for n, a in enumerate(c.args):
             t = params[n] if n < len(params) else None
             if t is None or not isinstance(a, AddrOfVar) or not isinstance(a.v, SlotVar):
                 continue
             sl = a.v.slot
             base = t.replace('const ', '')
+            st = base[:-1] if base.endswith('*') else None
+            info = layouts().structs.get(st) if st in LOCAL_STRUCTS else None
+            if info and not getattr(sl, 'cls', None) and sl.off < 0:
+                self.struct_slot(sl.off, info[0], st)
+                continue
             if base in ('char*', 'LPSTR', 'LPCSTR', 'HPSTR') and not sl.array:
                 sl.array = 1
                 sl.signed[True] += 1
@@ -1701,6 +2137,10 @@ class Lifter2(Lifter):
             return c
         ret, params = proto
         self.type_args(c, params)
+        if qual in BUFFER_CALLS:
+            bi, si = BUFFER_CALLS[qual]
+            self.fixed_buffer(c.args[bi] if bi < len(c.args) else None,
+                              c.args[si] if si < len(c.args) else None)
         c.ptypes = params
         c.rtype = ret
         size = STRUCT_SIZES.get(ret)
@@ -1734,10 +2174,13 @@ class Lifter2(Lifter):
             return w
         return c
 
-    def vslot_bytes(self, slot):
-        """Argument bytes of a CPlayer virtual slot, from a character's implementation."""
-        table = self.syms.char_vtable
-        if slot >= 13:
+    def vslot_bytes(self, slot, fam):
+        """Argument bytes of a virtual slot of a class family, from an implementation (a
+        character's for CPlayer)."""
+        vclass, vnames, table = fam
+        if table is None:
+            table = self.syms.char_vtable
+        if slot >= (len(vnames) if vnames else 13):
             return None
         return self.callee_info(self.img.u32(table + 4 * slot))[0]
 
@@ -1766,6 +2209,14 @@ class Lifter2(Lifter):
             if ok:
                 st = self.struct_slot(base, blk['size'],
                                       {16: 'RECT'}.get(blk['size']))
+                src = getattr(st, 'copy_of', None)
+                if getattr(st, 'temp', False) and isinstance(src, StructResult) \
+                        and not getattr(src, 'consumed', False):
+                    # a struct-returning call passed straight on as an argument
+                    call = self.take_temp(src)
+                    v = StructRef(SlotVar(st), blk['size'])
+                    v.call = call
+                    return v
                 return StructRef(SlotVar(st), blk['size'])
         raise LiftError(f'struct argument from {fields} at {self.pc:#x}')
 
@@ -1815,6 +2266,30 @@ class Lifter2(Lifter):
 
     # floating point ---------------------------------------------------------------
 
+    def unsigned_pair(self, o):
+        """mov [t], x; mov [t+4], 0; fild qword [t]: an unsigned int converted to double
+        (zero-extended to 64 bits). Returns x as unsigned, or None."""
+        if not (o.kind == 'mem' and o.size == 8 and o.base == 'ebp' and o.index is None):
+            return None
+        if len(self.items) < 2 or self.items[-1][0] != 'stmt' or self.items[-2][0] != 'stmt':
+            return None
+        hi, lo = self.items[-1][1], self.items[-2][1]
+        if not (isinstance(hi, Assign) and isinstance(lo, Assign) and not hi.op and not lo.op
+                and isinstance(hi.lhs, SlotVar) and hi.lhs.slot.off == o.disp + 4
+                and isinstance(hi.rhs, Const) and hi.rhs.v == 0
+                and isinstance(lo.lhs, SlotVar) and lo.lhs.slot.off == o.disp):
+            return None
+        del self.items[-2:]
+        hi.lhs.slot.temp = lo.lhs.slot.temp = True
+        x = lo.rhs
+        if isinstance(x, (Deref, Index)):
+            x.ty = 'DWORD'
+        elif isinstance(x, SlotVar):
+            x.slot.unsigned_cmp += 1
+        else:
+            x = Cast('DWORD', x)
+        return x
+
     def fload(self, op):
         if op.kind == 'mem' and op.base is None and op.index is None:
             addr = op.disp & 0xFFFFFFFF
@@ -1842,7 +2317,10 @@ class Lifter2(Lifter):
             return k + 1
         if m == 'fild':
             o = ops[0]
-            if o.kind == 'mem' and o.base == 'ebp' and o.index is None and o.disp in self.forward:
+            u = self.unsigned_pair(o)
+            if u is not None:
+                v = u
+            elif o.kind == 'mem' and o.base == 'ebp' and o.index is None and o.disp in self.forward:
                 v = self.forward.pop(o.disp)
             else:
                 v = self.value(ops[0])
@@ -1883,6 +2361,8 @@ class Lifter2(Lifter):
             lhs = self.lvalue(dst, ty)
             if isinstance(lhs, SlotVar):
                 lhs.slot.float = ty
+            if isinstance(v, Cast) and getattr(v, 'fild', False) and not isinstance(lhs, SlotVar):
+                v = v.e     # an int stored as floating point: converted implicitly
             self.store(lhs, v, dst.size)
             return k + 1
         if m in FARITH or m in FARITH_R:
@@ -2030,7 +2510,7 @@ class ArgBlock(E):
 
 STRUCT_SIZES = {'RECT': 16}
 # the struct type used for a copy of n bytes whose type is unknown
-STRUCT_BY_SIZE = {16: 'RECT', 12: 'EffectFrame'}
+STRUCT_BY_SIZE = {16: 'RECT', 12: 'EffectFrame', 0xc8: 'PatternFrame'}
 STRUCT_FIELDS = {
     'RECT': {0: 'left', 4: 'top', 8: 'right', 12: 'bottom'},
     'EffectFrame': {0: 'duration', 2: 'surface', 4: 'x', 6: 'y', 8: 'width', 10: 'height'},
@@ -2075,9 +2555,13 @@ class StructRef(E):
         return self.var.ty
 
     def uses(self):
-        return [self.var]
+        call = getattr(self, 'call', None)
+        return [call] if call is not None else [self.var]
 
     def render(self):
+        call = getattr(self, 'call', None)
+        if call is not None:
+            return call.render()
         v = SlotVar(self.var.slot)
         v.whole = True
         return v.render()
@@ -2104,13 +2588,17 @@ class AddrOfVar(E):
         return [self.v]
 
     def render(self):
-        if isinstance(self.v, SlotVar) and self.v.slot.array:
-            return self.v.text()
+        e = elem_of(self.v)
+        if e is not None and e[1] == 0:
+            # &rects[i]; a row decays to a pointer
+            return e[0] if isinstance(e[2], tuple) else f'&{e[0]}'
         if isinstance(self.v, SlotVar) and getattr(self.v.slot, 'struct_size', None) \
                 and getattr(self.v.slot, 'parent', None) is None:
             whole = SlotVar(self.v.slot)
             whole.whole = True
             return f'&{whole.text(PREC["unary"])}'
+        if isinstance(self.v, SlotVar) and self.v.slot.array:
+            return self.v.text()
         return f'&{self.v.text(PREC["unary"])}'
 
 
@@ -2158,6 +2646,7 @@ CRT = {
     0x778600: ('memcpy', 'call'),
     0x778970: ('atan2', 'fpu'),
     0x778984: ('abs', 'call'),
+    0x775810: ('pow', 'fpu', ['int', 'int']),   # <math.h>'s inline pow(int, int)
 }
 
 
@@ -2607,11 +3096,16 @@ def render(nodes, indent=1, gotos=()):
             lines.append(f'{pad}{n.kind}{f" L{n.target:x}" if n.kind == "goto" else ""};')
         elif isinstance(n, Lbl):
             if n.addr in gotos:
-                lines.append(f'L{n.addr:x}:')
+                last = all(isinstance(x, Lbl) for x in nodes[nodes.index(n) + 1:])
+                lines.append(f'L{n.addr:x}:' + (';' if last else ''))
     return lines
 
 
 def declare(slot, name):
+    if getattr(slot, 'elem_stride', None):
+        if slot.elem == 'RECT':
+            return f'RECT {name}[{slot.array_len}];'
+        return f'int {name}[{slot.array_len}][{slot.elem[1]}];'
     if getattr(slot, 'struct_size', None):
         return f'{getattr(slot, "struct_type", None) or "RECT"} {name};'
     if slot.array:
@@ -2635,9 +3129,30 @@ def register_pads():
             for f, v in json.load(open(path)).items()}
 
 
+def base_of(qual):
+    import objdefs
+    cls = qual.rsplit('::', 1)[0] if qual and '::' in qual else None
+    for c in objdefs.CLASSES:
+        if c[1] == cls:
+            return c[2]
+    return 'CPlayer'
+
+
+def vfamily(qual):
+    """(base class, slot names, a vtable) for virtual calls made in qual's class."""
+    import objdefs
+    cls = qual.rsplit('::', 1)[0] if qual and '::' in qual else None
+    for c in objdefs.CLASSES:
+        if cls in (c[1], c[2]):
+            first = next(x for x in objdefs.CLASSES if x[2] == c[2])
+            return c[2], c[6], first[5]
+    return 'CPlayer', None, None
+
+
 def lift(img, syms, start, ret_type=None, this_type=None, qual=None):
     lf = Lifter2(img, syms, start, function_end(syms, start), this_type)
     lf.pads = register_pads().get(start, {})
+    lf.vfamily = vfamily(qual or syms.func_name(start))
     qual = qual or syms.func_name(start)
     lf.cls = qual.rsplit('::', 1)[0] if qual and '::' in qual else None
     if qual:
@@ -2657,6 +3172,19 @@ def lift(img, syms, start, ret_type=None, this_type=None, qual=None):
     ctx = {'ctor': bool(qual) and qual.split('::')[-1] == qual.split('::')[0].split('::')[-1]
                    if qual and '::' in qual else False,
            'dtor': bool(qual) and '::~' in qual}
+    # *(RECT*)p1 = r; return p1;  ->  return r;  (p1 being the hidden result pointer)
+    lf.struct_ret = None
+    tail = [n for n in body if not (isinstance(n, Lbl))]
+    if len(tail) >= 2 and isinstance(stmt_of(tail[-1]), Return) and isinstance(stmt_of(tail[-2]), Assign):
+        r, a = stmt_of(tail[-1]), stmt_of(tail[-2])
+        hidden = lambda e: isinstance(e, SlotVar) and e.slot.off == 8
+        lhs_addr = a.lhs.addr.e if isinstance(a.lhs, Deref) and isinstance(a.lhs.addr, Cast) else \
+            getattr(a.lhs, 'addr', None)
+        if isinstance(a.lhs, Deref) and a.lhs.ty in STRUCT_SIZES and hidden(lhs_addr) \
+                and (hidden(r.e) or (isinstance(r.e, Cast) and hidden(r.e.e))):
+            lf.struct_ret = a.lhs.ty
+            body.remove(tail[-2])
+            r.e = a.rhs
     ctx['gotos'] = st.gotos
     ctx['top'] = body
     ctx['lf'] = lf
@@ -2697,22 +3225,133 @@ def name_locals(locals_, ranks=None):
     return list(reversed(top_down))
 
 
+def node_values(n):
+    exprs = [getattr(n, 'cond', None), getattr(n, 'expr', None)]
+    st = getattr(n, 's', None)
+    if isinstance(st, Assign):
+        exprs += [st.lhs, st.rhs]
+    elif isinstance(st, (ExprStmt, Return, DeleteStmt)):
+        exprs.append(st.e)
+    elif isinstance(st, DeclStmt):
+        exprs += list(st.call.args)
+    for inc in getattr(n, 'inc', None) or []:
+        if isinstance(inc, Assign):
+            exprs += [inc.lhs, inc.rhs]
+    return [e for e in exprs if isinstance(e, E)]
+
+
+def stride_of(idx):
+    """A byte offset i << k or i * c as (i, stride); (idx, 1) otherwise."""
+    if isinstance(idx, Bin) and isinstance(idx.b, Const):
+        if idx.op == '<<':
+            return idx.a, 1 << idx.b.v
+        if idx.op == '*':
+            return idx.a, idx.b.v
+    return idx, 1
+
+
+def shape_arrays(lf, nodes):
+    """Local arrays of structs or rows, from byte-offset indexing with a stride: the
+    slots inside one element become its fields (rects[i].top, hits[i][j])."""
+    found = collections.defaultdict(set)      # stride -> slot offsets
+    rows = set()
+    for n in all_nodes(nodes):
+        for e in node_values(n):
+            for x in walk_expr(e):
+                if isinstance(x, Index) and isinstance(x.arr, SlotVar) and x.arr.slot.array == 1:
+                    sl = x.arr.slot
+                    if getattr(sl, 'parent', None) is not None and \
+                            getattr(sl.parent, 'struct_type', None):
+                        continue
+                    if getattr(sl, 'struct_type', None):
+                        continue
+                    i, S = stride_of(x.idx)
+                    if S >= 8:
+                        found[S].add(sl.off)
+                elif isinstance(x, Deref) and row_access(x) is not None:
+                    rows.add(row_access(x)[0].arr.slot.off)
+    offs = sorted(o for o in lf.slots if o < 0)
+    for S, members in found.items():
+        members = sorted(members)
+        while members:
+            base = members[0]
+            group = [o for o in members if o < base + S]
+            members = [o for o in members if o >= base + S]
+            A = lf.slot(base)
+            A.elem_stride = S
+            A.elem = 'RECT' if S == 16 and base not in rows else ('int', S // 4)
+            for o in offs:
+                if base < o < base + S and lf.slots[o] is not A:
+                    lf.slots[o].parent = A
+            above = [o for o in offs if o > base and getattr(lf.slots[o], 'parent', None) is not A
+                     and lf.slots[o] is not A] + [lf.cookie_slot or 0]
+            top = min(above) if above else 0
+            A.array_len = (top - base) // S
+            # slots further on in the array: elements (ignored as locals)
+            for o in offs:
+                if base + S <= o < base + A.array_len * S and lf.slots[o] is not A \
+                        and getattr(lf.slots[o], 'parent', None) is None:
+                    lf.slots[o].parent = A
+
+
+def row_access(d):
+    """*(int*)(&rows[i * S] + j * 4): (Index, j) or None."""
+    a = d.addr
+    if isinstance(a, Cast):
+        a = a.e
+    if isinstance(a, Bin) and a.op == '+' and isinstance(a.a, AddrOfVar) \
+            and isinstance(a.a.v, Index) and isinstance(a.b, Bin) and a.b.op == '*' \
+            and isinstance(a.b.b, Const) and a.b.b.v == 4 and d.ty in ('int', 'DWORD') \
+            and isinstance(a.a.v.arr, SlotVar):
+        return a.a.v, a.b.a
+    return None
+
+
+def slot_name(s):
+    return s.name or f'l_{-s.off:x}'
+
+
+def elem_of(ix):
+    """For an Index into a local array of structs or rows, or into an array member of
+    a struct local: (element text, offset within the element, element type) or None."""
+    if not isinstance(ix, Index) or not isinstance(ix.arr, SlotVar):
+        return None
+    s = ix.arr.slot
+    i, S = stride_of(ix.idx)
+    if S < 2:
+        return None
+    A = s if getattr(s, 'elem_stride', None) else getattr(s, 'parent', None)
+    if A is not None and getattr(A, 'elem_stride', None) == S:
+        return f'{slot_name(A)}[{i.text()}]', s.off - A.off, A.elem
+    P = s if getattr(s, 'struct_type', None) else getattr(s, 'parent', None)
+    if P is not None and getattr(P, 'struct_type', None):
+        af = layouts().array_field(P.struct_type, s.off - P.off)
+        if af and af[2] == S:
+            name, ety, esize, sub = af
+            return f'{slot_name(P)}.{name}[{i.text()}]', sub, ety
+    return None
+
+
+def member_text(base, f, ety):
+    """A field at offset f of an element."""
+    if ety == 'RECT' and f in RECT_FIELDS:
+        return f'{base}.{RECT_FIELDS[f]}'
+    if isinstance(ety, tuple):
+        return f'{base}[{f // 4}]'
+    fname = layouts().field(ety, f)
+    if fname:
+        return f'{base}.{fname}'
+    return None
+
+
 def used_slots(nodes):
     """Slots referenced anywhere in a node tree."""
     used = set()
     for n in all_nodes(nodes):
-        exprs = [getattr(n, 'cond', None), getattr(n, 'expr', None)]
         st = getattr(n, 's', None)
-        if isinstance(st, Assign):
-            exprs += [st.lhs, st.rhs]
-        elif isinstance(st, (ExprStmt, Return, DeleteStmt)):
-            exprs.append(st.e)
-        elif isinstance(st, DeclStmt):
+        if isinstance(st, DeclStmt):
             used.add(st.slot)
-            exprs += list(st.call.args)
-        for inc in getattr(n, 'inc', None) or []:
-            if isinstance(inc, Assign):
-                exprs += [inc.lhs, inc.rhs]
+        exprs = node_values(n)
         for e in exprs:
             if isinstance(e, E):
                 for x in walk_expr(e):
@@ -2725,6 +3364,15 @@ def used_slots(nodes):
 
 
 def body_text(lf, body, st, names=True):
+    shape_arrays(lf, body)
+    # arrays of known length (a buffer filled by a call): slots inside are elements
+    for s in list(lf.slots.values()):
+        n = getattr(s, 'fixed_len', None)
+        if n:
+            s.array_len = n // s.array
+            for o in range(s.off + 1, s.off + n):
+                if o in lf.slots and lf.slots[o] is not s:
+                    lf.slots[o].parent = s
     used = used_slots(body)
     locals_ = [s for s in lf.slots.values()
                if s.off < 0 and s.off != lf.this_slot and s.off != lf.cookie_slot
@@ -2736,7 +3384,7 @@ def body_text(lf, body, st, names=True):
     # array lengths: up to the next slot above
     offs = sorted(s.off for s in lf.slots.values() if s.off < 0)
     for s in locals_:
-        if s.array:
+        if s.array and not getattr(s, 'fixed_len', None) and not getattr(s, 'elem_stride', None):
             above = [o for o in offs if o > s.off] + [lf.cookie_slot or 0]
             top = min(o for o in above if o > s.off) if any(o > s.off for o in above) else 0
             s.array_len = array_bytes(top - s.off) // s.array
@@ -2790,6 +3438,7 @@ def split_top(s, sep=','):
 
 
 def parse_decl(chunk):
+    chunk = re.sub(r'\)\s*=\s*0\s*$', ')', chunk.strip())     # pure virtual
     chunk = re.sub(r'__declspec\s*\([^)]*\)', '', chunk)
     chunk = re.sub(r'extern\s+"C"', '', chunk)
     m = re.match(r'^(.*?)\b(~?\w+)\s*\((.*)\)\s*(const)?\s*$', chunk.strip())
@@ -2838,7 +3487,10 @@ def preprocess_headers(pre):
 
 BASIC_SIZES = {'char': 1, 'BYTE': 1, 'bool': 1, 'short': 2, 'WORD': 2, 'int': 4, 'DWORD': 4,
                'BOOL': 4, 'long': 4, 'float': 4, 'double': 8, 'HWND': 4, 'HANDLE': 4,
-               'RECT': 16, 'POINT': 8, 'GUID': 16}
+               'RECT': 16, 'POINT': 8, 'GUID': 16, 'UINT': 4, 'DIJOYSTATE': 0x50,
+               'PALETTEENTRY': 4, 'DDSURFACEDESC': 0x6c, 'DSBUFFERDESC': 0x24}
+ALIGN4 = ('RECT', 'POINT', 'GUID', 'DIJOYSTATE', 'DDSURFACEDESC', 'DSBUFFERDESC')
+ALIGN1 = ('PALETTEENTRY',)      # four BYTEs
 
 
 class Layouts:
@@ -2857,7 +3509,7 @@ class Layouts:
             return 4, 4
         if t in BASIC_SIZES:
             n = BASIC_SIZES[t]
-            return n, min(n, 4) if t in ('RECT', 'POINT', 'GUID') else n
+            return n, 4 if t in ALIGN4 else 1 if t in ALIGN1 else n
         if t in self.structs:
             size, align, _ = self.structs[t]
             return size, align
@@ -2865,30 +3517,38 @@ class Layouts:
 
     def parse(self, text):
         text = re.sub(r'//[^\n]*', '', text)
-        for m in re.finditer(r'^struct (\w+) \{\n(.*?)^\};', text, re.S | re.M):
-            name, body = m.group(1), m.group(2)
+        for m in re.finditer(r'^(?:struct|class) (\w+)(?: : public (\w+))? \{\n(.*?)^\};', text,
+                             re.S | re.M):
+            name, base, body = m.group(1), m.group(2), m.group(3)
+            if base:
+                continue        # derived classes: their fields are raw offsets anyway
+            virtual = 'virtual' in body
+            body = re.sub(r'\b(public|private|protected)\s*:', '', body)
             # drop inline method bodies
             while True:
                 b = re.sub(r'\{[^{}]*\}', ';', body)
                 if b == body:
                     break
                 body = b
-            fields, off, align, ok = {}, 0, 1, True
+            fields, off, align, ok = {}, (4 if virtual else 0), (4 if virtual else 1), True
             for decl in body.split(';'):
                 decl = ' '.join(decl.split())
-                if not decl or '(' in decl:
+                if not decl or '(' in decl or decl.startswith(('virtual', 'typedef', 'enum')):
                     continue
-                fm = re.match(r'^(.*?)\s*\b(\w+)(?:\[(\w+)\])?$', decl)
+                fm = re.match(r'^(.*?)\s*\b(\w+)((?:\[[\w +\-*]+\])*)$', decl)
                 if not fm:
                     ok = False
                     break
-                ty, fname, count = fm.group(1).replace(' *', '*'), fm.group(2), fm.group(3)
+                ty, fname, dims = fm.group(1).replace(' *', '*'), fm.group(2), fm.group(3)
                 info = self.type_info(ty)
                 if info is None:
                     ok = False
                     break
                 fsize, falign = info
-                n = int(count, 0) if count else 1
+                n = 1
+                for d in re.findall(r'\[([\w +\-*]+)\]', dims):
+                    n *= int(eval(d, {'__builtins__': {}}))     # (only numbers and + - *)
+                count = dims or None
                 off = (off + falign - 1) // falign * falign
                 fields[off] = (fname, ty, n)
                 off += fsize * n
@@ -2896,6 +3556,29 @@ class Layouts:
             if ok and fields:
                 size = (off + align - 1) // align * align
                 self.structs[name] = (size, align, fields)
+
+    def field_type(self, struct, off):
+        """The declared type of the field at `off` (an array's element type), or None."""
+        info = self.structs.get(struct)
+        if not info:
+            return None
+        for foff, (name, fty, n) in info[2].items():
+            size = (self.type_info(fty) or (0, 0))[0]
+            if foff <= off < foff + size * n and (off - foff) % max(size, 1) == 0:
+                return fty
+        return None
+
+    def array_field(self, struct, off):
+        """(name, element type, element size, offset within the element) of the array
+        field containing `off`, or None."""
+        info = self.structs.get(struct)
+        if not info:
+            return None
+        for foff, (name, fty, n) in info[2].items():
+            size = (self.type_info(fty) or (0, 0))[0]
+            if n > 1 and size and foff <= off < foff + size * n:
+                return name, fty, size, (off - foff) % size
+        return None
 
     def field(self, struct, off, ty=None):
         """The name of the field at `off`, or None."""
@@ -2910,6 +3593,50 @@ class Layouts:
             return None
         return name
 
+
+
+_INTERFACES = None
+
+
+def interfaces():
+    """{interface: [method names in vtable order]} from the DirectX SDK headers."""
+    global _INTERFACES
+    if _INTERFACES is not None:
+        return _INTERFACES
+    cache = os.path.join(REPO, 'build', 'interfaces.json')
+    if os.path.exists(cache):
+        _INTERFACES = json.load(open(cache))
+        return _INTERFACES
+    toolchain = os.environ.get('EFZ_TOOLCHAIN', os.path.expanduser('~/tools/efz-toolchain'))
+    decls = {}
+    for h in ('dinput.h', 'ddraw.h', 'dsound.h'):
+        path = os.path.join(toolchain, 'dxsdk', 'Include', h)
+        if not os.path.exists(path):
+            continue
+        text = open(path, encoding='latin-1').read()
+        for m in re.finditer(r'DECLARE_INTERFACE_\(\s*(\w+)\s*,\s*(\w+)\s*\)\s*\{(.*?)\};',
+                             text, re.S):
+            name, base, body = m.groups()
+            methods = re.findall(r'STDMETHOD_?\(\s*(?:\w+\s*,\s*)?(\w+)\s*\)', body)
+            decls[name] = (base, methods)
+    out = {}
+    for name in decls:
+        chain, n = [], name
+        while n in decls:
+            chain.insert(0, decls[n][1])
+            n = decls[n][0]
+        # IUnknown's own methods are in each derived body as STDMETHOD lines too
+        flat = []
+        for methods in chain:
+            for x in methods:
+                if x not in flat:
+                    flat.append(x)
+        out[name] = flat
+        if name.endswith('A'):
+            out.setdefault(name[:-1], flat)       # the ANSI build's typedef
+    _INTERFACES = out
+    json.dump(out, open(cache, 'w'))
+    return out
 
 _LAYOUTS = None
 
@@ -3021,7 +3748,27 @@ class NewArray(E):
         self.ty = 'char*'
 
     def render(self):
-        return f'(char*)new {self.cls}[{fmt_int(self.count)}]'
+        n = fmt_int(self.count) if isinstance(self.count, int) else self.count.text(PREC['='] + 1)
+        return f'(char*)new {self.cls}[{n}]'
+
+
+class NewObject(E):
+    prec = PREC['unary']
+
+    def __init__(self, cls, call):
+        self.cls, self.call = cls, call
+        self.ty = cls + '*'
+
+    def uses(self):
+        return list(self.call.args)
+
+    def has_side_effects(self):
+        return True
+
+    def render(self):
+        args = Call('', self.call.args)
+        args.ptypes = getattr(self.call, 'ptypes', None)
+        return f'new {self.cls}{args.render()}'
 
 
 class DeleteStmt(S):
@@ -3106,13 +3853,49 @@ def rewrite_patterns(nodes, syms, ctx):
                 fin = stmt_of(nodes[k + 2])
                 if vcall is not None and getattr(vcall, 'target', None) == VEC_CTOR \
                         and isinstance(fin, Assign) and slot_of(fin.rhs):
-                    count = vcall.args[2].v
+                    count = vcall.args[2]
                     ctor = vcall.args[3]
                     caddr = ctor.e.v if isinstance(ctor, Cast) else ctor.v
                     cls = syms.funcs.get(caddr, f'C{caddr:x}::').split('::')[0]
                     st.lhs.slot.temp = True
                     fin.rhs.slot.temp = True
+                    # the count copied into a temporary just before: new X[n]
+                    prev = stmt_of(out[-1]) if out else None
+                    if isinstance(count, SlotVar) and isinstance(prev, Assign) and not prev.op \
+                            and slot_of(prev.lhs) is count.slot and ctx.get('top') is not None:
+                        if '_counts' not in ctx:
+                            ctx['_counts'] = slot_counts(ctx['top'])
+                        w_all, r_all = ctx['_counts']
+                        w_in, r_in = slot_counts(nodes[k:k + 3])
+                        if w_all[count.slot] == 1 and r_all[count.slot] == r_in[count.slot]:
+                            out.pop()
+                            count.slot.temp = True
+                            count = prev.rhs
                     out.append(StmtNode(Assign(fin.lhs, NewArray(cls, count))))
+                    k += 3
+                    continue
+        # t = operator new(n); if (t) r = t->X(args); else r = 0; dest = r;  ->  new X(args)
+        if isinstance(st, Assign) and not st.op and slot_of(st.lhs) and k + 2 < len(nodes):
+            c = call_of(st.rhs)
+            nx = nodes[k + 1]
+            pads = []
+            if c is not None and c.fn == 'operator new' and isinstance(nx, If) and nx.els:
+                pads = [x for x in nx.then if isinstance(stmt_of(x), PadStmt)]
+                if pads and len(nx.then) - len(pads) == 1:
+                    nx.then = [x for x in nx.then if x not in pads]
+                    out += pads         # (register rotation: before the statement)
+            if c is not None and c.fn == 'operator new' and isinstance(nx, If) and nx.els \
+                    and len(nx.then) == 1 and len(nx.els) == 1:
+                cs = stmt_of(nx.then[0])
+                ctor = call_of(cs.rhs) if isinstance(cs, Assign) else None
+                fin = stmt_of(nodes[k + 2])
+                name = syms.funcs.get(getattr(ctor, 'target', None)) if ctor is not None else None
+                if name and name.rpartition('::')[2] == name.rpartition('::')[0].split('::')[-1] \
+                        and isinstance(fin, Assign) and slot_of(fin.rhs) \
+                        and slot_of(cs.lhs) is fin.rhs.slot:
+                    st.lhs.slot.temp = True
+                    fin.rhs.slot.temp = True
+                    out.append(StmtNode(Assign(fin.lhs, NewObject(name.rpartition('::')[0], ctor))))
                     k += 3
                     continue
         # t1 = p; t2 = t1; if (t2) r = t2->??_E(3); else r = 0;   ->   delete[] p;
@@ -3143,6 +3926,23 @@ def rewrite_patterns(nodes, syms, ctx):
                         out.append(StmtNode(DeleteStmt(st.rhs, cls, flag == 3)))
                         k += 3
                         continue
+        # t = p; operator delete(t);  ->  delete (char*)p;  (t being the delete's temporary)
+        if isinstance(st, Assign) and not st.op and slot_of(st.lhs) and k + 1 < len(nodes) \
+                and ctx.get('top') is not None:
+            nst = stmt_of(nodes[k + 1])
+            c = call_of(nst.e) if isinstance(nst, ExprStmt) else None
+            arg = c.args[0] if c is not None and c.fn == 'operator delete' and c.args else None
+            if isinstance(arg, Cast):
+                arg = arg.e
+            if isinstance(arg, SlotVar) and arg.slot is st.lhs.slot:
+                if '_counts' not in ctx:
+                    ctx['_counts'] = slot_counts(ctx['top'])
+                writes, reads = ctx['_counts']
+                if writes[arg.slot] == 1 and reads[arg.slot] == 1:
+                    arg.slot.temp = True
+                    out.append(StmtNode(DeleteStmt(st.rhs, 'char', False)))
+                    k += 2
+                    continue
         # a class-typed local: constructed where it is declared, destroyed implicitly
         if isinstance(st, ExprStmt):
             c = call_of(st.e)
@@ -3349,6 +4149,14 @@ def fold_temps(nodes, temps, this_class=None):
                 k += 1
                 continue
             sl = n.s.lhs.slot
+            if reads[sl] == 0 and isinstance(n.s.rhs, Cond):
+                # a comparison whose value is dropped: (int)(c);
+                lst[k] = StmtNode(ExprStmt(Cast('int', n.s.rhs)))
+                writes[sl] -= 1
+                if writes[sl] == 0:
+                    sl.temp = True
+                k += 1
+                continue
             if reads[sl] != writes[sl]:
                 k += 1
                 continue
@@ -3481,6 +4289,8 @@ def infer_signature(lf):
         off += 8 if t == 'double' else STRUCT_SIZES.get(t, 4)
     rets = [norm_type(t) for t in lf.ret_types]
     ret = rets[0] if rets else 'void'
+    if getattr(lf, 'struct_ret', None):
+        return lf.this_slot is not None, lf.struct_ret, params[1:]   # hidden result pointer
     return lf.this_slot is not None, ret, params
 
 
@@ -3498,7 +4308,12 @@ def lift_object(img, syms, lo, hi, cls, names=None, passes=2):
             lf = None
             try:
                 lf = Lifter2(img, syms, a, function_end(syms, a))
+                lf.vfamily = vfamily(qual)
                 lf.execute(sigs.get(a, (None, None))[1] if a in sigs else None)
+                # (structured too, for what only shows then: a struct returned through
+                # the hidden pointer)
+                lf2, _b, _s = lift(img, syms, a, qual=qual)
+                lf.struct_ret = lf2.struct_ret
             except Exception as e:
                 sigs[a] = (True, 'void', [], f'{type(e).__name__}: {e} at {getattr(lf, "pc", 0):#x}')
                 continue
@@ -3507,8 +4322,10 @@ def lift_object(img, syms, lo, hi, cls, names=None, passes=2):
             if a in objdefs.SIGNATURES:
                 ret, params = objdefs.SIGNATURES[a]
                 params = list(params)
-            elif re.match(r'Vf\d+$', meth) and syms.protos.lookup('CPlayer::' + meth):
-                ret, params = syms.protos.lookup('CPlayer::' + meth)
+            elif syms.protos.lookup(f'{base_of(qual)}::{meth}') and (
+                    re.match(r'Vf\d+$', meth) or meth in ('Draw', 'Update')):
+                # an override has the base class's signature
+                ret, params = syms.protos.lookup(f'{base_of(qual)}::{meth}')
                 params = list(params)
             sigs[a] = (this, ret, params, None)
             syms.protos.methods[qual] = [ret, params]
@@ -3545,12 +4362,13 @@ def gen_object(img, syms, obj):
             if l <= f['addr'] < h and f['addr'] not in syms.funcs:
                 syms.funcs[f['addr']] = n.get(f['addr'], f'{c}::Unk{f["addr"]:x}')
     lo, hi, cls, names = objdefs.OBJECTS[obj]
+    syms.funcs.update(names)        # names given in objdefs win over old annotations
     results = lift_object(img, syms, lo, hi, cls, names)
     os.makedirs(os.path.join(REPO, 'build', 'gen'), exist_ok=True)
     cpp, decl = [], {}
     for a, qual, this, ret, params, text, err in results:
-        if qual.startswith('??_'):
-            continue
+        if qual.startswith('?'):
+            continue        # compiler-generated or from a library header
         klass, _, meth = qual.rpartition('::')
         inline = objdefs.is_inline(obj, a)
         head = signature_text(qual, ret, params, decl=inline)
@@ -3575,19 +4393,35 @@ def gen_object(img, syms, obj):
 
 
 def add_class(header, obj):
-    """Declare a character class in efz.h if it isn't there yet."""
+    """Declare a character class (or one of the other classes in objdefs.CLASSES) in efz.h
+    if it isn't there yet."""
     import objdefs
-    for o, cls, lo, hi, vt, ctor, size in objdefs.CHARACTERS:
-        if o != obj or re.search(rf'^class {cls}\b', header, re.M):
+    entries = [(o, cls, 'CPlayer', size) for o, cls, lo, hi, vt, ctor, size in objdefs.CHARACTERS]
+    entries += [(c[0], c[1], c[2], c[9]) for c in objdefs.CLASSES]
+    for o, cls, base, size in entries:
+        if o != obj:
+            continue
+        # a generated class block is rebuilt each time
+        m = re.search(rf'^// \w+: (?:one of the character classes|derived from \w+)\.\n// SIZE: '
+                      rf'0x[0-9a-f]+\nclass {cls} : public \w+ {{\n.*?^}};\n\n', header, re.S | re.M)
+        if m:
+            header = header[:m.start()] + header[m.end():]
+        elif re.search(rf'^class {cls}\b', header, re.M):
             continue
         gen = open(os.path.join(REPO, 'build', 'gen', obj + '.h')).read()
         body = gen.split(f'// {cls}\n', 1)[1].split('\n\n', 1)[0]
-        body = re.sub(r'^(    )(\w[^(\n]* Vf\d+\()', r'\1virtual \2', body, flags=re.M)
+        slots = '|'.join(['Vf\\d+', 'Draw', 'Update'])
+        body = re.sub(rf'^(    )(\w[^(\n]* (?:{slots})\()', r'\1virtual \2', body, flags=re.M)
         name = obj[0].upper() + obj[1:]
-        block = (f'// {name}: one of the character classes.\n'
+        what = 'one of the character classes' if base == 'CPlayer' else f'derived from {base}'
+        block = (f'// {name}: {what}.\n'
                  f'// SIZE: {size:#x}\n'
-                 f'class {cls} : public CPlayer {{\npublic:\n{body}\n\n'
-                 f'    BYTE unk3138[{size:#x} - 0x3138];\n}};\n\n')
+                 f'class {cls} : public {base} {{\npublic:\n{body}\n')
+        if base == 'CPlayer':
+            block += f'\n    BYTE unk3138[{size:#x} - 0x3138];\n'
+        elif size:
+            block += f'\n    BYTE unk[{size:#x} - sizeof({base})];\n'
+        block += '};\n\n'
         k = header.rindex('#endif')
         header = header[:k] + block + header[k:]
     return header
@@ -3624,7 +4458,7 @@ def main():
         for a, qual, this, ret, params, text, err in gen_object(img, syms, obj):
             if err:
                 print(f'{a:#x} {qual}: {err}')
-            if objdefs.is_inline(obj, a) or qual.startswith('??_'):
+            if objdefs.is_inline(obj, a) or qual.startswith('?'):
                 continue
             # keep the header's declaration in step with the definition
             decl = signature_text(qual, ret, params, decl=True)

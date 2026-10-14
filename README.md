@@ -5,11 +5,12 @@ C++ source that the original compiler, Visual C++ .NET 2003, builds back into a 
 `efz.exe` (SHA-256 `3a1616d6…6dd66481`). The recovered source is then the base for a maintained,
 modernised version of the game.
 
-**Status: everything up to the scenes matches.** All game code from `0x401000` to
-`0x750d2f` builds byte for byte: the platform layer, the `CPlayer` base class and all 24
-character classes. That is 520 of the 630 game functions and 96% of the game code's
-bytes; the menus and scenes at the end of `.text` are next. `tools/progress.py` prints
-the current numbers.
+**Status: all game code matches.** Every game function from `0x401000` to `0x77697e`
+builds byte for byte: the platform layer, the `CPlayer` base class, all 24 character
+classes, the animated stage backgrounds and the eight scenes. That is all 630 game
+functions; the only bytes in between are the compiler's `int3` padding. Next is linking
+them, with the static CRT and the DirectX import libraries, into a byte-identical
+`efz.exe`. `tools/progress.py` prints the current numbers.
 
 | Source | What it is |
 |---|---|
@@ -24,6 +25,9 @@ the current numbers.
 | `src/player.cpp` | `CPlayer`, the base of the character classes: movement, guard and damage, the `.pal`/`.dat`/`.pat`/`.wav` loaders, round reset |
 | `src/playerobj.cpp` | `CPlayer`'s table of 64 spawned objects (projectiles and the like) |
 | `src/<character>.cpp` | One character class each (`shiori.cpp`, `sayuri.cpp`, ...) |
+| `src/bg01.cpp` | `CAnimBg`, the animated stage backgrounds' base, and stage 01's background |
+| `src/bg10.cpp`, `bg12.cpp`, `bg16.cpp` | The other three animated backgrounds |
+| `src/scene0.cpp` ... `scene8.cpp` | The scenes `WinMain` runs: 0 title, 1 character select, 2 match setup, 3 the fight, 5 results, 6 config, 7 staff roll, 8 replays |
 
 ## Game files
 
@@ -105,7 +109,8 @@ See [docs/recon.md](docs/recon.md). In short:
 
 - **Toolchain:** VS .NET 2003 (`cl` 13.10.3077), Standard Edition. It has no optimiser,
   so `/Od /GS` reproduces the code.
-- **Size:** about 3.6 MB of game code in 152 translation units.
+- **Size:** about 3.6 MB of game code in 46 objects. The Rich header counts 152 objects
+  built by this compiler; what the other 106 hold isn't known yet.
 - **Libraries:** the static CRT plus DirectDraw, DirectInput and DirectSound, using
   DirectX 7-era interfaces through the DirectX 9 SDK.
 - **Structure:**
@@ -121,9 +126,9 @@ See [docs/recon.md](docs/recon.md). In short:
 3. **Function matching**, in this order:
    1. platform layer and file loaders. *Done:* `0x401000`–`0x40e62f`, 8 objects.
    2. shared base classes. *Done:* `CPlayer`, `0x40e630`–`0x4136cf`, 2 objects.
-   3. effects and projectiles
+   3. effects and projectiles. *Done:* `CGame::UpdateEffect` and `CPlayer`'s object table.
    4. the 24 character classes. *Done.*
-   5. the scenes and menus (`0x750d30`–`0x77697e`).
+   5. the scenes and menus (`0x750d30`–`0x77697e`). *Done.*
 4. **Byte-identical exe.** Link with the original CRT and libraries, set the post-link header
    fields (timestamp, RSDS record, Rich header), and check the SHA-256 in CI.
 5. **Modern fork.** Starting from the matched source:

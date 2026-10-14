@@ -7610,20 +7610,20 @@ void CAkane::Vf7()
                         *(short*)((char*)this + v4 * 0x98 + 0x4d0) = 0x197;
                         *(short*)((char*)this + v4 * 0x98 + 0x4d2) = 0;
                         *(short*)((char*)this + v4 * 0x98 + 0x4d4) = 0;
-                        *(double*)((char*)this + v4 * 0x98 + 0x4e8) = (double)(int)(*(double*)(*(char**)*(char**)((char*)this + 0x78) + 0x20) + *((char*)this + v4 * 0x98 + 0x518) * ((*(double*)((char*)this + v4 * 0x98 + 0x4f0) - *(double*)(*(char**)*(char**)((char*)this + 0x78) + 0x28)) / 2.0) + ((WORD)CPlayer::Unk4108a0(0, 0x8c) - 0x46));
+                        *(double*)((char*)this + v4 * 0x98 + 0x4e8) = (int)(*(double*)(*(char**)*(char**)((char*)this + 0x78) + 0x20) + *((char*)this + v4 * 0x98 + 0x518) * ((*(double*)((char*)this + v4 * 0x98 + 0x4f0) - *(double*)(*(char**)*(char**)((char*)this + 0x78) + 0x28)) / 2.0) + ((WORD)CPlayer::Unk4108a0(0, 0x8c) - 0x46));
                         break;
                     }
                     if ((WORD)CPlayer::Unk4108a0(0, 2) == 0) {
                         *(short*)((char*)this + v4 * 0x98 + 0x4d0) = 0x198;
                         *(short*)((char*)this + v4 * 0x98 + 0x4d2) = 0;
                         *(short*)((char*)this + v4 * 0x98 + 0x4d4) = 0;
-                        *(double*)((char*)this + v4 * 0x98 + 0x4e8) = (double)(int)(*(double*)(*(char**)*(char**)((char*)this + 0x78) + 0x20) + *((char*)this + v4 * 0x98 + 0x518) * 0x64 + *((char*)this + v4 * 0x98 + 0x518) * (*(double*)((char*)this + v4 * 0x98 + 0x4f0) - *(double*)(*(char**)*(char**)((char*)this + 0x78) + 0x28) * 0.5) + ((WORD)CPlayer::Unk4108a0(0, 0x8c) - 0x46));
+                        *(double*)((char*)this + v4 * 0x98 + 0x4e8) = (int)(*(double*)(*(char**)*(char**)((char*)this + 0x78) + 0x20) + *((char*)this + v4 * 0x98 + 0x518) * 0x64 + *((char*)this + v4 * 0x98 + 0x518) * (*(double*)((char*)this + v4 * 0x98 + 0x4f0) - *(double*)(*(char**)*(char**)((char*)this + 0x78) + 0x28) * 0.5) + ((WORD)CPlayer::Unk4108a0(0, 0x8c) - 0x46));
                         break;
                     }
                     *(short*)((char*)this + v4 * 0x98 + 0x4d0) = 0x196;
                     *(short*)((char*)this + v4 * 0x98 + 0x4d2) = 0;
                     *(short*)((char*)this + v4 * 0x98 + 0x4d4) = 0;
-                    *(double*)((char*)this + v4 * 0x98 + 0x4e8) = (double)(int)(*(double*)(*(char**)*(char**)((char*)this + 0x78) + 0x20) + *((char*)this + v4 * 0x98 + 0x518) * ((*(double*)((char*)this + v4 * 0x98 + 0x4f0) - *(double*)(*(char**)*(char**)((char*)this + 0x78) + 0x28)) / 4.0) + ((WORD)CPlayer::Unk4108a0(0, 0x8c) - 0x46));
+                    *(double*)((char*)this + v4 * 0x98 + 0x4e8) = (int)(*(double*)(*(char**)*(char**)((char*)this + 0x78) + 0x20) + *((char*)this + v4 * 0x98 + 0x518) * ((*(double*)((char*)this + v4 * 0x98 + 0x4f0) - *(double*)(*(char**)*(char**)((char*)this + 0x78) + 0x28)) / 4.0) + ((WORD)CPlayer::Unk4108a0(0, 0x8c) - 0x46));
                     break;
                 }
                 (*(short*)((char*)this + v4 * 0x98 + 0x4d4))++;

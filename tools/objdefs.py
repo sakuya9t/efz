@@ -93,9 +93,53 @@ for _obj, _cls, _lo, _hi, _vt, _ctor, _size in CHARACTERS:
             _names[_a] = f'{_cls}::Vf{_k}'
     OBJECTS[_obj] = (_lo, _hi, _cls, _names)
 
+# Classes other than characters: (object, class, base, first address, end address,
+# vtable, slot names, constructor, destructor, size, {address: name}, inline from).
+# The destructors set the vtable but are never called.
+SCENE_SLOTS = ['Draw', 'Update', 'Vf2']
+BG_SLOTS = ['Vf0', 'Vf1']
+_BG_BASE = {0x750d30: 'CAnimBg::Load', 0x751030: 'CAnimBg::Unk751030',
+            0x7519f0: 'CAnimBg::CAnimBg', 0x751a10: '??_GEffectAnim@@QAEPAXI@Z'}
+_SCENE_BASE = {0x759c10: 'CScene::CScene', 0x759c90: 'CScene::Unk759c90',
+               0x759e20: 'CScene::Unk759e20'}
+CLASSES = [
+    ('bg01', 'CBg01', 'CAnimBg', 0x750d30, 0x751a40, 0x7890b0, BG_SLOTS, 0x751370, 0x751500, 0x1c,
+     _BG_BASE, 0x7519f0),
+    ('bg10', 'CBg10', 'CAnimBg', 0x751a40, 0x7520b0, 0x7890c0, BG_SLOTS, 0x751a40, 0x751bc0, 0x1c,
+     {}, None),
+    ('bg12', 'CBg12', 'CAnimBg', 0x7520b0, 0x752900, 0x7890c8, BG_SLOTS, 0x7520b0, 0x752240, 0x1c,
+     {}, None),
+    ('bg16', 'CBg16', 'CAnimBg', 0x752900, 0x753260, 0x7890d0, BG_SLOTS, 0x752900, 0x752a90, 0x1c,
+     {}, None),
+    ('scene1', 'CScene1', 'CScene', 0x753260, 0x759f30, 0x7892c0, SCENE_SLOTS, 0x753260, 0x7538b0,
+     0x560, _SCENE_BASE, 0x759c10),
+    ('scene6', 'CScene6', 'CScene', 0x759f30, 0x75db70, 0x7895a8, SCENE_SLOTS, 0x759f30, 0x75a3b0,
+     0x760, {}, None),
+    ('scene3', 'CScene3', 'CScene', 0x75db70, 0x76c6f0, 0x7895dc, SCENE_SLOTS, 0x7633a0, 0x763c00,
+     0x598, {}, None),
+    ('scene2', 'CScene2', 'CScene', 0x76c6f0, 0x76e480, 0x7896b4, SCENE_SLOTS, 0x76c6f0, 0x76c740,
+     0x438, {}, None),
+    ('scene8', 'CScene8', 'CScene', 0x76e480, 0x7712f0, 0x7897dc, SCENE_SLOTS, 0x76e480, 0x76efe0,
+     0x758, {}, None),
+    ('scene5', 'CScene5', 'CScene', 0x7712f0, 0x7758b0, 0x789874, SCENE_SLOTS, 0x7712f0, 0x771400,
+     0x474, {0x775810: '?pow@@YANHH@Z', 0x775830: '??$_Pow_int@H@@YAHHH@Z'}, None),
+    ('scene7', 'CScene7', 'CScene', 0x7758b0, 0x775d60, 0x7898c0, SCENE_SLOTS, 0x7758b0, 0x7759a0,
+     0x448, {}, None),
+    ('scene0', 'CScene0', 'CScene', 0x775d60, 0x77697e, 0x789980, SCENE_SLOTS, 0x775d60, 0x775f30,
+     0x44c, {}, None),
+]
+
+for _obj, _cls, _base, _lo, _hi, _vt, _slots, _ctor, _dtor, _size, _extra, _inl in CLASSES:
+    _names = {_ctor: f'{_cls}::{_cls}', _dtor: f'{_cls}::~{_cls}'}
+    for _k, _a in enumerate(_vtable(_vt, len(_slots))):
+        _names[_a] = f'{_cls}::{_slots[_k]}'
+    _names.update(_extra)
+    OBJECTS[_obj] = (_lo, _hi, _cls, _names)
+
 # Inline functions, emitted after the object's other functions: they are defined in a
 # header, and the generator writes them as such.
 INLINE_FROM = {'player': 0x412820}
+INLINE_FROM.update({c[0]: c[11] for c in CLASSES if c[11]})
 
 
 def is_inline(obj, addr):
@@ -115,4 +159,14 @@ SIGNATURES = {
     0x434010: ('void', ['double', 'double']),
     0x4c0480: ('double', ['double', 'double']),
 }
+SIGNATURES[0x7679b0] = ('int', ['int', 'int', 'CollisionInfo*', 'CollisionInfo*'])
+SIGNATURES[0x767f60] = ('void', ['int', 'int', 'CollisionInfo*', 'CollisionInfo*'])
+SIGNATURES[0x7697d0] = ('void', ['int', 'int', 'int', 'CollisionInfo*'])
+SIGNATURES[0x76bd40] = ('void', ['int', 'int', 'CollisionInfo*', 'CollisionInfo*', 'int'])
+SIGNATURES[0x759c90] = ('void', ['PALETTEENTRY*', 'BYTE', 'int', 'int'])
+SIGNATURES[0x759e20] = ('void', ['PALETTEENTRY*', 'BYTE'])
+_SCENE_ARGS = ['HWND', 'CPlayer**', 'CPlayer**', 'CGame*', 'CGraphics*', 'CInput*', 'CSound*']
+for _a in (0x759c10, 0x775d60, 0x753260, 0x76c6f0, 0x7633a0, 0x7712f0, 0x759f30, 0x7758b0,
+           0x76e480):
+    SIGNATURES[_a] = ('void', _SCENE_ARGS)
 

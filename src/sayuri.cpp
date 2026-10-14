@@ -3536,7 +3536,7 @@ void CSayuri::Vf6()
                 CPlayer::Unk40f1e0();
                 ((CPlayer*)*(int*)*(char**)((char*)this + 0x78))->Vf0();
                 *(short*)(*(char**)*(char**)((char*)this + 0x78) + 8) = 0x3b;
-                *(double*)(*(char**)*(char**)((char*)this + 0x78) + 0x20) = (double)((*((char*)this + 0x50) == 1) * 0x280);
+                *(double*)(*(char**)*(char**)((char*)this + 0x78) + 0x20) = (*((char*)this + 0x50) == 1) * 0x280;
                 *(double*)(*(char**)*(char**)((char*)this + 0x78) + 0x28) = -1.0;
                 *(double*)(*(char**)*(char**)((char*)this + 0x78) + 0xc0) = -2.0;
                 *(double*)(*(char**)*(char**)((char*)this + 0x78) + 0xc8) = -0.9;
@@ -3648,7 +3648,7 @@ void CSayuri::Vf6()
                 CPlayer::Unk40f1e0();
                 ((CPlayer*)*(int*)*(char**)((char*)this + 0x78))->Vf0();
                 *(short*)(*(char**)*(char**)((char*)this + 0x78) + 8) = 0x3b;
-                *(double*)(*(char**)*(char**)((char*)this + 0x78) + 0x20) = (double)((*((char*)this + 0x50) == 1) * 0x280);
+                *(double*)(*(char**)*(char**)((char*)this + 0x78) + 0x20) = (*((char*)this + 0x50) == 1) * 0x280;
                 *(double*)(*(char**)*(char**)((char*)this + 0x78) + 0x28) = -1.0;
                 *(double*)(*(char**)*(char**)((char*)this + 0x78) + 0xc0) = -2.0;
                 *(double*)(*(char**)*(char**)((char*)this + 0x78) + 0xc8) = -0.9;
@@ -3783,7 +3783,7 @@ void CSayuri::Vf6()
                 CPlayer::Unk40f1e0();
                 ((CPlayer*)*(int*)*(char**)((char*)this + 0x78))->Vf0();
                 *(short*)(*(char**)*(char**)((char*)this + 0x78) + 8) = 0x40;
-                *(double*)(*(char**)*(char**)((char*)this + 0x78) + 0x20) = (double)((*((char*)this + 0x50) == 1) * 0x280);
+                *(double*)(*(char**)*(char**)((char*)this + 0x78) + 0x20) = (*((char*)this + 0x50) == 1) * 0x280;
                 *(double*)(*(char**)*(char**)((char*)this + 0x78) + 0x28) = -1.0;
                 *(double*)(*(char**)*(char**)((char*)this + 0x78) + 0xc0) = -2.0;
                 *(double*)(*(char**)*(char**)((char*)this + 0x78) + 0xc8) = -0.9;
@@ -4560,7 +4560,7 @@ void CSayuri::Vf6()
                 CPlayer::Unk40f1e0();
                 ((CPlayer*)*(int*)*(char**)((char*)this + 0x78))->Vf0();
                 *(short*)(*(char**)*(char**)((char*)this + 0x78) + 8) = 0x3b;
-                *(double*)(*(char**)*(char**)((char*)this + 0x78) + 0x20) = (double)((*((char*)this + 0x50) == 1) * 0x280);
+                *(double*)(*(char**)*(char**)((char*)this + 0x78) + 0x20) = (*((char*)this + 0x50) == 1) * 0x280;
                 *(double*)(*(char**)*(char**)((char*)this + 0x78) + 0x28) = -1.0;
                 *(double*)(*(char**)*(char**)((char*)this + 0x78) + 0xc0) = -2.0;
                 *(double*)(*(char**)*(char**)((char*)this + 0x78) + 0xc8) = -2.9;
@@ -4686,7 +4686,7 @@ void CSayuri::Vf6()
                 CPlayer::Unk40f1e0();
                 ((CPlayer*)*(int*)*(char**)((char*)this + 0x78))->Vf0();
                 *(short*)(*(char**)*(char**)((char*)this + 0x78) + 8) = 0x3b;
-                *(double*)(*(char**)*(char**)((char*)this + 0x78) + 0x20) = (double)((*((char*)this + 0x50) == 1) * 0x280);
+                *(double*)(*(char**)*(char**)((char*)this + 0x78) + 0x20) = (*((char*)this + 0x50) == 1) * 0x280;
                 *(double*)(*(char**)*(char**)((char*)this + 0x78) + 0x28) = -1.0;
                 *(double*)(*(char**)*(char**)((char*)this + 0x78) + 0xc0) = -2.0;
                 *(double*)(*(char**)*(char**)((char*)this + 0x78) + 0xc8) = -2.9;
@@ -4835,7 +4835,7 @@ void CSayuri::Vf6()
                 CPlayer::Unk40f1e0();
                 ((CPlayer*)*(int*)*(char**)((char*)this + 0x78))->Vf0();
                 *(short*)(*(char**)*(char**)((char*)this + 0x78) + 8) = 0x3b;
-                *(double*)(*(char**)*(char**)((char*)this + 0x78) + 0x20) = (double)((*((char*)this + 0x50) == 1) * 0x280);
+                *(double*)(*(char**)*(char**)((char*)this + 0x78) + 0x20) = (*((char*)this + 0x50) == 1) * 0x280;
                 *(double*)(*(char**)*(char**)((char*)this + 0x78) + 0x28) = -1.0;
                 *(double*)(*(char**)*(char**)((char*)this + 0x78) + 0xc0) = -2.0;
                 *(double*)(*(char**)*(char**)((char*)this + 0x78) + 0xc8) = -3.9;

@@ -2978,7 +2978,7 @@ void CMayu::Vf6()
     case 0xdd:
         if (*(WORD*)((char*)this + 0xa) == 0 && *(WORD*)((char*)this + 0xc) == 0) {
             *(double*)((char*)this + 0x20) = *(double*)(*(char**)*(char**)((char*)this + 0x78) + 0x20) - *(short*)(*(char**)*(char**)((char*)this + 0x78) + 0x2ad0) * *((char*)this + 0x50);
-            *(double*)((char*)this + 0x28) = (double)(*(short*)(*(char**)*(char**)((char*)this + 0x78) + 0x2af8) + 0x1e);
+            *(double*)((char*)this + 0x28) = *(short*)(*(char**)*(char**)((char*)this + 0x78) + 0x2af8) + 0x1e;
         }
         if (*(WORD*)((char*)this + 0xa) == 3 && *(WORD*)((char*)this + 0xc) == 0) {
             *(short*)(*(char**)*(char**)((char*)this + 0x78) + 8) = 0x3b;
@@ -3335,7 +3335,7 @@ void CMayu::Vf6()
             *(short*)(*(char**)*(char**)((char*)this + 0x78) + 8) = 0x6b;
             Vf0();
             *(short*)((char*)this + 8) = 0xfd;
-            *(double*)((char*)this + 0x28) = (double)(*(short*)((char*)this + 0x2af8) + 0x32);
+            *(double*)((char*)this + 0x28) = *(short*)((char*)this + 0x2af8) + 0x32;
             *(double*)((char*)this + 0x20) = *(double*)(*(char**)*(char**)((char*)this + 0x78) + 0x20) + (-*(short*)((char*)this + 0x2ad0) - 0x14) * *((char*)this + 0x50);
             l50.type = 0;
             l50.x = (double)((int)*(double*)((char*)this + 0x20) + *((char*)this + 0x50) * 7);
@@ -3397,7 +3397,7 @@ void CMayu::Vf6()
             *(short*)(*(char**)*(char**)((char*)this + 0x78) + 8) = 0x6b;
             Vf0();
             *(short*)((char*)this + 8) = 0xfd;
-            *(double*)((char*)this + 0x28) = (double)(*(short*)((char*)this + 0x2af8) + 0x32);
+            *(double*)((char*)this + 0x28) = *(short*)((char*)this + 0x2af8) + 0x32;
             *(double*)((char*)this + 0x20) = *(double*)(*(char**)*(char**)((char*)this + 0x78) + 0x20) + (-*(short*)((char*)this + 0x2ad0) - 0x14) * *((char*)this + 0x50);
             l50.type = 0;
             l50.x = (double)((int)*(double*)((char*)this + 0x20) + *((char*)this + 0x50) * 7);
@@ -3472,7 +3472,7 @@ void CMayu::Vf6()
             Vf0();
             CPlayer::Unk40f1e0();
             *(short*)((char*)this + 8) = 0xfe;
-            *(double*)((char*)this + 0x28) = (double)(*(short*)((char*)this + 0x2af8) + 0x32);
+            *(double*)((char*)this + 0x28) = *(short*)((char*)this + 0x2af8) + 0x32;
             *(double*)((char*)this + 0x20) = *(double*)(*(char**)*(char**)((char*)this + 0x78) + 0x20) + (-*(short*)((char*)this + 0x2ad0) - 0x14) * *((char*)this + 0x50);
             l50.type = 0;
             l50.x = (double)((int)*(double*)((char*)this + 0x20) + *((char*)this + 0x50) * 7);
@@ -4342,10 +4342,10 @@ void CMayu::Vf6()
         }
         if (*(WORD*)((char*)this + 0xa) > 0xb && *(WORD*)((char*)this + 0xa) < 0x10) {
             if (*((char*)this + 0x50) == 1) {
-                *(double*)((char*)this + 0x20) = (double)(*(int*)(*(char**)((char*)this + 0x7c) + 0x14248) + 0xf);
+                *(double*)((char*)this + 0x20) = *(int*)(*(char**)((char*)this + 0x7c) + 0x14248) + 0xf;
             }
             if (*((char*)this + 0x50) == -1) {
-                *(double*)((char*)this + 0x20) = (double)(*(int*)(*(char**)((char*)this + 0x7c) + 0x14250) - 0xf);
+                *(double*)((char*)this + 0x20) = *(int*)(*(char**)((char*)this + 0x7c) + 0x14250) - 0xf;
             }
         }
         if (*(double*)((char*)this + 0x28) + *(double*)((char*)this + 0x38) >= 0.0 && *(WORD*)((char*)this + 0xa) > 4 && *(WORD*)((char*)this + 0xa) < 0x14) {
@@ -4406,7 +4406,7 @@ void CMayu::Vf6()
             Vf0();
             CPlayer::Unk40f1e0();
             *(short*)((char*)this + 8) = 0x113;
-            *(double*)((char*)this + 0x28) = (double)(*(short*)((char*)this + 0x2af8) + 0x32);
+            *(double*)((char*)this + 0x28) = *(short*)((char*)this + 0x2af8) + 0x32;
             *(double*)((char*)this + 0x20) = *(double*)(*(char**)*(char**)((char*)this + 0x78) + 0x20) + (-*(short*)((char*)this + 0x2ad0) - 0x14) * *((char*)this + 0x50);
             l50.type = 0;
             l50.x = (double)((int)*(double*)((char*)this + 0x20) + *((char*)this + 0x50) * 7);
@@ -4421,10 +4421,10 @@ void CMayu::Vf6()
         }
         if (*(WORD*)((char*)this + 0xa) > 0xb && *(WORD*)((char*)this + 0xa) < 0x10) {
             if (*((char*)this + 0x50) == 1) {
-                *(double*)((char*)this + 0x20) = (double)(*(int*)(*(char**)((char*)this + 0x7c) + 0x14248) + 0xf);
+                *(double*)((char*)this + 0x20) = *(int*)(*(char**)((char*)this + 0x7c) + 0x14248) + 0xf;
             }
             if (*((char*)this + 0x50) == -1) {
-                *(double*)((char*)this + 0x20) = (double)(*(int*)(*(char**)((char*)this + 0x7c) + 0x14250) - 0xf);
+                *(double*)((char*)this + 0x20) = *(int*)(*(char**)((char*)this + 0x7c) + 0x14250) - 0xf;
             }
         }
         if (*(double*)((char*)this + 0x28) + *(double*)((char*)this + 0x38) >= 0.0 && *(WORD*)((char*)this + 0xa) > 0xf && *(WORD*)((char*)this + 0xa) < 0x13) {
@@ -4520,10 +4520,10 @@ void CMayu::Vf6()
         }
         if (*(WORD*)((char*)this + 0xa) > 0xb && *(WORD*)((char*)this + 0xa) < 0x10) {
             if (*((char*)this + 0x50) == 1) {
-                *(double*)((char*)this + 0x20) = (double)(*(int*)(*(char**)((char*)this + 0x7c) + 0x14248) + 0xf);
+                *(double*)((char*)this + 0x20) = *(int*)(*(char**)((char*)this + 0x7c) + 0x14248) + 0xf;
             }
             if (*((char*)this + 0x50) == -1) {
-                *(double*)((char*)this + 0x20) = (double)(*(int*)(*(char**)((char*)this + 0x7c) + 0x14250) - 0xf);
+                *(double*)((char*)this + 0x20) = *(int*)(*(char**)((char*)this + 0x7c) + 0x14250) - 0xf;
             }
         }
         if (*(double*)((char*)this + 0x28) + *(double*)((char*)this + 0x38) >= 0.0 && *(WORD*)((char*)this + 0xa) > 4 && *(WORD*)((char*)this + 0xa) < 0x14) {
@@ -5008,10 +5008,10 @@ void CMayu::Vf6()
         }
         if (*(WORD*)((char*)this + 0xa) > 0xb && *(WORD*)((char*)this + 0xa) < 0x10) {
             if (*((char*)this + 0x50) == 1) {
-                *(double*)((char*)this + 0x20) = (double)(*(int*)(*(char**)((char*)this + 0x7c) + 0x14248) + 0xf);
+                *(double*)((char*)this + 0x20) = *(int*)(*(char**)((char*)this + 0x7c) + 0x14248) + 0xf;
             }
             if (*((char*)this + 0x50) == -1) {
-                *(double*)((char*)this + 0x20) = (double)(*(int*)(*(char**)((char*)this + 0x7c) + 0x14250) - 0xf);
+                *(double*)((char*)this + 0x20) = *(int*)(*(char**)((char*)this + 0x7c) + 0x14250) - 0xf;
             }
         }
         if (*(double*)((char*)this + 0x28) + *(double*)((char*)this + 0x38) >= 0.0 && *(WORD*)((char*)this + 0xa) > 0xf && *(WORD*)((char*)this + 0xa) < 0x13) {
@@ -5422,7 +5422,7 @@ void CMayu::Vf6()
             Vf0();
             CPlayer::Unk40f1e0();
             *(short*)((char*)this + 8) = 0x131;
-            *(double*)((char*)this + 0x28) = (double)(*(short*)((char*)this + 0x2af8) + 0x32);
+            *(double*)((char*)this + 0x28) = *(short*)((char*)this + 0x2af8) + 0x32;
             *(double*)((char*)this + 0x20) = *(double*)(*(char**)*(char**)((char*)this + 0x78) + 0x20) + (-*(short*)((char*)this + 0x2ad0) - 0x14) * *((char*)this + 0x50);
             l50.type = 0;
             l50.x = (double)((int)*(double*)(*(char**)*(char**)((char*)this + 0x78) + 0x20) + *(short*)((char*)this + 0x2ad0));
