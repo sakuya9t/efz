@@ -94,9 +94,9 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
         g_input.Unk40d140();
 
     g_game = new CGame(&g_graphics, &g_input, &g_sound);
-    g_game->Unk406780();
-    g_game->Unk406e60();
-    g_game->Unk406aa0();
+    g_game->LoadSounds();
+    g_game->LoadEffectAnims();
+    g_game->LoadEffects();
 
     g_player1 = 0;
     g_player2 = 0;
@@ -126,7 +126,7 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
         } else {
             g_game->unk1368 = !g_game->unk1368;
             if (g_scenes[g_scene] != NULL) {
-                g_sound.Unk40e4d0(g_game->unkf26);
+                g_sound.Unk40e4d0(g_game->m_music);
                 g_scene = g_scenes[g_scene]->Update();
             }
             WaitForSingleObject(g_frameEvent, INFINITE);
