@@ -230,21 +230,27 @@ def resolve(obj, target, actual, image, base, iat, known, learned):
     return actual
 
 
-def main():
-    obj_path = sys.argv[1]
-    flt = sys.argv[2] if len(sys.argv) > 2 else ''
-    exe = os.path.join(os.environ.get('EFZ_DIR', '.'), 'efz.exe')
-    pe = pefile.PE(exe)
-    image = pe.get_memory_mapped_image()
-    base = pe.OPTIONAL_HEADER.ImageBase
-    text = next(s for s in pe.sections if s.Name.startswith(b'.text'))
-    text_end = base + text.VirtualAddress + text.Misc_VirtualSize
-    iat = {i.address: (i.name.decode() if i.name else f'#{i.ordinal}')
-           for d in pe.DIRECTORY_ENTRY_IMPORT for i in d.imports}
-    known = read_annotations(os.path.join(REPO, 'src'))
+class Original:
+    """The original efz.exe, loaded once for any number of objects."""
+
+    def __init__(self, path):
+        self.pe = pefile.PE(path)
+        self.image = self.pe.get_memory_mapped_image()
+        self.base = self.pe.OPTIONAL_HEADER.ImageBase
+        text = next(s for s in self.pe.sections if s.Name.startswith(b'.text'))
+        self.text_end = self.base + text.VirtualAddress + text.Misc_VirtualSize
+        self.iat = {i.address: (i.name.decode() if i.name else f'#{i.ordinal}')
+                    for d in self.pe.DIRECTORY_ENTRY_IMPORT for i in d.imports}
+
+
+def check(obj_path, original, known, flt=''):
+    """Compare every annotated function in an object with the original.
+
+    Yields (qualified name, address, size, ok, report lines); `learned` collects the
+    addresses of symbols that are not annotated.
+    """
     obj = Coff(obj_path)
     learned = {}
-    total = matched = 0
     for qual, (kind, addr) in sorted(known.items(), key=lambda kv: kv[1][1]):
         if kind != 'FUNCTION' or flt not in qual:
             continue
@@ -252,22 +258,35 @@ def main():
         if not hits:
             continue
         sym, sec, off, size = hits[0]
-        total += 1
-        mine, orig, problems = compare(obj, sym, sec, off, size, addr, pe, image, iat, known, learned)
+        mine, orig, problems = compare(obj, sym, sec, off, size, addr, original.pe,
+                                       original.image, original.iat, known, learned)
+        image, base = original.image, original.base
         same = sum(a == b for a, b in zip(mine, orig))
         after = image[addr - base + size:addr - base + size + 3]
-        ends = after[:1] == b'\xcc' or after == b'\x55\x8b\xec' or addr + size == text_end
+        ends = after[:1] == b'\xcc' or after == b'\x55\x8b\xec' or addr + size == original.text_end
         ok = mine == orig and not problems and ends
-        matched += ok
-        print(f'{"MATCH" if ok else "DIFF "} {qual} {addr:#x}: {same}/{size} bytes'
-              f'{"" if ends else ", original function continues past the recompiled end"}')
-        for p in problems:
-            print('   reloc', p)
+        lines = [f'{"MATCH" if ok else "DIFF "} {qual} {addr:#x}: {same}/{size} bytes'
+                 f'{"" if ends else ", original function continues past the recompiled end"}']
+        lines += ['   reloc ' + p for p in problems]
         if mine != orig:
             a, b = disasm(orig, addr), disasm(mine, addr)
-            for line in difflib.unified_diff(a, b, 'original', 'recompiled', n=2, lineterm=''):
-                print('   ' + line)
-    for name, addrs in sorted(learned.items()):
+            lines += ['   ' + l for l in difflib.unified_diff(a, b, 'original', 'recompiled', n=2,
+                                                            lineterm='')]
+        yield qual, addr, size, ok, lines
+    check.learned = learned
+
+
+def main():
+    obj_path = sys.argv[1]
+    flt = sys.argv[2] if len(sys.argv) > 2 else ''
+    original = Original(os.path.join(os.environ.get('EFZ_DIR', '.'), 'efz.exe'))
+    known = read_annotations(os.path.join(REPO, 'src'))
+    total = matched = 0
+    for _qual, _addr, _size, ok, lines in check(obj_path, original, known, flt):
+        total += 1
+        matched += ok
+        print('\n'.join(lines))
+    for name, addrs in sorted(check.learned.items()):
         print(f'learned: {name} -> {", ".join(hex(a) for a in sorted(addrs))}')
     print(f'{matched}/{total} functions match')
     sys.exit(0 if matched == total else 1)

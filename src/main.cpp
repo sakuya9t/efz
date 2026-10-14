@@ -126,7 +126,7 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
         } else {
             g_game->unk1368 = !g_game->unk1368;
             if (g_scenes[g_scene] != NULL) {
-                g_sound.Unk40e4d0(g_game->m_music);
+                g_sound.UpdateLoop(g_game->m_music);
                 g_scene = g_scenes[g_scene]->Update();
             }
             WaitForSingleObject(g_frameEvent, INFINITE);

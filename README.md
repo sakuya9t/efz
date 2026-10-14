@@ -5,11 +5,23 @@ C++ source that the original compiler, Visual C++ .NET 2003, builds back into a 
 `efz.exe` (SHA-256 `3a1616d6…6dd66481`). The recovered source is then the base for a maintained,
 modernised version of the game.
 
-**Status:** 19 of ~622 game functions match, covering the first two object files
-(`0x401000`–`0x4054af`, plus their init stubs at the end of `.text`):
-- `src/main.cpp`: `WinMain`, the window procedure, the frame-timer thread
-- `src/effect.cpp`: `CGame::UpdateEffect`, the 14 KB per-frame update for all 640 effect
-  slots
+**Status: the platform layer matches.** All game code from `0x401000` to `0x40e62f` (the
+first 8 of the 152 object files, plus their init stubs at the end of `.text`) builds byte
+for byte: 143 functions. That is 22% of the ~622 game functions but only 1.5% of the
+game code's bytes, because the 23 character classes that follow are huge.
+
+| Source | What it is |
+|---|---|
+| `src/main.cpp` | `WinMain`, the window procedure, the 64 FPS frame timer |
+| `src/effect.cpp` | `CGame::UpdateEffect`, the per-frame update of the 640 effect slots |
+| `src/file.cpp` | `CFile`, the file wrapper the loaders use |
+| `src/config.cpp` | `key.ini`, per-character `.rec` records, the replay stream |
+| `src/game.cpp` | `CGame`: effects, sound effects and music, screen shake, palette flashes |
+| `src/graphics.cpp` | `CGraphics`: DirectDraw setup, `.dat`/`.bmp` sprite loaders, software blitters (inline assembly), palettes, screenshots |
+| `src/input.cpp` | `CInput`: DirectInput keyboard and joysticks, key bindings |
+| `src/sound.cpp` | `CSound`: DirectSound buffers, `.wav` loading, music loop points |
+
+`tools/progress.py` prints the current numbers.
 
 ## Game files
 
@@ -19,7 +31,7 @@ against a legitimately obtained EFZ 4.02 install, which `EFZ_DIR` points at.
 
 ## Setup
 
-You need Docker, Python 3 with `pefile`, GNU `objdump`, `curl` and `sha1sum`.
+You need Docker, Python 3 with `pefile`, GNU `objdump`, `iconv`, `curl` and `sha1sum`.
 
 ```sh
 toolchain/setup.sh                 # ~650 MB download, once; builds the efz-msvc71 image
@@ -67,6 +79,7 @@ that container; `tools/msvc <tool> <args>` runs any of the tools.
 | `tools/compid.py` | `@comp.id` build stamps in `.lib`/`.obj` files, to match the SDKs |
 | `tools/funcdiff.py` | Per-function byte and relocation comparison |
 | `tools/stackorder.py` | Picks local names that reproduce the original stack layout |
+| `tools/progress.py` | Matched functions and bytes, and where the matched prefix of `.text` ends |
 | `tools/msvc` | Run `cl`, `link` or `lib` in the container |
 
 ## Findings so far
@@ -89,8 +102,8 @@ See [docs/recon.md](docs/recon.md). In short:
 2. **Toolchain:** VS .NET 2003 under wine in Docker, plus a per-function compare loop.
    *Done:* `src/main.cpp` matches its original object byte for byte.
 3. **Function matching**, in this order:
-   1. platform layer and file loaders
-   2. shared base classes
+   1. platform layer and file loaders. *Done:* `0x401000`–`0x40e62f`, 8 objects.
+   2. shared base classes, starting with `CPlayer` at `0x40e630`
    3. effects and projectiles
    4. the 23 character classes
 4. **Byte-identical exe.** Link with the original CRT and libraries, set the post-link header

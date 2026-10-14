@@ -20,9 +20,15 @@ name per variable so the variables come out in the required order.
       variables that share a bucket.
 
 Arrays are not moved: with /GS the security cookie just goes directly above the first
-array in this order, so solve arrays and scalars together as one ordering. Variables
-declared inside a block (a `case`, an `if`) get their own slots below the
+char array (or struct containing one) in this order, so solve arrays and scalars
+together as one ordering. Arrays and structs of about 100 bytes or more are 8-aligned
+with their size rounded up to 8, which leaves gaps; adjacent char locals share a slot.
+Variables declared inside a block (a `case`, an `if`) get their own slots below the
 function-scope ones, block by block in code order; solve each block on its own.
+Compiler temporaries (new/delete pointers, struct returns) go below everything.
+
+When several assignments work, solve picks the one whose names come earliest in their
+candidate lists overall, so list preferred names first.
 """
 import os
 import re

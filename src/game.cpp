@@ -208,7 +208,7 @@ void CGame::PlayMusic(WORD track)
         m_music = 0x96;
     }
     m_music = m_sound->Load(path);
-    m_sound->Unk40e2b0(path);
+    m_sound->LoadLoop(path);
     if (m_music != 0x96)
         m_sound->Play(m_music, 1 - (track == 2 || track == 3 || track == 4 || track == 9));
 }

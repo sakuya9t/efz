@@ -13,6 +13,8 @@
 #include <ddraw.h>
 #define DIRECTINPUT_VERSION 0x0700
 #include <dinput.h>
+#include <mmsystem.h>
+#include <dsound.h>
 #include <string.h>
 
 // A frame of an effect animation, read from system\effect\effect.pat.
@@ -351,33 +353,57 @@ public:
     int unk1f4;
 };
 
-// DirectSound wrapper.
+// DirectSound wrapper: up to 150 sounds, each a .wav file kept in memory and copied to its
+// own static buffer. IDs index the arrays; 0x96 (150) means none.
 class CSound {
 public:
     // FUNCTION: 0x40d810
     CSound();
     // FUNCTION: 0x40d870
     ~CSound();
-    // FUNCTION: 0x40d9f0
-    void Init(HWND hWnd);
     // FUNCTION: 0x40d930
     // Releases all 150 sound buffers and the DirectSound object.
     void Shutdown();
-    // FUNCTION: 0x40e4d0
-    void Unk40e4d0(short value);
+    // FUNCTION: 0x40d9f0
+    void Init(HWND hWnd);
+    // FUNCTION: 0x40dab0
+    // Copies a sound's data into its buffer, restoring the buffer if it was lost.
+    void Fill(WORD id);
+    // FUNCTION: 0x40dc50
+    void ReleaseBuffer(WORD id);
+    // FUNCTION: 0x40dcd0
+    void CreateBuffer(WORD id, WAVEFORMATEX* format);
+    // FUNCTION: 0x40ddd0
+    // Returns the first ID without a buffer, or 0x96 after a message if none is free.
+    WORD FindFreeSlot();
     // FUNCTION: 0x40de40
     void Stop(WORD id);
     // FUNCTION: 0x40de80
+    // Plays a sound from the start; loop == 1 repeats it.
     void Play(WORD id, BOOL loop);
     // FUNCTION: 0x40df50
     void Release(WORD id);
     // FUNCTION: 0x40dfb0
-    // Loads a .wav file; returns its sound ID, or 0x96 on failure.
+    // Loads a PCM .wav file; returns its sound ID, or 0x96 on failure.
     WORD Load(const char* name);
     // FUNCTION: 0x40e2b0
-    void Unk40e2b0(const char* name);
+    // Sets the music loop from the 'cue ' and 'adtl' chunks in the last 320 bytes of a
+    // .wav file; without both, the music does not loop back.
+    void LoadLoop(const char* name);
+    // FUNCTION: 0x40e4d0
+    // Called every frame for the music: once its play cursor passes m_loopEnd, moves it
+    // back by m_loopLength.
+    void UpdateLoop(WORD id);
     // FUNCTION: 0x40e5d0
     void SetVolume(WORD id, int volume);
+
+    DWORD m_loopLength;  // bytes
+    DWORD m_loopEnd;
+    HWND m_hwnd;
+    IDirectSound* m_ds;
+    BYTE* m_data[0x96];
+    DWORD m_size[0x96];
+    IDirectSoundBuffer* m_buffers[0x96];
 };
 
 // Abstract base of the object held for each player (inferred: one per side, since there

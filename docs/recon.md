@@ -58,34 +58,80 @@ Consequences for a byte-identical rebuild:
 
   `tools/stackorder.py` works around the unknown hash by measuring ranks directly. Several
   names usually fit, so a match doesn't prove the developer's spelling.
-- **`/GS` doesn't reorder locals.** **Observed:** the cookie is placed directly above
-  whichever array comes first in hash order. In the original converter
-  (`0x4019b0`), both arrays happen to rank above every scalar.
-- **Block-scope locals get their own slots.** **Observed:** in `UpdateEffect`, each
-  `case` block's `double`s get fresh slots below the function-scope locals, one block
-  after another in code order.
-- **Evaluation is left to right.** **Observed:** in floating-point expressions, the left
-  operand is evaluated first and spilled to a temporary when the right one contains a
-  call. Operand order in the original source can therefore be read off the binary.
-- **Inline functions are COMDATs placed after the object that first uses them, in that
-  object's emission order.** **Observed:** `effect.obj` emits `fabs(float)`, `fabsf`,
-  `sin(float)`, `sinf` and `EffectDesc::EffectDesc` in the original's address order.
+- **`/GS` doesn't reorder locals.** **Observed:** the cookie goes directly above the first
+  *protected* buffer in hash order. Protected buffers are `char`/`BYTE` arrays over 4 bytes
+  and structs that contain one: `DSBUFFERDESC` counts, through its `GUID`'s `Data4[8]`.
+  `DWORD`/`int` arrays, `PALETTEENTRY[256]` and `BYTE[2]` don't get a cookie.
+- **Large arrays and structs are 8-byte aligned, and their size is rounded up to 8.**
+  **Observed:**
+  - 100-, 256- and 1000-byte `char` arrays, `DDSURFACEDESC` (`0x6c` → `0x70`) and
+    `PALETTEENTRY[256]` start 8-aligned with padding above them.
+  - Arrays of 36 bytes or less (`char[8]`, `char[10]`, `char[30]`, `char[32]`,
+    `DWORD[9]`) are packed at 4-byte alignment.
+  - The exact threshold lies in between. This pins down buffer sizes: `CFile::Printf`'s
+    buffer is `char[256]`, not `char[260]`.
+- **`char` locals share slots.** **Observed:** `BYTE`/`char` locals that are adjacent in
+  hash order are packed into one 4-byte slot, from its top byte down.
+- **Block-scope locals get their own slots.** **Observed:**
+  - In `UpdateEffect`, each `case` block's `double`s get fresh slots below the
+    function-scope locals, one block after another in code order.
+  - `for (int y = ...)` inside an `if`/`else` branch counts as that branch's block
+    (`CGraphics::LoadSurface`, `DrawLine`).
+- **Compiler temporaries go below the named locals.** **Observed:** this covers the
+  pointer copies for `new`/`delete`, struct return values and `switch` operands.
+- **Evaluation is left to right, unless the right operand is heavier.** **Observed:**
+  - In floating-point expressions, the left operand is evaluated first. It is spilled to
+    a temporary when the right one contains a call.
+  - A heavier right operand is evaluated first: `*ra + *(rb += 4)` loads `rb` first
+    (`BuildBlendTables`).
+  - `data[A + B + k]` computes `A`, then `B`, adds `data` to `B` and indexes with `A`
+    (`CInput::LoadPreset`).
+
+  Operand order in the original source can therefore be read off the binary, and folding
+  an increment into an expression shows up as a change in evaluation order.
+- **Inline functions are COMDATs placed after the object that first uses them, in
+  emission order.** **Observed:**
+  - Emission follows the referencing functions in source order.
+  - Within one function, the inline functions it uses are emitted in the order they are
+    *defined*.
+  - `effect.obj` emits `fabs(float)`, `fabsf`, `sin(float)`, `sinf` and
+    `EffectDesc::EffectDesc` in the original's address order.
+  - In `game.obj`, the original order (`EffectAnim::Alloc`, its constructor, then
+    `CFile`'s) only came out after `EffectAnim`'s definition, with `Alloc` first, moved
+    above `CFile`'s.
+  - Compiler-generated helpers (`??_E` vector deleting destructors, the `??_H`/`??_I`
+    vector constructor/destructor iterators) are emitted the same way.
+- **Inline assembly is used for the pixel loops.** **Observed:** the blitters,
+  `FillRect` and `Upscale` in `CGraphics` contain `__asm` blocks that save `esi`/`edi`
+  themselves. Functions with `__asm` also save `ebx`/`esi`/`edi` in the prologue.
+- **Shift-JIS string literals need code page 932.** **Observed:** under wine's default code
+  page, `cl` reads a `0x5c` trail byte (in `表`, `ソ`, …) as a backslash escape.
+  `tools/msvc` sets `LC_ALL=ja_JP.SJIS`. The Makefile converts the UTF-8 sources to CP932
+  before compiling.
+- **Watch for `windows.h` macros.** A method named `PlaySound` or `LoadBitmap` silently
+  becomes `PlaySoundA`/`LoadBitmapA`.
 - **The compiler pads functions to 16 bytes with `int3` inside one `.text` section;
   `/Gy` is not involved.** **Observed:** in the recompiled `main.obj`, `WndProc` sits at
   `+0x670` and `FrameTimerThread` at `+0x850`. Compiler-generated functions (scalar
   deleting destructors) go in COMDAT sections, which the linker places right after the
   object's code.
-- **The first object file is `src/main.cpp`, and all of it matches:**
-  - `0x401000`–`0x40194f`: `WinMain`, `WndProc`, `FrameTimerThread`, and the `CGame` and
-    `CPlayer` deleting destructors.
-  - The inline `CGraphics` constructor (`0x401950`).
-  - Dynamic initializers and `atexit` destructors for `g_graphics`, `g_input` and
-    `g_sound`, which the linker sorts to the end of `.text` (`0x786420`–`0x7864af`).
-- **The second object file is `src/effect.cpp` (`0x4019b0`–`0x4054af`), and all of it
-  matches:**
-  - a dead `.bmp`→`.dat` converter
-  - `CGame::UpdateEffect`
-  - five inline helpers
+- **Matched objects.** All game code from `0x401000` to `0x40e62f` matches, object by
+  object. Run `tools/progress.py` for current numbers.
+
+  | Source | Range | Functions | Contents |
+  |---|---|---|---|
+  | `main.cpp` | `0x401000`–`0x4019af` | 12 | `WinMain`, window procedure, frame timer; inline `CGraphics` constructor; init stubs at `0x786420`–`0x7864af` |
+  | `effect.cpp` | `0x4019b0`–`0x4054af` | 7 | `CGame::UpdateEffect`, a dead `.bmp`→`.dat` converter, inline helpers |
+  | `file.cpp` | `0x4054b0`–`0x405a1f` | 18 | `CFile`, the Win32 file wrapper |
+  | `config.cpp` | `0x405a20`–`0x40606f` | 11 | `key.ini` access, per-character `.rec` records, `CReplayFile` |
+  | `game.cpp` | `0x406070`–`0x4083af` | 35 | `CGame`: effects, sounds and music, screen shake, palette flashes; inline helpers |
+  | `graphics.cpp` | `0x4083b0`–`0x40c5df` | 36 | `CGraphics`: DirectDraw, sprite loaders, blitters, palettes, screenshots |
+  | `input.cpp` | `0x40c5e0`–`0x40d80f` | 9 | `CInput`: DirectInput keyboard and joysticks, bindings |
+  | `sound.cpp` | `0x40d810`–`0x40e62f` | 15 | `CSound`: DirectSound, `.wav` loading, music loop points |
+
+  The boundaries come from each object's string literals, which are contiguous in
+  `.rdata`. The next object starts at `0x40e630` with two `CPlayer` methods, followed by
+  `CPlayer`'s constructor (`0x40e740`).
 - **String literals are not pooled.** **Observed:** `/GF` is off, and `WinMain`'s four
   identical `"ETENAL FIGHTER ZERO"` literals each get their own copy. (The typo is the
   original's.)
@@ -193,17 +239,71 @@ Each line below is **observed**, read from the matched `WinMain` in `src/main.cp
   rollback netplay, spectating, replays and training features, and its feature list
   is the parity target for the modernised fork.
 
-## Data formats (initial look, all **inferred**)
+## Platform layer (matched)
 
-- **`*.dat` (618 files) are compressed images with palettes.** The first byte is a flag
-  byte (`0xf0`/`0xfe`), followed by what reads as RGB palette triplets and LZ-style
-  back-references. Character `.dat` files repeat the palette block for each colour.
-  The exe accepts `.bmp` in place of `.dat`.
-- **`*.pat` (31 files) hold per-character frame data.** They start with a `u32` count
-  (`akane.pat`: 223). The records that follow contain incrementing sprite IDs,
-  coordinates and many zeroed slots (box slots?).
-- **`*.wav` (314 files) are plain PCM.** Background music lives in `wave/bgm`.
-- **`replay/*.rep`** files are replays. EfzRevival extends the format.
+**Observed** in the matched code:
+
+- **Graphics** (`CGraphics`, DirectDraw 1 interfaces):
+  - The screen is 320x240 or 640x480 in 8-bit colour. The primary surface and its one
+    back buffer are in *system* memory.
+  - Sprites are system-memory surfaces. Everything is drawn in software into the
+    320x240 corner of the back buffer by `__asm` loops: colour-keyed copy, mirrored
+    copy, two 64 KB blend tables (average and saturated sum), tint, shadow and smear.
+  - In 640x480 mode, `Flip` doubles the image in place.
+  - The blend tables are rebuilt from the palette with squared distances from a
+    quarter-squares table.
+- **Input** (`CInput`, DirectInput 7):
+  - Each player has 8 bindings: 4 directions and 4 buttons.
+  - A binding is a keyboard key or a joystick button or axis direction (dead zone ±500
+    of ±1000).
+  - The keyboard is acquired exclusively.
+- **Sound** (`CSound`, DirectSound):
+  - There are 150 static buffers, each filled from a `.wav` kept in memory.
+  - The music loops by moving the play cursor back once it passes a loop end read from
+    the file's `cue `/`adtl` chunks.
+- **Shared game state** (`CGame`):
+  - edge-triggered button presses
+  - 920 effect sprites and 65 sound effects
+  - music with volume fades
+  - screen shake: a decaying amplitude on two rotating phases
+  - palette flashes to white or black
+
+## Data formats
+
+**Observed**, from the matched loaders, except where marked:
+
+- **`.dat` images** (e.g. `system\effect\effect.dat`, `system\object.dat`):
+  - Byte 0 is a palette entry count `n`, followed by `n` 3-byte entries in B, G, R
+    order.
+  - Then come sprites back to back. Each is a little-endian `u16` width and height,
+    then pixels, which are either:
+    - **raw:** bottom-up rows, each byte plus a palette base
+    - **run-length:** top-down; a byte above the threshold `rle` repeats the previous
+      colour `byte - rle` times
+  - `effect.dat` holds 920 sprites (`rle` `0x51`, base `0xaf`).
+  - **Inferred:** character `.dat` files are the same container. The flag bytes
+    `0xf0`/`0xfe` seen before are palette counts.
+- **`system\effect\effect.pat`:**
+  - A `u32` animation count.
+  - Per animation: 3 unknown `u32`s and a frame count.
+  - Per frame: 6 `u32`s (duration, sprite, width, height, hotspot x, y), 14 unused
+    `u32`s and 10 unused 16-byte records.
+  - **Inferred:** character `.pat` files share at least the frame record.
+- **`key.ini`** (at least 32 bytes):
+  - Bytes `0x00`–`0x1f`: the bindings, per player and in order up, down, left, right,
+    A–D. Each binding is two bytes, a device and a code; a device byte `n > 0` gives the
+    binding `(n << 8) + code - 1`.
+  - Further presets of 39 bytes sit at `n * 39`; byte `0x9c` selects one.
+  - Byte `0x20`: the display mode (1 = 640x480).
+  - Bytes `0x21`–`0x26`: game settings read by `CGame`.
+- **`system\<name>\<name>.rec`:** 36 bytes: 8 `u32` per-character counters and a zero.
+- **Replays** (`CReplayFile`): a stream of `u16` input words. (EfzRevival's `.rep`
+  format extends the game's.)
+- **`snap\snNNNN.bmp`** screenshots: a 320x240 8-bit BMP of the back buffer.
+- **`*.wav`:** PCM only. Music loop points come from the `cue ` and `adtl` chunks in
+  the file's last 320 bytes (`u32` at chunk + `0x10`, times 4).
+- **`*.pat` character files** (31) start with a `u32` count (`akane.pat`: 223)
+  (**inferred** layout beyond that).
 
 ## Not yet established
 
@@ -212,10 +312,10 @@ Each line below is **observed**, read from the matched `WinMain` in `src/main.cp
 
 - **The function list is approximate.** It comes from objdump with heuristics; it needs
   a Ghidra or IDA database and a reconciled function list.
-- **The translation-unit boundaries are unknown.** There are 152 objects, but where each
-  one starts is still to be worked out.
+- **Most translation-unit boundaries are unknown.** There are 152 objects; the first 8 are
+  established (see *Matched objects*). The rest follow the same method.
 - **Some compiler flags are unconfirmed.** `/Od /GS` without `/EHsc` is settled by
   `WinMain`. `/Zp`, `/J` and `/GR` still need a function that depends on them.
 - **Import hints are unchecked.** Byte-identical `.idata` needs import libraries whose
   hints match the original; the SDK libraries' hints haven't been compared yet.
-- **The `.dat` compression and `.pat` record layout** have not been decoded yet.
+- **The character `.pat` record layout** beyond the effect frames is not decoded yet.
