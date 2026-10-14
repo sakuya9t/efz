@@ -1330,17 +1330,18 @@ class Lifter2(Lifter):
             # sub eax, C; neg eax; sbb eax, eax  ->  (x == C) - 1, then
             # inc eax  ->  x == C;   add eax, K  ->  (x == C) + (K - 1)
             r = ops[0].reg
-            if nxt and nxt.m == 'sbb' and nxt.ops[0].kind == 'reg' and nxt.ops[0].reg == r \
-                    and nxt.ops[1].kind == 'reg' and nxt.ops[1].reg == r:
+            same_reg = lambda o: o.kind == 'reg' and SUBREG.get(o.reg, (o.reg,))[0] == SUBREG.get(r, (r,))[0]
+            if nxt and nxt.m == 'sbb' and same_reg(nxt.ops[0]) and same_reg(nxt.ops[1]):
+                r8 = nxt.ops[0].reg       # sbb al,al: the 0/1 is worked out as a char
                 v = self.reg_value(r)
                 if isinstance(v, Bin) and v.op == '-':
                     c = Cond('==', v.a, v.b)
                 else:
                     c = Cond('==', v, Const(0))
-                if r in REG32:
+                if r8 in REG32:
                     c.wide = True
                 after = self.ins[k + 2] if k + 2 < len(self.ins) else None
-                if after is not None and after.ops and after.ops[0].kind == 'reg' and after.ops[0].reg == r:
+                if after is not None and after.ops and same_reg(after.ops[0]):
                     if after.m == 'inc':
                         self.set_reg(r, c)
                         return k + 3
@@ -2654,7 +2655,8 @@ def lift(img, syms, start, ret_type=None, this_type=None, qual=None):
     st = Structurer(items, lf.epilogue)
     body = st.parse(0, len(items), {})
     ctx = {'ctor': bool(qual) and qual.split('::')[-1] == qual.split('::')[0].split('::')[-1]
-                   if qual and '::' in qual else False}
+                   if qual and '::' in qual else False,
+           'dtor': bool(qual) and '::~' in qual}
     ctx['gotos'] = st.gotos
     ctx['top'] = body
     ctx['lf'] = lf
@@ -3160,6 +3162,15 @@ def rewrite_patterns(nodes, syms, ctx):
                 if cls and c.fn == '~' + cls.split('::')[-1] and getattr(sl, 'cls', None) == cls:
                     k += 1
                     continue
+        # destructors: the base class's destructor runs implicitly at the end (the last
+        # such call; an earlier one is an explicit call in the source)
+        if ctx.get('dtor') and isinstance(st, ExprStmt) and ctx.get('top') is nodes:
+            c = call_of(st.e)
+            name = syms.funcs.get(getattr(c, 'target', None)) if c is not None else None
+            later = [x for x in nodes[k + 1:] if not isinstance(x, (Lbl, Jmp))]
+            if name and name.rpartition('::')[2].startswith('~') and c.this is None and not later:
+                k += 1
+                continue
         # constructors: member construction is implicit, and so is `return this`
         if ctx.get('ctor') and isinstance(st, Return) and isinstance(st.e, ThisVar):
             k += 1

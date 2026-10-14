@@ -48,10 +48,12 @@ def divergence(mine, orig, addr):
             continue
         if norm(ot) != norm(mt):
             return None          # something other than registers differs first
-        if not re.match(r'mov e[acd]x, dword ptr \[ebp - 0x[0-9a-f]+\]$', ot):
-            return None          # not where a statement starts: operand order, not rotation
         ro = [WIDE.get(r, r) for r in REG.findall(ot)]
         rm = [WIDE.get(r, r) for r in REG.findall(mt)]
+        if ro == rm:
+            continue             # only an address differs (code moved by a size change)
+        if not re.match(r'mov e[acd]x, dword ptr \[ebp - 0x[0-9a-f]+\]$', ot):
+            return None          # not where a statement starts: operand order, not rotation
         for x, y in zip(ro, rm):
             if x != y and x in ROT and y in ROT:
                 return oa, (ROT.index(x) - ROT.index(y)) % 3

@@ -1492,4 +1492,270 @@ public:
     BYTE unk3138[0x3468 - 0x3138];
 };
 
+// Nanase: one of the character classes.
+// SIZE: 0x3470
+class CNanase : public CPlayer {
+public:
+    // FUNCTION: 0x46d970
+    virtual void Vf6();
+    // FUNCTION: 0x47c130
+    void Unk47c130();
+    // FUNCTION: 0x48a720
+    CNanase(int p1, int p2, int p3, int p4, int p5, BYTE p6);
+    // FUNCTION: 0x48a9b0
+    virtual void Vf12();
+    // FUNCTION: 0x48ab00
+    ~CNanase();
+    // FUNCTION: 0x48abb0
+    virtual void Vf11();
+    // FUNCTION: 0x48abf0
+    virtual void Vf0();
+    // FUNCTION: 0x48ac30
+    virtual void Vf10(short p1);
+    // FUNCTION: 0x48ac80
+    virtual void Vf3();
+    // FUNCTION: 0x48aca0
+    virtual void Vf4();
+    // FUNCTION: 0x48d940
+    void Unk48d940();
+    // FUNCTION: 0x48dd00
+    virtual void Vf1();
+    // FUNCTION: 0x48e140
+    void Unk48e140(char p1);
+    // FUNCTION: 0x48e250
+    virtual void Vf8();
+    // FUNCTION: 0x48e260
+    virtual void Vf9(EffectDesc* p1);
+    // FUNCTION: 0x48e290
+    virtual void Vf2();
+    // FUNCTION: 0x48f690
+    virtual void Vf5();
+    // FUNCTION: 0x492db0
+    virtual void Vf7();
+    // FUNCTION: 0x497540
+    void Unk497540();
+
+    BYTE unk3138[0x3470 - 0x3138];
+};
+
+// Nagamori: one of the character classes.
+// SIZE: 0x34b0
+class CNagamori : public CPlayer {
+public:
+    // FUNCTION: 0x49d610
+    virtual void Vf6();
+    // FUNCTION: 0x4add90
+    CNagamori(int p1, int p2, int p3, int p4, int p5, BYTE p6);
+    // FUNCTION: 0x4adfa0
+    virtual void Vf12();
+    // FUNCTION: 0x4ae130
+    virtual void Vf0();
+    // FUNCTION: 0x4ae170
+    virtual void Vf10(short p1);
+    // FUNCTION: 0x4ae1d0
+    void Unk4ae1d0(short p1, short p2, short p3, short p4);
+    // FUNCTION: 0x4ae2c0
+    virtual void Vf3();
+    // FUNCTION: 0x4ae2e0
+    virtual void Vf4();
+    // FUNCTION: 0x4b12e0
+    virtual void Vf1();
+    // FUNCTION: 0x4b1720
+    virtual void Vf8();
+    // FUNCTION: 0x4b1750
+    virtual void Vf9(EffectDesc* p1);
+    // FUNCTION: 0x4b1780
+    virtual void Vf2();
+    // FUNCTION: 0x4b2ac0
+    virtual void Vf5();
+    // FUNCTION: 0x4b6680
+    virtual void Vf7();
+
+    BYTE unk3138[0x34b0 - 0x3138];
+};
+
+// Kaori: one of the character classes.
+// SIZE: 0x3450
+class CKaori : public CPlayer {
+public:
+    // FUNCTION: 0x62a5e0
+    virtual void Vf6();
+    // FUNCTION: 0x638d90
+    CKaori(int p1, int p2, int p3, int p4, int p5, BYTE p6);
+    // FUNCTION: 0x638f10
+    virtual void Vf12();
+    // FUNCTION: 0x639030
+    virtual void Vf0();
+    // FUNCTION: 0x639070
+    virtual void Vf10(short p1);
+    // FUNCTION: 0x6390c0
+    virtual void Vf3();
+    // FUNCTION: 0x6390e0
+    virtual void Vf4();
+    // FUNCTION: 0x63b610
+    virtual void Vf1();
+    // FUNCTION: 0x63b620
+    virtual void Vf8();
+    // FUNCTION: 0x63b630
+    virtual void Vf9(EffectDesc* p1);
+    // FUNCTION: 0x63b660
+    virtual void Vf2();
+    // FUNCTION: 0x63c960
+    virtual void Vf5();
+    // FUNCTION: 0x640710
+    virtual void Vf7();
+
+    BYTE unk3138[0x3450 - 0x3138];
+};
+
+// Kano: one of the character classes.
+// SIZE: 0x3478
+class CKano : public CPlayer {
+public:
+    // FUNCTION: 0x6429c0
+    virtual void Vf6();
+    // FUNCTION: 0x653a20
+    CKano(int p1, int p2, int p3, int p4, int p5, BYTE p6);
+    // FUNCTION: 0x653c30
+    virtual void Vf12();
+    // FUNCTION: 0x653dd0
+    virtual void Vf0();
+    // FUNCTION: 0x653e10
+    virtual void Vf10(short p1);
+    // FUNCTION: 0x653e60
+    virtual void Vf3();
+    // FUNCTION: 0x653e80
+    virtual void Vf4();
+    // FUNCTION: 0x657500
+    virtual void Vf1();
+    // FUNCTION: 0x657b70
+    virtual void Vf8();
+    // FUNCTION: 0x657e70
+    virtual void Vf9(EffectDesc* p1);
+    // FUNCTION: 0x657ea0
+    virtual void Vf2();
+    // FUNCTION: 0x659250
+    virtual void Vf5();
+    // FUNCTION: 0x65cd30
+    virtual void Vf7();
+
+    BYTE unk3138[0x3478 - 0x3138];
+};
+
+// Ikumi: one of the character classes.
+// SIZE: 0x3478
+class CIkumi : public CPlayer {
+public:
+    // FUNCTION: 0x683550
+    virtual void Vf6();
+    // FUNCTION: 0x694d00
+    void Unk694d00();
+    // FUNCTION: 0x6a59c0
+    CIkumi(int p1, int p2, int p3, int p4, int p5, BYTE p6);
+    // FUNCTION: 0x6a5c50
+    virtual void Vf12();
+    // FUNCTION: 0x6a5dc0
+    ~CIkumi();
+    // FUNCTION: 0x6a5e70
+    virtual void Vf11();
+    // FUNCTION: 0x6a5eb0
+    void Unk6a5eb0();
+    // FUNCTION: 0x6a6270
+    virtual void Vf0();
+    // FUNCTION: 0x6a62c0
+    virtual void Vf10(short p1);
+    // FUNCTION: 0x6a6310
+    virtual void Vf3();
+    // FUNCTION: 0x6a6330
+    virtual void Vf4();
+    // FUNCTION: 0x6a93f0
+    virtual void Vf1();
+    // FUNCTION: 0x6ab060
+    virtual void Vf8();
+    // FUNCTION: 0x6ab6a0
+    void Unk6ab6a0(char p1);
+    // FUNCTION: 0x6ab7b0
+    virtual void Vf9(EffectDesc* p1);
+    // FUNCTION: 0x6ab7e0
+    virtual void Vf2();
+    // FUNCTION: 0x6acc10
+    virtual void Vf5();
+    // FUNCTION: 0x6b06f0
+    virtual void Vf7();
+    // FUNCTION: 0x6b7900
+    void Unk6b7900();
+
+    BYTE unk3138[0x3478 - 0x3138];
+};
+
+// Exnanase: one of the character classes.
+// SIZE: 0x3468
+class CEXNanase : public CPlayer {
+public:
+    // FUNCTION: 0x6be9c0
+    virtual void Vf6();
+    // FUNCTION: 0x6cfbb0
+    CEXNanase(int p1, int p2, int p3, int p4, int p5, BYTE p6);
+    // FUNCTION: 0x6cfd80
+    virtual void Vf12();
+    // FUNCTION: 0x6cfed0
+    virtual void Vf0();
+    // FUNCTION: 0x6cff10
+    virtual void Vf10(short p1);
+    // FUNCTION: 0x6cff60
+    virtual void Vf3();
+    // FUNCTION: 0x6cff80
+    virtual void Vf4();
+    // FUNCTION: 0x6d2400
+    virtual void Vf1();
+    // FUNCTION: 0x6d2410
+    void Unk6d2410(int p1);
+    // FUNCTION: 0x6d2420
+    virtual void Vf8();
+    // FUNCTION: 0x6d2740
+    virtual void Vf9(EffectDesc* p1);
+    // FUNCTION: 0x6d2770
+    virtual void Vf2();
+    // FUNCTION: 0x6d38e0
+    virtual void Vf5();
+    // FUNCTION: 0x6d6e40
+    virtual void Vf7();
+
+    BYTE unk3138[0x3468 - 0x3138];
+};
+
+// Nayukib: one of the character classes.
+// SIZE: 0x3458
+class CNayukiB : public CPlayer {
+public:
+    // FUNCTION: 0x730710
+    virtual void Vf6();
+    // FUNCTION: 0x73e790
+    CNayukiB(int p1, int p2, int p3, int p4, int p5, BYTE p6);
+    // FUNCTION: 0x73e970
+    virtual void Vf12();
+    // FUNCTION: 0x73eac0
+    virtual void Vf0();
+    // FUNCTION: 0x73eb00
+    virtual void Vf10(short p1);
+    // FUNCTION: 0x73eb50
+    virtual void Vf3();
+    // FUNCTION: 0x73eb70
+    virtual void Vf4();
+    // FUNCTION: 0x741680
+    virtual void Vf1();
+    // FUNCTION: 0x741ac0
+    virtual void Vf8();
+    // FUNCTION: 0x741bc0
+    virtual void Vf9(EffectDesc* p1);
+    // FUNCTION: 0x741bf0
+    virtual void Vf2();
+    // FUNCTION: 0x742eb0
+    virtual void Vf5();
+    // FUNCTION: 0x7472c0
+    virtual void Vf7();
+
+    BYTE unk3138[0x3458 - 0x3138];
+};
+
 #endif

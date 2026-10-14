@@ -76,7 +76,7 @@ def main():
         d = s.get_data()
         for off in range(0, len(d) - 3, 4):
             v = struct.unpack_from('<I', d, off)[0]
-            if v in index and (v in reasons or is_frame(index[v])):
+            if (v in index and (v in reasons or is_frame(index[v]))) or 'frame' in reasons.get(v, ()):
                 reasons[v].add('data')
                 data_ptrs.append((base + s.VirtualAddress + off, v))
 

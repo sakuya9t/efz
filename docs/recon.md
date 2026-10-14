@@ -191,8 +191,8 @@ Consequences for a byte-identical rebuild:
   `+0x670` and `FrameTimerThread` at `+0x850`. Compiler-generated functions (scalar
   deleting destructors) go in COMDAT sections, which the linker places right after the
   object's code.
-- **Matched objects.** All game code from `0x401000` to `0x4136cf` matches, object by
-  object. Run `tools/progress.py` for current numbers.
+- **Matched objects.** All game code from `0x401000` to `0x750d2f` matches, object by
+  object: the platform layer, `CPlayer` and the 24 character classes. Run `tools/progress.py` for current numbers.
 
   | Source | Range | Functions | Contents |
   |---|---|---|---|
@@ -206,23 +206,30 @@ Consequences for a byte-identical rebuild:
   | `sound.cpp` | `0x40d810`–`0x40e62f` | 15 | `CSound`: DirectSound, `.wav` loading, music loop points |
   | `player.cpp` | `0x40e630`–`0x412b0f` | 49 | `CPlayer`, the base of the character classes; inline `PatternData` and `Afterimages` methods |
   | `playerobj.cpp` | `0x412b10`–`0x4136cf` | 6 | `CPlayer`'s table of 64 spawned objects and drawing them |
-  | `shiori.cpp` | `0x4136d0`–`0x43405f` | 13 | `CShiori` (and the inline `ObjBase::SetVelocity`) |
-  | `sayuri.cpp` | `0x434060`–`0x45184f` | 13 | `CSayuri` |
-  | `nayuki.cpp` | `0x451850`–`0x46d96f` | 13 | `CNayuki` |
-  | `mizukab.cpp` | `0x4c04b0`–`0x4e7ebf` | 13 | `CMizukaB` |
-  | `mizuka.cpp` | `0x4e7ec0`–`0x50c4af` | 13 | `CMizuka` |
-  | `misuzu.cpp` | `0x50c4b0`–`0x530bbf` | 13 | `CMisuzu` |
-  | `mishio.cpp` | `0x530bc0`–`0x5571ef` | 13 | `CMishio` |
-  | `misaki.cpp` | `0x5571f0`–`0x5736cf` | 13 | `CMisaki` |
-  | `mio.cpp` | `0x5736d0`–`0x59c49f` | 13 | `CMio` |
-  | `minagi.cpp` | `0x59c4a0`–`0x5c857f` | 13 | `CMinagi` |
-  | `mayu.cpp` | `0x5c8580`–`0x5e85ef` | 13 | `CMayu` |
-  | `makoto.cpp` | `0x5e85f0`–`0x60792f` | 13 | `CMakoto` |
-  | `mai.cpp` | `0x607930`–`0x62a5df` | 13 | `CMai` |
-  | `kanna.cpp` | `0x667570`–`0x68354f` | 13 | `CKanna` |
-  | `ayu.cpp` | `0x6d93f0`–`0x6f2f1f` | 13 | `CAyu` |
-  | `akane.cpp` | `0x6f2f20`–`0x7124ff` | 13 | `CAkane` |
-  | `akiko.cpp` | `0x712500`–`0x73070f` | 13 | `CAkiko` |
+  | `shiori.cpp` | `0x4136d0`–`0x43405f` | all | `CShiori` and the inline `ObjBase::SetVelocity` |
+  | `sayuri.cpp` | `0x434060`–`0x45184f` | all | `CSayuri` |
+  | `nayuki.cpp` | `0x451850`–`0x46d96f` | all | `CNayuki` |
+  | `nanase.cpp` | `0x46d970`–`0x49d60f` | all | `CNanase`; an unused destructor |
+  | `nagamori.cpp` | `0x49d610`–`0x4c04af` | all | `CNagamori` and the inline `ObjBase::AngleTo` |
+  | `mizukab.cpp` | `0x4c04b0`–`0x4e7ebf` | all | `CMizukaB` |
+  | `mizuka.cpp` | `0x4e7ec0`–`0x50c4af` | all | `CMizuka` |
+  | `misuzu.cpp` | `0x50c4b0`–`0x530bbf` | all | `CMisuzu` |
+  | `mishio.cpp` | `0x530bc0`–`0x5571ef` | all | `CMishio` |
+  | `misaki.cpp` | `0x5571f0`–`0x5736cf` | all | `CMisaki` |
+  | `mio.cpp` | `0x5736d0`–`0x59c49f` | all | `CMio` |
+  | `minagi.cpp` | `0x59c4a0`–`0x5c857f` | all | `CMinagi` |
+  | `mayu.cpp` | `0x5c8580`–`0x5e85ef` | all | `CMayu` |
+  | `makoto.cpp` | `0x5e85f0`–`0x60792f` | all | `CMakoto` |
+  | `mai.cpp` | `0x607930`–`0x62a5df` | all | `CMai` |
+  | `kaori.cpp` | `0x62a5e0`–`0x6429bf` | all | `CKaori` |
+  | `kano.cpp` | `0x6429c0`–`0x66756f` | all | `CKano` |
+  | `kanna.cpp` | `0x667570`–`0x68354f` | all | `CKanna` |
+  | `ikumi.cpp` | `0x683550`–`0x6be9bf` | all | `CIkumi`; an unused destructor |
+  | `exnanase.cpp` | `0x6be9c0`–`0x6d93ef` | all | `CEXNanase` |
+  | `ayu.cpp` | `0x6d93f0`–`0x6f2f1f` | all | `CAyu` |
+  | `akane.cpp` | `0x6f2f20`–`0x7124ff` | all | `CAkane` |
+  | `akiko.cpp` | `0x712500`–`0x73070f` | all | `CAkiko` |
+  | `nayukib.cpp` | `0x730710`–`0x750d2f` | all | `CNayukiB` |
 
   The boundaries come from each object's string literals, which are contiguous in
   `.rdata`, and from where inline functions are emitted. Each character class is one

@@ -55,7 +55,20 @@ CHARACTERS = [
     ('ayu', 'CAyu', 0x6d93f0, 0x6f2f20, 0x788e4c, 0x6e8130, 0x3450),
     ('akane', 'CAkane', 0x6f2f20, 0x712500, 0x788eb0, 0x7039d0, 0x3450),
     ('akiko', 'CAkiko', 0x712500, 0x730710, 0x788f58, 0x7219a0, 0x3468),
+    ('nanase', 'CNanase', 0x46d970, 0x49d610, 0x788334, 0x48a720, 0x3470),
+    ('nagamori', 'CNagamori', 0x49d610, 0x4c04b0, 0x7883fc, 0x4add90, 0x34b0),
+    ('kaori', 'CKaori', 0x62a5e0, 0x6429c0, 0x788bf8, 0x638d90, 0x3450),
+    ('kano', 'CKano', 0x6429c0, 0x667570, 0x788c78, 0x653a20, 0x3478),
+    ('ikumi', 'CIkumi', 0x683550, 0x6be9c0, 0x788d74, 0x6a59c0, 0x3478),
+    ('exnanase', 'CEXNanase', 0x6be9c0, 0x6d93f0, 0x788de4, 0x6cfbb0, 0x3468),
+    ('nayukib', 'CNayukiB', 0x730710, 0x750d30, 0x788fb8, 0x73e790, 0x3458),
 ]
+
+# Other functions of character objects with known roles.
+EXTRA_NAMES = {
+    0x48ab00: 'CNanase::~CNanase',     # never called: players are deleted as CPlayer
+    0x6a5dc0: 'CIkumi::~CIkumi',
+}
 
 CPLAYER_SLOT11 = 0x410b70     # the one slot characters inherit
 
@@ -74,6 +87,7 @@ def _vtable(addr, n=13):
 for _obj, _cls, _lo, _hi, _vt, _ctor, _size in CHARACTERS:
     _names = {_ctor: f'{_cls}::{_cls}'}
     _names.update({a: n for a, n in SHARED.items() if _lo <= a < _hi})
+    _names.update({a: n for a, n in EXTRA_NAMES.items() if _lo <= a < _hi})
     for _k, _a in enumerate(_vtable(_vt)):
         if _a != CPLAYER_SLOT11:
             _names[_a] = f'{_cls}::Vf{_k}'

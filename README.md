@@ -5,11 +5,11 @@ C++ source that the original compiler, Visual C++ .NET 2003, builds back into a 
 `efz.exe` (SHA-256 `3a1616d6…6dd66481`). The recovered source is then the base for a maintained,
 modernised version of the game.
 
-**Status: the platform layer, the `CPlayer` base class and 17 of the 22 character
-classes match.** All game code from `0x401000` up to the first character with extra
-classes (Nanase, `0x46d970`) builds byte for byte, and so do 13 more character objects
-after it. In all, 414 of the 630 game functions and 66% of the game code's bytes match.
-`tools/progress.py` prints the current numbers.
+**Status: everything up to the scenes matches.** All game code from `0x401000` to
+`0x750d2f` builds byte for byte: the platform layer, the `CPlayer` base class and all 24
+character classes. That is 520 of the 630 game functions and 96% of the game code's
+bytes; the menus and scenes at the end of `.text` are next. `tools/progress.py` prints
+the current numbers.
 
 | Source | What it is |
 |---|---|
@@ -109,7 +109,7 @@ See [docs/recon.md](docs/recon.md). In short:
 - **Libraries:** the static CRT plus DirectDraw, DirectInput and DirectSound, using
   DirectX 7-era interfaces through the DirectX 9 SDK.
 - **Structure:**
-  - 630 game functions, mostly virtual methods of 22 character classes that derive from
+  - 630 game functions, mostly virtual methods of 24 character classes that derive from
     `CPlayer` (13-slot vtables)
   - 8 top-level scene objects, driven from `WinMain`
 
@@ -122,8 +122,8 @@ See [docs/recon.md](docs/recon.md). In short:
    1. platform layer and file loaders. *Done:* `0x401000`–`0x40e62f`, 8 objects.
    2. shared base classes. *Done:* `CPlayer`, `0x40e630`–`0x4136cf`, 2 objects.
    3. effects and projectiles
-   4. the 22 character classes. *In progress:* 17 match; Nanase, Nagamori, Kaori,
-      nayukiB and one more carry extra classes still to split out.
+   4. the 24 character classes. *Done.*
+   5. the scenes and menus (`0x750d30`–`0x77697e`).
 4. **Byte-identical exe.** Link with the original CRT and libraries, set the post-link header
    fields (timestamp, RSDS record, Rich header), and check the SHA-256 in CI.
 5. **Modern fork.** Starting from the matched source:
