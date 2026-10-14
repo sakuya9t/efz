@@ -9,15 +9,21 @@
 CFLAGS = /nologo /c /Od /GS /W3 /Zi /D WIN32 /D NDEBUG /D _WINDOWS /D _MBCS
 
 SRCS := $(wildcard src/*.cpp)
+HDRS := $(wildcard src/*.h)
 OBJS := $(SRCS:src/%.cpp=build/%.obj)
 
 all: $(OBJS)
 
-build/%.obj: src/%.cpp $(wildcard src/*.h) | build
+# Sources are UTF-8; the compiler gets Shift-JIS (code page 932) copies, so Japanese
+# string literals come out as the original's bytes.
+build/src/%: src/% | build/src
+	iconv -f UTF-8 -t CP932 $< > $@
+
+build/%.obj: build/src/%.cpp $(HDRS:src/%=build/src/%) | build
 	tools/msvc cl $(CFLAGS) /Fo$@ /Fdbuild/$*.pdb $<
 
-build:
-	mkdir -p build
+build build/src:
+	mkdir -p $@
 
 diff: $(OBJS)
 	@test -n "$(EFZ_DIR)" || { echo 'set EFZ_DIR to the folder containing the original efz.exe' >&2; exit 1; }
@@ -29,3 +35,4 @@ clean:
 	rm -rf build
 
 .PHONY: all diff clean
+.SECONDARY:

@@ -12,9 +12,115 @@
 #include <windows.h>
 #include <string.h>
 
+// Win32 file wrapper used by the loaders.
+class CFile {
+public:
+    // FUNCTION: 0x408330
+    // Defined inline; the copy is placed after the CGame object, which uses it first.
+    CFile(const char* name, DWORD mode)
+    {
+        Reset();
+        Open(name, mode);
+    }
+    // FUNCTION: 0x408360
+    ~CFile() { Close(); }
+
+    // FUNCTION: 0x4054b0
+    // mode: 1 read, 2 write; 0x10 truncate, 0x20 open always, both: create always.
+    BOOL Open(const char* name, DWORD mode);
+    // FUNCTION: 0x4055a0
+    BOOL Close();
+    // FUNCTION: 0x405600
+    DWORD Read(void* buffer, DWORD size);
+    // FUNCTION: 0x405640
+    // Reads up to a newline; returns the line length minus one.
+    int ReadLine(char* line, int size);
+    // FUNCTION: 0x405700
+    int ReadInt();
+    // FUNCTION: 0x405720
+    short ReadShort();
+    // FUNCTION: 0x405740
+    float ReadFloat();
+    // FUNCTION: 0x405760
+    DWORD Write(const void* buffer, DWORD size);
+    // FUNCTION: 0x4057a0
+    void WriteInt(int value);
+    // FUNCTION: 0x4057c0
+    void WriteFloat(float value);
+    // FUNCTION: 0x4057e0
+    BOOL Printf(const char* format, ...);
+    // FUNCTION: 0x405850
+    DWORD Seek(LONG offset, int origin);
+    // FUNCTION: 0x4058c0
+    DWORD SeekToStart();
+    // FUNCTION: 0x4058f0
+    DWORD SeekToEnd();
+    // FUNCTION: 0x405920
+    DWORD GetSize();
+    // FUNCTION: 0x405950
+    BOOL IsOpen();
+    // FUNCTION: 0x405970
+    BOOL Reset();
+    // FUNCTION: 0x4059a0
+    // Reads the whole file into a NUL-terminated buffer the CFile owns.
+    char* Load(const char* name);
+
+    HANDLE m_handle;
+    char* m_data;
+};
+
 // FUNCTION: 0x405a20
-// Opens the config file and returns the byte at the given offset.
-BYTE ReadConfigByte(int offset);
+// Returns the byte at `offset` in key.ini, or 0 if the file is missing or short.
+// The file is reread on every call.
+BYTE ReadConfigByte(BYTE offset);
+// FUNCTION: 0x405ae0
+// Rewrites key.ini with the byte at `offset` replaced.
+BYTE WriteConfigByte(BYTE offset, BYTE newValue);
+
+// Eight per-character counters, kept at CPlayer+0x3118 and saved as
+// system\<name>\<name>.rec (36 bytes: the counters and a zero word). Callers increment
+// one before saving.
+struct CharRecord {
+    // FUNCTION: 0x405be0
+    void Save(const char* name);
+    // FUNCTION: 0x405cf0
+    void Load(const char* name);
+
+    DWORD unk0;
+    DWORD unk4;
+    DWORD unk8;
+    DWORD unkc;
+    DWORD unk10;
+    DWORD unk14;
+    DWORD unk18;
+    DWORD unk1c;
+};
+
+// A replay file: a stream of 16-bit input words.
+class CReplayFile {
+public:
+    // FUNCTION: 0x405e60
+    CReplayFile();
+    // FUNCTION: 0x405f80
+    ~CReplayFile();
+    // FUNCTION: 0x405e90
+    // Returns the file size, or 0 if it cannot be opened.
+    DWORD OpenRead(const char* name);
+    // FUNCTION: 0x405f00
+    void OpenWrite(const char* name);
+    // FUNCTION: 0x405f50
+    void Close();
+    // FUNCTION: 0x405fb0
+    // Returns the next word, or 0 and sets m_eof at the end of the file.
+    short Read();
+    // FUNCTION: 0x406020
+    void Write(short value);
+
+    BOOL m_eof;
+    HANDLE m_handle;
+    DWORD m_remaining; // bytes left to read
+    DWORD m_read;
+};
 
 // DirectDraw wrapper.
 class CGraphics {

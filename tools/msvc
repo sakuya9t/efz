@@ -4,6 +4,9 @@
 # The repo is mounted at /work and the current directory is preserved inside it.
 # EFZ_TOOLCHAIN (default ~/tools/efz-toolchain) holds msvc71/, psdk/ and dxsdk/,
 # laid out by toolchain/setup.sh.
+# LC_ALL=ja_JP.SJIS makes wine use code page 932, as on the original developer's machine:
+# cl then reads Shift-JIS string literals whole instead of taking a 0x5c trail byte for a
+# backslash escape.
 set -e
 tool=$1; shift
 toolchain=${EFZ_TOOLCHAIN:-$HOME/tools/efz-toolchain}
@@ -13,7 +16,7 @@ case $PWD/ in
     *) echo "tools/msvc: run from inside $repo" >&2; exit 1 ;;
 esac
 exec docker run --rm -i --network none \
-    -v "$repo:/work" -v "$toolchain:/opt/tc:ro" -w "/work$sub" \
+    -v "$repo:/work" -v "$toolchain:/opt/tc:ro" -w "/work$sub" -e LC_ALL=ja_JP.SJIS \
     -e 'INCLUDE=Z:\opt\tc\msvc71\include;Z:\opt\tc\psdk\Include;Z:\opt\tc\dxsdk\Include' \
     -e 'LIB=Z:\opt\tc\msvc71\lib;Z:\opt\tc\psdk\Lib;Z:\opt\tc\dxsdk\Lib' \
     efz-msvc71 wine "/opt/tc/msvc71/bin/$tool.exe" "$@"

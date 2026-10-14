@@ -192,8 +192,9 @@ def compare(obj, sym, sec, off, size, addr, pe, image, iat, known, learned):
             problems.append(f'+{o:#x}: unsupported relocation type {typ:#x}')
             continue
         name = target['name']
-        if target['section'] == sec + 1:
-            # A label in this function's own section (jump table, case target).
+        if target['section'] == sec + 1 and target['storage'] != 2:
+            # A label in this function's own section (jump table, case target). Calls
+            # to other functions of this object are external symbols and resolve below.
             expected = addr - off + target['value']
         else:
             expected = resolve(obj, target, actual, image, base, iat, known, learned)
