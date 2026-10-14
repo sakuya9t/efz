@@ -7,9 +7,16 @@
 # LC_ALL=ja_JP.SJIS makes wine use code page 932, as on the original developer's machine:
 # cl then reads Shift-JIS string literals whole instead of taking a 0x5c trail byte for a
 # backslash escape.
+# Drive D: is build/d in the repo, so the link can write its PDB where the original's
+# was, D:\nonotaro\works\EFZ\EFZ.pdb, a path efz.exe records.
 set -e
 tool=$1; shift
 toolchain=${EFZ_TOOLCHAIN:-$HOME/tools/efz-toolchain}
+# rc.exe comes from the February 2003 Platform SDK, the rest from the compiler's bin.
+case $tool in
+    rc) bin=psdk2003/Bin ;;
+    *) bin=msvc71/bin ;;
+esac
 repo=$(cd "$(dirname "$0")/.." && pwd)
 case $PWD/ in
     "$repo"/*) sub=${PWD#"$repo"} ;;
@@ -18,5 +25,6 @@ esac
 exec docker run --rm -i --network none \
     -v "$repo:/work" -v "$toolchain:/opt/tc:ro" -w "/work$sub" -e LC_ALL=ja_JP.SJIS \
     -e 'INCLUDE=Z:\opt\tc\msvc71\include;Z:\opt\tc\psdk\Include;Z:\opt\tc\dxsdk\Include' \
-    -e 'LIB=Z:\opt\tc\msvc71\lib;Z:\opt\tc\psdk\Lib;Z:\opt\tc\dxsdk\Lib' \
-    efz-msvc71 wine "/opt/tc/msvc71/bin/$tool.exe" "$@"
+    -e 'LIB=Z:\opt\tc\msvc71\lib;Z:\opt\tc\vs2003\Lib;Z:\opt\tc\psdk2003\Lib;Z:\opt\tc\psdk\Lib;Z:\opt\tc\dxsdk\Lib' \
+    efz-msvc71 sh -c 'mkdir -p /work/build/d && ln -s /work/build/d "$WINEPREFIX/dosdevices/d:" &&
+        exec wine "$@"' sh "/opt/tc/$bin/$tool.exe" "$@"

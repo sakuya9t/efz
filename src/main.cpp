@@ -9,38 +9,42 @@ DWORD WINAPI FrameTimerThread(LPVOID param);
 // Milliseconds the frame timer sleeps per frame; raised by 1 each second the game ran
 // faster than 64 frames.
 BYTE g_frameWait = 10;
+// The scalars are zero-initialised: that puts them in .bss in declaration order, as in
+// the original (uninitialised ones would be ordered by a hash of their names). The
+// three objects with constructors come after them, still in name-hash order, which is
+// why CInput's is g_inputDev: g_input would come before g_graphics.
 // GLOBAL: 0x790100
-DWORD g_startTime;
+DWORD g_startTime = 0;
 // GLOBAL: 0x790104
-CPlayer* g_player1;
+CPlayer* g_player1 = NULL;
 // GLOBAL: 0x790108
-CPlayer* g_player2;
+CPlayer* g_player2 = NULL;
 // GLOBAL: 0x79010c
-CGame* g_game;
+CGame* g_game = NULL;
 // GLOBAL: 0x790110
-CScene* g_scenes[9];
+CScene* g_scenes[9] = { NULL };
 // GLOBAL: 0x790134
 // wParam of the last WM_ACTIVATEAPP: nonzero while the game window is active.
-WPARAM g_appActive;
+WPARAM g_appActive = 0;
 // GLOBAL: 0x790138
-DWORD g_timerThreadId;
+DWORD g_timerThreadId = 0;
 // GLOBAL: 0x79013c
 // Never signalled after startup; the timer thread waits on it as an interruptible sleep.
-HANDLE g_sleepEvent;
+HANDLE g_sleepEvent = NULL;
 // GLOBAL: 0x790140
 // Signalled by the timer thread once per frame; the main loop waits on it.
-HANDLE g_frameEvent;
+HANDLE g_frameEvent = NULL;
 // GLOBAL: 0x790144
-HANDLE g_timerThread;
+HANDLE g_timerThread = NULL;
 // GLOBAL: 0x790148
-BYTE g_scene;
+BYTE g_scene = 0;
 // GLOBAL: 0x79014c
 // Set once the scenes exist; WndProc only touches scenes while it is set.
-int g_scenesReady;
+int g_scenesReady = 0;
 // GLOBAL: 0x790150
 CGraphics g_graphics;
 // GLOBAL: 0x7b0968
-CInput g_input;
+CInput g_inputDev;
 // GLOBAL: 0x7b0b60
 CSound g_sound;
 
@@ -86,30 +90,30 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
     ShowCursor(FALSE);
 
     g_graphics.Init(hwnd, ReadConfigByte(0x20));
-    g_input.Init(hwnd);
+    g_inputDev.Init(hwnd);
     g_sound.Init(hwnd);
     if (ReadConfigByte(0x9c) > 0)
-        g_input.LoadPreset(ReadConfigByte(0x9c));
+        g_inputDev.LoadPreset(ReadConfigByte(0x9c));
     else
-        g_input.LoadBindings();
+        g_inputDev.LoadBindings();
 
-    g_game = new CGame(&g_graphics, &g_input, &g_sound);
+    g_game = new CGame(&g_graphics, &g_inputDev, &g_sound);
     g_game->LoadSounds();
     g_game->LoadEffectAnims();
     g_game->LoadEffects();
 
     g_player1 = 0;
     g_player2 = 0;
-    g_scenes[0] = new CScene0(hwnd, &g_player1, &g_player2, g_game, &g_graphics, &g_input, &g_sound);
-    g_scenes[1] = new CScene1(hwnd, &g_player1, &g_player2, g_game, &g_graphics, &g_input, &g_sound);
-    g_scenes[2] = new CScene2(hwnd, &g_player1, &g_player2, g_game, &g_graphics, &g_input, &g_sound);
-    g_scenes[3] = new CScene3(hwnd, &g_player1, &g_player2, g_game, &g_graphics, &g_input, &g_sound);
+    g_scenes[0] = new CScene0(hwnd, &g_player1, &g_player2, g_game, &g_graphics, &g_inputDev, &g_sound);
+    g_scenes[1] = new CScene1(hwnd, &g_player1, &g_player2, g_game, &g_graphics, &g_inputDev, &g_sound);
+    g_scenes[2] = new CScene2(hwnd, &g_player1, &g_player2, g_game, &g_graphics, &g_inputDev, &g_sound);
+    g_scenes[3] = new CScene3(hwnd, &g_player1, &g_player2, g_game, &g_graphics, &g_inputDev, &g_sound);
     g_scenes[4] = NULL;
-    g_scenes[5] = new CScene5(hwnd, &g_player1, &g_player2, g_game, &g_graphics, &g_input, &g_sound);
+    g_scenes[5] = new CScene5(hwnd, &g_player1, &g_player2, g_game, &g_graphics, &g_inputDev, &g_sound);
     if (1) {
-        g_scenes[6] = new CScene6(hwnd, &g_player1, &g_player2, g_game, &g_graphics, &g_input, &g_sound);
-        g_scenes[7] = new CScene7(hwnd, &g_player1, &g_player2, g_game, &g_graphics, &g_input, &g_sound);
-        g_scenes[8] = new CScene8(hwnd, &g_player1, &g_player2, g_game, &g_graphics, &g_input, &g_sound);
+        g_scenes[6] = new CScene6(hwnd, &g_player1, &g_player2, g_game, &g_graphics, &g_inputDev, &g_sound);
+        g_scenes[7] = new CScene7(hwnd, &g_player1, &g_player2, g_game, &g_graphics, &g_inputDev, &g_sound);
+        g_scenes[8] = new CScene8(hwnd, &g_player1, &g_player2, g_game, &g_graphics, &g_inputDev, &g_sound);
     } else {
         g_scenes[6] = NULL;
         g_scenes[7] = NULL;
@@ -162,7 +166,7 @@ LRESULT CALLBACK WndProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam)
         if (g_player2 != NULL)
             delete g_player2;
         g_sound.Shutdown();
-        g_input.Shutdown();
+        g_inputDev.Shutdown();
         g_graphics.Shutdown();
         TerminateThread(g_timerThread, 0);
         CloseHandle(g_frameEvent);

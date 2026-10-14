@@ -29,9 +29,16 @@ Compiler temporaries (new/delete pointers, struct returns) go below everything.
 
 When several assignments work, solve picks the one whose names come earliest in their
 candidate lists overall, so list preferred names first.
+
+Global variables without an initialiser follow the same kind of hash: an object's .bss
+holds them in a fixed order of their names, and only names that tie fall back on
+declaration order (the later declaration comes first). With --globals, rank and solve
+work on .bss offsets instead, lowest address first:
+  tools/stackorder.py --globals solve 'startTime: g_startTime g_baseTime' ...
 """
 import os
 import re
+import struct
 import subprocess
 import sys
 import tempfile
@@ -39,24 +46,59 @@ import tempfile
 REPO = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
 
-def measure(names):
-    """Return {name: frame offset} for a probe declaring `names` in that order."""
-    body = ''.join(f'    int {n};\n' for n in names)
-    body += ''.join(f'    {n} = {k};\n' for k, n in enumerate(names))
+GLOBALS = False     # --globals: rank globals by .bss offset instead of locals
+
+
+def compile_probe(source):
+    """Compile `source` and return the object file's bytes."""
     os.makedirs(os.path.join(REPO, 'build'), exist_ok=True)
     with tempfile.TemporaryDirectory(dir=os.path.join(REPO, 'build')) as tmp:
-        src = os.path.join(tmp, 'probe.cpp')
-        obj = os.path.join(tmp, 'probe.obj')
-        with open(src, 'w') as f:
-            f.write('void probe()\n{\n' + body + '}\n')
+        with open(os.path.join(tmp, 'probe.cpp'), 'w') as f:
+            f.write(source)
         rel = os.path.relpath(tmp, REPO)
         subprocess.run([os.path.join(REPO, 'tools', 'msvc'), 'cl', '/nologo', '/c', '/Od',
                         f'/Fo{rel}/probe.obj', f'{rel}/probe.cpp'],
                        cwd=REPO, check=True, stdout=subprocess.DEVNULL)
-        dis = subprocess.run(['objdump', '-d', '-M', 'intel', obj],
+        with open(os.path.join(tmp, 'probe.obj'), 'rb') as f:
+            return f.read()
+
+
+def measure(names):
+    """Return {name: frame offset} for a probe declaring `names` in that order (with
+    GLOBALS, {name: .bss offset} for globals)."""
+    if GLOBALS:
+        return measure_globals(names)
+    body = ''.join(f'    int {n};\n' for n in names)
+    body += ''.join(f'    {n} = {k};\n' for k, n in enumerate(names))
+    data = compile_probe('void probe()\n{\n' + body + '}\n')
+    with tempfile.NamedTemporaryFile(suffix='.obj') as obj:
+        obj.write(data)
+        obj.flush()
+        dis = subprocess.run(['objdump', '-d', '-M', 'intel', obj.name],
                              capture_output=True, text=True, check=True).stdout
     found = re.findall(r'mov\s+DWORD PTR \[ebp-(0x[0-9a-f]+)\],(0x[0-9a-f]+)', dis)
     return {names[int(k, 16)]: int(off, 16) for off, k in found}
+
+
+def measure_globals(names):
+    """{name: offset in .bss} for a probe defining `names` as int globals in that order."""
+    data = compile_probe(''.join(f'int {n};\n' for n in names))
+    _machine, _nsec, _ts, symtab, nsyms = struct.unpack_from('<HHIII', data, 0)
+    strtab = symtab + nsyms * 18
+    found = {}
+    i = 0
+    while i < nsyms:
+        off = symtab + i * 18
+        name = data[off:off + 8]
+        if name[:4] == b'\0\0\0\0':
+            k = strtab + struct.unpack_from('<I', name, 4)[0]
+            name = data[k:data.index(b'\0', k)]
+        value, section, _type, storage, naux = struct.unpack_from('<IhHBB', data, off + 8)
+        m = re.match(rb'\?(\w+)@@3', name)
+        if storage == 2 and section > 0 and m:
+            found[m.group(1).decode()] = value
+        i += 1 + naux
+    return found
 
 
 def rank(names):
@@ -114,6 +156,10 @@ def solve(variables, ranks=None):
 
 
 def main():
+    global GLOBALS
+    if sys.argv[1:2] == ['--globals']:
+        GLOBALS = True
+        del sys.argv[1]
     if len(sys.argv) < 3 or sys.argv[1] not in ('rank', 'solve'):
         sys.exit(__doc__)
     if sys.argv[1] == 'rank':

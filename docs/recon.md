@@ -20,16 +20,16 @@ Rich header, decoded by `tools/peinfo.py` (**observed**):
 
 | Tool | Build | Objects | Reading |
 |---|---|---|---|
-| `Utc1310_CPP_Std` | 13.10.3077 | 152 | **The game.** C++ compiled by Visual C++ .NET 2003 *Standard Edition*. Its code is in 46 of them (see *Matched objects*) |
+| `Utc1310_CPP_Std` | 13.10.3077 | 152 | **The game.** C++ compiled by Visual C++ .NET 2003 *Standard Edition*. Everything in the image comes from 71 of them (see *Matched objects*); the other 81 left nothing in it |
 | `Utc1310_C` | 13.10.3077 | 112 | Static CRT (Microsoft's prebuilt, optimised) |
 | `Utc1310_CPP` | 13.10.3077 | 4 | Static CRT C++ support |
 | `Masm710` | 7.10.3077 | 31 | CRT assembly helpers |
 | `Utc1310_C` | 13.10.4035 | 2 | `dinput.lib`'s `c_dfDIKeyboard`/`c_dfDIJoystick` data-format objects. **Observed:** the DirectX SDK's `dilib*.obj` carry this stamp, and the two tables sit in `.text` at `0x776a70` and `0x777a80` |
-| `Utc1310_CPP` | 13.10.4035 | 1 | Unidentified DirectX SDK library object |
+| `Utc1310_CPP` | 13.10.4035 | 1 | `dxguid.lib`'s `dxguid.obj`, for the DirectInput GUIDs. **Observed:** it carries this stamp |
 | `Implib710` | 4035 | 6 | `ddraw`, `dinput` and `dsound` import objects (2 per DLL). **Observed:** the DirectX SDK (Aug 2005) libs carry 4035, as do all its libs from late 2004 on |
-| `Implib710` | 2179 | 7 | 3 DLLs plus the shared null import descriptor. **Inferred:** the Platform SDK subset bundled with VS .NET 2003; the toolkit's own `kernel32.lib` carries 2179 |
-| `Implib710` | 2067 | 2 | 1 DLL, source not identified |
-| `Cvtres710` | 7.10.3052 | 1 | Resources |
+| `Implib710` | 2179 | 7 | `winmm`, `kernel32` and `gdi32`, plus the null import descriptor from `winmm.lib`, the first library. **Observed:** the February 2003 Platform SDK's `winmm.lib` and `gdi32.lib` and the toolkit's `kernel32.lib` carry 2179, and their hints match the original's |
+| `Implib710` | 2067 | 2 | `user32`. **Observed:** the original's `user32` hints equal the February 2003 Platform SDK's up to `PostQuitMessage` and are one higher from `RegisterClassA` on; the 2005 SDK's differ elsewhere (`LoadCursorA` to `PostQuitMessage`, `UpdateWindow`). **Inferred:** VS .NET 2003's own `user32.lib`, which isn't freely available; `toolchain/user32lib.py` derives a stand-in |
+| `Cvtres710` | 7.10.3052 | 1 | The icon resource. **Observed:** the .NET Framework 1.1 ships `cvtres.exe` 7.10.3052 |
 | `Linker710` | 7.10.3077 | 1 | VS .NET 2003 linker |
 
 Consequences for a byte-identical rebuild:
@@ -41,8 +41,8 @@ Consequences for a byte-identical rebuild:
 - **The free Visual C++ Toolkit 2003 1.01 reproduces it.** It ships `cl` 13.10.3077, and with
   `/Od` it generates identical code. **Observed:** `WinMain` matches byte for byte. The
   Toolkit 1.0 release is `cl` 13.10.3052; don't use it. The Standard Edition stamps
-  `Utc1310_CPP_Std` into the Rich header and the toolkit stamps `Utc1310_CPP`, so the
-  final header has to be fixed up after linking.
+  `Utc1310_CPP_Std` into each object and the toolkit stamps `Utc1310_CPP`;
+  `tools/stdstamp.py` rewrites the stamp after compiling.
 - **The build flags are `/Od /GS`, without `/EHsc`.** **Observed:** this is what matches.
   With `/EHsc`, every `new T(...)` would get an exception frame, and the original has none.
 - **Stack layout follows a hash of local-variable names, not declaration order.**
@@ -236,45 +236,75 @@ Consequences for a byte-identical rebuild:
   | `sound.cpp` | `0x40d810`–`0x40e62f` | 15 | `CSound`: DirectSound, `.wav` loading, music loop points |
   | `player.cpp` | `0x40e630`–`0x412b0f` | 49 | `CPlayer`, the base of the character classes; inline `PatternData` and `Afterimages` methods |
   | `playerobj.cpp` | `0x412b10`–`0x4136cf` | 6 | `CPlayer`'s table of 64 spawned objects and drawing them |
-  | `shiori.cpp` | `0x4136d0`–`0x43405f` | all | `CShiori` and the inline `ObjBase::SetVelocity` |
-  | `sayuri.cpp` | `0x434060`–`0x45184f` | all | `CSayuri` |
-  | `nayuki.cpp` | `0x451850`–`0x46d96f` | all | `CNayuki` |
-  | `nanase.cpp` | `0x46d970`–`0x49d60f` | all | `CNanase`; an unused destructor |
-  | `nagamori.cpp` | `0x49d610`–`0x4c04af` | all | `CNagamori` and the inline `ObjBase::AngleTo` |
-  | `mizukab.cpp` | `0x4c04b0`–`0x4e7ebf` | all | `CMizukaB` |
-  | `mizuka.cpp` | `0x4e7ec0`–`0x50c4af` | all | `CMizuka` |
-  | `misuzu.cpp` | `0x50c4b0`–`0x530bbf` | all | `CMisuzu` |
-  | `mishio.cpp` | `0x530bc0`–`0x5571ef` | all | `CMishio` |
-  | `misaki.cpp` | `0x5571f0`–`0x5736cf` | all | `CMisaki` |
-  | `mio.cpp` | `0x5736d0`–`0x59c49f` | all | `CMio` |
-  | `minagi.cpp` | `0x59c4a0`–`0x5c857f` | all | `CMinagi` |
-  | `mayu.cpp` | `0x5c8580`–`0x5e85ef` | all | `CMayu` |
-  | `makoto.cpp` | `0x5e85f0`–`0x60792f` | all | `CMakoto` |
-  | `mai.cpp` | `0x607930`–`0x62a5df` | all | `CMai` |
-  | `kaori.cpp` | `0x62a5e0`–`0x6429bf` | all | `CKaori` |
-  | `kano.cpp` | `0x6429c0`–`0x66756f` | all | `CKano` |
-  | `kanna.cpp` | `0x667570`–`0x68354f` | all | `CKanna` |
-  | `ikumi.cpp` | `0x683550`–`0x6be9bf` | all | `CIkumi`; an unused destructor |
-  | `exnanase.cpp` | `0x6be9c0`–`0x6d93ef` | all | `CEXNanase` |
-  | `ayu.cpp` | `0x6d93f0`–`0x6f2f1f` | all | `CAyu` |
-  | `akane.cpp` | `0x6f2f20`–`0x7124ff` | all | `CAkane` |
-  | `akiko.cpp` | `0x712500`–`0x73070f` | all | `CAkiko` |
-  | `nayukib.cpp` | `0x730710`–`0x750d2f` | all | `CNayukiB` |
+  | `shiori_vf6.cpp` | `0x4136d0`–`0x422d6f` | all | `Vf6`, the per-state update |
+  | `shiori.cpp` | `0x422d70`–`0x43405f` | all | `CShiori` and the inline `ObjBase::SetVelocity` |
+  | `sayuri_vf6.cpp` | `0x434060`–`0x4463df` | all | `Vf6`, the per-state update |
+  | `sayuri.cpp` | `0x4463e0`–`0x45184f` | all | `CSayuri` |
+  | `nayuki_vf6.cpp` | `0x451850`–`0x46108f` | all | `Vf6`, the per-state update |
+  | `nayuki.cpp` | `0x461090`–`0x46d96f` | all | `CNayuki` |
+  | `nanase_vf6.cpp` | `0x46d970`–`0x48a71f` | all | `Vf6`, the per-state update (and the second one it hands over to) |
+  | `nanase.cpp` | `0x48a720`–`0x49d60f` | all | `CNanase`; an unused destructor |
+  | `nagamori_vf6.cpp` | `0x49d610`–`0x4add8f` | all | `Vf6`, the per-state update |
+  | `nagamori.cpp` | `0x4add90`–`0x4c04af` | all | `CNagamori` and the inline `ObjBase::AngleTo` |
+  | `mizukab_vf6.cpp` | `0x4c04b0`–`0x4d284f` | all | `Vf6`, the per-state update |
+  | `mizukab.cpp` | `0x4d2850`–`0x4e7ebf` | all | `CMizukaB` |
+  | `mizuka_vf6.cpp` | `0x4e7ec0`–`0x4f82ff` | all | `Vf6`, the per-state update |
+  | `mizuka.cpp` | `0x4f8300`–`0x50c4af` | all | `CMizuka` |
+  | `misuzu_vf6.cpp` | `0x50c4b0`–`0x519dff` | all | `Vf6`, the per-state update |
+  | `misuzu.cpp` | `0x519e00`–`0x530bbf` | all | `CMisuzu` |
+  | `mishio_vf6.cpp` | `0x530bc0`–`0x54647f` | all | `Vf6`, the per-state update |
+  | `mishio.cpp` | `0x546480`–`0x5571ef` | all | `CMishio` |
+  | `misaki_vf6.cpp` | `0x5571f0`–`0x5678ff` | all | `Vf6`, the per-state update |
+  | `misaki.cpp` | `0x567900`–`0x5736cf` | all | `CMisaki` |
+  | `mio_vf6.cpp` | `0x5736d0`–`0x58830f` | all | `Vf6`, the per-state update |
+  | `mio.cpp` | `0x588310`–`0x59c49f` | all | `CMio` |
+  | `minagi_vf6.cpp` | `0x59c4a0`–`0x5a9f9f` | all | `Vf6`, the per-state update |
+  | `minagi.cpp` | `0x5a9fa0`–`0x5c857f` | all | `CMinagi` |
+  | `mayu_vf6.cpp` | `0x5c8580`–`0x5dddef` | all | `Vf6`, the per-state update |
+  | `mayu.cpp` | `0x5dddf0`–`0x5e85ef` | all | `CMayu` |
+  | `makoto_vf6.cpp` | `0x5e85f0`–`0x5f6d8f` | all | `Vf6`, the per-state update |
+  | `makoto.cpp` | `0x5f6d90`–`0x60792f` | all | `CMakoto` |
+  | `mai_vf6.cpp` | `0x607930`–`0x6163af` | all | `Vf6`, the per-state update |
+  | `mai.cpp` | `0x6163b0`–`0x62a5df` | all | `CMai` |
+  | `kaori_vf6.cpp` | `0x62a5e0`–`0x638d8f` | all | `Vf6`, the per-state update |
+  | `kaori.cpp` | `0x638d90`–`0x6429bf` | all | `CKaori` |
+  | `kano_vf6.cpp` | `0x6429c0`–`0x653a1f` | all | `Vf6`, the per-state update |
+  | `kano.cpp` | `0x653a20`–`0x66756f` | all | `CKano` |
+  | `kanna_vf6.cpp` | `0x667570`–`0x675c7f` | all | `Vf6`, the per-state update |
+  | `kanna.cpp` | `0x675c80`–`0x68354f` | all | `CKanna` |
+  | `ikumi_vf6.cpp` | `0x683550`–`0x6a59bf` | all | `Vf6`, the per-state update (and the second one it hands over to) |
+  | `ikumi.cpp` | `0x6a59c0`–`0x6be9bf` | all | `CIkumi`; an unused destructor |
+  | `exnanase_vf6.cpp` | `0x6be9c0`–`0x6cfbaf` | all | `Vf6`, the per-state update |
+  | `exnanase.cpp` | `0x6cfbb0`–`0x6d93ef` | all | `CEXNanase` |
+  | `ayu_vf6.cpp` | `0x6d93f0`–`0x6e812f` | all | `Vf6`, the per-state update |
+  | `ayu.cpp` | `0x6e8130`–`0x6f2f1f` | all | `CAyu` |
+  | `akane_vf6.cpp` | `0x6f2f20`–`0x7039cf` | all | `Vf6`, the per-state update |
+  | `akane.cpp` | `0x7039d0`–`0x7124ff` | all | `CAkane` |
+  | `akiko_vf6.cpp` | `0x712500`–`0x72199f` | all | `Vf6`, the per-state update |
+  | `akiko.cpp` | `0x7219a0`–`0x73070f` | all | `CAkiko` |
+  | `nayukib_vf6.cpp` | `0x730710`–`0x73e78f` | all | `Vf6`, the per-state update |
+  | `nayukib.cpp` | `0x73e790`–`0x750d2f` | all | `CNayukiB` |
   | `bg01.cpp` | `0x750d30`–`0x751a3f` | all | `CAnimBg`, the animated backgrounds' base (frames and `.pat` animations), and `CBg01`; inline `CAnimBg` constructor |
   | `bg10.cpp`, `bg12.cpp`, `bg16.cpp` | `0x751a40`–`0x75325f` | all | `CBg10`, `CBg12`, `CBg16` |
   | `scene1.cpp` | `0x753260`–`0x759f2f` | all | Scene 1, character and stage select; inline `CScene` constructor and palette fades |
   | `scene6.cpp` | `0x759f30`–`0x75db6f` | all | Scene 6, the config menu |
-  | `scene3.cpp` | `0x75db70`–`0x76c6ef` | all | Scene 3, the fight: collisions, camera, gauges, replay recording and playback |
+  | `scene3_draw.cpp` | `0x75db70`–`0x76339f` | all | The drawing helpers scene 3's `Draw` calls: digits, gauges, the fight's overlay |
+  | `scene3.cpp` | `0x7633a0`–`0x76c6ef` | all | Scene 3, the fight: collisions, camera, gauges, replay recording and playback |
   | `scene2.cpp` | `0x76c6f0`–`0x76e47f` | all | Scene 2, setting up a match: random picks, backgrounds, loading |
   | `scene8.cpp` | `0x76e480`–`0x7712ef` | all | Scene 8, the replay browser; two uncalled functions |
   | `scene5.cpp` | `0x7712f0`–`0x7758af` | all | Scene 5, the result screen; `pow(int, int)` from `<math.h>` |
   | `scene7.cpp` | `0x7758b0`–`0x775d5f` | all | Scene 7, the staff roll |
   | `scene0.cpp` | `0x775d60`–`0x77697d` | all | Scene 0, the title screen; two uncalled functions |
 
-  The boundaries come from each object's string literals, which are contiguous in
-  `.rdata`, and from where inline functions are emitted. Each character class is one
-  object: the constructor copies the character's folder name (`"shiori"`, `"sayuri"`,
-  ...) into `CPlayer`'s name field, and the objects run in reverse alphabetical order.
+  The boundaries come from where inline functions are emitted and from `.rdata`, where
+  each object's contributions follow one another: first its string literals (one
+  section, made before any code), then its floating-point constants and vtables in the
+  order its functions first use them, minus those an earlier object already supplied.
+  Each character class is two objects: the constructor copies the character's folder
+  name (`"shiori"`, `"sayuri"`, ...) into `CPlayer`'s name field, and that string comes
+  *after* `Vf6`'s constants, so `Vf6` (which precedes the constructor) was compiled
+  separately. `CScene3`'s drawing helpers before its constructor are split off the same
+  way. The characters run in reverse alphabetical order.
 - **String literals are not pooled.** **Observed:** `/GF` is off, and `WinMain`'s four
   identical `"ETENAL FIGHTER ZERO"` literals each get their own copy. (The typo is the
   original's.)
@@ -285,15 +315,36 @@ Consequences for a byte-identical rebuild:
 - **The CRT is linked statically.** **Observed:** there's no `msvcr71.dll` import. The imports
   include `CreateThread` and `Tls*`, so it is probably the multithreaded `libcmt.lib`
   (**inferred**). The CRT should be linked from VS .NET 2003's own libraries, not decompiled.
-- **Header fields** must be set after linking: the timestamp, the RSDS GUID/age/path, and
-  the Rich header.
-- **Linking the matched objects.** **Observed:** `make link` links the 46 objects in
-  address order with `/OPT:REF /OPT:NOICF`, and all 630 game functions land at their
-  original addresses. `/OPT:ICF` folds identical functions and moves nearly all of them,
-  so the original was linked without it. `/MT` (asking for `libcmt`) doesn't change the
-  game code. Still different: the CRT and library code after the game is 0x5780 bytes
-  shorter, which moves the static-initializer stubs at `0x786420`; `.rdata` is 0x468c
-  bytes against 0x79c0 and `.data` 0x23a94 against 0x23b14; and there are no resources.
+- **The link.** **Observed:** `make check` rebuilds a byte-identical `efz.exe`. What
+  it took:
+  - **`/debug /incremental:no`, objects in address order.** `/debug` makes `/opt:noref`
+    the default, which keeps the CRT functions nothing calls; with `/opt:ref` the CRT
+    part was 0x5780 bytes short. `/opt:icf` would fold identical functions. `/MT`
+    (asking for `libcmt`) doesn't change the game code.
+  - **`winmm.lib` first.** The import directory lists the DLLs in the order their
+    libraries are searched, and the thunks within a DLL follow from that too.
+  - **The PDB at `D:\nonotaro\works\EFZ\EFZ.pdb`**, made afresh so its age is 1. The
+    path is in the RSDS record and its length shifts the rest of `.rdata`.
+  - **The import libraries** listed under *Toolchain*: their hints are in the hint/name
+    table.
+  - **The icon**, `efz.exe`'s only resource: RT_ICON 1 (32×32, 256 colours) and
+    RT_GROUP_ICON 101, language 0x411, compiled by the February 2003 Platform SDK's
+    `rc.exe` and `cvtres.exe` 7.10.3052. `tools/icon.py` takes it from the original.
+  - **`.bss` order.** Globals without an initialiser are laid out in a fixed order of
+    their names (a hash, like stack locals; `tools/stackorder.py --globals`), then the
+    zero-initialised ones in declaration order, then objects with constructors, again
+    by name. `main.cpp`'s scalars are zero-initialised, and `CInput`'s global is
+    `g_inputDev` because `g_input` would come before `g_graphics`. `input.cpp` has 16
+    bytes after `g_enumInput` that no code uses, and `0x7b1290` is `scene3.cpp`'s
+    `g_fkeyHeld`.
+  - **The Rich header** lists each tool in reverse order of first use, the linker last.
+    Its key is the stub's length plus each stub byte rotated left by its offset (with
+    `e_lfanew` taken as 0) plus each entry's ID rotated left by its count. `link.exe`
+    reserves `0x20 + 8 × (entries + (key >> 5) % 3)` bytes for it, so the counts decide
+    where the PE header starts.
+  - **What the build can't reproduce** is set by `tools/postlink.py`: the timestamp,
+    the PDB's GUID, and the Rich header's count of 152 Standard Edition objects (the
+    source has 71), which also moves the PE header from `0x108` to `0x100`.
 
 ## Imports
 
@@ -475,15 +526,12 @@ Each line below is **observed**, read from the matched `WinMain` in `src/main.cp
 - **The stack-order hash function.** It's measured empirically for now; recovering it
   from `c1xx.dll` would let tools predict layouts without compiling.
 
-- **The function list comes from scanning.** `tools/inventory.py` finds functions by
-  their `push ebp; mov ebp, esp` prologues and by vtables. Every one it finds matches,
-  and the matched objects cover the game's code without gaps, but the final link is what
-  will prove nothing is missing.
-- **106 of the 152 game objects are unidentified.** The code splits into 46 objects (see
-  *Matched objects*). The others may hold only data, or code the linker dropped as
-  unreferenced.
+- **81 of the 152 game objects left no trace.** Everything in the image is accounted
+  for by 71 objects (see *Matched objects*). The others contributed no code, data or
+  constants, so nothing shows what they were: empty files, files whose code was
+  `#if`'d out, or splits of the 71 along lines the layout can't show (a file without
+  strings of its own leaves no seam in `.rdata`). `Vf6` and `Unk47c130` in
+  `nanase_vf6.cpp` (likewise Ikumi's) may have been two files, for one.
 - **Some compiler flags are unconfirmed.** `/Od /GS` without `/EHsc` is settled by
   `WinMain`. `/Zp`, `/J` and `/GR` still need a function that depends on them.
-- **Import hints are unchecked.** Byte-identical `.idata` needs import libraries whose
-  hints match the original; the SDK libraries' hints haven't been compared yet.
 - **The character `.pat` record layout** is decoded only as far as the frame boxes.

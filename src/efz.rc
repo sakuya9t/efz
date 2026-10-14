@@ -1,0 +1,5 @@
+// efz.exe's only resource: the program icon. tools/icon.py takes it from the original
+// efz.exe and writes build/efz.ico.
+LANGUAGE 0x11, 0x1      // LANG_JAPANESE, SUBLANG_DEFAULT
+
+101 ICON "build/efz.ico"

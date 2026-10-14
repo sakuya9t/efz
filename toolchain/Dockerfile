@@ -1,6 +1,6 @@
 # Runs Visual C++ .NET 2003 (cl 13.10.3077) under 32-bit wine.
-# The compiler and SDKs are not baked in: tools/setup-toolchain.sh extracts them
-# into a host directory that is mounted at /opt/msvc.
+# The compiler and SDKs are not baked in: toolchain/setup.sh extracts them into a
+# host directory that tools/msvc mounts at /opt/tc.
 FROM debian:bookworm-slim
 
 RUN dpkg --add-architecture i386 \

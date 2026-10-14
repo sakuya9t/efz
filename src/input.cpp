@@ -7,11 +7,15 @@
 // GLOBAL: 0x78998c _c_dfDIKeyboard
 // GLOBAL: 0x7899a4 _c_dfDIJoystick
 
+// Zero-initialised, like main.cpp's globals, so .bss keeps them in declaration order.
 // GLOBAL: 0x7b1278
 // The CInput whose Init is enumerating joysticks, for EnumJoysticks.
-CInput* g_enumInput;
+CInput* g_enumInput = NULL;
+// GLOBAL: 0x7b127c
+// 16 bytes no code uses (a GUID's size); only the original's layout shows them.
+BYTE g_unused7b127c[16] = { 0 };
 // GLOBAL: 0x7b128c
-BYTE g_joystickCount;
+BYTE g_joystickCount = 0;
 
 BOOL CALLBACK EnumJoysticks(LPCDIDEVICEINSTANCE instance, LPVOID context);
 

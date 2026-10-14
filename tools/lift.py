@@ -4392,14 +4392,15 @@ def gen_object(img, syms, obj):
     return results
 
 
-def add_class(header, obj):
+def add_class(header, obj, gen=None):
     """Declare a character class (or one of the other classes in objdefs.CLASSES) in efz.h
-    if it isn't there yet."""
+    if it isn't there yet. A class spread over several objects is declared from all of
+    their generated headers; `gen(o)` generates a missing one."""
     import objdefs
     entries = [(o, cls, 'CPlayer', size) for o, cls, lo, hi, vt, ctor, size in objdefs.CHARACTERS]
     entries += [(c[0], c[1], c[2], c[9]) for c in objdefs.CLASSES]
     for o, cls, base, size in entries:
-        if o != obj:
+        if cls != objdefs.OBJECTS[obj][2]:
             continue
         # a generated class block is rebuilt each time
         m = re.search(rf'^// \w+: (?:one of the character classes|derived from \w+)\.\n// SIZE: '
@@ -4408,11 +4409,18 @@ def add_class(header, obj):
             header = header[:m.start()] + header[m.end():]
         elif re.search(rf'^class {cls}\b', header, re.M):
             continue
-        gen = open(os.path.join(REPO, 'build', 'gen', obj + '.h')).read()
-        body = gen.split(f'// {cls}\n', 1)[1].split('\n\n', 1)[0]
+        parts = []
+        for o2 in sorted((o2 for o2, v in objdefs.OBJECTS.items() if v[2] == cls),
+                         key=lambda o2: objdefs.OBJECTS[o2][0]):
+            path = os.path.join(REPO, 'build', 'gen', o2 + '.h')
+            if not os.path.exists(path) and gen:
+                gen(o2)
+            text = open(path).read()
+            parts.append(text.split(f'// {cls}\n', 1)[1].split('\n\n', 1)[0])
+        body = '\n'.join(parts)
         slots = '|'.join(['Vf\\d+', 'Draw', 'Update'])
         body = re.sub(rf'^(    )(\w[^(\n]* (?:{slots})\()', r'\1virtual \2', body, flags=re.M)
-        name = obj[0].upper() + obj[1:]
+        name = o[0].upper() + o[1:]
         what = 'one of the character classes' if base == 'CPlayer' else f'derived from {base}'
         block = (f'// {name}: {what}.\n'
                  f'// SIZE: {size:#x}\n'
@@ -4464,7 +4472,7 @@ def main():
             decl = signature_text(qual, ret, params, decl=True)
             header = re.sub(rf'(// FUNCTION: {a:#x}\n[ \t]*(?:virtual )?)[^\n;]*;',
                             lambda m: m.group(1) + decl + ';', header)
-        header = add_class(header, obj)
+        header = add_class(header, obj, gen=lambda o: gen_object(img, syms, o))
         open(hpath, 'w', encoding='utf-8').write(header)
         path = os.path.join(REPO, 'src', obj + '.cpp')
         old = open(path, encoding='utf-8').read() if os.path.exists(path) else ''
@@ -4473,6 +4481,11 @@ def main():
         prefix = old[:incs[-1].end()] if incs else (
             f'// {cls} ({lo:#x}-{hi - 1:#x}).\n'
             '#include <stdlib.h>\n#include <string.h>\n#include <math.h>\n#include "efz.h"\n')
+        # keep the globals defined after the #includes (comment lines and declarations)
+        if incs:
+            kept = re.match(r'\n((?://[^\n]*\n|[^\n(/]*;\n)+)', old[incs[-1].end():])
+            if kept:
+                prefix += '\n' + kept.group(1)
         body = open(os.path.join(REPO, 'build', 'gen', obj + '.cpp')).read()
         # methods are annotated in the header
         body = re.sub(r'^// FUNCTION: 0x[0-9a-f]+\n(?=[^\n]*\b\w+::~?\w+\()', '', body, flags=re.M)

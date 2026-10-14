@@ -36,7 +36,10 @@ SHARED = {
 
 # Character classes: (object, class, first address, end address, vtable, constructor,
 # size from the scene code's `new`). Each derives from CPlayer and overrides its virtual
-# slots (named VfN after the slot).
+# slots (named VfN after the slot). Each is two objects, as in the original: <object>_vf6
+# holds Vf6 (the per-state update), which comes first, up to the constructor, and <object>
+# the rest of the class. The split shows in .rdata, where Vf6's floating-point constants
+# precede the string section the constructor's folder name is in.
 CHARACTERS = [
     ('shiori', 'CShiori', 0x4136d0, 0x434060, 0x787df8, 0x422d70, 0x3458),
     ('sayuri', 'CSayuri', 0x434060, 0x451850, 0x788138, 0x4463e0, 0x3458),
@@ -91,7 +94,8 @@ for _obj, _cls, _lo, _hi, _vt, _ctor, _size in CHARACTERS:
     for _k, _a in enumerate(_vtable(_vt)):
         if _a != CPLAYER_SLOT11:
             _names[_a] = f'{_cls}::Vf{_k}'
-    OBJECTS[_obj] = (_lo, _hi, _cls, _names)
+    OBJECTS[_obj + '_vf6'] = (_lo, _ctor, _cls, _names)
+    OBJECTS[_obj] = (_ctor, _hi, _cls, _names)
 
 # Classes other than characters: (object, class, base, first address, end address,
 # vtable, slot names, constructor, destructor, size, {address: name}, inline from).
@@ -129,11 +133,21 @@ CLASSES = [
      0x44c, {}, None),
 ]
 
+# Classes whose leading functions were a source file of their own in the original:
+# {object: (name of that file's object, address where the class's own object starts)}.
+# CScene3's drawing helpers come before the constructor, but their floating-point
+# constants precede the string section the rest of the class starts with.
+SPLIT = {'scene3': ('scene3_draw', 0x7633a0)}
+
 for _obj, _cls, _base, _lo, _hi, _vt, _slots, _ctor, _dtor, _size, _extra, _inl in CLASSES:
     _names = {_ctor: f'{_cls}::{_cls}', _dtor: f'{_cls}::~{_cls}'}
     for _k, _a in enumerate(_vtable(_vt, len(_slots))):
         _names[_a] = f'{_cls}::{_slots[_k]}'
     _names.update(_extra)
+    if _obj in SPLIT:
+        _first, _lo2 = SPLIT[_obj]
+        OBJECTS[_first] = (_lo, _lo2, _cls, _names)
+        _lo = _lo2
     OBJECTS[_obj] = (_lo, _hi, _cls, _names)
 
 # Inline functions, emitted after the object's other functions: they are defined in a
