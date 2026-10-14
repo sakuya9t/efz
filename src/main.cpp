@@ -89,9 +89,9 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
     g_input.Init(hwnd);
     g_sound.Init(hwnd);
     if (ReadConfigByte(0x9c) > 0)
-        g_input.Unk40d460(ReadConfigByte(0x9c));
+        g_input.LoadPreset(ReadConfigByte(0x9c));
     else
-        g_input.Unk40d140();
+        g_input.LoadBindings();
 
     g_game = new CGame(&g_graphics, &g_input, &g_sound);
     g_game->LoadSounds();

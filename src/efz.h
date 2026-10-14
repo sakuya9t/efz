@@ -11,6 +11,8 @@
 
 #include <windows.h>
 #include <ddraw.h>
+#define DIRECTINPUT_VERSION 0x0700
+#include <dinput.h>
 #include <string.h>
 
 // A frame of an effect animation, read from system\effect\effect.pat.
@@ -307,27 +309,46 @@ public:
 // FUNCTION: 0x40c590
 RECT MakeRect(int x, int y, int width, int height);
 
-// DirectInput wrapper.
+// DirectInput wrapper: the keyboard and up to two joysticks, read as 8 bindings per
+// player.
 class CInput {
 public:
     // FUNCTION: 0x40c5e0
+    // Default bindings: player 1 J G N Y and Q W E D, player 2 the arrows and P @ [ ].
     CInput();
     // FUNCTION: 0x40c990
     ~CInput();
     // FUNCTION: 0x40c6f0
-    void Init(HWND hWnd);
+    BOOL Init(HWND hWnd);
     // FUNCTION: 0x40c880
     // Unacquires and releases the DirectInput devices.
     void Shutdown();
-    // FUNCTION: 0x40d460
-    void Unk40d460(int value);
-    // FUNCTION: 0x40d140
-    void Unk40d140();
+    // FUNCTION: 0x40caa0
+    // Shows a message and closes the window.
+    void Fail();
     // FUNCTION: 0x40cd00
     // Returns a player's controls: bits 0-3 right, left, down, up; bits 4-7 the buttons.
     BYTE GetInput(BYTE player);
+    // FUNCTION: 0x40d140
+    // Loads the bindings from key.ini.
+    void LoadBindings();
+    // FUNCTION: 0x40d460
+    // Loads the bindings from preset `set` of key.ini (39 bytes each).
+    void LoadPreset(int set);
 
-    char unk[0x1f8]; // TODO: size and layout
+    char m_keyState[0x100];       // from the keyboard's GetDeviceState
+    char unk100[0x20];
+    DIJOYSTATE m_joyState[2];
+    // Per player: right, left, down, up, then the four buttons. The low byte is a key
+    // (DIK_*) or joystick code; the high byte is the device: 0 keyboard, 1 or 2 a
+    // joystick, whose codes 0x10-0x13 are up, down, left and right on the stick and
+    // lower codes its buttons.
+    short m_bindings[2][8];
+    HWND m_hwnd;
+    IDirectInput7* m_di;
+    IDirectInputDevice7* m_keyboard;
+    IDirectInputDevice7* m_joysticks[2];
+    int unk1f4;
 };
 
 // DirectSound wrapper.
