@@ -191,7 +191,23 @@ Consequences for a byte-identical rebuild:
   | `sound.cpp` | `0x40d810`–`0x40e62f` | 15 | `CSound`: DirectSound, `.wav` loading, music loop points |
   | `player.cpp` | `0x40e630`–`0x412b0f` | 49 | `CPlayer`, the base of the character classes; inline `PatternData` and `Afterimages` methods |
   | `playerobj.cpp` | `0x412b10`–`0x4136cf` | 6 | `CPlayer`'s table of 64 spawned objects and drawing them |
-  | `shiori.cpp` | `0x4136d0`–`0x43405f` | 13 of 14 | `CShiori`, the first character class; `Vf6` still differs |
+  | `shiori.cpp` | `0x4136d0`–`0x43405f` | 13 of 14 | `CShiori`; `Vf6` still differs |
+  | `sayuri.cpp` | `0x434060`–`0x45184f` | 11 of 13 | `CSayuri`; `Vf5`, `Vf7` still differ |
+  | `nayuki.cpp` | `0x451850`–`0x46d96f` | 10 of 13 | `CNayuki`; `Vf6`, `Vf5`, `Vf7` still differ |
+  | `mizukab.cpp` | `0x4c04b0`–`0x4e7ebf` | 12 of 13 | `CMizukaB`; `Vf5` still differs |
+  | `mizuka.cpp` | `0x4e7ec0`–`0x50c4af` | 11 of 13 | `CMizuka`; `Vf5`, `Vf7` still differ |
+  | `misuzu.cpp` | `0x50c4b0`–`0x530bbf` | 13 | `CMisuzu` |
+  | `mishio.cpp` | `0x530bc0`–`0x5571ef` | 13 | `CMishio` |
+  | `misaki.cpp` | `0x5571f0`–`0x5736cf` | 13 | `CMisaki` |
+  | `mio.cpp` | `0x5736d0`–`0x59c49f` | 13 | `CMio` |
+  | `minagi.cpp` | `0x59c4a0`–`0x5c857f` | 13 | `CMinagi` |
+  | `mayu.cpp` | `0x5c8580`–`0x5e85ef` | 13 | `CMayu` |
+  | `makoto.cpp` | `0x5e85f0`–`0x60792f` | 12 of 13 | `CMakoto`; `Vf7` still differs |
+  | `mai.cpp` | `0x607930`–`0x62a5df` | 10 of 13 | `CMai`; `Vf6`, `Vf5`, `Vf7` still differ |
+  | `kanna.cpp` | `0x667570`–`0x68354f` | 11 of 13 | `CKanna`; `Vf6`, `Vf5` still differ |
+  | `ayu.cpp` | `0x6d93f0`–`0x6f2f1f` | 13 | `CAyu` |
+  | `akane.cpp` | `0x6f2f20`–`0x7124ff` | 11 of 13 | `CAkane`; `Vf6`, `Vf7` still differ |
+  | `akiko.cpp` | `0x712500`–`0x73070f` | 12 of 13 | `CAkiko`; `Vf6` still differs |
 
   The boundaries come from each object's string literals, which are contiguous in
   `.rdata`, and from where inline functions are emitted. Each character class is one

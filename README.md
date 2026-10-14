@@ -5,11 +5,11 @@ C++ source that the original compiler, Visual C++ .NET 2003, builds back into a 
 `efz.exe` (SHA-256 `3a1616d6…6dd66481`). The recovered source is then the base for a maintained,
 modernised version of the game.
 
-**Status: the platform layer and the `CPlayer` base class match.** All game code from
-`0x401000` to `0x4136cf` (the first 10 of the 152 object files, plus their init stubs at
-the end of `.text`) builds byte for byte: 192 functions. That is 30% of the 630 game
-functions but only 2% of the game code's bytes, because the character classes that
-follow are huge.
+**Status: the platform layer, the `CPlayer` base class and most character classes
+match.** All game code from `0x401000` to `0x4136cf` builds byte for byte, and 17 of
+the 22 character classes are lifted, 7 of them completely. In all, 396 of the 630 game
+functions and 48% of the game code's bytes match. `tools/progress.py` prints the current
+numbers.
 
 | Source | What it is |
 |---|---|
@@ -23,9 +23,7 @@ follow are huge.
 | `src/sound.cpp` | `CSound`: DirectSound buffers, `.wav` loading, music loop points |
 | `src/player.cpp` | `CPlayer`, the base of the character classes: movement, guard and damage, the `.pal`/`.dat`/`.pat`/`.wav` loaders, round reset |
 | `src/playerobj.cpp` | `CPlayer`'s table of 64 spawned objects (projectiles and the like) |
-| `src/shiori.cpp` | `CShiori`, the first character class (one function still differs) |
-
-`tools/progress.py` prints the current numbers.
+| `src/<character>.cpp` | One character class each (`shiori.cpp`, `sayuri.cpp`, ...): see docs/recon.md for which functions still differ |
 
 ## Game files
 
@@ -94,6 +92,7 @@ that container; `tools/msvc <tool> <args>` runs any of the tools.
 | `tools/lift.py` | Lifts a function (`body 0xADDR`) or an object (`write <obj>`) to C++ |
 | `tools/objdefs.py` | Object ranges, class names and signatures for the lifter |
 | `tools/objcheck.sh` | Regenerate, compile and diff objects |
+| `tools/batch.sh` | `objcheck.sh` over many objects, one summary line each |
 | `tools/lifttest.py` | Relift the matched functions and check they still match |
 | `tools/objorder.py` | Function order in `.obj` files as the linker will lay them out |
 | `tools/msvc` | Run `cl`, `link` or `lib` in the container |
@@ -121,7 +120,7 @@ See [docs/recon.md](docs/recon.md). In short:
    1. platform layer and file loaders. *Done:* `0x401000`–`0x40e62f`, 8 objects.
    2. shared base classes. *Done:* `CPlayer`, `0x40e630`–`0x4136cf`, 2 objects.
    3. effects and projectiles
-   4. the 22 character classes. *In progress:* Shiori 13 of 14 functions.
+   4. the 22 character classes. *In progress:* 17 lifted, 7 matching completely.
 4. **Byte-identical exe.** Link with the original CRT and libraries, set the post-link header
    fields (timestamp, RSDS record, Rich header), and check the SHA-256 in CI.
 5. **Modern fork.** Starting from the matched source:

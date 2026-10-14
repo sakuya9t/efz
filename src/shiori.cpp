@@ -6127,36 +6127,28 @@ void CShiori::Vf5()
     }
     if (*(WORD*)((char*)this + 8) == 0xa8 && *(WORD*)((char*)this + 0xc) < 6) {
         if (*(WORD*)(*(char**)*(char**)((char*)this + 0x78) + 8) != 0xc8 && *(WORD*)(*(char**)*(char**)((char*)this + 0x78) + 8) != 0xcc && *(WORD*)(*(char**)*(char**)((char*)this + 0x78) + 8) < 0xfa && *(double*)(*(char**)*(char**)((char*)this + 0x78) + 0x28) == 0.0 && *(short*)(*(char**)*(char**)((char*)this + 0x78) + 0x16c) == 0) {
-            if (v10 < 40.0) {
-                if ((double)(WORD)CPlayer::Unk4108a0(0, 0x64) < *(float*)((char*)this + 0xa8) * 3.0f) {
-                    *((char*)this + 0x18a) = 1;
-                    *((char*)this + 0x189) = 1;
-                    return;
-                }
+            if (v10 < 40.0 && (double)(WORD)CPlayer::Unk4108a0(0, 0x64) < *(float*)((char*)this + 0xa8) * 3.0f) {
+                *((char*)this + 0x18a) = 1;
+                *((char*)this + 0x189) = 1;
+                return;
             }
-            if (v10 < 60.0) {
-                if ((double)(WORD)CPlayer::Unk4108a0(0, 0x64) < *(float*)((char*)this + 0xa8) * 2.0) {
-                    *((char*)this + 0x18a) = 1;
-                    *((char*)this + 0x189) = 0;
-                    return;
-                }
+            if (v10 < 60.0 && (double)(WORD)CPlayer::Unk4108a0(0, 0x64) < *(float*)((char*)this + 0xa8) * 2.0) {
+                *((char*)this + 0x18a) = 1;
+                *((char*)this + 0x189) = 0;
+                return;
             }
         }
         if ((*(WORD*)(*(char**)*(char**)((char*)this + 0x78) + 8) == 0xc9 || *(WORD*)(*(char**)*(char**)((char*)this + 0x78) + 8) == 0xca || *(WORD*)(*(char**)*(char**)((char*)this + 0x78) + 8) == 0xcd) && *(WORD*)(*(char**)*(char**)((char*)this + 0x78) + 8) < 0xfa && *(double*)(*(char**)*(char**)((char*)this + 0x78) + 0x28) == 0.0 && *(short*)(*(char**)*(char**)((char*)this + 0x78) + 0x16c) == 0) {
-            if (v10 > 20.0 && v10 < 60.0) {
-                if ((double)(WORD)CPlayer::Unk4108a0(0, 0x64) < *(float*)((char*)this + 0xa8) * 2.0) {
-                    *((char*)this + 0x18b) = 1;
-                    *((char*)this + 0x189) = 1;
-                    *((char*)this + 0x188) = 0;
-                    return;
-                }
+            if (v10 > 20.0 && v10 < 60.0 && (double)(WORD)CPlayer::Unk4108a0(0, 0x64) < *(float*)((char*)this + 0xa8) * 2.0) {
+                *((char*)this + 0x18b) = 1;
+                *((char*)this + 0x189) = 1;
+                *((char*)this + 0x188) = 0;
+                return;
             }
-            if (v10 > 60.0 && v10 < 80.0) {
-                if ((double)(WORD)CPlayer::Unk4108a0(0, 0x64) < *(float*)((char*)this + 0xa8) * 2.0) {
-                    *((char*)this + 0x18a) = 3;
-                    *((char*)this + 0x189) = 1;
-                    return;
-                }
+            if (v10 > 60.0 && v10 < 80.0 && (double)(WORD)CPlayer::Unk4108a0(0, 0x64) < *(float*)((char*)this + 0xa8) * 2.0) {
+                *((char*)this + 0x18a) = 3;
+                *((char*)this + 0x189) = 1;
+                return;
             }
         }
     }
@@ -6205,75 +6197,61 @@ void CShiori::Vf5()
             *(int*)((char*)this + 0x3114) = 3;
             return;
         }
-        if (*(double*)((char*)this + 0x28) - *(double*)(*(char**)*(char**)((char*)this + 0x78) + 0x28) < 0.0 && *(double*)((char*)this + 0x28) - *(double*)(*(char**)*(char**)((char*)this + 0x78) + 0x28) > -40.0 && v10 < 80.0) {
-            if ((double)(WORD)CPlayer::Unk4108a0(0, 0x64) < *(float*)((char*)this + 0xa8) * 5.0f) {
-                *((char*)this + 0x18a) = 1;
-                return;
-            }
-        }
-        if (*(double*)((char*)this + 0x28) - *(double*)(*(char**)*(char**)((char*)this + 0x78) + 0x28) > -100.0 && *(double*)((char*)this + 0x28) - *(double*)(*(char**)*(char**)((char*)this + 0x78) + 0x28) < -50.0 && v10 < 100.0) {
-            if ((double)(WORD)CPlayer::Unk4108a0(0, 0x64) < *(float*)((char*)this + 0xa8) * 5.0f) {
-                *((char*)this + 0x18b) = 1;
-                return;
-            }
-        }
-        if (*(double*)((char*)this + 0x28) - *(double*)(*(char**)*(char**)((char*)this + 0x78) + 0x28) > -100.0 && *(double*)((char*)this + 0x28) - *(double*)(*(char**)*(char**)((char*)this + 0x78) + 0x28) < -50.0 && v10 < 120.0) {
-            if ((double)(WORD)CPlayer::Unk4108a0(0, 0x64) < *(float*)((char*)this + 0xa8) * 5.0f) {
-                *((char*)this + 0x18c) = 1;
-                *((char*)this + 0x189) = 0;
-                return;
-            }
-        }
-        if (x8 < 50.0 && v10 < 100.0) {
-            if ((double)(WORD)CPlayer::Unk4108a0(0, 0x64) < *(float*)((char*)this + 0xa8) * 2.0) {
-                *(short*)((char*)this + 0x262) = 0x16;
-                return;
-            }
-        }
-    }
-    if ((*(WORD*)(*(char**)*(char**)((char*)this + 0x78) + 8) == 0xa8 || *(WORD*)(*(char**)*(char**)((char*)this + 0x78) + 8) == 0xa9 || *(WORD*)(*(char**)*(char**)((char*)this + 0x78) + 8) == 0xaa) && *(double*)((char*)this + 0x28) == 0.0) {
-        if ((double)(WORD)CPlayer::Unk4108a0(0, 0x64) < 15.0f * *(float*)((char*)this + 0xa8) && *(int*)((char*)this + 0x3114) != 2 && *(short*)(*(char**)*(char**)((char*)this + 0x78) + 0x14c) == 0) {
-            *(int*)((char*)this + 0x3110) = (WORD)CPlayer::Unk4108a0(0, 0x64);
-            if (*(int*)((char*)this + 0x3110) < 3 && *(double*)((char*)this + 0x118) > 500.0) {
-                *(short*)((char*)this + 0x262) = 0x16;
-                return;
-            }
-            if (*(int*)((char*)this + 0x3110) < 4 && *(double*)((char*)this + 0x118) > 500.0) {
-                *(short*)((char*)this + 0x262) = 0xc;
-                return;
-            }
-            if (*(int*)((char*)this + 0x3110) < 0x11 && *(int*)((char*)this + 0x3110) > 0xc && *(short*)((char*)this + 0x148) >= 0x3e8) {
-                *(short*)((char*)this + 0x262) = (WORD)CPlayer::Unk4108a0(0, 3) + 0x78;
-                return;
-            }
-            if (*(int*)((char*)this + 0x3110) > 0x55) {
-                *(int*)((char*)this + 0x3114) = 2;
-                return;
-            }
-        }
-    }
-    if ((*(WORD*)(*(char**)*(char**)((char*)this + 0x78) + 8) == 0xa8 || *(WORD*)(*(char**)*(char**)((char*)this + 0x78) + 8) == 0xa9 || *(WORD*)(*(char**)*(char**)((char*)this + 0x78) + 8) == 0xaa) && *(double*)((char*)this + 0x28) < 0.0) {
-        if ((double)(WORD)CPlayer::Unk4108a0(0, 0x64) < 15.0f * *(float*)((char*)this + 0xa8) && *(int*)((char*)this + 0x3114) != 2 && *(short*)(*(char**)*(char**)((char*)this + 0x78) + 0x14c) == 0) {
-            *(int*)((char*)this + 0x3110) = (WORD)CPlayer::Unk4108a0(0, 0x64);
-            if (*(int*)((char*)this + 0x3110) < 3 && *(double*)((char*)this + 0x118) > 500.0) {
-                *(short*)((char*)this + 0x262) = 0x16;
-                return;
-            }
-            if (*(int*)((char*)this + 0x3110) < 0x11 && *(int*)((char*)this + 0x3110) > 0xc && *(short*)((char*)this + 0x148) >= 0x3e8) {
-                *(short*)((char*)this + 0x262) = (WORD)CPlayer::Unk4108a0(0, 3) + 0x78;
-                return;
-            }
-            if (*(int*)((char*)this + 0x3110) > 0x55) {
-                *(int*)((char*)this + 0x3114) = 2;
-                return;
-            }
-        }
-    }
-    if (*(double*)((char*)this + 0x118) > 500.0 || *((char*)this + 0x120) > 0) {
-        if ((double)(WORD)CPlayer::Unk4108a0(0, 0x64) < 8.0f * *(float*)((char*)this + 0xa8) && *(WORD*)(*(char**)*(char**)((char*)this + 0x78) + 8) > 0x95 && *(WORD*)(*(char**)*(char**)((char*)this + 0x78) + 8) < 0x9d && (*(WORD*)((char*)this + 8) == 0xfa || *(WORD*)((char*)this + 8) == 0xfb || *(WORD*)((char*)this + 8) == 0xfc || *(WORD*)((char*)this + 8) == 0x10e || *(WORD*)((char*)this + 8) == 0x10f || *(WORD*)((char*)this + 8) == 0x110)) {
-            *(short*)((char*)this + 0x262) = 0x34;
+        if (*(double*)((char*)this + 0x28) - *(double*)(*(char**)*(char**)((char*)this + 0x78) + 0x28) < 0.0 && *(double*)((char*)this + 0x28) - *(double*)(*(char**)*(char**)((char*)this + 0x78) + 0x28) > -40.0 && v10 < 80.0 && (double)(WORD)CPlayer::Unk4108a0(0, 0x64) < *(float*)((char*)this + 0xa8) * 5.0f) {
+            *((char*)this + 0x18a) = 1;
             return;
         }
+        if (*(double*)((char*)this + 0x28) - *(double*)(*(char**)*(char**)((char*)this + 0x78) + 0x28) > -100.0 && *(double*)((char*)this + 0x28) - *(double*)(*(char**)*(char**)((char*)this + 0x78) + 0x28) < -50.0 && v10 < 100.0 && (double)(WORD)CPlayer::Unk4108a0(0, 0x64) < *(float*)((char*)this + 0xa8) * 5.0f) {
+            *((char*)this + 0x18b) = 1;
+            return;
+        }
+        if (*(double*)((char*)this + 0x28) - *(double*)(*(char**)*(char**)((char*)this + 0x78) + 0x28) > -100.0 && *(double*)((char*)this + 0x28) - *(double*)(*(char**)*(char**)((char*)this + 0x78) + 0x28) < -50.0 && v10 < 120.0 && (double)(WORD)CPlayer::Unk4108a0(0, 0x64) < *(float*)((char*)this + 0xa8) * 5.0f) {
+            *((char*)this + 0x18c) = 1;
+            *((char*)this + 0x189) = 0;
+            return;
+        }
+        if (x8 < 50.0 && v10 < 100.0 && (double)(WORD)CPlayer::Unk4108a0(0, 0x64) < *(float*)((char*)this + 0xa8) * 2.0) {
+            *(short*)((char*)this + 0x262) = 0x16;
+            return;
+        }
+    }
+    if ((*(WORD*)(*(char**)*(char**)((char*)this + 0x78) + 8) == 0xa8 || *(WORD*)(*(char**)*(char**)((char*)this + 0x78) + 8) == 0xa9 || *(WORD*)(*(char**)*(char**)((char*)this + 0x78) + 8) == 0xaa) && *(double*)((char*)this + 0x28) == 0.0 && (double)(WORD)CPlayer::Unk4108a0(0, 0x64) < 15.0f * *(float*)((char*)this + 0xa8) && *(int*)((char*)this + 0x3114) != 2 && *(short*)(*(char**)*(char**)((char*)this + 0x78) + 0x14c) == 0) {
+        *(int*)((char*)this + 0x3110) = (WORD)CPlayer::Unk4108a0(0, 0x64);
+        if (*(int*)((char*)this + 0x3110) < 3 && *(double*)((char*)this + 0x118) > 500.0) {
+            *(short*)((char*)this + 0x262) = 0x16;
+            return;
+        }
+        if (*(int*)((char*)this + 0x3110) < 4 && *(double*)((char*)this + 0x118) > 500.0) {
+            *(short*)((char*)this + 0x262) = 0xc;
+            return;
+        }
+        if (*(int*)((char*)this + 0x3110) < 0x11 && *(int*)((char*)this + 0x3110) > 0xc && *(short*)((char*)this + 0x148) >= 0x3e8) {
+            *(short*)((char*)this + 0x262) = (WORD)CPlayer::Unk4108a0(0, 3) + 0x78;
+            return;
+        }
+        if (*(int*)((char*)this + 0x3110) > 0x55) {
+            *(int*)((char*)this + 0x3114) = 2;
+            return;
+        }
+    }
+    if ((*(WORD*)(*(char**)*(char**)((char*)this + 0x78) + 8) == 0xa8 || *(WORD*)(*(char**)*(char**)((char*)this + 0x78) + 8) == 0xa9 || *(WORD*)(*(char**)*(char**)((char*)this + 0x78) + 8) == 0xaa) && *(double*)((char*)this + 0x28) < 0.0 && (double)(WORD)CPlayer::Unk4108a0(0, 0x64) < 15.0f * *(float*)((char*)this + 0xa8) && *(int*)((char*)this + 0x3114) != 2 && *(short*)(*(char**)*(char**)((char*)this + 0x78) + 0x14c) == 0) {
+        *(int*)((char*)this + 0x3110) = (WORD)CPlayer::Unk4108a0(0, 0x64);
+        if (*(int*)((char*)this + 0x3110) < 3 && *(double*)((char*)this + 0x118) > 500.0) {
+            *(short*)((char*)this + 0x262) = 0x16;
+            return;
+        }
+        if (*(int*)((char*)this + 0x3110) < 0x11 && *(int*)((char*)this + 0x3110) > 0xc && *(short*)((char*)this + 0x148) >= 0x3e8) {
+            *(short*)((char*)this + 0x262) = (WORD)CPlayer::Unk4108a0(0, 3) + 0x78;
+            return;
+        }
+        if (*(int*)((char*)this + 0x3110) > 0x55) {
+            *(int*)((char*)this + 0x3114) = 2;
+            return;
+        }
+    }
+    if ((*(double*)((char*)this + 0x118) > 500.0 || *((char*)this + 0x120) > 0) && (double)(WORD)CPlayer::Unk4108a0(0, 0x64) < 8.0f * *(float*)((char*)this + 0xa8) && *(WORD*)(*(char**)*(char**)((char*)this + 0x78) + 8) > 0x95 && *(WORD*)(*(char**)*(char**)((char*)this + 0x78) + 8) < 0x9d && (*(WORD*)((char*)this + 8) == 0xfa || *(WORD*)((char*)this + 8) == 0xfb || *(WORD*)((char*)this + 8) == 0xfc || *(WORD*)((char*)this + 8) == 0x10e || *(WORD*)((char*)this + 8) == 0x10f || *(WORD*)((char*)this + 8) == 0x110)) {
+        *(short*)((char*)this + 0x262) = 0x34;
+        return;
     }
     if (*(int*)((char*)this + 0x3114) > 0 && *(WORD*)((char*)this + 8) > 0x31 && *(WORD*)((char*)this + 8) < 0x9e) {
         *(int*)((char*)this + 0x3114) = 0;
@@ -6355,378 +6333,376 @@ void CShiori::Vf5()
         }
         return;
     }
-    if (*(int*)((char*)this + 0x168) > 1 && *(short*)((char*)this + 0x14a) == 0) {
-        if ((double)(WORD)CPlayer::Unk4108a0(0, 0x64) < *(float*)((char*)this + 0xa8) * 25.0f && *(int*)((char*)this + 0x3114) != 1 && *(int*)((char*)this + 0x3114) != 2) {
-            *(int*)((char*)this + 0x3110) = (WORD)CPlayer::Unk4108a0(0, 0x3e8);
-            if (*(WORD*)((char*)this + 8) == 0xc8) {
-                if (*(double*)(*(char**)*(char**)((char*)this + 0x78) + 0x28) < 0.0 && *(int*)((char*)this + 0x3110) < 0x12c) {
-                    *((char*)this + 0x18b) = 1;
-                    *((char*)this + 0x189) = 0;
-                    return;
+    if (*(int*)((char*)this + 0x168) > 1 && *(short*)((char*)this + 0x14a) == 0 && (double)(WORD)CPlayer::Unk4108a0(0, 0x64) < *(float*)((char*)this + 0xa8) * 25.0f && *(int*)((char*)this + 0x3114) != 1 && *(int*)((char*)this + 0x3114) != 2) {
+        *(int*)((char*)this + 0x3110) = (WORD)CPlayer::Unk4108a0(0, 0x3e8);
+        if (*(WORD*)((char*)this + 8) == 0xc8) {
+            if (*(double*)(*(char**)*(char**)((char*)this + 0x78) + 0x28) < 0.0 && *(int*)((char*)this + 0x3110) < 0x12c) {
+                *((char*)this + 0x18b) = 1;
+                *((char*)this + 0x189) = 0;
+                return;
+            }
+            if (v10 < 50.0 && *(int*)((char*)this + 0x3110) < 0x190) {
+                *((char*)this + 0x18a) = 1;
+                *((char*)this + 0x189) = 0;
+                if (*(int*)((char*)this + 0x168) == 2 && (WORD)CPlayer::Unk4108a0(0, 0x64) < 0x1e) {
+                    *((char*)this + 0x18c) = 1;
+                    *((char*)this + 0x189) = 1;
                 }
-                if (v10 < 50.0 && *(int*)((char*)this + 0x3110) < 0x190) {
-                    *((char*)this + 0x18a) = 1;
-                    *((char*)this + 0x189) = 0;
-                    if (*(int*)((char*)this + 0x168) == 2 && (WORD)CPlayer::Unk4108a0(0, 0x64) < 0x1e) {
-                        *((char*)this + 0x18c) = 1;
-                        *((char*)this + 0x189) = 1;
-                    }
-                    return;
+                return;
+            }
+            if (v10 < 125.0 && *(int*)((char*)this + 0x3110) > 0x18f && *(int*)((char*)this + 0x3110) < 0x2bc) {
+                *((char*)this + 0x18b) = 1;
+                *((char*)this + 0x189) = 0;
+                return;
+            }
+            if (*(int*)((char*)this + 0x3110) > 0x3ca) {
+                *(int*)((char*)this + 0x3114) = 4;
+                *((char*)this + 0x189) = -1;
+                *((char*)this + 0x188) = (WORD)CPlayer::Unk4108a0(0, 2) - 1;
+                return;
+            }
+            if (*(int*)((char*)this + 0x3110) > 0x2bb) {
+                *(int*)((char*)this + 0x3114) = 1;
+                if ((WORD)CPlayer::Unk4108a0(0, 2) == 0) {
+                    *(int*)((char*)this + 0x3114) = 6;
                 }
-                if (v10 < 125.0 && *(int*)((char*)this + 0x3110) > 0x18f && *(int*)((char*)this + 0x3110) < 0x2bc) {
-                    *((char*)this + 0x18b) = 1;
-                    *((char*)this + 0x189) = 0;
-                    return;
+                if ((WORD)CPlayer::Unk4108a0(0, 2) == 0) {
+                    *(int*)((char*)this + 0x3114) = 8;
                 }
-                if (*(int*)((char*)this + 0x3110) > 0x3ca) {
-                    *(int*)((char*)this + 0x3114) = 4;
-                    *((char*)this + 0x189) = -1;
-                    *((char*)this + 0x188) = (WORD)CPlayer::Unk4108a0(0, 2) - 1;
-                    return;
-                }
-                if (*(int*)((char*)this + 0x3110) > 0x2bb) {
-                    *(int*)((char*)this + 0x3114) = 1;
-                    if ((WORD)CPlayer::Unk4108a0(0, 2) == 0) {
-                        *(int*)((char*)this + 0x3114) = 6;
-                    }
-                    if ((WORD)CPlayer::Unk4108a0(0, 2) == 0) {
+                return;
+            }
+        }
+        if (*(WORD*)((char*)this + 8) == 0xc9) {
+            if (*(double*)(*(char**)*(char**)((char*)this + 0x78) + 0x28) < 0.0 && *(int*)((char*)this + 0x3110) < 0x12c && *(int*)((char*)this + 0x168) == 3) {
+                *(short*)((char*)this + 0x262) = (WORD)CPlayer::Unk4108a0(0, 2) + 0x14;
+                return;
+            }
+            if (*(double*)(*(char**)*(char**)((char*)this + 0x78) + 0x28) < 0.0 && *(int*)((char*)this + 0x3110) > 0x12b && *(int*)((char*)this + 0x3110) < 0x140 && *(short*)((char*)this + 0x148) >= 0x3e8) {
+                *(short*)((char*)this + 0x262) = (WORD)CPlayer::Unk4108a0(0, 3) + 0x78;
+                return;
+            }
+            if (*(double*)(*(char**)*(char**)((char*)this + 0x78) + 0x28) < 0.0 && *(int*)((char*)this + 0x3110) > 0x140 && *(int*)((char*)this + 0x3110) < 0x258 && *(int*)((char*)this + 0x168) == 3) {
+                *((char*)this + 0x188) = *((char*)this + 0x50);
+                *((char*)this + 0x189) = -1;
+                return;
+            }
+            if (*(int*)((char*)this + 0x3110) < 0xc8) {
+                *((char*)this + 0x18c) = 1;
+                *((char*)this + 0x189) = 1;
+                return;
+            }
+            if (*(int*)((char*)this + 0x3110) > 0xc8 && *(int*)((char*)this + 0x3110) < 0x1c2 && v10 < 90.0) {
+                *((char*)this + 0x18b) = 1;
+                *((char*)this + 0x189) = 0;
+                return;
+            }
+            if (*(double*)(*(char**)*(char**)((char*)this + 0x78) + 0x28) < 0.0 && *(int*)((char*)this + 0x3110) > 0x1c2 && *(int*)((char*)this + 0x3110) < 0x2bc) {
+                *((char*)this + 0x18c) = 1;
+                return;
+            }
+            if (*(int*)((char*)this + 0x3110) > 0x384) {
+                *(int*)((char*)this + 0x3114) = 4;
+                *((char*)this + 0x189) = -1;
+                *((char*)this + 0x188) = (WORD)CPlayer::Unk4108a0(0, 2) - 1;
+                return;
+            }
+            if (*(int*)((char*)this + 0x3110) > 0x2bc) {
+                *(int*)((char*)this + 0x3114) = 1;
+                if ((WORD)CPlayer::Unk4108a0(0, 1) == 0) {
+                    *(int*)((char*)this + 0x3114) = 6;
+                    if (v10 > 80.0) {
                         *(int*)((char*)this + 0x3114) = 8;
                     }
                     return;
                 }
             }
-            if (*(WORD*)((char*)this + 8) == 0xc9) {
-                if (*(double*)(*(char**)*(char**)((char*)this + 0x78) + 0x28) < 0.0 && *(int*)((char*)this + 0x3110) < 0x12c && *(int*)((char*)this + 0x168) == 3) {
-                    *(short*)((char*)this + 0x262) = (WORD)CPlayer::Unk4108a0(0, 2) + 0x14;
+        }
+        if (*(WORD*)((char*)this + 8) == 0xca) {
+            if (*(double*)(*(char**)*(char**)((char*)this + 0x78) + 0x28) < 0.0 && *(int*)((char*)this + 0x3110) > 0x12b && *(int*)((char*)this + 0x3110) < 0x140) {
+                *(short*)((char*)this + 0x262) = 0xa;
+                return;
+            }
+            if (*(double*)(*(char**)*(char**)((char*)this + 0x78) + 0x28) < 0.0 && *(int*)((char*)this + 0x3110) > 0x140 && *(int*)((char*)this + 0x3110) < 0x258 && v10 < 100.0) {
+                *((char*)this + 0x18c) = 1;
+                return;
+            }
+            if (*(int*)((char*)this + 0x3110) < 0x1f4 && *(int*)((char*)this + 0x168) == 3 && v10 < 80.0) {
+                *((char*)this + 0x18c) = 1;
+                *((char*)this + 0x189) = 0;
+                return;
+            }
+            if (*(int*)((char*)this + 0x3110) > 0x2bc) {
+                *(int*)((char*)this + 0x3114) = 1;
+                if ((WORD)CPlayer::Unk4108a0(0, 1) == 0) {
+                    *(int*)((char*)this + 0x3114) = 6;
+                    if (v10 > 110.0) {
+                        *(int*)((char*)this + 0x3114) = 8;
+                    }
                     return;
                 }
-                if (*(double*)(*(char**)*(char**)((char*)this + 0x78) + 0x28) < 0.0 && *(int*)((char*)this + 0x3110) > 0x12b && *(int*)((char*)this + 0x3110) < 0x140 && *(short*)((char*)this + 0x148) >= 0x3e8) {
-                    *(short*)((char*)this + 0x262) = (WORD)CPlayer::Unk4108a0(0, 3) + 0x78;
-                    return;
+            }
+        }
+        if (*(WORD*)((char*)this + 8) == 0xcb) {
+            if (*(double*)(*(char**)*(char**)((char*)this + 0x78) + 0x28) < 0.0 && *(int*)((char*)this + 0x3110) < 0x12c && *(int*)((char*)this + 0x168) == 3) {
+                *(short*)((char*)this + 0x262) = 0xa;
+                return;
+            }
+            if (*(double*)(*(char**)*(char**)((char*)this + 0x78) + 0x28) < 0.0 && *(int*)((char*)this + 0x3110) > 0x12b && *(int*)((char*)this + 0x3110) < 0x140 && *(short*)((char*)this + 0x148) >= 0x3e8 && v10 < 90.0) {
+                *(short*)((char*)this + 0x262) = (WORD)CPlayer::Unk4108a0(0, 3) + 0x78;
+                return;
+            }
+            if (*(int*)((char*)this + 0x3110) > 0 && *(int*)((char*)this + 0x3110) < 0xc8 && *(int*)((char*)this + 0x168) == 3) {
+                *(short*)((char*)this + 0x262) = 0xa;
+                return;
+            }
+            if (*(int*)((char*)this + 0x3110) > 0xc8 && *(int*)((char*)this + 0x3110) < 0xfa) {
+                *(short*)((char*)this + 0x262) = (WORD)CPlayer::Unk4108a0(0, 3) + 0x1e;
+                return;
+            }
+            if (*(int*)((char*)this + 0x3110) > 0x15e && *(int*)((char*)this + 0x3110) < 0x190 && *(double*)((char*)this + 0x118) > 500.0) {
+                *(short*)((char*)this + 0x262) = 0x34;
+                return;
+            }
+            if (*(int*)((char*)this + 0x3110) > 0x190 && *(int*)((char*)this + 0x3110) < 0x1ae && *(int*)((char*)this + 0x168) == 3 && *(short*)((char*)this + 0x148) == 0xbb8) {
+                *(short*)((char*)this + 0x262) = 0x5f;
+                return;
+            }
+            if (*(int*)((char*)this + 0x3110) > 0x1ae && *(int*)((char*)this + 0x3110) < 0x21c && *(int*)((char*)this + 0x168) != 3) {
+                *(short*)((char*)this + 0x262) = 0x28;
+                if (v10 > 120.0) {
+                    *(short*)((char*)this + 0x262) = 0x29;
                 }
-                if (*(double*)(*(char**)*(char**)((char*)this + 0x78) + 0x28) < 0.0 && *(int*)((char*)this + 0x3110) > 0x140 && *(int*)((char*)this + 0x3110) < 0x258 && *(int*)((char*)this + 0x168) == 3) {
-                    *((char*)this + 0x188) = *((char*)this + 0x50);
-                    *((char*)this + 0x189) = -1;
-                    return;
-                }
-                if (*(int*)((char*)this + 0x3110) < 0xc8) {
+                return;
+            }
+            if (*(int*)((char*)this + 0x3110) > 0x38e && *(int*)((char*)this + 0x168) == 3) {
+                *(int*)((char*)this + 0x3114) = 4;
+                *((char*)this + 0x189) = -1;
+                *((char*)this + 0x188) = (WORD)CPlayer::Unk4108a0(0, 2) - 1;
+                return;
+            }
+            if (*(int*)((char*)this + 0x3110) > 0x289) {
+                *(int*)((char*)this + 0x3114) = 1;
+                return;
+            }
+        }
+        if (*(WORD*)((char*)this + 8) == 0xcc) {
+            if (*(double*)(*(char**)*(char**)((char*)this + 0x78) + 0x28) < 0.0 && *(int*)((char*)this + 0x3110) < 0x12c) {
+                *((char*)this + 0x18b) = 1;
+                *((char*)this + 0x189) = 1;
+                return;
+            }
+            if (v10 < 50.0 && *(int*)((char*)this + 0x3110) < 0x190) {
+                *((char*)this + 0x18a) = 1;
+                *((char*)this + 0x189) = 0;
+                if (*(int*)((char*)this + 0x168) == 2 && (WORD)CPlayer::Unk4108a0(0, 0x64) < 0x14) {
                     *((char*)this + 0x18c) = 1;
                     *((char*)this + 0x189) = 1;
-                    return;
                 }
-                if (*(int*)((char*)this + 0x3110) > 0xc8 && *(int*)((char*)this + 0x3110) < 0x1c2 && v10 < 90.0) {
-                    *((char*)this + 0x18b) = 1;
-                    *((char*)this + 0x189) = 0;
-                    return;
-                }
-                if (*(double*)(*(char**)*(char**)((char*)this + 0x78) + 0x28) < 0.0 && *(int*)((char*)this + 0x3110) > 0x1c2 && *(int*)((char*)this + 0x3110) < 0x2bc) {
-                    *((char*)this + 0x18c) = 1;
-                    return;
-                }
-                if (*(int*)((char*)this + 0x3110) > 0x384) {
-                    *(int*)((char*)this + 0x3114) = 4;
-                    *((char*)this + 0x189) = -1;
-                    *((char*)this + 0x188) = (WORD)CPlayer::Unk4108a0(0, 2) - 1;
-                    return;
-                }
-                if (*(int*)((char*)this + 0x3110) > 0x2bc) {
-                    *(int*)((char*)this + 0x3114) = 1;
-                    if ((WORD)CPlayer::Unk4108a0(0, 1) == 0) {
-                        *(int*)((char*)this + 0x3114) = 6;
-                        if (v10 > 80.0) {
-                            *(int*)((char*)this + 0x3114) = 8;
-                        }
-                        return;
-                    }
-                }
+                return;
             }
-            if (*(WORD*)((char*)this + 8) == 0xca) {
-                if (*(double*)(*(char**)*(char**)((char*)this + 0x78) + 0x28) < 0.0 && *(int*)((char*)this + 0x3110) > 0x12b && *(int*)((char*)this + 0x3110) < 0x140) {
-                    *(short*)((char*)this + 0x262) = 0xa;
-                    return;
-                }
-                if (*(double*)(*(char**)*(char**)((char*)this + 0x78) + 0x28) < 0.0 && *(int*)((char*)this + 0x3110) > 0x140 && *(int*)((char*)this + 0x3110) < 0x258 && v10 < 100.0) {
-                    *((char*)this + 0x18c) = 1;
-                    return;
-                }
-                if (*(int*)((char*)this + 0x3110) < 0x1f4 && *(int*)((char*)this + 0x168) == 3 && v10 < 80.0) {
-                    *((char*)this + 0x18c) = 1;
-                    *((char*)this + 0x189) = 0;
-                    return;
-                }
-                if (*(int*)((char*)this + 0x3110) > 0x2bc) {
-                    *(int*)((char*)this + 0x3114) = 1;
-                    if ((WORD)CPlayer::Unk4108a0(0, 1) == 0) {
-                        *(int*)((char*)this + 0x3114) = 6;
-                        if (v10 > 110.0) {
-                            *(int*)((char*)this + 0x3114) = 8;
-                        }
-                        return;
-                    }
-                }
+            if (v10 < 135.0 && *(int*)((char*)this + 0x3110) < 0x258) {
+                *((char*)this + 0x18b) = 1;
+                *((char*)this + 0x189) = 0;
+                return;
             }
-            if (*(WORD*)((char*)this + 8) == 0xcb) {
-                if (*(double*)(*(char**)*(char**)((char*)this + 0x78) + 0x28) < 0.0 && *(int*)((char*)this + 0x3110) < 0x12c && *(int*)((char*)this + 0x168) == 3) {
-                    *(short*)((char*)this + 0x262) = 0xa;
-                    return;
-                }
-                if (*(double*)(*(char**)*(char**)((char*)this + 0x78) + 0x28) < 0.0 && *(int*)((char*)this + 0x3110) > 0x12b && *(int*)((char*)this + 0x3110) < 0x140 && *(short*)((char*)this + 0x148) >= 0x3e8 && v10 < 90.0) {
-                    *(short*)((char*)this + 0x262) = (WORD)CPlayer::Unk4108a0(0, 3) + 0x78;
-                    return;
-                }
-                if (*(int*)((char*)this + 0x3110) > 0 && *(int*)((char*)this + 0x3110) < 0xc8 && *(int*)((char*)this + 0x168) == 3) {
-                    *(short*)((char*)this + 0x262) = 0xa;
-                    return;
-                }
-                if (*(int*)((char*)this + 0x3110) > 0xc8 && *(int*)((char*)this + 0x3110) < 0xfa) {
-                    *(short*)((char*)this + 0x262) = (WORD)CPlayer::Unk4108a0(0, 3) + 0x1e;
-                    return;
-                }
-                if (*(int*)((char*)this + 0x3110) > 0x15e && *(int*)((char*)this + 0x3110) < 0x190 && *(double*)((char*)this + 0x118) > 500.0) {
-                    *(short*)((char*)this + 0x262) = 0x34;
-                    return;
-                }
-                if (*(int*)((char*)this + 0x3110) > 0x190 && *(int*)((char*)this + 0x3110) < 0x1ae && *(int*)((char*)this + 0x168) == 3 && *(short*)((char*)this + 0x148) == 0xbb8) {
-                    *(short*)((char*)this + 0x262) = 0x5f;
-                    return;
-                }
-                if (*(int*)((char*)this + 0x3110) > 0x1ae && *(int*)((char*)this + 0x3110) < 0x21c && *(int*)((char*)this + 0x168) != 3) {
-                    *(short*)((char*)this + 0x262) = 0x28;
-                    if (v10 > 120.0) {
-                        *(short*)((char*)this + 0x262) = 0x29;
+            if (*(int*)((char*)this + 0x3110) > 0x3b6) {
+                *(int*)((char*)this + 0x3114) = 4;
+                *((char*)this + 0x189) = -1;
+                *((char*)this + 0x188) = (WORD)CPlayer::Unk4108a0(0, 2) - 1;
+                return;
+            }
+            if (*(int*)((char*)this + 0x3110) > 0x2bb) {
+                *(int*)((char*)this + 0x3114) = 1;
+                if ((WORD)CPlayer::Unk4108a0(0, 1) == 0) {
+                    *(int*)((char*)this + 0x3114) = 6;
+                    if (v10 > 110.0) {
+                        *(int*)((char*)this + 0x3114) = 8;
                     }
                     return;
                 }
-                if (*(int*)((char*)this + 0x3110) > 0x38e && *(int*)((char*)this + 0x168) == 3) {
-                    *(int*)((char*)this + 0x3114) = 4;
-                    *((char*)this + 0x189) = -1;
-                    *((char*)this + 0x188) = (WORD)CPlayer::Unk4108a0(0, 2) - 1;
-                    return;
-                }
-                if (*(int*)((char*)this + 0x3110) > 0x289) {
-                    *(int*)((char*)this + 0x3114) = 1;
-                    return;
-                }
+                return;
             }
-            if (*(WORD*)((char*)this + 8) == 0xcc) {
-                if (*(double*)(*(char**)*(char**)((char*)this + 0x78) + 0x28) < 0.0 && *(int*)((char*)this + 0x3110) < 0x12c) {
-                    *((char*)this + 0x18b) = 1;
-                    *((char*)this + 0x189) = 1;
-                    return;
-                }
-                if (v10 < 50.0 && *(int*)((char*)this + 0x3110) < 0x190) {
-                    *((char*)this + 0x18a) = 1;
-                    *((char*)this + 0x189) = 0;
-                    if (*(int*)((char*)this + 0x168) == 2 && (WORD)CPlayer::Unk4108a0(0, 0x64) < 0x14) {
-                        *((char*)this + 0x18c) = 1;
-                        *((char*)this + 0x189) = 1;
-                    }
-                    return;
-                }
-                if (v10 < 135.0 && *(int*)((char*)this + 0x3110) < 0x258) {
-                    *((char*)this + 0x18b) = 1;
-                    *((char*)this + 0x189) = 0;
-                    return;
-                }
-                if (*(int*)((char*)this + 0x3110) > 0x3b6) {
-                    *(int*)((char*)this + 0x3114) = 4;
-                    *((char*)this + 0x189) = -1;
-                    *((char*)this + 0x188) = (WORD)CPlayer::Unk4108a0(0, 2) - 1;
-                    return;
-                }
-                if (*(int*)((char*)this + 0x3110) > 0x2bb) {
-                    *(int*)((char*)this + 0x3114) = 1;
-                    if ((WORD)CPlayer::Unk4108a0(0, 1) == 0) {
-                        *(int*)((char*)this + 0x3114) = 6;
-                        if (v10 > 110.0) {
-                            *(int*)((char*)this + 0x3114) = 8;
-                        }
-                        return;
-                    }
-                    return;
-                }
+        }
+        if (*(WORD*)((char*)this + 8) == 0xcd) {
+            if (*(double*)(*(char**)*(char**)((char*)this + 0x78) + 0x28) < 0.0 && *(int*)((char*)this + 0x3110) > 0x140 && *(int*)((char*)this + 0x3110) < 0x258 && v10 < 100.0) {
+                *((char*)this + 0x18c) = 1;
+                return;
             }
-            if (*(WORD*)((char*)this + 8) == 0xcd) {
-                if (*(double*)(*(char**)*(char**)((char*)this + 0x78) + 0x28) < 0.0 && *(int*)((char*)this + 0x3110) > 0x140 && *(int*)((char*)this + 0x3110) < 0x258 && v10 < 100.0) {
-                    *((char*)this + 0x18c) = 1;
-                    return;
-                }
-                if (*(int*)((char*)this + 0x3110) < 0x64) {
-                    *((char*)this + 0x18c) = 1;
-                    *((char*)this + 0x189) = 1;
-                    return;
-                }
-                if (*(int*)((char*)this + 0x3110) > 0x64 && *(int*)((char*)this + 0x3110) < 0x12c && v10 < 100.0) {
-                    *((char*)this + 0x18b) = 1;
-                    *((char*)this + 0x189) = 0;
-                    return;
-                }
-                if (*(double*)(*(char**)*(char**)((char*)this + 0x78) + 0x28) < 0.0 && *(int*)((char*)this + 0x3110) > 0x12c && *(int*)((char*)this + 0x3110) < 0x258) {
-                    *((char*)this + 0x18c) = 1;
-                    return;
-                }
-                if (*(int*)((char*)this + 0x3110) > 0x384) {
-                    *(int*)((char*)this + 0x3114) = 4;
-                    *((char*)this + 0x189) = -1;
-                    *((char*)this + 0x188) = (WORD)CPlayer::Unk4108a0(0, 2) - 1;
-                    return;
-                }
-                if (*(int*)((char*)this + 0x3110) > 0x2bc) {
-                    *(int*)((char*)this + 0x3114) = 1;
-                    if ((WORD)CPlayer::Unk4108a0(0, 1) == 0) {
-                        *(int*)((char*)this + 0x3114) = 6;
-                        if (v10 > 110.0) {
-                            *(int*)((char*)this + 0x3114) = 8;
-                        }
-                    }
-                    return;
-                }
+            if (*(int*)((char*)this + 0x3110) < 0x64) {
+                *((char*)this + 0x18c) = 1;
+                *((char*)this + 0x189) = 1;
+                return;
             }
-            if (*(WORD*)((char*)this + 8) == 0xce) {
-                if (*(double*)(*(char**)*(char**)((char*)this + 0x78) + 0x28) < 0.0 && *(int*)((char*)this + 0x3110) < 0x12c && *(int*)((char*)this + 0x168) == 3) {
-                    *(short*)((char*)this + 0x262) = 0xa;
-                    return;
-                }
-                if (*(double*)(*(char**)*(char**)((char*)this + 0x78) + 0x28) < 0.0 && *(int*)((char*)this + 0x3110) > 0x12b && *(int*)((char*)this + 0x3110) < 0x140 && *(short*)((char*)this + 0x148) >= 0x3e8 && v10 < 90.0) {
-                    *(short*)((char*)this + 0x262) = (WORD)CPlayer::Unk4108a0(0, 3) + 0x78;
-                    return;
-                }
-                if (*(int*)((char*)this + 0x3110) > 0 && *(int*)((char*)this + 0x3110) < 0xc8 && *(int*)((char*)this + 0x168) == 3) {
-                    *(short*)((char*)this + 0x262) = 0xa;
-                    return;
-                }
-                if (*(int*)((char*)this + 0x3110) > 0xc8 && *(int*)((char*)this + 0x3110) < 0xfa) {
-                    *(short*)((char*)this + 0x262) = (WORD)CPlayer::Unk4108a0(0, 3) + 0x1e;
-                    return;
-                }
-                if (*(int*)((char*)this + 0x3110) > 0x15e && *(int*)((char*)this + 0x3110) < 0x190 && *(double*)((char*)this + 0x118) > 500.0) {
-                    *(short*)((char*)this + 0x262) = 0x34;
-                    return;
-                }
-                if (*(int*)((char*)this + 0x3110) > 0x1ae && *(int*)((char*)this + 0x3110) < 0x21c && *(int*)((char*)this + 0x168) != 3) {
-                    *(short*)((char*)this + 0x262) = 0x28;
-                    if (v10 > 120.0) {
-                        *(short*)((char*)this + 0x262) = 0x29;
-                    }
-                    return;
-                }
-                if (*(int*)((char*)this + 0x3110) > 0x289) {
-                    *(int*)((char*)this + 0x3114) = 1;
-                    return;
-                }
+            if (*(int*)((char*)this + 0x3110) > 0x64 && *(int*)((char*)this + 0x3110) < 0x12c && v10 < 100.0) {
+                *((char*)this + 0x18b) = 1;
+                *((char*)this + 0x189) = 0;
+                return;
             }
-            if (*(WORD*)((char*)this + 8) == 0xcf) {
-                if (*(double*)(*(char**)*(char**)((char*)this + 0x78) + 0x28) < 0.0 && *(int*)((char*)this + 0x3110) < 0x12c) {
-                    *((char*)this + 0x18b) = 1;
-                    return;
-                }
-                if (v10 < 60.0 && *(int*)((char*)this + 0x3110) < 0x190) {
-                    *((char*)this + 0x18a) = 1;
-                    return;
-                }
-                if (v10 < 125.0 && *(int*)((char*)this + 0x3110) > 0x18f && *(int*)((char*)this + 0x3110) < 0x2bc) {
-                    *((char*)this + 0x18c) = 1;
-                    *((char*)this + 0x189) = 0;
-                    return;
-                }
-                if (*(int*)((char*)this + 0x3110) > 0x2bb) {
-                    *(int*)((char*)this + 0x3114) = 1;
-                    if ((WORD)CPlayer::Unk4108a0(0, 4) == 0) {
-                        *(int*)((char*)this + 0x3114) = 3;
-                    }
-                    return;
-                }
+            if (*(double*)(*(char**)*(char**)((char*)this + 0x78) + 0x28) < 0.0 && *(int*)((char*)this + 0x3110) > 0x12c && *(int*)((char*)this + 0x3110) < 0x258) {
+                *((char*)this + 0x18c) = 1;
+                return;
             }
-            if (*(WORD*)((char*)this + 8) == 0xd0) {
-                if (*(int*)((char*)this + 0x3110) > 0x14 && *(int*)((char*)this + 0x3110) < 0x3c && *(int*)((char*)this + 0x168) == 3 && *(double*)(*(char**)*(char**)((char*)this + 0x78) + 0x28) < 0.0) {
-                    *(short*)((char*)this + 0x262) = 0xa;
-                    return;
-                }
-                if (*(int*)((char*)this + 0x3110) > 0x50 && *(int*)((char*)this + 0x3110) < 0x12c) {
-                    *((char*)this + 0x18c) = 1;
-                    return;
-                }
-                if (*(int*)((char*)this + 0x3110) > 0x3b6) {
-                    *((char*)this + 0x188) = (WORD)CPlayer::Unk4108a0(0, 2) - 1;
-                    return;
-                }
-                if (*(int*)((char*)this + 0x3110) > 0x289) {
-                    *(int*)((char*)this + 0x3114) = 3;
-                    return;
-                }
+            if (*(int*)((char*)this + 0x3110) > 0x384) {
+                *(int*)((char*)this + 0x3114) = 4;
+                *((char*)this + 0x189) = -1;
+                *((char*)this + 0x188) = (WORD)CPlayer::Unk4108a0(0, 2) - 1;
+                return;
             }
-            if (*(WORD*)((char*)this + 8) == 0xd1) {
-                if (*(int*)((char*)this + 0x3110) > 0x3b6) {
-                    *((char*)this + 0x188) = (WORD)CPlayer::Unk4108a0(0, 2) - 1;
-                    return;
-                }
-                if (*(int*)((char*)this + 0x3110) > 0x289) {
-                    *(int*)((char*)this + 0x3114) = 3;
-                    return;
-                }
-            }
-            if (*(WORD*)((char*)this + 8) == 0xe7) {
-                if (*(double*)(*(char**)*(char**)((char*)this + 0x78) + 0x28) < 0.0 && *(int*)((char*)this + 0x3110) < 0x12c && *(int*)((char*)this + 0x168) == 3) {
-                    *(short*)((char*)this + 0x262) = (WORD)CPlayer::Unk4108a0(0, 2) + 0x14;
-                    return;
-                }
-                if (*(int*)((char*)this + 0x3110) > 0xc8 && *(int*)((char*)this + 0x3110) < 0xdc && v10 < 90.0 && *(int*)((char*)this + 0x168) == 3 && *(short*)((char*)this + 0x148) >= 0x3e8) {
-                    *(short*)((char*)this + 0x262) = (WORD)CPlayer::Unk4108a0(0, 3) + 0x78;
-                    return;
-                }
-                if (*(int*)((char*)this + 0x3110) > 0x15e && *(int*)((char*)this + 0x3110) < 0x190 && *(double*)((char*)this + 0x118) > 500.0) {
-                    *(short*)((char*)this + 0x262) = 0x34;
-                    return;
-                }
-                if (*(int*)((char*)this + 0x3110) > 0x289 && (WORD)CPlayer::Unk4108a0(0, 2) == 0) {
-                    *(int*)((char*)this + 0x3114) = 0xc;
+            if (*(int*)((char*)this + 0x3110) > 0x2bc) {
+                *(int*)((char*)this + 0x3114) = 1;
+                if ((WORD)CPlayer::Unk4108a0(0, 1) == 0) {
+                    *(int*)((char*)this + 0x3114) = 6;
                     if (v10 > 110.0) {
                         *(int*)((char*)this + 0x3114) = 8;
                     }
                 }
+                return;
             }
-            if (*(WORD*)((char*)this + 8) == 0xe8) {
-                if (*(double*)(*(char**)*(char**)((char*)this + 0x78) + 0x28) < 0.0 && *(int*)((char*)this + 0x3110) < 0x12c && *(int*)((char*)this + 0x168) == 3) {
-                    *(short*)((char*)this + 0x262) = 0xa;
-                    return;
+        }
+        if (*(WORD*)((char*)this + 8) == 0xce) {
+            if (*(double*)(*(char**)*(char**)((char*)this + 0x78) + 0x28) < 0.0 && *(int*)((char*)this + 0x3110) < 0x12c && *(int*)((char*)this + 0x168) == 3) {
+                *(short*)((char*)this + 0x262) = 0xa;
+                return;
+            }
+            if (*(double*)(*(char**)*(char**)((char*)this + 0x78) + 0x28) < 0.0 && *(int*)((char*)this + 0x3110) > 0x12b && *(int*)((char*)this + 0x3110) < 0x140 && *(short*)((char*)this + 0x148) >= 0x3e8 && v10 < 90.0) {
+                *(short*)((char*)this + 0x262) = (WORD)CPlayer::Unk4108a0(0, 3) + 0x78;
+                return;
+            }
+            if (*(int*)((char*)this + 0x3110) > 0 && *(int*)((char*)this + 0x3110) < 0xc8 && *(int*)((char*)this + 0x168) == 3) {
+                *(short*)((char*)this + 0x262) = 0xa;
+                return;
+            }
+            if (*(int*)((char*)this + 0x3110) > 0xc8 && *(int*)((char*)this + 0x3110) < 0xfa) {
+                *(short*)((char*)this + 0x262) = (WORD)CPlayer::Unk4108a0(0, 3) + 0x1e;
+                return;
+            }
+            if (*(int*)((char*)this + 0x3110) > 0x15e && *(int*)((char*)this + 0x3110) < 0x190 && *(double*)((char*)this + 0x118) > 500.0) {
+                *(short*)((char*)this + 0x262) = 0x34;
+                return;
+            }
+            if (*(int*)((char*)this + 0x3110) > 0x1ae && *(int*)((char*)this + 0x3110) < 0x21c && *(int*)((char*)this + 0x168) != 3) {
+                *(short*)((char*)this + 0x262) = 0x28;
+                if (v10 > 120.0) {
+                    *(short*)((char*)this + 0x262) = 0x29;
                 }
-                if (*(double*)(*(char**)*(char**)((char*)this + 0x78) + 0x28) < 0.0 && *(int*)((char*)this + 0x3110) > 0x12b && *(int*)((char*)this + 0x3110) < 0x140 && *(short*)((char*)this + 0x148) >= 0x3e8 && v10 < 90.0) {
-                    *(short*)((char*)this + 0x262) = (WORD)CPlayer::Unk4108a0(0, 3) + 0x78;
-                    return;
+                return;
+            }
+            if (*(int*)((char*)this + 0x3110) > 0x289) {
+                *(int*)((char*)this + 0x3114) = 1;
+                return;
+            }
+        }
+        if (*(WORD*)((char*)this + 8) == 0xcf) {
+            if (*(double*)(*(char**)*(char**)((char*)this + 0x78) + 0x28) < 0.0 && *(int*)((char*)this + 0x3110) < 0x12c) {
+                *((char*)this + 0x18b) = 1;
+                return;
+            }
+            if (v10 < 60.0 && *(int*)((char*)this + 0x3110) < 0x190) {
+                *((char*)this + 0x18a) = 1;
+                return;
+            }
+            if (v10 < 125.0 && *(int*)((char*)this + 0x3110) > 0x18f && *(int*)((char*)this + 0x3110) < 0x2bc) {
+                *((char*)this + 0x18c) = 1;
+                *((char*)this + 0x189) = 0;
+                return;
+            }
+            if (*(int*)((char*)this + 0x3110) > 0x2bb) {
+                *(int*)((char*)this + 0x3114) = 1;
+                if ((WORD)CPlayer::Unk4108a0(0, 4) == 0) {
+                    *(int*)((char*)this + 0x3114) = 3;
                 }
-                if (*(int*)((char*)this + 0x3110) > 0 && *(int*)((char*)this + 0x3110) < 0xc8 && *(int*)((char*)this + 0x168) == 3) {
-                    *(short*)((char*)this + 0x262) = 0xa;
-                    return;
+                return;
+            }
+        }
+        if (*(WORD*)((char*)this + 8) == 0xd0) {
+            if (*(int*)((char*)this + 0x3110) > 0x14 && *(int*)((char*)this + 0x3110) < 0x3c && *(int*)((char*)this + 0x168) == 3 && *(double*)(*(char**)*(char**)((char*)this + 0x78) + 0x28) < 0.0) {
+                *(short*)((char*)this + 0x262) = 0xa;
+                return;
+            }
+            if (*(int*)((char*)this + 0x3110) > 0x50 && *(int*)((char*)this + 0x3110) < 0x12c) {
+                *((char*)this + 0x18c) = 1;
+                return;
+            }
+            if (*(int*)((char*)this + 0x3110) > 0x3b6) {
+                *((char*)this + 0x188) = (WORD)CPlayer::Unk4108a0(0, 2) - 1;
+                return;
+            }
+            if (*(int*)((char*)this + 0x3110) > 0x289) {
+                *(int*)((char*)this + 0x3114) = 3;
+                return;
+            }
+        }
+        if (*(WORD*)((char*)this + 8) == 0xd1) {
+            if (*(int*)((char*)this + 0x3110) > 0x3b6) {
+                *((char*)this + 0x188) = (WORD)CPlayer::Unk4108a0(0, 2) - 1;
+                return;
+            }
+            if (*(int*)((char*)this + 0x3110) > 0x289) {
+                *(int*)((char*)this + 0x3114) = 3;
+                return;
+            }
+        }
+        if (*(WORD*)((char*)this + 8) == 0xe7) {
+            if (*(double*)(*(char**)*(char**)((char*)this + 0x78) + 0x28) < 0.0 && *(int*)((char*)this + 0x3110) < 0x12c && *(int*)((char*)this + 0x168) == 3) {
+                *(short*)((char*)this + 0x262) = (WORD)CPlayer::Unk4108a0(0, 2) + 0x14;
+                return;
+            }
+            if (*(int*)((char*)this + 0x3110) > 0xc8 && *(int*)((char*)this + 0x3110) < 0xdc && v10 < 90.0 && *(int*)((char*)this + 0x168) == 3 && *(short*)((char*)this + 0x148) >= 0x3e8) {
+                *(short*)((char*)this + 0x262) = (WORD)CPlayer::Unk4108a0(0, 3) + 0x78;
+                return;
+            }
+            if (*(int*)((char*)this + 0x3110) > 0x15e && *(int*)((char*)this + 0x3110) < 0x190 && *(double*)((char*)this + 0x118) > 500.0) {
+                *(short*)((char*)this + 0x262) = 0x34;
+                return;
+            }
+            if (*(int*)((char*)this + 0x3110) > 0x289 && (WORD)CPlayer::Unk4108a0(0, 2) == 0) {
+                *(int*)((char*)this + 0x3114) = 0xc;
+                if (v10 > 110.0) {
+                    *(int*)((char*)this + 0x3114) = 8;
                 }
-                if (*(int*)((char*)this + 0x3110) > 0xc8 && *(int*)((char*)this + 0x3110) < 0xfa) {
-                    *(short*)((char*)this + 0x262) = (WORD)CPlayer::Unk4108a0(0, 3) + 0x1e;
-                    return;
+            }
+        }
+        if (*(WORD*)((char*)this + 8) == 0xe8) {
+            if (*(double*)(*(char**)*(char**)((char*)this + 0x78) + 0x28) < 0.0 && *(int*)((char*)this + 0x3110) < 0x12c && *(int*)((char*)this + 0x168) == 3) {
+                *(short*)((char*)this + 0x262) = 0xa;
+                return;
+            }
+            if (*(double*)(*(char**)*(char**)((char*)this + 0x78) + 0x28) < 0.0 && *(int*)((char*)this + 0x3110) > 0x12b && *(int*)((char*)this + 0x3110) < 0x140 && *(short*)((char*)this + 0x148) >= 0x3e8 && v10 < 90.0) {
+                *(short*)((char*)this + 0x262) = (WORD)CPlayer::Unk4108a0(0, 3) + 0x78;
+                return;
+            }
+            if (*(int*)((char*)this + 0x3110) > 0 && *(int*)((char*)this + 0x3110) < 0xc8 && *(int*)((char*)this + 0x168) == 3) {
+                *(short*)((char*)this + 0x262) = 0xa;
+                return;
+            }
+            if (*(int*)((char*)this + 0x3110) > 0xc8 && *(int*)((char*)this + 0x3110) < 0xfa) {
+                *(short*)((char*)this + 0x262) = (WORD)CPlayer::Unk4108a0(0, 3) + 0x1e;
+                return;
+            }
+            if (*(int*)((char*)this + 0x3110) > 0x15e && *(int*)((char*)this + 0x3110) < 0x190 && *(double*)((char*)this + 0x118) > 500.0) {
+                *(short*)((char*)this + 0x262) = 0x34;
+                return;
+            }
+            if (*(int*)((char*)this + 0x3110) > 0x190 && *(int*)((char*)this + 0x3110) < 0x1ae && *(int*)((char*)this + 0x168) == 3 && *(short*)((char*)this + 0x148) == 0xbb8) {
+                *(short*)((char*)this + 0x262) = 0x5f;
+                return;
+            }
+            if (*(int*)((char*)this + 0x3110) > 0x1ae && *(int*)((char*)this + 0x3110) < 0x21c && *(int*)((char*)this + 0x168) != 3) {
+                *(short*)((char*)this + 0x262) = 0x28;
+                if (v10 > 120.0) {
+                    *(short*)((char*)this + 0x262) = 0x29;
                 }
-                if (*(int*)((char*)this + 0x3110) > 0x15e && *(int*)((char*)this + 0x3110) < 0x190 && *(double*)((char*)this + 0x118) > 500.0) {
-                    *(short*)((char*)this + 0x262) = 0x34;
-                    return;
-                }
-                if (*(int*)((char*)this + 0x3110) > 0x190 && *(int*)((char*)this + 0x3110) < 0x1ae && *(int*)((char*)this + 0x168) == 3 && *(short*)((char*)this + 0x148) == 0xbb8) {
-                    *(short*)((char*)this + 0x262) = 0x5f;
-                    return;
-                }
-                if (*(int*)((char*)this + 0x3110) > 0x1ae && *(int*)((char*)this + 0x3110) < 0x21c && *(int*)((char*)this + 0x168) != 3) {
-                    *(short*)((char*)this + 0x262) = 0x28;
-                    if (v10 > 120.0) {
-                        *(short*)((char*)this + 0x262) = 0x29;
-                    }
-                    return;
-                }
-                if (*(int*)((char*)this + 0x3110) > 0x38e && *(int*)((char*)this + 0x168) == 3) {
-                    *(int*)((char*)this + 0x3114) = 4;
-                    *((char*)this + 0x189) = -1;
-                    *((char*)this + 0x188) = (WORD)CPlayer::Unk4108a0(0, 2) - 1;
-                    return;
-                }
-                if (*(int*)((char*)this + 0x3110) > 0x289) {
-                    *(int*)((char*)this + 0x3114) = 1;
-                    return;
-                }
+                return;
+            }
+            if (*(int*)((char*)this + 0x3110) > 0x38e && *(int*)((char*)this + 0x168) == 3) {
+                *(int*)((char*)this + 0x3114) = 4;
+                *((char*)this + 0x189) = -1;
+                *((char*)this + 0x188) = (WORD)CPlayer::Unk4108a0(0, 2) - 1;
+                return;
+            }
+            if (*(int*)((char*)this + 0x3110) > 0x289) {
+                *(int*)((char*)this + 0x3114) = 1;
+                return;
             }
         }
     }
@@ -6893,17 +6869,13 @@ void CShiori::Vf5()
             }
         }
     }
-    if (*(WORD*)((char*)this + 8) < 0x32 && (*(WORD*)(*(char**)*(char**)((char*)this + 0x78) + 8) > 0x95 && *(WORD*)(*(char**)*(char**)((char*)this + 0x78) + 8) < 0x9c || *(WORD*)(*(char**)*(char**)((char*)this + 0x78) + 8) > 0x31 && *(WORD*)(*(char**)*(char**)((char*)this + 0x78) + 8) < 0x3b) && *(double*)((char*)this + 0x28) == 0.0) {
-        if ((double)(WORD)CPlayer::Unk4108a0(0, 0x64) < 3.0f * *(float*)((char*)this + 0xa8)) {
-            *(short*)((char*)this + 0x262) = *((char*)this + 0x50) == 1;
-            return;
-        }
+    if (*(WORD*)((char*)this + 8) < 0x32 && (*(WORD*)(*(char**)*(char**)((char*)this + 0x78) + 8) > 0x95 && *(WORD*)(*(char**)*(char**)((char*)this + 0x78) + 8) < 0x9c || *(WORD*)(*(char**)*(char**)((char*)this + 0x78) + 8) > 0x31 && *(WORD*)(*(char**)*(char**)((char*)this + 0x78) + 8) < 0x3b) && *(double*)((char*)this + 0x28) == 0.0 && (double)(WORD)CPlayer::Unk4108a0(0, 0x64) < 3.0f * *(float*)((char*)this + 0xa8)) {
+        *(short*)((char*)this + 0x262) = *((char*)this + 0x50) == 1;
+        return;
     }
-    if (*(WORD*)((char*)this + 8) < 0x32 && *(WORD*)(*(char**)*(char**)((char*)this + 0x78) + 8) < 0x32 && v10 > 60.0 && v10 < 140.0) {
-        if ((double)(WORD)CPlayer::Unk4108a0(0, 0x64) < 2.0f * *(float*)((char*)this + 0xa8) && *(double*)((char*)this + 0x20) > 120.0 && *(double*)((char*)this + 0x20) < 520.0) {
-            *(short*)((char*)this + 0x262) = -((*((char*)this + 0x50) == 1) - 1);
-            return;
-        }
+    if (*(WORD*)((char*)this + 8) < 0x32 && *(WORD*)(*(char**)*(char**)((char*)this + 0x78) + 8) < 0x32 && v10 > 60.0 && v10 < 140.0 && (double)(WORD)CPlayer::Unk4108a0(0, 0x64) < 2.0f * *(float*)((char*)this + 0xa8) && *(double*)((char*)this + 0x20) > 120.0 && *(double*)((char*)this + 0x20) < 520.0) {
+        *(short*)((char*)this + 0x262) = -((*((char*)this + 0x50) == 1) - 1);
+        return;
     }
     if ((WORD)CPlayer::Unk4108a0(0, 0x3e8) < 2) {
         *(int*)((char*)this + 0x3114) = 4;

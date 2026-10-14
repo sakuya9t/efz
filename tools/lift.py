@@ -519,6 +519,24 @@ class Symbols:
     def func_name(self, addr):
         return self.funcs.get(addr)
 
+    def infer_proto(self, img, addr, name):
+        """Signature of a function nobody has declared yet, from lifting it."""
+        cache = self.__dict__.setdefault('_inferred', {})
+        if addr in cache or not 0x401000 <= addr < 0x77697e:
+            return
+        cache[addr] = None          # guards recursion
+        clock = _CLOCK[0]
+        try:
+            lf = Lifter2(img, self, addr, function_end(self, addr))
+            lf.execute(None)
+            this, ret, params = infer_signature(lf)
+        except Exception:
+            return
+        finally:
+            _CLOCK[0] = clock
+        cache[addr] = (ret, params)
+        self.protos.methods[name] = [ret, params]
+
 
 CC_SIGNED = {'jl': '<', 'jle': '<=', 'jg': '>', 'jge': '>=', 'je': '==', 'jne': '!=',
              'jb': '<', 'jbe': '<=', 'ja': '>', 'jae': '>=', 'jz': '==', 'jnz': '!=',
@@ -729,6 +747,8 @@ class Lifter:
 
     def imm_value(self, v, size=4):
         if 0x787000 <= v < 0x7b4000:
+            if v in self.syms.vtables:
+                return Cast('char*', Const(v))
             if v in self.syms.globals:
                 return AddrOf(self.global_var(v, 'int'))
             s = self.img.cstring(v, 2048)
@@ -761,7 +781,7 @@ class Lifter:
             if c is old and not contains(new, c):
                 # still held elsewhere (copied to another register, or an argument)?
                 held = [v for v in self.regs.values() if v is not old] + list(self.fpu) \
-                    + list(self.args)
+                    + list(self.args) + list(self.forward.values())
                 if any(contains(v, c) for v in held if isinstance(v, E)):
                     continue
                 self.emit(ExprStmt(c))
@@ -771,10 +791,19 @@ class Lifter:
         for c in list(self.pending):
             if contains_stmt(stmt, c):
                 self.pending.remove(c)
-        # calls not consumed by this statement happened before it
+        # calls not consumed by this statement happened before it, unless their value
+        # is still on its way into a later one
         rest = list(self.pending)
         self.pending = []
+        held = list(self.regs.values()) + list(self.fpu) + list(self.args) \
+            + list(self.forward.values())
         for c in rest:
+            # (a register holding just the call's return value is the normal pending
+            # state; an expression built on it is still being evaluated)
+            if any(isinstance(v, E) and v is not c and not (isinstance(v, Cast) and v.e is c)
+                   and contains(v, c) for v in held):
+                self.pending.append(c)
+                continue
             self.items.append(('stmt', ExprStmt(c), stmt.addr))
         self.items.append(('stmt', stmt, stmt.addr))
         self.cur_stmt_addr = None
@@ -908,6 +937,8 @@ FARITH = {'fadd': '+', 'fsub': '-', 'fmul': '*', 'fdiv': '/', 'faddp': '+', 'fsu
           'fmulp': '*', 'fdivp': '/', 'fiadd': '+', 'fisub': '-', 'fimul': '*', 'fidiv': '/'}
 FARITH_R = {'fsubr': '-', 'fdivr': '/', 'fsubrp': '-', 'fdivrp': '/', 'fisubr': '-',
             'fidivr': '/'}
+# FPU instructions that read an integer from memory
+FINT_OPS = ('fild', 'fiadd', 'fisub', 'fimul', 'fidiv', 'fisubr', 'fidivr', 'ficomp', 'ficom')
 # fnstsw ax; test ah, mask; jcc  ->  relation of st(0) to the fcomp operand
 FTEST = {(0x01, 'jne'): '<', (0x01, 'je'): '>=', (0x05, 'jp'): '>=', (0x05, 'jnp'): '<',
          (0x41, 'jne'): '<=', (0x41, 'je'): '>', (0x41, 'jp'): '>', (0x41, 'jnp'): '<=',
@@ -1019,6 +1050,7 @@ class Lifter2(Lifter):
         self.copy = None
         self.arg_block = None
         self.ret_types = []
+        self.forward = {}
         self.ret_type = ret_type
         self.dirty = set()
         skip = {self.this_store} if self.this_slot is not None else set()
@@ -1113,6 +1145,7 @@ class Lifter2(Lifter):
 
     def step(self, k, tables):
         _CLOCK[0] = k
+        self.k = k
         ins = self.ins[k]
         m, ops = ins.m, ins.ops
         nxt = self.ins[k + 1] if k + 1 < len(self.ins) else None
@@ -1409,6 +1442,16 @@ class Lifter2(Lifter):
             self.vtable = rhs.e.v          # set by the compiler in ctors and dtors
             self.dirty = set()
             return
+        if isinstance(lhs, SlotVar) and self.this_slot is not None and lhs.slot.off < self.this_slot \
+                and size == 4 and not compound and self.k + 1 < len(self.ins):
+            # an int stored to a temporary only to be loaded by fild: part of the
+            # expression, so keep it out of the statement list
+            nxt = self.ins[self.k + 1]
+            if nxt.m in FINT_OPS and nxt.addr not in self.targets \
+                    and nxt.ops[0].kind == 'mem' and nxt.ops[0].base == 'ebp' \
+                    and nxt.ops[0].disp == lhs.slot.off and nxt.ops[0].index is None:
+                self.forward[lhs.slot.off] = rhs
+                return
         if isinstance(lhs, SlotVar):
             lhs.slot.sizes[size] += 1
         elif isinstance(lhs, (Deref, Index)) and lhs.ty not in ('char*', 'double', 'float'):
@@ -1511,6 +1554,9 @@ class Lifter2(Lifter):
                 return consumed
             pop, thiscall = self.callee_info(target)
             name = self.syms.func_name(target) or f'Unk{target:x}'
+            if target not in self.syms.funcs and self.syms.protos.lookup(name) is None:
+                # not declared anywhere yet (a function of an object still to come)
+                self.syms.infer_proto(self.img, target, name)
             args = self.pop_args(pop or cleanup)
             if thiscall:
                 this = self.reg_value('ecx')
@@ -1634,6 +1680,10 @@ class Lifter2(Lifter):
 
     def after_call(self, c):
         call = getattr(c, 'call', c)
+        # calls whose results are this call's arguments are part of it
+        for p in list(self.pending):
+            if p is not call and contains(call, p):
+                self.pending.remove(p)
         self.pending.append(call)
         self.regs['eax'] = c
         self.dirty = {'eax'}
@@ -1728,7 +1778,11 @@ class Lifter2(Lifter):
             self.last = 'st0'
             return k + 1
         if m == 'fild':
-            v = self.value(ops[0])
+            o = ops[0]
+            if o.kind == 'mem' and o.base == 'ebp' and o.index is None and o.disp in self.forward:
+                v = self.forward.pop(o.disp)
+            else:
+                v = self.value(ops[0])
             if isinstance(v, SlotVar):
                 v.slot.sizes[ops[0].size] += 1
             c = Cast('double', v)
@@ -1770,7 +1824,11 @@ class Lifter2(Lifter):
             return k + 1
         if m in FARITH or m in FARITH_R:
             if ops and ops[0].kind == 'mem':
-                b = self.fload(ops[0]) if not m.startswith('fi') else self.value(ops[0])
+                o = ops[0]
+                if m.startswith('fi') and o.base == 'ebp' and o.index is None and o.disp in self.forward:
+                    b = self.forward.pop(o.disp)
+                else:
+                    b = self.fload(ops[0]) if not m.startswith('fi') else self.value(ops[0])
                 a = st.pop()
                 if m in FARITH_R:
                     st.append(fbin(FARITH_R[m], b, a))
@@ -1823,7 +1881,11 @@ class Lifter2(Lifter):
                     a, b = b, a
                     self.fswap = True
             else:
-                b = self.fload(ops[0]) if m != 'ficomp' else self.value(ops[0])
+                o = ops[0]
+                if m == 'ficomp' and o.base == 'ebp' and o.index is None and o.disp in self.forward:
+                    b = self.forward.pop(o.disp)
+                else:
+                    b = self.fload(ops[0]) if m != 'ficomp' else self.value(ops[0])
                 if m != 'fcom':
                     st.pop()
                 if b.first_time() < a.first_time() and isinstance(a, Bin):
@@ -2543,10 +2605,39 @@ def name_locals(locals_, ranks=None):
     return list(reversed(top_down))
 
 
+def used_slots(nodes):
+    """Slots referenced anywhere in a node tree."""
+    used = set()
+    for n in all_nodes(nodes):
+        exprs = [getattr(n, 'cond', None), getattr(n, 'expr', None)]
+        st = getattr(n, 's', None)
+        if isinstance(st, Assign):
+            exprs += [st.lhs, st.rhs]
+        elif isinstance(st, (ExprStmt, Return, DeleteStmt)):
+            exprs.append(st.e)
+        elif isinstance(st, DeclStmt):
+            used.add(st.slot)
+            exprs += list(st.call.args)
+        for inc in getattr(n, 'inc', None) or []:
+            if isinstance(inc, Assign):
+                exprs += [inc.lhs, inc.rhs]
+        for e in exprs:
+            if isinstance(e, E):
+                for x in walk_expr(e):
+                    if isinstance(x, SlotVar):
+                        used.add(x.slot)
+                        p = getattr(x.slot, 'parent', None)
+                        if p is not None:
+                            used.add(p)
+    return used
+
+
 def body_text(lf, body, st, names=True):
+    used = used_slots(body)
     locals_ = [s for s in lf.slots.values()
                if s.off < 0 and s.off != lf.this_slot and s.off != lf.cookie_slot
-               and not getattr(s, 'temp', False) and getattr(s, 'parent', None) is None]
+               and not getattr(s, 'temp', False) and getattr(s, 'parent', None) is None
+               and s in used]
     for s in lf.slots.values():
         if getattr(s, 'parent', None) is not None and getattr(s.parent, 'temp', False):
             s.temp = True
