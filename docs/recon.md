@@ -287,6 +287,13 @@ Consequences for a byte-identical rebuild:
   (**inferred**). The CRT should be linked from VS .NET 2003's own libraries, not decompiled.
 - **Header fields** must be set after linking: the timestamp, the RSDS GUID/age/path, and
   the Rich header.
+- **Linking the matched objects.** **Observed:** `make link` links the 46 objects in
+  address order with `/OPT:REF /OPT:NOICF`, and all 630 game functions land at their
+  original addresses. `/OPT:ICF` folds identical functions and moves nearly all of them,
+  so the original was linked without it. `/MT` (asking for `libcmt`) doesn't change the
+  game code. Still different: the CRT and library code after the game is 0x5780 bytes
+  shorter, which moves the static-initializer stubs at `0x786420`; `.rdata` is 0x468c
+  bytes against 0x79c0 and `.data` 0x23a94 against 0x23b14; and there are no resources.
 
 ## Imports
 

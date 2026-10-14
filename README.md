@@ -44,7 +44,12 @@ toolchain/setup.sh                 # ~650 MB download, once; builds the efz-msvc
 export EFZ_DIR=/path/to/EFZ        # folder containing the original efz.exe
 tools/peinfo.py                    # check it is the 4.02 build
 make diff                          # compile src/ and compare with the original
+make link                          # link build/efz.exe from the recovered code
 ```
+
+`make link` puts every game function at its original address. The rest of the file is
+not byte-identical yet: the statically linked CRT, the data sections, the resources and
+the header still differ.
 
 `toolchain/setup.sh` fetches Microsoft's own installers from archive.org, pinned by SHA-1:
 - **Visual C++ Toolkit 2003 1.01**, the free release of the exact compiler build
