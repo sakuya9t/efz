@@ -60,6 +60,13 @@ def main():
         if is_frame(i) and (i == 0 or insns[i - 1][1].startswith(('ret', 'jmp', 'int3'))):
             reasons[a].add('frame')
 
+    # Switch jump tables sit inside functions and can throw the linear disassembly out of
+    # step, hiding the next function's prologue; find those from the raw bytes.
+    raw = pe.get_memory_mapped_image()
+    for a in range(t0, GAME_END, 16):
+        if raw[a - base:a - base + 3] == b'\x55\x8b\xec':
+            reasons[a].add('frame')
+
     # Code pointers in data: vtables and callback tables.  A pointer only counts if it
     # lands on a frame or an already-known start, which drops coincidental values.
     data_ptrs = []
@@ -73,7 +80,7 @@ def main():
                 reasons[v].add('data')
                 data_ptrs.append((base + s.VirtualAddress + off, v))
 
-    starts = sorted(a for a in reasons if t0 <= a < t1 and a in index)
+    starts = sorted(a for a in reasons if t0 <= a < t1 and (a in index or 'frame' in reasons[a]))
     starts = sorted(set(starts) | {GAME_END})
     funcs = [{'addr': a, 'size': (starts[k + 1] if k + 1 < len(starts) else t1) - a,
               'region': 'game' if a < GAME_END else 'lib' if a < CRT_START else 'crt', 'refs': sorted(reasons[a])}

@@ -89,6 +89,40 @@ Consequences for a byte-identical rebuild:
 
   Operand order in the original source can therefore be read off the binary, and folding
   an increment into an expression shows up as a change in evaluation order.
+
+  More cases, **observed** while matching `CPlayer`:
+  - `p->arr[i]` adds the member offset to `p` first, which makes `p` the heavier operand,
+    so `p` is loaded before `i`. The raw form `(char*)p + i*4 + off` loads `i` first. With
+    `this` as the base the two forms compile the same.
+  - In `a + b` and `a * b` on doubles, a memory operand is kept as the instruction's
+    operand. If its address is worked out before the other side is loaded, it was the
+    left operand: `fild t; fmul [X]` with `X`'s address ready first is `X * t`. A constant
+    doesn't count: `0.0 * x` computes `x`'s address first and still loads `0.0` first.
+  - `x += e` works out `x`'s address first and loads `x` last. `x = e + x` doesn't.
+  - `==` and `!=` on doubles compile to `fucompp` with the *right* operand loaded first.
+    The relational operators load the left one first and use `fcomp`/`fcompp`.
+- **Some expressions always go through unnamed temporaries.** **Observed:**
+  - A boolean used as a value (`return a && b;`, `x * (y > 0)`) is materialised as 0 or 1
+    in a temporary by an `if`/`else` diamond. The diamond is hoisted in front of the
+    expression that uses it.
+  - An `int` expression converted to `double` is stored to a temporary for `fild`.
+  - `(float)e` is an `fst dword` into a temporary that is never read. The rest of the
+    expression keeps using the unrounded value.
+
+  These temporaries go below all named locals and below `this`. `this` itself is placed
+  by the same name hash as the locals, so named locals can sit on either side of it, but
+  a slot below every name is always a temporary.
+- **More idioms.** **Observed:** `x * 2.0` compiles to `fadd st(0),st`. A `char` function's
+  `return -1` is `or al,0xff`. A struct assignment of up to 16 bytes is a run of `mov`
+  pairs, one per dword.
+- **Classes.** **Observed** in `CPlayer`:
+  - A class with a vtable whose base has none puts the vtable pointer at 0 and the base
+    after it, aligned to the base's alignment: `ObjBase` holds doubles, so it starts at 8.
+  - Converting a pointer to a base at a nonzero offset is null-checked
+    (`p ? (char*)p + 8 : 0`).
+  - Stores that run before a member object is constructed come from the constructor's
+    initializer list. They are fields declared before that member.
+  - The compiler sets the vtable pointer at the start of constructors and destructors.
 - **Inline functions are COMDATs placed after the object that first uses them, in
   emission order.** **Observed:**
   - Emission follows the referencing functions in source order.
@@ -101,6 +135,9 @@ Consequences for a byte-identical rebuild:
     above `CFile`'s.
   - Compiler-generated helpers (`??_E` vector deleting destructors, the `??_H`/`??_I`
     vector constructor/destructor iterators) are emitted the same way.
+  - In a constructor, the inline functions the body uses come before the constructors of
+    member objects. `CPlayer`'s constructor emits `PatternData`'s constructor (used by
+    `new PatternData[505]` in the body) before `Afterimages`'s (a member).
 - **Inline assembly is used for the pixel loops.** **Observed:** the blitters,
   `FillRect` and `Upscale` in `CGraphics` contain `__asm` blocks that save `esi`/`edi`
   themselves. Functions with `__asm` also save `ebx`/`esi`/`edi` in the prologue.
@@ -115,7 +152,7 @@ Consequences for a byte-identical rebuild:
   `+0x670` and `FrameTimerThread` at `+0x850`. Compiler-generated functions (scalar
   deleting destructors) go in COMDAT sections, which the linker places right after the
   object's code.
-- **Matched objects.** All game code from `0x401000` to `0x40e62f` matches, object by
+- **Matched objects.** All game code from `0x401000` to `0x4136cf` matches, object by
   object. Run `tools/progress.py` for current numbers.
 
   | Source | Range | Functions | Contents |
@@ -128,10 +165,12 @@ Consequences for a byte-identical rebuild:
   | `graphics.cpp` | `0x4083b0`–`0x40c5df` | 36 | `CGraphics`: DirectDraw, sprite loaders, blitters, palettes, screenshots |
   | `input.cpp` | `0x40c5e0`–`0x40d80f` | 9 | `CInput`: DirectInput keyboard and joysticks, bindings |
   | `sound.cpp` | `0x40d810`–`0x40e62f` | 15 | `CSound`: DirectSound, `.wav` loading, music loop points |
+  | `player.cpp` | `0x40e630`–`0x412b0f` | 49 | `CPlayer`, the base of the character classes; inline `PatternData` and `Afterimages` methods |
+  | `playerobj.cpp` | `0x412b10`–`0x4136cf` | 6 | `CPlayer`'s table of 64 spawned objects and drawing them |
 
   The boundaries come from each object's string literals, which are contiguous in
-  `.rdata`. The next object starts at `0x40e630` with two `CPlayer` methods, followed by
-  `CPlayer`'s constructor (`0x40e740`).
+  `.rdata`, and from where inline functions are emitted. The first character class,
+  Shiori (`"shiori"`), starts at `0x4136d0`; its constructor is at `0x422d70`.
 - **String literals are not pooled.** **Observed:** `/GF` is off, and `WinMain`'s four
   identical `"ETENAL FIGHTER ZERO"` literals each get their own copy. (The typo is the
   original's.)
@@ -155,7 +194,7 @@ window/message functions, and one GDI32 call. 115 imported functions in total.
 
 | Region | Range | Functions | Bytes |
 |---|---|---|---|
-| Game | `0x401000`–`0x77697e` | ~622 | 3,627,390 |
+| Game | `0x401000`–`0x77697e` | 630 | 3,627,390 |
 | Import thunks and DirectInput data formats | `0x77697e`–`0x777d46` | — | 5,064 |
 | Static CRT | `0x777d46`–`0x7864af` | ~342 | ~59,000 |
 
@@ -169,15 +208,20 @@ and `_purecall` `0x77893d` (from `CPlayer`'s vtable).
   `LoadIcon(0, IDI_APPLICATION)`, and `memset` (CRT, `0x777dc0`).
 - **Game functions are mostly C++ virtual methods** (**observed**). There are 36 vtables
   in `.rdata`:
-  - **23 vtables have 13 slots each.** These are the character classes (24 character
-    folders; variants such as `nayukib` may share a class, **inferred**). Slot 12 is
-    usually the shared base method `0x410b70`.
+  - **23 vtables have 13 slots each:** `CPlayer`'s at `0x787bcc` (slots 1–8 pure) and
+    22 character classes (24 character folders; variants such as `nayukib` may share a
+    class, **inferred**). Characters keep `CPlayer`'s slot 11 (`0x410b70`) and override
+    the others.
   - **13 smaller vtables (2–6 slots)** are probably projectile, effect and system objects (**inferred**).
 - **Functions are very large:** median ~320 bytes, but the biggest are 70–118 KB each.
   These are per-character virtual methods. Each is probably a large state machine over
   move states (**inferred**). Two of them, `0x5b2d10` and `0x5c8580`, are exactly 88,176
   bytes, which suggests copy-and-paste or a shared macro between related characters.
-- **There are 97 switch jump tables** in total.
+- **There are 97 switch jump tables** in total. **Observed:** the tables sit inside their
+  functions, after the code, and can throw a linear disassembly out of step so that the
+  next function's prologue is missed. `tools/inventory.py` also scans the raw bytes for
+  16-aligned `push ebp; mov ebp,esp`, which found 8 functions hidden that way (among
+  them Shiori's constructor at `0x422d70`).
 - **Character objects have a large layout** (**observed** field offsets): `+0x14c`,
   `+0x2ca`, `+0x2cc`, an array at `+0x3d0`, and an array of 0x98-byte records near `+0x556`.
 

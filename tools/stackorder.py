@@ -76,12 +76,16 @@ def rank(names):
     return groups
 
 
-def solve(variables):
+def solve(variables, ranks=None):
     """variables: [(label, [candidates])] from the top of the frame down.
 
     Returns the assignment whose candidates are earliest in their lists overall (the
     sum of their positions is minimal), so that preferred names win where they can.
+    `ranks` marks variables declared later in the body than the others (1, 2, ... in
+    code order; 0 for the ones declared at the top, whose order is free): a variable
+    declared later sits above the others in its bucket.
     """
+    ranks = ranks or [0] * len(variables)
     groups = rank([c for _, cands in variables for c in cands])
     level = {n: i for i, g in enumerate(groups) for n in g}
     # best[k][lv]: (cost, names) of the cheapest assignment of variables k.. whose
@@ -96,7 +100,11 @@ def solve(variables):
         for lv in range(nlevels - 1, -1, -1):
             options = [best[k][lv + 1]] if lv + 1 <= nlevels else []
             for cost, cand in enumerate(variables[k][1]):
-                rest = best[k + 1][level[cand]]
+                below = ranks[k + 1] if k + 1 < len(variables) else 0
+                # sharing a bucket with the variable below needs this one declared later
+                share = ranks[k] > below or ranks[k] == below == 0
+                nxt = level[cand] if share else level[cand] + 1
+                rest = best[k + 1][nxt] if nxt <= nlevels else None
                 if level[cand] == lv and rest is not None and cand not in rest[1]:
                     options.append((cost + rest[0], [cand] + rest[1]))
             options = [o for o in options if o is not None]

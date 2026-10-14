@@ -5,10 +5,11 @@ C++ source that the original compiler, Visual C++ .NET 2003, builds back into a 
 `efz.exe` (SHA-256 `3a1616d6…6dd66481`). The recovered source is then the base for a maintained,
 modernised version of the game.
 
-**Status: the platform layer matches.** All game code from `0x401000` to `0x40e62f` (the
-first 8 of the 152 object files, plus their init stubs at the end of `.text`) builds byte
-for byte: 143 functions. That is 22% of the ~622 game functions but only 1.5% of the
-game code's bytes, because the 23 character classes that follow are huge.
+**Status: the platform layer and the `CPlayer` base class match.** All game code from
+`0x401000` to `0x4136cf` (the first 10 of the 152 object files, plus their init stubs at
+the end of `.text`) builds byte for byte: 192 functions. That is 30% of the 630 game
+functions but only 2% of the game code's bytes, because the character classes that
+follow are huge.
 
 | Source | What it is |
 |---|---|
@@ -20,6 +21,8 @@ game code's bytes, because the 23 character classes that follow are huge.
 | `src/graphics.cpp` | `CGraphics`: DirectDraw setup, `.dat`/`.bmp` sprite loaders, software blitters (inline assembly), palettes, screenshots |
 | `src/input.cpp` | `CInput`: DirectInput keyboard and joysticks, key bindings |
 | `src/sound.cpp` | `CSound`: DirectSound buffers, `.wav` loading, music loop points |
+| `src/player.cpp` | `CPlayer`, the base of the character classes: movement, guard and damage, the `.pal`/`.dat`/`.pat`/`.wav` loaders, round reset |
+| `src/playerobj.cpp` | `CPlayer`'s table of 64 spawned objects (projectiles and the like) |
 
 `tools/progress.py` prints the current numbers.
 
@@ -63,7 +66,14 @@ that container; `tools/msvc <tool> <args>` runs any of the tools.
 
    It prints an instruction diff of whatever differs, plus the addresses of symbols that
    aren't annotated yet (`learned:`).
-4. **Fix stack-layout differences by renaming.** This compiler orders stack variables by a
+4. **Or lift a whole object.** `tools/lift.py` turns this compiler's unoptimised x86
+   back into C++ that compiles to the same bytes. Describe the object in
+   `tools/objdefs.py` (address range, class, names), then run
+   `tools/objcheck.sh <obj>`: it regenerates `src/<obj>.cpp` (keeping its leading comment
+   and `#include`s), updates the declarations in `src/efz.h`, compiles and diffs.
+   Whatever still differs points at a lifter rule to add. `tools/lifttest.py` relifts
+   every matched function to check that the lifter doesn't regress.
+5. **Fix stack-layout differences by renaming.** This compiler orders stack variables by a
    hash of their names, not by declaration order. If only `[ebp-N]` offsets differ:
    - list each local's slot in the original, top of the frame first
    - run `tools/stackorder.py solve` with a few candidate names per local; one probe
@@ -80,6 +90,11 @@ that container; `tools/msvc <tool> <args>` runs any of the tools.
 | `tools/funcdiff.py` | Per-function byte and relocation comparison |
 | `tools/stackorder.py` | Picks local names that reproduce the original stack layout |
 | `tools/progress.py` | Matched functions and bytes, and where the matched prefix of `.text` ends |
+| `tools/lift.py` | Lifts a function (`body 0xADDR`) or an object (`write <obj>`) to C++ |
+| `tools/objdefs.py` | Object ranges, class names and signatures for the lifter |
+| `tools/objcheck.sh` | Regenerate, compile and diff objects |
+| `tools/lifttest.py` | Relift the matched functions and check they still match |
+| `tools/objorder.py` | Function order in `.obj` files as the linker will lay them out |
 | `tools/msvc` | Run `cl`, `link` or `lib` in the container |
 
 ## Findings so far
@@ -92,8 +107,8 @@ See [docs/recon.md](docs/recon.md). In short:
 - **Libraries:** the static CRT plus DirectDraw, DirectInput and DirectSound, using
   DirectX 7-era interfaces through the DirectX 9 SDK.
 - **Structure:**
-  - about 622 game functions, mostly virtual methods of 23 character classes (13-slot
-    vtables)
+  - 630 game functions, mostly virtual methods of 22 character classes that derive from
+    `CPlayer` (13-slot vtables)
   - 8 top-level scene objects, driven from `WinMain`
 
 ## Roadmap
@@ -103,9 +118,9 @@ See [docs/recon.md](docs/recon.md). In short:
    *Done:* `src/main.cpp` matches its original object byte for byte.
 3. **Function matching**, in this order:
    1. platform layer and file loaders. *Done:* `0x401000`–`0x40e62f`, 8 objects.
-   2. shared base classes, starting with `CPlayer` at `0x40e630`
+   2. shared base classes. *Done:* `CPlayer`, `0x40e630`–`0x4136cf`, 2 objects.
    3. effects and projectiles
-   4. the 23 character classes
+   4. the 22 character classes
 4. **Byte-identical exe.** Link with the original CRT and libraries, set the post-link header
    fields (timestamp, RSDS record, Rich header), and check the SHA-256 in CI.
 5. **Modern fork.** Starting from the matched source:

@@ -406,23 +406,224 @@ public:
     IDirectSoundBuffer* m_buffers[0x96];
 };
 
-// Abstract base of the object held for each player (inferred: one per side, since there
-// are two of them and the destructor releases sound slots and per-character arrays).
-// Its vtable at 0x787bcc has one implemented slot and eight pure virtual ones.
-class CPlayer {
+// Per-pattern data read from <name>.pat beside the sprite frames, one per pattern
+// (CPlayer+0x164 holds 505 of them): 0xc8-byte frames with boxes and physics values.
+struct PatternData {
+    // Inline methods are emitted after the CPlayer object in order of first use.
+    // FUNCTION: 0x412820
+    PatternData()
+    {
+        *(int*)((char*)this + 4) = 0;
+    }
+    // FUNCTION: 0x4128e0
+    ~PatternData()
+    {
+        int v4;
+
+        if (*(int*)((char*)this + 4) != 0) {
+            v4 = *(int*)((char*)this + 4);
+            operator delete((void*)v4);
+        }
+    }
+    // FUNCTION: 0x412ad0
+    void Alloc(int p1)
+    {
+        int v4;
+
+        if (p1 > 0) {
+            v4 = (int)operator new(p1 * 0xc8);
+            *(int*)((char*)this + 4) = v4;
+        }
+    }
+
+    short unk0;
+    short unk2;
+    void* frames;
+};
+
+// What a player and each of the objects it spawns have in common: pattern and frame,
+// the sprite animations, position and facing. CPlayer derives from it (at offset 8,
+// after the vtable pointer), and so do the 0x98-byte entries of its object table.
+struct ObjBase {
+    short pattern;    // +0
+    short frame;      // +2
+    BYTE unk4[4];
+    EffectAnim* anims; // +8: the character's sprite animations, one per pattern
+    BYTE unkc[0xc];
+    double x;         // +0x18
+    double y;         // +0x20
+    BYTE unk28[0x20];
+    char facing;      // +0x48: 1 or -1
+    BYTE unk49[7];
+};
+
+// The last 60 positions of a player, for drawing afterimages: x and y, facing, pattern
+// and frame. Kept at CPlayer+0x2bc0.
+struct Afterimages {
+    // FUNCTION: 0x412840
+    Afterimages()
+    {
+        *(short*)((char*)this + 0x4f4) = 0;
+        *(char*)this = 0;
+        *((char*)this + 2) = 0;
+    }
+    // FUNCTION: 0x412910
+    void Unk412910()
+    {
+        *((char*)this + 2) = *(BYTE*)(char*)this * 3;
+        *(char*)this = 0;
+    }
+    // FUNCTION: 0x412930
+    void Unk412930(ObjBase* p1)
+    {
+        *((char*)this + 1) = *(char*)this;
+        *((char*)this + 2) = 0;
+        *(double*)((char*)this + *(short*)((char*)this + 0x4f4) * 8 + 8) = *(double*)((char*)p1 + 0x18);
+        *(double*)((char*)this + *(short*)((char*)this + 0x4f4) * 8 + 0x1e8) = *(double*)((char*)p1 + 0x20);
+        *((char*)this + *(short*)((char*)this + 0x4f4) + 0x3c8) = *((char*)p1 + 0x48);
+        *(short*)((char*)this + *(short*)((char*)this + 0x4f4) * 2 + 0x404) = *(short*)(char*)p1;
+        *(short*)((char*)this + *(short*)((char*)this + 0x4f4) * 2 + 0x47c) = *(short*)((char*)p1 + 2);
+        (*(short*)((char*)this + 0x4f4))++;
+        if (*(short*)((char*)this + 0x4f4) >= 0x3c) {
+            *(short*)((char*)this + 0x4f4) = 0;
+        }
+    }
+    // FUNCTION: 0x412a10
+    void Unk412a10(ObjBase* p1, char p2)
+    {
+        int v4;
+
+        if (*(BYTE*)(char*)this == 0 && *(BYTE*)((char*)this + 2) == 0) {
+            v4 = 0;
+            for (; v4 < 0x3c; v4++) {
+                *(double*)((char*)this + v4 * 8 + 8) = *(double*)((char*)p1 + 0x18);
+                *(double*)((char*)this + v4 * 8 + 0x1e8) = *(double*)((char*)p1 + 0x20);
+                *((char*)this + v4 + 0x3c8) = *((char*)p1 + 0x48);
+                *(short*)((char*)this + v4 * 2 + 0x404) = *(short*)(char*)p1;
+                *(short*)((char*)this + v4 * 2 + 0x47c) = *(short*)((char*)p1 + 2);
+            }
+        }
+        *(char*)this = p2;
+        *((char*)this + 1) = p2;
+    }
+
+    BYTE data[0x4f8];
+};
+
+// Base of the character classes, one per side. Characters override the pure virtual
+// slots; the vtable at 0x787bcc implements slots 0 and 9-12. The destructor is not
+// virtual: g_player1 and g_player2 are deleted as CPlayer.
+class CPlayer : public ObjBase {
 public:
+    // FUNCTION: 0x40e630
+    int Unk40e630();
+    // FUNCTION: 0x40e6c0
+    int Unk40e6c0(double p1);
+    // FUNCTION: 0x40e740
+    void Unk40e740();
+    // FUNCTION: 0x40eae0
+    CPlayer(int p1, int p2, int p3, int p4, int p5, char p6);
     // FUNCTION: 0x40ecb0
     ~CPlayer();
+    // FUNCTION: 0x40f170
+    void Unk40f170();
+    // FUNCTION: 0x40f190
+    void Unk40f190();
+    // FUNCTION: 0x40f1e0
+    void Unk40f1e0();
+    // FUNCTION: 0x40f230
+    void Unk40f230();
+    // FUNCTION: 0x40f470
+    void Unk40f470();
+    // FUNCTION: 0x40f580
+    void Unk40f580();
+    // FUNCTION: 0x40f980
+    void Unk40f980();
+    // FUNCTION: 0x40ff70
+    char Unk40ff70();
+    // FUNCTION: 0x410050
+    int Unk410050(int p1, int p2);
+    // FUNCTION: 0x4100f0
+    int Unk4100f0(int p1);
+    // FUNCTION: 0x4102e0
+    int Unk4102e0();
+    // FUNCTION: 0x410340
+    int Unk410340();
+    // FUNCTION: 0x4103a0
+    int Unk4103a0();
+    // FUNCTION: 0x410420
+    int Unk410420();
+    // FUNCTION: 0x410480
+    double Unk410480();
+    // FUNCTION: 0x410530
+    double Unk410530();
+    // FUNCTION: 0x410560
+    double Unk410560();
+    // FUNCTION: 0x4105a0
+    void Unk4105a0(int p1, double p2);
+    // FUNCTION: 0x410790
+    void Unk410790(int p1);
+    // FUNCTION: 0x410840
+    void Unk410840(int p1);
+    // FUNCTION: 0x4108a0
+    short Unk4108a0(short p1, short p2);
+    // FUNCTION: 0x410940
+    void Unk410940();
+    // FUNCTION: 0x4109d0
+    void Unk4109d0(char p1);
+    // FUNCTION: 0x410a10
+    void Unk410a10(int p1, int p2);
+    // FUNCTION: 0x410a40
+    void Unk410a40(int p1, int p2);
+    // FUNCTION: 0x410a80
+    void Unk410a80(int p1, int p2);
+    // FUNCTION: 0x410ac0
+    void Unk410ac0(char p1, int p2);
+    // FUNCTION: 0x410b10
+    void Unk410b10(char p1, int p2);
+    // FUNCTION: 0x411080
+    void Unk411080();
+    // FUNCTION: 0x4116a0
+    void Unk4116a0();
+    // FUNCTION: 0x411ae0
+    void Unk411ae0();
+    // FUNCTION: 0x411be0
+    void Unk411be0();
+    // FUNCTION: 0x4121a0
+    void Unk4121a0(int p1, int p2);
+    // FUNCTION: 0x412f10
+    void Unk412f10();
+    // FUNCTION: 0x413040
+    void Unk413040();
+    // FUNCTION: 0x413090
+    void Unk413090(int p1);
+    // FUNCTION: 0x413100
+    void Unk413100(int p1, int p2, BYTE p3);
 
-    virtual void Unk0();
-    virtual void Unk1() = 0;
-    virtual void Unk2() = 0;
-    virtual void Unk3() = 0;
-    virtual void Unk4() = 0;
-    virtual void Unk5() = 0;
-    virtual void Unk6() = 0;
-    virtual void Unk7() = 0;
-    virtual void Unk8() = 0;
+    // FUNCTION: 0x40f110
+    virtual void Vf0();
+    virtual void Vf1() = 0;
+    virtual void Vf2() = 0;
+    virtual void Vf3() = 0;
+    virtual void Vf4() = 0;
+    virtual void Vf5() = 0;
+    virtual void Vf6() = 0;
+    virtual void Vf7() = 0;
+    virtual void Vf8() = 0;
+    // FUNCTION: 0x412b10
+    virtual void Vf9(int p1);
+    // FUNCTION: 0x412e60
+    virtual void Vf10(short p1);
+    // FUNCTION: 0x410b70
+    virtual void Vf11();
+    // FUNCTION: 0x40edf0
+    virtual void Vf12();
+
+    BYTE unk58[0x78 - 0x58];
+    int unk78; // set first: initialized before m_afterimages
+    BYTE unk7c[0x2bc0 - 0x7c];
+    Afterimages m_afterimages;
+    BYTE unk30b8[0x3138 - 0x30b8];
 };
 
 // One running effect (sparks, debris, screen flashes...). CGame keeps 640 of them in a
