@@ -1,4 +1,5 @@
-// CMisaki (0x5571f0-0x5736cf): the character class whose data lives in system\misaki\.
+// CMisaki (0x5571f0-0x5736cf): the character class whose files are in misaki\ in the game
+// folder (misaki.dat sprites, misaki.pat patterns, wave\).
 // Its constructor sets the folder name CPlayer's loaders use; the VfN methods override
 // the CPlayer virtual slots of the same number (see shiori.cpp for what they do).
 #include <stdlib.h>

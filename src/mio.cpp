@@ -1,4 +1,5 @@
-// CMio (0x5736d0-0x59c49f): the character class whose data lives in system\mio\.
+// CMio (0x5736d0-0x59c49f): the character class whose files are in mio\ in the game
+// folder (mio.dat sprites, mio.pat patterns, wave\).
 // Its constructor sets the folder name CPlayer's loaders use; the VfN methods override
 // the CPlayer virtual slots of the same number (see shiori.cpp for what they do).
 #include <stdlib.h>

@@ -1,4 +1,5 @@
-// CMai (0x607930-0x62a5df): the character class whose data lives in system\mai\.
+// CMai (0x607930-0x62a5df): the character class whose files are in mai\ in the game
+// folder (mai.dat sprites, mai.pat patterns, wave\).
 // Its constructor sets the folder name CPlayer's loaders use; the VfN methods override
 // the CPlayer virtual slots of the same number (see shiori.cpp for what they do).
 #include <stdlib.h>

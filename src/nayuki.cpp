@@ -1,4 +1,5 @@
-// CNayuki (0x451850-0x46d96f): the character class whose data lives in system\nayuki\.
+// CNayuki (0x451850-0x46d96f): the character class whose files are in nayuki\ in the game
+// folder (nayuki.dat sprites, nayuki.pat patterns, wave\).
 // Its constructor sets the folder name CPlayer's loaders use; the VfN methods override
 // the CPlayer virtual slots of the same number (see shiori.cpp for what they do).
 #include <stdlib.h>

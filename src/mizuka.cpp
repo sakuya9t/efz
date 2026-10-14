@@ -1,4 +1,5 @@
-// CMizuka (0x4e7ec0-0x50c4af): the character class whose data lives in system\mizuka\.
+// CMizuka (0x4e7ec0-0x50c4af): the character class whose files are in mizuka\ in the game
+// folder (mizuka.dat sprites, mizuka.pat patterns, wave\).
 // Its constructor sets the folder name CPlayer's loaders use; the VfN methods override
 // the CPlayer virtual slots of the same number (see shiori.cpp for what they do).
 #include <stdlib.h>

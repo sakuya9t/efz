@@ -1,4 +1,5 @@
-// CMayu (0x5c8580-0x5e85ef): the character class whose data lives in system\mayu\.
+// CMayu (0x5c8580-0x5e85ef): the character class whose files are in mayu\ in the game
+// folder (mayu.dat sprites, mayu.pat patterns, wave\).
 // Its constructor sets the folder name CPlayer's loaders use; the VfN methods override
 // the CPlayer virtual slots of the same number (see shiori.cpp for what they do).
 #include <stdlib.h>

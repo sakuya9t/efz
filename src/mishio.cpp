@@ -1,4 +1,5 @@
-// CMishio (0x530bc0-0x5571ef): the character class whose data lives in system\mishio\.
+// CMishio (0x530bc0-0x5571ef): the character class whose files are in mishio\ in the game
+// folder (mishio.dat sprites, mishio.pat patterns, wave\).
 // Its constructor sets the folder name CPlayer's loaders use; the VfN methods override
 // the CPlayer virtual slots of the same number (see shiori.cpp for what they do).
 #include <stdlib.h>

@@ -1,4 +1,5 @@
-// CMinagi (0x59c4a0-0x5c857f): the character class whose data lives in system\minagi\.
+// CMinagi (0x59c4a0-0x5c857f): the character class whose files are in minagi\ in the game
+// folder (minagi.dat sprites, minagi.pat patterns, wave\).
 // Its constructor sets the folder name CPlayer's loaders use; the VfN methods override
 // the CPlayer virtual slots of the same number (see shiori.cpp for what they do).
 #include <stdlib.h>

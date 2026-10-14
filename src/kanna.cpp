@@ -1,4 +1,5 @@
-// CKanna (0x667570-0x68354f): the character class whose data lives in system\kanna\.
+// CKanna (0x667570-0x68354f): the character class whose files are in kanna\ in the game
+// folder (kanna.dat sprites, kanna.pat patterns, wave\).
 // Its constructor sets the folder name CPlayer's loaders use; the VfN methods override
 // the CPlayer virtual slots of the same number (see shiori.cpp for what they do).
 #include <stdlib.h>
