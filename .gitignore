@@ -1,0 +1,15 @@
+# Original game files never go in the repo
+*.exe
+*.dll
+*.dat
+*.pat
+*.wav
+*.rep
+efz-unpacked/
+
+# Generated analysis output
+inventory.json
+__pycache__/
+
+# Build output
+build/

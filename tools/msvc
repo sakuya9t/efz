@@ -1,0 +1,19 @@
+#!/bin/bash
+# Run a Visual C++ .NET 2003 tool (cl, link, lib, ...) under wine in the efz-msvc71 container.
+#   tools/msvc cl /c src/main.cpp
+# The repo is mounted at /work and the current directory is preserved inside it.
+# EFZ_TOOLCHAIN (default ~/tools/efz-toolchain) holds msvc71/, psdk/ and dxsdk/,
+# laid out by toolchain/setup.sh.
+set -e
+tool=$1; shift
+toolchain=${EFZ_TOOLCHAIN:-$HOME/tools/efz-toolchain}
+repo=$(cd "$(dirname "$0")/.." && pwd)
+case $PWD/ in
+    "$repo"/*) sub=${PWD#"$repo"} ;;
+    *) echo "tools/msvc: run from inside $repo" >&2; exit 1 ;;
+esac
+exec docker run --rm -i --network none \
+    -v "$repo:/work" -v "$toolchain:/opt/tc:ro" -w "/work$sub" \
+    -e 'INCLUDE=Z:\opt\tc\msvc71\include;Z:\opt\tc\psdk\Include;Z:\opt\tc\dxsdk\Include' \
+    -e 'LIB=Z:\opt\tc\msvc71\lib;Z:\opt\tc\psdk\Lib;Z:\opt\tc\dxsdk\Lib' \
+    efz-msvc71 wine "/opt/tc/msvc71/bin/$tool.exe" "$@"
