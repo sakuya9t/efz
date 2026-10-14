@@ -28,6 +28,12 @@ OBJECTS = {
     }),
 }
 
+# Inline methods of shared classes, named wherever their copy happens to be emitted.
+SHARED = {
+    0x434010: 'ObjBase::SetVelocity',
+    0x4c0480: 'ObjBase::AngleTo',
+}
+
 # Character classes: (object, class, first address, end address, vtable, constructor,
 # size from the scene code's `new`). Each derives from CPlayer and overrides its virtual
 # slots (named VfN after the slot).
@@ -67,6 +73,7 @@ def _vtable(addr, n=13):
 
 for _obj, _cls, _lo, _hi, _vt, _ctor, _size in CHARACTERS:
     _names = {_ctor: f'{_cls}::{_cls}'}
+    _names.update({a: n for a, n in SHARED.items() if _lo <= a < _hi})
     for _k, _a in enumerate(_vtable(_vt)):
         if _a != CPLAYER_SLOT11:
             _names[_a] = f'{_cls}::Vf{_k}'
@@ -78,7 +85,7 @@ INLINE_FROM = {'player': 0x412820}
 
 
 def is_inline(obj, addr):
-    return obj in INLINE_FROM and addr >= INLINE_FROM[obj]
+    return (obj in INLINE_FROM and addr >= INLINE_FROM[obj]) or addr in SHARED
 
 
 # Base classes at a nonzero offset: converting a pointer to them is a null-checked
@@ -91,4 +98,7 @@ SIGNATURES = {
     0x412a10: ('void', ['ObjBase*', 'char']),
     0x412b10: ('void', ['EffectDesc*']),     # CPlayer::Vf9 spawns an object
     0x413090: ('void', ['EffectDesc*']),
+    0x434010: ('void', ['double', 'double']),
+    0x4c0480: ('double', ['double', 'double']),
 }
+

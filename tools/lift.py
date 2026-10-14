@@ -423,6 +423,20 @@ class Cond(E):
         return f'{self.a.text(self.prec)} {self.op} {self.b.text(self.prec + 1)}'
 
 
+class Ternary(E):
+    prec = PREC['?']
+
+    def __init__(self, c, a, b):
+        self.c, self.a, self.b = c, a, b
+        self.ty = 'int'
+
+    def uses(self):
+        return [self.c, self.a, self.b]
+
+    def render(self):
+        return f'{self.c.text(PREC["?"] + 1)} ? {self.a.text(PREC["?"])} : {self.b.text(PREC["?"])}'
+
+
 NEGATE = {'==': '!=', '!=': '==', '<': '>=', '>=': '<', '>': '<=', '<=': '>'}
 
 
@@ -876,6 +890,17 @@ class Index(E):
         return f'{self.arr.text(PREC["post"])}[{self.idx.text()}]'
 
 
+def base_call(obj, name):
+    """Whether `obj` is this + the offset of the base class that `name` belongs to,
+    which a call from a derived class's method adjusts to without writing it."""
+    import objdefs
+    if not (isinstance(obj, Bin) and obj.op == '+' and isinstance(obj.b, Const)
+            and isinstance(obj.a, Cast) and isinstance(obj.a.e, ThisVar)) or '::' not in name:
+        return False
+    base = name.rsplit('::', 1)[0]
+    return any(off == obj.b.v and b == base for (_c, off), b in objdefs.BASES.items())
+
+
 def is_offset(v):
     """An index computation rather than a pointer: i * size, or a constant."""
     if isinstance(v, Const):
@@ -1051,6 +1076,7 @@ class Lifter2(Lifter):
         self.arg_block = None
         self.ret_types = []
         self.forward = {}
+        self.pads = self.__dict__.get('pads', {})
         self.ret_type = ret_type
         self.dirty = set()
         skip = {self.this_store} if self.this_slot is not None else set()
@@ -1070,6 +1096,13 @@ class Lifter2(Lifter):
             if ins.addr in skip:
                 k += 1
                 continue
+            pad = self.pads.get(ins.addr)
+            if pad and not self.fpu and not self.args and not self.forward:
+                # a statement starts here (a finished call still pending is a
+                # statement of its own)
+                self.flush_pending()
+                self.items.append(('stmt', PadStmt(pad), ins.addr))
+                self.cur_stmt_addr = None
             if self.cur_stmt_addr is None:
                 self.cur_stmt_addr = ins.addr
             k = self.step(k, tables)
@@ -1212,6 +1245,16 @@ class Lifter2(Lifter):
                     term = self.reg_value(src.index)
                     if src.scale != 1:
                         term = Bin('*', term, Const(src.scale), 'int')
+                    if v is not None and v.ty != 'char*' and src.scale != 1 \
+                            and isinstance(v, Bin) and v.op in ('*', '<<'):
+                        # lea r, [x*t + y*s (+ K)] with x already shifted: of two scaled
+                        # terms the compiler folds the *left* one's scaling into the lea
+                        # and shifts the right one itself, so this is y*s + x*t (+ K)
+                        v = Bin('+', term, v, 'int')
+                        if src.disp:
+                            v = Bin('+', v, Const(src.disp), 'int')
+                        self.set_reg(dst.reg, v)
+                        return k + 1
                     if v is not None and v.ty != 'char*' and src.disp:
                         # lea r, [x + y + K]: the compiler folds a constant into the
                         # addition after it, so this is x + K + y, unless y was computed
@@ -1294,6 +1337,8 @@ class Lifter2(Lifter):
                     c = Cond('==', v.a, v.b)
                 else:
                     c = Cond('==', v, Const(0))
+                if r in REG32:
+                    c.wide = True
                 after = self.ins[k + 2] if k + 2 < len(self.ins) else None
                 if after is not None and after.ops and after.ops[0].kind == 'reg' and after.ops[0].reg == r:
                     if after.m == 'inc':
@@ -1343,6 +1388,15 @@ class Lifter2(Lifter):
             return k + 1
         if m.startswith('set') and m in SETCC:
             c = self.condition(SETCC[m])
+            # `xor r32, r32` first: the 0 or 1 is an int (stored to a char only through
+            # `c ? 1 : 0`)
+            parent = SUBREG.get(ops[0].reg, (ops[0].reg,))[0]
+            for back in (1, 2, 3):
+                p = self.ins[k - back] if k >= back else None
+                if p is not None and p.m == 'xor' and p.ops[0].kind == 'reg' and p.ops[0].reg == parent \
+                        and p.ops[1].kind == 'reg' and p.ops[1].reg == parent:
+                    c.wide = True
+                    break
             self.set_reg(ops[0].reg, c)
             self.dirty.add(SUBREG[ops[0].reg][0])
             return k + 1
@@ -1437,6 +1491,8 @@ class Lifter2(Lifter):
     def store(self, lhs, rhs, size, compound=False):
         if self.struct_copy(lhs, rhs):
             return
+        if size == 1 and isinstance(rhs, Cond) and getattr(rhs, 'wide', False):
+            rhs = Ternary(rhs, Const(1), Const(0))     # worked out as an int
         if isinstance(lhs, Deref) and isinstance(rhs, Cast) and isinstance(rhs.e, Const) \
                 and rhs.e.v in self.syms.vtables and is_this_field(lhs, 0):
             self.vtable = rhs.e.v          # set by the compiler in ctors and dtors
@@ -1553,7 +1609,10 @@ class Lifter2(Lifter):
                 self.after_call(c)
                 return consumed
             pop, thiscall = self.callee_info(target)
-            name = self.syms.func_name(target) or f'Unk{target:x}'
+            name = self.syms.func_name(target)
+            if name is None:
+                import objdefs
+                name = objdefs.SHARED.get(target) or f'Unk{target:x}'
             if target not in self.syms.funcs and self.syms.protos.lookup(name) is None:
                 # not declared anywhere yet (a function of an object still to come)
                 self.syms.infer_proto(self.img, target, name)
@@ -1567,6 +1626,9 @@ class Lifter2(Lifter):
             c = self.typed_call(c, name)
             if c is None:
                 return consumed
+            if thiscall and base_call(this, name):
+                c.this = None          # a method of a base class at a nonzero offset
+                this = ThisVar()
             if thiscall and isinstance(this, ThisVar):
                 c.this = None          # a call to another method of this class
                 own = getattr(self, 'cls', None)
@@ -1833,7 +1895,9 @@ class Lifter2(Lifter):
                 if m in FARITH_R:
                     st.append(fbin(FARITH_R[m], b, a))
                 elif FARITH[m] in ('+', '*') and b.first_time() < a.first_time() \
-                        and not isinstance(a, Const):
+                        and (isinstance(a, Bin) or getattr(a, 'fild', False)):
+                    # (against a plain load, the memory operand's address can come
+                    # first just because it is heavier)
                     # the memory operand's address was worked out first: it is the left
                     # operand, kept in memory while the right one was loaded
                     v = fbin(FARITH[m], b, a)
@@ -1853,7 +1917,8 @@ class Lifter2(Lifter):
                 i, j = int(ops[0].reg[3]), int(ops[1].reg[3])
                 a, b = st[-1 - i], st[-1 - j]
                 if i == j and m == 'fadd':
-                    v = Bin('*', a, Const(2.0, 'double'), 'double')   # x * 2.0
+                    # x * 2 (an int constant keeps a float x float)
+                    v = fbin('*', a, Const(2))
                 elif m in FARITH_R:
                     v = fbin(FARITH_R[m], b, a, reg_form=True)
                 else:
@@ -1888,12 +1953,21 @@ class Lifter2(Lifter):
                     b = self.fload(ops[0]) if m != 'ficomp' else self.value(ops[0])
                 if m != 'fcom':
                     st.pop()
-                if b.first_time() < a.first_time() and isinstance(a, Bin):
+                fild = isinstance(a, Cast) and getattr(a, 'fild', False)
+                inner = a.e if fild else a
+                # (an int has to go through fild whichever side it is on, so then the
+                # order of evaluation is the source order too)
+                if b.first_time() < a.first_time() and (isinstance(inner, Bin) or fild):
                     # The memory operand's address came first. Against an arithmetic
                     # expression that means it was the left operand; against a plain
                     # load it can just be the heavier right operand.
                     a, b = b, a
                     self.fswap = True
+            # an int loaded with fild is compared with an implicit conversion
+            if fprec(a) == 'int' and isinstance(a, Cast) and fprec(b) in ('float', 'double'):
+                a = a.e
+            elif fprec(b) == 'int' and isinstance(b, Cast) and fprec(a) in ('float', 'double'):
+                b = b.e
             swap = getattr(self, 'fswap', False)
             self.fswap = False
             self.flags = ('fcmp', a, b)
@@ -2081,6 +2155,8 @@ CRT = {
     0x7784e0: ('strlen', 'call'),
     0x77856b: ('vsprintf', 'call'),
     0x778600: ('memcpy', 'call'),
+    0x778970: ('atan2', 'fpu'),
+    0x778984: ('abs', 'call'),
 }
 
 
@@ -2451,10 +2527,15 @@ class Structurer:
             # the default case is a body among the others; the end is where the breaks
             # go, or, if every case returns, the end of the range
             end = None
-        for x in range(k + 1, hi):
-            it = self.items[x]
-            if it[0] == 'jump' and it[1] > last_case and it[1] not in excluded:
-                end = it[1] if end is None else max(end, it[1])
+        # breaks: jumps out of the earlier cases to past the last one (jumps inside the
+        # last case's own body can't be told apart from breaks, so they don't count)
+        last_k = self.at.get(last_case, hi)
+        targets = collections.Counter(self.items[x][1] for x in range(k + 1, min(last_k, hi))
+                                      if self.items[x][0] == 'jump' and self.items[x][1] > last_case
+                                      and self.items[x][1] not in excluded)
+        if targets:
+            t = targets.most_common(1)[0][0]
+            end = t if end is None else max(end, t)
         if end is None:
             end = self.items[hi][1] if hi < len(self.items) and self.items[hi][0] == 'label' \
                 else self.epilogue
@@ -2545,8 +2626,17 @@ def array_bytes(space):
     return space // 8 * 8 if space >= 64 else space
 
 
+def register_pads():
+    path = os.path.join(REPO, 'tools', 'regpads.json')
+    if not os.path.exists(path):
+        return {}
+    return {int(f, 16): {int(a, 16): n for a, n in v.items()}
+            for f, v in json.load(open(path)).items()}
+
+
 def lift(img, syms, start, ret_type=None, this_type=None, qual=None):
     lf = Lifter2(img, syms, start, function_end(syms, start), this_type)
+    lf.pads = register_pads().get(start, {})
     qual = qual or syms.func_name(start)
     lf.cls = qual.rsplit('::', 1)[0] if qual and '::' in qual else None
     if qual:
@@ -2870,8 +2960,8 @@ class Protos:
                 m = re.search(r'\b(class|struct)\s+(\w+)[^;]*$', cur)
                 if m and '(' not in cur.split(m.group(2))[-1]:
                     stack.append((m.group(2), depth))
-                elif stack and stack[-1][1] == depth - 0:
-                    self.method(stack[-1][0], cur)
+                elif stack and stack[-1][1] == depth - 1:
+                    self.method(stack[-1][0], cur)      # an inline method's header
                 depth += 1
                 cur = ''
             elif tok == '}':
@@ -2938,6 +3028,18 @@ class DeleteStmt(S):
 
     def lines(self):
         return [f'delete{"[]" if self.array else ""} ({self.cls}*){self.e.text(PREC["cast"])};']
+
+
+class PadStmt(S):
+    """`if (0) {}`: no code, but each one advances the compiler's register rotation
+    (eax, ecx, edx) by one step. The original has dead code here that did the same;
+    tools/regfix.py finds where."""
+
+    def __init__(self, n):
+        self.n = n
+
+    def lines(self):
+        return ['if (0) {}'] * self.n
 
 
 class DeclStmt(S):

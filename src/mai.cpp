@@ -3624,6 +3624,8 @@ void CMai::Vf6()
         if (*(WORD*)((char*)this + 0xc) >= l4) {
             *(short*)((char*)this + 0xc) = 0;
             (*(short*)((char*)this + 0xa))++;
+            if (0) {}
+            if (0) {}
             if (*(WORD*)((char*)this + 0xa) == 6 && *(int*)((char*)this + 0x3138) == 1) {
                 *(short*)((char*)this + 0xa) = 0;
                 *(short*)((char*)this + 0xc) = 0;
@@ -3925,6 +3927,7 @@ void CMai::Vf6()
             *(double*)((char*)this + 0x38) = 0.0;
             *(short*)((char*)this + 0x16c) = 1;
         }
+        if (0) {}
         if (*(WORD*)((char*)this + 0xa) > 2) {
             *(double*)((char*)this + 0x38) += 0.035;
         }
@@ -5987,13 +5990,13 @@ void CMai::Vf5()
     *((char*)this + 0x18c) = 0;
     *((char*)this + 0x18d) = 0;
     *(short*)((char*)this + 0x14e) = 0;
-    if ((double)(WORD)CPlayer::Unk4108a0(0, 0x3e8) < 25.0f * *(float*)((char*)this + 0xa8) + (*(double*)((char*)this + 0x28) < 0.0) * 0x1e * *(float*)((char*)this + 0xa8) + (*(int*)((char*)this + 0x3114) == 3) * 0x190 + (*(WORD*)((char*)this + 8) == 0xaa) * 0x12c) {
+    if ((WORD)CPlayer::Unk4108a0(0, 0x3e8) < 25.0f * *(float*)((char*)this + 0xa8) + (*(double*)((char*)this + 0x28) < 0.0) * 0x1e * *(float*)((char*)this + 0xa8) + (*(int*)((char*)this + 0x3114) == 3) * 0x190 + (*(WORD*)((char*)this + 8) == 0xaa) * 0x12c) {
         *(short*)((char*)this + 0x14e) = 0x3c;
     }
-    if ((double)(WORD)CPlayer::Unk4108a0(0, 0x7d0) < ((*((char*)this + 0x130) > 0) * 4.0 + 1.0) * 8.0 * *(float*)((char*)this + 0xa8) * ((*(WORD*)((char*)this + 8) > 0x95 && *(WORD*)((char*)this + 8) < 0x9d) * 2 + 1)) {
+    if ((WORD)CPlayer::Unk4108a0(0, 0x7d0) < ((*((char*)this + 0x130) > 0) * 4.0 + 1.0) * 8.0 * *(float*)((char*)this + 0xa8) * ((*(WORD*)((char*)this + 8) > 0x95 && *(WORD*)((char*)this + 8) < 0x9d) * 2 + 1)) {
         *(short*)((char*)this + 0x14e) = 0x3c;
     }
-    if ((double)(WORD)CPlayer::Unk4108a0(0, 0x3e8) < 4e+01f * *(float*)((char*)this + 0xa8) && *(WORD*)((char*)this + 8) > 0xc7) {
+    if ((WORD)CPlayer::Unk4108a0(0, 0x3e8) < 4e+01f * *(float*)((char*)this + 0xa8) && *(WORD*)((char*)this + 8) > 0xc7) {
         *(short*)((char*)this + 0x14e) = 0x3c;
     }
     if (*(int*)((char*)this + 0x170) == 1 && *(int*)((char*)this + 0x3114) == 2) {
@@ -6009,14 +6012,14 @@ void CMai::Vf5()
     v10 = (*(double*)(*(char**)*(char**)((char*)this + 0x78) + 0x20) - *(double*)((char*)this + 0x20)) * *((char*)this + 0x50);
     x8 = fabs(*(double*)((char*)this + 0x28) - *(double*)(*(char**)*(char**)((char*)this + 0x78) + 0x28));
     if (*(WORD*)((char*)this + 8) >= 0x32 && *(WORD*)((char*)this + 8) <= 0x96 && *(WORD*)((char*)this + 0xc) == 0) {
-        if ((double)(WORD)CPlayer::Unk4108a0(0, 0x64) < 8.0f * *(float*)((char*)this + 0xa8)) {
+        if ((WORD)CPlayer::Unk4108a0(0, 0x64) < 8.0f * *(float*)((char*)this + 0xa8)) {
             *(int*)((char*)this + 0x3114) = 3;
         } else {
             *(int*)((char*)this + 0x3114) = 0;
         }
         *((char*)this + 0x188) = 1 - (((WORD)CPlayer::Unk4108a0(0, 0x64) < 0x32) << 1);
-        *((char*)this + 0x18d) = (double)(WORD)CPlayer::Unk4108a0(0, 0xf0) < x8;
-        *((char*)this + 0x18d) = (double)(WORD)CPlayer::Unk4108a0(0, 0x140) < v10;
+        *((char*)this + 0x18d) = (WORD)CPlayer::Unk4108a0(0, 0xf0) < x8;
+        *((char*)this + 0x18d) = (WORD)CPlayer::Unk4108a0(0, 0x140) < v10;
         if (*(WORD*)(*(char**)*(char**)((char*)this + 0x78) + 8) > 0xc7 && *(WORD*)(*(char**)*(char**)((char*)this + 0x78) + 8) < 0xfa && *(WORD*)(*(char**)*(char**)((char*)this + 0x78) + 0xa) < 3 && x8 < 100.0 && v10 < 150.0) {
             *((char*)this + 0x18d) = 0;
         }
@@ -6030,28 +6033,28 @@ void CMai::Vf5()
     }
     if (*(WORD*)((char*)this + 8) == 0xa8 && *(WORD*)((char*)this + 0xc) < 6) {
         if (*(WORD*)(*(char**)*(char**)((char*)this + 0x78) + 8) != 0xc8 && *(WORD*)(*(char**)*(char**)((char*)this + 0x78) + 8) != 0xcc && *(WORD*)(*(char**)*(char**)((char*)this + 0x78) + 8) < 0xfa && *(double*)(*(char**)*(char**)((char*)this + 0x78) + 0x28) == 0.0 && *(short*)(*(char**)*(char**)((char*)this + 0x78) + 0x16c) == 0) {
-            if (v10 < 60.0 && (double)(WORD)CPlayer::Unk4108a0(0, 0x64) < *(float*)((char*)this + 0xa8) * 3.0f) {
+            if (v10 < 60.0 && (WORD)CPlayer::Unk4108a0(0, 0x64) < *(float*)((char*)this + 0xa8) * 3.0f) {
                 *((char*)this + 0x18a) = 1;
                 *((char*)this + 0x189) = 1;
                 return;
             }
-            if (v10 < 60.0 && (double)(WORD)CPlayer::Unk4108a0(0, 0x64) < *(float*)((char*)this + 0xa8) * 3.0f) {
+            if (v10 < 60.0 && (WORD)CPlayer::Unk4108a0(0, 0x64) < *(float*)((char*)this + 0xa8) * 3.0f) {
                 *((char*)this + 0x18b) = 1;
                 *((char*)this + 0x189) = 0;
                 return;
             }
-            if (v10 < 100.0 && (double)(WORD)CPlayer::Unk4108a0(0, 0x64) < *(float*)((char*)this + 0xa8) * 3.0f) {
+            if (v10 < 100.0 && (WORD)CPlayer::Unk4108a0(0, 0x64) < *(float*)((char*)this + 0xa8) * 3.0f) {
                 *((char*)this + 0x18b) = 1;
                 *((char*)this + 0x189) = 1;
                 return;
             }
         }
         if ((*(WORD*)(*(char**)*(char**)((char*)this + 0x78) + 8) == 0xc9 || *(WORD*)(*(char**)*(char**)((char*)this + 0x78) + 8) == 0xca || *(WORD*)(*(char**)*(char**)((char*)this + 0x78) + 8) == 0xcd) && *(WORD*)(*(char**)*(char**)((char*)this + 0x78) + 8) < 0xfa && *(double*)(*(char**)*(char**)((char*)this + 0x78) + 0x28) == 0.0 && *(short*)(*(char**)*(char**)((char*)this + 0x78) + 0x16c) == 0) {
-            if (v10 < 80.0 && (double)(WORD)CPlayer::Unk4108a0(0, 0x64) < *(float*)((char*)this + 0xa8) * 3.0f && *(double*)((char*)this + 0x118) > 500.0) {
+            if (v10 < 80.0 && (WORD)CPlayer::Unk4108a0(0, 0x64) < *(float*)((char*)this + 0xa8) * 3.0f && *(double*)((char*)this + 0x118) > 500.0) {
                 *(short*)((char*)this + 0x262) = 0x2a;
                 return;
             }
-            if (v10 < 120.0 && (double)(WORD)CPlayer::Unk4108a0(0, 0x64) < *(float*)((char*)this + 0xa8) * 3.0f && *(short*)((char*)this + 0x148) >= 0x3e8) {
+            if (v10 < 120.0 && (WORD)CPlayer::Unk4108a0(0, 0x64) < *(float*)((char*)this + 0xa8) * 3.0f && *(short*)((char*)this + 0x148) >= 0x3e8) {
                 *(short*)((char*)this + 0x262) = (WORD)CPlayer::Unk4108a0(0, 2) + 0x64;
                 return;
             }
@@ -6059,100 +6062,100 @@ void CMai::Vf5()
     }
     if (*(WORD*)((char*)this + 8) == 0xa8 || *(WORD*)((char*)this + 8) == 0xa9) {
         if (v10 < 120.0) {
-            if (v10 < 60.0 && (double)(WORD)CPlayer::Unk4108a0(0, 0x64) < *(float*)((char*)this + 0xa8) * 3.0f) {
+            if (v10 < 60.0 && (WORD)CPlayer::Unk4108a0(0, 0x64) < *(float*)((char*)this + 0xa8) * 3.0f) {
                 *((char*)this + 0x18a) = 1;
                 *((char*)this + 0x189) = 1;
                 return;
             }
-            if (v10 < 60.0 && (double)(WORD)CPlayer::Unk4108a0(0, 0x64) < *(float*)((char*)this + 0xa8) * 3.0f) {
+            if (v10 < 60.0 && (WORD)CPlayer::Unk4108a0(0, 0x64) < *(float*)((char*)this + 0xa8) * 3.0f) {
                 *((char*)this + 0x18b) = 1;
                 *((char*)this + 0x189) = 0;
                 return;
             }
-            if ((double)(WORD)CPlayer::Unk4108a0(0, 0x64) < *(float*)((char*)this + 0xa8) * 3.0f && *(short*)((char*)this + 0x148) >= 0x3e8) {
+            if ((WORD)CPlayer::Unk4108a0(0, 0x64) < *(float*)((char*)this + 0xa8) * 3.0f && *(short*)((char*)this + 0x148) >= 0x3e8) {
                 *(short*)((char*)this + 0x262) = 0x6e;
                 return;
             }
-            if (v10 < 100.0 && (double)(WORD)CPlayer::Unk4108a0(0, 0x64) < *(float*)((char*)this + 0xa8) * 3.0f) {
+            if (v10 < 100.0 && (WORD)CPlayer::Unk4108a0(0, 0x64) < *(float*)((char*)this + 0xa8) * 3.0f) {
                 *((char*)this + 0x18b) = 1;
                 *((char*)this + 0x189) = 1;
                 return;
             }
-            if (v10 < 80.0 && (double)(WORD)CPlayer::Unk4108a0(0, 0x64) < *(float*)((char*)this + 0xa8) * 3.0f && *(double*)((char*)this + 0x118) > 500.0) {
+            if (v10 < 80.0 && (WORD)CPlayer::Unk4108a0(0, 0x64) < *(float*)((char*)this + 0xa8) * 3.0f && *(double*)((char*)this + 0x118) > 500.0) {
                 *(short*)((char*)this + 0x262) = 0x2a;
                 return;
             }
-            if (v10 < 120.0 && (double)(WORD)CPlayer::Unk4108a0(0, 0x64) < *(float*)((char*)this + 0xa8) * 3.0f && *(short*)((char*)this + 0x148) >= 0x3e8) {
+            if (v10 < 120.0 && (WORD)CPlayer::Unk4108a0(0, 0x64) < *(float*)((char*)this + 0xa8) * 3.0f && *(short*)((char*)this + 0x148) >= 0x3e8) {
                 *(short*)((char*)this + 0x262) = (WORD)CPlayer::Unk4108a0(0, 2) + 0x64;
                 return;
             }
         }
         if (v10 < 160.0) {
-            if ((double)(WORD)CPlayer::Unk4108a0(0, 0x64) < *(float*)((char*)this + 0xa8) * 3.0f && *(short*)((char*)this + 0x148) >= 0x3e8) {
+            if ((WORD)CPlayer::Unk4108a0(0, 0x64) < *(float*)((char*)this + 0xa8) * 3.0f && *(short*)((char*)this + 0x148) >= 0x3e8) {
                 *(short*)((char*)this + 0x262) = 0x6e;
                 return;
             }
-            if ((double)(WORD)CPlayer::Unk4108a0(0, 0x64) < *(float*)((char*)this + 0xa8) * 3.0f && *(double*)((char*)this + 0x118) > 500.0) {
+            if ((WORD)CPlayer::Unk4108a0(0, 0x64) < *(float*)((char*)this + 0xa8) * 3.0f && *(double*)((char*)this + 0x118) > 500.0) {
                 *(short*)((char*)this + 0x262) = 0x2a;
                 return;
             }
-            if ((double)(WORD)CPlayer::Unk4108a0(0, 0x64) < *(float*)((char*)this + 0xa8) * 3.0f && *(double*)((char*)this + 0x118) > 500.0) {
+            if ((WORD)CPlayer::Unk4108a0(0, 0x64) < *(float*)((char*)this + 0xa8) * 3.0f && *(double*)((char*)this + 0x118) > 500.0) {
                 *(short*)((char*)this + 0x262) = 0x20;
                 return;
             }
         }
         if (v10 < 220.0 && v10 > 160.0) {
-            if ((double)(WORD)CPlayer::Unk4108a0(0, 0x64) < *(float*)((char*)this + 0xa8) * 2.0 && *(short*)((char*)this + 0x148) == 0xbb8) {
+            if ((WORD)CPlayer::Unk4108a0(0, 0x64) < *(float*)((char*)this + 0xa8) * 2 && *(short*)((char*)this + 0x148) == 0xbb8) {
                 *(short*)((char*)this + 0x262) = 0x66;
                 return;
             }
-            if ((double)(WORD)CPlayer::Unk4108a0(0, 0x64) < *(float*)((char*)this + 0xa8) * 2.0) {
+            if ((WORD)CPlayer::Unk4108a0(0, 0x64) < *(float*)((char*)this + 0xa8) * 2) {
                 *(short*)((char*)this + 0x262) = 0x28;
                 return;
             }
-            if ((double)(WORD)CPlayer::Unk4108a0(0, 0x64) < *(float*)((char*)this + 0xa8) * 3.0f && *(double*)((char*)this + 0x28) == 0.0) {
+            if ((WORD)CPlayer::Unk4108a0(0, 0x64) < *(float*)((char*)this + 0xa8) * 3.0f && *(double*)((char*)this + 0x28) == 0.0) {
                 *((char*)this + 0x18b) = 1;
                 *((char*)this + 0x188) = *((char*)this + 0x50);
                 return;
             }
-            if ((double)(WORD)CPlayer::Unk4108a0(0, 0x64) < *(float*)((char*)this + 0xa8) * 3.0f && *(double*)((char*)this + 0x28) == 0.0) {
+            if ((WORD)CPlayer::Unk4108a0(0, 0x64) < *(float*)((char*)this + 0xa8) * 3.0f && *(double*)((char*)this + 0x28) == 0.0) {
                 *((char*)this + 0x18c) = 1;
                 *((char*)this + 0x188) = *((char*)this + 0x50);
                 return;
             }
         }
-        if (v10 > 220.0 && (double)(WORD)CPlayer::Unk4108a0(0, 0x64) < *(float*)((char*)this + 0xa8) * 2.0) {
+        if (v10 > 220.0 && (WORD)CPlayer::Unk4108a0(0, 0x64) < *(float*)((char*)this + 0xa8) * 2) {
             *(short*)((char*)this + 0x262) = 0x28;
             return;
         }
     }
     if (*(WORD*)((char*)this + 8) == 0xaa && *(WORD*)((char*)this + 0xa) == 1 && *(WORD*)((char*)this + 0xc) == 0) {
-        if ((double)(WORD)CPlayer::Unk4108a0(0, 0x64) < *(float*)((char*)this + 0xa8) * 5.0f) {
+        if ((WORD)CPlayer::Unk4108a0(0, 0x64) < *(float*)((char*)this + 0xa8) * 5.0f) {
             *(int*)((char*)this + 0x3114) = 3;
             return;
         }
-        if (x8 < 70.0 && v10 < 80.0 && (double)(WORD)CPlayer::Unk4108a0(0, 0x64) < *(float*)((char*)this + 0xa8) * 5.0f && *(double*)((char*)this + 0x118) > 500.0) {
+        if (x8 < 70.0 && v10 < 80.0 && (WORD)CPlayer::Unk4108a0(0, 0x64) < *(float*)((char*)this + 0xa8) * 5.0f && *(double*)((char*)this + 0x118) > 500.0) {
             *(short*)((char*)this + 0x262) = 0x16;
             return;
         }
-        if (x8 < 60.0 && v10 < 70.0 && (double)(WORD)CPlayer::Unk4108a0(0, 0x64) < *(float*)((char*)this + 0xa8) * 5.0f) {
+        if (x8 < 60.0 && v10 < 70.0 && (WORD)CPlayer::Unk4108a0(0, 0x64) < *(float*)((char*)this + 0xa8) * 5.0f) {
             *(short*)((char*)this + 0x262) = 0x14;
             return;
         }
-        if (*(double*)((char*)this + 0x28) - *(double*)(*(char**)*(char**)((char*)this + 0x78) + 0x28) < 0.0 && *(double*)((char*)this + 0x28) - *(double*)(*(char**)*(char**)((char*)this + 0x78) + 0x28) > -60.0 && v10 < 80.0 && (double)(WORD)CPlayer::Unk4108a0(0, 0x64) < *(float*)((char*)this + 0xa8) * 5.0f) {
+        if (*(double*)((char*)this + 0x28) - *(double*)(*(char**)*(char**)((char*)this + 0x78) + 0x28) < 0.0 && *(double*)((char*)this + 0x28) - *(double*)(*(char**)*(char**)((char*)this + 0x78) + 0x28) > -60.0 && v10 < 80.0 && (WORD)CPlayer::Unk4108a0(0, 0x64) < *(float*)((char*)this + 0xa8) * 5.0f) {
             *((char*)this + 0x18a) = 1;
             return;
         }
-        if (x8 < 40.0 && v10 < 120.0 && (double)(WORD)CPlayer::Unk4108a0(0, 0x64) < *(float*)((char*)this + 0xa8) * 5.0f) {
+        if (x8 < 40.0 && v10 < 120.0 && (WORD)CPlayer::Unk4108a0(0, 0x64) < *(float*)((char*)this + 0xa8) * 5.0f) {
             *((char*)this + 0x18b) = 1;
             return;
         }
-        if (*(double*)((char*)this + 0x28) - *(double*)(*(char**)*(char**)((char*)this + 0x78) + 0x28) < 0.0 && *(double*)((char*)this + 0x28) - *(double*)(*(char**)*(char**)((char*)this + 0x78) + 0x28) > -60.0 && v10 < 80.0 && (double)(WORD)CPlayer::Unk4108a0(0, 0x64) < *(float*)((char*)this + 0xa8) * 5.0f) {
+        if (*(double*)((char*)this + 0x28) - *(double*)(*(char**)*(char**)((char*)this + 0x78) + 0x28) < 0.0 && *(double*)((char*)this + 0x28) - *(double*)(*(char**)*(char**)((char*)this + 0x78) + 0x28) > -60.0 && v10 < 80.0 && (WORD)CPlayer::Unk4108a0(0, 0x64) < *(float*)((char*)this + 0xa8) * 5.0f) {
             *((char*)this + 0x18c) = 1;
             return;
         }
     }
-    if ((*(WORD*)(*(char**)*(char**)((char*)this + 0x78) + 8) == 0xa8 || *(WORD*)(*(char**)*(char**)((char*)this + 0x78) + 8) == 0xa9 || *(WORD*)(*(char**)*(char**)((char*)this + 0x78) + 8) == 0xaa) && *(double*)((char*)this + 0x28) == 0.0 && (double)(WORD)CPlayer::Unk4108a0(0, 0x64) < 15.0f * *(float*)((char*)this + 0xa8) && *(int*)((char*)this + 0x3114) != 2 && *(short*)(*(char**)*(char**)((char*)this + 0x78) + 0x14c) == 0) {
+    if ((*(WORD*)(*(char**)*(char**)((char*)this + 0x78) + 8) == 0xa8 || *(WORD*)(*(char**)*(char**)((char*)this + 0x78) + 8) == 0xa9 || *(WORD*)(*(char**)*(char**)((char*)this + 0x78) + 8) == 0xaa) && *(double*)((char*)this + 0x28) == 0.0 && (WORD)CPlayer::Unk4108a0(0, 0x64) < 15.0f * *(float*)((char*)this + 0xa8) && *(int*)((char*)this + 0x3114) != 2 && *(short*)(*(char**)*(char**)((char*)this + 0x78) + 0x14c) == 0) {
         *(int*)((char*)this + 0x3110) = (WORD)CPlayer::Unk4108a0(0, 0x64);
         if (*(int*)((char*)this + 0x3110) < 3 && *(double*)((char*)this + 0x118) > 500.0 && v10 < 90.0 && *(double*)(*(char**)*(char**)((char*)this + 0x78) + 0x28) == 0.0) {
             *(short*)((char*)this + 0x262) = 0x48;
@@ -6175,7 +6178,7 @@ void CMai::Vf5()
             return;
         }
     }
-    if ((*(WORD*)(*(char**)*(char**)((char*)this + 0x78) + 8) == 0xa8 || *(WORD*)(*(char**)*(char**)((char*)this + 0x78) + 8) == 0xa9 || *(WORD*)(*(char**)*(char**)((char*)this + 0x78) + 8) == 0xaa) && *(double*)((char*)this + 0x28) < 0.0 && (double)(WORD)CPlayer::Unk4108a0(0, 0x64) < 15.0f * *(float*)((char*)this + 0xa8) && *(int*)((char*)this + 0x3114) != 2 && *(short*)(*(char**)*(char**)((char*)this + 0x78) + 0x14c) == 0) {
+    if ((*(WORD*)(*(char**)*(char**)((char*)this + 0x78) + 8) == 0xa8 || *(WORD*)(*(char**)*(char**)((char*)this + 0x78) + 8) == 0xa9 || *(WORD*)(*(char**)*(char**)((char*)this + 0x78) + 8) == 0xaa) && *(double*)((char*)this + 0x28) < 0.0 && (WORD)CPlayer::Unk4108a0(0, 0x64) < 15.0f * *(float*)((char*)this + 0xa8) && *(int*)((char*)this + 0x3114) != 2 && *(short*)(*(char**)*(char**)((char*)this + 0x78) + 0x14c) == 0) {
         *(int*)((char*)this + 0x3110) = (WORD)CPlayer::Unk4108a0(0, 0x64);
         if (*(int*)((char*)this + 0x3110) < 0x1e) {
             *(int*)((char*)this + 0x3114) = 2;
@@ -6190,25 +6193,25 @@ void CMai::Vf5()
             return;
         }
     }
-    if ((*(double*)((char*)this + 0x118) > 500.0 || *((char*)this + 0x120) > 0) && (double)(WORD)CPlayer::Unk4108a0(0, 0x64) < 8.0f * *(float*)((char*)this + 0xa8) && *(WORD*)(*(char**)*(char**)((char*)this + 0x78) + 8) > 0x95 && *(WORD*)(*(char**)*(char**)((char*)this + 0x78) + 8) < 0x9d && (*(WORD*)((char*)this + 8) == 0xfa || *(WORD*)((char*)this + 8) == 0xfb || *(WORD*)((char*)this + 8) == 0xfc || *(WORD*)((char*)this + 8) == 0x100 || *(WORD*)((char*)this + 8) == 0x12f || *(WORD*)((char*)this + 8) == 0x130 || *(WORD*)((char*)this + 8) == 0x131)) {
+    if ((*(double*)((char*)this + 0x118) > 500.0 || *((char*)this + 0x120) > 0) && (WORD)CPlayer::Unk4108a0(0, 0x64) < 8.0f * *(float*)((char*)this + 0xa8) && *(WORD*)(*(char**)*(char**)((char*)this + 0x78) + 8) > 0x95 && *(WORD*)(*(char**)*(char**)((char*)this + 0x78) + 8) < 0x9d && (*(WORD*)((char*)this + 8) == 0xfa || *(WORD*)((char*)this + 8) == 0xfb || *(WORD*)((char*)this + 8) == 0xfc || *(WORD*)((char*)this + 8) == 0x100 || *(WORD*)((char*)this + 8) == 0x12f || *(WORD*)((char*)this + 8) == 0x130 || *(WORD*)((char*)this + 8) == 0x131)) {
         *(short*)((char*)this + 0x262) = 0x34;
         return;
     }
-    if ((*(double*)((char*)this + 0x118) > 500.0 || *((char*)this + 0x120) > 0) && (double)(WORD)CPlayer::Unk4108a0(0, 0x64) < 1.0f * *(float*)((char*)this + 0xa8) && *(int*)((char*)this + 0x168) == 3 && (*(WORD*)((char*)this + 8) == 0x100 || *(WORD*)((char*)this + 8) == 0xd4 && v10 < 60.0)) {
+    if ((*(double*)((char*)this + 0x118) > 500.0 || *((char*)this + 0x120) > 0) && (WORD)CPlayer::Unk4108a0(0, 0x64) < 1.0f * *(float*)((char*)this + 0xa8) && *(int*)((char*)this + 0x168) == 3 && (*(WORD*)((char*)this + 8) == 0x100 || *(WORD*)((char*)this + 8) == 0xd4 && v10 < 60.0)) {
         *(short*)((char*)this + 0x262) = 0x34;
         return;
     }
-    if ((*(WORD*)((char*)this + 8) == 0xfe || *(WORD*)((char*)this + 8) == 0xff) && *(int*)((char*)this + 0x3144) == 0 && *(int*)((char*)this + 0x314c) == 1 && (double)(WORD)CPlayer::Unk4108a0(0, 0x64) < 5.0f * *(float*)((char*)this + 0xa8)) {
+    if ((*(WORD*)((char*)this + 8) == 0xfe || *(WORD*)((char*)this + 8) == 0xff) && *(int*)((char*)this + 0x3144) == 0 && *(int*)((char*)this + 0x314c) == 1 && (WORD)CPlayer::Unk4108a0(0, 0x64) < 5.0f * *(float*)((char*)this + 0xa8)) {
         *((char*)this + 0x18d) = 1;
         *((char*)this + 0x188) = *((char*)this + 0x50);
         return;
     }
-    if (*(WORD*)((char*)this + 8) == 0x60 && v10 < 120.0 && *(int*)((char*)this + 0x3144) == 0 && *(int*)((char*)this + 0x314c) == 1 && (double)(WORD)CPlayer::Unk4108a0(0, 0x64) < 5.0f * *(float*)((char*)this + 0xa8)) {
+    if (*(WORD*)((char*)this + 8) == 0x60 && v10 < 120.0 && *(int*)((char*)this + 0x3144) == 0 && *(int*)((char*)this + 0x314c) == 1 && (WORD)CPlayer::Unk4108a0(0, 0x64) < 5.0f * *(float*)((char*)this + 0xa8)) {
         *((char*)this + 0x18d) = 1;
         *((char*)this + 0x188) = *((char*)this + 0x50);
         return;
     }
-    if (*(WORD*)(*(char**)*(char**)((char*)this + 0x78) + 8) > 0x3a && *(WORD*)(*(char**)*(char**)((char*)this + 0x78) + 8) < 0x9d && *(int*)((char*)this + 0x314c) == 0 && (double)(WORD)CPlayer::Unk4108a0(0, 0x64) < 5.0f * *(float*)((char*)this + 0xa8)) {
+    if (*(WORD*)(*(char**)*(char**)((char*)this + 0x78) + 8) > 0x3a && *(WORD*)(*(char**)*(char**)((char*)this + 0x78) + 8) < 0x9d && *(int*)((char*)this + 0x314c) == 0 && (WORD)CPlayer::Unk4108a0(0, 0x64) < 5.0f * *(float*)((char*)this + 0xa8)) {
         *((char*)this + 0x18d) = 1;
         *((char*)this + 0x188) = 0;
         *((char*)this + 0x189) = 0;
@@ -6261,7 +6264,7 @@ void CMai::Vf5()
         }
         return;
     }
-    if (*(int*)((char*)this + 0x168) > 1 && *(short*)((char*)this + 0x14a) == 0 && (double)(WORD)CPlayer::Unk4108a0(0, 0x64) < *(float*)((char*)this + 0xa8) * 25.0f && *(int*)((char*)this + 0x3114) != 1 && *(int*)((char*)this + 0x3114) != 2) {
+    if (*(int*)((char*)this + 0x168) > 1 && *(short*)((char*)this + 0x14a) == 0 && (WORD)CPlayer::Unk4108a0(0, 0x64) < *(float*)((char*)this + 0xa8) * 25.0f && *(int*)((char*)this + 0x3114) != 1 && *(int*)((char*)this + 0x3114) != 2) {
         *(int*)((char*)this + 0x3110) = (WORD)CPlayer::Unk4108a0(0, 0x3e8);
         if (*(WORD*)((char*)this + 8) == 0xc8) {
             if (*(double*)(*(char**)*(char**)((char*)this + 0x78) + 0x28) < 0.0 && *(int*)((char*)this + 0x3110) < 0x12c) {
@@ -6605,7 +6608,7 @@ void CMai::Vf5()
             }
         }
     }
-    if ((double)(WORD)CPlayer::Unk4108a0(0, 0x64) < 25.0f * *(float*)((char*)this + 0xa8)) {
+    if ((WORD)CPlayer::Unk4108a0(0, 0x64) < 25.0f * *(float*)((char*)this + 0xa8)) {
         *(int*)((char*)this + 0x3110) = (WORD)CPlayer::Unk4108a0(0, 0x3e8);
         if (*(double*)((char*)this + 0x28) == 0.0) {
             if (*(double*)(*(char**)*(char**)((char*)this + 0x78) + 0x28) == 0.0 && *(WORD*)(*(char**)*(char**)((char*)this + 0x78) + 8) != 0x63) {
@@ -6743,12 +6746,12 @@ void CMai::Vf5()
         }
     }
     if (*(WORD*)((char*)this + 8) < 0x32 && (*(WORD*)(*(char**)*(char**)((char*)this + 0x78) + 8) > 0x95 && *(WORD*)(*(char**)*(char**)((char*)this + 0x78) + 8) < 0x9c || *(WORD*)(*(char**)*(char**)((char*)this + 0x78) + 8) > 0x31 && *(WORD*)(*(char**)*(char**)((char*)this + 0x78) + 8) < 0x3b) && *(double*)((char*)this + 0x28) == 0.0) {
-        if ((double)(WORD)CPlayer::Unk4108a0(0, 0x64) < (((*(WORD*)(*(char**)*(char**)((char*)this + 0x78) + 8) == 0x63) << 2) + 1 + (*(int*)((char*)this + 0x3144) == 1 && *(int*)((char*)this + 0x314c) == 1 && (*(WORD*)(*(char**)*(char**)((char*)this + 0x78) + 8) > 0x95 && *(WORD*)(*(char**)*(char**)((char*)this + 0x78) + 8) < 0x9d || *(WORD*)(*(char**)*(char**)((char*)this + 0x78) + 8) > 0x31 && *(WORD*)(*(char**)*(char**)((char*)this + 0x78) + 8) < 0x3b)) * 2) * *(float*)((char*)this + 0xa8) && v10 > 80.0) {
+        if ((WORD)CPlayer::Unk4108a0(0, 0x64) < ((*(int*)((char*)this + 0x3144) == 1 && *(int*)((char*)this + 0x314c) == 1 && (*(WORD*)(*(char**)*(char**)((char*)this + 0x78) + 8) > 0x95 && *(WORD*)(*(char**)*(char**)((char*)this + 0x78) + 8) < 0x9d || *(WORD*)(*(char**)*(char**)((char*)this + 0x78) + 8) > 0x31 && *(WORD*)(*(char**)*(char**)((char*)this + 0x78) + 8) < 0x3b)) * 2 + ((*(WORD*)(*(char**)*(char**)((char*)this + 0x78) + 8) == 0x63) << 2) + 1) * *(float*)((char*)this + 0xa8) && v10 > 80.0) {
             *(short*)((char*)this + 0x262) = *((char*)this + 0x50) == 1;
             return;
         }
     }
-    if (*(WORD*)((char*)this + 8) < 0x32 && *(WORD*)(*(char**)*(char**)((char*)this + 0x78) + 8) < 0x32 && v10 > 60.0 && v10 < 140.0 && (double)(WORD)CPlayer::Unk4108a0(0, 0x64) < 2.0f * *(float*)((char*)this + 0xa8) && *(double*)((char*)this + 0x20) > 120.0 && *(double*)((char*)this + 0x20) < 520.0 && *(int*)((char*)this + 0x314c) == 0) {
+    if (*(WORD*)((char*)this + 8) < 0x32 && *(WORD*)(*(char**)*(char**)((char*)this + 0x78) + 8) < 0x32 && v10 > 60.0 && v10 < 140.0 && (WORD)CPlayer::Unk4108a0(0, 0x64) < 2.0f * *(float*)((char*)this + 0xa8) && *(double*)((char*)this + 0x20) > 120.0 && *(double*)((char*)this + 0x20) < 520.0 && *(int*)((char*)this + 0x314c) == 0) {
         *(short*)((char*)this + 0x262) = -((*((char*)this + 0x50) == 1) - 1);
         return;
     }
@@ -6757,7 +6760,7 @@ void CMai::Vf5()
         return;
     }
     if ((WORD)CPlayer::Unk4108a0(0, 0x64) < 2) {
-        if ((double)(WORD)CPlayer::Unk4108a0(0, 0x64) < 8.0f * *(float*)((char*)this + 0xa8)) {
+        if ((WORD)CPlayer::Unk4108a0(0, 0x64) < 8.0f * *(float*)((char*)this + 0xa8)) {
             *(int*)((char*)this + 0x3114) = 3;
         } else {
             *(int*)((char*)this + 0x3114) = 0;
@@ -6816,5 +6819,2081 @@ void CMai::Vf5()
 
 void CMai::Vf7()
 {
-    // LIFT FAILED: IndexError: pop from empty list (lift.py:1530)
+    WORD v58;
+    WORD v54;
+    int v4;
+
+    if (*(short*)(*(char**)*(char**)((char*)this + 0x78) + 0x14c) > 0) {
+        return;
+    }
+    v4 = *(short*)((char*)this + 0x2cc);
+    EffectDesc l50;
+    while (v4 != *(short*)((char*)this + 0x2ca)) {
+        if (*(int*)((char*)this + v4 * 4 + 0x3d0) != 0 && *(short*)((char*)this + v4 * 0x98 + 0x556) == 0 && (*(short*)((char*)this + 0x14c) == 0 || *(short*)((char*)this + 0x14c) > 0 && *(int*)((char*)this + v4 * 0x98 + 0x558) != 0)) {
+            v54 = *(short*)(*(char**)(*(char**)((char*)this + 0x10) + *(WORD*)((char*)this + v4 * 0x98 + 0x4d0) * 8 + 4) + *(WORD*)((char*)this + v4 * 0x98 + 0x4d2) * 0xc);
+            v58 = *(BYTE*)(*(char**)((char*)this + 0x10) + *(WORD*)((char*)this + v4 * 0x98 + 0x4d0) * 8);
+            CPlayer::Unk413090((EffectDesc*)&l50);
+            switch (*(WORD*)((char*)this + v4 * 0x98 + 0x4d0)) {
+            case 0x191:
+                *(int*)((char*)this + 0x3144) = 1;
+                if (*(WORD*)((char*)this + v4 * 0x98 + 0x4d2) > 2) {
+                    if (*(double*)((char*)this + v4 * 0x98 + 0x4f8) >= 0.1) {
+                        *(double*)((char*)this + v4 * 0x98 + 0x4f8) -= 0.02;
+                    }
+                    if (*(double*)((char*)this + v4 * 0x98 + 0x4f8) <= -0.1) {
+                        *(double*)((char*)this + v4 * 0x98 + 0x4f8) += 0.02;
+                    }
+                    if (*(double*)((char*)this + v4 * 0x98 + 0x500) >= 0.1) {
+                        *(double*)((char*)this + v4 * 0x98 + 0x500) -= 0.02;
+                    }
+                    if (*(double*)((char*)this + v4 * 0x98 + 0x500) <= -0.1) {
+                        *(double*)((char*)this + v4 * 0x98 + 0x500) += 0.02;
+                    }
+                    if (*(double*)((char*)this + v4 * 0x98 + 0x4f8) < 0.1 && *(double*)((char*)this + v4 * 0x98 + 0x4f8) > -0.1) {
+                        *(double*)((char*)this + v4 * 0x98 + 0x4f8) = 0.0;
+                    }
+                    if (*(double*)((char*)this + v4 * 0x98 + 0x500) < 0.1 && *(double*)((char*)this + v4 * 0x98 + 0x500) > -0.1) {
+                        *(double*)((char*)this + v4 * 0x98 + 0x500) = 0.0;
+                    }
+                    if (*(int*)((char*)this + 0x3150) == 1) {
+                        *(int*)((char*)this + 0x3150) = 0;
+                        *(double*)((char*)this + v4 * 0x98 + 0x4f8) = 0.0;
+                        *(double*)((char*)this + v4 * 0x98 + 0x500) = 0.0;
+                        if (*(double*)((char*)this + v4 * 0x98 + 0x4f0) > -30.0) {
+                            l50.type = 0x1f;
+                            l50.x = (double)(int)*(double*)((char*)this + v4 * 0x98 + 0x4e8);
+                            l50.y = (double)(int)*(double*)((char*)this + v4 * 0x98 + 0x4f0);
+                            l50.unk20 = 0;
+                            l50.unk21 = 0;
+                            l50.side = *((char*)this + v4 * 0x98 + 0x518) == -1;
+                            ((CGame*)*(int*)((char*)this + 0x7c))->CreateEffect((EffectDesc*)&l50);
+                        }
+                    }
+                    if (*(int*)((char*)this + 0x3148) <= 0) {
+                        *(short*)((char*)this + v4 * 0x98 + 0x4d0) = 0x193;
+                        *(short*)((char*)this + v4 * 0x98 + 0x4d4) = 0;
+                        *(short*)((char*)this + v4 * 0x98 + 0x4d2) = 0;
+                        *(int*)((char*)this + 0x3148) = 0;
+                        *(int*)((char*)this + 0x3144) = 2;
+                        break;
+                    }
+                    if (*(double*)((char*)this + v4 * 0x98 + 0x4e8) > *(double*)(*(char**)*(char**)((char*)this + 0x78) + 0x20)) {
+                        *((char*)this + v4 * 0x98 + 0x518) = -1;
+                    }
+                    if (*(double*)((char*)this + v4 * 0x98 + 0x4e8) <= *(double*)(*(char**)*(char**)((char*)this + 0x78) + 0x20)) {
+                        *((char*)this + v4 * 0x98 + 0x518) = 1;
+                    }
+                    if (*(WORD*)((char*)this + 8) > 0x31 && *(WORD*)((char*)this + 8) < 0x96 || *(int*)((char*)this + v4 * 0x98 + 0x550) == 4 || *(int*)((char*)this + v4 * 0x98 + 0x550) == 5) {
+                        *(short*)((char*)this + v4 * 0x98 + 0x4d0) = 0x192;
+                        *(int*)((char*)this + 0x3144) = 2;
+                        *(short*)((char*)this + v4 * 0x98 + 0x4d2) = 0;
+                        *(short*)((char*)this + v4 * 0x98 + 0x4d4) = 0;
+                        break;
+                    }
+                    if (*(WORD*)((char*)this + 8) == 0x10d) {
+                        *(short*)((char*)this + v4 * 0x98 + 0x4d0) = 0x194;
+                        *(short*)((char*)this + v4 * 0x98 + 0x4d4) = 0;
+                        *(short*)((char*)this + v4 * 0x98 + 0x4d2) = 0;
+                        *(int*)((char*)this + 0x3148) = 0;
+                        break;
+                    }
+                    if (*(WORD*)((char*)this + 8) == 0x143 && *(WORD*)((char*)this + 0xa) == 3 && *(WORD*)((char*)this + 0xc) == 0) {
+                        *(short*)((char*)this + v4 * 0x98 + 0x4d0) = 0x1bf;
+                        *(int*)((char*)this + 0x3144) = 2;
+                        *(short*)((char*)this + v4 * 0x98 + 0x4d2) = 0;
+                        *(short*)((char*)this + v4 * 0x98 + 0x4d4) = 0;
+                        break;
+                    }
+                    if (*(WORD*)((char*)this + 8) == 0x141 && *(WORD*)((char*)this + 0xa) == 3 && *(WORD*)((char*)this + 0xc) == 0) {
+                        *(short*)((char*)this + v4 * 0x98 + 0x4d0) = 0x1bb;
+                        *(int*)((char*)this + 0x3144) = 2;
+                        *(short*)((char*)this + v4 * 0x98 + 0x4d2) = 0;
+                        *(short*)((char*)this + v4 * 0x98 + 0x4d4) = 0;
+                        break;
+                    }
+                    if (*(WORD*)((char*)this + 8) == 0x13f && *(WORD*)((char*)this + 0xa) == 3 && *(WORD*)((char*)this + 0xc) == 0) {
+                        *(short*)((char*)this + v4 * 0x98 + 0x4d0) = 0x1b7;
+                        *(int*)((char*)this + 0x3144) = 2;
+                        *(short*)((char*)this + v4 * 0x98 + 0x4d2) = 0;
+                        *(short*)((char*)this + v4 * 0x98 + 0x4d4) = 0;
+                        break;
+                    }
+                    if ((*(WORD*)((char*)this + 8) < 0x96 || *(WORD*)((char*)this + 8) > 0x9c) && *(WORD*)((char*)this + 8) != 0xa8 && *(WORD*)((char*)this + 8) != 0xa9 && *(WORD*)((char*)this + 8) != 0xaa && *(WORD*)((char*)this + 8) != 0x104 && *(WORD*)((char*)this + 8) != 0x10d) {
+                        if (*(short*)((char*)this + 0x262) == 0x21) {
+                            *(short*)((char*)this + v4 * 0x98 + 0x4d0) = 0x1c3;
+                            *(short*)((char*)this + v4 * 0x98 + 0x4d2) = 0;
+                            *(short*)((char*)this + v4 * 0x98 + 0x4d4) = 0;
+                            *(int*)((char*)this + 0x3144) = 2;
+                            break;
+                        }
+                        if (*(short*)((char*)this + 0x262) == 0x2b) {
+                            *(short*)((char*)this + v4 * 0x98 + 0x4d0) = 0x1b4;
+                            *(short*)((char*)this + v4 * 0x98 + 0x4d2) = 0;
+                            *(short*)((char*)this + v4 * 0x98 + 0x4d4) = 0;
+                            *(int*)((char*)this + 0x3144) = 2;
+                            break;
+                        }
+                        if (*(short*)((char*)this + 0x262) == 0xd) {
+                            *(short*)((char*)this + v4 * 0x98 + 0x4d0) = 0x1af;
+                            *(short*)((char*)this + v4 * 0x98 + 0x4d2) = 0;
+                            *(short*)((char*)this + v4 * 0x98 + 0x4d4) = 0;
+                            *(int*)((char*)this + 0x3144) = 2;
+                            break;
+                        }
+                        if (*(short*)((char*)this + 0x262) == 0x35) {
+                            *(short*)((char*)this + v4 * 0x98 + 0x4d0) = 0x19e;
+                            *(short*)((char*)this + v4 * 0x98 + 0x4d2) = 0;
+                            *(short*)((char*)this + v4 * 0x98 + 0x4d4) = 0;
+                            *(int*)((char*)this + 0x3144) = 2;
+                            break;
+                        }
+                    }
+                }
+                if (*(double*)((char*)this + v4 * 0x98 + 0x4e8) > 600.0) {
+                    *(double*)((char*)this + v4 * 0x98 + 0x4e8) = 600.0;
+                    *(double*)((char*)this + v4 * 0x98 + 0x4f8) = 0.0;
+                }
+                if (*(double*)((char*)this + v4 * 0x98 + 0x4e8) < 40.0) {
+                    *(double*)((char*)this + v4 * 0x98 + 0x4e8) = 40.0;
+                    *(double*)((char*)this + v4 * 0x98 + 0x4f8) = 0.0;
+                }
+                (*(short*)((char*)this + v4 * 0x98 + 0x4d4))++;
+                if (*(WORD*)((char*)this + v4 * 0x98 + 0x4d4) >= v54) {
+                    *(short*)((char*)this + v4 * 0x98 + 0x4d4) = 0;
+                    (*(short*)((char*)this + v4 * 0x98 + 0x4d2))++;
+                    *(int*)((char*)this + v4 * 0x98 + 0x550) = 0;
+                    if (*(WORD*)((char*)this + v4 * 0x98 + 0x4d2) >= v58) {
+                        *(short*)((char*)this + v4 * 0x98 + 0x4d2) = 3;
+                    }
+                }
+                break;
+            case 0x192:
+                *(int*)((char*)this + 0x3144) = 2;
+                if (*(WORD*)((char*)this + v4 * 0x98 + 0x4d2) == 0 && *(WORD*)((char*)this + v4 * 0x98 + 0x4d4) == 0 && *(int*)((char*)this + v4 * 4 + 0x3158) == 0) {
+                    *(double*)((char*)this + v4 * 0x98 + 0x4f8) = -2.0;
+                    *(double*)((char*)this + v4 * 0x98 + 0x500) = -2.0;
+                    *(double*)((char*)this + v4 * 0x98 + 0x508) = 0.05;
+                    *(int*)((char*)this + v4 * 4 + 0x3158) = 1;
+                }
+                *(double*)((char*)this + v4 * 0x98 + 0x4f8) = *(double*)((char*)this + v4 * 0x98 + 0x4f8) + *(double*)((char*)this + v4 * 0x98 + 0x508);
+                *(double*)((char*)this + v4 * 0x98 + 0x500) = *(double*)((char*)this + v4 * 0x98 + 0x500) + *(double*)((char*)this + v4 * 0x98 + 0x508);
+                if (*(double*)((char*)this + v4 * 0x98 + 0x4f8) > 0.0) {
+                    *(double*)((char*)this + v4 * 0x98 + 0x4f8) = 0.0;
+                }
+                if (*(double*)((char*)this + v4 * 0x98 + 0x500) > 0.0) {
+                    *(double*)((char*)this + v4 * 0x98 + 0x500) = 0.0;
+                }
+                (*(short*)((char*)this + v4 * 0x98 + 0x4d4))++;
+                if (*(int*)((char*)this + v4 * 0x98 + 0x550) == 1) {
+                    Vf10(v4);
+                }
+                if (*(WORD*)((char*)this + v4 * 0x98 + 0x4d4) >= v54) {
+                    *(short*)((char*)this + v4 * 0x98 + 0x4d4) = 0;
+                    (*(short*)((char*)this + v4 * 0x98 + 0x4d2))++;
+                    *(int*)((char*)this + v4 * 0x98 + 0x550) = 0;
+                    if (*(WORD*)((char*)this + v4 * 0x98 + 0x4d2) == 2 && *(int*)((char*)this + v4 * 4 + 0x3258) < 5) {
+                        (*(int*)((char*)this + v4 * 4 + 0x3258))++;
+                        *(short*)((char*)this + v4 * 0x98 + 0x4d2) = *(WORD*)((char*)this + v4 * 0x98 + 0x4d2) - 2;
+                    }
+                    if (*(WORD*)((char*)this + v4 * 0x98 + 0x4d2) >= v58) {
+                        *(int*)((char*)this + 0x314c) = 0;
+                        *(int*)((char*)this + 0x3148) = 0x4b0;
+                        *(int*)((char*)this + 0x3144) = 3;
+                        *(int*)((char*)this + v4 * 4 + 0x3258) = 0;
+                        *(int*)((char*)this + v4 * 4 + 0x3158) = 0;
+                        Vf10(v4);
+                    }
+                }
+                break;
+            case 0x193:
+                *(int*)((char*)this + 0x3144) = 2;
+                *(double*)((char*)this + v4 * 0x98 + 0x4f8) = 0.0;
+                *(double*)((char*)this + v4 * 0x98 + 0x500) = 0.0;
+                (*(short*)((char*)this + v4 * 0x98 + 0x4d4))++;
+                if (*(WORD*)((char*)this + v4 * 0x98 + 0x4d4) >= v54) {
+                    *(short*)((char*)this + v4 * 0x98 + 0x4d4) = 0;
+                    (*(short*)((char*)this + v4 * 0x98 + 0x4d2))++;
+                    *(int*)((char*)this + v4 * 0x98 + 0x550) = 0;
+                    if (*(WORD*)((char*)this + v4 * 0x98 + 0x4d2) >= v58) {
+                        *(int*)((char*)this + 0x3148) = 0x4b0;
+                        *(int*)((char*)this + 0x3144) = 3;
+                        *(int*)((char*)this + 0x3150) = 0;
+                        *(int*)((char*)this + 0x314c) = 0;
+                        Vf10(v4);
+                    }
+                }
+                break;
+            case 0x194:
+                *(int*)((char*)this + 0x3144) = 2;
+                *(double*)((char*)this + v4 * 0x98 + 0x4f8) = 0.0;
+                *(double*)((char*)this + v4 * 0x98 + 0x500) = 0.0;
+                (*(short*)((char*)this + v4 * 0x98 + 0x4d4))++;
+                if (*(WORD*)((char*)this + v4 * 0x98 + 0x4d4) >= v54) {
+                    *(short*)((char*)this + v4 * 0x98 + 0x4d4) = 0;
+                    (*(short*)((char*)this + v4 * 0x98 + 0x4d2))++;
+                    *(int*)((char*)this + v4 * 0x98 + 0x550) = 0;
+                    if (*(WORD*)((char*)this + v4 * 0x98 + 0x4d2) >= v58) {
+                        *(int*)((char*)this + 0x3148) = 0x4b0;
+                        *(int*)((char*)this + 0x3144) = 3;
+                        *(int*)((char*)this + 0x3150) = 1;
+                        Vf10(v4);
+                    }
+                }
+                break;
+            case 0x196:
+                (*(int*)((char*)this + 0x3148))--;
+                if (*(WORD*)((char*)this + 8) > 0x31 && *(WORD*)((char*)this + 8) < 0x96 || *(int*)((char*)this + v4 * 0x98 + 0x550) == 4 || *(int*)((char*)this + v4 * 0x98 + 0x550) == 5) {
+                    *(short*)((char*)this + v4 * 0x98 + 0x4d0) = 0x192;
+                    *(short*)((char*)this + v4 * 0x98 + 0x4d2) = 0;
+                    *(short*)((char*)this + v4 * 0x98 + 0x4d4) = 0;
+                    return;
+                }
+                *(double*)((char*)this + v4 * 0x98 + 0x4f8) = *(double*)((char*)this + v4 * 0x98 + 0x4f8) + *(double*)((char*)this + v4 * 0x98 + 0x508);
+                *(double*)((char*)this + v4 * 0x98 + 0x500) = *(double*)((char*)this + v4 * 0x98 + 0x500) + *(double*)((char*)this + v4 * 0x98 + 0x510);
+                if (*(double*)((char*)this + v4 * 0x98 + 0x4e8) > 590.0 && *((char*)this + v4 * 0x98 + 0x518) == 1) {
+                    *(double*)((char*)this + v4 * 0x98 + 0x4f8) = 0.0;
+                }
+                if (*(double*)((char*)this + v4 * 0x98 + 0x4e8) < 50.0 && *((char*)this + v4 * 0x98 + 0x518) == -1) {
+                    *(double*)((char*)this + v4 * 0x98 + 0x4f8) = 0.0;
+                }
+                if (*(double*)((char*)this + v4 * 0x98 + 0x4f8) < 0.0) {
+                    *(double*)((char*)this + v4 * 0x98 + 0x4f8) = 0.0;
+                }
+                if (*(double*)((char*)this + v4 * 0x98 + 0x500) < 0.0) {
+                    *(double*)((char*)this + v4 * 0x98 + 0x500) = 0.0;
+                }
+                if (*(WORD*)((char*)this + v4 * 0x98 + 0x4d2) == 5 && *(WORD*)((char*)this + v4 * 0x98 + 0x4d4) == 0) {
+                    if (*(int*)((char*)this + 0x3148) > 1) {
+                        *(int*)((char*)this + 0x3148) -= 0x1388;
+                    } else {
+                        *(int*)((char*)this + 0x3148) = 0;
+                    }
+                }
+                if (*(WORD*)((char*)this + v4 * 0x98 + 0x4d2) == 0) {
+                    *(double*)((char*)this + v4 * 0x98 + 0x4f8) = 0.0;
+                    *(double*)((char*)this + v4 * 0x98 + 0x508) = 0.0;
+                }
+                if (*(WORD*)((char*)this + v4 * 0x98 + 0x4d2) == 7 && *(WORD*)((char*)this + v4 * 0x98 + 0x4d4) == 0) {
+                    *(short*)((char*)this + v4 * 0x98 + 0x554) = 1;
+                }
+                if (*(WORD*)((char*)this + v4 * 0x98 + 0x4d2) == 5 && *(WORD*)((char*)this + v4 * 0x98 + 0x4d4) == 0) {
+                    *(double*)((char*)this + v4 * 0x98 + 0x4f8) = 2.5;
+                    *(double*)((char*)this + v4 * 0x98 + 0x508) = -0.015;
+                    *(int*)((char*)this + v4 * 4 + 0x3158) = 6;
+                    *(double*)((char*)this + v4 * 0x98 + 0x500) = 0.9;
+                    *(double*)((char*)this + v4 * 0x98 + 0x510) = -0.035;
+                }
+                (*(short*)((char*)this + v4 * 0x98 + 0x4d4))++;
+                if (*(WORD*)((char*)this + v4 * 0x98 + 0x4d4) >= v54) {
+                    *(short*)((char*)this + v4 * 0x98 + 0x4d4) = 0;
+                    (*(short*)((char*)this + v4 * 0x98 + 0x4d2))++;
+                    if (*(WORD*)((char*)this + v4 * 0x98 + 0x4d2) == 0xb && *(int*)((char*)this + v4 * 4 + 0x3158) > 0) {
+                        *(short*)((char*)this + v4 * 0x98 + 0x4d2) = 7;
+                        (*(int*)((char*)this + v4 * 4 + 0x3158))--;
+                    }
+                    *(int*)((char*)this + v4 * 0x98 + 0x550) = 0;
+                    if (*(WORD*)((char*)this + v4 * 0x98 + 0x4d2) >= v58) {
+                        *(short*)((char*)this + v4 * 0x98 + 0x4d0) = 0x191;
+                        *(int*)((char*)this + 0x3144) = 0;
+                        *(short*)((char*)this + v4 * 0x98 + 0x4d2) = 0;
+                    }
+                }
+                break;
+            case 0x197:
+                if (*(WORD*)((char*)this + 8) > 0x31 && *(WORD*)((char*)this + 8) < 0x96 || *(int*)((char*)this + v4 * 0x98 + 0x550) == 4 || *(int*)((char*)this + v4 * 0x98 + 0x550) == 5) {
+                    *(short*)((char*)this + v4 * 0x98 + 0x4d0) = 0x192;
+                    *(short*)((char*)this + v4 * 0x98 + 0x4d2) = 0;
+                    *(short*)((char*)this + v4 * 0x98 + 0x4d4) = 0;
+                    return;
+                }
+                if (*(WORD*)((char*)this + v4 * 0x98 + 0x4d2) == 5 && *(WORD*)((char*)this + v4 * 0x98 + 0x4d4) == 0 && *(int*)((char*)this + v4 * 4 + 0x3258) == 0) {
+                    *(int*)((char*)this + 0x3148) = 0;
+                }
+                *(double*)((char*)this + v4 * 0x98 + 0x4f8) = 0.0;
+                *(double*)((char*)this + v4 * 0x98 + 0x500) = 0.0;
+                if (*(WORD*)((char*)this + v4 * 0x98 + 0x4d2) == 5 && *(WORD*)((char*)this + v4 * 0x98 + 0x4d4) == 0 && *(int*)((char*)this + v4 * 4 + 0x3258) != 1) {
+                    l50.type = 0x198;
+                    l50.x = (double)(int)(*(double*)((char*)this + v4 * 0x98 + 0x4e8) + *((char*)this + v4 * 0x98 + 0x518) * 0x1d);
+                    l50.y = (double)(int)(*(double*)((char*)this + v4 * 0x98 + 0x4f0) - 49.0);
+                    l50.unk20 = 2;
+                    l50.unk21 = 1;
+                    l50.unk18 = *((char*)this + v4 * 0x98 + 0x518);
+                    Vf9(&l50);
+                    *(int*)((char*)this + v4 * 4 + 0x3258) = 1;
+                    *(int*)((char*)this + v4 * 4 + 0x3158) = 0;
+                }
+                (*(short*)((char*)this + v4 * 0x98 + 0x4d4))++;
+                if (*(WORD*)((char*)this + v4 * 0x98 + 0x4d4) >= v54) {
+                    *(short*)((char*)this + v4 * 0x98 + 0x4d4) = 0;
+                    (*(short*)((char*)this + v4 * 0x98 + 0x4d2))++;
+                    if (*(WORD*)((char*)this + v4 * 0x98 + 0x4d2) == 8 && *(int*)((char*)this + v4 * 4 + 0x3158) < 5) {
+                        *(short*)((char*)this + v4 * 0x98 + 0x4d2) = *(WORD*)((char*)this + v4 * 0x98 + 0x4d2) - 4;
+                        (*(int*)((char*)this + v4 * 4 + 0x3158))++;
+                    }
+                    *(int*)((char*)this + v4 * 0x98 + 0x550) = 0;
+                    if (*(WORD*)((char*)this + v4 * 0x98 + 0x4d2) >= v58) {
+                        *(short*)((char*)this + v4 * 0x98 + 0x4d0) = 0x193;
+                        *(int*)((char*)this + 0x3144) = 0;
+                        *(short*)((char*)this + v4 * 0x98 + 0x4d2) = 0;
+                        *(int*)((char*)this + v4 * 4 + 0x3258) = 0;
+                        *(int*)((char*)this + v4 * 4 + 0x3158) = 0;
+                    }
+                }
+                break;
+            case 0x198:
+                if (*(WORD*)((char*)this + v4 * 0x98 + 0x4d4) == 0 && *(WORD*)((char*)this + v4 * 0x98 + 0x4d2) == 0 && *(int*)((char*)this + v4 * 4 + 0x3158) <= 0) {
+                    if (*(int*)((char*)this + v4 * 4 + 0x3258) == 0) {
+                        *(short*)((char*)this + v4 * 0x98 + 0x554) = 1;
+                    }
+                    if (*(int*)((char*)this + v4 * 4 + 0x3258) < 3 && *(short*)((char*)this + v4 * 0x98 + 0x554) > 0) {
+                        *(int*)((char*)this + v4 * 4 + 0x3358) = (int)((ObjBase*)((char*)this + 8))->AngleTo(*(double*)(*(char**)*(char**)((char*)this + 0x78) + 0x20) - *(double*)((char*)this + v4 * 0x98 + 0x4e8), *(double*)(*(char**)*(char**)((char*)this + 0x78) + 0x28) - 50.0 - *(double*)((char*)this + v4 * 0x98 + 0x4f0));
+                        ((ObjBase*)((char*)this + v4 * 0x98 + 0x4d0))->SetVelocity((double)*(int*)((char*)this + v4 * 4 + 0x3358), -0.00875);
+                        *(double*)((char*)this + v4 * 0x98 + 0x508) = *(double*)((char*)this + v4 * 0x98 + 0x4f8);
+                        *(double*)((char*)this + v4 * 0x98 + 0x510) = *(double*)((char*)this + v4 * 0x98 + 0x500);
+                        ((ObjBase*)((char*)this + v4 * 0x98 + 0x4d0))->SetVelocity((double)*(int*)((char*)this + v4 * 4 + 0x3358), 1.4);
+                        if (*((char*)this + v4 * 0x98 + 0x518) == -1) {
+                            *(double*)((char*)this + v4 * 0x98 + 0x508) = -*(double*)((char*)this + v4 * 0x98 + 0x508);
+                            *(double*)((char*)this + v4 * 0x98 + 0x4f8) = -*(double*)((char*)this + v4 * 0x98 + 0x4f8);
+                        }
+                        *(int*)((char*)this + v4 * 4 + 0x3358) = 0xa0;
+                        (*(int*)((char*)this + v4 * 4 + 0x3258))++;
+                        *(int*)((char*)this + v4 * 4 + 0x3158) = 0xf0;
+                    }
+                }
+                if (*(int*)((char*)this + v4 * 4 + 0x3358) > 0) {
+                    *(double*)((char*)this + v4 * 0x98 + 0x4f8) = *(double*)((char*)this + v4 * 0x98 + 0x4f8) + *(double*)((char*)this + v4 * 0x98 + 0x508);
+                    *(double*)((char*)this + v4 * 0x98 + 0x500) = *(double*)((char*)this + v4 * 0x98 + 0x500) + *(double*)((char*)this + v4 * 0x98 + 0x510);
+                    (*(int*)((char*)this + v4 * 4 + 0x3358))--;
+                }
+                (*(int*)((char*)this + v4 * 4 + 0x3158))--;
+                (*(short*)((char*)this + v4 * 0x98 + 0x4d4))++;
+                if (*(WORD*)((char*)this + v4 * 0x98 + 0x4d4) >= v54) {
+                    *(short*)((char*)this + v4 * 0x98 + 0x4d4) = 0;
+                    (*(short*)((char*)this + v4 * 0x98 + 0x4d2))++;
+                    *(int*)((char*)this + v4 * 0x98 + 0x550) = 0;
+                    if (*(WORD*)((char*)this + v4 * 0x98 + 0x4d2) >= v58) {
+                        *(short*)((char*)this + v4 * 0x98 + 0x4d2) = 0;
+                        if ((*(int*)((char*)this + v4 * 4 + 0x3258) > 2 || *(short*)((char*)this + v4 * 0x98 + 0x554) == 0) && *(int*)((char*)this + v4 * 4 + 0x3158) <= 0) {
+                            Vf10(v4);
+                        }
+                    }
+                }
+                break;
+            case 0x199:
+                *(int*)((char*)this + 0x3144) = 1;
+                if (*(WORD*)((char*)this + 8) == 0x13d) {
+                    ((CGame*)*(int*)((char*)this + 0x7c))->Unk4080c0(0xf);
+                }
+                if (*(WORD*)((char*)this + v4 * 0x98 + 0x4d2) == 0 && *(WORD*)((char*)this + v4 * 0x98 + 0x4d4) == 0) {
+                    *(int*)((char*)this + v4 * 0x98 + 0x558) = 1;
+                    if (*(WORD*)((char*)this + 8) == 0x13b) {
+                        *(short*)((char*)this + 0x148) = *(short*)((char*)this + 0x148) - 0x3e8;
+                    }
+                    if (*(WORD*)((char*)this + 8) == 0x13c) {
+                        *(short*)((char*)this + 0x148) = *(short*)((char*)this + 0x148) - 0x7d0;
+                    }
+                    if (*(WORD*)((char*)this + 8) == 0x13d) {
+                        *(short*)((char*)this + 0x148) = *(short*)((char*)this + 0x148) - 0xbb8;
+                    }
+                    *(int*)((char*)this + 0x3140) = 0;
+                    *(int*)((char*)this + v4 * 4 + 0x3158) = 0;
+                    *(short*)((char*)this + 0x14c) = 0x78;
+                    CPlayer::Unk410b10(0xb0, 3);
+                    l50.type = 9;
+                    l50.unk2c = 5;
+                    l50.x = (double)(int)(*(double*)((char*)this + v4 * 0x98 + 0x4e8) + *((char*)this + v4 * 0x98 + 0x518) * 0x1c);
+                    l50.y = (double)(int)(*(double*)((char*)this + v4 * 0x98 + 0x4f0) - 52.0);
+                    l50.unk20 = 2;
+                    l50.unk0 = 1;
+                    l50.unk21 = 1;
+                    ((CGame*)*(int*)((char*)this + 0x7c))->CreateEffect((EffectDesc*)&l50);
+                    *((char*)this + 0x2c9) = 0x25;
+                }
+                if (*(WORD*)((char*)this + v4 * 0x98 + 0x4d2) > 4 && *(WORD*)((char*)this + v4 * 0x98 + 0x4d2) < 0xc && *(short*)((char*)this + 0x14c) == 0) {
+                    if (*(int*)((char*)this + v4 * 4 + 0x3358) == 0) {
+                        *((char*)this + 0x2c8) = 6;
+                        (*(int*)((char*)this + v4 * 4 + 0x3358))++;
+                    }
+                    if (*(int*)((char*)this + v4 * 4 + 0x3258) >= 0xf) {
+                        *(int*)((char*)this + v4 * 4 + 0x3258) = 0;
+                        if (*(WORD*)((char*)this + 8) == 0x13b && *(int*)((char*)this + 0x3140) < 3) {
+                            l50.type = 0x19a;
+                            l50.x = (double)(int)(*(double*)((char*)this + v4 * 0x98 + 0x4e8) + *((char*)this + v4 * 0x98 + 0x518) * 0x1d);
+                            l50.y = (double)(int)(*(double*)((char*)this + v4 * 0x98 + 0x4f0) - 49.0);
+                            l50.unk20 = 2;
+                            l50.unk21 = 1;
+                            l50.unk18 = *((char*)this + v4 * 0x98 + 0x518);
+                            l50.unk18 = l50.unk18;
+                            Vf9(&l50);
+                            (*(int*)((char*)this + 0x3140))++;
+                        }
+                        if (*(WORD*)((char*)this + 8) == 0x13c && *(int*)((char*)this + 0x3140) < 5) {
+                            l50.type = 0x1a7;
+                            l50.x = (double)(int)(*(double*)((char*)this + v4 * 0x98 + 0x4e8) + *((char*)this + v4 * 0x98 + 0x518) * 0x1d);
+                            l50.y = (double)(int)(*(double*)((char*)this + v4 * 0x98 + 0x4f0) - 49.0);
+                            l50.unk20 = 2;
+                            l50.unk21 = 1;
+                            l50.unk18 = *((char*)this + v4 * 0x98 + 0x518);
+                            l50.unk18 = l50.unk18;
+                            Vf9(&l50);
+                            (*(int*)((char*)this + 0x3140))++;
+                        }
+                        if (*(WORD*)((char*)this + 8) == 0x13d && *(int*)((char*)this + 0x3140) < 0xa) {
+                            l50.type = 0x1a9;
+                            l50.x = (double)(int)(*(double*)((char*)this + v4 * 0x98 + 0x4e8) + *((char*)this + v4 * 0x98 + 0x518) * 0x1d);
+                            l50.y = (double)(int)(*(double*)((char*)this + v4 * 0x98 + 0x4f0) - 49.0);
+                            l50.unk20 = 2;
+                            l50.unk21 = 1;
+                            l50.unk18 = *((char*)this + v4 * 0x98 + 0x518);
+                            l50.unk18 = l50.unk18;
+                            Vf9(&l50);
+                            (*(int*)((char*)this + 0x3140))++;
+                        }
+                    }
+                }
+                *(double*)((char*)this + v4 * 0x98 + 0x4f8) = 0.0;
+                *(double*)((char*)this + v4 * 0x98 + 0x500) = 0.0;
+                (*(int*)((char*)this + v4 * 4 + 0x3258))++;
+                (*(short*)((char*)this + v4 * 0x98 + 0x4d4))++;
+                if (*(WORD*)((char*)this + v4 * 0x98 + 0x4d4) >= v54) {
+                    *(short*)((char*)this + v4 * 0x98 + 0x4d4) = 0;
+                    (*(short*)((char*)this + v4 * 0x98 + 0x4d2))++;
+                    if (*(WORD*)((char*)this + v4 * 0x98 + 0x4d2) == 0xc && *(int*)((char*)this + v4 * 4 + 0x3158) < 5) {
+                        *(short*)((char*)this + v4 * 0x98 + 0x4d2) = *(WORD*)((char*)this + v4 * 0x98 + 0x4d2) - 4;
+                        (*(int*)((char*)this + v4 * 4 + 0x3158))++;
+                    }
+                    *(int*)((char*)this + v4 * 0x98 + 0x550) = 0;
+                    if (*(WORD*)((char*)this + v4 * 0x98 + 0x4d2) >= v58) {
+                        *(short*)((char*)this + v4 * 0x98 + 0x4d0) = 0x193;
+                        *(int*)((char*)this + 0x3144) = 0;
+                        *(int*)((char*)this + v4 * 0x98 + 0x558) = 0;
+                        *(short*)((char*)this + v4 * 0x98 + 0x4d2) = 0;
+                    }
+                }
+                break;
+            case 0x19a:
+                if (*(WORD*)((char*)this + v4 * 0x98 + 0x4d2) == 0 && *(WORD*)((char*)this + v4 * 0x98 + 0x4d4) == 0 && *(int*)((char*)this + v4 * 4 + 0x3158) == 0) {
+                    *(double*)((char*)this + v4 * 0x98 + 0x4f8) = (double)*(int*)((char*)this + 0x3140);
+                    (*(int*)((char*)this + v4 * 4 + 0x3158))++;
+                    *(short*)((char*)this + v4 * 0x98 + 0x554) = 1;
+                }
+                *(double*)((char*)this + v4 * 0x98 + 0x500) += 0.045;
+                (*(short*)((char*)this + v4 * 0x98 + 0x4d4))++;
+                if (*(WORD*)((char*)this + v4 * 0x98 + 0x4d4) >= v54) {
+                    *(short*)((char*)this + v4 * 0x98 + 0x4d4) = 0;
+                    (*(short*)((char*)this + v4 * 0x98 + 0x4d2))++;
+                    *(int*)((char*)this + v4 * 0x98 + 0x550) = 0;
+                    if (*(WORD*)((char*)this + v4 * 0x98 + 0x4d2) >= v58) {
+                        *(short*)((char*)this + v4 * 0x98 + 0x4d2) = 0;
+                    }
+                }
+                if (*(double*)((char*)this + v4 * 0x98 + 0x4f0) + *(double*)((char*)this + v4 * 0x98 + 0x500) >= 0.0) {
+                    *(double*)((char*)this + v4 * 0x98 + 0x500) = 0.0;
+                    *(double*)((char*)this + v4 * 0x98 + 0x4f8) = 0.0;
+                    *(short*)((char*)this + v4 * 0x98 + 0x4d2) = 0;
+                    *(short*)((char*)this + v4 * 0x98 + 0x4d4) = 0;
+                    *(short*)((char*)this + v4 * 0x98 + 0x4d0) = 0x19b;
+                    *((char*)this + 0x2c9) = 0x12;
+                }
+                break;
+            case 0x19b:
+                if (*(WORD*)((char*)this + v4 * 0x98 + 0x4d2) == 0 && *(WORD*)((char*)this + v4 * 0x98 + 0x4d4) == 0) {
+                    *(short*)((char*)this + v4 * 0x98 + 0x554) = 1;
+                    *((char*)this + 0x2c8) = 7;
+                }
+                (*(short*)((char*)this + v4 * 0x98 + 0x4d4))++;
+                if (*(WORD*)((char*)this + v4 * 0x98 + 0x4d4) >= v54) {
+                    *(short*)((char*)this + v4 * 0x98 + 0x4d4) = 0;
+                    (*(short*)((char*)this + v4 * 0x98 + 0x4d2))++;
+                    *(int*)((char*)this + v4 * 0x98 + 0x550) = 0;
+                    if (*(WORD*)((char*)this + v4 * 0x98 + 0x4d2) >= v58) {
+                        Vf10(v4);
+                    }
+                }
+                break;
+            case 0x19c:
+                *(int*)((char*)this + 0x3144) = 2;
+                if (*(WORD*)((char*)this + 8) > 0x31 && *(WORD*)((char*)this + 8) < 0x96 || *(int*)((char*)this + v4 * 0x98 + 0x550) == 4 || *(int*)((char*)this + v4 * 0x98 + 0x550) == 5) {
+                    *(short*)((char*)this + v4 * 0x98 + 0x4d0) = 0x192;
+                    *(short*)((char*)this + v4 * 0x98 + 0x4d2) = 0;
+                    *(short*)((char*)this + v4 * 0x98 + 0x4d4) = 0;
+                    return;
+                }
+                if (*(WORD*)((char*)this + v4 * 0x98 + 0x4d2) == 0 && *(WORD*)((char*)this + v4 * 0x98 + 0x4d4) == 0) {
+                    *(short*)((char*)this + v4 * 0x98 + 0x554) = 6;
+                    *(int*)((char*)this + v4 * 4 + 0x3258) = 0xb4;
+                }
+                if (*(WORD*)((char*)this + v4 * 0x98 + 0x4d2) > 5) {
+                    *(int*)((char*)this + v4 * 4 + 0x3258) -= 4;
+                }
+                if (*(int*)((char*)this + v4 * 4 + 0x3258) < 0xf) {
+                    *(int*)((char*)this + v4 * 4 + 0x3258) = 0xf;
+                }
+                if (*(WORD*)((char*)this + v4 * 0x98 + 0x4d2) > 4) {
+                    ((ObjBase*)((char*)this + v4 * 0x98 + 0x4d0))->SetVelocity(-60.0, *(int*)((char*)this + v4 * 4 + 0x3258) * 0.01);
+                }
+                if (*(WORD*)((char*)this + v4 * 0x98 + 0x4d2) > 8) {
+                    *(double*)((char*)this + v4 * 0x98 + 0x4f8) = 0.0;
+                    *(double*)((char*)this + v4 * 0x98 + 0x500) = 0.0;
+                }
+                (*(short*)((char*)this + v4 * 0x98 + 0x4d4))++;
+                if (*(WORD*)((char*)this + v4 * 0x98 + 0x4d4) >= v54) {
+                    *(short*)((char*)this + v4 * 0x98 + 0x4d4) = 0;
+                    (*(short*)((char*)this + v4 * 0x98 + 0x4d2))++;
+                    if (*(WORD*)((char*)this + v4 * 0x98 + 0x4d2) == 6 || *(WORD*)((char*)this + v4 * 0x98 + 0x4d2) == 8) {
+                        *(int*)((char*)this + v4 * 0x98 + 0x550) = 0;
+                    }
+                    if (*(WORD*)((char*)this + v4 * 0x98 + 0x4d2) == 8 && *(int*)((char*)this + v4 * 4 + 0x3158) < 8) {
+                        (*(int*)((char*)this + v4 * 4 + 0x3158))++;
+                        *(short*)((char*)this + v4 * 0x98 + 0x4d2) = *(WORD*)((char*)this + v4 * 0x98 + 0x4d2) - 2;
+                        break;
+                    }
+                    if (*(WORD*)((char*)this + v4 * 0x98 + 0x4d2) >= v58) {
+                        *(int*)((char*)this + 0x3144) = 3;
+                        *(int*)((char*)this + 0x314c) = 0;
+                        *(int*)((char*)this + 0x3148) = 0x4b0;
+                        *(int*)((char*)this + 0x3150) = 1;
+                        *(int*)((char*)this + v4 * 4 + 0x3158) = 0;
+                        *(int*)((char*)this + v4 * 4 + 0x3258) = 0;
+                        Vf10(v4);
+                        break;
+                    }
+                }
+                break;
+            case 0x19d:
+                if (*(WORD*)((char*)this + 8) > 0x31 && *(WORD*)((char*)this + 8) < 0x96 || *(int*)((char*)this + v4 * 0x98 + 0x550) == 4 || *(int*)((char*)this + v4 * 0x98 + 0x550) == 5) {
+                    *(short*)((char*)this + v4 * 0x98 + 0x4d0) = 0x192;
+                    *(short*)((char*)this + v4 * 0x98 + 0x4d2) = 0;
+                    *(short*)((char*)this + v4 * 0x98 + 0x4d4) = 0;
+                    return;
+                }
+                if (*(WORD*)((char*)this + v4 * 0x98 + 0x4d2) == 0 && *(WORD*)((char*)this + v4 * 0x98 + 0x4d4) == 0) {
+                    *(short*)((char*)this + v4 * 0x98 + 0x554) = 4;
+                }
+                (*(short*)((char*)this + v4 * 0x98 + 0x4d4))++;
+                if (*(WORD*)((char*)this + v4 * 0x98 + 0x4d4) >= v54) {
+                    *(short*)((char*)this + v4 * 0x98 + 0x4d4) = 0;
+                    (*(short*)((char*)this + v4 * 0x98 + 0x4d2))++;
+                    if (*(WORD*)((char*)this + v4 * 0x98 + 0x4d2) == 2) {
+                        *(double*)((char*)this + v4 * 0x98 + 0x4f8) = 0.6;
+                    }
+                    if (*(WORD*)((char*)this + v4 * 0x98 + 0x4d2) == 4 && *(int*)((char*)this + v4 * 4 + 0x3158) < 0x14) {
+                        (*(int*)((char*)this + v4 * 4 + 0x3158))++;
+                        *(short*)((char*)this + v4 * 0x98 + 0x4d2) = *(WORD*)((char*)this + v4 * 0x98 + 0x4d2) - 2;
+                    }
+                    if (*(WORD*)((char*)this + v4 * 0x98 + 0x4d2) == 7) {
+                        *(double*)((char*)this + v4 * 0x98 + 0x500) = -0.1;
+                        *(double*)((char*)this + v4 * 0x98 + 0x4f8) = 0.0;
+                    }
+                    *(int*)((char*)this + v4 * 0x98 + 0x550) = 0;
+                    if (*(WORD*)((char*)this + v4 * 0x98 + 0x4d2) >= v58) {
+                        if (*(int*)((char*)this + v4 * 4 + 0x3158) < 0xe) {
+                            (*(int*)((char*)this + v4 * 4 + 0x3158))++;
+                            *(short*)((char*)this + v4 * 0x98 + 0x4d2) = *(WORD*)((char*)this + v4 * 0x98 + 0x4d2) - 2;
+                            break;
+                        }
+                        *(short*)((char*)this + v4 * 0x98 + 0x4d2) = 0;
+                        *(short*)((char*)this + v4 * 0x98 + 0x4d4) = 0;
+                        *(short*)((char*)this + v4 * 0x98 + 0x4d0) = 0x19e;
+                        break;
+                    }
+                }
+                break;
+            case 0x19e:
+                *(int*)((char*)this + 0x3144) = 2;
+                if (*(WORD*)((char*)this + 8) > 0x31 && *(WORD*)((char*)this + 8) < 0x96 || *(int*)((char*)this + v4 * 0x98 + 0x550) == 4 || *(int*)((char*)this + v4 * 0x98 + 0x550) == 5) {
+                    *(short*)((char*)this + v4 * 0x98 + 0x4d0) = 0x192;
+                    *(short*)((char*)this + v4 * 0x98 + 0x4d2) = 0;
+                    *(short*)((char*)this + v4 * 0x98 + 0x4d4) = 0;
+                    return;
+                }
+                if (*(WORD*)((char*)this + v4 * 0x98 + 0x4d2) == 0 && *(WORD*)((char*)this + v4 * 0x98 + 0x4d4) == 0) {
+                    *(short*)((char*)this + v4 * 0x98 + 0x554) = 6;
+                    *(int*)((char*)this + v4 * 4 + 0x3258) = 0xb4;
+                }
+                if (*(WORD*)((char*)this + v4 * 0x98 + 0x4d2) > 1) {
+                    *(int*)((char*)this + v4 * 4 + 0x3258) -= 2;
+                }
+                if (*(int*)((char*)this + v4 * 4 + 0x3258) < 0x1e) {
+                    *(int*)((char*)this + v4 * 4 + 0x3258) = 0x1e;
+                }
+                if (*(WORD*)((char*)this + v4 * 0x98 + 0x4d2) > 0) {
+                    ((ObjBase*)((char*)this + v4 * 0x98 + 0x4d0))->SetVelocity(-30.0, *(int*)((char*)this + v4 * 4 + 0x3258) * 0.01);
+                }
+                if (*(WORD*)((char*)this + v4 * 0x98 + 0x4d2) > 4) {
+                    *(double*)((char*)this + v4 * 0x98 + 0x4f8) = 0.0;
+                    *(double*)((char*)this + v4 * 0x98 + 0x500) = 0.0;
+                }
+                (*(short*)((char*)this + v4 * 0x98 + 0x4d4))++;
+                if (*(WORD*)((char*)this + v4 * 0x98 + 0x4d4) >= v54) {
+                    *(short*)((char*)this + v4 * 0x98 + 0x4d4) = 0;
+                    (*(short*)((char*)this + v4 * 0x98 + 0x4d2))++;
+                    if (*(WORD*)((char*)this + v4 * 0x98 + 0x4d2) == 2 || *(WORD*)((char*)this + v4 * 0x98 + 0x4d2) == 4) {
+                        *(int*)((char*)this + v4 * 0x98 + 0x550) = 0;
+                    }
+                    if (*(WORD*)((char*)this + v4 * 0x98 + 0x4d2) == 4 && *(int*)((char*)this + v4 * 4 + 0x3158) < 0xc) {
+                        (*(int*)((char*)this + v4 * 4 + 0x3158))++;
+                        *(short*)((char*)this + v4 * 0x98 + 0x4d2) = *(WORD*)((char*)this + v4 * 0x98 + 0x4d2) - 2;
+                        break;
+                    }
+                    if (*(WORD*)((char*)this + v4 * 0x98 + 0x4d2) >= v58) {
+                        *(int*)((char*)this + 0x3144) = 3;
+                        *(int*)((char*)this + 0x314c) = 0;
+                        *(int*)((char*)this + 0x3148) = 0x4b0;
+                        *(int*)((char*)this + v4 * 4 + 0x3158) = 0;
+                        *(int*)((char*)this + v4 * 4 + 0x3258) = 0;
+                        Vf10(v4);
+                        break;
+                    }
+                }
+                break;
+            case 0x19f:
+                (*(short*)((char*)this + v4 * 0x98 + 0x4d4))++;
+                if (*(WORD*)((char*)this + v4 * 0x98 + 0x4d4) >= v54) {
+                    *(short*)((char*)this + v4 * 0x98 + 0x4d4) = 0;
+                    (*(short*)((char*)this + v4 * 0x98 + 0x4d2))++;
+                    *(int*)((char*)this + v4 * 0x98 + 0x550) = 0;
+                    if (*(WORD*)((char*)this + v4 * 0x98 + 0x4d2) >= v58) {
+                        Vf10(v4);
+                    }
+                }
+                break;
+            case 0x1a0:
+                (*(short*)((char*)this + v4 * 0x98 + 0x4d4))++;
+                if (*(WORD*)((char*)this + v4 * 0x98 + 0x4d4) >= v54) {
+                    *(short*)((char*)this + v4 * 0x98 + 0x4d4) = 0;
+                    (*(short*)((char*)this + v4 * 0x98 + 0x4d2))++;
+                    *(int*)((char*)this + v4 * 0x98 + 0x550) = 0;
+                    if (*(WORD*)((char*)this + v4 * 0x98 + 0x4d2) >= v58) {
+                        Vf10(v4);
+                    }
+                }
+                break;
+            case 0x1a1:
+                (*(short*)((char*)this + v4 * 0x98 + 0x4d4))++;
+                if (*(WORD*)((char*)this + v4 * 0x98 + 0x4d4) >= v54) {
+                    *(short*)((char*)this + v4 * 0x98 + 0x4d4) = 0;
+                    (*(short*)((char*)this + v4 * 0x98 + 0x4d2))++;
+                    *(int*)((char*)this + v4 * 0x98 + 0x550) = 0;
+                    if (*(WORD*)((char*)this + v4 * 0x98 + 0x4d2) >= v58) {
+                        Vf10(v4);
+                    }
+                }
+                break;
+            case 0x1a2:
+                (*(short*)((char*)this + v4 * 0x98 + 0x4d4))++;
+                if (*(WORD*)((char*)this + v4 * 0x98 + 0x4d4) >= v54) {
+                    *(short*)((char*)this + v4 * 0x98 + 0x4d4) = 0;
+                    (*(short*)((char*)this + v4 * 0x98 + 0x4d2))++;
+                    *(int*)((char*)this + v4 * 0x98 + 0x550) = 0;
+                    if (*(WORD*)((char*)this + v4 * 0x98 + 0x4d2) >= v58) {
+                        Vf10(v4);
+                    }
+                }
+                break;
+            case 0x1a3:
+                if (*(WORD*)((char*)this + 8) != 0x134) {
+                    if (*(int*)((char*)this + v4 * 4 + 0x3158) < 9) {
+                        *((char*)this + v4 * 0x98 + 0x520) = 1;
+                        (*(int*)((char*)this + v4 * 4 + 0x3158))++;
+                        break;
+                    }
+                    Vf10(v4);
+                    break;
+                }
+                (*(short*)((char*)this + v4 * 0x98 + 0x4d4))++;
+                if (*(WORD*)((char*)this + v4 * 0x98 + 0x4d4) >= v54) {
+                    *(short*)((char*)this + v4 * 0x98 + 0x4d4) = 0;
+                    (*(short*)((char*)this + v4 * 0x98 + 0x4d2))++;
+                    *(int*)((char*)this + v4 * 0x98 + 0x550) = 0;
+                }
+                break;
+            case 0x1a4:
+                if (*(WORD*)((char*)this + 8) != 0x134) {
+                    if (*(int*)((char*)this + v4 * 4 + 0x3158) < 9) {
+                        *((char*)this + v4 * 0x98 + 0x520) = 1;
+                        (*(int*)((char*)this + v4 * 4 + 0x3158))++;
+                        break;
+                    }
+                    Vf10(v4);
+                    break;
+                }
+                (*(short*)((char*)this + v4 * 0x98 + 0x4d4))++;
+                if (*(WORD*)((char*)this + v4 * 0x98 + 0x4d4) >= v54) {
+                    *(short*)((char*)this + v4 * 0x98 + 0x4d4) = 0;
+                    (*(short*)((char*)this + v4 * 0x98 + 0x4d2))++;
+                    *(int*)((char*)this + v4 * 0x98 + 0x550) = 0;
+                }
+                break;
+            case 0x1a5:
+                if (*(WORD*)((char*)this + v4 * 0x98 + 0x4d2) == 0 && *(WORD*)((char*)this + v4 * 0x98 + 0x4d4) == 0) {
+                    *(double*)((char*)this + v4 * 0x98 + 0x4f8) = 1.1;
+                    *(double*)((char*)this + v4 * 0x98 + 0x500) = -1.0;
+                    *(double*)((char*)this + v4 * 0x98 + 0x510) = 0.04;
+                    *(short*)((char*)this + v4 * 0x98 + 0x554) = 1;
+                }
+                *(double*)((char*)this + v4 * 0x98 + 0x500) = *(double*)((char*)this + v4 * 0x98 + 0x500) + *(double*)((char*)this + v4 * 0x98 + 0x510);
+                if (*(int*)((char*)this + v4 * 0x98 + 0x550) == 1 || *(double*)((char*)this + v4 * 0x98 + 0x4f0) >= 0.0) {
+                    *(short*)((char*)this + v4 * 0x98 + 0x4d0) = 0x192;
+                    *((char*)this + v4 * 0x98 + 0x520) = 1;
+                    *(short*)((char*)this + v4 * 0x98 + 0x4d2) = 0;
+                    *(short*)((char*)this + v4 * 0x98 + 0x4d4) = 0;
+                    return;
+                }
+                (*(short*)((char*)this + v4 * 0x98 + 0x4d4))++;
+                if (*(WORD*)((char*)this + v4 * 0x98 + 0x4d4) >= v54) {
+                    *(short*)((char*)this + v4 * 0x98 + 0x4d4) = 0;
+                    (*(short*)((char*)this + v4 * 0x98 + 0x4d2))++;
+                    *(int*)((char*)this + v4 * 0x98 + 0x550) = 0;
+                    if (*(WORD*)((char*)this + v4 * 0x98 + 0x4d2) >= v58) {
+                        *(short*)((char*)this + v4 * 0x98 + 0x4d2) = 0;
+                        *(short*)((char*)this + v4 * 0x98 + 0x4d4) = 1;
+                    }
+                }
+                if (*(double*)((char*)this + v4 * 0x98 + 0x4e8) < -100.0 || *(double*)((char*)this + v4 * 0x98 + 0x4e8) > 800.0 || *(double*)((char*)this + v4 * 0x98 + 0x4f0) < -480.0) {
+                    Vf10(v4);
+                }
+                break;
+            case 0x1a6:
+                *(double*)((char*)this + v4 * 0x98 + 0x500) = *(double*)((char*)this + v4 * 0x98 + 0x500) + *(double*)((char*)this + v4 * 0x98 + 0x510);
+                if (*(WORD*)((char*)this + v4 * 0x98 + 0x4d2) == 0 && *(WORD*)((char*)this + v4 * 0x98 + 0x4d4) == 0) {
+                    *(double*)((char*)this + v4 * 0x98 + 0x4f8) = 0.8;
+                    *(double*)((char*)this + v4 * 0x98 + 0x500) = -0.5;
+                    *(double*)((char*)this + v4 * 0x98 + 0x510) = 0.03;
+                }
+                (*(short*)((char*)this + v4 * 0x98 + 0x4d4))++;
+                if (*(WORD*)((char*)this + v4 * 0x98 + 0x4d4) >= v54) {
+                    *(short*)((char*)this + v4 * 0x98 + 0x4d4) = 0;
+                    (*(short*)((char*)this + v4 * 0x98 + 0x4d2))++;
+                    *(int*)((char*)this + v4 * 0x98 + 0x550) = 0;
+                    if (*(WORD*)((char*)this + v4 * 0x98 + 0x4d2) >= v58) {
+                        *(short*)((char*)this + v4 * 0x98 + 0x4d2) = 0;
+                        *(short*)((char*)this + v4 * 0x98 + 0x4d4) = 1;
+                    }
+                }
+                if (*(double*)((char*)this + v4 * 0x98 + 0x4e8) < -100.0 || *(double*)((char*)this + v4 * 0x98 + 0x4e8) > 800.0 || *(double*)((char*)this + v4 * 0x98 + 0x4f0) > 50.0) {
+                    Vf10(v4);
+                }
+                break;
+            case 0x1a7:
+                if (*(WORD*)((char*)this + v4 * 0x98 + 0x4d2) == 0 && *(WORD*)((char*)this + v4 * 0x98 + 0x4d4) == 0 && *(int*)((char*)this + v4 * 4 + 0x3158) == 0) {
+                    *(double*)((char*)this + v4 * 0x98 + 0x4f8) = (double)*(int*)((char*)this + 0x3140);
+                    (*(int*)((char*)this + v4 * 4 + 0x3158))++;
+                    *(short*)((char*)this + v4 * 0x98 + 0x554) = 1;
+                }
+                *(double*)((char*)this + v4 * 0x98 + 0x500) += 0.045;
+                (*(short*)((char*)this + v4 * 0x98 + 0x4d4))++;
+                if (*(WORD*)((char*)this + v4 * 0x98 + 0x4d4) >= v54) {
+                    *(short*)((char*)this + v4 * 0x98 + 0x4d4) = 0;
+                    (*(short*)((char*)this + v4 * 0x98 + 0x4d2))++;
+                    *(int*)((char*)this + v4 * 0x98 + 0x550) = 0;
+                    if (*(WORD*)((char*)this + v4 * 0x98 + 0x4d2) >= v58) {
+                        *(short*)((char*)this + v4 * 0x98 + 0x4d2) = 0;
+                    }
+                }
+                if (*(double*)((char*)this + v4 * 0x98 + 0x4f0) + *(double*)((char*)this + v4 * 0x98 + 0x500) >= 0.0) {
+                    *(double*)((char*)this + v4 * 0x98 + 0x500) = 0.0;
+                    *(double*)((char*)this + v4 * 0x98 + 0x4f8) = 0.0;
+                    *(short*)((char*)this + v4 * 0x98 + 0x4d2) = 0;
+                    *(short*)((char*)this + v4 * 0x98 + 0x4d4) = 0;
+                    *(short*)((char*)this + v4 * 0x98 + 0x4d0) = 0x1a8;
+                    *((char*)this + 0x2c9) = 0x12;
+                }
+                break;
+            case 0x1a8:
+                if (*(WORD*)((char*)this + v4 * 0x98 + 0x4d2) == 0 && *(WORD*)((char*)this + v4 * 0x98 + 0x4d4) == 0) {
+                    *(short*)((char*)this + v4 * 0x98 + 0x554) = 1;
+                    *((char*)this + 0x2c8) = 7;
+                }
+                (*(short*)((char*)this + v4 * 0x98 + 0x4d4))++;
+                if (*(WORD*)((char*)this + v4 * 0x98 + 0x4d4) >= v54) {
+                    *(short*)((char*)this + v4 * 0x98 + 0x4d4) = 0;
+                    (*(short*)((char*)this + v4 * 0x98 + 0x4d2))++;
+                    *(int*)((char*)this + v4 * 0x98 + 0x550) = 0;
+                    if (*(WORD*)((char*)this + v4 * 0x98 + 0x4d2) >= v58) {
+                        Vf10(v4);
+                    }
+                }
+                break;
+            case 0x1a9:
+                if (*(WORD*)((char*)this + v4 * 0x98 + 0x4d2) == 0 && *(WORD*)((char*)this + v4 * 0x98 + 0x4d4) == 0 && *(int*)((char*)this + v4 * 4 + 0x3158) == 0) {
+                    *(double*)((char*)this + v4 * 0x98 + 0x4f8) = (double)(*(int*)((char*)this + 0x3140) - (*(int*)((char*)this + 0x3140) > 5) * 5);
+                    (*(int*)((char*)this + v4 * 4 + 0x3158))++;
+                    *(short*)((char*)this + v4 * 0x98 + 0x554) = 1;
+                }
+                *(double*)((char*)this + v4 * 0x98 + 0x500) += 0.045;
+                (*(short*)((char*)this + v4 * 0x98 + 0x4d4))++;
+                if (*(WORD*)((char*)this + v4 * 0x98 + 0x4d4) >= v54) {
+                    *(short*)((char*)this + v4 * 0x98 + 0x4d4) = 0;
+                    (*(short*)((char*)this + v4 * 0x98 + 0x4d2))++;
+                    *(int*)((char*)this + v4 * 0x98 + 0x550) = 0;
+                    if (*(WORD*)((char*)this + v4 * 0x98 + 0x4d2) >= v58) {
+                        *(short*)((char*)this + v4 * 0x98 + 0x4d2) = 0;
+                    }
+                }
+                if (*(double*)((char*)this + v4 * 0x98 + 0x4f0) + *(double*)((char*)this + v4 * 0x98 + 0x500) >= 0.0) {
+                    *(double*)((char*)this + v4 * 0x98 + 0x500) = 0.0;
+                    *(double*)((char*)this + v4 * 0x98 + 0x4f8) = 0.0;
+                    *(short*)((char*)this + v4 * 0x98 + 0x4d2) = 0;
+                    *(short*)((char*)this + v4 * 0x98 + 0x4d4) = 0;
+                    *(short*)((char*)this + v4 * 0x98 + 0x4d0) = 0x1aa;
+                }
+                break;
+            case 0x1aa:
+                if (*(WORD*)((char*)this + v4 * 0x98 + 0x4d2) == 0 && *(WORD*)((char*)this + v4 * 0x98 + 0x4d4) == 0) {
+                    *(short*)((char*)this + v4 * 0x98 + 0x554) = 1;
+                    *((char*)this + 0x2c8) = 7;
+                }
+                (*(short*)((char*)this + v4 * 0x98 + 0x4d4))++;
+                if (*(WORD*)((char*)this + v4 * 0x98 + 0x4d4) >= v54) {
+                    *(short*)((char*)this + v4 * 0x98 + 0x4d4) = 0;
+                    (*(short*)((char*)this + v4 * 0x98 + 0x4d2))++;
+                    *(int*)((char*)this + v4 * 0x98 + 0x550) = 0;
+                    if (*(WORD*)((char*)this + v4 * 0x98 + 0x4d2) >= v58) {
+                        Vf10(v4);
+                    }
+                }
+                break;
+            case 0x1ab:
+                ((CGame*)*(int*)((char*)this + 0x7c))->Unk4080c0(0xf);
+                *(short*)((char*)this + 0x14c) = 2;
+                CPlayer::Unk410b10(0xb0, 1);
+                *(double*)((char*)this + v4 * 0x98 + 0x500) += 0.05;
+                if (*(double*)((char*)this + v4 * 0x98 + 0x500) > -0.1) {
+                    *(double*)((char*)this + v4 * 0x98 + 0x500) = -0.1;
+                }
+                (*(short*)((char*)this + v4 * 0x98 + 0x4d4))++;
+                if (*(WORD*)((char*)this + v4 * 0x98 + 0x4d4) >= v54) {
+                    *(short*)((char*)this + v4 * 0x98 + 0x4d4) = 0;
+                    (*(short*)((char*)this + v4 * 0x98 + 0x4d2))++;
+                    if (*(WORD*)((char*)this + v4 * 0x98 + 0x4d2) == 7) {
+                        *(double*)((char*)this + v4 * 0x98 + 0x500) = -1.5;
+                        *(double*)((char*)this + v4 * 0x98 + 0x4f8) = 0.0;
+                    }
+                    *(int*)((char*)this + v4 * 0x98 + 0x550) = 0;
+                    if (*(WORD*)((char*)this + v4 * 0x98 + 0x4d2) >= v58) {
+                        if (*(int*)((char*)this + v4 * 4 + 0x3158) < 6) {
+                            (*(int*)((char*)this + v4 * 4 + 0x3158))++;
+                            *(short*)((char*)this + v4 * 0x98 + 0x4d2) = *(WORD*)((char*)this + v4 * 0x98 + 0x4d2) - 2;
+                            break;
+                        }
+                        *((char*)this + 0x2c8) = 4;
+                        l50.type = 1;
+                        l50.unk2c = 0;
+                        l50.x = (double)(int)*(double*)((char*)this + v4 * 0x98 + 0x4e8);
+                        l50.y = (double)(int)(*(double*)((char*)this + v4 * 0x98 + 0x4f0) - 40.0);
+                        l50.unk20 = 2;
+                        l50.unk21 = 1;
+                        ((CGame*)*(int*)((char*)this + 0x7c))->CreateEffect((EffectDesc*)&l50);
+                        *(int*)((char*)this + 0x3148) = 0x2710;
+                        *(int*)((char*)this + 0x3144) = 4;
+                        *(short*)((char*)this + 0x14c) = 0x3c;
+                        CPlayer::Unk410b10(0xb0, 0x14);
+                        Vf10(v4);
+                        break;
+                    }
+                }
+                break;
+            case 0x1ac:
+                *(int*)((char*)this + 0x3144) = 2;
+                if (*(WORD*)((char*)this + 8) > 0x31 && *(WORD*)((char*)this + 8) < 0x96 || *(int*)((char*)this + v4 * 0x98 + 0x550) == 4 || *(int*)((char*)this + v4 * 0x98 + 0x550) == 5) {
+                    *(short*)((char*)this + v4 * 0x98 + 0x4d0) = 0x192;
+                    *(short*)((char*)this + v4 * 0x98 + 0x4d2) = 0;
+                    *(short*)((char*)this + v4 * 0x98 + 0x4d4) = 0;
+                    return;
+                }
+                if (*(WORD*)((char*)this + v4 * 0x98 + 0x4d2) == 0 && *(WORD*)((char*)this + v4 * 0x98 + 0x4d4) == 0) {
+                    *(short*)((char*)this + v4 * 0x98 + 0x554) = 4;
+                    *(double*)((char*)this + v4 * 0x98 + 0x4f8) = 1.7;
+                }
+                *(double*)((char*)this + v4 * 0x98 + 0x4f8) -= 0.035;
+                if (*(double*)((char*)this + v4 * 0x98 + 0x4f8) < 0.0) {
+                    *(double*)((char*)this + v4 * 0x98 + 0x4f8) = 0.0;
+                }
+                if (*(double*)((char*)this + v4 * 0x98 + 0x4e8) > 600.0 && *((char*)this + v4 * 0x98 + 0x518) == 1) {
+                    *(double*)((char*)this + v4 * 0x98 + 0x4e8) = 600.0;
+                    *(double*)((char*)this + v4 * 0x98 + 0x4f8) = 0.0;
+                }
+                if (*(double*)((char*)this + v4 * 0x98 + 0x4e8) < 40.0 && *((char*)this + v4 * 0x98 + 0x518) == -1) {
+                    *(double*)((char*)this + v4 * 0x98 + 0x4e8) = 40.0;
+                    *(double*)((char*)this + v4 * 0x98 + 0x4f8) = 0.0;
+                }
+                (*(short*)((char*)this + v4 * 0x98 + 0x4d4))++;
+                if (*(WORD*)((char*)this + v4 * 0x98 + 0x4d4) >= v54) {
+                    *(short*)((char*)this + v4 * 0x98 + 0x4d4) = 0;
+                    (*(short*)((char*)this + v4 * 0x98 + 0x4d2))++;
+                    if (*(WORD*)((char*)this + v4 * 0x98 + 0x4d2) == 7 && *(int*)((char*)this + v4 * 4 + 0x3158) < 3) {
+                        *(short*)((char*)this + v4 * 0x98 + 0x4d2) = *(WORD*)((char*)this + v4 * 0x98 + 0x4d2) - 4;
+                        (*(int*)((char*)this + v4 * 4 + 0x3158))++;
+                    }
+                    if (*(WORD*)((char*)this + v4 * 0x98 + 0x4d2) == 4 || *(WORD*)((char*)this + v4 * 0x98 + 0x4d2) == 6 || *(WORD*)((char*)this + v4 * 0x98 + 0x4d2) < 3) {
+                        *(int*)((char*)this + v4 * 0x98 + 0x550) = 0;
+                    }
+                    if (*(WORD*)((char*)this + v4 * 0x98 + 0x4d2) == 9 && *(int*)((char*)this + v4 * 4 + 0x3258) < 1) {
+                        *(short*)((char*)this + v4 * 0x98 + 0x4d2) = *(WORD*)((char*)this + v4 * 0x98 + 0x4d2) - 2;
+                        (*(int*)((char*)this + v4 * 4 + 0x3258))++;
+                        break;
+                    }
+                    if (*(WORD*)((char*)this + v4 * 0x98 + 0x4d2) >= v58) {
+                        *(int*)((char*)this + 0x3144) = 3;
+                        *(int*)((char*)this + 0x314c) = 0;
+                        *(int*)((char*)this + 0x3148) = 0x4b0;
+                        *(int*)((char*)this + 0x3150) = 1;
+                        *(int*)((char*)this + v4 * 4 + 0x3158) = 0;
+                        *(int*)((char*)this + v4 * 4 + 0x3258) = 0;
+                        Vf10(v4);
+                    }
+                }
+                break;
+            case 0x1ad:
+                *(int*)((char*)this + 0x3144) = 2;
+                if (*(WORD*)((char*)this + 8) > 0x31 && *(WORD*)((char*)this + 8) < 0x96 || *(int*)((char*)this + v4 * 0x98 + 0x550) == 4 || *(int*)((char*)this + v4 * 0x98 + 0x550) == 5) {
+                    *(short*)((char*)this + v4 * 0x98 + 0x4d0) = 0x192;
+                    *(short*)((char*)this + v4 * 0x98 + 0x4d2) = 0;
+                    *(short*)((char*)this + v4 * 0x98 + 0x4d4) = 0;
+                    return;
+                }
+                if (*(WORD*)((char*)this + v4 * 0x98 + 0x4d2) == 0 && *(WORD*)((char*)this + v4 * 0x98 + 0x4d4) == 0) {
+                    *(short*)((char*)this + v4 * 0x98 + 0x554) = 4;
+                    *(double*)((char*)this + v4 * 0x98 + 0x4f8) = 1.7;
+                }
+                *(double*)((char*)this + v4 * 0x98 + 0x4f8) -= 0.025;
+                if (*(double*)((char*)this + v4 * 0x98 + 0x4f8) < 0.1) {
+                    *(double*)((char*)this + v4 * 0x98 + 0x4f8) = 0.1;
+                }
+                if (*(double*)((char*)this + v4 * 0x98 + 0x4e8) > 600.0 && *((char*)this + v4 * 0x98 + 0x518) == 1) {
+                    *(double*)((char*)this + v4 * 0x98 + 0x4e8) = 600.0;
+                    *(double*)((char*)this + v4 * 0x98 + 0x4f8) = 0.0;
+                }
+                if (*(double*)((char*)this + v4 * 0x98 + 0x4e8) < 40.0 && *((char*)this + v4 * 0x98 + 0x518) == -1) {
+                    *(double*)((char*)this + v4 * 0x98 + 0x4e8) = 40.0;
+                    *(double*)((char*)this + v4 * 0x98 + 0x4f8) = 0.0;
+                }
+                (*(short*)((char*)this + v4 * 0x98 + 0x4d4))++;
+                if (*(WORD*)((char*)this + v4 * 0x98 + 0x4d4) >= v54) {
+                    *(short*)((char*)this + v4 * 0x98 + 0x4d4) = 0;
+                    (*(short*)((char*)this + v4 * 0x98 + 0x4d2))++;
+                    if (*(WORD*)((char*)this + v4 * 0x98 + 0x4d2) == 7 && *(int*)((char*)this + v4 * 4 + 0x3158) < 1) {
+                        *(short*)((char*)this + v4 * 0x98 + 0x4d2) = *(WORD*)((char*)this + v4 * 0x98 + 0x4d2) - 4;
+                        (*(int*)((char*)this + v4 * 4 + 0x3158))++;
+                    }
+                    if (*(WORD*)((char*)this + v4 * 0x98 + 0x4d2) == 4 || *(WORD*)((char*)this + v4 * 0x98 + 0x4d2) == 6 || *(WORD*)((char*)this + v4 * 0x98 + 0x4d2) < 3) {
+                        *(int*)((char*)this + v4 * 0x98 + 0x550) = 0;
+                    }
+                    if (*(WORD*)((char*)this + v4 * 0x98 + 0x4d2) >= v58) {
+                        if (*(int*)((char*)this + v4 * 4 + 0x3258) < 2) {
+                            *(short*)((char*)this + v4 * 0x98 + 0x4d2) = *(WORD*)((char*)this + v4 * 0x98 + 0x4d2) - 2;
+                            (*(int*)((char*)this + v4 * 4 + 0x3258))++;
+                            break;
+                        }
+                        *(short*)((char*)this + v4 * 0x98 + 0x4d0) = 0x191;
+                        *(int*)((char*)this + 0x3144) = 1;
+                        *(int*)((char*)this + 0x3148) = 0x2710;
+                        *(int*)((char*)this + v4 * 4 + 0x3158) = 0;
+                        *(int*)((char*)this + v4 * 4 + 0x3258) = 0;
+                        *(short*)((char*)this + v4 * 0x98 + 0x4d2) = 3;
+                    }
+                }
+                break;
+            case 0x1ae:
+                *(int*)((char*)this + 0x3144) = 2;
+                if (*(WORD*)((char*)this + 8) > 0x31 && *(WORD*)((char*)this + 8) < 0x96 || *(int*)((char*)this + v4 * 0x98 + 0x550) == 4 || *(int*)((char*)this + v4 * 0x98 + 0x550) == 5) {
+                    *(short*)((char*)this + v4 * 0x98 + 0x4d0) = 0x192;
+                    *(short*)((char*)this + v4 * 0x98 + 0x4d2) = 0;
+                    *(short*)((char*)this + v4 * 0x98 + 0x4d4) = 0;
+                    return;
+                }
+                if (*(WORD*)((char*)this + v4 * 0x98 + 0x4d2) == 0 && *(WORD*)((char*)this + v4 * 0x98 + 0x4d4) == 0) {
+                    *(short*)((char*)this + v4 * 0x98 + 0x554) = 0x10;
+                    *(double*)((char*)this + v4 * 0x98 + 0x4f8) = 2.0;
+                }
+                *(double*)((char*)this + v4 * 0x98 + 0x4f8) -= 0.025;
+                if (*(double*)((char*)this + v4 * 0x98 + 0x4f8) < 0.4) {
+                    *(double*)((char*)this + v4 * 0x98 + 0x4f8) = 0.4;
+                }
+                if (*(double*)((char*)this + v4 * 0x98 + 0x4e8) > 600.0) {
+                    *(double*)((char*)this + v4 * 0x98 + 0x4e8) = 600.0;
+                    *(double*)((char*)this + v4 * 0x98 + 0x4f8) = 0.0;
+                }
+                if (*(double*)((char*)this + v4 * 0x98 + 0x4e8) < 40.0) {
+                    *(double*)((char*)this + v4 * 0x98 + 0x4e8) = 40.0;
+                    *(double*)((char*)this + v4 * 0x98 + 0x4f8) = 0.0;
+                }
+                (*(short*)((char*)this + v4 * 0x98 + 0x4d4))++;
+                if (*(WORD*)((char*)this + v4 * 0x98 + 0x4d4) >= v54) {
+                    *(short*)((char*)this + v4 * 0x98 + 0x4d4) = 0;
+                    (*(short*)((char*)this + v4 * 0x98 + 0x4d2))++;
+                    if (*(WORD*)((char*)this + v4 * 0x98 + 0x4d2) == 7 && *(int*)((char*)this + v4 * 4 + 0x3158) < 7) {
+                        *(short*)((char*)this + v4 * 0x98 + 0x4d2) = *(WORD*)((char*)this + v4 * 0x98 + 0x4d2) - 4;
+                        (*(int*)((char*)this + v4 * 4 + 0x3158))++;
+                    }
+                    if (*(WORD*)((char*)this + v4 * 0x98 + 0x4d2) == 4 || *(WORD*)((char*)this + v4 * 0x98 + 0x4d2) == 6 || *(WORD*)((char*)this + v4 * 0x98 + 0x4d2) < 3) {
+                        *(int*)((char*)this + v4 * 0x98 + 0x550) = 0;
+                    }
+                    if (*(WORD*)((char*)this + v4 * 0x98 + 0x4d2) >= v58) {
+                        if (*(int*)((char*)this + v4 * 4 + 0x3258) < 5) {
+                            *(short*)((char*)this + v4 * 0x98 + 0x4d2) = *(WORD*)((char*)this + v4 * 0x98 + 0x4d2) - 2;
+                            (*(int*)((char*)this + v4 * 4 + 0x3258))++;
+                            break;
+                        }
+                        *(short*)((char*)this + v4 * 0x98 + 0x4d0) = 0x191;
+                        *(int*)((char*)this + 0x3144) = 1;
+                        *(int*)((char*)this + 0x3148) = 0x2710;
+                        *(int*)((char*)this + v4 * 4 + 0x3158) = 0;
+                        *(int*)((char*)this + v4 * 4 + 0x3258) = 0;
+                        *(short*)((char*)this + v4 * 0x98 + 0x4d2) = 3;
+                    }
+                }
+                break;
+            case 0x1af:
+                *(int*)((char*)this + 0x3144) = 2;
+                if (*(WORD*)((char*)this + 8) > 0x31 && *(WORD*)((char*)this + 8) < 0x96 || *(int*)((char*)this + v4 * 0x98 + 0x550) == 4 || *(int*)((char*)this + v4 * 0x98 + 0x550) == 5) {
+                    *(short*)((char*)this + v4 * 0x98 + 0x4d0) = 0x192;
+                    *(short*)((char*)this + v4 * 0x98 + 0x4d2) = 0;
+                    *(short*)((char*)this + v4 * 0x98 + 0x4d4) = 0;
+                    return;
+                }
+                if (*(WORD*)((char*)this + v4 * 0x98 + 0x4d2) == 0 && *(WORD*)((char*)this + v4 * 0x98 + 0x4d4) == 0) {
+                    *(short*)((char*)this + v4 * 0x98 + 0x554) = 8;
+                    *(double*)((char*)this + v4 * 0x98 + 0x4f8) = 1.3;
+                }
+                *(double*)((char*)this + v4 * 0x98 + 0x4f8) -= 0.025;
+                if (*(double*)((char*)this + v4 * 0x98 + 0x4f8) < 0.1) {
+                    *(double*)((char*)this + v4 * 0x98 + 0x4f8) = 0.1;
+                }
+                if (*(double*)((char*)this + v4 * 0x98 + 0x4e8) > 600.0) {
+                    *(double*)((char*)this + v4 * 0x98 + 0x4e8) = 600.0;
+                    *(double*)((char*)this + v4 * 0x98 + 0x4f8) = 0.0;
+                }
+                if (*(double*)((char*)this + v4 * 0x98 + 0x4e8) < 40.0) {
+                    *(double*)((char*)this + v4 * 0x98 + 0x4e8) = 40.0;
+                    *(double*)((char*)this + v4 * 0x98 + 0x4f8) = 0.0;
+                }
+                (*(short*)((char*)this + v4 * 0x98 + 0x4d4))++;
+                if (*(WORD*)((char*)this + v4 * 0x98 + 0x4d4) >= v54) {
+                    *(short*)((char*)this + v4 * 0x98 + 0x4d4) = 0;
+                    (*(short*)((char*)this + v4 * 0x98 + 0x4d2))++;
+                    if (*(WORD*)((char*)this + v4 * 0x98 + 0x4d2) == 7 && *(int*)((char*)this + v4 * 4 + 0x3158) < 3) {
+                        *(short*)((char*)this + v4 * 0x98 + 0x4d2) = *(WORD*)((char*)this + v4 * 0x98 + 0x4d2) - 4;
+                        (*(int*)((char*)this + v4 * 4 + 0x3158))++;
+                    }
+                    if (*(WORD*)((char*)this + v4 * 0x98 + 0x4d2) == 9 && *(int*)((char*)this + v4 * 4 + 0x3258) < 2) {
+                        *(short*)((char*)this + v4 * 0x98 + 0x4d2) = *(WORD*)((char*)this + v4 * 0x98 + 0x4d2) - 2;
+                        (*(int*)((char*)this + v4 * 4 + 0x3258))++;
+                        break;
+                    }
+                    if (*(WORD*)((char*)this + v4 * 0x98 + 0x4d2) == 4 || *(WORD*)((char*)this + v4 * 0x98 + 0x4d2) == 6 || *(WORD*)((char*)this + v4 * 0x98 + 0x4d2) < 3) {
+                        *(int*)((char*)this + v4 * 0x98 + 0x550) = 0;
+                    }
+                    if (*(WORD*)((char*)this + v4 * 0x98 + 0x4d2) >= v58) {
+                        *(int*)((char*)this + 0x3144) = 3;
+                        *(int*)((char*)this + 0x3148) = 0x4b0;
+                        *(int*)((char*)this + v4 * 4 + 0x3158) = 0;
+                        *(int*)((char*)this + v4 * 4 + 0x3258) = 0;
+                        *(short*)((char*)this + v4 * 0x98 + 0x4d2) = 0;
+                        *(double*)((char*)this + v4 * 0x98 + 0x4f8) = 0.0;
+                        Vf10(v4);
+                    }
+                }
+                break;
+            case 0x1b0:
+                *(int*)((char*)this + 0x3144) = 2;
+                if (*(WORD*)((char*)this + 8) > 0x31 && *(WORD*)((char*)this + 8) < 0x96 || *(int*)((char*)this + v4 * 0x98 + 0x550) == 4 || *(int*)((char*)this + v4 * 0x98 + 0x550) == 5) {
+                    *(short*)((char*)this + v4 * 0x98 + 0x4d0) = 0x192;
+                    *(short*)((char*)this + v4 * 0x98 + 0x4d2) = 0;
+                    *(short*)((char*)this + v4 * 0x98 + 0x4d4) = 0;
+                    return;
+                }
+                if (*(WORD*)((char*)this + v4 * 0x98 + 0x4d2) == 2 && *(WORD*)((char*)this + v4 * 0x98 + 0x4d4) == 0) {
+                    l50.type = 0x1c5;
+                    l50.x = (double)(int)(*(double*)((char*)this + v4 * 0x98 + 0x4e8) + *((char*)this + v4 * 0x98 + 0x518) * 0x3c);
+                    l50.y = (double)(int)(*(double*)((char*)this + v4 * 0x98 + 0x4f0) - 50.0);
+                    l50.unk0 = 1;
+                    l50.unk20 = 2;
+                    l50.unk21 = 1;
+                    l50.unk18 = *((char*)this + v4 * 0x98 + 0x518);
+                    Vf9(&l50);
+                }
+                if (*(double*)((char*)this + v4 * 0x98 + 0x4e8) > 600.0) {
+                    *(double*)((char*)this + v4 * 0x98 + 0x4e8) = 600.0;
+                    *(double*)((char*)this + v4 * 0x98 + 0x4f8) = 0.0;
+                }
+                if (*(double*)((char*)this + v4 * 0x98 + 0x4e8) < 40.0) {
+                    *(double*)((char*)this + v4 * 0x98 + 0x4e8) = 40.0;
+                    *(double*)((char*)this + v4 * 0x98 + 0x4f8) = 0.0;
+                }
+                (*(short*)((char*)this + v4 * 0x98 + 0x4d4))++;
+                if (*(WORD*)((char*)this + v4 * 0x98 + 0x4d4) >= v54) {
+                    *(short*)((char*)this + v4 * 0x98 + 0x4d4) = 0;
+                    (*(short*)((char*)this + v4 * 0x98 + 0x4d2))++;
+                    *(int*)((char*)this + v4 * 0x98 + 0x550) = 0;
+                    if (*(WORD*)((char*)this + v4 * 0x98 + 0x4d2) == 5 && *(int*)((char*)this + v4 * 4 + 0x3158) < 4) {
+                        *(short*)((char*)this + v4 * 0x98 + 0x4d2) = *(WORD*)((char*)this + v4 * 0x98 + 0x4d2) - 2;
+                        (*(int*)((char*)this + v4 * 4 + 0x3158))++;
+                    }
+                    if (*(WORD*)((char*)this + v4 * 0x98 + 0x4d2) >= v58) {
+                        *(short*)((char*)this + v4 * 0x98 + 0x4d2) = 3;
+                        *(short*)((char*)this + v4 * 0x98 + 0x4d4) = 0;
+                        *(short*)((char*)this + v4 * 0x98 + 0x4d0) = 0x191;
+                        *(int*)((char*)this + v4 * 4 + 0x3158) = 0;
+                        *(int*)((char*)this + 0x3148) = 0x2710;
+                        *(int*)((char*)this + 0x3144) = 1;
+                    }
+                }
+                break;
+            case 0x1b1:
+                if (*(WORD*)((char*)this + v4 * 0x98 + 0x4d2) == 0 && *(WORD*)((char*)this + v4 * 0x98 + 0x4d4) == 0) {
+                    *(short*)((char*)this + v4 * 0x98 + 0x554) = 1;
+                }
+                (*(short*)((char*)this + v4 * 0x98 + 0x4d4))++;
+                if (*(WORD*)((char*)this + v4 * 0x98 + 0x4d4) >= v54) {
+                    *(short*)((char*)this + v4 * 0x98 + 0x4d4) = 0;
+                    (*(short*)((char*)this + v4 * 0x98 + 0x4d2))++;
+                    *(int*)((char*)this + v4 * 0x98 + 0x550) = 0;
+                    if (*(WORD*)((char*)this + v4 * 0x98 + 0x4d2) >= v58) {
+                        Vf10(v4);
+                    }
+                }
+                break;
+            case 0x1b2:
+                (*(short*)((char*)this + v4 * 0x98 + 0x4d4))++;
+                if (*(WORD*)((char*)this + v4 * 0x98 + 0x4d4) >= v54) {
+                    *(short*)((char*)this + v4 * 0x98 + 0x4d4) = 0;
+                    (*(short*)((char*)this + v4 * 0x98 + 0x4d2))++;
+                    *(int*)((char*)this + v4 * 0x98 + 0x550) = 0;
+                    if (*(WORD*)((char*)this + v4 * 0x98 + 0x4d2) >= v58) {
+                        Vf10(v4);
+                    }
+                }
+                break;
+            case 0x1b3:
+                *(int*)((char*)this + 0x3144) = 2;
+                if (*(WORD*)((char*)this + 8) > 0x31 && *(WORD*)((char*)this + 8) < 0x96 || *(int*)((char*)this + v4 * 0x98 + 0x550) == 4 || *(int*)((char*)this + v4 * 0x98 + 0x550) == 5) {
+                    *(short*)((char*)this + v4 * 0x98 + 0x4d0) = 0x192;
+                    *(short*)((char*)this + v4 * 0x98 + 0x4d2) = 0;
+                    *(short*)((char*)this + v4 * 0x98 + 0x4d4) = 0;
+                    return;
+                }
+                if (*(WORD*)((char*)this + v4 * 0x98 + 0x4d2) == 0 && *(WORD*)((char*)this + v4 * 0x98 + 0x4d4) == 0) {
+                    *(short*)((char*)this + v4 * 0x98 + 0x554) = 1;
+                    *(double*)((char*)this + v4 * 0x98 + 0x4f8) = 0.0;
+                }
+                if (*(WORD*)((char*)this + v4 * 0x98 + 0x4d2) == 2 && *(WORD*)((char*)this + v4 * 0x98 + 0x4d4) == 0) {
+                    *(double*)((char*)this + v4 * 0x98 + 0x4f8) = 5.25;
+                }
+                if (*(WORD*)((char*)this + v4 * 0x98 + 0x4d2) > 3) {
+                    *(double*)((char*)this + v4 * 0x98 + 0x4f8) -= 0.4;
+                    if (*(double*)((char*)this + v4 * 0x98 + 0x4f8) < 0.2) {
+                        *(double*)((char*)this + v4 * 0x98 + 0x4f8) = 0.2;
+                    }
+                }
+                if (*(double*)(*(char**)*(char**)((char*)this + 0x78) + 0x20) - *(double*)((char*)this + v4 * 0x98 + 0x4e8) < 120.0 && *((char*)this + v4 * 0x98 + 0x518) == 1 && *(WORD*)((char*)this + v4 * 0x98 + 0x4d2) == 3) {
+                    *(short*)((char*)this + v4 * 0x98 + 0x4d4) = 0;
+                    *(short*)((char*)this + v4 * 0x98 + 0x4d2) = 4;
+                    break;
+                }
+                if (*(double*)((char*)this + v4 * 0x98 + 0x4e8) - *(double*)(*(char**)*(char**)((char*)this + 0x78) + 0x20) < 120.0 && *((char*)this + v4 * 0x98 + 0x518) == -1 && *(WORD*)((char*)this + v4 * 0x98 + 0x4d2) == 3) {
+                    *(short*)((char*)this + v4 * 0x98 + 0x4d4) = 0;
+                    *(short*)((char*)this + v4 * 0x98 + 0x4d2) = 4;
+                    break;
+                }
+                if (*(double*)((char*)this + v4 * 0x98 + 0x4e8) > 600.0) {
+                    *(double*)((char*)this + v4 * 0x98 + 0x4e8) = 600.0;
+                    *(double*)((char*)this + v4 * 0x98 + 0x4f8) = 0.0;
+                }
+                if (*(double*)((char*)this + v4 * 0x98 + 0x4e8) < 40.0) {
+                    *(double*)((char*)this + v4 * 0x98 + 0x4e8) = 40.0;
+                    *(double*)((char*)this + v4 * 0x98 + 0x4f8) = 0.0;
+                }
+                (*(short*)((char*)this + v4 * 0x98 + 0x4d4))++;
+                if (*(WORD*)((char*)this + v4 * 0x98 + 0x4d4) >= v54) {
+                    *(short*)((char*)this + v4 * 0x98 + 0x4d4) = 0;
+                    (*(short*)((char*)this + v4 * 0x98 + 0x4d2))++;
+                    if (*(WORD*)((char*)this + v4 * 0x98 + 0x4d2) == 0xa && *(int*)((char*)this + v4 * 4 + 0x3158) < 2) {
+                        *(short*)((char*)this + v4 * 0x98 + 0x4d2) = *(WORD*)((char*)this + v4 * 0x98 + 0x4d2) - 2;
+                        (*(int*)((char*)this + v4 * 4 + 0x3158))++;
+                    }
+                    *(int*)((char*)this + v4 * 0x98 + 0x550) = 0;
+                    if (*(WORD*)((char*)this + v4 * 0x98 + 0x4d2) >= v58) {
+                        *(int*)((char*)this + 0x3150) = 1;
+                        *(int*)((char*)this + 0x3144) = 3;
+                        *(int*)((char*)this + 0x3148) = 0x4b0;
+                        *(int*)((char*)this + v4 * 4 + 0x3158) = 0;
+                        *(int*)((char*)this + v4 * 4 + 0x3258) = 0;
+                        *(short*)((char*)this + v4 * 0x98 + 0x4d2) = 0;
+                        *(double*)((char*)this + v4 * 0x98 + 0x4f8) = 0.0;
+                        Vf10(v4);
+                    }
+                }
+                break;
+            case 0x1b4:
+                *(int*)((char*)this + 0x3144) = 2;
+                if (*(WORD*)((char*)this + 8) > 0x31 && *(WORD*)((char*)this + 8) < 0x96 || *(int*)((char*)this + v4 * 0x98 + 0x550) == 4 || *(int*)((char*)this + v4 * 0x98 + 0x550) == 5) {
+                    *(short*)((char*)this + v4 * 0x98 + 0x4d0) = 0x192;
+                    *(short*)((char*)this + v4 * 0x98 + 0x4d2) = 0;
+                    *(short*)((char*)this + v4 * 0x98 + 0x4d4) = 0;
+                    return;
+                }
+                if (*(WORD*)((char*)this + v4 * 0x98 + 0x4d2) == 0 && *(WORD*)((char*)this + v4 * 0x98 + 0x4d4) == 0) {
+                    *(double*)((char*)this + v4 * 0x98 + 0x4f8) = 0.0;
+                }
+                if (*(WORD*)((char*)this + v4 * 0x98 + 0x4d2) == 4 && *(WORD*)((char*)this + v4 * 0x98 + 0x4d4) == 0) {
+                    l50.type = 0x1c6;
+                    l50.x = (double)(int)(*(double*)((char*)this + v4 * 0x98 + 0x4e8) + *((char*)this + v4 * 0x98 + 0x518) * 0x24);
+                    l50.y = (double)(int)(*(double*)((char*)this + v4 * 0x98 + 0x4f0) - 60.0);
+                    l50.unk0 = 1;
+                    l50.unk20 = 2;
+                    l50.unk21 = 1;
+                    l50.unk18 = *((char*)this + v4 * 0x98 + 0x518);
+                    Vf9(&l50);
+                }
+                if (*(double*)((char*)this + v4 * 0x98 + 0x4e8) > 600.0) {
+                    *(double*)((char*)this + v4 * 0x98 + 0x4e8) = 600.0;
+                    *(double*)((char*)this + v4 * 0x98 + 0x4f8) = 0.0;
+                }
+                if (*(double*)((char*)this + v4 * 0x98 + 0x4e8) < 40.0) {
+                    *(double*)((char*)this + v4 * 0x98 + 0x4e8) = 40.0;
+                    *(double*)((char*)this + v4 * 0x98 + 0x4f8) = 0.0;
+                }
+                (*(short*)((char*)this + v4 * 0x98 + 0x4d4))++;
+                if (*(WORD*)((char*)this + v4 * 0x98 + 0x4d4) >= v54) {
+                    *(short*)((char*)this + v4 * 0x98 + 0x4d4) = 0;
+                    (*(short*)((char*)this + v4 * 0x98 + 0x4d2))++;
+                    if (*(WORD*)((char*)this + v4 * 0x98 + 0x4d2) == 7 && *(int*)((char*)this + v4 * 4 + 0x3158) < 3) {
+                        *(short*)((char*)this + v4 * 0x98 + 0x4d2) = *(WORD*)((char*)this + v4 * 0x98 + 0x4d2) - 2;
+                        (*(int*)((char*)this + v4 * 4 + 0x3158))++;
+                    }
+                    *(int*)((char*)this + v4 * 0x98 + 0x550) = 0;
+                    if (*(WORD*)((char*)this + v4 * 0x98 + 0x4d2) >= v58) {
+                        *(int*)((char*)this + 0x3144) = 3;
+                        *(int*)((char*)this + 0x3150) = 1;
+                        *(int*)((char*)this + 0x3148) = 0x4b0;
+                        *(int*)((char*)this + v4 * 4 + 0x3158) = 0;
+                        *(int*)((char*)this + v4 * 4 + 0x3258) = 0;
+                        *(short*)((char*)this + v4 * 0x98 + 0x4d2) = 0;
+                        *(double*)((char*)this + v4 * 0x98 + 0x4f8) = 0.0;
+                        Vf10(v4);
+                    }
+                }
+                break;
+            case 0x1b5:
+                if (*(WORD*)((char*)this + v4 * 0x98 + 0x4d2) == 0 && *(WORD*)((char*)this + v4 * 0x98 + 0x4d4) == 0) {
+                    *(short*)((char*)this + v4 * 0x98 + 0x554) = 3;
+                }
+                if (*(WORD*)((char*)this + v4 * 0x98 + 0x4d2) == 7 && *(WORD*)((char*)this + v4 * 0x98 + 0x4d4) == 0 && *(int*)((char*)this + v4 * 4 + 0x3158) == 0) {
+                    *(double*)((char*)this + v4 * 0x98 + 0x4f8) = 0.7;
+                    (*(int*)((char*)this + v4 * 4 + 0x3158))++;
+                }
+                if (*(int*)((char*)this + v4 * 0x98 + 0x550) > 0 && *(short*)((char*)this + v4 * 0x98 + 0x554) == 0 && *(WORD*)((char*)this + v4 * 0x98 + 0x4d2) < 0x28) {
+                    *(short*)((char*)this + v4 * 0x98 + 0x4d4) = 0;
+                    *(short*)((char*)this + v4 * 0x98 + 0x4d2) = 0x28;
+                    break;
+                }
+                if (*(double*)((char*)this + v4 * 0x98 + 0x4e8) > 740.0 || *(double*)((char*)this + v4 * 0x98 + 0x4e8) < -100.0) {
+                    Vf10(v4);
+                    break;
+                }
+                (*(short*)((char*)this + v4 * 0x98 + 0x4d4))++;
+                if (*(WORD*)((char*)this + v4 * 0x98 + 0x4d4) >= v54) {
+                    *(short*)((char*)this + v4 * 0x98 + 0x4d4) = 0;
+                    (*(short*)((char*)this + v4 * 0x98 + 0x4d2))++;
+                    *(int*)((char*)this + v4 * 0x98 + 0x550) = 0;
+                    if (*(WORD*)((char*)this + v4 * 0x98 + 0x4d2) == 0x28 && *(short*)((char*)this + v4 * 0x98 + 0x554) > 1) {
+                        *(short*)((char*)this + v4 * 0x98 + 0x4d2) = 0x12;
+                        (*(short*)((char*)this + v4 * 0x98 + 0x554))--;
+                    }
+                    if (*(WORD*)((char*)this + v4 * 0x98 + 0x4d2) >= v58) {
+                        Vf10(v4);
+                    }
+                }
+                break;
+            case 0x1b6:
+                *(int*)((char*)this + 0x3144) = 2;
+                if (*(WORD*)((char*)this + 8) > 0x31 && *(WORD*)((char*)this + 8) < 0x96 || *(int*)((char*)this + v4 * 0x98 + 0x550) == 4 || *(int*)((char*)this + v4 * 0x98 + 0x550) == 5) {
+                    *(short*)((char*)this + v4 * 0x98 + 0x4d0) = 0x192;
+                    *(short*)((char*)this + v4 * 0x98 + 0x4d2) = 0;
+                    *(short*)((char*)this + v4 * 0x98 + 0x4d4) = 0;
+                    return;
+                }
+                if (*(WORD*)((char*)this + v4 * 0x98 + 0x4d2) == 0 && *(WORD*)((char*)this + v4 * 0x98 + 0x4d4) == 0) {
+                    *(double*)((char*)this + v4 * 0x98 + 0x4f8) = -1.5;
+                }
+                if (*(double*)((char*)this + v4 * 0x98 + 0x4f8) < 0.0) {
+                    *(double*)((char*)this + v4 * 0x98 + 0x4f8) += 0.03;
+                }
+                if (*(double*)((char*)this + v4 * 0x98 + 0x500) < 0.0) {
+                    *(double*)((char*)this + v4 * 0x98 + 0x500) += 0.025;
+                }
+                if (*(double*)((char*)this + v4 * 0x98 + 0x4f8) > 0.0) {
+                    *(double*)((char*)this + v4 * 0x98 + 0x4f8) = 0.0;
+                }
+                if (*(double*)((char*)this + v4 * 0x98 + 0x500) > 0.0) {
+                    *(double*)((char*)this + v4 * 0x98 + 0x500) = 0.0;
+                }
+                if (*(WORD*)((char*)this + v4 * 0x98 + 0x4d2) == 7 && *(WORD*)((char*)this + v4 * 0x98 + 0x4d4) == 0) {
+                    l50.type = 0x1b8;
+                    l50.x = (double)(int)(*(double*)((char*)this + v4 * 0x98 + 0x4e8) + *((char*)this + v4 * 0x98 + 0x518) * 0x1c);
+                    l50.y = (double)(int)(*(double*)((char*)this + v4 * 0x98 + 0x4f0) - 57.0);
+                    l50.unk0 = 1;
+                    l50.unk20 = 2;
+                    l50.unk21 = 1;
+                    l50.unk18 = *((char*)this + v4 * 0x98 + 0x518);
+                    Vf9(&l50);
+                }
+                (*(short*)((char*)this + v4 * 0x98 + 0x4d4))++;
+                if (*(WORD*)((char*)this + v4 * 0x98 + 0x4d4) >= v54) {
+                    *(short*)((char*)this + v4 * 0x98 + 0x4d4) = 0;
+                    (*(short*)((char*)this + v4 * 0x98 + 0x4d2))++;
+                    if (*(WORD*)((char*)this + v4 * 0x98 + 0x4d2) == 0xa && *(int*)((char*)this + v4 * 4 + 0x3158) < 0xa) {
+                        *(short*)((char*)this + v4 * 0x98 + 0x4d2) = *(WORD*)((char*)this + v4 * 0x98 + 0x4d2) - 2;
+                        (*(int*)((char*)this + v4 * 4 + 0x3158))++;
+                    }
+                    *(int*)((char*)this + v4 * 0x98 + 0x550) = 0;
+                    if (*(WORD*)((char*)this + v4 * 0x98 + 0x4d2) >= v58) {
+                        *(int*)((char*)this + 0x3144) = 3;
+                        *(int*)((char*)this + 0x3148) = 0x4b0;
+                        *(int*)((char*)this + v4 * 4 + 0x3158) = 0;
+                        *(int*)((char*)this + v4 * 4 + 0x3258) = 0;
+                        *(short*)((char*)this + v4 * 0x98 + 0x4d2) = 0;
+                        *(double*)((char*)this + v4 * 0x98 + 0x4f8) = 0.0;
+                        Vf10(v4);
+                    }
+                }
+                break;
+            case 0x1b7:
+                *(int*)((char*)this + 0x3144) = 2;
+                if (*(WORD*)((char*)this + 8) > 0x31 && *(WORD*)((char*)this + 8) < 0x96 || *(int*)((char*)this + v4 * 0x98 + 0x550) == 4 || *(int*)((char*)this + v4 * 0x98 + 0x550) == 5) {
+                    *(short*)((char*)this + v4 * 0x98 + 0x4d0) = 0x192;
+                    *(short*)((char*)this + v4 * 0x98 + 0x4d2) = 0;
+                    *(short*)((char*)this + v4 * 0x98 + 0x4d4) = 0;
+                    return;
+                }
+                if (*(WORD*)((char*)this + v4 * 0x98 + 0x4d2) == 0 && *(WORD*)((char*)this + v4 * 0x98 + 0x4d4) == 0) {
+                    *(short*)((char*)this + 0x14c) = 0x78;
+                    *(short*)((char*)this + 0x148) = *(short*)((char*)this + 0x148) - 0x3e8;
+                    CPlayer::Unk410b10(0xb0, 3);
+                    l50.type = 0x44;
+                    l50.unk2c = 0x13;
+                    l50.x = (double)(int)*(double*)((char*)this + v4 * 0x98 + 0x4e8);
+                    l50.y = (double)((int)*(double*)((char*)this + v4 * 0x98 + 0x4f0) - 0x32);
+                    l50.unk20 = 2;
+                    l50.unk0 = 1;
+                    l50.unk21 = 1;
+                    ((CGame*)*(int*)((char*)this + 0x7c))->CreateEffect((EffectDesc*)&l50);
+                    *(int*)((char*)this + v4 * 0x98 + 0x558) = 0x78;
+                }
+                if (*(WORD*)((char*)this + v4 * 0x98 + 0x4d2) == 7 && *(WORD*)((char*)this + v4 * 0x98 + 0x4d4) == 0) {
+                    l50.type = 0x1b9;
+                    l50.x = (double)(int)(*(double*)((char*)this + v4 * 0x98 + 0x4e8) + *((char*)this + v4 * 0x98 + 0x518) * 0x1c);
+                    l50.y = (double)(int)(*(double*)((char*)this + v4 * 0x98 + 0x4f0) - 57.0);
+                    l50.unk0 = 1;
+                    l50.unk20 = 2;
+                    l50.unk21 = 1;
+                    l50.unk18 = *((char*)this + v4 * 0x98 + 0x518);
+                    Vf9(&l50);
+                }
+                (*(short*)((char*)this + v4 * 0x98 + 0x4d4))++;
+                if (*(WORD*)((char*)this + v4 * 0x98 + 0x4d4) >= v54) {
+                    *(short*)((char*)this + v4 * 0x98 + 0x4d4) = 0;
+                    (*(short*)((char*)this + v4 * 0x98 + 0x4d2))++;
+                    if (*(WORD*)((char*)this + v4 * 0x98 + 0x4d2) == 0xa && *(int*)((char*)this + v4 * 4 + 0x3258) < 1) {
+                        *(short*)((char*)this + v4 * 0x98 + 0x4d2) = 5;
+                        (*(int*)((char*)this + v4 * 4 + 0x3258))++;
+                    }
+                    if (*(WORD*)((char*)this + v4 * 0x98 + 0x4d2) == 0xa && *(int*)((char*)this + v4 * 4 + 0x3158) < 0xa) {
+                        *(short*)((char*)this + v4 * 0x98 + 0x4d2) = *(WORD*)((char*)this + v4 * 0x98 + 0x4d2) - 2;
+                        (*(int*)((char*)this + v4 * 4 + 0x3158))++;
+                    }
+                    *(int*)((char*)this + v4 * 0x98 + 0x550) = 0;
+                    if (*(WORD*)((char*)this + v4 * 0x98 + 0x4d2) >= v58) {
+                        *(int*)((char*)this + 0x3144) = 3;
+                        *(int*)((char*)this + 0x3148) = 0x4b0;
+                        *(int*)((char*)this + v4 * 4 + 0x3158) = 0;
+                        *(int*)((char*)this + v4 * 4 + 0x3258) = 0;
+                        *(short*)((char*)this + v4 * 0x98 + 0x4d2) = 0;
+                        *(double*)((char*)this + v4 * 0x98 + 0x4f8) = 0.0;
+                        Vf10(v4);
+                    }
+                }
+                break;
+            case 0x1b8:
+                if (*(WORD*)((char*)this + v4 * 0x98 + 0x4d2) == 0 && *(WORD*)((char*)this + v4 * 0x98 + 0x4d4) == 0 && *(int*)((char*)this + v4 * 4 + 0x3158) == 0) {
+                    *(short*)((char*)this + v4 * 0x98 + 0x554) = 5;
+                    *(double*)((char*)this + v4 * 0x98 + 0x4f8) = 2.8;
+                    (*(int*)((char*)this + v4 * 4 + 0x3158))++;
+                }
+                if (*(int*)((char*)this + v4 * 0x98 + 0x550) > 0 && *(short*)((char*)this + v4 * 0x98 + 0x554) == 0 && *(WORD*)((char*)this + v4 * 0x98 + 0x4d2) < 0x15) {
+                    *(short*)((char*)this + v4 * 0x98 + 0x4d4) = 0;
+                    *(short*)((char*)this + v4 * 0x98 + 0x4d2) = 0x15;
+                    *(double*)((char*)this + v4 * 0x98 + 0x4f8) = 0.0;
+                    break;
+                }
+                if (*(double*)((char*)this + v4 * 0x98 + 0x4e8) > 740.0 || *(double*)((char*)this + v4 * 0x98 + 0x4e8) < -100.0) {
+                    Vf10(v4);
+                    break;
+                }
+                (*(short*)((char*)this + v4 * 0x98 + 0x4d4))++;
+                if (*(WORD*)((char*)this + v4 * 0x98 + 0x4d4) >= v54) {
+                    *(short*)((char*)this + v4 * 0x98 + 0x4d4) = 0;
+                    (*(short*)((char*)this + v4 * 0x98 + 0x4d2))++;
+                    *(int*)((char*)this + v4 * 0x98 + 0x550) = 0;
+                    if (*(WORD*)((char*)this + v4 * 0x98 + 0x4d2) == 0x15) {
+                        *(short*)((char*)this + v4 * 0x98 + 0x4d2) = 1;
+                    }
+                    if (*(WORD*)((char*)this + v4 * 0x98 + 0x4d2) >= v58) {
+                        Vf10(v4);
+                    }
+                }
+                break;
+            case 0x1b9:
+                if (*(WORD*)((char*)this + v4 * 0x98 + 0x4d2) == 0 && *(WORD*)((char*)this + v4 * 0x98 + 0x4d4) == 0 && *(int*)((char*)this + v4 * 4 + 0x3158) == 0) {
+                    *(short*)((char*)this + v4 * 0x98 + 0x554) = 1;
+                    *(double*)((char*)this + v4 * 0x98 + 0x4f8) = 4.0;
+                    (*(int*)((char*)this + v4 * 4 + 0x3158))++;
+                }
+                *(double*)((char*)this + v4 * 0x98 + 0x4f8) -= 0.035;
+                if (*(double*)((char*)this + v4 * 0x98 + 0x4f8) < 1.0) {
+                    *(double*)((char*)this + v4 * 0x98 + 0x4f8) = 1.0;
+                }
+                if (*(int*)((char*)this + v4 * 0x98 + 0x550) > 0 && *(short*)((char*)this + v4 * 0x98 + 0x554) == 0 && *(WORD*)((char*)this + v4 * 0x98 + 0x4d2) < 0xb) {
+                    *(short*)((char*)this + v4 * 0x98 + 0x4d4) = 0;
+                    *(short*)((char*)this + v4 * 0x98 + 0x4d2) = 0xb;
+                    *(double*)((char*)this + v4 * 0x98 + 0x4f8) = 0.0;
+                    break;
+                }
+                if (*(double*)((char*)this + v4 * 0x98 + 0x4e8) > 740.0 || *(double*)((char*)this + v4 * 0x98 + 0x4e8) < -100.0) {
+                    Vf10(v4);
+                    break;
+                }
+                (*(short*)((char*)this + v4 * 0x98 + 0x4d4))++;
+                if (*(WORD*)((char*)this + v4 * 0x98 + 0x4d4) >= v54) {
+                    *(short*)((char*)this + v4 * 0x98 + 0x4d4) = 0;
+                    (*(short*)((char*)this + v4 * 0x98 + 0x4d2))++;
+                    *(int*)((char*)this + v4 * 0x98 + 0x550) = 0;
+                    if (*(WORD*)((char*)this + v4 * 0x98 + 0x4d2) == 0xb) {
+                        *(short*)((char*)this + v4 * 0x98 + 0x4d2) = 0;
+                    }
+                    if (*(WORD*)((char*)this + v4 * 0x98 + 0x4d2) >= v58) {
+                        Vf10(v4);
+                    }
+                }
+                break;
+            case 0x1ba:
+                *(int*)((char*)this + 0x3144) = 2;
+                if (*(WORD*)((char*)this + 8) > 0x31 && *(WORD*)((char*)this + 8) < 0x96 || *(int*)((char*)this + v4 * 0x98 + 0x550) == 4 || *(int*)((char*)this + v4 * 0x98 + 0x550) == 5) {
+                    *(short*)((char*)this + v4 * 0x98 + 0x4d0) = 0x192;
+                    *(short*)((char*)this + v4 * 0x98 + 0x4d2) = 0;
+                    *(short*)((char*)this + v4 * 0x98 + 0x4d4) = 0;
+                    return;
+                }
+                if (*(WORD*)((char*)this + v4 * 0x98 + 0x4d2) == 0 && *(WORD*)((char*)this + v4 * 0x98 + 0x4d4) == 0) {
+                    *(double*)((char*)this + v4 * 0x98 + 0x4f8) = -1.5;
+                }
+                if (*(double*)((char*)this + v4 * 0x98 + 0x4f8) < 0.0) {
+                    *(double*)((char*)this + v4 * 0x98 + 0x4f8) += 0.03;
+                }
+                if (*(double*)((char*)this + v4 * 0x98 + 0x500) < 0.0) {
+                    *(double*)((char*)this + v4 * 0x98 + 0x500) += 0.025;
+                }
+                if (*(double*)((char*)this + v4 * 0x98 + 0x4f8) > 0.0) {
+                    *(double*)((char*)this + v4 * 0x98 + 0x4f8) = 0.0;
+                }
+                if (*(double*)((char*)this + v4 * 0x98 + 0x500) > 0.0) {
+                    *(double*)((char*)this + v4 * 0x98 + 0x500) = 0.0;
+                }
+                if (*(WORD*)((char*)this + v4 * 0x98 + 0x4d2) == 7 && *(WORD*)((char*)this + v4 * 0x98 + 0x4d4) == 0) {
+                    l50.type = 0x1bc;
+                    l50.x = (double)(int)(*(double*)((char*)this + v4 * 0x98 + 0x4e8) + *((char*)this + v4 * 0x98 + 0x518) * 0x1c);
+                    l50.y = (double)(int)(*(double*)((char*)this + v4 * 0x98 + 0x4f0) - 57.0);
+                    l50.unk0 = 1;
+                    l50.unk20 = 2;
+                    l50.unk21 = 1;
+                    l50.unk18 = *((char*)this + v4 * 0x98 + 0x518);
+                    Vf9(&l50);
+                }
+                (*(short*)((char*)this + v4 * 0x98 + 0x4d4))++;
+                if (*(WORD*)((char*)this + v4 * 0x98 + 0x4d4) >= v54) {
+                    *(short*)((char*)this + v4 * 0x98 + 0x4d4) = 0;
+                    (*(short*)((char*)this + v4 * 0x98 + 0x4d2))++;
+                    if (*(WORD*)((char*)this + v4 * 0x98 + 0x4d2) == 0xa && *(int*)((char*)this + v4 * 4 + 0x3158) < 0xa) {
+                        *(short*)((char*)this + v4 * 0x98 + 0x4d2) = *(WORD*)((char*)this + v4 * 0x98 + 0x4d2) - 2;
+                        (*(int*)((char*)this + v4 * 4 + 0x3158))++;
+                    }
+                    *(int*)((char*)this + v4 * 0x98 + 0x550) = 0;
+                    if (*(WORD*)((char*)this + v4 * 0x98 + 0x4d2) >= v58) {
+                        *(int*)((char*)this + 0x3144) = 3;
+                        *(int*)((char*)this + 0x3148) = 0x4b0;
+                        *(int*)((char*)this + v4 * 4 + 0x3158) = 0;
+                        *(int*)((char*)this + v4 * 4 + 0x3258) = 0;
+                        *(short*)((char*)this + v4 * 0x98 + 0x4d2) = 0;
+                        *(double*)((char*)this + v4 * 0x98 + 0x4f8) = 0.0;
+                        Vf10(v4);
+                    }
+                }
+                break;
+            case 0x1bb:
+                *(int*)((char*)this + 0x3144) = 2;
+                if (*(WORD*)((char*)this + 8) > 0x31 && *(WORD*)((char*)this + 8) < 0x96 || *(int*)((char*)this + v4 * 0x98 + 0x550) == 4 || *(int*)((char*)this + v4 * 0x98 + 0x550) == 5) {
+                    *(short*)((char*)this + v4 * 0x98 + 0x4d0) = 0x192;
+                    *(short*)((char*)this + v4 * 0x98 + 0x4d2) = 0;
+                    *(short*)((char*)this + v4 * 0x98 + 0x4d4) = 0;
+                    return;
+                }
+                if (*(WORD*)((char*)this + v4 * 0x98 + 0x4d2) == 0 && *(WORD*)((char*)this + v4 * 0x98 + 0x4d4) == 0) {
+                    *(short*)((char*)this + 0x14c) = 0x78;
+                    *(short*)((char*)this + 0x148) = *(short*)((char*)this + 0x148) - 0x7d0;
+                    CPlayer::Unk410b10(0xb0, 3);
+                    l50.type = 0x45;
+                    l50.unk2c = 5;
+                    l50.x = (double)(int)*(double*)((char*)this + v4 * 0x98 + 0x4e8);
+                    l50.y = (double)((int)*(double*)((char*)this + v4 * 0x98 + 0x4f0) - 0x32);
+                    l50.unk20 = 2;
+                    l50.unk0 = 1;
+                    l50.unk21 = 1;
+                    ((CGame*)*(int*)((char*)this + 0x7c))->CreateEffect((EffectDesc*)&l50);
+                    *(int*)((char*)this + v4 * 0x98 + 0x558) = 0x78;
+                }
+                if (*(WORD*)((char*)this + v4 * 0x98 + 0x4d2) == 7 && *(WORD*)((char*)this + v4 * 0x98 + 0x4d4) == 0) {
+                    l50.type = 0x1b9;
+                    l50.x = (double)(int)(*(double*)((char*)this + v4 * 0x98 + 0x4e8) + *((char*)this + v4 * 0x98 + 0x518) * 0x1c);
+                    if (*(int*)((char*)this + v4 * 4 + 0x3258) == 0) {
+                        l50.y = (double)(int)(*(double*)((char*)this + v4 * 0x98 + 0x4f0) - 27.0);
+                    }
+                    if (*(int*)((char*)this + v4 * 4 + 0x3258) == 1) {
+                        l50.y = (double)(int)(*(double*)((char*)this + v4 * 0x98 + 0x4f0) - 87.0);
+                    }
+                    if (*(int*)((char*)this + v4 * 4 + 0x3258) == 2) {
+                        l50.y = (double)(int)(*(double*)((char*)this + v4 * 0x98 + 0x4f0) - 27.0);
+                    }
+                    if (*(int*)((char*)this + v4 * 4 + 0x3258) == 3) {
+                        l50.y = (double)(int)(*(double*)((char*)this + v4 * 0x98 + 0x4f0) - 87.0);
+                    }
+                    l50.unk0 = 1;
+                    l50.unk20 = 2;
+                    l50.unk21 = 1;
+                    l50.unk18 = *((char*)this + v4 * 0x98 + 0x518);
+                    Vf9(&l50);
+                }
+                (*(short*)((char*)this + v4 * 0x98 + 0x4d4))++;
+                if (*(WORD*)((char*)this + v4 * 0x98 + 0x4d4) >= v54) {
+                    *(short*)((char*)this + v4 * 0x98 + 0x4d4) = 0;
+                    (*(short*)((char*)this + v4 * 0x98 + 0x4d2))++;
+                    if (*(WORD*)((char*)this + v4 * 0x98 + 0x4d2) == 0xa && *(int*)((char*)this + v4 * 4 + 0x3258) < 3) {
+                        *(short*)((char*)this + v4 * 0x98 + 0x4d2) = 5;
+                        (*(int*)((char*)this + v4 * 4 + 0x3258))++;
+                    }
+                    if (*(WORD*)((char*)this + v4 * 0x98 + 0x4d2) == 0xa && *(int*)((char*)this + v4 * 4 + 0x3158) < 0xa) {
+                        *(short*)((char*)this + v4 * 0x98 + 0x4d2) = *(WORD*)((char*)this + v4 * 0x98 + 0x4d2) - 2;
+                        (*(int*)((char*)this + v4 * 4 + 0x3158))++;
+                    }
+                    *(int*)((char*)this + v4 * 0x98 + 0x550) = 0;
+                    if (*(WORD*)((char*)this + v4 * 0x98 + 0x4d2) >= v58) {
+                        *(int*)((char*)this + 0x3144) = 3;
+                        *(int*)((char*)this + 0x3148) = 0x4b0;
+                        *(int*)((char*)this + v4 * 4 + 0x3158) = 0;
+                        *(int*)((char*)this + v4 * 4 + 0x3258) = 0;
+                        *(short*)((char*)this + v4 * 0x98 + 0x4d2) = 0;
+                        *(double*)((char*)this + v4 * 0x98 + 0x4f8) = 0.0;
+                        Vf10(v4);
+                    }
+                }
+                break;
+            case 0x1bc:
+                if (*(WORD*)((char*)this + v4 * 0x98 + 0x4d2) == 0 && *(WORD*)((char*)this + v4 * 0x98 + 0x4d4) == 0 && *(int*)((char*)this + v4 * 4 + 0x3158) == 0) {
+                    *(short*)((char*)this + v4 * 0x98 + 0x554) = 7;
+                    *(double*)((char*)this + v4 * 0x98 + 0x4f8) = 3.5;
+                    (*(int*)((char*)this + v4 * 4 + 0x3158))++;
+                }
+                if (*(double*)((char*)this + v4 * 0x98 + 0x4e8) > 740.0 || *(double*)((char*)this + v4 * 0x98 + 0x4e8) < -100.0) {
+                    Vf10(v4);
+                    break;
+                }
+                (*(short*)((char*)this + v4 * 0x98 + 0x4d4))++;
+                if (*(WORD*)((char*)this + v4 * 0x98 + 0x4d4) >= v54) {
+                    *(short*)((char*)this + v4 * 0x98 + 0x4d4) = 0;
+                    (*(short*)((char*)this + v4 * 0x98 + 0x4d2))++;
+                    *(int*)((char*)this + v4 * 0x98 + 0x550) = 0;
+                    if (*(WORD*)((char*)this + v4 * 0x98 + 0x4d2) >= v58) {
+                        *(short*)((char*)this + v4 * 0x98 + 0x4d2) = 1;
+                    }
+                }
+                break;
+            case 0x1bd:
+                if (*(WORD*)((char*)this + v4 * 0x98 + 0x4d2) == 0 && *(WORD*)((char*)this + v4 * 0x98 + 0x4d4) == 0 && *(int*)((char*)this + v4 * 4 + 0x3158) == 0) {
+                    *(short*)((char*)this + v4 * 0x98 + 0x554) = 2;
+                    *(double*)((char*)this + v4 * 0x98 + 0x4f8) = 1.3;
+                    (*(int*)((char*)this + v4 * 4 + 0x3158))++;
+                }
+                if (*(int*)((char*)this + v4 * 0x98 + 0x550) > 0 && *(short*)((char*)this + v4 * 0x98 + 0x554) == 0 && *(WORD*)((char*)this + v4 * 0x98 + 0x4d2) < 0xb) {
+                    *(short*)((char*)this + v4 * 0x98 + 0x4d4) = 0;
+                    *(short*)((char*)this + v4 * 0x98 + 0x4d2) = 0xb;
+                    *(double*)((char*)this + v4 * 0x98 + 0x4f8) = 0.0;
+                    break;
+                }
+                if (*(double*)((char*)this + v4 * 0x98 + 0x4e8) > 740.0 || *(double*)((char*)this + v4 * 0x98 + 0x4e8) < -100.0) {
+                    Vf10(v4);
+                    break;
+                }
+                (*(short*)((char*)this + v4 * 0x98 + 0x4d4))++;
+                if (*(WORD*)((char*)this + v4 * 0x98 + 0x4d4) >= v54) {
+                    *(short*)((char*)this + v4 * 0x98 + 0x4d4) = 0;
+                    (*(short*)((char*)this + v4 * 0x98 + 0x4d2))++;
+                    *(int*)((char*)this + v4 * 0x98 + 0x550) = 0;
+                    if (*(WORD*)((char*)this + v4 * 0x98 + 0x4d2) == 0xb) {
+                        *(short*)((char*)this + v4 * 0x98 + 0x4d2) = 0;
+                    }
+                    if (*(WORD*)((char*)this + v4 * 0x98 + 0x4d2) >= v58) {
+                        Vf10(v4);
+                    }
+                }
+                break;
+            case 0x1be:
+                *(int*)((char*)this + 0x3144) = 2;
+                if (*(WORD*)((char*)this + 8) > 0x31 && *(WORD*)((char*)this + 8) < 0x96 || *(int*)((char*)this + v4 * 0x98 + 0x550) == 4 || *(int*)((char*)this + v4 * 0x98 + 0x550) == 5) {
+                    *(short*)((char*)this + v4 * 0x98 + 0x4d0) = 0x192;
+                    *(short*)((char*)this + v4 * 0x98 + 0x4d2) = 0;
+                    *(short*)((char*)this + v4 * 0x98 + 0x4d4) = 0;
+                    return;
+                }
+                if (*(WORD*)((char*)this + v4 * 0x98 + 0x4d2) == 0 && *(WORD*)((char*)this + v4 * 0x98 + 0x4d4) == 0) {
+                    *(double*)((char*)this + v4 * 0x98 + 0x4f8) = -1.5;
+                }
+                if (*(double*)((char*)this + v4 * 0x98 + 0x4f8) < 0.0) {
+                    *(double*)((char*)this + v4 * 0x98 + 0x4f8) += 0.03;
+                }
+                if (*(double*)((char*)this + v4 * 0x98 + 0x500) < 0.0) {
+                    *(double*)((char*)this + v4 * 0x98 + 0x500) += 0.025;
+                }
+                if (*(double*)((char*)this + v4 * 0x98 + 0x4f8) > 0.0) {
+                    *(double*)((char*)this + v4 * 0x98 + 0x4f8) = 0.0;
+                }
+                if (*(double*)((char*)this + v4 * 0x98 + 0x500) > 0.0) {
+                    *(double*)((char*)this + v4 * 0x98 + 0x500) = 0.0;
+                }
+                if (*(WORD*)((char*)this + v4 * 0x98 + 0x4d2) == 7 && *(WORD*)((char*)this + v4 * 0x98 + 0x4d4) == 0) {
+                    l50.type = 0x1c0;
+                    l50.x = (double)(int)(*(double*)((char*)this + v4 * 0x98 + 0x4e8) + *((char*)this + v4 * 0x98 + 0x518) * 0x1c);
+                    l50.y = (double)(int)(*(double*)((char*)this + v4 * 0x98 + 0x4f0) - 57.0);
+                    l50.unk0 = 1;
+                    l50.unk20 = 2;
+                    l50.unk21 = 1;
+                    l50.unk18 = *((char*)this + v4 * 0x98 + 0x518);
+                    Vf9(&l50);
+                }
+                (*(short*)((char*)this + v4 * 0x98 + 0x4d4))++;
+                if (*(WORD*)((char*)this + v4 * 0x98 + 0x4d4) >= v54) {
+                    *(short*)((char*)this + v4 * 0x98 + 0x4d4) = 0;
+                    (*(short*)((char*)this + v4 * 0x98 + 0x4d2))++;
+                    if (*(WORD*)((char*)this + v4 * 0x98 + 0x4d2) == 0xa && *(int*)((char*)this + v4 * 4 + 0x3158) < 0xa) {
+                        *(short*)((char*)this + v4 * 0x98 + 0x4d2) = *(WORD*)((char*)this + v4 * 0x98 + 0x4d2) - 2;
+                        (*(int*)((char*)this + v4 * 4 + 0x3158))++;
+                    }
+                    *(int*)((char*)this + v4 * 0x98 + 0x550) = 0;
+                    if (*(WORD*)((char*)this + v4 * 0x98 + 0x4d2) >= v58) {
+                        *(int*)((char*)this + 0x3144) = 3;
+                        *(int*)((char*)this + 0x3148) = 0x4b0;
+                        *(int*)((char*)this + v4 * 4 + 0x3158) = 0;
+                        *(int*)((char*)this + v4 * 4 + 0x3258) = 0;
+                        *(short*)((char*)this + v4 * 0x98 + 0x4d2) = 0;
+                        *(double*)((char*)this + v4 * 0x98 + 0x4f8) = 0.0;
+                        Vf10(v4);
+                    }
+                }
+                break;
+            case 0x1bf:
+                *(int*)((char*)this + 0x3144) = 2;
+                if (*(WORD*)((char*)this + 8) > 0x31 && *(WORD*)((char*)this + 8) < 0x96 || *(int*)((char*)this + v4 * 0x98 + 0x550) == 4 || *(int*)((char*)this + v4 * 0x98 + 0x550) == 5) {
+                    *(short*)((char*)this + v4 * 0x98 + 0x4d0) = 0x192;
+                    *(short*)((char*)this + v4 * 0x98 + 0x4d2) = 0;
+                    *(short*)((char*)this + v4 * 0x98 + 0x4d4) = 0;
+                    return;
+                }
+                if (*(WORD*)((char*)this + v4 * 0x98 + 0x4d2) == 0 && *(WORD*)((char*)this + v4 * 0x98 + 0x4d4) == 0) {
+                    *(short*)((char*)this + 0x14c) = 0x78;
+                    *(short*)((char*)this + 0x148) = *(short*)((char*)this + 0x148) - 0xbb8;
+                    CPlayer::Unk410b10(0xb0, 3);
+                    l50.type = 0x46;
+                    l50.unk2c = 0x40;
+                    l50.x = (double)(int)*(double*)((char*)this + v4 * 0x98 + 0x4e8);
+                    l50.y = (double)((int)*(double*)((char*)this + v4 * 0x98 + 0x4f0) - 0x32);
+                    l50.unk20 = 2;
+                    l50.unk0 = 1;
+                    l50.unk21 = 1;
+                    ((CGame*)*(int*)((char*)this + 0x7c))->CreateEffect((EffectDesc*)&l50);
+                    *(int*)((char*)this + v4 * 0x98 + 0x558) = 0x78;
+                }
+                if (*(WORD*)((char*)this + v4 * 0x98 + 0x4d2) == 7 && *(WORD*)((char*)this + v4 * 0x98 + 0x4d4) == 0) {
+                    l50.type = 0x1b9;
+                    l50.x = (double)(int)(*(double*)((char*)this + v4 * 0x98 + 0x4e8) + *((char*)this + v4 * 0x98 + 0x518) * 0x1c);
+                    l50.y = (double)(int)(*(double*)((char*)this + v4 * 0x98 + 0x4f0) - 107.0 + (WORD)CPlayer::Unk4108a0(0, 0x64));
+                    l50.unk0 = 1;
+                    l50.unk20 = 2;
+                    l50.unk21 = 1;
+                    l50.unk18 = *((char*)this + v4 * 0x98 + 0x518);
+                    Vf9(&l50);
+                }
+                (*(short*)((char*)this + v4 * 0x98 + 0x4d4))++;
+                if (*(WORD*)((char*)this + v4 * 0x98 + 0x4d4) >= v54) {
+                    *(short*)((char*)this + v4 * 0x98 + 0x4d4) = 0;
+                    (*(short*)((char*)this + v4 * 0x98 + 0x4d2))++;
+                    if (*(WORD*)((char*)this + v4 * 0x98 + 0x4d2) == 0xa && *(int*)((char*)this + v4 * 4 + 0x3258) < 5) {
+                        *(short*)((char*)this + v4 * 0x98 + 0x4d2) = 5;
+                        (*(int*)((char*)this + v4 * 4 + 0x3258))++;
+                    }
+                    if (*(WORD*)((char*)this + v4 * 0x98 + 0x4d2) == 0xa && *(int*)((char*)this + v4 * 4 + 0x3158) < 0xa) {
+                        *(short*)((char*)this + v4 * 0x98 + 0x4d2) = *(WORD*)((char*)this + v4 * 0x98 + 0x4d2) - 2;
+                        (*(int*)((char*)this + v4 * 4 + 0x3158))++;
+                    }
+                    *(int*)((char*)this + v4 * 0x98 + 0x550) = 0;
+                    if (*(WORD*)((char*)this + v4 * 0x98 + 0x4d2) >= v58) {
+                        *(int*)((char*)this + 0x3144) = 3;
+                        *(int*)((char*)this + 0x3148) = 0x4b0;
+                        *(int*)((char*)this + v4 * 4 + 0x3158) = 0;
+                        *(int*)((char*)this + v4 * 4 + 0x3258) = 0;
+                        *(short*)((char*)this + v4 * 0x98 + 0x4d2) = 0;
+                        *(double*)((char*)this + v4 * 0x98 + 0x4f8) = 0.0;
+                        Vf10(v4);
+                    }
+                }
+                break;
+            case 0x1c0:
+                if (*(WORD*)((char*)this + v4 * 0x98 + 0x4d2) == 0 && *(WORD*)((char*)this + v4 * 0x98 + 0x4d4) == 0 && *(int*)((char*)this + v4 * 4 + 0x3158) == 0) {
+                    *(short*)((char*)this + v4 * 0x98 + 0x554) = 0xa;
+                    *(double*)((char*)this + v4 * 0x98 + 0x4f8) = 4.2;
+                    (*(int*)((char*)this + v4 * 4 + 0x3158))++;
+                }
+                if (*(double*)((char*)this + v4 * 0x98 + 0x4e8) > 740.0 || *(double*)((char*)this + v4 * 0x98 + 0x4e8) < -100.0) {
+                    Vf10(v4);
+                    break;
+                }
+                (*(short*)((char*)this + v4 * 0x98 + 0x4d4))++;
+                if (*(WORD*)((char*)this + v4 * 0x98 + 0x4d4) >= v54) {
+                    *(short*)((char*)this + v4 * 0x98 + 0x4d4) = 0;
+                    (*(short*)((char*)this + v4 * 0x98 + 0x4d2))++;
+                    *(int*)((char*)this + v4 * 0x98 + 0x550) = 0;
+                    if (*(WORD*)((char*)this + v4 * 0x98 + 0x4d2) >= v58) {
+                        *(short*)((char*)this + v4 * 0x98 + 0x4d2) = 1;
+                    }
+                }
+                break;
+            case 0x1c1:
+                if (*(WORD*)((char*)this + v4 * 0x98 + 0x4d2) == 0 && *(WORD*)((char*)this + v4 * 0x98 + 0x4d4) == 0 && *(int*)((char*)this + v4 * 4 + 0x3158) == 0) {
+                    *(short*)((char*)this + v4 * 0x98 + 0x554) = 3;
+                    *(double*)((char*)this + v4 * 0x98 + 0x4f8) = 1.9;
+                    (*(int*)((char*)this + v4 * 4 + 0x3158))++;
+                }
+                if (*(int*)((char*)this + v4 * 0x98 + 0x550) > 0 && *(short*)((char*)this + v4 * 0x98 + 0x554) == 0 && *(WORD*)((char*)this + v4 * 0x98 + 0x4d2) < 0xb) {
+                    *(short*)((char*)this + v4 * 0x98 + 0x4d4) = 0;
+                    *(short*)((char*)this + v4 * 0x98 + 0x4d2) = 0xb;
+                    *(double*)((char*)this + v4 * 0x98 + 0x4f8) = 0.0;
+                    break;
+                }
+                if (*(double*)((char*)this + v4 * 0x98 + 0x4e8) > 740.0 || *(double*)((char*)this + v4 * 0x98 + 0x4e8) < -100.0) {
+                    Vf10(v4);
+                    break;
+                }
+                (*(short*)((char*)this + v4 * 0x98 + 0x4d4))++;
+                if (*(WORD*)((char*)this + v4 * 0x98 + 0x4d4) >= v54) {
+                    *(short*)((char*)this + v4 * 0x98 + 0x4d4) = 0;
+                    (*(short*)((char*)this + v4 * 0x98 + 0x4d2))++;
+                    *(int*)((char*)this + v4 * 0x98 + 0x550) = 0;
+                    if (*(WORD*)((char*)this + v4 * 0x98 + 0x4d2) == 0xb) {
+                        *(short*)((char*)this + v4 * 0x98 + 0x4d2) = 0;
+                    }
+                    if (*(WORD*)((char*)this + v4 * 0x98 + 0x4d2) >= v58) {
+                        Vf10(v4);
+                    }
+                }
+                break;
+            case 0x1c2:
+                (*(short*)((char*)this + v4 * 0x98 + 0x4d4))++;
+                if (*(WORD*)((char*)this + v4 * 0x98 + 0x4d4) >= v54) {
+                    *(short*)((char*)this + v4 * 0x98 + 0x4d4) = 0;
+                    (*(short*)((char*)this + v4 * 0x98 + 0x4d2))++;
+                    *(int*)((char*)this + v4 * 0x98 + 0x550) = 0;
+                    if (*(WORD*)((char*)this + v4 * 0x98 + 0x4d2) >= v58) {
+                        Vf10(v4);
+                    }
+                }
+                break;
+            case 0x1c3:
+                *(int*)((char*)this + 0x3144) = 2;
+                if (*(WORD*)((char*)this + 8) > 0x31 && *(WORD*)((char*)this + 8) < 0x96 || *(int*)((char*)this + v4 * 0x98 + 0x550) == 4 || *(int*)((char*)this + v4 * 0x98 + 0x550) == 5) {
+                    *(short*)((char*)this + v4 * 0x98 + 0x4d0) = 0x192;
+                    *(short*)((char*)this + v4 * 0x98 + 0x4d2) = 0;
+                    *(short*)((char*)this + v4 * 0x98 + 0x4d4) = 0;
+                    return;
+                }
+                if (*(WORD*)((char*)this + v4 * 0x98 + 0x4d2) == 0 && *(WORD*)((char*)this + v4 * 0x98 + 0x4d4) == 0) {
+                    *(short*)((char*)this + v4 * 0x98 + 0x554) = 1;
+                    *(double*)((char*)this + v4 * 0x98 + 0x4f8) = 0.0;
+                }
+                if (*(WORD*)((char*)this + v4 * 0x98 + 0x4d2) == 2 && *(WORD*)((char*)this + v4 * 0x98 + 0x4d4) == 0) {
+                    *(double*)((char*)this + v4 * 0x98 + 0x4f8) = 4.0;
+                }
+                if (*(WORD*)((char*)this + v4 * 0x98 + 0x4d2) > 3) {
+                    *(double*)((char*)this + v4 * 0x98 + 0x4f8) -= 0.15;
+                    if (*(double*)((char*)this + v4 * 0x98 + 0x4f8) < 0.2) {
+                        *(double*)((char*)this + v4 * 0x98 + 0x4f8) = 0.2;
+                    }
+                }
+                if (*(double*)(*(char**)*(char**)((char*)this + 0x78) + 0x20) - *(double*)((char*)this + v4 * 0x98 + 0x4e8) < 120.0 && *((char*)this + v4 * 0x98 + 0x518) == 1 && *(WORD*)((char*)this + v4 * 0x98 + 0x4d2) == 3) {
+                    *(short*)((char*)this + v4 * 0x98 + 0x4d4) = 0;
+                    *(short*)((char*)this + v4 * 0x98 + 0x4d2) = 4;
+                    break;
+                }
+                if (*(double*)((char*)this + v4 * 0x98 + 0x4e8) - *(double*)(*(char**)*(char**)((char*)this + 0x78) + 0x20) < 120.0 && *((char*)this + v4 * 0x98 + 0x518) == -1 && *(WORD*)((char*)this + v4 * 0x98 + 0x4d2) == 3) {
+                    *(short*)((char*)this + v4 * 0x98 + 0x4d4) = 0;
+                    *(short*)((char*)this + v4 * 0x98 + 0x4d2) = 4;
+                    break;
+                }
+                if (*(double*)((char*)this + v4 * 0x98 + 0x4e8) > 600.0) {
+                    *(double*)((char*)this + v4 * 0x98 + 0x4e8) = 600.0;
+                    *(double*)((char*)this + v4 * 0x98 + 0x4f8) = 0.0;
+                }
+                if (*(double*)((char*)this + v4 * 0x98 + 0x4e8) < 40.0) {
+                    *(double*)((char*)this + v4 * 0x98 + 0x4e8) = 40.0;
+                    *(double*)((char*)this + v4 * 0x98 + 0x4f8) = 0.0;
+                }
+                (*(short*)((char*)this + v4 * 0x98 + 0x4d4))++;
+                if (*(WORD*)((char*)this + v4 * 0x98 + 0x4d4) >= v54) {
+                    *(short*)((char*)this + v4 * 0x98 + 0x4d4) = 0;
+                    (*(short*)((char*)this + v4 * 0x98 + 0x4d2))++;
+                    if (*(WORD*)((char*)this + v4 * 0x98 + 0x4d2) == 0xa && *(int*)((char*)this + v4 * 4 + 0x3158) < 2) {
+                        *(short*)((char*)this + v4 * 0x98 + 0x4d2) = *(WORD*)((char*)this + v4 * 0x98 + 0x4d2) - 2;
+                        (*(int*)((char*)this + v4 * 4 + 0x3158))++;
+                    }
+                    *(int*)((char*)this + v4 * 0x98 + 0x550) = 0;
+                    if (*(WORD*)((char*)this + v4 * 0x98 + 0x4d2) >= v58) {
+                        *(int*)((char*)this + 0x3144) = 3;
+                        *(int*)((char*)this + 0x3150) = 4;
+                        *(int*)((char*)this + 0x3148) = 0x4b0;
+                        *(int*)((char*)this + v4 * 4 + 0x3158) = 0;
+                        *(int*)((char*)this + v4 * 4 + 0x3258) = 0;
+                        *(short*)((char*)this + v4 * 0x98 + 0x4d2) = 0;
+                        *(double*)((char*)this + v4 * 0x98 + 0x4f8) = 0.0;
+                        Vf10(v4);
+                    }
+                }
+                break;
+            case 0x1c5:
+                if ((*(WORD*)((char*)this + 8) > 0x31 && *(WORD*)((char*)this + 8) < 0x96 || *(int*)((char*)this + 0x3144) == 3) && *(WORD*)((char*)this + v4 * 0x98 + 0x4d2) < 0x1e) {
+                    *(short*)((char*)this + v4 * 0x98 + 0x4d2) = 0x1e;
+                    break;
+                }
+                if (*(WORD*)((char*)this + v4 * 0x98 + 0x4d2) == 0 && *(WORD*)((char*)this + v4 * 0x98 + 0x4d4) == 0) {
+                    *(short*)((char*)this + v4 * 0x98 + 0x554) = 2;
+                }
+                (*(short*)((char*)this + v4 * 0x98 + 0x4d4))++;
+                if (*(WORD*)((char*)this + v4 * 0x98 + 0x4d4) >= v54) {
+                    *(short*)((char*)this + v4 * 0x98 + 0x4d4) = 0;
+                    (*(short*)((char*)this + v4 * 0x98 + 0x4d2))++;
+                    if (*(WORD*)((char*)this + v4 * 0x98 + 0x4d2) == 1 || *(WORD*)((char*)this + v4 * 0x98 + 0x4d2) == 0x12) {
+                        *(int*)((char*)this + v4 * 0x98 + 0x550) = 0;
+                    }
+                    if (*(WORD*)((char*)this + v4 * 0x98 + 0x4d2) >= v58) {
+                        Vf10(v4);
+                    }
+                }
+                break;
+            case 0x1c6:
+                if (*(WORD*)((char*)this + v4 * 0x98 + 0x4d2) == 0 && *(WORD*)((char*)this + v4 * 0x98 + 0x4d4) == 0) {
+                    *(short*)((char*)this + v4 * 0x98 + 0x554) = 1;
+                    *(int*)((char*)this + v4 * 0x98 + 0x550) = 0;
+                }
+                (*(short*)((char*)this + v4 * 0x98 + 0x4d4))++;
+                if (*(WORD*)((char*)this + v4 * 0x98 + 0x4d4) >= v54) {
+                    *(short*)((char*)this + v4 * 0x98 + 0x4d4) = 0;
+                    (*(short*)((char*)this + v4 * 0x98 + 0x4d2))++;
+                    if (*(WORD*)((char*)this + v4 * 0x98 + 0x4d2) == 2) {
+                        *(int*)((char*)this + v4 * 0x98 + 0x550) = 0;
+                    }
+                    if (*(WORD*)((char*)this + v4 * 0x98 + 0x4d2) == 4) {
+                        *(int*)((char*)this + v4 * 0x98 + 0x550) = 0;
+                    }
+                    if (*(WORD*)((char*)this + v4 * 0x98 + 0x4d2) >= v58) {
+                        Vf10(v4);
+                    }
+                }
+                break;
+            case 0x1ef:
+                *(double*)((char*)this + v4 * 0x98 + 0x4f8) = -0.02;
+                *(int*)((char*)this + v4 * 0x98 + 0x55c) = 0x7530;
+                (*(short*)((char*)this + v4 * 0x98 + 0x4d4))++;
+                if (*(WORD*)((char*)this + 8) != 0x57) {
+                    Vf10(v4);
+                }
+                if (*(WORD*)((char*)this + v4 * 0x98 + 0x4d4) >= v54) {
+                    *(short*)((char*)this + v4 * 0x98 + 0x4d4) = 0;
+                    (*(short*)((char*)this + v4 * 0x98 + 0x4d2))++;
+                    *(int*)((char*)this + v4 * 0x98 + 0x550) = 0;
+                    if (*(WORD*)((char*)this + v4 * 0x98 + 0x4d2) >= v58) {
+                        *(short*)((char*)this + v4 * 0x98 + 0x4d2) = 0;
+                    }
+                }
+                break;
+            case 0x1f0:
+                if (*(WORD*)((char*)this + 8) != 0x53 && *(WORD*)((char*)this + 8) != 0x54 && *(WORD*)((char*)this + 8) != 0x55 && *(WORD*)((char*)this + 8) != 0x56 || *(WORD*)((char*)this + 8) == 0x53 && *(WORD*)((char*)this + 0xa) > 1 || *(WORD*)((char*)this + 8) == 0x54 && *(WORD*)((char*)this + 0xa) > 1) {
+                    l50.type = 0x1f1;
+                    l50.x = (double)((int)*(double*)((char*)this + 0x20) + *((char*)this + 0x50) * 0x17);
+                    l50.y = (double)((int)*(double*)((char*)this + 0x28) - 4);
+                    l50.unk20 = 0;
+                    l50.unk21 = 1;
+                    l50.unk18 = *((char*)this + 0x50);
+                    Vf9(&l50);
+                    l50.type = 0x1f1;
+                    l50.x = (double)((int)*(double*)((char*)this + 0x20) - (*((char*)this + 0x50) << 2));
+                    l50.y = (double)((int)*(double*)((char*)this + 0x28) - 6);
+                    l50.unk20 = 0;
+                    l50.unk21 = 1;
+                    l50.unk18 = *((char*)this + 0x50);
+                    Vf9(&l50);
+                    l50.type = 0x1f1;
+                    l50.x = (double)((int)*(double*)((char*)this + 0x20) - *((char*)this + 0x50) * 0xe);
+                    l50.y = (double)((int)*(double*)((char*)this + 0x28) - 0x1a);
+                    l50.unk20 = 0;
+                    l50.unk21 = 1;
+                    l50.unk18 = *((char*)this + 0x50);
+                    Vf9(&l50);
+                    l50.type = 0x1f1;
+                    l50.x = (double)(int)*(double*)((char*)this + 0x20);
+                    l50.y = (double)(int)*(double*)((char*)this + 0x28);
+                    l50.unk20 = 0;
+                    l50.unk21 = 1;
+                    l50.unk18 = *((char*)this + 0x50);
+                    Vf9(&l50);
+                    l50.type = 0x1f1;
+                    l50.x = (double)((int)*(double*)((char*)this + 0x20) + *((char*)this + 0x50) * 0x1e);
+                    l50.y = (double)((int)*(double*)((char*)this + 0x28) - 0x28);
+                    l50.unk20 = 0;
+                    l50.unk21 = 1;
+                    l50.unk18 = *((char*)this + 0x50);
+                    Vf9(&l50);
+                    l50.type = 0x1f1;
+                    l50.x = (double)((int)*(double*)((char*)this + 0x20) - *((char*)this + 0x50) * 0x19);
+                    l50.y = (double)((int)*(double*)((char*)this + 0x28) - 0x50);
+                    l50.unk20 = 0;
+                    l50.unk21 = 1;
+                    l50.unk18 = *((char*)this + 0x50);
+                    Vf9(&l50);
+                    l50.type = 0x1f2;
+                    l50.x = (double)((int)*(double*)((char*)this + 0x20) - *((char*)this + 0x50) * 0x23);
+                    l50.y = (double)((int)*(double*)((char*)this + 0x28) - 0x2a);
+                    l50.unk20 = 0;
+                    l50.unk21 = 1;
+                    l50.unk18 = *((char*)this + 0x50);
+                    Vf9(&l50);
+                    l50.type = 0x1f2;
+                    l50.x = (double)((int)*(double*)((char*)this + 0x20) - *((char*)this + 0x50) * 0x12);
+                    l50.y = (double)((int)*(double*)((char*)this + 0x28) - 0x14);
+                    l50.unk20 = 0;
+                    l50.unk21 = 1;
+                    l50.unk18 = *((char*)this + 0x50);
+                    Vf9(&l50);
+                    l50.type = 0x1f2;
+                    l50.x = (double)((int)*(double*)((char*)this + 0x20) + *((char*)this + 0x50) * 2);
+                    l50.y = (double)((int)*(double*)((char*)this + 0x28) - 0x41);
+                    l50.unk20 = 0;
+                    l50.unk21 = 1;
+                    l50.unk18 = *((char*)this + 0x50);
+                    Vf9(&l50);
+                    l50.type = 0x1f2;
+                    l50.x = (double)((int)*(double*)((char*)this + 0x20) + (*((char*)this + 0x50) << 4));
+                    l50.y = (double)((int)*(double*)((char*)this + 0x28) - 0x50);
+                    l50.unk20 = 0;
+                    l50.unk21 = 1;
+                    l50.unk18 = *((char*)this + 0x50);
+                    Vf9(&l50);
+                    *((char*)this + 0x2c9) = 0x22;
+                    Vf10(v4);
+                    *(int*)((char*)this + 0x3154) = 0;
+                    break;
+                }
+                (*(short*)((char*)this + v4 * 0x98 + 0x4d4))++;
+                if (*(WORD*)((char*)this + v4 * 0x98 + 0x4d4) >= v54) {
+                    *(short*)((char*)this + v4 * 0x98 + 0x4d4) = 0;
+                    (*(short*)((char*)this + v4 * 0x98 + 0x4d2))++;
+                    *(int*)((char*)this + v4 * 0x98 + 0x550) = 0;
+                    if (*(WORD*)((char*)this + v4 * 0x98 + 0x4d2) >= v58) {
+                        *(short*)((char*)this + v4 * 0x98 + 0x4d2) = 0;
+                    }
+                }
+                break;
+            case 0x1f1:
+                if (*(WORD*)((char*)this + v4 * 0x98 + 0x4d2) == 0 && *(WORD*)((char*)this + v4 * 0x98 + 0x4d4) == 0 && *(int*)((char*)this + v4 * 4 + 0x3158) == 0) {
+                    *(int*)((char*)this + v4 * 4 + 0x3258) = (rand() > 0x3e80) * 0x28 + 0x50 + (rand() > 0x3e80) * 0x14;
+                    (*(int*)((char*)this + v4 * 4 + 0x3158))++;
+                    *(double*)((char*)this + v4 * 0x98 + 0x4f8) = (rand() > 0x3e80) * 1.2 + (rand() > 0x3e80) * 0.7 + (rand() > 0x3e80) * 1.7 + -1.8;
+                    *(double*)((char*)this + v4 * 0x98 + 0x500) = -1.2 - ((rand() > 0x3e80) * 0.6 + (rand() > 0x3e80) * 0.9 + (rand() > 0x3e80) * 1.4);
+                }
+                *(double*)((char*)this + v4 * 0x98 + 0x500) += 0.05;
+                if (*(double*)((char*)this + v4 * 0x98 + 0x4f0) > 0.0 && *(double*)((char*)this + v4 * 0x98 + 0x500) > 0.0) {
+                    *(double*)((char*)this + v4 * 0x98 + 0x500) = -*(double*)((char*)this + v4 * 0x98 + 0x500);
+                }
+                if (*(int*)((char*)this + v4 * 4 + 0x3258) < 0xa) {
+                    *((char*)this + v4 * 0x98 + 0x520) = 1;
+                }
+                if (*(int*)((char*)this + v4 * 4 + 0x3258) < 0) {
+                    Vf10(v4);
+                    break;
+                }
+                (*(short*)((char*)this + v4 * 0x98 + 0x4d4))++;
+                (*(int*)((char*)this + v4 * 4 + 0x3258))--;
+                if (*(WORD*)((char*)this + v4 * 0x98 + 0x4d4) >= v54) {
+                    *(short*)((char*)this + v4 * 0x98 + 0x4d4) = 0;
+                    (*(short*)((char*)this + v4 * 0x98 + 0x4d2))++;
+                    *(int*)((char*)this + v4 * 0x98 + 0x550) = 0;
+                    if (*(WORD*)((char*)this + v4 * 0x98 + 0x4d2) >= v58) {
+                        *(short*)((char*)this + v4 * 0x98 + 0x4d2) = 0;
+                    }
+                }
+                break;
+            case 0x1f2:
+                if (*(WORD*)((char*)this + v4 * 0x98 + 0x4d2) == 0 && *(WORD*)((char*)this + v4 * 0x98 + 0x4d4) == 0 && *(int*)((char*)this + v4 * 4 + 0x3158) == 0) {
+                    *(int*)((char*)this + v4 * 4 + 0x3258) = (rand() > 0x3e80) * 0x3c + 0x78 + (rand() > 0x3e80) * 0x28;
+                    (*(int*)((char*)this + v4 * 4 + 0x3158))++;
+                    *(double*)((char*)this + v4 * 0x98 + 0x4f8) = (double)(rand() > 0x3e80) + (rand() > 0x3e80) * 0.5 + (rand() > 0x3e80) * 1.5 + -1.5;
+                    *(double*)((char*)this + v4 * 0x98 + 0x500) = -1.0 - ((rand() > 0x3e80) * 0.5 + (rand() > 0x3e80) * 0.8 + (rand() > 0x3e80) * 1.2);
+                }
+                *(double*)((char*)this + v4 * 0x98 + 0x500) += 0.03;
+                if (*(double*)((char*)this + v4 * 0x98 + 0x4f0) > 0.0 && *(double*)((char*)this + v4 * 0x98 + 0x500) > 0.0) {
+                    *(double*)((char*)this + v4 * 0x98 + 0x500) = -*(double*)((char*)this + v4 * 0x98 + 0x500);
+                }
+                if (*(int*)((char*)this + v4 * 4 + 0x3258) < 0xa) {
+                    *((char*)this + v4 * 0x98 + 0x520) = 1;
+                }
+                if (*(int*)((char*)this + v4 * 4 + 0x3258) < 0) {
+                    Vf10(v4);
+                    break;
+                }
+                (*(short*)((char*)this + v4 * 0x98 + 0x4d4))++;
+                (*(int*)((char*)this + v4 * 4 + 0x3258))--;
+                if (*(WORD*)((char*)this + v4 * 0x98 + 0x4d4) >= v54) {
+                    *(short*)((char*)this + v4 * 0x98 + 0x4d4) = 0;
+                    (*(short*)((char*)this + v4 * 0x98 + 0x4d2))++;
+                    *(int*)((char*)this + v4 * 0x98 + 0x550) = 0;
+                    if (*(WORD*)((char*)this + v4 * 0x98 + 0x4d2) >= v58) {
+                        *(short*)((char*)this + v4 * 0x98 + 0x4d2) = 0;
+                    }
+                }
+                break;
+            case 0x1f3:
+                *(double*)((char*)this + v4 * 0x98 + 0x4e8) = *(double*)((char*)this + 0x20);
+                *(double*)((char*)this + v4 * 0x98 + 0x4f0) = *(double*)((char*)this + 0x28);
+                (*(short*)((char*)this + v4 * 0x98 + 0x4d4))++;
+                if (*(WORD*)((char*)this + v4 * 0x98 + 0x4d4) >= v54) {
+                    *(short*)((char*)this + v4 * 0x98 + 0x4d4) = 0;
+                    (*(short*)((char*)this + v4 * 0x98 + 0x4d2))++;
+                    *(int*)((char*)this + v4 * 0x98 + 0x550) = 0;
+                    if (*(WORD*)((char*)this + v4 * 0x98 + 0x4d2) >= v58) {
+                        Vf10(v4);
+                    }
+                }
+            }
+        }
+        v4++;
+        if (v4 >= 0x40) {
+            v4 = 0;
+        }
+    }
 }

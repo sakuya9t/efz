@@ -16,6 +16,7 @@
 #include <mmsystem.h>
 #include <dsound.h>
 #include <string.h>
+#include <math.h>
 
 struct EffectDesc;
 
@@ -447,6 +448,21 @@ struct PatternData {
 // the sprite animations, position and facing. CPlayer derives from it (at offset 8,
 // after the vtable pointer), and so do the 0x98-byte entries of its object table.
 struct ObjBase {
+    // Inline: each copy sits after the first object that uses it.
+    // FUNCTION: 0x434010
+    // Sets the velocity from a direction in degrees and a speed.
+    void SetVelocity(double angle, double speed)
+    {
+        *(double*)((char*)this + 0x28) = cos(angle / 57.29579143313326) * speed;
+        *(double*)((char*)this + 0x30) = sin(angle / 57.29579143313326) * speed;
+    }
+    // FUNCTION: 0x4c0480
+    // The direction of (dx, dy) in degrees.
+    double AngleTo(double dx, double dy)
+    {
+        return atan2(dy, dx) * 57.29579143313326;
+    }
+
     short pattern;    // +0
     short frame;      // +2
     BYTE unk4[4];
@@ -454,7 +470,9 @@ struct ObjBase {
     BYTE unkc[0xc];
     double x;         // +0x18
     double y;         // +0x20
-    BYTE unk28[0x20];
+    double vx;        // +0x28
+    double vy;        // +0x30
+    BYTE unk38[0x10];
     char facing;      // +0x48: 1 or -1
     BYTE unk49[7];
 };
@@ -926,8 +944,6 @@ public:
     virtual void Vf5();
     // FUNCTION: 0x42b190
     virtual void Vf7();
-    // FUNCTION: 0x434010
-    void Unk434010(double p1, double p2);
 
     BYTE unk3138[0x3458 - 0x3138];
 };

@@ -121,10 +121,25 @@ Consequences for a byte-identical rebuild:
   - A `char` constant argument of 0x80 or more pushed as `0xb0` (not `0xffffffb0`) means
     an unsigned `BYTE` parameter.
 - **Register choice rotates through `eax`, `ecx`, `edx`** across statements, calls and
-  labels alike. **Observed:** in Shiori's `Vf6` (`0x4136d0`) the original restarts the
-  rotation one step early in three places, each right after an `int` member's `x--` or a
-  store and before `timer++`. No source form tried so far reproduces this; that is the
-  only difference left in the function.
+  labels alike, and dead code still takes its turn. **Observed:** a statement the
+  compiler drops (one after a `break`, or `if (0) {}`) emits nothing but moves the
+  rotation on, so the next statement starts one or two registers later. The original
+  has such dead code in places (Shiori's `Vf6` has nine, Kanna's `Vf6` one).
+  `tools/regfix.py` finds them by comparing builds and records them in
+  `tools/regpads.json`; the lifter then writes that many `if (0) {}` there.
+- **More forms, observed in the character code:**
+  - A comparison stored to a `char` is worked out at 8 bits (`sbb cl,cl`, or `setl dl`
+    alone) when written `c = a < b`, and as an int (`sbb ecx,ecx`, or `xor edx,edx`
+    before `setl dl`) when written `c = a < b ? 1 : 0`.
+  - `x * 2` on a `float` is `fadd st(0),st`, and an `int` 2 keeps the result `float`.
+  - Of two scaled terms in a sum, the compiler folds the left one's scaling into the
+    `lea` and shifts the right one itself: `lea [x*4 + y*2 + 1]` with `x` shifted first
+    is `y * 2 + x * 4 + 1`.
+  - `int` against `double`: the `int` is always loaded with `fild`, so which side's
+    address is worked out first shows the source order. With two plain `double`
+    loads, the heavier address comes first whatever the order.
+  - A base-class method called from a derived class adjusts `this` by the base's offset
+    without the null check an explicit cast adds (`ObjBase` methods from `CPlayer`).
 - **Some expressions always go through unnamed temporaries.** **Observed:**
   - A boolean used as a value (`return a && b;`, `x * (y > 0)`) is materialised as 0 or 1
     in a temporary by an `if`/`else` diamond. The diamond is hoisted in front of the
@@ -191,23 +206,23 @@ Consequences for a byte-identical rebuild:
   | `sound.cpp` | `0x40d810`–`0x40e62f` | 15 | `CSound`: DirectSound, `.wav` loading, music loop points |
   | `player.cpp` | `0x40e630`–`0x412b0f` | 49 | `CPlayer`, the base of the character classes; inline `PatternData` and `Afterimages` methods |
   | `playerobj.cpp` | `0x412b10`–`0x4136cf` | 6 | `CPlayer`'s table of 64 spawned objects and drawing them |
-  | `shiori.cpp` | `0x4136d0`–`0x43405f` | 13 of 14 | `CShiori`; `Vf6` still differs |
-  | `sayuri.cpp` | `0x434060`–`0x45184f` | 11 of 13 | `CSayuri`; `Vf5`, `Vf7` still differ |
-  | `nayuki.cpp` | `0x451850`–`0x46d96f` | 10 of 13 | `CNayuki`; `Vf6`, `Vf5`, `Vf7` still differ |
-  | `mizukab.cpp` | `0x4c04b0`–`0x4e7ebf` | 12 of 13 | `CMizukaB`; `Vf5` still differs |
-  | `mizuka.cpp` | `0x4e7ec0`–`0x50c4af` | 11 of 13 | `CMizuka`; `Vf5`, `Vf7` still differ |
+  | `shiori.cpp` | `0x4136d0`–`0x43405f` | 13 | `CShiori` (and the inline `ObjBase::SetVelocity`) |
+  | `sayuri.cpp` | `0x434060`–`0x45184f` | 13 | `CSayuri` |
+  | `nayuki.cpp` | `0x451850`–`0x46d96f` | 13 | `CNayuki` |
+  | `mizukab.cpp` | `0x4c04b0`–`0x4e7ebf` | 13 | `CMizukaB` |
+  | `mizuka.cpp` | `0x4e7ec0`–`0x50c4af` | 13 | `CMizuka` |
   | `misuzu.cpp` | `0x50c4b0`–`0x530bbf` | 13 | `CMisuzu` |
   | `mishio.cpp` | `0x530bc0`–`0x5571ef` | 13 | `CMishio` |
   | `misaki.cpp` | `0x5571f0`–`0x5736cf` | 13 | `CMisaki` |
   | `mio.cpp` | `0x5736d0`–`0x59c49f` | 13 | `CMio` |
   | `minagi.cpp` | `0x59c4a0`–`0x5c857f` | 13 | `CMinagi` |
   | `mayu.cpp` | `0x5c8580`–`0x5e85ef` | 13 | `CMayu` |
-  | `makoto.cpp` | `0x5e85f0`–`0x60792f` | 12 of 13 | `CMakoto`; `Vf7` still differs |
-  | `mai.cpp` | `0x607930`–`0x62a5df` | 10 of 13 | `CMai`; `Vf6`, `Vf5`, `Vf7` still differ |
-  | `kanna.cpp` | `0x667570`–`0x68354f` | 11 of 13 | `CKanna`; `Vf6`, `Vf5` still differ |
+  | `makoto.cpp` | `0x5e85f0`–`0x60792f` | 13 | `CMakoto` |
+  | `mai.cpp` | `0x607930`–`0x62a5df` | 13 | `CMai` |
+  | `kanna.cpp` | `0x667570`–`0x68354f` | 13 | `CKanna` |
   | `ayu.cpp` | `0x6d93f0`–`0x6f2f1f` | 13 | `CAyu` |
-  | `akane.cpp` | `0x6f2f20`–`0x7124ff` | 11 of 13 | `CAkane`; `Vf6`, `Vf7` still differ |
-  | `akiko.cpp` | `0x712500`–`0x73070f` | 12 of 13 | `CAkiko`; `Vf6` still differs |
+  | `akane.cpp` | `0x6f2f20`–`0x7124ff` | 13 | `CAkane` |
+  | `akiko.cpp` | `0x712500`–`0x73070f` | 13 | `CAkiko` |
 
   The boundaries come from each object's string literals, which are contiguous in
   `.rdata`, and from where inline functions are emitted. Each character class is one

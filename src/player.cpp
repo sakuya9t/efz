@@ -376,9 +376,9 @@ void CPlayer::Unk40f580()
         if ((char)Unk40ff70() * *((char*)this + 0x50) * (*(double*)((char*)this + 0x30) + *(double*)((char*)this + 0xb0) + *(double*)(*(char**)*(char**)((char*)this + 0x78) + 0xb8) * (*(int*)(*(char**)*(char**)((char*)this + 0x78) + 0xd0) != 0 && *(short*)((char*)this + 0x14c) == 0)) >= 0.0) {
             *(double*)((char*)this + 0x20) = (*(double*)((char*)this + 0x30) + *(double*)((char*)this + 0xb0) + *(double*)(*(char**)*(char**)((char*)this + 0x78) + 0xb8) * (*(int*)(*(char**)*(char**)((char*)this + 0x78) + 0xd0) != 0 && *(short*)((char*)this + 0x14c) == 0)) * *((char*)this + 0x50) + *(double*)((char*)this + 0x20);
         }
-        if ((double)(((char)((CPlayer*)*(int*)*(char**)((char*)this + 0x78))->Unk40ff70() == 1 && *(double*)(*(char**)*(char**)((char*)this + 0x78) + 0x20) <= 20.0) + 0x14) > *(double*)((char*)this + 0x20)) {
+        if (((char)((CPlayer*)*(int*)*(char**)((char*)this + 0x78))->Unk40ff70() == 1 && *(double*)(*(char**)*(char**)((char*)this + 0x78) + 0x20) <= 20.0) + 0x14 > *(double*)((char*)this + 0x20)) {
             *(double*)((char*)this + 0x20) = (double)(((char)((CPlayer*)*(int*)*(char**)((char*)this + 0x78))->Unk40ff70() == 1 && *(double*)(*(char**)*(char**)((char*)this + 0x78) + 0x20) <= 20.0) + 0x14);
-        } else if ((double)(0x26b - ((char)((CPlayer*)*(int*)*(char**)((char*)this + 0x78))->Unk40ff70() == -1 && *(double*)(*(char**)*(char**)((char*)this + 0x78) + 0x20) >= 619.0)) < *(double*)((char*)this + 0x20)) {
+        } else if (0x26b - ((char)((CPlayer*)*(int*)*(char**)((char*)this + 0x78))->Unk40ff70() == -1 && *(double*)(*(char**)*(char**)((char*)this + 0x78) + 0x20) >= 619.0) < *(double*)((char*)this + 0x20)) {
             *(double*)((char*)this + 0x20) = (double)(0x26b - ((char)((CPlayer*)*(int*)*(char**)((char*)this + 0x78))->Unk40ff70() == -1 && *(double*)(*(char**)*(char**)((char*)this + 0x78) + 0x20) >= 619.0));
         }
         *(double*)((char*)this + 0x28) = *(double*)((char*)this + 0x28) + *(double*)((char*)this + 0x38);
@@ -513,10 +513,10 @@ void CPlayer::Unk40f980()
 
 char CPlayer::Unk40ff70()
 {
-    if (*(double*)((char*)this + 0x20) - 20.0 <= (double)(*(double*)(*(char**)*(char**)((char*)this + 0x78) + 0x20) <= 20.0) || *(double*)(*(char**)*(char**)((char*)this + 0x78) + 0x20) - *(double*)((char*)this + 0x20) > 280.0) {
+    if (*(double*)((char*)this + 0x20) - 20.0 <= (*(double*)(*(char**)*(char**)((char*)this + 0x78) + 0x20) <= 20.0) || *(double*)(*(char**)*(char**)((char*)this + 0x78) + 0x20) - *(double*)((char*)this + 0x20) > 280.0) {
         return 1;
     }
-    if (*(double*)((char*)this + 0x20) + 20.0 >= (double)(0x27f - (*(double*)(*(char**)*(char**)((char*)this + 0x78) + 0x20) >= 619.0)) || *(double*)((char*)this + 0x20) - *(double*)(*(char**)*(char**)((char*)this + 0x78) + 0x20) > 280.0) {
+    if (*(double*)((char*)this + 0x20) + 20.0 >= 0x27f - (*(double*)(*(char**)*(char**)((char*)this + 0x78) + 0x20) >= 619.0) || *(double*)((char*)this + 0x20) - *(double*)(*(char**)*(char**)((char*)this + 0x78) + 0x20) > 280.0) {
         return -1;
     }
     return 0;
@@ -550,7 +550,7 @@ int CPlayer::Unk4100f0(int p1)
                 return 0;
             }
         } else {
-            if ((double)rand() > *(float*)((char*)this + 0xa8) * 1e+04f) {
+            if (rand() > *(float*)((char*)this + 0xa8) * 1e+04f) {
                 return 0;
             }
             if ((*(WORD*)((char*)p1 + 0xaa) & 1) == 0) {
@@ -604,7 +604,7 @@ double CPlayer::Unk410480()
     if (*(*(char**)((char*)this + 0x7c) + 0x1370) == 2) {
         return *(double*)((char*)this + 0x118) / 10000.0 + 1.0;
     }
-    return (*(double*)((char*)this + 0x118) / 10000.0 + 1.0) * 2.0;
+    return (*(double*)((char*)this + 0x118) / 10000.0 + 1.0) * 2;
 }
 
 double CPlayer::Unk410530()

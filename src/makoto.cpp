@@ -5774,13 +5774,13 @@ void CMakoto::Vf5()
     *((char*)this + 0x18c) = 0;
     *((char*)this + 0x18d) = 0;
     *(short*)((char*)this + 0x14e) = 0;
-    if ((double)(WORD)CPlayer::Unk4108a0(0, 0x3e8) < 25.0f * *(float*)((char*)this + 0xa8) + (*(double*)((char*)this + 0x28) < 0.0) * 0x1e * *(float*)((char*)this + 0xa8) + (*(int*)((char*)this + 0x3114) == 3) * 0x190 + (*(WORD*)((char*)this + 8) == 0xaa) * 0x12c) {
+    if ((WORD)CPlayer::Unk4108a0(0, 0x3e8) < 25.0f * *(float*)((char*)this + 0xa8) + (*(double*)((char*)this + 0x28) < 0.0) * 0x1e * *(float*)((char*)this + 0xa8) + (*(int*)((char*)this + 0x3114) == 3) * 0x190 + (*(WORD*)((char*)this + 8) == 0xaa) * 0x12c) {
         *(short*)((char*)this + 0x14e) = 0x3c;
     }
-    if ((double)(WORD)CPlayer::Unk4108a0(0, 0x7d0) < ((*((char*)this + 0x130) > 0) * 4.0 + 1.0) * 8.0 * *(float*)((char*)this + 0xa8) * ((*(WORD*)((char*)this + 8) > 0x95 && *(WORD*)((char*)this + 8) < 0x9d) * 2 + 1)) {
+    if ((WORD)CPlayer::Unk4108a0(0, 0x7d0) < ((*((char*)this + 0x130) > 0) * 4.0 + 1.0) * 8.0 * *(float*)((char*)this + 0xa8) * ((*(WORD*)((char*)this + 8) > 0x95 && *(WORD*)((char*)this + 8) < 0x9d) * 2 + 1)) {
         *(short*)((char*)this + 0x14e) = 0x3c;
     }
-    if ((double)(WORD)CPlayer::Unk4108a0(0, 0x3e8) < 4e+01f * *(float*)((char*)this + 0xa8) && *(WORD*)((char*)this + 8) > 0xc7) {
+    if ((WORD)CPlayer::Unk4108a0(0, 0x3e8) < 4e+01f * *(float*)((char*)this + 0xa8) && *(WORD*)((char*)this + 8) > 0xc7) {
         *(short*)((char*)this + 0x14e) = 0x3c;
     }
     if (*(int*)((char*)this + 0x170) == 1 && *(int*)((char*)this + 0x3114) == 2) {
@@ -5796,14 +5796,14 @@ void CMakoto::Vf5()
     v10 = (*(double*)(*(char**)*(char**)((char*)this + 0x78) + 0x20) - *(double*)((char*)this + 0x20)) * *((char*)this + 0x50);
     x8 = fabs(*(double*)((char*)this + 0x28) - *(double*)(*(char**)*(char**)((char*)this + 0x78) + 0x28));
     if (*(WORD*)((char*)this + 8) >= 0x32 && *(WORD*)((char*)this + 8) <= 0x96 && *(WORD*)((char*)this + 0xc) == 0) {
-        if ((double)(WORD)CPlayer::Unk4108a0(0, 0x64) < 8.0f * *(float*)((char*)this + 0xa8)) {
+        if ((WORD)CPlayer::Unk4108a0(0, 0x64) < 8.0f * *(float*)((char*)this + 0xa8)) {
             *(int*)((char*)this + 0x3114) = 3;
         } else {
             *(int*)((char*)this + 0x3114) = 0;
         }
         *((char*)this + 0x188) = 1 - (((WORD)CPlayer::Unk4108a0(0, 0x64) < 0x32) << 1);
-        *((char*)this + 0x18d) = (double)(WORD)CPlayer::Unk4108a0(0, 0xf0) < x8;
-        *((char*)this + 0x18d) = (double)(WORD)CPlayer::Unk4108a0(0, 0x140) < v10;
+        *((char*)this + 0x18d) = (WORD)CPlayer::Unk4108a0(0, 0xf0) < x8;
+        *((char*)this + 0x18d) = (WORD)CPlayer::Unk4108a0(0, 0x140) < v10;
         if (*(WORD*)(*(char**)*(char**)((char*)this + 0x78) + 8) > 0xc7 && *(WORD*)(*(char**)*(char**)((char*)this + 0x78) + 8) < 0xfa && *(WORD*)(*(char**)*(char**)((char*)this + 0x78) + 0xa) < 3 && x8 < 100.0 && v10 < 150.0) {
             *((char*)this + 0x18d) = 0;
         }
@@ -5817,18 +5817,18 @@ void CMakoto::Vf5()
     }
     if (*(WORD*)((char*)this + 8) == 0xa8 && *(WORD*)((char*)this + 0xc) < 6) {
         if (*(WORD*)(*(char**)*(char**)((char*)this + 0x78) + 8) != 0xc8 && *(WORD*)(*(char**)*(char**)((char*)this + 0x78) + 8) != 0xcc && *(WORD*)(*(char**)*(char**)((char*)this + 0x78) + 8) < 0xfa && *(double*)(*(char**)*(char**)((char*)this + 0x78) + 0x28) == 0.0 && *(short*)(*(char**)*(char**)((char*)this + 0x78) + 0x16c) == 0) {
-            if (v10 < 45.0 && (double)(WORD)CPlayer::Unk4108a0(0, 0x64) < *(float*)((char*)this + 0xa8) * 2.0) {
+            if (v10 < 45.0 && (WORD)CPlayer::Unk4108a0(0, 0x64) < *(float*)((char*)this + 0xa8) * 2) {
                 *((char*)this + 0x18a) = 1;
                 *((char*)this + 0x189) = 0;
                 return;
             }
-            if (v10 < 60.0 && (double)(WORD)CPlayer::Unk4108a0(0, 0x64) < *(float*)((char*)this + 0xa8) * 2.0) {
+            if (v10 < 60.0 && (WORD)CPlayer::Unk4108a0(0, 0x64) < *(float*)((char*)this + 0xa8) * 2) {
                 *((char*)this + 0x18a) = 1;
                 *((char*)this + 0x189) = 1;
                 return;
             }
         }
-        if ((*(WORD*)(*(char**)*(char**)((char*)this + 0x78) + 8) == 0xc9 || *(WORD*)(*(char**)*(char**)((char*)this + 0x78) + 8) == 0xca || *(WORD*)(*(char**)*(char**)((char*)this + 0x78) + 8) == 0xcd) && *(WORD*)(*(char**)*(char**)((char*)this + 0x78) + 8) < 0xfa && *(double*)(*(char**)*(char**)((char*)this + 0x78) + 0x28) == 0.0 && *(short*)(*(char**)*(char**)((char*)this + 0x78) + 0x16c) == 0 && v10 > 60.0 && v10 < 70.0 && (double)(WORD)CPlayer::Unk4108a0(0, 0x64) < *(float*)((char*)this + 0xa8) * 1.0f) {
+        if ((*(WORD*)(*(char**)*(char**)((char*)this + 0x78) + 8) == 0xc9 || *(WORD*)(*(char**)*(char**)((char*)this + 0x78) + 8) == 0xca || *(WORD*)(*(char**)*(char**)((char*)this + 0x78) + 8) == 0xcd) && *(WORD*)(*(char**)*(char**)((char*)this + 0x78) + 8) < 0xfa && *(double*)(*(char**)*(char**)((char*)this + 0x78) + 0x28) == 0.0 && *(short*)(*(char**)*(char**)((char*)this + 0x78) + 0x16c) == 0 && v10 > 60.0 && v10 < 70.0 && (WORD)CPlayer::Unk4108a0(0, 0x64) < *(float*)((char*)this + 0xa8) * 1.0f) {
             *((char*)this + 0x18b) = 1;
             *((char*)this + 0x189) = 1;
             *((char*)this + 0x188) = 0;
@@ -5837,82 +5837,82 @@ void CMakoto::Vf5()
     }
     if (*(WORD*)((char*)this + 8) == 0xa8 || *(WORD*)((char*)this + 8) == 0xa9) {
         if (v10 < 100.0) {
-            if ((double)(WORD)CPlayer::Unk4108a0(0, 0x64) < *(float*)((char*)this + 0xa8) * 5.0f && *(double*)((char*)this + 0x118) > 500.0) {
+            if ((WORD)CPlayer::Unk4108a0(0, 0x64) < *(float*)((char*)this + 0xa8) * 5.0f && *(double*)((char*)this + 0x118) > 500.0) {
                 *(short*)((char*)this + 0x262) = 0x14;
                 return;
             }
-            if ((double)(WORD)CPlayer::Unk4108a0(0, 0x64) < *(float*)((char*)this + 0xa8) * 3.0f && *(double*)((char*)this + 0x118) > 500.0) {
+            if ((WORD)CPlayer::Unk4108a0(0, 0x64) < *(float*)((char*)this + 0xa8) * 3.0f && *(double*)((char*)this + 0x118) > 500.0) {
                 *(short*)((char*)this + 0x262) = 0x16;
                 return;
             }
-            if ((double)(WORD)CPlayer::Unk4108a0(0, 0x64) < *(float*)((char*)this + 0xa8) * 2.0 && *(double*)((char*)this + 0x118) > 500.0) {
+            if ((WORD)CPlayer::Unk4108a0(0, 0x64) < *(float*)((char*)this + 0xa8) * 2 && *(double*)((char*)this + 0x118) > 500.0) {
                 *(short*)((char*)this + 0x262) = 0x2a;
                 return;
             }
-            if (v10 < 60.0 && (double)(WORD)CPlayer::Unk4108a0(0, 0x64) < *(float*)((char*)this + 0xa8) * 1.0f) {
+            if (v10 < 60.0 && (WORD)CPlayer::Unk4108a0(0, 0x64) < *(float*)((char*)this + 0xa8) * 1.0f) {
                 *((char*)this + 0x18a) = 1;
                 *((char*)this + 0x189) = 0;
                 return;
             }
-            if ((double)(WORD)CPlayer::Unk4108a0(0, 0x64) < *(float*)((char*)this + 0xa8) * 1.0f && *(short*)((char*)this + 0x148) >= 0x3e8) {
+            if ((WORD)CPlayer::Unk4108a0(0, 0x64) < *(float*)((char*)this + 0xa8) * 1.0f && *(short*)((char*)this + 0x148) >= 0x3e8) {
                 *(short*)((char*)this + 0x262) = (WORD)CPlayer::Unk4108a0(0, 3) + 0x6e;
                 return;
             }
-            if ((double)(WORD)CPlayer::Unk4108a0(0, 0x64) < *(float*)((char*)this + 0xa8) * 3.0f && *(short*)((char*)this + 0x148) >= 0x7d0) {
+            if ((WORD)CPlayer::Unk4108a0(0, 0x64) < *(float*)((char*)this + 0xa8) * 3.0f && *(short*)((char*)this + 0x148) >= 0x7d0) {
                 *(short*)((char*)this + 0x262) = (WORD)CPlayer::Unk4108a0(0, 2) + 0x79;
                 return;
             }
         }
         if (v10 < 150.0 && v10 > 100.0) {
-            if ((double)(WORD)CPlayer::Unk4108a0(0, 0x64) < *(float*)((char*)this + 0xa8) * 3.0f && *(double*)((char*)this + 0x118) > 500.0) {
+            if ((WORD)CPlayer::Unk4108a0(0, 0x64) < *(float*)((char*)this + 0xa8) * 3.0f && *(double*)((char*)this + 0x118) > 500.0) {
                 *(short*)((char*)this + 0x262) = 0x2a;
                 return;
             }
-            if (v10 < 120.0 && (double)(WORD)CPlayer::Unk4108a0(0, 0x64) < *(float*)((char*)this + 0xa8) * 1.0f) {
+            if (v10 < 120.0 && (WORD)CPlayer::Unk4108a0(0, 0x64) < *(float*)((char*)this + 0xa8) * 1.0f) {
                 *((char*)this + 0x18a) = 2;
                 *((char*)this + 0x189) = 0;
                 return;
             }
-            if ((double)(WORD)CPlayer::Unk4108a0(0, 0x64) < *(float*)((char*)this + 0xa8) * 2.0 && *(short*)((char*)this + 0x148) >= 0x7d0) {
+            if ((WORD)CPlayer::Unk4108a0(0, 0x64) < *(float*)((char*)this + 0xa8) * 2 && *(short*)((char*)this + 0x148) >= 0x7d0) {
                 *(short*)((char*)this + 0x262) = (WORD)CPlayer::Unk4108a0(0, 2) + 0x79;
                 return;
             }
         }
         if (v10 > 150.0) {
-            if ((double)(WORD)CPlayer::Unk4108a0(0, 0x64) < *(float*)((char*)this + 0xa8) * 1.0f && *(double*)((char*)this + 0x118) > 500.0) {
+            if ((WORD)CPlayer::Unk4108a0(0, 0x64) < *(float*)((char*)this + 0xa8) * 1.0f && *(double*)((char*)this + 0x118) > 500.0) {
                 *(short*)((char*)this + 0x262) = (WORD)CPlayer::Unk4108a0(0, 2) + 0x28;
                 return;
             }
-            if ((double)(WORD)CPlayer::Unk4108a0(0, 0x64) < *(float*)((char*)this + 0xa8) * 1.0f) {
+            if ((WORD)CPlayer::Unk4108a0(0, 0x64) < *(float*)((char*)this + 0xa8) * 1.0f) {
                 *(short*)((char*)this + 0x262) = (WORD)CPlayer::Unk4108a0(0, 2) + 0xb;
                 return;
             }
         }
     }
     if (*(WORD*)((char*)this + 8) == 0xaa && *(WORD*)((char*)this + 0xa) == 1 && *(WORD*)((char*)this + 0xc) == 0) {
-        if ((double)(WORD)CPlayer::Unk4108a0(0, 0x64) < *(float*)((char*)this + 0xa8) * 5.0f) {
+        if ((WORD)CPlayer::Unk4108a0(0, 0x64) < *(float*)((char*)this + 0xa8) * 5.0f) {
             *(int*)((char*)this + 0x3114) = 3;
             return;
         }
-        if (*(double*)((char*)this + 0x28) - *(double*)(*(char**)*(char**)((char*)this + 0x78) + 0x28) < 0.0 && *(double*)((char*)this + 0x28) - *(double*)(*(char**)*(char**)((char*)this + 0x78) + 0x28) > -40.0 && v10 < 80.0 && (double)(WORD)CPlayer::Unk4108a0(0, 0x64) < *(float*)((char*)this + 0xa8) * 5.0f) {
+        if (*(double*)((char*)this + 0x28) - *(double*)(*(char**)*(char**)((char*)this + 0x78) + 0x28) < 0.0 && *(double*)((char*)this + 0x28) - *(double*)(*(char**)*(char**)((char*)this + 0x78) + 0x28) > -40.0 && v10 < 80.0 && (WORD)CPlayer::Unk4108a0(0, 0x64) < *(float*)((char*)this + 0xa8) * 5.0f) {
             *((char*)this + 0x18a) = 1;
             return;
         }
-        if (*(double*)((char*)this + 0x28) - *(double*)(*(char**)*(char**)((char*)this + 0x78) + 0x28) > 0.0 && *(double*)((char*)this + 0x28) - *(double*)(*(char**)*(char**)((char*)this + 0x78) + 0x28) < 50.0 && v10 < 100.0 && (double)(WORD)CPlayer::Unk4108a0(0, 0x64) < *(float*)((char*)this + 0xa8) * 5.0f) {
+        if (*(double*)((char*)this + 0x28) - *(double*)(*(char**)*(char**)((char*)this + 0x78) + 0x28) > 0.0 && *(double*)((char*)this + 0x28) - *(double*)(*(char**)*(char**)((char*)this + 0x78) + 0x28) < 50.0 && v10 < 100.0 && (WORD)CPlayer::Unk4108a0(0, 0x64) < *(float*)((char*)this + 0xa8) * 5.0f) {
             *((char*)this + 0x18b) = 1;
             return;
         }
-        if (*(double*)((char*)this + 0x28) - *(double*)(*(char**)*(char**)((char*)this + 0x78) + 0x28) < -20.0 && *(double*)((char*)this + 0x28) - *(double*)(*(char**)*(char**)((char*)this + 0x78) + 0x28) > -90.0 && v10 < 110.0 && (double)(WORD)CPlayer::Unk4108a0(0, 0x64) < *(float*)((char*)this + 0xa8) * 5.0f) {
+        if (*(double*)((char*)this + 0x28) - *(double*)(*(char**)*(char**)((char*)this + 0x78) + 0x28) < -20.0 && *(double*)((char*)this + 0x28) - *(double*)(*(char**)*(char**)((char*)this + 0x78) + 0x28) > -90.0 && v10 < 110.0 && (WORD)CPlayer::Unk4108a0(0, 0x64) < *(float*)((char*)this + 0xa8) * 5.0f) {
             *((char*)this + 0x18c) = 1;
             *((char*)this + 0x189) = 0;
             return;
         }
-        if (x8 < 100.0 && (double)(WORD)CPlayer::Unk4108a0(0, 0x64) < *(float*)((char*)this + 0xa8) * 1.0f) {
+        if (x8 < 100.0 && (WORD)CPlayer::Unk4108a0(0, 0x64) < *(float*)((char*)this + 0xa8) * 1.0f) {
             *(short*)((char*)this + 0x262) = (WORD)CPlayer::Unk4108a0(0, 2) + 0x6e;
             return;
         }
     }
-    if ((*(WORD*)(*(char**)*(char**)((char*)this + 0x78) + 8) == 0xa8 || *(WORD*)(*(char**)*(char**)((char*)this + 0x78) + 8) == 0xa9 || *(WORD*)(*(char**)*(char**)((char*)this + 0x78) + 8) == 0xaa) && *(double*)((char*)this + 0x28) == 0.0 && (double)(WORD)CPlayer::Unk4108a0(0, 0x64) < 15.0f * *(float*)((char*)this + 0xa8) && *(int*)((char*)this + 0x3114) != 2 && *(short*)(*(char**)*(char**)((char*)this + 0x78) + 0x14c) == 0) {
+    if ((*(WORD*)(*(char**)*(char**)((char*)this + 0x78) + 8) == 0xa8 || *(WORD*)(*(char**)*(char**)((char*)this + 0x78) + 8) == 0xa9 || *(WORD*)(*(char**)*(char**)((char*)this + 0x78) + 8) == 0xaa) && *(double*)((char*)this + 0x28) == 0.0 && (WORD)CPlayer::Unk4108a0(0, 0x64) < 15.0f * *(float*)((char*)this + 0xa8) && *(int*)((char*)this + 0x3114) != 2 && *(short*)(*(char**)*(char**)((char*)this + 0x78) + 0x14c) == 0) {
         *(int*)((char*)this + 0x3110) = (WORD)CPlayer::Unk4108a0(0, 0x64);
         if (*(int*)((char*)this + 0x3110) < 3 && *(double*)((char*)this + 0x118) > 500.0 && v10 < 80.0) {
             *(short*)((char*)this + 0x262) = 0x14;
@@ -5939,7 +5939,7 @@ void CMakoto::Vf5()
             return;
         }
     }
-    if ((*(WORD*)(*(char**)*(char**)((char*)this + 0x78) + 8) == 0xa8 || *(WORD*)(*(char**)*(char**)((char*)this + 0x78) + 8) == 0xa9 || *(WORD*)(*(char**)*(char**)((char*)this + 0x78) + 8) == 0xaa) && *(double*)((char*)this + 0x28) < 0.0 && (double)(WORD)CPlayer::Unk4108a0(0, 0x64) < 15.0f * *(float*)((char*)this + 0xa8) && *(int*)((char*)this + 0x3114) != 2 && *(short*)(*(char**)*(char**)((char*)this + 0x78) + 0x14c) == 0) {
+    if ((*(WORD*)(*(char**)*(char**)((char*)this + 0x78) + 8) == 0xa8 || *(WORD*)(*(char**)*(char**)((char*)this + 0x78) + 8) == 0xa9 || *(WORD*)(*(char**)*(char**)((char*)this + 0x78) + 8) == 0xaa) && *(double*)((char*)this + 0x28) < 0.0 && (WORD)CPlayer::Unk4108a0(0, 0x64) < 15.0f * *(float*)((char*)this + 0xa8) && *(int*)((char*)this + 0x3114) != 2 && *(short*)(*(char**)*(char**)((char*)this + 0x78) + 0x14c) == 0) {
         *(int*)((char*)this + 0x3110) = (WORD)CPlayer::Unk4108a0(0, 0x64);
         if (*(int*)((char*)this + 0x3110) < 0x11 && *(int*)((char*)this + 0x3110) > 0xc && *(short*)((char*)this + 0x148) >= 0x3e8 && v10 > 50.0) {
             *(short*)((char*)this + 0x262) = (WORD)CPlayer::Unk4108a0(0, 3) + 0x6e;
@@ -5950,7 +5950,7 @@ void CMakoto::Vf5()
             return;
         }
     }
-    if ((*(double*)((char*)this + 0x118) > 500.0 || *((char*)this + 0x120) > 0) && (double)(WORD)CPlayer::Unk4108a0(0, 0x64) < 8.0f * *(float*)((char*)this + 0xa8) && *(WORD*)(*(char**)*(char**)((char*)this + 0x78) + 8) > 0x95 && *(WORD*)(*(char**)*(char**)((char*)this + 0x78) + 8) < 0x9d && (*(WORD*)((char*)this + 8) == 0x100 || *(WORD*)((char*)this + 8) == 0xe8 && (WORD)CPlayer::Unk4108a0(0, 0xa) == 0 || *(WORD*)((char*)this + 8) == 0x101 || *(WORD*)((char*)this + 8) == 0xee)) {
+    if ((*(double*)((char*)this + 0x118) > 500.0 || *((char*)this + 0x120) > 0) && (WORD)CPlayer::Unk4108a0(0, 0x64) < 8.0f * *(float*)((char*)this + 0xa8) && *(WORD*)(*(char**)*(char**)((char*)this + 0x78) + 8) > 0x95 && *(WORD*)(*(char**)*(char**)((char*)this + 0x78) + 8) < 0x9d && (*(WORD*)((char*)this + 8) == 0x100 || *(WORD*)((char*)this + 8) == 0xe8 && (WORD)CPlayer::Unk4108a0(0, 0xa) == 0 || *(WORD*)((char*)this + 8) == 0x101 || *(WORD*)((char*)this + 8) == 0xee)) {
         *(short*)((char*)this + 0x262) = 0x34;
         return;
     }
@@ -6079,7 +6079,7 @@ void CMakoto::Vf5()
         }
         return;
     }
-    if (*(int*)((char*)this + 0x168) > 1 && *(short*)((char*)this + 0x14a) == 0 && (double)(WORD)CPlayer::Unk4108a0(0, 0x64) < *(float*)((char*)this + 0xa8) * 25.0f && *(int*)((char*)this + 0x3114) != 1 && *(int*)((char*)this + 0x3114) != 2) {
+    if (*(int*)((char*)this + 0x168) > 1 && *(short*)((char*)this + 0x14a) == 0 && (WORD)CPlayer::Unk4108a0(0, 0x64) < *(float*)((char*)this + 0xa8) * 25.0f && *(int*)((char*)this + 0x3114) != 1 && *(int*)((char*)this + 0x3114) != 2) {
         *(int*)((char*)this + 0x3110) = (WORD)CPlayer::Unk4108a0(0, 0x3e8);
         if (*(WORD*)((char*)this + 8) == 0xc8) {
             if (*(double*)(*(char**)*(char**)((char*)this + 0x78) + 0x28) < 0.0 && *(int*)((char*)this + 0x3110) < 0x12c) {
@@ -6554,7 +6554,7 @@ void CMakoto::Vf5()
             return;
         }
     }
-    if ((double)(WORD)CPlayer::Unk4108a0(0, 0x64) < 25.0f * *(float*)((char*)this + 0xa8)) {
+    if ((WORD)CPlayer::Unk4108a0(0, 0x64) < 25.0f * *(float*)((char*)this + 0xa8)) {
         *(int*)((char*)this + 0x3110) = (WORD)CPlayer::Unk4108a0(0, 0x3e8);
         if (*(double*)((char*)this + 0x28) == 0.0) {
             if (*(double*)(*(char**)*(char**)((char*)this + 0x78) + 0x28) == 0.0 && *(WORD*)(*(char**)*(char**)((char*)this + 0x78) + 8) != 0x63) {
@@ -6585,13 +6585,13 @@ void CMakoto::Vf5()
                         return;
                     }
                 }
-                if ((double)(0x46 - (*(WORD*)(*(char**)*(char**)((char*)this + 0x78) + 8) > 0x31 && *(WORD*)(*(char**)*(char**)((char*)this + 0x78) + 8) < 0x9c) * 0x46) < v10 && v10 < 95.0) {
+                if (0x46 - (*(WORD*)(*(char**)*(char**)((char*)this + 0x78) + 8) > 0x31 && *(WORD*)(*(char**)*(char**)((char*)this + 0x78) + 8) < 0x9c) * 0x46 < v10 && v10 < 95.0) {
                     if (*(int*)((char*)this + 0x3110) < (*(WORD*)(*(char**)*(char**)((char*)this + 0x78) + 8) > 0x31 && *(WORD*)(*(char**)*(char**)((char*)this + 0x78) + 8) < 0x9c) * 0x14 + 0x50 && *(int*)((char*)this + 0x3110) > 0x46) {
                         *(int*)((char*)this + 0x3114) = 0xc;
                         return;
                     }
                 }
-                if ((double)(0x50 - (*(WORD*)(*(char**)*(char**)((char*)this + 0x78) + 8) > 0x31 && *(WORD*)(*(char**)*(char**)((char*)this + 0x78) + 8) < 0x9c) * 0x46) < v10 && v10 < 110.0) {
+                if (0x50 - (*(WORD*)(*(char**)*(char**)((char*)this + 0x78) + 8) > 0x31 && *(WORD*)(*(char**)*(char**)((char*)this + 0x78) + 8) < 0x9c) * 0x46 < v10 && v10 < 110.0) {
                     if (*(int*)((char*)this + 0x3110) < (*(WORD*)(*(char**)*(char**)((char*)this + 0x78) + 8) > 0x31 && *(WORD*)(*(char**)*(char**)((char*)this + 0x78) + 8) < 0x9c) * 0xf + 0x80 && *(int*)((char*)this + 0x3110) > 0x78) {
                         *(int*)((char*)this + 0x3114) = 8;
                         return;
@@ -6606,13 +6606,13 @@ void CMakoto::Vf5()
                     *((char*)this + 0x189) = 0;
                     return;
                 }
-                if ((double)(0x50 - (*(WORD*)(*(char**)*(char**)((char*)this + 0x78) + 8) > 0x31 && *(WORD*)(*(char**)*(char**)((char*)this + 0x78) + 8) < 0x9c) * 0x50) < v10 && v10 < 120.0) {
+                if (0x50 - (*(WORD*)(*(char**)*(char**)((char*)this + 0x78) + 8) > 0x31 && *(WORD*)(*(char**)*(char**)((char*)this + 0x78) + 8) < 0x9c) * 0x50 < v10 && v10 < 120.0) {
                     if (*(int*)((char*)this + 0x3110) < (*(WORD*)(*(char**)*(char**)((char*)this + 0x78) + 8) > 0x31 && *(WORD*)(*(char**)*(char**)((char*)this + 0x78) + 8) < 0x9c) * 0x19 + 0xb9 && *(int*)((char*)this + 0x3110) > 0xaa) {
                         *(int*)((char*)this + 0x3114) = 0xe;
                         return;
                     }
                 }
-                if ((double)(0x5a - (*(WORD*)(*(char**)*(char**)((char*)this + 0x78) + 8) > 0x31 && *(WORD*)(*(char**)*(char**)((char*)this + 0x78) + 8) < 0x9c) * 0x5a) < v10 && v10 < 120.0) {
+                if (0x5a - (*(WORD*)(*(char**)*(char**)((char*)this + 0x78) + 8) > 0x31 && *(WORD*)(*(char**)*(char**)((char*)this + 0x78) + 8) < 0x9c) * 0x5a < v10 && v10 < 120.0) {
                     if (*(int*)((char*)this + 0x3110) < (*(WORD*)(*(char**)*(char**)((char*)this + 0x78) + 8) > 0x31 && *(WORD*)(*(char**)*(char**)((char*)this + 0x78) + 8) < 0x9c) * 0x19 + 0xe1 && *(int*)((char*)this + 0x3110) > 0xd2) {
                         *(int*)((char*)this + 0x3114) = 0xa;
                         return;
@@ -6727,11 +6727,11 @@ void CMakoto::Vf5()
             }
         }
     }
-    if (*(WORD*)((char*)this + 8) < 0x32 && (*(WORD*)(*(char**)*(char**)((char*)this + 0x78) + 8) > 0x95 && *(WORD*)(*(char**)*(char**)((char*)this + 0x78) + 8) < 0x9c || *(WORD*)(*(char**)*(char**)((char*)this + 0x78) + 8) > 0x31 && *(WORD*)(*(char**)*(char**)((char*)this + 0x78) + 8) < 0x3b) && *(double*)((char*)this + 0x28) == 0.0 && (double)(WORD)CPlayer::Unk4108a0(0, 0x64) < 5.0f * *(float*)((char*)this + 0xa8) && v10 > 120.0) {
+    if (*(WORD*)((char*)this + 8) < 0x32 && (*(WORD*)(*(char**)*(char**)((char*)this + 0x78) + 8) > 0x95 && *(WORD*)(*(char**)*(char**)((char*)this + 0x78) + 8) < 0x9c || *(WORD*)(*(char**)*(char**)((char*)this + 0x78) + 8) > 0x31 && *(WORD*)(*(char**)*(char**)((char*)this + 0x78) + 8) < 0x3b) && *(double*)((char*)this + 0x28) == 0.0 && (WORD)CPlayer::Unk4108a0(0, 0x64) < 5.0f * *(float*)((char*)this + 0xa8) && v10 > 120.0) {
         *(short*)((char*)this + 0x262) = *((char*)this + 0x50) == 1;
         return;
     }
-    if (*(WORD*)((char*)this + 8) < 0x32 && *(WORD*)(*(char**)*(char**)((char*)this + 0x78) + 8) < 0x32 && v10 > 800.0 && v10 < 80.0 && (double)(WORD)CPlayer::Unk4108a0(0, 0x64) < 3.0f * *(float*)((char*)this + 0xa8) && *(double*)((char*)this + 0x20) > 150.0 && *(double*)((char*)this + 0x20) < 490.0) {
+    if (*(WORD*)((char*)this + 8) < 0x32 && *(WORD*)(*(char**)*(char**)((char*)this + 0x78) + 8) < 0x32 && v10 > 800.0 && v10 < 80.0 && (WORD)CPlayer::Unk4108a0(0, 0x64) < 3.0f * *(float*)((char*)this + 0xa8) && *(double*)((char*)this + 0x20) > 150.0 && *(double*)((char*)this + 0x20) < 490.0) {
         *(short*)((char*)this + 0x262) = -((*((char*)this + 0x50) == 1) - 1);
         return;
     }
@@ -6740,7 +6740,7 @@ void CMakoto::Vf5()
         return;
     }
     if ((WORD)CPlayer::Unk4108a0(0, 0x64) < 2) {
-        if ((double)(WORD)CPlayer::Unk4108a0(0, 0x64) < 8.0f * *(float*)((char*)this + 0xa8)) {
+        if ((WORD)CPlayer::Unk4108a0(0, 0x64) < 8.0f * *(float*)((char*)this + 0xa8)) {
             *(int*)((char*)this + 0x3114) = 3;
         } else {
             *(int*)((char*)this + 0x3114) = 0;
@@ -7268,7 +7268,7 @@ void CMakoto::Vf7()
                     if (*(WORD*)((char*)this + v4 * 0x98 + 0x4d2) == 0 || *(WORD*)((char*)this + v4 * 0x98 + 0x4d2) == 1) {
                         *(double*)((char*)this + v4 * 0x98 + 0x4f8) = 1.5;
                         *(double*)((char*)this + v4 * 0x98 + 0x500) = -1.5;
-                        if ((double)*(int*)(*(char**)((char*)this + 0x7c) + 0x1424c) > *(double*)((char*)this + v4 * 0x98 + 0x4f0)) {
+                        if (*(double*)((char*)this + v4 * 0x98 + 0x4f0) < *(int*)(*(char**)((char*)this + 0x7c) + 0x1424c)) {
                             *(short*)((char*)this + v4 * 0x98 + 0x4d2) = *(WORD*)((char*)this + v4 * 0x98 + 0x4d2) + 2;
                             (*(int*)((char*)this + v4 * 4 + 0x314c))++;
                             if (*(int*)((char*)this + v4 * 4 + 0x314c) > 3) {
@@ -7278,7 +7278,7 @@ void CMakoto::Vf7()
                             *((char*)this + 0x2c8) = 1;
                             break;
                         }
-                        if ((double)*(int*)(*(char**)((char*)this + 0x7c) + 0x14250) < *(double*)((char*)this + v4 * 0x98 + 0x4e8)) {
+                        if (*(double*)((char*)this + v4 * 0x98 + 0x4e8) > *(int*)(*(char**)((char*)this + 0x7c) + 0x14250)) {
                             *(short*)((char*)this + v4 * 0x98 + 0x4d2) = *(WORD*)((char*)this + v4 * 0x98 + 0x4d2) + 6;
                             (*(int*)((char*)this + v4 * 4 + 0x314c))++;
                             if (*(int*)((char*)this + v4 * 4 + 0x314c) > 3) {
@@ -7292,7 +7292,7 @@ void CMakoto::Vf7()
                     if (*(WORD*)((char*)this + v4 * 0x98 + 0x4d2) == 2 || *(WORD*)((char*)this + v4 * 0x98 + 0x4d2) == 3) {
                         *(double*)((char*)this + v4 * 0x98 + 0x4f8) = 1.5;
                         *(double*)((char*)this + v4 * 0x98 + 0x500) = 1.5;
-                        if ((double)*(int*)(*(char**)((char*)this + 0x7c) + 0x14254) < *(double*)((char*)this + v4 * 0x98 + 0x4f0)) {
+                        if (*(double*)((char*)this + v4 * 0x98 + 0x4f0) > *(int*)(*(char**)((char*)this + 0x7c) + 0x14254)) {
                             *(short*)((char*)this + v4 * 0x98 + 0x4d2) = *(WORD*)((char*)this + v4 * 0x98 + 0x4d2) - 2;
                             (*(int*)((char*)this + v4 * 4 + 0x314c))++;
                             *((char*)this + 0x2c8) = 1;
@@ -7302,7 +7302,7 @@ void CMakoto::Vf7()
                             }
                             break;
                         }
-                        if ((double)*(int*)(*(char**)((char*)this + 0x7c) + 0x14250) < *(double*)((char*)this + v4 * 0x98 + 0x4e8)) {
+                        if (*(double*)((char*)this + v4 * 0x98 + 0x4e8) > *(int*)(*(char**)((char*)this + 0x7c) + 0x14250)) {
                             *(short*)((char*)this + v4 * 0x98 + 0x4d2) = *(WORD*)((char*)this + v4 * 0x98 + 0x4d2) + 2;
                             (*(int*)((char*)this + v4 * 4 + 0x314c))++;
                             *((char*)this + 0x2c8) = 1;
@@ -7316,7 +7316,7 @@ void CMakoto::Vf7()
                     if (*(WORD*)((char*)this + v4 * 0x98 + 0x4d2) == 4 || *(WORD*)((char*)this + v4 * 0x98 + 0x4d2) == 5) {
                         *(double*)((char*)this + v4 * 0x98 + 0x4f8) = -1.5;
                         *(double*)((char*)this + v4 * 0x98 + 0x500) = 1.5;
-                        if ((double)*(int*)(*(char**)((char*)this + 0x7c) + 0x14254) < *(double*)((char*)this + v4 * 0x98 + 0x4f0)) {
+                        if (*(double*)((char*)this + v4 * 0x98 + 0x4f0) > *(int*)(*(char**)((char*)this + 0x7c) + 0x14254)) {
                             *(short*)((char*)this + v4 * 0x98 + 0x4d2) = *(WORD*)((char*)this + v4 * 0x98 + 0x4d2) + 2;
                             (*(int*)((char*)this + v4 * 4 + 0x314c))++;
                             *((char*)this + 0x2c8) = 1;
@@ -7326,7 +7326,7 @@ void CMakoto::Vf7()
                             }
                             break;
                         }
-                        if ((double)*(int*)(*(char**)((char*)this + 0x7c) + 0x14248) > *(double*)((char*)this + v4 * 0x98 + 0x4e8)) {
+                        if (*(double*)((char*)this + v4 * 0x98 + 0x4e8) < *(int*)(*(char**)((char*)this + 0x7c) + 0x14248)) {
                             *(short*)((char*)this + v4 * 0x98 + 0x4d2) = *(WORD*)((char*)this + v4 * 0x98 + 0x4d2) - 2;
                             (*(int*)((char*)this + v4 * 4 + 0x314c))++;
                             *((char*)this + 0x2c8) = 1;
@@ -7340,7 +7340,7 @@ void CMakoto::Vf7()
                     if (*(WORD*)((char*)this + v4 * 0x98 + 0x4d2) == 6 || *(WORD*)((char*)this + v4 * 0x98 + 0x4d2) == 7) {
                         *(double*)((char*)this + v4 * 0x98 + 0x4f8) = -1.5;
                         *(double*)((char*)this + v4 * 0x98 + 0x500) = -1.5;
-                        if ((double)*(int*)(*(char**)((char*)this + 0x7c) + 0x1424c) > *(double*)((char*)this + v4 * 0x98 + 0x4f0)) {
+                        if (*(double*)((char*)this + v4 * 0x98 + 0x4f0) < *(int*)(*(char**)((char*)this + 0x7c) + 0x1424c)) {
                             *(short*)((char*)this + v4 * 0x98 + 0x4d2) = *(WORD*)((char*)this + v4 * 0x98 + 0x4d2) - 2;
                             (*(int*)((char*)this + v4 * 4 + 0x314c))++;
                             *((char*)this + 0x2c8) = 1;
@@ -7350,7 +7350,7 @@ void CMakoto::Vf7()
                             }
                             break;
                         }
-                        if ((double)*(int*)(*(char**)((char*)this + 0x7c) + 0x14248) > *(double*)((char*)this + v4 * 0x98 + 0x4e8)) {
+                        if (*(double*)((char*)this + v4 * 0x98 + 0x4e8) < *(int*)(*(char**)((char*)this + 0x7c) + 0x14248)) {
                             *(short*)((char*)this + v4 * 0x98 + 0x4d2) = *(WORD*)((char*)this + v4 * 0x98 + 0x4d2) - 6;
                             (*(int*)((char*)this + v4 * 4 + 0x314c))++;
                             *((char*)this + 0x2c8) = 1;
@@ -7366,7 +7366,7 @@ void CMakoto::Vf7()
                     if (*(WORD*)((char*)this + v4 * 0x98 + 0x4d2) == 0 || *(WORD*)((char*)this + v4 * 0x98 + 0x4d2) == 1) {
                         *(double*)((char*)this + v4 * 0x98 + 0x4f8) = 1.5;
                         *(double*)((char*)this + v4 * 0x98 + 0x500) = -1.5;
-                        if ((double)*(int*)(*(char**)((char*)this + 0x7c) + 0x1424c) > *(double*)((char*)this + v4 * 0x98 + 0x4f0)) {
+                        if (*(double*)((char*)this + v4 * 0x98 + 0x4f0) < *(int*)(*(char**)((char*)this + 0x7c) + 0x1424c)) {
                             *(short*)((char*)this + v4 * 0x98 + 0x4d2) = *(WORD*)((char*)this + v4 * 0x98 + 0x4d2) + 2;
                             (*(int*)((char*)this + v4 * 4 + 0x314c))++;
                             *((char*)this + 0x2c8) = 1;
@@ -7376,7 +7376,7 @@ void CMakoto::Vf7()
                             }
                             break;
                         }
-                        if ((double)*(int*)(*(char**)((char*)this + 0x7c) + 0x14248) > *(double*)((char*)this + v4 * 0x98 + 0x4e8)) {
+                        if (*(double*)((char*)this + v4 * 0x98 + 0x4e8) < *(int*)(*(char**)((char*)this + 0x7c) + 0x14248)) {
                             *(short*)((char*)this + v4 * 0x98 + 0x4d2) = *(WORD*)((char*)this + v4 * 0x98 + 0x4d2) + 6;
                             (*(int*)((char*)this + v4 * 4 + 0x314c))++;
                             *((char*)this + 0x2c8) = 1;
@@ -7390,7 +7390,7 @@ void CMakoto::Vf7()
                     if (*(WORD*)((char*)this + v4 * 0x98 + 0x4d2) == 2 || *(WORD*)((char*)this + v4 * 0x98 + 0x4d2) == 3) {
                         *(double*)((char*)this + v4 * 0x98 + 0x4f8) = 1.5;
                         *(double*)((char*)this + v4 * 0x98 + 0x500) = 1.5;
-                        if ((double)*(int*)(*(char**)((char*)this + 0x7c) + 0x14254) < *(double*)((char*)this + v4 * 0x98 + 0x4f0)) {
+                        if (*(double*)((char*)this + v4 * 0x98 + 0x4f0) > *(int*)(*(char**)((char*)this + 0x7c) + 0x14254)) {
                             *(short*)((char*)this + v4 * 0x98 + 0x4d2) = *(WORD*)((char*)this + v4 * 0x98 + 0x4d2) - 2;
                             (*(int*)((char*)this + v4 * 4 + 0x314c))++;
                             *((char*)this + 0x2c8) = 1;
@@ -7400,7 +7400,7 @@ void CMakoto::Vf7()
                             }
                             break;
                         }
-                        if ((double)*(int*)(*(char**)((char*)this + 0x7c) + 0x14248) > *(double*)((char*)this + v4 * 0x98 + 0x4e8)) {
+                        if (*(double*)((char*)this + v4 * 0x98 + 0x4e8) < *(int*)(*(char**)((char*)this + 0x7c) + 0x14248)) {
                             *(short*)((char*)this + v4 * 0x98 + 0x4d2) = *(WORD*)((char*)this + v4 * 0x98 + 0x4d2) + 2;
                             (*(int*)((char*)this + v4 * 4 + 0x314c))++;
                             *((char*)this + 0x2c8) = 1;
@@ -7414,7 +7414,7 @@ void CMakoto::Vf7()
                     if (*(WORD*)((char*)this + v4 * 0x98 + 0x4d2) == 4 || *(WORD*)((char*)this + v4 * 0x98 + 0x4d2) == 5) {
                         *(double*)((char*)this + v4 * 0x98 + 0x4f8) = -1.5;
                         *(double*)((char*)this + v4 * 0x98 + 0x500) = 1.5;
-                        if ((double)*(int*)(*(char**)((char*)this + 0x7c) + 0x14254) < *(double*)((char*)this + v4 * 0x98 + 0x4f0)) {
+                        if (*(double*)((char*)this + v4 * 0x98 + 0x4f0) > *(int*)(*(char**)((char*)this + 0x7c) + 0x14254)) {
                             *(short*)((char*)this + v4 * 0x98 + 0x4d2) = *(WORD*)((char*)this + v4 * 0x98 + 0x4d2) + 2;
                             (*(int*)((char*)this + v4 * 4 + 0x314c))++;
                             *((char*)this + 0x2c8) = 1;
@@ -7424,7 +7424,7 @@ void CMakoto::Vf7()
                             }
                             break;
                         }
-                        if ((double)*(int*)(*(char**)((char*)this + 0x7c) + 0x14250) < *(double*)((char*)this + v4 * 0x98 + 0x4e8)) {
+                        if (*(double*)((char*)this + v4 * 0x98 + 0x4e8) > *(int*)(*(char**)((char*)this + 0x7c) + 0x14250)) {
                             *(short*)((char*)this + v4 * 0x98 + 0x4d2) = *(WORD*)((char*)this + v4 * 0x98 + 0x4d2) - 2;
                             (*(int*)((char*)this + v4 * 4 + 0x314c))++;
                             *((char*)this + 0x2c8) = 1;
@@ -7438,7 +7438,7 @@ void CMakoto::Vf7()
                     if (*(WORD*)((char*)this + v4 * 0x98 + 0x4d2) == 6 || *(WORD*)((char*)this + v4 * 0x98 + 0x4d2) == 7) {
                         *(double*)((char*)this + v4 * 0x98 + 0x4f8) = -1.5;
                         *(double*)((char*)this + v4 * 0x98 + 0x500) = -1.5;
-                        if ((double)*(int*)(*(char**)((char*)this + 0x7c) + 0x1424c) > *(double*)((char*)this + v4 * 0x98 + 0x4f0)) {
+                        if (*(double*)((char*)this + v4 * 0x98 + 0x4f0) < *(int*)(*(char**)((char*)this + 0x7c) + 0x1424c)) {
                             *(short*)((char*)this + v4 * 0x98 + 0x4d2) = *(WORD*)((char*)this + v4 * 0x98 + 0x4d2) - 2;
                             (*(int*)((char*)this + v4 * 4 + 0x314c))++;
                             *((char*)this + 0x2c8) = 1;
@@ -7448,7 +7448,7 @@ void CMakoto::Vf7()
                             }
                             break;
                         }
-                        if ((double)*(int*)(*(char**)((char*)this + 0x7c) + 0x14250) < *(double*)((char*)this + v4 * 0x98 + 0x4e8)) {
+                        if (*(double*)((char*)this + v4 * 0x98 + 0x4e8) > *(int*)(*(char**)((char*)this + 0x7c) + 0x14250)) {
                             *(short*)((char*)this + v4 * 0x98 + 0x4d2) = *(WORD*)((char*)this + v4 * 0x98 + 0x4d2) - 6;
                             (*(int*)((char*)this + v4 * 4 + 0x314c))++;
                             *((char*)this + 0x2c8) = 1;
@@ -7488,7 +7488,7 @@ void CMakoto::Vf7()
                     if (*(WORD*)((char*)this + v4 * 0x98 + 0x4d2) == 0 || *(WORD*)((char*)this + v4 * 0x98 + 0x4d2) == 1) {
                         *(double*)((char*)this + v4 * 0x98 + 0x4f8) = 1.5;
                         *(double*)((char*)this + v4 * 0x98 + 0x500) = -1.5;
-                        if ((double)*(int*)(*(char**)((char*)this + 0x7c) + 0x1424c) > *(double*)((char*)this + v4 * 0x98 + 0x4f0)) {
+                        if (*(double*)((char*)this + v4 * 0x98 + 0x4f0) < *(int*)(*(char**)((char*)this + 0x7c) + 0x1424c)) {
                             *(short*)((char*)this + v4 * 0x98 + 0x4d2) = *(WORD*)((char*)this + v4 * 0x98 + 0x4d2) + 2;
                             (*(int*)((char*)this + v4 * 4 + 0x314c))++;
                             *((char*)this + 0x2c8) = 1;
@@ -7498,7 +7498,7 @@ void CMakoto::Vf7()
                             }
                             break;
                         }
-                        if ((double)*(int*)(*(char**)((char*)this + 0x7c) + 0x14250) < *(double*)((char*)this + v4 * 0x98 + 0x4e8)) {
+                        if (*(double*)((char*)this + v4 * 0x98 + 0x4e8) > *(int*)(*(char**)((char*)this + 0x7c) + 0x14250)) {
                             *(short*)((char*)this + v4 * 0x98 + 0x4d2) = *(WORD*)((char*)this + v4 * 0x98 + 0x4d2) + 6;
                             (*(int*)((char*)this + v4 * 4 + 0x314c))++;
                             *((char*)this + 0x2c8) = 1;
@@ -7512,7 +7512,7 @@ void CMakoto::Vf7()
                     if (*(WORD*)((char*)this + v4 * 0x98 + 0x4d2) == 2 || *(WORD*)((char*)this + v4 * 0x98 + 0x4d2) == 3) {
                         *(double*)((char*)this + v4 * 0x98 + 0x4f8) = 1.5;
                         *(double*)((char*)this + v4 * 0x98 + 0x500) = 1.5;
-                        if ((double)*(int*)(*(char**)((char*)this + 0x7c) + 0x14254) < *(double*)((char*)this + v4 * 0x98 + 0x4f0)) {
+                        if (*(double*)((char*)this + v4 * 0x98 + 0x4f0) > *(int*)(*(char**)((char*)this + 0x7c) + 0x14254)) {
                             *(short*)((char*)this + v4 * 0x98 + 0x4d2) = *(WORD*)((char*)this + v4 * 0x98 + 0x4d2) - 2;
                             (*(int*)((char*)this + v4 * 4 + 0x314c))++;
                             *((char*)this + 0x2c8) = 1;
@@ -7522,7 +7522,7 @@ void CMakoto::Vf7()
                             }
                             break;
                         }
-                        if ((double)*(int*)(*(char**)((char*)this + 0x7c) + 0x14250) < *(double*)((char*)this + v4 * 0x98 + 0x4e8)) {
+                        if (*(double*)((char*)this + v4 * 0x98 + 0x4e8) > *(int*)(*(char**)((char*)this + 0x7c) + 0x14250)) {
                             *(short*)((char*)this + v4 * 0x98 + 0x4d2) = *(WORD*)((char*)this + v4 * 0x98 + 0x4d2) + 2;
                             (*(int*)((char*)this + v4 * 4 + 0x314c))++;
                             *((char*)this + 0x2c8) = 1;
@@ -7536,7 +7536,7 @@ void CMakoto::Vf7()
                     if (*(WORD*)((char*)this + v4 * 0x98 + 0x4d2) == 4 || *(WORD*)((char*)this + v4 * 0x98 + 0x4d2) == 5) {
                         *(double*)((char*)this + v4 * 0x98 + 0x4f8) = -1.5;
                         *(double*)((char*)this + v4 * 0x98 + 0x500) = 1.5;
-                        if ((double)*(int*)(*(char**)((char*)this + 0x7c) + 0x14254) < *(double*)((char*)this + v4 * 0x98 + 0x4f0)) {
+                        if (*(double*)((char*)this + v4 * 0x98 + 0x4f0) > *(int*)(*(char**)((char*)this + 0x7c) + 0x14254)) {
                             *(short*)((char*)this + v4 * 0x98 + 0x4d2) = *(WORD*)((char*)this + v4 * 0x98 + 0x4d2) + 2;
                             (*(int*)((char*)this + v4 * 4 + 0x314c))++;
                             *((char*)this + 0x2c8) = 1;
@@ -7546,7 +7546,7 @@ void CMakoto::Vf7()
                             }
                             break;
                         }
-                        if ((double)*(int*)(*(char**)((char*)this + 0x7c) + 0x14248) > *(double*)((char*)this + v4 * 0x98 + 0x4e8)) {
+                        if (*(double*)((char*)this + v4 * 0x98 + 0x4e8) < *(int*)(*(char**)((char*)this + 0x7c) + 0x14248)) {
                             *(short*)((char*)this + v4 * 0x98 + 0x4d2) = *(WORD*)((char*)this + v4 * 0x98 + 0x4d2) - 2;
                             (*(int*)((char*)this + v4 * 4 + 0x314c))++;
                             *((char*)this + 0x2c8) = 1;
@@ -7560,7 +7560,7 @@ void CMakoto::Vf7()
                     if (*(WORD*)((char*)this + v4 * 0x98 + 0x4d2) == 6 || *(WORD*)((char*)this + v4 * 0x98 + 0x4d2) == 7) {
                         *(double*)((char*)this + v4 * 0x98 + 0x4f8) = -1.5;
                         *(double*)((char*)this + v4 * 0x98 + 0x500) = -1.5;
-                        if ((double)*(int*)(*(char**)((char*)this + 0x7c) + 0x1424c) > *(double*)((char*)this + v4 * 0x98 + 0x4f0)) {
+                        if (*(double*)((char*)this + v4 * 0x98 + 0x4f0) < *(int*)(*(char**)((char*)this + 0x7c) + 0x1424c)) {
                             *(short*)((char*)this + v4 * 0x98 + 0x4d2) = *(WORD*)((char*)this + v4 * 0x98 + 0x4d2) - 2;
                             (*(int*)((char*)this + v4 * 4 + 0x314c))++;
                             *((char*)this + 0x2c8) = 1;
@@ -7570,7 +7570,7 @@ void CMakoto::Vf7()
                             }
                             break;
                         }
-                        if ((double)*(int*)(*(char**)((char*)this + 0x7c) + 0x14248) > *(double*)((char*)this + v4 * 0x98 + 0x4e8)) {
+                        if (*(double*)((char*)this + v4 * 0x98 + 0x4e8) < *(int*)(*(char**)((char*)this + 0x7c) + 0x14248)) {
                             *(short*)((char*)this + v4 * 0x98 + 0x4d2) = *(WORD*)((char*)this + v4 * 0x98 + 0x4d2) - 6;
                             (*(int*)((char*)this + v4 * 4 + 0x314c))++;
                             *((char*)this + 0x2c8) = 1;
@@ -7586,7 +7586,7 @@ void CMakoto::Vf7()
                     if (*(WORD*)((char*)this + v4 * 0x98 + 0x4d2) == 0 || *(WORD*)((char*)this + v4 * 0x98 + 0x4d2) == 1) {
                         *(double*)((char*)this + v4 * 0x98 + 0x4f8) = 1.5;
                         *(double*)((char*)this + v4 * 0x98 + 0x500) = -1.5;
-                        if ((double)*(int*)(*(char**)((char*)this + 0x7c) + 0x1424c) > *(double*)((char*)this + v4 * 0x98 + 0x4f0)) {
+                        if (*(double*)((char*)this + v4 * 0x98 + 0x4f0) < *(int*)(*(char**)((char*)this + 0x7c) + 0x1424c)) {
                             *(short*)((char*)this + v4 * 0x98 + 0x4d2) = *(WORD*)((char*)this + v4 * 0x98 + 0x4d2) + 2;
                             (*(int*)((char*)this + v4 * 4 + 0x314c))++;
                             *((char*)this + 0x2c8) = 1;
@@ -7596,7 +7596,7 @@ void CMakoto::Vf7()
                             }
                             break;
                         }
-                        if ((double)*(int*)(*(char**)((char*)this + 0x7c) + 0x14248) > *(double*)((char*)this + v4 * 0x98 + 0x4e8)) {
+                        if (*(double*)((char*)this + v4 * 0x98 + 0x4e8) < *(int*)(*(char**)((char*)this + 0x7c) + 0x14248)) {
                             *(short*)((char*)this + v4 * 0x98 + 0x4d2) = *(WORD*)((char*)this + v4 * 0x98 + 0x4d2) + 6;
                             (*(int*)((char*)this + v4 * 4 + 0x314c))++;
                             *((char*)this + 0x2c8) = 1;
@@ -7610,7 +7610,7 @@ void CMakoto::Vf7()
                     if (*(WORD*)((char*)this + v4 * 0x98 + 0x4d2) == 2 || *(WORD*)((char*)this + v4 * 0x98 + 0x4d2) == 3) {
                         *(double*)((char*)this + v4 * 0x98 + 0x4f8) = 1.5;
                         *(double*)((char*)this + v4 * 0x98 + 0x500) = 1.5;
-                        if ((double)*(int*)(*(char**)((char*)this + 0x7c) + 0x14254) < *(double*)((char*)this + v4 * 0x98 + 0x4f0)) {
+                        if (*(double*)((char*)this + v4 * 0x98 + 0x4f0) > *(int*)(*(char**)((char*)this + 0x7c) + 0x14254)) {
                             *(short*)((char*)this + v4 * 0x98 + 0x4d2) = *(WORD*)((char*)this + v4 * 0x98 + 0x4d2) - 2;
                             (*(int*)((char*)this + v4 * 4 + 0x314c))++;
                             *((char*)this + 0x2c8) = 1;
@@ -7620,7 +7620,7 @@ void CMakoto::Vf7()
                             }
                             break;
                         }
-                        if ((double)*(int*)(*(char**)((char*)this + 0x7c) + 0x14248) > *(double*)((char*)this + v4 * 0x98 + 0x4e8)) {
+                        if (*(double*)((char*)this + v4 * 0x98 + 0x4e8) < *(int*)(*(char**)((char*)this + 0x7c) + 0x14248)) {
                             *(short*)((char*)this + v4 * 0x98 + 0x4d2) = *(WORD*)((char*)this + v4 * 0x98 + 0x4d2) + 2;
                             (*(int*)((char*)this + v4 * 4 + 0x314c))++;
                             *((char*)this + 0x2c8) = 1;
@@ -7634,7 +7634,7 @@ void CMakoto::Vf7()
                     if (*(WORD*)((char*)this + v4 * 0x98 + 0x4d2) == 4 || *(WORD*)((char*)this + v4 * 0x98 + 0x4d2) == 5) {
                         *(double*)((char*)this + v4 * 0x98 + 0x4f8) = -1.5;
                         *(double*)((char*)this + v4 * 0x98 + 0x500) = 1.5;
-                        if ((double)*(int*)(*(char**)((char*)this + 0x7c) + 0x14254) < *(double*)((char*)this + v4 * 0x98 + 0x4f0)) {
+                        if (*(double*)((char*)this + v4 * 0x98 + 0x4f0) > *(int*)(*(char**)((char*)this + 0x7c) + 0x14254)) {
                             *(short*)((char*)this + v4 * 0x98 + 0x4d2) = *(WORD*)((char*)this + v4 * 0x98 + 0x4d2) + 2;
                             (*(int*)((char*)this + v4 * 4 + 0x314c))++;
                             *((char*)this + 0x2c8) = 1;
@@ -7644,7 +7644,7 @@ void CMakoto::Vf7()
                             }
                             break;
                         }
-                        if ((double)*(int*)(*(char**)((char*)this + 0x7c) + 0x14250) < *(double*)((char*)this + v4 * 0x98 + 0x4e8)) {
+                        if (*(double*)((char*)this + v4 * 0x98 + 0x4e8) > *(int*)(*(char**)((char*)this + 0x7c) + 0x14250)) {
                             *(short*)((char*)this + v4 * 0x98 + 0x4d2) = *(WORD*)((char*)this + v4 * 0x98 + 0x4d2) - 2;
                             (*(int*)((char*)this + v4 * 4 + 0x314c))++;
                             *((char*)this + 0x2c8) = 1;
@@ -7658,7 +7658,7 @@ void CMakoto::Vf7()
                     if (*(WORD*)((char*)this + v4 * 0x98 + 0x4d2) == 6 || *(WORD*)((char*)this + v4 * 0x98 + 0x4d2) == 7) {
                         *(double*)((char*)this + v4 * 0x98 + 0x4f8) = -1.5;
                         *(double*)((char*)this + v4 * 0x98 + 0x500) = -1.5;
-                        if ((double)*(int*)(*(char**)((char*)this + 0x7c) + 0x1424c) > *(double*)((char*)this + v4 * 0x98 + 0x4f0)) {
+                        if (*(double*)((char*)this + v4 * 0x98 + 0x4f0) < *(int*)(*(char**)((char*)this + 0x7c) + 0x1424c)) {
                             *(short*)((char*)this + v4 * 0x98 + 0x4d2) = *(WORD*)((char*)this + v4 * 0x98 + 0x4d2) - 2;
                             (*(int*)((char*)this + v4 * 4 + 0x314c))++;
                             *((char*)this + 0x2c8) = 1;
@@ -7668,7 +7668,7 @@ void CMakoto::Vf7()
                             }
                             break;
                         }
-                        if ((double)*(int*)(*(char**)((char*)this + 0x7c) + 0x14250) < *(double*)((char*)this + v4 * 0x98 + 0x4e8)) {
+                        if (*(double*)((char*)this + v4 * 0x98 + 0x4e8) > *(int*)(*(char**)((char*)this + 0x7c) + 0x14250)) {
                             *(short*)((char*)this + v4 * 0x98 + 0x4d2) = *(WORD*)((char*)this + v4 * 0x98 + 0x4d2) - 6;
                             (*(int*)((char*)this + v4 * 4 + 0x314c))++;
                             *((char*)this + 0x2c8) = 1;
@@ -7703,7 +7703,7 @@ void CMakoto::Vf7()
                     if (*(WORD*)((char*)this + v4 * 0x98 + 0x4d2) == 0 || *(WORD*)((char*)this + v4 * 0x98 + 0x4d2) == 1) {
                         *(double*)((char*)this + v4 * 0x98 + 0x4f8) = 3.0;
                         *(double*)((char*)this + v4 * 0x98 + 0x500) = -3.0;
-                        if ((double)*(int*)(*(char**)((char*)this + 0x7c) + 0x1424c) > *(double*)((char*)this + v4 * 0x98 + 0x4f0)) {
+                        if (*(double*)((char*)this + v4 * 0x98 + 0x4f0) < *(int*)(*(char**)((char*)this + 0x7c) + 0x1424c)) {
                             *(short*)((char*)this + v4 * 0x98 + 0x4d2) = *(WORD*)((char*)this + v4 * 0x98 + 0x4d2) + 2;
                             (*(int*)((char*)this + v4 * 4 + 0x314c))++;
                             *((char*)this + 0x2c8) = 1;
@@ -7714,7 +7714,7 @@ void CMakoto::Vf7()
                             }
                             break;
                         }
-                        if ((double)*(int*)(*(char**)((char*)this + 0x7c) + 0x14250) < *(double*)((char*)this + v4 * 0x98 + 0x4e8)) {
+                        if (*(double*)((char*)this + v4 * 0x98 + 0x4e8) > *(int*)(*(char**)((char*)this + 0x7c) + 0x14250)) {
                             *(short*)((char*)this + v4 * 0x98 + 0x4d2) = *(WORD*)((char*)this + v4 * 0x98 + 0x4d2) + 6;
                             (*(int*)((char*)this + v4 * 4 + 0x314c))++;
                             *((char*)this + 0x2c8) = 1;
@@ -7729,7 +7729,7 @@ void CMakoto::Vf7()
                     if (*(WORD*)((char*)this + v4 * 0x98 + 0x4d2) == 2 || *(WORD*)((char*)this + v4 * 0x98 + 0x4d2) == 3) {
                         *(double*)((char*)this + v4 * 0x98 + 0x4f8) = 3.0;
                         *(double*)((char*)this + v4 * 0x98 + 0x500) = 3.0;
-                        if ((double)*(int*)(*(char**)((char*)this + 0x7c) + 0x14254) < *(double*)((char*)this + v4 * 0x98 + 0x4f0)) {
+                        if (*(double*)((char*)this + v4 * 0x98 + 0x4f0) > *(int*)(*(char**)((char*)this + 0x7c) + 0x14254)) {
                             *(short*)((char*)this + v4 * 0x98 + 0x4d2) = *(WORD*)((char*)this + v4 * 0x98 + 0x4d2) - 2;
                             (*(int*)((char*)this + v4 * 4 + 0x314c))++;
                             *((char*)this + 0x2c8) = 1;
@@ -7740,7 +7740,7 @@ void CMakoto::Vf7()
                             }
                             break;
                         }
-                        if ((double)*(int*)(*(char**)((char*)this + 0x7c) + 0x14250) < *(double*)((char*)this + v4 * 0x98 + 0x4e8)) {
+                        if (*(double*)((char*)this + v4 * 0x98 + 0x4e8) > *(int*)(*(char**)((char*)this + 0x7c) + 0x14250)) {
                             *(short*)((char*)this + v4 * 0x98 + 0x4d2) = *(WORD*)((char*)this + v4 * 0x98 + 0x4d2) + 2;
                             (*(int*)((char*)this + v4 * 4 + 0x314c))++;
                             *((char*)this + 0x2c8) = 1;
@@ -7755,7 +7755,7 @@ void CMakoto::Vf7()
                     if (*(WORD*)((char*)this + v4 * 0x98 + 0x4d2) == 4 || *(WORD*)((char*)this + v4 * 0x98 + 0x4d2) == 5) {
                         *(double*)((char*)this + v4 * 0x98 + 0x4f8) = -3.0;
                         *(double*)((char*)this + v4 * 0x98 + 0x500) = 3.0;
-                        if ((double)*(int*)(*(char**)((char*)this + 0x7c) + 0x14254) < *(double*)((char*)this + v4 * 0x98 + 0x4f0)) {
+                        if (*(double*)((char*)this + v4 * 0x98 + 0x4f0) > *(int*)(*(char**)((char*)this + 0x7c) + 0x14254)) {
                             *(short*)((char*)this + v4 * 0x98 + 0x4d2) = *(WORD*)((char*)this + v4 * 0x98 + 0x4d2) + 2;
                             (*(int*)((char*)this + v4 * 4 + 0x314c))++;
                             *((char*)this + 0x2c8) = 1;
@@ -7766,7 +7766,7 @@ void CMakoto::Vf7()
                             }
                             break;
                         }
-                        if ((double)*(int*)(*(char**)((char*)this + 0x7c) + 0x14248) > *(double*)((char*)this + v4 * 0x98 + 0x4e8)) {
+                        if (*(double*)((char*)this + v4 * 0x98 + 0x4e8) < *(int*)(*(char**)((char*)this + 0x7c) + 0x14248)) {
                             *(short*)((char*)this + v4 * 0x98 + 0x4d2) = *(WORD*)((char*)this + v4 * 0x98 + 0x4d2) - 2;
                             (*(int*)((char*)this + v4 * 4 + 0x314c))++;
                             *(short*)((char*)this + v4 * 0x98 + 0x554) = 1;
@@ -7781,7 +7781,7 @@ void CMakoto::Vf7()
                     if (*(WORD*)((char*)this + v4 * 0x98 + 0x4d2) == 6 || *(WORD*)((char*)this + v4 * 0x98 + 0x4d2) == 7) {
                         *(double*)((char*)this + v4 * 0x98 + 0x4f8) = -3.0;
                         *(double*)((char*)this + v4 * 0x98 + 0x500) = -3.0;
-                        if ((double)*(int*)(*(char**)((char*)this + 0x7c) + 0x1424c) > *(double*)((char*)this + v4 * 0x98 + 0x4f0)) {
+                        if (*(double*)((char*)this + v4 * 0x98 + 0x4f0) < *(int*)(*(char**)((char*)this + 0x7c) + 0x1424c)) {
                             *(short*)((char*)this + v4 * 0x98 + 0x4d2) = *(WORD*)((char*)this + v4 * 0x98 + 0x4d2) - 2;
                             (*(int*)((char*)this + v4 * 4 + 0x314c))++;
                             *((char*)this + 0x2c8) = 1;
@@ -7792,7 +7792,7 @@ void CMakoto::Vf7()
                             }
                             break;
                         }
-                        if ((double)*(int*)(*(char**)((char*)this + 0x7c) + 0x14248) > *(double*)((char*)this + v4 * 0x98 + 0x4e8)) {
+                        if (*(double*)((char*)this + v4 * 0x98 + 0x4e8) < *(int*)(*(char**)((char*)this + 0x7c) + 0x14248)) {
                             *(short*)((char*)this + v4 * 0x98 + 0x4d2) = *(WORD*)((char*)this + v4 * 0x98 + 0x4d2) - 6;
                             (*(int*)((char*)this + v4 * 4 + 0x314c))++;
                             *(short*)((char*)this + v4 * 0x98 + 0x554) = 1;
@@ -7809,7 +7809,7 @@ void CMakoto::Vf7()
                     if (*(WORD*)((char*)this + v4 * 0x98 + 0x4d2) == 0 || *(WORD*)((char*)this + v4 * 0x98 + 0x4d2) == 1) {
                         *(double*)((char*)this + v4 * 0x98 + 0x4f8) = 3.0;
                         *(double*)((char*)this + v4 * 0x98 + 0x500) = -3.0;
-                        if ((double)*(int*)(*(char**)((char*)this + 0x7c) + 0x1424c) > *(double*)((char*)this + v4 * 0x98 + 0x4f0)) {
+                        if (*(double*)((char*)this + v4 * 0x98 + 0x4f0) < *(int*)(*(char**)((char*)this + 0x7c) + 0x1424c)) {
                             *(short*)((char*)this + v4 * 0x98 + 0x4d2) = *(WORD*)((char*)this + v4 * 0x98 + 0x4d2) + 2;
                             (*(int*)((char*)this + v4 * 4 + 0x314c))++;
                             *((char*)this + 0x2c8) = 1;
@@ -7820,7 +7820,7 @@ void CMakoto::Vf7()
                             }
                             break;
                         }
-                        if ((double)*(int*)(*(char**)((char*)this + 0x7c) + 0x14248) > *(double*)((char*)this + v4 * 0x98 + 0x4e8)) {
+                        if (*(double*)((char*)this + v4 * 0x98 + 0x4e8) < *(int*)(*(char**)((char*)this + 0x7c) + 0x14248)) {
                             *(short*)((char*)this + v4 * 0x98 + 0x4d2) = *(WORD*)((char*)this + v4 * 0x98 + 0x4d2) + 6;
                             (*(int*)((char*)this + v4 * 4 + 0x314c))++;
                             *((char*)this + 0x2c8) = 1;
@@ -7835,7 +7835,7 @@ void CMakoto::Vf7()
                     if (*(WORD*)((char*)this + v4 * 0x98 + 0x4d2) == 2 || *(WORD*)((char*)this + v4 * 0x98 + 0x4d2) == 3) {
                         *(double*)((char*)this + v4 * 0x98 + 0x4f8) = 3.0;
                         *(double*)((char*)this + v4 * 0x98 + 0x500) = 3.0;
-                        if ((double)*(int*)(*(char**)((char*)this + 0x7c) + 0x14254) < *(double*)((char*)this + v4 * 0x98 + 0x4f0)) {
+                        if (*(double*)((char*)this + v4 * 0x98 + 0x4f0) > *(int*)(*(char**)((char*)this + 0x7c) + 0x14254)) {
                             *(short*)((char*)this + v4 * 0x98 + 0x4d2) = *(WORD*)((char*)this + v4 * 0x98 + 0x4d2) - 2;
                             (*(int*)((char*)this + v4 * 4 + 0x314c))++;
                             *((char*)this + 0x2c8) = 1;
@@ -7846,7 +7846,7 @@ void CMakoto::Vf7()
                             }
                             break;
                         }
-                        if ((double)*(int*)(*(char**)((char*)this + 0x7c) + 0x14248) > *(double*)((char*)this + v4 * 0x98 + 0x4e8)) {
+                        if (*(double*)((char*)this + v4 * 0x98 + 0x4e8) < *(int*)(*(char**)((char*)this + 0x7c) + 0x14248)) {
                             *(short*)((char*)this + v4 * 0x98 + 0x4d2) = *(WORD*)((char*)this + v4 * 0x98 + 0x4d2) + 2;
                             (*(int*)((char*)this + v4 * 4 + 0x314c))++;
                             *((char*)this + 0x2c8) = 1;
@@ -7861,7 +7861,7 @@ void CMakoto::Vf7()
                     if (*(WORD*)((char*)this + v4 * 0x98 + 0x4d2) == 4 || *(WORD*)((char*)this + v4 * 0x98 + 0x4d2) == 5) {
                         *(double*)((char*)this + v4 * 0x98 + 0x4f8) = -3.0;
                         *(double*)((char*)this + v4 * 0x98 + 0x500) = 3.0;
-                        if ((double)*(int*)(*(char**)((char*)this + 0x7c) + 0x14254) < *(double*)((char*)this + v4 * 0x98 + 0x4f0)) {
+                        if (*(double*)((char*)this + v4 * 0x98 + 0x4f0) > *(int*)(*(char**)((char*)this + 0x7c) + 0x14254)) {
                             *(short*)((char*)this + v4 * 0x98 + 0x4d2) = *(WORD*)((char*)this + v4 * 0x98 + 0x4d2) + 2;
                             (*(int*)((char*)this + v4 * 4 + 0x314c))++;
                             *((char*)this + 0x2c8) = 1;
@@ -7872,7 +7872,7 @@ void CMakoto::Vf7()
                             }
                             break;
                         }
-                        if ((double)*(int*)(*(char**)((char*)this + 0x7c) + 0x14250) < *(double*)((char*)this + v4 * 0x98 + 0x4e8)) {
+                        if (*(double*)((char*)this + v4 * 0x98 + 0x4e8) > *(int*)(*(char**)((char*)this + 0x7c) + 0x14250)) {
                             *(short*)((char*)this + v4 * 0x98 + 0x4d2) = *(WORD*)((char*)this + v4 * 0x98 + 0x4d2) - 2;
                             (*(int*)((char*)this + v4 * 4 + 0x314c))++;
                             *((char*)this + 0x2c8) = 1;
@@ -7887,7 +7887,7 @@ void CMakoto::Vf7()
                     if (*(WORD*)((char*)this + v4 * 0x98 + 0x4d2) == 6 || *(WORD*)((char*)this + v4 * 0x98 + 0x4d2) == 7) {
                         *(double*)((char*)this + v4 * 0x98 + 0x4f8) = -3.0;
                         *(double*)((char*)this + v4 * 0x98 + 0x500) = -3.0;
-                        if ((double)*(int*)(*(char**)((char*)this + 0x7c) + 0x1424c) > *(double*)((char*)this + v4 * 0x98 + 0x4f0)) {
+                        if (*(double*)((char*)this + v4 * 0x98 + 0x4f0) < *(int*)(*(char**)((char*)this + 0x7c) + 0x1424c)) {
                             *(short*)((char*)this + v4 * 0x98 + 0x4d2) = *(WORD*)((char*)this + v4 * 0x98 + 0x4d2) - 2;
                             (*(int*)((char*)this + v4 * 4 + 0x314c))++;
                             *((char*)this + 0x2c8) = 1;
@@ -7898,7 +7898,7 @@ void CMakoto::Vf7()
                             }
                             break;
                         }
-                        if ((double)*(int*)(*(char**)((char*)this + 0x7c) + 0x14250) < *(double*)((char*)this + v4 * 0x98 + 0x4e8)) {
+                        if (*(double*)((char*)this + v4 * 0x98 + 0x4e8) > *(int*)(*(char**)((char*)this + 0x7c) + 0x14250)) {
                             *(short*)((char*)this + v4 * 0x98 + 0x4d2) = *(WORD*)((char*)this + v4 * 0x98 + 0x4d2) - 6;
                             (*(int*)((char*)this + v4 * 4 + 0x314c))++;
                             *(short*)((char*)this + v4 * 0x98 + 0x554) = 1;
