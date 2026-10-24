@@ -16,6 +16,14 @@ def coff_compid(data):
     """Return (prodid, build) from a COFF object's @comp.id symbol, or None."""
     if len(data) < 20:
         return None
+    if data[:4] == b'\0\0\xff\xff':
+        # A /GL object holds compiler IL, not COFF; its stamp is the front end's
+        # (Utc1700_CPP), which the linker records as the LTCG product (Utc1700_LTCG_CPP).
+        at = data.find(b'@comp.id')
+        if at < 0:
+            return None
+        value = struct.unpack_from('<I', data, at + 8)[0]
+        return value >> 16, value & 0xFFFF
     machine, _nsec, _ts, symtab, nsyms = struct.unpack_from('<HHIII', data, 0)
     if machine != 0x14C or not symtab:
         return None

@@ -6,6 +6,7 @@
 *.wav
 *.rep
 efz-unpacked/
+uploads/
 
 # Generated analysis output
 inventory.json

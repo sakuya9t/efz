@@ -1,6 +1,8 @@
 #!/usr/bin/env python3
 """Identify an efz.exe: hash check, build toolchain (Rich header), PDB record, sections, imports.
 
+Works on any PE; EfzRevival's binaries (docs/revival.md) are read the same way.
+
 Usage: tools/peinfo.py [path/to/efz.exe]   (default: $EFZ_DIR/efz.exe)
 """
 import hashlib
@@ -13,7 +15,9 @@ import pefile
 # The 4.02 build every EfzRevival install expects; this is the decomp target.
 TARGET_SHA256 = '3a1616d6c76d2eea08a95bb198d853e96cb6b9b3266e277ca1d167426dd66481'
 
-# Rich header product IDs that occur in Visual Studio .NET 2003 builds.
+# Rich header product IDs that occur in Visual Studio .NET 2003 builds, and in the
+# Visual Studio 2012 builds of EfzRevival (with the Windows SDK 7.1A's import libraries,
+# made by Visual Studio 2008's lib.exe).
 PRODIDS = {
     0x0001: 'Import0 (imported functions)',
     0x000f: 'Masm710',
@@ -26,6 +30,17 @@ PRODIDS = {
     0x0060: 'Utc1310_CPP',
     0x0061: 'Utc1310_C_Std',
     0x0062: 'Utc1310_CPP_Std',
+    0x0093: 'Implib900',
+    0x00c7: 'AliasObj1100',
+    0x00c9: 'Cvtres1100',
+    0x00ca: 'Export1100',
+    0x00cb: 'Implib1100',
+    0x00cc: 'Linker1100',
+    0x00cd: 'Masm1100',
+    0x00ce: 'Utc1700_C',
+    0x00cf: 'Utc1700_CPP',
+    0x00d2: 'Utc1700_LTCG_C',
+    0x00d3: 'Utc1700_LTCG_CPP',
 }
 
 

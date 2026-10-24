@@ -5,7 +5,7 @@ FROM debian:bookworm-slim
 
 RUN dpkg --add-architecture i386 \
  && apt-get update \
- && apt-get install -y --no-install-recommends wine wine32 msitools p7zip-full cabextract python3 \
+ && apt-get install -y --no-install-recommends wine wine32 msitools p7zip-full cabextract innoextract python3 \
  && rm -rf /var/lib/apt/lists/*
 
 # Same uid as the host user, so build outputs in the mounted repo stay theirs.

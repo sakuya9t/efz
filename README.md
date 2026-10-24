@@ -148,6 +148,27 @@ ssh, name the session's display, e.g. `DISPLAY=:10 make play` for an xrdp deskto
 | `tools/icon.py` | Writes the original's icon as an `.ico` for `src/efz.rc` |
 | `tools/postlink.py` | Sets the timestamp, PDB GUID and Rich header count after linking |
 | `tools/play.sh` | Plays the built (or original) `efz.exe` under wine on an X display |
+| `tools/msvc11` | Run Visual C++ 2012 tools (EfzRevival's toolchain) in the container |
+| `tools/libmatch.py` | Finds the functions of prebuilt `.lib`/`.obj` files in a binary, relocations masked |
+| `tools/ghidra/ExportFunctions.java` | Ghidra headless script: every function's entry, extent, name source and callees as JSON |
+
+## EfzRevival
+
+The second target is EfzRevival 1.02h, the add-on that provides EFZ's rollback netplay,
+spectating, replays and training tools (frame step, save states, hit/hurt/collision
+boxes): `EfzRevival.exe` (the launcher and network side), `EfzRevival.dll` (injected
+into `efz.exe`: rollback, practice features, replays) and its `DDRAW.dll` (a Direct3D 9
+renderer). It is being decompiled the same way, to source that rebuilds its binaries
+byte for byte. Its binaries aren't in the repository either; `REVIVAL_DIR` points at a
+copy of the 1.02h files (default `~/.local/share/efz-decomp/revival/1.02h`).
+
+```sh
+toolchain/setup-vs2012.sh          # ~3.5 GB download, once; after toolchain/setup.sh
+```
+
+lays out Visual C++ 2012 with Update 5's compiler, the Windows SDK 7.1A, the DirectX SDK
+(June 2010) and boost 1.56, which is what the binaries' Rich headers and code show;
+`tools/msvc11` runs it. See [docs/revival.md](docs/revival.md) for what is known so far.
 
 ## Findings so far
 
@@ -184,3 +205,13 @@ See [docs/recon.md](docs/recon.md). In short:
    - add widescreen and HD output, in-game input binding and controller hot-plug
    - add mod support for characters, stages and palettes
 6. **UE5.** Host the simulation core as a UE5 C++ module and render it with new assets.
+
+EfzRevival 1.02h, alongside:
+
+1. **Reconnaissance:** binaries, toolchain, libraries, layout. *Done:*
+   [docs/revival.md](docs/revival.md).
+2. **Toolchain:** Visual C++ 2012 Update 5 for `v110_xp`, boost 1.56. *Done:* a test
+   link reproduces the Rich header's products and builds.
+3. **Function matching:** the launcher first (no `/GL`, so objects compare one by one),
+   then `EfzRevival.dll` and `DDRAW.dll` (`/GL`: compared after linking).
+4. **Byte-identical binaries.**

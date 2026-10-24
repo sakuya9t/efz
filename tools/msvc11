@@ -1,0 +1,26 @@
+#!/bin/bash
+# Run a Visual C++ 2012 tool (cl, link, lib, ...) under wine in the efz-msvc71 container,
+# with the include and library paths of a v110_xp build: VS2012's own, Windows SDK 7.1A,
+# the DirectX SDK (June 2010) and boost 1.56.  EfzRevival 1.02h was built with this
+# toolchain.
+#   tools/msvc11 cl /c revival/EfzRevival/init.cpp
+# The repo is mounted at /work and the current directory is preserved inside it.
+# EFZ_TOOLCHAIN (default ~/tools/efz-toolchain) holds vs2012/, sdk71a/, dxsdk2010/ and
+# boost156/, laid out by toolchain/setup-vs2012.sh.
+# Drive C: gets build/revival/c, so a link can write its PDB where the originals' were,
+# C:\Git\efz_2022\Release\, a path the binaries record.
+set -e
+tool=$1; shift
+toolchain=${EFZ_TOOLCHAIN:-$HOME/tools/efz-toolchain}
+repo=$(cd "$(dirname "$0")/.." && pwd)
+case $PWD/ in
+    "$repo"/*) sub=${PWD#"$repo"} ;;
+    *) echo "tools/msvc11: run from inside $repo" >&2; exit 1 ;;
+esac
+exec docker run --rm -i --network none \
+    -v "$repo:/work" -v "$toolchain:/opt/tc:ro" -w "/work$sub" \
+    -e 'INCLUDE=Z:\opt\tc\vs2012\include;Z:\opt\tc\sdk71a\Include;Z:\opt\tc\dxsdk2010\Include;Z:\opt\tc\boost156' \
+    -e 'LIB=Z:\opt\tc\vs2012\lib;Z:\opt\tc\sdk71a\Lib;Z:\opt\tc\dxsdk2010\Lib;Z:\opt\tc\boost156\lib' \
+    efz-msvc71 sh -c 'mkdir -p /work/build/revival/c/Git && rm -rf "$WINEPREFIX/drive_c/Git" &&
+        ln -s /work/build/revival/c/Git "$WINEPREFIX/drive_c/Git" && exec wine "$@"' \
+    sh "/opt/tc/vs2012/bin/$tool.exe" "$@"
