@@ -150,6 +150,7 @@ ssh, name the session's display, e.g. `DISPLAY=:10 make play` for an xrdp deskto
 | `tools/play.sh` | Plays the built (or original) `efz.exe` under wine on an X display |
 | `tools/msvc11` | Run Visual C++ 2012 tools (EfzRevival's toolchain) in the container |
 | `tools/libmatch.py` | Finds the functions of prebuilt `.lib`/`.obj` files in a binary, relocations masked |
+| `tools/rtti.py` | Lists an MSVC binary's vtables, with their classes, through its RTTI |
 | `tools/ghidra/ExportFunctions.java` | Ghidra headless script: every function's entry, extent, name source and callees as JSON |
 
 ## EfzRevival

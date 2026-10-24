@@ -85,7 +85,12 @@ Build options **observed** so far:
 - `/GS` (load config has a security cookie) and `/SAFESEH` (SEH handler tables of
   403, 312 and 485 entries).
 - C++ exceptions (`/EHsc`): `__CxxFrameHandler3`, catch funclets.
-- `/O2` with frame pointers omitted where possible (no `/Oy-`).
+- The launcher: `/O2 /Oi /Oy- /GS /Gy /EHsc /fp:precise /MT`, VS2012's Release
+  defaults minus `/GL`. **Observed:** protobuf compiled with exactly these reproduces the
+  launcher's protobuf code; without `/Oy-` the frames differ (`ebp` frames in the
+  original).
+- The link folds identical functions (`/OPT:ICF`): `ArrayInputStream::Next` and
+  `ArrayOutputStream::Next` are one function at `0x44dd00`.
 - RTTI: the launcher's own classes have type descriptors; `EfzRevival.dll`'s and
   `DDRAW.dll`'s don't (`/GR-` there, **inferred**; the library classes' descriptors come
   from the prebuilt objects).
@@ -105,7 +110,12 @@ Build options **observed** so far:
   against the official `?A0x92439a12`), and MSVC draws those names afresh on every
   compile (**observed**: the same file compiled twice gets two names). All three
   binaries share the developer's `error_code.obj` (same name in each).
-- **protobuf-lite**, 2.5 or later (`ZeroCopyOutputStream` aliasing check); launcher only.
+- **protobuf 2.6.1**, lite runtime plus `io/gzip_stream.cc` built with `HAVE_ZLIB`;
+  launcher only, compiled from source with the launcher's flags. **Observed:** compiled
+  with the flags below, its functions reproduce the launcher's byte for byte at their
+  addresses (`0x44d7e0`-`0x44eb47` holds the stream classes); 2.6.1 alone reproduces
+  `internal::VerifyVersion`, which embeds the version, and 2.5.0 reproduces fewer
+  functions (125 against 147).
 - **zlib 1.2.8**, through boost_zlib: gzip for replays and logs.
 - Direct3D 9 + D3DX 9 (June 2010, `d3dx9_43.dll`) in `DDRAW.dll`; DirectShow in the DLL.
 
