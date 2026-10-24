@@ -71,6 +71,30 @@ against the source's 71; the other 81 left nothing in the file).
 It unpacks them in the container into `~/tools/efz-toolchain`. `cl.exe` runs under wine in
 that container; `tools/msvc <tool> <args>` runs any of the tools.
 
+## Playing
+
+`make play` (or `tools/play.sh`) runs `build/efz.exe` under wine in a window on the X
+display in `$DISPLAY`. From a terminal in your desktop session that is already set; over
+ssh, name the session's display, e.g. `DISPLAY=:10 make play` for an xrdp desktop.
+`tools/play.sh --original` runs `$EFZ_DIR/efz.exe` instead.
+
+- **Where it runs.** Wine from the host if it is installed, otherwise the `efz-play`
+  docker image (`toolchain/play.Dockerfile`, built on first use from the toolchain's
+  image), which gets the display's socket and cookie, and the session's PulseAudio or
+  PipeWire socket for sound.
+- **What it writes.** The game runs in `~/.local/share/efz-decomp/game` (`EFZ_PLAY`
+  moves it), which links to the data in `$EFZ_DIR` and holds real copies of what the game
+  writes: `key.ini`, the `.rec` records, replays and screenshots; the container also
+  mounts `$EFZ_DIR` read-only. The wine prefix is in `~/.local/share/efz-decomp/wine`.
+- **The window.** The game switches the screen to 640×480 (or 320×240) fullscreen; it
+  runs inside a 640×480 wine desktop window, so only that window changes.
+  `EFZ_DESKTOP=off` lets it change the real screen mode instead.
+- **Sound.** The game can't run without a DirectSound device: it shows "DirectSound
+  オブジェクトが生成できません" and crashes after it. Without a sound server, the image's
+  ALSA device discards the sound so the game still runs.
+- **Controls.** The keyboard, as bound in `key.ini`. Joysticks aren't passed into the
+  container.
+
 ## Matching workflow
 
 1. **Annotate.** Put `// FUNCTION: 0xADDR` above the function or its declaration, and
@@ -123,6 +147,7 @@ that container; `tools/msvc <tool> <args>` runs any of the tools.
 | `tools/stdstamp.py` | Stamps objects as the Standard Edition compiler's, as in the original's Rich header |
 | `tools/icon.py` | Writes the original's icon as an `.ico` for `src/efz.rc` |
 | `tools/postlink.py` | Sets the timestamp, PDB GUID and Rich header count after linking |
+| `tools/play.sh` | Plays the built (or original) `efz.exe` under wine on an X display |
 
 ## Findings so far
 

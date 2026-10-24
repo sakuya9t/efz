@@ -4,6 +4,7 @@
 #   make diff F=X   only functions whose name contains X
 #   make link       link build/efz.exe
 #   make check      link and compare it with $(EFZ_DIR)/efz.exe: they are identical
+#   make play       play build/efz.exe under wine on $(DISPLAY) (tools/play.sh)
 # One-time setup: toolchain/setup.sh
 
 # Compiler flags confirmed by matching WinMain (0x401000).  The original was built by
@@ -62,6 +63,9 @@ check: build/efz.exe
 	cmp build/efz.exe '$(EFZ_DIR)/efz.exe'
 	@sha256sum build/efz.exe
 
+play: build/efz.exe
+	EFZ_DIR='$(EFZ_DIR)' tools/play.sh
+
 # The icon, efz.exe's only resource, comes from the original.
 build/efz.ico: | build
 	@test -n "$(EFZ_DIR)" || { echo 'set EFZ_DIR to the folder containing the original efz.exe' >&2; exit 1; }
@@ -79,6 +83,6 @@ diff: $(OBJS)
 clean:
 	rm -rf build
 
-.PHONY: all diff link check clean
+.PHONY: all diff link check play clean
 .SECONDARY:
 .DELETE_ON_ERROR:
