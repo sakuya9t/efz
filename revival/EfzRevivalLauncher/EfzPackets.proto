@@ -1,0 +1,107 @@
+// EfzRevival's network messages, reconstructed from the 1.02h launcher.
+//
+// The launcher was built with protobuf 2.6.1's lite runtime, which keeps no field or
+// enum names, so the names here are placeholders except where the use is clear. What is
+// recovered exactly: the package, the messages and their order (the order of their type
+// names and RTTI), every field's number, type and label (from the parse, serialise and
+// IsInitialized code), and the number of enums and their values (protoc's output must
+// have as many lines as the original for the GOOGLE_CHECK line numbers in it). protoc
+// 2.6.1 generates EfzPackets.pb.cc and .pb.h from this; every function of the generated
+// code compiles to the original's bytes (make revival-diff).
+//
+// The real names also decide where functions land, because the compiler sorts them by
+// name; docs/revival.md explains how and why the layout can only be settled once the
+// whole launcher links.
+
+package EfzPackets;
+
+option optimize_for = LITE_RUNTIME;
+
+enum Player {
+  P1 = 0;
+  P2 = 1;
+}
+
+enum Unknown1 {
+  UNKNOWN1_0 = 0;
+  UNKNOWN1_1 = 1;
+}
+
+enum Unknown2 {
+  UNKNOWN2_0 = 0;
+  UNKNOWN2_1 = 1;
+}
+
+enum Unknown3 {
+  UNKNOWN3_0 = 0;
+  UNKNOWN3_1 = 1;
+}
+
+enum Unknown4 {
+  UNKNOWN4_0 = 0;
+  UNKNOWN4_1 = 1;
+}
+
+enum Role {
+  ROLE_0 = 0;
+  ROLE_1 = 1;
+  ROLE_2 = 2;
+}
+
+message MessageInit {
+  required Player f1 = 1;
+  required uint32 f2 = 2;
+  required uint32 f3 = 3;
+  required Role f4 = 4;
+  required Player f5 = 5;
+  required uint32 f6 = 6;
+  optional bytes f7 = 7;
+  optional bytes f8 = 8;
+  optional bool f9 = 9;
+}
+
+message MessageInput {
+  required Player f1 = 1;
+  optional int32 f2 = 2;
+  required uint32 f3 = 3;
+  optional uint32 f4 = 4;
+  repeated bytes f5 = 5;
+  optional int32 f6 = 6;
+}
+
+// Sent with timeGetTime().
+message MessagePing {
+  required uint32 f3 = 3;
+}
+
+message MessageSync {
+  required Player f1 = 1;
+  optional uint32 f2 = 2;
+  optional uint32 f3 = 3;
+  repeated bytes f4 = 4;
+}
+
+message MessagePalette {
+  required Player f1 = 1;
+  required bytes f2 = 2;
+}
+
+message MessageQuit {
+  required Player f1 = 1;
+}
+
+message MessageRedirect {
+  required bytes f1 = 1;
+}
+
+message MessageChangeRole {
+  required Role f1 = 1;
+}
+
+message MessageDone {
+  required Player f1 = 1;
+}
+
+message MessagePunch {
+  required bytes f1 = 1;
+}

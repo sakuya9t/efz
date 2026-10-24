@@ -85,10 +85,23 @@ Build options **observed** so far:
 - `/GS` (load config has a security cookie) and `/SAFESEH` (SEH handler tables of
   403, 312 and 485 entries).
 - C++ exceptions (`/EHsc`): `__CxxFrameHandler3`, catch funclets.
-- The launcher: `/O2 /Oi /Oy- /GS /Gy /EHsc /fp:precise /MT`, VS2012's Release
-  defaults minus `/GL`. **Observed:** protobuf compiled with exactly these reproduces the
-  launcher's protobuf code; without `/Oy-` the frames differ (`ebp` frames in the
-  original).
+- The launcher's own sources: `/O2 /Ob0 /Oi /Oy- /GS /sdl /Gy /EHsc /arch:IA32
+  /fp:precise /MT`. **Observed**, each in `EfzPackets.pb.cc`:
+  - `/Ob0`: nothing is inlined, not even protobuf's accessors or `std::string`'s
+    constructor, yet the code is optimised (leaf functions without frames, values in
+    registers).
+  - `/sdl`: before constructing an object whose class has pointer members, a
+    compiler-made `__autoclassinit` zeroes them (with `/Ob0` it is a call).
+  - `/arch:IA32`: members are zeroed with integer stores; VS2012's default `/arch:SSE2`
+    uses `xorps`/`movq`.
+  - `/Oy-`: functions that need a frame build it on `ebp`.
+- protobuf, a separate static library: its own project's Release options
+  (`/O2 /Oi /Oy- /GS /Gy /EHsc /fp:precise`), changed to `/MT`, with `HAVE_ZLIB`, built
+  from its `vsprojects` directory (its `__FILE__` strings are `..\src\google\protobuf\...`).
+  **Observed:** this reproduces every protobuf function that can be placed.
+- Include paths: the launcher saw protobuf at `C:\Programming\protobuf-2.6.1\src` (the
+  `__FILE__` of `repeated_field.h` in a template instantiated in `EfzPackets.pb.cc`);
+  `EfzPackets.pb.cc` itself was compiled as a bare file name.
 - The link folds identical functions (`/OPT:ICF`): `ArrayInputStream::Next` and
   `ArrayOutputStream::Next` are one function at `0x44dd00`.
 - RTTI: the launcher's own classes have type descriptors; `EfzRevival.dll`'s and
@@ -151,6 +164,54 @@ analyzeHeadless ~/tools/efz-ghidra revival-1.02h -import $REVIVAL_DIR/EfzRevival
 
 A map from an `/LTCG` link still names each generated function's object, so the
 link-time code can be compared function by function after linking.
+
+## How the code is laid out
+
+Three rules decide where a function ends up. Each was tested by linking small test
+objects with the toolchain and reading the map, and each holds in the launcher:
+
+1. **The compiler emits an object's functions sorted by decorated name.** With `/Gy`
+   every function is a COMDAT section, and Visual C++ 2012 numbers them in name order
+   whatever the source order (`aa_free`, `alpha`, `mid`, `zeta`, `zz_free`, `_entry` from a
+   file that defines them in another order). The linker keeps an object's section order.
+   In the launcher, `MergeFrom` and `MergePartialFromCodedStream` of the ten messages run
+   `ChangeRole, Done, Init, Input, Palette, Ping, Punch, Quit, Redirect, Sync`, and
+   `gzip_stream.obj`'s functions run `??0GzipInputStream` ... `?Skip@...`.
+2. **Of identical functions only the last copy survives** (`/OPT:ICF`), in its own
+   place: of `aaa`, `qqq` and `zzz` with the same body, `zzz` is kept, whichever is
+   referenced first. Accessors such as `has_x()` that read the same bit of different
+   messages fold into one.
+3. **An inline function used by several objects is taken from the first object in link
+   order** (COMDAT "any" selection); the other copies are discarded.
+
+So a function's position depends on its name, on which other functions share its
+body, and on which earlier objects use it. Names that are lost (all of EfzPackets' field
+names, for one) are therefore constrained to windows by the original's layout, and an
+object's layout can only be checked in full once every object before it in link order
+exists. Until then each function is compared on its own (`tools/revdiff.py`), and
+`tools/revlayout.py` predicts an object's layout from rules 1 and 2.
+
+## The network messages
+
+`revival/EfzRevivalLauncher/EfzPackets.proto` is reconstructed from the launcher (every
+generated function compiles to the original's bytes). Package `EfzPackets`, protobuf
+2.6.1, `optimize_for = LITE_RUNTIME`; ten messages, declared in this order:
+
+| Message | Fields (number: type, `req`uired / `opt`ional / `rep`eated) | What is known |
+|---|---|---|
+| `MessageInit` | 1: enum (2 values) req; 2: uint32 req; 3: uint32 req; 4: enum (3 values) req; 5: enum (2) req; 6: uint32 req; 7, 8: bytes opt; 9: bool opt | Connection handshake. Field 3 is the protocol version, sent as `0x66` (the check `init` repeats in the DLL); field 1 selects the full form (all fields, two names) or a short one; 7 and 8 are names (0x80-byte buffers, "None" when absent) |
+| `MessageInput` | 1: enum (2) req; 2: int32 opt; 3: uint32 req; 4: uint32 opt; 5: bytes rep; 6: int32 opt | Inputs, several frames per message (field 5) |
+| `MessagePing` | 3: uint32 req | A `timeGetTime()` timestamp (fields 1 and 2 were removed at some point) |
+| `MessageSync` | 1: enum (2) req; 2: uint32 opt; 3: uint32 opt; 4: bytes rep | Either a data block (field 1 = 0) or a request with two numbers (field 1 = 1) |
+| `MessagePalette` | 1: enum (2) req; 2: bytes req | A player's palette |
+| `MessageQuit`, `MessageDone` | 1: enum (2) req | |
+| `MessageRedirect`, `MessagePunch` | 1: bytes req | A 28-byte socket address (`sockaddr_in6`); **inferred:** redirecting a connection elsewhere, and UDP hole punching |
+| `MessageChangeRole` | 1: enum (3 values) req | |
+
+There are six enums: five with values 0-1 and one with values 0-2. Which 2-value enum
+each field uses can't be told from the code (their `IsValid` functions are identical).
+The launcher sends each message with a type number of its own (Ping 2, Sync 4,
+Redirect 7, Punch 10, ...) through one send routine (`0x4407c0`).
 
 ## Features (1.02h `EfzRevival.ini`, readme and changelog)
 

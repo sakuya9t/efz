@@ -151,6 +151,8 @@ ssh, name the session's display, e.g. `DISPLAY=:10 make play` for an xrdp deskto
 | `tools/msvc11` | Run Visual C++ 2012 tools (EfzRevival's toolchain) in the container |
 | `tools/libmatch.py` | Finds the functions of prebuilt `.lib`/`.obj` files in a binary, relocations masked |
 | `tools/rtti.py` | Lists an MSVC binary's vtables, with their classes, through its RTTI |
+| `tools/revdiff.py` | Per-function comparison for EfzRevival, addresses from annotations or unique byte matches |
+| `tools/revlayout.py` | Predicts where an object's functions land (name order, identical-function folding) |
 | `tools/ghidra/ExportFunctions.java` | Ghidra headless script: every function's entry, extent, name source and callees as JSON |
 
 ## EfzRevival
@@ -168,8 +170,19 @@ toolchain/setup-vs2012.sh          # ~3.5 GB download, once; after toolchain/set
 ```
 
 lays out Visual C++ 2012 with Update 5's compiler, the Windows SDK 7.1A, the DirectX SDK
-(June 2010) and boost 1.56, which is what the binaries' Rich headers and code show;
-`tools/msvc11` runs it. See [docs/revival.md](docs/revival.md) for what is known so far.
+(June 2010), boost 1.56, protobuf 2.6.1 and zlib 1.2.8, which is what the binaries'
+Rich headers and code show; `tools/msvc11` runs it.
+
+```sh
+make revival                       # compile revival/ and protobuf with the launcher's options
+make revival-diff                  # compare every function with $REVIVAL_DIR/EfzRevival.exe
+```
+
+`revival-diff` uses a Ghidra export of the original for its function boundaries
+(`GHIDRA_HOME`, made once). Recovered so far: the network messages
+(`revival/EfzRevivalLauncher/EfzPackets.proto`, whose generated code matches function for
+function) and the protobuf library build. See [docs/revival.md](docs/revival.md) for the
+binaries, the toolchain, the rules that decide the code layout and the protocol.
 
 ## Findings so far
 
@@ -214,5 +227,6 @@ EfzRevival 1.02h, alongside:
 2. **Toolchain:** Visual C++ 2012 Update 5 for `v110_xp`, boost 1.56. *Done:* a test
    link reproduces the Rich header's products and builds.
 3. **Function matching:** the launcher first (no `/GL`, so objects compare one by one),
-   then `EfzRevival.dll` and `DDRAW.dll` (`/GL`: compared after linking).
+   then `EfzRevival.dll` and `DDRAW.dll` (`/GL`: compared after linking). *Started:*
+   `EfzPackets.pb.cc` (242 functions) and protobuf (112) match.
 4. **Byte-identical binaries.**

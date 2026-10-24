@@ -12,6 +12,9 @@
 #              d3dx9_43 imports
 #   boost156/  boost 1.56.0 headers and its official msvc-11.0 static libraries
 #              (-mt-s), whose code is the binaries' boost code (docs/revival.md)
+#   protobuf-2.6.1/, zlib-1.2.8/
+#              sources: the launcher compiles protobuf's lite runtime and gzip stream
+#              (with zlib's headers) itself
 # into $EFZ_TOOLCHAIN (default ~/tools/efz-toolchain), using the efz-msvc71 wine image
 # that toolchain/setup.sh builds.
 set -euo pipefail
@@ -29,6 +32,8 @@ downloads=(
     "VS2012.5.iso b28241ca909e909a9bb43fbec3358c0d1bc26b5f https://archive.org/download/vs-2012.5_202610/VS2012.5.iso"
     "DXSDK_Jun10.exe 495ad05ae5fc4ecd76b53a69a35bacb66d958608 https://download.microsoft.com/download/A/E/7/AE743F1F-632B-4809-87A9-AA1BB3458E31/DXSDK_Jun10.exe"
     "boost_1_56_0-msvc-11.0-32.exe 6ac113f753836102ca993b1d5320d44432995683 https://sourceforge.net/projects/boost/files/boost-binaries/1.56.0/boost_1_56_0-msvc-11.0-32.exe/download"
+    "protobuf-2.6.1.tar.gz 375765455ad49e45e4e10364f91aaf2831d3e905 https://github.com/protocolbuffers/protobuf/releases/download/v2.6.1/protobuf-2.6.1.tar.gz"
+    "zlib-1.2.8.tar.gz a4d316c404ff54ca545ea71a27af7dbc29817088 https://zlib.net/fossils/zlib-1.2.8.tar.gz"
 )
 for entry in "${downloads[@]}"; do
     read -r file sha1 url <<<"$entry"
@@ -45,7 +50,7 @@ docker build -q --build-arg UID="$(id -u)" --build-arg GID="$(id -g)" -t efz-msv
 docker run --rm --network none -v "$cache:/cache:ro" -v "$dest:/dest" \
     efz-msvc71 bash -euo pipefail -c '
 work=$(mktemp -d)
-rm -rf /dest/vs2012 /dest/sdk71a /dest/dxsdk2010 /dest/boost156
+rm -rf /dest/vs2012 /dest/sdk71a /dest/dxsdk2010 /dest/boost156 /dest/protobuf-2.6.1 /dest/zlib-1.2.8
 
 echo "extracting Visual C++ 2012"
 7z x -y -o"$work/iso" /cache/VS2012.5.iso packages/vc_compilercore86 \
@@ -95,6 +100,10 @@ echo "extracting boost 1.56.0"
 mkdir -p /dest/boost156/lib
 cp -r "$work/boost/app/boost" /dest/boost156/boost
 cp "$work/boost/app/lib32-msvc-11.0/"libboost_*-vc110-mt-s-1_56.lib /dest/boost156/lib/
+
+echo "extracting protobuf 2.6.1 and zlib 1.2.8"
+tar -xzf /cache/protobuf-2.6.1.tar.gz -C /dest
+tar -xzf /cache/zlib-1.2.8.tar.gz -C /dest
 
 rm -rf "$work"
 cd /tmp && wine /dest/vs2012/bin/cl.exe 2>&1 | head -1
