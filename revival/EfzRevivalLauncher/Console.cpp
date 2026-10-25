@@ -1,4 +1,5 @@
 #include "Console.h"
+// OBJECT: 0x40ff60 0x4102a0
 #include <cmath>
 
 // FUNCTION: 0x40ff90
@@ -58,7 +59,8 @@ int Console::printChar(wchar_t c)
         step.Y = 1;
         break;
     case L'\t':
-        WriteConsoleOutputCharacterW(output_, L"    ", 4, cursor_, &written);
+        // Four characters from a one-character string, as in the original.
+        WriteConsoleOutputCharacterW(output_, L" ", 4, cursor_, &written);
         step.X = 4;
         break;
     default:

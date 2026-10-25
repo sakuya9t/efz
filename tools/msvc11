@@ -22,6 +22,15 @@ case $PWD/ in
     "$repo"/*) sub=${PWD#"$repo"} ;;
     *) echo "tools/msvc11: run from inside $repo" >&2; exit 1 ;;
 esac
+# MSVC11_QUIET=1 drops the noise every compile prints: the SDK's macro redefinitions
+# (C4005 between VS2012's sal.h and SDK 7.1A's), asio's _WIN32_WINNT notice and the
+# echoed source name.
+if [ -n "$MSVC11_QUIET" ]; then
+    MSVC11_QUIET= "$0" "$tool" "$@" 2>&1 | sed -u \
+        -e '/warning C4005/{N;d;}' -e '/^Please define _WIN32_WINNT/,/^Assuming _WIN32_WINNT/d' \
+        -e '/^[A-Za-z0-9_.]*\.\(c\|cc\|cpp\)\r\?$/d'
+    exit "${PIPESTATUS[0]}"
+fi
 exec docker run --rm -i --network none \
     -v "$repo:/work" -v "$toolchain:/opt/tc:ro" -w "${MSVC11_DIR:-/work$sub}" \
     -e 'INCLUDE=Z:\opt\tc\vs2012\include;Z:\opt\tc\sdk71a\Include;Z:\opt\tc\dxsdk2010\Include;Z:\opt\tc\boost156' \

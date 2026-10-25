@@ -222,7 +222,11 @@ def resolve(obj, target, actual, image, base, iat, known, learned):
         sec = obj.sections[target['section'] - 1] if target['section'] > 0 else None
         if sec is not None:
             blob = sec['raw'][target['value']:]
-            if name.startswith('??_C@'):
+            if name.startswith('??_C@_1'):
+                # wide: up to the first aligned 16-bit terminator
+                end = next(i for i in range(0, len(blob) - 1, 2) if blob[i:i + 2] == b'\0\0')
+                blob = blob[:end + 2]
+            elif name.startswith('??_C@'):
                 blob = blob[:blob.index(b'\0') + 1]
             start = actual - base
             return actual if image[start:start + len(blob)] == blob else None

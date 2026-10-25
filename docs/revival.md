@@ -85,16 +85,21 @@ Build options **observed** so far:
 - `/GS` (load config has a security cookie) and `/SAFESEH` (SEH handler tables of
   403, 312 and 485 entries).
 - C++ exceptions (`/EHsc`): `__CxxFrameHandler3`, catch funclets.
-- The launcher's own sources: `/O2 /Ob0 /Oi /Oy- /GS /sdl /Gy /EHsc /arch:IA32
-  /fp:precise /MT`. **Observed**, each in `EfzPackets.pb.cc`:
-  - `/Ob0`: nothing is inlined, not even protobuf's accessors or `std::string`'s
-    constructor, yet the code is optimised (leaf functions without frames, values in
-    registers).
+- The launcher's own sources: `/O2 /Ob0 /Oy- /GS /sdl /Gy /EHsc /arch:IA32 /fp:strict
+  /MT`. **Observed**:
+  - `/Ob0` (`EfzPackets.pb.cc`): nothing is inlined, not even protobuf's accessors or
+    `std::string`'s constructor, yet the code is optimised (leaf functions without
+    frames, values in registers).
   - `/sdl`: before constructing an object whose class has pointer members, a
     compiler-made `__autoclassinit` zeroes them (with `/Ob0` it is a call).
   - `/arch:IA32`: members are zeroed with integer stores; VS2012's default `/arch:SSE2`
     uses `xorps`/`movq`.
   - `/Oy-`: functions that need a frame build it on `ebp`.
+  - `/fp:strict` (`Console::printChar`): with `/fp:precise` the compiler takes
+    `(x + step) % width` from the `idiv` that computed `(x + step) / width` before the
+    call to `floor`; the original divides again after it. Intrinsics stay on (`/O2`):
+    `std::char_traits<char>::length` inlines `strlen`, the messages' `Clear` inlines
+    `memset`. **Inferred:** strict floating point for deterministic rollback.
 - protobuf, a separate static library: its own project's Release options
   (`/O2 /Oi /Oy- /GS /Gy /EHsc /fp:precise`), changed to `/MT`, with `HAVE_ZLIB`, built
   from its `vsprojects` directory (its `__FILE__` strings are `..\src\google\protobuf\...`).
@@ -190,6 +195,53 @@ names, for one) are therefore constrained to windows by the original's layout, a
 object's layout can only be checked in full once every object before it in link order
 exists. Until then each function is compared on its own (`tools/revdiff.py`), and
 `tools/revlayout.py` predicts an object's layout from rules 1 and 2.
+
+## Recovering a launcher object
+
+The launcher is matched object by object, in link order (its objects are linked in
+the alphabetical order of their source files, so a recovered file's name has to sort
+between its neighbours'). Setup, once the toolchain is in place:
+
+```sh
+make revival-names      # probes + recovered objects -> names for the original's code
+make revival-decomp     # Ghidra decompilation with those names (needs GHIDRA_HOME)
+```
+
+They write `build/revival/EfzRevival.exe.names.json` (decorated name -> address),
+`.labels.json` (address -> readable name) and `.c` (the decompilation). To read the
+original:
+
+| Command | Shows |
+|---|---|
+| `tools/revmap.py LO HI` | Every function start with its placed names (or `?`) and string literals |
+| `tools/revdc.py LO HI` | Ghidra's decompilation of the functions there |
+| `tools/revdis.py LO HI` | Disassembly with call targets, imports and strings labelled |
+
+A source file in `revival/EfzRevivalLauncher/` names the range its object occupies
+with `// OBJECT: 0xLO 0xHI` and its functions with `// FUNCTION: 0xADDR` (as in `src/`).
+`make revival-check N=<file stem>` compiles it, compares every function in the range
+(`V=-v` prints instruction diffs) and lists the original's functions in the range that
+neither it nor a probe produces yet; the object is done when that list is empty and
+every function matches. The functions that aren't the developer's (template and inline
+library code) need no annotation: they are found by their bytes, and they come out
+right once the code that uses them does.
+
+What decides the code, from the objects matched so far:
+- Each function is compiled on its own (`/Ob0`), so a function's bytes depend only on
+  its source, its object's other declarations aside.
+- Statement order is kept closely: moving an assignment across a call changes which
+  register holds it (`Console::printChar`). Local variable names don't matter.
+- A function returning `int`/`BOOL` sets `eax`; one returning `bool` sets `al`.
+- An object's functions are laid out sorted by decorated name (case-sensitive), its
+  template and inline functions among them, so the developer's lost names are
+  constrained by their neighbours'. An inline or template function used by several
+  objects is emitted in the first; identical functions are folded into the last copy.
+- C inline functions from the CRT headers (`_wmemmove`, `_ldexpf`, `_gmtime`) sort
+  after every C++ name, so they close the object that first used them.
+- The static initializers are grouped near the end of `.text` (`0x495230`-`0x49604b`,
+  listed by the `.CRT$XCU` table at `0x497314`), one run per object in link order:
+  boost.bind's placeholders `_1`-`_9`, error-category references and a header's static
+  `std::wstring` (`L"h!!!"`) show which objects include which headers.
 
 ## The network messages
 

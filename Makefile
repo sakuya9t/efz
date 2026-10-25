@@ -115,7 +115,6 @@ PROTOBUF_SRCS = io/coded_stream stubs/common extension_set generated_message_uti
 PROTOBUF_OBJS = $(PROTOBUF_SRCS:%=build/revival/protobuf/%.obj)
 
 # Where each recovered launcher object's code lies in the original.
-LAUNCHER_RANGE_Console = 0x40ff60 0x4102a0
 LAUNCHER_RANGE_EfzPackets.pb = 0x4102a0 0x414710
 LAUNCHER_RANGE_protobuf = 0x44a000 0x44eb50
 
@@ -123,15 +122,15 @@ revival: $(LAUNCHER_OBJS) $(PROTOBUF_OBJS)
 
 build/revival/launcher/%.obj: revival/EfzRevivalLauncher/%.cc Makefile
 	mkdir -p $(@D)
-	cd revival/EfzRevivalLauncher && ../../tools/msvc11 cl $(LAUNCHER_CFLAGS) /Fo../../$@ $*.cc
+	cd revival/EfzRevivalLauncher && MSVC11_QUIET=1 ../../tools/msvc11 cl $(LAUNCHER_CFLAGS) /Fo../../$@ $*.cc
 
 build/revival/launcher/%.obj: revival/EfzRevivalLauncher/%.cpp Makefile
 	mkdir -p $(@D)
-	cd revival/EfzRevivalLauncher && ../../tools/msvc11 cl $(LAUNCHER_CFLAGS) /Fo../../$@ $*.cpp
+	cd revival/EfzRevivalLauncher && MSVC11_QUIET=1 ../../tools/msvc11 cl $(LAUNCHER_CFLAGS) /Fo../../$@ $*.cpp
 
-build/revival/protobuf/%.obj: Makefile
+build/revival/protobuf/%.obj:
 	mkdir -p $(@D)
-	MSVC11_DIR=/opt/tc/protobuf-2.6.1/vsprojects tools/msvc11 cl $(PROTOBUF_CFLAGS) \
+	MSVC11_QUIET=1 MSVC11_DIR=/opt/tc/protobuf-2.6.1/vsprojects tools/msvc11 cl $(PROTOBUF_CFLAGS) \
 		'/FoZ:\work\$(subst /,\,$@)' '..\src\google\protobuf\$(subst /,\,$*).cc'
 
 build/revival/%.functions.json:
@@ -158,9 +157,9 @@ revival-diff: revival build/revival/EfzRevival.exe.functions.json
 PROBE_OBJS := $(patsubst tools/probes/%.cpp,build/revival/probe/%.obj,$(wildcard tools/probes/launcher_*.cpp))
 REVIVAL_EXE_DATA = build/revival/EfzRevival.exe
 
-build/revival/probe/%.obj: tools/probes/%.cpp Makefile
+build/revival/probe/%.obj: tools/probes/%.cpp
 	mkdir -p $(@D)
-	cd tools/probes && ../../tools/msvc11 cl $(LAUNCHER_CFLAGS) /Fo../../$@ $*.cpp
+	cd tools/probes && MSVC11_QUIET=1 ../../tools/msvc11 cl $(LAUNCHER_CFLAGS) /wd4244 /wd4099 /Fo../../$@ $*.cpp
 
 revival-names: $(LAUNCHER_OBJS) $(PROTOBUF_OBJS) $(PROBE_OBJS) $(REVIVAL_EXE_DATA).functions.json
 	python3 tools/revmatch.py '$(REVIVAL_DIR)/EfzRevival.exe' $(REVIVAL_EXE_DATA).functions.json \
@@ -174,8 +173,21 @@ revival-decomp: revival-names
 		-postScript ExportDecomp.java $(CURDIR)/$(REVIVAL_EXE_DATA).labels.json \
 		$(CURDIR)/$(REVIVAL_EXE_DATA).c 0x401000 0x44a000 > $(REVIVAL_EXE_DATA).c.log 2>&1
 
+# An object's range: LAUNCHER_RANGE_<name>, or a `// OBJECT: LO HI` line in its source.
 revival-range:
-	@echo $(LAUNCHER_RANGE_$(N))
+	@r='$(LAUNCHER_RANGE_$(N))'; [ -n "$$r" ] || r=$$(sed -n \
+		's#^// OBJECT: *\(0x[0-9a-fA-F]*\) *\(0x[0-9a-fA-F]*\).*#\1 \2#p' \
+		$(wildcard revival/EfzRevivalLauncher/$(N).cpp revival/EfzRevivalLauncher/$(N).cc) | head -1); echo $$r
+
+# One object: compile it, compare its functions (V=-v prints the diffs) and list the
+# original's functions in its range that no object or probe produces yet.
+revival-check: build/revival/launcher/$(N).obj $(PROTOBUF_OBJS) $(PROBE_OBJS)
+	@python3 tools/revdiff.py '$(REVIVAL_DIR)/EfzRevival.exe' $(REVIVAL_EXE_DATA).functions.json \
+		build/revival/launcher/$(N).obj $$(make -s --no-print-directory revival-range N=$(N)) \
+		$(PROTOBUF_OBJS) $(V)
+	@python3 tools/revmatch.py '$(REVIVAL_DIR)/EfzRevival.exe' $(REVIVAL_EXE_DATA).functions.json \
+		build/revival/launcher/$(N).obj $(PROTOBUF_OBJS) $(PROBE_OBJS) --uncovered \
+		--range $$(make -s --no-print-directory revival-range N=$(N)) | sed -n '/not placed/,$$p'
 
 revival-flags:
 	@echo $(LAUNCHER_CFLAGS)
@@ -183,6 +195,6 @@ revival-flags:
 clean:
 	rm -rf build
 
-.PHONY: all diff link check play clean revival revival-diff revival-range revival-flags revival-names revival-decomp
+.PHONY: all diff link check play clean revival revival-diff revival-range revival-flags revival-names revival-decomp revival-check
 .SECONDARY:
 .DELETE_ON_ERROR:

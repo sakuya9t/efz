@@ -17,16 +17,19 @@ def undname(names):
     cache = json.load(open(CACHE)) if os.path.exists(CACHE) else {}
     todo = sorted({n for n in names if n not in cache and n.startswith('?')})
     if todo:
-        tmp = os.path.join(REPO, 'build', 'revival', 'undname.in')
+        tmp = os.path.join(REPO, 'build', 'revival', f'undname.{os.getpid()}.in')
         os.makedirs(os.path.dirname(tmp), exist_ok=True)
         open(tmp, 'w').write('\n'.join(todo) + '\n')
-        out = subprocess.run([os.path.join(REPO, 'tools', 'msvc11'), 'undname', 'undname.in'],
+        out = subprocess.run([os.path.join(REPO, 'tools', 'msvc11'), 'undname', os.path.basename(tmp)],
                              cwd=os.path.dirname(tmp), capture_output=True, text=True,
                              check=True).stdout.splitlines()
         out = [l.rstrip() for l in out if l.strip()]
+        os.remove(tmp)
         if len(out) == len(todo):
             cache.update(zip(todo, out))
-            json.dump(cache, open(CACHE, 'w'))
+            part = f'{CACHE}.{os.getpid()}'
+            json.dump(cache, open(part, 'w'))
+            os.replace(part, CACHE)  # atomic: several processes may share the cache
         else:
             for n in todo:
                 cache[n] = n
