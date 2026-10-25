@@ -14,9 +14,8 @@ import sys
 import pefile
 
 
-def main():
-    pe = pefile.PE(sys.argv[1])
-    flt = sys.argv[2] if len(sys.argv) > 2 else ''
+def vtables(pe):
+    """[(type descriptor name, offset in the complete object, vtable address, [slots])]."""
     base = pe.OPTIONAL_HEADER.ImageBase
     image = pe.get_memory_mapped_image()
     text = next(s for s in pe.sections if s.Name.startswith(b'.text'))
@@ -54,7 +53,13 @@ def main():
                     p += 4
                 if funcs:
                     rows.append((cols[col][0], cols[col][1], va + 4, funcs))
-    for name, offset, vt, funcs in sorted(rows, key=lambda r: r[2]):
+    return sorted(rows, key=lambda r: r[2])
+
+
+def main():
+    pe = pefile.PE(sys.argv[1])
+    flt = sys.argv[2] if len(sys.argv) > 2 else ''
+    for name, offset, vt, funcs in vtables(pe):
         if flt in name:
             off = f' (at +{offset:#x})' if offset else ''
             print(f'{vt:#x} {name}{off}: {" ".join(f"{f:#x}" for f in funcs)}')

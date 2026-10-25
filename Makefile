@@ -91,11 +91,12 @@ REVIVAL_DIR ?= $(HOME)/.local/share/efz-decomp/revival/1.02h
 GHIDRA_HOME ?= $(HOME)/tools/ghidra_12.1.4_PUBLIC
 GHIDRA_PROJECTS ?= $(HOME)/tools/efz-ghidra
 
-# The launcher's own sources, as observed: VS2012's Release options (/O2 /Oi /Oy- /GS
-# /sdl /Gy /MT /EHsc /fp:precise), but no /GL, no inlining (/Ob0) and no SSE
-# (/arch:IA32). It found protobuf in C:\Programming (tools/msvc11 maps that drive path).
-LAUNCHER_CFLAGS = /nologo /c /O2 /Ob0 /Oi /Oy- /GS /sdl /Gy /MT /EHsc /arch:IA32 /W3 \
-	/Zc:wchar_t /Zc:forScope /fp:precise /D WIN32 /D NDEBUG /D _CONSOLE /D _UNICODE \
+# The launcher's own sources, as observed: VS2012's Release options (/O2 /Oy- /GS /sdl
+# /Gy /MT /EHsc), but no /GL, no inlining (/Ob0), no SSE (/arch:IA32) and strict
+# floating point (/fp:strict). It found protobuf in C:\Programming (tools/msvc11 maps
+# that drive path).
+LAUNCHER_CFLAGS = /nologo /c /O2 /Ob0 /Oy- /GS /sdl /Gy /MT /EHsc /arch:IA32 /W3 \
+	/Zc:wchar_t /Zc:forScope /fp:strict /D WIN32 /D NDEBUG /D _CONSOLE /D _UNICODE \
 	/D UNICODE '/IC:\Programming\protobuf-2.6.1\src'
 LAUNCHER_SRCS := $(wildcard revival/EfzRevivalLauncher/*.cc revival/EfzRevivalLauncher/*.cpp)
 LAUNCHER_OBJS := $(patsubst revival/EfzRevivalLauncher/%,build/revival/launcher/%.obj,$(basename $(LAUNCHER_SRCS)))
@@ -114,6 +115,7 @@ PROTOBUF_SRCS = io/coded_stream stubs/common extension_set generated_message_uti
 PROTOBUF_OBJS = $(PROTOBUF_SRCS:%=build/revival/protobuf/%.obj)
 
 # Where each recovered launcher object's code lies in the original.
+LAUNCHER_RANGE_Console = 0x40ff60 0x4102a0
 LAUNCHER_RANGE_EfzPackets.pb = 0x4102a0 0x414710
 LAUNCHER_RANGE_protobuf = 0x44a000 0x44eb50
 
@@ -150,12 +152,37 @@ revival-diff: revival build/revival/EfzRevival.exe.functions.json
 			$(LAUNCHER_RANGE_protobuf) $(PROTOBUF_OBJS) || status=1; \
 	done; exit $$status
 
+# Names for the original's library and template code: probes (tools/probes) compiled
+# with the launcher's options and placed, with the recovered objects, by
+# tools/revmatch.py. revival-decomp then exports Ghidra's decompilation with them.
+PROBE_OBJS := $(patsubst tools/probes/%.cpp,build/revival/probe/%.obj,$(wildcard tools/probes/launcher_*.cpp))
+REVIVAL_EXE_DATA = build/revival/EfzRevival.exe
+
+build/revival/probe/%.obj: tools/probes/%.cpp Makefile
+	mkdir -p $(@D)
+	cd tools/probes && ../../tools/msvc11 cl $(LAUNCHER_CFLAGS) /Fo../../$@ $*.cpp
+
+revival-names: $(LAUNCHER_OBJS) $(PROTOBUF_OBJS) $(PROBE_OBJS) $(REVIVAL_EXE_DATA).functions.json
+	python3 tools/revmatch.py '$(REVIVAL_DIR)/EfzRevival.exe' $(REVIVAL_EXE_DATA).functions.json \
+		$(LAUNCHER_OBJS) $(PROTOBUF_OBJS) $(PROBE_OBJS) --range 0x401000 0x44a000 \
+		--out $(REVIVAL_EXE_DATA).names.json
+	python3 tools/revnames.py $(REVIVAL_EXE_DATA).names.json > $(REVIVAL_EXE_DATA).labels.json
+
+revival-decomp: revival-names
+	$(GHIDRA_HOME)/support/analyzeHeadless $(GHIDRA_PROJECTS) revival-1.02h \
+		-process EfzRevival.exe -noanalysis -scriptPath tools/ghidra \
+		-postScript ExportDecomp.java $(CURDIR)/$(REVIVAL_EXE_DATA).labels.json \
+		$(CURDIR)/$(REVIVAL_EXE_DATA).c 0x401000 0x44a000 > $(REVIVAL_EXE_DATA).c.log 2>&1
+
 revival-range:
 	@echo $(LAUNCHER_RANGE_$(N))
+
+revival-flags:
+	@echo $(LAUNCHER_CFLAGS)
 
 clean:
 	rm -rf build
 
-.PHONY: all diff link check play clean revival revival-diff revival-range
+.PHONY: all diff link check play clean revival revival-diff revival-range revival-flags revival-names revival-decomp
 .SECONDARY:
 .DELETE_ON_ERROR:
