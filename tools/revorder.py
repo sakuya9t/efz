@@ -250,9 +250,9 @@ def main():
                    for i, j in sorted(pairs.items())}, open(opt('--pairs'), 'w'), indent=0)
     if opt('--order'):
         # The rebuild's functions in the original's order: each paired one at its
-        # original's place, and one that isn't paired (it still differs, or the two
-        # sides split it differently) right after the paired function before it in the
-        # rebuild, so that it keeps its neighbourhood.
+        # original's place, and one of the rebuild's own objects that isn't paired (it
+        # still differs, or the two sides split it differently) right after the paired
+        # function before it in the rebuild, so that it keeps its neighbourhood.
         inv = {j: i for i, j in pairs.items()}
         libs = set(opt('--libs').split(',')) if opt('--libs') else set()
 
@@ -266,7 +266,7 @@ def main():
             if j in inv:
                 anchor = (A[inv[j]][0], 0)
                 keyed.append((anchor, j))
-            elif lo <= B[j][0] <= bmax and any(orderable(o, i) for _n, o, i in syms.get(B[j][0], [])):
+            elif lo <= B[j][0] <= bmax and any(':' not in o for _n, o, _i in syms.get(B[j][0], [])):
                 anchor = (anchor[0], anchor[1] + 1)
                 keyed.append((anchor, j))
         # The functions from UNTIL on keep the link's own order (a static function, which

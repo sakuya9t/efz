@@ -9,5 +9,14 @@
 // Network.obj has the two placeholders its receive handler binds. The headers that the
 // objects themselves include (boost/bind.hpp's _1-_9, Version.h) give every object its
 // own copies.
+//
+// stdio.h and tchar.h, the lines Visual Studio's console template starts with, come
+// after asio: the compiler keeps a scope's names in a table keyed by where they lie in its
+// memory, so what the header holds decides the order in which EfzPackets.pb.obj lays out
+// the messages' default_instance_ (the original's starts at MessagePalette, as with these
+// two; asio alone starts at MessageRedirect). Before asio they would change the order in
+// which every object refers to the CRT (memmove.obj and others would be loaded early).
 #pragma once
 #include <boost/asio.hpp>
+#include <stdio.h>
+#include <tchar.h>

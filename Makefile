@@ -196,12 +196,13 @@ revival-decomp: revival-names
 #   make revival-launcher         link build/revival/launcher/EfzRevival.exe from the objects
 #   make revival-launcher-check   and compare it with $(REVIVAL_DIR)'s, byte for byte
 #   make revival-launcher-order   remake the order file after the sources change
-# Link order is the project's: its files in alphabetical order (case-insensitive),
-# stdafx.obj (the precompiled header's) after them, then protobuf as a static library.
+# Link order is the project's: its files in alphabetical order (case-insensitive), so
+# stdafx.obj (the precompiled header's) and Unused.obj (code the link drops) last, then
+# protobuf as a static library.
 LAUNCHER_LINK_ORDER = Config Console EfzPackets.pb EfzRevivalLauncher GameProcess NetPeers \
 	Network ProtocolContext ProtocolState ProtocolStateClientConnect ProtocolStateEnd \
 	ProtocolStateHostConnect ProtocolStatePlay ProtocolStateSpecConnect ProtocolStateSpecPlay \
-	ProtocolStateTestDelay stdafx
+	ProtocolStateTestDelay stdafx Unused
 LAUNCHER_LIBS = user32.lib winmm.lib ws2_32.lib
 
 build/revival/protobuf/libprotobuf-lite.lib: $(PROTOBUF_OBJS)
@@ -249,9 +250,17 @@ revival-launcher-check: build/revival/launcher/EfzRevival.exe
 	cmp $< '$(REVIVAL_DIR)/EfzRevival.exe'
 	@sha256sum $<
 
+# The order a link without one suggests changes which identical functions the link folds
+# (listing them changes their sort), so the order is made again from a link with it.
+LAUNCHER_REORDER = python3 tools/revorder.py '$(REVIVAL_DIR)/EfzRevival.exe' $(1).exe $(1).map \
+	$(REVIVAL_EXE_DATA).functions.json 0x401000 0x44eb47 --until 0x44a710 --order $(LAUNCHER_ORDER)
 revival-launcher-order: build/revival/launcher/natural/EfzRevival.exe $(REVIVAL_EXE_DATA).functions.json
-	python3 tools/revorder.py '$(REVIVAL_DIR)/EfzRevival.exe' $< build/revival/launcher/natural/EfzRevival.map \
-		$(REVIVAL_EXE_DATA).functions.json 0x401000 0x44eb47 --until 0x44a710 --order $(LAUNCHER_ORDER)
+	$(call LAUNCHER_REORDER,build/revival/launcher/natural/EfzRevival)
+	mkdir -p build/revival/launcher/ordered
+	rm -f build/revival/c/Git/efz_2022/Release/EfzRevivalLauncher.pdb
+	$(LAUNCHER_LINK) /MAP:build/revival/launcher/ordered/EfzRevival.map \
+		/OUT:build/revival/launcher/ordered/EfzRevival.exe /ORDER:@$(LAUNCHER_ORDER) | { grep -v 'LNK4037' || true; }
+	$(call LAUNCHER_REORDER,build/revival/launcher/ordered/EfzRevival)
 
 revival-launcher: build/revival/launcher/EfzRevival.exe
 

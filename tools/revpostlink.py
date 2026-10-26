@@ -6,12 +6,15 @@
   GUID and age** in the RSDS record (link.exe makes up the GUID when it creates the PDB;
   the original's PDB had been updated by 12 links).
 - **The Rich header's counts of objects that left nothing in the image.** The original
-  counts 30 objects from the launcher's compiler (the build has 28: two protobuf objects
-  more were loaded, extension_set and stringprintf, whose code wasn't used), 134 C++
-  objects of the static CRT (one more) and 202 imported functions (four more): its
-  sources had code no longer in the image, which pulled them in. The new counts change
-  the header's checksum key, and with it how much link.exe pads the block, so the PE
-  header can move (tools/postlink.py).
+  counts 30 objects from the launcher's compiler (the build has 29, Unused.obj
+  included), 134 C++ objects of the static CRT (one more) and 202 imported functions
+  (four more): its sources had code no longer in the image, which pulled them in. The
+  new counts change the header's checksum key, and with it how much link.exe pads the
+  block, so the PE header can move (tools/postlink.py).
+- **The anonymous-namespace names in boost's type names** (`?A0x...`, as
+  tools/revdllpostlink.py for EfzRevival.dll): the developer linked their own build of
+  the boost libraries, and the compiler draws those names afresh on every compile; the
+  official libraries the build uses have others, of the same length.
 - **The size of .reloc.** link.exe reserves .reloc before it drops unreferenced code
   (/OPT:REF), at 2 bytes per DIR32 relocation of every section it took in plus 10 per page
   (IMAGE::CalculatePtrs), and pads the unused rest with zeros. The original's inputs had
@@ -36,6 +39,7 @@ COUNTS = {(0xCF, 61219): 30,                # Utc1700_CPP, Update 5's compiler
           (0xCF, 50929): 134,               # Utc1700_CPP, the static CRT
           (0x01, 0): 202}                   # Import0, imported functions
 RELOC_VSIZE = 0x2094C
+ANONYMOUS = {b'?A0x92439a12': b'?A0x0812ae90'}    # boost.system's error categories
 
 
 def main():
@@ -73,6 +77,9 @@ def main():
                      reloc.VirtualAddress + (RELOC_VSIZE + salign - 1) // salign * salign)
     struct.pack_into('<I', data, opt + 8,                      # SizeOfInitializedData
                      pe.OPTIONAL_HEADER.SizeOfInitializedData + grow)
+
+    for built, original in ANONYMOUS.items():
+        data[:] = data.replace(built, original)
 
     open(path, 'wb').write(data)
 

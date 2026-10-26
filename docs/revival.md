@@ -306,10 +306,12 @@ What decides the code, from the objects matched so far:
 - `.text` is the original's size. Every launcher function compiles to the original's
   instructions (`make revival-diff`; the few DIFFs left are template copies the checker
   maps to another identical copy). Of the original's 3,708 functions in
-  `0x401000`-`0x44eb47`, 3,633 pair with one of the build's and 3,405 sit at their
+  `0x401000`-`0x44eb47`, 3,633 pair with one of the build's and 3,407 sit at their
   address with their instructions; the rest are the `0x30` bytes of `time.inl`'s static
   `gmtime`/`localtime_s`/`time` (below), and call targets and data addresses that follow
-  from what is still out of place. The CRT after it (`0x44eae5` on) is not in place.
+  from what is still out of place. The CRT after it (`0x44eae5` on) is loaded in the
+  original's order but for three ConcRT objects, and is not in place: of identical CRT
+  functions the link keeps other copies (below).
 
 What the image showed about the sources (**observed**, each confirmed by a test build):
 - **The precompiled header.** A header static of `stdafx.h` (asio's categories,
@@ -341,17 +343,35 @@ What the image showed about the sources (**observed**, each confirmed by a test 
   headers' declarations and include order (to do).
 - **Static locals** in `.bss` come in the order of their functions' definitions
   (`ProtocolContext::send`'s before `checkSync`'s).
-- **Libraries.** The CRT's objects come in the order the link first needs them: five of
-  about 350 are elsewhere (`fiopen`, `tolower`, `abort`, `_wctype`,
-  `VirtualProcessorRoot`), which follows from the order in which the objects refer to
-  symbols (to do). Two protobuf objects more were loaded (`extension_set`,
-  `stringprintf`: two more `allocator_arg`/`piecewise_construct` bytes each after
-  `generated_message_util`'s), by references from code no longer in the image.
+- **Names kept by address.** The compiler keeps a scope's names in a table keyed by where
+  they lie in its memory, so names declared one after the other come out in their order
+  but starting anywhere: `EfzPackets.pb.obj` lays out the ten `default_instance_`
+  pointers in message order from `MessageRedirect` with `stdafx.h` holding asio alone,
+  from `MessagePalette` (the original's) with `stdio.h` and `tchar.h` (the console
+  template's lines) after it. Before asio they would change the order in which every
+  object refers to the CRT.
+- **Libraries.** The link resolves a library's members in the order of its list of
+  undefined symbols (`LIB::Search`): the objects' symbols in link order, each object's in
+  the order the compiler created them (declaration order, so include order), then the
+  entry point, then each loaded member's at the end. So `ProtocolContext.h` includes
+  `<thread>` before `Log.h` (whose boost.iostreams brings `<fstream>`): the thread
+  objects come before `fiopen.obj`, and `abort.obj` before `fopen.obj`. `tolower.obj`
+  comes right after `stdafx.obj`'s `signal` and before the entry point, so an object
+  linked after `stdafx.obj` referred to `tolower` (`Unused.cpp`, a stand-in: nothing of
+  it is in the image); `_wctype.obj` follows from it. Three ConcRT objects
+  (`ScheduleGroupBase`, `VirtualProcessor`, `VirtualProcessorRoot`) are still loaded
+  later than in the original: what loads them are other CRT objects' references, the
+  same in both, so the difference lies in what the original's unused code pulled in
+  (the Rich header counts one CRT object more). The original also has 4 bytes more
+  `.bss` after `generated_message_util`'s (not `stringprintf.obj`, whose `vsnprintf`
+  would load `vsnprint.obj` earlier) and Network.obj 4 bytes after `REVIVAL_SUFFIX`
+  that nothing reads (a file static of the source lands after asio's placeholders).
 
 Fixed after the link (`tools/revpostlink.py`), as nothing in the sources can give them:
 the timestamp, the PDB's GUID and age (12), the Rich header's counts (30 objects from the
 launcher's compiler, 134 C++ objects of the CRT, 202 imported functions: what the
-unused code pulled in), and the size reserved for `.reloc`. `link.exe` reserves
+unused code pulled in), boost.system's anonymous-namespace name (as for the DLL), and
+the size reserved for `.reloc`. `link.exe` reserves
 `2 x DIR32 relocations + 10 x pages` before it drops unreferenced code
 (`IMAGE::CalculatePtrs`, counted by `CountRelocsInSection`), and pads the rest with
 zeros: the original's inputs had 65,626 such relocations, about 43,000 more than the
@@ -374,9 +394,20 @@ from their place. Exception funclets (`.text$x`) can't be ordered either (they a
 local symbols), and identical read-only data is folded the same way and can't be
 ordered either (`/ORDER` takes functions only): of the identical virtual base tables
 `e0 ff ff ff 08 00 00 00` of the boost exception wrappers, the original keeps
-`Config.obj`'s (`0x497898`), the build `ProtocolContext.obj`'s. So where folded funclets
-and data go is still the link's choice; matching it needs the original's link inputs,
-unused code included, or a link that can be told.
+`Config.obj`'s (`0x497898`), the build `ProtocolContext.obj`'s. Nor can the CRT be
+ordered: some of its objects aren't COMDATs (`memchr.obj` and the other assembler ones;
+`/ORDER` warns LNK4065), and those would go after every ordered function. So of
+identical CRT functions, too, the link's choice stands, and it is another than the
+original's from the CRT's third object on: the original keeps `xthrow.obj`'s deleting
+destructor of `bad_function_call`, `length_error` and `invalid_argument` (`0x44ec39`),
+the build `Exceptions.obj`'s, and everything after it moves. Where folded functions,
+funclets and data go is the link's choice; matching it needs the original's link
+inputs, unused code included (the comparison sorts every candidate with the CRT's
+unstable `qsort` and keeps the first of each run).
+
+Making the order file again after the sources change (`make revival-launcher-order`)
+takes two links: one without it, and one with the order that link suggests, because
+naming identical functions changes which of them the link folds.
 
 ## Recovering EfzRevival.dll
 

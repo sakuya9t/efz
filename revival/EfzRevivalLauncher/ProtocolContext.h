@@ -16,6 +16,10 @@
 #include "ProtocolState.h"
 #include "SharedData.h"
 #include "SharedQueue.h"
+// <thread> before Log.h's boost.iostreams (and <fstream>): the object refers to
+// std::thread's functions before _Fiopen, so the link loads the CRT's thread objects
+// before fiopen.obj (and abort.obj before fopen.obj), as in the original.
+#include <thread>
 #include "Log.h"
 #include "Timer.h"
 #include "Version.h"
@@ -26,7 +30,6 @@
 #include <deque>
 #include <memory>
 #include <string>
-#include <thread>
 #include <vector>
 
 class ProtocolContext {
