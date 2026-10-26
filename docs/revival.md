@@ -500,6 +500,45 @@ protobuf's `GzipOutputStream` (zlib format, level 9) before sending.
   hat hook) on the game's input object and returns the controls, so EfzRevival.dll can read
   real local input around its own patch of `CInput::GetInput`.
 
+## EfzRevival.dll: hooks, boxes, save states
+
+**Observed** in `revival/EfzRevival/EfzRevival.cpp`, `EfzGame.cpp`, `GameState.cpp`, `Hook.cpp`
+(`0x1006a850`-`0x1006fae2`; 175 of 183 functions match):
+- **Hooks.** `init` hooks `0x401582` (`WinMain`'s loop) to `setup`, which runs once: it sets
+  the window title, makes `0x776053` an unconditional jump and installs the rest:
+  - `0x40d131`, the end of `CInput::GetInput` -> `inputHook` (left+right becomes left, then
+    the session's `input`);
+  - `0x7656a7` in `CScene3::Vf2` -> the session's `fightUpdate`;
+  - the call at `0x401642` -> `frameHook`: switch sessions if the game's mode changed,
+    `keepAwake` (a zero mouse move through `SendInput`), key and button edges to the
+    session, then the session's `update`;
+  - the call at `0x76479c` in `CScene3::Draw` -> `drawBoxesHook`;
+  - the CRT's `rand` at `0x777d61` -> `std::minstd_rand` with a uniform 0-`0x7fff`
+    distribution (a random state the rollback can save);
+  - `CReplayFile`'s five methods (`0x405e90`-`0x406020`) -> `ReplayFile`;
+  - `CSound::Play` (`0x40de80`), `Stop` (`0x40de40`) and `SetVolume` (`0x40e5d0`) -> the
+    session's sound slots.
+  `setRendering(false)` makes 7 blit and fill functions return at once (rollback re-runs
+  frames without drawing); `true` restores them. In practice mode, leaving the title
+  switches to the replay session (scene 8) or the practice session (scene 1).
+- **Boxes.** A session's `showBoxes(player, kind)` queues requests; `drawBoxesHook` draws
+  them during the fight scene's `Draw`. `drawBoxRequest` reads the player's current pattern
+  frame (patterns at `CPlayer+0x164`), puts each box through the game's own box function,
+  the camera (with the shake offset while hit) and x2, and hands it to DDRAW.dll's
+  `EfzRender::addRectRender(rect, colour, stipple)`:
+  - hit boxes red `0xffff0000`, stippled `0xf0f0f0f0` while the hit is inactive;
+  - hurt boxes blue `0xff0000ff`, only while the player is vulnerable;
+  - the collision box yellow `0xffffff00`, plus the crossup midline: a zero-width rectangle
+    at the player's x, twice the box's height, starting half a box higher;
+  - projectiles (the 64-entry object ring) the same way, offset by 420 in y.
+- **Save states.** A 500,000-byte buffer of copied regions: the x87 state, the F-key word,
+  the fight scene (`0x598` bytes, or all but `0x434`-`0x440` when not full), `CGame`
+  (`0x142f0`), each player (by its character's size), the 1 KB palette, the back buffer,
+  the stage animation frames (`0x1c0` or `0xe0`), plus the random generator's state and
+  the box list. Loading restores everything but the x87 state.
+- **Crash handler.** Writes "!!!Crash!!!", the DLL's base, the exception's address and code,
+  the registers and 150 stack words following the `ebp` chain to `logEfz.txt`.
+
 ## The network messages
 
 `revival/EfzRevivalLauncher/EfzPackets.proto` is reconstructed from the launcher (every
