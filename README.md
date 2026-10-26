@@ -153,6 +153,8 @@ ssh, name the session's display, e.g. `DISPLAY=:10 make play` for an xrdp deskto
 | `tools/rtti.py` | Lists an MSVC binary's vtables, with their classes, through its RTTI |
 | `tools/revdiff.py` | Per-function comparison for EfzRevival, addresses from annotations or unique byte matches |
 | `tools/revlayout.py` | Predicts where an object's functions land (name order, identical-function folding) |
+| `tools/revorder.py` | Pairs a rebuilt launcher's functions with the original's and writes the link order file |
+| `tools/revpostlink.py` | Sets the launcher's timestamp, PDB GUID and age, Rich counts and `.reloc` size after linking |
 | `tools/ghidra/ExportFunctions.java` | Ghidra headless script: every function's entry, extent, name source and callees as JSON |
 
 ## EfzRevival

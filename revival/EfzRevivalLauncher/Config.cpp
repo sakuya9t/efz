@@ -3,11 +3,33 @@
 #include "Config.h"
 // OBJECT: 0x401000 0x40ff60
 #include "Version.h"
+#include "Characters.h"
 #include <boost/algorithm/string.hpp>
 #define DIRECTINPUT_VERSION 0x0800
 #include <dinput.h>
 #include <cstdlib>
+#include <sstream>
 #include <vector>
+
+// Observed: Config.obj defines the locale ids of narrow and wide number output
+// (num_put<char> and numpunct<char> and <wchar_t>, num_put<wchar_t>) and
+// iostream_category's object (static initializers 0x495230-0x4952b0, the first in the
+// launcher), and emits _Iostream_error_category's virtual functions, yet none of its code
+// prints a number; and its first string literals are L"None" and L"Name" (0x4978d0),
+// before isValidAddress's ":" and load's keys, though load is the first to use L"Name".
+// The source had code that wasn't compiled into the object, before the functions below;
+// an unused function like this one makes the compiler define those statics and literals
+// and nothing else.
+static std::wstring unusedKeyText(int key, int number)
+{
+    if (key < 0)
+        return L"None";
+    std::wstringstream wide;
+    wide << L"Name" << number;
+    std::ostringstream narrow;
+    narrow << number;
+    return wide.str();
+}
 
 // FUNCTION: 0x405e90
 Config::Config(const std::wstring &path)

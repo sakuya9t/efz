@@ -32,52 +32,6 @@ void ProtocolStateSpecPlay::enter(ProtocolContext &context)
     context.startResendTimer(64);
 }
 
-// FUNCTION: 0x4478c0
-void ProtocolStateSpecPlay::handleGameTimer(ProtocolContext &context)
-{
-    if (!context.isGameRunning()) {
-        context.log << "Efz died, quit\n";
-        context.sendQuitAll();
-        console_ << "\nEfz died\n";
-        context.switchState(std::unique_ptr<ProtocolStateEnd>(new ProtocolStateEnd()));
-    }
-}
-
-// Acknowledges the inputs received so far, which asks for the next 60 frames.
-// FUNCTION: 0x4479a0
-void ProtocolStateSpecPlay::handleResendTimer(ProtocolContext &context)
-{
-    context.consumeSync();
-    std::vector<Endpoint> sources = context.peers.getFlagged(2);
-    for (Endpoint source : sources) {
-        context.sendInputAck(context.inputs[0].size(), 60, source);
-        if (context.debug())
-            context.sendSyncRequest(10, source);
-    }
-}
-
-// FUNCTION: 0x447ab0
-void ProtocolStateSpecPlay::handleTimeout(ProtocolContext &context, const Endpoint &peer)
-{
-    if (context.peers.flagged(peer, 2)) {
-        context.log << "Source " << peer << " died, try reconnect\n";
-        context.peers.remove(peer);
-        context.switchState(std::unique_ptr<ProtocolStateSpecConnect>(new ProtocolStateSpecConnect()));
-    } else {
-        context.log << peer << " died\n";
-        context.peers.remove(peer);
-    }
-}
-
-// FUNCTION: 0x447bd0
-void ProtocolStateSpecPlay::leave(ProtocolContext &context)
-{
-    context.stopPingTimer();
-    context.stopTimeoutTimer();
-    context.stopGameTimer();
-    context.stopResendTimer();
-}
-
 // FUNCTION: 0x447c00
 void ProtocolStateSpecPlay::receiveConnectRequest(ProtocolContext &context, int game,
                                                   int version, int role, std::wstring, bool,
@@ -101,6 +55,67 @@ void ProtocolStateSpecPlay::receiveConnectRequest(ProtocolContext &context, int 
     } else {
         context.sendConnectConfirm(role, from);
     }
+}
+
+// FUNCTION: 0x447ab0
+void ProtocolStateSpecPlay::handleTimeout(ProtocolContext &context, const Endpoint &peer)
+{
+    if (context.peers.flagged(peer, 2)) {
+        context.log << "Source " << peer << " died, try reconnect\n";
+        context.peers.remove(peer);
+        context.switchState(std::unique_ptr<ProtocolStateSpecConnect>(new ProtocolStateSpecConnect()));
+    } else {
+        context.log << peer << " died\n";
+        context.peers.remove(peer);
+    }
+}
+
+// FUNCTION: 0x447f50
+void ProtocolStateSpecPlay::receiveQuit(ProtocolContext &context, const Endpoint &from)
+{
+    context.log << "Received quit from: " << from << "\n";
+    handleTimeout(context, from);
+}
+
+// FUNCTION: 0x4478c0
+void ProtocolStateSpecPlay::handleGameTimer(ProtocolContext &context)
+{
+    if (!context.isGameRunning()) {
+        context.log << "Efz died, quit\n";
+        context.sendQuitAll();
+        console_ << "\nEfz died\n";
+        context.switchState(std::unique_ptr<ProtocolStateEnd>(new ProtocolStateEnd()));
+    }
+}
+
+// FUNCTION: 0x447fa0
+void ProtocolStateSpecPlay::receiveRedirect(ProtocolContext &context, const Endpoint &target,
+                                            const Endpoint &from)
+{
+    context.log << "Received redirect from " << from << ", send NAT traversal and wait for "
+                << target << "\n";
+    context.sendNatTraversal(target.port(), target.port() + 10, target);
+}
+// Acknowledges the inputs received so far, which asks for the next 60 frames.
+// FUNCTION: 0x4479a0
+void ProtocolStateSpecPlay::handleResendTimer(ProtocolContext &context)
+{
+    context.consumeSync();
+    std::vector<Endpoint> sources = context.peers.getFlagged(2);
+    for (Endpoint source : sources) {
+        context.sendInputAck(context.inputs[0].size(), 60, source);
+        if (context.debug())
+            context.sendSyncRequest(10, source);
+    }
+}
+
+// FUNCTION: 0x447bd0
+void ProtocolStateSpecPlay::leave(ProtocolContext &context)
+{
+    context.stopPingTimer();
+    context.stopTimeoutTimer();
+    context.stopGameTimer();
+    context.stopResendTimer();
 }
 
 // Folded with ProtocolStatePlay::receiveInputAck (0x446400).
@@ -144,20 +159,4 @@ void ProtocolStateSpecPlay::receivePunch(ProtocolContext &context, const Endpoin
     static int redirects = 0;
     context.sendPing(Endpoint(target.address(), target.port() + redirects++));
     redirects %= 10;
-}
-
-// FUNCTION: 0x447f50
-void ProtocolStateSpecPlay::receiveQuit(ProtocolContext &context, const Endpoint &from)
-{
-    context.log << "Received quit from: " << from << "\n";
-    handleTimeout(context, from);
-}
-
-// FUNCTION: 0x447fa0
-void ProtocolStateSpecPlay::receiveRedirect(ProtocolContext &context, const Endpoint &target,
-                                            const Endpoint &from)
-{
-    context.log << "Received redirect from " << from << ", send NAT traversal and wait for "
-                << target << "\n";
-    context.sendNatTraversal(target.port(), target.port() + 10, target);
 }

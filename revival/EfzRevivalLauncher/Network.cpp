@@ -220,6 +220,34 @@ void Network::init(int mode, const std::string &address)
     }
 }
 
+// FUNCTION: 0x429000
+void Network::start(int mode, const std::string &address)
+{
+    if (mutexError_ == ERROR_ALREADY_EXISTS) {
+        console_ << "Only one net instance allowed\n";
+        system("pause");
+        return;
+    }
+    init(mode, address);
+    asyncReceive();
+    io_.run();
+    if (context_ != NULL) {
+        delete context_;
+        context_ = NULL;
+    }
+}
+
+// FUNCTION: 0x4279e0
+void Network::receive(std::size_t size, const boost::system::error_code &error)
+{
+    if (error) {
+        context_->log << "Recv error: " << error.message() << " src: "
+                      << remote_.address().to_string() << "\n";
+        context_->log.flush();
+    }
+    handlePacket(buffer_, size, remote_);
+    asyncReceive();
+}
 // FUNCTION: 0x4273b0
 boost::asio::ip::udp::endpoint parseEndpoint(const std::string &address)
 {
@@ -249,18 +277,6 @@ boost::asio::ip::udp::endpoint parseEndpoint(const std::string &address)
 std::wstring parseName(const std::string &bytes)
 {
     return std::wstring((const wchar_t *)bytes.data(), bytes.size() / 2);
-}
-
-// FUNCTION: 0x4279e0
-void Network::receive(std::size_t size, const boost::system::error_code &error)
-{
-    if (error) {
-        context_->log << "Recv error: " << error.message() << " src: "
-                      << remote_.address().to_string() << "\n";
-        context_->log.flush();
-    }
-    handlePacket(buffer_, size, remote_);
-    asyncReceive();
 }
 
 // FUNCTION: 0x427af0
@@ -403,23 +419,6 @@ void Network::receiveSync(const char *packet, int size, bool compressed, const E
             context_->receiveSyncRequest(message.f2(), message.f3(), from);
             break;
         }
-    }
-}
-
-// FUNCTION: 0x429000
-void Network::start(int mode, const std::string &address)
-{
-    if (mutexError_ == ERROR_ALREADY_EXISTS) {
-        console_ << "Only one net instance allowed\n";
-        system("pause");
-        return;
-    }
-    init(mode, address);
-    asyncReceive();
-    io_.run();
-    if (context_ != NULL) {
-        delete context_;
-        context_ = NULL;
     }
 }
 

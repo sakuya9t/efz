@@ -116,17 +116,36 @@ PROTOBUF_OBJS = $(PROTOBUF_SRCS:%=build/revival/protobuf/%.obj)
 
 # Where each recovered launcher object's code lies in the original.
 LAUNCHER_RANGE_EfzPackets.pb = 0x4102a0 0x414710
-LAUNCHER_RANGE_protobuf = 0x44a5d0 0x44eb50
+LAUNCHER_RANGE_protobuf = 0x44a710 0x44eb50
 
 revival: $(LAUNCHER_OBJS) $(PROTOBUF_OBJS)
 
-build/revival/launcher/%.obj: revival/EfzRevivalLauncher/%.cc Makefile
-	mkdir -p $(@D)
-	cd revival/EfzRevivalLauncher && MSVC11_QUIET=1 ../../tools/msvc11 cl $(LAUNCHER_CFLAGS) /Fo../../$@ $*.cc
+# Every launcher source, EfzPackets.pb.cc included, is compiled with the precompiled
+# header stdafx.h (forced in with /FI), which stdafx.cpp makes: observed in which header
+# statics and inline functions each object emits (stdafx.h). With debug information
+# (the original was linked /DEBUG): /Z7 gives the image /Zi gives, and builds in
+# parallel without a PDB server.
+LAUNCHER_PCH = build/revival/launcher/EfzRevivalLauncher.pch
+LAUNCHER_DEBUG = /Z7
+LAUNCHER_USE_PCH = /Yustdafx.h /FIstdafx.h /Fp../../$(LAUNCHER_PCH)
+LAUNCHER_HDRS := $(wildcard revival/EfzRevivalLauncher/*.h)
 
-build/revival/launcher/%.obj: revival/EfzRevivalLauncher/%.cpp Makefile
+build/revival/launcher/stdafx.obj: revival/EfzRevivalLauncher/stdafx.cpp revival/EfzRevivalLauncher/stdafx.h Makefile
 	mkdir -p $(@D)
-	cd revival/EfzRevivalLauncher && MSVC11_QUIET=1 ../../tools/msvc11 cl $(LAUNCHER_CFLAGS) /Fo../../$@ $*.cpp
+	cd revival/EfzRevivalLauncher && MSVC11_QUIET=1 ../../tools/msvc11 cl $(LAUNCHER_CFLAGS) $(LAUNCHER_DEBUG) \
+		/Ycstdafx.h /Fp../../$(LAUNCHER_PCH) /Fo../../$@ stdafx.cpp
+
+$(LAUNCHER_PCH): build/revival/launcher/stdafx.obj
+
+build/revival/launcher/%.obj: revival/EfzRevivalLauncher/%.cc $(LAUNCHER_PCH) $(LAUNCHER_HDRS) Makefile
+	mkdir -p $(@D)
+	cd revival/EfzRevivalLauncher && MSVC11_QUIET=1 ../../tools/msvc11 cl $(LAUNCHER_CFLAGS) $(LAUNCHER_DEBUG) \
+		$(LAUNCHER_USE_PCH) /Fo../../$@ $*.cc
+
+build/revival/launcher/%.obj: revival/EfzRevivalLauncher/%.cpp $(LAUNCHER_PCH) $(LAUNCHER_HDRS) Makefile
+	mkdir -p $(@D)
+	cd revival/EfzRevivalLauncher && MSVC11_QUIET=1 ../../tools/msvc11 cl $(LAUNCHER_CFLAGS) $(LAUNCHER_DEBUG) \
+		$(LAUNCHER_USE_PCH) /Fo../../$@ $*.cpp
 
 build/revival/protobuf/%.obj:
 	mkdir -p $(@D)
@@ -174,13 +193,15 @@ revival-decomp: revival-names
 		$(CURDIR)/$(REVIVAL_EXE_DATA).c 0x401000 0x44a000 > $(REVIVAL_EXE_DATA).c.log 2>&1
 
 # --- EfzRevival.exe: the whole launcher ---------------------------------------------
-#   make revival-launcher   link build/revival/launcher/EfzRevival.exe from the objects
-# Link order is the project's: its files in alphabetical order (case-insensitive), then
-# protobuf as a static library.
+#   make revival-launcher         link build/revival/launcher/EfzRevival.exe from the objects
+#   make revival-launcher-check   and compare it with $(REVIVAL_DIR)'s, byte for byte
+#   make revival-launcher-order   remake the order file after the sources change
+# Link order is the project's: its files in alphabetical order (case-insensitive),
+# stdafx.obj (the precompiled header's) after them, then protobuf as a static library.
 LAUNCHER_LINK_ORDER = Config Console EfzPackets.pb EfzRevivalLauncher GameProcess NetPeers \
 	Network ProtocolContext ProtocolState ProtocolStateClientConnect ProtocolStateEnd \
 	ProtocolStateHostConnect ProtocolStatePlay ProtocolStateSpecConnect ProtocolStateSpecPlay \
-	ProtocolStateTestDelay
+	ProtocolStateTestDelay stdafx
 LAUNCHER_LIBS = user32.lib winmm.lib ws2_32.lib
 
 build/revival/protobuf/libprotobuf-lite.lib: $(PROTOBUF_OBJS)
@@ -193,15 +214,44 @@ build/revival/launcher/EfzRevival.ico:
 build/revival/launcher/EfzRevivalLauncher.res: revival/EfzRevivalLauncher/EfzRevivalLauncher.rc build/revival/launcher/EfzRevival.ico
 	tools/msvc11 rc /nologo /fo$@ $< > /dev/null
 
-build/revival/launcher/EfzRevival.exe: $(LAUNCHER_LINK_ORDER:%=build/revival/launcher/%.obj) \
-		build/revival/protobuf/libprotobuf-lite.lib build/revival/launcher/EfzRevivalLauncher.res
+# The link of the launcher, without its order file: OUT is the image, ORDER the option.
+LAUNCHER_LINK = tools/msvc11 link /nologo /SUBSYSTEM:CONSOLE,5.01 /OPT:REF /OPT:ICF /DYNAMICBASE \
+	/NXCOMPAT /MACHINE:X86 /SAFESEH /DEBUG '/PDB:C:\Git\efz_2022\Release\EfzRevivalLauncher.pdb' \
+	/MANIFEST:EMBED "/MANIFESTUAC:level='asInvoker' uiAccess='false'" \
+	$(LAUNCHER_LINK_ORDER:%=build/revival/launcher/%.obj) build/revival/launcher/EfzRevivalLauncher.res \
+	build/revival/protobuf/libprotobuf-lite.lib $(LAUNCHER_LIBS)
+LAUNCHER_INPUTS = $(LAUNCHER_LINK_ORDER:%=build/revival/launcher/%.obj) \
+	build/revival/protobuf/libprotobuf-lite.lib build/revival/launcher/EfzRevivalLauncher.res
+
+# The functions' order (/ORDER) is the original's: which of several identical functions
+# the link keeps (/OPT:ICF) depends on every function in it, dead code included, which
+# the sources no longer have (docs/revival.md, "Identical functions"). The order file
+# names our functions in the original's order; make revival-launcher-order remakes it
+# from a link without it (tools/revorder.py) after the sources change. Only the
+# launcher's own objects are ordered (up to protobuf, 0x44a710): protobuf's static
+# functions can't be named, so protobuf keeps the link's order, which is the original's.
+LAUNCHER_ORDER = revival/EfzRevivalLauncher/EfzRevival.order
+
+build/revival/launcher/EfzRevival.exe: $(LAUNCHER_INPUTS) $(LAUNCHER_ORDER)
 	mkdir -p build/revival/c/Git/efz_2022/Release
-	tools/msvc11 link /nologo /SUBSYSTEM:CONSOLE,5.01 /OPT:REF /OPT:ICF /DYNAMICBASE /NXCOMPAT \
-		/MACHINE:X86 /SAFESEH /DEBUG '/PDB:C:\Git\efz_2022\Release\EfzRevivalLauncher.pdb' \
-		/MANIFEST:EMBED "/MANIFESTUAC:level='asInvoker' uiAccess='false'" \
-		/MAP:build/revival/launcher/EfzRevival.map /OUT:$@ \
-		$(LAUNCHER_LINK_ORDER:%=build/revival/launcher/%.obj) build/revival/launcher/EfzRevivalLauncher.res \
-		build/revival/protobuf/libprotobuf-lite.lib $(LAUNCHER_LIBS)
+	rm -f build/revival/c/Git/efz_2022/Release/EfzRevivalLauncher.pdb
+	$(LAUNCHER_LINK) /MAP:build/revival/launcher/EfzRevival.map /OUT:$@ /ORDER:@$(LAUNCHER_ORDER) \
+		| { grep -v 'LNK4037' || true; }
+	python3 tools/revpostlink.py $@
+
+build/revival/launcher/natural/EfzRevival.exe: $(LAUNCHER_INPUTS)
+	mkdir -p $(@D) build/revival/c/Git/efz_2022/Release
+	rm -f build/revival/c/Git/efz_2022/Release/EfzRevivalLauncher.pdb
+	$(LAUNCHER_LINK) /MAP:$(@D)/EfzRevival.map /OUT:$@
+
+# Like make check: the linked launcher is the original, byte for byte (not yet).
+revival-launcher-check: build/revival/launcher/EfzRevival.exe
+	cmp $< '$(REVIVAL_DIR)/EfzRevival.exe'
+	@sha256sum $<
+
+revival-launcher-order: build/revival/launcher/natural/EfzRevival.exe $(REVIVAL_EXE_DATA).functions.json
+	python3 tools/revorder.py '$(REVIVAL_DIR)/EfzRevival.exe' $< build/revival/launcher/natural/EfzRevival.map \
+		$(REVIVAL_EXE_DATA).functions.json 0x401000 0x44eb47 --until 0x44a710 --order $(LAUNCHER_ORDER)
 
 revival-launcher: build/revival/launcher/EfzRevival.exe
 
@@ -310,6 +360,6 @@ revival-flags:
 clean:
 	rm -rf build
 
-.PHONY: all diff link check play clean revival revival-diff revival-range revival-flags revival-names revival-decomp revival-check revival-launcher revival-dll revival-dll-diff revival-dll-check revival-ddraw-diff
+.PHONY: all diff link check play clean revival revival-diff revival-range revival-flags revival-names revival-decomp revival-check revival-launcher revival-launcher-check revival-launcher-order revival-dll revival-dll-diff revival-dll-check revival-ddraw-diff
 .SECONDARY:
 .DELETE_ON_ERROR:

@@ -100,6 +100,15 @@ Build options **observed** so far:
     call to `floor`; the original divides again after it. Intrinsics stay on (`/O2`):
     `std::char_traits<char>::length` inlines `strlen`, the messages' `Clear` inlines
     `memset`. **Inferred:** strict floating point for deterministic rollback.
+  - A precompiled header, `stdafx.h` with `<boost/asio.hpp>`: every source, the
+    generated `EfzPackets.pb.cc` included, is compiled with it (`/Yu`, forced in with
+    `/FI` here), `stdafx.cpp` makes it (`/Yc`) and `stdafx.obj` is linked after the
+    other objects. **Observed** in the static initializers: only the last object
+    (`0x495c40`-`0x495cc0`) has asio's error categories, `winsock_init` and
+    placeholders, and the others only the header statics their code uses (see "The
+    launcher, byte for byte").
+  - Debug information (the original was linked `/DEBUG`): `/Z7` and `/Zi` give the same
+    image, and both change which copy of identical functions the link keeps.
 - `EfzRevival.dll`, linked with `/LTCG`: `/O2 /Ob0 /Oy- /GS /GL /Gy- /GF- /MT /EHsc
   /arch:IA32`. **Observed** (test links compared with `tools/revltcg.py`):
   - `/Gy-` (no function-level linking): the developer's functions are not COMDATs, so
@@ -218,10 +227,18 @@ objects with the toolchain and reading the map, and each holds in the launcher:
    In the launcher, `MergeFrom` and `MergePartialFromCodedStream` of the ten messages run
    `ChangeRole, Done, Init, Input, Palette, Ping, Punch, Quit, Redirect, Sync`, and
    `gzip_stream.obj`'s functions run `??0GzipInputStream` ... `?Skip@...`.
-2. **Of identical functions only the last copy survives** (`/OPT:ICF`), in its own
-   place: of `aaa`, `qqq` and `zzz` with the same body, `zzz` is kept, whichever is
-   referenced first. Accessors such as `has_x()` that read the same bit of different
-   messages fold into one.
+2. **Of identical functions one copy survives** (`/OPT:ICF`), in its own place.
+   Accessors such as `has_x()` that read the same bit of different messages fold into
+   one. Which copy is not a rule of names or order: read from `link.exe` (its public
+   symbols are on Microsoft's symbol server; `IMAGE::ICFAnalysis`, `ICFComparePcon`),
+   the candidates of each section are sorted with the CRT's `qsort` by checksum, size,
+   relocation count and a few flags, and the first of each run of identical ones is
+   kept. Identical functions compare equal, and `qsort` isn't stable, so the
+   survivor depends on every candidate in the link, dead code included (a dead object
+   linked after the others changed 33 of 60 test pairs) and on `/Z7`. Only with
+   `/VERBOSE` (which fills in the names the sort compares last) is the alphabetically
+   first kept. The launcher's link pins the original's choices with an order file
+   (see "The launcher, byte for byte").
 3. **An inline function used by several objects is taken from the first object in link
    order** (COMDAT "any" selection); the other copies are discarded.
 
@@ -278,6 +295,88 @@ What decides the code, from the objects matched so far:
   listed by the `.CRT$XCU` table at `0x497314`), one run per object in link order:
   boost.bind's placeholders `_1`-`_9`, error-category references and a header's static
   `std::wstring` (`L"h!!!"`) show which objects include which headers.
+
+## The launcher, byte for byte
+
+`make revival-launcher-check` links, post-processes (`tools/revpostlink.py`) and compares
+`EfzRevival.exe` with the original; it doesn't pass yet. Where it stands:
+- Same size, sections, header and resources. `.data` is the original's size and its
+  initialized part is laid out the same; the 172 static initializers (`.CRT$XCU`) are
+  the original's, object for object; `.rdata` is the original's size.
+- `.text` is the original's size. Every launcher function compiles to the original's
+  instructions (`make revival-diff`; the few DIFFs left are template copies the checker
+  maps to another identical copy). Of the original's 3,708 functions in
+  `0x401000`-`0x44eb47`, 3,633 pair with one of the build's and 3,405 sit at their
+  address with their instructions; the rest are the `0x30` bytes of `time.inl`'s static
+  `gmtime`/`localtime_s`/`time` (below), and call targets and data addresses that follow
+  from what is still out of place. The CRT after it (`0x44eae5` on) is not in place.
+
+What the image showed about the sources (**observed**, each confirmed by a test build):
+- **The precompiled header.** A header static of `stdafx.h` (asio's categories,
+  `winsock_init`, placeholders) is in `stdafx.obj` and in an object compiled with the
+  header only when that object's code uses it, before the object's own statics.
+  Template statics a precompiled header instantiated (`_Error_objects::_Iostream_object`,
+  locale ids, `call_stack<>::top_`, service ids) come first too. So the order of an
+  object's static initializers says which header statics its code uses and in which
+  order it includes `Version.h` (`REVIVAL_SUFFIX`) and `boost/bind.hpp` (`_1`-`_9`):
+  `ProtocolContext.h` includes bind before `Version.h`, `EfzRevivalLauncher.cpp`
+  includes `Version.h` and then `ProtocolContext.h` (its inline `Timer` and `Log` code
+  defines the deadline timer service's id and `codecvt`'s).
+- **Unused code.** An unused (static or inline) function isn't compiled, but the
+  statics and literals it uses are created where it stands. `Config.obj` defines
+  `iostream_category`'s object and four locale ids and has `L"None"` and `L"Name"` as its
+  first literals though nothing in it prints a number: `Config.cpp` had such code before
+  its functions (a stand-in is in the source).
+- **`g_characterSizes`**, a table of the characters' `CPlayer` sizes, is in the
+  initialized data of every object that includes `Version.h` (twelve copies; the DLLs
+  have it too). `Characters.h` defines it.
+- **String literals** (`/GF`: a COMDAT each) are numbered as the compiler first meets
+  them, so an object's literals come in the order of its source text: the headers', then
+  the functions' in the order of their definitions, then the templates'. That gives the
+  order of the definitions of every function that uses a literal (the protocol states,
+  `ProtocolContext`, `Network`, `GameProcess`; `SharedData.h` before `Log.h`).
+- **Exception data** (`.xdata$x`) comes in the order the compiler generated the
+  functions: the order their symbols were created (a class's members in declaration
+  order, a template when first instantiated), not their definitions. It constrains the
+  headers' declarations and include order (to do).
+- **Static locals** in `.bss` come in the order of their functions' definitions
+  (`ProtocolContext::send`'s before `checkSync`'s).
+- **Libraries.** The CRT's objects come in the order the link first needs them: five of
+  about 350 are elsewhere (`fiopen`, `tolower`, `abort`, `_wctype`,
+  `VirtualProcessorRoot`), which follows from the order in which the objects refer to
+  symbols (to do). Two protobuf objects more were loaded (`extension_set`,
+  `stringprintf`: two more `allocator_arg`/`piecewise_construct` bytes each after
+  `generated_message_util`'s), by references from code no longer in the image.
+
+Fixed after the link (`tools/revpostlink.py`), as nothing in the sources can give them:
+the timestamp, the PDB's GUID and age (12), the Rich header's counts (30 objects from the
+launcher's compiler, 134 C++ objects of the CRT, 202 imported functions: what the
+unused code pulled in), and the size reserved for `.reloc`. `link.exe` reserves
+`2 x DIR32 relocations + 10 x pages` before it drops unreferenced code
+(`IMAGE::CalculatePtrs`, counted by `CountRelocsInSection`), and pads the rest with
+zeros: the original's inputs had 65,626 such relocations, about 43,000 more than the
+build's, all in code no longer in the image.
+
+**The order file.** Which of several identical functions the link keeps depends on
+every function in it (rule 2 of "How the code is laid out"), so the original's unused
+code decided it. `revival/EfzRevivalLauncher/EfzRevival.order` (`/ORDER`) lists the
+build's functions in the original's order, every function of a group of identical ones
+at the group's place; `make revival-launcher-order` remakes it with `tools/revorder.py`,
+which pairs the original's functions with a link without it (instruction text with
+addresses masked: an alignment, unique text, then the targets of address operands
+through the pairs found). Static functions can't be ordered (an order file names only
+public symbols), and unnamed functions go after all named ones: `time.inl`'s `gmtime`,
+`localtime_s` and `time`, which `ProtocolContext.obj` has out of line after its own
+functions (`0x444520`), so the order covers only the launcher's objects, protobuf
+(`0x44a710` on, whose `gzip_stream.cc` has a static function too) keeps the link's
+order, which is the original's, and the three end up before protobuf, `0x30` bytes
+from their place. Exception funclets (`.text$x`) can't be ordered either (they are
+local symbols), and identical read-only data is folded the same way and can't be
+ordered either (`/ORDER` takes functions only): of the identical virtual base tables
+`e0 ff ff ff 08 00 00 00` of the boost exception wrappers, the original keeps
+`Config.obj`'s (`0x497898`), the build `ProtocolContext.obj`'s. So where folded funclets
+and data go is still the link's choice; matching it needs the original's link inputs,
+unused code included, or a link that can be told.
 
 ## Recovering EfzRevival.dll
 

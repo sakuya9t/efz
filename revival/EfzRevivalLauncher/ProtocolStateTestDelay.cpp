@@ -53,6 +53,63 @@ void ProtocolStateTestDelay::enter(ProtocolContext &context)
     console_ << "Measuring Delay\n";
 }
 
+// The opponent asking again is confirmed again; anyone else is turned away.
+// FUNCTION: 0x449dd0
+void ProtocolStateTestDelay::receiveConnectRequest(ProtocolContext &context, int, int, int role,
+                                                   std::wstring name, bool, const Endpoint &from)
+{
+    switch (role) {
+    case 1:
+        if (context.peers.flagged(from, 3)) {
+            context.log << "Received delay connect\n";
+            context.sendConnectConfirm(1, from);
+            break;
+        }
+    case 2:
+        if (context.config.allowSpectating)
+            context.sendChangeRole(2, from);
+        else
+            context.sendDone(1, from);
+        break;
+    }
+}
+
+// FUNCTION: 0x449cd0
+bool ProtocolStateTestDelay::isValidDelay(const std::string &text)
+{
+    int delay;
+    try {
+        delay = std::stoi(text);
+    } catch (std::exception e) {
+        console_ << "\nInvalid delay\n";
+        return false;
+    }
+    if (delay >= minimum_ && delay <= 20)
+        return true;
+    console_ << "\nDelay must be between " << minimum_ << " and 20\n";
+    return false;
+}
+
+// FUNCTION: 0x44a4f0
+void ProtocolStateTestDelay::suggestDelay(ProtocolContext &context)
+{
+    console_.clear();
+    console_ << "The input delay can always be adjusted during the actual match.\nAverage Ping: "
+             << context.ping.average << "\n" << "Min Ping: " << context.ping.minimum << "\n"
+             << "Max Ping: " << context.ping.maximum << "\n" << "Recommended input delay: "
+             << recommended_ << "\n" << "Enter the initial input delay (between ) " << minimum_
+             << " and 20, none for recommended): ";
+}
+
+// FUNCTION: 0x449c00
+void ProtocolStateTestDelay::handleTimeout(ProtocolContext &context, const Endpoint &peer)
+{
+    if (context.peers.flagged(peer, 3)) {
+        console_ << "\nRemote timed out\n";
+        context.switchState(std::unique_ptr<ProtocolStateEnd>(new ProtocolStateEnd()));
+    }
+}
+
 // A line with only Enter takes the recommended delay.
 // FUNCTION: 0x4498e0
 void ProtocolStateTestDelay::handleCommand(ProtocolContext &context, std::string command)
@@ -79,38 +136,12 @@ void ProtocolStateTestDelay::handleCommand(ProtocolContext &context, std::string
                              ENABLE_EXTENDED_FLAGS, ENABLE_PROCESSED_OUTPUT | ENABLE_WRAP_AT_EOL_OUTPUT);
     }
 }
-
 // FUNCTION: 0x449b10
 void ProtocolStateTestDelay::handleResendTimer(ProtocolContext &context)
 {
     std::vector<Endpoint> peers = context.peers.getFlagged(2);
     for (Endpoint peer : peers)
         context.sendDone(0, peer);
-}
-
-// FUNCTION: 0x449c00
-void ProtocolStateTestDelay::handleTimeout(ProtocolContext &context, const Endpoint &peer)
-{
-    if (context.peers.flagged(peer, 3)) {
-        console_ << "\nRemote timed out\n";
-        context.switchState(std::unique_ptr<ProtocolStateEnd>(new ProtocolStateEnd()));
-    }
-}
-
-// FUNCTION: 0x449cd0
-bool ProtocolStateTestDelay::isValidDelay(const std::string &text)
-{
-    int delay;
-    try {
-        delay = std::stoi(text);
-    } catch (std::exception e) {
-        console_ << "\nInvalid delay\n";
-        return false;
-    }
-    if (delay >= minimum_ && delay <= 20)
-        return true;
-    console_ << "\nDelay must be between " << minimum_ << " and 20\n";
-    return false;
 }
 
 // FUNCTION: 0x449da0
@@ -120,29 +151,6 @@ void ProtocolStateTestDelay::leave(ProtocolContext &context)
     context.stopTimeoutTimer();
     context.stopConsole();
     context.stopResendTimer();
-}
-
-// The opponent asking again is confirmed again; anyone else is turned away.
-// FUNCTION: 0x449dd0
-// TODO: differs: the original loads context and from into esi/edi before role; no
-// arrangement of the switch tried gives that order.
-void ProtocolStateTestDelay::receiveConnectRequest(ProtocolContext &context, int, int, int role,
-                                                   std::wstring, bool, const Endpoint &from)
-{
-    switch (role) {
-    case 1:
-        if (context.peers.flagged(from, 3)) {
-            context.log << "Received delay connect\n";
-            context.sendConnectConfirm(1, from);
-            break;
-        }
-    case 2:
-        if (context.config.allowSpectating)
-            context.sendChangeRole(2, from);
-        else
-            context.sendDone(1, from);
-        break;
-    }
 }
 
 // FUNCTION: 0x449e70
@@ -158,10 +166,8 @@ void ProtocolStateTestDelay::receiveDone(ProtocolContext &context, int player, c
 
 // Inputs mean the opponent has started already.
 // FUNCTION: 0x449fd0
-// TODO: differs: the original loads context and from into registers (saving esi)
-// before pushing them; here they are pushed from memory.
-void ProtocolStateTestDelay::receiveInput(ProtocolContext &context, int, int, std::deque<FrameInput>,
-                                          const Endpoint &from)
+void ProtocolStateTestDelay::receiveInput(ProtocolContext &context, int, int,
+                                          std::deque<FrameInput> inputs, const Endpoint &from)
 {
     receiveDone(context, 0, from);
 }
@@ -198,15 +204,4 @@ void ProtocolStateTestDelay::receivePunch(ProtocolContext &context, const Endpoi
     static int redirects = 0;
     context.sendPing(Endpoint(target.address(), target.port() + redirects++));
     redirects %= 10;
-}
-
-// FUNCTION: 0x44a4f0
-void ProtocolStateTestDelay::suggestDelay(ProtocolContext &context)
-{
-    console_.clear();
-    console_ << "The input delay can always be adjusted during the actual match.\nAverage Ping: "
-             << context.ping.average << "\n" << "Min Ping: " << context.ping.minimum << "\n"
-             << "Max Ping: " << context.ping.maximum << "\n" << "Recommended input delay: "
-             << recommended_ << "\n" << "Enter the initial input delay (between ) " << minimum_
-             << " and 20, none for recommended): ";
 }

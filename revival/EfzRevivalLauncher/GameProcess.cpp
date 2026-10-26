@@ -39,22 +39,7 @@ bool GameProcess::check()
     return true;
 }
 
-// FUNCTION: 0x41cb40
-void GameProcess::close()
-{
-    TerminateProcess(info_.hProcess, 0);
-}
-
-// FUNCTION: 0x41d8b0
-PROCESS_INFORMATION GameProcess::getProcessInfo()
-{
-    return info_;
-}
-
 // FUNCTION: 0x41d8f0
-// TODO: differs: the original keeps the thread's exit code at [ebp-0x8] and the
-// written byte count at [ebp-0xc]; this build swaps the two slots (declaration order and
-// the types tried don't change it). Everything else matches.
 void GameProcess::inject(const std::string &exe, const std::string &dll, const void *data, SIZE_T size)
 {
     int wait;
@@ -112,8 +97,9 @@ void GameProcess::inject(const std::string &exe, const std::string &dll, const v
         return;
     }
     WriteProcessMemory(info_.hProcess, args, data, size, &written);
+    DWORD start = module + init;
     HANDLE initThread = CreateRemoteThread(info_.hProcess, NULL, 0,
-        (LPTHREAD_START_ROUTINE)(module + init), args, 0, NULL);
+        (LPTHREAD_START_ROUTINE)start, args, 0, NULL);
     if (!initThread) {
         TerminateProcess(info_.hProcess, 9);
         std::cout << "Could not create a remote thread for the dll\n";
@@ -128,6 +114,17 @@ void GameProcess::inject(const std::string &exe, const std::string &dll, const v
     if (ddraw)
         FreeLibrary(ddraw);
     std::cout << "Successfully loaded\n";
+}
+// FUNCTION: 0x41cb40
+void GameProcess::close()
+{
+    TerminateProcess(info_.hProcess, 0);
+}
+
+// FUNCTION: 0x41d8b0
+PROCESS_INFORMATION GameProcess::getProcessInfo()
+{
+    return info_;
 }
 
 // FUNCTION: 0x41db60

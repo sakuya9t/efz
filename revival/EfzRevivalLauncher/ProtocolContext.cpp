@@ -78,20 +78,100 @@ ProtocolContext::ProtocolContext(std::unique_ptr<ProtocolState> &&state, const E
     peers.add(config.holePunchingServer, 4);
 }
 
-// FUNCTION: 0x434080
-ProtocolContext::~ProtocolContext()
+// FUNCTION: 0x442780
+void ProtocolContext::switchState(std::unique_ptr<ProtocolState> &&state)
 {
-    log.close();
-    pingLog.close();
+    if (!state)
+        throw std::exception("Passing null state");
+    if (this->state)
+        this->state->leave(*this);
+    this->state = std::move(state);
+    this->state->enter(*this);
 }
 
-// FUNCTION: 0x438b80
-void ProtocolContext::close()
+// FUNCTION: 0x4407c0
+void ProtocolContext::send(const google::protobuf::MessageLite &message, char type,
+                           const Endpoint &to, bool compress)
 {
-    closeGame();
-    socket->get_io_service().stop();
-    socket->shutdown(boost::asio::ip::udp::socket::shutdown_both);
-    socket->close();
+    static int bytesSerialized = 0;
+    static int bytesSent = 0;
+    char packet[0x400];
+    packet[0] = compress;
+    packet[1] = type;
+    int size;
+    if (compress) {
+        size = deflate(message, packet + 2, sizeof packet - 2) + 2;
+    } else {
+        message.SerializeToArray(packet + 2, sizeof packet - 2);
+        size = message.ByteSize() + 2;
+    }
+    bytesSerialized += message.ByteSize() + 2;
+    bytesSent += size;
+    if (size >= 0x400) {
+        log << "Error: cannot send, message too large" << std::endl;
+        log << "Header " << (int)type << " size " << size << std::endl;
+        log.flush();
+    } else {
+        packet[0] = compress;
+        packet[1] = type;
+        boost::system::error_code error;
+        if (socket->send_to(boost::asio::buffer(packet, size), to, 0, error) == 0) {
+            log << "Error on send to " << to << " " << error.message() << "\n";
+            log << "Header " << (int)type << " size " << size << std::endl;
+            log.flush();
+        }
+    }
+}
+
+// FUNCTION: 0x43f030
+void ProtocolContext::receiveConnectConfirm(int game, int version, int player, int role, int seed,
+                                            std::wstring name1, std::wstring name2,
+                                            bool practiceKeys, const Endpoint &from)
+{
+    if (!peers.flagged(from, 2)) {
+        log << "Discard connect from " << from << std::endl;
+        return;
+    }
+    state->receiveConnectConfirm(*this, game, version, player, role, seed, name1, name2,
+                                 practiceKeys, from);
+}
+
+// FUNCTION: 0x443cc0
+void ProtocolContext::updatePing(int rtt)
+{
+    pings.push_back(rtt);
+    while (pings.size() > 20)
+        pings.pop_front();
+    std::deque<int>::iterator highest = std::max_element(pings.begin(), pings.end());
+    int average = std::accumulate(pings.begin(), pings.end(), 0) / pings.size();
+    ping.average = average;
+    ping.last = rtt;
+    ping.minimum = std::min(ping.minimum, rtt);
+    ping.maximum = *highest;
+    std::deque<int>::iterator lowest = std::min_element(pings.begin(), pings.end());
+    log << "Current " << ping.last << " Average " << ping.average << " Min " << *lowest << " Max "
+        << *highest << " GlobalMin " << ping.minimum << "\n";
+    pingLog << timeGetTime() << "," << rtt << "\n";
+}
+
+// The console thread: reads one line, hands it to the state on the io_service thread.
+// stopConsole wakes it with a key event that reads as "\a".
+// FUNCTION: 0x43b250
+void ProtocolContext::handleConsole(DWORD inputMode, DWORD outputMode)
+{
+    command.clear();
+    char buffer[0x80];
+    memset(buffer, 0, sizeof buffer);
+    HANDLE input = GetStdHandle(STD_INPUT_HANDLE);
+    HANDLE output = GetStdHandle(STD_OUTPUT_HANDLE);
+    FlushConsoleInputBuffer(input);
+    SetConsoleMode(input, inputMode);
+    SetConsoleMode(output, outputMode);
+    DWORD read;
+    ReadConsoleA(input, buffer, sizeof buffer, &read, NULL);
+    command = std::string(buffer);
+    if (command.compare("\a") != 0)
+        socket->get_io_service().post(boost::bind(&ProtocolContext::handleCommand, this, command));
 }
 
 // Asks EfzRevival.dll to quit, or kills efz.exe if the request cannot be queued.
@@ -143,6 +223,51 @@ bool ProtocolContext::checkSync(int frame)
         return same;
     }
     return false;
+}
+
+// FUNCTION: 0x441060
+void ProtocolContext::sendNatTraversal(unsigned short first, unsigned short last, const Endpoint &to)
+{
+    if (last - first > 100)
+        throw std::exception("Nat traversal port range too large");
+    EfzPackets::MessagePing message;
+    message.set_f3(0);
+    Endpoint port(to);
+    for (unsigned short i = first; i <= last; i++) {
+        port.port(i);
+        send(message, 2, port, false);
+    }
+}
+
+// FUNCTION: 0x439f20
+int ProtocolContext::deflate(const google::protobuf::MessageLite &message, void *buffer, int size)
+{
+    google::protobuf::io::ArrayOutputStream output(buffer, size);
+    google::protobuf::io::GzipOutputStream::Options options;
+    options.format = google::protobuf::io::GzipOutputStream::ZLIB;
+    options.compression_level = 9;
+    google::protobuf::io::GzipOutputStream stream(&output, options);
+    message.SerializeToZeroCopyStream(&stream);
+    if (!stream.Close()) {
+        log << "Error compressing " << stream.ZlibErrorCode() << "\n";
+        return 0;
+    }
+    return output.ByteCount();
+}
+// FUNCTION: 0x434080
+ProtocolContext::~ProtocolContext()
+{
+    log.close();
+    pingLog.close();
+}
+
+// FUNCTION: 0x438b80
+void ProtocolContext::close()
+{
+    closeGame();
+    socket->get_io_service().stop();
+    socket->shutdown(boost::asio::ip::udp::socket::shutdown_both);
+    socket->close();
 }
 
 // FUNCTION: 0x4393a0
@@ -199,32 +324,13 @@ bool ProtocolContext::debug()
     return config.debug;
 }
 
-// FUNCTION: 0x439f20
-int ProtocolContext::deflate(const google::protobuf::MessageLite &message, void *buffer, int size)
-{
-    google::protobuf::io::ArrayOutputStream output(buffer, size);
-    google::protobuf::io::GzipOutputStream::Options options;
-    options.format = google::protobuf::io::GzipOutputStream::ZLIB;
-    options.compression_level = 9;
-    google::protobuf::io::GzipOutputStream stream(&output, options);
-    message.SerializeToZeroCopyStream(&stream);
-    if (!stream.Close()) {
-        log << "Error compressing " << stream.ZlibErrorCode() << "\n";
-        return 0;
-    }
-    return output.ByteCount();
-}
-
 // FUNCTION: 0x43af30
-// TODO: differs: esi and edi swapped (the original keeps available in esi, frame in edi).
 int ProtocolContext::getCount(int frame, int count, int available, int maximum)
 {
     if (frame >= available)
         return 0;
     int n = std::min(count, maximum);
-    if (available < frame + n)
-        n = available - frame;
-    return n;
+    return available >= frame + n ? n : available - frame;
 }
 
 // FUNCTION: 0x43a260
@@ -244,26 +350,6 @@ void ProtocolContext::handleAlert()
 void ProtocolContext::handleCommand(std::string command)
 {
     state->handleCommand(*this, command);
-}
-
-// The console thread: reads one line, hands it to the state on the io_service thread.
-// stopConsole wakes it with a key event that reads as "\a".
-// FUNCTION: 0x43b250
-void ProtocolContext::handleConsole(DWORD inputMode, DWORD outputMode)
-{
-    command.clear();
-    char buffer[0x80];
-    memset(buffer, 0, sizeof buffer);
-    HANDLE input = GetStdHandle(STD_INPUT_HANDLE);
-    HANDLE output = GetStdHandle(STD_OUTPUT_HANDLE);
-    FlushConsoleInputBuffer(input);
-    SetConsoleMode(input, inputMode);
-    SetConsoleMode(output, outputMode);
-    DWORD read;
-    ReadConsoleA(input, buffer, sizeof buffer, &read, NULL);
-    command = std::string(buffer);
-    if (command.compare("\a") != 0)
-        socket->get_io_service().post(boost::bind(&ProtocolContext::handleCommand, this, command));
 }
 
 // FUNCTION: 0x43b3a0
@@ -397,19 +483,6 @@ void ProtocolContext::receiveChangeRole(int role, const Endpoint &from)
     state->receiveChangeRole(*this, role, from);
 }
 
-// FUNCTION: 0x43f030
-void ProtocolContext::receiveConnectConfirm(int game, int version, int player, int role, int seed,
-                                            std::wstring name1, std::wstring name2,
-                                            bool practiceKeys, const Endpoint &from)
-{
-    if (!peers.flagged(from, 2)) {
-        log << "Discard connect from " << from << std::endl;
-        return;
-    }
-    state->receiveConnectConfirm(*this, game, version, player, role, seed, name1, name2,
-                                 practiceKeys, from);
-}
-
 // FUNCTION: 0x43f110
 void ProtocolContext::receiveConnectRequest(int game, int version, int role, std::wstring name,
                                             bool practiceKeys, const Endpoint &from)
@@ -506,40 +579,6 @@ void ProtocolContext::receiveSyncRequest(int frame, int count, const Endpoint &f
         sendSync(frame, 0, count, from);
 }
 
-// FUNCTION: 0x4407c0
-void ProtocolContext::send(const google::protobuf::MessageLite &message, char type,
-                           const Endpoint &to, bool compress)
-{
-    static int bytesSerialized = 0;
-    static int bytesSent = 0;
-    char packet[0x400];
-    packet[0] = compress;
-    packet[1] = type;
-    int size;
-    if (compress) {
-        size = deflate(message, packet + 2, sizeof packet - 2) + 2;
-    } else {
-        message.SerializeToArray(packet + 2, sizeof packet - 2);
-        size = message.ByteSize() + 2;
-    }
-    bytesSerialized += message.ByteSize() + 2;
-    bytesSent += size;
-    if (size >= 0x400) {
-        log << "Error: cannot send, message too large" << std::endl;
-        log << "Header " << (int)type << " size " << size << std::endl;
-        log.flush();
-    } else {
-        packet[0] = compress;
-        packet[1] = type;
-        boost::system::error_code error;
-        if (socket->send_to(boost::asio::buffer(packet, size), to, 0, error) == 0) {
-            log << "Error on send to " << to << " " << error.message() << "\n";
-            log << "Header " << (int)type << " size " << size << std::endl;
-            log.flush();
-        }
-    }
-}
-
 // FUNCTION: 0x4409f0
 void ProtocolContext::sendChangeRole(int role, const Endpoint &to)
 {
@@ -609,16 +648,15 @@ void ProtocolContext::sendInputAck(int frame, int count, const Endpoint &to)
 
 // The local inputs from frame on, with the last remote frame received.
 // FUNCTION: 0x440df0
-// TODO: differs: ebx and edi swapped (this and the input vector).
 void ProtocolContext::sendInputPlayer(int frame, int count, const Endpoint &to)
 {
     if ((unsigned int)frame < inputs[localPlayer].size()) {
-        int end = frame + getCount(frame, count, inputs[localPlayer].size(), 60);
+        count = getCount(frame, count, inputs[localPlayer].size(), 60);
         EfzPackets::MessageInput message;
         message.set_f1((EfzPackets::Player)0);
         message.set_f2(inputs[remotePlayer].size() - 1);
         message.set_f3(frame);
-        for (int i = frame; i < end; i++)
+        for (int i = frame; i < frame + count; i++)
             message.add_f5(&inputs[localPlayer][i], 2);
         send(message, 1, to, true);
     }
@@ -626,40 +664,23 @@ void ProtocolContext::sendInputPlayer(int frame, int count, const Endpoint &to)
 
 // Both players' inputs, alternating, and the match being played.
 // FUNCTION: 0x440f10
-// TODO: differs: the original gives end a stack slot of its own (0x64 bytes of locals);
-// here it shares one with a temporary of the min.
 void ProtocolContext::sendInputSpectator(int frame, int count, const Endpoint &to)
 {
     const unsigned int &available = std::min(inputs[0].size(), inputs[1].size());
-    if (frame < (int)available) {
-        int n = getCount(frame, count, available, 60);
-        EfzPackets::MessageInput message;
-        message.set_f1((EfzPackets::Player)0);
-        message.set_f2(-1);
-        message.set_f3(frame);
-        message.set_f4(n);
-        message.set_f6(match.match);
-        int end = frame + n;
-        for (int i = frame; i < end; i++) {
-            message.add_f5(&inputs[0][i], 2);
-            message.add_f5(&inputs[1][i], 2);
-        }
-        send(message, 1, to, true);
+    if (frame >= (int)available)
+        return;
+    count = getCount(frame, count, available, 60);
+    EfzPackets::MessageInput message;
+    message.set_f1((EfzPackets::Player)0);
+    message.set_f2(-1);
+    message.set_f3(frame);
+    message.set_f4(count);
+    message.set_f6(match.match);
+    for (int i = frame; i < frame + count; i++) {
+        message.add_f5(&inputs[0][i], 2);
+        message.add_f5(&inputs[1][i], 2);
     }
-}
-
-// FUNCTION: 0x441060
-void ProtocolContext::sendNatTraversal(unsigned short first, unsigned short last, const Endpoint &to)
-{
-    if (last - first > 100)
-        throw std::exception("Nat traversal port range too large");
-    EfzPackets::MessagePing message;
-    message.set_f3(0);
-    Endpoint port(to);
-    for (unsigned short i = first; i <= last; i++) {
-        port.port(i);
-        send(message, 2, port, false);
-    }
+    send(message, 1, to, true);
 }
 
 // FUNCTION: 0x441140
@@ -866,35 +887,4 @@ void ProtocolContext::stopResendTimer()
 void ProtocolContext::stopTimeoutTimer()
 {
     timeoutTimer.stop();
-}
-
-// FUNCTION: 0x442780
-void ProtocolContext::switchState(std::unique_ptr<ProtocolState> &&state)
-{
-    if (!state)
-        throw std::exception("Passing null state");
-    if (this->state)
-        this->state->leave(*this);
-    this->state = std::move(state);
-    this->state->enter(*this);
-}
-
-// FUNCTION: 0x443cc0
-// TODO: differs: the original stores ping.last after ping.average, and still keeps
-// &ping.average in ebx for the log line; written in that order, this keeps &ping.last
-// in ebx instead (76 bytes differ, against 224).
-void ProtocolContext::updatePing(int rtt)
-{
-    pings.push_back(rtt);
-    while (pings.size() > 20)
-        pings.pop_front();
-    std::deque<int>::iterator highest = std::max_element(pings.begin(), pings.end());
-    ping.last = rtt;
-    ping.average = std::accumulate(pings.begin(), pings.end(), 0) / pings.size();
-    ping.minimum = std::min(ping.minimum, rtt);
-    ping.maximum = *highest;
-    std::deque<int>::iterator lowest = std::min_element(pings.begin(), pings.end());
-    log << "Current " << ping.last << " Average " << ping.average << " Min " << *lowest << " Max "
-        << *highest << " GlobalMin " << ping.minimum << "\n";
-    pingLog << timeGetTime() << "," << rtt << "\n";
 }

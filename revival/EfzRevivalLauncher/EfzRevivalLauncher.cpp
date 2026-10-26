@@ -1,10 +1,12 @@
 // The launcher's front end: the console menu (host / join / spectate / local play /
 // tournament), reading an address from the console or the clipboard, and starting a
 // netplay session or a local game.
+#include "Version.h"
+#include "Characters.h"
 #include "Network.h"
+#include "ProtocolContext.h"
 #include "Console.h"
 #include "GameProcess.h"
-#include "Version.h"
 // OBJECT: 0x414710 0x41aa50
 #include <boost/algorithm/string.hpp>
 #include <windows.h>
@@ -12,6 +14,13 @@
 #include <cstdlib>
 #include <cstring>
 #include <string>
+
+// The instantiations of Console::operator<< for string literals of every length are one
+// function, emitted by an earlier object (as in Network.cpp):
+// FUNCTION: 0x445300 ??$?6$$BY0P@$$CBD@Console@@QAEAAV0@AAY0P@$$CBD@Z
+// FUNCTION: 0x445300 ??$?6$$BY02$$CBD@Console@@QAEAAV0@AAY02$$CBD@Z
+// FUNCTION: 0x445300 ??$?6$$BY0KC@$$CBD@Console@@QAEAAV0@AAY0KC@$$CBD@Z
+// FUNCTION: 0x445300 ??$?6$$BY0BE@$$CBD@Console@@QAEAAV0@AAY0BE@$$CBD@Z
 
 // Strips carriage returns, newlines and spaces from a pasted or typed address.
 // FUNCTION: 0x418720
@@ -28,21 +37,18 @@ std::string cleanString(std::string input)
 // FUNCTION: 0x4192e0
 std::string getClipboard()
 {
-    // TODO: differs: the compiler lays the empty-string return out after the
-    // GlobalLock path, so a few branch displacements and the block order differ from
-    // the original; the instructions are otherwise the same.
-    if (OpenClipboard(NULL)) {
-        HANDLE data = GetClipboardData(CF_TEXT);
-        if (data) {
-            char *text = (char *)GlobalLock(data);
-            std::string value(text);
-            GlobalUnlock(data);
-            CloseClipboard();
-            return cleanString(value);
-        }
+    if (!OpenClipboard(NULL))
+        return std::string();
+    HANDLE data = GetClipboardData(CF_TEXT);
+    if (!data) {
         CloseClipboard();
+        return std::string();
     }
-    return std::string();
+    char *text = (char *)GlobalLock(data);
+    std::string value(text);
+    GlobalUnlock(data);
+    CloseClipboard();
+    return cleanString(value);
 }
 
 // Starts efz.exe locally and injects EfzRevival.dll with the mode (2 practice, 3
@@ -81,18 +87,13 @@ int readMenu()
 
 // Runs a netplay session: mode 0 hosts, 1 joins address, 2 spectates address.
 // FUNCTION: 0x419c10
-// TODO: differs: the host case's empty std::string gets a different stack slot than the
-// original (net at ebp-0x4b8, string at ebp-0x4d0), so the [ebp-...] displacements
-// differ; the instruction sequence matches.
 void runNetplay(int mode, std::string address)
 {
     Network net;
     switch (mode) {
-    case 0: {
-        std::string empty("");
-        net.start(0, empty);
+    case 0:
+        net.start(0, "");
         break;
-    }
     case 1:
         net.start(1, address);
         break;
@@ -103,10 +104,6 @@ void runNetplay(int mode, std::string address)
 }
 
 // FUNCTION: 0x41a770
-// TODO: differs: the console handle and the menu choice land in the opposite callee-
-// saved registers (the original keeps the handle in edi and the choice in esi), and the
-// Console and the two std::strings get different stack slots. The control flow, calls,
-// strings and the version arithmetic all match; only register/slot allocation differs.
 int wmain()
 {
     char input[128];
@@ -116,14 +113,15 @@ int wmain()
     Console display;
     int minor = 2;
     double version = REVIVAL_VERSION / 100.0;
-    while (true) {
+    int choice;
+    do {
         display.clear();
         int major = (int)std::floor(version);
         display << "Efz -Revival- " << major << ".0" << minor << REVIVAL_SUFFIX << "\n\n";
         display << "1: Host\n2: Join\n3: Join from clipboard\n4: Spectate from clipboard\n"
                    "5: Local Play (for practice select VS PLAYER in EFZ proper)\n"
                    "6: Offline Tournament\n\nOther: Quit\n";
-        int choice = readMenu();
+        choice = readMenu();
         std::string address;
         std::string unused;
         switch (choice) {
@@ -157,7 +155,6 @@ int wmain()
             choice = 0;
             break;
         }
-        if (choice == 0)
-            return 0;
-    }
+    } while (choice != 0);
+    return 0;
 }

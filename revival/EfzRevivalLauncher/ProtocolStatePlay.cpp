@@ -29,6 +29,38 @@ void ProtocolStatePlay::enter(ProtocolContext &context)
     context.startQueueEvent();
 }
 
+// A spectator joining a match in progress is added, unless three are watching already:
+// then it is sent to watch one of them at random.
+// FUNCTION: 0x446130
+void ProtocolStatePlay::receiveConnectRequest(ProtocolContext &context, int game, int version,
+                                              int role, std::wstring, bool,
+                                              const Endpoint &from)
+{
+    if (!context.isValidGame(game) || !context.isValidVersion(version)) {
+        context.log << "Wrong game version\n";
+        context.sendConnectConfirm(role, from);
+    } else {
+        if (context.hosting && !context.config.allowSpectating)
+            context.sendDone(1, from);
+        if (role == 1) {
+            context.log << "Already playing propose to spec\n";
+            context.sendChangeRole(2, from);
+        } else if (role == 2) {
+            std::vector<Endpoint> spectators = context.peers.getFlagged(1);
+            if (spectators.size() >= 3 && !context.peers.flagged(from, 1)) {
+                std::random_shuffle(spectators.begin(), spectators.end());
+                Endpoint sink = spectators.front();
+                context.log << "Already have sink, redirect " << from << " to " << sink << "\n";
+                context.sendRedirect(sink, from);
+            } else {
+                context.log << "Free, add " << from << " as spectator\n";
+                context.peers.add(from, 1);
+                context.sendConnectConfirm(2, from);
+            }
+        }
+    }
+}
+
 // FUNCTION: 0x445c60
 void ProtocolStatePlay::handleGameTimer(ProtocolContext &context)
 {
@@ -40,6 +72,27 @@ void ProtocolStatePlay::handleGameTimer(ProtocolContext &context)
     }
 }
 
+// FUNCTION: 0x446550
+void ProtocolStatePlay::receiveQuit(ProtocolContext &context, const Endpoint &from)
+{
+    context.log << "Recv quit from: " << from << "\n";
+    handleTimeout(context, from);
+}
+
+// FUNCTION: 0x445fa0
+void ProtocolStatePlay::handleTimeout(ProtocolContext &context, const Endpoint &peer)
+{
+    if (context.peers.flagged(peer, 2)) {
+        context.log << "Source " << peer << " died\n";
+        console_ << "\nSource quit or timed out\n";
+        context.sendQuitAll();
+        context.peers.remove(peer);
+        context.switchState(std::unique_ptr<ProtocolStateEnd>(new ProtocolStateEnd()));
+    } else {
+        context.log << peer << " died\n";
+        context.peers.remove(peer);
+    }
+}
 // FUNCTION: 0x445d40
 void ProtocolStatePlay::handleQueueEvent(ProtocolContext &context)
 {
@@ -67,21 +120,6 @@ void ProtocolStatePlay::handleResendTimer(ProtocolContext &context)
     }
 }
 
-// FUNCTION: 0x445fa0
-void ProtocolStatePlay::handleTimeout(ProtocolContext &context, const Endpoint &peer)
-{
-    if (context.peers.flagged(peer, 2)) {
-        context.log << "Source " << peer << " died\n";
-        console_ << "\nSource quit or timed out\n";
-        context.sendQuitAll();
-        context.peers.remove(peer);
-        context.switchState(std::unique_ptr<ProtocolStateEnd>(new ProtocolStateEnd()));
-    } else {
-        context.log << peer << " died\n";
-        context.peers.remove(peer);
-    }
-}
-
 // FUNCTION: 0x4460e0
 void ProtocolStatePlay::leave(ProtocolContext &context)
 {
@@ -91,38 +129,6 @@ void ProtocolStatePlay::leave(ProtocolContext &context)
     context.stopQueueEvent();
     context.stopResendTimer();
     context.closeGame();
-}
-
-// A spectator joining a match in progress is added, unless three are watching already:
-// then it is sent to watch one of them at random.
-// FUNCTION: 0x446130
-void ProtocolStatePlay::receiveConnectRequest(ProtocolContext &context, int game, int version,
-                                              int role, std::wstring, bool,
-                                              const Endpoint &from)
-{
-    if (context.isValidGame(game) && context.isValidVersion(version)) {
-        if (context.hosting && !context.config.allowSpectating)
-            context.sendDone(1, from);
-        if (role == 1) {
-            context.log << "Already playing propose to spec\n";
-            context.sendChangeRole(2, from);
-        } else if (role == 2) {
-            std::vector<Endpoint> spectators = context.peers.getFlagged(1);
-            if (spectators.size() >= 3 && !context.peers.flagged(from, 1)) {
-                std::random_shuffle(spectators.begin(), spectators.end());
-                Endpoint sink = spectators.front();
-                context.log << "Already have sink, redirect " << from << " to " << sink << "\n";
-                context.sendRedirect(sink, from);
-            } else {
-                context.log << "Free, add " << from << " as spectator\n";
-                context.peers.add(from, 1);
-                context.sendConnectConfirm(2, from);
-            }
-        }
-    } else {
-        context.log << "Wrong game version\n";
-        context.sendConnectConfirm(role, from);
-    }
 }
 
 // FUNCTION: 0x446330
@@ -175,13 +181,6 @@ void ProtocolStatePlay::receivePunch(ProtocolContext &context, const Endpoint &t
     static int redirects = 0;
     context.sendPing(Endpoint(target.address(), target.port() + redirects++));
     redirects %= 10;
-}
-
-// FUNCTION: 0x446550
-void ProtocolStatePlay::receiveQuit(ProtocolContext &context, const Endpoint &from)
-{
-    context.log << "Recv quit from: " << from << "\n";
-    handleTimeout(context, from);
 }
 
 // FUNCTION: 0x4465a0

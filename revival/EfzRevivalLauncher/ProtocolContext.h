@@ -8,17 +8,18 @@
 // classes it is the first to use: Log, SharedQueue<T>, Timer, the records of
 // SharedData.h, and every template they and the session instantiate.
 #pragma once
-#include "Version.h"
 #include <boost/bind.hpp>
 #include "Config.h"
 #include "Console.h"
 #include "EfzPackets.pb.h"
 #include "NetPeers.h"
 #include "ProtocolState.h"
-#include "Log.h"
 #include "SharedData.h"
 #include "SharedQueue.h"
+#include "Log.h"
 #include "Timer.h"
+#include "Version.h"
+#include "Characters.h"
 #include <boost/asio.hpp>
 #include <boost/function.hpp>
 #include <windows.h>
