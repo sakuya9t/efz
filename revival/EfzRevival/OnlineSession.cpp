@@ -10,7 +10,7 @@
 #include <sstream>
 #include "EfzGame.h"
 #include "EfzRevival.h"
-#include "stubs/EfzTimer.h"
+#include "../DDRAW/EfzTimer.h"
 #include "Hook.h"
 #include "Log.h"
 

@@ -9,7 +9,7 @@
 #include "EfzRevival.h"
 #include "Hook.h"
 #include "Log.h"
-#include "stubs/EfzTimer.h"
+#include "../DDRAW/EfzTimer.h"
 
 // FUNCTION: 0x100281a0 ??_GSpectatorSession@@UAEPAXI@Z
 

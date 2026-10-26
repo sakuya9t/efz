@@ -12,7 +12,12 @@
 #include <sstream>
 #include "InputDisplay.h"
 #include "EfzGame.h"
-#include "stubs/EfzTimer.h"
+#include "../DDRAW/EfzTimer.h"
+
+// DDRAW.dll's frame timer (getEfzTimer): its inline functions are emitted here, the first
+// object to use them.
+// FUNCTION: 0x10028c80 EfzTimer::setFps
+// FUNCTION: 0x10028cf0 EfzTimer::reset
 
 // FUNCTION: 0x10029090 ??_GPracticeSession@@UAEPAXI@Z
 

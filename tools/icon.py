@@ -1,10 +1,10 @@
 #!/usr/bin/env python3
-"""Write efz.exe's program icon (its only resource) as an .ico file for src/efz.rc.
+"""Write a program's icon (its first icon group) as an .ico file for a resource script.
 
-The icon is part of the original game, so it isn't in the repository; the build takes it
-from $EFZ_DIR/efz.exe.
+The icons are part of the originals, so they aren't in the repository; the builds take
+them from efz.exe ($EFZ_DIR) and EfzRevival.exe ($REVIVAL_DIR).
 
-Usage: tools/icon.py OUT.ico   (original: $EFZ_DIR/efz.exe)
+Usage: tools/icon.py OUT.ico [BINARY]   (default: $EFZ_DIR/efz.exe)
 """
 import os
 import struct
@@ -28,7 +28,8 @@ def resources(pe, rtype):
 
 
 def main():
-    pe = pefile.PE(os.path.join(os.environ['EFZ_DIR'], 'efz.exe'))
+    pe = pefile.PE(sys.argv[2] if len(sys.argv) > 2 else
+                   os.path.join(os.environ['EFZ_DIR'], 'efz.exe'))
     groups, icons = resources(pe, RT_GROUP_ICON), resources(pe, RT_ICON)
     group = groups[min(groups)]
     _reserved, kind, count = struct.unpack_from('<HHH', group, 0)

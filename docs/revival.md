@@ -358,6 +358,12 @@ starts the game, both DLLs are mapped, and the title becomes
 "Eternal Fighter Zero -Revival- 1.02h!!!". The `L"h!!!"` that a header defines as a
 static `std::wstring` in most of the launcher's objects is the version suffix.
 
+**Observed** with the rebuilt binaries too (`make revival-launcher`, the two DLL links,
+copied into one folder): the recovered launcher starts the rebuilt `efz.exe`, the
+recovered `EfzRevival.dll` and `DDRAW.dll` are mapped in it, the DLL's first-frame setup
+sets the title "Eternal Fighter Zero -Revival- 1.02h!!!" and the title screen renders
+through the recovered `DDRAW.dll`, as with the originals.
+
 ```sh
 EFZ_DIR=/path/to/EFZ tools/revival-test.sh                        # the originals
 EFZ_DIR=/path/to/EFZ tools/revival-test.sh --revival DIR --name x # rebuilt binaries in DIR

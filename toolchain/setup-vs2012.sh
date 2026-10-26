@@ -88,6 +88,10 @@ mkdir -p /dest/sdk71a/Lib
 cp -r "$sdk/Include" /dest/sdk71a/Include
 find "$sdk/Lib" -maxdepth 1 -type f -exec cp {} /dest/sdk71a/Lib/ \;
 cp -r "$sdk/Bin" /dest/sdk71a/Bin
+# The resource compiler beside the VS tools: link /MANIFEST:EMBED runs rc.exe through its
+# own search, which under wine doesn't find it on PATH.
+cp "$sdk/Bin/RC.Exe" /dest/vs2012/bin/rc.exe
+cp "$sdk/Bin/RcDll.Dll" /dest/vs2012/bin/rcdll.dll
 
 echo "extracting DirectX SDK (June 2010)"
 7z x -y -o"$work/dx" /cache/DXSDK_Jun10.exe "DXSDK/Include/*" "DXSDK/Lib/x86/*" >/dev/null

@@ -13,7 +13,7 @@
 #include "EfzReplay.h"
 #include "InputDisplay.h"
 #include "Log.h"
-#include "stubs/EfzTimer.h"
+#include "../DDRAW/EfzTimer.h"
 
 // FUNCTION: 0x1002cb30 ??_GReplaySession@@UAEPAXI@Z
 // FUNCTION: 0x1002cb80 ??1ReplayState@@QAE@XZ

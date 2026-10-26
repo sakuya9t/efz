@@ -1,0 +1,6 @@
+// EfzRevival.exe's icon (group 114, images 1-6, language 0x2000 as in the original).
+// tools/icon.py takes it from the original and writes build/revival/launcher/EfzRevival.ico;
+// the linker adds the manifest.
+LANGUAGE 0, 8
+
+114 ICON "build/revival/launcher/EfzRevival.ico"

@@ -173,6 +173,38 @@ revival-decomp: revival-names
 		-postScript ExportDecomp.java $(CURDIR)/$(REVIVAL_EXE_DATA).labels.json \
 		$(CURDIR)/$(REVIVAL_EXE_DATA).c 0x401000 0x44a000 > $(REVIVAL_EXE_DATA).c.log 2>&1
 
+# --- EfzRevival.exe: the whole launcher ---------------------------------------------
+#   make revival-launcher   link build/revival/launcher/EfzRevival.exe from the objects
+# Link order is the project's: its files in alphabetical order (case-insensitive), then
+# protobuf as a static library.
+LAUNCHER_LINK_ORDER = Config Console EfzPackets.pb EfzRevivalLauncher GameProcess NetPeers \
+	Network ProtocolContext ProtocolState ProtocolStateClientConnect ProtocolStateEnd \
+	ProtocolStateHostConnect ProtocolStatePlay ProtocolStateSpecConnect ProtocolStateSpecPlay \
+	ProtocolStateTestDelay
+LAUNCHER_LIBS = kernel32.lib user32.lib winmm.lib ws2_32.lib
+
+build/revival/protobuf/libprotobuf-lite.lib: $(PROTOBUF_OBJS)
+	tools/msvc11 lib /nologo /OUT:$@ $(PROTOBUF_OBJS) > /dev/null
+
+build/revival/launcher/EfzRevival.ico:
+	mkdir -p $(@D)
+	python3 tools/icon.py $@ '$(REVIVAL_DIR)/EfzRevival.exe'
+
+build/revival/launcher/EfzRevivalLauncher.res: revival/EfzRevivalLauncher/EfzRevivalLauncher.rc build/revival/launcher/EfzRevival.ico
+	tools/msvc11 rc /nologo /fo$@ $< > /dev/null
+
+build/revival/launcher/EfzRevival.exe: $(LAUNCHER_LINK_ORDER:%=build/revival/launcher/%.obj) \
+		build/revival/protobuf/libprotobuf-lite.lib build/revival/launcher/EfzRevivalLauncher.res
+	mkdir -p build/revival/c/Git/efz_2022/Release
+	tools/msvc11 link /nologo /SUBSYSTEM:CONSOLE,5.01 /OPT:REF /OPT:ICF /DYNAMICBASE /NXCOMPAT \
+		/MACHINE:X86 /SAFESEH /DEBUG '/PDB:C:\Git\efz_2022\Release\EfzRevivalLauncher.pdb' \
+		/MANIFEST:EMBED "/MANIFESTUAC:level='asInvoker' uiAccess='false'" \
+		/MAP:build/revival/launcher/EfzRevival.map /OUT:$@ \
+		$(LAUNCHER_LINK_ORDER:%=build/revival/launcher/%.obj) build/revival/launcher/EfzRevivalLauncher.res \
+		build/revival/protobuf/libprotobuf-lite.lib $(LAUNCHER_LIBS)
+
+revival-launcher: build/revival/launcher/EfzRevival.exe
+
 # --- EfzRevival.dll: link-time code generation (docs/revival.md) ----------------------
 #   make revival-dll        compile revival/EfzRevival with /GL and link EfzRevival.dll
 #   make revival-dll-diff   compare its annotated functions with $(REVIVAL_DIR)'s (F=filter)
@@ -278,6 +310,6 @@ revival-flags:
 clean:
 	rm -rf build
 
-.PHONY: all diff link check play clean revival revival-diff revival-range revival-flags revival-names revival-decomp revival-check revival-dll revival-dll-diff revival-dll-check revival-ddraw-diff
+.PHONY: all diff link check play clean revival revival-diff revival-range revival-flags revival-names revival-decomp revival-check revival-launcher revival-dll revival-dll-diff revival-dll-check revival-ddraw-diff
 .SECONDARY:
 .DELETE_ON_ERROR:
