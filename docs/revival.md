@@ -100,6 +100,27 @@ Build options **observed** so far:
     call to `floor`; the original divides again after it. Intrinsics stay on (`/O2`):
     `std::char_traits<char>::length` inlines `strlen`, the messages' `Clear` inlines
     `memset`. **Inferred:** strict floating point for deterministic rollback.
+- `EfzRevival.dll`, linked with `/LTCG`: `/O2 /Ob0 /Oy- /GS /GL /Gy- /GF- /MT /EHsc
+  /arch:IA32`. **Observed** (test links compared with `tools/revltcg.py`):
+  - `/Gy-` (no function-level linking): the developer's functions are not COMDATs, so
+    the linker places them after everything else, just after the import thunks the
+    CRT pulls in (`RtlUnwind`, `IsProcessorFeaturePresent`), as in the original
+    (`0x10065580`-`0x1007a250`). Functions defined in headers (templates, members
+    defined in class bodies) are COMDATs and come first (`0x10001000`-`0x1002dca9`).
+  - `/Ob0`: `init` calls `std::wstring`'s constructor and destructor out of line.
+  - `/GF-`: identical literals are separate (46 duplicates, "wtf" twice in a row).
+  - x87 only (`/arch:IA32`); `DDRAW.dll` uses SSE2.
+  - Link-time code generation keeps `this`-call member functions' stack arguments
+    (`ret N`) but passes a free function's in registers, and it knows which registers
+    a non-COMDAT callee preserves, which it can't assume for a COMDAT. So whether a
+    function is a member, and whether it is defined in a header, shows in its callers.
+  - `EfzRender` (DDRAW.dll's renderer) is declared `class __declspec(dllexport)` in a
+    header both DLLs include: `EfzRevival.dll` calls DDRAW.dll through its import
+    table (link-time code generation turns the thunk calls into `call [IAT]`) and
+    also emits and exports the implicit `EfzRender::operator=`.
+  - Exports: `DirectDrawCreate=_DirectDrawCreate@12` in both `.def` files (in
+    EfzRevival.dll it names DDRAW.dll's import thunk), so DDRAW.dll exports both
+    spellings and its import library imports `_DirectDrawCreate@12` by name.
 - protobuf, a separate static library: its own project's Release options
   (`/O2 /Oi /Oy- /GS /Gy /EHsc /fp:precise`), changed to `/MT`, with `HAVE_ZLIB`, built
   from its `vsprojects` directory (its `__FILE__` strings are `..\src\google\protobuf\...`).

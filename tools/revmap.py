@@ -50,7 +50,7 @@ def main():
     strs = {}
     import bisect
     for line in out.splitlines():
-        m = re.match(r'\s+([0-9a-f]+):\t(.*)', line)
+        m = re.match(r'\s*([0-9a-f]+):\t(.*)', line)
         if not m:
             continue
         for v in re.findall(r'0x([0-9a-f]{6,8})\b', m[2]):

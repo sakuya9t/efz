@@ -47,7 +47,7 @@ def main():
                           f'--start-address={lo}', f'--stop-address={hi}', binary],
                          capture_output=True, text=True, check=True).stdout
     for line in out.splitlines():
-        m = re.match(r'\s+([0-9a-f]+):\t(.*)', line)
+        m = re.match(r'\s*([0-9a-f]+):\t(.*)', line)
         if not m or m[2] == 'int3':
             continue
         a, ins = int(m[1], 16), m[2]
