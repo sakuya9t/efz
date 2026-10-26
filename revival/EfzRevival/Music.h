@@ -8,9 +8,7 @@
 // lead the string data of each object that includes this header.
 #pragma once
 #include <windows.h>
-// The SDK's ddraw.h, which dshow.h includes: the DLL's include path (/I../DDRAW) would
-// find DDRAW.dll's own DDRAW.h under that name.
-#include <../Include/ddraw.h>
+#include <ddraw.h>
 #include <dshow.h>
 #include <map>
 #include <string>

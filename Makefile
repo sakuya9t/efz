@@ -182,7 +182,7 @@ revival-decomp: revival-names
 # not SSE2 (/arch:SSE: cmov, x87 floating point); functions defined in headers stay out-of-line COMDATs at the start.
 DLL_CFLAGS = /nologo /c /O2 /Ob0 /Oy- /GS- /GL /Gy- /GF- /MT /EHsc /arch:SSE /fp:strict \
 	/W3 /Zc:wchar_t /Zc:forScope /D WIN32 /D NDEBUG /D _WINDOWS /D _USRDLL /D _UNICODE \
-	/D UNICODE /I../DDRAW
+	/D UNICODE
 DLL_SRCS := $(wildcard revival/EfzRevival/*.cpp)
 DLL_OBJS := $(patsubst revival/EfzRevival/%.cpp,build/revival/dll/%.obj,$(DLL_SRCS))
 # Until every source exists the link leaves calls to missing functions unresolved.
