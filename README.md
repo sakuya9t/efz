@@ -174,15 +174,26 @@ lays out Visual C++ 2012 with Update 5's compiler, the Windows SDK 7.1A, the Dir
 Rich headers and code show; `tools/msvc11` runs it.
 
 ```sh
-make revival                       # compile revival/ and protobuf with the launcher's options
-make revival-diff                  # compare every function with $REVIVAL_DIR/EfzRevival.exe
+make revival-diff                  # compare the launcher's functions with $REVIVAL_DIR's
+make revival-dll-diff              # link EfzRevival.dll (/LTCG) and compare its functions
+make revival-ddraw-diff            # the same for DDRAW.dll
+make revival-launcher              # link EfzRevival.exe
+EFZ_DIR=... tools/revival-test.sh --revival DIR   # run binaries from DIR with efz.exe
 ```
 
-`revival-diff` uses a Ghidra export of the original for its function boundaries
-(`GHIDRA_HOME`, made once). Recovered so far: the network messages
-(`revival/EfzRevivalLauncher/EfzPackets.proto`, whose generated code matches function for
-function) and the protobuf library build. See [docs/revival.md](docs/revival.md) for the
-binaries, the toolchain, the rules that decide the code layout and the protocol.
+The comparisons use a Ghidra export of the originals for function boundaries
+(`GHIDRA_HOME`, made once). **All three binaries' code is recovered** and links:
+
+| Binary | Source | Functions matching |
+|---|---|---|
+| `EfzRevival.exe` | `revival/EfzRevivalLauncher/`: config, console menu, game launch and injection, UDP network, the protocol state machine, shared memory with the DLL, the network messages (`EfzPackets.proto`) | 3359 of 3397 |
+| `EfzRevival.dll` | `revival/EfzRevival/`: hooks into `efz.exe`, the box display, save states, rollback (`OnlineSession`), practice (pause, frame step, record/replay), spectating, replays, tournaments, music | 370 of 416 |
+| `DDRAW.dll` | `revival/DDRAW/`: DirectDraw on Direct3D 9, the text overlay and box renderer | 214 of 217 |
+
+The rebuilt binaries inject into the rebuilt `efz.exe` and run like the originals
+(`tools/revival-test.sh`). Making the images byte-identical (code and data layout) is in
+progress. See [docs/revival.md](docs/revival.md) for the binaries, the toolchain, the
+rules that decide the code layout, the protocol, rollback and the practice tools.
 
 ## Findings so far
 
@@ -227,6 +238,7 @@ EfzRevival 1.02h, alongside:
 2. **Toolchain:** Visual C++ 2012 Update 5 for `v110_xp`, boost 1.56. *Done:* a test
    link reproduces the Rich header's products and builds.
 3. **Function matching:** the launcher first (no `/GL`, so objects compare one by one),
-   then `EfzRevival.dll` and `DDRAW.dll` (`/GL`: compared after linking). *Started:*
-   `EfzPackets.pb.cc` (242 functions) and protobuf (112) match.
-4. **Byte-identical binaries.**
+   then `EfzRevival.dll` and `DDRAW.dll` (`/GL`: compared after linking). *Done:* all
+   code recovered; 3359/3397, 370/416 and 214/217 functions match; the rebuilt binaries
+   inject and run like the originals.
+4. **Byte-identical binaries.** *In progress:* code and data layout.
