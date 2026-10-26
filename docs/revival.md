@@ -362,6 +362,34 @@ EFZ_DIR=/path/to/EFZ tools/revival-test.sh                        # the original
 EFZ_DIR=/path/to/EFZ tools/revival-test.sh --revival DIR --name x # rebuilt binaries in DIR
 ```
 
+## The launcher and the DLL: shared memory
+
+**Observed** (`revival/EfzRevivalLauncher/SharedQueue.h`, `SharedData.h`). The two processes
+talk through named shared-memory queues: a header of two counters (records read and
+written) and a ring of records, created and zeroed by whichever side comes first, each
+with an auto-reset event `<name>Write`.
+
+| Queue | Records | Written by |
+|---|---|---|
+| `Init` | 1 `GameInfo`: local side, delay, rollback, seed, practice keys, both names, the launcher's process id | launcher |
+| `InputP1`, `InputP2` | 600 two-byte inputs | DLL (local), launcher (remote) |
+| `PaletteP1`, `PaletteP2` | 10 palettes of `0xa4` bytes | DLL |
+| `Net` | 100 ping statistics | launcher |
+| `Sync` | 200 per-frame states: frame, state, FPU control word, both players' states, inputs and positions (doubles), RNG | DLL |
+| `Quit` | 1 bool | launcher (on close; if the queue is full it kills `efz.exe`) |
+| `LoadMatch` | 100 entries | launcher |
+
+The launcher waits on the input queue's event to forward local inputs to the network.
+`ProtocolContext`'s constructor (`0x432600`) reads `EfzRevival.ini` through `Config`:
+`Debug` turns on the logs, `MaxRollback` is clamped to 9, `Player` 1 or 2 (anything else
+picks a side at random), `HolePunchingServer` becomes a peer.
+
+Logs: `logNet.txt` (per checked frame, the two queue sizes and `HH:MM:SS Checked <frame>`,
+or on a desync `ERROR:` with both sides' states; ping summaries) and `logPing.csv`
+(`<timeGetTime>,<round trip>`). The first desync prints "Desync detected", flashes the
+console and plays the asterisk sound. Outgoing protobuf messages are compressed with
+protobuf's `GzipOutputStream` (zlib format, level 9) before sending.
+
 ## The network messages
 
 `revival/EfzRevivalLauncher/EfzPackets.proto` is reconstructed from the launcher (every
