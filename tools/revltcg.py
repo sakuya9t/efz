@@ -199,7 +199,14 @@ def main():
     flt = args[5] if len(args) > 5 else ''
     orig, built = Image(orig_path), Image(built_path)
     syms, byname = read_map(map_path)
-    starts = sorted({f['entry'] for f in json.load(open(fjson)) if not f['external']})
+    starts = {f['entry'] for f in json.load(open(fjson)) if not f['external']}
+    # Ghidra misses functions only reached through vtables: code after int3 padding at a
+    # 16-byte boundary starts one too (two int3s: one can be a displacement)
+    t = orig.image[orig.tlo - orig.base:orig.thi - orig.base]
+    for o in range(16 - orig.tlo % 16, len(t), 16):
+        if t[o - 2:o] == b'\xcc\xcc' and t[o] != 0xCC:
+            starts.add(orig.tlo + o)
+    starts = sorted(starts)
 
     annotated = {}
     want = []  # (qualified name, decorated name, original address)

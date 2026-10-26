@@ -127,8 +127,9 @@ Build options **observed** so far:
   - Exports: `DirectDrawCreate=_DirectDrawCreate@12` in both `.def` files (in
     EfzRevival.dll it names DDRAW.dll's import thunk), so DDRAW.dll exports both
     spellings and its import library imports `_DirectDrawCreate@12` by name.
-- `DDRAW.dll`, linked with `/LTCG`: `/O2 /Ob0 /Oy- /GS /GL /Gy /GF- /MT /EHsc`, SSE2 (the
-  default). **Observed:** a test build reproduces `EfzRender::isFullscreen`,
+- `DDRAW.dll`, linked with `/LTCG`: `/O2 /Ob0 /Oy- /GS- /GL /Gy /GF /MT /EHsc`, SSE2 (the
+  default), and linked without `/OPT:REF` or `/OPT:ICF` (unreferenced functions and
+  identical copies are all in it) and with `DxErr.lib`. **Observed:** a test build reproduces `EfzRender::isFullscreen`,
   `isActiveWindow`, `setBoxRender`, `setRenderText`, `getEfzRender` and `CDDRAW`'s
   constructor (the Visual Studio DLL template's sample class). Unlike EfzRevival.dll it
   links function by function (`/Gy`), so its own code is among the COMDATs at the
@@ -466,6 +467,38 @@ protobuf's `GzipOutputStream` (zlib format, level 9) before sending.
   held for 80 frames.
 - **Replays.** Extended replays keep 300 save states, one every 64 frames
   (`RingBuffer<ReplayState>`), for seeking and for taking control of a character.
+
+## DDRAW.dll: rendering, the overlay and the boxes
+
+**Observed** in `revival/DDRAW/` (every developer function written; 214 of 217 match):
+- **DirectDraw on Direct3D 9.** `DirectDrawCreate` returns `myIDirectDraw`; its
+  `SetCooperativeLevel` creates the device (windowed, `D3DSWAPEFFECT_FLIP`, a lockable back
+  buffer of the ini's BackBufferWidth/Height, software vertex processing with
+  `FPU_PRESERVE`). The game's 8-bit surfaces are D3D surfaces in system memory in the first
+  of P8, L8, A8, R3G3B2 or A4L4 the card supports, or `SoftwareSurface`s (an
+  `IDirect3DSurface9` over `malloc`ed memory) with SoftwareRendering. `Flip` converts the
+  8-bit back buffer through the palette into a 32-bit frame, stretches it onto a 640x480
+  render target, draws the text and boxes there, and stretches that onto the back buffer
+  (pillar- or letterboxed to 4:3 in fullscreen, which is borderless over the monitor and
+  toggled with Alt+Enter). A failed `Present` rebuilds the default-pool surfaces and font.
+- **`EfzRender`** (`0xb0` bytes, one instance at `0x100b6bc8`) holds that Direct3D state
+  and the overlay: a `std::list` of text lines and a `std::unordered_set` of boxes (hashed
+  and compared by rectangle only, so the first box added for a rectangle wins).
+- **Text.** "ＭＳゴシック" 14 px before Vista, Consolas 15 px from Vista on; each line is drawn
+  white over four black copies one pixel off (an outline). `addTextRender`'s last argument
+  is `DT_` format flags.
+- **Boxes.** Each box is a closed `ID3DXLine` polyline two pixels wide, created per box every
+  frame and drawn with `SetPattern(flags)`. EfzRevival.dll draws hitboxes red, hurtboxes blue
+  and collision boxes yellow; a hitbox that has already hit gets the pattern `0xf0f0f0f0`
+  (four pixels on, four off).
+- **Standalone fixes** (also under Revival, whenever the process is efz.exe 4.02): DDRAW's
+  own window from the ini, a frame timer replacing `FrameTimerThread`'s loop at `0x40187f`
+  (63.9 FPS by default, error carried between frames; `getEfzTimer` returns it, and
+  EfzRevival.dll's game speed sets its FPS), DirectInput 7's `DirectInputCreateW` with
+  joystick hats as directions, and a few sound and scene patches.
+- **`getEfzInput(bool player2)`** runs a copy of `CInput::GetInput` (made at startup, with the
+  hat hook) on the game's input object and returns the controls, so EfzRevival.dll can read
+  real local input around its own patch of `CInput::GetInput`.
 
 ## The network messages
 

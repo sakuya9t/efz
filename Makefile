@@ -197,14 +197,10 @@ build/revival/dll/%.obj: revival/EfzRevival/%.cpp $(DLL_DEPS)
 	mkdir -p $(@D)
 	cd revival/EfzRevival && MSVC11_QUIET=1 ../../tools/msvc11 cl $(DLL_CFLAGS) /Fo../../$@ $*.cpp
 
-# DDRAW.dll's import library, from a stub of its exports until DDRAW.dll is rebuilt
-build/revival/dll/DDRAW.lib: revival/DDRAW/stub/DDRAW_stub.cpp revival/DDRAW/EfzRender.h revival/DDRAW/DDRAW.def
-	mkdir -p build/revival/ddrawstub $(@D)
-	cd revival/DDRAW/stub && MSVC11_QUIET=1 ../../../tools/msvc11 cl /nologo /c /O2 /MT /EHsc \
-		/Fo../../../build/revival/ddrawstub/DDRAW_stub.obj DDRAW_stub.cpp
-	tools/msvc11 link /nologo /DLL /DEF:revival/DDRAW/DDRAW.def /IMPLIB:$@ \
-		/OUT:build/revival/ddrawstub/DDRAW.dll build/revival/ddrawstub/DDRAW_stub.obj \
-		> /dev/null
+# DDRAW.dll's import library comes from linking DDRAW.dll, as in the original.
+build/revival/dll/DDRAW.lib: build/revival/ddraw/DDRAW.dll
+	mkdir -p $(@D)
+	cp build/revival/ddraw/DDRAW.lib $@
 
 build/revival/dll/EfzRevival.dll: $(DLL_OBJS) build/revival/dll/DDRAW.lib revival/EfzRevival/EfzRevival.def
 	tools/msvc11 link /nologo /DLL /LTCG /OPT:REF /OPT:ICF /MACHINE:X86 $(DLL_LINK_EXTRA) \
@@ -235,21 +231,23 @@ revival-dll-check: build/revival/dll/DDRAW.lib build/revival/EfzRevival.dll.func
 comma := ,
 
 # --- DDRAW.dll: link-time code generation, like EfzRevival.dll but with function-level
-# linking (/Gy: its functions are COMDATs, at the start) and SSE2 (the default). -------
+# linking (/Gy: its functions are COMDATs, at the start), string pooling (/GF) and SSE2
+# (the default); linked without /OPT:REF or /OPT:ICF (unreferenced functions and
+# identical copies are all in the original) and with DxErr.lib. ----------------------
 #   make revival-ddraw-diff   compile revival/DDRAW, link DDRAW.dll, compare (F=filter)
-DDRAW_CFLAGS = /nologo /c /O2 /Ob0 /Oy- /GS- /GL /Gy /GF- /MT /EHsc /fp:strict \
+DDRAW_CFLAGS = /nologo /c /O2 /Ob0 /Oy- /GS- /GL /Gy /GF /MT /EHsc /fp:strict \
 	/W3 /Zc:wchar_t /Zc:forScope /D WIN32 /D NDEBUG /D _WINDOWS /D _USRDLL /D DDRAW_EXPORTS \
 	/D _UNICODE /D UNICODE
 DDRAW_SRCS := $(wildcard revival/DDRAW/*.cpp)
 DDRAW_OBJS := $(patsubst revival/DDRAW/%.cpp,build/revival/ddraw/%.obj,$(DDRAW_SRCS))
-DDRAW_LIBS = kernel32.lib user32.lib shell32.lib winmm.lib ws2_32.lib d3d9.lib d3dx9.lib
+DDRAW_LIBS = kernel32.lib user32.lib shell32.lib winmm.lib ws2_32.lib d3d9.lib d3dx9.lib DxErr.lib
 
 build/revival/ddraw/%.obj: revival/DDRAW/%.cpp $(wildcard revival/DDRAW/*.h revival/EfzRevivalLauncher/Config.*)
 	mkdir -p $(@D)
 	cd revival/DDRAW && MSVC11_QUIET=1 ../../tools/msvc11 cl $(DDRAW_CFLAGS) /Fo../../$@ $*.cpp
 
 build/revival/ddraw/DDRAW.dll: $(DDRAW_OBJS) revival/DDRAW/DDRAW.def
-	tools/msvc11 link /nologo /DLL /LTCG /OPT:REF /OPT:ICF /MACHINE:X86 $(DLL_LINK_EXTRA) \
+	tools/msvc11 link /nologo /DLL /LTCG /OPT:NOREF /OPT:NOICF /MACHINE:X86 $(DLL_LINK_EXTRA) \
 		/DEF:revival/DDRAW/DDRAW.def /MAP:build/revival/ddraw/DDRAW.map \
 		/IMPLIB:build/revival/ddraw/DDRAW.lib /OUT:$@ $(DDRAW_OBJS) $(DDRAW_LIBS) \
 		| grep -v '^Generating code\|^Finished generating\|Creating library\|LNK4088'; test -f $@
