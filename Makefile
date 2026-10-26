@@ -217,7 +217,7 @@ revival-dll-diff: build/revival/dll/EfzRevival.dll build/revival/EfzRevival.dll.
 # link every object that exists into OUT (each worker its own) and report the given
 # sources' functions. Objects of other sources are used as they are, stale or not.
 OUT ?= build/revival/dll-check
-revival-dll-check: build/revival/dll/DDRAW.lib build/revival/EfzRevival.dll.functions.json
+revival-dll-check revival-ddraw-diff: build/revival/dll/DDRAW.lib build/revival/EfzRevival.dll.functions.json
 	@for s in $(subst $(comma), ,$(S)); do $(MAKE) -s --no-print-directory \
 		build/revival/dll/$${s%.cpp}.obj || exit 1; done
 	@mkdir -p $(OUT)
@@ -229,6 +229,30 @@ revival-dll-check: build/revival/dll/DDRAW.lib build/revival/EfzRevival.dll.func
 		$(OUT)/EfzRevival.map revival/EfzRevival build/revival/EfzRevival.dll.functions.json \
 		--only $(S) $(V) $(F)
 comma := ,
+
+# --- DDRAW.dll: link-time code generation, like EfzRevival.dll but with function-level
+# linking (/Gy: its functions are COMDATs, at the start) and SSE2 (the default). -------
+#   make revival-ddraw-diff   compile revival/DDRAW, link DDRAW.dll, compare (F=filter)
+DDRAW_CFLAGS = /nologo /c /O2 /Ob0 /Oy- /GS /GL /Gy /GF- /MT /EHsc /fp:strict \
+	/W3 /Zc:wchar_t /Zc:forScope /D WIN32 /D NDEBUG /D _WINDOWS /D _USRDLL /D DDRAW_EXPORTS \
+	/D _UNICODE /D UNICODE
+DDRAW_SRCS := $(wildcard revival/DDRAW/*.cpp)
+DDRAW_OBJS := $(patsubst revival/DDRAW/%.cpp,build/revival/ddraw/%.obj,$(DDRAW_SRCS))
+DDRAW_LIBS = kernel32.lib user32.lib shell32.lib winmm.lib ws2_32.lib d3d9.lib d3dx9.lib
+
+build/revival/ddraw/%.obj: revival/DDRAW/%.cpp
+	mkdir -p $(@D)
+	cd revival/DDRAW && MSVC11_QUIET=1 ../../tools/msvc11 cl $(DDRAW_CFLAGS) /Fo../../$@ $*.cpp
+
+build/revival/ddraw/DDRAW.dll: $(DDRAW_OBJS) revival/DDRAW/DDRAW.def
+	tools/msvc11 link /nologo /DLL /LTCG /OPT:REF /OPT:ICF /MACHINE:X86 $(DLL_LINK_EXTRA) \
+		/DEF:revival/DDRAW/DDRAW.def /MAP:build/revival/ddraw/DDRAW.map \
+		/IMPLIB:build/revival/ddraw/DDRAW.lib /OUT:$@ $(DDRAW_OBJS) $(DDRAW_LIBS) \
+		| grep -v '^Generating code\|^Finished generating\|Creating library\|LNK4088'; test -f $@
+
+revival-ddraw-diff: build/revival/ddraw/DDRAW.dll build/revival/DDRAW.dll.functions.json
+	python3 tools/revltcg.py '$(REVIVAL_DIR)/DDRAW.dll' $< build/revival/ddraw/DDRAW.map \
+		revival/DDRAW build/revival/DDRAW.dll.functions.json $(V) $(F)
 
 # An object's range: LAUNCHER_RANGE_<name>, or a `// OBJECT: LO HI` line in its source.
 revival-range:
@@ -252,6 +276,6 @@ revival-flags:
 clean:
 	rm -rf build
 
-.PHONY: all diff link check play clean revival revival-diff revival-range revival-flags revival-names revival-decomp revival-check revival-dll revival-dll-diff revival-dll-check
+.PHONY: all diff link check play clean revival revival-diff revival-range revival-flags revival-names revival-decomp revival-check revival-dll revival-dll-diff revival-dll-check revival-ddraw-diff
 .SECONDARY:
 .DELETE_ON_ERROR:

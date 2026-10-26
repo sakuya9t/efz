@@ -127,6 +127,14 @@ Build options **observed** so far:
   - Exports: `DirectDrawCreate=_DirectDrawCreate@12` in both `.def` files (in
     EfzRevival.dll it names DDRAW.dll's import thunk), so DDRAW.dll exports both
     spellings and its import library imports `_DirectDrawCreate@12` by name.
+- `DDRAW.dll`, linked with `/LTCG`: `/O2 /Ob0 /Oy- /GS /GL /Gy /GF- /MT /EHsc`, SSE2 (the
+  default). **Observed:** a test build reproduces `EfzRender::isFullscreen`,
+  `isActiveWindow`, `setBoxRender`, `setRenderText`, `getEfzRender` and `CDDRAW`'s
+  constructor (the Visual Studio DLL template's sample class). Unlike EfzRevival.dll it
+  links function by function (`/Gy`), so its own code is among the COMDATs at the
+  start (`0x10001000`-`0x10020080`), not after the CRT. It also compiles `Config.cpp`
+  (the ini and key tables) and the hook trampolines that EfzRevival.dll has.
+  `make revival-ddraw-diff` builds `revival/DDRAW/*.cpp` and compares.
 - protobuf, a separate static library: its own project's Release options
   (`/O2 /Oi /Oy- /GS /Gy /EHsc /fp:precise`), changed to `/MT`, with `HAVE_ZLIB`, built
   from its `vsprojects` directory (its `__FILE__` strings are `..\src\google\protobuf\...`).

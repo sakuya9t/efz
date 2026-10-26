@@ -83,6 +83,7 @@ def infer_name(kind, lines, start, cls):
         if m and kind == 'FUNCTION' and '(' in code and code.split('(')[0].isupper():
             return f'{m.group(1)}::{m.group(1)}'  # DECLARE_X(Class, ...) declares a constructor
         if kind == 'FUNCTION':
+            code = re.sub(r'__declspec\s*\([^)]*\)|extern\s+"C"', '', code)
             m = re.search(r'([\w:~]+)\s*\(', code)
         else:
             m = re.search(r'([\w:]+)\s*(?:\[[^\]]*\]\s*)*(?:=|;)', code)
