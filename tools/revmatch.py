@@ -327,8 +327,18 @@ def main():
         print(f'{len(m.conflicts)} names placed at two addresses (-v lists them)')
     if rng:
         lo, hi = rng
-        covered = set(placed.values())
-        todo = [a for a in binary.starts if lo <= a < hi and a not in covered]
+        # a placed function covers every start inside it (Ghidra makes catch blocks and
+        # the code after them functions of their own)
+        def span(n, a):
+            kind, sec, off, _size = m.where[n].items[n]
+            return a, a + m.where[n].coff.sections[sec]['size'] - off  # to its section's end
+        spans = sorted(span(n, a) for n, a in placed.items() if m.where[n].items[n][0] == 'code')
+        import bisect
+        ends = [s for s, _e in spans]
+        def inside(a):
+            i = bisect.bisect_right(ends, a) - 1
+            return i >= 0 and spans[i][0] <= a < spans[i][1]
+        todo = [a for a in binary.starts if lo <= a < hi and not inside(a)]
         size = lambda a: binary.next_start(a) - a
         print(f'{len(todo)} original functions in {lo:#x}-{hi:#x} not placed, '
               f'{sum(size(a) for a in todo)} bytes')

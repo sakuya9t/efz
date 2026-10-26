@@ -71,8 +71,9 @@ rm -rf /dest/vs2012/bin/x86_amd64
 cp -r "$work/vc_librarycore86/$vc/include" /dest/vs2012/include
 mkdir -p /dest/vs2012/lib
 find "$work/vc_librarycore86/$vc/lib" -maxdepth 1 -type f -exec cp {} /dest/vs2012/lib/ \;
-# The compiler DLLs need mspdb110.dll and friends beside cl.exe.
-find "$work/vc_compilercore86" -iname "mspdb*.dll" -exec cp -n {} /dest/vs2012/bin/ \;
+# The compiler DLLs need mspdb110.dll and friends beside cl.exe, and the PDB server
+# mspdbsrv.exe for /Zi and link /DEBUG.
+find "$work/vc_compilercore86" -iname "mspdb*" -exec cp -n {} /dest/vs2012/bin/ \;
 find "$work/vc_compilercore86" -iname "msobj110.dll" -exec cp -n {} /dest/vs2012/bin/ \;
 
 echo "applying Update 5 (c1xx.dll, c2.dll 17.00.61219)"

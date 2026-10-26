@@ -97,7 +97,7 @@ GHIDRA_PROJECTS ?= $(HOME)/tools/efz-ghidra
 # that drive path).
 LAUNCHER_CFLAGS = /nologo /c /O2 /Ob0 /Oy- /GS /sdl /Gy /MT /EHsc /arch:SSE /W3 \
 	/Zc:wchar_t /Zc:forScope /fp:strict /D WIN32 /D NDEBUG /D _CONSOLE /D _UNICODE \
-	/D UNICODE '/IC:\Programming\protobuf-2.6.1\src'
+	/D UNICODE '/IC:\Programming\protobuf-2.6.1\src' '/IC:\Programming\zlib-1.2.8'
 LAUNCHER_SRCS := $(wildcard revival/EfzRevivalLauncher/*.cc revival/EfzRevivalLauncher/*.cpp)
 LAUNCHER_OBJS := $(patsubst revival/EfzRevivalLauncher/%,build/revival/launcher/%.obj,$(basename $(LAUNCHER_SRCS)))
 
