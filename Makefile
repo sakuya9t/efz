@@ -181,7 +181,7 @@ LAUNCHER_LINK_ORDER = Config Console EfzPackets.pb EfzRevivalLauncher GameProces
 	Network ProtocolContext ProtocolState ProtocolStateClientConnect ProtocolStateEnd \
 	ProtocolStateHostConnect ProtocolStatePlay ProtocolStateSpecConnect ProtocolStateSpecPlay \
 	ProtocolStateTestDelay
-LAUNCHER_LIBS = kernel32.lib user32.lib winmm.lib ws2_32.lib
+LAUNCHER_LIBS = user32.lib winmm.lib ws2_32.lib
 
 build/revival/protobuf/libprotobuf-lite.lib: $(PROTOBUF_OBJS)
 	tools/msvc11 lib /nologo /OUT:$@ $(PROTOBUF_OBJS) > /dev/null
