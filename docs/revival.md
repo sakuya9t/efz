@@ -334,6 +334,26 @@ The modules, by address (chunk B), as far as known:
 | `0x10078910`-`0x10078950` | `Session`'s default handlers (`revival/EfzRevival/Session.h`) |
 | `0x10078960`-`0x1007a250` | The tournament session |
 
+## Checking the injection
+
+`tools/revival-test.sh` runs EfzRevival with `efz.exe` on a virtual X server (docker image
+`efz-revival-test`, `toolchain/revival-test.Dockerfile`): it answers the launcher's menu
+with 5 (Local Play), then reports whether `efz.exe` runs with `EfzRevival.dll` and
+`DDRAW.dll` mapped and what the game window's title is (the DLL sets it on the first
+frame), and keeps screenshots. Two things wine needs: a wine desktop window (the game
+switches to 640x480, which a virtual X server can't), and `WINEDLLOVERRIDES=ddraw=n,b`,
+so that the game loads the `DDRAW.dll` beside it, as Windows does, instead of wine's.
+
+**Observed** with the original 1.02h files and the rebuilt `efz.exe`: the launcher
+starts the game, both DLLs are mapped, and the title becomes
+"Eternal Fighter Zero -Revival- 1.02h!!!". The `L"h!!!"` that a header defines as a
+static `std::wstring` in most of the launcher's objects is the version suffix.
+
+```sh
+EFZ_DIR=/path/to/EFZ tools/revival-test.sh                        # the originals
+EFZ_DIR=/path/to/EFZ tools/revival-test.sh --revival DIR --name x # rebuilt binaries in DIR
+```
+
 ## The network messages
 
 `revival/EfzRevivalLauncher/EfzPackets.proto` is reconstructed from the launcher (every
