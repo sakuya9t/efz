@@ -213,6 +213,23 @@ revival-dll-diff: build/revival/dll/EfzRevival.dll build/revival/EfzRevival.dll.
 	python3 tools/revltcg.py '$(REVIVAL_DIR)/EfzRevival.dll' $< build/revival/dll/EfzRevival.map \
 		revival/EfzRevival build/revival/EfzRevival.dll.functions.json $(V) $(F)
 
+# While several people work on the DLL: compile only the given sources (S=a.cpp,b.cpp),
+# link every object that exists into OUT (each worker its own) and report the given
+# sources' functions. Objects of other sources are used as they are, stale or not.
+OUT ?= build/revival/dll-check
+revival-dll-check: build/revival/dll/DDRAW.lib build/revival/EfzRevival.dll.functions.json
+	@for s in $(subst $(comma), ,$(S)); do $(MAKE) -s --no-print-directory \
+		build/revival/dll/$${s%.cpp}.obj || exit 1; done
+	@mkdir -p $(OUT)
+	@tools/msvc11 link /nologo /DLL /LTCG /OPT:REF /OPT:ICF /MACHINE:X86 $(DLL_LINK_EXTRA) \
+		/DEF:revival/EfzRevival/EfzRevival.def /MAP:$(OUT)/EfzRevival.map /LIBPATH:build/revival/dll \
+		/OUT:$(OUT)/EfzRevival.dll $(wildcard build/revival/dll/*.obj) $(DLL_LIBS) \
+		| grep -v '^Generating code\|^Finished generating\|Creating library\|LNK4088' || true
+	@python3 tools/revltcg.py '$(REVIVAL_DIR)/EfzRevival.dll' $(OUT)/EfzRevival.dll \
+		$(OUT)/EfzRevival.map revival/EfzRevival build/revival/EfzRevival.dll.functions.json \
+		--only $(S) $(V) $(F)
+comma := ,
+
 # An object's range: LAUNCHER_RANGE_<name>, or a `// OBJECT: LO HI` line in its source.
 revival-range:
 	@r='$(LAUNCHER_RANGE_$(N))'; [ -n "$$r" ] || r=$$(sed -n \
@@ -235,6 +252,6 @@ revival-flags:
 clean:
 	rm -rf build
 
-.PHONY: all diff link check play clean revival revival-diff revival-range revival-flags revival-names revival-decomp revival-check revival-dll revival-dll-diff
+.PHONY: all diff link check play clean revival revival-diff revival-range revival-flags revival-names revival-decomp revival-check revival-dll revival-dll-diff revival-dll-check
 .SECONDARY:
 .DELETE_ON_ERROR:

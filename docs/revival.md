@@ -114,6 +114,12 @@ Build options **observed** so far:
     (`ret N`) but passes a free function's in registers, and it knows which registers
     a non-COMDAT callee preserves, which it can't assume for a COMDAT. So whether a
     function is a member, and whether it is defined in a header, shows in its callers.
+  - Within an object, link-time code generation orders the developer's functions by a
+    key computed from each decorated name: renaming two functions swaps them, call
+    order doesn't matter, and any subset keeps the full set's order. The key isn't a
+    common string hash (ELF, djb2, FNV, CRC-32, the PDB's `LHashPbCb`, ... all fail),
+    so, as for VC7.1's locals (`tools/stackorder.py`), names that reproduce an order
+    have to be found by compiling probes.
   - `EfzRender` (DDRAW.dll's renderer) is declared `class __declspec(dllexport)` in a
     header both DLLs include: `EfzRevival.dll` calls DDRAW.dll through its import
     table (link-time code generation turns the thunk calls into `call [IAT]`) and
@@ -263,6 +269,70 @@ What decides the code, from the objects matched so far:
   listed by the `.CRT$XCU` table at `0x497314`), one run per object in link order:
   boost.bind's placeholders `_1`-`_9`, error-category references and a header's static
   `std::wstring` (`L"h!!!"`) show which objects include which headers.
+
+## Recovering EfzRevival.dll
+
+The DLL's code is generated at link time (`/GL`), so it is checked after linking. Its
+sources are `revival/EfzRevival/*.cpp`, annotated like the launcher's (`// FUNCTION:
+0xADDR`; no `// OBJECT:` line, see below). DDRAW.dll's interface (`EfzRender`) is in
+`revival/DDRAW/EfzRender.h`; until DDRAW.dll is rebuilt, its import library comes from
+`revival/DDRAW/stub/`.
+
+```sh
+make revival-dll-diff                          # link build/revival/dll/EfzRevival.dll, compare all
+make revival-dll-check S=a.cpp,b.cpp OUT=dir   # compile a.cpp and b.cpp, link every object
+                                               # there is into dir, report their functions
+```
+
+`V=-v` adds instruction diffs, `F=name` filters. `tools/revltcg.py` compares each
+annotated function with the original instruction by instruction, mapping address
+operands through the link map; missing functions are left unresolved
+(`/FORCE:UNRESOLVED`), so a function can only match once what it calls exists.
+
+What differs from the launcher (all observed in test links):
+- **Layout.** The developer's functions follow the CRT (`0x10065580`-`0x1007a250`), one
+  object after another in link order (alphabetical file names: `Config.cpp`,
+  `dllmain.cpp`, ..., `EfzRevival.cpp` with `init`, ...). Within an object their order
+  comes from an unknown key of each decorated name, not from the source or the
+  alphabet. Functions defined in headers (class bodies, templates) are COMDATs at the
+  start (`0x10001000`-`0x1002dca9`), shared by all objects.
+- **Calling conventions.** Link-time code generation passes a free function's first
+  two arguments in `ecx`/`edx` when it sees every caller; member functions keep
+  `thiscall` with their stack arguments (`ret N`), even when they don't use `this`
+  (the caller then doesn't load `ecx`). A function whose address is taken (hook
+  targets, vtable slots) keeps the standard convention. So the shape of a call shows
+  whether the callee is a member, and `ret N` with an unused `ecx` means a member that
+  doesn't touch its object.
+- **Register knowledge.** A caller knows which registers a non-COMDAT callee
+  preserves and keeps values in them across the call; it can't assume that for a
+  COMDAT (a function defined in a header). `Palettes::makePalette` (`0x1006d820`) only
+  matches with `PaletteId`'s constructor defined in its class body.
+- **Branches.** `return palette <= 5;` compiles to `sbb`; the original's `setbe`
+  comes from `if (palette > 5) return false; return true;`.
+- **Strings.** Not pooled (`/GF-`): each use of a literal is its own copy, in source
+  order.
+- **Game addresses.** The DLL patches and reads `efz.exe` at fixed addresses; `src/`
+  (the game's own decompilation) names them: `0x40d131` is inside `CInput::GetInput`,
+  `0x7b1290` is `g_fkeyHeld`, `0x7b0960` is inside `g_graphics`, and so on
+  (`grep -rn '0x7b0960' src/` or the annotations in `src/efz.h`).
+
+The modules, by address (chunk B), as far as known:
+
+| Range | What |
+|---|---|
+| `0x10065620`-`0x1006abb0` | `Config.cpp`: the same source as the launcher's first object (ini keys, `DIK_`/`BUTTON_` names), plus UTF-8 conversion helpers |
+| `0x1006abc0` | `dllmain.cpp`: the template `DllMain` |
+| `0x1006abd0`-`0x1006de..` | Game state and input (`key.ini`, devices), the extended replay buffer, the hit/hurt/collision box display (`0x1006c1d0`, `0x1006cf90` call `EfzRender::addRectRender`), characters and palettes |
+| `0x1006de..`-`0x1006f260` | `EfzRevival.cpp`: `init` (`0x1006f0b0`), the first-frame setup that installs the hooks (`0x1006ee10`), the hook targets (`0x1006dfa0`-`0x1006e070` replace `CReplayFile`'s methods; `0x1006eb10`-`0x1006ebc0` forward to the session), keyboard and joystick edges, the crash handler (`0x1006e1c0`), switching to practice/replay sessions (`0x1006e090`) |
+| `0x1006f260`-`0x1006f7a0` | Save states: copies of the game's memory (`0x1006f390`) |
+| `0x1006f7a0`-`0x1006fae2` | Hooks: patching bytes and three kinds of trampoline |
+| `0x1006faf0`-`0x10070600` | Music (DirectShow: custom BGM folder), replay file names |
+| `0x10070600`-`0x10074210` | The online session: rollback, input exchange with the launcher, sync, replay saving |
+| `0x10074210`-`0x10075370` | The spectator session |
+| `0x100757e0`-`0x100769e0` | The practice session: pause, frame step, save/load state, record/replay |
+| `0x10077650`-`0x100785c0` | The replay session |
+| `0x10078910`-`0x10078950` | `Session`'s default handlers (`revival/EfzRevival/Session.h`) |
+| `0x10078960`-`0x1007a250` | The tournament session |
 
 ## The network messages
 

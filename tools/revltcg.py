@@ -14,8 +14,10 @@ the rebuild (its address from the link map) over the original's (from its
 Functions end at the next symbol (rebuild) or the next function start (original,
 from the Ghidra export), padding removed.
 
-Usage: tools/revltcg.py ORIGINAL BUILT MAP SRC_DIR FUNCTIONS_JSON [-v] [NAME_FILTER]
-  -v prints instruction diffs and the learned addresses.
+Usage: tools/revltcg.py ORIGINAL BUILT MAP SRC_DIR FUNCTIONS_JSON [-v] [--only F,...]
+                        [NAME_FILTER]
+  -v prints instruction diffs and the learned addresses; --only reports just the
+  functions annotated in those source files (every annotation still names addresses).
 """
 import bisect
 import difflib
@@ -171,8 +173,14 @@ class Matcher:
 
 
 def main():
-    args = [a for a in sys.argv[1:] if a != '-v']
-    verbose = '-v' in sys.argv
+    argv = sys.argv[1:]
+    only = None
+    if '--only' in argv:
+        i = argv.index('--only')
+        only = {os.path.basename(f) for f in argv[i + 1].split(',') if f}
+        del argv[i:i + 2]
+    args = [a for a in argv if a != '-v']
+    verbose = '-v' in argv
     orig_path, built_path, map_path, src_dir, fjson = args[:5]
     flt = args[5] if len(args) > 5 else ''
     orig, built = Image(orig_path), Image(built_path)
@@ -181,12 +189,19 @@ def main():
 
     annotated = {}
     want = []  # (qualified name, decorated name, original address)
+    reported = None
+    if only is not None:
+        reported = {}
+        for root, _, files in os.walk(src_dir):
+            for fn in files:
+                if fn in only:
+                    funcdiff.parse_file(os.path.join(root, fn), reported)
     for qual, (kind, addr) in funcdiff.read_annotations(src_dir).items():
         prefixes = funcdiff.mangled_prefixes(qual)
         hits = [n for n in byname if funcdiff.matches(n, prefixes)]
         for n in hits:
             annotated[n] = addr
-        if kind == 'FUNCTION':
+        if kind == 'FUNCTION' and (reported is None or qual in reported):
             want.append((qual, hits, addr))
 
     m = Matcher(orig, built, syms, annotated)
