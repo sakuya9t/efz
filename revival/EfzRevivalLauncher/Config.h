@@ -11,6 +11,8 @@ class Config {
 public:
     Config(const std::wstring &path);
     ~Config();
+    // Reads the ini again (EfzRevival.dll's tournament does, at character select).
+    void reload();
 
     // [Global]
     bool debug;                                         // 0x00 Debug

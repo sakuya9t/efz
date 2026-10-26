@@ -48,6 +48,11 @@ bool isValidAddress(const std::string &address)
     return true;
 }
 
+void Config::reload()
+{
+    load(path_);
+}
+
 // FUNCTION: 0x40aa90
 bool Config::load(const std::wstring &path)
 {

@@ -8,6 +8,7 @@
 // FUNCTION: 0x10065d70 Config::loadKeyNames
 // FUNCTION: 0x100688d0 Config::readInt
 // FUNCTION: 0x10068900 Config::readString
+// FUNCTION: 0x10068970 Config::reload
 // FUNCTION: 0x10068980 Config::load
 // FUNCTION: 0x1006a140 Config::~Config
 // FUNCTION: 0x1006a1c0 Config::Config
