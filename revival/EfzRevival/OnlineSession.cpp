@@ -106,7 +106,7 @@ void OnlineSession::start()
     p1Name_ = std::wstring(init_.names[0]);
     p2Name_ = std::wstring(init_.names[1]);
     launcher_ = OpenProcess(PROCESS_QUERY_INFORMATION | PROCESS_TERMINATE, FALSE,
-                            init_.launcherProcessId);
+                            init_.launcher);
     g_log.flush();
     frame_ = 0;
     scene_ = 0;
@@ -161,11 +161,11 @@ void OnlineSession::start()
     matchOverFrame_ = INT_MAX - 1000;
     matchNumber_ = 0;
     lastFrame_ = 0;
-    match_.b = 0;
-    match_.c = 0;
+    match_.wins[0] = 0;
+    match_.wins[1] = 0;
     // TODO: differs: the original stores these two zeros and fpuControl's from eax
     unsigned int fpuControl = 0;
-    match_.a = 1;
+    match_.match = 1;
     _controlfp_s(&fpuControl, 0, 0);
     palettes_[localPlayer_].loadAll();
     frame_ = 0;
@@ -284,8 +284,7 @@ void OnlineSession::update()
     g_log << "iterations: " << iterations << "\n";
     g_log.flush();
     // TODO: differs: the original calls a SharedQueue member (0x100232d0) that does
-    // SetEvent(event_), which the launcher's SharedQueue.h doesn't have
-    SetEvent(inputQueues_[localPlayer_].getEvent());
+    inputQueues_[localPlayer_].notify();
 }
 
 // FUNCTION: 0x10072d30
@@ -377,7 +376,7 @@ void OnlineSession::sceneChanged()
     } else if (g_game.sceneId() == 2) {
         playlist_.next();
         matchNumber_++;
-        match_.a = matchNumber_;
+        match_.match = matchNumber_;
         replayFlushed_ = false;
         replaySaved_ = false;
         sendLoadMatch(match_);
@@ -386,7 +385,7 @@ void OnlineSession::sceneChanged()
         g_game.setWriteReplay(true);
         g_game.setTextRender(false);
     } else if (g_game.sceneId() == 5) {
-        (&match_.b)[g_game.roundWinner()]++;
+        match_.wins[g_game.roundWinner()]++;
         std::wstringstream line;
         std::wstringstream entry;
         line.str(L"");
@@ -420,10 +419,10 @@ void OnlineSession::sceneChanged()
         line << "Score: ";
         line.width(3);
         line.flags(std::ios::right);
-        line << match_.b;
+        line << match_.wins[0];
         line << " ";
         line.flags(std::ios::left);
-        line << match_.c;
+        line << match_.wins[1];
         entry.width(15);
         entry.flags(std::ios::left);
         entry << line.str();
@@ -454,7 +453,7 @@ void OnlineSession::keyPressed(int key)
     if (key == config_.toggleBGM) {
         music_->muted = !music_->muted;
         if (music_->muted)
-            setVolume(g_game.musicId());
+            stopSound(g_game.musicId());
         else
             playSound(g_game.musicId(), 1);
     }
@@ -508,7 +507,7 @@ void OnlineSession::drawInfo()
     int p1x = 10;
     int p2x = 630;
     if (config_.displayScore) {
-        text << "Wins: " << match_.b;
+        text << "Wins: " << match_.wins[0];
         g_game.addText(text.str(), p1x, 5, DT_LEFT);
         p1x = 80;
         text.str(L"");
@@ -517,7 +516,7 @@ void OnlineSession::drawInfo()
     g_game.addText(text.str(), p1x, 5, DT_LEFT);
     text.str(L"");
     if (config_.displayScore) {
-        text << "Wins: " << match_.c << "   ";
+        text << "Wins: " << match_.wins[1] << "   ";
         g_game.addText(text.str(), 630, 5, DT_RIGHT);
         p2x = 560;
         text.str(L"");
@@ -531,7 +530,7 @@ void OnlineSession::drawInfo()
 void OnlineSession::sendSync(const FrameInput &p1, const FrameInput &p2)
 {
     if (!syncQueue_.isFull()) {
-        syncQueue_.push(makeSyncData(frame_, p1, p2));
+        syncQueue_.push(makeSyncBlock(frame_, p1, p2));
         return;
     }
     g_log << "Full Sync queue\n";
@@ -604,7 +603,7 @@ int OnlineSession::menuFramesToRun()
               << "\n";
         g_log.flush();
         // TODO: differs: a SharedQueue member in the original (see update)
-        SetEvent(inputQueues_[localPlayer_].getEvent());
+        inputQueues_[localPlayer_].notify();
         return 0;
     }
     addInput(localPlayer_, readInput());
@@ -889,7 +888,7 @@ void OnlineSession::receivePing()
 }
 
 // FUNCTION: 0x100717a0
-void OnlineSession::sendLoadMatch(LoadMatchData match)
+void OnlineSession::sendLoadMatch(MatchInfo match)
 {
     if (!loadMatchQueue_.isFull())
         loadMatchQueue_.push(match);
@@ -961,10 +960,7 @@ std::wstring OnlineSession::replayFileName()
 }
 
 // FUNCTION: 0x10072b60
-// TODO: differs: the original's id is a WORD (CSound's): it indexes played_ and
-// confirmed_ (map<WORD, int>) directly and soundCounts_ (map<short, int>) through a
-// converted copy; Session.h declares the sound slots with short.
-void OnlineSession::playSound(short id, int loop)
+void OnlineSession::playSound(WORD id, int loop)
 {
     if (playlist_.size() != 0 && g_game.isMusic(id)
         && (g_game.sceneId() == 2 || g_game.sceneId() == 3)) {
@@ -1020,7 +1016,7 @@ void OnlineSession::input(BYTE *input, int player)
 }
 
 // FUNCTION: 0x10070650
-void OnlineSession::stopSound(short id, int volume)
+void OnlineSession::setVolume(WORD id, int volume)
 {
     if (playlist_.size() != 0 && g_game.isMusic(id) && music_->isPlaying()) {
         music_->setVolume(volume);
@@ -1030,7 +1026,7 @@ void OnlineSession::stopSound(short id, int volume)
 }
 
 // FUNCTION: 0x10070600
-void OnlineSession::setVolume(short id)
+void OnlineSession::stopSound(WORD id)
 {
     if (playlist_.size() != 0 && g_game.isMusic(id) && music_->isPlaying()) {
         music_->stop();

@@ -428,6 +428,45 @@ protobuf's `GzipOutputStream` (zlib format, level 9) before sending.
   the original includes `atlbase.h`, whose registrar strings lead each such object's
   strings) and remembers files that failed to play.
 
+## Practice, replays, spectating, tournaments (EfzRevival.dll's other sessions)
+
+**Observed** in `revival/EfzRevival/PracticeSession.cpp`, `ReplaySession.cpp`,
+`OnlineSpectatorSession.cpp` and `TournamentSession.cpp` (`0x10074210`-`0x1007a250`):
+- **Pause and frame step.** Pausing patches 10 places in `efz.exe` and sets
+  `CScene3`'s speed (`+0x578`) to 0; the scene still runs every frame, so drawing and the
+  overlay go on. A step clears the boxes, adds one to the "Frame Step" counter, runs one
+  frame at speed 3 and pauses again. The counter resets on pausing, unpausing and
+  leaving the fight. Loading a state while paused stays paused; otherwise it restores
+  speed 3. Replays step the same way, stopping the game's reading of the replay file
+  around the step.
+- **Record and replay.** Each player's inputs go through a `Recorder` (3 bytes a frame:
+  the game reads input 3 times a frame). Recording swaps the players' key bindings so
+  that you drive the dummy, and appends to the selected buffer (SetBuffer1-5); Random
+  picks a non-empty buffer at random each time playback starts. Start conditions: Now,
+  Wake-Up (action 99 past its frame 2), Tech, Guard (actions `0x97`/`0x99`/`0x9c`),
+  Recoil Guard (sets `CPlayer+0x14e` to 60 every frame) and Random RG (that, half the
+  time, starting on actions `0xa8`-`0xaa`); Record Wait and Replay Wait hold until the
+  condition is met. Under the guard conditions an idle dummy holds back (and down,
+  unless the opponent is in the air). Saving or loading a state restarts recording or
+  playback from there. Input delay applies to the human player: 3 zero bytes per frame.
+- **Switching and mirroring players.** Switching swaps which player is the dummy and the
+  two 16-byte key-binding blocks (saved at the start, restored on leaving the fight).
+  Mirroring sets x to (x - 319.5) * -1 + 319.5.
+- **Game speed.** Steps of 16 FPS (at least 1) through DDRAW.dll's timer (`setFps`); the
+  reset key and leaving the fight go back to 64.
+- **Spectating.** Each update runs min(frames received - 1 - frame, speed) frames,
+  drawing only the last (and the versus screen), stopping early on a scene change; speed
+  is 1-9 ("Game Speed: Nx"). It exits when the launcher dies, `Quit` fills or Esc is
+  pressed.
+- **Tournament.** P1 gets 22 menu inputs (down, down, A) to reach VS PLAYER. At character
+  select the ini is re-read every 64 frames, and new player names start a new set. The
+  versus screen sets the names and the replay's file name and starts recording;
+  `tournament_results.txt` gets a header per set and one line per game (time, both
+  characters, rounds, duration, set score). F1-F10 are cleared in fights and Esc must be
+  held for 80 frames.
+- **Replays.** Extended replays keep 300 save states, one every 64 frames
+  (`RingBuffer<ReplayState>`), for seeking and for taking control of a character.
+
 ## The network messages
 
 `revival/EfzRevivalLauncher/EfzPackets.proto` is reconstructed from the launcher (every

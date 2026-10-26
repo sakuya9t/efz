@@ -190,7 +190,10 @@ DLL_LINK_EXTRA = /FORCE:UNRESOLVED
 DLL_LIBS = kernel32.lib user32.lib winmm.lib psapi.lib ws2_32.lib ole32.lib strmiids.lib \
 	quartz.lib DDRAW.lib
 
-build/revival/dll/%.obj: revival/EfzRevival/%.cpp
+# Every header (and the launcher's Config.cpp, which the DLL's includes) counts.
+DLL_DEPS = $(wildcard revival/EfzRevival/*.h revival/EfzRevival/stubs/*.h \
+	revival/EfzRevivalLauncher/*.h revival/EfzRevivalLauncher/Config.cpp revival/DDRAW/*.h)
+build/revival/dll/%.obj: revival/EfzRevival/%.cpp $(DLL_DEPS)
 	mkdir -p $(@D)
 	cd revival/EfzRevival && MSVC11_QUIET=1 ../../tools/msvc11 cl $(DLL_CFLAGS) /Fo../../$@ $*.cpp
 
@@ -241,7 +244,7 @@ DDRAW_SRCS := $(wildcard revival/DDRAW/*.cpp)
 DDRAW_OBJS := $(patsubst revival/DDRAW/%.cpp,build/revival/ddraw/%.obj,$(DDRAW_SRCS))
 DDRAW_LIBS = kernel32.lib user32.lib shell32.lib winmm.lib ws2_32.lib d3d9.lib d3dx9.lib
 
-build/revival/ddraw/%.obj: revival/DDRAW/%.cpp
+build/revival/ddraw/%.obj: revival/DDRAW/%.cpp $(wildcard revival/DDRAW/*.h revival/EfzRevivalLauncher/Config.*)
 	mkdir -p $(@D)
 	cd revival/DDRAW && MSVC11_QUIET=1 ../../tools/msvc11 cl $(DDRAW_CFLAGS) /Fo../../$@ $*.cpp
 

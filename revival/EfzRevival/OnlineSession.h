@@ -2,7 +2,7 @@
 // against the launcher. The launcher (EfzRevival.exe) does the networking; the two
 // exchange records through named shared memory (SharedQueue): this side pushes the
 // local player's inputs ("InputP1"/"InputP2"), its palettes ("PaletteP1"/"PaletteP2"),
-// one SyncData per confirmed frame ("Sync"), the match results ("LoadMatch") and a
+// one SyncBlock per confirmed frame ("Sync"), the match results ("LoadMatch") and a
 // quit request ("Quit"); the launcher pushes the remote inputs and palettes, the
 // session parameters ("Init") and the ping statistics ("Net").
 //
@@ -31,48 +31,20 @@
 #include "EfzPalettes.h"
 #include "GameState.h"
 #include "RingBuffer.h"
-#include "stubs/SharedData.h"
-#include "stubs/SharedQueue.h"
+#include "../EfzRevivalLauncher/SharedData.h"
+#include "../EfzRevivalLauncher/SharedQueue.h"
 
-// The session's parameters ("Init"), written once by the launcher: the launcher's
-// GameInfo (EfzRevivalLauncher/SharedData.h), which the stub SharedData.h still has as
-// InitData with the launcher's older guess at its fields. 0x114 bytes. TODO: one
-// SharedData.h for both sides.
-struct GameInfo {
-    // FUNCTION: 0x100222b0 ??0GameInfo@@QAE@XZ
-    GameInfo()
-        : player(0), delay(0), rollback(0), seed(0), practiceKeys(false)
-    {
-        memset(names, 0, sizeof(names));
-        launcherProcessId = 0;
-    }
+// The records the launcher and the DLL exchange are the launcher's SharedData.h. Their
+// inline functions the DLL emits:
+// FUNCTION: 0x100222b0 ??0GameInfo@@QAE@XZ
+// FUNCTION: 0x10022290 ??0PingStats@@QAE@XZ
+// FUNCTION: 0x10022270 ??0FrameInput@@QAE@DD@Z
+// FUNCTION: 0x100285d0 ??0SyncBlock@@QAE@XZ
+// FUNCTION: 0x10028620 ?toString@SyncBlock@@QBE?AV?$basic_string@DU?$char_traits@D@std@@V?$allocator@D@2@@std@@XZ
 
-    int player;                     // 0x000 the local player, 0 or 1
-    char delay;                     // 0x004 input delay, frames
-    char rollback;                  // 0x005 MaxRollback
-    int seed;                       // 0x008 for the game's random numbers
-    bool practiceKeys;              // 0x00c AllowPracticeKeys: F4-F8 in a fight
-    wchar_t names[2][64];           // 0x00e P1's and P2's
-    // The launcher's process id (the launcher's GameInfo calls it launcher; this name is
-    // what the spectator session uses)
-    unsigned long launcherProcessId; // 0x110
-};
-// The name the spectator session uses for it (OnlineSpectatorSession.h).
-typedef GameInfo SessionInit;
-
-// The launcher's ping statistics ("Net"), milliseconds: its PingStats. 0x10 bytes.
-struct PingStats {
-    // FUNCTION: 0x10022290 ??0PingStats@@QAE@XZ
-    PingStats()
-        : minimum(1000000), average(0), last(0), maximum(0)
-    {
-    }
-
-    int minimum;                    // 0x00 lowest ever
-    int average;                    // 0x04 over the last 20
-    int last;                       // 0x08
-    int maximum;                    // 0x0c highest of the last 20
-};
+// The record of a frame about to run (0x100756a0, in the spectator's object): its
+// inputs, the game's state and random seed.
+SyncBlock makeSyncBlock(int frame, const FrameInput &inputP1, const FrameInput &inputP2);
 
 class OnlineSession : public Session {
 public:
@@ -85,11 +57,9 @@ public:
     virtual void keyPressed(int key);
     virtual void input(BYTE *input, int player);
     virtual void fightUpdate(void *frame);
-    virtual void playSound(short id, int loop);
-    // Session.h's names; the hooks send CSound::SetVolume(id, volume) to slot 7 and
-    // CSound::Stop(id) to slot 8.
-    virtual void stopSound(short id, int volume);
-    virtual void setVolume(short id);
+    virtual void playSound(WORD id, int loop);
+    virtual void setVolume(WORD id, int volume);
+    virtual void stopSound(WORD id);
 
 private:
     // Running frames
@@ -123,7 +93,7 @@ private:
     // The launcher
     void receiveInit();
     void receivePing();
-    void sendLoadMatch(LoadMatchData match);
+    void sendLoadMatch(MatchInfo match);
     bool isRunning(HANDLE process);
     // Replays and the battle log
     std::wstring timestamp(bool fileName);
@@ -173,16 +143,16 @@ private:
     // The record "LoadMatch" sends: the match number and each player's wins. TODO: the
     // stub SharedData.h names its fields a, b, c; the wins are an array (indexed by
     // the winner in sceneChanged).
-    LoadMatchData match_;                               // 0x4c4
+    MatchInfo match_;                               // 0x4c4
     int matchOverFrame_;                                // 0x4d0
     int lastFrame_;                                     // 0x4d4 the furthest frame run
     std::vector<SharedQueue<FrameInput> > inputQueues_;     // 0x4d8 "InputP1", "InputP2"
     std::vector<SharedQueue<ColorPalette> > paletteQueues_; // 0x4e4 "PaletteP1", "PaletteP2"
     SharedQueue<GameInfo> initQueue_;                   // 0x4f0 "Init"
     SharedQueue<PingStats> netQueue_;                   // 0x518 "Net"
-    SharedQueue<SyncData> syncQueue_;                   // 0x540 "Sync"
+    SharedQueue<SyncBlock> syncQueue_;                   // 0x540 "Sync"
     SharedQueue<bool> quitQueue_;                       // 0x568 "Quit"
-    SharedQueue<LoadMatchData> loadMatchQueue_;         // 0x590 "LoadMatch"
+    SharedQueue<MatchInfo> loadMatchQueue_;         // 0x590 "LoadMatch"
     MusicPlayer *music_;                                // 0x5b8
     Playlist playlist_;                                 // 0x5bc
     std::fstream unknown5d0_;                           // 0x5d0

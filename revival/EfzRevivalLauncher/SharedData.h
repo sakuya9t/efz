@@ -21,8 +21,19 @@ struct ColorPalette {
     unsigned char data[0xa4];
 };
 
-// One player's input for one frame.
+// One player's input for one frame. EfzRevival.dll builds them (FrameInput(char, char),
+// an inline constructor at 0x10022270 in the DLL); the empty constructor is the one the
+// launcher's code implies (ProtocolContext::provideInput).
 struct FrameInput {
+    FrameInput()
+    {
+    }
+
+    FrameInput(char first_, char second_)
+        : first(first_), second(second_)
+    {
+    }
+
     // FUNCTION: 0x434a90 ??8FrameInput@@QBE_NABU0@@Z
     bool operator==(const FrameInput &other) const
     {
@@ -55,8 +66,7 @@ struct GameInfo {
 // The match a spectator is watching (MessageInput field 6).
 struct MatchInfo {
     int match;
-    int unknown4;
-    int unknown8;
+    int wins[2];            // EfzRevival.dll's online session: by the round's winner
 };
 
 // Round-trip times in milliseconds, for the DLL's display ("Net" queue).
@@ -77,6 +87,16 @@ struct PingStats {
 // network brings the remote side's (MessageSync field 4), and they are compared frame
 // by frame.
 struct SyncBlock {
+    // EfzRevival.dll's (an inline constructor at 0x100285d0 in the DLL): the inputs first,
+    // then the rest, frame and fpuCW last.
+    SyncBlock()
+        : state(0), stateP1(0), stateP2(0), inputP1(0, 0), inputP2(0, 0), p1x(0), p1y(0),
+          p2x(0), p2y(0), rng(0)
+    {
+        frame = 0;
+        fpuCW = 0;
+    }
+
     // FUNCTION: 0x434ab0 ??8SyncBlock@@QBE_NABU0@@Z
     bool operator==(const SyncBlock &other) const
     {

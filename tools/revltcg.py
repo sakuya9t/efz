@@ -77,7 +77,13 @@ class Image:
             a = self.addrs[i]
             out.append((a, d[a][1]))
             i += 1
-        while out and out[-1][1] in ('int3', 'nop', 'lea    esi,[esi+0x0]', 'lea    ecx,[ecx+0x0]'):
+        # a switch's jump table follows its function; drop it.
+        tables = [int(t, 16) for _, ins in out
+                  for t in re.findall(r'jmp\s+DWORD PTR \[e\w\w\*4\+0x([0-9a-f]+)\]', ins)]
+        tables = [t for t in tables if lo < t < hi]
+        if tables:
+            out = [(a, ins) for a, ins in out if a < min(tables)]
+        while out and out[-1][1] in ('int3', 'nop', 'xchg   ax,ax', 'mov    edi,edi', 'lea    esi,[esi+0x0]', 'lea    ecx,[ecx+0x0]', 'lea    ebx,[ebx+0x0]', 'lea    esp,[esp+0x0]'):
             out.pop()
         return out
 
@@ -114,6 +120,11 @@ class Matcher:
         self.starts = [a for a, _ in syms]
         self.known = dict(annotated)   # symbol -> original address
         self.learned = {}
+        # identical functions folded by /OPT:ICF share an address; any
+        # of their names may be the one meant.
+        self.names_at = {}
+        for a, n in syms:
+            self.names_at.setdefault(a, []).append(n)
 
     def symbol_at(self, a):
         i = bisect.bisect_right(self.starts, a) - 1
@@ -133,13 +144,16 @@ class Matcher:
             wide = name.startswith('??_C@_1')
             s = b.cstring(ours, wide)
             return s is not None and s == o.cstring(theirs, wide), name
-        want = self.known.get(name)
-        if want is None:
-            want = self.learned.get(name)
-        if want is None:
-            self.learned[name] = theirs - off
-            return True, name
-        return want + off == theirs, name
+        names = self.names_at.get(ours - off, [name])
+        for n in names:
+            want = self.known.get(n, self.learned.get(n))
+            if want is not None and want + off == theirs:
+                return True, n
+        for n in names:
+            if n not in self.known and n not in self.learned:
+                self.learned[n] = theirs - off
+                return True, n
+        return False, name
 
     def compare(self, ours_lo, ours_hi, theirs_lo, theirs_hi):
         a = self.built.instructions(ours_lo, ours_hi)
@@ -204,9 +218,31 @@ def main():
         if kind == 'FUNCTION' and (reported is None or qual in reported):
             want.append((qual, hits, addr))
 
-    m = Matcher(orig, built, syms, annotated)
+    # annotated addresses also end the original's previous function
+    # (Ghidra misses functions only reached through vtables).
+    starts = sorted(set(starts) | {a for _, (k, a) in funcdiff.read_annotations(src_dir).items() if k == 'FUNCTION'})
     text_syms = [(a, n) for a, n in syms if built.tlo <= a < built.thi]
     tstarts = [a for a, _ in text_syms]
+    # a first pass over every annotated function learns addresses only
+    # from the functions that match, so that a misaligned diff can't teach a wrong one.
+    every = []
+    for qual, (kind, addr) in funcdiff.read_annotations(src_dir).items():
+        if kind == 'FUNCTION':
+            hits = [n for n in byname if funcdiff.matches(n, funcdiff.mangled_prefixes(qual))]
+            if hits:
+                every.append((hits, addr))
+    trusted = dict(annotated)
+    for _round in range(3):
+        for hits, addr in sorted(every, key=lambda w: w[1]):
+            probe = Matcher(orig, built, syms, trusted)
+            ours = byname[hits[0]]
+            i = bisect.bisect_right(tstarts, ours)
+            ours_end = tstarts[i] if i < len(tstarts) else built.thi
+            j = bisect.bisect_right(starts, addr)
+            theirs_end = starts[j] if j < len(starts) else orig.thi
+            if probe.compare(ours, ours_end, addr, theirs_end)[0]:
+                trusted.update(probe.learned)
+    m = Matcher(orig, built, syms, trusted)
     total = matched = 0
     for qual, hits, addr in sorted(want, key=lambda w: w[2]):
         if flt not in qual:
