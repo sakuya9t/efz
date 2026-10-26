@@ -92,10 +92,10 @@ GHIDRA_HOME ?= $(HOME)/tools/ghidra_12.1.4_PUBLIC
 GHIDRA_PROJECTS ?= $(HOME)/tools/efz-ghidra
 
 # The launcher's own sources, as observed: VS2012's Release options (/O2 /Oy- /GS /sdl
-# /Gy /MT /EHsc), but no /GL, no inlining (/Ob0), no SSE (/arch:IA32) and strict
+# /Gy /MT /EHsc), but no /GL, no inlining (/Ob0), SSE but not SSE2 (/arch:SSE) and strict
 # floating point (/fp:strict). It found protobuf in C:\Programming (tools/msvc11 maps
 # that drive path).
-LAUNCHER_CFLAGS = /nologo /c /O2 /Ob0 /Oy- /GS /sdl /Gy /MT /EHsc /arch:IA32 /W3 \
+LAUNCHER_CFLAGS = /nologo /c /O2 /Ob0 /Oy- /GS /sdl /Gy /MT /EHsc /arch:SSE /W3 \
 	/Zc:wchar_t /Zc:forScope /fp:strict /D WIN32 /D NDEBUG /D _CONSOLE /D _UNICODE \
 	/D UNICODE '/IC:\Programming\protobuf-2.6.1\src'
 LAUNCHER_SRCS := $(wildcard revival/EfzRevivalLauncher/*.cc revival/EfzRevivalLauncher/*.cpp)
@@ -177,9 +177,9 @@ revival-decomp: revival-names
 #   make revival-dll        compile revival/EfzRevival with /GL and link EfzRevival.dll
 #   make revival-dll-diff   compare its annotated functions with $(REVIVAL_DIR)'s (F=filter)
 # Observed: no inlining (/Ob0), no function-level linking (/Gy-: the developer's
-# functions follow the CRT, after the import thunks), no string pooling (/GF-), x87
-# only (/arch:IA32); functions defined in headers stay out-of-line COMDATs at the start.
-DLL_CFLAGS = /nologo /c /O2 /Ob0 /Oy- /GS /GL /Gy- /GF- /MT /EHsc /arch:IA32 /fp:strict \
+# functions follow the CRT, after the import thunks), no string pooling (/GF-), SSE but
+# not SSE2 (/arch:SSE: cmov, x87 floating point); functions defined in headers stay out-of-line COMDATs at the start.
+DLL_CFLAGS = /nologo /c /O2 /Ob0 /Oy- /GS /GL /Gy- /GF- /MT /EHsc /arch:SSE /fp:strict \
 	/W3 /Zc:wchar_t /Zc:forScope /D WIN32 /D NDEBUG /D _WINDOWS /D _USRDLL /D _UNICODE \
 	/D UNICODE /I../DDRAW
 DLL_SRCS := $(wildcard revival/EfzRevival/*.cpp)
