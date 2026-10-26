@@ -1,6 +1,6 @@
 // Starting efz.exe and injecting EfzRevival.dll into it.
 #include "GameProcess.h"
-// OBJECT: 0x41aa50 0x41dde0
+// OBJECT: 0x41aa50 0x41de10
 #include <cstdlib>
 #include <cstring>
 #include <iostream>

@@ -87,6 +87,9 @@ private:
 
 // Whether "host:port" (an IPv6 host may be in brackets) parses as a UDP endpoint.
 bool isValidAddress(const std::string &address);
+// "host:port" (IPv6 hosts in brackets) to an endpoint; the default endpoint if invalid.
+// The launcher defines it in Network.cpp, the DLLs in their Config objects.
+boost::asio::ip::udp::endpoint parseEndpoint(const std::string &address);
 
 std::string to_utf8(const std::wstring &text);
 std::string to_utf8(const wchar_t *text, int length);

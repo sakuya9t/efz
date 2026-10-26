@@ -539,6 +539,49 @@ protobuf's `GzipOutputStream` (zlib format, level 9) before sending.
 - **Crash handler.** Writes "!!!Crash!!!", the DLL's base, the exception's address and code,
   the registers and 150 stack words following the `ebp` chain to `logEfz.txt`.
 
+## The launcher's protocol
+
+**Observed** in `revival/EfzRevivalLauncher/Network.cpp`, `ProtocolContext.cpp` and the
+`ProtocolState*.cpp` files. Each UDP datagram is a 2-byte header and one protobuf message:
+byte 0 is 1 when the message is zlib-compressed (level 9; Init, Input, Sync and Palette
+are), byte 1 the type; payloads are at most `0x3fe` bytes. Every packet refreshes its
+sender's entry in the peer table.
+
+| Type | Message | Fields |
+|---|---|---|
+| 0 | Init | f1: 0 confirm (host to client), 1 request; f2 game (0); f3 version (`0x66`); f4 role (1 player, 2 spectator); f5 side (the client's, in a confirm); f6 seed (the host's `timeGetTime`, 0 in a request); f7/f8 names as UTF-16 bytes, at most 20 characters, "None" if absent; f9 practice keys (both sides' ANDed) |
+| 1 | Input | f1: 0 inputs, 1 ack; f2 last remote frame received (-1 in the spectator stream); f3 first frame; f4 count (60 per ack); f5 the 2-byte inputs (spectators get P1 and P2 alternating); f6 match index (a change loads the next match) |
+| 2 / 3 | Ping / Pong | f3 `timeGetTime()`, echoed back; RTT = now - f3; a NAT-traversal ping has f3 = 0 |
+| 4 | Sync | f1: 0 data (f4: 0x40-byte sync blocks), 1 request (f2 first frame, f3 count 10) |
+| 5 | Quit | f1 0 |
+| 6 | Palette | f1 player, f2 the 0xa4-byte palette |
+| 7 | Redirect | f1 the endpoint to use instead (raw `sockaddr_in6`) |
+| 8 | ChangeRole | f1: 1 host not playing yet, 2 host already playing ("join as a spectator?") |
+| 9 | Done | f1: 0 delay chosen and ready, 1 refused (spectating disabled) |
+| 10 | Punch | f1 the target endpoint |
+
+Peers carry flags: 1 receives inputs, 2 connected player or host, 3 opponent, 4 the
+hole-punching server.
+- **Hosting** (`ProtocolStateHostConnect`) pings the punch server. A player's request gets a
+  confirm and moves both sides to TestDelay; a spectator's gets ChangeRole(1), or Done(1)
+  when spectating is off. A wrong version gets a confirm and, if a newer version exists,
+  End.
+- **Joining** (`ProtocolStateClientConnect`) resends the request every 500 ms; until
+  connected it also sends Punch to the server, which relays it to the host. Punch replies
+  make the client retry at the target port +0..9 in rotation. A confirm sets side, seed and
+  names; 5000 ms of silence ends it.
+- **TestDelay** measures the round trip with pings and suggests a delay of
+  ceil(ping / (2 x 15.625 ms)) - rollback (rollback capped at 3); the user types the delay
+  and Done(0) says ready (inputs arriving early count as Done).
+- **Play** sends inputs and acks with resends, checks sync blocks frame by frame (a desync
+  raises the alert), relays palettes, and sweeps NAT-traversal pings over port..port+50
+  (players) or +10 (spectators). From 3 spectators on, the host redirects new spectators
+  to existing ones, so that spectators feed one another.
+- **Spectating** (`SpecConnect`, `SpecPlay`) connects with role 2 and follows the alternating
+  input stream, its speed adjustable.
+- **Timeouts.** A peer silent for 8000 ms is dropped; checked every 5000 ms while
+  connecting and every 1000 ms in play.
+
 ## The network messages
 
 `revival/EfzRevivalLauncher/EfzPackets.proto` is reconstructed from the launcher (every

@@ -1,7 +1,7 @@
 // The launcher's front end: the console menu (host / join / spectate / local play /
 // tournament), reading an address from the console or the clipboard, and starting a
 // netplay session or a local game.
-#include "stubs/Network.h"
+#include "Network.h"
 #include "Console.h"
 #include "GameProcess.h"
 #include "Version.h"
@@ -90,14 +90,14 @@ void runNetplay(int mode, std::string address)
     switch (mode) {
     case 0: {
         std::string empty("");
-        net.run(0, empty);
+        net.start(0, empty);
         break;
     }
     case 1:
-        net.run(1, address);
+        net.start(1, address);
         break;
     case 2:
-        net.run(2, address);
+        net.start(2, address);
         break;
     }
 }

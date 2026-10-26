@@ -2,7 +2,6 @@
 // address and text helpers that go with them.
 #include "Config.h"
 // OBJECT: 0x401000 0x40ff60
-#include "stubs/Network.h"
 #include "Version.h"
 #include <boost/algorithm/string.hpp>
 #define DIRECTINPUT_VERSION 0x0800
