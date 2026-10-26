@@ -97,6 +97,13 @@ public:
         return event_;
     }
 
+    // Wakes the reader (EfzRevival.dll signals its input queue every update; 0x100232d0
+    // there). The launcher doesn't call it.
+    void notify()
+    {
+        SetEvent(event_);
+    }
+
     // FUNCTION: 0x43bb50 ?isEmpty@?$SharedQueue@UColorPalette@@@@QAE_NXZ
     // FUNCTION: 0x43bb50 ?isEmpty@?$SharedQueue@UFrameInput@@@@QAE_NXZ
     // FUNCTION: 0x43bb50 ?isEmpty@?$SharedQueue@UGameInfo@@@@QAE_NXZ

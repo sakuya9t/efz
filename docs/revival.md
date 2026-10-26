@@ -390,6 +390,44 @@ or on a desync `ERROR:` with both sides' states; ping summaries) and `logPing.cs
 console and plays the asterisk sound. Outgoing protobuf messages are compressed with
 protobuf's `GzipOutputStream` (zlib format, level 9) before sending.
 
+## Rollback (EfzRevival.dll's online session)
+
+**Observed** in `revival/EfzRevival/OnlineSession.cpp` (`0x10070600`-`0x10074210`):
+- **Input delay.** From the launcher's `Init` record, clamped to 0-20. In the menus it is
+  re-derived as ceil(max ping / (2 x ms per frame)); a fight starts with the last delay
+  set. In a fight the IncreaseInputDelay/DecreaseInputDelay keys change it, but not
+  below ceil(ping in frames) - max rollback.
+- **Each update.** Reads one local input and runs the frames from the current one up to
+  the newest local input minus the delay. It pauses when local inputs lead the remote
+  ones by more than delay + max rollback, and repeats the last local input when the
+  delay has run out or the remote side is ahead by more than the lowest ping in frames.
+  There is no rollback in the first 20 frames of a fight, from 120 frames after the
+  match is decided, or outside fights (there it waits for remote inputs).
+- **Save and restore.** A frame without the remote input runs on the last one repeated.
+  A frame with both inputs is saved before it runs (the game's memory through the save
+  states, plus the session's frame counters registered with `addInt`), its inputs go
+  into the replay and its sync record is sent. After a run, the state of the last
+  confirmed frame (not before the fight's start) is loaded, so the next update re-runs
+  the unconfirmed frames; the ring holds 60 states. Rendering is off except on a run's
+  last frame. Sounds are counted per frame so that a re-run doesn't play them twice,
+  and sounds started on mispredicted inputs that won't recur are stopped.
+- **Desyncs.** For every confirmed frame, in order, the DLL pushes a sync record (frame,
+  scene, FPU control word, both players' actions, both inputs, the random seed, both
+  positions) to the `Sync` queue; the launcher compares it with the remote side's.
+- **Start.** P1 sends 22 scripted inputs to get through the title menu; P2 sends zeros.
+  `Quit` is set on Esc in the menus or on going back to the title.
+- **Replays and the battle log.** At character select the replay is named
+  `<ReplayFolder>\<YYYYmmdd-HHMMSS> <P1> (<char>) vs <P2> (<char>).rep` and writing is
+  switched on; only confirmed frames are written, and the fight's start sets the
+  replay's random seed. SavePreviousReplay flushes it ("Saved replay to disk",
+  "Failed to save replay", "All replays get autosaved"). The game's end-of-match replay
+  handling (`0x763f04`, `0x763e50`) is hooked. The battle log (UTF-8) gets
+  `<time> P1 VS P2` per session and
+  `<fight start> <char> VS <char> Rounds: a b Duration: mmm:ss Score: x y` per game.
+- **Music.** `MusicPlayer` plays the custom BGM folder through DirectShow (ATL `CComPtr`s;
+  the original includes `atlbase.h`, whose registrar strings lead each such object's
+  strings) and remembers files that failed to play.
+
 ## The network messages
 
 `revival/EfzRevivalLauncher/EfzPackets.proto` is reconstructed from the launcher (every
