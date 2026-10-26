@@ -176,10 +176,11 @@ revival-decomp: revival-names
 # --- EfzRevival.dll: link-time code generation (docs/revival.md) ----------------------
 #   make revival-dll        compile revival/EfzRevival with /GL and link EfzRevival.dll
 #   make revival-dll-diff   compare its annotated functions with $(REVIVAL_DIR)'s (F=filter)
-# Observed: no inlining (/Ob0), no function-level linking (/Gy-: the developer's
+# Observed: no inlining (/Ob0), no security cookies (/GS-: only the CRT reads it), no
+# function-level linking (/Gy-: the developer's
 # functions follow the CRT, after the import thunks), no string pooling (/GF-), SSE but
 # not SSE2 (/arch:SSE: cmov, x87 floating point); functions defined in headers stay out-of-line COMDATs at the start.
-DLL_CFLAGS = /nologo /c /O2 /Ob0 /Oy- /GS /GL /Gy- /GF- /MT /EHsc /arch:SSE /fp:strict \
+DLL_CFLAGS = /nologo /c /O2 /Ob0 /Oy- /GS- /GL /Gy- /GF- /MT /EHsc /arch:SSE /fp:strict \
 	/W3 /Zc:wchar_t /Zc:forScope /D WIN32 /D NDEBUG /D _WINDOWS /D _USRDLL /D _UNICODE \
 	/D UNICODE /I../DDRAW
 DLL_SRCS := $(wildcard revival/EfzRevival/*.cpp)
@@ -217,7 +218,7 @@ revival-dll-diff: build/revival/dll/EfzRevival.dll build/revival/EfzRevival.dll.
 # link every object that exists into OUT (each worker its own) and report the given
 # sources' functions. Objects of other sources are used as they are, stale or not.
 OUT ?= build/revival/dll-check
-revival-dll-check revival-ddraw-diff: build/revival/dll/DDRAW.lib build/revival/EfzRevival.dll.functions.json
+revival-dll-check: build/revival/dll/DDRAW.lib build/revival/EfzRevival.dll.functions.json
 	@for s in $(subst $(comma), ,$(S)); do $(MAKE) -s --no-print-directory \
 		build/revival/dll/$${s%.cpp}.obj || exit 1; done
 	@mkdir -p $(OUT)
@@ -233,7 +234,7 @@ comma := ,
 # --- DDRAW.dll: link-time code generation, like EfzRevival.dll but with function-level
 # linking (/Gy: its functions are COMDATs, at the start) and SSE2 (the default). -------
 #   make revival-ddraw-diff   compile revival/DDRAW, link DDRAW.dll, compare (F=filter)
-DDRAW_CFLAGS = /nologo /c /O2 /Ob0 /Oy- /GS /GL /Gy /GF- /MT /EHsc /fp:strict \
+DDRAW_CFLAGS = /nologo /c /O2 /Ob0 /Oy- /GS- /GL /Gy /GF- /MT /EHsc /fp:strict \
 	/W3 /Zc:wchar_t /Zc:forScope /D WIN32 /D NDEBUG /D _WINDOWS /D _USRDLL /D DDRAW_EXPORTS \
 	/D _UNICODE /D UNICODE
 DDRAW_SRCS := $(wildcard revival/DDRAW/*.cpp)
