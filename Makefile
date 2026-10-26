@@ -116,7 +116,7 @@ PROTOBUF_OBJS = $(PROTOBUF_SRCS:%=build/revival/protobuf/%.obj)
 
 # Where each recovered launcher object's code lies in the original.
 LAUNCHER_RANGE_EfzPackets.pb = 0x4102a0 0x414710
-LAUNCHER_RANGE_protobuf = 0x44a000 0x44eb50
+LAUNCHER_RANGE_protobuf = 0x44a5d0 0x44eb50
 
 revival: $(LAUNCHER_OBJS) $(PROTOBUF_OBJS)
 
@@ -146,7 +146,7 @@ revival-diff: revival build/revival/EfzRevival.exe.functions.json
 			build/revival/EfzRevival.exe.functions.json $$obj \
 			$$(make -s --no-print-directory revival-range N=$$name) $(PROTOBUF_OBJS) || status=1; \
 	done; for obj in $(PROTOBUF_OBJS); do \
-		python3 tools/revdiff.py '$(REVIVAL_DIR)/EfzRevival.exe' \
+		REVDIFF_LIBRARY=1 python3 tools/revdiff.py '$(REVIVAL_DIR)/EfzRevival.exe' \
 			build/revival/EfzRevival.exe.functions.json $$obj \
 			$(LAUNCHER_RANGE_protobuf) $(PROTOBUF_OBJS) || status=1; \
 	done; exit $$status

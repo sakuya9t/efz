@@ -111,8 +111,11 @@ def main():
 
     # The object's own copies of inline functions come first: a library compiled with
     # other options (inlining) has different code under the same names.
-    # the launcher's annotations only: the DLLs' name the same functions elsewhere
-    known = funcdiff.read_annotations(os.path.join(REPO, 'revival', 'EfzRevivalLauncher'))
+    # the launcher's annotations only: the DLLs' name the same functions elsewhere. A
+    # library object (REVDIFF_LIBRARY=1, protobuf) is compared by placement alone: its
+    # templates differ from the launcher's copies the annotations name.
+    known = {} if os.environ.get('REVDIFF_LIBRARY') else funcdiff.read_annotations(
+        os.path.join(REPO, 'revival', 'EfzRevivalLauncher'))
     for name, addr in placed(blob, base, obj, lo, hi, starts, original).items():
         known.setdefault(name, ('FUNCTION', addr))
     own = {name for name, _c, _m in coff_functions(open(obj, 'rb').read())}
