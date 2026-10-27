@@ -109,8 +109,9 @@ Build options **observed** so far:
     launcher, byte for byte").
   - Debug information (the original was linked `/DEBUG`): `/Z7` and `/Zi` give the same
     image, and both change which copy of identical functions the link keeps.
-- `EfzRevival.dll`, linked with `/LTCG`: `/O2 /Ob0 /Oy- /GS /GL /Gy- /GF- /MT /EHsc
-  /arch:IA32`. **Observed** (test links compared with `tools/revltcg.py`):
+- `EfzRevival.dll`, linked with `/LTCG`: `/O2 /Ob0 /Oy- /GS- /GL /Gy- /GF- /GR- /MT /EHsc
+  /arch:SSE /D _USING_V110_SDK71_` (as the Makefile has them), with the template's
+  precompiled header (`/Yu"stdafx.h"`). **Observed** (test links compared with `tools/revltcg.py`):
   - `/Gy-` (no function-level linking): the developer's functions are not COMDATs, so
     the linker places them after everything else, just after the import thunks the
     CRT pulls in (`RtlUnwind`, `IsProcessorFeaturePresent`), as in the original
@@ -118,17 +119,16 @@ Build options **observed** so far:
     defined in class bodies) are COMDATs and come first (`0x10001000`-`0x1002dca9`).
   - `/Ob0`: `init` calls `std::wstring`'s constructor and destructor out of line.
   - `/GF-`: identical literals are separate (46 duplicates, "wtf" twice in a row).
-  - x87 only (`/arch:IA32`); `DDRAW.dll` uses SSE2.
+  - x87 floating point (`/arch:SSE`: `cmov`, no SSE2); `DDRAW.dll` uses SSE2.
   - Link-time code generation keeps `this`-call member functions' stack arguments
     (`ret N`) but passes a free function's in registers, and it knows which registers
     a non-COMDAT callee preserves, which it can't assume for a COMDAT. So whether a
     function is a member, and whether it is defined in a header, shows in its callers.
-  - Within an object, link-time code generation orders the developer's functions by a
-    key computed from each decorated name: renaming two functions swaps them, call
-    order doesn't matter, and any subset keeps the full set's order. The key isn't a
-    common string hash (ELF, djb2, FNV, CRC-32, the PDB's `LHashPbCb`, ... all fail),
-    so, as for VC7.1's locals (`tools/stackorder.py`), names that reproduce an order
-    have to be found by compiling probes.
+  - Precompiled header: every source includes the Visual Studio template's `stdafx.h`
+    (`targetver.h`, `WIN32_LEAN_AND_MEAN`, `windows.h`) first and is compiled with it
+    (`/Yu`; `stdafx.cpp` makes it, `/Yc`, and `stdafx.obj` is linked last). It decides
+    where link-time code generation puts the functions of another object (see "How
+    link-time code generation orders functions" below).
   - `EfzRender` (DDRAW.dll's renderer) is declared `class __declspec(dllexport)` in a
     header both DLLs include: `EfzRevival.dll` calls DDRAW.dll through its import
     table (link-time code generation turns the thunk calls into `call [IAT]`) and
@@ -426,15 +426,19 @@ make revival-dll-check S=a.cpp,b.cpp OUT=dir   # compile a.cpp and b.cpp, link e
 `V=-v` adds instruction diffs, `F=name` filters. `tools/revltcg.py` compares each
 annotated function with the original instruction by instruction, mapping address
 operands through the link map; missing functions are left unresolved
-(`/FORCE:UNRESOLVED`), so a function can only match once what it calls exists.
+(`/FORCE:UNRESOLVED`), so a function can only match once what it calls exists. A
+`static` function with copies in several objects (`Utility.h`'s `to_utf8`, `time.h`'s
+`_time`) has one name for all of them: an annotation names the first copy, and calls to
+the others are matched by address, learned like an unannotated function's.
 
 What differs from the launcher (all observed in test links):
 - **Layout.** The developer's functions follow the CRT (`0x10065580`-`0x1007a250`), one
   object after another in link order (alphabetical file names: `Config.cpp`,
-  `dllmain.cpp`, ..., `EfzRevival.cpp` with `init`, ...). Within an object their order
-  comes from an unknown key of each decorated name, not from the source or the
-  alphabet. Functions defined in headers (class bodies, templates) are COMDATs at the
-  start (`0x10001000`-`0x1002dca9`), shared by all objects.
+  `dllmain.cpp`, ..., `EfzRevival.cpp` with `init`, ...). Within an object they come in
+  the reverse of the order in which their symbols were created, which is mostly the
+  reverse of their definitions (next section). Functions defined in headers (class
+  bodies, templates) are COMDATs at the start (`0x10001000`-`0x1002dca9`), shared by
+  all objects.
 - **Calling conventions.** Link-time code generation passes a free function's first
   two arguments in `ecx`/`edx` when it sees every caller; member functions keep
   `thiscall` with their stack arguments (`ret N`), even when they don't use `this`
@@ -448,29 +452,207 @@ What differs from the launcher (all observed in test links):
   matches with `PaletteId`'s constructor defined in its class body.
 - **Branches.** `return palette <= 5;` compiles to `sbb`; the original's `setbe`
   comes from `if (palette > 5) return false; return true;`.
-- **Strings.** Not pooled (`/GF-`): each use of a literal is its own copy, in source
-  order.
+- **Strings.** Not pooled (`/GF-`): each use of a literal is its own copy. **Observed**
+  in the link maps: the literals get their names at link time (`$SG` and a counter
+  that counts down across the whole link), object after object, and come out in that
+  order; within an object mostly in the order of the source, headers included
+  (`atlbase.h`'s where `Music.h` is included; unused functions' too). MSVC evaluates a
+  call's arguments right to left, so `stream << "a" << x << "b"` with the standard
+  library's `operator<<` (not a member) uses `"b"` first; `Log`'s `operator<<` is a
+  member and goes left to right. Not understood: in the original, `MusicPlayer::play`'s
+  literal comes before `Playlist::load`'s, though `play` is defined after it (its
+  address says so: defined first, `play` moves above all of `Music.cpp`'s functions);
+  the rebuild has them in source order. The literals' `$SG` numbers are `c2.dll`'s
+  "function assigned IDs" (`namestring2`), and `CompareSymOrderInternal` sorts a
+  literal that has an owning function by its owner and then that ID. In some objects neighbouring
+  literals come out pairwise swapped (the original's ATL strings in
+  `PracticeSession.cpp` and `ReplaySession.cpp`, the rebuilt tournament session's first
+  ones); the pattern changes with the counts before them (**inferred**: the order of a
+  hash table walk), so it can only match once every literal before it exists. One- and
+  two-byte literals (`""`, `"\n"`) are placed in the gaps the others' alignment leaves,
+  anywhere in the section. One-byte objects in `.bss` (`std::ignore`, boost.bind's
+  `_1`-`_9`) are placed the same way: in the original the first object's nine
+  placeholders are scattered over `0x100a063a`-`0x100a0642`, the next object's partly
+  in gaps; the rebuild has them in order (not reproduced).
+- **Unused code.** The linker drops functions nothing calls, but not their literals: an
+  object's strings show code the original had and never called. **Observed** in the
+  original, with no reference to them: `"Save too large"` (between `Config.cpp`'s and
+  `EfzGame.cpp`'s strings), `"Error, stream wrong size"` first and `"Size: "`, `" id "`,
+  `" custom "` last in `EfzPalettes.cpp`'s, `"Time "` last in `EfzRevival.cpp`'s,
+  `"Comparing "`, `" with "`, `"0x"`, `" Old "`, `" New "` (all of `GameState.cpp`'s),
+  three more `"Trampoline malloc failed"` between `Hook.cpp`'s three, and
+  `L"None"`, `L"Name"`, `L"Parameters"` with four `":"` at the start of `Config.cpp`'s,
+  `OnlineSession.cpp`'s and `TournamentSession.cpp`'s. The sources have unused
+  functions that give these strings (marked "Unused"); what the code was is a guess.
 - **Game addresses.** The DLL patches and reads `efz.exe` at fixed addresses; `src/`
   (the game's own decompilation) names them: `0x40d131` is inside `CInput::GetInput`,
   `0x7b1290` is `g_fkeyHeld`, `0x7b0960` is inside `g_graphics`, and so on
   (`grep -rn '0x7b0960' src/` or the annotations in `src/efz.h`).
 
+### The whole image
+
+`make revival-dll-check-image` links the DLL, sets what no build reproduces
+(`tools/revdllpostlink.py`: the timestamp, the PDB's GUID and age 128, the Rich
+header's count of imported functions, the reserved size of `.reloc`, and the names of
+boost's anonymous namespaces in the type descriptors, `?A0x0812ae90` and
+`?A0x71bbbf5e`, which the compiler drew when the developer's boost libraries were
+built) and compares the result with the original byte for byte (`tools/pecmp.py`). What the image showed about
+the build (**observed** unless marked):
+- **Link:** `/DEBUG` with the PDB at `C:\Git\efz_2022\Release\EfzRevival.pdb` (the
+  debug directory has a CodeView and a VC feature record), the manifest embedded (the
+  `.rsrc` section, identical), `/OPT:REF /OPT:ICF` (`/OPT:NOREF` would keep all of
+  boost.filesystem), and `v110_xp`'s subsystem version 5.01 (the OS and subsystem
+  versions in the optional header). The libraries are the project's (`winmm`, `psapi`, `DDRAW`,
+  `quartz`, `strmiids`) then Visual Studio's defaults, with `ws2_32` from asio's
+  `#pragma comment`: that gives the import directory's order (WINMM, PSAPI, DDRAW,
+  QUARTZ, KERNEL32, USER32, ole32, WS2_32) and the Rich header's.
+- **No RTTI** (`/GR-`): the only type descriptors are those exceptions need.
+- **Objects:** 22 compiled with `/GL` (Rich header), one more C++ object than the 21
+  recovered in the VC feature record. The static initializers (`.CRT$XCU`) show which
+  headers each object includes: fifteen copies of `Version.h`'s `REVIVAL_SUFFIX` (every
+  object that includes `EfzGame.h`, so it includes `Version.h` first), boost.bind's
+  `_1`-`_9` with `std::ignore` in fourteen (`Log.h`, through
+  `boost/iostreams/copy.hpp`), asio's error categories and `winsock_init` in eight
+  (`Config.h`, which includes only `boost/asio/ip/udp.hpp`: none of asio's own
+  placeholders) and boost.system's in `Music.cpp` (boost.filesystem). Two objects have
+  only `Log.h`'s, one between `Hook.cpp` and `Music.cpp` and one between
+  `PracticeSession.cpp` and `Recorder.cpp`; their names are guesses (`Log.cpp`,
+  `Process.cpp`), as is the 22nd object's (`RingBuffer.cpp`), which left nothing.
+- **Includes:** the first COMDATs are `wchar.h`'s, placement `new` and `delete`, then
+  `char_traits`: the order a standard header like `<map>` gives before any boost header
+  (which brings `<utility>`, and `char_traits`, first). So `Config.h` includes the
+  standard headers before asio.
+- **ATL:** `atlbase.h` defines its registrar's strings (`L"S"`, `L"M"`, ...,
+  `L"ForceRemove"`, ..., `L"TypeLib"`) in every object that includes it: five objects
+  have them, `Music.cpp` and the four sessions with music, and not `EfzRevival.cpp`,
+  which includes the session headers, nor the tournament session. So the sessions'
+  headers see only `Playlist` (`Playlist.h`, held by value) and declare `MusicPlayer`;
+  `Music.h` (with `CComPtr`s, so `atlbase.h`) is included by the sessions' sources. ATL
+  is Visual Studio 2012's (`vc_libraryextended`, set up by
+  `toolchain/setup-vs2012.sh` in `vs2012/atlmfc`); a `v110_xp` build defines
+  `_USING_V110_SDK71_`, which `atlcore.h` needs with the 7.1A SDK.
+- **`Utility.h`** (name made up): `Config.cpp`, `OnlineSession.cpp` and
+  `TournamentSession.cpp` start their strings the same way (the unused `L"None"`,
+  `L"Name"`, `L"Parameters"`, then the address parser's four `":"`) and each has its
+  own pair of `to_utf8` functions in the same order: one header of `static` functions
+  that the three include. Only `Config.cpp` uses the address parser.
+- **How far:** `make revival-dll-check-image` shows the headers (but for the sizes that
+  follow from the sections), `.rsrc` and the size of `.data` identical, `.text`
+  `0x100` bytes short and `.rdata` `0x10` short. 404 of the 416 annotated functions
+  match; 353 of the 368 developer functions and 2419 of the 2695 COMDATs are in their
+  original order (`tools/revalign.py`); the static initializers are the same 271 in the
+  same order. The string literals are the original's set but for ordering in a few
+  objects; what's left in `.rdata` is mostly the exception tables, which follow the
+  COMDATs' order, and the order of three imports within their DLLs.
+- **Source forms the code shows** (**observed**: each changed one function from
+  differing to matching, the rest of the source alike):
+  - `if (c) x = a; else x = b;` stores in each branch, where `x = c ? a : b` becomes a
+    `cmov` or `neg`/`sbb` before a call (`Recorder::setRecoilGuard`, `inputString`'s
+    button letters, the five function keys in each session's `fightUpdate`); a value
+    chosen for a call (`text << (c ? "a" : "b")`) is a call in each branch, which the
+    compiler merges (`SpectatorSession::drawInfo`, `ReplaySession::drawInfo`,
+    `setEfzReplay`).
+  - The other way round, `fps_ = fps_ < 1.0 ? 1.0 : fps_;` keeps the value in registers
+    for the following call, where an `if` stores and reloads it.
+  - A zero in `eax` comes from `ZeroMemory`/`memset` (the original clears `FILETIME`s,
+    `int` pairs and runs of members that way); plain `= 0` stores are immediates, and
+    a statement order puts the `memset` last (`Game::Game`), the members it doesn't
+    cover after it (`SpectatorSession::start`), or two of them side by side
+    (`OnlineSession::start`).
+  - `/fp:strict` copies a `double` into a local through two integer moves before
+    comparing it (`Recorder::guardInput`), and computes `64.0 / 2` at run time
+    (`ReplaySession::keyPressed`).
+  - `if (a) {...} else {...}` lays out the `a` branch first: `ReplaySession`'s
+    `update` and `sceneChanged` test `isControlling()` and handle it first.
+  - Named temporaries (`SyncBlock block = makeSyncBlock(...); queue.push(block);`) pass
+    the local's address; `return endpoint = ...;` passes the assignment's result
+    (`parseEndpoint`); a member read in each test (`Recorder::checkStart`'s `start_`)
+    keeps the cases from being proven exclusive.
+  - Container element types: the practice recorder's and the replay's input bytes are
+    `char` (`std::deque<char>`, `std::vector<char>`): `unsigned char` instantiates
+    `std::_Allocate<unsigned char>`, which link-time code generation gives a register
+    calling convention, so it can't fold with `char`'s.
+  - `Game`'s replay name is a `std::wstring` in a struct of its own (its implicit
+    constructor and destructor are folded with `boost::filesystem::path`'s); `rand`'s
+    seed string is read with `str().data()`.
+- **Not reproduced:** `SyncBlock`'s constructor matches with its members zeroed in the
+  body (`frame`, `fpuCW`, then `stateP1`, `stateP2`, `state`, the doubles and `rng`),
+  only the inputs in the initializer list, a change to the launcher's `SharedData.h`
+  that is still to be made. Register allocation without a source change found yet in
+  `Game::getCollisionInfo`, `collectRects`, `drawBoxRequest`, `readExtendedReplay` and
+  `LiveInput`'s constructor (which the original compiles knowing its base
+  constructor returns `this`); `Palettes::readColors`, whose `index` the original keeps
+  though both callers pass 0 (local variables, `unsigned`, a dead caller didn't change
+  that); `PracticeSession::keyPressed`'s `(x - middle) * -1.0 + middle`, which the
+  original multiplies and this build turns into a subtraction (eight spellings
+  tried); `MusicPlayer::play`'s merged `control_->Run()` tail;
+  `OnlineSession::menuFramesToRun`'s `last + 1 - frame_`.
+
+### How link-time code generation orders functions
+
+Read from `c2.dll`'s code with its public symbols (Microsoft's symbol server has
+`c2.pdb` and `c1xx.pdb` for these builds) and confirmed by test links
+(`tools/ltcgprobe.py`):
+
+- **Keys.** When the linker hands the objects' intermediate language to `c2.dll`, each
+  object is read in link order, and every global symbol it defines or refers to gets a
+  key the first time it is seen (`ModPutL2Ssr`: the keys count down from a large
+  number; a definition read later keeps the key of the reference that created the
+  symbol). The order of the symbols within an object is the order of its records:
+  first the functions it defines, in the order of their definitions (a call before the
+  definition doesn't create the symbol; a declaration doesn't either), then the
+  symbols it only refers to.
+- **The symbols an object refers to** come in one of two orders, depending on how the
+  front end (`c1xx.dll`) wrote the object. With a precompiled header (`/Yu`) it keeps a
+  work list (`WorkList_t`): each symbol is pushed when first referred to and the list
+  is emptied last-in first-out, so the referenced symbols are created in the reverse of
+  their first references (an inline function's references follow when it comes off
+  the list). Without one (`m_usingWorkList` is set only for `/Yu`) it walks its symbol
+  table instead (`BlockScope_t::DumpSymbols_impl`): a hash table of the identifiers,
+  then each class's members in declaration order, which is why renaming swapped
+  functions and call order didn't matter in test links without a precompiled header.
+- **Emission.** Each object's non-COMDAT functions are sorted by key, ascending
+  (`SymbolEmission::CompareSymOrderInternal`, a merge sort per object): so they come
+  out in the reverse of their creation. COMDATs (header functions) come out roughly in
+  creation order across the whole link, an identical-code fold taking the place of its
+  earliest member.
+
+Consequences for the sources:
+- An object's own functions are defined in the reverse of their original address
+  order (`tools/revreorder.py` rewrites a file that way); `static` helpers then need a
+  declaration before their first use, which creates nothing.
+- A function an earlier object refers to (a session's constructor, called from
+  `EfzRevival.cpp`'s `init`; `hook`, `patchCode`, ... from its `setup`; `Session`'s
+  virtual functions, from the derived sessions' vtables and destructors) is created
+  there, so it comes after all of its own object's functions, in the order of the
+  first references (with the precompiled header). Where it is defined doesn't matter.
+- Object boundaries show where such functions sit: `PracticeSession`'s constructor
+  comes before `Recorder`'s functions, so `Recorder` is a separate object
+  (`Recorder.cpp`) after `PracticeSession.cpp`, whose functions it calls first; and
+  `makeSyncBlock` (called first from `OnlineSession.cpp`) comes after the spectator
+  session's constructor (called from `init`), so it is in an object of its own after
+  the spectator's (`OnlineSync.cpp`).
+- Names don't matter for the developer's functions; they still do for COMDATs folded
+  with others and for anything sorted by the linker.
+
 The modules, by address (chunk B), as far as known:
 
 | Range | What |
 |---|---|
-| `0x10065620`-`0x1006abb0` | `Config.cpp`: the same source as the launcher's first object (ini keys, `DIK_`/`BUTTON_` names), plus UTF-8 conversion helpers |
+| `0x10065620`-`0x1006abb0` | `Config.cpp`: the same source as the launcher's first object (ini keys, `DIK_`/`BUTTON_` names), plus `Utility.h`'s address parser and UTF-8 conversions |
 | `0x1006abc0` | `dllmain.cpp`: the template `DllMain` |
 | `0x1006abd0`-`0x1006de..` | Game state and input (`key.ini`, devices), the extended replay buffer, the hit/hurt/collision box display (`0x1006c1d0`, `0x1006cf90` call `EfzRender::addRectRender`), characters and palettes |
 | `0x1006de..`-`0x1006f260` | `EfzRevival.cpp`: `init` (`0x1006f0b0`), the first-frame setup that installs the hooks (`0x1006ee10`), the hook targets (`0x1006dfa0`-`0x1006e070` replace `CReplayFile`'s methods; `0x1006eb10`-`0x1006ebc0` forward to the session), keyboard and joystick edges, the crash handler (`0x1006e1c0`), switching to practice/replay sessions (`0x1006e090`) |
 | `0x1006f260`-`0x1006f7a0` | Save states: copies of the game's memory (`0x1006f390`) |
 | `0x1006f7a0`-`0x1006fae2` | Hooks: patching bytes and three kinds of trampoline |
 | `0x1006faf0`-`0x10070600` | Music (DirectShow: custom BGM folder), replay file names |
-| `0x10070600`-`0x10074210` | The online session: rollback, input exchange with the launcher, sync, replay saving |
-| `0x10074210`-`0x10075370` | The spectator session |
-| `0x100757e0`-`0x100769e0` | The practice session: pause, frame step, save/load state, record/replay |
-| `0x10077650`-`0x100785c0` | The replay session |
-| `0x10078910`-`0x10078950` | `Session`'s default handlers (`revival/EfzRevival/Session.h`) |
+| `0x10070600`-`0x10074210` | `OnlineSession.cpp`: rollback, input exchange with the launcher, sync, replay saving |
+| `0x10074210`-`0x10075680` | `OnlineSpectatorSession.cpp`: the spectator session |
+| `0x10075680`-`0x100757e0` | `OnlineSync.cpp` (name unknown): `makeSyncBlock`, and an empty constructor and destructor nothing calls |
+| `0x100757e0`-`0x10076b70` | `PracticeSession.cpp`: pause, frame step, save/load state, record/replay |
+| `0x10076b70`-`0x10077650` | `Recorder.cpp`: recording and replaying a player's inputs |
+| `0x10077650`-`0x10078900` | `ReplaySession.cpp`: the replay session |
+| `0x10078900`-`0x10078960` | `Session.cpp`: `Session`'s default handlers (`revival/EfzRevival/Session.h`) |
 | `0x10078960`-`0x1007a250` | The tournament session |
 
 ## Checking the injection
@@ -562,8 +744,9 @@ protobuf's `GzipOutputStream` (zlib format, level 9) before sending.
   `<time> P1 VS P2` per session and
   `<fight start> <char> VS <char> Rounds: a b Duration: mmm:ss Score: x y` per game.
 - **Music.** `MusicPlayer` plays the custom BGM folder through DirectShow (ATL `CComPtr`s;
-  the original includes `atlbase.h`, whose registrar strings lead each such object's
-  strings) and remembers files that failed to play.
+  `Music.h` includes `atlbase.h`, whose registrar strings lead the strings of each
+  object that includes it, see "The whole image") and remembers files that failed to
+  play.
 
 ## Practice, replays, spectating, tournaments (EfzRevival.dll's other sessions)
 

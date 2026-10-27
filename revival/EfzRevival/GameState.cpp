@@ -1,39 +1,71 @@
 // Save states (GameState.h).
+#include "stdafx.h"
 #include "GameState.h"
+#include "Log.h"
 #include <stdlib.h>
 #include <sstream>
 #include "EfzRevival.h"
 
-// FUNCTION: 0x1006f260
-void SaveState::clear()
+// FUNCTION: 0x1006f730
+void StateBuffer::restore()
 {
-    buffer_->reset();
+    for (std::list<Region>::iterator it = regions_.begin(); it != regions_.end(); ++it)
+        memcpy(it->address, it->copy, it->size);
 }
 
-// FUNCTION: 0x1006f270
-void SaveState::load()
+// FUNCTION: 0x1006f6e0
+void StateBuffer::add(void *address, int size)
 {
-    if (random_.size() != 0) {
-        std::stringstream stream;
-        stream << random_;
-        stream >> g_rng;
+    if (address != 0 && size != 0) {
+        Region region;
+        region.copy = cursor_;
+        region.address = address;
+        region.size = size;
+        memcpy(cursor_, address, size);
+        cursor_ += size;
+        regions_.push_back(region);
     }
-    buffer_->restore();
-    g_game.rects_.clear();
-    g_game.rects_.insert(g_game.rects_.begin(), rects_.begin(), rects_.end());
 }
 
-// FUNCTION: 0x1006f340
-void SaveState::addPlayer(CPlayer *player)
+// FUNCTION: 0x1006f6d0
+__declspec(naked) void StateBuffer::saveFpu()
 {
-    int size = g_characterSizes[player->character];
-    buffer_->add(player, size);
+    __asm {
+        fsave [ecx]
+        frstor [ecx]
+        ret
+    }
 }
 
-// FUNCTION: 0x1006f370
-void SaveState::addInt(int *value, int size)
+// FUNCTION: 0x1006f690
+void StateBuffer::reset()
 {
-    buffer_->add(value, size);
+    unsigned int used = cursor_ - buffer_;
+    maxUsed_ = maxUsed_ > used ? maxUsed_ : used;
+    cursor_ = buffer_;
+    regions_.clear();
+}
+
+// FUNCTION: 0x1006f640
+StateBuffer::StateBuffer(int capacity)
+{
+    capacity_ = capacity;
+    buffer_ = (char *)malloc(capacity);
+    cursor_ = buffer_;
+    maxUsed_ = 0;
+    memset(fpu_, 0, sizeof(fpu_));
+}
+
+// FUNCTION: 0x1006f5a0 ??0SaveState@@QAE@XZ
+SaveState::SaveState()
+{
+    random_ = "";
+    buffer_ = new StateBuffer(500000);
+}
+
+// FUNCTION: 0x1006f580
+SaveState::~SaveState()
+{
 }
 
 // The scene, CGame and both players, the screen palette and back buffer, the
@@ -81,64 +113,47 @@ void SaveState::save(bool full)
     }
 }
 
-// FUNCTION: 0x1006f580
-SaveState::~SaveState()
+// FUNCTION: 0x1006f370
+void SaveState::addInt(int *value, int size)
 {
+    buffer_->add(value, size);
 }
 
-// FUNCTION: 0x1006f5a0 ??0SaveState@@QAE@XZ
-SaveState::SaveState()
+// FUNCTION: 0x1006f340
+void SaveState::addPlayer(CPlayer *player)
 {
-    random_ = "";
-    buffer_ = new StateBuffer(500000);
+    int size = g_characterSizes[player->character];
+    buffer_->add(player, size);
 }
 
-// FUNCTION: 0x1006f640
-StateBuffer::StateBuffer(int capacity)
+// FUNCTION: 0x1006f270
+void SaveState::load()
 {
-    capacity_ = capacity;
-    buffer_ = (char *)malloc(capacity);
-    cursor_ = buffer_;
-    maxUsed_ = 0;
-    memset(fpu_, 0, sizeof(fpu_));
-}
-
-// FUNCTION: 0x1006f690
-void StateBuffer::reset()
-{
-    unsigned int used = cursor_ - buffer_;
-    maxUsed_ = maxUsed_ > used ? maxUsed_ : used;
-    cursor_ = buffer_;
-    regions_.clear();
-}
-
-// FUNCTION: 0x1006f6d0
-__declspec(naked) void StateBuffer::saveFpu()
-{
-    __asm {
-        fsave [ecx]
-        frstor [ecx]
-        ret
+    if (random_.size() != 0) {
+        std::stringstream stream;
+        stream << random_;
+        stream >> g_rng;
     }
+    buffer_->restore();
+    g_game.rects_.clear();
+    g_game.rects_.insert(g_game.rects_.begin(), rects_.begin(), rects_.end());
 }
 
-// FUNCTION: 0x1006f6e0
-void StateBuffer::add(void *address, int size)
+// FUNCTION: 0x1006f260
+void SaveState::clear()
 {
-    if (address != 0 && size != 0) {
-        Region region;
-        region.copy = cursor_;
-        region.address = address;
-        region.size = size;
-        memcpy(cursor_, address, size);
-        cursor_ += size;
-        regions_.push_back(region);
-    }
+    buffer_->reset();
 }
 
-// FUNCTION: 0x1006f730
-void StateBuffer::restore()
+// Unused (only its strings are left, the object's only ones): the bytes in which two
+// states' buffers differ, for finding desyncs.
+static void compareStates(const char *name, const char *old, const char *other, const char *now,
+                          int size)
 {
-    for (std::list<Region>::iterator it = regions_.begin(); it != regions_.end(); ++it)
-        memcpy(it->address, it->copy, it->size);
+    g_log << "Comparing " << name << " with " << other << "\n";
+    for (int i = 0; i < size; i++)
+        if (old[i] != now[i])
+            g_log << "0x" << std::hex << i << " Old " << (int)old[i] << " New " << (int)now[i]
+                  << std::dec << "\n";
+    g_log.flush();
 }

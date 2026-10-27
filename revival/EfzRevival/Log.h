@@ -17,6 +17,10 @@
 #include <boost/iostreams/device/file.hpp>
 #include <boost/iostreams/filter/gzip.hpp>
 #include <boost/iostreams/filtering_stream.hpp>
+// Nothing uses boost::iostreams::copy, but its header is why every object that includes
+// this one has boost.bind's placeholders _1-_9 (and std::ignore) among its static
+// initializers, as fourteen of the original's objects do.
+#include <boost/iostreams/copy.hpp>
 
 class Log {
 public:

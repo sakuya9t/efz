@@ -90,11 +90,18 @@ struct SyncBlock {
     // EfzRevival.dll's (an inline constructor at 0x100285d0 in the DLL): the inputs first,
     // then the rest, frame and fpuCW last.
     SyncBlock()
-        : state(0), stateP1(0), stateP2(0), inputP1(0, 0), inputP2(0, 0), p1x(0), p1y(0),
-          p2x(0), p2y(0), rng(0)
+        : inputP1(0, 0), inputP2(0, 0)
     {
         frame = 0;
         fpuCW = 0;
+        stateP1 = 0;
+        stateP2 = 0;
+        state = 0;
+        p1x = 0;
+        p1y = 0;
+        p2x = 0;
+        p2y = 0;
+        rng = 0;
     }
 
     // FUNCTION: 0x434ab0 ??8SyncBlock@@QBE_NABU0@@Z

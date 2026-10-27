@@ -58,11 +58,8 @@ struct EfzTimer {
         }
     }
 
-    // FUNCTION: 0x1001c570
-    void restart()
-    {
-        setMsPerFrame(msPerFrame);
-    }
+    // EfzFixes.cpp, after run(), where its code is.
+    void restart();
 
     // The thread's loop: never returns.
     void run();

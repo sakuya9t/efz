@@ -2,10 +2,13 @@
 // fullscreen switch. Both kinds of overlay are drawn into renderTarget between the
 // frame and its presentation (myIDirectDrawSurface::Flip).
 #include "stdafx.h"
+// d3dx9.h before EfzRender.h (but after <memory>): D3DXVECTOR2's constructor comes
+// between std::shared_ptr's and TextRender's (0x10015f30).
+#include <memory>
+#include <d3dx9.h>
 #include "EfzRender.h"
 #include "EfzFixes.h"
 #include "myIDirectDraw.h"
-#include <d3dx9.h>
 
 // The implicit members the export brings, and TextRender's.
 // FUNCTION: 0x10016000 ??4EfzRender@@QAEAAV0@ABV0@@Z

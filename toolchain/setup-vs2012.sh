@@ -5,7 +5,8 @@
 #              an Update 5 install has.  Objects get c2's build in their @comp.id, so
 #              the Rich headers of all three 1.02h binaries show 61219 for the developer's
 #              own objects, 50929 for the CRT and a 61030 linker; their 61030 C and C++
-#              objects are prebuilt libraries (boost and its zlib).
+#              objects are prebuilt libraries (boost and its zlib).  vs2012/atlmfc/ has
+#              ATL's headers and libraries (EfzRevival.dll's Music.h includes atlbase.h).
 #   sdk71a/    Windows SDK 7.1A, the v110_xp platform SDK (its import libraries are the
 #              Implib900 30729 objects in the Rich headers)
 #   dxsdk2010/ DirectX SDK (June 2010) headers and x86 libs, for DDRAW.dll's d3d9 and
@@ -55,10 +56,11 @@ rm -rf /dest/vs2012 /dest/sdk71a /dest/dxsdk2010 /dest/boost156 /dest/protobuf-2
 echo "extracting Visual C++ 2012"
 7z x -y -o"$work/iso" /cache/VS2012.5.iso packages/vc_compilercore86 \
     packages/vc_compilercore86res/enu packages/vc_librarycore86 packages/XPSupport \
-    packages/KB2707250vc >/dev/null
+    packages/KB2707250vc packages/vc_libraryextended >/dev/null
 # (msiextract exits 0 even when it cannot open the package.)
 for p in vc_compilercore86/vc_compilercore86 vc_compilercore86res/enu/vc_compilercore86res \
-         vc_librarycore86/vc_librarycore86 XPSupport/Win_XPSupport; do
+         vc_librarycore86/vc_librarycore86 XPSupport/Win_XPSupport \
+         vc_libraryextended/vc_libraryextended; do
     pkg=${p%%/*}
     mkdir -p "$work/$pkg"
     (cd "$work/iso/packages/${p%/*}" && msiextract -C "$work/$pkg" "${p##*/}.msi" >/dev/null)
@@ -71,6 +73,10 @@ rm -rf /dest/vs2012/bin/x86_amd64
 cp -r "$work/vc_librarycore86/$vc/include" /dest/vs2012/include
 mkdir -p /dest/vs2012/lib
 find "$work/vc_librarycore86/$vc/lib" -maxdepth 1 -type f -exec cp {} /dest/vs2012/lib/ \;
+mkdir -p /dest/vs2012/atlmfc/lib
+cp -r "$work/vc_libraryextended/$vc/atlmfc/include" /dest/vs2012/atlmfc/include
+find "$work/vc_libraryextended/$vc/atlmfc/lib" -maxdepth 1 -type f -name "*.lib" \
+    -exec cp {} /dest/vs2012/atlmfc/lib/ \;
 # The compiler DLLs need mspdb110.dll and friends beside cl.exe, and the PDB server
 # mspdbsrv.exe for /Zi and link /DEBUG.
 find "$work/vc_compilercore86" -iname "mspdb*" -exec cp -n {} /dest/vs2012/bin/ \;

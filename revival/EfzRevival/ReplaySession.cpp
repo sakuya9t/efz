@@ -5,11 +5,13 @@
 // (Game::readExtendedReplay) drives input() instead, frame_ counting the frames. Once a
 // player takes control (control_), that player's inputs come from the pad, and the
 // session tells the game to record (setEfzReplay(false): replay mode 2).
+#include "stdafx.h"
+#include "EfzGame.h"
 #include "ReplaySession.h"
+#include "Music.h"
 #include <math.h>
 #include <iostream>
 #include <sstream>
-#include "EfzGame.h"
 #include "EfzReplay.h"
 #include "InputDisplay.h"
 #include "Log.h"
@@ -82,7 +84,25 @@ void ReplaySession::update()
     static_cast<FrameInput &>(inputs_[0]) = FrameInput(p1, g_game.functionKeys());
     static_cast<FrameInput &>(inputs_[1]) = FrameInput(p2, g_game.functionKeys());
     if (isReplaying() || isControlling()) {
-        if (!isControlling()) {
+        if (isControlling()) {
+            showBoxes();
+            if (paused_) {
+                if (step_) {
+                    g_game.clearRects();
+                    g_game.recordInputs(static_cast<FrameInput &>(inputs_[0]), static_cast<FrameInput &>(inputs_[1]));
+                    g_game.setWriteReplay(true);
+                    g_game.setGameSpeed(3);
+                    g_game.runFrame();
+                    g_game.setGameSpeed(0);
+                    g_game.setWriteReplay(false);
+                    step_ = false;
+                    return;
+                }
+            } else {
+                g_game.clearRects();
+                g_game.recordInputs(static_cast<FrameInput &>(inputs_[0]), static_cast<FrameInput &>(inputs_[1]));
+            }
+        } else {
             if (g_game.isRoundOver()) {
                 setEfzReplay(true);
                 g_game.setTextRender(false);
@@ -95,7 +115,10 @@ void ReplaySession::update()
             }
             if (frame_ == 1) {
                 saveState(state_);
-                setEfzReplay(replayInputs_.size() == 0);
+                if (replayInputs_.size() != 0)
+                    setEfzReplay(false);
+                else
+                    setEfzReplay(true);
             }
             if (inputs_[controlled_].first != 0 && frame_ > 1 && replayInputs_.size() != 0
                 && !g_game.isMatchOver())
@@ -123,23 +146,6 @@ void ReplaySession::update()
             if (!paused_)
                 frame_++;
             return;
-        }
-        showBoxes();
-        if (paused_) {
-            if (step_) {
-                g_game.clearRects();
-                g_game.recordInputs(inputs_[0], inputs_[1]);
-                g_game.setWriteReplay(true);
-                g_game.setGameSpeed(3);
-                g_game.runFrame();
-                g_game.setGameSpeed(0);
-                g_game.setWriteReplay(false);
-                step_ = false;
-                return;
-            }
-        } else {
-            g_game.clearRects();
-            g_game.recordInputs(inputs_[0], inputs_[1]);
         }
     }
     g_game.runFrame();
@@ -174,7 +180,7 @@ void ReplaySession::keyPressed(int key)
         if (key == config_->increaseInputDelay)
             loadState(states_[(int)ceil((frame_ + 1.0) / 64.0)]);
         if (key == config_->decreaseInputDelay && frame_ > 64)
-            loadState(states_[(int)floor((frame_ - 32.0) / 64.0)]);
+            loadState(states_[(int)floor((frame_ - 64.0 / 2) / 64.0)]);
         if (key == config_->switchPlayers) {
             controlled_ = controlled_ == 0;
             g_game.swapBindings();
@@ -203,8 +209,7 @@ void ReplaySession::keyPressed(int key)
     }
     if (key == config_->decreaseFPS) {
         fps_ -= 16.0;
-        if (fps_ < 1.0)
-            fps_ = 1.0;
+        fps_ = fps_ < 1.0 ? 1.0 : fps_;
         g_game.timer->setFps(fps_);
     }
     if (key == config_->resetFPS) {
@@ -234,85 +239,117 @@ void ReplaySession::input(BYTE *input, int player)
         *input = inputs_[player].first;
 }
 
-// The function keys (F4-F8, Esc): the replay's, or the pads' once in control.
-// FUNCTION: 0x100777b0
-void ReplaySession::fightUpdate(void *frame)
+// FUNCTION: 0x10077eb0
+bool ReplaySession::isReplaying()
 {
-    if (isReplaying() || isControlling()) {
-        BYTE *keys = (BYTE *)frame;
-        char pressed = 0;
-        if (!isControlling() && replayInputs_.size() != 0 && !control_) {
-            if (isReplaying() && replayInputs_.size() != 0) {
-                int index = frame_ * 2;
-                pressed = replayInputs_[index].second | replayInputs_[index + 1].second;
+    if (g_game.sceneId() == 3 && g_game.menuChoice() == 4
+        && (g_game.replayMode() == 0 || g_game.replayMode() == 1))
+        return true;
+    return false;
+}
+
+// FUNCTION: 0x10077e80
+bool ReplaySession::isControlling()
+{
+    if (g_game.sceneId() == 3 && g_game.menuChoice() == 4 && g_game.replayMode() == 2)
+        return true;
+    return false;
+}
+
+// Whether the game reads the replay's inputs (1) or records (2, the player in control).
+// FUNCTION: 0x10077e30
+void ReplaySession::setEfzReplay(bool play)
+{
+    g_log << "Set efz Replay " << play << "\n";
+    g_log.flush();
+    g_game.setReplayMode(play);
+    g_game.setReadReplay(play);
+}
+
+// FUNCTION: 0x10077c20
+void ReplaySession::sceneChanged(int &scene)
+{
+    scene = g_game.sceneId();
+    if (isReplaying()) {
+        g_game.timer->setFps(fps_);
+        quit_ = false;
+        frame_ = 0;
+        replayInputs_.clear();
+        state_.reset();
+        for (int i = 0; i < states_.size(); i++)
+            states_[i].reset();
+        control_ = false;
+        g_game.readExtendedReplay(replayInputs_);
+        p1Inputs_.clear();
+        p2Inputs_.clear();
+        if (replayInputs_.size() != 0) {
+            for (unsigned int i = 0; i < replayInputs_.size() - 1;) {
+                p1Inputs_.push_back(replayInputs_[i++].first);
+                p2Inputs_.push_back(replayInputs_[i++].first);
             }
-        } else {
-            pressed = inputs_[0].second | inputs_[1].second;
         }
-        for (int i = 0; i < 5; i++)
-            keys[DIK_F4 + i] = (pressed & (1 << i)) ? 0x80 : 0;
-        if (pressed & 0x20)
-            keys[DIK_ESCAPE] = 0x80;
-        if (quit_) {
-            g_log << "DoQuit\n";
-            quit_ = false;
-            keys[DIK_ESCAPE] = 0x80;
-        }
-        if (isReplaying() && keys[DIK_ESCAPE] == 0x80) {
-            g_log << "Get input esc\n";
-            g_log.flush();
-        }
-    }
-}
-
-// FUNCTION: 0x10077690
-void ReplaySession::setVolume(WORD id, int volume)
-{
-    if (playlist_.size() != 0 && g_game.isMusic(id) && music_->isPlaying()) {
-        music_->setVolume(volume);
+        g_game.setTextRender(display_);
+        setEfzReplay(true);
         return;
     }
-    g_game.setSoundVolume(id, volume);
-}
-
-// FUNCTION: 0x10077650
-void ReplaySession::stopSound(WORD id)
-{
-    if (playlist_.size() != 0 && g_game.isMusic(id) && music_->isPlaying()) {
-        music_->stop();
-        return;
-    }
-    g_game.stopSound(id);
-}
-
-// FUNCTION: 0x100776e0
-void ReplaySession::playSound(WORD id, int arg)
-{
-    if (playlist_.size() != 0 && g_game.isMusic(id)
-        && (g_game.sceneId() == 2 || g_game.sceneId() == 3)) {
-        music_->play(playlist_.current());
-        return;
-    }
-    if (music_->muted && g_game.isMusic(id))
-        return;
-    g_game.playSound(id, arg);
-}
-
-// FUNCTION: 0x10077750
-void ReplaySession::setPaused(bool paused)
-{
-    paused_ = paused;
-    if (paused) {
-        g_game.setReadReplay(false);
-        g_game.setWriteReplay(false);
-        g_game.setGameSpeed(0);
+    if (isControlling()) {
+        g_game.timer->setFps(fps_);
+        quit_ = false;
+        frame_ = 0;
+        replayInputs_.clear();
+        state_.reset();
+        for (int i = 0; i < states_.size(); i++)
+            states_[i].reset();
+        g_game.setRandomSeed(g_game.newRandomSeed());
+    } else {
+        g_game.timer->setFps(g_game.timer->defaultFps);
+        g_game.setTextRender(false);
+        g_game.setGameSpeed(3);
+        g_game.setReadReplay(true);
+        g_game.setWriteReplay(true);
+        g_game.clearBoxes();
+        paused_ = false;
         step_ = false;
-        return;
+        quit_ = false;
     }
-    g_game.setWriteReplay(true);
-    g_game.setReadReplay(true);
-    g_game.setGameSpeed(3);
-    step_ = false;
+}
+
+// FUNCTION: 0x10077bc0
+void ReplaySession::showBoxes()
+{
+    g_game.clearBoxes();
+    if (hitBoxes_) {
+        g_game.showBoxes(0, 0);
+        g_game.showBoxes(1, 0);
+    }
+    if (hurtBoxes_) {
+        g_game.showBoxes(0, 1);
+        g_game.showBoxes(1, 1);
+    }
+    if (collisionBoxes_) {
+        g_game.showBoxes(0, 2);
+        g_game.showBoxes(1, 2);
+    }
+}
+
+// FUNCTION: 0x10077b60
+void ReplaySession::saveState(ReplayState &state)
+{
+    state.state.clear();
+    state.state.save(false);
+    state.state.addInt(&frame_);
+    state.position = (int)((ReplayFile *)g_game.replayFile())->file->tellg();
+}
+
+// FUNCTION: 0x10077b00
+void ReplaySession::loadState(ReplayState &state)
+{
+    control_ = false;
+    CScene3 *fight = (CScene3 *)g_game.scene(3);
+    char speed = fight->speed;
+    state.state.load();
+    ((ReplayFile *)g_game.replayFile())->file->seekg(state.position);
+    fight->speed = speed;
 }
 
 // FUNCTION: 0x100778c0
@@ -346,124 +383,100 @@ void ReplaySession::drawInfo()
     }
     g_game.addText(text.str(), x, 96, 0);
     text.str(L"");
-    text << "State:         " << (control_ ? "Control" : "Replay");
+    text << "State:         ";
+    if (control_)
+        text << "Control";
+    else
+        text << "Replay";
     g_game.addText(text.str(), x, 110, 0);
     text.str(L"");
-    std::vector<BYTE> p1(&p1Inputs_[0], &p1Inputs_[frame_]);
-    std::vector<BYTE> p2(&p2Inputs_[0], &p2Inputs_[frame_]);
+    std::vector<char> p1(&p1Inputs_[0], &p1Inputs_[frame_]);
+    std::vector<char> p2(&p2Inputs_[0], &p2Inputs_[frame_]);
     drawInputs(p1, 200, 10, 0, 1);
     drawInputs(p2, 200, 550, 0, 1);
 }
 
-// FUNCTION: 0x10077b00
-void ReplaySession::loadState(ReplayState &state)
+// The function keys (F4-F8, Esc): the replay's, or the pads' once in control.
+// FUNCTION: 0x100777b0
+void ReplaySession::fightUpdate(void *frame)
 {
-    control_ = false;
-    CScene3 *fight = (CScene3 *)g_game.scene(3);
-    char speed = fight->speed;
-    state.state.load();
-    ((ReplayFile *)g_game.replayFile())->file->seekg(state.position);
-    fight->speed = speed;
-}
-
-// FUNCTION: 0x10077b60
-void ReplaySession::saveState(ReplayState &state)
-{
-    state.state.clear();
-    state.state.save(false);
-    state.state.addInt(&frame_);
-    state.position = (int)((ReplayFile *)g_game.replayFile())->file->tellg();
-}
-
-// FUNCTION: 0x10077bc0
-void ReplaySession::showBoxes()
-{
-    g_game.clearBoxes();
-    if (hitBoxes_) {
-        g_game.showBoxes(0, 0);
-        g_game.showBoxes(1, 0);
-    }
-    if (hurtBoxes_) {
-        g_game.showBoxes(0, 1);
-        g_game.showBoxes(1, 1);
-    }
-    if (collisionBoxes_) {
-        g_game.showBoxes(0, 2);
-        g_game.showBoxes(1, 2);
-    }
-}
-
-// FUNCTION: 0x10077c20
-void ReplaySession::sceneChanged(int &scene)
-{
-    scene = g_game.sceneId();
-    if (isReplaying()) {
-        g_game.timer->setFps(fps_);
-        quit_ = false;
-        frame_ = 0;
-        replayInputs_.clear();
-        state_.reset();
-        for (int i = 0; i < states_.size(); i++)
-            states_[i].reset();
-        control_ = false;
-        g_game.readExtendedReplay(replayInputs_);
-        p1Inputs_.clear();
-        p2Inputs_.clear();
-        if (replayInputs_.size() != 0) {
-            for (unsigned int i = 0; i < replayInputs_.size() - 1; i += 2) {
-                p1Inputs_.push_back(replayInputs_[i].first);
-                p2Inputs_.push_back(replayInputs_[i + 1].first);
+    if (isReplaying() || isControlling()) {
+        BYTE *keys = (BYTE *)frame;
+        char pressed = 0;
+        if (!isControlling() && replayInputs_.size() != 0 && !control_) {
+            if (isReplaying() && replayInputs_.size() != 0) {
+                int index = frame_ * 2;
+                pressed = replayInputs_[index].second | replayInputs_[index + 1].second;
             }
+        } else {
+            pressed = inputs_[0].second | inputs_[1].second;
         }
-        g_game.setTextRender(display_);
-        setEfzReplay(true);
-        return;
+        for (int i = 0; i < 5; i++) {
+            if (pressed & (1 << i))
+                keys[DIK_F4 + i] = 0x80;
+            else
+                keys[DIK_F4 + i] = 0;
+        }
+        if (pressed & 0x20)
+            keys[DIK_ESCAPE] = 0x80;
+        if (quit_) {
+            g_log << "DoQuit\n";
+            quit_ = false;
+            keys[DIK_ESCAPE] = 0x80;
+        }
+        if (isReplaying() && keys[DIK_ESCAPE] == 0x80) {
+            g_log << "Get input esc\n";
+            g_log.flush();
+        }
     }
-    if (!isControlling()) {
-        g_game.timer->setFps(g_game.timer->defaultFps);
-        g_game.setTextRender(false);
-        g_game.setGameSpeed(3);
-        g_game.setReadReplay(true);
-        g_game.setWriteReplay(true);
-        g_game.clearBoxes();
-        paused_ = false;
+}
+
+// FUNCTION: 0x10077750
+void ReplaySession::setPaused(bool paused)
+{
+    paused_ = paused;
+    if (paused) {
+        g_game.setReadReplay(false);
+        g_game.setWriteReplay(false);
+        g_game.setGameSpeed(0);
         step_ = false;
-        quit_ = false;
         return;
     }
-    g_game.timer->setFps(fps_);
-    quit_ = false;
-    frame_ = 0;
-    replayInputs_.clear();
-    state_.reset();
-    for (int i = 0; i < states_.size(); i++)
-        states_[i].reset();
-    g_game.setRandomSeed(g_game.newRandomSeed());
+    g_game.setWriteReplay(true);
+    g_game.setReadReplay(true);
+    g_game.setGameSpeed(3);
+    step_ = false;
 }
 
-// Whether the game reads the replay's inputs (1) or records (2, the player in control).
-// FUNCTION: 0x10077e30
-void ReplaySession::setEfzReplay(bool play)
+// FUNCTION: 0x100776e0
+void ReplaySession::playSound(WORD id, int arg)
 {
-    g_log << "Set efz Replay " << play << "\n";
-    g_log.flush();
-    g_game.setReplayMode(play);
-    g_game.setReadReplay(play);
+    if (playlist_.size() != 0 && g_game.isMusic(id)
+        && (g_game.sceneId() == 2 || g_game.sceneId() == 3)) {
+        music_->play(playlist_.current());
+        return;
+    }
+    if (music_->muted && g_game.isMusic(id))
+        return;
+    g_game.playSound(id, arg);
 }
 
-// FUNCTION: 0x10077e80
-bool ReplaySession::isControlling()
+// FUNCTION: 0x10077690
+void ReplaySession::setVolume(WORD id, int volume)
 {
-    if (g_game.sceneId() == 3 && g_game.menuChoice() == 4 && g_game.replayMode() == 2)
-        return true;
-    return false;
+    if (playlist_.size() != 0 && g_game.isMusic(id) && music_->isPlaying()) {
+        music_->setVolume(volume);
+        return;
+    }
+    g_game.setSoundVolume(id, volume);
 }
 
-// FUNCTION: 0x10077eb0
-bool ReplaySession::isReplaying()
+// FUNCTION: 0x10077650
+void ReplaySession::stopSound(WORD id)
 {
-    if (g_game.sceneId() == 3 && g_game.menuChoice() == 4
-        && (g_game.replayMode() == 0 || g_game.replayMode() == 1))
-        return true;
-    return false;
+    if (playlist_.size() != 0 && g_game.isMusic(id) && music_->isPlaying()) {
+        music_->stop();
+        return;
+    }
+    g_game.stopSound(id);
 }

@@ -5,16 +5,18 @@
 // control of a character from any point: pressing a button in a fight hands that
 // player's inputs to the keyboard, and the game records the rest of the fight.
 #pragma once
-#include "../EfzRevivalLauncher/Config.h"  // boost.asio's winsock2.h before windows.h
+#include "Config.h"
 #include <memory>
 #include <string>
 #include <vector>
 #include "Session.h"
 #include "Efz.h"
 #include "GameState.h"
-#include "Music.h"
+#include "Playlist.h"
 #include "RingBuffer.h"
 #include "../EfzRevivalLauncher/SharedData.h"
+
+class MusicPlayer;   // Music.h
 
 // A save state of the replay and where its file was then. 0x2c bytes.
 struct ReplayState {
@@ -87,7 +89,7 @@ private:
     int lastScene_;                         // 0x60
     MusicPlayer *music_;                    // 0x64
     Playlist playlist_;                     // 0x68
-    std::vector<BYTE> p1Inputs_;            // 0x78 for the input display
-    std::vector<BYTE> p2Inputs_;            // 0x84
+    std::vector<char> p1Inputs_;            // 0x78 for the input display
+    std::vector<char> p2Inputs_;            // 0x84
     RingBuffer<ReplayState> states_;        // 0x90 every 64 frames
 };

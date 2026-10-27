@@ -2,12 +2,13 @@
 // timer, the log and the renderer. dllmain.cpp's initVanilla applies the changes from
 // WinMain (0x401016), before the game makes its window.
 #include "stdafx.h"
+#include "Version.h"
 #include "EfzFixes.h"
 #include "EfzRender.h"
 #include "EfzTimer.h"
 #include "Hook.h"
 #include "Log.h"
-#include "../EfzRevivalLauncher/Config.h"
+#include "Config.h"
 #include <shellapi.h>
 #define DIRECTINPUT_VERSION 0x0700
 #include <dinput.h>
@@ -17,30 +18,23 @@
 
 // GLOBAL: 0x100b6ad0
 EfzTimer g_timer;
-// GLOBAL: 0x100b6b08
-std::fstream g_log;
-// GLOBAL: 0x100b6bc8
-EfzRender g_render;
 
 // GLOBAL: 0x100b6a3c
 // A copy of CInput::GetInput (0x40cd00), which getEfzInput calls.
 void *g_inputCode;
 
-// GLOBAL: 0x100b58a0
-char g_className[] = "ETERNAL FIGHTER ZERO";
-
-// This file's own copy of Hook.cpp's patchCode (the name is lost; renamed to keep the
-// annotations apart).
-// FUNCTION: 0x1001c970
-static bool patchGame(void *address, const void *bytes, int size)
-{
-    if (size <= 0)
-        return false;
-    DWORD protect;
-    BOOL ok = VirtualProtect(address, size, PAGE_READWRITE, &protect);
-    memcpy(address, bytes, size);
-    return ok && VirtualProtect(address, size, protect, &protect);
-}
+// Helpers defined after their first use (the code is in the order of the definitions).
+static bool patchGame(void *address, const void *bytes, int size);
+static void inputHook();
+static void readHat(BYTE *result, BYTE *player);
+static BYTE hatDirection(DIJOYSTATE *state);
+static void ikumiHook();
+static void fixIkumiUpdate();
+static void timerHook();
+static void replayHook();
+static void readFrameCount(DWORD *count, HANDLE file);
+static HRESULT WINAPI directInputCreate(HINSTANCE instance, DWORD version, REFIID iid,
+    LPVOID *object, LPUNKNOWN outer);
 
 // --- The frame timer
 
@@ -73,24 +67,19 @@ void EfzTimer::run()
     }
 }
 
-// The hook on FrameTimerThread's loop (hookTimer).
-// FUNCTION: 0x1001d020
-static void timerHook()
+// FUNCTION: 0x1001c570
+void EfzTimer::restart()
 {
-    g_timer.run();
+    setMsPerFrame(msPerFrame);
 }
 
-// FUNCTION: 0x1001d030
-void restartTimer()
-{
-    g_timer.restart();
-}
-
-// FUNCTION: 0x1001cfc0
-void hookTimer()
-{
-    hook((void *)0x40187f, 7, (void *)timerHook);
-}
+// The log and the renderer are defined here, after the timer's functions: the template
+// code of their destructors comes out after what run() uses (abs, 0x1001efa0, is
+// between the file stream's and basic_ios's), and their data follows g_timer's.
+// GLOBAL: 0x100b6b08
+std::fstream g_log;
+// GLOBAL: 0x100b6bc8
+EfzRender g_render;
 
 // --- The window
 
@@ -137,10 +126,26 @@ static LRESULT CALLBACK windowProc(HWND window, UINT message, WPARAM wParam, LPA
     return ((WNDPROC)0x401670)(window, message, wParam, lParam);
 }
 
+// skipWindowCreation has a local object with an empty constructor and destructor: their
+// code is here (0x1001c670, 0x1001c680), just before the function that uses them, though
+// link-time code generation drops the calls. What the object was is lost.
+struct Unknown1001c670 {
+    // FUNCTION: 0x1001c670 ??0Unknown1001c670@@QAE@XZ
+    Unknown1001c670()
+    {
+    }
+
+    // FUNCTION: 0x1001c680 ??1Unknown1001c670@@QAE@XZ
+    ~Unknown1001c670()
+    {
+    }
+};
+
 // WinMain jumps over its own CreateWindowEx (0x40101c to 0x4010da).
 // FUNCTION: 0x1001c690
 void skipWindowCreation()
 {
+    Unknown1001c670 unknown;
     BYTE jump[5] = { 0xe9, 0xb9, 0x00, 0x00, 0x00 };
     patchGame((void *)0x40101c, jump, 5);
 }
@@ -150,10 +155,17 @@ void skipWindowCreation()
 // handle goes into WinMain's hwnd (its ebp - 0x48: the hook's caller's frame). Also
 // opens the log when the ini asks for it.
 // TODO: differs: the registers: the original keeps width and height in esi/edi and x, y
-// on the stack; this keeps y in esi and reloads width.
+// on the stack; this keeps y in esi and reloads width (0x10 bytes shorter, which moves
+// all the code after it). Not changed by the locals' order, scope or names, a POINT,
+// bool temporaries, or an unused function before it; the default-first forms of the
+// checks (x = 10 unless the ini's fits) are further off.
 // FUNCTION: 0x1001c6c0
 void createWindow()
 {
+    // A local static: its data comes after the type descriptors of the earlier objects'
+    // exceptions, where a global's would come before them.
+    // GLOBAL: 0x100b58a0 ?className@?1??createWindow@@YAXXZ@4PADA
+    static char className[] = "ETERNAL FIGHTER ZERO";
     Config config(L"./EfzRevival.ini");
     if (config.debug) {
         g_log.open("logDdraw.txt", std::ios::out);
@@ -188,7 +200,7 @@ void createWindow()
     WNDCLASSA windowClass;
     memset(&windowClass, 0, sizeof(windowClass));
     windowClass.hInstance = instance;
-    windowClass.lpszClassName = g_className;
+    windowClass.lpszClassName = className;
     windowClass.lpfnWndProc = windowProc;
     windowClass.style = CS_HREDRAW | CS_VREDRAW | CS_OWNDC;
     windowClass.hIcon = icon;
@@ -197,19 +209,32 @@ void createWindow()
     windowClass.cbClsExtra = 0;
     windowClass.cbWndExtra = 0;
     windowClass.hbrBackground = GetSysColorBrush(COLOR_BTNFACE);
-    windowClass.lpszClassName = g_className;
+    windowClass.lpszClassName = className;
     if (!RegisterClassA(&windowClass))
         return;
     RECT rect;
     SetRect(&rect, 0, 0, width, height);
     AdjustWindowRect(&rect, WS_WINDOW, FALSE);
-    HWND window = CreateWindowExA(0, g_className, g_className, WS_WINDOW, x, y,
+    HWND window = CreateWindowExA(0, className, className, WS_WINDOW, x, y,
         rect.right - rect.left, rect.bottom - rect.top, NULL, NULL, windowClass.hInstance, NULL);
     if (!window)
         return;
     patchGame(gameWindow, &window, 4);
     ShowCursor(TRUE);
     SetFocus(window);
+}
+
+// This file's own copy of Hook.cpp's patchCode (the name is lost; renamed to keep the
+// annotations apart).
+// FUNCTION: 0x1001c970
+static bool patchGame(void *address, const void *bytes, int size)
+{
+    if (size <= 0)
+        return false;
+    DWORD protect;
+    BOOL ok = VirtualProtect(address, size, PAGE_READWRITE, &protect);
+    memcpy(address, bytes, size);
+    return ok && VirtualProtect(address, size, protect, &protect);
 }
 
 // --- The game's code
@@ -229,18 +254,14 @@ static void clearLocals()
     memset(locals, 0, 0x100);
 }
 
-// DirectInput 7's DirectInputCreateW for the game's DirectInputCreateEx.
-// FUNCTION: 0x1001d100
-static HRESULT WINAPI directInputCreate(HINSTANCE instance, DWORD version, REFIID iid,
-    LPVOID *object, LPUNKNOWN outer)
+// CSound (0x40da6a in Init, 0x40dd53 in CreateBuffer).
+// FUNCTION: 0x1001ca10
+void fixSounds()
 {
-    typedef HRESULT (WINAPI *Create)(HINSTANCE, DWORD, LPVOID *, LPUNKNOWN);
-    Create create = (Create)GetProcAddress(GetModuleHandleW(L"DINPUT.dll"), "DirectInputCreateW");
-    if (!create) {
-        MessageBoxA(NULL, "Cannot find DirectInputCreate", "Error", MB_OK);
-        return -1;
-    }
-    return create(instance, version, object, outer);
+    BYTE value = 1;
+    patchGame((void *)0x40da6a, &value, 1);
+    DWORD flags = 0x8080;
+    patchGame((void *)0x40dd53, &flags, 4);
 }
 
 // FUNCTION: 0x1001ca50
@@ -281,16 +302,6 @@ void fixGame()
     patchGame((void *)0x40ce27, nops, 9);
 }
 
-// CSound (0x40da6a in Init, 0x40dd53 in CreateBuffer).
-// FUNCTION: 0x1001ca10
-void fixSounds()
-{
-    BYTE value = 1;
-    patchGame((void *)0x40da6a, &value, 1);
-    DWORD flags = 0x8080;
-    patchGame((void *)0x40dd53, &flags, 4);
-}
-
 // Unused.
 // FUNCTION: 0x1001cca0
 void fix64c7fe()
@@ -313,39 +324,41 @@ void fix7586e8()
     patchGame((void *)0x753631, &count, 1);
 }
 
-// --- Input
-
-// The joystick's hat as a direction (0-3 right, left, down, up): the first hat that
-// isn't centred.
-// FUNCTION: 0x1001cec0
-static BYTE hatDirection(DIJOYSTATE *state)
+// FUNCTION: 0x1001cd30
+void copyInput()
 {
-    for (DWORD pov : state->rgdwPOV) {
-        if (LOWORD(pov) != 0xffff) {
-            if (pov >= 33750 || pov < 2250)
-                return 8;
-            if (pov >= 2250 && pov < 6750)
-                return 9;
-            if (pov >= 6750 && pov < 11250)
-                return 1;
-            if (pov >= 11250 && pov < 15750)
-                return 5;
-            if (pov >= 15750 && pov < 20250)
-                return 4;
-            if (pov >= 20250 && pov < 24750)
-                return 6;
-            if (pov >= 24750 && pov < 29250)
-                return 2;
-            if (pov >= 29250 && pov < 33750)
-                return 10;
-        }
+    if (g_inputCode)
+        free(g_inputCode);
+    g_inputCode = malloc(0x437);
+    DWORD protect;
+    VirtualProtect(g_inputCode, 0x437, PAGE_EXECUTE_READWRITE, &protect);
+    memcpy(g_inputCode, (void *)0x40cd00, 0x437);
+    hook((void *)0x40cd1d, 7, (void *)inputHook);
+    hook((char *)g_inputCode + 0x1d, 7, (void *)inputHook);
+}
+
+// In CInput::GetInput (0x40cd1d) and the copy: its result is at ebp - 0x15, the
+// player is its argument.
+// FUNCTION: 0x1001cdc0
+static void inputHook()
+{
+    BYTE *result;
+    BYTE *player;
+    __asm {
+        mov ebx, [ebp]
+        mov ecx, ebx
+        add ebx, 8
+        mov player, ebx
+        sub ecx, 0x15
+        mov result, ecx
     }
-    return 0;
+    readHat(result, player);
 }
 
 // When none of the player's four directions is bound to a joystick but a button is,
 // the hat of that button's joystick gives the direction.
-// TODO: differs: esi and edi are swapped (the original keeps the device in esi).
+// TODO: differs: esi and edi are swapped (the original keeps the device in esi). Not
+// changed by the order of the declarations.
 // FUNCTION: 0x1001cdf0
 static void readHat(BYTE *result, BYTE *player)
 {
@@ -380,35 +393,34 @@ static void readHat(BYTE *result, BYTE *player)
         *result = hatDirection(&state);
 }
 
-// In CInput::GetInput (0x40cd1d) and the copy: its result is at ebp - 0x15, the
-// player is its argument.
-// FUNCTION: 0x1001cdc0
-static void inputHook()
-{
-    BYTE *result;
-    BYTE *player;
-    __asm {
-        mov ebx, [ebp]
-        mov ecx, ebx
-        add ebx, 8
-        mov player, ebx
-        sub ecx, 0x15
-        mov result, ecx
-    }
-    readHat(result, player);
-}
+// --- Input
 
-// FUNCTION: 0x1001cd30
-void copyInput()
+// The joystick's hat as a direction (0-3 right, left, down, up): the first hat that
+// isn't centred.
+// FUNCTION: 0x1001cec0
+static BYTE hatDirection(DIJOYSTATE *state)
 {
-    if (g_inputCode)
-        free(g_inputCode);
-    g_inputCode = malloc(0x437);
-    DWORD protect;
-    VirtualProtect(g_inputCode, 0x437, PAGE_EXECUTE_READWRITE, &protect);
-    memcpy(g_inputCode, (void *)0x40cd00, 0x437);
-    hook((void *)0x40cd1d, 7, (void *)inputHook);
-    hook((char *)g_inputCode + 0x1d, 7, (void *)inputHook);
+    for (DWORD pov : state->rgdwPOV) {
+        if (LOWORD(pov) != 0xffff) {
+            if (pov >= 33750 || pov < 2250)
+                return 8;
+            if (pov >= 2250 && pov < 6750)
+                return 9;
+            if (pov >= 6750 && pov < 11250)
+                return 1;
+            if (pov >= 11250 && pov < 15750)
+                return 5;
+            if (pov >= 15750 && pov < 20250)
+                return 4;
+            if (pov >= 20250 && pov < 24750)
+                return 6;
+            if (pov >= 24750 && pov < 29250)
+                return 2;
+            if (pov >= 29250 && pov < 33750)
+                return 10;
+        }
+    }
+    return 0;
 }
 
 // FUNCTION: 0x1001cf40
@@ -421,6 +433,13 @@ BYTE efzInput(bool player2)
     BYTE *game = *(BYTE **)(scene + 0x1c);
     void *input = *(void **)(game + 4);
     return ((GetInput)g_inputCode)(input, player2);
+}
+
+// FUNCTION: 0x1001cf60
+void fixIkumi()
+{
+    hook((void *)0x6a5a90, 6, (void *)ikumiHook);
+    fixIkumiUpdate();
 }
 
 // --- Ikumi, scenes, replays
@@ -446,11 +465,16 @@ static void fixIkumiUpdate()
     patchGame((void *)0x6a5c5a, &value, 1);
 }
 
-// FUNCTION: 0x1001cf60
-void fixIkumi()
+// FUNCTION: 0x1001cfc0
+void hookTimer()
 {
-    hook((void *)0x6a5a90, 6, (void *)ikumiHook);
-    fixIkumiUpdate();
+    hook((void *)0x40187f, 7, (void *)timerHook);
+}
+
+// FUNCTION: 0x1001cfe0
+void hookReplays()
+{
+    hook((void *)0x405edb, 10, (void *)replayHook);
 }
 
 // FUNCTION: 0x1001d000
@@ -458,6 +482,36 @@ void fixScene()
 {
     BYTE value = 8;
     patchGame((void *)0x778c7b, &value, 1);
+}
+
+// The hook on FrameTimerThread's loop (hookTimer).
+// FUNCTION: 0x1001d020
+static void timerHook()
+{
+    g_timer.run();
+}
+
+// FUNCTION: 0x1001d030
+void restartTimer()
+{
+    g_timer.restart();
+}
+
+// In CReplayFile::OpenRead (0x405edb): edx points at the file's handle, followed by
+// the frame count it read.
+// FUNCTION: 0x1001d040
+static void replayHook()
+{
+    HANDLE file = 0;
+    DWORD *count;
+    __asm {
+        add edx, 4
+        mov ecx, [edx]
+        mov file, ecx
+        add edx, 4
+        mov count, edx
+    }
+    readFrameCount(count, file);
 }
 
 // An extended replay (EfzRevival.dll's) ends with its frame count and -1: the count
@@ -480,25 +534,16 @@ static void readFrameCount(DWORD *count, HANDLE file)
     }
 }
 
-// In CReplayFile::OpenRead (0x405edb): edx points at the file's handle, followed by
-// the frame count it read.
-// FUNCTION: 0x1001d040
-static void replayHook()
+// DirectInput 7's DirectInputCreateW for the game's DirectInputCreateEx.
+// FUNCTION: 0x1001d100
+static HRESULT WINAPI directInputCreate(HINSTANCE instance, DWORD version, REFIID iid,
+    LPVOID *object, LPUNKNOWN outer)
 {
-    HANDLE file = 0;
-    DWORD *count;
-    __asm {
-        add edx, 4
-        mov ecx, [edx]
-        mov file, ecx
-        add edx, 4
-        mov count, edx
+    typedef HRESULT (WINAPI *Create)(HINSTANCE, DWORD, LPVOID *, LPUNKNOWN);
+    Create create = (Create)GetProcAddress(GetModuleHandleW(L"DINPUT.dll"), "DirectInputCreateW");
+    if (!create) {
+        MessageBoxA(NULL, "Cannot find DirectInputCreate", "Error", MB_OK);
+        return -1;
     }
-    readFrameCount(count, file);
-}
-
-// FUNCTION: 0x1001cfe0
-void hookReplays()
-{
-    hook((void *)0x405edb, 10, (void *)replayHook);
+    return create(instance, version, object, outer);
 }

@@ -5,7 +5,7 @@
 #include "EfzFixes.h"
 #include "Hook.h"
 #include <tlhelp32.h>
-#include <boost/algorithm/string/predicate.hpp>
+#include <boost/algorithm/string.hpp>
 
 // FUNCTION: 0x1001bb50
 static bool isRevivalSession()

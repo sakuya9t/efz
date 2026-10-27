@@ -3,79 +3,18 @@
 // The results file gets a header line when a set begins (the time, then "P1 VS P2")
 // and a line per match: when it began, the two characters, the rounds each won, how
 // long it took and the set's score.
+#include "stdafx.h"
+#include "EfzGame.h"
 #include "TournamentSession.h"
+#include "Utility.h"
 #include <iomanip>
 #include <sstream>
 #include <time.h>
-#include "EfzGame.h"
 #include "EfzRevival.h"
 #include "Hook.h"
 #include "Log.h"
 
 // FUNCTION: 0x1002d8f0 ??_GTournamentSession@@UAEPAXI@Z
-
-// The tournament object's own copies of Config.cpp's UTF-8 conversions.
-// FUNCTION: 0x10079d50 ?toUtf8@@YA?AV?$basic_string@DU?$char_traits@D@std@@V?$allocator@D@2@@std@@PB_WH@Z
-static std::string toUtf8(const wchar_t *text, int length)
-{
-    int size = WideCharToMultiByte(CP_UTF8, 0, text, length, NULL, 0, NULL, NULL);
-    if (size == 0)
-        return std::string("");
-    std::string result;
-    result.resize(size);
-    WideCharToMultiByte(CP_UTF8, 0, text, length, (char *)result.c_str(), size, NULL, NULL);
-    return std::string(result);
-}
-
-// FUNCTION: 0x10079d10 ?toUtf8@@YA?AV?$basic_string@DU?$char_traits@D@std@@V?$allocator@D@2@@std@@ABV?$basic_string@_WU?$char_traits@_W@std@@V?$allocator@_W@2@@2@@Z
-static std::string toUtf8(const std::wstring &text)
-{
-    return toUtf8(text.c_str(), (int)text.size());
-}
-
-// "minutes:seconds"
-// FUNCTION: 0x10078a50
-std::wstring TournamentSession::formatDuration(const std::chrono::system_clock::time_point &start,
-                                              const std::chrono::system_clock::time_point &end)
-{
-    std::chrono::system_clock::duration duration = end - start;
-    std::chrono::minutes minutes = std::chrono::duration_cast<std::chrono::minutes>(duration);
-    duration -= minutes;
-    std::chrono::seconds seconds = std::chrono::duration_cast<std::chrono::seconds>(duration);
-    std::wstringstream text;
-    text.width(3);
-    text << minutes.count() << L":";
-    text.width(2);
-    text << std::setfill(L'0') << seconds.count();
-    return text.str();
-}
-
-// FUNCTION: 0x10078d90
-std::wstring TournamentSession::formatTime(const std::chrono::system_clock::time_point &time)
-{
-    time_t seconds = std::chrono::system_clock::to_time_t(time);
-    tm local;
-    localtime_s(&local, &seconds);
-    std::wstringstream text;
-    text << std::put_time(&local, L"%Y/%m/%d %H:%M:%S");
-    return text.str();
-}
-
-// The tournament only asks for the readable form, so link-time code generation drops
-// the file name's.
-// FUNCTION: 0x10078e30
-std::wstring TournamentSession::timestamp(bool fileName)
-{
-    time_t now = time(NULL);
-    tm local;
-    localtime_s(&local, &now);
-    std::wstringstream stream;
-    if (fileName)
-        stream << std::put_time(&local, L"%Y%m%d-%H%M%S");
-    else
-        stream << std::put_time(&local, L"%Y/%m/%d %H:%M:%S");
-    return stream.str();
-}
 
 // FUNCTION: 0x10079e40
 TournamentSession::TournamentSession()
@@ -83,8 +22,8 @@ TournamentSession::TournamentSession()
 {
     g_log << "Starting Tournament Mode\n";
     g_log.flush();
-    hookCall((void *)0x763f04, 7, onReplayDone);
-    hookCall((void *)0x763e50, 7, onReplayDone);
+    hook((void *)0x763f04, 7, onReplayDone);
+    hook((void *)0x763e50, 7, onReplayDone);
     char zero = 0;
     patchCode((void *)0x754c1a, &zero, 1);
     lastScene_ = 0;
@@ -122,7 +61,7 @@ TournamentSession::TournamentSession()
             g_log.flush();
         } else {
             g_log << "Tournament log doesn't exist\n";
-            g_log << toUtf8(path) << "\n";
+            g_log << to_utf8(path) << "\n";
             g_log.flush();
             results_.open(path, std::ios::out | std::ios::app);
         }
@@ -168,104 +107,55 @@ void TournamentSession::update()
     }
 }
 
-// FUNCTION: 0x10078a40
-void TournamentSession::keyPressed(int key)
+// Back on the title once the menu inputs ran out: the tournament is over.
+// FUNCTION: 0x10079bf0
+void TournamentSession::titleFrame()
 {
+    if (menuInputs_.empty())
+        ExitProcess(0);
+    g_game.runFrame();
 }
 
-// FUNCTION: 0x100789e0
-void TournamentSession::input(BYTE *input, int player)
-{
-    if (!menuInputs_.empty()) {
-        if (player == 1) {
-            *input = 0;
-            return;
-        }
-        *input = menuInputs_.front().first;
-        menuInputs_.pop();
-        return;
-    }
-    *input = g_game.cleanInput(g_game.efzInput(player));
-}
-
-// No function keys in a fight, and Esc only once held.
-// FUNCTION: 0x10078960
-void TournamentSession::fightUpdate(void *frame)
-{
-    static bool held;
-    static int frames;
-    if (g_game.sceneId() == 3) {
-        BYTE *keys = (BYTE *)frame;
-        memset(keys + DIK_F1, 0, 15);
-        if (keys[DIK_ESCAPE] == 0x80) {
-            g_log << "Esc\n";
-            g_log.flush();
-            frames++;
-            if (!held || frames < escHoldFrames_) {
-                keys[DIK_ESCAPE] = 0;
-                held = true;
-                return;
-            }
-        } else {
-            held = false;
-            frames = 0;
-        }
-    }
-}
-
-// FUNCTION: 0x10078b80
-std::wstring TournamentSession::replayFileName()
-{
-    time_t now = time(NULL);
-    tm local;
-    localtime_s(&local, &now);
-    std::wstringstream name;
-    std::string p1 = g_game.characterName(g_game.character(0));
-    std::string p2 = g_game.characterName(g_game.character(1));
-    name << config_.tournamentFolder << "\\" << std::put_time(&local, L"%Y%m%d-%H%M%S") << " "
-         << config_.p1Name << " (" << std::wstring(p1.begin(), p1.end()) << ")" << " vs " << config_.p2Name
-         << " (" << std::wstring(p2.begin(), p2.end()) << ")" << ".rep";
-    return name.str();
-}
-
-// Every 32 frames: key.ini and the pads.
-// FUNCTION: 0x10078ed0
-void TournamentSession::checkDevices()
+// Every 64 frames of the character select: the ini again (the players' names may have
+// changed: a new set), the results file, key.ini and new pads.
+// FUNCTION: 0x10079a80
+void TournamentSession::selectFrame()
 {
     static int frames;
-    if (frames % 32 == 0) {
+    if (frames % 64 == 0) {
+        frames = 0;
+        std::wstring p1 = config_.p1Name;
+        std::wstring p2 = config_.p2Name;
+        config_.reload();
+        if (config_.saveBattleLog) {
+            if (results_.is_open())
+                results_.close();
+            std::wstring path = config_.tournamentFolder + L"tournament_results.txt";
+            results_.open(path, std::ios::out | std::ios::app);
+        }
+        if (p1.compare(config_.p1Name) != 0 || p2.compare(config_.p2Name) != 0) {
+            memset(wins_, 0, sizeof(wins_));
+            setNumber_++;
+        }
         if (GetForegroundWindow() == g_game.window()) {
             if (g_game.keyIniChanged()) {
                 g_game.reloadKeys();
                 g_game.reacquireJoysticks();
-            } else if (!g_game.pollDevices(0) || !g_game.pollDevices(1)) {
+            } else if (g_game.joystickAdded()) {
                 g_game.reacquireJoysticks();
             }
         }
     }
     frames++;
+    g_game.runFrame();
 }
 
-// FUNCTION: 0x10078f40
-void TournamentSession::drawInfo()
+// FUNCTION: 0x10079a60
+void TournamentSession::fightFrame()
 {
-    g_game.clearText();
-    std::wstringstream text;
-    int right = 630;
-    text << "Wins: " << wins_[0];
-    g_game.addText(text.str(), 10, 5, 0);
-    text.str(L"");
-    text << config_.p1Name;
-    g_game.addText(text.str(), 80, 5, 0);
-    text.str(L"");
-    if (config_.displayScore != 0) {
-        text << "Wins: " << wins_[1] << "   ";
-        g_game.addText(text.str(), 630, 5, 2);
-        right = 560;
-        text.str(L"");
-    }
-    text << config_.p2Name;
-    g_game.addText(text.str(), right, 5, 2);
+    rounds_[0] = g_game.playerFlagAc(0);
+    rounds_[1] = g_game.playerFlagAc(1);
+    g_game.runFrame();
 }
 
 // FUNCTION: 0x10079110
@@ -299,7 +189,7 @@ void TournamentSession::sceneChanged()
         results_ << std::endl;
         results_.width(19);
         results_.flags(std::ios::left);
-        results_ << toUtf8(line.str());
+        results_ << to_utf8(line.str());
         line.str(L"");
         line.width(21);
         line.flags(std::ios::right);
@@ -310,7 +200,7 @@ void TournamentSession::sceneChanged()
         line << p2Name_;
         results_.width(46);
         results_.flags(std::ios::left);
-        results_ << toUtf8(line.str()) << std::endl;
+        results_ << to_utf8(line.str()) << std::endl;
         results_.flush();
     } else if (g_game.sceneId() == 5) {
         wins_[g_game.roundWinner()]++;
@@ -356,60 +246,154 @@ void TournamentSession::sceneChanged()
         row << cell.str();
         row << std::endl;
         row.flush();
-        results_ << toUtf8(row.str());
+        results_ << to_utf8(row.str());
         results_.flush();
         rounds_[0] = 0;
         rounds_[1] = 0;
     }
 }
 
-// FUNCTION: 0x10079a60
-void TournamentSession::fightFrame()
+// FUNCTION: 0x10078f40
+void TournamentSession::drawInfo()
 {
-    rounds_[0] = g_game.playerFlagAc(0);
-    rounds_[1] = g_game.playerFlagAc(1);
-    g_game.runFrame();
+    g_game.clearText();
+    std::wstringstream text;
+    int right = 630;
+    text << "Wins: " << wins_[0];
+    g_game.addText(text.str(), 10, 5, 0);
+    text.str(L"");
+    text << config_.p1Name;
+    g_game.addText(text.str(), 80, 5, 0);
+    text.str(L"");
+    if (config_.displayScore != 0) {
+        text << "Wins: " << wins_[1] << "   ";
+        g_game.addText(text.str(), 630, 5, 2);
+        right = 560;
+        text.str(L"");
+    }
+    text << config_.p2Name;
+    g_game.addText(text.str(), right, 5, 2);
 }
 
-// Every 64 frames of the character select: the ini again (the players' names may have
-// changed: a new set), the results file, key.ini and new pads.
-// FUNCTION: 0x10079a80
-void TournamentSession::selectFrame()
+// Every 32 frames: key.ini and the pads.
+// FUNCTION: 0x10078ed0
+void TournamentSession::checkDevices()
 {
-    static int frames;
-    if (frames % 64 == 0) {
-        frames = 0;
-        std::wstring p1 = config_.p1Name;
-        std::wstring p2 = config_.p2Name;
-        config_.reload();
-        if (config_.saveBattleLog) {
-            if (results_.is_open())
-                results_.close();
-            std::wstring path = config_.tournamentFolder + L"tournament_results.txt";
-            results_.open(path, std::ios::out | std::ios::app);
-        }
-        if (p1.compare(config_.p1Name) != 0 || p2.compare(config_.p2Name) != 0) {
-            memset(wins_, 0, sizeof(wins_));
-            setNumber_++;
-        }
+    static int frames = 1;  // initialized data (0x1009f0f8-0x1009f104)
+    if (frames % 32 == 0) {
         if (GetForegroundWindow() == g_game.window()) {
             if (g_game.keyIniChanged()) {
                 g_game.reloadKeys();
                 g_game.reacquireJoysticks();
-            } else if (g_game.joystickAdded()) {
+            } else if (!g_game.pollDevices(0) || !g_game.pollDevices(1)) {
                 g_game.reacquireJoysticks();
             }
         }
     }
     frames++;
-    g_game.runFrame();
 }
 
-// Back on the title once the menu inputs ran out: the tournament is over.
-// FUNCTION: 0x10079bf0
-void TournamentSession::titleFrame()
+// The tournament only asks for the readable form, so link-time code generation drops
+// the file name's.
+// FUNCTION: 0x10078e30
+std::wstring TournamentSession::timestamp(bool fileName)
 {
-    if (menuInputs_.empty())
-        ExitProcess(0);
-    g_game.runFrame();
+    time_t now = time(NULL);
+    tm local;
+    localtime_s(&local, &now);
+    std::wstringstream stream;
+    if (fileName)
+        stream << std::put_time(&local, L"%Y%m%d-%H%M%S");
+    else
+        stream << std::put_time(&local, L"%Y/%m/%d %H:%M:%S");
+    return stream.str();
+}
+
+// FUNCTION: 0x10078d90
+std::wstring TournamentSession::formatTime(const std::chrono::system_clock::time_point &time)
+{
+    time_t seconds = std::chrono::system_clock::to_time_t(time);
+    tm local;
+    localtime_s(&local, &seconds);
+    std::wstringstream text;
+    text << std::put_time(&local, L"%Y/%m/%d %H:%M:%S");
+    return text.str();
+}
+
+// FUNCTION: 0x10078b80
+std::wstring TournamentSession::replayFileName()
+{
+    time_t now = time(NULL);
+    tm local;
+    localtime_s(&local, &now);
+    std::wstringstream name;
+    std::string p1 = g_game.characterName(g_game.character(0));
+    std::string p2 = g_game.characterName(g_game.character(1));
+    name << config_.tournamentFolder << "\\" << std::put_time(&local, L"%Y%m%d-%H%M%S") << " "
+         << config_.p1Name << " (" << std::wstring(p1.begin(), p1.end()) << ")" << " vs " << config_.p2Name
+         << " (" << std::wstring(p2.begin(), p2.end()) << ")" << ".rep";
+    return name.str();
+}
+
+// "minutes:seconds"
+// FUNCTION: 0x10078a50
+std::wstring TournamentSession::formatDuration(const std::chrono::system_clock::time_point &start,
+                                              const std::chrono::system_clock::time_point &end)
+{
+    std::chrono::system_clock::duration elapsed = end - start;
+    std::chrono::minutes minutes = std::chrono::duration_cast<std::chrono::minutes>(elapsed);
+    std::chrono::seconds seconds = std::chrono::duration_cast<std::chrono::seconds>(elapsed -= minutes);
+    std::wstringstream stream;
+    stream.width(3);
+    stream << minutes.count();
+    stream << L":";
+    stream.width(2);
+    stream << std::setfill(L'0');
+    stream << seconds.count();
+    return stream.str();
+}
+
+// FUNCTION: 0x10078a40
+void TournamentSession::keyPressed(int key)
+{
+}
+
+// FUNCTION: 0x100789e0
+void TournamentSession::input(BYTE *input, int player)
+{
+    if (!menuInputs_.empty()) {
+        if (player == 1) {
+            *input = 0;
+            return;
+        }
+        *input = menuInputs_.front().first;
+        menuInputs_.pop();
+        return;
+    }
+    *input = g_game.cleanInput(g_game.efzInput(player));
+}
+
+// No function keys in a fight, and Esc only once held.
+// FUNCTION: 0x10078960
+void TournamentSession::fightUpdate(void *frame)
+{
+    static bool held;
+    static int frames;
+    if (g_game.sceneId() == 3) {
+        BYTE *keys = (BYTE *)frame;
+        memset(keys + DIK_F1, 0, 15);
+        if (keys[DIK_ESCAPE] == 0x80) {
+            g_log << "Esc\n";
+            g_log.flush();
+            frames++;
+            if (!held || frames < escHoldFrames_) {
+                keys[DIK_ESCAPE] = 0;
+                held = true;
+                return;
+            }
+        } else {
+            held = false;
+            frames = 0;
+        }
+    }
 }

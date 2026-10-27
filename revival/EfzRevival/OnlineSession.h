@@ -20,19 +20,21 @@
 // init() creates it with operator new(0x690) when the launcher's mode is 0. No RTTI;
 // its vtable is 0x10090400.
 #pragma once
-#include "../EfzRevivalLauncher/Config.h"  // boost.asio's winsock2.h before windows.h
+#include "Config.h"
 #include <chrono>
 #include <fstream>
 #include <map>
 #include <string>
 #include <vector>
 #include "Session.h"
-#include "Music.h"
+#include "Playlist.h"
 #include "EfzPalettes.h"
 #include "GameState.h"
 #include "RingBuffer.h"
 #include "../EfzRevivalLauncher/SharedData.h"
 #include "../EfzRevivalLauncher/SharedQueue.h"
+
+class MusicPlayer;   // Music.h
 
 // The records the launcher and the DLL exchange are the launcher's SharedData.h. Their
 // inline functions the DLL emits:
@@ -42,8 +44,8 @@
 // FUNCTION: 0x100285d0 ??0SyncBlock@@QAE@XZ
 // FUNCTION: 0x10028620 ?toString@SyncBlock@@QBE?AV?$basic_string@DU?$char_traits@D@std@@V?$allocator@D@2@@std@@XZ
 
-// The record of a frame about to run (0x100756a0, in the spectator's object): its
-// inputs, the game's state and random seed.
+// The record of a frame about to run (OnlineSync.cpp): its inputs, the game's state and
+// random seed.
 SyncBlock makeSyncBlock(int frame, const FrameInput &inputP1, const FrameInput &inputP2);
 
 class OnlineSession : public Session {

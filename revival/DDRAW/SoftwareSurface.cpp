@@ -34,26 +34,26 @@ SoftwareSurface::SoftwareSurface(int width_, int height_)
     refs = 1;
 }
 
+// FUNCTION: 0x10019250 ??_GSoftwareSurface@@UAEPAXI@Z
+// FUNCTION: 0x10019320
+SoftwareSurface::~SoftwareSurface()
+{
+    if (locks != 0 || refs != 0)
+        LOG("Error on surface destruction lock " << locks << " refs " << refs << "\n");
+    refs = 0;
+    locks = 0;
+    width = 0;
+    height = 0;
+    if (data) {
+        free(data);
+        data = NULL;
+    }
+}
+
 // FUNCTION: 0x100193c0
 HRESULT SoftwareSurface::QueryInterface(REFIID riid, void **object)
 {
     return D3D_OK;
-}
-
-// FUNCTION: 0x10019570
-ULONG SoftwareSurface::AddRef()
-{
-    return ++refs;
-}
-
-// FUNCTION: 0x10019550
-ULONG SoftwareSurface::Release()
-{
-    if (--refs == 0) {
-        delete this;
-        return 0;
-    }
-    return refs;
 }
 
 // FUNCTION: 0x100193d0
@@ -78,29 +78,6 @@ HRESULT SoftwareSurface::GetPrivateData(REFGUID guid, void *data, DWORD *size)
 HRESULT SoftwareSurface::FreePrivateData(REFGUID guid)
 {
     return D3D_OK;
-}
-
-// FUNCTION: 0x10019540
-DWORD SoftwareSurface::SetPriority(DWORD priority)
-{
-    return 0;
-}
-
-// FUNCTION: 0x10019530
-DWORD SoftwareSurface::GetPriority()
-{
-    return 0;
-}
-
-// FUNCTION: 0x10019520
-void SoftwareSurface::PreLoad()
-{
-}
-
-// FUNCTION: 0x10019510
-D3DRESOURCETYPE SoftwareSurface::GetType()
-{
-    return D3DRTYPE_SURFACE;
 }
 
 // FUNCTION: 0x10019410
@@ -152,18 +129,41 @@ HRESULT SoftwareSurface::ReleaseDC(HDC dc)
     return D3D_OK;
 }
 
-// FUNCTION: 0x10019250 ??_GSoftwareSurface@@UAEPAXI@Z
-// FUNCTION: 0x10019320
-SoftwareSurface::~SoftwareSurface()
+// FUNCTION: 0x10019510
+D3DRESOURCETYPE SoftwareSurface::GetType()
 {
-    if (locks != 0 || refs != 0)
-        LOG("Error on surface destruction lock " << locks << " refs " << refs << "\n");
-    refs = 0;
-    locks = 0;
-    width = 0;
-    height = 0;
-    if (data) {
-        free(data);
-        data = NULL;
+    return D3DRTYPE_SURFACE;
+}
+
+// FUNCTION: 0x10019520
+void SoftwareSurface::PreLoad()
+{
+}
+
+// FUNCTION: 0x10019530
+DWORD SoftwareSurface::GetPriority()
+{
+    return 0;
+}
+
+// FUNCTION: 0x10019540
+DWORD SoftwareSurface::SetPriority(DWORD priority)
+{
+    return 0;
+}
+
+// FUNCTION: 0x10019550
+ULONG SoftwareSurface::Release()
+{
+    if (--refs == 0) {
+        delete this;
+        return 0;
     }
+    return refs;
+}
+
+// FUNCTION: 0x10019570
+ULONG SoftwareSurface::AddRef()
+{
+    return ++refs;
 }

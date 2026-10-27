@@ -8,6 +8,10 @@
 // the fields at fixed addresses. The members whose callers pass ecx are those it did
 // not specialise.
 #pragma once
+// The launcher's version, first: every object that includes this header has its own
+// copy of the suffix (REVIVAL_SUFFIX, L"h!!!"), constructed before its other statics
+// (fifteen of them in the original's static initializers).
+#include "../EfzRevivalLauncher/Version.h"
 #include "Efz.h"
 #include "Hook.h"
 #include "../EfzRevivalLauncher/SharedData.h"
@@ -57,6 +61,14 @@ struct HitRect {
     unsigned int flags;         // 0x14 EfzRender's stipple pattern
     int object;                 // 0x18 the object's slot
     int box;                    // 0x1c which of its boxes
+};
+
+// Where a recording is saved: a wstring in a struct of its own. Game's constructor and
+// destructor call the struct's (implicit) ones, which the link folds with
+// boost::filesystem::path's (a wstring is all either holds, at its start); everything
+// else uses the wstring itself.
+struct ReplayTarget {
+    std::wstring name;
 };
 
 class Game {
@@ -184,7 +196,7 @@ private:
     std::iostream *pendingReplay_;          // 0x28 a recording not yet written out
     int joystickCount_;                     // 0x2c
     FILETIME keyIniTime_;                   // 0x30
-    std::wstring replayName_;               // 0x38 where a recording is saved
+    ReplayTarget replay_;                   // 0x38 where a recording is saved
     bool saveReplays_;                      // 0x50 SaveAllReplays
     bool writeReplay_;                      // 0x51 write inputs to the replay
     bool readReplay_;                       // 0x52 read inputs from it

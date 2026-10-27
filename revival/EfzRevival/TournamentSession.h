@@ -5,7 +5,7 @@
 // escHoldFrames_ frames in a fight quits it (one press does nothing), and a return to
 // the title ends the program.
 #pragma once
-#include "../EfzRevivalLauncher/Config.h"  // boost.asio's winsock2.h before windows.h
+#include "Config.h"
 #include <chrono>
 #include <fstream>
 #include <queue>

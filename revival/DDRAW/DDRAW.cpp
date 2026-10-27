@@ -14,6 +14,12 @@
 // GLOBAL: 0x100b6a38
 myIDirectDraw *g_ddraw;
 
+// Unreferenced (see Process.cpp's): after SoftwareSurface's vtable.
+// GLOBAL: 0x100a8e70 ?value@?$UnusedFour@$03@@2HB
+template <int N> struct UnusedFour { static const int value; };
+template <int N> const int UnusedFour<N>::value = N;
+template struct UnusedFour<4>;
+
 // FUNCTION: 0x1001b9b0
 extern "C" __declspec(dllexport) HRESULT WINAPI DirectDrawCreate(GUID *guid,
     LPDIRECTDRAW *ddraw, IUnknown *outer)

@@ -55,22 +55,31 @@ struct RectRender {
 // Boxes are kept once per rectangle: the first one added for a rectangle wins.
 bool operator==(const RectRender &a, const RectRender &b);
 
-namespace std {
-template<> struct hash<RECT> {
-    // TODO: differs: the original calls _Bitwise_hash<long>::operator() (0x10016dc0) with
-    // the key in ecx, link-time code generation having dropped its this; this jumps to it.
-    // FUNCTION: 0x10016b50 ??R?$hash@UtagRECT@@@std@@QBEIABUtagRECT@@@Z
-    size_t operator()(const RECT &rect) const
+// Boxes are hashed by their rectangle's left edge. std::hash has nothing for RECT; this
+// template stands in for it, so its functions are compiled with the object's templates
+// (operator() 0x10016b50, after hash<RectRender>'s 0x10015ff0; hash 0x10016dc0). Being
+// static, hash takes its argument in ecx (link-time code generation's own convention),
+// where a member would keep it on the stack.
+template <class Rect> struct RectHash {
+    // FUNCTION: 0x10016b50 ??R?$RectHash@UtagRECT@@@@QBEIABUtagRECT@@@Z
+    size_t operator()(const Rect &rect) const
     {
-        return hash<LONG>()(rect.left);
+        return hash(rect.left);
+    }
+
+    // FUNCTION: 0x10016dc0 ?hash@?$RectHash@UtagRECT@@@@SAIABJ@Z
+    static size_t hash(const LONG &value)
+    {
+        return std::_Hash_seq((const unsigned char *)&value, sizeof(value));
     }
 };
 
+namespace std {
 template<> struct hash<RectRender> {
     // FUNCTION: 0x10015ff0 ??R?$hash@URectRender@@@std@@QBEIABURectRender@@@Z
     size_t operator()(const RectRender &box) const
     {
-        return hash<RECT>()(box.rect);
+        return RectHash<RECT>()(box.rect);
     }
 };
 }

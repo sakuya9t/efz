@@ -1,6 +1,9 @@
 // The hooks into efz.exe's code (Hook.h): each allocates an executable trampoline,
 // records it with the bytes it replaces in g_detours (which a later hook of the same
 // address undoes first), and writes a jump to it, or to the target, over the code.
+#include "stdafx.h"
+#include "EfzGame.h"
+#include "Log.h"
 #include "Hook.h"
 #include <stdlib.h>
 
@@ -11,52 +14,40 @@ Detours g_detours;
 #define JMP 0xe9
 #define CALL 0xe8
 
-// The function's own code jumps to target; the trampoline (its first size bytes and a
-// jump back) is kept but nothing calls it.
-// FUNCTION: 0x1006f7a0
-static void redirect(Patch &patch, void *target)
+static void savingTrampoline(Patch &patch, void *target);
+static void callTrampoline(Patch &patch, void *target);
+static void redirect(Patch &patch, void *target);
+
+// FUNCTION: 0x1006fac0
+void replaceFunction(void *function, void *target)
 {
-    g_detours.restore(patch.address);
-    DWORD protect;
-    VirtualProtect(patch.address, patch.size + 5, PAGE_EXECUTE_READWRITE, &protect);
-    char *trampoline = (char *)malloc(patch.size + 5);
-    if (!trampoline)
-        throw "Trampoline malloc failed";
-    VirtualProtect(trampoline, patch.size + 5, PAGE_EXECUTE_READWRITE, &protect);
-    int at = 0;
-    memcpy(trampoline + at, patch.code, patch.size);
-    at += patch.size;
-    trampoline[at++] = JMP;
-    *(int *)(trampoline + at) = (int)patch.address + patch.size - (int)(trampoline + at) - 4;
-    g_detours.add(patch, trampoline);
-    char jump[5];
-    jump[0] = JMP;
-    *(int *)(jump + 1) = (int)target - (int)patch.address - 5;
-    memcpy(patch.address, jump, 5);
+    Patch patch(function, 0);
+    redirect(patch, target);
 }
 
-// The replaced bytes become a call to target, then the game's code goes on.
-// FUNCTION: 0x1006f860
-static void callTrampoline(Patch &patch, void *target)
+// FUNCTION: 0x1006faa0
+void hookCall(void *address, int size, void *target)
 {
-    g_detours.restore(patch.address);
+    Patch patch(address, size);
+    callTrampoline(patch, target);
+}
+
+// FUNCTION: 0x1006fa30
+bool patchCode(void *address, const void *bytes, int size)
+{
+    if (size <= 0)
+        return false;
     DWORD protect;
-    VirtualProtect(patch.address, patch.size, PAGE_EXECUTE_READWRITE, &protect);
-    char *trampoline = (char *)malloc(10);
-    if (!trampoline)
-        throw "Trampoline malloc failed";
-    VirtualProtect(trampoline, 10, PAGE_EXECUTE_READWRITE, &protect);
-    int at = 0;
-    trampoline[at++] = CALL;
-    *(int *)(trampoline + at) = (int)target - (int)(trampoline + at) - 4;
-    at += 4;
-    trampoline[at++] = JMP;
-    *(int *)(trampoline + at) = (int)patch.address + patch.size - (int)(trampoline + at) - 4;
-    g_detours.add(patch, trampoline);
-    char jump[5];
-    jump[0] = JMP;
-    *(int *)(jump + 1) = (int)trampoline - (int)patch.address - 5;
-    memcpy(patch.address, jump, 5);
+    BOOL ok = VirtualProtect(address, size, PAGE_READWRITE, &protect);
+    memcpy(address, bytes, size);
+    return ok && VirtualProtect(address, size, protect, &protect);
+}
+
+// FUNCTION: 0x1006fa10
+void hook(void *address, int size, void *target)
+{
+    Patch patch(address, size);
+    savingTrampoline(patch, target);
 }
 
 // pushad, pushfd, call target, popfd, popad, the replaced bytes, and back.
@@ -93,34 +84,80 @@ static void savingTrampoline(Patch &patch, void *target)
     }
 }
 
-// FUNCTION: 0x1006fa10
-void hook(void *address, int size, void *target)
+// Unused (only its string is left: the object has six "Trampoline malloc failed", the
+// first, fourth and sixth the three trampolines' and the others from code like this).
+static char *unusedTrampoline1(int size)
 {
-    Patch patch(address, size);
-    savingTrampoline(patch, target);
+    char *trampoline = (char *)malloc(size);
+    if (!trampoline)
+        throw "Trampoline malloc failed";
+    return trampoline;
 }
 
-// FUNCTION: 0x1006fa30
-bool patchCode(void *address, const void *bytes, int size)
+// Unused (only its string is left: the object has six "Trampoline malloc failed", the
+// first, fourth and sixth the three trampolines' and the others from code like this).
+static char *unusedTrampoline2(int size)
 {
-    if (size <= 0)
-        return false;
+    char *trampoline = (char *)malloc(size);
+    if (!trampoline)
+        throw "Trampoline malloc failed";
+    return trampoline;
+}
+
+// The replaced bytes become a call to target, then the game's code goes on.
+// FUNCTION: 0x1006f860
+static void callTrampoline(Patch &patch, void *target)
+{
+    g_detours.restore(patch.address);
     DWORD protect;
-    BOOL ok = VirtualProtect(address, size, PAGE_READWRITE, &protect);
-    memcpy(address, bytes, size);
-    return ok && VirtualProtect(address, size, protect, &protect);
+    VirtualProtect(patch.address, patch.size, PAGE_EXECUTE_READWRITE, &protect);
+    char *trampoline = (char *)malloc(10);
+    if (!trampoline)
+        throw "Trampoline malloc failed";
+    VirtualProtect(trampoline, 10, PAGE_EXECUTE_READWRITE, &protect);
+    int at = 0;
+    trampoline[at++] = CALL;
+    *(int *)(trampoline + at) = (int)target - (int)(trampoline + at) - 4;
+    at += 4;
+    trampoline[at++] = JMP;
+    *(int *)(trampoline + at) = (int)patch.address + patch.size - (int)(trampoline + at) - 4;
+    g_detours.add(patch, trampoline);
+    char jump[5];
+    jump[0] = JMP;
+    *(int *)(jump + 1) = (int)trampoline - (int)patch.address - 5;
+    memcpy(patch.address, jump, 5);
 }
 
-// FUNCTION: 0x1006faa0
-void hookCall(void *address, int size, void *target)
+// Unused (only its string is left: the object has six "Trampoline malloc failed", the
+// first, fourth and sixth the three trampolines' and the others from code like this).
+static char *unusedTrampoline3(int size)
 {
-    Patch patch(address, size);
-    callTrampoline(patch, target);
+    char *trampoline = (char *)malloc(size);
+    if (!trampoline)
+        throw "Trampoline malloc failed";
+    return trampoline;
 }
 
-// FUNCTION: 0x1006fac0
-void replaceFunction(void *function, void *target)
+// The function's own code jumps to target; the trampoline (its first size bytes and a
+// jump back) is kept but nothing calls it.
+// FUNCTION: 0x1006f7a0
+static void redirect(Patch &patch, void *target)
 {
-    Patch patch(function, 0);
-    redirect(patch, target);
+    g_detours.restore(patch.address);
+    DWORD protect;
+    VirtualProtect(patch.address, patch.size + 5, PAGE_EXECUTE_READWRITE, &protect);
+    char *trampoline = (char *)malloc(patch.size + 5);
+    if (!trampoline)
+        throw "Trampoline malloc failed";
+    VirtualProtect(trampoline, patch.size + 5, PAGE_EXECUTE_READWRITE, &protect);
+    int at = 0;
+    memcpy(trampoline + at, patch.code, patch.size);
+    at += patch.size;
+    trampoline[at++] = JMP;
+    *(int *)(trampoline + at) = (int)patch.address + patch.size - (int)(trampoline + at) - 4;
+    g_detours.add(patch, trampoline);
+    char jump[5];
+    jump[0] = JMP;
+    *(int *)(jump + 1) = (int)target - (int)patch.address - 5;
+    memcpy(patch.address, jump, 5);
 }

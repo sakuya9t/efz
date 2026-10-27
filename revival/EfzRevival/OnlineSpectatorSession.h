@@ -9,15 +9,17 @@
 // init() creates it with operator new(0x500) when the launcher's mode is 1. Its vtable is
 // 0x10090424.
 #pragma once
-#include "../EfzRevivalLauncher/Config.h"  // boost.asio's winsock2.h before windows.h
+#include "Config.h"
 #include <fstream>
 #include <string>
 #include <vector>
 #include "EfzPalettes.h"
-#include "Music.h"
+#include "Playlist.h"
 #include "Session.h"
 #include "../EfzRevivalLauncher/SharedData.h"
 #include "../EfzRevivalLauncher/SharedQueue.h"
+
+class MusicPlayer;   // Music.h
 
 // 0x500 bytes
 class SpectatorSession : public Session {

@@ -1,11 +1,24 @@
 // Process (Process.h).
 #include "stdafx.h"
 #include "Process.h"
+#include "EfzCharacters.h"
 #include <tlhelp32.h>
 #include <algorithm>
 #include <ctype.h>
 #include <string>
 #include <string.h>
+
+// Two unreferenced 4-byte constants are in the original's .rdata: 0x104 (MAX_PATH)
+// here and 4 in DDRAW.cpp. Nothing refers to them and their names are lost; each is
+// defined so that it lands where the original has it. Unused constants with internal
+// linkage aren't emitted. Unused extern consts are, but all together, at the first
+// one's place; only one of the two could be one. An explicitly instantiated template's
+// static member stays at its object's place (which, within the object, doesn't depend
+// on where it is defined).
+// GLOBAL: 0x100a8c70 ?value@?$UnusedNameSize@$0BAE@@@2HB
+template <int N> struct UnusedNameSize { static const int value; };
+template <int N> const int UnusedNameSize<N>::value = N;
+template struct UnusedNameSize<MAX_PATH>;
 
 // FUNCTION: 0x10010f80
 Process::Process()
@@ -48,15 +61,6 @@ PROCESS_INFORMATION Process::open(const wchar_t *name, int length)
     return process;
 }
 
-// FUNCTION: 0x10011140
-PROCESS_INFORMATION Process::attach(const wchar_t *name, int length)
-{
-    PROCESS_INFORMATION process;
-    process.dwProcessId = findId(name, length);
-    process.hProcess = OpenProcess(PROCESS_ALL_ACCESS, TRUE, process.dwProcessId);
-    return process;
-}
-
 // FUNCTION: 0x10011080
 std::vector<PROCESS_INFORMATION> Process::openAll(const wchar_t *name, int length)
 {
@@ -69,6 +73,15 @@ std::vector<PROCESS_INFORMATION> Process::openAll(const wchar_t *name, int lengt
         processes.push_back(process);
     }
     return processes;
+}
+
+// FUNCTION: 0x10011140
+PROCESS_INFORMATION Process::attach(const wchar_t *name, int length)
+{
+    PROCESS_INFORMATION process;
+    process.dwProcessId = findId(name, length);
+    process.hProcess = OpenProcess(PROCESS_ALL_ACCESS, TRUE, process.dwProcessId);
+    return process;
 }
 
 // Clears only MAX_PATH bytes of the name.

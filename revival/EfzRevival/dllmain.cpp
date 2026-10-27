@@ -1,6 +1,6 @@
 // The Visual Studio template's DllMain: EfzRevival.dll does its work in init(), which
 // the launcher calls in the game's process after injecting the DLL.
-#include <windows.h>
+#include "stdafx.h"
 
 // FUNCTION: 0x1006abc0
 BOOL APIENTRY DllMain(HMODULE hModule, DWORD ul_reason_for_call, LPVOID lpReserved)

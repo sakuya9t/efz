@@ -41,9 +41,18 @@ inline std::wstring inputString(BYTE input)
         text.append(L"\x2192 ");
     else
         text.append(L"  ");
-    text.append((input & 0x10) ? L"A" : L" ");
-    text.append((input & 0x20) ? L"B" : L" ");
-    text.append((input & 0x40) ? L"C" : L" ");
+    if (input & 0x10)
+        text.append(L"A");
+    else
+        text.append(L" ");
+    if (input & 0x20)
+        text.append(L"B");
+    else
+        text.append(L" ");
+    if (input & 0x40)
+        text.append(L"C");
+    else
+        text.append(L" ");
     if (input & 0x80)
         text.append(L"D");
     return text;
@@ -57,16 +66,16 @@ inline void drawLine(int y, const std::wstring &text, int line, int x, DWORD col
 
 // The last 15 inputs of `inputs` (oldest first), each with the frames it was held,
 // divided by `divisor` (the practice session records 3 entries a frame).
-// FUNCTION: 0x10028e80 ?drawInputs@@YAXABV?$vector@EV?$allocator@E@std@@@std@@HHKH@Z
-inline void drawInputs(const std::vector<BYTE> &inputs, int y, int x, DWORD color, int divisor)
+// FUNCTION: 0x10028e80 ?drawInputs@@YAXABV?$vector@DV?$allocator@D@std@@@std@@HHKH@Z
+inline void drawInputs(const std::vector<char> &inputs, int y, int x, DWORD color, int divisor)
 {
     if (inputs.size() == 0)
         return;
     std::wstring unused(L"");
     int line = 0;
-    std::vector<BYTE>::const_iterator it = inputs.end();
+    std::vector<char>::const_iterator it = inputs.end();
     --it;
-    std::vector<BYTE>::const_iterator last = it;
+    std::vector<char>::const_iterator last = it;
     while (it != inputs.begin()) {
         if (line > 14)
             break;
@@ -85,7 +94,7 @@ inline void drawInputs(const std::vector<BYTE> &inputs, int y, int x, DWORD colo
         text.append(L" ");
         text += inputString(*last);
         drawLine(y, text, line, x, color);
-        line++;
         last = it;
+        line++;
     }
 }

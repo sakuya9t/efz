@@ -125,6 +125,19 @@ class Matcher:
         self.names_at = {}
         for a, n in syms:
             self.names_at.setdefault(a, []).append(n)
+        # static functions of one name in several objects (each its own copy): an
+        # annotation names the first; the others are learned by address.
+        self.first, addresses = {}, {}
+        for a, n in syms:
+            self.first.setdefault(n, a)
+            addresses.setdefault(n, set()).add(a)
+        self.copies = {n for n, s in addresses.items() if len(s) > 1}
+
+    def key(self, name, a):
+        """known/learned key of the symbol name at our address a"""
+        if name in self.copies and a != self.first[name]:
+            return f'{name}@{a:#x}'
+        return name
 
     def symbol_at(self, a):
         i = bisect.bisect_right(self.starts, a) - 1
@@ -145,11 +158,12 @@ class Matcher:
             s = b.cstring(ours, wide)
             return s is not None and s == o.cstring(theirs, wide), name
         names = self.names_at.get(ours - off, [name])
-        for n in names:
+        keys = [self.key(n, ours - off) for n in names]
+        for n in keys:
             want = self.known.get(n, self.learned.get(n))
             if want is not None and want + off == theirs:
                 return True, n
-        for n in names:
+        for n in keys:
             if n not in self.known and n not in self.learned:
                 self.learned[n] = theirs - off
                 return True, n
