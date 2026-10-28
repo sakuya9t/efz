@@ -37,10 +37,15 @@ struct ReplayState {
 
 // A player's input of this frame, read from the keyboard or pad.
 struct LiveInput : public FrameInput {
-    // FUNCTION: 0x1002cb60 ??0LiveInput@@QAE@XZ
-    LiveInput()
-        : FrameInput(0, 0)
+    // FUNCTION: 0x1002cb60 ??_FLiveInput@@QAEXXZ
+    // The default arguments make inputs_' array construction go through the default
+    // constructor closure (??_F, "push 0; push 0; call; ret"), and assigning the members
+    // instead of calling FrameInput(char, char) lets the linker fold this constructor into
+    // FrameInput's (ICF), so the closure calls 0x10022270 like the original.
+    LiveInput(char first_ = 0, char second_ = 0)
     {
+        first = first_;
+        second = second_;
     }
 
 };

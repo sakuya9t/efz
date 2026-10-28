@@ -382,6 +382,23 @@ void Game::setTextRender(bool enable)
     render_->setRenderText(enable);
 }
 
+// Unused, and left out of the link: these stand in for two more calls into DDRAW.dll's
+// renderer that the original made from code the link drops. Only the import table shows
+// them: link.exe orders each DLL's import entries with an unstable qsort over every
+// import it loaded, dropped ones included, and DDRAW.dll's order in the original needs
+// exactly two more loaded after clearTextRender (docs/revival.md, Imports). Which
+// functions they called is not known. One call each, so that the compiler's symbol
+// numbering moves by an even count (an odd one swaps string pairs, see Strings).
+void unusedBoxRender(EfzRender *render)
+{
+    render->setBoxRender(true);
+}
+
+void unusedRenderBox(EfzRender *render)
+{
+    render->renderBox();
+}
+
 // FUNCTION: 0x1006c860
 char Game::menuChoice()
 {
@@ -468,9 +485,10 @@ void Game::showBoxes(int player, int kind)
 // collision box also gets a vertical line through the player's x, twice its height,
 // centred on its top edge: the crossup midline.
 // FUNCTION: 0x1006c1d0
-// TODO: differs: register allocation of boxes/color/count and of the camera across
-// the box loop; the original also keeps a store of (int)p->x into r->left that this
-// build drops as dead. The calls, constants and control flow are the same.
+// TODO: differs in one store: the original keeps r->left = (int)p->x before the line
+// that overwrites it, as if r could point at camera (&camera escaping); c2 drops it here
+// because getCamera's link-time summary says its return pointer doesn't escape. With
+// getCamera compiled without /GL the store stays; everything else matches.
 void Game::drawBoxRequest(BoxRequest *request)
 {
     if (sceneId() != 3)
@@ -490,11 +508,11 @@ void Game::drawBoxRequest(BoxRequest *request)
     unsigned int flags = 0xffffffff;
     switch (request->kind) {
     case BOX_HIT:
-        if (!solid)
-            flags = 0xf0f0f0f0;
         boxes = info.frame.hitBoxes;
         color = 0xffff0000;
         count = 4;
+        if (!solid)
+            flags = 0xf0f0f0f0;
         break;
     case BOX_HURT:
         if (vulnerable) {
@@ -519,7 +537,10 @@ void Game::drawBoxRequest(BoxRequest *request)
         r->right = r->left + width * 2;
         r->top = (int)((camera.y + box.top + info.y + 210.0 - (info.y < 0.0) - info.sprite.rect.y)
                        * 2.0);
-        r->bottom = r->top + height * 2;
+        // A variable of its own, as the original keeps height * 2 in a stack slot for
+        // the collision box's line below.
+        int height2 = height * 2;
+        r->bottom = r->top + height2;
         if (width != 0 && height != 0) {
             render_->addRectRender(*r, color, flags);
             if (request->kind == BOX_COLLISION) {
@@ -529,7 +550,7 @@ void Game::drawBoxRequest(BoxRequest *request)
                 r->right = r->left;
                 r->top = (int)((camera.y + box.top + info.y + 210.0 - (info.y < 0.0)
                                 - info.sprite.rect.y) * 2.0);
-                r->bottom = r->top + height * 2 * 2;
+                r->bottom = r->top + height2 * 2;
                 render_->addRectRender(*r, color, flags);
             }
         }
@@ -541,7 +562,9 @@ void Game::drawBoxRequest(BoxRequest *request)
             continue;
         getPatternFrame(request->player, object->pattern, object->frame, &info.frame);
         bool vulnerable = (info.frame.flagsB0 & 0x20) == 0;
-        bool active = object->unk84 != 0 && vulnerable;
+        // short, not bool: the original holds it in edi (tested as di), which has no
+        // byte register
+        short active = object->unk84 != 0 && vulnerable;
         unsigned int objectFlags = 0xffffffff;
         switch (request->kind) {
         case BOX_HIT:
@@ -556,12 +579,10 @@ void Game::drawBoxRequest(BoxRequest *request)
                 boxes = info.frame.hurtBoxes;
                 color = 0xff0000ff;
                 count = 5;
-            } else {
-                boxes = &info.frame.collisionBox;
-                color = 0xff0000ff;
-                count = 1;
+                break;
             }
-            break;
+            // Not vulnerable: the collision box, as in BOX_COLLISION (falling through
+            // lets the compiler share that case's code, like the original's)
         case BOX_COLLISION:
             if (!vulnerable) {
                 boxes = &info.frame.collisionBox;
@@ -591,9 +612,6 @@ void Game::drawBoxRequest(BoxRequest *request)
 
 // Mishio's 0x199 objects: their boxes are kept in rects, one per object and box.
 // FUNCTION: 0x1006bf20
-// TODO: differs: the original keeps p in esi across getCollisionInfo (and the object's
-// pattern in esi across character()); this build reloads p from its stack slot, and
-// the register allocation of the whole loop diverges from there.
 void Game::collectRects(BoxRequest *request, std::vector<HitRect> &rects)
 {
     if (sceneId() != 3)
@@ -615,7 +633,9 @@ void Game::collectRects(BoxRequest *request, std::vector<HitRect> &rects)
         short pattern = object->pattern;
         if (character(request->player) != 15 || pattern != 0x199)
             continue;
-        getPatternFrame(request->player, 0x199, object->frame, &info.frame);
+        // pattern, not 0x199: it keeps pattern a register across character(), as the
+        // original does (the call still gets the constant, from the test above)
+        getPatternFrame(request->player, pattern, object->frame, &info.frame);
         bool vulnerable = !((info.frame.flagsB0 & 0x20) > 0);
         switch (request->kind) {
         case BOX_HIT:
@@ -628,12 +648,10 @@ void Game::collectRects(BoxRequest *request, std::vector<HitRect> &rects)
                 boxes = info.frame.hurtBoxes;
                 color = 0xff0000ff;
                 count = 5;
-            } else {
-                boxes = &info.frame.collisionBox;
-                color = 0xff0000ff;
-                count = 1;
+                break;
             }
-            break;
+            // Not vulnerable: the collision box, as in BOX_COLLISION (falling through
+            // lets the compiler share that case's code, like the original's)
         case BOX_COLLISION:
             if (!vulnerable) {
                 boxes = &info.frame.collisionBox;
@@ -660,8 +678,11 @@ void Game::collectRects(BoxRequest *request, std::vector<HitRect> &rects)
             std::vector<HitRect>::iterator it = rects.begin();
             std::vector<HitRect>::iterator last = rects.end();
             for (; it != last; ++it) {
-                if (it->object == i && it->box == j) {
-                    it->rect = *r;
+                // Through operator* (folded with other vectors' by the linker), as the
+                // original does; it->... would instantiate operator-> for HitRect.
+                HitRect &hit = *it;
+                if (hit.object == i && hit.box == j) {
+                    hit.rect = *r;
                     found = true;
                     break;
                 }
@@ -744,7 +765,10 @@ void Game::getPatternFrame(int index, short pattern, short frame, PatternFrame *
 // FUNCTION: 0x1006bc70
 // TODO: differs: the original tests info in memory, keeps p in index's stack slot and
 // reloads info after the PatternFrame copy; this build holds info in a register from
-// the start, so the registers and the order of the loads differ.
+// the start, so the registers and the order of the loads differ. The original also
+// computes frame * 200 before adding frames, as getPatternFrame does: there frames stays
+// a register for c2's operand sort (FactCanonSort), here its load is folded into the
+// address and sorts first, which shortens the copy source's range in esi.
 void Game::getCollisionInfo(int index, CollisionInfo *info)
 {
     if (sceneId() == 3 && info != 0) {

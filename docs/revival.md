@@ -467,16 +467,30 @@ What differs from the launcher (all observed in test links):
   literal comes before `Playlist::load`'s because the player is an object of its own,
   before the playlist's (see Objects). The literals' `$SG` numbers are `c2.dll`'s
   "function assigned IDs" (`namestring2`), and `CompareSymOrderInternal` sorts a
-  literal that has an owning function by its owner and then that ID. In some objects neighbouring
-  literals come out pairwise swapped (the original's ATL strings in
-  `PracticeSession.cpp` and `ReplaySession.cpp`, the rebuilt tournament session's first
-  ones); the pattern changes with the counts before them (**inferred**: the order of a
-  hash table walk), so it can only match once every literal before it exists. One- and
+  literal that has an owning function by its owner and then that ID. The counter counts
+  every function, global and literal `c2.dll` meets, unused ones included, and once it
+  passes 65535 neighbouring literals come out swapped in pairs: numbers 2k+1, 2k+2 are
+  laid out 2k+2, 2k+1 (**observed** in test links: the tournament session's source
+  linked after 64,000 dummy literals keeps its order, after 66,000 swaps, and dummy
+  functions or globals do the same). The rebuild passes 65535 in the tournament
+  session's object. The original passed it before `PracticeSession.cpp`'s literals but
+  after `OnlineSpectatorSession.cpp`'s (its ATL strings, the recorder's names and the
+  replay session's strings are swapped, the spectator session's aren't): by then it had
+  numbered between about 9,700 and 17,000 more symbols than this build, and an odd
+  number more. Where is not known (the object whose source is a guess,
+  `OnlineSync.cpp`, sits in that window; including `Music.h` and `OnlineSession.h`
+  there adds 4,500 and swaps the recorder's and replay session's strings, but also adds
+  `atlbase.h`'s strings and asio's statics, which the original's object doesn't have),
+  so those three objects' strings stay in order here. The parity counts too: an odd
+  number of symbols added before the tournament session swaps its pairs the other
+  way, so this build's unused functions come in pairs. One- and
   two-byte literals (`""`, `"\n"`) are placed in the gaps the others' alignment leaves,
   anywhere in the section. One-byte objects in `.bss` (`std::ignore`, boost.bind's
   `_1`-`_9`) are placed the same way: in the original the first object's nine
   placeholders are scattered over `0x100a063a`-`0x100a0642`, the next object's partly
-  in gaps; the rebuild has them in order (not reproduced).
+  in gaps; the rebuild has them in order (not reproduced: they are `Config.cpp`'s,
+  numbered far below 65535, and compiling that object without the precompiled header
+  reorders its other one-byte objects and asio's statics but not the placeholders).
 - **Unused code.** The linker drops functions nothing calls, but not their literals: an
   object's strings show code the original had and never called. **Observed** in the
   original, with no reference to them: `"Save too large"` (between `Config.cpp`'s and
@@ -553,17 +567,18 @@ the build (**observed** unless marked):
   own pair of `to_utf8` functions in the same order: one header of `static` functions
   that the three include. Only `Config.cpp` uses the address parser.
 - **How far:** `make revival-dll-check-image` shows the headers (but for the sizes that
-  follow from the sections), `.rsrc` and the size of `.data` identical, `.text`
-  `0xd0` bytes short and `.rdata` `0x10` short. 410 of the 416 annotated functions
-  match; 355 of the 368 developer functions and 2582 of the 2695 COMDATs are in their
+  follow from the sections), `.rsrc`, the import table and the sizes of `.text` and
+  `.data` identical, and `.rdata` `0x10` short. 413 of the 416 annotated functions
+  match; 357 of the 368 developer functions and 2600 of the 2695 COMDATs are in their
   original order (`tools/revalign.py`); the static initializers are the same 271 in the
   same order. The string literals are the original's set but for ordering in a few
   objects (the pairwise swaps above); what's left in `.rdata` is mostly the exception
-  tables, which follow the COMDATs' order, and the order of two of `DDRAW.dll`'s
-  imports. Two more COMDAT groups need the launcher's headers changed (no change to the
-  launcher's own image): `SharedQueue.h` declaring `push` and `pop` before the other
-  members and `SharedData.h` defining `PingStats` before `GameInfo` (see "Header
-  functions within an object").
+  tables, whose order follows the COMDATs' and the linker's sorts (see "Imports": any
+  change to the set of linked contributions reshuffles them, by thousands of bytes in
+  `pecmp`'s count). Two COMDAT groups need the launcher's headers as they are now (no
+  change to the launcher's own image): `SharedQueue.h` declaring `push` and `pop`
+  before the other members and `SharedData.h` defining `PingStats` before `GameInfo`
+  (see "Header functions within an object").
 - **Source forms the code shows** (**observed**: each changed one function from
   differing to matching, the rest of the source alike):
   - `if (c) x = a; else x = b;` stores in each branch, where `x = c ? a : b` becomes a
@@ -603,16 +618,42 @@ the build (**observed** unless marked):
   - Log arguments are taken by reference: `readExtendedReplay` logs
     `(unsigned int)offset`, a temporary stored just before the call, so `offset` itself
     stays in a register.
+  - A multiply by a negative constant feeding an add becomes a subtraction
+    (`OptFinalPeeps` negates the constant through `OptTryNeg`), even under `/fp:strict`;
+    `PracticeSession::keyPressed` casts the product, `(double)((x - middle) * -1.0) +
+    middle`, which hides it from that peephole and keeps the original's `fmul` by -1.0.
+    The same function writes the BGM toggle in both branches of its scene test: the
+    original has two copies of the key test and the flip.
+  - A default constructor with default arguments: `LiveInput(char = 0, char = 0)` makes
+    `inputs_`' array construction call a default constructor closure (`??_F`, `push 0;
+    push 0; call; ret`), and its body (member assignments, not `FrameInput(a, b)`) is
+    byte for byte `FrameInput(char, char)`'s, so the linker folds the two; a caller with
+    variable arguments (`ReplaySession::update` builds `LiveInput(p1, keys)`) keeps it
+    from being specialised for (0, 0).
+  - Iterator access: `collectRects` reads the rects through `HitRect &hit = *it`, as the
+    original calls `_Vector_iterator::operator*` (folded with other vectors') and no
+    `operator->` for `HitRect`.
+  - A value passed on keeps its register: `collectRects` passes `pattern` (0x199 by then)
+    to `getPatternFrame`, so the object's pattern is loaded before `character()` and
+    held in esi, as in the original; with the constant written out, c2 moves the load
+    after the call, and the rest of the loop's allocation follows.
+  - Switch fall-through: `collectRects`' and `drawBoxRequest`'s `BOX_HURT` falls through
+    to `BOX_COLLISION` when the box isn't vulnerable, which lets the two cases share one
+    block; an `else` repeating the collision case's assignments has c2 hoist the shared
+    color store instead.
+  - Declared types show in registers: `drawBoxRequest`'s `active` is a `short` (the
+    original keeps it in edi and tests `di`; a `bool` gets a byte register), and its
+    `height * 2` is a variable of its own (kept in a stack slot for the collision box).
 - **Not reproduced:** register allocation in `Game::getCollisionInfo` (the original
-  tests `info` in memory: its pattern index takes edi), `collectRects` and
-  `drawBoxRequest` (which also keeps a store of `(int)p->x` into `r->left` and reuses
-  `height * 2`, as if `r` could alias the camera), and `LiveInput`'s
-  constructor (which the original compiles knowing its base constructor returns
-  `this`); `PracticeSession::keyPressed`'s `(x - middle) * -1.0 + middle`, which the
-  original multiplies and this build turns into a subtraction (c2 folds a multiply by
-  a constant -1.0 in its x87 code generation; spellings, a variable, `float`, loops
-  and inline helpers tried); `OnlineSession::menuFramesToRun`'s `last + 1 - frame_`,
-  which this build reassociates into `(last - frame_) + 1`.
+  tests `info` in memory: its pattern index takes edi; it also computes `frame * 200`
+  before adding `frames`, as `getPatternFrame` does, an operand order `FactCanonSort`
+  gives when `frames` is a register rather than a folded load); one store in
+  `drawBoxRequest`, the original's `r->left = (int)p->x` before the line that
+  overwrites it, kept as if `r` could point at `camera` (it stays here when `camera`'s
+  address escapes, e.g. with `getCamera` compiled without `/GL`, but `getCamera`'s
+  link-time summary says it doesn't); `OnlineSession::menuFramesToRun`'s
+  `last + 1 - frame_`, which `OptBuildTree` flattens into `add(last, 1, -frame_)` and
+  this build emits as sub, then inc.
 
 ### How link-time code generation orders functions
 
@@ -688,19 +729,50 @@ the end of the translation unit):
   `SharedQueue.h` declares `pop` and `push` before `clear`, `isEmpty`, `isFull` and
   `notify`, and `SharedData.h` defines `PingStats` before `GameInfo`, as the DLL's
   functions show (the launcher, which lays these out by name, shows neither: its image
-  is the same either way).
+  is the same either way). In `PracticeSession.cpp` the session's containers
+  (`std::vector<Recorder>`'s `push_back`, destructor, `operator[]`) come before
+  `Recorder`'s (`std::vector<char>::size`), so `PracticeSession.h` includes
+  `Recorder.h` after its class.
+- What the queue instantiates also tells types apart: `PracticeSession`'s two unused
+  vectors (`0x5c`, `0x68`) are destroyed through `_Destroy_range` with a stride of 8 and
+  an element destructor that folds with `std::list`'s, so they are vectors of lists
+  (of something trivially destructible); as `std::vector<int>` the build lacked their
+  functions (`0xc0` bytes of `.text`).
 - Each object's header functions are created in that object only if its code is the
   first in the link to use them: an unused function that isn't `static` counts (the
-  link drops it later), an unused `static` one doesn't.
+  link drops it later), an unused `static` one doesn't. `Recorder.cpp`'s object has
+  `std::deque<char>::push_front(char &&)` among the deque's first members, where only
+  a direct call puts it (the image's only call is the deque's `insert`'s, which comes
+  much later): two unused functions call it.
 
-**Imports.** The functions an object imports from a DLL come in the import table in
-the order of the definitions that first use them (an unused `static` function counts;
-a global's dynamic initializer counts where the global is defined): `Utility.h`'s
-unused ini read puts `GetPrivateProfileStringW` before `to_utf8`'s
-`WideCharToMultiByte`, and `EfzRevival.cpp` defines `g_rng` (whose initializer calls
-`timeGetTime`) after `init` (which calls `timeBeginPeriod`). `DDRAW.dll`'s imports
-(`clearTextRender` and `addTextRender`, which the original has last) don't follow this
-rule in test links, and their order isn't reproduced.
+**Imports.** Read from `link.exe` (its public symbols, `IMAGE::ImportSemantics` and
+`SortPGRPByPMOD`) and checked by simulation against every DLL's entries in four test
+links and this build: the linker loads the import libraries' members as the objects'
+symbols need them, then sorts all the import address entries it loaded, each DLL's
+terminator and the entries the link later drops included, by their DLL's name with
+the C runtime's `qsort`, which isn't stable. So a DLL's entries keep their loading
+order only where the sort leaves them: `DDRAW.dll` sorts first but loads after
+`WINMM.dll`'s and `PSAPI.DLL`'s, and its entries come out partly reversed, by a
+pattern that depends on how many entries the array holds before and among them.
+Loading follows the symbols' first uses: with the precompiled header, the order of
+the definitions that use them (an unused function that isn't `static` counts; a
+global's dynamic initializer counts where the global is defined); without it, the
+compiler's own symbol table's order. `Utility.h`'s unused ini read puts
+`GetPrivateProfileStringW` before `to_utf8`'s `WideCharToMultiByte`, and
+`EfzRevival.cpp` defines `g_rng` (whose initializer calls `timeGetTime`) after `init`
+(which calls `timeBeginPeriod`). `DDRAW.lib`'s own order plays no part (its members,
+both linker members, reversed or rebuilt with `lib /def`, give the same table).
+`DDRAW.dll`'s order in the original (`clearBoxRender`, `setRenderText`, then
+`getEfzTimer` to `addRectRender` in loading order, `addTextRender` and
+`clearTextRender` last) comes out of the sort only with exactly two more `DDRAW.dll`
+imports loaded after `clearTextRender` (and any number before it), which the link
+drops: the original called two more of its functions from code that isn't in the
+image. `EfzGame.cpp` has two unused functions for them (`setBoxRender` and
+`renderBox` stand in; which functions they were is not known). The count of loaded
+members also moves other sorts: `IMAGE::ICFAnalysis` sorts all candidate
+functions with the same `qsort` before folding identical ones, so adding or dropping
+contributions anywhere changes which copy of a library function survives and where
+the library's functions and their exception tables land.
 
 **Registers.** Read from `c2.dll`'s allocator and from a copy patched to print its
 decisions: each variable is weighed by its uses, block by block over its lifetime (a

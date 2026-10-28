@@ -111,14 +111,15 @@ void PracticeSession::keyPressed(int key)
                 setBuffer(4);
             if (key == config_.setBuffer[4])
                 setBuffer(5);
-            // TODO: differs: the original multiplies by -1.0 (0x10090620, kept in a
-            // register for both players); this compiles to middle - (x - middle).
             if (key == config_.mirrorPlayers) {
                 CPlayer *p1 = g_game.player(0);
                 CPlayer *p2 = g_game.player(1);
                 double middle = (619.0 - 20.0) / 2.0 + 20.0;
-                p1->x = (p1->x - middle) * -1.0 + middle;
-                p2->x = (p2->x - middle) * -1.0 + middle;
+                // The (double) cast only matches the original: without it the compiler
+                // folds "* -1.0 + middle" into "middle - (x - middle)" (OptFinalPeeps
+                // negates the constant through OptTryNeg; the cast hides the product).
+                p1->x = (double)((p1->x - middle) * -1.0) + middle;
+                p2->x = (double)((p2->x - middle) * -1.0) + middle;
             }
         }
         if (key == config_.pause) {
@@ -154,8 +155,16 @@ void PracticeSession::keyPressed(int key)
             fps_ = g_game.timer->defaultFps;
             g_game.timer->setFps(fps_);
         }
-    }
-    if (key == config_.toggleBGM) {
+        // The toggle is written out in both branches only to match: the original has
+        // two copies of the key test and the flip, one for each branch.
+        if (key == config_.toggleBGM) {
+            music_->muted = !music_->muted;
+            if (music_->muted)
+                stopSound(g_game.musicId());
+            else
+                playSound(g_game.musicId(), 1);
+        }
+    } else if (key == config_.toggleBGM) {
         music_->muted = !music_->muted;
         if (music_->muted)
             stopSound(g_game.musicId());

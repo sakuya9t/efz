@@ -4,6 +4,22 @@
 #include "Recorder.h"
 #include <stdlib.h>
 
+// Unused, and left out of the link: the original's object has std::deque<char>'s
+// push_front(char &&) among the deque's first members (after vector<char>'s push_back,
+// before the deque's clear), where only code that calls it directly puts it; the only
+// call left in the image is deque's insert's, which comes much later. What called it
+// is not known. Two functions rather than one keep the compiler's symbol numbering
+// even (an odd count swaps the tournament session's string pairs, docs/revival.md).
+void unusedPushFront(std::deque<char> &buffer)
+{
+    buffer.push_front(0);
+}
+
+void unusedPushFrontCopy(std::deque<char> &buffer, const char &input)
+{
+    buffer.push_front(input);
+}
+
 // FUNCTION: 0x100775c0
 void Recorder::setDelay(int frames)
 {

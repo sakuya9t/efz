@@ -804,7 +804,9 @@ int OnlineSession::menuFramesToRun()
     addInput(localPlayer_, readInput());
     // TODO: differs: the original adds the 1 to last and subtracts frame_ only while
     // setting up the log line; this build subtracts first (statement forms tried: last -
-    // frame_ + 1, ++last, a count variable, unsigned last, the sum inside the log line)
+    // frame_ + 1, ++last, a count variable, unsigned last, the sum inside the log line).
+    // c2's OptBuildTree makes any last + 1 - frame_ in one tree add(last, 1, -frame_),
+    // and FactCanonSort puts the constant last: sub, then inc.
     int iterations = last + 1 - frame_;
     g_log << "Iterations " << iterations << " delay " << delay << std::endl;
     return iterations;

@@ -4,6 +4,7 @@
 #pragma once
 #include "Config.h"
 #include <deque>
+#include <list>
 #include <queue>
 #include <string>
 #include <vector>
@@ -11,9 +12,13 @@
 #include "Efz.h"
 #include "Playlist.h"
 #include "GameState.h"
-#include "Recorder.h"
 
 class MusicPlayer;   // Music.h
+// Recorder.h comes after the class: the original's object instantiates the members of
+// this class's containers (std::vector<Recorder>'s push_back, destructor and
+// operator[]) before those of Recorder's (std::vector<char>::size), so Recorder's
+// definition, and its containers, came later in the source than this class's.
+class Recorder;
 
 // 0x2b0 bytes
 class PracticeSession : public Session {
@@ -61,8 +66,12 @@ private:
     int unknown2c_;                         // 0x2c
     int unknown30_;                         // 0x30
     SaveState saveState_;                   // 0x34
-    std::vector<int> unknown5c_;            // 0x5c
-    std::vector<int> unknown68_;            // 0x68
+    // Two vectors nothing uses but the constructor and destructor. Their elements are 8
+    // bytes with std::list's destructor (the original's ~PracticeSession destroys them
+    // through _Destroy_range with a stride of 8, and the element's destructor folds
+    // with std::list<linked_streambuf *>'s); what the lists hold is unknown.
+    std::vector<std::list<int> > unknown5c_;    // 0x5c
+    std::vector<std::list<int> > unknown68_;    // 0x68
     int inputDelay_;                        // 0x74
     std::queue<char> unknown78_[2];         // 0x78
     std::vector<Recorder> recorders_;       // 0xa0
@@ -79,6 +88,8 @@ private:
     MusicPlayer *music_;                    // 0x29c
     Playlist playlist_;                     // 0x2a0
 };
+
+#include "Recorder.h"
 
 // Here rather than in InputDisplay.h: the session's header functions have it before
 // EfzTimer.h's (setFps, reset), and those before the input display's.

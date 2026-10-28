@@ -81,8 +81,10 @@ void ReplaySession::update()
         music_->play(playlist_.current());
     BYTE p1 = g_game.cleanInput(g_game.efzInput(0));
     BYTE p2 = g_game.cleanInput(g_game.efzInput(1));
-    static_cast<FrameInput &>(inputs_[0]) = FrameInput(p1, g_game.functionKeys());
-    static_cast<FrameInput &>(inputs_[1]) = FrameInput(p2, g_game.functionKeys());
+    // Built as LiveInputs: a caller with variable arguments keeps LiveInput(char, char)
+    // generic, so that it folds into FrameInput(char, char) (see LiveInput).
+    inputs_[0] = LiveInput(p1, g_game.functionKeys());
+    inputs_[1] = LiveInput(p2, g_game.functionKeys());
     if (isReplaying() || isControlling()) {
         if (isControlling()) {
             showBoxes();
