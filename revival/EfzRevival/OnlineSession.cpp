@@ -5,6 +5,8 @@
 // select, 3 the fight, 5 the results.
 #include "stdafx.h"
 #include "EfzGame.h"
+// Next, for the timer's header functions to come before <atomic>'s and <chrono>'s.
+#include "../DDRAW/EfzTimer.h"
 #include "OnlineSession.h"
 #include "Utility.h"
 #include "Music.h"
@@ -13,7 +15,6 @@
 #include <iomanip>
 #include <sstream>
 #include "EfzRevival.h"
-#include "../DDRAW/EfzTimer.h"
 #include "Hook.h"
 #include "Log.h"
 

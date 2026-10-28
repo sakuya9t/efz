@@ -1,40 +1,15 @@
-// Save states (GameState.cpp, 0x1006f260-0x1006f7a0): a copy of the game's memory that
-// can be written back, for the practice session's save/load and the online session's
-// rollback (one per frame of its window). StateBuffer copies each region into one
-// buffer and remembers where it came from; SaveState decides the regions.
+// Save states (GameState.cpp, 0x1006f260-0x1006f640, and GameStateBuffer.cpp,
+// 0x1006f640-0x1006f7a0): a copy of the game's memory that can be written back, for the
+// practice session's save/load and the online session's rollback (one per frame of its
+// window). StateBuffer (GameStateBuffer.h) copies each region into one buffer and
+// remembers where it came from; SaveState decides the regions.
 #pragma once
 #include <list>
 #include <string>
 #include <vector>
 #include "EfzGame.h"
 
-class StateBuffer {
-public:
-    StateBuffer(int capacity);
-    // Forgets the regions, keeping the most it ever used.
-    void reset();
-    // FNSAVE and FRSTOR: the x87 state, control word included.
-    void saveFpu();
-    // Copies size bytes at address into the buffer.
-    void add(void *address, int size);
-    // Copies every region back.
-    void restore();
-
-private:
-    struct Region {
-        void *address;
-        char *copy;
-        int size;
-        int unused;
-    };
-
-    char fpu_[0x200];                       // 0x000
-    std::list<Region> regions_;             // 0x200
-    char *buffer_;                          // 0x208
-    char *cursor_;                          // 0x20c
-    int capacity_;                          // 0x210
-    unsigned int maxUsed_;                  // 0x214
-};
+class StateBuffer;   // GameStateBuffer.h
 
 class SaveState {
 public:

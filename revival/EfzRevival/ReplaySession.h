@@ -20,10 +20,9 @@ class MusicPlayer;   // Music.h
 
 // A save state of the replay and where its file was then. 0x2c bytes.
 struct ReplayState {
+    // The implicit constructor (generated where first needed, after the session's
+    // deleting destructor, as the original has it):
     // FUNCTION: 0x1002cb70 ??0ReplayState@@QAE@XZ
-    ReplayState()
-    {
-    }
 
     // FUNCTION: 0x1002cb10 ?reset@ReplayState@@QAEXXZ
     void reset()

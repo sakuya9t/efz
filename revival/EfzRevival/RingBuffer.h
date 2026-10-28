@@ -27,6 +27,15 @@ public:
         data_.resize(size);
     }
 
+    // Written out, not implicit: the original has the destructors among the class's
+    // header functions, after resize's and before operator[]'s (an implicit one comes
+    // out where it is first needed instead).
+    // FUNCTION: 0x100228e0 ??1?$RingBuffer@V?$map@GHU?$less@G@std@@V?$allocator@U?$pair@$$CBGH@std@@@2@@std@@@@QAE@XZ
+    // FUNCTION: 0x100229d0 ??1?$RingBuffer@VSaveState@@@@QAE@XZ
+    ~RingBuffer()
+    {
+    }
+
     // The replay session's loop bound (ICF-folded with std::ios_base::rdstate).
     int size()
     {
@@ -42,10 +51,6 @@ public:
             throw "Error: index out of bounds";
         return data_[(int)index % size_];
     }
-
-    // The implicit destructors:
-    // FUNCTION: 0x100228e0 ??1?$RingBuffer@V?$map@GHU?$less@G@std@@V?$allocator@U?$pair@$$CBGH@std@@@2@@std@@@@QAE@XZ
-    // FUNCTION: 0x100229d0 ??1?$RingBuffer@VSaveState@@@@QAE@XZ
 
 private:
     std::vector<T> data_;           // 0x00

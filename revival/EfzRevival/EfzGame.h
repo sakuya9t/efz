@@ -15,6 +15,31 @@
 #include "Efz.h"
 #include "Hook.h"
 #include "../EfzRevivalLauncher/SharedData.h"
+// The replay files' streams and DDRAW.dll's renderer, before the boxes: EfzGame.obj's
+// header functions show <fstream>'s, then EfzRender's implicit copy assignment (which
+// every object that includes EfzRender.h emits and exports, so Config.cpp includes only
+// Efz.h), then HitRect's and BoxRequest's constructors (in that order).
+#include <fstream>
+#include "../DDRAW/EfzRender.h"
+#include <iomanip>
+#include <sstream>
+
+// Unused, standing in for code the original had here (what it was isn't known). Its
+// std::wstringstream makes the compiler instantiate the class and generate its
+// destructor before Log.h's functions, and its uses of operator<< for a narrow literal
+// on a wide stream and of setw and setfill on a narrow one come before Log.h's: so
+// EfzRevival.obj, the first object to use them (setup's title, the crash handler), has
+// that destructor right after <ostream>'s header functions, wstringstream's members
+// before boost.iostreams' stream, and those four operator templates before the log's,
+// as the original does.
+inline std::wstring unusedText(int value)
+{
+    std::wstringstream text;
+    text << "." << value;
+    std::stringstream number;
+    number << std::setw(2) << std::setfill('0') << value;
+    return text.str();
+}
 #include <iosfwd>
 #include <list>
 #include <string>
@@ -34,19 +59,6 @@ enum BoxKind {
     BOX_COLLISION,              // yellow, the collision box and the crossup midline
 };
 
-// A player's boxes to draw each frame.
-struct BoxRequest {
-    // FUNCTION: 0x1000dab0
-    BoxRequest(int player_, int kind_)
-    {
-        kind = kind_;
-        player = player_;
-    }
-
-    int player;
-    int kind;
-};
-
 // A box kept from frame to frame: Mishio's (character 15) 0x199 objects leave their
 // hitboxes on screen. 0x20 bytes.
 struct HitRect {
@@ -61,6 +73,19 @@ struct HitRect {
     unsigned int flags;         // 0x14 EfzRender's stipple pattern
     int object;                 // 0x18 the object's slot
     int box;                    // 0x1c which of its boxes
+};
+
+// A player's boxes to draw each frame.
+struct BoxRequest {
+    // FUNCTION: 0x1000dab0
+    BoxRequest(int player_, int kind_)
+    {
+        kind = kind_;
+        player = player_;
+    }
+
+    int player;
+    int kind;
 };
 
 // Where a recording is saved: a wstring in a struct of its own. Game's constructor and
@@ -186,6 +211,13 @@ public:
     EfzTimer *timer;                        // 0x04 DDRAW.dll's frame timer
 private:
     friend class SaveState;
+
+    // The mode a recording is written with. Naming std::fstream's constants here makes
+    // the compiler instantiate the class before rects_'s vector, which is where the
+    // original's template functions put fstream's and filebuf's: before
+    // vector<HitRect>'s among EfzGame.obj's (a class template's member functions come
+    // out in the order the classes were instantiated).
+    static const int replayWriteMode_ = std::fstream::out | std::fstream::binary;
 
     std::vector<HitRect> rects_;            // 0x08
     bool initialized_;                      // 0x14

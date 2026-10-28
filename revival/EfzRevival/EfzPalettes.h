@@ -36,7 +36,7 @@ public:
 
 private:
     bool loadDat(unsigned int character, unsigned int number);
-    bool loadPal(unsigned int character, unsigned int number);
+    bool loadPal(unsigned int character, int number);
     bool readColors(PALETTEENTRY *colors, int first, int index, std::string file);
     void toColors(const BYTE *rgb, PALETTEENTRY *colors);
     void log(const ColorPalette *palette);

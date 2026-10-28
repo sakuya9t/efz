@@ -286,9 +286,9 @@ DLL_CFLAGS = /nologo /c /O2 /Ob0 /Oy- /GS- /GL /Gy- /GF- /GR- /MT /EHsc /arch:SS
 # order it first refers to them (without one, in its symbol table's order), and link-time
 # code generation lays out those defined in a later object in that order
 # (docs/revival.md, "How link-time code generation orders functions").
-DLL_LINK_ORDER = Config Detours dllmain EfzGame EfzPalettes EfzReplay EfzRevival GameState \
-	Hook Log Music OnlineSession OnlineSpectatorSession OnlineSync PracticeSession Process \
-	Recorder ReplaySession RingBuffer Session TournamentSession stdafx
+DLL_LINK_ORDER = Config Detours dllmain EfzGame EfzPalettes EfzReplay EfzRevival GameState GameStateBuffer \
+	Hook Music MusicList OnlineSession OnlineSpectatorSession OnlineSync PracticeSession Process \
+	Recorder ReplaySession Session TournamentSession stdafx
 DLL_OBJS := $(DLL_LINK_ORDER:%=build/revival/dll/%.obj)
 DLL_PCH = build/revival/dll/EfzRevival.pch
 # Until every source exists the link leaves calls to missing functions unresolved.

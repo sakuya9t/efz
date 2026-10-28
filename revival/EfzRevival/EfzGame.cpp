@@ -820,9 +820,9 @@ std::iostream *Game::openReplayWrite(const char *name)
     inputs_.clear();
     std::iostream *file;
     if (replay_.name.empty())
-        file = new std::fstream(name, std::ios::out | std::ios::binary);
+        file = new std::fstream(name, replayWriteMode_);
     else if (saveReplays_)
-        file = new std::fstream(replay_.name, std::ios::out | std::ios::binary);
+        file = new std::fstream(replay_.name, replayWriteMode_);
     else
         file = new std::stringstream();
     recording_ = true;
@@ -842,7 +842,7 @@ std::iostream *Game::openReplayRead(const char *name)
         g_log << "Read replay does not exist, create\n";
         g_log.flush();
         test.close();
-        test.open(name, std::ios::out | std::ios::binary);
+        test.open(name, replayWriteMode_);
     }
     g_log << "Create replay read\n";
     g_log.flush();
@@ -956,18 +956,20 @@ void Game::closeStream(std::iostream *&stream)
 // FUNCTION: 0x1006b520
 bool Game::flushReplay()
 {
-    if (pendingReplay_ != 0 && !saveReplays_) {
-        g_log << "Replay flushed " << "\n";
-        writeExtendedReplay(pendingReplay_);
-        std::fstream file;
-        file.open(replay_.name, std::ios::out | std::ios::binary);
-        file << pendingReplay_->rdbuf();
-        file.close();
-        closeStream(pendingReplay_);
-        return true;
+    // The empty case first: the object's string literals have its message before
+    // "Replay flushed " (the code is the same either way).
+    if (pendingReplay_ == 0 || saveReplays_) {
+        g_log << "Cannot flush, empty replay\n";
+        return false;
     }
-    g_log << "Cannot flush, empty replay\n";
-    return false;
+    g_log << "Replay flushed " << "\n";
+    writeExtendedReplay(pendingReplay_);
+    std::fstream file;
+    file.open(replay_.name, replayWriteMode_);
+    file << pendingReplay_->rdbuf();
+    file.close();
+    closeStream(pendingReplay_);
+    return true;
 }
 
 // FUNCTION: 0x1006b4f0
@@ -986,9 +988,11 @@ void Game::setRandomSeed(int seed)
 // Reads the random state and both players' inputs that an extended replay keeps after
 // the game's own data.
 // FUNCTION: 0x1006b2f0
-// The offset goes to the log as an unsigned copy: a temporary the log's operator<< takes
-// by reference, stored just before the call, where offset itself would live in memory
-// from the start (and `this`, the file and the registers would come out differently).
+// The offset goes to the log as an int copy: a temporary the log's operator<< takes by
+// reference, stored just before the call, where offset itself would live in memory from
+// the start (and `this`, the file and the registers would come out differently). All
+// three numbers go through the log's operator<< for int, as in the original (whose
+// object has no operator<< for unsigned int: EfzPalettes.obj's is the link's first).
 void Game::readExtendedReplay(std::vector<FrameInput> &inputs)
 {
     inputs.clear();
@@ -1000,9 +1004,9 @@ void Game::readExtendedReplay(std::vector<FrameInput> &inputs)
     }
     g_log << "Modded\n";
     g_log.flush();
-    int offset = readExtendedOffset(file);
-    file->seekg((unsigned int)offset);
-    g_log << "Start offset " << (unsigned int)offset << "\n";
+    unsigned int offset = readExtendedOffset(file);
+    file->seekg(offset);
+    g_log << "Start offset " << (int)offset << "\n";
     g_log.flush();
     file->read((char *)&rngSeed_, 4);
     g_log << "Rng " << rngSeed_ << "\n";

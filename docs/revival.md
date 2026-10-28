@@ -463,10 +463,9 @@ What differs from the launcher (all observed in test links):
   (`atlbase.h`'s where `Music.h` is included; unused functions' too). MSVC evaluates a
   call's arguments right to left, so `stream << "a" << x << "b"` with the standard
   library's `operator<<` (not a member) uses `"b"` first; `Log`'s `operator<<` is a
-  member and goes left to right. Not understood: in the original, `MusicPlayer::play`'s
-  literal comes before `Playlist::load`'s, though `play` is defined after it (its
-  address says so: defined first, `play` moves above all of `Music.cpp`'s functions);
-  the rebuild has them in source order. The literals' `$SG` numbers are `c2.dll`'s
+  member and goes left to right. In the original, `MusicPlayer::play`'s
+  literal comes before `Playlist::load`'s because the player is an object of its own,
+  before the playlist's (see Objects). The literals' `$SG` numbers are `c2.dll`'s
   "function assigned IDs" (`namestring2`), and `CompareSymOrderInternal` sorts a
   literal that has an owning function by its owner and then that ID. In some objects neighbouring
   literals come out pairwise swapped (the original's ATL strings in
@@ -488,6 +487,14 @@ What differs from the launcher (all observed in test links):
   `L"None"`, `L"Name"`, `L"Parameters"` with four `":"` at the start of `Config.cpp`'s,
   `OnlineSession.cpp`'s and `TournamentSession.cpp`'s. The sources have unused
   functions that give these strings (marked "Unused"); what the code was is a guess.
+  Unused code leaves other traces too: an unused function that isn't `static` is
+  compiled and dropped only at link time, so the header functions it uses are created
+  in its object, where the original has them (`EfzPalettes.cpp`'s `logColors`: the
+  log's hex output, width and fill); an unused `static` function's imports count for
+  the order of the import table (`Utility.h`'s ini read, see "Imports" below); and an
+  unused inline function in a header still instantiates the templates it uses there
+  (`EfzGame.h`'s `unusedText`: `std::wstringstream` and the stream operators
+  `EfzRevival.obj` then has in the original's order).
 - **Game addresses.** The DLL patches and reads `efz.exe` at fixed addresses; `src/`
   (the game's own decompilation) names them: `0x40d131` is inside `CInput::GetInput`,
   `0x7b1290` is `g_fkeyHeld`, `0x7b0960` is inside `g_graphics`, and so on
@@ -518,10 +525,15 @@ the build (**observed** unless marked):
   `_1`-`_9` with `std::ignore` in fourteen (`Log.h`, through
   `boost/iostreams/copy.hpp`), asio's error categories and `winsock_init` in eight
   (`Config.h`, which includes only `boost/asio/ip/udp.hpp`: none of asio's own
-  placeholders) and boost.system's in `Music.cpp` (boost.filesystem). Two objects have
-  only `Log.h`'s, one between `Hook.cpp` and `Music.cpp` and one between
-  `PracticeSession.cpp` and `Recorder.cpp`; their names are guesses (`Log.cpp`,
-  `Process.cpp`), as is the 22nd object's (`RingBuffer.cpp`), which left nothing.
+  placeholders) and boost.system's in the playlist's object (`MusicList.cpp`,
+  boost.filesystem). Two objects have only `Log.h`'s: the music player's (`Music.cpp`,
+  before the playlist's: its header functions, `CComPtr`'s and the failed-files map's,
+  and its string `"Could not play music: "` come before the playlist's), and one between
+  `PracticeSession.cpp` and `Recorder.cpp` (`Process.cpp`). The 22nd object has none: it
+  is the save states' buffer (`GameStateBuffer.cpp`, between `GameState.cpp` and
+  `Hook.cpp`: `StateBuffer`'s functions come after `SaveState`'s, and its list's header
+  functions after all of `GameState.obj`'s `vector<HitRect>::insert` and what that
+  uses). These objects' names are guesses.
 - **Includes:** the first COMDATs are `wchar.h`'s, placement `new` and `delete`, then
   `char_traits`: the order a standard header like `<map>` gives before any boost header
   (which brings `<utility>`, and `char_traits`, first). So `Config.h` includes the
@@ -542,12 +554,16 @@ the build (**observed** unless marked):
   that the three include. Only `Config.cpp` uses the address parser.
 - **How far:** `make revival-dll-check-image` shows the headers (but for the sizes that
   follow from the sections), `.rsrc` and the size of `.data` identical, `.text`
-  `0xf0` bytes short and `.rdata` `0x10` short. 410 of the 416 annotated functions
-  match; 353 of the 368 developer functions and 2419 of the 2695 COMDATs are in their
+  `0xd0` bytes short and `.rdata` `0x10` short. 410 of the 416 annotated functions
+  match; 355 of the 368 developer functions and 2582 of the 2695 COMDATs are in their
   original order (`tools/revalign.py`); the static initializers are the same 271 in the
   same order. The string literals are the original's set but for ordering in a few
-  objects; what's left in `.rdata` is mostly the exception tables, which follow the
-  COMDATs' order, and the order of three imports within their DLLs.
+  objects (the pairwise swaps above); what's left in `.rdata` is mostly the exception
+  tables, which follow the COMDATs' order, and the order of two of `DDRAW.dll`'s
+  imports. Two more COMDAT groups need the launcher's headers changed (no change to the
+  launcher's own image): `SharedQueue.h` declaring `push` and `pop` before the other
+  members and `SharedData.h` defining `PingStats` before `GameInfo` (see "Header
+  functions within an object").
 - **Source forms the code shows** (**observed**: each changed one function from
   differing to matching, the rest of the source alike):
   - `if (c) x = a; else x = b;` stores in each branch, where `x = c ? a : b` becomes a
@@ -645,6 +661,47 @@ Consequences for the sources:
 - Names don't matter for the developer's functions; they still do for COMDATs folded
   with others and for anything sorted by the linker.
 
+**Header functions within an object.** **Observed** in test links
+(`tools/ltcgprobe.py`, with the precompiled header) and confirmed on the DLL; read in
+part from `c1xx.dll` (`PendingTemplateList_t`, a first-in first-out queue processed at
+the end of the translation unit):
+- Inline functions that aren't templates (class bodies, `inline` functions, explicit
+  specializations like `char_traits<char>`'s) come out in the order of their
+  definitions in the translation unit, whatever order they are used in. So an
+  object's first header functions trace its includes: `EfzGame.h` includes `<fstream>`
+  and `EfzRender.h` before it defines `HitRect` and `BoxRequest` (in that order), and
+  `Log.h` defines `Log`'s destructor, explicitly, right after its constructor, and
+  `fill` before `width`. Functions the compiler generates (an implicit copy assignment
+  or destructor, a vbase destructor `??_D`) come out where they are first needed, so a
+  written-out destructor sits elsewhere than an implicit one (`RingBuffer`'s is written
+  out; `ReplayState`'s constructor is implicit).
+- Then the templates. A class template specialization joins the queue when it is
+  instantiated (when it first has to be complete: a member, a local, `std::fstream::out`),
+  a function template (or member template) when it is first referred to. At the end the
+  queue is worked through in order: a class's turn instantiates the members referred to
+  so far, in the order they are declared, and each instantiated body that refers to
+  something not yet done adds it to the end. So the classes' order of instantiation
+  decides most of it: in `EfzGame.cpp` `std::fstream` is instantiated before `Game`'s
+  `std::vector<HitRect>` member, by a constant `Game` declares from
+  `std::fstream::out`; in `EfzRevival.cpp` `<random>`'s engine comes after `Log.h`'s
+  stream. The order of a header's member declarations matters too: the launcher's
+  `SharedQueue.h` declares `pop` and `push` before `clear`, `isEmpty`, `isFull` and
+  `notify`, and `SharedData.h` defines `PingStats` before `GameInfo`, as the DLL's
+  functions show (the launcher, which lays these out by name, shows neither: its image
+  is the same either way).
+- Each object's header functions are created in that object only if its code is the
+  first in the link to use them: an unused function that isn't `static` counts (the
+  link drops it later), an unused `static` one doesn't.
+
+**Imports.** The functions an object imports from a DLL come in the import table in
+the order of the definitions that first use them (an unused `static` function counts;
+a global's dynamic initializer counts where the global is defined): `Utility.h`'s
+unused ini read puts `GetPrivateProfileStringW` before `to_utf8`'s
+`WideCharToMultiByte`, and `EfzRevival.cpp` defines `g_rng` (whose initializer calls
+`timeGetTime`) after `init` (which calls `timeBeginPeriod`). `DDRAW.dll`'s imports
+(`clearTextRender` and `addTextRender`, which the original has last) don't follow this
+rule in test links, and their order isn't reproduced.
+
 **Registers.** Read from `c2.dll`'s allocator and from a copy patched to print its
 decisions: each variable is weighed by its uses, block by block over its lifetime (a
 use in a loop counts four times), and the heaviest gets a register first. Copies of
@@ -662,9 +719,11 @@ The modules, by address (chunk B), as far as known:
 | `0x1006abc0` | `dllmain.cpp`: the template `DllMain` |
 | `0x1006abd0`-`0x1006de..` | Game state and input (`key.ini`, devices), the extended replay buffer, the hit/hurt/collision box display (`0x1006c1d0`, `0x1006cf90` call `EfzRender::addRectRender`), characters and palettes |
 | `0x1006de..`-`0x1006f260` | `EfzRevival.cpp`: `init` (`0x1006f0b0`), the first-frame setup that installs the hooks (`0x1006ee10`), the hook targets (`0x1006dfa0`-`0x1006e070` replace `CReplayFile`'s methods; `0x1006eb10`-`0x1006ebc0` forward to the session), keyboard and joystick edges, the crash handler (`0x1006e1c0`), switching to practice/replay sessions (`0x1006e090`) |
-| `0x1006f260`-`0x1006f7a0` | Save states: copies of the game's memory (`0x1006f390`) |
+| `0x1006f260`-`0x1006f640` | `GameState.cpp`: save states, copies of the game's memory (`0x1006f390`) |
+| `0x1006f640`-`0x1006f7a0` | `GameStateBuffer.cpp` (name unknown): the save states' buffer |
 | `0x1006f7a0`-`0x1006fae2` | Hooks: patching bytes and three kinds of trampoline |
-| `0x1006faf0`-`0x10070600` | Music (DirectShow: custom BGM folder), replay file names |
+| `0x1006faf0`-`0x1006ffd0` | `Music.cpp`: the music player (DirectShow) |
+| `0x1006ffd0`-`0x10070600` | `MusicList.cpp` (name unknown): the playlist of the custom BGM folder |
 | `0x10070600`-`0x10074210` | `OnlineSession.cpp`: rollback, input exchange with the launcher, sync, replay saving |
 | `0x10074210`-`0x10075680` | `OnlineSpectatorSession.cpp`: the spectator session |
 | `0x10075680`-`0x100757e0` | `OnlineSync.cpp` (name unknown): `makeSyncBlock`, and an empty constructor and destructor nothing calls |

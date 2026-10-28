@@ -103,7 +103,7 @@ private:
     RecorderState state_;                   // 0x20
     ReplayChoice random_;                   // 0x21
     StartCondition start_;                  // 0x22
-    std::deque<char>::const_iterator replayPos_;  // 0x24
+    std::deque<char>::iterator replayPos_;  // 0x24
     int replayBuffer_;                      // 0x30
     int recordBuffer_;                      // 0x34
     std::vector<std::deque<char> > buffers_;  // 0x38 10 of them, 1-5 used

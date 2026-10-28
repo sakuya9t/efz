@@ -15,18 +15,24 @@
 #include <boost/algorithm/string.hpp>
 #include <boost/asio/ip/udp.hpp>
 
-// Unused code the original had here, of which only its string literals are left (each
-// of the three objects' strings begin with L"None", L"Name", L"Parameters"), and, in
-// Config.obj, the locale ids of narrow and wide number output (Config.obj's first four
-// static initializers after the error categories, though none of its code prints a
-// number). Link-time code generation drops the function itself.
-static std::wstring unusedKeyText(int key, int number)
+// Unused code the original had here, of which only traces are left: its string literals
+// (each of the three objects' strings begin with L"None", L"Name", L"Parameters": the
+// arguments of an ini read, which are evaluated right to left), the import of
+// GetPrivateProfileStringW (KERNEL32's imports have it before WideCharToMultiByte, which
+// to_utf8, defined next, uses first otherwise), wstring's constructor from a buffer and
+// a length (with it, Config.obj's header functions have wstring's assign for a buffer
+// and a length among the first) and, in Config.obj, the locale ids of narrow and wide
+// number output (Config.obj's first four static initializers after the error categories,
+// though none of its code prints a number). Link-time code generation drops the function
+// itself.
+static std::wstring unusedKeyText(const std::wstring &path, int number)
 {
-    if (key < 0)
-        return L"None";
+    wchar_t buffer[0x100];
+    DWORD length = GetPrivateProfileStringW(L"Parameters", L"Name", L"None", buffer, 0x100,
+                                            path.c_str());
+    std::wstring text(buffer, length);
     std::wstringstream wide;
-    wide << L"Name" << number;
-    wide << L"Parameters";
+    wide << text << number;
     std::ostringstream narrow;
     narrow << number;
     return wide.str();

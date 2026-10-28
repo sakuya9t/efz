@@ -70,6 +70,37 @@ public:
         CloseHandle(event_);
     }
 
+    // pop and push before the other members: EfzRevival.dll, which lays out header
+    // functions by declaration order, has theirs first (the launcher sorts by name).
+    // A member function returns any class type through a hidden pointer, the two-byte
+    // FrameInput too.
+    // FUNCTION: 0x43e240 ?pop@?$SharedQueue@UColorPalette@@@@QAE?AUColorPalette@@XZ
+    // FUNCTION: 0x43e2a0 ?pop@?$SharedQueue@UFrameInput@@@@QAE?AUFrameInput@@XZ
+    // FUNCTION: 0x43e2f0 ?pop@?$SharedQueue@UMatchInfo@@@@QAE?AUMatchInfo@@XZ
+    // FUNCTION: 0x43e350 ?pop@?$SharedQueue@USyncBlock@@@@QAE?AUSyncBlock@@XZ
+    T pop()
+    {
+        checkBounds(view_->begin + 1, view_->end);
+        T value = view_->elements[view_->begin % maxElements_];
+        ++view_->begin;
+        return value;
+    }
+
+    // memcpy, not an assignment: assigning a struct copies value into a temporary
+    // before the call that loads the index.
+    // FUNCTION: 0x43e780 ?push@?$SharedQueue@UColorPalette@@@@QAEXABUColorPalette@@@Z
+    // FUNCTION: 0x43e7e0 ?push@?$SharedQueue@UFrameInput@@@@QAEXABUFrameInput@@@Z
+    // FUNCTION: 0x43e830 ?push@?$SharedQueue@UGameInfo@@@@QAEXABUGameInfo@@@Z
+    // FUNCTION: 0x43e890 ?push@?$SharedQueue@UMatchInfo@@@@QAEXABUMatchInfo@@@Z
+    // FUNCTION: 0x43e8f0 ?push@?$SharedQueue@UPingStats@@@@QAEXABUPingStats@@@Z
+    // FUNCTION: 0x43e950 ?push@?$SharedQueue@_N@@QAEXAB_N@Z
+    void push(const T &value)
+    {
+        checkBounds(view_->begin, view_->end + 1);
+        memcpy(&view_->elements[view_->end % maxElements_], &value, sizeof(T));
+        ++view_->end;
+    }
+
     // Empties the queue (both counters back to 0).
     // FUNCTION: 0x4384b0 ?clear@?$SharedQueue@UColorPalette@@@@QAEXXZ
     // FUNCTION: 0x4384b0 ?clear@?$SharedQueue@UFrameInput@@@@QAEXXZ
@@ -126,35 +157,6 @@ public:
     bool isFull()
     {
         return view_->end - view_->begin >= maxElements_;
-    }
-
-    // A member function returns any class type through a hidden pointer, the two-byte
-    // FrameInput too.
-    // FUNCTION: 0x43e240 ?pop@?$SharedQueue@UColorPalette@@@@QAE?AUColorPalette@@XZ
-    // FUNCTION: 0x43e2a0 ?pop@?$SharedQueue@UFrameInput@@@@QAE?AUFrameInput@@XZ
-    // FUNCTION: 0x43e2f0 ?pop@?$SharedQueue@UMatchInfo@@@@QAE?AUMatchInfo@@XZ
-    // FUNCTION: 0x43e350 ?pop@?$SharedQueue@USyncBlock@@@@QAE?AUSyncBlock@@XZ
-    T pop()
-    {
-        checkBounds(view_->begin + 1, view_->end);
-        T value = view_->elements[view_->begin % maxElements_];
-        ++view_->begin;
-        return value;
-    }
-
-    // memcpy, not an assignment: assigning a struct copies value into a temporary
-    // before the call that loads the index.
-    // FUNCTION: 0x43e780 ?push@?$SharedQueue@UColorPalette@@@@QAEXABUColorPalette@@@Z
-    // FUNCTION: 0x43e7e0 ?push@?$SharedQueue@UFrameInput@@@@QAEXABUFrameInput@@@Z
-    // FUNCTION: 0x43e830 ?push@?$SharedQueue@UGameInfo@@@@QAEXABUGameInfo@@@Z
-    // FUNCTION: 0x43e890 ?push@?$SharedQueue@UMatchInfo@@@@QAEXABUMatchInfo@@@Z
-    // FUNCTION: 0x43e8f0 ?push@?$SharedQueue@UPingStats@@@@QAEXABUPingStats@@@Z
-    // FUNCTION: 0x43e950 ?push@?$SharedQueue@_N@@QAEXAB_N@Z
-    void push(const T &value)
-    {
-        checkBounds(view_->begin, view_->end + 1);
-        memcpy(&view_->elements[view_->end % maxElements_], &value, sizeof(T));
-        ++view_->end;
     }
 
 private:

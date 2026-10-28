@@ -21,6 +21,8 @@
 // its vtable is 0x10090400.
 #pragma once
 #include "Config.h"
+// Before <chrono>: <atomic>'s header functions come before <chrono>'s.
+#include "../EfzRevivalLauncher/SharedQueue.h"
 #include <chrono>
 #include <fstream>
 #include <map>
@@ -32,7 +34,6 @@
 #include "GameState.h"
 #include "RingBuffer.h"
 #include "../EfzRevivalLauncher/SharedData.h"
-#include "../EfzRevivalLauncher/SharedQueue.h"
 
 class MusicPlayer;   // Music.h
 

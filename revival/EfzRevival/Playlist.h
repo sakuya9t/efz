@@ -1,7 +1,7 @@
-// The custom music's file list (Music.cpp, with MusicPlayer). The sessions hold a
-// Playlist by value, so their headers include this one, and declare MusicPlayer only:
-// Music.h brings in ATL, and of the objects that include the session headers only those
-// of the four sessions with music (and Music.cpp) have ATL's registrar strings;
+// The custom music's file list (MusicList.cpp). The sessions hold a Playlist by value,
+// so their headers include this one, and declare MusicPlayer only: Music.h brings in
+// ATL, and of the objects that include the session headers only those of the four
+// sessions with music (and Music.cpp, the player) have ATL's registrar strings;
 // EfzRevival.cpp and TournamentSession.cpp have none.
 #pragma once
 #include <string>

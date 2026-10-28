@@ -10,14 +10,6 @@
 #include <vector>
 #include "EfzGame.h"
 
-// FUNCTION: 0x10028c40 ?toWString@@YA?AV?$basic_string@_WU?$char_traits@_W@std@@V?$allocator@_W@2@@std@@H@Z
-inline std::wstring toWString(int value)
-{
-    wchar_t buffer[64];
-    swprintf_s(buffer, 64, L"%d", value);
-    return std::wstring(buffer);
-}
-
 // An input byte (bits 0-3 right, left, down, up; 4-7 A-D) as text.
 // FUNCTION: 0x10028d10 ?inputString@@YA?AV?$basic_string@_WU?$char_traits@_W@std@@V?$allocator@_W@2@@std@@E@Z
 inline std::wstring inputString(BYTE input)
@@ -92,7 +84,8 @@ inline void drawInputs(const std::vector<char> &inputs, int y, int x, DWORD colo
         count << std::setw(3) << frames / divisor;
         std::wstring text = count.str();
         text.append(L" ");
-        text += inputString(*last);
+        // append, not +=: the original calls basic_string::append (no operator+=).
+        text.append(inputString(*last));
         drawLine(y, text, line, x, color);
         last = it;
         line++;

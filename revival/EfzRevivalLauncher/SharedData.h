@@ -44,6 +44,21 @@ struct FrameInput {
     char second;
 };
 
+// Round-trip times in milliseconds, for the DLL's display ("Net" queue). Defined before
+// GameInfo: EfzRevival.dll has its constructor first.
+struct PingStats {
+    // FUNCTION: 0x4325e0
+    PingStats()
+        : minimum(1000000), average(0), last(0), maximum(0)
+    {
+    }
+
+    int minimum;  // 0x00 lowest ever
+    int average;  // 0x04 over the last 20
+    int last;     // 0x08
+    int maximum;  // 0x0c highest of the last 20
+};
+
 // What EfzRevival.dll needs to start a match. 0x114 bytes.
 struct GameInfo {
     // FUNCTION: 0x432580
@@ -67,20 +82,6 @@ struct GameInfo {
 struct MatchInfo {
     int match;
     int wins[2];            // EfzRevival.dll's online session: by the round's winner
-};
-
-// Round-trip times in milliseconds, for the DLL's display ("Net" queue).
-struct PingStats {
-    // FUNCTION: 0x4325e0
-    PingStats()
-        : minimum(1000000), average(0), last(0), maximum(0)
-    {
-    }
-
-    int minimum;  // 0x00 lowest ever
-    int average;  // 0x04 over the last 20
-    int last;     // 0x08
-    int maximum;  // 0x0c highest of the last 20
 };
 
 // One frame's state, for desync detection: the DLL writes the local side's, the

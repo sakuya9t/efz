@@ -13,9 +13,11 @@
 #include "Music.h"
 #include <stdlib.h>
 #include <sstream>
+// Before InputDisplay.h: the timer's setFps and reset come between PracticeSession.h's
+// toWString and the input display's functions.
+#include "../DDRAW/EfzTimer.h"
 #include "InputDisplay.h"
 #include "Log.h"
-#include "../DDRAW/EfzTimer.h"
 
 // DDRAW.dll's frame timer (getEfzTimer): its inline functions are emitted here, the first
 // object to use them.

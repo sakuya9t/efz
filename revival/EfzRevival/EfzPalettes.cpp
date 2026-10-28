@@ -43,7 +43,8 @@ static void readPalette(std::istream &in, ColorPalette *palette)
 }
 
 // FUNCTION: 0x1006dd70
-bool Palettes::loadPal(unsigned int character, unsigned int number)
+// number is an int: number + 1 goes to the stream as one (operator<<(int)).
+bool Palettes::loadPal(unsigned int character, int number)
 {
     if (!validPalette(character, number))
         return false;
@@ -227,4 +228,19 @@ static void logSize(int size, int id, bool custom)
 {
     g_log << "Size: " << size << " id " << id << " custom " << custom << "\n";
     g_log.flush();
+}
+
+// Unused, and not static: the compiler emits it and link-time code generation drops it,
+// but not before the log's hex output, width and fill and its operator<< for unsigned
+// int count as this object's. That is where the original has those header functions
+// (std::hex and ios_base::setf, Log::fill and width, then the operator<< instantiations
+// for std::hex and unsigned int after the one for bool), before EfzRevival.cpp's stack
+// trace, which keeps them. What the original did with them isn't known; it has no
+// strings.
+void logColors(const ColorPalette &palette)
+{
+    g_log << std::hex;
+    g_log.width(2);
+    g_log.fill('0');
+    g_log << (unsigned int)palette.data[0];
 }

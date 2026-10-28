@@ -8,7 +8,7 @@
 #include "stdafx.h"
 #include "Config.h"
 #include "../EfzRevivalLauncher/Version.h"
-#include "EfzGame.h"
+#include "Efz.h"
 #include <boost/algorithm/string.hpp>
 #define DIRECTINPUT_VERSION 0x0800
 #include <dinput.h>

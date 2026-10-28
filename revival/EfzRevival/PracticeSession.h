@@ -79,3 +79,13 @@ private:
     MusicPlayer *music_;                    // 0x29c
     Playlist playlist_;                     // 0x2a0
 };
+
+// Here rather than in InputDisplay.h: the session's header functions have it before
+// EfzTimer.h's (setFps, reset), and those before the input display's.
+// FUNCTION: 0x10028c40 ?toWString@@YA?AV?$basic_string@_WU?$char_traits@_W@std@@V?$allocator@_W@2@@std@@H@Z
+inline std::wstring toWString(int value)
+{
+    wchar_t buffer[64];
+    swprintf_s(buffer, 64, L"%d", value);
+    return std::wstring(buffer);
+}

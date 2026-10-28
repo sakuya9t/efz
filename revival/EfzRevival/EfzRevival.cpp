@@ -6,10 +6,11 @@
 #include "stdafx.h"
 #include "EfzGame.h"
 #include "Config.h"
-#include "EfzRevival.h"
 #include "EfzReplay.h"
 #include "Hook.h"
 #include "Log.h"
+// After Log.h: the object instantiates <random>'s engine after the log's stream.
+#include "EfzRevival.h"
 #include "../EfzRevivalLauncher/Version.h"
 #include "OnlineSession.h"
 #include "OnlineSpectatorSession.h"
@@ -47,15 +48,6 @@ bool g_unknown2a9;
 // GLOBAL: 0x100a02a8
 // The joystick the players' button A is on (CInput's device numbers, 0 the keyboard).
 BYTE g_joystick;
-
-// GLOBAL: 0x100a0710
-Log g_log;
-// GLOBAL: 0x100a070c
-// In place of the game's rand, so that both sides of a netplay match draw the same
-// numbers (and a replay or save state can restore them).
-std::minstd_rand g_rng(timeGetTime());
-// GLOBAL: 0x100a0780
-Game g_game;
 
 // The module the crash happened near, for the stack trace's offsets.
 class Module {
@@ -123,6 +115,19 @@ extern "C" __declspec(dllexport) void init(int *args)
     }
     hook((void *)0x401582, 10, (void *)setup);
 }
+
+// After init (before it would read better): an object's imports come in the order its
+// definitions first use them, and WINMM's list timeGetTime (g_rng's dynamic initializer)
+// before timeBeginPeriod (init). Their order among themselves is the static
+// initializers' and the data's.
+// GLOBAL: 0x100a0710
+Log g_log;
+// GLOBAL: 0x100a070c
+// In place of the game's rand, so that both sides of a netplay match draw the same
+// numbers (and a replay or save state can restore them).
+std::minstd_rand g_rng(timeGetTime());
+// GLOBAL: 0x100a0780
+Game g_game;
 
 // The first frame (hooked at efz.exe 0x401582 by init): the window's title, then
 // everything else.

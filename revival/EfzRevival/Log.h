@@ -14,8 +14,11 @@
 #pragma once
 #include <exception>
 #include <ostream>
-#include <boost/iostreams/device/file.hpp>
+// gzip.hpp first (the launcher's Log.h has file.hpp first): EfzRevival.obj has the
+// header functions of boost.iostreams' error.hpp (cant_read, cant_seek, bad_putback)
+// before boost.smart_ptr's, which file.hpp would bring first.
 #include <boost/iostreams/filter/gzip.hpp>
+#include <boost/iostreams/device/file.hpp>
 #include <boost/iostreams/filtering_stream.hpp>
 // Nothing uses boost::iostreams::copy, but its header is why every object that includes
 // this one has boost.bind's placeholders _1-_9 (and std::ignore) among its static
@@ -27,6 +30,12 @@ public:
     // FUNCTION: 0x10017fc0
     Log()
         : enabled_(false)
+    {
+    }
+
+    // Written out, not implicit: EfzRevival.obj has the destructor right after the
+    // constructor among its header functions, which come out in definition order.
+    ~Log()
     {
     }
 
@@ -67,18 +76,20 @@ public:
         }
     }
 
-    // FUNCTION: 0x10016ad0
-    void width(int width)
-    {
-        if (enabled_)
-            out_.width(width);
-    }
-
+    // fill before width: header functions come out in the order of their definitions
+    // (EfzPalettes.obj, the first to use them, has fill first).
     // FUNCTION: 0x10016aa0
     void fill(char fill)
     {
         if (enabled_)
             out_.fill(fill);
+    }
+
+    // FUNCTION: 0x10016ad0
+    void width(int width)
+    {
+        if (enabled_)
+            out_.width(width);
     }
 
     // The instantiations (decorated names as the rebuild's map has them; the ones for
