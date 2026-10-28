@@ -46,7 +46,10 @@ mkdir -p "$run/game"
 for entry in "$EFZ_DIR"/*; do
     ln -s "$entry" "$run/game/$(basename "$entry")"
 done
-rm -f "$run/game/efz.exe" "$run/game/key.ini"
+# The links to what is copied go first: cp would write through them into $EFZ_DIR (a
+# game folder with Revival installed has its own EfzRevival.* and DDRAW.dll).
+rm -f "$run/game/efz.exe" "$run/game/key.ini" "$run/game/EfzRevival.exe" \
+    "$run/game/EfzRevival.dll" "$run/game/DDRAW.dll" "$run/game/EfzRevival.ini"
 cp "$exe" "$run/game/efz.exe"
 [ ! -e "$EFZ_DIR/key.ini" ] || cp "$EFZ_DIR/key.ini" "$run/game/key.ini"
 cp "$revival/EfzRevival.exe" "$revival/EfzRevival.dll" "$revival/DDRAW.dll" "$run/game/"
