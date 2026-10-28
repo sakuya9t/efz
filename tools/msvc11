@@ -21,6 +21,9 @@ case $tool in
     rc) toolpath=/opt/tc/sdk71a/Bin/RC.Exe ;;
     *) toolpath=/opt/tc/vs2012/bin/$tool.exe ;;
 esac
+# MSVC11_LINK runs another link.exe instead, a path in the container (tools/icfsort.py's
+# instrumented copy under /work/build); the toolchain's DLLs are still found on WINEPATH.
+if [ "$tool" = link ] && [ -n "$MSVC11_LINK" ]; then toolpath=$MSVC11_LINK; fi
 toolchain=${EFZ_TOOLCHAIN:-$HOME/tools/efz-toolchain}
 repo=$(cd "$(dirname "$0")/.." && pwd)
 case $PWD/ in

@@ -194,10 +194,13 @@ The comparisons use a Ghidra export of the originals for function boundaries
 
 The rebuilt binaries inject into the rebuilt `efz.exe` and run like the originals
 (`tools/revival-test.sh`). `DDRAW.dll` rebuilds byte for byte (`make revival-ddraw-check`).
-`EfzRevival.exe` has the original's size, sections, data and static initializers, but
-can't be made identical from the sources: which of several identical functions its link
-keeps depended on unused code the original's link dropped, so part of its code sits at
-other addresses. `EfzRevival.dll`'s layout is in progress. See [docs/revival.md](docs/revival.md) for the binaries, the toolchain, the
+The other two can't be made identical: which of several identical functions and data
+the linker keeps is decided by an unstable sort over everything it loaded, including the
+original's unused code that the link dropped, and the outcome behaves like a hash of all
+of it. `EfzRevival.exe` has the original's size, sections, data and static initializers;
+`EfzRevival.dll` its imports, static initializers and string order, with 413 of 416
+functions matching. Apart from those three functions and a few orderings, what differs is
+the copies the linker keeps and what follows from where they sit. See [docs/revival.md](docs/revival.md) for the binaries, the toolchain, the
 rules that decide the code layout, the protocol, rollback and the practice tools.
 
 ## Findings so far
@@ -248,4 +251,5 @@ EfzRevival 1.02h, alongside:
    inject and run like the originals.
 4. **Byte-identical binaries.** *Done* for `DDRAW.dll`. `EfzRevival.exe`: as far as
    its sources go (see "The launcher, byte for byte" in [docs/revival.md](docs/revival.md)).
-   `EfzRevival.dll`: *in progress* (function, string and import order).
+   `EfzRevival.dll`: as far as its sources go, with three functions whose compiled form
+   wasn't reproduced (see "The whole image").

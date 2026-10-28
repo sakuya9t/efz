@@ -4,6 +4,11 @@
 #include "stdafx.h"
 #include "EfzGame.h"     // winsock2.h (Efz.h) before Session.h's windows.h
 #include "Session.h"
+// A stand-in: <functional> adds an odd number of symbols to the compiler's count here,
+// between ReplaySession.cpp's strings and TournamentSession.cpp's, and nothing to the
+// image. The original's count between them was odd too (the tournament session's string
+// pairs show it, see docs/revival.md, Strings); what it was is not known.
+#include <functional>
 
 // FUNCTION: 0x100224c0 ??0Session@@QAE@XZ
 // FUNCTION: 0x100224d0 ??_GSession@@UAEPAXI@Z

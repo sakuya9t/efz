@@ -413,6 +413,23 @@ Making the order file again after the sources change (`make revival-launcher-ord
 takes two links: one without it, and one with the order that link suggests, because
 naming identical functions changes which of them the link folds.
 
+**Steering the sort with stand-ins doesn't work** (**observed**). A stand-in
+`msvcr110.dll` for `link.exe` that passes everything through but logs `qsort` showed six
+folding sorts per link (`.text` with 10,187 candidates, dropped code included;
+`.text$x` 999; `.CRT$XCU` 20; `.rdata` 3,127; `.rdata$r` 1,270; `.xdata$x` 1,256), and a
+copy of VS2012's `qsort` fed the logged ranks reproduces all twelve of two links
+exactly (wine's `msvcr110.dll` and Microsoft's sort the same). The order file gives each
+listed function a rank of its own, so only unlisted candidates tie: the CRT's, protobuf's,
+statics, funclets and data. But the ties' outcome behaves like a hash of the whole array:
+one candidate added at a random place changed the first member of 387 to 543 of the 846
+`.text` runs (eight trials). Choosing the original's copy in each tie across objects
+would take about 490 bits for `.text` alone (231 for `.text$x`, 145 for `.rdata`, 153
+for `.xdata$x`), and the original's array held functions that aren't in the image at
+positions that can't be seen. So the CRT's layout, the folded funclets and data, and
+`time.inl`'s statics stay the link's choice: the launcher can't be made identical, with
+or without stand-ins for the dropped code. `EfzRevival.dll` meets the same sorts
+("The linker's folding sorts" below).
+
 ## Recovering EfzRevival.dll
 
 The DLL's code is generated at link time (`/GL`), so it is checked after linking. Its
@@ -472,18 +489,30 @@ What differs from the launcher (all observed in test links):
   passes 65535 neighbouring literals come out swapped in pairs: numbers 2k+1, 2k+2 are
   laid out 2k+2, 2k+1 (**observed** in test links: the tournament session's source
   linked after 64,000 dummy literals keeps its order, after 66,000 swaps, and dummy
-  functions or globals do the same). The rebuild passes 65535 in the tournament
-  session's object. The original passed it before `PracticeSession.cpp`'s literals but
-  after `OnlineSpectatorSession.cpp`'s (its ATL strings, the recorder's names and the
-  replay session's strings are swapped, the spectator session's aren't): by then it had
-  numbered between about 9,700 and 17,000 more symbols than this build, and an odd
-  number more. Where is not known (the object whose source is a guess,
-  `OnlineSync.cpp`, sits in that window; including `Music.h` and `OnlineSession.h`
-  there adds 4,500 and swaps the recorder's and replay session's strings, but also adds
-  `atlbase.h`'s strings and asio's statics, which the original's object doesn't have),
-  so those three objects' strings stay in order here. The parity counts too: an odd
-  number of symbols added before the tournament session swaps its pairs the other
-  way, so this build's unused functions come in pairs. One- and
+  functions or globals do the same). Within an object the counter takes its literals
+  before its functions, and it counts what the front end emits, not what it only
+  declares: a header of 5,000 function declarations or unused inline functions adds
+  nothing, unused classes with virtual destructors add 7 each, `<atomic>` about 1,700,
+  `<thread>` 300 and `<functional>` 35, with no code, data or strings. The original
+  passed 65535 before `PracticeSession.cpp`'s literals but after
+  `OnlineSpectatorSession.cpp`'s (its ATL strings, the recorder's names and the replay
+  session's strings are swapped, the spectator session's aren't), the rebuild only in
+  the tournament session's object: the original numbered thousands more symbols, where
+  is not known. Stand-ins put this build's numbering where the original's was:
+  `Log.h` includes `<atomic>` (each of the fifteen objects that include it counts about
+  1,700 more, which passes 65535 in `OnlineSync.cpp`, before the practice session's
+  strings), and the parity of each object's count decides which neighbours pair up,
+  so `Recorder.cpp`'s unused function is one (an odd count between the recorder's
+  strings and the replay session's) and `Session.cpp` includes `<functional>` (an odd
+  count between the replay session's and the tournament session's). With them every
+  object's strings come out in the original's order but for two short ones, `"0x"` in
+  `EfzRevival.cpp` and an `L" "`, which the original places elsewhere. The recorder's needed two more things the code shows: its name functions
+  defined in the reverse of their addresses' order (strings come in definition order,
+  code doesn't change) and `stateName`'s cases in the order of the original's code
+  blocks (recording, replaying, then the waits). Any change to the count before an
+  object (a function, a literal, an include) flips its pairs if it is odd, so new
+  stand-ins come in even numbers or are balanced where the original's count says.
+  One- and
   two-byte literals (`""`, `"\n"`) are placed in the gaps the others' alignment leaves,
   anywhere in the section. One-byte objects in `.bss` (`std::ignore`, boost.bind's
   `_1`-`_9`) are placed the same way: in the original the first object's nine
@@ -567,15 +596,17 @@ the build (**observed** unless marked):
   own pair of `to_utf8` functions in the same order: one header of `static` functions
   that the three include. Only `Config.cpp` uses the address parser.
 - **How far:** `make revival-dll-check-image` shows the headers (but for the sizes that
-  follow from the sections), `.rsrc`, the import table and the sizes of `.text` and
-  `.data` identical, and `.rdata` `0x10` short. 413 of the 416 annotated functions
-  match; 357 of the 368 developer functions and 2600 of the 2695 COMDATs are in their
-  original order (`tools/revalign.py`); the static initializers are the same 271 in the
-  same order. The string literals are the original's set but for ordering in a few
-  objects (the pairwise swaps above); what's left in `.rdata` is mostly the exception
-  tables, whose order follows the COMDATs' and the linker's sorts (see "Imports": any
-  change to the set of linked contributions reshuffles them, by thousands of bytes in
-  `pecmp`'s count). Two COMDAT groups need the launcher's headers as they are now (no
+  follow from the sections), `.rsrc`, the import table and the size of `.data`
+  identical, `.text` `0x10` long and `.rdata` `0x10` short (both from which copies of
+  identical library code and data the linker keeps, see "The linker's folding sorts").
+  413 of the 416 annotated functions match; 357 of the 368 developer functions and 2600
+  of the 2695 COMDATs are in their original order (`tools/revalign.py`); the static
+  initializers are the same 271 in the same order. The string literals are the
+  original's and in its order but for two short ones placed elsewhere (`"0x"`,
+  `L" "`) and a digit table kept from the other object; what's left in
+  `.rdata` is mostly the exception tables, whose order follows the COMDATs' and the
+  linker's sorts (any change to the set of linked contributions reshuffles them, by
+  thousands of bytes in `pecmp`'s count). Two COMDAT groups need the launcher's headers as they are now (no
   change to the launcher's own image): `SharedQueue.h` declaring `push` and `pop`
   before the other members and `SharedData.h` defining `PingStats` before `GameInfo`
   (see "Header functions within an object").
@@ -773,6 +804,39 @@ members also moves other sorts: `IMAGE::ICFAnalysis` sorts all candidate
 functions with the same `qsort` before folding identical ones, so adding or dropping
 contributions anywhere changes which copy of a library function survives and where
 the library's functions and their exception tables land.
+
+**The linker's folding sorts.** `tools/icfsort.py` links the DLL with a copy of
+`link.exe` that writes out the candidates of each of `ICFAnalysis`'s sorts, and replays
+them: the nine sorts of this link (7,712 code candidates, 3,336, 905, 724 and 390 data
+ones, and four small ones) come out exactly as the linker's. The comparator is in the
+script; what matters is its last key, a candidate's own id, which is unique only for
+code generated at link time: library functions, and every candidate in the data groups
+(link-time ones included), tie whenever their sizes and checksums are equal, and the
+C runtime's `qsort` then orders a run of ties by where its members happened to stand,
+and the first one of each run is kept. **Observed** consequences:
+- `.rdata` is `0x10` short for no missing item. Identical read-only data folds the same
+  way: `num_get`'s digit tables (`_Getffld`'s `"0123456789-+Ee"`, `_Getffldx`'s
+  `"0123456789ABCDEFabcdef-+XxPp"`), each in this build's `EfzGame.obj` and in
+  `wlocale.obj` for two more character types, are kept from `wlocale.obj` and the
+  link-time code respectively here, the other way round in the original, which pads
+  them differently; the same goes for a virtual table (`sp_counted_impl_p`'s), library
+  string constants (`" out of bounds"`, `"Write"`) and the exception tables, and with
+  their padding the differences add up to `0x10`.
+- Of the 76 runs of identical library functions that survive in this build, 61 keep
+  the copy the original keeps; for 15 the original keeps another (`__Xp_movx` is
+  `xlprec.obj`'s there, `xprec.obj`'s here).
+- The checksums cover the relocations' target names, so every link-time function that
+  refers to a literal changes key when the literals' `$SG` numbers move: 307 keys
+  changed with the stand-ins of "Strings", and with them which library copies survive
+  (`.text` went from the original's size to `0x10` more, `pecmp` from 192,703 differing
+  bytes to 67,667).
+
+So the survivors can't be steered from here: they follow from every candidate's key,
+which needs every link-time function and literal number to be the original's first.
+Adding one candidate anywhere among the link-time code (searched at every position
+with the simulation) keeps at most 45 of the 61 runs that match now. A single extra
+data candidate would fix the digit tables (976 of 3,337 positions do), but would move
+the 98 other runs of tied data, whose originals aren't known.
 
 **Registers.** Read from `c2.dll`'s allocator and from a copy patched to print its
 decisions: each variable is weighed by its uses, block by block over its lifetime (a

@@ -8,15 +8,12 @@
 // push_front(char &&) among the deque's first members (after vector<char>'s push_back,
 // before the deque's clear), where only code that calls it directly puts it; the only
 // call left in the image is deque's insert's, which comes much later. What called it
-// is not known. Two functions rather than one keep the compiler's symbol numbering
-// even (an odd count swaps the tournament session's string pairs, docs/revival.md).
-void unusedPushFront(std::deque<char> &buffer)
+// is not known. One function: the compiler counts it after this object's strings, and
+// an odd count here is what puts ReplaySession.cpp's string pairs in the original's
+// order (docs/revival.md, Strings).
+void unusedPushFront(std::deque<char> &buffer, const char &input)
 {
     buffer.push_front(0);
-}
-
-void unusedPushFrontCopy(std::deque<char> &buffer, const char &input)
-{
     buffer.push_front(input);
 }
 
@@ -77,27 +74,28 @@ unsigned int Recorder::delay()
     return delayed_.size() / 3;
 }
 
-// FUNCTION: 0x10077420
-std::wstring Recorder::replayBufferName()
+// The four name functions are in the reverse of their addresses' order, unlike the rest
+// of this file: their strings come first-defined first in the original's object
+// (stateName's, startConditionName's, then replayBufferName's), and the code is the
+// same either way. stateName's cases are in the order of the original's code blocks
+// (idle, recording, replaying, then the waits), which is also its strings' order.
+// FUNCTION: 0x10077200
+std::wstring Recorder::stateName()
 {
-    std::wstringstream name;
-    name << replayBuffer_;
-    switch (random_) {
-    case REPLAY_FIXED:
-        return name.str();
-    case REPLAY_RANDOM:
-        return L"Rand";
+    switch (state_) {
+    case RECORDER_IDLE:
+        return L"Nothing";
+    case RECORDER_RECORDING:
+        return L"Record";
+    case RECORDER_REPLAYING:
+        return L"Replay";
+    case RECORDER_RECORD_WAIT:
+        return L"Record Wait";
+    case RECORDER_REPLAY_WAIT:
+        return L"Replay Wait";
     default:
         return L"Error";
     }
-}
-
-// FUNCTION: 0x100773a0
-std::wstring Recorder::recordBufferName()
-{
-    std::wstringstream name;
-    name << recordBuffer_;
-    return name.str();
 }
 
 // FUNCTION: 0x100772c0
@@ -121,20 +119,24 @@ std::wstring Recorder::startConditionName()
     }
 }
 
-// FUNCTION: 0x10077200
-std::wstring Recorder::stateName()
+// FUNCTION: 0x100773a0
+std::wstring Recorder::recordBufferName()
 {
-    switch (state_) {
-    case RECORDER_IDLE:
-        return L"Nothing";
-    case RECORDER_RECORDING:
-        return L"Record";
-    case RECORDER_RECORD_WAIT:
-        return L"Record Wait";
-    case RECORDER_REPLAYING:
-        return L"Replay";
-    case RECORDER_REPLAY_WAIT:
-        return L"Replay Wait";
+    std::wstringstream name;
+    name << recordBuffer_;
+    return name.str();
+}
+
+// FUNCTION: 0x10077420
+std::wstring Recorder::replayBufferName()
+{
+    std::wstringstream name;
+    name << replayBuffer_;
+    switch (random_) {
+    case REPLAY_FIXED:
+        return name.str();
+    case REPLAY_RANDOM:
+        return L"Rand";
     default:
         return L"Error";
     }

@@ -24,6 +24,13 @@
 // this one has boost.bind's placeholders _1-_9 (and std::ignore) among its static
 // initializers, as fourteen of the original's objects do.
 #include <boost/iostreams/copy.hpp>
+// A stand-in: <atomic> adds about 1,700 symbols to the compiler's count in each object
+// that includes this header, and no code, data or strings. The original numbered
+// thousands more symbols than this build before PracticeSession.cpp's literals (what
+// they were is not known); this header brings this build's numbering past 65535 at the
+// same place, which swaps PracticeSession.cpp's, Recorder.cpp's and ReplaySession.cpp's
+// literals in pairs as in the original (docs/revival.md, Strings).
+#include <atomic>
 
 class Log {
 public:
