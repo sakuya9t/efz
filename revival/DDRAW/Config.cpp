@@ -7,6 +7,11 @@
 #include "stdafx.h"
 #include "Config.h"
 #include "EfzCharacters.h"
+// <locale> before Version.h: the functions the precompiled header brings (the end of
+// this object) come in the reverse of their first references, and <locale> refers to
+// the facet base's members before REVIVAL_SUFFIX's initializer refers to the wide
+// string's; boost's headers, after it, refer to std::locale's copy constructor.
+#include <locale>
 #include "Version.h"
 #include <boost/algorithm/string.hpp>
 #define DIRECTINPUT_VERSION 0x0800
@@ -27,14 +32,15 @@
 // - the wide string's move constructor, then c_str: referred to here, they come off the
 //   front end's work list (last in, first out: c_str first) after std::locale's default
 //   constructor, which the boost algorithms below refer to first, and before its copy
-//   constructor.
+//   constructor. A cast rather than std::move: std::move<std::wstring &>'s instance is
+//   among the later ones (0x10008010, after the iterator assign's).
 static std::wstring unusedHelper(std::wostream &out, int value, wchar_t *buffer,
     std::wstring &path)
 {
     out << L"None";
     out << L"Name";
     out << value;
-    std::wstring result(std::move(path));
+    std::wstring result(static_cast<std::wstring &&>(path));
     GetPrivateProfileStringW(NULL, NULL, NULL, buffer, value, result.c_str());
     return result;
 }

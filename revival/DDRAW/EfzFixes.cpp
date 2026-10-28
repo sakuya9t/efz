@@ -154,11 +154,11 @@ void skipWindowCreation()
 // 10, 10 when they don't fit the screen), with the exe's icon and windowProc. The
 // handle goes into WinMain's hwnd (its ebp - 0x48: the hook's caller's frame). Also
 // opens the log when the ini asks for it.
-// TODO: differs: the registers: the original keeps width and height in esi/edi and x, y
-// on the stack; this keeps y in esi and reloads width (0x10 bytes shorter, which moves
-// all the code after it). Not changed by the locals' order, scope or names, a POINT,
-// bool temporaries, or an unused function before it; the default-first forms of the
-// checks (x = 10 unless the ini's fits) are further off.
+// The size check is two checks with the same fallback, which the compiler merges: the
+// same code as one condition, but its register allocator (which weighs each variable by
+// its uses in the blocks its lifetime spans) then gives esi to width after the
+// GetSystemMetrics calls and the stack to x and y, as in the original; with one
+// condition y gets esi.
 // FUNCTION: 0x1001c6c0
 void createWindow()
 {
@@ -187,9 +187,12 @@ void createWindow()
     int height = config.windowHeight;
     int screenWidth = GetSystemMetrics(SM_CXSCREEN);
     int screenHeight = GetSystemMetrics(SM_CYSCREEN);
-    if (width < 1 || width > screenWidth || height < 1 || height > screenHeight) {
-        height = 480;
+    if (width < 1 || width > screenWidth) {
         width = 640;
+        height = 480;
+    } else if (height < 1 || height > screenHeight) {
+        width = 640;
+        height = 480;
     }
     int x = config.windowX;
     int y = config.windowY;
@@ -357,8 +360,10 @@ static void inputHook()
 
 // When none of the player's four directions is bound to a joystick but a button is,
 // the hat of that button's joystick gives the direction.
-// TODO: differs: esi and edi are swapped (the original keeps the device in esi). Not
-// changed by the order of the declarations.
+// Each joystick's case reads its state itself; the compiler merges the two copies only
+// after allocating registers. Until then the device's uses in both make it heavier than
+// the loop's binding byte, so the allocator colours it first (esi), before the player's
+// pointer (edi), as in the original; with one copy after the if, the pointer gets esi.
 // FUNCTION: 0x1001cdf0
 static void readHat(BYTE *result, BYTE *player)
 {
@@ -376,17 +381,22 @@ static void readHat(BYTE *result, BYTE *player)
         BYTE kind = HIBYTE(bindings[i]);
         if (kind == 0)
             continue;
-        if (kind == 1)
+        if (kind == 1) {
             device = *(IDirectInputDevice2A **)(input + 0x1ec);
-        else if (kind == 2)
+            if (device) {
+                device->Acquire();
+                if (device->GetDeviceState(sizeof(state), &state) != DI_OK)
+                    return;
+                break;
+            }
+        } else if (kind == 2) {
             device = *(IDirectInputDevice2A **)(input + 0x1f0);
-        else
-            continue;
-        if (device) {
-            device->Acquire();
-            if (device->GetDeviceState(sizeof(state), &state) != DI_OK)
-                return;
-            break;
+            if (device) {
+                device->Acquire();
+                if (device->GetDeviceState(sizeof(state), &state) != DI_OK)
+                    return;
+                break;
+            }
         }
     }
     if (device)

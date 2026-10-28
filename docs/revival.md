@@ -144,7 +144,11 @@ Build options **observed** so far:
   links function by function (`/Gy`), so its own code is among the COMDATs at the
   start (`0x10001000`-`0x10020080`), not after the CRT. It also compiles `Config.cpp`
   (the ini and key tables) and the hook trampolines that EfzRevival.dll has.
-  `make revival-ddraw-diff` builds `revival/DDRAW/*.cpp` and compares.
+  `make revival-ddraw-diff` builds `revival/DDRAW/*.cpp` and compares;
+  `make revival-ddraw-check` links it, sets what no build reproduces
+  (`tools/ddrawpostlink.py`: the timestamps, the PDB's GUID and age, boost.system's
+  anonymous-namespace name) and compares the whole image: it is the original, byte for
+  byte.
 - protobuf, a separate static library: its own project's Release options
   (`/O2 /Oi /Oy- /GS /Gy /EHsc /fp:precise`), changed to `/MT`, with `HAVE_ZLIB`, built
   from its `vsprojects` directory (its `__FILE__` strings are `..\src\google\protobuf\...`).
@@ -538,7 +542,7 @@ the build (**observed** unless marked):
   that the three include. Only `Config.cpp` uses the address parser.
 - **How far:** `make revival-dll-check-image` shows the headers (but for the sizes that
   follow from the sections), `.rsrc` and the size of `.data` identical, `.text`
-  `0x100` bytes short and `.rdata` `0x10` short. 404 of the 416 annotated functions
+  `0x120` bytes short and `.rdata` `0x10` short. 405 of the 416 annotated functions
   match; 353 of the 368 developer functions and 2419 of the 2695 COMDATs are in their
   original order (`tools/revalign.py`); the static initializers are the same 271 in the
   same order. The string literals are the original's set but for ordering in a few
@@ -634,6 +638,15 @@ Consequences for the sources:
   the spectator's (`OnlineSync.cpp`).
 - Names don't matter for the developer's functions; they still do for COMDATs folded
   with others and for anything sorted by the linker.
+
+**Registers.** Read from `c2.dll`'s allocator and from a copy patched to print its
+decisions: each variable is weighed by its uses, block by block over its lifetime (a
+use in a loop counts four times), and the heaviest gets a register first. Copies of
+code that the compiler merges only after allocating still count, so the source's block
+structure decides registers the final code doesn't show. In `DDRAW.dll`,
+`createWindow`'s size check is two checks with the same fallback (one condition gives
+`y` `esi`), and each of `readHat`'s joystick cases reads the device's state itself (one
+copy after the `if` gives the player's pointer `esi`).
 
 The modules, by address (chunk B), as far as known:
 
@@ -789,7 +802,8 @@ protobuf's `GzipOutputStream` (zlib format, level 9) before sending.
 
 ## DDRAW.dll: rendering, the overlay and the boxes
 
-**Observed** in `revival/DDRAW/` (every developer function written; 214 of 217 match):
+**Observed** in `revival/DDRAW/` (every function written; all 221 match, and the image is
+the original's, `make revival-ddraw-check`):
 - **DirectDraw on Direct3D 9.** `DirectDrawCreate` returns `myIDirectDraw`; its
   `SetCooperativeLevel` creates the device (windowed, `D3DSWAPEFFECT_FLIP`, a lockable back
   buffer of the ini's BackBufferWidth/Height, software vertex processing with

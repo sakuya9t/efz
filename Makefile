@@ -437,14 +437,17 @@ revival-ddraw-layout: build/revival/ddraw/DDRAW.dll build/revival/DDRAW.dll.func
 	python3 tools/revalign.py '$(REVIVAL_DIR)/DDRAW.dll' $< build/revival/ddraw/DDRAW.map \
 		build/revival/DDRAW.dll.functions.json 0x10001000 0x10020100 | tail -1
 
-# The whole image, byte for byte: the link, the fields no build reproduces
-# (tools/ddrawpostlink.py), then a comparison with the original (tools/pecmp.py).
+# The whole image, byte for byte: the link, then the fields no build reproduces
+# (tools/ddrawpostlink.py). Like make check, it is the original; where it isn't,
+# tools/pecmp.py says what differs.
 build/revival/ddraw/DDRAW.final.dll: build/revival/ddraw/DDRAW.dll tools/ddrawpostlink.py
 	cp $< $@
 	python3 tools/ddrawpostlink.py $@
 
 revival-ddraw-check: build/revival/ddraw/DDRAW.final.dll
-	python3 tools/pecmp.py '$(REVIVAL_DIR)/DDRAW.dll' $< build/revival/ddraw/DDRAW.map
+	cmp $< '$(REVIVAL_DIR)/DDRAW.dll' || { python3 tools/pecmp.py '$(REVIVAL_DIR)/DDRAW.dll' $< \
+		build/revival/ddraw/DDRAW.map; exit 1; }
+	@sha256sum $<
 
 # An object's range: LAUNCHER_RANGE_<name>, or a `// OBJECT: LO HI` line in its source.
 revival-range:
