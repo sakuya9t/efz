@@ -181,6 +181,7 @@ make revival-dll-diff              # link EfzRevival.dll (/LTCG) and compare its
 make revival-ddraw-diff            # the same for DDRAW.dll
 make revival-launcher              # link EfzRevival.exe
 EFZ_DIR=... tools/revival-test.sh --revival DIR   # run binaries from DIR with efz.exe
+EFZ_DIR=... tools/play.sh --revival  # play the rebuilt Revival on your X display
 ```
 
 The comparisons use a Ghidra export of the originals for function boundaries
