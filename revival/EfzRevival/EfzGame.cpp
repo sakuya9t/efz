@@ -986,9 +986,9 @@ void Game::setRandomSeed(int seed)
 // Reads the random state and both players' inputs that an extended replay keeps after
 // the game's own data.
 // FUNCTION: 0x1006b2f0
-// TODO: differs: the original keeps `this` in edi and the file in esi (here the other
-// way round), and pushes one g_log literal that this build propagates into a clone of
-// the operator<< instantiation; the calls and control flow are the same.
+// The offset goes to the log as an unsigned copy: a temporary the log's operator<< takes
+// by reference, stored just before the call, where offset itself would live in memory
+// from the start (and `this`, the file and the registers would come out differently).
 void Game::readExtendedReplay(std::vector<FrameInput> &inputs)
 {
     inputs.clear();
@@ -1002,7 +1002,7 @@ void Game::readExtendedReplay(std::vector<FrameInput> &inputs)
     g_log.flush();
     int offset = readExtendedOffset(file);
     file->seekg((unsigned int)offset);
-    g_log << "Start offset " << offset << "\n";
+    g_log << "Start offset " << (unsigned int)offset << "\n";
     g_log.flush();
     file->read((char *)&rngSeed_, 4);
     g_log << "Rng " << rngSeed_ << "\n";

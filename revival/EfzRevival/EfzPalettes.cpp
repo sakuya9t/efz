@@ -43,8 +43,6 @@ static void readPalette(std::istream &in, ColorPalette *palette)
 }
 
 // FUNCTION: 0x1006dd70
-// TODO: differs: as in loadDat, the original pushes readColors' index (0) where this
-// build pushes a dummy ecx.
 bool Palettes::loadPal(unsigned int character, unsigned int number)
 {
     if (!validPalette(character, number))
@@ -62,9 +60,6 @@ bool Palettes::loadPal(unsigned int character, unsigned int number)
 
 // 40 colours (120 bytes) from index first of a file's palette, after its first byte.
 // FUNCTION: 0x1006dc60
-// TODO: differs: index is 0 at both calls; the original still reads it (size - index,
-// colors + index), while this build propagates the constant and drops it. The rest
-// (call targets aside) is the same.
 bool Palettes::readColors(PALETTEENTRY *colors, int first, int index, std::string file)
 {
     BYTE rgb[120];
@@ -208,8 +203,6 @@ void Palettes::log(const ColorPalette *palette)
 }
 
 // FUNCTION: 0x1006d5b0
-// TODO: differs: the original pushes readColors' index (always 0) as a real argument;
-// this build propagates the 0 into readColors and pushes a dummy ecx instead.
 bool Palettes::loadDat(unsigned int character, unsigned int number)
 {
     if (!validPalette(character, number))
@@ -217,7 +210,11 @@ bool Palettes::loadDat(unsigned int character, unsigned int number)
     std::stringstream path;
     path << folderName(character) << "\\" << folderName(character) << ".dat";
     ColorPalette palette;
-    if (readColors((PALETTEENTRY *)(palette.data + 4), number * 40, 0, path.str())) {
+    // The index is 0, but number - number isn't a constant to link-time code generation,
+    // which would otherwise drop the parameter (both calls passing a constant) where the
+    // original pushes it and readColors still reads it.
+    if (readColors((PALETTEENTRY *)(palette.data + 4), number * 40, number - number,
+                   path.str())) {
         *(int *)palette.data = makePalette(character, false, number).value;
         palettes_[*(int *)palette.data] = palette;
         return true;

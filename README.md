@@ -189,7 +189,7 @@ The comparisons use a Ghidra export of the originals for function boundaries
 | Binary | Source | Functions matching |
 |---|---|---|
 | `EfzRevival.exe` | `revival/EfzRevivalLauncher/`: config, console menu, game launch and injection, UDP network, the protocol state machine, shared memory with the DLL, the network messages (`EfzPackets.proto`) | 3342 of 3365 |
-| `EfzRevival.dll` | `revival/EfzRevival/`: hooks into `efz.exe`, the box display, save states, rollback (`OnlineSession`), practice (pause, frame step, record/replay), spectating, replays, tournaments, music | 405 of 416 |
+| `EfzRevival.dll` | `revival/EfzRevival/`: hooks into `efz.exe`, the box display, save states, rollback (`OnlineSession`), practice (pause, frame step, record/replay), spectating, replays, tournaments, music | 410 of 416 |
 | `DDRAW.dll` | `revival/DDRAW/`: DirectDraw on Direct3D 9, the text overlay and box renderer | 221 of 221 |
 
 The rebuilt binaries inject into the rebuilt `efz.exe` and run like the originals
@@ -244,7 +244,7 @@ EfzRevival 1.02h, alongside:
    link reproduces the Rich header's products and builds.
 3. **Function matching:** the launcher first (no `/GL`, so objects compare one by one),
    then `EfzRevival.dll` and `DDRAW.dll` (`/GL`: compared after linking). *Done:* all
-   code recovered; 3342/3365, 405/416 and 221/221 functions match; the rebuilt binaries
+   code recovered; 3342/3365, 410/416 and 221/221 functions match; the rebuilt binaries
    inject and run like the originals.
 4. **Byte-identical binaries.** *Done* for `DDRAW.dll`. `EfzRevival.exe`: as far as
    its sources go (see "The launcher, byte for byte" in [docs/revival.md](docs/revival.md)).

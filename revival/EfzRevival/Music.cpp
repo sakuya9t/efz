@@ -101,10 +101,11 @@ MusicPlayer::~MusicPlayer()
     stop();
 }
 
+// The two branches' control_->Run() and return true are one block, after the seek: the
+// seek branch returns itself (falling through to the function's return instead, it
+// would jump to the RenderFile branch's copy). The original's tail at 0x1006fd40 is a
+// separate function in the Ghidra export.
 // FUNCTION: 0x1006fc10
-// TODO: differs: the original places the two branches' shared control_->Run() and
-// return after the seek; this build puts it after the RenderFile branch (the original's
-// tail at 0x1006fd40 is a separate function in the Ghidra export)
 bool MusicPlayer::play(std::wstring file)
 {
     if (muted || failed_[file])
@@ -117,6 +118,7 @@ bool MusicPlayer::play(std::wstring file)
         seeking_->SetPositions(&start, AM_SEEKING_AbsolutePositioning, &end,
                                AM_SEEKING_AbsolutePositioning);
         control_->Run();
+        return true;
     } else {
         graph_.CoCreateInstance(CLSID_FilterGraph);
         graph_->QueryInterface(IID_PPV_ARGS(&control_));

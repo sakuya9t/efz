@@ -242,6 +242,28 @@ def main():
     # annotated addresses also end the original's previous function
     # (Ghidra misses functions only reached through vtables).
     starts = sorted(set(starts) | {a for _, (k, a) in funcdiff.read_annotations(src_dir).items() if k == 'FUNCTION'})
+    # Ghidra also splits a function at a block it reaches only by a jump (a merged tail):
+    # when the original's range is shorter than ours, the comparison is tried again over
+    # our length, up to the next annotated function at most.
+    annotated_starts = sorted({a for _, (k, a) in funcdiff.read_annotations(src_dir).items()
+                               if k == 'FUNCTION'})
+
+    def compare_split(matcher, ours, ours_end, addr, theirs_end):
+        result = matcher.compare(ours, ours_end, addr, theirs_end)
+        longer = addr + (ours_end - ours)
+        if result[0] or longer <= theirs_end:
+            return result
+        k = bisect.bisect_right(annotated_starts, addr)
+        if k < len(annotated_starts) and annotated_starts[k] < longer:
+            return result
+        saved = dict(matcher.learned)
+        retry = matcher.compare(ours, ours_end, addr, longer)
+        if retry[0]:
+            return retry
+        matcher.learned.clear()
+        matcher.learned.update(saved)
+        return result
+
     text_syms = [(a, n) for a, n in syms if built.tlo <= a < built.thi]
     tstarts = [a for a, _ in text_syms]
     # a first pass over every annotated function learns addresses only
@@ -261,7 +283,7 @@ def main():
             ours_end = tstarts[i] if i < len(tstarts) else built.thi
             j = bisect.bisect_right(starts, addr)
             theirs_end = starts[j] if j < len(starts) else orig.thi
-            if probe.compare(ours, ours_end, addr, theirs_end)[0]:
+            if compare_split(probe, ours, ours_end, addr, theirs_end)[0]:
                 trusted.update(probe.learned)
     m = Matcher(orig, built, syms, trusted)
     total = matched = 0
@@ -277,7 +299,7 @@ def main():
         ours_end = tstarts[i] if i < len(tstarts) else built.thi
         j = bisect.bisect_right(starts, addr)
         theirs_end = starts[j] if j < len(starts) else orig.thi
-        ok, n, same, lb, la = m.compare(ours, ours_end, addr, theirs_end)
+        ok, n, same, lb, la = compare_split(m, ours, ours_end, addr, theirs_end)
         matched += ok
         print(f'{"MATCH" if ok else "DIFF "} {qual} {addr:#x}: {same}/{n} instructions')
         if verbose and not ok:

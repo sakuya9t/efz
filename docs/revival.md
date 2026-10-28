@@ -542,7 +542,7 @@ the build (**observed** unless marked):
   that the three include. Only `Config.cpp` uses the address parser.
 - **How far:** `make revival-dll-check-image` shows the headers (but for the sizes that
   follow from the sections), `.rsrc` and the size of `.data` identical, `.text`
-  `0x120` bytes short and `.rdata` `0x10` short. 405 of the 416 annotated functions
+  `0xf0` bytes short and `.rdata` `0x10` short. 410 of the 416 annotated functions
   match; 353 of the 368 developer functions and 2419 of the 2695 COMDATs are in their
   original order (`tools/revalign.py`); the static initializers are the same 271 in the
   same order. The string literals are the original's set but for ordering in a few
@@ -579,18 +579,24 @@ the build (**observed** unless marked):
   - `Game`'s replay name is a `std::wstring` in a struct of its own (its implicit
     constructor and destructor are folded with `boost::filesystem::path`'s); `rand`'s
     seed string is read with `str().data()`.
-- **Not reproduced:** `SyncBlock`'s constructor matches with its members zeroed in the
-  body (`frame`, `fpuCW`, then `stateP1`, `stateP2`, `state`, the doubles and `rng`),
-  only the inputs in the initializer list, a change to the launcher's `SharedData.h`
-  that is still to be made. Register allocation without a source change found yet in
-  `Game::getCollisionInfo`, `collectRects`, `drawBoxRequest`, `readExtendedReplay` and
-  `LiveInput`'s constructor (which the original compiles knowing its base
-  constructor returns `this`); `Palettes::readColors`, whose `index` the original keeps
-  though both callers pass 0 (local variables, `unsigned`, a dead caller didn't change
-  that); `PracticeSession::keyPressed`'s `(x - middle) * -1.0 + middle`, which the
-  original multiplies and this build turns into a subtraction (eight spellings
-  tried); `MusicPlayer::play`'s merged `control_->Run()` tail;
-  `OnlineSession::menuFramesToRun`'s `last + 1 - frame_`.
+  - A constant argument link-time code generation would propagate into the callee:
+    `loadDat` passes `readColors` its index as `number - number` (0, but not a
+    constant to it), so `readColors` keeps reading it and both callers push it.
+  - Merged tails: `MusicPlayer::play`'s seek branch returns itself, which puts the
+    branches' shared `control_->Run(); return true` block after the seek.
+  - Log arguments are taken by reference: `readExtendedReplay` logs
+    `(unsigned int)offset`, a temporary stored just before the call, so `offset` itself
+    stays in a register.
+- **Not reproduced:** register allocation in `Game::getCollisionInfo` (the original
+  tests `info` in memory: its pattern index takes edi), `collectRects` and
+  `drawBoxRequest` (which also keeps a store of `(int)p->x` into `r->left` and reuses
+  `height * 2`, as if `r` could alias the camera), and `LiveInput`'s
+  constructor (which the original compiles knowing its base constructor returns
+  `this`); `PracticeSession::keyPressed`'s `(x - middle) * -1.0 + middle`, which the
+  original multiplies and this build turns into a subtraction (c2 folds a multiply by
+  a constant -1.0 in its x87 code generation; spellings, a variable, `float`, loops
+  and inline helpers tried); `OnlineSession::menuFramesToRun`'s `last + 1 - frame_`,
+  which this build reassociates into `(last - frame_) + 1`.
 
 ### How link-time code generation orders functions
 
