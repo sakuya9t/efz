@@ -121,8 +121,8 @@ bodies; `effect.cpp`'s are edited by hand.
 The lifter still writes raw offsets. Lifting a function again (`tools/lift.py`,
 `tools/objcheck.sh`) overwrites its readable source; run `tools/members.py rewrite`
 on the file afterwards. `tools/lifttest.py` (relift every matched function and compare)
-gives 500 matches as before, the same 48 failures in the hand-written platform files
-as at v1.0.0, and four new ones: CScene3's collision functions `Unk7679b0`, `Unk767f60`,
+gives 503 matches, the same 44 failures in the hand-written platform files as at
+v1.0.0 (and the same 9 functions it can't lift), and four new failures: CScene3's collision functions `Unk7679b0`, `Unk767f60`,
 `Unk7697d0` and `Unk76bd40`, whose frames the lifter no longer recovers now that their
 parameters and callees are typed. Their source matches; only relifting them fails.
 
