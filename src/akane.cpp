@@ -2378,7 +2378,7 @@ void CAkane::UpdateObjects()
                         m_objects[v4].frame = m_objects[v4].frame - 2;
                     }
                 }
-                if ((m_objects[v4].x < m_game->unk14248 - 0x32 && m_objects[v4].facing == 1 || m_objects[v4].x > m_game->unk14250 + 0x32 && m_objects[v4].facing == -1) && m_objects[v4].frame > 0x14) {
+                if ((m_objects[v4].x < m_game->m_view.left - 0x32 && m_objects[v4].facing == 1 || m_objects[v4].x > m_game->m_view.right + 0x32 && m_objects[v4].facing == -1) && m_objects[v4].frame > 0x14) {
                     RemoveObject(v4);
                     unk3144 = 0;
                 }
@@ -2460,7 +2460,7 @@ void CAkane::UpdateObjects()
                         m_objects[v4].frame = m_objects[v4].frame - 2;
                     }
                 }
-                if ((m_objects[v4].x < m_game->unk14248 - 0x32 && m_objects[v4].facing == 1 || m_objects[v4].x > m_game->unk14250 + 0x32 && m_objects[v4].facing == -1) && m_objects[v4].frame > 0x14) {
+                if ((m_objects[v4].x < m_game->m_view.left - 0x32 && m_objects[v4].facing == 1 || m_objects[v4].x > m_game->m_view.right + 0x32 && m_objects[v4].facing == -1) && m_objects[v4].frame > 0x14) {
                     RemoveObject(v4);
                     unk3144 = 0;
                 }
@@ -2573,7 +2573,7 @@ void CAkane::UpdateObjects()
                     m_objects[v4].vy = 0.0;
                     m_objects[v4].unk84 = 1;
                 }
-                if (m_objects[v4].x > m_game->unk14250 + 0x3c && m_objects[v4].facing == -1 || m_objects[v4].x < m_game->unk14248 - 0x3c && m_objects[v4].facing == 1) {
+                if (m_objects[v4].x > m_game->m_view.right + 0x3c && m_objects[v4].facing == -1 || m_objects[v4].x < m_game->m_view.left - 0x3c && m_objects[v4].facing == 1) {
                     m_objects[v4].vx = 0.0;
                     m_objects[v4].vy = 0.0;
                 }
@@ -2599,7 +2599,7 @@ void CAkane::UpdateObjects()
                     m_objects[v4].vy = -1.8;
                     m_objects[v4].unk84 = 1;
                 }
-                if (m_objects[v4].x > m_game->unk14250 + 0x3c && m_objects[v4].facing == -1 || m_objects[v4].x < m_game->unk14248 - 0x3c && m_objects[v4].facing == 1) {
+                if (m_objects[v4].x > m_game->m_view.right + 0x3c && m_objects[v4].facing == -1 || m_objects[v4].x < m_game->m_view.left - 0x3c && m_objects[v4].facing == 1) {
                     m_objects[v4].vx = 0.0;
                     m_objects[v4].vy = 0.0;
                 }
@@ -2625,7 +2625,7 @@ void CAkane::UpdateObjects()
                     m_objects[v4].vy = -3.8;
                     m_objects[v4].unk84 = 1;
                 }
-                if (m_objects[v4].x > m_game->unk14250 + 0x3c && m_objects[v4].facing == -1 || m_objects[v4].x < m_game->unk14248 - 0x3c && m_objects[v4].facing == 1) {
+                if (m_objects[v4].x > m_game->m_view.right + 0x3c && m_objects[v4].facing == -1 || m_objects[v4].x < m_game->m_view.left - 0x3c && m_objects[v4].facing == 1) {
                     m_objects[v4].vx = 0.0;
                     m_objects[v4].vy = 0.0;
                 }
@@ -2651,7 +2651,7 @@ void CAkane::UpdateObjects()
                     m_objects[v4].vy = 0.0;
                     m_objects[v4].unk84 = 1;
                 }
-                if (m_objects[v4].x > m_game->unk14250 + 0x3c && m_objects[v4].facing == 1 || m_objects[v4].x < m_game->unk14248 - 0x3c && m_objects[v4].facing == -1) {
+                if (m_objects[v4].x > m_game->m_view.right + 0x3c && m_objects[v4].facing == 1 || m_objects[v4].x < m_game->m_view.left - 0x3c && m_objects[v4].facing == -1) {
                     m_objects[v4].vx = 0.0;
                     m_objects[v4].vy = 0.0;
                 }
@@ -2677,7 +2677,7 @@ void CAkane::UpdateObjects()
                     m_objects[v4].vy = -2.46;
                     m_objects[v4].unk84 = 1;
                 }
-                if (m_objects[v4].x > m_game->unk14250 + 0x3c && m_objects[v4].facing == 1 || m_objects[v4].x < m_game->unk14248 - 0x3c && m_objects[v4].facing == -1) {
+                if (m_objects[v4].x > m_game->m_view.right + 0x3c && m_objects[v4].facing == 1 || m_objects[v4].x < m_game->m_view.left - 0x3c && m_objects[v4].facing == -1) {
                     m_objects[v4].vx = 0.0;
                     m_objects[v4].vy = 0.0;
                 }
@@ -2703,7 +2703,7 @@ void CAkane::UpdateObjects()
                     m_objects[v4].vy = -4.0;
                     m_objects[v4].unk84 = 1;
                 }
-                if (m_objects[v4].x > m_game->unk14250 + 0x3c && m_objects[v4].facing == 1 || m_objects[v4].x < m_game->unk14248 - 0x3c && m_objects[v4].facing == -1) {
+                if (m_objects[v4].x > m_game->m_view.right + 0x3c && m_objects[v4].facing == 1 || m_objects[v4].x < m_game->m_view.left - 0x3c && m_objects[v4].facing == -1) {
                     m_objects[v4].vx = 0.0;
                     m_objects[v4].vy = 0.0;
                 }

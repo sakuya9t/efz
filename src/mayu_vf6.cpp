@@ -4341,10 +4341,10 @@ void CMayu::UpdatePattern()
         }
         if (frame > 0xb && frame < 0x10) {
             if (facing == 1) {
-                x = m_game->unk14248 + 0xf;
+                x = m_game->m_view.left + 0xf;
             }
             if (facing == -1) {
-                x = m_game->unk14250 - 0xf;
+                x = m_game->m_view.right - 0xf;
             }
         }
         if (y + vy >= 0.0 && frame > 4 && frame < 0x14) {
@@ -4420,10 +4420,10 @@ void CMayu::UpdatePattern()
         }
         if (frame > 0xb && frame < 0x10) {
             if (facing == 1) {
-                x = m_game->unk14248 + 0xf;
+                x = m_game->m_view.left + 0xf;
             }
             if (facing == -1) {
-                x = m_game->unk14250 - 0xf;
+                x = m_game->m_view.right - 0xf;
             }
         }
         if (y + vy >= 0.0 && frame > 0xf && frame < 0x13) {
@@ -4519,10 +4519,10 @@ void CMayu::UpdatePattern()
         }
         if (frame > 0xb && frame < 0x10) {
             if (facing == 1) {
-                x = m_game->unk14248 + 0xf;
+                x = m_game->m_view.left + 0xf;
             }
             if (facing == -1) {
-                x = m_game->unk14250 - 0xf;
+                x = m_game->m_view.right - 0xf;
             }
         }
         if (y + vy >= 0.0 && frame > 4 && frame < 0x14) {
@@ -5007,10 +5007,10 @@ void CMayu::UpdatePattern()
         }
         if (frame > 0xb && frame < 0x10) {
             if (facing == 1) {
-                x = m_game->unk14248 + 0xf;
+                x = m_game->m_view.left + 0xf;
             }
             if (facing == -1) {
-                x = m_game->unk14250 - 0xf;
+                x = m_game->m_view.right - 0xf;
             }
         }
         if (y + vy >= 0.0 && frame > 0xf && frame < 0x13) {

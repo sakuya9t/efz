@@ -2347,7 +2347,7 @@ void CKanna::UpdateObjects()
                     m_objects[v4].frame++;
                     if (m_objects[v4].frame == 4) {
                         l50.type = 0x1ac;
-                        l50.x = (double)m_game->unk14248;
+                        l50.x = (double)m_game->m_view.left;
                         l50.y = (double)((int)m_objects[v4].y - 0x3c);
                         l50.scale = 2;
                         l50.layer = 1;
@@ -2361,7 +2361,7 @@ void CKanna::UpdateObjects()
                 }
                 break;
             case 0x1ac:
-                m_objects[v4].x = m_game->unk14248;
+                m_objects[v4].x = m_game->m_view.left;
                 m_objects[v4].timer++;
                 if (m_objects[v4].timer >= v54) {
                     m_objects[v4].timer = 0;

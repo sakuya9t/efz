@@ -1111,10 +1111,7 @@ public:
     int unk1423c;
     int unk14240;
     int unk14244;
-    int unk14248;
-    int unk1424c;
-    int unk14250;
-    int unk14254;
+    RECT m_view;            // +0x14248: the part of the stage on screen, set by CScene3
     double unk14258;
     double m_fade;                // -100 to 100
     int m_fadeHold;

@@ -3559,10 +3559,10 @@ void CMizukaB::UpdateObjects()
                     l50.unk0 = 1;
                     l50.type = unk3148[v4] + 0x19b;
                     if (m_objects[v4].facing == -1) {
-                        l50.x = (double)(m_game->unk14248 - 0x14 - (WORD)CPlayer::Random(0, 0x14) - (unk313c << 3));
+                        l50.x = (double)(m_game->m_view.left - 0x14 - (WORD)CPlayer::Random(0, 0x14) - (unk313c << 3));
                     }
                     if (m_objects[v4].facing == 1) {
-                        l50.x = (double)(m_game->unk14250 + 0x14 + (WORD)CPlayer::Random(0, 0x14) + unk313c * 8);
+                        l50.x = (double)(m_game->m_view.right + 0x14 + (WORD)CPlayer::Random(0, 0x14) + unk313c * 8);
                     }
                     l50.y = (double)(4 - (WORD)CPlayer::Random(0, 4));
                     l50.unk28 = 1;
@@ -3595,10 +3595,10 @@ void CMizukaB::UpdateObjects()
                     l50.unk0 = 1;
                     l50.type = unk3148[v4] + 0x19b;
                     if (m_objects[v4].facing == 1) {
-                        l50.x = (double)(m_game->unk14248 - 0x14 - (WORD)CPlayer::Random(0, 0x14) - (unk313c << 3));
+                        l50.x = (double)(m_game->m_view.left - 0x14 - (WORD)CPlayer::Random(0, 0x14) - (unk313c << 3));
                     }
                     if (m_objects[v4].facing == -1) {
-                        l50.x = (double)(m_game->unk14250 + 0x14 + (WORD)CPlayer::Random(0, 0x14) + unk313c * 8);
+                        l50.x = (double)(m_game->m_view.right + 0x14 + (WORD)CPlayer::Random(0, 0x14) + unk313c * 8);
                     }
                     l50.y = (double)(4 - (WORD)CPlayer::Random(0, 4));
                     l50.unk28 = 1;

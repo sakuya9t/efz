@@ -25,14 +25,18 @@ with this compiler), and what is left.
 
 - **Members for every offset.** `efz.h` declares a member at each offset the code
   reaches: about 600 new ones in `CPlayer`, its 0x98-byte `PlayerObject` table, the 24
-  character classes, the scenes, `CAnimBg`, `CGame` and `Afterimages`. Where the meaning is known
-  the member has a name (`m_hp`, `m_gauge`, `m_comboHits`, `m_opponent`, `ax`, `ay`,
-  `m_inputHistory`...); elsewhere it is `unk<offset>`, its type the one the code reads
-  it as.
+  character classes, the scenes, `CAnimBg` and its `BgObject`s, `CGame` and
+  `Afterimages`. Where the meaning is known the member has a name (`m_hp`, `m_gauge`,
+  `m_comboHits`, `m_opponent`, `ax`, `ay`, `m_inputHistory`, `m_view`...); elsewhere it
+  is `unk<offset>`, its type the one the code reads it as.
 - **Accesses rewritten.** `tools/members.py rewrite` parsed the sources with clang,
   followed each address through the declared classes (bases, nested structs, arrays,
-  pointer members, pointer arithmetic on ints) and replaced about 185,000 accesses.
-  About 115 remain, through parameters that are ints holding pointers.
+  pointer members, pointer arithmetic on ints) and replaced about 186,000 accesses. No
+  `*(T*)((char*)p + offset)` is left.
+- **Pointers typed.** Parameters and locals that held pointers as `int` or `char*` are
+  typed (`CPlayer::Unk410050(PatternFrame* p1, PatternFrame* p2)`, the character
+  constructors' `CPlayer**`, `CGame*`..., `EffectFrame* v18`), so their accesses resolve
+  too, and their callers lost their `(int)` casts.
 - **Names.** `tools/members.py rename` renamed 40,000 references: CPlayer's members and
   helpers (`DealDamage`, `Random`, `ReadInput`...), and the virtual slots `Vf0`-`Vf12`
   in all 25 classes (`StartPattern`, `UpdatePattern`, `SpawnObject`...). Each name
@@ -50,6 +54,10 @@ Measured by compiling both forms with `cl` 13.10 `/Od` and comparing, then by
 | `*(int*)(p + 0x14) + i * 4` (a pointer read as an int) → `&surfaces[i]` | same |
 | `*(short*)p` where the member is a `WORD` → `(short)member`, in a value | same |
 | `((ObjBase*)((char*)this + 8))->AngleTo(...)` → `AngleTo(...)` (an inherited method) | same |
+| `(&m_afterimages)->F()` → `m_afterimages.F()`; `&objs[i].pattern` → `&objs[i]` (first member) | same |
+| A parameter's type, `int` → `PatternFrame*` (callers pass the pointer instead of `(int)`) | same |
+| A local's type, `char*` → `EffectFrame*`, keeping its name: its slot stays | same |
+| `*p1 = (CPlayer*)(int)new CAkane(...)` → `*p1 = new CAkane(...)` (an upcast to a base at offset 0) | same |
 | Renaming a member, a method or a virtual slot (with all its overrides) | same: names are only in the PDB |
 | Renaming an initialised global | same |
 | A constant as an `enum` or `#define` instead of a literal | same |
@@ -112,10 +120,10 @@ on the file afterwards.
 
 ## What is left
 
-- About 115 accesses through parameters typed `int` that hold pointers (`CPlayer::
-  Unk410050(int p1, int p2)` gets a `PatternFrame*`, the scenes' `p1`), and locals typed
-  `char*` that point at a struct. Typing them changes no code but needs their callers'
-  casts changed with them.
+- About 60 casts of a member's address remain where the code really reads it as
+  another type (`*(RECT*)&unk46e[8] = MakeRect(...)` in a char array of Scene8,
+  `*(int*)&unk134 = 0` on a float), and a few `(i << 4) + (char*)p` where the index is
+  computed first: `&p->boxes[i]` would load `p` first.
 - Most members are still `unk<offset>`, most methods `Unk<address>`, and the pattern
   numbers (`pattern = 0xd`) are bare: naming them is reverse engineering, one at a
   time.

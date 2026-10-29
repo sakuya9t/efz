@@ -311,7 +311,7 @@ void CScene3::Unk7647b0()
         }
     }
     m_game->UpdateShake();
-    *(tagRECT*)&m_game->unk14248 = MakeRect(-unk454, -unk458 - 0xd2, 0x140, 0xf0);
+    m_game->m_view = MakeRect(-unk454, -unk458 - 0xd2, 0x140, 0xf0);
     unk45c = unk454 + m_game->m_shakeX;
     unk460 = unk458 + m_game->m_shakeY;
 }

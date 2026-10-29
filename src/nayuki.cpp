@@ -1811,7 +1811,7 @@ void CNayuki::UpdateObjects()
                     m_objects[v4].vx = 1.7;
                     m_objects[v4].vy = -1.7;
                 }
-                if (m_objects[v4].y < m_game->unk1424c - 0x28) {
+                if (m_objects[v4].y < m_game->m_view.top - 0x28) {
                     RemoveObject(v4);
                 }
                 m_objects[v4].timer++;

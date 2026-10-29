@@ -1637,7 +1637,7 @@ void CSayuri::UpdateObjects()
                     m_objects[v4].unk80 = 0;
                     unk3154[v4] = 6;
                 }
-                if (m_objects[v4].x < m_game->unk14248 - 0x14 || m_objects[v4].x > m_game->unk14250 + 0x14 || m_objects[v4].y > 60.0) {
+                if (m_objects[v4].x < m_game->m_view.left - 0x14 || m_objects[v4].x > m_game->m_view.right + 0x14 || m_objects[v4].y > 60.0) {
                     RemoveObject(v4);
                     unk314c--;
                 }
@@ -1675,7 +1675,7 @@ void CSayuri::UpdateObjects()
                     m_objects[v4].unk80 = 0;
                     unk3154[v4] = 6;
                 }
-                if (m_objects[v4].x < m_game->unk14248 - 0x14 || m_objects[v4].x > m_game->unk14250 + 0x14 || m_objects[v4].y > 60.0) {
+                if (m_objects[v4].x < m_game->m_view.left - 0x14 || m_objects[v4].x > m_game->m_view.right + 0x14 || m_objects[v4].y > 60.0) {
                     RemoveObject(v4);
                     unk314c--;
                 }
@@ -2018,7 +2018,7 @@ void CSayuri::UpdateObjects()
                     m_objects[v4].unk80 = 0;
                     unk3154[v4] = 6;
                 }
-                if (m_objects[v4].x < m_game->unk14248 - 0x14 || m_objects[v4].x > m_game->unk14250 + 0x14 || m_objects[v4].y > 60.0) {
+                if (m_objects[v4].x < m_game->m_view.left - 0x14 || m_objects[v4].x > m_game->m_view.right + 0x14 || m_objects[v4].y > 60.0) {
                     RemoveObject(v4);
                     unk314c--;
                 }
@@ -2059,7 +2059,7 @@ void CSayuri::UpdateObjects()
                     m_objects[v4].unk80 = 0;
                     unk3154[v4] = 6;
                 }
-                if (m_objects[v4].x < m_game->unk14248 - 0x14 || m_objects[v4].x > m_game->unk14250 + 0x14 || m_objects[v4].y > 60.0) {
+                if (m_objects[v4].x < m_game->m_view.left - 0x14 || m_objects[v4].x > m_game->m_view.right + 0x14 || m_objects[v4].y > 60.0) {
                     RemoveObject(v4);
                     unk314c--;
                 }

@@ -2308,7 +2308,7 @@ void CMakoto::UpdateObjects()
                     if (m_objects[v4].frame == 0 || m_objects[v4].frame == 1) {
                         m_objects[v4].vx = 1.5;
                         m_objects[v4].vy = -1.5;
-                        if (m_objects[v4].y < m_game->unk1424c) {
+                        if (m_objects[v4].y < m_game->m_view.top) {
                             m_objects[v4].frame = m_objects[v4].frame + 2;
                             unk314c[v4]++;
                             if (unk314c[v4] > 3) {
@@ -2318,7 +2318,7 @@ void CMakoto::UpdateObjects()
                             unk2c8 = 1;
                             break;
                         }
-                        if (m_objects[v4].x > m_game->unk14250) {
+                        if (m_objects[v4].x > m_game->m_view.right) {
                             m_objects[v4].frame = m_objects[v4].frame + 6;
                             unk314c[v4]++;
                             if (unk314c[v4] > 3) {
@@ -2332,7 +2332,7 @@ void CMakoto::UpdateObjects()
                     if (m_objects[v4].frame == 2 || m_objects[v4].frame == 3) {
                         m_objects[v4].vx = 1.5;
                         m_objects[v4].vy = 1.5;
-                        if (m_objects[v4].y > m_game->unk14254) {
+                        if (m_objects[v4].y > m_game->m_view.bottom) {
                             m_objects[v4].frame = m_objects[v4].frame - 2;
                             unk314c[v4]++;
                             unk2c8 = 1;
@@ -2342,7 +2342,7 @@ void CMakoto::UpdateObjects()
                             }
                             break;
                         }
-                        if (m_objects[v4].x > m_game->unk14250) {
+                        if (m_objects[v4].x > m_game->m_view.right) {
                             m_objects[v4].frame = m_objects[v4].frame + 2;
                             unk314c[v4]++;
                             unk2c8 = 1;
@@ -2356,7 +2356,7 @@ void CMakoto::UpdateObjects()
                     if (m_objects[v4].frame == 4 || m_objects[v4].frame == 5) {
                         m_objects[v4].vx = -1.5;
                         m_objects[v4].vy = 1.5;
-                        if (m_objects[v4].y > m_game->unk14254) {
+                        if (m_objects[v4].y > m_game->m_view.bottom) {
                             m_objects[v4].frame = m_objects[v4].frame + 2;
                             unk314c[v4]++;
                             unk2c8 = 1;
@@ -2366,7 +2366,7 @@ void CMakoto::UpdateObjects()
                             }
                             break;
                         }
-                        if (m_objects[v4].x < m_game->unk14248) {
+                        if (m_objects[v4].x < m_game->m_view.left) {
                             m_objects[v4].frame = m_objects[v4].frame - 2;
                             unk314c[v4]++;
                             unk2c8 = 1;
@@ -2380,7 +2380,7 @@ void CMakoto::UpdateObjects()
                     if (m_objects[v4].frame == 6 || m_objects[v4].frame == 7) {
                         m_objects[v4].vx = -1.5;
                         m_objects[v4].vy = -1.5;
-                        if (m_objects[v4].y < m_game->unk1424c) {
+                        if (m_objects[v4].y < m_game->m_view.top) {
                             m_objects[v4].frame = m_objects[v4].frame - 2;
                             unk314c[v4]++;
                             unk2c8 = 1;
@@ -2390,7 +2390,7 @@ void CMakoto::UpdateObjects()
                             }
                             break;
                         }
-                        if (m_objects[v4].x < m_game->unk14248) {
+                        if (m_objects[v4].x < m_game->m_view.left) {
                             m_objects[v4].frame = m_objects[v4].frame - 6;
                             unk314c[v4]++;
                             unk2c8 = 1;
@@ -2406,7 +2406,7 @@ void CMakoto::UpdateObjects()
                     if (m_objects[v4].frame == 0 || m_objects[v4].frame == 1) {
                         m_objects[v4].vx = 1.5;
                         m_objects[v4].vy = -1.5;
-                        if (m_objects[v4].y < m_game->unk1424c) {
+                        if (m_objects[v4].y < m_game->m_view.top) {
                             m_objects[v4].frame = m_objects[v4].frame + 2;
                             unk314c[v4]++;
                             unk2c8 = 1;
@@ -2416,7 +2416,7 @@ void CMakoto::UpdateObjects()
                             }
                             break;
                         }
-                        if (m_objects[v4].x < m_game->unk14248) {
+                        if (m_objects[v4].x < m_game->m_view.left) {
                             m_objects[v4].frame = m_objects[v4].frame + 6;
                             unk314c[v4]++;
                             unk2c8 = 1;
@@ -2430,7 +2430,7 @@ void CMakoto::UpdateObjects()
                     if (m_objects[v4].frame == 2 || m_objects[v4].frame == 3) {
                         m_objects[v4].vx = 1.5;
                         m_objects[v4].vy = 1.5;
-                        if (m_objects[v4].y > m_game->unk14254) {
+                        if (m_objects[v4].y > m_game->m_view.bottom) {
                             m_objects[v4].frame = m_objects[v4].frame - 2;
                             unk314c[v4]++;
                             unk2c8 = 1;
@@ -2440,7 +2440,7 @@ void CMakoto::UpdateObjects()
                             }
                             break;
                         }
-                        if (m_objects[v4].x < m_game->unk14248) {
+                        if (m_objects[v4].x < m_game->m_view.left) {
                             m_objects[v4].frame = m_objects[v4].frame + 2;
                             unk314c[v4]++;
                             unk2c8 = 1;
@@ -2454,7 +2454,7 @@ void CMakoto::UpdateObjects()
                     if (m_objects[v4].frame == 4 || m_objects[v4].frame == 5) {
                         m_objects[v4].vx = -1.5;
                         m_objects[v4].vy = 1.5;
-                        if (m_objects[v4].y > m_game->unk14254) {
+                        if (m_objects[v4].y > m_game->m_view.bottom) {
                             m_objects[v4].frame = m_objects[v4].frame + 2;
                             unk314c[v4]++;
                             unk2c8 = 1;
@@ -2464,7 +2464,7 @@ void CMakoto::UpdateObjects()
                             }
                             break;
                         }
-                        if (m_objects[v4].x > m_game->unk14250) {
+                        if (m_objects[v4].x > m_game->m_view.right) {
                             m_objects[v4].frame = m_objects[v4].frame - 2;
                             unk314c[v4]++;
                             unk2c8 = 1;
@@ -2478,7 +2478,7 @@ void CMakoto::UpdateObjects()
                     if (m_objects[v4].frame == 6 || m_objects[v4].frame == 7) {
                         m_objects[v4].vx = -1.5;
                         m_objects[v4].vy = -1.5;
-                        if (m_objects[v4].y < m_game->unk1424c) {
+                        if (m_objects[v4].y < m_game->m_view.top) {
                             m_objects[v4].frame = m_objects[v4].frame - 2;
                             unk314c[v4]++;
                             unk2c8 = 1;
@@ -2488,7 +2488,7 @@ void CMakoto::UpdateObjects()
                             }
                             break;
                         }
-                        if (m_objects[v4].x > m_game->unk14250) {
+                        if (m_objects[v4].x > m_game->m_view.right) {
                             m_objects[v4].frame = m_objects[v4].frame - 6;
                             unk314c[v4]++;
                             unk2c8 = 1;
@@ -2528,7 +2528,7 @@ void CMakoto::UpdateObjects()
                     if (m_objects[v4].frame == 0 || m_objects[v4].frame == 1) {
                         m_objects[v4].vx = 1.5;
                         m_objects[v4].vy = -1.5;
-                        if (m_objects[v4].y < m_game->unk1424c) {
+                        if (m_objects[v4].y < m_game->m_view.top) {
                             m_objects[v4].frame = m_objects[v4].frame + 2;
                             unk314c[v4]++;
                             unk2c8 = 1;
@@ -2538,7 +2538,7 @@ void CMakoto::UpdateObjects()
                             }
                             break;
                         }
-                        if (m_objects[v4].x > m_game->unk14250) {
+                        if (m_objects[v4].x > m_game->m_view.right) {
                             m_objects[v4].frame = m_objects[v4].frame + 6;
                             unk314c[v4]++;
                             unk2c8 = 1;
@@ -2552,7 +2552,7 @@ void CMakoto::UpdateObjects()
                     if (m_objects[v4].frame == 2 || m_objects[v4].frame == 3) {
                         m_objects[v4].vx = 1.5;
                         m_objects[v4].vy = 1.5;
-                        if (m_objects[v4].y > m_game->unk14254) {
+                        if (m_objects[v4].y > m_game->m_view.bottom) {
                             m_objects[v4].frame = m_objects[v4].frame - 2;
                             unk314c[v4]++;
                             unk2c8 = 1;
@@ -2562,7 +2562,7 @@ void CMakoto::UpdateObjects()
                             }
                             break;
                         }
-                        if (m_objects[v4].x > m_game->unk14250) {
+                        if (m_objects[v4].x > m_game->m_view.right) {
                             m_objects[v4].frame = m_objects[v4].frame + 2;
                             unk314c[v4]++;
                             unk2c8 = 1;
@@ -2576,7 +2576,7 @@ void CMakoto::UpdateObjects()
                     if (m_objects[v4].frame == 4 || m_objects[v4].frame == 5) {
                         m_objects[v4].vx = -1.5;
                         m_objects[v4].vy = 1.5;
-                        if (m_objects[v4].y > m_game->unk14254) {
+                        if (m_objects[v4].y > m_game->m_view.bottom) {
                             m_objects[v4].frame = m_objects[v4].frame + 2;
                             unk314c[v4]++;
                             unk2c8 = 1;
@@ -2586,7 +2586,7 @@ void CMakoto::UpdateObjects()
                             }
                             break;
                         }
-                        if (m_objects[v4].x < m_game->unk14248) {
+                        if (m_objects[v4].x < m_game->m_view.left) {
                             m_objects[v4].frame = m_objects[v4].frame - 2;
                             unk314c[v4]++;
                             unk2c8 = 1;
@@ -2600,7 +2600,7 @@ void CMakoto::UpdateObjects()
                     if (m_objects[v4].frame == 6 || m_objects[v4].frame == 7) {
                         m_objects[v4].vx = -1.5;
                         m_objects[v4].vy = -1.5;
-                        if (m_objects[v4].y < m_game->unk1424c) {
+                        if (m_objects[v4].y < m_game->m_view.top) {
                             m_objects[v4].frame = m_objects[v4].frame - 2;
                             unk314c[v4]++;
                             unk2c8 = 1;
@@ -2610,7 +2610,7 @@ void CMakoto::UpdateObjects()
                             }
                             break;
                         }
-                        if (m_objects[v4].x < m_game->unk14248) {
+                        if (m_objects[v4].x < m_game->m_view.left) {
                             m_objects[v4].frame = m_objects[v4].frame - 6;
                             unk314c[v4]++;
                             unk2c8 = 1;
@@ -2626,7 +2626,7 @@ void CMakoto::UpdateObjects()
                     if (m_objects[v4].frame == 0 || m_objects[v4].frame == 1) {
                         m_objects[v4].vx = 1.5;
                         m_objects[v4].vy = -1.5;
-                        if (m_objects[v4].y < m_game->unk1424c) {
+                        if (m_objects[v4].y < m_game->m_view.top) {
                             m_objects[v4].frame = m_objects[v4].frame + 2;
                             unk314c[v4]++;
                             unk2c8 = 1;
@@ -2636,7 +2636,7 @@ void CMakoto::UpdateObjects()
                             }
                             break;
                         }
-                        if (m_objects[v4].x < m_game->unk14248) {
+                        if (m_objects[v4].x < m_game->m_view.left) {
                             m_objects[v4].frame = m_objects[v4].frame + 6;
                             unk314c[v4]++;
                             unk2c8 = 1;
@@ -2650,7 +2650,7 @@ void CMakoto::UpdateObjects()
                     if (m_objects[v4].frame == 2 || m_objects[v4].frame == 3) {
                         m_objects[v4].vx = 1.5;
                         m_objects[v4].vy = 1.5;
-                        if (m_objects[v4].y > m_game->unk14254) {
+                        if (m_objects[v4].y > m_game->m_view.bottom) {
                             m_objects[v4].frame = m_objects[v4].frame - 2;
                             unk314c[v4]++;
                             unk2c8 = 1;
@@ -2660,7 +2660,7 @@ void CMakoto::UpdateObjects()
                             }
                             break;
                         }
-                        if (m_objects[v4].x < m_game->unk14248) {
+                        if (m_objects[v4].x < m_game->m_view.left) {
                             m_objects[v4].frame = m_objects[v4].frame + 2;
                             unk314c[v4]++;
                             unk2c8 = 1;
@@ -2674,7 +2674,7 @@ void CMakoto::UpdateObjects()
                     if (m_objects[v4].frame == 4 || m_objects[v4].frame == 5) {
                         m_objects[v4].vx = -1.5;
                         m_objects[v4].vy = 1.5;
-                        if (m_objects[v4].y > m_game->unk14254) {
+                        if (m_objects[v4].y > m_game->m_view.bottom) {
                             m_objects[v4].frame = m_objects[v4].frame + 2;
                             unk314c[v4]++;
                             unk2c8 = 1;
@@ -2684,7 +2684,7 @@ void CMakoto::UpdateObjects()
                             }
                             break;
                         }
-                        if (m_objects[v4].x > m_game->unk14250) {
+                        if (m_objects[v4].x > m_game->m_view.right) {
                             m_objects[v4].frame = m_objects[v4].frame - 2;
                             unk314c[v4]++;
                             unk2c8 = 1;
@@ -2698,7 +2698,7 @@ void CMakoto::UpdateObjects()
                     if (m_objects[v4].frame == 6 || m_objects[v4].frame == 7) {
                         m_objects[v4].vx = -1.5;
                         m_objects[v4].vy = -1.5;
-                        if (m_objects[v4].y < m_game->unk1424c) {
+                        if (m_objects[v4].y < m_game->m_view.top) {
                             m_objects[v4].frame = m_objects[v4].frame - 2;
                             unk314c[v4]++;
                             unk2c8 = 1;
@@ -2708,7 +2708,7 @@ void CMakoto::UpdateObjects()
                             }
                             break;
                         }
-                        if (m_objects[v4].x > m_game->unk14250) {
+                        if (m_objects[v4].x > m_game->m_view.right) {
                             m_objects[v4].frame = m_objects[v4].frame - 6;
                             unk314c[v4]++;
                             unk2c8 = 1;
@@ -2743,7 +2743,7 @@ void CMakoto::UpdateObjects()
                     if (m_objects[v4].frame == 0 || m_objects[v4].frame == 1) {
                         m_objects[v4].vx = 3.0;
                         m_objects[v4].vy = -3.0;
-                        if (m_objects[v4].y < m_game->unk1424c) {
+                        if (m_objects[v4].y < m_game->m_view.top) {
                             m_objects[v4].frame = m_objects[v4].frame + 2;
                             unk314c[v4]++;
                             unk2c8 = 1;
@@ -2754,7 +2754,7 @@ void CMakoto::UpdateObjects()
                             }
                             break;
                         }
-                        if (m_objects[v4].x > m_game->unk14250) {
+                        if (m_objects[v4].x > m_game->m_view.right) {
                             m_objects[v4].frame = m_objects[v4].frame + 6;
                             unk314c[v4]++;
                             unk2c8 = 1;
@@ -2769,7 +2769,7 @@ void CMakoto::UpdateObjects()
                     if (m_objects[v4].frame == 2 || m_objects[v4].frame == 3) {
                         m_objects[v4].vx = 3.0;
                         m_objects[v4].vy = 3.0;
-                        if (m_objects[v4].y > m_game->unk14254) {
+                        if (m_objects[v4].y > m_game->m_view.bottom) {
                             m_objects[v4].frame = m_objects[v4].frame - 2;
                             unk314c[v4]++;
                             unk2c8 = 1;
@@ -2780,7 +2780,7 @@ void CMakoto::UpdateObjects()
                             }
                             break;
                         }
-                        if (m_objects[v4].x > m_game->unk14250) {
+                        if (m_objects[v4].x > m_game->m_view.right) {
                             m_objects[v4].frame = m_objects[v4].frame + 2;
                             unk314c[v4]++;
                             unk2c8 = 1;
@@ -2795,7 +2795,7 @@ void CMakoto::UpdateObjects()
                     if (m_objects[v4].frame == 4 || m_objects[v4].frame == 5) {
                         m_objects[v4].vx = -3.0;
                         m_objects[v4].vy = 3.0;
-                        if (m_objects[v4].y > m_game->unk14254) {
+                        if (m_objects[v4].y > m_game->m_view.bottom) {
                             m_objects[v4].frame = m_objects[v4].frame + 2;
                             unk314c[v4]++;
                             unk2c8 = 1;
@@ -2806,7 +2806,7 @@ void CMakoto::UpdateObjects()
                             }
                             break;
                         }
-                        if (m_objects[v4].x < m_game->unk14248) {
+                        if (m_objects[v4].x < m_game->m_view.left) {
                             m_objects[v4].frame = m_objects[v4].frame - 2;
                             unk314c[v4]++;
                             m_objects[v4].unk84 = 1;
@@ -2821,7 +2821,7 @@ void CMakoto::UpdateObjects()
                     if (m_objects[v4].frame == 6 || m_objects[v4].frame == 7) {
                         m_objects[v4].vx = -3.0;
                         m_objects[v4].vy = -3.0;
-                        if (m_objects[v4].y < m_game->unk1424c) {
+                        if (m_objects[v4].y < m_game->m_view.top) {
                             m_objects[v4].frame = m_objects[v4].frame - 2;
                             unk314c[v4]++;
                             unk2c8 = 1;
@@ -2832,7 +2832,7 @@ void CMakoto::UpdateObjects()
                             }
                             break;
                         }
-                        if (m_objects[v4].x < m_game->unk14248) {
+                        if (m_objects[v4].x < m_game->m_view.left) {
                             m_objects[v4].frame = m_objects[v4].frame - 6;
                             unk314c[v4]++;
                             m_objects[v4].unk84 = 1;
@@ -2849,7 +2849,7 @@ void CMakoto::UpdateObjects()
                     if (m_objects[v4].frame == 0 || m_objects[v4].frame == 1) {
                         m_objects[v4].vx = 3.0;
                         m_objects[v4].vy = -3.0;
-                        if (m_objects[v4].y < m_game->unk1424c) {
+                        if (m_objects[v4].y < m_game->m_view.top) {
                             m_objects[v4].frame = m_objects[v4].frame + 2;
                             unk314c[v4]++;
                             unk2c8 = 1;
@@ -2860,7 +2860,7 @@ void CMakoto::UpdateObjects()
                             }
                             break;
                         }
-                        if (m_objects[v4].x < m_game->unk14248) {
+                        if (m_objects[v4].x < m_game->m_view.left) {
                             m_objects[v4].frame = m_objects[v4].frame + 6;
                             unk314c[v4]++;
                             unk2c8 = 1;
@@ -2875,7 +2875,7 @@ void CMakoto::UpdateObjects()
                     if (m_objects[v4].frame == 2 || m_objects[v4].frame == 3) {
                         m_objects[v4].vx = 3.0;
                         m_objects[v4].vy = 3.0;
-                        if (m_objects[v4].y > m_game->unk14254) {
+                        if (m_objects[v4].y > m_game->m_view.bottom) {
                             m_objects[v4].frame = m_objects[v4].frame - 2;
                             unk314c[v4]++;
                             unk2c8 = 1;
@@ -2886,7 +2886,7 @@ void CMakoto::UpdateObjects()
                             }
                             break;
                         }
-                        if (m_objects[v4].x < m_game->unk14248) {
+                        if (m_objects[v4].x < m_game->m_view.left) {
                             m_objects[v4].frame = m_objects[v4].frame + 2;
                             unk314c[v4]++;
                             unk2c8 = 1;
@@ -2901,7 +2901,7 @@ void CMakoto::UpdateObjects()
                     if (m_objects[v4].frame == 4 || m_objects[v4].frame == 5) {
                         m_objects[v4].vx = -3.0;
                         m_objects[v4].vy = 3.0;
-                        if (m_objects[v4].y > m_game->unk14254) {
+                        if (m_objects[v4].y > m_game->m_view.bottom) {
                             m_objects[v4].frame = m_objects[v4].frame + 2;
                             unk314c[v4]++;
                             unk2c8 = 1;
@@ -2912,7 +2912,7 @@ void CMakoto::UpdateObjects()
                             }
                             break;
                         }
-                        if (m_objects[v4].x > m_game->unk14250) {
+                        if (m_objects[v4].x > m_game->m_view.right) {
                             m_objects[v4].frame = m_objects[v4].frame - 2;
                             unk314c[v4]++;
                             unk2c8 = 1;
@@ -2927,7 +2927,7 @@ void CMakoto::UpdateObjects()
                     if (m_objects[v4].frame == 6 || m_objects[v4].frame == 7) {
                         m_objects[v4].vx = -3.0;
                         m_objects[v4].vy = -3.0;
-                        if (m_objects[v4].y < m_game->unk1424c) {
+                        if (m_objects[v4].y < m_game->m_view.top) {
                             m_objects[v4].frame = m_objects[v4].frame - 2;
                             unk314c[v4]++;
                             unk2c8 = 1;
@@ -2938,7 +2938,7 @@ void CMakoto::UpdateObjects()
                             }
                             break;
                         }
-                        if (m_objects[v4].x > m_game->unk14250) {
+                        if (m_objects[v4].x > m_game->m_view.right) {
                             m_objects[v4].frame = m_objects[v4].frame - 6;
                             unk314c[v4]++;
                             m_objects[v4].unk84 = 1;
