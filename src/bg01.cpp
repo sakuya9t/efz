@@ -23,13 +23,13 @@ void CAnimBg::Load()
 
     if (1) {
         v30 = 0;
-        for (; v30 <= unk6; v30++) {
-            if (unk4 >= 0xa) {
+        for (; v30 <= m_lastFrame; v30++) {
+            if (m_number >= 0xa) {
                 strcpy(v2c, "system\\bg\\bg");
             } else {
                 strcpy(v2c, "system\\bg\\bg0");
             }
-            _itoa(unk4, vc, 0xa);
+            _itoa(m_number, vc, 0xa);
             strcat(v2c, (const char*)vc);
             if (v30 >= 0x64) {
                 strcat(v2c, "\\");
@@ -46,19 +46,19 @@ void CAnimBg::Load()
             v48 = (int)operator new(v38);
             h40 = (char*)v48;
             ReadFile((HANDLE)v34, (LPVOID)h40, v38, (LPDWORD)&a3c, 0);
-            ((CGraphics*)unk8)->LoadSurface((IDirectDrawSurface**)((int)unkc + v30 * 4), (BYTE*)(h40 + *(BYTE*)h40 * 3 + 1), 0, 1);
+            m_graphics->LoadSurface(&m_surfaces[v30], (BYTE*)(h40 + *(BYTE*)h40 * 3 + 1), 0, 1);
             CloseHandle((HANDLE)v34);
             delete (char*)h40;
         }
     } else {
         f44 = 0;
-        for (; f44 <= unk6; f44++) {
-            if (unk4 >= 0xa) {
+        for (; f44 <= m_lastFrame; f44++) {
+            if (m_number >= 0xa) {
                 strcpy(v2c, "system\\bg\\bg");
             } else {
                 strcpy(v2c, "system\\bg\\bg0");
             }
-            _itoa(unk4, vc, 0xa);
+            _itoa(m_number, vc, 0xa);
             strcat(v2c, (const char*)vc);
             if (f44 >= 0x64) {
                 strcat(v2c, "\\");
@@ -70,10 +70,10 @@ void CAnimBg::Load()
             _itoa(f44, vc, 0xa);
             strcat(v2c, (const char*)vc);
             strcat(v2c, ".bmp");
-            ((CGraphics*)unk8)->LoadBmp((IDirectDrawSurface**)((int)unkc + f44 * 4), (const char*)v2c, 1);
+            m_graphics->LoadBmp(&m_surfaces[f44], (const char*)v2c, 1);
         }
     }
-    unk18 = ((CGraphics*)unk8)->GetColorKey((IDirectDrawSurface*)*(int*)unkc);
+    m_colorKey = m_graphics->GetColorKey(*m_surfaces);
 }
 
 void CAnimBg::Unk751030()
@@ -88,14 +88,14 @@ void CAnimBg::Unk751030()
     char v1c[8];
     int n10[4];
 
-    if (unk4 >= 0xa) {
+    if (m_number >= 0xa) {
         strcpy(v4c, "system\\bg\\bg");
     } else {
         strcpy(v4c, "system\\bg\\bg0");
     }
-    _itoa(unk4, v1c, 0xa);
+    _itoa(m_number, v1c, 0xa);
     strcat(v4c, (const char*)v1c);
-    if (unk4 >= 0xa) {
+    if (m_number >= 0xa) {
         strcat(v4c, "\\bg");
     } else {
         strcat(v4c, "\\bg0");
@@ -104,23 +104,23 @@ void CAnimBg::Unk751030()
     strcat(v4c, ".pat");
     CFile l2c(v4c, 1);
     b20 = l2c.ReadInt();
-    unk14 = (char*)new EffectAnim[b20];
+    m_anims = new EffectAnim[b20];
     l58 = 0;
     for (; l58 < b20; l58++) {
         l50 = l2c.ReadInt();
         l2c.ReadInt();
         l2c.ReadInt();
-        *(unk14 + l58 * 8) = l2c.ReadInt();
-        x54 = *(BYTE*)(unk14 + l58 * 8);
-        ((EffectAnim*)((int)unk14 + l58 * 8))->Alloc(x54);
+        m_anims[l58].frameCount = l2c.ReadInt();
+        x54 = m_anims[l58].frameCount;
+        (&m_anims[l58])->Alloc(x54);
         l5c = 0;
         for (; l5c < x54; l5c++) {
-            *(short*)(*(char**)(unk14 + 4 + l58 * 8) + l5c * 0xc) = l2c.ReadInt();
-            *(short*)(*(char**)(unk14 + 4 + l58 * 8) + l5c * 0xc + 2) = l2c.ReadInt();
-            *(short*)(*(char**)(unk14 + 4 + l58 * 8) + l5c * 0xc + 8) = l2c.ReadInt();
-            *(short*)(*(char**)(unk14 + 4 + l58 * 8) + l5c * 0xc + 0xa) = l2c.ReadInt();
-            *(short*)(*(char**)(unk14 + 4 + l58 * 8) + l5c * 0xc + 4) = l2c.ReadInt();
-            *(short*)(*(char**)(unk14 + 4 + l58 * 8) + l5c * 0xc + 6) = l2c.ReadInt();
+            m_anims[l58].frames[l5c].duration = l2c.ReadInt();
+            m_anims[l58].frames[l5c].surface = l2c.ReadInt();
+            m_anims[l58].frames[l5c].width = l2c.ReadInt();
+            m_anims[l58].frames[l5c].height = l2c.ReadInt();
+            m_anims[l58].frames[l5c].x = l2c.ReadInt();
+            m_anims[l58].frames[l5c].y = l2c.ReadInt();
             l2c.ReadInt();
             l2c.ReadInt();
             l2c.ReadInt();
@@ -143,33 +143,33 @@ void CAnimBg::Unk751030()
     }
 }
 
-CBg01::CBg01(int p1)
+CBg01::CBg01(CGraphics* p1)
     : CAnimBg()
 {
     int xc;
     int v8;
     int v4;
 
-    unk8 = p1;
-    unk4 = 1;
-    unk6 = 0x39;
+    m_graphics = p1;
+    m_number = 1;
+    m_lastFrame = 0x39;
     v8 = (int)operator new(0xe8);
-    unkc = (char*)v8;
+    m_surfaces = (IDirectDrawSurface**)v8;
     xc = (int)operator new(0xe0);
-    unk10 = (char*)xc;
-    unk14 = (char*)new EffectAnim[2];
+    m_objects = (BgObject*)xc;
+    m_anims = new EffectAnim[2];
     CAnimBg::Load();
     CAnimBg::Unk751030();
     v4 = 0;
     for (; v4 < 2; v4++) {
-        *(short*)(unk10 + v4 * 0x70) = v4;
-        *(double*)(unk10 + v4 * 0x70 + 0x18) = 0.0;
-        *(double*)(unk10 + v4 * 0x70 + 0x20) = -450.0;
-        *(short*)(unk10 + v4 * 0x70 + 2) = 0;
-        *(short*)(unk10 + v4 * 0x70 + 4) = 0;
-        *(unk10 + v4 * 0x70 + 0x48) = 1;
-        *(unk10 + v4 * 0x70 + 0x50) = 2;
-        *(unk10 + v4 * 0x70 + 0x51) = 0;
+        m_objects[v4].pattern = v4;
+        m_objects[v4].x = 0.0;
+        m_objects[v4].y = -450.0;
+        m_objects[v4].frame = 0;
+        m_objects[v4].timer = 0;
+        m_objects[v4].facing = 1;
+        m_objects[v4].scale = 2;
+        m_objects[v4].layer = 0;
     }
 }
 
@@ -179,14 +179,14 @@ CBg01::~CBg01()
 
     v4 = 0;
     for (; v4 < 0x3a; v4++) {
-        if (*(int*)(unkc + v4 * 4) != 0) {
-            ((IUnknown*)*(int*)(unkc + v4 * 4))->Release();
-            *(int*)(unkc + v4 * 4) = 0;
+        if ((int)m_surfaces[v4] != 0) {
+            m_surfaces[v4]->Release();
+            m_surfaces[v4] = (IDirectDrawSurface*)0;
         }
     }
-    delete unkc;
-    delete unk10;
-    delete (EffectAnim*)unk14;
+    delete (char*)m_surfaces;
+    delete (char*)m_objects;
+    delete m_anims;
 }
 
 void CBg01::Vf0()
@@ -197,17 +197,17 @@ void CBg01::Vf0()
 
     v4 = 0;
     for (; v4 < 2; v4++) {
-        v8 = *(short*)(*(char**)(unk14 + *(WORD*)(unk10 + v4 * 0x70) * 8 + 4) + *(WORD*)(unk10 + v4 * 0x70 + 2) * 0xc);
-        xc = *(BYTE*)(unk14 + *(WORD*)(unk10 + v4 * 0x70) * 8);
-        switch (*(WORD*)(unk10 + v4 * 0x70)) {
+        v8 = (short)m_anims[m_objects[v4].pattern].frames[m_objects[v4].frame].duration;
+        xc = m_anims[m_objects[v4].pattern].frameCount;
+        switch (m_objects[v4].pattern) {
         case 0:
         case 1:
-            (*(short*)(unk10 + v4 * 0x70 + 4))++;
-            if (*(WORD*)(unk10 + v4 * 0x70 + 4) >= v8) {
-                *(short*)(unk10 + v4 * 0x70 + 4) = 0;
-                (*(short*)(unk10 + v4 * 0x70 + 2))++;
-                if (*(WORD*)(unk10 + v4 * 0x70 + 2) >= xc) {
-                    *(short*)(unk10 + v4 * 0x70 + 2) = 0;
+            m_objects[v4].timer++;
+            if (m_objects[v4].timer >= v8) {
+                m_objects[v4].timer = 0;
+                m_objects[v4].frame++;
+                if (m_objects[v4].frame >= xc) {
+                    m_objects[v4].frame = 0;
                 }
             }
         }
@@ -226,23 +226,23 @@ void CBg01::Vf1(int p1, int p2, char p3)
     }
     v30 = 0;
     for (; v30 < 2; v30++) {
-        x1c = *(EffectFrame*)(char*)(*(int*)(unk14 + *(WORD*)(unk10 + v30 * 0x70) * 8 + 4) + *(WORD*)(unk10 + v30 * 0x70 + 2) * 0xc);
+        x1c = m_anims[m_objects[v30].pattern].frames[m_objects[v30].frame];
         v2c = MakeRect(0, 0, x1c.width, x1c.height);
-        if (*(unk10 + v30 * 0x70 + 0x48) == -1) {
-            v10.left = (int)*(double*)(unk10 + v30 * 0x70 + 0x18) + p1 - (x1c.width - x1c.x);
-            v10.top = p2 + (int)*(double*)(unk10 + v30 * 0x70 + 0x20) + 0xd2 - x1c.y;
+        if (m_objects[v30].facing == -1) {
+            v10.left = (int)m_objects[v30].x + p1 - (x1c.width - x1c.x);
+            v10.top = p2 + (int)m_objects[v30].y + 0xd2 - x1c.y;
             v10.right = x1c.width + v10.left;
             v10.bottom = x1c.height + v10.top;
         } else {
-            v10.left = (int)*(double*)(unk10 + v30 * 0x70 + 0x18) + p1 - x1c.x;
-            v10.top = p2 + (int)*(double*)(unk10 + v30 * 0x70 + 0x20) + 0xd2 - x1c.y;
+            v10.left = (int)m_objects[v30].x + p1 - x1c.x;
+            v10.top = p2 + (int)m_objects[v30].y + 0xd2 - x1c.y;
             v10.right = x1c.width + v10.left;
             v10.bottom = x1c.height + v10.top;
         }
-        if (*(unk10 + v30 * 0x70 + 0x50) > 0) {
-            ((CGraphics*)unk8)->BlitEx(v10, (IDirectDrawSurface*)*(int*)(unkc + x1c.surface * 4), v2c, unk18, *(unk10 + v30 * 0x70 + 0x48) == -1, *(unk10 + v30 * 0x70 + 0x50) - 1);
+        if (m_objects[v30].scale > 0) {
+            m_graphics->BlitEx(v10, m_surfaces[x1c.surface], v2c, m_colorKey, m_objects[v30].facing == -1, m_objects[v30].scale - 1);
         } else {
-            ((CGraphics*)unk8)->Blit(v10, (IDirectDrawSurface*)*(int*)(unkc + x1c.surface * 4), v2c, unk18, *(unk10 + v30 * 0x70 + 0x48) == -1);
+            m_graphics->Blit(v10, m_surfaces[x1c.surface], v2c, m_colorKey, m_objects[v30].facing == -1);
         }
     }
 }

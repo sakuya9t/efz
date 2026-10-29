@@ -164,8 +164,8 @@ CPlayer::CPlayer(CPlayer** p1, CGame* p2, CGraphics* p3, CInput* p4, CSound* p5,
         unk30f5[v4] = -1;
     }
     surfaces = (IDirectDrawSurface**)0;
-    anims = (EffectAnim*)(int)(char*)new EffectAnim[0x1f9];
-    m_patterns = (PatternData*)(int)(char*)new PatternData[0x1f9];
+    anims = new EffectAnim[0x1f9];
+    m_patterns = new PatternData[0x1f9];
     m_score = 0;
     m_scoreHigh = 0;
     m_hitsLanded = 0;

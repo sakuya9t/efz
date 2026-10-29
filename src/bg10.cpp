@@ -5,33 +5,33 @@
 #include <math.h>
 #include "efz.h"
 
-CBg10::CBg10(int p1)
+CBg10::CBg10(CGraphics* p1)
     : CAnimBg()
 {
     int xc;
     int v8;
     int v4;
 
-    unk8 = p1;
-    unk4 = 0xa;
-    unk6 = 4;
+    m_graphics = p1;
+    m_number = 0xa;
+    m_lastFrame = 4;
     v8 = (int)operator new(0x14);
-    unkc = (char*)v8;
+    m_surfaces = (IDirectDrawSurface**)v8;
     xc = (int)operator new(0x70);
-    unk10 = (char*)xc;
-    unk14 = (char*)new EffectAnim[1];
+    m_objects = (BgObject*)xc;
+    m_anims = new EffectAnim[1];
     CAnimBg::Load();
     CAnimBg::Unk751030();
     v4 = 0;
     for (; v4 < 1; v4++) {
-        *(short*)(unk10 + v4 * 0x70) = v4;
-        *(double*)(unk10 + v4 * 0x70 + 0x18) = 0.0;
-        *(double*)(unk10 + v4 * 0x70 + 0x20) = -450.0;
-        *(short*)(unk10 + v4 * 0x70 + 2) = 0;
-        *(short*)(unk10 + v4 * 0x70 + 4) = 0;
-        *(unk10 + v4 * 0x70 + 0x48) = 1;
-        *(unk10 + v4 * 0x70 + 0x50) = 2;
-        *(unk10 + v4 * 0x70 + 0x51) = 1;
+        m_objects[v4].pattern = v4;
+        m_objects[v4].x = 0.0;
+        m_objects[v4].y = -450.0;
+        m_objects[v4].frame = 0;
+        m_objects[v4].timer = 0;
+        m_objects[v4].facing = 1;
+        m_objects[v4].scale = 2;
+        m_objects[v4].layer = 1;
     }
 }
 
@@ -41,14 +41,14 @@ CBg10::~CBg10()
 
     v4 = 0;
     for (; v4 < 5; v4++) {
-        if (*(int*)(unkc + v4 * 4) != 0) {
-            ((IUnknown*)*(int*)(unkc + v4 * 4))->Release();
-            *(int*)(unkc + v4 * 4) = 0;
+        if ((int)m_surfaces[v4] != 0) {
+            m_surfaces[v4]->Release();
+            m_surfaces[v4] = (IDirectDrawSurface*)0;
         }
     }
-    delete unkc;
-    delete unk10;
-    delete (EffectAnim*)unk14;
+    delete (char*)m_surfaces;
+    delete (char*)m_objects;
+    delete m_anims;
 }
 
 void CBg10::Vf0()
@@ -59,17 +59,17 @@ void CBg10::Vf0()
 
     v4 = 0;
     for (; v4 < 1; v4++) {
-        v8 = *(short*)(*(char**)(unk14 + *(WORD*)(unk10 + v4 * 0x70) * 8 + 4) + *(WORD*)(unk10 + v4 * 0x70 + 2) * 0xc);
-        xc = *(BYTE*)(unk14 + *(WORD*)(unk10 + v4 * 0x70) * 8);
-        switch (*(WORD*)(unk10 + v4 * 0x70)) {
+        v8 = (short)m_anims[m_objects[v4].pattern].frames[m_objects[v4].frame].duration;
+        xc = m_anims[m_objects[v4].pattern].frameCount;
+        switch (m_objects[v4].pattern) {
         case 0:
         case 1:
-            (*(short*)(unk10 + v4 * 0x70 + 4))++;
-            if (*(WORD*)(unk10 + v4 * 0x70 + 4) >= v8) {
-                *(short*)(unk10 + v4 * 0x70 + 4) = 0;
-                (*(short*)(unk10 + v4 * 0x70 + 2))++;
-                if (*(WORD*)(unk10 + v4 * 0x70 + 2) >= xc) {
-                    *(short*)(unk10 + v4 * 0x70 + 2) = 0;
+            m_objects[v4].timer++;
+            if (m_objects[v4].timer >= v8) {
+                m_objects[v4].timer = 0;
+                m_objects[v4].frame++;
+                if (m_objects[v4].frame >= xc) {
+                    m_objects[v4].frame = 0;
                 }
             }
         }
@@ -88,23 +88,23 @@ void CBg10::Vf1(int p1, int p2, char p3)
     }
     v30 = 0;
     for (; v30 < 1; v30++) {
-        x1c = *(EffectFrame*)(char*)(*(int*)(unk14 + *(WORD*)(unk10 + v30 * 0x70) * 8 + 4) + *(WORD*)(unk10 + v30 * 0x70 + 2) * 0xc);
+        x1c = m_anims[m_objects[v30].pattern].frames[m_objects[v30].frame];
         v2c = MakeRect(0, 0, x1c.width, x1c.height);
-        if (*(unk10 + v30 * 0x70 + 0x48) == -1) {
-            v10.left = (int)*(double*)(unk10 + v30 * 0x70 + 0x18) + p1 - (x1c.width - x1c.x);
-            v10.top = p2 + (int)*(double*)(unk10 + v30 * 0x70 + 0x20) + 0xd2 - x1c.y;
+        if (m_objects[v30].facing == -1) {
+            v10.left = (int)m_objects[v30].x + p1 - (x1c.width - x1c.x);
+            v10.top = p2 + (int)m_objects[v30].y + 0xd2 - x1c.y;
             v10.right = x1c.width + v10.left;
             v10.bottom = x1c.height + v10.top;
         } else {
-            v10.left = (int)*(double*)(unk10 + v30 * 0x70 + 0x18) + p1 - x1c.x;
-            v10.top = p2 + (int)*(double*)(unk10 + v30 * 0x70 + 0x20) + 0xd2 - x1c.y;
+            v10.left = (int)m_objects[v30].x + p1 - x1c.x;
+            v10.top = p2 + (int)m_objects[v30].y + 0xd2 - x1c.y;
             v10.right = x1c.width + v10.left;
             v10.bottom = x1c.height + v10.top;
         }
-        if (*(unk10 + v30 * 0x70 + 0x50) > 0) {
-            ((CGraphics*)unk8)->BlitEx(v10, (IDirectDrawSurface*)*(int*)(unkc + x1c.surface * 4), v2c, unk18, *(unk10 + v30 * 0x70 + 0x48) == -1, *(unk10 + v30 * 0x70 + 0x50) - 1);
+        if (m_objects[v30].scale > 0) {
+            m_graphics->BlitEx(v10, m_surfaces[x1c.surface], v2c, m_colorKey, m_objects[v30].facing == -1, m_objects[v30].scale - 1);
         } else {
-            ((CGraphics*)unk8)->Blit(v10, (IDirectDrawSurface*)*(int*)(unkc + x1c.surface * 4), v2c, unk18, *(unk10 + v30 * 0x70 + 0x48) == -1);
+            m_graphics->Blit(v10, m_surfaces[x1c.surface], v2c, m_colorKey, m_objects[v30].facing == -1);
         }
     }
 }

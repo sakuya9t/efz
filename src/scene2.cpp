@@ -319,16 +319,16 @@ void CScene2::Unk76ca50()
     case 1:
         if (0) {}
         if (0) {}
-        m_game->m_background = (CAnimBg*)(int)new CBg01((int)m_graphics);
+        m_game->m_background = new CBg01(m_graphics);
         break;
     case 0xa:
-        m_game->m_background = (CAnimBg*)(int)new CBg10((int)m_graphics);
+        m_game->m_background = new CBg10(m_graphics);
         break;
     case 0xc:
-        m_game->m_background = (CAnimBg*)(int)new CBg12((int)m_graphics);
+        m_game->m_background = new CBg12(m_graphics);
         break;
     case 0x10:
-        m_game->m_background = (CAnimBg*)(int)new CBg16((int)m_graphics);
+        m_game->m_background = new CBg16(m_graphics);
     }
     if (m_game->unkf32 == 0x10) {
         m_game->unk14258 = 0.125;

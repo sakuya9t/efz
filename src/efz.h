@@ -1147,8 +1147,8 @@ public:
         m_player1Ref = p2;
         m_player2Ref = p3;
         m_hwnd = p1;
-        m_players[0] = (CPlayer*)*(int*)(char*)p2;
-        m_players[1] = (CPlayer*)*(int*)(char*)p3;
+        m_players[0] = *p2;
+        m_players[1] = *p3;
         m_game = p4;
         m_graphics = p5;
         m_input = p6;
@@ -1248,8 +1248,14 @@ public:
     BYTE unk42f;
 };
 
-// An animated stage background: its frames are system\bg\bgNN\MMM.dat, with NN at +4
-// and the frame count at +6.
+// One of an animated background's objects: 0x70 bytes.
+struct BgObject : ObjBase {
+    char scale;             // +0x50: as Effect's
+    char layer;             // +0x51
+    BYTE unk52[0x70 - 0x52];
+};
+
+// An animated stage background: its frames are system\bg\bgNN\MMM.dat.
 class CAnimBg {
 public:
     // FUNCTION: 0x7519f0
@@ -1262,13 +1268,13 @@ public:
     virtual void Vf0() = 0;
     virtual void Vf1(int p1, int p2, char p3) = 0;
 
-    short unk4;
-    short unk6;
-    int unk8;
-    char* unkc;
-    char* unk10;
-    char* unk14;
-    char unk18;
+    short m_number;         // +4: NN in system\bg\bgNN
+    short m_lastFrame;      // +6: frames 0 to m_lastFrame
+    CGraphics* m_graphics;  // +8
+    IDirectDrawSurface** m_surfaces; // +0xc: one per frame
+    BgObject* m_objects;    // +0x10
+    EffectAnim* m_anims;    // +0x14
+    char m_colorKey;        // +0x18
     BYTE unk19[0x1c - 0x19];
 };
 
@@ -1277,7 +1283,7 @@ public:
 class CBg01 : public CAnimBg {
 public:
     // FUNCTION: 0x751370
-    CBg01(int p1);
+    CBg01(CGraphics* p1);
     // FUNCTION: 0x751500
     ~CBg01();
     // FUNCTION: 0x7515d0
@@ -1293,7 +1299,7 @@ public:
 class CBg10 : public CAnimBg {
 public:
     // FUNCTION: 0x751a40
-    CBg10(int p1);
+    CBg10(CGraphics* p1);
     // FUNCTION: 0x751bc0
     ~CBg10();
     // FUNCTION: 0x751c90
@@ -1309,7 +1315,7 @@ public:
 class CBg12 : public CAnimBg {
 public:
     // FUNCTION: 0x7520b0
-    CBg12(int p1);
+    CBg12(CGraphics* p1);
     // FUNCTION: 0x752240
     ~CBg12();
     // FUNCTION: 0x752310
@@ -1325,7 +1331,7 @@ public:
 class CBg16 : public CAnimBg {
 public:
     // FUNCTION: 0x752900
-    CBg16(int p1);
+    CBg16(CGraphics* p1);
     // FUNCTION: 0x752a90
     ~CBg16();
     // FUNCTION: 0x752b60
