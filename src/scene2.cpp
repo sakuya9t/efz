@@ -122,7 +122,7 @@ void CScene2::Unk76ca50()
         _itoa(m_game->unk14281 + 1, vc, 0xa);
         strcat(v38, (const char*)vc);
         strcat(v38, ".rep");
-        if (m_game->unk14283 == 1) {
+        if (m_game->m_replayMode == 1) {
             (&m_game->m_replay)->OpenRead((const char*)v38);
             Unk76da20((int)m_player1Ref, (int)m_player2Ref, 0, (&m_game->m_replay)->Read());
             Unk76da20((int)m_player2Ref, (int)m_player1Ref, 1, (&m_game->m_replay)->Read());
@@ -135,7 +135,7 @@ void CScene2::Unk76ca50()
             }
             (*m_player1Ref)->m_paletteIndex = (&m_game->m_replay)->Read();
             (*m_player2Ref)->m_paletteIndex = (&m_game->m_replay)->Read();
-        } else if (m_game->unk14283 == 2) {
+        } else if (m_game->m_replayMode == 2) {
             (&m_game->m_replay)->OpenWrite((const char*)v38);
             (&m_game->m_replay)->Write((*m_player1Ref)->unk8d);
             (&m_game->m_replay)->Write((*m_player2Ref)->unk8d);

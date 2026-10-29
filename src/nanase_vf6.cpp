@@ -67,7 +67,7 @@ void CNanase::Vf6()
         unk158 = 0;
         vx = 0.0;
         vy = 0.0;
-        CPlayer::Unk40e630();
+        CPlayer::FaceOpponent();
         timer++;
         if (timer >= l4) {
             timer = 0;
@@ -80,7 +80,7 @@ void CNanase::Vf6()
     case 4:
         if (frame == 0 && timer == 0) {
             if (unk158 == 0) {
-                CPlayer::Unk40e630();
+                CPlayer::FaceOpponent();
             }
             vx = 0.0;
         }
@@ -107,7 +107,7 @@ void CNanase::Vf6()
         if (y + vy >= 0.0 && frame > 3) {
             y = 0.0;
             unk2c9 = 9;
-            CPlayer::Unk40e630();
+            CPlayer::FaceOpponent();
             pattern = 0xd;
             Vf0();
         }
@@ -115,7 +115,7 @@ void CNanase::Vf6()
     case 5:
         if (frame == 0 && timer == 0) {
             if (unk158 == 0) {
-                CPlayer::Unk40e630();
+                CPlayer::FaceOpponent();
             }
             vx = 0.0;
         }
@@ -143,7 +143,7 @@ void CNanase::Vf6()
         if (y + vy >= 0.0 && frame > 3) {
             y = 0.0;
             unk2c9 = 9;
-            CPlayer::Unk40e630();
+            CPlayer::FaceOpponent();
             pattern = 0xd;
             Vf0();
         }
@@ -151,7 +151,7 @@ void CNanase::Vf6()
     case 6:
         if (frame == 0 && timer == 0) {
             if (unk158 == 0) {
-                CPlayer::Unk40e630();
+                CPlayer::FaceOpponent();
             }
             vx = 0.0;
         }
@@ -175,7 +175,7 @@ void CNanase::Vf6()
         if (y + vy >= 0.0 && frame > 3) {
             y = 0.0;
             unk2c9 = 9;
-            CPlayer::Unk40e630();
+            CPlayer::FaceOpponent();
             pattern = 0xd;
             Vf0();
         }
@@ -184,7 +184,7 @@ void CNanase::Vf6()
         unk158 = 0;
         vx = 0.0;
         vy = 0.0;
-        CPlayer::Unk40e630();
+        CPlayer::FaceOpponent();
         timer++;
         if (timer >= l4) {
             timer = 0;
@@ -199,7 +199,7 @@ void CNanase::Vf6()
         unk158 = 0;
         vx = 0.0;
         vy = 0.0;
-        CPlayer::Unk40e630();
+        CPlayer::FaceOpponent();
         timer++;
         if (timer >= l4) {
             timer = 0;
@@ -232,7 +232,7 @@ void CNanase::Vf6()
         unk158 = 0;
         vx = 0.0;
         vy = 0.0;
-        CPlayer::Unk40e630();
+        CPlayer::FaceOpponent();
         timer++;
         if (timer >= l4) {
             timer = 0;
@@ -266,7 +266,7 @@ void CNanase::Vf6()
         if (y + vy >= 0.0 && frame > 3) {
             y = 0.0;
             unk2c9 = 9;
-            CPlayer::Unk40e630();
+            CPlayer::FaceOpponent();
             pattern = 0xd;
             Vf0();
         }
@@ -291,7 +291,7 @@ void CNanase::Vf6()
         if (y + vy >= 0.0 && frame > 3) {
             y = 0.0;
             unk2c9 = 9;
-            CPlayer::Unk40e630();
+            CPlayer::FaceOpponent();
             pattern = 0xd;
             Vf0();
         }
@@ -316,7 +316,7 @@ void CNanase::Vf6()
         if (y + vy >= 0.0 && frame > 3) {
             y = 0.0;
             unk2c9 = 9;
-            CPlayer::Unk40e630();
+            CPlayer::FaceOpponent();
             pattern = 0xd;
             Vf0();
         }
@@ -354,8 +354,8 @@ void CNanase::Vf6()
         }
         unk158 = 0;
         if (frame == 0 && timer == 0) {
-            unk148 = unk148 + 0xa;
-            vx = (2.0 - (*m_opponent)->unk178 / 10000.0) * -1.1;
+            m_gauge = m_gauge + 0xa;
+            vx = (2.0 - (*m_opponent)->m_proration / 10000.0) * -1.1;
             if (unk120 != 0) {
                 unk118 -= 10.0;
             }
@@ -390,8 +390,8 @@ void CNanase::Vf6()
         }
         unk158 = 0;
         if (frame == 0 && timer == 0) {
-            unk148 = unk148 + 0xf;
-            vx = (2.0 - (*m_opponent)->unk178 / 10000.0) * -1.5;
+            m_gauge = m_gauge + 0xf;
+            vx = (2.0 - (*m_opponent)->m_proration / 10000.0) * -1.5;
             if (unk120 != 0) {
                 unk118 -= 20.0;
             }
@@ -426,8 +426,8 @@ void CNanase::Vf6()
         }
         unk158 = 0;
         if (frame == 0 && timer == 0) {
-            unk148 = unk148 + 0x14;
-            vx = (2.0 - (*m_opponent)->unk178 / 10000.0) * -1.8;
+            m_gauge = m_gauge + 0x14;
+            vx = (2.0 - (*m_opponent)->m_proration / 10000.0) * -1.8;
             if (unk120 != 0) {
                 unk118 -= 30.0;
             }
@@ -462,8 +462,8 @@ void CNanase::Vf6()
         }
         unk158 = 0;
         if (frame == 0 && timer == 0) {
-            unk148 = unk148 + 0xa;
-            vx = (2.0 - (*m_opponent)->unk178 / 10000.0) * -1.1;
+            m_gauge = m_gauge + 0xa;
+            vx = (2.0 - (*m_opponent)->m_proration / 10000.0) * -1.1;
             if (unk120 != 0) {
                 unk118 -= 10.0;
             }
@@ -498,8 +498,8 @@ void CNanase::Vf6()
         }
         unk158 = 0;
         if (frame == 0 && timer == 0) {
-            unk148 = unk148 + 0xf;
-            vx = (2.0 - (*m_opponent)->unk178 / 10000.0) * -1.5;
+            m_gauge = m_gauge + 0xf;
+            vx = (2.0 - (*m_opponent)->m_proration / 10000.0) * -1.5;
             if (unk120 != 0) {
                 unk118 -= 20.0;
             }
@@ -534,8 +534,8 @@ void CNanase::Vf6()
         }
         unk158 = 0;
         if (frame == 0 && timer == 0) {
-            unk148 = unk148 + 0x14;
-            vx = (2.0 - (*m_opponent)->unk178 / 10000.0) * -1.8;
+            m_gauge = m_gauge + 0x14;
+            vx = (2.0 - (*m_opponent)->m_proration / 10000.0) * -1.8;
             if (unk120 != 0) {
                 unk118 -= 30.0;
             }
@@ -570,8 +570,8 @@ void CNanase::Vf6()
         }
         unk158 = 0;
         if (frame == 0 && timer == 0) {
-            unk148 = unk148 + 0xa;
-            vx = (2.0 - (*m_opponent)->unk178 / 10000.0) * -1.1;
+            m_gauge = m_gauge + 0xa;
+            vx = (2.0 - (*m_opponent)->m_proration / 10000.0) * -1.1;
             if (unk120 != 0) {
                 unk118 -= 10.0;
             }
@@ -603,8 +603,8 @@ void CNanase::Vf6()
         }
         unk158 = 0;
         if (frame == 0 && timer == 0) {
-            unk148 = unk148 + 0xf;
-            vx = (2.0 - (*m_opponent)->unk178 / 10000.0) * -1.5;
+            m_gauge = m_gauge + 0xf;
+            vx = (2.0 - (*m_opponent)->m_proration / 10000.0) * -1.5;
             if (unk120 != 0) {
                 unk118 -= 20.0;
             }
@@ -636,8 +636,8 @@ void CNanase::Vf6()
         }
         unk158 = 0;
         if (frame == 0 && timer == 0) {
-            unk148 = unk148 + 0x14;
-            vx = (2.0 - (*m_opponent)->unk178 / 10000.0) * -1.8;
+            m_gauge = m_gauge + 0x14;
+            vx = (2.0 - (*m_opponent)->m_proration / 10000.0) * -1.8;
             if (unk120 != 0) {
                 unk118 -= 30.0;
             }
@@ -668,7 +668,7 @@ void CNanase::Vf6()
             unk118 -= 0.8;
         }
         if (frame == 0 && timer == 0) {
-            unk148 = unk148 + 0x1e;
+            m_gauge = m_gauge + 0x1e;
             vx = unkc0;
             vy = vy * 0.75 + unkc8;
             if (vy < -2.0) {
@@ -711,7 +711,7 @@ void CNanase::Vf6()
             unk118 -= 0.8;
         }
         if (frame == 0 && timer == 0) {
-            unk148 = unk148 + 0x1e;
+            m_gauge = m_gauge + 0x1e;
             vx = unkc0;
             vy = vy * 0.75 + unkc8;
             if (vy < -4.0) {
@@ -754,7 +754,7 @@ void CNanase::Vf6()
             unk118 -= 0.8;
         }
         if (frame == 0 && timer == 0) {
-            unk148 = unk148 + 0x1e;
+            m_gauge = m_gauge + 0x1e;
             vx = unkc0;
             vy = vy * 0.75 + unkc8;
             if (vy < -6.0) {
@@ -797,7 +797,7 @@ void CNanase::Vf6()
             unk118 -= 0.8;
         }
         if (frame == 0 && timer == 0) {
-            unk148 = unk148 + 0x1e;
+            m_gauge = m_gauge + 0x1e;
             vx = unkc0;
             vy = vy * 0.75 + unkc8;
             ay = 0.032;
@@ -835,7 +835,7 @@ void CNanase::Vf6()
             unk118 -= 0.8;
         }
         if (frame == 0 && timer == 0) {
-            unk148 = unk148 + 0x1e;
+            m_gauge = m_gauge + 0x1e;
             vx = unkc0;
             vy = unkc8;
             ay = 0.032;
@@ -878,7 +878,7 @@ void CNanase::Vf6()
             break;
         }
         if (frame == 0 && timer == 0) {
-            unk148 = unk148 + 0x1e;
+            m_gauge = m_gauge + 0x1e;
             vx = unkc0;
             vy = vy * 0.75 + unkc8;
             if (vy < -2.0) {
@@ -926,7 +926,7 @@ void CNanase::Vf6()
             break;
         }
         if (frame == 0 && timer == 0) {
-            unk148 = unk148 + 0x1e;
+            m_gauge = m_gauge + 0x1e;
             vx = unkc0;
             vy = vy * 0.75 + unkc8;
             if (vy < -4.0) {
@@ -974,7 +974,7 @@ void CNanase::Vf6()
             break;
         }
         if (frame == 0 && timer == 0) {
-            unk148 = unk148 + 0x1e;
+            m_gauge = m_gauge + 0x1e;
             vx = unkc0;
             vy = vy * 0.75 + unkc8;
             ay = 0.032;
@@ -1017,7 +1017,7 @@ void CNanase::Vf6()
             break;
         }
         if (frame == 0 && timer == 0) {
-            unk148 = unk148 + 0x1e;
+            m_gauge = m_gauge + 0x1e;
             vx = unkc0;
             vy = unkc8;
             ay = 0.032;
@@ -1054,7 +1054,7 @@ void CNanase::Vf6()
         if (unk120 != 0) {
             unk118 -= 1.5;
         }
-        unk148 = unk148 + 3;
+        m_gauge = m_gauge + 3;
         vx = unkc0;
         vy = unkc8;
         timer++;
@@ -1085,7 +1085,7 @@ void CNanase::Vf6()
         if (unk120 != 0) {
             unk118 -= 1.5;
         }
-        unk148 = unk148 + 3;
+        m_gauge = m_gauge + 3;
         vx = unkc0;
         vy = unkc8;
         timer++;
@@ -1112,7 +1112,7 @@ void CNanase::Vf6()
             unk118 -= 0.8;
         }
         if (frame == 0 && timer == 0 && unk3138 == 0) {
-            unk148 = unk148 + 0x1e;
+            m_gauge = m_gauge + 0x1e;
             unk3138++;
             unk124 = unk124 + 0x78;
             vx = 0.5;
@@ -1122,8 +1122,8 @@ void CNanase::Vf6()
             l50.type = 0;
             l50.x = (double)(int)x;
             l50.y = (double)(int)y;
-            l50.unk20 = 2;
-            l50.unk21 = 1;
+            l50.scale = 2;
+            l50.layer = 1;
             m_game->CreateEffect((EffectDesc*)&l50);
         }
         vy = vy + ay;
@@ -1151,7 +1151,7 @@ void CNanase::Vf6()
             unk118 -= 0.8;
         }
         if (frame == 0 && timer == 0) {
-            unk148 = unk148 + 0x1e;
+            m_gauge = m_gauge + 0x1e;
             vx = unkc0;
             vy = unkc8;
             ay = 0.072;
@@ -1262,7 +1262,7 @@ void CNanase::Vf6()
         }
         unk158 = 0;
         if (frame == 0 && timer == 0) {
-            unk148 = unk148 + 0x1e;
+            m_gauge = m_gauge + 0x1e;
             if (unk120 != 0) {
                 unk118 -= 30.0;
             }
@@ -1300,7 +1300,7 @@ void CNanase::Vf6()
         }
         unk158 = 0;
         if (frame == 0 && timer == 0) {
-            unk148 = unk148 + 0x1e;
+            m_gauge = m_gauge + 0x1e;
             if (unk120 != 0) {
                 unk118 -= 30.0;
             }
@@ -1338,7 +1338,7 @@ void CNanase::Vf6()
         }
         unk158 = 0;
         if (frame == 0 && timer == 0) {
-            unk148 = unk148 + 0x1e;
+            m_gauge = m_gauge + 0x1e;
             if (unk120 != 0) {
                 unk118 -= 30.0;
             }
@@ -1376,9 +1376,9 @@ void CNanase::Vf6()
             l50.x = (double)(int)x;
             l50.y = (double)(int)y;
             l50.unk18 = facing;
-            l50.unk21 = 1;
+            l50.layer = 1;
             Vf9(&l50);
-            unk148 = unk148 + 0x1e;
+            m_gauge = m_gauge + 0x1e;
             vx = unkc0;
             vy = unkc8;
             ay = 0.032;
@@ -1416,7 +1416,7 @@ void CNanase::Vf6()
             vy = -0.45;
             vx = -0.1;
             unk3138++;
-            unk148 = unk148 + 0x1e;
+            m_gauge = m_gauge + 0x1e;
         }
         if (frame == 4 && timer == 0) {
             vx = unkc0;
@@ -1459,8 +1459,8 @@ void CNanase::Vf6()
                 l50.type = 0x1f0;
                 l50.x = (double)(int)x;
                 l50.y = (double)(int)y;
-                l50.unk20 = 0;
-                l50.unk21 = 0;
+                l50.scale = 0;
+                l50.layer = 0;
                 l50.unk0 = 1;
                 l50.unk18 = facing;
                 Vf9(&l50);
@@ -1472,7 +1472,7 @@ void CNanase::Vf6()
             unk2c9 = 0x21;
             vy = -1.5;
             vx = -0.8;
-            unk148 = unk148 + 0x1e;
+            m_gauge = m_gauge + 0x1e;
         }
         vy += 0.04;
         if (frame == 0 && vy + y > 0.0) {
@@ -1501,7 +1501,7 @@ void CNanase::Vf6()
             if (frame >= x8) {
                 pattern = 0;
                 Vf0();
-                CPlayer::Unk40e630();
+                CPlayer::FaceOpponent();
             }
         }
         break;
@@ -1511,8 +1511,8 @@ void CNanase::Vf6()
                 l50.type = 0x1f0;
                 l50.x = (double)(int)x;
                 l50.y = (double)(int)y;
-                l50.unk20 = 0;
-                l50.unk21 = 0;
+                l50.scale = 0;
+                l50.layer = 0;
                 l50.unk0 = 1;
                 l50.unk18 = facing;
                 Vf9(&l50);
@@ -1524,7 +1524,7 @@ void CNanase::Vf6()
             unk2c9 = 0x21;
             vy = -1.5;
             vx = -0.8;
-            unk148 = unk148 + 0x1e;
+            m_gauge = m_gauge + 0x1e;
         }
         vy += 0.04;
         if (frame == 0 && vy + y > 0.0) {
@@ -1553,7 +1553,7 @@ void CNanase::Vf6()
             if (frame >= x8) {
                 pattern = 0;
                 Vf0();
-                CPlayer::Unk40e630();
+                CPlayer::FaceOpponent();
             }
         }
         break;
@@ -1563,8 +1563,8 @@ void CNanase::Vf6()
                 l50.type = 0x1f0;
                 l50.x = (double)(int)x;
                 l50.y = (double)(int)y;
-                l50.unk20 = 0;
-                l50.unk21 = 0;
+                l50.scale = 0;
+                l50.layer = 0;
                 l50.unk0 = 1;
                 l50.unk18 = facing;
                 Vf9(&l50);
@@ -1576,7 +1576,7 @@ void CNanase::Vf6()
             unk2c9 = 0x21;
             vx = unkc0;
             vy = unkc8;
-            unk148 = unk148 + 0x1e;
+            m_gauge = m_gauge + 0x1e;
         }
         vy += 0.04;
         timer++;
@@ -1586,7 +1586,7 @@ void CNanase::Vf6()
             if (frame >= x8) {
                 pattern = 0;
                 Vf0();
-                CPlayer::Unk40e630();
+                CPlayer::FaceOpponent();
             }
         }
         if (y + vy >= 0.0) {
@@ -1606,8 +1606,8 @@ void CNanase::Vf6()
                 l50.type = 0x1f0;
                 l50.x = (double)(int)x;
                 l50.y = (double)(int)y;
-                l50.unk20 = 0;
-                l50.unk21 = 0;
+                l50.scale = 0;
+                l50.layer = 0;
                 l50.unk0 = 1;
                 l50.unk18 = facing;
                 Vf9(&l50);
@@ -1620,7 +1620,7 @@ void CNanase::Vf6()
                 unk2c9 = 0x21;
                 vx = unkc0;
                 vy = unkc8;
-                unk148 = unk148 + 0x1e;
+                m_gauge = m_gauge + 0x1e;
                 unk3138++;
             }
         }
@@ -1649,10 +1649,10 @@ void CNanase::Vf6()
             l50.type = 0x1ef;
             l50.x = 60.0;
             l50.y = 40.0;
-            l50.unk24 = 1;
+            l50.screen = 1;
             l50.unk18 = 1;
-            l50.unk20 = 0;
-            l50.unk21 = 1;
+            l50.scale = 0;
+            l50.layer = 1;
             Vf9(&l50);
         }
         timer++;
@@ -1671,7 +1671,7 @@ void CNanase::Vf6()
             timer = 0;
             frame++;
             if (frame == x8 - 1) {
-                CPlayer::Unk40e630();
+                CPlayer::FaceOpponent();
             }
             if (frame >= x8) {
                 pattern = 7;
@@ -1690,8 +1690,8 @@ void CNanase::Vf6()
             l50.type = 3;
             l50.x = (double)(int)x;
             l50.y = (double)(int)y;
-            l50.unk20 = 2;
-            l50.unk21 = 0;
+            l50.scale = 2;
+            l50.layer = 0;
             m_game->CreateEffect((EffectDesc*)&l50);
             unk2c9 = 7;
         }
@@ -1713,8 +1713,8 @@ void CNanase::Vf6()
             l50.type = 3;
             l50.x = (double)(int)x;
             l50.y = (double)(int)y;
-            l50.unk20 = 2;
-            l50.unk21 = 0;
+            l50.scale = 2;
+            l50.layer = 0;
             m_game->CreateEffect((EffectDesc*)&l50);
             unk2c9 = 7;
         }
@@ -1729,7 +1729,7 @@ void CNanase::Vf6()
         }
         break;
     case 0x63:
-        if (unk108 > 0 && timer > 0x63 && frame == 0) {
+        if (m_hp > 0 && timer > 0x63 && frame == 0) {
             pattern = 0x60;
             Vf0();
             break;
@@ -1740,7 +1740,7 @@ void CNanase::Vf6()
             timer = 0;
             frame++;
             if (frame == x8) {
-                CPlayer::Unk40e630();
+                CPlayer::FaceOpponent();
             }
             if (frame >= x8) {
                 pattern = 0x60;
@@ -1757,7 +1757,7 @@ void CNanase::Vf6()
         }
         if (frame == 0 && timer == 0) {
             unk158 = 0;
-            unk148 = unk148 + 0xa;
+            m_gauge = m_gauge + 0xa;
             vx = -1.5;
             vy = 0.0;
             y = 0.0;
@@ -1777,7 +1777,7 @@ void CNanase::Vf6()
             timer = 0;
             frame++;
             if (frame == x8) {
-                CPlayer::Unk40e630();
+                CPlayer::FaceOpponent();
             }
             if (frame >= x8) {
                 pattern = 0;
@@ -1797,7 +1797,7 @@ void CNanase::Vf6()
         }
         if (frame == 0 && timer == 0) {
             unk158 = 0;
-            unk148 = unk148 + 0xf;
+            m_gauge = m_gauge + 0xf;
             vx = -1.8;
             vy = 0.0;
             y = 0.0;
@@ -1817,7 +1817,7 @@ void CNanase::Vf6()
             timer = 0;
             frame++;
             if (frame == x8) {
-                CPlayer::Unk40e630();
+                CPlayer::FaceOpponent();
             }
             if (frame >= x8) {
                 pattern = 0;
@@ -1837,7 +1837,7 @@ void CNanase::Vf6()
         }
         if (frame == 0 && timer == 0) {
             unk158 = 0;
-            unk148 = unk148 + 0x14;
+            m_gauge = m_gauge + 0x14;
             vx = -2.3;
             vy = 0.0;
             y = 0.0;
@@ -1857,7 +1857,7 @@ void CNanase::Vf6()
             timer = 0;
             frame++;
             if (frame == x8) {
-                CPlayer::Unk40e630();
+                CPlayer::FaceOpponent();
             }
             if (frame >= x8) {
                 pattern = 0;
@@ -1877,7 +1877,7 @@ void CNanase::Vf6()
         }
         if (frame == 0 && timer == 0) {
             unk158 = 0;
-            unk148 = unk148 + 0xa;
+            m_gauge = m_gauge + 0xa;
             vx = -1.5;
             vy = 0.0;
             y = 0.0;
@@ -1897,7 +1897,7 @@ void CNanase::Vf6()
             timer = 0;
             frame++;
             if (frame == x8) {
-                CPlayer::Unk40e630();
+                CPlayer::FaceOpponent();
             }
             if (frame >= x8) {
                 pattern = 3;
@@ -1914,7 +1914,7 @@ void CNanase::Vf6()
         }
         if (frame == 0 && timer == 0) {
             unk158 = 0;
-            unk148 = unk148 + 0xf;
+            m_gauge = m_gauge + 0xf;
             vx = -1.8;
             vy = 0.0;
             y = 0.0;
@@ -1934,7 +1934,7 @@ void CNanase::Vf6()
             timer = 0;
             frame++;
             if (frame == x8) {
-                CPlayer::Unk40e630();
+                CPlayer::FaceOpponent();
             }
             if (frame >= x8) {
                 pattern = 3;
@@ -1951,7 +1951,7 @@ void CNanase::Vf6()
         }
         if (frame == 0 && timer == 0) {
             unk158 = 0;
-            unk148 = unk148 + 0x14;
+            m_gauge = m_gauge + 0x14;
             vx = -2.3;
             vy = 0.0;
             y = 0.0;
@@ -1971,7 +1971,7 @@ void CNanase::Vf6()
             timer = 0;
             frame++;
             if (frame == x8) {
-                CPlayer::Unk40e630();
+                CPlayer::FaceOpponent();
             }
             if (frame >= x8) {
                 pattern = 3;
@@ -1982,7 +1982,7 @@ void CNanase::Vf6()
     case 0x9c:
         if (frame == 0 && timer == 0) {
             vy = -2.6;
-            unk148 = unk148 + 0xf;
+            m_gauge = m_gauge + 0xf;
             ay = 0.06;
         }
         vx = -1.2;
@@ -1999,7 +1999,7 @@ void CNanase::Vf6()
         if (y + vy >= 0.0) {
             y = 0.0;
             unk2c9 = 9;
-            CPlayer::Unk40e630();
+            CPlayer::FaceOpponent();
             pattern = 0xd;
             Vf0();
         }
@@ -2013,8 +2013,8 @@ void CNanase::Vf6()
             l50.type = 8;
             l50.x = (double)(int)x;
             l50.y = (double)(int)y;
-            l50.unk20 = 2;
-            l50.unk21 = 0;
+            l50.scale = 2;
+            l50.layer = 0;
             m_game->CreateEffect((EffectDesc*)&l50);
         } else {
             vy = vy + ay;
@@ -2031,7 +2031,7 @@ void CNanase::Vf6()
         if (y + vy >= 0.0) {
             y = 0.0;
             unk2c9 = 9;
-            CPlayer::Unk40e630();
+            CPlayer::FaceOpponent();
             pattern = 0xd;
             Vf0();
         }
@@ -2045,8 +2045,8 @@ void CNanase::Vf6()
             l50.type = 8;
             l50.x = (double)(int)x;
             l50.y = (double)(int)y;
-            l50.unk20 = 2;
-            l50.unk21 = 0;
+            l50.scale = 2;
+            l50.layer = 0;
             m_game->CreateEffect((EffectDesc*)&l50);
         } else {
             vy = vy + ay;
@@ -2063,21 +2063,21 @@ void CNanase::Vf6()
         if (y + vy >= 0.0) {
             y = 0.0;
             unk2c9 = 9;
-            CPlayer::Unk40e630();
+            CPlayer::FaceOpponent();
             pattern = 0xd;
             Vf0();
         }
         break;
     case 0xa1:
         if (frame == 0 && timer == 0) {
-            CPlayer::Unk40f1e0();
+            CPlayer::StopMoving();
             l50.type = 9;
             l50.x = (double)(int)x;
             l50.y = (double)((int)y - 0x46);
-            l50.unk20 = 2;
-            l50.unk21 = 1;
+            l50.scale = 2;
+            l50.layer = 1;
             m_game->CreateEffect((EffectDesc*)&l50);
-            unk16c = 1;
+            m_hitsLeft = 1;
             unk2c9 = 0x3e;
             unk3138++;
         }
@@ -2094,24 +2094,24 @@ void CNanase::Vf6()
         break;
     case 0xa2:
         if (frame == 0 && timer == 0) {
-            CPlayer::Unk40f1e0();
+            CPlayer::StopMoving();
         }
         if (frame == 2 && timer == 0) {
             vy = -1.5;
             ay = 0.025;
-            unk16c = 1;
+            m_hitsLeft = 1;
         }
         if (frame == 5 && timer == 0) {
-            CPlayer::Unk40f1e0();
+            CPlayer::StopMoving();
             l50.type = 9;
             l50.x = (double)(int)x;
             l50.y = (double)((int)y - 0x46);
-            l50.unk20 = 2;
-            l50.unk21 = 1;
+            l50.scale = 2;
+            l50.layer = 1;
             m_game->CreateEffect((EffectDesc*)&l50);
-            unk16c = 1;
+            m_hitsLeft = 1;
             unk2c9 = 0x3e;
-            unk148 = unk148 - 0x3e8;
+            m_gauge = m_gauge - 0x3e8;
             unk3138++;
         }
         vy = vy + ay;
@@ -2146,7 +2146,7 @@ void CNanase::Vf6()
             if (m_inputX == -facing) {
                 pattern = 6;
             }
-            unk168 = 0;
+            m_attackResult = 0;
             Vf0();
             break;
         }
@@ -2193,7 +2193,7 @@ void CNanase::Vf6()
         }
         if (y + vy > 0.0 && frame < 9) {
             unk2c9 = 9;
-            CPlayer::Unk40f1e0();
+            CPlayer::StopMoving();
             y = 0.0;
             frame = 9;
             timer = 0;
@@ -2237,7 +2237,7 @@ void CNanase::Vf6()
             Vf0();
             vx = 1.3;
             ay = 0.03;
-            if (CPlayer::Unk40e630() != 0) {
+            if (CPlayer::FaceOpponent() != 0) {
                 vx = -vx;
             }
         }
@@ -2246,7 +2246,7 @@ void CNanase::Vf6()
             Vf0();
             vx = 1.3;
             ay = 0.03;
-            if (CPlayer::Unk40e630() != 0) {
+            if (CPlayer::FaceOpponent() != 0) {
                 vx = -vx;
             }
         }
@@ -2276,7 +2276,7 @@ void CNanase::Vf6()
             Vf0();
             vx = -0.9;
             ay = 0.03;
-            if (CPlayer::Unk40e630() != 0) {
+            if (CPlayer::FaceOpponent() != 0) {
                 vx = -vx;
             }
         }
@@ -2285,7 +2285,7 @@ void CNanase::Vf6()
             Vf0();
             vx = -0.9;
             ay = 0.03;
-            if (CPlayer::Unk40e630() != 0) {
+            if (CPlayer::FaceOpponent() != 0) {
                 vx = -vx;
             }
         }
@@ -2296,7 +2296,7 @@ void CNanase::Vf6()
             vx = 0.0;
             vy = 0.0;
             if (unk120 == 1) {
-                unk178 = unk118 * 5.0 + unk178;
+                m_proration = unk118 * 5.0 + m_proration;
             }
             unk118 = 0.0;
             unk14c = 0x5a;
@@ -2307,26 +2307,26 @@ void CNanase::Vf6()
             l50.type = 1;
             l50.x = (double)(int)x;
             l50.y = (double)(int)y;
-            l50.unk20 = 2;
-            l50.unk21 = 1;
+            l50.scale = 2;
+            l50.layer = 1;
             m_game->CreateEffect((EffectDesc*)&l50);
         }
         if (frame == 2 && timer == 0) {
             l50.type = 4;
             l50.x = (double)(int)x;
             l50.y = (double)(int)y;
-            l50.unk20 = 2;
-            l50.unk21 = 1;
+            l50.scale = 2;
+            l50.layer = 1;
             m_game->CreateEffect((EffectDesc*)&l50);
         }
         timer++;
         if (timer >= l4) {
             timer = 0;
             frame++;
-            unk168 = 0;
+            m_attackResult = 0;
             if (frame >= x8) {
                 pattern = 0;
-                CPlayer::Unk40e630();
+                CPlayer::FaceOpponent();
                 Vf0();
             }
         }
@@ -2344,8 +2344,8 @@ void CNanase::Vf6()
             l50.type = 8;
             l50.x = (double)(int)x;
             l50.y = (double)(int)y;
-            l50.unk20 = 2;
-            l50.unk21 = 1;
+            l50.scale = 2;
+            l50.layer = 1;
             m_game->CreateEffect((EffectDesc*)&l50);
         }
         timer++;
@@ -2353,7 +2353,7 @@ void CNanase::Vf6()
             timer = 0;
             frame++;
             if (frame == x8) {
-                CPlayer::Unk40e630();
+                CPlayer::FaceOpponent();
             }
             if (frame >= x8) {
                 pattern = 0;
@@ -2374,8 +2374,8 @@ void CNanase::Vf6()
             l50.type = 8;
             l50.x = (double)(int)x;
             l50.y = (double)(int)y;
-            l50.unk20 = 2;
-            l50.unk21 = 1;
+            l50.scale = 2;
+            l50.layer = 1;
             m_game->CreateEffect((EffectDesc*)&l50);
         }
         timer++;
@@ -2383,7 +2383,7 @@ void CNanase::Vf6()
             timer = 0;
             frame++;
             if (frame == x8) {
-                CPlayer::Unk40e630();
+                CPlayer::FaceOpponent();
             }
             if (frame >= x8) {
                 pattern = 3;
@@ -2413,7 +2413,7 @@ void CNanase::Vf6()
             vy = vy + ay;
         }
         if (vy + y > 0.0) {
-            CPlayer::Unk40f1e0();
+            CPlayer::StopMoving();
             y = 0.0;
             pattern = 0xa9;
             break;
@@ -2435,7 +2435,7 @@ void CNanase::Vf6()
             vx = 0.0;
             vy = 0.0;
             if (unk120 == 1) {
-                unk178 = unk118 * 5.0 + unk178;
+                m_proration = unk118 * 5.0 + m_proration;
             }
             unk118 = 0.0;
             unk14c = 0x5a;
@@ -2446,15 +2446,15 @@ void CNanase::Vf6()
             l50.type = 1;
             l50.x = (double)(int)x;
             l50.y = (double)(int)y;
-            l50.unk20 = 2;
-            l50.unk21 = 1;
+            l50.scale = 2;
+            l50.layer = 1;
             m_game->CreateEffect((EffectDesc*)&l50);
         }
         timer++;
         if (timer >= l4) {
             timer = 0;
             frame++;
-            unk168 = 0;
+            m_attackResult = 0;
             if (frame >= x8) {
                 pattern = 9;
                 vx = unk3138 * 0.01;
@@ -2479,7 +2479,7 @@ void CNanase::Vf6()
             if (m_inputX == -facing) {
                 pattern = 6;
             }
-            unk168 = 0;
+            m_attackResult = 0;
             Vf0();
             break;
         }
@@ -2505,7 +2505,7 @@ void CNanase::Vf6()
             vy = vy + ay;
         }
         if (y + vy > 0.0 && frame < 9) {
-            CPlayer::Unk40f1e0();
+            CPlayer::StopMoving();
             y = 0.0;
             timer = 0;
             frame = 9;
@@ -2540,7 +2540,7 @@ void CNanase::Vf6()
             vx = 0.0;
             unk158 = 0;
         }
-        if (m_inputY == -1 && frame > 0 && unk15c < 3 && unk168 >= 2) {
+        if (m_inputY == -1 && frame > 0 && unk15c < 3 && m_attackResult >= 2) {
             pattern = 4;
             if (m_inputX == facing) {
                 pattern = 5;
@@ -2548,15 +2548,15 @@ void CNanase::Vf6()
             if (m_inputX == -facing) {
                 pattern = 6;
             }
-            unk168 = 0;
+            m_attackResult = 0;
             Vf0();
             break;
         }
         if (frame == 1 && timer == 0) {
-            unk16c = 1;
+            m_hitsLeft = 1;
         }
         if (frame == 1 && timer == 0) {
-            unk148 = unk148 + 5;
+            m_gauge = m_gauge + 5;
             unk2c9 = 0x15;
         }
         timer++;
@@ -2564,11 +2564,11 @@ void CNanase::Vf6()
             timer = 0;
             frame++;
             if (frame < 2) {
-                unk168 = 0;
+                m_attackResult = 0;
             }
             if (frame >= x8) {
                 pattern = 0;
-                CPlayer::Unk40e630();
+                CPlayer::FaceOpponent();
                 Vf0();
             }
         }
@@ -2584,7 +2584,7 @@ void CNanase::Vf6()
             vx = 0.0;
             unk158 = 0;
         }
-        if (m_inputY == -1 && frame > 0 && unk15c < 3 && unk168 >= 2) {
+        if (m_inputY == -1 && frame > 0 && unk15c < 3 && m_attackResult >= 2) {
             pattern = 4;
             if (m_inputX == facing) {
                 pattern = 5;
@@ -2592,25 +2592,25 @@ void CNanase::Vf6()
             if (m_inputX == -facing) {
                 pattern = 6;
             }
-            unk168 = 0;
+            m_attackResult = 0;
             Vf0();
             break;
         }
         if (frame == 1 && timer == 0) {
-            unk148 = unk148 + 0xf;
+            m_gauge = m_gauge + 0xf;
             unk2c9 = 0x14;
-            unk16c = 1;
+            m_hitsLeft = 1;
         }
         timer++;
         if (timer >= l4) {
             timer = 0;
             frame++;
             if (frame < 2) {
-                unk168 = 0;
+                m_attackResult = 0;
             }
             if (frame >= x8) {
                 pattern = 0;
-                CPlayer::Unk40e630();
+                CPlayer::FaceOpponent();
                 Vf0();
             }
         }
@@ -2626,7 +2626,7 @@ void CNanase::Vf6()
             vx = 0.0;
             unk158 = 0;
         }
-        if (m_inputY == -1 && frame > 0 && unk15c < 3 && unk168 == 3) {
+        if (m_inputY == -1 && frame > 0 && unk15c < 3 && m_attackResult == 3) {
             pattern = 4;
             if (m_inputX == facing) {
                 pattern = 5;
@@ -2634,25 +2634,25 @@ void CNanase::Vf6()
             if (m_inputX == -facing) {
                 pattern = 6;
             }
-            unk168 = 0;
+            m_attackResult = 0;
             Vf0();
             break;
         }
         if (frame == 2 && timer == 0) {
-            unk148 = unk148 + 0xf;
+            m_gauge = m_gauge + 0xf;
             unk2c9 = 0x14;
-            unk16c = 1;
+            m_hitsLeft = 1;
         }
         timer++;
         if (timer >= l4) {
             timer = 0;
             frame++;
             if (frame < 2) {
-                unk168 = 0;
+                m_attackResult = 0;
             }
             if (frame >= x8) {
                 pattern = 0;
-                CPlayer::Unk40e630();
+                CPlayer::FaceOpponent();
                 Vf0();
             }
         }
@@ -2669,20 +2669,20 @@ void CNanase::Vf6()
             unk158 = 0;
         }
         if (frame == 3 && timer == 0) {
-            unk148 = unk148 + 0x23;
+            m_gauge = m_gauge + 0x23;
             unk2c9 = 0x14;
-            unk16c = 1;
+            m_hitsLeft = 1;
         }
         timer++;
         if (timer >= l4) {
             timer = 0;
             frame++;
             if (frame < 2) {
-                unk168 = 0;
+                m_attackResult = 0;
             }
             if (frame >= x8) {
                 pattern = 0;
-                CPlayer::Unk40e630();
+                CPlayer::FaceOpponent();
                 Vf0();
             }
         }
@@ -2698,7 +2698,7 @@ void CNanase::Vf6()
             vx = 0.0;
             unk158 = 0;
         }
-        if (m_inputY == -1 && frame > 0 && unk15c < 3 && unk168 >= 2) {
+        if (m_inputY == -1 && frame > 0 && unk15c < 3 && m_attackResult >= 2) {
             pattern = 4;
             if (m_inputX == facing) {
                 pattern = 5;
@@ -2706,28 +2706,28 @@ void CNanase::Vf6()
             if (m_inputX == -facing) {
                 pattern = 6;
             }
-            unk168 = 0;
+            m_attackResult = 0;
             Vf0();
             break;
         }
         if (frame == 1 && timer == 0) {
-            unk148 = unk148 + 5;
+            m_gauge = m_gauge + 5;
             unk2c9 = 0x15;
-            unk16c = 1;
+            m_hitsLeft = 1;
         }
         timer++;
         if (timer >= l4) {
             timer = 0;
             frame++;
             if (frame < 2) {
-                unk168 = 0;
+                m_attackResult = 0;
             }
             if (frame >= x8) {
                 pattern = 0;
                 if (m_inputY == 1) {
                     pattern = 3;
                 }
-                CPlayer::Unk40e630();
+                CPlayer::FaceOpponent();
                 Vf0();
             }
         }
@@ -2743,7 +2743,7 @@ void CNanase::Vf6()
             vx = 0.0;
             unk158 = 0;
         }
-        if (m_inputY == -1 && frame > 0 && unk15c < 3 && unk168 == 3) {
+        if (m_inputY == -1 && frame > 0 && unk15c < 3 && m_attackResult == 3) {
             pattern = 4;
             if (m_inputX == facing) {
                 pattern = 5;
@@ -2751,28 +2751,28 @@ void CNanase::Vf6()
             if (m_inputX == -facing) {
                 pattern = 6;
             }
-            unk168 = 0;
+            m_attackResult = 0;
             Vf0();
             break;
         }
         if (frame == 2 && timer == 0) {
-            unk148 = unk148 + 0xd;
+            m_gauge = m_gauge + 0xd;
             unk2c9 = 0x14;
-            unk16c = 1;
+            m_hitsLeft = 1;
         }
         timer++;
         if (timer >= l4) {
             timer = 0;
             frame++;
             if (frame < 2) {
-                unk168 = 0;
+                m_attackResult = 0;
             }
             if (frame >= x8) {
                 pattern = 0;
                 if (m_inputY == 1) {
                     pattern = 3;
                 }
-                CPlayer::Unk40e630();
+                CPlayer::FaceOpponent();
                 Vf0();
             }
         }
@@ -2789,15 +2789,15 @@ void CNanase::Vf6()
             unk158 = 0;
         }
         if (frame == 3 && timer == 0) {
-            unk148 = unk148 + 0x19;
+            m_gauge = m_gauge + 0x19;
             unk2c9 = 0x14;
-            unk16c = 1;
+            m_hitsLeft = 1;
         }
         timer++;
         if (timer >= l4) {
             timer = 0;
             frame++;
-            unk168 = 0;
+            m_attackResult = 0;
             if (frame == 3) {
                 x = facing * 0x32 + x;
             }
@@ -2806,14 +2806,14 @@ void CNanase::Vf6()
                 if (m_inputY == 1) {
                     pattern = 3;
                 }
-                CPlayer::Unk40e630();
+                CPlayer::FaceOpponent();
                 Vf0();
             }
         }
         break;
     case 0xcf:
         vy = vy + ay;
-        if (m_inputY == -1 && frame > 0 && unk15c < 3 && unk168 >= 2 && unk15a == 0) {
+        if (m_inputY == -1 && frame > 0 && unk15c < 3 && m_attackResult >= 2 && unk15a == 0) {
             unk15a++;
             pattern = 0xe;
             if (m_inputX == facing) {
@@ -2822,14 +2822,14 @@ void CNanase::Vf6()
             if (m_inputX == -facing) {
                 pattern = 0x10;
             }
-            unk168 = 0;
+            m_attackResult = 0;
             Vf0();
             break;
         }
         if (frame == 2 && timer == 0) {
-            unk148 = unk148 + 5;
+            m_gauge = m_gauge + 5;
             unk2c9 = 0x15;
-            unk16c = 1;
+            m_hitsLeft = 1;
         }
         if (y + vy >= 0.0) {
             y = 0.0;
@@ -2842,7 +2842,7 @@ void CNanase::Vf6()
             timer = 0;
             frame++;
             if (frame < 2) {
-                unk168 = 0;
+                m_attackResult = 0;
             }
             if (frame >= x8) {
                 pattern = 9;
@@ -2852,7 +2852,7 @@ void CNanase::Vf6()
         break;
     case 0xd0:
         vy = vy + ay;
-        if (m_inputY == -1 && frame > 0 && unk15c < 3 && unk168 >= 2 && unk15a == 0) {
+        if (m_inputY == -1 && frame > 0 && unk15c < 3 && m_attackResult >= 2 && unk15a == 0) {
             unk15a++;
             pattern = 0xe;
             if (m_inputX == facing) {
@@ -2861,14 +2861,14 @@ void CNanase::Vf6()
             if (m_inputX == -facing) {
                 pattern = 0x10;
             }
-            unk168 = 0;
+            m_attackResult = 0;
             Vf0();
             break;
         }
         if (frame == 3 && timer == 0) {
-            unk148 = unk148 + 0xd;
+            m_gauge = m_gauge + 0xd;
             unk2c9 = 0x14;
-            unk16c = 1;
+            m_hitsLeft = 1;
         }
         if (y + vy >= 0.0) {
             y = 0.0;
@@ -2881,7 +2881,7 @@ void CNanase::Vf6()
             timer = 0;
             frame++;
             if (frame < 2) {
-                unk168 = 0;
+                m_attackResult = 0;
             }
             if (frame >= x8) {
                 pattern = 4;
@@ -2892,7 +2892,7 @@ void CNanase::Vf6()
         break;
     case 0xd1:
         vy = vy + ay;
-        if (m_inputY == -1 && frame > 0 && unk15c < 3 && unk168 >= 2 && unk15a == 0) {
+        if (m_inputY == -1 && frame > 0 && unk15c < 3 && m_attackResult >= 2 && unk15a == 0) {
             unk15a++;
             pattern = 0xe;
             if (m_inputX == facing) {
@@ -2901,14 +2901,14 @@ void CNanase::Vf6()
             if (m_inputX == -facing) {
                 pattern = 0x10;
             }
-            unk168 = 0;
+            m_attackResult = 0;
             Vf0();
             break;
         }
         if (frame == 6 && timer == 0) {
-            unk148 = unk148 + 0x1e;
+            m_gauge = m_gauge + 0x1e;
             unk2c9 = 0x14;
-            unk16c = 3;
+            m_hitsLeft = 3;
         }
         if (y + vy >= 0.0) {
             y = 0.0;
@@ -2921,7 +2921,7 @@ void CNanase::Vf6()
             timer = 0;
             frame++;
             if (frame < 2) {
-                unk168 = 0;
+                m_attackResult = 0;
             }
             if (frame >= x8) {
                 pattern = 4;
@@ -2941,9 +2941,9 @@ void CNanase::Vf6()
             ay = 0.08;
         }
         if (frame == 2 && timer == 0) {
-            unk148 = unk148 + 0xf;
+            m_gauge = m_gauge + 0xf;
             unk2c9 = 0x14;
-            unk16c = 1;
+            m_hitsLeft = 1;
         }
         if (frame == 5 && timer == 0) {
             vx = 0.0;
@@ -2957,7 +2957,7 @@ void CNanase::Vf6()
         if (timer >= l4) {
             timer = 0;
             frame++;
-            unk168 = 0;
+            m_attackResult = 0;
             if (frame == 5) {
                 if (y + vy < 0.0) {
                     frame--;
@@ -2967,13 +2967,13 @@ void CNanase::Vf6()
             }
             if (frame >= x8) {
                 pattern = 0;
-                CPlayer::Unk40e630();
+                CPlayer::FaceOpponent();
                 Vf0();
             }
         }
         break;
     case 0xd3:
-        if (m_inputY == -1 && frame > 0 && unk168 >= 2) {
+        if (m_inputY == -1 && frame > 0 && m_attackResult >= 2) {
             pattern = 4;
             if (m_inputX == facing) {
                 pattern = 5;
@@ -2981,7 +2981,7 @@ void CNanase::Vf6()
             if (m_inputX == -facing) {
                 pattern = 6;
             }
-            unk168 = 0;
+            m_attackResult = 0;
             Vf0();
             break;
         }
@@ -2990,18 +2990,18 @@ void CNanase::Vf6()
             vy = 0.0;
         }
         if (frame == 3 && timer == 0) {
-            unk148 = unk148 + 0x1e;
+            m_gauge = m_gauge + 0x1e;
             unk2c9 = 0x14;
-            unk16c = 1;
+            m_hitsLeft = 1;
         }
         timer++;
         if (timer >= l4) {
             timer = 0;
             frame++;
-            unk168 = 0;
+            m_attackResult = 0;
             if (frame >= x8) {
                 pattern = 0;
-                CPlayer::Unk40e630();
+                CPlayer::FaceOpponent();
                 Vf0();
             }
         }
@@ -3009,16 +3009,16 @@ void CNanase::Vf6()
     case 0xd4:
         vy = vy + ay;
         if (frame == 0 && timer == 0) {
-            unk148 = unk148 + 0x1e;
+            m_gauge = m_gauge + 0x1e;
             unk2c9 = 0x14;
-            unk16c = 1;
+            m_hitsLeft = 1;
             vx = vx / 2.0;
             ay = 0.07;
         }
-        if (unk168 > 1) {
+        if (m_attackResult > 1) {
             pattern = 0xd5;
             Vf0();
-            CPlayer::Unk40f1e0();
+            CPlayer::StopMoving();
             break;
         }
         if (y + vy >= 0.0) {
@@ -3028,8 +3028,8 @@ void CNanase::Vf6()
             l50.type = 3;
             l50.x = (double)(int)x;
             l50.y = (double)(int)y;
-            l50.unk20 = 2;
-            l50.unk21 = 0;
+            l50.scale = 2;
+            l50.layer = 0;
             l50.unk2c = 7;
             m_game->CreateEffect((EffectDesc*)&l50);
             unk2c9 = 7;
@@ -3041,7 +3041,7 @@ void CNanase::Vf6()
         if (timer >= l4) {
             timer = 0;
             frame++;
-            unk168 = 0;
+            m_attackResult = 0;
             if (frame >= x8) {
                 frame = frame - 2;
             }
@@ -3058,7 +3058,7 @@ void CNanase::Vf6()
         if (timer >= l4) {
             timer = 0;
             frame++;
-            unk168 = 0;
+            m_attackResult = 0;
             if (frame >= x8) {
                 pattern = 9;
                 Vf0();
@@ -3073,8 +3073,8 @@ void CNanase::Vf6()
             l50.type = 3;
             l50.x = (double)(int)x;
             l50.y = (double)(int)y;
-            l50.unk20 = 2;
-            l50.unk21 = 0;
+            l50.scale = 2;
+            l50.layer = 0;
             l50.unk2c = 7;
             m_game->CreateEffect((EffectDesc*)&l50);
         }
@@ -3082,13 +3082,13 @@ void CNanase::Vf6()
         if (timer >= l4) {
             timer = 0;
             frame++;
-            unk168 = 0;
+            m_attackResult = 0;
             if (frame >= x8) {
                 pattern = 7;
                 if (m_inputY == 1) {
                     pattern = 3;
                 }
-                CPlayer::Unk40e630();
+                CPlayer::FaceOpponent();
                 Vf0();
             }
         }
@@ -3098,18 +3098,18 @@ void CNanase::Vf6()
         vy = 0.0;
         unk158 = 0;
         if (frame == 1 && timer == 0 && (*m_opponent)->y == 0.0) {
-            unk16c = 1;
+            m_hitsLeft = 1;
         } else {
-            unk16c = 0;
+            m_hitsLeft = 0;
         }
-        if (frame == 1 && unk168 == 3) {
+        if (frame == 1 && m_attackResult == 3) {
             if (x > 580.0) {
                 x = 580.0;
             }
             if (x < 60.0) {
                 x = 60.0;
             }
-            CPlayer::Unk40f1e0();
+            CPlayer::StopMoving();
             Vf0();
             (*m_opponent)->Vf0();
             pattern = 0xdd;
@@ -3118,20 +3118,20 @@ void CNanase::Vf6()
             l50.type = 0;
             l50.x = (double)((int)x + facing * 0x25);
             l50.y = (double)((int)y - 0x2a);
-            l50.unk20 = 2;
-            l50.unk21 = 1;
+            l50.scale = 2;
+            l50.layer = 1;
             m_game->CreateEffect((EffectDesc*)&l50);
-            (*m_opponent)->Unk40f1e0();
+            (*m_opponent)->StopMoving();
             break;
         }
         timer++;
         if (timer >= l4) {
             timer = 0;
             frame++;
-            unk168 = 0;
+            m_attackResult = 0;
             if (frame >= x8) {
                 pattern = 0;
-                CPlayer::Unk40e630();
+                CPlayer::FaceOpponent();
                 Vf0();
             }
         }
@@ -3139,7 +3139,7 @@ void CNanase::Vf6()
     case 0xdd:
         CPlayer::Unk410a80(0x32, 3);
         if (frame == 0 && timer == 0) {
-            CPlayer::Unk40f1e0();
+            CPlayer::StopMoving();
         }
         if (frame == 3 && timer == 0) {
             vx = 1.0;
@@ -3149,7 +3149,7 @@ void CNanase::Vf6()
         vy = vy + ay;
         if (vy + y > 0.0 && frame == 4) {
             y = 0.0;
-            CPlayer::Unk40f1e0();
+            CPlayer::StopMoving();
             frame = 5;
             timer = 0;
             break;
@@ -3188,18 +3188,18 @@ void CNanase::Vf6()
         if (timer >= l4) {
             timer = 0;
             frame++;
-            unk168 = 0;
+            m_attackResult = 0;
             if (frame == 6) {
                 (*m_opponent)->x = facing * 0x28 + x;
                 (*m_opponent)->y = 0.0;
                 (*m_opponent)->pattern = 0x62;
                 (*m_opponent)->Vf0();
-                CPlayer::Unk4105a0(0x4b0, 750.0);
+                CPlayer::DealDamage(0x4b0, 750.0);
             }
             if (frame >= x8) {
                 pattern = 0;
                 Vf0();
-                CPlayer::Unk40e630();
+                CPlayer::FaceOpponent();
             }
         }
         break;
@@ -3212,9 +3212,9 @@ void CNanase::Vf6()
             unk158 = 0;
         }
         if (frame == 1 && timer == 0) {
-            unk16c = 1;
+            m_hitsLeft = 1;
             unk2c9 = 0x14;
-            unk148 = unk148 + 0x14;
+            m_gauge = m_gauge + 0x14;
         }
         if (vx < 0.0) {
             vx = 0.0;
@@ -3224,7 +3224,7 @@ void CNanase::Vf6()
             timer = 0;
             frame++;
             if (frame < 2) {
-                unk168 = 0;
+                m_attackResult = 0;
             }
             if (frame >= x8) {
                 pattern = 0;
@@ -3241,9 +3241,9 @@ void CNanase::Vf6()
             unk158 = 0;
         }
         if (frame == 1 && timer == 0) {
-            unk16c = 1;
+            m_hitsLeft = 1;
             unk2c9 = 0x14;
-            unk148 = unk148 + 0x14;
+            m_gauge = m_gauge + 0x14;
         }
         if (vx < 0.0) {
             vx = 0.0;
@@ -3253,7 +3253,7 @@ void CNanase::Vf6()
             timer = 0;
             frame++;
             if (frame < 2) {
-                unk168 = 0;
+                m_attackResult = 0;
             }
             if (frame >= x8) {
                 pattern = 0;
@@ -3273,16 +3273,16 @@ void CNanase::Vf6()
             vx = 0.0;
         }
         if (frame == 2 && timer == 0) {
-            unk148 = unk148 + 0x23;
+            m_gauge = m_gauge + 0x23;
             unk2c9 = 0x14;
-            unk16c = 1;
+            m_hitsLeft = 1;
         }
         timer++;
         if (timer >= l4) {
             timer = 0;
             frame++;
             if (frame < 2) {
-                unk168 = 0;
+                m_attackResult = 0;
             }
             if (frame >= x8) {
                 pattern = 0;
@@ -3299,9 +3299,9 @@ void CNanase::Vf6()
             unk158 = 0;
         }
         if (frame == 1 && timer == 0) {
-            unk16c = 1;
+            m_hitsLeft = 1;
             unk2c9 = 0x14;
-            unk148 = unk148 + 0x14;
+            m_gauge = m_gauge + 0x14;
         }
         if (vx < 0.0) {
             vx = 0.0;
@@ -3311,7 +3311,7 @@ void CNanase::Vf6()
             timer = 0;
             frame++;
             if (frame < 2) {
-                unk168 = 0;
+                m_attackResult = 0;
             }
             if (frame >= x8) {
                 pattern = 0;
@@ -3328,9 +3328,9 @@ void CNanase::Vf6()
             unk158 = 0;
         }
         if (frame == 1 && timer == 0) {
-            unk16c = 1;
+            m_hitsLeft = 1;
             unk2c9 = 0x14;
-            unk148 = unk148 + 0x14;
+            m_gauge = m_gauge + 0x14;
         }
         if (vx < 0.0) {
             vx = 0.0;
@@ -3340,7 +3340,7 @@ void CNanase::Vf6()
             timer = 0;
             frame++;
             if (frame < 2) {
-                unk168 = 0;
+                m_attackResult = 0;
             }
             if (frame >= x8) {
                 pattern = 0;
@@ -3357,9 +3357,9 @@ void CNanase::Vf6()
             unk158 = 0;
         }
         if (frame == 3 && timer == 0) {
-            unk16c = 1;
+            m_hitsLeft = 1;
             unk2c9 = 0x14;
-            unk148 = unk148 + 0x14;
+            m_gauge = m_gauge + 0x14;
         }
         if (vx < 0.0) {
             vx = 0.0;
@@ -3369,7 +3369,7 @@ void CNanase::Vf6()
             timer = 0;
             frame++;
             if (frame < 2) {
-                unk168 = 0;
+                m_attackResult = 0;
             }
             if (frame >= x8) {
                 pattern = 0;
@@ -3379,16 +3379,16 @@ void CNanase::Vf6()
         break;
     case 0xf8:
         vy = vy + ay;
-        if (frame == 2 && unk168 == 3) {
-            (*m_opponent)->Unk40f1e0();
+        if (frame == 2 && m_attackResult == 3) {
+            (*m_opponent)->StopMoving();
             (*m_opponent)->Vf0();
-            CPlayer::Unk40f1e0();
+            CPlayer::StopMoving();
             (*m_opponent)->unk128 = 1;
             l50.type = 0;
             l50.x = (double)((int)x + facing * 0x25);
             l50.y = (double)((int)y - 0x2a);
-            l50.unk20 = 2;
-            l50.unk21 = 1;
+            l50.scale = 2;
+            l50.layer = 1;
             m_game->CreateEffect((EffectDesc*)&l50);
             frame = 0;
             timer = 0;
@@ -3404,11 +3404,11 @@ void CNanase::Vf6()
             timer = 0;
             frame++;
             if (frame == 2 && (*m_opponent)->y < 0.0 && ((*m_opponent)->pattern < 0x32 || (*m_opponent)->pattern > 0x95)) {
-                unk16c = 1;
+                m_hitsLeft = 1;
             } else {
-                unk16c = 0;
+                m_hitsLeft = 0;
             }
-            unk168 = 0;
+            m_attackResult = 0;
             if (frame >= x8) {
                 pattern = 0xd1;
                 frame = 5;
@@ -3420,7 +3420,7 @@ void CNanase::Vf6()
         (*m_opponent)->unk13e = 0x1e;
         CPlayer::Unk410a80(0x32, 3);
         if (frame == 0 && timer == 0) {
-            CPlayer::Unk40f1e0();
+            CPlayer::StopMoving();
         }
         if (frame == 0 && timer == 0) {
             vx = 1.0;
@@ -3430,7 +3430,7 @@ void CNanase::Vf6()
         vy = vy + ay;
         if (vy + y > 0.0 && frame == 1) {
             y = 0.0;
-            CPlayer::Unk40f1e0();
+            CPlayer::StopMoving();
             frame = 2;
             timer = 0;
             break;
@@ -3460,18 +3460,18 @@ void CNanase::Vf6()
         if (timer >= l4) {
             timer = 0;
             frame++;
-            unk168 = 0;
+            m_attackResult = 0;
             if (frame == 3) {
                 (*m_opponent)->x = facing * 0x28 + x;
                 (*m_opponent)->y = 0.0;
                 (*m_opponent)->pattern = 0x62;
                 (*m_opponent)->Vf0();
-                CPlayer::Unk4105a0(0x578, 500.0);
+                CPlayer::DealDamage(0x578, 500.0);
             }
             if (frame >= x8) {
                 pattern = 0;
                 Vf0();
-                CPlayer::Unk40e630();
+                CPlayer::FaceOpponent();
             }
         }
         break;
@@ -3479,7 +3479,7 @@ void CNanase::Vf6()
         unk158 = 0;
         vx = 0.0;
         vy = 0.0;
-        if (frame == 2 && unk168 == 3) {
+        if (frame == 2 && m_attackResult == 3) {
             vx = 0.0;
             vy = 0.0;
             unkb8 = 0.0;
@@ -3489,12 +3489,12 @@ void CNanase::Vf6()
             (*m_opponent)->pattern = 0x6b;
             (*m_opponent)->x = facing * 0x28 + x;
             (*m_opponent)->unk128 = 1;
-            (*m_opponent)->Unk40f1e0();
+            (*m_opponent)->StopMoving();
             l50.type = 0;
             l50.x = (double)((int)x + facing * 0x37);
             l50.y = (double)((int)y - 0x29);
-            l50.unk20 = 2;
-            l50.unk21 = 1;
+            l50.scale = 2;
+            l50.layer = 1;
             m_game->CreateEffect((EffectDesc*)&l50);
             break;
         }
@@ -3502,37 +3502,37 @@ void CNanase::Vf6()
         if (timer >= l4) {
             timer = 0;
             frame++;
-            unk168 = 0;
+            m_attackResult = 0;
             if (frame == 2 && (*m_opponent)->y == 0.0 && ((*m_opponent)->pattern < 0x32 || (*m_opponent)->pattern > 0x96)) {
-                unk16c = 1;
+                m_hitsLeft = 1;
             } else {
-                unk16c = 0;
+                m_hitsLeft = 0;
             }
             if (frame >= x8) {
                 pattern = 0;
                 if (m_inputY == 1) {
                     pattern = 8;
                 }
-                CPlayer::Unk40e630();
+                CPlayer::FaceOpponent();
                 Vf0();
             }
         }
         break;
     case 0xfb:
-        CPlayer::Unk40f1e0();
+        CPlayer::StopMoving();
         CPlayer::Unk410a80(0x32, 3);
-        if (frame > 5 && unk262 == 0xa) {
+        if (frame > 5 && m_command == 0xa) {
             pattern = 0x106;
-            CPlayer::Unk40e630();
+            CPlayer::FaceOpponent();
             Vf0();
             break;
         }
-        if (frame == 9 && unk262 == 0xb) {
+        if (frame == 9 && m_command == 0xb) {
             pattern = 0xfc;
             Vf0();
             break;
         }
-        if (frame == 9 && unk262 == 0xc && unk148 >= 0xbb8 && unk108 <= 0xd05) {
+        if (frame == 9 && m_command == 0xc && m_gauge >= 0xbb8 && m_hp <= 0xd05) {
             pattern = 0x132;
             Vf0();
             break;
@@ -3541,7 +3541,7 @@ void CNanase::Vf6()
         if (timer >= l4) {
             timer = 0;
             frame++;
-            unk168 = 0;
+            m_attackResult = 0;
             if (frame == 1) {
                 (*m_opponent)->x = facing * 0xb + x;
                 (*m_opponent)->y = -62.0;
@@ -3587,73 +3587,73 @@ void CNanase::Vf6()
             if ((*m_opponent)->y > -80.0 && (*m_opponent)->y < 0.0) {
                 unk2c9 = 0x24;
                 (*m_opponent)->pattern = 0x47;
-                (*m_opponent)->Unk40e630();
+                (*m_opponent)->FaceOpponent();
                 (*m_opponent)->Vf0();
-                (*m_opponent)->Unk40f1e0();
+                (*m_opponent)->StopMoving();
                 (*m_opponent)->unkc0 = ((*m_opponent)->y / 80.0 + 1.0) * 8.0;
                 (*m_opponent)->unkc8 = -(((*m_opponent)->y / 80.0 + 1.0) * 8.0);
                 if ((*m_opponent)->y > -30.0) {
                     unk2c8 = 4;
                 }
-                CPlayer::Unk4105a0((int)(((*m_opponent)->y / 80.0 + 1.0) * 4500.0), 500.0);
+                CPlayer::DealDamage((int)(((*m_opponent)->y / 80.0 + 1.0) * 4500.0), 500.0);
                 unk14a = (int)(((*m_opponent)->y / 80.0 + 1.0) * 120.0);
                 (*m_opponent)->unk14a = (int)(((*m_opponent)->y / 80.0 + 1.0) * 120.0);
                 CPlayer::Unk410a10((int)(((*m_opponent)->y / 80.0 + 1.0) * 10.0), 0);
                 l50.type = 0;
                 l50.x = (double)(int)(*m_opponent)->x;
                 l50.y = (double)((int)(*m_opponent)->y - 0x32);
-                l50.unk20 = 2;
-                l50.unk21 = 1;
+                l50.scale = 2;
+                l50.layer = 1;
                 m_game->CreateEffect((EffectDesc*)&l50);
             }
         }
         timer++;
         if (timer >= l4) {
             timer = 0;
-            unk168 = 0;
+            m_attackResult = 0;
             frame++;
             if (frame >= x8) {
                 pattern = 0;
                 if (m_inputY == 1) {
                     pattern = 3;
                 }
-                CPlayer::Unk40e630();
+                CPlayer::FaceOpponent();
                 Vf0();
             }
         }
         break;
     case 0xfd:
         unk158 = 0;
-        if (frame > 2 && frame < 0xb && (unk168 == 2 || unk168 == 7)) {
+        if (frame > 2 && frame < 0xb && (m_attackResult == 2 || m_attackResult == 7)) {
             timer = 0;
             frame = 0x13;
-            unk168 = 0;
+            m_attackResult = 0;
             ax = 0.025;
             break;
         }
-        if (frame > 2 && frame < 0xb && unk168 == 3 && (*m_opponent)->y == 0.0) {
+        if (frame > 2 && frame < 0xb && m_attackResult == 3 && (*m_opponent)->y == 0.0) {
             timer = 0;
             frame = 0xb;
-            unk168 = 0;
+            m_attackResult = 0;
             break;
         }
         if (frame == 0 && timer == 0) {
-            CPlayer::Unk40f1e0();
-            unk16c = 2;
+            CPlayer::StopMoving();
+            m_hitsLeft = 2;
         }
         if (frame == 3 && timer == 0) {
             unk2c9 = 0x14;
-            unk148 = unk148 + 0xf;
+            m_gauge = m_gauge + 0xf;
             vx = 1.6;
         }
         if (frame == 0xb && timer == 0) {
-            CPlayer::Unk40f1e0();
+            CPlayer::StopMoving();
         }
         if (frame == 0xe && timer == 0) {
             vx = 1.4;
         }
         if (frame == 0x13 && timer == 0) {
-            CPlayer::Unk40f1e0();
+            CPlayer::StopMoving();
         }
         if (frame == 0x14 && timer == 0) {
             ax = -0.035;
@@ -3671,7 +3671,7 @@ void CNanase::Vf6()
         if (timer >= l4) {
             timer = 0;
             frame++;
-            unk168 = 0;
+            m_attackResult = 0;
             if (frame == 0xb) {
                 if (unk3138 < 0) {
                     frame = frame - 8;
@@ -3685,7 +3685,7 @@ void CNanase::Vf6()
             if (frame == 0x13) {
                 Vf0();
                 pattern = 0;
-                CPlayer::Unk40e630();
+                CPlayer::FaceOpponent();
                 break;
             }
             if (frame == 0x16) {
@@ -3701,36 +3701,36 @@ void CNanase::Vf6()
         break;
     case 0xfe:
         unk158 = 0;
-        if (frame > 2 && frame < 0xb && (unk168 == 2 || unk168 == 7)) {
+        if (frame > 2 && frame < 0xb && (m_attackResult == 2 || m_attackResult == 7)) {
             timer = 0;
             frame = 0x13;
-            unk168 = 0;
+            m_attackResult = 0;
             ax = 0.025;
             break;
         }
-        if (frame > 2 && frame < 0xb && unk168 == 3 && (*m_opponent)->y == 0.0) {
+        if (frame > 2 && frame < 0xb && m_attackResult == 3 && (*m_opponent)->y == 0.0) {
             timer = 0;
             frame = 0xb;
-            unk168 = 0;
+            m_attackResult = 0;
             break;
         }
         if (frame == 0 && timer == 0) {
-            CPlayer::Unk40f1e0();
-            unk16c = 2;
+            CPlayer::StopMoving();
+            m_hitsLeft = 2;
         }
         if (frame == 3 && timer == 0) {
             unk2c9 = 0x14;
-            unk148 = unk148 + 0xf;
+            m_gauge = m_gauge + 0xf;
             vx = 3.0;
         }
         if (frame == 0xb && timer == 0) {
-            CPlayer::Unk40f1e0();
+            CPlayer::StopMoving();
         }
         if (frame == 0xe && timer == 0) {
             vx = 1.4;
         }
         if (frame == 0x13 && timer == 0) {
-            CPlayer::Unk40f1e0();
+            CPlayer::StopMoving();
         }
         if (frame == 0x14 && timer == 0) {
             ax = -0.035;
@@ -3748,7 +3748,7 @@ void CNanase::Vf6()
         if (timer >= l4) {
             timer = 0;
             frame++;
-            unk168 = 0;
+            m_attackResult = 0;
             if (frame == 0xb) {
                 if (unk3138 < 1) {
                     frame = frame - 8;
@@ -3762,7 +3762,7 @@ void CNanase::Vf6()
             if (frame == 0x13) {
                 Vf0();
                 pattern = 0;
-                CPlayer::Unk40e630();
+                CPlayer::FaceOpponent();
                 break;
             }
             if (frame == 0x16) {
@@ -3778,25 +3778,25 @@ void CNanase::Vf6()
         break;
     case 0xff:
         unk158 = 0;
-        if (frame > 2 && frame < 0xb && (unk168 == 2 || unk168 == 7)) {
+        if (frame > 2 && frame < 0xb && (m_attackResult == 2 || m_attackResult == 7)) {
             timer = 0;
             frame = 0x18;
-            unk168 = 0;
+            m_attackResult = 0;
             ax = 0.025;
             break;
         }
-        if (frame > 2 && frame < 0xb && unk168 == 3 && (*m_opponent)->y == 0.0) {
+        if (frame > 2 && frame < 0xb && m_attackResult == 3 && (*m_opponent)->y == 0.0) {
             timer = 0;
             frame = 0xb;
-            unk168 = 0;
+            m_attackResult = 0;
             break;
         }
         if (frame > 2 && frame < 0xb && unk3140 <= 0) {
             l50.type = 0x22;
             l50.x = (double)((int)x + facing * 0x47);
             l50.y = (double)((int)y - 0x31);
-            l50.unk20 = 2;
-            l50.unk21 = 1;
+            l50.scale = 2;
+            l50.layer = 1;
             m_game->CreateEffect((EffectDesc*)&l50);
             unk3140 = 2;
         }
@@ -3811,27 +3811,27 @@ void CNanase::Vf6()
             l50.unk2c = 0xb;
             l50.x = (double)(int)x;
             l50.y = (double)((int)y - 0x32);
-            l50.unk20 = 2;
-            l50.unk21 = 1;
+            l50.scale = 2;
+            l50.layer = 1;
             m_game->CreateEffect((EffectDesc*)&l50);
         }
         if (frame == 0 && timer == 0) {
-            CPlayer::Unk40f1e0();
-            unk16c = 3;
+            CPlayer::StopMoving();
+            m_hitsLeft = 3;
         }
         if (frame == 3 && timer == 0) {
             unk2c9 = 0x14;
-            unk148 = unk148 + 0xf;
+            m_gauge = m_gauge + 0xf;
             vx = 2.0;
         }
         if (frame == 0xb && timer == 0) {
-            CPlayer::Unk40f1e0();
+            CPlayer::StopMoving();
         }
         if (frame == 0x18 && timer == 0) {
             vx = 1.4;
         }
         if (frame == 0x1d && timer == 0) {
-            CPlayer::Unk40f1e0();
+            CPlayer::StopMoving();
         }
         if (frame == 0x19 && timer == 0) {
             ax = -0.035;
@@ -3844,7 +3844,7 @@ void CNanase::Vf6()
         if (timer >= l4) {
             timer = 0;
             frame++;
-            unk168 = 0;
+            m_attackResult = 0;
             if (frame == 0xb) {
                 if (unk3138 < 0) {
                     frame = frame - 8;
@@ -3858,7 +3858,7 @@ void CNanase::Vf6()
             if (frame == 0x18) {
                 Vf0();
                 pattern = 0;
-                CPlayer::Unk40e630();
+                CPlayer::FaceOpponent();
                 break;
             }
             if (frame == 0x1b) {
@@ -3875,8 +3875,8 @@ void CNanase::Vf6()
     case 0x100:
         unk158 = 0;
         if (frame == 0 && timer == 0) {
-            CPlayer::Unk40f1e0();
-            unk16c = 1;
+            CPlayer::StopMoving();
+            m_hitsLeft = 1;
         }
         if (frame == 4 && timer == 0) {
             vy -= 1.5;
@@ -3887,17 +3887,17 @@ void CNanase::Vf6()
             l50.x = (double)((int)x + facing * 0x4b);
             l50.y = (double)((int)y - 0x2c);
             l50.unk18 = facing;
-            l50.unk21 = 0;
+            l50.layer = 0;
             l50.unk28 = 1;
             l50.unk0 = 1;
-            l50.unk20 = 0;
+            l50.scale = 0;
             Vf9(&l50);
             l50.type = 0x191;
             l50.x = (double)((int)x + facing * 0x4b);
             l50.y = (double)((int)y - 0x2c);
             l50.unk18 = facing;
-            l50.unk21 = 1;
-            l50.unk20 = 2;
+            l50.layer = 1;
+            l50.scale = 2;
             Vf9(&l50);
             Unk48e140(1);
             unk344c = 1;
@@ -3911,7 +3911,7 @@ void CNanase::Vf6()
         timer++;
         if (frame > 0xd && frame < 0x13 && y + vy > 0.0) {
             y = 0.0;
-            CPlayer::Unk40f1e0();
+            CPlayer::StopMoving();
             timer = 0;
             frame = 0x13;
             break;
@@ -3920,7 +3920,7 @@ void CNanase::Vf6()
             timer = 0;
             frame++;
             if (frame < 2) {
-                unk168 = 0;
+                m_attackResult = 0;
             }
             if (frame == 0x13) {
                 frame = frame - 2;
@@ -3934,8 +3934,8 @@ void CNanase::Vf6()
     case 0x101:
         unk158 = 0;
         if (frame == 0 && timer == 0) {
-            CPlayer::Unk40f1e0();
-            unk16c = 1;
+            CPlayer::StopMoving();
+            m_hitsLeft = 1;
         }
         if (frame == 4 && timer == 0) {
             vy -= 2.5;
@@ -3946,8 +3946,8 @@ void CNanase::Vf6()
             l50.x = (double)((int)x + facing * 0x4b);
             l50.y = (double)((int)y - 0x2c);
             l50.unk18 = facing;
-            l50.unk21 = 0;
-            l50.unk20 = 0;
+            l50.layer = 0;
+            l50.scale = 0;
             l50.unk0 = 1;
             l50.unk28 = 1;
             Vf9(&l50);
@@ -3955,8 +3955,8 @@ void CNanase::Vf6()
             l50.x = (double)((int)x + facing * 0x4b);
             l50.y = (double)((int)y - 0x2c);
             l50.unk18 = facing;
-            l50.unk21 = 1;
-            l50.unk20 = 2;
+            l50.layer = 1;
+            l50.scale = 2;
             Vf9(&l50);
             Unk48e140(1);
             unk344c = 1;
@@ -3970,7 +3970,7 @@ void CNanase::Vf6()
         timer++;
         if (frame > 0xd && frame < 0x13 && y + vy > 0.0) {
             y = 0.0;
-            CPlayer::Unk40f1e0();
+            CPlayer::StopMoving();
             timer = 0;
             frame = 0x13;
             break;
@@ -3979,7 +3979,7 @@ void CNanase::Vf6()
             timer = 0;
             frame++;
             if (frame < 2) {
-                unk168 = 0;
+                m_attackResult = 0;
             }
             if (frame == 0x13) {
                 frame = frame - 2;
@@ -3993,8 +3993,8 @@ void CNanase::Vf6()
     case 0x102:
         unk158 = 0;
         if (frame == 0 && timer == 0) {
-            CPlayer::Unk40f1e0();
-            unk16c = 1;
+            CPlayer::StopMoving();
+            m_hitsLeft = 1;
             if (unk120 == 0) {
                 unk118 -= 500.0;
             } else {
@@ -4004,13 +4004,13 @@ void CNanase::Vf6()
             l50.unk2c = 0xb;
             l50.x = (double)(int)x;
             l50.y = (double)((int)y - 0x32);
-            l50.unk20 = 2;
-            l50.unk21 = 1;
+            l50.scale = 2;
+            l50.layer = 1;
             m_game->CreateEffect((EffectDesc*)&l50);
         }
         if (unk3140 == 1) {
             unk3140 = 0;
-            unk16c = 1;
+            m_hitsLeft = 1;
             if (unk120 == 0) {
                 unk118 -= 500.0;
             } else {
@@ -4020,8 +4020,8 @@ void CNanase::Vf6()
             l50.unk2c = 0xb;
             l50.x = (double)(int)x;
             l50.y = (double)((int)y - 0x32);
-            l50.unk20 = 2;
-            l50.unk21 = 1;
+            l50.scale = 2;
+            l50.layer = 1;
             m_game->CreateEffect((EffectDesc*)&l50);
         }
         if (frame == 4 && timer == 0) {
@@ -4033,8 +4033,8 @@ void CNanase::Vf6()
             l50.x = (double)((int)x + facing * 0x4b);
             l50.y = (double)((int)y - 0x2c);
             l50.unk18 = facing;
-            l50.unk21 = 0;
-            l50.unk20 = 0;
+            l50.layer = 0;
+            l50.scale = 0;
             l50.unk0 = 1;
             l50.unk28 = 1;
             Vf9(&l50);
@@ -4042,8 +4042,8 @@ void CNanase::Vf6()
             l50.x = (double)((int)x + facing * 0x4b);
             l50.y = (double)((int)y - 0x2c);
             l50.unk18 = facing;
-            l50.unk21 = 1;
-            l50.unk20 = 2;
+            l50.layer = 1;
+            l50.scale = 2;
             Vf9(&l50);
             Unk48e140(1);
             unk344c = 1;
@@ -4057,7 +4057,7 @@ void CNanase::Vf6()
         timer++;
         if (frame > 0xd && frame < 0x13 && y + vy > 0.0) {
             y = 0.0;
-            CPlayer::Unk40f1e0();
+            CPlayer::StopMoving();
             timer = 0;
             frame = 0x13;
             break;
@@ -4066,7 +4066,7 @@ void CNanase::Vf6()
             timer = 0;
             frame++;
             if (frame < 2) {
-                unk168 = 0;
+                m_attackResult = 0;
             }
             if (frame == 0x13) {
                 frame = frame - 2;
@@ -4080,58 +4080,58 @@ void CNanase::Vf6()
     case 0x103:
         unk158 = 0;
         if (frame == 0 && timer == 0) {
-            CPlayer::Unk40f1e0();
-            unk16c = 1;
+            CPlayer::StopMoving();
+            m_hitsLeft = 1;
         }
-        if (unk168 > 1 && unk3138 == 0) {
+        if (m_attackResult > 1 && unk3138 == 0) {
             unk3138++;
             (*m_opponent)->unk14a = (*m_opponent)->unk14a + 0x1e;
         }
         if (frame == 5 && timer == 0) {
-            l50.type = (WORD)CPlayer::Unk4108a0(0, 1) + 0x199;
-            l50.x = (double)(int)(facing * (0x28 - (WORD)CPlayer::Unk4108a0(0, 0x46)) + x);
+            l50.type = (WORD)CPlayer::Random(0, 1) + 0x199;
+            l50.x = (double)(int)(facing * (0x28 - (WORD)CPlayer::Random(0, 0x46)) + x);
             l50.y = (double)(int)y;
             l50.unk18 = facing;
-            l50.unk21 = 1;
-            l50.unk20 = 0;
+            l50.layer = 1;
+            l50.scale = 0;
             Vf9(&l50);
-            l50.type = (WORD)CPlayer::Unk4108a0(0, 1) + 0x199;
-            l50.x = (double)(int)(facing * (0x28 - (WORD)CPlayer::Unk4108a0(0, 0x46)) + x);
+            l50.type = (WORD)CPlayer::Random(0, 1) + 0x199;
+            l50.x = (double)(int)(facing * (0x28 - (WORD)CPlayer::Random(0, 0x46)) + x);
             l50.y = (double)(int)y;
             Vf9(&l50);
-            l50.type = (WORD)CPlayer::Unk4108a0(0, 1) + 0x199;
-            l50.x = (double)(int)(facing * (0x28 - (WORD)CPlayer::Unk4108a0(0, 0x46)) + x);
+            l50.type = (WORD)CPlayer::Random(0, 1) + 0x199;
+            l50.x = (double)(int)(facing * (0x28 - (WORD)CPlayer::Random(0, 0x46)) + x);
             l50.y = (double)(int)y;
             Vf9(&l50);
-            l50.type = (WORD)CPlayer::Unk4108a0(0, 1) + 0x199;
-            l50.x = (double)(int)(facing * (0x28 - (WORD)CPlayer::Unk4108a0(0, 0x46)) + x);
+            l50.type = (WORD)CPlayer::Random(0, 1) + 0x199;
+            l50.x = (double)(int)(facing * (0x28 - (WORD)CPlayer::Random(0, 0x46)) + x);
             l50.y = (double)(int)y;
             Vf9(&l50);
-            l50.type = (WORD)CPlayer::Unk4108a0(0, 1) + 0x199;
-            l50.x = (double)(int)(facing * (0x28 - (WORD)CPlayer::Unk4108a0(0, 0x46)) + x);
+            l50.type = (WORD)CPlayer::Random(0, 1) + 0x199;
+            l50.x = (double)(int)(facing * (0x28 - (WORD)CPlayer::Random(0, 0x46)) + x);
             l50.y = (double)(int)y;
             Vf9(&l50);
             l50.type = 0x19b;
             l50.x = (double)((int)x + facing * 0xa);
             l50.y = (double)(int)y;
             Vf9(&l50);
-            l50.type = (WORD)CPlayer::Unk4108a0(0, 1) + 0x199;
+            l50.type = (WORD)CPlayer::Random(0, 1) + 0x199;
             l50.x = (double)((int)x + facing * 0xa);
             l50.y = (double)(int)y;
             Vf9(&l50);
-            l50.type = (WORD)CPlayer::Unk4108a0(0, 1) + 0x199;
+            l50.type = (WORD)CPlayer::Random(0, 1) + 0x199;
             l50.x = (double)((int)x + facing * 0xa);
             l50.y = (double)(int)y;
             Vf9(&l50);
-            l50.type = (WORD)CPlayer::Unk4108a0(0, 1) + 0x199;
+            l50.type = (WORD)CPlayer::Random(0, 1) + 0x199;
             l50.x = (double)((int)x + facing * 0xa);
             l50.y = (double)(int)y;
             Vf9(&l50);
-            l50.type = (WORD)CPlayer::Unk4108a0(0, 1) + 0x199;
+            l50.type = (WORD)CPlayer::Random(0, 1) + 0x199;
             l50.x = (double)((int)x + facing * 0xa);
             l50.y = (double)(int)y;
             Vf9(&l50);
-            l50.type = (WORD)CPlayer::Unk4108a0(0, 1) + 0x199;
+            l50.type = (WORD)CPlayer::Random(0, 1) + 0x199;
             l50.x = (double)((int)x + facing * 0xa);
             l50.y = (double)(int)y;
             Vf9(&l50);
@@ -4143,11 +4143,11 @@ void CNanase::Vf6()
             timer = 0;
             frame++;
             if (frame < 2) {
-                unk168 = 0;
+                m_attackResult = 0;
             }
             if (frame >= x8) {
                 pattern = 0;
-                CPlayer::Unk40e630();
+                CPlayer::FaceOpponent();
                 Vf0();
             }
         }
@@ -4155,70 +4155,70 @@ void CNanase::Vf6()
     case 0x104:
         unk158 = 0;
         if (frame == 0 && timer == 0) {
-            CPlayer::Unk40f1e0();
-            unk16c = 1;
+            CPlayer::StopMoving();
+            m_hitsLeft = 1;
         }
-        if (unk168 > 1 && unk3138 == 0) {
+        if (m_attackResult > 1 && unk3138 == 0) {
             unk3138++;
             (*m_opponent)->unk14a = (*m_opponent)->unk14a + 0x1e;
         }
         if (frame == 5 && timer == 0) {
-            l50.type = (WORD)CPlayer::Unk4108a0(0, 1) + 0x199;
-            l50.x = (double)(int)(facing * (0x28 - (WORD)CPlayer::Unk4108a0(0, 0x46)) + x);
+            l50.type = (WORD)CPlayer::Random(0, 1) + 0x199;
+            l50.x = (double)(int)(facing * (0x28 - (WORD)CPlayer::Random(0, 0x46)) + x);
             l50.y = (double)(int)y;
             l50.unk18 = facing;
-            l50.unk21 = 1;
-            l50.unk20 = 0;
+            l50.layer = 1;
+            l50.scale = 0;
             Vf9(&l50);
-            l50.type = (WORD)CPlayer::Unk4108a0(0, 1) + 0x199;
-            l50.x = (double)(int)(facing * (0x28 - (WORD)CPlayer::Unk4108a0(0, 0x46)) + x);
+            l50.type = (WORD)CPlayer::Random(0, 1) + 0x199;
+            l50.x = (double)(int)(facing * (0x28 - (WORD)CPlayer::Random(0, 0x46)) + x);
             l50.y = (double)(int)y;
             Vf9(&l50);
-            l50.type = (WORD)CPlayer::Unk4108a0(0, 1) + 0x199;
-            l50.x = (double)(int)(facing * (0x28 - (WORD)CPlayer::Unk4108a0(0, 0x46)) + x);
+            l50.type = (WORD)CPlayer::Random(0, 1) + 0x199;
+            l50.x = (double)(int)(facing * (0x28 - (WORD)CPlayer::Random(0, 0x46)) + x);
             l50.y = (double)(int)y;
             Vf9(&l50);
-            l50.type = (WORD)CPlayer::Unk4108a0(0, 1) + 0x199;
-            l50.x = (double)(int)(facing * (0x28 - (WORD)CPlayer::Unk4108a0(0, 0x46)) + x);
+            l50.type = (WORD)CPlayer::Random(0, 1) + 0x199;
+            l50.x = (double)(int)(facing * (0x28 - (WORD)CPlayer::Random(0, 0x46)) + x);
             l50.y = (double)(int)y;
             Vf9(&l50);
-            l50.type = (WORD)CPlayer::Unk4108a0(0, 1) + 0x199;
-            l50.x = (double)(int)(facing * (0x28 - (WORD)CPlayer::Unk4108a0(0, 0x46)) + x);
+            l50.type = (WORD)CPlayer::Random(0, 1) + 0x199;
+            l50.x = (double)(int)(facing * (0x28 - (WORD)CPlayer::Random(0, 0x46)) + x);
             l50.y = (double)(int)y;
             Vf9(&l50);
-            l50.type = (WORD)CPlayer::Unk4108a0(0, 1) + 0x199;
-            l50.x = (double)(int)(facing * (0x28 - (WORD)CPlayer::Unk4108a0(0, 0x46)) + x);
+            l50.type = (WORD)CPlayer::Random(0, 1) + 0x199;
+            l50.x = (double)(int)(facing * (0x28 - (WORD)CPlayer::Random(0, 0x46)) + x);
             l50.y = (double)(int)y;
             Vf9(&l50);
-            l50.type = (WORD)CPlayer::Unk4108a0(0, 1) + 0x199;
-            l50.x = (double)(int)(facing * (0x28 - (WORD)CPlayer::Unk4108a0(0, 0x46)) + x);
+            l50.type = (WORD)CPlayer::Random(0, 1) + 0x199;
+            l50.x = (double)(int)(facing * (0x28 - (WORD)CPlayer::Random(0, 0x46)) + x);
             l50.y = (double)(int)y;
             Vf9(&l50);
-            l50.type = (WORD)CPlayer::Unk4108a0(0, 1) + 0x199;
-            l50.x = (double)(int)(facing * (0x28 - (WORD)CPlayer::Unk4108a0(0, 0x46)) + x);
+            l50.type = (WORD)CPlayer::Random(0, 1) + 0x199;
+            l50.x = (double)(int)(facing * (0x28 - (WORD)CPlayer::Random(0, 0x46)) + x);
             l50.y = (double)(int)y;
             Vf9(&l50);
             l50.type = 0x19b;
             l50.x = (double)((int)x + facing * 0xa);
             l50.y = (double)(int)y;
             Vf9(&l50);
-            l50.type = (WORD)CPlayer::Unk4108a0(0, 1) + 0x199;
+            l50.type = (WORD)CPlayer::Random(0, 1) + 0x199;
             l50.x = (double)((int)x + facing * 0xa);
             l50.y = (double)(int)y;
             Vf9(&l50);
-            l50.type = (WORD)CPlayer::Unk4108a0(0, 1) + 0x199;
+            l50.type = (WORD)CPlayer::Random(0, 1) + 0x199;
             l50.x = (double)((int)x + facing * 0xa);
             l50.y = (double)(int)y;
             Vf9(&l50);
-            l50.type = (WORD)CPlayer::Unk4108a0(0, 1) + 0x199;
+            l50.type = (WORD)CPlayer::Random(0, 1) + 0x199;
             l50.x = (double)((int)x + facing * 0xa);
             l50.y = (double)(int)y;
             Vf9(&l50);
-            l50.type = (WORD)CPlayer::Unk4108a0(0, 1) + 0x199;
+            l50.type = (WORD)CPlayer::Random(0, 1) + 0x199;
             l50.x = (double)((int)x + facing * 0xa);
             l50.y = (double)(int)y;
             Vf9(&l50);
-            l50.type = (WORD)CPlayer::Unk4108a0(0, 1) + 0x199;
+            l50.type = (WORD)CPlayer::Random(0, 1) + 0x199;
             l50.x = (double)((int)x + facing * 0xa);
             l50.y = (double)(int)y;
             Vf9(&l50);
@@ -4230,11 +4230,11 @@ void CNanase::Vf6()
             timer = 0;
             frame++;
             if (frame < 2) {
-                unk168 = 0;
+                m_attackResult = 0;
             }
             if (frame >= x8) {
                 pattern = 0;
-                CPlayer::Unk40e630();
+                CPlayer::FaceOpponent();
                 Vf0();
             }
         }
@@ -4242,8 +4242,8 @@ void CNanase::Vf6()
     case 0x105:
         unk158 = 0;
         if (frame == 0 && timer == 0) {
-            CPlayer::Unk40f1e0();
-            unk16c = 1;
+            CPlayer::StopMoving();
+            m_hitsLeft = 1;
             if (unk120 == 0) {
                 unk118 -= 500.0;
             } else {
@@ -4253,8 +4253,8 @@ void CNanase::Vf6()
             l50.unk2c = 0xb;
             l50.x = (double)(int)x;
             l50.y = (double)((int)y - 0x32);
-            l50.unk20 = 2;
-            l50.unk21 = 1;
+            l50.scale = 2;
+            l50.layer = 1;
             m_game->CreateEffect((EffectDesc*)&l50);
         }
         if (frame == 6 && timer == 0) {
@@ -4262,8 +4262,8 @@ void CNanase::Vf6()
             l50.x = (double)((int)x + (facing << 4));
             l50.y = (double)(int)y;
             l50.unk18 = facing;
-            l50.unk21 = 1;
-            l50.unk20 = 0;
+            l50.layer = 1;
+            l50.scale = 0;
             Vf9(&l50);
             CPlayer::Unk410a10(6, 0);
             unk2c8 = 0;
@@ -4272,10 +4272,10 @@ void CNanase::Vf6()
         if (timer >= l4) {
             timer = 0;
             frame++;
-            unk168 = 0;
+            m_attackResult = 0;
             if (frame >= x8) {
                 pattern = 0;
-                CPlayer::Unk40e630();
+                CPlayer::FaceOpponent();
                 Vf0();
             }
         }
@@ -4285,9 +4285,9 @@ void CNanase::Vf6()
             CPlayer::Unk410a80(0x32, 3);
         }
         if (frame == 0 && timer == 0) {
-            unk16c = 1;
+            m_hitsLeft = 1;
         }
-        if (unk168 == 3 && frame == 2) {
+        if (m_attackResult == 3 && frame == 2) {
             timer = 0;
             frame = 3;
         }
@@ -4295,14 +4295,14 @@ void CNanase::Vf6()
         if (timer >= l4) {
             timer = 0;
             frame++;
-            unk168 = 0;
+            m_attackResult = 0;
             if (frame == 3) {
                 frame = 5;
             }
             if (frame >= x8) {
                 Vf0();
                 pattern = 0;
-                CPlayer::Unk40e630();
+                CPlayer::FaceOpponent();
             }
         }
         break;
@@ -4310,7 +4310,7 @@ void CNanase::Vf6()
         unk158 = 0;
         vx = 0.0;
         vy = 0.0;
-        if (frame == 2 && unk168 == 3) {
+        if (frame == 2 && m_attackResult == 3) {
             vx = 0.0;
             vy = 0.0;
             unkb8 = 0.0;
@@ -4320,12 +4320,12 @@ void CNanase::Vf6()
             (*m_opponent)->pattern = 0x6b;
             (*m_opponent)->x = facing * 0x28 + x;
             (*m_opponent)->unk128 = 1;
-            (*m_opponent)->Unk40f1e0();
+            (*m_opponent)->StopMoving();
             l50.type = 0;
             l50.x = (double)((int)x + facing * 0x37);
             l50.y = (double)((int)y - 0x29);
-            l50.unk20 = 2;
-            l50.unk21 = 1;
+            l50.scale = 2;
+            l50.layer = 1;
             m_game->CreateEffect((EffectDesc*)&l50);
             break;
         }
@@ -4333,18 +4333,18 @@ void CNanase::Vf6()
         if (timer >= l4) {
             timer = 0;
             frame++;
-            unk168 = 0;
+            m_attackResult = 0;
             if (frame == 2 && (*m_opponent)->y == 0.0 && ((*m_opponent)->pattern < 0x32 || (*m_opponent)->pattern > 0x96)) {
-                unk16c = 1;
+                m_hitsLeft = 1;
             } else {
-                unk16c = 0;
+                m_hitsLeft = 0;
             }
             if (frame >= x8) {
                 pattern = 0;
                 if (m_inputY == 1) {
                     pattern = 8;
                 }
-                CPlayer::Unk40e630();
+                CPlayer::FaceOpponent();
                 Vf0();
             }
         }
@@ -4353,7 +4353,7 @@ void CNanase::Vf6()
         unk158 = 0;
         vx = 0.0;
         vy = 0.0;
-        if (frame == 2 && unk168 == 3) {
+        if (frame == 2 && m_attackResult == 3) {
             vx = 0.0;
             vy = 0.0;
             unkb8 = 0.0;
@@ -4363,12 +4363,12 @@ void CNanase::Vf6()
             (*m_opponent)->pattern = 0x6b;
             (*m_opponent)->x = facing * 0x28 + x;
             (*m_opponent)->unk128 = 1;
-            (*m_opponent)->Unk40f1e0();
+            (*m_opponent)->StopMoving();
             l50.type = 0;
             l50.x = (double)((int)x + facing * 0x37);
             l50.y = (double)((int)y - 0x29);
-            l50.unk20 = 2;
-            l50.unk21 = 1;
+            l50.scale = 2;
+            l50.layer = 1;
             m_game->CreateEffect((EffectDesc*)&l50);
             break;
         }
@@ -4376,18 +4376,18 @@ void CNanase::Vf6()
         if (timer >= l4) {
             timer = 0;
             frame++;
-            unk168 = 0;
+            m_attackResult = 0;
             if (frame == 2 && (*m_opponent)->y == 0.0 && ((*m_opponent)->pattern < 0x32 || (*m_opponent)->pattern > 0x96)) {
-                unk16c = 1;
+                m_hitsLeft = 1;
             } else {
-                unk16c = 0;
+                m_hitsLeft = 0;
             }
             if (frame >= x8) {
                 pattern = 0;
                 if (m_inputY == 1) {
                     pattern = 8;
                 }
-                CPlayer::Unk40e630();
+                CPlayer::FaceOpponent();
                 Vf0();
             }
         }
@@ -4395,17 +4395,17 @@ void CNanase::Vf6()
     case 0x12b:
         unk158 = 0;
         if (frame == 0 && timer == 0) {
-            CPlayer::Unk40f1e0();
+            CPlayer::StopMoving();
             unk2c9 = 0x1a;
         }
         timer++;
         if (timer >= l4) {
             timer = 0;
             frame++;
-            unk168 = 0;
+            m_attackResult = 0;
             if (frame >= x8) {
                 pattern = 0;
-                CPlayer::Unk40e630();
+                CPlayer::FaceOpponent();
                 Vf0();
             }
         }
@@ -4416,20 +4416,20 @@ void CNanase::Vf6()
             vx = 0.0;
             vy = 0.0;
             ay = 0.0;
-            unk16c = 1;
+            m_hitsLeft = 1;
         }
         CPlayer::Unk410a80(0x32, 3);
         if (frame == 2 && timer == 0) {
             unk14c = 0x78;
-            unk148 = unk148 - 0x3e8;
+            m_gauge = m_gauge - 0x3e8;
             CPlayer::Unk410b10(0xb0, 3);
             l50.type = 0x44;
             l50.unk2c = 0x13;
             l50.x = (double)((int)x - facing * 0xd);
             l50.y = (double)((int)y - 0x5d);
-            l50.unk20 = 2;
+            l50.scale = 2;
             l50.unk0 = 1;
-            l50.unk21 = 1;
+            l50.layer = 1;
             m_game->CreateEffect((EffectDesc*)&l50);
         }
         if (frame >= 1) {
@@ -4443,7 +4443,7 @@ void CNanase::Vf6()
         if (timer >= l4) {
             timer = 0;
             frame++;
-            unk168 = 0;
+            m_attackResult = 0;
             if (frame >= x8) {
                 pattern = 0;
                 Vf0();
@@ -4456,20 +4456,20 @@ void CNanase::Vf6()
             vx = 0.0;
             vy = 0.0;
             ay = 0.0;
-            unk16c = 1;
+            m_hitsLeft = 1;
         }
         CPlayer::Unk410a80(0x32, 3);
         if (frame == 2 && timer == 0) {
             unk14c = 0x78;
-            unk148 = unk148 - 0x7d0;
+            m_gauge = m_gauge - 0x7d0;
             CPlayer::Unk410b10(0xb0, 3);
             l50.type = 0x45;
             l50.unk2c = 5;
             l50.x = (double)((int)x - facing * 0xd);
             l50.y = (double)((int)y - 0x5d);
-            l50.unk20 = 2;
+            l50.scale = 2;
             l50.unk0 = 1;
-            l50.unk21 = 1;
+            l50.layer = 1;
             m_game->CreateEffect((EffectDesc*)&l50);
         }
         if (frame >= 1) {
@@ -4483,7 +4483,7 @@ void CNanase::Vf6()
         if (timer >= l4) {
             timer = 0;
             frame++;
-            unk168 = 0;
+            m_attackResult = 0;
             if (frame >= x8) {
                 pattern = 0;
                 Vf0();
@@ -4496,20 +4496,20 @@ void CNanase::Vf6()
             vx = 0.0;
             vy = 0.0;
             ay = 0.0;
-            unk16c = 1;
+            m_hitsLeft = 1;
         }
         CPlayer::Unk410a80(0x32, 3);
         if (frame == 2 && timer == 0) {
             unk14c = 0x78;
-            unk148 = unk148 - 0xbb8;
+            m_gauge = m_gauge - 0xbb8;
             CPlayer::Unk410b10(0xb0, 3);
             l50.type = 0x46;
             l50.unk2c = 0x40;
             l50.x = (double)((int)x - facing * 0xd);
             l50.y = (double)((int)y - 0x5d);
-            l50.unk20 = 2;
+            l50.scale = 2;
             l50.unk0 = 1;
-            l50.unk21 = 1;
+            l50.layer = 1;
             m_game->CreateEffect((EffectDesc*)&l50);
             unk2c9 = 0x25;
         }
@@ -4519,7 +4519,7 @@ void CNanase::Vf6()
         if (frame == 6 && timer == 0) {
             CPlayer::Unk410a10(0x14, 0);
             unk2c9 = 0x16;
-            if (unk168 == 3) {
+            if (m_attackResult == 3) {
                 (*m_opponent)->unk14a = 0x168;
             }
         }
@@ -4527,7 +4527,7 @@ void CNanase::Vf6()
         if (timer >= l4) {
             timer = 0;
             frame++;
-            unk168 = 0;
+            m_attackResult = 0;
             if (frame >= x8) {
                 pattern = 0;
                 Vf0();
@@ -4538,15 +4538,15 @@ void CNanase::Vf6()
         CPlayer::Unk410a80(0x32, 3);
         if (frame == 0 && timer == 0) {
             unk14c = 0x78;
-            unk148 = unk148 - 0xbb8;
+            m_gauge = m_gauge - 0xbb8;
             CPlayer::Unk410b10(0xb0, 3);
             l50.type = 0x46;
             l50.unk2c = 0x40;
             l50.x = (double)(int)x;
             l50.y = (double)((int)y - 0x28);
-            l50.unk20 = 2;
+            l50.scale = 2;
             l50.unk0 = 1;
-            l50.unk21 = 1;
+            l50.layer = 1;
             m_game->CreateEffect((EffectDesc*)&l50);
             unk2c9 = 0x25;
             l50.type = 0x47;
@@ -4558,8 +4558,8 @@ void CNanase::Vf6()
             l50.x = (double)(int)x;
             l50.y = (double)((int)y - 0x26);
             l50.unk18 = facing;
-            l50.unk21 = 1;
-            l50.unk20 = 2;
+            l50.layer = 1;
+            l50.scale = 2;
             Vf9(&l50);
         }
         if (frame == 2 && timer == 0) {
@@ -4567,12 +4567,12 @@ void CNanase::Vf6()
             if ((*m_opponent)->y > -80.0 && (*m_opponent)->y < 0.0) {
                 unk2c9 = 0x24;
                 (*m_opponent)->pattern = 0x47;
-                (*m_opponent)->Unk40e630();
+                (*m_opponent)->FaceOpponent();
                 (*m_opponent)->Vf0();
-                (*m_opponent)->Unk40f1e0();
+                (*m_opponent)->StopMoving();
                 (*m_opponent)->unkc0 = ((*m_opponent)->y / 80.0 + 1.0) * 8.0 + 1.0;
                 (*m_opponent)->unkc8 = -(((*m_opponent)->y / 80.0 + 1.0) * 8.0);
-                CPlayer::Unk4105a0((int)(((*m_opponent)->y / 80.0 + 1.0) * 6500.0), 500.0);
+                CPlayer::DealDamage((int)(((*m_opponent)->y / 80.0 + 1.0) * 6500.0), 500.0);
                 if ((*m_opponent)->y > -30.0) {
                     unk2c8 = 4;
                 }
@@ -4582,22 +4582,22 @@ void CNanase::Vf6()
                 l50.type = 0;
                 l50.x = (double)(int)(*m_opponent)->x;
                 l50.y = (double)((int)(*m_opponent)->y - 0x32);
-                l50.unk20 = 2;
-                l50.unk21 = 1;
+                l50.scale = 2;
+                l50.layer = 1;
                 m_game->CreateEffect((EffectDesc*)&l50);
             }
         }
         timer++;
         if (timer >= l4) {
             timer = 0;
-            unk168 = 0;
+            m_attackResult = 0;
             frame++;
             if (frame >= x8) {
                 pattern = 0;
                 if (m_inputY == 1) {
                     pattern = 3;
                 }
-                CPlayer::Unk40e630();
+                CPlayer::FaceOpponent();
                 Vf0();
             }
         }
@@ -4605,8 +4605,8 @@ void CNanase::Vf6()
     case 0x133:
         unk158 = 0;
         if (frame == 0 && timer == 0) {
-            CPlayer::Unk40f1e0();
-            unk16c = 1;
+            CPlayer::StopMoving();
+            m_hitsLeft = 1;
         }
         if (frame < 4) {
             unk3138--;
@@ -4615,15 +4615,15 @@ void CNanase::Vf6()
             unk3138 = 0x42;
             CPlayer::Unk410a80(0x32, 0x78);
             unk14c = 0x78;
-            unk148 = unk148 - 0xbb8;
+            m_gauge = m_gauge - 0xbb8;
             CPlayer::Unk410b10(0xb0, 3);
             l50.type = 0x46;
             l50.unk2c = 0x40;
             l50.x = (double)((int)x + facing * 0x13);
             l50.y = (double)((int)y - 0x22);
-            l50.unk20 = 2;
+            l50.scale = 2;
             l50.unk0 = 1;
-            l50.unk21 = 1;
+            l50.layer = 1;
             m_game->CreateEffect((EffectDesc*)&l50);
             unk2c9 = 0x25;
         }
@@ -4637,7 +4637,7 @@ void CNanase::Vf6()
         if (timer >= l4) {
             timer = 0;
             frame++;
-            unk168 = 0;
+            m_attackResult = 0;
             if (frame == 4) {
                 frame = frame - 3;
             }
@@ -4648,8 +4648,8 @@ void CNanase::Vf6()
                 l50.x = (double)(int)x;
                 l50.y = (double)((int)y - 0x26);
                 l50.unk18 = facing;
-                l50.unk21 = 0;
-                l50.unk20 = 2;
+                l50.layer = 0;
+                l50.scale = 2;
                 l50.unk0 = 1;
                 Vf9(&l50);
                 unk3148 = 0xbb8;
@@ -4657,7 +4657,7 @@ void CNanase::Vf6()
             if (frame == 0xb) {
                 unk313c++;
                 if (unk313c > 2) {
-                    unk16c = 0;
+                    m_hitsLeft = 0;
                 }
                 if (unk313c < 0xa) {
                     frame = frame - 2;
@@ -4675,20 +4675,20 @@ void CNanase::Vf6()
             vx = 0.0;
             vy = 0.0;
             ay = 0.0;
-            unk16c = 1;
+            m_hitsLeft = 1;
         }
         CPlayer::Unk410a80(0x32, 3);
         if (frame == 0 && timer == 0) {
             unk14c = 0x78;
-            unk148 = unk148 - 0x3e8;
+            m_gauge = m_gauge - 0x3e8;
             CPlayer::Unk410b10(0xb0, 3);
             l50.type = 0x44;
             l50.unk2c = 0x13;
             l50.x = (double)(int)x;
             l50.y = (double)((int)y - 0x2b);
-            l50.unk20 = 2;
+            l50.scale = 2;
             l50.unk0 = 1;
-            l50.unk21 = 1;
+            l50.layer = 1;
             m_game->CreateEffect((EffectDesc*)&l50);
         }
         if (frame == 0xc && timer == 0) {
@@ -4697,13 +4697,13 @@ void CNanase::Vf6()
             l50.x = (double)((int)x + facing * 0x28);
             l50.y = (double)((int)y - 0x28);
             l50.unk18 = facing;
-            l50.unk20 = 0;
+            l50.scale = 0;
             l50.unk0 = 1;
-            l50.unk21 = 1;
+            l50.layer = 1;
             l50.unk28 = 1;
             Vf9(&l50);
             l50.type = 0x1a7;
-            l50.unk20 = 2;
+            l50.scale = 2;
             l50.unk0 = 1;
             l50.unk18 = facing;
             Vf9(&l50);
@@ -4714,7 +4714,7 @@ void CNanase::Vf6()
         if (timer >= l4) {
             timer = 0;
             frame++;
-            unk168 = 0;
+            m_attackResult = 0;
             if (frame >= x8) {
                 pattern = 0;
                 Vf0();
@@ -4727,20 +4727,20 @@ void CNanase::Vf6()
             vx = 0.0;
             vy = 0.0;
             ay = 0.0;
-            unk16c = 1;
+            m_hitsLeft = 1;
         }
         CPlayer::Unk410a80(0x32, 3);
         if (frame == 0 && timer == 0) {
             unk14c = 0x78;
-            unk148 = unk148 - 0x7d0;
+            m_gauge = m_gauge - 0x7d0;
             CPlayer::Unk410b10(0xb0, 3);
             l50.type = 0x45;
             l50.unk2c = 5;
             l50.x = (double)(int)x;
             l50.y = (double)((int)y - 0x2b);
-            l50.unk20 = 2;
+            l50.scale = 2;
             l50.unk0 = 1;
-            l50.unk21 = 1;
+            l50.layer = 1;
             m_game->CreateEffect((EffectDesc*)&l50);
         }
         if (frame == 0xc && timer == 0) {
@@ -4749,13 +4749,13 @@ void CNanase::Vf6()
             l50.x = (double)((int)x + facing * 0x28);
             l50.y = (double)((int)y - 0x28);
             l50.unk18 = facing;
-            l50.unk20 = 0;
+            l50.scale = 0;
             l50.unk0 = 1;
-            l50.unk21 = 1;
+            l50.layer = 1;
             l50.unk28 = 1;
             Vf9(&l50);
             l50.type = 0x1a7;
-            l50.unk20 = 2;
+            l50.scale = 2;
             l50.unk0 = 1;
             l50.unk18 = facing;
             Vf9(&l50);
@@ -4766,7 +4766,7 @@ void CNanase::Vf6()
         if (timer >= l4) {
             timer = 0;
             frame++;
-            unk168 = 0;
+            m_attackResult = 0;
             if (frame >= x8) {
                 pattern = 0;
                 Vf0();
@@ -4779,20 +4779,20 @@ void CNanase::Vf6()
             vx = 0.0;
             vy = 0.0;
             ay = 0.0;
-            unk16c = 1;
+            m_hitsLeft = 1;
         }
         CPlayer::Unk410a80(0x32, 3);
         if (frame == 0 && timer == 0) {
             unk14c = 0x78;
-            unk148 = unk148 - 0xbb8;
+            m_gauge = m_gauge - 0xbb8;
             CPlayer::Unk410b10(0xb0, 3);
             l50.type = 0x46;
             l50.unk2c = 0x40;
             l50.x = (double)(int)x;
             l50.y = (double)((int)y - 0x2b);
-            l50.unk20 = 2;
+            l50.scale = 2;
             l50.unk0 = 1;
-            l50.unk21 = 1;
+            l50.layer = 1;
             m_game->CreateEffect((EffectDesc*)&l50);
             unk2c9 = 0x25;
         }
@@ -4805,13 +4805,13 @@ void CNanase::Vf6()
             l50.x = (double)((int)x + facing * 0x28);
             l50.y = (double)((int)y - 0x28);
             l50.unk18 = facing;
-            l50.unk20 = 0;
+            l50.scale = 0;
             l50.unk0 = 1;
-            l50.unk21 = 1;
+            l50.layer = 1;
             l50.unk28 = 1;
             Vf9(&l50);
             l50.type = 0x1a7;
-            l50.unk20 = 2;
+            l50.scale = 2;
             l50.unk0 = 1;
             l50.unk18 = facing;
             Vf9(&l50);
@@ -4822,7 +4822,7 @@ void CNanase::Vf6()
         if (timer >= l4) {
             timer = 0;
             frame++;
-            unk168 = 0;
+            m_attackResult = 0;
             if (frame >= x8) {
                 pattern = 0;
                 Vf0();
@@ -4887,7 +4887,7 @@ void CNanase::Unk47c130()
         vx = 0.0;
         vy = 0.0;
         unk158 = 0;
-        CPlayer::Unk40e630();
+        CPlayer::FaceOpponent();
         timer++;
         if (timer >= l4) {
             timer = 0;
@@ -4900,7 +4900,7 @@ void CNanase::Unk47c130()
     case 4:
         if (frame == 0 && timer == 0) {
             if (unk158 == 0) {
-                CPlayer::Unk40e630();
+                CPlayer::FaceOpponent();
             }
             vx = 0.0;
         }
@@ -4927,7 +4927,7 @@ void CNanase::Unk47c130()
         if (y + vy >= 0.0 && frame > 3) {
             y = 0.0;
             unk2c9 = 9;
-            CPlayer::Unk40e630();
+            CPlayer::FaceOpponent();
             pattern = 0xd;
             Vf0();
         }
@@ -4935,7 +4935,7 @@ void CNanase::Unk47c130()
     case 5:
         if (frame == 0 && timer == 0) {
             if (unk158 == 0) {
-                CPlayer::Unk40e630();
+                CPlayer::FaceOpponent();
             }
             vx = 0.0;
         }
@@ -4963,7 +4963,7 @@ void CNanase::Unk47c130()
         if (y + vy >= 0.0 && frame > 3) {
             y = 0.0;
             unk2c9 = 9;
-            CPlayer::Unk40e630();
+            CPlayer::FaceOpponent();
             pattern = 0xd;
             Vf0();
         }
@@ -4971,7 +4971,7 @@ void CNanase::Unk47c130()
     case 6:
         if (frame == 0 && timer == 0) {
             if (unk158 == 0) {
-                CPlayer::Unk40e630();
+                CPlayer::FaceOpponent();
             }
             vx = 0.0;
         }
@@ -4995,7 +4995,7 @@ void CNanase::Unk47c130()
         if (y + vy >= 0.0 && frame > 3) {
             y = 0.0;
             unk2c9 = 9;
-            CPlayer::Unk40e630();
+            CPlayer::FaceOpponent();
             pattern = 0xd;
             Vf0();
         }
@@ -5004,7 +5004,7 @@ void CNanase::Unk47c130()
         vx = 0.0;
         vy = 0.0;
         unk158 = 0;
-        CPlayer::Unk40e630();
+        CPlayer::FaceOpponent();
         timer++;
         if (timer >= l4) {
             timer = 0;
@@ -5019,7 +5019,7 @@ void CNanase::Unk47c130()
         vx = 0.0;
         vy = 0.0;
         unk158 = 0;
-        CPlayer::Unk40e630();
+        CPlayer::FaceOpponent();
         timer++;
         if (timer >= l4) {
             timer = 0;
@@ -5052,7 +5052,7 @@ void CNanase::Unk47c130()
         vx = 0.0;
         vy = 0.0;
         unk158 = 0;
-        CPlayer::Unk40e630();
+        CPlayer::FaceOpponent();
         timer++;
         if (timer >= l4) {
             timer = 0;
@@ -5086,7 +5086,7 @@ void CNanase::Unk47c130()
         if (y + vy >= 0.0 && frame > 3) {
             y = 0.0;
             unk2c9 = 9;
-            CPlayer::Unk40e630();
+            CPlayer::FaceOpponent();
             pattern = 0xd;
             Vf0();
         }
@@ -5111,7 +5111,7 @@ void CNanase::Unk47c130()
         if (y + vy >= 0.0 && frame > 3) {
             y = 0.0;
             unk2c9 = 9;
-            CPlayer::Unk40e630();
+            CPlayer::FaceOpponent();
             pattern = 0xd;
             Vf0();
         }
@@ -5136,7 +5136,7 @@ void CNanase::Unk47c130()
         if (y + vy >= 0.0 && frame > 3) {
             y = 0.0;
             unk2c9 = 9;
-            CPlayer::Unk40e630();
+            CPlayer::FaceOpponent();
             pattern = 0xd;
             Vf0();
         }
@@ -5174,8 +5174,8 @@ void CNanase::Unk47c130()
         }
         unk158 = 0;
         if (frame == 0 && timer == 0) {
-            unk148 = unk148 + 0xa;
-            vx = (2.0 - (*m_opponent)->unk178 / 10000.0) * -1.1;
+            m_gauge = m_gauge + 0xa;
+            vx = (2.0 - (*m_opponent)->m_proration / 10000.0) * -1.1;
             if (unk120 != 0) {
                 unk118 -= 10.0;
             }
@@ -5210,8 +5210,8 @@ void CNanase::Unk47c130()
         }
         unk158 = 0;
         if (frame == 0 && timer == 0) {
-            unk148 = unk148 + 0xf;
-            vx = (2.0 - (*m_opponent)->unk178 / 10000.0) * -1.5;
+            m_gauge = m_gauge + 0xf;
+            vx = (2.0 - (*m_opponent)->m_proration / 10000.0) * -1.5;
             if (unk120 != 0) {
                 unk118 -= 20.0;
             }
@@ -5246,8 +5246,8 @@ void CNanase::Unk47c130()
         }
         unk158 = 0;
         if (frame == 0 && timer == 0) {
-            unk148 = unk148 + 0x14;
-            vx = (2.0 - (*m_opponent)->unk178 / 10000.0) * -1.8;
+            m_gauge = m_gauge + 0x14;
+            vx = (2.0 - (*m_opponent)->m_proration / 10000.0) * -1.8;
             if (unk120 != 0) {
                 unk118 -= 30.0;
             }
@@ -5282,8 +5282,8 @@ void CNanase::Unk47c130()
         }
         unk158 = 0;
         if (frame == 0 && timer == 0) {
-            unk148 = unk148 + 0xa;
-            vx = (2.0 - (*m_opponent)->unk178 / 10000.0) * -1.1;
+            m_gauge = m_gauge + 0xa;
+            vx = (2.0 - (*m_opponent)->m_proration / 10000.0) * -1.1;
             if (unk120 != 0) {
                 unk118 -= 10.0;
             }
@@ -5318,8 +5318,8 @@ void CNanase::Unk47c130()
         }
         unk158 = 0;
         if (frame == 0 && timer == 0) {
-            unk148 = unk148 + 0xf;
-            vx = (2.0 - (*m_opponent)->unk178 / 10000.0) * -1.5;
+            m_gauge = m_gauge + 0xf;
+            vx = (2.0 - (*m_opponent)->m_proration / 10000.0) * -1.5;
             if (unk120 != 0) {
                 unk118 -= 20.0;
             }
@@ -5354,8 +5354,8 @@ void CNanase::Unk47c130()
         }
         unk158 = 0;
         if (frame == 0 && timer == 0) {
-            unk148 = unk148 + 0x14;
-            vx = (2.0 - (*m_opponent)->unk178 / 10000.0) * -1.8;
+            m_gauge = m_gauge + 0x14;
+            vx = (2.0 - (*m_opponent)->m_proration / 10000.0) * -1.8;
             if (unk120 != 0) {
                 unk118 -= 30.0;
             }
@@ -5390,8 +5390,8 @@ void CNanase::Unk47c130()
         }
         unk158 = 0;
         if (frame == 0 && timer == 0) {
-            unk148 = unk148 + 0xa;
-            vx = (2.0 - (*m_opponent)->unk178 / 10000.0) * -1.1;
+            m_gauge = m_gauge + 0xa;
+            vx = (2.0 - (*m_opponent)->m_proration / 10000.0) * -1.1;
             if (unk120 != 0) {
                 unk118 -= 10.0;
             }
@@ -5423,8 +5423,8 @@ void CNanase::Unk47c130()
         }
         unk158 = 0;
         if (frame == 0 && timer == 0) {
-            unk148 = unk148 + 0xf;
-            vx = (2.0 - (*m_opponent)->unk178 / 10000.0) * -1.5;
+            m_gauge = m_gauge + 0xf;
+            vx = (2.0 - (*m_opponent)->m_proration / 10000.0) * -1.5;
             if (unk120 != 0) {
                 unk118 -= 20.0;
             }
@@ -5456,8 +5456,8 @@ void CNanase::Unk47c130()
         }
         unk158 = 0;
         if (frame == 0 && timer == 0) {
-            unk148 = unk148 + 0x14;
-            vx = (2.0 - (*m_opponent)->unk178 / 10000.0) * -1.8;
+            m_gauge = m_gauge + 0x14;
+            vx = (2.0 - (*m_opponent)->m_proration / 10000.0) * -1.8;
             if (unk120 != 0) {
                 unk118 -= 30.0;
             }
@@ -5488,7 +5488,7 @@ void CNanase::Unk47c130()
             unk118 -= 0.8;
         }
         if (frame == 0 && timer == 0) {
-            unk148 = unk148 + 0x1e;
+            m_gauge = m_gauge + 0x1e;
             vx = unkc0;
             vy = vy * 0.75 + unkc8;
             if (vy < -2.0) {
@@ -5531,7 +5531,7 @@ void CNanase::Unk47c130()
             unk118 -= 0.8;
         }
         if (frame == 0 && timer == 0) {
-            unk148 = unk148 + 0x1e;
+            m_gauge = m_gauge + 0x1e;
             vx = unkc0;
             vy = vy * 0.75 + unkc8;
             if (vy < -4.0) {
@@ -5574,7 +5574,7 @@ void CNanase::Unk47c130()
             unk118 -= 0.8;
         }
         if (frame == 0 && timer == 0) {
-            unk148 = unk148 + 0x1e;
+            m_gauge = m_gauge + 0x1e;
             vx = unkc0;
             vy = vy * 0.75 + unkc8;
             if (vy < -6.0) {
@@ -5617,7 +5617,7 @@ void CNanase::Unk47c130()
             unk118 -= 0.8;
         }
         if (frame == 0 && timer == 0) {
-            unk148 = unk148 + 0x1e;
+            m_gauge = m_gauge + 0x1e;
             vx = unkc0;
             vy = vy * 0.75 + unkc8;
             ay = 0.032;
@@ -5655,7 +5655,7 @@ void CNanase::Unk47c130()
             unk118 -= 0.8;
         }
         if (frame == 0 && timer == 0) {
-            unk148 = unk148 + 0x1e;
+            m_gauge = m_gauge + 0x1e;
             vx = unkc0;
             vy = unkc8;
             ay = 0.032;
@@ -5698,7 +5698,7 @@ void CNanase::Unk47c130()
             break;
         }
         if (frame == 0 && timer == 0) {
-            unk148 = unk148 + 0x1e;
+            m_gauge = m_gauge + 0x1e;
             vx = unkc0;
             vy = vy * 0.75 + unkc8;
             if (vy < -2.0) {
@@ -5746,7 +5746,7 @@ void CNanase::Unk47c130()
             break;
         }
         if (frame == 0 && timer == 0) {
-            unk148 = unk148 + 0x1e;
+            m_gauge = m_gauge + 0x1e;
             vx = unkc0;
             vy = vy * 0.75 + unkc8;
             if (vy < -4.0) {
@@ -5794,7 +5794,7 @@ void CNanase::Unk47c130()
             break;
         }
         if (frame == 0 && timer == 0) {
-            unk148 = unk148 + 0x1e;
+            m_gauge = m_gauge + 0x1e;
             vx = unkc0;
             vy = vy * 0.75 + unkc8;
             ay = 0.032;
@@ -5837,7 +5837,7 @@ void CNanase::Unk47c130()
             break;
         }
         if (frame == 0 && timer == 0) {
-            unk148 = unk148 + 0x1e;
+            m_gauge = m_gauge + 0x1e;
             vx = unkc0;
             vy = unkc8;
             ay = 0.032;
@@ -5874,7 +5874,7 @@ void CNanase::Unk47c130()
         if (unk120 != 0) {
             unk118 -= 1.5;
         }
-        unk148 = unk148 + 3;
+        m_gauge = m_gauge + 3;
         vx = unkc0;
         vy = unkc8;
         timer++;
@@ -5905,7 +5905,7 @@ void CNanase::Unk47c130()
         if (unk120 != 0) {
             unk118 -= 1.5;
         }
-        unk148 = unk148 + 3;
+        m_gauge = m_gauge + 3;
         vx = unkc0;
         vy = unkc8;
         timer++;
@@ -5932,7 +5932,7 @@ void CNanase::Unk47c130()
             unk118 -= 0.8;
         }
         if (frame == 0 && timer == 0 && unk3138 == 0) {
-            unk148 = unk148 + 0x1e;
+            m_gauge = m_gauge + 0x1e;
             unk3138++;
             unk124 = unk124 + 0x78;
             vx = 0.5;
@@ -5942,8 +5942,8 @@ void CNanase::Unk47c130()
             l50.type = 0;
             l50.x = (double)(int)x;
             l50.y = (double)(int)y;
-            l50.unk20 = 2;
-            l50.unk21 = 1;
+            l50.scale = 2;
+            l50.layer = 1;
             m_game->CreateEffect((EffectDesc*)&l50);
         }
         vy = vy + ay;
@@ -5971,7 +5971,7 @@ void CNanase::Unk47c130()
             unk118 -= 0.8;
         }
         if (frame == 0 && timer == 0) {
-            unk148 = unk148 + 0x1e;
+            m_gauge = m_gauge + 0x1e;
             vx = unkc0;
             vy = unkc8;
             ay = 0.072;
@@ -6082,7 +6082,7 @@ void CNanase::Unk47c130()
         }
         unk158 = 0;
         if (frame == 0 && timer == 0) {
-            unk148 = unk148 + 0x1e;
+            m_gauge = m_gauge + 0x1e;
             if (unk120 != 0) {
                 unk118 -= 30.0;
             }
@@ -6120,7 +6120,7 @@ void CNanase::Unk47c130()
         }
         unk158 = 0;
         if (frame == 0 && timer == 0) {
-            unk148 = unk148 + 0x1e;
+            m_gauge = m_gauge + 0x1e;
             if (unk120 != 0) {
                 unk118 -= 30.0;
             }
@@ -6158,7 +6158,7 @@ void CNanase::Unk47c130()
         }
         unk158 = 0;
         if (frame == 0 && timer == 0) {
-            unk148 = unk148 + 0x1e;
+            m_gauge = m_gauge + 0x1e;
             if (unk120 != 0) {
                 unk118 -= 30.0;
             }
@@ -6196,9 +6196,9 @@ void CNanase::Unk47c130()
             l50.x = (double)(int)x;
             l50.y = (double)(int)y;
             l50.unk18 = facing;
-            l50.unk21 = 1;
+            l50.layer = 1;
             Vf9(&l50);
-            unk148 = unk148 + 0x1e;
+            m_gauge = m_gauge + 0x1e;
             vx = unkc0;
             vy = unkc8;
             ay = 0.032;
@@ -6236,7 +6236,7 @@ void CNanase::Unk47c130()
             vy = -0.45;
             vx = -0.1;
             unk3138++;
-            unk148 = unk148 + 0x1e;
+            m_gauge = m_gauge + 0x1e;
         }
         if (frame == 4 && timer == 0) {
             vx = unkc0;
@@ -6279,8 +6279,8 @@ void CNanase::Unk47c130()
                 l50.type = 0x1f0;
                 l50.x = (double)(int)x;
                 l50.y = (double)(int)y;
-                l50.unk20 = 0;
-                l50.unk21 = 0;
+                l50.scale = 0;
+                l50.layer = 0;
                 l50.unk0 = 1;
                 l50.unk18 = facing;
                 Vf9(&l50);
@@ -6292,7 +6292,7 @@ void CNanase::Unk47c130()
             unk2c9 = 0x21;
             vy = -1.5;
             vx = -0.8;
-            unk148 = unk148 + 0x1e;
+            m_gauge = m_gauge + 0x1e;
         }
         vy += 0.04;
         if (frame == 0 && vy + y > 0.0) {
@@ -6321,7 +6321,7 @@ void CNanase::Unk47c130()
             if (frame >= x8) {
                 pattern = 0;
                 Vf0();
-                CPlayer::Unk40e630();
+                CPlayer::FaceOpponent();
             }
         }
         break;
@@ -6331,8 +6331,8 @@ void CNanase::Unk47c130()
                 l50.type = 0x1f0;
                 l50.x = (double)(int)x;
                 l50.y = (double)(int)y;
-                l50.unk20 = 0;
-                l50.unk21 = 0;
+                l50.scale = 0;
+                l50.layer = 0;
                 l50.unk0 = 1;
                 l50.unk18 = facing;
                 Vf9(&l50);
@@ -6344,7 +6344,7 @@ void CNanase::Unk47c130()
             unk2c9 = 0x21;
             vy = -1.5;
             vx = -0.8;
-            unk148 = unk148 + 0x1e;
+            m_gauge = m_gauge + 0x1e;
         }
         vy += 0.04;
         if (frame == 0 && vy + y > 0.0) {
@@ -6373,7 +6373,7 @@ void CNanase::Unk47c130()
             if (frame >= x8) {
                 pattern = 0;
                 Vf0();
-                CPlayer::Unk40e630();
+                CPlayer::FaceOpponent();
             }
         }
         break;
@@ -6383,8 +6383,8 @@ void CNanase::Unk47c130()
                 l50.type = 0x1f0;
                 l50.x = (double)(int)x;
                 l50.y = (double)(int)y;
-                l50.unk20 = 0;
-                l50.unk21 = 0;
+                l50.scale = 0;
+                l50.layer = 0;
                 l50.unk0 = 1;
                 l50.unk18 = facing;
                 Vf9(&l50);
@@ -6396,7 +6396,7 @@ void CNanase::Unk47c130()
             unk2c9 = 0x21;
             vx = unkc0;
             vy = unkc8;
-            unk148 = unk148 + 0x1e;
+            m_gauge = m_gauge + 0x1e;
         }
         vy += 0.04;
         timer++;
@@ -6406,7 +6406,7 @@ void CNanase::Unk47c130()
             if (frame >= x8) {
                 pattern = 0;
                 Vf0();
-                CPlayer::Unk40e630();
+                CPlayer::FaceOpponent();
             }
         }
         if (y + vy >= 0.0) {
@@ -6426,8 +6426,8 @@ void CNanase::Unk47c130()
                 l50.type = 0x1f0;
                 l50.x = (double)(int)x;
                 l50.y = (double)(int)y;
-                l50.unk20 = 0;
-                l50.unk21 = 0;
+                l50.scale = 0;
+                l50.layer = 0;
                 l50.unk0 = 1;
                 l50.unk18 = facing;
                 Vf9(&l50);
@@ -6440,7 +6440,7 @@ void CNanase::Unk47c130()
                 unk2c9 = 0x21;
                 vx = unkc0;
                 vy = unkc8;
-                unk148 = unk148 + 0x1e;
+                m_gauge = m_gauge + 0x1e;
                 unk3138++;
             }
         }
@@ -6469,10 +6469,10 @@ void CNanase::Unk47c130()
             l50.type = 0x1ef;
             l50.x = 60.0;
             l50.y = 40.0;
-            l50.unk24 = 1;
+            l50.screen = 1;
             l50.unk18 = 1;
-            l50.unk20 = 0;
-            l50.unk21 = 1;
+            l50.scale = 0;
+            l50.layer = 1;
             Vf9(&l50);
         }
         timer++;
@@ -6491,7 +6491,7 @@ void CNanase::Unk47c130()
             timer = 0;
             frame++;
             if (frame == x8 - 1) {
-                CPlayer::Unk40e630();
+                CPlayer::FaceOpponent();
             }
             if (frame >= x8) {
                 pattern = 7;
@@ -6510,8 +6510,8 @@ void CNanase::Unk47c130()
             l50.type = 3;
             l50.x = (double)(int)x;
             l50.y = (double)(int)y;
-            l50.unk20 = 2;
-            l50.unk21 = 0;
+            l50.scale = 2;
+            l50.layer = 0;
             m_game->CreateEffect((EffectDesc*)&l50);
             unk2c9 = 7;
         }
@@ -6533,8 +6533,8 @@ void CNanase::Unk47c130()
             l50.type = 3;
             l50.x = (double)(int)x;
             l50.y = (double)(int)y;
-            l50.unk20 = 2;
-            l50.unk21 = 0;
+            l50.scale = 2;
+            l50.layer = 0;
             m_game->CreateEffect((EffectDesc*)&l50);
             unk2c9 = 7;
         }
@@ -6549,7 +6549,7 @@ void CNanase::Unk47c130()
         }
         break;
     case 0x63:
-        if (unk108 > 0 && timer > 0x63 && frame == 0) {
+        if (m_hp > 0 && timer > 0x63 && frame == 0) {
             pattern = 0x60;
             Vf0();
             unk158 = 0;
@@ -6560,7 +6560,7 @@ void CNanase::Unk47c130()
             timer = 0;
             frame++;
             if (frame == x8) {
-                CPlayer::Unk40e630();
+                CPlayer::FaceOpponent();
             }
             if (frame >= x8) {
                 pattern = 0x60;
@@ -6577,7 +6577,7 @@ void CNanase::Unk47c130()
         }
         if (frame == 0 && timer == 0) {
             unk158 = 0;
-            unk148 = unk148 + 0xa;
+            m_gauge = m_gauge + 0xa;
             vx = -1.5;
             vy = 0.0;
             y = 0.0;
@@ -6597,7 +6597,7 @@ void CNanase::Unk47c130()
             timer = 0;
             frame++;
             if (frame == x8) {
-                CPlayer::Unk40e630();
+                CPlayer::FaceOpponent();
             }
             if (frame >= x8) {
                 pattern = 0;
@@ -6617,7 +6617,7 @@ void CNanase::Unk47c130()
         }
         if (frame == 0 && timer == 0) {
             unk158 = 0;
-            unk148 = unk148 + 0xf;
+            m_gauge = m_gauge + 0xf;
             vx = -1.8;
             vy = 0.0;
             y = 0.0;
@@ -6637,7 +6637,7 @@ void CNanase::Unk47c130()
             timer = 0;
             frame++;
             if (frame == x8) {
-                CPlayer::Unk40e630();
+                CPlayer::FaceOpponent();
             }
             if (frame >= x8) {
                 pattern = 0;
@@ -6657,7 +6657,7 @@ void CNanase::Unk47c130()
         }
         if (frame == 0 && timer == 0) {
             unk158 = 0;
-            unk148 = unk148 + 0x14;
+            m_gauge = m_gauge + 0x14;
             vx = -2.3;
             vy = 0.0;
             y = 0.0;
@@ -6677,7 +6677,7 @@ void CNanase::Unk47c130()
             timer = 0;
             frame++;
             if (frame == x8) {
-                CPlayer::Unk40e630();
+                CPlayer::FaceOpponent();
             }
             if (frame >= x8) {
                 pattern = 0;
@@ -6697,7 +6697,7 @@ void CNanase::Unk47c130()
         }
         if (frame == 0 && timer == 0) {
             unk158 = 0;
-            unk148 = unk148 + 0xa;
+            m_gauge = m_gauge + 0xa;
             vx = -1.5;
             vy = 0.0;
             y = 0.0;
@@ -6717,7 +6717,7 @@ void CNanase::Unk47c130()
             timer = 0;
             frame++;
             if (frame == x8) {
-                CPlayer::Unk40e630();
+                CPlayer::FaceOpponent();
             }
             if (frame >= x8) {
                 pattern = 3;
@@ -6734,7 +6734,7 @@ void CNanase::Unk47c130()
         }
         if (frame == 0 && timer == 0) {
             unk158 = 0;
-            unk148 = unk148 + 0xf;
+            m_gauge = m_gauge + 0xf;
             vx = -1.8;
             vy = 0.0;
             y = 0.0;
@@ -6754,7 +6754,7 @@ void CNanase::Unk47c130()
             timer = 0;
             frame++;
             if (frame == x8) {
-                CPlayer::Unk40e630();
+                CPlayer::FaceOpponent();
             }
             if (frame >= x8) {
                 pattern = 3;
@@ -6771,7 +6771,7 @@ void CNanase::Unk47c130()
         }
         if (frame == 0 && timer == 0) {
             unk158 = 0;
-            unk148 = unk148 + 0x14;
+            m_gauge = m_gauge + 0x14;
             vx = -2.3;
             vy = 0.0;
             y = 0.0;
@@ -6791,7 +6791,7 @@ void CNanase::Unk47c130()
             timer = 0;
             frame++;
             if (frame == x8) {
-                CPlayer::Unk40e630();
+                CPlayer::FaceOpponent();
             }
             if (frame >= x8) {
                 pattern = 3;
@@ -6802,7 +6802,7 @@ void CNanase::Unk47c130()
     case 0x9c:
         if (frame == 0 && timer == 0) {
             vy = -2.6;
-            unk148 = unk148 + 0xf;
+            m_gauge = m_gauge + 0xf;
             ay = 0.06;
         }
         vx = -1.2;
@@ -6819,7 +6819,7 @@ void CNanase::Unk47c130()
         if (y + vy >= 0.0) {
             y = 0.0;
             unk2c9 = 9;
-            CPlayer::Unk40e630();
+            CPlayer::FaceOpponent();
             pattern = 0xd;
             Vf0();
         }
@@ -6832,8 +6832,8 @@ void CNanase::Unk47c130()
             l50.type = 8;
             l50.x = (double)(int)x;
             l50.y = (double)(int)y;
-            l50.unk20 = 2;
-            l50.unk21 = 0;
+            l50.scale = 2;
+            l50.layer = 0;
             m_game->CreateEffect((EffectDesc*)&l50);
         } else {
             vy = vy + ay;
@@ -6850,7 +6850,7 @@ void CNanase::Unk47c130()
         if (y + vy >= 0.0) {
             y = 0.0;
             unk2c9 = 9;
-            CPlayer::Unk40e630();
+            CPlayer::FaceOpponent();
             pattern = 0xd;
             Vf0();
         }
@@ -6863,8 +6863,8 @@ void CNanase::Unk47c130()
             l50.type = 8;
             l50.x = (double)(int)x;
             l50.y = (double)(int)y;
-            l50.unk20 = 2;
-            l50.unk21 = 0;
+            l50.scale = 2;
+            l50.layer = 0;
             m_game->CreateEffect((EffectDesc*)&l50);
         } else {
             vy = vy + ay;
@@ -6881,21 +6881,21 @@ void CNanase::Unk47c130()
         if (y + vy >= 0.0) {
             y = 0.0;
             unk2c9 = 9;
-            CPlayer::Unk40e630();
+            CPlayer::FaceOpponent();
             pattern = 0xd;
             Vf0();
         }
         break;
     case 0xa1:
         if (frame == 0 && timer == 0) {
-            CPlayer::Unk40f1e0();
+            CPlayer::StopMoving();
             l50.type = 9;
             l50.x = (double)(int)x;
             l50.y = (double)((int)y - 0x46);
-            l50.unk20 = 2;
-            l50.unk21 = 1;
+            l50.scale = 2;
+            l50.layer = 1;
             m_game->CreateEffect((EffectDesc*)&l50);
-            unk16c = 1;
+            m_hitsLeft = 1;
             unk2c9 = 0x3e;
             unk3138++;
         }
@@ -6912,24 +6912,24 @@ void CNanase::Unk47c130()
         break;
     case 0xa2:
         if (frame == 0 && timer == 0) {
-            CPlayer::Unk40f1e0();
+            CPlayer::StopMoving();
         }
         if (frame == 2 && timer == 0) {
             vy = -1.5;
             ay = 0.025;
-            unk16c = 1;
+            m_hitsLeft = 1;
         }
         if (frame == 5 && timer == 0) {
-            CPlayer::Unk40f1e0();
+            CPlayer::StopMoving();
             l50.type = 9;
             l50.x = (double)(int)x;
             l50.y = (double)((int)y - 0x46);
-            l50.unk20 = 2;
-            l50.unk21 = 1;
+            l50.scale = 2;
+            l50.layer = 1;
             m_game->CreateEffect((EffectDesc*)&l50);
-            unk16c = 1;
+            m_hitsLeft = 1;
             unk2c9 = 0x3e;
-            unk148 = unk148 - 0x3e8;
+            m_gauge = m_gauge - 0x3e8;
             unk3138++;
         }
         vy = vy + ay;
@@ -6964,7 +6964,7 @@ void CNanase::Unk47c130()
             if (m_inputX == -facing) {
                 pattern = 6;
             }
-            unk168 = 0;
+            m_attackResult = 0;
             Vf0();
             break;
         }
@@ -7011,7 +7011,7 @@ void CNanase::Unk47c130()
         }
         if (y + vy > 0.0 && frame < 9) {
             unk2c9 = 9;
-            CPlayer::Unk40f1e0();
+            CPlayer::StopMoving();
             y = 0.0;
             frame = 9;
             timer = 0;
@@ -7055,7 +7055,7 @@ void CNanase::Unk47c130()
             Vf0();
             vx = 1.3;
             ay = 0.03;
-            if (CPlayer::Unk40e630() != 0) {
+            if (CPlayer::FaceOpponent() != 0) {
                 vx = -vx;
             }
         }
@@ -7064,7 +7064,7 @@ void CNanase::Unk47c130()
             Vf0();
             vx = 1.3;
             ay = 0.03;
-            if (CPlayer::Unk40e630() != 0) {
+            if (CPlayer::FaceOpponent() != 0) {
                 vx = -vx;
             }
         }
@@ -7094,7 +7094,7 @@ void CNanase::Unk47c130()
             Vf0();
             vx = -0.9;
             ay = 0.03;
-            if (CPlayer::Unk40e630() != 0) {
+            if (CPlayer::FaceOpponent() != 0) {
                 vx = -vx;
             }
         }
@@ -7103,7 +7103,7 @@ void CNanase::Unk47c130()
             Vf0();
             vx = -0.9;
             ay = 0.03;
-            if (CPlayer::Unk40e630() != 0) {
+            if (CPlayer::FaceOpponent() != 0) {
                 vx = -vx;
             }
         }
@@ -7114,7 +7114,7 @@ void CNanase::Unk47c130()
             vy = 0.0;
             unk158 = 0;
             if (unk120 == 1) {
-                unk178 = unk118 * 5.0 + unk178;
+                m_proration = unk118 * 5.0 + m_proration;
             }
             unk118 = 0.0;
             unk14c = 0x5a;
@@ -7125,26 +7125,26 @@ void CNanase::Unk47c130()
             l50.type = 1;
             l50.x = (double)(int)x;
             l50.y = (double)(int)y;
-            l50.unk20 = 2;
-            l50.unk21 = 1;
+            l50.scale = 2;
+            l50.layer = 1;
             m_game->CreateEffect((EffectDesc*)&l50);
         }
         if (frame == 2 && timer == 0) {
             l50.type = 4;
             l50.x = (double)(int)x;
             l50.y = (double)(int)y;
-            l50.unk20 = 2;
-            l50.unk21 = 1;
+            l50.scale = 2;
+            l50.layer = 1;
             m_game->CreateEffect((EffectDesc*)&l50);
         }
         timer++;
         if (timer >= l4) {
             timer = 0;
             frame++;
-            unk168 = 0;
+            m_attackResult = 0;
             if (frame >= x8) {
                 pattern = 0;
-                CPlayer::Unk40e630();
+                CPlayer::FaceOpponent();
                 Vf0();
             }
         }
@@ -7162,8 +7162,8 @@ void CNanase::Unk47c130()
             l50.type = 8;
             l50.x = (double)(int)x;
             l50.y = (double)(int)y;
-            l50.unk20 = 2;
-            l50.unk21 = 1;
+            l50.scale = 2;
+            l50.layer = 1;
             m_game->CreateEffect((EffectDesc*)&l50);
         }
         timer++;
@@ -7171,7 +7171,7 @@ void CNanase::Unk47c130()
             timer = 0;
             frame++;
             if (frame == x8) {
-                CPlayer::Unk40e630();
+                CPlayer::FaceOpponent();
             }
             if (frame >= x8) {
                 pattern = 0;
@@ -7192,8 +7192,8 @@ void CNanase::Unk47c130()
             l50.type = 8;
             l50.x = (double)(int)x;
             l50.y = (double)(int)y;
-            l50.unk20 = 2;
-            l50.unk21 = 1;
+            l50.scale = 2;
+            l50.layer = 1;
             m_game->CreateEffect((EffectDesc*)&l50);
         }
         timer++;
@@ -7201,7 +7201,7 @@ void CNanase::Unk47c130()
             timer = 0;
             frame++;
             if (frame == x8) {
-                CPlayer::Unk40e630();
+                CPlayer::FaceOpponent();
             }
             if (frame >= x8) {
                 pattern = 3;
@@ -7231,7 +7231,7 @@ void CNanase::Unk47c130()
             vy = vy + ay;
         }
         if (vy + y > 0.0) {
-            CPlayer::Unk40f1e0();
+            CPlayer::StopMoving();
             y = 0.0;
             pattern = 0xa9;
             break;
@@ -7253,7 +7253,7 @@ void CNanase::Unk47c130()
             vx = 0.0;
             vy = 0.0;
             if (unk120 == 1) {
-                unk178 = unk118 * 5.0 + unk178;
+                m_proration = unk118 * 5.0 + m_proration;
             }
             unk118 = 0.0;
             unk14c = 0x5a;
@@ -7264,15 +7264,15 @@ void CNanase::Unk47c130()
             l50.type = 1;
             l50.x = (double)(int)x;
             l50.y = (double)(int)y;
-            l50.unk20 = 2;
-            l50.unk21 = 1;
+            l50.scale = 2;
+            l50.layer = 1;
             m_game->CreateEffect((EffectDesc*)&l50);
         }
         timer++;
         if (timer >= l4) {
             timer = 0;
             frame++;
-            unk168 = 0;
+            m_attackResult = 0;
             if (frame >= x8) {
                 pattern = 9;
                 vx = unk3138 * 0.01;
@@ -7297,7 +7297,7 @@ void CNanase::Unk47c130()
             if (m_inputX == -facing) {
                 pattern = 6;
             }
-            unk168 = 0;
+            m_attackResult = 0;
             Vf0();
             break;
         }
@@ -7323,7 +7323,7 @@ void CNanase::Unk47c130()
             vy = vy + ay;
         }
         if (y + vy > 0.0 && frame < 9) {
-            CPlayer::Unk40f1e0();
+            CPlayer::StopMoving();
             y = 0.0;
             timer = 0;
             frame = 9;
@@ -7358,7 +7358,7 @@ void CNanase::Unk47c130()
             vx = 0.0;
             unk158 = 0;
         }
-        if (m_inputY == -1 && frame > 0 && unk15c < 3 && unk168 >= 2) {
+        if (m_inputY == -1 && frame > 0 && unk15c < 3 && m_attackResult >= 2) {
             pattern = 4;
             if (m_inputX == facing) {
                 pattern = 5;
@@ -7366,15 +7366,15 @@ void CNanase::Unk47c130()
             if (m_inputX == -facing) {
                 pattern = 6;
             }
-            unk168 = 0;
+            m_attackResult = 0;
             Vf0();
             break;
         }
         if (frame == 1 && timer == 0) {
-            unk16c = 1;
+            m_hitsLeft = 1;
         }
         if (frame == 1 && timer == 0) {
-            unk148 = unk148 + 5;
+            m_gauge = m_gauge + 5;
             unk2c9 = 0x15;
         }
         timer++;
@@ -7382,11 +7382,11 @@ void CNanase::Unk47c130()
             timer = 0;
             frame++;
             if (frame < 2) {
-                unk168 = 0;
+                m_attackResult = 0;
             }
             if (frame >= x8) {
                 pattern = 0;
-                CPlayer::Unk40e630();
+                CPlayer::FaceOpponent();
                 Vf0();
             }
         }
@@ -7402,7 +7402,7 @@ void CNanase::Unk47c130()
             vx = 0.0;
             unk158 = 0;
         }
-        if (m_inputY == -1 && frame > 0 && unk15c < 3 && unk168 >= 2) {
+        if (m_inputY == -1 && frame > 0 && unk15c < 3 && m_attackResult >= 2) {
             pattern = 4;
             if (m_inputX == facing) {
                 pattern = 5;
@@ -7410,25 +7410,25 @@ void CNanase::Unk47c130()
             if (m_inputX == -facing) {
                 pattern = 6;
             }
-            unk168 = 0;
+            m_attackResult = 0;
             Vf0();
             break;
         }
         if (frame == 1 && timer == 0) {
-            unk148 = unk148 + 0xf;
+            m_gauge = m_gauge + 0xf;
             unk2c9 = 0x14;
-            unk16c = 1;
+            m_hitsLeft = 1;
         }
         timer++;
         if (timer >= l4) {
             timer = 0;
             frame++;
             if (frame < 2) {
-                unk168 = 0;
+                m_attackResult = 0;
             }
             if (frame >= x8) {
                 pattern = 0;
-                CPlayer::Unk40e630();
+                CPlayer::FaceOpponent();
                 Vf0();
             }
         }
@@ -7444,7 +7444,7 @@ void CNanase::Unk47c130()
             vx = 0.0;
             unk158 = 0;
         }
-        if (m_inputY == -1 && frame > 0 && unk15c < 3 && unk168 == 3) {
+        if (m_inputY == -1 && frame > 0 && unk15c < 3 && m_attackResult == 3) {
             pattern = 4;
             if (m_inputX == facing) {
                 pattern = 5;
@@ -7452,25 +7452,25 @@ void CNanase::Unk47c130()
             if (m_inputX == -facing) {
                 pattern = 6;
             }
-            unk168 = 0;
+            m_attackResult = 0;
             Vf0();
             break;
         }
         if (frame == 2 && timer == 0) {
-            unk148 = unk148 + 0xf;
+            m_gauge = m_gauge + 0xf;
             unk2c9 = 0x14;
-            unk16c = 1;
+            m_hitsLeft = 1;
         }
         timer++;
         if (timer >= l4) {
             timer = 0;
             frame++;
             if (frame < 2) {
-                unk168 = 0;
+                m_attackResult = 0;
             }
             if (frame >= x8) {
                 pattern = 0;
-                CPlayer::Unk40e630();
+                CPlayer::FaceOpponent();
                 Vf0();
             }
         }
@@ -7486,9 +7486,9 @@ void CNanase::Unk47c130()
             unk158 = 0;
         }
         if (frame == 2 && timer == 0) {
-            unk148 = unk148 + 0x23;
+            m_gauge = m_gauge + 0x23;
             unk2c9 = 0x14;
-            unk16c = 1;
+            m_hitsLeft = 1;
             vx = 2.0;
         }
         if (frame > 2 && vx > 0.0) {
@@ -7501,10 +7501,10 @@ void CNanase::Unk47c130()
         if (timer >= l4) {
             timer = 0;
             frame++;
-            unk168 = 0;
+            m_attackResult = 0;
             if (frame >= x8) {
                 pattern = 0;
-                CPlayer::Unk40e630();
+                CPlayer::FaceOpponent();
                 Vf0();
             }
         }
@@ -7520,7 +7520,7 @@ void CNanase::Unk47c130()
             vx = 0.0;
             unk158 = 0;
         }
-        if (m_inputY == -1 && frame > 0 && unk15c < 3 && unk168 >= 2) {
+        if (m_inputY == -1 && frame > 0 && unk15c < 3 && m_attackResult >= 2) {
             pattern = 4;
             if (m_inputX == facing) {
                 pattern = 5;
@@ -7528,28 +7528,28 @@ void CNanase::Unk47c130()
             if (m_inputX == -facing) {
                 pattern = 6;
             }
-            unk168 = 0;
+            m_attackResult = 0;
             Vf0();
             break;
         }
         if (frame == 1 && timer == 0) {
-            unk148 = unk148 + 5;
+            m_gauge = m_gauge + 5;
             unk2c9 = 0x15;
-            unk16c = 1;
+            m_hitsLeft = 1;
         }
         timer++;
         if (timer >= l4) {
             timer = 0;
             frame++;
             if (frame < 2) {
-                unk168 = 0;
+                m_attackResult = 0;
             }
             if (frame >= x8) {
                 pattern = 0;
                 if (m_inputY == 1) {
                     pattern = 3;
                 }
-                CPlayer::Unk40e630();
+                CPlayer::FaceOpponent();
                 Vf0();
             }
         }
@@ -7565,7 +7565,7 @@ void CNanase::Unk47c130()
             vx = 0.0;
             unk158 = 0;
         }
-        if (m_inputY == -1 && frame > 0 && unk15c < 3 && unk168 >= 2) {
+        if (m_inputY == -1 && frame > 0 && unk15c < 3 && m_attackResult >= 2) {
             pattern = 4;
             if (m_inputX == facing) {
                 pattern = 5;
@@ -7573,28 +7573,28 @@ void CNanase::Unk47c130()
             if (m_inputX == -facing) {
                 pattern = 6;
             }
-            unk168 = 0;
+            m_attackResult = 0;
             Vf0();
             break;
         }
         if (frame == 2 && timer == 0) {
-            unk148 = unk148 + 0xd;
+            m_gauge = m_gauge + 0xd;
             unk2c9 = 0x14;
-            unk16c = 1;
+            m_hitsLeft = 1;
         }
         timer++;
         if (timer >= l4) {
             timer = 0;
             frame++;
             if (frame < 2) {
-                unk168 = 0;
+                m_attackResult = 0;
             }
             if (frame >= x8) {
                 pattern = 0;
                 if (m_inputY == 1) {
                     pattern = 3;
                 }
-                CPlayer::Unk40e630();
+                CPlayer::FaceOpponent();
                 Vf0();
             }
         }
@@ -7610,7 +7610,7 @@ void CNanase::Unk47c130()
             vx = 0.0;
             unk158 = 0;
         }
-        if (m_inputY == -1 && frame > 0 && unk15c < 3 && unk168 == 3) {
+        if (m_inputY == -1 && frame > 0 && unk15c < 3 && m_attackResult == 3) {
             pattern = 4;
             if (m_inputX == facing) {
                 pattern = 5;
@@ -7618,33 +7618,33 @@ void CNanase::Unk47c130()
             if (m_inputX == -facing) {
                 pattern = 6;
             }
-            unk168 = 0;
+            m_attackResult = 0;
             Vf0();
             break;
         }
         if (frame == 2 && timer == 0) {
-            unk148 = unk148 + 0x19;
+            m_gauge = m_gauge + 0x19;
             unk2c9 = 0x14;
-            unk16c = 2;
+            m_hitsLeft = 2;
         }
         timer++;
         if (timer >= l4) {
             timer = 0;
             frame++;
             if (frame < 6) {
-                unk168 = 0;
+                m_attackResult = 0;
             }
             if (frame >= x8) {
                 pattern = 3;
-                CPlayer::Unk40e630();
+                CPlayer::FaceOpponent();
                 Vf0();
             }
         }
         break;
     case 0xcf:
         vy = vy + ay;
-        if (m_inputY == -1 && frame > 0 && unk15c < 3 && unk168 >= 2 && unk15a == 0) {
-            CPlayer::Unk40e630();
+        if (m_inputY == -1 && frame > 0 && unk15c < 3 && m_attackResult >= 2 && unk15a == 0) {
+            CPlayer::FaceOpponent();
             unk15a++;
             pattern = 0xe;
             if (m_inputX == facing) {
@@ -7653,14 +7653,14 @@ void CNanase::Unk47c130()
             if (m_inputX == -facing) {
                 pattern = 0x10;
             }
-            unk168 = 0;
+            m_attackResult = 0;
             Vf0();
             break;
         }
         if (frame == 2 && timer == 0) {
-            unk148 = unk148 + 5;
+            m_gauge = m_gauge + 5;
             unk2c9 = 0x15;
-            unk16c = 1;
+            m_hitsLeft = 1;
         }
         if (y + vy >= 0.0) {
             y = 0.0;
@@ -7673,7 +7673,7 @@ void CNanase::Unk47c130()
             timer = 0;
             frame++;
             if (frame < 2) {
-                unk168 = 0;
+                m_attackResult = 0;
             }
             if (frame >= x8) {
                 pattern = 9;
@@ -7683,8 +7683,8 @@ void CNanase::Unk47c130()
         break;
     case 0xd0:
         vy = vy + ay;
-        if (m_inputY == -1 && frame > 0 && unk15c < 3 && unk168 >= 2 && unk15a == 0) {
-            CPlayer::Unk40e630();
+        if (m_inputY == -1 && frame > 0 && unk15c < 3 && m_attackResult >= 2 && unk15a == 0) {
+            CPlayer::FaceOpponent();
             unk15a++;
             pattern = 0xe;
             if (m_inputX == facing) {
@@ -7693,14 +7693,14 @@ void CNanase::Unk47c130()
             if (m_inputX == -facing) {
                 pattern = 0x10;
             }
-            unk168 = 0;
+            m_attackResult = 0;
             Vf0();
             break;
         }
         if (frame == 3 && timer == 0) {
-            unk148 = unk148 + 0xd;
+            m_gauge = m_gauge + 0xd;
             unk2c9 = 0x14;
-            unk16c = 1;
+            m_hitsLeft = 1;
         }
         if (y + vy >= 0.0) {
             y = 0.0;
@@ -7713,7 +7713,7 @@ void CNanase::Unk47c130()
             timer = 0;
             frame++;
             if (frame < 2) {
-                unk168 = 0;
+                m_attackResult = 0;
             }
             if (frame >= x8) {
                 pattern = 4;
@@ -7724,8 +7724,8 @@ void CNanase::Unk47c130()
         break;
     case 0xd1:
         vy = vy + ay;
-        if (m_inputY == -1 && frame > 0 && unk15c < 3 && unk168 >= 2 && unk15a == 0) {
-            CPlayer::Unk40e630();
+        if (m_inputY == -1 && frame > 0 && unk15c < 3 && m_attackResult >= 2 && unk15a == 0) {
+            CPlayer::FaceOpponent();
             unk15a++;
             pattern = 0xe;
             if (m_inputX == facing) {
@@ -7734,14 +7734,14 @@ void CNanase::Unk47c130()
             if (m_inputX == -facing) {
                 pattern = 0x10;
             }
-            unk168 = 0;
+            m_attackResult = 0;
             Vf0();
             break;
         }
         if (frame == 4 && timer == 0) {
-            unk148 = unk148 + 0x1e;
+            m_gauge = m_gauge + 0x1e;
             unk2c9 = 0x14;
-            unk16c = 1;
+            m_hitsLeft = 1;
         }
         if (y + vy >= 0.0) {
             y = 0.0;
@@ -7754,7 +7754,7 @@ void CNanase::Unk47c130()
             timer = 0;
             frame++;
             if (frame < 2) {
-                unk168 = 0;
+                m_attackResult = 0;
             }
             if (frame >= x8) {
                 pattern = 4;
@@ -7774,9 +7774,9 @@ void CNanase::Unk47c130()
             ay = 0.08;
         }
         if (frame == 2 && timer == 0) {
-            unk148 = unk148 + 0xf;
+            m_gauge = m_gauge + 0xf;
             unk2c9 = 0x14;
-            unk16c = 1;
+            m_hitsLeft = 1;
         }
         if (frame == 5 && timer == 0) {
             vx = 0.0;
@@ -7790,7 +7790,7 @@ void CNanase::Unk47c130()
         if (timer >= l4) {
             timer = 0;
             frame++;
-            unk168 = 0;
+            m_attackResult = 0;
             if (frame == 5) {
                 if (y + vy < 0.0) {
                     frame--;
@@ -7800,13 +7800,13 @@ void CNanase::Unk47c130()
             }
             if (frame >= x8) {
                 pattern = 0;
-                CPlayer::Unk40e630();
+                CPlayer::FaceOpponent();
                 Vf0();
             }
         }
         break;
     case 0xd3:
-        if (m_inputY == -1 && frame > 0 && unk168 >= 2) {
+        if (m_inputY == -1 && frame > 0 && m_attackResult >= 2) {
             pattern = 4;
             if (m_inputX == facing) {
                 pattern = 5;
@@ -7814,7 +7814,7 @@ void CNanase::Unk47c130()
             if (m_inputX == -facing) {
                 pattern = 6;
             }
-            unk168 = 0;
+            m_attackResult = 0;
             Vf0();
             break;
         }
@@ -7823,18 +7823,18 @@ void CNanase::Unk47c130()
             vy = 0.0;
         }
         if (frame == 3 && timer == 0) {
-            unk148 = unk148 + 0x1e;
+            m_gauge = m_gauge + 0x1e;
             unk2c9 = 0x14;
-            unk16c = 1;
+            m_hitsLeft = 1;
         }
         timer++;
         if (timer >= l4) {
             timer = 0;
             frame++;
-            unk168 = 0;
+            m_attackResult = 0;
             if (frame >= x8) {
                 pattern = 0;
-                CPlayer::Unk40e630();
+                CPlayer::FaceOpponent();
                 Vf0();
             }
         }
@@ -7842,16 +7842,16 @@ void CNanase::Unk47c130()
     case 0xd4:
         vy = vy + ay;
         if (frame == 0 && timer == 0) {
-            unk148 = unk148 + 0x1e;
+            m_gauge = m_gauge + 0x1e;
             unk2c9 = 0x14;
-            unk16c = 1;
+            m_hitsLeft = 1;
             vx = vx / 2.0;
             ay = 0.07;
         }
-        if (unk168 > 1) {
+        if (m_attackResult > 1) {
             pattern = 0xd5;
             Vf0();
-            CPlayer::Unk40f1e0();
+            CPlayer::StopMoving();
             break;
         }
         if (y + vy >= 0.0) {
@@ -7861,8 +7861,8 @@ void CNanase::Unk47c130()
             l50.type = 3;
             l50.x = (double)(int)x;
             l50.y = (double)(int)y;
-            l50.unk20 = 2;
-            l50.unk21 = 0;
+            l50.scale = 2;
+            l50.layer = 0;
             l50.unk2c = 7;
             m_game->CreateEffect((EffectDesc*)&l50);
             unk2c9 = 7;
@@ -7874,7 +7874,7 @@ void CNanase::Unk47c130()
         if (timer >= l4) {
             timer = 0;
             frame++;
-            unk168 = 0;
+            m_attackResult = 0;
             if (frame >= x8) {
                 frame = frame - 2;
             }
@@ -7891,7 +7891,7 @@ void CNanase::Unk47c130()
         if (timer >= l4) {
             timer = 0;
             frame++;
-            unk168 = 0;
+            m_attackResult = 0;
             if (frame >= x8) {
                 pattern = 9;
                 Vf0();
@@ -7906,8 +7906,8 @@ void CNanase::Unk47c130()
             l50.type = 3;
             l50.x = (double)(int)x;
             l50.y = (double)(int)y;
-            l50.unk20 = 2;
-            l50.unk21 = 0;
+            l50.scale = 2;
+            l50.layer = 0;
             l50.unk2c = 7;
             m_game->CreateEffect((EffectDesc*)&l50);
         }
@@ -7915,13 +7915,13 @@ void CNanase::Unk47c130()
         if (timer >= l4) {
             timer = 0;
             frame++;
-            unk168 = 0;
+            m_attackResult = 0;
             if (frame >= x8) {
                 pattern = 7;
                 if (m_inputY == 1) {
                     pattern = 3;
                 }
-                CPlayer::Unk40e630();
+                CPlayer::FaceOpponent();
                 Vf0();
             }
         }
@@ -7931,20 +7931,20 @@ void CNanase::Unk47c130()
         vy = 0.0;
         unk158 = 0;
         if (frame == 1 && timer == 0 && (*m_opponent)->y == 0.0) {
-            unk16c = 1;
+            m_hitsLeft = 1;
         } else {
-            unk16c = 0;
+            m_hitsLeft = 0;
         }
-        if (frame == 1 && unk168 == 3) {
+        if (frame == 1 && m_attackResult == 3) {
             if (x > 580.0) {
                 x = 580.0;
             }
             if (x < 60.0) {
                 x = 60.0;
             }
-            CPlayer::Unk40f1e0();
+            CPlayer::StopMoving();
             Vf0();
-            (*m_opponent)->Unk40f1e0();
+            (*m_opponent)->StopMoving();
             (*m_opponent)->Vf0();
             pattern = 0xdd;
             (*m_opponent)->pattern = 0x6b;
@@ -7952,8 +7952,8 @@ void CNanase::Unk47c130()
             l50.type = 0;
             l50.x = (double)((int)x + facing * 0x25);
             l50.y = (double)((int)y - 0x2a);
-            l50.unk20 = 2;
-            l50.unk21 = 1;
+            l50.scale = 2;
+            l50.layer = 1;
             m_game->CreateEffect((EffectDesc*)&l50);
             break;
         }
@@ -7961,10 +7961,10 @@ void CNanase::Unk47c130()
         if (timer >= l4) {
             timer = 0;
             frame++;
-            unk168 = 0;
+            m_attackResult = 0;
             if (frame >= x8) {
                 pattern = 0;
-                CPlayer::Unk40e630();
+                CPlayer::FaceOpponent();
                 Vf0();
             }
         }
@@ -7972,7 +7972,7 @@ void CNanase::Unk47c130()
     case 0xdd:
         CPlayer::Unk410a80(0x32, 3);
         if (frame == 0 && timer == 0) {
-            CPlayer::Unk40f1e0();
+            CPlayer::StopMoving();
         }
         if (frame == 3 && timer == 0) {
             vx = 1.0;
@@ -7982,7 +7982,7 @@ void CNanase::Unk47c130()
         vy = vy + ay;
         if (vy + y > 0.0 && frame == 4) {
             y = 0.0;
-            CPlayer::Unk40f1e0();
+            CPlayer::StopMoving();
             frame = 5;
             timer = 0;
             break;
@@ -8021,18 +8021,18 @@ void CNanase::Unk47c130()
         if (timer >= l4) {
             timer = 0;
             frame++;
-            unk168 = 0;
+            m_attackResult = 0;
             if (frame == 6) {
                 (*m_opponent)->x = facing * 0x28 + x;
                 (*m_opponent)->y = 0.0;
                 (*m_opponent)->pattern = 0x62;
                 (*m_opponent)->Vf0();
-                CPlayer::Unk4105a0(0x4b0, 750.0);
+                CPlayer::DealDamage(0x4b0, 750.0);
             }
             if (frame >= x8) {
                 pattern = 0;
                 Vf0();
-                CPlayer::Unk40e630();
+                CPlayer::FaceOpponent();
             }
         }
         break;
@@ -8045,9 +8045,9 @@ void CNanase::Unk47c130()
             unk158 = 0;
         }
         if (frame == 1 && timer == 0) {
-            unk16c = 1;
+            m_hitsLeft = 1;
             unk2c9 = 0x14;
-            unk148 = unk148 + 0x14;
+            m_gauge = m_gauge + 0x14;
         }
         if (vx < 0.0) {
             vx = 0.0;
@@ -8057,7 +8057,7 @@ void CNanase::Unk47c130()
             timer = 0;
             frame++;
             if (frame < 2) {
-                unk168 = 0;
+                m_attackResult = 0;
             }
             if (frame >= x8) {
                 pattern = 0;
@@ -8074,9 +8074,9 @@ void CNanase::Unk47c130()
             unk158 = 0;
         }
         if (frame == 3 && timer == 0) {
-            unk16c = 1;
+            m_hitsLeft = 1;
             unk2c9 = 0x14;
-            unk148 = unk148 + 0x14;
+            m_gauge = m_gauge + 0x14;
         }
         if (vx < 0.0) {
             vx = 0.0;
@@ -8086,7 +8086,7 @@ void CNanase::Unk47c130()
             timer = 0;
             frame++;
             if (frame < 2) {
-                unk168 = 0;
+                m_attackResult = 0;
             }
             if (frame >= x8) {
                 pattern = 0;
@@ -8103,9 +8103,9 @@ void CNanase::Unk47c130()
             unk158 = 0;
         }
         if (frame == 3 && timer == 0) {
-            unk16c = 1;
+            m_hitsLeft = 1;
             unk2c9 = 0x14;
-            unk148 = unk148 + 0x14;
+            m_gauge = m_gauge + 0x14;
         }
         if (vx < 0.0) {
             vx = 0.0;
@@ -8115,7 +8115,7 @@ void CNanase::Unk47c130()
             timer = 0;
             frame++;
             if (frame < 2) {
-                unk168 = 0;
+                m_attackResult = 0;
             }
             if (frame >= x8) {
                 pattern = 0;
@@ -8132,9 +8132,9 @@ void CNanase::Unk47c130()
             unk158 = 0;
         }
         if (frame == 1 && timer == 0) {
-            unk16c = 1;
+            m_hitsLeft = 1;
             unk2c9 = 0x14;
-            unk148 = unk148 + 0x14;
+            m_gauge = m_gauge + 0x14;
         }
         if (vx < 0.0) {
             vx = 0.0;
@@ -8144,7 +8144,7 @@ void CNanase::Unk47c130()
             timer = 0;
             frame++;
             if (frame < 2) {
-                unk168 = 0;
+                m_attackResult = 0;
             }
             if (frame >= x8) {
                 pattern = 3;
@@ -8161,9 +8161,9 @@ void CNanase::Unk47c130()
             unk158 = 0;
         }
         if (frame == 1 && timer == 0) {
-            unk16c = 1;
+            m_hitsLeft = 1;
             unk2c9 = 0x14;
-            unk148 = unk148 + 0x14;
+            m_gauge = m_gauge + 0x14;
         }
         if (vx < 0.0) {
             vx = 0.0;
@@ -8173,7 +8173,7 @@ void CNanase::Unk47c130()
             timer = 0;
             frame++;
             if (frame < 2) {
-                unk168 = 0;
+                m_attackResult = 0;
             }
             if (frame >= x8) {
                 pattern = 3;
@@ -8184,7 +8184,7 @@ void CNanase::Unk47c130()
     case 0xeb:
         CPlayer::Unk4109d0(3);
         unk158 = 0;
-        if (m_inputY == -1 && frame > 0 && unk15c < 3 && unk168 >= 2) {
+        if (m_inputY == -1 && frame > 0 && unk15c < 3 && m_attackResult >= 2) {
             pattern = 4;
             if (m_inputX == facing) {
                 pattern = 5;
@@ -8192,7 +8192,7 @@ void CNanase::Unk47c130()
             if (m_inputX == -facing) {
                 pattern = 6;
             }
-            unk168 = 0;
+            m_attackResult = 0;
             Vf0();
             break;
         }
@@ -8202,9 +8202,9 @@ void CNanase::Unk47c130()
             unk158 = 0;
         }
         if (frame == 1 && timer == 0) {
-            unk16c = 1;
+            m_hitsLeft = 1;
             unk2c9 = 0x14;
-            unk148 = unk148 + 0x14;
+            m_gauge = m_gauge + 0x14;
         }
         if (vx < 0.0) {
             vx = 0.0;
@@ -8214,7 +8214,7 @@ void CNanase::Unk47c130()
             timer = 0;
             frame++;
             if (frame < 2) {
-                unk168 = 0;
+                m_attackResult = 0;
             }
             if (frame >= x8) {
                 pattern = 0;
@@ -8224,16 +8224,16 @@ void CNanase::Unk47c130()
         break;
     case 0xf8:
         vy = vy + ay;
-        if (frame == 1 && unk168 == 3) {
-            (*m_opponent)->Unk40f1e0();
+        if (frame == 1 && m_attackResult == 3) {
+            (*m_opponent)->StopMoving();
             (*m_opponent)->Vf0();
-            CPlayer::Unk40f1e0();
+            CPlayer::StopMoving();
             (*m_opponent)->unk128 = 1;
             l50.type = 0;
             l50.x = (double)((int)x + facing * 0x25);
             l50.y = (double)((int)y - 0x2a);
-            l50.unk20 = 2;
-            l50.unk21 = 1;
+            l50.scale = 2;
+            l50.layer = 1;
             m_game->CreateEffect((EffectDesc*)&l50);
             frame = 0;
             timer = 0;
@@ -8249,11 +8249,11 @@ void CNanase::Unk47c130()
             timer = 0;
             frame++;
             if (frame == 1 && (*m_opponent)->y < 0.0 && ((*m_opponent)->pattern < 0x32 || (*m_opponent)->pattern > 0x95)) {
-                unk16c = 1;
+                m_hitsLeft = 1;
             } else {
-                unk16c = 0;
+                m_hitsLeft = 0;
             }
-            unk168 = 0;
+            m_attackResult = 0;
             if (frame >= x8) {
                 pattern = 0xd1;
                 frame = 2;
@@ -8265,7 +8265,7 @@ void CNanase::Unk47c130()
         (*m_opponent)->unk13e = 0x1e;
         CPlayer::Unk410a80(0x32, 3);
         if (frame == 0 && timer == 0) {
-            CPlayer::Unk40f1e0();
+            CPlayer::StopMoving();
         }
         if (frame == 0 && timer == 0) {
             vx = 1.0;
@@ -8275,7 +8275,7 @@ void CNanase::Unk47c130()
         vy = vy + ay;
         if (vy + y > 0.0 && frame == 1) {
             y = 0.0;
-            CPlayer::Unk40f1e0();
+            CPlayer::StopMoving();
             frame = 2;
             timer = 0;
             break;
@@ -8305,18 +8305,18 @@ void CNanase::Unk47c130()
         if (timer >= l4) {
             timer = 0;
             frame++;
-            unk168 = 0;
+            m_attackResult = 0;
             if (frame == 3) {
                 (*m_opponent)->x = facing * 0x28 + x;
                 (*m_opponent)->y = 0.0;
                 (*m_opponent)->pattern = 0x62;
                 (*m_opponent)->Vf0();
-                CPlayer::Unk4105a0(0x44c, 500.0);
+                CPlayer::DealDamage(0x44c, 500.0);
             }
             if (frame >= x8) {
                 pattern = 0;
                 Vf0();
-                CPlayer::Unk40e630();
+                CPlayer::FaceOpponent();
             }
         }
         break;
@@ -8324,7 +8324,7 @@ void CNanase::Unk47c130()
         vx = 0.0;
         vy = 0.0;
         unk158 = 0;
-        if (frame == 2 && unk168 == 3) {
+        if (frame == 2 && m_attackResult == 3) {
             vx = 0.0;
             vy = 0.0;
             unkb8 = 0.0;
@@ -8334,12 +8334,12 @@ void CNanase::Unk47c130()
             (*m_opponent)->pattern = 0x6b;
             (*m_opponent)->x = facing * 0x28 + x;
             (*m_opponent)->unk128 = 1;
-            (*m_opponent)->Unk40f1e0();
+            (*m_opponent)->StopMoving();
             l50.type = 0;
             l50.x = (double)((int)x + facing * 0x37);
             l50.y = (double)((int)y - 0x29);
-            l50.unk20 = 2;
-            l50.unk21 = 1;
+            l50.scale = 2;
+            l50.layer = 1;
             m_game->CreateEffect((EffectDesc*)&l50);
             break;
         }
@@ -8347,29 +8347,29 @@ void CNanase::Unk47c130()
         if (timer >= l4) {
             timer = 0;
             frame++;
-            unk168 = 0;
+            m_attackResult = 0;
             if (frame == 2 && (*m_opponent)->y == 0.0 && ((*m_opponent)->pattern < 0x32 || (*m_opponent)->pattern > 0x96)) {
-                unk16c = 1;
+                m_hitsLeft = 1;
             } else {
-                unk16c = 0;
+                m_hitsLeft = 0;
             }
             if (frame >= x8) {
                 pattern = 0;
                 if (m_inputY == 1) {
                     pattern = 8;
                 }
-                CPlayer::Unk40e630();
+                CPlayer::FaceOpponent();
                 Vf0();
             }
         }
         break;
     case 0xfb:
-        CPlayer::Unk40f1e0();
+        CPlayer::StopMoving();
         timer++;
         if (timer >= l4) {
             timer = 0;
             frame++;
-            unk168 = 0;
+            m_attackResult = 0;
             if (frame == 1) {
                 (*m_opponent)->x = facing * 0xb + x;
                 (*m_opponent)->y = -62.0;
@@ -8412,12 +8412,12 @@ void CNanase::Unk47c130()
         CPlayer::Unk410a80(0x32, 3);
         if (frame == 3 && timer == 0) {
             unk2c9 = 0x14;
-            unk16c = 1;
+            m_hitsLeft = 1;
         }
         timer++;
         if (timer >= l4) {
             timer = 0;
-            unk168 = 0;
+            m_attackResult = 0;
             frame++;
             if (frame == 4) {
                 frame = 6;
@@ -8437,42 +8437,42 @@ void CNanase::Unk47c130()
                 if (m_inputY == 1) {
                     pattern = 3;
                 }
-                CPlayer::Unk40e630();
+                CPlayer::FaceOpponent();
                 Vf0();
             }
         }
         break;
     case 0xfd:
-        if (frame > 2 && frame < 0xb && (unk168 == 2 || unk168 == 7)) {
+        if (frame > 2 && frame < 0xb && (m_attackResult == 2 || m_attackResult == 7)) {
             timer = 0;
             frame = 0x13;
-            unk168 = 0;
+            m_attackResult = 0;
             ax = 0.025;
             break;
         }
-        if (frame > 2 && frame < 0xb && unk168 == 3 && (*m_opponent)->y == 0.0) {
+        if (frame > 2 && frame < 0xb && m_attackResult == 3 && (*m_opponent)->y == 0.0) {
             timer = 0;
             frame = 0xb;
-            unk168 = 0;
+            m_attackResult = 0;
             break;
         }
         if (frame == 0 && timer == 0) {
-            CPlayer::Unk40f1e0();
-            unk16c = 2;
+            CPlayer::StopMoving();
+            m_hitsLeft = 2;
         }
         if (frame == 3 && timer == 0) {
             unk2c9 = 0x14;
-            unk148 = unk148 + 0xf;
+            m_gauge = m_gauge + 0xf;
             vx = 1.6;
         }
         if (frame == 0xb && timer == 0) {
-            CPlayer::Unk40f1e0();
+            CPlayer::StopMoving();
         }
         if (frame == 0xe && timer == 0) {
             vx = 1.4;
         }
         if (frame == 0x13 && timer == 0) {
-            CPlayer::Unk40f1e0();
+            CPlayer::StopMoving();
         }
         if (frame == 0x14 && timer == 0) {
             ax = -0.035;
@@ -8490,7 +8490,7 @@ void CNanase::Unk47c130()
         if (timer >= l4) {
             timer = 0;
             frame++;
-            unk168 = 0;
+            m_attackResult = 0;
             if (frame == 0xb) {
                 if (unk3138 < 0) {
                     frame = frame - 8;
@@ -8504,7 +8504,7 @@ void CNanase::Unk47c130()
             if (frame == 0x13) {
                 Vf0();
                 pattern = 0;
-                CPlayer::Unk40e630();
+                CPlayer::FaceOpponent();
                 break;
             }
             if (frame == 0x16) {
@@ -8519,36 +8519,36 @@ void CNanase::Unk47c130()
         }
         break;
     case 0xfe:
-        if (frame > 2 && frame < 0xb && (unk168 == 2 || unk168 == 7)) {
+        if (frame > 2 && frame < 0xb && (m_attackResult == 2 || m_attackResult == 7)) {
             timer = 0;
             frame = 0x13;
-            unk168 = 0;
+            m_attackResult = 0;
             ax = 0.025;
             break;
         }
-        if (frame > 2 && frame < 0xb && unk168 == 3 && (*m_opponent)->y == 0.0) {
+        if (frame > 2 && frame < 0xb && m_attackResult == 3 && (*m_opponent)->y == 0.0) {
             timer = 0;
             frame = 0xb;
-            unk168 = 0;
+            m_attackResult = 0;
             break;
         }
         if (frame == 0 && timer == 0) {
-            CPlayer::Unk40f1e0();
-            unk16c = 2;
+            CPlayer::StopMoving();
+            m_hitsLeft = 2;
         }
         if (frame == 3 && timer == 0) {
             unk2c9 = 0x14;
-            unk148 = unk148 + 0xf;
+            m_gauge = m_gauge + 0xf;
             vx = 3.0;
         }
         if (frame == 0xb && timer == 0) {
-            CPlayer::Unk40f1e0();
+            CPlayer::StopMoving();
         }
         if (frame == 0xe && timer == 0) {
             vx = 1.4;
         }
         if (frame == 0x13 && timer == 0) {
-            CPlayer::Unk40f1e0();
+            CPlayer::StopMoving();
         }
         if (frame == 0x14 && timer == 0) {
             ax = -0.035;
@@ -8566,7 +8566,7 @@ void CNanase::Unk47c130()
         if (timer >= l4) {
             timer = 0;
             frame++;
-            unk168 = 0;
+            m_attackResult = 0;
             if (frame == 0xb) {
                 if (unk3138 < 1) {
                     frame = frame - 8;
@@ -8580,7 +8580,7 @@ void CNanase::Unk47c130()
             if (frame == 0x13) {
                 Vf0();
                 pattern = 0;
-                CPlayer::Unk40e630();
+                CPlayer::FaceOpponent();
                 break;
             }
             if (frame == 0x16) {
@@ -8595,36 +8595,36 @@ void CNanase::Unk47c130()
         }
         break;
     case 0xff:
-        if (frame > 2 && frame < 0xb && (unk168 == 2 || unk168 == 7)) {
+        if (frame > 2 && frame < 0xb && (m_attackResult == 2 || m_attackResult == 7)) {
             timer = 0;
             frame = 0x13;
-            unk168 = 0;
+            m_attackResult = 0;
             ax = 0.025;
             break;
         }
-        if (frame > 2 && frame < 0xb && unk168 == 3 && (*m_opponent)->y == 0.0) {
+        if (frame > 2 && frame < 0xb && m_attackResult == 3 && (*m_opponent)->y == 0.0) {
             timer = 0;
             frame = 0xb;
-            unk168 = 0;
+            m_attackResult = 0;
             break;
         }
         if (frame == 0 && timer == 0) {
-            CPlayer::Unk40f1e0();
-            unk16c = 2;
+            CPlayer::StopMoving();
+            m_hitsLeft = 2;
         }
         if (frame == 3 && timer == 0) {
             unk2c9 = 0x14;
-            unk148 = unk148 + 0xf;
+            m_gauge = m_gauge + 0xf;
             vx = 2.0;
         }
         if (frame == 0xb && timer == 0) {
-            CPlayer::Unk40f1e0();
+            CPlayer::StopMoving();
         }
         if (frame == 0xe && timer == 0) {
             vx = 1.4;
         }
         if (frame == 0x13 && timer == 0) {
-            CPlayer::Unk40f1e0();
+            CPlayer::StopMoving();
         }
         if (frame == 0x14 && timer == 0) {
             ax = -0.035;
@@ -8642,7 +8642,7 @@ void CNanase::Unk47c130()
         if (timer >= l4) {
             timer = 0;
             frame++;
-            unk168 = 0;
+            m_attackResult = 0;
             if (frame == 0xb) {
                 if (unk3138 < 0) {
                     frame = frame - 8;
@@ -8656,7 +8656,7 @@ void CNanase::Unk47c130()
             if (frame == 0x13) {
                 Vf0();
                 pattern = 0;
-                CPlayer::Unk40e630();
+                CPlayer::FaceOpponent();
                 break;
             }
             if (frame == 0x16) {
@@ -8672,8 +8672,8 @@ void CNanase::Unk47c130()
         break;
     case 0x100:
         if (frame == 0 && timer == 0) {
-            CPlayer::Unk40f1e0();
-            unk16c = 1;
+            CPlayer::StopMoving();
+            m_hitsLeft = 1;
         }
         if (frame == 4 && timer == 0) {
             vx = 0.5;
@@ -8685,15 +8685,15 @@ void CNanase::Unk47c130()
             l50.x = (double)((int)x + facing * 0x4b);
             l50.y = (double)((int)y - 0x2c);
             l50.unk18 = facing;
-            l50.unk21 = 0;
-            l50.unk20 = 0;
+            l50.layer = 0;
+            l50.scale = 0;
             Vf9(&l50);
             l50.type = 0x191;
             l50.x = (double)((int)x + facing * 0x4b);
             l50.y = (double)((int)y - 0x2c);
             l50.unk18 = facing;
-            l50.unk21 = 1;
-            l50.unk20 = 2;
+            l50.layer = 1;
+            l50.scale = 2;
             Vf9(&l50);
             Unk48e140(1);
             unk2c8 = 3;
@@ -8702,7 +8702,7 @@ void CNanase::Unk47c130()
         timer++;
         if (frame > 0xd && frame < 0x13 && y + vy > 0.0) {
             y = 0.0;
-            CPlayer::Unk40f1e0();
+            CPlayer::StopMoving();
             timer = 0;
             frame = 0x13;
             break;
@@ -8721,8 +8721,8 @@ void CNanase::Unk47c130()
         break;
     case 0x101:
         if (frame == 0 && timer == 0) {
-            CPlayer::Unk40f1e0();
-            unk16c = 1;
+            CPlayer::StopMoving();
+            m_hitsLeft = 1;
         }
         if (frame == 4 && timer == 0) {
             vx = 0.5;
@@ -8734,15 +8734,15 @@ void CNanase::Unk47c130()
             l50.x = (double)((int)x + facing * 0x4b);
             l50.y = (double)((int)y - 0x2c);
             l50.unk18 = facing;
-            l50.unk21 = 0;
-            l50.unk20 = 0;
+            l50.layer = 0;
+            l50.scale = 0;
             Vf9(&l50);
             l50.type = 0x191;
             l50.x = (double)((int)x + facing * 0x4b);
             l50.y = (double)((int)y - 0x2c);
             l50.unk18 = facing;
-            l50.unk21 = 1;
-            l50.unk20 = 2;
+            l50.layer = 1;
+            l50.scale = 2;
             Vf9(&l50);
             Unk48e140(1);
             unk2c8 = 3;
@@ -8751,7 +8751,7 @@ void CNanase::Unk47c130()
         timer++;
         if (frame > 0xd && frame < 0x13 && y + vy > 0.0) {
             y = 0.0;
-            CPlayer::Unk40f1e0();
+            CPlayer::StopMoving();
             timer = 0;
             frame = 0x13;
             break;
@@ -8770,8 +8770,8 @@ void CNanase::Unk47c130()
         break;
     case 0x102:
         if (frame == 0 && timer == 0) {
-            CPlayer::Unk40f1e0();
-            unk16c = 1;
+            CPlayer::StopMoving();
+            m_hitsLeft = 1;
         }
         if (frame == 4 && timer == 0) {
             vx = 0.5;
@@ -8783,15 +8783,15 @@ void CNanase::Unk47c130()
             l50.x = (double)((int)x + facing * 0x4b);
             l50.y = (double)((int)y - 0x2c);
             l50.unk18 = facing;
-            l50.unk21 = 0;
-            l50.unk20 = 0;
+            l50.layer = 0;
+            l50.scale = 0;
             Vf9(&l50);
             l50.type = 0x191;
             l50.x = (double)((int)x + facing * 0x4b);
             l50.y = (double)((int)y - 0x2c);
             l50.unk18 = facing;
-            l50.unk21 = 1;
-            l50.unk20 = 2;
+            l50.layer = 1;
+            l50.scale = 2;
             Vf9(&l50);
             Unk48e140(1);
             unk2c8 = 3;
@@ -8800,7 +8800,7 @@ void CNanase::Unk47c130()
         timer++;
         if (frame > 0xd && frame < 0x13 && y + vy > 0.0) {
             y = 0.0;
-            CPlayer::Unk40f1e0();
+            CPlayer::StopMoving();
             timer = 0;
             frame = 0x13;
             break;
@@ -8819,53 +8819,53 @@ void CNanase::Unk47c130()
         break;
     case 0x103:
         if (frame == 0 && timer == 0) {
-            CPlayer::Unk40f1e0();
+            CPlayer::StopMoving();
         }
         if (frame == 6 && timer == 0) {
-            l50.type = (WORD)CPlayer::Unk4108a0(0, 3) + 0x195;
-            l50.x = (double)(int)(facing * (0x28 - (WORD)CPlayer::Unk4108a0(0, 0x46)) + x);
+            l50.type = (WORD)CPlayer::Random(0, 3) + 0x195;
+            l50.x = (double)(int)(facing * (0x28 - (WORD)CPlayer::Random(0, 0x46)) + x);
             l50.y = (double)(int)y;
             l50.unk18 = facing;
-            l50.unk21 = 1;
-            l50.unk20 = 0;
+            l50.layer = 1;
+            l50.scale = 0;
             Vf9(&l50);
-            l50.type = (WORD)CPlayer::Unk4108a0(0, 3) + 0x195;
-            l50.x = (double)(int)(facing * (0x28 - (WORD)CPlayer::Unk4108a0(0, 0x46)) + x);
+            l50.type = (WORD)CPlayer::Random(0, 3) + 0x195;
+            l50.x = (double)(int)(facing * (0x28 - (WORD)CPlayer::Random(0, 0x46)) + x);
             l50.y = (double)(int)y;
             Vf9(&l50);
-            l50.type = (WORD)CPlayer::Unk4108a0(0, 3) + 0x195;
-            l50.x = (double)(int)(facing * (0x28 - (WORD)CPlayer::Unk4108a0(0, 0x46)) + x);
+            l50.type = (WORD)CPlayer::Random(0, 3) + 0x195;
+            l50.x = (double)(int)(facing * (0x28 - (WORD)CPlayer::Random(0, 0x46)) + x);
             l50.y = (double)(int)y;
             Vf9(&l50);
-            l50.type = (WORD)CPlayer::Unk4108a0(0, 3) + 0x195;
-            l50.x = (double)(int)(facing * (0x28 - (WORD)CPlayer::Unk4108a0(0, 0x46)) + x);
+            l50.type = (WORD)CPlayer::Random(0, 3) + 0x195;
+            l50.x = (double)(int)(facing * (0x28 - (WORD)CPlayer::Random(0, 0x46)) + x);
             l50.y = (double)(int)y;
             Vf9(&l50);
-            l50.type = (WORD)CPlayer::Unk4108a0(0, 3) + 0x195;
-            l50.x = (double)(int)(facing * (0x28 - (WORD)CPlayer::Unk4108a0(0, 0x46)) + x);
+            l50.type = (WORD)CPlayer::Random(0, 3) + 0x195;
+            l50.x = (double)(int)(facing * (0x28 - (WORD)CPlayer::Random(0, 0x46)) + x);
             l50.y = (double)(int)y;
             Vf9(&l50);
             l50.type = 0x19b;
             l50.x = (double)((int)x + facing * 0xa);
             l50.y = (double)(int)y;
             Vf9(&l50);
-            l50.type = (WORD)CPlayer::Unk4108a0(0, 1) + 0x199;
+            l50.type = (WORD)CPlayer::Random(0, 1) + 0x199;
             l50.x = (double)((int)x + facing * 0xa);
             l50.y = (double)(int)y;
             Vf9(&l50);
-            l50.type = (WORD)CPlayer::Unk4108a0(0, 1) + 0x199;
+            l50.type = (WORD)CPlayer::Random(0, 1) + 0x199;
             l50.x = (double)((int)x + facing * 0xa);
             l50.y = (double)(int)y;
             Vf9(&l50);
-            l50.type = (WORD)CPlayer::Unk4108a0(0, 1) + 0x199;
+            l50.type = (WORD)CPlayer::Random(0, 1) + 0x199;
             l50.x = (double)((int)x + facing * 0xa);
             l50.y = (double)(int)y;
             Vf9(&l50);
-            l50.type = (WORD)CPlayer::Unk4108a0(0, 1) + 0x199;
+            l50.type = (WORD)CPlayer::Random(0, 1) + 0x199;
             l50.x = (double)((int)x + facing * 0xa);
             l50.y = (double)(int)y;
             Vf9(&l50);
-            l50.type = (WORD)CPlayer::Unk4108a0(0, 1) + 0x199;
+            l50.type = (WORD)CPlayer::Random(0, 1) + 0x199;
             l50.x = (double)((int)x + facing * 0xa);
             l50.y = (double)(int)y;
             Vf9(&l50);
@@ -8876,75 +8876,75 @@ void CNanase::Unk47c130()
         if (timer >= l4) {
             timer = 0;
             frame++;
-            unk168 = 0;
+            m_attackResult = 0;
             if (frame >= x8) {
                 pattern = 0;
-                CPlayer::Unk40e630();
+                CPlayer::FaceOpponent();
                 Vf0();
             }
         }
         break;
     case 0x104:
         if (frame == 0 && timer == 0) {
-            CPlayer::Unk40f1e0();
+            CPlayer::StopMoving();
         }
         if (frame == 6 && timer == 0) {
-            l50.type = (WORD)CPlayer::Unk4108a0(0, 3) + 0x195;
-            l50.x = (double)(int)(facing * (0x28 - (WORD)CPlayer::Unk4108a0(0, 0x46)) + x);
+            l50.type = (WORD)CPlayer::Random(0, 3) + 0x195;
+            l50.x = (double)(int)(facing * (0x28 - (WORD)CPlayer::Random(0, 0x46)) + x);
             l50.y = (double)(int)y;
             l50.unk18 = facing;
-            l50.unk21 = 1;
-            l50.unk20 = 0;
+            l50.layer = 1;
+            l50.scale = 0;
             Vf9(&l50);
-            l50.type = (WORD)CPlayer::Unk4108a0(0, 3) + 0x195;
-            l50.x = (double)(int)(facing * (0x28 - (WORD)CPlayer::Unk4108a0(0, 0x46)) + x);
+            l50.type = (WORD)CPlayer::Random(0, 3) + 0x195;
+            l50.x = (double)(int)(facing * (0x28 - (WORD)CPlayer::Random(0, 0x46)) + x);
             l50.y = (double)(int)y;
             Vf9(&l50);
-            l50.type = (WORD)CPlayer::Unk4108a0(0, 3) + 0x195;
-            l50.x = (double)(int)(facing * (0x28 - (WORD)CPlayer::Unk4108a0(0, 0x46)) + x);
+            l50.type = (WORD)CPlayer::Random(0, 3) + 0x195;
+            l50.x = (double)(int)(facing * (0x28 - (WORD)CPlayer::Random(0, 0x46)) + x);
             l50.y = (double)(int)y;
             Vf9(&l50);
-            l50.type = (WORD)CPlayer::Unk4108a0(0, 3) + 0x195;
-            l50.x = (double)(int)(facing * (0x28 - (WORD)CPlayer::Unk4108a0(0, 0x46)) + x);
+            l50.type = (WORD)CPlayer::Random(0, 3) + 0x195;
+            l50.x = (double)(int)(facing * (0x28 - (WORD)CPlayer::Random(0, 0x46)) + x);
             l50.y = (double)(int)y;
             Vf9(&l50);
-            l50.type = (WORD)CPlayer::Unk4108a0(0, 3) + 0x195;
-            l50.x = (double)(int)(facing * (0x28 - (WORD)CPlayer::Unk4108a0(0, 0x46)) + x);
+            l50.type = (WORD)CPlayer::Random(0, 3) + 0x195;
+            l50.x = (double)(int)(facing * (0x28 - (WORD)CPlayer::Random(0, 0x46)) + x);
             l50.y = (double)(int)y;
             Vf9(&l50);
-            l50.type = (WORD)CPlayer::Unk4108a0(0, 3) + 0x195;
-            l50.x = (double)(int)(facing * (0x28 - (WORD)CPlayer::Unk4108a0(0, 0x46)) + x);
+            l50.type = (WORD)CPlayer::Random(0, 3) + 0x195;
+            l50.x = (double)(int)(facing * (0x28 - (WORD)CPlayer::Random(0, 0x46)) + x);
             l50.y = (double)(int)y;
             Vf9(&l50);
-            l50.type = (WORD)CPlayer::Unk4108a0(0, 3) + 0x195;
-            l50.x = (double)(int)(facing * (0x28 - (WORD)CPlayer::Unk4108a0(0, 0x46)) + x);
+            l50.type = (WORD)CPlayer::Random(0, 3) + 0x195;
+            l50.x = (double)(int)(facing * (0x28 - (WORD)CPlayer::Random(0, 0x46)) + x);
             l50.y = (double)(int)y;
             Vf9(&l50);
-            l50.type = (WORD)CPlayer::Unk4108a0(0, 3) + 0x195;
-            l50.x = (double)(int)(facing * (0x28 - (WORD)CPlayer::Unk4108a0(0, 0x46)) + x);
+            l50.type = (WORD)CPlayer::Random(0, 3) + 0x195;
+            l50.x = (double)(int)(facing * (0x28 - (WORD)CPlayer::Random(0, 0x46)) + x);
             l50.y = (double)(int)y;
             Vf9(&l50);
             l50.type = 0x19b;
             l50.x = (double)((int)x + facing * 0xa);
             l50.y = (double)(int)y;
             Vf9(&l50);
-            l50.type = (WORD)CPlayer::Unk4108a0(0, 1) + 0x199;
+            l50.type = (WORD)CPlayer::Random(0, 1) + 0x199;
             l50.x = (double)((int)x + facing * 0xa);
             l50.y = (double)(int)y;
             Vf9(&l50);
-            l50.type = (WORD)CPlayer::Unk4108a0(0, 1) + 0x199;
+            l50.type = (WORD)CPlayer::Random(0, 1) + 0x199;
             l50.x = (double)((int)x + facing * 0xa);
             l50.y = (double)(int)y;
             Vf9(&l50);
-            l50.type = (WORD)CPlayer::Unk4108a0(0, 1) + 0x199;
+            l50.type = (WORD)CPlayer::Random(0, 1) + 0x199;
             l50.x = (double)((int)x + facing * 0xa);
             l50.y = (double)(int)y;
             Vf9(&l50);
-            l50.type = (WORD)CPlayer::Unk4108a0(0, 1) + 0x199;
+            l50.type = (WORD)CPlayer::Random(0, 1) + 0x199;
             l50.x = (double)((int)x + facing * 0xa);
             l50.y = (double)(int)y;
             Vf9(&l50);
-            l50.type = (WORD)CPlayer::Unk4108a0(0, 1) + 0x199;
+            l50.type = (WORD)CPlayer::Random(0, 1) + 0x199;
             l50.x = (double)((int)x + facing * 0xa);
             l50.y = (double)(int)y;
             Vf9(&l50);
@@ -8955,17 +8955,17 @@ void CNanase::Unk47c130()
         if (timer >= l4) {
             timer = 0;
             frame++;
-            unk168 = 0;
+            m_attackResult = 0;
             if (frame >= x8) {
                 pattern = 0;
-                CPlayer::Unk40e630();
+                CPlayer::FaceOpponent();
                 Vf0();
             }
         }
         break;
     case 0x105:
         if (frame == 0 && timer == 0) {
-            CPlayer::Unk40f1e0();
+            CPlayer::StopMoving();
             if (unk120 == 0) {
                 unk118 -= 500.0;
             } else {
@@ -8975,56 +8975,56 @@ void CNanase::Unk47c130()
             l50.unk2c = 0xb;
             l50.x = (double)(int)x;
             l50.y = (double)((int)y - 0x32);
-            l50.unk20 = 2;
-            l50.unk21 = 1;
+            l50.scale = 2;
+            l50.layer = 1;
             m_game->CreateEffect((EffectDesc*)&l50);
         }
         if (frame == 6 && timer == 0) {
-            l50.type = (WORD)CPlayer::Unk4108a0(0, 3) + 0x195;
-            l50.x = (double)(int)(facing * (0x28 - (WORD)CPlayer::Unk4108a0(0, 0x46)) + x + unk3138 * 0x50 * facing);
+            l50.type = (WORD)CPlayer::Random(0, 3) + 0x195;
+            l50.x = (double)(int)(facing * (0x28 - (WORD)CPlayer::Random(0, 0x46)) + x + unk3138 * 0x50 * facing);
             l50.y = (double)(int)y;
             l50.unk18 = facing;
-            l50.unk21 = 1;
-            l50.unk20 = 0;
+            l50.layer = 1;
+            l50.scale = 0;
             Vf9(&l50);
-            l50.type = (WORD)CPlayer::Unk4108a0(0, 3) + 0x195;
-            l50.x = (double)(int)(facing * (0x28 - (WORD)CPlayer::Unk4108a0(0, 0x46)) + x + unk3138 * 0x50 * facing);
+            l50.type = (WORD)CPlayer::Random(0, 3) + 0x195;
+            l50.x = (double)(int)(facing * (0x28 - (WORD)CPlayer::Random(0, 0x46)) + x + unk3138 * 0x50 * facing);
             l50.y = (double)(int)y;
             Vf9(&l50);
-            l50.type = (WORD)CPlayer::Unk4108a0(0, 3) + 0x195;
-            l50.x = (double)(int)(facing * (0x28 - (WORD)CPlayer::Unk4108a0(0, 0x46)) + x + unk3138 * 0x50 * facing);
+            l50.type = (WORD)CPlayer::Random(0, 3) + 0x195;
+            l50.x = (double)(int)(facing * (0x28 - (WORD)CPlayer::Random(0, 0x46)) + x + unk3138 * 0x50 * facing);
             l50.y = (double)(int)y;
             Vf9(&l50);
-            l50.type = (WORD)CPlayer::Unk4108a0(0, 3) + 0x195;
-            l50.x = (double)(int)(facing * (0x28 - (WORD)CPlayer::Unk4108a0(0, 0x46)) + x + unk3138 * 0x50 * facing);
+            l50.type = (WORD)CPlayer::Random(0, 3) + 0x195;
+            l50.x = (double)(int)(facing * (0x28 - (WORD)CPlayer::Random(0, 0x46)) + x + unk3138 * 0x50 * facing);
             l50.y = (double)(int)y;
             Vf9(&l50);
-            l50.type = (WORD)CPlayer::Unk4108a0(0, 3) + 0x195;
-            l50.x = (double)(int)(facing * (0x28 - (WORD)CPlayer::Unk4108a0(0, 0x46)) + x + unk3138 * 0x50 * facing);
+            l50.type = (WORD)CPlayer::Random(0, 3) + 0x195;
+            l50.x = (double)(int)(facing * (0x28 - (WORD)CPlayer::Random(0, 0x46)) + x + unk3138 * 0x50 * facing);
             l50.y = (double)(int)y;
             Vf9(&l50);
             l50.type = 0x19b;
             l50.x = (double)((int)x + 0xa + unk3138 * 0x50 * facing);
             l50.y = (double)(int)y;
             Vf9(&l50);
-            l50.type = (WORD)CPlayer::Unk4108a0(0, 1) + 0x199;
-            l50.x = (double)(int)(facing * (0x28 - (WORD)CPlayer::Unk4108a0(0, 0x46)) + x + unk3138 * 0x50 * facing);
+            l50.type = (WORD)CPlayer::Random(0, 1) + 0x199;
+            l50.x = (double)(int)(facing * (0x28 - (WORD)CPlayer::Random(0, 0x46)) + x + unk3138 * 0x50 * facing);
             l50.y = (double)(int)y;
             Vf9(&l50);
-            l50.type = (WORD)CPlayer::Unk4108a0(0, 1) + 0x199;
-            l50.x = (double)(int)(facing * (0x28 - (WORD)CPlayer::Unk4108a0(0, 0x46)) + x + unk3138 * 0x50 * facing);
+            l50.type = (WORD)CPlayer::Random(0, 1) + 0x199;
+            l50.x = (double)(int)(facing * (0x28 - (WORD)CPlayer::Random(0, 0x46)) + x + unk3138 * 0x50 * facing);
             l50.y = (double)(int)y;
             Vf9(&l50);
-            l50.type = (WORD)CPlayer::Unk4108a0(0, 1) + 0x199;
-            l50.x = (double)(int)(facing * (0x28 - (WORD)CPlayer::Unk4108a0(0, 0x46)) + x + unk3138 * 0x50 * facing);
+            l50.type = (WORD)CPlayer::Random(0, 1) + 0x199;
+            l50.x = (double)(int)(facing * (0x28 - (WORD)CPlayer::Random(0, 0x46)) + x + unk3138 * 0x50 * facing);
             l50.y = (double)(int)y;
             Vf9(&l50);
-            l50.type = (WORD)CPlayer::Unk4108a0(0, 1) + 0x199;
-            l50.x = (double)(int)(facing * (0x28 - (WORD)CPlayer::Unk4108a0(0, 0x46)) + x + unk3138 * 0x50 * facing);
+            l50.type = (WORD)CPlayer::Random(0, 1) + 0x199;
+            l50.x = (double)(int)(facing * (0x28 - (WORD)CPlayer::Random(0, 0x46)) + x + unk3138 * 0x50 * facing);
             l50.y = (double)(int)y;
             Vf9(&l50);
-            l50.type = (WORD)CPlayer::Unk4108a0(0, 1) + 0x199;
-            l50.x = (double)(int)(facing * (0x28 - (WORD)CPlayer::Unk4108a0(0, 0x46)) + x + unk3138 * 0x50 * facing);
+            l50.type = (WORD)CPlayer::Random(0, 1) + 0x199;
+            l50.x = (double)(int)(facing * (0x28 - (WORD)CPlayer::Random(0, 0x46)) + x + unk3138 * 0x50 * facing);
             l50.y = (double)(int)y;
             Vf9(&l50);
             CPlayer::Unk410a10(6, 0);
@@ -9038,7 +9038,7 @@ void CNanase::Unk47c130()
         if (timer >= l4) {
             timer = 0;
             frame++;
-            unk168 = 0;
+            m_attackResult = 0;
             if (frame >= x8) {
                 if (unk3138 < 2) {
                     unk3138++;
@@ -9047,7 +9047,7 @@ void CNanase::Unk47c130()
                     break;
                 }
                 pattern = 0;
-                CPlayer::Unk40e630();
+                CPlayer::FaceOpponent();
                 Vf0();
             }
         }
@@ -9057,7 +9057,7 @@ void CNanase::Unk47c130()
             vx *= 0.5;
             vy *= 0.5;
             ay = 0.01;
-            unk148 = unk148 + 0x2d;
+            m_gauge = m_gauge + 0x2d;
             unk3138 = 4;
         }
         vy = vy + ay;
@@ -9065,13 +9065,13 @@ void CNanase::Unk47c130()
         if (timer >= l4) {
             timer = 0;
             frame++;
-            unk168 = 0;
+            m_attackResult = 0;
             if (frame == 5) {
                 l50.type = 0x198;
                 l50.x = (double)((int)x + facing * 0x24);
                 l50.y = (double)((int)y - 0x30);
-                l50.unk20 = 2;
-                l50.unk21 = 1;
+                l50.scale = 2;
+                l50.layer = 1;
                 l50.unk18 = facing;
                 Vf9(&l50);
                 unk2c8 = 6;
@@ -9088,7 +9088,7 @@ void CNanase::Unk47c130()
         break;
     case 0x109:
         if (frame == 0 && timer == 0) {
-            CPlayer::Unk40f1e0();
+            CPlayer::StopMoving();
             unk3138 = 2;
         }
         if (frame == 3 && timer == 0) {
@@ -9096,8 +9096,8 @@ void CNanase::Unk47c130()
             l50.x = (double)((int)x + facing * 0x1e);
             l50.y = (double)((int)y - 0x1e);
             l50.unk18 = facing;
-            l50.unk21 = 1;
-            l50.unk20 = 2;
+            l50.layer = 1;
+            l50.scale = 2;
             Vf9(&l50);
             unk2c8 = 1;
         }
@@ -9105,7 +9105,7 @@ void CNanase::Unk47c130()
         if (timer >= l4) {
             timer = 0;
             frame++;
-            unk168 = 0;
+            m_attackResult = 0;
             if (frame == 8) {
                 if (unk3138 > 1) {
                     unk3138--;
@@ -9113,7 +9113,7 @@ void CNanase::Unk47c130()
                 } else {
                     pattern = 0;
                     Vf0();
-                    CPlayer::Unk40e630();
+                    CPlayer::FaceOpponent();
                 }
             }
         }
@@ -9128,8 +9128,8 @@ void CNanase::Unk47c130()
             l50.x = (double)((int)x + facing * 0x1e);
             l50.y = (double)((int)y - 0x1e);
             l50.unk18 = facing;
-            l50.unk21 = 1;
-            l50.unk20 = 2;
+            l50.layer = 1;
+            l50.scale = 2;
             Vf9(&l50);
         }
         vy = vy + ay;
@@ -9137,7 +9137,7 @@ void CNanase::Unk47c130()
         if (timer >= l4) {
             timer = 0;
             frame++;
-            unk168 = 0;
+            m_attackResult = 0;
             if (y + vy > 0.0) {
                 y = 0.0;
                 vy = 0.0;
@@ -9154,16 +9154,16 @@ void CNanase::Unk47c130()
         break;
     case 0x12b:
         if (frame == 0 && timer == 0) {
-            CPlayer::Unk40f1e0();
+            CPlayer::StopMoving();
         }
         timer++;
         if (timer >= l4) {
             timer = 0;
             frame++;
-            unk168 = 0;
+            m_attackResult = 0;
             if (frame >= x8) {
                 pattern = 0;
-                CPlayer::Unk40e630();
+                CPlayer::FaceOpponent();
                 Vf0();
             }
         }
@@ -9173,20 +9173,20 @@ void CNanase::Unk47c130()
             vx = 0.0;
             vy = 0.0;
             ay = 0.0;
-            unk16c = 1;
+            m_hitsLeft = 1;
         }
         CPlayer::Unk410a80(0x32, 3);
         if (frame == 2 && timer == 0) {
             unk14c = 0x78;
-            unk148 = unk148 - 0x3e8;
+            m_gauge = m_gauge - 0x3e8;
             CPlayer::Unk410b10(0xb0, 3);
             l50.type = 9;
             l50.unk2c = 5;
             l50.x = (double)((int)x - facing * 0xd);
             l50.y = (double)((int)y - 0x5d);
-            l50.unk20 = 2;
+            l50.scale = 2;
             l50.unk0 = 1;
-            l50.unk21 = 1;
+            l50.layer = 1;
             m_game->CreateEffect((EffectDesc*)&l50);
         }
         if (frame >= 1) {
@@ -9200,7 +9200,7 @@ void CNanase::Unk47c130()
         if (timer >= l4) {
             timer = 0;
             frame++;
-            unk168 = 0;
+            m_attackResult = 0;
             if (frame >= x8) {
                 pattern = 0;
                 Vf0();
@@ -9210,21 +9210,21 @@ void CNanase::Unk47c130()
     case 0x12f:
         unk158 = 0;
         if (frame == 0 && timer == 0) {
-            CPlayer::Unk40f1e0();
-            unk16c = 1;
+            CPlayer::StopMoving();
+            m_hitsLeft = 1;
         }
         if (frame == 4 && timer == 0) {
             CPlayer::Unk410a80(0x32, 0x78);
             unk14c = 0x78;
-            unk148 = unk148 - 0x3e8;
+            m_gauge = m_gauge - 0x3e8;
             CPlayer::Unk410b10(0xb0, 3);
             l50.type = 0x44;
             l50.unk2c = 0x13;
             l50.x = (double)((int)x + facing * 0x13);
             l50.y = (double)((int)y - 0x22);
-            l50.unk20 = 2;
+            l50.scale = 2;
             l50.unk0 = 1;
-            l50.unk21 = 1;
+            l50.layer = 1;
             m_game->CreateEffect((EffectDesc*)&l50);
         }
         if (frame >= 1) {
@@ -9239,14 +9239,14 @@ void CNanase::Unk47c130()
                 vx = 0.0;
             }
         }
-        if (unk168 == 3) {
+        if (m_attackResult == 3) {
             CPlayer::Unk410a10(0xa, 0);
         }
         timer++;
         if (timer >= l4) {
             timer = 0;
             frame++;
-            unk168 = 0;
+            m_attackResult = 0;
             if (frame >= x8) {
                 pattern = 0;
                 Vf0();
@@ -9256,21 +9256,21 @@ void CNanase::Unk47c130()
     case 0x130:
         unk158 = 0;
         if (frame == 0 && timer == 0) {
-            CPlayer::Unk40f1e0();
-            unk16c = 1;
+            CPlayer::StopMoving();
+            m_hitsLeft = 1;
         }
         if (frame == 4 && timer == 0) {
             CPlayer::Unk410a80(0x32, 0x78);
             unk14c = 0x78;
-            unk148 = unk148 - 0x7d0;
+            m_gauge = m_gauge - 0x7d0;
             CPlayer::Unk410b10(0xb0, 3);
             l50.type = 0x45;
             l50.unk2c = 5;
             l50.x = (double)((int)x + facing * 0x13);
             l50.y = (double)((int)y - 0x22);
-            l50.unk20 = 2;
+            l50.scale = 2;
             l50.unk0 = 1;
-            l50.unk21 = 1;
+            l50.layer = 1;
             m_game->CreateEffect((EffectDesc*)&l50);
         }
         if (frame >= 1) {
@@ -9285,14 +9285,14 @@ void CNanase::Unk47c130()
                 vx = 0.0;
             }
         }
-        if (unk168 == 3) {
+        if (m_attackResult == 3) {
             CPlayer::Unk410a10(0xa, 0);
         }
         timer++;
         if (timer >= l4) {
             timer = 0;
             frame++;
-            unk168 = 0;
+            m_attackResult = 0;
             if (frame >= x8) {
                 pattern = 0;
                 Vf0();
@@ -9302,21 +9302,21 @@ void CNanase::Unk47c130()
     case 0x131:
         unk158 = 0;
         if (frame == 0 && timer == 0) {
-            CPlayer::Unk40f1e0();
-            unk16c = 1;
+            CPlayer::StopMoving();
+            m_hitsLeft = 1;
         }
         if (frame == 4 && timer == 0) {
             CPlayer::Unk410a80(0x32, 0x78);
             unk14c = 0x78;
-            unk148 = unk148 - 0xbb8;
+            m_gauge = m_gauge - 0xbb8;
             CPlayer::Unk410b10(0xb0, 3);
             l50.type = 0x46;
             l50.unk2c = 0x40;
             l50.x = (double)((int)x + facing * 0x13);
             l50.y = (double)((int)y - 0x22);
-            l50.unk20 = 2;
+            l50.scale = 2;
             l50.unk0 = 1;
-            l50.unk21 = 1;
+            l50.layer = 1;
             m_game->CreateEffect((EffectDesc*)&l50);
             unk2c9 = 0x25;
         }
@@ -9332,14 +9332,14 @@ void CNanase::Unk47c130()
                 vx = 0.0;
             }
         }
-        if (unk168 == 3) {
+        if (m_attackResult == 3) {
             CPlayer::Unk410a10(0xa, 0);
         }
         timer++;
         if (timer >= l4) {
             timer = 0;
             frame++;
-            unk168 = 0;
+            m_attackResult = 0;
             if (frame >= x8) {
                 pattern = 0;
                 Vf0();
@@ -9350,15 +9350,15 @@ void CNanase::Unk47c130()
         CPlayer::Unk410a80(0x32, 3);
         if (frame == 0 && timer == 0) {
             unk14c = 0x78;
-            unk148 = unk148 - 0xbb8;
+            m_gauge = m_gauge - 0xbb8;
             CPlayer::Unk410b10(0xb0, 3);
             l50.type = 9;
             l50.unk2c = 5;
             l50.x = (double)(int)x;
             l50.y = (double)((int)y - 0x28);
-            l50.unk20 = 2;
+            l50.scale = 2;
             l50.unk0 = 1;
-            l50.unk21 = 1;
+            l50.layer = 1;
             m_game->CreateEffect((EffectDesc*)&l50);
         }
         if (frame == 2 && timer == 0) {
@@ -9366,18 +9366,18 @@ void CNanase::Unk47c130()
             l50.x = (double)(int)x;
             l50.y = (double)((int)y - 0x26);
             l50.unk18 = facing;
-            l50.unk21 = 1;
-            l50.unk20 = 2;
+            l50.layer = 1;
+            l50.scale = 2;
             Vf9(&l50);
         }
         if (frame == 3 && timer == 0) {
             unk2c9 = 0x14;
-            unk16c = 1;
+            m_hitsLeft = 1;
         }
         timer++;
         if (timer >= l4) {
             timer = 0;
-            unk168 = 0;
+            m_attackResult = 0;
             frame++;
             if (frame == 4) {
                 frame = 6;
@@ -9397,7 +9397,7 @@ void CNanase::Unk47c130()
                 if (m_inputY == 1) {
                     pattern = 3;
                 }
-                CPlayer::Unk40e630();
+                CPlayer::FaceOpponent();
                 Vf0();
             }
         }
@@ -9408,20 +9408,20 @@ void CNanase::Unk47c130()
             vx = 0.0;
             vy = 0.0;
             ay = 0.0;
-            unk16c = 1;
+            m_hitsLeft = 1;
         }
         CPlayer::Unk410a80(0x32, 3);
         if (frame == 0 && timer == 0) {
             unk14c = 0x78;
-            unk148 = unk148 - 0x3e8;
+            m_gauge = m_gauge - 0x3e8;
             CPlayer::Unk410b10(0xb0, 3);
             l50.type = 9;
             l50.unk2c = 5;
             l50.x = (double)(int)x;
             l50.y = (double)((int)y - 0x2b);
-            l50.unk20 = 2;
+            l50.scale = 2;
             l50.unk0 = 1;
-            l50.unk21 = 1;
+            l50.layer = 1;
             m_game->CreateEffect((EffectDesc*)&l50);
         }
         if (frame == 0xc && timer == 0) {
@@ -9431,15 +9431,15 @@ void CNanase::Unk47c130()
             l50.x = (double)((int)x + facing * 0x28);
             l50.y = (double)((int)y - 0x28);
             l50.unk18 = facing;
-            l50.unk20 = 0;
+            l50.scale = 0;
             l50.unk0 = 1;
-            l50.unk21 = 1;
+            l50.layer = 1;
             Vf9(&l50);
             l50.type = 0x1a7;
-            l50.unk20 = 2;
+            l50.scale = 2;
             l50.unk18 = facing;
             l50.unk0 = 1;
-            l50.unk21 = 1;
+            l50.layer = 1;
             Vf9(&l50);
             unk344c = 1;
         }
@@ -9447,7 +9447,7 @@ void CNanase::Unk47c130()
         if (timer >= l4) {
             timer = 0;
             frame++;
-            unk168 = 0;
+            m_attackResult = 0;
             if (frame >= x8) {
                 pattern = 0;
                 Vf0();
@@ -9460,20 +9460,20 @@ void CNanase::Unk47c130()
             vx = 0.0;
             vy = 0.0;
             ay = 0.0;
-            unk16c = 1;
+            m_hitsLeft = 1;
         }
         CPlayer::Unk410a80(0x32, 3);
         if (frame == 0 && timer == 0) {
             unk14c = 0x78;
-            unk148 = unk148 - 0x7d0;
+            m_gauge = m_gauge - 0x7d0;
             CPlayer::Unk410b10(0xb0, 3);
             l50.type = 9;
             l50.unk2c = 5;
             l50.x = (double)(int)x;
             l50.y = (double)((int)y - 0x2b);
-            l50.unk20 = 2;
+            l50.scale = 2;
             l50.unk0 = 1;
-            l50.unk21 = 1;
+            l50.layer = 1;
             m_game->CreateEffect((EffectDesc*)&l50);
         }
         if (frame == 0xc && timer == 0) {
@@ -9482,13 +9482,13 @@ void CNanase::Unk47c130()
             l50.x = (double)((int)x + facing * 0x28);
             l50.y = (double)((int)y - 0x28);
             l50.unk18 = facing;
-            l50.unk20 = 0;
+            l50.scale = 0;
             l50.unk0 = 1;
-            l50.unk21 = 1;
+            l50.layer = 1;
             l50.unk28 = 1;
             Vf9(&l50);
             l50.type = 0x1a7;
-            l50.unk20 = 2;
+            l50.scale = 2;
             l50.unk0 = 1;
             l50.unk18 = facing;
             Vf9(&l50);
@@ -9499,7 +9499,7 @@ void CNanase::Unk47c130()
         if (timer >= l4) {
             timer = 0;
             frame++;
-            unk168 = 0;
+            m_attackResult = 0;
             if (frame >= x8) {
                 pattern = 0;
                 Vf0();
@@ -9512,20 +9512,20 @@ void CNanase::Unk47c130()
             vx = 0.0;
             vy = 0.0;
             ay = 0.0;
-            unk16c = 1;
+            m_hitsLeft = 1;
         }
         CPlayer::Unk410a80(0x32, 3);
         if (frame == 0 && timer == 0) {
             unk14c = 0x78;
-            unk148 = unk148 - 0xbb8;
+            m_gauge = m_gauge - 0xbb8;
             CPlayer::Unk410b10(0xb0, 3);
             l50.type = 9;
             l50.unk2c = 5;
             l50.x = (double)(int)x;
             l50.y = (double)((int)y - 0x2b);
-            l50.unk20 = 2;
+            l50.scale = 2;
             l50.unk0 = 1;
-            l50.unk21 = 1;
+            l50.layer = 1;
             m_game->CreateEffect((EffectDesc*)&l50);
             unk2c9 = 0x25;
         }
@@ -9538,13 +9538,13 @@ void CNanase::Unk47c130()
             l50.x = (double)((int)x + facing * 0x28);
             l50.y = (double)((int)y - 0x28);
             l50.unk18 = facing;
-            l50.unk20 = 0;
+            l50.scale = 0;
             l50.unk0 = 1;
-            l50.unk21 = 1;
+            l50.layer = 1;
             l50.unk28 = 1;
             Vf9(&l50);
             l50.type = 0x1a7;
-            l50.unk20 = 2;
+            l50.scale = 2;
             l50.unk0 = 1;
             l50.unk18 = facing;
             Vf9(&l50);
@@ -9555,7 +9555,7 @@ void CNanase::Unk47c130()
         if (timer >= l4) {
             timer = 0;
             frame++;
-            unk168 = 0;
+            m_attackResult = 0;
             if (frame >= x8) {
                 pattern = 0;
                 Vf0();

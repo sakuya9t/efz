@@ -9,7 +9,7 @@
 #include <math.h>
 #include "efz.h"
 
-int CPlayer::Unk40e630()
+int CPlayer::FaceOpponent()
 {
     char v1;
 
@@ -25,7 +25,7 @@ int CPlayer::Unk40e630()
     return 0;
 }
 
-int CPlayer::Unk40e6c0(double p1)
+int CPlayer::FaceX(double p1)
 {
     char v1;
 
@@ -49,23 +49,23 @@ void CPlayer::Unk40e740()
     }
     if (y >= 0.0 && pattern != 4 && pattern != 5 && pattern != 6 && pattern != 0xa && pattern != 0xb && pattern != 0xc) {
         if (unk15c < 3 && m_inputY == -1) {
-            Unk40e630();
-            if (unk262 >= 3 && unk262 <= 5) {
-                if (unk262 == 3) {
+            FaceOpponent();
+            if (m_command >= 3 && m_command <= 5) {
+                if (m_command == 3) {
                     if (pattern != 0xa) {
                         Vf0();
                     }
                     pattern = 0xa;
                     return;
                 }
-                if (unk262 == 4) {
+                if (m_command == 4) {
                     if (pattern != 0xb) {
                         Vf0();
                     }
                     pattern = 0xb;
                     return;
                 }
-                if (unk262 == 5) {
+                if (m_command == 5) {
                     if (pattern != 0xc) {
                         Vf0();
                     }
@@ -100,18 +100,18 @@ void CPlayer::Unk40e740()
             if (pattern != 8 && pattern != 3) {
                 pattern = 8;
                 Vf0();
-                Unk40e630();
+                FaceOpponent();
                 return;
             }
             if (pattern != 8) {
                 pattern = 3;
-                Unk40e630();
+                FaceOpponent();
                 return;
             }
             return;
         }
         if (m_inputX != 0) {
-            Unk40e630();
+            FaceOpponent();
             if (m_inputX == facing) {
                 if (pattern != 1) {
                     Vf0();
@@ -127,19 +127,19 @@ void CPlayer::Unk40e740()
         }
         if (pattern == 3 || pattern == 8) {
             pattern = 7;
-            Unk40e630();
+            FaceOpponent();
             Vf0();
             return;
         }
         if (pattern == 7 || pattern == 0xd) {
-            Unk40e630();
+            FaceOpponent();
             return;
         }
         if (pattern != 0) {
             Vf0();
         }
         pattern = 0;
-        Unk40e630();
+        FaceOpponent();
     }
 }
 
@@ -166,11 +166,11 @@ CPlayer::CPlayer(int p1, int p2, int p3, int p4, int p5, BYTE p6)
     surfaces = (IDirectDrawSurface**)0;
     anims = (EffectAnim*)(int)(char*)new EffectAnim[0x1f9];
     m_patterns = (PatternData*)(int)(char*)new PatternData[0x1f9];
-    unk30c8 = 0;
-    unk30cc = 0;
-    unk30d0 = 0;
-    unk30d4 = 0;
-    unk30d8 = 0;
+    m_score = 0;
+    m_scoreHigh = 0;
+    m_hitsLanded = 0;
+    m_maxHits = 0;
+    m_maxDamage = 0;
     unk30e8 = 0;
 }
 
@@ -205,7 +205,7 @@ void CPlayer::Vf12()
     x = m_side * 0xa0 + 0xf0;
     y = 0.0;
     facing = 1 - (m_side << 1);
-    Unk40f1e0();
+    StopMoving();
     unkb0 = 0.0;
     unkd0 = 0;
     pattern = 0;
@@ -213,10 +213,10 @@ void CPlayer::Vf12()
     timer = 0;
     unk30bc = 0;
     unk30c4 = 0;
-    unk108 = 0x270f;
-    unk10c = 0x270f;
+    m_hp = 0x270f;
+    m_comboStartHp = 0x270f;
     unk110 = 0x270f;
-    unk148 = 0;
+    m_gauge = 0;
     unk118 = 0.0;
     unk120 = 0;
     unk14c = 0;
@@ -233,19 +233,19 @@ void CPlayer::Vf12()
     unk140 = 0;
     unk15c = 0;
     unk160 = 0;
-    unk168 = 0;
+    m_attackResult = 0;
     unk14a = 0;
     *(int*)&unk134 = 0;
-    unk174 = 0;
-    unkf4 = 0;
-    unk104 = 0;
-    unk178 = 10000.0;
-    unkf8 = 10000.0;
+    m_comboHits = 0;
+    m_shownHits = 0;
+    m_comboTimer = 0;
+    m_proration = 10000.0;
+    m_shownProration = 10000.0;
     unk170 = 0;
-    unk180 = 1.0;
+    m_defense = 1.0;
     unk1a8 = 0;
     unk1a9 = 0;
-    unk262 = 0x63;
+    m_command = 0x63;
     m_inputPos = 0;
     v4 = 0;
     for (; v4 < 0xb4; v4++) {
@@ -264,8 +264,8 @@ void CPlayer::Vf12()
     unk58 = 0;
     unk60 = 1;
     unk30dc = 0;
-    unk30d4 = 0;
-    unk30d8 = 0;
+    m_maxHits = 0;
+    m_maxDamage = 0;
 }
 
 void CPlayer::Vf0()
@@ -273,7 +273,7 @@ void CPlayer::Vf0()
     frame = 0;
     timer = 0;
     unkb8 = 0.0;
-    unk168 = 0;
+    m_attackResult = 0;
     unk170 = 0;
     (&m_afterimages)->Unk412910();
 }
@@ -284,7 +284,7 @@ void CPlayer::Unk40f170()
     unk1a9 = 0;
 }
 
-void CPlayer::Unk40f190()
+void CPlayer::ClearInput()
 {
     int v4;
 
@@ -292,10 +292,10 @@ void CPlayer::Unk40f190()
     for (; v4 < 0xb4; v4++) {
         m_inputHistory[v4] = 0;
     }
-    unk262 = 0x63;
+    m_command = 0x63;
 }
 
-void CPlayer::Unk40f1e0()
+void CPlayer::StopMoving()
 {
     vx = 0.0;
     vy = 0.0;
@@ -310,11 +310,11 @@ void CPlayer::Unk40f230()
         if (pattern < 0x32 || pattern > 0x96 || pattern == 0x60) {
             unk124 = 0;
             unk12c = 0;
-            (*m_opponent)->unk174 = 0;
-            if ((*m_opponent)->unk178 > 10000.0) {
-                (*m_opponent)->unk178 -= 20.0;
+            (*m_opponent)->m_comboHits = 0;
+            if ((*m_opponent)->m_proration > 10000.0) {
+                (*m_opponent)->m_proration -= 20.0;
             } else {
-                (*m_opponent)->unk178 = 10000.0;
+                (*m_opponent)->m_proration = 10000.0;
             }
         }
         if (pattern < 0x32) {
@@ -322,8 +322,8 @@ void CPlayer::Unk40f230()
             unkb8 = 0.0;
             (*m_opponent)->unkb8 = 0.0;
             if (unk30ec != 0 && (*m_opponent)->pattern < 0x32) {
-                unk148 = 0xbb8;
-                unk108 = unk30ee;
+                m_gauge = 0xbb8;
+                m_hp = unk30ee;
                 if (unk30ec > 0) {
                     if (unk30ec < 0x3e8) {
                         unk118 = unk30ec;
@@ -483,17 +483,17 @@ void CPlayer::Unk40f980()
                 if ((unsigned long)unk30e0 > 1) {
                     unk30e0--;
                 }
-                if ((unsigned long)unk30d0 > 0) {
-                    unk30d0--;
+                if ((unsigned long)m_hitsLanded > 0) {
+                    m_hitsLanded--;
                 }
                 unk30e4 = unk30e0 * 5 * 3;
             }
         }
     }
-    if (unk148 < 0) {
-        unk148 = 0;
-    } else if (unk148 > 0xbb8) {
-        unk148 = 0xbb8;
+    if (m_gauge < 0) {
+        m_gauge = 0;
+    } else if (m_gauge > 0xbb8) {
+        m_gauge = 0xbb8;
     }
     if (unk118 < 0.0) {
         unk118 = 0.0;
@@ -504,8 +504,8 @@ void CPlayer::Unk40f980()
     if (unk30f0 <= 0) {
         unk30f0 = 0x3138;
     }
-    if (unk104 > 0 && unk174 == 0) {
-        unk104--;
+    if (m_comboTimer > 0 && m_comboHits == 0) {
+        m_comboTimer--;
     }
 }
 
@@ -591,7 +591,7 @@ int CPlayer::Unk410420()
     return pattern == 0xa3 || pattern == 0xa4 || pattern == 0xa5 || pattern == 0xa6;
 }
 
-double CPlayer::Unk410480()
+double CPlayer::AttackFactor()
 {
     if (m_game->unk1364 == 2) {
         return unk118 / 10000.0 + 1.0;
@@ -605,74 +605,74 @@ double CPlayer::Unk410480()
     return (unk118 / 10000.0 + 1.0) * 2;
 }
 
-double CPlayer::Unk410530()
+double CPlayer::DefenseFactor()
 {
-    return (unk108 * 0.5 / 10000.0 + 0.5) * unk180;
+    return (m_hp * 0.5 / 10000.0 + 0.5) * m_defense;
 }
 
-double CPlayer::Unk410560()
+double CPlayer::ProrationFactor()
 {
-    if (unk178 / 10000.0 > 1.0) {
+    if (m_proration / 10000.0 > 1.0) {
         return 1.0;
     }
-    return unk178 / 10000.0;
+    return m_proration / 10000.0;
 }
 
-void CPlayer::Unk4105a0(int p1, double p2)
+void CPlayer::DealDamage(int p1, double p2)
 {
-    if (unk174 == 0) {
-        (*m_opponent)->unk10c = (*m_opponent)->unk108;
+    if (m_comboHits == 0) {
+        (*m_opponent)->m_comboStartHp = (*m_opponent)->m_hp;
     }
-    (*m_opponent)->unk108 -= (int)((double)p1 * this->Unk410480() * (*m_opponent)->Unk410530() * this->Unk410560());
-    unkf8 = unk178 / 100.0;
-    unk178 = p2 / 1000.0 * unk178;
-    if (unk178 > 10000.0) {
-        unk178 = p2 / 1000.0 * unk178;
+    (*m_opponent)->m_hp -= (int)((double)p1 * this->AttackFactor() * (*m_opponent)->DefenseFactor() * this->ProrationFactor());
+    m_shownProration = m_proration / 100.0;
+    m_proration = p2 / 1000.0 * m_proration;
+    if (m_proration > 10000.0) {
+        m_proration = p2 / 1000.0 * m_proration;
     }
-    unk174++;
-    unkf4 = unk174;
-    unk104 = 0xb4;
-    unk100 = (*m_opponent)->unk10c - (*m_opponent)->unk108;
-    if ((DWORD)unk174 > unk30d4) {
-        unk30d4 = unk174;
+    m_comboHits++;
+    m_shownHits = m_comboHits;
+    m_comboTimer = 0xb4;
+    m_comboDamage = (*m_opponent)->m_comboStartHp - (*m_opponent)->m_hp;
+    if ((DWORD)m_comboHits > m_maxHits) {
+        m_maxHits = m_comboHits;
     }
-    if ((unsigned long)unk100 > unk30d8) {
-        unk30d8 = unk100;
+    if ((unsigned long)m_comboDamage > m_maxDamage) {
+        m_maxDamage = m_comboDamage;
     }
-    unk30d0++;
-    Unk410840(p1 / 0x64 * unk30d0 * unk30d4 * unk174);
+    m_hitsLanded++;
+    AddScore(p1 / 0x64 * m_hitsLanded * m_maxHits * m_comboHits);
 }
 
 void CPlayer::Unk410790(int p1)
 {
-    if ((DWORD)unk174 > unk30d4) {
-        unk30d4 = unk174;
+    if ((DWORD)m_comboHits > m_maxHits) {
+        m_maxHits = m_comboHits;
     }
-    if ((unsigned long)unk100 > unk30d8) {
-        unk30d8 = unk100;
+    if ((unsigned long)m_comboDamage > m_maxDamage) {
+        m_maxDamage = m_comboDamage;
     }
-    unk30d0++;
-    Unk410840(*(short*)((char*)p1 + 0xa0) / 0x64 * unk30d0 * unk30d4 * unk174);
+    m_hitsLanded++;
+    AddScore(*(short*)((char*)p1 + 0xa0) / 0x64 * m_hitsLanded * m_maxHits * m_comboHits);
 }
 
-void CPlayer::Unk410840(int p1)
+void CPlayer::AddScore(int p1)
 {
-    unk30c8 += p1;
-    while ((unsigned long)unk30c8 >= 0x5f5e100) {
-        unk30c8 -= 0x5f5e100;
-        unk30cc++;
+    m_score += p1;
+    while ((unsigned long)m_score >= 0x5f5e100) {
+        m_score -= 0x5f5e100;
+        m_scoreHigh++;
     }
 }
 
-short CPlayer::Unk4108a0(short p1, short p2)
+short CPlayer::Random(short p1, short p2)
 {
     WORD v8;
     short v4;
 
     v8 = rand();
-    if (m_game->unk14283 == 1) {
+    if (m_game->m_replayMode == 1) {
         v8 = (&m_game->m_replay)->Read();
-    } else if (m_game->unk14283 == 2) {
+    } else if (m_game->m_replayMode == 2) {
         (&m_game->m_replay)->Write(v8);
     }
     v4 = p1 + (p2 - p1) * v8 / 0x8000;
@@ -1018,14 +1018,14 @@ void CPlayer::Unk411be0()
             m_pressB = 0;
             m_pressC = 0;
             m_pressD = 0;
-            unk262 = 0x63;
+            m_command = 0x63;
         }
         return;
     }
     v1 = m_input->GetInput(m_side);
-    if (m_game->unk14283 == 1) {
+    if (m_game->m_replayMode == 1) {
         v1 = (&m_game->m_replay)->Read();
-    } else if (m_game->unk14283 == 2) {
+    } else if (m_game->m_replayMode == 2) {
         (&m_game->m_replay)->Write(v1);
     }
     m_inputX = 0;
@@ -1079,7 +1079,7 @@ void CPlayer::Unk411be0()
         m_pressB = 0;
         m_pressC = 0;
         m_pressD = 0;
-        unk262 = 0x63;
+        m_command = 0x63;
     }
     m_inputHistory[m_inputPos] = (m_inputX == 1) + (m_inputX == -1) * 2 + (m_inputY == 1) * 4 + (m_inputY == -1) * 8 + (m_pressA << 4) + (m_pressB << 5) + (m_pressC << 6) + (m_pressD << 7);
     if ((unsigned char)m_inputHistory[m_inputPos] >= 0x10) {

@@ -103,7 +103,7 @@ void CMizuka::Vf4()
     if (y == 0.0) {
         unk3458 = 0;
     }
-    if (unk262 == 0x34 && (unk118 >= 500.0 || unk120 > 0) && unk168 > 1 && unk168 != 6 && (m_patterns[pattern].frames[frame].flagsB0 & 8) > 0 && m_patterns[pattern].unk2 <= m_patterns[0xa7].unk0) {
+    if (m_command == 0x34 && (unk118 >= 500.0 || unk120 > 0) && m_attackResult > 1 && m_attackResult != 6 && (m_patterns[pattern].frames[frame].flagsB0 & 8) > 0 && m_patterns[pattern].unk2 <= m_patterns[0xa7].unk0) {
         Vf0();
         CPlayer::Unk40f170();
         pattern = 0xa7;
@@ -113,109 +113,109 @@ void CMizuka::Vf4()
         return;
     }
     if (unk15c < 2) {
-        if (unk262 == 0x84 && unk148 >= 0xbb8 && (m_patterns[pattern].frames[frame].flagsB0 & 8) > 0 && y == 0.0 && (pattern >= 0xc8 && unk168 >= 2 && unk168 != 6 || pattern < 0xc8) && m_patterns[pattern].unk2 <= m_patterns[0x13c].unk0) {
+        if (m_command == 0x84 && m_gauge >= 0xbb8 && (m_patterns[pattern].frames[frame].flagsB0 & 8) > 0 && y == 0.0 && (pattern >= 0xc8 && m_attackResult >= 2 && m_attackResult != 6 || pattern < 0xc8) && m_patterns[pattern].unk2 <= m_patterns[0x13c].unk0) {
             Vf0();
             CPlayer::Unk40f170();
             pattern = 0x13c;
             return;
         }
-        if (unk262 == 0x70 && unk148 >= 0xbb8 && (m_patterns[pattern].frames[frame].flagsB0 & 8) > 0 && y == 0.0 && (pattern >= 0xc8 && unk168 >= 2 && unk168 != 6 || pattern < 0xc8) && m_patterns[pattern].unk2 <= m_patterns[0x13a].unk0) {
+        if (m_command == 0x70 && m_gauge >= 0xbb8 && (m_patterns[pattern].frames[frame].flagsB0 & 8) > 0 && y == 0.0 && (pattern >= 0xc8 && m_attackResult >= 2 && m_attackResult != 6 || pattern < 0xc8) && m_patterns[pattern].unk2 <= m_patterns[0x13a].unk0) {
             Vf0();
             CPlayer::Unk40f170();
             pattern = 0x13a;
             return;
         }
-        if (unk262 == 0x66 && unk148 >= 0xbb8 && y == 0.0 && (m_patterns[pattern].frames[frame].flagsB0 & 8) > 0 && (pattern >= 0xc8 && unk168 >= 2 && unk168 != 6 || pattern < 0xc8) && m_patterns[pattern].unk2 <= m_patterns[0x12c].unk0) {
+        if (m_command == 0x66 && m_gauge >= 0xbb8 && y == 0.0 && (m_patterns[pattern].frames[frame].flagsB0 & 8) > 0 && (pattern >= 0xc8 && m_attackResult >= 2 && m_attackResult != 6 || pattern < 0xc8) && m_patterns[pattern].unk2 <= m_patterns[0x12c].unk0) {
             Vf0();
             CPlayer::Unk40f170();
             pattern = 0x12e;
             return;
         }
-        if ((unk262 == 0x65 || unk262 == 0x66) && unk148 >= 0x7d0 && y == 0.0 && (m_patterns[pattern].frames[frame].flagsB0 & 8) > 0 && (pattern >= 0xc8 && unk168 >= 2 && unk168 != 6 || pattern < 0xc8) && m_patterns[pattern].unk2 <= m_patterns[0x12d].unk0) {
+        if ((m_command == 0x65 || m_command == 0x66) && m_gauge >= 0x7d0 && y == 0.0 && (m_patterns[pattern].frames[frame].flagsB0 & 8) > 0 && (pattern >= 0xc8 && m_attackResult >= 2 && m_attackResult != 6 || pattern < 0xc8) && m_patterns[pattern].unk2 <= m_patterns[0x12d].unk0) {
             Vf0();
             CPlayer::Unk40f170();
             pattern = 0x12d;
             return;
         }
-        if ((unk262 == 0x64 || unk262 == 0x65 || unk262 == 0x66) && unk148 >= 0x3e8 && y == 0.0 && (m_patterns[pattern].frames[frame].flagsB0 & 8) > 0 && (pattern >= 0xc8 && unk168 >= 2 && unk168 != 6 || pattern < 0xc8) && m_patterns[pattern].unk2 <= m_patterns[0x12c].unk0) {
+        if ((m_command == 0x64 || m_command == 0x65 || m_command == 0x66) && m_gauge >= 0x3e8 && y == 0.0 && (m_patterns[pattern].frames[frame].flagsB0 & 8) > 0 && (pattern >= 0xc8 && m_attackResult >= 2 && m_attackResult != 6 || pattern < 0xc8) && m_patterns[pattern].unk2 <= m_patterns[0x12c].unk0) {
             Vf0();
             CPlayer::Unk40f170();
             pattern = 0x12c;
             return;
         }
-        if (unk262 == 0x7a && unk148 >= 0xbb8 && y == 0.0 && (m_patterns[pattern].frames[frame].flagsB0 & 8) > 0 && (pattern >= 0xc8 && unk168 >= 2 && unk168 != 6 || pattern < 0xc8) && m_patterns[pattern].unk2 <= m_patterns[0x131].unk0) {
+        if (m_command == 0x7a && m_gauge >= 0xbb8 && y == 0.0 && (m_patterns[pattern].frames[frame].flagsB0 & 8) > 0 && (pattern >= 0xc8 && m_attackResult >= 2 && m_attackResult != 6 || pattern < 0xc8) && m_patterns[pattern].unk2 <= m_patterns[0x131].unk0) {
             Vf0();
             CPlayer::Unk40f170();
             pattern = 0x131;
             return;
         }
-        if ((unk262 == 0x79 || unk262 == 0x7a) && unk148 >= 0x7d0 && y == 0.0 && (m_patterns[pattern].frames[frame].flagsB0 & 8) > 0 && (pattern >= 0xc8 && unk168 >= 2 && unk168 != 6 || pattern < 0xc8) && m_patterns[pattern].unk2 <= m_patterns[0x130].unk0) {
+        if ((m_command == 0x79 || m_command == 0x7a) && m_gauge >= 0x7d0 && y == 0.0 && (m_patterns[pattern].frames[frame].flagsB0 & 8) > 0 && (pattern >= 0xc8 && m_attackResult >= 2 && m_attackResult != 6 || pattern < 0xc8) && m_patterns[pattern].unk2 <= m_patterns[0x130].unk0) {
             Vf0();
             CPlayer::Unk40f170();
             pattern = 0x130;
             return;
         }
-        if ((unk262 == 0x78 || unk262 == 0x79 || unk262 == 0x7a) && unk148 >= 0x3e8 && y == 0.0 && (m_patterns[pattern].frames[frame].flagsB0 & 8) > 0 && (pattern >= 0xc8 && unk168 >= 2 && unk168 != 6 || pattern < 0xc8) && m_patterns[pattern].unk2 <= m_patterns[0x12f].unk0) {
+        if ((m_command == 0x78 || m_command == 0x79 || m_command == 0x7a) && m_gauge >= 0x3e8 && y == 0.0 && (m_patterns[pattern].frames[frame].flagsB0 & 8) > 0 && (pattern >= 0xc8 && m_attackResult >= 2 && m_attackResult != 6 || pattern < 0xc8) && m_patterns[pattern].unk2 <= m_patterns[0x12f].unk0) {
             Vf0();
             CPlayer::Unk40f170();
             pattern = 0x12f;
             return;
         }
-        if (unk262 == 0x16 && (unk118 >= 500.0 || unk120 > 0) && (m_patterns[pattern].frames[frame].flagsB0 & 8) > 0 && y == 0.0 && (pattern >= 0xc8 && unk168 >= 2 && unk168 != 6 || pattern < 0xc8) && m_patterns[pattern].unk2 <= m_patterns[0x105].unk0) {
+        if (m_command == 0x16 && (unk118 >= 500.0 || unk120 > 0) && (m_patterns[pattern].frames[frame].flagsB0 & 8) > 0 && y == 0.0 && (pattern >= 0xc8 && m_attackResult >= 2 && m_attackResult != 6 || pattern < 0xc8) && m_patterns[pattern].unk2 <= m_patterns[0x105].unk0) {
             Vf0();
             CPlayer::Unk40f170();
             pattern = 0x105;
             return;
         }
-        if ((unk262 == 0x14 || unk262 == 0x15 || unk262 == 0x16) && (m_patterns[pattern].frames[frame].flagsB0 & 8) > 0 && y == 0.0 && (pattern >= 0xc8 && unk168 >= 2 && unk168 != 6 || pattern < 0xc8) && m_patterns[pattern].unk2 <= m_patterns[0x103].unk0) {
+        if ((m_command == 0x14 || m_command == 0x15 || m_command == 0x16) && (m_patterns[pattern].frames[frame].flagsB0 & 8) > 0 && y == 0.0 && (pattern >= 0xc8 && m_attackResult >= 2 && m_attackResult != 6 || pattern < 0xc8) && m_patterns[pattern].unk2 <= m_patterns[0x103].unk0) {
             Vf0();
             CPlayer::Unk40f170();
             pattern = 0x103;
             return;
         }
-        if ((unk262 == 0x20 || unk262 == 0x1f || unk262 == 0x1e) && (m_patterns[pattern].frames[frame].flagsB0 & 8) > 0 && y < 0.0 && (pattern >= 0xc8 && unk168 >= 2 && unk168 != 6 || pattern < 0xc8) && m_patterns[pattern].unk2 <= m_patterns[0x109].unk0) {
+        if ((m_command == 0x20 || m_command == 0x1f || m_command == 0x1e) && (m_patterns[pattern].frames[frame].flagsB0 & 8) > 0 && y < 0.0 && (pattern >= 0xc8 && m_attackResult >= 2 && m_attackResult != 6 || pattern < 0xc8) && m_patterns[pattern].unk2 <= m_patterns[0x109].unk0) {
             Vf0();
             CPlayer::Unk40f170();
             pattern = 0x109;
             return;
         }
-        if (unk262 == 0x20 && (unk118 >= 500.0 || unk120 > 0) && (m_patterns[pattern].frames[frame].flagsB0 & 8) > 0 && y == 0.0 && (pattern >= 0xc8 && unk168 >= 2 && unk168 != 6 || pattern < 0xc8) && m_patterns[pattern].unk2 <= m_patterns[0xff].unk0) {
+        if (m_command == 0x20 && (unk118 >= 500.0 || unk120 > 0) && (m_patterns[pattern].frames[frame].flagsB0 & 8) > 0 && y == 0.0 && (pattern >= 0xc8 && m_attackResult >= 2 && m_attackResult != 6 || pattern < 0xc8) && m_patterns[pattern].unk2 <= m_patterns[0xff].unk0) {
             Vf0();
             CPlayer::Unk40f170();
             pattern = 0xff;
             return;
         }
-        if ((unk262 == 0x1f || unk262 == 0x20) && (m_patterns[pattern].frames[frame].flagsB0 & 8) > 0 && y == 0.0 && (pattern >= 0xc8 && unk168 >= 2 && unk168 != 6 || pattern < 0xc8) && m_patterns[pattern].unk2 <= m_patterns[0xfe].unk0) {
+        if ((m_command == 0x1f || m_command == 0x20) && (m_patterns[pattern].frames[frame].flagsB0 & 8) > 0 && y == 0.0 && (pattern >= 0xc8 && m_attackResult >= 2 && m_attackResult != 6 || pattern < 0xc8) && m_patterns[pattern].unk2 <= m_patterns[0xfe].unk0) {
             Vf0();
             CPlayer::Unk40f170();
             pattern = 0xfe;
             return;
         }
-        if (unk262 == 0x1e && (m_patterns[pattern].frames[frame].flagsB0 & 8) > 0 && y == 0.0 && (pattern >= 0xc8 && unk168 >= 2 && unk168 != 6 || pattern < 0xc8) && m_patterns[pattern].unk2 <= m_patterns[0xfd].unk0) {
+        if (m_command == 0x1e && (m_patterns[pattern].frames[frame].flagsB0 & 8) > 0 && y == 0.0 && (pattern >= 0xc8 && m_attackResult >= 2 && m_attackResult != 6 || pattern < 0xc8) && m_patterns[pattern].unk2 <= m_patterns[0xfd].unk0) {
             Vf0();
             CPlayer::Unk40f170();
             pattern = 0xfd;
             return;
         }
-        if (unk262 == 0x48 && (m_patterns[pattern].frames[frame].flagsB0 & 8) > 0 && y == 0.0 && (pattern >= 0xc8 && unk168 >= 2 && unk168 != 6 || pattern < 0xc8) && m_patterns[pattern].unk2 <= m_patterns[0x102].unk0) {
+        if (m_command == 0x48 && (m_patterns[pattern].frames[frame].flagsB0 & 8) > 0 && y == 0.0 && (pattern >= 0xc8 && m_attackResult >= 2 && m_attackResult != 6 || pattern < 0xc8) && m_patterns[pattern].unk2 <= m_patterns[0x102].unk0) {
             Vf0();
             CPlayer::Unk40f170();
             pattern = 0x102;
             return;
         }
-        if (unk262 == 0x47 && (m_patterns[pattern].frames[frame].flagsB0 & 8) > 0 && y == 0.0 && (pattern >= 0xc8 && unk168 >= 2 && unk168 != 6 || pattern < 0xc8) && m_patterns[pattern].unk2 <= m_patterns[0x101].unk0) {
+        if (m_command == 0x47 && (m_patterns[pattern].frames[frame].flagsB0 & 8) > 0 && y == 0.0 && (pattern >= 0xc8 && m_attackResult >= 2 && m_attackResult != 6 || pattern < 0xc8) && m_patterns[pattern].unk2 <= m_patterns[0x101].unk0) {
             Vf0();
             CPlayer::Unk40f170();
             pattern = 0x101;
             return;
         }
-        if (unk262 == 0x46 && (m_patterns[pattern].frames[frame].flagsB0 & 8) > 0 && y == 0.0 && (pattern >= 0xc8 && unk168 >= 2 && unk168 != 6 || pattern < 0xc8) && m_patterns[pattern].unk2 <= m_patterns[0x100].unk0) {
+        if (m_command == 0x46 && (m_patterns[pattern].frames[frame].flagsB0 & 8) > 0 && y == 0.0 && (pattern >= 0xc8 && m_attackResult >= 2 && m_attackResult != 6 || pattern < 0xc8) && m_patterns[pattern].unk2 <= m_patterns[0x100].unk0) {
             Vf0();
             CPlayer::Unk40f170();
             pattern = 0x100;
             return;
         }
-        if (unk262 == 0xc && (unk118 >= 500.0 || unk120 > 0) && (m_patterns[pattern].frames[frame].flagsB0 & 8) > 0 && (pattern >= 0xc8 && unk168 >= 2 && unk168 != 6 || pattern < 0xc8) && m_patterns[pattern].unk2 <= m_patterns[0xfc].unk0) {
+        if (m_command == 0xc && (unk118 >= 500.0 || unk120 > 0) && (m_patterns[pattern].frames[frame].flagsB0 & 8) > 0 && (pattern >= 0xc8 && m_attackResult >= 2 && m_attackResult != 6 || pattern < 0xc8) && m_patterns[pattern].unk2 <= m_patterns[0xfc].unk0) {
             Vf0();
             CPlayer::Unk40f170();
             pattern = 0xfc;
@@ -224,7 +224,7 @@ void CMizuka::Vf4()
             }
             return;
         }
-        if ((unk262 == 0xb || unk262 == 0xc) && (m_patterns[pattern].frames[frame].flagsB0 & 8) > 0 && (pattern >= 0xc8 && unk168 >= 2 && unk168 != 6 || pattern < 0xc8) && m_patterns[pattern].unk2 <= m_patterns[0xfb].unk0) {
+        if ((m_command == 0xb || m_command == 0xc) && (m_patterns[pattern].frames[frame].flagsB0 & 8) > 0 && (pattern >= 0xc8 && m_attackResult >= 2 && m_attackResult != 6 || pattern < 0xc8) && m_patterns[pattern].unk2 <= m_patterns[0xfb].unk0) {
             Vf0();
             CPlayer::Unk40f170();
             pattern = 0xfb;
@@ -233,7 +233,7 @@ void CMizuka::Vf4()
             }
             return;
         }
-        if (unk262 == 0xa && (m_patterns[pattern].frames[frame].flagsB0 & 8) > 0 && (pattern >= 0xc8 && unk168 >= 2 && unk168 != 6 || pattern < 0xc8) && m_patterns[pattern].unk2 <= m_patterns[0xfa].unk0) {
+        if (m_command == 0xa && (m_patterns[pattern].frames[frame].flagsB0 & 8) > 0 && (pattern >= 0xc8 && m_attackResult >= 2 && m_attackResult != 6 || pattern < 0xc8) && m_patterns[pattern].unk2 <= m_patterns[0xfa].unk0) {
             Vf0();
             CPlayer::Unk40f170();
             pattern = 0xfa;
@@ -243,25 +243,25 @@ void CMizuka::Vf4()
             return;
         }
     }
-    if (unk15c < 1 && (unk262 == 0 || unk262 == 1)) {
+    if (unk15c < 1 && (m_command == 0 || m_command == 1)) {
         if (y < 0.0 && unk159 < 1) {
-            if ((((*m_opponent)->x - x) * (1 - (unk262 << 1)) < 0.0 || 0.0 == (*m_opponent)->x - x && facing == (1 - (unk262 << 1)) * -1) && m_patterns[pattern].unk2 <= m_patterns[0xa5].unk0 && pattern != 0xaa && (y < -40.0 || unk3458 > 0) && (m_patterns[pattern].frames[frame].flagsB0 & 8) > 0 && (pattern >= 0xc8 && unk168 >= 2 && unk168 != 6 || pattern < 0xc8)) {
+            if ((((*m_opponent)->x - x) * (1 - (m_command << 1)) < 0.0 || 0.0 == (*m_opponent)->x - x && facing == (1 - (m_command << 1)) * -1) && m_patterns[pattern].unk2 <= m_patterns[0xa5].unk0 && pattern != 0xaa && (y < -40.0 || unk3458 > 0) && (m_patterns[pattern].frames[frame].flagsB0 & 8) > 0 && (pattern >= 0xc8 && m_attackResult >= 2 && m_attackResult != 6 || pattern < 0xc8)) {
                 if (pattern != 0xa5) {
                     Vf0();
                 }
                 pattern = 0xa5;
-                CPlayer::Unk40e630();
+                CPlayer::FaceOpponent();
                 unk159++;
                 unk15a++;
                 unk1a8 = 0;
                 return;
             }
-            if ((((*m_opponent)->x - x) * (1 - (unk262 << 1)) > 0.0 || 0.0 == (*m_opponent)->x - x && facing == 1 - (unk262 << 1)) && m_patterns[pattern].unk2 <= m_patterns[0xa6].unk0 && pattern != 0xaa && (m_patterns[pattern].frames[frame].flagsB0 & 8) > 0 && (pattern >= 0xc8 && unk168 >= 2 && unk168 != 6 || pattern < 0xc8)) {
+            if ((((*m_opponent)->x - x) * (1 - (m_command << 1)) > 0.0 || 0.0 == (*m_opponent)->x - x && facing == 1 - (m_command << 1)) && m_patterns[pattern].unk2 <= m_patterns[0xa6].unk0 && pattern != 0xaa && (m_patterns[pattern].frames[frame].flagsB0 & 8) > 0 && (pattern >= 0xc8 && m_attackResult >= 2 && m_attackResult != 6 || pattern < 0xc8)) {
                 if (pattern != 0xa6) {
                     Vf0();
                 }
                 pattern = 0xa6;
-                CPlayer::Unk40e630();
+                CPlayer::FaceOpponent();
                 unk159++;
                 unk15a++;
                 unk1a8 = 0;
@@ -269,29 +269,29 @@ void CMizuka::Vf4()
             }
         }
         if (y == 0.0 && (m_patterns[pattern].frames[frame].flagsB0 & 8) > 0) {
-            if ((((*m_opponent)->x - x) * (1 - (unk262 << 1)) < 0.0 || 0.0 == (*m_opponent)->x - x && facing == (1 - (unk262 << 1)) * -1) && m_patterns[pattern].unk2 <= m_patterns[0xa3].unk0 && (pattern >= 0xc8 && unk168 >= 2 && unk168 != 6 || pattern < 0xc8)) {
+            if ((((*m_opponent)->x - x) * (1 - (m_command << 1)) < 0.0 || 0.0 == (*m_opponent)->x - x && facing == (1 - (m_command << 1)) * -1) && m_patterns[pattern].unk2 <= m_patterns[0xa3].unk0 && (pattern >= 0xc8 && m_attackResult >= 2 && m_attackResult != 6 || pattern < 0xc8)) {
                 if (pattern != 0xa3) {
                     Vf0();
                 }
                 pattern = 0xa3;
-                CPlayer::Unk40e630();
+                CPlayer::FaceOpponent();
                 unk158++;
                 unk1a8 = 0;
                 return;
             }
-            if ((((*m_opponent)->x - x) * (1 - (unk262 << 1)) > 0.0 || 0.0 == (*m_opponent)->x - x && facing == 1 - (unk262 << 1)) && m_patterns[pattern].unk2 <= m_patterns[0xa4].unk0 && (pattern >= 0xc8 && unk168 >= 2 && unk168 != 6 || pattern < 0xc8)) {
+            if ((((*m_opponent)->x - x) * (1 - (m_command << 1)) > 0.0 || 0.0 == (*m_opponent)->x - x && facing == 1 - (m_command << 1)) && m_patterns[pattern].unk2 <= m_patterns[0xa4].unk0 && (pattern >= 0xc8 && m_attackResult >= 2 && m_attackResult != 6 || pattern < 0xc8)) {
                 if (pattern != 0xa4) {
                     Vf0();
                 }
                 pattern = 0xa4;
-                CPlayer::Unk40e630();
+                CPlayer::FaceOpponent();
                 unk158++;
                 unk1a8 = 0;
                 return;
             }
         }
     }
-    if (unk15c < 3 && unk262 == 6 && (m_patterns[pattern].frames[frame].flagsB0 & 8) > 0 && y < 0.0 && unk15a < 1 && (pattern >= 0xc8 && unk168 >= 2 && unk168 != 6 || pattern < 0xc8) && m_patterns[pattern].unk2 <= m_patterns[0xe].unk0) {
+    if (unk15c < 3 && m_command == 6 && (m_patterns[pattern].frames[frame].flagsB0 & 8) > 0 && y < 0.0 && unk15a < 1 && (pattern >= 0xc8 && m_attackResult >= 2 && m_attackResult != 6 || pattern < 0xc8) && m_patterns[pattern].unk2 <= m_patterns[0xe].unk0) {
         Vf0();
         CPlayer::Unk40f170();
         unk15a++;
@@ -312,20 +312,20 @@ void CMizuka::Vf4()
             return;
         }
         if (y < 0.0) {
-            if (m_patterns[pattern].unk2 <= m_patterns[0xcf].unk0 && (m_patterns[pattern].frames[frame].flagsB0 & 8) > 0 && (pattern >= 0xc8 && unk168 >= 2 && unk168 != 6 || pattern < 0xc8)) {
+            if (m_patterns[pattern].unk2 <= m_patterns[0xcf].unk0 && (m_patterns[pattern].frames[frame].flagsB0 & 8) > 0 && (pattern >= 0xc8 && m_attackResult >= 2 && m_attackResult != 6 || pattern < 0xc8)) {
                 Vf0();
                 CPlayer::Unk40f170();
                 pattern = 0xcf;
             }
             return;
         }
-        if ((m_inputY == 1 || (unk1a8 & 4) != 0 || (unk1a9 & 4) != 0) && m_patterns[pattern].unk2 <= m_patterns[0xcc].unk0 && (m_patterns[pattern].frames[frame].flagsB0 & 8) > 0 && (pattern >= 0xc8 && unk168 >= 2 && unk168 != 6 || pattern < 0xc8)) {
+        if ((m_inputY == 1 || (unk1a8 & 4) != 0 || (unk1a9 & 4) != 0) && m_patterns[pattern].unk2 <= m_patterns[0xcc].unk0 && (m_patterns[pattern].frames[frame].flagsB0 & 8) > 0 && (pattern >= 0xc8 && m_attackResult >= 2 && m_attackResult != 6 || pattern < 0xc8)) {
             Vf0();
             CPlayer::Unk40f170();
             pattern = 0xcc;
             return;
         }
-        if ((m_inputY == 0 || (unk1a8 & 4) == 0 || (unk1a9 & 4) == 0) && m_patterns[pattern].unk2 <= m_patterns[0xc8].unk0 && (m_patterns[pattern].frames[frame].flagsB0 & 8) > 0 && (pattern >= 0xc8 && unk168 >= 2 && unk168 != 6 || pattern < 0xc8)) {
+        if ((m_inputY == 0 || (unk1a8 & 4) == 0 || (unk1a9 & 4) == 0) && m_patterns[pattern].unk2 <= m_patterns[0xc8].unk0 && (m_patterns[pattern].frames[frame].flagsB0 & 8) > 0 && (pattern >= 0xc8 && m_attackResult >= 2 && m_attackResult != 6 || pattern < 0xc8)) {
             Vf0();
             CPlayer::Unk40f170();
             pattern = 0xc8;
@@ -340,27 +340,27 @@ void CMizuka::Vf4()
             return;
         }
         if (y < 0.0) {
-            if (m_patterns[pattern].unk2 <= m_patterns[0xd0].unk0 && (m_patterns[pattern].frames[frame].flagsB0 & 8) > 0 && (pattern >= 0xc8 && unk168 >= 2 && unk168 != 6 || pattern < 0xc8)) {
+            if (m_patterns[pattern].unk2 <= m_patterns[0xd0].unk0 && (m_patterns[pattern].frames[frame].flagsB0 & 8) > 0 && (pattern >= 0xc8 && m_attackResult >= 2 && m_attackResult != 6 || pattern < 0xc8)) {
                 Vf0();
                 CPlayer::Unk40f170();
                 pattern = 0xd0;
             }
             return;
         }
-        if ((m_inputY == 1 || (unk1a8 & 4) != 0 || (unk1a9 & 4) != 0) && m_patterns[pattern].unk2 <= m_patterns[0xcd].unk0 && (m_patterns[pattern].frames[frame].flagsB0 & 8) > 0 && (pattern >= 0xc8 && unk168 >= 2 && unk168 != 6 || pattern < 0xc8)) {
+        if ((m_inputY == 1 || (unk1a8 & 4) != 0 || (unk1a9 & 4) != 0) && m_patterns[pattern].unk2 <= m_patterns[0xcd].unk0 && (m_patterns[pattern].frames[frame].flagsB0 & 8) > 0 && (pattern >= 0xc8 && m_attackResult >= 2 && m_attackResult != 6 || pattern < 0xc8)) {
             Vf0();
             CPlayer::Unk40f170();
             pattern = 0xcd;
             return;
         }
         if (m_inputY == 0 || (unk1a8 & 4) == 0 || (unk1a9 & 4) == 0) {
-            if (m_patterns[pattern].unk2 <= m_patterns[0xc9].unk0 && (m_patterns[pattern].frames[frame].flagsB0 & 8) > 0 && x - (*m_opponent)->x > -70.0 && x - (*m_opponent)->x < 70.0 && (pattern >= 0xc8 && unk168 >= 2 && unk168 != 6 || pattern < 0xc8)) {
+            if (m_patterns[pattern].unk2 <= m_patterns[0xc9].unk0 && (m_patterns[pattern].frames[frame].flagsB0 & 8) > 0 && x - (*m_opponent)->x > -70.0 && x - (*m_opponent)->x < 70.0 && (pattern >= 0xc8 && m_attackResult >= 2 && m_attackResult != 6 || pattern < 0xc8)) {
                 Vf0();
                 CPlayer::Unk40f170();
                 pattern = 0xc9;
                 return;
             }
-            if (m_patterns[pattern].unk2 <= m_patterns[0xca].unk0 && (m_patterns[pattern].frames[frame].flagsB0 & 8) > 0 && (pattern >= 0xc8 && unk168 >= 2 && unk168 != 6 || pattern < 0xc8)) {
+            if (m_patterns[pattern].unk2 <= m_patterns[0xca].unk0 && (m_patterns[pattern].frames[frame].flagsB0 & 8) > 0 && (pattern >= 0xc8 && m_attackResult >= 2 && m_attackResult != 6 || pattern < 0xc8)) {
                 Vf0();
                 CPlayer::Unk40f170();
                 pattern = 0xca;
@@ -376,33 +376,33 @@ void CMizuka::Vf4()
             return;
         }
         if (y < 0.0) {
-            if (m_patterns[pattern].unk2 <= m_patterns[0xd2].unk0 && m_inputX == facing && m_inputY == 0 && (m_patterns[pattern].frames[frame].flagsB0 & 8) > 0 && (pattern >= 0xc8 && unk168 >= 2 && unk168 != 6 || pattern < 0xc8)) {
+            if (m_patterns[pattern].unk2 <= m_patterns[0xd2].unk0 && m_inputX == facing && m_inputY == 0 && (m_patterns[pattern].frames[frame].flagsB0 & 8) > 0 && (pattern >= 0xc8 && m_attackResult >= 2 && m_attackResult != 6 || pattern < 0xc8)) {
                 Vf0();
                 CPlayer::Unk40f170();
                 pattern = 0xd2;
                 return;
             }
-            if (m_patterns[pattern].unk2 <= m_patterns[0xd1].unk0 && (m_patterns[pattern].frames[frame].flagsB0 & 8) > 0 && (pattern >= 0xc8 && unk168 >= 2 && unk168 != 6 || pattern < 0xc8)) {
+            if (m_patterns[pattern].unk2 <= m_patterns[0xd1].unk0 && (m_patterns[pattern].frames[frame].flagsB0 & 8) > 0 && (pattern >= 0xc8 && m_attackResult >= 2 && m_attackResult != 6 || pattern < 0xc8)) {
                 Vf0();
                 CPlayer::Unk40f170();
                 pattern = 0xd1;
             }
             return;
         }
-        if ((m_inputY == 1 || (unk1a8 & 4) != 0 || (unk1a9 & 4) != 0) && m_patterns[pattern].unk2 <= m_patterns[0xce].unk0 && (m_patterns[pattern].frames[frame].flagsB0 & 8) > 0 && (pattern >= 0xc8 && unk168 >= 2 && unk168 != 6 || pattern < 0xc8)) {
+        if ((m_inputY == 1 || (unk1a8 & 4) != 0 || (unk1a9 & 4) != 0) && m_patterns[pattern].unk2 <= m_patterns[0xce].unk0 && (m_patterns[pattern].frames[frame].flagsB0 & 8) > 0 && (pattern >= 0xc8 && m_attackResult >= 2 && m_attackResult != 6 || pattern < 0xc8)) {
             Vf0();
             CPlayer::Unk40f170();
             pattern = 0xce;
             return;
         }
         if (m_inputY == 0 || (unk1a8 & 4) == 0 || (unk1a9 & 4) == 0) {
-            if (m_inputX != 0 && x - (*m_opponent)->x > -40.0 && x - (*m_opponent)->x < 40.0 && m_patterns[pattern].unk2 <= m_patterns[0xdc].unk0 && ((*m_opponent)->pattern < 0x32 || (*m_opponent)->pattern > 0x9c) && (m_patterns[pattern].frames[frame].flagsB0 & 8) > 0 && (pattern >= 0xc8 && unk168 >= 2 && unk168 != 6 || pattern < 0xc8)) {
+            if (m_inputX != 0 && x - (*m_opponent)->x > -40.0 && x - (*m_opponent)->x < 40.0 && m_patterns[pattern].unk2 <= m_patterns[0xdc].unk0 && ((*m_opponent)->pattern < 0x32 || (*m_opponent)->pattern > 0x9c) && (m_patterns[pattern].frames[frame].flagsB0 & 8) > 0 && (pattern >= 0xc8 && m_attackResult >= 2 && m_attackResult != 6 || pattern < 0xc8)) {
                 Vf0();
                 CPlayer::Unk40f170();
                 pattern = 0xdc;
                 return;
             }
-            if (m_patterns[pattern].unk2 <= m_patterns[0xcb].unk0 && (m_patterns[pattern].frames[frame].flagsB0 & 8) > 0 && (pattern >= 0xc8 && unk168 >= 2 && unk168 != 6 || pattern < 0xc8)) {
+            if (m_patterns[pattern].unk2 <= m_patterns[0xcb].unk0 && (m_patterns[pattern].frames[frame].flagsB0 & 8) > 0 && (pattern >= 0xc8 && m_attackResult >= 2 && m_attackResult != 6 || pattern < 0xc8)) {
                 Vf0();
                 CPlayer::Unk40f170();
                 pattern = 0xcb;
@@ -410,7 +410,7 @@ void CMizuka::Vf4()
             }
         }
     }
-    if (unk15c < 2 && (m_pressD == 1 || (unk1a8 & 0x80) != 0 || (unk1a9 & 0x80) != 0) && m_patterns[pattern].unk2 <= m_patterns[0xb3].unk0 && (m_patterns[pattern].frames[frame].flagsB0 & 8) > 0 && (pattern >= 0xc8 && unk168 >= 2 && unk168 != 6 || pattern < 0xc8) && unk3458 <= 0) {
+    if (unk15c < 2 && (m_pressD == 1 || (unk1a8 & 0x80) != 0 || (unk1a9 & 0x80) != 0) && m_patterns[pattern].unk2 <= m_patterns[0xb3].unk0 && (m_patterns[pattern].frames[frame].flagsB0 & 8) > 0 && (pattern >= 0xc8 && m_attackResult >= 2 && m_attackResult != 6 || pattern < 0xc8) && unk3458 <= 0) {
         Vf0();
         CPlayer::Unk40f170();
         pattern = 0xb3;
@@ -437,13 +437,13 @@ void CMizuka::Vf2()
     BYTE v5;
     int v4;
 
-    unk262 = 0x63;
+    m_command = 0x63;
     x6 = 0;
     v4 = m_inputPos + 0x2d;
     for (; v4 < m_inputPos + 0xb4; v4++) {
         v5 = m_inputHistory[(v4 - (v4 >= 0xb4) * 0xb4)];
         if ((v5 & 0x40) != 0 && x6 == 5) {
-            unk262 = 0x5a;
+            m_command = 0x5a;
             return;
         }
         if ((v5 & 0x20) != 0 && x6 == 4) {
@@ -479,7 +479,7 @@ void CMizuka::Vf2()
             break;
         }
         if ((v5 & 0x10) != 0 && x6 == 5) {
-            unk262 = 0x5b;
+            m_command = 0x5b;
             return;
         }
         if (v5 == 0 && x6 == 4) {
@@ -509,7 +509,7 @@ void CMizuka::Vf2()
     for (; v4 < m_inputPos + 0xb4; v4++) {
         v5 = m_inputHistory[(v4 - (v4 >= 0xb4) * 0xb4)];
         if ((v5 & 0x40) != 0 && x6 == 6) {
-            unk262 = 0x5c;
+            m_command = 0x5c;
             return;
         }
         if ((v5 & 0xf) == 4 && x6 == 5) {
@@ -536,7 +536,7 @@ void CMizuka::Vf2()
     for (; v4 < m_inputPos + 0xb4; v4++) {
         v5 = m_inputHistory[(v4 - (v4 >= 0xb4) * 0xb4)];
         if ((v5 & 0x40) != 0 && x6 == 5) {
-            unk262 = 0x5d;
+            m_command = 0x5d;
             return;
         }
         if ((v5 & 0x20) != 0 && x6 == 4) {
@@ -569,7 +569,7 @@ void CMizuka::Vf2()
     for (; v4 < m_inputPos + 0xb4; v4++) {
         v5 = m_inputHistory[(v4 - (v4 >= 0xb4) * 0xb4)];
         if ((v5 & 0x20) != 0 && x6 == 5) {
-            unk262 = 0x5e;
+            m_command = 0x5e;
             return;
         }
         if ((v5 & 0x10) != 0 && x6 == 4) {
@@ -602,7 +602,7 @@ void CMizuka::Vf2()
     for (; v4 < m_inputPos + 0xb4; v4++) {
         v5 = m_inputHistory[(v4 - (v4 >= 0xb4) * 0xb4)];
         if ((v5 & 0x40) != 0 && x6 == 7) {
-            unk262 = 0x5f;
+            m_command = 0x5f;
             return;
         }
         if ((v5 & 0x20) != 0 && x6 == 6) {
@@ -636,7 +636,7 @@ void CMizuka::Vf2()
     for (; v4 < m_inputPos + 0xb4; v4++) {
         v5 = m_inputHistory[(v4 - (v4 >= 0xb4) * 0xb4)];
         if ((v5 & 0xf) == (facing == -1) + 1 && x6 == 6) {
-            unk262 = 0x61;
+            m_command = 0x61;
             return;
         }
         if ((v5 & 0xf) == (facing == -1) + 5 && x6 == 5) {
@@ -663,7 +663,7 @@ void CMizuka::Vf2()
     for (; v4 < m_inputPos + 0xb4; v4++) {
         v5 = m_inputHistory[(v4 - (v4 >= 0xb4) * 0xb4)];
         if ((v5 & 0x10) != 0 && x6 == 5) {
-            unk262 = 0x62;
+            m_command = 0x62;
             return;
         }
         if ((v5 & 0x20) != 0 && x6 == 4) {
@@ -696,12 +696,12 @@ void CMizuka::Vf2()
     for (; v4 < m_inputPos + 0xb4; v4++) {
         v5 = m_inputHistory[(v4 - (v4 >= 0xb4) * 0xb4)];
         if ((v5 & 0xf0) != 0 && x6 == 5) {
-            unk262 = ((v5 & 0xe0) > 0) + 0xaa + ((v5 & 0xc0) > 0) + ((v5 & 0x80) > 0);
+            m_command = ((v5 & 0xe0) > 0) + 0xaa + ((v5 & 0xc0) > 0) + ((v5 & 0x80) > 0);
             return;
         }
         if ((v5 & 0xf) == (facing == -1) + 1 && x6 == 4) {
             if ((v5 & 0xf0) != 0) {
-                unk262 = ((v5 & 0xe0) > 0) + 0xa0 + ((v5 & 0xc0) > 0) + ((v5 & 0x80) > 0);
+                m_command = ((v5 & 0xe0) > 0) + 0xa0 + ((v5 & 0xc0) > 0) + ((v5 & 0x80) > 0);
                 return;
             }
             x6 = 5;
@@ -724,12 +724,12 @@ void CMizuka::Vf2()
     for (; v4 < m_inputPos + 0xb4; v4++) {
         v5 = m_inputHistory[(v4 - (v4 >= 0xb4) * 0xb4)];
         if ((v5 & 0xf0) != 0 && x6 == 6) {
-            unk262 = ((v5 & 0xe0) > 0) + 0xa0 + ((v5 & 0xc0) > 0) + ((v5 & 0x80) > 0);
+            m_command = ((v5 & 0xe0) > 0) + 0xa0 + ((v5 & 0xc0) > 0) + ((v5 & 0x80) > 0);
             return;
         }
         if ((v5 & 0xf) == 6 - (facing == -1) && x6 == 5) {
             if ((v5 & 0xf0) != 0) {
-                unk262 = ((v5 & 0xe0) > 0) + 0xa0 + ((v5 & 0xc0) > 0) + ((v5 & 0x80) > 0);
+                m_command = ((v5 & 0xe0) > 0) + 0xa0 + ((v5 & 0xc0) > 0) + ((v5 & 0x80) > 0);
                 return;
             }
             x6 = 6;
@@ -755,12 +755,12 @@ void CMizuka::Vf2()
     for (; v4 < m_inputPos + 0xb4; v4++) {
         v5 = m_inputHistory[(v4 - (v4 >= 0xb4) * 0xb4)];
         if ((v5 & 0xf0) != 0 && x6 == 6) {
-            unk262 = ((v5 & 0xe0) > 0) + 0x96 + ((v5 & 0xc0) > 0) + ((v5 & 0x80) > 0);
+            m_command = ((v5 & 0xe0) > 0) + 0x96 + ((v5 & 0xc0) > 0) + ((v5 & 0x80) > 0);
             return;
         }
         if ((v5 & 0xf) == (facing == -1) + 5 && x6 == 5) {
             if ((v5 & 0xf0) != 0) {
-                unk262 = ((v5 & 0xe0) > 0) + 0x96 + ((v5 & 0xc0) > 0) + ((v5 & 0x80) > 0);
+                m_command = ((v5 & 0xe0) > 0) + 0x96 + ((v5 & 0xc0) > 0) + ((v5 & 0x80) > 0);
                 return;
             }
             x6 = 6;
@@ -786,12 +786,12 @@ void CMizuka::Vf2()
     for (; v4 < m_inputPos + 0xb4; v4++) {
         v5 = m_inputHistory[(v4 - (v4 >= 0xb4) * 0xb4)];
         if ((v5 & 0xf0) != 0 && x6 == 5) {
-            unk262 = ((v5 & 0xe0) > 0) + 0x8c + ((v5 & 0xc0) > 0) + ((v5 & 0x80) > 0);
+            m_command = ((v5 & 0xe0) > 0) + 0x8c + ((v5 & 0xc0) > 0) + ((v5 & 0x80) > 0);
             return;
         }
         if ((v5 & 0xf) == 2 - (facing == -1) && x6 == 4) {
             if ((v5 & 0xf0) != 0) {
-                unk262 = ((v5 & 0xe0) > 0) + 0xa0 + ((v5 & 0xc0) > 0) + ((v5 & 0x80) > 0);
+                m_command = ((v5 & 0xe0) > 0) + 0xa0 + ((v5 & 0xc0) > 0) + ((v5 & 0x80) > 0);
                 return;
             }
             x6 = 5;
@@ -814,12 +814,12 @@ void CMizuka::Vf2()
     for (; v4 < m_inputPos + 0xb4; v4++) {
         v5 = m_inputHistory[(v4 - (v4 >= 0xb4) * 0xb4)];
         if ((v5 & 0xf0) != 0 && x6 == 4) {
-            unk262 = ((v5 & 0xe0) > 0) + 0x82 + ((v5 & 0xc0) > 0) + ((v5 & 0x80) > 0);
+            m_command = ((v5 & 0xe0) > 0) + 0x82 + ((v5 & 0xc0) > 0) + ((v5 & 0x80) > 0);
             return;
         }
         if ((v5 & 0xf) == 6 - (facing == -1) && x6 == 3) {
             if ((v5 & 0xf0) != 0) {
-                unk262 = ((v5 & 0xe0) > 0) + 0x82 + ((v5 & 0xc0) > 0) + ((v5 & 0x80) > 0);
+                m_command = ((v5 & 0xe0) > 0) + 0x82 + ((v5 & 0xc0) > 0) + ((v5 & 0x80) > 0);
                 return;
             }
             x6 = 4;
@@ -839,12 +839,12 @@ void CMizuka::Vf2()
     for (; v4 < m_inputPos + 0xb4; v4++) {
         v5 = m_inputHistory[(v4 - (v4 >= 0xb4) * 0xb4)];
         if ((v5 & 0xf0) != 0 && x6 == 4) {
-            unk262 = ((v5 & 0xe0) > 0) + 0x78 + ((v5 & 0xc0) > 0) + ((v5 & 0x80) > 0);
+            m_command = ((v5 & 0xe0) > 0) + 0x78 + ((v5 & 0xc0) > 0) + ((v5 & 0x80) > 0);
             return;
         }
         if ((v5 & 0xf) == (facing == -1) + 5 && x6 == 3) {
             if ((v5 & 0xf0) != 0) {
-                unk262 = ((v5 & 0xe0) > 0) + 0x78 + ((v5 & 0xc0) > 0) + ((v5 & 0x80) > 0);
+                m_command = ((v5 & 0xe0) > 0) + 0x78 + ((v5 & 0xc0) > 0) + ((v5 & 0x80) > 0);
                 return;
             }
             x6 = 4;
@@ -864,12 +864,12 @@ void CMizuka::Vf2()
     for (; v4 < m_inputPos + 0xb4; v4++) {
         v5 = m_inputHistory[(v4 - (v4 >= 0xb4) * 0xb4)];
         if ((v5 & 0xf0) != 0 && x6 == 6) {
-            unk262 = ((v5 & 0xe0) > 0) + 0x6e + ((v5 & 0xc0) > 0) + ((v5 & 0x80) > 0);
+            m_command = ((v5 & 0xe0) > 0) + 0x6e + ((v5 & 0xc0) > 0) + ((v5 & 0x80) > 0);
             return;
         }
         if ((v5 & 0xf) == 2 - (facing == -1) && x6 == 5) {
             if ((v5 & 0xf0) != 0) {
-                unk262 = ((v5 & 0xe0) > 0) + 0x6e + ((v5 & 0xc0) > 0) + ((v5 & 0x80) > 0);
+                m_command = ((v5 & 0xe0) > 0) + 0x6e + ((v5 & 0xc0) > 0) + ((v5 & 0x80) > 0);
                 return;
             }
             x6 = 6;
@@ -895,12 +895,12 @@ void CMizuka::Vf2()
     for (; v4 < m_inputPos + 0xb4; v4++) {
         v5 = m_inputHistory[(v4 - (v4 >= 0xb4) * 0xb4)];
         if ((v5 & 0xf0) != 0 && x6 == 6) {
-            unk262 = ((v5 & 0xe0) > 0) + 0x64 + ((v5 & 0xc0) > 0) + ((v5 & 0x80) > 0);
+            m_command = ((v5 & 0xe0) > 0) + 0x64 + ((v5 & 0xc0) > 0) + ((v5 & 0x80) > 0);
             return;
         }
         if ((v5 & 0xf) == (facing == -1) + 1 && x6 == 5) {
             if ((v5 & 0xf0) != 0) {
-                unk262 = ((v5 & 0xe0) > 0) + 0x64 + ((v5 & 0xc0) > 0) + ((v5 & 0x80) > 0);
+                m_command = ((v5 & 0xe0) > 0) + 0x64 + ((v5 & 0xc0) > 0) + ((v5 & 0x80) > 0);
                 return;
             }
             x6 = 6;
@@ -926,12 +926,12 @@ void CMizuka::Vf2()
     for (; v4 < m_inputPos + 0xb4; v4++) {
         v5 = m_inputHistory[(v4 - (v4 >= 0xb4) * 0xb4)];
         if ((v5 & 0xf0) != 0 && x6 == 3) {
-            unk262 = ((v5 & 0xe0) > 0) + 0x50 + ((v5 & 0xc0) > 0) + ((v5 & 0x80) > 0);
+            m_command = ((v5 & 0xe0) > 0) + 0x50 + ((v5 & 0xc0) > 0) + ((v5 & 0x80) > 0);
             return;
         }
         if ((v5 & 0xf) == 6 - (facing == -1) && x6 == 2) {
             if ((v5 & 0xf0) != 0) {
-                unk262 = ((v5 & 0xe0) > 0) + 0x50 + ((v5 & 0xc0) > 0) + ((v5 & 0x80) > 0);
+                m_command = ((v5 & 0xe0) > 0) + 0x50 + ((v5 & 0xc0) > 0) + ((v5 & 0x80) > 0);
                 return;
             }
             x6 = 3;
@@ -948,12 +948,12 @@ void CMizuka::Vf2()
     for (; v4 < m_inputPos + 0xb4; v4++) {
         v5 = m_inputHistory[(v4 - (v4 >= 0xb4) * 0xb4)];
         if ((v5 & 0xf0) != 0 && x6 == 3) {
-            unk262 = ((v5 & 0xe0) > 0) + 0x46 + ((v5 & 0xc0) > 0) + ((v5 & 0x80) > 0);
+            m_command = ((v5 & 0xe0) > 0) + 0x46 + ((v5 & 0xc0) > 0) + ((v5 & 0x80) > 0);
             return;
         }
         if ((v5 & 0xf) == (facing == -1) + 5 && x6 == 2) {
             if ((v5 & 0xf0) != 0) {
-                unk262 = ((v5 & 0xe0) > 0) + 0x46 + ((v5 & 0xc0) > 0) + ((v5 & 0x80) > 0);
+                m_command = ((v5 & 0xe0) > 0) + 0x46 + ((v5 & 0xc0) > 0) + ((v5 & 0x80) > 0);
                 return;
             }
             x6 = 3;
@@ -970,12 +970,12 @@ void CMizuka::Vf2()
     for (; v4 < m_inputPos + 0xb4; v4++) {
         v5 = m_inputHistory[(v4 - (v4 >= 0xb4) * 0xb4)];
         if ((v5 & 0x40) != 0 && x6 == 3) {
-            unk262 = 0x60;
+            m_command = 0x60;
             return;
         }
         if ((v5 & 0xf) == (facing == -1) + 5 && x6 == 2) {
             if ((v5 & 0x40) != 0) {
-                unk262 = 0x60;
+                m_command = 0x60;
                 return;
             }
             x6 = 3;
@@ -992,12 +992,12 @@ void CMizuka::Vf2()
     for (; v4 < m_inputPos + 0xb4; v4++) {
         v5 = m_inputHistory[(v4 - (v4 >= 0xb4) * 0xb4)];
         if ((v5 & 0xf0) != 0 && x6 == 3) {
-            unk262 = ((v5 & 0xe0) > 0) + 0x50 + ((v5 & 0xc0) > 0) + ((v5 & 0x80) > 0);
+            m_command = ((v5 & 0xe0) > 0) + 0x50 + ((v5 & 0xc0) > 0) + ((v5 & 0x80) > 0);
             return;
         }
         if ((v5 & 0xf) == 6 - (facing == -1) && x6 == 2) {
             if ((v5 & 0xf0) != 0) {
-                unk262 = ((v5 & 0xe0) > 0) + 0x50 + ((v5 & 0xc0) > 0) + ((v5 & 0x80) > 0);
+                m_command = ((v5 & 0xe0) > 0) + 0x50 + ((v5 & 0xc0) > 0) + ((v5 & 0x80) > 0);
                 return;
             }
             x6 = 3;
@@ -1014,12 +1014,12 @@ void CMizuka::Vf2()
     for (; v4 < m_inputPos + 0xb4; v4++) {
         v5 = m_inputHistory[(v4 - (v4 >= 0xb4) * 0xb4)];
         if ((v5 & 0xf0) != 0 && x6 == 3) {
-            unk262 = ((v5 & 0xe0) > 0) + 0x14 + ((v5 & 0xc0) > 0) + ((v5 & 0x80) > 0);
+            m_command = ((v5 & 0xe0) > 0) + 0x14 + ((v5 & 0xc0) > 0) + ((v5 & 0x80) > 0);
             return;
         }
         if ((v5 & 0xf) == (facing == -1) + 5 && x6 == 2) {
             if ((v5 & 0xf0) != 0) {
-                unk262 = ((v5 & 0xe0) > 0) + 0x14 + ((v5 & 0xc0) > 0) + ((v5 & 0x80) > 0);
+                m_command = ((v5 & 0xe0) > 0) + 0x14 + ((v5 & 0xc0) > 0) + ((v5 & 0x80) > 0);
                 return;
             }
             x6 = 3;
@@ -1036,12 +1036,12 @@ void CMizuka::Vf2()
     for (; v4 < m_inputPos + 0xb4; v4++) {
         v5 = m_inputHistory[(v4 - (v4 >= 0xb4) * 0xb4)];
         if ((v5 & 0xf0) != 0 && x6 == 3) {
-            unk262 = ((v5 & 0xe0) > 0) + 0xa + ((v5 & 0xc0) > 0) + ((v5 & 0x80) > 0);
+            m_command = ((v5 & 0xe0) > 0) + 0xa + ((v5 & 0xc0) > 0) + ((v5 & 0x80) > 0);
             return;
         }
         if ((v5 & 0xf) == (facing == -1) + 1 && x6 == 2) {
             if ((v5 & 0xf0) != 0) {
-                unk262 = ((v5 & 0xe0) > 0) + 0xa + ((v5 & 0xc0) > 0) + ((v5 & 0x80) > 0);
+                m_command = ((v5 & 0xe0) > 0) + 0xa + ((v5 & 0xc0) > 0) + ((v5 & 0x80) > 0);
                 return;
             }
             x6 = 3;
@@ -1058,12 +1058,12 @@ void CMizuka::Vf2()
     for (; v4 < m_inputPos + 0xb4; v4++) {
         v5 = m_inputHistory[(v4 - (v4 >= 0xb4) * 0xb4)];
         if ((v5 & 0xf0) != 0 && x6 == 3) {
-            unk262 = ((v5 & 0xe0) > 0) + 0x28 + ((v5 & 0xc0) > 0) + ((v5 & 0x80) > 0);
+            m_command = ((v5 & 0xe0) > 0) + 0x28 + ((v5 & 0xc0) > 0) + ((v5 & 0x80) > 0);
             return;
         }
         if ((v5 & 0xf) == 4 && x6 == 2) {
             if ((v5 & 0xf0) != 0) {
-                unk262 = ((v5 & 0xe0) > 0) + 0x28 + ((v5 & 0xc0) > 0) + ((v5 & 0x80) > 0);
+                m_command = ((v5 & 0xe0) > 0) + 0x28 + ((v5 & 0xc0) > 0) + ((v5 & 0x80) > 0);
                 return;
             }
             x6 = 3;
@@ -1080,12 +1080,12 @@ void CMizuka::Vf2()
     for (; v4 < m_inputPos + 0xb4; v4++) {
         v5 = m_inputHistory[(v4 - (v4 >= 0xb4) * 0xb4)];
         if ((v5 & 0xf0) != 0 && x6 == 3) {
-            unk262 = ((v5 & 0xe0) > 0) + 0x1e + ((v5 & 0xc0) > 0) + ((v5 & 0x80) > 0);
+            m_command = ((v5 & 0xe0) > 0) + 0x1e + ((v5 & 0xc0) > 0) + ((v5 & 0x80) > 0);
             return;
         }
         if ((v5 & 0xf) == 2 - (facing == -1) && x6 == 2) {
             if ((v5 & 0xf0) != 0) {
-                unk262 = ((v5 & 0xe0) > 0) + 0x1e + ((v5 & 0xc0) > 0) + ((v5 & 0x80) > 0);
+                m_command = ((v5 & 0xe0) > 0) + 0x1e + ((v5 & 0xc0) > 0) + ((v5 & 0x80) > 0);
                 return;
             }
             x6 = 3;
@@ -1102,7 +1102,7 @@ void CMizuka::Vf2()
     for (; v4 < m_inputPos + 0xb4; v4++) {
         v5 = m_inputHistory[(v4 - (v4 >= 0xb4) * 0xb4)];
         if ((v5 & 8) != 0 && x6 == 1) {
-            unk262 = 6;
+            m_command = 6;
             return;
         }
         if ((v5 & 8) == 0 && x6 == 0) {
@@ -1114,7 +1114,7 @@ void CMizuka::Vf2()
     for (; v4 < m_inputPos + 0xb4; v4++) {
         v5 = m_inputHistory[(v4 - (v4 >= 0xb4) * 0xb4)];
         if ((v5 & 0x80) != 0 && x6 == 4) {
-            unk262 = 0x35;
+            m_command = 0x35;
             return;
         }
         if ((v5 & 0xf) == 4 && x6 == 3) {
@@ -1135,7 +1135,7 @@ void CMizuka::Vf2()
     for (; v4 < m_inputPos + 0xb4; v4++) {
         v5 = m_inputHistory[(v4 - (v4 >= 0xb4) * 0xb4)];
         if ((v5 & 0x40) != 0 && x6 == 4) {
-            unk262 = 0x34;
+            m_command = 0x34;
             return;
         }
         if ((v5 & 0xf) == 4 && x6 == 3) {
@@ -1156,7 +1156,7 @@ void CMizuka::Vf2()
     for (; v4 < m_inputPos + 0xb4; v4++) {
         v5 = m_inputHistory[(v4 - (v4 >= 0xb4) * 0xb4)];
         if ((v5 & 0x20) != 0 && x6 == 4) {
-            unk262 = 0x33;
+            m_command = 0x33;
             return;
         }
         if ((v5 & 0xf) == 4 && x6 == 3) {
@@ -1177,7 +1177,7 @@ void CMizuka::Vf2()
     for (; v4 < m_inputPos + 0xb4; v4++) {
         v5 = m_inputHistory[(v4 - (v4 >= 0xb4) * 0xb4)];
         if ((v5 & 0x10) != 0 && x6 == 4) {
-            unk262 = 0x32;
+            m_command = 0x32;
             return;
         }
         if ((v5 & 0xf) == 4 && x6 == 3) {
@@ -1198,12 +1198,12 @@ void CMizuka::Vf2()
     for (; v4 < m_inputPos + 0xb4; v4++) {
         v5 = m_inputHistory[(v4 - (v4 >= 0xb4) * 0xb4)];
         if ((v5 & 0xf0) != 0 && x6 == 4) {
-            unk262 = ((v5 & 0xe0) > 0) + 0x3c + ((v5 & 0xc0) > 0) + ((v5 & 0x80) > 0);
+            m_command = ((v5 & 0xe0) > 0) + 0x3c + ((v5 & 0xc0) > 0) + ((v5 & 0x80) > 0);
             return;
         }
         if ((v5 & 0xf) == (facing == -1) + 1 && x6 == 3) {
             if ((v5 & 0xf0) != 0) {
-                unk262 = ((v5 & 0xe0) > 0) + 0x3c + ((v5 & 0xc0) > 0) + ((v5 & 0x80) > 0);
+                m_command = ((v5 & 0xe0) > 0) + 0x3c + ((v5 & 0xc0) > 0) + ((v5 & 0x80) > 0);
                 return;
             }
             x6 = 4;
@@ -1223,7 +1223,7 @@ void CMizuka::Vf2()
     for (; v4 < m_inputPos + 0xb4; v4++) {
         v5 = m_inputHistory[(v4 - (v4 >= 0xb4) * 0xb4)];
         if ((v5 & 0xf) == 1 && x6 == 3) {
-            unk262 = 1;
+            m_command = 1;
             return;
         }
         if ((v5 & 0xf) == 0 && x6 == 2) {
@@ -1241,7 +1241,7 @@ void CMizuka::Vf2()
     for (; v4 < m_inputPos + 0xb4; v4++) {
         v5 = m_inputHistory[(v4 - (v4 >= 0xb4) * 0xb4)];
         if ((v5 & 0xf) == 2 && x6 == 3) {
-            unk262 = 0;
+            m_command = 0;
             break;
         }
         if ((v5 & 0xf) == 0 && x6 == 2) {
@@ -1261,7 +1261,7 @@ void CMizuka::Vf5()
     double v10;
     double x8;
 
-    unk262 = 0x63;
+    m_command = 0x63;
     if (unk1a0 > 0) {
         unk1a0--;
     }
@@ -1275,13 +1275,13 @@ void CMizuka::Vf5()
     m_pressC = 0;
     m_pressD = 0;
     unk14e = 0;
-    if ((WORD)CPlayer::Unk4108a0(0, 0x3e8) < 25.0f * unka8 + (y < 0.0) * 0x1e * unka8 + (unk3114 == 3) * 0x190 + (pattern == 0xaa) * 0x12c) {
+    if ((WORD)CPlayer::Random(0, 0x3e8) < 25.0f * unka8 + (y < 0.0) * 0x1e * unka8 + (unk3114 == 3) * 0x190 + (pattern == 0xaa) * 0x12c) {
         unk14e = 0x3c;
     }
-    if ((WORD)CPlayer::Unk4108a0(0, 0x7d0) < ((unk130 > 0) * 4.0 + 1.0) * 8.0 * unka8 * ((pattern > 0x95 && pattern < 0x9d) * 2 + 1)) {
+    if ((WORD)CPlayer::Random(0, 0x7d0) < ((unk130 > 0) * 4.0 + 1.0) * 8.0 * unka8 * ((pattern > 0x95 && pattern < 0x9d) * 2 + 1)) {
         unk14e = 0x3c;
     }
-    if ((WORD)CPlayer::Unk4108a0(0, 0x3e8) < 4e+01f * unka8 && pattern > 0xc7) {
+    if ((WORD)CPlayer::Random(0, 0x3e8) < 4e+01f * unka8 && pattern > 0xc7) {
         unk14e = 0x3c;
     }
     if (unk170 == 1 && unk3114 == 2) {
@@ -1297,14 +1297,14 @@ void CMizuka::Vf5()
     v10 = ((*m_opponent)->x - x) * facing;
     x8 = fabs(y - (*m_opponent)->y);
     if (pattern >= 0x32 && pattern <= 0x96 && timer == 0) {
-        if ((WORD)CPlayer::Unk4108a0(0, 0x64) < 8.0f * unka8) {
+        if ((WORD)CPlayer::Random(0, 0x64) < 8.0f * unka8) {
             unk3114 = 3;
         } else {
             unk3114 = 0;
         }
-        m_inputX = 1 - (((WORD)CPlayer::Unk4108a0(0, 0x64) < 0x32) << 1);
-        m_pressD = (WORD)CPlayer::Unk4108a0(0, 0xf0) < x8;
-        m_pressD = (WORD)CPlayer::Unk4108a0(0, 0x140) < v10;
+        m_inputX = 1 - (((WORD)CPlayer::Random(0, 0x64) < 0x32) << 1);
+        m_pressD = (WORD)CPlayer::Random(0, 0xf0) < x8;
+        m_pressD = (WORD)CPlayer::Random(0, 0x140) < v10;
         if ((*m_opponent)->pattern > 0xc7 && (*m_opponent)->pattern < 0xfa && (*m_opponent)->frame < 3 && x8 < 100.0 && v10 < 150.0) {
             m_pressD = 0;
         }
@@ -1313,30 +1313,30 @@ void CMizuka::Vf5()
     if ((pattern >= 4 && pattern <= 6 || pattern >= 0xa && pattern <= 0xc) && y == 0.0) {
         return;
     }
-    if ((*m_opponent)->pattern >= 0x32 && (*m_opponent)->pattern < 0x96 && pattern == 0x108 && unk16c > 1) {
+    if ((*m_opponent)->pattern >= 0x32 && (*m_opponent)->pattern < 0x96 && pattern == 0x108 && m_hitsLeft > 1) {
         return;
     }
     if (pattern == 0xa8 && timer < 6) {
-        if ((*m_opponent)->pattern != 0xc8 && (*m_opponent)->pattern != 0xcc && (*m_opponent)->pattern < 0xfa && (*m_opponent)->y == 0.0 && (*m_opponent)->unk16c == 0) {
-            if (v10 < 40.0 && (WORD)CPlayer::Unk4108a0(0, 0x64) < unka8 * 3.0f) {
+        if ((*m_opponent)->pattern != 0xc8 && (*m_opponent)->pattern != 0xcc && (*m_opponent)->pattern < 0xfa && (*m_opponent)->y == 0.0 && (*m_opponent)->m_hitsLeft == 0) {
+            if (v10 < 40.0 && (WORD)CPlayer::Random(0, 0x64) < unka8 * 3.0f) {
                 m_pressA = 1;
                 m_inputY = 1;
                 return;
             }
-            if (v10 < 60.0 && (WORD)CPlayer::Unk4108a0(0, 0x64) < unka8 * 2) {
+            if (v10 < 60.0 && (WORD)CPlayer::Random(0, 0x64) < unka8 * 2) {
                 m_pressA = 1;
                 m_inputY = 0;
                 return;
             }
         }
-        if (((*m_opponent)->pattern == 0xc9 || (*m_opponent)->pattern == 0xca || (*m_opponent)->pattern == 0xcd) && (*m_opponent)->pattern < 0xfa && (*m_opponent)->y == 0.0 && (*m_opponent)->unk16c == 0) {
-            if (v10 > 20.0 && v10 < 60.0 && (WORD)CPlayer::Unk4108a0(0, 0x64) < unka8 * 2) {
+        if (((*m_opponent)->pattern == 0xc9 || (*m_opponent)->pattern == 0xca || (*m_opponent)->pattern == 0xcd) && (*m_opponent)->pattern < 0xfa && (*m_opponent)->y == 0.0 && (*m_opponent)->m_hitsLeft == 0) {
+            if (v10 > 20.0 && v10 < 60.0 && (WORD)CPlayer::Random(0, 0x64) < unka8 * 2) {
                 m_pressB = 1;
                 m_inputY = 1;
                 m_inputX = 0;
                 return;
             }
-            if (v10 > 60.0 && v10 < 80.0 && (WORD)CPlayer::Unk4108a0(0, 0x64) < unka8 * 2) {
+            if (v10 > 60.0 && v10 < 80.0 && (WORD)CPlayer::Random(0, 0x64) < unka8 * 2) {
                 m_pressA = 3;
                 m_inputY = 1;
                 return;
@@ -1345,78 +1345,78 @@ void CMizuka::Vf5()
     }
     if (pattern == 0xa8 || pattern == 0xa9) {
         if (v10 < 100.0) {
-            if ((WORD)CPlayer::Unk4108a0(0, 0x64) < unka8 * 3.0f) {
-                unk262 = 0x14;
+            if ((WORD)CPlayer::Random(0, 0x64) < unka8 * 3.0f) {
+                m_command = 0x14;
                 return;
             }
-            if ((WORD)CPlayer::Unk4108a0(0, 0x64) < unka8 * 1.0f && unk118 > 500.0) {
-                unk262 = 0x16;
+            if ((WORD)CPlayer::Random(0, 0x64) < unka8 * 1.0f && unk118 > 500.0) {
+                m_command = 0x16;
                 return;
             }
-            if ((WORD)CPlayer::Unk4108a0(0, 0x64) < unka8 * 1.0f && unk118 > 500.0) {
-                unk262 = 0xc;
+            if ((WORD)CPlayer::Random(0, 0x64) < unka8 * 1.0f && unk118 > 500.0) {
+                m_command = 0xc;
                 return;
             }
-            if ((WORD)CPlayer::Unk4108a0(0, 0x64) < unka8 * 2 && v10 < 80.0 && unk148 >= 0xbb8) {
-                unk262 = 0x70;
+            if ((WORD)CPlayer::Random(0, 0x64) < unka8 * 2 && v10 < 80.0 && m_gauge >= 0xbb8) {
+                m_command = 0x70;
                 return;
             }
-            if ((WORD)CPlayer::Unk4108a0(0, 0x64) < unka8 * 1.0f && v10 < 150.0 && unk148 == 0xbb8) {
-                unk262 = 0x84;
+            if ((WORD)CPlayer::Random(0, 0x64) < unka8 * 1.0f && v10 < 150.0 && m_gauge == 0xbb8) {
+                m_command = 0x84;
                 return;
             }
         }
         if (v10 < 320.0) {
-            if ((WORD)CPlayer::Unk4108a0(0, 0x64) < unka8 * 3.0f && unk118 > 500.0) {
-                unk262 = 0x20;
+            if ((WORD)CPlayer::Random(0, 0x64) < unka8 * 3.0f && unk118 > 500.0) {
+                m_command = 0x20;
                 return;
             }
-            if ((WORD)CPlayer::Unk4108a0(0, 0x64) < unka8 * 1.0f && unk148 == 0xbb8) {
-                unk262 = 0x84;
+            if ((WORD)CPlayer::Random(0, 0x64) < unka8 * 1.0f && m_gauge == 0xbb8) {
+                m_command = 0x84;
                 return;
             }
         }
     }
     if (pattern == 0xaa && frame == 1 && timer == 0) {
-        if ((WORD)CPlayer::Unk4108a0(0, 0x64) < unka8 * 5.0f) {
+        if ((WORD)CPlayer::Random(0, 0x64) < unka8 * 5.0f) {
             unk3114 = 3;
             return;
         }
-        if (y - (*m_opponent)->y < 0.0 && y - (*m_opponent)->y > -40.0 && v10 < 80.0 && (WORD)CPlayer::Unk4108a0(0, 0x64) < unka8 * 5.0f) {
+        if (y - (*m_opponent)->y < 0.0 && y - (*m_opponent)->y > -40.0 && v10 < 80.0 && (WORD)CPlayer::Random(0, 0x64) < unka8 * 5.0f) {
             m_pressA = 1;
             return;
         }
-        if (y - (*m_opponent)->y > -100.0 && y - (*m_opponent)->y < -50.0 && v10 < 100.0 && (WORD)CPlayer::Unk4108a0(0, 0x64) < unka8 * 5.0f) {
+        if (y - (*m_opponent)->y > -100.0 && y - (*m_opponent)->y < -50.0 && v10 < 100.0 && (WORD)CPlayer::Random(0, 0x64) < unka8 * 5.0f) {
             m_pressB = 1;
             return;
         }
-        if (y - (*m_opponent)->y > -100.0 && y - (*m_opponent)->y < -50.0 && v10 < 120.0 && (WORD)CPlayer::Unk4108a0(0, 0x64) < unka8 * 5.0f) {
+        if (y - (*m_opponent)->y > -100.0 && y - (*m_opponent)->y < -50.0 && v10 < 120.0 && (WORD)CPlayer::Random(0, 0x64) < unka8 * 5.0f) {
             m_pressC = 1;
             m_inputY = 0;
             m_inputX = facing;
             return;
         }
-        if ((WORD)CPlayer::Unk4108a0(0, 0x64) < unka8 * 2) {
-            unk262 = 0xc;
+        if ((WORD)CPlayer::Random(0, 0x64) < unka8 * 2) {
+            m_command = 0xc;
             return;
         }
     }
-    if (((*m_opponent)->pattern == 0xa8 || (*m_opponent)->pattern == 0xa9 || (*m_opponent)->pattern == 0xaa) && y == 0.0 && (WORD)CPlayer::Unk4108a0(0, 0x64) < 15.0f * unka8 && unk3114 != 2 && (*m_opponent)->unk14c == 0) {
-        unk3110 = (WORD)CPlayer::Unk4108a0(0, 0x64);
+    if (((*m_opponent)->pattern == 0xa8 || (*m_opponent)->pattern == 0xa9 || (*m_opponent)->pattern == 0xaa) && y == 0.0 && (WORD)CPlayer::Random(0, 0x64) < 15.0f * unka8 && unk3114 != 2 && (*m_opponent)->unk14c == 0) {
+        unk3110 = (WORD)CPlayer::Random(0, 0x64);
         if (unk3110 < 3 && unk118 > 500.0) {
-            unk262 = 0x14;
+            m_command = 0x14;
             return;
         }
         if (unk3110 < 4 && unk118 > 500.0) {
-            unk262 = 0xc;
+            m_command = 0xc;
             return;
         }
-        if (unk3110 < 0x11 && unk3110 > 0xc && unk148 >= 0xbb8) {
-            unk262 = 0x70;
+        if (unk3110 < 0x11 && unk3110 > 0xc && m_gauge >= 0xbb8) {
+            m_command = 0x70;
             return;
         }
-        if (unk3110 < 0x1e && unk3110 > 0x11 && unk148 >= 0xbb8) {
-            unk262 = 0x84;
+        if (unk3110 < 0x1e && unk3110 > 0x11 && m_gauge >= 0xbb8) {
+            m_command = 0x84;
             return;
         }
         if (unk3110 > 0x32) {
@@ -1424,14 +1424,14 @@ void CMizuka::Vf5()
             return;
         }
     }
-    if (((*m_opponent)->pattern == 0xa8 || (*m_opponent)->pattern == 0xa9 || (*m_opponent)->pattern == 0xaa) && y < 0.0 && (WORD)CPlayer::Unk4108a0(0, 0x64) < 15.0f * unka8 && unk3114 != 2 && (*m_opponent)->unk14c == 0) {
-        unk3110 = (WORD)CPlayer::Unk4108a0(0, 0x64);
+    if (((*m_opponent)->pattern == 0xa8 || (*m_opponent)->pattern == 0xa9 || (*m_opponent)->pattern == 0xaa) && y < 0.0 && (WORD)CPlayer::Random(0, 0x64) < 15.0f * unka8 && unk3114 != 2 && (*m_opponent)->unk14c == 0) {
+        unk3110 = (WORD)CPlayer::Random(0, 0x64);
         if (unk3110 < 3 && unk118 > 500.0) {
-            unk262 = 0x16;
+            m_command = 0x16;
             return;
         }
-        if (unk3110 < 0x11 && unk3110 > 0xc && unk148 >= 0x3e8) {
-            unk262 = (WORD)CPlayer::Unk4108a0(0, 3) + 0x78;
+        if (unk3110 < 0x11 && unk3110 > 0xc && m_gauge >= 0x3e8) {
+            m_command = (WORD)CPlayer::Random(0, 3) + 0x78;
             return;
         }
         if (unk3110 > 0x55) {
@@ -1439,12 +1439,12 @@ void CMizuka::Vf5()
             return;
         }
     }
-    if ((unk118 > 500.0 || unk120 > 0) && (WORD)CPlayer::Unk4108a0(0, 0x64) < 8.0f * unka8 && (*m_opponent)->pattern > 0x95 && (*m_opponent)->pattern < 0x9d && (pattern == 0x103 || pattern == 0x104 || pattern == 0x105 || pattern == 0x13a)) {
-        unk262 = 0x34;
+    if ((unk118 > 500.0 || unk120 > 0) && (WORD)CPlayer::Random(0, 0x64) < 8.0f * unka8 && (*m_opponent)->pattern > 0x95 && (*m_opponent)->pattern < 0x9d && (pattern == 0x103 || pattern == 0x104 || pattern == 0x105 || pattern == 0x13a)) {
+        m_command = 0x34;
         return;
     }
     if (unk3458 > 0) {
-        unk3110 = (WORD)CPlayer::Unk4108a0(0, 0x3e8);
+        unk3110 = (WORD)CPlayer::Random(0, 0x3e8);
         if ((*m_opponent)->y == 0.0) {
             if (v10 < 110.0 && x8 < 60.0 && unk3110 < 0x32) {
                 m_pressA = 1;
@@ -1458,12 +1458,12 @@ void CMizuka::Vf5()
                 m_pressC = 1;
                 return;
             }
-            if ((WORD)CPlayer::Unk4108a0(0, 0x140) < v10 - 100.0 && unk3110 > 0xaa && unk3110 < 0xdc) {
-                unk262 = (WORD)CPlayer::Unk4108a0(0, 3) + 0xa;
+            if ((WORD)CPlayer::Random(0, 0x140) < v10 - 100.0 && unk3110 > 0xaa && unk3110 < 0xdc) {
+                m_command = (WORD)CPlayer::Random(0, 3) + 0xa;
                 return;
             }
             if (v10 > 100.0 && unk3110 > 0xf0 && unk3110 < 0x14a && x8 < 40.0) {
-                unk262 = (WORD)CPlayer::Unk4108a0(0, 3) + 0x1e;
+                m_command = (WORD)CPlayer::Random(0, 3) + 0x1e;
                 return;
             }
         }
@@ -1480,29 +1480,29 @@ void CMizuka::Vf5()
                 m_pressC = 1;
                 return;
             }
-            if ((WORD)CPlayer::Unk4108a0(0, 0x140) < v10 - 100.0 && unk3110 > 0xaa && unk3110 < 0xdc) {
-                unk262 = (WORD)CPlayer::Unk4108a0(0, 3) + 0xa;
+            if ((WORD)CPlayer::Random(0, 0x140) < v10 - 100.0 && unk3110 > 0xaa && unk3110 < 0xdc) {
+                m_command = (WORD)CPlayer::Random(0, 3) + 0xa;
                 return;
             }
             if (v10 > 100.0 && unk3110 > 0xf0 && unk3110 < 0x14a && x8 < 60.0) {
-                unk262 = (WORD)CPlayer::Unk4108a0(0, 3) + 0x1e;
+                m_command = (WORD)CPlayer::Random(0, 3) + 0x1e;
                 return;
             }
         }
-        if (pattern < 0x32 && ((*m_opponent)->pattern > 0x95 && (*m_opponent)->pattern < 0x9c || (*m_opponent)->pattern > 0x31 && (*m_opponent)->pattern < 0x3b) && y == 0.0 && (WORD)CPlayer::Unk4108a0(0, 0x64) < 3.0f * unka8) {
-            unk262 = facing == 1;
+        if (pattern < 0x32 && ((*m_opponent)->pattern > 0x95 && (*m_opponent)->pattern < 0x9c || (*m_opponent)->pattern > 0x31 && (*m_opponent)->pattern < 0x3b) && y == 0.0 && (WORD)CPlayer::Random(0, 0x64) < 3.0f * unka8) {
+            m_command = facing == 1;
             return;
         }
-        if (pattern < 0x32 && (*m_opponent)->pattern < 0x32 && v10 > 60.0 && v10 < 140.0 && (WORD)CPlayer::Unk4108a0(0, 0x64) < 2.0f * unka8 && x > 120.0 && x < 520.0) {
-            unk262 = -((facing == 1) - 1);
+        if (pattern < 0x32 && (*m_opponent)->pattern < 0x32 && v10 > 60.0 && v10 < 140.0 && (WORD)CPlayer::Random(0, 0x64) < 2.0f * unka8 && x > 120.0 && x < 520.0) {
+            m_command = -((facing == 1) - 1);
             return;
         }
-        if ((WORD)CPlayer::Unk4108a0(0, 0x3e8) < 1) {
+        if ((WORD)CPlayer::Random(0, 0x3e8) < 1) {
             unk3114 = 4;
             return;
         }
         m_inputY = 1;
-        if ((WORD)CPlayer::Unk4108a0(0, 0x64) < 0x32) {
+        if ((WORD)CPlayer::Random(0, 0x64) < 0x32) {
             m_inputY = -1;
         }
         if (x8 > 200.0) {
@@ -1522,27 +1522,27 @@ void CMizuka::Vf5()
             m_inputX = -1;
             return;
         }
-        if ((WORD)CPlayer::Unk4108a0(0, 0x64) < 0x32 && v10 < 120.0) {
+        if ((WORD)CPlayer::Random(0, 0x64) < 0x32 && v10 < 120.0) {
             if (facing == 1) {
-                unk1a4 = (WORD)CPlayer::Unk4108a0(0, 0xc8) + 0x2d;
+                unk1a4 = (WORD)CPlayer::Random(0, 0xc8) + 0x2d;
             } else {
-                unk1a0 = (WORD)CPlayer::Unk4108a0(0, 0xc8) + 0x2d;
+                unk1a0 = (WORD)CPlayer::Random(0, 0xc8) + 0x2d;
             }
         }
-        if ((WORD)CPlayer::Unk4108a0(0, 0x64) < 0x32) {
+        if ((WORD)CPlayer::Random(0, 0x64) < 0x32) {
             if (facing == 1) {
-                unk1a0 = (WORD)CPlayer::Unk4108a0(0, 0xc8) + 0x2d;
+                unk1a0 = (WORD)CPlayer::Random(0, 0xc8) + 0x2d;
             } else {
-                unk1a4 = (WORD)CPlayer::Unk4108a0(0, 0xc8) + 0x2d;
+                unk1a4 = (WORD)CPlayer::Random(0, 0xc8) + 0x2d;
             }
         } else if (facing == -1) {
-            unk1a0 = (WORD)CPlayer::Unk4108a0(0, 0xc8) + 0x2d;
+            unk1a0 = (WORD)CPlayer::Random(0, 0xc8) + 0x2d;
         } else {
-            unk1a4 = (WORD)CPlayer::Unk4108a0(0, 0xc8) + 0x2d;
+            unk1a4 = (WORD)CPlayer::Random(0, 0xc8) + 0x2d;
         }
         return;
     }
-    if (unk3114 == 0 && (WORD)CPlayer::Unk4108a0(0, 0x64) < unka8 && (pattern > 0x95 && pattern < 0x9d || pattern == 0x60)) {
+    if (unk3114 == 0 && (WORD)CPlayer::Random(0, 0x64) < unka8 && (pattern > 0x95 && pattern < 0x9d || pattern == 0x60)) {
         unk3114 = 0xd;
     }
     if (unk3114 > 0 && pattern > 0x31 && pattern < 0x9e) {
@@ -1557,9 +1557,9 @@ void CMizuka::Vf5()
     }
     if (unk3114 == 4) {
         m_inputY = -1;
-        m_inputX = (WORD)CPlayer::Unk4108a0(0, 2) - 1;
+        m_inputX = (WORD)CPlayer::Random(0, 2) - 1;
         if (pattern == 4 || pattern == 5 || pattern == 6) {
-            unk262 = facing == 1;
+            m_command = facing == 1;
             if (pattern == 0xa5) {
                 unk3114 = 0;
             }
@@ -1569,14 +1569,14 @@ void CMizuka::Vf5()
         }
     }
     if (unk3114 == 5 && pattern < 0x32) {
-        unk262 = facing == 1;
+        m_command = facing == 1;
         if (pattern == 0xa3) {
             unk3114 = 0;
         }
         return;
     }
     if (unk3114 == 6 && pattern < 0x32) {
-        unk262 = facing == 1;
+        m_command = facing == 1;
         if (pattern == 0xa3) {
             unk3114 = 7;
         }
@@ -1590,7 +1590,7 @@ void CMizuka::Vf5()
         return;
     }
     if (unk3114 == 8 && pattern < 0x32) {
-        unk262 = facing == 1;
+        m_command = facing == 1;
         if (pattern == 0xa3) {
             unk3114 = 9;
         }
@@ -1604,7 +1604,7 @@ void CMizuka::Vf5()
         return;
     }
     if (unk3114 == 0xa && pattern < 0x32) {
-        unk262 = facing == 1;
+        m_command = facing == 1;
         if (pattern == 0xa3) {
             unk3114 = 0xb;
         }
@@ -1626,13 +1626,13 @@ void CMizuka::Vf5()
         return;
     }
     if (unk3114 == 0xd) {
-        unk262 = 0x14;
+        m_command = 0x14;
         if (pattern == 0x103) {
             unk3114 = 0;
         }
     }
-    if (unk168 > 1 && unk14a == 0 && (WORD)CPlayer::Unk4108a0(0, 0x64) < unka8 * 25.0f && unk3114 != 1 && unk3114 != 2) {
-        unk3110 = (WORD)CPlayer::Unk4108a0(0, 0x3e8);
+    if (m_attackResult > 1 && unk14a == 0 && (WORD)CPlayer::Random(0, 0x64) < unka8 * 25.0f && unk3114 != 1 && unk3114 != 2) {
+        unk3110 = (WORD)CPlayer::Random(0, 0x3e8);
         if (pattern == 0xc8) {
             if ((*m_opponent)->y < 0.0 && unk3110 < 0x12c) {
                 m_pressB = 1;
@@ -1642,7 +1642,7 @@ void CMizuka::Vf5()
             if (v10 < 50.0 && unk3110 < 0x190) {
                 m_pressA = 1;
                 m_inputY = 0;
-                if (unk168 == 2 && (WORD)CPlayer::Unk4108a0(0, 0x64) < 0x1e) {
+                if (m_attackResult == 2 && (WORD)CPlayer::Random(0, 0x64) < 0x1e) {
                     m_pressC = 1;
                     m_inputY = 1;
                 }
@@ -1656,30 +1656,30 @@ void CMizuka::Vf5()
             if (unk3110 > 0x3ca) {
                 unk3114 = 4;
                 m_inputY = -1;
-                m_inputX = (WORD)CPlayer::Unk4108a0(0, 2) - 1;
+                m_inputX = (WORD)CPlayer::Random(0, 2) - 1;
                 return;
             }
             if (unk3110 > 0x2bb) {
                 unk3114 = 1;
-                if ((WORD)CPlayer::Unk4108a0(0, 2) == 0) {
+                if ((WORD)CPlayer::Random(0, 2) == 0) {
                     unk3114 = 6;
                 }
-                if ((WORD)CPlayer::Unk4108a0(0, 2) == 0) {
+                if ((WORD)CPlayer::Random(0, 2) == 0) {
                     unk3114 = 8;
                 }
                 return;
             }
         }
         if (pattern == 0xc9) {
-            if ((*m_opponent)->y < 0.0 && unk3110 < 0x12c && unk168 == 3) {
-                unk262 = (WORD)CPlayer::Unk4108a0(0, 2) + 0x14;
+            if ((*m_opponent)->y < 0.0 && unk3110 < 0x12c && m_attackResult == 3) {
+                m_command = (WORD)CPlayer::Random(0, 2) + 0x14;
                 return;
             }
-            if ((*m_opponent)->y < 0.0 && unk3110 > 0x12b && unk3110 < 0x140 && unk148 >= 0x3e8) {
-                unk262 = (WORD)CPlayer::Unk4108a0(0, 3) + 0x78;
+            if ((*m_opponent)->y < 0.0 && unk3110 > 0x12b && unk3110 < 0x140 && m_gauge >= 0x3e8) {
+                m_command = (WORD)CPlayer::Random(0, 3) + 0x78;
                 return;
             }
-            if ((*m_opponent)->y < 0.0 && unk3110 > 0x140 && unk3110 < 0x258 && unk168 == 3) {
+            if ((*m_opponent)->y < 0.0 && unk3110 > 0x140 && unk3110 < 0x258 && m_attackResult == 3) {
                 m_inputX = facing;
                 m_inputY = -1;
                 return;
@@ -1701,12 +1701,12 @@ void CMizuka::Vf5()
             if (unk3110 > 0x384) {
                 unk3114 = 4;
                 m_inputY = -1;
-                m_inputX = (WORD)CPlayer::Unk4108a0(0, 2) - 1;
+                m_inputX = (WORD)CPlayer::Random(0, 2) - 1;
                 return;
             }
             if (unk3110 > 0x2bc) {
                 unk3114 = 1;
-                if ((WORD)CPlayer::Unk4108a0(0, 1) == 0) {
+                if ((WORD)CPlayer::Random(0, 1) == 0) {
                     unk3114 = 6;
                     if (v10 > 80.0) {
                         unk3114 = 8;
@@ -1717,21 +1717,21 @@ void CMizuka::Vf5()
         }
         if (pattern == 0xca) {
             if ((*m_opponent)->y < 0.0 && unk3110 > 0x12b && unk3110 < 0x140) {
-                unk262 = 0xa;
+                m_command = 0xa;
                 return;
             }
             if ((*m_opponent)->y < 0.0 && unk3110 > 0x140 && unk3110 < 0x258 && v10 < 100.0) {
                 m_pressC = 1;
                 return;
             }
-            if (unk3110 < 0x1f4 && unk168 == 3 && v10 < 80.0) {
+            if (unk3110 < 0x1f4 && m_attackResult == 3 && v10 < 80.0) {
                 m_pressC = 1;
                 m_inputY = 0;
                 return;
             }
             if (unk3110 > 0x2bc) {
                 unk3114 = 1;
-                if ((WORD)CPlayer::Unk4108a0(0, 1) == 0) {
+                if ((WORD)CPlayer::Random(0, 1) == 0) {
                     unk3114 = 6;
                     if (v10 > 110.0) {
                         unk3114 = 8;
@@ -1741,24 +1741,24 @@ void CMizuka::Vf5()
             }
         }
         if (pattern == 0xcb) {
-            if ((*m_opponent)->y < 0.0 && unk3110 < 0x12c && unk168 == 3) {
-                unk262 = 0x14;
+            if ((*m_opponent)->y < 0.0 && unk3110 < 0x12c && m_attackResult == 3) {
+                m_command = 0x14;
                 return;
             }
-            if ((*m_opponent)->y < 0.0 && unk3110 > 0x12b && unk3110 < 0x131 && unk148 >= 0xbb8 && v10 < 90.0 && unk168 == 3) {
-                unk262 = 0x84;
+            if ((*m_opponent)->y < 0.0 && unk3110 > 0x12b && unk3110 < 0x131 && m_gauge >= 0xbb8 && v10 < 90.0 && m_attackResult == 3) {
+                m_command = 0x84;
                 return;
             }
             if (unk3110 > 0xc8 && unk3110 < 0x15e) {
-                unk262 = 0x1e;
+                m_command = 0x1e;
                 return;
             }
             if (unk3110 > 0x15e && unk3110 < 0x1f4) {
-                unk262 = (WORD)CPlayer::Unk4108a0(0, 3) + 0xa;
+                m_command = (WORD)CPlayer::Random(0, 3) + 0xa;
                 return;
             }
             if (unk3110 > 0x1f4 && unk3110 < 0x258) {
-                unk262 = (WORD)CPlayer::Unk4108a0(0, 3) + 0x46;
+                m_command = (WORD)CPlayer::Random(0, 3) + 0x46;
                 return;
             }
             if (unk3110 > 0x29e && unk3110 < 0x2bc) {
@@ -1775,7 +1775,7 @@ void CMizuka::Vf5()
             if (v10 < 50.0 && unk3110 < 0x190) {
                 m_pressA = 1;
                 m_inputY = 0;
-                if (unk168 == 2 && (WORD)CPlayer::Unk4108a0(0, 0x64) < 0x14) {
+                if (m_attackResult == 2 && (WORD)CPlayer::Random(0, 0x64) < 0x14) {
                     m_pressC = 1;
                     m_inputY = 1;
                 }
@@ -1789,12 +1789,12 @@ void CMizuka::Vf5()
             if (unk3110 > 0x3b6) {
                 unk3114 = 4;
                 m_inputY = -1;
-                m_inputX = (WORD)CPlayer::Unk4108a0(0, 2) - 1;
+                m_inputX = (WORD)CPlayer::Random(0, 2) - 1;
                 return;
             }
             if (unk3110 > 0x2bb) {
                 unk3114 = 1;
-                if ((WORD)CPlayer::Unk4108a0(0, 1) == 0) {
+                if ((WORD)CPlayer::Random(0, 1) == 0) {
                     unk3114 = 6;
                     if (v10 > 110.0) {
                         unk3114 = 8;
@@ -1826,12 +1826,12 @@ void CMizuka::Vf5()
             if (unk3110 > 0x384) {
                 unk3114 = 4;
                 m_inputY = -1;
-                m_inputX = (WORD)CPlayer::Unk4108a0(0, 2) - 1;
+                m_inputX = (WORD)CPlayer::Random(0, 2) - 1;
                 return;
             }
             if (unk3110 > 0x2bc) {
                 unk3114 = 1;
-                if ((WORD)CPlayer::Unk4108a0(0, 1) == 0) {
+                if ((WORD)CPlayer::Random(0, 1) == 0) {
                     unk3114 = 6;
                     if (v10 > 110.0) {
                         unk3114 = 8;
@@ -1841,28 +1841,28 @@ void CMizuka::Vf5()
             }
         }
         if (pattern == 0xce) {
-            if ((*m_opponent)->y < 0.0 && unk3110 < 0x12c && unk168 == 3) {
-                unk262 = 0x14;
+            if ((*m_opponent)->y < 0.0 && unk3110 < 0x12c && m_attackResult == 3) {
+                m_command = 0x14;
                 return;
             }
-            if ((*m_opponent)->y < 0.0 && unk3110 > 0x12b && unk3110 < 0x131 && unk148 >= 0xbb8 && v10 < 90.0 && unk168 == 3) {
-                unk262 = 0x84;
+            if ((*m_opponent)->y < 0.0 && unk3110 > 0x12b && unk3110 < 0x131 && m_gauge >= 0xbb8 && v10 < 90.0 && m_attackResult == 3) {
+                m_command = 0x84;
                 return;
             }
-            if ((*m_opponent)->y < 0.0 && unk3110 > 0x131 && unk3110 < 0x15e && unk148 >= 0x3e8 && unk168 == 3) {
-                unk262 = (WORD)CPlayer::Unk4108a0(0, 3) + 0x64;
+            if ((*m_opponent)->y < 0.0 && unk3110 > 0x131 && unk3110 < 0x15e && m_gauge >= 0x3e8 && m_attackResult == 3) {
+                m_command = (WORD)CPlayer::Random(0, 3) + 0x64;
                 return;
             }
             if (unk3110 > 0xc8 && unk3110 < 0x15e) {
-                unk262 = 0x1e;
+                m_command = 0x1e;
                 return;
             }
             if (unk3110 > 0x15e && unk3110 < 0x1f4) {
-                unk262 = (WORD)CPlayer::Unk4108a0(0, 3) + 0xa;
+                m_command = (WORD)CPlayer::Random(0, 3) + 0xa;
                 return;
             }
             if (unk3110 > 0x1f4 && unk3110 < 0x258) {
-                unk262 = (WORD)CPlayer::Unk4108a0(0, 3) + 0x46;
+                m_command = (WORD)CPlayer::Random(0, 3) + 0x46;
                 return;
             }
             if (unk3110 > 0x29e && unk3110 < 0x2bc) {
@@ -1886,15 +1886,15 @@ void CMizuka::Vf5()
             }
             if (unk3110 > 0x2bb) {
                 unk3114 = 1;
-                if ((WORD)CPlayer::Unk4108a0(0, 4) == 0) {
+                if ((WORD)CPlayer::Random(0, 4) == 0) {
                     unk3114 = 3;
                 }
                 return;
             }
         }
         if (pattern == 0xd0) {
-            if (unk3110 > 0x14 && unk3110 < 0x3c && unk168 == 3 && (*m_opponent)->y < 0.0) {
-                unk262 = 0xa;
+            if (unk3110 > 0x14 && unk3110 < 0x3c && m_attackResult == 3 && (*m_opponent)->y < 0.0) {
+                m_command = 0xa;
                 return;
             }
             if (unk3110 > 0x50 && unk3110 < 0x12c) {
@@ -1902,7 +1902,7 @@ void CMizuka::Vf5()
                 return;
             }
             if (unk3110 > 0x3b6) {
-                m_inputX = (WORD)CPlayer::Unk4108a0(0, 2) - 1;
+                m_inputX = (WORD)CPlayer::Random(0, 2) - 1;
                 return;
             }
             if (unk3110 > 0x289) {
@@ -1912,7 +1912,7 @@ void CMizuka::Vf5()
         }
         if (pattern == 0xd1) {
             if (unk3110 > 0x3b6) {
-                m_inputX = (WORD)CPlayer::Unk4108a0(0, 2) - 1;
+                m_inputX = (WORD)CPlayer::Random(0, 2) - 1;
                 return;
             }
             if (unk3110 > 0x289) {
@@ -1921,19 +1921,19 @@ void CMizuka::Vf5()
             }
         }
         if (pattern == 0xe7) {
-            if ((*m_opponent)->y < 0.0 && unk3110 < 0x12c && unk168 == 3) {
-                unk262 = (WORD)CPlayer::Unk4108a0(0, 2) + 0x14;
+            if ((*m_opponent)->y < 0.0 && unk3110 < 0x12c && m_attackResult == 3) {
+                m_command = (WORD)CPlayer::Random(0, 2) + 0x14;
                 return;
             }
-            if (unk3110 > 0xc8 && unk3110 < 0xdc && v10 < 90.0 && unk168 == 3 && unk148 >= 0x3e8) {
-                unk262 = (WORD)CPlayer::Unk4108a0(0, 3) + 0x78;
+            if (unk3110 > 0xc8 && unk3110 < 0xdc && v10 < 90.0 && m_attackResult == 3 && m_gauge >= 0x3e8) {
+                m_command = (WORD)CPlayer::Random(0, 3) + 0x78;
                 return;
             }
             if (unk3110 > 0x15e && unk3110 < 0x190 && unk118 > 500.0) {
-                unk262 = 0x34;
+                m_command = 0x34;
                 return;
             }
-            if (unk3110 > 0x289 && (WORD)CPlayer::Unk4108a0(0, 2) == 0) {
+            if (unk3110 > 0x289 && (WORD)CPlayer::Random(0, 2) == 0) {
                 unk3114 = 0xc;
                 if (v10 > 110.0) {
                     unk3114 = 8;
@@ -1941,41 +1941,41 @@ void CMizuka::Vf5()
             }
         }
         if (pattern == 0xe8) {
-            if ((*m_opponent)->y < 0.0 && unk3110 < 0x12c && unk168 == 3) {
-                unk262 = 0xa;
+            if ((*m_opponent)->y < 0.0 && unk3110 < 0x12c && m_attackResult == 3) {
+                m_command = 0xa;
                 return;
             }
-            if ((*m_opponent)->y < 0.0 && unk3110 > 0x12b && unk3110 < 0x140 && unk148 >= 0x3e8 && v10 < 90.0) {
-                unk262 = (WORD)CPlayer::Unk4108a0(0, 3) + 0x78;
+            if ((*m_opponent)->y < 0.0 && unk3110 > 0x12b && unk3110 < 0x140 && m_gauge >= 0x3e8 && v10 < 90.0) {
+                m_command = (WORD)CPlayer::Random(0, 3) + 0x78;
                 return;
             }
-            if (unk3110 > 0 && unk3110 < 0xc8 && unk168 == 3) {
-                unk262 = 0xa;
+            if (unk3110 > 0 && unk3110 < 0xc8 && m_attackResult == 3) {
+                m_command = 0xa;
                 return;
             }
             if (unk3110 > 0xc8 && unk3110 < 0xfa) {
-                unk262 = (WORD)CPlayer::Unk4108a0(0, 3) + 0x1e;
+                m_command = (WORD)CPlayer::Random(0, 3) + 0x1e;
                 return;
             }
             if (unk3110 > 0x15e && unk3110 < 0x190 && unk118 > 500.0) {
-                unk262 = 0x34;
+                m_command = 0x34;
                 return;
             }
-            if (unk3110 > 0x190 && unk3110 < 0x1ae && unk168 == 3 && unk148 == 0xbb8) {
-                unk262 = 0x5f;
+            if (unk3110 > 0x190 && unk3110 < 0x1ae && m_attackResult == 3 && m_gauge == 0xbb8) {
+                m_command = 0x5f;
                 return;
             }
-            if (unk3110 > 0x1ae && unk3110 < 0x21c && unk168 != 3) {
-                unk262 = 0x28;
+            if (unk3110 > 0x1ae && unk3110 < 0x21c && m_attackResult != 3) {
+                m_command = 0x28;
                 if (v10 > 120.0) {
-                    unk262 = 0x29;
+                    m_command = 0x29;
                 }
                 return;
             }
-            if (unk3110 > 0x38e && unk168 == 3) {
+            if (unk3110 > 0x38e && m_attackResult == 3) {
                 unk3114 = 4;
                 m_inputY = -1;
-                m_inputX = (WORD)CPlayer::Unk4108a0(0, 2) - 1;
+                m_inputX = (WORD)CPlayer::Random(0, 2) - 1;
                 return;
             }
             if (unk3110 > 0x289) {
@@ -1984,8 +1984,8 @@ void CMizuka::Vf5()
             }
         }
     }
-    if ((WORD)CPlayer::Unk4108a0(0, 0x64) < 25.0f * unka8) {
-        unk3110 = (WORD)CPlayer::Unk4108a0(0, 0x3e8);
+    if ((WORD)CPlayer::Random(0, 0x64) < 25.0f * unka8) {
+        unk3110 = (WORD)CPlayer::Random(0, 0x3e8);
         if (y == 0.0) {
             if ((*m_opponent)->y == 0.0 && (*m_opponent)->pattern != 0x63) {
                 if (v10 < 40.0 && (*m_opponent)->y == 0.0 && unk3110 < 5) {
@@ -2037,43 +2037,43 @@ void CMizuka::Vf5()
                     return;
                 }
                 if (v10 < 70.0 && unk3110 < 0xb9 && unk3110 > 0x91 && unk118 > 500.0 && (*m_opponent)->pattern > 0xc7) {
-                    unk262 = 0x14;
+                    m_command = 0x14;
                     return;
                 }
-                if (v10 < 100.0 && v10 > 40.0 && unk3110 < 0xbe && unk3110 > 0xb9 && unk148 >= 0xbb8 && (*m_opponent)->pattern > 0xc7) {
-                    unk262 = 0x84;
+                if (v10 < 100.0 && v10 > 40.0 && unk3110 < 0xbe && unk3110 > 0xb9 && m_gauge >= 0xbb8 && (*m_opponent)->pattern > 0xc7) {
+                    m_command = 0x84;
                     return;
                 }
-                if (v10 > 120.0 && unk3110 < 0xc8 && unk3110 > 0xbe && unk148 >= 0xbb8 && (*m_opponent)->pattern > 0xc7) {
-                    unk262 = 0x70;
+                if (v10 > 120.0 && unk3110 < 0xc8 && unk3110 > 0xbe && m_gauge >= 0xbb8 && (*m_opponent)->pattern > 0xc7) {
+                    m_command = 0x70;
                     return;
                 }
                 if (v10 > 200.0 && unk3110 < 0xbe && unk3110 > 0xaa) {
-                    unk262 = (WORD)CPlayer::Unk4108a0(0, 3) + 0xa;
+                    m_command = (WORD)CPlayer::Random(0, 3) + 0xa;
                     return;
                 }
                 if (v10 > 180.0 && unk3110 < 0xc8 && unk3110 > 0xbe) {
-                    unk262 = 0x46;
+                    m_command = 0x46;
                     return;
                 }
                 if (v10 > 180.0 && unk3110 < 0xd2 && unk3110 > 0xc8) {
-                    unk262 = 0x47;
+                    m_command = 0x47;
                     return;
                 }
                 if (v10 > 80.0 && v10 < 120.0 && unk3110 < 0xdc && unk3110 > 0xd2) {
-                    unk262 = 0x1e;
+                    m_command = 0x1e;
                     return;
                 }
                 if (v10 > 140.0 && v10 < 180.0 && unk3110 < 0xf0 && unk3110 > 0xe6) {
-                    unk262 = 0x1f;
+                    m_command = 0x1f;
                     return;
                 }
                 if ((unk118 > 500.0 || unk120 == 1) && unk3110 < 0xf5 && unk3110 > 0xf0) {
-                    unk262 = 0x20;
+                    m_command = 0x20;
                     return;
                 }
-                if (v10 > 140.0 && unk3110 < 0x104 && unk3110 > 0xfa && unk148 >= 0x3e8) {
-                    unk262 = (WORD)CPlayer::Unk4108a0(0, 3) + 0x78;
+                if (v10 > 140.0 && unk3110 < 0x104 && unk3110 > 0xfa && m_gauge >= 0x3e8) {
+                    m_command = (WORD)CPlayer::Random(0, 3) + 0x78;
                     return;
                 }
             }
@@ -2084,18 +2084,18 @@ void CMizuka::Vf5()
                         m_inputX = -facing;
                         return;
                     }
-                    if (v10 < 150.0 && v10 > 50.0 && unk3110 < 0x28 && unk148 >= 0xbb8) {
-                        unk262 = 0x84;
+                    if (v10 < 150.0 && v10 > 50.0 && unk3110 < 0x28 && m_gauge >= 0xbb8) {
+                        m_command = 0x84;
                         return;
                     }
                 }
                 if ((*m_opponent)->vy > 0.0) {
                     if (v10 < 90.0 && x8 < 140.0 && unk3110 < 6 && (unk118 > 500.0 || unk120 > 0)) {
-                        unk262 = 0x16;
+                        m_command = 0x16;
                         return;
                     }
                     if (v10 < 90.0 && x8 < 140.0 && unk3110 < 0x1e) {
-                        unk262 = 0x16;
+                        m_command = 0x16;
                         return;
                     }
                     if (v10 < 80.0 && v10 > 30.0 && x8 < 140.0 && x8 > 100.0 && unk3110 < 0x41 && unk3110 > 0x1e) {
@@ -2108,8 +2108,8 @@ void CMizuka::Vf5()
                         m_inputY = 0;
                         return;
                     }
-                    if (v10 < 160.0 && v10 > 30.0 && unk3110 < 0x6e && unk3110 > 0x50 && (*m_opponent)->y < -50.0 && unk148 >= 0xbb8) {
-                        unk262 = 0x84;
+                    if (v10 < 160.0 && v10 > 30.0 && unk3110 < 0x6e && unk3110 > 0x50 && (*m_opponent)->y < -50.0 && m_gauge >= 0xbb8) {
+                        m_command = 0x84;
                         return;
                     }
                 }
@@ -2129,12 +2129,12 @@ void CMizuka::Vf5()
                     m_pressC = 1;
                     return;
                 }
-                if ((WORD)CPlayer::Unk4108a0(0, 0x140) < v10 - 100.0 && x8 < 90.0 && unk3110 > 0xaa && unk3110 < 0xdc) {
-                    unk262 = (WORD)CPlayer::Unk4108a0(0, 3) + 0xa;
+                if ((WORD)CPlayer::Random(0, 0x140) < v10 - 100.0 && x8 < 90.0 && unk3110 > 0xaa && unk3110 < 0xdc) {
+                    m_command = (WORD)CPlayer::Random(0, 3) + 0xa;
                     return;
                 }
                 if (v10 > 100.0 && unk3110 > 0xf0 && unk3110 < 0x14a && x8 + 40.0 > v10 && x8 - 40.0 < v10) {
-                    unk262 = (WORD)CPlayer::Unk4108a0(0, 3) + 0x1e;
+                    m_command = (WORD)CPlayer::Random(0, 3) + 0x1e;
                     return;
                 }
             }
@@ -2151,36 +2151,36 @@ void CMizuka::Vf5()
                     m_pressC = 1;
                     return;
                 }
-                if ((WORD)CPlayer::Unk4108a0(0, 0x140) < v10 - 100.0 && x8 < 90.0 && unk3110 > 0xaa && unk3110 < 0xdc) {
-                    unk262 = (WORD)CPlayer::Unk4108a0(0, 3) + 0xa;
+                if ((WORD)CPlayer::Random(0, 0x140) < v10 - 100.0 && x8 < 90.0 && unk3110 > 0xaa && unk3110 < 0xdc) {
+                    m_command = (WORD)CPlayer::Random(0, 3) + 0xa;
                     return;
                 }
                 if (v10 > 100.0 && unk3110 > 0xf0 && unk3110 < 0x14a && x8 + 40.0 > v10 && x8 - 40.0 < v10) {
-                    unk262 = (WORD)CPlayer::Unk4108a0(0, 3) + 0x1e;
+                    m_command = (WORD)CPlayer::Random(0, 3) + 0x1e;
                     return;
                 }
             }
         }
     }
-    if (pattern < 0x32 && ((*m_opponent)->pattern > 0x95 && (*m_opponent)->pattern < 0x9c || (*m_opponent)->pattern > 0x31 && (*m_opponent)->pattern < 0x3b) && y == 0.0 && (WORD)CPlayer::Unk4108a0(0, 0x64) < 3.0f * unka8) {
-        unk262 = facing == 1;
+    if (pattern < 0x32 && ((*m_opponent)->pattern > 0x95 && (*m_opponent)->pattern < 0x9c || (*m_opponent)->pattern > 0x31 && (*m_opponent)->pattern < 0x3b) && y == 0.0 && (WORD)CPlayer::Random(0, 0x64) < 3.0f * unka8) {
+        m_command = facing == 1;
         return;
     }
-    if (pattern < 0x32 && (*m_opponent)->pattern < 0x32 && v10 > 60.0 && v10 < 140.0 && (WORD)CPlayer::Unk4108a0(0, 0x64) < 2.0f * unka8 && x > 120.0 && x < 520.0) {
-        unk262 = -((facing == 1) - 1);
+    if (pattern < 0x32 && (*m_opponent)->pattern < 0x32 && v10 > 60.0 && v10 < 140.0 && (WORD)CPlayer::Random(0, 0x64) < 2.0f * unka8 && x > 120.0 && x < 520.0) {
+        m_command = -((facing == 1) - 1);
         return;
     }
-    if ((WORD)CPlayer::Unk4108a0(0, 0x3e8) < 1) {
+    if ((WORD)CPlayer::Random(0, 0x3e8) < 1) {
         unk3114 = 4;
         return;
     }
-    if ((WORD)CPlayer::Unk4108a0(0, 0x64) < 2) {
-        if ((WORD)CPlayer::Unk4108a0(0, 0x64) < 8.0f * unka8) {
+    if ((WORD)CPlayer::Random(0, 0x64) < 2) {
+        if ((WORD)CPlayer::Random(0, 0x64) < 8.0f * unka8) {
             unk3114 = 3;
         } else {
             unk3114 = 0;
         }
-        if (v10 > 180.0 && y == 0.0 && (WORD)CPlayer::Unk4108a0(0, 0x64) < 2) {
+        if (v10 > 180.0 && y == 0.0 && (WORD)CPlayer::Random(0, 0x64) < 2) {
             m_inputX = 0;
             m_inputY = -1;
             return;
@@ -2205,26 +2205,26 @@ void CMizuka::Vf5()
         m_inputX = -1;
         return;
     }
-    if ((WORD)CPlayer::Unk4108a0(0, 0x64) < 0x32 && v10 < 120.0) {
+    if ((WORD)CPlayer::Random(0, 0x64) < 0x32 && v10 < 120.0) {
         if (facing == 1) {
-            unk1a4 = (WORD)CPlayer::Unk4108a0(0, 0xc8) + 0x2d;
+            unk1a4 = (WORD)CPlayer::Random(0, 0xc8) + 0x2d;
         } else {
-            unk1a0 = (WORD)CPlayer::Unk4108a0(0, 0xc8) + 0x2d;
+            unk1a0 = (WORD)CPlayer::Random(0, 0xc8) + 0x2d;
         }
     }
-    if ((WORD)CPlayer::Unk4108a0(0, 0x64) < 0x32) {
+    if ((WORD)CPlayer::Random(0, 0x64) < 0x32) {
         if (facing == 1) {
-            unk1a0 = (WORD)CPlayer::Unk4108a0(0, 0xc8) + 0x2d;
+            unk1a0 = (WORD)CPlayer::Random(0, 0xc8) + 0x2d;
         } else {
-            unk1a4 = (WORD)CPlayer::Unk4108a0(0, 0xc8) + 0x2d;
+            unk1a4 = (WORD)CPlayer::Random(0, 0xc8) + 0x2d;
         }
         return;
     }
     if (facing == -1) {
-        unk1a0 = (WORD)CPlayer::Unk4108a0(0, 0xc8) + 0x2d;
+        unk1a0 = (WORD)CPlayer::Random(0, 0xc8) + 0x2d;
         return;
     }
-    unk1a4 = (WORD)CPlayer::Unk4108a0(0, 0xc8) + 0x2d;
+    unk1a4 = (WORD)CPlayer::Random(0, 0xc8) + 0x2d;
 }
 
 void CMizuka::Vf7()
@@ -2343,8 +2343,8 @@ void CMizuka::Vf7()
                     l50.type = 0x199;
                     l50.x = (double)((int)m_objects[v4].x + m_objects[v4].facing * 0x3c);
                     l50.y = 0.0;
-                    l50.unk20 = 0;
-                    l50.unk21 = 1;
+                    l50.scale = 0;
+                    l50.layer = 1;
                     l50.unk18 = m_objects[v4].facing;
                     Vf9(&l50);
                 }
@@ -2366,8 +2366,8 @@ void CMizuka::Vf7()
                     l50.type = 0x19a;
                     l50.x = (double)((int)m_objects[v4].x + m_objects[v4].facing * 0x3c);
                     l50.y = 0.0;
-                    l50.unk20 = 0;
-                    l50.unk21 = 1;
+                    l50.scale = 0;
+                    l50.layer = 1;
                     l50.unk18 = m_objects[v4].facing;
                     Vf9(&l50);
                 }
@@ -2389,8 +2389,8 @@ void CMizuka::Vf7()
                     l50.type = 0x198;
                     l50.x = (double)((int)m_objects[v4].x + m_objects[v4].facing * 0x3c);
                     l50.y = 0.0;
-                    l50.unk20 = 0;
-                    l50.unk21 = 1;
+                    l50.scale = 0;
+                    l50.layer = 1;
                     l50.unk18 = m_objects[v4].facing;
                     Vf9(&l50);
                 }
@@ -2405,7 +2405,7 @@ void CMizuka::Vf7()
                 break;
             case 0x19b:
                 if (m_objects[v4].frame == 0 && m_objects[v4].timer == 0 && unk3148[v4] == 0) {
-                    m_objects[v4].vx = (WORD)CPlayer::Unk4108a0(0, 0x14) * 0.01 + 0.7;
+                    m_objects[v4].vx = (WORD)CPlayer::Random(0, 0x14) * 0.01 + 0.7;
                     m_objects[v4].unk84 = 1;
                     unk3148[v4]++;
                 }
@@ -2424,7 +2424,7 @@ void CMizuka::Vf7()
                 break;
             case 0x19c:
                 if (m_objects[v4].frame == 0 && m_objects[v4].timer == 0 && unk3148[v4] == 0) {
-                    m_objects[v4].vx = (WORD)CPlayer::Unk4108a0(0, 0x14) * 0.01 + 0.7;
+                    m_objects[v4].vx = (WORD)CPlayer::Random(0, 0x14) * 0.01 + 0.7;
                     m_objects[v4].unk84 = 1;
                     unk3148[v4]++;
                 }
@@ -2443,7 +2443,7 @@ void CMizuka::Vf7()
                 break;
             case 0x19d:
                 if (m_objects[v4].frame == 0 && m_objects[v4].timer == 0 && unk3148[v4] == 0) {
-                    m_objects[v4].vx = (WORD)CPlayer::Unk4108a0(0, 0x14) * 0.01 + 0.7;
+                    m_objects[v4].vx = (WORD)CPlayer::Random(0, 0x14) * 0.01 + 0.7;
                     m_objects[v4].unk84 = 1;
                     unk3148[v4]++;
                 }
@@ -2462,7 +2462,7 @@ void CMizuka::Vf7()
                 break;
             case 0x19e:
                 if (m_objects[v4].frame == 0 && m_objects[v4].timer == 0 && unk3148[v4] == 0) {
-                    m_objects[v4].vx = (WORD)CPlayer::Unk4108a0(0, 0x14) * 0.01 + 0.7;
+                    m_objects[v4].vx = (WORD)CPlayer::Random(0, 0x14) * 0.01 + 0.7;
                     m_objects[v4].unk84 = 1;
                     unk3148[v4]++;
                 }
@@ -2481,7 +2481,7 @@ void CMizuka::Vf7()
                 break;
             case 0x19f:
                 if (m_objects[v4].frame == 0 && m_objects[v4].timer == 0 && unk3148[v4] == 0) {
-                    m_objects[v4].vx = (WORD)CPlayer::Unk4108a0(0, 0x14) * 0.01 + 0.7;
+                    m_objects[v4].vx = (WORD)CPlayer::Random(0, 0x14) * 0.01 + 0.7;
                     m_objects[v4].unk84 = 1;
                     unk3148[v4]++;
                 }
@@ -2500,7 +2500,7 @@ void CMizuka::Vf7()
                 break;
             case 0x1a0:
                 if (m_objects[v4].frame == 0 && m_objects[v4].timer == 0 && unk3148[v4] == 0) {
-                    m_objects[v4].vx = (WORD)CPlayer::Unk4108a0(0, 0x14) * 0.01 + 0.7;
+                    m_objects[v4].vx = (WORD)CPlayer::Random(0, 0x14) * 0.01 + 0.7;
                     m_objects[v4].unk84 = 1;
                     unk3148[v4]++;
                 }
@@ -2537,7 +2537,7 @@ void CMizuka::Vf7()
                     break;
                 }
                 if (m_objects[v4].frame == 0x25 && m_objects[v4].unk80 == 3) {
-                    (*m_opponent)->Unk40f1e0();
+                    (*m_opponent)->StopMoving();
                     (*m_opponent)->Vf0();
                     (*m_opponent)->pattern = 0x79;
                     m_objects[v4].unk80 = 0;
@@ -2560,7 +2560,7 @@ void CMizuka::Vf7()
                         Vf10(v4);
                         if ((*m_opponent)->pattern == 0x79) {
                             (*m_opponent)->Vf0();
-                            (*m_opponent)->Unk40f1e0();
+                            (*m_opponent)->StopMoving();
                             (*m_opponent)->y = -480.0;
                             (*m_opponent)->x = x;
                             (*m_opponent)->pattern = 0x3b;
@@ -2588,7 +2588,7 @@ void CMizuka::Vf7()
                     break;
                 }
                 if (m_objects[v4].frame == 0x25 && m_objects[v4].unk80 == 3) {
-                    (*m_opponent)->Unk40f1e0();
+                    (*m_opponent)->StopMoving();
                     (*m_opponent)->Vf0();
                     (*m_opponent)->pattern = 0x79;
                     m_objects[v4].unk80 = 0;
@@ -2611,7 +2611,7 @@ void CMizuka::Vf7()
                         Vf10(v4);
                         if ((*m_opponent)->pattern == 0x79) {
                             (*m_opponent)->Vf0();
-                            (*m_opponent)->Unk40f1e0();
+                            (*m_opponent)->StopMoving();
                             (*m_opponent)->y = -480.0;
                             (*m_opponent)->x = x;
                             (*m_opponent)->pattern = 0x3b;
@@ -2648,7 +2648,7 @@ void CMizuka::Vf7()
                     break;
                 }
                 if (m_objects[v4].frame == 0x25 && m_objects[v4].unk80 == 3) {
-                    (*m_opponent)->Unk40f1e0();
+                    (*m_opponent)->StopMoving();
                     (*m_opponent)->Vf0();
                     (*m_opponent)->pattern = 0x79;
                     m_objects[v4].unk80 = 0;
@@ -2671,7 +2671,7 @@ void CMizuka::Vf7()
                         Vf10(v4);
                         if ((*m_opponent)->pattern == 0x79) {
                             (*m_opponent)->Vf0();
-                            (*m_opponent)->Unk40f1e0();
+                            (*m_opponent)->StopMoving();
                             (*m_opponent)->y = -480.0;
                             (*m_opponent)->x = x;
                             (*m_opponent)->pattern = 0x3b;
@@ -2705,7 +2705,7 @@ void CMizuka::Vf7()
                     break;
                 }
                 if (m_objects[v4].frame == 0x25 && m_objects[v4].unk80 == 3) {
-                    (*m_opponent)->Unk40f1e0();
+                    (*m_opponent)->StopMoving();
                     (*m_opponent)->Vf0();
                     (*m_opponent)->pattern = 0x79;
                     m_objects[v4].unk80 = 0;
@@ -2728,7 +2728,7 @@ void CMizuka::Vf7()
                         Vf10(v4);
                         if ((*m_opponent)->pattern == 0x79) {
                             (*m_opponent)->Vf0();
-                            (*m_opponent)->Unk40f1e0();
+                            (*m_opponent)->StopMoving();
                             (*m_opponent)->y = -480.0;
                             (*m_opponent)->x = x;
                             (*m_opponent)->pattern = 0x3b;
@@ -3092,7 +3092,7 @@ void CMizuka::Vf7()
                     (*m_opponent)->y = m_objects[v4].y - 81.0;
                     (*m_opponent)->x = m_objects[v4].x;
                     (*m_opponent)->Vf0();
-                    (*m_opponent)->Unk40f1e0();
+                    (*m_opponent)->StopMoving();
                     (*m_opponent)->unkc0 = -6.0;
                     (*m_opponent)->unkc8 = 4.0;
                     (*m_opponent)->facing = -m_objects[v4].facing;
@@ -3101,7 +3101,7 @@ void CMizuka::Vf7()
                     unk3138--;
                 }
                 if ((*m_opponent)->y == 0.0 && unk3348[v4] == 0 && m_objects[v4].frame == 2) {
-                    CPlayer::Unk4105a0(0x170c, 500.0);
+                    CPlayer::DealDamage(0x170c, 500.0);
                     unk3348[v4]++;
                     unk2c9 = 0x16;
                 }
@@ -3112,7 +3112,7 @@ void CMizuka::Vf7()
                     m_objects[v4].vx = unk3148[v4] * 0.01;
                     m_objects[v4].vy = unk3248[v4] * 0.01;
                 }
-                if (m_objects[v4].frame == 4 && m_objects[v4].timer == v54 - 0xc && (unkac == 0 || unkac == 1 && (*m_opponent)->unk108 > 0)) {
+                if (m_objects[v4].frame == 4 && m_objects[v4].timer == v54 - 0xc && (unkac == 0 || unkac == 1 && (*m_opponent)->m_hp > 0)) {
                     m_game->FlashWhite(9, 3, 0xc);
                 }
                 if (m_objects[v4].frame != 2) {
@@ -3181,7 +3181,7 @@ void CMizuka::Vf7()
                 }
                 if (m_objects[v4].frame == 0) {
                     m_objects[v4].vy += 0.035;
-                    if (m_objects[v4].unk80 == 3 && (*m_opponent)->unk108 > 0) {
+                    if (m_objects[v4].unk80 == 3 && (*m_opponent)->m_hp > 0) {
                         m_objects[v4].unk51 = 0;
                         unk3448 = 1;
                         m_objects[v4].unk86 = 0x3c;
@@ -3239,7 +3239,7 @@ void CMizuka::Vf7()
                         }
                     }
                     if ((m_objects[v4].frame == 8 || m_objects[v4].frame == 0xb) && m_objects[v4].timer == 0xd2 || m_objects[v4].frame == 0xe && m_objects[v4].timer == 0x294) {
-                        if ((WORD)CPlayer::Unk4108a0(0, 9) < 5) {
+                        if ((WORD)CPlayer::Random(0, 9) < 5) {
                             unk2c8 = 6;
                             unk3448 = 3;
                             m_objects[v4].timer++;
@@ -3253,8 +3253,8 @@ void CMizuka::Vf7()
                             l50.type = 0;
                             l50.x = (double)(int)(*m_opponent)->x;
                             l50.y = -80.0;
-                            l50.unk20 = 2;
-                            l50.unk21 = 1;
+                            l50.scale = 2;
+                            l50.layer = 1;
                             l50.unk2c = 0x16;
                             m_game->CreateEffect((EffectDesc*)&l50);
                             unk3448 = 5;
@@ -3264,15 +3264,15 @@ void CMizuka::Vf7()
                             (*m_opponent)->unkc8 = -13.0;
                             (*m_opponent)->unkc0 = 0.0;
                             if (m_objects[v4].frame == 8) {
-                                CPlayer::Unk4105a0(0x708, 50.0);
+                                CPlayer::DealDamage(0x708, 50.0);
                                 m_objects[v4].frame = 0xf;
                             }
                             if (m_objects[v4].frame == 0xb) {
-                                CPlayer::Unk4105a0(0xdac, 50.0);
+                                CPlayer::DealDamage(0xdac, 50.0);
                                 m_objects[v4].frame = 0x12;
                             }
                             if (m_objects[v4].frame == 0xe) {
-                                CPlayer::Unk4105a0(0x1964, 50.0);
+                                CPlayer::DealDamage(0x1964, 50.0);
                                 m_objects[v4].frame = 0x15;
                             }
                             m_objects[v4].timer = 0;
@@ -3686,8 +3686,8 @@ void CMizuka::Vf7()
                     l50.type = 0x1c4;
                     l50.x = (double)((int)m_objects[v4].x + m_objects[v4].facing * 0x3c);
                     l50.y = m_objects[v4].y;
-                    l50.unk20 = 2;
-                    l50.unk21 = 1;
+                    l50.scale = 2;
+                    l50.layer = 1;
                     l50.unk18 = m_objects[v4].facing;
                     Vf9(&l50);
                 }
@@ -3712,8 +3712,8 @@ void CMizuka::Vf7()
                     l50.type = 0;
                     l50.x = (double)((int)x + facing * 0x14);
                     l50.y = (double)(int)m_objects[v4].y;
-                    l50.unk20 = 2;
-                    l50.unk21 = 1;
+                    l50.scale = 2;
+                    l50.layer = 1;
                     l50.unk2c = 2;
                     m_game->CreateEffect((EffectDesc*)&l50);
                     Vf10(v4);
@@ -3739,8 +3739,8 @@ void CMizuka::Vf7()
                     l50.type = 0;
                     l50.x = (double)((int)x + facing * 0x14);
                     l50.y = (double)(int)m_objects[v4].y;
-                    l50.unk20 = 2;
-                    l50.unk21 = 1;
+                    l50.scale = 2;
+                    l50.layer = 1;
                     l50.unk2c = 2;
                     m_game->CreateEffect((EffectDesc*)&l50);
                     Vf10(v4);
@@ -3766,8 +3766,8 @@ void CMizuka::Vf7()
                     l50.type = 0;
                     l50.x = (double)((int)x + facing * 0x14);
                     l50.y = (double)(int)m_objects[v4].y;
-                    l50.unk20 = 2;
-                    l50.unk21 = 1;
+                    l50.scale = 2;
+                    l50.layer = 1;
                     l50.unk2c = 2;
                     m_game->CreateEffect((EffectDesc*)&l50);
                     Vf10(v4);
@@ -3845,14 +3845,14 @@ void CMizuka::Vf7()
                     l50.type = 0;
                     l50.x = (double)((int)x + facing * 0x25);
                     l50.y = (double)((int)y - 0x2a);
-                    l50.unk20 = 2;
-                    l50.unk21 = 1;
+                    l50.scale = 2;
+                    l50.layer = 1;
                     m_game->CreateEffect((EffectDesc*)&l50);
                     unk2c9 = 0x1a;
                     (*m_opponent)->pattern = 0x71;
                     (*m_opponent)->timer = 0;
                     (*m_opponent)->frame = 0;
-                    (*m_opponent)->Unk40f1e0();
+                    (*m_opponent)->StopMoving();
                     m_objects[v4].frame = 2;
                     m_objects[v4].timer = 0;
                 }
@@ -3887,7 +3887,7 @@ void CMizuka::Vf7()
                         (*m_opponent)->unkc0 = -2.1;
                         (*m_opponent)->unkc8 = -1.5;
                         (*m_opponent)->pattern = 0x40;
-                        CPlayer::Unk4105a0(0x4b0, 750.0);
+                        CPlayer::DealDamage(0x4b0, 750.0);
                     }
                 }
                 if (m_objects[v4].frame > 7) {
@@ -4007,71 +4007,71 @@ void CMizuka::Vf7()
                     l50.type = 0x1f1;
                     l50.x = (double)((int)x + facing * 0x17);
                     l50.y = (double)((int)y - 4);
-                    l50.unk20 = 0;
-                    l50.unk21 = 1;
+                    l50.scale = 0;
+                    l50.layer = 1;
                     l50.unk18 = facing;
                     Vf9(&l50);
                     l50.type = 0x1f1;
                     l50.x = (double)((int)x - (facing << 2));
                     l50.y = (double)((int)y - 6);
-                    l50.unk20 = 0;
-                    l50.unk21 = 1;
+                    l50.scale = 0;
+                    l50.layer = 1;
                     l50.unk18 = facing;
                     Vf9(&l50);
                     l50.type = 0x1f1;
                     l50.x = (double)((int)x - facing * 0xe);
                     l50.y = (double)((int)y - 0x1a);
-                    l50.unk20 = 0;
-                    l50.unk21 = 1;
+                    l50.scale = 0;
+                    l50.layer = 1;
                     l50.unk18 = facing;
                     Vf9(&l50);
                     l50.type = 0x1f1;
                     l50.x = (double)(int)x;
                     l50.y = (double)(int)y;
-                    l50.unk20 = 0;
-                    l50.unk21 = 1;
+                    l50.scale = 0;
+                    l50.layer = 1;
                     l50.unk18 = facing;
                     Vf9(&l50);
                     l50.type = 0x1f1;
                     l50.x = (double)((int)x + facing * 0x1e);
                     l50.y = (double)((int)y - 0x28);
-                    l50.unk20 = 0;
-                    l50.unk21 = 1;
+                    l50.scale = 0;
+                    l50.layer = 1;
                     l50.unk18 = facing;
                     Vf9(&l50);
                     l50.type = 0x1f1;
                     l50.x = (double)((int)x - facing * 0x19);
                     l50.y = (double)((int)y - 0x50);
-                    l50.unk20 = 0;
-                    l50.unk21 = 1;
+                    l50.scale = 0;
+                    l50.layer = 1;
                     l50.unk18 = facing;
                     Vf9(&l50);
                     l50.type = 0x1f2;
                     l50.x = (double)((int)x - facing * 0x23);
                     l50.y = (double)((int)y - 0x2a);
-                    l50.unk20 = 0;
-                    l50.unk21 = 1;
+                    l50.scale = 0;
+                    l50.layer = 1;
                     l50.unk18 = facing;
                     Vf9(&l50);
                     l50.type = 0x1f2;
                     l50.x = (double)((int)x - facing * 0x12);
                     l50.y = (double)((int)y - 0x14);
-                    l50.unk20 = 0;
-                    l50.unk21 = 1;
+                    l50.scale = 0;
+                    l50.layer = 1;
                     l50.unk18 = facing;
                     Vf9(&l50);
                     l50.type = 0x1f2;
                     l50.x = (double)((int)x + facing * 2);
                     l50.y = (double)((int)y - 0x41);
-                    l50.unk20 = 0;
-                    l50.unk21 = 1;
+                    l50.scale = 0;
+                    l50.layer = 1;
                     l50.unk18 = facing;
                     Vf9(&l50);
                     l50.type = 0x1f2;
                     l50.x = (double)((int)x + (facing << 4));
                     l50.y = (double)((int)y - 0x50);
-                    l50.unk20 = 0;
-                    l50.unk21 = 1;
+                    l50.scale = 0;
+                    l50.layer = 1;
                     l50.unk18 = facing;
                     Vf9(&l50);
                     unk2c9 = 0x22;

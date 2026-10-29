@@ -108,7 +108,7 @@ void CAyu::Vf4()
     if (unk1a9 == 0) {
         unk1aa = 0;
     }
-    if (unk262 == 0x34 && (unk118 >= 500.0 && unk168 > 1 && unk168 != 6 || unk120 > 0 && unk168 > 1) && (m_patterns[pattern].frames[frame].flagsB0 & 8) > 0 && m_patterns[pattern].unk2 <= m_patterns[0xa7].unk0) {
+    if (m_command == 0x34 && (unk118 >= 500.0 && m_attackResult > 1 && m_attackResult != 6 || unk120 > 0 && m_attackResult > 1) && (m_patterns[pattern].frames[frame].flagsB0 & 8) > 0 && m_patterns[pattern].unk2 <= m_patterns[0xa7].unk0) {
         Vf0();
         CPlayer::Unk40f170();
         pattern = 0xa7;
@@ -118,31 +118,31 @@ void CAyu::Vf4()
         return;
     }
     if (unk15c < 2) {
-        if (unk108 < 0xd05 && unk262 == 0x5d && unk148 >= 0xbb8 && y == 0.0 && unk168 != 6 && (m_patterns[pattern].frames[frame].flagsB0 & 8) > 0 && m_patterns[pattern].unk2 <= m_patterns[0x13e].unk0) {
+        if (m_hp < 0xd05 && m_command == 0x5d && m_gauge >= 0xbb8 && y == 0.0 && m_attackResult != 6 && (m_patterns[pattern].frames[frame].flagsB0 & 8) > 0 && m_patterns[pattern].unk2 <= m_patterns[0x13e].unk0) {
             Vf0();
             CPlayer::Unk40f170();
             pattern = 0x13e;
             return;
         }
-        if (unk262 == 0x7a && unk148 >= 0xbb8 && y == 0.0 && (m_patterns[pattern].frames[frame].flagsB0 & 8) > 0 && (pattern >= 0xc8 && unk168 >= 2 && unk168 != 6 || pattern < 0xc8) && m_patterns[pattern].unk2 <= m_patterns[0x134].unk0) {
+        if (m_command == 0x7a && m_gauge >= 0xbb8 && y == 0.0 && (m_patterns[pattern].frames[frame].flagsB0 & 8) > 0 && (pattern >= 0xc8 && m_attackResult >= 2 && m_attackResult != 6 || pattern < 0xc8) && m_patterns[pattern].unk2 <= m_patterns[0x134].unk0) {
             Vf0();
             CPlayer::Unk40f170();
             pattern = 0x134;
             return;
         }
-        if ((unk262 == 0x79 || unk262 == 0x7a) && unk148 >= 0x7d0 && y == 0.0 && (m_patterns[pattern].frames[frame].flagsB0 & 8) > 0 && (pattern >= 0xc8 && unk168 >= 2 && unk168 != 6 || pattern < 0xc8) && m_patterns[pattern].unk2 <= m_patterns[0x133].unk0) {
+        if ((m_command == 0x79 || m_command == 0x7a) && m_gauge >= 0x7d0 && y == 0.0 && (m_patterns[pattern].frames[frame].flagsB0 & 8) > 0 && (pattern >= 0xc8 && m_attackResult >= 2 && m_attackResult != 6 || pattern < 0xc8) && m_patterns[pattern].unk2 <= m_patterns[0x133].unk0) {
             Vf0();
             CPlayer::Unk40f170();
             pattern = 0x133;
             return;
         }
-        if ((unk262 == 0x78 || unk262 == 0x79 || unk262 == 0x7a) && unk148 >= 0x3e8 && y == 0.0 && (m_patterns[pattern].frames[frame].flagsB0 & 8) > 0 && (pattern >= 0xc8 && unk168 >= 2 && unk168 != 6 || pattern < 0xc8) && m_patterns[pattern].unk2 <= m_patterns[0x132].unk0) {
+        if ((m_command == 0x78 || m_command == 0x79 || m_command == 0x7a) && m_gauge >= 0x3e8 && y == 0.0 && (m_patterns[pattern].frames[frame].flagsB0 & 8) > 0 && (pattern >= 0xc8 && m_attackResult >= 2 && m_attackResult != 6 || pattern < 0xc8) && m_patterns[pattern].unk2 <= m_patterns[0x132].unk0) {
             Vf0();
             CPlayer::Unk40f170();
             pattern = 0x132;
             return;
         }
-        if (unk262 == 0x70 && unk148 >= 0xbb8 && (m_patterns[pattern].frames[frame].flagsB0 & 8) > 0 && (pattern >= 0xc8 && unk168 >= 2 && unk168 != 6 || pattern < 0xc8) && m_patterns[pattern].unk2 <= m_patterns[0x12e].unk0) {
+        if (m_command == 0x70 && m_gauge >= 0xbb8 && (m_patterns[pattern].frames[frame].flagsB0 & 8) > 0 && (pattern >= 0xc8 && m_attackResult >= 2 && m_attackResult != 6 || pattern < 0xc8) && m_patterns[pattern].unk2 <= m_patterns[0x12e].unk0) {
             Vf0();
             CPlayer::Unk40f170();
             pattern = 0x12e;
@@ -151,7 +151,7 @@ void CAyu::Vf4()
             }
             return;
         }
-        if ((unk262 == 0x6f || unk262 == 0x70) && unk148 >= 0x7d0 && (m_patterns[pattern].frames[frame].flagsB0 & 8) > 0 && (pattern >= 0xc8 && unk168 >= 2 && unk168 != 6 || pattern < 0xc8) && m_patterns[pattern].unk2 <= m_patterns[0x12d].unk0) {
+        if ((m_command == 0x6f || m_command == 0x70) && m_gauge >= 0x7d0 && (m_patterns[pattern].frames[frame].flagsB0 & 8) > 0 && (pattern >= 0xc8 && m_attackResult >= 2 && m_attackResult != 6 || pattern < 0xc8) && m_patterns[pattern].unk2 <= m_patterns[0x12d].unk0) {
             Vf0();
             CPlayer::Unk40f170();
             pattern = 0x12d;
@@ -160,7 +160,7 @@ void CAyu::Vf4()
             }
             return;
         }
-        if ((unk262 == 0x6e || unk262 == 0x6f || unk262 == 0x70) && unk148 >= 0x3e8 && (m_patterns[pattern].frames[frame].flagsB0 & 8) > 0 && (pattern >= 0xc8 && unk168 >= 2 && unk168 != 6 || pattern < 0xc8) && m_patterns[pattern].unk2 <= m_patterns[0x12c].unk0) {
+        if ((m_command == 0x6e || m_command == 0x6f || m_command == 0x70) && m_gauge >= 0x3e8 && (m_patterns[pattern].frames[frame].flagsB0 & 8) > 0 && (pattern >= 0xc8 && m_attackResult >= 2 && m_attackResult != 6 || pattern < 0xc8) && m_patterns[pattern].unk2 <= m_patterns[0x12c].unk0) {
             Vf0();
             CPlayer::Unk40f170();
             pattern = 0x12c;
@@ -169,31 +169,31 @@ void CAyu::Vf4()
             }
             return;
         }
-        if (unk262 == 0x66 && unk148 >= 0xbb8 && y == 0.0 && (m_patterns[pattern].frames[frame].flagsB0 & 8) > 0 && (pattern >= 0xc8 && unk168 >= 2 && unk168 != 6 || pattern < 0xc8) && m_patterns[pattern].unk2 <= m_patterns[0x13d].unk0) {
+        if (m_command == 0x66 && m_gauge >= 0xbb8 && y == 0.0 && (m_patterns[pattern].frames[frame].flagsB0 & 8) > 0 && (pattern >= 0xc8 && m_attackResult >= 2 && m_attackResult != 6 || pattern < 0xc8) && m_patterns[pattern].unk2 <= m_patterns[0x13d].unk0) {
             Vf0();
             CPlayer::Unk40f170();
             pattern = 0x13d;
             return;
         }
-        if ((unk262 == 0x65 || unk262 == 0x66) && unk148 >= 0x7d0 && y == 0.0 && (m_patterns[pattern].frames[frame].flagsB0 & 8) > 0 && (pattern >= 0xc8 && unk168 >= 2 && unk168 != 6 || pattern < 0xc8) && m_patterns[pattern].unk2 <= m_patterns[0x13c].unk0) {
+        if ((m_command == 0x65 || m_command == 0x66) && m_gauge >= 0x7d0 && y == 0.0 && (m_patterns[pattern].frames[frame].flagsB0 & 8) > 0 && (pattern >= 0xc8 && m_attackResult >= 2 && m_attackResult != 6 || pattern < 0xc8) && m_patterns[pattern].unk2 <= m_patterns[0x13c].unk0) {
             Vf0();
             CPlayer::Unk40f170();
             pattern = 0x13c;
             return;
         }
-        if ((unk262 == 0x64 || unk262 == 0x65 || unk262 == 0x66) && unk148 >= 0x3e8 && y == 0.0 && (m_patterns[pattern].frames[frame].flagsB0 & 8) > 0 && (pattern >= 0xc8 && unk168 >= 2 && unk168 != 6 || pattern < 0xc8) && m_patterns[pattern].unk2 <= m_patterns[0x13b].unk0) {
+        if ((m_command == 0x64 || m_command == 0x65 || m_command == 0x66) && m_gauge >= 0x3e8 && y == 0.0 && (m_patterns[pattern].frames[frame].flagsB0 & 8) > 0 && (pattern >= 0xc8 && m_attackResult >= 2 && m_attackResult != 6 || pattern < 0xc8) && m_patterns[pattern].unk2 <= m_patterns[0x13b].unk0) {
             Vf0();
             CPlayer::Unk40f170();
             pattern = 0x13b;
             return;
         }
-        if (unk262 == 0x78 && unk148 >= 0xbb8 && y == 0.0 && (m_patterns[pattern].frames[frame].flagsB0 & 8) > 0 && (pattern >= 0xc8 && unk168 >= 2 && unk168 != 6 || pattern < 0xc8) && m_patterns[pattern].unk2 <= m_patterns[0x132].unk0) {
+        if (m_command == 0x78 && m_gauge >= 0xbb8 && y == 0.0 && (m_patterns[pattern].frames[frame].flagsB0 & 8) > 0 && (pattern >= 0xc8 && m_attackResult >= 2 && m_attackResult != 6 || pattern < 0xc8) && m_patterns[pattern].unk2 <= m_patterns[0x132].unk0) {
             Vf0();
             CPlayer::Unk40f170();
             pattern = 0x132;
             return;
         }
-        if (unk262 == 0x16 && (unk118 >= 500.0 || unk120 > 0) && (m_patterns[pattern].frames[frame].flagsB0 & 8) > 0 && (pattern >= 0xc8 && unk168 >= 2 && unk168 != 6 || pattern < 0xc8) && m_patterns[pattern].unk2 <= m_patterns[0xfb].unk0) {
+        if (m_command == 0x16 && (unk118 >= 500.0 || unk120 > 0) && (m_patterns[pattern].frames[frame].flagsB0 & 8) > 0 && (pattern >= 0xc8 && m_attackResult >= 2 && m_attackResult != 6 || pattern < 0xc8) && m_patterns[pattern].unk2 <= m_patterns[0xfb].unk0) {
             Vf0();
             CPlayer::Unk40f170();
             pattern = 0xfb;
@@ -202,56 +202,56 @@ void CAyu::Vf4()
             }
             return;
         }
-        if ((unk262 == 0x15 || unk262 == 0x16) && (m_patterns[pattern].frames[frame].flagsB0 & 8) > 0 && (pattern >= 0xc8 && unk168 >= 2 && unk168 != 6 || pattern < 0xc8) && m_patterns[pattern].unk2 <= m_patterns[0xfc].unk0) {
+        if ((m_command == 0x15 || m_command == 0x16) && (m_patterns[pattern].frames[frame].flagsB0 & 8) > 0 && (pattern >= 0xc8 && m_attackResult >= 2 && m_attackResult != 6 || pattern < 0xc8) && m_patterns[pattern].unk2 <= m_patterns[0xfc].unk0) {
             Vf0();
             CPlayer::Unk40f170();
             pattern = 0xfc;
             return;
         }
-        if (unk262 == 0x14 && (m_patterns[pattern].frames[frame].flagsB0 & 8) > 0 && (pattern >= 0xc8 && unk168 >= 2 && unk168 != 6 || pattern < 0xc8) && m_patterns[pattern].unk2 <= m_patterns[0xfa].unk0) {
+        if (m_command == 0x14 && (m_patterns[pattern].frames[frame].flagsB0 & 8) > 0 && (pattern >= 0xc8 && m_attackResult >= 2 && m_attackResult != 6 || pattern < 0xc8) && m_patterns[pattern].unk2 <= m_patterns[0xfa].unk0) {
             Vf0();
             CPlayer::Unk40f170();
             pattern = 0xfa;
             return;
         }
-        if (unk262 == 0x20 && (unk118 >= 500.0 || unk120 > 0) && (m_patterns[pattern].frames[frame].flagsB0 & 8) > 0 && (pattern >= 0xc8 && unk168 >= 2 && unk168 != 6 || pattern < 0xc8) && m_patterns[pattern].unk2 <= m_patterns[0x102].unk0) {
+        if (m_command == 0x20 && (unk118 >= 500.0 || unk120 > 0) && (m_patterns[pattern].frames[frame].flagsB0 & 8) > 0 && (pattern >= 0xc8 && m_attackResult >= 2 && m_attackResult != 6 || pattern < 0xc8) && m_patterns[pattern].unk2 <= m_patterns[0x102].unk0) {
             Vf0();
             CPlayer::Unk40f170();
             pattern = 0x102;
             return;
         }
-        if ((unk262 == 0x1f || unk262 == 0x20) && (m_patterns[pattern].frames[frame].flagsB0 & 8) > 0 && (pattern >= 0xc8 && unk168 >= 2 && unk168 != 6 || pattern < 0xc8) && m_patterns[pattern].unk2 <= m_patterns[0x101].unk0) {
+        if ((m_command == 0x1f || m_command == 0x20) && (m_patterns[pattern].frames[frame].flagsB0 & 8) > 0 && (pattern >= 0xc8 && m_attackResult >= 2 && m_attackResult != 6 || pattern < 0xc8) && m_patterns[pattern].unk2 <= m_patterns[0x101].unk0) {
             Vf0();
             CPlayer::Unk40f170();
             pattern = 0x101;
             return;
         }
-        if (unk262 == 0x1e && (m_patterns[pattern].frames[frame].flagsB0 & 8) > 0 && (pattern >= 0xc8 && unk168 >= 2 && unk168 != 6 || pattern < 0xc8) && m_patterns[pattern].unk2 <= m_patterns[0x100].unk0) {
+        if (m_command == 0x1e && (m_patterns[pattern].frames[frame].flagsB0 & 8) > 0 && (pattern >= 0xc8 && m_attackResult >= 2 && m_attackResult != 6 || pattern < 0xc8) && m_patterns[pattern].unk2 <= m_patterns[0x100].unk0) {
             Vf0();
             CPlayer::Unk40f170();
             pattern = 0x100;
             return;
         }
-        if (unk262 == 0xc && (unk118 >= 500.0 || unk120 > 0) && (m_patterns[pattern].frames[frame].flagsB0 & 8) > 0 && y == 0.0 && (pattern >= 0xc8 && unk168 >= 2 && unk168 != 6 || pattern < 0xc8) && m_patterns[pattern].unk2 <= m_patterns[0x106].unk0) {
+        if (m_command == 0xc && (unk118 >= 500.0 || unk120 > 0) && (m_patterns[pattern].frames[frame].flagsB0 & 8) > 0 && y == 0.0 && (pattern >= 0xc8 && m_attackResult >= 2 && m_attackResult != 6 || pattern < 0xc8) && m_patterns[pattern].unk2 <= m_patterns[0x106].unk0) {
             Vf0();
             CPlayer::Unk40f170();
             pattern = 0x106;
             return;
         }
-        if ((unk262 == 0xb || unk262 == 0xc) && (m_patterns[pattern].frames[frame].flagsB0 & 8) > 0 && y == 0.0 && (pattern >= 0xc8 && unk168 >= 2 && unk168 != 6 || pattern < 0xc8) && m_patterns[pattern].unk2 <= m_patterns[0x105].unk0) {
+        if ((m_command == 0xb || m_command == 0xc) && (m_patterns[pattern].frames[frame].flagsB0 & 8) > 0 && y == 0.0 && (pattern >= 0xc8 && m_attackResult >= 2 && m_attackResult != 6 || pattern < 0xc8) && m_patterns[pattern].unk2 <= m_patterns[0x105].unk0) {
             Vf0();
             CPlayer::Unk40f170();
             pattern = 0x105;
             return;
         }
-        if (unk262 == 0xa && (m_patterns[pattern].frames[frame].flagsB0 & 8) > 0 && y == 0.0 && (pattern >= 0xc8 && unk168 >= 2 && unk168 != 6 || pattern < 0xc8) && m_patterns[pattern].unk2 <= m_patterns[0x104].unk0) {
+        if (m_command == 0xa && (m_patterns[pattern].frames[frame].flagsB0 & 8) > 0 && y == 0.0 && (pattern >= 0xc8 && m_attackResult >= 2 && m_attackResult != 6 || pattern < 0xc8) && m_patterns[pattern].unk2 <= m_patterns[0x104].unk0) {
             Vf0();
             CPlayer::Unk40f170();
             pattern = 0x104;
             return;
         }
     }
-    if (unk15c < 3 && unk262 == 6 && (m_patterns[pattern].frames[frame].flagsB0 & 8) > 0 && y < 0.0 && unk15a < 1 && m_patterns[pattern].unk2 <= m_patterns[0xe].unk0 && (pattern >= 0xc8 && unk168 >= 2 && unk168 != 6 || pattern < 0xc8)) {
+    if (unk15c < 3 && m_command == 6 && (m_patterns[pattern].frames[frame].flagsB0 & 8) > 0 && y < 0.0 && unk15a < 1 && m_patterns[pattern].unk2 <= m_patterns[0xe].unk0 && (pattern >= 0xc8 && m_attackResult >= 2 && m_attackResult != 6 || pattern < 0xc8)) {
         Vf0();
         CPlayer::Unk40f170();
         unk15a++;
@@ -264,25 +264,25 @@ void CAyu::Vf4()
         }
         return;
     }
-    if (unk15c < 1 && (unk262 == 0 || unk262 == 1)) {
+    if (unk15c < 1 && (m_command == 0 || m_command == 1)) {
         if (y < 0.0 && unk159 < 2) {
-            if ((((*m_opponent)->x - x) * (1 - (unk262 << 1)) < 0.0 || 0.0 == (*m_opponent)->x - x && facing == (1 - (unk262 << 1)) * -1) && m_patterns[pattern].unk2 <= m_patterns[0xa5].unk0 && pattern != 0xaa && y < -40.0 && (m_patterns[pattern].frames[frame].flagsB0 & 8) > 0 && (pattern >= 0xc8 && unk168 >= 2 && unk168 != 6 || pattern < 0xc8)) {
+            if ((((*m_opponent)->x - x) * (1 - (m_command << 1)) < 0.0 || 0.0 == (*m_opponent)->x - x && facing == (1 - (m_command << 1)) * -1) && m_patterns[pattern].unk2 <= m_patterns[0xa5].unk0 && pattern != 0xaa && y < -40.0 && (m_patterns[pattern].frames[frame].flagsB0 & 8) > 0 && (pattern >= 0xc8 && m_attackResult >= 2 && m_attackResult != 6 || pattern < 0xc8)) {
                 if (pattern != 0xa5) {
                     Vf0();
                 }
                 pattern = 0xa5;
-                CPlayer::Unk40e630();
+                CPlayer::FaceOpponent();
                 unk159++;
                 unk15a++;
                 unk1a8 = 0;
                 return;
             }
-            if ((((*m_opponent)->x - x) * (1 - (unk262 << 1)) > 0.0 || 0.0 == (*m_opponent)->x - x && facing == 1 - (unk262 << 1)) && m_patterns[pattern].unk2 <= m_patterns[0xa6].unk0 && pattern != 0xaa && (m_patterns[pattern].frames[frame].flagsB0 & 8) > 0 && (pattern >= 0xc8 && unk168 >= 2 && unk168 != 6 || pattern < 0xc8)) {
+            if ((((*m_opponent)->x - x) * (1 - (m_command << 1)) > 0.0 || 0.0 == (*m_opponent)->x - x && facing == 1 - (m_command << 1)) && m_patterns[pattern].unk2 <= m_patterns[0xa6].unk0 && pattern != 0xaa && (m_patterns[pattern].frames[frame].flagsB0 & 8) > 0 && (pattern >= 0xc8 && m_attackResult >= 2 && m_attackResult != 6 || pattern < 0xc8)) {
                 if (pattern != 0xa6) {
                     Vf0();
                 }
                 pattern = 0xa6;
-                CPlayer::Unk40e630();
+                CPlayer::FaceOpponent();
                 unk159++;
                 unk15a++;
                 unk1a8 = 0;
@@ -290,22 +290,22 @@ void CAyu::Vf4()
             }
         }
         if (y == 0.0 && (m_patterns[pattern].frames[frame].flagsB0 & 8) > 0) {
-            if ((((*m_opponent)->x - x) * (1 - (unk262 << 1)) < 0.0 || 0.0 == (*m_opponent)->x - x && facing == (1 - (unk262 << 1)) * -1) && m_patterns[pattern].unk2 <= m_patterns[0xa3].unk0 && (pattern >= 0xc8 && unk168 >= 2 && unk168 != 6 || pattern < 0xc8)) {
+            if ((((*m_opponent)->x - x) * (1 - (m_command << 1)) < 0.0 || 0.0 == (*m_opponent)->x - x && facing == (1 - (m_command << 1)) * -1) && m_patterns[pattern].unk2 <= m_patterns[0xa3].unk0 && (pattern >= 0xc8 && m_attackResult >= 2 && m_attackResult != 6 || pattern < 0xc8)) {
                 if (pattern != 0xa3) {
                     Vf0();
                 }
                 pattern = 0xa3;
-                CPlayer::Unk40e630();
+                CPlayer::FaceOpponent();
                 unk158++;
                 unk1a8 = 0;
                 return;
             }
-            if ((((*m_opponent)->x - x) * (1 - (unk262 << 1)) > 0.0 || 0.0 == (*m_opponent)->x - x && facing == 1 - (unk262 << 1)) && m_patterns[pattern].unk2 <= m_patterns[0xa4].unk0 && (pattern >= 0xc8 && unk168 >= 2 && unk168 != 6 || pattern < 0xc8)) {
+            if ((((*m_opponent)->x - x) * (1 - (m_command << 1)) > 0.0 || 0.0 == (*m_opponent)->x - x && facing == 1 - (m_command << 1)) && m_patterns[pattern].unk2 <= m_patterns[0xa4].unk0 && (pattern >= 0xc8 && m_attackResult >= 2 && m_attackResult != 6 || pattern < 0xc8)) {
                 if (pattern != 0xa4) {
                     Vf0();
                 }
                 pattern = 0xa4;
-                CPlayer::Unk40e630();
+                CPlayer::FaceOpponent();
                 unk158++;
                 unk1a8 = 0;
                 return;
@@ -314,20 +314,20 @@ void CAyu::Vf4()
     }
     if (m_pressA == 1 || (unk1a8 & 0x10) != 0 || (unk1a9 & 0x10) != 0) {
         if (y < 0.0) {
-            if (m_patterns[pattern].unk2 <= m_patterns[0xcf].unk0 && (m_patterns[pattern].frames[frame].flagsB0 & 8) > 0 && (pattern >= 0xc8 && unk168 >= 2 && unk168 != 6 || pattern < 0xc8)) {
+            if (m_patterns[pattern].unk2 <= m_patterns[0xcf].unk0 && (m_patterns[pattern].frames[frame].flagsB0 & 8) > 0 && (pattern >= 0xc8 && m_attackResult >= 2 && m_attackResult != 6 || pattern < 0xc8)) {
                 Vf0();
                 CPlayer::Unk40f170();
                 pattern = 0xcf;
             }
             return;
         }
-        if ((m_inputY == 1 || (unk1a8 & 4) != 0 || (unk1a9 & 4) != 0) && m_patterns[pattern].unk2 <= m_patterns[0xcc].unk0 && (m_patterns[pattern].frames[frame].flagsB0 & 8) > 0 && (pattern >= 0xc8 && unk168 >= 2 && unk168 != 6 || pattern < 0xc8)) {
+        if ((m_inputY == 1 || (unk1a8 & 4) != 0 || (unk1a9 & 4) != 0) && m_patterns[pattern].unk2 <= m_patterns[0xcc].unk0 && (m_patterns[pattern].frames[frame].flagsB0 & 8) > 0 && (pattern >= 0xc8 && m_attackResult >= 2 && m_attackResult != 6 || pattern < 0xc8)) {
             Vf0();
             CPlayer::Unk40f170();
             pattern = 0xcc;
             return;
         }
-        if ((m_inputY == 0 || (unk1a8 & 4) == 0 || (unk1a9 & 4) == 0) && m_patterns[pattern].unk2 <= m_patterns[0xc8].unk0 && (m_patterns[pattern].frames[frame].flagsB0 & 8) > 0 && (pattern >= 0xc8 && unk168 >= 2 && unk168 != 6 || pattern < 0xc8)) {
+        if ((m_inputY == 0 || (unk1a8 & 4) == 0 || (unk1a9 & 4) == 0) && m_patterns[pattern].unk2 <= m_patterns[0xc8].unk0 && (m_patterns[pattern].frames[frame].flagsB0 & 8) > 0 && (pattern >= 0xc8 && m_attackResult >= 2 && m_attackResult != 6 || pattern < 0xc8)) {
             Vf0();
             CPlayer::Unk40f170();
             pattern = 0xc8;
@@ -336,33 +336,33 @@ void CAyu::Vf4()
     }
     if (m_pressB == 1 || (unk1a8 & 0x20) != 0 || (unk1a9 & 0x20) != 0) {
         if (y < 0.0) {
-            if (m_patterns[pattern].unk2 <= m_patterns[0xd0].unk0 && (m_patterns[pattern].frames[frame].flagsB0 & 8) > 0 && (pattern >= 0xc8 && unk168 >= 2 && unk168 != 6 || pattern < 0xc8)) {
+            if (m_patterns[pattern].unk2 <= m_patterns[0xd0].unk0 && (m_patterns[pattern].frames[frame].flagsB0 & 8) > 0 && (pattern >= 0xc8 && m_attackResult >= 2 && m_attackResult != 6 || pattern < 0xc8)) {
                 Vf0();
                 CPlayer::Unk40f170();
                 pattern = 0xd0;
             }
             return;
         }
-        if ((m_inputY == 1 || (unk1a8 & 4) != 0 || (unk1a9 & 4) != 0) && m_patterns[pattern].unk2 <= m_patterns[0xcd].unk0 && (m_patterns[pattern].frames[frame].flagsB0 & 8) > 0 && (pattern >= 0xc8 && unk168 >= 2 && unk168 != 6 || pattern < 0xc8)) {
+        if ((m_inputY == 1 || (unk1a8 & 4) != 0 || (unk1a9 & 4) != 0) && m_patterns[pattern].unk2 <= m_patterns[0xcd].unk0 && (m_patterns[pattern].frames[frame].flagsB0 & 8) > 0 && (pattern >= 0xc8 && m_attackResult >= 2 && m_attackResult != 6 || pattern < 0xc8)) {
             Vf0();
             CPlayer::Unk40f170();
             pattern = 0xcd;
             return;
         }
         if (m_inputY == 0 || (unk1a8 & 4) == 0 || (unk1a9 & 4) == 0) {
-            if (m_patterns[pattern].unk2 <= m_patterns[0xd2].unk0 && (m_patterns[pattern].frames[frame].flagsB0 & 8) > 0 && m_inputX == facing && (pattern >= 0xc8 && unk168 >= 2 && unk168 != 6 || pattern < 0xc8)) {
+            if (m_patterns[pattern].unk2 <= m_patterns[0xd2].unk0 && (m_patterns[pattern].frames[frame].flagsB0 & 8) > 0 && m_inputX == facing && (pattern >= 0xc8 && m_attackResult >= 2 && m_attackResult != 6 || pattern < 0xc8)) {
                 Vf0();
                 CPlayer::Unk40f170();
                 pattern = 0xd2;
                 return;
             }
-            if (m_patterns[pattern].unk2 <= m_patterns[0xc9].unk0 && (m_patterns[pattern].frames[frame].flagsB0 & 8) > 0 && x - (*m_opponent)->x > -70.0 && x - (*m_opponent)->x < 70.0 && (pattern >= 0xc8 && unk168 >= 2 && unk168 != 6 || pattern < 0xc8)) {
+            if (m_patterns[pattern].unk2 <= m_patterns[0xc9].unk0 && (m_patterns[pattern].frames[frame].flagsB0 & 8) > 0 && x - (*m_opponent)->x > -70.0 && x - (*m_opponent)->x < 70.0 && (pattern >= 0xc8 && m_attackResult >= 2 && m_attackResult != 6 || pattern < 0xc8)) {
                 Vf0();
                 CPlayer::Unk40f170();
                 pattern = 0xc9;
                 return;
             }
-            if (m_patterns[pattern].unk2 <= m_patterns[0xca].unk0 && (m_patterns[pattern].frames[frame].flagsB0 & 8) > 0 && (pattern >= 0xc8 && unk168 >= 2 && unk168 != 6 || pattern < 0xc8)) {
+            if (m_patterns[pattern].unk2 <= m_patterns[0xca].unk0 && (m_patterns[pattern].frames[frame].flagsB0 & 8) > 0 && (pattern >= 0xc8 && m_attackResult >= 2 && m_attackResult != 6 || pattern < 0xc8)) {
                 Vf0();
                 CPlayer::Unk40f170();
                 pattern = 0xca;
@@ -372,44 +372,44 @@ void CAyu::Vf4()
     }
     if (m_pressC == 1 || (unk1a8 & 0x40) != 0 || (unk1a9 & 0x40) != 0) {
         if (y < 0.0) {
-            if (m_inputX == facing && m_inputY == 0 && x - (*m_opponent)->x > -100.0 && x - (*m_opponent)->x < 100.0 && (*m_opponent)->y < 0.0 && m_patterns[pattern].unk2 <= m_patterns[0xf0].unk0 && ((*m_opponent)->pattern < 0x32 || (*m_opponent)->pattern > 0x9c) && (m_patterns[pattern].frames[frame].flagsB0 & 8) > 0 && (pattern >= 0xc8 && unk168 >= 2 && unk168 != 6 || pattern < 0xc8)) {
+            if (m_inputX == facing && m_inputY == 0 && x - (*m_opponent)->x > -100.0 && x - (*m_opponent)->x < 100.0 && (*m_opponent)->y < 0.0 && m_patterns[pattern].unk2 <= m_patterns[0xf0].unk0 && ((*m_opponent)->pattern < 0x32 || (*m_opponent)->pattern > 0x9c) && (m_patterns[pattern].frames[frame].flagsB0 & 8) > 0 && (pattern >= 0xc8 && m_attackResult >= 2 && m_attackResult != 6 || pattern < 0xc8)) {
                 Vf0();
                 CPlayer::Unk40f170();
                 pattern = 0xf0;
                 return;
             }
-            if (m_patterns[pattern].unk2 <= m_patterns[0xd4].unk0 && (m_patterns[pattern].frames[frame].flagsB0 & 8) > 0 && m_inputY == 1 && (pattern >= 0xc8 && unk168 >= 2 && unk168 != 6 || pattern < 0xc8)) {
+            if (m_patterns[pattern].unk2 <= m_patterns[0xd4].unk0 && (m_patterns[pattern].frames[frame].flagsB0 & 8) > 0 && m_inputY == 1 && (pattern >= 0xc8 && m_attackResult >= 2 && m_attackResult != 6 || pattern < 0xc8)) {
                 Vf0();
                 CPlayer::Unk40f170();
                 pattern = 0xd4;
             }
-            if (m_patterns[pattern].unk2 <= m_patterns[0xd1].unk0 && (m_patterns[pattern].frames[frame].flagsB0 & 8) > 0 && (pattern >= 0xc8 && unk168 >= 2 && unk168 != 6 || pattern < 0xc8)) {
+            if (m_patterns[pattern].unk2 <= m_patterns[0xd1].unk0 && (m_patterns[pattern].frames[frame].flagsB0 & 8) > 0 && (pattern >= 0xc8 && m_attackResult >= 2 && m_attackResult != 6 || pattern < 0xc8)) {
                 Vf0();
                 CPlayer::Unk40f170();
                 pattern = 0xd1;
             }
             return;
         }
-        if ((m_inputY == 1 || (unk1a8 & 4) != 0 || (unk1a9 & 4) != 0) && m_patterns[pattern].unk2 <= m_patterns[0xce].unk0 && (m_patterns[pattern].frames[frame].flagsB0 & 8) > 0 && (pattern >= 0xc8 && unk168 >= 2 && unk168 != 6 || pattern < 0xc8)) {
+        if ((m_inputY == 1 || (unk1a8 & 4) != 0 || (unk1a9 & 4) != 0) && m_patterns[pattern].unk2 <= m_patterns[0xce].unk0 && (m_patterns[pattern].frames[frame].flagsB0 & 8) > 0 && (pattern >= 0xc8 && m_attackResult >= 2 && m_attackResult != 6 || pattern < 0xc8)) {
             Vf0();
             CPlayer::Unk40f170();
             pattern = 0xce;
             return;
         }
         if (m_inputY == 0 || (unk1a8 & 4) == 0 || (unk1a9 & 4) == 0) {
-            if (m_inputX != 0 && (*m_opponent)->y == 0.0 && x - (*m_opponent)->x > -30.0 && x - (*m_opponent)->x < 30.0 && m_patterns[pattern].unk2 <= m_patterns[0xdc].unk0 && (*m_opponent)->y == 0.0 && ((*m_opponent)->pattern < 0x32 || (*m_opponent)->pattern > 0x9c) && (m_patterns[pattern].frames[frame].flagsB0 & 8) > 0 && (pattern >= 0xc8 && unk168 >= 2 && unk168 != 6 || pattern < 0xc8)) {
+            if (m_inputX != 0 && (*m_opponent)->y == 0.0 && x - (*m_opponent)->x > -30.0 && x - (*m_opponent)->x < 30.0 && m_patterns[pattern].unk2 <= m_patterns[0xdc].unk0 && (*m_opponent)->y == 0.0 && ((*m_opponent)->pattern < 0x32 || (*m_opponent)->pattern > 0x9c) && (m_patterns[pattern].frames[frame].flagsB0 & 8) > 0 && (pattern >= 0xc8 && m_attackResult >= 2 && m_attackResult != 6 || pattern < 0xc8)) {
                 Vf0();
                 CPlayer::Unk40f170();
                 pattern = 0xdc;
                 return;
             }
-            if (m_patterns[pattern].unk2 <= m_patterns[0xd3].unk0 && (m_patterns[pattern].frames[frame].flagsB0 & 8) > 0 && m_inputX == facing && (pattern >= 0xc8 && unk168 >= 2 && unk168 != 6 || pattern < 0xc8)) {
+            if (m_patterns[pattern].unk2 <= m_patterns[0xd3].unk0 && (m_patterns[pattern].frames[frame].flagsB0 & 8) > 0 && m_inputX == facing && (pattern >= 0xc8 && m_attackResult >= 2 && m_attackResult != 6 || pattern < 0xc8)) {
                 Vf0();
                 CPlayer::Unk40f170();
                 pattern = 0xd3;
                 return;
             }
-            if (m_patterns[pattern].unk2 <= m_patterns[0xcb].unk0 && (m_patterns[pattern].frames[frame].flagsB0 & 8) > 0 && (pattern >= 0xc8 && unk168 >= 2 && unk168 != 6 || pattern < 0xc8)) {
+            if (m_patterns[pattern].unk2 <= m_patterns[0xcb].unk0 && (m_patterns[pattern].frames[frame].flagsB0 & 8) > 0 && (pattern >= 0xc8 && m_attackResult >= 2 && m_attackResult != 6 || pattern < 0xc8)) {
                 Vf0();
                 CPlayer::Unk40f170();
                 pattern = 0xcb;
@@ -417,7 +417,7 @@ void CAyu::Vf4()
             }
         }
     }
-    if (unk15c < 1 && (m_pressD == 1 || (unk1a8 & 0x80) != 0 || (unk1a9 & 0x80) != 0) && m_patterns[pattern].unk2 <= m_patterns[0x28].unk0 && (m_patterns[pattern].frames[frame].flagsB0 & 8) > 0 && y < 0.0 && (pattern >= 0xc8 && unk168 >= 2 && unk168 != 6 || pattern < 0xc8)) {
+    if (unk15c < 1 && (m_pressD == 1 || (unk1a8 & 0x80) != 0 || (unk1a9 & 0x80) != 0) && m_patterns[pattern].unk2 <= m_patterns[0x28].unk0 && (m_patterns[pattern].frames[frame].flagsB0 & 8) > 0 && y < 0.0 && (pattern >= 0xc8 && m_attackResult >= 2 && m_attackResult != 6 || pattern < 0xc8)) {
         Vf0();
         CPlayer::Unk40f170();
         pattern = 0x28;
@@ -444,13 +444,13 @@ void CAyu::Vf2()
     BYTE v5;
     int v4;
 
-    unk262 = 0x63;
+    m_command = 0x63;
     x6 = 0;
     v4 = m_inputPos + 0x2d;
     for (; v4 < m_inputPos + 0xb4; v4++) {
         v5 = m_inputHistory[(v4 - (v4 >= 0xb4) * 0xb4)];
         if ((v5 & 0x40) != 0 && x6 == 5) {
-            unk262 = 0x5d;
+            m_command = 0x5d;
             return;
         }
         if ((v5 & 0x20) != 0 && x6 == 4) {
@@ -474,7 +474,7 @@ void CAyu::Vf2()
         if ((v5 & 0xe0) != 0 && x6 == 1) {
             break;
         }
-        if ((v5 & 0x10) != 0 && x6 == 0 && unk148 == 0xbb8) {
+        if ((v5 & 0x10) != 0 && x6 == 0 && m_gauge == 0xbb8) {
             x6 = 1;
         }
     }
@@ -483,12 +483,12 @@ void CAyu::Vf2()
     for (; v4 < m_inputPos + 0xb4; v4++) {
         v5 = m_inputHistory[(v4 - (v4 >= 0xb4) * 0xb4)];
         if ((v5 & 0xf0) != 0 && x6 == 4) {
-            unk262 = ((v5 & 0xe0) > 0) + 0x78 + ((v5 & 0xc0) > 0) + ((v5 & 0x80) > 0);
+            m_command = ((v5 & 0xe0) > 0) + 0x78 + ((v5 & 0xc0) > 0) + ((v5 & 0x80) > 0);
             return;
         }
         if ((v5 & 0xf) == (facing == -1) + 5 && x6 == 3) {
             if ((v5 & 0xf0) != 0) {
-                unk262 = ((v5 & 0xe0) > 0) + 0x78 + ((v5 & 0xc0) > 0) + ((v5 & 0x80) > 0);
+                m_command = ((v5 & 0xe0) > 0) + 0x78 + ((v5 & 0xc0) > 0) + ((v5 & 0x80) > 0);
                 return;
             }
             x6 = 4;
@@ -499,7 +499,7 @@ void CAyu::Vf2()
         if ((v5 & 0xf) == 2 - (facing == -1) && x6 == 1) {
             x6 = 2;
         }
-        if ((v5 & 0xf) == (facing == -1) + 1 && x6 == 0 && unk148 >= 0x3e8) {
+        if ((v5 & 0xf) == (facing == -1) + 1 && x6 == 0 && m_gauge >= 0x3e8) {
             x6 = 1;
         }
     }
@@ -508,12 +508,12 @@ void CAyu::Vf2()
     for (; v4 < m_inputPos + 0xb4; v4++) {
         v5 = m_inputHistory[(v4 - (v4 >= 0xb4) * 0xb4)];
         if ((v5 & 0xf0) != 0 && x6 == 6) {
-            unk262 = ((v5 & 0xe0) > 0) + 0x6e + ((v5 & 0xc0) > 0) + ((v5 & 0x80) > 0);
+            m_command = ((v5 & 0xe0) > 0) + 0x6e + ((v5 & 0xc0) > 0) + ((v5 & 0x80) > 0);
             return;
         }
         if ((v5 & 0xf) == 2 - (facing == -1) && x6 == 5) {
             if ((v5 & 0xf0) != 0) {
-                unk262 = ((v5 & 0xe0) > 0) + 0x6e + ((v5 & 0xc0) > 0) + ((v5 & 0x80) > 0);
+                m_command = ((v5 & 0xe0) > 0) + 0x6e + ((v5 & 0xc0) > 0) + ((v5 & 0x80) > 0);
                 return;
             }
             x6 = 6;
@@ -530,7 +530,7 @@ void CAyu::Vf2()
         if ((v5 & 0xf) == 6 - (facing == -1) && x6 == 1) {
             x6 = 2;
         }
-        if ((v5 & 0xf) == 4 && x6 == 0 && unk148 >= 0x3e8) {
+        if ((v5 & 0xf) == 4 && x6 == 0 && m_gauge >= 0x3e8) {
             x6 = 1;
         }
     }
@@ -539,12 +539,12 @@ void CAyu::Vf2()
     for (; v4 < m_inputPos + 0xb4; v4++) {
         v5 = m_inputHistory[(v4 - (v4 >= 0xb4) * 0xb4)];
         if ((v5 & 0xf0) != 0 && x6 == 6) {
-            unk262 = ((v5 & 0xe0) > 0) + 0x64 + ((v5 & 0xc0) > 0) + ((v5 & 0x80) > 0);
+            m_command = ((v5 & 0xe0) > 0) + 0x64 + ((v5 & 0xc0) > 0) + ((v5 & 0x80) > 0);
             return;
         }
         if ((v5 & 0xf) == (facing == -1) + 1 && x6 == 5) {
             if ((v5 & 0xf0) != 0) {
-                unk262 = ((v5 & 0xe0) > 0) + 0x64 + ((v5 & 0xc0) > 0) + ((v5 & 0x80) > 0);
+                m_command = ((v5 & 0xe0) > 0) + 0x64 + ((v5 & 0xc0) > 0) + ((v5 & 0x80) > 0);
                 return;
             }
             x6 = 6;
@@ -561,7 +561,7 @@ void CAyu::Vf2()
         if ((v5 & 0xf) == (facing == -1) + 5 && x6 == 1) {
             x6 = 2;
         }
-        if ((v5 & 0xf) == 4 && x6 == 0 && unk148 >= 0x3e8) {
+        if ((v5 & 0xf) == 4 && x6 == 0 && m_gauge >= 0x3e8) {
             x6 = 1;
         }
     }
@@ -570,12 +570,12 @@ void CAyu::Vf2()
     for (; v4 < m_inputPos + 0xb4; v4++) {
         v5 = m_inputHistory[(v4 - (v4 >= 0xb4) * 0xb4)];
         if ((v5 & 0xf0) != 0 && x6 == 3) {
-            unk262 = ((v5 & 0xe0) > 0) + 0x14 + ((v5 & 0xc0) > 0) + ((v5 & 0x80) > 0);
+            m_command = ((v5 & 0xe0) > 0) + 0x14 + ((v5 & 0xc0) > 0) + ((v5 & 0x80) > 0);
             return;
         }
         if ((v5 & 0xf) == (facing == -1) + 5 && x6 == 2) {
             if ((v5 & 0xf0) != 0) {
-                unk262 = ((v5 & 0xe0) > 0) + 0x14 + ((v5 & 0xc0) > 0) + ((v5 & 0x80) > 0);
+                m_command = ((v5 & 0xe0) > 0) + 0x14 + ((v5 & 0xc0) > 0) + ((v5 & 0x80) > 0);
                 return;
             }
             x6 = 3;
@@ -592,12 +592,12 @@ void CAyu::Vf2()
     for (; v4 < m_inputPos + 0xb4; v4++) {
         v5 = m_inputHistory[(v4 - (v4 >= 0xb4) * 0xb4)];
         if ((v5 & 0xf0) != 0 && x6 == 3) {
-            unk262 = ((v5 & 0xe0) > 0) + 0xa + ((v5 & 0xc0) > 0) + ((v5 & 0x80) > 0);
+            m_command = ((v5 & 0xe0) > 0) + 0xa + ((v5 & 0xc0) > 0) + ((v5 & 0x80) > 0);
             return;
         }
         if ((v5 & 0xf) == (facing == -1) + 1 && x6 == 2) {
             if ((v5 & 0xf0) != 0) {
-                unk262 = ((v5 & 0xe0) > 0) + 0xa + ((v5 & 0xc0) > 0) + ((v5 & 0x80) > 0);
+                m_command = ((v5 & 0xe0) > 0) + 0xa + ((v5 & 0xc0) > 0) + ((v5 & 0x80) > 0);
                 return;
             }
             x6 = 3;
@@ -614,12 +614,12 @@ void CAyu::Vf2()
     for (; v4 < m_inputPos + 0xb4; v4++) {
         v5 = m_inputHistory[(v4 - (v4 >= 0xb4) * 0xb4)];
         if ((v5 & 0xf0) != 0 && x6 == 3) {
-            unk262 = ((v5 & 0xe0) > 0) + 0x1e + ((v5 & 0xc0) > 0) + ((v5 & 0x80) > 0);
+            m_command = ((v5 & 0xe0) > 0) + 0x1e + ((v5 & 0xc0) > 0) + ((v5 & 0x80) > 0);
             return;
         }
         if ((v5 & 0xf) == 2 - (facing == -1) && x6 == 2) {
             if ((v5 & 0xf0) != 0) {
-                unk262 = ((v5 & 0xe0) > 0) + 0x1e + ((v5 & 0xc0) > 0) + ((v5 & 0x80) > 0);
+                m_command = ((v5 & 0xe0) > 0) + 0x1e + ((v5 & 0xc0) > 0) + ((v5 & 0x80) > 0);
                 return;
             }
             x6 = 3;
@@ -636,7 +636,7 @@ void CAyu::Vf2()
     for (; v4 < m_inputPos + 0xb4; v4++) {
         v5 = m_inputHistory[(v4 - (v4 >= 0xb4) * 0xb4)];
         if ((v5 & 8) != 0 && x6 == 1) {
-            unk262 = 6;
+            m_command = 6;
             return;
         }
         if ((v5 & 8) == 0 && x6 == 0) {
@@ -648,7 +648,7 @@ void CAyu::Vf2()
     for (; v4 < m_inputPos + 0xb4; v4++) {
         v5 = m_inputHistory[(v4 - (v4 >= 0xb4) * 0xb4)];
         if ((v5 & 0x80) != 0 && x6 == 4) {
-            unk262 = 0x35;
+            m_command = 0x35;
             return;
         }
         if ((v5 & 0xf) == 4 && x6 == 3) {
@@ -669,7 +669,7 @@ void CAyu::Vf2()
     for (; v4 < m_inputPos + 0xb4; v4++) {
         v5 = m_inputHistory[(v4 - (v4 >= 0xb4) * 0xb4)];
         if ((v5 & 0x40) != 0 && x6 == 4) {
-            unk262 = 0x34;
+            m_command = 0x34;
             return;
         }
         if ((v5 & 0xf) == 4 && x6 == 3) {
@@ -690,7 +690,7 @@ void CAyu::Vf2()
     for (; v4 < m_inputPos + 0xb4; v4++) {
         v5 = m_inputHistory[(v4 - (v4 >= 0xb4) * 0xb4)];
         if ((v5 & 0x20) != 0 && x6 == 4) {
-            unk262 = 0x33;
+            m_command = 0x33;
             return;
         }
         if ((v5 & 0xf) == 4 && x6 == 3) {
@@ -711,7 +711,7 @@ void CAyu::Vf2()
     for (; v4 < m_inputPos + 0xb4; v4++) {
         v5 = m_inputHistory[(v4 - (v4 >= 0xb4) * 0xb4)];
         if ((v5 & 0x10) != 0 && x6 == 4) {
-            unk262 = 0x32;
+            m_command = 0x32;
             return;
         }
         if ((v5 & 0xf) == 4 && x6 == 3) {
@@ -732,7 +732,7 @@ void CAyu::Vf2()
     for (; v4 < m_inputPos + 0xb4; v4++) {
         v5 = m_inputHistory[(v4 - (v4 >= 0xb4) * 0xb4)];
         if ((v5 & 0xf) == 1 && x6 == 3) {
-            unk262 = 1;
+            m_command = 1;
             return;
         }
         if ((v5 & 0xf) == 0 && x6 == 2) {
@@ -750,7 +750,7 @@ void CAyu::Vf2()
     for (; v4 < m_inputPos + 0xb4; v4++) {
         v5 = m_inputHistory[(v4 - (v4 >= 0xb4) * 0xb4)];
         if ((v5 & 0xf) == 2 && x6 == 3) {
-            unk262 = 0;
+            m_command = 0;
             break;
         }
         if ((v5 & 0xf) == 0 && x6 == 2) {
@@ -770,7 +770,7 @@ void CAyu::Vf5()
     double v10;
     double x8;
 
-    unk262 = 0x63;
+    m_command = 0x63;
     if (unk1a0 > 0) {
         unk1a0--;
     }
@@ -784,13 +784,13 @@ void CAyu::Vf5()
     m_pressC = 0;
     m_pressD = 0;
     unk14e = 0;
-    if ((WORD)CPlayer::Unk4108a0(0, 0x3e8) < 25.0f * unka8 + (y < 0.0) * 0x1e * unka8 + (unk3114 == 3) * 0x190 + (pattern == 0xaa) * 0x12c) {
+    if ((WORD)CPlayer::Random(0, 0x3e8) < 25.0f * unka8 + (y < 0.0) * 0x1e * unka8 + (unk3114 == 3) * 0x190 + (pattern == 0xaa) * 0x12c) {
         unk14e = 0x3c;
     }
-    if ((WORD)CPlayer::Unk4108a0(0, 0x7d0) < ((unk130 > 0) * 4.0 + 1.0) * 8.0 * unka8 * ((pattern > 0x95 && pattern < 0x9d) * 0x7d0 + 1)) {
+    if ((WORD)CPlayer::Random(0, 0x7d0) < ((unk130 > 0) * 4.0 + 1.0) * 8.0 * unka8 * ((pattern > 0x95 && pattern < 0x9d) * 0x7d0 + 1)) {
         unk14e = 0x3c;
     }
-    if ((WORD)CPlayer::Unk4108a0(0, 0x3e8) < 4e+01f * unka8 && pattern > 0xc7) {
+    if ((WORD)CPlayer::Random(0, 0x3e8) < 4e+01f * unka8 && pattern > 0xc7) {
         unk14e = 0x3c;
     }
     if (unk170 == 1 && unk3114 == 2) {
@@ -806,14 +806,14 @@ void CAyu::Vf5()
     v10 = ((*m_opponent)->x - x) * facing;
     x8 = fabs(y - (*m_opponent)->y);
     if (pattern >= 0x32 && pattern <= 0x96 && timer == 0) {
-        if ((WORD)CPlayer::Unk4108a0(0, 0x64) < 8.0f * unka8) {
+        if ((WORD)CPlayer::Random(0, 0x64) < 8.0f * unka8) {
             unk3114 = 3;
         } else {
             unk3114 = 0;
         }
-        m_inputX = 1 - (((WORD)CPlayer::Unk4108a0(0, 0x64) < 0x32) << 1);
-        m_pressD = (WORD)CPlayer::Unk4108a0(0, 0xf0) < x8;
-        m_pressD = (WORD)CPlayer::Unk4108a0(0, 0x140) < v10;
+        m_inputX = 1 - (((WORD)CPlayer::Random(0, 0x64) < 0x32) << 1);
+        m_pressD = (WORD)CPlayer::Random(0, 0xf0) < x8;
+        m_pressD = (WORD)CPlayer::Random(0, 0x140) < v10;
         if ((*m_opponent)->pattern > 0xc7 && (*m_opponent)->pattern < 0xfa && (*m_opponent)->frame < 3 && x8 < 100.0 && v10 < 150.0) {
             m_pressD = 0;
         }
@@ -822,29 +822,29 @@ void CAyu::Vf5()
     if ((pattern >= 4 && pattern <= 6 || pattern >= 0xa && pattern <= 0xc) && y == 0.0) {
         return;
     }
-    if ((*m_opponent)->pattern >= 0x32 && (*m_opponent)->pattern < 0x96 && pattern == 0x108 && unk16c > 1) {
+    if ((*m_opponent)->pattern >= 0x32 && (*m_opponent)->pattern < 0x96 && pattern == 0x108 && m_hitsLeft > 1) {
         return;
     }
     if (pattern == 0xa8 && timer < 6) {
-        if ((*m_opponent)->pattern != 0xc8 && (*m_opponent)->pattern != 0xcc && (*m_opponent)->pattern < 0xfa && (*m_opponent)->y == 0.0 && (*m_opponent)->unk16c == 0) {
-            if (v10 < 40.0 && (WORD)CPlayer::Unk4108a0(0, 0x64) < unka8 * 3.0f) {
+        if ((*m_opponent)->pattern != 0xc8 && (*m_opponent)->pattern != 0xcc && (*m_opponent)->pattern < 0xfa && (*m_opponent)->y == 0.0 && (*m_opponent)->m_hitsLeft == 0) {
+            if (v10 < 40.0 && (WORD)CPlayer::Random(0, 0x64) < unka8 * 3.0f) {
                 m_pressA = 1;
                 m_inputY = 1;
                 return;
             }
-            if (v10 < 60.0 && (WORD)CPlayer::Unk4108a0(0, 0x64) < unka8 * 3.0f) {
+            if (v10 < 60.0 && (WORD)CPlayer::Random(0, 0x64) < unka8 * 3.0f) {
                 m_pressA = 1;
                 m_inputY = 0;
                 return;
             }
         }
-        if (((*m_opponent)->pattern == 0xc9 || (*m_opponent)->pattern == 0xca || (*m_opponent)->pattern == 0xcd) && (*m_opponent)->pattern < 0xfa && (*m_opponent)->y == 0.0 && (*m_opponent)->unk16c == 0) {
-            if (v10 > 40.0 && v10 < 80.0 && (WORD)CPlayer::Unk4108a0(0, 0x64) < unka8 * 3.0f) {
+        if (((*m_opponent)->pattern == 0xc9 || (*m_opponent)->pattern == 0xca || (*m_opponent)->pattern == 0xcd) && (*m_opponent)->pattern < 0xfa && (*m_opponent)->y == 0.0 && (*m_opponent)->m_hitsLeft == 0) {
+            if (v10 > 40.0 && v10 < 80.0 && (WORD)CPlayer::Random(0, 0x64) < unka8 * 3.0f) {
                 m_pressB = 1;
                 m_inputY = 0;
                 return;
             }
-            if (v10 > 80.0 && v10 < 140.0 && (WORD)CPlayer::Unk4108a0(0, 0x64) < unka8 * 3.0f) {
+            if (v10 > 80.0 && v10 < 140.0 && (WORD)CPlayer::Random(0, 0x64) < unka8 * 3.0f) {
                 m_pressA = 2;
                 m_inputY = 0;
                 m_inputX = facing;
@@ -854,95 +854,95 @@ void CAyu::Vf5()
     }
     if (pattern == 0xa8 || pattern == 0xa9) {
         if (v10 < 100.0) {
-            if ((WORD)CPlayer::Unk4108a0(0, 0x64) < unka8 * 3.0f && unk118 > 500.0) {
-                unk262 = 0x20;
+            if ((WORD)CPlayer::Random(0, 0x64) < unka8 * 3.0f && unk118 > 500.0) {
+                m_command = 0x20;
                 return;
             }
-            if ((WORD)CPlayer::Unk4108a0(0, 0x64) < unka8 * 3.0f + ((unk118 > 500.0) << 1)) {
-                unk262 = 0x16;
+            if ((WORD)CPlayer::Random(0, 0x64) < unka8 * 3.0f + ((unk118 > 500.0) << 1)) {
+                m_command = 0x16;
                 return;
             }
-            if ((WORD)CPlayer::Unk4108a0(0, 0x64) < unka8 * 4.0f && unk148 >= 0x3e8) {
-                unk262 = (WORD)CPlayer::Unk4108a0(0, 2) + 0x78;
+            if ((WORD)CPlayer::Random(0, 0x64) < unka8 * 4.0f && m_gauge >= 0x3e8) {
+                m_command = (WORD)CPlayer::Random(0, 2) + 0x78;
                 return;
             }
-            if ((WORD)CPlayer::Unk4108a0(0, 0x64) < unka8 * 1.0f && unk148 == 0xbb8) {
-                unk262 = 0x5d;
+            if ((WORD)CPlayer::Random(0, 0x64) < unka8 * 1.0f && m_gauge == 0xbb8) {
+                m_command = 0x5d;
                 return;
             }
         }
-        if (v10 < 160.0 && (WORD)CPlayer::Unk4108a0(0, 0x64) < unka8 * 3.0f && unk118 > 500.0) {
-            unk262 = 0xc;
+        if (v10 < 160.0 && (WORD)CPlayer::Random(0, 0x64) < unka8 * 3.0f && unk118 > 500.0) {
+            m_command = 0xc;
             return;
         }
-        if (v10 < 220.0 && (WORD)CPlayer::Unk4108a0(0, 0x64) < unka8 * 2 && unk148 >= 0x7d0) {
-            unk262 = (WORD)CPlayer::Unk4108a0(0, 1) + 0x65;
+        if (v10 < 220.0 && (WORD)CPlayer::Random(0, 0x64) < unka8 * 2 && m_gauge >= 0x7d0) {
+            m_command = (WORD)CPlayer::Random(0, 1) + 0x65;
             return;
         }
-        if (v10 < 220.0 && (WORD)CPlayer::Unk4108a0(0, 0x64) < unka8 * 5.0f && unk118 > 500.0) {
-            unk262 = 0x16;
+        if (v10 < 220.0 && (WORD)CPlayer::Random(0, 0x64) < unka8 * 5.0f && unk118 > 500.0) {
+            m_command = 0x16;
             return;
         }
     }
     if (pattern == 0xaa && frame == 1 && timer == 0) {
-        if ((WORD)CPlayer::Unk4108a0(0, 0x64) < unka8 * 5.0f) {
+        if ((WORD)CPlayer::Random(0, 0x64) < unka8 * 5.0f) {
             unk3114 = 3;
             return;
         }
-        if (y - (*m_opponent)->y > 0.0 && y - (*m_opponent)->y < 40.0 && v10 < 80.0 && (WORD)CPlayer::Unk4108a0(0, 0x64) < unka8 * 5.0f) {
+        if (y - (*m_opponent)->y > 0.0 && y - (*m_opponent)->y < 40.0 && v10 < 80.0 && (WORD)CPlayer::Random(0, 0x64) < unka8 * 5.0f) {
             m_pressA = 1;
             return;
         }
-        if (y - (*m_opponent)->y > -30.0 && y - (*m_opponent)->y < 0.0 && v10 < 100.0 && (WORD)CPlayer::Unk4108a0(0, 0x64) < unka8 * 5.0f) {
+        if (y - (*m_opponent)->y > -30.0 && y - (*m_opponent)->y < 0.0 && v10 < 100.0 && (WORD)CPlayer::Random(0, 0x64) < unka8 * 5.0f) {
             m_pressB = 1;
             return;
         }
-        if (y - (*m_opponent)->y > -80.0 && y - (*m_opponent)->y < 30.0 && x8 > 30.0 && v10 < 100.0 && (WORD)CPlayer::Unk4108a0(0, 0x64) < unka8 * 5.0f) {
+        if (y - (*m_opponent)->y > -80.0 && y - (*m_opponent)->y < 30.0 && x8 > 30.0 && v10 < 100.0 && (WORD)CPlayer::Random(0, 0x64) < unka8 * 5.0f) {
             m_pressC = 1;
             m_inputY = 0;
             return;
         }
-        if (x8 < 50.0 && v10 < 100.0 && (WORD)CPlayer::Unk4108a0(0, 0x64) < unka8 * 2) {
-            unk262 = 0x16;
+        if (x8 < 50.0 && v10 < 100.0 && (WORD)CPlayer::Random(0, 0x64) < unka8 * 2) {
+            m_command = 0x16;
             return;
         }
     }
-    if (((*m_opponent)->pattern == 0xa8 || (*m_opponent)->pattern == 0xa9 || (*m_opponent)->pattern == 0xaa) && y == 0.0 && (WORD)CPlayer::Unk4108a0(0, 0x64) < 15.0f * unka8 && unk3114 != 2 && (*m_opponent)->unk14c == 0) {
-        unk3110 = (WORD)CPlayer::Unk4108a0(0, 0x64);
+    if (((*m_opponent)->pattern == 0xa8 || (*m_opponent)->pattern == 0xa9 || (*m_opponent)->pattern == 0xaa) && y == 0.0 && (WORD)CPlayer::Random(0, 0x64) < 15.0f * unka8 && unk3114 != 2 && (*m_opponent)->unk14c == 0) {
+        unk3110 = (WORD)CPlayer::Random(0, 0x64);
         if (unk3110 < 4 && unk118 > 500.0) {
-            unk262 = 0x20;
+            m_command = 0x20;
             return;
         }
         if (unk3110 < 0xa && unk118 > 500.0) {
-            unk262 = 0x14;
+            m_command = 0x14;
             return;
         }
         if (unk3110 < 0xd && unk118 > 500.0) {
-            unk262 = 0x16;
+            m_command = 0x16;
             return;
         }
-        if (unk3110 < 0x11 && unk3110 > 0xc && unk148 >= 0x3e8) {
-            unk262 = (WORD)CPlayer::Unk4108a0(0, 2) * 0x78;
+        if (unk3110 < 0x11 && unk3110 > 0xc && m_gauge >= 0x3e8) {
+            m_command = (WORD)CPlayer::Random(0, 2) * 0x78;
             return;
         }
-        if (unk3110 < 0x10 && unk3110 > 0x12 && unk148 == 0xbb8) {
-            unk262 = 0x5d;
+        if (unk3110 < 0x10 && unk3110 > 0x12 && m_gauge == 0xbb8) {
+            m_command = 0x5d;
             return;
         }
     }
-    if (((*m_opponent)->pattern == 0xa8 || (*m_opponent)->pattern == 0xa9 || (*m_opponent)->pattern == 0xaa) && y < 0.0 && (WORD)CPlayer::Unk4108a0(0, 0x64) < 15.0f * unka8 && unk3114 != 2 && (*m_opponent)->unk14c == 0) {
-        unk3110 = (WORD)CPlayer::Unk4108a0(0, 0x64);
+    if (((*m_opponent)->pattern == 0xa8 || (*m_opponent)->pattern == 0xa9 || (*m_opponent)->pattern == 0xaa) && y < 0.0 && (WORD)CPlayer::Random(0, 0x64) < 15.0f * unka8 && unk3114 != 2 && (*m_opponent)->unk14c == 0) {
+        unk3110 = (WORD)CPlayer::Random(0, 0x64);
         if (unk3110 < 0x14) {
             unk3114 = 2;
             return;
         }
         if (v10 < 100.0 && unk3110 < 0x16) {
-            unk262 = 0x16;
+            m_command = 0x16;
             return;
         }
     }
-    if ((unk118 > 500.0 || unk120 > 0) && (WORD)CPlayer::Unk4108a0(0, 0x64) < 8.0f * unka8 && (*m_opponent)->pattern > 0x95 && (*m_opponent)->pattern < 0x9d && (pattern == 0xfa || pattern == 0xfb || pattern == 0x104 || pattern == 0x105 || pattern == 0x106 || pattern == 0x132 || pattern == 0x133 || pattern == 0x134 || pattern == 0x13b || pattern == 0x13c || pattern == 0x13d)) {
-        unk262 = 0x34;
+    if ((unk118 > 500.0 || unk120 > 0) && (WORD)CPlayer::Random(0, 0x64) < 8.0f * unka8 && (*m_opponent)->pattern > 0x95 && (*m_opponent)->pattern < 0x9d && (pattern == 0xfa || pattern == 0xfb || pattern == 0x104 || pattern == 0x105 || pattern == 0x106 || pattern == 0x132 || pattern == 0x133 || pattern == 0x134 || pattern == 0x13b || pattern == 0x13c || pattern == 0x13d)) {
+        m_command = 0x34;
         return;
     }
     if (unk3114 > 0 && pattern > 0x31 && pattern < 0x9e) {
@@ -957,9 +957,9 @@ void CAyu::Vf5()
     }
     if (unk3114 == 4) {
         m_inputY = -1;
-        m_inputX = (WORD)CPlayer::Unk4108a0(0, 2) - 1;
+        m_inputX = (WORD)CPlayer::Random(0, 2) - 1;
         if (pattern == 4 || pattern == 5 || pattern == 6) {
-            unk262 = facing == 1;
+            m_command = facing == 1;
             if (pattern == 0xa5) {
                 unk3114 = 0;
             }
@@ -977,8 +977,8 @@ void CAyu::Vf5()
         m_pressB = 1;
         return;
     }
-    if (unk168 > 1 && unk14a == 0 && (WORD)CPlayer::Unk4108a0(0, 0x64) < unka8 * 25.0f && unk3114 != 1 && unk3114 != 2) {
-        unk3110 = (WORD)CPlayer::Unk4108a0(0, 0x3e8);
+    if (m_attackResult > 1 && unk14a == 0 && (WORD)CPlayer::Random(0, 0x64) < unka8 * 25.0f && unk3114 != 1 && unk3114 != 2) {
+        unk3110 = (WORD)CPlayer::Random(0, 0x3e8);
         if (pattern == 0xc8) {
             if ((*m_opponent)->y < 0.0 && unk3110 < 0x12c) {
                 m_pressB = 1;
@@ -993,7 +993,7 @@ void CAyu::Vf5()
             if (v10 < 80.0 && unk3110 < 0x190) {
                 m_pressA = 1;
                 m_inputY = 0;
-                if (unk168 == 2 && (WORD)CPlayer::Unk4108a0(0, 0x64) < 0x14) {
+                if (m_attackResult == 2 && (WORD)CPlayer::Random(0, 0x64) < 0x14) {
                     m_pressC = 1;
                     m_inputY = 1;
                 }
@@ -1007,24 +1007,24 @@ void CAyu::Vf5()
             if (unk3110 > 0x3b6) {
                 unk3114 = 4;
                 m_inputY = -1;
-                m_inputX = (WORD)CPlayer::Unk4108a0(0, 2) - 1;
+                m_inputX = (WORD)CPlayer::Random(0, 2) - 1;
                 return;
             }
             if (unk3110 > 0x2bb) {
                 unk3114 = 1;
-                if ((WORD)CPlayer::Unk4108a0(0, 4) == 0) {
+                if ((WORD)CPlayer::Random(0, 4) == 0) {
                     unk3114 = 5;
                 }
                 return;
             }
         }
         if (pattern == 0xc9) {
-            if ((*m_opponent)->y < 0.0 && unk3110 < 0x12c && unk168 == 3) {
-                unk262 = 0x14;
+            if ((*m_opponent)->y < 0.0 && unk3110 < 0x12c && m_attackResult == 3) {
+                m_command = 0x14;
                 return;
             }
             if ((*m_opponent)->y < 0.0 && unk3110 > 0x12b && unk3110 < 0x258) {
-                unk262 = 0x1f;
+                m_command = 0x1f;
                 return;
             }
             if ((*m_opponent)->y < 0.0 && unk3110 > 0x257 && unk3110 < 0x2bc && v10 < 90.0) {
@@ -1037,12 +1037,12 @@ void CAyu::Vf5()
                 m_inputY = 1;
                 return;
             }
-            if (unk3110 < 0x1f4 && unk168 == 3) {
+            if (unk3110 < 0x1f4 && m_attackResult == 3) {
                 m_pressC = 1;
                 m_inputY = 0;
                 return;
             }
-            if (unk3110 < 0x12c && unk168 == 2) {
+            if (unk3110 < 0x12c && m_attackResult == 2) {
                 m_pressB = 1;
                 m_inputY = 0;
                 m_inputX = facing;
@@ -1056,56 +1056,56 @@ void CAyu::Vf5()
             if (unk3110 > 0x398) {
                 unk3114 = 4;
                 m_inputY = -1;
-                m_inputX = (WORD)CPlayer::Unk4108a0(0, 2) - 1;
+                m_inputX = (WORD)CPlayer::Random(0, 2) - 1;
                 return;
             }
             if (unk3110 > 0x1f3) {
                 unk3114 = 1;
-                if ((WORD)CPlayer::Unk4108a0(0, 3) == 0) {
+                if ((WORD)CPlayer::Random(0, 3) == 0) {
                     unk3114 = 5;
                 }
                 return;
             }
         }
         if (pattern == 0xca) {
-            if ((*m_opponent)->y < 0.0 && unk3110 < 0xc8 && unk168 == 3) {
-                unk262 = 0x14;
+            if ((*m_opponent)->y < 0.0 && unk3110 < 0xc8 && m_attackResult == 3) {
+                m_command = 0x14;
                 return;
             }
             if ((*m_opponent)->y < 0.0 && unk3110 > 0xc7 && unk3110 < 0x190) {
-                unk262 = 0x1f;
+                m_command = 0x1f;
                 return;
             }
-            if ((*m_opponent)->y < 0.0 && unk3110 > 0x18f && unk3110 < 0x1f4 && unk148 >= 0x3e8) {
-                unk262 = (WORD)CPlayer::Unk4108a0(0, 2) + 0x64;
+            if ((*m_opponent)->y < 0.0 && unk3110 > 0x18f && unk3110 < 0x1f4 && m_gauge >= 0x3e8) {
+                m_command = (WORD)CPlayer::Random(0, 2) + 0x64;
                 return;
             }
-            if (unk3110 < (unk168 == 3) * 0xc8 + 0xc8) {
+            if (unk3110 < (m_attackResult == 3) * 0xc8 + 0xc8) {
                 m_pressC = 1;
                 m_inputY = 1;
                 return;
             }
-            if (unk3110 < 0x1f4 && unk168 == 3 && v10 < 100.0) {
+            if (unk3110 < 0x1f4 && m_attackResult == 3 && v10 < 100.0) {
                 m_pressC = 1;
                 m_inputY = 0;
                 return;
             }
             if (unk3110 > 0x1f3 && unk3110 < 0x226 && unk118 > 500.0) {
-                unk262 = 0xa;
+                m_command = 0xa;
                 return;
             }
             if (unk3110 > 0x225 && unk3110 < 0x258) {
-                unk262 = 0x1e;
+                m_command = 0x1e;
                 return;
             }
             if (unk3110 > 0x257 && unk3110 < 0x28a) {
-                unk262 = 0x1f;
+                m_command = 0x1f;
                 return;
             }
             if (unk3110 > 0x3b6) {
                 unk3114 = 4;
                 m_inputY = -1;
-                m_inputX = (WORD)CPlayer::Unk4108a0(0, 2) - 1;
+                m_inputX = (WORD)CPlayer::Random(0, 2) - 1;
                 return;
             }
             if (unk3110 > 0x289) {
@@ -1114,38 +1114,38 @@ void CAyu::Vf5()
             }
         }
         if (pattern == 0xcb) {
-            if ((*m_opponent)->y < 0.0 && unk3110 < 0xc8 && unk168 == 3) {
-                unk262 = 0x14;
+            if ((*m_opponent)->y < 0.0 && unk3110 < 0xc8 && m_attackResult == 3) {
+                m_command = 0x14;
                 return;
             }
-            if (unk3110 > 0 && unk3110 < (unk168 == 3) * 0xc8 + 0x64 && (unk118 > 500.0 || unk168 == 3)) {
-                unk262 = 0xa;
+            if (unk3110 > 0 && unk3110 < (m_attackResult == 3) * 0xc8 + 0x64 && (unk118 > 500.0 || m_attackResult == 3)) {
+                m_command = 0xa;
                 return;
             }
             if (unk3110 > 0x64 && unk3110 < 0x96) {
-                unk262 = 0x1e;
+                m_command = 0x1e;
                 return;
             }
             if (unk3110 > 0x96 && unk3110 < 0xc8) {
-                unk262 = 0x1f;
+                m_command = 0x1f;
                 return;
             }
             if (unk3110 > 0xc8 && unk3110 < 0xfa && unk118 > 500.0) {
-                unk262 = 0x34;
+                m_command = 0x34;
                 return;
             }
-            if (unk3110 > 0xfa && unk3110 < 0x190 && unk168 == 3 && unk148 >= 0x3e8) {
-                unk262 = (WORD)CPlayer::Unk4108a0(0, 2) + 0x64;
+            if (unk3110 > 0xfa && unk3110 < 0x190 && m_attackResult == 3 && m_gauge >= 0x3e8) {
+                m_command = (WORD)CPlayer::Random(0, 2) + 0x64;
                 return;
             }
-            if (unk3110 > 0x190 && unk3110 < 0x1cc && unk148 >= 0x3e8) {
-                unk262 = (WORD)CPlayer::Unk4108a0(0, 2) + 0x6e;
+            if (unk3110 > 0x190 && unk3110 < 0x1cc && m_gauge >= 0x3e8) {
+                m_command = (WORD)CPlayer::Random(0, 2) + 0x6e;
                 return;
             }
             if (unk3110 > 0x38e) {
                 unk3114 = 4;
                 m_inputY = -1;
-                m_inputX = (WORD)CPlayer::Unk4108a0(0, 2) - 1;
+                m_inputX = (WORD)CPlayer::Random(0, 2) - 1;
                 return;
             }
             if (unk3110 > 0x289) {
@@ -1167,7 +1167,7 @@ void CAyu::Vf5()
             if (v10 < 80.0 && unk3110 < 0x190) {
                 m_pressA = 1;
                 m_inputY = 0;
-                if (unk168 == 2 && (WORD)CPlayer::Unk4108a0(0, 0x64) < 0x14) {
+                if (m_attackResult == 2 && (WORD)CPlayer::Random(0, 0x64) < 0x14) {
                     m_pressC = 1;
                     m_inputY = 1;
                 }
@@ -1181,56 +1181,56 @@ void CAyu::Vf5()
             if (unk3110 > 0x3b6) {
                 unk3114 = 4;
                 m_inputY = -1;
-                m_inputX = (WORD)CPlayer::Unk4108a0(0, 2) - 1;
+                m_inputX = (WORD)CPlayer::Random(0, 2) - 1;
                 return;
             }
             if (unk3110 > 0x2bb) {
                 unk3114 = 1;
-                if ((WORD)CPlayer::Unk4108a0(0, 4) == 0) {
+                if ((WORD)CPlayer::Random(0, 4) == 0) {
                     unk3114 = 5;
                 }
                 return;
             }
         }
         if (pattern == 0xcd) {
-            if ((*m_opponent)->y < 0.0 && unk3110 < 0xc8 && unk168 == 3) {
-                unk262 = 0x14;
+            if ((*m_opponent)->y < 0.0 && unk3110 < 0xc8 && m_attackResult == 3) {
+                m_command = 0x14;
                 return;
             }
             if ((*m_opponent)->y < 0.0 && unk3110 > 0xc7 && unk3110 < 0x190) {
-                unk262 = 0x1f;
+                m_command = 0x1f;
                 return;
             }
-            if ((*m_opponent)->y < 0.0 && unk3110 > 0x18f && unk3110 < 0x1f4 && unk148 >= 0x3e8) {
-                unk262 = (WORD)CPlayer::Unk4108a0(0, 2) + 0x64;
+            if ((*m_opponent)->y < 0.0 && unk3110 > 0x18f && unk3110 < 0x1f4 && m_gauge >= 0x3e8) {
+                m_command = (WORD)CPlayer::Random(0, 2) + 0x64;
                 return;
             }
-            if (unk3110 < (unk168 == 3) * 0xc8 + 0xc8) {
+            if (unk3110 < (m_attackResult == 3) * 0xc8 + 0xc8) {
                 m_pressC = 1;
                 m_inputY = 1;
                 return;
             }
-            if (unk3110 < 0x1f4 && unk168 == 3 && v10 < 100.0) {
+            if (unk3110 < 0x1f4 && m_attackResult == 3 && v10 < 100.0) {
                 m_pressC = 1;
                 m_inputY = 0;
                 return;
             }
             if (unk3110 > 0x1f3 && unk3110 < 0x226 && unk118 > 500.0) {
-                unk262 = 0xa;
+                m_command = 0xa;
                 return;
             }
             if (unk3110 > 0x225 && unk3110 < 0x258) {
-                unk262 = 0x1e;
+                m_command = 0x1e;
                 return;
             }
             if (unk3110 > 0x257 && unk3110 < 0x28a) {
-                unk262 = 0x1f;
+                m_command = 0x1f;
                 return;
             }
             if (unk3110 > 0x3b6) {
                 unk3114 = 4;
                 m_inputY = -1;
-                m_inputX = (WORD)CPlayer::Unk4108a0(0, 2) - 1;
+                m_inputX = (WORD)CPlayer::Random(0, 2) - 1;
                 return;
             }
             if (unk3110 > 0x289) {
@@ -1239,32 +1239,32 @@ void CAyu::Vf5()
             }
         }
         if (pattern == 0xce) {
-            if ((*m_opponent)->y < 0.0 && unk3110 < 0xc8 && unk168 == 3) {
-                unk262 = 0x14;
+            if ((*m_opponent)->y < 0.0 && unk3110 < 0xc8 && m_attackResult == 3) {
+                m_command = 0x14;
                 return;
             }
-            if (unk3110 > 0 && unk3110 < (unk168 == 3) * 0xc8 + 0x64 && (unk118 > 500.0 || unk168 == 3)) {
-                unk262 = 0xa;
+            if (unk3110 > 0 && unk3110 < (m_attackResult == 3) * 0xc8 + 0x64 && (unk118 > 500.0 || m_attackResult == 3)) {
+                m_command = 0xa;
                 return;
             }
             if (unk3110 > 0x64 && unk3110 < 0x96) {
-                unk262 = 0x1e;
+                m_command = 0x1e;
                 return;
             }
             if (unk3110 > 0x96 && unk3110 < 0xc8) {
-                unk262 = 0x1f;
+                m_command = 0x1f;
                 return;
             }
             if (unk3110 > 0xc8 && unk3110 < 0xfa && unk118 > 500.0) {
-                unk262 = 0x34;
+                m_command = 0x34;
                 return;
             }
-            if (unk3110 > 0xfa && unk3110 < 0x190 && unk168 == 3 && unk148 >= 0x3e8) {
-                unk262 = (WORD)CPlayer::Unk4108a0(0, 2) + 0x64;
+            if (unk3110 > 0xfa && unk3110 < 0x190 && m_attackResult == 3 && m_gauge >= 0x3e8) {
+                m_command = (WORD)CPlayer::Random(0, 2) + 0x64;
                 return;
             }
-            if (unk3110 > 0x190 && unk3110 < 0x1cc && unk148 >= 0x3e8) {
-                unk262 = (WORD)CPlayer::Unk4108a0(0, 2) + 0x6e;
+            if (unk3110 > 0x190 && unk3110 < 0x1cc && m_gauge >= 0x3e8) {
+                m_command = (WORD)CPlayer::Random(0, 2) + 0x6e;
                 return;
             }
             if (unk3110 > 0x289) {
@@ -1288,23 +1288,23 @@ void CAyu::Vf5()
             }
             if (unk3110 > 0x2bb) {
                 unk3114 = 1;
-                if ((WORD)CPlayer::Unk4108a0(0, 4) == 0) {
+                if ((WORD)CPlayer::Random(0, 4) == 0) {
                     unk3114 = 3;
                 }
                 return;
             }
         }
         if (pattern == 0xd0) {
-            if (unk3110 < 0x14 && unk168 == 3 && (*m_opponent)->y < 0.0) {
-                unk262 = 0x14;
+            if (unk3110 < 0x14 && m_attackResult == 3 && (*m_opponent)->y < 0.0) {
+                m_command = 0x14;
                 return;
             }
-            if (unk3110 > 0x14 && unk3110 < 0x32 && unk168 == 3 && (*m_opponent)->y < 0.0) {
-                unk262 = 0x1f;
+            if (unk3110 > 0x14 && unk3110 < 0x32 && m_attackResult == 3 && (*m_opponent)->y < 0.0) {
+                m_command = 0x1f;
                 return;
             }
-            if (unk3110 > 0x32 && unk3110 < 0x3c && unk148 >= 0x3e8 && (*m_opponent)->y < 0.0) {
-                unk262 = (WORD)CPlayer::Unk4108a0(0, 2) + 0x6e;
+            if (unk3110 > 0x32 && unk3110 < 0x3c && m_gauge >= 0x3e8 && (*m_opponent)->y < 0.0) {
+                m_command = (WORD)CPlayer::Random(0, 2) + 0x6e;
                 return;
             }
             if (unk3110 > 0x3c && unk3110 < 0x12c) {
@@ -1312,7 +1312,7 @@ void CAyu::Vf5()
                 return;
             }
             if (unk3110 > 0x3b6) {
-                m_inputX = (WORD)CPlayer::Unk4108a0(0, 2) - 1;
+                m_inputX = (WORD)CPlayer::Random(0, 2) - 1;
                 return;
             }
             if (unk3110 > 0x289) {
@@ -1325,8 +1325,8 @@ void CAyu::Vf5()
             return;
         }
     }
-    if ((WORD)CPlayer::Unk4108a0(0, 0x64) < 25.0f * unka8) {
-        unk3110 = (WORD)CPlayer::Unk4108a0(0, 0x3e8);
+    if ((WORD)CPlayer::Random(0, 0x64) < 25.0f * unka8) {
+        unk3110 = (WORD)CPlayer::Random(0, 0x3e8);
         if (y == 0.0) {
             if ((*m_opponent)->y == 0.0 && (*m_opponent)->pattern != 0x63) {
                 if (v10 < 40.0 && (*m_opponent)->y == 0.0 && unk3110 < 5) {
@@ -1366,11 +1366,11 @@ void CAyu::Vf5()
                     return;
                 }
                 if (v10 < 150.0 && v10 > 80.0 && unk3110 < 0x2a && unk3110 > 0x28) {
-                    unk262 = 0x1e;
+                    m_command = 0x1e;
                     return;
                 }
                 if (unk3110 < 0x2a && unk3110 > 0x2f) {
-                    unk262 = facing;
+                    m_command = facing;
                     unk3114 = 5;
                     return;
                 }
@@ -1387,15 +1387,15 @@ void CAyu::Vf5()
                         m_inputY = 1;
                         return;
                     }
-                    if (v10 < 80.0 && x8 < 120.0 && unk3110 < 0x11 && unk148 >= 0x7d0) {
-                        unk262 = (WORD)CPlayer::Unk4108a0(0, 1) + 0x79;
+                    if (v10 < 80.0 && x8 < 120.0 && unk3110 < 0x11 && m_gauge >= 0x7d0) {
+                        m_command = (WORD)CPlayer::Random(0, 1) + 0x79;
                         return;
                     }
                 }
                 if ((*m_opponent)->vy > 0.0) {
                     if (v10 < 80.0 && x8 < 120.0) {
                         if (unk3110 < (unk118 > 500.0 || unk120 > 0) * 5 + 6) {
-                            unk262 = 0x14;
+                            m_command = 0x14;
                             return;
                         }
                     }
@@ -1404,8 +1404,8 @@ void CAyu::Vf5()
                         m_inputY = 1;
                         return;
                     }
-                    if (v10 < 120.0 && x8 < 150.0 && unk3110 < 0x11 && unk148 >= 0x7d0) {
-                        unk262 = (WORD)CPlayer::Unk4108a0(0, 1) + 0x79;
+                    if (v10 < 120.0 && x8 < 150.0 && unk3110 < 0x11 && m_gauge >= 0x7d0) {
+                        m_command = (WORD)CPlayer::Random(0, 1) + 0x79;
                         return;
                     }
                 }
@@ -1433,7 +1433,7 @@ void CAyu::Vf5()
             if ((*m_opponent)->y < 0.0) {
                 if (v10 < 80.0 && x8 < 80.0 && (*m_opponent)->y < y) {
                     if (unk3110 < (unk118 > 500.0 || unk120 > 0) * 0x14 + 6) {
-                        unk262 = 0x14;
+                        m_command = 0x14;
                         return;
                     }
                 }
@@ -1454,28 +1454,28 @@ void CAyu::Vf5()
             }
         }
     }
-    if (pattern < 0x32 && ((*m_opponent)->pattern > 0x95 && (*m_opponent)->pattern < 0x9c || (*m_opponent)->pattern > 0x31 && (*m_opponent)->pattern < 0x3b) && y == 0.0 && (WORD)CPlayer::Unk4108a0(0, 0x64) < 1.0f * unka8) {
+    if (pattern < 0x32 && ((*m_opponent)->pattern > 0x95 && (*m_opponent)->pattern < 0x9c || (*m_opponent)->pattern > 0x31 && (*m_opponent)->pattern < 0x3b) && y == 0.0 && (WORD)CPlayer::Random(0, 0x64) < 1.0f * unka8) {
         if (v10 < 100.0) {
-            unk262 = facing == 1;
+            m_command = facing == 1;
         }
         return;
     }
-    if ((WORD)CPlayer::Unk4108a0(0, 0x3e8) < 2) {
+    if ((WORD)CPlayer::Random(0, 0x3e8) < 2) {
         unk3114 = 4;
         return;
     }
-    if ((WORD)CPlayer::Unk4108a0(0, 0x64) < 2) {
-        if ((WORD)CPlayer::Unk4108a0(0, 0x64) < 8.0f * unka8) {
+    if ((WORD)CPlayer::Random(0, 0x64) < 2) {
+        if ((WORD)CPlayer::Random(0, 0x64) < 8.0f * unka8) {
             unk3114 = 3;
         } else {
             unk3114 = 0;
         }
-        if (v10 > 240.0 && y == 0.0 && (WORD)CPlayer::Unk4108a0(0, 0x64) < 2) {
+        if (v10 > 240.0 && y == 0.0 && (WORD)CPlayer::Random(0, 0x64) < 2) {
             m_inputX = 0;
             m_inputY = -1;
             return;
         }
-        if (v10 < 80.0 && y == 0.0 && (WORD)CPlayer::Unk4108a0(0, 0x64) < 2) {
+        if (v10 < 80.0 && y == 0.0 && (WORD)CPlayer::Random(0, 0x64) < 2) {
             m_inputX = 0;
             m_inputY = -1;
             return;
@@ -1500,26 +1500,26 @@ void CAyu::Vf5()
         m_inputX = -1;
         return;
     }
-    if ((WORD)CPlayer::Unk4108a0(0, 0x64) < 0x28 && v10 < 60.0) {
+    if ((WORD)CPlayer::Random(0, 0x64) < 0x28 && v10 < 60.0) {
         if (facing == 1) {
-            unk1a4 = (WORD)CPlayer::Unk4108a0(0, 0xc8) + 0x1e;
+            unk1a4 = (WORD)CPlayer::Random(0, 0xc8) + 0x1e;
         } else {
-            unk1a0 = (WORD)CPlayer::Unk4108a0(0, 0xc8) + 0x1e;
+            unk1a0 = (WORD)CPlayer::Random(0, 0xc8) + 0x1e;
         }
     }
-    if ((WORD)CPlayer::Unk4108a0(0, 0x64) < 0x50) {
+    if ((WORD)CPlayer::Random(0, 0x64) < 0x50) {
         if (facing == 1) {
-            unk1a0 = (WORD)CPlayer::Unk4108a0(0, 0xc8) + 0x1e;
+            unk1a0 = (WORD)CPlayer::Random(0, 0xc8) + 0x1e;
         } else {
-            unk1a4 = (WORD)CPlayer::Unk4108a0(0, 0xc8) + 0x1e;
+            unk1a4 = (WORD)CPlayer::Random(0, 0xc8) + 0x1e;
         }
         return;
     }
     if (facing == -1) {
-        unk1a0 = (WORD)CPlayer::Unk4108a0(0, 0xc8) + 0x1e;
+        unk1a0 = (WORD)CPlayer::Random(0, 0xc8) + 0x1e;
         return;
     }
-    unk1a4 = (WORD)CPlayer::Unk4108a0(0, 0xc8) + 0x1e;
+    unk1a4 = (WORD)CPlayer::Random(0, 0xc8) + 0x1e;
 }
 
 void CAyu::Vf7()
@@ -1837,8 +1837,8 @@ void CAyu::Vf7()
                     l50.x = m_objects[v4].x;
                     l50.y = m_objects[v4].y;
                     l50.unk18 = m_objects[v4].facing;
-                    l50.unk20 = 2;
-                    l50.unk21 = 1;
+                    l50.scale = 2;
+                    l50.layer = 1;
                     Vf9(&l50);
                 }
                 if (m_objects[v4].timer >= v54) {
@@ -1869,10 +1869,10 @@ void CAyu::Vf7()
                 if (unk3150[v4] == 0) {
                     m_objects[v4].unk84 = 1;
                     unk3150[v4]++;
-                    m_objects[v4].vx = (WORD)CPlayer::Unk4108a0(0, 0x64) * 0.01 + 2.5;
-                    m_objects[v4].ay = (WORD)CPlayer::Unk4108a0(0, 0x64) * 0.00015;
+                    m_objects[v4].vx = (WORD)CPlayer::Random(0, 0x64) * 0.01 + 2.5;
+                    m_objects[v4].ay = (WORD)CPlayer::Random(0, 0x64) * 0.00015;
                     m_objects[v4].vy = 0.5;
-                    m_objects[v4].frame = CPlayer::Unk4108a0(0, 0xf);
+                    m_objects[v4].frame = CPlayer::Random(0, 0xf);
                 }
                 m_objects[v4].vy = m_objects[v4].vy - m_objects[v4].ay;
                 m_objects[v4].timer++;
@@ -1893,10 +1893,10 @@ void CAyu::Vf7()
                 if (unk3150[v4] == 0) {
                     m_objects[v4].unk84 = 1;
                     unk3150[v4]++;
-                    m_objects[v4].vx = (WORD)CPlayer::Unk4108a0(0, 0x64) * 0.01 + 1.0;
-                    m_objects[v4].ay = (WORD)CPlayer::Unk4108a0(0, 0x64) * 0.0002;
+                    m_objects[v4].vx = (WORD)CPlayer::Random(0, 0x64) * 0.01 + 1.0;
+                    m_objects[v4].ay = (WORD)CPlayer::Random(0, 0x64) * 0.0002;
                     m_objects[v4].vy = 0.5;
-                    m_objects[v4].frame = CPlayer::Unk4108a0(0, 0xf);
+                    m_objects[v4].frame = CPlayer::Random(0, 0xf);
                 }
                 m_objects[v4].vy = m_objects[v4].vy - m_objects[v4].ay;
                 m_objects[v4].timer++;
@@ -2024,71 +2024,71 @@ void CAyu::Vf7()
                     l50.type = 0x1f1;
                     l50.x = (double)((int)x + facing * 0x17);
                     l50.y = (double)((int)y - 4);
-                    l50.unk20 = 0;
-                    l50.unk21 = 1;
+                    l50.scale = 0;
+                    l50.layer = 1;
                     l50.unk18 = facing;
                     Vf9(&l50);
                     l50.type = 0x1f1;
                     l50.x = (double)((int)x - (facing << 2));
                     l50.y = (double)((int)y - 6);
-                    l50.unk20 = 0;
-                    l50.unk21 = 1;
+                    l50.scale = 0;
+                    l50.layer = 1;
                     l50.unk18 = facing;
                     Vf9(&l50);
                     l50.type = 0x1f1;
                     l50.x = (double)((int)x - facing * 0xe);
                     l50.y = (double)((int)y - 0x1a);
-                    l50.unk20 = 0;
-                    l50.unk21 = 1;
+                    l50.scale = 0;
+                    l50.layer = 1;
                     l50.unk18 = facing;
                     Vf9(&l50);
                     l50.type = 0x1f1;
                     l50.x = (double)(int)x;
                     l50.y = (double)(int)y;
-                    l50.unk20 = 0;
-                    l50.unk21 = 1;
+                    l50.scale = 0;
+                    l50.layer = 1;
                     l50.unk18 = facing;
                     Vf9(&l50);
                     l50.type = 0x1f1;
                     l50.x = (double)((int)x + facing * 0x1e);
                     l50.y = (double)((int)y - 0x28);
-                    l50.unk20 = 0;
-                    l50.unk21 = 1;
+                    l50.scale = 0;
+                    l50.layer = 1;
                     l50.unk18 = facing;
                     Vf9(&l50);
                     l50.type = 0x1f1;
                     l50.x = (double)((int)x - facing * 0x19);
                     l50.y = (double)((int)y - 0x50);
-                    l50.unk20 = 0;
-                    l50.unk21 = 1;
+                    l50.scale = 0;
+                    l50.layer = 1;
                     l50.unk18 = facing;
                     Vf9(&l50);
                     l50.type = 0x1f2;
                     l50.x = (double)((int)x - facing * 0x23);
                     l50.y = (double)((int)y - 0x2a);
-                    l50.unk20 = 0;
-                    l50.unk21 = 1;
+                    l50.scale = 0;
+                    l50.layer = 1;
                     l50.unk18 = facing;
                     Vf9(&l50);
                     l50.type = 0x1f2;
                     l50.x = (double)((int)x - facing * 0x12);
                     l50.y = (double)((int)y - 0x14);
-                    l50.unk20 = 0;
-                    l50.unk21 = 1;
+                    l50.scale = 0;
+                    l50.layer = 1;
                     l50.unk18 = facing;
                     Vf9(&l50);
                     l50.type = 0x1f2;
                     l50.x = (double)((int)x + facing * 2);
                     l50.y = (double)((int)y - 0x41);
-                    l50.unk20 = 0;
-                    l50.unk21 = 1;
+                    l50.scale = 0;
+                    l50.layer = 1;
                     l50.unk18 = facing;
                     Vf9(&l50);
                     l50.type = 0x1f2;
                     l50.x = (double)((int)x + (facing << 4));
                     l50.y = (double)((int)y - 0x50);
-                    l50.unk20 = 0;
-                    l50.unk21 = 1;
+                    l50.scale = 0;
+                    l50.layer = 1;
                     l50.unk18 = facing;
                     Vf9(&l50);
                     unk2c9 = 0x22;

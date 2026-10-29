@@ -23,6 +23,8 @@ Usage:
     tools/members.py rewrite [files...]             rewrite src/*.cpp (and efz.h) in place
     tools/members.py check [files...]               what rewrite would change, as a diff
     tools/members.py layout                         check efz.h's offsets and sizes
+    tools/members.py rename RENAMES                 rename members and methods: lines
+                                                    "Class::member name"
 
 Needs the libclang Python package (pip install libclang) and the toolchain's headers
 (toolchain/setup.sh); efz.h is parsed as the compiler sees it, with the PSDK and DirectX
@@ -1083,8 +1085,104 @@ def check_layout():
     return errors
 
 
+# --- renaming ----------------------------------------------------------------------
+
+def read_renames(path):
+    """{(class, member): new name} from lines "Class::member name" (# starts a comment)."""
+    out = {}
+    with open(path, encoding='utf-8') as f:
+        for line in f:
+            line = line.split('#', 1)[0].strip()
+            if not line:
+                continue
+            qual, new = line.split()
+            cls, member = qual.rsplit('::', 1)
+            out[(cls, member)] = new
+    return out
+
+
+def rename_work(job):
+    """Edits [(offset, old, new)] for one file; efz.h is reached through main.cpp."""
+    path, renames = job
+    src = os.path.join(SRC, 'main.cpp') if path.endswith('.h') else path
+    tu = parse(src, ci.Index.create())
+    with open(path, 'rb') as f:
+        data = f.read()
+    edits = {}
+    problems = []
+
+    def target(c):
+        if c.kind in (CK.FIELD_DECL, CK.CXX_METHOD):
+            d = c.canonical if c.kind == CK.CXX_METHOD else c
+        elif c.kind in (CK.MEMBER_REF_EXPR, CK.MEMBER_REF, CK.DECL_REF_EXPR, CK.OVERLOADED_DECL_REF):
+            d = c.referenced
+        else:
+            return None
+        if d is None or d.kind not in (CK.FIELD_DECL, CK.CXX_METHOD):
+            return None
+        cls = d.semantic_parent.spelling if d.semantic_parent else None
+        return renames.get((cls, d.spelling))
+
+    def visit(c, names):
+        for x in c.get_children():
+            f = x.location.file
+            if f is None or os.path.abspath(f.name) != path:
+                continue
+            inner = names
+            if x.kind in (CK.CXX_METHOD, CK.FUNCTION_DECL, CK.CONSTRUCTOR, CK.DESTRUCTOR):
+                inner = {y.spelling for y in x.walk_preorder()
+                         if y.kind in (CK.VAR_DECL, CK.PARM_DECL)}
+            new = target(x)
+            if new is not None:
+                off = x.location.offset
+                old = x.spelling if x.kind in (CK.FIELD_DECL, CK.CXX_METHOD) else \
+                    x.referenced.spelling
+                if data[off:off + len(old)].decode('utf-8', 'replace') != old:
+                    problems.append(f'{os.path.relpath(path, REPO)}:{x.location.line}: '
+                                    f'{old} not at its location (macro?)')
+                else:
+                    before = data[:off].rstrip()
+                    implicit = x.kind == CK.MEMBER_REF_EXPR and not (
+                        before.endswith(b'.') or before.endswith(b'->'))
+                    text = new
+                    if implicit and new in names:
+                        text = 'this->' + new
+                    edits[off] = (old, text)
+            visit(x, inner)
+    visit(tu.cursor, set())
+    return path, data, edits, problems
+
+
+def rename(path_list, renames):
+    files = path_list or default_files()
+    include_farm()
+    with multiprocessing.Pool() as pool:
+        results = pool.map(rename_work, [(p, renames) for p in files])
+    total = 0
+    bad = False
+    for path, data, edits, problems in results:
+        for p in problems:
+            print(p)
+            bad = True
+        if not edits:
+            continue
+        out = data
+        for off in sorted(edits, reverse=True):
+            old, new = edits[off]
+            out = out[:off] + new.encode('utf-8') + out[off + len(old):]
+        with open(path, 'wb') as f:
+            f.write(out)
+        total += len(edits)
+        print(f'{os.path.relpath(path, REPO)}: {len(edits)} references')
+    print(f'{total} references renamed')
+    return bad
+
+
 def main():
     args = sys.argv[1:]
+    if args and args[0] == 'rename':
+        renames = read_renames(args[1])
+        sys.exit(1 if rename([os.path.abspath(a) for a in args[2:]], renames) else 0)
     if not args or args[0] not in ('scan', 'rewrite', 'check', 'layout'):
         print(__doc__)
         sys.exit(2)

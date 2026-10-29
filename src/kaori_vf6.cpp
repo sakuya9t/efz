@@ -62,7 +62,7 @@ void CKaori::Vf6()
         vx = 0.0;
         vy = 0.0;
         unk158 = 0;
-        CPlayer::Unk40e630();
+        CPlayer::FaceOpponent();
         timer++;
         if (timer >= l4) {
             timer = 0;
@@ -75,7 +75,7 @@ void CKaori::Vf6()
     case 4:
         if (frame == 0 && timer == 0) {
             if (unk158 == 0) {
-                CPlayer::Unk40e630();
+                CPlayer::FaceOpponent();
             }
             vx = 0.0;
         }
@@ -102,7 +102,7 @@ void CKaori::Vf6()
         if (y + vy >= 0.0 && frame > 3) {
             y = 0.0;
             unk2c9 = 9;
-            CPlayer::Unk40e630();
+            CPlayer::FaceOpponent();
             pattern = 0xd;
             Vf0();
         }
@@ -110,7 +110,7 @@ void CKaori::Vf6()
     case 5:
         if (frame == 0 && timer == 0) {
             if (unk158 == 0) {
-                CPlayer::Unk40e630();
+                CPlayer::FaceOpponent();
             }
             vx = 0.0;
         }
@@ -138,7 +138,7 @@ void CKaori::Vf6()
         if (y + vy >= 0.0 && frame > 3) {
             y = 0.0;
             unk2c9 = 9;
-            CPlayer::Unk40e630();
+            CPlayer::FaceOpponent();
             pattern = 0xd;
             Vf0();
         }
@@ -146,7 +146,7 @@ void CKaori::Vf6()
     case 6:
         if (frame == 0 && timer == 0) {
             if (unk158 == 0) {
-                CPlayer::Unk40e630();
+                CPlayer::FaceOpponent();
             }
             vx = 0.0;
         }
@@ -170,7 +170,7 @@ void CKaori::Vf6()
         if (y + vy >= 0.0 && frame > 3) {
             y = 0.0;
             unk2c9 = 9;
-            CPlayer::Unk40e630();
+            CPlayer::FaceOpponent();
             pattern = 0xd;
             Vf0();
         }
@@ -179,7 +179,7 @@ void CKaori::Vf6()
         vx = 0.0;
         vy = 0.0;
         unk158 = 0;
-        CPlayer::Unk40e630();
+        CPlayer::FaceOpponent();
         timer++;
         if (timer >= l4) {
             timer = 0;
@@ -194,7 +194,7 @@ void CKaori::Vf6()
         vx = 0.0;
         vy = 0.0;
         unk158 = 0;
-        CPlayer::Unk40e630();
+        CPlayer::FaceOpponent();
         timer++;
         if (timer >= l4) {
             timer = 0;
@@ -227,7 +227,7 @@ void CKaori::Vf6()
         vx = 0.0;
         vy = 0.0;
         unk158 = 0;
-        CPlayer::Unk40e630();
+        CPlayer::FaceOpponent();
         timer++;
         if (timer >= l4) {
             timer = 0;
@@ -261,7 +261,7 @@ void CKaori::Vf6()
         if (y + vy >= 0.0 && frame > 3) {
             y = 0.0;
             unk2c9 = 9;
-            CPlayer::Unk40e630();
+            CPlayer::FaceOpponent();
             pattern = 0xd;
             Vf0();
         }
@@ -286,7 +286,7 @@ void CKaori::Vf6()
         if (y + vy >= 0.0 && frame > 3) {
             y = 0.0;
             unk2c9 = 9;
-            CPlayer::Unk40e630();
+            CPlayer::FaceOpponent();
             pattern = 0xd;
             Vf0();
         }
@@ -311,7 +311,7 @@ void CKaori::Vf6()
         if (y + vy >= 0.0 && frame > 3) {
             y = 0.0;
             unk2c9 = 9;
-            CPlayer::Unk40e630();
+            CPlayer::FaceOpponent();
             pattern = 0xd;
             Vf0();
         }
@@ -349,8 +349,8 @@ void CKaori::Vf6()
         }
         unk158 = 0;
         if (frame == 0 && timer == 0) {
-            unk148 = unk148 + 0xa;
-            vx = (2.0 - (*m_opponent)->unk178 / 10000.0) * -1.1;
+            m_gauge = m_gauge + 0xa;
+            vx = (2.0 - (*m_opponent)->m_proration / 10000.0) * -1.1;
             if (unk120 != 0) {
                 unk118 -= 10.0;
             }
@@ -385,8 +385,8 @@ void CKaori::Vf6()
         }
         unk158 = 0;
         if (frame == 0 && timer == 0) {
-            unk148 = unk148 + 0xf;
-            vx = (2.0 - (*m_opponent)->unk178 / 10000.0) * -1.5;
+            m_gauge = m_gauge + 0xf;
+            vx = (2.0 - (*m_opponent)->m_proration / 10000.0) * -1.5;
             if (unk120 != 0) {
                 unk118 -= 20.0;
             }
@@ -421,8 +421,8 @@ void CKaori::Vf6()
         }
         unk158 = 0;
         if (frame == 0 && timer == 0) {
-            unk148 = unk148 + 0x14;
-            vx = (2.0 - (*m_opponent)->unk178 / 10000.0) * -1.8;
+            m_gauge = m_gauge + 0x14;
+            vx = (2.0 - (*m_opponent)->m_proration / 10000.0) * -1.8;
             if (unk120 != 0) {
                 unk118 -= 30.0;
             }
@@ -457,8 +457,8 @@ void CKaori::Vf6()
         }
         unk158 = 0;
         if (frame == 0 && timer == 0) {
-            unk148 = unk148 + 0xa;
-            vx = (2.0 - (*m_opponent)->unk178 / 10000.0) * -1.1;
+            m_gauge = m_gauge + 0xa;
+            vx = (2.0 - (*m_opponent)->m_proration / 10000.0) * -1.1;
             if (unk120 != 0) {
                 unk118 -= 10.0;
             }
@@ -493,8 +493,8 @@ void CKaori::Vf6()
         }
         unk158 = 0;
         if (frame == 0 && timer == 0) {
-            unk148 = unk148 + 0xf;
-            vx = (2.0 - (*m_opponent)->unk178 / 10000.0) * -1.5;
+            m_gauge = m_gauge + 0xf;
+            vx = (2.0 - (*m_opponent)->m_proration / 10000.0) * -1.5;
             if (unk120 != 0) {
                 unk118 -= 20.0;
             }
@@ -529,8 +529,8 @@ void CKaori::Vf6()
         }
         unk158 = 0;
         if (frame == 0 && timer == 0) {
-            unk148 = unk148 + 0x14;
-            vx = (2.0 - (*m_opponent)->unk178 / 10000.0) * -1.8;
+            m_gauge = m_gauge + 0x14;
+            vx = (2.0 - (*m_opponent)->m_proration / 10000.0) * -1.8;
             if (unk120 != 0) {
                 unk118 -= 30.0;
             }
@@ -565,8 +565,8 @@ void CKaori::Vf6()
         }
         unk158 = 0;
         if (frame == 0 && timer == 0) {
-            unk148 = unk148 + 0xa;
-            vx = (2.0 - (*m_opponent)->unk178 / 10000.0) * -1.1;
+            m_gauge = m_gauge + 0xa;
+            vx = (2.0 - (*m_opponent)->m_proration / 10000.0) * -1.1;
             if (unk120 != 0) {
                 unk118 -= 10.0;
             }
@@ -598,8 +598,8 @@ void CKaori::Vf6()
         }
         unk158 = 0;
         if (frame == 0 && timer == 0) {
-            unk148 = unk148 + 0xf;
-            vx = (2.0 - (*m_opponent)->unk178 / 10000.0) * -1.5;
+            m_gauge = m_gauge + 0xf;
+            vx = (2.0 - (*m_opponent)->m_proration / 10000.0) * -1.5;
             if (unk120 != 0) {
                 unk118 -= 20.0;
             }
@@ -631,8 +631,8 @@ void CKaori::Vf6()
         }
         unk158 = 0;
         if (frame == 0 && timer == 0) {
-            unk148 = unk148 + 0x14;
-            vx = (2.0 - (*m_opponent)->unk178 / 10000.0) * -1.8;
+            m_gauge = m_gauge + 0x14;
+            vx = (2.0 - (*m_opponent)->m_proration / 10000.0) * -1.8;
             if (unk120 != 0) {
                 unk118 -= 30.0;
             }
@@ -663,7 +663,7 @@ void CKaori::Vf6()
             unk118 -= 0.8;
         }
         if (frame == 0 && timer == 0) {
-            unk148 = unk148 + 0x1e;
+            m_gauge = m_gauge + 0x1e;
             vx = unkc0;
             vy = vy * 0.75 + unkc8;
             if (vy < -2.0) {
@@ -706,7 +706,7 @@ void CKaori::Vf6()
             unk118 -= 0.8;
         }
         if (frame == 0 && timer == 0) {
-            unk148 = unk148 + 0x1e;
+            m_gauge = m_gauge + 0x1e;
             vx = unkc0;
             vy = vy * 0.75 + unkc8;
             if (vy < -4.0) {
@@ -749,7 +749,7 @@ void CKaori::Vf6()
             unk118 -= 0.8;
         }
         if (frame == 0 && timer == 0) {
-            unk148 = unk148 + 0x1e;
+            m_gauge = m_gauge + 0x1e;
             vx = unkc0;
             vy = vy * 0.75 + unkc8;
             if (vy < -6.0) {
@@ -792,7 +792,7 @@ void CKaori::Vf6()
             unk118 -= 0.8;
         }
         if (frame == 0 && timer == 0) {
-            unk148 = unk148 + 0x1e;
+            m_gauge = m_gauge + 0x1e;
             vx = unkc0;
             vy = vy * 0.75 + unkc8;
             ay = 0.032;
@@ -830,7 +830,7 @@ void CKaori::Vf6()
             unk118 -= 0.8;
         }
         if (frame == 0 && timer == 0) {
-            unk148 = unk148 + 0x1e;
+            m_gauge = m_gauge + 0x1e;
             vx = unkc0;
             vy = unkc8;
             ay = 0.032;
@@ -873,7 +873,7 @@ void CKaori::Vf6()
             break;
         }
         if (frame == 0 && timer == 0) {
-            unk148 = unk148 + 0x1e;
+            m_gauge = m_gauge + 0x1e;
             vx = unkc0;
             vy = vy * 0.75 + unkc8;
             if (vy < -2.0) {
@@ -921,7 +921,7 @@ void CKaori::Vf6()
             break;
         }
         if (frame == 0 && timer == 0) {
-            unk148 = unk148 + 0x1e;
+            m_gauge = m_gauge + 0x1e;
             vx = unkc0;
             vy = vy * 0.75 + unkc8;
             if (vy < -4.0) {
@@ -969,7 +969,7 @@ void CKaori::Vf6()
             break;
         }
         if (frame == 0 && timer == 0) {
-            unk148 = unk148 + 0x1e;
+            m_gauge = m_gauge + 0x1e;
             vx = unkc0;
             vy = vy * 0.75 + unkc8;
             ay = 0.032;
@@ -1012,7 +1012,7 @@ void CKaori::Vf6()
             break;
         }
         if (frame == 0 && timer == 0) {
-            unk148 = unk148 + 0x1e;
+            m_gauge = m_gauge + 0x1e;
             vx = unkc0;
             vy = unkc8;
             ay = 0.032;
@@ -1049,7 +1049,7 @@ void CKaori::Vf6()
         if (unk120 != 0) {
             unk118 -= 1.5;
         }
-        unk148 = unk148 + 3;
+        m_gauge = m_gauge + 3;
         vx = unkc0;
         vy = unkc8;
         timer++;
@@ -1080,7 +1080,7 @@ void CKaori::Vf6()
         if (unk120 != 0) {
             unk118 -= 1.5;
         }
-        unk148 = unk148 + 3;
+        m_gauge = m_gauge + 3;
         vx = unkc0;
         vy = unkc8;
         timer++;
@@ -1107,7 +1107,7 @@ void CKaori::Vf6()
             unk118 -= 0.8;
         }
         if (frame == 0 && timer == 0 && unk3138 == 0) {
-            unk148 = unk148 + 0x1e;
+            m_gauge = m_gauge + 0x1e;
             unk3138++;
             unk124 = unk124 + 0x78;
             vx = 0.5;
@@ -1117,8 +1117,8 @@ void CKaori::Vf6()
             l50.type = 0;
             l50.x = (double)(int)x;
             l50.y = (double)(int)y;
-            l50.unk20 = 2;
-            l50.unk21 = 1;
+            l50.scale = 2;
+            l50.layer = 1;
             m_game->CreateEffect((EffectDesc*)&l50);
         }
         vy = vy + ay;
@@ -1146,7 +1146,7 @@ void CKaori::Vf6()
             unk118 -= 0.8;
         }
         if (frame == 0 && timer == 0) {
-            unk148 = unk148 + 0x1e;
+            m_gauge = m_gauge + 0x1e;
             vx = unkc0;
             vy = unkc8;
             ay = 0.072;
@@ -1257,7 +1257,7 @@ void CKaori::Vf6()
         }
         unk158 = 0;
         if (frame == 0 && timer == 0) {
-            unk148 = unk148 + 0x1e;
+            m_gauge = m_gauge + 0x1e;
             if (unk120 != 0) {
                 unk118 -= 30.0;
             }
@@ -1295,7 +1295,7 @@ void CKaori::Vf6()
         }
         unk158 = 0;
         if (frame == 0 && timer == 0) {
-            unk148 = unk148 + 0x1e;
+            m_gauge = m_gauge + 0x1e;
             if (unk120 != 0) {
                 unk118 -= 30.0;
             }
@@ -1333,7 +1333,7 @@ void CKaori::Vf6()
         }
         unk158 = 0;
         if (frame == 0 && timer == 0) {
-            unk148 = unk148 + 0x1e;
+            m_gauge = m_gauge + 0x1e;
             if (unk120 != 0) {
                 unk118 -= 30.0;
             }
@@ -1371,9 +1371,9 @@ void CKaori::Vf6()
             l50.x = (double)(int)x;
             l50.y = (double)(int)y;
             l50.unk18 = facing;
-            l50.unk21 = 1;
+            l50.layer = 1;
             Vf9(&l50);
-            unk148 = unk148 + 0x1e;
+            m_gauge = m_gauge + 0x1e;
             vx = unkc0;
             vy = unkc8;
             ay = 0.032;
@@ -1411,7 +1411,7 @@ void CKaori::Vf6()
             vy = -0.45;
             vx = -0.1;
             unk3138++;
-            unk148 = unk148 + 0x1e;
+            m_gauge = m_gauge + 0x1e;
         }
         if (frame == 4 && timer == 0) {
             vx = unkc0;
@@ -1454,8 +1454,8 @@ void CKaori::Vf6()
                 l50.type = 0x1f0;
                 l50.x = (double)(int)x;
                 l50.y = (double)(int)y;
-                l50.unk20 = 0;
-                l50.unk21 = 0;
+                l50.scale = 0;
+                l50.layer = 0;
                 l50.unk0 = 1;
                 l50.unk18 = facing;
                 Vf9(&l50);
@@ -1467,7 +1467,7 @@ void CKaori::Vf6()
             unk2c9 = 0x21;
             vy = -1.5;
             vx = -0.8;
-            unk148 = unk148 + 0x1e;
+            m_gauge = m_gauge + 0x1e;
         }
         vy += 0.04;
         if (frame == 0 && vy + y > 0.0) {
@@ -1496,7 +1496,7 @@ void CKaori::Vf6()
             if (frame >= x8) {
                 pattern = 0;
                 Vf0();
-                CPlayer::Unk40e630();
+                CPlayer::FaceOpponent();
             }
         }
         break;
@@ -1506,8 +1506,8 @@ void CKaori::Vf6()
                 l50.type = 0x1f0;
                 l50.x = (double)(int)x;
                 l50.y = (double)(int)y;
-                l50.unk20 = 0;
-                l50.unk21 = 0;
+                l50.scale = 0;
+                l50.layer = 0;
                 l50.unk0 = 1;
                 l50.unk18 = facing;
                 Vf9(&l50);
@@ -1519,7 +1519,7 @@ void CKaori::Vf6()
             unk2c9 = 0x21;
             vy = -1.5;
             vx = -0.8;
-            unk148 = unk148 + 0x1e;
+            m_gauge = m_gauge + 0x1e;
         }
         vy += 0.04;
         if (frame == 0 && vy + y > 0.0) {
@@ -1548,7 +1548,7 @@ void CKaori::Vf6()
             if (frame >= x8) {
                 pattern = 0;
                 Vf0();
-                CPlayer::Unk40e630();
+                CPlayer::FaceOpponent();
             }
         }
         break;
@@ -1558,8 +1558,8 @@ void CKaori::Vf6()
                 l50.type = 0x1f0;
                 l50.x = (double)(int)x;
                 l50.y = (double)(int)y;
-                l50.unk20 = 0;
-                l50.unk21 = 0;
+                l50.scale = 0;
+                l50.layer = 0;
                 l50.unk0 = 1;
                 l50.unk18 = facing;
                 Vf9(&l50);
@@ -1571,7 +1571,7 @@ void CKaori::Vf6()
             unk2c9 = 0x21;
             vx = unkc0;
             vy = unkc8;
-            unk148 = unk148 + 0x1e;
+            m_gauge = m_gauge + 0x1e;
         }
         vy += 0.04;
         timer++;
@@ -1581,7 +1581,7 @@ void CKaori::Vf6()
             if (frame >= x8) {
                 pattern = 0;
                 Vf0();
-                CPlayer::Unk40e630();
+                CPlayer::FaceOpponent();
             }
         }
         if (y + vy >= 0.0) {
@@ -1601,8 +1601,8 @@ void CKaori::Vf6()
                 l50.type = 0x1f0;
                 l50.x = (double)(int)x;
                 l50.y = (double)(int)y;
-                l50.unk20 = 0;
-                l50.unk21 = 0;
+                l50.scale = 0;
+                l50.layer = 0;
                 l50.unk0 = 1;
                 l50.unk18 = facing;
                 Vf9(&l50);
@@ -1615,7 +1615,7 @@ void CKaori::Vf6()
                 unk2c9 = 0x21;
                 vx = unkc0;
                 vy = unkc8;
-                unk148 = unk148 + 0x1e;
+                m_gauge = m_gauge + 0x1e;
                 unk3138++;
             }
         }
@@ -1644,10 +1644,10 @@ void CKaori::Vf6()
             l50.type = 0x1ef;
             l50.x = 60.0;
             l50.y = 40.0;
-            l50.unk24 = 1;
+            l50.screen = 1;
             l50.unk18 = 1;
-            l50.unk20 = 0;
-            l50.unk21 = 1;
+            l50.scale = 0;
+            l50.layer = 1;
             Vf9(&l50);
         }
         timer++;
@@ -1666,7 +1666,7 @@ void CKaori::Vf6()
             timer = 0;
             frame++;
             if (frame == x8 - 1) {
-                CPlayer::Unk40e630();
+                CPlayer::FaceOpponent();
             }
             if (frame >= x8) {
                 pattern = 0;
@@ -1685,8 +1685,8 @@ void CKaori::Vf6()
             l50.type = 3;
             l50.x = (double)(int)x;
             l50.y = (double)(int)y;
-            l50.unk20 = 2;
-            l50.unk21 = 0;
+            l50.scale = 2;
+            l50.layer = 0;
             m_game->CreateEffect((EffectDesc*)&l50);
             unk2c9 = 7;
         }
@@ -1708,8 +1708,8 @@ void CKaori::Vf6()
             l50.type = 3;
             l50.x = (double)(int)x;
             l50.y = (double)(int)y;
-            l50.unk20 = 2;
-            l50.unk21 = 0;
+            l50.scale = 2;
+            l50.layer = 0;
             m_game->CreateEffect((EffectDesc*)&l50);
             unk2c9 = 7;
         }
@@ -1725,7 +1725,7 @@ void CKaori::Vf6()
         break;
     case 0x63:
         unk158 = 0;
-        if (unk108 > 0 && timer > 0x63) {
+        if (m_hp > 0 && timer > 0x63) {
             pattern = 0x60;
             Vf0();
         }
@@ -1734,7 +1734,7 @@ void CKaori::Vf6()
             timer = 0;
             frame++;
             if (frame == x8) {
-                CPlayer::Unk40e630();
+                CPlayer::FaceOpponent();
             }
             if (frame >= x8) {
                 pattern = 0x60;
@@ -1751,7 +1751,7 @@ void CKaori::Vf6()
         }
         if (frame == 0 && timer == 0) {
             unk158 = 0;
-            unk148 = unk148 + 0xa;
+            m_gauge = m_gauge + 0xa;
             vx = -1.5;
             vy = 0.0;
             y = 0.0;
@@ -1771,7 +1771,7 @@ void CKaori::Vf6()
             timer = 0;
             frame++;
             if (frame == x8) {
-                CPlayer::Unk40e630();
+                CPlayer::FaceOpponent();
             }
             if (frame >= x8) {
                 pattern = 0;
@@ -1791,7 +1791,7 @@ void CKaori::Vf6()
         }
         if (frame == 0 && timer == 0) {
             unk158 = 0;
-            unk148 = unk148 + 0xf;
+            m_gauge = m_gauge + 0xf;
             vx = -1.8;
             vy = 0.0;
             y = 0.0;
@@ -1811,7 +1811,7 @@ void CKaori::Vf6()
             timer = 0;
             frame++;
             if (frame == x8) {
-                CPlayer::Unk40e630();
+                CPlayer::FaceOpponent();
             }
             if (frame >= x8) {
                 pattern = 0;
@@ -1831,7 +1831,7 @@ void CKaori::Vf6()
         }
         if (frame == 0 && timer == 0) {
             unk158 = 0;
-            unk148 = unk148 + 0x14;
+            m_gauge = m_gauge + 0x14;
             vx = -2.3;
             vy = 0.0;
             y = 0.0;
@@ -1851,7 +1851,7 @@ void CKaori::Vf6()
             timer = 0;
             frame++;
             if (frame == x8) {
-                CPlayer::Unk40e630();
+                CPlayer::FaceOpponent();
             }
             if (frame >= x8) {
                 pattern = 0;
@@ -1871,7 +1871,7 @@ void CKaori::Vf6()
         }
         if (frame == 0 && timer == 0) {
             unk158 = 0;
-            unk148 = unk148 + 0xa;
+            m_gauge = m_gauge + 0xa;
             vx = -1.5;
             vy = 0.0;
             y = 0.0;
@@ -1891,7 +1891,7 @@ void CKaori::Vf6()
             timer = 0;
             frame++;
             if (frame == x8) {
-                CPlayer::Unk40e630();
+                CPlayer::FaceOpponent();
             }
             if (frame >= x8) {
                 pattern = 3;
@@ -1908,7 +1908,7 @@ void CKaori::Vf6()
         }
         if (frame == 0 && timer == 0) {
             unk158 = 0;
-            unk148 = unk148 + 0xf;
+            m_gauge = m_gauge + 0xf;
             vx = -1.8;
             vy = 0.0;
             y = 0.0;
@@ -1928,7 +1928,7 @@ void CKaori::Vf6()
             timer = 0;
             frame++;
             if (frame == x8) {
-                CPlayer::Unk40e630();
+                CPlayer::FaceOpponent();
             }
             if (frame >= x8) {
                 pattern = 3;
@@ -1945,7 +1945,7 @@ void CKaori::Vf6()
         }
         if (frame == 0 && timer == 0) {
             unk158 = 0;
-            unk148 = unk148 + 0x14;
+            m_gauge = m_gauge + 0x14;
             vx = -2.3;
             vy = 0.0;
             y = 0.0;
@@ -1965,7 +1965,7 @@ void CKaori::Vf6()
             timer = 0;
             frame++;
             if (frame == x8) {
-                CPlayer::Unk40e630();
+                CPlayer::FaceOpponent();
             }
             if (frame >= x8) {
                 pattern = 3;
@@ -1976,7 +1976,7 @@ void CKaori::Vf6()
     case 0x9c:
         if (frame == 0 && timer == 0) {
             vy = -2.6;
-            unk148 = unk148 + 0xf;
+            m_gauge = m_gauge + 0xf;
             ay = 0.06;
         }
         vx = -1.2;
@@ -1993,7 +1993,7 @@ void CKaori::Vf6()
         if (y + vy >= 0.0) {
             y = 0.0;
             unk2c9 = 9;
-            CPlayer::Unk40e630();
+            CPlayer::FaceOpponent();
             pattern = 0xd;
             Vf0();
         }
@@ -2007,8 +2007,8 @@ void CKaori::Vf6()
             l50.type = 8;
             l50.x = (double)(int)x;
             l50.y = (double)(int)y;
-            l50.unk20 = 2;
-            l50.unk21 = 0;
+            l50.scale = 2;
+            l50.layer = 0;
             m_game->CreateEffect((EffectDesc*)&l50);
         } else {
             vy = vy + ay;
@@ -2025,7 +2025,7 @@ void CKaori::Vf6()
         if (y + vy >= 0.0) {
             y = 0.0;
             unk2c9 = 9;
-            CPlayer::Unk40e630();
+            CPlayer::FaceOpponent();
             pattern = 0xd;
             Vf0();
         }
@@ -2039,8 +2039,8 @@ void CKaori::Vf6()
             l50.type = 8;
             l50.x = (double)(int)x;
             l50.y = (double)(int)y;
-            l50.unk20 = 2;
-            l50.unk21 = 0;
+            l50.scale = 2;
+            l50.layer = 0;
             m_game->CreateEffect((EffectDesc*)&l50);
         } else {
             vy = vy + ay;
@@ -2057,21 +2057,21 @@ void CKaori::Vf6()
         if (y + vy >= 0.0) {
             y = 0.0;
             unk2c9 = 9;
-            CPlayer::Unk40e630();
+            CPlayer::FaceOpponent();
             pattern = 0xd;
             Vf0();
         }
         break;
     case 0xa1:
         if (frame == 0 && timer == 0) {
-            CPlayer::Unk40f1e0();
+            CPlayer::StopMoving();
             l50.type = 9;
             l50.x = (double)(int)x;
             l50.y = (double)((int)y - 0x46);
-            l50.unk20 = 2;
-            l50.unk21 = 1;
+            l50.scale = 2;
+            l50.layer = 1;
             m_game->CreateEffect((EffectDesc*)&l50);
-            unk16c = 1;
+            m_hitsLeft = 1;
             unk2c9 = 0x3e;
             unk3138++;
         }
@@ -2088,24 +2088,24 @@ void CKaori::Vf6()
         break;
     case 0xa2:
         if (frame == 0 && timer == 0) {
-            CPlayer::Unk40f1e0();
+            CPlayer::StopMoving();
         }
         if (frame == 3 && timer == 0) {
             vy = -1.5;
             ay = 0.025;
-            unk16c = 1;
+            m_hitsLeft = 1;
         }
         if (frame == 8 && timer == 0) {
-            CPlayer::Unk40f1e0();
+            CPlayer::StopMoving();
             l50.type = 9;
             l50.x = (double)(int)x;
             l50.y = (double)((int)y - 0x46);
-            l50.unk20 = 2;
-            l50.unk21 = 1;
+            l50.scale = 2;
+            l50.layer = 1;
             m_game->CreateEffect((EffectDesc*)&l50);
-            unk16c = 1;
+            m_hitsLeft = 1;
             unk2c9 = 0x3e;
-            unk148 = unk148 - 0x3e8;
+            m_gauge = m_gauge - 0x3e8;
             unk3138++;
         }
         vy = vy + ay;
@@ -2137,12 +2137,12 @@ void CKaori::Vf6()
             if (m_inputX == -facing) {
                 pattern = 6;
             }
-            unk168 = 0;
+            m_attackResult = 0;
             Vf0();
             break;
         }
         if (frame == 0 && timer == 0) {
-            CPlayer::Unk40f1e0();
+            CPlayer::StopMoving();
         }
         vx = 1.65;
         unk158 = 1;
@@ -2191,9 +2191,9 @@ void CKaori::Vf6()
             frame = 4;
             timer = 0;
         }
-        if ((frame == 4 || frame == 5) && (facing == 1 && unk262 == 1 || facing == -1 && unk262 == 0)) {
+        if ((frame == 4 || frame == 5) && (facing == 1 && m_command == 1 || facing == -1 && m_command == 0)) {
             Vf0();
-            CPlayer::Unk40f1e0();
+            CPlayer::StopMoving();
             pattern = 0xfb;
             break;
         }
@@ -2205,7 +2205,7 @@ void CKaori::Vf6()
                 frame = frame - 2;
             }
             if (frame >= x8) {
-                CPlayer::Unk40e630();
+                CPlayer::FaceOpponent();
                 pattern = 0;
                 Vf0();
             }
@@ -2233,7 +2233,7 @@ void CKaori::Vf6()
             Vf0();
             vx = 1.3;
             ay = 0.03;
-            if (CPlayer::Unk40e630() != 0) {
+            if (CPlayer::FaceOpponent() != 0) {
                 vx = -vx;
             }
         }
@@ -2242,7 +2242,7 @@ void CKaori::Vf6()
             Vf0();
             vx = 1.3;
             ay = 0.03;
-            if (CPlayer::Unk40e630() != 0) {
+            if (CPlayer::FaceOpponent() != 0) {
                 vx = -vx;
             }
         }
@@ -2270,7 +2270,7 @@ void CKaori::Vf6()
             Vf0();
             vx = -0.9;
             ay = 0.03;
-            if (CPlayer::Unk40e630() != 0) {
+            if (CPlayer::FaceOpponent() != 0) {
                 vx = -vx;
             }
         }
@@ -2279,7 +2279,7 @@ void CKaori::Vf6()
             Vf0();
             vx = -0.9;
             ay = 0.03;
-            if (CPlayer::Unk40e630() != 0) {
+            if (CPlayer::FaceOpponent() != 0) {
                 vx = -vx;
             }
         }
@@ -2290,7 +2290,7 @@ void CKaori::Vf6()
             unk158 = 0;
             vy = 0.0;
             if (unk120 == 1) {
-                unk178 = unk118 * 5.0 + unk178;
+                m_proration = unk118 * 5.0 + m_proration;
             }
             unk118 = 0.0;
             unk14c = 0x5a;
@@ -2301,26 +2301,26 @@ void CKaori::Vf6()
             l50.type = 1;
             l50.x = (double)(int)x;
             l50.y = (double)(int)y;
-            l50.unk20 = 2;
-            l50.unk21 = 1;
+            l50.scale = 2;
+            l50.layer = 1;
             m_game->CreateEffect((EffectDesc*)&l50);
         }
         if (frame == 2 && timer == 0) {
             l50.type = 4;
             l50.x = (double)(int)x;
             l50.y = (double)(int)y;
-            l50.unk20 = 2;
-            l50.unk21 = 1;
+            l50.scale = 2;
+            l50.layer = 1;
             m_game->CreateEffect((EffectDesc*)&l50);
         }
         timer++;
         if (timer >= l4) {
             timer = 0;
             frame++;
-            unk168 = 0;
+            m_attackResult = 0;
             if (frame >= x8) {
                 pattern = 0;
-                CPlayer::Unk40e630();
+                CPlayer::FaceOpponent();
                 Vf0();
             }
         }
@@ -2338,8 +2338,8 @@ void CKaori::Vf6()
             l50.type = 8;
             l50.x = (double)(int)x;
             l50.y = (double)(int)y;
-            l50.unk20 = 2;
-            l50.unk21 = 1;
+            l50.scale = 2;
+            l50.layer = 1;
             m_game->CreateEffect((EffectDesc*)&l50);
         }
         timer++;
@@ -2347,7 +2347,7 @@ void CKaori::Vf6()
             timer = 0;
             frame++;
             if (frame == x8) {
-                CPlayer::Unk40e630();
+                CPlayer::FaceOpponent();
             }
             if (frame >= x8) {
                 pattern = 0;
@@ -2368,8 +2368,8 @@ void CKaori::Vf6()
             l50.type = 8;
             l50.x = (double)(int)x;
             l50.y = (double)(int)y;
-            l50.unk20 = 2;
-            l50.unk21 = 1;
+            l50.scale = 2;
+            l50.layer = 1;
             m_game->CreateEffect((EffectDesc*)&l50);
         }
         timer++;
@@ -2377,7 +2377,7 @@ void CKaori::Vf6()
             timer = 0;
             frame++;
             if (frame == x8) {
-                CPlayer::Unk40e630();
+                CPlayer::FaceOpponent();
             }
             if (frame >= x8) {
                 pattern = 3;
@@ -2407,7 +2407,7 @@ void CKaori::Vf6()
             vy = vy + ay;
         }
         if (vy + y > 0.0) {
-            CPlayer::Unk40f1e0();
+            CPlayer::StopMoving();
             y = 0.0;
             pattern = 0xa9;
             break;
@@ -2429,7 +2429,7 @@ void CKaori::Vf6()
             vx = 0.0;
             vy = 0.0;
             if (unk120 == 1) {
-                unk178 = unk118 * 5.0 + unk178;
+                m_proration = unk118 * 5.0 + m_proration;
             }
             unk118 = 0.0;
             unk14c = 0x5a;
@@ -2440,23 +2440,23 @@ void CKaori::Vf6()
             l50.type = 1;
             l50.x = (double)(int)x;
             l50.y = (double)(int)y;
-            l50.unk20 = 2;
-            l50.unk21 = 1;
+            l50.scale = 2;
+            l50.layer = 1;
             m_game->CreateEffect((EffectDesc*)&l50);
         }
         if (frame == 2 && timer == 0 && unk3140 == 0) {
             l50.type = 4;
             l50.x = (double)(int)x;
             l50.y = (double)(int)y;
-            l50.unk20 = 2;
-            l50.unk21 = 1;
+            l50.scale = 2;
+            l50.layer = 1;
             m_game->CreateEffect((EffectDesc*)&l50);
         }
         timer++;
         if (timer >= l4) {
             timer = 0;
             frame++;
-            unk168 = 0;
+            m_attackResult = 0;
             if (frame >= x8 && unk3140 < 3) {
                 unk3140++;
                 frame = frame - 2;
@@ -2484,7 +2484,7 @@ void CKaori::Vf6()
             if (m_inputX == -facing) {
                 pattern = 6;
             }
-            unk168 = 0;
+            m_attackResult = 0;
             Vf0();
             break;
         }
@@ -2510,7 +2510,7 @@ void CKaori::Vf6()
             vy = vy + ay;
         }
         if (y + vy > 0.0 && frame < 4) {
-            CPlayer::Unk40f1e0();
+            CPlayer::StopMoving();
             y = 0.0;
             timer = 0;
             frame = 4;
@@ -2545,7 +2545,7 @@ void CKaori::Vf6()
             vx = 0.0;
             unk158 = 0;
         }
-        if (m_inputY == -1 && frame > 0 && unk15c < 3 && unk168 >= 2) {
+        if (m_inputY == -1 && frame > 0 && unk15c < 3 && m_attackResult >= 2) {
             pattern = 4;
             if (m_inputX == facing) {
                 pattern = 5;
@@ -2553,25 +2553,25 @@ void CKaori::Vf6()
             if (m_inputX == -facing) {
                 pattern = 6;
             }
-            unk168 = 0;
+            m_attackResult = 0;
             Vf0();
             break;
         }
         if (frame == 1 && timer == 0) {
-            unk148 = unk148 + 5;
+            m_gauge = m_gauge + 5;
             unk2c9 = 0x15;
-            unk16c = 1;
+            m_hitsLeft = 1;
         }
         timer++;
         if (timer >= l4) {
             timer = 0;
             frame++;
             if (frame < 2) {
-                unk168 = 0;
+                m_attackResult = 0;
             }
             if (frame >= x8) {
                 pattern = 0;
-                CPlayer::Unk40e630();
+                CPlayer::FaceOpponent();
                 Vf0();
             }
         }
@@ -2587,7 +2587,7 @@ void CKaori::Vf6()
             vx = 0.0;
             unk158 = 0;
         }
-        if (m_inputY == -1 && frame > 0 && unk15c < 3 && unk168 >= 2) {
+        if (m_inputY == -1 && frame > 0 && unk15c < 3 && m_attackResult >= 2) {
             pattern = 4;
             if (m_inputX == facing) {
                 pattern = 5;
@@ -2595,25 +2595,25 @@ void CKaori::Vf6()
             if (m_inputX == -facing) {
                 pattern = 6;
             }
-            unk168 = 0;
+            m_attackResult = 0;
             Vf0();
             break;
         }
         if (frame == 1 && timer == 0) {
-            unk148 = unk148 + 0xf;
+            m_gauge = m_gauge + 0xf;
             unk2c9 = 0x14;
-            unk16c = 1;
+            m_hitsLeft = 1;
         }
         timer++;
         if (timer >= l4) {
             timer = 0;
             frame++;
             if (frame < 2) {
-                unk168 = 0;
+                m_attackResult = 0;
             }
             if (frame >= x8) {
                 pattern = 0;
-                CPlayer::Unk40e630();
+                CPlayer::FaceOpponent();
                 Vf0();
             }
         }
@@ -2623,7 +2623,7 @@ void CKaori::Vf6()
             vx = 0.0;
             vy = 0.0;
         }
-        if (m_inputY == -1 && frame > 0 && unk15c < 3 && unk168 == 3) {
+        if (m_inputY == -1 && frame > 0 && unk15c < 3 && m_attackResult == 3) {
             pattern = 4;
             if (m_inputX == facing) {
                 pattern = 5;
@@ -2631,7 +2631,7 @@ void CKaori::Vf6()
             if (m_inputX == -facing) {
                 pattern = 6;
             }
-            unk168 = 0;
+            m_attackResult = 0;
             Vf0();
             break;
         }
@@ -2642,20 +2642,20 @@ void CKaori::Vf6()
             unk158 = 0;
         }
         if (frame == 2 && timer == 0) {
-            unk148 = unk148 + 0xf;
+            m_gauge = m_gauge + 0xf;
             unk2c9 = 0x14;
-            unk16c = 1;
+            m_hitsLeft = 1;
         }
         timer++;
         if (timer >= l4) {
             timer = 0;
             frame++;
             if (frame < 2) {
-                unk168 = 0;
+                m_attackResult = 0;
             }
             if (frame >= x8) {
                 pattern = 0;
-                CPlayer::Unk40e630();
+                CPlayer::FaceOpponent();
                 Vf0();
             }
         }
@@ -2672,20 +2672,20 @@ void CKaori::Vf6()
             unk158 = 0;
         }
         if (frame == 4 && timer == 0) {
-            unk148 = unk148 + 0x23;
+            m_gauge = m_gauge + 0x23;
             unk2c9 = 0x14;
-            unk16c = 1;
+            m_hitsLeft = 1;
         }
         timer++;
         if (timer >= l4) {
             timer = 0;
             frame++;
             if (frame < 2) {
-                unk168 = 0;
+                m_attackResult = 0;
             }
             if (frame >= x8) {
                 pattern = 0;
-                CPlayer::Unk40e630();
+                CPlayer::FaceOpponent();
                 Vf0();
             }
         }
@@ -2701,7 +2701,7 @@ void CKaori::Vf6()
             vx = 0.0;
             unk158 = 0;
         }
-        if (m_inputY == -1 && frame > 0 && unk15c < 3 && unk168 >= 2) {
+        if (m_inputY == -1 && frame > 0 && unk15c < 3 && m_attackResult >= 2) {
             pattern = 4;
             if (m_inputX == facing) {
                 pattern = 5;
@@ -2709,28 +2709,28 @@ void CKaori::Vf6()
             if (m_inputX == -facing) {
                 pattern = 6;
             }
-            unk168 = 0;
+            m_attackResult = 0;
             Vf0();
             break;
         }
         if (frame == 1 && timer == 0) {
-            unk148 = unk148 + 5;
+            m_gauge = m_gauge + 5;
             unk2c9 = 0x15;
-            unk16c = 1;
+            m_hitsLeft = 1;
         }
         timer++;
         if (timer >= l4) {
             timer = 0;
             frame++;
             if (frame < 3) {
-                unk168 = 0;
+                m_attackResult = 0;
             }
             if (frame >= x8) {
                 pattern = 0;
                 if (m_inputY == 1) {
                     pattern = 3;
                 }
-                CPlayer::Unk40e630();
+                CPlayer::FaceOpponent();
                 Vf0();
             }
         }
@@ -2739,7 +2739,7 @@ void CKaori::Vf6()
         if (vx > 0.0 && unk158 == 1 && frame < 3) {
             vx -= 0.06;
         }
-        if (m_inputY == -1 && frame > 0 && unk168 >= 2) {
+        if (m_inputY == -1 && frame > 0 && m_attackResult >= 2) {
             pattern = 4;
             if (m_inputX == facing) {
                 pattern = 5;
@@ -2747,11 +2747,11 @@ void CKaori::Vf6()
             if (m_inputX == -facing) {
                 pattern = 6;
             }
-            unk168 = 0;
+            m_attackResult = 0;
             Vf0();
             break;
         }
-        if (m_inputY == -1 && frame > 0 && unk15c < 3 && unk168 == 3) {
+        if (m_inputY == -1 && frame > 0 && unk15c < 3 && m_attackResult == 3) {
             pattern = 4;
             if (m_inputX == facing) {
                 pattern = 5;
@@ -2759,14 +2759,14 @@ void CKaori::Vf6()
             if (m_inputX == -facing) {
                 pattern = 6;
             }
-            unk168 = 0;
+            m_attackResult = 0;
             Vf0();
             break;
         }
         if (frame == 3 && timer == 0) {
-            unk148 = unk148 + 0xd;
+            m_gauge = m_gauge + 0xd;
             unk2c9 = 0x14;
-            unk16c = 1;
+            m_hitsLeft = 1;
             vx += 0.5;
         }
         if (frame > 2) {
@@ -2779,13 +2779,13 @@ void CKaori::Vf6()
         if (timer >= l4) {
             timer = 0;
             frame++;
-            unk168 = 0;
+            m_attackResult = 0;
             if (frame >= x8) {
                 pattern = 0;
                 if (m_inputY == 1) {
                     pattern = 3;
                 }
-                CPlayer::Unk40e630();
+                CPlayer::FaceOpponent();
                 Vf0();
             }
         }
@@ -2801,7 +2801,7 @@ void CKaori::Vf6()
             vx = 0.0;
             unk158 = 0;
         }
-        if (m_inputY == -1 && frame > 0 && unk15c < 3 && unk168 == 3) {
+        if (m_inputY == -1 && frame > 0 && unk15c < 3 && m_attackResult == 3) {
             pattern = 4;
             if (m_inputX == facing) {
                 pattern = 5;
@@ -2809,35 +2809,35 @@ void CKaori::Vf6()
             if (m_inputX == -facing) {
                 pattern = 6;
             }
-            unk168 = 0;
+            m_attackResult = 0;
             Vf0();
             break;
         }
         if (frame == 3 && timer == 0) {
-            unk148 = unk148 + 0x19;
+            m_gauge = m_gauge + 0x19;
             unk2c9 = 0x14;
-            unk16c = 1;
+            m_hitsLeft = 1;
         }
         timer++;
         if (timer >= l4) {
             timer = 0;
             frame++;
             if (frame < 4) {
-                unk168 = 0;
+                m_attackResult = 0;
             }
             if (frame >= x8) {
                 pattern = 0;
                 if (m_inputY == 1) {
                     pattern = 3;
                 }
-                CPlayer::Unk40e630();
+                CPlayer::FaceOpponent();
                 Vf0();
             }
         }
         break;
     case 0xcf:
         vy = vy + ay;
-        if (m_inputY == -1 && frame > 0 && unk15c < 3 && unk168 >= 2 && unk15a == 0) {
+        if (m_inputY == -1 && frame > 0 && unk15c < 3 && m_attackResult >= 2 && unk15a == 0) {
             unk15a++;
             pattern = 0xe;
             if (m_inputX == facing) {
@@ -2846,14 +2846,14 @@ void CKaori::Vf6()
             if (m_inputX == -facing) {
                 pattern = 0x10;
             }
-            unk168 = 0;
+            m_attackResult = 0;
             Vf0();
             break;
         }
         if (frame == 1 && timer == 0) {
-            unk148 = unk148 + 5;
+            m_gauge = m_gauge + 5;
             unk2c9 = 0x15;
-            unk16c = 1;
+            m_hitsLeft = 1;
         }
         if (y + vy >= 0.0) {
             y = 0.0;
@@ -2866,7 +2866,7 @@ void CKaori::Vf6()
             timer = 0;
             frame++;
             if (frame < 3) {
-                unk168 = 0;
+                m_attackResult = 0;
             }
             if (frame >= x8) {
                 pattern = 9;
@@ -2876,7 +2876,7 @@ void CKaori::Vf6()
         break;
     case 0xd0:
         vy = vy + ay;
-        if (m_inputY == -1 && frame > 0 && unk15c < 3 && unk168 >= 2 && unk15a == 0) {
+        if (m_inputY == -1 && frame > 0 && unk15c < 3 && m_attackResult >= 2 && unk15a == 0) {
             unk15a++;
             pattern = 0xe;
             if (m_inputX == facing) {
@@ -2885,14 +2885,14 @@ void CKaori::Vf6()
             if (m_inputX == -facing) {
                 pattern = 0x10;
             }
-            unk168 = 0;
+            m_attackResult = 0;
             Vf0();
             break;
         }
         if (frame == 2 && timer == 0) {
-            unk148 = unk148 + 0xd;
+            m_gauge = m_gauge + 0xd;
             unk2c9 = 0x14;
-            unk16c = 1;
+            m_hitsLeft = 1;
         }
         if (y + vy >= 0.0) {
             y = 0.0;
@@ -2905,7 +2905,7 @@ void CKaori::Vf6()
             timer = 0;
             frame++;
             if (frame < 3) {
-                unk168 = 0;
+                m_attackResult = 0;
             }
             if (frame >= x8) {
                 pattern = 9;
@@ -2915,7 +2915,7 @@ void CKaori::Vf6()
         break;
     case 0xd1:
         vy = vy + ay;
-        if (m_inputY == -1 && frame > 0 && unk15c < 3 && unk168 >= 2 && unk15a == 0) {
+        if (m_inputY == -1 && frame > 0 && unk15c < 3 && m_attackResult >= 2 && unk15a == 0) {
             unk15a++;
             pattern = 0xe;
             if (m_inputX == facing) {
@@ -2924,14 +2924,14 @@ void CKaori::Vf6()
             if (m_inputX == -facing) {
                 pattern = 0x10;
             }
-            unk168 = 0;
+            m_attackResult = 0;
             Vf0();
             break;
         }
         if (frame == 2 && timer == 0) {
-            unk148 = unk148 + 0x1e;
+            m_gauge = m_gauge + 0x1e;
             unk2c9 = 0x14;
-            unk16c = 1;
+            m_hitsLeft = 1;
         }
         if (y + vy >= 0.0) {
             y = 0.0;
@@ -2944,7 +2944,7 @@ void CKaori::Vf6()
             timer = 0;
             frame++;
             if (frame < 5) {
-                unk168 = 0;
+                m_attackResult = 0;
             }
             if (frame >= x8) {
                 pattern = 9;
@@ -2957,18 +2957,18 @@ void CKaori::Vf6()
             vy = vy + ay;
         }
         if (frame == 2 && timer == 0) {
-            CPlayer::Unk40f1e0();
+            CPlayer::StopMoving();
         }
         if (frame == 6 && timer == 0) {
-            unk148 = unk148 + 0x1e;
+            m_gauge = m_gauge + 0x1e;
             unk2c9 = 0x14;
-            unk16c = 3;
+            m_hitsLeft = 3;
             vx = 1.0;
             vy = 1.0;
         }
         if (y + vy >= 0.0) {
             y = 0.0;
-            CPlayer::Unk40f1e0();
+            CPlayer::StopMoving();
             pattern = 0xd;
             Vf0();
             break;
@@ -2977,7 +2977,7 @@ void CKaori::Vf6()
         if (timer >= l4) {
             timer = 0;
             frame++;
-            unk168 = 0;
+            m_attackResult = 0;
             if (frame == 0xa) {
                 frame = 7;
             }
@@ -2985,7 +2985,7 @@ void CKaori::Vf6()
         break;
     case 0xd3:
         vy = vy + ay;
-        if (m_inputY == -1 && frame > 0 && unk15c < 3 && unk168 >= 2 && unk15a == 0) {
+        if (m_inputY == -1 && frame > 0 && unk15c < 3 && m_attackResult >= 2 && unk15a == 0) {
             unk15a++;
             pattern = 0xe;
             if (m_inputX == facing) {
@@ -2994,14 +2994,14 @@ void CKaori::Vf6()
             if (m_inputX == -facing) {
                 pattern = 0x10;
             }
-            unk168 = 0;
+            m_attackResult = 0;
             Vf0();
             break;
         }
         if (frame == 3 && timer == 0) {
-            unk148 = unk148 + 0x1e;
+            m_gauge = m_gauge + 0x1e;
             unk2c9 = 0x14;
-            unk16c = 1;
+            m_hitsLeft = 1;
         }
         if (y + vy >= 0.0) {
             y = 0.0;
@@ -3014,7 +3014,7 @@ void CKaori::Vf6()
             timer = 0;
             frame++;
             if (frame < 5) {
-                unk168 = 0;
+                m_attackResult = 0;
             }
             if (frame >= x8) {
                 pattern = 9;
@@ -3033,7 +3033,7 @@ void CKaori::Vf6()
         if (timer >= l4) {
             timer = 0;
             frame++;
-            unk168 = 0;
+            m_attackResult = 0;
             if (frame >= x8) {
                 pattern = 9;
                 Vf0();
@@ -3048,8 +3048,8 @@ void CKaori::Vf6()
             l50.type = 3;
             l50.x = (double)(int)x;
             l50.y = (double)(int)y;
-            l50.unk20 = 2;
-            l50.unk21 = 0;
+            l50.scale = 2;
+            l50.layer = 0;
             l50.unk2c = 7;
             m_game->CreateEffect((EffectDesc*)&l50);
         }
@@ -3057,13 +3057,13 @@ void CKaori::Vf6()
         if (timer >= l4) {
             timer = 0;
             frame++;
-            unk168 = 0;
+            m_attackResult = 0;
             if (frame >= x8) {
                 pattern = 7;
                 if (m_inputY == 1) {
                     pattern = 3;
                 }
-                CPlayer::Unk40e630();
+                CPlayer::FaceOpponent();
                 Vf0();
             }
         }
@@ -3073,24 +3073,24 @@ void CKaori::Vf6()
         vy = 0.0;
         unk158 = 0;
         if (frame == 2 && timer == 0 && (*m_opponent)->y == 0.0) {
-            unk16c = 1;
+            m_hitsLeft = 1;
         } else {
-            unk16c = 0;
+            m_hitsLeft = 0;
         }
-        if (frame == 2 && unk168 == 3) {
+        if (frame == 2 && m_attackResult == 3) {
             vx = 0.0;
             vy = 0.0;
             unkb8 = 0.0;
             Vf0();
             (*m_opponent)->Vf0();
-            (*m_opponent)->Unk40f1e0();
+            (*m_opponent)->StopMoving();
             pattern = 0xdd;
             (*m_opponent)->pattern = 0x6b;
             l50.type = 0;
             l50.x = (double)((int)x + facing * 0x28);
             l50.y = (double)((int)y - 0x3c);
-            l50.unk20 = 2;
-            l50.unk21 = 1;
+            l50.scale = 2;
+            l50.layer = 1;
             m_game->CreateEffect((EffectDesc*)&l50);
             (*m_opponent)->y = 0.0;
             break;
@@ -3099,20 +3099,20 @@ void CKaori::Vf6()
         if (timer >= l4) {
             timer = 0;
             frame++;
-            unk168 = 0;
+            m_attackResult = 0;
             if (frame >= x8) {
                 pattern = 0;
                 if (m_inputY == 1) {
                     pattern = 3;
                 }
-                CPlayer::Unk40e630();
+                CPlayer::FaceOpponent();
                 Vf0();
             }
         }
         break;
     case 0xdd:
         if (frame == 0 && timer == 1) {
-            unk168 = 0;
+            m_attackResult = 0;
         }
         if (frame == 1 && timer == 0) {
             (*m_opponent)->x = facing * 0x24 + x;
@@ -3132,7 +3132,7 @@ void CKaori::Vf6()
         if (frame == 6 && timer == 0) {
             (*m_opponent)->Vf0();
             (*m_opponent)->pattern = 0x51;
-            CPlayer::Unk4105a0(0x4b0, 750.0);
+            CPlayer::DealDamage(0x4b0, 750.0);
             (*m_opponent)->unkc0 = -2.5;
             (*m_opponent)->unkc8 = -1.5;
             unk2c9 = 2;
@@ -3140,42 +3140,42 @@ void CKaori::Vf6()
             l50.x = (double)((int)x + facing * 0x14);
             l50.y = (double)((int)y - 0x3c);
             l50.unk18 = facing;
-            l50.unk20 = 2;
-            l50.unk21 = 1;
+            l50.scale = 2;
+            l50.layer = 1;
             Vf9(&l50);
-            l50.x = (double)((int)x + -0x32 + (WORD)CPlayer::Unk4108a0(0, 0x64));
-            l50.y = (double)((int)y + -0x3c + (WORD)CPlayer::Unk4108a0(0, 0x50));
+            l50.x = (double)((int)x + -0x32 + (WORD)CPlayer::Random(0, 0x64));
+            l50.y = (double)((int)y + -0x3c + (WORD)CPlayer::Random(0, 0x50));
             Vf9(&l50);
-            l50.x = (double)((int)x + -0x32 + (WORD)CPlayer::Unk4108a0(0, 0x64));
-            l50.y = (double)((int)y + -0x3c + (WORD)CPlayer::Unk4108a0(0, 0x50));
+            l50.x = (double)((int)x + -0x32 + (WORD)CPlayer::Random(0, 0x64));
+            l50.y = (double)((int)y + -0x3c + (WORD)CPlayer::Random(0, 0x50));
             Vf9(&l50);
-            l50.x = (double)((int)x + -0x32 + (WORD)CPlayer::Unk4108a0(0, 0x64));
-            l50.y = (double)((int)y + -0x3c + (WORD)CPlayer::Unk4108a0(0, 0x50));
+            l50.x = (double)((int)x + -0x32 + (WORD)CPlayer::Random(0, 0x64));
+            l50.y = (double)((int)y + -0x3c + (WORD)CPlayer::Random(0, 0x50));
             Vf9(&l50);
-            l50.x = (double)((int)x + -0x32 + (WORD)CPlayer::Unk4108a0(0, 0x64));
-            l50.y = (double)((int)y + -0x3c + (WORD)CPlayer::Unk4108a0(0, 0x50));
+            l50.x = (double)((int)x + -0x32 + (WORD)CPlayer::Random(0, 0x64));
+            l50.y = (double)((int)y + -0x3c + (WORD)CPlayer::Random(0, 0x50));
             Vf9(&l50);
-            l50.x = (double)((int)x + -0x32 + (WORD)CPlayer::Unk4108a0(0, 0x64));
-            l50.y = (double)((int)y + -0x3c + (WORD)CPlayer::Unk4108a0(0, 0x50));
+            l50.x = (double)((int)x + -0x32 + (WORD)CPlayer::Random(0, 0x64));
+            l50.y = (double)((int)y + -0x3c + (WORD)CPlayer::Random(0, 0x50));
             Vf9(&l50);
-            l50.x = (double)((int)x + -0x32 + (WORD)CPlayer::Unk4108a0(0, 0x64));
-            l50.y = (double)((int)y + -0x3c + (WORD)CPlayer::Unk4108a0(0, 0x50));
+            l50.x = (double)((int)x + -0x32 + (WORD)CPlayer::Random(0, 0x64));
+            l50.y = (double)((int)y + -0x3c + (WORD)CPlayer::Random(0, 0x50));
             Vf9(&l50);
-            l50.x = (double)((int)x + -0x32 + (WORD)CPlayer::Unk4108a0(0, 0x64));
-            l50.y = (double)((int)y + -0x3c + (WORD)CPlayer::Unk4108a0(0, 0x50));
+            l50.x = (double)((int)x + -0x32 + (WORD)CPlayer::Random(0, 0x64));
+            l50.y = (double)((int)y + -0x3c + (WORD)CPlayer::Random(0, 0x50));
             Vf9(&l50);
         }
         timer++;
         if (timer >= l4) {
             timer = 0;
             frame++;
-            unk168 = 0;
+            m_attackResult = 0;
             if (frame >= x8) {
                 pattern = 0;
                 if (m_inputY == 1) {
                     pattern = 3;
                 }
-                CPlayer::Unk40e630();
+                CPlayer::FaceOpponent();
                 Vf0();
             }
         }
@@ -3191,16 +3191,16 @@ void CKaori::Vf6()
             vy = 0.0;
         }
         if (frame == 1 && timer == 0) {
-            unk148 = unk148 + 5;
+            m_gauge = m_gauge + 5;
             unk2c9 = 0x15;
-            unk16c = 1;
+            m_hitsLeft = 1;
         }
         timer++;
         if (timer >= l4) {
             timer = 0;
             frame++;
             if (frame < 3) {
-                unk168 = 0;
+                m_attackResult = 0;
             }
             if (frame >= x8) {
                 pattern = 0;
@@ -3217,14 +3217,14 @@ void CKaori::Vf6()
             unk158 = 0;
         }
         if (frame == 1 && timer == 0) {
-            unk16c = 3;
+            m_hitsLeft = 3;
             unk2c9 = 0x14;
-            unk148 = unk148 + 0x14;
+            m_gauge = m_gauge + 0x14;
         }
         if (vx < 0.0) {
             vx = 0.0;
         }
-        if (m_inputY == -1 && frame > 0 && unk15c < 3 && unk168 >= 2) {
+        if (m_inputY == -1 && frame > 0 && unk15c < 3 && m_attackResult >= 2) {
             pattern = 4;
             if (m_inputX == facing) {
                 pattern = 5;
@@ -3232,7 +3232,7 @@ void CKaori::Vf6()
             if (m_inputX == -facing) {
                 pattern = 6;
             }
-            unk168 = 0;
+            m_attackResult = 0;
             Vf0();
             break;
         }
@@ -3241,7 +3241,7 @@ void CKaori::Vf6()
             timer = 0;
             frame++;
             if (frame < 5) {
-                unk168 = 0;
+                m_attackResult = 0;
             }
             if (frame >= x8) {
                 pattern = 0;
@@ -3258,14 +3258,14 @@ void CKaori::Vf6()
             unk158 = 0;
         }
         if (frame == 1 && timer == 0) {
-            unk16c = 1;
+            m_hitsLeft = 1;
             unk2c9 = 0x14;
-            unk148 = unk148 + 0x14;
+            m_gauge = m_gauge + 0x14;
         }
         if (vx < 0.0) {
             vx = 0.0;
         }
-        if (m_inputY == -1 && frame > 0 && unk15c < 3 && unk168 >= 2) {
+        if (m_inputY == -1 && frame > 0 && unk15c < 3 && m_attackResult >= 2) {
             pattern = 4;
             if (m_inputX == facing) {
                 pattern = 5;
@@ -3273,7 +3273,7 @@ void CKaori::Vf6()
             if (m_inputX == -facing) {
                 pattern = 6;
             }
-            unk168 = 0;
+            m_attackResult = 0;
             Vf0();
             break;
         }
@@ -3282,7 +3282,7 @@ void CKaori::Vf6()
             timer = 0;
             frame++;
             if (frame < 3) {
-                unk168 = 0;
+                m_attackResult = 0;
             }
             if (frame >= x8) {
                 pattern = 0;
@@ -3301,16 +3301,16 @@ void CKaori::Vf6()
             vy = 0.0;
         }
         if (frame == 1 && timer == 0) {
-            unk148 = unk148 + 5;
+            m_gauge = m_gauge + 5;
             unk2c9 = 0x15;
-            unk16c = 1;
+            m_hitsLeft = 1;
         }
         timer++;
         if (timer >= l4) {
             timer = 0;
             frame++;
             if (frame < 3) {
-                unk168 = 0;
+                m_attackResult = 0;
             }
             if (frame >= x8) {
                 pattern = 3;
@@ -3327,9 +3327,9 @@ void CKaori::Vf6()
             unk158 = 0;
         }
         if (frame == 2 && timer == 0) {
-            unk16c = 1;
+            m_hitsLeft = 1;
             unk2c9 = 0x14;
-            unk148 = unk148 + 0x14;
+            m_gauge = m_gauge + 0x14;
             vx += 1.2;
         }
         if (vx < 0.0) {
@@ -3340,7 +3340,7 @@ void CKaori::Vf6()
             timer = 0;
             frame++;
             if (frame < 2) {
-                unk168 = 0;
+                m_attackResult = 0;
             }
             if (frame >= x8) {
                 pattern = 0;
@@ -3357,9 +3357,9 @@ void CKaori::Vf6()
             unk158 = 0;
         }
         if (frame == 0xd && timer == 0) {
-            unk16c = 1;
+            m_hitsLeft = 1;
             unk2c9 = 0x14;
-            unk148 = unk148 + 0x14;
+            m_gauge = m_gauge + 0x14;
         }
         if (frame > 2 && frame < 0x11) {
             vy = vy + ay;
@@ -3367,7 +3367,7 @@ void CKaori::Vf6()
                 timer = 0;
                 frame = 0x12;
                 y = 0.0;
-                CPlayer::Unk40f1e0();
+                CPlayer::StopMoving();
                 break;
             }
         }
@@ -3378,7 +3378,7 @@ void CKaori::Vf6()
         if (timer >= l4) {
             timer = 0;
             frame++;
-            unk168 = 0;
+            m_attackResult = 0;
             if (frame == 3) {
                 vx = 1.2;
                 vy = -1.5;
@@ -3392,8 +3392,8 @@ void CKaori::Vf6()
         break;
     case 0xf0:
         vy = vy + ay;
-        if (frame == 1 && unk168 == 3) {
-            (*m_opponent)->Unk40f1e0();
+        if (frame == 1 && m_attackResult == 3) {
+            (*m_opponent)->StopMoving();
             (*m_opponent)->Vf0();
             Vf0();
             vx = 1.0;
@@ -3404,8 +3404,8 @@ void CKaori::Vf6()
             l50.type = 0;
             l50.x = (double)((int)x + facing * 0x1d);
             l50.y = (double)((int)y - 0x27);
-            l50.unk20 = 2;
-            l50.unk21 = 1;
+            l50.scale = 2;
+            l50.layer = 1;
             m_game->CreateEffect((EffectDesc*)&l50);
             (*m_opponent)->x = x;
             (*m_opponent)->y = 0.0;
@@ -3415,11 +3415,11 @@ void CKaori::Vf6()
             timer = 0;
             frame++;
             if (frame == 1 && (*m_opponent)->y < 0.0 && ((*m_opponent)->pattern < 0x32 || (*m_opponent)->pattern > 0x95)) {
-                unk16c = 1;
+                m_hitsLeft = 1;
             } else {
-                unk16c = 0;
+                m_hitsLeft = 0;
             }
-            unk168 = 0;
+            m_attackResult = 0;
             if (frame >= x8) {
                 pattern = 0xd3;
                 frame = 1;
@@ -3440,7 +3440,7 @@ void CKaori::Vf6()
             vx = 0.0;
         }
         if (vy + y > 0.0 && frame == 4) {
-            CPlayer::Unk40f1e0();
+            CPlayer::StopMoving();
             y = 0.0;
             frame = 5;
             timer = 0;
@@ -3481,8 +3481,8 @@ void CKaori::Vf6()
             l50.unk2c = 7;
             l50.x = (double)((int)x + facing * 0xf);
             l50.y = (double)(int)y;
-            l50.unk20 = 2;
-            l50.unk21 = 1;
+            l50.scale = 2;
+            l50.layer = 1;
             m_game->CreateEffect((EffectDesc*)&l50);
             (*m_opponent)->x = facing * 0xf + x;
             (*m_opponent)->pattern = 0x3f;
@@ -3490,36 +3490,36 @@ void CKaori::Vf6()
             (*m_opponent)->unkc8 = -0.5;
             (*m_opponent)->ay = 0.035;
             (*m_opponent)->x = facing * 0xf + x;
-            CPlayer::Unk4105a0(0x3e8, 790.0);
-            (*m_opponent)->unk124 = (int)(200.0 * unk178 * 0.0001);
+            CPlayer::DealDamage(0x3e8, 790.0);
+            (*m_opponent)->unk124 = (int)(200.0 * m_proration * 0.0001);
             (*m_opponent)->Vf0();
         }
         timer++;
         if (timer >= l4) {
             timer = 0;
             frame++;
-            unk168 = 0;
+            m_attackResult = 0;
             if (frame >= x8) {
                 pattern = 0;
-                CPlayer::Unk40e630();
+                CPlayer::FaceOpponent();
                 Vf0();
             }
         }
         break;
     case 0xf8:
         vy = vy + ay;
-        if (frame == 1 && unk168 == 3) {
-            (*m_opponent)->Unk40f1e0();
+        if (frame == 1 && m_attackResult == 3) {
+            (*m_opponent)->StopMoving();
             (*m_opponent)->Vf0();
             Vf0();
-            CPlayer::Unk40f1e0();
+            CPlayer::StopMoving();
             pattern = 0xf9;
             (*m_opponent)->pattern = 0x64;
             l50.type = 0;
             l50.x = (double)((int)x + facing * 0x2e);
             l50.y = (double)((int)y - 0x46);
-            l50.unk20 = 2;
-            l50.unk21 = 1;
+            l50.scale = 2;
+            l50.layer = 1;
             m_game->CreateEffect((EffectDesc*)&l50);
             (*m_opponent)->x = facing * 0x2e + x;
             (*m_opponent)->y = y - 70.0;
@@ -3529,11 +3529,11 @@ void CKaori::Vf6()
             timer = 0;
             frame++;
             if (frame == 1 && (*m_opponent)->y < 0.0 && ((*m_opponent)->pattern < 0x32 || (*m_opponent)->pattern > 0x95)) {
-                unk16c = 1;
+                m_hitsLeft = 1;
             } else {
-                unk16c = 0;
+                m_hitsLeft = 0;
             }
-            unk168 = 0;
+            m_attackResult = 0;
             if (frame >= x8) {
                 pattern = 0xd1;
                 frame = 2;
@@ -3552,7 +3552,7 @@ void CKaori::Vf6()
         }
         vy = vy + ay;
         if (vy + y > 0.0 && frame > 7) {
-            CPlayer::Unk40f1e0();
+            CPlayer::StopMoving();
             y = 0.0;
             Vf0();
             pattern = 0xd;
@@ -3562,14 +3562,14 @@ void CKaori::Vf6()
             (*m_opponent)->y = y - 27.0;
             (*m_opponent)->x = facing * 0x36 + x;
             (*m_opponent)->pattern = 0x45;
-            CPlayer::Unk4105a0(0x578, 500.0);
+            CPlayer::DealDamage(0x578, 500.0);
             (*m_opponent)->Vf0();
             l50.type = 0;
             l50.x = (double)((int)x + facing * 0x36);
             l50.y = (double)((int)y - 0x1b);
             l50.unk2c = 2;
-            l50.unk20 = 2;
-            l50.unk21 = 1;
+            l50.scale = 2;
+            l50.layer = 1;
             m_game->CreateEffect((EffectDesc*)&l50);
             (*m_opponent)->unkc0 = -3.0;
             (*m_opponent)->unkc8 = 3.0;
@@ -3581,7 +3581,7 @@ void CKaori::Vf6()
         if (timer >= l4) {
             timer = 0;
             frame++;
-            unk168 = 0;
+            m_attackResult = 0;
             if (frame >= x8) {
                 frame = frame - 2;
             }
@@ -3590,7 +3590,7 @@ void CKaori::Vf6()
     case 0xfa:
         if (frame == 0 && timer == 0) {
             unk158 = 0;
-            CPlayer::Unk40f1e0();
+            CPlayer::StopMoving();
         }
         if (frame == 2 && timer == 0) {
             vx = 2.5;
@@ -3625,10 +3625,10 @@ void CKaori::Vf6()
         if (timer >= l4) {
             timer = 0;
             frame++;
-            unk168 = 3;
+            m_attackResult = 3;
             if (frame >= x8) {
                 pattern = 0;
-                CPlayer::Unk40e630();
+                CPlayer::FaceOpponent();
                 Vf0();
             }
         }
@@ -3636,7 +3636,7 @@ void CKaori::Vf6()
     case 0xfb:
         if (frame == 0 && timer == 0) {
             unk158 = 0;
-            CPlayer::Unk40f1e0();
+            CPlayer::StopMoving();
         }
         if (frame == 2 && timer == 0) {
             vx = 4.0;
@@ -3671,10 +3671,10 @@ void CKaori::Vf6()
         if (timer >= l4) {
             timer = 0;
             frame++;
-            unk168 = 3;
+            m_attackResult = 3;
             if (frame >= x8) {
                 pattern = 0;
-                CPlayer::Unk40e630();
+                CPlayer::FaceOpponent();
                 Vf0();
             }
         }
@@ -3682,30 +3682,30 @@ void CKaori::Vf6()
     case 0xfd:
         if (frame == 0 && timer == 0) {
             unk158 = 0;
-            CPlayer::Unk40f1e0();
+            CPlayer::StopMoving();
         }
         if (frame == 6 && timer == 0) {
-            unk148 = unk148 + 0x2d;
-            unk16c = 1;
+            m_gauge = m_gauge + 0x2d;
+            m_hitsLeft = 1;
         }
         timer++;
         if (timer >= l4) {
             timer = 0;
             frame++;
             if (frame < 6) {
-                unk168 = 0;
+                m_attackResult = 0;
             }
             if (frame == 0xb) {
-                if (unk168 == 3) {
-                    unk16c = 1;
-                    unk168 = 0;
+                if (m_attackResult == 3) {
+                    m_hitsLeft = 1;
+                    m_attackResult = 0;
                 } else {
                     frame = 0xf;
                 }
             }
             if (frame >= x8) {
                 Vf0();
-                CPlayer::Unk40e630();
+                CPlayer::FaceOpponent();
                 pattern = 0;
             }
         }
@@ -3713,7 +3713,7 @@ void CKaori::Vf6()
     case 0xfe:
         if (frame == 0 && timer == 0) {
             unk158 = 0;
-            CPlayer::Unk40f1e0();
+            CPlayer::StopMoving();
         }
         if (frame == 4 && timer == 0) {
             vx = 2.1;
@@ -3725,23 +3725,23 @@ void CKaori::Vf6()
             vx = 0.0;
         }
         if (frame == 6 && timer == 0) {
-            unk148 = unk148 + 0x2d;
-            unk16c = 1;
+            m_gauge = m_gauge + 0x2d;
+            m_hitsLeft = 1;
         }
         timer++;
         if (timer >= l4) {
             timer = 0;
             frame++;
             if (frame < 6) {
-                unk168 = 0;
+                m_attackResult = 0;
             }
             if (frame == 0xb) {
-                unk16c = 1;
-                unk168 = 0;
+                m_hitsLeft = 1;
+                m_attackResult = 0;
             }
             if (frame >= x8) {
                 Vf0();
-                CPlayer::Unk40e630();
+                CPlayer::FaceOpponent();
                 pattern = 0;
             }
         }
@@ -3749,7 +3749,7 @@ void CKaori::Vf6()
     case 0xff:
         if (frame == 0 && timer == 0) {
             unk158 = 0;
-            CPlayer::Unk40f1e0();
+            CPlayer::StopMoving();
             if (unk120 == 0) {
                 unk118 -= 500.0;
             } else {
@@ -3759,8 +3759,8 @@ void CKaori::Vf6()
             l50.unk2c = 0xb;
             l50.x = (double)(int)x;
             l50.y = (double)((int)y - 0x32);
-            l50.unk20 = 2;
-            l50.unk21 = 1;
+            l50.scale = 2;
+            l50.layer = 1;
             m_game->CreateEffect((EffectDesc*)&l50);
         }
         if (frame == 4 && timer == 0) {
@@ -3773,27 +3773,27 @@ void CKaori::Vf6()
             vx = 0.0;
         }
         if (frame == 6 && timer == 0) {
-            unk148 = unk148 + 0x2d;
-            unk16c = 1;
+            m_gauge = m_gauge + 0x2d;
+            m_hitsLeft = 1;
         }
         timer++;
         if (timer >= l4) {
             timer = 0;
             frame++;
             if (frame < 6) {
-                unk168 = 0;
+                m_attackResult = 0;
             }
             if (frame == 0xb) {
-                if (unk168 == 3) {
-                    unk16c = 1;
-                    unk168 = 0;
+                if (m_attackResult == 3) {
+                    m_hitsLeft = 1;
+                    m_attackResult = 0;
                 } else {
                     frame = 0xf;
                 }
             }
             if (frame >= x8) {
                 Vf0();
-                CPlayer::Unk40e630();
+                CPlayer::FaceOpponent();
                 pattern = 0;
             }
         }
@@ -3801,33 +3801,33 @@ void CKaori::Vf6()
     case 0x100:
         if (frame == 0 && timer == 0) {
             unk158 = 0;
-            CPlayer::Unk40f1e0();
+            CPlayer::StopMoving();
         }
         if (frame == 3 && timer == 0) {
             l50.type = 0x19a;
             l50.x = (double)((int)x + facing * 0x28);
             l50.y = (double)(int)y;
-            l50.unk20 = 2;
-            l50.unk21 = 1;
+            l50.scale = 2;
+            l50.layer = 1;
             l50.unk18 = facing;
             Vf9(&l50);
         }
         if (frame == 4 && timer == 0) {
-            unk16c = 0;
-            unk148 = unk148 + 0x23;
+            m_hitsLeft = 0;
+            m_gauge = m_gauge + 0x23;
         }
         timer++;
         if (timer >= l4) {
             timer = 0;
             frame++;
-            unk168 = 0;
+            m_attackResult = 0;
             if (frame == 8 && unk3138 < 6) {
                 frame--;
                 unk3138++;
             }
             if (frame >= x8) {
                 Vf0();
-                CPlayer::Unk40e630();
+                CPlayer::FaceOpponent();
                 pattern = 0;
             }
         }
@@ -3835,33 +3835,33 @@ void CKaori::Vf6()
     case 0x101:
         if (frame == 0 && timer == 0) {
             unk158 = 0;
-            CPlayer::Unk40f1e0();
+            CPlayer::StopMoving();
         }
         if (frame == 3 && timer == 0) {
             l50.type = 0x190;
             l50.x = (double)((int)x + facing * 0x28);
             l50.y = (double)(int)y;
-            l50.unk20 = 2;
-            l50.unk21 = 1;
+            l50.scale = 2;
+            l50.layer = 1;
             l50.unk18 = facing;
             Vf9(&l50);
         }
         if (frame == 4 && timer == 0) {
-            unk16c = 0xa;
-            unk148 = unk148 + 0x23;
+            m_hitsLeft = 0xa;
+            m_gauge = m_gauge + 0x23;
         }
         timer++;
         if (timer >= l4) {
             timer = 0;
             frame++;
-            unk168 = 0;
+            m_attackResult = 0;
             if (frame == 8 && unk3138 < 0xa) {
                 frame--;
                 unk3138++;
             }
             if (frame >= x8) {
                 Vf0();
-                CPlayer::Unk40e630();
+                CPlayer::FaceOpponent();
                 pattern = 0;
             }
         }
@@ -3869,7 +3869,7 @@ void CKaori::Vf6()
     case 0x102:
         if (frame == 0 && timer == 0) {
             unk158 = 0;
-            CPlayer::Unk40f1e0();
+            CPlayer::StopMoving();
             if (unk120 == 0) {
                 unk118 -= 500.0;
             } else {
@@ -3879,35 +3879,35 @@ void CKaori::Vf6()
             l50.unk2c = 0xb;
             l50.x = (double)(int)x;
             l50.y = (double)((int)y - 0x32);
-            l50.unk20 = 2;
-            l50.unk21 = 1;
+            l50.scale = 2;
+            l50.layer = 1;
             m_game->CreateEffect((EffectDesc*)&l50);
         }
         if (frame == 3 && timer == 0) {
             l50.type = 0x19b;
             l50.x = (double)((int)x + facing * 0x28);
             l50.y = (double)(int)y;
-            l50.unk20 = 2;
-            l50.unk21 = 1;
+            l50.scale = 2;
+            l50.layer = 1;
             l50.unk18 = facing;
             Vf9(&l50);
         }
         if (frame == 4 && timer == 0) {
-            unk16c = 1;
-            unk148 = unk148 + 0x23;
+            m_hitsLeft = 1;
+            m_gauge = m_gauge + 0x23;
         }
         timer++;
         if (timer >= l4) {
             timer = 0;
             frame++;
-            unk168 = 0;
+            m_attackResult = 0;
             if (frame == 8 && unk3138 < 7) {
                 frame--;
                 unk3138++;
             }
             if (frame >= x8) {
                 Vf0();
-                CPlayer::Unk40e630();
+                CPlayer::FaceOpponent();
                 pattern = 0;
             }
         }
@@ -3919,18 +3919,18 @@ void CKaori::Vf6()
         }
         if (frame == 2 && timer == 0) {
             unk2c9 = 0x15;
-            unk16c = 1;
+            m_hitsLeft = 1;
         }
         timer++;
         if (timer >= l4) {
             timer = 0;
             frame++;
             if (frame < 2) {
-                unk168 = 0;
+                m_attackResult = 0;
             }
             if (frame >= x8) {
                 Vf0();
-                CPlayer::Unk40e630();
+                CPlayer::FaceOpponent();
                 pattern = 0;
             }
         }
@@ -3944,7 +3944,7 @@ void CKaori::Vf6()
         }
         if (frame == 5 && timer == 0) {
             unk2c9 = 0x15;
-            unk16c = 1;
+            m_hitsLeft = 1;
             vx = 3.5;
         }
         if (frame > 4) {
@@ -3955,11 +3955,11 @@ void CKaori::Vf6()
             timer = 0;
             frame++;
             if (frame < 2) {
-                unk168 = 0;
+                m_attackResult = 0;
             }
             if (frame >= x8) {
                 Vf0();
-                CPlayer::Unk40e630();
+                CPlayer::FaceOpponent();
                 pattern = 0;
             }
         }
@@ -3971,18 +3971,18 @@ void CKaori::Vf6()
         }
         if (frame == 5 && timer == 0) {
             unk2c9 = 0x15;
-            unk16c = 1;
+            m_hitsLeft = 1;
         }
         timer++;
         if (timer >= l4) {
             timer = 0;
             frame++;
             if (frame < 2) {
-                unk168 = 0;
+                m_attackResult = 0;
             }
             if (frame >= x8) {
                 Vf0();
-                CPlayer::Unk40e630();
+                CPlayer::FaceOpponent();
                 pattern = 3;
             }
         }
@@ -3994,18 +3994,18 @@ void CKaori::Vf6()
         }
         if (frame == 5 && timer == 0) {
             unk2c9 = 0x15;
-            unk16c = 1;
+            m_hitsLeft = 1;
         }
         timer++;
         if (timer >= l4) {
             timer = 0;
             frame++;
             if (frame < 2) {
-                unk168 = 0;
+                m_attackResult = 0;
             }
             if (frame >= x8) {
                 Vf0();
-                CPlayer::Unk40e630();
+                CPlayer::FaceOpponent();
                 pattern = 0;
             }
         }
@@ -4017,22 +4017,22 @@ void CKaori::Vf6()
         }
         if (frame == 2 && timer == 0) {
             unk2c9 = 0x15;
-            unk16c = 1;
+            m_hitsLeft = 1;
         }
         if (frame == 7 && timer == 0) {
             unk2c9 = 0x14;
-            unk16c = 1;
+            m_hitsLeft = 1;
         }
         timer++;
         if (timer >= l4) {
             timer = 0;
             frame++;
             if (frame == 2 || frame == 7) {
-                unk168 = 0;
+                m_attackResult = 0;
             }
             if (frame >= x8) {
                 Vf0();
-                CPlayer::Unk40e630();
+                CPlayer::FaceOpponent();
                 pattern = 0;
             }
         }
@@ -4047,24 +4047,24 @@ void CKaori::Vf6()
             ay = 0.0;
         }
         if (frame == 0 && timer == 0) {
-            CPlayer::Unk40f1e0();
+            CPlayer::StopMoving();
             unk14c = 0x78;
-            unk148 = unk148 - 0x3e8;
+            m_gauge = m_gauge - 0x3e8;
             CPlayer::Unk410b10(0xb0, 3);
             l50.type = 0x44;
             l50.unk2c = 0x13;
             l50.x = (double)((int)x + facing * 8);
             l50.y = (double)((int)y - 0x1b);
-            l50.unk20 = 2;
+            l50.scale = 2;
             l50.unk0 = 1;
-            l50.unk21 = 1;
+            l50.layer = 1;
             m_game->CreateEffect((EffectDesc*)&l50);
-            unk16c = 1;
+            m_hitsLeft = 1;
         }
         if (frame < 8) {
             CPlayer::Unk410a80(0x32, 0xa);
         }
-        if (frame == 6 && unk168 == 3) {
+        if (frame == 6 && m_attackResult == 3) {
             m_game->FlashWhite(9, 0x24, 9);
             Vf0();
             pattern = 0x12d;
@@ -4075,10 +4075,10 @@ void CKaori::Vf6()
         if (timer >= l4) {
             timer = 0;
             frame++;
-            unk168 = 0;
+            m_attackResult = 0;
             if (frame >= x8) {
                 pattern = 0;
-                CPlayer::Unk40e630();
+                CPlayer::FaceOpponent();
                 Vf0();
             }
         }
@@ -4086,7 +4086,7 @@ void CKaori::Vf6()
     case 0x12d:
         CPlayer::Unk410a80(0x32, 0xa);
         if (frame == 0 && timer == 0) {
-            unk16c = 2;
+            m_hitsLeft = 2;
         }
         if (frame == 1 && timer == 0) {
             facing = 1;
@@ -4098,8 +4098,8 @@ void CKaori::Vf6()
             l50.type = 0x192;
             l50.x = (double)(int)x;
             l50.y = (double)(int)y;
-            l50.unk20 = 2;
-            l50.unk21 = 1;
+            l50.scale = 2;
+            l50.layer = 1;
             l50.unk18 = facing;
             Vf9(&l50);
         }
@@ -4107,8 +4107,8 @@ void CKaori::Vf6()
             l50.type = 0x193;
             l50.x = (double)(int)x;
             l50.y = (double)(int)y;
-            l50.unk20 = 2;
-            l50.unk21 = 1;
+            l50.scale = 2;
+            l50.layer = 1;
             l50.unk18 = facing;
             Vf9(&l50);
         }
@@ -4116,8 +4116,8 @@ void CKaori::Vf6()
             l50.type = 0x194;
             l50.x = (double)(int)x;
             l50.y = (double)(int)y;
-            l50.unk20 = 2;
-            l50.unk21 = 1;
+            l50.scale = 2;
+            l50.layer = 1;
             l50.unk18 = facing;
             Vf9(&l50);
         }
@@ -4125,10 +4125,10 @@ void CKaori::Vf6()
         if (timer >= l4) {
             timer = 0;
             frame++;
-            unk168 = 0;
+            m_attackResult = 0;
             if (frame >= x8) {
                 pattern = 0;
-                CPlayer::Unk40e630();
+                CPlayer::FaceOpponent();
                 Vf0();
             }
         }
@@ -4143,24 +4143,24 @@ void CKaori::Vf6()
             ay = 0.0;
         }
         if (frame == 0 && timer == 0) {
-            CPlayer::Unk40f1e0();
+            CPlayer::StopMoving();
             unk14c = 0x78;
-            unk148 = unk148 - 0x7d0;
+            m_gauge = m_gauge - 0x7d0;
             CPlayer::Unk410b10(0xb0, 3);
             l50.type = 0x45;
             l50.unk2c = 5;
             l50.x = (double)((int)x + facing * 8);
             l50.y = (double)((int)y - 0x1b);
-            l50.unk20 = 2;
+            l50.scale = 2;
             l50.unk0 = 1;
-            l50.unk21 = 1;
+            l50.layer = 1;
             m_game->CreateEffect((EffectDesc*)&l50);
-            unk16c = 1;
+            m_hitsLeft = 1;
         }
         if (frame < 8) {
             CPlayer::Unk410a80(0x32, 0xa);
         }
-        if (frame == 6 && unk168 == 3) {
+        if (frame == 6 && m_attackResult == 3) {
             m_game->FlashWhite(9, 0x24, 9);
             Vf0();
             pattern = 0x12f;
@@ -4171,10 +4171,10 @@ void CKaori::Vf6()
         if (timer >= l4) {
             timer = 0;
             frame++;
-            unk168 = 0;
+            m_attackResult = 0;
             if (frame >= x8) {
                 pattern = 0;
-                CPlayer::Unk40e630();
+                CPlayer::FaceOpponent();
                 Vf0();
             }
         }
@@ -4182,7 +4182,7 @@ void CKaori::Vf6()
     case 0x12f:
         CPlayer::Unk410a80(0x32, 0xa);
         if (frame == 0 && timer == 0) {
-            unk16c = 2;
+            m_hitsLeft = 2;
         }
         if (frame == 1 && timer == 0) {
             facing = 1;
@@ -4194,8 +4194,8 @@ void CKaori::Vf6()
             l50.type = 0x192;
             l50.x = (double)(int)x;
             l50.y = (double)(int)y;
-            l50.unk20 = 2;
-            l50.unk21 = 1;
+            l50.scale = 2;
+            l50.layer = 1;
             l50.unk18 = facing;
             Vf9(&l50);
         }
@@ -4203,8 +4203,8 @@ void CKaori::Vf6()
             l50.type = 0x193;
             l50.x = (double)(int)x;
             l50.y = (double)(int)y;
-            l50.unk20 = 2;
-            l50.unk21 = 1;
+            l50.scale = 2;
+            l50.layer = 1;
             l50.unk18 = facing;
             Vf9(&l50);
         }
@@ -4212,8 +4212,8 @@ void CKaori::Vf6()
             l50.type = 0x194;
             l50.x = (double)(int)x;
             l50.y = (double)(int)y;
-            l50.unk20 = 2;
-            l50.unk21 = 1;
+            l50.scale = 2;
+            l50.layer = 1;
             l50.unk18 = facing;
             Vf9(&l50);
         }
@@ -4221,10 +4221,10 @@ void CKaori::Vf6()
         if (timer >= l4) {
             timer = 0;
             frame++;
-            unk168 = 0;
+            m_attackResult = 0;
             if (frame >= x8) {
                 pattern = 0;
-                CPlayer::Unk40e630();
+                CPlayer::FaceOpponent();
                 Vf0();
             }
         }
@@ -4242,24 +4242,24 @@ void CKaori::Vf6()
             ay = 0.0;
         }
         if (frame == 0 && timer == 0) {
-            CPlayer::Unk40f1e0();
+            CPlayer::StopMoving();
             unk14c = 0x78;
-            unk148 = unk148 - 0xbb8;
+            m_gauge = m_gauge - 0xbb8;
             CPlayer::Unk410b10(0xb0, 3);
             l50.type = 0x46;
             l50.unk2c = 0x40;
             l50.x = (double)((int)x + facing * 8);
             l50.y = (double)((int)y - 0x1b);
-            l50.unk20 = 2;
+            l50.scale = 2;
             l50.unk0 = 1;
-            l50.unk21 = 1;
+            l50.layer = 1;
             m_game->CreateEffect((EffectDesc*)&l50);
-            unk16c = 1;
+            m_hitsLeft = 1;
         }
         if (frame < 8) {
             CPlayer::Unk410a80(0x32, 0xa);
         }
-        if (frame == 6 && unk168 == 3) {
+        if (frame == 6 && m_attackResult == 3) {
             m_game->FlashWhite(9, 0x24, 9);
             Vf0();
             pattern = 0x131;
@@ -4270,10 +4270,10 @@ void CKaori::Vf6()
         if (timer >= l4) {
             timer = 0;
             frame++;
-            unk168 = 0;
+            m_attackResult = 0;
             if (frame >= x8) {
                 pattern = 0;
-                CPlayer::Unk40e630();
+                CPlayer::FaceOpponent();
                 Vf0();
             }
         }
@@ -4282,7 +4282,7 @@ void CKaori::Vf6()
         CPlayer::Unk410a80(0x32, 0xa);
         m_game->Unk4080c0(0xf);
         if (frame == 0 && timer == 0) {
-            unk16c = 3;
+            m_hitsLeft = 3;
         }
         if (frame == 1 && timer == 0) {
             facing = 1;
@@ -4294,8 +4294,8 @@ void CKaori::Vf6()
             l50.type = 0x195;
             l50.x = (double)(int)x;
             l50.y = (double)(int)y;
-            l50.unk20 = 2;
-            l50.unk21 = 1;
+            l50.scale = 2;
+            l50.layer = 1;
             l50.unk18 = facing;
             Vf9(&l50);
         }
@@ -4303,8 +4303,8 @@ void CKaori::Vf6()
             l50.type = 0x196;
             l50.x = (double)(int)x;
             l50.y = (double)(int)y;
-            l50.unk20 = 2;
-            l50.unk21 = 1;
+            l50.scale = 2;
+            l50.layer = 1;
             l50.unk18 = facing;
             Vf9(&l50);
         }
@@ -4312,8 +4312,8 @@ void CKaori::Vf6()
             l50.type = 0x197;
             l50.x = (double)(int)x;
             l50.y = (double)(int)y;
-            l50.unk20 = 2;
-            l50.unk21 = 1;
+            l50.scale = 2;
+            l50.layer = 1;
             l50.unk18 = facing;
             Vf9(&l50);
         }
@@ -4321,10 +4321,10 @@ void CKaori::Vf6()
         if (timer >= l4) {
             timer = 0;
             frame++;
-            unk168 = 0;
+            m_attackResult = 0;
             if (frame >= x8) {
                 pattern = 0;
-                CPlayer::Unk40e630();
+                CPlayer::FaceOpponent();
                 Vf0();
             }
         }
@@ -4337,19 +4337,19 @@ void CKaori::Vf6()
             ay = 0.0;
         }
         if (frame == 0 && timer == 0) {
-            CPlayer::Unk40f1e0();
+            CPlayer::StopMoving();
             unk14c = 0x78;
-            unk148 = unk148 - 0x3e8;
+            m_gauge = m_gauge - 0x3e8;
             CPlayer::Unk410b10(0xb0, 3);
             l50.type = 0x44;
             l50.unk2c = 0x13;
             l50.x = (double)(int)x;
             l50.y = (double)((int)y - 0x28);
-            l50.unk20 = 2;
+            l50.scale = 2;
             l50.unk0 = 1;
-            l50.unk21 = 1;
+            l50.layer = 1;
             m_game->CreateEffect((EffectDesc*)&l50);
-            unk16c = 1;
+            m_hitsLeft = 1;
         }
         if (frame == 0xa && timer == 0) {
             vx = 4.0;
@@ -4363,10 +4363,10 @@ void CKaori::Vf6()
         if (frame < 0xd) {
             CPlayer::Unk410a80(0x32, 0xa);
         }
-        if (frame == 0xc && unk168 == 3) {
+        if (frame == 0xc && m_attackResult == 3) {
             (*m_opponent)->Vf0();
             (*m_opponent)->pattern = 0x48;
-            (*m_opponent)->Unk40f1e0();
+            (*m_opponent)->StopMoving();
             (*m_opponent)->y = 0.0;
             Vf0();
             pattern = 0x133;
@@ -4377,10 +4377,10 @@ void CKaori::Vf6()
         if (timer >= l4) {
             timer = 0;
             frame++;
-            unk168 = 0;
+            m_attackResult = 0;
             if (frame >= x8) {
                 pattern = 0;
-                CPlayer::Unk40e630();
+                CPlayer::FaceOpponent();
                 Vf0();
             }
         }
@@ -4393,8 +4393,8 @@ void CKaori::Vf6()
         }
         if (frame == 0 && timer == 0) {
             (*m_opponent)->y = 0.0;
-            unk16c = 6;
-            CPlayer::Unk40e630();
+            m_hitsLeft = 6;
+            CPlayer::FaceOpponent();
         }
         if (frame < 0x24) {
             CPlayer::Unk410a80(0x32, 0xa);
@@ -4403,10 +4403,10 @@ void CKaori::Vf6()
         if (timer >= l4) {
             timer = 0;
             frame++;
-            unk168 = 0;
+            m_attackResult = 0;
             if (frame >= x8) {
                 pattern = 0;
-                CPlayer::Unk40e630();
+                CPlayer::FaceOpponent();
                 Vf0();
             }
         }
@@ -4419,19 +4419,19 @@ void CKaori::Vf6()
             ay = 0.0;
         }
         if (frame == 0 && timer == 0) {
-            CPlayer::Unk40f1e0();
+            CPlayer::StopMoving();
             unk14c = 0x78;
-            unk148 = unk148 - 0x7d0;
+            m_gauge = m_gauge - 0x7d0;
             CPlayer::Unk410b10(0xb0, 3);
             l50.type = 0x45;
             l50.unk2c = 5;
             l50.x = (double)(int)x;
             l50.y = (double)((int)y - 0x28);
-            l50.unk20 = 2;
+            l50.scale = 2;
             l50.unk0 = 1;
-            l50.unk21 = 1;
+            l50.layer = 1;
             m_game->CreateEffect((EffectDesc*)&l50);
-            unk16c = 1;
+            m_hitsLeft = 1;
         }
         if (frame == 0xa && timer == 0) {
             vx = 4.3;
@@ -4445,10 +4445,10 @@ void CKaori::Vf6()
         if (frame < 0xd) {
             CPlayer::Unk410a80(0x32, 0xa);
         }
-        if (frame == 0xc && unk168 == 3) {
+        if (frame == 0xc && m_attackResult == 3) {
             (*m_opponent)->Vf0();
             (*m_opponent)->pattern = 0x48;
-            (*m_opponent)->Unk40f1e0();
+            (*m_opponent)->StopMoving();
             (*m_opponent)->y = 0.0;
             Vf0();
             pattern = 0x135;
@@ -4459,10 +4459,10 @@ void CKaori::Vf6()
         if (timer >= l4) {
             timer = 0;
             frame++;
-            unk168 = 0;
+            m_attackResult = 0;
             if (frame >= x8) {
                 pattern = 0;
-                CPlayer::Unk40e630();
+                CPlayer::FaceOpponent();
                 Vf0();
             }
         }
@@ -4475,8 +4475,8 @@ void CKaori::Vf6()
         }
         if (frame == 0 && timer == 0) {
             (*m_opponent)->y = 0.0;
-            unk16c = 0xf;
-            CPlayer::Unk40e630();
+            m_hitsLeft = 0xf;
+            CPlayer::FaceOpponent();
         }
         if (frame < 0x24) {
             CPlayer::Unk410a80(0x32, 0xa);
@@ -4485,10 +4485,10 @@ void CKaori::Vf6()
         if (timer >= l4) {
             timer = 0;
             frame++;
-            unk168 = 0;
+            m_attackResult = 0;
             if (frame >= x8) {
                 pattern = 0;
-                CPlayer::Unk40e630();
+                CPlayer::FaceOpponent();
                 Vf0();
             }
         }
@@ -4502,19 +4502,19 @@ void CKaori::Vf6()
             ay = 0.0;
         }
         if (frame == 0 && timer == 0) {
-            CPlayer::Unk40f1e0();
+            CPlayer::StopMoving();
             unk14c = 0x78;
-            unk148 = unk148 - 0xbb8;
+            m_gauge = m_gauge - 0xbb8;
             CPlayer::Unk410b10(0xb0, 3);
             l50.type = 0x46;
             l50.unk2c = 0x40;
             l50.x = (double)(int)x;
             l50.y = (double)((int)y - 0x28);
-            l50.unk20 = 2;
+            l50.scale = 2;
             l50.unk0 = 1;
-            l50.unk21 = 1;
+            l50.layer = 1;
             m_game->CreateEffect((EffectDesc*)&l50);
-            unk16c = 1;
+            m_hitsLeft = 1;
         }
         if (frame == 0xa && timer == 0) {
             vx = 4.6;
@@ -4528,10 +4528,10 @@ void CKaori::Vf6()
         if (frame < 0xd) {
             CPlayer::Unk410a80(0x32, 0xa);
         }
-        if (frame == 0xc && unk168 == 3) {
+        if (frame == 0xc && m_attackResult == 3) {
             (*m_opponent)->Vf0();
             (*m_opponent)->pattern = 0x48;
-            (*m_opponent)->Unk40f1e0();
+            (*m_opponent)->StopMoving();
             (*m_opponent)->y = 0.0;
             Vf0();
             pattern = 0x137;
@@ -4542,10 +4542,10 @@ void CKaori::Vf6()
         if (timer >= l4) {
             timer = 0;
             frame++;
-            unk168 = 0;
+            m_attackResult = 0;
             if (frame >= x8) {
                 pattern = 0;
-                CPlayer::Unk40e630();
+                CPlayer::FaceOpponent();
                 Vf0();
             }
         }
@@ -4559,8 +4559,8 @@ void CKaori::Vf6()
         }
         if (frame == 0 && timer == 0) {
             (*m_opponent)->y = 0.0;
-            unk16c = 0xf;
-            CPlayer::Unk40e630();
+            m_hitsLeft = 0xf;
+            CPlayer::FaceOpponent();
         }
         if (frame < 0x24) {
             CPlayer::Unk410a80(0x32, 0xa);
@@ -4569,10 +4569,10 @@ void CKaori::Vf6()
         if (timer >= l4) {
             timer = 0;
             frame++;
-            unk168 = 0;
+            m_attackResult = 0;
             if (frame >= x8) {
                 pattern = 0;
-                CPlayer::Unk40e630();
+                CPlayer::FaceOpponent();
                 Vf0();
             }
         }
@@ -4580,33 +4580,33 @@ void CKaori::Vf6()
     case 0x138:
         unk158 = 0;
         if (frame == 0 && timer == 0) {
-            CPlayer::Unk40f1e0();
+            CPlayer::StopMoving();
         }
         if (frame == 8 && timer == 0) {
             unk3138 = (int)(vx * 100.0);
             unk313c = (int)(vy * 100.0);
-            CPlayer::Unk40f1e0();
+            CPlayer::StopMoving();
             unk14c = 0x78;
-            unk148 = unk148 - 0x3e8;
+            m_gauge = m_gauge - 0x3e8;
             CPlayer::Unk410b10(0xb0, 3);
             l50.type = 0x44;
             l50.unk2c = 0x13;
             l50.x = (double)((int)x - facing * 0x1f);
             l50.y = (double)((int)y - 0x48);
-            l50.unk20 = 2;
+            l50.scale = 2;
             l50.unk0 = 1;
-            l50.unk21 = 1;
+            l50.layer = 1;
             m_game->CreateEffect((EffectDesc*)&l50);
-            unk16c = 2;
+            m_hitsLeft = 2;
         }
-        if (frame == 0xc && unk168 > 0 && unk3140 == 0) {
+        if (frame == 0xc && m_attackResult > 0 && unk3140 == 0) {
             (*m_opponent)->unk14a = 0xb4;
-            CPlayer::Unk40f1e0();
+            CPlayer::StopMoving();
             unk3140++;
         }
-        if (frame == 0x10 && unk168 > 0 && unk3140 == 1) {
+        if (frame == 0x10 && m_attackResult > 0 && unk3140 == 1) {
             (*m_opponent)->unk14a = 0xb4;
-            CPlayer::Unk40f1e0();
+            CPlayer::StopMoving();
             unk3140++;
         }
         if (frame == 8) {
@@ -4614,14 +4614,14 @@ void CKaori::Vf6()
         }
         if (frame == 0xd && y + vy > 0.0) {
             y = 0.0;
-            CPlayer::Unk40f1e0();
+            CPlayer::StopMoving();
             timer = 0;
             frame = 0x20;
             break;
         }
         if ((frame == 0x1e || frame == 0x1f) && y + vy > 0.0) {
             y = 0.0;
-            CPlayer::Unk40f1e0();
+            CPlayer::StopMoving();
             timer = 0;
             frame = 0x20;
             break;
@@ -4632,7 +4632,7 @@ void CKaori::Vf6()
             timer = 0;
             frame++;
             if (frame == 1 || frame == 0xf) {
-                unk168 = 0;
+                m_attackResult = 0;
             }
             if (frame == 3) {
                 vx = 0.7;
@@ -4647,17 +4647,17 @@ void CKaori::Vf6()
             if (frame == 0xe) {
                 frame = 0xd;
             }
-            if (frame == 0xd && unk168 > 0) {
+            if (frame == 0xd && m_attackResult > 0) {
                 frame = 0xe;
             }
             if (frame == 0xf) {
                 (*m_opponent)->unk14a = 0;
             }
-            if (frame == 0x11 && unk168 == 0) {
+            if (frame == 0x11 && m_attackResult == 0) {
                 ay = 0.035;
                 (*m_opponent)->unk14a = 0;
             }
-            if (frame == 0x12 && unk168 > 0) {
+            if (frame == 0x12 && m_attackResult > 0) {
                 (*m_opponent)->unk14a = 0;
                 vx = -2.5;
                 vy = -2.5;
@@ -4668,7 +4668,7 @@ void CKaori::Vf6()
             }
             if (frame >= x8) {
                 pattern = 3;
-                CPlayer::Unk40e630();
+                CPlayer::FaceOpponent();
                 Vf0();
             }
         }
@@ -4676,33 +4676,33 @@ void CKaori::Vf6()
     case 0x139:
         unk158 = 0;
         if (frame == 0 && timer == 0) {
-            CPlayer::Unk40f1e0();
+            CPlayer::StopMoving();
         }
         if (frame == 8 && timer == 0) {
             unk3138 = (int)(vx * 100.0);
             unk313c = (int)(vy * 100.0);
-            CPlayer::Unk40f1e0();
+            CPlayer::StopMoving();
             unk14c = 0x78;
-            unk148 = unk148 - 0x7d0;
+            m_gauge = m_gauge - 0x7d0;
             CPlayer::Unk410b10(0xb0, 3);
             l50.type = 0x45;
             l50.unk2c = 5;
             l50.x = (double)((int)x - facing * 0x1f);
             l50.y = (double)((int)y - 0x48);
-            l50.unk20 = 2;
+            l50.scale = 2;
             l50.unk0 = 1;
-            l50.unk21 = 1;
+            l50.layer = 1;
             m_game->CreateEffect((EffectDesc*)&l50);
-            unk16c = 2;
+            m_hitsLeft = 2;
         }
-        if (frame == 0xc && unk168 > 0 && unk3140 == 0) {
+        if (frame == 0xc && m_attackResult > 0 && unk3140 == 0) {
             (*m_opponent)->unk14a = 0xb4;
-            CPlayer::Unk40f1e0();
+            CPlayer::StopMoving();
             unk3140++;
         }
-        if (frame == 0x10 && unk168 > 0 && unk3140 == 1) {
+        if (frame == 0x10 && m_attackResult > 0 && unk3140 == 1) {
             (*m_opponent)->unk14a = 0xb4;
-            CPlayer::Unk40f1e0();
+            CPlayer::StopMoving();
             unk3140++;
         }
         if (frame == 8) {
@@ -4710,14 +4710,14 @@ void CKaori::Vf6()
         }
         if (frame == 0xd && y + vy > 0.0) {
             y = 0.0;
-            CPlayer::Unk40f1e0();
+            CPlayer::StopMoving();
             timer = 0;
             frame = 0x20;
             break;
         }
         if ((frame == 0x1e || frame == 0x1f) && y + vy > 0.0) {
             y = 0.0;
-            CPlayer::Unk40f1e0();
+            CPlayer::StopMoving();
             timer = 0;
             frame = 0x20;
             break;
@@ -4728,7 +4728,7 @@ void CKaori::Vf6()
             timer = 0;
             frame++;
             if (frame == 1 || frame == 0xf) {
-                unk168 = 0;
+                m_attackResult = 0;
             }
             if (frame == 3) {
                 vx = 0.7;
@@ -4743,17 +4743,17 @@ void CKaori::Vf6()
             if (frame == 0xe) {
                 frame = 0xd;
             }
-            if (frame == 0xd && unk168 > 0) {
+            if (frame == 0xd && m_attackResult > 0) {
                 frame = 0xe;
             }
             if (frame == 0xf) {
                 (*m_opponent)->unk14a = 0;
             }
-            if (frame == 0x11 && unk168 == 0) {
+            if (frame == 0x11 && m_attackResult == 0) {
                 ay = 0.035;
                 (*m_opponent)->unk14a = 0;
             }
-            if (frame == 0x12 && unk168 > 0) {
+            if (frame == 0x12 && m_attackResult > 0) {
                 (*m_opponent)->unk14a = 0;
                 vx = -2.5;
                 vy = -2.5;
@@ -4764,7 +4764,7 @@ void CKaori::Vf6()
             }
             if (frame >= x8) {
                 pattern = 3;
-                CPlayer::Unk40e630();
+                CPlayer::FaceOpponent();
                 Vf0();
             }
         }
@@ -4772,36 +4772,36 @@ void CKaori::Vf6()
     case 0x13a:
         unk158 = 0;
         if (frame == 0 && timer == 0) {
-            CPlayer::Unk40f1e0();
+            CPlayer::StopMoving();
         }
         if (frame == 8 && timer == 0) {
             unk3138 = (int)(vx * 100.0);
             unk313c = (int)(vy * 100.0);
-            CPlayer::Unk40f1e0();
+            CPlayer::StopMoving();
             unk14c = 0x78;
-            unk148 = unk148 - 0xbb8;
+            m_gauge = m_gauge - 0xbb8;
             CPlayer::Unk410b10(0xb0, 3);
             l50.type = 0x46;
             l50.unk2c = 0x40;
             l50.x = (double)((int)x - facing * 0x1f);
             l50.y = (double)((int)y - 0x48);
-            l50.unk20 = 2;
+            l50.scale = 2;
             l50.unk0 = 1;
-            l50.unk21 = 1;
+            l50.layer = 1;
             m_game->CreateEffect((EffectDesc*)&l50);
-            unk16c = 2;
+            m_hitsLeft = 2;
         }
         if (frame > 7) {
             m_game->Unk4080c0(0xf);
         }
-        if (frame == 0xc && unk168 > 0 && unk3140 == 0) {
+        if (frame == 0xc && m_attackResult > 0 && unk3140 == 0) {
             (*m_opponent)->unk14a = 0xb4;
-            CPlayer::Unk40f1e0();
+            CPlayer::StopMoving();
             unk3140++;
         }
-        if (frame == 0x10 && unk168 > 0 && unk3140 == 1) {
+        if (frame == 0x10 && m_attackResult > 0 && unk3140 == 1) {
             (*m_opponent)->unk14a = 0xb4;
-            CPlayer::Unk40f1e0();
+            CPlayer::StopMoving();
             unk3140++;
         }
         if (frame == 8) {
@@ -4809,14 +4809,14 @@ void CKaori::Vf6()
         }
         if (frame == 0xd && y + vy > 0.0) {
             y = 0.0;
-            CPlayer::Unk40f1e0();
+            CPlayer::StopMoving();
             timer = 0;
             frame = 0x20;
             break;
         }
         if ((frame == 0x1e || frame == 0x1f) && y + vy > 0.0) {
             y = 0.0;
-            CPlayer::Unk40f1e0();
+            CPlayer::StopMoving();
             timer = 0;
             frame = 0x20;
             break;
@@ -4827,7 +4827,7 @@ void CKaori::Vf6()
             timer = 0;
             frame++;
             if (frame == 1 || frame == 0xf) {
-                unk168 = 0;
+                m_attackResult = 0;
             }
             if (frame == 3) {
                 vx = 0.7;
@@ -4842,17 +4842,17 @@ void CKaori::Vf6()
             if (frame == 0xe) {
                 frame = 0xd;
             }
-            if (frame == 0xd && unk168 > 0) {
+            if (frame == 0xd && m_attackResult > 0) {
                 frame = 0xe;
             }
             if (frame == 0xf) {
                 (*m_opponent)->unk14a = 0;
             }
-            if (frame == 0x11 && unk168 == 0) {
+            if (frame == 0x11 && m_attackResult == 0) {
                 ay = 0.035;
                 (*m_opponent)->unk14a = 0;
             }
-            if (frame == 0x12 && unk168 > 0) {
+            if (frame == 0x12 && m_attackResult > 0) {
                 (*m_opponent)->unk14a = 0;
                 vx = -2.5;
                 vy = -2.5;
@@ -4863,7 +4863,7 @@ void CKaori::Vf6()
             }
             if (frame >= x8) {
                 pattern = 3;
-                CPlayer::Unk40e630();
+                CPlayer::FaceOpponent();
                 Vf0();
             }
         }
@@ -4872,26 +4872,26 @@ void CKaori::Vf6()
         m_game->Unk4080c0(0xf);
         unk158 = 0;
         if (frame == 0 && timer == 0) {
-            CPlayer::Unk40f1e0();
+            CPlayer::StopMoving();
             CPlayer::Unk410a80(0x32, 0x2d);
             unk14c = 0x78;
             CPlayer::Unk410b10(0xb0, 3);
-            unk148 = unk148 - 0xbb8;
+            m_gauge = m_gauge - 0xbb8;
             l50.type = 0x46;
             l50.unk2c = 0x40;
             l50.x = (double)((int)x - facing);
             l50.y = (double)((int)y - 0x34);
-            l50.unk20 = 2;
+            l50.scale = 2;
             l50.unk0 = 1;
-            l50.unk21 = 1;
+            l50.layer = 1;
             m_game->CreateEffect((EffectDesc*)&l50);
             unk2c9 = 0x25;
             l50.type = 0x47;
             m_game->CreateEffect((EffectDesc*)&l50);
         }
-        if (unk168 == 6 && frame == 6) {
+        if (m_attackResult == 6 && frame == 6) {
             Vf0();
-            unk168 = 0;
+            m_attackResult = 0;
             unk14c = 0xa0;
             unk2c9 = 3;
             pattern = 0x13c;
@@ -4899,8 +4899,8 @@ void CKaori::Vf6()
             l50.type = 0;
             l50.x = (double)((int)x + facing * 0xa);
             l50.y = (double)((int)y - 0x28);
-            l50.unk20 = 2;
-            l50.unk21 = 1;
+            l50.scale = 2;
+            l50.layer = 1;
             m_game->CreateEffect((EffectDesc*)&l50);
             break;
         }
@@ -4908,10 +4908,10 @@ void CKaori::Vf6()
         if (timer >= l4) {
             timer = 0;
             frame++;
-            unk168 = 0;
+            m_attackResult = 0;
             if (frame >= x8) {
                 pattern = 0;
-                CPlayer::Unk40e630();
+                CPlayer::FaceOpponent();
                 Vf0();
             }
         }
@@ -4928,27 +4928,27 @@ void CKaori::Vf6()
             m_game->unk1420e = 0x7530;
             (*m_opponent)->m_game->unk1420e = 0x7530;
             m_game->unk1420c = 0x7530;
-            CPlayer::Unk4105a0(0x1388, 1000.0);
+            CPlayer::DealDamage(0x1388, 1000.0);
             (*m_opponent)->Vf0();
-            (*m_opponent)->Unk40f1e0();
+            (*m_opponent)->StopMoving();
             (*m_opponent)->pattern = 0x57;
             (*m_opponent)->unk128 = 1;
             unk2c9 = 0x24;
             l50.type = 0x198;
             l50.x = 0.0;
             l50.y = 0.0;
-            l50.unk20 = 0;
-            l50.unk24 = 1;
+            l50.scale = 0;
+            l50.screen = 1;
             l50.unk18 = 1;
-            l50.unk21 = 0;
+            l50.layer = 0;
             Vf9(&l50);
             l50.type = 0x199;
             l50.x = 0.0;
             l50.y = 0.0;
-            l50.unk20 = 0;
-            l50.unk24 = 1;
+            l50.scale = 0;
+            l50.screen = 1;
             l50.unk18 = 1;
-            l50.unk21 = 1;
+            l50.layer = 1;
             Vf9(&l50);
         }
         if (frame == 2 && timer == 0) {
@@ -4975,10 +4975,10 @@ void CKaori::Vf6()
         if (timer >= l4) {
             timer = 0;
             frame++;
-            unk168 = 0;
+            m_attackResult = 0;
             if (frame >= x8) {
                 pattern = 0;
-                CPlayer::Unk40e630();
+                CPlayer::FaceOpponent();
                 Vf0();
             }
         }

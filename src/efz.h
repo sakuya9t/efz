@@ -612,9 +612,11 @@ struct Afterimages {
 class CPlayer : public ObjBase {
 public:
     // FUNCTION: 0x40e630
-    int Unk40e630();
+    // Faces the opponent; returns whether the facing changed.
+    int FaceOpponent();
     // FUNCTION: 0x40e6c0
-    int Unk40e6c0(double p1);
+    // The same towards x = p1.
+    int FaceX(double p1);
     // FUNCTION: 0x40e740
     void Unk40e740();
     // FUNCTION: 0x40eae0
@@ -624,9 +626,11 @@ public:
     // FUNCTION: 0x40f170
     void Unk40f170();
     // FUNCTION: 0x40f190
-    void Unk40f190();
+    // Clears m_inputHistory and m_command.
+    void ClearInput();
     // FUNCTION: 0x40f1e0
-    void Unk40f1e0();
+    // Zeroes the velocity and acceleration.
+    void StopMoving();
     // FUNCTION: 0x40f230
     void Unk40f230();
     // FUNCTION: 0x40f470
@@ -650,19 +654,26 @@ public:
     // FUNCTION: 0x410420
     int Unk410420();
     // FUNCTION: 0x410480
-    double Unk410480();
+    // The attacker's damage factor, 1 + unk118 / 10000, scaled by the game settings.
+    double AttackFactor();
     // FUNCTION: 0x410530
-    double Unk410530();
+    // The defender's: from 1 at full HP to 0.5 at none, times m_defense.
+    double DefenseFactor();
     // FUNCTION: 0x410560
-    double Unk410560();
+    // m_proration as a factor, at most 1.
+    double ProrationFactor();
     // FUNCTION: 0x4105a0
-    void Unk4105a0(int p1, double p2);
+    // Takes p1 times the three factors off the opponent's HP, multiplies m_proration
+    // by p2 / 1000 and counts the hit in the combo and the score.
+    void DealDamage(int p1, double p2);
     // FUNCTION: 0x410790
     void Unk410790(int p1);
     // FUNCTION: 0x410840
-    void Unk410840(int p1);
+    void AddScore(int p1);
     // FUNCTION: 0x4108a0
-    short Unk4108a0(short p1, short p2);
+    // A random number from p1 up to p2: rand() while recording a replay, which stores it,
+    // or the replay's next word when playing one back (docs/compat.md).
+    short Random(short p1, short p2);
     // FUNCTION: 0x410940
     void Unk410940();
     // FUNCTION: 0x4109d0
@@ -746,14 +757,14 @@ public:
     double unke8;
     BYTE unkf0[0xf2 - 0xf0];
     short unkf2;
-    short unkf4;
+    short m_shownHits;      // +0xf4: the combo counter on screen
     BYTE unkf6[0xf8 - 0xf6];
-    double unkf8;
-    int unk100;
-    short unk104;
+    double m_shownProration; // +0xf8: the proration on screen, in percent
+    int m_comboDamage;      // +0x100: the current combo's damage so far
+    short m_comboTimer;     // +0x104: frames the combo counter stays on screen
     BYTE unk106[0x108 - 0x106];
-    int unk108;
-    int unk10c;
+    int m_hp;               // +0x108: 9999 full
+    int m_comboStartHp;     // +0x10c: m_hp when the combo against this player began
     int unk110;
     BYTE unk114[0x118 - 0x114];
     double unk118;
@@ -773,7 +784,7 @@ public:
     short unk140;
     BYTE unk142[0x144 - 0x142];
     int unk144;
-    short unk148;
+    short m_gauge;          // +0x148: the power gauge, a level per 1000, up to 3000
     short unk14a;
     short unk14c;
     short unk14e;
@@ -786,14 +797,15 @@ public:
     int unk15c;
     int unk160;
     PatternData* m_patterns; // +0x164: one per pattern, 505 of them
-    int unk168;
-    short unk16c;
+    int m_attackResult;     // +0x168: of the current attack: 0 none yet, 2 guarded, 3 hit,
+                            // 6 clashed
+    short m_hitsLeft;       // +0x16c: hits the current attack can still land
     BYTE unk16e[0x170 - 0x16e];
     int unk170;
-    short unk174;
+    short m_comboHits;      // +0x174: hits in the current combo
     BYTE unk176[0x178 - 0x176];
-    double unk178;
-    double unk180;
+    double m_proration;     // +0x178: the combo's damage scaling, 10000 = 100%
+    double m_defense;       // +0x180: the defender's damage factor, 1.0
     // This frame's input (Unk410b70): the direction relative to facing (1 forward, -1
     // back), up (-1) or down (1), and whether A-D went down this frame.
     char m_inputX;          // +0x188
@@ -817,7 +829,7 @@ public:
     char m_inputHistory[0xb4]; // +0x1ab
     BYTE unk25f;
     short m_inputPos;       // +0x260: the newest entry in m_inputHistory
-    short unk262;
+    short m_command;        // +0x262: the move m_inputHistory makes, 0x63 for none
     short unk264[0x32];     // the constructor sets all to 0x96
     char unk2c8;
     char unk2c9;
@@ -839,11 +851,11 @@ public:
     char unk30c0;
     BYTE unk30c1[0x30c4 - 0x30c1];
     int unk30c4;
-    int unk30c8;
-    int unk30cc;
-    int unk30d0;
-    int unk30d4;
-    int unk30d8;
+    int m_score;            // +0x30c8: below 100,000,000
+    int m_scoreHigh;        // +0x30cc: the score's hundred millions
+    int m_hitsLanded;       // +0x30d0
+    int m_maxHits;          // +0x30d4: the round's longest combo
+    int m_maxDamage;        // +0x30d8: the round's most damaging combo
     int unk30dc;
     int unk30e0;
     int unk30e4;
@@ -917,10 +929,10 @@ struct EffectDesc {
     BYTE unk19;
     short unk1a;
     int side;
-    BYTE unk20;  // copied to Effect::scale
-    BYTE unk21;  // copied to Effect::layer
+    BYTE scale;  // copied to Effect's
+    BYTE layer;
     short unk22;
-    int unk24;   // copied to Effect::screen
+    int screen;
     int unk28;
     BYTE unk2c;  // copied to Effect::unk6c
     BYTE unk2d;
@@ -1110,7 +1122,7 @@ public:
     BYTE unk14280;
     char unk14281;
     char unk14282;
-    char unk14283;
+    char m_replayMode;      // 1 playing a replay back, 2 recording one
     CReplayFile m_replay;
     int unk14294;                 // spawn counter for the ellipse effects (0x26, 0x35, 0x36)
     int unk14298;                 // random angle in degrees, 0..359

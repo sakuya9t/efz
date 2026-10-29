@@ -953,7 +953,7 @@ void CScene1::Unk7598d0()
                 unk53e[1] = -1;
             }
         }
-        m_game->unk14283 = 0;
+        m_game->m_replayMode = 0;
     }
     memset((void*)&unk544[0], 0, 0x17);
     if (m_game->m_extraChars == 0) {

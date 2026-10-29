@@ -62,7 +62,7 @@ void CMisaki::Vf6()
         vx = 0.0;
         vy = 0.0;
         unk158 = 0;
-        CPlayer::Unk40e630();
+        CPlayer::FaceOpponent();
         timer++;
         if (timer >= l4) {
             timer = 0;
@@ -75,7 +75,7 @@ void CMisaki::Vf6()
     case 4:
         if (frame == 0 && timer == 0) {
             if (unk158 == 0) {
-                CPlayer::Unk40e630();
+                CPlayer::FaceOpponent();
             }
             vx = 0.0;
         }
@@ -102,7 +102,7 @@ void CMisaki::Vf6()
         if (y + vy >= 0.0 && frame > 3) {
             y = 0.0;
             unk2c9 = 9;
-            CPlayer::Unk40e630();
+            CPlayer::FaceOpponent();
             pattern = 0xd;
             Vf0();
         }
@@ -110,7 +110,7 @@ void CMisaki::Vf6()
     case 5:
         if (frame == 0 && timer == 0) {
             if (unk158 == 0) {
-                CPlayer::Unk40e630();
+                CPlayer::FaceOpponent();
             }
             vx = 0.0;
         }
@@ -138,7 +138,7 @@ void CMisaki::Vf6()
         if (y + vy >= 0.0 && frame > 3) {
             y = 0.0;
             unk2c9 = 9;
-            CPlayer::Unk40e630();
+            CPlayer::FaceOpponent();
             pattern = 0xd;
             Vf0();
         }
@@ -146,7 +146,7 @@ void CMisaki::Vf6()
     case 6:
         if (frame == 0 && timer == 0) {
             if (unk158 == 0) {
-                CPlayer::Unk40e630();
+                CPlayer::FaceOpponent();
             }
             vx = 0.0;
         }
@@ -170,7 +170,7 @@ void CMisaki::Vf6()
         if (y + vy >= 0.0 && frame > 3) {
             y = 0.0;
             unk2c9 = 9;
-            CPlayer::Unk40e630();
+            CPlayer::FaceOpponent();
             pattern = 0xd;
             Vf0();
         }
@@ -179,7 +179,7 @@ void CMisaki::Vf6()
         vx = 0.0;
         vy = 0.0;
         unk158 = 0;
-        CPlayer::Unk40e630();
+        CPlayer::FaceOpponent();
         timer++;
         if (timer >= l4) {
             timer = 0;
@@ -194,7 +194,7 @@ void CMisaki::Vf6()
         vx = 0.0;
         vy = 0.0;
         unk158 = 0;
-        CPlayer::Unk40e630();
+        CPlayer::FaceOpponent();
         timer++;
         if (timer >= l4) {
             timer = 0;
@@ -227,7 +227,7 @@ void CMisaki::Vf6()
         vx = 0.0;
         vy = 0.0;
         unk158 = 0;
-        CPlayer::Unk40e630();
+        CPlayer::FaceOpponent();
         timer++;
         if (timer >= l4) {
             timer = 0;
@@ -260,7 +260,7 @@ void CMisaki::Vf6()
         if (y + vy >= 0.0 && frame > 3) {
             y = 0.0;
             unk2c9 = 9;
-            CPlayer::Unk40e630();
+            CPlayer::FaceOpponent();
             pattern = 0xd;
             Vf0();
         }
@@ -284,7 +284,7 @@ void CMisaki::Vf6()
         if (y + vy >= 0.0 && frame > 3) {
             y = 0.0;
             unk2c9 = 9;
-            CPlayer::Unk40e630();
+            CPlayer::FaceOpponent();
             pattern = 0xd;
             Vf0();
         }
@@ -308,7 +308,7 @@ void CMisaki::Vf6()
         if (y + vy >= 0.0 && frame > 3) {
             y = 0.0;
             unk2c9 = 9;
-            CPlayer::Unk40e630();
+            CPlayer::FaceOpponent();
             pattern = 0xd;
             Vf0();
         }
@@ -346,8 +346,8 @@ void CMisaki::Vf6()
         }
         unk158 = 0;
         if (frame == 0 && timer == 0) {
-            unk148 = unk148 + 0xa;
-            vx = (2.0 - (*m_opponent)->unk178 / 10000.0) * -1.1;
+            m_gauge = m_gauge + 0xa;
+            vx = (2.0 - (*m_opponent)->m_proration / 10000.0) * -1.1;
             if (unk120 != 0) {
                 unk118 -= 10.0;
             }
@@ -382,8 +382,8 @@ void CMisaki::Vf6()
         }
         unk158 = 0;
         if (frame == 0 && timer == 0) {
-            unk148 = unk148 + 0xf;
-            vx = (2.0 - (*m_opponent)->unk178 / 10000.0) * -1.5;
+            m_gauge = m_gauge + 0xf;
+            vx = (2.0 - (*m_opponent)->m_proration / 10000.0) * -1.5;
             if (unk120 != 0) {
                 unk118 -= 20.0;
             }
@@ -418,8 +418,8 @@ void CMisaki::Vf6()
         }
         unk158 = 0;
         if (frame == 0 && timer == 0) {
-            unk148 = unk148 + 0x14;
-            vx = (2.0 - (*m_opponent)->unk178 / 10000.0) * -1.8;
+            m_gauge = m_gauge + 0x14;
+            vx = (2.0 - (*m_opponent)->m_proration / 10000.0) * -1.8;
             if (unk120 != 0) {
                 unk118 -= 30.0;
             }
@@ -454,8 +454,8 @@ void CMisaki::Vf6()
         }
         unk158 = 0;
         if (frame == 0 && timer == 0) {
-            unk148 = unk148 + 0xa;
-            vx = (2.0 - (*m_opponent)->unk178 / 10000.0) * -1.1;
+            m_gauge = m_gauge + 0xa;
+            vx = (2.0 - (*m_opponent)->m_proration / 10000.0) * -1.1;
             if (unk120 != 0) {
                 unk118 -= 10.0;
             }
@@ -490,8 +490,8 @@ void CMisaki::Vf6()
         }
         unk158 = 0;
         if (frame == 0 && timer == 0) {
-            unk148 = unk148 + 0xf;
-            vx = (2.0 - (*m_opponent)->unk178 / 10000.0) * -1.5;
+            m_gauge = m_gauge + 0xf;
+            vx = (2.0 - (*m_opponent)->m_proration / 10000.0) * -1.5;
             if (unk120 != 0) {
                 unk118 -= 20.0;
             }
@@ -526,8 +526,8 @@ void CMisaki::Vf6()
         }
         unk158 = 0;
         if (frame == 0 && timer == 0) {
-            unk148 = unk148 + 0x14;
-            vx = (2.0 - (*m_opponent)->unk178 / 10000.0) * -1.8;
+            m_gauge = m_gauge + 0x14;
+            vx = (2.0 - (*m_opponent)->m_proration / 10000.0) * -1.8;
             if (unk120 != 0) {
                 unk118 -= 30.0;
             }
@@ -562,8 +562,8 @@ void CMisaki::Vf6()
         }
         unk158 = 0;
         if (frame == 0 && timer == 0) {
-            unk148 = unk148 + 0xa;
-            vx = (2.0 - (*m_opponent)->unk178 / 10000.0) * -1.1;
+            m_gauge = m_gauge + 0xa;
+            vx = (2.0 - (*m_opponent)->m_proration / 10000.0) * -1.1;
             if (unk120 != 0) {
                 unk118 -= 10.0;
             }
@@ -595,8 +595,8 @@ void CMisaki::Vf6()
         }
         unk158 = 0;
         if (frame == 0 && timer == 0) {
-            unk148 = unk148 + 0xf;
-            vx = (2.0 - (*m_opponent)->unk178 / 10000.0) * -1.5;
+            m_gauge = m_gauge + 0xf;
+            vx = (2.0 - (*m_opponent)->m_proration / 10000.0) * -1.5;
             if (unk120 != 0) {
                 unk118 -= 20.0;
             }
@@ -628,8 +628,8 @@ void CMisaki::Vf6()
         }
         unk158 = 0;
         if (frame == 0 && timer == 0) {
-            unk148 = unk148 + 0x14;
-            vx = (2.0 - (*m_opponent)->unk178 / 10000.0) * -1.8;
+            m_gauge = m_gauge + 0x14;
+            vx = (2.0 - (*m_opponent)->m_proration / 10000.0) * -1.8;
             if (unk120 != 0) {
                 unk118 -= 30.0;
             }
@@ -660,7 +660,7 @@ void CMisaki::Vf6()
             unk118 -= 0.8;
         }
         if (frame == 0 && timer == 0) {
-            unk148 = unk148 + 0x1e;
+            m_gauge = m_gauge + 0x1e;
             vx = unkc0;
             vy = vy * 0.75 + unkc8;
             if (vy < -2.0) {
@@ -703,7 +703,7 @@ void CMisaki::Vf6()
             unk118 -= 0.8;
         }
         if (frame == 0 && timer == 0) {
-            unk148 = unk148 + 0x1e;
+            m_gauge = m_gauge + 0x1e;
             vx = unkc0;
             vy = vy * 0.75 + unkc8;
             if (vy < -4.0) {
@@ -746,7 +746,7 @@ void CMisaki::Vf6()
             unk118 -= 0.8;
         }
         if (frame == 0 && timer == 0) {
-            unk148 = unk148 + 0x1e;
+            m_gauge = m_gauge + 0x1e;
             vx = unkc0;
             vy = vy * 0.75 + unkc8;
             if (vy < -6.0) {
@@ -789,7 +789,7 @@ void CMisaki::Vf6()
             unk118 -= 0.8;
         }
         if (frame == 0 && timer == 0) {
-            unk148 = unk148 + 0x1e;
+            m_gauge = m_gauge + 0x1e;
             vx = unkc0;
             vy = vy * 0.75 + unkc8;
             ay = 0.032;
@@ -827,7 +827,7 @@ void CMisaki::Vf6()
             unk118 -= 0.8;
         }
         if (frame == 0 && timer == 0) {
-            unk148 = unk148 + 0x1e;
+            m_gauge = m_gauge + 0x1e;
             vx = unkc0;
             vy = unkc8;
             ay = 0.032;
@@ -870,7 +870,7 @@ void CMisaki::Vf6()
             break;
         }
         if (frame == 0 && timer == 0) {
-            unk148 = unk148 + 0x1e;
+            m_gauge = m_gauge + 0x1e;
             vx = unkc0;
             vy = vy * 0.75 + unkc8;
             if (vy < -2.0) {
@@ -918,7 +918,7 @@ void CMisaki::Vf6()
             break;
         }
         if (frame == 0 && timer == 0) {
-            unk148 = unk148 + 0x1e;
+            m_gauge = m_gauge + 0x1e;
             vx = unkc0;
             vy = vy * 0.75 + unkc8;
             if (vy < -4.0) {
@@ -966,7 +966,7 @@ void CMisaki::Vf6()
             break;
         }
         if (frame == 0 && timer == 0) {
-            unk148 = unk148 + 0x1e;
+            m_gauge = m_gauge + 0x1e;
             vx = unkc0;
             vy = vy * 0.75 + unkc8;
             ay = 0.032;
@@ -1009,7 +1009,7 @@ void CMisaki::Vf6()
             break;
         }
         if (frame == 0 && timer == 0) {
-            unk148 = unk148 + 0x1e;
+            m_gauge = m_gauge + 0x1e;
             vx = unkc0;
             vy = unkc8;
             ay = 0.032;
@@ -1046,7 +1046,7 @@ void CMisaki::Vf6()
         if (unk120 != 0) {
             unk118 -= 1.5;
         }
-        unk148 = unk148 + 3;
+        m_gauge = m_gauge + 3;
         vx = unkc0;
         vy = unkc8;
         timer++;
@@ -1077,7 +1077,7 @@ void CMisaki::Vf6()
         if (unk120 != 0) {
             unk118 -= 1.5;
         }
-        unk148 = unk148 + 3;
+        m_gauge = m_gauge + 3;
         vx = unkc0;
         vy = unkc8;
         timer++;
@@ -1104,7 +1104,7 @@ void CMisaki::Vf6()
             unk118 -= 0.8;
         }
         if (frame == 0 && timer == 0 && unk3138 == 0) {
-            unk148 = unk148 + 0x1e;
+            m_gauge = m_gauge + 0x1e;
             unk3138++;
             unk124 = unk124 + 0x78;
             vx = 0.5;
@@ -1114,8 +1114,8 @@ void CMisaki::Vf6()
             l50.type = 0;
             l50.x = (double)(int)x;
             l50.y = (double)(int)y;
-            l50.unk20 = 2;
-            l50.unk21 = 1;
+            l50.scale = 2;
+            l50.layer = 1;
             m_game->CreateEffect((EffectDesc*)&l50);
         }
         vy = vy + ay;
@@ -1143,7 +1143,7 @@ void CMisaki::Vf6()
             unk118 -= 0.8;
         }
         if (frame == 0 && timer == 0) {
-            unk148 = unk148 + 0x1e;
+            m_gauge = m_gauge + 0x1e;
             vx = unkc0;
             vy = unkc8;
             ay = 0.072;
@@ -1254,7 +1254,7 @@ void CMisaki::Vf6()
         }
         unk158 = 0;
         if (frame == 0 && timer == 0) {
-            unk148 = unk148 + 0x1e;
+            m_gauge = m_gauge + 0x1e;
             if (unk120 != 0) {
                 unk118 -= 30.0;
             }
@@ -1292,7 +1292,7 @@ void CMisaki::Vf6()
         }
         unk158 = 0;
         if (frame == 0 && timer == 0) {
-            unk148 = unk148 + 0x1e;
+            m_gauge = m_gauge + 0x1e;
             if (unk120 != 0) {
                 unk118 -= 30.0;
             }
@@ -1330,7 +1330,7 @@ void CMisaki::Vf6()
         }
         unk158 = 0;
         if (frame == 0 && timer == 0) {
-            unk148 = unk148 + 0x1e;
+            m_gauge = m_gauge + 0x1e;
             if (unk120 != 0) {
                 unk118 -= 30.0;
             }
@@ -1368,9 +1368,9 @@ void CMisaki::Vf6()
             l50.x = (double)(int)x;
             l50.y = (double)(int)y;
             l50.unk18 = facing;
-            l50.unk21 = 1;
+            l50.layer = 1;
             Vf9(&l50);
-            unk148 = unk148 + 0x1e;
+            m_gauge = m_gauge + 0x1e;
             vx = unkc0;
             vy = unkc8;
             ay = 0.032;
@@ -1408,7 +1408,7 @@ void CMisaki::Vf6()
             vy = -0.45;
             vx = -0.1;
             unk3138++;
-            unk148 = unk148 + 0x1e;
+            m_gauge = m_gauge + 0x1e;
         }
         if (frame == 4 && timer == 0) {
             vx = unkc0;
@@ -1451,8 +1451,8 @@ void CMisaki::Vf6()
                 l50.type = 0x1f0;
                 l50.x = (double)(int)x;
                 l50.y = (double)(int)y;
-                l50.unk20 = 0;
-                l50.unk21 = 0;
+                l50.scale = 0;
+                l50.layer = 0;
                 l50.unk0 = 1;
                 l50.unk18 = facing;
                 Vf9(&l50);
@@ -1464,7 +1464,7 @@ void CMisaki::Vf6()
             unk2c9 = 0x21;
             vy = -1.5;
             vx = -0.8;
-            unk148 = unk148 + 0x1e;
+            m_gauge = m_gauge + 0x1e;
         }
         vy += 0.04;
         if (frame == 0 && vy + y > 0.0) {
@@ -1493,7 +1493,7 @@ void CMisaki::Vf6()
             if (frame >= x8) {
                 pattern = 0;
                 Vf0();
-                CPlayer::Unk40e630();
+                CPlayer::FaceOpponent();
             }
         }
         break;
@@ -1503,8 +1503,8 @@ void CMisaki::Vf6()
                 l50.type = 0x1f0;
                 l50.x = (double)(int)x;
                 l50.y = (double)(int)y;
-                l50.unk20 = 0;
-                l50.unk21 = 0;
+                l50.scale = 0;
+                l50.layer = 0;
                 l50.unk0 = 1;
                 l50.unk18 = facing;
                 Vf9(&l50);
@@ -1516,7 +1516,7 @@ void CMisaki::Vf6()
             unk2c9 = 0x21;
             vy = -1.5;
             vx = -0.8;
-            unk148 = unk148 + 0x1e;
+            m_gauge = m_gauge + 0x1e;
         }
         vy += 0.04;
         if (frame == 0 && vy + y > 0.0) {
@@ -1545,7 +1545,7 @@ void CMisaki::Vf6()
             if (frame >= x8) {
                 pattern = 0;
                 Vf0();
-                CPlayer::Unk40e630();
+                CPlayer::FaceOpponent();
             }
         }
         break;
@@ -1555,8 +1555,8 @@ void CMisaki::Vf6()
                 l50.type = 0x1f0;
                 l50.x = (double)(int)x;
                 l50.y = (double)(int)y;
-                l50.unk20 = 0;
-                l50.unk21 = 0;
+                l50.scale = 0;
+                l50.layer = 0;
                 l50.unk0 = 1;
                 l50.unk18 = facing;
                 Vf9(&l50);
@@ -1568,7 +1568,7 @@ void CMisaki::Vf6()
             unk2c9 = 0x21;
             vx = unkc0;
             vy = unkc8;
-            unk148 = unk148 + 0x1e;
+            m_gauge = m_gauge + 0x1e;
         }
         vy += 0.04;
         timer++;
@@ -1578,7 +1578,7 @@ void CMisaki::Vf6()
             if (frame >= x8) {
                 pattern = 0;
                 Vf0();
-                CPlayer::Unk40e630();
+                CPlayer::FaceOpponent();
             }
         }
         if (y + vy >= 0.0) {
@@ -1598,8 +1598,8 @@ void CMisaki::Vf6()
                 l50.type = 0x1f0;
                 l50.x = (double)(int)x;
                 l50.y = (double)(int)y;
-                l50.unk20 = 0;
-                l50.unk21 = 0;
+                l50.scale = 0;
+                l50.layer = 0;
                 l50.unk0 = 1;
                 l50.unk18 = facing;
                 Vf9(&l50);
@@ -1612,7 +1612,7 @@ void CMisaki::Vf6()
                 unk2c9 = 0x21;
                 vx = unkc0;
                 vy = unkc8;
-                unk148 = unk148 + 0x1e;
+                m_gauge = m_gauge + 0x1e;
                 unk3138++;
             }
         }
@@ -1641,10 +1641,10 @@ void CMisaki::Vf6()
             l50.type = 0x1ef;
             l50.x = 60.0;
             l50.y = 40.0;
-            l50.unk24 = 1;
+            l50.screen = 1;
             l50.unk18 = 1;
-            l50.unk20 = 0;
-            l50.unk21 = 0;
+            l50.scale = 0;
+            l50.layer = 0;
             Vf9(&l50);
         }
         timer++;
@@ -1663,7 +1663,7 @@ void CMisaki::Vf6()
             timer = 0;
             frame++;
             if (frame == x8 - 1) {
-                CPlayer::Unk40e630();
+                CPlayer::FaceOpponent();
             }
             if (frame >= x8) {
                 pattern = 7;
@@ -1682,8 +1682,8 @@ void CMisaki::Vf6()
             l50.type = 3;
             l50.x = (double)(int)x;
             l50.y = (double)(int)y;
-            l50.unk20 = 2;
-            l50.unk21 = 0;
+            l50.scale = 2;
+            l50.layer = 0;
             m_game->CreateEffect((EffectDesc*)&l50);
             unk2c9 = 7;
         }
@@ -1705,8 +1705,8 @@ void CMisaki::Vf6()
             l50.type = 3;
             l50.x = (double)(int)x;
             l50.y = (double)(int)y;
-            l50.unk20 = 2;
-            l50.unk21 = 0;
+            l50.scale = 2;
+            l50.layer = 0;
             m_game->CreateEffect((EffectDesc*)&l50);
             unk2c9 = 7;
         }
@@ -1721,7 +1721,7 @@ void CMisaki::Vf6()
         }
         break;
     case 0x63:
-        if (unk108 > 0 && timer > 0x63 && frame == 0) {
+        if (m_hp > 0 && timer > 0x63 && frame == 0) {
             pattern = 0x60;
             Vf0();
             unk158 = 0;
@@ -1731,7 +1731,7 @@ void CMisaki::Vf6()
             timer = 0;
             frame++;
             if (frame == x8) {
-                CPlayer::Unk40e630();
+                CPlayer::FaceOpponent();
             }
             if (frame >= x8) {
                 pattern = 0x60;
@@ -1748,7 +1748,7 @@ void CMisaki::Vf6()
         }
         if (frame == 0 && timer == 0) {
             unk158 = 0;
-            unk148 = unk148 + 0xa;
+            m_gauge = m_gauge + 0xa;
             vx = -1.5;
             vy = 0.0;
             y = 0.0;
@@ -1768,7 +1768,7 @@ void CMisaki::Vf6()
             timer = 0;
             frame++;
             if (frame == x8) {
-                CPlayer::Unk40e630();
+                CPlayer::FaceOpponent();
             }
             if (frame >= x8) {
                 pattern = 0;
@@ -1788,7 +1788,7 @@ void CMisaki::Vf6()
         }
         if (frame == 0 && timer == 0) {
             unk158 = 0;
-            unk148 = unk148 + 0xf;
+            m_gauge = m_gauge + 0xf;
             vx = -1.8;
             vy = 0.0;
             y = 0.0;
@@ -1808,7 +1808,7 @@ void CMisaki::Vf6()
             timer = 0;
             frame++;
             if (frame == x8) {
-                CPlayer::Unk40e630();
+                CPlayer::FaceOpponent();
             }
             if (frame >= x8) {
                 pattern = 0;
@@ -1828,7 +1828,7 @@ void CMisaki::Vf6()
         }
         if (frame == 0 && timer == 0) {
             unk158 = 0;
-            unk148 = unk148 + 0x14;
+            m_gauge = m_gauge + 0x14;
             vx = -2.3;
             vy = 0.0;
             y = 0.0;
@@ -1848,7 +1848,7 @@ void CMisaki::Vf6()
             timer = 0;
             frame++;
             if (frame == x8) {
-                CPlayer::Unk40e630();
+                CPlayer::FaceOpponent();
             }
             if (frame >= x8) {
                 pattern = 0;
@@ -1868,7 +1868,7 @@ void CMisaki::Vf6()
         }
         if (frame == 0 && timer == 0) {
             unk158 = 0;
-            unk148 = unk148 + 0xa;
+            m_gauge = m_gauge + 0xa;
             vx = -1.5;
             vy = 0.0;
             y = 0.0;
@@ -1888,7 +1888,7 @@ void CMisaki::Vf6()
             timer = 0;
             frame++;
             if (frame == x8) {
-                CPlayer::Unk40e630();
+                CPlayer::FaceOpponent();
             }
             if (frame >= x8) {
                 pattern = 3;
@@ -1905,7 +1905,7 @@ void CMisaki::Vf6()
         }
         if (frame == 0 && timer == 0) {
             unk158 = 0;
-            unk148 = unk148 + 0xf;
+            m_gauge = m_gauge + 0xf;
             vx = -1.8;
             vy = 0.0;
             y = 0.0;
@@ -1925,7 +1925,7 @@ void CMisaki::Vf6()
             timer = 0;
             frame++;
             if (frame == x8) {
-                CPlayer::Unk40e630();
+                CPlayer::FaceOpponent();
             }
             if (frame >= x8) {
                 pattern = 3;
@@ -1942,7 +1942,7 @@ void CMisaki::Vf6()
         }
         if (frame == 0 && timer == 0) {
             unk158 = 0;
-            unk148 = unk148 + 0x14;
+            m_gauge = m_gauge + 0x14;
             vx = -2.3;
             vy = 0.0;
             y = 0.0;
@@ -1962,7 +1962,7 @@ void CMisaki::Vf6()
             timer = 0;
             frame++;
             if (frame == x8) {
-                CPlayer::Unk40e630();
+                CPlayer::FaceOpponent();
             }
             if (frame >= x8) {
                 pattern = 3;
@@ -1973,7 +1973,7 @@ void CMisaki::Vf6()
     case 0x9c:
         if (frame == 0 && timer == 0) {
             vy = -2.6;
-            unk148 = unk148 + 0xf;
+            m_gauge = m_gauge + 0xf;
             ay = 0.06;
         }
         vx = -1.2;
@@ -1990,7 +1990,7 @@ void CMisaki::Vf6()
         if (y + vy >= 0.0) {
             y = 0.0;
             unk2c9 = 9;
-            CPlayer::Unk40e630();
+            CPlayer::FaceOpponent();
             pattern = 0xd;
             Vf0();
         }
@@ -2004,8 +2004,8 @@ void CMisaki::Vf6()
             l50.type = 8;
             l50.x = (double)(int)x;
             l50.y = (double)(int)y;
-            l50.unk20 = 2;
-            l50.unk21 = 0;
+            l50.scale = 2;
+            l50.layer = 0;
             m_game->CreateEffect((EffectDesc*)&l50);
         } else {
             vy = vy + ay;
@@ -2022,7 +2022,7 @@ void CMisaki::Vf6()
         if (y + vy >= 0.0) {
             y = 0.0;
             unk2c9 = 9;
-            CPlayer::Unk40e630();
+            CPlayer::FaceOpponent();
             pattern = 0xd;
             Vf0();
         }
@@ -2036,8 +2036,8 @@ void CMisaki::Vf6()
             l50.type = 8;
             l50.x = (double)(int)x;
             l50.y = (double)(int)y;
-            l50.unk20 = 2;
-            l50.unk21 = 0;
+            l50.scale = 2;
+            l50.layer = 0;
             m_game->CreateEffect((EffectDesc*)&l50);
         } else {
             vy = vy + ay;
@@ -2054,21 +2054,21 @@ void CMisaki::Vf6()
         if (y + vy >= 0.0) {
             y = 0.0;
             unk2c9 = 9;
-            CPlayer::Unk40e630();
+            CPlayer::FaceOpponent();
             pattern = 0xd;
             Vf0();
         }
         break;
     case 0xa1:
         if (frame == 0 && timer == 0) {
-            CPlayer::Unk40f1e0();
+            CPlayer::StopMoving();
             l50.type = 9;
             l50.x = (double)(int)x;
             l50.y = (double)((int)y - 0x3c);
-            l50.unk20 = 2;
-            l50.unk21 = 1;
+            l50.scale = 2;
+            l50.layer = 1;
             m_game->CreateEffect((EffectDesc*)&l50);
-            unk16c = 1;
+            m_hitsLeft = 1;
             unk2c9 = 0x3e;
             unk3138++;
         }
@@ -2085,24 +2085,24 @@ void CMisaki::Vf6()
         break;
     case 0xa2:
         if (frame == 0 && timer == 0) {
-            CPlayer::Unk40f1e0();
+            CPlayer::StopMoving();
         }
         if (frame == 3 && timer == 0) {
             vy = -1.5;
             ay = 0.025;
-            unk16c = 1;
+            m_hitsLeft = 1;
         }
         if (frame == 6 && timer == 0) {
-            CPlayer::Unk40f1e0();
+            CPlayer::StopMoving();
             l50.type = 9;
             l50.x = (double)(int)x;
             l50.y = (double)((int)y - 0x3c);
-            l50.unk20 = 2;
-            l50.unk21 = 1;
+            l50.scale = 2;
+            l50.layer = 1;
             m_game->CreateEffect((EffectDesc*)&l50);
-            unk16c = 1;
+            m_hitsLeft = 1;
             unk2c9 = 0x3e;
-            unk148 = unk148 - 0x3e8;
+            m_gauge = m_gauge - 0x3e8;
             unk3138++;
         }
         vy = vy + ay;
@@ -2128,7 +2128,7 @@ void CMisaki::Vf6()
     case 0xa3:
         if (frame == 0 && timer == 0) {
             CPlayer::Unk4109d0(3);
-            CPlayer::Unk40f1e0();
+            CPlayer::StopMoving();
         }
         if (m_inputY == -1 && frame > 0) {
             pattern = 4;
@@ -2138,7 +2138,7 @@ void CMisaki::Vf6()
             if (m_inputX == -facing) {
                 pattern = 6;
             }
-            unk168 = 0;
+            m_attackResult = 0;
             Vf0();
             break;
         }
@@ -2227,7 +2227,7 @@ void CMisaki::Vf6()
             Vf0();
             vx = 1.3;
             ay = 0.03;
-            if (CPlayer::Unk40e630() != 0) {
+            if (CPlayer::FaceOpponent() != 0) {
                 vx = -vx;
             }
         }
@@ -2236,7 +2236,7 @@ void CMisaki::Vf6()
             Vf0();
             vx = 1.3;
             ay = 0.03;
-            if (CPlayer::Unk40e630() != 0) {
+            if (CPlayer::FaceOpponent() != 0) {
                 vx = -vx;
             }
         }
@@ -2264,7 +2264,7 @@ void CMisaki::Vf6()
             Vf0();
             vx = -0.9;
             ay = 0.03;
-            if (CPlayer::Unk40e630() != 0) {
+            if (CPlayer::FaceOpponent() != 0) {
                 vx = -vx;
             }
         }
@@ -2273,7 +2273,7 @@ void CMisaki::Vf6()
             Vf0();
             vx = -0.9;
             ay = 0.03;
-            if (CPlayer::Unk40e630() != 0) {
+            if (CPlayer::FaceOpponent() != 0) {
                 vx = -vx;
             }
         }
@@ -2284,7 +2284,7 @@ void CMisaki::Vf6()
             vx = 0.0;
             vy = 0.0;
             if (unk120 == 1) {
-                unk178 = unk118 * 5.0 + unk178;
+                m_proration = unk118 * 5.0 + m_proration;
             }
             unk118 = 0.0;
             unk14c = 0x5a;
@@ -2295,26 +2295,26 @@ void CMisaki::Vf6()
             l50.type = 1;
             l50.x = (double)(int)x;
             l50.y = (double)(int)y;
-            l50.unk20 = 2;
-            l50.unk21 = 1;
+            l50.scale = 2;
+            l50.layer = 1;
             m_game->CreateEffect((EffectDesc*)&l50);
         }
         if (frame == 2 && timer == 0) {
             l50.type = 4;
             l50.x = (double)(int)x;
             l50.y = (double)(int)y;
-            l50.unk20 = 2;
-            l50.unk21 = 1;
+            l50.scale = 2;
+            l50.layer = 1;
             m_game->CreateEffect((EffectDesc*)&l50);
         }
         timer++;
         if (timer >= l4) {
             timer = 0;
             frame++;
-            unk168 = 0;
+            m_attackResult = 0;
             if (frame >= x8) {
                 pattern = 0;
-                CPlayer::Unk40e630();
+                CPlayer::FaceOpponent();
                 Vf0();
             }
         }
@@ -2332,8 +2332,8 @@ void CMisaki::Vf6()
             l50.type = 8;
             l50.x = (double)(int)x;
             l50.y = (double)(int)y;
-            l50.unk20 = 2;
-            l50.unk21 = 1;
+            l50.scale = 2;
+            l50.layer = 1;
             m_game->CreateEffect((EffectDesc*)&l50);
         }
         timer++;
@@ -2341,7 +2341,7 @@ void CMisaki::Vf6()
             timer = 0;
             frame++;
             if (frame == x8) {
-                CPlayer::Unk40e630();
+                CPlayer::FaceOpponent();
             }
             if (frame >= x8) {
                 pattern = 0;
@@ -2362,8 +2362,8 @@ void CMisaki::Vf6()
             l50.type = 8;
             l50.x = (double)(int)x;
             l50.y = (double)(int)y;
-            l50.unk20 = 2;
-            l50.unk21 = 1;
+            l50.scale = 2;
+            l50.layer = 1;
             m_game->CreateEffect((EffectDesc*)&l50);
         }
         timer++;
@@ -2371,7 +2371,7 @@ void CMisaki::Vf6()
             timer = 0;
             frame++;
             if (frame == x8) {
-                CPlayer::Unk40e630();
+                CPlayer::FaceOpponent();
             }
             if (frame >= x8) {
                 pattern = 3;
@@ -2401,7 +2401,7 @@ void CMisaki::Vf6()
             vy = vy + ay;
         }
         if (vy + y > 0.0) {
-            CPlayer::Unk40f1e0();
+            CPlayer::StopMoving();
             y = 0.0;
             pattern = 0xa9;
             break;
@@ -2423,7 +2423,7 @@ void CMisaki::Vf6()
             vx = 0.0;
             vy = 0.0;
             if (unk120 == 1) {
-                unk178 = unk118 * 5.0 + unk178;
+                m_proration = unk118 * 5.0 + m_proration;
             }
             unk118 = 0.0;
             unk14c = 0x5a;
@@ -2434,23 +2434,23 @@ void CMisaki::Vf6()
             l50.type = 1;
             l50.x = (double)(int)x;
             l50.y = (double)(int)y;
-            l50.unk20 = 2;
-            l50.unk21 = 1;
+            l50.scale = 2;
+            l50.layer = 1;
             m_game->CreateEffect((EffectDesc*)&l50);
         }
         if (frame == 2 && timer == 0) {
             l50.type = 4;
             l50.x = (double)(int)x;
             l50.y = (double)(int)y;
-            l50.unk20 = 2;
-            l50.unk21 = 1;
+            l50.scale = 2;
+            l50.layer = 1;
             m_game->CreateEffect((EffectDesc*)&l50);
         }
         timer++;
         if (timer >= l4) {
             timer = 0;
             frame++;
-            unk168 = 0;
+            m_attackResult = 0;
             if (frame >= x8) {
                 pattern = 9;
                 vx = unk3138 * 0.01;
@@ -2475,7 +2475,7 @@ void CMisaki::Vf6()
             if (m_inputX == -facing) {
                 pattern = 6;
             }
-            unk168 = 0;
+            m_attackResult = 0;
             Vf0();
             break;
         }
@@ -2501,7 +2501,7 @@ void CMisaki::Vf6()
             vy = vy + ay;
         }
         if (y + vy > 0.0 && frame < 0xa) {
-            CPlayer::Unk40f1e0();
+            CPlayer::StopMoving();
             y = 0.0;
             timer = 0;
             frame = 0xa;
@@ -2536,7 +2536,7 @@ void CMisaki::Vf6()
             vx = 0.0;
             unk158 = 0;
         }
-        if (m_inputY == -1 && frame > 0 && unk15c < 3 && unk168 >= 2) {
+        if (m_inputY == -1 && frame > 0 && unk15c < 3 && m_attackResult >= 2) {
             pattern = 4;
             if (m_inputX == facing) {
                 pattern = 5;
@@ -2544,25 +2544,25 @@ void CMisaki::Vf6()
             if (m_inputX == -facing) {
                 pattern = 6;
             }
-            unk168 = 0;
+            m_attackResult = 0;
             Vf0();
             break;
         }
         if (frame == 2 && timer == 0) {
-            unk148 = unk148 + 5;
+            m_gauge = m_gauge + 5;
             unk2c9 = 0x15;
-            unk16c = 1;
+            m_hitsLeft = 1;
         }
         timer++;
         if (timer >= l4) {
             timer = 0;
             frame++;
             if (frame < 3) {
-                unk168 = 0;
+                m_attackResult = 0;
             }
             if (frame >= x8) {
                 pattern = 0;
-                CPlayer::Unk40e630();
+                CPlayer::FaceOpponent();
                 Vf0();
             }
         }
@@ -2578,7 +2578,7 @@ void CMisaki::Vf6()
             vx = 0.0;
             unk158 = 0;
         }
-        if (m_inputY == -1 && frame > 0 && unk15c < 3 && unk168 >= 2) {
+        if (m_inputY == -1 && frame > 0 && unk15c < 3 && m_attackResult >= 2) {
             pattern = 4;
             if (m_inputX == facing) {
                 pattern = 5;
@@ -2586,25 +2586,25 @@ void CMisaki::Vf6()
             if (m_inputX == -facing) {
                 pattern = 6;
             }
-            unk168 = 0;
+            m_attackResult = 0;
             Vf0();
             break;
         }
         if (frame == 3 && timer == 0) {
-            unk148 = unk148 + 0xf;
+            m_gauge = m_gauge + 0xf;
             unk2c9 = 0x14;
-            unk16c = 1;
+            m_hitsLeft = 1;
         }
         timer++;
         if (timer >= l4) {
             timer = 0;
             frame++;
             if (frame < 3) {
-                unk168 = 0;
+                m_attackResult = 0;
             }
             if (frame >= x8) {
                 pattern = 0;
-                CPlayer::Unk40e630();
+                CPlayer::FaceOpponent();
                 Vf0();
             }
         }
@@ -2621,20 +2621,20 @@ void CMisaki::Vf6()
             unk158 = 0;
         }
         if (frame == 4 && timer == 0) {
-            unk148 = unk148 + 0xf;
+            m_gauge = m_gauge + 0xf;
             unk2c9 = 0x14;
-            unk16c = 1;
+            m_hitsLeft = 1;
         }
         timer++;
         if (timer >= l4) {
             timer = 0;
             frame++;
             if (frame < 3) {
-                unk168 = 0;
+                m_attackResult = 0;
             }
             if (frame >= x8) {
                 pattern = 0;
-                CPlayer::Unk40e630();
+                CPlayer::FaceOpponent();
                 Vf0();
             }
         }
@@ -2650,7 +2650,7 @@ void CMisaki::Vf6()
             vx = 0.0;
             unk158 = 0;
         }
-        if (m_inputY == -1 && frame > 0 && unk15c < 3 && unk168 == 3) {
+        if (m_inputY == -1 && frame > 0 && unk15c < 3 && m_attackResult == 3) {
             pattern = 4;
             if (m_inputX == facing) {
                 pattern = 5;
@@ -2658,20 +2658,20 @@ void CMisaki::Vf6()
             if (m_inputX == -facing) {
                 pattern = 6;
             }
-            unk168 = 0;
+            m_attackResult = 0;
             Vf0();
             break;
         }
         if (frame == 4 && timer == 0) {
-            unk148 = unk148 + 0x23;
+            m_gauge = m_gauge + 0x23;
             unk2c9 = 0x12;
-            unk16c = 1;
+            m_hitsLeft = 1;
             l50.type = 0x190;
             l50.x = (double)((int)x + facing * 0xf);
             l50.y = (double)(int)y;
-            l50.unk20 = 2;
+            l50.scale = 2;
             l50.unk2c = 1;
-            l50.unk21 = 1;
+            l50.layer = 1;
             l50.unk18 = facing;
             Vf9(&l50);
         }
@@ -2680,7 +2680,7 @@ void CMisaki::Vf6()
             timer = 0;
             frame++;
             if (frame < 3) {
-                unk168 = 0;
+                m_attackResult = 0;
             }
             if (frame == 8 && unk313c < 2) {
                 unk313c++;
@@ -2688,7 +2688,7 @@ void CMisaki::Vf6()
             }
             if (frame >= x8) {
                 pattern = 0;
-                CPlayer::Unk40e630();
+                CPlayer::FaceOpponent();
                 Vf0();
             }
         }
@@ -2704,7 +2704,7 @@ void CMisaki::Vf6()
             vx = 0.0;
             unk158 = 0;
         }
-        if (m_inputY == -1 && frame > 0 && unk168 >= 2) {
+        if (m_inputY == -1 && frame > 0 && m_attackResult >= 2) {
             pattern = 4;
             if (m_inputX == facing) {
                 pattern = 5;
@@ -2712,28 +2712,28 @@ void CMisaki::Vf6()
             if (m_inputX == -facing) {
                 pattern = 6;
             }
-            unk168 = 0;
+            m_attackResult = 0;
             Vf0();
             break;
         }
         if (frame == 1 && timer == 0) {
-            unk148 = unk148 + 5;
+            m_gauge = m_gauge + 5;
             unk2c9 = 0x15;
-            unk16c = 1;
+            m_hitsLeft = 1;
         }
         timer++;
         if (timer >= l4) {
             timer = 0;
             frame++;
             if (frame < 3) {
-                unk168 = 0;
+                m_attackResult = 0;
             }
             if (frame >= x8) {
                 pattern = 0;
                 if (m_inputY == 1) {
                     pattern = 3;
                 }
-                CPlayer::Unk40e630();
+                CPlayer::FaceOpponent();
                 Vf0();
             }
         }
@@ -2749,7 +2749,7 @@ void CMisaki::Vf6()
             vx = 0.0;
             unk158 = 0;
         }
-        if (m_inputY == -1 && frame > 0 && unk15c < 3 && unk168 >= 2) {
+        if (m_inputY == -1 && frame > 0 && unk15c < 3 && m_attackResult >= 2) {
             pattern = 4;
             if (m_inputX == facing) {
                 pattern = 5;
@@ -2757,28 +2757,28 @@ void CMisaki::Vf6()
             if (m_inputX == -facing) {
                 pattern = 6;
             }
-            unk168 = 0;
+            m_attackResult = 0;
             Vf0();
             break;
         }
         if (frame == 2 && timer == 0) {
-            unk148 = unk148 + 0xd;
+            m_gauge = m_gauge + 0xd;
             unk2c9 = 0x14;
-            unk16c = 1;
+            m_hitsLeft = 1;
         }
         timer++;
         if (timer >= l4) {
             timer = 0;
             frame++;
             if (frame < 3) {
-                unk168 = 0;
+                m_attackResult = 0;
             }
             if (frame >= x8) {
                 pattern = 0;
                 if (m_inputY == 1) {
                     pattern = 3;
                 }
-                CPlayer::Unk40e630();
+                CPlayer::FaceOpponent();
                 Vf0();
             }
         }
@@ -2797,10 +2797,10 @@ void CMisaki::Vf6()
             vx = 0.0;
         }
         if (frame == 1 && timer == 0) {
-            unk16c = 1;
+            m_hitsLeft = 1;
         }
         if (frame == 3 && timer == 0 && unk3138 == 0) {
-            unk148 = unk148 + 0x19;
+            m_gauge = m_gauge + 0x19;
             unk2c9 = 0x14;
             vx = 4.5;
             unk3138++;
@@ -2812,7 +2812,7 @@ void CMisaki::Vf6()
         if (timer >= l4) {
             timer = 0;
             frame++;
-            unk168 = 0;
+            m_attackResult = 0;
             if (frame == 5 && vx > 0.6) {
                 frame = 3;
             }
@@ -2821,14 +2821,14 @@ void CMisaki::Vf6()
                 if (m_inputY == 1) {
                     pattern = 3;
                 }
-                CPlayer::Unk40e630();
+                CPlayer::FaceOpponent();
                 Vf0();
             }
         }
         break;
     case 0xcf:
         vy = vy + ay;
-        if (m_inputY == -1 && frame > 0 && unk15c < 3 && unk168 >= 2 && unk15a == 0) {
+        if (m_inputY == -1 && frame > 0 && unk15c < 3 && m_attackResult >= 2 && unk15a == 0) {
             unk15a++;
             pattern = 0xe;
             if (m_inputX == facing) {
@@ -2837,14 +2837,14 @@ void CMisaki::Vf6()
             if (m_inputX == -facing) {
                 pattern = 0x10;
             }
-            unk168 = 0;
+            m_attackResult = 0;
             Vf0();
             break;
         }
         if (frame == 2 && timer == 0) {
-            unk148 = unk148 + 5;
+            m_gauge = m_gauge + 5;
             unk2c9 = 0x15;
-            unk16c = 1;
+            m_hitsLeft = 1;
         }
         if (y + vy >= 0.0) {
             y = 0.0;
@@ -2857,7 +2857,7 @@ void CMisaki::Vf6()
             timer = 0;
             frame++;
             if (frame < 3) {
-                unk168 = 0;
+                m_attackResult = 0;
             }
             if (frame >= x8) {
                 pattern = 9;
@@ -2867,7 +2867,7 @@ void CMisaki::Vf6()
         break;
     case 0xd0:
         vy = vy + ay;
-        if (m_inputY == -1 && frame > 0 && unk15c < 3 && unk168 >= 2 && unk15a == 0) {
+        if (m_inputY == -1 && frame > 0 && unk15c < 3 && m_attackResult >= 2 && unk15a == 0) {
             unk15a++;
             pattern = 0xe;
             if (m_inputX == facing) {
@@ -2876,14 +2876,14 @@ void CMisaki::Vf6()
             if (m_inputX == -facing) {
                 pattern = 0x10;
             }
-            unk168 = 0;
+            m_attackResult = 0;
             Vf0();
             break;
         }
         if (frame == 2 && timer == 0) {
-            unk148 = unk148 + 0xd;
+            m_gauge = m_gauge + 0xd;
             unk2c9 = 0x14;
-            unk16c = 1;
+            m_hitsLeft = 1;
         }
         if (y + vy >= 0.0) {
             y = 0.0;
@@ -2896,7 +2896,7 @@ void CMisaki::Vf6()
             timer = 0;
             frame++;
             if (frame < 4) {
-                unk168 = 0;
+                m_attackResult = 0;
             }
             if (frame >= x8) {
                 pattern = 9;
@@ -2906,7 +2906,7 @@ void CMisaki::Vf6()
         break;
     case 0xd1:
         vy = vy + ay;
-        if (m_inputY == -1 && frame > 0 && unk15c < 3 && unk168 >= 2 && unk15a == 0) {
+        if (m_inputY == -1 && frame > 0 && unk15c < 3 && m_attackResult >= 2 && unk15a == 0) {
             unk15a++;
             pattern = 0xe;
             if (m_inputX == facing) {
@@ -2915,14 +2915,14 @@ void CMisaki::Vf6()
             if (m_inputX == -facing) {
                 pattern = 0x10;
             }
-            unk168 = 0;
+            m_attackResult = 0;
             Vf0();
             break;
         }
         if (frame == 2 && timer == 0) {
-            unk148 = unk148 + 0x1e;
+            m_gauge = m_gauge + 0x1e;
             unk2c9 = 0x14;
-            unk16c = 1;
+            m_hitsLeft = 1;
         }
         if (y + vy >= 0.0) {
             y = 0.0;
@@ -2935,7 +2935,7 @@ void CMisaki::Vf6()
             timer = 0;
             frame++;
             if (frame < 3) {
-                unk168 = 0;
+                m_attackResult = 0;
             }
             if (frame >= x8) {
                 pattern = 9;
@@ -2954,9 +2954,9 @@ void CMisaki::Vf6()
             ay = 0.08;
         }
         if (frame == 2 && timer == 0) {
-            unk148 = unk148 + 0xf;
+            m_gauge = m_gauge + 0xf;
             unk2c9 = 0x14;
-            unk16c = 1;
+            m_hitsLeft = 1;
         }
         if (frame == 5 && timer == 0) {
             vx = 0.0;
@@ -2970,7 +2970,7 @@ void CMisaki::Vf6()
         if (timer >= l4) {
             timer = 0;
             frame++;
-            unk168 = 0;
+            m_attackResult = 0;
             if (frame == 5) {
                 if (y + vy < 0.0) {
                     frame--;
@@ -2980,13 +2980,13 @@ void CMisaki::Vf6()
             }
             if (frame >= x8) {
                 pattern = 0;
-                CPlayer::Unk40e630();
+                CPlayer::FaceOpponent();
                 Vf0();
             }
         }
         break;
     case 0xd3:
-        if (m_inputY == -1 && frame > 0 && unk15c < 3 && unk168 >= 2) {
+        if (m_inputY == -1 && frame > 0 && unk15c < 3 && m_attackResult >= 2) {
             pattern = 4;
             if (m_inputX == facing) {
                 pattern = 5;
@@ -2994,7 +2994,7 @@ void CMisaki::Vf6()
             if (m_inputX == -facing) {
                 pattern = 6;
             }
-            unk168 = 0;
+            m_attackResult = 0;
             Vf0();
             break;
         }
@@ -3003,18 +3003,18 @@ void CMisaki::Vf6()
             vy = 0.0;
         }
         if (frame == 3 && timer == 0) {
-            unk148 = unk148 + 0x1e;
+            m_gauge = m_gauge + 0x1e;
             unk2c9 = 0x14;
-            unk16c = 1;
+            m_hitsLeft = 1;
         }
         timer++;
         if (timer >= l4) {
             timer = 0;
             frame++;
-            unk168 = 0;
+            m_attackResult = 0;
             if (frame >= x8) {
                 pattern = 0;
-                CPlayer::Unk40e630();
+                CPlayer::FaceOpponent();
                 Vf0();
             }
         }
@@ -3022,16 +3022,16 @@ void CMisaki::Vf6()
     case 0xd4:
         vy = vy + ay;
         if (frame == 0 && timer == 0) {
-            unk148 = unk148 + 0x1e;
+            m_gauge = m_gauge + 0x1e;
             unk2c9 = 0x14;
-            unk16c = 1;
+            m_hitsLeft = 1;
             vx = vx / 2.0;
             ay = 0.07;
         }
-        if (unk168 > 1) {
+        if (m_attackResult > 1) {
             pattern = 0xd5;
             Vf0();
-            CPlayer::Unk40f1e0();
+            CPlayer::StopMoving();
             break;
         }
         if (y + vy >= 0.0) {
@@ -3041,8 +3041,8 @@ void CMisaki::Vf6()
             l50.type = 3;
             l50.x = (double)(int)x;
             l50.y = (double)(int)y;
-            l50.unk20 = 2;
-            l50.unk21 = 0;
+            l50.scale = 2;
+            l50.layer = 0;
             l50.unk2c = 7;
             m_game->CreateEffect((EffectDesc*)&l50);
             pattern = 0xd6;
@@ -3053,7 +3053,7 @@ void CMisaki::Vf6()
         if (timer >= l4) {
             timer = 0;
             frame++;
-            unk168 = 0;
+            m_attackResult = 0;
             if (frame >= x8) {
                 frame = frame - 2;
             }
@@ -3070,7 +3070,7 @@ void CMisaki::Vf6()
         if (timer >= l4) {
             timer = 0;
             frame++;
-            unk168 = 0;
+            m_attackResult = 0;
             if (frame >= x8) {
                 pattern = 9;
                 Vf0();
@@ -3085,8 +3085,8 @@ void CMisaki::Vf6()
             l50.type = 3;
             l50.x = (double)(int)x;
             l50.y = (double)(int)y;
-            l50.unk20 = 2;
-            l50.unk21 = 0;
+            l50.scale = 2;
+            l50.layer = 0;
             l50.unk2c = 7;
             m_game->CreateEffect((EffectDesc*)&l50);
         }
@@ -3094,13 +3094,13 @@ void CMisaki::Vf6()
         if (timer >= l4) {
             timer = 0;
             frame++;
-            unk168 = 0;
+            m_attackResult = 0;
             if (frame >= x8) {
                 pattern = 7;
                 if (m_inputY == 1) {
                     pattern = 3;
                 }
-                CPlayer::Unk40e630();
+                CPlayer::FaceOpponent();
                 Vf0();
             }
         }
@@ -3109,24 +3109,24 @@ void CMisaki::Vf6()
         vx = 0.0;
         vy = 0.0;
         if (frame == 1 && timer == 0 && (*m_opponent)->y == 0.0) {
-            unk16c = 1;
+            m_hitsLeft = 1;
         } else {
-            unk16c = 0;
+            m_hitsLeft = 0;
         }
-        if (frame == 1 && unk168 == 3) {
+        if (frame == 1 && m_attackResult == 3) {
             vx = 0.0;
             vy = 0.0;
             Vf0();
-            CPlayer::Unk40f1e0();
-            (*m_opponent)->Unk40f1e0();
+            CPlayer::StopMoving();
+            (*m_opponent)->StopMoving();
             (*m_opponent)->Vf0();
             pattern = 0xdd;
             (*m_opponent)->unk128 = 1;
             l50.type = 0;
             l50.x = (double)((int)x + facing * 0x25);
             l50.y = (double)((int)y - 0x2a);
-            l50.unk20 = 2;
-            l50.unk21 = 1;
+            l50.scale = 2;
+            l50.layer = 1;
             m_game->CreateEffect((EffectDesc*)&l50);
             break;
         }
@@ -3134,29 +3134,29 @@ void CMisaki::Vf6()
         if (timer >= l4) {
             timer = 0;
             frame++;
-            unk168 = 0;
+            m_attackResult = 0;
             if (frame >= x8) {
                 pattern = 0;
                 if (m_inputY == 1) {
                     pattern = 3;
                 }
-                CPlayer::Unk40e630();
+                CPlayer::FaceOpponent();
                 Vf0();
             }
         }
         break;
     case 0xdd:
         if (frame == 4 && timer == 0) {
-            CPlayer::Unk4105a0(0x4e2, 750.0);
+            CPlayer::DealDamage(0x4e2, 750.0);
         }
         timer++;
         if (timer >= l4) {
             timer = 0;
             frame++;
-            unk168 = 0;
+            m_attackResult = 0;
             if (frame == 1) {
                 (*m_opponent)->pattern = 0x67;
-                (*m_opponent)->Unk40f1e0();
+                (*m_opponent)->StopMoving();
                 (*m_opponent)->Vf0();
                 (*m_opponent)->y = -86.0;
                 (*m_opponent)->x = facing * 0x29 + x;
@@ -3176,12 +3176,12 @@ void CMisaki::Vf6()
                 (*m_opponent)->facing = -facing;
                 CPlayer::Unk410a10(3, 0);
                 (*m_opponent)->pattern = 0x61;
-                (*m_opponent)->Unk40f1e0();
+                (*m_opponent)->StopMoving();
                 (*m_opponent)->Vf0();
             }
             if (frame >= x8) {
                 pattern = 0;
-                CPlayer::Unk40e630();
+                CPlayer::FaceOpponent();
                 Vf0();
             }
         }
@@ -3198,16 +3198,16 @@ void CMisaki::Vf6()
             vy = 0.0;
         }
         if (frame == 2 && timer == 0) {
-            unk148 = unk148 + 5;
+            m_gauge = m_gauge + 5;
             unk2c9 = 0x15;
-            unk16c = 1;
+            m_hitsLeft = 1;
         }
         timer++;
         if (timer >= l4) {
             timer = 0;
             frame++;
             if (frame < 3) {
-                unk168 = 0;
+                m_attackResult = 0;
             }
             if (frame >= x8) {
                 pattern = 0;
@@ -3227,16 +3227,16 @@ void CMisaki::Vf6()
             vx = 2.0;
         }
         if (frame == 2 && timer == 0) {
-            unk148 = unk148 + 0xa;
+            m_gauge = m_gauge + 0xa;
             unk2c9 = 0x14;
-            unk16c = 1;
+            m_hitsLeft = 1;
         }
         timer++;
         if (timer >= l4) {
             timer = 0;
             frame++;
             if (frame < 3) {
-                unk168 = 0;
+                m_attackResult = 0;
             }
             if (frame >= x8) {
                 pattern = 0;
@@ -3261,8 +3261,8 @@ void CMisaki::Vf6()
         if (frame == 3 && timer == 0) {
             unk2c9 = 0x14;
             vx = 3.0;
-            unk16c = 1;
-            unk148 = unk148 + 0x23;
+            m_hitsLeft = 1;
+            m_gauge = m_gauge + 0x23;
         }
         vx = vx - (vx > 0.0) * 0.07;
         if (vx < 0.0) {
@@ -3273,7 +3273,7 @@ void CMisaki::Vf6()
             timer = 0;
             frame++;
             if (frame < 3) {
-                unk168 = 0;
+                m_attackResult = 0;
             }
             if (frame >= x8) {
                 pattern = 0;
@@ -3293,16 +3293,16 @@ void CMisaki::Vf6()
             vy = 0.0;
         }
         if (frame == 1 && timer == 0) {
-            unk148 = unk148 + 5;
+            m_gauge = m_gauge + 5;
             unk2c9 = 0x15;
-            unk16c = 1;
+            m_hitsLeft = 1;
         }
         timer++;
         if (timer >= l4) {
             timer = 0;
             frame++;
             if (frame < 5) {
-                unk168 = 0;
+                m_attackResult = 0;
             }
             if (frame >= x8) {
                 pattern = 3;
@@ -3322,16 +3322,16 @@ void CMisaki::Vf6()
             vx = 2.0;
         }
         if (frame == 2 && timer == 0) {
-            unk148 = unk148 + 0xa;
+            m_gauge = m_gauge + 0xa;
             unk2c9 = 0x14;
-            unk16c = 1;
+            m_hitsLeft = 1;
         }
         timer++;
         if (timer >= l4) {
             timer = 0;
             frame++;
             if (frame < 3) {
-                unk168 = 0;
+                m_attackResult = 0;
             }
             if (frame >= x8) {
                 pattern = 3;
@@ -3357,22 +3357,22 @@ void CMisaki::Vf6()
             vy = vy + ay;
             if (vy + y > 0.0) {
                 timer = 0;
-                CPlayer::Unk40f1e0();
+                CPlayer::StopMoving();
                 y = 0.0;
                 frame = 0xf;
             }
         }
         if (frame == 7 && timer == 0) {
             unk2c9 = 0x14;
-            unk16c = 1;
-            unk148 = unk148 + 0x23;
+            m_hitsLeft = 1;
+            m_gauge = m_gauge + 0x23;
         }
         timer++;
         if (timer >= l4) {
             timer = 0;
             frame++;
             if (frame < 3) {
-                unk168 = 0;
+                m_attackResult = 0;
             }
             if (frame == 3) {
                 vx = 1.5;
@@ -3403,22 +3403,22 @@ void CMisaki::Vf6()
             vy = vy + ay;
             if (vy + y > 0.0) {
                 timer = 0;
-                CPlayer::Unk40f1e0();
+                CPlayer::StopMoving();
                 y = 0.0;
                 frame = 0xf;
             }
         }
         if (frame == 7 && timer == 0) {
             unk2c9 = 0x14;
-            unk16c = 1;
-            unk148 = unk148 + 0x23;
+            m_hitsLeft = 1;
+            m_gauge = m_gauge + 0x23;
         }
         timer++;
         if (timer >= l4) {
             timer = 0;
             frame++;
             if (frame < 3) {
-                unk168 = 0;
+                m_attackResult = 0;
             }
             if (frame == 3) {
                 vx = 1.5;
@@ -3433,16 +3433,16 @@ void CMisaki::Vf6()
         break;
     case 0xf8:
         vy = vy + ay;
-        if (frame == 1 && unk168 == 3) {
-            (*m_opponent)->Unk40f1e0();
+        if (frame == 1 && m_attackResult == 3) {
+            (*m_opponent)->StopMoving();
             (*m_opponent)->Vf0();
-            CPlayer::Unk40f1e0();
+            CPlayer::StopMoving();
             (*m_opponent)->unk128 = 1;
             l50.type = 0;
             l50.x = (double)((int)x + facing * 0x36);
             l50.y = (double)((int)y - 0x54);
-            l50.unk20 = 2;
-            l50.unk21 = 1;
+            l50.scale = 2;
+            l50.layer = 1;
             m_game->CreateEffect((EffectDesc*)&l50);
             frame = 0;
             timer = 0;
@@ -3457,11 +3457,11 @@ void CMisaki::Vf6()
             timer = 0;
             frame++;
             if (frame == 1 && (*m_opponent)->y < 0.0 && ((*m_opponent)->pattern < 0x32 || (*m_opponent)->pattern > 0x95)) {
-                unk16c = 1;
+                m_hitsLeft = 1;
             } else {
-                unk16c = 0;
+                m_hitsLeft = 0;
             }
-            unk168 = 0;
+            m_attackResult = 0;
             if (frame >= x8) {
                 pattern = 0xd1;
                 frame = 2;
@@ -3474,7 +3474,7 @@ void CMisaki::Vf6()
         if (timer >= l4) {
             timer = 0;
             frame++;
-            unk168 = 0;
+            m_attackResult = 0;
             if (frame == 1) {
                 (*m_opponent)->pattern = 0x64;
                 (*m_opponent)->y = y - 59.0;
@@ -3504,9 +3504,9 @@ void CMisaki::Vf6()
                 (*m_opponent)->unkc0 = 2.2;
                 (*m_opponent)->unkc8 = -1.0;
                 (*m_opponent)->ay = 0.035;
-                CPlayer::Unk4105a0(0x514, 500.0);
-                unk174--;
-                unkf4--;
+                CPlayer::DealDamage(0x514, 500.0);
+                m_comboHits--;
+                m_shownHits--;
                 (*m_opponent)->unk128 = 1;
                 (*m_opponent)->y = y - 69.0;
                 (*m_opponent)->x = x - facing * 0x27;
@@ -3526,8 +3526,8 @@ void CMisaki::Vf6()
                 vx = 0.0;
                 vy = 0.0;
             }
-            unk148 = unk148 + 0x2d;
-            unk16c = 0;
+            m_gauge = m_gauge + 0x2d;
+            m_hitsLeft = 0;
             if (y < 0.0) {
                 frame = 2;
                 timer = 0;
@@ -3538,19 +3538,19 @@ void CMisaki::Vf6()
                 l50.type = 0x1f;
                 l50.x = (double)(int)x;
                 l50.y = (double)(int)y;
-                l50.unk20 = 0;
-                l50.unk21 = 1;
+                l50.scale = 0;
+                l50.layer = 1;
                 l50.side = -((facing == 1) - 1);
                 m_game->CreateEffect((EffectDesc*)&l50);
             }
-            unk16c = 0;
+            m_hitsLeft = 0;
         }
         if (frame == 6 && timer == 0) {
             l50.type = 8;
             l50.x = (double)(int)x;
             l50.y = (double)(int)y;
-            l50.unk20 = 2;
-            l50.unk21 = 1;
+            l50.scale = 2;
+            l50.layer = 1;
             m_game->CreateEffect((EffectDesc*)&l50);
             vx = 1.4;
             vy = -1.5;
@@ -3558,12 +3558,12 @@ void CMisaki::Vf6()
         }
         if (frame > 5 && vy > 0.2 && unk3138 == 0) {
             frame = 0xd;
-            unk16c = 1;
+            m_hitsLeft = 1;
             timer = 0;
             unk3138 = 1;
         }
         if (frame == 0xe && timer == 0) {
-            unk16c = 1;
+            m_hitsLeft = 1;
         }
         vy = vy + ay;
         timer++;
@@ -3580,13 +3580,13 @@ void CMisaki::Vf6()
             timer = 0;
             frame++;
             if (frame < 3) {
-                unk168 = 0;
+                m_attackResult = 0;
             }
             if (frame == 0xd) {
                 frame = 7;
             }
             if (frame == 5 || frame == 0xe) {
-                unk168 = 0;
+                m_attackResult = 0;
             }
             if (frame >= x8) {
                 pattern = 0xfd;
@@ -3601,8 +3601,8 @@ void CMisaki::Vf6()
                 vx = 0.0;
                 vy = 0.0;
             }
-            unk148 = unk148 + 0x2d;
-            unk16c = 0;
+            m_gauge = m_gauge + 0x2d;
+            m_hitsLeft = 0;
             if (y < 0.0) {
                 frame = 2;
                 timer = 0;
@@ -3613,19 +3613,19 @@ void CMisaki::Vf6()
                 l50.type = 0x1f;
                 l50.x = (double)(int)x;
                 l50.y = (double)(int)y;
-                l50.unk20 = 0;
-                l50.unk21 = 1;
+                l50.scale = 0;
+                l50.layer = 1;
                 l50.side = -((facing == 1) - 1);
                 m_game->CreateEffect((EffectDesc*)&l50);
             }
-            unk16c = 1;
+            m_hitsLeft = 1;
         }
         if (frame == 6 && timer == 0) {
             l50.type = 8;
             l50.x = (double)(int)x;
             l50.y = (double)(int)y;
-            l50.unk20 = 2;
-            l50.unk21 = 1;
+            l50.scale = 2;
+            l50.layer = 1;
             m_game->CreateEffect((EffectDesc*)&l50);
             vx = 1.4;
             vy = -1.5;
@@ -3633,12 +3633,12 @@ void CMisaki::Vf6()
         }
         if (frame > 5 && vy > 0.8 && unk3138 == 0) {
             frame = 0xd;
-            unk16c = 1;
+            m_hitsLeft = 1;
             timer = 0;
             unk3138 = 1;
         }
         if (frame == 0xe && timer == 0) {
-            unk16c = 1;
+            m_hitsLeft = 1;
         }
         vy = vy + ay;
         timer++;
@@ -3655,10 +3655,10 @@ void CMisaki::Vf6()
             timer = 0;
             frame++;
             if (frame < 3) {
-                unk168 = 0;
+                m_attackResult = 0;
             }
             if (frame == 5 || frame == 0xe) {
-                unk168 = 0;
+                m_attackResult = 0;
             }
             if (frame >= x8) {
                 pattern = 0xfd;
@@ -3679,14 +3679,14 @@ void CMisaki::Vf6()
             l50.unk2c = 0xb;
             l50.x = (double)(int)x;
             l50.y = (double)((int)y - 0x32);
-            l50.unk20 = 2;
-            l50.unk21 = 1;
+            l50.scale = 2;
+            l50.layer = 1;
             m_game->CreateEffect((EffectDesc*)&l50);
-            unk16c = 1;
+            m_hitsLeft = 1;
             vx = 0.0;
             vy = 0.0;
             ax = 0.0;
-            unk16c = 1;
+            m_hitsLeft = 1;
             if (y < 0.0) {
                 frame = 6;
             }
@@ -3695,8 +3695,8 @@ void CMisaki::Vf6()
             l50.type = 0x1f;
             l50.x = (double)(int)x;
             l50.y = (double)(int)y;
-            l50.unk20 = 0;
-            l50.unk21 = 1;
+            l50.scale = 0;
+            l50.layer = 1;
             l50.side = facing == -1;
             m_game->CreateEffect((EffectDesc*)&l50);
         }
@@ -3704,8 +3704,8 @@ void CMisaki::Vf6()
             l50.type = 8;
             l50.x = (double)(int)x;
             l50.y = (double)(int)y;
-            l50.unk20 = 2;
-            l50.unk21 = 1;
+            l50.scale = 2;
+            l50.layer = 1;
             l50.unk18 = facing;
             m_game->CreateEffect((EffectDesc*)&l50);
             vx = 1.2;
@@ -3713,7 +3713,7 @@ void CMisaki::Vf6()
             ay = 0.035;
         }
         if (frame > 5 && vy > 0.2 && unk3138 == 0) {
-            if (unk16c == 1) {
+            if (m_hitsLeft == 1) {
                 pattern = 0xfd;
                 Vf0();
                 break;
@@ -3729,18 +3729,18 @@ void CMisaki::Vf6()
             l50.type = 0x199;
             l50.x = (double)(int)x;
             l50.y = (double)((int)y - 0x14);
-            l50.unk20 = 2;
-            l50.unk21 = 1;
+            l50.scale = 2;
+            l50.layer = 1;
             l50.unk18 = facing;
             Vf9(&l50);
-            unk16c = 1;
+            m_hitsLeft = 1;
         }
         vy = vy + ay;
         timer++;
         if (timer >= l4) {
             timer = 0;
             frame++;
-            unk168 = 0;
+            m_attackResult = 0;
             if (frame == 0xd) {
                 frame = 7;
             }
@@ -3748,7 +3748,7 @@ void CMisaki::Vf6()
                 unk13c = 0x3c;
             }
             if (frame == 5 || frame == 0x11) {
-                unk168 = 0;
+                m_attackResult = 0;
             }
             if (frame >= x8) {
                 pattern = 0xfd;
@@ -3774,11 +3774,11 @@ void CMisaki::Vf6()
         if (timer >= l4) {
             timer = 0;
             frame++;
-            unk168 = 0;
+            m_attackResult = 0;
             if (frame == 2) {
                 frame = 0;
             }
-            unk168 = 0;
+            m_attackResult = 0;
             if (frame >= x8) {
                 pattern = 0;
                 Vf0();
@@ -3793,18 +3793,18 @@ void CMisaki::Vf6()
             l50.type = 0x196;
             l50.x = (double)(int)x;
             l50.y = (double)(int)y;
-            l50.unk20 = 2;
-            l50.unk21 = 1;
+            l50.scale = 2;
+            l50.layer = 1;
             l50.unk18 = facing;
             Vf9(&l50);
             unk2c9 = 0x12;
-            unk148 = unk148 + 0x19;
+            m_gauge = m_gauge + 0x19;
         }
         timer++;
         if (timer >= l4) {
             timer = 0;
             frame++;
-            unk168 = 3;
+            m_attackResult = 3;
             if (frame == 0xc && unk3138 != 0) {
                 unk3138--;
                 frame = frame - 2;
@@ -3812,7 +3812,7 @@ void CMisaki::Vf6()
             if (frame >= x8) {
                 pattern = 0;
                 Vf0();
-                CPlayer::Unk40e630();
+                CPlayer::FaceOpponent();
             }
         }
         break;
@@ -3824,18 +3824,18 @@ void CMisaki::Vf6()
             l50.type = 0x197;
             l50.x = (double)(int)x;
             l50.y = (double)(int)y;
-            l50.unk20 = 2;
-            l50.unk21 = 1;
+            l50.scale = 2;
+            l50.layer = 1;
             l50.unk18 = facing;
             Vf9(&l50);
             unk2c9 = 0x12;
-            unk148 = unk148 + 0x19;
+            m_gauge = m_gauge + 0x19;
         }
         timer++;
         if (timer >= l4) {
             timer = 0;
             frame++;
-            unk168 = 3;
+            m_attackResult = 3;
             if (frame == 0xc && unk3138 != 0) {
                 unk3138--;
                 frame = frame - 2;
@@ -3843,7 +3843,7 @@ void CMisaki::Vf6()
             if (frame >= x8) {
                 pattern = 0;
                 Vf0();
-                CPlayer::Unk40e630();
+                CPlayer::FaceOpponent();
             }
         }
         break;
@@ -3862,25 +3862,25 @@ void CMisaki::Vf6()
             l50.unk2c = 0xb;
             l50.x = (double)(int)x;
             l50.y = (double)((int)y - 0x32);
-            l50.unk20 = 2;
-            l50.unk21 = 1;
+            l50.scale = 2;
+            l50.layer = 1;
             m_game->CreateEffect((EffectDesc*)&l50);
         }
         if (frame == 3 && timer == 0) {
             l50.type = 0x1a1;
             l50.x = (double)((int)x + facing * 0x14);
             l50.y = (double)(int)y;
-            l50.unk20 = 2;
-            l50.unk21 = 1;
+            l50.scale = 2;
+            l50.layer = 1;
             l50.unk18 = facing;
             Vf9(&l50);
-            unk148 = unk148 + 0xf;
+            m_gauge = m_gauge + 0xf;
         }
         timer++;
         if (timer >= l4) {
             timer = 0;
             frame++;
-            unk168 = 3;
+            m_attackResult = 3;
             if (frame == 0xc && unk3138 != 0) {
                 unk3138--;
                 frame = frame - 2;
@@ -3888,36 +3888,36 @@ void CMisaki::Vf6()
             if (frame >= x8) {
                 pattern = 0;
                 Vf0();
-                CPlayer::Unk40e630();
+                CPlayer::FaceOpponent();
             }
         }
         break;
     case 0x101:
         unk158 = 0;
         if (y >= 0.0) {
-            unk16c = 0;
+            m_hitsLeft = 0;
         }
         if (frame > 6) {
-            unk168 = 3;
+            m_attackResult = 3;
         }
         if (frame == 0 && timer == 0) {
             vx = 0.0;
             vy = 0.0;
-            unk148 = unk148 + 0x2d;
+            m_gauge = m_gauge + 0x2d;
             if (y < 0.0) {
                 frame = 5;
             }
         }
-        if (frame > 4 && frame < 7 && unk168 == 3 && (*m_opponent)->y < 0.0) {
-            (*m_opponent)->Unk40f1e0();
+        if (frame > 4 && frame < 7 && m_attackResult == 3 && (*m_opponent)->y < 0.0) {
+            (*m_opponent)->StopMoving();
             (*m_opponent)->Vf0();
-            CPlayer::Unk40f1e0();
+            CPlayer::StopMoving();
             (*m_opponent)->unk128 = 1;
             l50.type = 0;
             l50.x = (double)((int)x + facing * 0x36);
             l50.y = (double)((int)y - 0x54);
-            l50.unk20 = 2;
-            l50.unk21 = 1;
+            l50.scale = 2;
+            l50.layer = 1;
             m_game->CreateEffect((EffectDesc*)&l50);
             frame = 7;
             timer = 0;
@@ -3936,8 +3936,8 @@ void CMisaki::Vf6()
             l50.type = 8;
             l50.x = (double)(int)x;
             l50.y = (double)(int)y;
-            l50.unk20 = 2;
-            l50.unk21 = 1;
+            l50.scale = 2;
+            l50.layer = 1;
             m_game->CreateEffect((EffectDesc*)&l50);
             vx = 1.4;
             vy = -3.0;
@@ -3948,11 +3948,11 @@ void CMisaki::Vf6()
         if (timer >= l4) {
             timer = 0;
             frame++;
-            unk168 = 0;
+            m_attackResult = 0;
             if (y < -40.0 && (*m_opponent)->y < 0.0) {
-                unk16c = 1;
+                m_hitsLeft = 1;
             } else {
-                unk16c = 0;
+                m_hitsLeft = 0;
             }
             if (frame == 7 && unk3138 < 0xa) {
                 frame = 5;
@@ -3987,9 +3987,9 @@ void CMisaki::Vf6()
                 (*m_opponent)->unkc0 = 2.5;
                 (*m_opponent)->unkc8 = -0.3;
                 (*m_opponent)->ay = 0.035;
-                CPlayer::Unk4105a0(0x352, 890.0);
-                unk174--;
-                unkf4--;
+                CPlayer::DealDamage(0x352, 890.0);
+                m_comboHits--;
+                m_shownHits--;
                 (*m_opponent)->unk128 = 1;
                 (*m_opponent)->y = y - 69.0;
                 (*m_opponent)->x = x - facing * 0x27;
@@ -4014,18 +4014,18 @@ void CMisaki::Vf6()
             l50.unk2c = 0xb;
             l50.x = (double)(int)x;
             l50.y = (double)((int)y - 0x32);
-            l50.unk20 = 2;
-            l50.unk21 = 1;
+            l50.scale = 2;
+            l50.layer = 1;
             m_game->CreateEffect((EffectDesc*)&l50);
             CPlayer::Unk4109d0(3);
-            unk16c = 0;
+            m_hitsLeft = 0;
             vx = 0.0;
             vy = 0.0;
             ax = 0.0;
         }
-        if (frame == 4 && unk168 == 3) {
+        if (frame == 4 && m_attackResult == 3) {
             unk3138 = 0;
-            (*m_opponent)->Unk40f1e0();
+            (*m_opponent)->StopMoving();
             (*m_opponent)->Vf0();
             Vf0();
             (*m_opponent)->unk128 = 1;
@@ -4034,8 +4034,8 @@ void CMisaki::Vf6()
             l50.type = 0;
             l50.x = (double)((int)x + facing * 0x24);
             l50.y = (double)((int)y - 0x29);
-            l50.unk20 = 2;
-            l50.unk21 = 1;
+            l50.scale = 2;
+            l50.layer = 1;
             m_game->CreateEffect((EffectDesc*)&l50);
             pattern = 0x103;
             (*m_opponent)->pattern = 0x67;
@@ -4046,14 +4046,14 @@ void CMisaki::Vf6()
             timer = 0;
             frame++;
             if (frame == 4 && (*m_opponent)->y < 0.0) {
-                unk16c = 1;
+                m_hitsLeft = 1;
             } else {
-                unk16c = 0;
+                m_hitsLeft = 0;
             }
-            unk168 = 0;
+            m_attackResult = 0;
             if (frame >= x8) {
                 pattern = 0;
-                CPlayer::Unk40e630();
+                CPlayer::FaceOpponent();
                 Vf0();
             }
         }
@@ -4085,14 +4085,14 @@ void CMisaki::Vf6()
                     (*m_opponent)->Vf0();
                     (*m_opponent)->pattern = 0x61;
                     (*m_opponent)->unk12c = 1;
-                    CPlayer::Unk4105a0(0x15e, 960.0);
+                    CPlayer::DealDamage(0x15e, 960.0);
                 } else {
                     frame = 6;
                     (*m_opponent)->y = -75.0;
                     (*m_opponent)->pattern = 0x3f;
                     (*m_opponent)->Vf0();
-                    unk16c = 1;
-                    unk168 = 0;
+                    m_hitsLeft = 1;
+                    m_attackResult = 0;
                 }
             }
             if (frame == 6 && unk3138 < 3) {
@@ -4103,10 +4103,10 @@ void CMisaki::Vf6()
                 (*m_opponent)->pattern = 0x67;
                 (*m_opponent)->Vf0();
             }
-            unk168 = 0;
+            m_attackResult = 0;
             if (frame >= x8) {
                 pattern = 0;
-                CPlayer::Unk40e630();
+                CPlayer::FaceOpponent();
                 Vf0();
             }
         }
@@ -4114,29 +4114,29 @@ void CMisaki::Vf6()
     case 0x104:
         unk158 = 0;
         if (y >= 0.0) {
-            unk16c = 0;
+            m_hitsLeft = 0;
         }
         if (frame > 6) {
-            unk168 = 3;
+            m_attackResult = 3;
         }
         if (frame == 0 && timer == 0) {
             vx = 0.0;
             vy = 0.0;
-            unk148 = unk148 + 0x2d;
+            m_gauge = m_gauge + 0x2d;
             if (y < 0.0) {
                 frame = 5;
             }
         }
-        if (frame > 4 && frame < 7 && unk168 == 3 && (*m_opponent)->y < 0.0) {
-            (*m_opponent)->Unk40f1e0();
+        if (frame > 4 && frame < 7 && m_attackResult == 3 && (*m_opponent)->y < 0.0) {
+            (*m_opponent)->StopMoving();
             (*m_opponent)->Vf0();
-            CPlayer::Unk40f1e0();
+            CPlayer::StopMoving();
             (*m_opponent)->unk128 = 1;
             l50.type = 0;
             l50.x = (double)((int)x + facing * 0x36);
             l50.y = (double)((int)y - 0x54);
-            l50.unk20 = 2;
-            l50.unk21 = 1;
+            l50.scale = 2;
+            l50.layer = 1;
             m_game->CreateEffect((EffectDesc*)&l50);
             frame = 7;
             timer = 0;
@@ -4155,8 +4155,8 @@ void CMisaki::Vf6()
             l50.type = 8;
             l50.x = (double)(int)x;
             l50.y = (double)(int)y;
-            l50.unk20 = 2;
-            l50.unk21 = 1;
+            l50.scale = 2;
+            l50.layer = 1;
             m_game->CreateEffect((EffectDesc*)&l50);
             vx = 1.4;
             vy = -4.0;
@@ -4167,11 +4167,11 @@ void CMisaki::Vf6()
         if (timer >= l4) {
             timer = 0;
             frame++;
-            unk168 = 0;
+            m_attackResult = 0;
             if (y < -40.0 && (*m_opponent)->y < 0.0) {
-                unk16c = 1;
+                m_hitsLeft = 1;
             } else {
-                unk16c = 0;
+                m_hitsLeft = 0;
             }
             if (frame == 7 && unk3138 < 0xa) {
                 frame = 5;
@@ -4204,11 +4204,11 @@ void CMisaki::Vf6()
                 (*m_opponent)->Vf0();
                 (*m_opponent)->pattern = 0x3c;
                 (*m_opponent)->unkc0 = 0.8;
-                (*m_opponent)->unkc8 = -5.0 * unk178 / 10000.0;
+                (*m_opponent)->unkc8 = -5.0 * m_proration / 10000.0;
                 (*m_opponent)->ay = 0.035;
-                CPlayer::Unk4105a0(0x28a, 890.0);
-                unk174--;
-                unkf4--;
+                CPlayer::DealDamage(0x28a, 890.0);
+                m_comboHits--;
+                m_shownHits--;
                 (*m_opponent)->unk128 = 1;
                 (*m_opponent)->y = y - 69.0;
                 (*m_opponent)->x = x - facing * 0x27;
@@ -4223,22 +4223,22 @@ void CMisaki::Vf6()
         break;
     case 0x105:
         if (frame == 0 && timer == 0) {
-            CPlayer::Unk40f1e0();
+            CPlayer::StopMoving();
         }
         if (frame == 3 && timer == 0) {
-            unk148 = unk148 + 0x14;
+            m_gauge = m_gauge + 0x14;
         }
-        if (unk168 == 6 && frame == 3) {
+        if (m_attackResult == 6 && frame == 3) {
             Vf0();
-            unk168 = 0;
+            m_attackResult = 0;
             unk14c = 0x5a;
             unk2c9 = 3;
             pattern = 0x106;
             l50.type = 0;
             l50.x = (double)((int)x - (facing << 3));
             l50.y = (double)((int)y - 0x35);
-            l50.unk20 = 2;
-            l50.unk21 = 1;
+            l50.scale = 2;
+            l50.layer = 1;
             m_game->CreateEffect((EffectDesc*)&l50);
             break;
         }
@@ -4246,29 +4246,29 @@ void CMisaki::Vf6()
         if (timer >= l4) {
             timer = 0;
             frame++;
-            unk168 = 0;
+            m_attackResult = 0;
             if (frame >= x8) {
                 pattern = 0;
-                CPlayer::Unk40e630();
+                CPlayer::FaceOpponent();
                 Vf0();
             }
         }
         break;
     case 0x106:
         if (frame == 0 && timer == 0) {
-            CPlayer::Unk40f1e0();
+            CPlayer::StopMoving();
         }
         if (frame == 3 && timer == 0) {
-            unk148 = unk148 + 0xf;
+            m_gauge = m_gauge + 0xf;
             unk2c9 = 0x14;
-            unk16c = 1;
+            m_hitsLeft = 1;
             l50.type = 0x191;
             l50.x = (double)((int)x + facing * 0x28);
             l50.y = (double)(int)y;
-            l50.unk20 = 2;
+            l50.scale = 2;
             l50.unk18 = facing;
             l50.unk0 = 1;
-            l50.unk21 = 1;
+            l50.layer = 1;
             Vf9(&l50);
         }
         timer++;
@@ -4276,26 +4276,26 @@ void CMisaki::Vf6()
             timer = 0;
             frame++;
             if (frame < 3) {
-                unk168 = 0;
+                m_attackResult = 0;
             }
             if (frame >= x8) {
                 pattern = 0;
-                CPlayer::Unk40e630();
+                CPlayer::FaceOpponent();
                 Vf0();
             }
         }
         break;
     case 0x107:
         if (frame == 0 && timer == 0) {
-            CPlayer::Unk40f1e0();
+            CPlayer::StopMoving();
         }
         if (frame == 2 && timer == 0) {
-            unk16c = 0;
+            m_hitsLeft = 0;
         }
         vy = vy + ay;
         timer++;
         if (frame > 3 && y + vy > 0.0) {
-            CPlayer::Unk40f1e0();
+            CPlayer::StopMoving();
             y = 0.0;
             frame = 0x13;
             timer = 0;
@@ -4306,14 +4306,14 @@ void CMisaki::Vf6()
             timer = 0;
             frame++;
             if (frame < 3) {
-                unk168 = 0;
+                m_attackResult = 0;
             }
             if (frame == 4 && timer == 0) {
                 l50.type = 8;
                 l50.x = (double)(int)x;
                 l50.y = (double)(int)y;
-                l50.unk20 = 2;
-                l50.unk21 = 1;
+                l50.scale = 2;
+                l50.layer = 1;
                 m_game->CreateEffect((EffectDesc*)&l50);
                 vx = 1.4;
                 vy = -1.5;
@@ -4324,8 +4324,8 @@ void CMisaki::Vf6()
                 unk3138++;
             }
             if (frame == 0xd) {
-                unk16c = 1;
-                unk168 = 0;
+                m_hitsLeft = 1;
+                m_attackResult = 0;
             }
             if (frame == 0x13) {
                 frame = frame - 2;
@@ -4338,15 +4338,15 @@ void CMisaki::Vf6()
         break;
     case 0x108:
         if (frame == 0 && timer == 0) {
-            CPlayer::Unk40f1e0();
+            CPlayer::StopMoving();
         }
         if (frame == 2 && timer == 0) {
-            unk16c = 1;
+            m_hitsLeft = 1;
         }
         vy = vy + ay;
         timer++;
         if (frame > 3 && y + vy > 0.0) {
-            CPlayer::Unk40f1e0();
+            CPlayer::StopMoving();
             y = 0.0;
             frame = 0xf;
             timer = 0;
@@ -4357,14 +4357,14 @@ void CMisaki::Vf6()
             timer = 0;
             frame++;
             if (frame < 3) {
-                unk168 = 0;
+                m_attackResult = 0;
             }
             if (frame == 4 && timer == 0) {
                 l50.type = 8;
                 l50.x = (double)(int)x;
                 l50.y = (double)(int)y;
-                l50.unk20 = 2;
-                l50.unk21 = 1;
+                l50.scale = 2;
+                l50.layer = 1;
                 m_game->CreateEffect((EffectDesc*)&l50);
                 vx = 1.4;
                 vy = -1.5;
@@ -4385,22 +4385,22 @@ void CMisaki::Vf6()
         break;
     case 0x109:
         if (frame == 0 && timer == 0) {
-            CPlayer::Unk40f1e0();
+            CPlayer::StopMoving();
         }
         if (frame == 3 && timer == 0) {
-            unk148 = unk148 + 0x14;
+            m_gauge = m_gauge + 0x14;
         }
-        if (unk168 == 6 && frame == 3) {
+        if (m_attackResult == 6 && frame == 3) {
             Vf0();
-            unk168 = 0;
+            m_attackResult = 0;
             unk14c = 0x5a;
             unk2c9 = 3;
             pattern = 0x106;
             l50.type = 0;
             l50.x = (double)((int)x - (facing << 3));
             l50.y = (double)((int)y - 0x35);
-            l50.unk20 = 2;
-            l50.unk21 = 1;
+            l50.scale = 2;
+            l50.layer = 1;
             m_game->CreateEffect((EffectDesc*)&l50);
             break;
         }
@@ -4408,10 +4408,10 @@ void CMisaki::Vf6()
         if (timer >= l4) {
             timer = 0;
             frame++;
-            unk168 = 0;
+            m_attackResult = 0;
             if (frame >= x8) {
                 pattern = 0;
-                CPlayer::Unk40e630();
+                CPlayer::FaceOpponent();
                 Vf0();
             }
         }
@@ -4421,20 +4421,20 @@ void CMisaki::Vf6()
             vx = 0.0;
             vy = -1.0;
             ay = 0.002;
-            unk16c = 1;
+            m_hitsLeft = 1;
         }
         if (frame == 7 && timer == 0) {
-            CPlayer::Unk40f1e0();
+            CPlayer::StopMoving();
             unk14c = 0x78;
-            unk148 = unk148 - 0x3e8;
+            m_gauge = m_gauge - 0x3e8;
             CPlayer::Unk410b10(0xb0, 3);
             l50.type = 0x44;
             l50.unk2c = 0x13;
             l50.x = (double)(int)x;
             l50.y = (double)((int)y - 0x28);
-            l50.unk20 = 2;
+            l50.scale = 2;
             l50.unk0 = 1;
-            l50.unk21 = 1;
+            l50.layer = 1;
             m_game->CreateEffect((EffectDesc*)&l50);
         }
         if (frame == 7) {
@@ -4452,8 +4452,8 @@ void CMisaki::Vf6()
             l50.x = (double)(int)x;
             l50.y = (double)(int)y;
             l50.unk18 = facing;
-            l50.unk20 = 2;
-            l50.unk21 = 1;
+            l50.scale = 2;
+            l50.layer = 1;
             Vf9(&l50);
         }
         if (vx + y >= 0.0) {
@@ -4466,13 +4466,13 @@ void CMisaki::Vf6()
         if (timer >= l4) {
             timer = 0;
             frame++;
-            unk168 = 0;
+            m_attackResult = 0;
             if (frame == 0xd && vy < 0.0) {
                 frame = 0xa;
             }
             if (frame >= x8) {
                 pattern = 0;
-                CPlayer::Unk40e630();
+                CPlayer::FaceOpponent();
                 Vf0();
             }
         }
@@ -4482,20 +4482,20 @@ void CMisaki::Vf6()
             vx = 0.0;
             vy = -1.0;
             ay = 0.002;
-            unk16c = 1;
+            m_hitsLeft = 1;
         }
         if (frame == 7 && timer == 0) {
-            CPlayer::Unk40f1e0();
+            CPlayer::StopMoving();
             unk14c = 0x78;
-            unk148 = unk148 - 0x7d0;
+            m_gauge = m_gauge - 0x7d0;
             CPlayer::Unk410b10(0xb0, 3);
             l50.type = 0x45;
             l50.unk2c = 5;
             l50.x = (double)(int)x;
             l50.y = (double)((int)y - 0x28);
-            l50.unk20 = 2;
+            l50.scale = 2;
             l50.unk0 = 1;
-            l50.unk21 = 1;
+            l50.layer = 1;
             m_game->CreateEffect((EffectDesc*)&l50);
         }
         if (frame == 7) {
@@ -4513,8 +4513,8 @@ void CMisaki::Vf6()
             l50.x = (double)(int)x;
             l50.y = (double)(int)y;
             l50.unk18 = facing;
-            l50.unk20 = 2;
-            l50.unk21 = 1;
+            l50.scale = 2;
+            l50.layer = 1;
             Vf9(&l50);
         }
         if (vx + y >= 0.0) {
@@ -4527,13 +4527,13 @@ void CMisaki::Vf6()
         if (timer >= l4) {
             timer = 0;
             frame++;
-            unk168 = 0;
+            m_attackResult = 0;
             if (frame == 0xd && vy < 0.0) {
                 frame = 0xa;
             }
             if (frame >= x8) {
                 pattern = 0;
-                CPlayer::Unk40e630();
+                CPlayer::FaceOpponent();
                 Vf0();
             }
         }
@@ -4543,20 +4543,20 @@ void CMisaki::Vf6()
             vx = 0.0;
             vy = -1.0;
             ay = 0.002;
-            unk16c = 1;
+            m_hitsLeft = 1;
         }
         if (frame == 7 && timer == 0) {
-            CPlayer::Unk40f1e0();
+            CPlayer::StopMoving();
             unk14c = 0x78;
-            unk148 = unk148 - 0xbb8;
+            m_gauge = m_gauge - 0xbb8;
             CPlayer::Unk410b10(0xb0, 3);
             l50.type = 0x46;
             l50.unk2c = 0x40;
             l50.x = (double)(int)x;
             l50.y = (double)((int)y - 0x28);
-            l50.unk20 = 2;
+            l50.scale = 2;
             l50.unk0 = 1;
-            l50.unk21 = 1;
+            l50.layer = 1;
             m_game->CreateEffect((EffectDesc*)&l50);
             unk2c9 = 0x25;
         }
@@ -4578,8 +4578,8 @@ void CMisaki::Vf6()
             l50.x = (double)(int)x;
             l50.y = (double)(int)y;
             l50.unk18 = facing;
-            l50.unk20 = 2;
-            l50.unk21 = 1;
+            l50.scale = 2;
+            l50.layer = 1;
             Vf9(&l50);
         }
         if (vx + y >= 0.0) {
@@ -4592,13 +4592,13 @@ void CMisaki::Vf6()
         if (timer >= l4) {
             timer = 0;
             frame++;
-            unk168 = 0;
+            m_attackResult = 0;
             if (frame == 0xd && vy < 0.0) {
                 frame = 0xa;
             }
             if (frame >= x8) {
                 pattern = 0;
-                CPlayer::Unk40e630();
+                CPlayer::FaceOpponent();
                 Vf0();
             }
         }
@@ -4612,37 +4612,37 @@ void CMisaki::Vf6()
         }
         if (frame == 3 && timer == 0) {
             unk14c = 0x78;
-            unk148 = unk148 - 0x3e8;
+            m_gauge = m_gauge - 0x3e8;
             CPlayer::Unk410b10(0xb0, 3);
             l50.type = 0x44;
             l50.unk2c = 0x13;
             l50.x = (double)(int)x;
             l50.y = (double)((int)y - 0x28);
-            l50.unk20 = 2;
+            l50.scale = 2;
             l50.unk0 = 1;
-            l50.unk21 = 1;
+            l50.layer = 1;
             m_game->CreateEffect((EffectDesc*)&l50);
             CPlayer::Unk410a80(0x32, 0x2d);
         }
         if (frame == 9 && timer == 0) {
             unk3138 = 0;
-            if ((WORD)CPlayer::Unk4108a0(0, 0x64) < 0x32) {
+            if ((WORD)CPlayer::Random(0, 0x64) < 0x32) {
                 l50.type = 0x19b;
                 l50.x = (double)((int)x + facing * 0x14);
                 l50.y = (double)((int)y - 0x4a);
                 l50.unk18 = facing;
-                l50.unk20 = 0;
-                l50.unk21 = 1;
+                l50.scale = 0;
+                l50.layer = 1;
                 unk3138++;
                 Vf9(&l50);
             }
-            if ((WORD)CPlayer::Unk4108a0(0, 0x64) < 0x32 && unk3138 == 0) {
+            if ((WORD)CPlayer::Random(0, 0x64) < 0x32 && unk3138 == 0) {
                 l50.type = 0x19d;
                 l50.x = (double)((int)x + facing * 0x14);
                 l50.y = (double)((int)y - 0x4a);
                 l50.unk18 = facing;
-                l50.unk20 = 0;
-                l50.unk21 = 1;
+                l50.scale = 0;
+                l50.layer = 1;
                 unk3138++;
                 Vf9(&l50);
             }
@@ -4651,8 +4651,8 @@ void CMisaki::Vf6()
                 l50.x = (double)((int)x + facing * 0x14);
                 l50.y = (double)((int)y - 0x4a);
                 l50.unk18 = facing;
-                l50.unk20 = 0;
-                l50.unk21 = 1;
+                l50.scale = 0;
+                l50.layer = 1;
                 Vf9(&l50);
             }
         }
@@ -4660,14 +4660,14 @@ void CMisaki::Vf6()
         if (timer >= l4) {
             timer = 0;
             frame++;
-            unk168 = 0;
+            m_attackResult = 0;
             if (frame == 0xb && unk313c < 0x1b) {
                 frame = 4;
                 unk313c += 2;
             }
             if (frame >= x8) {
                 pattern = 0;
-                CPlayer::Unk40e630();
+                CPlayer::FaceOpponent();
                 Vf0();
             }
         }
@@ -4681,38 +4681,38 @@ void CMisaki::Vf6()
         }
         if (frame == 3 && timer == 0) {
             unk14c = 0x78;
-            unk148 = unk148 - 0x7d0;
+            m_gauge = m_gauge - 0x7d0;
             CPlayer::Unk410b10(0xb0, 3);
             l50.type = 0x45;
             l50.unk2c = 5;
             l50.x = (double)(int)x;
             l50.y = (double)((int)y - 0x28);
-            l50.unk20 = 2;
+            l50.scale = 2;
             l50.unk0 = 1;
-            l50.unk21 = 1;
+            l50.layer = 1;
             m_game->CreateEffect((EffectDesc*)&l50);
             CPlayer::Unk410a80(0x32, 0x2d);
             unk13c = 0x87;
         }
         if (frame == 9 && timer == 0) {
             unk3138 = 0;
-            if ((WORD)CPlayer::Unk4108a0(0, 0x64) < 0x32) {
+            if ((WORD)CPlayer::Random(0, 0x64) < 0x32) {
                 l50.type = 0x19b;
                 l50.x = (double)((int)x + facing * 0x14);
                 l50.y = (double)((int)y - 0x4a);
                 l50.unk18 = facing;
-                l50.unk20 = 0;
-                l50.unk21 = 1;
+                l50.scale = 0;
+                l50.layer = 1;
                 unk3138++;
                 Vf9(&l50);
             }
-            if ((WORD)CPlayer::Unk4108a0(0, 0x64) < 0x32 && unk3138 == 0) {
+            if ((WORD)CPlayer::Random(0, 0x64) < 0x32 && unk3138 == 0) {
                 l50.type = 0x19d;
                 l50.x = (double)((int)x + facing * 0x14);
                 l50.y = (double)((int)y - 0x4a);
                 l50.unk18 = facing;
-                l50.unk20 = 0;
-                l50.unk21 = 1;
+                l50.scale = 0;
+                l50.layer = 1;
                 unk3138++;
                 Vf9(&l50);
             }
@@ -4721,8 +4721,8 @@ void CMisaki::Vf6()
                 l50.x = (double)((int)x + facing * 0x14);
                 l50.y = (double)((int)y - 0x4a);
                 l50.unk18 = facing;
-                l50.unk20 = 0;
-                l50.unk21 = 1;
+                l50.scale = 0;
+                l50.layer = 1;
                 Vf9(&l50);
             }
         }
@@ -4730,14 +4730,14 @@ void CMisaki::Vf6()
         if (timer >= l4) {
             timer = 0;
             frame++;
-            unk168 = 0;
+            m_attackResult = 0;
             if (frame == 0xb && unk313c < 0x27) {
                 frame = 4;
                 unk313c += 2;
             }
             if (frame >= x8) {
                 pattern = 0;
-                CPlayer::Unk40e630();
+                CPlayer::FaceOpponent();
                 Vf0();
             }
         }
@@ -4751,15 +4751,15 @@ void CMisaki::Vf6()
         }
         if (frame == 3 && timer == 0) {
             unk14c = 0x78;
-            unk148 = unk148 - 0xbb8;
+            m_gauge = m_gauge - 0xbb8;
             CPlayer::Unk410b10(0xb0, 3);
             l50.type = 0x46;
             l50.unk2c = 0x40;
             l50.x = (double)(int)x;
             l50.y = (double)((int)y - 0x28);
-            l50.unk20 = 2;
+            l50.scale = 2;
             l50.unk0 = 1;
-            l50.unk21 = 1;
+            l50.layer = 1;
             m_game->CreateEffect((EffectDesc*)&l50);
             CPlayer::Unk410a80(0x32, 0x2d);
             unk2c9 = 0x25;
@@ -4770,23 +4770,23 @@ void CMisaki::Vf6()
         }
         if (frame == 9 && timer == 0) {
             unk3138 = 0;
-            if ((WORD)CPlayer::Unk4108a0(0, 0x64) < 0x32) {
+            if ((WORD)CPlayer::Random(0, 0x64) < 0x32) {
                 l50.type = 0x19b;
                 l50.x = (double)((int)x + facing * 0x14);
                 l50.y = (double)((int)y - 0x4a);
                 l50.unk18 = facing;
-                l50.unk20 = 0;
-                l50.unk21 = 1;
+                l50.scale = 0;
+                l50.layer = 1;
                 unk3138++;
                 Vf9(&l50);
             }
-            if ((WORD)CPlayer::Unk4108a0(0, 0x64) < 0x32 && unk3138 == 0) {
+            if ((WORD)CPlayer::Random(0, 0x64) < 0x32 && unk3138 == 0) {
                 l50.type = 0x19d;
                 l50.x = (double)((int)x + facing * 0x14);
                 l50.y = (double)((int)y - 0x4a);
                 l50.unk18 = facing;
-                l50.unk20 = 0;
-                l50.unk21 = 1;
+                l50.scale = 0;
+                l50.layer = 1;
                 unk3138++;
                 Vf9(&l50);
             }
@@ -4795,8 +4795,8 @@ void CMisaki::Vf6()
                 l50.x = (double)((int)x + facing * 0x14);
                 l50.y = (double)((int)y - 0x4a);
                 l50.unk18 = facing;
-                l50.unk20 = 0;
-                l50.unk21 = 1;
+                l50.scale = 0;
+                l50.layer = 1;
                 Vf9(&l50);
             }
         }
@@ -4804,14 +4804,14 @@ void CMisaki::Vf6()
         if (timer >= l4) {
             timer = 0;
             frame++;
-            unk168 = 0;
+            m_attackResult = 0;
             if (frame == 0xb && unk313c < 0x39) {
                 frame = 4;
                 unk313c += 2;
             }
             if (frame >= x8) {
                 pattern = 0;
-                CPlayer::Unk40e630();
+                CPlayer::FaceOpponent();
                 Vf0();
             }
         }
@@ -4819,24 +4819,24 @@ void CMisaki::Vf6()
     case 0x132:
         if (frame == 3 && timer == 0) {
             unk158 = 0;
-            CPlayer::Unk40f1e0();
+            CPlayer::StopMoving();
             unk14c = 0x78;
-            unk148 = unk148 - 0x3e8;
+            m_gauge = m_gauge - 0x3e8;
             CPlayer::Unk410b10(0xb0, 3);
             l50.type = 0x44;
             l50.unk2c = 0x13;
             l50.x = (double)(int)x;
             l50.y = (double)((int)y - 0x28);
-            l50.unk20 = 2;
+            l50.scale = 2;
             l50.unk0 = 1;
-            l50.unk21 = 1;
+            l50.layer = 1;
             m_game->CreateEffect((EffectDesc*)&l50);
             CPlayer::Unk410a80(0x32, 0x2d);
         }
         if (frame > 4 && (*m_opponent)->y == 0.0) {
-            unk16c = 1;
+            m_hitsLeft = 1;
         } else {
-            unk16c = 0;
+            m_hitsLeft = 0;
         }
         if (frame == 1 && timer == 0) {
             unk3140 = 0xf;
@@ -4845,8 +4845,8 @@ void CMisaki::Vf6()
             l50.type = 0x1a2;
             l50.x = (double)((int)x + facing * 0xf);
             l50.y = (double)(int)y;
-            l50.unk20 = 2;
-            l50.unk21 = 1;
+            l50.scale = 2;
+            l50.layer = 1;
             l50.unk18 = facing;
             Vf9(&l50);
         }
@@ -4863,17 +4863,17 @@ void CMisaki::Vf6()
                 unkb8 = unk3138 * 0.01 * (*m_opponent)->facing;
             }
         }
-        if (frame > 4 && unk168 == 3) {
-            (*m_opponent)->Unk40f1e0();
+        if (frame > 4 && m_attackResult == 3) {
+            (*m_opponent)->StopMoving();
             (*m_opponent)->Vf0();
             Vf0();
             (*m_opponent)->unk128 = 1;
             l50.type = 0;
             l50.x = (double)((int)x + facing * 0x1d);
             l50.y = (double)((int)y - 0x53);
-            l50.unk20 = 2;
+            l50.scale = 2;
             l50.unk0 = 1;
-            l50.unk21 = 1;
+            l50.layer = 1;
             m_game->CreateEffect((EffectDesc*)&l50);
             pattern = 0x135;
             (*m_opponent)->pattern = 0x67;
@@ -4886,7 +4886,7 @@ void CMisaki::Vf6()
         if (timer >= l4) {
             timer = 0;
             frame++;
-            unk168 = 0;
+            m_attackResult = 0;
             if (frame == 5) {
                 unk2c9 = 0x12;
             }
@@ -4896,7 +4896,7 @@ void CMisaki::Vf6()
             }
             if (frame >= x8) {
                 pattern = 0;
-                CPlayer::Unk40e630();
+                CPlayer::FaceOpponent();
                 Vf0();
             }
         }
@@ -4904,24 +4904,24 @@ void CMisaki::Vf6()
     case 0x133:
         if (frame == 3 && timer == 0) {
             unk158 = 0;
-            CPlayer::Unk40f1e0();
+            CPlayer::StopMoving();
             unk14c = 0x78;
-            unk148 = unk148 - 0x7d0;
+            m_gauge = m_gauge - 0x7d0;
             CPlayer::Unk410b10(0xb0, 3);
             l50.type = 0x45;
             l50.unk2c = 5;
             l50.x = (double)(int)x;
             l50.y = (double)((int)y - 0x28);
-            l50.unk20 = 2;
+            l50.scale = 2;
             l50.unk0 = 1;
-            l50.unk21 = 1;
+            l50.layer = 1;
             m_game->CreateEffect((EffectDesc*)&l50);
             CPlayer::Unk410a80(0x32, 0x2d);
         }
         if (frame > 4 && (*m_opponent)->y == 0.0) {
-            unk16c = 1;
+            m_hitsLeft = 1;
         } else {
-            unk16c = 0;
+            m_hitsLeft = 0;
         }
         if (frame == 1 && timer == 0) {
             unk3140 = 0xf;
@@ -4930,8 +4930,8 @@ void CMisaki::Vf6()
             l50.type = 0x1a2;
             l50.x = (double)((int)x + facing * 0xf);
             l50.y = (double)(int)y;
-            l50.unk20 = 2;
-            l50.unk21 = 1;
+            l50.scale = 2;
+            l50.layer = 1;
             l50.unk18 = facing;
             Vf9(&l50);
         }
@@ -4948,17 +4948,17 @@ void CMisaki::Vf6()
                 unkb8 = unk3138 * 0.01 * (*m_opponent)->facing;
             }
         }
-        if (frame > 4 && unk168 == 3) {
-            (*m_opponent)->Unk40f1e0();
+        if (frame > 4 && m_attackResult == 3) {
+            (*m_opponent)->StopMoving();
             (*m_opponent)->Vf0();
             Vf0();
             (*m_opponent)->unk128 = 1;
             l50.type = 0;
             l50.x = (double)((int)x + facing * 0x1d);
             l50.y = (double)((int)y - 0x53);
-            l50.unk20 = 2;
+            l50.scale = 2;
             l50.unk0 = 1;
-            l50.unk21 = 1;
+            l50.layer = 1;
             m_game->CreateEffect((EffectDesc*)&l50);
             pattern = 0x136;
             (*m_opponent)->pattern = 0x67;
@@ -4971,7 +4971,7 @@ void CMisaki::Vf6()
         if (timer >= l4) {
             timer = 0;
             frame++;
-            unk168 = 0;
+            m_attackResult = 0;
             if (frame == 5) {
                 unk2c9 = 0x12;
             }
@@ -4981,7 +4981,7 @@ void CMisaki::Vf6()
             }
             if (frame >= x8) {
                 pattern = 0;
-                CPlayer::Unk40e630();
+                CPlayer::FaceOpponent();
                 Vf0();
             }
         }
@@ -4989,24 +4989,24 @@ void CMisaki::Vf6()
     case 0x134:
         if (frame == 0 && timer == 0) {
             unk158 = 0;
-            CPlayer::Unk40f1e0();
+            CPlayer::StopMoving();
             unk14c = 0x78;
-            unk148 = unk148 - 0xbb8;
+            m_gauge = m_gauge - 0xbb8;
             CPlayer::Unk410b10(0xb0, 3);
             l50.type = 0x46;
             l50.unk2c = 0x40;
             l50.x = (double)(int)x;
             l50.y = (double)((int)y - 0x28);
-            l50.unk20 = 2;
+            l50.scale = 2;
             l50.unk0 = 1;
-            l50.unk21 = 1;
+            l50.layer = 1;
             m_game->CreateEffect((EffectDesc*)&l50);
             CPlayer::Unk410a80(0x32, 0x2d);
             unk2c9 = 0x25;
         }
         m_game->Unk4080c0(0xf);
         if (frame > 4) {
-            unk16c = 1;
+            m_hitsLeft = 1;
         }
         if (frame == 1 && timer == 0) {
             unk3140 = 0xf;
@@ -5015,8 +5015,8 @@ void CMisaki::Vf6()
             l50.type = 0x1a2;
             l50.x = (double)((int)x + facing * 0xf);
             l50.y = (double)(int)y;
-            l50.unk20 = 2;
-            l50.unk21 = 1;
+            l50.scale = 2;
+            l50.layer = 1;
             l50.unk18 = facing;
             Vf9(&l50);
         }
@@ -5033,17 +5033,17 @@ void CMisaki::Vf6()
                 unkb8 = unk3138 * 0.01 * (*m_opponent)->facing;
             }
         }
-        if (frame > 4 && unk168 == 3) {
-            (*m_opponent)->Unk40f1e0();
+        if (frame > 4 && m_attackResult == 3) {
+            (*m_opponent)->StopMoving();
             (*m_opponent)->Vf0();
             Vf0();
             (*m_opponent)->unk128 = 1;
             l50.type = 0;
             l50.x = (double)((int)x + facing * 0x1d);
             l50.y = (double)((int)y - 0x53);
-            l50.unk20 = 2;
+            l50.scale = 2;
             l50.unk0 = 1;
-            l50.unk21 = 1;
+            l50.layer = 1;
             m_game->CreateEffect((EffectDesc*)&l50);
             pattern = 0x137;
             (*m_opponent)->pattern = 0x67;
@@ -5056,7 +5056,7 @@ void CMisaki::Vf6()
         if (timer >= l4) {
             timer = 0;
             frame++;
-            unk168 = 0;
+            m_attackResult = 0;
             if (frame == 5) {
                 unk2c9 = 0x12;
             }
@@ -5066,7 +5066,7 @@ void CMisaki::Vf6()
             }
             if (frame >= x8) {
                 pattern = 0;
-                CPlayer::Unk40e630();
+                CPlayer::FaceOpponent();
                 Vf0();
             }
         }
@@ -5084,18 +5084,18 @@ void CMisaki::Vf6()
                 y = 0.0;
                 frame = 0xe;
                 timer = 0;
-                CPlayer::Unk40f1e0();
+                CPlayer::StopMoving();
                 CPlayer::Unk410a10(0xf, 0xa);
                 unk2c9 = 0x16;
-                CPlayer::Unk4105a0(0x578, 900.0);
+                CPlayer::DealDamage(0x578, 900.0);
                 (*m_opponent)->unk140 = 0;
                 (*m_opponent)->Vf0();
                 (*m_opponent)->pattern = 0x62;
                 l50.type = 0x190;
                 l50.x = (double)(int)x;
                 l50.y = (double)(int)y;
-                l50.unk20 = 2;
-                l50.unk21 = 1;
+                l50.scale = 2;
+                l50.layer = 1;
                 l50.unk18 = facing;
                 Vf9(&l50);
                 l50.type = 0;
@@ -5129,7 +5129,7 @@ void CMisaki::Vf6()
                 (*m_opponent)->Vf0();
                 (*m_opponent)->pattern = 0x61;
                 (*m_opponent)->unk12c = 1;
-                CPlayer::Unk4105a0(0x12c, 980.0);
+                CPlayer::DealDamage(0x12c, 980.0);
             }
             if (frame == 6 && unk3138 < 3) {
                 unk3138++;
@@ -5140,10 +5140,10 @@ void CMisaki::Vf6()
                 vx = 0.3;
                 ay = 0.15;
             }
-            unk168 = 0;
+            m_attackResult = 0;
             if (frame >= x8) {
                 pattern = 0;
-                CPlayer::Unk40e630();
+                CPlayer::FaceOpponent();
                 Vf0();
             }
         }
@@ -5180,22 +5180,22 @@ void CMisaki::Vf6()
                 (*m_opponent)->Vf0();
                 (*m_opponent)->pattern = 0x61;
                 (*m_opponent)->unk12c = 1;
-                CPlayer::Unk4105a0(0x12c, 920.0);
+                CPlayer::DealDamage(0x12c, 920.0);
             }
             if (frame == 6 && unk3138 < 6) {
                 unk3138++;
                 frame = 0;
             }
             if (frame == 0xa) {
-                (*m_opponent)->Unk40f1e0();
+                (*m_opponent)->StopMoving();
                 (*m_opponent)->Vf0();
                 (*m_opponent)->unk128 = 1;
                 l50.type = 0;
                 l50.x = (double)((int)x + facing * 0xf);
                 l50.y = (double)((int)y - 5);
-                l50.unk20 = 2;
+                l50.scale = 2;
                 l50.unk0 = 1;
-                l50.unk21 = 1;
+                l50.layer = 1;
                 m_game->CreateEffect((EffectDesc*)&l50);
                 (*m_opponent)->pattern = 0x3f;
                 (*m_opponent)->y = 0.0;
@@ -5218,18 +5218,18 @@ void CMisaki::Vf6()
                 l50.x = (double)(int)x;
                 l50.y = (double)(int)y;
                 l50.unk18 = facing;
-                l50.unk20 = 2;
-                l50.unk21 = 1;
+                l50.scale = 2;
+                l50.layer = 1;
                 Vf9(&l50);
             }
             if (frame == 0x20 && unk3140 < 0xb) {
                 frame = frame - 3;
                 unk3140++;
             }
-            unk168 = 0;
+            m_attackResult = 0;
             if (frame >= x8) {
                 pattern = 0xfd;
-                CPlayer::Unk40e630();
+                CPlayer::FaceOpponent();
                 Vf0();
             }
         }
@@ -5250,15 +5250,15 @@ void CMisaki::Vf6()
         if (timer >= l4) {
             timer = 0;
             frame++;
-            unk168 = 0;
+            m_attackResult = 0;
             if (frame == 3 || frame == 6) {
                 l50.type = 0;
                 l50.unk2c = 2;
-                l50.x = (double)((int)x + facing * 0xe + (WORD)CPlayer::Unk4108a0(0, 0x1e));
-                l50.y = (double)((int)y + -0x62 + (WORD)CPlayer::Unk4108a0(0, 0x1e));
-                l50.unk20 = 2;
+                l50.x = (double)((int)x + facing * 0xe + (WORD)CPlayer::Random(0, 0x1e));
+                l50.y = (double)((int)y + -0x62 + (WORD)CPlayer::Random(0, 0x1e));
+                l50.scale = 2;
                 l50.unk0 = 1;
-                l50.unk21 = 1;
+                l50.layer = 1;
                 m_game->CreateEffect((EffectDesc*)&l50);
             }
             if (frame == 1) {
@@ -5274,10 +5274,10 @@ void CMisaki::Vf6()
                 l50.type = 0x193;
                 l50.x = (double)(int)x;
                 l50.y = (double)((int)y - 0xfa);
-                l50.unk20 = 2;
+                l50.scale = 2;
                 l50.unk0 = 1;
                 l50.unk18 = facing;
-                l50.unk21 = 1;
+                l50.layer = 1;
                 Vf9(&l50);
             }
             if (frame == 3) {
@@ -5306,8 +5306,8 @@ void CMisaki::Vf6()
                 (*m_opponent)->pattern = 0x3f;
                 (*m_opponent)->unkc0 = 0.2;
                 (*m_opponent)->unkc8 = -1.9;
-                CPlayer::Unk4105a0(0x3e8, 1000.0);
-                unk16c = 1;
+                CPlayer::DealDamage(0x3e8, 1000.0);
+                m_hitsLeft = 1;
             }
             if (frame == 7 && unk3138 < 9) {
                 unk3138++;
@@ -5317,25 +5317,25 @@ void CMisaki::Vf6()
                 l50.type = 0x1f;
                 l50.x = (double)(int)x;
                 l50.y = (double)((int)y + 4);
-                l50.unk20 = 0;
+                l50.scale = 0;
                 l50.unk0 = 1;
                 l50.unk18 = facing;
-                l50.unk21 = 1;
+                l50.layer = 1;
                 m_game->CreateEffect((EffectDesc*)&l50);
                 l50.type = 0x191;
                 l50.x = (double)((int)x + facing * 0x28);
                 l50.y = (double)(int)y;
-                l50.unk20 = 2;
+                l50.scale = 2;
                 l50.unk18 = facing;
                 l50.unk0 = 1;
-                l50.unk21 = 1;
+                l50.layer = 1;
                 Vf9(&l50);
                 CPlayer::Unk410a10(0xa, 0x3c);
             }
             if (frame >= x8) {
                 pattern = 0;
                 Vf0();
-                CPlayer::Unk40e630();
+                CPlayer::FaceOpponent();
             }
         }
         break;
@@ -5345,7 +5345,7 @@ void CMisaki::Vf6()
             vx = 0.0;
             vy = 0.0;
             ay = 0.0;
-            unk16c = 2;
+            m_hitsLeft = 2;
         }
         if (frame == 6 && timer == 0) {
             CPlayer::Unk410a80(0x32, 0x2d);
@@ -5355,9 +5355,9 @@ void CMisaki::Vf6()
             l50.unk2c = 0x40;
             l50.x = (double)((int)x + facing * 0x17);
             l50.y = (double)((int)y - 0x1e);
-            l50.unk20 = 2;
+            l50.scale = 2;
             l50.unk0 = 1;
-            l50.unk21 = 1;
+            l50.layer = 1;
             m_game->CreateEffect((EffectDesc*)&l50);
             l50.type = 0x47;
             m_game->CreateEffect((EffectDesc*)&l50);
@@ -5367,39 +5367,39 @@ void CMisaki::Vf6()
             l50.type = 0x1f;
             l50.x = (double)(int)x;
             l50.y = (double)((int)y + 4);
-            l50.unk20 = 0;
+            l50.scale = 0;
             l50.unk0 = 1;
             l50.unk18 = facing;
-            l50.unk21 = 1;
+            l50.layer = 1;
             m_game->CreateEffect((EffectDesc*)&l50);
             l50.type = 0x192;
             l50.x = (double)((int)x + facing * 0x2d);
             l50.y = (double)(int)y;
-            l50.unk20 = 2;
+            l50.scale = 2;
             l50.unk18 = facing;
             l50.unk0 = 1;
-            l50.unk21 = 1;
+            l50.layer = 1;
             Vf9(&l50);
         }
         if (frame == 8 && timer == 0) {
             l50.type = 0x1f;
             l50.x = (double)(int)x;
             l50.y = (double)((int)y + 4);
-            l50.unk20 = 0;
+            l50.scale = 0;
             l50.unk0 = 1;
             l50.unk18 = facing;
-            l50.unk21 = 1;
+            l50.layer = 1;
             m_game->CreateEffect((EffectDesc*)&l50);
             l50.type = 0x191;
             l50.x = (double)((int)x + facing * 0x28);
             l50.y = (double)(int)y;
-            l50.unk20 = 2;
+            l50.scale = 2;
             l50.unk18 = facing;
             l50.unk0 = 1;
-            l50.unk21 = 1;
+            l50.layer = 1;
             Vf9(&l50);
         }
-        if (frame == 2 && unk168 == 3) {
+        if (frame == 2 && m_attackResult == 3) {
             CPlayer::Unk410a10(6, 0x3c);
             (*m_opponent)->unk14a = 0x1f4;
             m_game->Unk4080c0(0xf);
@@ -5411,11 +5411,11 @@ void CMisaki::Vf6()
         if (timer >= l4) {
             timer = 0;
             frame++;
-            if (unk168 != 3 && frame == 6) {
+            if (m_attackResult != 3 && frame == 6) {
                 frame = 0xc;
             }
             if (frame == 9 || frame == 1) {
-                unk168 = 0;
+                m_attackResult = 0;
             }
             if (frame >= x8) {
                 pattern = 0;
@@ -5427,37 +5427,37 @@ void CMisaki::Vf6()
         m_game->Unk4080c0(0xf);
         unk158 = 0;
         if (frame == 0 && timer == 0) {
-            CPlayer::Unk40f1e0();
+            CPlayer::StopMoving();
             if (frame == 1 && timer == 0) {
-                unk148 = unk148 - 0xbb8;
+                m_gauge = m_gauge - 0xbb8;
             }
             CPlayer::Unk410a80(0x32, 0x2d);
             unk14c = 0x78;
             CPlayer::Unk410b10(0xb0, 3);
-            unk148 = unk148 - 0xbb8;
+            m_gauge = m_gauge - 0xbb8;
             l50.type = 0x46;
             l50.unk2c = 0x40;
             l50.x = (double)((int)x + facing * 0x17);
             l50.y = (double)((int)y - 0x1e);
-            l50.unk20 = 2;
+            l50.scale = 2;
             l50.unk0 = 1;
-            l50.unk21 = 1;
+            l50.layer = 1;
             m_game->CreateEffect((EffectDesc*)&l50);
             unk2c9 = 0x25;
             l50.type = 0x47;
             m_game->CreateEffect((EffectDesc*)&l50);
         }
-        if (unk168 == 6 && frame == 2) {
+        if (m_attackResult == 6 && frame == 2) {
             Vf0();
             frame = 3;
-            unk168 = 0;
+            m_attackResult = 0;
             unk14c = 0xa0;
             unk2c9 = 3;
             l50.type = 0;
             l50.x = (double)((int)x + facing * 0xa);
             l50.y = (double)((int)y - 0x28);
-            l50.unk20 = 2;
-            l50.unk21 = 1;
+            l50.scale = 2;
+            l50.layer = 1;
             m_game->CreateEffect((EffectDesc*)&l50);
             break;
         }
@@ -5465,7 +5465,7 @@ void CMisaki::Vf6()
         if (timer >= l4) {
             timer = 0;
             frame++;
-            unk168 = 0;
+            m_attackResult = 0;
             if (frame == 3) {
                 frame = 4;
                 break;
@@ -5477,7 +5477,7 @@ void CMisaki::Vf6()
             }
             if (frame >= x8) {
                 pattern = 0;
-                CPlayer::Unk40e630();
+                CPlayer::FaceOpponent();
                 Vf0();
             }
         }

@@ -35,7 +35,7 @@ reads the words back strictly in the order it wrote them.
 | Header | P1 character, P2 character, `0x68`, stage, P1 palette, P2 palette | written `src/scene3.cpp:677-683`, read `src/scene2.cpp:126-137` |
 | Each fight frame, not while paused | Two values the F4/F5 keys set; the second is the HP the players are reset to (`src/player.cpp:326`) | `CScene3::Vf2`, `src/scene3.cpp:592-608` |
 | Each player's input | One word: bits `1` right, `2` left, `4` down, `8` up, `0x10`-`0x80` A-D | `src/player.cpp:1027-1029`, decoded at `:1037-1084` |
-| Each random draw through `CPlayer::Unk4108a0` (`0x4108a0`) | The `rand()` value when recording; on playback the word replaces it | `src/player.cpp:667-680` |
+| Each random draw through `CPlayer::Random` (`0x4108a0`) | The `rand()` value when recording; on playback the word replaces it | `src/player.cpp:667-680` |
 
 A third header word of 100 or less is the stage and means the replay has no per-frame
 F4/F5 words (the game then uses 1000 and 9999). **Inferred:** these are replays from
@@ -43,7 +43,7 @@ earlier versions.
 
 ## What a replay reproduces
 
-- **Randomness that matters to play.** It goes through `CPlayer::Unk4108a0`, so it is
+- **Randomness that matters to play.** It goes through `CPlayer::Random`, so it is
   recorded. Ayu's LV4 (A, neutral, A, 4, B, C with the gauge full and HP below 3333;
   state `0x13e`, `src/ayu.cpp:124` and `:449-479`) is the clearest case. During the
   move, whether each attacking feather spawns, its type (fast `0x1a0` or slow `0x1a1`),
@@ -66,7 +66,7 @@ earlier versions.
 
 ## Rules for changes in the fork
 
-- **Keep every helper call.** The same number of calls to `CPlayer::Unk4108a0`, in the
+- **Keep every helper call.** The same number of calls to `CPlayer::Random`, in the
   same order, at the same points. One call more or less shifts every later word, and the
   replay goes off the rails from that frame.
 - **Random numbers that can affect a hit go through the helper.** Plain `rand()` is only
@@ -82,15 +82,15 @@ earlier versions.
 
 What the test compares for each player on each frame. Offsets are in `CPlayer`.
 
-| Field | Offset | Notes |
+| Field | Member and offset | Notes |
 |---|---|---|
-| HP | `+0x108` | 9999 full (`src/player.cpp:216`) |
-| HP when the current combo began | `+0x10c` | `src/player.cpp:624` |
-| The combo's damage so far | `+0x100` | `src/player.cpp:635` |
-| Hits in the current combo | `+0x174` | `src/player.cpp:632` |
-| Position | `+0x20`, `+0x28` | Doubles; y is negative in the air. Compared bit for bit |
-| Action | `+0x8` | e.g. Ayu's forward dash is `0xa3` |
-| Gauge | `+0x148` | **Inferred:** 3000 full (Ayu's LV4 needs exactly `0xbb8`) |
+| HP | `m_hp`, `+0x108` | 9999 full (`src/player.cpp:216`) |
+| HP when the current combo began | `m_comboStartHp`, `+0x10c` | `src/player.cpp:624` |
+| The combo's damage so far | `m_comboDamage`, `+0x100` | `src/player.cpp:635` |
+| Hits in the current combo | `m_comboHits`, `+0x174` | `src/player.cpp:632` |
+| Position | `x`, `y`, `+0x20`, `+0x28` | Doubles; y is negative in the air. Compared bit for bit |
+| Action | `pattern`, `+0x8` | e.g. Ayu's forward dash is `0xa3` |
+| Gauge | `m_gauge`, `+0x148` | A level per 1000, 3000 full: moves test `>= 0x3e8`, `0x7d0` and `0xbb8` |
 
 The list grows as more fields are identified. The replay word offset is logged with
 each frame too: if the fork and the original read different words first, the bug is in

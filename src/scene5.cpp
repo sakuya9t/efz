@@ -62,7 +62,7 @@ BYTE CScene5::Update()
             delete (char*)m_game->m_background;
             m_game->m_background = (CAnimBg*)0;
         }
-        if (m_game->unk14283 > 0) {
+        if (m_game->m_replayMode > 0) {
             (&m_game->m_replay)->Close();
         }
         if (m_game->unk1364 == 0) {
@@ -349,13 +349,13 @@ void CScene5::Draw()
         Unk774a10(0x136, 0x9d, unk470);
         m_graphics->Blit(MakeRect(9, 0xbe, 0x4a, 0x12), (IDirectDrawSurface*)unk438, MakeRect(0x34, 0x161, 0x4a, 0x12), (char)m_game->m_colorKey, 0);
         m_graphics->Blit(MakeRect(0x12a, 0xbb, 0xb, 0x11), (IDirectDrawSurface*)unk438, MakeRect(0xb2, 0x1c8, 0xb, 0x11), (char)m_game->m_colorKey, 0);
-        Unk774a10(0x128, 0xba, m_players[m_game->unk1342]->unk30d0);
-        Unk774a10(0x136, 0xd7, m_players[m_game->unk1342]->unk30c8);
-        if ((unsigned long)m_players[m_game->unk1342]->unk30cc > 0) {
-            Unk774a10(0xc6, 0xd7, m_players[m_game->unk1342]->unk30cc);
+        Unk774a10(0x128, 0xba, m_players[m_game->unk1342]->m_hitsLanded);
+        Unk774a10(0x136, 0xd7, m_players[m_game->unk1342]->m_score);
+        if ((unsigned long)m_players[m_game->unk1342]->m_scoreHigh > 0) {
+            Unk774a10(0xc6, 0xd7, m_players[m_game->unk1342]->m_scoreHigh);
             v8 = 1;
             for (; v8 < 8; v8++) {
-                if ((double)(unsigned long)m_players[m_game->unk1342]->unk30c8 / pow(0xa, 8 - v8) < 1.0) {
+                if ((double)(unsigned long)m_players[m_game->unk1342]->m_score / pow(0xa, 8 - v8) < 1.0) {
                     Unk774a10(v8 * 0xe + 0xc6, 0xd7, 0);
                 }
             }
@@ -460,40 +460,40 @@ void CScene5::Unk774b00()
     }
     if (m_game->unk1364 == 2) {
         unk464 = (unsigned long)m_players[m_game->unk1342]->unk30dc / 0x64;
-        m_players[m_game->unk1342]->unk30d0 += unk464;
-        unk468 = m_players[m_game->unk1342]->unk30d4 << 1;
-        m_players[m_game->unk1342]->unk30d0 += unk468;
-        unk46c = (unsigned long)m_players[m_game->unk1342]->unk30d8 / 0x64;
-        m_players[m_game->unk1342]->unk30d0 += unk46c;
+        m_players[m_game->unk1342]->m_hitsLanded += unk464;
+        unk468 = m_players[m_game->unk1342]->m_maxHits << 1;
+        m_players[m_game->unk1342]->m_hitsLanded += unk468;
+        unk46c = (unsigned long)m_players[m_game->unk1342]->m_maxDamage / 0x64;
+        m_players[m_game->unk1342]->m_hitsLanded += unk46c;
         unk470 = m_game->unk1358 * 0x32 * (m_players[(1 - m_game->unk1342)]->unkac == 0);
-        m_players[m_game->unk1342]->unk30d0 += unk470;
+        m_players[m_game->unk1342]->m_hitsLanded += unk470;
         ((CharRecord*)&m_players[m_game->unk1342]->unk3118)->Load(m_players[m_game->unk1342]->m_name);
-        if ((unsigned long)m_players[m_game->unk1342]->unk3128 < m_players[m_game->unk1342]->unk30cc) {
-            m_players[m_game->unk1342]->unk3124 = m_players[m_game->unk1342]->unk30c8;
-            m_players[m_game->unk1342]->unk3128 = m_players[m_game->unk1342]->unk30cc;
-        } else if (m_players[m_game->unk1342]->unk3128 == m_players[m_game->unk1342]->unk30cc && m_players[m_game->unk1342]->unk3124 < m_players[m_game->unk1342]->unk30c8) {
-            m_players[m_game->unk1342]->unk3124 = m_players[m_game->unk1342]->unk30c8;
+        if ((unsigned long)m_players[m_game->unk1342]->unk3128 < m_players[m_game->unk1342]->m_scoreHigh) {
+            m_players[m_game->unk1342]->unk3124 = m_players[m_game->unk1342]->m_score;
+            m_players[m_game->unk1342]->unk3128 = m_players[m_game->unk1342]->m_scoreHigh;
+        } else if (m_players[m_game->unk1342]->unk3128 == m_players[m_game->unk1342]->m_scoreHigh && m_players[m_game->unk1342]->unk3124 < m_players[m_game->unk1342]->m_score) {
+            m_players[m_game->unk1342]->unk3124 = m_players[m_game->unk1342]->m_score;
         }
         ((CharRecord*)&m_players[m_game->unk1342]->unk3118)->Save(m_players[m_game->unk1342]->m_name);
     }
     if ((char)m_game->unk1370 == 2) {
         if (m_game->unk1343[0] == 0) {
             ((CharRecord*)&m_players[0]->unk3118)->Load(m_players[0]->m_name);
-            if (m_players[0]->unk3130 < m_players[0]->unk30d4) {
-                m_players[0]->unk3130 = m_players[0]->unk30d4;
+            if (m_players[0]->unk3130 < m_players[0]->m_maxHits) {
+                m_players[0]->unk3130 = m_players[0]->m_maxHits;
             }
-            if (m_players[0]->unk3134 < m_players[0]->unk30d8) {
-                m_players[0]->unk3134 = m_players[0]->unk30d8;
+            if (m_players[0]->unk3134 < m_players[0]->m_maxDamage) {
+                m_players[0]->unk3134 = m_players[0]->m_maxDamage;
             }
             ((CharRecord*)&m_players[0]->unk3118)->Save(m_players[0]->m_name);
         }
         if (m_game->unk1343[1] == 0) {
             ((CharRecord*)&m_players[1]->unk3118)->Load(m_players[1]->m_name);
-            if (m_players[1]->unk3130 < m_players[1]->unk30d4) {
-                m_players[1]->unk3130 = m_players[1]->unk30d4;
+            if (m_players[1]->unk3130 < m_players[1]->m_maxHits) {
+                m_players[1]->unk3130 = m_players[1]->m_maxHits;
             }
-            if (m_players[1]->unk3134 < m_players[1]->unk30d8) {
-                m_players[1]->unk3134 = m_players[1]->unk30d8;
+            if (m_players[1]->unk3134 < m_players[1]->m_maxDamage) {
+                m_players[1]->unk3134 = m_players[1]->m_maxDamage;
             }
             ((CharRecord*)&m_players[1]->unk3118)->Save(m_players[1]->m_name);
         }
@@ -517,7 +517,7 @@ void CScene5::Unk774b00()
         m_players[0]->facing = -1;
         m_players[0]->pattern = 0x2f;
         m_players[0]->Vf0();
-        m_players[0]->Unk40f1e0();
+        m_players[0]->StopMoving();
         m_players[0]->unk30bc = 0;
         m_players[0]->m_afterimages.unk0 = 0;
         m_players[0]->m_afterimages.unk2 = 0;
@@ -531,7 +531,7 @@ void CScene5::Unk774b00()
     m_players[1]->facing = -1;
     m_players[1]->pattern = 0x2f;
     m_players[1]->Vf0();
-    m_players[1]->Unk40f1e0();
+    m_players[1]->StopMoving();
     m_players[1]->unk30bc = 0;
     m_players[1]->m_afterimages.unk0 = 0;
     m_players[1]->m_afterimages.unk2 = 0;

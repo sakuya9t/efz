@@ -70,17 +70,17 @@ void EncodeObjectDat()
 }
 
 // count times, spawn effect `type` twice at this effect's position, the second time
-// with unk21 set.
+// on layer 1.
 #define SPAWN_PAIRS(count, effectType)                      \
     for (i = 0; i < (count); i++) {                         \
         d.x = (int)m_effects[index].x;                      \
         d.y = (int)m_effects[index].y;                      \
         d.side = m_effects[index].side;                     \
-        d.unk20 = 2;                                        \
-        d.unk21 = 0;                                        \
+        d.scale = 2;                                        \
+        d.layer = 0;                                        \
         d.type = (effectType);                              \
         CreateEffect(&d);                                   \
-        d.unk21 = 1;                                        \
+        d.layer = 1;                                        \
         CreateEffect(&d);                                   \
     }
 
@@ -90,8 +90,8 @@ void EncodeObjectDat()
         d.x = (int)m_effects[index].x;                      \
         d.y = (int)m_effects[index].y;                      \
         d.side = m_effects[index].side;                     \
-        d.unk20 = 2;                                        \
-        d.unk21 = 0;                                        \
+        d.scale = 2;                                        \
+        d.layer = 0;                                        \
         d.type = (effectType);                              \
         CreateEffect(&d);                                   \
     }
@@ -112,7 +112,7 @@ void CGame::UpdateEffect(short index)
     double ty;
 
     d.unk0 = 0;
-    d.unk24 = 0;
+    d.screen = 0;
     d.unk2c = 0xff;
 
     switch (m_effects[index].type) {
@@ -139,18 +139,18 @@ void CGame::UpdateEffect(short index)
                 d.x = 160;
                 d.y = 120;
                 d.side = 0;
-                d.unk20 = 0;
-                d.unk21 = 2;
-                d.unk24 = 1;
+                d.scale = 0;
+                d.layer = 2;
+                d.screen = 1;
                 d.type = 0x15;
                 d.unk2c = 0xff;
                 CreateEffect(&d);
                 d.x = 160;
                 d.y = 120;
                 d.side = 0;
-                d.unk20 = 0;
-                d.unk21 = 2;
-                d.unk24 = 1;
+                d.scale = 0;
+                d.layer = 2;
+                d.screen = 1;
                 d.type = unk134d + 0x38;
                 d.unk2c = 0xff;
                 CreateEffect(&d);
@@ -160,9 +160,9 @@ void CGame::UpdateEffect(short index)
                 d.x = 160;
                 d.y = 120;
                 d.side = 0;
-                d.unk20 = 2;
-                d.unk21 = 1;
-                d.unk24 = 1;
+                d.scale = 2;
+                d.layer = 1;
+                d.screen = 1;
                 d.type = 0x1a;
                 d.unk2c = 0xff;
                 CreateEffect(&d);
@@ -223,9 +223,9 @@ void CGame::UpdateEffect(short index)
                 d.x = 160;
                 d.y = 120;
                 d.side = 0;
-                d.unk20 = 2;
-                d.unk21 = 3;
-                d.unk24 = 1;
+                d.scale = 2;
+                d.layer = 3;
+                d.screen = 1;
                 d.type = 6;
                 d.unk2c = 0xff;
                 CreateEffect(&d);
@@ -233,9 +233,9 @@ void CGame::UpdateEffect(short index)
                 d.x = 160;
                 d.y = 120;
                 d.side = 0;
-                d.unk20 = 0;
-                d.unk21 = 2;
-                d.unk24 = 1;
+                d.scale = 0;
+                d.layer = 2;
+                d.screen = 1;
                 d.type = 0x16;
                 d.unk2c = 0x17;
                 CreateEffect(&d);
@@ -253,9 +253,9 @@ void CGame::UpdateEffect(short index)
                 d.x = 160;
                 d.y = 120;
                 d.side = 0;
-                d.unk20 = 0;
-                d.unk21 = 2;
-                d.unk24 = 1;
+                d.scale = 0;
+                d.layer = 2;
+                d.screen = 1;
                 d.type = 0x17;
                 d.unk2c = 0xff;
                 CreateEffect(&d);
@@ -273,9 +273,9 @@ void CGame::UpdateEffect(short index)
                 d.x = 160;
                 d.y = 120;
                 d.side = 0;
-                d.unk20 = 2;
-                d.unk21 = 2;
-                d.unk24 = 1;
+                d.scale = 2;
+                d.layer = 2;
+                d.screen = 1;
                 d.type = 7;
                 d.unk2c = 0xff;
                 CreateEffect(&d);
@@ -283,9 +283,9 @@ void CGame::UpdateEffect(short index)
                 d.x = 160;
                 d.y = 120;
                 d.side = 0;
-                d.unk20 = 0;
-                d.unk21 = 2;
-                d.unk24 = 1;
+                d.scale = 0;
+                d.layer = 2;
+                d.screen = 1;
                 d.type = 0x18;
                 d.unk2c = 0x18;
                 CreateEffect(&d);
@@ -303,9 +303,9 @@ void CGame::UpdateEffect(short index)
                 d.x = 160;
                 d.y = 120;
                 d.side = 0;
-                d.unk20 = 0;
-                d.unk21 = 2;
-                d.unk24 = 1;
+                d.scale = 0;
+                d.layer = 2;
+                d.screen = 1;
                 d.type = 0x19;
                 d.unk2c = 0xff;
                 CreateEffect(&d);
@@ -323,9 +323,9 @@ void CGame::UpdateEffect(short index)
                 d.x = 160;
                 d.y = 120;
                 d.side = 0;
-                d.unk20 = 2;
-                d.unk21 = 2;
-                d.unk24 = 1;
+                d.scale = 2;
+                d.layer = 2;
+                d.screen = 1;
                 d.type = 0x12;
                 d.unk2c = 0xff;
                 CreateEffect(&d);
@@ -347,9 +347,9 @@ void CGame::UpdateEffect(short index)
                 d.x = 160;
                 d.y = 120;
                 d.side = 0;
-                d.unk20 = 2;
-                d.unk21 = 2;
-                d.unk24 = 1;
+                d.scale = 2;
+                d.layer = 2;
+                d.screen = 1;
                 d.type = 5;
                 d.unk2c = unk134d + 0xb;
                 CreateEffect(&d);

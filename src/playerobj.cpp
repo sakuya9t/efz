@@ -20,10 +20,10 @@ void CPlayer::Vf9(EffectDesc* p1)
     m_objects[unk2ca].ay = 0.0;
     m_objects[unk2ca].facing = (char)p1->unk18;
     m_objects[unk2ca].unk4c = p1->side;
-    m_objects[unk2ca].unk50 = (char)p1->unk20;
+    m_objects[unk2ca].unk50 = (char)p1->scale;
     m_objects[unk2ca].unk6c = (char)p1->unk2c;
-    m_objects[unk2ca].unk54 = p1->unk24;
-    m_objects[unk2ca].unk51 = (char)p1->unk21;
+    m_objects[unk2ca].unk54 = p1->screen;
+    m_objects[unk2ca].unk51 = (char)p1->layer;
     m_objects[unk2ca].unk58 = p1->unk28;
     m_objects[unk2ca].unk88 = p1->unk30;
     m_objects[unk2ca].unk8c = 0;
@@ -90,9 +90,9 @@ void CPlayer::Unk413040()
 void CPlayer::Unk413090(EffectDesc* p1)
 {
     p1->unk0 = 0;
-    p1->unk20 = 0;
+    p1->scale = 0;
     p1->unk2c = -1;
-    p1->unk24 = 0;
+    p1->screen = 0;
     p1->unk28 = 0;
     p1->unk30 = 0;
     p1->unk38 = 0;

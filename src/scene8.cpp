@@ -174,7 +174,7 @@ BYTE CScene8::Update()
                 if (((char (*)[9])&unk46e[0])[unk46d][unk46a] != 0 && unk46b == 0) {
                     m_game->unk14281 = unk46a;
                     m_game->unk14282 = unk46d;
-                    m_game->unk14283 = 1;
+                    m_game->m_replayMode = 1;
                     CScene::Unk759c90(m_palette, 0, 0, 0x32);
                     unk2c = 2;
                     return 2;
@@ -185,7 +185,7 @@ BYTE CScene8::Update()
                     } else {
                         m_game->unk14281 = unk46a;
                         m_game->unk14282 = unk46d;
-                        m_game->unk14283 = 2;
+                        m_game->m_replayMode = 2;
                         unk2d = 2;
                     }
                 } else {
@@ -221,7 +221,7 @@ BYTE CScene8::Update()
                 if (unk46c == 0) {
                     m_game->unk14281 = unk46a;
                     m_game->unk14282 = unk46d;
-                    m_game->unk14283 = 2;
+                    m_game->m_replayMode = 2;
                     unk2d = 2;
                 }
             }

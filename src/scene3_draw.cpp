@@ -111,40 +111,40 @@ void CScene3::Unk75e240()
     int v14;
     RECT n10;
 
-    if (m_players[0]->unk110 > m_players[0]->unk108) {
+    if (m_players[0]->unk110 > m_players[0]->m_hp) {
         m_players[0]->unk110 -= 0xc8;
-        if (m_players[0]->unk110 < m_players[0]->unk108) {
-            m_players[0]->unk110 = m_players[0]->unk108;
+        if (m_players[0]->unk110 < m_players[0]->m_hp) {
+            m_players[0]->unk110 = m_players[0]->m_hp;
         }
     }
-    if (m_players[0]->unk110 < m_players[0]->unk108) {
+    if (m_players[0]->unk110 < m_players[0]->m_hp) {
         m_players[0]->unk110 += 0xc8;
-        if (m_players[0]->unk110 > m_players[0]->unk108) {
-            m_players[0]->unk110 = m_players[0]->unk108;
+        if (m_players[0]->unk110 > m_players[0]->m_hp) {
+            m_players[0]->unk110 = m_players[0]->m_hp;
         }
     }
-    if (m_players[1]->unk174 == 0) {
-        m_players[0]->unk10c -= (m_players[0]->unk10c > m_players[0]->unk108) * 0x64;
-        if (m_players[0]->unk10c < m_players[0]->unk108) {
-            m_players[0]->unk10c = m_players[0]->unk108;
+    if (m_players[1]->m_comboHits == 0) {
+        m_players[0]->m_comboStartHp -= (m_players[0]->m_comboStartHp > m_players[0]->m_hp) * 0x64;
+        if (m_players[0]->m_comboStartHp < m_players[0]->m_hp) {
+            m_players[0]->m_comboStartHp = m_players[0]->m_hp;
         }
     }
-    if (m_players[1]->unk110 > m_players[1]->unk108) {
+    if (m_players[1]->unk110 > m_players[1]->m_hp) {
         m_players[1]->unk110 -= 0xc8;
-        if (m_players[1]->unk110 < m_players[1]->unk108) {
-            m_players[1]->unk110 = m_players[1]->unk108;
+        if (m_players[1]->unk110 < m_players[1]->m_hp) {
+            m_players[1]->unk110 = m_players[1]->m_hp;
         }
     }
-    if (m_players[1]->unk110 < m_players[1]->unk108) {
+    if (m_players[1]->unk110 < m_players[1]->m_hp) {
         m_players[1]->unk110 += 0xc8;
-        if (m_players[1]->unk110 > m_players[1]->unk108) {
-            m_players[1]->unk110 = m_players[1]->unk108;
+        if (m_players[1]->unk110 > m_players[1]->m_hp) {
+            m_players[1]->unk110 = m_players[1]->m_hp;
         }
     }
-    if (m_players[0]->unk174 == 0) {
-        m_players[1]->unk10c -= (m_players[1]->unk10c > m_players[1]->unk108) * 0x64;
-        if (m_players[1]->unk10c < m_players[1]->unk108) {
-            m_players[1]->unk10c = m_players[1]->unk108;
+    if (m_players[0]->m_comboHits == 0) {
+        m_players[1]->m_comboStartHp -= (m_players[1]->m_comboStartHp > m_players[1]->m_hp) * 0x64;
+        if (m_players[1]->m_comboStartHp < m_players[1]->m_hp) {
+            m_players[1]->m_comboStartHp = m_players[1]->m_hp;
         }
     }
     if (m_game->unk1420c > 0) {
@@ -165,7 +165,7 @@ void CScene3::Unk75e240()
     v24 = MakeRect(0, 0, m_players[1]->anims[0x2d].frames->width, m_players[1]->anims[0x2d].frames->height);
     n10 = MakeRect(0x13f - m_players[1]->anims[0x2d].frames->width, 0x28, m_players[1]->anims[0x2d].frames->width, m_players[1]->anims[0x2d].frames->height);
     m_graphics->Blit(n10, m_players[1]->surfaces[m_players[1]->anims[0x2d].frames->surface], v24, m_players[1]->colorKey, 0);
-    v14 = (int)(m_players[0]->unk10c * 120.0 / 9999.0);
+    v14 = (int)(m_players[0]->m_comboStartHp * 120.0 / 9999.0);
     if (v14 > 0) {
         v24 = MakeRect(0x78 - v14, 0x5b, v14, 6);
         n10 = MakeRect(0x8a - v14, 0x12, v14, 6);
@@ -181,7 +181,7 @@ void CScene3::Unk75e240()
         n10 = MakeRect(0x8a - v14, 0x12, v14, 6);
         m_graphics->Blit(n10, m_game->m_objectSurface, v24, (char)m_game->m_colorKey, 0);
     }
-    v14 = (int)(m_players[1]->unk10c * 120.0 / 9999.0);
+    v14 = (int)(m_players[1]->m_comboStartHp * 120.0 / 9999.0);
     if (v14 > 0) {
         v24 = MakeRect(0x78, 0x5b, v14, 6);
         n10 = MakeRect(0xb6, 0x12, v14, 6);
@@ -258,19 +258,19 @@ void CScene3::Unk760060()
     l28 = MakeRect(0, 0x28, 0x140, 0x21);
     v14 = MakeRect(0, 0xce, 0x140, 0x21);
     m_graphics->Blit(v14, m_game->m_objectSurface, l28, (char)m_game->m_colorKey, 0);
-    l18 = m_players[0]->unk148 * 0x6c / 0xbb8;
-    if (m_players[0]->unk148 < 0x3e8) {
+    l18 = m_players[0]->m_gauge * 0x6c / 0xbb8;
+    if (m_players[0]->m_gauge < 0x3e8) {
         l28 = MakeRect(0x6c - l18, 0x73, l18, 4);
         v14 = MakeRect(0x8c - l18, 0xe0, l18, 4);
         m_graphics->Blit(v14, m_game->m_objectSurface, l28, (char)m_game->m_colorKey, 0);
-    } else if (m_players[0]->unk148 < 0x7d0) {
+    } else if (m_players[0]->m_gauge < 0x7d0) {
         l28 = MakeRect(0, 0x94, 0x18, 0x18);
         v14 = MakeRect(6, 0xd1, 0x18, 0x18);
         m_graphics->Blit(v14, m_game->m_objectSurface, l28, (char)m_game->m_colorKey, 0);
         l28 = MakeRect(0x6c - l18, 0x77, l18, 4);
         v14 = MakeRect(0x8c - l18, 0xe0, l18, 4);
         m_graphics->Blit(v14, m_game->m_objectSurface, l28, (char)m_game->m_colorKey, 0);
-    } else if (m_players[0]->unk148 < 0xbb8) {
+    } else if (m_players[0]->m_gauge < 0xbb8) {
         l28 = MakeRect(0x18, 0x94, 0x18, 0x18);
         v14 = MakeRect(6, 0xd1, 0x18, 0x18);
         m_graphics->Blit(v14, m_game->m_objectSurface, l28, (char)m_game->m_colorKey, 0);
@@ -285,19 +285,19 @@ void CScene3::Unk760060()
         v14 = MakeRect(0x8c - l18, 0xe0, l18, 4);
         m_graphics->Blit(v14, m_game->m_objectSurface, l28, (char)m_game->m_colorKey, 0);
     }
-    l18 = m_players[1]->unk148 * 0x6c / 0xbb8;
-    if (m_players[1]->unk148 < 0x3e8) {
+    l18 = m_players[1]->m_gauge * 0x6c / 0xbb8;
+    if (m_players[1]->m_gauge < 0x3e8) {
         l28 = MakeRect(0x6c, 0x73, l18, 4);
         v14 = MakeRect(0xb4, 0xe0, l18, 4);
         m_graphics->Blit(v14, m_game->m_objectSurface, l28, (char)m_game->m_colorKey, 0);
-    } else if (m_players[1]->unk148 < 0x7d0) {
+    } else if (m_players[1]->m_gauge < 0x7d0) {
         l28 = MakeRect(0, 0x94, 0x18, 0x18);
         v14 = MakeRect(0x122, 0xd1, 0x18, 0x18);
         m_graphics->Blit(v14, m_game->m_objectSurface, l28, (char)m_game->m_colorKey, 0);
         l28 = MakeRect(0x6c, 0x77, l18, 4);
         v14 = MakeRect(0xb4, 0xe0, l18, 4);
         m_graphics->Blit(v14, m_game->m_objectSurface, l28, (char)m_game->m_colorKey, 0);
-    } else if (m_players[1]->unk148 < 0xbb8) {
+    } else if (m_players[1]->m_gauge < 0xbb8) {
         l28 = MakeRect(0x18, 0x94, 0x18, 0x18);
         v14 = MakeRect(0x122, 0xd1, 0x18, 0x18);
         m_graphics->Blit(v14, m_game->m_objectSurface, l28, (char)m_game->m_colorKey, 0);
