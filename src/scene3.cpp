@@ -444,7 +444,7 @@ void CScene3::Unk765040()
             m_game->unk1354 = 1;
             unk2d = 2;
             unk580 = 0.0;
-            m_game->unk134c = 1;
+            m_game->m_winner = 1;
         }
         return;
     }
@@ -476,7 +476,7 @@ void CScene3::Unk765040()
         m_game->unk1354 = 1;
         unk2d = 2;
         unk580 = 0.0;
-        m_game->unk134c = 0;
+        m_game->m_winner = 0;
     }
 }
 
@@ -675,8 +675,8 @@ void CScene3::Unk7661a0()
         strcat(v34, (const char*)vc);
         strcat(v34, ".rep");
         m_game->m_replay.OpenWrite((const char*)v34);
-        m_game->m_replay.Write((*m_player1Ref)->unk8d);
-        m_game->m_replay.Write((*m_player2Ref)->unk8d);
+        m_game->m_replay.Write((*m_player1Ref)->m_charId);
+        m_game->m_replay.Write((*m_player2Ref)->m_charId);
         m_game->m_replay.Write(0x68);
         m_game->m_replay.Write(m_game->unkf32);
         m_game->m_replay.Write((*m_player1Ref)->m_paletteIndex);

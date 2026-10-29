@@ -12,7 +12,7 @@ if (*(double*)((char*)this + 0x20) < *(double*)(*(char**)*(char**)((char*)this +
 The source now reads them through the members `src/efz.h` declares at those offsets:
 
 ```cpp
-unk2af8[4] = -0x1d;
+m_pointY[4] = -0x1d;    // Akane's constructor: the fifth point on her body
 l4 = (short)anims[pattern].frames[frame].duration;
 if (x < (*m_opponent)->x) {
 ```

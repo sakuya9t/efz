@@ -153,7 +153,7 @@ CPlayer::CPlayer(CPlayer** p1, CGame* p2, CGraphics* p3, CInput* p4, CSound* p5,
     m_input = p4;
     m_sound = p5;
     m_side = p6;
-    unk8d = 0;
+    m_charId = 0;
     m_paletteIndex = 0;
     v4 = 0;
     for (; v4 < 0x32; v4++) {
@@ -161,7 +161,7 @@ CPlayer::CPlayer(CPlayer** p1, CGame* p2, CGraphics* p3, CInput* p4, CSound* p5,
     }
     v4 = 0;
     for (; v4 < 0x14; v4++) {
-        unk30f5[v4] = -1;
+        m_rivals[v4] = -1;
     }
     surfaces = (IDirectDrawSurface**)0;
     anims = new EffectAnim[0x1f9];

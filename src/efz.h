@@ -749,7 +749,7 @@ public:
     CInput* m_input;        // +0x84
     CSound* m_sound;        // +0x88
     char m_side;            // +0x8c: 0 for player 1, 1 for player 2
-    char unk8d;
+    char m_charId;          // +0x8d: the character's number on the select screen
     char m_paletteIndex;    // +0x8e: which <name>N.pal (N = index + 1)
     BYTE unk8f[0x94 - 0x8f];
     char m_name[0x10];      // +0x94: the character's folder and file name, "akane"
@@ -852,10 +852,11 @@ public:
     int unk2d0[0x40];       // one per object
     int m_objectActive[0x40];       // one per object
     PlayerObject m_objects[0x40]; // +0x4d0
-    // Per-character offsets the constructors set; throws place the opponent relative to
-    // them.
-    short unk2ad0[0x14];    // x
-    short unk2af8[0x14];    // y
+    // Points on the character's body relative to (x, y), five set by each constructor:
+    // throws put the opponent at one of the thrower's, some moves put the character at
+    // one of the opponent's.
+    short m_pointX[0x14];   // +0x2ad0
+    short m_pointY[0x14];   // +0x2af8
     BYTE unk2b20[0x2bc0 - 0x2b20];
     Afterimages m_afterimages;
     char m_tintColor;       // +0x30b8: Tint's
@@ -876,8 +877,10 @@ public:
     short unk30ec;
     short unk30ee;
     int unk30f0;
-    char unk30f4;
-    char unk30f5[0x14];     // the constructor sets all to -1
+    char m_resultPictures;  // +0x30f4: results pictures system\<name>\NN.dat to choose
+                            // from at random
+    char m_rivals[0x14];    // +0x30f5: m_charIds with a results picture of their own,
+                            // NN = 10 + index; -1 for none
     BYTE unk3109[0x3110 - 0x3109];
     int m_cpuRoll;          // +0x3110: CpuInput's random number, Random(0, 100) or (0, 1000)
     int m_cpuAction;        // +0x3114: what CpuInput decided to do
@@ -1075,7 +1078,7 @@ public:
     BYTE unk1346;
     BYTE unk1347;
     int unk1348;
-    char unk134c;
+    char m_winner;                // the side the results screen (CScene5) shows
     char unk134d;
     char unk134e;
     char unk134f;

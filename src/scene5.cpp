@@ -66,7 +66,7 @@ BYTE CScene5::Update()
             m_game->m_replay.Close();
         }
         if (m_game->unk1364 == 0) {
-            if (m_game->unk134c == m_game->unk1342) {
+            if (m_game->m_winner == m_game->unk1342) {
                 if (m_game->unk1358 == 8) {
                     delete *m_player1Ref;
                     delete *m_player2Ref;
@@ -77,11 +77,11 @@ BYTE CScene5::Update()
                     return 7;
                 }
                 if (m_game->unk1342 == 1) {
-                    m_game->unk135c |= 1 << (*m_player1Ref)->unk8d;
+                    m_game->unk135c |= 1 << (*m_player1Ref)->m_charId;
                     delete *m_player1Ref;
                     *m_player1Ref = (CPlayer*)0;
                 } else {
-                    m_game->unk135c |= 1 << (*m_player2Ref)->unk8d;
+                    m_game->unk135c |= 1 << (*m_player2Ref)->m_charId;
                     delete *m_player2Ref;
                     *m_player2Ref = (CPlayer*)0;
                 }
@@ -104,13 +104,13 @@ BYTE CScene5::Update()
             unk2c = 1;
             return 1;
         }
-        if (m_game->unk1364 == 2 && m_game->unk134c == m_game->unk1342 && m_game->unk1358 < 8) {
+        if (m_game->unk1364 == 2 && m_game->m_winner == m_game->unk1342 && m_game->unk1358 < 8) {
             if (m_game->unk1342 == 1) {
-                m_game->unk135c |= 1 << (*m_player1Ref)->unk8d;
+                m_game->unk135c |= 1 << (*m_player1Ref)->m_charId;
                 delete *m_player1Ref;
                 *m_player1Ref = (CPlayer*)0;
             } else {
-                m_game->unk135c |= 1 << (*m_player2Ref)->unk8d;
+                m_game->unk135c |= 1 << (*m_player2Ref)->m_charId;
                 delete *m_player2Ref;
                 *m_player2Ref = (CPlayer*)0;
             }
@@ -139,7 +139,7 @@ BYTE CScene5::Update()
     Vf2();
     if (unk45c < 0x3c) {
         unk45c++;
-        if (m_game->unk134c == 1) {
+        if (m_game->m_winner == 1) {
             m_players[0]->UpdatePattern();
             m_players[0]->Unk40f580();
             m_players[0]->UpdatePattern();
@@ -163,11 +163,11 @@ BYTE CScene5::Update()
             }
         }
         if (unk45c == 0x3c) {
-            if (m_players[m_game->unk134c]->unk8d == 0x13 || m_players[m_game->unk134c]->unk8d == 0x14 || m_players[m_game->unk134c]->unk8d == 0x15 || m_players[m_game->unk134c]->unk8d == 0x17) {
+            if (m_players[m_game->m_winner]->m_charId == 0x13 || m_players[m_game->m_winner]->m_charId == 0x14 || m_players[m_game->m_winner]->m_charId == 0x15 || m_players[m_game->m_winner]->m_charId == 0x17) {
                 m_game->PlayMusic(4);
-            } else if (m_players[m_game->unk134c]->unk8d == 0xe) {
+            } else if (m_players[m_game->m_winner]->m_charId == 0xe) {
                 m_game->PlayMusic(9);
-            } else if (m_players[m_game->unk134c]->unk8d == 1 || m_players[m_game->unk134c]->unk8d == 0x10 || m_players[m_game->unk134c]->unk8d == 0x11 || m_players[m_game->unk134c]->unk8d == 0xd || m_players[m_game->unk134c]->unk8d == 0xf || m_players[m_game->unk134c]->unk8d == 2 || m_players[m_game->unk134c]->unk8d == 3 || m_players[m_game->unk134c]->unk8d == 8 || m_players[m_game->unk134c]->unk8d == 9 || m_players[m_game->unk134c]->unk8d == 0xa) {
+            } else if (m_players[m_game->m_winner]->m_charId == 1 || m_players[m_game->m_winner]->m_charId == 0x10 || m_players[m_game->m_winner]->m_charId == 0x11 || m_players[m_game->m_winner]->m_charId == 0xd || m_players[m_game->m_winner]->m_charId == 0xf || m_players[m_game->m_winner]->m_charId == 2 || m_players[m_game->m_winner]->m_charId == 3 || m_players[m_game->m_winner]->m_charId == 8 || m_players[m_game->m_winner]->m_charId == 9 || m_players[m_game->m_winner]->m_charId == 0xa) {
                 m_game->PlayMusic(2);
             } else {
                 m_game->PlayMusic(3);
@@ -210,11 +210,11 @@ BYTE CScene5::Update()
             }
         }
     } else if (m_game->m_pressA[0] != 0 || m_game->m_pressB[0] != 0 || m_game->m_pressC[0] != 0 || m_game->m_pressD[0] != 0 || m_game->m_pressA[1] != 0 || m_game->m_pressB[1] != 0 || m_game->m_pressC[1] != 0 || m_game->m_pressD[1] != 0) {
-        if (m_game->unk1364 == 0 && m_game->unk134c != m_game->unk1342 && unk45e < 2) {
+        if (m_game->unk1364 == 0 && m_game->m_winner != m_game->unk1342 && unk45e < 2) {
             if (unk45e == 0) {
-                if (m_players[m_game->unk134c]->unk8d == 0x13 || m_players[m_game->unk134c]->unk8d == 0x14 || m_players[m_game->unk134c]->unk8d == 0x15 || m_players[m_game->unk134c]->unk8d == 0x17) {
+                if (m_players[m_game->m_winner]->m_charId == 0x13 || m_players[m_game->m_winner]->m_charId == 0x14 || m_players[m_game->m_winner]->m_charId == 0x15 || m_players[m_game->m_winner]->m_charId == 0x17) {
                     m_game->PlayMusic(4);
-                } else if (m_players[m_game->unk134c]->unk8d == 1 || m_players[m_game->unk134c]->unk8d == 2 || m_players[m_game->unk134c]->unk8d == 3 || m_players[m_game->unk134c]->unk8d == 8 || m_players[m_game->unk134c]->unk8d == 9 || m_players[m_game->unk134c]->unk8d == 0xa) {
+                } else if (m_players[m_game->m_winner]->m_charId == 1 || m_players[m_game->m_winner]->m_charId == 2 || m_players[m_game->m_winner]->m_charId == 3 || m_players[m_game->m_winner]->m_charId == 8 || m_players[m_game->m_winner]->m_charId == 9 || m_players[m_game->m_winner]->m_charId == 0xa) {
                     m_game->PlayMusic(2);
                 } else {
                     m_game->PlayMusic(3);
@@ -228,9 +228,9 @@ BYTE CScene5::Update()
             unk45c = 0x3c;
         } else if (m_game->unk1364 == 2 && unk45e < 2) {
             if (unk45e == 0) {
-                if (m_players[m_game->unk134c]->unk8d == 0x13 || m_players[m_game->unk134c]->unk8d == 0x14 || m_players[m_game->unk134c]->unk8d == 0x15 || m_players[m_game->unk134c]->unk8d == 0x17) {
+                if (m_players[m_game->m_winner]->m_charId == 0x13 || m_players[m_game->m_winner]->m_charId == 0x14 || m_players[m_game->m_winner]->m_charId == 0x15 || m_players[m_game->m_winner]->m_charId == 0x17) {
                     m_game->PlayMusic(4);
-                } else if (m_players[m_game->unk134c]->unk8d == 1 || m_players[m_game->unk134c]->unk8d == 2 || m_players[m_game->unk134c]->unk8d == 3 || m_players[m_game->unk134c]->unk8d == 8 || m_players[m_game->unk134c]->unk8d == 9 || m_players[m_game->unk134c]->unk8d == 0xa) {
+                } else if (m_players[m_game->m_winner]->m_charId == 1 || m_players[m_game->m_winner]->m_charId == 2 || m_players[m_game->m_winner]->m_charId == 3 || m_players[m_game->m_winner]->m_charId == 8 || m_players[m_game->m_winner]->m_charId == 9 || m_players[m_game->m_winner]->m_charId == 0xa) {
                     m_game->PlayMusic(2);
                 } else {
                     m_game->PlayMusic(3);
@@ -294,7 +294,7 @@ void CScene5::Draw()
 
     m_graphics->Blit(MakeRect(0, 0, 0x140, 0xa0), m_game->unke98, MakeRect(unk444, 0x140, 0x140, 0xa0), 0, 0);
     m_graphics->FillRect(MakeRect(0, 0xa0, 0x140, 0x50), 0xb0);
-    if (m_game->unk134c == 1) {
+    if (m_game->m_winner == 1) {
         m_players[0]->Unk4121a0(-unk444, -0x50);
     } else {
         m_players[1]->Unk4121a0(-unk444, -0x50);
@@ -397,7 +397,7 @@ void CScene5::Unk774b00()
     char v34[40];
     char vc[8];
 
-    v38 = rand() % m_players[m_game->unk134c]->unk30f4;
+    v38 = rand() % m_players[m_game->m_winner]->m_resultPictures;
     if (unk440 != 0) {
         ((IUnknown*)unk440)->Release();
         unk440 = 0;
@@ -407,27 +407,27 @@ void CScene5::Unk774b00()
         unk43c = 0;
     }
     strcpy(v34, "system\\");
-    strcat(v34, m_players[m_game->unk134c]->m_name);
+    strcat(v34, m_players[m_game->m_winner]->m_name);
     strcat(v34, "\\");
-    strcat(v34, m_players[m_game->unk134c]->m_name);
+    strcat(v34, m_players[m_game->m_winner]->m_name);
     if (1) {
         strcat(v34, ".dat");
-        m_game->LoadDat((IDirectDrawSurface**)&unk440, (const char*)v34, 0, m_game->unk134c * 0x28 + 0x5f);
-        m_graphics->LoadPaletteDat(m_game->m_palette, (const char*)v34, m_players[m_game->unk134c]->m_paletteIndex * 0x28, m_game->unk134c * 0x28 + 0x5f, 0x28);
+        m_game->LoadDat((IDirectDrawSurface**)&unk440, (const char*)v34, 0, m_game->m_winner * 0x28 + 0x5f);
+        m_graphics->LoadPaletteDat(m_game->m_palette, (const char*)v34, m_players[m_game->m_winner]->m_paletteIndex * 0x28, m_game->m_winner * 0x28 + 0x5f, 0x28);
     } else {
         strcat(v34, ".bmp");
-        m_graphics->LoadBmp((IDirectDrawSurface**)&unk440, (const char*)v34, m_game->unk134c * 0x28 + 0x5f);
-        m_graphics->LoadPaletteBmp(m_game->m_palette, (const char*)v34, m_players[m_game->unk134c]->m_paletteIndex * 0x28, m_game->unk134c * 0x28 + 0x5f, 0x28);
+        m_graphics->LoadBmp((IDirectDrawSurface**)&unk440, (const char*)v34, m_game->m_winner * 0x28 + 0x5f);
+        m_graphics->LoadPaletteBmp(m_game->m_palette, (const char*)v34, m_players[m_game->m_winner]->m_paletteIndex * 0x28, m_game->m_winner * 0x28 + 0x5f, 0x28);
     }
     m_colorKey = m_graphics->GetColorKey((IDirectDrawSurface*)unk440);
     x3c = 0;
     for (; x3c < 0x14; x3c++) {
-        if (m_players[(1 - m_game->unk134c)]->unk8d == m_players[m_game->unk134c]->unk30f5[x3c]) {
+        if (m_players[(1 - m_game->m_winner)]->m_charId == m_players[m_game->m_winner]->m_rivals[x3c]) {
             v38 = x3c + 0xa;
         }
     }
     strcpy(v34, "system\\");
-    strcat(v34, m_players[m_game->unk134c]->m_name);
+    strcat(v34, m_players[m_game->m_winner]->m_name);
     strcat(v34, "\\");
     _itoa(v38, vc, 0xa);
     if (v38 < 0xa) {
@@ -442,7 +442,7 @@ void CScene5::Unk774b00()
         m_graphics->LoadBmp((IDirectDrawSurface**)&unk43c, (const char*)v34, 0xaf);
     }
     if (m_game->unk1364 == 4) {
-        if (m_game->unk134c == 0) {
+        if (m_game->m_winner == 0) {
             ((CharRecord*)&m_players[0]->unk3118)->Load(m_players[0]->m_name);
             m_players[0]->unk311c++;
             ((CharRecord*)&m_players[0]->unk3118)->Save(m_players[0]->m_name);
@@ -511,7 +511,7 @@ void CScene5::Unk774b00()
     unk456 = 0xf;
     unk45a = 0xf;
     unk45c = 0;
-    if (m_game->unk134c == 1) {
+    if (m_game->m_winner == 1) {
         m_players[0]->x = 480.0;
         m_players[0]->y = -240.0;
         m_players[0]->facing = -1;

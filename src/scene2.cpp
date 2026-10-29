@@ -98,7 +98,7 @@ void CScene2::Unk76ca50()
         }
         Unk76da20(m_player2Ref, m_player1Ref, 1, l10);
         (*m_player1Ref)->m_paletteIndex = 0;
-        (*m_player2Ref)->m_paletteIndex = (*m_player2Ref)->unk8d == (*m_player1Ref)->unk8d;
+        (*m_player2Ref)->m_paletteIndex = (*m_player2Ref)->m_charId == (*m_player1Ref)->m_charId;
         (*m_player1Ref)->m_cpu = 1;
         (*m_player2Ref)->m_cpu = 1;
         l10 = 0x17;
@@ -137,8 +137,8 @@ void CScene2::Unk76ca50()
             (*m_player2Ref)->m_paletteIndex = m_game->m_replay.Read();
         } else if (m_game->m_replayMode == 2) {
             m_game->m_replay.OpenWrite((const char*)v38);
-            m_game->m_replay.Write((*m_player1Ref)->unk8d);
-            m_game->m_replay.Write((*m_player2Ref)->unk8d);
+            m_game->m_replay.Write((*m_player1Ref)->m_charId);
+            m_game->m_replay.Write((*m_player2Ref)->m_charId);
             m_game->m_replay.Write(0x68);
             m_game->m_replay.Write(m_game->unkf32);
             m_game->m_replay.Write((*m_player1Ref)->m_paletteIndex);
@@ -181,13 +181,13 @@ void CScene2::Unk76ca50()
         if (m_game->unk1343[0] == 1) {
             Unk76da20(m_player1Ref, m_player2Ref, 0, l10);
             (*m_player1Ref)->m_paletteIndex = 0;
-            if ((*m_player1Ref)->unk8d == (*m_player2Ref)->unk8d && (*m_player2Ref)->m_paletteIndex == 0) {
+            if ((*m_player1Ref)->m_charId == (*m_player2Ref)->m_charId && (*m_player2Ref)->m_paletteIndex == 0) {
                 (*m_player1Ref)->m_paletteIndex = 1;
             }
         } else {
             Unk76da20(m_player2Ref, m_player1Ref, 1, l10);
             (*m_player2Ref)->m_paletteIndex = 0;
-            if ((*m_player2Ref)->unk8d == (*m_player1Ref)->unk8d && (*m_player1Ref)->m_paletteIndex == 0) {
+            if ((*m_player2Ref)->m_charId == (*m_player1Ref)->m_charId && (*m_player1Ref)->m_paletteIndex == 0) {
                 (*m_player2Ref)->m_paletteIndex = 1;
             }
         }
@@ -430,7 +430,7 @@ void CScene2::Unk76da20(CPlayer** p1, CPlayer** p2, char p3, char p4)
     case 0x18:
         *p1 = new CMizuka(p2, m_game, m_graphics, m_input, m_sound, p3);
     }
-    (*p1)->unk8d = p4;
+    (*p1)->m_charId = p4;
     m_players[p3] = *p1;
     (*p1)->m_cpu = m_game->unk1343[p3];
 }

@@ -3452,8 +3452,8 @@ void CMio::UpdatePattern()
             l50.scale = 2;
             l50.layer = 1;
             m_game->CreateEffect((EffectDesc*)&l50);
-            x = (*m_opponent)->x - (*m_opponent)->unk2ad0[0] * facing;
-            y = (*m_opponent)->unk2af8[0] + 0x39 + y;
+            x = (*m_opponent)->x - (*m_opponent)->m_pointX[0] * facing;
+            y = (*m_opponent)->m_pointY[0] + 0x39 + y;
             break;
         }
         timer++;
@@ -3474,8 +3474,8 @@ void CMio::UpdatePattern()
     case 0xdd:
         if (frame == 0 && timer == 0) {
             (*m_opponent)->pattern = 0x6b;
-            x = (*m_opponent)->x - (*m_opponent)->unk2ad0[0] * facing;
-            y = (*m_opponent)->unk2af8[0] + 0x39 + y;
+            x = (*m_opponent)->x - (*m_opponent)->m_pointX[0] * facing;
+            y = (*m_opponent)->m_pointY[0] + 0x39 + y;
             m_attackResult = 0;
         }
         if ((unk3138 > 0x258 && frame == 3 || (*m_opponent)->m_hp <= 0) && frame < 5) {

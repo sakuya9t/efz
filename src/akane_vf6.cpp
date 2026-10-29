@@ -5458,7 +5458,7 @@ void CAkane::UpdatePattern()
             if (x < 80.0 && facing == -1) {
                 x = 80.0;
             }
-            (*m_opponent)->x = (unk2ad0[2] + 0x47) * facing + x;
+            (*m_opponent)->x = (m_pointX[2] + 0x47) * facing + x;
             (*m_opponent)->y = 0.0;
             pattern = 0x138;
             break;
@@ -5483,22 +5483,22 @@ void CAkane::UpdatePattern()
         break;
     case 0x138:
         if (frame == 1) {
-            (*m_opponent)->x = (unk2ad0[2] + 0x3c) * facing + x;
-            (*m_opponent)->y = y - 13.0 - unk2af8[2];
+            (*m_opponent)->x = (m_pointX[2] + 0x3c) * facing + x;
+            (*m_opponent)->y = y - 13.0 - m_pointY[2];
             (*m_opponent)->pattern = 0x6b;
             (*m_opponent)->StartPattern();
             (*m_opponent)->StopMoving();
         }
         if (frame == 2) {
-            (*m_opponent)->x = (unk2ad0[3] + 0x2e) * facing + x;
-            (*m_opponent)->y = y - 16.0 - unk2af8[3];
+            (*m_opponent)->x = (m_pointX[3] + 0x2e) * facing + x;
+            (*m_opponent)->y = y - 16.0 - m_pointY[3];
             (*m_opponent)->pattern = 0x6e;
             (*m_opponent)->StartPattern();
             (*m_opponent)->StopMoving();
         }
         if (frame == 3) {
-            (*m_opponent)->x = (unk2ad0[4] + 0x1a) * facing + x;
-            (*m_opponent)->y = y - 41.0 - unk2af8[4];
+            (*m_opponent)->x = (m_pointX[4] + 0x1a) * facing + x;
+            (*m_opponent)->y = y - 41.0 - m_pointY[4];
             (*m_opponent)->pattern = 0x6f;
             (*m_opponent)->StartPattern();
             (*m_opponent)->StopMoving();

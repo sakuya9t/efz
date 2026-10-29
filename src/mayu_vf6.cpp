@@ -2976,8 +2976,8 @@ void CMayu::UpdatePattern()
         break;
     case 0xdd:
         if (frame == 0 && timer == 0) {
-            x = (*m_opponent)->x - (*m_opponent)->unk2ad0[0] * facing;
-            y = (*m_opponent)->unk2af8[0] + 0x1e;
+            x = (*m_opponent)->x - (*m_opponent)->m_pointX[0] * facing;
+            y = (*m_opponent)->m_pointY[0] + 0x1e;
         }
         if (frame == 3 && timer == 0) {
             (*m_opponent)->pattern = 0x3b;
@@ -3334,8 +3334,8 @@ void CMayu::UpdatePattern()
             (*m_opponent)->pattern = 0x6b;
             StartPattern();
             pattern = 0xfd;
-            y = unk2af8[0] + 0x32;
-            x = (*m_opponent)->x + (-unk2ad0[0] - 0x14) * facing;
+            y = m_pointY[0] + 0x32;
+            x = (*m_opponent)->x + (-m_pointX[0] - 0x14) * facing;
             l50.type = 0;
             l50.x = (double)((int)x + facing * 7);
             l50.y = (double)((int)y - 0x2c);
@@ -3396,8 +3396,8 @@ void CMayu::UpdatePattern()
             (*m_opponent)->pattern = 0x6b;
             StartPattern();
             pattern = 0xfd;
-            y = unk2af8[0] + 0x32;
-            x = (*m_opponent)->x + (-unk2ad0[0] - 0x14) * facing;
+            y = m_pointY[0] + 0x32;
+            x = (*m_opponent)->x + (-m_pointX[0] - 0x14) * facing;
             l50.type = 0;
             l50.x = (double)((int)x + facing * 7);
             l50.y = (double)((int)y - 0x2c);
@@ -3471,8 +3471,8 @@ void CMayu::UpdatePattern()
             StartPattern();
             CPlayer::StopMoving();
             pattern = 0xfe;
-            y = unk2af8[0] + 0x32;
-            x = (*m_opponent)->x + (-unk2ad0[0] - 0x14) * facing;
+            y = m_pointY[0] + 0x32;
+            x = (*m_opponent)->x + (-m_pointX[0] - 0x14) * facing;
             l50.type = 0;
             l50.x = (double)((int)x + facing * 7);
             l50.y = (double)((int)y - 0x2c);
@@ -3533,7 +3533,7 @@ void CMayu::UpdatePattern()
                 (*m_opponent)->StopMoving();
             }
             if ((char)(*m_opponent)->Unk40ff70() == 0) {
-                (*m_opponent)->x = (unk2ad0[0] + 0x14) * facing + x;
+                (*m_opponent)->x = (m_pointX[0] + 0x14) * facing + x;
             }
         }
         if (frame == 3) {
@@ -3593,7 +3593,7 @@ void CMayu::UpdatePattern()
                 (*m_opponent)->StopMoving();
             }
             if ((char)(*m_opponent)->Unk40ff70() == 0) {
-                (*m_opponent)->x = (unk2ad0[0] + 0x14) * facing + x;
+                (*m_opponent)->x = (m_pointX[0] + 0x14) * facing + x;
             }
         }
         if (frame == 3) {
@@ -4405,8 +4405,8 @@ void CMayu::UpdatePattern()
             StartPattern();
             CPlayer::StopMoving();
             pattern = 0x113;
-            y = unk2af8[0] + 0x32;
-            x = (*m_opponent)->x + (-unk2ad0[0] - 0x14) * facing;
+            y = m_pointY[0] + 0x32;
+            x = (*m_opponent)->x + (-m_pointX[0] - 0x14) * facing;
             l50.type = 0;
             l50.x = (double)((int)x + facing * 7);
             l50.y = (double)((int)y - 0x2c);
@@ -4838,8 +4838,8 @@ void CMayu::UpdatePattern()
             frame++;
             m_attackResult = 0;
             if (frame == 1) {
-                x = (*m_opponent)->x - (*m_opponent)->unk2ad0[0] * facing;
-                y = (*m_opponent)->y + (*m_opponent)->unk2af8[0] - 20.0;
+                x = (*m_opponent)->x - (*m_opponent)->m_pointX[0] * facing;
+                y = (*m_opponent)->y + (*m_opponent)->m_pointY[0] - 20.0;
             }
             if (frame >= x8) {
                 frame = frame - 2;
@@ -5421,11 +5421,11 @@ void CMayu::UpdatePattern()
             StartPattern();
             CPlayer::StopMoving();
             pattern = 0x131;
-            y = unk2af8[0] + 0x32;
-            x = (*m_opponent)->x + (-unk2ad0[0] - 0x14) * facing;
+            y = m_pointY[0] + 0x32;
+            x = (*m_opponent)->x + (-m_pointX[0] - 0x14) * facing;
             l50.type = 0;
-            l50.x = (double)((int)(*m_opponent)->x + unk2ad0[0]);
-            l50.y = (double)((int)(*m_opponent)->y + unk2af8[0]);
+            l50.x = (double)((int)(*m_opponent)->x + m_pointX[0]);
+            l50.y = (double)((int)(*m_opponent)->y + m_pointY[0]);
             l50.scale = 2;
             l50.layer = 1;
             m_game->CreateEffect((EffectDesc*)&l50);

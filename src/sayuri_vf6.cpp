@@ -5862,8 +5862,8 @@ void CSayuri::UpdatePattern()
             pattern = 0x13c;
             (*m_opponent)->unk14a = 0x1e;
             (*m_opponent)->pattern = 0x6b;
-            x = (*m_opponent)->x + ((*m_opponent)->unk2ad0[0] + 0xf) * facing;
-            y = (*m_opponent)->y + 46.0 + (*m_opponent)->unk2af8[0];
+            x = (*m_opponent)->x + ((*m_opponent)->m_pointX[0] + 0xf) * facing;
+            y = (*m_opponent)->y + 46.0 + (*m_opponent)->m_pointY[0];
             (*m_opponent)->facing = -facing;
             l50.type = 0;
             l50.x = (double)(int)x;

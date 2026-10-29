@@ -14,7 +14,7 @@ Rich header are set after linking (`tools/postlink.py`). `tools/progress.py` pri
 per-function numbers.
 
 The source reads fields through named members rather than the lifter's raw offsets
-(`unk2af8[4] = -0x1d` for `*(short*)((char*)this + 0x2b00) = -0x1d`, `(*m_opponent)->x`),
+(`m_pointY[4] = -0x1d` for `*(short*)((char*)this + 0x2b00) = -0x1d`, `(*m_opponent)->x`),
 and still builds the identical exe. [docs/readability.md](docs/readability.md) records
 how, and which readability changes keep the compiled code: renaming members and methods
 does; renaming locals doesn't, since this compiler orders stack slots by their names.

@@ -3227,7 +3227,7 @@ void CNagamori::UpdatePattern()
                 (*m_opponent)->x = x;
             }
             if (frame == 2) {
-                x = (*m_opponent)->x + (-0x11 - (*m_opponent)->unk2ad0[1]) * facing;
+                x = (*m_opponent)->x + (-0x11 - (*m_opponent)->m_pointX[1]) * facing;
             }
             if (frame == 7 && unk3138 < 3) {
                 frame = frame - 2;
@@ -4827,7 +4827,7 @@ void CNagamori::UpdatePattern()
                 (*m_opponent)->x = x;
             }
             if (frame == 2) {
-                x = (*m_opponent)->x + (-0x11 - (*m_opponent)->unk2ad0[1]) * facing;
+                x = (*m_opponent)->x + (-0x11 - (*m_opponent)->m_pointX[1]) * facing;
             }
             if (frame == 6 && unk3138 == 0) {
                 frame = 7;
@@ -4950,7 +4950,7 @@ void CNagamori::UpdatePattern()
                 (*m_opponent)->x = x;
             }
             if (frame == 2) {
-                x = (*m_opponent)->x + (-0x11 - (*m_opponent)->unk2ad0[1]) * facing;
+                x = (*m_opponent)->x + (-0x11 - (*m_opponent)->m_pointX[1]) * facing;
             }
             if (frame == 6 && unk3138 == 0) {
                 frame = 7;
@@ -5093,7 +5093,7 @@ void CNagamori::UpdatePattern()
                 (*m_opponent)->x = x;
             }
             if (frame == 2) {
-                x = (*m_opponent)->x + (-0x11 - (*m_opponent)->unk2ad0[1]) * facing;
+                x = (*m_opponent)->x + (-0x11 - (*m_opponent)->m_pointX[1]) * facing;
             }
             if (frame == 6 && unk3138 == 0) {
                 frame = 7;

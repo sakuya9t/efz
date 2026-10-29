@@ -811,7 +811,7 @@ void CScene1::Unk7586b0(CPlayer** p1, CPlayer** p2, char p3)
     case 0x17:
         *p1 = new CMisuzu(p2, m_game, m_graphics, m_input, m_sound, p3);
     }
-    (*p1)->unk8d = unk53c[p3];
+    (*p1)->m_charId = unk53c[p3];
     m_players[p3] = *p1;
     (*p1)->m_cpu = m_game->unk1343[p3];
     if (1) {
