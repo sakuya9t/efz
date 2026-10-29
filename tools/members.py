@@ -132,10 +132,6 @@ def canon(t):
     return t.get_canonical()
 
 
-def strip_typedefs(t):
-    return t.get_canonical()
-
-
 def is_record(t):
     return canon(t).kind == TK.RECORD
 
@@ -377,10 +373,6 @@ class Rewriter:
         e = c.extent
         return self.data[e.start.offset:e.end.offset].decode('utf-8')
 
-    def in_file(self, c):
-        f = c.location.file
-        return f is not None and os.path.abspath(f.name) == self.path
-
     # --- semantic values ---------------------------------------------------------------
 
     def children(self, c):
@@ -482,9 +474,6 @@ class Rewriter:
                     inner = TAddr(pointee(self.children(c)[0].type), inner)
                 if isinstance(inner, TAddr):
                     return self.resolve(inner, c)
-                p = self.as_ptr(inner)
-                if p is not None and not isinstance(inner, Ptr):
-                    pass
                 return None
             return None
         return None

@@ -37,10 +37,13 @@ with this compiler), and what is left.
   typed (`CPlayer::Unk410050(PatternFrame* p1, PatternFrame* p2)`, the character
   constructors' `CPlayer**`, `CGame*`..., `EffectFrame* v18`), so their accesses resolve
   too, and their callers lost their `(int)` casts.
-- **Names.** `tools/members.py rename` renamed 40,000 references: CPlayer's members and
-  helpers (`DealDamage`, `Random`, `ReadInput`...), and the virtual slots `Vf0`-`Vf12`
-  in all 25 classes (`StartPattern`, `UpdatePattern`, `SpawnObject`...). Each name
-  comes from what the code does with it; `efz.h` comments the evidence.
+- **Names.** `tools/members.py rename` renamed 54,000 references: CPlayer's members
+  (`m_hp`, `m_gauge`, `m_attackResult`, `m_cpuAction`, `m_pointX`...) and helpers
+  (`DealDamage`, `Random`, `ReadInput`, `LoadPatterns`, `FillBackground`...), the
+  virtual slots `Vf0`-`Vf12` in all 25 classes (`StartPattern`, `UpdatePattern`,
+  `SpawnObject`...), and members of CGame, CAnimBg, EffectDesc and the objects. Each
+  name comes from what the code does with it; `efz.h` comments the evidence. Calls
+  of CPlayer's non-virtual helpers lost the lifter's `CPlayer::` qualifier.
 
 ## What keeps the bytes
 
@@ -58,6 +61,7 @@ Measured by compiling both forms with `cl` 13.10 `/Od` and comparing, then by
 | A parameter's type, `int` → `PatternFrame*` (callers pass the pointer instead of `(int)`) | same |
 | A local's type, `char*` → `EffectFrame*`, keeping its name: its slot stays | same |
 | `*p1 = (CPlayer*)(int)new CAkane(...)` → `*p1 = new CAkane(...)` (an upcast to a base at offset 0) | same |
+| `CPlayer::Random(...)` → `Random(...)` for a non-virtual method (a virtual one needs it) | same |
 | Renaming a member, a method or a virtual slot (with all its overrides) | same: names are only in the PDB |
 | Renaming an initialised global | same |
 | A constant as an `enum` or `#define` instead of a literal | same |
