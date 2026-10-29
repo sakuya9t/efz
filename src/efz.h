@@ -1031,10 +1031,10 @@ public:
     // down this frame and whether they are held.
     char m_inputX[2];
     char m_inputY[2];
-    BYTE m_pressA[2];
-    BYTE m_pressB[2];
-    BYTE m_pressC[2];
-    BYTE m_pressD[2];
+    char m_pressA[2];
+    char m_pressB[2];
+    char m_pressC[2];
+    char m_pressD[2];
     BOOL m_holdA[2];
     BOOL m_holdB[2];
     BOOL m_holdC[2];
@@ -1048,9 +1048,9 @@ public:
     int m_musicTarget;
     int m_musicVolume;
     short m_musicStep;
-    BYTE unkf32;
+    char unkf32;
     BYTE unkf33;
-    BYTE m_colorKey;              // the object sprite's transparent colour
+    char m_colorKey;              // the object sprite's transparent colour
     PALETTEENTRY m_palette[0x100];
     char unk1335[3];
     int unk1338[2];         // one per player
@@ -1065,8 +1065,8 @@ public:
     char unk134c;
     char unk134d;
     char unk134e;
-    BYTE unk134f;
-    BYTE unk1350;
+    char unk134f;
+    char unk1350;
     char unk1351;
     short unk1352;
     int unk1354;
@@ -1075,12 +1075,12 @@ public:
     int unk135c;
     int unk1360;
     char unk1364;
-    BYTE unk1365;
+    char unk1365;
     char unk1366;
     char unk1367;
     BOOL unk1368;                 // toggled every frame by WinMain
     int unk136c;
-    BYTE unk1370;
+    char unk1370;
     char unk1371[3];
     BOOL unk1374;
     char unk1378;

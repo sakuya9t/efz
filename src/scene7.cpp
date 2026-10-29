@@ -44,9 +44,9 @@ BYTE CScene7::Update()
         return 0;
     }
     m_game->UpdateInput();
-    if ((char)m_game->m_pressA[0] != 0 || (char)m_game->m_pressB[0] != 0 || (char)m_game->m_pressC[0] != 0 || (char)m_game->m_pressD[0] != 0) {
+    if (m_game->m_pressA[0] != 0 || m_game->m_pressB[0] != 0 || m_game->m_pressC[0] != 0 || m_game->m_pressD[0] != 0) {
         unk440 = 1;
-    } else if ((char)m_game->m_pressA[1] != 0 || (char)m_game->m_pressB[1] != 0 || (char)m_game->m_pressC[1] != 0 || (char)m_game->m_pressD[1] != 0) {
+    } else if (m_game->m_pressA[1] != 0 || m_game->m_pressB[1] != 0 || m_game->m_pressC[1] != 0 || m_game->m_pressD[1] != 0) {
         unk440 = 1;
     }
     unk438 += 0.3;

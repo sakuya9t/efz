@@ -58,7 +58,7 @@ BYTE CScene2::Update()
         ((IUnknown*)unk434)->Release();
         unk434 = 0;
     }
-    m_game->PlayMusic((char)m_game->unkf32 + 0xa);
+    m_game->PlayMusic(m_game->unkf32 + 0xa);
     return 3;
 }
 
@@ -127,8 +127,8 @@ void CScene2::Unk76ca50()
             Unk76da20((int)m_player1Ref, (int)m_player2Ref, 0, (&m_game->m_replay)->Read());
             Unk76da20((int)m_player2Ref, (int)m_player1Ref, 1, (&m_game->m_replay)->Read());
             m_game->unkf32 = (&m_game->m_replay)->Read();
-            if ((char)m_game->unkf32 > 0x64) {
-                m_game->unk1340 = (char)m_game->unkf32;
+            if (m_game->unkf32 > 0x64) {
+                m_game->unk1340 = m_game->unkf32;
                 m_game->unkf32 = (&m_game->m_replay)->Read();
             } else {
                 m_game->unk1340 = 0;
@@ -140,7 +140,7 @@ void CScene2::Unk76ca50()
             (&m_game->m_replay)->Write((*m_player1Ref)->unk8d);
             (&m_game->m_replay)->Write((*m_player2Ref)->unk8d);
             (&m_game->m_replay)->Write(0x68);
-            (&m_game->m_replay)->Write((char)m_game->unkf32);
+            (&m_game->m_replay)->Write(m_game->unkf32);
             (&m_game->m_replay)->Write((*m_player1Ref)->m_paletteIndex);
             (&m_game->m_replay)->Write((*m_player2Ref)->m_paletteIndex);
         }
@@ -265,8 +265,8 @@ void CScene2::Unk76ca50()
             m_game->unkf32 = 0xc;
         }
     }
-    _itoa((char)m_game->unkf32, vc, 0xa);
-    if ((char)m_game->unkf32 < 0xa) {
+    _itoa(m_game->unkf32, vc, 0xa);
+    if (m_game->unkf32 < 0xa) {
         strcpy(v38, "system\\bg\\bg0");
     } else {
         strcpy(v38, "system\\bg\\bg");
@@ -280,8 +280,8 @@ void CScene2::Unk76ca50()
         }
         m_game->LoadDat(&m_game->unke98, (const char*)v38, 0, 1);
         m_graphics->LoadPaletteDat(m_game->m_palette, (const char*)v38, 0, 1, 0x5e);
-        _itoa((char)m_game->unkf32, vc, 0xa);
-        if ((char)m_game->unkf32 < 0xa) {
+        _itoa(m_game->unkf32, vc, 0xa);
+        if (m_game->unkf32 < 0xa) {
             strcpy(v38, "system\\bg\\bg0");
         } else {
             strcpy(v38, "system\\bg\\bg");
@@ -301,8 +301,8 @@ void CScene2::Unk76ca50()
         }
         m_graphics->LoadBmp(&m_game->unke98, (const char*)v38, 1);
         m_graphics->LoadPaletteBmp(m_game->m_palette, (const char*)v38, 0, 1, 0x5e);
-        _itoa((char)m_game->unkf32, vc, 0xa);
-        if ((char)m_game->unkf32 < 0xa) {
+        _itoa(m_game->unkf32, vc, 0xa);
+        if (m_game->unkf32 < 0xa) {
             strcpy(v38, "system\\bg\\bg0");
         } else {
             strcpy(v38, "system\\bg\\bg");
@@ -315,7 +315,7 @@ void CScene2::Unk76ca50()
         }
         m_graphics->LoadBmp(&m_game->unke9c, (const char*)v38, 0xaf);
     }
-    switch ((char)m_game->unkf32) {
+    switch (m_game->unkf32) {
     case 1:
         if (0) {}
         if (0) {}
@@ -330,7 +330,7 @@ void CScene2::Unk76ca50()
     case 0x10:
         m_game->m_background = (CAnimBg*)(int)new CBg16((int)m_graphics);
     }
-    if ((char)m_game->unkf32 == 0x10) {
+    if (m_game->unkf32 == 0x10) {
         m_game->unk14258 = 0.125;
     } else {
         m_game->unk14258 = 1.0;
@@ -341,8 +341,8 @@ void CScene2::Unk76ca50()
         (*m_player1Ref)->unka8 = m_game->unk1358 / 1.5f;
         (*m_player2Ref)->unka8 = m_game->unk1358 / 1.5f;
     } else {
-        (*m_player1Ref)->unka8 = (char)m_game->unk1365;
-        (*m_player2Ref)->unka8 = (char)m_game->unk1365;
+        (*m_player1Ref)->unka8 = m_game->unk1365;
+        (*m_player2Ref)->unka8 = m_game->unk1365;
     }
     m_game->Reset();
     m_graphics->BuildBlendTables(m_game->m_palette);

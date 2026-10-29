@@ -88,7 +88,7 @@ BYTE CScene0::Update()
         } else {
             unk444 = 0;
         }
-        if ((char)m_game->m_pressA[v4] == 1) {
+        if (m_game->m_pressA[v4] == 1) {
             switch (unk43c) {
             case 0:
                 *(char*)&m_game->unk1343[0] = v4 == 1;
@@ -105,7 +105,7 @@ BYTE CScene0::Update()
                 *(char*)&m_game->unk1343[1] = v4 == 0;
                 m_game->PlaySE(6);
                 m_game->unk1364 = 3;
-                m_game->unk134e = (char)m_game->unk134f;
+                m_game->unk134e = m_game->unk134f;
                 CScene::Unk759c90(m_palette, 1, 0, 0);
                 unk2c = 2;
                 return 1;
@@ -114,7 +114,7 @@ BYTE CScene0::Update()
                 m_game->unk1343[1] = 0;
                 m_game->PlaySE(6);
                 m_game->unk1364 = 4;
-                m_game->unk134e = (char)m_game->unk134f;
+                m_game->unk134e = m_game->unk134f;
                 CScene::Unk759c90(m_palette, 1, 0, 0);
                 unk2c = 2;
                 return 1;

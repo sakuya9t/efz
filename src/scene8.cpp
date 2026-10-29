@@ -139,7 +139,7 @@ BYTE CScene8::Update()
                     unk46d = 9;
                 }
             }
-            if ((char)m_game->m_pressA[v4] != 0) {
+            if (m_game->m_pressA[v4] != 0) {
                 if (unk46d == 9) {
                     unk2d = 1;
                 } else {
@@ -147,7 +147,7 @@ BYTE CScene8::Update()
                     unk469 = 1;
                 }
             }
-            if (unk469 == 0 && ((char)m_game->m_pressB[0] != 0 || (char)m_game->m_pressB[1] != 0)) {
+            if (unk469 == 0 && (m_game->m_pressB[0] != 0 || m_game->m_pressB[1] != 0)) {
                 unk2d = 1;
             }
             break;
@@ -169,7 +169,7 @@ BYTE CScene8::Update()
                     unk46b = 2;
                 }
             }
-            if ((char)m_game->m_pressA[v4] != 0) {
+            if (m_game->m_pressA[v4] != 0) {
                 m_game->PlaySE(6);
                 if (((char (*)[9])&unk46e[0])[unk46d][unk46a] != 0 && unk46b == 0) {
                     m_game->unk14281 = unk46a;
@@ -192,7 +192,7 @@ BYTE CScene8::Update()
                     unk469 = 3;
                 }
             }
-            if ((char)m_game->m_pressB[v4] != 0 && unk44e[v4] == 0) {
+            if (m_game->m_pressB[v4] != 0 && unk44e[v4] == 0) {
                 unk469 = 3;
                 unk44e[v4] = 1;
             }
@@ -215,7 +215,7 @@ BYTE CScene8::Update()
                     unk46c = 1;
                 }
             }
-            if ((char)m_game->m_pressA[v4] != 0) {
+            if (m_game->m_pressA[v4] != 0) {
                 m_game->PlaySE(6);
                 unk469 = 2;
                 if (unk46c == 0) {
@@ -225,12 +225,12 @@ BYTE CScene8::Update()
                     unk2d = 2;
                 }
             }
-            if ((char)m_game->m_pressB[v4] != 0) {
+            if (m_game->m_pressB[v4] != 0) {
                 unk469 = 2;
                 unk44e[v4] = 1;
             }
         }
-        *(char*)&unk44e[v4] = m_game->m_inputX[v4] != 0 || m_game->m_inputY[v4] != 0 || (char)m_game->m_pressB[v4] != 0;
+        *(char*)&unk44e[v4] = m_game->m_inputX[v4] != 0 || m_game->m_inputY[v4] != 0 || m_game->m_pressB[v4] != 0;
     }
     Draw();
     return 8;

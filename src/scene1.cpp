@@ -214,7 +214,7 @@ BYTE CScene1::Update()
         case 0:
             m_game->unk1338[v4] = 0;
             unk47c[v4] = 2;
-            if ((char)m_game->m_pressC[v4] != 0 && unk540[v4] == 0 || (char)m_game->m_pressA[v4] != 0 && unk538[v4] == 1 && unk53a[v4] == 7) {
+            if (m_game->m_pressC[v4] != 0 && unk540[v4] == 0 || m_game->m_pressA[v4] != 0 && unk538[v4] == 1 && unk53a[v4] == 7) {
                 unk540[v4] = 0x3c;
             }
             if (unk540[v4] > 0) {
@@ -272,7 +272,7 @@ BYTE CScene1::Update()
             if (m_game->m_extraChars == -1 && (unk53c[v4] == 0xc || unk53c[v4] == 0xd || unk53c[v4] == 0xe || unk53c[v4] == 0xf)) {
                 m_game->m_pressA[v4] = 0;
             }
-            if ((char)m_game->m_pressA[v4] != 0 && m_game->m_inputY[v4] == 0 && m_game->m_inputX[v4] == 0) {
+            if (m_game->m_pressA[v4] != 0 && m_game->m_inputY[v4] == 0 && m_game->m_inputX[v4] == 0) {
                 if (unk49e[(1 - v4)] < 7 && unk49e[(1 - v4)] > 0 && unk53e[0] == unk53e[1] && unk53c[0] == unk53c[1]) {
                     unk53e[v4]++;
                     if (unk53e[v4] >= 6) {
@@ -297,7 +297,7 @@ BYTE CScene1::Update()
                 unk49e[v4] = 3;
                 m_game->PlaySE(unk53c[v4] + 0x28);
             }
-            if ((char)m_game->m_pressB[v4] != 0) {
+            if (m_game->m_pressB[v4] != 0) {
                 unk49e[v4] = 2;
                 unk540[v4] = 0;
             }
@@ -330,8 +330,8 @@ BYTE CScene1::Update()
                 }
                 Unk7595d0(v4);
             }
-            if ((char)m_game->m_pressA[v4] != 0 || (char)m_game->m_pressD[v4] != 0) {
-                if ((char)m_game->m_pressD[v4] != 0) {
+            if (m_game->m_pressA[v4] != 0 || m_game->m_pressD[v4] != 0) {
+                if (m_game->m_pressD[v4] != 0) {
                     m_game->unk1338[v4] = 1;
                 }
                 m_players[v4]->m_paletteIndex = unk53e[v4];
@@ -346,7 +346,7 @@ BYTE CScene1::Update()
                     return 2;
                 }
             }
-            if ((char)m_game->m_pressB[v4] != 0) {
+            if (m_game->m_pressB[v4] != 0) {
                 unk49e[v4] = 2;
             }
             break;
@@ -355,10 +355,10 @@ BYTE CScene1::Update()
                 if (unk540[0] > 0) {
                     unk540[0]--;
                     if (unk540[0] == 0) {
-                        if (m_game->m_extraChars == 0 && (char)m_game->unkf32 >= 0xd && (char)m_game->unkf32 <= 0x10) {
+                        if (m_game->m_extraChars == 0 && m_game->unkf32 >= 0xd && m_game->unkf32 <= 0x10) {
                             unk540[0] = rand() % 0x17 + 1;
                         }
-                        if (m_game->m_extraChars == -1 && (char)m_game->unkf32 >= 0x12 && (char)m_game->unkf32 <= 0x16) {
+                        if (m_game->m_extraChars == -1 && m_game->unkf32 >= 0x12 && m_game->unkf32 <= 0x16) {
                             unk540[0] = rand() % 0x17 + 1;
                         }
                     }
@@ -373,7 +373,7 @@ BYTE CScene1::Update()
                         return 2;
                     }
                     m_game->unkf32++;
-                    if ((char)m_game->unkf32 >= 0x17) {
+                    if (m_game->unkf32 >= 0x17) {
                         m_game->unkf32 = 0;
                     }
                 } else {
@@ -386,13 +386,13 @@ BYTE CScene1::Update()
                         unk49e[0] = 9;
                         unk49e[1] = 9;
                     }
-                    if (m_game->m_extraChars == 0 && (char)m_game->unkf32 >= 0xd && (char)m_game->unkf32 <= 0x10) {
+                    if (m_game->m_extraChars == 0 && m_game->unkf32 >= 0xd && m_game->unkf32 <= 0x10) {
                         m_game->m_pressA[v4] = 0;
                     }
-                    if (m_game->m_extraChars == -1 && (char)m_game->unkf32 >= 0x12 && (char)m_game->unkf32 <= 0x16) {
+                    if (m_game->m_extraChars == -1 && m_game->unkf32 >= 0x12 && m_game->unkf32 <= 0x16) {
                         m_game->m_pressA[v4] = 0;
                     }
-                    if ((char)m_game->m_pressA[v4] != 0) {
+                    if (m_game->m_pressA[v4] != 0) {
                         m_game->PlaySE(6);
                         CScene::Unk759c90(m_palette, 0, 0, 0x32);
                         unk2c = 2;
@@ -402,18 +402,18 @@ BYTE CScene1::Update()
                         return 2;
                     }
                 }
-                if ((char)m_game->m_pressC[v4] != 0 && unk540[0] == 0 && 1) {
+                if (m_game->m_pressC[v4] != 0 && unk540[0] == 0 && 1) {
                     unk540[0] = rand() % 0x17 + 0x3c;
                 }
             }
-            if ((char)m_game->m_pressB[v4] != 0) {
+            if (m_game->m_pressB[v4] != 0) {
                 unk49e[v4] = 8;
                 unk49e[(1 - v4)] = 8;
                 unk540[0] = 0;
                 unk540[1] = 0;
             }
         }
-        if (unk49e[0] == 0 && (char)m_game->m_pressB[0] != 0 && m_game->unk1343[0] == 0 || unk49e[1] == 0 && (char)m_game->m_pressB[1] != 0 && m_game->unk1343[1] == 0) {
+        if (unk49e[0] == 0 && m_game->m_pressB[0] != 0 && m_game->unk1343[0] == 0 || unk49e[1] == 0 && m_game->m_pressB[1] != 0 && m_game->unk1343[1] == 0) {
             unk2d = 1;
         }
         *(char*)&unk49c[v4] = m_game->m_inputX[v4] != 0 || m_game->m_inputY[v4] != 0;
@@ -430,12 +430,12 @@ BYTE CScene1::Update()
         } else {
             unk49e[0] = 7;
             unk49e[1] = 7;
-            if ((char)m_game->unkf32 < 0xa) {
+            if (m_game->unkf32 < 0xa) {
                 strcpy(v30, "system\\stage\\0");
             } else {
                 strcpy(v30, "system\\stage\\");
             }
-            _itoa((char)m_game->unkf32, v38, 0xa);
+            _itoa(m_game->unkf32, v38, 0xa);
             strcat(v30, (const char*)v38);
             if (1) {
                 strcat(v30, ".dat");
@@ -452,11 +452,11 @@ BYTE CScene1::Update()
             m_graphics->SetPaletteRange(m_palette, 0xaf, 0x50);
         }
     } else if (unk49e[0] == 6) {
-        if ((char)m_game->m_pressB[0] != 0) {
+        if (m_game->m_pressB[0] != 0) {
             unk49e[0] = 2;
         }
     } else if (unk49e[1] == 6) {
-        if ((char)m_game->m_pressB[1] != 0) {
+        if (m_game->m_pressB[1] != 0) {
             unk49e[1] = 2;
         }
     } else if (unk49e[0] == 7) {
@@ -519,13 +519,13 @@ BYTE CScene1::Update()
             unk49e[0] = 4;
             unk49e[1] = 4;
             m_game->unkf32++;
-            if (m_game->m_extraChars == 0 && (char)m_game->unkf32 == 0xd) {
+            if (m_game->m_extraChars == 0 && m_game->unkf32 == 0xd) {
                 m_game->unkf32 = 0x11;
             }
-            if (m_game->m_extraChars == -1 && (char)m_game->unkf32 == 0x12) {
+            if (m_game->m_extraChars == -1 && m_game->unkf32 == 0x12) {
                 m_game->unkf32 = 0;
             }
-            if ((char)m_game->unkf32 >= 0x17) {
+            if (m_game->unkf32 >= 0x17) {
                 m_game->unkf32 = 0;
             }
             Unk759460();
@@ -538,13 +538,13 @@ BYTE CScene1::Update()
             unk49e[0] = 4;
             unk49e[1] = 4;
             m_game->unkf32--;
-            if ((char)m_game->unkf32 < 0) {
+            if (m_game->unkf32 < 0) {
                 m_game->unkf32 = 0x16;
             }
-            if (m_game->m_extraChars == 0 && (char)m_game->unkf32 == 0x10) {
+            if (m_game->m_extraChars == 0 && m_game->unkf32 == 0x10) {
                 m_game->unkf32 = 0xc;
             }
-            if (m_game->m_extraChars == -1 && (char)m_game->unkf32 == 0x16) {
+            if (m_game->m_extraChars == -1 && m_game->unkf32 == 0x16) {
                 m_game->unkf32 = 0x11;
             }
             Unk759460();
@@ -666,14 +666,14 @@ void CScene1::Draw()
             x24 = 0;
             a28 = 1;
             for (; a28 <= 7; a28++) {
-                while (unk544[((char)m_game->unkf32 + a28 + x24) % 0x17] != 0) {
+                while (unk544[(m_game->unkf32 + a28 + x24) % 0x17] != 0) {
                     x24++;
                 }
-                v10 = MakeRect(0, ((char)m_game->unkf32 + a28 + x24) % 0x17 << 5, 0xa0, 0x20);
+                v10 = MakeRect(0, (m_game->unkf32 + a28 + x24) % 0x17 << 5, 0xa0, 0x20);
                 x20 = MakeRect(a28 * 0xb + 0xaa, 0xcd - a28 * 0x21 + (int)((double)(a28 * 0x21 + 0xbe) * cos(unk47c[4] / 57.29579143313326)), 0xa0, 0x20);
                 m_graphics->Blit(x20, (IDirectDrawSurface*)unk440, v10, unk44c[2], 0);
             }
-            v10 = MakeRect(0xa0, (char)m_game->unkf32 << 5, 0xa0, 0x20);
+            v10 = MakeRect(0xa0, m_game->unkf32 << 5, 0xa0, 0x20);
             x20 = MakeRect(0xaa, (int)(cos(unk47c[4] / 57.29579143313326) * 190.0) + 0xcd, 0xa0, 0x20);
             m_graphics->Blit(x20, (IDirectDrawSurface*)unk440, v10, unk44c[2], 0);
             v10 = MakeRect(1, 0, 0xc3, 0xde);
@@ -683,10 +683,10 @@ void CScene1::Draw()
             v2c = 0;
             v30 = 0;
             for (; v30 <= 8; v30++) {
-                while (unk544[((char)m_game->unkf32 + v30 + v2c) % 0x17] != 0) {
+                while (unk544[(m_game->unkf32 + v30 + v2c) % 0x17] != 0) {
                     v2c++;
                 }
-                v10 = MakeRect(0, ((char)m_game->unkf32 + v30 + v2c) % 0x17 << 5, 0xa0, 0x20);
+                v10 = MakeRect(0, (m_game->unkf32 + v30 + v2c) % 0x17 << 5, 0xa0, 0x20);
                 x20 = MakeRect(v30 * 0xb + 0xaa, 0xcd - v30 * 0x21 + (int)((double)(v30 * 0x21 + 0xbe) * cos(unk47c[4] / 57.29579143313326)), 0xa0, 0x20);
                 m_graphics->Blit(x20, (IDirectDrawSurface*)unk440, v10, unk44c[2], 0);
             }
@@ -698,10 +698,10 @@ void CScene1::Draw()
         v34 = 0;
         v38 = 0;
         for (; v38 <= 8; v38++) {
-            while (unk544[((char)m_game->unkf32 + v38 + v34) % 0x17] != 0) {
+            while (unk544[(m_game->unkf32 + v38 + v34) % 0x17] != 0) {
                 v34++;
             }
-            v10 = MakeRect(0, ((char)m_game->unkf32 + v38 + v34) % 0x17 << 5, 0xa0, 0x20);
+            v10 = MakeRect(0, (m_game->unkf32 + v38 + v34) % 0x17 << 5, 0xa0, 0x20);
             x20 = MakeRect(v38 * 0xb + 0xaa - (int)(sin(unk47c[5] / 57.29579143313326) * 11.0), 0xcd - v38 * 0x21 + (int)((double)(v38 * 0x21 + 0xbe) * cos(unk47c[4] / 57.29579143313326)) + (int)(sin(unk47c[5] / 57.29579143313326) * 33.0), 0xa0, 0x20);
             m_graphics->Blit(x20, (IDirectDrawSurface*)unk440, v10, unk44c[2], 0);
         }
@@ -712,19 +712,19 @@ void CScene1::Draw()
         x3c = 0;
         l40 = 0;
         for (; l40 <= 8; l40++) {
-            while (unk544[((char)m_game->unkf32 + l40 + 0x17 + x3c) % 0x17] != 0) {
+            while (unk544[(m_game->unkf32 + l40 + 0x17 + x3c) % 0x17] != 0) {
                 x3c++;
             }
-            v10 = MakeRect(0, ((char)m_game->unkf32 + l40 + 0x17 + x3c) % 0x17 << 5, 0xa0, 0x20);
+            v10 = MakeRect(0, (m_game->unkf32 + l40 + 0x17 + x3c) % 0x17 << 5, 0xa0, 0x20);
             x20 = MakeRect(l40 * 0xb + 0xaa + (int)(sin(unk47c[5] / 57.29579143313326) * 11.0), 0xcd - l40 * 0x21 + (int)((double)(l40 * 0x21 + 0xbe) * cos(unk47c[4] / 57.29579143313326)) - (int)(sin(unk47c[5] / 57.29579143313326) * 33.0), 0xa0, 0x20);
             m_graphics->Blit(x20, (IDirectDrawSurface*)unk440, v10, unk44c[2], 0);
         }
         l40 = -1;
         x3c = 0;
-        while (unk544[((char)m_game->unkf32 + l40 + 0x17 + x3c) % 0x17] != 0) {
+        while (unk544[(m_game->unkf32 + l40 + 0x17 + x3c) % 0x17] != 0) {
             x3c--;
         }
-        v10 = MakeRect(0, ((char)m_game->unkf32 + l40 + 0x17 + x3c) % 0x17 << 5, 0xa0, 0x20);
+        v10 = MakeRect(0, (m_game->unkf32 + l40 + 0x17 + x3c) % 0x17 << 5, 0xa0, 0x20);
         x20 = MakeRect(l40 * 0xb + 0xaa + (int)(sin(unk47c[5] / 57.29579143313326) * 11.0), 0xcd - l40 * 0x21 + (int)((double)(l40 * 0x21 + 0xbe) * cos(unk47c[4] / 57.29579143313326)) - (int)(sin(unk47c[5] / 57.29579143313326) * 33.0), 0xa0, 0x20);
         m_graphics->Blit(x20, (IDirectDrawSurface*)unk440, v10, unk44c[2], 0);
         v10 = MakeRect(1, 0, 0xc3, 0xde);
@@ -840,12 +840,12 @@ void CScene1::Unk759460()
     char v34[8];
     char v2c[40];
 
-    if ((char)m_game->unkf32 < 0xa) {
+    if (m_game->unkf32 < 0xa) {
         strcpy(v2c, "system\\stage\\0");
     } else {
         strcpy(v2c, "system\\stage\\");
     }
-    _itoa((char)m_game->unkf32, v34, 0xa);
+    _itoa(m_game->unkf32, v34, 0xa);
     strcat(v2c, (const char*)v34);
     if (1) {
         strcat(v2c, ".dat");

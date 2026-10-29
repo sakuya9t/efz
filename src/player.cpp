@@ -476,7 +476,7 @@ void CPlayer::Unk40f980()
             unk30e4 = 0x384;
             unk30e0 = 0xc;
         }
-        if (((*m_opponent)->pattern < 0x32 || (*m_opponent)->pattern >= 0xc8) && (char)m_game->unk1350 == 0 && m_game->unk1354 == 0) {
+        if (((*m_opponent)->pattern < 0x32 || (*m_opponent)->pattern >= 0xc8) && m_game->unk1350 == 0 && m_game->unk1354 == 0) {
             if ((unsigned long)unk30e4 > 0) {
                 unk30e4--;
             } else {
@@ -596,10 +596,10 @@ double CPlayer::AttackFactor()
     if (m_game->unk1364 == 2) {
         return unk118 / 10000.0 + 1.0;
     }
-    if ((char)m_game->unk1370 == 1) {
+    if (m_game->unk1370 == 1) {
         return (unk118 / 10000.0 + 1.0) / 2.0;
     }
-    if ((char)m_game->unk1370 == 2) {
+    if (m_game->unk1370 == 2) {
         return unk118 / 10000.0 + 1.0;
     }
     return (unk118 / 10000.0 + 1.0) * 2;
@@ -1013,7 +1013,7 @@ void CPlayer::Unk411be0()
             return;
         }
         Vf5();
-        if ((char)m_game->unk1350 != 0 || m_game->unk1354 != 0) {
+        if (m_game->unk1350 != 0 || m_game->unk1354 != 0) {
             m_pressA = 0;
             m_pressB = 0;
             m_pressC = 0;
@@ -1074,7 +1074,7 @@ void CPlayer::Unk411be0()
     } else {
         m_holdD = 0;
     }
-    if ((char)m_game->unk1350 != 0 || m_game->unk1354 != 0) {
+    if (m_game->unk1350 != 0 || m_game->unk1354 != 0) {
         m_pressA = 0;
         m_pressB = 0;
         m_pressC = 0;

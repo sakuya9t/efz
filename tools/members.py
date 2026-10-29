@@ -844,6 +844,13 @@ class Rewriter:
             return None
         v = self.sem(ch[-1])
         X = c.type
+        inner = self.strip(ch[-1])
+        if inner.kind in (CK.MEMBER_REF_EXPR, CK.ARRAY_SUBSCRIPT_EXPR) and \
+                canon(inner.type).spelling == canon(X).spelling and \
+                (is_integral(X) or is_pointer(X)) and not in_macro(inner):
+            # (char)m_colorKey once m_colorKey is a char: a cast to its own type
+            text, prec = self.render(ch[-1], 'rvalue')
+            return text, prec
         if isinstance(v, LVal):
             if canon(X).spelling == canon(v.T).spelling and same_size_scalar(v.U, v.T) and \
                     (is_pointer(X) or same_type(v.U, v.T) or is_pointer(v.U)):

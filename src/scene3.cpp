@@ -153,7 +153,7 @@ BYTE CScene3::Update()
         m_players[1]->Vf6();
         m_players[0]->Vf7();
         m_players[1]->Vf7();
-        if (m_game->unk1354 == 0 && (char)m_game->unk1350 == 0) {
+        if (m_game->unk1354 == 0 && m_game->unk1350 == 0) {
             Unk766480();
         }
         Unk766b50();
@@ -495,7 +495,7 @@ void CScene3::Vf2()
     }
     if (unk2d == 0 && m_game->unk1364 == 6) {
         m_game->UpdateInput();
-        if ((char)m_game->m_pressA[0] != 0 || (char)m_game->m_pressA[1] != 0 || (char)m_game->m_pressB[0] != 0 || (char)m_game->m_pressB[1] != 0 || (v108[1] & 0x80) != 0) {
+        if (m_game->m_pressA[0] != 0 || m_game->m_pressA[1] != 0 || m_game->m_pressB[0] != 0 || m_game->m_pressB[1] != 0 || (v108[1] & 0x80) != 0) {
             unk2d = 1;
             m_game->StopMusic();
             unk588 = 0;
@@ -505,7 +505,7 @@ void CScene3::Vf2()
         unk2d = 1;
         unk588 = 0;
     }
-    if ((v108[62] & 0x80) != 0 && (char)m_game->unk1350 == 0 && m_game->unk1354 == 0 && m_game->unk1364 != 0 && m_game->unk1364 != 2 && m_game->unk1364 != 6) {
+    if ((v108[62] & 0x80) != 0 && m_game->unk1350 == 0 && m_game->unk1354 == 0 && m_game->unk1364 != 0 && m_game->unk1364 != 2 && m_game->unk1364 != 6) {
         unk574 = unk574 + 5;
         if (unk574 > 0x7d0) {
             unk574 = 0;
@@ -624,11 +624,11 @@ int CScene3::Unk765fa0()
 
 void CScene3::Unk766070()
 {
-    if ((char)m_game->unk1350 == 0) {
+    if (m_game->unk1350 == 0) {
         return;
     }
     EffectDesc v48;
-    switch ((char)m_game->unk1350) {
+    switch (m_game->unk1350) {
     case 1:
         v48.unk0 = 0;
         v48.x = 160.0;
@@ -678,7 +678,7 @@ void CScene3::Unk7661a0()
         (&m_game->m_replay)->Write((*m_player1Ref)->unk8d);
         (&m_game->m_replay)->Write((*m_player2Ref)->unk8d);
         (&m_game->m_replay)->Write(0x68);
-        (&m_game->m_replay)->Write((char)m_game->unkf32);
+        (&m_game->m_replay)->Write(m_game->unkf32);
         (&m_game->m_replay)->Write((*m_player1Ref)->m_paletteIndex);
         (&m_game->m_replay)->Write((*m_player2Ref)->m_paletteIndex);
         m_game->Reset();

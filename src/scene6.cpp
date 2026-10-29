@@ -155,13 +155,13 @@ BYTE CScene6::Update()
             case 1:
                 if (m_game->m_inputX[v4] != 0 && unk44b[v4] == 0) {
                     *(char*)&m_game->unk1370 += m_game->m_inputX[v4];
-                    if ((char)m_game->unk1370 > 3) {
+                    if (m_game->unk1370 > 3) {
                         m_game->unk1370 = 1;
                     }
-                    if ((char)m_game->unk1370 < 1) {
+                    if (m_game->unk1370 < 1) {
                         m_game->unk1370 = 3;
                     }
-                    WriteConfigByte(0x24, (char)m_game->unk1370);
+                    WriteConfigByte(0x24, m_game->unk1370);
                     m_game->PlaySE(8);
                     unk44b[v4] = 1;
                 }
@@ -183,13 +183,13 @@ BYTE CScene6::Update()
             case 3:
                 if (m_game->m_inputX[v4] != 0 && unk44b[v4] == 0) {
                     *(char*)&m_game->unk1365 += m_game->m_inputX[v4];
-                    if ((char)m_game->unk1365 > 4) {
+                    if (m_game->unk1365 > 4) {
                         m_game->unk1365 = 1;
                     }
-                    if ((char)m_game->unk1365 < 1) {
+                    if (m_game->unk1365 < 1) {
                         m_game->unk1365 = 4;
                     }
-                    WriteConfigByte(0x21, (char)m_game->unk1365);
+                    WriteConfigByte(0x21, m_game->unk1365);
                     m_game->PlaySE(8);
                     unk44b[v4] = 1;
                 }
@@ -197,25 +197,25 @@ BYTE CScene6::Update()
             case 4:
                 if (m_game->m_inputX[v4] != 0 && unk44b[v4] == 0) {
                     *(char*)&m_game->unk134f += m_game->m_inputX[v4];
-                    if ((char)m_game->unk134f > 3) {
+                    if (m_game->unk134f > 3) {
                         m_game->unk134f = 1;
                     }
-                    if ((char)m_game->unk134f < 1) {
+                    if (m_game->unk134f < 1) {
                         m_game->unk134f = 3;
                     }
-                    WriteConfigByte(0x26, (char)m_game->unk134f);
+                    WriteConfigByte(0x26, m_game->unk134f);
                     m_game->PlaySE(8);
                     unk44b[v4] = 1;
                 }
                 break;
             case 5:
-                if ((char)m_game->m_pressA[v4] == 1) {
+                if (m_game->m_pressA[v4] == 1) {
                     m_game->PlaySE(6);
                     Unk75d660();
                 }
                 break;
             case 6:
-                if ((char)m_game->m_pressA[v4] == 1) {
+                if (m_game->m_pressA[v4] == 1) {
                     m_game->PlaySE(6);
                     Unk75da30(0);
                     if (1) {
@@ -230,11 +230,11 @@ BYTE CScene6::Update()
                 }
                 break;
             case 7:
-                if ((char)m_game->m_pressA[v4] == 1) {
+                if (m_game->m_pressA[v4] == 1) {
                     unk2d = 1;
                 }
             }
-            if ((char)m_game->m_pressB[v4] == 1) {
+            if (m_game->m_pressB[v4] == 1) {
                 unk2d = 1;
             }
         }
@@ -280,8 +280,8 @@ BYTE CScene6::Update()
             if (m_game->m_inputX[v8] == 0 && m_game->m_inputY[v8] == 0) {
                 unk44b[v8] = 0;
             }
-            if ((char)m_game->m_pressA[v8] != 0 || (char)m_game->m_pressB[v8] != 0) {
-                if ((char)m_game->m_pressA[v8] != 0) {
+            if (m_game->m_pressA[v8] != 0 || m_game->m_pressB[v8] != 0) {
+                if (m_game->m_pressA[v8] != 0) {
                     m_game->PlaySE(6);
                 }
                 Unk75da30(0);
@@ -310,8 +310,8 @@ BYTE CScene6::Update()
                 }
                 Unk75d660();
             }
-            if ((char)m_game->m_pressA[xc] != 0 || (char)m_game->m_pressB[xc] != 0) {
-                if ((char)m_game->m_pressA[xc] != 0) {
+            if (m_game->m_pressA[xc] != 0 || m_game->m_pressB[xc] != 0) {
+                if (m_game->m_pressA[xc] != 0) {
                     m_game->PlaySE(6);
                 }
                 Unk75d8d0(1);
@@ -372,11 +372,11 @@ void CScene6::Draw()
         } else if (m_game->unk136c == 1) {
             m_graphics->Blit(MakeRect(0xc0, unk754 + 0x5f, 0x50, 0xe), (IDirectDrawSurface*)unk438, MakeRect(0xc0, 0x105, 0x50, 0xe), m_colorKey, 0);
         }
-        if ((char)m_game->unk1370 == 1) {
+        if (m_game->unk1370 == 1) {
             m_graphics->Blit(MakeRect(0x70, unk754 + 0x71, 0x40, 0xe), (IDirectDrawSurface*)unk438, MakeRect(0x70, 0x117, 0x40, 0xe), m_colorKey, 0);
-        } else if ((char)m_game->unk1370 == 2) {
+        } else if (m_game->unk1370 == 2) {
             m_graphics->Blit(MakeRect(0xb0, unk754 + 0x71, 0x40, 0xe), (IDirectDrawSurface*)unk438, MakeRect(0xb0, 0x117, 0x40, 0xe), m_colorKey, 0);
-        } else if ((char)m_game->unk1370 == 3) {
+        } else if (m_game->unk1370 == 3) {
             m_graphics->Blit(MakeRect(0xf0, unk754 + 0x71, 0x40, 0xe), (IDirectDrawSurface*)unk438, MakeRect(0xf0, 0x117, 0x40, 0xe), m_colorKey, 0);
         }
         if (m_game->unk1366 == 0) {
@@ -384,20 +384,20 @@ void CScene6::Draw()
         } else if (m_game->unk1366 == 1) {
             m_graphics->Blit(MakeRect(0xa0, unk754 + 0x83, 0x30, 0xe), (IDirectDrawSurface*)unk438, MakeRect(0xa0, 0x129, 0x30, 0xe), m_colorKey, 0);
         }
-        if ((char)m_game->unk1365 == 1) {
+        if (m_game->unk1365 == 1) {
             m_graphics->Blit(MakeRect(0x80, unk754 + 0x95, 0x18, 0xe), (IDirectDrawSurface*)unk438, MakeRect(0x80, 0x13b, 0x18, 0xe), m_colorKey, 0);
-        } else if ((char)m_game->unk1365 == 2) {
+        } else if (m_game->unk1365 == 2) {
             m_graphics->Blit(MakeRect(0x98, unk754 + 0x95, 0x18, 0xe), (IDirectDrawSurface*)unk438, MakeRect(0x98, 0x13b, 0x18, 0xe), m_colorKey, 0);
-        } else if ((char)m_game->unk1365 == 3) {
+        } else if (m_game->unk1365 == 3) {
             m_graphics->Blit(MakeRect(0xb0, unk754 + 0x95, 0x18, 0xe), (IDirectDrawSurface*)unk438, MakeRect(0xb0, 0x13b, 0x18, 0xe), m_colorKey, 0);
-        } else if ((char)m_game->unk1365 == 4) {
+        } else if (m_game->unk1365 == 4) {
             m_graphics->Blit(MakeRect(0xc8, unk754 + 0x95, 0x18, 0xe), (IDirectDrawSurface*)unk438, MakeRect(0xc8, 0x13b, 0x18, 0xe), m_colorKey, 0);
         }
-        if ((char)m_game->unk134f == 1) {
+        if (m_game->unk134f == 1) {
             m_graphics->Blit(MakeRect(0x80, unk754 + 0xa7, 0x18, 0xe), (IDirectDrawSurface*)unk438, MakeRect(0x80, 0x14d, 0x18, 0xe), m_colorKey, 0);
-        } else if ((char)m_game->unk134f == 2) {
+        } else if (m_game->unk134f == 2) {
             m_graphics->Blit(MakeRect(0x98, unk754 + 0xa7, 0x18, 0xe), (IDirectDrawSurface*)unk438, MakeRect(0x98, 0x14d, 0x18, 0xe), m_colorKey, 0);
-        } else if ((char)m_game->unk134f == 3) {
+        } else if (m_game->unk134f == 3) {
             m_graphics->Blit(MakeRect(0xb0, unk754 + 0xa7, 0x18, 0xe), (IDirectDrawSurface*)unk438, MakeRect(0xb0, 0x14d, 0x18, 0xe), m_colorKey, 0);
         }
     } else if ((char)unk44b[2] == 1) {
