@@ -37,29 +37,29 @@ CScene6::CScene6(HWND p1, CPlayer** p2, CPlayer** p3, CGame* p4, CGraphics* p5, 
     unk750 = 0;
     unk754 = 0;
     unk758 = 0;
-    strcpy((char*)this + 0x470, "nanase");
-    strcpy((char*)this + 0x48e, "ayu");
-    strcpy((char*)this + 0x4ac, "mai");
-    strcpy((char*)this + 0x4ca, "makoto");
-    strcpy((char*)this + 0x4e8, "akane");
-    strcpy((char*)this + 0x506, "mayu");
-    strcpy((char*)this + 0x524, "nagamori");
-    strcpy((char*)this + 0x542, "misaki");
-    strcpy((char*)this + 0x560, "shiori");
-    strcpy((char*)this + 0x57e, "sayuri");
-    strcpy((char*)this + 0x59c, "nayuki");
-    strcpy((char*)this + 0x5ba, "mio");
-    strcpy((char*)this + 0x5d8, "misuzu");
-    strcpy((char*)this + 0x5f6, "minagi");
-    strcpy((char*)this + 0x614, "kano");
-    strcpy((char*)this + 0x632, "mizukab");
-    strcpy((char*)this + 0x650, "EXnanase");
-    strcpy((char*)this + 0x66e, "kaori");
-    strcpy((char*)this + 0x68c, "ikumi");
-    strcpy((char*)this + 0x6aa, "mishio");
-    strcpy((char*)this + 0x6c8, "nayukiB");
-    strcpy((char*)this + 0x6e6, "akiko");
-    strcpy((char*)this + 0x704, "kanna");
+    strcpy(m_names[0], "nanase");
+    strcpy(m_names[1], "ayu");
+    strcpy(m_names[2], "mai");
+    strcpy(m_names[3], "makoto");
+    strcpy(m_names[4], "akane");
+    strcpy(m_names[5], "mayu");
+    strcpy(m_names[6], "nagamori");
+    strcpy(m_names[7], "misaki");
+    strcpy(m_names[8], "shiori");
+    strcpy(m_names[9], "sayuri");
+    strcpy(m_names[0xa], "nayuki");
+    strcpy(m_names[0xb], "mio");
+    strcpy(m_names[0xc], "misuzu");
+    strcpy(m_names[0xd], "minagi");
+    strcpy(m_names[0xe], "kano");
+    strcpy(m_names[0xf], "mizukab");
+    strcpy(m_names[0x10], "EXnanase");
+    strcpy(m_names[0x11], "kaori");
+    strcpy(m_names[0x12], "ikumi");
+    strcpy(m_names[0x13], "mishio");
+    strcpy(m_names[0x14], "nayukiB");
+    strcpy(m_names[0x15], "akiko");
+    strcpy(m_names[0x16], "kanna");
 }
 
 CScene6::~CScene6()
@@ -407,11 +407,11 @@ void CScene6::Draw()
         m_graphics->Blit(MakeRect(0, 0 - unk754, 0x140, 0x28), (IDirectDrawSurface*)unk440, MakeRect(0, 0, 0x140, 0x28), unk741, 0);
         m_graphics->Blit(MakeRect(0, unk754 + 0x28, 0x140, 0xc8), (IDirectDrawSurface*)unk440, MakeRect(0, 0x28, 0x140, 0xc8), unk741, 0);
         m_graphics->Blit(MakeRect(unk750 + 0x50, unk754, 0x140, 0xf0), (IDirectDrawSurface*)unk43c, MakeRect(0, 0, 0x140, 0xf0), unk740, 0);
-        Unk75d260(0xa0, unk754 + 0x8f, unk450);
-        Unk75d260(0xa0, unk754 + 0xa1, unk454);
-        Unk75d260(0xa0, unk754 + 0xb3, unk458);
-        Unk75d260(0xa0, unk754 + 0xc5, unk46c);
-        Unk75d260(0xa0, unk754 + 0xd7, unk468);
+        Unk75d260(0xa0, unk754 + 0x8f, m_record.unk0);
+        Unk75d260(0xa0, unk754 + 0xa1, m_record.unk4);
+        Unk75d260(0xa0, unk754 + 0xb3, m_record.unk8);
+        Unk75d260(0xa0, unk754 + 0xc5, m_record.unk1c);
+        Unk75d260(0xa0, unk754 + 0xd7, m_record.unk18);
     } else if ((char)unk44b[2] == 2) {
         m_graphics->Blit(MakeRect(0, 0, 0x140, 0xf0), (IDirectDrawSurface*)unk444, MakeRect(0, 0, 0x140, 0xf0), 0, 0);
     }
@@ -463,9 +463,9 @@ void CScene6::Unk75d400()
     char v38[52];
 
     strcpy(v38, "system\\");
-    strcat(v38, (const char*)((char*)this + unk449 * 0x1e + 0x470));
+    strcat(v38, m_names[unk449]);
     strcat(v38, "\\");
-    strcat(v38, (const char*)((char*)this + unk449 * 0x1e + 0x470));
+    strcat(v38, m_names[unk449]);
     if (1) {
         strcat(v38, ".dat");
         m_game->LoadDat((IDirectDrawSurface**)&unk43c, (const char*)v38, 0, 0xd6);
@@ -476,7 +476,7 @@ void CScene6::Unk75d400()
         m_graphics->LoadPaletteBmp(m_palette, (const char*)v38, 0, 0xd6, 0x28);
     }
     unk740 = m_graphics->GetColorKey((IDirectDrawSurface*)unk43c);
-    ((CharRecord*)&unk450)->Load((const char*)((char*)this + unk449 * 0x1e + 0x470));
+    m_record.Load(m_names[unk449]);
 }
 
 void CScene6::Unk75d580()

@@ -1295,7 +1295,7 @@ void CScene3::Unk767f60(CPlayer* p1, CPlayer* p2, CollisionInfo* p3, CollisionIn
                         *(int*)&p2->unk134 = 0x43b40000;
                     }
                 }
-                *(int*)((char*)p2 + 0x154) = 0;
+                p2->unk154 = 0;
                 k2c0.type = 2;
                 k2c0.unk2c = 3;
                 m_game->CreateEffect((EffectDesc*)&k2c0);
@@ -1654,7 +1654,7 @@ void CScene3::Unk7697d0(CPlayer* p1, CPlayer* p2, int p3, CollisionInfo* p4)
                         *(int*)&p2->unk134 = 0x43b40000;
                     }
                 }
-                *(int*)((char*)p2 + 0x154) = 1;
+                p2->unk154 = 1;
                 k168.type = 2;
                 k168.unk2c = 3;
                 m_game->CreateEffect((EffectDesc*)&k168);

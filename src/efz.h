@@ -793,7 +793,7 @@ public:
     short unk14c;
     short unk14e;
     int unk150;
-    BYTE unk154[0x158 - 0x154];
+    int unk154;
     BYTE unk158;
     BYTE unk159;
     BYTE unk15a;
@@ -1447,13 +1447,8 @@ public:
     char unk44a;
     BYTE unk44b[0x3]; // indexed
     BYTE unk44e[0x450 - 0x44e];
-    int unk450;
-    int unk454;
-    int unk458;
-    BYTE unk45c[0x468 - 0x45c];
-    int unk468;
-    int unk46c;
-    BYTE unk470[0x740 - 0x470];
+    CharRecord m_record;    // +0x450: the shown character's
+    char m_names[0x18][0x1e]; // +0x470: the characters' folder names
     char unk740;
     char unk741;
     BYTE unk742[0x748 - 0x742];
