@@ -47,7 +47,7 @@ CIkumi::CIkumi(int p1, int p2, int p3, int p4, int p5, BYTE p6)
     }
 }
 
-void CIkumi::Vf12()
+void CIkumi::Reset()
 {
     int v4;
 
@@ -79,7 +79,7 @@ void CIkumi::Vf12()
         unk3260[v4] = 0;
         unk3360[v4] = 0;
     }
-    CPlayer::Vf12();
+    CPlayer::Reset();
 }
 
 CIkumi::~CIkumi()
@@ -91,10 +91,10 @@ CIkumi::~CIkumi()
     CPlayer::~CPlayer();
 }
 
-void CIkumi::Vf11()
+void CIkumi::Load()
 {
     Unk6a5eb0();
-    CPlayer::Vf11();
+    CPlayer::Load();
     unk346c = (int)anims;
     unk3470 = (int)m_patterns;
 }
@@ -167,29 +167,29 @@ void CIkumi::Unk6a5eb0()
     }
 }
 
-void CIkumi::Vf0()
+void CIkumi::StartPattern()
 {
     unk3138 = 0;
     unk313c = 0;
     unk3140 = 0;
     unk3154 = 0;
-    CPlayer::Vf0();
+    CPlayer::StartPattern();
 }
 
-void CIkumi::Vf10(short p1)
+void CIkumi::RemoveObject(short p1)
 {
     unk3160[p1] = 0;
     unk3260[p1] = 0;
     unk3360[p1] = 0;
-    CPlayer::Vf10(p1);
+    CPlayer::RemoveObject(p1);
 }
 
-void CIkumi::Vf3()
+void CIkumi::Move()
 {
     CPlayer::Unk40e740();
 }
 
-void CIkumi::Vf4()
+void CIkumi::StartCommand()
 {
     if (pattern < 0xc8) {
         unk1a8 = 0;
@@ -203,7 +203,7 @@ void CIkumi::Vf4()
         unk1aa = 0;
     }
     if (m_command == 0x34 && (unk118 >= 500.0 && m_attackResult > 1 || unk120 > 0 && m_attackResult > 1 && m_attackResult != 6) && (m_patterns[pattern].frames[frame].flagsB0 & 8) > 0 && m_patterns[pattern].unk2 <= m_patterns[0xa7].unk0) {
-        Vf0();
+        StartPattern();
         CPlayer::Unk40f170();
         pattern = 0xa7;
         if (y < 0.0) {
@@ -213,49 +213,49 @@ void CIkumi::Vf4()
     }
     if (unk15c < 2) {
         if (m_command == 0x5e && m_gauge >= 0xbb8 && m_hp < 0xd05 && (m_patterns[pattern].frames[frame].flagsB0 & 8) > 0 && y == 0.0 && m_attackResult != 6 && unk3150 == 0 && m_patterns[pattern].unk2 <= m_patterns[0x141].unk0) {
-            Vf0();
+            StartPattern();
             CPlayer::Unk40f170();
             pattern = 0x141;
             return;
         }
         if (unk3150 == 0 && m_command == 0x70 && m_gauge >= 0x3e8 && y == 0.0 && (m_patterns[pattern].frames[frame].flagsB0 & 8) > 0 && (pattern >= 0xc8 && m_attackResult >= 2 && m_attackResult != 6 || pattern < 0xc8) && m_patterns[pattern].unk2 <= m_patterns[0x137].unk0) {
-            Vf0();
+            StartPattern();
             CPlayer::Unk40f170();
             pattern = 0x137;
             return;
         }
         if (unk3150 == 0 && m_command == 0x6f && y == 0.0 && m_gauge >= 0x3e8 && (m_patterns[pattern].frames[frame].flagsB0 & 8) > 0 && (pattern >= 0xc8 && m_attackResult >= 2 && m_attackResult != 6 || pattern < 0xc8) && m_patterns[pattern].unk2 <= m_patterns[0x136].unk0) {
-            Vf0();
+            StartPattern();
             CPlayer::Unk40f170();
             pattern = 0x136;
             return;
         }
         if (unk3150 == 0 && m_command == 0x6e && y == 0.0 && m_gauge >= 0x3e8 && (m_patterns[pattern].frames[frame].flagsB0 & 8) > 0 && (pattern >= 0xc8 && m_attackResult >= 2 && m_attackResult != 6 || pattern < 0xc8) && m_patterns[pattern].unk2 <= m_patterns[0x135].unk0) {
-            Vf0();
+            StartPattern();
             CPlayer::Unk40f170();
             pattern = 0x135;
             return;
         }
         if (unk3150 > 0 && m_command == 0xac && m_gauge >= 0xbb8 && y == 0.0 && (m_patterns[pattern].frames[frame].flagsB0 & 8) > 0 && (pattern >= 0xc8 && m_attackResult >= 2 && m_attackResult != 6 || pattern < 0xc8) && m_patterns[pattern].unk2 <= m_patterns[0x140].unk0) {
-            Vf0();
+            StartPattern();
             CPlayer::Unk40f170();
             pattern = 0x140;
             return;
         }
         if (unk3150 > 0 && (m_command == 0xab || m_command == 0xac) && m_gauge >= 0x7d0 && y == 0.0 && (m_patterns[pattern].frames[frame].flagsB0 & 8) > 0 && (pattern >= 0xc8 && m_attackResult >= 2 && m_attackResult != 6 || pattern < 0xc8) && m_patterns[pattern].unk2 <= m_patterns[0x13f].unk0) {
-            Vf0();
+            StartPattern();
             CPlayer::Unk40f170();
             pattern = 0x13f;
             return;
         }
         if (unk3150 > 0 && (m_command == 0xaa || m_command == 0xab || m_command == 0xac) && m_gauge >= 0x3e8 && y == 0.0 && (m_patterns[pattern].frames[frame].flagsB0 & 8) > 0 && (pattern >= 0xc8 && m_attackResult >= 2 && m_attackResult != 6 || pattern < 0xc8) && m_patterns[pattern].unk2 <= m_patterns[0x13e].unk0) {
-            Vf0();
+            StartPattern();
             CPlayer::Unk40f170();
             pattern = 0x13e;
             return;
         }
         if ((m_command == 0xaa || m_command == 0xab || m_command == 0xac) && unk315c > 0 && y == 0.0 && (m_patterns[pattern].frames[frame].flagsB0 & 8) > 0 && (pattern >= 0xc8 && m_attackResult >= 2 && m_attackResult != 6 || pattern < 0xc8) && m_patterns[pattern].unk2 <= m_patterns[0x13b].unk0) {
-            Vf0();
+            StartPattern();
             CPlayer::Unk40f170();
             pattern = 0x13b;
             if (unk315c == 2) {
@@ -267,49 +267,49 @@ void CIkumi::Vf4()
             return;
         }
         if (m_command == 0xac && m_gauge >= 0xbb8 && y == 0.0 && (m_patterns[pattern].frames[frame].flagsB0 & 8) > 0 && (pattern >= 0xc8 && m_attackResult >= 2 && m_attackResult != 6 || pattern < 0xc8) && m_patterns[pattern].unk2 <= m_patterns[0x13a].unk0) {
-            Vf0();
+            StartPattern();
             CPlayer::Unk40f170();
             pattern = 0x13a;
             return;
         }
         if ((m_command == 0xab || m_command == 0xac) && m_gauge >= 0x7d0 && y == 0.0 && (m_patterns[pattern].frames[frame].flagsB0 & 8) > 0 && (pattern >= 0xc8 && m_attackResult >= 2 && m_attackResult != 6 || pattern < 0xc8) && m_patterns[pattern].unk2 <= m_patterns[0x139].unk0) {
-            Vf0();
+            StartPattern();
             CPlayer::Unk40f170();
             pattern = 0x139;
             return;
         }
         if ((m_command == 0xaa || m_command == 0xab || m_command == 0xac) && m_gauge >= 0x3e8 && y == 0.0 && (m_patterns[pattern].frames[frame].flagsB0 & 8) > 0 && (pattern >= 0xc8 && m_attackResult >= 2 && m_attackResult != 6 || pattern < 0xc8) && m_patterns[pattern].unk2 <= m_patterns[0x138].unk0) {
-            Vf0();
+            StartPattern();
             CPlayer::Unk40f170();
             pattern = 0x138;
             return;
         }
         if (m_command == 0x98 && m_gauge >= 0xbb8 && y == 0.0 && (m_patterns[pattern].frames[frame].flagsB0 & 8) > 0 && (pattern >= 0xc8 && m_attackResult >= 2 && m_attackResult != 6 || pattern < 0xc8) && m_patterns[pattern].unk2 <= m_patterns[0x133].unk0) {
-            Vf0();
+            StartPattern();
             CPlayer::Unk40f170();
             pattern = 0x133;
             return;
         }
         if ((m_command == 0x98 || m_command == 0x97) && m_gauge >= 0x7d0 && y == 0.0 && (m_patterns[pattern].frames[frame].flagsB0 & 8) > 0 && (pattern >= 0xc8 && m_attackResult >= 2 && m_attackResult != 6 || pattern < 0xc8) && m_patterns[pattern].unk2 <= m_patterns[0x131].unk0) {
-            Vf0();
+            StartPattern();
             CPlayer::Unk40f170();
             pattern = 0x131;
             return;
         }
         if ((m_command == 0x96 || m_command == 0x97 || m_command == 0x98) && m_gauge >= 0x3e8 && y == 0.0 && (m_patterns[pattern].frames[frame].flagsB0 & 8) > 0 && (pattern >= 0xc8 && m_attackResult >= 2 && m_attackResult != 6 || pattern < 0xc8) && m_patterns[pattern].unk2 <= m_patterns[0x12f].unk0) {
-            Vf0();
+            StartPattern();
             CPlayer::Unk40f170();
             pattern = 0x12f;
             return;
         }
         if (m_command == 0x48 && y == 0.0 && (m_patterns[pattern].frames[frame].flagsB0 & 8) > 0 && (pattern >= 0xc8 && m_attackResult >= 2 && m_attackResult != 6 || pattern < 0xc8) && m_patterns[pattern].unk2 <= m_patterns[0x107].unk0) {
-            Vf0();
+            StartPattern();
             CPlayer::Unk40f170();
             pattern = 0x107;
             return;
         }
         if (m_command == 0x16 && (unk118 >= 500.0 || unk120 > 0) && (m_patterns[pattern].frames[frame].flagsB0 & 8) > 0 && y == 0.0 && (pattern >= 0xc8 && m_attackResult >= 2 && m_attackResult != 6 || pattern < 0xc8) && m_patterns[pattern].unk2 <= m_patterns[0x102].unk0) {
-            Vf0();
+            StartPattern();
             CPlayer::Unk40f170();
             pattern = 0x102;
             if (unk314c > 5 || unk3150 > 0) {
@@ -329,7 +329,7 @@ void CIkumi::Vf4()
             return;
         }
         if ((m_command == 0x15 || m_command == 0x16) && (m_patterns[pattern].frames[frame].flagsB0 & 8) > 0 && y == 0.0 && (pattern >= 0xc8 && m_attackResult >= 2 && m_attackResult != 6 || pattern < 0xc8) && m_patterns[pattern].unk2 <= m_patterns[0x101].unk0) {
-            Vf0();
+            StartPattern();
             CPlayer::Unk40f170();
             pattern = 0x101;
             if (unk314c > 5 || unk3150 > 0) {
@@ -349,13 +349,13 @@ void CIkumi::Vf4()
             return;
         }
         if (m_command == 0x14 && (m_patterns[pattern].frames[frame].flagsB0 & 8) > 0 && y == 0.0 && (pattern >= 0xc8 && m_attackResult >= 2 && m_attackResult != 6 || pattern < 0xc8) && m_patterns[pattern].unk2 <= m_patterns[0x100].unk0) {
-            Vf0();
+            StartPattern();
             CPlayer::Unk40f170();
             pattern = 0x100;
             return;
         }
         if (m_command == 0x20 && y == 0.0 && (m_patterns[pattern].frames[frame].flagsB0 & 8) > 0 && (pattern >= 0xc8 && m_attackResult >= 2 && m_attackResult != 6 || pattern < 0xc8) && m_patterns[pattern].unk2 <= m_patterns[0xfc].unk0) {
-            Vf0();
+            StartPattern();
             CPlayer::Unk40f170();
             pattern = 0xfc;
             if (unk314c > 5 || unk3150 > 0) {
@@ -375,7 +375,7 @@ void CIkumi::Vf4()
             return;
         }
         if (m_command == 0x1f && y == 0.0 && (m_patterns[pattern].frames[frame].flagsB0 & 8) > 0 && (pattern >= 0xc8 && m_attackResult >= 2 && m_attackResult != 6 || pattern < 0xc8) && m_patterns[pattern].unk2 <= m_patterns[0xfb].unk0) {
-            Vf0();
+            StartPattern();
             CPlayer::Unk40f170();
             pattern = 0xfb;
             if (unk314c > 5 || unk3150 > 0) {
@@ -395,7 +395,7 @@ void CIkumi::Vf4()
             return;
         }
         if (m_command == 0x1e && y == 0.0 && (m_patterns[pattern].frames[frame].flagsB0 & 8) > 0 && (pattern >= 0xc8 && m_attackResult >= 2 && m_attackResult != 6 || pattern < 0xc8) && m_patterns[pattern].unk2 <= m_patterns[0xfa].unk0) {
-            Vf0();
+            StartPattern();
             CPlayer::Unk40f170();
             pattern = 0xfa;
             if (unk314c > 5 || unk3150 > 0) {
@@ -415,7 +415,7 @@ void CIkumi::Vf4()
             return;
         }
         if (m_command == 0xc && y == 0.0 && (unk118 >= 500.0 || unk120 > 0) && (m_patterns[pattern].frames[frame].flagsB0 & 8) > 0 && (pattern >= 0xc8 && m_attackResult >= 2 && m_attackResult != 6 || pattern < 0xc8) && m_patterns[pattern].unk2 <= m_patterns[0xff].unk0) {
-            Vf0();
+            StartPattern();
             CPlayer::Unk40f170();
             pattern = 0xff;
             if (unk314c > 5 || unk3150 > 0) {
@@ -435,7 +435,7 @@ void CIkumi::Vf4()
             return;
         }
         if ((m_command == 0xb || m_command == 0xc) && y == 0.0 && (m_patterns[pattern].frames[frame].flagsB0 & 8) > 0 && (pattern >= 0xc8 && m_attackResult >= 2 && m_attackResult != 6 || pattern < 0xc8) && m_patterns[pattern].unk2 <= m_patterns[0xfe].unk0) {
-            Vf0();
+            StartPattern();
             CPlayer::Unk40f170();
             pattern = 0xfe;
             if (unk314c > 5 || unk3150 > 0) {
@@ -455,7 +455,7 @@ void CIkumi::Vf4()
             return;
         }
         if (m_command == 0xa && y == 0.0 && (m_patterns[pattern].frames[frame].flagsB0 & 8) > 0 && (pattern >= 0xc8 && m_attackResult >= 2 && m_attackResult != 6 || pattern < 0xc8) && m_patterns[pattern].unk2 <= m_patterns[0xfd].unk0) {
-            Vf0();
+            StartPattern();
             CPlayer::Unk40f170();
             pattern = 0xfd;
             return;
@@ -465,7 +465,7 @@ void CIkumi::Vf4()
         if (y < 0.0 && unk159 < 2) {
             if ((((*m_opponent)->x - x) * (1 - (m_command << 1)) < 0.0 || 0.0 == (*m_opponent)->x - x && facing == (1 - (m_command << 1)) * -1) && m_patterns[pattern].unk2 <= m_patterns[0xa5].unk0 && pattern != 0xaa && y < -40.0 && (m_patterns[pattern].frames[frame].flagsB0 & 8) > 0 && (pattern >= 0xc8 && m_attackResult >= 2 && m_attackResult != 6 || pattern < 0xc8)) {
                 if (pattern != 0xa5) {
-                    Vf0();
+                    StartPattern();
                 }
                 pattern = 0xa5;
                 CPlayer::FaceOpponent();
@@ -476,7 +476,7 @@ void CIkumi::Vf4()
             }
             if ((((*m_opponent)->x - x) * (1 - (m_command << 1)) > 0.0 || 0.0 == (*m_opponent)->x - x && facing == 1 - (m_command << 1)) && m_patterns[pattern].unk2 <= m_patterns[0xa6].unk0 && pattern != 0xaa && (m_patterns[pattern].frames[frame].flagsB0 & 8) > 0 && (pattern >= 0xc8 && m_attackResult >= 2 && m_attackResult != 6 || pattern < 0xc8)) {
                 if (pattern != 0xa6) {
-                    Vf0();
+                    StartPattern();
                 }
                 pattern = 0xa6;
                 CPlayer::FaceOpponent();
@@ -489,7 +489,7 @@ void CIkumi::Vf4()
         if (y == 0.0 && (m_patterns[pattern].frames[frame].flagsB0 & 8) > 0) {
             if ((((*m_opponent)->x - x) * (1 - (m_command << 1)) < 0.0 || 0.0 == (*m_opponent)->x - x && facing == (1 - (m_command << 1)) * -1) && m_patterns[pattern].unk2 <= m_patterns[0xa3].unk0 && (pattern >= 0xc8 && m_attackResult >= 2 && m_attackResult != 6 || pattern < 0xc8)) {
                 if (pattern != 0xa3) {
-                    Vf0();
+                    StartPattern();
                 }
                 pattern = 0xa3;
                 CPlayer::FaceOpponent();
@@ -499,7 +499,7 @@ void CIkumi::Vf4()
             }
             if ((((*m_opponent)->x - x) * (1 - (m_command << 1)) > 0.0 || 0.0 == (*m_opponent)->x - x && facing == 1 - (m_command << 1)) && m_patterns[pattern].unk2 <= m_patterns[0xa4].unk0 && (pattern >= 0xc8 && m_attackResult >= 2 && m_attackResult != 6 || pattern < 0xc8)) {
                 if (pattern != 0xa4) {
-                    Vf0();
+                    StartPattern();
                 }
                 pattern = 0xa4;
                 CPlayer::FaceOpponent();
@@ -509,7 +509,7 @@ void CIkumi::Vf4()
         }
     }
     if (unk15c < 3 && m_command == 6 && (m_patterns[pattern].frames[frame].flagsB0 & 8) > 0 && y < 0.0 && unk15a < 1 && m_patterns[pattern].unk2 <= m_patterns[0xe].unk0 && (pattern >= 0xc8 && m_attackResult >= 2 && m_attackResult != 6 || pattern < 0xc8)) {
-        Vf0();
+        StartPattern();
         CPlayer::Unk40f170();
         unk15a++;
         pattern = 0xe;
@@ -523,7 +523,7 @@ void CIkumi::Vf4()
     }
     if (m_pressA == 1 || (unk1a8 & 0x10) != 0 || (unk1a9 & 0x10) != 0) {
         if (pattern == 0xa3 && m_inputX != -facing) {
-            Vf0();
+            StartPattern();
             CPlayer::Unk40f170();
             pattern = 0xe6;
             if (m_inputY == 1) {
@@ -533,20 +533,20 @@ void CIkumi::Vf4()
         }
         if (y < 0.0) {
             if (m_patterns[pattern].unk2 <= m_patterns[0xcf].unk0 && (m_patterns[pattern].frames[frame].flagsB0 & 8) > 0 && (pattern >= 0xc8 && m_attackResult >= 2 && m_attackResult != 6 || pattern < 0xc8)) {
-                Vf0();
+                StartPattern();
                 CPlayer::Unk40f170();
                 pattern = 0xcf;
             }
             return;
         }
         if ((m_inputY == 1 || (unk1a8 & 4) != 0 || (unk1a9 & 4) != 0) && m_patterns[pattern].unk2 <= m_patterns[0xcc].unk0 && (m_patterns[pattern].frames[frame].flagsB0 & 8) > 0 && (pattern >= 0xc8 && m_attackResult >= 2 && m_attackResult != 6 || pattern < 0xc8)) {
-            Vf0();
+            StartPattern();
             CPlayer::Unk40f170();
             pattern = 0xcc;
             return;
         }
         if ((m_inputY == 0 || (unk1a8 & 4) == 0 || (unk1a9 & 4) == 0) && m_patterns[pattern].unk2 <= m_patterns[0xc8].unk0 && (m_patterns[pattern].frames[frame].flagsB0 & 8) > 0 && (pattern >= 0xc8 && m_attackResult >= 2 && m_attackResult != 6 || pattern < 0xc8)) {
-            Vf0();
+            StartPattern();
             CPlayer::Unk40f170();
             pattern = 0xc8;
             return;
@@ -554,7 +554,7 @@ void CIkumi::Vf4()
     }
     if (m_pressB == 1 || (unk1a8 & 0x20) != 0 || (unk1a9 & 0x20) != 0) {
         if (pattern == 0xa3 && m_inputX != -facing) {
-            Vf0();
+            StartPattern();
             CPlayer::Unk40f170();
             pattern = 0xe7;
             if (m_inputY == 1) {
@@ -564,27 +564,27 @@ void CIkumi::Vf4()
         }
         if (y < 0.0) {
             if (m_patterns[pattern].unk2 <= m_patterns[0xd0].unk0 && (m_patterns[pattern].frames[frame].flagsB0 & 8) > 0 && (pattern >= 0xc8 && m_attackResult >= 2 && m_attackResult != 6 || pattern < 0xc8)) {
-                Vf0();
+                StartPattern();
                 CPlayer::Unk40f170();
                 pattern = 0xd0;
             }
             return;
         }
         if ((m_inputY == 1 || (unk1a8 & 4) != 0 || (unk1a9 & 4) != 0) && m_patterns[pattern].unk2 <= m_patterns[0xcd].unk0 && (m_patterns[pattern].frames[frame].flagsB0 & 8) > 0 && (pattern >= 0xc8 && m_attackResult >= 2 && m_attackResult != 6 || pattern < 0xc8)) {
-            Vf0();
+            StartPattern();
             CPlayer::Unk40f170();
             pattern = 0xcd;
             return;
         }
         if (m_inputY == 0 || (unk1a8 & 4) == 0 || (unk1a9 & 4) == 0) {
             if (m_patterns[pattern].unk2 <= m_patterns[0xc9].unk0 && (m_patterns[pattern].frames[frame].flagsB0 & 8) > 0 && x - (*m_opponent)->x > -70.0 && x - (*m_opponent)->x < 70.0 && (pattern >= 0xc8 && m_attackResult >= 2 && m_attackResult != 6 || pattern < 0xc8)) {
-                Vf0();
+                StartPattern();
                 CPlayer::Unk40f170();
                 pattern = 0xc9;
                 return;
             }
             if (m_patterns[pattern].unk2 <= m_patterns[0xca].unk0 && (m_patterns[pattern].frames[frame].flagsB0 & 8) > 0 && (pattern >= 0xc8 && m_attackResult >= 2 && m_attackResult != 6 || pattern < 0xc8)) {
-                Vf0();
+                StartPattern();
                 CPlayer::Unk40f170();
                 pattern = 0xca;
                 return;
@@ -593,7 +593,7 @@ void CIkumi::Vf4()
     }
     if (m_pressC == 1 || (unk1a8 & 0x40) != 0 || (unk1a9 & 0x40) != 0) {
         if (pattern == 0xa3 && m_inputX != -facing) {
-            Vf0();
+            StartPattern();
             CPlayer::Unk40f170();
             pattern = 0xe8;
             if (m_inputY == 1) {
@@ -603,33 +603,33 @@ void CIkumi::Vf4()
         }
         if (y < 0.0) {
             if (m_inputX == facing && m_inputY == 0 && x - (*m_opponent)->x > -100.0 && x - (*m_opponent)->x < 100.0 && (*m_opponent)->y < 0.0 && m_patterns[pattern].unk2 <= m_patterns[0xf8].unk0 && ((*m_opponent)->pattern < 0x32 || (*m_opponent)->pattern > 0x9c) && (m_patterns[pattern].frames[frame].flagsB0 & 8) > 0 && (pattern >= 0xc8 && m_attackResult >= 2 && m_attackResult != 6 || pattern < 0xc8)) {
-                Vf0();
+                StartPattern();
                 CPlayer::Unk40f170();
                 pattern = 0xf8;
                 return;
             }
             if (m_patterns[pattern].unk2 <= m_patterns[0xd1].unk0 && (m_patterns[pattern].frames[frame].flagsB0 & 8) > 0 && (pattern >= 0xc8 && m_attackResult >= 2 && m_attackResult != 6 || pattern < 0xc8)) {
-                Vf0();
+                StartPattern();
                 CPlayer::Unk40f170();
                 pattern = 0xd1;
             }
             return;
         }
         if ((m_inputY == 1 || (unk1a8 & 4) != 0 || (unk1a9 & 4) != 0) && m_patterns[pattern].unk2 <= m_patterns[0xce].unk0 && (m_patterns[pattern].frames[frame].flagsB0 & 8) > 0 && (pattern >= 0xc8 && m_attackResult >= 2 && m_attackResult != 6 || pattern < 0xc8)) {
-            Vf0();
+            StartPattern();
             CPlayer::Unk40f170();
             pattern = 0xce;
             return;
         }
         if (m_inputY == 0 || (unk1a8 & 4) == 0 || (unk1a9 & 4) == 0) {
             if (m_inputX != 0 && x - (*m_opponent)->x > -30.0 && x - (*m_opponent)->x < 30.0 && m_patterns[pattern].unk2 <= m_patterns[0xdc].unk0 && ((*m_opponent)->pattern < 0x32 || (*m_opponent)->pattern > 0x9c) && (m_patterns[pattern].frames[frame].flagsB0 & 8) > 0 && (pattern >= 0xc8 && m_attackResult >= 2 && m_attackResult != 6 || pattern < 0xc8)) {
-                Vf0();
+                StartPattern();
                 CPlayer::Unk40f170();
                 pattern = 0xdc;
                 return;
             }
             if (m_patterns[pattern].unk2 <= m_patterns[0xcb].unk0 && (m_patterns[pattern].frames[frame].flagsB0 & 8) > 0 && (pattern >= 0xc8 && m_attackResult >= 2 && m_attackResult != 6 || pattern < 0xc8)) {
-                Vf0();
+                StartPattern();
                 CPlayer::Unk40f170();
                 pattern = 0xcb;
             }
@@ -637,7 +637,7 @@ void CIkumi::Vf4()
     }
 }
 
-void CIkumi::Vf1()
+void CIkumi::DrawGauge()
 {
     RECT v2c;
     EffectFrame x1c;
@@ -834,9 +834,9 @@ void CIkumi::Vf1()
 void CIkumi::Vf8()
 {
     EffectDesc v48;
-    CPlayer::Unk413090((EffectDesc*)&v48);
+    CPlayer::InitEffectDesc((EffectDesc*)&v48);
     if (unk314c == 8 && y == 0.0 && pattern < 8 && pattern != 0x12c) {
-        Vf0();
+        StartPattern();
         CPlayer::StopMoving();
         pattern = 0x12c;
     }
@@ -914,7 +914,7 @@ void CIkumi::Vf8()
             v48.scale = 0;
             v48.layer = 1;
             v48.unk18 = facing;
-            Vf9(&v48);
+            SpawnObject(&v48);
             unk3154++;
         }
         if (pattern == 0xe7 || pattern == 0xea) {
@@ -924,7 +924,7 @@ void CIkumi::Vf8()
             v48.scale = 0;
             v48.layer = 1;
             v48.unk18 = facing;
-            Vf9(&v48);
+            SpawnObject(&v48);
             unk3154++;
         }
         if (pattern == 0xfd || pattern == 0xfe || pattern == 0x100 || pattern == 0x101) {
@@ -934,7 +934,7 @@ void CIkumi::Vf8()
             v48.scale = 0;
             v48.layer = 1;
             v48.unk18 = facing;
-            Vf9(&v48);
+            SpawnObject(&v48);
             unk3154++;
         }
         if (pattern == 0x10a || pattern == 0xff || pattern == 0x10b || pattern == 0x102 || pattern == 0x110 || pattern == 0x111) {
@@ -944,7 +944,7 @@ void CIkumi::Vf8()
             v48.scale = 0;
             v48.layer = 1;
             v48.unk18 = facing;
-            Vf9(&v48);
+            SpawnObject(&v48);
             unk3154++;
         }
         if (pattern == 0x10d || pattern == 0x10e || pattern == 0x114 || pattern == 0x115) {
@@ -954,7 +954,7 @@ void CIkumi::Vf8()
             v48.scale = 0;
             v48.layer = 1;
             v48.unk18 = facing;
-            Vf9(&v48);
+            SpawnObject(&v48);
             unk3154++;
         }
     }
@@ -986,13 +986,13 @@ void CIkumi::Unk6ab6a0(char p1)
     }
 }
 
-void CIkumi::Vf9(EffectDesc* p1)
+void CIkumi::SpawnObject(EffectDesc* p1)
 {
-    Vf10(unk2ca);
-    CPlayer::Vf9(p1);
+    RemoveObject(m_objectHead);
+    CPlayer::SpawnObject(p1);
 }
 
-void CIkumi::Vf2()
+void CIkumi::ReadCommand()
 {
     BYTE x6;
     BYTE v5;
@@ -1357,7 +1357,7 @@ void CIkumi::Vf2()
     }
 }
 
-void CIkumi::Vf5()
+void CIkumi::CpuInput()
 {
     double v10;
     double x8;
@@ -2226,7 +2226,7 @@ void CIkumi::Vf5()
     unk1a4 = (WORD)CPlayer::Random(0, 0xc8) + 0x1e;
 }
 
-void CIkumi::Vf7()
+void CIkumi::UpdateObjects()
 {
     WORD v58;
     WORD v54;
@@ -2239,13 +2239,13 @@ void CIkumi::Vf7()
     if ((*m_opponent)->unk14c > 0) {
         return;
     }
-    v4 = unk2cc;
+    v4 = m_objectTail;
     EffectDesc l50;
-    while (v4 != unk2ca) {
-        if (unk3d0[v4] != 0 && m_objects[v4].unk86 == 0 && (unk14c == 0 || unk14c > 0 && m_objects[v4].unk88 != 0)) {
+    while (v4 != m_objectHead) {
+        if (m_objectActive[v4] != 0 && m_objects[v4].unk86 == 0 && (unk14c == 0 || unk14c > 0 && m_objects[v4].unk88 != 0)) {
             v54 = (short)anims[m_objects[v4].pattern].frames[m_objects[v4].frame].duration;
             v58 = anims[m_objects[v4].pattern].frameCount;
-            CPlayer::Unk413090((EffectDesc*)&l50);
+            CPlayer::InitEffectDesc((EffectDesc*)&l50);
             switch (m_objects[v4].pattern) {
             case 0x190:
                 m_objects[v4].x = x;
@@ -2256,7 +2256,7 @@ void CIkumi::Vf7()
                     m_objects[v4].frame++;
                     m_objects[v4].unk80 = 0;
                     if (m_objects[v4].frame >= v58) {
-                        Vf10(v4);
+                        RemoveObject(v4);
                     }
                 }
                 break;
@@ -2267,7 +2267,7 @@ void CIkumi::Vf7()
                     m_objects[v4].frame++;
                     m_objects[v4].unk80 = 0;
                     if (m_objects[v4].frame >= v58) {
-                        Vf10(v4);
+                        RemoveObject(v4);
                     }
                 }
                 break;
@@ -2278,7 +2278,7 @@ void CIkumi::Vf7()
                     m_objects[v4].frame++;
                     m_objects[v4].unk80 = 0;
                     if (m_objects[v4].frame >= v58) {
-                        Vf10(v4);
+                        RemoveObject(v4);
                     }
                 }
                 break;
@@ -2294,7 +2294,7 @@ void CIkumi::Vf7()
                     l50.layer = 1;
                     l50.scale = 2;
                     l50.unk0 = 1;
-                    Vf9(&l50);
+                    SpawnObject(&l50);
                     unk2c8 = 1;
                 }
                 m_objects[v4].timer++;
@@ -2303,7 +2303,7 @@ void CIkumi::Vf7()
                     m_objects[v4].frame++;
                     m_objects[v4].unk80 = 0;
                     if (m_objects[v4].frame >= v58) {
-                        Vf10(v4);
+                        RemoveObject(v4);
                     }
                 }
                 break;
@@ -2320,7 +2320,7 @@ void CIkumi::Vf7()
                     l50.scale = 0;
                     l50.layer = 1;
                     l50.unk18 = facing;
-                    Vf9(&l50);
+                    SpawnObject(&l50);
                 }
                 if (m_objects[v4].unk84 == 0 && m_objects[v4].frame < 0x2f) {
                     m_objects[v4].timer = 0;
@@ -2333,7 +2333,7 @@ void CIkumi::Vf7()
                     m_objects[v4].frame++;
                     m_objects[v4].unk80 = 0;
                     if (m_objects[v4].frame >= v58) {
-                        Vf10(v4);
+                        RemoveObject(v4);
                     }
                 }
                 break;
@@ -2344,7 +2344,7 @@ void CIkumi::Vf7()
                     m_objects[v4].frame++;
                     m_objects[v4].unk80 = 0;
                     if (m_objects[v4].frame >= v58) {
-                        Vf10(v4);
+                        RemoveObject(v4);
                     }
                 }
                 break;
@@ -2360,7 +2360,7 @@ void CIkumi::Vf7()
                     l50.layer = 1;
                     l50.scale = 2;
                     l50.unk0 = 1;
-                    Vf9(&l50);
+                    SpawnObject(&l50);
                     unk2c8 = 1;
                 }
                 m_objects[v4].timer++;
@@ -2369,7 +2369,7 @@ void CIkumi::Vf7()
                     m_objects[v4].frame++;
                     m_objects[v4].unk80 = 0;
                     if (m_objects[v4].frame >= v58) {
-                        Vf10(v4);
+                        RemoveObject(v4);
                     }
                 }
                 break;
@@ -2386,7 +2386,7 @@ void CIkumi::Vf7()
                     l50.scale = 0;
                     l50.layer = 1;
                     l50.unk18 = facing;
-                    Vf9(&l50);
+                    SpawnObject(&l50);
                 }
                 if (m_objects[v4].unk84 == 0 && m_objects[v4].frame < 0x2f) {
                     m_objects[v4].timer = 0;
@@ -2403,7 +2403,7 @@ void CIkumi::Vf7()
                         m_objects[v4].frame = 0x20;
                     }
                     if (m_objects[v4].frame >= v58) {
-                        Vf10(v4);
+                        RemoveObject(v4);
                     }
                 }
                 break;
@@ -2419,7 +2419,7 @@ void CIkumi::Vf7()
                     l50.layer = 1;
                     l50.scale = 2;
                     l50.unk0 = 1;
-                    Vf9(&l50);
+                    SpawnObject(&l50);
                     unk2c8 = 1;
                 }
                 m_objects[v4].timer++;
@@ -2428,7 +2428,7 @@ void CIkumi::Vf7()
                     m_objects[v4].frame++;
                     m_objects[v4].unk80 = 0;
                     if (m_objects[v4].frame >= v58) {
-                        Vf10(v4);
+                        RemoveObject(v4);
                     }
                 }
                 break;
@@ -2451,7 +2451,7 @@ void CIkumi::Vf7()
                     l50.scale = 0;
                     l50.layer = 1;
                     l50.unk18 = facing;
-                    Vf9(&l50);
+                    SpawnObject(&l50);
                 }
                 m_objects[v4].timer++;
                 if (m_objects[v4].timer >= v54) {
@@ -2464,7 +2464,7 @@ void CIkumi::Vf7()
                         unk3260[v4] = 0;
                     }
                     if (m_objects[v4].frame >= v58) {
-                        Vf10(v4);
+                        RemoveObject(v4);
                     }
                 }
                 break;
@@ -2475,7 +2475,7 @@ void CIkumi::Vf7()
                     m_objects[v4].frame++;
                     m_objects[v4].unk80 = 0;
                     if (m_objects[v4].frame >= v58) {
-                        Vf10(v4);
+                        RemoveObject(v4);
                     }
                 }
                 break;
@@ -2488,7 +2488,7 @@ void CIkumi::Vf7()
                         m_objects[v4].frame = 0;
                     }
                     if (m_objects[v4].frame >= v58) {
-                        Vf10(v4);
+                        RemoveObject(v4);
                     }
                 }
                 break;
@@ -2501,7 +2501,7 @@ void CIkumi::Vf7()
                         m_objects[v4].frame = 0;
                     }
                     if (m_objects[v4].frame >= v58) {
-                        Vf10(v4);
+                        RemoveObject(v4);
                     }
                 }
                 break;
@@ -2519,7 +2519,7 @@ void CIkumi::Vf7()
                     }
                     l50.layer = 1;
                     l50.scale = 2;
-                    Vf9(&l50);
+                    SpawnObject(&l50);
                 }
                 m_objects[v4].timer++;
                 if (m_objects[v4].timer >= v54) {
@@ -2529,7 +2529,7 @@ void CIkumi::Vf7()
                         m_objects[v4].frame = 0;
                     }
                     if (m_objects[v4].frame >= v58) {
-                        Vf10(v4);
+                        RemoveObject(v4);
                     }
                 }
                 break;
@@ -2539,7 +2539,7 @@ void CIkumi::Vf7()
                     m_objects[v4].timer = 0;
                     m_objects[v4].frame++;
                     if (m_objects[v4].frame >= v58) {
-                        Vf10(v4);
+                        RemoveObject(v4);
                     }
                 }
                 break;
@@ -2549,7 +2549,7 @@ void CIkumi::Vf7()
                     m_objects[v4].timer = 0;
                     m_objects[v4].frame++;
                     if (m_objects[v4].frame >= v58) {
-                        Vf10(v4);
+                        RemoveObject(v4);
                     }
                 }
                 break;
@@ -2579,7 +2579,7 @@ void CIkumi::Vf7()
                     l50.layer = 1;
                     l50.unk0 = 1;
                     l50.unk18 = m_objects[v4].facing;
-                    Vf9(&l50);
+                    SpawnObject(&l50);
                     unk2c8 = 2;
                 }
                 if (m_objects[v4].frame > 0x26) {
@@ -2723,7 +2723,7 @@ void CIkumi::Vf7()
                         l50.layer = 1;
                         l50.unk0 = 1;
                         l50.unk18 = facing;
-                        Vf9(&l50);
+                        SpawnObject(&l50);
                     }
                     if (m_objects[v4].frame >= v58) {
                         m_objects[v4].frame = 0;
@@ -2740,7 +2740,7 @@ void CIkumi::Vf7()
                     m_objects[v4].timer = 0;
                     m_objects[v4].frame++;
                     if (m_objects[v4].frame >= v58) {
-                        Vf10(v4);
+                        RemoveObject(v4);
                     }
                 }
                 break;
@@ -2754,7 +2754,7 @@ void CIkumi::Vf7()
                     m_objects[v4].timer = 0;
                     m_objects[v4].frame++;
                     if (m_objects[v4].frame >= v58) {
-                        Vf10(v4);
+                        RemoveObject(v4);
                     }
                 }
                 break;
@@ -2767,7 +2767,7 @@ void CIkumi::Vf7()
                     m_objects[v4].timer = 0;
                     m_objects[v4].frame++;
                     if (m_objects[v4].frame >= v58) {
-                        Vf10(v4);
+                        RemoveObject(v4);
                     }
                 }
                 break;
@@ -2781,7 +2781,7 @@ void CIkumi::Vf7()
                     m_objects[v4].timer = 0;
                     m_objects[v4].frame++;
                     if (m_objects[v4].frame >= v58) {
-                        Vf10(v4);
+                        RemoveObject(v4);
                     }
                 }
                 break;
@@ -2795,7 +2795,7 @@ void CIkumi::Vf7()
                     m_objects[v4].timer = 0;
                     m_objects[v4].frame++;
                     if (m_objects[v4].frame >= v58) {
-                        Vf10(v4);
+                        RemoveObject(v4);
                     }
                 }
                 break;
@@ -2811,7 +2811,7 @@ void CIkumi::Vf7()
                     l50.layer = 1;
                     l50.scale = 2;
                     l50.unk0 = 1;
-                    Vf9(&l50);
+                    SpawnObject(&l50);
                     unk2c8 = 1;
                 }
                 m_objects[v4].timer++;
@@ -2820,7 +2820,7 @@ void CIkumi::Vf7()
                     m_objects[v4].frame++;
                     m_objects[v4].unk80 = 0;
                     if (m_objects[v4].frame >= v58) {
-                        Vf10(v4);
+                        RemoveObject(v4);
                     }
                 }
                 break;
@@ -2843,7 +2843,7 @@ void CIkumi::Vf7()
                         m_objects[v4].unk80 = 0;
                     }
                     if (m_objects[v4].frame >= v58) {
-                        Vf10(v4);
+                        RemoveObject(v4);
                     }
                 }
                 break;
@@ -2853,7 +2853,7 @@ void CIkumi::Vf7()
                     m_objects[v4].timer = 0;
                     m_objects[v4].frame++;
                     if (m_objects[v4].frame >= v58) {
-                        Vf10(v4);
+                        RemoveObject(v4);
                     }
                 }
                 break;
@@ -2868,7 +2868,7 @@ void CIkumi::Vf7()
                     m_objects[v4].timer = 0;
                     m_objects[v4].frame++;
                     if (m_objects[v4].frame >= v58) {
-                        Vf10(v4);
+                        RemoveObject(v4);
                     }
                 }
                 break;
@@ -2883,7 +2883,7 @@ void CIkumi::Vf7()
                     m_objects[v4].timer = 0;
                     m_objects[v4].frame++;
                     if (m_objects[v4].frame >= v58) {
-                        Vf10(v4);
+                        RemoveObject(v4);
                     }
                 }
                 break;
@@ -2898,7 +2898,7 @@ void CIkumi::Vf7()
                     m_objects[v4].timer = 0;
                     m_objects[v4].frame++;
                     if (m_objects[v4].frame >= v58) {
-                        Vf10(v4);
+                        RemoveObject(v4);
                     }
                 }
                 break;
@@ -2913,7 +2913,7 @@ void CIkumi::Vf7()
                     m_objects[v4].timer = 0;
                     m_objects[v4].frame++;
                     if (m_objects[v4].frame >= v58) {
-                        Vf10(v4);
+                        RemoveObject(v4);
                     }
                 }
                 break;
@@ -2944,7 +2944,7 @@ void CIkumi::Vf7()
                     m_objects[v4].timer = 0;
                     m_objects[v4].frame++;
                     if (m_objects[v4].frame >= v58) {
-                        Vf10(v4);
+                        RemoveObject(v4);
                     }
                 }
                 break;
@@ -2974,7 +2974,7 @@ void CIkumi::Vf7()
                     m_objects[v4].timer = 0;
                     m_objects[v4].frame++;
                     if (m_objects[v4].frame >= v58) {
-                        Vf10(v4);
+                        RemoveObject(v4);
                     }
                 }
                 break;
@@ -3005,7 +3005,7 @@ void CIkumi::Vf7()
                     m_objects[v4].timer = 0;
                     m_objects[v4].frame++;
                     if (m_objects[v4].frame >= v58) {
-                        Vf10(v4);
+                        RemoveObject(v4);
                     }
                 }
                 break;
@@ -3035,7 +3035,7 @@ void CIkumi::Vf7()
                     m_objects[v4].timer = 0;
                     m_objects[v4].frame++;
                     if (m_objects[v4].frame >= v58) {
-                        Vf10(v4);
+                        RemoveObject(v4);
                     }
                 }
                 break;
@@ -3051,7 +3051,7 @@ void CIkumi::Vf7()
                     m_objects[v4].timer = 0;
                     m_objects[v4].frame++;
                     if (m_objects[v4].frame >= v58) {
-                        Vf10(v4);
+                        RemoveObject(v4);
                     }
                 }
                 break;
@@ -3063,9 +3063,9 @@ void CIkumi::Vf7()
                     l50.unk18 = m_objects[v4].facing;
                     l50.layer = 1;
                     l50.scale = 0;
-                    Vf9(&l50);
-                    Vf9(&l50);
-                    Vf9(&l50);
+                    SpawnObject(&l50);
+                    SpawnObject(&l50);
+                    SpawnObject(&l50);
                 }
                 m_objects[v4].timer++;
                 if (m_objects[v4].timer >= v54) {
@@ -3073,7 +3073,7 @@ void CIkumi::Vf7()
                     m_objects[v4].frame++;
                     m_objects[v4].unk80 = 0;
                     if (m_objects[v4].frame >= v58) {
-                        Vf10(v4);
+                        RemoveObject(v4);
                     }
                 }
                 break;
@@ -3085,18 +3085,18 @@ void CIkumi::Vf7()
                     l50.unk18 = m_objects[v4].facing;
                     l50.layer = 1;
                     l50.scale = 0;
-                    Vf9(&l50);
-                    Vf9(&l50);
-                    Vf9(&l50);
-                    Vf9(&l50);
+                    SpawnObject(&l50);
+                    SpawnObject(&l50);
+                    SpawnObject(&l50);
+                    SpawnObject(&l50);
                     l50.type = 0x1d9;
                     l50.x = (double)(int)m_objects[v4].x;
                     l50.y = (double)(int)m_objects[v4].y;
                     l50.unk18 = m_objects[v4].facing;
                     l50.layer = 1;
                     l50.scale = 0;
-                    Vf9(&l50);
-                    Vf9(&l50);
+                    SpawnObject(&l50);
+                    SpawnObject(&l50);
                 }
                 m_objects[v4].timer++;
                 if (m_objects[v4].timer >= v54) {
@@ -3104,7 +3104,7 @@ void CIkumi::Vf7()
                     m_objects[v4].frame++;
                     m_objects[v4].unk80 = 0;
                     if (m_objects[v4].frame >= v58) {
-                        Vf10(v4);
+                        RemoveObject(v4);
                     }
                 }
                 break;
@@ -3144,7 +3144,7 @@ void CIkumi::Vf7()
                     m_objects[v4].frame = 0;
                     m_objects[v4].timer = 0;
                     m_objects[v4].pattern = 0x1dc;
-                    m_objects[v4].unk51 = 0;
+                    m_objects[v4].layer = 0;
                     break;
                 }
                 m_objects[v4].timer++;
@@ -3196,7 +3196,7 @@ void CIkumi::Vf7()
                     m_objects[v4].frame = 0;
                     m_objects[v4].timer = 0;
                     m_objects[v4].pattern = 0x1dc;
-                    m_objects[v4].unk51 = 0;
+                    m_objects[v4].layer = 0;
                     break;
                 }
                 m_objects[v4].timer++;
@@ -3245,7 +3245,7 @@ void CIkumi::Vf7()
                     m_objects[v4].frame = 0;
                     m_objects[v4].timer = 0;
                     m_objects[v4].pattern = 0x1dc;
-                    m_objects[v4].unk51 = 0;
+                    m_objects[v4].layer = 0;
                     break;
                 }
                 m_objects[v4].timer++;
@@ -3265,7 +3265,7 @@ void CIkumi::Vf7()
                     m_objects[v4].frame++;
                     m_objects[v4].unk80 = 0;
                     if (m_objects[v4].frame >= v58) {
-                        Vf10(v4);
+                        RemoveObject(v4);
                     }
                 }
                 break;
@@ -3291,7 +3291,7 @@ void CIkumi::Vf7()
                     m_objects[v4].frame++;
                     m_objects[v4].unk80 = 0;
                     if (m_objects[v4].frame >= v58) {
-                        Vf10(v4);
+                        RemoveObject(v4);
                     }
                 }
                 break;
@@ -3303,32 +3303,32 @@ void CIkumi::Vf7()
                     l50.unk18 = m_objects[v4].facing;
                     l50.layer = 1;
                     l50.scale = 0;
-                    Vf9(&l50);
-                    Vf9(&l50);
-                    Vf9(&l50);
-                    Vf9(&l50);
-                    Vf9(&l50);
-                    Vf9(&l50);
-                    Vf9(&l50);
-                    Vf9(&l50);
+                    SpawnObject(&l50);
+                    SpawnObject(&l50);
+                    SpawnObject(&l50);
+                    SpawnObject(&l50);
+                    SpawnObject(&l50);
+                    SpawnObject(&l50);
+                    SpawnObject(&l50);
+                    SpawnObject(&l50);
                     l50.type = 0x1d9;
                     l50.x = (double)(int)m_objects[v4].x;
                     l50.y = (double)(int)m_objects[v4].y;
                     l50.unk18 = m_objects[v4].facing;
                     l50.layer = 1;
                     l50.scale = 0;
-                    Vf9(&l50);
-                    Vf9(&l50);
-                    Vf9(&l50);
-                    Vf9(&l50);
+                    SpawnObject(&l50);
+                    SpawnObject(&l50);
+                    SpawnObject(&l50);
+                    SpawnObject(&l50);
                     l50.type = 0x1da;
                     l50.x = (double)(int)m_objects[v4].x;
                     l50.y = (double)(int)m_objects[v4].y;
                     l50.unk18 = m_objects[v4].facing;
                     l50.layer = 1;
                     l50.scale = 0;
-                    Vf9(&l50);
-                    Vf9(&l50);
+                    SpawnObject(&l50);
+                    SpawnObject(&l50);
                 }
                 m_objects[v4].timer++;
                 if (m_objects[v4].timer >= v54) {
@@ -3336,7 +3336,7 @@ void CIkumi::Vf7()
                     m_objects[v4].frame++;
                     m_objects[v4].unk80 = 0;
                     if (m_objects[v4].frame >= v58) {
-                        Vf10(v4);
+                        RemoveObject(v4);
                     }
                 }
                 break;
@@ -3348,17 +3348,17 @@ void CIkumi::Vf7()
                     l50.unk18 = m_objects[v4].facing;
                     l50.layer = 1;
                     l50.scale = 0;
-                    Vf9(&l50);
-                    Vf9(&l50);
-                    Vf9(&l50);
-                    Vf9(&l50);
+                    SpawnObject(&l50);
+                    SpawnObject(&l50);
+                    SpawnObject(&l50);
+                    SpawnObject(&l50);
                     l50.type = 0x1d9;
                     l50.x = (double)(int)m_objects[v4].x;
                     l50.y = (double)(int)m_objects[v4].y;
                     l50.unk18 = m_objects[v4].facing;
                     l50.layer = 1;
                     l50.scale = 0;
-                    Vf9(&l50);
+                    SpawnObject(&l50);
                 }
                 m_objects[v4].timer++;
                 if (m_objects[v4].timer >= v54) {
@@ -3366,7 +3366,7 @@ void CIkumi::Vf7()
                     m_objects[v4].frame++;
                     m_objects[v4].unk80 = 0;
                     if (m_objects[v4].frame >= v58) {
-                        Vf10(v4);
+                        RemoveObject(v4);
                     }
                 }
                 break;
@@ -3378,27 +3378,27 @@ void CIkumi::Vf7()
                     l50.unk18 = m_objects[v4].facing;
                     l50.layer = 1;
                     l50.scale = 0;
-                    Vf9(&l50);
-                    Vf9(&l50);
-                    Vf9(&l50);
-                    Vf9(&l50);
-                    Vf9(&l50);
+                    SpawnObject(&l50);
+                    SpawnObject(&l50);
+                    SpawnObject(&l50);
+                    SpawnObject(&l50);
+                    SpawnObject(&l50);
                     l50.type = 0x1d9;
                     l50.x = (double)(int)m_objects[v4].x;
                     l50.y = (double)(int)m_objects[v4].y;
                     l50.unk18 = m_objects[v4].facing;
                     l50.layer = 1;
                     l50.scale = 0;
-                    Vf9(&l50);
-                    Vf9(&l50);
-                    Vf9(&l50);
+                    SpawnObject(&l50);
+                    SpawnObject(&l50);
+                    SpawnObject(&l50);
                     l50.type = 0x1da;
                     l50.x = (double)(int)m_objects[v4].x;
                     l50.y = (double)(int)m_objects[v4].y;
                     l50.unk18 = m_objects[v4].facing;
                     l50.layer = 1;
                     l50.scale = 0;
-                    Vf9(&l50);
+                    SpawnObject(&l50);
                 }
                 m_objects[v4].timer++;
                 if (m_objects[v4].timer >= v54) {
@@ -3406,7 +3406,7 @@ void CIkumi::Vf7()
                     m_objects[v4].frame++;
                     m_objects[v4].unk80 = 0;
                     if (m_objects[v4].frame >= v58) {
-                        Vf10(v4);
+                        RemoveObject(v4);
                     }
                 }
                 break;
@@ -3418,28 +3418,28 @@ void CIkumi::Vf7()
                     l50.unk18 = m_objects[v4].facing;
                     l50.layer = 1;
                     l50.scale = 0;
-                    Vf9(&l50);
-                    Vf9(&l50);
-                    Vf9(&l50);
-                    Vf9(&l50);
-                    Vf9(&l50);
+                    SpawnObject(&l50);
+                    SpawnObject(&l50);
+                    SpawnObject(&l50);
+                    SpawnObject(&l50);
+                    SpawnObject(&l50);
                     l50.type = 0x1d9;
                     l50.x = (double)(int)m_objects[v4].x;
                     l50.y = (double)(int)m_objects[v4].y;
                     l50.unk18 = m_objects[v4].facing;
                     l50.layer = 1;
                     l50.scale = 0;
-                    Vf9(&l50);
-                    Vf9(&l50);
-                    Vf9(&l50);
+                    SpawnObject(&l50);
+                    SpawnObject(&l50);
+                    SpawnObject(&l50);
                     l50.type = 0x1da;
                     l50.x = (double)(int)m_objects[v4].x;
                     l50.y = (double)(int)m_objects[v4].y;
                     l50.unk18 = m_objects[v4].facing;
                     l50.layer = 1;
                     l50.scale = 0;
-                    Vf9(&l50);
-                    Vf9(&l50);
+                    SpawnObject(&l50);
+                    SpawnObject(&l50);
                 }
                 m_objects[v4].timer++;
                 if (m_objects[v4].timer >= v54) {
@@ -3447,7 +3447,7 @@ void CIkumi::Vf7()
                     m_objects[v4].frame++;
                     m_objects[v4].unk80 = 0;
                     if (m_objects[v4].frame >= v58) {
-                        Vf10(v4);
+                        RemoveObject(v4);
                     }
                 }
                 break;
@@ -3456,7 +3456,7 @@ void CIkumi::Vf7()
                 m_objects[v4].unk8c = 0x7530;
                 m_objects[v4].timer++;
                 if (pattern != 0x57) {
-                    Vf10(v4);
+                    RemoveObject(v4);
                 }
                 if (m_objects[v4].timer >= v54) {
                     m_objects[v4].timer = 0;
@@ -3475,72 +3475,72 @@ void CIkumi::Vf7()
                     l50.scale = 0;
                     l50.layer = 1;
                     l50.unk18 = facing;
-                    Vf9(&l50);
+                    SpawnObject(&l50);
                     l50.type = 0x1f1;
                     l50.x = (double)((int)x - (facing << 2));
                     l50.y = (double)((int)y - 6);
                     l50.scale = 0;
                     l50.layer = 1;
                     l50.unk18 = facing;
-                    Vf9(&l50);
+                    SpawnObject(&l50);
                     l50.type = 0x1f1;
                     l50.x = (double)((int)x - facing * 0xe);
                     l50.y = (double)((int)y - 0x1a);
                     l50.scale = 0;
                     l50.layer = 1;
                     l50.unk18 = facing;
-                    Vf9(&l50);
+                    SpawnObject(&l50);
                     l50.type = 0x1f1;
                     l50.x = (double)(int)x;
                     l50.y = (double)(int)y;
                     l50.scale = 0;
                     l50.layer = 1;
                     l50.unk18 = facing;
-                    Vf9(&l50);
+                    SpawnObject(&l50);
                     l50.type = 0x1f1;
                     l50.x = (double)((int)x + facing * 0x1e);
                     l50.y = (double)((int)y - 0x28);
                     l50.scale = 0;
                     l50.layer = 1;
                     l50.unk18 = facing;
-                    Vf9(&l50);
+                    SpawnObject(&l50);
                     l50.type = 0x1f1;
                     l50.x = (double)((int)x - facing * 0x19);
                     l50.y = (double)((int)y - 0x50);
                     l50.scale = 0;
                     l50.layer = 1;
                     l50.unk18 = facing;
-                    Vf9(&l50);
+                    SpawnObject(&l50);
                     l50.type = 0x1f2;
                     l50.x = (double)((int)x - facing * 0x23);
                     l50.y = (double)((int)y - 0x2a);
                     l50.scale = 0;
                     l50.layer = 1;
                     l50.unk18 = facing;
-                    Vf9(&l50);
+                    SpawnObject(&l50);
                     l50.type = 0x1f2;
                     l50.x = (double)((int)x - facing * 0x12);
                     l50.y = (double)((int)y - 0x14);
                     l50.scale = 0;
                     l50.layer = 1;
                     l50.unk18 = facing;
-                    Vf9(&l50);
+                    SpawnObject(&l50);
                     l50.type = 0x1f2;
                     l50.x = (double)((int)x + facing * 2);
                     l50.y = (double)((int)y - 0x41);
                     l50.scale = 0;
                     l50.layer = 1;
                     l50.unk18 = facing;
-                    Vf9(&l50);
+                    SpawnObject(&l50);
                     l50.type = 0x1f2;
                     l50.x = (double)((int)x + (facing << 4));
                     l50.y = (double)((int)y - 0x50);
                     l50.scale = 0;
                     l50.layer = 1;
                     l50.unk18 = facing;
-                    Vf9(&l50);
+                    SpawnObject(&l50);
                     unk2c9 = 0x22;
-                    Vf10(v4);
+                    RemoveObject(v4);
                     unk3144 = 0;
                     break;
                 }
@@ -3566,10 +3566,10 @@ void CIkumi::Vf7()
                     m_objects[v4].vy = -m_objects[v4].vy;
                 }
                 if (unk3260[v4] < 0xa) {
-                    m_objects[v4].unk50 = 1;
+                    m_objects[v4].scale = 1;
                 }
                 if (unk3260[v4] < 0) {
-                    Vf10(v4);
+                    RemoveObject(v4);
                     break;
                 }
                 m_objects[v4].timer++;
@@ -3595,10 +3595,10 @@ void CIkumi::Vf7()
                     m_objects[v4].vy = -m_objects[v4].vy;
                 }
                 if (unk3260[v4] < 0xa) {
-                    m_objects[v4].unk50 = 1;
+                    m_objects[v4].scale = 1;
                 }
                 if (unk3260[v4] < 0) {
-                    Vf10(v4);
+                    RemoveObject(v4);
                     break;
                 }
                 m_objects[v4].timer++;
@@ -3621,7 +3621,7 @@ void CIkumi::Vf7()
                     m_objects[v4].frame++;
                     m_objects[v4].unk80 = 0;
                     if (m_objects[v4].frame >= v58) {
-                        Vf10(v4);
+                        RemoveObject(v4);
                     }
                 }
             }
@@ -3642,13 +3642,13 @@ void CIkumi::Unk6b7900()
     if ((*m_opponent)->unk14c > 0) {
         return;
     }
-    v4 = unk2cc;
+    v4 = m_objectTail;
     EffectDesc l50;
-    while (v4 != unk2ca) {
-        if (unk3d0[v4] != 0 && m_objects[v4].unk86 == 0 && (unk14c == 0 || unk14c > 0 && m_objects[v4].unk88 != 0)) {
+    while (v4 != m_objectHead) {
+        if (m_objectActive[v4] != 0 && m_objects[v4].unk86 == 0 && (unk14c == 0 || unk14c > 0 && m_objects[v4].unk88 != 0)) {
             v54 = (short)anims[m_objects[v4].pattern].frames[m_objects[v4].frame].duration;
             v58 = anims[m_objects[v4].pattern].frameCount;
-            CPlayer::Unk413090((EffectDesc*)&l50);
+            CPlayer::InitEffectDesc((EffectDesc*)&l50);
             switch (m_objects[v4].pattern) {
             case 0x190:
                 m_objects[v4].x = x;
@@ -3659,7 +3659,7 @@ void CIkumi::Unk6b7900()
                     m_objects[v4].frame++;
                     m_objects[v4].unk80 = 0;
                     if (m_objects[v4].frame >= v58) {
-                        Vf10(v4);
+                        RemoveObject(v4);
                     }
                 }
                 break;
@@ -3670,7 +3670,7 @@ void CIkumi::Unk6b7900()
                     m_objects[v4].frame++;
                     m_objects[v4].unk80 = 0;
                     if (m_objects[v4].frame >= v58) {
-                        Vf10(v4);
+                        RemoveObject(v4);
                     }
                 }
                 break;
@@ -3681,7 +3681,7 @@ void CIkumi::Unk6b7900()
                     m_objects[v4].frame++;
                     m_objects[v4].unk80 = 0;
                     if (m_objects[v4].frame >= v58) {
-                        Vf10(v4);
+                        RemoveObject(v4);
                     }
                 }
                 break;
@@ -3697,7 +3697,7 @@ void CIkumi::Unk6b7900()
                     l50.layer = 1;
                     l50.scale = 2;
                     l50.unk0 = 1;
-                    Vf9(&l50);
+                    SpawnObject(&l50);
                     unk2c8 = 1;
                 }
                 m_objects[v4].timer++;
@@ -3706,7 +3706,7 @@ void CIkumi::Unk6b7900()
                     m_objects[v4].frame++;
                     m_objects[v4].unk80 = 0;
                     if (m_objects[v4].frame >= v58) {
-                        Vf10(v4);
+                        RemoveObject(v4);
                     }
                 }
                 break;
@@ -3723,7 +3723,7 @@ void CIkumi::Unk6b7900()
                     l50.scale = 0;
                     l50.layer = 1;
                     l50.unk18 = facing;
-                    Vf9(&l50);
+                    SpawnObject(&l50);
                 }
                 if (m_objects[v4].unk84 == 0 && m_objects[v4].frame < 0x2f) {
                     m_objects[v4].timer = 0;
@@ -3736,7 +3736,7 @@ void CIkumi::Unk6b7900()
                     m_objects[v4].frame++;
                     m_objects[v4].unk80 = 0;
                     if (m_objects[v4].frame >= v58) {
-                        Vf10(v4);
+                        RemoveObject(v4);
                     }
                 }
                 break;
@@ -3747,7 +3747,7 @@ void CIkumi::Unk6b7900()
                     m_objects[v4].frame++;
                     m_objects[v4].unk80 = 0;
                     if (m_objects[v4].frame >= v58) {
-                        Vf10(v4);
+                        RemoveObject(v4);
                     }
                 }
                 break;
@@ -3763,7 +3763,7 @@ void CIkumi::Unk6b7900()
                     l50.layer = 1;
                     l50.scale = 2;
                     l50.unk0 = 1;
-                    Vf9(&l50);
+                    SpawnObject(&l50);
                     unk2c8 = 1;
                 }
                 m_objects[v4].timer++;
@@ -3772,7 +3772,7 @@ void CIkumi::Unk6b7900()
                     m_objects[v4].frame++;
                     m_objects[v4].unk80 = 0;
                     if (m_objects[v4].frame >= v58) {
-                        Vf10(v4);
+                        RemoveObject(v4);
                     }
                 }
                 break;
@@ -3789,7 +3789,7 @@ void CIkumi::Unk6b7900()
                     l50.scale = 0;
                     l50.layer = 1;
                     l50.unk18 = facing;
-                    Vf9(&l50);
+                    SpawnObject(&l50);
                 }
                 if (m_objects[v4].unk84 == 0 && m_objects[v4].frame < 0x2f) {
                     m_objects[v4].timer = 0;
@@ -3806,7 +3806,7 @@ void CIkumi::Unk6b7900()
                         m_objects[v4].frame = 0x20;
                     }
                     if (m_objects[v4].frame >= v58) {
-                        Vf10(v4);
+                        RemoveObject(v4);
                     }
                 }
                 break;
@@ -3822,7 +3822,7 @@ void CIkumi::Unk6b7900()
                     l50.layer = 1;
                     l50.scale = 2;
                     l50.unk0 = 1;
-                    Vf9(&l50);
+                    SpawnObject(&l50);
                     unk2c8 = 1;
                 }
                 m_objects[v4].timer++;
@@ -3831,7 +3831,7 @@ void CIkumi::Unk6b7900()
                     m_objects[v4].frame++;
                     m_objects[v4].unk80 = 0;
                     if (m_objects[v4].frame >= v58) {
-                        Vf10(v4);
+                        RemoveObject(v4);
                     }
                 }
                 break;
@@ -3854,7 +3854,7 @@ void CIkumi::Unk6b7900()
                     l50.scale = 0;
                     l50.layer = 1;
                     l50.unk18 = facing;
-                    Vf9(&l50);
+                    SpawnObject(&l50);
                 }
                 m_objects[v4].timer++;
                 if (m_objects[v4].timer >= v54) {
@@ -3867,7 +3867,7 @@ void CIkumi::Unk6b7900()
                         unk3260[v4] = 0;
                     }
                     if (m_objects[v4].frame >= v58) {
-                        Vf10(v4);
+                        RemoveObject(v4);
                     }
                 }
                 break;
@@ -3878,7 +3878,7 @@ void CIkumi::Unk6b7900()
                     m_objects[v4].frame++;
                     m_objects[v4].unk80 = 0;
                     if (m_objects[v4].frame >= v58) {
-                        Vf10(v4);
+                        RemoveObject(v4);
                     }
                 }
                 break;
@@ -3891,7 +3891,7 @@ void CIkumi::Unk6b7900()
                         m_objects[v4].frame = 0;
                     }
                     if (m_objects[v4].frame >= v58) {
-                        Vf10(v4);
+                        RemoveObject(v4);
                     }
                 }
                 break;
@@ -3904,7 +3904,7 @@ void CIkumi::Unk6b7900()
                         m_objects[v4].frame = 0;
                     }
                     if (m_objects[v4].frame >= v58) {
-                        Vf10(v4);
+                        RemoveObject(v4);
                     }
                 }
                 break;
@@ -3922,7 +3922,7 @@ void CIkumi::Unk6b7900()
                     }
                     l50.layer = 1;
                     l50.scale = 2;
-                    Vf9(&l50);
+                    SpawnObject(&l50);
                 }
                 m_objects[v4].timer++;
                 if (m_objects[v4].timer >= v54) {
@@ -3932,7 +3932,7 @@ void CIkumi::Unk6b7900()
                         m_objects[v4].frame = 0;
                     }
                     if (m_objects[v4].frame >= v58) {
-                        Vf10(v4);
+                        RemoveObject(v4);
                     }
                 }
                 break;
@@ -3942,7 +3942,7 @@ void CIkumi::Unk6b7900()
                     m_objects[v4].timer = 0;
                     m_objects[v4].frame++;
                     if (m_objects[v4].frame >= v58) {
-                        Vf10(v4);
+                        RemoveObject(v4);
                     }
                 }
                 break;
@@ -3952,7 +3952,7 @@ void CIkumi::Unk6b7900()
                     m_objects[v4].timer = 0;
                     m_objects[v4].frame++;
                     if (m_objects[v4].frame >= v58) {
-                        Vf10(v4);
+                        RemoveObject(v4);
                     }
                 }
                 break;
@@ -3982,7 +3982,7 @@ void CIkumi::Unk6b7900()
                     l50.layer = 1;
                     l50.unk0 = 1;
                     l50.unk18 = m_objects[v4].facing;
-                    Vf9(&l50);
+                    SpawnObject(&l50);
                     unk2c8 = 2;
                 }
                 if (m_objects[v4].frame > 0x26) {
@@ -4123,7 +4123,7 @@ void CIkumi::Unk6b7900()
                         l50.layer = 1;
                         l50.unk0 = 1;
                         l50.unk18 = facing;
-                        Vf9(&l50);
+                        SpawnObject(&l50);
                     }
                     if (m_objects[v4].frame >= v58) {
                         m_objects[v4].frame = 0;
@@ -4140,7 +4140,7 @@ void CIkumi::Unk6b7900()
                     m_objects[v4].timer = 0;
                     m_objects[v4].frame++;
                     if (m_objects[v4].frame >= v58) {
-                        Vf10(v4);
+                        RemoveObject(v4);
                     }
                 }
                 break;
@@ -4154,7 +4154,7 @@ void CIkumi::Unk6b7900()
                     m_objects[v4].timer = 0;
                     m_objects[v4].frame++;
                     if (m_objects[v4].frame >= v58) {
-                        Vf10(v4);
+                        RemoveObject(v4);
                     }
                 }
                 break;
@@ -4167,7 +4167,7 @@ void CIkumi::Unk6b7900()
                     m_objects[v4].timer = 0;
                     m_objects[v4].frame++;
                     if (m_objects[v4].frame >= v58) {
-                        Vf10(v4);
+                        RemoveObject(v4);
                     }
                 }
                 break;
@@ -4181,7 +4181,7 @@ void CIkumi::Unk6b7900()
                     m_objects[v4].timer = 0;
                     m_objects[v4].frame++;
                     if (m_objects[v4].frame >= v58) {
-                        Vf10(v4);
+                        RemoveObject(v4);
                     }
                 }
                 break;
@@ -4195,7 +4195,7 @@ void CIkumi::Unk6b7900()
                     m_objects[v4].timer = 0;
                     m_objects[v4].frame++;
                     if (m_objects[v4].frame >= v58) {
-                        Vf10(v4);
+                        RemoveObject(v4);
                     }
                 }
                 break;
@@ -4211,7 +4211,7 @@ void CIkumi::Unk6b7900()
                     l50.layer = 1;
                     l50.scale = 2;
                     l50.unk0 = 1;
-                    Vf9(&l50);
+                    SpawnObject(&l50);
                     unk2c8 = 1;
                 }
                 m_objects[v4].timer++;
@@ -4220,7 +4220,7 @@ void CIkumi::Unk6b7900()
                     m_objects[v4].frame++;
                     m_objects[v4].unk80 = 0;
                     if (m_objects[v4].frame >= v58) {
-                        Vf10(v4);
+                        RemoveObject(v4);
                     }
                 }
                 break;
@@ -4243,7 +4243,7 @@ void CIkumi::Unk6b7900()
                         m_objects[v4].unk80 = 0;
                     }
                     if (m_objects[v4].frame >= v58) {
-                        Vf10(v4);
+                        RemoveObject(v4);
                     }
                 }
                 break;
@@ -4253,7 +4253,7 @@ void CIkumi::Unk6b7900()
                     m_objects[v4].timer = 0;
                     m_objects[v4].frame++;
                     if (m_objects[v4].frame >= v58) {
-                        Vf10(v4);
+                        RemoveObject(v4);
                     }
                 }
                 break;
@@ -4268,7 +4268,7 @@ void CIkumi::Unk6b7900()
                     m_objects[v4].timer = 0;
                     m_objects[v4].frame++;
                     if (m_objects[v4].frame >= v58) {
-                        Vf10(v4);
+                        RemoveObject(v4);
                     }
                 }
                 break;
@@ -4283,7 +4283,7 @@ void CIkumi::Unk6b7900()
                     m_objects[v4].timer = 0;
                     m_objects[v4].frame++;
                     if (m_objects[v4].frame >= v58) {
-                        Vf10(v4);
+                        RemoveObject(v4);
                     }
                 }
                 break;
@@ -4298,7 +4298,7 @@ void CIkumi::Unk6b7900()
                     m_objects[v4].timer = 0;
                     m_objects[v4].frame++;
                     if (m_objects[v4].frame >= v58) {
-                        Vf10(v4);
+                        RemoveObject(v4);
                     }
                 }
                 break;
@@ -4313,7 +4313,7 @@ void CIkumi::Unk6b7900()
                     m_objects[v4].timer = 0;
                     m_objects[v4].frame++;
                     if (m_objects[v4].frame >= v58) {
-                        Vf10(v4);
+                        RemoveObject(v4);
                     }
                 }
                 break;
@@ -4344,7 +4344,7 @@ void CIkumi::Unk6b7900()
                     m_objects[v4].timer = 0;
                     m_objects[v4].frame++;
                     if (m_objects[v4].frame >= v58) {
-                        Vf10(v4);
+                        RemoveObject(v4);
                     }
                 }
                 break;
@@ -4374,7 +4374,7 @@ void CIkumi::Unk6b7900()
                     m_objects[v4].timer = 0;
                     m_objects[v4].frame++;
                     if (m_objects[v4].frame >= v58) {
-                        Vf10(v4);
+                        RemoveObject(v4);
                     }
                 }
                 break;
@@ -4405,7 +4405,7 @@ void CIkumi::Unk6b7900()
                     m_objects[v4].timer = 0;
                     m_objects[v4].frame++;
                     if (m_objects[v4].frame >= v58) {
-                        Vf10(v4);
+                        RemoveObject(v4);
                     }
                 }
                 break;
@@ -4435,7 +4435,7 @@ void CIkumi::Unk6b7900()
                     m_objects[v4].timer = 0;
                     m_objects[v4].frame++;
                     if (m_objects[v4].frame >= v58) {
-                        Vf10(v4);
+                        RemoveObject(v4);
                     }
                 }
                 break;
@@ -4448,7 +4448,7 @@ void CIkumi::Unk6b7900()
                     m_objects[v4].timer = 0;
                     m_objects[v4].frame++;
                     if (m_objects[v4].frame >= v58) {
-                        Vf10(v4);
+                        RemoveObject(v4);
                     }
                 }
                 break;
@@ -4460,9 +4460,9 @@ void CIkumi::Unk6b7900()
                     l50.unk18 = m_objects[v4].facing;
                     l50.layer = 1;
                     l50.scale = 0;
-                    Vf9(&l50);
-                    Vf9(&l50);
-                    Vf9(&l50);
+                    SpawnObject(&l50);
+                    SpawnObject(&l50);
+                    SpawnObject(&l50);
                 }
                 m_objects[v4].timer++;
                 if (m_objects[v4].timer >= v54) {
@@ -4470,7 +4470,7 @@ void CIkumi::Unk6b7900()
                     m_objects[v4].frame++;
                     m_objects[v4].unk80 = 0;
                     if (m_objects[v4].frame >= v58) {
-                        Vf10(v4);
+                        RemoveObject(v4);
                     }
                 }
                 break;
@@ -4482,18 +4482,18 @@ void CIkumi::Unk6b7900()
                     l50.unk18 = m_objects[v4].facing;
                     l50.layer = 1;
                     l50.scale = 0;
-                    Vf9(&l50);
-                    Vf9(&l50);
-                    Vf9(&l50);
-                    Vf9(&l50);
+                    SpawnObject(&l50);
+                    SpawnObject(&l50);
+                    SpawnObject(&l50);
+                    SpawnObject(&l50);
                     l50.type = 0x1d9;
                     l50.x = (double)(int)m_objects[v4].x;
                     l50.y = (double)(int)m_objects[v4].y;
                     l50.unk18 = m_objects[v4].facing;
                     l50.layer = 1;
                     l50.scale = 0;
-                    Vf9(&l50);
-                    Vf9(&l50);
+                    SpawnObject(&l50);
+                    SpawnObject(&l50);
                 }
                 m_objects[v4].timer++;
                 if (m_objects[v4].timer >= v54) {
@@ -4501,7 +4501,7 @@ void CIkumi::Unk6b7900()
                     m_objects[v4].frame++;
                     m_objects[v4].unk80 = 0;
                     if (m_objects[v4].frame >= v58) {
-                        Vf10(v4);
+                        RemoveObject(v4);
                     }
                 }
                 break;
@@ -4535,7 +4535,7 @@ void CIkumi::Unk6b7900()
                     m_objects[v4].frame = 0;
                     m_objects[v4].timer = 0;
                     m_objects[v4].pattern = 0x1dc;
-                    m_objects[v4].unk51 = 0;
+                    m_objects[v4].layer = 0;
                     break;
                 }
                 m_objects[v4].timer++;
@@ -4581,7 +4581,7 @@ void CIkumi::Unk6b7900()
                     m_objects[v4].frame = 0;
                     m_objects[v4].timer = 0;
                     m_objects[v4].pattern = 0x1dc;
-                    m_objects[v4].unk51 = 0;
+                    m_objects[v4].layer = 0;
                     break;
                 }
                 m_objects[v4].timer++;
@@ -4624,7 +4624,7 @@ void CIkumi::Unk6b7900()
                     m_objects[v4].frame = 0;
                     m_objects[v4].timer = 0;
                     m_objects[v4].pattern = 0x1dc;
-                    m_objects[v4].unk51 = 0;
+                    m_objects[v4].layer = 0;
                     break;
                 }
                 m_objects[v4].timer++;
@@ -4644,7 +4644,7 @@ void CIkumi::Unk6b7900()
                     m_objects[v4].frame++;
                     m_objects[v4].unk80 = 0;
                     if (m_objects[v4].frame >= v58) {
-                        Vf10(v4);
+                        RemoveObject(v4);
                     }
                 }
                 break;
@@ -4664,7 +4664,7 @@ void CIkumi::Unk6b7900()
                     m_objects[v4].frame++;
                     m_objects[v4].unk80 = 0;
                     if (m_objects[v4].frame >= v58) {
-                        Vf10(v4);
+                        RemoveObject(v4);
                     }
                 }
                 break;
@@ -4676,32 +4676,32 @@ void CIkumi::Unk6b7900()
                     l50.unk18 = m_objects[v4].facing;
                     l50.layer = 1;
                     l50.scale = 0;
-                    Vf9(&l50);
-                    Vf9(&l50);
-                    Vf9(&l50);
-                    Vf9(&l50);
-                    Vf9(&l50);
-                    Vf9(&l50);
-                    Vf9(&l50);
-                    Vf9(&l50);
+                    SpawnObject(&l50);
+                    SpawnObject(&l50);
+                    SpawnObject(&l50);
+                    SpawnObject(&l50);
+                    SpawnObject(&l50);
+                    SpawnObject(&l50);
+                    SpawnObject(&l50);
+                    SpawnObject(&l50);
                     l50.type = 0x1d9;
                     l50.x = (double)(int)m_objects[v4].x;
                     l50.y = (double)(int)m_objects[v4].y;
                     l50.unk18 = m_objects[v4].facing;
                     l50.layer = 1;
                     l50.scale = 0;
-                    Vf9(&l50);
-                    Vf9(&l50);
-                    Vf9(&l50);
-                    Vf9(&l50);
+                    SpawnObject(&l50);
+                    SpawnObject(&l50);
+                    SpawnObject(&l50);
+                    SpawnObject(&l50);
                     l50.type = 0x1da;
                     l50.x = (double)(int)m_objects[v4].x;
                     l50.y = (double)(int)m_objects[v4].y;
                     l50.unk18 = m_objects[v4].facing;
                     l50.layer = 1;
                     l50.scale = 0;
-                    Vf9(&l50);
-                    Vf9(&l50);
+                    SpawnObject(&l50);
+                    SpawnObject(&l50);
                 }
                 m_objects[v4].timer++;
                 if (m_objects[v4].timer >= v54) {
@@ -4709,7 +4709,7 @@ void CIkumi::Unk6b7900()
                     m_objects[v4].frame++;
                     m_objects[v4].unk80 = 0;
                     if (m_objects[v4].frame >= v58) {
-                        Vf10(v4);
+                        RemoveObject(v4);
                     }
                 }
                 break;
@@ -4721,17 +4721,17 @@ void CIkumi::Unk6b7900()
                     l50.unk18 = m_objects[v4].facing;
                     l50.layer = 1;
                     l50.scale = 0;
-                    Vf9(&l50);
-                    Vf9(&l50);
-                    Vf9(&l50);
-                    Vf9(&l50);
+                    SpawnObject(&l50);
+                    SpawnObject(&l50);
+                    SpawnObject(&l50);
+                    SpawnObject(&l50);
                     l50.type = 0x1d9;
                     l50.x = (double)(int)m_objects[v4].x;
                     l50.y = (double)(int)m_objects[v4].y;
                     l50.unk18 = m_objects[v4].facing;
                     l50.layer = 1;
                     l50.scale = 0;
-                    Vf9(&l50);
+                    SpawnObject(&l50);
                 }
                 m_objects[v4].timer++;
                 if (m_objects[v4].timer >= v54) {
@@ -4739,7 +4739,7 @@ void CIkumi::Unk6b7900()
                     m_objects[v4].frame++;
                     m_objects[v4].unk80 = 0;
                     if (m_objects[v4].frame >= v58) {
-                        Vf10(v4);
+                        RemoveObject(v4);
                     }
                 }
                 break;
@@ -4751,27 +4751,27 @@ void CIkumi::Unk6b7900()
                     l50.unk18 = m_objects[v4].facing;
                     l50.layer = 1;
                     l50.scale = 0;
-                    Vf9(&l50);
-                    Vf9(&l50);
-                    Vf9(&l50);
-                    Vf9(&l50);
-                    Vf9(&l50);
+                    SpawnObject(&l50);
+                    SpawnObject(&l50);
+                    SpawnObject(&l50);
+                    SpawnObject(&l50);
+                    SpawnObject(&l50);
                     l50.type = 0x1d9;
                     l50.x = (double)(int)m_objects[v4].x;
                     l50.y = (double)(int)m_objects[v4].y;
                     l50.unk18 = m_objects[v4].facing;
                     l50.layer = 1;
                     l50.scale = 0;
-                    Vf9(&l50);
-                    Vf9(&l50);
-                    Vf9(&l50);
+                    SpawnObject(&l50);
+                    SpawnObject(&l50);
+                    SpawnObject(&l50);
                     l50.type = 0x1da;
                     l50.x = (double)(int)m_objects[v4].x;
                     l50.y = (double)(int)m_objects[v4].y;
                     l50.unk18 = m_objects[v4].facing;
                     l50.layer = 1;
                     l50.scale = 0;
-                    Vf9(&l50);
+                    SpawnObject(&l50);
                 }
                 m_objects[v4].timer++;
                 if (m_objects[v4].timer >= v54) {
@@ -4779,7 +4779,7 @@ void CIkumi::Unk6b7900()
                     m_objects[v4].frame++;
                     m_objects[v4].unk80 = 0;
                     if (m_objects[v4].frame >= v58) {
-                        Vf10(v4);
+                        RemoveObject(v4);
                     }
                 }
                 break;
@@ -4791,28 +4791,28 @@ void CIkumi::Unk6b7900()
                     l50.unk18 = m_objects[v4].facing;
                     l50.layer = 1;
                     l50.scale = 0;
-                    Vf9(&l50);
-                    Vf9(&l50);
-                    Vf9(&l50);
-                    Vf9(&l50);
-                    Vf9(&l50);
+                    SpawnObject(&l50);
+                    SpawnObject(&l50);
+                    SpawnObject(&l50);
+                    SpawnObject(&l50);
+                    SpawnObject(&l50);
                     l50.type = 0x1d9;
                     l50.x = (double)(int)m_objects[v4].x;
                     l50.y = (double)(int)m_objects[v4].y;
                     l50.unk18 = m_objects[v4].facing;
                     l50.layer = 1;
                     l50.scale = 0;
-                    Vf9(&l50);
-                    Vf9(&l50);
-                    Vf9(&l50);
+                    SpawnObject(&l50);
+                    SpawnObject(&l50);
+                    SpawnObject(&l50);
                     l50.type = 0x1da;
                     l50.x = (double)(int)m_objects[v4].x;
                     l50.y = (double)(int)m_objects[v4].y;
                     l50.unk18 = m_objects[v4].facing;
                     l50.layer = 1;
                     l50.scale = 0;
-                    Vf9(&l50);
-                    Vf9(&l50);
+                    SpawnObject(&l50);
+                    SpawnObject(&l50);
                 }
                 m_objects[v4].timer++;
                 if (m_objects[v4].timer >= v54) {
@@ -4820,7 +4820,7 @@ void CIkumi::Unk6b7900()
                     m_objects[v4].frame++;
                     m_objects[v4].unk80 = 0;
                     if (m_objects[v4].frame >= v58) {
-                        Vf10(v4);
+                        RemoveObject(v4);
                     }
                 }
                 break;
@@ -4829,7 +4829,7 @@ void CIkumi::Unk6b7900()
                 m_objects[v4].unk8c = 0x7530;
                 m_objects[v4].timer++;
                 if (pattern != 0x57) {
-                    Vf10(v4);
+                    RemoveObject(v4);
                 }
                 if (m_objects[v4].timer >= v54) {
                     m_objects[v4].timer = 0;
@@ -4848,72 +4848,72 @@ void CIkumi::Unk6b7900()
                     l50.scale = 0;
                     l50.layer = 1;
                     l50.unk18 = facing;
-                    Vf9(&l50);
+                    SpawnObject(&l50);
                     l50.type = 0x1f1;
                     l50.x = (double)((int)x - (facing << 2));
                     l50.y = (double)((int)y - 6);
                     l50.scale = 0;
                     l50.layer = 1;
                     l50.unk18 = facing;
-                    Vf9(&l50);
+                    SpawnObject(&l50);
                     l50.type = 0x1f1;
                     l50.x = (double)((int)x - facing * 0xe);
                     l50.y = (double)((int)y - 0x1a);
                     l50.scale = 0;
                     l50.layer = 1;
                     l50.unk18 = facing;
-                    Vf9(&l50);
+                    SpawnObject(&l50);
                     l50.type = 0x1f1;
                     l50.x = (double)(int)x;
                     l50.y = (double)(int)y;
                     l50.scale = 0;
                     l50.layer = 1;
                     l50.unk18 = facing;
-                    Vf9(&l50);
+                    SpawnObject(&l50);
                     l50.type = 0x1f1;
                     l50.x = (double)((int)x + facing * 0x1e);
                     l50.y = (double)((int)y - 0x28);
                     l50.scale = 0;
                     l50.layer = 1;
                     l50.unk18 = facing;
-                    Vf9(&l50);
+                    SpawnObject(&l50);
                     l50.type = 0x1f1;
                     l50.x = (double)((int)x - facing * 0x19);
                     l50.y = (double)((int)y - 0x50);
                     l50.scale = 0;
                     l50.layer = 1;
                     l50.unk18 = facing;
-                    Vf9(&l50);
+                    SpawnObject(&l50);
                     l50.type = 0x1f2;
                     l50.x = (double)((int)x - facing * 0x23);
                     l50.y = (double)((int)y - 0x2a);
                     l50.scale = 0;
                     l50.layer = 1;
                     l50.unk18 = facing;
-                    Vf9(&l50);
+                    SpawnObject(&l50);
                     l50.type = 0x1f2;
                     l50.x = (double)((int)x - facing * 0x12);
                     l50.y = (double)((int)y - 0x14);
                     l50.scale = 0;
                     l50.layer = 1;
                     l50.unk18 = facing;
-                    Vf9(&l50);
+                    SpawnObject(&l50);
                     l50.type = 0x1f2;
                     l50.x = (double)((int)x + facing * 2);
                     l50.y = (double)((int)y - 0x41);
                     l50.scale = 0;
                     l50.layer = 1;
                     l50.unk18 = facing;
-                    Vf9(&l50);
+                    SpawnObject(&l50);
                     l50.type = 0x1f2;
                     l50.x = (double)((int)x + (facing << 4));
                     l50.y = (double)((int)y - 0x50);
                     l50.scale = 0;
                     l50.layer = 1;
                     l50.unk18 = facing;
-                    Vf9(&l50);
+                    SpawnObject(&l50);
                     unk2c9 = 0x22;
-                    Vf10(v4);
+                    RemoveObject(v4);
                     unk3144 = 0;
                     break;
                 }
@@ -4939,10 +4939,10 @@ void CIkumi::Unk6b7900()
                     m_objects[v4].vy = -m_objects[v4].vy;
                 }
                 if (unk3260[v4] < 0xa) {
-                    m_objects[v4].unk50 = 1;
+                    m_objects[v4].scale = 1;
                 }
                 if (unk3260[v4] < 0) {
-                    Vf10(v4);
+                    RemoveObject(v4);
                     break;
                 }
                 m_objects[v4].timer++;
@@ -4968,10 +4968,10 @@ void CIkumi::Unk6b7900()
                     m_objects[v4].vy = -m_objects[v4].vy;
                 }
                 if (unk3260[v4] < 0xa) {
-                    m_objects[v4].unk50 = 1;
+                    m_objects[v4].scale = 1;
                 }
                 if (unk3260[v4] < 0) {
-                    Vf10(v4);
+                    RemoveObject(v4);
                     break;
                 }
                 m_objects[v4].timer++;
@@ -4994,7 +4994,7 @@ void CIkumi::Unk6b7900()
                     m_objects[v4].frame++;
                     m_objects[v4].unk80 = 0;
                     if (m_objects[v4].frame >= v58) {
-                        Vf10(v4);
+                        RemoveObject(v4);
                     }
                 }
             }

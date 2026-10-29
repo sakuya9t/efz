@@ -1,4 +1,4 @@
-// CKano::Vf6 (0x6429c0-0x653a1f), the per-state update. It is a file of its own,
+// CKano::UpdatePattern (0x6429c0-0x653a1f), the per-state update. It is a file of its own,
 // as in the original: its floating-point constants precede the rest of CKano's
 // .rdata, which starts with its constructor's folder name (kano.cpp).
 #include <stdlib.h>
@@ -6,7 +6,7 @@
 #include <math.h>
 #include "efz.h"
 
-void CKano::Vf6()
+void CKano::UpdatePattern()
 {
     WORD x8;
     WORD l4;
@@ -17,7 +17,7 @@ void CKano::Vf6()
     EffectDesc l50;
     l4 = (short)anims[pattern].frames[frame].duration;
     x8 = anims[pattern].frameCount;
-    CPlayer::Unk413090((EffectDesc*)&l50);
+    CPlayer::InitEffectDesc((EffectDesc*)&l50);
     switch (pattern) {
     default:
         unk158 = 0;
@@ -96,7 +96,7 @@ void CKano::Vf6()
             frame++;
             if (frame >= x8) {
                 pattern = 9;
-                Vf0();
+                StartPattern();
             }
         }
         if (y + vy >= 0.0 && frame > 3) {
@@ -104,7 +104,7 @@ void CKano::Vf6()
             unk2c9 = 9;
             CPlayer::FaceOpponent();
             pattern = 0xd;
-            Vf0();
+            StartPattern();
         }
         break;
     case 5:
@@ -132,7 +132,7 @@ void CKano::Vf6()
             frame++;
             if (frame >= x8) {
                 pattern = 9;
-                Vf0();
+                StartPattern();
             }
         }
         if (y + vy >= 0.0 && frame > 3) {
@@ -140,7 +140,7 @@ void CKano::Vf6()
             unk2c9 = 9;
             CPlayer::FaceOpponent();
             pattern = 0xd;
-            Vf0();
+            StartPattern();
         }
         break;
     case 6:
@@ -164,7 +164,7 @@ void CKano::Vf6()
             frame++;
             if (frame >= x8) {
                 pattern = 9;
-                Vf0();
+                StartPattern();
             }
         }
         if (y + vy >= 0.0 && frame > 3) {
@@ -172,7 +172,7 @@ void CKano::Vf6()
             unk2c9 = 9;
             CPlayer::FaceOpponent();
             pattern = 0xd;
-            Vf0();
+            StartPattern();
         }
         break;
     case 7:
@@ -186,7 +186,7 @@ void CKano::Vf6()
             frame++;
             if (frame >= x8) {
                 pattern = 0;
-                Vf0();
+                StartPattern();
             }
         }
         break;
@@ -201,7 +201,7 @@ void CKano::Vf6()
             frame++;
             if (frame >= x8) {
                 pattern = 3;
-                Vf0();
+                StartPattern();
             }
         }
         break;
@@ -220,7 +220,7 @@ void CKano::Vf6()
             y = 0.0;
             unk2c9 = 9;
             pattern = 0xd;
-            Vf0();
+            StartPattern();
         }
         break;
     case 0xd:
@@ -237,7 +237,7 @@ void CKano::Vf6()
                 if (m_inputY == 1) {
                     pattern = 3;
                 }
-                Vf0();
+                StartPattern();
             }
         }
         break;
@@ -259,7 +259,7 @@ void CKano::Vf6()
             frame++;
             if (frame >= x8) {
                 pattern = 9;
-                Vf0();
+                StartPattern();
             }
         }
         if (y + vy >= 0.0 && frame > 3) {
@@ -267,7 +267,7 @@ void CKano::Vf6()
             unk2c9 = 9;
             CPlayer::FaceOpponent();
             pattern = 0xd;
-            Vf0();
+            StartPattern();
         }
         break;
     case 0xf:
@@ -288,7 +288,7 @@ void CKano::Vf6()
             frame++;
             if (frame >= x8) {
                 pattern = 9;
-                Vf0();
+                StartPattern();
             }
         }
         if (y + vy >= 0.0 && frame > 3) {
@@ -296,7 +296,7 @@ void CKano::Vf6()
             unk2c9 = 9;
             CPlayer::FaceOpponent();
             pattern = 0xd;
-            Vf0();
+            StartPattern();
         }
         break;
     case 0x10:
@@ -316,7 +316,7 @@ void CKano::Vf6()
             frame++;
             if (frame >= x8) {
                 pattern = 9;
-                Vf0();
+                StartPattern();
             }
         }
         if (y + vy >= 0.0 && frame > 3) {
@@ -324,7 +324,7 @@ void CKano::Vf6()
             unk2c9 = 9;
             CPlayer::FaceOpponent();
             pattern = 0xd;
-            Vf0();
+            StartPattern();
         }
         break;
     case 0x2f:
@@ -386,7 +386,7 @@ void CKano::Vf6()
                 if (m_inputY == 1) {
                     pattern = 3;
                 }
-                Vf0();
+                StartPattern();
             }
         }
         break;
@@ -422,7 +422,7 @@ void CKano::Vf6()
                 if (m_inputY == 1) {
                     pattern = 3;
                 }
-                Vf0();
+                StartPattern();
             }
         }
         break;
@@ -458,7 +458,7 @@ void CKano::Vf6()
                 if (m_inputY == 1) {
                     pattern = 3;
                 }
-                Vf0();
+                StartPattern();
             }
         }
         break;
@@ -494,7 +494,7 @@ void CKano::Vf6()
                 if (m_inputY == 1) {
                     pattern = 3;
                 }
-                Vf0();
+                StartPattern();
             }
         }
         break;
@@ -530,7 +530,7 @@ void CKano::Vf6()
                 if (m_inputY == 1) {
                     pattern = 3;
                 }
-                Vf0();
+                StartPattern();
             }
         }
         break;
@@ -565,7 +565,7 @@ void CKano::Vf6()
                 if (m_inputY == 1) {
                     pattern = 3;
                 }
-                Vf0();
+                StartPattern();
             }
         }
         break;
@@ -598,7 +598,7 @@ void CKano::Vf6()
             frame++;
             if (frame >= x8) {
                 pattern = 3;
-                Vf0();
+                StartPattern();
             }
         }
         break;
@@ -631,7 +631,7 @@ void CKano::Vf6()
             frame++;
             if (frame >= x8) {
                 pattern = 3;
-                Vf0();
+                StartPattern();
             }
         }
         break;
@@ -664,7 +664,7 @@ void CKano::Vf6()
             frame++;
             if (frame >= x8) {
                 pattern = 3;
-                Vf0();
+                StartPattern();
             }
         }
         break;
@@ -704,10 +704,10 @@ void CKano::Vf6()
             y = 0.0;
             if (unk12c != 0) {
                 pattern = 0x61;
-                Vf0();
+                StartPattern();
             } else {
                 pattern = 0x62;
-                Vf0();
+                StartPattern();
             }
         }
         break;
@@ -747,10 +747,10 @@ void CKano::Vf6()
             y = 0.0;
             if (unk12c != 0) {
                 pattern = 0x61;
-                Vf0();
+                StartPattern();
             } else {
                 pattern = 0x62;
-                Vf0();
+                StartPattern();
             }
         }
         break;
@@ -790,10 +790,10 @@ void CKano::Vf6()
             y = 0.0;
             if (unk12c != 0) {
                 pattern = 0x61;
-                Vf0();
+                StartPattern();
             } else {
                 pattern = 0x62;
-                Vf0();
+                StartPattern();
             }
         }
         break;
@@ -828,10 +828,10 @@ void CKano::Vf6()
             y = 0.0;
             if (unk12c != 0) {
                 pattern = 0x61;
-                Vf0();
+                StartPattern();
             } else {
                 pattern = 0x62;
-                Vf0();
+                StartPattern();
             }
         }
         break;
@@ -866,10 +866,10 @@ void CKano::Vf6()
             y = 0.0;
             if (unk12c != 0) {
                 pattern = 0x61;
-                Vf0();
+                StartPattern();
             } else {
                 pattern = 0x62;
-                Vf0();
+                StartPattern();
             }
         }
         break;
@@ -879,7 +879,7 @@ void CKano::Vf6()
         }
         if (frame > 0 && (char)CPlayer::Unk40ff70() != 0) {
             pattern = 0x46;
-            Vf0();
+            StartPattern();
             break;
         }
         if (frame == 0 && timer == 0) {
@@ -914,10 +914,10 @@ void CKano::Vf6()
             y = 0.0;
             if (unk12c != 0) {
                 pattern = 0x61;
-                Vf0();
+                StartPattern();
             } else {
                 pattern = 0x62;
-                Vf0();
+                StartPattern();
             }
         }
         break;
@@ -927,7 +927,7 @@ void CKano::Vf6()
         }
         if (frame > 0 && (char)CPlayer::Unk40ff70() != 0) {
             pattern = 0x46;
-            Vf0();
+            StartPattern();
             break;
         }
         if (frame == 0 && timer == 0) {
@@ -962,10 +962,10 @@ void CKano::Vf6()
             y = 0.0;
             if (unk12c != 0) {
                 pattern = 0x61;
-                Vf0();
+                StartPattern();
             } else {
                 pattern = 0x62;
-                Vf0();
+                StartPattern();
             }
         }
         break;
@@ -975,7 +975,7 @@ void CKano::Vf6()
         }
         if (frame > 0 && (char)CPlayer::Unk40ff70() != 0) {
             pattern = 0x46;
-            Vf0();
+            StartPattern();
             break;
         }
         if (frame == 0 && timer == 0) {
@@ -1005,10 +1005,10 @@ void CKano::Vf6()
             y = 0.0;
             if (unk12c != 0) {
                 pattern = 0x61;
-                Vf0();
+                StartPattern();
             } else {
                 pattern = 0x62;
-                Vf0();
+                StartPattern();
             }
         }
         break;
@@ -1018,7 +1018,7 @@ void CKano::Vf6()
         }
         if (frame > 0 && (char)CPlayer::Unk40ff70() != 0) {
             pattern = 0x46;
-            Vf0();
+            StartPattern();
             break;
         }
         if (frame == 0 && timer == 0) {
@@ -1048,10 +1048,10 @@ void CKano::Vf6()
             y = 0.0;
             if (unk12c != 0) {
                 pattern = 0x61;
-                Vf0();
+                StartPattern();
             } else {
                 pattern = 0x62;
-                Vf0();
+                StartPattern();
             }
         }
         break;
@@ -1065,7 +1065,7 @@ void CKano::Vf6()
         timer++;
         if ((char)CPlayer::Unk40ff70() != 0) {
             pattern = 0x46;
-            Vf0();
+            StartPattern();
             break;
         }
         if (timer >= l4) {
@@ -1079,10 +1079,10 @@ void CKano::Vf6()
             y = 0.0;
             if (unk12c != 0) {
                 pattern = 0x61;
-                Vf0();
+                StartPattern();
             } else {
                 pattern = 0x62;
-                Vf0();
+                StartPattern();
             }
         }
         break;
@@ -1105,10 +1105,10 @@ void CKano::Vf6()
             y = 0.0;
             if (unk12c != 0) {
                 pattern = 0x61;
-                Vf0();
+                StartPattern();
             } else {
                 pattern = 0x62;
-                Vf0();
+                StartPattern();
             }
         }
         break;
@@ -1144,10 +1144,10 @@ void CKano::Vf6()
             y = 0.0;
             if (unk12c != 0) {
                 pattern = 0x61;
-                Vf0();
+                StartPattern();
             } else {
                 pattern = 0x62;
-                Vf0();
+                StartPattern();
             }
         }
         break;
@@ -1182,10 +1182,10 @@ void CKano::Vf6()
             y = 0.0;
             if (unk12c != 0) {
                 pattern = 0x61;
-                Vf0();
+                StartPattern();
             } else {
                 pattern = 0x62;
-                Vf0();
+                StartPattern();
             }
         }
         break;
@@ -1210,7 +1210,7 @@ void CKano::Vf6()
                 if (m_inputY == 1) {
                     pattern = 3;
                 }
-                Vf0();
+                StartPattern();
             }
         }
         break;
@@ -1235,7 +1235,7 @@ void CKano::Vf6()
                 if (m_inputY == 1) {
                     pattern = 3;
                 }
-                Vf0();
+                StartPattern();
             }
         }
         break;
@@ -1257,7 +1257,7 @@ void CKano::Vf6()
             frame++;
             if (frame >= x8) {
                 pattern = 3;
-                Vf0();
+                StartPattern();
             }
         }
         break;
@@ -1295,7 +1295,7 @@ void CKano::Vf6()
                 if (m_inputY == 1) {
                     pattern = 3;
                 }
-                Vf0();
+                StartPattern();
             }
         }
         break;
@@ -1333,7 +1333,7 @@ void CKano::Vf6()
                 if (m_inputY == 1) {
                     pattern = 3;
                 }
-                Vf0();
+                StartPattern();
             }
         }
         break;
@@ -1368,7 +1368,7 @@ void CKano::Vf6()
             frame++;
             if (frame >= x8) {
                 pattern = 3;
-                Vf0();
+                StartPattern();
             }
         }
         break;
@@ -1382,7 +1382,7 @@ void CKano::Vf6()
             l50.y = (double)(int)y;
             l50.unk18 = facing;
             l50.layer = 1;
-            Vf9(&l50);
+            SpawnObject(&l50);
             m_gauge = m_gauge + 0x1e;
             vx = unkc0;
             vy = unkc8;
@@ -1405,10 +1405,10 @@ void CKano::Vf6()
             y = 0.0;
             if (unk12c != 0) {
                 pattern = 0x61;
-                Vf0();
+                StartPattern();
             } else {
                 pattern = 0x62;
-                Vf0();
+                StartPattern();
             }
         }
         break;
@@ -1451,10 +1451,10 @@ void CKano::Vf6()
             y = 0.0;
             if (unk12c != 0) {
                 pattern = 0x61;
-                Vf0();
+                StartPattern();
             } else {
                 pattern = 0x62;
-                Vf0();
+                StartPattern();
             }
         }
         break;
@@ -1468,7 +1468,7 @@ void CKano::Vf6()
                 l50.layer = 0;
                 l50.unk0 = 1;
                 l50.unk18 = facing;
-                Vf9(&l50);
+                SpawnObject(&l50);
                 unk3144 = 1;
             }
             if (unk120 != 0) {
@@ -1505,7 +1505,7 @@ void CKano::Vf6()
             frame++;
             if (frame >= x8) {
                 pattern = 0;
-                Vf0();
+                StartPattern();
                 CPlayer::FaceOpponent();
             }
         }
@@ -1520,7 +1520,7 @@ void CKano::Vf6()
                 l50.layer = 0;
                 l50.unk0 = 1;
                 l50.unk18 = facing;
-                Vf9(&l50);
+                SpawnObject(&l50);
                 unk3144 = 1;
             }
             if (unk120 != 0) {
@@ -1557,7 +1557,7 @@ void CKano::Vf6()
             frame++;
             if (frame >= x8) {
                 pattern = 0;
-                Vf0();
+                StartPattern();
                 CPlayer::FaceOpponent();
             }
         }
@@ -1572,7 +1572,7 @@ void CKano::Vf6()
                 l50.layer = 0;
                 l50.unk0 = 1;
                 l50.unk18 = facing;
-                Vf9(&l50);
+                SpawnObject(&l50);
                 unk3144 = 1;
             }
             if (unk120 != 0) {
@@ -1590,7 +1590,7 @@ void CKano::Vf6()
             frame++;
             if (frame >= x8) {
                 pattern = 0;
-                Vf0();
+                StartPattern();
                 CPlayer::FaceOpponent();
             }
         }
@@ -1598,10 +1598,10 @@ void CKano::Vf6()
             y = 0.0;
             if (unk12c != 0) {
                 pattern = 0x61;
-                Vf0();
+                StartPattern();
             } else {
                 pattern = 0x62;
-                Vf0();
+                StartPattern();
             }
         }
         break;
@@ -1615,7 +1615,7 @@ void CKano::Vf6()
                 l50.layer = 0;
                 l50.unk0 = 1;
                 l50.unk18 = facing;
-                Vf9(&l50);
+                SpawnObject(&l50);
                 unk3144 = 1;
             }
             if (unk3138 == 0) {
@@ -1642,10 +1642,10 @@ void CKano::Vf6()
             y = 0.0;
             if (unk12c != 0) {
                 pattern = 0x61;
-                Vf0();
+                StartPattern();
             } else {
                 pattern = 0x62;
-                Vf0();
+                StartPattern();
             }
         }
         break;
@@ -1658,7 +1658,7 @@ void CKano::Vf6()
             l50.unk18 = 1;
             l50.scale = 0;
             l50.layer = 0;
-            Vf9(&l50);
+            SpawnObject(&l50);
         }
         timer++;
         if (timer >= l4) {
@@ -1666,7 +1666,7 @@ void CKano::Vf6()
             frame++;
             if (frame >= x8) {
                 pattern = 0;
-                Vf0();
+                StartPattern();
             }
         }
         break;
@@ -1683,7 +1683,7 @@ void CKano::Vf6()
                 if (m_inputY == 1) {
                     pattern = 3;
                 }
-                Vf0();
+                StartPattern();
             }
         }
         break;
@@ -1706,7 +1706,7 @@ void CKano::Vf6()
             frame++;
             if (frame >= x8) {
                 pattern = 0x63;
-                Vf0();
+                StartPattern();
             }
         }
         break;
@@ -1729,7 +1729,7 @@ void CKano::Vf6()
             frame++;
             if (frame >= x8) {
                 pattern = 0x63;
-                Vf0();
+                StartPattern();
             }
         }
         break;
@@ -1738,7 +1738,7 @@ void CKano::Vf6()
         unk158 = 0;
         if (m_hp > 0 && timer > 0x63 && frame == 0) {
             pattern = 0x60;
-            Vf0();
+            StartPattern();
         }
         if (timer >= l4) {
             timer = 0;
@@ -1748,7 +1748,7 @@ void CKano::Vf6()
             }
             if (frame >= x8) {
                 pattern = 0x60;
-                Vf0();
+                StartPattern();
             }
         }
         break;
@@ -1788,7 +1788,7 @@ void CKano::Vf6()
                 if (m_inputY == 1) {
                     pattern = 3;
                 }
-                Vf0();
+                StartPattern();
             }
         }
         break;
@@ -1828,7 +1828,7 @@ void CKano::Vf6()
                 if (m_inputY == 1) {
                     pattern = 3;
                 }
-                Vf0();
+                StartPattern();
             }
         }
         break;
@@ -1868,7 +1868,7 @@ void CKano::Vf6()
                 if (m_inputY == 1) {
                     pattern = 3;
                 }
-                Vf0();
+                StartPattern();
             }
         }
         break;
@@ -1905,7 +1905,7 @@ void CKano::Vf6()
             }
             if (frame >= x8) {
                 pattern = 3;
-                Vf0();
+                StartPattern();
             }
         }
         break;
@@ -1942,7 +1942,7 @@ void CKano::Vf6()
             }
             if (frame >= x8) {
                 pattern = 3;
-                Vf0();
+                StartPattern();
             }
         }
         break;
@@ -1979,7 +1979,7 @@ void CKano::Vf6()
             }
             if (frame >= x8) {
                 pattern = 3;
-                Vf0();
+                StartPattern();
             }
         }
         break;
@@ -1997,7 +1997,7 @@ void CKano::Vf6()
             frame++;
             if (frame >= x8) {
                 pattern = 9;
-                Vf0();
+                StartPattern();
             }
         }
         if (y + vy >= 0.0) {
@@ -2005,7 +2005,7 @@ void CKano::Vf6()
             unk2c9 = 9;
             CPlayer::FaceOpponent();
             pattern = 0xd;
-            Vf0();
+            StartPattern();
         }
         break;
     case 0x9d:
@@ -2028,7 +2028,7 @@ void CKano::Vf6()
             frame++;
             if (frame >= x8) {
                 pattern = 9;
-                Vf0();
+                StartPattern();
             }
         }
         if (y + vy >= 0.0) {
@@ -2036,7 +2036,7 @@ void CKano::Vf6()
             unk2c9 = 9;
             CPlayer::FaceOpponent();
             pattern = 0xd;
-            Vf0();
+            StartPattern();
         }
         break;
     case 0x9e:
@@ -2059,7 +2059,7 @@ void CKano::Vf6()
             frame++;
             if (frame >= x8) {
                 pattern = 9;
-                Vf0();
+                StartPattern();
             }
         }
         if (y + vy >= 0.0) {
@@ -2067,7 +2067,7 @@ void CKano::Vf6()
             unk2c9 = 9;
             CPlayer::FaceOpponent();
             pattern = 0xd;
-            Vf0();
+            StartPattern();
         }
         break;
     case 0xa1:
@@ -2089,7 +2089,7 @@ void CKano::Vf6()
             frame++;
             if (frame >= x8) {
                 pattern = 9;
-                Vf0();
+                StartPattern();
                 ay = 0.035;
             }
         }
@@ -2119,8 +2119,8 @@ void CKano::Vf6()
         vy = vy + ay;
         if (y + vy > 0.0) {
             pattern = 0xd;
-            Vf0();
-            Vf0();
+            StartPattern();
+            StartPattern();
             y = 0.0;
             break;
         }
@@ -2149,7 +2149,7 @@ void CKano::Vf6()
                 pattern = 6;
             }
             m_attackResult = 0;
-            Vf0();
+            StartPattern();
             break;
         }
         if (frame == 0 && timer == 0) {
@@ -2173,11 +2173,11 @@ void CKano::Vf6()
         }
         if (m_inputX == facing && unk313c >= 0x50) {
             pattern = 0xb2;
-            Vf0();
+            StartPattern();
         }
         if (m_inputX != facing && unk3138 >= 0x3c) {
             pattern = 0xb2;
-            Vf0();
+            StartPattern();
         }
         break;
     case 0xa4:
@@ -2198,7 +2198,7 @@ void CKano::Vf6()
             vx = 0.0;
             vy = 0.0;
             pattern = 0;
-            Vf0();
+            StartPattern();
             break;
         }
         timer++;
@@ -2230,7 +2230,7 @@ void CKano::Vf6()
         }
         if (m_inputX == facing && unk313c >= 0x78) {
             pattern = 9;
-            Vf0();
+            StartPattern();
             vx = 0.9;
             ay = 0.02;
             if (CPlayer::FaceOpponent() != 0) {
@@ -2239,7 +2239,7 @@ void CKano::Vf6()
         }
         if (m_inputX != facing && unk3138 >= 0x30) {
             pattern = 9;
-            Vf0();
+            StartPattern();
             vx = 0.9;
             ay = 0.02;
             if (CPlayer::FaceOpponent() != 0) {
@@ -2267,7 +2267,7 @@ void CKano::Vf6()
         }
         if (m_inputX == -facing && unk313c >= 0x78) {
             pattern = 9;
-            Vf0();
+            StartPattern();
             vx = -0.9;
             ay = 0.02;
             if (CPlayer::FaceOpponent() != 0) {
@@ -2276,7 +2276,7 @@ void CKano::Vf6()
         }
         if (m_inputX != -facing && unk3138 >= 0x30) {
             pattern = 9;
-            Vf0();
+            StartPattern();
             vx = -0.9;
             ay = 0.03;
             if (CPlayer::FaceOpponent() != 0) {
@@ -2321,7 +2321,7 @@ void CKano::Vf6()
             if (frame >= x8) {
                 pattern = 0;
                 CPlayer::FaceOpponent();
-                Vf0();
+                StartPattern();
             }
         }
         break;
@@ -2351,7 +2351,7 @@ void CKano::Vf6()
             }
             if (frame >= x8) {
                 pattern = 0;
-                Vf0();
+                StartPattern();
             }
         }
         break;
@@ -2381,7 +2381,7 @@ void CKano::Vf6()
             }
             if (frame >= x8) {
                 pattern = 3;
-                Vf0();
+                StartPattern();
             }
         }
         break;
@@ -2418,7 +2418,7 @@ void CKano::Vf6()
             frame++;
             if (frame >= x8) {
                 pattern = 9;
-                Vf0();
+                StartPattern();
             }
         }
         break;
@@ -2456,7 +2456,7 @@ void CKano::Vf6()
                 if (ay == 0.0) {
                     ay = 0.02;
                 }
-                Vf0();
+                StartPattern();
             }
         }
         break;
@@ -2476,7 +2476,7 @@ void CKano::Vf6()
                 pattern = 6;
             }
             m_attackResult = 0;
-            Vf0();
+            StartPattern();
             break;
         }
         timer++;
@@ -2485,7 +2485,7 @@ void CKano::Vf6()
             frame++;
             if (frame >= x8) {
                 pattern = 0;
-                Vf0();
+                StartPattern();
                 break;
             }
         }
@@ -2520,7 +2520,7 @@ void CKano::Vf6()
                 frame = frame - 2;
             }
             if (frame >= x8) {
-                Vf0();
+                StartPattern();
                 pattern = 0;
             }
         }
@@ -2545,7 +2545,7 @@ void CKano::Vf6()
                 pattern = 6;
             }
             m_attackResult = 0;
-            Vf0();
+            StartPattern();
             break;
         }
         if (frame == 2 && timer == 0) {
@@ -2562,7 +2562,7 @@ void CKano::Vf6()
             if (frame >= x8) {
                 pattern = 0;
                 CPlayer::FaceOpponent();
-                Vf0();
+                StartPattern();
             }
         }
         break;
@@ -2586,7 +2586,7 @@ void CKano::Vf6()
                 pattern = 6;
             }
             m_attackResult = 0;
-            Vf0();
+            StartPattern();
             break;
         }
         if (frame == 1 && timer == 0) {
@@ -2603,7 +2603,7 @@ void CKano::Vf6()
             if (frame >= x8) {
                 pattern = 0;
                 CPlayer::FaceOpponent();
-                Vf0();
+                StartPattern();
             }
         }
         break;
@@ -2632,7 +2632,7 @@ void CKano::Vf6()
             if (frame >= x8) {
                 pattern = 0;
                 CPlayer::FaceOpponent();
-                Vf0();
+                StartPattern();
             }
         }
         break;
@@ -2656,7 +2656,7 @@ void CKano::Vf6()
                 pattern = 6;
             }
             m_attackResult = 0;
-            Vf0();
+            StartPattern();
             break;
         }
         if (frame == 4 && timer == 0) {
@@ -2673,7 +2673,7 @@ void CKano::Vf6()
             if (frame >= x8) {
                 pattern = 0;
                 CPlayer::FaceOpponent();
-                Vf0();
+                StartPattern();
             }
         }
         break;
@@ -2697,7 +2697,7 @@ void CKano::Vf6()
                 pattern = 6;
             }
             m_attackResult = 0;
-            Vf0();
+            StartPattern();
             break;
         }
         if (frame == 1 && timer == 0) {
@@ -2717,7 +2717,7 @@ void CKano::Vf6()
                     pattern = 3;
                 }
                 CPlayer::FaceOpponent();
-                Vf0();
+                StartPattern();
             }
         }
         break;
@@ -2741,7 +2741,7 @@ void CKano::Vf6()
                 pattern = 6;
             }
             m_attackResult = 0;
-            Vf0();
+            StartPattern();
             break;
         }
         if (frame == 2 && timer == 0) {
@@ -2761,7 +2761,7 @@ void CKano::Vf6()
                     pattern = 3;
                 }
                 CPlayer::FaceOpponent();
-                Vf0();
+                StartPattern();
             }
         }
         break;
@@ -2791,7 +2791,7 @@ void CKano::Vf6()
                     pattern = 3;
                 }
                 CPlayer::FaceOpponent();
-                Vf0();
+                StartPattern();
             }
         }
         break;
@@ -2807,7 +2807,7 @@ void CKano::Vf6()
                 pattern = 0x10;
             }
             m_attackResult = 0;
-            Vf0();
+            StartPattern();
             break;
         }
         if (frame == 2 && timer == 0) {
@@ -2817,7 +2817,7 @@ void CKano::Vf6()
         if (y + vy >= 0.0) {
             y = 0.0;
             pattern = 0xd;
-            Vf0();
+            StartPattern();
             break;
         }
         timer++;
@@ -2829,7 +2829,7 @@ void CKano::Vf6()
             }
             if (frame >= x8) {
                 pattern = 9;
-                Vf0();
+                StartPattern();
             }
         }
         break;
@@ -2845,7 +2845,7 @@ void CKano::Vf6()
                 pattern = 0x10;
             }
             m_attackResult = 0;
-            Vf0();
+            StartPattern();
             break;
         }
         if (frame == 3 && timer == 0) {
@@ -2858,7 +2858,7 @@ void CKano::Vf6()
         if (y + vy >= 0.0) {
             y = 0.0;
             pattern = 0xd;
-            Vf0();
+            StartPattern();
             break;
         }
         timer++;
@@ -2870,7 +2870,7 @@ void CKano::Vf6()
             }
             if (frame >= x8) {
                 pattern = 9;
-                Vf0();
+                StartPattern();
             }
         }
         break;
@@ -2886,7 +2886,7 @@ void CKano::Vf6()
                 pattern = 0x10;
             }
             m_attackResult = 0;
-            Vf0();
+            StartPattern();
             break;
         }
         if (frame == 2 && timer == 0) {
@@ -2901,7 +2901,7 @@ void CKano::Vf6()
         if (y + vy >= 0.0) {
             y = 0.0;
             pattern = 0xd;
-            Vf0();
+            StartPattern();
             break;
         }
         timer++;
@@ -2917,7 +2917,7 @@ void CKano::Vf6()
             }
             if (frame >= x8) {
                 pattern = 9;
-                Vf0();
+                StartPattern();
             }
         }
         break;
@@ -2933,7 +2933,7 @@ void CKano::Vf6()
             l50.scale = 2;
             l50.layer = 1;
             l50.unk18 = facing;
-            Vf9(&l50);
+            SpawnObject(&l50);
             unk3138++;
             unk2c8 = 2;
             m_gauge = m_gauge - 0x14;
@@ -2947,7 +2947,7 @@ void CKano::Vf6()
             }
             if (frame >= x8) {
                 pattern = 0;
-                Vf0();
+                StartPattern();
             }
         }
         break;
@@ -2966,7 +2966,7 @@ void CKano::Vf6()
         if (y + vy >= 0.0) {
             y = 0.0;
             pattern = 0xd;
-            Vf0();
+            StartPattern();
             break;
         }
         timer++;
@@ -3019,7 +3019,7 @@ void CKano::Vf6()
                     pattern = 3;
                 }
                 CPlayer::FaceOpponent();
-                Vf0();
+                StartPattern();
             }
         }
         break;
@@ -3052,7 +3052,7 @@ void CKano::Vf6()
                 frame = frame - 2;
             }
             if (frame >= x8) {
-                Vf0();
+                StartPattern();
                 pattern = 7;
                 CPlayer::FaceOpponent();
             }
@@ -3087,7 +3087,7 @@ void CKano::Vf6()
                 frame = frame - 2;
             }
             if (frame >= x8) {
-                Vf0();
+                StartPattern();
                 pattern = 7;
                 CPlayer::FaceOpponent();
             }
@@ -3122,7 +3122,7 @@ void CKano::Vf6()
                 frame = frame - 2;
             }
             if (frame >= x8) {
-                Vf0();
+                StartPattern();
                 pattern = 7;
                 CPlayer::FaceOpponent();
             }
@@ -3153,7 +3153,7 @@ void CKano::Vf6()
             if (frame >= x8) {
                 pattern = 0;
                 CPlayer::FaceOpponent();
-                Vf0();
+                StartPattern();
             }
         }
         break;
@@ -3170,8 +3170,8 @@ void CKano::Vf6()
             vx = 0.0;
             vy = 0.0;
             unkb8 = 0.0;
-            Vf0();
-            (*m_opponent)->Vf0();
+            StartPattern();
+            (*m_opponent)->StartPattern();
             (*m_opponent)->StopMoving();
             pattern = 0xdd;
             (*m_opponent)->pattern = 0x6b;
@@ -3193,7 +3193,7 @@ void CKano::Vf6()
                     pattern = 3;
                 }
                 CPlayer::FaceOpponent();
-                Vf0();
+                StartPattern();
             }
         }
         break;
@@ -3208,7 +3208,7 @@ void CKano::Vf6()
             l50.layer = 1;
             m_game->CreateEffect((EffectDesc*)&l50);
             CPlayer::DealDamage(0x3e8, 750.0);
-            (*m_opponent)->Vf0();
+            (*m_opponent)->StartPattern();
             (*m_opponent)->pattern = 0x3f;
             (*m_opponent)->unkc0 = -2.0;
             (*m_opponent)->unkc8 = -1.5;
@@ -3220,7 +3220,7 @@ void CKano::Vf6()
             m_attackResult = 3;
             if (frame >= x8) {
                 pattern = 0;
-                Vf0();
+                StartPattern();
                 CPlayer::FaceOpponent();
             }
         }
@@ -3249,7 +3249,7 @@ void CKano::Vf6()
             }
             if (frame >= x8) {
                 pattern = 0;
-                Vf0();
+                StartPattern();
             }
         }
         break;
@@ -3265,7 +3265,7 @@ void CKano::Vf6()
                 pattern = 6;
             }
             m_attackResult = 0;
-            Vf0();
+            StartPattern();
             break;
         }
         vx -= 0.01;
@@ -3289,7 +3289,7 @@ void CKano::Vf6()
             }
             if (frame >= x8) {
                 pattern = 0;
-                Vf0();
+                StartPattern();
             }
         }
         break;
@@ -3305,7 +3305,7 @@ void CKano::Vf6()
                 pattern = 6;
             }
             m_attackResult = 0;
-            Vf0();
+            StartPattern();
             break;
         }
         vx -= 0.01;
@@ -3329,7 +3329,7 @@ void CKano::Vf6()
             }
             if (frame >= x8) {
                 pattern = 0;
-                Vf0();
+                StartPattern();
             }
         }
         break;
@@ -3357,7 +3357,7 @@ void CKano::Vf6()
             }
             if (frame >= x8) {
                 pattern = 3;
-                Vf0();
+                StartPattern();
             }
         }
         break;
@@ -3385,7 +3385,7 @@ void CKano::Vf6()
             }
             if (frame >= x8) {
                 pattern = 3;
-                Vf0();
+                StartPattern();
             }
         }
         break;
@@ -3411,7 +3411,7 @@ void CKano::Vf6()
             m_attackResult = 0;
             if (frame >= x8) {
                 pattern = 3;
-                Vf0();
+                StartPattern();
             }
         }
         break;
@@ -3419,8 +3419,8 @@ void CKano::Vf6()
         vy = vy + ay;
         if (frame == 1 && m_attackResult == 3) {
             (*m_opponent)->StopMoving();
-            (*m_opponent)->Vf0();
-            Vf0();
+            (*m_opponent)->StartPattern();
+            StartPattern();
             CPlayer::StopMoving();
             pattern = 0xf9;
             (*m_opponent)->pattern = 0x64;
@@ -3465,7 +3465,7 @@ void CKano::Vf6()
         if (vy + y > 0.0 && frame > 5) {
             CPlayer::StopMoving();
             y = 0.0;
-            Vf0();
+            StartPattern();
             pattern = 0xd;
             break;
         }
@@ -3492,7 +3492,7 @@ void CKano::Vf6()
             (*m_opponent)->pattern = 0x3f;
             (*m_opponent)->facing = facing;
             CPlayer::DealDamage(0x4b0, 500.0);
-            (*m_opponent)->Vf0();
+            (*m_opponent)->StartPattern();
             (*m_opponent)->unkc0 = -1.0;
             (*m_opponent)->unkc8 = -2.3;
         }
@@ -3534,14 +3534,14 @@ void CKano::Vf6()
             l50.scale = 2;
             l50.layer = 1;
             l50.unk18 = facing;
-            Vf9(&l50);
+            SpawnObject(&l50);
             l50.type = 0x197;
             l50.x = (double)(int)x;
             l50.y = (double)(int)y;
             l50.scale = 2;
             l50.layer = 0;
             l50.unk18 = facing;
-            Vf9(&l50);
+            SpawnObject(&l50);
         }
         timer++;
         if (timer >= l4) {
@@ -3555,7 +3555,7 @@ void CKano::Vf6()
             }
             if (frame >= x8) {
                 pattern = 0;
-                Vf0();
+                StartPattern();
             }
         }
         break;
@@ -3583,19 +3583,19 @@ void CKano::Vf6()
                 l50.scale = 2;
                 l50.layer = 1;
                 l50.unk18 = facing;
-                Vf9(&l50);
+                SpawnObject(&l50);
                 l50.type = 0x197;
                 l50.x = (double)(int)x;
                 l50.y = (double)(int)y;
                 l50.scale = 2;
                 l50.layer = 0;
                 l50.unk18 = facing;
-                Vf9(&l50);
+                SpawnObject(&l50);
                 unk2c8 = 1;
             }
             if (frame >= x8) {
                 pattern = 0;
-                Vf0();
+                StartPattern();
             }
         }
         break;
@@ -3612,14 +3612,14 @@ void CKano::Vf6()
             l50.scale = 2;
             l50.layer = 1;
             l50.unk18 = facing;
-            Vf9(&l50);
+            SpawnObject(&l50);
             l50.type = 0x197;
             l50.x = (double)(int)x;
             l50.y = (double)(int)y;
             l50.scale = 2;
             l50.layer = 0;
             l50.unk18 = facing;
-            Vf9(&l50);
+            SpawnObject(&l50);
         }
         if (frame == 7 && timer == 0) {
             unk158 = 0;
@@ -3635,7 +3635,7 @@ void CKano::Vf6()
             break;
         }
         if (frame > 0xf && m_command == 0xd && (unk118 >= 500.0 || unk120 > 0)) {
-            Vf0();
+            StartPattern();
             CPlayer::StopMoving();
             pattern = 0xfb;
             break;
@@ -3656,13 +3656,13 @@ void CKano::Vf6()
                 l50.layer = 1;
                 l50.unk0 = 1;
                 l50.unk18 = facing;
-                Vf9(&l50);
+                SpawnObject(&l50);
                 unk2c8 = 3;
                 unk3170++;
             }
             if (frame >= x8) {
                 pattern = 0;
-                Vf0();
+                StartPattern();
             }
         }
         break;
@@ -3679,14 +3679,14 @@ void CKano::Vf6()
             l50.scale = 2;
             l50.layer = 1;
             l50.unk18 = facing;
-            Vf9(&l50);
+            SpawnObject(&l50);
             l50.type = 0x197;
             l50.x = (double)(int)x;
             l50.y = (double)(int)y;
             l50.scale = 2;
             l50.layer = 0;
             l50.unk18 = facing;
-            Vf9(&l50);
+            SpawnObject(&l50);
         }
         if (frame == 7 && timer == 0) {
             unk158 = 0;
@@ -3702,7 +3702,7 @@ void CKano::Vf6()
             break;
         }
         if (frame > 0xf && m_command == 0xd && (unk118 >= 500.0 || unk120 > 0)) {
-            Vf0();
+            StartPattern();
             CPlayer::StopMoving();
             pattern = 0xfb;
             break;
@@ -3723,14 +3723,14 @@ void CKano::Vf6()
                 l50.layer = 1;
                 l50.unk0 = 1;
                 l50.unk18 = facing;
-                Vf9(&l50);
+                SpawnObject(&l50);
                 unk2c8 = 3;
                 unk3170++;
                 m_gauge = m_gauge - 0x14;
             }
             if (frame >= x8) {
                 pattern = 0;
-                Vf0();
+                StartPattern();
             }
         }
         break;
@@ -3747,14 +3747,14 @@ void CKano::Vf6()
             l50.scale = 2;
             l50.layer = 1;
             l50.unk18 = facing;
-            Vf9(&l50);
+            SpawnObject(&l50);
             l50.type = 0x197;
             l50.x = (double)(int)x;
             l50.y = (double)(int)y;
             l50.scale = 2;
             l50.layer = 0;
             l50.unk18 = facing;
-            Vf9(&l50);
+            SpawnObject(&l50);
         }
         if (frame == 7 && timer == 0) {
             unk158 = 0;
@@ -3770,7 +3770,7 @@ void CKano::Vf6()
             break;
         }
         if (frame > 0xf && m_command == 0xd && (unk118 >= 500.0 || unk120 > 0)) {
-            Vf0();
+            StartPattern();
             CPlayer::StopMoving();
             pattern = 0xfb;
             break;
@@ -3791,14 +3791,14 @@ void CKano::Vf6()
                 l50.layer = 1;
                 l50.unk0 = 1;
                 l50.unk18 = facing;
-                Vf9(&l50);
+                SpawnObject(&l50);
                 unk2c8 = 3;
                 unk3170++;
                 m_gauge = m_gauge - 0x32;
             }
             if (frame >= x8) {
                 pattern = 0;
-                Vf0();
+                StartPattern();
             }
         }
         break;
@@ -3822,7 +3822,7 @@ void CKano::Vf6()
             break;
         }
         if (frame > 0x10 && m_command == 0xd && (unk118 >= 500.0 || unk120 > 0)) {
-            Vf0();
+            StartPattern();
             CPlayer::StopMoving();
             pattern = 0xfb;
             break;
@@ -3834,14 +3834,14 @@ void CKano::Vf6()
             l50.scale = 2;
             l50.layer = 1;
             l50.unk18 = facing;
-            Vf9(&l50);
+            SpawnObject(&l50);
             l50.type = 0x197;
             l50.x = (double)(int)x;
             l50.y = (double)(int)y;
             l50.scale = 2;
             l50.layer = 0;
             l50.unk18 = facing;
-            Vf9(&l50);
+            SpawnObject(&l50);
         }
         timer++;
         if (timer >= l4) {
@@ -3859,7 +3859,7 @@ void CKano::Vf6()
                 l50.layer = 1;
                 l50.unk18 = facing;
                 l50.unk0 = 1;
-                Vf9(&l50);
+                SpawnObject(&l50);
                 unk2c8 = 5;
                 unk316c++;
             }
@@ -3869,7 +3869,7 @@ void CKano::Vf6()
             }
             if (frame >= x8) {
                 pattern = 0;
-                Vf0();
+                StartPattern();
             }
         }
         break;
@@ -3893,7 +3893,7 @@ void CKano::Vf6()
             break;
         }
         if (frame > 0x10 && m_command == 0xd && (unk118 >= 500.0 || unk120 > 0)) {
-            Vf0();
+            StartPattern();
             CPlayer::StopMoving();
             pattern = 0xfb;
             break;
@@ -3905,14 +3905,14 @@ void CKano::Vf6()
             l50.scale = 2;
             l50.layer = 1;
             l50.unk18 = facing;
-            Vf9(&l50);
+            SpawnObject(&l50);
             l50.type = 0x197;
             l50.x = (double)(int)x;
             l50.y = (double)(int)y;
             l50.scale = 2;
             l50.layer = 0;
             l50.unk18 = facing;
-            Vf9(&l50);
+            SpawnObject(&l50);
         }
         timer++;
         if (timer >= l4) {
@@ -3931,7 +3931,7 @@ void CKano::Vf6()
                     l50.layer = 1;
                     l50.unk0 = 1;
                     l50.unk18 = facing;
-                    Vf9(&l50);
+                    SpawnObject(&l50);
                     unk2c8 = 5;
                     unk316c++;
                     m_gauge = m_gauge - 7;
@@ -3944,7 +3944,7 @@ void CKano::Vf6()
                     l50.layer = 1;
                     l50.unk18 = facing;
                     l50.unk0 = 1;
-                    Vf9(&l50);
+                    SpawnObject(&l50);
                     unk316c++;
                     m_gauge = m_gauge - 7;
                     l50.x = (double)((int)x + facing * 0x26);
@@ -3953,7 +3953,7 @@ void CKano::Vf6()
                     l50.layer = 1;
                     l50.unk18 = facing;
                     l50.unk0 = 1;
-                    Vf9(&l50);
+                    SpawnObject(&l50);
                     unk2c8 = 5;
                     unk316c++;
                     m_gauge = m_gauge - 7;
@@ -3965,7 +3965,7 @@ void CKano::Vf6()
             }
             if (frame >= x8) {
                 pattern = 0;
-                Vf0();
+                StartPattern();
             }
         }
         break;
@@ -3989,7 +3989,7 @@ void CKano::Vf6()
             break;
         }
         if (frame > 0x10 && m_command == 0xd && (unk118 >= 500.0 || unk120 > 0)) {
-            Vf0();
+            StartPattern();
             CPlayer::StopMoving();
             pattern = 0xfb;
             break;
@@ -4001,14 +4001,14 @@ void CKano::Vf6()
             l50.scale = 2;
             l50.layer = 1;
             l50.unk18 = facing;
-            Vf9(&l50);
+            SpawnObject(&l50);
             l50.type = 0x197;
             l50.x = (double)(int)x;
             l50.y = (double)(int)y;
             l50.scale = 2;
             l50.layer = 0;
             l50.unk18 = facing;
-            Vf9(&l50);
+            SpawnObject(&l50);
         }
         timer++;
         if (timer >= l4) {
@@ -4027,7 +4027,7 @@ void CKano::Vf6()
                     l50.layer = 1;
                     l50.unk18 = facing;
                     l50.unk0 = 1;
-                    Vf9(&l50);
+                    SpawnObject(&l50);
                     unk2c8 = 5;
                     unk316c++;
                     m_gauge = m_gauge - 0xa;
@@ -4040,7 +4040,7 @@ void CKano::Vf6()
                     l50.layer = 1;
                     l50.unk0 = 1;
                     l50.unk18 = facing;
-                    Vf9(&l50);
+                    SpawnObject(&l50);
                     unk316c++;
                     m_gauge = m_gauge - 0xa;
                     l50.x = (double)((int)x + facing * 0x26);
@@ -4049,7 +4049,7 @@ void CKano::Vf6()
                     l50.layer = 1;
                     l50.unk18 = facing;
                     l50.unk0 = 1;
-                    Vf9(&l50);
+                    SpawnObject(&l50);
                     unk2c8 = 5;
                     unk316c++;
                     m_gauge = m_gauge - 0xa;
@@ -4062,7 +4062,7 @@ void CKano::Vf6()
                     l50.layer = 1;
                     l50.unk18 = facing;
                     l50.unk0 = 1;
-                    Vf9(&l50);
+                    SpawnObject(&l50);
                     unk316c++;
                     m_gauge = m_gauge - 0xa;
                     l50.x = (double)((int)x + facing * 0x26);
@@ -4071,7 +4071,7 @@ void CKano::Vf6()
                     l50.layer = 1;
                     l50.unk18 = facing;
                     l50.unk0 = 1;
-                    Vf9(&l50);
+                    SpawnObject(&l50);
                     unk2c8 = 5;
                     unk316c++;
                     m_gauge = m_gauge - 0xa;
@@ -4083,7 +4083,7 @@ void CKano::Vf6()
             }
             if (frame >= x8) {
                 pattern = 0;
-                Vf0();
+                StartPattern();
             }
         }
         break;
@@ -4107,7 +4107,7 @@ void CKano::Vf6()
             break;
         }
         if (frame > 0xb && m_command == 0xd && (unk118 >= 500.0 || unk120 > 0)) {
-            Vf0();
+            StartPattern();
             CPlayer::StopMoving();
             pattern = 0xfb;
             break;
@@ -4119,14 +4119,14 @@ void CKano::Vf6()
             l50.scale = 2;
             l50.layer = 1;
             l50.unk18 = facing;
-            Vf9(&l50);
+            SpawnObject(&l50);
             l50.type = 0x197;
             l50.x = (double)(int)x;
             l50.y = (double)(int)y;
             l50.scale = 2;
             l50.layer = 0;
             l50.unk18 = facing;
-            Vf9(&l50);
+            SpawnObject(&l50);
         }
         timer++;
         if (timer >= l4) {
@@ -4144,7 +4144,7 @@ void CKano::Vf6()
                 l50.layer = 1;
                 l50.unk18 = facing;
                 l50.unk0 = 1;
-                Vf9(&l50);
+                SpawnObject(&l50);
                 unk3168++;
                 unk2c8 = 4;
                 unk313c = 0x15;
@@ -4152,7 +4152,7 @@ void CKano::Vf6()
             }
             if (frame >= x8) {
                 pattern = 0;
-                Vf0();
+                StartPattern();
             }
         }
         break;
@@ -4176,7 +4176,7 @@ void CKano::Vf6()
             break;
         }
         if (frame > 0xb && m_command == 0xd && (unk118 >= 500.0 || unk120 > 0)) {
-            Vf0();
+            StartPattern();
             CPlayer::StopMoving();
             pattern = 0xfb;
             break;
@@ -4188,14 +4188,14 @@ void CKano::Vf6()
             l50.scale = 2;
             l50.layer = 1;
             l50.unk18 = facing;
-            Vf9(&l50);
+            SpawnObject(&l50);
             l50.type = 0x197;
             l50.x = (double)(int)x;
             l50.y = (double)(int)y;
             l50.scale = 2;
             l50.layer = 0;
             l50.unk18 = facing;
-            Vf9(&l50);
+            SpawnObject(&l50);
         }
         timer++;
         if (timer >= l4) {
@@ -4213,7 +4213,7 @@ void CKano::Vf6()
                 l50.layer = 1;
                 l50.unk18 = facing;
                 l50.unk0 = 1;
-                Vf9(&l50);
+                SpawnObject(&l50);
                 unk2c8 = 4;
                 unk3168++;
                 unk313c = 0x15;
@@ -4222,7 +4222,7 @@ void CKano::Vf6()
             }
             if (frame >= x8) {
                 pattern = 0;
-                Vf0();
+                StartPattern();
             }
         }
         break;
@@ -4246,7 +4246,7 @@ void CKano::Vf6()
             break;
         }
         if (frame > 0xb && m_command == 0xd && (unk118 >= 500.0 || unk120 > 0)) {
-            Vf0();
+            StartPattern();
             CPlayer::StopMoving();
             pattern = 0xfb;
             break;
@@ -4258,14 +4258,14 @@ void CKano::Vf6()
             l50.scale = 2;
             l50.layer = 1;
             l50.unk18 = facing;
-            Vf9(&l50);
+            SpawnObject(&l50);
             l50.type = 0x197;
             l50.x = (double)(int)x;
             l50.y = (double)(int)y;
             l50.scale = 2;
             l50.layer = 0;
             l50.unk18 = facing;
-            Vf9(&l50);
+            SpawnObject(&l50);
         }
         timer++;
         if (timer >= l4) {
@@ -4283,7 +4283,7 @@ void CKano::Vf6()
                 l50.layer = 1;
                 l50.unk18 = facing;
                 l50.unk0 = 1;
-                Vf9(&l50);
+                SpawnObject(&l50);
                 unk3168++;
                 unk2c8 = 4;
                 unk313c = 0x15;
@@ -4292,7 +4292,7 @@ void CKano::Vf6()
             }
             if (frame >= x8) {
                 pattern = 0;
-                Vf0();
+                StartPattern();
             }
         }
         break;
@@ -4325,7 +4325,7 @@ void CKano::Vf6()
             l50.scale = 2;
             l50.layer = 1;
             l50.unk18 = facing;
-            Vf9(&l50);
+            SpawnObject(&l50);
             unk3138++;
             unk2c8 = 2;
         }
@@ -4336,14 +4336,14 @@ void CKano::Vf6()
             l50.scale = 2;
             l50.layer = 1;
             l50.unk18 = facing;
-            Vf9(&l50);
+            SpawnObject(&l50);
             l50.type = 0x197;
             l50.x = (double)(int)x;
             l50.y = (double)(int)y;
             l50.scale = 2;
             l50.layer = 0;
             l50.unk18 = facing;
-            Vf9(&l50);
+            SpawnObject(&l50);
         }
         timer++;
         if (timer >= l4) {
@@ -4359,7 +4359,7 @@ void CKano::Vf6()
             }
             if (frame >= x8) {
                 pattern = 0;
-                Vf0();
+                StartPattern();
             }
         }
         break;
@@ -4392,7 +4392,7 @@ void CKano::Vf6()
             l50.scale = 2;
             l50.layer = 1;
             l50.unk18 = facing;
-            Vf9(&l50);
+            SpawnObject(&l50);
             unk3138++;
             unk2c8 = 2;
         }
@@ -4403,14 +4403,14 @@ void CKano::Vf6()
             l50.scale = 2;
             l50.layer = 1;
             l50.unk18 = facing;
-            Vf9(&l50);
+            SpawnObject(&l50);
             l50.type = 0x197;
             l50.x = (double)(int)x;
             l50.y = (double)(int)y;
             l50.scale = 2;
             l50.layer = 0;
             l50.unk18 = facing;
-            Vf9(&l50);
+            SpawnObject(&l50);
         }
         timer++;
         if (timer >= l4) {
@@ -4426,7 +4426,7 @@ void CKano::Vf6()
             }
             if (frame >= x8) {
                 pattern = 0;
-                Vf0();
+                StartPattern();
             }
         }
         break;
@@ -4444,13 +4444,13 @@ void CKano::Vf6()
             l50.unk18 = facing;
             l50.layer = 1;
             l50.scale = 2;
-            Vf9(&l50);
+            SpawnObject(&l50);
             l50.x = (double)((int)x + facing * 0x50);
             l50.y = (double)((int)y - 0x208);
-            Vf9(&l50);
+            SpawnObject(&l50);
             l50.x = (double)((int)x + facing * 0x82);
             l50.y = (double)((int)y - 0x212);
-            Vf9(&l50);
+            SpawnObject(&l50);
         }
         timer++;
         if (timer >= l4) {
@@ -4459,7 +4459,7 @@ void CKano::Vf6()
             m_attackResult = 0;
             if (frame >= x8) {
                 pattern = 0;
-                Vf0();
+                StartPattern();
                 CPlayer::FaceOpponent();
             }
         }
@@ -4478,13 +4478,13 @@ void CKano::Vf6()
             l50.unk18 = facing;
             l50.layer = 1;
             l50.scale = 2;
-            Vf9(&l50);
+            SpawnObject(&l50);
             l50.x = (double)((int)x + facing * 0xa0);
             l50.y = (double)((int)y - 0x208);
-            Vf9(&l50);
+            SpawnObject(&l50);
             l50.x = (double)((int)x + facing * 0xd2);
             l50.y = (double)((int)y - 0x212);
-            Vf9(&l50);
+            SpawnObject(&l50);
         }
         timer++;
         if (timer >= l4) {
@@ -4493,7 +4493,7 @@ void CKano::Vf6()
             m_attackResult = 0;
             if (frame >= x8) {
                 pattern = 0;
-                Vf0();
+                StartPattern();
                 CPlayer::FaceOpponent();
             }
         }
@@ -4512,13 +4512,13 @@ void CKano::Vf6()
             l50.unk18 = facing;
             l50.layer = 1;
             l50.scale = 2;
-            Vf9(&l50);
+            SpawnObject(&l50);
             l50.x = (double)((int)x + facing * 0xf0);
             l50.y = (double)((int)y - 0x208);
-            Vf9(&l50);
+            SpawnObject(&l50);
             l50.x = (double)((int)x + facing * 0x122);
             l50.y = (double)((int)y - 0x212);
-            Vf9(&l50);
+            SpawnObject(&l50);
         }
         timer++;
         if (timer >= l4) {
@@ -4527,7 +4527,7 @@ void CKano::Vf6()
             m_attackResult = 0;
             if (frame >= x8) {
                 pattern = 0;
-                Vf0();
+                StartPattern();
                 CPlayer::FaceOpponent();
             }
         }
@@ -4548,7 +4548,7 @@ void CKano::Vf6()
             l50.unk18 = facing;
             l50.layer = 1;
             l50.scale = 2;
-            Vf9(&l50);
+            SpawnObject(&l50);
         }
         timer++;
         if (timer >= l4) {
@@ -4561,7 +4561,7 @@ void CKano::Vf6()
                 break;
             }
             if (frame >= x8) {
-                Vf0();
+                StartPattern();
                 pattern = 9;
                 ay = 0.035;
             }
@@ -4583,7 +4583,7 @@ void CKano::Vf6()
             l50.unk18 = facing;
             l50.layer = 1;
             l50.scale = 2;
-            Vf9(&l50);
+            SpawnObject(&l50);
         }
         timer++;
         if (timer >= l4) {
@@ -4596,7 +4596,7 @@ void CKano::Vf6()
                 break;
             }
             if (frame >= x8) {
-                Vf0();
+                StartPattern();
                 pattern = 9;
                 ay = 0.035;
             }
@@ -4630,7 +4630,7 @@ void CKano::Vf6()
             l50.unk18 = facing;
             l50.layer = 1;
             l50.scale = 2;
-            Vf9(&l50);
+            SpawnObject(&l50);
         }
         if (frame > 1) {
             unk313c++;
@@ -4642,7 +4642,7 @@ void CKano::Vf6()
             l50.unk18 = facing;
             l50.layer = 1;
             l50.scale = 2;
-            Vf9(&l50);
+            SpawnObject(&l50);
         }
         if (unk313c == 0x20) {
             l50.type = 0x197;
@@ -4651,7 +4651,7 @@ void CKano::Vf6()
             l50.unk18 = facing;
             l50.layer = 1;
             l50.scale = 2;
-            Vf9(&l50);
+            SpawnObject(&l50);
         }
         if (unk313c == 0x30) {
             l50.type = 0x197;
@@ -4660,7 +4660,7 @@ void CKano::Vf6()
             l50.unk18 = facing;
             l50.layer = 1;
             l50.scale = 2;
-            Vf9(&l50);
+            SpawnObject(&l50);
         }
         timer++;
         if (timer >= l4) {
@@ -4673,7 +4673,7 @@ void CKano::Vf6()
                 break;
             }
             if (frame >= x8) {
-                Vf0();
+                StartPattern();
                 pattern = 9;
                 ay = 0.035;
             }
@@ -4720,14 +4720,14 @@ void CKano::Vf6()
             l50.scale = 2;
             l50.layer = 1;
             l50.unk18 = facing;
-            Vf9(&l50);
+            SpawnObject(&l50);
             l50.type = 0x197;
             l50.x = (double)(int)x;
             l50.y = (double)(int)y;
             l50.scale = 2;
             l50.layer = 0;
             l50.unk18 = facing;
-            Vf9(&l50);
+            SpawnObject(&l50);
         }
         if (frame == 0x10 && timer == 0) {
             unk2c8 = 0x1d;
@@ -4759,7 +4759,7 @@ void CKano::Vf6()
                 l50.scale = 2;
                 l50.layer = 1;
                 l50.unk18 = facing;
-                Vf9(&l50);
+                SpawnObject(&l50);
             }
             if (frame == 0x12 && unk3138 < 3) {
                 frame--;
@@ -4767,7 +4767,7 @@ void CKano::Vf6()
             }
             if (frame >= x8) {
                 pattern = 0;
-                Vf0();
+                StartPattern();
             }
         }
         break;
@@ -4812,14 +4812,14 @@ void CKano::Vf6()
             l50.scale = 2;
             l50.layer = 1;
             l50.unk18 = facing;
-            Vf9(&l50);
+            SpawnObject(&l50);
             l50.type = 0x197;
             l50.x = (double)(int)x;
             l50.y = (double)(int)y;
             l50.scale = 2;
             l50.layer = 0;
             l50.unk18 = facing;
-            Vf9(&l50);
+            SpawnObject(&l50);
         }
         if (frame == 0xf && timer == 0) {
             l50.type = 0x1a3;
@@ -4829,7 +4829,7 @@ void CKano::Vf6()
             l50.layer = 1;
             l50.unk0 = 1;
             l50.unk18 = facing;
-            Vf9(&l50);
+            SpawnObject(&l50);
         }
         timer++;
         if (timer >= l4) {
@@ -4845,7 +4845,7 @@ void CKano::Vf6()
             }
             if (frame >= x8) {
                 pattern = 0;
-                Vf0();
+                StartPattern();
             }
         }
         break;
@@ -4876,14 +4876,14 @@ void CKano::Vf6()
             l50.scale = 2;
             l50.layer = 1;
             l50.unk18 = facing;
-            Vf9(&l50);
+            SpawnObject(&l50);
             l50.type = 0x197;
             l50.x = (double)(int)x;
             l50.y = (double)(int)y;
             l50.scale = 2;
             l50.layer = 0;
             l50.unk18 = facing;
-            Vf9(&l50);
+            SpawnObject(&l50);
         }
         if (frame == 0xa && timer == 0) {
             unk14c = 0x78;
@@ -4908,7 +4908,7 @@ void CKano::Vf6()
             l50.unk0 = 1;
             l50.layer = 1;
             l50.unk30 = 1;
-            Vf9(&l50);
+            SpawnObject(&l50);
         }
         timer++;
         if (timer >= l4) {
@@ -4920,7 +4920,7 @@ void CKano::Vf6()
             }
             if (frame >= x8) {
                 pattern = 0;
-                Vf0();
+                StartPattern();
             }
         }
         break;
@@ -4965,14 +4965,14 @@ void CKano::Vf6()
             l50.scale = 2;
             l50.layer = 1;
             l50.unk18 = facing;
-            Vf9(&l50);
+            SpawnObject(&l50);
             l50.type = 0x197;
             l50.x = (double)(int)x;
             l50.y = (double)(int)y;
             l50.scale = 2;
             l50.layer = 0;
             l50.unk18 = facing;
-            Vf9(&l50);
+            SpawnObject(&l50);
         }
         if (frame == 0xe && timer == 0) {
             l50.type = 0x19c;
@@ -4982,7 +4982,7 @@ void CKano::Vf6()
             l50.layer = 1;
             l50.unk0 = 1;
             l50.unk18 = facing;
-            Vf9(&l50);
+            SpawnObject(&l50);
         }
         timer++;
         if (timer >= l4) {
@@ -4994,7 +4994,7 @@ void CKano::Vf6()
             }
             if (frame >= x8) {
                 pattern = 0;
-                Vf0();
+                StartPattern();
             }
         }
         break;
@@ -5039,14 +5039,14 @@ void CKano::Vf6()
             l50.scale = 2;
             l50.layer = 1;
             l50.unk18 = facing;
-            Vf9(&l50);
+            SpawnObject(&l50);
             l50.type = 0x197;
             l50.x = (double)(int)x;
             l50.y = (double)(int)y;
             l50.scale = 2;
             l50.layer = 0;
             l50.unk18 = facing;
-            Vf9(&l50);
+            SpawnObject(&l50);
         }
         if (frame == 0xd && timer == 0) {
             l50.type = 0x1ad;
@@ -5056,20 +5056,20 @@ void CKano::Vf6()
             l50.layer = 1;
             l50.unk0 = 1;
             l50.unk18 = facing;
-            Vf9(&l50);
+            SpawnObject(&l50);
             l50.x = (double)((int)x + facing * 0x2d);
             l50.y = (double)((int)y + 0xa);
             l50.unk0 = 1;
-            Vf9(&l50);
+            SpawnObject(&l50);
             l50.x = (double)((int)x + facing * 0x4b);
             l50.y = (double)((int)y - 0xa);
             l50.unk0 = 1;
-            Vf9(&l50);
+            SpawnObject(&l50);
             l50.x = (double)((int)x + facing * 0x3c);
             l50.y = (double)(int)y;
             l50.unk0 = 1;
             l50.type = 0x19d;
-            Vf9(&l50);
+            SpawnObject(&l50);
             CPlayer::Unk410a10(4, 0);
         }
         timer++;
@@ -5082,7 +5082,7 @@ void CKano::Vf6()
             }
             if (frame >= x8) {
                 pattern = 0;
-                Vf0();
+                StartPattern();
             }
         }
         break;
@@ -5113,14 +5113,14 @@ void CKano::Vf6()
             l50.scale = 2;
             l50.layer = 1;
             l50.unk18 = facing;
-            Vf9(&l50);
+            SpawnObject(&l50);
             l50.type = 0x197;
             l50.x = (double)(int)x;
             l50.y = (double)(int)y;
             l50.scale = 2;
             l50.layer = 0;
             l50.unk18 = facing;
-            Vf9(&l50);
+            SpawnObject(&l50);
         }
         if (frame == 9 && timer == 0) {
             unk14c = 0x78;
@@ -5144,7 +5144,7 @@ void CKano::Vf6()
             l50.scale = 2;
             l50.unk0 = 1;
             l50.layer = 1;
-            Vf9(&l50);
+            SpawnObject(&l50);
             unk315c++;
             unk3160 = 0x258;
             unk3164 = facing;
@@ -5170,7 +5170,7 @@ void CKano::Vf6()
             }
             if (frame >= x8) {
                 pattern = 0;
-                Vf0();
+                StartPattern();
             }
         }
         break;
@@ -5218,7 +5218,7 @@ void CKano::Vf6()
             l50.layer = 1;
             l50.unk0 = 1;
             l50.unk18 = facing;
-            Vf9(&l50);
+            SpawnObject(&l50);
             unk313c = 0x1e;
             unk3140++;
         }
@@ -5236,7 +5236,7 @@ void CKano::Vf6()
             }
             if (frame >= x8) {
                 pattern = 0;
-                Vf0();
+                StartPattern();
             }
         }
         break;
@@ -5284,7 +5284,7 @@ void CKano::Vf6()
             l50.layer = 1;
             l50.unk0 = 1;
             l50.unk18 = facing;
-            Vf9(&l50);
+            SpawnObject(&l50);
             unk313c = 0x1e;
             unk3140++;
         }
@@ -5302,7 +5302,7 @@ void CKano::Vf6()
             }
             if (frame >= x8) {
                 pattern = 0;
-                Vf0();
+                StartPattern();
             }
         }
         break;
@@ -5354,7 +5354,7 @@ void CKano::Vf6()
             l50.layer = 1;
             l50.unk0 = 1;
             l50.unk18 = facing;
-            Vf9(&l50);
+            SpawnObject(&l50);
             unk313c = 0x1e;
             unk3140++;
         }
@@ -5372,7 +5372,7 @@ void CKano::Vf6()
             }
             if (frame >= x8) {
                 pattern = 0;
-                Vf0();
+                StartPattern();
             }
         }
         break;
@@ -5416,14 +5416,14 @@ void CKano::Vf6()
             l50.scale = 2;
             l50.layer = 1;
             l50.unk18 = facing;
-            Vf9(&l50);
+            SpawnObject(&l50);
             l50.type = 0x197;
             l50.x = (double)(int)x;
             l50.y = (double)(int)y;
             l50.scale = 2;
             l50.layer = 0;
             l50.unk18 = facing;
-            Vf9(&l50);
+            SpawnObject(&l50);
         }
         if (frame == 0xc && timer == 0) {
             l50.type = 0x1ae;
@@ -5433,7 +5433,7 @@ void CKano::Vf6()
             l50.layer = 1;
             l50.unk0 = 1;
             l50.unk18 = facing;
-            Vf9(&l50);
+            SpawnObject(&l50);
             unk2c8 = 0x12;
         }
         timer++;
@@ -5446,7 +5446,7 @@ void CKano::Vf6()
             }
             if (frame >= x8) {
                 pattern = 0;
-                Vf0();
+                StartPattern();
             }
         }
         break;
@@ -5490,14 +5490,14 @@ void CKano::Vf6()
             l50.scale = 2;
             l50.layer = 1;
             l50.unk18 = facing;
-            Vf9(&l50);
+            SpawnObject(&l50);
             l50.type = 0x197;
             l50.x = (double)(int)x;
             l50.y = (double)(int)y;
             l50.scale = 2;
             l50.layer = 0;
             l50.unk18 = facing;
-            Vf9(&l50);
+            SpawnObject(&l50);
         }
         if (frame == 0x11 && timer == 0) {
             l50.type = 0x1a7;
@@ -5507,7 +5507,7 @@ void CKano::Vf6()
             l50.layer = 1;
             l50.unk0 = 1;
             l50.unk18 = facing;
-            Vf9(&l50);
+            SpawnObject(&l50);
             unk2c8 = 0x11;
         }
         timer++;
@@ -5520,7 +5520,7 @@ void CKano::Vf6()
             }
             if (frame >= x8) {
                 pattern = 0;
-                Vf0();
+                StartPattern();
             }
         }
         break;
@@ -5564,14 +5564,14 @@ void CKano::Vf6()
             l50.scale = 2;
             l50.layer = 1;
             l50.unk18 = facing;
-            Vf9(&l50);
+            SpawnObject(&l50);
             l50.type = 0x197;
             l50.x = (double)(int)x;
             l50.y = (double)(int)y;
             l50.scale = 2;
             l50.layer = 0;
             l50.unk18 = facing;
-            Vf9(&l50);
+            SpawnObject(&l50);
         }
         if (frame == 0xc && timer == 0) {
             l50.type = 0x1ac;
@@ -5581,7 +5581,7 @@ void CKano::Vf6()
             l50.layer = 1;
             l50.unk0 = 1;
             l50.unk18 = facing;
-            Vf9(&l50);
+            SpawnObject(&l50);
             unk2c8 = 0xf;
         }
         timer++;
@@ -5594,7 +5594,7 @@ void CKano::Vf6()
             }
             if (frame >= x8) {
                 pattern = 0;
-                Vf0();
+                StartPattern();
             }
         }
         break;
@@ -5625,14 +5625,14 @@ void CKano::Vf6()
             l50.scale = 2;
             l50.layer = 1;
             l50.unk18 = facing;
-            Vf9(&l50);
+            SpawnObject(&l50);
             l50.type = 0x197;
             l50.x = (double)(int)x;
             l50.y = (double)(int)y;
             l50.scale = 2;
             l50.layer = 0;
             l50.unk18 = facing;
-            Vf9(&l50);
+            SpawnObject(&l50);
         }
         if (frame == 8 && timer == 0) {
             unk14c = 0x78;
@@ -5657,7 +5657,7 @@ void CKano::Vf6()
             l50.scale = 2;
             l50.unk0 = 1;
             l50.layer = 1;
-            Vf9(&l50);
+            SpawnObject(&l50);
         }
         timer++;
         if (timer >= l4) {
@@ -5669,7 +5669,7 @@ void CKano::Vf6()
             }
             if (frame >= x8) {
                 pattern = 0;
-                Vf0();
+                StartPattern();
             }
         }
         break;
@@ -5718,7 +5718,7 @@ void CKano::Vf6()
             }
             if (frame >= x8) {
                 pattern = 0;
-                Vf0();
+                StartPattern();
             }
         }
         break;
@@ -5763,7 +5763,7 @@ void CKano::Vf6()
                 l50.unk18 = 1;
                 l50.screen = 1;
                 l50.unk30 = 1;
-                Vf9(&l50);
+                SpawnObject(&l50);
             }
             if (frame == 8) {
                 (*m_opponent)->pattern = 0x64;
@@ -5781,7 +5781,7 @@ void CKano::Vf6()
             }
             if (frame >= x8) {
                 pattern = 0;
-                Vf0();
+                StartPattern();
             }
         }
     }

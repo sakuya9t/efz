@@ -53,21 +53,21 @@ void CPlayer::Unk40e740()
             if (m_command >= 3 && m_command <= 5) {
                 if (m_command == 3) {
                     if (pattern != 0xa) {
-                        Vf0();
+                        StartPattern();
                     }
                     pattern = 0xa;
                     return;
                 }
                 if (m_command == 4) {
                     if (pattern != 0xb) {
-                        Vf0();
+                        StartPattern();
                     }
                     pattern = 0xb;
                     return;
                 }
                 if (m_command == 5) {
                     if (pattern != 0xc) {
-                        Vf0();
+                        StartPattern();
                     }
                     pattern = 0xc;
                     return;
@@ -75,21 +75,21 @@ void CPlayer::Unk40e740()
             } else {
                 if (m_inputX == 0) {
                     if (pattern != 4) {
-                        Vf0();
+                        StartPattern();
                     }
                     pattern = 4;
                     return;
                 }
                 if (m_inputX == facing) {
                     if (pattern != 5) {
-                        Vf0();
+                        StartPattern();
                     }
                     pattern = 5;
                     return;
                 }
                 if (m_inputX == -facing) {
                     if (pattern != 6) {
-                        Vf0();
+                        StartPattern();
                     }
                     pattern = 6;
                     return;
@@ -99,7 +99,7 @@ void CPlayer::Unk40e740()
         if (m_inputY == 1) {
             if (pattern != 8 && pattern != 3) {
                 pattern = 8;
-                Vf0();
+                StartPattern();
                 FaceOpponent();
                 return;
             }
@@ -114,13 +114,13 @@ void CPlayer::Unk40e740()
             FaceOpponent();
             if (m_inputX == facing) {
                 if (pattern != 1) {
-                    Vf0();
+                    StartPattern();
                 }
                 pattern = 1;
                 return;
             }
             if (pattern != 2) {
-                Vf0();
+                StartPattern();
             }
             pattern = 2;
             return;
@@ -128,7 +128,7 @@ void CPlayer::Unk40e740()
         if (pattern == 3 || pattern == 8) {
             pattern = 7;
             FaceOpponent();
-            Vf0();
+            StartPattern();
             return;
         }
         if (pattern == 7 || pattern == 0xd) {
@@ -136,7 +136,7 @@ void CPlayer::Unk40e740()
             return;
         }
         if (pattern != 0) {
-            Vf0();
+            StartPattern();
         }
         pattern = 0;
         FaceOpponent();
@@ -198,7 +198,7 @@ CPlayer::~CPlayer()
     delete[] m_patterns;
 }
 
-void CPlayer::Vf12()
+void CPlayer::Reset()
 {
     int v4;
 
@@ -253,9 +253,9 @@ void CPlayer::Vf12()
     }
     unk2c8 = -1;
     unk2c9 = -1;
-    unk2ca = 0;
-    unk2cc = 0;
-    Unk413040();
+    m_objectHead = 0;
+    m_objectTail = 0;
+    ClearObjects();
     m_afterimages.pos = 0;
     m_afterimages.unk0 = 0;
     m_afterimages.unk2 = 0;
@@ -268,7 +268,7 @@ void CPlayer::Vf12()
     m_maxDamage = 0;
 }
 
-void CPlayer::Vf0()
+void CPlayer::StartPattern()
 {
     frame = 0;
     timer = 0;
@@ -318,7 +318,7 @@ void CPlayer::Unk40f230()
             }
         }
         if (pattern < 0x32) {
-            Vf3();
+            Move();
             unkb8 = 0.0;
             (*m_opponent)->unkb8 = 0.0;
             if (unk30ec != 0 && (*m_opponent)->pattern < 0x32) {
@@ -338,7 +338,7 @@ void CPlayer::Unk40f230()
         if (pattern >= 0x32 && pattern < 0x96 && unk134 <= 0.0f && (m_patterns[pattern].frames[frame].flagsAA & 0x400) == 0) {
             Unk40f470();
         }
-        Vf4();
+        StartCommand();
     }
 }
 
@@ -351,14 +351,14 @@ void CPlayer::Unk40f470()
     if (y < 0.0 && unk128 == 0 && (m_pressA != 0 || m_pressB != 0 || m_pressC != 0 || m_pressD != 0)) {
         if (m_inputX == facing) {
             if (pattern != 0x9d) {
-                Vf0();
+                StartPattern();
             }
             pattern = 0x9d;
             return;
         }
         if (m_inputX == -facing) {
             if (pattern != 0x9e) {
-                Vf0();
+                StartPattern();
             }
             pattern = 0x9e;
         }
@@ -369,7 +369,7 @@ void CPlayer::Unk40f580()
 {
     int v4;
 
-    v4 = unk2cc;
+    v4 = m_objectTail;
     if (unk14a == 0 && (*m_opponent)->unk14c == 0) {
         if ((char)Unk40ff70() * facing * (vx + unkb0 + (*m_opponent)->unkb8 * ((*m_opponent)->unkd0 != 0 && unk14c == 0)) >= 0.0) {
             x = (vx + unkb0 + (*m_opponent)->unkb8 * ((*m_opponent)->unkd0 != 0 && unk14c == 0)) * facing + x;
@@ -384,8 +384,8 @@ void CPlayer::Unk40f580()
             y = 0.0;
         }
     }
-    while (v4 != unk2ca) {
-        if (unk3d0[v4] != 0 && (unk14c <= 0 || m_objects[v4].unk88 != 0) && m_objects[v4].unk86 == 0 && (*m_opponent)->unk14c == 0) {
+    while (v4 != m_objectHead) {
+        if (m_objectActive[v4] != 0 && (unk14c <= 0 || m_objects[v4].unk88 != 0) && m_objects[v4].unk86 == 0 && (*m_opponent)->unk14c == 0) {
             m_objects[v4].x += (m_objects[v4].vx + 0.0 * m_objects[v4].unk70) * m_objects[v4].facing;
             m_objects[v4].y = m_objects[v4].y + m_objects[v4].vy;
         }
@@ -458,9 +458,9 @@ void CPlayer::Unk40f980()
             unk120 = 0;
             unk118 = 0.0;
         }
-        v4 = unk2cc;
-        while (v4 != unk2ca) {
-            if (unk3d0[v4] != 0) {
+        v4 = m_objectTail;
+        while (v4 != m_objectHead) {
+            if (m_objectActive[v4] != 0) {
                 if (m_objects[v4].unk86 > 0) {
                     m_objects[v4].unk86--;
                 } else {
@@ -542,7 +542,7 @@ int CPlayer::Unk410050(int p1, int p2)
 
 int CPlayer::Unk4100f0(int p1)
 {
-    if (unka4 != 0) {
+    if (m_cpu != 0) {
         if (m_game->unk1364 == 1) {
             if (m_game->unk1348 == 0) {
                 return 0;
@@ -735,7 +735,7 @@ void CPlayer::Unk410b10(BYTE p1, int p2)
     m_game->unkf33 = m_side;
 }
 
-void CPlayer::Vf11()
+void CPlayer::Load()
 {
     char v2c[32];
     char vc[8];
@@ -784,8 +784,8 @@ void CPlayer::Vf11()
         strcat(v2c, "\\000.bmp");
         m_graphics->LoadPaletteBmp(m_game->m_palette, (const char*)v2c, m_paletteIndex * 0x28, m_side * 0x28 + 0x5f, 0x28);
     }
-    Vf12();
-    if (unka4 == 0) {
+    Reset();
+    if (m_cpu == 0) {
         if ((m_game->unk1364 == 0 || m_game->unk1364 == 2) && m_game->unk1358 == 1) {
             ((CharRecord*)&unk3118)->Load(m_name);
             unk3118++;
@@ -992,11 +992,11 @@ void CPlayer::Unk411ae0()
     }
 }
 
-void CPlayer::Unk411be0()
+void CPlayer::ReadInput()
 {
     BYTE v1;
 
-    if (unka4 != 0) {
+    if (m_cpu != 0) {
         if (m_game->unk1364 == 1) {
             m_pressA = 0;
             m_pressB = 0;
@@ -1012,7 +1012,7 @@ void CPlayer::Unk411be0()
             }
             return;
         }
-        Vf5();
+        CpuInput();
         if (m_game->unk1350 != 0 || m_game->unk1354 != 0) {
             m_pressA = 0;
             m_pressB = 0;
@@ -1106,7 +1106,7 @@ void CPlayer::Unk411be0()
     } else {
         unk150 = 1;
     }
-    Vf2();
+    ReadCommand();
 }
 
 void CPlayer::Unk4121a0(int p1, int p2)

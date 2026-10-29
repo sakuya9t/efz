@@ -499,9 +499,9 @@ void CScene3::Unk762c50()
                 m_graphics->BlitShadow(v14, m_players[l18]->surfaces[*(WORD*)(v1c + 2)], v30, m_players[l18]->colorKey, m_players[l18]->facing == -1, 0xb0);
             }
         }
-        v34 = m_players[l18]->unk2cc;
-        while (v34 != m_players[l18]->unk2ca) {
-            if (m_players[l18]->unk3d0[v34] != 0 && m_players[l18]->m_objects[v34].unk58 != 0 && (m_players[l18]->m_objects[v34].unk8c != 0 || m_game->unk1420e == 0)) {
+        v34 = m_players[l18]->m_objectTail;
+        while (v34 != m_players[l18]->m_objectHead) {
+            if (m_players[l18]->m_objectActive[v34] != 0 && m_players[l18]->m_objects[v34].unk58 != 0 && (m_players[l18]->m_objects[v34].unk8c != 0 || m_game->unk1420e == 0)) {
                 v1c = (char*)&m_players[l18]->anims[m_players[l18]->m_objects[v34].pattern].frames[m_players[l18]->m_objects[v34].frame].duration;
                 if (*(short*)(v1c + 6) < *(short*)(v1c + 0xa)) {
                     v20 = *(short*)(v1c + 6);

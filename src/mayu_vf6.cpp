@@ -1,4 +1,4 @@
-// CMayu::Vf6 (0x5c8580-0x5dddef), the per-state update. It is a file of its own,
+// CMayu::UpdatePattern (0x5c8580-0x5dddef), the per-state update. It is a file of its own,
 // as in the original: its floating-point constants precede the rest of CMayu's
 // .rdata, which starts with its constructor's folder name (mayu.cpp).
 #include <stdlib.h>
@@ -6,7 +6,7 @@
 #include <math.h>
 #include "efz.h"
 
-void CMayu::Vf6()
+void CMayu::UpdatePattern()
 {
     WORD x8;
     WORD l4;
@@ -17,7 +17,7 @@ void CMayu::Vf6()
     EffectDesc l50;
     l4 = (short)anims[pattern].frames[frame].duration;
     x8 = anims[pattern].frameCount;
-    CPlayer::Unk413090((EffectDesc*)&l50);
+    CPlayer::InitEffectDesc((EffectDesc*)&l50);
     switch (pattern) {
     default:
         vx = 0.0;
@@ -94,7 +94,7 @@ void CMayu::Vf6()
             unk2c9 = 9;
             CPlayer::FaceOpponent();
             pattern = 0xd;
-            Vf0();
+            StartPattern();
         }
         break;
     case 5:
@@ -124,7 +124,7 @@ void CMayu::Vf6()
             unk2c9 = 9;
             CPlayer::FaceOpponent();
             pattern = 0xd;
-            Vf0();
+            StartPattern();
         }
         break;
     case 6:
@@ -154,7 +154,7 @@ void CMayu::Vf6()
             unk2c9 = 9;
             CPlayer::FaceOpponent();
             pattern = 0xd;
-            Vf0();
+            StartPattern();
         }
         break;
     case 7:
@@ -167,7 +167,7 @@ void CMayu::Vf6()
             frame++;
             if (frame >= x8) {
                 pattern = 0;
-                Vf0();
+                StartPattern();
             }
         }
         break;
@@ -181,7 +181,7 @@ void CMayu::Vf6()
             frame++;
             if (frame >= x8) {
                 pattern = 3;
-                Vf0();
+                StartPattern();
             }
         }
         break;
@@ -199,7 +199,7 @@ void CMayu::Vf6()
             y = 0.0;
             unk2c9 = 9;
             pattern = 0xd;
-            Vf0();
+            StartPattern();
         }
         break;
     case 0xa:
@@ -216,7 +216,7 @@ void CMayu::Vf6()
             y = 0.0;
             unk2c9 = 9;
             pattern = 0xd;
-            Vf0();
+            StartPattern();
         }
         break;
     case 0xd:
@@ -232,7 +232,7 @@ void CMayu::Vf6()
                 if (m_inputY == 1) {
                     pattern = 3;
                 }
-                Vf0();
+                StartPattern();
             }
         }
         break;
@@ -256,7 +256,7 @@ void CMayu::Vf6()
             unk2c9 = 9;
             CPlayer::FaceOpponent();
             pattern = 0xd;
-            Vf0();
+            StartPattern();
         }
         break;
     case 0xf:
@@ -279,7 +279,7 @@ void CMayu::Vf6()
             unk2c9 = 9;
             CPlayer::FaceOpponent();
             pattern = 0xd;
-            Vf0();
+            StartPattern();
         }
         break;
     case 0x10:
@@ -302,7 +302,7 @@ void CMayu::Vf6()
             unk2c9 = 9;
             CPlayer::FaceOpponent();
             pattern = 0xd;
-            Vf0();
+            StartPattern();
         }
         break;
     case 0x2f:
@@ -363,7 +363,7 @@ void CMayu::Vf6()
                 if (m_inputY == 1) {
                     pattern = 3;
                 }
-                Vf0();
+                StartPattern();
             }
         }
         break;
@@ -398,7 +398,7 @@ void CMayu::Vf6()
                 if (m_inputY == 1) {
                     pattern = 3;
                 }
-                Vf0();
+                StartPattern();
             }
         }
         break;
@@ -433,7 +433,7 @@ void CMayu::Vf6()
                 if (m_inputY == 1) {
                     pattern = 3;
                 }
-                Vf0();
+                StartPattern();
             }
         }
         break;
@@ -468,7 +468,7 @@ void CMayu::Vf6()
                 if (m_inputY == 1) {
                     pattern = 3;
                 }
-                Vf0();
+                StartPattern();
             }
         }
         break;
@@ -503,7 +503,7 @@ void CMayu::Vf6()
                 if (m_inputY == 1) {
                     pattern = 3;
                 }
-                Vf0();
+                StartPattern();
             }
         }
         break;
@@ -538,7 +538,7 @@ void CMayu::Vf6()
                 if (m_inputY == 1) {
                     pattern = 3;
                 }
-                Vf0();
+                StartPattern();
             }
         }
         break;
@@ -570,7 +570,7 @@ void CMayu::Vf6()
             frame++;
             if (frame >= x8) {
                 pattern = 3;
-                Vf0();
+                StartPattern();
             }
         }
         break;
@@ -602,7 +602,7 @@ void CMayu::Vf6()
             frame++;
             if (frame >= x8) {
                 pattern = 3;
-                Vf0();
+                StartPattern();
             }
         }
         break;
@@ -634,7 +634,7 @@ void CMayu::Vf6()
             frame++;
             if (frame >= x8) {
                 pattern = 3;
-                Vf0();
+                StartPattern();
             }
         }
         break;
@@ -674,10 +674,10 @@ void CMayu::Vf6()
             y = 0.0;
             if (unk12c != 0) {
                 pattern = 0x61;
-                Vf0();
+                StartPattern();
             } else {
                 pattern = 0x62;
-                Vf0();
+                StartPattern();
             }
         }
         break;
@@ -717,10 +717,10 @@ void CMayu::Vf6()
             y = 0.0;
             if (unk12c != 0) {
                 pattern = 0x61;
-                Vf0();
+                StartPattern();
             } else {
                 pattern = 0x62;
-                Vf0();
+                StartPattern();
             }
         }
         break;
@@ -760,10 +760,10 @@ void CMayu::Vf6()
             y = 0.0;
             if (unk12c != 0) {
                 pattern = 0x61;
-                Vf0();
+                StartPattern();
             } else {
                 pattern = 0x62;
-                Vf0();
+                StartPattern();
             }
         }
         break;
@@ -798,10 +798,10 @@ void CMayu::Vf6()
             y = 0.0;
             if (unk12c != 0) {
                 pattern = 0x61;
-                Vf0();
+                StartPattern();
             } else {
                 pattern = 0x62;
-                Vf0();
+                StartPattern();
             }
         }
         break;
@@ -836,10 +836,10 @@ void CMayu::Vf6()
             y = 0.0;
             if (unk12c != 0) {
                 pattern = 0x61;
-                Vf0();
+                StartPattern();
             } else {
                 pattern = 0x62;
-                Vf0();
+                StartPattern();
             }
         }
         break;
@@ -849,7 +849,7 @@ void CMayu::Vf6()
         }
         if (frame > 0 && (char)CPlayer::Unk40ff70() != 0) {
             pattern = 0x46;
-            Vf0();
+            StartPattern();
             break;
         }
         if (frame == 0 && timer == 0) {
@@ -884,10 +884,10 @@ void CMayu::Vf6()
             y = 0.0;
             if (unk12c != 0) {
                 pattern = 0x61;
-                Vf0();
+                StartPattern();
             } else {
                 pattern = 0x62;
-                Vf0();
+                StartPattern();
             }
         }
         break;
@@ -897,7 +897,7 @@ void CMayu::Vf6()
         }
         if (frame > 0 && (char)CPlayer::Unk40ff70() != 0) {
             pattern = 0x46;
-            Vf0();
+            StartPattern();
             break;
         }
         if (frame == 0 && timer == 0) {
@@ -932,10 +932,10 @@ void CMayu::Vf6()
             y = 0.0;
             if (unk12c != 0) {
                 pattern = 0x61;
-                Vf0();
+                StartPattern();
             } else {
                 pattern = 0x62;
-                Vf0();
+                StartPattern();
             }
         }
         break;
@@ -945,7 +945,7 @@ void CMayu::Vf6()
         }
         if (frame > 0 && (char)CPlayer::Unk40ff70() != 0) {
             pattern = 0x46;
-            Vf0();
+            StartPattern();
             break;
         }
         if (frame == 0 && timer == 0) {
@@ -975,10 +975,10 @@ void CMayu::Vf6()
             y = 0.0;
             if (unk12c != 0) {
                 pattern = 0x61;
-                Vf0();
+                StartPattern();
             } else {
                 pattern = 0x62;
-                Vf0();
+                StartPattern();
             }
         }
         break;
@@ -988,7 +988,7 @@ void CMayu::Vf6()
         }
         if (frame > 0 && (char)CPlayer::Unk40ff70() != 0) {
             pattern = 0x46;
-            Vf0();
+            StartPattern();
             break;
         }
         if (frame == 0 && timer == 0) {
@@ -1018,10 +1018,10 @@ void CMayu::Vf6()
             y = 0.0;
             if (unk12c != 0) {
                 pattern = 0x61;
-                Vf0();
+                StartPattern();
             } else {
                 pattern = 0x62;
-                Vf0();
+                StartPattern();
             }
         }
         break;
@@ -1035,7 +1035,7 @@ void CMayu::Vf6()
         timer++;
         if ((char)CPlayer::Unk40ff70() != 0) {
             pattern = 0x46;
-            Vf0();
+            StartPattern();
             break;
         }
         if (timer >= l4) {
@@ -1049,10 +1049,10 @@ void CMayu::Vf6()
             y = 0.0;
             if (unk12c != 0) {
                 pattern = 0x61;
-                Vf0();
+                StartPattern();
             } else {
                 pattern = 0x62;
-                Vf0();
+                StartPattern();
             }
         }
         break;
@@ -1075,10 +1075,10 @@ void CMayu::Vf6()
             y = 0.0;
             if (unk12c != 0) {
                 pattern = 0x61;
-                Vf0();
+                StartPattern();
             } else {
                 pattern = 0x62;
-                Vf0();
+                StartPattern();
             }
         }
         break;
@@ -1114,10 +1114,10 @@ void CMayu::Vf6()
             y = 0.0;
             if (unk12c != 0) {
                 pattern = 0x61;
-                Vf0();
+                StartPattern();
             } else {
                 pattern = 0x62;
-                Vf0();
+                StartPattern();
             }
         }
         break;
@@ -1152,10 +1152,10 @@ void CMayu::Vf6()
             y = 0.0;
             if (unk12c != 0) {
                 pattern = 0x61;
-                Vf0();
+                StartPattern();
             } else {
                 pattern = 0x62;
-                Vf0();
+                StartPattern();
             }
         }
         break;
@@ -1179,7 +1179,7 @@ void CMayu::Vf6()
                 if (m_inputY == 1) {
                     pattern = 3;
                 }
-                Vf0();
+                StartPattern();
             }
         }
         break;
@@ -1203,7 +1203,7 @@ void CMayu::Vf6()
                 if (m_inputY == 1) {
                     pattern = 3;
                 }
-                Vf0();
+                StartPattern();
             }
         }
         break;
@@ -1224,7 +1224,7 @@ void CMayu::Vf6()
             frame++;
             if (frame >= x8) {
                 pattern = 3;
-                Vf0();
+                StartPattern();
             }
         }
         break;
@@ -1261,7 +1261,7 @@ void CMayu::Vf6()
                 if (m_inputY == 1) {
                     pattern = 3;
                 }
-                Vf0();
+                StartPattern();
             }
         }
         break;
@@ -1298,7 +1298,7 @@ void CMayu::Vf6()
                 if (m_inputY == 1) {
                     pattern = 3;
                 }
-                Vf0();
+                StartPattern();
             }
         }
         break;
@@ -1332,7 +1332,7 @@ void CMayu::Vf6()
             frame++;
             if (frame >= x8) {
                 pattern = 3;
-                Vf0();
+                StartPattern();
             }
         }
         break;
@@ -1346,7 +1346,7 @@ void CMayu::Vf6()
             l50.y = (double)(int)y;
             l50.unk18 = facing;
             l50.layer = 1;
-            Vf9(&l50);
+            SpawnObject(&l50);
             m_gauge = m_gauge + 0x1e;
             vx = unkc0;
             vy = unkc8;
@@ -1369,10 +1369,10 @@ void CMayu::Vf6()
             y = 0.0;
             if (unk12c != 0) {
                 pattern = 0x61;
-                Vf0();
+                StartPattern();
             } else {
                 pattern = 0x62;
-                Vf0();
+                StartPattern();
             }
         }
         break;
@@ -1415,10 +1415,10 @@ void CMayu::Vf6()
             y = 0.0;
             if (unk12c != 0) {
                 pattern = 0x61;
-                Vf0();
+                StartPattern();
             } else {
                 pattern = 0x62;
-                Vf0();
+                StartPattern();
             }
         }
         break;
@@ -1432,7 +1432,7 @@ void CMayu::Vf6()
                 l50.layer = 0;
                 l50.unk0 = 1;
                 l50.unk18 = facing;
-                Vf9(&l50);
+                SpawnObject(&l50);
                 unk3144 = 1;
             }
             if (unk120 != 0) {
@@ -1469,7 +1469,7 @@ void CMayu::Vf6()
             frame++;
             if (frame >= x8) {
                 pattern = 0;
-                Vf0();
+                StartPattern();
                 CPlayer::FaceOpponent();
             }
         }
@@ -1484,7 +1484,7 @@ void CMayu::Vf6()
                 l50.layer = 0;
                 l50.unk0 = 1;
                 l50.unk18 = facing;
-                Vf9(&l50);
+                SpawnObject(&l50);
                 unk3144 = 1;
             }
             if (unk120 != 0) {
@@ -1521,7 +1521,7 @@ void CMayu::Vf6()
             frame++;
             if (frame >= x8) {
                 pattern = 0;
-                Vf0();
+                StartPattern();
                 CPlayer::FaceOpponent();
             }
         }
@@ -1536,7 +1536,7 @@ void CMayu::Vf6()
                 l50.layer = 0;
                 l50.unk0 = 1;
                 l50.unk18 = facing;
-                Vf9(&l50);
+                SpawnObject(&l50);
                 unk3144 = 1;
             }
             if (unk120 != 0) {
@@ -1554,7 +1554,7 @@ void CMayu::Vf6()
             frame++;
             if (frame >= x8) {
                 pattern = 0;
-                Vf0();
+                StartPattern();
                 CPlayer::FaceOpponent();
             }
         }
@@ -1562,10 +1562,10 @@ void CMayu::Vf6()
             y = 0.0;
             if (unk12c != 0) {
                 pattern = 0x61;
-                Vf0();
+                StartPattern();
             } else {
                 pattern = 0x62;
-                Vf0();
+                StartPattern();
             }
         }
         break;
@@ -1579,7 +1579,7 @@ void CMayu::Vf6()
                 l50.layer = 0;
                 l50.unk0 = 1;
                 l50.unk18 = facing;
-                Vf9(&l50);
+                SpawnObject(&l50);
                 unk3144 = 1;
             }
             if (unk3138 == 0) {
@@ -1606,10 +1606,10 @@ void CMayu::Vf6()
             y = 0.0;
             if (unk12c != 0) {
                 pattern = 0x61;
-                Vf0();
+                StartPattern();
             } else {
                 pattern = 0x62;
-                Vf0();
+                StartPattern();
             }
         }
         break;
@@ -1622,7 +1622,7 @@ void CMayu::Vf6()
             l50.unk18 = 1;
             l50.scale = 0;
             l50.layer = 0;
-            Vf9(&l50);
+            SpawnObject(&l50);
         }
         timer++;
         if (timer >= l4) {
@@ -1630,7 +1630,7 @@ void CMayu::Vf6()
             frame++;
             if (frame >= x8) {
                 pattern = 0;
-                Vf0();
+                StartPattern();
             }
         }
         break;
@@ -1662,7 +1662,7 @@ void CMayu::Vf6()
                 if (m_inputY == 1) {
                     pattern = 3;
                 }
-                Vf0();
+                StartPattern();
             }
         }
         break;
@@ -1685,7 +1685,7 @@ void CMayu::Vf6()
             frame++;
             if (frame >= x8) {
                 pattern = 0x63;
-                Vf0();
+                StartPattern();
             }
         }
         break;
@@ -1708,7 +1708,7 @@ void CMayu::Vf6()
             frame++;
             if (frame >= x8) {
                 pattern = 0x63;
-                Vf0();
+                StartPattern();
             }
         }
         break;
@@ -1716,7 +1716,7 @@ void CMayu::Vf6()
         timer++;
         if (m_hp > 0 && timer > 0x45 && frame == 0) {
             pattern = 0x60;
-            Vf0();
+            StartPattern();
         }
         if (timer >= l4) {
             timer = 0;
@@ -1726,7 +1726,7 @@ void CMayu::Vf6()
             }
             if (frame >= x8) {
                 pattern = 0x60;
-                Vf0();
+                StartPattern();
             }
         }
         break;
@@ -1765,7 +1765,7 @@ void CMayu::Vf6()
                 if (m_inputY == 1) {
                     pattern = 3;
                 }
-                Vf0();
+                StartPattern();
             }
         }
         break;
@@ -1804,7 +1804,7 @@ void CMayu::Vf6()
                 if (m_inputY == 1) {
                     pattern = 3;
                 }
-                Vf0();
+                StartPattern();
             }
         }
         break;
@@ -1843,7 +1843,7 @@ void CMayu::Vf6()
                 if (m_inputY == 1) {
                     pattern = 3;
                 }
-                Vf0();
+                StartPattern();
             }
         }
         break;
@@ -1879,7 +1879,7 @@ void CMayu::Vf6()
             }
             if (frame >= x8) {
                 pattern = 3;
-                Vf0();
+                StartPattern();
             }
         }
         break;
@@ -1915,7 +1915,7 @@ void CMayu::Vf6()
             }
             if (frame >= x8) {
                 pattern = 3;
-                Vf0();
+                StartPattern();
             }
         }
         break;
@@ -1951,7 +1951,7 @@ void CMayu::Vf6()
             }
             if (frame >= x8) {
                 pattern = 3;
-                Vf0();
+                StartPattern();
             }
         }
         break;
@@ -1969,7 +1969,7 @@ void CMayu::Vf6()
             frame++;
             if (frame >= x8) {
                 pattern = 9;
-                Vf0();
+                StartPattern();
             }
         }
         if (y + vy >= 0.0) {
@@ -1977,7 +1977,7 @@ void CMayu::Vf6()
             unk2c9 = 9;
             CPlayer::FaceOpponent();
             pattern = 0xd;
-            Vf0();
+            StartPattern();
         }
         break;
     case 0x9d:
@@ -2000,7 +2000,7 @@ void CMayu::Vf6()
             frame++;
             if (frame >= x8) {
                 pattern = 9;
-                Vf0();
+                StartPattern();
             }
         }
         if (y + vy >= 0.0) {
@@ -2008,7 +2008,7 @@ void CMayu::Vf6()
             unk2c9 = 9;
             CPlayer::FaceOpponent();
             pattern = 0xd;
-            Vf0();
+            StartPattern();
         }
         break;
     case 0x9e:
@@ -2031,7 +2031,7 @@ void CMayu::Vf6()
             frame++;
             if (frame >= x8) {
                 pattern = 9;
-                Vf0();
+                StartPattern();
             }
         }
         if (y + vy >= 0.0) {
@@ -2039,7 +2039,7 @@ void CMayu::Vf6()
             unk2c9 = 9;
             CPlayer::FaceOpponent();
             pattern = 0xd;
-            Vf0();
+            StartPattern();
         }
         break;
     case 0xa1:
@@ -2061,7 +2061,7 @@ void CMayu::Vf6()
             frame++;
             if (frame >= x8) {
                 pattern = 9;
-                Vf0();
+                StartPattern();
                 ay = 0.035;
             }
         }
@@ -2091,8 +2091,8 @@ void CMayu::Vf6()
         vy = vy + ay;
         if (y + vy > 0.0) {
             pattern = 0xd;
-            Vf0();
-            Vf0();
+            StartPattern();
+            StartPattern();
             y = 0.0;
             break;
         }
@@ -2130,7 +2130,7 @@ void CMayu::Vf6()
         }
         if (y + vy > 0.0) {
             pattern = 0xb2;
-            Vf0();
+            StartPattern();
             break;
         }
         timer++;
@@ -2165,7 +2165,7 @@ void CMayu::Vf6()
         if (y + vy > 0.0) {
             CPlayer::StopMoving();
             y = 0.0;
-            Vf0();
+            StartPattern();
             pattern = 0xd;
             break;
         }
@@ -2206,7 +2206,7 @@ void CMayu::Vf6()
         }
         if (m_inputX == facing && unk313c >= 0x78) {
             pattern = 9;
-            Vf0();
+            StartPattern();
             vx = 1.3;
             ay = 0.03;
             if (CPlayer::FaceOpponent() != 0) {
@@ -2215,7 +2215,7 @@ void CMayu::Vf6()
         }
         if (m_inputX != facing && unk3138 >= 0x30) {
             pattern = 9;
-            Vf0();
+            StartPattern();
             vx = 1.3;
             ay = 0.03;
             if (CPlayer::FaceOpponent() != 0) {
@@ -2245,7 +2245,7 @@ void CMayu::Vf6()
         }
         if (m_inputX == -facing && unk313c >= 0x78) {
             pattern = 9;
-            Vf0();
+            StartPattern();
             vx = -0.9;
             ay = 0.03;
             if (CPlayer::FaceOpponent() != 0) {
@@ -2254,7 +2254,7 @@ void CMayu::Vf6()
         }
         if (m_inputX != -facing && unk3138 >= 0x30) {
             pattern = 9;
-            Vf0();
+            StartPattern();
             vx = -0.9;
             ay = 0.03;
             if (CPlayer::FaceOpponent() != 0) {
@@ -2298,7 +2298,7 @@ void CMayu::Vf6()
             if (frame >= x8) {
                 pattern = 0;
                 CPlayer::FaceOpponent();
-                Vf0();
+                StartPattern();
             }
         }
         break;
@@ -2327,7 +2327,7 @@ void CMayu::Vf6()
             }
             if (frame >= x8) {
                 pattern = 0;
-                Vf0();
+                StartPattern();
             }
         }
         break;
@@ -2356,7 +2356,7 @@ void CMayu::Vf6()
             }
             if (frame >= x8) {
                 pattern = 3;
-                Vf0();
+                StartPattern();
             }
         }
         break;
@@ -2390,7 +2390,7 @@ void CMayu::Vf6()
             frame++;
             if (frame >= x8) {
                 pattern = 9;
-                Vf0();
+                StartPattern();
             }
         }
         break;
@@ -2431,7 +2431,7 @@ void CMayu::Vf6()
                 if (ay == 0.0) {
                     ay = 0.035;
                 }
-                Vf0();
+                StartPattern();
             }
         }
         break;
@@ -2449,7 +2449,7 @@ void CMayu::Vf6()
                 if (m_inputY == 1) {
                     pattern = 3;
                 }
-                Vf0();
+                StartPattern();
                 break;
             }
         }
@@ -2484,7 +2484,7 @@ void CMayu::Vf6()
                 frame = frame - 4;
             }
             if (frame >= x8) {
-                Vf0();
+                StartPattern();
                 pattern = 0;
             }
         }
@@ -2501,7 +2501,7 @@ void CMayu::Vf6()
                 pattern = 6;
             }
             m_attackResult = 0;
-            Vf0();
+            StartPattern();
             break;
         }
         if (frame == 1 && timer == 0) {
@@ -2519,7 +2519,7 @@ void CMayu::Vf6()
             if (frame >= x8) {
                 pattern = 0;
                 CPlayer::FaceOpponent();
-                Vf0();
+                StartPattern();
             }
         }
         break;
@@ -2533,7 +2533,7 @@ void CMayu::Vf6()
                 pattern = 6;
             }
             m_attackResult = 0;
-            Vf0();
+            StartPattern();
             break;
         }
         if (frame == 0 && timer == 0) {
@@ -2555,7 +2555,7 @@ void CMayu::Vf6()
             if (frame >= x8) {
                 pattern = 0;
                 CPlayer::FaceOpponent();
-                Vf0();
+                StartPattern();
             }
         }
         break;
@@ -2584,7 +2584,7 @@ void CMayu::Vf6()
             if (frame >= x8) {
                 pattern = 0;
                 CPlayer::FaceOpponent();
-                Vf0();
+                StartPattern();
             }
         }
         break;
@@ -2608,7 +2608,7 @@ void CMayu::Vf6()
             if (frame >= x8) {
                 pattern = 0;
                 CPlayer::FaceOpponent();
-                Vf0();
+                StartPattern();
             }
         }
         break;
@@ -2624,7 +2624,7 @@ void CMayu::Vf6()
                 pattern = 6;
             }
             m_attackResult = 0;
-            Vf0();
+            StartPattern();
             break;
         }
         if (frame == 1 && timer == 0) {
@@ -2645,7 +2645,7 @@ void CMayu::Vf6()
                     pattern = 3;
                 }
                 CPlayer::FaceOpponent();
-                Vf0();
+                StartPattern();
             }
         }
         break;
@@ -2662,7 +2662,7 @@ void CMayu::Vf6()
                 pattern = 6;
             }
             m_attackResult = 0;
-            Vf0();
+            StartPattern();
             break;
         }
         if (frame == 2 && timer == 0) {
@@ -2696,7 +2696,7 @@ void CMayu::Vf6()
                     pattern = 3;
                 }
                 CPlayer::FaceOpponent();
-                Vf0();
+                StartPattern();
             }
         }
         break;
@@ -2732,7 +2732,7 @@ void CMayu::Vf6()
                     pattern = 3;
                 }
                 CPlayer::FaceOpponent();
-                Vf0();
+                StartPattern();
             }
         }
         break;
@@ -2748,7 +2748,7 @@ void CMayu::Vf6()
                 pattern = 0x10;
             }
             m_attackResult = 0;
-            Vf0();
+            StartPattern();
             break;
         }
         if (frame == 1 && timer == 0) {
@@ -2759,7 +2759,7 @@ void CMayu::Vf6()
         if (y + vy >= 0.0) {
             y = 0.0;
             pattern = 0xd;
-            Vf0();
+            StartPattern();
             break;
         }
         timer++;
@@ -2770,7 +2770,7 @@ void CMayu::Vf6()
                 m_attackResult = 0;
             }
             if (frame >= x8) {
-                Vf0();
+                StartPattern();
                 pattern = 9;
             }
         }
@@ -2787,7 +2787,7 @@ void CMayu::Vf6()
                 pattern = 0x10;
             }
             m_attackResult = 0;
-            Vf0();
+            StartPattern();
             break;
         }
         if (frame == 3 && timer == 0) {
@@ -2798,7 +2798,7 @@ void CMayu::Vf6()
         if (y + vy >= 0.0) {
             y = 0.0;
             pattern = 0xd;
-            Vf0();
+            StartPattern();
             break;
         }
         timer++;
@@ -2810,7 +2810,7 @@ void CMayu::Vf6()
             }
             if (frame >= x8) {
                 pattern = 9;
-                Vf0();
+                StartPattern();
             }
         }
         break;
@@ -2826,7 +2826,7 @@ void CMayu::Vf6()
                 pattern = 0x10;
             }
             m_attackResult = 0;
-            Vf0();
+            StartPattern();
             break;
         }
         if (frame == 4 && timer == 0) {
@@ -2837,7 +2837,7 @@ void CMayu::Vf6()
         if (y + vy >= 0.0) {
             y = 0.0;
             pattern = 0xd;
-            Vf0();
+            StartPattern();
             break;
         }
         timer++;
@@ -2849,7 +2849,7 @@ void CMayu::Vf6()
             }
             if (frame >= x8) {
                 pattern = 9;
-                Vf0();
+                StartPattern();
             }
         }
         break;
@@ -2897,7 +2897,7 @@ void CMayu::Vf6()
             if (frame >= x8) {
                 pattern = 0;
                 CPlayer::FaceOpponent();
-                Vf0();
+                StartPattern();
             }
         }
         break;
@@ -2914,7 +2914,7 @@ void CMayu::Vf6()
                 pattern = 6;
             }
             m_attackResult = 0;
-            Vf0();
+            StartPattern();
             break;
         }
         if (frame == 2 && timer == 0) {
@@ -2935,7 +2935,7 @@ void CMayu::Vf6()
                     pattern = 3;
                 }
                 CPlayer::FaceOpponent();
-                Vf0();
+                StartPattern();
             }
         }
         break;
@@ -2944,9 +2944,9 @@ void CMayu::Vf6()
         vy = 0.0;
         if (frame == 1 && m_attackResult == 3) {
             CPlayer::StopMoving();
-            Vf0();
+            StartPattern();
             (*m_opponent)->StopMoving();
-            (*m_opponent)->Vf0();
+            (*m_opponent)->StartPattern();
             pattern = 0xdd;
             (*m_opponent)->pattern = 0x6b;
             l50.type = 0;
@@ -2970,7 +2970,7 @@ void CMayu::Vf6()
             if (frame >= x8) {
                 pattern = 0;
                 CPlayer::FaceOpponent();
-                Vf0();
+                StartPattern();
             }
         }
         break;
@@ -2981,7 +2981,7 @@ void CMayu::Vf6()
         }
         if (frame == 3 && timer == 0) {
             (*m_opponent)->pattern = 0x3b;
-            (*m_opponent)->Vf0();
+            (*m_opponent)->StartPattern();
             (*m_opponent)->unkc0 = -2.5;
             (*m_opponent)->unkc8 = -1.0;
             (*m_opponent)->ay = 0.035;
@@ -3008,7 +3008,7 @@ void CMayu::Vf6()
             if (frame >= x8) {
                 pattern = 9;
                 CPlayer::FaceOpponent();
-                Vf0();
+                StartPattern();
             }
         }
         break;
@@ -3025,7 +3025,7 @@ void CMayu::Vf6()
                 pattern = 0x10;
             }
             m_attackResult = 0;
-            Vf0();
+            StartPattern();
             break;
         }
         if (frame == 0 && timer == 0) {
@@ -3039,7 +3039,7 @@ void CMayu::Vf6()
         if (y + vy >= 0.0) {
             y = 0.0;
             pattern = 0xe9;
-            Vf0();
+            StartPattern();
             frame = 2;
             break;
         }
@@ -3052,7 +3052,7 @@ void CMayu::Vf6()
             }
             if (frame >= x8) {
                 pattern = 0xa;
-                Vf0();
+                StartPattern();
             }
         }
         break;
@@ -3069,7 +3069,7 @@ void CMayu::Vf6()
                 pattern = 0x10;
             }
             m_attackResult = 0;
-            Vf0();
+            StartPattern();
             break;
         }
         if (frame == 0 && timer == 0) {
@@ -3083,7 +3083,7 @@ void CMayu::Vf6()
         if (y + vy >= 0.0) {
             y = 0.0;
             pattern = 0xe9;
-            Vf0();
+            StartPattern();
             frame = 1;
             break;
         }
@@ -3096,7 +3096,7 @@ void CMayu::Vf6()
             }
             if (frame >= x8) {
                 pattern = 0xa;
-                Vf0();
+                StartPattern();
             }
         }
         break;
@@ -3113,7 +3113,7 @@ void CMayu::Vf6()
                 pattern = 0x10;
             }
             m_attackResult = 0;
-            Vf0();
+            StartPattern();
             break;
         }
         if (frame == 0 && timer == 0) {
@@ -3127,7 +3127,7 @@ void CMayu::Vf6()
         if (y + vy >= 0.0) {
             y = 0.0;
             pattern = 0xe9;
-            Vf0();
+            StartPattern();
             frame = 1;
             break;
         }
@@ -3140,7 +3140,7 @@ void CMayu::Vf6()
             }
             if (frame >= x8) {
                 pattern = 0xa;
-                Vf0();
+                StartPattern();
             }
         }
         break;
@@ -3158,7 +3158,7 @@ void CMayu::Vf6()
                 if (m_inputY == 1) {
                     pattern = 3;
                 }
-                Vf0();
+                StartPattern();
             }
         }
         break;
@@ -3166,7 +3166,7 @@ void CMayu::Vf6()
         vy = vy + ay;
         if (frame == 2 && m_attackResult == 3) {
             (*m_opponent)->StopMoving();
-            (*m_opponent)->Vf0();
+            (*m_opponent)->StartPattern();
             (*m_opponent)->unk128 = 1;
             l50.type = 0;
             l50.x = (double)((int)x + facing * 0x16);
@@ -3218,7 +3218,7 @@ void CMayu::Vf6()
                 if (frame < 0xa) {
                     y = 0.0;
                     CPlayer::StopMoving();
-                    (*m_opponent)->Vf0();
+                    (*m_opponent)->StartPattern();
                     (*m_opponent)->pattern = 0x62;
                     (*m_opponent)->y = 0.0;
                     (*m_opponent)->x = facing + x;
@@ -3317,7 +3317,7 @@ void CMayu::Vf6()
                 ay = 0.035;
             }
             if (frame >= x8) {
-                Vf0();
+                StartPattern();
                 CPlayer::FaceOpponent();
                 pattern = 3;
             }
@@ -3329,10 +3329,10 @@ void CMayu::Vf6()
             m_hitsLeft = 0;
         }
         if (frame > 2 && frame < 8 && m_attackResult == 3) {
-            (*m_opponent)->Vf0();
+            (*m_opponent)->StartPattern();
             (*m_opponent)->StopMoving();
             (*m_opponent)->pattern = 0x6b;
-            Vf0();
+            StartPattern();
             pattern = 0xfd;
             y = unk2af8[0] + 0x32;
             x = (*m_opponent)->x + (-unk2ad0[0] - 0x14) * facing;
@@ -3379,7 +3379,7 @@ void CMayu::Vf6()
                 frame = 8;
             }
             if (frame >= x8) {
-                Vf0();
+                StartPattern();
                 pattern = 3;
                 CPlayer::FaceOpponent();
             }
@@ -3391,10 +3391,10 @@ void CMayu::Vf6()
             m_hitsLeft = 0;
         }
         if (frame > 2 && frame < 8 && m_attackResult == 3) {
-            (*m_opponent)->Vf0();
+            (*m_opponent)->StartPattern();
             (*m_opponent)->StopMoving();
             (*m_opponent)->pattern = 0x6b;
-            Vf0();
+            StartPattern();
             pattern = 0xfd;
             y = unk2af8[0] + 0x32;
             x = (*m_opponent)->x + (-unk2ad0[0] - 0x14) * facing;
@@ -3441,7 +3441,7 @@ void CMayu::Vf6()
                 frame = 8;
             }
             if (frame >= x8) {
-                Vf0();
+                StartPattern();
                 pattern = 3;
                 CPlayer::FaceOpponent();
             }
@@ -3465,10 +3465,10 @@ void CMayu::Vf6()
             m_game->CreateEffect((EffectDesc*)&l50);
         }
         if (frame > 2 && frame < 8 && m_attackResult == 3) {
-            (*m_opponent)->Vf0();
+            (*m_opponent)->StartPattern();
             (*m_opponent)->StopMoving();
             (*m_opponent)->pattern = 0x6b;
-            Vf0();
+            StartPattern();
             CPlayer::StopMoving();
             pattern = 0xfe;
             y = unk2af8[0] + 0x32;
@@ -3516,7 +3516,7 @@ void CMayu::Vf6()
                 frame = 8;
             }
             if (frame >= x8) {
-                Vf0();
+                StartPattern();
                 pattern = 3;
                 CPlayer::FaceOpponent();
             }
@@ -3545,14 +3545,14 @@ void CMayu::Vf6()
             vy = vy + ay;
         }
         if (frame > 3 && vy + y > 0.0) {
-            Vf0();
+            StartPattern();
             CPlayer::StopMoving();
             pattern = 3;
             y = 0.0;
             break;
         }
         if (frame == 4 && timer == 0) {
-            (*m_opponent)->Vf0();
+            (*m_opponent)->StartPattern();
             (*m_opponent)->pattern = 0x3f;
             (*m_opponent)->x = (-31.0 + vx) * facing + x;
             (*m_opponent)->y = -33.0 + vy + y;
@@ -3578,7 +3578,7 @@ void CMayu::Vf6()
             }
             if (frame >= x8) {
                 pattern = 0;
-                Vf0();
+                StartPattern();
             }
         }
         break;
@@ -3605,14 +3605,14 @@ void CMayu::Vf6()
             vy = vy + ay;
         }
         if (frame > 3 && vy + y > 0.0) {
-            Vf0();
+            StartPattern();
             CPlayer::StopMoving();
             pattern = 3;
             y = 0.0;
             break;
         }
         if (frame == 4 && timer == 0) {
-            (*m_opponent)->Vf0();
+            (*m_opponent)->StartPattern();
             (*m_opponent)->pattern = 0x43;
             (*m_opponent)->x = (-41.0 + vx) * facing + x;
             (*m_opponent)->y = -43.0 + vy + y;
@@ -3639,7 +3639,7 @@ void CMayu::Vf6()
             }
             if (frame >= x8) {
                 pattern = 0;
-                Vf0();
+                StartPattern();
             }
         }
         break;
@@ -3657,7 +3657,7 @@ void CMayu::Vf6()
             vy = vy + ay;
         }
         if (y + vy > 0.0) {
-            Vf0();
+            StartPattern();
             CPlayer::StopMoving();
             pattern = 0x102;
             y = 0.0;
@@ -3720,7 +3720,7 @@ void CMayu::Vf6()
             frame++;
             if (frame >= x8) {
                 pattern = 3;
-                Vf0();
+                StartPattern();
             }
         }
         break;
@@ -3735,18 +3735,18 @@ void CMayu::Vf6()
             frame++;
             if (frame >= x8) {
                 pattern = 3;
-                Vf0();
+                StartPattern();
             }
         }
         break;
     case 0x103:
         if (frame > 8 && frame < 0xf && m_holdA > 0) {
-            Vf0();
+            StartPattern();
             pattern = 0x106;
             break;
         }
         if (frame > 8 && frame < 0xf && m_holdB > 0) {
-            Vf0();
+            StartPattern();
             pattern = 0x107;
             break;
         }
@@ -3776,7 +3776,7 @@ void CMayu::Vf6()
             }
             if (frame >= x8) {
                 pattern = 3;
-                Vf0();
+                StartPattern();
                 CPlayer::FaceOpponent();
             }
         }
@@ -3793,12 +3793,12 @@ void CMayu::Vf6()
             }
         }
         if (m_command == 0xa && frame > 0xd) {
-            Vf0();
+            StartPattern();
             pattern = 0x122;
             break;
         }
         if (y < 0.0 && vy > 0.0 && m_pressA == 1) {
-            Vf0();
+            StartPattern();
             CPlayer::StopMoving();
             pattern = 0x100;
             break;
@@ -3840,7 +3840,7 @@ void CMayu::Vf6()
             }
             if (frame >= x8) {
                 pattern = 3;
-                Vf0();
+                StartPattern();
                 CPlayer::FaceOpponent();
             }
         }
@@ -3909,7 +3909,7 @@ void CMayu::Vf6()
             }
             if (frame >= x8) {
                 pattern = 3;
-                Vf0();
+                StartPattern();
                 CPlayer::FaceOpponent();
             }
         }
@@ -3945,7 +3945,7 @@ void CMayu::Vf6()
                 frame = frame - 4;
             }
             if (frame >= x8) {
-                Vf0();
+                StartPattern();
                 pattern = 3;
             }
         }
@@ -3962,13 +3962,13 @@ void CMayu::Vf6()
             }
         }
         if (y < 0.0 && vy > 0.0 && m_pressA == 1) {
-            Vf0();
+            StartPattern();
             CPlayer::StopMoving();
             pattern = 0x100;
             break;
         }
         if (vy + y > 0.0 && frame > 2 && frame < 0xa) {
-            Vf0();
+            StartPattern();
             CPlayer::StopMoving();
             y = 0.0;
             pattern = 0x102;
@@ -4003,7 +4003,7 @@ void CMayu::Vf6()
             frame++;
             m_attackResult = 0;
             if (frame >= x8) {
-                Vf0();
+                StartPattern();
                 pattern = 3;
                 CPlayer::StopMoving();
             }
@@ -4020,7 +4020,7 @@ void CMayu::Vf6()
             frame++;
             m_attackResult = 0;
             if (frame >= x8) {
-                Vf0();
+                StartPattern();
                 pattern = 3;
                 CPlayer::StopMoving();
             }
@@ -4067,7 +4067,7 @@ void CMayu::Vf6()
             if (frame >= x8) {
                 pattern = 0;
                 CPlayer::FaceOpponent();
-                Vf0();
+                StartPattern();
             }
         }
         break;
@@ -4112,7 +4112,7 @@ void CMayu::Vf6()
             if (frame >= x8) {
                 pattern = 0;
                 CPlayer::FaceOpponent();
-                Vf0();
+                StartPattern();
             }
         }
         break;
@@ -4172,7 +4172,7 @@ void CMayu::Vf6()
                 frame = frame - 4;
             }
             if (frame >= x8) {
-                Vf0();
+                StartPattern();
                 pattern = 0;
             }
         }
@@ -4249,7 +4249,7 @@ void CMayu::Vf6()
             if (vy + y > 0.0) {
                 y = 0.0;
                 CPlayer::StopMoving();
-                Vf0();
+                StartPattern();
                 frame = 0xe;
                 break;
             }
@@ -4259,7 +4259,7 @@ void CMayu::Vf6()
             if (vy + y > 0.0) {
                 y = 0.0;
                 vy = 0.0;
-                Vf0();
+                StartPattern();
                 unk3138 = (int)(vx * 100.0);
                 vx = 0.0;
                 frame = 7;
@@ -4281,7 +4281,7 @@ void CMayu::Vf6()
             }
             if (frame >= x8) {
                 pattern = 3;
-                Vf0();
+                StartPattern();
             }
         }
         break;
@@ -4290,7 +4290,7 @@ void CMayu::Vf6()
             CPlayer::StopMoving();
         }
         if (frame > 0x13 && m_command == 0xa) {
-            Vf0();
+            StartPattern();
             pattern = 0x106;
             break;
         }
@@ -4312,7 +4312,7 @@ void CMayu::Vf6()
                 vx = 2.5;
             }
             if (m_pressA == 1) {
-                Vf0();
+                StartPattern();
                 pattern = 0x10d;
                 if (m_inputX == -facing) {
                     facing = -facing;
@@ -4320,7 +4320,7 @@ void CMayu::Vf6()
                 break;
             }
             if (m_pressB == 1) {
-                Vf0();
+                StartPattern();
                 pattern = 0x10e;
                 if (m_inputX == -facing) {
                     facing = -facing;
@@ -4328,7 +4328,7 @@ void CMayu::Vf6()
                 break;
             }
             if (m_pressC == 1) {
-                Vf0();
+                StartPattern();
                 pattern = 0x10f;
                 if (m_inputX == -facing) {
                     facing = -facing;
@@ -4379,7 +4379,7 @@ void CMayu::Vf6()
             }
             if (frame >= x8) {
                 pattern = 3;
-                Vf0();
+                StartPattern();
                 CPlayer::FaceOpponent();
             }
         }
@@ -4399,10 +4399,10 @@ void CMayu::Vf6()
             m_hitsLeft = 0;
         }
         if (frame == 0x12 && m_attackResult == 3) {
-            (*m_opponent)->Vf0();
+            (*m_opponent)->StartPattern();
             (*m_opponent)->StopMoving();
             (*m_opponent)->pattern = 0x6b;
-            Vf0();
+            StartPattern();
             CPlayer::StopMoving();
             pattern = 0x113;
             y = unk2af8[0] + 0x32;
@@ -4458,7 +4458,7 @@ void CMayu::Vf6()
             }
             if (frame >= x8) {
                 pattern = 3;
-                Vf0();
+                StartPattern();
                 CPlayer::FaceOpponent();
             }
         }
@@ -4468,7 +4468,7 @@ void CMayu::Vf6()
             CPlayer::StopMoving();
         }
         if (frame > 0x13 && m_command == 0xa) {
-            Vf0();
+            StartPattern();
             pattern = 0x106;
             break;
         }
@@ -4490,7 +4490,7 @@ void CMayu::Vf6()
                 vx = 2.5;
             }
             if (m_pressA == 1) {
-                Vf0();
+                StartPattern();
                 pattern = 0x10d;
                 if (m_inputX == -facing) {
                     facing = -facing;
@@ -4498,7 +4498,7 @@ void CMayu::Vf6()
                 break;
             }
             if (m_pressB == 1) {
-                Vf0();
+                StartPattern();
                 pattern = 0x10e;
                 if (m_inputX == -facing) {
                     facing = -facing;
@@ -4506,7 +4506,7 @@ void CMayu::Vf6()
                 break;
             }
             if (m_pressC == 1) {
-                Vf0();
+                StartPattern();
                 pattern = 0x10f;
                 if (m_inputX == -facing) {
                     facing = -facing;
@@ -4558,7 +4558,7 @@ void CMayu::Vf6()
             }
             if (frame >= x8) {
                 pattern = 3;
-                Vf0();
+                StartPattern();
                 CPlayer::FaceOpponent();
             }
         }
@@ -4602,7 +4602,7 @@ void CMayu::Vf6()
         }
         if (frame == 0xa && timer == 0) {
             (*m_opponent)->StopMoving();
-            (*m_opponent)->Vf0();
+            (*m_opponent)->StartPattern();
             (*m_opponent)->pattern = 0x62;
             (*m_opponent)->y = 0.0;
             (*m_opponent)->x = x;
@@ -4616,7 +4616,7 @@ void CMayu::Vf6()
             m_game->CreateEffect((EffectDesc*)&l50);
         }
         if (frame == 0x13 && y + vy > 0.0) {
-            Vf0();
+            StartPattern();
             CPlayer::StopMoving();
             y = 0.0;
             pattern = 0xd;
@@ -4659,7 +4659,7 @@ void CMayu::Vf6()
         if (frame == 5 && m_attackResult == 3) {
             vx *= 0.15;
             vy *= 0.15;
-            Vf0();
+            StartPattern();
             pattern = 0x123;
             break;
         }
@@ -4679,7 +4679,7 @@ void CMayu::Vf6()
                 frame = frame - 6;
             }
             if (frame >= x8) {
-                Vf0();
+                StartPattern();
                 CPlayer::FaceOpponent();
                 pattern = 3;
             }
@@ -4701,7 +4701,7 @@ void CMayu::Vf6()
         if (frame == 5 && m_attackResult == 3) {
             vx *= 0.15;
             vy *= 0.15;
-            Vf0();
+            StartPattern();
             pattern = 0x123;
             break;
         }
@@ -4721,7 +4721,7 @@ void CMayu::Vf6()
                 frame = frame - 6;
             }
             if (frame >= x8) {
-                Vf0();
+                StartPattern();
                 CPlayer::FaceOpponent();
                 pattern = 3;
             }
@@ -4778,7 +4778,7 @@ void CMayu::Vf6()
                 frame = frame - 6;
             }
             if (frame >= x8) {
-                Vf0();
+                StartPattern();
                 CPlayer::FaceOpponent();
                 pattern = 3;
             }
@@ -4789,9 +4789,9 @@ void CMayu::Vf6()
         vy = 0.0;
         if (frame == 2 && m_attackResult == 3) {
             CPlayer::StopMoving();
-            Vf0();
+            StartPattern();
             (*m_opponent)->StopMoving();
-            (*m_opponent)->Vf0();
+            (*m_opponent)->StartPattern();
             pattern = 0x11c;
             (*m_opponent)->pattern = 0x6b;
             break;
@@ -4812,7 +4812,7 @@ void CMayu::Vf6()
             if (frame >= x8) {
                 pattern = 0;
                 CPlayer::FaceOpponent();
-                Vf0();
+                StartPattern();
             }
         }
         break;
@@ -4827,8 +4827,8 @@ void CMayu::Vf6()
         if (frame > 3 && vy + y > 0.0) {
             CPlayer::StopMoving();
             y = 0.0;
-            Vf0();
-            (*m_opponent)->Vf0();
+            StartPattern();
+            (*m_opponent)->StartPattern();
             pattern = 0xd;
             (*m_opponent)->pattern = 0x48;
             break;
@@ -4858,7 +4858,7 @@ void CMayu::Vf6()
             m_gauge = m_gauge + 0x23;
         }
         if (m_attackResult > 0) {
-            Vf0();
+            StartPattern();
             CPlayer::StopMoving();
             pattern = 0x120;
             break;
@@ -4895,7 +4895,7 @@ void CMayu::Vf6()
             m_gauge = m_gauge + 0x23;
         }
         if (m_attackResult > 0) {
-            Vf0();
+            StartPattern();
             CPlayer::StopMoving();
             pattern = 0x120;
             break;
@@ -4932,7 +4932,7 @@ void CMayu::Vf6()
             m_gauge = m_gauge + 0x23;
         }
         if (m_attackResult > 0) {
-            Vf0();
+            StartPattern();
             CPlayer::StopMoving();
             pattern = 0x120;
             break;
@@ -4982,7 +4982,7 @@ void CMayu::Vf6()
                 frame = frame - 4;
             }
             if (frame >= x8) {
-                Vf0();
+                StartPattern();
                 CPlayer::FaceOpponent();
                 pattern = 3;
             }
@@ -5036,7 +5036,7 @@ void CMayu::Vf6()
                 frame = frame - 4;
             }
             if (frame == 0x10) {
-                Vf0();
+                StartPattern();
                 CPlayer::StopMoving();
                 pattern = 0x11f;
                 if (x - (*m_opponent)->x < 140.0 && x - (*m_opponent)->x > -140.0) {
@@ -5052,7 +5052,7 @@ void CMayu::Vf6()
             }
             if (frame >= x8) {
                 pattern = 3;
-                Vf0();
+                StartPattern();
                 CPlayer::FaceOpponent();
             }
         }
@@ -5088,7 +5088,7 @@ void CMayu::Vf6()
                 frame = frame - 4;
             }
             if (frame >= x8) {
-                Vf0();
+                StartPattern();
                 pattern = 3;
             }
         }
@@ -5123,7 +5123,7 @@ void CMayu::Vf6()
                 frame = frame - 4;
             }
             if (frame >= x8) {
-                Vf0();
+                StartPattern();
                 CPlayer::FaceOpponent();
                 pattern = 3;
             }
@@ -5193,7 +5193,7 @@ void CMayu::Vf6()
             }
             if (frame >= x8) {
                 pattern = 3;
-                Vf0();
+                StartPattern();
             }
         }
         break;
@@ -5287,7 +5287,7 @@ void CMayu::Vf6()
             }
             if (frame >= x8) {
                 pattern = 0xa;
-                Vf0();
+                StartPattern();
             }
         }
         break;
@@ -5386,7 +5386,7 @@ void CMayu::Vf6()
             }
             if (frame >= x8) {
                 pattern = 3;
-                Vf0();
+                StartPattern();
             }
         }
         break;
@@ -5415,10 +5415,10 @@ void CMayu::Vf6()
             CPlayer::Unk410a80(0x32, 3);
         }
         if (frame == 6 && m_attackResult == 3) {
-            (*m_opponent)->Vf0();
+            (*m_opponent)->StartPattern();
             (*m_opponent)->StopMoving();
             (*m_opponent)->pattern = 0x6b;
-            Vf0();
+            StartPattern();
             CPlayer::StopMoving();
             pattern = 0x131;
             y = unk2af8[0] + 0x32;
@@ -5459,7 +5459,7 @@ void CMayu::Vf6()
             if (frame >= x8) {
                 pattern = 0;
                 CPlayer::FaceOpponent();
-                Vf0();
+                StartPattern();
             }
         }
         break;
@@ -5486,10 +5486,10 @@ void CMayu::Vf6()
             CPlayer::Unk410a80(0x32, 3);
         }
         if (frame == 4 && m_attackResult == 3) {
-            (*m_opponent)->Vf0();
+            (*m_opponent)->StartPattern();
             (*m_opponent)->StopMoving();
             (*m_opponent)->pattern = 0x6b;
-            Vf0();
+            StartPattern();
             CPlayer::StopMoving();
             pattern = 0x132;
             (*m_opponent)->unk14a = 0x78;
@@ -5515,7 +5515,7 @@ void CMayu::Vf6()
             if (frame >= x8) {
                 pattern = 0;
                 CPlayer::FaceOpponent();
-                Vf0();
+                StartPattern();
             }
         }
         break;
@@ -5563,9 +5563,9 @@ void CMayu::Vf6()
         }
         if (frame > 8 && vy + y > 0.0) {
             CPlayer::StopMoving();
-            Vf0();
+            StartPattern();
             (*m_opponent)->StopMoving();
-            (*m_opponent)->Vf0();
+            (*m_opponent)->StartPattern();
             (*m_opponent)->pattern = 0x62;
             (*m_opponent)->y = 0.0;
             (*m_opponent)->x = x;
@@ -5606,7 +5606,7 @@ void CMayu::Vf6()
             frame++;
             m_attackResult = 0;
             if (frame >= x8) {
-                Vf0();
+                StartPattern();
                 pattern = 0x131;
                 frame = 4;
                 (*m_opponent)->unk14a = 0;
@@ -5630,7 +5630,7 @@ void CMayu::Vf6()
             l50.scale = 0;
             l50.layer = 1;
             l50.unk18 = facing;
-            Vf9(&l50);
+            SpawnObject(&l50);
         }
         if (frame > 3) {
             vy = vy + ay;
@@ -5647,7 +5647,7 @@ void CMayu::Vf6()
             l50.unk0 = 1;
             l50.unk28 = 1;
             l50.unk18 = facing;
-            Vf9(&l50);
+            SpawnObject(&l50);
         }
         if (unk3138 == 0x78) {
             l50.type = 0x192;
@@ -5658,14 +5658,14 @@ void CMayu::Vf6()
             l50.unk28 = 1;
             l50.unk18 = facing;
             l50.unk0 = 1;
-            Vf9(&l50);
+            SpawnObject(&l50);
         }
         if (frame == 9 && vy + y > 0.0) {
             CPlayer::StopMoving();
             timer = 0;
             frame = 0xa;
             (*m_opponent)->StopMoving();
-            (*m_opponent)->Vf0();
+            (*m_opponent)->StartPattern();
             (*m_opponent)->pattern = 0x62;
             y = 0.0;
             (*m_opponent)->unk140 = 0x7530;
@@ -5684,7 +5684,7 @@ void CMayu::Vf6()
             timer = 0;
             frame = 0x10;
             (*m_opponent)->StopMoving();
-            (*m_opponent)->Vf0();
+            (*m_opponent)->StartPattern();
             (*m_opponent)->pattern = 0x62;
             y = 0.0;
             CPlayer::DealDamage(0x578, 960.0);
@@ -5705,7 +5705,7 @@ void CMayu::Vf6()
             timer = 0;
             frame = 0x15;
             (*m_opponent)->StopMoving();
-            (*m_opponent)->Vf0();
+            (*m_opponent)->StartPattern();
             y = 0.0;
             break;
         }
@@ -5746,7 +5746,7 @@ void CMayu::Vf6()
                 unk313c++;
             }
             if (frame >= x8) {
-                Vf0();
+                StartPattern();
                 pattern = 0;
                 CPlayer::FaceOpponent();
             }
@@ -5779,12 +5779,12 @@ void CMayu::Vf6()
                 x = 60.0;
                 vx = 0.0;
             }
-            (*m_opponent)->Vf0();
+            (*m_opponent)->StartPattern();
             (*m_opponent)->StopMoving();
             (*m_opponent)->pattern = 0x67;
             (*m_opponent)->x = facing * 0x16 + x;
             (*m_opponent)->y = y - 52.0;
-            Vf0();
+            StartPattern();
             ay = 0.025;
             pattern = 0x137;
             l50.type = 0;
@@ -5840,7 +5840,7 @@ void CMayu::Vf6()
             if (frame >= x8) {
                 pattern = 3;
                 CPlayer::FaceOpponent();
-                Vf0();
+                StartPattern();
             }
         }
         break;
@@ -5871,12 +5871,12 @@ void CMayu::Vf6()
                 x = 60.0;
                 vx = 0.0;
             }
-            (*m_opponent)->Vf0();
+            (*m_opponent)->StartPattern();
             (*m_opponent)->StopMoving();
             (*m_opponent)->pattern = 0x67;
             (*m_opponent)->x = facing * 0x16 + x;
             (*m_opponent)->y = y - 52.0;
-            Vf0();
+            StartPattern();
             ay = 0.025;
             pattern = 0x138;
             l50.type = 0;
@@ -5932,7 +5932,7 @@ void CMayu::Vf6()
             if (frame >= x8) {
                 pattern = 3;
                 CPlayer::FaceOpponent();
-                Vf0();
+                StartPattern();
             }
         }
         break;
@@ -5965,12 +5965,12 @@ void CMayu::Vf6()
                 x = 60.0;
                 vx = 0.0;
             }
-            (*m_opponent)->Vf0();
+            (*m_opponent)->StartPattern();
             (*m_opponent)->StopMoving();
             (*m_opponent)->pattern = 0x67;
             (*m_opponent)->x = facing * 0x16 + x;
             (*m_opponent)->y = y - 52.0;
-            Vf0();
+            StartPattern();
             ay = 0.025;
             pattern = 0x139;
             l50.type = 0;
@@ -6026,7 +6026,7 @@ void CMayu::Vf6()
             if (frame >= x8) {
                 pattern = 3;
                 CPlayer::FaceOpponent();
-                Vf0();
+                StartPattern();
             }
         }
         break;
@@ -6050,7 +6050,7 @@ void CMayu::Vf6()
                 if (frame < 0xd) {
                     y = 0.0;
                     CPlayer::StopMoving();
-                    (*m_opponent)->Vf0();
+                    (*m_opponent)->StartPattern();
                     (*m_opponent)->pattern = 0x62;
                     (*m_opponent)->y = 0.0;
                     (*m_opponent)->x = facing + x;
@@ -6151,14 +6151,14 @@ void CMayu::Vf6()
                 vy = -2.0;
                 ay = 0.035;
                 (*m_opponent)->y = -1.0;
-                (*m_opponent)->Vf0();
+                (*m_opponent)->StartPattern();
                 (*m_opponent)->StopMoving();
                 (*m_opponent)->unkc0 = -1.2;
                 (*m_opponent)->unkc8 = -2.0;
                 (*m_opponent)->pattern = 0x3b;
             }
             if (frame >= x8) {
-                Vf0();
+                StartPattern();
                 CPlayer::FaceOpponent();
                 pattern = 3;
             }
@@ -6184,7 +6184,7 @@ void CMayu::Vf6()
                 if (frame < 0xd) {
                     y = 0.0;
                     CPlayer::StopMoving();
-                    (*m_opponent)->Vf0();
+                    (*m_opponent)->StartPattern();
                     (*m_opponent)->pattern = 0x62;
                     (*m_opponent)->y = 0.0;
                     (*m_opponent)->StopMoving();
@@ -6202,7 +6202,7 @@ void CMayu::Vf6()
                 if (frame > 0xe && frame < 0x19) {
                     y = 0.0;
                     CPlayer::StopMoving();
-                    (*m_opponent)->Vf0();
+                    (*m_opponent)->StartPattern();
                     (*m_opponent)->pattern = 0x62;
                     (*m_opponent)->y = 0.0;
                     (*m_opponent)->x = facing + x;
@@ -6314,14 +6314,14 @@ void CMayu::Vf6()
                 vx = -1.8;
                 vy = -2.3;
                 ay = 0.035;
-                (*m_opponent)->Vf0();
+                (*m_opponent)->StartPattern();
                 (*m_opponent)->StopMoving();
                 (*m_opponent)->unkc0 = -1.8;
                 (*m_opponent)->unkc8 = -2.3;
                 (*m_opponent)->pattern = 0x3b;
             }
             if (frame >= x8) {
-                Vf0();
+                StartPattern();
                 CPlayer::FaceOpponent();
                 pattern = 3;
             }
@@ -6348,7 +6348,7 @@ void CMayu::Vf6()
                 if (frame < 0xd) {
                     y = 0.0;
                     CPlayer::StopMoving();
-                    (*m_opponent)->Vf0();
+                    (*m_opponent)->StartPattern();
                     (*m_opponent)->pattern = 0x62;
                     (*m_opponent)->y = 0.0;
                     (*m_opponent)->StopMoving();
@@ -6366,7 +6366,7 @@ void CMayu::Vf6()
                 if (frame > 0xe && frame < 0x19) {
                     y = 0.0;
                     CPlayer::StopMoving();
-                    (*m_opponent)->Vf0();
+                    (*m_opponent)->StartPattern();
                     (*m_opponent)->pattern = 0x62;
                     (*m_opponent)->y = 0.0;
                     (*m_opponent)->x = facing + x;
@@ -6478,14 +6478,14 @@ void CMayu::Vf6()
                 vx = -1.8;
                 vy = -2.3;
                 ay = 0.035;
-                (*m_opponent)->Vf0();
+                (*m_opponent)->StartPattern();
                 (*m_opponent)->StopMoving();
                 (*m_opponent)->unkc0 = -1.8;
                 (*m_opponent)->unkc8 = -2.3;
                 (*m_opponent)->pattern = 0x3b;
             }
             if (frame >= x8) {
-                Vf0();
+                StartPattern();
                 CPlayer::FaceOpponent();
                 pattern = 3;
             }
@@ -6555,7 +6555,7 @@ void CMayu::Vf6()
             }
             if (frame >= x8) {
                 pattern = 0;
-                Vf0();
+                StartPattern();
             }
         }
         break;
@@ -6623,7 +6623,7 @@ void CMayu::Vf6()
             }
             if (frame >= x8) {
                 pattern = 0;
-                Vf0();
+                StartPattern();
             }
         }
         break;
@@ -6695,7 +6695,7 @@ void CMayu::Vf6()
             }
             if (frame >= x8) {
                 pattern = 0;
-                Vf0();
+                StartPattern();
             }
         }
         break;
@@ -6721,7 +6721,7 @@ void CMayu::Vf6()
             CPlayer::Unk410a80(0x32, 0x78);
         }
         if (frame > 0xd && frame < 0x12 && m_attackResult == 3) {
-            Vf0();
+            StartPattern();
             CPlayer::StopMoving();
             (*m_opponent)->StopMoving();
             (*m_opponent)->unk14a = 0xb4;
@@ -6756,7 +6756,7 @@ void CMayu::Vf6()
             }
             if (frame >= x8) {
                 pattern = 3;
-                Vf0();
+                StartPattern();
             }
         }
         break;
@@ -6819,7 +6819,7 @@ void CMayu::Vf6()
             }
             if (frame >= x8) {
                 pattern = 3;
-                Vf0();
+                StartPattern();
             }
         }
         break;
@@ -6845,7 +6845,7 @@ void CMayu::Vf6()
             CPlayer::Unk410a80(0x32, 0x78);
         }
         if (frame > 0xd && frame < 0x12 && m_attackResult == 3) {
-            Vf0();
+            StartPattern();
             CPlayer::StopMoving();
             (*m_opponent)->StopMoving();
             (*m_opponent)->unk14a = 0xb4;
@@ -6880,7 +6880,7 @@ void CMayu::Vf6()
             }
             if (frame >= x8) {
                 pattern = 3;
-                Vf0();
+                StartPattern();
             }
         }
         break;
@@ -6943,7 +6943,7 @@ void CMayu::Vf6()
             }
             if (frame >= x8) {
                 pattern = 3;
-                Vf0();
+                StartPattern();
             }
         }
         break;
@@ -6971,7 +6971,7 @@ void CMayu::Vf6()
             unk2c9 = 0x25;
         }
         if (frame > 0xd && frame < 0x12 && m_attackResult == 3) {
-            Vf0();
+            StartPattern();
             CPlayer::StopMoving();
             (*m_opponent)->StopMoving();
             (*m_opponent)->unk14a = 0xb4;
@@ -7006,7 +7006,7 @@ void CMayu::Vf6()
             }
             if (frame >= x8) {
                 pattern = 3;
-                Vf0();
+                StartPattern();
             }
         }
         break;
@@ -7102,7 +7102,7 @@ void CMayu::Vf6()
             }
             if (frame >= x8) {
                 pattern = 3;
-                Vf0();
+                StartPattern();
             }
         }
     }

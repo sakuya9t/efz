@@ -1,7 +1,7 @@
 // CSayuri (0x4463e0-0x45184f): the character class whose files are in sayuri\ in the game
 // folder (sayuri.dat sprites, sayuri.pat patterns, wave\).
-// Its constructor sets the folder name CPlayer's loaders use; the VfN methods override
-// the CPlayer virtual slots of the same number (see shiori.cpp for what they do).
+// Its constructor sets the folder name CPlayer's loaders use; its other methods override
+// CPlayer's virtual ones (efz.h says what each does).
 #include <stdlib.h>
 #include <string.h>
 #include <math.h>
@@ -43,7 +43,7 @@ CSayuri::CSayuri(int p1, int p2, int p3, int p4, int p5, BYTE p6)
     }
 }
 
-void CSayuri::Vf12()
+void CSayuri::Reset()
 {
     int v4;
 
@@ -70,31 +70,31 @@ void CSayuri::Vf12()
         unk3254[v4] = 0;
         unk3354[v4] = 0;
     }
-    CPlayer::Vf12();
+    CPlayer::Reset();
 }
 
-void CSayuri::Vf0()
+void CSayuri::StartPattern()
 {
     unk3138 = 0;
     unk313c = 0;
     unk3140 = 0;
-    CPlayer::Vf0();
+    CPlayer::StartPattern();
 }
 
-void CSayuri::Vf10(short p1)
+void CSayuri::RemoveObject(short p1)
 {
     unk3154[p1] = 0;
     unk3254[p1] = 0;
     unk3354[p1] = 0;
-    CPlayer::Vf10(p1);
+    CPlayer::RemoveObject(p1);
 }
 
-void CSayuri::Vf3()
+void CSayuri::Move()
 {
     CPlayer::Unk40e740();
 }
 
-void CSayuri::Vf4()
+void CSayuri::StartCommand()
 {
     if (pattern < 0xc8) {
         unk1a8 = 0;
@@ -116,7 +116,7 @@ void CSayuri::Vf4()
         }
     }
     if (m_command == 0x34 && (unk118 >= 500.0 || unk120 > 0) && m_attackResult > 1 && m_attackResult != 6 && (m_patterns[pattern].frames[frame].flagsB0 & 8) > 0 && m_patterns[pattern].unk2 <= m_patterns[0xa7].unk0) {
-        Vf0();
+        StartPattern();
         CPlayer::Unk40f170();
         pattern = 0xa7;
         if (y < 0.0) {
@@ -126,127 +126,127 @@ void CSayuri::Vf4()
     }
     if (unk15c < 2) {
         if (m_hp < 0xd05 && m_command == 0x62 && m_gauge >= 0xbb8 && y == 0.0 && (m_patterns[pattern].frames[frame].flagsB0 & 8) > 0 && (pattern >= 0xc8 && m_attackResult >= 2 && m_attackResult != 6 || pattern < 0xc8) && m_patterns[pattern].unk2 <= m_patterns[0x13b].unk0) {
-            Vf0();
+            StartPattern();
             CPlayer::Unk40f170();
             pattern = 0x13b;
             return;
         }
         if (m_command == 0xac && m_gauge >= 0xbb8 && y == 0.0 && (m_patterns[pattern].frames[frame].flagsB0 & 8) > 0 && (pattern >= 0xc8 && m_attackResult >= 2 && m_attackResult != 6 || pattern < 0xc8) && m_patterns[pattern].unk2 <= m_patterns[0x12e].unk0) {
-            Vf0();
+            StartPattern();
             CPlayer::Unk40f170();
             pattern = 0x12e;
             return;
         }
         if ((m_command == 0xab || m_command == 0xac) && m_gauge >= 0x7d0 && y == 0.0 && (m_patterns[pattern].frames[frame].flagsB0 & 8) > 0 && (pattern >= 0xc8 && m_attackResult >= 2 && m_attackResult != 6 || pattern < 0xc8) && m_patterns[pattern].unk2 <= m_patterns[0x12d].unk0) {
-            Vf0();
+            StartPattern();
             CPlayer::Unk40f170();
             pattern = 0x12d;
             return;
         }
         if ((m_command == 0xaa || m_command == 0xab || m_command == 0xac) && m_gauge >= 0x3e8 && y == 0.0 && (m_patterns[pattern].frames[frame].flagsB0 & 8) > 0 && (pattern >= 0xc8 && m_attackResult >= 2 && m_attackResult != 6 || pattern < 0xc8) && m_patterns[pattern].unk2 <= m_patterns[0x12c].unk0) {
-            Vf0();
+            StartPattern();
             CPlayer::Unk40f170();
             pattern = 0x12c;
             return;
         }
         if (m_command == 0xa2 && m_gauge >= 0xbb8 && y == 0.0 && (m_patterns[pattern].frames[frame].flagsB0 & 8) > 0 && (pattern >= 0xc8 && m_attackResult >= 2 && m_attackResult != 6 || pattern < 0xc8) && m_patterns[pattern].unk2 <= m_patterns[0x139].unk0) {
-            Vf0();
+            StartPattern();
             CPlayer::Unk40f170();
             pattern = 0x139;
             return;
         }
         if ((m_command == 0xa1 || m_command == 0xa2) && m_gauge >= 0x7d0 && y == 0.0 && (m_patterns[pattern].frames[frame].flagsB0 & 8) > 0 && (pattern >= 0xc8 && m_attackResult >= 2 && m_attackResult != 6 || pattern < 0xc8) && m_patterns[pattern].unk2 <= m_patterns[0x137].unk0) {
-            Vf0();
+            StartPattern();
             CPlayer::Unk40f170();
             pattern = 0x137;
             return;
         }
         if ((m_command == 0xa0 || m_command == 0xa1 || m_command == 0xa2) && m_gauge >= 0x3e8 && y == 0.0 && (m_patterns[pattern].frames[frame].flagsB0 & 8) > 0 && (pattern >= 0xc8 && m_attackResult >= 2 && m_attackResult != 6 || pattern < 0xc8) && m_patterns[pattern].unk2 <= m_patterns[0x135].unk0) {
-            Vf0();
+            StartPattern();
             CPlayer::Unk40f170();
             pattern = 0x135;
             return;
         }
         if (m_command == 0x70 && m_gauge >= 0xbb8 && y == 0.0 && (m_patterns[pattern].frames[frame].flagsB0 & 8) > 0 && (pattern >= 0xc8 && m_attackResult >= 2 && m_attackResult != 6 || pattern < 0xc8) && m_patterns[pattern].unk2 <= m_patterns[0x134].unk0) {
-            Vf0();
+            StartPattern();
             CPlayer::Unk40f170();
             pattern = 0x134;
             return;
         }
         if ((m_command == 0x6f || m_command == 0x70) && m_gauge >= 0x7d0 && y == 0.0 && (m_patterns[pattern].frames[frame].flagsB0 & 8) > 0 && (pattern >= 0xc8 && m_attackResult >= 2 && m_attackResult != 6 || pattern < 0xc8) && m_patterns[pattern].unk2 <= m_patterns[0x133].unk0) {
-            Vf0();
+            StartPattern();
             CPlayer::Unk40f170();
             pattern = 0x133;
             return;
         }
         if ((m_command == 0x6e || m_command == 0x6f || m_command == 0x70) && m_gauge >= 0x3e8 && y == 0.0 && (m_patterns[pattern].frames[frame].flagsB0 & 8) > 0 && (pattern >= 0xc8 && m_attackResult >= 2 && m_attackResult != 6 || pattern < 0xc8) && m_patterns[pattern].unk2 <= m_patterns[0x132].unk0) {
-            Vf0();
+            StartPattern();
             CPlayer::Unk40f170();
             pattern = 0x132;
             return;
         }
         if (m_command == 0x2a && (unk118 >= 500.0 || unk120 > 0) && (m_patterns[pattern].frames[frame].flagsB0 & 8) > 0 && y < 0.0 && (pattern >= 0xc8 && m_attackResult >= 2 && m_attackResult != 6 || pattern < 0xc8) && m_patterns[pattern].unk2 <= m_patterns[0x105].unk0) {
-            Vf0();
+            StartPattern();
             CPlayer::Unk40f170();
             pattern = 0x105;
             return;
         }
         if ((m_command == 0x29 || m_command == 0x2a) && (m_patterns[pattern].frames[frame].flagsB0 & 8) > 0 && y < 0.0 && (pattern >= 0xc8 && m_attackResult >= 2 && m_attackResult != 6 || pattern < 0xc8) && pattern != 0x10c && m_patterns[pattern].unk2 <= m_patterns[0x104].unk0) {
-            Vf0();
+            StartPattern();
             CPlayer::Unk40f170();
             pattern = 0x104;
             return;
         }
         if (m_command == 0x28 && (m_patterns[pattern].frames[frame].flagsB0 & 8) > 0 && y < 0.0 && (pattern >= 0xc8 && m_attackResult >= 2 && m_attackResult != 6 || pattern < 0xc8) && m_patterns[pattern].unk2 <= m_patterns[0x103].unk0) {
-            Vf0();
+            StartPattern();
             CPlayer::Unk40f170();
             pattern = 0x103;
             return;
         }
         if (m_command == 0x16 && (unk118 >= 500.0 || unk120 > 0) && (m_patterns[pattern].frames[frame].flagsB0 & 8) > 0 && y == 0.0 && (pattern >= 0xc8 && m_attackResult >= 2 && m_attackResult != 6 || pattern < 0xc8) && m_patterns[pattern].unk2 <= m_patterns[0x108].unk0) {
-            Vf0();
+            StartPattern();
             CPlayer::Unk40f170();
             pattern = 0x108;
             return;
         }
         if ((m_command == 0x15 || m_command == 0x16) && (m_patterns[pattern].frames[frame].flagsB0 & 8) > 0 && y == 0.0 && (pattern >= 0xc8 && m_attackResult >= 2 && m_attackResult != 6 || pattern < 0xc8) && m_patterns[pattern].unk2 <= m_patterns[0x107].unk0) {
-            Vf0();
+            StartPattern();
             CPlayer::Unk40f170();
             pattern = 0x107;
             return;
         }
         if (m_command == 0x14 && (m_patterns[pattern].frames[frame].flagsB0 & 8) > 0 && y == 0.0 && (pattern >= 0xc8 && m_attackResult >= 2 && m_attackResult != 6 || pattern < 0xc8) && m_patterns[pattern].unk2 <= m_patterns[0x106].unk0) {
-            Vf0();
+            StartPattern();
             CPlayer::Unk40f170();
             pattern = 0x106;
             return;
         }
         if ((m_command == 0x1e || m_command == 0x1f || m_command == 0x20) && (m_patterns[pattern].frames[frame].flagsB0 & 8) > 0 && y == 0.0 && (pattern >= 0xc8 && m_attackResult >= 2 && m_attackResult != 6 || pattern < 0xc8) && m_patterns[pattern].unk2 <= m_patterns[0x100].unk0) {
-            Vf0();
+            StartPattern();
             CPlayer::Unk40f170();
             pattern = 0x100;
             return;
         }
         if (m_command == 0x48 && (unk118 >= 500.0 || unk120 > 0) && (m_patterns[pattern].frames[frame].flagsB0 & 8) > 0 && y == 0.0 && (pattern >= 0xc8 && m_attackResult >= 2 && m_attackResult != 6 || pattern < 0xc8) && m_patterns[pattern].unk2 <= m_patterns[0xff].unk0) {
-            Vf0();
+            StartPattern();
             CPlayer::Unk40f170();
             pattern = 0xff;
             return;
         }
         if ((m_command == 0x47 || m_command == 0x48) && (m_patterns[pattern].frames[frame].flagsB0 & 8) > 0 && y == 0.0 && (pattern >= 0xc8 && m_attackResult >= 2 && m_attackResult != 6 || pattern < 0xc8) && m_patterns[pattern].unk2 <= m_patterns[0xfe].unk0) {
-            Vf0();
+            StartPattern();
             CPlayer::Unk40f170();
             pattern = 0xfe;
             return;
         }
         if (m_command == 0x46 && (m_patterns[pattern].frames[frame].flagsB0 & 8) > 0 && y == 0.0 && (pattern >= 0xc8 && m_attackResult >= 2 && m_attackResult != 6 || pattern < 0xc8) && m_patterns[pattern].unk2 <= m_patterns[0xfd].unk0) {
-            Vf0();
+            StartPattern();
             CPlayer::Unk40f170();
             pattern = 0xfd;
             return;
         }
         if (m_command == 0xc && (unk118 >= 500.0 || unk120 > 0 || y < 0.0) && (m_patterns[pattern].frames[frame].flagsB0 & 8) > 0 && unk314c == 0 && (pattern >= 0xc8 && m_attackResult >= 2 && m_attackResult != 6 || pattern < 0xc8) && m_patterns[pattern].unk2 <= m_patterns[0xfc].unk0) {
-            Vf0();
+            StartPattern();
             CPlayer::Unk40f170();
             pattern = 0xfc;
             if (y < 0.0) {
@@ -255,7 +255,7 @@ void CSayuri::Vf4()
             return;
         }
         if ((m_command == 0xb || m_command == 0xc) && (m_patterns[pattern].frames[frame].flagsB0 & 8) > 0 && unk314c == 0 && (pattern >= 0xc8 && m_attackResult >= 2 && m_attackResult != 6 || pattern < 0xc8) && m_patterns[pattern].unk2 <= m_patterns[0xfb].unk0) {
-            Vf0();
+            StartPattern();
             CPlayer::Unk40f170();
             pattern = 0xfb;
             if (y < 0.0) {
@@ -264,7 +264,7 @@ void CSayuri::Vf4()
             return;
         }
         if (m_command == 0xa && (m_patterns[pattern].frames[frame].flagsB0 & 8) > 0 && unk314c == 0 && (pattern >= 0xc8 && m_attackResult >= 2 && m_attackResult != 6 || pattern < 0xc8) && m_patterns[pattern].unk2 <= m_patterns[0xfa].unk0) {
-            Vf0();
+            StartPattern();
             CPlayer::Unk40f170();
             pattern = 0xfa;
             if (y < 0.0) {
@@ -277,7 +277,7 @@ void CSayuri::Vf4()
         if (y < 0.0 && unk159 < 1) {
             if ((((*m_opponent)->x - x) * (1 - (m_command << 1)) < 0.0 || 0.0 == (*m_opponent)->x - x && facing == (1 - (m_command << 1)) * -1) && m_patterns[pattern].unk2 <= m_patterns[0xa5].unk0 && pattern != 0xaa && y < -40.0 && (m_patterns[pattern].frames[frame].flagsB0 & 8) > 0 && (pattern >= 0xc8 && m_attackResult >= 2 && m_attackResult != 6 || pattern < 0xc8)) {
                 if (pattern != 0xa5) {
-                    Vf0();
+                    StartPattern();
                 }
                 pattern = 0xa5;
                 CPlayer::FaceOpponent();
@@ -288,7 +288,7 @@ void CSayuri::Vf4()
             }
             if ((((*m_opponent)->x - x) * (1 - (m_command << 1)) > 0.0 || 0.0 == (*m_opponent)->x - x && facing == 1 - (m_command << 1)) && m_patterns[pattern].unk2 <= m_patterns[0xa6].unk0 && pattern != 0xaa && (m_patterns[pattern].frames[frame].flagsB0 & 8) > 0 && (pattern >= 0xc8 && m_attackResult >= 2 && m_attackResult != 6 || pattern < 0xc8)) {
                 if (pattern != 0xa6) {
-                    Vf0();
+                    StartPattern();
                 }
                 pattern = 0xa6;
                 CPlayer::FaceOpponent();
@@ -301,7 +301,7 @@ void CSayuri::Vf4()
         if (y == 0.0 && (m_patterns[pattern].frames[frame].flagsB0 & 8) > 0) {
             if ((((*m_opponent)->x - x) * (1 - (m_command << 1)) < 0.0 || 0.0 == (*m_opponent)->x - x && facing == (1 - (m_command << 1)) * -1) && m_patterns[pattern].unk2 <= m_patterns[0xa3].unk0 && (pattern >= 0xc8 && m_attackResult >= 2 && m_attackResult != 6 || pattern < 0xc8)) {
                 if (pattern != 0xa3) {
-                    Vf0();
+                    StartPattern();
                 }
                 pattern = 0xa3;
                 CPlayer::FaceOpponent();
@@ -311,7 +311,7 @@ void CSayuri::Vf4()
             }
             if ((((*m_opponent)->x - x) * (1 - (m_command << 1)) > 0.0 || 0.0 == (*m_opponent)->x - x && facing == 1 - (m_command << 1)) && m_patterns[pattern].unk2 <= m_patterns[0xa4].unk0 && (pattern >= 0xc8 && m_attackResult >= 2 && m_attackResult != 6 || pattern < 0xc8)) {
                 if (pattern != 0xa4) {
-                    Vf0();
+                    StartPattern();
                 }
                 pattern = 0xa4;
                 CPlayer::FaceOpponent();
@@ -321,7 +321,7 @@ void CSayuri::Vf4()
         }
     }
     if (unk15c < 3 && m_command == 6 && (m_patterns[pattern].frames[frame].flagsB0 & 8) > 0 && y < 0.0 && unk15a < 1 && m_patterns[pattern].unk2 <= m_patterns[0xe].unk0 && (pattern >= 0xc8 && m_attackResult >= 2 && m_attackResult != 6 || pattern < 0xc8)) {
-        Vf0();
+        StartPattern();
         CPlayer::Unk40f170();
         unk15a++;
         pattern = 0xe;
@@ -336,20 +336,20 @@ void CSayuri::Vf4()
     if (m_pressA == 1 || (unk1a8 & 0x10) != 0 || (unk1a9 & 0x10) != 0) {
         if (y < 0.0) {
             if (m_patterns[pattern].unk2 <= m_patterns[0xcf].unk0 && (m_patterns[pattern].frames[frame].flagsB0 & 8) > 0 && (pattern >= 0xc8 && m_attackResult >= 2 && m_attackResult != 6 || pattern < 0xc8)) {
-                Vf0();
+                StartPattern();
                 CPlayer::Unk40f170();
                 pattern = 0xcf;
             }
             return;
         }
         if ((m_inputY == 1 || (unk1a8 & 4) != 0 || (unk1a9 & 4) != 0) && m_patterns[pattern].unk2 <= m_patterns[0xcc].unk0 && (m_patterns[pattern].frames[frame].flagsB0 & 8) > 0 && (pattern >= 0xc8 && m_attackResult >= 2 && m_attackResult != 6 || pattern < 0xc8)) {
-            Vf0();
+            StartPattern();
             CPlayer::Unk40f170();
             pattern = 0xcc;
             return;
         }
         if ((m_inputY == 0 || (unk1a8 & 4) == 0 || (unk1a9 & 4) == 0) && m_patterns[pattern].unk2 <= m_patterns[0xc8].unk0 && (m_patterns[pattern].frames[frame].flagsB0 & 8) > 0 && (pattern >= 0xc8 && m_attackResult >= 2 && m_attackResult != 6 || pattern < 0xc8)) {
-            Vf0();
+            StartPattern();
             CPlayer::Unk40f170();
             pattern = 0xc8;
             return;
@@ -358,27 +358,27 @@ void CSayuri::Vf4()
     if (m_pressB == 1 || (unk1a8 & 0x20) != 0 || (unk1a9 & 0x20) != 0) {
         if (y < 0.0) {
             if (m_patterns[pattern].unk2 <= m_patterns[0xd0].unk0 && (m_patterns[pattern].frames[frame].flagsB0 & 8) > 0 && (pattern >= 0xc8 && m_attackResult >= 2 && m_attackResult != 6 || pattern < 0xc8)) {
-                Vf0();
+                StartPattern();
                 CPlayer::Unk40f170();
                 pattern = 0xd0;
             }
             return;
         }
         if ((m_inputY == 1 || (unk1a8 & 4) != 0 || (unk1a9 & 4) != 0) && m_patterns[pattern].unk2 <= m_patterns[0xcd].unk0 && (m_patterns[pattern].frames[frame].flagsB0 & 8) > 0 && (pattern >= 0xc8 && m_attackResult >= 2 && m_attackResult != 6 || pattern < 0xc8)) {
-            Vf0();
+            StartPattern();
             CPlayer::Unk40f170();
             pattern = 0xcd;
             return;
         }
         if (m_inputY == 0 || (unk1a8 & 4) == 0 || (unk1a9 & 4) == 0) {
             if (m_patterns[pattern].unk2 <= m_patterns[0xc9].unk0 && (m_patterns[pattern].frames[frame].flagsB0 & 8) > 0 && x - (*m_opponent)->x > -70.0 && x - (*m_opponent)->x < 70.0 && (pattern >= 0xc8 && m_attackResult >= 2 && m_attackResult != 6 || pattern < 0xc8)) {
-                Vf0();
+                StartPattern();
                 CPlayer::Unk40f170();
                 pattern = 0xc9;
                 return;
             }
             if (m_patterns[pattern].unk2 <= m_patterns[0xca].unk0 && (m_patterns[pattern].frames[frame].flagsB0 & 8) > 0 && (pattern >= 0xc8 && m_attackResult >= 2 && m_attackResult != 6 || pattern < 0xc8)) {
-                Vf0();
+                StartPattern();
                 CPlayer::Unk40f170();
                 pattern = 0xca;
                 return;
@@ -388,33 +388,33 @@ void CSayuri::Vf4()
     if (m_pressC == 1 || (unk1a8 & 0x40) != 0 || (unk1a9 & 0x40) != 0) {
         if (y < 0.0) {
             if (m_inputX == facing && m_inputY == 0 && x - (*m_opponent)->x > -100.0 && x - (*m_opponent)->x < 100.0 && (*m_opponent)->y < 0.0 && m_patterns[pattern].unk2 <= m_patterns[0xf8].unk0 && ((*m_opponent)->pattern < 0x32 || (*m_opponent)->pattern > 0x9c) && (m_patterns[pattern].frames[frame].flagsB0 & 8) > 0 && (pattern >= 0xc8 && m_attackResult >= 2 && m_attackResult != 6 || pattern < 0xc8)) {
-                Vf0();
+                StartPattern();
                 CPlayer::Unk40f170();
                 pattern = 0xf8;
                 return;
             }
             if (m_patterns[pattern].unk2 <= m_patterns[0xd1].unk0 && (m_patterns[pattern].frames[frame].flagsB0 & 8) > 0 && (pattern >= 0xc8 && m_attackResult >= 2 && m_attackResult != 6 || pattern < 0xc8)) {
-                Vf0();
+                StartPattern();
                 CPlayer::Unk40f170();
                 pattern = 0xd1;
             }
             return;
         }
         if ((m_inputY == 1 || (unk1a8 & 4) != 0 || (unk1a9 & 4) != 0) && m_patterns[pattern].unk2 <= m_patterns[0xce].unk0 && (m_patterns[pattern].frames[frame].flagsB0 & 8) > 0 && (pattern >= 0xc8 && m_attackResult >= 2 && m_attackResult != 6 || pattern < 0xc8)) {
-            Vf0();
+            StartPattern();
             CPlayer::Unk40f170();
             pattern = 0xce;
             return;
         }
         if (m_inputY == 0 || (unk1a8 & 4) == 0 || (unk1a9 & 4) == 0) {
             if (m_inputX != 0 && (*m_opponent)->y == 0.0 && x - (*m_opponent)->x > -30.0 && x - (*m_opponent)->x < 30.0 && m_patterns[pattern].unk2 <= m_patterns[0xdc].unk0 && ((*m_opponent)->pattern < 0x32 || (*m_opponent)->pattern > 0x9c) && (m_patterns[pattern].frames[frame].flagsB0 & 8) > 0 && (pattern >= 0xc8 && m_attackResult >= 2 && m_attackResult != 6 || pattern < 0xc8)) {
-                Vf0();
+                StartPattern();
                 CPlayer::Unk40f170();
                 pattern = 0xdc;
                 return;
             }
             if (m_patterns[pattern].unk2 <= m_patterns[0xcb].unk0 && (m_patterns[pattern].frames[frame].flagsB0 & 8) > 0 && (pattern >= 0xc8 && m_attackResult >= 2 && m_attackResult != 6 || pattern < 0xc8)) {
-                Vf0();
+                StartPattern();
                 CPlayer::Unk40f170();
                 pattern = 0xcb;
             }
@@ -422,7 +422,7 @@ void CSayuri::Vf4()
     }
 }
 
-void CSayuri::Vf1()
+void CSayuri::DrawGauge()
 {
 }
 
@@ -434,13 +434,13 @@ void CSayuri::Vf8()
     }
 }
 
-void CSayuri::Vf9(EffectDesc* p1)
+void CSayuri::SpawnObject(EffectDesc* p1)
 {
-    Vf10(unk2ca);
-    CPlayer::Vf9(p1);
+    RemoveObject(m_objectHead);
+    CPlayer::SpawnObject(p1);
 }
 
-void CSayuri::Vf2()
+void CSayuri::ReadCommand()
 {
     BYTE x6;
     BYTE v5;
@@ -845,7 +845,7 @@ void CSayuri::Vf2()
     }
 }
 
-void CSayuri::Vf5()
+void CSayuri::CpuInput()
 {
     double v10;
     double x8;
@@ -1570,7 +1570,7 @@ void CSayuri::Vf5()
     unk1a4 = (WORD)CPlayer::Random(0, 0xc8) + 0x3c;
 }
 
-void CSayuri::Vf7()
+void CSayuri::UpdateObjects()
 {
     WORD v58;
     WORD v54;
@@ -1579,13 +1579,13 @@ void CSayuri::Vf7()
     if ((*m_opponent)->unk14c > 0) {
         return;
     }
-    v4 = unk2cc;
+    v4 = m_objectTail;
     EffectDesc l50;
-    while (v4 != unk2ca) {
-        if (unk3d0[v4] != 0 && m_objects[v4].unk86 == 0 && (unk14c == 0 || unk14c > 0 && m_objects[v4].unk88 != 0)) {
+    while (v4 != m_objectHead) {
+        if (m_objectActive[v4] != 0 && m_objects[v4].unk86 == 0 && (unk14c == 0 || unk14c > 0 && m_objects[v4].unk88 != 0)) {
             v54 = (short)anims[m_objects[v4].pattern].frames[m_objects[v4].frame].duration;
             v58 = anims[m_objects[v4].pattern].frameCount;
-            CPlayer::Unk413090((EffectDesc*)&l50);
+            CPlayer::InitEffectDesc((EffectDesc*)&l50);
             switch (m_objects[v4].pattern) {
             case 0x190:
                 if (pattern > 0x95 && pattern < 0x9d || pattern > 0xa7 && pattern < 0xab) {
@@ -1602,7 +1602,7 @@ void CSayuri::Vf7()
                         m_objects[v4].x = facing * 0x1c + x;
                     }
                 } else {
-                    Vf10(v4);
+                    RemoveObject(v4);
                     unk3148 = 0;
                     break;
                 }
@@ -1638,7 +1638,7 @@ void CSayuri::Vf7()
                     unk3154[v4] = 6;
                 }
                 if (m_objects[v4].x < m_game->unk14248 - 0x14 || m_objects[v4].x > m_game->unk14250 + 0x14 || m_objects[v4].y > 60.0) {
-                    Vf10(v4);
+                    RemoveObject(v4);
                     unk314c--;
                 }
                 m_objects[v4].timer++;
@@ -1676,7 +1676,7 @@ void CSayuri::Vf7()
                     unk3154[v4] = 6;
                 }
                 if (m_objects[v4].x < m_game->unk14248 - 0x14 || m_objects[v4].x > m_game->unk14250 + 0x14 || m_objects[v4].y > 60.0) {
-                    Vf10(v4);
+                    RemoveObject(v4);
                     unk314c--;
                 }
                 m_objects[v4].timer++;
@@ -1696,7 +1696,7 @@ void CSayuri::Vf7()
                 m_objects[v4].y = y;
                 m_objects[v4].x = x;
                 if (pattern != 0x103 && pattern != 0x104 && pattern != 0x105 || frame > 2) {
-                    Vf10(v4);
+                    RemoveObject(v4);
                 }
                 m_objects[v4].timer++;
                 if (m_objects[v4].timer >= v54) {
@@ -1712,7 +1712,7 @@ void CSayuri::Vf7()
                 m_objects[v4].y = y;
                 m_objects[v4].x = x;
                 if (pattern != 0x103 && pattern != 0x104 && pattern != 0x105 || y >= 0.0) {
-                    Vf10(v4);
+                    RemoveObject(v4);
                 }
                 m_objects[v4].timer++;
                 if (m_objects[v4].timer >= v54) {
@@ -1731,7 +1731,7 @@ void CSayuri::Vf7()
                     m_objects[v4].frame++;
                     m_objects[v4].unk80 = 0;
                     if (m_objects[v4].frame >= v58) {
-                        Vf10(v4);
+                        RemoveObject(v4);
                     }
                 }
                 break;
@@ -1746,7 +1746,7 @@ void CSayuri::Vf7()
                     m_objects[v4].frame++;
                     m_objects[v4].unk80 = 0;
                     if (m_objects[v4].frame >= v58) {
-                        Vf10(v4);
+                        RemoveObject(v4);
                     }
                 }
                 break;
@@ -1757,7 +1757,7 @@ void CSayuri::Vf7()
                     m_objects[v4].frame++;
                     m_objects[v4].unk80 = 0;
                     if (m_objects[v4].frame >= v58) {
-                        Vf10(v4);
+                        RemoveObject(v4);
                     }
                 }
                 break;
@@ -1775,7 +1775,7 @@ void CSayuri::Vf7()
                     l50.unk2c = 4;
                     l50.layer = 1;
                     l50.unk18 = m_objects[v4].facing;
-                    Vf9(&l50);
+                    SpawnObject(&l50);
                 }
                 m_objects[v4].timer++;
                 if (m_objects[v4].timer >= v54) {
@@ -1786,7 +1786,7 @@ void CSayuri::Vf7()
                         m_objects[v4].frame = 4;
                     }
                     if (m_objects[v4].frame >= v58) {
-                        Vf10(v4);
+                        RemoveObject(v4);
                     }
                 }
                 break;
@@ -1804,7 +1804,7 @@ void CSayuri::Vf7()
                     l50.unk2c = 4;
                     l50.layer = 1;
                     l50.unk18 = m_objects[v4].facing;
-                    Vf9(&l50);
+                    SpawnObject(&l50);
                 }
                 m_objects[v4].timer++;
                 if (m_objects[v4].timer >= v54) {
@@ -1815,7 +1815,7 @@ void CSayuri::Vf7()
                         m_objects[v4].frame = 4;
                     }
                     if (m_objects[v4].frame >= v58) {
-                        Vf10(v4);
+                        RemoveObject(v4);
                     }
                 }
                 break;
@@ -1833,7 +1833,7 @@ void CSayuri::Vf7()
                     l50.unk2c = 4;
                     l50.layer = 1;
                     l50.unk18 = m_objects[v4].facing;
-                    Vf9(&l50);
+                    SpawnObject(&l50);
                 }
                 m_objects[v4].timer++;
                 if (m_objects[v4].timer >= v54) {
@@ -1844,7 +1844,7 @@ void CSayuri::Vf7()
                         m_objects[v4].frame = 4;
                     }
                     if (m_objects[v4].frame >= v58) {
-                        Vf10(v4);
+                        RemoveObject(v4);
                     }
                 }
                 break;
@@ -1862,7 +1862,7 @@ void CSayuri::Vf7()
                     l50.unk2c = 4;
                     l50.layer = 1;
                     l50.unk18 = m_objects[v4].facing;
-                    Vf9(&l50);
+                    SpawnObject(&l50);
                 }
                 m_objects[v4].timer++;
                 if (m_objects[v4].timer >= v54) {
@@ -1873,7 +1873,7 @@ void CSayuri::Vf7()
                         m_objects[v4].frame = 4;
                     }
                     if (m_objects[v4].frame >= v58) {
-                        Vf10(v4);
+                        RemoveObject(v4);
                     }
                 }
                 break;
@@ -1891,7 +1891,7 @@ void CSayuri::Vf7()
                     l50.unk2c = 4;
                     l50.layer = 1;
                     l50.unk18 = m_objects[v4].facing;
-                    Vf9(&l50);
+                    SpawnObject(&l50);
                 }
                 m_objects[v4].timer++;
                 if (m_objects[v4].timer >= v54) {
@@ -1902,7 +1902,7 @@ void CSayuri::Vf7()
                         m_objects[v4].frame = 4;
                     }
                     if (m_objects[v4].frame >= v58) {
-                        Vf10(v4);
+                        RemoveObject(v4);
                     }
                 }
                 break;
@@ -1920,7 +1920,7 @@ void CSayuri::Vf7()
                     l50.unk2c = 4;
                     l50.layer = 1;
                     l50.unk18 = m_objects[v4].facing;
-                    Vf9(&l50);
+                    SpawnObject(&l50);
                 }
                 m_objects[v4].timer++;
                 if (m_objects[v4].timer >= v54) {
@@ -1931,7 +1931,7 @@ void CSayuri::Vf7()
                         m_objects[v4].frame = 4;
                     }
                     if (m_objects[v4].frame >= v58) {
-                        Vf10(v4);
+                        RemoveObject(v4);
                     }
                 }
                 break;
@@ -1942,7 +1942,7 @@ void CSayuri::Vf7()
                     m_objects[v4].frame++;
                     m_objects[v4].unk80 = 0;
                     if (m_objects[v4].frame >= v58) {
-                        Vf10(v4);
+                        RemoveObject(v4);
                     }
                 }
                 break;
@@ -1953,7 +1953,7 @@ void CSayuri::Vf7()
                     m_objects[v4].frame++;
                     m_objects[v4].unk80 = 0;
                     if (m_objects[v4].frame >= v58) {
-                        Vf10(v4);
+                        RemoveObject(v4);
                     }
                 }
                 break;
@@ -1971,7 +1971,7 @@ void CSayuri::Vf7()
                     l50.scale = 2;
                     l50.layer = 1;
                     l50.unk18 = m_objects[v4].facing;
-                    Vf9(&l50);
+                    SpawnObject(&l50);
                 }
                 m_objects[v4].timer++;
                 if (m_objects[v4].timer >= v54) {
@@ -1979,7 +1979,7 @@ void CSayuri::Vf7()
                     m_objects[v4].frame++;
                     m_objects[v4].unk80 = 0;
                     if (m_objects[v4].frame >= v58) {
-                        Vf10(v4);
+                        RemoveObject(v4);
                     }
                 }
                 break;
@@ -1990,7 +1990,7 @@ void CSayuri::Vf7()
                     m_objects[v4].frame++;
                     m_objects[v4].unk80 = 0;
                     if (m_objects[v4].frame >= v58) {
-                        Vf10(v4);
+                        RemoveObject(v4);
                     }
                 }
                 break;
@@ -2019,7 +2019,7 @@ void CSayuri::Vf7()
                     unk3154[v4] = 6;
                 }
                 if (m_objects[v4].x < m_game->unk14248 - 0x14 || m_objects[v4].x > m_game->unk14250 + 0x14 || m_objects[v4].y > 60.0) {
-                    Vf10(v4);
+                    RemoveObject(v4);
                     unk314c--;
                 }
                 m_objects[v4].timer++;
@@ -2060,7 +2060,7 @@ void CSayuri::Vf7()
                     unk3154[v4] = 6;
                 }
                 if (m_objects[v4].x < m_game->unk14248 - 0x14 || m_objects[v4].x > m_game->unk14250 + 0x14 || m_objects[v4].y > 60.0) {
-                    Vf10(v4);
+                    RemoveObject(v4);
                     unk314c--;
                 }
                 m_objects[v4].timer++;
@@ -2084,7 +2084,7 @@ void CSayuri::Vf7()
                 m_objects[v4].x = x;
                 m_objects[v4].y = y + 25.0;
                 if (pattern != 0x102) {
-                    Vf10(v4);
+                    RemoveObject(v4);
                 }
                 m_objects[v4].timer++;
                 if (unk14a > 0) {
@@ -2095,13 +2095,13 @@ void CSayuri::Vf7()
                     m_objects[v4].frame++;
                     m_objects[v4].unk80 = 0;
                     if (m_objects[v4].frame >= v58) {
-                        Vf10(v4);
+                        RemoveObject(v4);
                     }
                 }
                 break;
             case 0x1a6:
                 if (frame > 1) {
-                    Vf10(v4);
+                    RemoveObject(v4);
                 }
                 m_objects[v4].timer++;
                 if (unk14a > 0) {
@@ -2121,7 +2121,7 @@ void CSayuri::Vf7()
                 m_objects[v4].unk8c = 0x7530;
                 m_objects[v4].timer++;
                 if (pattern != 0x57) {
-                    Vf10(v4);
+                    RemoveObject(v4);
                 }
                 if (m_objects[v4].timer >= v54) {
                     m_objects[v4].timer = 0;
@@ -2140,72 +2140,72 @@ void CSayuri::Vf7()
                     l50.scale = 0;
                     l50.layer = 1;
                     l50.unk18 = facing;
-                    Vf9(&l50);
+                    SpawnObject(&l50);
                     l50.type = 0x1f1;
                     l50.x = (double)((int)x - (facing << 2));
                     l50.y = (double)((int)y - 6);
                     l50.scale = 0;
                     l50.layer = 1;
                     l50.unk18 = facing;
-                    Vf9(&l50);
+                    SpawnObject(&l50);
                     l50.type = 0x1f1;
                     l50.x = (double)((int)x - facing * 0xe);
                     l50.y = (double)((int)y - 0x1a);
                     l50.scale = 0;
                     l50.layer = 1;
                     l50.unk18 = facing;
-                    Vf9(&l50);
+                    SpawnObject(&l50);
                     l50.type = 0x1f1;
                     l50.x = (double)(int)x;
                     l50.y = (double)(int)y;
                     l50.scale = 0;
                     l50.layer = 1;
                     l50.unk18 = facing;
-                    Vf9(&l50);
+                    SpawnObject(&l50);
                     l50.type = 0x1f1;
                     l50.x = (double)((int)x + facing * 0x1e);
                     l50.y = (double)((int)y - 0x28);
                     l50.scale = 0;
                     l50.layer = 1;
                     l50.unk18 = facing;
-                    Vf9(&l50);
+                    SpawnObject(&l50);
                     l50.type = 0x1f1;
                     l50.x = (double)((int)x - facing * 0x19);
                     l50.y = (double)((int)y - 0x50);
                     l50.scale = 0;
                     l50.layer = 1;
                     l50.unk18 = facing;
-                    Vf9(&l50);
+                    SpawnObject(&l50);
                     l50.type = 0x1f2;
                     l50.x = (double)((int)x - facing * 0x23);
                     l50.y = (double)((int)y - 0x2a);
                     l50.scale = 0;
                     l50.layer = 1;
                     l50.unk18 = facing;
-                    Vf9(&l50);
+                    SpawnObject(&l50);
                     l50.type = 0x1f2;
                     l50.x = (double)((int)x - facing * 0x12);
                     l50.y = (double)((int)y - 0x14);
                     l50.scale = 0;
                     l50.layer = 1;
                     l50.unk18 = facing;
-                    Vf9(&l50);
+                    SpawnObject(&l50);
                     l50.type = 0x1f2;
                     l50.x = (double)((int)x + facing * 2);
                     l50.y = (double)((int)y - 0x41);
                     l50.scale = 0;
                     l50.layer = 1;
                     l50.unk18 = facing;
-                    Vf9(&l50);
+                    SpawnObject(&l50);
                     l50.type = 0x1f2;
                     l50.x = (double)((int)x + (facing << 4));
                     l50.y = (double)((int)y - 0x50);
                     l50.scale = 0;
                     l50.layer = 1;
                     l50.unk18 = facing;
-                    Vf9(&l50);
+                    SpawnObject(&l50);
                     unk2c9 = 0x22;
-                    Vf10(v4);
+                    RemoveObject(v4);
                     unk3144 = 0;
                     break;
                 }
@@ -2231,10 +2231,10 @@ void CSayuri::Vf7()
                     m_objects[v4].vy = -m_objects[v4].vy;
                 }
                 if (unk3254[v4] < 0xa) {
-                    m_objects[v4].unk50 = 1;
+                    m_objects[v4].scale = 1;
                 }
                 if (unk3254[v4] < 0) {
-                    Vf10(v4);
+                    RemoveObject(v4);
                     break;
                 }
                 m_objects[v4].timer++;
@@ -2260,10 +2260,10 @@ void CSayuri::Vf7()
                     m_objects[v4].vy = -m_objects[v4].vy;
                 }
                 if (unk3254[v4] < 0xa) {
-                    m_objects[v4].unk50 = 1;
+                    m_objects[v4].scale = 1;
                 }
                 if (unk3254[v4] < 0) {
-                    Vf10(v4);
+                    RemoveObject(v4);
                     break;
                 }
                 m_objects[v4].timer++;
@@ -2286,7 +2286,7 @@ void CSayuri::Vf7()
                     m_objects[v4].frame++;
                     m_objects[v4].unk80 = 0;
                     if (m_objects[v4].frame >= v58) {
-                        Vf10(v4);
+                        RemoveObject(v4);
                     }
                 }
             }

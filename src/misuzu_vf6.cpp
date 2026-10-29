@@ -1,4 +1,4 @@
-// CMisuzu::Vf6 (0x50c4b0-0x519dff), the per-state update. It is a file of its own,
+// CMisuzu::UpdatePattern (0x50c4b0-0x519dff), the per-state update. It is a file of its own,
 // as in the original: its floating-point constants precede the rest of CMisuzu's
 // .rdata, which starts with its constructor's folder name (misuzu.cpp).
 #include <stdlib.h>
@@ -6,7 +6,7 @@
 #include <math.h>
 #include "efz.h"
 
-void CMisuzu::Vf6()
+void CMisuzu::UpdatePattern()
 {
     WORD x8;
     WORD l4;
@@ -17,7 +17,7 @@ void CMisuzu::Vf6()
     EffectDesc l50;
     l4 = (short)anims[pattern].frames[frame].duration;
     x8 = anims[pattern].frameCount;
-    CPlayer::Unk413090((EffectDesc*)&l50);
+    CPlayer::InitEffectDesc((EffectDesc*)&l50);
     switch (pattern) {
     default:
         vx = 0.0;
@@ -86,7 +86,7 @@ void CMisuzu::Vf6()
             frame++;
             if (frame >= x8) {
                 pattern = 9;
-                Vf0();
+                StartPattern();
             }
         }
         if (y + vy >= 0.0 && frame > 2) {
@@ -94,7 +94,7 @@ void CMisuzu::Vf6()
             unk2c9 = 9;
             CPlayer::FaceOpponent();
             pattern = 0xd;
-            Vf0();
+            StartPattern();
         }
         break;
     case 5:
@@ -116,7 +116,7 @@ void CMisuzu::Vf6()
             frame++;
             if (frame >= x8) {
                 pattern = 9;
-                Vf0();
+                StartPattern();
             }
         }
         if (y + vy >= 0.0 && frame > 2) {
@@ -124,7 +124,7 @@ void CMisuzu::Vf6()
             unk2c9 = 9;
             CPlayer::FaceOpponent();
             pattern = 0xd;
-            Vf0();
+            StartPattern();
         }
         break;
     case 6:
@@ -146,7 +146,7 @@ void CMisuzu::Vf6()
             frame++;
             if (frame >= x8) {
                 pattern = 9;
-                Vf0();
+                StartPattern();
             }
         }
         if (y + vy >= 0.0 && frame > 2) {
@@ -154,7 +154,7 @@ void CMisuzu::Vf6()
             unk2c9 = 9;
             CPlayer::FaceOpponent();
             pattern = 0xd;
-            Vf0();
+            StartPattern();
         }
         break;
     case 7:
@@ -167,7 +167,7 @@ void CMisuzu::Vf6()
             frame++;
             if (frame >= x8) {
                 pattern = 0;
-                Vf0();
+                StartPattern();
             }
         }
         break;
@@ -181,7 +181,7 @@ void CMisuzu::Vf6()
             frame++;
             if (frame >= x8) {
                 pattern = 3;
-                Vf0();
+                StartPattern();
             }
         }
         break;
@@ -200,7 +200,7 @@ void CMisuzu::Vf6()
             CPlayer::StopMoving();
             unk2c9 = 9;
             pattern = 0xd;
-            Vf0();
+            StartPattern();
         }
         break;
     case 0xd:
@@ -216,7 +216,7 @@ void CMisuzu::Vf6()
                 if (m_inputY == 1) {
                     pattern = 3;
                 }
-                Vf0();
+                StartPattern();
             }
         }
         break;
@@ -233,7 +233,7 @@ void CMisuzu::Vf6()
             frame++;
             if (frame >= x8) {
                 pattern = 9;
-                Vf0();
+                StartPattern();
             }
         }
         if (y + vy >= 0.0 && frame > 3) {
@@ -241,7 +241,7 @@ void CMisuzu::Vf6()
             unk2c9 = 9;
             CPlayer::FaceOpponent();
             pattern = 0xd;
-            Vf0();
+            StartPattern();
         }
         break;
     case 0xf:
@@ -257,7 +257,7 @@ void CMisuzu::Vf6()
             frame++;
             if (frame >= x8) {
                 pattern = 9;
-                Vf0();
+                StartPattern();
             }
         }
         if (y + vy >= 0.0 && frame > 3) {
@@ -265,7 +265,7 @@ void CMisuzu::Vf6()
             unk2c9 = 9;
             CPlayer::FaceOpponent();
             pattern = 0xd;
-            Vf0();
+            StartPattern();
         }
         break;
     case 0x10:
@@ -281,7 +281,7 @@ void CMisuzu::Vf6()
             frame++;
             if (frame >= x8) {
                 pattern = 9;
-                Vf0();
+                StartPattern();
             }
         }
         if (y + vy >= 0.0 && frame > 3) {
@@ -289,7 +289,7 @@ void CMisuzu::Vf6()
             unk2c9 = 9;
             CPlayer::FaceOpponent();
             pattern = 0xd;
-            Vf0();
+            StartPattern();
         }
         break;
     case 0x2f:
@@ -350,7 +350,7 @@ void CMisuzu::Vf6()
                 if (m_inputY == 1) {
                     pattern = 3;
                 }
-                Vf0();
+                StartPattern();
             }
         }
         break;
@@ -385,7 +385,7 @@ void CMisuzu::Vf6()
                 if (m_inputY == 1) {
                     pattern = 3;
                 }
-                Vf0();
+                StartPattern();
             }
         }
         break;
@@ -420,7 +420,7 @@ void CMisuzu::Vf6()
                 if (m_inputY == 1) {
                     pattern = 3;
                 }
-                Vf0();
+                StartPattern();
             }
         }
         break;
@@ -455,7 +455,7 @@ void CMisuzu::Vf6()
                 if (m_inputY == 1) {
                     pattern = 3;
                 }
-                Vf0();
+                StartPattern();
             }
         }
         break;
@@ -490,7 +490,7 @@ void CMisuzu::Vf6()
                 if (m_inputY == 1) {
                     pattern = 3;
                 }
-                Vf0();
+                StartPattern();
             }
         }
         break;
@@ -525,7 +525,7 @@ void CMisuzu::Vf6()
                 if (m_inputY == 1) {
                     pattern = 3;
                 }
-                Vf0();
+                StartPattern();
             }
         }
         break;
@@ -557,7 +557,7 @@ void CMisuzu::Vf6()
             frame++;
             if (frame >= x8) {
                 pattern = 3;
-                Vf0();
+                StartPattern();
             }
         }
         break;
@@ -589,7 +589,7 @@ void CMisuzu::Vf6()
             frame++;
             if (frame >= x8) {
                 pattern = 3;
-                Vf0();
+                StartPattern();
             }
         }
         break;
@@ -621,7 +621,7 @@ void CMisuzu::Vf6()
             frame++;
             if (frame >= x8) {
                 pattern = 3;
-                Vf0();
+                StartPattern();
             }
         }
         break;
@@ -661,10 +661,10 @@ void CMisuzu::Vf6()
             y = 0.0;
             if (unk12c != 0) {
                 pattern = 0x61;
-                Vf0();
+                StartPattern();
             } else {
                 pattern = 0x62;
-                Vf0();
+                StartPattern();
             }
         }
         break;
@@ -704,10 +704,10 @@ void CMisuzu::Vf6()
             y = 0.0;
             if (unk12c != 0) {
                 pattern = 0x61;
-                Vf0();
+                StartPattern();
             } else {
                 pattern = 0x62;
-                Vf0();
+                StartPattern();
             }
         }
         break;
@@ -747,10 +747,10 @@ void CMisuzu::Vf6()
             y = 0.0;
             if (unk12c != 0) {
                 pattern = 0x61;
-                Vf0();
+                StartPattern();
             } else {
                 pattern = 0x62;
-                Vf0();
+                StartPattern();
             }
         }
         break;
@@ -785,10 +785,10 @@ void CMisuzu::Vf6()
             y = 0.0;
             if (unk12c != 0) {
                 pattern = 0x61;
-                Vf0();
+                StartPattern();
             } else {
                 pattern = 0x62;
-                Vf0();
+                StartPattern();
             }
         }
         break;
@@ -823,10 +823,10 @@ void CMisuzu::Vf6()
             y = 0.0;
             if (unk12c != 0) {
                 pattern = 0x61;
-                Vf0();
+                StartPattern();
             } else {
                 pattern = 0x62;
-                Vf0();
+                StartPattern();
             }
         }
         break;
@@ -836,7 +836,7 @@ void CMisuzu::Vf6()
         }
         if (frame > 0 && (char)CPlayer::Unk40ff70() != 0) {
             pattern = 0x46;
-            Vf0();
+            StartPattern();
             break;
         }
         if (frame == 0 && timer == 0) {
@@ -871,10 +871,10 @@ void CMisuzu::Vf6()
             y = 0.0;
             if (unk12c != 0) {
                 pattern = 0x61;
-                Vf0();
+                StartPattern();
             } else {
                 pattern = 0x62;
-                Vf0();
+                StartPattern();
             }
         }
         break;
@@ -884,7 +884,7 @@ void CMisuzu::Vf6()
         }
         if (frame > 0 && (char)CPlayer::Unk40ff70() != 0) {
             pattern = 0x46;
-            Vf0();
+            StartPattern();
             break;
         }
         if (frame == 0 && timer == 0) {
@@ -919,10 +919,10 @@ void CMisuzu::Vf6()
             y = 0.0;
             if (unk12c != 0) {
                 pattern = 0x61;
-                Vf0();
+                StartPattern();
             } else {
                 pattern = 0x62;
-                Vf0();
+                StartPattern();
             }
         }
         break;
@@ -932,7 +932,7 @@ void CMisuzu::Vf6()
         }
         if (frame > 0 && (char)CPlayer::Unk40ff70() != 0) {
             pattern = 0x46;
-            Vf0();
+            StartPattern();
             break;
         }
         if (frame == 0 && timer == 0) {
@@ -962,10 +962,10 @@ void CMisuzu::Vf6()
             y = 0.0;
             if (unk12c != 0) {
                 pattern = 0x61;
-                Vf0();
+                StartPattern();
             } else {
                 pattern = 0x62;
-                Vf0();
+                StartPattern();
             }
         }
         break;
@@ -975,7 +975,7 @@ void CMisuzu::Vf6()
         }
         if (frame > 0 && (char)CPlayer::Unk40ff70() != 0) {
             pattern = 0x46;
-            Vf0();
+            StartPattern();
             break;
         }
         if (frame == 0 && timer == 0) {
@@ -1005,10 +1005,10 @@ void CMisuzu::Vf6()
             y = 0.0;
             if (unk12c != 0) {
                 pattern = 0x61;
-                Vf0();
+                StartPattern();
             } else {
                 pattern = 0x62;
-                Vf0();
+                StartPattern();
             }
         }
         break;
@@ -1022,7 +1022,7 @@ void CMisuzu::Vf6()
         timer++;
         if ((char)CPlayer::Unk40ff70() != 0) {
             pattern = 0x46;
-            Vf0();
+            StartPattern();
             break;
         }
         if (timer >= l4) {
@@ -1036,10 +1036,10 @@ void CMisuzu::Vf6()
             y = 0.0;
             if (unk12c != 0) {
                 pattern = 0x61;
-                Vf0();
+                StartPattern();
             } else {
                 pattern = 0x62;
-                Vf0();
+                StartPattern();
             }
         }
         break;
@@ -1062,10 +1062,10 @@ void CMisuzu::Vf6()
             y = 0.0;
             if (unk12c != 0) {
                 pattern = 0x61;
-                Vf0();
+                StartPattern();
             } else {
                 pattern = 0x62;
-                Vf0();
+                StartPattern();
             }
         }
         break;
@@ -1101,10 +1101,10 @@ void CMisuzu::Vf6()
             y = 0.0;
             if (unk12c != 0) {
                 pattern = 0x61;
-                Vf0();
+                StartPattern();
             } else {
                 pattern = 0x62;
-                Vf0();
+                StartPattern();
             }
         }
         break;
@@ -1139,10 +1139,10 @@ void CMisuzu::Vf6()
             y = 0.0;
             if (unk12c != 0) {
                 pattern = 0x61;
-                Vf0();
+                StartPattern();
             } else {
                 pattern = 0x62;
-                Vf0();
+                StartPattern();
             }
         }
         break;
@@ -1166,7 +1166,7 @@ void CMisuzu::Vf6()
                 if (m_inputY == 1) {
                     pattern = 3;
                 }
-                Vf0();
+                StartPattern();
             }
         }
         break;
@@ -1190,7 +1190,7 @@ void CMisuzu::Vf6()
                 if (m_inputY == 1) {
                     pattern = 3;
                 }
-                Vf0();
+                StartPattern();
             }
         }
         break;
@@ -1211,7 +1211,7 @@ void CMisuzu::Vf6()
             frame++;
             if (frame >= x8) {
                 pattern = 3;
-                Vf0();
+                StartPattern();
             }
         }
         break;
@@ -1248,7 +1248,7 @@ void CMisuzu::Vf6()
                 if (m_inputY == 1) {
                     pattern = 3;
                 }
-                Vf0();
+                StartPattern();
             }
         }
         break;
@@ -1285,7 +1285,7 @@ void CMisuzu::Vf6()
                 if (m_inputY == 1) {
                     pattern = 3;
                 }
-                Vf0();
+                StartPattern();
             }
         }
         break;
@@ -1319,7 +1319,7 @@ void CMisuzu::Vf6()
             frame++;
             if (frame >= x8) {
                 pattern = 3;
-                Vf0();
+                StartPattern();
             }
         }
         break;
@@ -1333,7 +1333,7 @@ void CMisuzu::Vf6()
             l50.y = (double)(int)y;
             l50.unk18 = facing;
             l50.layer = 1;
-            Vf9(&l50);
+            SpawnObject(&l50);
             m_gauge = m_gauge + 0x1e;
             vx = unkc0;
             vy = unkc8;
@@ -1356,10 +1356,10 @@ void CMisuzu::Vf6()
             y = 0.0;
             if (unk12c != 0) {
                 pattern = 0x61;
-                Vf0();
+                StartPattern();
             } else {
                 pattern = 0x62;
-                Vf0();
+                StartPattern();
             }
         }
         break;
@@ -1402,10 +1402,10 @@ void CMisuzu::Vf6()
             y = 0.0;
             if (unk12c != 0) {
                 pattern = 0x61;
-                Vf0();
+                StartPattern();
             } else {
                 pattern = 0x62;
-                Vf0();
+                StartPattern();
             }
         }
         break;
@@ -1419,7 +1419,7 @@ void CMisuzu::Vf6()
                 l50.layer = 0;
                 l50.unk0 = 1;
                 l50.unk18 = facing;
-                Vf9(&l50);
+                SpawnObject(&l50);
                 unk3144 = 1;
             }
             if (unk120 != 0) {
@@ -1456,7 +1456,7 @@ void CMisuzu::Vf6()
             frame++;
             if (frame >= x8) {
                 pattern = 0;
-                Vf0();
+                StartPattern();
                 CPlayer::FaceOpponent();
             }
         }
@@ -1471,7 +1471,7 @@ void CMisuzu::Vf6()
                 l50.layer = 0;
                 l50.unk0 = 1;
                 l50.unk18 = facing;
-                Vf9(&l50);
+                SpawnObject(&l50);
                 unk3144 = 1;
             }
             if (unk120 != 0) {
@@ -1508,7 +1508,7 @@ void CMisuzu::Vf6()
             frame++;
             if (frame >= x8) {
                 pattern = 0;
-                Vf0();
+                StartPattern();
                 CPlayer::FaceOpponent();
             }
         }
@@ -1523,7 +1523,7 @@ void CMisuzu::Vf6()
                 l50.layer = 0;
                 l50.unk0 = 1;
                 l50.unk18 = facing;
-                Vf9(&l50);
+                SpawnObject(&l50);
                 unk3144 = 1;
             }
             if (unk120 != 0) {
@@ -1541,7 +1541,7 @@ void CMisuzu::Vf6()
             frame++;
             if (frame >= x8) {
                 pattern = 0;
-                Vf0();
+                StartPattern();
                 CPlayer::FaceOpponent();
             }
         }
@@ -1549,10 +1549,10 @@ void CMisuzu::Vf6()
             y = 0.0;
             if (unk12c != 0) {
                 pattern = 0x61;
-                Vf0();
+                StartPattern();
             } else {
                 pattern = 0x62;
-                Vf0();
+                StartPattern();
             }
         }
         break;
@@ -1566,7 +1566,7 @@ void CMisuzu::Vf6()
                 l50.layer = 0;
                 l50.unk0 = 1;
                 l50.unk18 = facing;
-                Vf9(&l50);
+                SpawnObject(&l50);
                 unk3144 = 1;
             }
             if (unk3138 == 0) {
@@ -1593,10 +1593,10 @@ void CMisuzu::Vf6()
             y = 0.0;
             if (unk12c != 0) {
                 pattern = 0x61;
-                Vf0();
+                StartPattern();
             } else {
                 pattern = 0x62;
-                Vf0();
+                StartPattern();
             }
         }
         break;
@@ -1609,7 +1609,7 @@ void CMisuzu::Vf6()
             l50.unk18 = 1;
             l50.scale = 0;
             l50.layer = 0;
-            Vf9(&l50);
+            SpawnObject(&l50);
         }
         timer++;
         if (timer >= l4) {
@@ -1617,7 +1617,7 @@ void CMisuzu::Vf6()
             frame++;
             if (frame >= x8) {
                 pattern = 0;
-                Vf0();
+                StartPattern();
             }
         }
         break;
@@ -1634,7 +1634,7 @@ void CMisuzu::Vf6()
                 if (m_inputY == 1) {
                     pattern = 3;
                 }
-                Vf0();
+                StartPattern();
             }
         }
         break;
@@ -1657,7 +1657,7 @@ void CMisuzu::Vf6()
             frame++;
             if (frame >= x8) {
                 pattern = 0x63;
-                Vf0();
+                StartPattern();
             }
         }
         break;
@@ -1680,7 +1680,7 @@ void CMisuzu::Vf6()
             frame++;
             if (frame >= x8) {
                 pattern = 0x63;
-                Vf0();
+                StartPattern();
             }
         }
         break;
@@ -1688,7 +1688,7 @@ void CMisuzu::Vf6()
         timer++;
         if (m_hp > 0 && timer > 0x63 && frame == 0) {
             pattern = 0x60;
-            Vf0();
+            StartPattern();
         }
         if (timer >= l4) {
             timer = 0;
@@ -1698,7 +1698,7 @@ void CMisuzu::Vf6()
             }
             if (frame >= x8) {
                 pattern = 0x60;
-                Vf0();
+                StartPattern();
             }
         }
         break;
@@ -1743,7 +1743,7 @@ void CMisuzu::Vf6()
                 if (m_inputY == 1) {
                     pattern = 3;
                 }
-                Vf0();
+                StartPattern();
             }
         }
         break;
@@ -1782,7 +1782,7 @@ void CMisuzu::Vf6()
                 if (m_inputY == 1) {
                     pattern = 3;
                 }
-                Vf0();
+                StartPattern();
             }
         }
         break;
@@ -1821,7 +1821,7 @@ void CMisuzu::Vf6()
                 if (m_inputY == 1) {
                     pattern = 3;
                 }
-                Vf0();
+                StartPattern();
             }
         }
         break;
@@ -1857,7 +1857,7 @@ void CMisuzu::Vf6()
             }
             if (frame >= x8) {
                 pattern = 3;
-                Vf0();
+                StartPattern();
             }
         }
         break;
@@ -1893,7 +1893,7 @@ void CMisuzu::Vf6()
             }
             if (frame >= x8) {
                 pattern = 3;
-                Vf0();
+                StartPattern();
             }
         }
         break;
@@ -1929,7 +1929,7 @@ void CMisuzu::Vf6()
             }
             if (frame >= x8) {
                 pattern = 3;
-                Vf0();
+                StartPattern();
             }
         }
         break;
@@ -1947,7 +1947,7 @@ void CMisuzu::Vf6()
             frame++;
             if (frame >= x8) {
                 pattern = 9;
-                Vf0();
+                StartPattern();
             }
         }
         if (y + vy >= 0.0) {
@@ -1955,7 +1955,7 @@ void CMisuzu::Vf6()
             unk2c9 = 9;
             CPlayer::FaceOpponent();
             pattern = 0xd;
-            Vf0();
+            StartPattern();
         }
         break;
     case 0x9d:
@@ -1978,7 +1978,7 @@ void CMisuzu::Vf6()
             frame++;
             if (frame >= x8) {
                 pattern = 9;
-                Vf0();
+                StartPattern();
             }
         }
         if (y + vy >= 0.0) {
@@ -1986,7 +1986,7 @@ void CMisuzu::Vf6()
             unk2c9 = 9;
             CPlayer::FaceOpponent();
             pattern = 0xd;
-            Vf0();
+            StartPattern();
         }
         break;
     case 0x9e:
@@ -2009,7 +2009,7 @@ void CMisuzu::Vf6()
             frame++;
             if (frame >= x8) {
                 pattern = 9;
-                Vf0();
+                StartPattern();
             }
         }
         if (y + vy >= 0.0) {
@@ -2017,7 +2017,7 @@ void CMisuzu::Vf6()
             unk2c9 = 9;
             CPlayer::FaceOpponent();
             pattern = 0xd;
-            Vf0();
+            StartPattern();
         }
         break;
     case 0xa1:
@@ -2039,7 +2039,7 @@ void CMisuzu::Vf6()
             frame++;
             if (frame >= x8) {
                 pattern = 9;
-                Vf0();
+                StartPattern();
                 ay = 0.035;
             }
         }
@@ -2069,8 +2069,8 @@ void CMisuzu::Vf6()
         vy = vy + ay;
         if (y + vy > 0.0) {
             pattern = 0xd;
-            Vf0();
-            Vf0();
+            StartPattern();
+            StartPattern();
             y = 0.0;
             break;
         }
@@ -2121,13 +2121,13 @@ void CMisuzu::Vf6()
         }
         if (m_inputX == facing && unk313c >= 0x78) {
             pattern = 9;
-            Vf0();
+            StartPattern();
             vx = 0.5;
             ay = 0.03;
         }
         if (m_inputX != facing && unk3138 >= 0x27) {
             pattern = 9;
-            Vf0();
+            StartPattern();
             vx = 0.5;
             ay = 0.03;
         }
@@ -2168,7 +2168,7 @@ void CMisuzu::Vf6()
         }
         if (unk313c > 0x27 && m_inputX != -facing || unk313c >= 0x78) {
             pattern = 9;
-            Vf0();
+            StartPattern();
             vx = -0.5;
             ay = 0.03;
         }
@@ -2193,7 +2193,7 @@ void CMisuzu::Vf6()
         }
         if (m_inputX == facing && unk313c >= 0x78) {
             pattern = 9;
-            Vf0();
+            StartPattern();
             vx = 1.3;
             ay = 0.03;
             if (CPlayer::FaceOpponent() != 0) {
@@ -2202,7 +2202,7 @@ void CMisuzu::Vf6()
         }
         if (m_inputX != facing && unk3138 >= 0x30) {
             pattern = 9;
-            Vf0();
+            StartPattern();
             vx = 1.3;
             ay = 0.03;
             if (CPlayer::FaceOpponent() != 0) {
@@ -2230,7 +2230,7 @@ void CMisuzu::Vf6()
         }
         if (m_inputX == -facing && unk313c >= 0x78) {
             pattern = 9;
-            Vf0();
+            StartPattern();
             vx = -0.9;
             ay = 0.03;
             if (CPlayer::FaceOpponent() != 0) {
@@ -2239,7 +2239,7 @@ void CMisuzu::Vf6()
         }
         if (m_inputX != -facing && unk3138 >= 0x30) {
             pattern = 9;
-            Vf0();
+            StartPattern();
             vx = -0.9;
             ay = 0.03;
             if (CPlayer::FaceOpponent() != 0) {
@@ -2283,7 +2283,7 @@ void CMisuzu::Vf6()
             if (frame >= x8) {
                 pattern = 0;
                 CPlayer::FaceOpponent();
-                Vf0();
+                StartPattern();
             }
         }
         break;
@@ -2312,7 +2312,7 @@ void CMisuzu::Vf6()
             }
             if (frame >= x8) {
                 pattern = 0;
-                Vf0();
+                StartPattern();
             }
         }
         break;
@@ -2341,7 +2341,7 @@ void CMisuzu::Vf6()
             }
             if (frame >= x8) {
                 pattern = 3;
-                Vf0();
+                StartPattern();
             }
         }
         break;
@@ -2378,7 +2378,7 @@ void CMisuzu::Vf6()
             frame++;
             if (frame >= x8) {
                 pattern = 9;
-                Vf0();
+                StartPattern();
             }
         }
         break;
@@ -2414,7 +2414,7 @@ void CMisuzu::Vf6()
                 vx = unk3138 * 0.01;
                 vy = unk313c * 0.01;
                 ay = 0.035;
-                Vf0();
+                StartPattern();
             }
         }
         break;
@@ -2448,7 +2448,7 @@ void CMisuzu::Vf6()
                 frame = frame - 2;
             }
             if (frame >= x8) {
-                Vf0();
+                StartPattern();
                 pattern = 0;
             }
         }
@@ -2465,7 +2465,7 @@ void CMisuzu::Vf6()
                 pattern = 6;
             }
             m_attackResult = 0;
-            Vf0();
+            StartPattern();
             break;
         }
         if (frame == 1 && timer == 0) {
@@ -2483,7 +2483,7 @@ void CMisuzu::Vf6()
             if (frame >= x8) {
                 pattern = 0;
                 CPlayer::FaceOpponent();
-                Vf0();
+                StartPattern();
             }
         }
         break;
@@ -2497,7 +2497,7 @@ void CMisuzu::Vf6()
                 pattern = 6;
             }
             m_attackResult = 0;
-            Vf0();
+            StartPattern();
             break;
         }
         if (frame == 0 && timer == 0) {
@@ -2528,7 +2528,7 @@ void CMisuzu::Vf6()
             if (frame >= x8) {
                 pattern = 0;
                 CPlayer::FaceOpponent();
-                Vf0();
+                StartPattern();
             }
         }
         break;
@@ -2542,7 +2542,7 @@ void CMisuzu::Vf6()
                 pattern = 6;
             }
             m_attackResult = 0;
-            Vf0();
+            StartPattern();
             break;
         }
         if (frame == 0 && timer == 0) {
@@ -2564,7 +2564,7 @@ void CMisuzu::Vf6()
             if (frame >= x8) {
                 pattern = 0;
                 CPlayer::FaceOpponent();
-                Vf0();
+                StartPattern();
             }
         }
         break;
@@ -2588,7 +2588,7 @@ void CMisuzu::Vf6()
             if (frame >= x8) {
                 pattern = 0;
                 CPlayer::FaceOpponent();
-                Vf0();
+                StartPattern();
             }
         }
         break;
@@ -2604,7 +2604,7 @@ void CMisuzu::Vf6()
                 pattern = 6;
             }
             m_attackResult = 0;
-            Vf0();
+            StartPattern();
             break;
         }
         if (frame == 1 && timer == 0) {
@@ -2625,7 +2625,7 @@ void CMisuzu::Vf6()
                     pattern = 3;
                 }
                 CPlayer::FaceOpponent();
-                Vf0();
+                StartPattern();
             }
         }
         break;
@@ -2641,7 +2641,7 @@ void CMisuzu::Vf6()
                 pattern = 6;
             }
             m_attackResult = 0;
-            Vf0();
+            StartPattern();
             break;
         }
         if (frame == 2 && timer == 0) {
@@ -2662,7 +2662,7 @@ void CMisuzu::Vf6()
                     pattern = 3;
                 }
                 CPlayer::FaceOpponent();
-                Vf0();
+                StartPattern();
             }
         }
         break;
@@ -2696,7 +2696,7 @@ void CMisuzu::Vf6()
                     pattern = 3;
                 }
                 CPlayer::FaceOpponent();
-                Vf0();
+                StartPattern();
             }
         }
         break;
@@ -2712,7 +2712,7 @@ void CMisuzu::Vf6()
                 pattern = 0x10;
             }
             m_attackResult = 0;
-            Vf0();
+            StartPattern();
             break;
         }
         if (frame == 1 && timer == 0) {
@@ -2723,7 +2723,7 @@ void CMisuzu::Vf6()
         if (y + vy >= 0.0) {
             y = 0.0;
             pattern = 0xd;
-            Vf0();
+            StartPattern();
             break;
         }
         timer++;
@@ -2735,7 +2735,7 @@ void CMisuzu::Vf6()
             }
             if (frame >= x8) {
                 pattern = 9;
-                Vf0();
+                StartPattern();
             }
         }
         break;
@@ -2751,7 +2751,7 @@ void CMisuzu::Vf6()
                 pattern = 0x10;
             }
             m_attackResult = 0;
-            Vf0();
+            StartPattern();
             break;
         }
         if (frame == 2 && timer == 0) {
@@ -2762,7 +2762,7 @@ void CMisuzu::Vf6()
         if (y + vy >= 0.0) {
             y = 0.0;
             pattern = 0xd;
-            Vf0();
+            StartPattern();
             break;
         }
         timer++;
@@ -2774,7 +2774,7 @@ void CMisuzu::Vf6()
             }
             if (frame >= x8) {
                 pattern = 9;
-                Vf0();
+                StartPattern();
             }
         }
         break;
@@ -2790,7 +2790,7 @@ void CMisuzu::Vf6()
                 pattern = 0x10;
             }
             m_attackResult = 0;
-            Vf0();
+            StartPattern();
             break;
         }
         if (frame == 3 && timer == 0) {
@@ -2801,7 +2801,7 @@ void CMisuzu::Vf6()
         if (y + vy >= 0.0) {
             y = 0.0;
             pattern = 0xd;
-            Vf0();
+            StartPattern();
             break;
         }
         timer++;
@@ -2817,7 +2817,7 @@ void CMisuzu::Vf6()
             }
             if (frame >= x8) {
                 pattern = 9;
-                Vf0();
+                StartPattern();
             }
         }
         break;
@@ -2861,7 +2861,7 @@ void CMisuzu::Vf6()
             if (frame >= x8) {
                 pattern = 0;
                 CPlayer::FaceOpponent();
-                Vf0();
+                StartPattern();
             }
         }
         break;
@@ -2899,7 +2899,7 @@ void CMisuzu::Vf6()
             if (frame >= x8) {
                 pattern = 0;
                 CPlayer::FaceOpponent();
-                Vf0();
+                StartPattern();
             }
         }
         break;
@@ -2914,7 +2914,7 @@ void CMisuzu::Vf6()
         }
         if (m_attackResult > 1) {
             pattern = 0xd5;
-            Vf0();
+            StartPattern();
             CPlayer::StopMoving();
             break;
         }
@@ -2932,7 +2932,7 @@ void CMisuzu::Vf6()
             m_game->CreateEffect((EffectDesc*)&l50);
             unk2c9 = 7;
             pattern = 0xd6;
-            Vf0();
+            StartPattern();
             break;
         }
         timer++;
@@ -2959,7 +2959,7 @@ void CMisuzu::Vf6()
             m_attackResult = 0;
             if (frame >= x8) {
                 pattern = 9;
-                Vf0();
+                StartPattern();
             }
         }
         break;
@@ -2987,7 +2987,7 @@ void CMisuzu::Vf6()
                     pattern = 3;
                 }
                 CPlayer::FaceOpponent();
-                Vf0();
+                StartPattern();
             }
         }
         break;
@@ -3003,8 +3003,8 @@ void CMisuzu::Vf6()
             vx = 0.0;
             vy = 0.0;
             unkb8 = 0.0;
-            Vf0();
-            (*m_opponent)->Vf0();
+            StartPattern();
+            (*m_opponent)->StartPattern();
             (*m_opponent)->StopMoving();
             pattern = 0xdd;
             (*m_opponent)->pattern = 0x6e;
@@ -3027,7 +3027,7 @@ void CMisuzu::Vf6()
                     pattern = 3;
                 }
                 CPlayer::FaceOpponent();
-                Vf0();
+                StartPattern();
             }
         }
         break;
@@ -3038,10 +3038,10 @@ void CMisuzu::Vf6()
             (*m_opponent)->StopMoving();
             (*m_opponent)->y = 0.0;
             (*m_opponent)->x = facing * 0x2a + x;
-            (*m_opponent)->Vf0();
+            (*m_opponent)->StartPattern();
         }
         if (frame == 5 && timer == 0) {
-            (*m_opponent)->Vf0();
+            (*m_opponent)->StartPattern();
             (*m_opponent)->pattern = 0x3b;
             (*m_opponent)->unkc0 = 2.0;
             (*m_opponent)->unkc8 = -1.0;
@@ -3082,7 +3082,7 @@ void CMisuzu::Vf6()
             if (frame >= x8) {
                 pattern = 0;
                 CPlayer::FaceOpponent();
-                Vf0();
+                StartPattern();
             }
         }
         break;
@@ -3100,7 +3100,7 @@ void CMisuzu::Vf6()
         if (y + vy >= 0.0) {
             y = 0.0;
             pattern = 0xd;
-            Vf0();
+            StartPattern();
             break;
         }
         timer++;
@@ -3110,7 +3110,7 @@ void CMisuzu::Vf6()
             m_attackResult = 0;
             if (frame >= x8) {
                 pattern = 9;
-                Vf0();
+                StartPattern();
             }
         }
         break;
@@ -3128,7 +3128,7 @@ void CMisuzu::Vf6()
         if (y + vy >= 0.0) {
             y = 0.0;
             pattern = 0xd;
-            Vf0();
+            StartPattern();
             break;
         }
         timer++;
@@ -3138,7 +3138,7 @@ void CMisuzu::Vf6()
             m_attackResult = 0;
             if (frame >= x8) {
                 pattern = 9;
-                Vf0();
+                StartPattern();
             }
         }
         break;
@@ -3156,7 +3156,7 @@ void CMisuzu::Vf6()
         if (y + vy >= 0.0) {
             y = 0.0;
             pattern = 0xd;
-            Vf0();
+            StartPattern();
             break;
         }
         timer++;
@@ -3166,7 +3166,7 @@ void CMisuzu::Vf6()
             m_attackResult = 0;
             if (frame >= x8) {
                 pattern = 9;
-                Vf0();
+                StartPattern();
             }
         }
         break;
@@ -3174,8 +3174,8 @@ void CMisuzu::Vf6()
         vy = vy + ay;
         if (frame == 1 && m_attackResult == 3) {
             (*m_opponent)->StopMoving();
-            (*m_opponent)->Vf0();
-            Vf0();
+            (*m_opponent)->StartPattern();
+            StartPattern();
             CPlayer::StopMoving();
             pattern = 0xf9;
             (*m_opponent)->pattern = 0x64;
@@ -3218,7 +3218,7 @@ void CMisuzu::Vf6()
         if (vy + y > 0.0 && frame > 5) {
             CPlayer::StopMoving();
             y = 0.0;
-            Vf0();
+            StartPattern();
             pattern = 0xd;
             break;
         }
@@ -3241,7 +3241,7 @@ void CMisuzu::Vf6()
             (*m_opponent)->x = x - facing * 0x21;
             (*m_opponent)->pattern = 0x3f;
             CPlayer::DealDamage(0x4b0, 500.0);
-            (*m_opponent)->Vf0();
+            (*m_opponent)->StartPattern();
             (*m_opponent)->unkc0 = -2.0;
             (*m_opponent)->unkc8 = 0.0;
         }
@@ -3274,7 +3274,7 @@ void CMisuzu::Vf6()
             l50.unk0 = 1;
             l50.layer = 1;
             unk2c8 = 1;
-            Vf9(&l50);
+            SpawnObject(&l50);
         }
         timer++;
         if (timer >= l4) {
@@ -3282,7 +3282,7 @@ void CMisuzu::Vf6()
             frame++;
             if (frame >= x8) {
                 pattern = 0;
-                Vf0();
+                StartPattern();
             }
         }
         break;
@@ -3299,7 +3299,7 @@ void CMisuzu::Vf6()
             l50.unk18 = facing;
             l50.layer = 1;
             unk2c8 = 1;
-            Vf9(&l50);
+            SpawnObject(&l50);
         }
         timer++;
         if (timer >= l4) {
@@ -3307,7 +3307,7 @@ void CMisuzu::Vf6()
             frame++;
             if (frame >= x8) {
                 pattern = 0;
-                Vf0();
+                StartPattern();
             }
         }
         break;
@@ -3341,7 +3341,7 @@ void CMisuzu::Vf6()
             l50.unk0 = 1;
             l50.layer = 1;
             unk2c8 = 1;
-            Vf9(&l50);
+            SpawnObject(&l50);
         }
         timer++;
         if (timer >= l4) {
@@ -3349,7 +3349,7 @@ void CMisuzu::Vf6()
             frame++;
             if (frame >= x8) {
                 pattern = 0;
-                Vf0();
+                StartPattern();
             }
         }
         break;
@@ -3372,12 +3372,12 @@ void CMisuzu::Vf6()
                     l50.unk18 = facing;
                     l50.unk0 = 1;
                     l50.layer = 1;
-                    Vf9(&l50);
+                    SpawnObject(&l50);
                 }
             }
             if (frame >= x8) {
                 pattern = 0;
-                Vf0();
+                StartPattern();
             }
         }
         break;
@@ -3400,12 +3400,12 @@ void CMisuzu::Vf6()
                     l50.unk18 = facing;
                     l50.unk0 = 1;
                     l50.layer = 1;
-                    Vf9(&l50);
+                    SpawnObject(&l50);
                 }
             }
             if (frame >= x8) {
                 pattern = 0;
-                Vf0();
+                StartPattern();
             }
         }
         break;
@@ -3442,12 +3442,12 @@ void CMisuzu::Vf6()
                     l50.unk18 = facing;
                     l50.unk0 = 1;
                     l50.layer = 1;
-                    Vf9(&l50);
+                    SpawnObject(&l50);
                 }
             }
             if (frame >= x8) {
                 pattern = 0;
-                Vf0();
+                StartPattern();
             }
         }
         break;
@@ -3465,7 +3465,7 @@ void CMisuzu::Vf6()
             m_attackResult = 3;
             if (frame >= x8) {
                 pattern = 0;
-                Vf0();
+                StartPattern();
             }
         }
         break;
@@ -3483,7 +3483,7 @@ void CMisuzu::Vf6()
             m_attackResult = 3;
             if (frame >= x8) {
                 pattern = 0;
-                Vf0();
+                StartPattern();
             }
         }
         break;
@@ -3515,7 +3515,7 @@ void CMisuzu::Vf6()
             m_attackResult = 3;
             if (frame >= x8) {
                 pattern = 0;
-                Vf0();
+                StartPattern();
             }
         }
         break;
@@ -3562,7 +3562,7 @@ void CMisuzu::Vf6()
             }
             if (frame >= x8) {
                 pattern = 0;
-                Vf0();
+                StartPattern();
             }
         }
         break;
@@ -3609,7 +3609,7 @@ void CMisuzu::Vf6()
             }
             if (frame >= x8) {
                 pattern = 0;
-                Vf0();
+                StartPattern();
             }
         }
         break;
@@ -3672,7 +3672,7 @@ void CMisuzu::Vf6()
             }
             if (frame >= x8) {
                 pattern = 0;
-                Vf0();
+                StartPattern();
             }
         }
         break;
@@ -3711,7 +3711,7 @@ void CMisuzu::Vf6()
             }
             if (frame >= x8) {
                 pattern = 0;
-                Vf0();
+                StartPattern();
             }
         }
         break;
@@ -3750,7 +3750,7 @@ void CMisuzu::Vf6()
             }
             if (frame >= x8) {
                 pattern = 0;
-                Vf0();
+                StartPattern();
             }
         }
         break;
@@ -3805,7 +3805,7 @@ void CMisuzu::Vf6()
             }
             if (frame >= x8) {
                 pattern = 0;
-                Vf0();
+                StartPattern();
             }
         }
         break;
@@ -3821,7 +3821,7 @@ void CMisuzu::Vf6()
             l50.unk18 = facing;
             l50.layer = 1;
             l50.scale = 2;
-            Vf9(&l50);
+            SpawnObject(&l50);
             unk2c8 = 6;
         }
         timer++;
@@ -3830,7 +3830,7 @@ void CMisuzu::Vf6()
             frame++;
             if (frame >= x8) {
                 pattern = 0;
-                Vf0();
+                StartPattern();
             }
         }
         break;
@@ -3846,7 +3846,7 @@ void CMisuzu::Vf6()
             l50.unk18 = facing;
             l50.layer = 1;
             l50.scale = 2;
-            Vf9(&l50);
+            SpawnObject(&l50);
             unk2c8 = 6;
         }
         timer++;
@@ -3855,7 +3855,7 @@ void CMisuzu::Vf6()
             frame++;
             if (frame >= x8) {
                 pattern = 0;
-                Vf0();
+                StartPattern();
             }
         }
         break;
@@ -3883,7 +3883,7 @@ void CMisuzu::Vf6()
             l50.unk18 = facing;
             l50.layer = 1;
             l50.scale = 2;
-            Vf9(&l50);
+            SpawnObject(&l50);
             unk2c8 = 6;
         }
         timer++;
@@ -3892,7 +3892,7 @@ void CMisuzu::Vf6()
             frame++;
             if (frame >= x8) {
                 pattern = 0;
-                Vf0();
+                StartPattern();
             }
         }
         break;
@@ -3914,7 +3914,7 @@ void CMisuzu::Vf6()
             m_game->CreateEffect((EffectDesc*)&l50);
         }
         if (m_attackResult == 6 && frame == 7) {
-            Vf0();
+            StartPattern();
             frame = 8;
             m_attackResult = 0;
             unk14c = 0x9f;
@@ -3937,7 +3937,7 @@ void CMisuzu::Vf6()
                 break;
             }
             if (frame == 9) {
-                Vf0();
+                StartPattern();
                 pattern = 0x12f;
                 l50.type = 0x1a9;
                 l50.x = (double)((int)x - facing * 0xf);
@@ -3945,13 +3945,13 @@ void CMisuzu::Vf6()
                 l50.scale = 0;
                 l50.layer = 1;
                 l50.unk18 = facing;
-                Vf9(&l50);
+                SpawnObject(&l50);
                 break;
             }
             if (frame >= x8) {
                 pattern = 0;
                 CPlayer::FaceOpponent();
-                Vf0();
+                StartPattern();
             }
         }
         break;
@@ -3973,7 +3973,7 @@ void CMisuzu::Vf6()
             m_game->CreateEffect((EffectDesc*)&l50);
         }
         if (m_attackResult == 6 && frame == 7) {
-            Vf0();
+            StartPattern();
             frame = 8;
             m_attackResult = 0;
             unk14c = 0x9f;
@@ -3996,7 +3996,7 @@ void CMisuzu::Vf6()
                 break;
             }
             if (frame == 9) {
-                Vf0();
+                StartPattern();
                 pattern = 0x12f;
                 l50.type = 0x1aa;
                 l50.x = (double)((int)x - facing * 0xf);
@@ -4004,13 +4004,13 @@ void CMisuzu::Vf6()
                 l50.scale = 0;
                 l50.layer = 1;
                 l50.unk18 = facing;
-                Vf9(&l50);
+                SpawnObject(&l50);
                 break;
             }
             if (frame >= x8) {
                 pattern = 0;
                 CPlayer::FaceOpponent();
-                Vf0();
+                StartPattern();
             }
         }
         break;
@@ -4034,7 +4034,7 @@ void CMisuzu::Vf6()
             unk2c9 = 0x25;
         }
         if (m_attackResult == 6 && frame == 7) {
-            Vf0();
+            StartPattern();
             frame = 8;
             m_attackResult = 0;
             unk14c = 0x9f;
@@ -4057,7 +4057,7 @@ void CMisuzu::Vf6()
                 break;
             }
             if (frame == 9) {
-                Vf0();
+                StartPattern();
                 pattern = 0x12f;
                 l50.type = 0x1ab;
                 l50.x = (double)((int)x - facing * 0xf);
@@ -4065,13 +4065,13 @@ void CMisuzu::Vf6()
                 l50.scale = 0;
                 l50.layer = 1;
                 l50.unk18 = facing;
-                Vf9(&l50);
+                SpawnObject(&l50);
                 break;
             }
             if (frame >= x8) {
                 pattern = 0;
                 CPlayer::FaceOpponent();
-                Vf0();
+                StartPattern();
             }
         }
         break;
@@ -4086,7 +4086,7 @@ void CMisuzu::Vf6()
             l50.scale = 0;
             l50.layer = 1;
             l50.unk18 = facing;
-            Vf9(&l50);
+            SpawnObject(&l50);
         }
         if (y < 0.0) {
             vy = vy + ay;
@@ -4104,7 +4104,7 @@ void CMisuzu::Vf6()
                 frame = frame - 2;
             }
             if (frame >= x8) {
-                Vf0();
+                StartPattern();
                 pattern = 0;
                 break;
             }
@@ -4152,7 +4152,7 @@ void CMisuzu::Vf6()
         }
         if (m_attackResult == 6 && (frame == 7 || frame == 6)) {
             CPlayer::StopMoving();
-            Vf0();
+            StartPattern();
             frame = 8;
             m_attackResult = 0;
             unk14c = 0x9f;
@@ -4179,7 +4179,7 @@ void CMisuzu::Vf6()
                 unk3138++;
             }
             if (frame == 9) {
-                Vf0();
+                StartPattern();
                 pattern = 0x12f;
                 l50.type = 0x1a9;
                 l50.x = (double)((int)x - facing * 0xf);
@@ -4187,13 +4187,13 @@ void CMisuzu::Vf6()
                 l50.scale = 0;
                 l50.layer = 1;
                 l50.unk18 = facing;
-                Vf9(&l50);
+                SpawnObject(&l50);
                 break;
             }
             if (frame >= x8) {
                 pattern = 3;
                 CPlayer::FaceOpponent();
-                Vf0();
+                StartPattern();
             }
         }
         break;
@@ -4221,7 +4221,7 @@ void CMisuzu::Vf6()
             l50.unk18 = facing;
             l50.unk30 = 1;
             l50.unk28 = 1;
-            Vf9(&l50);
+            SpawnObject(&l50);
         }
         timer++;
         if (timer >= l4) {
@@ -4235,7 +4235,7 @@ void CMisuzu::Vf6()
             if (frame >= x8) {
                 pattern = 0;
                 CPlayer::FaceOpponent();
-                Vf0();
+                StartPattern();
             }
         }
         break;
@@ -4263,7 +4263,7 @@ void CMisuzu::Vf6()
             l50.unk18 = facing;
             l50.unk30 = 1;
             l50.unk28 = 1;
-            Vf9(&l50);
+            SpawnObject(&l50);
         }
         timer++;
         if (timer >= l4) {
@@ -4277,7 +4277,7 @@ void CMisuzu::Vf6()
             if (frame >= x8) {
                 pattern = 0;
                 CPlayer::FaceOpponent();
-                Vf0();
+                StartPattern();
             }
         }
         break;
@@ -4310,7 +4310,7 @@ void CMisuzu::Vf6()
             l50.unk18 = facing;
             l50.unk30 = 1;
             l50.unk28 = 1;
-            Vf9(&l50);
+            SpawnObject(&l50);
         }
         timer++;
         if (timer >= l4) {
@@ -4324,7 +4324,7 @@ void CMisuzu::Vf6()
             if (frame >= x8) {
                 pattern = 0;
                 CPlayer::FaceOpponent();
-                Vf0();
+                StartPattern();
             }
         }
         break;
@@ -4364,7 +4364,7 @@ void CMisuzu::Vf6()
             if (frame >= x8) {
                 pattern = 0;
                 CPlayer::FaceOpponent();
-                Vf0();
+                StartPattern();
             }
         }
         break;
@@ -4404,7 +4404,7 @@ void CMisuzu::Vf6()
             if (frame >= x8) {
                 pattern = 0;
                 CPlayer::FaceOpponent();
-                Vf0();
+                StartPattern();
             }
         }
         break;
@@ -4448,7 +4448,7 @@ void CMisuzu::Vf6()
             if (frame >= x8) {
                 pattern = 0;
                 CPlayer::FaceOpponent();
-                Vf0();
+                StartPattern();
             }
         }
         break;
@@ -4477,7 +4477,7 @@ void CMisuzu::Vf6()
             if (frame >= x8) {
                 pattern = 0;
                 CPlayer::FaceOpponent();
-                Vf0();
+                StartPattern();
             }
         }
         break;
@@ -4506,7 +4506,7 @@ void CMisuzu::Vf6()
             if (frame >= x8) {
                 pattern = 0;
                 CPlayer::FaceOpponent();
-                Vf0();
+                StartPattern();
             }
         }
         break;
@@ -4535,7 +4535,7 @@ void CMisuzu::Vf6()
             if (frame >= x8) {
                 pattern = 0;
                 CPlayer::FaceOpponent();
-                Vf0();
+                StartPattern();
             }
         }
         break;
@@ -4551,7 +4551,7 @@ void CMisuzu::Vf6()
             l50.unk0 = 1;
             l50.unk18 = 1;
             l50.unk30 = 1;
-            Vf9(&l50);
+            SpawnObject(&l50);
         }
         if (frame > 6 && frame < 0x2a) {
             unk14c = 2;
@@ -4614,7 +4614,7 @@ void CMisuzu::Vf6()
             l50.unk18 = 1;
             l50.screen = 1;
             l50.unk30 = 1;
-            Vf9(&l50);
+            SpawnObject(&l50);
         }
         if (frame == 0x29 && timer == 0) {
             m_game->unk1420e = 0;
@@ -4667,7 +4667,7 @@ void CMisuzu::Vf6()
             }
             if (frame >= x8) {
                 pattern = 0x60;
-                Vf0();
+                StartPattern();
             }
         }
         break;
@@ -4695,7 +4695,7 @@ void CMisuzu::Vf6()
             if (frame >= x8) {
                 pattern = 0;
                 CPlayer::FaceOpponent();
-                Vf0();
+                StartPattern();
             }
         }
     }

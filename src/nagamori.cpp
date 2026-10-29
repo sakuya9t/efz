@@ -48,7 +48,7 @@ CNagamori::CNagamori(int p1, int p2, int p3, int p4, int p5, BYTE p6)
     }
 }
 
-void CNagamori::Vf12()
+void CNagamori::Reset()
 {
     int v4;
 
@@ -81,33 +81,33 @@ void CNagamori::Vf12()
         unk32ac[v4] = 0;
         unk33ac[v4] = 0;
     }
-    CPlayer::Vf12();
+    CPlayer::Reset();
 }
 
-void CNagamori::Vf0()
+void CNagamori::StartPattern()
 {
     unk3138 = 0;
     unk313c = 0;
     unk3140 = 0;
-    CPlayer::Vf0();
+    CPlayer::StartPattern();
 }
 
-void CNagamori::Vf10(short p1)
+void CNagamori::RemoveObject(short p1)
 {
     unk316c[p1] = 0;
     unk31ac[p1] = 0;
     unk32ac[p1] = 0;
     unk33ac[p1] = 0;
-    CPlayer::Vf10(p1);
+    CPlayer::RemoveObject(p1);
 }
 
 void CNagamori::Unk4ae1d0(short p1, short p2, short p3, short p4)
 {
     int v4;
 
-    v4 = unk2cc;
-    while (v4 != unk2ca) {
-        if (unk3d0[v4] != 0 && fabs(p1 - m_objects[v4].x) < p3 && fabs(p2 - m_objects[v4].y) < p4) {
+    v4 = m_objectTail;
+    while (v4 != m_objectHead) {
+        if (m_objectActive[v4] != 0 && fabs(p1 - m_objects[v4].x) < p3 && fabs(p2 - m_objects[v4].y) < p4) {
             unk316c[v4] = 1;
         }
         v4++;
@@ -117,12 +117,12 @@ void CNagamori::Unk4ae1d0(short p1, short p2, short p3, short p4)
     }
 }
 
-void CNagamori::Vf3()
+void CNagamori::Move()
 {
     CPlayer::Unk40e740();
 }
 
-void CNagamori::Vf4()
+void CNagamori::StartCommand()
 {
     if (pattern < 0xc8) {
         unk1a8 = 0;
@@ -136,7 +136,7 @@ void CNagamori::Vf4()
         unk1aa = 0;
     }
     if (m_command == 0x34 && (unk118 >= 500.0 && m_attackResult > 1 && m_attackResult != 6 || unk120 > 0 && m_attackResult > 1) && (m_patterns[pattern].frames[frame].flagsB0 & 8) > 0 && unk3150 == 0 && m_patterns[pattern].unk2 <= m_patterns[0xa7].unk0) {
-        Vf0();
+        StartPattern();
         CPlayer::Unk40f170();
         pattern = 0xa7;
         if (y < 0.0) {
@@ -146,31 +146,31 @@ void CNagamori::Vf4()
     }
     if (unk15c < 2) {
         if (m_hp < 0xd05 && m_command == 0x5b && m_gauge >= 0xbb8 && (m_patterns[pattern].frames[frame].flagsB0 & 8) > 0 && y == 0.0 && m_attackResult != 6 && m_patterns[pattern].unk2 <= m_patterns[0x138].unk0) {
-            Vf0();
+            StartPattern();
             CPlayer::Unk40f170();
             pattern = 0x138;
             return;
         }
         if (m_command == 0x7a && m_gauge >= 0xbb8 && unk3148 == 0 && y == 0.0 && (m_patterns[pattern].frames[frame].flagsB0 & 8) > 0 && m_patterns[pattern].unk2 <= m_patterns[0x13b].unk0 && (pattern >= 0xc8 && m_attackResult >= 2 && m_attackResult != 6 || pattern < 0xc8)) {
-            Vf0();
+            StartPattern();
             CPlayer::Unk40f170();
             pattern = 0x13b;
             return;
         }
         if ((m_command == 0x79 || m_command == 0x7a) && unk3148 == 0 && m_gauge >= 0x7d0 && y == 0.0 && (m_patterns[pattern].frames[frame].flagsB0 & 8) > 0 && m_patterns[pattern].unk2 <= m_patterns[0x13a].unk0 && (pattern >= 0xc8 && m_attackResult >= 2 && m_attackResult != 6 || pattern < 0xc8)) {
-            Vf0();
+            StartPattern();
             CPlayer::Unk40f170();
             pattern = 0x13a;
             return;
         }
         if ((m_command == 0x78 || m_command == 0x79 || m_command == 0x7a) && unk3148 == 0 && m_gauge >= 0x3e8 && y == 0.0 && (m_patterns[pattern].frames[frame].flagsB0 & 8) > 0 && m_patterns[pattern].unk2 <= m_patterns[0x139].unk0 && (pattern >= 0xc8 && m_attackResult >= 2 && m_attackResult != 6 || pattern < 0xc8)) {
-            Vf0();
+            StartPattern();
             CPlayer::Unk40f170();
             pattern = 0x139;
             return;
         }
         if (m_command == 0x70 && m_gauge >= 0x3e8 && (m_patterns[pattern].frames[frame].flagsB0 & 8) > 0 && unk3148 == 0 && unk3168 == 0 && y == 0.0 && m_patterns[pattern].unk2 <= m_patterns[0x134].unk0 && (pattern >= 0xc8 && m_attackResult >= 2 && m_attackResult != 6 || pattern < 0xc8)) {
-            Vf0();
+            StartPattern();
             CPlayer::Unk40f170();
             pattern = 0x134;
             if (y < 0.0) {
@@ -179,7 +179,7 @@ void CNagamori::Vf4()
             return;
         }
         if (m_command == 0x6f && m_gauge >= 0x3e8 && (m_patterns[pattern].frames[frame].flagsB0 & 8) > 0 && unk3148 == 0 && m_patterns[pattern].unk2 <= m_patterns[0x132].unk0 && (pattern >= 0xc8 && m_attackResult >= 2 && m_attackResult != 6 || pattern < 0xc8)) {
-            Vf0();
+            StartPattern();
             CPlayer::Unk40f170();
             pattern = 0x132;
             if (y < 0.0) {
@@ -188,7 +188,7 @@ void CNagamori::Vf4()
             return;
         }
         if (m_command == 0x6e && m_gauge >= 0x3e8 && (m_patterns[pattern].frames[frame].flagsB0 & 8) > 0 && unk3148 == 0 && m_patterns[pattern].unk2 <= m_patterns[0x133].unk0 && (pattern >= 0xc8 && m_attackResult >= 2 && m_attackResult != 6 || pattern < 0xc8)) {
-            Vf0();
+            StartPattern();
             CPlayer::Unk40f170();
             pattern = 0x133;
             if (y < 0.0) {
@@ -197,61 +197,61 @@ void CNagamori::Vf4()
             return;
         }
         if (m_command == 0x66 && m_gauge >= 0xbb8 && y == 0.0 && (m_patterns[pattern].frames[frame].flagsB0 & 8) > 0 && m_patterns[pattern].unk2 <= m_patterns[0x12e].unk0 && (pattern >= 0xc8 && m_attackResult >= 2 && m_attackResult != 6 || pattern < 0xc8)) {
-            Vf0();
+            StartPattern();
             CPlayer::Unk40f170();
             pattern = 0x12e;
             return;
         }
         if ((m_command == 0x65 || m_command == 0x66) && m_gauge >= 0x7d0 && y == 0.0 && (m_patterns[pattern].frames[frame].flagsB0 & 8) > 0 && m_patterns[pattern].unk2 <= m_patterns[0x12d].unk0 && (pattern >= 0xc8 && m_attackResult >= 2 && m_attackResult != 6 || pattern < 0xc8)) {
-            Vf0();
+            StartPattern();
             CPlayer::Unk40f170();
             pattern = 0x12d;
             return;
         }
         if ((m_command == 0x64 || m_command == 0x65 || m_command == 0x66) && m_gauge >= 0x3e8 && y == 0.0 && (m_patterns[pattern].frames[frame].flagsB0 & 8) > 0 && m_patterns[pattern].unk2 <= m_patterns[0x12c].unk0 && (pattern >= 0xc8 && m_attackResult >= 2 && m_attackResult != 6 || pattern < 0xc8)) {
-            Vf0();
+            StartPattern();
             CPlayer::Unk40f170();
             pattern = 0x12c;
             return;
         }
         if (m_command == 0x2a && (unk118 >= 500.0 || unk120 > 0) && (m_patterns[pattern].frames[frame].flagsB0 & 8) > 0 && y == 0.0 && unk3148 == 0 && m_patterns[pattern].unk2 <= m_patterns[0x110].unk0 && (pattern >= 0xc8 && m_attackResult >= 2 && m_attackResult != 6 || pattern < 0xc8)) {
-            Vf0();
+            StartPattern();
             CPlayer::Unk40f170();
             pattern = 0x110;
             return;
         }
         if ((m_command == 0x29 || m_command == 0x2a) && (m_patterns[pattern].frames[frame].flagsB0 & 8) > 0 && y == 0.0 && unk3148 == 0 && m_patterns[pattern].unk2 <= m_patterns[0x10f].unk0 && (pattern >= 0xc8 && m_attackResult >= 2 && m_attackResult != 6 || pattern < 0xc8)) {
-            Vf0();
+            StartPattern();
             CPlayer::Unk40f170();
             pattern = 0x10f;
             return;
         }
         if (m_command == 0x28 && (m_patterns[pattern].frames[frame].flagsB0 & 8) > 0 && y == 0.0 && unk3148 == 0 && m_patterns[pattern].unk2 <= m_patterns[0x10e].unk0 && (pattern >= 0xc8 && m_attackResult >= 2 && m_attackResult != 6 || pattern < 0xc8)) {
-            Vf0();
+            StartPattern();
             CPlayer::Unk40f170();
             pattern = 0x10e;
             return;
         }
         if (m_command == 0x16 && (unk118 >= 500.0 || unk120 > 0) && (m_patterns[pattern].frames[frame].flagsB0 & 8) > 0 && unk3148 == 0 && m_patterns[pattern].unk2 <= m_patterns[0xfc].unk0 && (pattern >= 0xc8 && m_attackResult >= 2 && m_attackResult != 6 || pattern < 0xc8)) {
-            Vf0();
+            StartPattern();
             CPlayer::Unk40f170();
             pattern = 0xfc;
             return;
         }
         if ((m_command == 0x15 || m_command == 0x16) && (m_patterns[pattern].frames[frame].flagsB0 & 8) > 0 && unk3148 == 0 && m_patterns[pattern].unk2 <= m_patterns[0xfb].unk0 && (pattern >= 0xc8 && m_attackResult >= 2 && m_attackResult != 6 || pattern < 0xc8)) {
-            Vf0();
+            StartPattern();
             CPlayer::Unk40f170();
             pattern = 0xfb;
             return;
         }
         if (m_command == 0x14 && (m_patterns[pattern].frames[frame].flagsB0 & 8) > 0 && unk3148 == 0 && m_patterns[pattern].unk2 <= m_patterns[0xfa].unk0 && (pattern >= 0xc8 && m_attackResult >= 2 && m_attackResult != 6 || pattern < 0xc8)) {
-            Vf0();
+            StartPattern();
             CPlayer::Unk40f170();
             pattern = 0xfa;
             return;
         }
         if (m_command == 0x20 && (m_patterns[pattern].frames[frame].flagsB0 & 8) > 0 && unk3148 == 0 && m_gauge > 0x32 && m_patterns[pattern].unk2 <= m_patterns[0x101].unk0 && (pattern >= 0xc8 && m_attackResult >= 2 && m_attackResult != 6 || pattern < 0xc8)) {
-            Vf0();
+            StartPattern();
             CPlayer::Unk40f170();
             pattern = 0x101;
             if (y < 0.0) {
@@ -260,7 +260,7 @@ void CNagamori::Vf4()
             return;
         }
         if (m_command == 0x1f && (m_patterns[pattern].frames[frame].flagsB0 & 8) > 0 && unk3148 == 0 && m_gauge > 0x32 && m_patterns[pattern].unk2 <= m_patterns[0x100].unk0 && (pattern >= 0xc8 && m_attackResult >= 2 && m_attackResult != 6 || pattern < 0xc8)) {
-            Vf0();
+            StartPattern();
             CPlayer::Unk40f170();
             pattern = 0x100;
             if (y < 0.0) {
@@ -269,7 +269,7 @@ void CNagamori::Vf4()
             return;
         }
         if (m_command == 0x1e && (m_patterns[pattern].frames[frame].flagsB0 & 8) > 0 && unk3148 == 0 && m_gauge > 0x32 && m_patterns[pattern].unk2 <= m_patterns[0xff].unk0 && (pattern >= 0xc8 && m_attackResult >= 2 && m_attackResult != 6 || pattern < 0xc8)) {
-            Vf0();
+            StartPattern();
             CPlayer::Unk40f170();
             pattern = 0xff;
             if (y < 0.0) {
@@ -278,37 +278,37 @@ void CNagamori::Vf4()
             return;
         }
         if (m_command == 0xc && (m_patterns[pattern].frames[frame].flagsB0 & 8) > 0 && y < 0.0 && unk3148 == 0 && m_gauge > 0x32 && m_patterns[pattern].unk2 <= m_patterns[0x106].unk0 && (pattern >= 0xc8 && m_attackResult >= 2 && m_attackResult != 6 || pattern < 0xc8)) {
-            Vf0();
+            StartPattern();
             CPlayer::Unk40f170();
             pattern = 0x106;
             return;
         }
         if (m_command == 0xb && (m_patterns[pattern].frames[frame].flagsB0 & 8) > 0 && y < 0.0 && unk3148 == 0 && m_gauge > 0x32 && m_patterns[pattern].unk2 <= m_patterns[0x105].unk0 && (pattern >= 0xc8 && m_attackResult >= 2 && m_attackResult != 6 || pattern < 0xc8)) {
-            Vf0();
+            StartPattern();
             CPlayer::Unk40f170();
             pattern = 0x105;
             return;
         }
         if (m_command == 0xa && (m_patterns[pattern].frames[frame].flagsB0 & 8) > 0 && y < 0.0 && unk3148 == 0 && m_gauge > 0x32 && m_patterns[pattern].unk2 <= m_patterns[0x104].unk0 && (pattern >= 0xc8 && m_attackResult >= 2 && m_attackResult != 6 || pattern < 0xc8)) {
-            Vf0();
+            StartPattern();
             CPlayer::Unk40f170();
             pattern = 0x104;
             return;
         }
         if (m_command == 0xc && unk3148 == 0 && (unk118 >= 500.0 || unk120 > 0) && (m_patterns[pattern].frames[frame].flagsB0 & 8) > 0 && y == 0.0 && m_patterns[pattern].unk2 <= m_patterns[0x10d].unk0 && (pattern >= 0xc8 && m_attackResult >= 2 && m_attackResult != 6 || pattern < 0xc8)) {
-            Vf0();
+            StartPattern();
             CPlayer::Unk40f170();
             pattern = 0x10d;
             return;
         }
         if (m_command == 0xc && unk3148 != 0 && (m_patterns[pattern].frames[frame].flagsB0 & 8) > 0 && y == 0.0 && m_patterns[pattern].unk2 <= m_patterns[0x118].unk0 && (pattern >= 0xc8 && m_attackResult >= 2 && m_attackResult != 6 || pattern < 0xc8)) {
-            Vf0();
+            StartPattern();
             CPlayer::Unk40f170();
             pattern = 0x118;
             return;
         }
         if ((m_command == 0xb || m_command == 0xc) && (m_patterns[pattern].frames[frame].flagsB0 & 8) > 0 && y == 0.0 && m_patterns[pattern].unk2 <= m_patterns[0x10c].unk0 && (pattern >= 0xc8 && m_attackResult >= 2 && m_attackResult != 6 || pattern < 0xc8)) {
-            Vf0();
+            StartPattern();
             CPlayer::Unk40f170();
             pattern = 0x10c;
             if (unk3148 != 0) {
@@ -317,7 +317,7 @@ void CNagamori::Vf4()
             return;
         }
         if (m_command == 0xa && (m_patterns[pattern].frames[frame].flagsB0 & 8) > 0 && y == 0.0 && m_patterns[pattern].unk2 <= m_patterns[0x10b].unk0 && (pattern >= 0xc8 && m_attackResult >= 2 && m_attackResult != 6 || pattern < 0xc8)) {
-            Vf0();
+            StartPattern();
             CPlayer::Unk40f170();
             pattern = 0x10b;
             if (unk3148 != 0) {
@@ -327,7 +327,7 @@ void CNagamori::Vf4()
         }
     }
     if (unk15c < 3 && m_command == 6 && (m_patterns[pattern].frames[frame].flagsB0 & 8) > 0 && y < 0.0 && unk15a < 1 && m_patterns[pattern].unk2 <= m_patterns[0xe].unk0 && (pattern >= 0xc8 && m_attackResult >= 2 && m_attackResult != 6 || pattern < 0xc8)) {
-        Vf0();
+        StartPattern();
         CPlayer::Unk40f170();
         unk15a++;
         pattern = 0xe;
@@ -343,7 +343,7 @@ void CNagamori::Vf4()
         if (y < 0.0 && unk159 < 1) {
             if ((((*m_opponent)->x - x) * (1 - (m_command << 1)) < 0.0 || 0.0 == (*m_opponent)->x - x && facing == (1 - (m_command << 1)) * -1) && m_patterns[pattern].unk2 <= m_patterns[0xa5].unk0 && pattern != 0xaa && y < -40.0 && (m_patterns[pattern].frames[frame].flagsB0 & 8) > 0 && (pattern >= 0xc8 && m_attackResult >= 2 && m_attackResult != 6 || pattern < 0xc8)) {
                 if (pattern != 0xa5) {
-                    Vf0();
+                    StartPattern();
                 }
                 pattern = 0xa5;
                 CPlayer::FaceOpponent();
@@ -354,7 +354,7 @@ void CNagamori::Vf4()
             }
             if ((((*m_opponent)->x - x) * (1 - (m_command << 1)) > 0.0 || 0.0 == (*m_opponent)->x - x && facing == 1 - (m_command << 1)) && m_patterns[pattern].unk2 <= m_patterns[0xa6].unk0 && pattern != 0xaa && (m_patterns[pattern].frames[frame].flagsB0 & 8) > 0 && (pattern >= 0xc8 && m_attackResult >= 2 && m_attackResult != 6 || pattern < 0xc8)) {
                 if (pattern != 0xa6) {
-                    Vf0();
+                    StartPattern();
                 }
                 pattern = 0xa6;
                 CPlayer::FaceOpponent();
@@ -367,7 +367,7 @@ void CNagamori::Vf4()
         if (y == 0.0 && (m_patterns[pattern].frames[frame].flagsB0 & 8) > 0) {
             if ((((*m_opponent)->x - x) * (1 - (m_command << 1)) < 0.0 || 0.0 == (*m_opponent)->x - x && facing == (1 - (m_command << 1)) * -1) && m_patterns[pattern].unk2 <= m_patterns[0xa3].unk0 && (pattern >= 0xc8 && m_attackResult >= 2 && m_attackResult != 6 || pattern < 0xc8)) {
                 if (pattern != 0xa3) {
-                    Vf0();
+                    StartPattern();
                 }
                 pattern = 0xa3;
                 CPlayer::FaceOpponent();
@@ -377,7 +377,7 @@ void CNagamori::Vf4()
             }
             if ((((*m_opponent)->x - x) * (1 - (m_command << 1)) > 0.0 || 0.0 == (*m_opponent)->x - x && facing == 1 - (m_command << 1)) && m_patterns[pattern].unk2 <= m_patterns[0xa4].unk0 && (pattern >= 0xc8 && m_attackResult >= 2 && m_attackResult != 6 || pattern < 0xc8)) {
                 if (pattern != 0xa4) {
-                    Vf0();
+                    StartPattern();
                 }
                 pattern = 0xa4;
                 CPlayer::FaceOpponent();
@@ -388,7 +388,7 @@ void CNagamori::Vf4()
     }
     if (m_pressA == 1 || (unk1a8 & 0x10) != 0 || (unk1a9 & 0x10) != 0) {
         if (pattern == 0xa3 && m_inputX != -facing) {
-            Vf0();
+            StartPattern();
             CPlayer::Unk40f170();
             pattern = 0xe6;
             if (m_inputY == 1) {
@@ -398,20 +398,20 @@ void CNagamori::Vf4()
         }
         if (y < 0.0) {
             if (m_patterns[pattern].unk2 <= m_patterns[0xcf].unk0 && (m_patterns[pattern].frames[frame].flagsB0 & 8) > 0 && (pattern >= 0xc8 && m_attackResult >= 2 && m_attackResult != 6 || pattern < 0xc8)) {
-                Vf0();
+                StartPattern();
                 CPlayer::Unk40f170();
                 pattern = 0xcf;
             }
             return;
         }
         if ((m_inputY == 1 || (unk1a8 & 4) != 0 || (unk1a9 & 4) != 0) && m_patterns[pattern].unk2 <= m_patterns[0xcc].unk0 && (m_patterns[pattern].frames[frame].flagsB0 & 8) > 0 && (pattern >= 0xc8 && m_attackResult >= 2 && m_attackResult != 6 || pattern < 0xc8)) {
-            Vf0();
+            StartPattern();
             CPlayer::Unk40f170();
             pattern = 0xcc;
             return;
         }
         if ((m_inputY == 0 || (unk1a8 & 4) == 0 || (unk1a9 & 4) == 0) && m_patterns[pattern].unk2 <= m_patterns[0xc8].unk0 && (m_patterns[pattern].frames[frame].flagsB0 & 8) > 0 && (pattern >= 0xc8 && m_attackResult >= 2 && m_attackResult != 6 || pattern < 0xc8)) {
-            Vf0();
+            StartPattern();
             CPlayer::Unk40f170();
             pattern = 0xc8;
             return;
@@ -419,7 +419,7 @@ void CNagamori::Vf4()
     }
     if (m_pressB == 1 || (unk1a8 & 0x20) != 0 || (unk1a9 & 0x20) != 0) {
         if (pattern == 0xa3 && m_inputX != -facing) {
-            Vf0();
+            StartPattern();
             CPlayer::Unk40f170();
             pattern = 0xe7;
             if (m_inputY == 1) {
@@ -429,33 +429,33 @@ void CNagamori::Vf4()
         }
         if (y < 0.0) {
             if (m_patterns[pattern].unk2 <= m_patterns[0xd0].unk0 && (m_patterns[pattern].frames[frame].flagsB0 & 8) > 0 && (pattern >= 0xc8 && m_attackResult >= 2 && m_attackResult != 6 || pattern < 0xc8)) {
-                Vf0();
+                StartPattern();
                 CPlayer::Unk40f170();
                 pattern = 0xd0;
             }
             return;
         }
         if ((m_inputY == 1 || (unk1a8 & 4) != 0 || (unk1a9 & 4) != 0) && m_patterns[pattern].unk2 <= m_patterns[0xcd].unk0 && (m_patterns[pattern].frames[frame].flagsB0 & 8) > 0 && (pattern >= 0xc8 && m_attackResult >= 2 && m_attackResult != 6 || pattern < 0xc8)) {
-            Vf0();
+            StartPattern();
             CPlayer::Unk40f170();
             pattern = 0xcd;
             return;
         }
         if (m_inputY == 0 || (unk1a8 & 4) == 0 || (unk1a9 & 4) == 0) {
             if (m_patterns[pattern].unk2 <= m_patterns[0xd8].unk0 && (m_patterns[pattern].frames[frame].flagsB0 & 8) > 0 && m_inputX == facing) {
-                Vf0();
+                StartPattern();
                 CPlayer::Unk40f170();
                 pattern = 0xd8;
                 return;
             }
             if (m_patterns[pattern].unk2 <= m_patterns[0xc9].unk0 && (m_patterns[pattern].frames[frame].flagsB0 & 8) > 0 && x - (*m_opponent)->x > -70.0 && x - (*m_opponent)->x < 70.0 && (pattern >= 0xc8 && m_attackResult >= 2 && m_attackResult != 6 || pattern < 0xc8)) {
-                Vf0();
+                StartPattern();
                 CPlayer::Unk40f170();
                 pattern = 0xc9;
                 return;
             }
             if (m_patterns[pattern].unk2 <= m_patterns[0xca].unk0 && (m_patterns[pattern].frames[frame].flagsB0 & 8) > 0 && (pattern >= 0xc8 && m_attackResult >= 2 && m_attackResult != 6 || pattern < 0xc8)) {
-                Vf0();
+                StartPattern();
                 CPlayer::Unk40f170();
                 pattern = 0xca;
                 return;
@@ -464,7 +464,7 @@ void CNagamori::Vf4()
     }
     if (m_pressC == 1 || (unk1a8 & 0x40) != 0 || (unk1a9 & 0x40) != 0) {
         if (pattern == 0xa3 && m_inputX != -facing) {
-            Vf0();
+            StartPattern();
             CPlayer::Unk40f170();
             pattern = 0xe8;
             if (m_inputY == 1) {
@@ -474,20 +474,20 @@ void CNagamori::Vf4()
         }
         if (y < 0.0) {
             if (m_inputX == facing && m_inputY == 0 && x - (*m_opponent)->x > -100.0 && x - (*m_opponent)->x < 100.0 && (*m_opponent)->y < 0.0 && m_patterns[pattern].unk2 <= m_patterns[0xf8].unk0 && ((*m_opponent)->pattern < 0x32 || (*m_opponent)->pattern > 0x9c) && (m_patterns[pattern].frames[frame].flagsB0 & 8) > 0 && (pattern >= 0xc8 && m_attackResult >= 2 && m_attackResult != 6 || pattern < 0xc8)) {
-                Vf0();
+                StartPattern();
                 CPlayer::Unk40f170();
                 pattern = 0xf8;
                 return;
             }
             if (m_patterns[pattern].unk2 <= m_patterns[0xd1].unk0 && (m_patterns[pattern].frames[frame].flagsB0 & 8) > 0 && (pattern >= 0xc8 && m_attackResult >= 2 && m_attackResult != 6 || pattern < 0xc8)) {
-                Vf0();
+                StartPattern();
                 CPlayer::Unk40f170();
                 pattern = 0xd1;
             }
             return;
         }
         if ((m_inputY == 1 || (unk1a8 & 4) != 0 || (unk1a9 & 4) != 0) && m_patterns[pattern].unk2 <= m_patterns[0xce].unk0 && (m_patterns[pattern].frames[frame].flagsB0 & 8) > 0 && (pattern >= 0xc8 && m_attackResult >= 2 && m_attackResult != 6 || pattern < 0xc8)) {
-            Vf0();
+            StartPattern();
             CPlayer::Unk40f170();
             pattern = 0xce;
             if (unk3148 > 0) {
@@ -497,13 +497,13 @@ void CNagamori::Vf4()
         }
         if (m_inputY == 0 || (unk1a8 & 4) == 0 || (unk1a9 & 4) == 0) {
             if (m_inputX != 0 && (*m_opponent)->y == 0.0 && x - (*m_opponent)->x > -30.0 && x - (*m_opponent)->x < 30.0 && m_patterns[pattern].unk2 <= m_patterns[0xdc].unk0 && ((*m_opponent)->pattern < 0x32 || (*m_opponent)->pattern > 0x9c) && (m_patterns[pattern].frames[frame].flagsB0 & 8) > 0 && (pattern >= 0xc8 && m_attackResult >= 2 && m_attackResult != 6 || pattern < 0xc8)) {
-                Vf0();
+                StartPattern();
                 CPlayer::Unk40f170();
                 pattern = 0xdc;
                 return;
             }
             if (m_patterns[pattern].unk2 <= m_patterns[0xcb].unk0 && (m_patterns[pattern].frames[frame].flagsB0 & 8) > 0 && (pattern >= 0xc8 && m_attackResult >= 2 && m_attackResult != 6 || pattern < 0xc8)) {
-                Vf0();
+                StartPattern();
                 CPlayer::Unk40f170();
                 pattern = 0xcb;
             }
@@ -511,7 +511,7 @@ void CNagamori::Vf4()
     }
 }
 
-void CNagamori::Vf1()
+void CNagamori::DrawGauge()
 {
     RECT v2c;
     EffectFrame x1c;
@@ -546,13 +546,13 @@ void CNagamori::Vf8()
     }
 }
 
-void CNagamori::Vf9(EffectDesc* p1)
+void CNagamori::SpawnObject(EffectDesc* p1)
 {
-    Vf10(unk2ca);
-    CPlayer::Vf9(p1);
+    RemoveObject(m_objectHead);
+    CPlayer::SpawnObject(p1);
 }
 
-void CNagamori::Vf2()
+void CNagamori::ReadCommand()
 {
     BYTE x6;
     BYTE v5;
@@ -901,7 +901,7 @@ void CNagamori::Vf2()
     }
 }
 
-void CNagamori::Vf5()
+void CNagamori::CpuInput()
 {
     double v10;
     double x8;
@@ -1785,7 +1785,7 @@ void CNagamori::Vf5()
     unk1a4 = (WORD)CPlayer::Random(0, 0xc8) + 0x1e;
 }
 
-void CNagamori::Vf7()
+void CNagamori::UpdateObjects()
 {
     WORD v58;
     WORD v54;
@@ -1794,13 +1794,13 @@ void CNagamori::Vf7()
     if ((*m_opponent)->unk14c > 0) {
         return;
     }
-    v4 = unk2cc;
+    v4 = m_objectTail;
     EffectDesc l50;
-    while (v4 != unk2ca) {
-        if (unk3d0[v4] != 0 && m_objects[v4].unk86 == 0 && (unk14c == 0 || unk14c > 0 && m_objects[v4].unk88 != 0)) {
+    while (v4 != m_objectHead) {
+        if (m_objectActive[v4] != 0 && m_objects[v4].unk86 == 0 && (unk14c == 0 || unk14c > 0 && m_objects[v4].unk88 != 0)) {
             v54 = (short)anims[m_objects[v4].pattern].frames[m_objects[v4].frame].duration;
             v58 = anims[m_objects[v4].pattern].frameCount;
-            CPlayer::Unk413090((EffectDesc*)&l50);
+            CPlayer::InitEffectDesc((EffectDesc*)&l50);
             switch (m_objects[v4].pattern) {
             case 0x190:
                 if (unk33ac[v4] == 0) {
@@ -1824,11 +1824,11 @@ void CNagamori::Vf7()
                     l50.unk18 = m_objects[v4].facing;
                     l50.scale = 2;
                     l50.layer = 1;
-                    Vf9(&l50);
+                    SpawnObject(&l50);
                     unk316c[v4] = 0;
                     unk32ac[v4] = 0x78;
                     if (unk314c == 0) {
-                        Vf10(v4);
+                        RemoveObject(v4);
                     }
                     break;
                 }
@@ -1844,7 +1844,7 @@ void CNagamori::Vf7()
                             m_objects[v4].frame = 0;
                             unk31ac[v4]++;
                         } else {
-                            Vf10(v4);
+                            RemoveObject(v4);
                         }
                     }
                 }
@@ -1870,10 +1870,10 @@ void CNagamori::Vf7()
                     l50.scale = 2;
                     l50.layer = 1;
                     unk33ac[v4] = 0;
-                    Vf9(&l50);
+                    SpawnObject(&l50);
                 }
                 if (m_objects[v4].x > 680.0 || m_objects[v4].x < -40.0) {
-                    Vf10(v4);
+                    RemoveObject(v4);
                     unk3168 = 0;
                 }
                 m_objects[v4].timer++;
@@ -1907,7 +1907,7 @@ void CNagamori::Vf7()
                     l50.unk18 = m_objects[v4].facing;
                     l50.scale = 2;
                     l50.layer = 1;
-                    Vf9(&l50);
+                    SpawnObject(&l50);
                     unk316c[v4] = 0;
                     unk32ac[v4] = 0x78;
                     break;
@@ -1923,7 +1923,7 @@ void CNagamori::Vf7()
                             m_objects[v4].frame = 0;
                             unk31ac[v4]++;
                         } else {
-                            Vf10(v4);
+                            RemoveObject(v4);
                         }
                     }
                 }
@@ -1950,11 +1950,11 @@ void CNagamori::Vf7()
                     l50.unk18 = m_objects[v4].facing;
                     l50.scale = 2;
                     l50.layer = 1;
-                    Vf9(&l50);
+                    SpawnObject(&l50);
                     unk316c[v4] = 0;
                     unk32ac[v4] = 0x78;
                     if (unk314c == 0) {
-                        Vf10(v4);
+                        RemoveObject(v4);
                     }
                     break;
                 }
@@ -1970,7 +1970,7 @@ void CNagamori::Vf7()
                             m_objects[v4].frame = 0;
                             unk31ac[v4]++;
                         } else {
-                            Vf10(v4);
+                            RemoveObject(v4);
                         }
                     }
                 }
@@ -1982,7 +1982,7 @@ void CNagamori::Vf7()
                     m_objects[v4].frame++;
                     m_objects[v4].unk80 = 0;
                     if (m_objects[v4].frame >= v58) {
-                        Vf10(v4);
+                        RemoveObject(v4);
                     }
                 }
                 break;
@@ -2011,7 +2011,7 @@ void CNagamori::Vf7()
                     m_objects[v4].frame++;
                     m_objects[v4].unk80 = 0;
                     if (m_objects[v4].frame >= v58) {
-                        Vf10(v4);
+                        RemoveObject(v4);
                     }
                 }
                 break;
@@ -2047,11 +2047,11 @@ void CNagamori::Vf7()
                     l50.unk18 = m_objects[v4].facing;
                     l50.scale = 2;
                     l50.layer = 1;
-                    Vf9(&l50);
+                    SpawnObject(&l50);
                     unk316c[v4] = 0;
                     unk32ac[v4] = 0x78;
                     if (unk314c == 0) {
-                        Vf10(v4);
+                        RemoveObject(v4);
                     }
                     break;
                 }
@@ -2067,7 +2067,7 @@ void CNagamori::Vf7()
                             m_objects[v4].frame = 0;
                             unk31ac[v4]++;
                         } else {
-                            Vf10(v4);
+                            RemoveObject(v4);
                         }
                     }
                 }
@@ -2107,11 +2107,11 @@ void CNagamori::Vf7()
                     l50.unk18 = m_objects[v4].facing;
                     l50.scale = 2;
                     l50.layer = 1;
-                    Vf9(&l50);
+                    SpawnObject(&l50);
                     unk316c[v4] = 0;
                     unk32ac[v4] = 0x78;
                     if (unk314c == 0) {
-                        Vf10(v4);
+                        RemoveObject(v4);
                     }
                     break;
                 }
@@ -2127,7 +2127,7 @@ void CNagamori::Vf7()
                             m_objects[v4].frame = 0;
                             unk31ac[v4]++;
                         } else {
-                            Vf10(v4);
+                            RemoveObject(v4);
                         }
                     }
                 }
@@ -2172,11 +2172,11 @@ void CNagamori::Vf7()
                     l50.unk18 = m_objects[v4].facing;
                     l50.scale = 2;
                     l50.layer = 1;
-                    Vf9(&l50);
+                    SpawnObject(&l50);
                     unk316c[v4] = 0;
                     unk32ac[v4] = 0x78;
                     if (unk314c == 0) {
-                        Vf10(v4);
+                        RemoveObject(v4);
                     }
                     break;
                 }
@@ -2192,7 +2192,7 @@ void CNagamori::Vf7()
                             m_objects[v4].frame = 0;
                             unk31ac[v4]++;
                         } else {
-                            Vf10(v4);
+                            RemoveObject(v4);
                         }
                     }
                 }
@@ -2234,11 +2234,11 @@ void CNagamori::Vf7()
                     l50.unk18 = m_objects[v4].facing;
                     l50.scale = 2;
                     l50.layer = 1;
-                    Vf9(&l50);
+                    SpawnObject(&l50);
                     unk316c[v4] = 0;
                     unk32ac[v4] = 0x78;
                     if (unk314c == 0) {
-                        Vf10(v4);
+                        RemoveObject(v4);
                     }
                     break;
                 }
@@ -2254,7 +2254,7 @@ void CNagamori::Vf7()
                             m_objects[v4].frame = 0;
                             unk31ac[v4]++;
                         } else {
-                            Vf10(v4);
+                            RemoveObject(v4);
                         }
                     }
                 }
@@ -2277,11 +2277,11 @@ void CNagamori::Vf7()
                     l50.unk18 = m_objects[v4].facing;
                     l50.scale = 2;
                     l50.layer = 1;
-                    Vf9(&l50);
+                    SpawnObject(&l50);
                     l50.type = 0x19f;
-                    Vf9(&l50);
+                    SpawnObject(&l50);
                     l50.type = 0x199;
-                    Vf9(&l50);
+                    SpawnObject(&l50);
                 }
                 m_objects[v4].timer++;
                 if (m_objects[v4].timer >= v54) {
@@ -2289,7 +2289,7 @@ void CNagamori::Vf7()
                     m_objects[v4].frame++;
                     m_objects[v4].unk80 = 0;
                     if (m_objects[v4].frame >= v58) {
-                        Vf10(v4);
+                        RemoveObject(v4);
                     }
                 }
                 break;
@@ -2359,7 +2359,7 @@ void CNagamori::Vf7()
                         m_objects[v4].vx = 2.0;
                     }
                     if (m_objects[v4].y > y - 70.0 && m_objects[v4].y < y - 20.0 && m_objects[v4].x > x - 10.0 && m_objects[v4].x < x + 10.0 && unk3148 >= 2) {
-                        Vf10(v4);
+                        RemoveObject(v4);
                         unk3148 = 0;
                         unk2c9 = 0x1a;
                         break;
@@ -2441,7 +2441,7 @@ void CNagamori::Vf7()
                         m_objects[v4].vx = 2.0;
                     }
                     if (m_objects[v4].y > y - 70.0 && m_objects[v4].y < y - 20.0 && m_objects[v4].x > x - 10.0 && m_objects[v4].x < x + 10.0 && unk3148 >= 2) {
-                        Vf10(v4);
+                        RemoveObject(v4);
                         unk3148 = 0;
                         unk2c9 = 0x1a;
                         break;
@@ -2529,14 +2529,14 @@ void CNagamori::Vf7()
                         l50.unk18 = m_objects[v4].facing;
                         l50.scale = 2;
                         l50.layer = 1;
-                        Vf9(&l50);
+                        SpawnObject(&l50);
                         l50.type = 0x19e;
-                        Vf9(&l50);
+                        SpawnObject(&l50);
                         unk32ac[v4] = 0;
                         unk33ac[v4]++;
                     }
                     if (m_objects[v4].y > y - 70.0 && m_objects[v4].y < y - 20.0 && m_objects[v4].x > x - 10.0 && m_objects[v4].x < x + 10.0 && unk3148 >= 2) {
-                        Vf10(v4);
+                        RemoveObject(v4);
                         unk3148 = 0;
                         unk2c9 = 0x1a;
                         break;
@@ -2565,7 +2565,7 @@ void CNagamori::Vf7()
                     m_objects[v4].frame++;
                     m_objects[v4].unk80 = 0;
                     if (m_objects[v4].frame >= v58) {
-                        Vf10(v4);
+                        RemoveObject(v4);
                     }
                 }
                 break;
@@ -2609,11 +2609,11 @@ void CNagamori::Vf7()
                     l50.unk18 = m_objects[v4].facing;
                     l50.scale = 2;
                     l50.layer = 1;
-                    Vf9(&l50);
+                    SpawnObject(&l50);
                     unk316c[v4] = 0;
                     unk32ac[v4] = 0x78;
                     if (unk314c == 0) {
-                        Vf10(v4);
+                        RemoveObject(v4);
                     }
                     break;
                 }
@@ -2629,7 +2629,7 @@ void CNagamori::Vf7()
                             m_objects[v4].frame = 0;
                             unk31ac[v4]++;
                         } else {
-                            Vf10(v4);
+                            RemoveObject(v4);
                         }
                     }
                 }
@@ -2647,7 +2647,7 @@ void CNagamori::Vf7()
                     m_objects[v4].frame++;
                     m_objects[v4].unk80 = 0;
                     if (m_objects[v4].frame >= v58) {
-                        Vf10(v4);
+                        RemoveObject(v4);
                         unk314c = 0;
                     }
                 }
@@ -2662,7 +2662,7 @@ void CNagamori::Vf7()
                 if (unk3150 == 0) {
                     unk14c = 0;
                     (*m_opponent)->unk13a = 0;
-                    Vf10(v4);
+                    RemoveObject(v4);
                     unk2c9 = 0x16;
                     (*m_opponent)->pattern = 0x3b;
                     (*m_opponent)->unk140 = 0;
@@ -2685,7 +2685,7 @@ void CNagamori::Vf7()
                     l50.scale = 1;
                     l50.layer = 0;
                     l50.unk30 = 1;
-                    Vf9(&l50);
+                    SpawnObject(&l50);
                 }
                 if (unk3150 == 0x474) {
                     l50.unk0 = 0;
@@ -2697,7 +2697,7 @@ void CNagamori::Vf7()
                     l50.scale = 1;
                     l50.layer = 0;
                     l50.unk30 = 1;
-                    Vf9(&l50);
+                    SpawnObject(&l50);
                 }
                 if (unk3150 == 0x46a) {
                     l50.unk0 = 0;
@@ -2709,7 +2709,7 @@ void CNagamori::Vf7()
                     l50.scale = 1;
                     l50.layer = 0;
                     l50.unk30 = 1;
-                    Vf9(&l50);
+                    SpawnObject(&l50);
                 }
                 if (unk3150 == 0x460) {
                     l50.unk0 = 0;
@@ -2721,7 +2721,7 @@ void CNagamori::Vf7()
                     l50.scale = 1;
                     l50.layer = 0;
                     l50.unk30 = 1;
-                    Vf9(&l50);
+                    SpawnObject(&l50);
                 }
                 if (unk3150 == 0x456) {
                     l50.unk0 = 0;
@@ -2733,7 +2733,7 @@ void CNagamori::Vf7()
                     l50.scale = 1;
                     l50.layer = 0;
                     l50.unk30 = 1;
-                    Vf9(&l50);
+                    SpawnObject(&l50);
                 }
                 if (unk3150 == 0x44c) {
                     l50.unk0 = 0;
@@ -2745,7 +2745,7 @@ void CNagamori::Vf7()
                     l50.scale = 1;
                     l50.layer = 0;
                     l50.unk30 = 1;
-                    Vf9(&l50);
+                    SpawnObject(&l50);
                 }
                 if (unk3150 == 0x438) {
                     l50.unk0 = 0;
@@ -2757,7 +2757,7 @@ void CNagamori::Vf7()
                     l50.scale = 1;
                     l50.layer = 0;
                     l50.unk30 = 1;
-                    Vf9(&l50);
+                    SpawnObject(&l50);
                 }
                 if (unk3150 == 0x424) {
                     l50.unk0 = 0;
@@ -2769,7 +2769,7 @@ void CNagamori::Vf7()
                     l50.scale = 1;
                     l50.layer = 0;
                     l50.unk30 = 1;
-                    Vf9(&l50);
+                    SpawnObject(&l50);
                 }
                 if (unk3150 == 0x410) {
                     l50.unk0 = 0;
@@ -2781,7 +2781,7 @@ void CNagamori::Vf7()
                     l50.scale = 1;
                     l50.layer = 0;
                     l50.unk30 = 1;
-                    Vf9(&l50);
+                    SpawnObject(&l50);
                 }
                 if (unk3150 == 0x3fc) {
                     l50.unk0 = 0;
@@ -2793,7 +2793,7 @@ void CNagamori::Vf7()
                     l50.scale = 1;
                     l50.layer = 0;
                     l50.unk30 = 1;
-                    Vf9(&l50);
+                    SpawnObject(&l50);
                 }
                 if (unk3150 == 0x3e8) {
                     l50.unk0 = 0;
@@ -2805,7 +2805,7 @@ void CNagamori::Vf7()
                     l50.scale = 1;
                     l50.layer = 0;
                     l50.unk30 = 1;
-                    Vf9(&l50);
+                    SpawnObject(&l50);
                 }
                 if (unk3150 == 0x3d4) {
                     l50.unk0 = 0;
@@ -2817,7 +2817,7 @@ void CNagamori::Vf7()
                     l50.scale = 1;
                     l50.layer = 0;
                     l50.unk30 = 1;
-                    Vf9(&l50);
+                    SpawnObject(&l50);
                 }
                 if (unk3150 == 0x3ca) {
                     l50.unk0 = 0;
@@ -2829,7 +2829,7 @@ void CNagamori::Vf7()
                     l50.scale = 1;
                     l50.layer = 0;
                     l50.unk30 = 1;
-                    Vf9(&l50);
+                    SpawnObject(&l50);
                 }
                 if (unk3150 == 0x3b6) {
                     l50.unk0 = 0;
@@ -2841,7 +2841,7 @@ void CNagamori::Vf7()
                     l50.scale = 1;
                     l50.layer = 0;
                     l50.unk30 = 1;
-                    Vf9(&l50);
+                    SpawnObject(&l50);
                 }
                 if (unk3150 == 0x3a2) {
                     l50.unk0 = 0;
@@ -2853,7 +2853,7 @@ void CNagamori::Vf7()
                     l50.scale = 1;
                     l50.layer = 0;
                     l50.unk30 = 1;
-                    Vf9(&l50);
+                    SpawnObject(&l50);
                 }
                 if (unk3150 == 0x38e) {
                     l50.unk0 = 0;
@@ -2865,7 +2865,7 @@ void CNagamori::Vf7()
                     l50.scale = 1;
                     l50.layer = 0;
                     l50.unk30 = 1;
-                    Vf9(&l50);
+                    SpawnObject(&l50);
                 }
                 if (unk3150 == 0x37a) {
                     l50.unk0 = 0;
@@ -2877,7 +2877,7 @@ void CNagamori::Vf7()
                     l50.scale = 1;
                     l50.layer = 0;
                     l50.unk30 = 1;
-                    Vf9(&l50);
+                    SpawnObject(&l50);
                 }
                 if (unk3150 == 0x366) {
                     l50.unk0 = 0;
@@ -2889,7 +2889,7 @@ void CNagamori::Vf7()
                     l50.scale = 1;
                     l50.layer = 0;
                     l50.unk30 = 1;
-                    Vf9(&l50);
+                    SpawnObject(&l50);
                 }
                 if (unk3150 == 0x352) {
                     l50.unk0 = 0;
@@ -2901,7 +2901,7 @@ void CNagamori::Vf7()
                     l50.scale = 1;
                     l50.layer = 0;
                     l50.unk30 = 1;
-                    Vf9(&l50);
+                    SpawnObject(&l50);
                 }
                 if (unk3150 == 0x33e) {
                     l50.unk0 = 0;
@@ -2913,7 +2913,7 @@ void CNagamori::Vf7()
                     l50.scale = 1;
                     l50.layer = 0;
                     l50.unk30 = 1;
-                    Vf9(&l50);
+                    SpawnObject(&l50);
                 }
                 if (unk3150 == 0x32a) {
                     l50.unk0 = 0;
@@ -2925,7 +2925,7 @@ void CNagamori::Vf7()
                     l50.scale = 1;
                     l50.layer = 0;
                     l50.unk30 = 1;
-                    Vf9(&l50);
+                    SpawnObject(&l50);
                 }
                 if (unk3150 == 0x316) {
                     l50.unk0 = 0;
@@ -2937,7 +2937,7 @@ void CNagamori::Vf7()
                     l50.scale = 1;
                     l50.layer = 0;
                     l50.unk30 = 1;
-                    Vf9(&l50);
+                    SpawnObject(&l50);
                 }
                 if (unk3150 == 0x302) {
                     l50.unk0 = 0;
@@ -2949,7 +2949,7 @@ void CNagamori::Vf7()
                     l50.scale = 1;
                     l50.layer = 0;
                     l50.unk30 = 1;
-                    Vf9(&l50);
+                    SpawnObject(&l50);
                 }
                 if (unk3150 == 0x2ee) {
                     l50.unk0 = 0;
@@ -2961,7 +2961,7 @@ void CNagamori::Vf7()
                     l50.scale = 1;
                     l50.layer = 0;
                     l50.unk30 = 1;
-                    Vf9(&l50);
+                    SpawnObject(&l50);
                 }
                 if (unk3150 == 0x2da) {
                     l50.unk0 = 0;
@@ -2973,7 +2973,7 @@ void CNagamori::Vf7()
                     l50.scale = 1;
                     l50.layer = 0;
                     l50.unk30 = 1;
-                    Vf9(&l50);
+                    SpawnObject(&l50);
                 }
                 if (unk3150 == 0x2c6) {
                     l50.unk0 = 0;
@@ -2985,7 +2985,7 @@ void CNagamori::Vf7()
                     l50.scale = 1;
                     l50.layer = 0;
                     l50.unk30 = 1;
-                    Vf9(&l50);
+                    SpawnObject(&l50);
                 }
                 if (unk3150 == 0x2b2) {
                     l50.unk0 = 0;
@@ -2997,7 +2997,7 @@ void CNagamori::Vf7()
                     l50.scale = 1;
                     l50.layer = 0;
                     l50.unk30 = 1;
-                    Vf9(&l50);
+                    SpawnObject(&l50);
                 }
                 if (unk3150 == 0x21c) {
                     l50.unk0 = 1;
@@ -3009,7 +3009,7 @@ void CNagamori::Vf7()
                     l50.scale = 0;
                     l50.layer = 0;
                     l50.unk30 = 1;
-                    Vf9(&l50);
+                    SpawnObject(&l50);
                 }
                 if (unk3150 == 0x12c) {
                     l50.unk0 = 1;
@@ -3021,7 +3021,7 @@ void CNagamori::Vf7()
                     l50.scale = 0;
                     l50.layer = 0;
                     l50.unk30 = 1;
-                    Vf9(&l50);
+                    SpawnObject(&l50);
                 }
                 m_objects[v4].timer++;
                 if (m_objects[v4].timer >= v54) {
@@ -3042,7 +3042,7 @@ void CNagamori::Vf7()
                     m_objects[v4].vx = 10.0;
                 }
                 if (m_objects[v4].timer > 0x82) {
-                    Vf10(v4);
+                    RemoveObject(v4);
                 }
                 m_objects[v4].timer++;
                 if (m_objects[v4].timer >= v54) {
@@ -3063,7 +3063,7 @@ void CNagamori::Vf7()
                     m_objects[v4].vy = -10.0;
                 }
                 if (m_objects[v4].timer > 0x82) {
-                    Vf10(v4);
+                    RemoveObject(v4);
                 }
                 m_objects[v4].timer++;
                 if (m_objects[v4].timer >= v54) {
@@ -3084,7 +3084,7 @@ void CNagamori::Vf7()
                     m_objects[v4].vx = -10.0;
                 }
                 if (m_objects[v4].timer > 0x82) {
-                    Vf10(v4);
+                    RemoveObject(v4);
                 }
                 m_objects[v4].timer++;
                 if (m_objects[v4].timer >= v54) {
@@ -3105,7 +3105,7 @@ void CNagamori::Vf7()
                     m_objects[v4].vx = 10.0;
                 }
                 if (m_objects[v4].timer > 0x82) {
-                    Vf10(v4);
+                    RemoveObject(v4);
                 }
                 m_objects[v4].timer++;
                 if (m_objects[v4].timer >= v54) {
@@ -3126,7 +3126,7 @@ void CNagamori::Vf7()
                     m_objects[v4].vy = 10.0;
                 }
                 if (m_objects[v4].timer > 0x82) {
-                    Vf10(v4);
+                    RemoveObject(v4);
                 }
                 m_objects[v4].timer++;
                 if (m_objects[v4].timer >= v54) {
@@ -3147,7 +3147,7 @@ void CNagamori::Vf7()
                     m_objects[v4].vx = -10.0;
                 }
                 if (m_objects[v4].timer > 0x82) {
-                    Vf10(v4);
+                    RemoveObject(v4);
                 }
                 m_objects[v4].timer++;
                 if (m_objects[v4].timer >= v54) {
@@ -3168,7 +3168,7 @@ void CNagamori::Vf7()
                     m_objects[v4].vy = 10.0;
                 }
                 if (m_objects[v4].timer > 0x82) {
-                    Vf10(v4);
+                    RemoveObject(v4);
                 }
                 m_objects[v4].timer++;
                 if (m_objects[v4].timer >= v54) {
@@ -3189,7 +3189,7 @@ void CNagamori::Vf7()
                     m_objects[v4].vy = 10.0;
                 }
                 if (m_objects[v4].timer > 0x82) {
-                    Vf10(v4);
+                    RemoveObject(v4);
                 }
                 m_objects[v4].timer++;
                 if (m_objects[v4].timer >= v54) {
@@ -3210,7 +3210,7 @@ void CNagamori::Vf7()
                     m_objects[v4].vx = 10.0;
                 }
                 if (m_objects[v4].timer > 0x82) {
-                    Vf10(v4);
+                    RemoveObject(v4);
                 }
                 m_objects[v4].timer++;
                 if (m_objects[v4].timer >= v54) {
@@ -3231,7 +3231,7 @@ void CNagamori::Vf7()
                     m_objects[v4].vy = 10.0;
                 }
                 if (m_objects[v4].timer > 0x82) {
-                    Vf10(v4);
+                    RemoveObject(v4);
                 }
                 m_objects[v4].timer++;
                 if (m_objects[v4].timer >= v54) {
@@ -3252,7 +3252,7 @@ void CNagamori::Vf7()
                     m_objects[v4].vx = -10.0;
                 }
                 if (m_objects[v4].timer > 0x82) {
-                    Vf10(v4);
+                    RemoveObject(v4);
                 }
                 m_objects[v4].timer++;
                 if (m_objects[v4].timer >= v54) {
@@ -3273,7 +3273,7 @@ void CNagamori::Vf7()
                     m_objects[v4].vy = -10.0;
                 }
                 if (m_objects[v4].timer > 0x82) {
-                    Vf10(v4);
+                    RemoveObject(v4);
                 }
                 m_objects[v4].timer++;
                 if (m_objects[v4].timer >= v54) {
@@ -3294,7 +3294,7 @@ void CNagamori::Vf7()
                     m_objects[v4].vy = -10.0;
                 }
                 if (m_objects[v4].timer > 0x82) {
-                    Vf10(v4);
+                    RemoveObject(v4);
                 }
                 m_objects[v4].timer++;
                 if (m_objects[v4].timer >= v54) {
@@ -3315,7 +3315,7 @@ void CNagamori::Vf7()
                     m_objects[v4].vx = 10.0;
                 }
                 if (m_objects[v4].timer > 0x82) {
-                    Vf10(v4);
+                    RemoveObject(v4);
                 }
                 m_objects[v4].timer++;
                 if (m_objects[v4].timer >= v54) {
@@ -3336,7 +3336,7 @@ void CNagamori::Vf7()
                     m_objects[v4].vy = 10.0;
                 }
                 if (m_objects[v4].timer > 0x82) {
-                    Vf10(v4);
+                    RemoveObject(v4);
                 }
                 m_objects[v4].timer++;
                 if (m_objects[v4].timer >= v54) {
@@ -3357,7 +3357,7 @@ void CNagamori::Vf7()
                     m_objects[v4].vx = -10.0;
                 }
                 if (m_objects[v4].timer > 0x82) {
-                    Vf10(v4);
+                    RemoveObject(v4);
                 }
                 m_objects[v4].timer++;
                 if (m_objects[v4].timer >= v54) {
@@ -3378,7 +3378,7 @@ void CNagamori::Vf7()
                     m_objects[v4].vy = -10.0;
                 }
                 if (m_objects[v4].timer > 0x82) {
-                    Vf10(v4);
+                    RemoveObject(v4);
                 }
                 m_objects[v4].timer++;
                 if (m_objects[v4].timer >= v54) {
@@ -3399,7 +3399,7 @@ void CNagamori::Vf7()
                     m_objects[v4].vx = 10.0;
                 }
                 if (m_objects[v4].timer > 0x82) {
-                    Vf10(v4);
+                    RemoveObject(v4);
                 }
                 m_objects[v4].timer++;
                 if (m_objects[v4].timer >= v54) {
@@ -3420,7 +3420,7 @@ void CNagamori::Vf7()
                     m_objects[v4].vy = 10.0;
                 }
                 if (m_objects[v4].timer > 0x82) {
-                    Vf10(v4);
+                    RemoveObject(v4);
                 }
                 m_objects[v4].timer++;
                 if (m_objects[v4].timer >= v54) {
@@ -3441,7 +3441,7 @@ void CNagamori::Vf7()
                     m_objects[v4].vx = -10.0;
                 }
                 if (m_objects[v4].timer > 0x82) {
-                    Vf10(v4);
+                    RemoveObject(v4);
                 }
                 m_objects[v4].timer++;
                 if (m_objects[v4].timer >= v54) {
@@ -3462,7 +3462,7 @@ void CNagamori::Vf7()
                     m_objects[v4].vx = 10.0;
                 }
                 if (m_objects[v4].timer > 0x82) {
-                    Vf10(v4);
+                    RemoveObject(v4);
                 }
                 m_objects[v4].timer++;
                 if (m_objects[v4].timer >= v54) {
@@ -3483,7 +3483,7 @@ void CNagamori::Vf7()
                     m_objects[v4].vx = -10.0;
                 }
                 if (m_objects[v4].timer > 0x82) {
-                    Vf10(v4);
+                    RemoveObject(v4);
                 }
                 m_objects[v4].timer++;
                 if (m_objects[v4].timer >= v54) {
@@ -3504,7 +3504,7 @@ void CNagamori::Vf7()
                     m_objects[v4].vy = -10.0;
                 }
                 if (m_objects[v4].timer > 0x82) {
-                    Vf10(v4);
+                    RemoveObject(v4);
                 }
                 m_objects[v4].timer++;
                 if (m_objects[v4].timer >= v54) {
@@ -3525,7 +3525,7 @@ void CNagamori::Vf7()
                     m_objects[v4].vy = 10.0;
                 }
                 if (m_objects[v4].timer > 0x82) {
-                    Vf10(v4);
+                    RemoveObject(v4);
                 }
                 m_objects[v4].timer++;
                 if (m_objects[v4].timer >= v54) {
@@ -3546,7 +3546,7 @@ void CNagamori::Vf7()
                     m_objects[v4].vx = 10.0;
                 }
                 if (m_objects[v4].timer > 0x82) {
-                    Vf10(v4);
+                    RemoveObject(v4);
                 }
                 m_objects[v4].timer++;
                 if (m_objects[v4].timer >= v54) {
@@ -3567,7 +3567,7 @@ void CNagamori::Vf7()
                     m_objects[v4].vy = -10.0;
                 }
                 if (m_objects[v4].timer > 0xb4) {
-                    Vf10(v4);
+                    RemoveObject(v4);
                 }
                 m_objects[v4].timer++;
                 if (m_objects[v4].timer >= v54) {
@@ -3588,7 +3588,7 @@ void CNagamori::Vf7()
                     m_objects[v4].vy = 10.0;
                 }
                 if (m_objects[v4].timer > 0xb4) {
-                    Vf10(v4);
+                    RemoveObject(v4);
                 }
                 m_objects[v4].timer++;
                 if (m_objects[v4].timer >= v54) {
@@ -3609,7 +3609,7 @@ void CNagamori::Vf7()
                     m_objects[v4].vx = 10.0;
                 }
                 if (m_objects[v4].timer > 0x21c) {
-                    Vf10(v4);
+                    RemoveObject(v4);
                 }
                 m_objects[v4].timer++;
                 if (m_objects[v4].timer >= v54) {
@@ -3630,7 +3630,7 @@ void CNagamori::Vf7()
                     m_objects[v4].vx = -10.0;
                 }
                 if (m_objects[v4].timer > 0x12c) {
-                    Vf10(v4);
+                    RemoveObject(v4);
                 }
                 m_objects[v4].timer++;
                 if (m_objects[v4].timer >= v54) {
@@ -3644,7 +3644,7 @@ void CNagamori::Vf7()
                 break;
             case 0x1bf:
                 if (pattern != 0x138) {
-                    Vf10(v4);
+                    RemoveObject(v4);
                 }
                 if (m_objects[v4].frame == 0x19) {
                     if (unk3138 == 0) {
@@ -3673,7 +3673,7 @@ void CNagamori::Vf7()
                 break;
             case 0x1c0:
                 if (pattern != 0x138) {
-                    Vf10(v4);
+                    RemoveObject(v4);
                 }
                 m_objects[v4].timer++;
                 if (m_objects[v4].timer >= v54) {
@@ -3681,7 +3681,7 @@ void CNagamori::Vf7()
                     m_objects[v4].frame++;
                     m_objects[v4].unk80 = 0;
                     if (m_objects[v4].frame >= v58) {
-                        Vf10(v4);
+                        RemoveObject(v4);
                     }
                 }
                 break;
@@ -3725,11 +3725,11 @@ void CNagamori::Vf7()
                     l50.unk18 = m_objects[v4].facing;
                     l50.scale = 2;
                     l50.layer = 1;
-                    Vf9(&l50);
+                    SpawnObject(&l50);
                     unk316c[v4] = 0;
                     unk32ac[v4] = 0x78;
                     if (unk314c == 0) {
-                        Vf10(v4);
+                        RemoveObject(v4);
                     }
                     break;
                 }
@@ -3745,7 +3745,7 @@ void CNagamori::Vf7()
                             m_objects[v4].frame = 0;
                             unk31ac[v4]++;
                         } else {
-                            Vf10(v4);
+                            RemoveObject(v4);
                         }
                     }
                 }
@@ -3762,7 +3762,7 @@ void CNagamori::Vf7()
                     l50.unk18 = m_objects[v4].facing;
                     l50.scale = 2;
                     l50.layer = 1;
-                    Vf9(&l50);
+                    SpawnObject(&l50);
                 }
                 m_objects[v4].timer++;
                 if (m_objects[v4].timer >= v54) {
@@ -3770,7 +3770,7 @@ void CNagamori::Vf7()
                     m_objects[v4].frame++;
                     m_objects[v4].unk80 = 0;
                     if (m_objects[v4].frame >= v58) {
-                        Vf10(v4);
+                        RemoveObject(v4);
                     }
                 }
                 break;
@@ -3786,7 +3786,7 @@ void CNagamori::Vf7()
                     l50.unk18 = m_objects[v4].facing;
                     l50.scale = 2;
                     l50.layer = 1;
-                    Vf9(&l50);
+                    SpawnObject(&l50);
                 }
                 m_objects[v4].timer++;
                 if (m_objects[v4].timer >= v54) {
@@ -3794,7 +3794,7 @@ void CNagamori::Vf7()
                     m_objects[v4].frame++;
                     m_objects[v4].unk80 = 0;
                     if (m_objects[v4].frame >= v58) {
-                        Vf10(v4);
+                        RemoveObject(v4);
                     }
                 }
                 break;
@@ -3810,7 +3810,7 @@ void CNagamori::Vf7()
                     l50.unk18 = m_objects[v4].facing;
                     l50.scale = 2;
                     l50.layer = 1;
-                    Vf9(&l50);
+                    SpawnObject(&l50);
                 }
                 m_objects[v4].timer++;
                 if (m_objects[v4].timer >= v54) {
@@ -3818,7 +3818,7 @@ void CNagamori::Vf7()
                     m_objects[v4].frame++;
                     m_objects[v4].unk80 = 0;
                     if (m_objects[v4].frame >= v58) {
-                        Vf10(v4);
+                        RemoveObject(v4);
                     }
                 }
                 break;
@@ -3834,7 +3834,7 @@ void CNagamori::Vf7()
                     m_objects[v4].frame++;
                     m_objects[v4].unk80 = 0;
                     if (m_objects[v4].frame >= v58) {
-                        Vf10(v4);
+                        RemoveObject(v4);
                     }
                 }
                 break;
@@ -3863,7 +3863,7 @@ void CNagamori::Vf7()
                     m_objects[v4].frame++;
                     m_objects[v4].unk80 = 0;
                     if (m_objects[v4].frame >= v58) {
-                        Vf10(v4);
+                        RemoveObject(v4);
                     }
                 }
                 break;
@@ -3872,7 +3872,7 @@ void CNagamori::Vf7()
                 m_objects[v4].unk8c = 0x7530;
                 m_objects[v4].timer++;
                 if (pattern != 0x57) {
-                    Vf10(v4);
+                    RemoveObject(v4);
                 }
                 if (m_objects[v4].timer >= v54) {
                     m_objects[v4].timer = 0;
@@ -3891,72 +3891,72 @@ void CNagamori::Vf7()
                     l50.scale = 0;
                     l50.layer = 1;
                     l50.unk18 = facing;
-                    Vf9(&l50);
+                    SpawnObject(&l50);
                     l50.type = 0x1f1;
                     l50.x = (double)((int)x - (facing << 2));
                     l50.y = (double)((int)y - 6);
                     l50.scale = 0;
                     l50.layer = 1;
                     l50.unk18 = facing;
-                    Vf9(&l50);
+                    SpawnObject(&l50);
                     l50.type = 0x1f1;
                     l50.x = (double)((int)x - facing * 0xe);
                     l50.y = (double)((int)y - 0x1a);
                     l50.scale = 0;
                     l50.layer = 1;
                     l50.unk18 = facing;
-                    Vf9(&l50);
+                    SpawnObject(&l50);
                     l50.type = 0x1f1;
                     l50.x = (double)(int)x;
                     l50.y = (double)(int)y;
                     l50.scale = 0;
                     l50.layer = 1;
                     l50.unk18 = facing;
-                    Vf9(&l50);
+                    SpawnObject(&l50);
                     l50.type = 0x1f1;
                     l50.x = (double)((int)x + facing * 0x1e);
                     l50.y = (double)((int)y - 0x28);
                     l50.scale = 0;
                     l50.layer = 1;
                     l50.unk18 = facing;
-                    Vf9(&l50);
+                    SpawnObject(&l50);
                     l50.type = 0x1f1;
                     l50.x = (double)((int)x - facing * 0x19);
                     l50.y = (double)((int)y - 0x50);
                     l50.scale = 0;
                     l50.layer = 1;
                     l50.unk18 = facing;
-                    Vf9(&l50);
+                    SpawnObject(&l50);
                     l50.type = 0x1f2;
                     l50.x = (double)((int)x - facing * 0x23);
                     l50.y = (double)((int)y - 0x2a);
                     l50.scale = 0;
                     l50.layer = 1;
                     l50.unk18 = facing;
-                    Vf9(&l50);
+                    SpawnObject(&l50);
                     l50.type = 0x1f2;
                     l50.x = (double)((int)x - facing * 0x12);
                     l50.y = (double)((int)y - 0x14);
                     l50.scale = 0;
                     l50.layer = 1;
                     l50.unk18 = facing;
-                    Vf9(&l50);
+                    SpawnObject(&l50);
                     l50.type = 0x1f2;
                     l50.x = (double)((int)x + facing * 2);
                     l50.y = (double)((int)y - 0x41);
                     l50.scale = 0;
                     l50.layer = 1;
                     l50.unk18 = facing;
-                    Vf9(&l50);
+                    SpawnObject(&l50);
                     l50.type = 0x1f2;
                     l50.x = (double)((int)x + (facing << 4));
                     l50.y = (double)((int)y - 0x50);
                     l50.scale = 0;
                     l50.layer = 1;
                     l50.unk18 = facing;
-                    Vf9(&l50);
+                    SpawnObject(&l50);
                     unk2c9 = 0x22;
-                    Vf10(v4);
+                    RemoveObject(v4);
                     unk3144 = 0;
                     break;
                 }
@@ -3982,10 +3982,10 @@ void CNagamori::Vf7()
                     m_objects[v4].vy = -m_objects[v4].vy;
                 }
                 if (unk32ac[v4] < 0xa) {
-                    m_objects[v4].unk50 = 1;
+                    m_objects[v4].scale = 1;
                 }
                 if (unk32ac[v4] < 0) {
-                    Vf10(v4);
+                    RemoveObject(v4);
                     break;
                 }
                 m_objects[v4].timer++;
@@ -4011,10 +4011,10 @@ void CNagamori::Vf7()
                     m_objects[v4].vy = -m_objects[v4].vy;
                 }
                 if (unk32ac[v4] < 0xa) {
-                    m_objects[v4].unk50 = 1;
+                    m_objects[v4].scale = 1;
                 }
                 if (unk32ac[v4] < 0) {
-                    Vf10(v4);
+                    RemoveObject(v4);
                     break;
                 }
                 m_objects[v4].timer++;
@@ -4037,7 +4037,7 @@ void CNagamori::Vf7()
                     m_objects[v4].frame++;
                     m_objects[v4].unk80 = 0;
                     if (m_objects[v4].frame >= v58) {
-                        Vf10(v4);
+                        RemoveObject(v4);
                     }
                 }
             }

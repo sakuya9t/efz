@@ -1,4 +1,4 @@
-// CIkumi::Vf6 and Unk694d00 (0x683550-0x6a59bf): the per-state update, and the second one
+// CIkumi::UpdatePattern and Unk694d00 (0x683550-0x6a59bf): the per-state update, and the second one
 // it hands over to while the byte at 0x3460 is 1. They are a file of their own, as in
 // the original: their floating-point constants precede the rest of CIkumi's .rdata,
 // which starts with its constructor's folder name (ikumi.cpp).
@@ -7,7 +7,7 @@
 #include <math.h>
 #include "efz.h"
 
-void CIkumi::Vf6()
+void CIkumi::UpdatePattern()
 {
     WORD x8;
     WORD l4;
@@ -22,7 +22,7 @@ void CIkumi::Vf6()
     EffectDesc l50;
     l4 = (short)anims[pattern].frames[frame].duration;
     x8 = anims[pattern].frameCount;
-    CPlayer::Unk413090((EffectDesc*)&l50);
+    CPlayer::InitEffectDesc((EffectDesc*)&l50);
     switch (pattern) {
     default:
         unk158 = 0;
@@ -101,7 +101,7 @@ void CIkumi::Vf6()
             frame++;
             if (frame >= x8) {
                 pattern = 9;
-                Vf0();
+                StartPattern();
             }
         }
         if (y + vy >= 0.0 && frame > 3) {
@@ -109,7 +109,7 @@ void CIkumi::Vf6()
             unk2c9 = 9;
             CPlayer::FaceOpponent();
             pattern = 0xd;
-            Vf0();
+            StartPattern();
         }
         break;
     case 5:
@@ -137,7 +137,7 @@ void CIkumi::Vf6()
             frame++;
             if (frame >= x8) {
                 pattern = 9;
-                Vf0();
+                StartPattern();
             }
         }
         if (y + vy >= 0.0 && frame > 3) {
@@ -145,7 +145,7 @@ void CIkumi::Vf6()
             unk2c9 = 9;
             CPlayer::FaceOpponent();
             pattern = 0xd;
-            Vf0();
+            StartPattern();
         }
         break;
     case 6:
@@ -169,7 +169,7 @@ void CIkumi::Vf6()
             frame++;
             if (frame >= x8) {
                 pattern = 9;
-                Vf0();
+                StartPattern();
             }
         }
         if (y + vy >= 0.0 && frame > 3) {
@@ -177,7 +177,7 @@ void CIkumi::Vf6()
             unk2c9 = 9;
             CPlayer::FaceOpponent();
             pattern = 0xd;
-            Vf0();
+            StartPattern();
         }
         break;
     case 7:
@@ -191,7 +191,7 @@ void CIkumi::Vf6()
             frame++;
             if (frame >= x8) {
                 pattern = 0;
-                Vf0();
+                StartPattern();
             }
         }
         break;
@@ -206,7 +206,7 @@ void CIkumi::Vf6()
             frame++;
             if (frame >= x8) {
                 pattern = 3;
-                Vf0();
+                StartPattern();
             }
         }
         break;
@@ -225,7 +225,7 @@ void CIkumi::Vf6()
             y = 0.0;
             unk2c9 = 9;
             pattern = 0xd;
-            Vf0();
+            StartPattern();
         }
         break;
     case 0xd:
@@ -242,7 +242,7 @@ void CIkumi::Vf6()
                 if (m_inputY == 1) {
                     pattern = 3;
                 }
-                Vf0();
+                StartPattern();
             }
         }
         break;
@@ -264,7 +264,7 @@ void CIkumi::Vf6()
             frame++;
             if (frame >= x8) {
                 pattern = 9;
-                Vf0();
+                StartPattern();
             }
         }
         if (y + vy >= 0.0 && frame > 3) {
@@ -272,7 +272,7 @@ void CIkumi::Vf6()
             unk2c9 = 9;
             CPlayer::FaceOpponent();
             pattern = 0xd;
-            Vf0();
+            StartPattern();
         }
         break;
     case 0xf:
@@ -293,7 +293,7 @@ void CIkumi::Vf6()
             frame++;
             if (frame >= x8) {
                 pattern = 9;
-                Vf0();
+                StartPattern();
             }
         }
         if (y + vy >= 0.0 && frame > 3) {
@@ -301,7 +301,7 @@ void CIkumi::Vf6()
             unk2c9 = 9;
             CPlayer::FaceOpponent();
             pattern = 0xd;
-            Vf0();
+            StartPattern();
         }
         break;
     case 0x10:
@@ -321,7 +321,7 @@ void CIkumi::Vf6()
             frame++;
             if (frame >= x8) {
                 pattern = 9;
-                Vf0();
+                StartPattern();
             }
         }
         if (y + vy >= 0.0 && frame > 3) {
@@ -329,7 +329,7 @@ void CIkumi::Vf6()
             unk2c9 = 9;
             CPlayer::FaceOpponent();
             pattern = 0xd;
-            Vf0();
+            StartPattern();
         }
         break;
     case 0x2f:
@@ -391,7 +391,7 @@ void CIkumi::Vf6()
                 if (m_inputY == 1) {
                     pattern = 3;
                 }
-                Vf0();
+                StartPattern();
             }
         }
         break;
@@ -427,7 +427,7 @@ void CIkumi::Vf6()
                 if (m_inputY == 1) {
                     pattern = 3;
                 }
-                Vf0();
+                StartPattern();
             }
         }
         break;
@@ -463,7 +463,7 @@ void CIkumi::Vf6()
                 if (m_inputY == 1) {
                     pattern = 3;
                 }
-                Vf0();
+                StartPattern();
             }
         }
         break;
@@ -499,7 +499,7 @@ void CIkumi::Vf6()
                 if (m_inputY == 1) {
                     pattern = 3;
                 }
-                Vf0();
+                StartPattern();
             }
         }
         break;
@@ -535,7 +535,7 @@ void CIkumi::Vf6()
                 if (m_inputY == 1) {
                     pattern = 3;
                 }
-                Vf0();
+                StartPattern();
             }
         }
         break;
@@ -570,7 +570,7 @@ void CIkumi::Vf6()
                 if (m_inputY == 1) {
                     pattern = 3;
                 }
-                Vf0();
+                StartPattern();
             }
         }
         break;
@@ -603,7 +603,7 @@ void CIkumi::Vf6()
             frame++;
             if (frame >= x8) {
                 pattern = 3;
-                Vf0();
+                StartPattern();
             }
         }
         break;
@@ -636,7 +636,7 @@ void CIkumi::Vf6()
             frame++;
             if (frame >= x8) {
                 pattern = 3;
-                Vf0();
+                StartPattern();
             }
         }
         break;
@@ -669,7 +669,7 @@ void CIkumi::Vf6()
             frame++;
             if (frame >= x8) {
                 pattern = 3;
-                Vf0();
+                StartPattern();
             }
         }
         break;
@@ -709,10 +709,10 @@ void CIkumi::Vf6()
             y = 0.0;
             if (unk12c != 0) {
                 pattern = 0x61;
-                Vf0();
+                StartPattern();
             } else {
                 pattern = 0x62;
-                Vf0();
+                StartPattern();
             }
         }
         break;
@@ -752,10 +752,10 @@ void CIkumi::Vf6()
             y = 0.0;
             if (unk12c != 0) {
                 pattern = 0x61;
-                Vf0();
+                StartPattern();
             } else {
                 pattern = 0x62;
-                Vf0();
+                StartPattern();
             }
         }
         break;
@@ -795,10 +795,10 @@ void CIkumi::Vf6()
             y = 0.0;
             if (unk12c != 0) {
                 pattern = 0x61;
-                Vf0();
+                StartPattern();
             } else {
                 pattern = 0x62;
-                Vf0();
+                StartPattern();
             }
         }
         break;
@@ -833,10 +833,10 @@ void CIkumi::Vf6()
             y = 0.0;
             if (unk12c != 0) {
                 pattern = 0x61;
-                Vf0();
+                StartPattern();
             } else {
                 pattern = 0x62;
-                Vf0();
+                StartPattern();
             }
         }
         break;
@@ -871,10 +871,10 @@ void CIkumi::Vf6()
             y = 0.0;
             if (unk12c != 0) {
                 pattern = 0x61;
-                Vf0();
+                StartPattern();
             } else {
                 pattern = 0x62;
-                Vf0();
+                StartPattern();
             }
         }
         break;
@@ -884,7 +884,7 @@ void CIkumi::Vf6()
         }
         if (frame > 0 && (char)CPlayer::Unk40ff70() != 0) {
             pattern = 0x46;
-            Vf0();
+            StartPattern();
             break;
         }
         if (frame == 0 && timer == 0) {
@@ -919,10 +919,10 @@ void CIkumi::Vf6()
             y = 0.0;
             if (unk12c != 0) {
                 pattern = 0x61;
-                Vf0();
+                StartPattern();
             } else {
                 pattern = 0x62;
-                Vf0();
+                StartPattern();
             }
         }
         break;
@@ -932,7 +932,7 @@ void CIkumi::Vf6()
         }
         if (frame > 0 && (char)CPlayer::Unk40ff70() != 0) {
             pattern = 0x46;
-            Vf0();
+            StartPattern();
             break;
         }
         if (frame == 0 && timer == 0) {
@@ -967,10 +967,10 @@ void CIkumi::Vf6()
             y = 0.0;
             if (unk12c != 0) {
                 pattern = 0x61;
-                Vf0();
+                StartPattern();
             } else {
                 pattern = 0x62;
-                Vf0();
+                StartPattern();
             }
         }
         break;
@@ -980,7 +980,7 @@ void CIkumi::Vf6()
         }
         if (frame > 0 && (char)CPlayer::Unk40ff70() != 0) {
             pattern = 0x46;
-            Vf0();
+            StartPattern();
             break;
         }
         if (frame == 0 && timer == 0) {
@@ -1010,10 +1010,10 @@ void CIkumi::Vf6()
             y = 0.0;
             if (unk12c != 0) {
                 pattern = 0x61;
-                Vf0();
+                StartPattern();
             } else {
                 pattern = 0x62;
-                Vf0();
+                StartPattern();
             }
         }
         break;
@@ -1023,7 +1023,7 @@ void CIkumi::Vf6()
         }
         if (frame > 0 && (char)CPlayer::Unk40ff70() != 0) {
             pattern = 0x46;
-            Vf0();
+            StartPattern();
             break;
         }
         if (frame == 0 && timer == 0) {
@@ -1053,10 +1053,10 @@ void CIkumi::Vf6()
             y = 0.0;
             if (unk12c != 0) {
                 pattern = 0x61;
-                Vf0();
+                StartPattern();
             } else {
                 pattern = 0x62;
-                Vf0();
+                StartPattern();
             }
         }
         break;
@@ -1070,7 +1070,7 @@ void CIkumi::Vf6()
         timer++;
         if ((char)CPlayer::Unk40ff70() != 0) {
             pattern = 0x46;
-            Vf0();
+            StartPattern();
             break;
         }
         if (timer >= l4) {
@@ -1084,10 +1084,10 @@ void CIkumi::Vf6()
             y = 0.0;
             if (unk12c != 0) {
                 pattern = 0x61;
-                Vf0();
+                StartPattern();
             } else {
                 pattern = 0x62;
-                Vf0();
+                StartPattern();
             }
         }
         break;
@@ -1110,10 +1110,10 @@ void CIkumi::Vf6()
             y = 0.0;
             if (unk12c != 0) {
                 pattern = 0x61;
-                Vf0();
+                StartPattern();
             } else {
                 pattern = 0x62;
-                Vf0();
+                StartPattern();
             }
         }
         break;
@@ -1149,10 +1149,10 @@ void CIkumi::Vf6()
             y = 0.0;
             if (unk12c != 0) {
                 pattern = 0x61;
-                Vf0();
+                StartPattern();
             } else {
                 pattern = 0x62;
-                Vf0();
+                StartPattern();
             }
         }
         break;
@@ -1187,10 +1187,10 @@ void CIkumi::Vf6()
             y = 0.0;
             if (unk12c != 0) {
                 pattern = 0x61;
-                Vf0();
+                StartPattern();
             } else {
                 pattern = 0x62;
-                Vf0();
+                StartPattern();
             }
         }
         break;
@@ -1215,7 +1215,7 @@ void CIkumi::Vf6()
                 if (m_inputY == 1) {
                     pattern = 3;
                 }
-                Vf0();
+                StartPattern();
             }
         }
         break;
@@ -1240,7 +1240,7 @@ void CIkumi::Vf6()
                 if (m_inputY == 1) {
                     pattern = 3;
                 }
-                Vf0();
+                StartPattern();
             }
         }
         break;
@@ -1262,7 +1262,7 @@ void CIkumi::Vf6()
             frame++;
             if (frame >= x8) {
                 pattern = 3;
-                Vf0();
+                StartPattern();
             }
         }
         break;
@@ -1300,7 +1300,7 @@ void CIkumi::Vf6()
                 if (m_inputY == 1) {
                     pattern = 3;
                 }
-                Vf0();
+                StartPattern();
             }
         }
         break;
@@ -1338,7 +1338,7 @@ void CIkumi::Vf6()
                 if (m_inputY == 1) {
                     pattern = 3;
                 }
-                Vf0();
+                StartPattern();
             }
         }
         break;
@@ -1373,7 +1373,7 @@ void CIkumi::Vf6()
             frame++;
             if (frame >= x8) {
                 pattern = 3;
-                Vf0();
+                StartPattern();
             }
         }
         break;
@@ -1387,7 +1387,7 @@ void CIkumi::Vf6()
             l50.y = (double)(int)y;
             l50.unk18 = facing;
             l50.layer = 1;
-            Vf9(&l50);
+            SpawnObject(&l50);
             m_gauge = m_gauge + 0x1e;
             vx = unkc0;
             vy = unkc8;
@@ -1410,10 +1410,10 @@ void CIkumi::Vf6()
             y = 0.0;
             if (unk12c != 0) {
                 pattern = 0x61;
-                Vf0();
+                StartPattern();
             } else {
                 pattern = 0x62;
-                Vf0();
+                StartPattern();
             }
         }
         break;
@@ -1456,10 +1456,10 @@ void CIkumi::Vf6()
             y = 0.0;
             if (unk12c != 0) {
                 pattern = 0x61;
-                Vf0();
+                StartPattern();
             } else {
                 pattern = 0x62;
-                Vf0();
+                StartPattern();
             }
         }
         break;
@@ -1473,7 +1473,7 @@ void CIkumi::Vf6()
                 l50.layer = 0;
                 l50.unk0 = 1;
                 l50.unk18 = facing;
-                Vf9(&l50);
+                SpawnObject(&l50);
                 unk3144 = 1;
             }
             if (unk120 != 0) {
@@ -1510,7 +1510,7 @@ void CIkumi::Vf6()
             frame++;
             if (frame >= x8) {
                 pattern = 0;
-                Vf0();
+                StartPattern();
                 CPlayer::FaceOpponent();
             }
         }
@@ -1525,7 +1525,7 @@ void CIkumi::Vf6()
                 l50.layer = 0;
                 l50.unk0 = 1;
                 l50.unk18 = facing;
-                Vf9(&l50);
+                SpawnObject(&l50);
                 unk3144 = 1;
             }
             if (unk120 != 0) {
@@ -1562,7 +1562,7 @@ void CIkumi::Vf6()
             frame++;
             if (frame >= x8) {
                 pattern = 0;
-                Vf0();
+                StartPattern();
                 CPlayer::FaceOpponent();
             }
         }
@@ -1577,7 +1577,7 @@ void CIkumi::Vf6()
                 l50.layer = 0;
                 l50.unk0 = 1;
                 l50.unk18 = facing;
-                Vf9(&l50);
+                SpawnObject(&l50);
                 unk3144 = 1;
             }
             if (unk120 != 0) {
@@ -1595,7 +1595,7 @@ void CIkumi::Vf6()
             frame++;
             if (frame >= x8) {
                 pattern = 0;
-                Vf0();
+                StartPattern();
                 CPlayer::FaceOpponent();
             }
         }
@@ -1603,10 +1603,10 @@ void CIkumi::Vf6()
             y = 0.0;
             if (unk12c != 0) {
                 pattern = 0x61;
-                Vf0();
+                StartPattern();
             } else {
                 pattern = 0x62;
-                Vf0();
+                StartPattern();
             }
         }
         break;
@@ -1620,7 +1620,7 @@ void CIkumi::Vf6()
                 l50.layer = 0;
                 l50.unk0 = 1;
                 l50.unk18 = facing;
-                Vf9(&l50);
+                SpawnObject(&l50);
                 unk3144 = 1;
             }
             if (unk3138 == 0) {
@@ -1647,10 +1647,10 @@ void CIkumi::Vf6()
             y = 0.0;
             if (unk12c != 0) {
                 pattern = 0x61;
-                Vf0();
+                StartPattern();
             } else {
                 pattern = 0x62;
-                Vf0();
+                StartPattern();
             }
         }
         break;
@@ -1663,7 +1663,7 @@ void CIkumi::Vf6()
             l50.unk18 = 1;
             l50.scale = 0;
             l50.layer = 0;
-            Vf9(&l50);
+            SpawnObject(&l50);
         }
         timer++;
         if (timer >= l4) {
@@ -1671,7 +1671,7 @@ void CIkumi::Vf6()
             frame++;
             if (frame >= x8) {
                 pattern = 0;
-                Vf0();
+                StartPattern();
             }
         }
         break;
@@ -1688,7 +1688,7 @@ void CIkumi::Vf6()
                 if (m_inputY == 1) {
                     pattern = 3;
                 }
-                Vf0();
+                StartPattern();
             }
         }
         break;
@@ -1711,7 +1711,7 @@ void CIkumi::Vf6()
             frame++;
             if (frame >= x8) {
                 pattern = 0x63;
-                Vf0();
+                StartPattern();
             }
         }
         break;
@@ -1734,7 +1734,7 @@ void CIkumi::Vf6()
             frame++;
             if (frame >= x8) {
                 pattern = 0x63;
-                Vf0();
+                StartPattern();
             }
         }
         break;
@@ -1743,7 +1743,7 @@ void CIkumi::Vf6()
         unk158 = 0;
         if (m_hp > 0 && timer > 0x63 && frame == 0) {
             pattern = 0x60;
-            Vf0();
+            StartPattern();
         }
         if (timer >= l4) {
             timer = 0;
@@ -1753,7 +1753,7 @@ void CIkumi::Vf6()
             }
             if (frame >= x8) {
                 pattern = 0x60;
-                Vf0();
+                StartPattern();
             }
         }
         break;
@@ -1793,7 +1793,7 @@ void CIkumi::Vf6()
                 if (m_inputY == 1) {
                     pattern = 3;
                 }
-                Vf0();
+                StartPattern();
             }
         }
         break;
@@ -1833,7 +1833,7 @@ void CIkumi::Vf6()
                 if (m_inputY == 1) {
                     pattern = 3;
                 }
-                Vf0();
+                StartPattern();
             }
         }
         break;
@@ -1873,7 +1873,7 @@ void CIkumi::Vf6()
                 if (m_inputY == 1) {
                     pattern = 3;
                 }
-                Vf0();
+                StartPattern();
             }
         }
         break;
@@ -1910,7 +1910,7 @@ void CIkumi::Vf6()
             }
             if (frame >= x8) {
                 pattern = 3;
-                Vf0();
+                StartPattern();
             }
         }
         break;
@@ -1947,7 +1947,7 @@ void CIkumi::Vf6()
             }
             if (frame >= x8) {
                 pattern = 3;
-                Vf0();
+                StartPattern();
             }
         }
         break;
@@ -1984,7 +1984,7 @@ void CIkumi::Vf6()
             }
             if (frame >= x8) {
                 pattern = 3;
-                Vf0();
+                StartPattern();
             }
         }
         break;
@@ -2002,7 +2002,7 @@ void CIkumi::Vf6()
             frame++;
             if (frame >= x8) {
                 pattern = 9;
-                Vf0();
+                StartPattern();
             }
         }
         if (y + vy >= 0.0) {
@@ -2010,7 +2010,7 @@ void CIkumi::Vf6()
             unk2c9 = 9;
             CPlayer::FaceOpponent();
             pattern = 0xd;
-            Vf0();
+            StartPattern();
         }
         break;
     case 0x9d:
@@ -2033,7 +2033,7 @@ void CIkumi::Vf6()
             frame++;
             if (frame >= x8) {
                 pattern = 9;
-                Vf0();
+                StartPattern();
             }
         }
         if (y + vy >= 0.0) {
@@ -2041,7 +2041,7 @@ void CIkumi::Vf6()
             unk2c9 = 9;
             CPlayer::FaceOpponent();
             pattern = 0xd;
-            Vf0();
+            StartPattern();
         }
         break;
     case 0x9e:
@@ -2064,7 +2064,7 @@ void CIkumi::Vf6()
             frame++;
             if (frame >= x8) {
                 pattern = 9;
-                Vf0();
+                StartPattern();
             }
         }
         if (y + vy >= 0.0) {
@@ -2072,7 +2072,7 @@ void CIkumi::Vf6()
             unk2c9 = 9;
             CPlayer::FaceOpponent();
             pattern = 0xd;
-            Vf0();
+            StartPattern();
         }
         break;
     case 0xa3:
@@ -2088,7 +2088,7 @@ void CIkumi::Vf6()
                 pattern = 6;
             }
             m_attackResult = 0;
-            Vf0();
+            StartPattern();
             break;
         }
         if (frame == 0 && timer == 0) {
@@ -2108,17 +2108,17 @@ void CIkumi::Vf6()
             }
             if (frame >= x8) {
                 pattern = 0;
-                Vf0();
+                StartPattern();
                 break;
             }
         }
         if (m_inputX == facing && unk313c >= 0x50 && frame < 4) {
             pattern = 0xb2;
-            Vf0();
+            StartPattern();
         }
         if (m_inputX != facing && unk3138 >= 0x3c && frame < 4) {
             pattern = 0xb2;
-            Vf0();
+            StartPattern();
         }
         break;
     case 0xa4:
@@ -2155,7 +2155,7 @@ void CIkumi::Vf6()
             if (frame >= x8) {
                 CPlayer::FaceOpponent();
                 pattern = 0;
-                Vf0();
+                StartPattern();
             }
         }
         break;
@@ -2179,7 +2179,7 @@ void CIkumi::Vf6()
         }
         if (m_inputX == facing && unk313c >= 0x78) {
             pattern = 9;
-            Vf0();
+            StartPattern();
             vx = 1.6;
             ay = 0.03;
             if (CPlayer::FaceOpponent() != 0) {
@@ -2188,7 +2188,7 @@ void CIkumi::Vf6()
         }
         if (m_inputX != facing && unk3138 >= 0x28) {
             pattern = 9;
-            Vf0();
+            StartPattern();
             vx = 1.3;
             ay = 0.03;
             if (CPlayer::FaceOpponent() != 0) {
@@ -2216,7 +2216,7 @@ void CIkumi::Vf6()
         }
         if (m_inputX == -facing && unk313c >= 0x78) {
             pattern = 9;
-            Vf0();
+            StartPattern();
             vx = -0.9;
             ay = 0.03;
             if (CPlayer::FaceOpponent() != 0) {
@@ -2225,7 +2225,7 @@ void CIkumi::Vf6()
         }
         if (m_inputX != -facing && unk3138 >= 0x28) {
             pattern = 9;
-            Vf0();
+            StartPattern();
             vx = -0.9;
             ay = 0.03;
             if (CPlayer::FaceOpponent() != 0) {
@@ -2270,7 +2270,7 @@ void CIkumi::Vf6()
             if (frame >= x8) {
                 pattern = 0;
                 CPlayer::FaceOpponent();
-                Vf0();
+                StartPattern();
             }
         }
         break;
@@ -2300,7 +2300,7 @@ void CIkumi::Vf6()
             }
             if (frame >= x8) {
                 pattern = 0;
-                Vf0();
+                StartPattern();
             }
         }
         break;
@@ -2330,7 +2330,7 @@ void CIkumi::Vf6()
             }
             if (frame >= x8) {
                 pattern = 3;
-                Vf0();
+                StartPattern();
             }
         }
         break;
@@ -2367,7 +2367,7 @@ void CIkumi::Vf6()
             frame++;
             if (frame >= x8) {
                 pattern = 9;
-                Vf0();
+                StartPattern();
             }
         }
         break;
@@ -2403,7 +2403,7 @@ void CIkumi::Vf6()
                 vx = unk3138 * 0.01;
                 vy = unk313c * 0.01;
                 ay = 0.035;
-                Vf0();
+                StartPattern();
             }
         }
         break;
@@ -2424,7 +2424,7 @@ void CIkumi::Vf6()
                 pattern = 6;
             }
             m_attackResult = 0;
-            Vf0();
+            StartPattern();
             break;
         }
         timer++;
@@ -2433,7 +2433,7 @@ void CIkumi::Vf6()
             frame++;
             if (frame >= x8) {
                 pattern = 0;
-                Vf0();
+                StartPattern();
                 break;
             }
         }
@@ -2468,7 +2468,7 @@ void CIkumi::Vf6()
                 frame = frame - 2;
             }
             if (frame >= x8) {
-                Vf0();
+                StartPattern();
                 pattern = 0;
             }
         }
@@ -2493,7 +2493,7 @@ void CIkumi::Vf6()
                 pattern = 6;
             }
             m_attackResult = 0;
-            Vf0();
+            StartPattern();
             break;
         }
         if (frame == 1 && timer == 0) {
@@ -2511,7 +2511,7 @@ void CIkumi::Vf6()
             if (frame >= x8) {
                 pattern = 0;
                 CPlayer::FaceOpponent();
-                Vf0();
+                StartPattern();
             }
         }
         break;
@@ -2535,7 +2535,7 @@ void CIkumi::Vf6()
                 pattern = 6;
             }
             m_attackResult = 0;
-            Vf0();
+            StartPattern();
             break;
         }
         if (frame == 1 && timer == 0) {
@@ -2556,7 +2556,7 @@ void CIkumi::Vf6()
             if (frame >= x8) {
                 pattern = 0;
                 CPlayer::FaceOpponent();
-                Vf0();
+                StartPattern();
             }
         }
         break;
@@ -2570,7 +2570,7 @@ void CIkumi::Vf6()
                 pattern = 6;
             }
             m_attackResult = 0;
-            Vf0();
+            StartPattern();
             break;
         }
         if (unk158 == 0) {
@@ -2598,7 +2598,7 @@ void CIkumi::Vf6()
             if (frame >= x8) {
                 pattern = 0;
                 CPlayer::FaceOpponent();
-                Vf0();
+                StartPattern();
             }
         }
         break;
@@ -2612,7 +2612,7 @@ void CIkumi::Vf6()
                 pattern = 6;
             }
             m_attackResult = 0;
-            Vf0();
+            StartPattern();
             break;
         }
         if (frame < 2) {
@@ -2632,7 +2632,7 @@ void CIkumi::Vf6()
                 pattern = 6;
             }
             m_attackResult = 0;
-            Vf0();
+            StartPattern();
             break;
         }
         if (frame == 2 && timer == 0) {
@@ -2657,7 +2657,7 @@ void CIkumi::Vf6()
             if (frame >= x8) {
                 pattern = 0;
                 CPlayer::FaceOpponent();
-                Vf0();
+                StartPattern();
             }
         }
         break;
@@ -2681,7 +2681,7 @@ void CIkumi::Vf6()
                 pattern = 6;
             }
             m_attackResult = 0;
-            Vf0();
+            StartPattern();
             break;
         }
         if (frame == 1 && timer == 0) {
@@ -2702,7 +2702,7 @@ void CIkumi::Vf6()
                     pattern = 3;
                 }
                 CPlayer::FaceOpponent();
-                Vf0();
+                StartPattern();
             }
         }
         break;
@@ -2726,7 +2726,7 @@ void CIkumi::Vf6()
                 pattern = 6;
             }
             m_attackResult = 0;
-            Vf0();
+            StartPattern();
             break;
         }
         if (frame == 2 && timer == 0) {
@@ -2747,7 +2747,7 @@ void CIkumi::Vf6()
                     pattern = 3;
                 }
                 CPlayer::FaceOpponent();
-                Vf0();
+                StartPattern();
             }
         }
         break;
@@ -2789,7 +2789,7 @@ void CIkumi::Vf6()
                     pattern = 3;
                 }
                 CPlayer::FaceOpponent();
-                Vf0();
+                StartPattern();
             }
         }
         break;
@@ -2805,7 +2805,7 @@ void CIkumi::Vf6()
                 pattern = 0x10;
             }
             m_attackResult = 0;
-            Vf0();
+            StartPattern();
             break;
         }
         if (frame == 2 && timer == 0) {
@@ -2816,7 +2816,7 @@ void CIkumi::Vf6()
         if (y + vy >= 0.0) {
             y = 0.0;
             pattern = 0xd;
-            Vf0();
+            StartPattern();
             break;
         }
         timer++;
@@ -2828,7 +2828,7 @@ void CIkumi::Vf6()
             }
             if (frame >= x8) {
                 pattern = 9;
-                Vf0();
+                StartPattern();
             }
         }
         break;
@@ -2844,7 +2844,7 @@ void CIkumi::Vf6()
                 pattern = 0x10;
             }
             m_attackResult = 0;
-            Vf0();
+            StartPattern();
             break;
         }
         if (frame == 1 && timer == 0) {
@@ -2860,7 +2860,7 @@ void CIkumi::Vf6()
         if (y + vy >= 0.0) {
             y = 0.0;
             pattern = 0xd;
-            Vf0();
+            StartPattern();
             break;
         }
         timer++;
@@ -2872,7 +2872,7 @@ void CIkumi::Vf6()
             }
             if (frame >= x8) {
                 pattern = 9;
-                Vf0();
+                StartPattern();
             }
         }
         break;
@@ -2888,7 +2888,7 @@ void CIkumi::Vf6()
                 pattern = 0x10;
             }
             m_attackResult = 0;
-            Vf0();
+            StartPattern();
             break;
         }
         if (frame == 2 && timer == 0) {
@@ -2899,7 +2899,7 @@ void CIkumi::Vf6()
         if (y + vy >= 0.0) {
             y = 0.0;
             pattern = 0xd;
-            Vf0();
+            StartPattern();
             break;
         }
         timer++;
@@ -2911,7 +2911,7 @@ void CIkumi::Vf6()
             }
             if (frame >= x8) {
                 pattern = 9;
-                Vf0();
+                StartPattern();
             }
         }
         break;
@@ -2928,8 +2928,8 @@ void CIkumi::Vf6()
             vx = 0.0;
             vy = 0.0;
             unkb8 = 0.0;
-            Vf0();
-            (*m_opponent)->Vf0();
+            StartPattern();
+            (*m_opponent)->StartPattern();
             (*m_opponent)->StopMoving();
             pattern = 0xdd;
             (*m_opponent)->pattern = 0x67;
@@ -2954,7 +2954,7 @@ void CIkumi::Vf6()
                     pattern = 3;
                 }
                 CPlayer::FaceOpponent();
-                Vf0();
+                StartPattern();
             }
         }
         break;
@@ -2974,7 +2974,7 @@ void CIkumi::Vf6()
             unk2c8 = 0;
         }
         if (frame == 2 && timer == 0) {
-            (*m_opponent)->Vf0();
+            (*m_opponent)->StartPattern();
             (*m_opponent)->pattern = 0x3f;
             (*m_opponent)->unkc0 = -1.2;
             (*m_opponent)->unkc8 = -1.0;
@@ -2987,7 +2987,7 @@ void CIkumi::Vf6()
             m_attackResult = 0;
             if (frame >= x8) {
                 pattern = 0;
-                Vf0();
+                StartPattern();
                 CPlayer::FaceOpponent();
             }
         }
@@ -3016,7 +3016,7 @@ void CIkumi::Vf6()
             }
             if (frame >= x8) {
                 pattern = 0;
-                Vf0();
+                StartPattern();
             }
         }
         break;
@@ -3032,7 +3032,7 @@ void CIkumi::Vf6()
                 pattern = 6;
             }
             m_attackResult = 0;
-            Vf0();
+            StartPattern();
             break;
         }
         vx -= 0.03;
@@ -3056,7 +3056,7 @@ void CIkumi::Vf6()
             }
             if (frame >= x8) {
                 pattern = 0;
-                Vf0();
+                StartPattern();
             }
         }
         break;
@@ -3081,7 +3081,7 @@ void CIkumi::Vf6()
             }
             if (frame >= x8) {
                 pattern = 0;
-                Vf0();
+                StartPattern();
             }
         }
         break;
@@ -3109,7 +3109,7 @@ void CIkumi::Vf6()
             }
             if (frame >= x8) {
                 pattern = 3;
-                Vf0();
+                StartPattern();
             }
         }
         break;
@@ -3137,7 +3137,7 @@ void CIkumi::Vf6()
             }
             if (frame >= x8) {
                 pattern = 3;
-                Vf0();
+                StartPattern();
             }
         }
         break;
@@ -3152,7 +3152,7 @@ void CIkumi::Vf6()
                 pattern = 0x10;
             }
             m_attackResult = 0;
-            Vf0();
+            StartPattern();
             break;
         }
         CPlayer::Unk4109d0(3);
@@ -3194,7 +3194,7 @@ void CIkumi::Vf6()
             }
             if (frame >= x8) {
                 pattern = 3;
-                Vf0();
+                StartPattern();
             }
         }
         break;
@@ -3202,8 +3202,8 @@ void CIkumi::Vf6()
         vy = vy + ay;
         if (frame == 1 && m_attackResult == 3) {
             (*m_opponent)->StopMoving();
-            (*m_opponent)->Vf0();
-            Vf0();
+            (*m_opponent)->StartPattern();
+            StartPattern();
             CPlayer::StopMoving();
             pattern = 0xf9;
             (*m_opponent)->pattern = 0x67;
@@ -3242,7 +3242,7 @@ void CIkumi::Vf6()
         vy = vy + ay;
         if (vy + y > 0.0 && frame > 4) {
             CPlayer::StopMoving();
-            Vf0();
+            StartPattern();
             y = 0.0;
             pattern = 0xd;
             break;
@@ -3276,7 +3276,7 @@ void CIkumi::Vf6()
                 (*m_opponent)->x = facing * 0x2a + x;
                 (*m_opponent)->pattern = 0x3f;
                 CPlayer::DealDamage(0x4b0, 500.0);
-                (*m_opponent)->Vf0();
+                (*m_opponent)->StartPattern();
                 (*m_opponent)->unkc0 = -2.0;
                 (*m_opponent)->unkc8 = 0.0;
                 ay = 0.035;
@@ -3288,7 +3288,7 @@ void CIkumi::Vf6()
                 l50.scale = 2;
                 l50.unk18 = facing;
                 l50.layer = 1;
-                Vf9(&l50);
+                SpawnObject(&l50);
                 unk2c8 = 5;
             }
             if (frame >= x8) {
@@ -3314,9 +3314,9 @@ void CIkumi::Vf6()
                 l50.layer = 1;
                 l50.unk0 = 1;
                 l50.unk18 = facing;
-                Vf9(&l50);
+                SpawnObject(&l50);
                 l50.type = 0x193;
-                Vf9(&l50);
+                SpawnObject(&l50);
                 CPlayer::Unk410a10(2, 0);
             }
             if (frame == 7 && unk3138 > 0) {
@@ -3325,7 +3325,7 @@ void CIkumi::Vf6()
             }
             if (frame >= x8) {
                 pattern = 0;
-                Vf0();
+                StartPattern();
             }
         }
         break;
@@ -3347,9 +3347,9 @@ void CIkumi::Vf6()
                 l50.layer = 1;
                 l50.unk0 = 1;
                 l50.unk18 = facing;
-                Vf9(&l50);
+                SpawnObject(&l50);
                 l50.type = 0x193;
-                Vf9(&l50);
+                SpawnObject(&l50);
                 CPlayer::Unk410a10(2, 0);
             }
             if (frame == 7 && unk3138 > 0) {
@@ -3358,7 +3358,7 @@ void CIkumi::Vf6()
             }
             if (frame >= x8) {
                 pattern = 0;
-                Vf0();
+                StartPattern();
             }
         }
         break;
@@ -3380,9 +3380,9 @@ void CIkumi::Vf6()
                 l50.layer = 1;
                 l50.unk0 = 1;
                 l50.unk18 = facing;
-                Vf9(&l50);
+                SpawnObject(&l50);
                 l50.type = 0x193;
-                Vf9(&l50);
+                SpawnObject(&l50);
                 CPlayer::Unk410a10(2, 0);
             }
             if (frame == 7 && unk3138 > 0) {
@@ -3391,7 +3391,7 @@ void CIkumi::Vf6()
             }
             if (frame >= x8) {
                 pattern = 0;
-                Vf0();
+                StartPattern();
             }
         }
         break;
@@ -3415,7 +3415,7 @@ void CIkumi::Vf6()
             l50.layer = 1;
             l50.unk0 = 1;
             l50.unk18 = facing;
-            Vf9(&l50);
+            SpawnObject(&l50);
             unk2c8 = 2;
         }
         if (frame > 0xb) {
@@ -3442,7 +3442,7 @@ void CIkumi::Vf6()
             }
             if (frame >= x8) {
                 pattern = 0;
-                Vf0();
+                StartPattern();
             }
         }
         break;
@@ -3466,7 +3466,7 @@ void CIkumi::Vf6()
             l50.layer = 1;
             l50.unk0 = 1;
             l50.unk18 = facing;
-            Vf9(&l50);
+            SpawnObject(&l50);
             unk2c8 = 2;
         }
         if (frame > 0xb) {
@@ -3493,7 +3493,7 @@ void CIkumi::Vf6()
             }
             if (frame >= x8) {
                 pattern = 0;
-                Vf0();
+                StartPattern();
             }
         }
         break;
@@ -3529,7 +3529,7 @@ void CIkumi::Vf6()
             l50.layer = 1;
             l50.unk0 = 1;
             l50.unk18 = facing;
-            Vf9(&l50);
+            SpawnObject(&l50);
             unk2c8 = 2;
         }
         if (frame > 0xb) {
@@ -3556,7 +3556,7 @@ void CIkumi::Vf6()
             }
             if (frame >= x8) {
                 pattern = 0;
-                Vf0();
+                StartPattern();
             }
         }
         break;
@@ -3576,7 +3576,7 @@ void CIkumi::Vf6()
             if (y + vy >= 0.0) {
                 y = 0.0;
                 CPlayer::StopMoving();
-                Vf0();
+                StartPattern();
                 pattern = 0x103;
                 break;
             }
@@ -3591,7 +3591,7 @@ void CIkumi::Vf6()
             l50.layer = 1;
             l50.unk0 = 1;
             l50.unk18 = facing;
-            Vf9(&l50);
+            SpawnObject(&l50);
             unk2c8 = 3;
         }
         timer++;
@@ -3625,7 +3625,7 @@ void CIkumi::Vf6()
             if (y + vy >= 0.0) {
                 y = 0.0;
                 CPlayer::StopMoving();
-                Vf0();
+                StartPattern();
                 pattern = 0x103;
                 break;
             }
@@ -3640,7 +3640,7 @@ void CIkumi::Vf6()
             l50.layer = 1;
             l50.unk0 = 1;
             l50.unk18 = facing;
-            Vf9(&l50);
+            SpawnObject(&l50);
             unk2c8 = 3;
         }
         timer++;
@@ -3683,7 +3683,7 @@ void CIkumi::Vf6()
             if (y + vy >= 0.0) {
                 y = 0.0;
                 CPlayer::StopMoving();
-                Vf0();
+                StartPattern();
                 pattern = 0x103;
                 break;
             }
@@ -3698,7 +3698,7 @@ void CIkumi::Vf6()
             l50.layer = 1;
             l50.unk0 = 1;
             l50.unk18 = facing;
-            Vf9(&l50);
+            SpawnObject(&l50);
             unk2c8 = 3;
         }
         timer++;
@@ -3723,7 +3723,7 @@ void CIkumi::Vf6()
             frame++;
             if (frame >= x8) {
                 pattern = 0;
-                Vf0();
+                StartPattern();
             }
         }
         break;
@@ -3740,8 +3740,8 @@ void CIkumi::Vf6()
             vx = 0.0;
             vy = 0.0;
             unkb8 = 0.0;
-            Vf0();
-            (*m_opponent)->Vf0();
+            StartPattern();
+            (*m_opponent)->StartPattern();
             (*m_opponent)->StopMoving();
             pattern = 0x108;
             (*m_opponent)->pattern = 0x6b;
@@ -3760,7 +3760,7 @@ void CIkumi::Vf6()
             if (frame >= x8) {
                 pattern = 0;
                 CPlayer::FaceOpponent();
-                Vf0();
+                StartPattern();
             }
         }
         break;
@@ -3774,7 +3774,7 @@ void CIkumi::Vf6()
             l50.layer = 1;
             m_game->CreateEffect((EffectDesc*)&l50);
             CPlayer::DealDamage(0xfa, 1000.0);
-            (*m_opponent)->Vf0();
+            (*m_opponent)->StartPattern();
             (*m_opponent)->pattern = 0x6c;
             (*m_opponent)->x = facing * 0x28 + x;
             unk2c8 = 4;
@@ -3786,7 +3786,7 @@ void CIkumi::Vf6()
             l50.scale = 0;
             l50.layer = 1;
             l50.unk18 = facing;
-            Vf9(&l50);
+            SpawnObject(&l50);
         }
         if (frame == 0xc && timer == 0x5a) {
             (*m_opponent)->unk14a = 0;
@@ -3796,9 +3796,9 @@ void CIkumi::Vf6()
             l50.scale = 2;
             l50.unk18 = facing;
             l50.layer = 1;
-            Vf9(&l50);
+            SpawnObject(&l50);
             CPlayer::DealDamage(0xfa, 600.0);
-            (*m_opponent)->Vf0();
+            (*m_opponent)->StartPattern();
             (*m_opponent)->pattern = 0x3f;
             (*m_opponent)->unkc0 = -0.8;
             (*m_opponent)->unkc8 = -2.8;
@@ -3808,14 +3808,14 @@ void CIkumi::Vf6()
             l50.scale = 0;
             l50.layer = 1;
             l50.unk18 = facing;
-            Vf9(&l50);
+            SpawnObject(&l50);
             l50.type = 0x1dd;
             l50.x = (double)((int)x + facing * 0x2b);
             l50.y = (double)((int)y - 0x2e);
             l50.scale = 0;
             l50.layer = 1;
             l50.unk18 = -facing;
-            Vf9(&l50);
+            SpawnObject(&l50);
             unk2c8 = 5;
             CPlayer::Unk410a10(4, 0);
         }
@@ -3826,7 +3826,7 @@ void CIkumi::Vf6()
             m_attackResult = 0;
             if (frame >= x8) {
                 pattern = 0;
-                Vf0();
+                StartPattern();
                 CPlayer::FaceOpponent();
             }
         }
@@ -3851,7 +3851,7 @@ void CIkumi::Vf6()
             l50.layer = 1;
             l50.unk0 = 1;
             l50.unk18 = facing;
-            Vf9(&l50);
+            SpawnObject(&l50);
             unk2c8 = 2;
         }
         if (frame > 0xb) {
@@ -3878,7 +3878,7 @@ void CIkumi::Vf6()
             }
             if (frame >= x8) {
                 pattern = 0;
-                Vf0();
+                StartPattern();
             }
         }
         break;
@@ -3914,7 +3914,7 @@ void CIkumi::Vf6()
             l50.layer = 1;
             l50.unk0 = 1;
             l50.unk18 = facing;
-            Vf9(&l50);
+            SpawnObject(&l50);
             unk2c8 = 2;
         }
         if (frame > 0xb) {
@@ -3941,7 +3941,7 @@ void CIkumi::Vf6()
             }
             if (frame >= x8) {
                 pattern = 0;
-                Vf0();
+                StartPattern();
             }
         }
         break;
@@ -3965,7 +3965,7 @@ void CIkumi::Vf6()
             l50.layer = 1;
             l50.unk0 = 1;
             l50.unk18 = facing;
-            Vf9(&l50);
+            SpawnObject(&l50);
             unk2c8 = 2;
         }
         if (frame > 0xb) {
@@ -3992,7 +3992,7 @@ void CIkumi::Vf6()
             }
             if (frame >= x8) {
                 pattern = 0;
-                Vf0();
+                StartPattern();
             }
         }
         break;
@@ -4028,7 +4028,7 @@ void CIkumi::Vf6()
             l50.layer = 1;
             l50.unk0 = 1;
             l50.unk18 = facing;
-            Vf9(&l50);
+            SpawnObject(&l50);
             unk2c8 = 2;
         }
         if (frame > 0xb) {
@@ -4055,7 +4055,7 @@ void CIkumi::Vf6()
             }
             if (frame >= x8) {
                 pattern = 0;
-                Vf0();
+                StartPattern();
             }
         }
         break;
@@ -4075,7 +4075,7 @@ void CIkumi::Vf6()
             if (y + vy >= 0.0) {
                 y = 0.0;
                 CPlayer::StopMoving();
-                Vf0();
+                StartPattern();
                 pattern = 0x112;
                 break;
             }
@@ -4090,7 +4090,7 @@ void CIkumi::Vf6()
             l50.layer = 1;
             l50.unk0 = 1;
             l50.unk18 = facing;
-            Vf9(&l50);
+            SpawnObject(&l50);
             unk2c8 = 3;
         }
         timer++;
@@ -4133,7 +4133,7 @@ void CIkumi::Vf6()
             if (y + vy >= 0.0) {
                 y = 0.0;
                 CPlayer::StopMoving();
-                Vf0();
+                StartPattern();
                 pattern = 0x112;
                 break;
             }
@@ -4148,7 +4148,7 @@ void CIkumi::Vf6()
             l50.layer = 1;
             l50.unk0 = 1;
             l50.unk18 = facing;
-            Vf9(&l50);
+            SpawnObject(&l50);
             unk2c8 = 3;
         }
         timer++;
@@ -4173,7 +4173,7 @@ void CIkumi::Vf6()
             frame++;
             if (frame >= x8) {
                 pattern = 0;
-                Vf0();
+                StartPattern();
             }
         }
         break;
@@ -4193,7 +4193,7 @@ void CIkumi::Vf6()
             if (y + vy >= 0.0) {
                 y = 0.0;
                 CPlayer::StopMoving();
-                Vf0();
+                StartPattern();
                 pattern = 0x116;
                 break;
             }
@@ -4208,7 +4208,7 @@ void CIkumi::Vf6()
             l50.layer = 1;
             l50.unk0 = 1;
             l50.unk18 = facing;
-            Vf9(&l50);
+            SpawnObject(&l50);
             unk2c8 = 3;
         }
         timer++;
@@ -4251,7 +4251,7 @@ void CIkumi::Vf6()
             if (y + vy >= 0.0) {
                 y = 0.0;
                 CPlayer::StopMoving();
-                Vf0();
+                StartPattern();
                 pattern = 0x116;
                 break;
             }
@@ -4266,7 +4266,7 @@ void CIkumi::Vf6()
             l50.layer = 1;
             l50.unk0 = 1;
             l50.unk18 = facing;
-            Vf9(&l50);
+            SpawnObject(&l50);
             unk2c8 = 3;
         }
         timer++;
@@ -4291,7 +4291,7 @@ void CIkumi::Vf6()
             frame++;
             if (frame >= x8) {
                 pattern = 0;
-                Vf0();
+                StartPattern();
             }
         }
         break;
@@ -4313,9 +4313,9 @@ void CIkumi::Vf6()
                 l50.layer = 1;
                 l50.unk0 = 1;
                 l50.unk18 = facing;
-                Vf9(&l50);
+                SpawnObject(&l50);
                 l50.type = 0x19a;
-                Vf9(&l50);
+                SpawnObject(&l50);
                 CPlayer::Unk410a10(2, 0);
             }
             if (frame == 7 && unk3138 > 0) {
@@ -4324,7 +4324,7 @@ void CIkumi::Vf6()
             }
             if (frame >= x8) {
                 pattern = 0;
-                Vf0();
+                StartPattern();
             }
         }
         break;
@@ -4346,9 +4346,9 @@ void CIkumi::Vf6()
                 l50.layer = 1;
                 l50.unk0 = 1;
                 l50.unk18 = facing;
-                Vf9(&l50);
+                SpawnObject(&l50);
                 l50.type = 0x19a;
-                Vf9(&l50);
+                SpawnObject(&l50);
                 CPlayer::Unk410a10(2, 0);
             }
             if (frame == 7 && unk3138 > 0) {
@@ -4357,7 +4357,7 @@ void CIkumi::Vf6()
             }
             if (frame >= x8) {
                 pattern = 0;
-                Vf0();
+                StartPattern();
             }
         }
         break;
@@ -4379,9 +4379,9 @@ void CIkumi::Vf6()
                 l50.layer = 1;
                 l50.unk0 = 1;
                 l50.unk18 = facing;
-                Vf9(&l50);
+                SpawnObject(&l50);
                 l50.type = 0x19a;
-                Vf9(&l50);
+                SpawnObject(&l50);
                 CPlayer::Unk410a10(2, 0);
             }
             if (frame == 7 && unk3138 > 0) {
@@ -4390,7 +4390,7 @@ void CIkumi::Vf6()
             }
             if (frame >= x8) {
                 pattern = 0;
-                Vf0();
+                StartPattern();
             }
         }
         break;
@@ -4412,9 +4412,9 @@ void CIkumi::Vf6()
                 l50.layer = 1;
                 l50.unk0 = 1;
                 l50.unk18 = facing;
-                Vf9(&l50);
+                SpawnObject(&l50);
                 l50.type = 0x19c;
-                Vf9(&l50);
+                SpawnObject(&l50);
                 CPlayer::Unk410a10(2, 0);
             }
             if (frame == 7 && unk3138 > 0) {
@@ -4423,7 +4423,7 @@ void CIkumi::Vf6()
             }
             if (frame >= x8) {
                 pattern = 0;
-                Vf0();
+                StartPattern();
             }
         }
         break;
@@ -4445,9 +4445,9 @@ void CIkumi::Vf6()
                 l50.layer = 1;
                 l50.unk0 = 1;
                 l50.unk18 = facing;
-                Vf9(&l50);
+                SpawnObject(&l50);
                 l50.type = 0x19c;
-                Vf9(&l50);
+                SpawnObject(&l50);
                 CPlayer::Unk410a10(2, 0);
             }
             if (frame == 7 && unk3138 > 0) {
@@ -4456,7 +4456,7 @@ void CIkumi::Vf6()
             }
             if (frame >= x8) {
                 pattern = 0;
-                Vf0();
+                StartPattern();
             }
         }
         break;
@@ -4478,9 +4478,9 @@ void CIkumi::Vf6()
                 l50.layer = 1;
                 l50.unk0 = 1;
                 l50.unk18 = facing;
-                Vf9(&l50);
+                SpawnObject(&l50);
                 l50.type = 0x19c;
-                Vf9(&l50);
+                SpawnObject(&l50);
                 CPlayer::Unk410a10(2, 0);
             }
             if (frame == 7 && unk3138 > 0) {
@@ -4489,7 +4489,7 @@ void CIkumi::Vf6()
             }
             if (frame >= x8) {
                 pattern = 0;
-                Vf0();
+                StartPattern();
             }
         }
         break;
@@ -4521,7 +4521,7 @@ void CIkumi::Vf6()
             l50.unk0 = 1;
             l50.layer = 1;
             l50.unk18 = facing;
-            Vf9(&l50);
+            SpawnObject(&l50);
             CPlayer::Unk410a10(0xa, 0);
             unk2c8 = 6;
             unk2c8 = 7;
@@ -4538,7 +4538,7 @@ void CIkumi::Vf6()
                     break;
                 }
                 pattern = 0;
-                Vf0();
+                StartPattern();
                 unk3150 = 0x4ec;
                 unk314c = 0xa;
                 Unk6ab6a0(1);
@@ -4568,8 +4568,8 @@ void CIkumi::Vf6()
             vx = 0.0;
             vy = 0.0;
             unkb8 = 0.0;
-            Vf0();
-            (*m_opponent)->Vf0();
+            StartPattern();
+            (*m_opponent)->StartPattern();
             (*m_opponent)->StopMoving();
             pattern = 0x130;
             (*m_opponent)->pattern = 0x67;
@@ -4596,7 +4596,7 @@ void CIkumi::Vf6()
             if (frame >= x8) {
                 pattern = 0;
                 CPlayer::FaceOpponent();
-                Vf0();
+                StartPattern();
             }
         }
         break;
@@ -4623,7 +4623,7 @@ void CIkumi::Vf6()
             } else {
                 l50.unk18 = -facing;
             }
-            Vf9(&l50);
+            SpawnObject(&l50);
         }
         timer++;
         if (timer >= l4) {
@@ -4647,14 +4647,14 @@ void CIkumi::Vf6()
                 l50.layer = 1;
                 l50.unk0 = 1;
                 l50.unk18 = facing;
-                Vf9(&l50);
+                SpawnObject(&l50);
                 l50.type = 0x19f;
                 l50.x = (double)((int)x + facing * 0x1e);
                 l50.y = -160.0;
                 l50.scale = 2;
                 l50.layer = 1;
                 l50.unk18 = facing;
-                Vf9(&l50);
+                SpawnObject(&l50);
             }
             if (unk3138 < 8 && frame == 7) {
                 frame = frame - 4;
@@ -4669,7 +4669,7 @@ void CIkumi::Vf6()
                 (*m_opponent)->y = y - 74.0;
             }
             if (frame == 0xd) {
-                (*m_opponent)->Vf0();
+                (*m_opponent)->StartPattern();
                 (*m_opponent)->pattern = 0x3f;
                 (*m_opponent)->unkc0 = -1.2;
                 (*m_opponent)->unkc8 = -0.5;
@@ -4681,7 +4681,7 @@ void CIkumi::Vf6()
             if (frame >= x8) {
                 pattern = 0;
                 CPlayer::FaceOpponent();
-                Vf0();
+                StartPattern();
             }
         }
         break;
@@ -4708,8 +4708,8 @@ void CIkumi::Vf6()
             vx = 0.0;
             vy = 0.0;
             unkb8 = 0.0;
-            Vf0();
-            (*m_opponent)->Vf0();
+            StartPattern();
+            (*m_opponent)->StartPattern();
             (*m_opponent)->StopMoving();
             pattern = 0x132;
             (*m_opponent)->pattern = 0x67;
@@ -4736,7 +4736,7 @@ void CIkumi::Vf6()
             if (frame >= x8) {
                 pattern = 0;
                 CPlayer::FaceOpponent();
-                Vf0();
+                StartPattern();
             }
         }
         break;
@@ -4763,7 +4763,7 @@ void CIkumi::Vf6()
             } else {
                 l50.unk18 = -facing;
             }
-            Vf9(&l50);
+            SpawnObject(&l50);
         }
         timer++;
         if (timer >= l4) {
@@ -4787,14 +4787,14 @@ void CIkumi::Vf6()
                 l50.layer = 1;
                 l50.unk0 = 1;
                 l50.unk18 = facing;
-                Vf9(&l50);
+                SpawnObject(&l50);
                 l50.type = 0x1a0;
                 l50.x = (double)((int)x + facing * 0x1e);
                 l50.y = -160.0;
                 l50.scale = 2;
                 l50.layer = 1;
                 l50.unk18 = facing;
-                Vf9(&l50);
+                SpawnObject(&l50);
             }
             if (unk3138 < 0xc && frame == 7) {
                 frame = frame - 4;
@@ -4809,7 +4809,7 @@ void CIkumi::Vf6()
                 (*m_opponent)->y = y - 74.0;
             }
             if (frame == 0xd) {
-                (*m_opponent)->Vf0();
+                (*m_opponent)->StartPattern();
                 (*m_opponent)->pattern = 0x3f;
                 (*m_opponent)->unkc0 = -1.2;
                 (*m_opponent)->unkc8 = -0.5;
@@ -4821,7 +4821,7 @@ void CIkumi::Vf6()
             if (frame >= x8) {
                 pattern = 0;
                 CPlayer::FaceOpponent();
-                Vf0();
+                StartPattern();
             }
         }
         break;
@@ -4851,8 +4851,8 @@ void CIkumi::Vf6()
             vx = 0.0;
             vy = 0.0;
             unkb8 = 0.0;
-            Vf0();
-            (*m_opponent)->Vf0();
+            StartPattern();
+            (*m_opponent)->StartPattern();
             (*m_opponent)->StopMoving();
             pattern = 0x134;
             (*m_opponent)->pattern = 0x67;
@@ -4879,7 +4879,7 @@ void CIkumi::Vf6()
             if (frame >= x8) {
                 pattern = 0;
                 CPlayer::FaceOpponent();
-                Vf0();
+                StartPattern();
             }
         }
         break;
@@ -4905,7 +4905,7 @@ void CIkumi::Vf6()
             l50.scale = 0;
             l50.layer = 1;
             l50.unk18 = facing;
-            Vf9(&l50);
+            SpawnObject(&l50);
         }
         timer++;
         if (timer >= l4) {
@@ -4929,14 +4929,14 @@ void CIkumi::Vf6()
                 l50.layer = 1;
                 l50.unk0 = 1;
                 l50.unk18 = facing;
-                Vf9(&l50);
+                SpawnObject(&l50);
                 l50.type = 0x1a1;
                 l50.x = (double)((int)x + facing * 0x1e);
                 l50.y = -160.0;
                 l50.scale = 2;
                 l50.layer = 1;
                 l50.unk18 = facing;
-                Vf9(&l50);
+                SpawnObject(&l50);
             }
             if (unk3138 < 0xc && frame == 7) {
                 frame = frame - 4;
@@ -4951,7 +4951,7 @@ void CIkumi::Vf6()
                 (*m_opponent)->y = y - 74.0;
             }
             if (frame == 0xd) {
-                (*m_opponent)->Vf0();
+                (*m_opponent)->StartPattern();
                 (*m_opponent)->pattern = 0x3f;
                 (*m_opponent)->unkc0 = -1.2;
                 (*m_opponent)->unkc8 = -0.5;
@@ -4963,7 +4963,7 @@ void CIkumi::Vf6()
             if (frame >= x8) {
                 pattern = 0;
                 CPlayer::FaceOpponent();
-                Vf0();
+                StartPattern();
             }
         }
         break;
@@ -4996,7 +4996,7 @@ void CIkumi::Vf6()
                 l50.unk0 = 1;
                 l50.unk18 = facing;
                 l50.layer = 0;
-                Vf9(&l50);
+                SpawnObject(&l50);
             }
             if (frame == 7 && unk3138 < 2) {
                 frame = frame - 2;
@@ -5005,7 +5005,7 @@ void CIkumi::Vf6()
             if (frame >= x8) {
                 pattern = 0;
                 CPlayer::FaceOpponent();
-                Vf0();
+                StartPattern();
             }
         }
         break;
@@ -5038,7 +5038,7 @@ void CIkumi::Vf6()
                 l50.unk0 = 1;
                 l50.unk18 = facing;
                 l50.layer = 0;
-                Vf9(&l50);
+                SpawnObject(&l50);
             }
             if (frame == 7 && unk3138 < 2) {
                 frame = frame - 2;
@@ -5047,7 +5047,7 @@ void CIkumi::Vf6()
             if (frame >= x8) {
                 pattern = 0;
                 CPlayer::FaceOpponent();
-                Vf0();
+                StartPattern();
             }
         }
         break;
@@ -5080,7 +5080,7 @@ void CIkumi::Vf6()
                 l50.unk0 = 1;
                 l50.unk18 = facing;
                 l50.layer = 0;
-                Vf9(&l50);
+                SpawnObject(&l50);
             }
             if (frame == 7 && unk3138 < 2) {
                 frame = frame - 2;
@@ -5089,7 +5089,7 @@ void CIkumi::Vf6()
             if (frame >= x8) {
                 pattern = 0;
                 CPlayer::FaceOpponent();
-                Vf0();
+                StartPattern();
             }
         }
         break;
@@ -5137,7 +5137,7 @@ void CIkumi::Vf6()
                 l50.unk0 = 1;
                 l50.unk18 = facing;
                 l50.layer = 0;
-                Vf9(&l50);
+                SpawnObject(&l50);
             }
             if (frame == 0x10 && unk3138 < 3) {
                 frame = frame - 2;
@@ -5147,7 +5147,7 @@ void CIkumi::Vf6()
             if (frame >= x8) {
                 pattern = 0;
                 CPlayer::FaceOpponent();
-                Vf0();
+                StartPattern();
             }
         }
         break;
@@ -5195,7 +5195,7 @@ void CIkumi::Vf6()
                 l50.unk0 = 1;
                 l50.unk18 = facing;
                 l50.layer = 0;
-                Vf9(&l50);
+                SpawnObject(&l50);
             }
             if (frame == 0x10 && unk3138 < 3) {
                 frame = frame - 2;
@@ -5205,7 +5205,7 @@ void CIkumi::Vf6()
             if (frame >= x8) {
                 pattern = 0;
                 CPlayer::FaceOpponent();
-                Vf0();
+                StartPattern();
             }
         }
         break;
@@ -5256,7 +5256,7 @@ void CIkumi::Vf6()
                 l50.unk0 = 1;
                 l50.unk18 = facing;
                 l50.layer = 0;
-                Vf9(&l50);
+                SpawnObject(&l50);
             }
             if (frame == 0x10 && unk3138 < 3) {
                 frame = frame - 2;
@@ -5266,7 +5266,7 @@ void CIkumi::Vf6()
             if (frame >= x8) {
                 pattern = 0;
                 CPlayer::FaceOpponent();
-                Vf0();
+                StartPattern();
             }
         }
         break;
@@ -5302,15 +5302,15 @@ void CIkumi::Vf6()
                 l50.unk0 = 1;
                 l50.unk18 = facing;
                 l50.layer = 1;
-                Vf9(&l50);
+                SpawnObject(&l50);
                 l50.type = 0x1a7;
                 l50.layer = 0;
-                Vf9(&l50);
+                SpawnObject(&l50);
             }
             if (frame >= x8) {
                 pattern = 0;
                 CPlayer::FaceOpponent();
-                Vf0();
+                StartPattern();
             }
         }
         break;
@@ -5346,7 +5346,7 @@ void CIkumi::Vf6()
                 l50.unk0 = 1;
                 l50.unk18 = facing;
                 l50.layer = 1;
-                Vf9(&l50);
+                SpawnObject(&l50);
                 l50.type = 0x1a9;
                 l50.x = (double)((int)(*m_opponent)->x + 0x19);
                 l50.y = -10.0;
@@ -5354,10 +5354,10 @@ void CIkumi::Vf6()
                 l50.unk0 = 1;
                 l50.unk18 = facing;
                 l50.layer = 1;
-                Vf9(&l50);
+                SpawnObject(&l50);
                 l50.type = 0x1a7;
                 l50.layer = 0;
-                Vf9(&l50);
+                SpawnObject(&l50);
                 l50.type = 0x1a9;
                 l50.x = (double)((int)(*m_opponent)->x - 0x19);
                 l50.y = -10.0;
@@ -5365,10 +5365,10 @@ void CIkumi::Vf6()
                 l50.unk0 = 1;
                 l50.unk18 = facing;
                 l50.layer = 1;
-                Vf9(&l50);
+                SpawnObject(&l50);
                 l50.type = 0x1a7;
                 l50.layer = 0;
-                Vf9(&l50);
+                SpawnObject(&l50);
                 l50.type = 0x1a9;
                 l50.x = (double)((int)(*m_opponent)->x + 0x2d);
                 l50.y = 10.0;
@@ -5376,10 +5376,10 @@ void CIkumi::Vf6()
                 l50.unk0 = 1;
                 l50.unk18 = facing;
                 l50.layer = 1;
-                Vf9(&l50);
+                SpawnObject(&l50);
                 l50.type = 0x1a7;
                 l50.layer = 0;
-                Vf9(&l50);
+                SpawnObject(&l50);
                 l50.type = 0x1a9;
                 l50.x = (double)((int)(*m_opponent)->x - 0x2d);
                 l50.y = 10.0;
@@ -5387,15 +5387,15 @@ void CIkumi::Vf6()
                 l50.unk0 = 1;
                 l50.unk18 = facing;
                 l50.layer = 1;
-                Vf9(&l50);
+                SpawnObject(&l50);
                 l50.type = 0x1a7;
                 l50.layer = 0;
-                Vf9(&l50);
+                SpawnObject(&l50);
             }
             if (frame >= x8) {
                 pattern = 0;
                 CPlayer::FaceOpponent();
-                Vf0();
+                StartPattern();
             }
         }
         break;
@@ -5434,7 +5434,7 @@ void CIkumi::Vf6()
                 l50.unk0 = 1;
                 l50.unk18 = facing;
                 l50.layer = 1;
-                Vf9(&l50);
+                SpawnObject(&l50);
                 l50.type = 0x1a9;
                 l50.x = (double)((int)(*m_opponent)->x + 0x23);
                 l50.y = -10.0;
@@ -5442,10 +5442,10 @@ void CIkumi::Vf6()
                 l50.unk0 = 1;
                 l50.unk18 = facing;
                 l50.layer = 1;
-                Vf9(&l50);
+                SpawnObject(&l50);
                 l50.type = 0x1a7;
                 l50.layer = 0;
-                Vf9(&l50);
+                SpawnObject(&l50);
                 l50.type = 0x1a9;
                 l50.x = (double)((int)(*m_opponent)->x - 0x23);
                 l50.y = -10.0;
@@ -5453,10 +5453,10 @@ void CIkumi::Vf6()
                 l50.unk0 = 1;
                 l50.unk18 = facing;
                 l50.layer = 1;
-                Vf9(&l50);
+                SpawnObject(&l50);
                 l50.type = 0x1a7;
                 l50.layer = 0;
-                Vf9(&l50);
+                SpawnObject(&l50);
                 l50.type = 0x1a9;
                 l50.x = (double)((int)(*m_opponent)->x + 0x46);
                 l50.y = 0.0;
@@ -5464,10 +5464,10 @@ void CIkumi::Vf6()
                 l50.unk0 = 1;
                 l50.unk18 = facing;
                 l50.layer = 1;
-                Vf9(&l50);
+                SpawnObject(&l50);
                 l50.type = 0x1a7;
                 l50.layer = 0;
-                Vf9(&l50);
+                SpawnObject(&l50);
                 l50.type = 0x1a9;
                 l50.x = (double)((int)(*m_opponent)->x - 0x46);
                 l50.y = 0.0;
@@ -5475,10 +5475,10 @@ void CIkumi::Vf6()
                 l50.unk0 = 1;
                 l50.unk18 = facing;
                 l50.layer = 1;
-                Vf9(&l50);
+                SpawnObject(&l50);
                 l50.type = 0x1a7;
                 l50.layer = 0;
-                Vf9(&l50);
+                SpawnObject(&l50);
                 l50.type = 0x1a9;
                 l50.x = (double)((int)(*m_opponent)->x + 0x28);
                 l50.y = 10.0;
@@ -5486,10 +5486,10 @@ void CIkumi::Vf6()
                 l50.unk0 = 1;
                 l50.unk18 = facing;
                 l50.layer = 1;
-                Vf9(&l50);
+                SpawnObject(&l50);
                 l50.type = 0x1a7;
                 l50.layer = 0;
-                Vf9(&l50);
+                SpawnObject(&l50);
                 l50.type = 0x1a9;
                 l50.x = (double)((int)(*m_opponent)->x - 0x28);
                 l50.y = 10.0;
@@ -5497,15 +5497,15 @@ void CIkumi::Vf6()
                 l50.unk0 = 1;
                 l50.unk18 = facing;
                 l50.layer = 1;
-                Vf9(&l50);
+                SpawnObject(&l50);
                 l50.type = 0x1a7;
                 l50.layer = 0;
-                Vf9(&l50);
+                SpawnObject(&l50);
             }
             if (frame >= x8) {
                 pattern = 0;
                 CPlayer::FaceOpponent();
-                Vf0();
+                StartPattern();
             }
         }
         break;
@@ -5551,10 +5551,10 @@ void CIkumi::Vf6()
                 l50.unk0 = 1;
                 l50.unk18 = facing;
                 l50.layer = 1;
-                Vf9(&l50);
+                SpawnObject(&l50);
                 l50.type = 0x1a7;
                 l50.layer = 0;
-                Vf9(&l50);
+                SpawnObject(&l50);
             }
             if (frame == 0x10 && unk3138 < 6) {
                 frame = frame - 2;
@@ -5563,7 +5563,7 @@ void CIkumi::Vf6()
             if (frame >= x8) {
                 pattern = 0;
                 CPlayer::FaceOpponent();
-                Vf0();
+                StartPattern();
             }
         }
         break;
@@ -5609,7 +5609,7 @@ void CIkumi::Vf6()
                 l50.unk0 = 1;
                 l50.unk18 = facing;
                 l50.layer = 1;
-                Vf9(&l50);
+                SpawnObject(&l50);
                 l50.type = 0x1a9;
                 l50.x = (double)((int)(*m_opponent)->x + 0x19);
                 l50.y = -10.0;
@@ -5617,10 +5617,10 @@ void CIkumi::Vf6()
                 l50.unk0 = 1;
                 l50.unk18 = facing;
                 l50.layer = 1;
-                Vf9(&l50);
+                SpawnObject(&l50);
                 l50.type = 0x1a7;
                 l50.layer = 0;
-                Vf9(&l50);
+                SpawnObject(&l50);
                 l50.type = 0x1a9;
                 l50.x = (double)((int)(*m_opponent)->x - 0x19);
                 l50.y = -10.0;
@@ -5628,10 +5628,10 @@ void CIkumi::Vf6()
                 l50.unk0 = 1;
                 l50.unk18 = facing;
                 l50.layer = 1;
-                Vf9(&l50);
+                SpawnObject(&l50);
                 l50.type = 0x1a7;
                 l50.layer = 0;
-                Vf9(&l50);
+                SpawnObject(&l50);
                 l50.type = 0x1a9;
                 l50.x = (double)((int)(*m_opponent)->x + 0x2d);
                 l50.y = 10.0;
@@ -5639,10 +5639,10 @@ void CIkumi::Vf6()
                 l50.unk0 = 1;
                 l50.unk18 = facing;
                 l50.layer = 1;
-                Vf9(&l50);
+                SpawnObject(&l50);
                 l50.type = 0x1a7;
                 l50.layer = 0;
-                Vf9(&l50);
+                SpawnObject(&l50);
                 l50.type = 0x1a9;
                 l50.x = (double)((int)(*m_opponent)->x - 0x2d);
                 l50.y = 10.0;
@@ -5650,10 +5650,10 @@ void CIkumi::Vf6()
                 l50.unk0 = 1;
                 l50.unk18 = facing;
                 l50.layer = 1;
-                Vf9(&l50);
+                SpawnObject(&l50);
                 l50.type = 0x1a7;
                 l50.layer = 0;
-                Vf9(&l50);
+                SpawnObject(&l50);
             }
             if (frame == 0x10 && unk3138 < 6) {
                 frame = frame - 2;
@@ -5662,7 +5662,7 @@ void CIkumi::Vf6()
             if (frame >= x8) {
                 pattern = 0;
                 CPlayer::FaceOpponent();
-                Vf0();
+                StartPattern();
             }
         }
         break;
@@ -5711,7 +5711,7 @@ void CIkumi::Vf6()
                 l50.unk0 = 1;
                 l50.unk18 = facing;
                 l50.layer = 1;
-                Vf9(&l50);
+                SpawnObject(&l50);
                 l50.type = 0x1a9;
                 l50.x = (double)((int)(*m_opponent)->x + 0x23);
                 l50.y = -10.0;
@@ -5719,10 +5719,10 @@ void CIkumi::Vf6()
                 l50.unk0 = 1;
                 l50.unk18 = facing;
                 l50.layer = 1;
-                Vf9(&l50);
+                SpawnObject(&l50);
                 l50.type = 0x1a7;
                 l50.layer = 0;
-                Vf9(&l50);
+                SpawnObject(&l50);
                 l50.type = 0x1a9;
                 l50.x = (double)((int)(*m_opponent)->x - 0x23);
                 l50.y = -10.0;
@@ -5730,10 +5730,10 @@ void CIkumi::Vf6()
                 l50.unk0 = 1;
                 l50.unk18 = facing;
                 l50.layer = 1;
-                Vf9(&l50);
+                SpawnObject(&l50);
                 l50.type = 0x1a7;
                 l50.layer = 0;
-                Vf9(&l50);
+                SpawnObject(&l50);
                 l50.type = 0x1a9;
                 l50.x = (double)((int)(*m_opponent)->x + 0x46);
                 l50.y = 0.0;
@@ -5741,10 +5741,10 @@ void CIkumi::Vf6()
                 l50.unk0 = 1;
                 l50.unk18 = facing;
                 l50.layer = 1;
-                Vf9(&l50);
+                SpawnObject(&l50);
                 l50.type = 0x1a7;
                 l50.layer = 0;
-                Vf9(&l50);
+                SpawnObject(&l50);
                 l50.type = 0x1a9;
                 l50.x = (double)((int)(*m_opponent)->x - 0x46);
                 l50.y = 0.0;
@@ -5752,10 +5752,10 @@ void CIkumi::Vf6()
                 l50.unk0 = 1;
                 l50.unk18 = facing;
                 l50.layer = 1;
-                Vf9(&l50);
+                SpawnObject(&l50);
                 l50.type = 0x1a7;
                 l50.layer = 0;
-                Vf9(&l50);
+                SpawnObject(&l50);
                 l50.type = 0x1a9;
                 l50.x = (double)((int)(*m_opponent)->x + 0x28);
                 l50.y = 10.0;
@@ -5763,10 +5763,10 @@ void CIkumi::Vf6()
                 l50.unk0 = 1;
                 l50.unk18 = facing;
                 l50.layer = 1;
-                Vf9(&l50);
+                SpawnObject(&l50);
                 l50.type = 0x1a7;
                 l50.layer = 0;
-                Vf9(&l50);
+                SpawnObject(&l50);
                 l50.type = 0x1a9;
                 l50.x = (double)((int)(*m_opponent)->x - 0x28);
                 l50.y = 10.0;
@@ -5774,10 +5774,10 @@ void CIkumi::Vf6()
                 l50.unk0 = 1;
                 l50.unk18 = facing;
                 l50.layer = 1;
-                Vf9(&l50);
+                SpawnObject(&l50);
                 l50.type = 0x1a7;
                 l50.layer = 0;
-                Vf9(&l50);
+                SpawnObject(&l50);
             }
             if (frame == 0x10 && unk3138 < 6) {
                 frame = frame - 2;
@@ -5786,7 +5786,7 @@ void CIkumi::Vf6()
             if (frame >= x8) {
                 pattern = 0;
                 CPlayer::FaceOpponent();
-                Vf0();
+                StartPattern();
             }
         }
         break;
@@ -5818,8 +5818,8 @@ void CIkumi::Vf6()
         if (frame == 0xd && m_attackResult == 3) {
             CPlayer::Unk4109d0(0);
             (*m_opponent)->StopMoving();
-            (*m_opponent)->Vf0();
-            Vf0();
+            (*m_opponent)->StartPattern();
+            StartPattern();
             CPlayer::StopMoving();
             pattern = 0x142;
             unk13e = 3;
@@ -5851,7 +5851,7 @@ void CIkumi::Vf6()
             if (frame >= x8) {
                 pattern = 0;
                 CPlayer::FaceOpponent();
-                Vf0();
+                StartPattern();
             }
         }
         break;
@@ -5902,7 +5902,7 @@ void CIkumi::Vf6()
             l50.unk0 = 1;
             l50.unk18 = facing;
             l50.layer = 1;
-            Vf9(&l50);
+            SpawnObject(&l50);
         }
         if (frame == 2 && timer == 0) {
             l50.type = 0x1b0;
@@ -5912,7 +5912,7 @@ void CIkumi::Vf6()
             l50.unk0 = 1;
             l50.unk18 = -facing;
             l50.layer = 1;
-            Vf9(&l50);
+            SpawnObject(&l50);
         }
         if (frame == 3 && timer == 0) {
             l50.type = 0x1b1;
@@ -5922,7 +5922,7 @@ void CIkumi::Vf6()
             l50.unk0 = 1;
             l50.unk18 = facing;
             l50.layer = 1;
-            Vf9(&l50);
+            SpawnObject(&l50);
         }
         if (frame == 4 && timer == 0) {
             l50.type = 0x1b2;
@@ -5932,7 +5932,7 @@ void CIkumi::Vf6()
             l50.unk0 = 1;
             l50.unk18 = -facing;
             l50.layer = 1;
-            Vf9(&l50);
+            SpawnObject(&l50);
         }
         if (frame == 0x15 && timer == 0) {
             l50.type = 0x1b3;
@@ -5943,7 +5943,7 @@ void CIkumi::Vf6()
             l50.unk18 = facing;
             l50.unk28 = 1;
             l50.layer = 1;
-            Vf9(&l50);
+            SpawnObject(&l50);
             l50.type = 0x1b4;
             l50.x = (double)((int)x - facing * 0xc3);
             l50.y = (double)((int)y - 0x1ef);
@@ -5952,7 +5952,7 @@ void CIkumi::Vf6()
             l50.unk18 = facing;
             l50.unk28 = 1;
             l50.layer = 1;
-            Vf9(&l50);
+            SpawnObject(&l50);
             l50.type = 0x1b5;
             l50.x = (double)((int)x + facing * 0x186);
             l50.y = (double)((int)y - 0x14a);
@@ -5961,7 +5961,7 @@ void CIkumi::Vf6()
             l50.unk18 = -facing;
             l50.unk28 = 1;
             l50.layer = 1;
-            Vf9(&l50);
+            SpawnObject(&l50);
             l50.type = 0x1b6;
             l50.x = (double)((int)x + facing * 0xc3);
             l50.y = (double)((int)y - 0x1ef);
@@ -5970,7 +5970,7 @@ void CIkumi::Vf6()
             l50.unk18 = -facing;
             l50.unk28 = 1;
             l50.layer = 0;
-            Vf9(&l50);
+            SpawnObject(&l50);
         }
         if (frame == 8 && timer == 0) {
             l50.type = 0x1b7;
@@ -5980,7 +5980,7 @@ void CIkumi::Vf6()
             l50.unk0 = 1;
             l50.unk18 = facing;
             l50.layer = 1;
-            Vf9(&l50);
+            SpawnObject(&l50);
         }
         if (frame == 0x16 && unk3138 == 1) {
             frame = 0x17;
@@ -5999,7 +5999,7 @@ void CIkumi::Vf6()
                 pattern = 0;
                 unk13e = 0;
                 CPlayer::FaceOpponent();
-                Vf0();
+                StartPattern();
             }
         }
     }
@@ -6016,7 +6016,7 @@ void CIkumi::Unk694d00()
     EffectDesc l50;
     l4 = (short)anims[pattern].frames[frame].duration;
     x8 = anims[pattern].frameCount;
-    CPlayer::Unk413090((EffectDesc*)&l50);
+    CPlayer::InitEffectDesc((EffectDesc*)&l50);
     switch (pattern) {
     default:
         unk158 = 0;
@@ -6095,7 +6095,7 @@ void CIkumi::Unk694d00()
             frame++;
             if (frame >= x8) {
                 pattern = 9;
-                Vf0();
+                StartPattern();
             }
         }
         if (y + vy >= 0.0 && frame > 3) {
@@ -6103,7 +6103,7 @@ void CIkumi::Unk694d00()
             unk2c9 = 9;
             CPlayer::FaceOpponent();
             pattern = 0xd;
-            Vf0();
+            StartPattern();
         }
         break;
     case 5:
@@ -6131,7 +6131,7 @@ void CIkumi::Unk694d00()
             frame++;
             if (frame >= x8) {
                 pattern = 9;
-                Vf0();
+                StartPattern();
             }
         }
         if (y + vy >= 0.0 && frame > 3) {
@@ -6139,7 +6139,7 @@ void CIkumi::Unk694d00()
             unk2c9 = 9;
             CPlayer::FaceOpponent();
             pattern = 0xd;
-            Vf0();
+            StartPattern();
         }
         break;
     case 6:
@@ -6163,7 +6163,7 @@ void CIkumi::Unk694d00()
             frame++;
             if (frame >= x8) {
                 pattern = 9;
-                Vf0();
+                StartPattern();
             }
         }
         if (y + vy >= 0.0 && frame > 3) {
@@ -6171,7 +6171,7 @@ void CIkumi::Unk694d00()
             unk2c9 = 9;
             CPlayer::FaceOpponent();
             pattern = 0xd;
-            Vf0();
+            StartPattern();
         }
         break;
     case 7:
@@ -6185,7 +6185,7 @@ void CIkumi::Unk694d00()
             frame++;
             if (frame >= x8) {
                 pattern = 0;
-                Vf0();
+                StartPattern();
             }
         }
         break;
@@ -6200,7 +6200,7 @@ void CIkumi::Unk694d00()
             frame++;
             if (frame >= x8) {
                 pattern = 3;
-                Vf0();
+                StartPattern();
             }
         }
         break;
@@ -6219,7 +6219,7 @@ void CIkumi::Unk694d00()
             y = 0.0;
             unk2c9 = 9;
             pattern = 0xd;
-            Vf0();
+            StartPattern();
         }
         break;
     case 0xd:
@@ -6236,7 +6236,7 @@ void CIkumi::Unk694d00()
                 if (m_inputY == 1) {
                     pattern = 3;
                 }
-                Vf0();
+                StartPattern();
             }
         }
         break;
@@ -6258,7 +6258,7 @@ void CIkumi::Unk694d00()
             frame++;
             if (frame >= x8) {
                 pattern = 9;
-                Vf0();
+                StartPattern();
             }
         }
         if (y + vy >= 0.0 && frame > 3) {
@@ -6266,7 +6266,7 @@ void CIkumi::Unk694d00()
             unk2c9 = 9;
             CPlayer::FaceOpponent();
             pattern = 0xd;
-            Vf0();
+            StartPattern();
         }
         break;
     case 0xf:
@@ -6287,7 +6287,7 @@ void CIkumi::Unk694d00()
             frame++;
             if (frame >= x8) {
                 pattern = 9;
-                Vf0();
+                StartPattern();
             }
         }
         if (y + vy >= 0.0 && frame > 3) {
@@ -6295,7 +6295,7 @@ void CIkumi::Unk694d00()
             unk2c9 = 9;
             CPlayer::FaceOpponent();
             pattern = 0xd;
-            Vf0();
+            StartPattern();
         }
         break;
     case 0x10:
@@ -6315,7 +6315,7 @@ void CIkumi::Unk694d00()
             frame++;
             if (frame >= x8) {
                 pattern = 9;
-                Vf0();
+                StartPattern();
             }
         }
         if (y + vy >= 0.0 && frame > 3) {
@@ -6323,7 +6323,7 @@ void CIkumi::Unk694d00()
             unk2c9 = 9;
             CPlayer::FaceOpponent();
             pattern = 0xd;
-            Vf0();
+            StartPattern();
         }
         break;
     case 0x2f:
@@ -6385,7 +6385,7 @@ void CIkumi::Unk694d00()
                 if (m_inputY == 1) {
                     pattern = 3;
                 }
-                Vf0();
+                StartPattern();
             }
         }
         break;
@@ -6421,7 +6421,7 @@ void CIkumi::Unk694d00()
                 if (m_inputY == 1) {
                     pattern = 3;
                 }
-                Vf0();
+                StartPattern();
             }
         }
         break;
@@ -6457,7 +6457,7 @@ void CIkumi::Unk694d00()
                 if (m_inputY == 1) {
                     pattern = 3;
                 }
-                Vf0();
+                StartPattern();
             }
         }
         break;
@@ -6493,7 +6493,7 @@ void CIkumi::Unk694d00()
                 if (m_inputY == 1) {
                     pattern = 3;
                 }
-                Vf0();
+                StartPattern();
             }
         }
         break;
@@ -6529,7 +6529,7 @@ void CIkumi::Unk694d00()
                 if (m_inputY == 1) {
                     pattern = 3;
                 }
-                Vf0();
+                StartPattern();
             }
         }
         break;
@@ -6564,7 +6564,7 @@ void CIkumi::Unk694d00()
                 if (m_inputY == 1) {
                     pattern = 3;
                 }
-                Vf0();
+                StartPattern();
             }
         }
         break;
@@ -6597,7 +6597,7 @@ void CIkumi::Unk694d00()
             frame++;
             if (frame >= x8) {
                 pattern = 3;
-                Vf0();
+                StartPattern();
             }
         }
         break;
@@ -6630,7 +6630,7 @@ void CIkumi::Unk694d00()
             frame++;
             if (frame >= x8) {
                 pattern = 3;
-                Vf0();
+                StartPattern();
             }
         }
         break;
@@ -6663,7 +6663,7 @@ void CIkumi::Unk694d00()
             frame++;
             if (frame >= x8) {
                 pattern = 3;
-                Vf0();
+                StartPattern();
             }
         }
         break;
@@ -6703,10 +6703,10 @@ void CIkumi::Unk694d00()
             y = 0.0;
             if (unk12c != 0) {
                 pattern = 0x61;
-                Vf0();
+                StartPattern();
             } else {
                 pattern = 0x62;
-                Vf0();
+                StartPattern();
             }
         }
         break;
@@ -6746,10 +6746,10 @@ void CIkumi::Unk694d00()
             y = 0.0;
             if (unk12c != 0) {
                 pattern = 0x61;
-                Vf0();
+                StartPattern();
             } else {
                 pattern = 0x62;
-                Vf0();
+                StartPattern();
             }
         }
         break;
@@ -6789,10 +6789,10 @@ void CIkumi::Unk694d00()
             y = 0.0;
             if (unk12c != 0) {
                 pattern = 0x61;
-                Vf0();
+                StartPattern();
             } else {
                 pattern = 0x62;
-                Vf0();
+                StartPattern();
             }
         }
         break;
@@ -6827,10 +6827,10 @@ void CIkumi::Unk694d00()
             y = 0.0;
             if (unk12c != 0) {
                 pattern = 0x61;
-                Vf0();
+                StartPattern();
             } else {
                 pattern = 0x62;
-                Vf0();
+                StartPattern();
             }
         }
         break;
@@ -6865,10 +6865,10 @@ void CIkumi::Unk694d00()
             y = 0.0;
             if (unk12c != 0) {
                 pattern = 0x61;
-                Vf0();
+                StartPattern();
             } else {
                 pattern = 0x62;
-                Vf0();
+                StartPattern();
             }
         }
         break;
@@ -6878,7 +6878,7 @@ void CIkumi::Unk694d00()
         }
         if (frame > 0 && (char)CPlayer::Unk40ff70() != 0) {
             pattern = 0x46;
-            Vf0();
+            StartPattern();
             break;
         }
         if (frame == 0 && timer == 0) {
@@ -6913,10 +6913,10 @@ void CIkumi::Unk694d00()
             y = 0.0;
             if (unk12c != 0) {
                 pattern = 0x61;
-                Vf0();
+                StartPattern();
             } else {
                 pattern = 0x62;
-                Vf0();
+                StartPattern();
             }
         }
         break;
@@ -6926,7 +6926,7 @@ void CIkumi::Unk694d00()
         }
         if (frame > 0 && (char)CPlayer::Unk40ff70() != 0) {
             pattern = 0x46;
-            Vf0();
+            StartPattern();
             break;
         }
         if (frame == 0 && timer == 0) {
@@ -6961,10 +6961,10 @@ void CIkumi::Unk694d00()
             y = 0.0;
             if (unk12c != 0) {
                 pattern = 0x61;
-                Vf0();
+                StartPattern();
             } else {
                 pattern = 0x62;
-                Vf0();
+                StartPattern();
             }
         }
         break;
@@ -6974,7 +6974,7 @@ void CIkumi::Unk694d00()
         }
         if (frame > 0 && (char)CPlayer::Unk40ff70() != 0) {
             pattern = 0x46;
-            Vf0();
+            StartPattern();
             break;
         }
         if (frame == 0 && timer == 0) {
@@ -7004,10 +7004,10 @@ void CIkumi::Unk694d00()
             y = 0.0;
             if (unk12c != 0) {
                 pattern = 0x61;
-                Vf0();
+                StartPattern();
             } else {
                 pattern = 0x62;
-                Vf0();
+                StartPattern();
             }
         }
         break;
@@ -7017,7 +7017,7 @@ void CIkumi::Unk694d00()
         }
         if (frame > 0 && (char)CPlayer::Unk40ff70() != 0) {
             pattern = 0x46;
-            Vf0();
+            StartPattern();
             break;
         }
         if (frame == 0 && timer == 0) {
@@ -7047,10 +7047,10 @@ void CIkumi::Unk694d00()
             y = 0.0;
             if (unk12c != 0) {
                 pattern = 0x61;
-                Vf0();
+                StartPattern();
             } else {
                 pattern = 0x62;
-                Vf0();
+                StartPattern();
             }
         }
         break;
@@ -7064,7 +7064,7 @@ void CIkumi::Unk694d00()
         timer++;
         if ((char)CPlayer::Unk40ff70() != 0) {
             pattern = 0x46;
-            Vf0();
+            StartPattern();
             break;
         }
         if (timer >= l4) {
@@ -7078,10 +7078,10 @@ void CIkumi::Unk694d00()
             y = 0.0;
             if (unk12c != 0) {
                 pattern = 0x61;
-                Vf0();
+                StartPattern();
             } else {
                 pattern = 0x62;
-                Vf0();
+                StartPattern();
             }
         }
         break;
@@ -7104,10 +7104,10 @@ void CIkumi::Unk694d00()
             y = 0.0;
             if (unk12c != 0) {
                 pattern = 0x61;
-                Vf0();
+                StartPattern();
             } else {
                 pattern = 0x62;
-                Vf0();
+                StartPattern();
             }
         }
         break;
@@ -7143,10 +7143,10 @@ void CIkumi::Unk694d00()
             y = 0.0;
             if (unk12c != 0) {
                 pattern = 0x61;
-                Vf0();
+                StartPattern();
             } else {
                 pattern = 0x62;
-                Vf0();
+                StartPattern();
             }
         }
         break;
@@ -7181,10 +7181,10 @@ void CIkumi::Unk694d00()
             y = 0.0;
             if (unk12c != 0) {
                 pattern = 0x61;
-                Vf0();
+                StartPattern();
             } else {
                 pattern = 0x62;
-                Vf0();
+                StartPattern();
             }
         }
         break;
@@ -7209,7 +7209,7 @@ void CIkumi::Unk694d00()
                 if (m_inputY == 1) {
                     pattern = 3;
                 }
-                Vf0();
+                StartPattern();
             }
         }
         break;
@@ -7234,7 +7234,7 @@ void CIkumi::Unk694d00()
                 if (m_inputY == 1) {
                     pattern = 3;
                 }
-                Vf0();
+                StartPattern();
             }
         }
         break;
@@ -7256,7 +7256,7 @@ void CIkumi::Unk694d00()
             frame++;
             if (frame >= x8) {
                 pattern = 3;
-                Vf0();
+                StartPattern();
             }
         }
         break;
@@ -7294,7 +7294,7 @@ void CIkumi::Unk694d00()
                 if (m_inputY == 1) {
                     pattern = 3;
                 }
-                Vf0();
+                StartPattern();
             }
         }
         break;
@@ -7332,7 +7332,7 @@ void CIkumi::Unk694d00()
                 if (m_inputY == 1) {
                     pattern = 3;
                 }
-                Vf0();
+                StartPattern();
             }
         }
         break;
@@ -7367,7 +7367,7 @@ void CIkumi::Unk694d00()
             frame++;
             if (frame >= x8) {
                 pattern = 3;
-                Vf0();
+                StartPattern();
             }
         }
         break;
@@ -7381,7 +7381,7 @@ void CIkumi::Unk694d00()
             l50.y = (double)(int)y;
             l50.unk18 = facing;
             l50.layer = 1;
-            Vf9(&l50);
+            SpawnObject(&l50);
             m_gauge = m_gauge + 0x1e;
             vx = unkc0;
             vy = unkc8;
@@ -7404,10 +7404,10 @@ void CIkumi::Unk694d00()
             y = 0.0;
             if (unk12c != 0) {
                 pattern = 0x61;
-                Vf0();
+                StartPattern();
             } else {
                 pattern = 0x62;
-                Vf0();
+                StartPattern();
             }
         }
         break;
@@ -7450,10 +7450,10 @@ void CIkumi::Unk694d00()
             y = 0.0;
             if (unk12c != 0) {
                 pattern = 0x61;
-                Vf0();
+                StartPattern();
             } else {
                 pattern = 0x62;
-                Vf0();
+                StartPattern();
             }
         }
         break;
@@ -7467,7 +7467,7 @@ void CIkumi::Unk694d00()
                 l50.layer = 0;
                 l50.unk0 = 1;
                 l50.unk18 = facing;
-                Vf9(&l50);
+                SpawnObject(&l50);
                 unk3144 = 1;
             }
             if (unk120 != 0) {
@@ -7504,7 +7504,7 @@ void CIkumi::Unk694d00()
             frame++;
             if (frame >= x8) {
                 pattern = 0;
-                Vf0();
+                StartPattern();
                 CPlayer::FaceOpponent();
             }
         }
@@ -7519,7 +7519,7 @@ void CIkumi::Unk694d00()
                 l50.layer = 0;
                 l50.unk0 = 1;
                 l50.unk18 = facing;
-                Vf9(&l50);
+                SpawnObject(&l50);
                 unk3144 = 1;
             }
             if (unk120 != 0) {
@@ -7556,7 +7556,7 @@ void CIkumi::Unk694d00()
             frame++;
             if (frame >= x8) {
                 pattern = 0;
-                Vf0();
+                StartPattern();
                 CPlayer::FaceOpponent();
             }
         }
@@ -7571,7 +7571,7 @@ void CIkumi::Unk694d00()
                 l50.layer = 0;
                 l50.unk0 = 1;
                 l50.unk18 = facing;
-                Vf9(&l50);
+                SpawnObject(&l50);
                 unk3144 = 1;
             }
             if (unk120 != 0) {
@@ -7589,7 +7589,7 @@ void CIkumi::Unk694d00()
             frame++;
             if (frame >= x8) {
                 pattern = 0;
-                Vf0();
+                StartPattern();
                 CPlayer::FaceOpponent();
             }
         }
@@ -7597,10 +7597,10 @@ void CIkumi::Unk694d00()
             y = 0.0;
             if (unk12c != 0) {
                 pattern = 0x61;
-                Vf0();
+                StartPattern();
             } else {
                 pattern = 0x62;
-                Vf0();
+                StartPattern();
             }
         }
         break;
@@ -7614,7 +7614,7 @@ void CIkumi::Unk694d00()
                 l50.layer = 0;
                 l50.unk0 = 1;
                 l50.unk18 = facing;
-                Vf9(&l50);
+                SpawnObject(&l50);
                 unk3144 = 1;
             }
             if (unk3138 == 0) {
@@ -7641,10 +7641,10 @@ void CIkumi::Unk694d00()
             y = 0.0;
             if (unk12c != 0) {
                 pattern = 0x61;
-                Vf0();
+                StartPattern();
             } else {
                 pattern = 0x62;
-                Vf0();
+                StartPattern();
             }
         }
         break;
@@ -7657,7 +7657,7 @@ void CIkumi::Unk694d00()
             l50.unk18 = 1;
             l50.scale = 0;
             l50.layer = 0;
-            Vf9(&l50);
+            SpawnObject(&l50);
         }
         timer++;
         if (timer >= l4) {
@@ -7665,7 +7665,7 @@ void CIkumi::Unk694d00()
             frame++;
             if (frame >= x8) {
                 pattern = 0;
-                Vf0();
+                StartPattern();
             }
         }
         break;
@@ -7682,7 +7682,7 @@ void CIkumi::Unk694d00()
                 if (m_inputY == 1) {
                     pattern = 3;
                 }
-                Vf0();
+                StartPattern();
             }
         }
         break;
@@ -7705,7 +7705,7 @@ void CIkumi::Unk694d00()
             frame++;
             if (frame >= x8) {
                 pattern = 0x63;
-                Vf0();
+                StartPattern();
             }
         }
         break;
@@ -7728,7 +7728,7 @@ void CIkumi::Unk694d00()
             frame++;
             if (frame >= x8) {
                 pattern = 0x63;
-                Vf0();
+                StartPattern();
             }
         }
         break;
@@ -7737,7 +7737,7 @@ void CIkumi::Unk694d00()
         unk158 = 0;
         if (m_hp > 0 && timer > 0x63 && frame == 0) {
             pattern = 0x60;
-            Vf0();
+            StartPattern();
         }
         if (timer >= l4) {
             timer = 0;
@@ -7747,7 +7747,7 @@ void CIkumi::Unk694d00()
             }
             if (frame >= x8) {
                 pattern = 0x60;
-                Vf0();
+                StartPattern();
             }
         }
         break;
@@ -7787,7 +7787,7 @@ void CIkumi::Unk694d00()
                 if (m_inputY == 1) {
                     pattern = 3;
                 }
-                Vf0();
+                StartPattern();
             }
         }
         break;
@@ -7827,7 +7827,7 @@ void CIkumi::Unk694d00()
                 if (m_inputY == 1) {
                     pattern = 3;
                 }
-                Vf0();
+                StartPattern();
             }
         }
         break;
@@ -7867,7 +7867,7 @@ void CIkumi::Unk694d00()
                 if (m_inputY == 1) {
                     pattern = 3;
                 }
-                Vf0();
+                StartPattern();
             }
         }
         break;
@@ -7904,7 +7904,7 @@ void CIkumi::Unk694d00()
             }
             if (frame >= x8) {
                 pattern = 3;
-                Vf0();
+                StartPattern();
             }
         }
         break;
@@ -7941,7 +7941,7 @@ void CIkumi::Unk694d00()
             }
             if (frame >= x8) {
                 pattern = 3;
-                Vf0();
+                StartPattern();
             }
         }
         break;
@@ -7978,7 +7978,7 @@ void CIkumi::Unk694d00()
             }
             if (frame >= x8) {
                 pattern = 3;
-                Vf0();
+                StartPattern();
             }
         }
         break;
@@ -7996,7 +7996,7 @@ void CIkumi::Unk694d00()
             frame++;
             if (frame >= x8) {
                 pattern = 9;
-                Vf0();
+                StartPattern();
             }
         }
         if (y + vy >= 0.0) {
@@ -8004,7 +8004,7 @@ void CIkumi::Unk694d00()
             unk2c9 = 9;
             CPlayer::FaceOpponent();
             pattern = 0xd;
-            Vf0();
+            StartPattern();
         }
         break;
     case 0x9d:
@@ -8027,7 +8027,7 @@ void CIkumi::Unk694d00()
             frame++;
             if (frame >= x8) {
                 pattern = 9;
-                Vf0();
+                StartPattern();
             }
         }
         if (y + vy >= 0.0) {
@@ -8035,7 +8035,7 @@ void CIkumi::Unk694d00()
             unk2c9 = 9;
             CPlayer::FaceOpponent();
             pattern = 0xd;
-            Vf0();
+            StartPattern();
         }
         break;
     case 0x9e:
@@ -8058,7 +8058,7 @@ void CIkumi::Unk694d00()
             frame++;
             if (frame >= x8) {
                 pattern = 9;
-                Vf0();
+                StartPattern();
             }
         }
         if (y + vy >= 0.0) {
@@ -8066,7 +8066,7 @@ void CIkumi::Unk694d00()
             unk2c9 = 9;
             CPlayer::FaceOpponent();
             pattern = 0xd;
-            Vf0();
+            StartPattern();
         }
         break;
     case 0xa3:
@@ -8082,7 +8082,7 @@ void CIkumi::Unk694d00()
                 pattern = 6;
             }
             m_attackResult = 0;
-            Vf0();
+            StartPattern();
             break;
         }
         if (frame == 0 && timer == 0) {
@@ -8102,17 +8102,17 @@ void CIkumi::Unk694d00()
             }
             if (frame >= x8) {
                 pattern = 0;
-                Vf0();
+                StartPattern();
                 break;
             }
         }
         if (m_inputX == facing && unk313c >= 0x50 && frame < 4) {
             pattern = 0xb2;
-            Vf0();
+            StartPattern();
         }
         if (m_inputX != facing && unk3138 >= 0x3c && frame < 4) {
             pattern = 0xb2;
-            Vf0();
+            StartPattern();
         }
         break;
     case 0xa4:
@@ -8149,7 +8149,7 @@ void CIkumi::Unk694d00()
             if (frame >= x8) {
                 CPlayer::FaceOpponent();
                 pattern = 0;
-                Vf0();
+                StartPattern();
             }
         }
         break;
@@ -8173,7 +8173,7 @@ void CIkumi::Unk694d00()
         }
         if (m_inputX == facing && unk313c >= 0x78) {
             pattern = 9;
-            Vf0();
+            StartPattern();
             vx = 1.6;
             ay = 0.03;
             if (CPlayer::FaceOpponent() != 0) {
@@ -8182,7 +8182,7 @@ void CIkumi::Unk694d00()
         }
         if (m_inputX != facing && unk3138 >= 0x28) {
             pattern = 9;
-            Vf0();
+            StartPattern();
             vx = 1.3;
             ay = 0.03;
             if (CPlayer::FaceOpponent() != 0) {
@@ -8210,7 +8210,7 @@ void CIkumi::Unk694d00()
         }
         if (m_inputX == -facing && unk313c >= 0x78) {
             pattern = 9;
-            Vf0();
+            StartPattern();
             vx = -0.9;
             ay = 0.03;
             if (CPlayer::FaceOpponent() != 0) {
@@ -8219,7 +8219,7 @@ void CIkumi::Unk694d00()
         }
         if (m_inputX != -facing && unk3138 >= 0x28) {
             pattern = 9;
-            Vf0();
+            StartPattern();
             vx = -0.9;
             ay = 0.03;
             if (CPlayer::FaceOpponent() != 0) {
@@ -8264,7 +8264,7 @@ void CIkumi::Unk694d00()
             if (frame >= x8) {
                 pattern = 0;
                 CPlayer::FaceOpponent();
-                Vf0();
+                StartPattern();
             }
         }
         break;
@@ -8294,7 +8294,7 @@ void CIkumi::Unk694d00()
             }
             if (frame >= x8) {
                 pattern = 0;
-                Vf0();
+                StartPattern();
             }
         }
         break;
@@ -8324,7 +8324,7 @@ void CIkumi::Unk694d00()
             }
             if (frame >= x8) {
                 pattern = 3;
-                Vf0();
+                StartPattern();
             }
         }
         break;
@@ -8361,7 +8361,7 @@ void CIkumi::Unk694d00()
             frame++;
             if (frame >= x8) {
                 pattern = 9;
-                Vf0();
+                StartPattern();
             }
         }
         break;
@@ -8397,7 +8397,7 @@ void CIkumi::Unk694d00()
                 vx = unk3138 * 0.01;
                 vy = unk313c * 0.01;
                 ay = 0.035;
-                Vf0();
+                StartPattern();
             }
         }
         break;
@@ -8418,7 +8418,7 @@ void CIkumi::Unk694d00()
                 pattern = 6;
             }
             m_attackResult = 0;
-            Vf0();
+            StartPattern();
             break;
         }
         timer++;
@@ -8427,7 +8427,7 @@ void CIkumi::Unk694d00()
             frame++;
             if (frame >= x8) {
                 pattern = 0;
-                Vf0();
+                StartPattern();
                 break;
             }
         }
@@ -8462,7 +8462,7 @@ void CIkumi::Unk694d00()
                 frame = frame - 2;
             }
             if (frame >= x8) {
-                Vf0();
+                StartPattern();
                 pattern = 0;
             }
         }
@@ -8487,7 +8487,7 @@ void CIkumi::Unk694d00()
                 pattern = 6;
             }
             m_attackResult = 0;
-            Vf0();
+            StartPattern();
             break;
         }
         if (frame == 1 && timer == 0) {
@@ -8505,7 +8505,7 @@ void CIkumi::Unk694d00()
             if (frame >= x8) {
                 pattern = 0;
                 CPlayer::FaceOpponent();
-                Vf0();
+                StartPattern();
             }
         }
         break;
@@ -8529,7 +8529,7 @@ void CIkumi::Unk694d00()
                 pattern = 6;
             }
             m_attackResult = 0;
-            Vf0();
+            StartPattern();
             break;
         }
         if (frame == 1 && timer == 0) {
@@ -8550,7 +8550,7 @@ void CIkumi::Unk694d00()
             if (frame >= x8) {
                 pattern = 0;
                 CPlayer::FaceOpponent();
-                Vf0();
+                StartPattern();
             }
         }
         break;
@@ -8564,7 +8564,7 @@ void CIkumi::Unk694d00()
                 pattern = 6;
             }
             m_attackResult = 0;
-            Vf0();
+            StartPattern();
             break;
         }
         if (unk158 == 0) {
@@ -8592,7 +8592,7 @@ void CIkumi::Unk694d00()
             if (frame >= x8) {
                 pattern = 0;
                 CPlayer::FaceOpponent();
-                Vf0();
+                StartPattern();
             }
         }
         break;
@@ -8606,7 +8606,7 @@ void CIkumi::Unk694d00()
                 pattern = 6;
             }
             m_attackResult = 0;
-            Vf0();
+            StartPattern();
             break;
         }
         if (frame < 2) {
@@ -8626,7 +8626,7 @@ void CIkumi::Unk694d00()
                 pattern = 6;
             }
             m_attackResult = 0;
-            Vf0();
+            StartPattern();
             break;
         }
         if (frame == 2 && timer == 0) {
@@ -8651,7 +8651,7 @@ void CIkumi::Unk694d00()
             if (frame >= x8) {
                 pattern = 0;
                 CPlayer::FaceOpponent();
-                Vf0();
+                StartPattern();
             }
         }
         break;
@@ -8675,7 +8675,7 @@ void CIkumi::Unk694d00()
                 pattern = 6;
             }
             m_attackResult = 0;
-            Vf0();
+            StartPattern();
             break;
         }
         if (frame == 1 && timer == 0) {
@@ -8696,7 +8696,7 @@ void CIkumi::Unk694d00()
                     pattern = 3;
                 }
                 CPlayer::FaceOpponent();
-                Vf0();
+                StartPattern();
             }
         }
         break;
@@ -8720,7 +8720,7 @@ void CIkumi::Unk694d00()
                 pattern = 6;
             }
             m_attackResult = 0;
-            Vf0();
+            StartPattern();
             break;
         }
         if (frame == 2 && timer == 0) {
@@ -8741,7 +8741,7 @@ void CIkumi::Unk694d00()
                     pattern = 3;
                 }
                 CPlayer::FaceOpponent();
-                Vf0();
+                StartPattern();
             }
         }
         break;
@@ -8783,7 +8783,7 @@ void CIkumi::Unk694d00()
                     pattern = 3;
                 }
                 CPlayer::FaceOpponent();
-                Vf0();
+                StartPattern();
             }
         }
         break;
@@ -8799,7 +8799,7 @@ void CIkumi::Unk694d00()
                 pattern = 0x10;
             }
             m_attackResult = 0;
-            Vf0();
+            StartPattern();
             break;
         }
         if (frame == 2 && timer == 0) {
@@ -8810,7 +8810,7 @@ void CIkumi::Unk694d00()
         if (y + vy >= 0.0) {
             y = 0.0;
             pattern = 0xd;
-            Vf0();
+            StartPattern();
             break;
         }
         timer++;
@@ -8822,7 +8822,7 @@ void CIkumi::Unk694d00()
             }
             if (frame >= x8) {
                 pattern = 9;
-                Vf0();
+                StartPattern();
             }
         }
         break;
@@ -8838,7 +8838,7 @@ void CIkumi::Unk694d00()
                 pattern = 0x10;
             }
             m_attackResult = 0;
-            Vf0();
+            StartPattern();
             break;
         }
         if (frame == 1 && timer == 0) {
@@ -8854,7 +8854,7 @@ void CIkumi::Unk694d00()
         if (y + vy >= 0.0) {
             y = 0.0;
             pattern = 0xd;
-            Vf0();
+            StartPattern();
             break;
         }
         timer++;
@@ -8866,7 +8866,7 @@ void CIkumi::Unk694d00()
             }
             if (frame >= x8) {
                 pattern = 9;
-                Vf0();
+                StartPattern();
             }
         }
         break;
@@ -8882,7 +8882,7 @@ void CIkumi::Unk694d00()
                 pattern = 0x10;
             }
             m_attackResult = 0;
-            Vf0();
+            StartPattern();
             break;
         }
         if (frame == 2 && timer == 0) {
@@ -8893,7 +8893,7 @@ void CIkumi::Unk694d00()
         if (y + vy >= 0.0) {
             y = 0.0;
             pattern = 0xd;
-            Vf0();
+            StartPattern();
             break;
         }
         timer++;
@@ -8905,7 +8905,7 @@ void CIkumi::Unk694d00()
             }
             if (frame >= x8) {
                 pattern = 9;
-                Vf0();
+                StartPattern();
             }
         }
         break;
@@ -8922,8 +8922,8 @@ void CIkumi::Unk694d00()
             vx = 0.0;
             vy = 0.0;
             unkb8 = 0.0;
-            Vf0();
-            (*m_opponent)->Vf0();
+            StartPattern();
+            (*m_opponent)->StartPattern();
             (*m_opponent)->StopMoving();
             pattern = 0xdd;
             (*m_opponent)->pattern = 0x67;
@@ -8948,7 +8948,7 @@ void CIkumi::Unk694d00()
                     pattern = 3;
                 }
                 CPlayer::FaceOpponent();
-                Vf0();
+                StartPattern();
             }
         }
         break;
@@ -8968,7 +8968,7 @@ void CIkumi::Unk694d00()
             unk2c8 = 0;
         }
         if (frame == 2 && timer == 0) {
-            (*m_opponent)->Vf0();
+            (*m_opponent)->StartPattern();
             (*m_opponent)->pattern = 0x3f;
             (*m_opponent)->unkc0 = -1.2;
             (*m_opponent)->unkc8 = -1.0;
@@ -8981,7 +8981,7 @@ void CIkumi::Unk694d00()
             m_attackResult = 0;
             if (frame >= x8) {
                 pattern = 0;
-                Vf0();
+                StartPattern();
                 CPlayer::FaceOpponent();
             }
         }
@@ -9010,7 +9010,7 @@ void CIkumi::Unk694d00()
             }
             if (frame >= x8) {
                 pattern = 0;
-                Vf0();
+                StartPattern();
             }
         }
         break;
@@ -9026,7 +9026,7 @@ void CIkumi::Unk694d00()
                 pattern = 6;
             }
             m_attackResult = 0;
-            Vf0();
+            StartPattern();
             break;
         }
         vx -= 0.03;
@@ -9050,7 +9050,7 @@ void CIkumi::Unk694d00()
             }
             if (frame >= x8) {
                 pattern = 0;
-                Vf0();
+                StartPattern();
             }
         }
         break;
@@ -9075,7 +9075,7 @@ void CIkumi::Unk694d00()
             }
             if (frame >= x8) {
                 pattern = 0;
-                Vf0();
+                StartPattern();
             }
         }
         break;
@@ -9103,7 +9103,7 @@ void CIkumi::Unk694d00()
             }
             if (frame >= x8) {
                 pattern = 3;
-                Vf0();
+                StartPattern();
             }
         }
         break;
@@ -9131,7 +9131,7 @@ void CIkumi::Unk694d00()
             }
             if (frame >= x8) {
                 pattern = 3;
-                Vf0();
+                StartPattern();
             }
         }
         break;
@@ -9146,7 +9146,7 @@ void CIkumi::Unk694d00()
                 pattern = 0x10;
             }
             m_attackResult = 0;
-            Vf0();
+            StartPattern();
             break;
         }
         CPlayer::Unk4109d0(3);
@@ -9188,7 +9188,7 @@ void CIkumi::Unk694d00()
             }
             if (frame >= x8) {
                 pattern = 3;
-                Vf0();
+                StartPattern();
             }
         }
         break;
@@ -9196,8 +9196,8 @@ void CIkumi::Unk694d00()
         vy = vy + ay;
         if (frame == 1 && m_attackResult == 3) {
             (*m_opponent)->StopMoving();
-            (*m_opponent)->Vf0();
-            Vf0();
+            (*m_opponent)->StartPattern();
+            StartPattern();
             CPlayer::StopMoving();
             pattern = 0xf9;
             (*m_opponent)->pattern = 0x67;
@@ -9236,7 +9236,7 @@ void CIkumi::Unk694d00()
         vy = vy + ay;
         if (vy + y > 0.0 && frame > 4) {
             CPlayer::StopMoving();
-            Vf0();
+            StartPattern();
             y = 0.0;
             pattern = 0xd;
             break;
@@ -9270,7 +9270,7 @@ void CIkumi::Unk694d00()
                 (*m_opponent)->x = facing * 0x2a + x;
                 (*m_opponent)->pattern = 0x3f;
                 CPlayer::DealDamage(0x578, 500.0);
-                (*m_opponent)->Vf0();
+                (*m_opponent)->StartPattern();
                 (*m_opponent)->unkc0 = -2.0;
                 (*m_opponent)->unkc8 = 0.0;
                 ay = 0.035;
@@ -9282,7 +9282,7 @@ void CIkumi::Unk694d00()
                 l50.scale = 2;
                 l50.unk18 = facing;
                 l50.layer = 1;
-                Vf9(&l50);
+                SpawnObject(&l50);
                 unk2c8 = 5;
             }
             if (frame >= x8) {
@@ -9308,9 +9308,9 @@ void CIkumi::Unk694d00()
                 l50.layer = 1;
                 l50.unk0 = 1;
                 l50.unk18 = facing;
-                Vf9(&l50);
+                SpawnObject(&l50);
                 l50.type = 0x193;
-                Vf9(&l50);
+                SpawnObject(&l50);
                 CPlayer::Unk410a10(2, 0);
             }
             if (frame == 7 && unk3138 > 0) {
@@ -9319,7 +9319,7 @@ void CIkumi::Unk694d00()
             }
             if (frame >= x8) {
                 pattern = 0;
-                Vf0();
+                StartPattern();
             }
         }
         break;
@@ -9341,9 +9341,9 @@ void CIkumi::Unk694d00()
                 l50.layer = 1;
                 l50.unk0 = 1;
                 l50.unk18 = facing;
-                Vf9(&l50);
+                SpawnObject(&l50);
                 l50.type = 0x193;
-                Vf9(&l50);
+                SpawnObject(&l50);
                 CPlayer::Unk410a10(2, 0);
             }
             if (frame == 7 && unk3138 > 0) {
@@ -9352,7 +9352,7 @@ void CIkumi::Unk694d00()
             }
             if (frame >= x8) {
                 pattern = 0;
-                Vf0();
+                StartPattern();
             }
         }
         break;
@@ -9374,9 +9374,9 @@ void CIkumi::Unk694d00()
                 l50.layer = 1;
                 l50.unk0 = 1;
                 l50.unk18 = facing;
-                Vf9(&l50);
+                SpawnObject(&l50);
                 l50.type = 0x193;
-                Vf9(&l50);
+                SpawnObject(&l50);
                 CPlayer::Unk410a10(2, 0);
             }
             if (frame == 7 && unk3138 > 0) {
@@ -9385,7 +9385,7 @@ void CIkumi::Unk694d00()
             }
             if (frame >= x8) {
                 pattern = 0;
-                Vf0();
+                StartPattern();
             }
         }
         break;
@@ -9409,7 +9409,7 @@ void CIkumi::Unk694d00()
             l50.layer = 1;
             l50.unk0 = 1;
             l50.unk18 = facing;
-            Vf9(&l50);
+            SpawnObject(&l50);
             unk2c8 = 2;
         }
         if (frame > 0xb) {
@@ -9436,7 +9436,7 @@ void CIkumi::Unk694d00()
             }
             if (frame >= x8) {
                 pattern = 0;
-                Vf0();
+                StartPattern();
             }
         }
         break;
@@ -9460,7 +9460,7 @@ void CIkumi::Unk694d00()
             l50.layer = 1;
             l50.unk0 = 1;
             l50.unk18 = facing;
-            Vf9(&l50);
+            SpawnObject(&l50);
             unk2c8 = 2;
         }
         if (frame > 0xb) {
@@ -9487,7 +9487,7 @@ void CIkumi::Unk694d00()
             }
             if (frame >= x8) {
                 pattern = 0;
-                Vf0();
+                StartPattern();
             }
         }
         break;
@@ -9523,7 +9523,7 @@ void CIkumi::Unk694d00()
             l50.layer = 1;
             l50.unk0 = 1;
             l50.unk18 = facing;
-            Vf9(&l50);
+            SpawnObject(&l50);
             unk2c8 = 2;
         }
         if (frame > 0xb) {
@@ -9550,7 +9550,7 @@ void CIkumi::Unk694d00()
             }
             if (frame >= x8) {
                 pattern = 0;
-                Vf0();
+                StartPattern();
             }
         }
         break;
@@ -9570,7 +9570,7 @@ void CIkumi::Unk694d00()
             if (y + vy >= 0.0) {
                 y = 0.0;
                 CPlayer::StopMoving();
-                Vf0();
+                StartPattern();
                 pattern = 0x103;
                 break;
             }
@@ -9585,7 +9585,7 @@ void CIkumi::Unk694d00()
             l50.layer = 1;
             l50.unk0 = 1;
             l50.unk18 = facing;
-            Vf9(&l50);
+            SpawnObject(&l50);
             unk2c8 = 3;
         }
         timer++;
@@ -9616,7 +9616,7 @@ void CIkumi::Unk694d00()
             if (y + vy >= 0.0) {
                 y = 0.0;
                 CPlayer::StopMoving();
-                Vf0();
+                StartPattern();
                 pattern = 0x103;
                 break;
             }
@@ -9631,7 +9631,7 @@ void CIkumi::Unk694d00()
             l50.layer = 1;
             l50.unk0 = 1;
             l50.unk18 = facing;
-            Vf9(&l50);
+            SpawnObject(&l50);
             unk2c8 = 3;
         }
         timer++;
@@ -9674,7 +9674,7 @@ void CIkumi::Unk694d00()
             if (y + vy >= 0.0) {
                 y = 0.0;
                 CPlayer::StopMoving();
-                Vf0();
+                StartPattern();
                 pattern = 0x103;
                 break;
             }
@@ -9689,7 +9689,7 @@ void CIkumi::Unk694d00()
             l50.layer = 1;
             l50.unk0 = 1;
             l50.unk18 = facing;
-            Vf9(&l50);
+            SpawnObject(&l50);
             unk2c8 = 3;
         }
         timer++;
@@ -9714,7 +9714,7 @@ void CIkumi::Unk694d00()
             frame++;
             if (frame >= x8) {
                 pattern = 0;
-                Vf0();
+                StartPattern();
             }
         }
         break;
@@ -9731,8 +9731,8 @@ void CIkumi::Unk694d00()
             vx = 0.0;
             vy = 0.0;
             unkb8 = 0.0;
-            Vf0();
-            (*m_opponent)->Vf0();
+            StartPattern();
+            (*m_opponent)->StartPattern();
             (*m_opponent)->StopMoving();
             pattern = 0x108;
             (*m_opponent)->pattern = 0x6b;
@@ -9751,7 +9751,7 @@ void CIkumi::Unk694d00()
             if (frame >= x8) {
                 pattern = 0;
                 CPlayer::FaceOpponent();
-                Vf0();
+                StartPattern();
             }
         }
         break;
@@ -9765,7 +9765,7 @@ void CIkumi::Unk694d00()
             l50.layer = 1;
             m_game->CreateEffect((EffectDesc*)&l50);
             CPlayer::DealDamage(0xfa, 1000.0);
-            (*m_opponent)->Vf0();
+            (*m_opponent)->StartPattern();
             (*m_opponent)->pattern = 0x6c;
             (*m_opponent)->x = facing * 0x28 + x;
             unk2c8 = 4;
@@ -9777,7 +9777,7 @@ void CIkumi::Unk694d00()
             l50.scale = 0;
             l50.layer = 1;
             l50.unk18 = facing;
-            Vf9(&l50);
+            SpawnObject(&l50);
         }
         if (frame == 0xc && timer == 0x5a) {
             (*m_opponent)->unk14a = 0;
@@ -9787,9 +9787,9 @@ void CIkumi::Unk694d00()
             l50.scale = 2;
             l50.unk18 = facing;
             l50.layer = 1;
-            Vf9(&l50);
+            SpawnObject(&l50);
             CPlayer::DealDamage(0x1f4, 700.0);
-            (*m_opponent)->Vf0();
+            (*m_opponent)->StartPattern();
             (*m_opponent)->pattern = 0x3f;
             (*m_opponent)->unkc0 = -0.8;
             (*m_opponent)->unkc8 = -2.8;
@@ -9799,14 +9799,14 @@ void CIkumi::Unk694d00()
             l50.scale = 0;
             l50.layer = 1;
             l50.unk18 = facing;
-            Vf9(&l50);
+            SpawnObject(&l50);
             l50.type = 0x1dd;
             l50.x = (double)((int)x + facing * 0x2b);
             l50.y = (double)((int)y - 0x2e);
             l50.scale = 0;
             l50.layer = 1;
             l50.unk18 = -facing;
-            Vf9(&l50);
+            SpawnObject(&l50);
             unk2c8 = 5;
             CPlayer::Unk410a10(4, 0);
         }
@@ -9817,7 +9817,7 @@ void CIkumi::Unk694d00()
             m_attackResult = 0;
             if (frame >= x8) {
                 pattern = 0;
-                Vf0();
+                StartPattern();
                 CPlayer::FaceOpponent();
             }
         }
@@ -9842,7 +9842,7 @@ void CIkumi::Unk694d00()
             l50.layer = 1;
             l50.unk0 = 1;
             l50.unk18 = facing;
-            Vf9(&l50);
+            SpawnObject(&l50);
             unk2c8 = 2;
         }
         if (frame > 0xb) {
@@ -9869,7 +9869,7 @@ void CIkumi::Unk694d00()
             }
             if (frame >= x8) {
                 pattern = 0;
-                Vf0();
+                StartPattern();
             }
         }
         break;
@@ -9905,7 +9905,7 @@ void CIkumi::Unk694d00()
             l50.layer = 1;
             l50.unk0 = 1;
             l50.unk18 = facing;
-            Vf9(&l50);
+            SpawnObject(&l50);
             unk2c8 = 2;
         }
         if (frame > 0xb) {
@@ -9932,7 +9932,7 @@ void CIkumi::Unk694d00()
             }
             if (frame >= x8) {
                 pattern = 0;
-                Vf0();
+                StartPattern();
             }
         }
         break;
@@ -9956,7 +9956,7 @@ void CIkumi::Unk694d00()
             l50.layer = 1;
             l50.unk0 = 1;
             l50.unk18 = facing;
-            Vf9(&l50);
+            SpawnObject(&l50);
             unk2c8 = 2;
         }
         if (frame > 0xb) {
@@ -9983,7 +9983,7 @@ void CIkumi::Unk694d00()
             }
             if (frame >= x8) {
                 pattern = 0;
-                Vf0();
+                StartPattern();
             }
         }
         break;
@@ -10019,7 +10019,7 @@ void CIkumi::Unk694d00()
             l50.layer = 1;
             l50.unk0 = 1;
             l50.unk18 = facing;
-            Vf9(&l50);
+            SpawnObject(&l50);
             unk2c8 = 2;
         }
         if (frame > 0xb) {
@@ -10046,7 +10046,7 @@ void CIkumi::Unk694d00()
             }
             if (frame >= x8) {
                 pattern = 0;
-                Vf0();
+                StartPattern();
             }
         }
         break;
@@ -10066,7 +10066,7 @@ void CIkumi::Unk694d00()
             if (y + vy >= 0.0) {
                 y = 0.0;
                 CPlayer::StopMoving();
-                Vf0();
+                StartPattern();
                 pattern = 0x112;
                 break;
             }
@@ -10081,7 +10081,7 @@ void CIkumi::Unk694d00()
             l50.layer = 1;
             l50.unk0 = 1;
             l50.unk18 = facing;
-            Vf9(&l50);
+            SpawnObject(&l50);
             unk2c8 = 3;
         }
         timer++;
@@ -10124,7 +10124,7 @@ void CIkumi::Unk694d00()
             if (y + vy >= 0.0) {
                 y = 0.0;
                 CPlayer::StopMoving();
-                Vf0();
+                StartPattern();
                 pattern = 0x112;
                 break;
             }
@@ -10139,7 +10139,7 @@ void CIkumi::Unk694d00()
             l50.layer = 1;
             l50.unk0 = 1;
             l50.unk18 = facing;
-            Vf9(&l50);
+            SpawnObject(&l50);
             unk2c8 = 3;
         }
         timer++;
@@ -10164,7 +10164,7 @@ void CIkumi::Unk694d00()
             frame++;
             if (frame >= x8) {
                 pattern = 0;
-                Vf0();
+                StartPattern();
             }
         }
         break;
@@ -10184,7 +10184,7 @@ void CIkumi::Unk694d00()
             if (y + vy >= 0.0) {
                 y = 0.0;
                 CPlayer::StopMoving();
-                Vf0();
+                StartPattern();
                 pattern = 0x116;
                 break;
             }
@@ -10199,7 +10199,7 @@ void CIkumi::Unk694d00()
             l50.layer = 1;
             l50.unk0 = 1;
             l50.unk18 = facing;
-            Vf9(&l50);
+            SpawnObject(&l50);
             unk2c8 = 3;
         }
         timer++;
@@ -10242,7 +10242,7 @@ void CIkumi::Unk694d00()
             if (y + vy >= 0.0) {
                 y = 0.0;
                 CPlayer::StopMoving();
-                Vf0();
+                StartPattern();
                 pattern = 0x116;
                 break;
             }
@@ -10257,7 +10257,7 @@ void CIkumi::Unk694d00()
             l50.layer = 1;
             l50.unk0 = 1;
             l50.unk18 = facing;
-            Vf9(&l50);
+            SpawnObject(&l50);
             unk2c8 = 3;
         }
         timer++;
@@ -10282,7 +10282,7 @@ void CIkumi::Unk694d00()
             frame++;
             if (frame >= x8) {
                 pattern = 0;
-                Vf0();
+                StartPattern();
             }
         }
         break;
@@ -10304,9 +10304,9 @@ void CIkumi::Unk694d00()
                 l50.layer = 1;
                 l50.unk0 = 1;
                 l50.unk18 = facing;
-                Vf9(&l50);
+                SpawnObject(&l50);
                 l50.type = 0x19a;
-                Vf9(&l50);
+                SpawnObject(&l50);
                 CPlayer::Unk410a10(2, 0);
             }
             if (frame == 7 && unk3138 > 0) {
@@ -10315,7 +10315,7 @@ void CIkumi::Unk694d00()
             }
             if (frame >= x8) {
                 pattern = 0;
-                Vf0();
+                StartPattern();
             }
         }
         break;
@@ -10337,9 +10337,9 @@ void CIkumi::Unk694d00()
                 l50.layer = 1;
                 l50.unk0 = 1;
                 l50.unk18 = facing;
-                Vf9(&l50);
+                SpawnObject(&l50);
                 l50.type = 0x19a;
-                Vf9(&l50);
+                SpawnObject(&l50);
                 CPlayer::Unk410a10(2, 0);
             }
             if (frame == 7 && unk3138 > 0) {
@@ -10348,7 +10348,7 @@ void CIkumi::Unk694d00()
             }
             if (frame >= x8) {
                 pattern = 0;
-                Vf0();
+                StartPattern();
             }
         }
         break;
@@ -10370,9 +10370,9 @@ void CIkumi::Unk694d00()
                 l50.layer = 1;
                 l50.unk0 = 1;
                 l50.unk18 = facing;
-                Vf9(&l50);
+                SpawnObject(&l50);
                 l50.type = 0x19a;
-                Vf9(&l50);
+                SpawnObject(&l50);
                 CPlayer::Unk410a10(2, 0);
             }
             if (frame == 7 && unk3138 > 0) {
@@ -10381,7 +10381,7 @@ void CIkumi::Unk694d00()
             }
             if (frame >= x8) {
                 pattern = 0;
-                Vf0();
+                StartPattern();
             }
         }
         break;
@@ -10403,9 +10403,9 @@ void CIkumi::Unk694d00()
                 l50.layer = 1;
                 l50.unk0 = 1;
                 l50.unk18 = facing;
-                Vf9(&l50);
+                SpawnObject(&l50);
                 l50.type = 0x19c;
-                Vf9(&l50);
+                SpawnObject(&l50);
                 CPlayer::Unk410a10(2, 0);
             }
             if (frame == 7 && unk3138 > 0) {
@@ -10414,7 +10414,7 @@ void CIkumi::Unk694d00()
             }
             if (frame >= x8) {
                 pattern = 0;
-                Vf0();
+                StartPattern();
             }
         }
         break;
@@ -10436,9 +10436,9 @@ void CIkumi::Unk694d00()
                 l50.layer = 1;
                 l50.unk0 = 1;
                 l50.unk18 = facing;
-                Vf9(&l50);
+                SpawnObject(&l50);
                 l50.type = 0x19c;
-                Vf9(&l50);
+                SpawnObject(&l50);
                 CPlayer::Unk410a10(2, 0);
             }
             if (frame == 7 && unk3138 > 0) {
@@ -10447,7 +10447,7 @@ void CIkumi::Unk694d00()
             }
             if (frame >= x8) {
                 pattern = 0;
-                Vf0();
+                StartPattern();
             }
         }
         break;
@@ -10469,9 +10469,9 @@ void CIkumi::Unk694d00()
                 l50.layer = 1;
                 l50.unk0 = 1;
                 l50.unk18 = facing;
-                Vf9(&l50);
+                SpawnObject(&l50);
                 l50.type = 0x19c;
-                Vf9(&l50);
+                SpawnObject(&l50);
                 CPlayer::Unk410a10(2, 0);
             }
             if (frame == 7 && unk3138 > 0) {
@@ -10480,7 +10480,7 @@ void CIkumi::Unk694d00()
             }
             if (frame >= x8) {
                 pattern = 0;
-                Vf0();
+                StartPattern();
             }
         }
         break;
@@ -10512,7 +10512,7 @@ void CIkumi::Unk694d00()
             l50.unk0 = 1;
             l50.layer = 1;
             l50.unk18 = facing;
-            Vf9(&l50);
+            SpawnObject(&l50);
             CPlayer::Unk410a10(0xa, 0);
             unk2c8 = 6;
             unk2c8 = 7;
@@ -10529,7 +10529,7 @@ void CIkumi::Unk694d00()
                     break;
                 }
                 pattern = 0;
-                Vf0();
+                StartPattern();
                 unk3150 = 0x4ec;
                 unk314c = 0xa;
                 Unk6ab6a0(1);
@@ -10559,8 +10559,8 @@ void CIkumi::Unk694d00()
             vx = 0.0;
             vy = 0.0;
             unkb8 = 0.0;
-            Vf0();
-            (*m_opponent)->Vf0();
+            StartPattern();
+            (*m_opponent)->StartPattern();
             (*m_opponent)->StopMoving();
             pattern = 0x130;
             (*m_opponent)->pattern = 0x67;
@@ -10587,7 +10587,7 @@ void CIkumi::Unk694d00()
             if (frame >= x8) {
                 pattern = 0;
                 CPlayer::FaceOpponent();
-                Vf0();
+                StartPattern();
             }
         }
         break;
@@ -10614,7 +10614,7 @@ void CIkumi::Unk694d00()
             } else {
                 l50.unk18 = -facing;
             }
-            Vf9(&l50);
+            SpawnObject(&l50);
         }
         timer++;
         if (timer >= l4) {
@@ -10638,14 +10638,14 @@ void CIkumi::Unk694d00()
                 l50.layer = 1;
                 l50.unk0 = 1;
                 l50.unk18 = facing;
-                Vf9(&l50);
+                SpawnObject(&l50);
                 l50.type = 0x19f;
                 l50.x = (double)((int)x + facing * 0x1e);
                 l50.y = -160.0;
                 l50.scale = 2;
                 l50.layer = 1;
                 l50.unk18 = facing;
-                Vf9(&l50);
+                SpawnObject(&l50);
             }
             if (unk3138 < 8 && frame == 7) {
                 frame = frame - 4;
@@ -10660,7 +10660,7 @@ void CIkumi::Unk694d00()
                 (*m_opponent)->y = y - 74.0;
             }
             if (frame == 0xd) {
-                (*m_opponent)->Vf0();
+                (*m_opponent)->StartPattern();
                 (*m_opponent)->pattern = 0x3f;
                 (*m_opponent)->unkc0 = -1.2;
                 (*m_opponent)->unkc8 = -0.5;
@@ -10672,7 +10672,7 @@ void CIkumi::Unk694d00()
             if (frame >= x8) {
                 pattern = 0;
                 CPlayer::FaceOpponent();
-                Vf0();
+                StartPattern();
             }
         }
         break;
@@ -10699,8 +10699,8 @@ void CIkumi::Unk694d00()
             vx = 0.0;
             vy = 0.0;
             unkb8 = 0.0;
-            Vf0();
-            (*m_opponent)->Vf0();
+            StartPattern();
+            (*m_opponent)->StartPattern();
             (*m_opponent)->StopMoving();
             pattern = 0x132;
             (*m_opponent)->pattern = 0x67;
@@ -10727,7 +10727,7 @@ void CIkumi::Unk694d00()
             if (frame >= x8) {
                 pattern = 0;
                 CPlayer::FaceOpponent();
-                Vf0();
+                StartPattern();
             }
         }
         break;
@@ -10754,7 +10754,7 @@ void CIkumi::Unk694d00()
             } else {
                 l50.unk18 = -facing;
             }
-            Vf9(&l50);
+            SpawnObject(&l50);
         }
         timer++;
         if (timer >= l4) {
@@ -10778,14 +10778,14 @@ void CIkumi::Unk694d00()
                 l50.layer = 1;
                 l50.unk0 = 1;
                 l50.unk18 = facing;
-                Vf9(&l50);
+                SpawnObject(&l50);
                 l50.type = 0x1a0;
                 l50.x = (double)((int)x + facing * 0x1e);
                 l50.y = -160.0;
                 l50.scale = 2;
                 l50.layer = 1;
                 l50.unk18 = facing;
-                Vf9(&l50);
+                SpawnObject(&l50);
             }
             if (unk3138 < 0xc && frame == 7) {
                 frame = frame - 4;
@@ -10800,7 +10800,7 @@ void CIkumi::Unk694d00()
                 (*m_opponent)->y = y - 74.0;
             }
             if (frame == 0xd) {
-                (*m_opponent)->Vf0();
+                (*m_opponent)->StartPattern();
                 (*m_opponent)->pattern = 0x3f;
                 (*m_opponent)->unkc0 = -1.2;
                 (*m_opponent)->unkc8 = -0.5;
@@ -10812,7 +10812,7 @@ void CIkumi::Unk694d00()
             if (frame >= x8) {
                 pattern = 0;
                 CPlayer::FaceOpponent();
-                Vf0();
+                StartPattern();
             }
         }
         break;
@@ -10842,8 +10842,8 @@ void CIkumi::Unk694d00()
             vx = 0.0;
             vy = 0.0;
             unkb8 = 0.0;
-            Vf0();
-            (*m_opponent)->Vf0();
+            StartPattern();
+            (*m_opponent)->StartPattern();
             (*m_opponent)->StopMoving();
             pattern = 0x134;
             (*m_opponent)->pattern = 0x67;
@@ -10870,7 +10870,7 @@ void CIkumi::Unk694d00()
             if (frame >= x8) {
                 pattern = 0;
                 CPlayer::FaceOpponent();
-                Vf0();
+                StartPattern();
             }
         }
         break;
@@ -10901,7 +10901,7 @@ void CIkumi::Unk694d00()
                 l50.unk18 = -facing;
             }
             l50.unk18 = facing;
-            Vf9(&l50);
+            SpawnObject(&l50);
         }
         timer++;
         if (timer >= l4) {
@@ -10925,14 +10925,14 @@ void CIkumi::Unk694d00()
                 l50.layer = 1;
                 l50.unk0 = 1;
                 l50.unk18 = facing;
-                Vf9(&l50);
+                SpawnObject(&l50);
                 l50.type = 0x1a1;
                 l50.x = (double)((int)x + facing * 0x1e);
                 l50.y = -160.0;
                 l50.scale = 2;
                 l50.layer = 1;
                 l50.unk18 = facing;
-                Vf9(&l50);
+                SpawnObject(&l50);
             }
             if (unk3138 < 0xc && frame == 7) {
                 frame = frame - 4;
@@ -10947,7 +10947,7 @@ void CIkumi::Unk694d00()
                 (*m_opponent)->y = y - 74.0;
             }
             if (frame == 0xd) {
-                (*m_opponent)->Vf0();
+                (*m_opponent)->StartPattern();
                 (*m_opponent)->pattern = 0x3f;
                 (*m_opponent)->unkc0 = -1.2;
                 (*m_opponent)->unkc8 = -0.5;
@@ -10959,7 +10959,7 @@ void CIkumi::Unk694d00()
             if (frame >= x8) {
                 pattern = 0;
                 CPlayer::FaceOpponent();
-                Vf0();
+                StartPattern();
             }
         }
         break;
@@ -10992,7 +10992,7 @@ void CIkumi::Unk694d00()
                 l50.unk0 = 1;
                 l50.unk18 = facing;
                 l50.layer = 0;
-                Vf9(&l50);
+                SpawnObject(&l50);
             }
             if (frame == 7 && unk3138 < 5) {
                 frame = frame - 2;
@@ -11001,7 +11001,7 @@ void CIkumi::Unk694d00()
             if (frame >= x8) {
                 pattern = 0;
                 CPlayer::FaceOpponent();
-                Vf0();
+                StartPattern();
             }
         }
         break;
@@ -11034,7 +11034,7 @@ void CIkumi::Unk694d00()
                 l50.unk0 = 1;
                 l50.unk18 = facing;
                 l50.layer = 0;
-                Vf9(&l50);
+                SpawnObject(&l50);
             }
             if (frame == 7 && unk3138 < 5) {
                 frame = frame - 2;
@@ -11043,7 +11043,7 @@ void CIkumi::Unk694d00()
             if (frame >= x8) {
                 pattern = 0;
                 CPlayer::FaceOpponent();
-                Vf0();
+                StartPattern();
             }
         }
         break;
@@ -11076,7 +11076,7 @@ void CIkumi::Unk694d00()
                 l50.unk0 = 1;
                 l50.unk18 = facing;
                 l50.layer = 0;
-                Vf9(&l50);
+                SpawnObject(&l50);
             }
             if (frame == 7 && unk3138 < 5) {
                 frame = frame - 2;
@@ -11085,7 +11085,7 @@ void CIkumi::Unk694d00()
             if (frame >= x8) {
                 pattern = 0;
                 CPlayer::FaceOpponent();
-                Vf0();
+                StartPattern();
             }
         }
         break;
@@ -11133,7 +11133,7 @@ void CIkumi::Unk694d00()
                 l50.unk0 = 1;
                 l50.unk18 = facing;
                 l50.layer = 0;
-                Vf9(&l50);
+                SpawnObject(&l50);
             }
             if (frame == 0x10 && unk3138 < 3) {
                 frame = frame - 2;
@@ -11142,7 +11142,7 @@ void CIkumi::Unk694d00()
             if (frame >= x8) {
                 pattern = 0;
                 CPlayer::FaceOpponent();
-                Vf0();
+                StartPattern();
             }
         }
         break;
@@ -11190,7 +11190,7 @@ void CIkumi::Unk694d00()
                 l50.unk0 = 1;
                 l50.unk18 = facing;
                 l50.layer = 0;
-                Vf9(&l50);
+                SpawnObject(&l50);
             }
             if (frame == 0x10 && unk3138 < 3) {
                 frame = frame - 2;
@@ -11199,7 +11199,7 @@ void CIkumi::Unk694d00()
             if (frame >= x8) {
                 pattern = 0;
                 CPlayer::FaceOpponent();
-                Vf0();
+                StartPattern();
             }
         }
         break;
@@ -11250,7 +11250,7 @@ void CIkumi::Unk694d00()
                 l50.unk0 = 1;
                 l50.unk18 = facing;
                 l50.layer = 0;
-                Vf9(&l50);
+                SpawnObject(&l50);
             }
             if (frame == 0x10 && unk3138 < 3) {
                 frame = frame - 2;
@@ -11259,7 +11259,7 @@ void CIkumi::Unk694d00()
             if (frame >= x8) {
                 pattern = 0;
                 CPlayer::FaceOpponent();
-                Vf0();
+                StartPattern();
             }
         }
         break;
@@ -11295,15 +11295,15 @@ void CIkumi::Unk694d00()
                 l50.unk0 = 1;
                 l50.unk18 = facing;
                 l50.layer = 1;
-                Vf9(&l50);
+                SpawnObject(&l50);
                 l50.type = 0x1a7;
                 l50.layer = 0;
-                Vf9(&l50);
+                SpawnObject(&l50);
             }
             if (frame >= x8) {
                 pattern = 0;
                 CPlayer::FaceOpponent();
-                Vf0();
+                StartPattern();
             }
         }
         break;
@@ -11339,7 +11339,7 @@ void CIkumi::Unk694d00()
                 l50.unk0 = 1;
                 l50.unk18 = facing;
                 l50.layer = 1;
-                Vf9(&l50);
+                SpawnObject(&l50);
                 l50.type = 0x1a9;
                 l50.x = (double)((int)(*m_opponent)->x + 0x19);
                 l50.y = -10.0;
@@ -11347,10 +11347,10 @@ void CIkumi::Unk694d00()
                 l50.unk0 = 1;
                 l50.unk18 = facing;
                 l50.layer = 1;
-                Vf9(&l50);
+                SpawnObject(&l50);
                 l50.type = 0x1a7;
                 l50.layer = 0;
-                Vf9(&l50);
+                SpawnObject(&l50);
                 l50.type = 0x1a9;
                 l50.x = (double)((int)(*m_opponent)->x - 0x19);
                 l50.y = -10.0;
@@ -11358,10 +11358,10 @@ void CIkumi::Unk694d00()
                 l50.unk0 = 1;
                 l50.unk18 = facing;
                 l50.layer = 1;
-                Vf9(&l50);
+                SpawnObject(&l50);
                 l50.type = 0x1a7;
                 l50.layer = 0;
-                Vf9(&l50);
+                SpawnObject(&l50);
                 l50.type = 0x1a9;
                 l50.x = (double)((int)(*m_opponent)->x + 0x2d);
                 l50.y = 10.0;
@@ -11369,10 +11369,10 @@ void CIkumi::Unk694d00()
                 l50.unk0 = 1;
                 l50.unk18 = facing;
                 l50.layer = 1;
-                Vf9(&l50);
+                SpawnObject(&l50);
                 l50.type = 0x1a7;
                 l50.layer = 0;
-                Vf9(&l50);
+                SpawnObject(&l50);
                 l50.type = 0x1a9;
                 l50.x = (double)((int)(*m_opponent)->x - 0x2d);
                 l50.y = 10.0;
@@ -11380,15 +11380,15 @@ void CIkumi::Unk694d00()
                 l50.unk0 = 1;
                 l50.unk18 = facing;
                 l50.layer = 1;
-                Vf9(&l50);
+                SpawnObject(&l50);
                 l50.type = 0x1a7;
                 l50.layer = 0;
-                Vf9(&l50);
+                SpawnObject(&l50);
             }
             if (frame >= x8) {
                 pattern = 0;
                 CPlayer::FaceOpponent();
-                Vf0();
+                StartPattern();
             }
         }
         break;
@@ -11427,7 +11427,7 @@ void CIkumi::Unk694d00()
                 l50.unk0 = 1;
                 l50.unk18 = facing;
                 l50.layer = 1;
-                Vf9(&l50);
+                SpawnObject(&l50);
                 l50.type = 0x1a9;
                 l50.x = (double)((int)(*m_opponent)->x + 0x23);
                 l50.y = -10.0;
@@ -11435,10 +11435,10 @@ void CIkumi::Unk694d00()
                 l50.unk0 = 1;
                 l50.unk18 = facing;
                 l50.layer = 1;
-                Vf9(&l50);
+                SpawnObject(&l50);
                 l50.type = 0x1a7;
                 l50.layer = 0;
-                Vf9(&l50);
+                SpawnObject(&l50);
                 l50.type = 0x1a9;
                 l50.x = (double)((int)(*m_opponent)->x - 0x23);
                 l50.y = -10.0;
@@ -11446,10 +11446,10 @@ void CIkumi::Unk694d00()
                 l50.unk0 = 1;
                 l50.unk18 = facing;
                 l50.layer = 1;
-                Vf9(&l50);
+                SpawnObject(&l50);
                 l50.type = 0x1a7;
                 l50.layer = 0;
-                Vf9(&l50);
+                SpawnObject(&l50);
                 l50.type = 0x1a9;
                 l50.x = (double)((int)(*m_opponent)->x + 0x46);
                 l50.y = 0.0;
@@ -11457,10 +11457,10 @@ void CIkumi::Unk694d00()
                 l50.unk0 = 1;
                 l50.unk18 = facing;
                 l50.layer = 1;
-                Vf9(&l50);
+                SpawnObject(&l50);
                 l50.type = 0x1a7;
                 l50.layer = 0;
-                Vf9(&l50);
+                SpawnObject(&l50);
                 l50.type = 0x1a9;
                 l50.x = (double)((int)(*m_opponent)->x - 0x46);
                 l50.y = 0.0;
@@ -11468,10 +11468,10 @@ void CIkumi::Unk694d00()
                 l50.unk0 = 1;
                 l50.unk18 = facing;
                 l50.layer = 1;
-                Vf9(&l50);
+                SpawnObject(&l50);
                 l50.type = 0x1a7;
                 l50.layer = 0;
-                Vf9(&l50);
+                SpawnObject(&l50);
                 l50.type = 0x1a9;
                 l50.x = (double)((int)(*m_opponent)->x + 0x28);
                 l50.y = 10.0;
@@ -11479,10 +11479,10 @@ void CIkumi::Unk694d00()
                 l50.unk0 = 1;
                 l50.unk18 = facing;
                 l50.layer = 1;
-                Vf9(&l50);
+                SpawnObject(&l50);
                 l50.type = 0x1a7;
                 l50.layer = 0;
-                Vf9(&l50);
+                SpawnObject(&l50);
                 l50.type = 0x1a9;
                 l50.x = (double)((int)(*m_opponent)->x - 0x28);
                 l50.y = 10.0;
@@ -11490,15 +11490,15 @@ void CIkumi::Unk694d00()
                 l50.unk0 = 1;
                 l50.unk18 = facing;
                 l50.layer = 1;
-                Vf9(&l50);
+                SpawnObject(&l50);
                 l50.type = 0x1a7;
                 l50.layer = 0;
-                Vf9(&l50);
+                SpawnObject(&l50);
             }
             if (frame >= x8) {
                 pattern = 0;
                 CPlayer::FaceOpponent();
-                Vf0();
+                StartPattern();
             }
         }
         break;
@@ -11544,10 +11544,10 @@ void CIkumi::Unk694d00()
                 l50.unk0 = 1;
                 l50.unk18 = facing;
                 l50.layer = 1;
-                Vf9(&l50);
+                SpawnObject(&l50);
                 l50.type = 0x1a7;
                 l50.layer = 0;
-                Vf9(&l50);
+                SpawnObject(&l50);
             }
             if (frame == 0x10 && unk3138 < 6) {
                 frame = frame - 2;
@@ -11556,7 +11556,7 @@ void CIkumi::Unk694d00()
             if (frame >= x8) {
                 pattern = 0;
                 CPlayer::FaceOpponent();
-                Vf0();
+                StartPattern();
             }
         }
         break;
@@ -11602,7 +11602,7 @@ void CIkumi::Unk694d00()
                 l50.unk0 = 1;
                 l50.unk18 = facing;
                 l50.layer = 1;
-                Vf9(&l50);
+                SpawnObject(&l50);
                 l50.type = 0x1a9;
                 l50.x = (double)((int)(*m_opponent)->x + 0x19);
                 l50.y = -10.0;
@@ -11610,10 +11610,10 @@ void CIkumi::Unk694d00()
                 l50.unk0 = 1;
                 l50.unk18 = facing;
                 l50.layer = 1;
-                Vf9(&l50);
+                SpawnObject(&l50);
                 l50.type = 0x1a7;
                 l50.layer = 0;
-                Vf9(&l50);
+                SpawnObject(&l50);
                 l50.type = 0x1a9;
                 l50.x = (double)((int)(*m_opponent)->x - 0x19);
                 l50.y = -10.0;
@@ -11621,10 +11621,10 @@ void CIkumi::Unk694d00()
                 l50.unk0 = 1;
                 l50.unk18 = facing;
                 l50.layer = 1;
-                Vf9(&l50);
+                SpawnObject(&l50);
                 l50.type = 0x1a7;
                 l50.layer = 0;
-                Vf9(&l50);
+                SpawnObject(&l50);
                 l50.type = 0x1a9;
                 l50.x = (double)((int)(*m_opponent)->x + 0x2d);
                 l50.y = 10.0;
@@ -11632,10 +11632,10 @@ void CIkumi::Unk694d00()
                 l50.unk0 = 1;
                 l50.unk18 = facing;
                 l50.layer = 1;
-                Vf9(&l50);
+                SpawnObject(&l50);
                 l50.type = 0x1a7;
                 l50.layer = 0;
-                Vf9(&l50);
+                SpawnObject(&l50);
                 l50.type = 0x1a9;
                 l50.x = (double)((int)(*m_opponent)->x - 0x2d);
                 l50.y = 10.0;
@@ -11643,10 +11643,10 @@ void CIkumi::Unk694d00()
                 l50.unk0 = 1;
                 l50.unk18 = facing;
                 l50.layer = 1;
-                Vf9(&l50);
+                SpawnObject(&l50);
                 l50.type = 0x1a7;
                 l50.layer = 0;
-                Vf9(&l50);
+                SpawnObject(&l50);
             }
             if (frame == 0x10 && unk3138 < 6) {
                 frame = frame - 2;
@@ -11655,7 +11655,7 @@ void CIkumi::Unk694d00()
             if (frame >= x8) {
                 pattern = 0;
                 CPlayer::FaceOpponent();
-                Vf0();
+                StartPattern();
             }
         }
         break;
@@ -11704,7 +11704,7 @@ void CIkumi::Unk694d00()
                 l50.unk0 = 1;
                 l50.unk18 = facing;
                 l50.layer = 1;
-                Vf9(&l50);
+                SpawnObject(&l50);
                 l50.type = 0x1a9;
                 l50.x = (double)((int)(*m_opponent)->x + 0x23);
                 l50.y = -10.0;
@@ -11712,10 +11712,10 @@ void CIkumi::Unk694d00()
                 l50.unk0 = 1;
                 l50.unk18 = facing;
                 l50.layer = 1;
-                Vf9(&l50);
+                SpawnObject(&l50);
                 l50.type = 0x1a7;
                 l50.layer = 0;
-                Vf9(&l50);
+                SpawnObject(&l50);
                 l50.type = 0x1a9;
                 l50.x = (double)((int)(*m_opponent)->x - 0x23);
                 l50.y = -10.0;
@@ -11723,10 +11723,10 @@ void CIkumi::Unk694d00()
                 l50.unk0 = 1;
                 l50.unk18 = facing;
                 l50.layer = 1;
-                Vf9(&l50);
+                SpawnObject(&l50);
                 l50.type = 0x1a7;
                 l50.layer = 0;
-                Vf9(&l50);
+                SpawnObject(&l50);
                 l50.type = 0x1a9;
                 l50.x = (double)((int)(*m_opponent)->x + 0x46);
                 l50.y = 0.0;
@@ -11734,10 +11734,10 @@ void CIkumi::Unk694d00()
                 l50.unk0 = 1;
                 l50.unk18 = facing;
                 l50.layer = 1;
-                Vf9(&l50);
+                SpawnObject(&l50);
                 l50.type = 0x1a7;
                 l50.layer = 0;
-                Vf9(&l50);
+                SpawnObject(&l50);
                 l50.type = 0x1a9;
                 l50.x = (double)((int)(*m_opponent)->x - 0x46);
                 l50.y = 0.0;
@@ -11745,10 +11745,10 @@ void CIkumi::Unk694d00()
                 l50.unk0 = 1;
                 l50.unk18 = facing;
                 l50.layer = 1;
-                Vf9(&l50);
+                SpawnObject(&l50);
                 l50.type = 0x1a7;
                 l50.layer = 0;
-                Vf9(&l50);
+                SpawnObject(&l50);
                 l50.type = 0x1a9;
                 l50.x = (double)((int)(*m_opponent)->x + 0x28);
                 l50.y = 10.0;
@@ -11756,10 +11756,10 @@ void CIkumi::Unk694d00()
                 l50.unk0 = 1;
                 l50.unk18 = facing;
                 l50.layer = 1;
-                Vf9(&l50);
+                SpawnObject(&l50);
                 l50.type = 0x1a7;
                 l50.layer = 0;
-                Vf9(&l50);
+                SpawnObject(&l50);
                 l50.type = 0x1a9;
                 l50.x = (double)((int)(*m_opponent)->x - 0x28);
                 l50.y = 10.0;
@@ -11767,10 +11767,10 @@ void CIkumi::Unk694d00()
                 l50.unk0 = 1;
                 l50.unk18 = facing;
                 l50.layer = 1;
-                Vf9(&l50);
+                SpawnObject(&l50);
                 l50.type = 0x1a7;
                 l50.layer = 0;
-                Vf9(&l50);
+                SpawnObject(&l50);
             }
             if (frame == 0x10 && unk3138 < 6) {
                 frame = frame - 2;
@@ -11779,7 +11779,7 @@ void CIkumi::Unk694d00()
             if (frame >= x8) {
                 pattern = 0;
                 CPlayer::FaceOpponent();
-                Vf0();
+                StartPattern();
             }
         }
     }

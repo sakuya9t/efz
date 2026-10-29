@@ -1,4 +1,4 @@
-// CAkane::Vf6 (0x6f2f20-0x7039cf), the per-state update. It is a file of its own,
+// CAkane::UpdatePattern (0x6f2f20-0x7039cf), the per-state update. It is a file of its own,
 // as in the original: its floating-point constants precede the rest of CAkane's
 // .rdata, which starts with its constructor's folder name (akane.cpp).
 #include <stdlib.h>
@@ -6,7 +6,7 @@
 #include <math.h>
 #include "efz.h"
 
-void CAkane::Vf6()
+void CAkane::UpdatePattern()
 {
     WORD x8;
     WORD l4;
@@ -17,7 +17,7 @@ void CAkane::Vf6()
     EffectDesc l50;
     l4 = (short)anims[pattern].frames[frame].duration;
     x8 = anims[pattern].frameCount;
-    CPlayer::Unk413090((EffectDesc*)&l50);
+    CPlayer::InitEffectDesc((EffectDesc*)&l50);
     switch (pattern) {
     default:
         vx = 0.0;
@@ -96,7 +96,7 @@ void CAkane::Vf6()
             frame++;
             if (frame >= x8) {
                 pattern = 9;
-                Vf0();
+                StartPattern();
             }
         }
         if (y + vy >= 0.0 && frame > 3) {
@@ -104,7 +104,7 @@ void CAkane::Vf6()
             unk2c9 = 9;
             CPlayer::FaceOpponent();
             pattern = 0xd;
-            Vf0();
+            StartPattern();
         }
         break;
     case 5:
@@ -132,7 +132,7 @@ void CAkane::Vf6()
             frame++;
             if (frame >= x8) {
                 pattern = 9;
-                Vf0();
+                StartPattern();
             }
         }
         if (y + vy >= 0.0 && frame > 3) {
@@ -140,7 +140,7 @@ void CAkane::Vf6()
             unk2c9 = 9;
             CPlayer::FaceOpponent();
             pattern = 0xd;
-            Vf0();
+            StartPattern();
         }
         break;
     case 6:
@@ -164,7 +164,7 @@ void CAkane::Vf6()
             frame++;
             if (frame >= x8) {
                 pattern = 9;
-                Vf0();
+                StartPattern();
             }
         }
         if (y + vy >= 0.0 && frame > 3) {
@@ -172,7 +172,7 @@ void CAkane::Vf6()
             unk2c9 = 9;
             CPlayer::FaceOpponent();
             pattern = 0xd;
-            Vf0();
+            StartPattern();
         }
         break;
     case 7:
@@ -186,7 +186,7 @@ void CAkane::Vf6()
             frame++;
             if (frame >= x8) {
                 pattern = 0;
-                Vf0();
+                StartPattern();
             }
         }
         break;
@@ -201,7 +201,7 @@ void CAkane::Vf6()
             frame++;
             if (frame >= x8) {
                 pattern = 3;
-                Vf0();
+                StartPattern();
             }
         }
         break;
@@ -220,7 +220,7 @@ void CAkane::Vf6()
             y = 0.0;
             unk2c9 = 9;
             pattern = 0xd;
-            Vf0();
+            StartPattern();
         }
         break;
     case 0xd:
@@ -237,7 +237,7 @@ void CAkane::Vf6()
                 if (m_inputY == 1) {
                     pattern = 3;
                 }
-                Vf0();
+                StartPattern();
             }
         }
         break;
@@ -255,7 +255,7 @@ void CAkane::Vf6()
             frame++;
             if (frame >= x8) {
                 pattern = 9;
-                Vf0();
+                StartPattern();
             }
         }
         if (y + vy >= 0.0 && frame > 3) {
@@ -263,7 +263,7 @@ void CAkane::Vf6()
             unk2c9 = 9;
             CPlayer::FaceOpponent();
             pattern = 0xd;
-            Vf0();
+            StartPattern();
         }
         break;
     case 0xf:
@@ -280,7 +280,7 @@ void CAkane::Vf6()
             frame++;
             if (frame >= x8) {
                 pattern = 9;
-                Vf0();
+                StartPattern();
             }
         }
         if (y + vy >= 0.0 && frame > 3) {
@@ -288,7 +288,7 @@ void CAkane::Vf6()
             unk2c9 = 9;
             CPlayer::FaceOpponent();
             pattern = 0xd;
-            Vf0();
+            StartPattern();
         }
         break;
     case 0x10:
@@ -305,7 +305,7 @@ void CAkane::Vf6()
             frame++;
             if (frame >= x8) {
                 pattern = 9;
-                Vf0();
+                StartPattern();
             }
         }
         if (y + vy >= 0.0 && frame > 3) {
@@ -313,7 +313,7 @@ void CAkane::Vf6()
             unk2c9 = 9;
             CPlayer::FaceOpponent();
             pattern = 0xd;
-            Vf0();
+            StartPattern();
         }
         break;
     case 0x2f:
@@ -375,7 +375,7 @@ void CAkane::Vf6()
                 if (m_inputY == 1) {
                     pattern = 3;
                 }
-                Vf0();
+                StartPattern();
             }
         }
         break;
@@ -411,7 +411,7 @@ void CAkane::Vf6()
                 if (m_inputY == 1) {
                     pattern = 3;
                 }
-                Vf0();
+                StartPattern();
             }
         }
         break;
@@ -447,7 +447,7 @@ void CAkane::Vf6()
                 if (m_inputY == 1) {
                     pattern = 3;
                 }
-                Vf0();
+                StartPattern();
             }
         }
         break;
@@ -483,7 +483,7 @@ void CAkane::Vf6()
                 if (m_inputY == 1) {
                     pattern = 3;
                 }
-                Vf0();
+                StartPattern();
             }
         }
         break;
@@ -519,7 +519,7 @@ void CAkane::Vf6()
                 if (m_inputY == 1) {
                     pattern = 3;
                 }
-                Vf0();
+                StartPattern();
             }
         }
         break;
@@ -555,7 +555,7 @@ void CAkane::Vf6()
                 if (m_inputY == 1) {
                     pattern = 3;
                 }
-                Vf0();
+                StartPattern();
             }
         }
         break;
@@ -588,7 +588,7 @@ void CAkane::Vf6()
             frame++;
             if (frame >= x8) {
                 pattern = 3;
-                Vf0();
+                StartPattern();
             }
         }
         break;
@@ -621,7 +621,7 @@ void CAkane::Vf6()
             frame++;
             if (frame >= x8) {
                 pattern = 3;
-                Vf0();
+                StartPattern();
             }
         }
         break;
@@ -654,7 +654,7 @@ void CAkane::Vf6()
             frame++;
             if (frame >= x8) {
                 pattern = 3;
-                Vf0();
+                StartPattern();
             }
         }
         break;
@@ -694,10 +694,10 @@ void CAkane::Vf6()
             y = 0.0;
             if (unk12c != 0) {
                 pattern = 0x61;
-                Vf0();
+                StartPattern();
             } else {
                 pattern = 0x62;
-                Vf0();
+                StartPattern();
             }
         }
         break;
@@ -737,10 +737,10 @@ void CAkane::Vf6()
             y = 0.0;
             if (unk12c != 0) {
                 pattern = 0x61;
-                Vf0();
+                StartPattern();
             } else {
                 pattern = 0x62;
-                Vf0();
+                StartPattern();
             }
         }
         break;
@@ -780,10 +780,10 @@ void CAkane::Vf6()
             y = 0.0;
             if (unk12c != 0) {
                 pattern = 0x61;
-                Vf0();
+                StartPattern();
             } else {
                 pattern = 0x62;
-                Vf0();
+                StartPattern();
             }
         }
         break;
@@ -818,10 +818,10 @@ void CAkane::Vf6()
             y = 0.0;
             if (unk12c != 0) {
                 pattern = 0x61;
-                Vf0();
+                StartPattern();
             } else {
                 pattern = 0x62;
-                Vf0();
+                StartPattern();
             }
         }
         break;
@@ -856,10 +856,10 @@ void CAkane::Vf6()
             y = 0.0;
             if (unk12c != 0) {
                 pattern = 0x61;
-                Vf0();
+                StartPattern();
             } else {
                 pattern = 0x62;
-                Vf0();
+                StartPattern();
             }
         }
         break;
@@ -869,7 +869,7 @@ void CAkane::Vf6()
         }
         if (frame > 0 && (char)CPlayer::Unk40ff70() != 0) {
             pattern = 0x46;
-            Vf0();
+            StartPattern();
             break;
         }
         if (frame == 0 && timer == 0) {
@@ -904,10 +904,10 @@ void CAkane::Vf6()
             y = 0.0;
             if (unk12c != 0) {
                 pattern = 0x61;
-                Vf0();
+                StartPattern();
             } else {
                 pattern = 0x62;
-                Vf0();
+                StartPattern();
             }
         }
         break;
@@ -917,7 +917,7 @@ void CAkane::Vf6()
         }
         if (frame > 0 && (char)CPlayer::Unk40ff70() != 0) {
             pattern = 0x46;
-            Vf0();
+            StartPattern();
             break;
         }
         if (frame == 0 && timer == 0) {
@@ -952,10 +952,10 @@ void CAkane::Vf6()
             y = 0.0;
             if (unk12c != 0) {
                 pattern = 0x61;
-                Vf0();
+                StartPattern();
             } else {
                 pattern = 0x62;
-                Vf0();
+                StartPattern();
             }
         }
         break;
@@ -965,7 +965,7 @@ void CAkane::Vf6()
         }
         if (frame > 0 && (char)CPlayer::Unk40ff70() != 0) {
             pattern = 0x46;
-            Vf0();
+            StartPattern();
             break;
         }
         if (frame == 0 && timer == 0) {
@@ -995,10 +995,10 @@ void CAkane::Vf6()
             y = 0.0;
             if (unk12c != 0) {
                 pattern = 0x61;
-                Vf0();
+                StartPattern();
             } else {
                 pattern = 0x62;
-                Vf0();
+                StartPattern();
             }
         }
         break;
@@ -1008,7 +1008,7 @@ void CAkane::Vf6()
         }
         if (frame > 0 && (char)CPlayer::Unk40ff70() != 0) {
             pattern = 0x46;
-            Vf0();
+            StartPattern();
             break;
         }
         if (frame == 0 && timer == 0) {
@@ -1038,10 +1038,10 @@ void CAkane::Vf6()
             y = 0.0;
             if (unk12c != 0) {
                 pattern = 0x61;
-                Vf0();
+                StartPattern();
             } else {
                 pattern = 0x62;
-                Vf0();
+                StartPattern();
             }
         }
         break;
@@ -1055,7 +1055,7 @@ void CAkane::Vf6()
         timer++;
         if ((char)CPlayer::Unk40ff70() != 0) {
             pattern = 0x46;
-            Vf0();
+            StartPattern();
             break;
         }
         if (timer >= l4) {
@@ -1069,10 +1069,10 @@ void CAkane::Vf6()
             y = 0.0;
             if (unk12c != 0) {
                 pattern = 0x61;
-                Vf0();
+                StartPattern();
             } else {
                 pattern = 0x62;
-                Vf0();
+                StartPattern();
             }
         }
         break;
@@ -1095,10 +1095,10 @@ void CAkane::Vf6()
             y = 0.0;
             if (unk12c != 0) {
                 pattern = 0x61;
-                Vf0();
+                StartPattern();
             } else {
                 pattern = 0x62;
-                Vf0();
+                StartPattern();
             }
         }
         break;
@@ -1134,10 +1134,10 @@ void CAkane::Vf6()
             y = 0.0;
             if (unk12c != 0) {
                 pattern = 0x61;
-                Vf0();
+                StartPattern();
             } else {
                 pattern = 0x62;
-                Vf0();
+                StartPattern();
             }
         }
         break;
@@ -1172,10 +1172,10 @@ void CAkane::Vf6()
             y = 0.0;
             if (unk12c != 0) {
                 pattern = 0x61;
-                Vf0();
+                StartPattern();
             } else {
                 pattern = 0x62;
-                Vf0();
+                StartPattern();
             }
         }
         break;
@@ -1200,7 +1200,7 @@ void CAkane::Vf6()
                 if (m_inputY == 1) {
                     pattern = 3;
                 }
-                Vf0();
+                StartPattern();
             }
         }
         break;
@@ -1225,7 +1225,7 @@ void CAkane::Vf6()
                 if (m_inputY == 1) {
                     pattern = 3;
                 }
-                Vf0();
+                StartPattern();
             }
         }
         break;
@@ -1247,7 +1247,7 @@ void CAkane::Vf6()
             frame++;
             if (frame >= x8) {
                 pattern = 3;
-                Vf0();
+                StartPattern();
             }
         }
         break;
@@ -1285,7 +1285,7 @@ void CAkane::Vf6()
                 if (m_inputY == 1) {
                     pattern = 3;
                 }
-                Vf0();
+                StartPattern();
             }
         }
         break;
@@ -1323,7 +1323,7 @@ void CAkane::Vf6()
                 if (m_inputY == 1) {
                     pattern = 3;
                 }
-                Vf0();
+                StartPattern();
             }
         }
         break;
@@ -1358,7 +1358,7 @@ void CAkane::Vf6()
             frame++;
             if (frame >= x8) {
                 pattern = 3;
-                Vf0();
+                StartPattern();
             }
         }
         break;
@@ -1372,7 +1372,7 @@ void CAkane::Vf6()
             l50.y = (double)(int)y;
             l50.unk18 = facing;
             l50.layer = 1;
-            Vf9(&l50);
+            SpawnObject(&l50);
             m_gauge = m_gauge + 0x1e;
             vx = unkc0;
             vy = unkc8;
@@ -1395,10 +1395,10 @@ void CAkane::Vf6()
             y = 0.0;
             if (unk12c != 0) {
                 pattern = 0x61;
-                Vf0();
+                StartPattern();
             } else {
                 pattern = 0x62;
-                Vf0();
+                StartPattern();
             }
         }
         break;
@@ -1441,10 +1441,10 @@ void CAkane::Vf6()
             y = 0.0;
             if (unk12c != 0) {
                 pattern = 0x61;
-                Vf0();
+                StartPattern();
             } else {
                 pattern = 0x62;
-                Vf0();
+                StartPattern();
             }
         }
         break;
@@ -1458,7 +1458,7 @@ void CAkane::Vf6()
                 l50.layer = 0;
                 l50.unk0 = 1;
                 l50.unk18 = facing;
-                Vf9(&l50);
+                SpawnObject(&l50);
                 unk3148 = 1;
             }
             if (unk120 != 0) {
@@ -1495,7 +1495,7 @@ void CAkane::Vf6()
             frame++;
             if (frame >= x8) {
                 pattern = 0;
-                Vf0();
+                StartPattern();
                 CPlayer::FaceOpponent();
             }
         }
@@ -1510,7 +1510,7 @@ void CAkane::Vf6()
                 l50.layer = 0;
                 l50.unk0 = 1;
                 l50.unk18 = facing;
-                Vf9(&l50);
+                SpawnObject(&l50);
                 unk3148 = 1;
             }
             if (unk120 != 0) {
@@ -1547,7 +1547,7 @@ void CAkane::Vf6()
             frame++;
             if (frame >= x8) {
                 pattern = 0;
-                Vf0();
+                StartPattern();
                 CPlayer::FaceOpponent();
             }
         }
@@ -1562,7 +1562,7 @@ void CAkane::Vf6()
                 l50.layer = 0;
                 l50.unk0 = 1;
                 l50.unk18 = facing;
-                Vf9(&l50);
+                SpawnObject(&l50);
                 unk3148 = 1;
             }
             if (unk120 != 0) {
@@ -1580,7 +1580,7 @@ void CAkane::Vf6()
             frame++;
             if (frame >= x8) {
                 pattern = 0;
-                Vf0();
+                StartPattern();
                 CPlayer::FaceOpponent();
             }
         }
@@ -1588,10 +1588,10 @@ void CAkane::Vf6()
             y = 0.0;
             if (unk12c != 0) {
                 pattern = 0x61;
-                Vf0();
+                StartPattern();
             } else {
                 pattern = 0x62;
-                Vf0();
+                StartPattern();
             }
         }
         break;
@@ -1605,7 +1605,7 @@ void CAkane::Vf6()
                 l50.layer = 0;
                 l50.unk0 = 1;
                 l50.unk18 = facing;
-                Vf9(&l50);
+                SpawnObject(&l50);
                 unk3148 = 1;
             }
             if (unk3138 == 0) {
@@ -1632,10 +1632,10 @@ void CAkane::Vf6()
             y = 0.0;
             if (unk12c != 0) {
                 pattern = 0x61;
-                Vf0();
+                StartPattern();
             } else {
                 pattern = 0x62;
-                Vf0();
+                StartPattern();
             }
         }
         break;
@@ -1648,7 +1648,7 @@ void CAkane::Vf6()
             l50.unk18 = 1;
             l50.scale = 0;
             l50.layer = 0;
-            Vf9(&l50);
+            SpawnObject(&l50);
         }
         timer++;
         if (timer >= l4) {
@@ -1656,7 +1656,7 @@ void CAkane::Vf6()
             frame++;
             if (frame >= x8) {
                 pattern = 0;
-                Vf0();
+                StartPattern();
             }
         }
         break;
@@ -1673,7 +1673,7 @@ void CAkane::Vf6()
                 if (m_inputY == 1) {
                     pattern = 3;
                 }
-                Vf0();
+                StartPattern();
             }
         }
         break;
@@ -1696,7 +1696,7 @@ void CAkane::Vf6()
             frame++;
             if (frame >= x8) {
                 pattern = 0x63;
-                Vf0();
+                StartPattern();
             }
         }
         break;
@@ -1719,7 +1719,7 @@ void CAkane::Vf6()
             frame++;
             if (frame >= x8) {
                 pattern = 0x63;
-                Vf0();
+                StartPattern();
             }
         }
         break;
@@ -1727,7 +1727,7 @@ void CAkane::Vf6()
         unk158 = 0;
         if (m_hp > 0 && timer > 0x63) {
             pattern = 0x60;
-            Vf0();
+            StartPattern();
         }
         timer++;
         if (timer >= l4) {
@@ -1738,7 +1738,7 @@ void CAkane::Vf6()
             }
             if (frame >= x8) {
                 pattern = 0x60;
-                Vf0();
+                StartPattern();
             }
         }
         break;
@@ -1778,7 +1778,7 @@ void CAkane::Vf6()
                 if (m_inputY == 1) {
                     pattern = 3;
                 }
-                Vf0();
+                StartPattern();
             }
         }
         break;
@@ -1818,7 +1818,7 @@ void CAkane::Vf6()
                 if (m_inputY == 1) {
                     pattern = 3;
                 }
-                Vf0();
+                StartPattern();
             }
         }
         break;
@@ -1858,7 +1858,7 @@ void CAkane::Vf6()
                 if (m_inputY == 1) {
                     pattern = 3;
                 }
-                Vf0();
+                StartPattern();
             }
         }
         break;
@@ -1895,7 +1895,7 @@ void CAkane::Vf6()
             }
             if (frame >= x8) {
                 pattern = 3;
-                Vf0();
+                StartPattern();
             }
         }
         break;
@@ -1932,7 +1932,7 @@ void CAkane::Vf6()
             }
             if (frame >= x8) {
                 pattern = 3;
-                Vf0();
+                StartPattern();
             }
         }
         break;
@@ -1969,7 +1969,7 @@ void CAkane::Vf6()
             }
             if (frame >= x8) {
                 pattern = 3;
-                Vf0();
+                StartPattern();
             }
         }
         break;
@@ -1987,7 +1987,7 @@ void CAkane::Vf6()
             frame++;
             if (frame >= x8) {
                 pattern = 9;
-                Vf0();
+                StartPattern();
             }
         }
         if (y + vy >= 0.0) {
@@ -1995,7 +1995,7 @@ void CAkane::Vf6()
             unk2c9 = 9;
             CPlayer::FaceOpponent();
             pattern = 0xd;
-            Vf0();
+            StartPattern();
         }
         break;
     case 0x9d:
@@ -2019,7 +2019,7 @@ void CAkane::Vf6()
             frame++;
             if (frame >= x8) {
                 pattern = 9;
-                Vf0();
+                StartPattern();
             }
         }
         if (y + vy >= 0.0) {
@@ -2027,7 +2027,7 @@ void CAkane::Vf6()
             unk2c9 = 9;
             CPlayer::FaceOpponent();
             pattern = 0xd;
-            Vf0();
+            StartPattern();
         }
         break;
     case 0x9e:
@@ -2051,7 +2051,7 @@ void CAkane::Vf6()
             frame++;
             if (frame >= x8) {
                 pattern = 9;
-                Vf0();
+                StartPattern();
             }
         }
         if (y + vy >= 0.0) {
@@ -2059,7 +2059,7 @@ void CAkane::Vf6()
             unk2c9 = 9;
             CPlayer::FaceOpponent();
             pattern = 0xd;
-            Vf0();
+            StartPattern();
         }
         break;
     case 0xa1:
@@ -2081,7 +2081,7 @@ void CAkane::Vf6()
             frame++;
             if (frame >= x8) {
                 pattern = 9;
-                Vf0();
+                StartPattern();
                 ay = 0.035;
             }
         }
@@ -2111,8 +2111,8 @@ void CAkane::Vf6()
         vy = vy + ay;
         if (y + vy > 0.0) {
             pattern = 0xd;
-            Vf0();
-            Vf0();
+            StartPattern();
+            StartPattern();
             y = 0.0;
             break;
         }
@@ -2138,7 +2138,7 @@ void CAkane::Vf6()
                 pattern = 6;
             }
             m_attackResult = 0;
-            Vf0();
+            StartPattern();
             break;
         }
         if (frame == 0 && timer == 0) {
@@ -2158,11 +2158,11 @@ void CAkane::Vf6()
         }
         if (m_inputX == facing && unk3138 >= 0x78) {
             pattern = 0xb2;
-            Vf0();
+            StartPattern();
         }
         if (m_inputX != facing && unk3138 >= 0x3c) {
             pattern = 0xb2;
-            Vf0();
+            StartPattern();
         }
         break;
     case 0xa4:
@@ -2197,7 +2197,7 @@ void CAkane::Vf6()
             if (frame >= x8) {
                 CPlayer::FaceOpponent();
                 pattern = 3;
-                Vf0();
+                StartPattern();
             }
         }
         break;
@@ -2220,7 +2220,7 @@ void CAkane::Vf6()
         }
         if (m_inputX == facing && unk3138 >= 0x78) {
             pattern = 9;
-            Vf0();
+            StartPattern();
             vx = 1.3;
             ay = 0.03;
             if (CPlayer::FaceOpponent() != 0) {
@@ -2229,7 +2229,7 @@ void CAkane::Vf6()
         }
         if (m_inputX != facing && unk3138 >= 0x30) {
             pattern = 9;
-            Vf0();
+            StartPattern();
             vx = 1.3;
             ay = 0.03;
             if (CPlayer::FaceOpponent() != 0) {
@@ -2257,7 +2257,7 @@ void CAkane::Vf6()
         }
         if (m_inputX == -facing && unk313c >= 0x78) {
             pattern = 9;
-            Vf0();
+            StartPattern();
             vx = -0.9;
             ay = 0.03;
             if (CPlayer::FaceOpponent() != 0) {
@@ -2266,7 +2266,7 @@ void CAkane::Vf6()
         }
         if (m_inputX != -facing && unk3138 >= 0x30) {
             pattern = 9;
-            Vf0();
+            StartPattern();
             vx = -0.9;
             ay = 0.03;
             if (CPlayer::FaceOpponent() != 0) {
@@ -2311,7 +2311,7 @@ void CAkane::Vf6()
             if (frame >= x8) {
                 pattern = 0;
                 CPlayer::FaceOpponent();
-                Vf0();
+                StartPattern();
             }
         }
         break;
@@ -2341,7 +2341,7 @@ void CAkane::Vf6()
             }
             if (frame >= x8) {
                 pattern = 0;
-                Vf0();
+                StartPattern();
             }
         }
         break;
@@ -2371,7 +2371,7 @@ void CAkane::Vf6()
             }
             if (frame >= x8) {
                 pattern = 3;
-                Vf0();
+                StartPattern();
             }
         }
         break;
@@ -2408,7 +2408,7 @@ void CAkane::Vf6()
             frame++;
             if (frame >= x8) {
                 pattern = 9;
-                Vf0();
+                StartPattern();
             }
         }
         break;
@@ -2452,7 +2452,7 @@ void CAkane::Vf6()
                 vx = unk3138 * 0.01;
                 vy = unk313c * 0.01;
                 ay = 0.035;
-                Vf0();
+                StartPattern();
             }
         }
         break;
@@ -2471,7 +2471,7 @@ void CAkane::Vf6()
                 pattern = 6;
             }
             m_attackResult = 0;
-            Vf0();
+            StartPattern();
             break;
         }
         timer++;
@@ -2480,7 +2480,7 @@ void CAkane::Vf6()
             frame++;
             if (frame >= x8) {
                 pattern = 0;
-                Vf0();
+                StartPattern();
                 break;
             }
         }
@@ -2515,7 +2515,7 @@ void CAkane::Vf6()
                 frame = frame - 2;
             }
             if (frame >= x8) {
-                Vf0();
+                StartPattern();
                 pattern = 0;
             }
         }
@@ -2540,7 +2540,7 @@ void CAkane::Vf6()
                 pattern = 6;
             }
             m_attackResult = 0;
-            Vf0();
+            StartPattern();
             break;
         }
         if (frame == 1 && timer == 0) {
@@ -2558,7 +2558,7 @@ void CAkane::Vf6()
             if (frame >= x8) {
                 pattern = 0;
                 CPlayer::FaceOpponent();
-                Vf0();
+                StartPattern();
             }
         }
         break;
@@ -2582,7 +2582,7 @@ void CAkane::Vf6()
                 pattern = 6;
             }
             m_attackResult = 0;
-            Vf0();
+            StartPattern();
             break;
         }
         if (frame == 1 && timer == 0) {
@@ -2600,7 +2600,7 @@ void CAkane::Vf6()
             if (frame >= x8) {
                 pattern = 0;
                 CPlayer::FaceOpponent();
-                Vf0();
+                StartPattern();
             }
         }
         break;
@@ -2618,7 +2618,7 @@ void CAkane::Vf6()
                 pattern = 6;
             }
             m_attackResult = 0;
-            Vf0();
+            StartPattern();
             break;
         }
         if (vx > 0.0 && unk158 == 1) {
@@ -2642,7 +2642,7 @@ void CAkane::Vf6()
             if (frame >= x8) {
                 pattern = 0;
                 CPlayer::FaceOpponent();
-                Vf0();
+                StartPattern();
             }
         }
         break;
@@ -2677,7 +2677,7 @@ void CAkane::Vf6()
             if (frame >= x8) {
                 pattern = 0;
                 CPlayer::FaceOpponent();
-                Vf0();
+                StartPattern();
             }
         }
         break;
@@ -2701,7 +2701,7 @@ void CAkane::Vf6()
                 pattern = 6;
             }
             m_attackResult = 0;
-            Vf0();
+            StartPattern();
             break;
         }
         if (frame == 1 && timer == 0) {
@@ -2722,7 +2722,7 @@ void CAkane::Vf6()
                     pattern = 3;
                 }
                 CPlayer::FaceOpponent();
-                Vf0();
+                StartPattern();
             }
         }
         break;
@@ -2739,7 +2739,7 @@ void CAkane::Vf6()
                 pattern = 6;
             }
             m_attackResult = 0;
-            Vf0();
+            StartPattern();
             break;
         }
         if (m_inputY == -1 && frame > 0 && m_attackResult == 3) {
@@ -2751,7 +2751,7 @@ void CAkane::Vf6()
                 pattern = 6;
             }
             m_attackResult = 0;
-            Vf0();
+            StartPattern();
             break;
         }
         if (frame == 3 && timer == 0) {
@@ -2777,7 +2777,7 @@ void CAkane::Vf6()
                     pattern = 3;
                 }
                 CPlayer::FaceOpponent();
-                Vf0();
+                StartPattern();
             }
         }
         break;
@@ -2801,7 +2801,7 @@ void CAkane::Vf6()
                 pattern = 6;
             }
             m_attackResult = 0;
-            Vf0();
+            StartPattern();
             break;
         }
         if (frame == 3 && timer == 0) {
@@ -2822,7 +2822,7 @@ void CAkane::Vf6()
                     pattern = 3;
                 }
                 CPlayer::FaceOpponent();
-                Vf0();
+                StartPattern();
             }
         }
         break;
@@ -2838,7 +2838,7 @@ void CAkane::Vf6()
                 pattern = 0x10;
             }
             m_attackResult = 0;
-            Vf0();
+            StartPattern();
             break;
         }
         if (frame == 1 && timer == 0) {
@@ -2849,7 +2849,7 @@ void CAkane::Vf6()
         if (y + vy >= 0.0) {
             y = 0.0;
             pattern = 0xd;
-            Vf0();
+            StartPattern();
             break;
         }
         timer++;
@@ -2861,7 +2861,7 @@ void CAkane::Vf6()
             }
             if (frame >= x8) {
                 pattern = 9;
-                Vf0();
+                StartPattern();
             }
         }
         break;
@@ -2877,7 +2877,7 @@ void CAkane::Vf6()
                 pattern = 0x10;
             }
             m_attackResult = 0;
-            Vf0();
+            StartPattern();
             break;
         }
         if (frame == 2 && timer == 0) {
@@ -2888,7 +2888,7 @@ void CAkane::Vf6()
         if (y + vy >= 0.0) {
             y = 0.0;
             pattern = 0xd;
-            Vf0();
+            StartPattern();
             break;
         }
         timer++;
@@ -2900,7 +2900,7 @@ void CAkane::Vf6()
             }
             if (frame >= x8) {
                 pattern = 9;
-                Vf0();
+                StartPattern();
             }
         }
         break;
@@ -2916,7 +2916,7 @@ void CAkane::Vf6()
                 pattern = 0x10;
             }
             m_attackResult = 0;
-            Vf0();
+            StartPattern();
             break;
         }
         if (frame == 2 && timer == 0) {
@@ -2927,7 +2927,7 @@ void CAkane::Vf6()
         if (y + vy >= 0.0) {
             y = 0.0;
             pattern = 0xd;
-            Vf0();
+            StartPattern();
             break;
         }
         timer++;
@@ -2939,7 +2939,7 @@ void CAkane::Vf6()
             }
             if (frame >= x8) {
                 pattern = 9;
-                Vf0();
+                StartPattern();
             }
         }
         break;
@@ -2961,7 +2961,7 @@ void CAkane::Vf6()
             y = 0.0;
             CPlayer::StopMoving();
             pattern = 0xd;
-            Vf0();
+            StartPattern();
             break;
         }
         timer++;
@@ -2986,7 +2986,7 @@ void CAkane::Vf6()
                 pattern = 0x10;
             }
             m_attackResult = 0;
-            Vf0();
+            StartPattern();
             break;
         }
         if (frame == 3 && timer == 0) {
@@ -2997,7 +2997,7 @@ void CAkane::Vf6()
         if (y + vy >= 0.0) {
             y = 0.0;
             pattern = 0xd;
-            Vf0();
+            StartPattern();
             break;
         }
         timer++;
@@ -3009,7 +3009,7 @@ void CAkane::Vf6()
             }
             if (frame >= x8) {
                 pattern = 9;
-                Vf0();
+                StartPattern();
             }
         }
         break;
@@ -3027,7 +3027,7 @@ void CAkane::Vf6()
             m_attackResult = 0;
             if (frame >= x8) {
                 pattern = 9;
-                Vf0();
+                StartPattern();
             }
         }
         break;
@@ -3055,7 +3055,7 @@ void CAkane::Vf6()
                     pattern = 3;
                 }
                 CPlayer::FaceOpponent();
-                Vf0();
+                StartPattern();
             }
         }
         break;
@@ -3072,8 +3072,8 @@ void CAkane::Vf6()
             vx = 0.0;
             vy = 0.0;
             unkb8 = 0.0;
-            Vf0();
-            (*m_opponent)->Vf0();
+            StartPattern();
+            (*m_opponent)->StartPattern();
             (*m_opponent)->StopMoving();
             pattern = 0xdd;
             (*m_opponent)->pattern = 0x6b;
@@ -3097,7 +3097,7 @@ void CAkane::Vf6()
                     pattern = 3;
                 }
                 CPlayer::FaceOpponent();
-                Vf0();
+                StartPattern();
             }
         }
         break;
@@ -3120,7 +3120,7 @@ void CAkane::Vf6()
                     pattern = 3;
                 }
                 CPlayer::FaceOpponent();
-                Vf0();
+                StartPattern();
             }
         }
         break;
@@ -3148,7 +3148,7 @@ void CAkane::Vf6()
             }
             if (frame >= x8) {
                 pattern = 0;
-                Vf0();
+                StartPattern();
             }
         }
         break;
@@ -3177,7 +3177,7 @@ void CAkane::Vf6()
                 pattern = 6;
             }
             m_attackResult = 0;
-            Vf0();
+            StartPattern();
             break;
         }
         timer++;
@@ -3189,7 +3189,7 @@ void CAkane::Vf6()
             }
             if (frame >= x8) {
                 pattern = 0;
-                Vf0();
+                StartPattern();
             }
         }
         break;
@@ -3218,7 +3218,7 @@ void CAkane::Vf6()
                 pattern = 6;
             }
             m_attackResult = 0;
-            Vf0();
+            StartPattern();
             break;
         }
         timer++;
@@ -3230,7 +3230,7 @@ void CAkane::Vf6()
             }
             if (frame >= x8) {
                 pattern = 0;
-                Vf0();
+                StartPattern();
             }
         }
         break;
@@ -3258,7 +3258,7 @@ void CAkane::Vf6()
             }
             if (frame >= x8) {
                 pattern = 3;
-                Vf0();
+                StartPattern();
             }
         }
         break;
@@ -3288,7 +3288,7 @@ void CAkane::Vf6()
             }
             if (frame >= x8) {
                 pattern = 0;
-                Vf0();
+                StartPattern();
             }
         }
         break;
@@ -3330,7 +3330,7 @@ void CAkane::Vf6()
             }
             if (frame >= x8) {
                 pattern = 0;
-                Vf0();
+                StartPattern();
             }
         }
         break;
@@ -3340,7 +3340,7 @@ void CAkane::Vf6()
             (*m_opponent)->StopMoving();
             (*m_opponent)->frame = 0;
             (*m_opponent)->timer = 0;
-            Vf0();
+            StartPattern();
             vx = 1.0;
             vy = -2.5;
             ay = 0.035;
@@ -3448,7 +3448,7 @@ void CAkane::Vf6()
             if (frame >= x8) {
                 pattern = 0;
                 CPlayer::FaceOpponent();
-                Vf0();
+                StartPattern();
             }
         }
         break;
@@ -3476,7 +3476,7 @@ void CAkane::Vf6()
             if (frame >= x8) {
                 pattern = 0;
                 CPlayer::FaceOpponent();
-                Vf0();
+                StartPattern();
             }
         }
         break;
@@ -3498,7 +3498,7 @@ void CAkane::Vf6()
                 l50.scale = 0;
                 l50.unk0 = 1;
                 l50.layer = 1;
-                Vf9(&l50);
+                SpawnObject(&l50);
             }
             if ((int)(x + (*m_opponent)->x) / 2 < 0xa0) {
                 unk3140++;
@@ -3510,7 +3510,7 @@ void CAkane::Vf6()
                 l50.scale = 0;
                 l50.unk0 = 1;
                 l50.layer = 1;
-                Vf9(&l50);
+                SpawnObject(&l50);
             }
             if (unk3140 == 0) {
                 l50.type = 0x19e;
@@ -3521,7 +3521,7 @@ void CAkane::Vf6()
                 l50.scale = 0;
                 l50.unk0 = 1;
                 l50.layer = 1;
-                Vf9(&l50);
+                SpawnObject(&l50);
             }
             unk3138++;
         }
@@ -3533,7 +3533,7 @@ void CAkane::Vf6()
             if (frame >= x8) {
                 pattern = 0;
                 CPlayer::FaceOpponent();
-                Vf0();
+                StartPattern();
             }
         }
         break;
@@ -3555,7 +3555,7 @@ void CAkane::Vf6()
                 l50.scale = 0;
                 l50.unk0 = 1;
                 l50.layer = 1;
-                Vf9(&l50);
+                SpawnObject(&l50);
             }
             if ((int)(x + (*m_opponent)->x) / 2 < 0xa0) {
                 unk3140++;
@@ -3567,7 +3567,7 @@ void CAkane::Vf6()
                 l50.scale = 0;
                 l50.unk0 = 1;
                 l50.layer = 1;
-                Vf9(&l50);
+                SpawnObject(&l50);
             }
             if (unk3140 == 0) {
                 l50.unk28 = 1;
@@ -3578,7 +3578,7 @@ void CAkane::Vf6()
                 l50.scale = 0;
                 l50.unk0 = 1;
                 l50.layer = 1;
-                Vf9(&l50);
+                SpawnObject(&l50);
             }
             unk3138++;
         }
@@ -3590,7 +3590,7 @@ void CAkane::Vf6()
             if (frame >= x8) {
                 pattern = 0;
                 CPlayer::FaceOpponent();
-                Vf0();
+                StartPattern();
             }
         }
         break;
@@ -3623,7 +3623,7 @@ void CAkane::Vf6()
                 l50.scale = 0;
                 l50.unk0 = 1;
                 l50.layer = 1;
-                Vf9(&l50);
+                SpawnObject(&l50);
             }
             if ((int)(x + (*m_opponent)->x) / 2 < 0xa0) {
                 unk3140++;
@@ -3635,7 +3635,7 @@ void CAkane::Vf6()
                 l50.scale = 0;
                 l50.unk0 = 1;
                 l50.layer = 1;
-                Vf9(&l50);
+                SpawnObject(&l50);
             }
             if (unk3140 == 0) {
                 l50.unk28 = 1;
@@ -3646,7 +3646,7 @@ void CAkane::Vf6()
                 l50.scale = 0;
                 l50.unk0 = 1;
                 l50.layer = 1;
-                Vf9(&l50);
+                SpawnObject(&l50);
             }
             unk3138++;
         }
@@ -3657,7 +3657,7 @@ void CAkane::Vf6()
             m_attackResult = 0;
             if (frame >= x8) {
                 pattern = 0;
-                Vf0();
+                StartPattern();
             }
         }
         break;
@@ -3687,7 +3687,7 @@ void CAkane::Vf6()
         if (y + vy > 0.0 && frame > 7 && frame < 0xb) {
             y = 0.0;
             CPlayer::StopMoving();
-            Vf0();
+            StartPattern();
             frame = 0xb;
             break;
         }
@@ -3704,7 +3704,7 @@ void CAkane::Vf6()
                 frame = frame - 2;
             }
             if (frame >= x8) {
-                Vf0();
+                StartPattern();
                 pattern = 3;
                 CPlayer::FaceOpponent();
             }
@@ -3732,7 +3732,7 @@ void CAkane::Vf6()
         }
         if (y + vy > 0.0 && frame > 0xa && frame < 0xe) {
             y = 0.0;
-            Vf0();
+            StartPattern();
             CPlayer::StopMoving();
             frame = 0xe;
             break;
@@ -3759,7 +3759,7 @@ void CAkane::Vf6()
                 frame = frame - 2;
             }
             if (frame >= x8) {
-                Vf0();
+                StartPattern();
                 pattern = 3;
                 CPlayer::FaceOpponent();
             }
@@ -3799,7 +3799,7 @@ void CAkane::Vf6()
         }
         if (y + vy > 0.0 && frame > 0xa && frame < 0xe) {
             y = 0.0;
-            Vf0();
+            StartPattern();
             CPlayer::StopMoving();
             frame = 0xe;
             break;
@@ -3826,7 +3826,7 @@ void CAkane::Vf6()
                 frame = frame - 2;
             }
             if (frame >= x8) {
-                Vf0();
+                StartPattern();
                 pattern = 3;
                 CPlayer::FaceOpponent();
             }
@@ -3851,17 +3851,17 @@ void CAkane::Vf6()
         if (unk3138 > 0x34) {
             if (m_command == 0xa) {
                 pattern = 0x106;
-                Vf0();
+                StartPattern();
                 break;
             }
             if (m_command == 0xb) {
                 pattern = 0x107;
-                Vf0();
+                StartPattern();
                 break;
             }
             if (m_command == 0xc && (unk118 >= 500.0 || unk120 == 1)) {
                 pattern = 0x108;
-                Vf0();
+                StartPattern();
                 break;
             }
             if (m_pressC == 1) {
@@ -3872,7 +3872,7 @@ void CAkane::Vf6()
                 if (m_inputY == 0 && m_inputX == -facing) {
                     pattern = 0x10b;
                 }
-                Vf0();
+                StartPattern();
                 break;
             }
         }
@@ -3881,7 +3881,7 @@ void CAkane::Vf6()
             vy = 0.0;
             ay = 0.0;
             pattern = 0x10e;
-            Vf0();
+            StartPattern();
             unk2c9 = 9;
             break;
         }
@@ -3914,17 +3914,17 @@ void CAkane::Vf6()
         if (unk3138 > 0x34) {
             if (m_command == 0xa) {
                 pattern = 0x106;
-                Vf0();
+                StartPattern();
                 break;
             }
             if (m_command == 0xb) {
                 pattern = 0x107;
-                Vf0();
+                StartPattern();
                 break;
             }
             if (m_command == 0xc && (unk118 >= 500.0 || unk120 == 1)) {
                 pattern = 0x108;
-                Vf0();
+                StartPattern();
                 break;
             }
             if (m_pressC == 1) {
@@ -3935,7 +3935,7 @@ void CAkane::Vf6()
                 if (m_inputY == 0 && m_inputX == -facing) {
                     pattern = 0x10b;
                 }
-                Vf0();
+                StartPattern();
                 break;
             }
         }
@@ -3944,7 +3944,7 @@ void CAkane::Vf6()
             vy = 0.0;
             ay = 0.0;
             pattern = 0x10d;
-            Vf0();
+            StartPattern();
             unk2c9 = 9;
             break;
         }
@@ -3977,17 +3977,17 @@ void CAkane::Vf6()
         if (unk3138 > 0x34) {
             if (m_command == 0xa) {
                 pattern = 0x106;
-                Vf0();
+                StartPattern();
                 break;
             }
             if (m_command == 0xb) {
                 pattern = 0x107;
-                Vf0();
+                StartPattern();
                 break;
             }
             if (m_command == 0xc && (unk118 >= 500.0 || unk120 == 1)) {
                 pattern = 0x108;
-                Vf0();
+                StartPattern();
                 break;
             }
             if (m_pressC == 1) {
@@ -3998,7 +3998,7 @@ void CAkane::Vf6()
                 if (m_inputY == 0 && m_inputX == -facing) {
                     pattern = 0x10b;
                 }
-                Vf0();
+                StartPattern();
                 break;
             }
         }
@@ -4007,7 +4007,7 @@ void CAkane::Vf6()
             vy = 0.0;
             ay = 0.0;
             pattern = 0x10e;
-            Vf0();
+            StartPattern();
             unk2c9 = 9;
             break;
         }
@@ -4044,17 +4044,17 @@ void CAkane::Vf6()
         if (unk3138 > 0x34) {
             if (m_command == 0xa) {
                 pattern = 0x106;
-                Vf0();
+                StartPattern();
                 break;
             }
             if (m_command == 0xb) {
                 pattern = 0x107;
-                Vf0();
+                StartPattern();
                 break;
             }
             if (m_command == 0xc && (unk118 >= 500.0 || unk120 == 1)) {
                 pattern = 0x108;
-                Vf0();
+                StartPattern();
                 break;
             }
             if (m_pressC == 1) {
@@ -4062,7 +4062,7 @@ void CAkane::Vf6()
                 if (m_inputY == 1) {
                     pattern = 0x10a;
                 }
-                Vf0();
+                StartPattern();
                 break;
             }
         }
@@ -4072,7 +4072,7 @@ void CAkane::Vf6()
             vy = 0.0;
             ay = 0.0;
             pattern = 0x10d;
-            Vf0();
+            StartPattern();
             unk2c9 = 9;
             break;
         }
@@ -4109,17 +4109,17 @@ void CAkane::Vf6()
         if (unk3138 > 0x34) {
             if (m_command == 0xa) {
                 pattern = 0x106;
-                Vf0();
+                StartPattern();
                 break;
             }
             if (m_command == 0xb) {
                 pattern = 0x107;
-                Vf0();
+                StartPattern();
                 break;
             }
             if (m_command == 0xc && (unk118 >= 500.0 || unk120 == 1)) {
                 pattern = 0x108;
-                Vf0();
+                StartPattern();
                 break;
             }
             if (m_pressC == 1) {
@@ -4127,7 +4127,7 @@ void CAkane::Vf6()
                 if (m_inputY == 1) {
                     pattern = 0x10a;
                 }
-                Vf0();
+                StartPattern();
                 break;
             }
         }
@@ -4137,7 +4137,7 @@ void CAkane::Vf6()
             vy = 0.0;
             ay = 0.0;
             pattern = 0x10d;
-            Vf0();
+            StartPattern();
             unk2c9 = 9;
             break;
         }
@@ -4174,17 +4174,17 @@ void CAkane::Vf6()
         if (unk3138 > 0x34) {
             if (m_command == 0xa) {
                 pattern = 0x106;
-                Vf0();
+                StartPattern();
                 break;
             }
             if (m_command == 0xb) {
                 pattern = 0x107;
-                Vf0();
+                StartPattern();
                 break;
             }
             if (m_command == 0xc && (unk118 >= 500.0 || unk120 == 1)) {
                 pattern = 0x108;
-                Vf0();
+                StartPattern();
                 break;
             }
             if (m_pressC == 1) {
@@ -4192,7 +4192,7 @@ void CAkane::Vf6()
                 if (m_inputY == 1) {
                     pattern = 0x10a;
                 }
-                Vf0();
+                StartPattern();
                 break;
             }
         }
@@ -4202,7 +4202,7 @@ void CAkane::Vf6()
             vy = 0.0;
             ay = 0.0;
             pattern = 0x10d;
-            Vf0();
+            StartPattern();
             unk2c9 = 9;
             break;
         }
@@ -4230,21 +4230,21 @@ void CAkane::Vf6()
             l50.scale = 0;
             l50.layer = 1;
             l50.unk18 = facing;
-            Vf9(&l50);
+            SpawnObject(&l50);
             l50.type = 0x190;
             l50.x = (double)((int)x + facing * 0x14);
             l50.y = (double)((int)y - 0x19);
             l50.scale = 0;
             l50.layer = 1;
             l50.unk18 = facing;
-            Vf9(&l50);
+            SpawnObject(&l50);
             l50.type = 0x190;
             l50.x = (double)((int)x + facing * 0x36);
             l50.y = (double)((int)y - 0x18);
             l50.scale = 0;
             l50.layer = 1;
             l50.unk18 = facing;
-            Vf9(&l50);
+            SpawnObject(&l50);
         }
         vy = vy + ay;
         if (y + vy >= 0.0) {
@@ -4252,7 +4252,7 @@ void CAkane::Vf6()
             vy = 0.0;
             ay = 0.0;
             pattern = 0x10d;
-            Vf0();
+            StartPattern();
             unk2c9 = 9;
             break;
         }
@@ -4264,7 +4264,7 @@ void CAkane::Vf6()
             m_attackResult = 3;
             if (frame >= x8) {
                 pattern = 0;
-                Vf0();
+                StartPattern();
             }
         }
         break;
@@ -4282,21 +4282,21 @@ void CAkane::Vf6()
             l50.scale = 0;
             l50.layer = 1;
             l50.unk18 = facing;
-            Vf9(&l50);
+            SpawnObject(&l50);
             l50.type = 0x191;
             l50.x = (double)((int)x + facing * 0x14);
             l50.y = (double)((int)y - 0x19);
             l50.scale = 0;
             l50.layer = 1;
             l50.unk18 = facing;
-            Vf9(&l50);
+            SpawnObject(&l50);
             l50.type = 0x191;
             l50.x = (double)((int)x + facing * 0x36);
             l50.y = (double)((int)y - 0x18);
             l50.scale = 0;
             l50.layer = 1;
             l50.unk18 = facing;
-            Vf9(&l50);
+            SpawnObject(&l50);
         }
         vy = vy + ay;
         if (y + vy >= 0.0) {
@@ -4304,7 +4304,7 @@ void CAkane::Vf6()
             vy = 0.0;
             ay = 0.0;
             pattern = 0x10d;
-            Vf0();
+            StartPattern();
             unk2c9 = 9;
             break;
         }
@@ -4316,7 +4316,7 @@ void CAkane::Vf6()
             m_attackResult = 3;
             if (frame >= x8) {
                 pattern = 0;
-                Vf0();
+                StartPattern();
             }
         }
         break;
@@ -4348,21 +4348,21 @@ void CAkane::Vf6()
             l50.scale = 0;
             l50.layer = 1;
             l50.unk18 = facing;
-            Vf9(&l50);
+            SpawnObject(&l50);
             l50.type = 0x192;
             l50.x = (double)((int)x + facing * 0x14);
             l50.y = (double)((int)y - 0x19);
             l50.scale = 0;
             l50.layer = 1;
             l50.unk18 = facing;
-            Vf9(&l50);
+            SpawnObject(&l50);
             l50.type = 0x192;
             l50.x = (double)((int)x + facing * 0x36);
             l50.y = (double)((int)y - 0x18);
             l50.scale = 0;
             l50.layer = 1;
             l50.unk18 = facing;
-            Vf9(&l50);
+            SpawnObject(&l50);
         }
         vy = vy + ay;
         if (y + vy >= 0.0) {
@@ -4370,7 +4370,7 @@ void CAkane::Vf6()
             vy = 0.0;
             ay = 0.0;
             pattern = 0x10d;
-            Vf0();
+            StartPattern();
             unk2c9 = 9;
             break;
         }
@@ -4382,7 +4382,7 @@ void CAkane::Vf6()
             m_attackResult = 3;
             if (frame >= x8) {
                 pattern = 0;
-                Vf0();
+                StartPattern();
             }
         }
         break;
@@ -4422,7 +4422,7 @@ void CAkane::Vf6()
             m_attackResult = 0;
             if (frame >= x8) {
                 pattern = 3;
-                Vf0();
+                StartPattern();
                 break;
             }
         }
@@ -4459,7 +4459,7 @@ void CAkane::Vf6()
             }
             if (frame >= x8) {
                 pattern = 3;
-                Vf0();
+                StartPattern();
                 break;
             }
         }
@@ -4468,8 +4468,8 @@ void CAkane::Vf6()
         vy = vy + ay;
         if (frame == 2 && m_attackResult == 3) {
             (*m_opponent)->StopMoving();
-            (*m_opponent)->Vf0();
-            Vf0();
+            (*m_opponent)->StartPattern();
+            StartPattern();
             vx = 1.0;
             vy = -2.5;
             ay = 0.035;
@@ -4504,7 +4504,7 @@ void CAkane::Vf6()
             if (frame >= x8) {
                 pattern = 0;
                 CPlayer::FaceOpponent();
-                Vf0();
+                StartPattern();
             }
         }
         break;
@@ -4574,7 +4574,7 @@ void CAkane::Vf6()
             (*m_opponent)->x = facing * 0xf + x;
             CPlayer::DealDamage(0x3e8, 790.0);
             (*m_opponent)->unk124 = (int)(200.0 * m_proration * 0.0001);
-            (*m_opponent)->Vf0();
+            (*m_opponent)->StartPattern();
         }
         timer++;
         if (timer >= l4) {
@@ -4584,7 +4584,7 @@ void CAkane::Vf6()
             if (frame >= x8) {
                 pattern = 0;
                 CPlayer::FaceOpponent();
-                Vf0();
+                StartPattern();
             }
         }
         break;
@@ -4605,7 +4605,7 @@ void CAkane::Vf6()
                 if (m_inputY == 1) {
                     pattern = 3;
                 }
-                Vf0();
+                StartPattern();
             }
         }
         break;
@@ -4630,7 +4630,7 @@ void CAkane::Vf6()
             m_attackResult = 0;
             if (frame >= x8) {
                 pattern = 3;
-                Vf0();
+                StartPattern();
             }
         }
         break;
@@ -4680,7 +4680,7 @@ void CAkane::Vf6()
                 frame = frame - 8;
             }
             if (frame >= x8) {
-                Vf0();
+                StartPattern();
                 pattern = 0;
                 CPlayer::FaceOpponent();
             }
@@ -4729,7 +4729,7 @@ void CAkane::Vf6()
                 frame = frame - 8;
             }
             if (frame >= x8) {
-                Vf0();
+                StartPattern();
                 pattern = 0;
                 CPlayer::FaceOpponent();
             }
@@ -4788,7 +4788,7 @@ void CAkane::Vf6()
                 frame = frame - 8;
             }
             if (frame >= x8) {
-                Vf0();
+                StartPattern();
                 pattern = 0;
                 CPlayer::FaceOpponent();
             }
@@ -4831,7 +4831,7 @@ void CAkane::Vf6()
                 l50.layer = 0;
             }
             l50.unk18 = facing;
-            Vf9(&l50);
+            SpawnObject(&l50);
         }
         timer++;
         if (timer >= l4) {
@@ -4845,7 +4845,7 @@ void CAkane::Vf6()
             if (frame >= x8) {
                 pattern = 0;
                 CPlayer::FaceOpponent();
-                Vf0();
+                StartPattern();
             }
         }
         break;
@@ -4886,7 +4886,7 @@ void CAkane::Vf6()
                 l50.layer = 0;
             }
             l50.unk18 = facing;
-            Vf9(&l50);
+            SpawnObject(&l50);
         }
         timer++;
         if (timer >= l4) {
@@ -4900,7 +4900,7 @@ void CAkane::Vf6()
             if (frame >= x8) {
                 pattern = 0;
                 CPlayer::FaceOpponent();
-                Vf0();
+                StartPattern();
             }
         }
         break;
@@ -4943,7 +4943,7 @@ void CAkane::Vf6()
                 l50.layer = 0;
             }
             l50.unk18 = facing;
-            Vf9(&l50);
+            SpawnObject(&l50);
         }
         timer++;
         if (timer >= l4) {
@@ -4957,7 +4957,7 @@ void CAkane::Vf6()
             if (frame >= x8) {
                 pattern = 0;
                 CPlayer::FaceOpponent();
-                Vf0();
+                StartPattern();
             }
         }
         break;
@@ -4995,7 +4995,7 @@ void CAkane::Vf6()
                 l50.unk18 = facing;
                 l50.unk0 = 1;
                 l50.layer = 1;
-                Vf9(&l50);
+                SpawnObject(&l50);
                 l50.type = 8;
                 l50.x = (double)(int)x;
                 l50.y = (double)(int)y;
@@ -5019,7 +5019,7 @@ void CAkane::Vf6()
             if (frame >= x8) {
                 pattern = 0;
                 CPlayer::FaceOpponent();
-                Vf0();
+                StartPattern();
             }
         }
         break;
@@ -5057,7 +5057,7 @@ void CAkane::Vf6()
                 l50.unk18 = facing;
                 l50.unk0 = 1;
                 l50.layer = 1;
-                Vf9(&l50);
+                SpawnObject(&l50);
                 l50.type = 8;
                 l50.x = (double)(int)x;
                 l50.y = (double)(int)y;
@@ -5081,7 +5081,7 @@ void CAkane::Vf6()
             if (frame >= x8) {
                 pattern = 0;
                 CPlayer::FaceOpponent();
-                Vf0();
+                StartPattern();
             }
         }
         break;
@@ -5119,7 +5119,7 @@ void CAkane::Vf6()
                 l50.unk18 = facing;
                 l50.unk0 = 1;
                 l50.layer = 1;
-                Vf9(&l50);
+                SpawnObject(&l50);
                 l50.type = 8;
                 l50.x = (double)(int)x;
                 l50.y = (double)(int)y;
@@ -5143,7 +5143,7 @@ void CAkane::Vf6()
             if (frame >= x8) {
                 pattern = 0;
                 CPlayer::FaceOpponent();
-                Vf0();
+                StartPattern();
             }
         }
         break;
@@ -5178,7 +5178,7 @@ void CAkane::Vf6()
             l50.unk28 = 1;
             l50.unk18 = facing;
             l50.unk30 = 1;
-            Vf9(&l50);
+            SpawnObject(&l50);
             unk3144 = 2;
         }
         if (frame < 4) {
@@ -5195,7 +5195,7 @@ void CAkane::Vf6()
             if (frame >= x8) {
                 pattern = 0;
                 CPlayer::FaceOpponent();
-                Vf0();
+                StartPattern();
             }
         }
         break;
@@ -5230,7 +5230,7 @@ void CAkane::Vf6()
             l50.unk28 = 1;
             l50.unk18 = facing;
             l50.unk30 = 1;
-            Vf9(&l50);
+            SpawnObject(&l50);
             unk3144 = 2;
         }
         if (frame < 4) {
@@ -5247,7 +5247,7 @@ void CAkane::Vf6()
             if (frame >= x8) {
                 pattern = 0;
                 CPlayer::FaceOpponent();
-                Vf0();
+                StartPattern();
             }
         }
         break;
@@ -5282,7 +5282,7 @@ void CAkane::Vf6()
             l50.unk28 = 1;
             l50.unk18 = facing;
             l50.unk30 = 1;
-            Vf9(&l50);
+            SpawnObject(&l50);
             unk3144 = 2;
             unk2c9 = 0x25;
         }
@@ -5297,7 +5297,7 @@ void CAkane::Vf6()
             if (frame >= x8) {
                 pattern = 0;
                 CPlayer::FaceOpponent();
-                Vf0();
+                StartPattern();
             }
         }
         break;
@@ -5334,8 +5334,8 @@ void CAkane::Vf6()
         if (frame > 0 && frame < 3 && m_attackResult == 3) {
             CPlayer::Unk4109d0(0);
             (*m_opponent)->StopMoving();
-            (*m_opponent)->Vf0();
-            Vf0();
+            (*m_opponent)->StartPattern();
+            StartPattern();
             CPlayer::StopMoving();
             frame = 3;
             (*m_opponent)->pattern = 0x6b;
@@ -5393,7 +5393,7 @@ void CAkane::Vf6()
                     l50.unk28 = 0;
                     l50.unk18 = 1;
                     l50.screen = 1;
-                    Vf9(&l50);
+                    SpawnObject(&l50);
                     unk2c8 = 4;
                 }
             }
@@ -5414,13 +5414,13 @@ void CAkane::Vf6()
                 if (unk313c > 0xe) {
                     pattern = 0;
                     CPlayer::FaceOpponent();
-                    Vf0();
+                    StartPattern();
                 }
             }
             if (frame >= x8) {
                 pattern = 0;
                 CPlayer::FaceOpponent();
-                Vf0();
+                StartPattern();
             }
         }
         break;
@@ -5448,8 +5448,8 @@ void CAkane::Vf6()
         }
         if (frame == 5 && m_attackResult == 3) {
             (*m_opponent)->StopMoving();
-            (*m_opponent)->Vf0();
-            Vf0();
+            (*m_opponent)->StartPattern();
+            StartPattern();
             CPlayer::StopMoving();
             (*m_opponent)->pattern = 0x6b;
             if (x > 560.0 && facing == 1) {
@@ -5477,7 +5477,7 @@ void CAkane::Vf6()
             if (frame >= x8) {
                 pattern = 0;
                 CPlayer::FaceOpponent();
-                Vf0();
+                StartPattern();
             }
         }
         break;
@@ -5486,25 +5486,25 @@ void CAkane::Vf6()
             (*m_opponent)->x = (unk2ad0[2] + 0x3c) * facing + x;
             (*m_opponent)->y = y - 13.0 - unk2af8[2];
             (*m_opponent)->pattern = 0x6b;
-            (*m_opponent)->Vf0();
+            (*m_opponent)->StartPattern();
             (*m_opponent)->StopMoving();
         }
         if (frame == 2) {
             (*m_opponent)->x = (unk2ad0[3] + 0x2e) * facing + x;
             (*m_opponent)->y = y - 16.0 - unk2af8[3];
             (*m_opponent)->pattern = 0x6e;
-            (*m_opponent)->Vf0();
+            (*m_opponent)->StartPattern();
             (*m_opponent)->StopMoving();
         }
         if (frame == 3) {
             (*m_opponent)->x = (unk2ad0[4] + 0x1a) * facing + x;
             (*m_opponent)->y = y - 41.0 - unk2af8[4];
             (*m_opponent)->pattern = 0x6f;
-            (*m_opponent)->Vf0();
+            (*m_opponent)->StartPattern();
             (*m_opponent)->StopMoving();
         }
         if (frame == 4) {
-            (*m_opponent)->Vf0();
+            (*m_opponent)->StartPattern();
             (*m_opponent)->StopMoving();
             (*m_opponent)->unkc0 = 0.0;
             (*m_opponent)->unkc8 = -2.9;
@@ -5534,7 +5534,7 @@ void CAkane::Vf6()
             l50.unk0 = 1;
             l50.unk18 = facing;
             l50.layer = 1;
-            Vf9(&l50);
+            SpawnObject(&l50);
         }
         if (unk3138 == 0x96 || unk3138 == 0x168) {
             l50.type = 0x1a6;
@@ -5544,7 +5544,7 @@ void CAkane::Vf6()
             l50.unk0 = 1;
             l50.unk18 = facing;
             l50.layer = 1;
-            Vf9(&l50);
+            SpawnObject(&l50);
         }
         if (unk3138 == 0xf0 || unk3138 == 0xc8) {
             l50.type = 0x1a7;
@@ -5554,7 +5554,7 @@ void CAkane::Vf6()
             l50.unk0 = 1;
             l50.unk18 = facing;
             l50.layer = 1;
-            Vf9(&l50);
+            SpawnObject(&l50);
         }
         if (unk3138 == 0x78 || unk3138 == 0x10e) {
             l50.type = 0x1a8;
@@ -5564,7 +5564,7 @@ void CAkane::Vf6()
             l50.unk0 = 1;
             l50.unk18 = facing;
             l50.layer = 1;
-            Vf9(&l50);
+            SpawnObject(&l50);
         }
         if (unk3138 == 0xb4 || unk3138 == 0x14a) {
             l50.type = 0x1a9;
@@ -5574,7 +5574,7 @@ void CAkane::Vf6()
             l50.unk0 = 1;
             l50.unk18 = facing;
             l50.layer = 1;
-            Vf9(&l50);
+            SpawnObject(&l50);
         }
         if (unk3138 == 0xd2 || unk3138 == 0x186) {
             l50.type = 0x1aa;
@@ -5584,7 +5584,7 @@ void CAkane::Vf6()
             l50.unk0 = 1;
             l50.unk18 = facing;
             l50.layer = 1;
-            Vf9(&l50);
+            SpawnObject(&l50);
         }
         if (unk3138 == 0x1f4) {
             l50.type = 0x1ab;
@@ -5594,7 +5594,7 @@ void CAkane::Vf6()
             l50.unk0 = 1;
             l50.unk18 = facing;
             l50.layer = 1;
-            Vf9(&l50);
+            SpawnObject(&l50);
         }
         if (frame < 0x10) {
             CPlayer::Unk410a80(0x32, 3);
@@ -5617,7 +5617,7 @@ void CAkane::Vf6()
             if (frame >= x8) {
                 pattern = 0;
                 CPlayer::FaceOpponent();
-                Vf0();
+                StartPattern();
             }
         }
         break;
@@ -5653,14 +5653,14 @@ void CAkane::Vf6()
                 l50.unk18 = facing;
                 l50.layer = 1;
                 l50.scale = 2;
-                Vf9(&l50);
+                SpawnObject(&l50);
             }
             if (y + vy > 0.0) {
                 y = 0.0;
                 vy = 0.0;
                 ay = 0.0;
                 vx = 0.0;
-                Vf0();
+                StartPattern();
                 pattern = 0xd;
                 break;
             }

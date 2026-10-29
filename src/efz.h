@@ -519,18 +519,18 @@ struct ObjBase {
     double ay;        // +0x40: gravity, added to vy every frame
     char facing;      // +0x48: 1 or -1
     BYTE unk49[3];
-    int unk4c;
+    int side;         // +0x4c: objects' only, from their descriptor's
 };
 
 // One of the 64 objects a player spawns (projectiles, its parts of supers...): the
 // 0x98-byte entries of CPlayer's object table.
 struct PlayerObject : ObjBase {
-    char unk50;
-    char unk51;
+    char scale;       // +0x50: as Effect's
+    char layer;       // +0x51
     BYTE unk52[2];
-    int unk54;
+    int screen;       // +0x54
     int unk58;
-    RECT unk5c;
+    RECT clip;        // +0x5c: drawn clipped to it unless top == bottom
     char unk6c;
     BYTE unk6d[3];
     double unk70;
@@ -695,36 +695,36 @@ public:
     // FUNCTION: 0x411ae0
     void Unk411ae0();
     // FUNCTION: 0x411be0
-    void Unk411be0();
+    void ReadInput();
     // FUNCTION: 0x4121a0
     void Unk4121a0(int p1, int p2);
     // FUNCTION: 0x412f10
-    void Unk412f10();
+    void AdvanceObjectHead();
     // FUNCTION: 0x413040
-    void Unk413040();
+    void ClearObjects();
     // FUNCTION: 0x413090
-    void Unk413090(EffectDesc* p1);
+    void InitEffectDesc(EffectDesc* p1);
     // FUNCTION: 0x413100
-    void Unk413100(int p1, int p2, BYTE p3);
+    void DrawObjects(int p1, int p2, BYTE p3);
 
     // FUNCTION: 0x40f110
-    virtual void Vf0();
-    virtual void Vf1() = 0;
-    virtual void Vf2() = 0;
-    virtual void Vf3() = 0;
-    virtual void Vf4() = 0;
-    virtual void Vf5() = 0;
-    virtual void Vf6() = 0;
-    virtual void Vf7() = 0;
+    virtual void StartPattern();
+    virtual void DrawGauge() = 0;
+    virtual void ReadCommand() = 0;
+    virtual void Move() = 0;
+    virtual void StartCommand() = 0;
+    virtual void CpuInput() = 0;
+    virtual void UpdatePattern() = 0;
+    virtual void UpdateObjects() = 0;
     virtual void Vf8() = 0;
     // FUNCTION: 0x412b10
-    virtual void Vf9(EffectDesc* p1);
+    virtual void SpawnObject(EffectDesc* p1);
     // FUNCTION: 0x412e60
-    virtual void Vf10(short p1);
+    virtual void RemoveObject(short p1);
     // FUNCTION: 0x410b70
-    virtual void Vf11();
+    virtual void Load();
     // FUNCTION: 0x40edf0
-    virtual void Vf12();
+    virtual void Reset();
 
     char unk58;
     BYTE unk59[0x60 - 0x59];
@@ -741,7 +741,7 @@ public:
     char m_paletteIndex;    // +0x8e: which <name>N.pal (N = index + 1)
     BYTE unk8f[0x94 - 0x8f];
     char m_name[0x10];      // +0x94: the character's folder and file name, "akane"
-    int unka4;
+    int m_cpu;
     float unka8;
     char unkac;
     BYTE unkad[0xb0 - 0xad];
@@ -833,11 +833,11 @@ public:
     short unk264[0x32];     // the constructor sets all to 0x96
     char unk2c8;
     char unk2c9;
-    short unk2ca;
-    short unk2cc;
+    short m_objectHead;
+    short m_objectTail;
     BYTE unk2ce[0x2d0 - 0x2ce];
     int unk2d0[0x40];       // one per object
-    int unk3d0[0x40];       // one per object
+    int m_objectActive[0x40];       // one per object
     PlayerObject m_objects[0x40]; // +0x4d0
     // Per-character offsets the constructors set; throws place the opponent relative to
     // them.
@@ -1722,31 +1722,31 @@ public:
 class CShiori : public CPlayer {
 public:
     // FUNCTION: 0x4136d0
-    virtual void Vf6();
+    virtual void UpdatePattern();
     // FUNCTION: 0x422d70
     CShiori(int p1, int p2, int p3, int p4, int p5, BYTE p6);
     // FUNCTION: 0x422f40
-    virtual void Vf12();
+    virtual void Reset();
     // FUNCTION: 0x423090
-    virtual void Vf0();
+    virtual void StartPattern();
     // FUNCTION: 0x4230d0
-    virtual void Vf10(short p1);
+    virtual void RemoveObject(short p1);
     // FUNCTION: 0x423120
-    virtual void Vf3();
+    virtual void Move();
     // FUNCTION: 0x423140
-    virtual void Vf4();
+    virtual void StartCommand();
     // FUNCTION: 0x425d70
-    virtual void Vf1();
+    virtual void DrawGauge();
     // FUNCTION: 0x4261b0
     virtual void Vf8();
     // FUNCTION: 0x4261c0
-    virtual void Vf9(EffectDesc* p1);
+    virtual void SpawnObject(EffectDesc* p1);
     // FUNCTION: 0x4261f0
-    virtual void Vf2();
+    virtual void ReadCommand();
     // FUNCTION: 0x4276b0
-    virtual void Vf5();
+    virtual void CpuInput();
     // FUNCTION: 0x42b190
-    virtual void Vf7();
+    virtual void UpdateObjects();
 
     int unk3138;
     int unk313c;
@@ -1766,31 +1766,31 @@ public:
 class CSayuri : public CPlayer {
 public:
     // FUNCTION: 0x434060
-    virtual void Vf6();
+    virtual void UpdatePattern();
     // FUNCTION: 0x4463e0
     CSayuri(int p1, int p2, int p3, int p4, int p5, BYTE p6);
     // FUNCTION: 0x446590
-    virtual void Vf12();
+    virtual void Reset();
     // FUNCTION: 0x4466d0
-    virtual void Vf0();
+    virtual void StartPattern();
     // FUNCTION: 0x446710
-    virtual void Vf10(short p1);
+    virtual void RemoveObject(short p1);
     // FUNCTION: 0x446760
-    virtual void Vf3();
+    virtual void Move();
     // FUNCTION: 0x446780
-    virtual void Vf4();
+    virtual void StartCommand();
     // FUNCTION: 0x4492f0
-    virtual void Vf1();
+    virtual void DrawGauge();
     // FUNCTION: 0x449300
     virtual void Vf8();
     // FUNCTION: 0x449390
-    virtual void Vf9(EffectDesc* p1);
+    virtual void SpawnObject(EffectDesc* p1);
     // FUNCTION: 0x4493c0
-    virtual void Vf2();
+    virtual void ReadCommand();
     // FUNCTION: 0x44ab30
-    virtual void Vf5();
+    virtual void CpuInput();
     // FUNCTION: 0x44db60
-    virtual void Vf7();
+    virtual void UpdateObjects();
 
     int unk3138;
     int unk313c;
@@ -1810,31 +1810,31 @@ public:
 class CNayuki : public CPlayer {
 public:
     // FUNCTION: 0x451850
-    virtual void Vf6();
+    virtual void UpdatePattern();
     // FUNCTION: 0x461090
     CNayuki(int p1, int p2, int p3, int p4, int p5, BYTE p6);
     // FUNCTION: 0x461260
-    virtual void Vf12();
+    virtual void Reset();
     // FUNCTION: 0x4613b0
-    virtual void Vf0();
+    virtual void StartPattern();
     // FUNCTION: 0x4613f0
-    virtual void Vf10(short p1);
+    virtual void RemoveObject(short p1);
     // FUNCTION: 0x461440
-    virtual void Vf3();
+    virtual void Move();
     // FUNCTION: 0x461460
-    virtual void Vf4();
+    virtual void StartCommand();
     // FUNCTION: 0x463dd0
-    virtual void Vf1();
+    virtual void DrawGauge();
     // FUNCTION: 0x464180
     virtual void Vf8();
     // FUNCTION: 0x464190
-    virtual void Vf9(EffectDesc* p1);
+    virtual void SpawnObject(EffectDesc* p1);
     // FUNCTION: 0x4641c0
-    virtual void Vf2();
+    virtual void ReadCommand();
     // FUNCTION: 0x4654a0
-    virtual void Vf5();
+    virtual void CpuInput();
     // FUNCTION: 0x468870
-    virtual void Vf7();
+    virtual void UpdateObjects();
 
     int unk3138;
     int unk313c;
@@ -1856,31 +1856,31 @@ public:
 class CMizukaB : public CPlayer {
 public:
     // FUNCTION: 0x4c04b0
-    virtual void Vf6();
+    virtual void UpdatePattern();
     // FUNCTION: 0x4d2850
     CMizukaB(int p1, int p2, int p3, int p4, int p5, BYTE p6);
     // FUNCTION: 0x4d29e0
-    virtual void Vf12();
+    virtual void Reset();
     // FUNCTION: 0x4d2b00
-    virtual void Vf0();
+    virtual void StartPattern();
     // FUNCTION: 0x4d2b40
-    virtual void Vf10(short p1);
+    virtual void RemoveObject(short p1);
     // FUNCTION: 0x4d2b90
-    virtual void Vf3();
+    virtual void Move();
     // FUNCTION: 0x4d2bb0
-    virtual void Vf4();
+    virtual void StartCommand();
     // FUNCTION: 0x4d59d0
-    virtual void Vf1();
+    virtual void DrawGauge();
     // FUNCTION: 0x4d59e0
     virtual void Vf8();
     // FUNCTION: 0x4d5aa0
-    virtual void Vf9(EffectDesc* p1);
+    virtual void SpawnObject(EffectDesc* p1);
     // FUNCTION: 0x4d5ad0
-    virtual void Vf2();
+    virtual void ReadCommand();
     // FUNCTION: 0x4d6f50
-    virtual void Vf5();
+    virtual void CpuInput();
     // FUNCTION: 0x4db160
-    virtual void Vf7();
+    virtual void UpdateObjects();
 
     int unk3138;
     int unk313c;
@@ -1902,31 +1902,31 @@ public:
 class CMizuka : public CPlayer {
 public:
     // FUNCTION: 0x4e7ec0
-    virtual void Vf6();
+    virtual void UpdatePattern();
     // FUNCTION: 0x4f8300
     CMizuka(int p1, int p2, int p3, int p4, int p5, BYTE p6);
     // FUNCTION: 0x4f8480
-    virtual void Vf12();
+    virtual void Reset();
     // FUNCTION: 0x4f8590
-    virtual void Vf0();
+    virtual void StartPattern();
     // FUNCTION: 0x4f85d0
-    virtual void Vf10(short p1);
+    virtual void RemoveObject(short p1);
     // FUNCTION: 0x4f8620
-    virtual void Vf3();
+    virtual void Move();
     // FUNCTION: 0x4f8640
-    virtual void Vf4();
+    virtual void StartCommand();
     // FUNCTION: 0x4faf20
-    virtual void Vf1();
+    virtual void DrawGauge();
     // FUNCTION: 0x4faf30
     virtual void Vf8();
     // FUNCTION: 0x4faf40
-    virtual void Vf9(EffectDesc* p1);
+    virtual void SpawnObject(EffectDesc* p1);
     // FUNCTION: 0x4faf70
-    virtual void Vf2();
+    virtual void ReadCommand();
     // FUNCTION: 0x4fdc10
-    virtual void Vf5();
+    virtual void CpuInput();
     // FUNCTION: 0x501e20
-    virtual void Vf7();
+    virtual void UpdateObjects();
 
     int unk3138;
     int unk313c;
@@ -1948,31 +1948,31 @@ public:
 class CMisuzu : public CPlayer {
 public:
     // FUNCTION: 0x50c4b0
-    virtual void Vf6();
+    virtual void UpdatePattern();
     // FUNCTION: 0x519e00
     CMisuzu(int p1, int p2, int p3, int p4, int p5, BYTE p6);
     // FUNCTION: 0x51a070
-    virtual void Vf12();
+    virtual void Reset();
     // FUNCTION: 0x51a2a0
-    virtual void Vf0();
+    virtual void StartPattern();
     // FUNCTION: 0x51a2e0
-    virtual void Vf10(short p1);
+    virtual void RemoveObject(short p1);
     // FUNCTION: 0x51a330
-    virtual void Vf3();
+    virtual void Move();
     // FUNCTION: 0x51a350
-    virtual void Vf4();
+    virtual void StartCommand();
     // FUNCTION: 0x51d390
-    virtual void Vf1();
+    virtual void DrawGauge();
     // FUNCTION: 0x51dde0
     virtual void Vf8();
     // FUNCTION: 0x51df30
-    virtual void Vf9(EffectDesc* p1);
+    virtual void SpawnObject(EffectDesc* p1);
     // FUNCTION: 0x51df60
-    virtual void Vf2();
+    virtual void ReadCommand();
     // FUNCTION: 0x51f3e0
-    virtual void Vf5();
+    virtual void CpuInput();
     // FUNCTION: 0x5236d0
-    virtual void Vf7();
+    virtual void UpdateObjects();
 
     int unk3138;
     int unk313c;
@@ -2004,31 +2004,31 @@ public:
 class CMishio : public CPlayer {
 public:
     // FUNCTION: 0x530bc0
-    virtual void Vf6();
+    virtual void UpdatePattern();
     // FUNCTION: 0x546480
     CMishio(int p1, int p2, int p3, int p4, int p5, BYTE p6);
     // FUNCTION: 0x546690
-    virtual void Vf12();
+    virtual void Reset();
     // FUNCTION: 0x546830
-    virtual void Vf0();
+    virtual void StartPattern();
     // FUNCTION: 0x546870
-    virtual void Vf10(short p1);
+    virtual void RemoveObject(short p1);
     // FUNCTION: 0x5468c0
-    virtual void Vf3();
+    virtual void Move();
     // FUNCTION: 0x5468e0
-    virtual void Vf4();
+    virtual void StartCommand();
     // FUNCTION: 0x549dc0
-    virtual void Vf1();
+    virtual void DrawGauge();
     // FUNCTION: 0x54aa90
     virtual void Vf8();
     // FUNCTION: 0x54ad50
-    virtual void Vf9(EffectDesc* p1);
+    virtual void SpawnObject(EffectDesc* p1);
     // FUNCTION: 0x54ad80
-    virtual void Vf2();
+    virtual void ReadCommand();
     // FUNCTION: 0x54c250
-    virtual void Vf5();
+    virtual void CpuInput();
     // FUNCTION: 0x54fd30
-    virtual void Vf7();
+    virtual void UpdateObjects();
 
     int unk3138;
     int unk313c;
@@ -2056,31 +2056,31 @@ public:
 class CMisaki : public CPlayer {
 public:
     // FUNCTION: 0x5571f0
-    virtual void Vf6();
+    virtual void UpdatePattern();
     // FUNCTION: 0x567900
     CMisaki(int p1, int p2, int p3, int p4, int p5, BYTE p6);
     // FUNCTION: 0x567a90
-    virtual void Vf12();
+    virtual void Reset();
     // FUNCTION: 0x567ba0
-    virtual void Vf0();
+    virtual void StartPattern();
     // FUNCTION: 0x567be0
-    virtual void Vf10(short p1);
+    virtual void RemoveObject(short p1);
     // FUNCTION: 0x567c30
-    virtual void Vf3();
+    virtual void Move();
     // FUNCTION: 0x567c50
-    virtual void Vf4();
+    virtual void StartCommand();
     // FUNCTION: 0x56a5f0
-    virtual void Vf1();
+    virtual void DrawGauge();
     // FUNCTION: 0x56a600
     virtual void Vf8();
     // FUNCTION: 0x56a610
-    virtual void Vf9(EffectDesc* p1);
+    virtual void SpawnObject(EffectDesc* p1);
     // FUNCTION: 0x56a640
-    virtual void Vf2();
+    virtual void ReadCommand();
     // FUNCTION: 0x56b630
-    virtual void Vf5();
+    virtual void CpuInput();
     // FUNCTION: 0x56f920
-    virtual void Vf7();
+    virtual void UpdateObjects();
 
     int unk3138;
     int unk313c;
@@ -2096,31 +2096,31 @@ public:
 class CMio : public CPlayer {
 public:
     // FUNCTION: 0x5736d0
-    virtual void Vf6();
+    virtual void UpdatePattern();
     // FUNCTION: 0x588310
     CMio(int p1, int p2, int p3, int p4, int p5, BYTE p6);
     // FUNCTION: 0x5884b0
-    virtual void Vf12();
+    virtual void Reset();
     // FUNCTION: 0x5885d0
-    virtual void Vf0();
+    virtual void StartPattern();
     // FUNCTION: 0x588610
-    virtual void Vf10(short p1);
+    virtual void RemoveObject(short p1);
     // FUNCTION: 0x588660
-    virtual void Vf3();
+    virtual void Move();
     // FUNCTION: 0x588680
-    virtual void Vf4();
+    virtual void StartCommand();
     // FUNCTION: 0x58d6e0
-    virtual void Vf1();
+    virtual void DrawGauge();
     // FUNCTION: 0x58dab0
     virtual void Vf8();
     // FUNCTION: 0x58dac0
-    virtual void Vf9(EffectDesc* p1);
+    virtual void SpawnObject(EffectDesc* p1);
     // FUNCTION: 0x58daf0
-    virtual void Vf2();
+    virtual void ReadCommand();
     // FUNCTION: 0x58ee20
-    virtual void Vf5();
+    virtual void CpuInput();
     // FUNCTION: 0x594ea0
-    virtual void Vf7();
+    virtual void UpdateObjects();
 
     int unk3138;
     BYTE unk313c[0x3140 - 0x313c];
@@ -2138,31 +2138,31 @@ public:
 class CMinagi : public CPlayer {
 public:
     // FUNCTION: 0x59c4a0
-    virtual void Vf6();
+    virtual void UpdatePattern();
     // FUNCTION: 0x5a9fa0
     CMinagi(int p1, int p2, int p3, int p4, int p5, BYTE p6);
     // FUNCTION: 0x5aa180
-    virtual void Vf12();
+    virtual void Reset();
     // FUNCTION: 0x5aa340
-    virtual void Vf0();
+    virtual void StartPattern();
     // FUNCTION: 0x5aa380
-    virtual void Vf10(short p1);
+    virtual void RemoveObject(short p1);
     // FUNCTION: 0x5aa3d0
-    virtual void Vf3();
+    virtual void Move();
     // FUNCTION: 0x5aa3f0
-    virtual void Vf4();
+    virtual void StartCommand();
     // FUNCTION: 0x5ad500
-    virtual void Vf1();
+    virtual void DrawGauge();
     // FUNCTION: 0x5ad510
     virtual void Vf8();
     // FUNCTION: 0x5ad520
-    virtual void Vf9(EffectDesc* p1);
+    virtual void SpawnObject(EffectDesc* p1);
     // FUNCTION: 0x5ad550
-    virtual void Vf2();
+    virtual void ReadCommand();
     // FUNCTION: 0x5aea20
-    virtual void Vf5();
+    virtual void CpuInput();
     // FUNCTION: 0x5b2d10
-    virtual void Vf7();
+    virtual void UpdateObjects();
 
     int unk3138;
     int unk313c;
@@ -2182,31 +2182,31 @@ public:
 class CMayu : public CPlayer {
 public:
     // FUNCTION: 0x5c8580
-    virtual void Vf6();
+    virtual void UpdatePattern();
     // FUNCTION: 0x5dddf0
     CMayu(int p1, int p2, int p3, int p4, int p5, BYTE p6);
     // FUNCTION: 0x5ddf90
-    virtual void Vf12();
+    virtual void Reset();
     // FUNCTION: 0x5de0a0
-    virtual void Vf0();
+    virtual void StartPattern();
     // FUNCTION: 0x5de0e0
-    virtual void Vf10(short p1);
+    virtual void RemoveObject(short p1);
     // FUNCTION: 0x5de130
-    virtual void Vf3();
+    virtual void Move();
     // FUNCTION: 0x5de150
-    virtual void Vf4();
+    virtual void StartCommand();
     // FUNCTION: 0x5e1060
-    virtual void Vf1();
+    virtual void DrawGauge();
     // FUNCTION: 0x5e1070
     virtual void Vf8();
     // FUNCTION: 0x5e1080
-    virtual void Vf9(EffectDesc* p1);
+    virtual void SpawnObject(EffectDesc* p1);
     // FUNCTION: 0x5e10b0
-    virtual void Vf2();
+    virtual void ReadCommand();
     // FUNCTION: 0x5e2440
-    virtual void Vf5();
+    virtual void CpuInput();
     // FUNCTION: 0x5e5c30
-    virtual void Vf7();
+    virtual void UpdateObjects();
 
     int unk3138;
     int unk313c;
@@ -2222,31 +2222,31 @@ public:
 class CMakoto : public CPlayer {
 public:
     // FUNCTION: 0x5e85f0
-    virtual void Vf6();
+    virtual void UpdatePattern();
     // FUNCTION: 0x5f6d90
     CMakoto(int p1, int p2, int p3, int p4, int p5, BYTE p6);
     // FUNCTION: 0x5f6f20
-    virtual void Vf12();
+    virtual void Reset();
     // FUNCTION: 0x5f7040
-    virtual void Vf0();
+    virtual void StartPattern();
     // FUNCTION: 0x5f7080
-    virtual void Vf10(short p1);
+    virtual void RemoveObject(short p1);
     // FUNCTION: 0x5f70d0
-    virtual void Vf3();
+    virtual void Move();
     // FUNCTION: 0x5f70f0
-    virtual void Vf4();
+    virtual void StartCommand();
     // FUNCTION: 0x5f9d20
-    virtual void Vf1();
+    virtual void DrawGauge();
     // FUNCTION: 0x5f9d30
     virtual void Vf8();
     // FUNCTION: 0x5f9d40
-    virtual void Vf9(EffectDesc* p1);
+    virtual void SpawnObject(EffectDesc* p1);
     // FUNCTION: 0x5f9d70
-    virtual void Vf2();
+    virtual void ReadCommand();
     // FUNCTION: 0x5fb040
-    virtual void Vf5();
+    virtual void CpuInput();
     // FUNCTION: 0x5ff4c0
-    virtual void Vf7();
+    virtual void UpdateObjects();
 
     int unk3138;
     int unk313c;
@@ -2264,31 +2264,31 @@ public:
 class CMai : public CPlayer {
 public:
     // FUNCTION: 0x607930
-    virtual void Vf6();
+    virtual void UpdatePattern();
     // FUNCTION: 0x6163b0
     CMai(int p1, int p2, int p3, int p4, int p5, BYTE p6);
     // FUNCTION: 0x616570
-    virtual void Vf12();
+    virtual void Reset();
     // FUNCTION: 0x6166c0
-    virtual void Vf0();
+    virtual void StartPattern();
     // FUNCTION: 0x616700
-    virtual void Vf10(short p1);
+    virtual void RemoveObject(short p1);
     // FUNCTION: 0x616750
-    virtual void Vf3();
+    virtual void Move();
     // FUNCTION: 0x616770
-    virtual void Vf4();
+    virtual void StartCommand();
     // FUNCTION: 0x619d50
-    virtual void Vf1();
+    virtual void DrawGauge();
     // FUNCTION: 0x61a620
     virtual void Vf8();
     // FUNCTION: 0x61a830
-    virtual void Vf9(EffectDesc* p1);
+    virtual void SpawnObject(EffectDesc* p1);
     // FUNCTION: 0x61a860
-    virtual void Vf2();
+    virtual void ReadCommand();
     // FUNCTION: 0x61b9a0
-    virtual void Vf5();
+    virtual void CpuInput();
     // FUNCTION: 0x61f750
-    virtual void Vf7();
+    virtual void UpdateObjects();
 
     int unk3138;
     int unk313c;
@@ -2308,31 +2308,31 @@ public:
 class CKanna : public CPlayer {
 public:
     // FUNCTION: 0x667570
-    virtual void Vf6();
+    virtual void UpdatePattern();
     // FUNCTION: 0x675c80
     CKanna(int p1, int p2, int p3, int p4, int p5, BYTE p6);
     // FUNCTION: 0x675e20
-    virtual void Vf12();
+    virtual void Reset();
     // FUNCTION: 0x675f40
-    virtual void Vf0();
+    virtual void StartPattern();
     // FUNCTION: 0x675f80
-    virtual void Vf10(short p1);
+    virtual void RemoveObject(short p1);
     // FUNCTION: 0x675fd0
-    virtual void Vf3();
+    virtual void Move();
     // FUNCTION: 0x6763c0
-    virtual void Vf4();
+    virtual void StartCommand();
     // FUNCTION: 0x677e10
-    virtual void Vf1();
+    virtual void DrawGauge();
     // FUNCTION: 0x677e20
     virtual void Vf8();
     // FUNCTION: 0x677e30
-    virtual void Vf9(EffectDesc* p1);
+    virtual void SpawnObject(EffectDesc* p1);
     // FUNCTION: 0x677e60
-    virtual void Vf2();
+    virtual void ReadCommand();
     // FUNCTION: 0x678c30
-    virtual void Vf5();
+    virtual void CpuInput();
     // FUNCTION: 0x67cf50
-    virtual void Vf7();
+    virtual void UpdateObjects();
 
     int unk3138;
     int unk313c;
@@ -2352,31 +2352,31 @@ public:
 class CAyu : public CPlayer {
 public:
     // FUNCTION: 0x6d93f0
-    virtual void Vf6();
+    virtual void UpdatePattern();
     // FUNCTION: 0x6e8130
     CAyu(int p1, int p2, int p3, int p4, int p5, BYTE p6);
     // FUNCTION: 0x6e82f0
-    virtual void Vf12();
+    virtual void Reset();
     // FUNCTION: 0x6e8420
-    virtual void Vf0();
+    virtual void StartPattern();
     // FUNCTION: 0x6e8460
-    virtual void Vf10(short p1);
+    virtual void RemoveObject(short p1);
     // FUNCTION: 0x6e84b0
-    virtual void Vf3();
+    virtual void Move();
     // FUNCTION: 0x6e84d0
-    virtual void Vf4();
+    virtual void StartCommand();
     // FUNCTION: 0x6eaf80
-    virtual void Vf1();
+    virtual void DrawGauge();
     // FUNCTION: 0x6eaf90
     virtual void Vf8();
     // FUNCTION: 0x6eafa0
-    virtual void Vf9(EffectDesc* p1);
+    virtual void SpawnObject(EffectDesc* p1);
     // FUNCTION: 0x6eafd0
-    virtual void Vf2();
+    virtual void ReadCommand();
     // FUNCTION: 0x6ec160
-    virtual void Vf5();
+    virtual void CpuInput();
     // FUNCTION: 0x6ef410
-    virtual void Vf7();
+    virtual void UpdateObjects();
 
     int unk3138;
     int unk313c;
@@ -2394,31 +2394,31 @@ public:
 class CAkane : public CPlayer {
 public:
     // FUNCTION: 0x6f2f20
-    virtual void Vf6();
+    virtual void UpdatePattern();
     // FUNCTION: 0x7039d0
     CAkane(int p1, int p2, int p3, int p4, int p5, BYTE p6);
     // FUNCTION: 0x703b70
-    virtual void Vf12();
+    virtual void Reset();
     // FUNCTION: 0x703c90
-    virtual void Vf0();
+    virtual void StartPattern();
     // FUNCTION: 0x703cd0
-    virtual void Vf10(short p1);
+    virtual void RemoveObject(short p1);
     // FUNCTION: 0x703d20
-    virtual void Vf3();
+    virtual void Move();
     // FUNCTION: 0x703d40
-    virtual void Vf4();
+    virtual void StartCommand();
     // FUNCTION: 0x706a80
-    virtual void Vf1();
+    virtual void DrawGauge();
     // FUNCTION: 0x706a90
     virtual void Vf8();
     // FUNCTION: 0x706aa0
-    virtual void Vf9(EffectDesc* p1);
+    virtual void SpawnObject(EffectDesc* p1);
     // FUNCTION: 0x706ad0
-    virtual void Vf2();
+    virtual void ReadCommand();
     // FUNCTION: 0x707e50
-    virtual void Vf5();
+    virtual void CpuInput();
     // FUNCTION: 0x70bc00
-    virtual void Vf7();
+    virtual void UpdateObjects();
 
     int unk3138;
     int unk313c;
@@ -2436,31 +2436,31 @@ public:
 class CAkiko : public CPlayer {
 public:
     // FUNCTION: 0x712500
-    virtual void Vf6();
+    virtual void UpdatePattern();
     // FUNCTION: 0x7219a0
     CAkiko(int p1, int p2, int p3, int p4, int p5, BYTE p6);
     // FUNCTION: 0x721ba0
-    virtual void Vf12();
+    virtual void Reset();
     // FUNCTION: 0x721d10
-    virtual void Vf0();
+    virtual void StartPattern();
     // FUNCTION: 0x721d50
-    virtual void Vf10(short p1);
+    virtual void RemoveObject(short p1);
     // FUNCTION: 0x721da0
-    virtual void Vf3();
+    virtual void Move();
     // FUNCTION: 0x721dc0
-    virtual void Vf4();
+    virtual void StartCommand();
     // FUNCTION: 0x724780
-    virtual void Vf1();
+    virtual void DrawGauge();
     // FUNCTION: 0x7256b0
     virtual void Vf8();
     // FUNCTION: 0x725bd0
-    virtual void Vf9(EffectDesc* p1);
+    virtual void SpawnObject(EffectDesc* p1);
     // FUNCTION: 0x725c00
-    virtual void Vf2();
+    virtual void ReadCommand();
     // FUNCTION: 0x726f10
-    virtual void Vf5();
+    virtual void CpuInput();
     // FUNCTION: 0x729cc0
-    virtual void Vf7();
+    virtual void UpdateObjects();
 
     int unk3138;
     int unk313c;
@@ -2484,41 +2484,41 @@ public:
 class CNanase : public CPlayer {
 public:
     // FUNCTION: 0x46d970
-    virtual void Vf6();
+    virtual void UpdatePattern();
     // FUNCTION: 0x47c130
     void Unk47c130();
     // FUNCTION: 0x48a720
     CNanase(int p1, int p2, int p3, int p4, int p5, BYTE p6);
     // FUNCTION: 0x48a9b0
-    virtual void Vf12();
+    virtual void Reset();
     // FUNCTION: 0x48ab00
     ~CNanase();
     // FUNCTION: 0x48abb0
-    virtual void Vf11();
+    virtual void Load();
     // FUNCTION: 0x48abf0
-    virtual void Vf0();
+    virtual void StartPattern();
     // FUNCTION: 0x48ac30
-    virtual void Vf10(short p1);
+    virtual void RemoveObject(short p1);
     // FUNCTION: 0x48ac80
-    virtual void Vf3();
+    virtual void Move();
     // FUNCTION: 0x48aca0
-    virtual void Vf4();
+    virtual void StartCommand();
     // FUNCTION: 0x48d940
     void Unk48d940();
     // FUNCTION: 0x48dd00
-    virtual void Vf1();
+    virtual void DrawGauge();
     // FUNCTION: 0x48e140
     void Unk48e140(char p1);
     // FUNCTION: 0x48e250
     virtual void Vf8();
     // FUNCTION: 0x48e260
-    virtual void Vf9(EffectDesc* p1);
+    virtual void SpawnObject(EffectDesc* p1);
     // FUNCTION: 0x48e290
-    virtual void Vf2();
+    virtual void ReadCommand();
     // FUNCTION: 0x48f690
-    virtual void Vf5();
+    virtual void CpuInput();
     // FUNCTION: 0x492db0
-    virtual void Vf7();
+    virtual void UpdateObjects();
     // FUNCTION: 0x497540
     void Unk497540();
 
@@ -2547,33 +2547,33 @@ public:
 class CNagamori : public CPlayer {
 public:
     // FUNCTION: 0x49d610
-    virtual void Vf6();
+    virtual void UpdatePattern();
     // FUNCTION: 0x4add90
     CNagamori(int p1, int p2, int p3, int p4, int p5, BYTE p6);
     // FUNCTION: 0x4adfa0
-    virtual void Vf12();
+    virtual void Reset();
     // FUNCTION: 0x4ae130
-    virtual void Vf0();
+    virtual void StartPattern();
     // FUNCTION: 0x4ae170
-    virtual void Vf10(short p1);
+    virtual void RemoveObject(short p1);
     // FUNCTION: 0x4ae1d0
     void Unk4ae1d0(short p1, short p2, short p3, short p4);
     // FUNCTION: 0x4ae2c0
-    virtual void Vf3();
+    virtual void Move();
     // FUNCTION: 0x4ae2e0
-    virtual void Vf4();
+    virtual void StartCommand();
     // FUNCTION: 0x4b12e0
-    virtual void Vf1();
+    virtual void DrawGauge();
     // FUNCTION: 0x4b1720
     virtual void Vf8();
     // FUNCTION: 0x4b1750
-    virtual void Vf9(EffectDesc* p1);
+    virtual void SpawnObject(EffectDesc* p1);
     // FUNCTION: 0x4b1780
-    virtual void Vf2();
+    virtual void ReadCommand();
     // FUNCTION: 0x4b2ac0
-    virtual void Vf5();
+    virtual void CpuInput();
     // FUNCTION: 0x4b6680
-    virtual void Vf7();
+    virtual void UpdateObjects();
 
     int unk3138;
     int unk313c;
@@ -2600,31 +2600,31 @@ public:
 class CKaori : public CPlayer {
 public:
     // FUNCTION: 0x62a5e0
-    virtual void Vf6();
+    virtual void UpdatePattern();
     // FUNCTION: 0x638d90
     CKaori(int p1, int p2, int p3, int p4, int p5, BYTE p6);
     // FUNCTION: 0x638f10
-    virtual void Vf12();
+    virtual void Reset();
     // FUNCTION: 0x639030
-    virtual void Vf0();
+    virtual void StartPattern();
     // FUNCTION: 0x639070
-    virtual void Vf10(short p1);
+    virtual void RemoveObject(short p1);
     // FUNCTION: 0x6390c0
-    virtual void Vf3();
+    virtual void Move();
     // FUNCTION: 0x6390e0
-    virtual void Vf4();
+    virtual void StartCommand();
     // FUNCTION: 0x63b610
-    virtual void Vf1();
+    virtual void DrawGauge();
     // FUNCTION: 0x63b620
     virtual void Vf8();
     // FUNCTION: 0x63b630
-    virtual void Vf9(EffectDesc* p1);
+    virtual void SpawnObject(EffectDesc* p1);
     // FUNCTION: 0x63b660
-    virtual void Vf2();
+    virtual void ReadCommand();
     // FUNCTION: 0x63c960
-    virtual void Vf5();
+    virtual void CpuInput();
     // FUNCTION: 0x640710
-    virtual void Vf7();
+    virtual void UpdateObjects();
 
     int unk3138;
     int unk313c;
@@ -2642,31 +2642,31 @@ public:
 class CKano : public CPlayer {
 public:
     // FUNCTION: 0x6429c0
-    virtual void Vf6();
+    virtual void UpdatePattern();
     // FUNCTION: 0x653a20
     CKano(int p1, int p2, int p3, int p4, int p5, BYTE p6);
     // FUNCTION: 0x653c30
-    virtual void Vf12();
+    virtual void Reset();
     // FUNCTION: 0x653dd0
-    virtual void Vf0();
+    virtual void StartPattern();
     // FUNCTION: 0x653e10
-    virtual void Vf10(short p1);
+    virtual void RemoveObject(short p1);
     // FUNCTION: 0x653e60
-    virtual void Vf3();
+    virtual void Move();
     // FUNCTION: 0x653e80
-    virtual void Vf4();
+    virtual void StartCommand();
     // FUNCTION: 0x657500
-    virtual void Vf1();
+    virtual void DrawGauge();
     // FUNCTION: 0x657b70
     virtual void Vf8();
     // FUNCTION: 0x657e70
-    virtual void Vf9(EffectDesc* p1);
+    virtual void SpawnObject(EffectDesc* p1);
     // FUNCTION: 0x657ea0
-    virtual void Vf2();
+    virtual void ReadCommand();
     // FUNCTION: 0x659250
-    virtual void Vf5();
+    virtual void CpuInput();
     // FUNCTION: 0x65cd30
-    virtual void Vf7();
+    virtual void UpdateObjects();
 
     int unk3138;
     int unk313c;
@@ -2694,41 +2694,41 @@ public:
 class CIkumi : public CPlayer {
 public:
     // FUNCTION: 0x683550
-    virtual void Vf6();
+    virtual void UpdatePattern();
     // FUNCTION: 0x694d00
     void Unk694d00();
     // FUNCTION: 0x6a59c0
     CIkumi(int p1, int p2, int p3, int p4, int p5, BYTE p6);
     // FUNCTION: 0x6a5c50
-    virtual void Vf12();
+    virtual void Reset();
     // FUNCTION: 0x6a5dc0
     ~CIkumi();
     // FUNCTION: 0x6a5e70
-    virtual void Vf11();
+    virtual void Load();
     // FUNCTION: 0x6a5eb0
     void Unk6a5eb0();
     // FUNCTION: 0x6a6270
-    virtual void Vf0();
+    virtual void StartPattern();
     // FUNCTION: 0x6a62c0
-    virtual void Vf10(short p1);
+    virtual void RemoveObject(short p1);
     // FUNCTION: 0x6a6310
-    virtual void Vf3();
+    virtual void Move();
     // FUNCTION: 0x6a6330
-    virtual void Vf4();
+    virtual void StartCommand();
     // FUNCTION: 0x6a93f0
-    virtual void Vf1();
+    virtual void DrawGauge();
     // FUNCTION: 0x6ab060
     virtual void Vf8();
     // FUNCTION: 0x6ab6a0
     void Unk6ab6a0(char p1);
     // FUNCTION: 0x6ab7b0
-    virtual void Vf9(EffectDesc* p1);
+    virtual void SpawnObject(EffectDesc* p1);
     // FUNCTION: 0x6ab7e0
-    virtual void Vf2();
+    virtual void ReadCommand();
     // FUNCTION: 0x6acc10
-    virtual void Vf5();
+    virtual void CpuInput();
     // FUNCTION: 0x6b06f0
-    virtual void Vf7();
+    virtual void UpdateObjects();
     // FUNCTION: 0x6b7900
     void Unk6b7900();
 
@@ -2759,33 +2759,33 @@ public:
 class CEXNanase : public CPlayer {
 public:
     // FUNCTION: 0x6be9c0
-    virtual void Vf6();
+    virtual void UpdatePattern();
     // FUNCTION: 0x6cfbb0
     CEXNanase(int p1, int p2, int p3, int p4, int p5, BYTE p6);
     // FUNCTION: 0x6cfd80
-    virtual void Vf12();
+    virtual void Reset();
     // FUNCTION: 0x6cfed0
-    virtual void Vf0();
+    virtual void StartPattern();
     // FUNCTION: 0x6cff10
-    virtual void Vf10(short p1);
+    virtual void RemoveObject(short p1);
     // FUNCTION: 0x6cff60
-    virtual void Vf3();
+    virtual void Move();
     // FUNCTION: 0x6cff80
-    virtual void Vf4();
+    virtual void StartCommand();
     // FUNCTION: 0x6d2400
-    virtual void Vf1();
+    virtual void DrawGauge();
     // FUNCTION: 0x6d2410
     void Unk6d2410(int p1);
     // FUNCTION: 0x6d2420
     virtual void Vf8();
     // FUNCTION: 0x6d2740
-    virtual void Vf9(EffectDesc* p1);
+    virtual void SpawnObject(EffectDesc* p1);
     // FUNCTION: 0x6d2770
-    virtual void Vf2();
+    virtual void ReadCommand();
     // FUNCTION: 0x6d38e0
-    virtual void Vf5();
+    virtual void CpuInput();
     // FUNCTION: 0x6d6e40
-    virtual void Vf7();
+    virtual void UpdateObjects();
 
     int unk3138;
     int unk313c;
@@ -2808,31 +2808,31 @@ public:
 class CNayukiB : public CPlayer {
 public:
     // FUNCTION: 0x730710
-    virtual void Vf6();
+    virtual void UpdatePattern();
     // FUNCTION: 0x73e790
     CNayukiB(int p1, int p2, int p3, int p4, int p5, BYTE p6);
     // FUNCTION: 0x73e970
-    virtual void Vf12();
+    virtual void Reset();
     // FUNCTION: 0x73eac0
-    virtual void Vf0();
+    virtual void StartPattern();
     // FUNCTION: 0x73eb00
-    virtual void Vf10(short p1);
+    virtual void RemoveObject(short p1);
     // FUNCTION: 0x73eb50
-    virtual void Vf3();
+    virtual void Move();
     // FUNCTION: 0x73eb70
-    virtual void Vf4();
+    virtual void StartCommand();
     // FUNCTION: 0x741680
-    virtual void Vf1();
+    virtual void DrawGauge();
     // FUNCTION: 0x741ac0
     virtual void Vf8();
     // FUNCTION: 0x741bc0
-    virtual void Vf9(EffectDesc* p1);
+    virtual void SpawnObject(EffectDesc* p1);
     // FUNCTION: 0x741bf0
-    virtual void Vf2();
+    virtual void ReadCommand();
     // FUNCTION: 0x742eb0
-    virtual void Vf5();
+    virtual void CpuInput();
     // FUNCTION: 0x7472c0
-    virtual void Vf7();
+    virtual void UpdateObjects();
 
     int unk3138;
     int unk313c;

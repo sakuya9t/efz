@@ -140,22 +140,22 @@ BYTE CScene5::Update()
     if (unk45c < 0x3c) {
         unk45c++;
         if (m_game->unk134c == 1) {
-            m_players[0]->Vf6();
+            m_players[0]->UpdatePattern();
             m_players[0]->Unk40f580();
-            m_players[0]->Vf6();
+            m_players[0]->UpdatePattern();
             m_players[0]->Unk40f580();
-            m_players[0]->Vf6();
+            m_players[0]->UpdatePattern();
             m_players[0]->Unk40f580();
             if (m_players[0]->unk2c9 >= 0 && m_players[0]->unk2c9 < 0x41) {
                 m_sound->Play((short)m_game->m_sounds[m_players[0]->unk2c9], 0);
                 m_players[0]->unk2c9 = -1;
             }
         } else {
-            m_players[1]->Vf6();
+            m_players[1]->UpdatePattern();
             m_players[1]->Unk40f580();
-            m_players[1]->Vf6();
+            m_players[1]->UpdatePattern();
             m_players[1]->Unk40f580();
-            m_players[1]->Vf6();
+            m_players[1]->UpdatePattern();
             m_players[1]->Unk40f580();
             if (m_players[1]->unk2c9 >= 0 && m_players[1]->unk2c9 < 0x41) {
                 m_sound->Play((short)m_game->m_sounds[m_players[1]->unk2c9], 0);
@@ -516,7 +516,7 @@ void CScene5::Unk774b00()
         m_players[0]->y = -240.0;
         m_players[0]->facing = -1;
         m_players[0]->pattern = 0x2f;
-        m_players[0]->Vf0();
+        m_players[0]->StartPattern();
         m_players[0]->StopMoving();
         m_players[0]->unk30bc = 0;
         m_players[0]->m_afterimages.unk0 = 0;
@@ -530,7 +530,7 @@ void CScene5::Unk774b00()
     m_players[1]->y = -240.0;
     m_players[1]->facing = -1;
     m_players[1]->pattern = 0x2f;
-    m_players[1]->Vf0();
+    m_players[1]->StartPattern();
     m_players[1]->StopMoving();
     m_players[1]->unk30bc = 0;
     m_players[1]->m_afterimages.unk0 = 0;

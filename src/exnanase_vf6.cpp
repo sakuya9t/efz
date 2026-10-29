@@ -1,4 +1,4 @@
-// CEXNanase::Vf6 (0x6be9c0-0x6cfbaf), the per-state update. It is a file of its own,
+// CEXNanase::UpdatePattern (0x6be9c0-0x6cfbaf), the per-state update. It is a file of its own,
 // as in the original: its floating-point constants precede the rest of CEXNanase's
 // .rdata, which starts with its constructor's folder name (exnanase.cpp).
 #include <stdlib.h>
@@ -6,7 +6,7 @@
 #include <math.h>
 #include "efz.h"
 
-void CEXNanase::Vf6()
+void CEXNanase::UpdatePattern()
 {
     WORD x8;
     WORD l4;
@@ -17,7 +17,7 @@ void CEXNanase::Vf6()
     EffectDesc l50;
     l4 = (short)anims[pattern].frames[frame].duration;
     x8 = anims[pattern].frameCount;
-    CPlayer::Unk413090((EffectDesc*)&l50);
+    CPlayer::InitEffectDesc((EffectDesc*)&l50);
     switch (pattern) {
     default:
         vx = 0.0;
@@ -96,7 +96,7 @@ void CEXNanase::Vf6()
             frame++;
             if (frame >= x8) {
                 pattern = 9;
-                Vf0();
+                StartPattern();
             }
         }
         if (y + vy >= 0.0 && frame > 3) {
@@ -104,7 +104,7 @@ void CEXNanase::Vf6()
             unk2c9 = 9;
             CPlayer::FaceOpponent();
             pattern = 0xd;
-            Vf0();
+            StartPattern();
         }
         break;
     case 5:
@@ -132,7 +132,7 @@ void CEXNanase::Vf6()
             frame++;
             if (frame >= x8) {
                 pattern = 9;
-                Vf0();
+                StartPattern();
             }
         }
         if (y + vy >= 0.0 && frame > 3) {
@@ -140,7 +140,7 @@ void CEXNanase::Vf6()
             unk2c9 = 9;
             CPlayer::FaceOpponent();
             pattern = 0xd;
-            Vf0();
+            StartPattern();
         }
         break;
     case 6:
@@ -164,7 +164,7 @@ void CEXNanase::Vf6()
             frame++;
             if (frame >= x8) {
                 pattern = 9;
-                Vf0();
+                StartPattern();
             }
         }
         if (y + vy >= 0.0 && frame > 3) {
@@ -172,7 +172,7 @@ void CEXNanase::Vf6()
             unk2c9 = 9;
             CPlayer::FaceOpponent();
             pattern = 0xd;
-            Vf0();
+            StartPattern();
         }
         break;
     case 7:
@@ -186,7 +186,7 @@ void CEXNanase::Vf6()
             frame++;
             if (frame >= x8) {
                 pattern = 0;
-                Vf0();
+                StartPattern();
             }
         }
         break;
@@ -201,7 +201,7 @@ void CEXNanase::Vf6()
             frame++;
             if (frame >= x8) {
                 pattern = 3;
-                Vf0();
+                StartPattern();
             }
         }
         break;
@@ -220,7 +220,7 @@ void CEXNanase::Vf6()
             y = 0.0;
             unk2c9 = 9;
             pattern = 0xd;
-            Vf0();
+            StartPattern();
         }
         break;
     case 0xd:
@@ -237,7 +237,7 @@ void CEXNanase::Vf6()
                 if (m_inputY == 1) {
                     pattern = 3;
                 }
-                Vf0();
+                StartPattern();
             }
         }
         break;
@@ -255,7 +255,7 @@ void CEXNanase::Vf6()
             frame++;
             if (frame >= x8) {
                 pattern = 9;
-                Vf0();
+                StartPattern();
             }
         }
         if (y + vy >= 0.0 && frame > 3) {
@@ -263,7 +263,7 @@ void CEXNanase::Vf6()
             unk2c9 = 9;
             CPlayer::FaceOpponent();
             pattern = 0xd;
-            Vf0();
+            StartPattern();
         }
         break;
     case 0xf:
@@ -280,7 +280,7 @@ void CEXNanase::Vf6()
             frame++;
             if (frame >= x8) {
                 pattern = 9;
-                Vf0();
+                StartPattern();
             }
         }
         if (y + vy >= 0.0 && frame > 3) {
@@ -288,7 +288,7 @@ void CEXNanase::Vf6()
             unk2c9 = 9;
             CPlayer::FaceOpponent();
             pattern = 0xd;
-            Vf0();
+            StartPattern();
         }
         break;
     case 0x10:
@@ -305,7 +305,7 @@ void CEXNanase::Vf6()
             frame++;
             if (frame >= x8) {
                 pattern = 9;
-                Vf0();
+                StartPattern();
             }
         }
         if (y + vy >= 0.0 && frame > 3) {
@@ -313,7 +313,7 @@ void CEXNanase::Vf6()
             unk2c9 = 9;
             CPlayer::FaceOpponent();
             pattern = 0xd;
-            Vf0();
+            StartPattern();
         }
         break;
     case 0x2f:
@@ -375,7 +375,7 @@ void CEXNanase::Vf6()
                 if (m_inputY == 1) {
                     pattern = 3;
                 }
-                Vf0();
+                StartPattern();
             }
         }
         break;
@@ -411,7 +411,7 @@ void CEXNanase::Vf6()
                 if (m_inputY == 1) {
                     pattern = 3;
                 }
-                Vf0();
+                StartPattern();
             }
         }
         break;
@@ -447,7 +447,7 @@ void CEXNanase::Vf6()
                 if (m_inputY == 1) {
                     pattern = 3;
                 }
-                Vf0();
+                StartPattern();
             }
         }
         break;
@@ -483,7 +483,7 @@ void CEXNanase::Vf6()
                 if (m_inputY == 1) {
                     pattern = 3;
                 }
-                Vf0();
+                StartPattern();
             }
         }
         break;
@@ -519,7 +519,7 @@ void CEXNanase::Vf6()
                 if (m_inputY == 1) {
                     pattern = 3;
                 }
-                Vf0();
+                StartPattern();
             }
         }
         break;
@@ -555,7 +555,7 @@ void CEXNanase::Vf6()
                 if (m_inputY == 1) {
                     pattern = 3;
                 }
-                Vf0();
+                StartPattern();
             }
         }
         break;
@@ -588,7 +588,7 @@ void CEXNanase::Vf6()
             frame++;
             if (frame >= x8) {
                 pattern = 3;
-                Vf0();
+                StartPattern();
             }
         }
         break;
@@ -621,7 +621,7 @@ void CEXNanase::Vf6()
             frame++;
             if (frame >= x8) {
                 pattern = 3;
-                Vf0();
+                StartPattern();
             }
         }
         break;
@@ -654,7 +654,7 @@ void CEXNanase::Vf6()
             frame++;
             if (frame >= x8) {
                 pattern = 3;
-                Vf0();
+                StartPattern();
             }
         }
         break;
@@ -694,10 +694,10 @@ void CEXNanase::Vf6()
             y = 0.0;
             if (unk12c != 0) {
                 pattern = 0x61;
-                Vf0();
+                StartPattern();
             } else {
                 pattern = 0x62;
-                Vf0();
+                StartPattern();
             }
         }
         break;
@@ -737,10 +737,10 @@ void CEXNanase::Vf6()
             y = 0.0;
             if (unk12c != 0) {
                 pattern = 0x61;
-                Vf0();
+                StartPattern();
             } else {
                 pattern = 0x62;
-                Vf0();
+                StartPattern();
             }
         }
         break;
@@ -780,10 +780,10 @@ void CEXNanase::Vf6()
             y = 0.0;
             if (unk12c != 0) {
                 pattern = 0x61;
-                Vf0();
+                StartPattern();
             } else {
                 pattern = 0x62;
-                Vf0();
+                StartPattern();
             }
         }
         break;
@@ -818,10 +818,10 @@ void CEXNanase::Vf6()
             y = 0.0;
             if (unk12c != 0) {
                 pattern = 0x61;
-                Vf0();
+                StartPattern();
             } else {
                 pattern = 0x62;
-                Vf0();
+                StartPattern();
             }
         }
         break;
@@ -856,10 +856,10 @@ void CEXNanase::Vf6()
             y = 0.0;
             if (unk12c != 0) {
                 pattern = 0x61;
-                Vf0();
+                StartPattern();
             } else {
                 pattern = 0x62;
-                Vf0();
+                StartPattern();
             }
         }
         break;
@@ -869,7 +869,7 @@ void CEXNanase::Vf6()
         }
         if (frame > 0 && (char)CPlayer::Unk40ff70() != 0) {
             pattern = 0x46;
-            Vf0();
+            StartPattern();
             break;
         }
         if (frame == 0 && timer == 0) {
@@ -904,10 +904,10 @@ void CEXNanase::Vf6()
             y = 0.0;
             if (unk12c != 0) {
                 pattern = 0x61;
-                Vf0();
+                StartPattern();
             } else {
                 pattern = 0x62;
-                Vf0();
+                StartPattern();
             }
         }
         break;
@@ -917,7 +917,7 @@ void CEXNanase::Vf6()
         }
         if (frame > 0 && (char)CPlayer::Unk40ff70() != 0) {
             pattern = 0x46;
-            Vf0();
+            StartPattern();
             break;
         }
         if (frame == 0 && timer == 0) {
@@ -952,10 +952,10 @@ void CEXNanase::Vf6()
             y = 0.0;
             if (unk12c != 0) {
                 pattern = 0x61;
-                Vf0();
+                StartPattern();
             } else {
                 pattern = 0x62;
-                Vf0();
+                StartPattern();
             }
         }
         break;
@@ -965,7 +965,7 @@ void CEXNanase::Vf6()
         }
         if (frame > 0 && (char)CPlayer::Unk40ff70() != 0) {
             pattern = 0x46;
-            Vf0();
+            StartPattern();
             break;
         }
         if (frame == 0 && timer == 0) {
@@ -995,10 +995,10 @@ void CEXNanase::Vf6()
             y = 0.0;
             if (unk12c != 0) {
                 pattern = 0x61;
-                Vf0();
+                StartPattern();
             } else {
                 pattern = 0x62;
-                Vf0();
+                StartPattern();
             }
         }
         break;
@@ -1008,7 +1008,7 @@ void CEXNanase::Vf6()
         }
         if (frame > 0 && (char)CPlayer::Unk40ff70() != 0) {
             pattern = 0x46;
-            Vf0();
+            StartPattern();
             break;
         }
         if (frame == 0 && timer == 0) {
@@ -1038,10 +1038,10 @@ void CEXNanase::Vf6()
             y = 0.0;
             if (unk12c != 0) {
                 pattern = 0x61;
-                Vf0();
+                StartPattern();
             } else {
                 pattern = 0x62;
-                Vf0();
+                StartPattern();
             }
         }
         break;
@@ -1055,7 +1055,7 @@ void CEXNanase::Vf6()
         timer++;
         if ((char)CPlayer::Unk40ff70() != 0) {
             pattern = 0x46;
-            Vf0();
+            StartPattern();
             break;
         }
         if (timer >= l4) {
@@ -1069,10 +1069,10 @@ void CEXNanase::Vf6()
             y = 0.0;
             if (unk12c != 0) {
                 pattern = 0x61;
-                Vf0();
+                StartPattern();
             } else {
                 pattern = 0x62;
-                Vf0();
+                StartPattern();
             }
         }
         break;
@@ -1095,10 +1095,10 @@ void CEXNanase::Vf6()
             y = 0.0;
             if (unk12c != 0) {
                 pattern = 0x61;
-                Vf0();
+                StartPattern();
             } else {
                 pattern = 0x62;
-                Vf0();
+                StartPattern();
             }
         }
         break;
@@ -1134,10 +1134,10 @@ void CEXNanase::Vf6()
             y = 0.0;
             if (unk12c != 0) {
                 pattern = 0x61;
-                Vf0();
+                StartPattern();
             } else {
                 pattern = 0x62;
-                Vf0();
+                StartPattern();
             }
         }
         break;
@@ -1172,10 +1172,10 @@ void CEXNanase::Vf6()
             y = 0.0;
             if (unk12c != 0) {
                 pattern = 0x61;
-                Vf0();
+                StartPattern();
             } else {
                 pattern = 0x62;
-                Vf0();
+                StartPattern();
             }
         }
         break;
@@ -1200,7 +1200,7 @@ void CEXNanase::Vf6()
                 if (m_inputY == 1) {
                     pattern = 3;
                 }
-                Vf0();
+                StartPattern();
             }
         }
         break;
@@ -1225,7 +1225,7 @@ void CEXNanase::Vf6()
                 if (m_inputY == 1) {
                     pattern = 3;
                 }
-                Vf0();
+                StartPattern();
             }
         }
         break;
@@ -1247,7 +1247,7 @@ void CEXNanase::Vf6()
             frame++;
             if (frame >= x8) {
                 pattern = 3;
-                Vf0();
+                StartPattern();
             }
         }
         break;
@@ -1285,7 +1285,7 @@ void CEXNanase::Vf6()
                 if (m_inputY == 1) {
                     pattern = 3;
                 }
-                Vf0();
+                StartPattern();
             }
         }
         break;
@@ -1323,7 +1323,7 @@ void CEXNanase::Vf6()
                 if (m_inputY == 1) {
                     pattern = 3;
                 }
-                Vf0();
+                StartPattern();
             }
         }
         break;
@@ -1358,7 +1358,7 @@ void CEXNanase::Vf6()
             frame++;
             if (frame >= x8) {
                 pattern = 3;
-                Vf0();
+                StartPattern();
             }
         }
         break;
@@ -1372,7 +1372,7 @@ void CEXNanase::Vf6()
             l50.y = (double)(int)y;
             l50.unk18 = facing;
             l50.layer = 1;
-            Vf9(&l50);
+            SpawnObject(&l50);
             m_gauge = m_gauge + 0x1e;
             vx = unkc0;
             vy = unkc8;
@@ -1395,10 +1395,10 @@ void CEXNanase::Vf6()
             y = 0.0;
             if (unk12c != 0) {
                 pattern = 0x61;
-                Vf0();
+                StartPattern();
             } else {
                 pattern = 0x62;
-                Vf0();
+                StartPattern();
             }
         }
         break;
@@ -1441,10 +1441,10 @@ void CEXNanase::Vf6()
             y = 0.0;
             if (unk12c != 0) {
                 pattern = 0x61;
-                Vf0();
+                StartPattern();
             } else {
                 pattern = 0x62;
-                Vf0();
+                StartPattern();
             }
         }
         break;
@@ -1458,7 +1458,7 @@ void CEXNanase::Vf6()
                 l50.layer = 0;
                 l50.unk0 = 1;
                 l50.unk18 = facing;
-                Vf9(&l50);
+                SpawnObject(&l50);
                 unk3144 = 1;
             }
             if (unk120 != 0) {
@@ -1495,7 +1495,7 @@ void CEXNanase::Vf6()
             frame++;
             if (frame >= x8) {
                 pattern = 0;
-                Vf0();
+                StartPattern();
                 CPlayer::FaceOpponent();
             }
         }
@@ -1510,7 +1510,7 @@ void CEXNanase::Vf6()
                 l50.layer = 0;
                 l50.unk0 = 1;
                 l50.unk18 = facing;
-                Vf9(&l50);
+                SpawnObject(&l50);
                 unk3144 = 1;
             }
             if (unk120 != 0) {
@@ -1547,7 +1547,7 @@ void CEXNanase::Vf6()
             frame++;
             if (frame >= x8) {
                 pattern = 0;
-                Vf0();
+                StartPattern();
                 CPlayer::FaceOpponent();
             }
         }
@@ -1562,7 +1562,7 @@ void CEXNanase::Vf6()
                 l50.layer = 0;
                 l50.unk0 = 1;
                 l50.unk18 = facing;
-                Vf9(&l50);
+                SpawnObject(&l50);
                 unk3144 = 1;
             }
             if (unk120 != 0) {
@@ -1580,7 +1580,7 @@ void CEXNanase::Vf6()
             frame++;
             if (frame >= x8) {
                 pattern = 0;
-                Vf0();
+                StartPattern();
                 CPlayer::FaceOpponent();
             }
         }
@@ -1588,10 +1588,10 @@ void CEXNanase::Vf6()
             y = 0.0;
             if (unk12c != 0) {
                 pattern = 0x61;
-                Vf0();
+                StartPattern();
             } else {
                 pattern = 0x62;
-                Vf0();
+                StartPattern();
             }
         }
         break;
@@ -1605,7 +1605,7 @@ void CEXNanase::Vf6()
                 l50.layer = 0;
                 l50.unk0 = 1;
                 l50.unk18 = facing;
-                Vf9(&l50);
+                SpawnObject(&l50);
                 unk3144 = 1;
             }
             if (unk3138 == 0) {
@@ -1632,10 +1632,10 @@ void CEXNanase::Vf6()
             y = 0.0;
             if (unk12c != 0) {
                 pattern = 0x61;
-                Vf0();
+                StartPattern();
             } else {
                 pattern = 0x62;
-                Vf0();
+                StartPattern();
             }
         }
         break;
@@ -1648,7 +1648,7 @@ void CEXNanase::Vf6()
             l50.unk18 = 1;
             l50.scale = 0;
             l50.layer = 0;
-            Vf9(&l50);
+            SpawnObject(&l50);
         }
         timer++;
         if (timer >= l4) {
@@ -1656,7 +1656,7 @@ void CEXNanase::Vf6()
             frame++;
             if (frame >= x8) {
                 pattern = 0;
-                Vf0();
+                StartPattern();
             }
         }
         break;
@@ -1673,7 +1673,7 @@ void CEXNanase::Vf6()
                 if (m_inputY == 1) {
                     pattern = 3;
                 }
-                Vf0();
+                StartPattern();
             }
         }
         break;
@@ -1696,7 +1696,7 @@ void CEXNanase::Vf6()
             frame++;
             if (frame >= x8) {
                 pattern = 0x63;
-                Vf0();
+                StartPattern();
             }
         }
         break;
@@ -1719,14 +1719,14 @@ void CEXNanase::Vf6()
             frame++;
             if (frame >= x8) {
                 pattern = 0x63;
-                Vf0();
+                StartPattern();
             }
         }
         break;
     case 0x63:
         if (m_hp > 0 && timer > 0x63 && frame == 0) {
             pattern = 0x60;
-            Vf0();
+            StartPattern();
             unk158 = 0;
             break;
         }
@@ -1739,7 +1739,7 @@ void CEXNanase::Vf6()
             }
             if (frame >= x8) {
                 pattern = 0x60;
-                Vf0();
+                StartPattern();
             }
         }
         break;
@@ -1779,7 +1779,7 @@ void CEXNanase::Vf6()
                 if (m_inputY == 1) {
                     pattern = 3;
                 }
-                Vf0();
+                StartPattern();
             }
         }
         break;
@@ -1819,7 +1819,7 @@ void CEXNanase::Vf6()
                 if (m_inputY == 1) {
                     pattern = 3;
                 }
-                Vf0();
+                StartPattern();
             }
         }
         break;
@@ -1859,7 +1859,7 @@ void CEXNanase::Vf6()
                 if (m_inputY == 1) {
                     pattern = 3;
                 }
-                Vf0();
+                StartPattern();
             }
         }
         break;
@@ -1896,7 +1896,7 @@ void CEXNanase::Vf6()
             }
             if (frame >= x8) {
                 pattern = 3;
-                Vf0();
+                StartPattern();
             }
         }
         break;
@@ -1933,7 +1933,7 @@ void CEXNanase::Vf6()
             }
             if (frame >= x8) {
                 pattern = 3;
-                Vf0();
+                StartPattern();
             }
         }
         break;
@@ -1970,7 +1970,7 @@ void CEXNanase::Vf6()
             }
             if (frame >= x8) {
                 pattern = 3;
-                Vf0();
+                StartPattern();
             }
         }
         break;
@@ -1988,7 +1988,7 @@ void CEXNanase::Vf6()
             frame++;
             if (frame >= x8) {
                 pattern = 9;
-                Vf0();
+                StartPattern();
             }
         }
         if (y + vy >= 0.0) {
@@ -1996,7 +1996,7 @@ void CEXNanase::Vf6()
             unk2c9 = 9;
             CPlayer::FaceOpponent();
             pattern = 0xd;
-            Vf0();
+            StartPattern();
         }
         break;
     case 0x9d:
@@ -2019,7 +2019,7 @@ void CEXNanase::Vf6()
             frame++;
             if (frame >= x8) {
                 pattern = 9;
-                Vf0();
+                StartPattern();
             }
         }
         if (y + vy >= 0.0) {
@@ -2027,7 +2027,7 @@ void CEXNanase::Vf6()
             unk2c9 = 9;
             CPlayer::FaceOpponent();
             pattern = 0xd;
-            Vf0();
+            StartPattern();
         }
         break;
     case 0x9e:
@@ -2050,7 +2050,7 @@ void CEXNanase::Vf6()
             frame++;
             if (frame >= x8) {
                 pattern = 9;
-                Vf0();
+                StartPattern();
             }
         }
         if (y + vy >= 0.0) {
@@ -2058,7 +2058,7 @@ void CEXNanase::Vf6()
             unk2c9 = 9;
             CPlayer::FaceOpponent();
             pattern = 0xd;
-            Vf0();
+            StartPattern();
         }
         break;
     case 0xa3:
@@ -2074,7 +2074,7 @@ void CEXNanase::Vf6()
                 pattern = 6;
             }
             m_attackResult = 0;
-            Vf0();
+            StartPattern();
             break;
         }
         if (frame == 0 && timer == 0) {
@@ -2096,11 +2096,11 @@ void CEXNanase::Vf6()
         }
         if (m_inputX == facing && unk313c >= 0x78) {
             pattern = 0xb2;
-            Vf0();
+            StartPattern();
         }
         if (m_inputX != facing && unk3138 >= 0x3c) {
             pattern = 0xb2;
-            Vf0();
+            StartPattern();
         }
         break;
     case 0xa4:
@@ -2135,7 +2135,7 @@ void CEXNanase::Vf6()
             }
             if (frame >= x8) {
                 pattern = 0;
-                Vf0();
+                StartPattern();
             }
         }
         break;
@@ -2161,7 +2161,7 @@ void CEXNanase::Vf6()
         }
         if (m_inputX == facing && unk313c >= 0x64) {
             pattern = 9;
-            Vf0();
+            StartPattern();
             vx = 1.3;
             ay = 0.03;
             if (CPlayer::FaceOpponent() != 0) {
@@ -2170,7 +2170,7 @@ void CEXNanase::Vf6()
         }
         if (m_inputX != facing && unk3138 >= 0x30) {
             pattern = 9;
-            Vf0();
+            StartPattern();
             vx = 1.3;
             ay = 0.03;
             if (CPlayer::FaceOpponent() != 0) {
@@ -2200,7 +2200,7 @@ void CEXNanase::Vf6()
         }
         if (m_inputX == -facing && unk313c >= 0x78) {
             pattern = 9;
-            Vf0();
+            StartPattern();
             vx = -0.9;
             ay = 0.03;
             if (CPlayer::FaceOpponent() != 0) {
@@ -2209,7 +2209,7 @@ void CEXNanase::Vf6()
         }
         if (m_inputX != -facing && unk3138 >= 0x28) {
             pattern = 9;
-            Vf0();
+            StartPattern();
             vx = -0.9;
             ay = 0.03;
             if (CPlayer::FaceOpponent() != 0) {
@@ -2254,7 +2254,7 @@ void CEXNanase::Vf6()
             if (frame >= x8) {
                 pattern = 0;
                 CPlayer::FaceOpponent();
-                Vf0();
+                StartPattern();
             }
         }
         break;
@@ -2284,7 +2284,7 @@ void CEXNanase::Vf6()
             }
             if (frame >= x8) {
                 pattern = 0;
-                Vf0();
+                StartPattern();
             }
         }
         break;
@@ -2314,7 +2314,7 @@ void CEXNanase::Vf6()
             }
             if (frame >= x8) {
                 pattern = 3;
-                Vf0();
+                StartPattern();
             }
         }
         break;
@@ -2351,7 +2351,7 @@ void CEXNanase::Vf6()
             frame++;
             if (frame >= x8) {
                 pattern = 9;
-                Vf0();
+                StartPattern();
             }
         }
         break;
@@ -2387,7 +2387,7 @@ void CEXNanase::Vf6()
                 vx = unk3138 * 0.01;
                 vy = unk313c * 0.01;
                 ay = 0.035;
-                Vf0();
+                StartPattern();
             }
         }
         break;
@@ -2407,7 +2407,7 @@ void CEXNanase::Vf6()
                 pattern = 6;
             }
             m_attackResult = 0;
-            Vf0();
+            StartPattern();
             break;
         }
         timer++;
@@ -2416,7 +2416,7 @@ void CEXNanase::Vf6()
             frame++;
             if (frame >= x8) {
                 pattern = 0;
-                Vf0();
+                StartPattern();
                 break;
             }
         }
@@ -2451,7 +2451,7 @@ void CEXNanase::Vf6()
                 frame = frame - 2;
             }
             if (frame >= x8) {
-                Vf0();
+                StartPattern();
                 pattern = 0;
             }
         }
@@ -2476,7 +2476,7 @@ void CEXNanase::Vf6()
                 pattern = 6;
             }
             m_attackResult = 0;
-            Vf0();
+            StartPattern();
             break;
         }
         if (frame == 1 && timer == 0) {
@@ -2496,7 +2496,7 @@ void CEXNanase::Vf6()
             if (frame >= x8) {
                 pattern = 0;
                 CPlayer::FaceOpponent();
-                Vf0();
+                StartPattern();
             }
         }
         break;
@@ -2520,7 +2520,7 @@ void CEXNanase::Vf6()
                 pattern = 6;
             }
             m_attackResult = 0;
-            Vf0();
+            StartPattern();
             break;
         }
         if (frame == 1 && timer == 0) {
@@ -2538,7 +2538,7 @@ void CEXNanase::Vf6()
             if (frame >= x8) {
                 pattern = 0;
                 CPlayer::FaceOpponent();
-                Vf0();
+                StartPattern();
             }
         }
         break;
@@ -2562,7 +2562,7 @@ void CEXNanase::Vf6()
                 pattern = 6;
             }
             m_attackResult = 0;
-            Vf0();
+            StartPattern();
             break;
         }
         if (frame == 2 && timer == 0) {
@@ -2583,7 +2583,7 @@ void CEXNanase::Vf6()
             if (frame >= x8) {
                 pattern = 0;
                 CPlayer::FaceOpponent();
-                Vf0();
+                StartPattern();
             }
         }
         break;
@@ -2617,7 +2617,7 @@ void CEXNanase::Vf6()
             if (frame >= x8) {
                 pattern = 0;
                 CPlayer::FaceOpponent();
-                Vf0();
+                StartPattern();
             }
         }
         break;
@@ -2641,7 +2641,7 @@ void CEXNanase::Vf6()
                 pattern = 6;
             }
             m_attackResult = 0;
-            Vf0();
+            StartPattern();
             break;
         }
         if (frame == 1 && timer == 0) {
@@ -2662,7 +2662,7 @@ void CEXNanase::Vf6()
                     pattern = 3;
                 }
                 CPlayer::FaceOpponent();
-                Vf0();
+                StartPattern();
             }
         }
         break;
@@ -2686,7 +2686,7 @@ void CEXNanase::Vf6()
                 pattern = 6;
             }
             m_attackResult = 0;
-            Vf0();
+            StartPattern();
             break;
         }
         if (frame == 2 && timer == 0) {
@@ -2707,7 +2707,7 @@ void CEXNanase::Vf6()
                     pattern = 3;
                 }
                 CPlayer::FaceOpponent();
-                Vf0();
+                StartPattern();
             }
         }
         break;
@@ -2731,7 +2731,7 @@ void CEXNanase::Vf6()
                 pattern = 6;
             }
             m_attackResult = 0;
-            Vf0();
+            StartPattern();
             break;
         }
         if (frame == 2 && timer == 0) {
@@ -2749,7 +2749,7 @@ void CEXNanase::Vf6()
             if (frame >= x8) {
                 pattern = 3;
                 CPlayer::FaceOpponent();
-                Vf0();
+                StartPattern();
             }
         }
         break;
@@ -2766,7 +2766,7 @@ void CEXNanase::Vf6()
                 pattern = 0x10;
             }
             m_attackResult = 0;
-            Vf0();
+            StartPattern();
             break;
         }
         if (frame == 2 && timer == 0) {
@@ -2777,7 +2777,7 @@ void CEXNanase::Vf6()
         if (y + vy >= 0.0) {
             y = 0.0;
             pattern = 0xd;
-            Vf0();
+            StartPattern();
             break;
         }
         timer++;
@@ -2789,7 +2789,7 @@ void CEXNanase::Vf6()
             }
             if (frame >= x8) {
                 pattern = 9;
-                Vf0();
+                StartPattern();
             }
         }
         break;
@@ -2806,7 +2806,7 @@ void CEXNanase::Vf6()
                 pattern = 0x10;
             }
             m_attackResult = 0;
-            Vf0();
+            StartPattern();
             break;
         }
         if (frame == 3 && timer == 0) {
@@ -2817,7 +2817,7 @@ void CEXNanase::Vf6()
         if (y + vy >= 0.0) {
             y = 0.0;
             pattern = 0xd;
-            Vf0();
+            StartPattern();
             break;
         }
         timer++;
@@ -2829,7 +2829,7 @@ void CEXNanase::Vf6()
             }
             if (frame >= x8) {
                 pattern = 4;
-                Vf0();
+                StartPattern();
                 frame = 7;
             }
         }
@@ -2847,7 +2847,7 @@ void CEXNanase::Vf6()
                 pattern = 0x10;
             }
             m_attackResult = 0;
-            Vf0();
+            StartPattern();
             break;
         }
         if (frame == 4 && timer == 0) {
@@ -2858,7 +2858,7 @@ void CEXNanase::Vf6()
         if (y + vy >= 0.0) {
             y = 0.0;
             pattern = 0xd;
-            Vf0();
+            StartPattern();
             break;
         }
         timer++;
@@ -2870,7 +2870,7 @@ void CEXNanase::Vf6()
             }
             if (frame >= x8) {
                 pattern = 4;
-                Vf0();
+                StartPattern();
                 frame = 7;
             }
         }
@@ -2900,7 +2900,7 @@ void CEXNanase::Vf6()
             if (frame >= x8) {
                 pattern = 0;
                 CPlayer::FaceOpponent();
-                Vf0();
+                StartPattern();
             }
         }
         break;
@@ -2914,7 +2914,7 @@ void CEXNanase::Vf6()
                 pattern = 6;
             }
             m_attackResult = 0;
-            Vf0();
+            StartPattern();
             break;
         }
         if (frame == 0 && timer == 0) {
@@ -2934,7 +2934,7 @@ void CEXNanase::Vf6()
             if (frame >= x8) {
                 pattern = 0;
                 CPlayer::FaceOpponent();
-                Vf0();
+                StartPattern();
             }
         }
         break;
@@ -2949,7 +2949,7 @@ void CEXNanase::Vf6()
         }
         if (m_attackResult > 1) {
             pattern = 0xd5;
-            Vf0();
+            StartPattern();
             CPlayer::StopMoving();
             break;
         }
@@ -2966,7 +2966,7 @@ void CEXNanase::Vf6()
             m_game->CreateEffect((EffectDesc*)&l50);
             unk2c9 = 7;
             pattern = 0xd6;
-            Vf0();
+            StartPattern();
             break;
         }
         timer++;
@@ -2993,7 +2993,7 @@ void CEXNanase::Vf6()
             m_attackResult = 0;
             if (frame >= x8) {
                 pattern = 9;
-                Vf0();
+                StartPattern();
             }
         }
         break;
@@ -3021,7 +3021,7 @@ void CEXNanase::Vf6()
                     pattern = 3;
                 }
                 CPlayer::FaceOpponent();
-                Vf0();
+                StartPattern();
             }
         }
         break;
@@ -3042,9 +3042,9 @@ void CEXNanase::Vf6()
                 x = 60.0;
             }
             CPlayer::StopMoving();
-            Vf0();
+            StartPattern();
             (*m_opponent)->StopMoving();
-            (*m_opponent)->Vf0();
+            (*m_opponent)->StartPattern();
             pattern = 0xdd;
             (*m_opponent)->pattern = 0x6b;
             (*m_opponent)->x = facing * 0x28 + x;
@@ -3064,7 +3064,7 @@ void CEXNanase::Vf6()
             if (frame >= x8) {
                 pattern = 0;
                 CPlayer::FaceOpponent();
-                Vf0();
+                StartPattern();
             }
         }
         break;
@@ -3096,25 +3096,25 @@ void CEXNanase::Vf6()
             (*m_opponent)->x = facing * 0x1e + x;
             (*m_opponent)->y = y - 68.0;
             (*m_opponent)->pattern = 0x65;
-            (*m_opponent)->Vf0();
+            (*m_opponent)->StartPattern();
         }
         if (frame == 3) {
             (*m_opponent)->x = facing * 0x19 + x;
             (*m_opponent)->y = y - 80.0;
             (*m_opponent)->pattern = 0x65;
-            (*m_opponent)->Vf0();
+            (*m_opponent)->StartPattern();
         }
         if (frame == 4) {
             (*m_opponent)->x = facing * 0xa + x;
             (*m_opponent)->y = y - 90.0;
             (*m_opponent)->pattern = 0x76;
-            (*m_opponent)->Vf0();
+            (*m_opponent)->StartPattern();
         }
         if (frame == 5) {
             (*m_opponent)->x = facing * 0x1e + x;
             (*m_opponent)->y = y - 60.0;
             (*m_opponent)->pattern = 0x69;
-            (*m_opponent)->Vf0();
+            (*m_opponent)->StartPattern();
         }
         timer++;
         if (timer >= l4) {
@@ -3125,12 +3125,12 @@ void CEXNanase::Vf6()
                 (*m_opponent)->x = facing * 0x28 + x;
                 (*m_opponent)->y = 0.0;
                 (*m_opponent)->pattern = 0x62;
-                (*m_opponent)->Vf0();
+                (*m_opponent)->StartPattern();
                 CPlayer::DealDamage(0x4b0, 750.0);
             }
             if (frame >= x8) {
                 pattern = 0;
-                Vf0();
+                StartPattern();
                 CPlayer::FaceOpponent();
             }
         }
@@ -3160,7 +3160,7 @@ void CEXNanase::Vf6()
             }
             if (frame >= x8) {
                 pattern = 0;
-                Vf0();
+                StartPattern();
             }
         }
         break;
@@ -3189,7 +3189,7 @@ void CEXNanase::Vf6()
             }
             if (frame >= x8) {
                 pattern = 0;
-                Vf0();
+                StartPattern();
             }
         }
         break;
@@ -3218,7 +3218,7 @@ void CEXNanase::Vf6()
             }
             if (frame >= x8) {
                 pattern = 0;
-                Vf0();
+                StartPattern();
             }
         }
         break;
@@ -3247,7 +3247,7 @@ void CEXNanase::Vf6()
             }
             if (frame >= x8) {
                 pattern = 3;
-                Vf0();
+                StartPattern();
             }
         }
         break;
@@ -3276,7 +3276,7 @@ void CEXNanase::Vf6()
             }
             if (frame >= x8) {
                 pattern = 3;
-                Vf0();
+                StartPattern();
             }
         }
         break;
@@ -3292,7 +3292,7 @@ void CEXNanase::Vf6()
                 pattern = 6;
             }
             m_attackResult = 0;
-            Vf0();
+            StartPattern();
             break;
         }
         if (vx > 0.0) {
@@ -3317,7 +3317,7 @@ void CEXNanase::Vf6()
             }
             if (frame >= x8) {
                 pattern = 0;
-                Vf0();
+                StartPattern();
             }
         }
         break;
@@ -3325,7 +3325,7 @@ void CEXNanase::Vf6()
         vy = vy + ay;
         if (frame == 1 && m_attackResult == 3) {
             (*m_opponent)->StopMoving();
-            (*m_opponent)->Vf0();
+            (*m_opponent)->StartPattern();
             CPlayer::StopMoving();
             (*m_opponent)->unk128 = 1;
             l50.type = 0;
@@ -3340,7 +3340,7 @@ void CEXNanase::Vf6()
             (*m_opponent)->x = facing * 0x19 + x;
             (*m_opponent)->y = y - 80.0;
             (*m_opponent)->pattern = 0x65;
-            (*m_opponent)->Vf0();
+            (*m_opponent)->StartPattern();
             break;
         }
         timer++;
@@ -3386,19 +3386,19 @@ void CEXNanase::Vf6()
             (*m_opponent)->x = facing * 0x19 + x;
             (*m_opponent)->y = y - 80.0;
             (*m_opponent)->pattern = 0x65;
-            (*m_opponent)->Vf0();
+            (*m_opponent)->StartPattern();
         }
         if (frame == 1) {
             (*m_opponent)->x = facing * 0xa + x;
             (*m_opponent)->y = y - 90.0;
             (*m_opponent)->pattern = 0x76;
-            (*m_opponent)->Vf0();
+            (*m_opponent)->StartPattern();
         }
         if (frame == 2) {
             (*m_opponent)->x = facing * 0x1e + x;
             (*m_opponent)->y = y - 60.0;
             (*m_opponent)->pattern = 0x69;
-            (*m_opponent)->Vf0();
+            (*m_opponent)->StartPattern();
         }
         timer++;
         if (timer >= l4) {
@@ -3409,12 +3409,12 @@ void CEXNanase::Vf6()
                 (*m_opponent)->x = facing * 0x28 + x;
                 (*m_opponent)->y = 0.0;
                 (*m_opponent)->pattern = 0x62;
-                (*m_opponent)->Vf0();
+                (*m_opponent)->StartPattern();
                 CPlayer::DealDamage(0x578, 500.0);
             }
             if (frame >= x8) {
                 pattern = 0;
-                Vf0();
+                StartPattern();
                 CPlayer::FaceOpponent();
             }
         }
@@ -3427,8 +3427,8 @@ void CEXNanase::Vf6()
             vx = 0.0;
             vy = 0.0;
             unkb8 = 0.0;
-            Vf0();
-            (*m_opponent)->Vf0();
+            StartPattern();
+            (*m_opponent)->StartPattern();
             (*m_opponent)->pattern = 0x6b;
             (*m_opponent)->unk14a = 0x5a;
             (*m_opponent)->x = facing * 0x28 + x;
@@ -3472,7 +3472,7 @@ void CEXNanase::Vf6()
                     pattern = 8;
                 }
                 CPlayer::FaceOpponent();
-                Vf0();
+                StartPattern();
             }
         }
         break;
@@ -3487,37 +3487,37 @@ void CEXNanase::Vf6()
                 (*m_opponent)->x = facing * 0xb + x;
                 (*m_opponent)->y = -62.0;
                 (*m_opponent)->pattern = 0x64;
-                (*m_opponent)->Vf0();
+                (*m_opponent)->StartPattern();
             }
             if (frame == 2) {
                 (*m_opponent)->x = x - facing * 0xb;
                 (*m_opponent)->y = -57.0;
                 (*m_opponent)->pattern = 0x64;
-                (*m_opponent)->Vf0();
+                (*m_opponent)->StartPattern();
             }
             if (frame == 3) {
                 (*m_opponent)->x = x - facing * 0xb;
                 (*m_opponent)->y = -52.0;
                 (*m_opponent)->pattern = 0x68;
-                (*m_opponent)->Vf0();
+                (*m_opponent)->StartPattern();
             }
             if (frame == 4) {
                 (*m_opponent)->x = x - facing * 0x19;
                 (*m_opponent)->y = -55.0;
                 (*m_opponent)->pattern = 0x68;
-                (*m_opponent)->Vf0();
+                (*m_opponent)->StartPattern();
             }
             if (frame == 5) {
                 (*m_opponent)->x = x - facing * 0x25;
                 (*m_opponent)->y = -54.0;
                 (*m_opponent)->pattern = 0x3f;
-                (*m_opponent)->Vf0();
+                (*m_opponent)->StartPattern();
                 (*m_opponent)->unkc0 = 0.5;
                 (*m_opponent)->unkc8 = -2.6;
             }
             if (frame >= x8) {
                 pattern = 0;
-                Vf0();
+                StartPattern();
             }
         }
         break;
@@ -3531,10 +3531,10 @@ void CEXNanase::Vf6()
             (*m_opponent)->x = facing * 0x32 + x;
             (*m_opponent)->y = 0.0;
             (*m_opponent)->pattern = 0x6b;
-            (*m_opponent)->Vf0();
+            (*m_opponent)->StartPattern();
             (*m_opponent)->StopMoving();
             (*m_opponent)->unk128 = 1;
-            Vf0();
+            StartPattern();
             pattern = 0xfe;
             break;
         }
@@ -3554,7 +3554,7 @@ void CEXNanase::Vf6()
             if (frame >= x8) {
                 pattern = 0;
                 CPlayer::FaceOpponent();
-                Vf0();
+                StartPattern();
             }
         }
         break;
@@ -3568,9 +3568,9 @@ void CEXNanase::Vf6()
             (*m_opponent)->x = facing * 0x28 + x;
             (*m_opponent)->y = -80.0;
             (*m_opponent)->pattern = 0x67;
-            (*m_opponent)->Vf0();
+            (*m_opponent)->StartPattern();
             (*m_opponent)->StopMoving();
-            Vf0();
+            StartPattern();
             pattern = 0xfe;
             frame = 2;
             (*m_opponent)->unk128 = 1;
@@ -3589,7 +3589,7 @@ void CEXNanase::Vf6()
             if (frame >= x8) {
                 pattern = 0;
                 CPlayer::FaceOpponent();
-                Vf0();
+                StartPattern();
             }
         }
         break;
@@ -3615,7 +3615,7 @@ void CEXNanase::Vf6()
                 (*m_opponent)->x = facing * 0x28 + x;
                 (*m_opponent)->y = -81.0;
                 (*m_opponent)->pattern = 0x67;
-                (*m_opponent)->Vf0();
+                (*m_opponent)->StartPattern();
                 (*m_opponent)->StopMoving();
                 (*m_opponent)->unk128 = 1;
             }
@@ -3623,14 +3623,14 @@ void CEXNanase::Vf6()
                 (*m_opponent)->x = facing * 0x28 + x;
                 (*m_opponent)->y = -80.0;
                 (*m_opponent)->pattern = 0x67;
-                (*m_opponent)->Vf0();
+                (*m_opponent)->StartPattern();
                 (*m_opponent)->StopMoving();
                 (*m_opponent)->unk128 = 1;
             }
             if (frame >= x8) {
                 pattern = 0x101;
                 (*m_opponent)->pattern = 0x3f;
-                (*m_opponent)->Vf0();
+                (*m_opponent)->StartPattern();
                 (*m_opponent)->StopMoving();
                 (*m_opponent)->unk128 = 1;
                 if (m_command == 0xa || m_command == 0x1e) {
@@ -3639,11 +3639,11 @@ void CEXNanase::Vf6()
                     timer = 0;
                     (*m_opponent)->pattern = 0x67;
                     if (unk3138 == 3) {
-                        Vf0();
+                        StartPattern();
                         pattern = 0x102;
                         unk2c9 = 0x1a;
                         (*m_opponent)->pattern = 0x9e;
-                        (*m_opponent)->Vf0();
+                        (*m_opponent)->StartPattern();
                         (*m_opponent)->StopMoving();
                         break;
                     }
@@ -3651,11 +3651,11 @@ void CEXNanase::Vf6()
                 }
                 if (m_command == 0xb || m_command == 0x1f) {
                     if (unk3138 == 2) {
-                        Vf0();
+                        StartPattern();
                         pattern = 0x102;
                         unk2c9 = 0x1a;
                         (*m_opponent)->pattern = 0x9e;
-                        (*m_opponent)->Vf0();
+                        (*m_opponent)->StartPattern();
                         (*m_opponent)->StopMoving();
                         break;
                     }
@@ -3704,11 +3704,11 @@ void CEXNanase::Vf6()
         if (frame == 0xa && timer == 0) {
             if ((m_command == 0xa || m_command == 0x1e) && m_gauge >= 0x3e8) {
                 if (unk3138 == 3) {
-                    Vf0();
+                    StartPattern();
                     pattern = 0x102;
                     unk2c9 = 0x1a;
                     (*m_opponent)->pattern = 0x9e;
-                    (*m_opponent)->Vf0();
+                    (*m_opponent)->StartPattern();
                     (*m_opponent)->StopMoving();
                     break;
                 }
@@ -3719,11 +3719,11 @@ void CEXNanase::Vf6()
             }
             if ((m_command == 0xb || m_command == 0x1f) && m_gauge >= 0x3e8) {
                 if (unk3138 == 2) {
-                    Vf0();
+                    StartPattern();
                     pattern = 0x102;
                     unk2c9 = 0x1a;
                     (*m_opponent)->pattern = 0x9e;
-                    (*m_opponent)->Vf0();
+                    (*m_opponent)->StartPattern();
                     (*m_opponent)->StopMoving();
                     break;
                 }
@@ -3743,53 +3743,53 @@ void CEXNanase::Vf6()
                 (*m_opponent)->x = facing * 0x24 + x;
                 (*m_opponent)->y = -78.0;
                 (*m_opponent)->pattern = 0x67;
-                (*m_opponent)->Vf0();
+                (*m_opponent)->StartPattern();
             }
             if (frame == 2) {
                 (*m_opponent)->x = facing * 0x2b + x;
                 (*m_opponent)->y = -75.0;
                 (*m_opponent)->pattern = 0x67;
-                (*m_opponent)->Vf0();
+                (*m_opponent)->StartPattern();
             }
             if (frame == 3) {
                 (*m_opponent)->x = facing * 0x2d + x;
                 (*m_opponent)->y = -69.0;
                 (*m_opponent)->pattern = 0x67;
-                (*m_opponent)->Vf0();
+                (*m_opponent)->StartPattern();
             }
             if (frame == 4) {
                 (*m_opponent)->x = facing * 0x17 + x;
                 (*m_opponent)->y = -66.0;
                 (*m_opponent)->pattern = 0x68;
-                (*m_opponent)->Vf0();
+                (*m_opponent)->StartPattern();
                 (*m_opponent)->facing = facing;
             }
             if (frame == 5) {
                 (*m_opponent)->x = x - facing * 0xa;
                 (*m_opponent)->y = -62.0;
                 (*m_opponent)->pattern = 0x69;
-                (*m_opponent)->Vf0();
+                (*m_opponent)->StartPattern();
             }
             if (frame == 6) {
                 (*m_opponent)->x = x - 0.0;
                 (*m_opponent)->y = 0.0;
                 (*m_opponent)->pattern = 0x62;
-                (*m_opponent)->Vf0();
+                (*m_opponent)->StartPattern();
                 (*m_opponent)->StopMoving();
             }
             if (frame >= x8) {
                 pattern = 0;
-                Vf0();
+                StartPattern();
             }
         }
         break;
     case 0x100:
         if (frame == 0 && timer == 0 && unk3138 == 1) {
-            Vf0();
+            StartPattern();
             pattern = 0x102;
             unk2c9 = 0x1a;
             (*m_opponent)->pattern = 0x9e;
-            (*m_opponent)->Vf0();
+            (*m_opponent)->StartPattern();
             (*m_opponent)->StopMoving();
             break;
         }
@@ -3813,7 +3813,7 @@ void CEXNanase::Vf6()
             l50.unk18 = facing;
             l50.unk0 = 1;
             l50.layer = 1;
-            Vf9(&l50);
+            SpawnObject(&l50);
         }
         timer++;
         if (timer >= l4) {
@@ -3822,7 +3822,7 @@ void CEXNanase::Vf6()
             m_attackResult = 3;
             if (frame >= x8) {
                 pattern = 0;
-                Vf0();
+                StartPattern();
             }
         }
         break;
@@ -3843,7 +3843,7 @@ void CEXNanase::Vf6()
             if (frame >= x8) {
                 pattern = 0;
                 CPlayer::FaceOpponent();
-                Vf0();
+                StartPattern();
             }
         }
         break;
@@ -3859,7 +3859,7 @@ void CEXNanase::Vf6()
             if (frame >= x8) {
                 pattern = 0;
                 CPlayer::FaceOpponent();
-                Vf0();
+                StartPattern();
             }
         }
         break;
@@ -3898,10 +3898,10 @@ void CEXNanase::Vf6()
             (*m_opponent)->x = facing * 0x32 + x;
             (*m_opponent)->y = 0.0;
             (*m_opponent)->pattern = 0x6b;
-            (*m_opponent)->Vf0();
+            (*m_opponent)->StartPattern();
             (*m_opponent)->StopMoving();
             (*m_opponent)->unk128 = 1;
-            Vf0();
+            StartPattern();
             pattern = 0xfe;
             l50.type = 0;
             l50.x = (double)((int)x + facing * 0x45);
@@ -3922,7 +3922,7 @@ void CEXNanase::Vf6()
             if (frame >= x8) {
                 pattern = 0;
                 CPlayer::FaceOpponent();
-                Vf0();
+                StartPattern();
             }
         }
         break;
@@ -3945,7 +3945,7 @@ void CEXNanase::Vf6()
                 l50.unk18 = facing;
                 l50.scale = 2;
                 l50.layer = 1;
-                Vf9(&l50);
+                SpawnObject(&l50);
                 m_gauge = m_gauge + 0x1e;
             }
             if (frame == 0xa && unk3138 < 3) {
@@ -3961,7 +3961,7 @@ void CEXNanase::Vf6()
                     pattern = 8;
                 }
                 CPlayer::FaceOpponent();
-                Vf0();
+                StartPattern();
             }
         }
         break;
@@ -3977,7 +3977,7 @@ void CEXNanase::Vf6()
             l50.unk18 = facing;
             l50.scale = 2;
             l50.layer = 1;
-            Vf9(&l50);
+            SpawnObject(&l50);
         }
         timer++;
         if (timer >= l4 - ((unk3454 == 1) << 1)) {
@@ -3997,7 +3997,7 @@ void CEXNanase::Vf6()
                     pattern = 8;
                 }
                 CPlayer::FaceOpponent();
-                Vf0();
+                StartPattern();
             }
         }
         break;
@@ -4030,7 +4030,7 @@ void CEXNanase::Vf6()
             l50.unk18 = facing;
             l50.scale = 2;
             l50.layer = 1;
-            Vf9(&l50);
+            SpawnObject(&l50);
         }
         timer++;
         if (timer >= l4 - ((unk3454 == 1) << 1)) {
@@ -4050,7 +4050,7 @@ void CEXNanase::Vf6()
                     pattern = 8;
                 }
                 CPlayer::FaceOpponent();
-                Vf0();
+                StartPattern();
             }
         }
         break;
@@ -4089,7 +4089,7 @@ void CEXNanase::Vf6()
                 l50.unk18 = facing;
                 l50.scale = 2;
                 l50.layer = 0;
-                Vf9(&l50);
+                SpawnObject(&l50);
                 m_gauge = m_gauge + 0x1e;
             }
             if (frame == 4) {
@@ -4107,7 +4107,7 @@ void CEXNanase::Vf6()
                     pattern = 8;
                 }
                 CPlayer::FaceOpponent();
-                Vf0();
+                StartPattern();
             }
         }
         break;
@@ -4146,7 +4146,7 @@ void CEXNanase::Vf6()
                 l50.unk18 = facing;
                 l50.scale = 2;
                 l50.layer = 0;
-                Vf9(&l50);
+                SpawnObject(&l50);
                 m_gauge = m_gauge + 0x1e;
             }
             if (frame == 4) {
@@ -4164,7 +4164,7 @@ void CEXNanase::Vf6()
                     pattern = 8;
                 }
                 CPlayer::FaceOpponent();
-                Vf0();
+                StartPattern();
             }
         }
         break;
@@ -4209,7 +4209,7 @@ void CEXNanase::Vf6()
                 l50.unk18 = facing;
                 l50.scale = 2;
                 l50.layer = 0;
-                Vf9(&l50);
+                SpawnObject(&l50);
                 m_gauge = m_gauge + 0x1e;
             }
             if (frame == 4) {
@@ -4226,7 +4226,7 @@ void CEXNanase::Vf6()
                     pattern = 8;
                 }
                 CPlayer::FaceOpponent();
-                Vf0();
+                StartPattern();
             }
         }
         break;
@@ -4289,29 +4289,29 @@ void CEXNanase::Vf6()
         }
         if (frame > 1 && frame < 8 && (m_command == 0x64 || m_command == 0x6e) && m_gauge >= 0x3e8) {
             if (unk3138 == 3) {
-                Vf0();
+                StartPattern();
                 pattern = 0x102;
                 unk2c9 = 0x1a;
                 (*m_opponent)->pattern = 0x9e;
-                (*m_opponent)->Vf0();
+                (*m_opponent)->StartPattern();
                 (*m_opponent)->StopMoving();
                 break;
             }
-            Vf0();
+            StartPattern();
             pattern = 0x12e;
             break;
         }
         if (frame > 1 && frame < 8 && (m_command == 0x65 || m_command == 0x6f) && m_gauge >= 0x3e8) {
             if (unk3138 == 2) {
-                Vf0();
+                StartPattern();
                 pattern = 0x102;
                 unk2c9 = 0x1a;
                 (*m_opponent)->pattern = 0x9e;
-                (*m_opponent)->Vf0();
+                (*m_opponent)->StartPattern();
                 (*m_opponent)->StopMoving();
                 break;
             }
-            Vf0();
+            StartPattern();
             pattern = 0x133;
             facing = -facing;
             break;
@@ -4327,18 +4327,18 @@ void CEXNanase::Vf6()
             }
             if (frame >= x8) {
                 pattern = 0;
-                Vf0();
+                StartPattern();
             }
         }
         break;
     case 0x12d:
         if (frame == 0 && timer == 0) {
             if (unk3138 == 1) {
-                Vf0();
+                StartPattern();
                 pattern = 0x102;
                 unk2c9 = 0x1a;
                 (*m_opponent)->pattern = 0x9e;
-                (*m_opponent)->Vf0();
+                (*m_opponent)->StartPattern();
                 (*m_opponent)->StopMoving();
                 break;
             }
@@ -4368,7 +4368,7 @@ void CEXNanase::Vf6()
             CPlayer::DealDamage(0x960, 600.0);
             CPlayer::Unk410a10(5, 5);
             (*m_opponent)->pattern = 0x3f;
-            (*m_opponent)->Vf0();
+            (*m_opponent)->StartPattern();
             (*m_opponent)->StopMoving();
             (*m_opponent)->unkc0 = -3.0;
             (*m_opponent)->unkc8 = -8.0;
@@ -4381,7 +4381,7 @@ void CEXNanase::Vf6()
             m_attackResult = 0;
             if (frame >= x8) {
                 pattern = 0;
-                Vf0();
+                StartPattern();
             }
         }
         break;
@@ -4416,7 +4416,7 @@ void CEXNanase::Vf6()
             l50.unk0 = 1;
             l50.layer = 1;
             l50.unk18 = 1;
-            Vf9(&l50);
+            SpawnObject(&l50);
             unk2c8 = 4;
         }
         if (frame == 6 && (timer == 0x10e || timer == 0x13b || timer == 0x168 || timer == 0x186 || timer == 0x1a4 || timer == 0x1c2 || timer == 0x1d1 || timer == 0x1e0)) {
@@ -4427,7 +4427,7 @@ void CEXNanase::Vf6()
             l50.unk0 = 1;
             l50.layer = 1;
             l50.unk18 = 1;
-            Vf9(&l50);
+            SpawnObject(&l50);
             unk2c8 = 3;
         }
         timer++;
@@ -4440,25 +4440,25 @@ void CEXNanase::Vf6()
                 (*m_opponent)->x = facing * 0x2e + x;
                 (*m_opponent)->y = -38.0;
                 (*m_opponent)->pattern = 0x67;
-                (*m_opponent)->Vf0();
+                (*m_opponent)->StartPattern();
             }
             if (frame == 4) {
                 (*m_opponent)->x = facing * 0x31 + x;
                 (*m_opponent)->y = -56.0;
                 (*m_opponent)->pattern = 0x67;
-                (*m_opponent)->Vf0();
+                (*m_opponent)->StartPattern();
             }
             if (frame == 5) {
                 (*m_opponent)->x = facing * 0x28 + x;
                 (*m_opponent)->y = -93.0;
                 (*m_opponent)->pattern = 0x65;
-                (*m_opponent)->Vf0();
+                (*m_opponent)->StartPattern();
             }
             if (frame == 6) {
                 (*m_opponent)->x = facing * 0x25 + x;
                 (*m_opponent)->y = -87.0;
                 (*m_opponent)->pattern = 0x65;
-                (*m_opponent)->Vf0();
+                (*m_opponent)->StartPattern();
             }
             if (frame == 7) {
                 l50.type = 0x198;
@@ -4468,9 +4468,9 @@ void CEXNanase::Vf6()
                 l50.unk0 = 1;
                 l50.layer = 1;
                 l50.unk18 = facing;
-                Vf9(&l50);
+                SpawnObject(&l50);
                 (*m_opponent)->pattern = 0x3f;
-                (*m_opponent)->Vf0();
+                (*m_opponent)->StartPattern();
                 (*m_opponent)->StopMoving();
                 (*m_opponent)->unkc0 = -6.0;
                 (*m_opponent)->unkc8 = -2.0;
@@ -4484,7 +4484,7 @@ void CEXNanase::Vf6()
             }
             if (frame >= x8) {
                 pattern = 0;
-                Vf0();
+                StartPattern();
             }
         }
         break;
@@ -4530,7 +4530,7 @@ void CEXNanase::Vf6()
             m_attackResult = 0;
             if (frame >= x8) {
                 pattern = 0;
-                Vf0();
+                StartPattern();
             }
         }
         break;
@@ -4576,7 +4576,7 @@ void CEXNanase::Vf6()
             m_attackResult = 0;
             if (frame >= x8) {
                 pattern = 0;
-                Vf0();
+                StartPattern();
             }
         }
         break;
@@ -4623,7 +4623,7 @@ void CEXNanase::Vf6()
             m_attackResult = 0;
             if (frame >= x8) {
                 pattern = 0;
-                Vf0();
+                StartPattern();
             }
         }
         break;
@@ -4675,35 +4675,35 @@ void CEXNanase::Vf6()
             l50.unk0 = 1;
             l50.layer = 1;
             l50.unk18 = facing;
-            Vf9(&l50);
+            SpawnObject(&l50);
         }
         if (frame == 8 && (m_command == 0x64 || m_command == 0x6e) && m_gauge >= 0x3e8) {
             if (unk3138 == 3) {
-                Vf0();
+                StartPattern();
                 pattern = 0x102;
                 unk2c9 = 0x1a;
                 (*m_opponent)->pattern = 0x9e;
                 (*m_opponent)->unk14a = 0;
-                (*m_opponent)->Vf0();
+                (*m_opponent)->StartPattern();
                 (*m_opponent)->StopMoving();
                 break;
             }
-            Vf0();
+            StartPattern();
             pattern = 0x13e;
             break;
         }
         if (frame == 8 && (m_command == 0x65 || m_command == 0x6f) && m_gauge >= 0x3e8) {
             if (unk3138 == 2) {
-                Vf0();
+                StartPattern();
                 pattern = 0x102;
                 unk2c9 = 0x1a;
                 (*m_opponent)->pattern = 0x9e;
                 (*m_opponent)->unk14a = 0;
-                (*m_opponent)->Vf0();
+                (*m_opponent)->StartPattern();
                 (*m_opponent)->StopMoving();
                 break;
             }
-            Vf0();
+            StartPattern();
             pattern = 0x13f;
             CPlayer::FaceOpponent();
             break;
@@ -4715,7 +4715,7 @@ void CEXNanase::Vf6()
             m_attackResult = 0;
             if (frame >= x8) {
                 pattern = 0;
-                Vf0();
+                StartPattern();
             }
         }
         break;
@@ -4765,7 +4765,7 @@ void CEXNanase::Vf6()
             l50.unk0 = 1;
             l50.layer = 1;
             l50.unk18 = facing;
-            Vf9(&l50);
+            SpawnObject(&l50);
         }
         CPlayer::Unk410a80(-0x32, 3);
         timer++;
@@ -4779,7 +4779,7 @@ void CEXNanase::Vf6()
             m_attackResult = 0;
             if (frame >= x8) {
                 pattern = 0;
-                Vf0();
+                StartPattern();
                 CPlayer::Unk410b10(0xb0, 0);
             }
         }
@@ -4823,10 +4823,10 @@ void CEXNanase::Vf6()
             (*m_opponent)->x = facing * 0x18 + x;
             (*m_opponent)->y = -40.0;
             (*m_opponent)->pattern = 0x67;
-            (*m_opponent)->Vf0();
+            (*m_opponent)->StartPattern();
             (*m_opponent)->StopMoving();
             (*m_opponent)->unk128 = 1;
-            Vf0();
+            StartPattern();
             pattern = 0x136;
             l50.type = 0;
             l50.x = (double)((int)x + facing * 0x45);
@@ -4851,7 +4851,7 @@ void CEXNanase::Vf6()
             if (frame >= x8) {
                 pattern = 0;
                 CPlayer::FaceOpponent();
-                Vf0();
+                StartPattern();
             }
         }
         break;
@@ -4890,9 +4890,9 @@ void CEXNanase::Vf6()
                 l50.unk0 = 1;
                 l50.layer = 1;
                 l50.unk18 = facing;
-                Vf9(&l50);
+                SpawnObject(&l50);
                 (*m_opponent)->pattern = 0x3f;
-                (*m_opponent)->Vf0();
+                (*m_opponent)->StartPattern();
                 (*m_opponent)->StopMoving();
                 (*m_opponent)->unkc0 = -4.0;
                 (*m_opponent)->unkc8 = -2.0;
@@ -4907,7 +4907,7 @@ void CEXNanase::Vf6()
             }
             if (frame >= x8) {
                 pattern = 0;
-                Vf0();
+                StartPattern();
             }
         }
         break;
@@ -4950,10 +4950,10 @@ void CEXNanase::Vf6()
             (*m_opponent)->x = facing * 0x18 + x;
             (*m_opponent)->y = -40.0;
             (*m_opponent)->pattern = 0x67;
-            (*m_opponent)->Vf0();
+            (*m_opponent)->StartPattern();
             (*m_opponent)->StopMoving();
             (*m_opponent)->unk128 = 1;
-            Vf0();
+            StartPattern();
             pattern = 0x138;
             l50.type = 0;
             l50.x = (double)((int)x + facing * 0x45);
@@ -4978,7 +4978,7 @@ void CEXNanase::Vf6()
             if (frame >= x8) {
                 pattern = 0;
                 CPlayer::FaceOpponent();
-                Vf0();
+                StartPattern();
             }
         }
         break;
@@ -5017,9 +5017,9 @@ void CEXNanase::Vf6()
                 l50.unk0 = 1;
                 l50.layer = 1;
                 l50.unk18 = facing;
-                Vf9(&l50);
+                SpawnObject(&l50);
                 (*m_opponent)->pattern = 0x3f;
-                (*m_opponent)->Vf0();
+                (*m_opponent)->StartPattern();
                 (*m_opponent)->StopMoving();
                 (*m_opponent)->unkc0 = -4.0;
                 (*m_opponent)->unkc8 = -2.0;
@@ -5034,7 +5034,7 @@ void CEXNanase::Vf6()
             }
             if (frame >= x8) {
                 pattern = 0;
-                Vf0();
+                StartPattern();
             }
         }
         break;
@@ -5078,10 +5078,10 @@ void CEXNanase::Vf6()
             (*m_opponent)->x = facing * 0x18 + x;
             (*m_opponent)->y = -40.0;
             (*m_opponent)->pattern = 0x67;
-            (*m_opponent)->Vf0();
+            (*m_opponent)->StartPattern();
             (*m_opponent)->StopMoving();
             (*m_opponent)->unk128 = 1;
-            Vf0();
+            StartPattern();
             pattern = 0x13a;
             l50.type = 0;
             l50.x = (double)((int)x + facing * 0x45);
@@ -5107,7 +5107,7 @@ void CEXNanase::Vf6()
             if (frame >= x8) {
                 pattern = 0;
                 CPlayer::FaceOpponent();
-                Vf0();
+                StartPattern();
             }
         }
         break;
@@ -5128,7 +5128,7 @@ void CEXNanase::Vf6()
             l50.unk0 = 1;
             l50.layer = 1;
             l50.unk18 = 1;
-            Vf9(&l50);
+            SpawnObject(&l50);
             unk2c8 = 4;
         }
         if (frame == 3 && (timer == 0x10e || timer == 0x13b || timer == 0x168 || timer == 0x186 || timer == 0x1a4 || timer == 0x1c2 || timer == 0x1d1 || timer == 0x1e0)) {
@@ -5139,7 +5139,7 @@ void CEXNanase::Vf6()
             l50.unk0 = 1;
             l50.layer = 1;
             l50.unk18 = 1;
-            Vf9(&l50);
+            SpawnObject(&l50);
             unk2c8 = 3;
         }
         CPlayer::Unk410a80(0x32, 3);
@@ -5171,9 +5171,9 @@ void CEXNanase::Vf6()
                 l50.unk0 = 1;
                 l50.layer = 1;
                 l50.unk18 = facing;
-                Vf9(&l50);
+                SpawnObject(&l50);
                 (*m_opponent)->pattern = 0x3f;
-                (*m_opponent)->Vf0();
+                (*m_opponent)->StartPattern();
                 (*m_opponent)->StopMoving();
                 (*m_opponent)->unkc0 = -4.0;
                 (*m_opponent)->unkc8 = -2.0;
@@ -5188,7 +5188,7 @@ void CEXNanase::Vf6()
             }
             if (frame >= x8) {
                 pattern = 0;
-                Vf0();
+                StartPattern();
             }
         }
         break;
@@ -5228,12 +5228,12 @@ void CEXNanase::Vf6()
             l50.unk0 = 1;
             l50.layer = 1;
             l50.unk18 = facing;
-            Vf9(&l50);
+            SpawnObject(&l50);
             l50.type = 0x19f;
             l50.unk0 = 1;
             l50.layer = 0;
             l50.unk18 = facing;
-            Vf9(&l50);
+            SpawnObject(&l50);
         }
         timer++;
         if (timer >= l4) {
@@ -5242,7 +5242,7 @@ void CEXNanase::Vf6()
             m_attackResult = 0;
             if (frame >= x8) {
                 pattern = 0;
-                Vf0();
+                StartPattern();
             }
         }
         break;
@@ -5282,12 +5282,12 @@ void CEXNanase::Vf6()
             l50.unk0 = 1;
             l50.layer = 1;
             l50.unk18 = facing;
-            Vf9(&l50);
+            SpawnObject(&l50);
             l50.type = 0x19f;
             l50.unk0 = 1;
             l50.layer = 0;
             l50.unk18 = facing;
-            Vf9(&l50);
+            SpawnObject(&l50);
         }
         timer++;
         if (timer >= l4) {
@@ -5296,7 +5296,7 @@ void CEXNanase::Vf6()
             m_attackResult = 0;
             if (frame >= x8) {
                 pattern = 0;
-                Vf0();
+                StartPattern();
             }
         }
         break;
@@ -5339,12 +5339,12 @@ void CEXNanase::Vf6()
             l50.unk0 = 1;
             l50.layer = 1;
             l50.unk18 = facing;
-            Vf9(&l50);
+            SpawnObject(&l50);
             l50.type = 0x19f;
             l50.unk0 = 1;
             l50.layer = 0;
             l50.unk18 = facing;
-            Vf9(&l50);
+            SpawnObject(&l50);
         }
         timer++;
         if (timer >= l4) {
@@ -5353,7 +5353,7 @@ void CEXNanase::Vf6()
             m_attackResult = 0;
             if (frame >= x8) {
                 pattern = 0;
-                Vf0();
+                StartPattern();
             }
         }
         break;
@@ -5388,7 +5388,7 @@ void CEXNanase::Vf6()
             (*m_opponent)->x = facing * 0x28 + x;
             if (x > 610.0 || x < 30.0) {
                 (*m_opponent)->pattern = 0x3f;
-                (*m_opponent)->Vf0();
+                (*m_opponent)->StartPattern();
                 (*m_opponent)->StopMoving();
                 (*m_opponent)->unkc0 = -6.0;
                 (*m_opponent)->unkc8 = -3.5;
@@ -5407,7 +5407,7 @@ void CEXNanase::Vf6()
                 l50.unk0 = 1;
                 l50.layer = 1;
                 l50.unk18 = facing;
-                Vf9(&l50);
+                SpawnObject(&l50);
             }
         }
         if ((frame == 6 || frame == 8 || frame == 0xa) && timer == 0) {
@@ -5425,7 +5425,7 @@ void CEXNanase::Vf6()
             if (y + vy > 0.0) {
                 y = 0.0;
                 CPlayer::StopMoving();
-                Vf0();
+                StartPattern();
                 pattern = 0x62;
                 break;
             }
@@ -5444,7 +5444,7 @@ void CEXNanase::Vf6()
                 l50.unk0 = 1;
                 l50.layer = 1;
                 l50.unk18 = facing;
-                Vf9(&l50);
+                SpawnObject(&l50);
             }
             if (frame == 0xb) {
                 frame = frame - 6;
@@ -5455,7 +5455,7 @@ void CEXNanase::Vf6()
                 l50.unk0 = 1;
                 l50.layer = 1;
                 l50.unk18 = facing;
-                Vf9(&l50);
+                SpawnObject(&l50);
             }
             if (frame >= x8) {
                 frame = frame - 2;
@@ -5501,12 +5501,12 @@ void CEXNanase::Vf6()
             l50.unk0 = 1;
             l50.layer = 1;
             l50.unk18 = facing;
-            Vf9(&l50);
+            SpawnObject(&l50);
             l50.type = 0x19f;
             l50.unk0 = 1;
             l50.layer = 0;
             l50.unk18 = facing;
-            Vf9(&l50);
+            SpawnObject(&l50);
         }
         if (frame == 5 && timer == 0xf) {
             (*m_opponent)->pattern = 0x3f;
@@ -5522,7 +5522,7 @@ void CEXNanase::Vf6()
             m_attackResult = 0;
             if (frame >= x8) {
                 pattern = 0;
-                Vf0();
+                StartPattern();
             }
         }
         break;
@@ -5557,7 +5557,7 @@ void CEXNanase::Vf6()
             m_attackResult = 0;
             if (frame >= x8) {
                 pattern = 0;
-                Vf0();
+                StartPattern();
             }
         }
     }

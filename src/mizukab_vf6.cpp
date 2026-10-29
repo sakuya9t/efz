@@ -1,4 +1,4 @@
-// CMizukaB::Vf6 (0x4c04b0-0x4d284f), the per-state update. It is a file of its own,
+// CMizukaB::UpdatePattern (0x4c04b0-0x4d284f), the per-state update. It is a file of its own,
 // as in the original: its floating-point constants precede the rest of CMizukaB's
 // .rdata, which starts with its constructor's folder name (mizukab.cpp).
 #include <stdlib.h>
@@ -6,7 +6,7 @@
 #include <math.h>
 #include "efz.h"
 
-void CMizukaB::Vf6()
+void CMizukaB::UpdatePattern()
 {
     WORD x8;
     WORD l4;
@@ -17,7 +17,7 @@ void CMizukaB::Vf6()
     EffectDesc l50;
     l4 = (short)anims[pattern].frames[frame].duration;
     x8 = anims[pattern].frameCount;
-    CPlayer::Unk413090((EffectDesc*)&l50);
+    CPlayer::InitEffectDesc((EffectDesc*)&l50);
     switch (pattern) {
     default:
         vx = 0.0;
@@ -101,7 +101,7 @@ void CMizukaB::Vf6()
             frame++;
             if (frame >= x8) {
                 pattern = 9;
-                Vf0();
+                StartPattern();
             }
         }
         if (y + vy >= 0.0 && frame > 3) {
@@ -109,7 +109,7 @@ void CMizukaB::Vf6()
             unk2c9 = 9;
             CPlayer::FaceOpponent();
             pattern = 0xd;
-            Vf0();
+            StartPattern();
         }
         break;
     case 5:
@@ -145,7 +145,7 @@ void CMizukaB::Vf6()
             unk2c9 = 9;
             CPlayer::FaceOpponent();
             pattern = 0xd;
-            Vf0();
+            StartPattern();
         }
         break;
     case 6:
@@ -177,7 +177,7 @@ void CMizukaB::Vf6()
             unk2c9 = 9;
             CPlayer::FaceOpponent();
             pattern = 0xd;
-            Vf0();
+            StartPattern();
         }
         break;
     case 7:
@@ -192,7 +192,7 @@ void CMizukaB::Vf6()
             frame++;
             if (frame >= x8) {
                 pattern = 0;
-                Vf0();
+                StartPattern();
             }
         }
         break;
@@ -208,7 +208,7 @@ void CMizukaB::Vf6()
             frame++;
             if (frame >= x8) {
                 pattern = 3;
-                Vf0();
+                StartPattern();
             }
         }
         break;
@@ -231,7 +231,7 @@ void CMizukaB::Vf6()
             y = 0.0;
             unk2c9 = 9;
             pattern = 0xd;
-            Vf0();
+            StartPattern();
         }
         break;
     case 0xd:
@@ -249,7 +249,7 @@ void CMizukaB::Vf6()
                 if (m_inputY == 1) {
                     pattern = 3;
                 }
-                Vf0();
+                StartPattern();
             }
         }
         break;
@@ -268,7 +268,7 @@ void CMizukaB::Vf6()
             frame++;
             if (frame >= x8) {
                 pattern = 9;
-                Vf0();
+                StartPattern();
             }
         }
         if (y + vy >= 0.0 && frame > 3) {
@@ -276,7 +276,7 @@ void CMizukaB::Vf6()
             unk2c9 = 9;
             CPlayer::FaceOpponent();
             pattern = 0xd;
-            Vf0();
+            StartPattern();
         }
         break;
     case 0xf:
@@ -301,7 +301,7 @@ void CMizukaB::Vf6()
             unk2c9 = 9;
             CPlayer::FaceOpponent();
             pattern = 0xd;
-            Vf0();
+            StartPattern();
         }
         break;
     case 0x10:
@@ -319,7 +319,7 @@ void CMizukaB::Vf6()
             frame++;
             if (frame >= x8) {
                 pattern = 9;
-                Vf0();
+                StartPattern();
             }
         }
         if (y + vy >= 0.0 && frame > 3) {
@@ -327,7 +327,7 @@ void CMizukaB::Vf6()
             unk2c9 = 9;
             CPlayer::FaceOpponent();
             pattern = 0xd;
-            Vf0();
+            StartPattern();
         }
         break;
     case 0x14:
@@ -349,7 +349,7 @@ void CMizukaB::Vf6()
             y = 0.0;
             unk2c9 = 9;
             pattern = 0xd;
-            Vf0();
+            StartPattern();
         }
         break;
     case 0x2f:
@@ -412,7 +412,7 @@ void CMizukaB::Vf6()
                 if (m_inputY == 1) {
                     pattern = 3;
                 }
-                Vf0();
+                StartPattern();
             }
         }
         break;
@@ -449,7 +449,7 @@ void CMizukaB::Vf6()
                 if (m_inputY == 1) {
                     pattern = 3;
                 }
-                Vf0();
+                StartPattern();
             }
         }
         break;
@@ -486,7 +486,7 @@ void CMizukaB::Vf6()
                 if (m_inputY == 1) {
                     pattern = 3;
                 }
-                Vf0();
+                StartPattern();
             }
         }
         break;
@@ -523,7 +523,7 @@ void CMizukaB::Vf6()
                 if (m_inputY == 1) {
                     pattern = 3;
                 }
-                Vf0();
+                StartPattern();
             }
         }
         break;
@@ -560,7 +560,7 @@ void CMizukaB::Vf6()
                 if (m_inputY == 1) {
                     pattern = 3;
                 }
-                Vf0();
+                StartPattern();
             }
         }
         break;
@@ -597,7 +597,7 @@ void CMizukaB::Vf6()
                 if (m_inputY == 1) {
                     pattern = 3;
                 }
-                Vf0();
+                StartPattern();
             }
         }
         break;
@@ -631,7 +631,7 @@ void CMizukaB::Vf6()
             frame++;
             if (frame >= x8) {
                 pattern = 3;
-                Vf0();
+                StartPattern();
             }
         }
         break;
@@ -665,7 +665,7 @@ void CMizukaB::Vf6()
             frame++;
             if (frame >= x8) {
                 pattern = 3;
-                Vf0();
+                StartPattern();
             }
         }
         break;
@@ -699,7 +699,7 @@ void CMizukaB::Vf6()
             frame++;
             if (frame >= x8) {
                 pattern = 3;
-                Vf0();
+                StartPattern();
             }
         }
         break;
@@ -740,10 +740,10 @@ void CMizukaB::Vf6()
             y = 0.0;
             if (unk12c != 0) {
                 pattern = 0x61;
-                Vf0();
+                StartPattern();
             } else {
                 pattern = 0x62;
-                Vf0();
+                StartPattern();
             }
         }
         break;
@@ -784,10 +784,10 @@ void CMizukaB::Vf6()
             y = 0.0;
             if (unk12c != 0) {
                 pattern = 0x61;
-                Vf0();
+                StartPattern();
             } else {
                 pattern = 0x62;
-                Vf0();
+                StartPattern();
             }
         }
         break;
@@ -828,10 +828,10 @@ void CMizukaB::Vf6()
             y = 0.0;
             if (unk12c != 0) {
                 pattern = 0x61;
-                Vf0();
+                StartPattern();
             } else {
                 pattern = 0x62;
-                Vf0();
+                StartPattern();
             }
         }
         break;
@@ -867,10 +867,10 @@ void CMizukaB::Vf6()
             y = 0.0;
             if (unk12c != 0) {
                 pattern = 0x61;
-                Vf0();
+                StartPattern();
             } else {
                 pattern = 0x62;
-                Vf0();
+                StartPattern();
             }
         }
         break;
@@ -906,10 +906,10 @@ void CMizukaB::Vf6()
             y = 0.0;
             if (unk12c != 0) {
                 pattern = 0x61;
-                Vf0();
+                StartPattern();
             } else {
                 pattern = 0x62;
-                Vf0();
+                StartPattern();
             }
         }
         break;
@@ -920,7 +920,7 @@ void CMizukaB::Vf6()
         }
         if (frame > 0 && (char)CPlayer::Unk40ff70() != 0) {
             pattern = 0x46;
-            Vf0();
+            StartPattern();
             break;
         }
         if (frame == 0 && timer == 0) {
@@ -955,10 +955,10 @@ void CMizukaB::Vf6()
             y = 0.0;
             if (unk12c != 0) {
                 pattern = 0x61;
-                Vf0();
+                StartPattern();
             } else {
                 pattern = 0x62;
-                Vf0();
+                StartPattern();
             }
         }
         break;
@@ -969,7 +969,7 @@ void CMizukaB::Vf6()
         }
         if (frame > 0 && (char)CPlayer::Unk40ff70() != 0) {
             pattern = 0x46;
-            Vf0();
+            StartPattern();
             break;
         }
         if (frame == 0 && timer == 0) {
@@ -1004,10 +1004,10 @@ void CMizukaB::Vf6()
             y = 0.0;
             if (unk12c != 0) {
                 pattern = 0x61;
-                Vf0();
+                StartPattern();
             } else {
                 pattern = 0x62;
-                Vf0();
+                StartPattern();
             }
         }
         break;
@@ -1018,7 +1018,7 @@ void CMizukaB::Vf6()
         }
         if (frame > 0 && (char)CPlayer::Unk40ff70() != 0) {
             pattern = 0x46;
-            Vf0();
+            StartPattern();
             break;
         }
         if (frame == 0 && timer == 0) {
@@ -1048,10 +1048,10 @@ void CMizukaB::Vf6()
             y = 0.0;
             if (unk12c != 0) {
                 pattern = 0x61;
-                Vf0();
+                StartPattern();
             } else {
                 pattern = 0x62;
-                Vf0();
+                StartPattern();
             }
         }
         break;
@@ -1062,7 +1062,7 @@ void CMizukaB::Vf6()
         }
         if (frame > 0 && (char)CPlayer::Unk40ff70() != 0) {
             pattern = 0x46;
-            Vf0();
+            StartPattern();
             break;
         }
         if (frame == 0 && timer == 0) {
@@ -1092,10 +1092,10 @@ void CMizukaB::Vf6()
             y = 0.0;
             if (unk12c != 0) {
                 pattern = 0x61;
-                Vf0();
+                StartPattern();
             } else {
                 pattern = 0x62;
-                Vf0();
+                StartPattern();
             }
         }
         break;
@@ -1113,7 +1113,7 @@ void CMizukaB::Vf6()
         timer++;
         if ((char)CPlayer::Unk40ff70() != 0) {
             pattern = 0x46;
-            Vf0();
+            StartPattern();
             break;
         }
         if (timer >= l4) {
@@ -1130,10 +1130,10 @@ void CMizukaB::Vf6()
             y = 0.0;
             if (unk12c != 0) {
                 pattern = 0x61;
-                Vf0();
+                StartPattern();
             } else {
                 pattern = 0x62;
-                Vf0();
+                StartPattern();
             }
         }
         break;
@@ -1163,10 +1163,10 @@ void CMizukaB::Vf6()
             y = 0.0;
             if (unk12c != 0) {
                 pattern = 0x61;
-                Vf0();
+                StartPattern();
             } else {
                 pattern = 0x62;
-                Vf0();
+                StartPattern();
             }
         }
         break;
@@ -1203,10 +1203,10 @@ void CMizukaB::Vf6()
             y = 0.0;
             if (unk12c != 0) {
                 pattern = 0x61;
-                Vf0();
+                StartPattern();
             } else {
                 pattern = 0x62;
-                Vf0();
+                StartPattern();
             }
         }
         break;
@@ -1242,10 +1242,10 @@ void CMizukaB::Vf6()
             y = 0.0;
             if (unk12c != 0) {
                 pattern = 0x61;
-                Vf0();
+                StartPattern();
             } else {
                 pattern = 0x62;
-                Vf0();
+                StartPattern();
             }
         }
         break;
@@ -1271,7 +1271,7 @@ void CMizukaB::Vf6()
                 if (m_inputY == 1) {
                     pattern = 3;
                 }
-                Vf0();
+                StartPattern();
             }
         }
         break;
@@ -1297,7 +1297,7 @@ void CMizukaB::Vf6()
                 if (m_inputY == 1) {
                     pattern = 3;
                 }
-                Vf0();
+                StartPattern();
             }
         }
         break;
@@ -1320,7 +1320,7 @@ void CMizukaB::Vf6()
             frame++;
             if (frame >= x8) {
                 pattern = 3;
-                Vf0();
+                StartPattern();
             }
         }
         break;
@@ -1359,7 +1359,7 @@ void CMizukaB::Vf6()
                 if (m_inputY == 1) {
                     pattern = 3;
                 }
-                Vf0();
+                StartPattern();
             }
         }
         break;
@@ -1398,7 +1398,7 @@ void CMizukaB::Vf6()
                 if (m_inputY == 1) {
                     pattern = 3;
                 }
-                Vf0();
+                StartPattern();
             }
         }
         break;
@@ -1434,7 +1434,7 @@ void CMizukaB::Vf6()
             frame++;
             if (frame >= x8) {
                 pattern = 3;
-                Vf0();
+                StartPattern();
             }
         }
         break;
@@ -1449,7 +1449,7 @@ void CMizukaB::Vf6()
             l50.y = (double)(int)y;
             l50.unk18 = facing;
             l50.layer = 1;
-            Vf9(&l50);
+            SpawnObject(&l50);
             m_gauge = m_gauge + 0x1e;
             vx = unkc0;
             vy = unkc8;
@@ -1472,10 +1472,10 @@ void CMizukaB::Vf6()
             y = 0.0;
             if (unk12c != 0) {
                 pattern = 0x61;
-                Vf0();
+                StartPattern();
             } else {
                 pattern = 0x62;
-                Vf0();
+                StartPattern();
             }
         }
         break;
@@ -1519,10 +1519,10 @@ void CMizukaB::Vf6()
             y = 0.0;
             if (unk12c != 0) {
                 pattern = 0x61;
-                Vf0();
+                StartPattern();
             } else {
                 pattern = 0x62;
-                Vf0();
+                StartPattern();
             }
         }
         break;
@@ -1537,7 +1537,7 @@ void CMizukaB::Vf6()
                 l50.layer = 0;
                 l50.unk0 = 1;
                 l50.unk18 = facing;
-                Vf9(&l50);
+                SpawnObject(&l50);
                 unk3144 = 1;
             }
             if (unk120 != 0) {
@@ -1574,7 +1574,7 @@ void CMizukaB::Vf6()
             frame++;
             if (frame >= x8) {
                 pattern = 0;
-                Vf0();
+                StartPattern();
                 CPlayer::FaceOpponent();
             }
         }
@@ -1590,7 +1590,7 @@ void CMizukaB::Vf6()
                 l50.layer = 0;
                 l50.unk0 = 1;
                 l50.unk18 = facing;
-                Vf9(&l50);
+                SpawnObject(&l50);
                 unk3144 = 1;
             }
             if (unk120 != 0) {
@@ -1627,7 +1627,7 @@ void CMizukaB::Vf6()
             frame++;
             if (frame >= x8) {
                 pattern = 0;
-                Vf0();
+                StartPattern();
                 CPlayer::FaceOpponent();
             }
         }
@@ -1643,7 +1643,7 @@ void CMizukaB::Vf6()
                 l50.layer = 0;
                 l50.unk0 = 1;
                 l50.unk18 = facing;
-                Vf9(&l50);
+                SpawnObject(&l50);
                 unk3144 = 1;
             }
             if (unk120 != 0) {
@@ -1661,7 +1661,7 @@ void CMizukaB::Vf6()
             frame++;
             if (frame >= x8) {
                 pattern = 0;
-                Vf0();
+                StartPattern();
                 CPlayer::FaceOpponent();
             }
         }
@@ -1669,10 +1669,10 @@ void CMizukaB::Vf6()
             y = 0.0;
             if (unk12c != 0) {
                 pattern = 0x61;
-                Vf0();
+                StartPattern();
             } else {
                 pattern = 0x62;
-                Vf0();
+                StartPattern();
             }
         }
         break;
@@ -1687,7 +1687,7 @@ void CMizukaB::Vf6()
                 l50.layer = 0;
                 l50.unk0 = 1;
                 l50.unk18 = facing;
-                Vf9(&l50);
+                SpawnObject(&l50);
                 unk3144 = 1;
             }
             if (unk3138 == 0) {
@@ -1714,10 +1714,10 @@ void CMizukaB::Vf6()
             y = 0.0;
             if (unk12c != 0) {
                 pattern = 0x61;
-                Vf0();
+                StartPattern();
             } else {
                 pattern = 0x62;
-                Vf0();
+                StartPattern();
             }
         }
         break;
@@ -1730,7 +1730,7 @@ void CMizukaB::Vf6()
             l50.unk18 = 1;
             l50.scale = 0;
             l50.layer = 0;
-            Vf9(&l50);
+            SpawnObject(&l50);
         }
         timer++;
         if (timer >= l4) {
@@ -1738,7 +1738,7 @@ void CMizukaB::Vf6()
             frame++;
             if (frame >= x8) {
                 pattern = 0;
-                Vf0();
+                StartPattern();
             }
         }
         break;
@@ -1758,7 +1758,7 @@ void CMizukaB::Vf6()
                 if (m_command == 0x35 && m_gauge >= 0x3e8) {
                     pattern = 0xa2;
                 }
-                Vf0();
+                StartPattern();
             }
         }
         break;
@@ -1782,7 +1782,7 @@ void CMizukaB::Vf6()
             frame++;
             if (frame >= x8) {
                 pattern = 0x63;
-                Vf0();
+                StartPattern();
             }
         }
         break;
@@ -1806,7 +1806,7 @@ void CMizukaB::Vf6()
             frame++;
             if (frame >= x8) {
                 pattern = 0x63;
-                Vf0();
+                StartPattern();
             }
         }
         break;
@@ -1814,7 +1814,7 @@ void CMizukaB::Vf6()
         unk58 = 0;
         if (m_hp > 0 && timer > 0x63 && frame == 0) {
             pattern = 0x60;
-            Vf0();
+            StartPattern();
             unk158 = 0;
         }
         timer++;
@@ -1826,7 +1826,7 @@ void CMizukaB::Vf6()
             }
             if (frame >= x8) {
                 pattern = 0x60;
-                Vf0();
+                StartPattern();
             }
         }
         break;
@@ -1866,7 +1866,7 @@ void CMizukaB::Vf6()
                 if (m_inputY == 1) {
                     pattern = 3;
                 }
-                Vf0();
+                StartPattern();
             }
         }
         break;
@@ -1906,7 +1906,7 @@ void CMizukaB::Vf6()
                 if (m_inputY == 1) {
                     pattern = 3;
                 }
-                Vf0();
+                StartPattern();
             }
         }
         break;
@@ -1946,7 +1946,7 @@ void CMizukaB::Vf6()
                 if (m_inputY == 1) {
                     pattern = 3;
                 }
-                Vf0();
+                StartPattern();
             }
         }
         break;
@@ -1983,7 +1983,7 @@ void CMizukaB::Vf6()
             }
             if (frame >= x8) {
                 pattern = 3;
-                Vf0();
+                StartPattern();
             }
         }
         break;
@@ -2020,7 +2020,7 @@ void CMizukaB::Vf6()
             }
             if (frame >= x8) {
                 pattern = 3;
-                Vf0();
+                StartPattern();
             }
         }
         break;
@@ -2057,7 +2057,7 @@ void CMizukaB::Vf6()
             }
             if (frame >= x8) {
                 pattern = 3;
-                Vf0();
+                StartPattern();
             }
         }
         break;
@@ -2075,7 +2075,7 @@ void CMizukaB::Vf6()
             frame++;
             if (frame >= x8) {
                 pattern = 9;
-                Vf0();
+                StartPattern();
             }
         }
         if (y + vy >= 0.0) {
@@ -2083,7 +2083,7 @@ void CMizukaB::Vf6()
             unk2c9 = 9;
             CPlayer::FaceOpponent();
             pattern = 0xd;
-            Vf0();
+            StartPattern();
         }
         break;
     case 0x9d:
@@ -2107,7 +2107,7 @@ void CMizukaB::Vf6()
             frame++;
             if (frame >= x8) {
                 pattern = 9;
-                Vf0();
+                StartPattern();
             }
         }
         if (y + vy >= 0.0) {
@@ -2118,7 +2118,7 @@ void CMizukaB::Vf6()
             if (unk3458 > 0) {
                 pattern = 0xb3;
             }
-            Vf0();
+            StartPattern();
         }
         break;
     case 0x9e:
@@ -2142,7 +2142,7 @@ void CMizukaB::Vf6()
             frame++;
             if (frame >= x8) {
                 pattern = 9;
-                Vf0();
+                StartPattern();
             }
         }
         if (y + vy >= 0.0) {
@@ -2153,7 +2153,7 @@ void CMizukaB::Vf6()
             if (unk3458 > 0) {
                 pattern = 0xb3;
             }
-            Vf0();
+            StartPattern();
         }
         break;
     case 0xa1:
@@ -2175,7 +2175,7 @@ void CMizukaB::Vf6()
             frame++;
             if (frame >= x8) {
                 pattern = 9;
-                Vf0();
+                StartPattern();
                 ay = 0.035;
             }
         }
@@ -2205,8 +2205,8 @@ void CMizukaB::Vf6()
         vy = vy + ay;
         if (y + vy > 0.0) {
             pattern = 0xd;
-            Vf0();
-            Vf0();
+            StartPattern();
+            StartPattern();
             y = 0.0;
             break;
         }
@@ -2251,12 +2251,12 @@ void CMizukaB::Vf6()
         if (m_inputX == facing && unk313c >= 0x2a) {
             pattern = 0xb2;
             unk58 = 1;
-            Vf0();
+            StartPattern();
         }
         if (m_inputX != facing && unk313c >= 0x18) {
             pattern = 0xb2;
             unk58 = 1;
-            Vf0();
+            StartPattern();
         }
         break;
     case 0xa4:
@@ -2297,7 +2297,7 @@ void CMizukaB::Vf6()
                 frame = frame - 2;
             }
             if (frame >= x8) {
-                Vf0();
+                StartPattern();
                 pattern = 7;
             }
         }
@@ -2322,7 +2322,7 @@ void CMizukaB::Vf6()
         }
         if (m_inputX == facing && unk313c >= 0x78) {
             pattern = 9;
-            Vf0();
+            StartPattern();
             vx = 1.3;
             ay = 0.03;
             if (CPlayer::FaceOpponent() != 0) {
@@ -2331,7 +2331,7 @@ void CMizukaB::Vf6()
         }
         if (m_inputX != facing && unk3138 >= 0x30) {
             pattern = 9;
-            Vf0();
+            StartPattern();
             vx = 1.3;
             ay = 0.03;
             if (unk3458 > 0) {
@@ -2363,7 +2363,7 @@ void CMizukaB::Vf6()
         }
         if (m_inputX == -facing && unk313c >= 0x78) {
             pattern = 9;
-            Vf0();
+            StartPattern();
             vx = -0.9;
             ay = 0.03;
             if (CPlayer::FaceOpponent() != 0) {
@@ -2372,7 +2372,7 @@ void CMizukaB::Vf6()
         }
         if (m_inputX != -facing && unk3138 >= 0x30) {
             pattern = 9;
-            Vf0();
+            StartPattern();
             vx = -0.9;
             ay = 0.03;
             if (unk3458 > 0) {
@@ -2421,7 +2421,7 @@ void CMizukaB::Vf6()
             if (frame >= x8) {
                 pattern = 0;
                 CPlayer::FaceOpponent();
-                Vf0();
+                StartPattern();
             }
         }
         break;
@@ -2452,7 +2452,7 @@ void CMizukaB::Vf6()
             }
             if (frame >= x8) {
                 pattern = 0;
-                Vf0();
+                StartPattern();
             }
         }
         break;
@@ -2483,7 +2483,7 @@ void CMizukaB::Vf6()
             }
             if (frame >= x8) {
                 pattern = 3;
-                Vf0();
+                StartPattern();
             }
         }
         break;
@@ -2522,7 +2522,7 @@ void CMizukaB::Vf6()
             frame++;
             if (frame >= x8) {
                 pattern = 9;
-                Vf0();
+                StartPattern();
                 if (unk3458 > 0) {
                     pattern = 0xb3;
                     frame = 7;
@@ -2570,7 +2570,7 @@ void CMizukaB::Vf6()
                 vx = unk3138 * 0.01;
                 vy = unk313c * 0.01;
                 ay = 0.035;
-                Vf0();
+                StartPattern();
                 if (unk3458 > 0) {
                     pattern = 0xb3;
                     frame = 7;
@@ -2593,7 +2593,7 @@ void CMizukaB::Vf6()
                 pattern = 6;
             }
             m_attackResult = 0;
-            Vf0();
+            StartPattern();
             break;
         }
         timer++;
@@ -2605,7 +2605,7 @@ void CMizukaB::Vf6()
             }
             if (frame >= x8) {
                 pattern = 0;
-                Vf0();
+                StartPattern();
                 break;
             }
         }
@@ -2634,7 +2634,7 @@ void CMizukaB::Vf6()
         if (frame > 6) {
             if (unk3458 <= 0) {
                 ay = 0.035;
-                Vf0();
+                StartPattern();
                 pattern = 9;
                 break;
             }
@@ -2650,12 +2650,12 @@ void CMizukaB::Vf6()
                 vy = 1.0;
             }
             if (m_inputX == facing) {
-                Vf0();
+                StartPattern();
                 pattern = 0xb4;
                 break;
             }
             if (m_inputX == -facing) {
-                Vf0();
+                StartPattern();
                 pattern = 0xb5;
                 break;
             }
@@ -2684,7 +2684,7 @@ void CMizukaB::Vf6()
         unk58 = 0;
         if (unk3458 <= 0) {
             ay = 0.035;
-            Vf0();
+            StartPattern();
             pattern = 9;
             break;
         }
@@ -2701,13 +2701,13 @@ void CMizukaB::Vf6()
             vy = 1.0;
         }
         if (m_inputX == 0) {
-            Vf0();
+            StartPattern();
             frame = 7;
             pattern = 0xb3;
             break;
         }
         if (m_inputX == -facing) {
-            Vf0();
+            StartPattern();
             pattern = 0xb5;
             break;
         }
@@ -2716,7 +2716,7 @@ void CMizukaB::Vf6()
         }
         if (unk3458 <= 0) {
             ay = 0.035;
-            Vf0();
+            StartPattern();
             pattern = 9;
             break;
         }
@@ -2740,7 +2740,7 @@ void CMizukaB::Vf6()
         unk58 = 0;
         if (unk3458 <= 0) {
             ay = 0.035;
-            Vf0();
+            StartPattern();
             pattern = 9;
             break;
         }
@@ -2757,13 +2757,13 @@ void CMizukaB::Vf6()
             vy = 0.0;
         }
         if (m_inputX == 0) {
-            Vf0();
+            StartPattern();
             frame = 7;
             pattern = 0xb3;
             break;
         }
         if (m_inputX == facing) {
-            Vf0();
+            StartPattern();
             pattern = 0xb4;
             break;
         }
@@ -2772,7 +2772,7 @@ void CMizukaB::Vf6()
         }
         if (unk3458 <= 0) {
             ay = 0.035;
-            Vf0();
+            StartPattern();
             pattern = 9;
             break;
         }
@@ -2815,7 +2815,7 @@ void CMizukaB::Vf6()
                 frame = frame - 2;
             }
             if (frame >= x8) {
-                Vf0();
+                StartPattern();
                 pattern = 0;
             }
         }
@@ -2841,7 +2841,7 @@ void CMizukaB::Vf6()
                 pattern = 6;
             }
             m_attackResult = 0;
-            Vf0();
+            StartPattern();
             break;
         }
         if (frame == 2 && timer == 0) {
@@ -2863,12 +2863,12 @@ void CMizukaB::Vf6()
                 l50.scale = 2;
                 l50.layer = 1;
                 l50.unk18 = facing;
-                Vf9(&l50);
+                SpawnObject(&l50);
             }
             if (frame >= x8) {
                 pattern = 0;
                 CPlayer::FaceOpponent();
-                Vf0();
+                StartPattern();
             }
         }
         break;
@@ -2893,7 +2893,7 @@ void CMizukaB::Vf6()
                 pattern = 6;
             }
             m_attackResult = 0;
-            Vf0();
+            StartPattern();
             break;
         }
         if (frame == 1 && timer == 0) {
@@ -2903,7 +2903,7 @@ void CMizukaB::Vf6()
             l50.scale = 2;
             l50.layer = 1;
             l50.unk18 = facing;
-            Vf9(&l50);
+            SpawnObject(&l50);
         }
         if (frame == 2 && timer == 0) {
             m_gauge = m_gauge + 0xf;
@@ -2920,7 +2920,7 @@ void CMizukaB::Vf6()
             if (frame >= x8) {
                 pattern = 0;
                 CPlayer::FaceOpponent();
-                Vf0();
+                StartPattern();
             }
         }
         break;
@@ -2946,7 +2946,7 @@ void CMizukaB::Vf6()
             l50.scale = 2;
             l50.layer = 1;
             l50.unk18 = facing;
-            Vf9(&l50);
+            SpawnObject(&l50);
         }
         timer++;
         if (timer >= l4) {
@@ -2958,7 +2958,7 @@ void CMizukaB::Vf6()
             if (frame >= x8) {
                 pattern = 0;
                 CPlayer::FaceOpponent();
-                Vf0();
+                StartPattern();
             }
         }
         break;
@@ -2976,7 +2976,7 @@ void CMizukaB::Vf6()
                 pattern = 6;
             }
             m_attackResult = 0;
-            Vf0();
+            StartPattern();
             break;
         }
         if (frame == 5 && timer == 0) {
@@ -3002,7 +3002,7 @@ void CMizukaB::Vf6()
             if (frame >= x8) {
                 pattern = 0;
                 CPlayer::FaceOpponent();
-                Vf0();
+                StartPattern();
             }
         }
         break;
@@ -3027,7 +3027,7 @@ void CMizukaB::Vf6()
                 pattern = 6;
             }
             m_attackResult = 0;
-            Vf0();
+            StartPattern();
             break;
         }
         if (frame == 1 && timer == 0) {
@@ -3040,7 +3040,7 @@ void CMizukaB::Vf6()
             l50.scale = 2;
             l50.layer = 1;
             l50.unk18 = facing;
-            Vf9(&l50);
+            SpawnObject(&l50);
         }
         timer++;
         if (timer >= l4) {
@@ -3055,7 +3055,7 @@ void CMizukaB::Vf6()
                     pattern = 3;
                 }
                 CPlayer::FaceOpponent();
-                Vf0();
+                StartPattern();
             }
         }
         break;
@@ -3080,7 +3080,7 @@ void CMizukaB::Vf6()
                 pattern = 6;
             }
             m_attackResult = 0;
-            Vf0();
+            StartPattern();
             break;
         }
         if (frame == 2 && timer == 0) {
@@ -3093,7 +3093,7 @@ void CMizukaB::Vf6()
             l50.scale = 2;
             l50.layer = 1;
             l50.unk18 = facing;
-            Vf9(&l50);
+            SpawnObject(&l50);
         }
         timer++;
         if (timer >= l4) {
@@ -3108,7 +3108,7 @@ void CMizukaB::Vf6()
                     pattern = 3;
                 }
                 CPlayer::FaceOpponent();
-                Vf0();
+                StartPattern();
             }
         }
         break;
@@ -3135,7 +3135,7 @@ void CMizukaB::Vf6()
                 pattern = 6;
             }
             m_attackResult = 0;
-            Vf0();
+            StartPattern();
             break;
         }
         if (frame == 1 && timer == 0) {
@@ -3164,7 +3164,7 @@ void CMizukaB::Vf6()
                     pattern = 3;
                 }
                 CPlayer::FaceOpponent();
-                Vf0();
+                StartPattern();
             }
         }
         break;
@@ -3203,7 +3203,7 @@ void CMizukaB::Vf6()
                 pattern = 0x10;
             }
             m_attackResult = 0;
-            Vf0();
+            StartPattern();
             break;
         }
         if (frame == 2 && timer == 0) {
@@ -3216,13 +3216,13 @@ void CMizukaB::Vf6()
             l50.scale = 2;
             l50.layer = 1;
             l50.unk18 = facing;
-            Vf9(&l50);
+            SpawnObject(&l50);
         }
         if (y + vy >= 0.0) {
             y = 0.0;
             pattern = 0xd;
             unk3458 = 0;
-            Vf0();
+            StartPattern();
             break;
         }
         timer++;
@@ -3234,7 +3234,7 @@ void CMizukaB::Vf6()
             }
             if (frame >= x8) {
                 pattern = 9;
-                Vf0();
+                StartPattern();
                 if (unk3458 > 0) {
                     pattern = 0xb3;
                     frame = 7;
@@ -3277,7 +3277,7 @@ void CMizukaB::Vf6()
                 pattern = 0x10;
             }
             m_attackResult = 0;
-            Vf0();
+            StartPattern();
             break;
         }
         if (frame == 2 && timer == 0) {
@@ -3290,13 +3290,13 @@ void CMizukaB::Vf6()
             l50.scale = 2;
             l50.layer = 1;
             l50.unk18 = facing;
-            Vf9(&l50);
+            SpawnObject(&l50);
         }
         if (y + vy >= 0.0) {
             y = 0.0;
             pattern = 0xd;
             unk3458 = 0;
-            Vf0();
+            StartPattern();
             break;
         }
         timer++;
@@ -3308,7 +3308,7 @@ void CMizukaB::Vf6()
             }
             if (frame >= x8) {
                 pattern = 9;
-                Vf0();
+                StartPattern();
                 if (unk3458 > 0) {
                     pattern = 0xb3;
                     frame = 7;
@@ -3351,7 +3351,7 @@ void CMizukaB::Vf6()
                 pattern = 0x10;
             }
             m_attackResult = 0;
-            Vf0();
+            StartPattern();
             break;
         }
         if (frame == 4 && timer == 0) {
@@ -3363,7 +3363,7 @@ void CMizukaB::Vf6()
             y = 0.0;
             pattern = 0xd;
             unk3458 = 0;
-            Vf0();
+            StartPattern();
             break;
         }
         timer++;
@@ -3380,7 +3380,7 @@ void CMizukaB::Vf6()
                 l50.scale = 2;
                 l50.layer = 1;
                 l50.unk18 = facing;
-                Vf9(&l50);
+                SpawnObject(&l50);
             }
             if (frame == 8 && unk3138 < 2) {
                 frame = frame - 3;
@@ -3389,7 +3389,7 @@ void CMizukaB::Vf6()
             }
             if (frame >= x8) {
                 pattern = 9;
-                Vf0();
+                StartPattern();
                 if (unk3458 > 0) {
                     pattern = 0xb3;
                     frame = 7;
@@ -3432,7 +3432,7 @@ void CMizukaB::Vf6()
                 pattern = 0x10;
             }
             m_attackResult = 0;
-            Vf0();
+            StartPattern();
             break;
         }
         if (frame == 7 && timer == 0) {
@@ -3444,7 +3444,7 @@ void CMizukaB::Vf6()
             y = 0.0;
             pattern = 0xd;
             unk3458 = 0;
-            Vf0();
+            StartPattern();
             break;
         }
         timer++;
@@ -3461,11 +3461,11 @@ void CMizukaB::Vf6()
                 l50.scale = 2;
                 l50.layer = 1;
                 l50.unk18 = facing;
-                Vf9(&l50);
+                SpawnObject(&l50);
             }
             if (frame >= x8) {
                 pattern = 9;
-                Vf0();
+                StartPattern();
                 if (unk3458 > 0) {
                     pattern = 0xb3;
                     frame = 7;
@@ -3483,7 +3483,7 @@ void CMizukaB::Vf6()
                 pattern = 6;
             }
             m_attackResult = 0;
-            Vf0();
+            StartPattern();
             break;
         }
         if (frame == 0 && timer == 0) {
@@ -3503,7 +3503,7 @@ void CMizukaB::Vf6()
             if (frame >= x8) {
                 pattern = 0;
                 CPlayer::FaceOpponent();
-                Vf0();
+                StartPattern();
             }
         }
         break;
@@ -3518,7 +3518,7 @@ void CMizukaB::Vf6()
         }
         if (m_attackResult > 1) {
             pattern = 0xd5;
-            Vf0();
+            StartPattern();
             CPlayer::StopMoving();
             break;
         }
@@ -3534,7 +3534,7 @@ void CMizukaB::Vf6()
             l50.unk2c = 7;
             m_game->CreateEffect((EffectDesc*)&l50);
             pattern = 0xd6;
-            Vf0();
+            StartPattern();
             break;
         }
         timer++;
@@ -3561,7 +3561,7 @@ void CMizukaB::Vf6()
             m_attackResult = 0;
             if (frame >= x8) {
                 pattern = 9;
-                Vf0();
+                StartPattern();
             }
         }
         break;
@@ -3589,7 +3589,7 @@ void CMizukaB::Vf6()
                     pattern = 3;
                 }
                 CPlayer::FaceOpponent();
-                Vf0();
+                StartPattern();
             }
         }
         break;
@@ -3606,7 +3606,7 @@ void CMizukaB::Vf6()
         if (frame == 1 && m_attackResult == 3) {
             vx = 0.0;
             vy = 0.0;
-            Vf0();
+            StartPattern();
             CPlayer::StopMoving();
             (*m_opponent)->StopMoving();
             pattern = 0xdd;
@@ -3629,7 +3629,7 @@ void CMizukaB::Vf6()
                     pattern = 3;
                 }
                 CPlayer::FaceOpponent();
-                Vf0();
+                StartPattern();
             }
         }
         break;
@@ -3650,7 +3650,7 @@ void CMizukaB::Vf6()
             l50.layer = 0;
             l50.unk28 = 1;
             l50.unk18 = facing;
-            Vf9(&l50);
+            SpawnObject(&l50);
             l50.type = 0x1c9;
             l50.x = (double)(int)(*m_opponent)->x;
             l50.y = 0.0;
@@ -3658,7 +3658,7 @@ void CMizukaB::Vf6()
             l50.layer = 0;
             l50.unk28 = 1;
             l50.unk18 = facing;
-            Vf9(&l50);
+            SpawnObject(&l50);
             l50.type = 0x1ca;
             l50.x = (double)((int)(*m_opponent)->x + facing * 0x50);
             l50.y = 0.0;
@@ -3666,7 +3666,7 @@ void CMizukaB::Vf6()
             l50.layer = 0;
             l50.unk28 = 1;
             l50.unk18 = facing;
-            Vf9(&l50);
+            SpawnObject(&l50);
         }
         if (frame == 3) {
             CPlayer::FaceOpponent();
@@ -3683,7 +3683,7 @@ void CMizukaB::Vf6()
             if (frame >= x8) {
                 pattern = 0;
                 CPlayer::FaceOpponent();
-                Vf0();
+                StartPattern();
             }
         }
         break;
@@ -3720,7 +3720,7 @@ void CMizukaB::Vf6()
                 l50.scale = 2;
                 l50.layer = 1;
                 l50.unk18 = facing;
-                Vf9(&l50);
+                SpawnObject(&l50);
             }
             if (unk58 == 1) {
                 unk58 = 0;
@@ -3731,7 +3731,7 @@ void CMizukaB::Vf6()
             if (frame >= x8) {
                 unk58 = 0;
                 pattern = 0;
-                Vf0();
+                StartPattern();
             }
         }
         break;
@@ -3747,7 +3747,7 @@ void CMizukaB::Vf6()
                 pattern = 6;
             }
             m_attackResult = 0;
-            Vf0();
+            StartPattern();
             break;
         }
         vx -= 0.03;
@@ -3768,7 +3768,7 @@ void CMizukaB::Vf6()
             l50.scale = 2;
             l50.layer = 1;
             l50.unk18 = facing;
-            Vf9(&l50);
+            SpawnObject(&l50);
         }
         if (frame == 3 && timer == 0) {
             m_gauge = m_gauge + 0xf;
@@ -3793,7 +3793,7 @@ void CMizukaB::Vf6()
             }
             if (frame >= x8) {
                 pattern = 0;
-                Vf0();
+                StartPattern();
             }
         }
         break;
@@ -3840,7 +3840,7 @@ void CMizukaB::Vf6()
             }
             if (frame >= x8) {
                 pattern = 0;
-                Vf0();
+                StartPattern();
             }
         }
         break;
@@ -3865,7 +3865,7 @@ void CMizukaB::Vf6()
             l50.scale = 2;
             l50.layer = 1;
             l50.unk18 = facing;
-            Vf9(&l50);
+            SpawnObject(&l50);
         }
         if (unk58 == 3 || unk58 == 1) {
             unk13c = 2;
@@ -3886,7 +3886,7 @@ void CMizukaB::Vf6()
             if (frame >= x8) {
                 unk58 = 0;
                 pattern = 3;
-                Vf0();
+                StartPattern();
             }
         }
         break;
@@ -3902,7 +3902,7 @@ void CMizukaB::Vf6()
                 pattern = 6;
             }
             m_attackResult = 0;
-            Vf0();
+            StartPattern();
             break;
         }
         vx -= 0.03;
@@ -3926,7 +3926,7 @@ void CMizukaB::Vf6()
             l50.scale = 2;
             l50.layer = 1;
             l50.unk18 = facing;
-            Vf9(&l50);
+            SpawnObject(&l50);
         }
         if (unk58 == 3 || unk58 == 1) {
             unk13c = 2;
@@ -3946,7 +3946,7 @@ void CMizukaB::Vf6()
             }
             if (frame >= x8) {
                 pattern = 3;
-                Vf0();
+                StartPattern();
             }
         }
         break;
@@ -3996,7 +3996,7 @@ void CMizukaB::Vf6()
         vy = vy + ay;
         if (frame == 1 && m_attackResult == 3) {
             (*m_opponent)->StopMoving();
-            (*m_opponent)->Vf0();
+            (*m_opponent)->StartPattern();
             CPlayer::StopMoving();
             (*m_opponent)->unk128 = 1;
             l50.type = 0;
@@ -4034,7 +4034,7 @@ void CMizukaB::Vf6()
         if (frame >= 7) {
             vy += 0.035;
             if (y + vy > 0.0) {
-                Vf0();
+                StartPattern();
                 CPlayer::StopMoving();
                 y = 0.0;
                 pattern = 0xd;
@@ -4051,7 +4051,7 @@ void CMizukaB::Vf6()
                 (*m_opponent)->x = facing * 0x1d + x;
             }
             if (frame == 4) {
-                (*m_opponent)->Vf0();
+                (*m_opponent)->StartPattern();
                 (*m_opponent)->pattern = 0x3c;
                 (*m_opponent)->unkc0 = 3.0;
                 (*m_opponent)->unkc8 = -1.0;
@@ -4090,7 +4090,7 @@ void CMizukaB::Vf6()
             l50.unk0 = 1;
             unk2c8 = 0xb;
             l50.unk18 = facing;
-            Vf9(&l50);
+            SpawnObject(&l50);
             m_gauge = m_gauge + 0x1e;
         }
         if (frame == 0xa && m_command > 9 && m_command < 0xd) {
@@ -4104,7 +4104,7 @@ void CMizukaB::Vf6()
             frame++;
             m_attackResult = 0;
             if (frame == 0x12) {
-                Vf0();
+                StartPattern();
                 pattern = 0;
             }
             if (frame == 0xb) {
@@ -4112,7 +4112,7 @@ void CMizukaB::Vf6()
             }
             if (frame >= x8) {
                 pattern = 0;
-                Vf0();
+                StartPattern();
             }
         }
         break;
@@ -4140,7 +4140,7 @@ void CMizukaB::Vf6()
             l50.unk0 = 1;
             unk2c8 = 0xb;
             l50.unk18 = facing;
-            Vf9(&l50);
+            SpawnObject(&l50);
             m_gauge = m_gauge + 0x1e;
         }
         if (frame == 0xa && m_command > 9 && m_command < 0xd) {
@@ -4154,7 +4154,7 @@ void CMizukaB::Vf6()
             frame++;
             m_attackResult = 0;
             if (frame == 0x12) {
-                Vf0();
+                StartPattern();
                 pattern = 0;
             }
             if (frame == 0xb) {
@@ -4162,7 +4162,7 @@ void CMizukaB::Vf6()
             }
             if (frame >= x8) {
                 pattern = 0;
-                Vf0();
+                StartPattern();
             }
         }
         break;
@@ -4204,7 +4204,7 @@ void CMizukaB::Vf6()
             l50.unk0 = 1;
             unk2c8 = 0xb;
             l50.unk18 = facing;
-            Vf9(&l50);
+            SpawnObject(&l50);
             m_gauge = m_gauge + 0x1e;
         }
         timer++;
@@ -4214,7 +4214,7 @@ void CMizukaB::Vf6()
             m_attackResult = 0;
             if (frame >= x8) {
                 pattern = 0;
-                Vf0();
+                StartPattern();
             }
         }
         break;
@@ -4231,7 +4231,7 @@ void CMizukaB::Vf6()
             l50.scale = 0;
             l50.unk18 = facing;
             l50.layer = 1;
-            Vf9(&l50);
+            SpawnObject(&l50);
             m_gauge = m_gauge + 0x2d;
         }
         timer++;
@@ -4241,7 +4241,7 @@ void CMizukaB::Vf6()
             m_attackResult = 3;
             if (frame >= x8) {
                 pattern = 0;
-                Vf0();
+                StartPattern();
             }
         }
         break;
@@ -4258,7 +4258,7 @@ void CMizukaB::Vf6()
             l50.scale = 0;
             l50.unk18 = facing;
             l50.layer = 1;
-            Vf9(&l50);
+            SpawnObject(&l50);
             m_gauge = m_gauge + 0x2d;
         }
         timer++;
@@ -4268,7 +4268,7 @@ void CMizukaB::Vf6()
             m_attackResult = 3;
             if (frame >= x8) {
                 pattern = 0;
-                Vf0();
+                StartPattern();
             }
         }
         break;
@@ -4297,7 +4297,7 @@ void CMizukaB::Vf6()
             l50.scale = 0;
             l50.layer = 1;
             l50.unk18 = facing;
-            Vf9(&l50);
+            SpawnObject(&l50);
             m_gauge = m_gauge + 0x2d;
         }
         timer++;
@@ -4307,7 +4307,7 @@ void CMizukaB::Vf6()
             m_attackResult = 3;
             if (frame >= x8) {
                 pattern = 0;
-                Vf0();
+                StartPattern();
             }
         }
         break;
@@ -4327,15 +4327,15 @@ void CMizukaB::Vf6()
             l50.scale = 0;
             l50.layer = 1;
             l50.unk18 = facing;
-            Vf9(&l50);
+            SpawnObject(&l50);
             l50.type = 0x1bf;
             l50.x = (double)((int)x + facing * 0x12);
             l50.y = (double)((int)y - 0x26);
-            Vf9(&l50);
+            SpawnObject(&l50);
             l50.type = 0x1be;
             l50.x = (double)((int)x + facing * 0x15);
             l50.y = (double)((int)y - 0x12);
-            Vf9(&l50);
+            SpawnObject(&l50);
             unk2c8 = 3;
             m_gauge = m_gauge + 0xf;
         }
@@ -4351,21 +4351,21 @@ void CMizukaB::Vf6()
                 l50.scale = 0;
                 l50.layer = 1;
                 l50.unk18 = facing;
-                Vf9(&l50);
+                SpawnObject(&l50);
                 l50.type = 0x1bf;
                 l50.x = (double)((int)x + facing * 0x1a);
                 l50.y = (double)((int)y - 0x1f);
-                Vf9(&l50);
+                SpawnObject(&l50);
                 l50.type = 0x1be;
                 l50.x = (double)((int)x + facing * 0x15);
                 l50.y = (double)((int)y - 0xb);
-                Vf9(&l50);
+                SpawnObject(&l50);
                 unk2c8 = 3;
                 m_gauge = m_gauge + 0xf;
             }
             if (frame >= x8) {
                 pattern = 0;
-                Vf0();
+                StartPattern();
                 CPlayer::FaceOpponent();
             }
         }
@@ -4386,15 +4386,15 @@ void CMizukaB::Vf6()
             l50.scale = 0;
             l50.layer = 1;
             l50.unk18 = facing;
-            Vf9(&l50);
+            SpawnObject(&l50);
             l50.type = 0x1c1;
             l50.x = (double)((int)x + (facing << 4));
             l50.y = (double)((int)y - 0x3d);
-            Vf9(&l50);
+            SpawnObject(&l50);
             l50.type = 0x1c0;
             l50.x = (double)((int)x + facing * 0x1a);
             l50.y = (double)((int)y - 0x33);
-            Vf9(&l50);
+            SpawnObject(&l50);
             unk2c8 = 3;
             m_gauge = m_gauge + 0xf;
         }
@@ -4410,21 +4410,21 @@ void CMizukaB::Vf6()
                 l50.scale = 0;
                 l50.layer = 1;
                 l50.unk18 = facing;
-                Vf9(&l50);
+                SpawnObject(&l50);
                 l50.type = 0x1bf;
                 l50.x = (double)((int)x + facing * 0x1a);
                 l50.y = (double)((int)y - 0x1f);
-                Vf9(&l50);
+                SpawnObject(&l50);
                 l50.type = 0x1be;
                 l50.x = (double)((int)x + facing * 0x15);
                 l50.y = (double)((int)y - 0xb);
-                Vf9(&l50);
+                SpawnObject(&l50);
                 unk2c8 = 3;
                 m_gauge = m_gauge + 0xf;
             }
             if (frame >= x8) {
                 pattern = 0;
-                Vf0();
+                StartPattern();
                 CPlayer::FaceOpponent();
             }
         }
@@ -4445,15 +4445,15 @@ void CMizukaB::Vf6()
             l50.scale = 0;
             l50.layer = 1;
             l50.unk18 = facing;
-            Vf9(&l50);
+            SpawnObject(&l50);
             l50.type = 0x1c1;
             l50.x = (double)((int)x + (facing << 4));
             l50.y = (double)((int)y - 0x3d);
-            Vf9(&l50);
+            SpawnObject(&l50);
             l50.type = 0x1c0;
             l50.x = (double)((int)x + facing * 0x1a);
             l50.y = (double)((int)y - 0x33);
-            Vf9(&l50);
+            SpawnObject(&l50);
             unk2c8 = 3;
             m_gauge = m_gauge + 0xf;
         }
@@ -4469,21 +4469,21 @@ void CMizukaB::Vf6()
                 l50.scale = 0;
                 l50.layer = 1;
                 l50.unk18 = facing;
-                Vf9(&l50);
+                SpawnObject(&l50);
                 l50.type = 0x1c2;
                 l50.x = (double)((int)x + (facing << 4));
                 l50.y = (double)((int)y - 0x3d);
-                Vf9(&l50);
+                SpawnObject(&l50);
                 l50.type = 0x1c0;
                 l50.x = (double)((int)x + facing * 0x1a);
                 l50.y = (double)((int)y - 0x33);
-                Vf9(&l50);
+                SpawnObject(&l50);
                 unk2c8 = 3;
                 m_gauge = m_gauge + 0xf;
             }
             if (frame >= x8) {
                 pattern = 0;
-                Vf0();
+                StartPattern();
                 CPlayer::FaceOpponent();
             }
         }
@@ -4509,7 +4509,7 @@ void CMizukaB::Vf6()
                 l50.scale = 2;
                 l50.layer = 1;
                 l50.unk18 = facing;
-                Vf9(&l50);
+                SpawnObject(&l50);
                 m_gauge = m_gauge + 0x2d;
             }
             if (frame == 7 && unk3138 < 6) {
@@ -4521,7 +4521,7 @@ void CMizukaB::Vf6()
             }
             if (frame >= x8) {
                 pattern = 0;
-                Vf0();
+                StartPattern();
             }
         }
         break;
@@ -4546,7 +4546,7 @@ void CMizukaB::Vf6()
                 l50.scale = 2;
                 l50.layer = 1;
                 l50.unk18 = facing;
-                Vf9(&l50);
+                SpawnObject(&l50);
                 m_gauge = m_gauge + 0x2d;
             }
             if (frame == 7 && unk3138 < 6) {
@@ -4558,7 +4558,7 @@ void CMizukaB::Vf6()
             }
             if (frame >= x8) {
                 pattern = 0;
-                Vf0();
+                StartPattern();
             }
         }
         break;
@@ -4592,7 +4592,7 @@ void CMizukaB::Vf6()
             l50.scale = 2;
             l50.layer = 1;
             l50.unk18 = facing;
-            Vf9(&l50);
+            SpawnObject(&l50);
             m_gauge = m_gauge + 0x14;
         }
         timer++;
@@ -4608,7 +4608,7 @@ void CMizukaB::Vf6()
             }
             if (frame >= x8) {
                 pattern = 0;
-                Vf0();
+                StartPattern();
             }
         }
         break;
@@ -4627,7 +4627,7 @@ void CMizukaB::Vf6()
             l50.unk0 = 1;
             unk2c8 = 0xb;
             l50.unk18 = facing;
-            Vf9(&l50);
+            SpawnObject(&l50);
             m_gauge = m_gauge + 0x1e;
         }
         if (frame == 8 && m_command > 9 && m_command < 0xd) {
@@ -4641,13 +4641,13 @@ void CMizukaB::Vf6()
             frame++;
             m_attackResult = 0;
             if (frame == 0xb) {
-                Vf0();
+                StartPattern();
                 pattern = 0x14;
                 break;
             }
             if (frame >= x8) {
                 pattern = 0x14;
-                Vf0();
+                StartPattern();
                 if (unk3458 > 0) {
                     frame = 7;
                     pattern = 0xb3;
@@ -4670,7 +4670,7 @@ void CMizukaB::Vf6()
             l50.unk0 = 1;
             unk2c8 = 0xb;
             l50.unk18 = facing;
-            Vf9(&l50);
+            SpawnObject(&l50);
             m_gauge = m_gauge + 0x1e;
         }
         if (frame == 8 && m_command > 9 && m_command < 0xd) {
@@ -4684,13 +4684,13 @@ void CMizukaB::Vf6()
             frame++;
             m_attackResult = 0;
             if (frame == 0xb) {
-                Vf0();
+                StartPattern();
                 pattern = 0x14;
                 break;
             }
             if (frame >= x8) {
                 pattern = 0x14;
-                Vf0();
+                StartPattern();
                 if (unk3458 > 0) {
                     frame = 7;
                     pattern = 0xb3;
@@ -4724,7 +4724,7 @@ void CMizukaB::Vf6()
             l50.unk18 = facing;
             l50.scale = 2;
             l50.layer = 1;
-            Vf9(&l50);
+            SpawnObject(&l50);
             unk2c8 = 0xb;
             m_gauge = m_gauge + 0x1e;
         }
@@ -4736,7 +4736,7 @@ void CMizukaB::Vf6()
             if (frame >= x8) {
                 pattern = 0x14;
                 ay = 0.035;
-                Vf0();
+                StartPattern();
                 if (unk3458 > 0) {
                     frame = 7;
                     pattern = 0xb3;
@@ -4759,7 +4759,7 @@ void CMizukaB::Vf6()
             l50.unk0 = 1;
             unk2c8 = 0xb;
             l50.unk18 = facing;
-            Vf9(&l50);
+            SpawnObject(&l50);
             m_gauge = m_gauge + 0x2d;
         }
         timer++;
@@ -4769,7 +4769,7 @@ void CMizukaB::Vf6()
             m_attackResult = 0;
             if (frame >= x8) {
                 pattern = 9;
-                Vf0();
+                StartPattern();
                 if (unk3458 > 0) {
                     frame = 7;
                     pattern = 0xb3;
@@ -4805,7 +4805,7 @@ void CMizukaB::Vf6()
             m_attackResult = 3;
             if (frame >= x8) {
                 pattern = 0;
-                Vf0();
+                StartPattern();
             }
         }
         break;
@@ -4837,7 +4837,7 @@ void CMizukaB::Vf6()
             m_attackResult = 3;
             if (frame >= x8) {
                 pattern = 0;
-                Vf0();
+                StartPattern();
             }
         }
         break;
@@ -4871,7 +4871,7 @@ void CMizukaB::Vf6()
             if (frame >= x8) {
                 pattern = 9;
                 ay = 0.035;
-                Vf0();
+                StartPattern();
             }
         }
         break;
@@ -4904,7 +4904,7 @@ void CMizukaB::Vf6()
             frame++;
             if (frame >= x8) {
                 pattern = 9;
-                Vf0();
+                StartPattern();
                 if (unk3458 > 0) {
                     frame = 7;
                     pattern = 0xb3;
@@ -4941,7 +4941,7 @@ void CMizukaB::Vf6()
             frame++;
             if (frame >= x8) {
                 pattern = 9;
-                Vf0();
+                StartPattern();
                 if (unk3458 > 0) {
                     frame = 7;
                     pattern = 0xb3;
@@ -4981,7 +4981,7 @@ void CMizukaB::Vf6()
             }
             if (frame >= x8) {
                 pattern = 0;
-                Vf0();
+                StartPattern();
             }
         }
         break;
@@ -5016,7 +5016,7 @@ void CMizukaB::Vf6()
             l50.unk18 = facing;
             l50.scale = 0;
             l50.layer = 1;
-            Vf9(&l50);
+            SpawnObject(&l50);
             unk2c8 = 0x10;
         }
         timer++;
@@ -5031,7 +5031,7 @@ void CMizukaB::Vf6()
             if (frame >= x8) {
                 pattern = 0;
                 CPlayer::FaceOpponent();
-                Vf0();
+                StartPattern();
             }
         }
         break;
@@ -5066,7 +5066,7 @@ void CMizukaB::Vf6()
             l50.unk18 = facing;
             l50.scale = 0;
             l50.layer = 1;
-            Vf9(&l50);
+            SpawnObject(&l50);
             unk2c8 = 0x10;
         }
         timer++;
@@ -5081,7 +5081,7 @@ void CMizukaB::Vf6()
             if (frame >= x8) {
                 pattern = 0;
                 CPlayer::FaceOpponent();
-                Vf0();
+                StartPattern();
             }
         }
         break;
@@ -5117,7 +5117,7 @@ void CMizukaB::Vf6()
             l50.unk18 = facing;
             l50.scale = 0;
             l50.layer = 1;
-            Vf9(&l50);
+            SpawnObject(&l50);
             unk2c8 = 0x10;
         }
         timer++;
@@ -5132,7 +5132,7 @@ void CMizukaB::Vf6()
             if (frame >= x8) {
                 pattern = 0;
                 CPlayer::FaceOpponent();
-                Vf0();
+                StartPattern();
             }
         }
         break;
@@ -5166,11 +5166,11 @@ void CMizukaB::Vf6()
             l50.unk18 = facing;
             l50.scale = 0;
             l50.layer = 1;
-            Vf9(&l50);
+            SpawnObject(&l50);
         }
         if (frame > 7 && unk3448 == 1) {
             m_game->FlashWhite(9, 0x50, 9);
-            Vf0();
+            StartPattern();
             pattern = 0x132;
             break;
         }
@@ -5182,7 +5182,7 @@ void CMizukaB::Vf6()
             if (frame >= x8) {
                 pattern = 0;
                 CPlayer::FaceOpponent();
-                Vf0();
+                StartPattern();
             }
         }
         break;
@@ -5216,11 +5216,11 @@ void CMizukaB::Vf6()
             l50.unk18 = facing;
             l50.scale = 0;
             l50.layer = 1;
-            Vf9(&l50);
+            SpawnObject(&l50);
         }
         if (frame > 7 && unk3448 == 1) {
             m_game->FlashWhite(9, 0x50, 9);
-            Vf0();
+            StartPattern();
             pattern = 0x133;
             break;
         }
@@ -5232,7 +5232,7 @@ void CMizukaB::Vf6()
             if (frame >= x8) {
                 pattern = 0;
                 CPlayer::FaceOpponent();
-                Vf0();
+                StartPattern();
             }
         }
         break;
@@ -5270,11 +5270,11 @@ void CMizukaB::Vf6()
             l50.unk18 = facing;
             l50.scale = 0;
             l50.layer = 1;
-            Vf9(&l50);
+            SpawnObject(&l50);
         }
         if (frame > 7 && unk3448 == 1) {
             m_game->FlashWhite(9, 0x50, 9);
-            Vf0();
+            StartPattern();
             pattern = 0x134;
             break;
         }
@@ -5286,7 +5286,7 @@ void CMizukaB::Vf6()
             if (frame >= x8) {
                 pattern = 0;
                 CPlayer::FaceOpponent();
-                Vf0();
+                StartPattern();
             }
         }
         break;
@@ -5298,7 +5298,7 @@ void CMizukaB::Vf6()
             facing = 1;
             (*m_opponent)->pattern = 0x7a;
             (*m_opponent)->facing = 1;
-            (*m_opponent)->Vf0();
+            (*m_opponent)->StartPattern();
             (*m_opponent)->StopMoving();
             (*m_opponent)->x = 420.0;
             (*m_opponent)->y = -17.0;
@@ -5315,7 +5315,7 @@ void CMizukaB::Vf6()
             l50.unk0 = 1;
             l50.layer = 0;
             l50.unk18 = facing;
-            Vf9(&l50);
+            SpawnObject(&l50);
         }
         timer++;
         if (timer >= l4) {
@@ -5333,7 +5333,7 @@ void CMizukaB::Vf6()
                 pattern = 0;
                 unk3448 = 0;
                 CPlayer::FaceOpponent();
-                Vf0();
+                StartPattern();
             }
         }
         break;
@@ -5345,7 +5345,7 @@ void CMizukaB::Vf6()
             facing = 1;
             (*m_opponent)->pattern = 0x7a;
             (*m_opponent)->facing = 1;
-            (*m_opponent)->Vf0();
+            (*m_opponent)->StartPattern();
             (*m_opponent)->StopMoving();
             (*m_opponent)->x = 420.0;
             (*m_opponent)->y = -17.0;
@@ -5359,7 +5359,7 @@ void CMizukaB::Vf6()
             l50.unk28 = 1;
             l50.layer = 0;
             l50.unk18 = facing;
-            Vf9(&l50);
+            SpawnObject(&l50);
         }
         if (frame == 6 && timer == 0) {
             unk2c8 = 2;
@@ -5379,7 +5379,7 @@ void CMizukaB::Vf6()
             l50.unk0 = 1;
             l50.layer = 0;
             l50.unk18 = facing;
-            Vf9(&l50);
+            SpawnObject(&l50);
         }
         timer++;
         if (timer >= l4) {
@@ -5419,7 +5419,7 @@ void CMizukaB::Vf6()
                 pattern = 0;
                 unk3448 = 0;
                 CPlayer::FaceOpponent();
-                Vf0();
+                StartPattern();
             }
         }
         break;
@@ -5432,7 +5432,7 @@ void CMizukaB::Vf6()
             facing = 1;
             (*m_opponent)->pattern = 0x7a;
             (*m_opponent)->facing = 1;
-            (*m_opponent)->Vf0();
+            (*m_opponent)->StartPattern();
             (*m_opponent)->StopMoving();
             (*m_opponent)->x = 420.0;
             (*m_opponent)->y = -17.0;
@@ -5446,7 +5446,7 @@ void CMizukaB::Vf6()
             l50.unk28 = 1;
             l50.layer = 0;
             l50.unk18 = facing;
-            Vf9(&l50);
+            SpawnObject(&l50);
         }
         if (frame == 6 && timer == 0) {
             unk2c8 = 2;
@@ -5466,7 +5466,7 @@ void CMizukaB::Vf6()
             l50.unk0 = 1;
             l50.layer = 0;
             l50.unk18 = facing;
-            Vf9(&l50);
+            SpawnObject(&l50);
         }
         timer++;
         if (timer >= l4) {
@@ -5506,7 +5506,7 @@ void CMizukaB::Vf6()
                 pattern = 0;
                 unk3448 = 0;
                 CPlayer::FaceOpponent();
-                Vf0();
+                StartPattern();
             }
         }
         break;
@@ -5516,7 +5516,7 @@ void CMizukaB::Vf6()
             CPlayer::Unk410a80(0x32, 3);
         }
         if (frame < 0xe && (*m_opponent)->pattern == 0x63) {
-            (*m_opponent)->Vf0();
+            (*m_opponent)->StartPattern();
         }
         if (frame > 8) {
             if (vy + y > 0.0 && frame < 0xe) {
@@ -5527,7 +5527,7 @@ void CMizukaB::Vf6()
                 CPlayer::Unk410a10(0xf, 0xa);
                 unk2c9 = 0x16;
                 CPlayer::DealDamage(0x320, 900.0);
-                (*m_opponent)->Vf0();
+                (*m_opponent)->StartPattern();
                 (*m_opponent)->pattern = 0x62;
                 l50.type = 0x190;
                 l50.x = (double)(int)x;
@@ -5535,7 +5535,7 @@ void CMizukaB::Vf6()
                 l50.scale = 2;
                 l50.layer = 1;
                 l50.unk18 = facing;
-                Vf9(&l50);
+                SpawnObject(&l50);
                 l50.type = 0;
                 m_game->CreateEffect((EffectDesc*)&l50);
                 (*m_opponent)->unk14a = 0xb4;
@@ -5548,7 +5548,7 @@ void CMizukaB::Vf6()
             timer = 0;
             frame++;
             if (frame == 1) {
-                (*m_opponent)->Vf0();
+                (*m_opponent)->StartPattern();
                 (*m_opponent)->pattern = 0x67;
                 (*m_opponent)->y = -98.0;
                 (*m_opponent)->x = facing * 0x23 + x;
@@ -5564,7 +5564,7 @@ void CMizukaB::Vf6()
                 (*m_opponent)->y = 0.0;
                 (*m_opponent)->x = facing * 0x21 + x;
                 (*m_opponent)->facing = -facing;
-                (*m_opponent)->Vf0();
+                (*m_opponent)->StartPattern();
                 (*m_opponent)->pattern = 0x61;
                 (*m_opponent)->unk12c = 1;
                 CPlayer::DealDamage(0x12c, 980.0);
@@ -5585,13 +5585,13 @@ void CMizukaB::Vf6()
             if (frame >= x8) {
                 pattern = 0;
                 CPlayer::FaceOpponent();
-                Vf0();
+                StartPattern();
             }
         }
         break;
     case 0x136:
         if (frame == 0 && timer == 0) {
-            (*m_opponent)->Vf0();
+            (*m_opponent)->StartPattern();
         }
         if (frame == 1 && timer == 0) {
             CPlayer::StopMoving();
@@ -5632,7 +5632,7 @@ void CMizukaB::Vf6()
             }
             if (frame == 1) {
                 (*m_opponent)->pattern = 0x67;
-                (*m_opponent)->Vf0();
+                (*m_opponent)->StartPattern();
                 (*m_opponent)->y = -101.0;
                 (*m_opponent)->x = facing * 0x15 + x;
             }
@@ -5647,7 +5647,7 @@ void CMizukaB::Vf6()
                 l50.unk0 = 1;
                 l50.unk18 = facing;
                 l50.layer = 1;
-                Vf9(&l50);
+                SpawnObject(&l50);
             }
             if (frame == 3) {
                 (*m_opponent)->pattern = 0x64;
@@ -5683,14 +5683,14 @@ void CMizukaB::Vf6()
             }
             if (frame >= x8) {
                 pattern = 0;
-                Vf0();
+                StartPattern();
                 CPlayer::FaceOpponent();
             }
         }
         break;
     case 0x137:
         if (frame == 0 && timer == 0) {
-            (*m_opponent)->Vf0();
+            (*m_opponent)->StartPattern();
         }
         if (frame < 7) {
             CPlayer::Unk410a80(0x32, 0x2d);
@@ -5716,7 +5716,7 @@ void CMizukaB::Vf6()
             }
             if (frame == 1) {
                 (*m_opponent)->pattern = 0x67;
-                (*m_opponent)->Vf0();
+                (*m_opponent)->StartPattern();
                 (*m_opponent)->y = -101.0;
                 (*m_opponent)->x = facing * 0x15 + x;
             }
@@ -5731,7 +5731,7 @@ void CMizukaB::Vf6()
                 l50.unk0 = 1;
                 l50.unk18 = facing;
                 l50.layer = 1;
-                Vf9(&l50);
+                SpawnObject(&l50);
             }
             if (frame == 3) {
                 (*m_opponent)->pattern = 0x64;
@@ -5754,7 +5754,7 @@ void CMizukaB::Vf6()
                 (*m_opponent)->x = facing * 0xf + x;
             }
             if (frame == 7 && unk3138 > 8) {
-                (*m_opponent)->Vf0();
+                (*m_opponent)->StartPattern();
                 (*m_opponent)->pattern = 0x3f;
                 (*m_opponent)->unkc0 = 0.2;
                 (*m_opponent)->unkc8 = -1.9;
@@ -5781,12 +5781,12 @@ void CMizukaB::Vf6()
                 l50.unk18 = facing;
                 l50.unk0 = 1;
                 l50.layer = 1;
-                Vf9(&l50);
+                SpawnObject(&l50);
                 CPlayer::Unk410a10(0xa, 0x3c);
             }
             if (frame >= x8) {
                 pattern = 0;
-                Vf0();
+                StartPattern();
                 CPlayer::FaceOpponent();
             }
         }
@@ -5827,7 +5827,7 @@ void CMizukaB::Vf6()
             l50.unk18 = facing;
             l50.unk0 = 1;
             l50.layer = 1;
-            Vf9(&l50);
+            SpawnObject(&l50);
         }
         if (frame == 8 && timer == 0) {
             l50.type = 0x1f;
@@ -5845,7 +5845,7 @@ void CMizukaB::Vf6()
             l50.unk18 = facing;
             l50.unk0 = 1;
             l50.layer = 1;
-            Vf9(&l50);
+            SpawnObject(&l50);
         }
         if (frame == 2 && m_attackResult == 3) {
             CPlayer::Unk410a10(6, 0x3c);
@@ -5866,7 +5866,7 @@ void CMizukaB::Vf6()
             }
             if (frame >= x8) {
                 pattern = 0;
-                Vf0();
+                StartPattern();
             }
         }
         break;
@@ -5917,7 +5917,7 @@ void CMizukaB::Vf6()
                     pattern = 0x14;
                     ay = 0.035;
                     CPlayer::FaceOpponent();
-                    Vf0();
+                    StartPattern();
                 }
             }
         }
@@ -5967,7 +5967,7 @@ void CMizukaB::Vf6()
             m_game->FlashWhite(9, 0xf, 9);
         }
         if (frame == 0xd && timer == 0 && m_attackResult == 3) {
-            Vf0();
+            StartPattern();
             pattern = 0x13b;
             break;
         }
@@ -5989,7 +5989,7 @@ void CMizukaB::Vf6()
             if (frame >= x8) {
                 pattern = 0;
                 CPlayer::FaceOpponent();
-                Vf0();
+                StartPattern();
             }
         }
         break;
@@ -6020,7 +6020,7 @@ void CMizukaB::Vf6()
             l50.scale = 0;
             l50.layer = 0;
             l50.unk18 = 1;
-            Vf9(&l50);
+            SpawnObject(&l50);
             l50.type = 0x1a5;
             l50.screen = 0;
             l50.x = 320.0;
@@ -6028,10 +6028,10 @@ void CMizukaB::Vf6()
             l50.scale = 0;
             l50.layer = 1;
             l50.unk18 = facing;
-            Vf9(&l50);
+            SpawnObject(&l50);
             (*m_opponent)->x = 320.0;
             (*m_opponent)->y = -160.0;
-            (*m_opponent)->Vf0();
+            (*m_opponent)->StartPattern();
             (*m_opponent)->StopMoving();
             (*m_opponent)->pattern = 0x3b;
         }
@@ -6044,7 +6044,7 @@ void CMizukaB::Vf6()
                 l50.scale = 0;
                 l50.layer = 1;
                 l50.unk18 = facing;
-                Vf9(&l50);
+                SpawnObject(&l50);
             }
             if (unk3138 == 0xa0) {
                 l50.type = 0x1a7;
@@ -6053,7 +6053,7 @@ void CMizukaB::Vf6()
                 l50.scale = 0;
                 l50.layer = 1;
                 l50.unk18 = facing;
-                Vf9(&l50);
+                SpawnObject(&l50);
             }
             if (unk3138 == 0xf0) {
                 l50.type = 0x1a8;
@@ -6062,7 +6062,7 @@ void CMizukaB::Vf6()
                 l50.scale = 0;
                 l50.layer = 1;
                 l50.unk18 = facing;
-                Vf9(&l50);
+                SpawnObject(&l50);
             }
             if (unk3138 == 0x140) {
                 l50.type = 0x1a9;
@@ -6071,7 +6071,7 @@ void CMizukaB::Vf6()
                 l50.scale = 0;
                 l50.layer = 1;
                 l50.unk18 = facing;
-                Vf9(&l50);
+                SpawnObject(&l50);
             }
             if (unk3138 == 0x190) {
                 l50.type = 0x1aa;
@@ -6080,7 +6080,7 @@ void CMizukaB::Vf6()
                 l50.scale = 0;
                 l50.layer = 1;
                 l50.unk18 = facing;
-                Vf9(&l50);
+                SpawnObject(&l50);
             }
         }
         if (frame == 0 && timer == l4 - 0x1e) {
@@ -6089,7 +6089,7 @@ void CMizukaB::Vf6()
             (*m_opponent)->x = 320.0;
             (*m_opponent)->y = 0.0;
             (*m_opponent)->pattern = 0x79;
-            (*m_opponent)->Vf0();
+            (*m_opponent)->StartPattern();
             (*m_opponent)->StopMoving();
         }
         if (frame == 1) {
@@ -6110,7 +6110,7 @@ void CMizukaB::Vf6()
                 l50.scale = 0;
                 l50.layer = 1;
                 l50.unk18 = facing;
-                Vf9(&l50);
+                SpawnObject(&l50);
             }
             if (unk3138 == 0xae) {
                 l50.type = 0x1ac;
@@ -6119,7 +6119,7 @@ void CMizukaB::Vf6()
                 l50.scale = 0;
                 l50.layer = 1;
                 l50.unk18 = facing;
-                Vf9(&l50);
+                SpawnObject(&l50);
             }
             if (unk3138 == 0xc6) {
                 l50.type = 0x1ad;
@@ -6128,7 +6128,7 @@ void CMizukaB::Vf6()
                 l50.scale = 0;
                 l50.layer = 1;
                 l50.unk18 = facing;
-                Vf9(&l50);
+                SpawnObject(&l50);
             }
             if (unk3138 == 0xde) {
                 l50.type = 0x1ae;
@@ -6137,7 +6137,7 @@ void CMizukaB::Vf6()
                 l50.scale = 0;
                 l50.layer = 1;
                 l50.unk18 = facing;
-                Vf9(&l50);
+                SpawnObject(&l50);
             }
             if (unk3138 == 0xf6) {
                 l50.type = 0x1af;
@@ -6146,7 +6146,7 @@ void CMizukaB::Vf6()
                 l50.scale = 0;
                 l50.layer = 1;
                 l50.unk18 = facing;
-                Vf9(&l50);
+                SpawnObject(&l50);
             }
             if (unk3138 == 0x10e) {
                 l50.type = 0x1b0;
@@ -6155,13 +6155,13 @@ void CMizukaB::Vf6()
                 l50.scale = 0;
                 l50.layer = 1;
                 l50.unk18 = facing;
-                Vf9(&l50);
+                SpawnObject(&l50);
             }
         }
         if (frame > 1) {
             vy += 0.035;
             if (vy + y > 0.0) {
-                Vf0();
+                StartPattern();
                 CPlayer::StopMoving();
                 pattern = 0xd;
                 y = 0.0;
@@ -6212,7 +6212,7 @@ void CMizukaB::Vf6()
             l50.unk18 = facing;
             l50.scale = 2;
             l50.layer = 1;
-            Vf9(&l50);
+            SpawnObject(&l50);
         }
         timer++;
         if (timer >= l4) {
@@ -6226,7 +6226,7 @@ void CMizukaB::Vf6()
             if (frame >= x8) {
                 pattern = 0;
                 CPlayer::FaceOpponent();
-                Vf0();
+                StartPattern();
             }
         }
         break;
@@ -6237,7 +6237,7 @@ void CMizukaB::Vf6()
             vy += 0.035;
             if (y + vy > 0.0) {
                 y = 0.0;
-                Vf0();
+                StartPattern();
                 CPlayer::StopMoving();
                 pattern = 0xd;
                 break;
@@ -6272,7 +6272,7 @@ void CMizukaB::Vf6()
             l50.unk18 = facing;
             l50.scale = 2;
             l50.layer = 1;
-            Vf9(&l50);
+            SpawnObject(&l50);
         }
         timer++;
         if (timer >= l4) {
@@ -6280,7 +6280,7 @@ void CMizukaB::Vf6()
             frame++;
             m_attackResult = 0;
             if (frame == 0x18) {
-                Vf0();
+                StartPattern();
                 pattern = 9;
                 ay = 0.035;
             }
@@ -6296,7 +6296,7 @@ void CMizukaB::Vf6()
             vy += 0.035;
             if (y + vy > 0.0) {
                 y = 0.0;
-                Vf0();
+                StartPattern();
                 CPlayer::StopMoving();
                 pattern = 0xd;
                 break;
@@ -6331,7 +6331,7 @@ void CMizukaB::Vf6()
             l50.unk18 = facing;
             l50.scale = 2;
             l50.layer = 1;
-            Vf9(&l50);
+            SpawnObject(&l50);
         }
         timer++;
         if (timer >= l4) {
@@ -6339,7 +6339,7 @@ void CMizukaB::Vf6()
             frame++;
             m_attackResult = 0;
             if (frame == 0x18) {
-                Vf0();
+                StartPattern();
                 pattern = 9;
                 ay = 0.035;
             }
@@ -6358,7 +6358,7 @@ void CMizukaB::Vf6()
             vy += 0.035;
             if (y + vy > 0.0) {
                 y = 0.0;
-                Vf0();
+                StartPattern();
                 CPlayer::StopMoving();
                 pattern = 0xd;
                 break;
@@ -6394,7 +6394,7 @@ void CMizukaB::Vf6()
             l50.unk18 = facing;
             l50.scale = 2;
             l50.layer = 1;
-            Vf9(&l50);
+            SpawnObject(&l50);
         }
         timer++;
         if (timer >= l4) {
@@ -6402,7 +6402,7 @@ void CMizukaB::Vf6()
             frame++;
             m_attackResult = 0;
             if (frame == 0x18) {
-                Vf0();
+                StartPattern();
                 pattern = 9;
                 ay = 0.035;
             }

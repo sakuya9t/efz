@@ -99,8 +99,8 @@ void CScene2::Unk76ca50()
         Unk76da20((int)m_player2Ref, (int)m_player1Ref, 1, l10);
         (*m_player1Ref)->m_paletteIndex = 0;
         (*m_player2Ref)->m_paletteIndex = (*m_player2Ref)->unk8d == (*m_player1Ref)->unk8d;
-        (*m_player1Ref)->unka4 = 1;
-        (*m_player2Ref)->unka4 = 1;
+        (*m_player1Ref)->m_cpu = 1;
+        (*m_player2Ref)->m_cpu = 1;
         l10 = 0x17;
         while (l10 == 0x17) {
             l10 = rand() % 0x17;
@@ -335,8 +335,8 @@ void CScene2::Unk76ca50()
     } else {
         m_game->unk14258 = 1.0;
     }
-    (*m_player1Ref)->Vf11();
-    (*m_player2Ref)->Vf11();
+    (*m_player1Ref)->Load();
+    (*m_player2Ref)->Load();
     if (m_game->unk1364 == 2) {
         (*m_player1Ref)->unka8 = m_game->unk1358 / 1.5f;
         (*m_player2Ref)->unka8 = m_game->unk1358 / 1.5f;

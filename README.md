@@ -26,7 +26,7 @@ per-function numbers.
 | `src/player.cpp` | `CPlayer`, the base of the character classes: movement, guard and damage, the `.pal`/`.dat`/`.pat`/`.wav` loaders, round reset |
 | `src/playerobj.cpp` | `CPlayer`'s table of 64 spawned objects (projectiles and the like) |
 | `src/<character>.cpp` | One character class each (`shiori.cpp`, `sayuri.cpp`, ...) |
-| `src/<character>_vf6.cpp` | Each character's per-state update, `Vf6`, a file of its own as in the original |
+| `src/<character>_vf6.cpp` | Each character's per-state update, `UpdatePattern`, a file of its own as in the original |
 | `src/bg01.cpp` | `CAnimBg`, the animated stage backgrounds' base, and stage 01's background |
 | `src/bg10.cpp`, `bg12.cpp`, `bg16.cpp` | The other three animated backgrounds |
 | `src/scene0.cpp` ... `scene8.cpp` | The scenes `WinMain` runs: 0 title, 1 character select, 2 match setup, 3 the fight, 5 results, 6 config, 7 staff roll, 8 replays |

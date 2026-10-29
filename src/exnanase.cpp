@@ -43,7 +43,7 @@ CEXNanase::CEXNanase(int p1, int p2, int p3, int p4, int p5, BYTE p6)
     }
 }
 
-void CEXNanase::Vf12()
+void CEXNanase::Reset()
 {
     int v4;
 
@@ -71,31 +71,31 @@ void CEXNanase::Vf12()
         unk3254[v4] = 0;
         unk3354[v4] = 0;
     }
-    CPlayer::Vf12();
+    CPlayer::Reset();
 }
 
-void CEXNanase::Vf0()
+void CEXNanase::StartPattern()
 {
     unk3138 = 0;
     unk313c = 0;
     unk3140 = 0;
-    CPlayer::Vf0();
+    CPlayer::StartPattern();
 }
 
-void CEXNanase::Vf10(short p1)
+void CEXNanase::RemoveObject(short p1)
 {
     unk3154[p1] = 0;
     unk3254[p1] = 0;
     unk3354[p1] = 0;
-    CPlayer::Vf10(p1);
+    CPlayer::RemoveObject(p1);
 }
 
-void CEXNanase::Vf3()
+void CEXNanase::Move()
 {
     CPlayer::Unk40e740();
 }
 
-void CEXNanase::Vf4()
+void CEXNanase::StartCommand()
 {
     if (pattern < 0xc8) {
         unk1a8 = 0;
@@ -109,7 +109,7 @@ void CEXNanase::Vf4()
         unk1aa = 0;
     }
     if (m_command == 0x34 && (unk118 >= 500.0 || unk120 > 0) && m_attackResult > 1 && m_attackResult != 6 && (m_patterns[pattern].frames[frame].flagsB0 & 8) > 0 && m_patterns[pattern].unk2 <= m_patterns[0xa7].unk0) {
-        Vf0();
+        StartPattern();
         CPlayer::Unk40f170();
         pattern = 0xa7;
         if (y < 0.0) {
@@ -119,91 +119,91 @@ void CEXNanase::Vf4()
     }
     if (unk15c < 2) {
         if (m_command == 0x70 && m_gauge >= 0xbb8 && y == 0.0 && (m_patterns[pattern].frames[frame].flagsB0 & 8) > 0 && (pattern >= 0xc8 && m_attackResult >= 2 && m_attackResult != 6 || pattern < 0xc8) && m_patterns[pattern].unk2 <= m_patterns[0x13d].unk0) {
-            Vf0();
+            StartPattern();
             CPlayer::Unk40f170();
             pattern = 0x13d;
             return;
         }
         if ((m_command == 0x6f || m_command == 0x70) && m_gauge >= 0x7d0 && y == 0.0 && (m_patterns[pattern].frames[frame].flagsB0 & 8) > 0 && (pattern >= 0xc8 && m_attackResult >= 2 && m_attackResult != 6 || pattern < 0xc8) && m_patterns[pattern].unk2 <= m_patterns[0x13c].unk0) {
-            Vf0();
+            StartPattern();
             CPlayer::Unk40f170();
             pattern = 0x13c;
             return;
         }
         if ((m_command == 0x6e || m_command == 0x6f || m_command == 0x70) && m_gauge >= 0x3e8 && y == 0.0 && (m_patterns[pattern].frames[frame].flagsB0 & 8) > 1 && (pattern >= 0xc8 && m_attackResult >= 2 && m_attackResult != 6 || pattern < 0xc8) && m_patterns[pattern].unk2 <= m_patterns[0x13b].unk0) {
-            Vf0();
+            StartPattern();
             CPlayer::Unk40f170();
             pattern = 0x13b;
             return;
         }
         if (m_command == 0x66 && m_gauge >= 0xbb8 && y == 0.0 && (m_patterns[pattern].frames[frame].flagsB0 & 8) > 0 && (pattern >= 0xc8 && m_attackResult >= 2 && m_attackResult != 6 || pattern < 0xc8) && m_patterns[pattern].unk2 <= m_patterns[0x139].unk0) {
-            Vf0();
+            StartPattern();
             CPlayer::Unk40f170();
             pattern = 0x139;
             return;
         }
         if ((m_command == 0x65 || m_command == 0x66) && m_gauge >= 0x7d0 && y == 0.0 && (m_patterns[pattern].frames[frame].flagsB0 & 8) > 0 && (pattern >= 0xc8 && m_attackResult >= 2 && m_attackResult != 6 || pattern < 0xc8) && m_patterns[pattern].unk2 <= m_patterns[0x137].unk0) {
-            Vf0();
+            StartPattern();
             CPlayer::Unk40f170();
             pattern = 0x137;
             return;
         }
         if ((m_command == 0x64 || m_command == 0x65 || m_command == 0x66) && m_gauge >= 0x3e8 && y == 0.0 && (m_patterns[pattern].frames[frame].flagsB0 & 8) > 1 && (pattern >= 0xc8 && m_attackResult >= 2 && m_attackResult != 6 || pattern < 0xc8) && m_patterns[pattern].unk2 <= m_patterns[0x135].unk0) {
-            Vf0();
+            StartPattern();
             CPlayer::Unk40f170();
             pattern = 0x135;
             return;
         }
         if (m_command == 0x16 && (unk118 >= 500.0 || unk120 > 0) && (m_patterns[pattern].frames[frame].flagsB0 & 8) > 0 && y == 0.0 && m_patterns[pattern].unk2 <= m_patterns[0x114].unk0 && (pattern >= 0xc8 && m_attackResult >= 2 && m_attackResult != 6 || pattern < 0xc8)) {
-            Vf0();
+            StartPattern();
             CPlayer::Unk40f170();
             pattern = 0x114;
             return;
         }
         if ((m_command == 0x15 || m_command == 0x16) && (m_patterns[pattern].frames[frame].flagsB0 & 8) > 0 && y == 0.0 && m_patterns[pattern].unk2 <= m_patterns[0x113].unk0 && (pattern >= 0xc8 && m_attackResult >= 2 && m_attackResult != 6 || pattern < 0xc8)) {
-            Vf0();
+            StartPattern();
             CPlayer::Unk40f170();
             pattern = 0x113;
             return;
         }
         if (m_command == 0x14 && y == 0.0 && (m_patterns[pattern].frames[frame].flagsB0 & 8) > 0 && y == 0.0 && m_patterns[pattern].unk2 <= m_patterns[0x112].unk0 && (pattern >= 0xc8 && m_attackResult >= 2 && m_attackResult != 6 || pattern < 0xc8)) {
-            Vf0();
+            StartPattern();
             CPlayer::Unk40f170();
             pattern = 0x112;
             return;
         }
         if (m_command == 0x20 && (unk118 >= 500.0 || unk120 > 0) && (m_patterns[pattern].frames[frame].flagsB0 & 8) > 0 && y == 0.0 && m_patterns[pattern].unk2 <= m_patterns[0x111].unk0 && (pattern >= 0xc8 && m_attackResult >= 2 && m_attackResult != 6 || pattern < 0xc8)) {
-            Vf0();
+            StartPattern();
             CPlayer::Unk40f170();
             pattern = 0x111;
             return;
         }
         if ((m_command == 0x1f || m_command == 0x20) && (m_patterns[pattern].frames[frame].flagsB0 & 8) > 0 && y == 0.0 && m_patterns[pattern].unk2 <= m_patterns[0x110].unk0 && (pattern >= 0xc8 && m_attackResult >= 2 && m_attackResult != 6 || pattern < 0xc8)) {
-            Vf0();
+            StartPattern();
             CPlayer::Unk40f170();
             pattern = 0x110;
             return;
         }
         if (m_command == 0x1e && (m_patterns[pattern].frames[frame].flagsB0 & 8) > 0 && y == 0.0 && m_patterns[pattern].unk2 <= m_patterns[0x10f].unk0 && (pattern >= 0xc8 && m_attackResult >= 2 && m_attackResult != 6 || pattern < 0xc8)) {
-            Vf0();
+            StartPattern();
             CPlayer::Unk40f170();
             pattern = 0x10f;
             return;
         }
         if (m_command == 0x48 && (m_patterns[pattern].frames[frame].flagsB0 & 8) > 0 && y == 0.0 && m_patterns[pattern].unk2 <= m_patterns[0xfa].unk0 && (pattern >= 0xc8 && m_attackResult >= 2 && m_attackResult != 6 || pattern < 0xc8)) {
-            Vf0();
+            StartPattern();
             CPlayer::Unk40f170();
             pattern = 0xfa;
             return;
         }
         if ((m_command == 0x47 || m_command == 0x48) && (m_patterns[pattern].frames[frame].flagsB0 & 8) > 0 && y == 0.0 && m_patterns[pattern].unk2 <= m_patterns[0xfd].unk0 && (pattern >= 0xc8 && m_attackResult >= 2 && m_attackResult != 6 || pattern < 0xc8)) {
-            Vf0();
+            StartPattern();
             CPlayer::Unk40f170();
             pattern = 0xfd;
             return;
         }
         if (m_command == 0x46 && (m_patterns[pattern].frames[frame].flagsB0 & 8) > 0 && y == 0.0 && m_patterns[pattern].unk2 <= m_patterns[0xfc].unk0 && (pattern >= 0xc8 && m_attackResult >= 2 && m_attackResult != 6 || pattern < 0xc8)) {
-            Vf0();
+            StartPattern();
             CPlayer::Unk40f170();
             pattern = 0xfc;
             return;
@@ -213,7 +213,7 @@ void CEXNanase::Vf4()
         if (y < 0.0 && unk159 < 1) {
             if ((((*m_opponent)->x - x) * (1 - (m_command << 1)) < 0.0 || 0.0 == (*m_opponent)->x - x && facing == (1 - (m_command << 1)) * -1) && m_patterns[pattern].unk2 <= m_patterns[0xa5].unk0 && pattern != 0xaa && y < -40.0 && (m_patterns[pattern].frames[frame].flagsB0 & 8) > 0 && (pattern >= 0xc8 && m_attackResult >= 2 && m_attackResult != 6 || pattern < 0xc8)) {
                 if (pattern != 0xa5) {
-                    Vf0();
+                    StartPattern();
                 }
                 pattern = 0xa5;
                 CPlayer::FaceOpponent();
@@ -224,7 +224,7 @@ void CEXNanase::Vf4()
             }
             if ((((*m_opponent)->x - x) * (1 - (m_command << 1)) > 0.0 || 0.0 == (*m_opponent)->x - x && facing == 1 - (m_command << 1)) && m_patterns[pattern].unk2 <= m_patterns[0xa6].unk0 && pattern != 0xaa && (m_patterns[pattern].frames[frame].flagsB0 & 8) > 0 && (pattern >= 0xc8 && m_attackResult >= 2 && m_attackResult != 6 || pattern < 0xc8)) {
                 if (pattern != 0xa6) {
-                    Vf0();
+                    StartPattern();
                 }
                 pattern = 0xa6;
                 CPlayer::FaceOpponent();
@@ -237,7 +237,7 @@ void CEXNanase::Vf4()
         if (y == 0.0 && (m_patterns[pattern].frames[frame].flagsB0 & 8) > 0) {
             if ((((*m_opponent)->x - x) * (1 - (m_command << 1)) < 0.0 || 0.0 == (*m_opponent)->x - x && facing == (1 - (m_command << 1)) * -1) && m_patterns[pattern].unk2 <= m_patterns[0xa3].unk0 && (pattern >= 0xc8 && m_attackResult >= 2 && m_attackResult != 6 || pattern < 0xc8)) {
                 if (pattern != 0xa3) {
-                    Vf0();
+                    StartPattern();
                 }
                 pattern = 0xa3;
                 CPlayer::FaceOpponent();
@@ -247,7 +247,7 @@ void CEXNanase::Vf4()
             }
             if ((((*m_opponent)->x - x) * (1 - (m_command << 1)) > 0.0 || 0.0 == (*m_opponent)->x - x && facing == 1 - (m_command << 1)) && m_patterns[pattern].unk2 <= m_patterns[0xa4].unk0 && (pattern >= 0xc8 && m_attackResult >= 2 && m_attackResult != 6 || pattern < 0xc8)) {
                 if (pattern != 0xa4) {
-                    Vf0();
+                    StartPattern();
                 }
                 pattern = 0xa4;
                 CPlayer::FaceOpponent();
@@ -257,7 +257,7 @@ void CEXNanase::Vf4()
         }
     }
     if (unk15c < 3 && m_command == 6 && (m_patterns[pattern].frames[frame].flagsB0 & 8) > 0 && y < 0.0 && unk15a < 1 && m_patterns[pattern].unk2 <= m_patterns[0xe].unk0 && (pattern >= 0xc8 && m_attackResult >= 2 && m_attackResult != 6 || pattern < 0xc8)) {
-        Vf0();
+        StartPattern();
         CPlayer::Unk40f170();
         unk15a++;
         pattern = 0xe;
@@ -271,7 +271,7 @@ void CEXNanase::Vf4()
     }
     if (m_pressA == 1 || (unk1a8 & 0x10) != 0 || (unk1a9 & 0x10) != 0) {
         if (pattern == 0xa3 && m_inputX != -facing) {
-            Vf0();
+            StartPattern();
             CPlayer::Unk40f170();
             pattern = 0xe6;
             if (m_inputY == 1) {
@@ -281,20 +281,20 @@ void CEXNanase::Vf4()
         }
         if (y < 0.0) {
             if (m_patterns[pattern].unk2 <= m_patterns[0xcf].unk0 && (m_patterns[pattern].frames[frame].flagsB0 & 8) > 0 && (pattern >= 0xc8 && m_attackResult >= 2 && m_attackResult != 6 || pattern < 0xc8)) {
-                Vf0();
+                StartPattern();
                 CPlayer::Unk40f170();
                 pattern = 0xcf;
             }
             return;
         }
         if ((m_inputY == 1 || (unk1a8 & 4) != 0 || (unk1a9 & 4) != 0) && m_patterns[pattern].unk2 <= m_patterns[0xcc].unk0 && (m_patterns[pattern].frames[frame].flagsB0 & 8) > 0 && (pattern >= 0xc8 && m_attackResult >= 2 && m_attackResult != 6 || pattern < 0xc8)) {
-            Vf0();
+            StartPattern();
             CPlayer::Unk40f170();
             pattern = 0xcc;
             return;
         }
         if ((m_inputY == 0 || (unk1a8 & 4) == 0 || (unk1a9 & 4) == 0) && m_patterns[pattern].unk2 <= m_patterns[0xc8].unk0 && (m_patterns[pattern].frames[frame].flagsB0 & 8) > 0 && (pattern >= 0xc8 && m_attackResult >= 2 && m_attackResult != 6 || pattern < 0xc8)) {
-            Vf0();
+            StartPattern();
             CPlayer::Unk40f170();
             pattern = 0xc8;
             return;
@@ -302,7 +302,7 @@ void CEXNanase::Vf4()
     }
     if (m_pressB == 1 || (unk1a8 & 0x20) != 0 || (unk1a9 & 0x20) != 0) {
         if (pattern == 0xa3 && m_inputX != -facing) {
-            Vf0();
+            StartPattern();
             CPlayer::Unk40f170();
             pattern = 0xe7;
             if (m_inputY == 1) {
@@ -312,27 +312,27 @@ void CEXNanase::Vf4()
         }
         if (y < 0.0) {
             if (m_patterns[pattern].unk2 <= m_patterns[0xd0].unk0 && (m_patterns[pattern].frames[frame].flagsB0 & 8) > 0 && (pattern >= 0xc8 && m_attackResult >= 2 && m_attackResult != 6 || pattern < 0xc8)) {
-                Vf0();
+                StartPattern();
                 CPlayer::Unk40f170();
                 pattern = 0xd0;
             }
             return;
         }
         if ((m_inputY == 1 || (unk1a8 & 4) != 0 || (unk1a9 & 4) != 0) && m_patterns[pattern].unk2 <= m_patterns[0xcd].unk0 && (m_patterns[pattern].frames[frame].flagsB0 & 8) > 0 && (pattern >= 0xc8 && m_attackResult >= 2 && m_attackResult != 6 || pattern < 0xc8)) {
-            Vf0();
+            StartPattern();
             CPlayer::Unk40f170();
             pattern = 0xcd;
             return;
         }
         if (m_inputY == 0 || (unk1a8 & 4) == 0 || (unk1a9 & 4) == 0) {
             if (m_patterns[pattern].unk2 <= m_patterns[0xc9].unk0 && (m_patterns[pattern].frames[frame].flagsB0 & 8) > 0 && x - (*m_opponent)->x > -50.0 && x - (*m_opponent)->x < 50.0 && (pattern >= 0xc8 && m_attackResult >= 2 && m_attackResult != 6 || pattern < 0xc8)) {
-                Vf0();
+                StartPattern();
                 CPlayer::Unk40f170();
                 pattern = 0xc9;
                 return;
             }
             if (m_patterns[pattern].unk2 <= m_patterns[0xca].unk0 && (m_patterns[pattern].frames[frame].flagsB0 & 8) > 0 && (pattern >= 0xc8 && m_attackResult >= 2 && m_attackResult != 6 || pattern < 0xc8)) {
-                Vf0();
+                StartPattern();
                 CPlayer::Unk40f170();
                 pattern = 0xca;
                 return;
@@ -341,7 +341,7 @@ void CEXNanase::Vf4()
     }
     if (m_pressC == 1 || (unk1a8 & 0x40) != 0 || (unk1a9 & 0x40) != 0) {
         if (pattern == 0xa3 && m_inputX != -facing) {
-            Vf0();
+            StartPattern();
             CPlayer::Unk40f170();
             pattern = 0xe8;
             if (m_inputY == 1) {
@@ -351,39 +351,39 @@ void CEXNanase::Vf4()
         }
         if (y < 0.0) {
             if (m_inputX == facing && m_inputY == 0 && x - (*m_opponent)->x > -100.0 && x - (*m_opponent)->x < 100.0 && (*m_opponent)->y < 0.0 && m_patterns[pattern].unk2 <= m_patterns[0xf8].unk0 && ((*m_opponent)->pattern < 0x32 || (*m_opponent)->pattern > 0x9c) && (m_patterns[pattern].frames[frame].flagsB0 & 8) > 0 && (pattern >= 0xc8 && m_attackResult >= 2 && m_attackResult != 6 || pattern < 0xc8)) {
-                Vf0();
+                StartPattern();
                 CPlayer::Unk40f170();
                 pattern = 0xf8;
                 return;
             }
             if (m_patterns[pattern].unk2 <= m_patterns[0xd1].unk0 && (m_patterns[pattern].frames[frame].flagsB0 & 8) > 0 && (pattern >= 0xc8 && m_attackResult >= 2 && m_attackResult != 6 || pattern < 0xc8)) {
-                Vf0();
+                StartPattern();
                 CPlayer::Unk40f170();
                 pattern = 0xd1;
             }
             return;
         }
         if ((m_inputY == 1 || (unk1a8 & 4) != 0 || (unk1a9 & 4) != 0) && m_patterns[pattern].unk2 <= m_patterns[0xce].unk0 && (m_patterns[pattern].frames[frame].flagsB0 & 8) > 0 && (pattern >= 0xc8 && m_attackResult >= 2 && m_attackResult != 6 || pattern < 0xc8)) {
-            Vf0();
+            StartPattern();
             CPlayer::Unk40f170();
             pattern = 0xce;
             return;
         }
         if (m_inputY == 0 || (unk1a8 & 4) == 0 || (unk1a9 & 4) == 0) {
             if (m_inputX != 0 && x - (*m_opponent)->x > -30.0 && x - (*m_opponent)->x < 30.0 && m_patterns[pattern].unk2 <= m_patterns[0xdc].unk0 && ((*m_opponent)->pattern < 0x32 || (*m_opponent)->pattern > 0x9c) && (m_patterns[pattern].frames[frame].flagsB0 & 8) > 0 && (pattern >= 0xc8 && m_attackResult >= 2 && m_attackResult != 6 || pattern < 0xc8)) {
-                Vf0();
+                StartPattern();
                 CPlayer::Unk40f170();
                 pattern = 0xdc;
                 return;
             }
             if (m_inputX == facing && m_patterns[pattern].unk2 <= m_patterns[0xd2].unk0 && (m_patterns[pattern].frames[frame].flagsB0 & 8) > 0 && (pattern >= 0xc8 && m_attackResult >= 2 && m_attackResult != 6 || pattern < 0xc8)) {
-                Vf0();
+                StartPattern();
                 CPlayer::Unk40f170();
                 pattern = 0xd2;
                 return;
             }
             if (m_patterns[pattern].unk2 <= m_patterns[0xcb].unk0 && (m_patterns[pattern].frames[frame].flagsB0 & 8) > 0 && (pattern >= 0xc8 && m_attackResult >= 2 && m_attackResult != 6 || pattern < 0xc8)) {
-                Vf0();
+                StartPattern();
                 CPlayer::Unk40f170();
                 pattern = 0xcb;
             }
@@ -391,7 +391,7 @@ void CEXNanase::Vf4()
     }
 }
 
-void CEXNanase::Vf1()
+void CEXNanase::DrawGauge()
 {
 }
 
@@ -402,9 +402,9 @@ void CEXNanase::Unk6d2410(int p1)
 void CEXNanase::Vf8()
 {
     EffectDesc v48;
-    CPlayer::Unk413090((EffectDesc*)&v48);
+    CPlayer::InitEffectDesc((EffectDesc*)&v48);
     if (unk3454 == 0 && m_gauge == 0xbb8 && m_hp < 0x682 && m_hp > 0 && (*m_opponent)->m_hp > 0 && (*m_opponent)->unkac + 1 == m_game->unk134e && unkac + 1 == m_game->unk134e && y == 0.0 && pattern < 8 && pattern != 0x140) {
-        Vf0();
+        StartPattern();
         CPlayer::StopMoving();
         pattern = 0x140;
     }
@@ -452,13 +452,13 @@ void CEXNanase::Vf8()
     }
 }
 
-void CEXNanase::Vf9(EffectDesc* p1)
+void CEXNanase::SpawnObject(EffectDesc* p1)
 {
-    Vf10(unk2ca);
-    CPlayer::Vf9(p1);
+    RemoveObject(m_objectHead);
+    CPlayer::SpawnObject(p1);
 }
 
-void CEXNanase::Vf2()
+void CEXNanase::ReadCommand()
 {
     BYTE x6;
     BYTE v5;
@@ -771,7 +771,7 @@ void CEXNanase::Vf2()
     }
 }
 
-void CEXNanase::Vf5()
+void CEXNanase::CpuInput()
 {
     double v10;
     double x8;
@@ -1573,7 +1573,7 @@ void CEXNanase::Vf5()
     unk1a4 = (WORD)CPlayer::Random(0, 0xc8) + 0x1e;
 }
 
-void CEXNanase::Vf7()
+void CEXNanase::UpdateObjects()
 {
     WORD v58;
     WORD v54;
@@ -1582,13 +1582,13 @@ void CEXNanase::Vf7()
     if ((*m_opponent)->unk14c > 0) {
         return;
     }
-    v4 = unk2cc;
+    v4 = m_objectTail;
     EffectDesc l50;
-    while (v4 != unk2ca) {
-        if (unk3d0[v4] != 0 && m_objects[v4].unk86 == 0 && (unk14c == 0 || unk14c > 0 && m_objects[v4].unk88 != 0)) {
+    while (v4 != m_objectHead) {
+        if (m_objectActive[v4] != 0 && m_objects[v4].unk86 == 0 && (unk14c == 0 || unk14c > 0 && m_objects[v4].unk88 != 0)) {
             v54 = (short)anims[m_objects[v4].pattern].frames[m_objects[v4].frame].duration;
             v58 = anims[m_objects[v4].pattern].frameCount;
-            CPlayer::Unk413090((EffectDesc*)&l50);
+            CPlayer::InitEffectDesc((EffectDesc*)&l50);
             switch (m_objects[v4].pattern) {
             case 0x190:
                 m_objects[v4].timer++;
@@ -1596,7 +1596,7 @@ void CEXNanase::Vf7()
                     m_objects[v4].timer = 0;
                     m_objects[v4].frame++;
                     if (m_objects[v4].frame >= v58) {
-                        Vf10(v4);
+                        RemoveObject(v4);
                     }
                 }
                 break;
@@ -1609,7 +1609,7 @@ void CEXNanase::Vf7()
                     m_objects[v4].timer = 0;
                     m_objects[v4].frame++;
                     if (m_objects[v4].frame >= v58) {
-                        Vf10(v4);
+                        RemoveObject(v4);
                     }
                 }
                 break;
@@ -1622,7 +1622,7 @@ void CEXNanase::Vf7()
                     m_objects[v4].timer = 0;
                     m_objects[v4].frame++;
                     if (m_objects[v4].frame >= v58) {
-                        Vf10(v4);
+                        RemoveObject(v4);
                     }
                 }
                 break;
@@ -1635,7 +1635,7 @@ void CEXNanase::Vf7()
                     m_objects[v4].timer = 0;
                     m_objects[v4].frame++;
                     if (m_objects[v4].frame >= v58) {
-                        Vf10(v4);
+                        RemoveObject(v4);
                     }
                 }
                 break;
@@ -1657,7 +1657,7 @@ void CEXNanase::Vf7()
                         m_objects[v4].frame = 0xf;
                     }
                     if (m_objects[v4].frame >= v58) {
-                        Vf10(v4);
+                        RemoveObject(v4);
                     }
                 }
                 break;
@@ -1679,7 +1679,7 @@ void CEXNanase::Vf7()
                         m_objects[v4].frame = 0xf;
                     }
                     if (m_objects[v4].frame >= v58) {
-                        Vf10(v4);
+                        RemoveObject(v4);
                     }
                 }
                 break;
@@ -1701,7 +1701,7 @@ void CEXNanase::Vf7()
                         m_objects[v4].frame = 0xf;
                     }
                     if (m_objects[v4].frame >= v58) {
-                        Vf10(v4);
+                        RemoveObject(v4);
                     }
                 }
                 break;
@@ -1712,7 +1712,7 @@ void CEXNanase::Vf7()
                     m_objects[v4].frame++;
                     m_objects[v4].unk80 = 0;
                     if (m_objects[v4].frame >= v58) {
-                        Vf10(v4);
+                        RemoveObject(v4);
                     }
                 }
                 break;
@@ -1726,14 +1726,14 @@ void CEXNanase::Vf7()
                     m_objects[v4].frame++;
                     m_objects[v4].unk80 = 0;
                     if (m_objects[v4].frame >= v58) {
-                        Vf10(v4);
+                        RemoveObject(v4);
                         unk3148 = 0;
                     }
                 }
                 break;
             case 0x199:
                 if (unk3148 > 0) {
-                    Vf10(v4);
+                    RemoveObject(v4);
                     break;
                 }
                 m_objects[v4].timer++;
@@ -1748,7 +1748,7 @@ void CEXNanase::Vf7()
                 break;
             case 0x19a:
                 if (unk3148 > 0) {
-                    Vf10(v4);
+                    RemoveObject(v4);
                     break;
                 }
                 m_objects[v4].timer++;
@@ -1768,7 +1768,7 @@ void CEXNanase::Vf7()
                     m_objects[v4].frame++;
                     m_objects[v4].unk80 = 0;
                     if (m_objects[v4].frame >= v58) {
-                        Vf10(v4);
+                        RemoveObject(v4);
                     }
                 }
                 break;
@@ -1782,7 +1782,7 @@ void CEXNanase::Vf7()
                     m_objects[v4].frame++;
                     m_objects[v4].unk80 = 0;
                     if (m_objects[v4].frame >= v58) {
-                        Vf10(v4);
+                        RemoveObject(v4);
                     }
                 }
                 break;
@@ -1796,7 +1796,7 @@ void CEXNanase::Vf7()
                     m_objects[v4].frame++;
                     m_objects[v4].unk80 = 0;
                     if (m_objects[v4].frame >= v58) {
-                        Vf10(v4);
+                        RemoveObject(v4);
                     }
                 }
                 break;
@@ -1810,7 +1810,7 @@ void CEXNanase::Vf7()
                     m_objects[v4].frame++;
                     m_objects[v4].unk80 = 0;
                     if (m_objects[v4].frame >= v58) {
-                        Vf10(v4);
+                        RemoveObject(v4);
                     }
                 }
                 break;
@@ -1821,14 +1821,14 @@ void CEXNanase::Vf7()
                     m_objects[v4].frame++;
                     m_objects[v4].unk80 = 0;
                     if (m_objects[v4].frame >= v58) {
-                        Vf10(v4);
+                        RemoveObject(v4);
                     }
                 }
                 break;
             case 0x1a0:
                 m_objects[v4].x = facing * 0x50 + x;
                 if (pattern != 0x13e || frame > 0xa) {
-                    Vf10(v4);
+                    RemoveObject(v4);
                 }
                 m_objects[v4].timer++;
                 if (m_objects[v4].timer >= v54) {
@@ -1847,7 +1847,7 @@ void CEXNanase::Vf7()
                     m_objects[v4].frame++;
                     m_objects[v4].unk80 = 0;
                     if (m_objects[v4].frame >= v58) {
-                        Vf10(v4);
+                        RemoveObject(v4);
                     }
                 }
                 break;
@@ -1861,7 +1861,7 @@ void CEXNanase::Vf7()
                     m_objects[v4].frame++;
                     m_objects[v4].unk80 = 0;
                     if (m_objects[v4].frame >= v58) {
-                        Vf10(v4);
+                        RemoveObject(v4);
                     }
                 }
                 break;
@@ -1870,7 +1870,7 @@ void CEXNanase::Vf7()
                 m_objects[v4].unk8c = 0x7530;
                 m_objects[v4].timer++;
                 if (pattern != 0x57) {
-                    Vf10(v4);
+                    RemoveObject(v4);
                 }
                 if (m_objects[v4].timer >= v54) {
                     m_objects[v4].timer = 0;
@@ -1889,72 +1889,72 @@ void CEXNanase::Vf7()
                     l50.scale = 0;
                     l50.layer = 1;
                     l50.unk18 = facing;
-                    Vf9(&l50);
+                    SpawnObject(&l50);
                     l50.type = 0x1f1;
                     l50.x = (double)((int)x - (facing << 2));
                     l50.y = (double)((int)y - 6);
                     l50.scale = 0;
                     l50.layer = 1;
                     l50.unk18 = facing;
-                    Vf9(&l50);
+                    SpawnObject(&l50);
                     l50.type = 0x1f1;
                     l50.x = (double)((int)x - facing * 0xe);
                     l50.y = (double)((int)y - 0x1a);
                     l50.scale = 0;
                     l50.layer = 1;
                     l50.unk18 = facing;
-                    Vf9(&l50);
+                    SpawnObject(&l50);
                     l50.type = 0x1f1;
                     l50.x = (double)(int)x;
                     l50.y = (double)(int)y;
                     l50.scale = 0;
                     l50.layer = 1;
                     l50.unk18 = facing;
-                    Vf9(&l50);
+                    SpawnObject(&l50);
                     l50.type = 0x1f1;
                     l50.x = (double)((int)x + facing * 0x1e);
                     l50.y = (double)((int)y - 0x28);
                     l50.scale = 0;
                     l50.layer = 1;
                     l50.unk18 = facing;
-                    Vf9(&l50);
+                    SpawnObject(&l50);
                     l50.type = 0x1f1;
                     l50.x = (double)((int)x - facing * 0x19);
                     l50.y = (double)((int)y - 0x50);
                     l50.scale = 0;
                     l50.layer = 1;
                     l50.unk18 = facing;
-                    Vf9(&l50);
+                    SpawnObject(&l50);
                     l50.type = 0x1f2;
                     l50.x = (double)((int)x - facing * 0x23);
                     l50.y = (double)((int)y - 0x2a);
                     l50.scale = 0;
                     l50.layer = 1;
                     l50.unk18 = facing;
-                    Vf9(&l50);
+                    SpawnObject(&l50);
                     l50.type = 0x1f2;
                     l50.x = (double)((int)x - facing * 0x12);
                     l50.y = (double)((int)y - 0x14);
                     l50.scale = 0;
                     l50.layer = 1;
                     l50.unk18 = facing;
-                    Vf9(&l50);
+                    SpawnObject(&l50);
                     l50.type = 0x1f2;
                     l50.x = (double)((int)x + facing * 2);
                     l50.y = (double)((int)y - 0x41);
                     l50.scale = 0;
                     l50.layer = 1;
                     l50.unk18 = facing;
-                    Vf9(&l50);
+                    SpawnObject(&l50);
                     l50.type = 0x1f2;
                     l50.x = (double)((int)x + (facing << 4));
                     l50.y = (double)((int)y - 0x50);
                     l50.scale = 0;
                     l50.layer = 1;
                     l50.unk18 = facing;
-                    Vf9(&l50);
+                    SpawnObject(&l50);
                     unk2c9 = 0x22;
-                    Vf10(v4);
+                    RemoveObject(v4);
                     unk3144 = 0;
                     break;
                 }
@@ -1980,10 +1980,10 @@ void CEXNanase::Vf7()
                     m_objects[v4].vy = -m_objects[v4].vy;
                 }
                 if (unk3254[v4] < 0xa) {
-                    m_objects[v4].unk50 = 1;
+                    m_objects[v4].scale = 1;
                 }
                 if (unk3254[v4] < 0) {
-                    Vf10(v4);
+                    RemoveObject(v4);
                     break;
                 }
                 m_objects[v4].timer++;
@@ -2009,10 +2009,10 @@ void CEXNanase::Vf7()
                     m_objects[v4].vy = -m_objects[v4].vy;
                 }
                 if (unk3254[v4] < 0xa) {
-                    m_objects[v4].unk50 = 1;
+                    m_objects[v4].scale = 1;
                 }
                 if (unk3254[v4] < 0) {
-                    Vf10(v4);
+                    RemoveObject(v4);
                     break;
                 }
                 m_objects[v4].timer++;
@@ -2035,7 +2035,7 @@ void CEXNanase::Vf7()
                     m_objects[v4].frame++;
                     m_objects[v4].unk80 = 0;
                     if (m_objects[v4].frame >= v58) {
-                        Vf10(v4);
+                        RemoveObject(v4);
                     }
                 }
             }

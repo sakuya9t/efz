@@ -1,7 +1,7 @@
 // CMizukaB (0x4d2850-0x4e7ebf): the character class whose files are in mizukaB\ in the game
 // folder (mizukaB.dat sprites, mizukaB.pat patterns, wave\).
-// Its constructor sets the folder name CPlayer's loaders use; the VfN methods override
-// the CPlayer virtual slots of the same number (see shiori.cpp for what they do).
+// Its constructor sets the folder name CPlayer's loaders use; its other methods override
+// CPlayer's virtual ones (efz.h says what each does).
 #include <stdlib.h>
 #include <string.h>
 #include <math.h>
@@ -41,7 +41,7 @@ CMizukaB::CMizukaB(int p1, int p2, int p3, int p4, int p5, BYTE p6)
     }
 }
 
-void CMizukaB::Vf12()
+void CMizukaB::Reset()
 {
     int v4;
 
@@ -65,31 +65,31 @@ void CMizukaB::Vf12()
         unk3248[v4] = 0;
         unk3348[v4] = 0;
     }
-    CPlayer::Vf12();
+    CPlayer::Reset();
 }
 
-void CMizukaB::Vf0()
+void CMizukaB::StartPattern()
 {
     unk3138 = 0;
     unk313c = 0;
     unk3140 = 0;
-    CPlayer::Vf0();
+    CPlayer::StartPattern();
 }
 
-void CMizukaB::Vf10(short p1)
+void CMizukaB::RemoveObject(short p1)
 {
     unk3148[p1] = 0;
     unk3248[p1] = 0;
     unk3348[p1] = 0;
-    CPlayer::Vf10(p1);
+    CPlayer::RemoveObject(p1);
 }
 
-void CMizukaB::Vf3()
+void CMizukaB::Move()
 {
     CPlayer::Unk40e740();
 }
 
-void CMizukaB::Vf4()
+void CMizukaB::StartCommand()
 {
     if (pattern < 0xc8) {
         unk1a8 = 0;
@@ -106,7 +106,7 @@ void CMizukaB::Vf4()
         unk3458 = 0;
     }
     if (m_command == 0x34 && (unk118 >= 500.0 || unk120 > 0) && m_attackResult > 1 && m_attackResult != 6 && (m_patterns[pattern].frames[frame].flagsB0 & 8) > 0 && m_patterns[pattern].unk2 <= m_patterns[0xa7].unk0) {
-        Vf0();
+        StartPattern();
         CPlayer::Unk40f170();
         pattern = 0xa7;
         if (y < 0.0) {
@@ -116,31 +116,31 @@ void CMizukaB::Vf4()
     }
     if (unk15c < 2) {
         if (m_hp <= 0xd05 && m_command == 0x5a && m_gauge >= 0xbb8 && y == 0.0 && m_attackResult != 6 && (m_patterns[pattern].frames[frame].flagsB0 & 8) > 0 && m_patterns[pattern].unk2 <= m_patterns[0x13a].unk0) {
-            Vf0();
+            StartPattern();
             CPlayer::Unk40f170();
             pattern = 0x13a;
             return;
         }
         if (m_command == 0x66 && m_gauge >= 0xbb8 && y < 0.0 && (m_patterns[pattern].frames[frame].flagsB0 & 8) > 0 && (pattern >= 0xc8 && m_attackResult >= 2 && m_attackResult != 6 || pattern < 0xc8) && m_patterns[pattern].unk2 <= m_patterns[0x13f].unk0) {
-            Vf0();
+            StartPattern();
             CPlayer::Unk40f170();
             pattern = 0x13f;
             return;
         }
         if ((m_command == 0x65 || m_command == 0x66) && m_gauge >= 0x7d0 && y < 0.0 && (m_patterns[pattern].frames[frame].flagsB0 & 8) > 0 && (pattern >= 0xc8 && m_attackResult >= 2 && m_attackResult != 6 || pattern < 0xc8) && m_patterns[pattern].unk2 <= m_patterns[0x13e].unk0) {
-            Vf0();
+            StartPattern();
             CPlayer::Unk40f170();
             pattern = 0x13e;
             return;
         }
         if (m_command == 0x65 && m_gauge >= 0x3e8 && y == 0.0 && (m_patterns[pattern].frames[frame].flagsB0 & 8) > 0 && (pattern >= 0xc8 && m_attackResult >= 2 && m_attackResult != 6 || pattern < 0xc8) && m_patterns[pattern].unk2 <= m_patterns[0x12d].unk0) {
-            Vf0();
+            StartPattern();
             CPlayer::Unk40f170();
             pattern = 0x12d;
             return;
         }
         if (m_command == 0x64 && m_gauge >= 0x3e8 && (m_patterns[pattern].frames[frame].flagsB0 & 8) > 0 && (pattern >= 0xc8 && m_attackResult >= 2 && m_attackResult != 6 || pattern < 0xc8) && m_patterns[pattern].unk2 <= m_patterns[0x12c].unk0) {
-            Vf0();
+            StartPattern();
             CPlayer::Unk40f170();
             pattern = 0x12c;
             if (y < 0.0) {
@@ -149,32 +149,32 @@ void CMizukaB::Vf4()
             return;
         }
         if (m_command == 0x84 && m_gauge >= 0xbb8 && y == 0.0 && (m_patterns[pattern].frames[frame].flagsB0 & 8) > 0 && (pattern >= 0xc8 && m_attackResult >= 2 && m_attackResult != 6 || pattern < 0xc8) && m_patterns[pattern].unk2 <= m_patterns[0x131].unk0) {
-            Vf0();
+            StartPattern();
             CPlayer::Unk40f170();
             pattern = 0x131;
             return;
         }
         if ((m_command == 0x83 || m_command == 0x84) && m_gauge >= 0x7d0 && y == 0.0 && (m_patterns[pattern].frames[frame].flagsB0 & 8) > 0 && (pattern >= 0xc8 && m_attackResult >= 2 && m_attackResult != 6 || pattern < 0xc8) && m_patterns[pattern].unk2 <= m_patterns[0x130].unk0) {
-            Vf0();
+            StartPattern();
             CPlayer::Unk40f170();
             pattern = 0x130;
             return;
         }
         if ((m_command == 0x82 || m_command == 0x83 || m_command == 0x84) && m_gauge >= 0x3e8 && y == 0.0 && (m_patterns[pattern].frames[frame].flagsB0 & 8) > 0 && (pattern >= 0xc8 && m_attackResult >= 2 && m_attackResult != 6 || pattern < 0xc8) && m_patterns[pattern].unk2 <= m_patterns[0x12f].unk0) {
-            Vf0();
+            StartPattern();
             CPlayer::Unk40f170();
             pattern = 0x12f;
             return;
         }
         if (m_command == 0x52 && (m_patterns[pattern].frames[frame].flagsB0 & 8) > 0 && (pattern >= 0xc8 && m_attackResult >= 2 && m_attackResult != 6 || pattern < 0xc8)) {
             if (m_patterns[pattern].unk2 <= m_patterns[0x10c].unk0 && y == 0.0) {
-                Vf0();
+                StartPattern();
                 CPlayer::Unk40f170();
                 pattern = 0x10c;
                 return;
             }
             if (m_patterns[pattern].unk2 <= m_patterns[0x10c].unk0 && y < 0.0 && unk159 == 0) {
-                Vf0();
+                StartPattern();
                 CPlayer::Unk40f170();
                 pattern = 0x10f;
                 return;
@@ -182,13 +182,13 @@ void CMizukaB::Vf4()
         }
         if (m_command == 0x51 && (m_patterns[pattern].frames[frame].flagsB0 & 8) > 0 && (pattern >= 0xc8 && m_attackResult >= 2 && m_attackResult != 6 || pattern < 0xc8)) {
             if (m_patterns[pattern].unk2 <= m_patterns[0x10b].unk0 && y == 0.0) {
-                Vf0();
+                StartPattern();
                 CPlayer::Unk40f170();
                 pattern = 0x10b;
                 return;
             }
             if (m_patterns[pattern].unk2 <= m_patterns[0x10b].unk0 && y < 0.0 && unk159 == 0) {
-                Vf0();
+                StartPattern();
                 CPlayer::Unk40f170();
                 pattern = 0x10e;
                 return;
@@ -196,74 +196,74 @@ void CMizukaB::Vf4()
         }
         if (m_command == 0x50 && (m_patterns[pattern].frames[frame].flagsB0 & 8) > 0 && (pattern >= 0xc8 && m_attackResult >= 2 && m_attackResult != 6 || pattern < 0xc8)) {
             if (m_patterns[pattern].unk2 <= m_patterns[0x10a].unk0 && y == 0.0) {
-                Vf0();
+                StartPattern();
                 CPlayer::Unk40f170();
                 pattern = 0x10a;
                 return;
             }
             if (m_patterns[pattern].unk2 <= m_patterns[0x10d].unk0 && y < 0.0 && unk159 == 0) {
-                Vf0();
+                StartPattern();
                 CPlayer::Unk40f170();
                 pattern = 0x10d;
                 return;
             }
         }
         if (m_command == 0x16 && (unk118 >= 500.0 || unk120 > 0) && (m_patterns[pattern].frames[frame].flagsB0 & 8) > 0 && y == 0.0 && (pattern >= 0xc8 && m_attackResult >= 2 && m_attackResult != 6 || pattern < 0xc8) && m_patterns[pattern].unk2 <= m_patterns[0x105].unk0) {
-            Vf0();
+            StartPattern();
             CPlayer::Unk40f170();
             pattern = 0x105;
             return;
         }
         if ((m_command == 0x15 || m_command == 0x16) && (m_patterns[pattern].frames[frame].flagsB0 & 8) > 0 && y == 0.0 && (pattern >= 0xc8 && m_attackResult >= 2 && m_attackResult != 6 || pattern < 0xc8) && m_patterns[pattern].unk2 <= m_patterns[0x104].unk0) {
-            Vf0();
+            StartPattern();
             CPlayer::Unk40f170();
             pattern = 0x104;
             return;
         }
         if (m_command == 0x14 && (m_patterns[pattern].frames[frame].flagsB0 & 8) > 0 && y == 0.0 && (pattern >= 0xc8 && m_attackResult >= 2 && m_attackResult != 6 || pattern < 0xc8) && m_patterns[pattern].unk2 <= m_patterns[0x103].unk0) {
-            Vf0();
+            StartPattern();
             CPlayer::Unk40f170();
             pattern = 0x103;
             return;
         }
         if (m_command == 0x20 && (unk118 >= 500.0 || unk120 > 0) && (m_patterns[pattern].frames[frame].flagsB0 & 8) > 0 && y == 0.0 && (pattern >= 0xc8 && m_attackResult >= 2 && m_attackResult != 6 || pattern < 0xc8) && m_patterns[pattern].unk2 <= m_patterns[0xff].unk0) {
-            Vf0();
+            StartPattern();
             CPlayer::Unk40f170();
             pattern = 0xff;
             return;
         }
         if ((m_command == 0x1f || m_command == 0x20) && (m_patterns[pattern].frames[frame].flagsB0 & 8) > 0 && y == 0.0 && (pattern >= 0xc8 && m_attackResult >= 2 && m_attackResult != 6 || pattern < 0xc8) && m_patterns[pattern].unk2 <= m_patterns[0xfe].unk0) {
-            Vf0();
+            StartPattern();
             CPlayer::Unk40f170();
             pattern = 0xfe;
             return;
         }
         if (m_command == 0x1e && (m_patterns[pattern].frames[frame].flagsB0 & 8) > 0 && y == 0.0 && (pattern >= 0xc8 && m_attackResult >= 2 && m_attackResult != 6 || pattern < 0xc8) && m_patterns[pattern].unk2 <= m_patterns[0xfd].unk0) {
-            Vf0();
+            StartPattern();
             CPlayer::Unk40f170();
             pattern = 0xfd;
             return;
         }
         if (m_command == 0x48 && (m_patterns[pattern].frames[frame].flagsB0 & 8) > 0 && y == 0.0 && (pattern >= 0xc8 && m_attackResult >= 2 && m_attackResult != 6 || pattern < 0xc8) && m_patterns[pattern].unk2 <= m_patterns[0x102].unk0) {
-            Vf0();
+            StartPattern();
             CPlayer::Unk40f170();
             pattern = 0x102;
             return;
         }
         if (m_command == 0x47 && (m_patterns[pattern].frames[frame].flagsB0 & 8) > 0 && y == 0.0 && (pattern >= 0xc8 && m_attackResult >= 2 && m_attackResult != 6 || pattern < 0xc8) && m_patterns[pattern].unk2 <= m_patterns[0x101].unk0) {
-            Vf0();
+            StartPattern();
             CPlayer::Unk40f170();
             pattern = 0x101;
             return;
         }
         if (m_command == 0x46 && (m_patterns[pattern].frames[frame].flagsB0 & 8) > 0 && y == 0.0 && (pattern >= 0xc8 && m_attackResult >= 2 && m_attackResult != 6 || pattern < 0xc8) && m_patterns[pattern].unk2 <= m_patterns[0x100].unk0) {
-            Vf0();
+            StartPattern();
             CPlayer::Unk40f170();
             pattern = 0x100;
             return;
         }
         if (m_command == 0xc && (unk118 >= 500.0 || unk120 > 0) && (m_patterns[pattern].frames[frame].flagsB0 & 8) > 0 && (pattern >= 0xc8 && m_attackResult >= 2 && m_attackResult != 6 || pattern < 0xc8) && m_patterns[pattern].unk2 <= m_patterns[0xfc].unk0) {
-            Vf0();
+            StartPattern();
             CPlayer::Unk40f170();
             pattern = 0xfc;
             if (y < 0.0) {
@@ -272,7 +272,7 @@ void CMizukaB::Vf4()
             return;
         }
         if ((m_command == 0xb || m_command == 0xc) && (m_patterns[pattern].frames[frame].flagsB0 & 8) > 0 && (pattern >= 0xc8 && m_attackResult >= 2 && m_attackResult != 6 || pattern < 0xc8) && m_patterns[pattern].unk2 <= m_patterns[0xfb].unk0) {
-            Vf0();
+            StartPattern();
             CPlayer::Unk40f170();
             pattern = 0xfb;
             if (y < 0.0) {
@@ -281,7 +281,7 @@ void CMizukaB::Vf4()
             return;
         }
         if (m_command == 0xa && (m_patterns[pattern].frames[frame].flagsB0 & 8) > 0 && (pattern >= 0xc8 && m_attackResult >= 2 && m_attackResult != 6 || pattern < 0xc8) && m_patterns[pattern].unk2 <= m_patterns[0xfa].unk0) {
-            Vf0();
+            StartPattern();
             CPlayer::Unk40f170();
             pattern = 0xfa;
             if (y < 0.0) {
@@ -294,7 +294,7 @@ void CMizukaB::Vf4()
         if (y < 0.0 && unk159 < 1) {
             if ((((*m_opponent)->x - x) * (1 - (m_command << 1)) < 0.0 || 0.0 == (*m_opponent)->x - x && facing == (1 - (m_command << 1)) * -1) && m_patterns[pattern].unk2 <= m_patterns[0xa5].unk0 && pattern != 0xaa && (y < -40.0 || unk3458 > 0) && (m_patterns[pattern].frames[frame].flagsB0 & 8) > 0 && (pattern >= 0xc8 && m_attackResult >= 2 && m_attackResult != 6 || pattern < 0xc8)) {
                 if (pattern != 0xa5) {
-                    Vf0();
+                    StartPattern();
                 }
                 pattern = 0xa5;
                 CPlayer::FaceOpponent();
@@ -305,7 +305,7 @@ void CMizukaB::Vf4()
             }
             if ((((*m_opponent)->x - x) * (1 - (m_command << 1)) > 0.0 || 0.0 == (*m_opponent)->x - x && facing == 1 - (m_command << 1)) && m_patterns[pattern].unk2 <= m_patterns[0xa6].unk0 && pattern != 0xaa && (m_patterns[pattern].frames[frame].flagsB0 & 8) > 0 && (pattern >= 0xc8 && m_attackResult >= 2 && m_attackResult != 6 || pattern < 0xc8)) {
                 if (pattern != 0xa6) {
-                    Vf0();
+                    StartPattern();
                 }
                 pattern = 0xa6;
                 CPlayer::FaceOpponent();
@@ -318,7 +318,7 @@ void CMizukaB::Vf4()
         if (y == 0.0 && (m_patterns[pattern].frames[frame].flagsB0 & 8) > 0) {
             if ((((*m_opponent)->x - x) * (1 - (m_command << 1)) < 0.0 || 0.0 == (*m_opponent)->x - x && facing == (1 - (m_command << 1)) * -1) && m_patterns[pattern].unk2 <= m_patterns[0xa3].unk0 && (pattern >= 0xc8 && m_attackResult >= 2 && m_attackResult != 6 || pattern < 0xc8)) {
                 if (pattern != 0xa3) {
-                    Vf0();
+                    StartPattern();
                 }
                 pattern = 0xa3;
                 CPlayer::FaceOpponent();
@@ -328,7 +328,7 @@ void CMizukaB::Vf4()
             }
             if ((((*m_opponent)->x - x) * (1 - (m_command << 1)) > 0.0 || 0.0 == (*m_opponent)->x - x && facing == 1 - (m_command << 1)) && m_patterns[pattern].unk2 <= m_patterns[0xa4].unk0 && (pattern >= 0xc8 && m_attackResult >= 2 && m_attackResult != 6 || pattern < 0xc8)) {
                 if (pattern != 0xa4) {
-                    Vf0();
+                    StartPattern();
                 }
                 pattern = 0xa4;
                 CPlayer::FaceOpponent();
@@ -339,7 +339,7 @@ void CMizukaB::Vf4()
         }
     }
     if (unk15c < 3 && m_command == 6 && (m_patterns[pattern].frames[frame].flagsB0 & 8) > 0 && y < 0.0 && unk15a < 1 && (pattern >= 0xc8 && m_attackResult >= 2 && m_attackResult != 6 || pattern < 0xc8) && m_patterns[pattern].unk2 <= m_patterns[0xe].unk0) {
-        Vf0();
+        StartPattern();
         CPlayer::Unk40f170();
         unk15a++;
         pattern = 0xe;
@@ -353,7 +353,7 @@ void CMizukaB::Vf4()
     }
     if (m_pressA == 1 || (unk1a8 & 0x10) != 0 || (unk1a9 & 0x10) != 0) {
         if (pattern == 0xa3 && m_inputX != -facing) {
-            Vf0();
+            StartPattern();
             CPlayer::Unk40f170();
             pattern = 0xe6;
             if (m_inputY == 1) {
@@ -363,20 +363,20 @@ void CMizukaB::Vf4()
         }
         if (y < 0.0) {
             if (m_patterns[pattern].unk2 <= m_patterns[0xcf].unk0 && (m_patterns[pattern].frames[frame].flagsB0 & 8) > 0 && (pattern >= 0xc8 && m_attackResult >= 2 && m_attackResult != 6 || pattern < 0xc8)) {
-                Vf0();
+                StartPattern();
                 CPlayer::Unk40f170();
                 pattern = 0xcf;
             }
             return;
         }
         if ((m_inputY == 1 || (unk1a8 & 4) != 0 || (unk1a9 & 4) != 0) && m_patterns[pattern].unk2 <= m_patterns[0xcc].unk0 && (m_patterns[pattern].frames[frame].flagsB0 & 8) > 0 && (pattern >= 0xc8 && m_attackResult >= 2 && m_attackResult != 6 || pattern < 0xc8)) {
-            Vf0();
+            StartPattern();
             CPlayer::Unk40f170();
             pattern = 0xcc;
             return;
         }
         if ((m_inputY == 0 || (unk1a8 & 4) == 0 || (unk1a9 & 4) == 0) && m_patterns[pattern].unk2 <= m_patterns[0xc8].unk0 && (m_patterns[pattern].frames[frame].flagsB0 & 8) > 0 && (pattern >= 0xc8 && m_attackResult >= 2 && m_attackResult != 6 || pattern < 0xc8)) {
-            Vf0();
+            StartPattern();
             CPlayer::Unk40f170();
             pattern = 0xc8;
             return;
@@ -384,7 +384,7 @@ void CMizukaB::Vf4()
     }
     if (m_pressB == 1 || (unk1a8 & 0x20) != 0 || (unk1a9 & 0x20) != 0) {
         if (pattern == 0xa3 && m_inputX != -facing) {
-            Vf0();
+            StartPattern();
             CPlayer::Unk40f170();
             pattern = 0xe7;
             if (m_inputY == 1) {
@@ -394,27 +394,27 @@ void CMizukaB::Vf4()
         }
         if (y < 0.0) {
             if (m_patterns[pattern].unk2 <= m_patterns[0xd0].unk0 && (m_patterns[pattern].frames[frame].flagsB0 & 8) > 0 && (pattern >= 0xc8 && m_attackResult >= 2 && m_attackResult != 6 || pattern < 0xc8)) {
-                Vf0();
+                StartPattern();
                 CPlayer::Unk40f170();
                 pattern = 0xd0;
             }
             return;
         }
         if ((m_inputY == 1 || (unk1a8 & 4) != 0 || (unk1a9 & 4) != 0) && m_patterns[pattern].unk2 <= m_patterns[0xcd].unk0 && (m_patterns[pattern].frames[frame].flagsB0 & 8) > 0 && (pattern >= 0xc8 && m_attackResult >= 2 && m_attackResult != 6 || pattern < 0xc8)) {
-            Vf0();
+            StartPattern();
             CPlayer::Unk40f170();
             pattern = 0xcd;
             return;
         }
         if (m_inputY == 0 || (unk1a8 & 4) == 0 || (unk1a9 & 4) == 0) {
             if (m_patterns[pattern].unk2 <= m_patterns[0xc9].unk0 && (m_patterns[pattern].frames[frame].flagsB0 & 8) > 0 && x - (*m_opponent)->x > -70.0 && x - (*m_opponent)->x < 70.0 && (pattern >= 0xc8 && m_attackResult >= 2 && m_attackResult != 6 || pattern < 0xc8)) {
-                Vf0();
+                StartPattern();
                 CPlayer::Unk40f170();
                 pattern = 0xc9;
                 return;
             }
             if (m_patterns[pattern].unk2 <= m_patterns[0xca].unk0 && (m_patterns[pattern].frames[frame].flagsB0 & 8) > 0 && (pattern >= 0xc8 && m_attackResult >= 2 && m_attackResult != 6 || pattern < 0xc8)) {
-                Vf0();
+                StartPattern();
                 CPlayer::Unk40f170();
                 pattern = 0xca;
                 return;
@@ -423,7 +423,7 @@ void CMizukaB::Vf4()
     }
     if (m_pressC == 1 || (unk1a8 & 0x40) != 0 || (unk1a9 & 0x40) != 0) {
         if (pattern == 0xa3 && m_inputX != -facing) {
-            Vf0();
+            StartPattern();
             CPlayer::Unk40f170();
             pattern = 0xe8;
             if (m_inputY == 1) {
@@ -433,39 +433,39 @@ void CMizukaB::Vf4()
         }
         if (y < 0.0) {
             if (m_inputX == facing && m_inputY == 0 && x - (*m_opponent)->x > -100.0 && x - (*m_opponent)->x < 100.0 && (*m_opponent)->y < 0.0 && m_patterns[pattern].unk2 <= m_patterns[0xf8].unk0 && ((*m_opponent)->pattern < 0x32 || (*m_opponent)->pattern > 0x9c) && (m_patterns[pattern].frames[frame].flagsB0 & 8) > 0 && (pattern >= 0xc8 && m_attackResult >= 2 && m_attackResult != 6 || pattern < 0xc8)) {
-                Vf0();
+                StartPattern();
                 CPlayer::Unk40f170();
                 pattern = 0xf8;
                 return;
             }
             if (m_patterns[pattern].unk2 <= m_patterns[0xd2].unk0 && m_inputX == facing && m_inputY == 0 && (m_patterns[pattern].frames[frame].flagsB0 & 8) > 0 && (pattern >= 0xc8 && m_attackResult >= 2 && m_attackResult != 6 || pattern < 0xc8)) {
-                Vf0();
+                StartPattern();
                 CPlayer::Unk40f170();
                 pattern = 0xd2;
                 return;
             }
             if (m_patterns[pattern].unk2 <= m_patterns[0xd1].unk0 && (m_patterns[pattern].frames[frame].flagsB0 & 8) > 0 && (pattern >= 0xc8 && m_attackResult >= 2 && m_attackResult != 6 || pattern < 0xc8)) {
-                Vf0();
+                StartPattern();
                 CPlayer::Unk40f170();
                 pattern = 0xd1;
             }
             return;
         }
         if ((m_inputY == 1 || (unk1a8 & 4) != 0 || (unk1a9 & 4) != 0) && m_patterns[pattern].unk2 <= m_patterns[0xce].unk0 && (m_patterns[pattern].frames[frame].flagsB0 & 8) > 0 && (pattern >= 0xc8 && m_attackResult >= 2 && m_attackResult != 6 || pattern < 0xc8)) {
-            Vf0();
+            StartPattern();
             CPlayer::Unk40f170();
             pattern = 0xce;
             return;
         }
         if (m_inputY == 0 || (unk1a8 & 4) == 0 || (unk1a9 & 4) == 0) {
             if (m_inputX != 0 && x - (*m_opponent)->x > -40.0 && x - (*m_opponent)->x < 40.0 && m_patterns[pattern].unk2 <= m_patterns[0xdc].unk0 && ((*m_opponent)->pattern < 0x32 || (*m_opponent)->pattern > 0x9c) && (m_patterns[pattern].frames[frame].flagsB0 & 8) > 0 && (pattern >= 0xc8 && m_attackResult >= 2 && m_attackResult != 6 || pattern < 0xc8)) {
-                Vf0();
+                StartPattern();
                 CPlayer::Unk40f170();
                 pattern = 0xdc;
                 return;
             }
             if (m_patterns[pattern].unk2 <= m_patterns[0xcb].unk0 && (m_patterns[pattern].frames[frame].flagsB0 & 8) > 0 && (pattern >= 0xc8 && m_attackResult >= 2 && m_attackResult != 6 || pattern < 0xc8)) {
-                Vf0();
+                StartPattern();
                 CPlayer::Unk40f170();
                 pattern = 0xcb;
                 return;
@@ -473,13 +473,13 @@ void CMizukaB::Vf4()
         }
     }
     if (unk15c < 2 && (m_pressD == 1 || (unk1a8 & 0x80) != 0 || (unk1a9 & 0x80) != 0) && unk15a == 0 && m_patterns[pattern].unk2 <= m_patterns[0xb3].unk0 && (m_patterns[pattern].frames[frame].flagsB0 & 8) > 0 && (pattern >= 0xc8 && m_attackResult >= 2 && m_attackResult != 6 || pattern < 0xc8) && unk3458 <= 0) {
-        Vf0();
+        StartPattern();
         CPlayer::Unk40f170();
         pattern = 0xb3;
     }
 }
 
-void CMizukaB::Vf1()
+void CMizukaB::DrawGauge()
 {
 }
 
@@ -497,13 +497,13 @@ void CMizukaB::Vf8()
     }
 }
 
-void CMizukaB::Vf9(EffectDesc* p1)
+void CMizukaB::SpawnObject(EffectDesc* p1)
 {
-    Vf10(unk2ca);
-    CPlayer::Vf9(p1);
+    RemoveObject(m_objectHead);
+    CPlayer::SpawnObject(p1);
 }
 
-void CMizukaB::Vf2()
+void CMizukaB::ReadCommand()
 {
     BYTE x6;
     BYTE v5;
@@ -874,7 +874,7 @@ void CMizukaB::Vf2()
     }
 }
 
-void CMizukaB::Vf5()
+void CMizukaB::CpuInput()
 {
     double v10;
     double x8;
@@ -1845,7 +1845,7 @@ void CMizukaB::Vf5()
     unk1a4 = (WORD)CPlayer::Random(0, 0xc8) + 0x2d;
 }
 
-void CMizukaB::Vf7()
+void CMizukaB::UpdateObjects()
 {
     WORD v58;
     WORD v54;
@@ -1854,13 +1854,13 @@ void CMizukaB::Vf7()
     if ((*m_opponent)->unk14c > 0) {
         return;
     }
-    v4 = unk2cc;
+    v4 = m_objectTail;
     EffectDesc l50;
-    while (v4 != unk2ca) {
-        if (unk3d0[v4] != 0 && m_objects[v4].unk86 == 0 && (unk14c == 0 || unk14c > 0 && m_objects[v4].unk88 != 0)) {
+    while (v4 != m_objectHead) {
+        if (m_objectActive[v4] != 0 && m_objects[v4].unk86 == 0 && (unk14c == 0 || unk14c > 0 && m_objects[v4].unk88 != 0)) {
             v54 = (short)anims[m_objects[v4].pattern].frames[m_objects[v4].frame].duration;
             v58 = anims[m_objects[v4].pattern].frameCount;
-            CPlayer::Unk413090((EffectDesc*)&l50);
+            CPlayer::InitEffectDesc((EffectDesc*)&l50);
             switch (m_objects[v4].pattern) {
             case 0x190:
                 m_objects[v4].timer++;
@@ -1869,7 +1869,7 @@ void CMizukaB::Vf7()
                     m_objects[v4].frame++;
                     m_objects[v4].unk80 = 0;
                     if (m_objects[v4].frame >= v58) {
-                        Vf10(v4);
+                        RemoveObject(v4);
                     }
                 }
                 break;
@@ -1880,7 +1880,7 @@ void CMizukaB::Vf7()
                     m_objects[v4].frame++;
                     m_objects[v4].unk80 = 0;
                     if (m_objects[v4].frame >= v58) {
-                        Vf10(v4);
+                        RemoveObject(v4);
                     }
                 }
                 break;
@@ -1891,7 +1891,7 @@ void CMizukaB::Vf7()
                     m_objects[v4].frame++;
                     m_objects[v4].unk80 = 0;
                     if (m_objects[v4].frame >= v58) {
-                        Vf10(v4);
+                        RemoveObject(v4);
                     }
                 }
                 break;
@@ -1902,13 +1902,13 @@ void CMizukaB::Vf7()
                     m_objects[v4].frame++;
                     m_objects[v4].unk80 = 0;
                     if (m_objects[v4].frame >= v58) {
-                        Vf10(v4);
+                        RemoveObject(v4);
                     }
                 }
                 break;
             case 0x194:
                 if (pattern != 0xd0) {
-                    Vf10(v4);
+                    RemoveObject(v4);
                 }
                 m_objects[v4].x = facing * 0x25 + x;
                 m_objects[v4].y = y - 72.0;
@@ -1918,7 +1918,7 @@ void CMizukaB::Vf7()
                     m_objects[v4].frame++;
                     m_objects[v4].unk80 = 0;
                     if (m_objects[v4].frame >= v58) {
-                        Vf10(v4);
+                        RemoveObject(v4);
                     }
                 }
                 break;
@@ -1934,7 +1934,7 @@ void CMizukaB::Vf7()
                         m_objects[v4].frame = m_objects[v4].frame - 2;
                     }
                     if (m_objects[v4].frame >= v58) {
-                        Vf10(v4);
+                        RemoveObject(v4);
                     }
                 }
                 break;
@@ -1948,7 +1948,7 @@ void CMizukaB::Vf7()
                     m_objects[v4].timer = 0;
                     m_objects[v4].frame++;
                     if (m_objects[v4].frame >= v58) {
-                        Vf10(v4);
+                        RemoveObject(v4);
                     }
                 }
                 break;
@@ -1964,14 +1964,14 @@ void CMizukaB::Vf7()
                     l50.scale = 0;
                     l50.layer = 1;
                     l50.unk18 = m_objects[v4].facing;
-                    Vf9(&l50);
+                    SpawnObject(&l50);
                 }
                 m_objects[v4].timer++;
                 if (m_objects[v4].timer >= v54) {
                     m_objects[v4].timer = 0;
                     m_objects[v4].frame++;
                     if (m_objects[v4].frame >= v58) {
-                        Vf10(v4);
+                        RemoveObject(v4);
                     }
                 }
                 break;
@@ -1987,14 +1987,14 @@ void CMizukaB::Vf7()
                     l50.scale = 0;
                     l50.layer = 1;
                     l50.unk18 = m_objects[v4].facing;
-                    Vf9(&l50);
+                    SpawnObject(&l50);
                 }
                 m_objects[v4].timer++;
                 if (m_objects[v4].timer >= v54) {
                     m_objects[v4].timer = 0;
                     m_objects[v4].frame++;
                     if (m_objects[v4].frame >= v58) {
-                        Vf10(v4);
+                        RemoveObject(v4);
                     }
                 }
                 break;
@@ -2010,14 +2010,14 @@ void CMizukaB::Vf7()
                     l50.scale = 0;
                     l50.layer = 1;
                     l50.unk18 = m_objects[v4].facing;
-                    Vf9(&l50);
+                    SpawnObject(&l50);
                 }
                 m_objects[v4].timer++;
                 if (m_objects[v4].timer >= v54) {
                     m_objects[v4].timer = 0;
                     m_objects[v4].frame++;
                     if (m_objects[v4].frame >= v58) {
-                        Vf10(v4);
+                        RemoveObject(v4);
                     }
                 }
                 break;
@@ -2037,7 +2037,7 @@ void CMizukaB::Vf7()
                     }
                 }
                 if (m_objects[v4].x < -30.0 && m_objects[v4].facing == -1 || m_objects[v4].x > 670.0 && m_objects[v4].facing == 1) {
-                    Vf10(v4);
+                    RemoveObject(v4);
                 }
                 break;
             case 0x19c:
@@ -2056,7 +2056,7 @@ void CMizukaB::Vf7()
                     }
                 }
                 if (m_objects[v4].x < -30.0 && m_objects[v4].facing == -1 || m_objects[v4].x > 670.0 && m_objects[v4].facing == 1) {
-                    Vf10(v4);
+                    RemoveObject(v4);
                 }
                 break;
             case 0x19d:
@@ -2075,7 +2075,7 @@ void CMizukaB::Vf7()
                     }
                 }
                 if (m_objects[v4].x < -30.0 && m_objects[v4].facing == -1 || m_objects[v4].x > 670.0 && m_objects[v4].facing == 1) {
-                    Vf10(v4);
+                    RemoveObject(v4);
                 }
                 break;
             case 0x19e:
@@ -2094,7 +2094,7 @@ void CMizukaB::Vf7()
                     }
                 }
                 if (m_objects[v4].x < -30.0 && m_objects[v4].facing == -1 || m_objects[v4].x > 670.0 && m_objects[v4].facing == 1) {
-                    Vf10(v4);
+                    RemoveObject(v4);
                 }
                 break;
             case 0x19f:
@@ -2113,7 +2113,7 @@ void CMizukaB::Vf7()
                     }
                 }
                 if (m_objects[v4].x < -30.0 && m_objects[v4].facing == -1 || m_objects[v4].x > 670.0 && m_objects[v4].facing == 1) {
-                    Vf10(v4);
+                    RemoveObject(v4);
                 }
                 break;
             case 0x1a0:
@@ -2132,7 +2132,7 @@ void CMizukaB::Vf7()
                     }
                 }
                 if (m_objects[v4].x < -30.0 && m_objects[v4].facing == -1 || m_objects[v4].x > 670.0 && m_objects[v4].facing == 1) {
-                    Vf10(v4);
+                    RemoveObject(v4);
                 }
                 break;
             case 0x1a1:
@@ -2175,7 +2175,7 @@ void CMizukaB::Vf7()
                         }
                     }
                     if (m_objects[v4].frame >= v58) {
-                        Vf10(v4);
+                        RemoveObject(v4);
                     }
                 }
                 break;
@@ -2219,7 +2219,7 @@ void CMizukaB::Vf7()
                         }
                     }
                     if (m_objects[v4].frame >= v58) {
-                        Vf10(v4);
+                        RemoveObject(v4);
                     }
                 }
                 break;
@@ -2244,7 +2244,7 @@ void CMizukaB::Vf7()
                 }
                 if (m_objects[v4].frame == 0x25 && m_objects[v4].unk80 == 3) {
                     (*m_opponent)->StopMoving();
-                    (*m_opponent)->Vf0();
+                    (*m_opponent)->StartPattern();
                     (*m_opponent)->pattern = 0x79;
                     m_objects[v4].unk80 = 0;
                 }
@@ -2268,9 +2268,9 @@ void CMizukaB::Vf7()
                         }
                     }
                     if (m_objects[v4].frame >= v58) {
-                        Vf10(v4);
+                        RemoveObject(v4);
                         if ((*m_opponent)->pattern == 0x79) {
-                            (*m_opponent)->Vf0();
+                            (*m_opponent)->StartPattern();
                             (*m_opponent)->StopMoving();
                             (*m_opponent)->y = -480.0;
                             (*m_opponent)->x = x;
@@ -2298,7 +2298,7 @@ void CMizukaB::Vf7()
                         unk3148[v4]++;
                     }
                     if (m_objects[v4].frame >= v58) {
-                        Vf10(v4);
+                        RemoveObject(v4);
                     }
                 }
                 break;
@@ -2312,7 +2312,7 @@ void CMizukaB::Vf7()
                     m_objects[v4].timer = 0;
                     m_objects[v4].frame++;
                     if (m_objects[v4].frame >= v58) {
-                        Vf10(v4);
+                        RemoveObject(v4);
                     }
                 }
                 break;
@@ -2326,7 +2326,7 @@ void CMizukaB::Vf7()
                     }
                 }
                 if (frame == 1 && unk3138 == 0x1e) {
-                    Vf10(v4);
+                    RemoveObject(v4);
                 }
                 m_objects[v4].vx -= 0.002;
                 m_objects[v4].timer++;
@@ -2349,7 +2349,7 @@ void CMizukaB::Vf7()
                     }
                 }
                 if (frame == 1 && unk3138 == 0x1e) {
-                    Vf10(v4);
+                    RemoveObject(v4);
                 }
                 m_objects[v4].vx -= 0.002;
                 m_objects[v4].timer++;
@@ -2372,7 +2372,7 @@ void CMizukaB::Vf7()
                     }
                 }
                 if (frame == 1 && unk3138 == 0x1e) {
-                    Vf10(v4);
+                    RemoveObject(v4);
                 }
                 m_objects[v4].vx -= 0.002;
                 m_objects[v4].timer++;
@@ -2395,7 +2395,7 @@ void CMizukaB::Vf7()
                     }
                 }
                 if (frame == 1 && unk3138 == 0x1e) {
-                    Vf10(v4);
+                    RemoveObject(v4);
                 }
                 m_objects[v4].vx -= 0.002;
                 m_objects[v4].timer++;
@@ -2418,7 +2418,7 @@ void CMizukaB::Vf7()
                     }
                 }
                 if (frame == 1 && unk3138 == 0x1e) {
-                    Vf10(v4);
+                    RemoveObject(v4);
                 }
                 m_objects[v4].vx -= 0.002;
                 m_objects[v4].timer++;
@@ -2441,7 +2441,7 @@ void CMizukaB::Vf7()
                     }
                 }
                 if (frame == 1 && unk3138 == 0x1e) {
-                    Vf10(v4);
+                    RemoveObject(v4);
                 }
                 m_objects[v4].vx -= 0.002;
                 m_objects[v4].timer++;
@@ -2474,7 +2474,7 @@ void CMizukaB::Vf7()
                     unk3348[v4] = 2;
                 }
                 if (frame > 1) {
-                    Vf10(v4);
+                    RemoveObject(v4);
                 }
                 if (unk3140 != 1) {
                     m_objects[v4].vy -= 0.01;
@@ -2485,7 +2485,7 @@ void CMizukaB::Vf7()
                     m_objects[v4].frame++;
                     m_objects[v4].unk80 = 0;
                     if (m_objects[v4].frame >= v58) {
-                        Vf10(v4);
+                        RemoveObject(v4);
                     }
                 }
                 break;
@@ -2509,7 +2509,7 @@ void CMizukaB::Vf7()
                     unk3348[v4] = 2;
                 }
                 if (frame > 1) {
-                    Vf10(v4);
+                    RemoveObject(v4);
                 }
                 if (unk3140 != 1) {
                     m_objects[v4].vy -= 0.01;
@@ -2520,7 +2520,7 @@ void CMizukaB::Vf7()
                     m_objects[v4].frame++;
                     m_objects[v4].unk80 = 0;
                     if (m_objects[v4].frame >= v58) {
-                        Vf10(v4);
+                        RemoveObject(v4);
                     }
                 }
                 break;
@@ -2544,7 +2544,7 @@ void CMizukaB::Vf7()
                     unk3348[v4] = 2;
                 }
                 if (frame > 1) {
-                    Vf10(v4);
+                    RemoveObject(v4);
                 }
                 if (unk3140 != 1) {
                     m_objects[v4].vy -= 0.01;
@@ -2555,7 +2555,7 @@ void CMizukaB::Vf7()
                     m_objects[v4].frame++;
                     m_objects[v4].unk80 = 0;
                     if (m_objects[v4].frame >= v58) {
-                        Vf10(v4);
+                        RemoveObject(v4);
                     }
                 }
                 break;
@@ -2579,7 +2579,7 @@ void CMizukaB::Vf7()
                     unk3348[v4] = 2;
                 }
                 if (frame > 1) {
-                    Vf10(v4);
+                    RemoveObject(v4);
                 }
                 if (unk3140 != 1) {
                     m_objects[v4].vy -= 0.01;
@@ -2590,7 +2590,7 @@ void CMizukaB::Vf7()
                     m_objects[v4].frame++;
                     m_objects[v4].unk80 = 0;
                     if (m_objects[v4].frame >= v58) {
-                        Vf10(v4);
+                        RemoveObject(v4);
                     }
                 }
                 break;
@@ -2614,7 +2614,7 @@ void CMizukaB::Vf7()
                     unk3348[v4] = 2;
                 }
                 if (frame > 1) {
-                    Vf10(v4);
+                    RemoveObject(v4);
                 }
                 if (unk3140 != 1) {
                     m_objects[v4].vy -= 0.01;
@@ -2625,13 +2625,13 @@ void CMizukaB::Vf7()
                     m_objects[v4].frame++;
                     m_objects[v4].unk80 = 0;
                     if (m_objects[v4].frame >= v58) {
-                        Vf10(v4);
+                        RemoveObject(v4);
                     }
                 }
                 break;
             case 0x1b2:
                 if (frame == 1) {
-                    Vf10(v4);
+                    RemoveObject(v4);
                 }
                 m_objects[v4].timer++;
                 if (m_objects[v4].timer >= v54) {
@@ -2657,7 +2657,7 @@ void CMizukaB::Vf7()
                     (*m_opponent)->pattern = 0x45;
                     (*m_opponent)->y = m_objects[v4].y - 81.0;
                     (*m_opponent)->x = m_objects[v4].x;
-                    (*m_opponent)->Vf0();
+                    (*m_opponent)->StartPattern();
                     (*m_opponent)->StopMoving();
                     (*m_opponent)->unkc0 = -6.0;
                     (*m_opponent)->unkc8 = 4.0;
@@ -2696,7 +2696,7 @@ void CMizukaB::Vf7()
                         unk3140 = 0;
                     }
                     if (m_objects[v4].frame >= v58) {
-                        Vf10(v4);
+                        RemoveObject(v4);
                         unk313c = (int)m_objects[v4].x;
                         unk3140 = (int)(m_objects[v4].y - 130.0);
                     }
@@ -2720,7 +2720,7 @@ void CMizukaB::Vf7()
                     m_objects[v4].timer = 0;
                     m_objects[v4].frame++;
                     if (m_objects[v4].frame >= v58) {
-                        Vf10(v4);
+                        RemoveObject(v4);
                     }
                 }
                 break;
@@ -2748,7 +2748,7 @@ void CMizukaB::Vf7()
                 if (m_objects[v4].frame == 0) {
                     m_objects[v4].vy += 0.035;
                     if (m_objects[v4].unk80 == 3 && (*m_opponent)->m_hp > 0) {
-                        m_objects[v4].unk51 = 0;
+                        m_objects[v4].layer = 0;
                         unk3448 = 1;
                         m_objects[v4].unk86 = 0x3c;
                         (*m_opponent)->unk14a = 0x3c;
@@ -2824,9 +2824,9 @@ void CMizukaB::Vf7()
                             l50.unk2c = 0x16;
                             m_game->CreateEffect((EffectDesc*)&l50);
                             unk3448 = 5;
-                            m_objects[v4].unk51 = 1;
+                            m_objects[v4].layer = 1;
                             (*m_opponent)->pattern = 0x47;
-                            (*m_opponent)->Vf0();
+                            (*m_opponent)->StartPattern();
                             (*m_opponent)->unkc8 = -13.0;
                             (*m_opponent)->unkc0 = 0.0;
                             if (m_objects[v4].frame == 8) {
@@ -2845,15 +2845,15 @@ void CMizukaB::Vf7()
                             unk313c = 0xb;
                         }
                         if (unk3448 == 3 && (pattern == 0x132 || pattern == 0x133 && unk3138 == 1 || pattern == 0x134 && unk3138 == 2)) {
-                            m_objects[v4].unk50 = 1;
+                            m_objects[v4].scale = 1;
                             (*m_opponent)->pattern = 0x3b;
-                            (*m_opponent)->Vf0();
+                            (*m_opponent)->StartPattern();
                             (*m_opponent)->unkc8 = -2.0;
                             (*m_opponent)->unkc0 = 0.0;
                         }
                     }
-                    if (((m_objects[v4].frame == 8 || m_objects[v4].frame == 0xb) && m_objects[v4].timer == 0x159 || m_objects[v4].frame == 0xe && m_objects[v4].timer == 0x31b) && m_objects[v4].unk50 == 1) {
-                        Vf10(v4);
+                    if (((m_objects[v4].frame == 8 || m_objects[v4].frame == 0xb) && m_objects[v4].timer == 0x159 || m_objects[v4].frame == 0xe && m_objects[v4].timer == 0x31b) && m_objects[v4].scale == 1) {
+                        RemoveObject(v4);
                         break;
                     }
                     if ((pattern == 0x133 || pattern == 0x134) && frame == 0x1c && timer == 0) {
@@ -2864,10 +2864,10 @@ void CMizukaB::Vf7()
                 }
                 m_objects[v4].timer++;
                 if ((m_objects[v4].frame == 0x11 || m_objects[v4].frame == 0x14 || m_objects[v4].frame == 0x17) && m_objects[v4].timer == v54 - 0xf) {
-                    m_objects[v4].unk50 = 1;
+                    m_objects[v4].scale = 1;
                 }
                 if ((m_objects[v4].frame == 0x11 || m_objects[v4].frame == 0x14 || m_objects[v4].frame == 0x17) && m_objects[v4].timer == v54) {
-                    Vf10(v4);
+                    RemoveObject(v4);
                     unk3448 = 5;
                     break;
                 }
@@ -2875,13 +2875,13 @@ void CMizukaB::Vf7()
                     m_objects[v4].timer = 0;
                     m_objects[v4].frame++;
                     if (m_objects[v4].frame == 6) {
-                        m_objects[v4].unk50 = 1;
+                        m_objects[v4].scale = 1;
                     }
                     if (m_objects[v4].frame == 7) {
-                        Vf10(v4);
+                        RemoveObject(v4);
                     }
                     if (m_objects[v4].frame >= v58) {
-                        Vf10(v4);
+                        RemoveObject(v4);
                     }
                 }
                 break;
@@ -2892,7 +2892,7 @@ void CMizukaB::Vf7()
                     m_objects[v4].frame++;
                     m_objects[v4].unk80 = 0;
                     if (m_objects[v4].frame >= v58) {
-                        Vf10(v4);
+                        RemoveObject(v4);
                     }
                 }
                 break;
@@ -2903,7 +2903,7 @@ void CMizukaB::Vf7()
                     m_objects[v4].frame++;
                     m_objects[v4].unk80 = 0;
                     if (m_objects[v4].frame >= v58) {
-                        Vf10(v4);
+                        RemoveObject(v4);
                     }
                 }
                 break;
@@ -2911,7 +2911,7 @@ void CMizukaB::Vf7()
                 m_objects[v4].x = x - facing * 7;
                 m_objects[v4].y = y - 41.0;
                 if (pattern != 0xcf) {
-                    Vf10(v4);
+                    RemoveObject(v4);
                 }
                 m_objects[v4].timer++;
                 if (m_objects[v4].timer >= v54) {
@@ -2919,7 +2919,7 @@ void CMizukaB::Vf7()
                     m_objects[v4].frame++;
                     m_objects[v4].unk80 = 0;
                     if (m_objects[v4].frame >= v58) {
-                        Vf10(v4);
+                        RemoveObject(v4);
                     }
                 }
                 break;
@@ -2941,10 +2941,10 @@ void CMizukaB::Vf7()
                 if (m_objects[v4].y + m_objects[v4].vy > 0.0) {
                     m_objects[v4].y = 0.0;
                     m_objects[v4].vy = -0.5 * m_objects[v4].vy;
-                    if (m_objects[v4].unk50 == 0) {
-                        m_objects[v4].unk50 = 1;
+                    if (m_objects[v4].scale == 0) {
+                        m_objects[v4].scale = 1;
                     } else {
-                        Vf10(v4);
+                        RemoveObject(v4);
                         break;
                     }
                 }
@@ -2960,7 +2960,7 @@ void CMizukaB::Vf7()
                     }
                 }
                 if (m_objects[v4].x < -30.0 || m_objects[v4].x > 670.0 || m_objects[v4].y < -510.0) {
-                    Vf10(v4);
+                    RemoveObject(v4);
                 }
                 break;
             case 0x1bd:
@@ -2981,10 +2981,10 @@ void CMizukaB::Vf7()
                 if (m_objects[v4].y + m_objects[v4].vy > 0.0) {
                     m_objects[v4].y = 0.0;
                     m_objects[v4].vy = -0.5 * m_objects[v4].vy;
-                    if (m_objects[v4].unk50 == 0) {
-                        m_objects[v4].unk50 = 1;
+                    if (m_objects[v4].scale == 0) {
+                        m_objects[v4].scale = 1;
                     } else {
-                        Vf10(v4);
+                        RemoveObject(v4);
                         break;
                     }
                 }
@@ -3000,7 +3000,7 @@ void CMizukaB::Vf7()
                     }
                 }
                 if (m_objects[v4].x < -30.0 || m_objects[v4].x > 670.0 || m_objects[v4].y < -510.0) {
-                    Vf10(v4);
+                    RemoveObject(v4);
                 }
                 break;
             case 0x1be:
@@ -3021,10 +3021,10 @@ void CMizukaB::Vf7()
                 if (m_objects[v4].y + m_objects[v4].vy > 0.0) {
                     m_objects[v4].y = 0.0;
                     m_objects[v4].vy = -0.5 * m_objects[v4].vy;
-                    if (m_objects[v4].unk50 == 0) {
-                        m_objects[v4].unk50 = 1;
+                    if (m_objects[v4].scale == 0) {
+                        m_objects[v4].scale = 1;
                     } else {
-                        Vf10(v4);
+                        RemoveObject(v4);
                         break;
                     }
                 }
@@ -3040,7 +3040,7 @@ void CMizukaB::Vf7()
                     }
                 }
                 if (m_objects[v4].x < -30.0 || m_objects[v4].x > 670.0 || m_objects[v4].y < -510.0) {
-                    Vf10(v4);
+                    RemoveObject(v4);
                 }
                 break;
             case 0x1bf:
@@ -3061,10 +3061,10 @@ void CMizukaB::Vf7()
                 if (m_objects[v4].y + m_objects[v4].vy > 0.0) {
                     m_objects[v4].y = 0.0;
                     m_objects[v4].vy = -0.5 * m_objects[v4].vy;
-                    if (m_objects[v4].unk50 == 0) {
-                        m_objects[v4].unk50 = 1;
+                    if (m_objects[v4].scale == 0) {
+                        m_objects[v4].scale = 1;
                     } else {
-                        Vf10(v4);
+                        RemoveObject(v4);
                         break;
                     }
                 }
@@ -3080,7 +3080,7 @@ void CMizukaB::Vf7()
                     }
                 }
                 if (m_objects[v4].x < -30.0 || m_objects[v4].x > 670.0 || m_objects[v4].y < -510.0) {
-                    Vf10(v4);
+                    RemoveObject(v4);
                 }
                 break;
             case 0x1c0:
@@ -3101,10 +3101,10 @@ void CMizukaB::Vf7()
                 if (m_objects[v4].y + m_objects[v4].vy > 0.0) {
                     m_objects[v4].y = 0.0;
                     m_objects[v4].vy = -0.5 * m_objects[v4].vy;
-                    if (m_objects[v4].unk50 == 0) {
-                        m_objects[v4].unk50 = 1;
+                    if (m_objects[v4].scale == 0) {
+                        m_objects[v4].scale = 1;
                     } else {
-                        Vf10(v4);
+                        RemoveObject(v4);
                         break;
                     }
                 }
@@ -3120,7 +3120,7 @@ void CMizukaB::Vf7()
                     }
                 }
                 if (m_objects[v4].x < -30.0 || m_objects[v4].x > 670.0 || m_objects[v4].y < -510.0) {
-                    Vf10(v4);
+                    RemoveObject(v4);
                 }
                 break;
             case 0x1c1:
@@ -3141,10 +3141,10 @@ void CMizukaB::Vf7()
                 if (m_objects[v4].y + m_objects[v4].vy > 0.0) {
                     m_objects[v4].y = 0.0;
                     m_objects[v4].vy = -0.5 * m_objects[v4].vy;
-                    if (m_objects[v4].unk50 == 0) {
-                        m_objects[v4].unk50 = 1;
+                    if (m_objects[v4].scale == 0) {
+                        m_objects[v4].scale = 1;
                     } else {
-                        Vf10(v4);
+                        RemoveObject(v4);
                         break;
                     }
                 }
@@ -3160,7 +3160,7 @@ void CMizukaB::Vf7()
                     }
                 }
                 if (m_objects[v4].x < -30.0 || m_objects[v4].x > 670.0 || m_objects[v4].y < -510.0) {
-                    Vf10(v4);
+                    RemoveObject(v4);
                 }
                 break;
             case 0x1c2:
@@ -3181,10 +3181,10 @@ void CMizukaB::Vf7()
                 if (m_objects[v4].y + m_objects[v4].vy > 0.0) {
                     m_objects[v4].y = 0.0;
                     m_objects[v4].vy = -0.5 * m_objects[v4].vy;
-                    if (m_objects[v4].unk50 == 0) {
-                        m_objects[v4].unk50 = 1;
+                    if (m_objects[v4].scale == 0) {
+                        m_objects[v4].scale = 1;
                     } else {
-                        Vf10(v4);
+                        RemoveObject(v4);
                         break;
                     }
                 }
@@ -3200,7 +3200,7 @@ void CMizukaB::Vf7()
                     }
                 }
                 if (m_objects[v4].x < -30.0 || m_objects[v4].x > 670.0 || m_objects[v4].y < -510.0) {
-                    Vf10(v4);
+                    RemoveObject(v4);
                 }
                 break;
             case 0x1c3:
@@ -3221,10 +3221,10 @@ void CMizukaB::Vf7()
                 if (m_objects[v4].y + m_objects[v4].vy > 0.0) {
                     m_objects[v4].y = 0.0;
                     m_objects[v4].vy = -0.5 * m_objects[v4].vy;
-                    if (m_objects[v4].unk50 == 0) {
-                        m_objects[v4].unk50 = 1;
+                    if (m_objects[v4].scale == 0) {
+                        m_objects[v4].scale = 1;
                     } else {
-                        Vf10(v4);
+                        RemoveObject(v4);
                         break;
                     }
                 }
@@ -3240,7 +3240,7 @@ void CMizukaB::Vf7()
                     }
                 }
                 if (m_objects[v4].x < -30.0 || m_objects[v4].x > 670.0 || m_objects[v4].y < -510.0) {
-                    Vf10(v4);
+                    RemoveObject(v4);
                 }
                 break;
             case 0x1c4:
@@ -3255,7 +3255,7 @@ void CMizukaB::Vf7()
                     l50.scale = 2;
                     l50.layer = 1;
                     l50.unk18 = m_objects[v4].facing;
-                    Vf9(&l50);
+                    SpawnObject(&l50);
                 }
                 m_objects[v4].timer++;
                 if (m_objects[v4].timer >= v54) {
@@ -3266,7 +3266,7 @@ void CMizukaB::Vf7()
                         m_objects[v4].frame = m_objects[v4].frame - 2;
                     }
                     if (m_objects[v4].frame >= v58) {
-                        Vf10(v4);
+                        RemoveObject(v4);
                     }
                 }
                 break;
@@ -3282,7 +3282,7 @@ void CMizukaB::Vf7()
                     l50.layer = 1;
                     l50.unk2c = 2;
                     m_game->CreateEffect((EffectDesc*)&l50);
-                    Vf10(v4);
+                    RemoveObject(v4);
                     unk344c = 1;
                 }
                 m_objects[v4].timer++;
@@ -3309,7 +3309,7 @@ void CMizukaB::Vf7()
                     l50.layer = 1;
                     l50.unk2c = 2;
                     m_game->CreateEffect((EffectDesc*)&l50);
-                    Vf10(v4);
+                    RemoveObject(v4);
                     unk344c = 1;
                 }
                 m_objects[v4].timer++;
@@ -3336,7 +3336,7 @@ void CMizukaB::Vf7()
                     l50.layer = 1;
                     l50.unk2c = 2;
                     m_game->CreateEffect((EffectDesc*)&l50);
-                    Vf10(v4);
+                    RemoveObject(v4);
                     unk344c = 1;
                 }
                 m_objects[v4].timer++;
@@ -3384,7 +3384,7 @@ void CMizukaB::Vf7()
                     m_objects[v4].vx = 3.1;
                 }
                 if ((m_objects[v4].x < -30.0 || m_objects[v4].x > 670.0) && m_objects[v4].frame > 7) {
-                    Vf10(v4);
+                    RemoveObject(v4);
                 }
                 m_objects[v4].timer++;
                 if (m_objects[v4].timer >= v54) {
@@ -3462,7 +3462,7 @@ void CMizukaB::Vf7()
                     m_objects[v4].vx = 3.1;
                 }
                 if ((m_objects[v4].x < -30.0 || m_objects[v4].x > 670.0) && m_objects[v4].frame > 7) {
-                    Vf10(v4);
+                    RemoveObject(v4);
                 }
                 m_objects[v4].timer++;
                 if (m_objects[v4].timer >= v54) {
@@ -3509,7 +3509,7 @@ void CMizukaB::Vf7()
                     m_objects[v4].vx = 3.1;
                 }
                 if ((m_objects[v4].x < -30.0 || m_objects[v4].x > 670.0) && m_objects[v4].frame > 7) {
-                    Vf10(v4);
+                    RemoveObject(v4);
                 }
                 m_objects[v4].timer++;
                 if (m_objects[v4].timer >= v54) {
@@ -3534,7 +3534,7 @@ void CMizukaB::Vf7()
                     m_objects[v4].timer = 0;
                     m_objects[v4].frame++;
                     if (m_objects[v4].frame >= v58) {
-                        Vf10(v4);
+                        RemoveObject(v4);
                     }
                 }
                 break;
@@ -3550,7 +3550,7 @@ void CMizukaB::Vf7()
                         m_objects[v4].frame = m_objects[v4].frame - 2;
                     }
                     if (m_objects[v4].frame >= v58) {
-                        Vf10(v4);
+                        RemoveObject(v4);
                     }
                 }
                 break;
@@ -3573,7 +3573,7 @@ void CMizukaB::Vf7()
                     if (unk3148[v4] > 5) {
                         unk3148[v4] = 0;
                     }
-                    Vf9(&l50);
+                    SpawnObject(&l50);
                 }
                 m_objects[v4].timer++;
                 if (m_objects[v4].timer >= v54) {
@@ -3586,7 +3586,7 @@ void CMizukaB::Vf7()
                             unk3248[v4]++;
                             break;
                         }
-                        Vf10(v4);
+                        RemoveObject(v4);
                     }
                 }
                 break;
@@ -3609,7 +3609,7 @@ void CMizukaB::Vf7()
                     if (unk3148[v4] > 5) {
                         unk3148[v4] = 0;
                     }
-                    Vf9(&l50);
+                    SpawnObject(&l50);
                 }
                 m_objects[v4].timer++;
                 if (m_objects[v4].timer >= v54) {
@@ -3622,7 +3622,7 @@ void CMizukaB::Vf7()
                             unk3248[v4]++;
                             break;
                         }
-                        Vf10(v4);
+                        RemoveObject(v4);
                     }
                 }
                 break;
@@ -3640,7 +3640,7 @@ void CMizukaB::Vf7()
                     if (unk3148[v4] > 5) {
                         unk3148[v4] = 0;
                     }
-                    Vf9(&l50);
+                    SpawnObject(&l50);
                 }
                 m_objects[v4].timer++;
                 if (m_objects[v4].timer >= v54) {
@@ -3653,14 +3653,14 @@ void CMizukaB::Vf7()
                             unk3248[v4]++;
                             break;
                         }
-                        Vf10(v4);
+                        RemoveObject(v4);
                     }
                 }
                 break;
             case 0x1d0:
                 m_objects[v4].unk84 = 0x63;
                 if (frame > 0x31 && frame < 0x96) {
-                    Vf10(v4);
+                    RemoveObject(v4);
                     break;
                 }
                 if (pattern == 0x13d) {
@@ -3671,53 +3671,53 @@ void CMizukaB::Vf7()
                     if (frame == 8) {
                         m_objects[v4].x = facing * 0x17 + x;
                         m_objects[v4].y = y - 60.0;
-                        m_objects[v4].unk51 = 0;
+                        m_objects[v4].layer = 0;
                     }
                     if (frame == 9) {
                         m_objects[v4].x = facing * 0x13 + x;
                         m_objects[v4].y = y - 78.0;
-                        m_objects[v4].unk51 = 0;
+                        m_objects[v4].layer = 0;
                     }
                     if (frame == 0xa) {
                         m_objects[v4].x = (facing << 4) + x;
                         m_objects[v4].y = y - 80.0;
-                        m_objects[v4].unk51 = 0;
+                        m_objects[v4].layer = 0;
                     }
                     if (frame == 0xb) {
                         m_objects[v4].x = facing * 0xf + x;
                         m_objects[v4].y = y - 81.0;
-                        m_objects[v4].unk51 = 0;
+                        m_objects[v4].layer = 0;
                     }
                     if (frame == 0xc) {
                         m_objects[v4].frame = 5;
                         m_objects[v4].x = x - facing * 3;
                         m_objects[v4].y = y - 96.0;
-                        m_objects[v4].unk51 = 0;
+                        m_objects[v4].layer = 0;
                     }
                     if (frame == 0xd) {
                         m_objects[v4].x = x - facing * 0x21;
                         m_objects[v4].y = y - 84.0;
-                        m_objects[v4].unk51 = 0;
+                        m_objects[v4].layer = 0;
                     }
                     if (frame == 0xe) {
                         m_objects[v4].x = x - facing * 0x23;
                         m_objects[v4].y = y - 81.0;
-                        m_objects[v4].unk51 = 0;
+                        m_objects[v4].layer = 0;
                     }
                     if (frame == 0xf) {
                         m_objects[v4].x = x - facing * 0x24;
                         m_objects[v4].y = y - 76.0;
-                        m_objects[v4].unk51 = 0;
+                        m_objects[v4].layer = 0;
                     }
                     if (frame == 0x10) {
                         m_objects[v4].x = facing * 0x34 + x;
                         m_objects[v4].y = y - 38.0;
-                        m_objects[v4].unk51 = 1;
+                        m_objects[v4].layer = 1;
                     }
                     if (frame == 0x11 && m_objects[v4].frame < 0x27) {
                         m_objects[v4].x = facing * 0x14 + x;
                         m_objects[v4].y = y + 2.0;
-                        m_objects[v4].unk51 = 1;
+                        m_objects[v4].layer = 1;
                         m_objects[v4].frame = 0x27;
                         m_objects[v4].timer = 0;
                     }
@@ -3733,7 +3733,7 @@ void CMizukaB::Vf7()
                         l50.unk18 = facing;
                         l50.scale = 2;
                         l50.layer = 1;
-                        Vf9(&l50);
+                        SpawnObject(&l50);
                         m_objects[v4].vx = 2.0;
                         m_objects[v4].vy = 2.0;
                         m_objects[v4].unk84 = 5;
@@ -3777,14 +3777,14 @@ void CMizukaB::Vf7()
                     m_objects[v4].timer = 0;
                     m_objects[v4].frame++;
                     if (m_objects[v4].frame >= v58) {
-                        Vf10(v4);
+                        RemoveObject(v4);
                     }
                 }
                 break;
             case 0x1d2:
                 m_objects[v4].unk84 = 0x63;
                 if (frame > 0x31 && frame < 0x96) {
-                    Vf10(v4);
+                    RemoveObject(v4);
                     break;
                 }
                 if (pattern == 0x13e) {
@@ -3795,53 +3795,53 @@ void CMizukaB::Vf7()
                     if (frame == 8) {
                         m_objects[v4].x = facing * 0x17 + x;
                         m_objects[v4].y = y - 60.0;
-                        m_objects[v4].unk51 = 0;
+                        m_objects[v4].layer = 0;
                     }
                     if (frame == 9) {
                         m_objects[v4].x = facing * 0x13 + x;
                         m_objects[v4].y = y - 78.0;
-                        m_objects[v4].unk51 = 0;
+                        m_objects[v4].layer = 0;
                     }
                     if (frame == 0xa) {
                         m_objects[v4].x = (facing << 4) + x;
                         m_objects[v4].y = y - 80.0;
-                        m_objects[v4].unk51 = 0;
+                        m_objects[v4].layer = 0;
                     }
                     if (frame == 0xb) {
                         m_objects[v4].x = facing * 0xf + x;
                         m_objects[v4].y = y - 81.0;
-                        m_objects[v4].unk51 = 0;
+                        m_objects[v4].layer = 0;
                     }
                     if (frame == 0xc) {
                         m_objects[v4].frame = 5;
                         m_objects[v4].x = x - facing * 3;
                         m_objects[v4].y = y - 96.0;
-                        m_objects[v4].unk51 = 0;
+                        m_objects[v4].layer = 0;
                     }
                     if (frame == 0xd) {
                         m_objects[v4].x = x - facing * 0x21;
                         m_objects[v4].y = y - 84.0;
-                        m_objects[v4].unk51 = 0;
+                        m_objects[v4].layer = 0;
                     }
                     if (frame == 0xe) {
                         m_objects[v4].x = x - facing * 0x23;
                         m_objects[v4].y = y - 81.0;
-                        m_objects[v4].unk51 = 0;
+                        m_objects[v4].layer = 0;
                     }
                     if (frame == 0xf) {
                         m_objects[v4].x = x - facing * 0x24;
                         m_objects[v4].y = y - 76.0;
-                        m_objects[v4].unk51 = 0;
+                        m_objects[v4].layer = 0;
                     }
                     if (frame == 0x10) {
                         m_objects[v4].x = facing * 0x34 + x;
                         m_objects[v4].y = y - 38.0;
-                        m_objects[v4].unk51 = 1;
+                        m_objects[v4].layer = 1;
                     }
                     if (frame == 0x11 && m_objects[v4].frame < 0x27) {
                         m_objects[v4].x = facing * 0x14 + x;
                         m_objects[v4].y = y + 2.0;
-                        m_objects[v4].unk51 = 1;
+                        m_objects[v4].layer = 1;
                         m_objects[v4].frame = 0x27;
                         m_objects[v4].timer = 0;
                     }
@@ -3857,7 +3857,7 @@ void CMizukaB::Vf7()
                         l50.unk18 = facing;
                         l50.scale = 2;
                         l50.layer = 1;
-                        Vf9(&l50);
+                        SpawnObject(&l50);
                         m_objects[v4].vx = 2.0;
                         m_objects[v4].vy = 2.0;
                         m_objects[v4].unk84 = 5;
@@ -3901,7 +3901,7 @@ void CMizukaB::Vf7()
                     m_objects[v4].timer = 0;
                     m_objects[v4].frame++;
                     if (m_objects[v4].frame >= v58) {
-                        Vf10(v4);
+                        RemoveObject(v4);
                     }
                 }
                 break;
@@ -3912,14 +3912,14 @@ void CMizukaB::Vf7()
                     m_objects[v4].frame++;
                     m_objects[v4].unk80 = 0;
                     if (m_objects[v4].frame >= v58) {
-                        Vf10(v4);
+                        RemoveObject(v4);
                     }
                 }
                 break;
             case 0x1d5:
                 m_objects[v4].unk84 = 0x63;
                 if (frame > 0x31 && frame < 0x96) {
-                    Vf10(v4);
+                    RemoveObject(v4);
                     break;
                 }
                 if (pattern == 0x13f) {
@@ -3930,53 +3930,53 @@ void CMizukaB::Vf7()
                     if (frame == 8) {
                         m_objects[v4].x = facing * 0x17 + x;
                         m_objects[v4].y = y - 60.0;
-                        m_objects[v4].unk51 = 0;
+                        m_objects[v4].layer = 0;
                     }
                     if (frame == 9) {
                         m_objects[v4].x = facing * 0x13 + x;
                         m_objects[v4].y = y - 78.0;
-                        m_objects[v4].unk51 = 0;
+                        m_objects[v4].layer = 0;
                     }
                     if (frame == 0xa) {
                         m_objects[v4].x = (facing << 4) + x;
                         m_objects[v4].y = y - 80.0;
-                        m_objects[v4].unk51 = 0;
+                        m_objects[v4].layer = 0;
                     }
                     if (frame == 0xb) {
                         m_objects[v4].x = facing * 0xf + x;
                         m_objects[v4].y = y - 81.0;
-                        m_objects[v4].unk51 = 0;
+                        m_objects[v4].layer = 0;
                     }
                     if (frame == 0xc) {
                         m_objects[v4].frame = 5;
                         m_objects[v4].x = x - facing * 3;
                         m_objects[v4].y = y - 96.0;
-                        m_objects[v4].unk51 = 0;
+                        m_objects[v4].layer = 0;
                     }
                     if (frame == 0xd) {
                         m_objects[v4].x = x - facing * 0x21;
                         m_objects[v4].y = y - 84.0;
-                        m_objects[v4].unk51 = 0;
+                        m_objects[v4].layer = 0;
                     }
                     if (frame == 0xe) {
                         m_objects[v4].x = x - facing * 0x23;
                         m_objects[v4].y = y - 81.0;
-                        m_objects[v4].unk51 = 0;
+                        m_objects[v4].layer = 0;
                     }
                     if (frame == 0xf) {
                         m_objects[v4].x = x - facing * 0x24;
                         m_objects[v4].y = y - 76.0;
-                        m_objects[v4].unk51 = 0;
+                        m_objects[v4].layer = 0;
                     }
                     if (frame == 0x10) {
                         m_objects[v4].x = facing * 0x34 + x;
                         m_objects[v4].y = y - 38.0;
-                        m_objects[v4].unk51 = 1;
+                        m_objects[v4].layer = 1;
                     }
                     if (frame == 0x11 && m_objects[v4].frame < 0x27) {
                         m_objects[v4].x = facing * 0x14 + x;
                         m_objects[v4].y = y + 2.0;
-                        m_objects[v4].unk51 = 1;
+                        m_objects[v4].layer = 1;
                         m_objects[v4].frame = 0x27;
                         m_objects[v4].timer = 0;
                     }
@@ -3992,7 +3992,7 @@ void CMizukaB::Vf7()
                         l50.unk18 = facing;
                         l50.scale = 2;
                         l50.layer = 1;
-                        Vf9(&l50);
+                        SpawnObject(&l50);
                         m_objects[v4].vx = 2.0;
                         m_objects[v4].vy = 2.0;
                         m_objects[v4].unk84 = 5;
@@ -4040,14 +4040,14 @@ void CMizukaB::Vf7()
                     l50.unk18 = m_objects[v4].facing;
                     l50.scale = 2;
                     l50.layer = 1;
-                    Vf9(&l50);
+                    SpawnObject(&l50);
                 }
                 m_objects[v4].timer++;
                 if (m_objects[v4].timer >= v54) {
                     m_objects[v4].timer = 0;
                     m_objects[v4].frame++;
                     if (m_objects[v4].frame >= v58) {
-                        Vf10(v4);
+                        RemoveObject(v4);
                     }
                 }
                 break;
@@ -4056,7 +4056,7 @@ void CMizukaB::Vf7()
                 m_objects[v4].unk8c = 0x7530;
                 m_objects[v4].timer++;
                 if (pattern != 0x57) {
-                    Vf10(v4);
+                    RemoveObject(v4);
                 }
                 if (m_objects[v4].timer >= v54) {
                     m_objects[v4].timer = 0;
@@ -4075,72 +4075,72 @@ void CMizukaB::Vf7()
                     l50.scale = 0;
                     l50.layer = 1;
                     l50.unk18 = facing;
-                    Vf9(&l50);
+                    SpawnObject(&l50);
                     l50.type = 0x1f1;
                     l50.x = (double)((int)x - (facing << 2));
                     l50.y = (double)((int)y - 6);
                     l50.scale = 0;
                     l50.layer = 1;
                     l50.unk18 = facing;
-                    Vf9(&l50);
+                    SpawnObject(&l50);
                     l50.type = 0x1f1;
                     l50.x = (double)((int)x - facing * 0xe);
                     l50.y = (double)((int)y - 0x1a);
                     l50.scale = 0;
                     l50.layer = 1;
                     l50.unk18 = facing;
-                    Vf9(&l50);
+                    SpawnObject(&l50);
                     l50.type = 0x1f1;
                     l50.x = (double)(int)x;
                     l50.y = (double)(int)y;
                     l50.scale = 0;
                     l50.layer = 1;
                     l50.unk18 = facing;
-                    Vf9(&l50);
+                    SpawnObject(&l50);
                     l50.type = 0x1f1;
                     l50.x = (double)((int)x + facing * 0x1e);
                     l50.y = (double)((int)y - 0x28);
                     l50.scale = 0;
                     l50.layer = 1;
                     l50.unk18 = facing;
-                    Vf9(&l50);
+                    SpawnObject(&l50);
                     l50.type = 0x1f1;
                     l50.x = (double)((int)x - facing * 0x19);
                     l50.y = (double)((int)y - 0x50);
                     l50.scale = 0;
                     l50.layer = 1;
                     l50.unk18 = facing;
-                    Vf9(&l50);
+                    SpawnObject(&l50);
                     l50.type = 0x1f2;
                     l50.x = (double)((int)x - facing * 0x23);
                     l50.y = (double)((int)y - 0x2a);
                     l50.scale = 0;
                     l50.layer = 1;
                     l50.unk18 = facing;
-                    Vf9(&l50);
+                    SpawnObject(&l50);
                     l50.type = 0x1f2;
                     l50.x = (double)((int)x - facing * 0x12);
                     l50.y = (double)((int)y - 0x14);
                     l50.scale = 0;
                     l50.layer = 1;
                     l50.unk18 = facing;
-                    Vf9(&l50);
+                    SpawnObject(&l50);
                     l50.type = 0x1f2;
                     l50.x = (double)((int)x + facing * 2);
                     l50.y = (double)((int)y - 0x41);
                     l50.scale = 0;
                     l50.layer = 1;
                     l50.unk18 = facing;
-                    Vf9(&l50);
+                    SpawnObject(&l50);
                     l50.type = 0x1f2;
                     l50.x = (double)((int)x + (facing << 4));
                     l50.y = (double)((int)y - 0x50);
                     l50.scale = 0;
                     l50.layer = 1;
                     l50.unk18 = facing;
-                    Vf9(&l50);
+                    SpawnObject(&l50);
                     unk2c9 = 0x22;
-                    Vf10(v4);
+                    RemoveObject(v4);
                     unk3144 = 0;
                     break;
                 }
@@ -4166,10 +4166,10 @@ void CMizukaB::Vf7()
                     m_objects[v4].vy = -m_objects[v4].vy;
                 }
                 if (unk3248[v4] < 0xa) {
-                    m_objects[v4].unk50 = 1;
+                    m_objects[v4].scale = 1;
                 }
                 if (unk3248[v4] < 0) {
-                    Vf10(v4);
+                    RemoveObject(v4);
                     break;
                 }
                 m_objects[v4].timer++;
@@ -4195,10 +4195,10 @@ void CMizukaB::Vf7()
                     m_objects[v4].vy = -m_objects[v4].vy;
                 }
                 if (unk3248[v4] < 0xa) {
-                    m_objects[v4].unk50 = 1;
+                    m_objects[v4].scale = 1;
                 }
                 if (unk3248[v4] < 0) {
-                    Vf10(v4);
+                    RemoveObject(v4);
                     break;
                 }
                 m_objects[v4].timer++;
@@ -4221,7 +4221,7 @@ void CMizukaB::Vf7()
                     m_objects[v4].frame++;
                     m_objects[v4].unk80 = 0;
                     if (m_objects[v4].frame >= v58) {
-                        Vf10(v4);
+                        RemoveObject(v4);
                     }
                 }
             }

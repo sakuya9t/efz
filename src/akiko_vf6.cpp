@@ -1,4 +1,4 @@
-// CAkiko::Vf6 (0x712500-0x72199f), the per-state update. It is a file of its own,
+// CAkiko::UpdatePattern (0x712500-0x72199f), the per-state update. It is a file of its own,
 // as in the original: its floating-point constants precede the rest of CAkiko's
 // .rdata, which starts with its constructor's folder name (akiko.cpp).
 #include <stdlib.h>
@@ -6,7 +6,7 @@
 #include <math.h>
 #include "efz.h"
 
-void CAkiko::Vf6()
+void CAkiko::UpdatePattern()
 {
     WORD x8;
     WORD l4;
@@ -17,7 +17,7 @@ void CAkiko::Vf6()
     EffectDesc l50;
     l4 = (short)anims[pattern].frames[frame].duration;
     x8 = anims[pattern].frameCount;
-    CPlayer::Unk413090((EffectDesc*)&l50);
+    CPlayer::InitEffectDesc((EffectDesc*)&l50);
     switch (pattern) {
     default:
         vx = 0.0;
@@ -86,7 +86,7 @@ void CAkiko::Vf6()
             frame++;
             if (frame >= x8) {
                 pattern = 9;
-                Vf0();
+                StartPattern();
             }
         }
         if (y + vy >= 0.0 && frame > 2) {
@@ -94,7 +94,7 @@ void CAkiko::Vf6()
             unk2c9 = 9;
             CPlayer::FaceOpponent();
             pattern = 0xd;
-            Vf0();
+            StartPattern();
         }
         break;
     case 5:
@@ -116,7 +116,7 @@ void CAkiko::Vf6()
             frame++;
             if (frame >= x8) {
                 pattern = 9;
-                Vf0();
+                StartPattern();
             }
         }
         if (y + vy >= 0.0 && frame > 2) {
@@ -124,7 +124,7 @@ void CAkiko::Vf6()
             unk2c9 = 9;
             CPlayer::FaceOpponent();
             pattern = 0xd;
-            Vf0();
+            StartPattern();
         }
         break;
     case 6:
@@ -146,7 +146,7 @@ void CAkiko::Vf6()
             frame++;
             if (frame >= x8) {
                 pattern = 9;
-                Vf0();
+                StartPattern();
             }
         }
         if (y + vy >= 0.0 && frame > 2) {
@@ -154,7 +154,7 @@ void CAkiko::Vf6()
             unk2c9 = 9;
             CPlayer::FaceOpponent();
             pattern = 0xd;
-            Vf0();
+            StartPattern();
         }
         break;
     case 7:
@@ -167,7 +167,7 @@ void CAkiko::Vf6()
             frame++;
             if (frame >= x8) {
                 pattern = 0;
-                Vf0();
+                StartPattern();
             }
         }
         break;
@@ -181,7 +181,7 @@ void CAkiko::Vf6()
             frame++;
             if (frame >= x8) {
                 pattern = 3;
-                Vf0();
+                StartPattern();
             }
         }
         break;
@@ -200,7 +200,7 @@ void CAkiko::Vf6()
             CPlayer::StopMoving();
             unk2c9 = 9;
             pattern = 0xd;
-            Vf0();
+            StartPattern();
         }
         break;
     case 0xd:
@@ -216,7 +216,7 @@ void CAkiko::Vf6()
                 if (m_inputY == 1) {
                     pattern = 3;
                 }
-                Vf0();
+                StartPattern();
             }
         }
         break;
@@ -233,7 +233,7 @@ void CAkiko::Vf6()
             frame++;
             if (frame >= x8) {
                 pattern = 9;
-                Vf0();
+                StartPattern();
             }
         }
         if (y + vy >= 0.0 && frame > 2) {
@@ -241,7 +241,7 @@ void CAkiko::Vf6()
             unk2c9 = 9;
             CPlayer::FaceOpponent();
             pattern = 0xd;
-            Vf0();
+            StartPattern();
         }
         break;
     case 0xf:
@@ -257,7 +257,7 @@ void CAkiko::Vf6()
             frame++;
             if (frame >= x8) {
                 pattern = 9;
-                Vf0();
+                StartPattern();
             }
         }
         if (y + vy >= 0.0 && frame > 2) {
@@ -265,7 +265,7 @@ void CAkiko::Vf6()
             unk2c9 = 9;
             CPlayer::FaceOpponent();
             pattern = 0xd;
-            Vf0();
+            StartPattern();
         }
         break;
     case 0x10:
@@ -281,7 +281,7 @@ void CAkiko::Vf6()
             frame++;
             if (frame >= x8) {
                 pattern = 9;
-                Vf0();
+                StartPattern();
             }
         }
         if (y + vy >= 0.0 && frame > 2) {
@@ -289,7 +289,7 @@ void CAkiko::Vf6()
             unk2c9 = 9;
             CPlayer::FaceOpponent();
             pattern = 0xd;
-            Vf0();
+            StartPattern();
         }
         break;
     case 0x28:
@@ -319,7 +319,7 @@ void CAkiko::Vf6()
         }
         if (m_inputY == 1) {
             pattern = 9;
-            Vf0();
+            StartPattern();
             break;
         }
         timer++;
@@ -335,7 +335,7 @@ void CAkiko::Vf6()
             unk2c9 = 9;
             CPlayer::FaceOpponent();
             pattern = 0xd;
-            Vf0();
+            StartPattern();
         }
         break;
     case 0x2f:
@@ -396,7 +396,7 @@ void CAkiko::Vf6()
                 if (m_inputY == 1) {
                     pattern = 3;
                 }
-                Vf0();
+                StartPattern();
             }
         }
         break;
@@ -431,7 +431,7 @@ void CAkiko::Vf6()
                 if (m_inputY == 1) {
                     pattern = 3;
                 }
-                Vf0();
+                StartPattern();
             }
         }
         break;
@@ -466,7 +466,7 @@ void CAkiko::Vf6()
                 if (m_inputY == 1) {
                     pattern = 3;
                 }
-                Vf0();
+                StartPattern();
             }
         }
         break;
@@ -501,7 +501,7 @@ void CAkiko::Vf6()
                 if (m_inputY == 1) {
                     pattern = 3;
                 }
-                Vf0();
+                StartPattern();
             }
         }
         break;
@@ -536,7 +536,7 @@ void CAkiko::Vf6()
                 if (m_inputY == 1) {
                     pattern = 3;
                 }
-                Vf0();
+                StartPattern();
             }
         }
         break;
@@ -571,7 +571,7 @@ void CAkiko::Vf6()
                 if (m_inputY == 1) {
                     pattern = 3;
                 }
-                Vf0();
+                StartPattern();
             }
         }
         break;
@@ -603,7 +603,7 @@ void CAkiko::Vf6()
             frame++;
             if (frame >= x8) {
                 pattern = 3;
-                Vf0();
+                StartPattern();
             }
         }
         break;
@@ -635,7 +635,7 @@ void CAkiko::Vf6()
             frame++;
             if (frame >= x8) {
                 pattern = 3;
-                Vf0();
+                StartPattern();
             }
         }
         break;
@@ -667,7 +667,7 @@ void CAkiko::Vf6()
             frame++;
             if (frame >= x8) {
                 pattern = 3;
-                Vf0();
+                StartPattern();
             }
         }
         break;
@@ -707,10 +707,10 @@ void CAkiko::Vf6()
             y = 0.0;
             if (unk12c != 0) {
                 pattern = 0x61;
-                Vf0();
+                StartPattern();
             } else {
                 pattern = 0x62;
-                Vf0();
+                StartPattern();
             }
         }
         break;
@@ -750,10 +750,10 @@ void CAkiko::Vf6()
             y = 0.0;
             if (unk12c != 0) {
                 pattern = 0x61;
-                Vf0();
+                StartPattern();
             } else {
                 pattern = 0x62;
-                Vf0();
+                StartPattern();
             }
         }
         break;
@@ -793,10 +793,10 @@ void CAkiko::Vf6()
             y = 0.0;
             if (unk12c != 0) {
                 pattern = 0x61;
-                Vf0();
+                StartPattern();
             } else {
                 pattern = 0x62;
-                Vf0();
+                StartPattern();
             }
         }
         break;
@@ -831,10 +831,10 @@ void CAkiko::Vf6()
             y = 0.0;
             if (unk12c != 0) {
                 pattern = 0x61;
-                Vf0();
+                StartPattern();
             } else {
                 pattern = 0x62;
-                Vf0();
+                StartPattern();
             }
         }
         break;
@@ -869,10 +869,10 @@ void CAkiko::Vf6()
             y = 0.0;
             if (unk12c != 0) {
                 pattern = 0x61;
-                Vf0();
+                StartPattern();
             } else {
                 pattern = 0x62;
-                Vf0();
+                StartPattern();
             }
         }
         break;
@@ -882,7 +882,7 @@ void CAkiko::Vf6()
         }
         if (frame > 0 && (char)CPlayer::Unk40ff70() != 0) {
             pattern = 0x46;
-            Vf0();
+            StartPattern();
             break;
         }
         if (frame == 0 && timer == 0) {
@@ -917,10 +917,10 @@ void CAkiko::Vf6()
             y = 0.0;
             if (unk12c != 0) {
                 pattern = 0x61;
-                Vf0();
+                StartPattern();
             } else {
                 pattern = 0x62;
-                Vf0();
+                StartPattern();
             }
         }
         break;
@@ -930,7 +930,7 @@ void CAkiko::Vf6()
         }
         if (frame > 0 && (char)CPlayer::Unk40ff70() != 0) {
             pattern = 0x46;
-            Vf0();
+            StartPattern();
             break;
         }
         if (frame == 0 && timer == 0) {
@@ -965,10 +965,10 @@ void CAkiko::Vf6()
             y = 0.0;
             if (unk12c != 0) {
                 pattern = 0x61;
-                Vf0();
+                StartPattern();
             } else {
                 pattern = 0x62;
-                Vf0();
+                StartPattern();
             }
         }
         break;
@@ -978,7 +978,7 @@ void CAkiko::Vf6()
         }
         if (frame > 0 && (char)CPlayer::Unk40ff70() != 0) {
             pattern = 0x46;
-            Vf0();
+            StartPattern();
             break;
         }
         if (frame == 0 && timer == 0) {
@@ -1008,10 +1008,10 @@ void CAkiko::Vf6()
             y = 0.0;
             if (unk12c != 0) {
                 pattern = 0x61;
-                Vf0();
+                StartPattern();
             } else {
                 pattern = 0x62;
-                Vf0();
+                StartPattern();
             }
         }
         break;
@@ -1021,7 +1021,7 @@ void CAkiko::Vf6()
         }
         if (frame > 0 && (char)CPlayer::Unk40ff70() != 0) {
             pattern = 0x46;
-            Vf0();
+            StartPattern();
             break;
         }
         if (frame == 0 && timer == 0) {
@@ -1051,10 +1051,10 @@ void CAkiko::Vf6()
             y = 0.0;
             if (unk12c != 0) {
                 pattern = 0x61;
-                Vf0();
+                StartPattern();
             } else {
                 pattern = 0x62;
-                Vf0();
+                StartPattern();
             }
         }
         break;
@@ -1068,7 +1068,7 @@ void CAkiko::Vf6()
         timer++;
         if ((char)CPlayer::Unk40ff70() != 0) {
             pattern = 0x46;
-            Vf0();
+            StartPattern();
             break;
         }
         if (timer >= l4) {
@@ -1082,10 +1082,10 @@ void CAkiko::Vf6()
             y = 0.0;
             if (unk12c != 0) {
                 pattern = 0x61;
-                Vf0();
+                StartPattern();
             } else {
                 pattern = 0x62;
-                Vf0();
+                StartPattern();
             }
         }
         break;
@@ -1108,10 +1108,10 @@ void CAkiko::Vf6()
             y = 0.0;
             if (unk12c != 0) {
                 pattern = 0x61;
-                Vf0();
+                StartPattern();
             } else {
                 pattern = 0x62;
-                Vf0();
+                StartPattern();
             }
         }
         break;
@@ -1147,10 +1147,10 @@ void CAkiko::Vf6()
             y = 0.0;
             if (unk12c != 0) {
                 pattern = 0x61;
-                Vf0();
+                StartPattern();
             } else {
                 pattern = 0x62;
-                Vf0();
+                StartPattern();
             }
         }
         break;
@@ -1185,10 +1185,10 @@ void CAkiko::Vf6()
             y = 0.0;
             if (unk12c != 0) {
                 pattern = 0x61;
-                Vf0();
+                StartPattern();
             } else {
                 pattern = 0x62;
-                Vf0();
+                StartPattern();
             }
         }
         break;
@@ -1212,7 +1212,7 @@ void CAkiko::Vf6()
                 if (m_inputY == 1) {
                     pattern = 3;
                 }
-                Vf0();
+                StartPattern();
             }
         }
         break;
@@ -1236,7 +1236,7 @@ void CAkiko::Vf6()
                 if (m_inputY == 1) {
                     pattern = 3;
                 }
-                Vf0();
+                StartPattern();
             }
         }
         break;
@@ -1257,7 +1257,7 @@ void CAkiko::Vf6()
             frame++;
             if (frame >= x8) {
                 pattern = 3;
-                Vf0();
+                StartPattern();
             }
         }
         break;
@@ -1294,7 +1294,7 @@ void CAkiko::Vf6()
                 if (m_inputY == 1) {
                     pattern = 3;
                 }
-                Vf0();
+                StartPattern();
             }
         }
         break;
@@ -1331,7 +1331,7 @@ void CAkiko::Vf6()
                 if (m_inputY == 1) {
                     pattern = 3;
                 }
-                Vf0();
+                StartPattern();
             }
         }
         break;
@@ -1365,7 +1365,7 @@ void CAkiko::Vf6()
             frame++;
             if (frame >= x8) {
                 pattern = 3;
-                Vf0();
+                StartPattern();
             }
         }
         break;
@@ -1379,7 +1379,7 @@ void CAkiko::Vf6()
             l50.y = (double)(int)y;
             l50.unk18 = facing;
             l50.layer = 1;
-            Vf9(&l50);
+            SpawnObject(&l50);
             m_gauge = m_gauge + 0x1e;
             vx = unkc0;
             vy = unkc8;
@@ -1402,10 +1402,10 @@ void CAkiko::Vf6()
             y = 0.0;
             if (unk12c != 0) {
                 pattern = 0x61;
-                Vf0();
+                StartPattern();
             } else {
                 pattern = 0x62;
-                Vf0();
+                StartPattern();
             }
         }
         break;
@@ -1448,10 +1448,10 @@ void CAkiko::Vf6()
             y = 0.0;
             if (unk12c != 0) {
                 pattern = 0x61;
-                Vf0();
+                StartPattern();
             } else {
                 pattern = 0x62;
-                Vf0();
+                StartPattern();
             }
         }
         break;
@@ -1465,7 +1465,7 @@ void CAkiko::Vf6()
                 l50.layer = 0;
                 l50.unk0 = 1;
                 l50.unk18 = facing;
-                Vf9(&l50);
+                SpawnObject(&l50);
                 unk3144 = 1;
             }
             if (unk120 != 0) {
@@ -1502,7 +1502,7 @@ void CAkiko::Vf6()
             frame++;
             if (frame >= x8) {
                 pattern = 0;
-                Vf0();
+                StartPattern();
                 CPlayer::FaceOpponent();
             }
         }
@@ -1517,7 +1517,7 @@ void CAkiko::Vf6()
                 l50.layer = 0;
                 l50.unk0 = 1;
                 l50.unk18 = facing;
-                Vf9(&l50);
+                SpawnObject(&l50);
                 unk3144 = 1;
             }
             if (unk120 != 0) {
@@ -1554,7 +1554,7 @@ void CAkiko::Vf6()
             frame++;
             if (frame >= x8) {
                 pattern = 0;
-                Vf0();
+                StartPattern();
                 CPlayer::FaceOpponent();
             }
         }
@@ -1569,7 +1569,7 @@ void CAkiko::Vf6()
                 l50.layer = 0;
                 l50.unk0 = 1;
                 l50.unk18 = facing;
-                Vf9(&l50);
+                SpawnObject(&l50);
                 unk3144 = 1;
             }
             if (unk120 != 0) {
@@ -1587,7 +1587,7 @@ void CAkiko::Vf6()
             frame++;
             if (frame >= x8) {
                 pattern = 0;
-                Vf0();
+                StartPattern();
                 CPlayer::FaceOpponent();
             }
         }
@@ -1595,10 +1595,10 @@ void CAkiko::Vf6()
             y = 0.0;
             if (unk12c != 0) {
                 pattern = 0x61;
-                Vf0();
+                StartPattern();
             } else {
                 pattern = 0x62;
-                Vf0();
+                StartPattern();
             }
         }
         break;
@@ -1612,7 +1612,7 @@ void CAkiko::Vf6()
                 l50.layer = 0;
                 l50.unk0 = 1;
                 l50.unk18 = facing;
-                Vf9(&l50);
+                SpawnObject(&l50);
                 unk3144 = 1;
             }
             if (unk3138 == 0) {
@@ -1639,10 +1639,10 @@ void CAkiko::Vf6()
             y = 0.0;
             if (unk12c != 0) {
                 pattern = 0x61;
-                Vf0();
+                StartPattern();
             } else {
                 pattern = 0x62;
-                Vf0();
+                StartPattern();
             }
         }
         break;
@@ -1655,7 +1655,7 @@ void CAkiko::Vf6()
             l50.unk18 = 1;
             l50.scale = 0;
             l50.layer = 0;
-            Vf9(&l50);
+            SpawnObject(&l50);
         }
         timer++;
         if (timer >= l4) {
@@ -1663,7 +1663,7 @@ void CAkiko::Vf6()
             frame++;
             if (frame >= x8) {
                 pattern = 0;
-                Vf0();
+                StartPattern();
             }
         }
         break;
@@ -1680,7 +1680,7 @@ void CAkiko::Vf6()
                 if (m_inputY == 1) {
                     pattern = 3;
                 }
-                Vf0();
+                StartPattern();
             }
         }
         break;
@@ -1703,7 +1703,7 @@ void CAkiko::Vf6()
             frame++;
             if (frame >= x8) {
                 pattern = 0x63;
-                Vf0();
+                StartPattern();
             }
         }
         break;
@@ -1726,7 +1726,7 @@ void CAkiko::Vf6()
             frame++;
             if (frame >= x8) {
                 pattern = 0x63;
-                Vf0();
+                StartPattern();
             }
         }
         break;
@@ -1734,7 +1734,7 @@ void CAkiko::Vf6()
         timer++;
         if (m_hp > 0 && timer > 0x63 && frame == 0) {
             pattern = 0x60;
-            Vf0();
+            StartPattern();
         }
         if (timer >= l4) {
             timer = 0;
@@ -1744,7 +1744,7 @@ void CAkiko::Vf6()
             }
             if (frame >= x8) {
                 pattern = 0x60;
-                Vf0();
+                StartPattern();
             }
         }
         break;
@@ -1789,7 +1789,7 @@ void CAkiko::Vf6()
                 if (m_inputY == 1) {
                     pattern = 3;
                 }
-                Vf0();
+                StartPattern();
             }
         }
         break;
@@ -1828,7 +1828,7 @@ void CAkiko::Vf6()
                 if (m_inputY == 1) {
                     pattern = 3;
                 }
-                Vf0();
+                StartPattern();
             }
         }
         break;
@@ -1867,7 +1867,7 @@ void CAkiko::Vf6()
                 if (m_inputY == 1) {
                     pattern = 3;
                 }
-                Vf0();
+                StartPattern();
             }
         }
         break;
@@ -1903,7 +1903,7 @@ void CAkiko::Vf6()
             }
             if (frame >= x8) {
                 pattern = 3;
-                Vf0();
+                StartPattern();
             }
         }
         break;
@@ -1939,7 +1939,7 @@ void CAkiko::Vf6()
             }
             if (frame >= x8) {
                 pattern = 3;
-                Vf0();
+                StartPattern();
             }
         }
         break;
@@ -1975,7 +1975,7 @@ void CAkiko::Vf6()
             }
             if (frame >= x8) {
                 pattern = 3;
-                Vf0();
+                StartPattern();
             }
         }
         break;
@@ -1993,7 +1993,7 @@ void CAkiko::Vf6()
             frame++;
             if (frame >= x8) {
                 pattern = 9;
-                Vf0();
+                StartPattern();
             }
         }
         if (y + vy >= 0.0) {
@@ -2001,7 +2001,7 @@ void CAkiko::Vf6()
             unk2c9 = 9;
             CPlayer::FaceOpponent();
             pattern = 0xd;
-            Vf0();
+            StartPattern();
         }
         break;
     case 0x9d:
@@ -2024,7 +2024,7 @@ void CAkiko::Vf6()
             frame++;
             if (frame >= x8) {
                 pattern = 9;
-                Vf0();
+                StartPattern();
             }
         }
         if (y + vy >= 0.0) {
@@ -2032,7 +2032,7 @@ void CAkiko::Vf6()
             unk2c9 = 9;
             CPlayer::FaceOpponent();
             pattern = 0xd;
-            Vf0();
+            StartPattern();
         }
         break;
     case 0x9e:
@@ -2055,7 +2055,7 @@ void CAkiko::Vf6()
             frame++;
             if (frame >= x8) {
                 pattern = 9;
-                Vf0();
+                StartPattern();
             }
         }
         if (y + vy >= 0.0) {
@@ -2063,7 +2063,7 @@ void CAkiko::Vf6()
             unk2c9 = 9;
             CPlayer::FaceOpponent();
             pattern = 0xd;
-            Vf0();
+            StartPattern();
         }
         break;
     case 0xa1:
@@ -2085,7 +2085,7 @@ void CAkiko::Vf6()
             frame++;
             if (frame >= x8) {
                 pattern = 9;
-                Vf0();
+                StartPattern();
                 ay = 0.035;
             }
         }
@@ -2115,8 +2115,8 @@ void CAkiko::Vf6()
         vy = vy + ay;
         if (y + vy > 0.0) {
             pattern = 0xd;
-            Vf0();
-            Vf0();
+            StartPattern();
+            StartPattern();
             y = 0.0;
             break;
         }
@@ -2143,7 +2143,7 @@ void CAkiko::Vf6()
             vy = vy + ay;
             if (y + vy >= 0.0) {
                 pattern = 0xd;
-                Vf0();
+                StartPattern();
                 break;
             }
         }
@@ -2177,7 +2177,7 @@ void CAkiko::Vf6()
             }
             if (frame >= x8) {
                 pattern = 9;
-                Vf0();
+                StartPattern();
             }
         }
         break;
@@ -2206,7 +2206,7 @@ void CAkiko::Vf6()
                 CPlayer::StopMoving();
             }
             if (frame >= x8) {
-                Vf0();
+                StartPattern();
                 CPlayer::StopMoving();
                 pattern = 0;
             }
@@ -2232,7 +2232,7 @@ void CAkiko::Vf6()
         }
         if (m_inputX == facing && unk313c >= 0x78) {
             pattern = 9;
-            Vf0();
+            StartPattern();
             vx = 1.3;
             ay = 0.03;
             if (CPlayer::FaceOpponent() != 0) {
@@ -2241,7 +2241,7 @@ void CAkiko::Vf6()
         }
         if (m_inputX != facing && unk3138 >= 0x30) {
             pattern = 9;
-            Vf0();
+            StartPattern();
             vx = 1.3;
             ay = 0.03;
             if (CPlayer::FaceOpponent() != 0) {
@@ -2269,7 +2269,7 @@ void CAkiko::Vf6()
         }
         if (m_inputX == -facing && unk313c >= 0x78) {
             pattern = 9;
-            Vf0();
+            StartPattern();
             vx = -0.9;
             ay = 0.03;
             if (CPlayer::FaceOpponent() != 0) {
@@ -2278,7 +2278,7 @@ void CAkiko::Vf6()
         }
         if (m_inputX != -facing && unk3138 >= 0x2a) {
             pattern = 9;
-            Vf0();
+            StartPattern();
             vx = -0.9;
             ay = 0.03;
             if (CPlayer::FaceOpponent() != 0) {
@@ -2322,7 +2322,7 @@ void CAkiko::Vf6()
             if (frame >= x8) {
                 pattern = 0;
                 CPlayer::FaceOpponent();
-                Vf0();
+                StartPattern();
             }
         }
         break;
@@ -2351,7 +2351,7 @@ void CAkiko::Vf6()
             }
             if (frame >= x8) {
                 pattern = 0;
-                Vf0();
+                StartPattern();
             }
         }
         break;
@@ -2380,7 +2380,7 @@ void CAkiko::Vf6()
             }
             if (frame >= x8) {
                 pattern = 3;
-                Vf0();
+                StartPattern();
             }
         }
         break;
@@ -2417,7 +2417,7 @@ void CAkiko::Vf6()
             frame++;
             if (frame >= x8) {
                 pattern = 9;
-                Vf0();
+                StartPattern();
             }
         }
         break;
@@ -2453,7 +2453,7 @@ void CAkiko::Vf6()
                 vx = unk3138 * 0.01;
                 vy = unk313c * 0.01;
                 ay = 0.035;
-                Vf0();
+                StartPattern();
             }
         }
         break;
@@ -2484,7 +2484,7 @@ void CAkiko::Vf6()
                 ay = 0.028;
             }
             if (frame >= x8) {
-                Vf0();
+                StartPattern();
                 pattern = 0;
             }
         }
@@ -2501,7 +2501,7 @@ void CAkiko::Vf6()
                 pattern = 6;
             }
             m_attackResult = 0;
-            Vf0();
+            StartPattern();
             break;
         }
         if (frame == 1 && timer == 0) {
@@ -2519,7 +2519,7 @@ void CAkiko::Vf6()
             if (frame >= x8) {
                 pattern = 0;
                 CPlayer::FaceOpponent();
-                Vf0();
+                StartPattern();
             }
         }
         break;
@@ -2533,7 +2533,7 @@ void CAkiko::Vf6()
                 pattern = 6;
             }
             m_attackResult = 0;
-            Vf0();
+            StartPattern();
             break;
         }
         if (frame == 0 && timer == 0) {
@@ -2555,7 +2555,7 @@ void CAkiko::Vf6()
             if (frame >= x8) {
                 pattern = 0;
                 CPlayer::FaceOpponent();
-                Vf0();
+                StartPattern();
             }
         }
         break;
@@ -2569,7 +2569,7 @@ void CAkiko::Vf6()
                 pattern = 6;
             }
             m_attackResult = 0;
-            Vf0();
+            StartPattern();
             break;
         }
         if (frame == 0 && timer == 0) {
@@ -2591,7 +2591,7 @@ void CAkiko::Vf6()
             if (frame >= x8) {
                 pattern = 0;
                 CPlayer::FaceOpponent();
-                Vf0();
+                StartPattern();
             }
         }
         break;
@@ -2605,7 +2605,7 @@ void CAkiko::Vf6()
                 pattern = 6;
             }
             m_attackResult = 0;
-            Vf0();
+            StartPattern();
             break;
         }
         if (frame == 0 && timer == 0) {
@@ -2627,7 +2627,7 @@ void CAkiko::Vf6()
             if (frame >= x8) {
                 pattern = 0;
                 CPlayer::FaceOpponent();
-                Vf0();
+                StartPattern();
             }
         }
         break;
@@ -2643,7 +2643,7 @@ void CAkiko::Vf6()
                 pattern = 6;
             }
             m_attackResult = 0;
-            Vf0();
+            StartPattern();
             break;
         }
         if (frame == 1 && timer == 0) {
@@ -2664,7 +2664,7 @@ void CAkiko::Vf6()
                     pattern = 3;
                 }
                 CPlayer::FaceOpponent();
-                Vf0();
+                StartPattern();
             }
         }
         break;
@@ -2680,7 +2680,7 @@ void CAkiko::Vf6()
                 pattern = 6;
             }
             m_attackResult = 0;
-            Vf0();
+            StartPattern();
             break;
         }
         if (frame == 2 && timer == 0) {
@@ -2704,7 +2704,7 @@ void CAkiko::Vf6()
                     pattern = 3;
                 }
                 CPlayer::FaceOpponent();
-                Vf0();
+                StartPattern();
             }
         }
         break;
@@ -2733,7 +2733,7 @@ void CAkiko::Vf6()
                     pattern = 3;
                 }
                 CPlayer::FaceOpponent();
-                Vf0();
+                StartPattern();
             }
         }
         break;
@@ -2749,7 +2749,7 @@ void CAkiko::Vf6()
                 pattern = 0x10;
             }
             m_attackResult = 0;
-            Vf0();
+            StartPattern();
             break;
         }
         if (frame == 1 && timer == 0) {
@@ -2760,7 +2760,7 @@ void CAkiko::Vf6()
         if (y + vy >= 0.0) {
             y = 0.0;
             pattern = 0xd;
-            Vf0();
+            StartPattern();
             break;
         }
         timer++;
@@ -2772,7 +2772,7 @@ void CAkiko::Vf6()
             }
             if (frame >= x8) {
                 pattern = 9;
-                Vf0();
+                StartPattern();
             }
         }
         break;
@@ -2788,7 +2788,7 @@ void CAkiko::Vf6()
                 pattern = 0x10;
             }
             m_attackResult = 0;
-            Vf0();
+            StartPattern();
             break;
         }
         if (frame == 1 && timer == 0) {
@@ -2798,7 +2798,7 @@ void CAkiko::Vf6()
         if (y + vy >= 0.0) {
             y = 0.0;
             pattern = 0xd;
-            Vf0();
+            StartPattern();
             break;
         }
         timer++;
@@ -2830,7 +2830,7 @@ void CAkiko::Vf6()
             }
             if (frame >= x8) {
                 pattern = 9;
-                Vf0();
+                StartPattern();
             }
         }
         break;
@@ -2846,7 +2846,7 @@ void CAkiko::Vf6()
                 pattern = 0x10;
             }
             m_attackResult = 0;
-            Vf0();
+            StartPattern();
             break;
         }
         if (frame == 3 && timer == 0) {
@@ -2858,7 +2858,7 @@ void CAkiko::Vf6()
         if (y + vy >= 0.0) {
             y = 0.0;
             pattern = 0xd;
-            Vf0();
+            StartPattern();
             break;
         }
         timer++;
@@ -2875,7 +2875,7 @@ void CAkiko::Vf6()
             }
             if (frame >= x8) {
                 pattern = 9;
-                Vf0();
+                StartPattern();
             }
         }
         break;
@@ -2919,7 +2919,7 @@ void CAkiko::Vf6()
             if (frame >= x8) {
                 pattern = 0;
                 CPlayer::FaceOpponent();
-                Vf0();
+                StartPattern();
             }
         }
         break;
@@ -2937,7 +2937,7 @@ void CAkiko::Vf6()
                 pattern = 6;
             }
             m_attackResult = 0;
-            Vf0();
+            StartPattern();
             break;
         }
         if (frame == 3 && timer == 0) {
@@ -2955,7 +2955,7 @@ void CAkiko::Vf6()
             if (frame >= x8) {
                 pattern = 0;
                 CPlayer::FaceOpponent();
-                Vf0();
+                StartPattern();
             }
         }
         break;
@@ -2970,7 +2970,7 @@ void CAkiko::Vf6()
         }
         if (m_attackResult > 1) {
             pattern = 0xd5;
-            Vf0();
+            StartPattern();
             CPlayer::StopMoving();
             break;
         }
@@ -2988,7 +2988,7 @@ void CAkiko::Vf6()
             m_game->CreateEffect((EffectDesc*)&l50);
             unk2c9 = 7;
             pattern = 0xd6;
-            Vf0();
+            StartPattern();
             break;
         }
         timer++;
@@ -3015,7 +3015,7 @@ void CAkiko::Vf6()
             m_attackResult = 0;
             if (frame >= x8) {
                 pattern = 9;
-                Vf0();
+                StartPattern();
             }
         }
         break;
@@ -3043,7 +3043,7 @@ void CAkiko::Vf6()
                     pattern = 3;
                 }
                 CPlayer::FaceOpponent();
-                Vf0();
+                StartPattern();
             }
         }
         break;
@@ -3059,8 +3059,8 @@ void CAkiko::Vf6()
             vx = 0.0;
             vy = 0.0;
             unkb8 = 0.0;
-            Vf0();
-            (*m_opponent)->Vf0();
+            StartPattern();
+            (*m_opponent)->StartPattern();
             (*m_opponent)->StopMoving();
             pattern = 0xdd;
             (*m_opponent)->pattern = 0x6e;
@@ -3080,7 +3080,7 @@ void CAkiko::Vf6()
             if (frame >= x8) {
                 pattern = 0;
                 CPlayer::FaceOpponent();
-                Vf0();
+                StartPattern();
             }
         }
         break;
@@ -3090,7 +3090,7 @@ void CAkiko::Vf6()
             (*m_opponent)->StopMoving();
             (*m_opponent)->y = 0.0;
             (*m_opponent)->x = facing * 0x2a + x;
-            (*m_opponent)->Vf0();
+            (*m_opponent)->StartPattern();
         }
         timer++;
         if (timer >= l4) {
@@ -3116,12 +3116,12 @@ void CAkiko::Vf6()
                 l50.scale = 0;
                 l50.unk0 = 1;
                 l50.layer = 0;
-                Vf9(&l50);
+                SpawnObject(&l50);
             }
             if (frame >= x8) {
                 pattern = 0;
                 CPlayer::FaceOpponent();
-                Vf0();
+                StartPattern();
             }
         }
         break;
@@ -3139,7 +3139,7 @@ void CAkiko::Vf6()
         if (y + vy >= 0.0) {
             y = 0.0;
             pattern = 0xd;
-            Vf0();
+            StartPattern();
             break;
         }
         timer++;
@@ -3149,7 +3149,7 @@ void CAkiko::Vf6()
             m_attackResult = 0;
             if (frame >= x8) {
                 pattern = 9;
-                Vf0();
+                StartPattern();
             }
         }
         break;
@@ -3167,7 +3167,7 @@ void CAkiko::Vf6()
         if (y + vy >= 0.0) {
             y = 0.0;
             pattern = 0xd;
-            Vf0();
+            StartPattern();
             break;
         }
         timer++;
@@ -3177,7 +3177,7 @@ void CAkiko::Vf6()
             m_attackResult = 0;
             if (frame >= x8) {
                 pattern = 9;
-                Vf0();
+                StartPattern();
             }
         }
         break;
@@ -3195,7 +3195,7 @@ void CAkiko::Vf6()
         if (y + vy >= 0.0) {
             y = 0.0;
             pattern = 0xd;
-            Vf0();
+            StartPattern();
             break;
         }
         timer++;
@@ -3205,7 +3205,7 @@ void CAkiko::Vf6()
             m_attackResult = 0;
             if (frame >= x8) {
                 pattern = 9;
-                Vf0();
+                StartPattern();
             }
         }
         break;
@@ -3213,8 +3213,8 @@ void CAkiko::Vf6()
         vy = vy + ay;
         if (frame == 1 && m_attackResult == 3) {
             (*m_opponent)->StopMoving();
-            (*m_opponent)->Vf0();
-            Vf0();
+            (*m_opponent)->StartPattern();
+            StartPattern();
             CPlayer::StopMoving();
             pattern = 0xf1;
             (*m_opponent)->pattern = 0x64;
@@ -3257,7 +3257,7 @@ void CAkiko::Vf6()
         if (vy + y > 0.0) {
             CPlayer::StopMoving();
             y = 0.0;
-            Vf0();
+            StartPattern();
             CPlayer::StopMoving();
             pattern = 0xd;
             break;
@@ -3276,7 +3276,7 @@ void CAkiko::Vf6()
                 l50.scale = 0;
                 l50.unk0 = 1;
                 l50.layer = 1;
-                Vf9(&l50);
+                SpawnObject(&l50);
             }
             if (frame == 3) {
                 ay = 0.035;
@@ -3310,7 +3310,7 @@ void CAkiko::Vf6()
             if (frame >= x8) {
                 pattern = 0;
                 CPlayer::FaceOpponent();
-                Vf0();
+                StartPattern();
             }
         }
         break;
@@ -3349,7 +3349,7 @@ void CAkiko::Vf6()
                     l50.unk18 = facing;
                     l50.layer = 1;
                     l50.unk28 = 1;
-                    Vf9(&l50);
+                    SpawnObject(&l50);
                 }
                 l50.type = 0x190;
                 l50.x = facing * 0x1e + x;
@@ -3358,11 +3358,11 @@ void CAkiko::Vf6()
                 l50.scale = 2;
                 l50.layer = 1;
                 l50.unk28 = 0;
-                Vf9(&l50);
+                SpawnObject(&l50);
             }
             if (frame >= x8) {
                 pattern = 0;
-                Vf0();
+                StartPattern();
             }
         }
         break;
@@ -3406,7 +3406,7 @@ void CAkiko::Vf6()
                     l50.unk28 = 1;
                     l50.unk18 = facing;
                     l50.layer = 1;
-                    Vf9(&l50);
+                    SpawnObject(&l50);
                 }
                 l50.type = 0x190;
                 l50.x = facing * 0x1e + x;
@@ -3415,11 +3415,11 @@ void CAkiko::Vf6()
                 l50.scale = 2;
                 l50.layer = 1;
                 l50.unk28 = 0;
-                Vf9(&l50);
+                SpawnObject(&l50);
             }
             if (frame >= x8) {
                 pattern = 0;
-                Vf0();
+                StartPattern();
             }
         }
         break;
@@ -3479,7 +3479,7 @@ void CAkiko::Vf6()
                     }
                     l50.unk18 = facing;
                     l50.layer = 1;
-                    Vf9(&l50);
+                    SpawnObject(&l50);
                 }
                 l50.type = 0x190;
                 l50.x = facing * 0x1e + x;
@@ -3488,7 +3488,7 @@ void CAkiko::Vf6()
                 l50.scale = 2;
                 l50.layer = 1;
                 l50.unk28 = 0;
-                Vf9(&l50);
+                SpawnObject(&l50);
             }
             if (frame == 8 && timer == 0) {
                 unk2c8 = 0;
@@ -3518,7 +3518,7 @@ void CAkiko::Vf6()
                     }
                     l50.unk18 = facing;
                     l50.layer = 1;
-                    Vf9(&l50);
+                    SpawnObject(&l50);
                 }
                 l50.type = 0x190;
                 l50.x = facing * 0x1e + x;
@@ -3527,11 +3527,11 @@ void CAkiko::Vf6()
                 l50.scale = 2;
                 l50.layer = 1;
                 l50.unk28 = 0;
-                Vf9(&l50);
+                SpawnObject(&l50);
             }
             if (frame >= x8) {
                 pattern = 0;
-                Vf0();
+                StartPattern();
             }
         }
         break;
@@ -3544,7 +3544,7 @@ void CAkiko::Vf6()
             ax = 0.0;
         }
         if ((frame == 9 || frame == 0xa) && m_attackResult == 3 && (m_command == 0x14 || m_command == 0x15)) {
-            Vf0();
+            StartPattern();
             pattern = 0xff;
             facing = -facing;
             break;
@@ -3588,7 +3588,7 @@ void CAkiko::Vf6()
             }
             if (frame >= x8) {
                 pattern = 0;
-                Vf0();
+                StartPattern();
             }
         }
         break;
@@ -3604,7 +3604,7 @@ void CAkiko::Vf6()
             if (y + vy >= 0.0) {
                 y = 0.0;
                 CPlayer::StopMoving();
-                Vf0();
+                StartPattern();
                 pattern = 0xd;
                 break;
             }
@@ -3649,7 +3649,7 @@ void CAkiko::Vf6()
             ay = 0.0;
         }
         if ((frame == 9 || frame == 0xa) && m_attackResult == 3 && (m_command == 0x14 || m_command == 0x15)) {
-            Vf0();
+            StartPattern();
             pattern = 0x103;
             facing = -facing;
             break;
@@ -3693,7 +3693,7 @@ void CAkiko::Vf6()
             }
             if (frame >= x8) {
                 pattern = 0;
-                Vf0();
+                StartPattern();
             }
         }
         break;
@@ -3706,7 +3706,7 @@ void CAkiko::Vf6()
             ax = 0.0;
         }
         if ((frame == 9 || frame == 0xa) && m_attackResult == 3 && (m_command == 0x14 || m_command == 0x15)) {
-            Vf0();
+            StartPattern();
             pattern = 0xff;
             facing = -facing;
             break;
@@ -3750,7 +3750,7 @@ void CAkiko::Vf6()
             }
             if (frame >= x8) {
                 pattern = 0;
-                Vf0();
+                StartPattern();
             }
         }
         break;
@@ -3777,7 +3777,7 @@ void CAkiko::Vf6()
             }
         }
         if ((frame == 9 || frame == 0xa) && m_attackResult == 3 && m_command == 0x16) {
-            Vf0();
+            StartPattern();
             pattern = 0x102;
             facing = -facing;
             break;
@@ -3821,7 +3821,7 @@ void CAkiko::Vf6()
             }
             if (frame >= x8) {
                 pattern = 0;
-                Vf0();
+                StartPattern();
             }
         }
         break;
@@ -3841,7 +3841,7 @@ void CAkiko::Vf6()
                 timer = 0;
                 break;
             }
-            Vf0();
+            StartPattern();
             pattern = 0xfe;
             facing = -facing;
             break;
@@ -3885,7 +3885,7 @@ void CAkiko::Vf6()
             }
             if (frame >= x8) {
                 pattern = 0;
-                Vf0();
+                StartPattern();
             }
         }
         break;
@@ -3901,7 +3901,7 @@ void CAkiko::Vf6()
             if (y + vy >= 0.0) {
                 y = 0.0;
                 CPlayer::StopMoving();
-                Vf0();
+                StartPattern();
                 pattern = 0xd;
                 break;
             }
@@ -3949,7 +3949,7 @@ void CAkiko::Vf6()
             l50.scale = 2;
             l50.layer = 1;
             l50.unk18 = facing;
-            Vf9(&l50);
+            SpawnObject(&l50);
         }
         timer++;
         if (timer >= l4) {
@@ -3958,7 +3958,7 @@ void CAkiko::Vf6()
             m_attackResult = 3;
             if (frame >= x8) {
                 pattern = 0;
-                Vf0();
+                StartPattern();
             }
         }
         break;
@@ -3977,7 +3977,7 @@ void CAkiko::Vf6()
             l50.scale = 2;
             l50.layer = 1;
             l50.unk18 = facing;
-            Vf9(&l50);
+            SpawnObject(&l50);
         }
         timer++;
         if (timer >= l4) {
@@ -3986,7 +3986,7 @@ void CAkiko::Vf6()
             m_attackResult = 3;
             if (frame >= x8) {
                 pattern = 0;
-                Vf0();
+                StartPattern();
             }
         }
         break;
@@ -4024,7 +4024,7 @@ void CAkiko::Vf6()
             l50.scale = 2;
             l50.layer = 1;
             l50.unk18 = facing;
-            Vf9(&l50);
+            SpawnObject(&l50);
         }
         timer++;
         if (timer >= l4) {
@@ -4033,7 +4033,7 @@ void CAkiko::Vf6()
             m_attackResult = 3;
             if (frame >= x8) {
                 pattern = 0;
-                Vf0();
+                StartPattern();
             }
         }
         break;
@@ -4068,8 +4068,8 @@ void CAkiko::Vf6()
                 x = 540.0;
             }
             (*m_opponent)->StopMoving();
-            (*m_opponent)->Vf0();
-            Vf0();
+            (*m_opponent)->StartPattern();
+            StartPattern();
             (*m_opponent)->unk128 = 1;
             l50.type = 0;
             l50.x = (double)((int)x + facing * 0x39);
@@ -4092,7 +4092,7 @@ void CAkiko::Vf6()
             m_attackResult = 0;
             if (frame >= x8) {
                 pattern = 0;
-                Vf0();
+                StartPattern();
             }
         }
         break;
@@ -4107,7 +4107,7 @@ void CAkiko::Vf6()
             if (y + vy >= 0.0) {
                 CPlayer::StopMoving();
                 y = 0.0;
-                Vf0();
+                StartPattern();
                 pattern = 0xd;
                 break;
             }
@@ -4126,7 +4126,7 @@ void CAkiko::Vf6()
                 vy = -1.25;
                 (*m_opponent)->y = -50.0;
                 (*m_opponent)->x = x - facing * 0x46;
-                (*m_opponent)->Vf0();
+                (*m_opponent)->StartPattern();
                 (*m_opponent)->StopMoving();
                 (*m_opponent)->pattern = 0x3f;
                 (*m_opponent)->unkc0 = 0.0;
@@ -4148,7 +4148,7 @@ void CAkiko::Vf6()
                 l50.scale = 0;
                 l50.layer = 1;
                 l50.unk18 = facing;
-                Vf9(&l50);
+                SpawnObject(&l50);
                 l50.type = 0x19e;
                 l50.unk0 = 1;
                 l50.x = (double)(int)x;
@@ -4156,7 +4156,7 @@ void CAkiko::Vf6()
                 l50.scale = 0;
                 l50.layer = 1;
                 l50.unk18 = facing;
-                Vf9(&l50);
+                SpawnObject(&l50);
             }
             if (frame >= x8) {
                 frame = frame - 2;
@@ -4194,8 +4194,8 @@ void CAkiko::Vf6()
                 x = 540.0;
             }
             (*m_opponent)->StopMoving();
-            (*m_opponent)->Vf0();
-            Vf0();
+            (*m_opponent)->StartPattern();
+            StartPattern();
             (*m_opponent)->unk128 = 1;
             l50.type = 0;
             l50.x = (double)((int)x + facing * 0x39);
@@ -4218,7 +4218,7 @@ void CAkiko::Vf6()
             m_attackResult = 0;
             if (frame >= x8) {
                 pattern = 0;
-                Vf0();
+                StartPattern();
             }
         }
         break;
@@ -4233,7 +4233,7 @@ void CAkiko::Vf6()
             if (y + vy >= 0.0) {
                 CPlayer::StopMoving();
                 y = 0.0;
-                Vf0();
+                StartPattern();
                 pattern = 0xd;
                 break;
             }
@@ -4252,7 +4252,7 @@ void CAkiko::Vf6()
                 vy = -1.25;
                 (*m_opponent)->y = -50.0;
                 (*m_opponent)->x = x - facing * 0x46;
-                (*m_opponent)->Vf0();
+                (*m_opponent)->StartPattern();
                 (*m_opponent)->StopMoving();
                 (*m_opponent)->pattern = 0x3f;
                 (*m_opponent)->unkc0 = 0.0;
@@ -4274,7 +4274,7 @@ void CAkiko::Vf6()
                 l50.scale = 0;
                 l50.layer = 1;
                 l50.unk18 = facing;
-                Vf9(&l50);
+                SpawnObject(&l50);
                 l50.type = 0x19e;
                 l50.unk0 = 1;
                 l50.x = (double)(int)x;
@@ -4282,7 +4282,7 @@ void CAkiko::Vf6()
                 l50.scale = 0;
                 l50.layer = 1;
                 l50.unk18 = facing;
-                Vf9(&l50);
+                SpawnObject(&l50);
             }
             if (frame >= x8) {
                 frame = frame - 2;
@@ -4335,8 +4335,8 @@ void CAkiko::Vf6()
                 x = 540.0;
             }
             (*m_opponent)->StopMoving();
-            (*m_opponent)->Vf0();
-            Vf0();
+            (*m_opponent)->StartPattern();
+            StartPattern();
             (*m_opponent)->unk128 = 1;
             l50.type = 0;
             l50.x = (double)((int)x + facing * 0x39);
@@ -4363,7 +4363,7 @@ void CAkiko::Vf6()
             }
             if (frame >= x8) {
                 pattern = 0;
-                Vf0();
+                StartPattern();
             }
         }
         break;
@@ -4378,7 +4378,7 @@ void CAkiko::Vf6()
             if (y + vy >= 0.0) {
                 CPlayer::StopMoving();
                 y = 0.0;
-                Vf0();
+                StartPattern();
                 pattern = 0xd;
                 break;
             }
@@ -4397,7 +4397,7 @@ void CAkiko::Vf6()
                 vy = -1.25;
                 (*m_opponent)->y = -50.0;
                 (*m_opponent)->x = x - facing * 0x46;
-                (*m_opponent)->Vf0();
+                (*m_opponent)->StartPattern();
                 (*m_opponent)->StopMoving();
                 (*m_opponent)->pattern = 0x3f;
                 (*m_opponent)->unkc0 = 0.0;
@@ -4419,7 +4419,7 @@ void CAkiko::Vf6()
                 l50.scale = 0;
                 l50.layer = 1;
                 l50.unk18 = facing;
-                Vf9(&l50);
+                SpawnObject(&l50);
                 l50.type = 0x19e;
                 l50.unk0 = 1;
                 l50.x = (double)(int)x;
@@ -4427,7 +4427,7 @@ void CAkiko::Vf6()
                 l50.scale = 0;
                 l50.layer = 1;
                 l50.unk18 = facing;
-                Vf9(&l50);
+                SpawnObject(&l50);
             }
             if (frame >= x8) {
                 frame = frame - 2;
@@ -4447,7 +4447,7 @@ void CAkiko::Vf6()
             l50.scale = 0;
             l50.layer = 1;
             l50.unk0 = 1;
-            Vf9(&l50);
+            SpawnObject(&l50);
             unk2c8 = 9;
         }
         if (frame < 3) {
@@ -4482,19 +4482,19 @@ void CAkiko::Vf6()
                 l50.unk0 = 1;
                 l50.unk18 = facing;
                 l50.layer = 1;
-                Vf9(&l50);
-                Vf9(&l50);
-                Vf9(&l50);
+                SpawnObject(&l50);
+                SpawnObject(&l50);
+                SpawnObject(&l50);
                 l50.type = 0x1af;
-                Vf9(&l50);
-                Vf9(&l50);
-                Vf9(&l50);
+                SpawnObject(&l50);
+                SpawnObject(&l50);
+                SpawnObject(&l50);
                 l50.type = 0x1ae;
-                Vf9(&l50);
-                Vf9(&l50);
-                Vf9(&l50);
-                Vf9(&l50);
-                Vf9(&l50);
+                SpawnObject(&l50);
+                SpawnObject(&l50);
+                SpawnObject(&l50);
+                SpawnObject(&l50);
+                SpawnObject(&l50);
             }
             if (frame == 0xa && timer == 0 && unk3138 < 6) {
                 unk3138++;
@@ -4502,7 +4502,7 @@ void CAkiko::Vf6()
             }
             if (frame >= x8) {
                 pattern = 0;
-                Vf0();
+                StartPattern();
             }
         }
         break;
@@ -4519,7 +4519,7 @@ void CAkiko::Vf6()
             l50.scale = 0;
             l50.layer = 1;
             l50.unk0 = 1;
-            Vf9(&l50);
+            SpawnObject(&l50);
             unk2c8 = 9;
         }
         if (frame < 3) {
@@ -4554,23 +4554,23 @@ void CAkiko::Vf6()
                 l50.unk0 = 1;
                 l50.unk18 = facing;
                 l50.layer = 1;
-                Vf9(&l50);
-                Vf9(&l50);
-                Vf9(&l50);
-                Vf9(&l50);
-                Vf9(&l50);
+                SpawnObject(&l50);
+                SpawnObject(&l50);
+                SpawnObject(&l50);
+                SpawnObject(&l50);
+                SpawnObject(&l50);
                 l50.type = 0x1af;
-                Vf9(&l50);
-                Vf9(&l50);
-                Vf9(&l50);
-                Vf9(&l50);
-                Vf9(&l50);
+                SpawnObject(&l50);
+                SpawnObject(&l50);
+                SpawnObject(&l50);
+                SpawnObject(&l50);
+                SpawnObject(&l50);
                 l50.type = 0x1b0;
-                Vf9(&l50);
-                Vf9(&l50);
-                Vf9(&l50);
-                Vf9(&l50);
-                Vf9(&l50);
+                SpawnObject(&l50);
+                SpawnObject(&l50);
+                SpawnObject(&l50);
+                SpawnObject(&l50);
+                SpawnObject(&l50);
             }
             if (frame == 0xa && timer == 0 && unk3138 < 6) {
                 unk3138++;
@@ -4578,7 +4578,7 @@ void CAkiko::Vf6()
             }
             if (frame >= x8) {
                 pattern = 0;
-                Vf0();
+                StartPattern();
             }
         }
         break;
@@ -4595,7 +4595,7 @@ void CAkiko::Vf6()
             l50.scale = 0;
             l50.layer = 1;
             l50.unk0 = 1;
-            Vf9(&l50);
+            SpawnObject(&l50);
             unk2c8 = 9;
         }
         if (frame < 3) {
@@ -4634,27 +4634,27 @@ void CAkiko::Vf6()
                 l50.unk0 = 1;
                 l50.unk18 = facing;
                 l50.layer = 1;
-                Vf9(&l50);
-                Vf9(&l50);
-                Vf9(&l50);
-                Vf9(&l50);
-                Vf9(&l50);
-                Vf9(&l50);
-                Vf9(&l50);
+                SpawnObject(&l50);
+                SpawnObject(&l50);
+                SpawnObject(&l50);
+                SpawnObject(&l50);
+                SpawnObject(&l50);
+                SpawnObject(&l50);
+                SpawnObject(&l50);
                 l50.type = 0x1af;
-                Vf9(&l50);
-                Vf9(&l50);
-                Vf9(&l50);
+                SpawnObject(&l50);
+                SpawnObject(&l50);
+                SpawnObject(&l50);
                 l50.type = 0x1b0;
-                Vf9(&l50);
-                Vf9(&l50);
-                Vf9(&l50);
-                Vf9(&l50);
-                Vf9(&l50);
+                SpawnObject(&l50);
+                SpawnObject(&l50);
+                SpawnObject(&l50);
+                SpawnObject(&l50);
+                SpawnObject(&l50);
                 l50.type = 0x1b1;
-                Vf9(&l50);
-                Vf9(&l50);
-                Vf9(&l50);
+                SpawnObject(&l50);
+                SpawnObject(&l50);
+                SpawnObject(&l50);
             }
             if (frame == 0xa && timer == 0 && unk3138 < 6) {
                 unk3138++;
@@ -4662,7 +4662,7 @@ void CAkiko::Vf6()
             }
             if (frame >= x8) {
                 pattern = 0;
-                Vf0();
+                StartPattern();
             }
         }
         break;
@@ -4689,7 +4689,7 @@ void CAkiko::Vf6()
             m_game->CreateEffect((EffectDesc*)&l50);
         }
         if (frame == 5 && m_attackResult == 3) {
-            Vf0();
+            StartPattern();
             CPlayer::StopMoving();
             pattern = 0x130;
             (*m_opponent)->unk14a = 0x1c2;
@@ -4702,7 +4702,7 @@ void CAkiko::Vf6()
             m_attackResult = 0;
             if (frame >= x8) {
                 pattern = 0;
-                Vf0();
+                StartPattern();
             }
         }
         break;
@@ -4718,7 +4718,7 @@ void CAkiko::Vf6()
             frame++;
             if (frame == 1 && timer == 0) {
                 CPlayer::Unk410a10(5, 5);
-                (*m_opponent)->Vf0();
+                (*m_opponent)->StartPattern();
                 (*m_opponent)->pattern = 0x3f;
                 (*m_opponent)->unkc0 = -3.5;
                 (*m_opponent)->unkc8 = -1.5;
@@ -4739,7 +4739,7 @@ void CAkiko::Vf6()
             m_attackResult = 0;
             if (frame >= x8) {
                 pattern = 0;
-                Vf0();
+                StartPattern();
             }
         }
         break;
@@ -4766,7 +4766,7 @@ void CAkiko::Vf6()
             m_game->CreateEffect((EffectDesc*)&l50);
         }
         if (frame == 5 && m_attackResult == 3) {
-            Vf0();
+            StartPattern();
             CPlayer::StopMoving();
             pattern = 0x132;
             (*m_opponent)->unk14a = 0x1c2;
@@ -4779,7 +4779,7 @@ void CAkiko::Vf6()
             m_attackResult = 0;
             if (frame >= x8) {
                 pattern = 0;
-                Vf0();
+                StartPattern();
             }
         }
         break;
@@ -4795,7 +4795,7 @@ void CAkiko::Vf6()
             frame++;
             if (frame == 1 && timer == 0) {
                 CPlayer::Unk410a10(5, 5);
-                (*m_opponent)->Vf0();
+                (*m_opponent)->StartPattern();
                 (*m_opponent)->pattern = 0x3f;
                 (*m_opponent)->unkc0 = -3.5;
                 (*m_opponent)->unkc8 = -1.5;
@@ -4816,7 +4816,7 @@ void CAkiko::Vf6()
             m_attackResult = 0;
             if (frame >= x8) {
                 pattern = 0;
-                Vf0();
+                StartPattern();
             }
         }
         break;
@@ -4847,7 +4847,7 @@ void CAkiko::Vf6()
             unk2c9 = 0x25;
         }
         if (frame == 5 && m_attackResult == 3) {
-            Vf0();
+            StartPattern();
             CPlayer::StopMoving();
             pattern = 0x134;
             (*m_opponent)->unk14a = 0x1c2;
@@ -4860,7 +4860,7 @@ void CAkiko::Vf6()
             m_attackResult = 0;
             if (frame >= x8) {
                 pattern = 0;
-                Vf0();
+                StartPattern();
             }
         }
         break;
@@ -4879,7 +4879,7 @@ void CAkiko::Vf6()
             frame++;
             if (frame == 1 && timer == 0) {
                 CPlayer::Unk410a10(5, 5);
-                (*m_opponent)->Vf0();
+                (*m_opponent)->StartPattern();
                 (*m_opponent)->pattern = 0x3f;
                 (*m_opponent)->unkc0 = -3.5;
                 (*m_opponent)->unkc8 = -1.5;
@@ -4900,7 +4900,7 @@ void CAkiko::Vf6()
             m_attackResult = 0;
             if (frame >= x8) {
                 pattern = 0;
-                Vf0();
+                StartPattern();
             }
         }
         break;
@@ -4945,7 +4945,7 @@ void CAkiko::Vf6()
             }
             if (frame >= x8) {
                 pattern = 0;
-                Vf0();
+                StartPattern();
             }
         }
         break;
@@ -4990,7 +4990,7 @@ void CAkiko::Vf6()
             }
             if (frame >= x8) {
                 pattern = 0;
-                Vf0();
+                StartPattern();
             }
         }
         break;
@@ -5036,7 +5036,7 @@ void CAkiko::Vf6()
             }
             if (frame >= x8) {
                 pattern = 0;
-                Vf0();
+                StartPattern();
             }
         }
         break;
@@ -5053,9 +5053,9 @@ void CAkiko::Vf6()
             CPlayer::Unk410a80(0x32, 3);
         }
         if (frame == 0xa && m_attackResult == 3) {
-            Vf0();
+            StartPattern();
             pattern = 0x13f;
-            (*m_opponent)->Vf0();
+            (*m_opponent)->StartPattern();
             (*m_opponent)->pattern = 0x79;
             CPlayer::Unk410b10(0xb0, 0x1770);
             m_game->FadeMusic(-0x2710, 0x3e8);
@@ -5095,7 +5095,7 @@ void CAkiko::Vf6()
             }
             if (frame >= x8) {
                 CPlayer::FaceOpponent();
-                Vf0();
+                StartPattern();
                 pattern = 0;
             }
         }
@@ -5125,7 +5125,7 @@ void CAkiko::Vf6()
             m_attackResult = 0;
             if (frame == 1) {
                 CPlayer::Unk410b10(0xb0, 0);
-                (*m_opponent)->Vf0();
+                (*m_opponent)->StartPattern();
                 (*m_opponent)->pattern = 0x7b;
                 (*m_opponent)->facing = facing;
                 l50.type = 0x1a9;
@@ -5135,14 +5135,14 @@ void CAkiko::Vf6()
                 l50.scale = 0;
                 l50.unk0 = 1;
                 l50.layer = 0;
-                Vf9(&l50);
+                SpawnObject(&l50);
                 unk2c8 = 0x11;
             }
             if (frame == 2) {
                 m_game->unk1420e = 0x7530;
                 (*m_opponent)->m_game->unk1420e = 0x7530;
                 m_game->unk1420c = 0x7530;
-                (*m_opponent)->Vf0();
+                (*m_opponent)->StartPattern();
                 (*m_opponent)->pattern = 0x79;
                 l50.type = 0x1aa;
                 l50.x = 0.0;
@@ -5153,7 +5153,7 @@ void CAkiko::Vf6()
                 l50.unk28 = 0;
                 l50.unk18 = 1;
                 l50.screen = 1;
-                Vf9(&l50);
+                SpawnObject(&l50);
                 unk2c8 = 0x10;
             }
             if (frame == 3) {
@@ -5162,7 +5162,7 @@ void CAkiko::Vf6()
                 m_game->unk1420c = 0;
                 unk2c8 = 0xe;
                 CPlayer::DealDamage(0x157c, 1000.0);
-                (*m_opponent)->Vf0();
+                (*m_opponent)->StartPattern();
                 (*m_opponent)->pattern = 0x63;
             }
             if (frame == 5 && unk3138 < 0x14) {
@@ -5177,7 +5177,7 @@ void CAkiko::Vf6()
             }
             if (frame >= x8) {
                 CPlayer::FaceOpponent();
-                Vf0();
+                StartPattern();
                 pattern = 0;
             }
         }

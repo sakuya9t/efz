@@ -5,89 +5,89 @@
 #include <string.h>
 #include "efz.h"
 
-void CPlayer::Vf9(EffectDesc* p1)
+void CPlayer::SpawnObject(EffectDesc* p1)
 {
-    unk3d0[unk2ca] = 1;
-    unk2d0[unk2ca] = p1->unk0;
-    m_objects[unk2ca].pattern = p1->type;
-    m_objects[unk2ca].frame = 0;
-    m_objects[unk2ca].timer = 0;
-    m_objects[unk2ca].x = p1->x;
-    m_objects[unk2ca].y = p1->y;
-    m_objects[unk2ca].vx = 0.0;
-    m_objects[unk2ca].vy = 0.0;
-    m_objects[unk2ca].ax = 0.0;
-    m_objects[unk2ca].ay = 0.0;
-    m_objects[unk2ca].facing = (char)p1->unk18;
-    m_objects[unk2ca].unk4c = p1->side;
-    m_objects[unk2ca].unk50 = (char)p1->scale;
-    m_objects[unk2ca].unk6c = (char)p1->unk2c;
-    m_objects[unk2ca].unk54 = p1->screen;
-    m_objects[unk2ca].unk51 = (char)p1->layer;
-    m_objects[unk2ca].unk58 = p1->unk28;
-    m_objects[unk2ca].unk88 = p1->unk30;
-    m_objects[unk2ca].unk8c = 0;
-    m_objects[unk2ca].unk5c = *(tagRECT*)&p1->unk34;
-    m_objects[unk2ca].unk80 = 0;
-    m_objects[unk2ca].unk84 = 0;
-    m_objects[unk2ca].unk86 = 0;
-    m_objects[unk2ca].unk70 = 0.0;
-    m_objects[unk2ca].unk78 = 0.0;
-    Unk412f10();
+    m_objectActive[m_objectHead] = 1;
+    unk2d0[m_objectHead] = p1->unk0;
+    m_objects[m_objectHead].pattern = p1->type;
+    m_objects[m_objectHead].frame = 0;
+    m_objects[m_objectHead].timer = 0;
+    m_objects[m_objectHead].x = p1->x;
+    m_objects[m_objectHead].y = p1->y;
+    m_objects[m_objectHead].vx = 0.0;
+    m_objects[m_objectHead].vy = 0.0;
+    m_objects[m_objectHead].ax = 0.0;
+    m_objects[m_objectHead].ay = 0.0;
+    m_objects[m_objectHead].facing = (char)p1->unk18;
+    m_objects[m_objectHead].side = p1->side;
+    m_objects[m_objectHead].scale = (char)p1->scale;
+    m_objects[m_objectHead].unk6c = (char)p1->unk2c;
+    m_objects[m_objectHead].screen = p1->screen;
+    m_objects[m_objectHead].layer = (char)p1->layer;
+    m_objects[m_objectHead].unk58 = p1->unk28;
+    m_objects[m_objectHead].unk88 = p1->unk30;
+    m_objects[m_objectHead].unk8c = 0;
+    m_objects[m_objectHead].clip = *(tagRECT*)&p1->unk34;
+    m_objects[m_objectHead].unk80 = 0;
+    m_objects[m_objectHead].unk84 = 0;
+    m_objects[m_objectHead].unk86 = 0;
+    m_objects[m_objectHead].unk70 = 0.0;
+    m_objects[m_objectHead].unk78 = 0.0;
+    AdvanceObjectHead();
 }
 
-void CPlayer::Vf10(short p1)
+void CPlayer::RemoveObject(short p1)
 {
-    unk3d0[p1] = 0;
+    m_objectActive[p1] = 0;
     unk2d0[p1] = 0;
-    if (p1 == unk2cc) {
-        while (unk2cc != unk2ca && unk3d0[unk2cc] == 0) {
-            unk2cc++;
-            if (unk2cc >= 0x40) {
-                unk2cc = 0;
+    if (p1 == m_objectTail) {
+        while (m_objectTail != m_objectHead && m_objectActive[m_objectTail] == 0) {
+            m_objectTail++;
+            if (m_objectTail >= 0x40) {
+                m_objectTail = 0;
             }
         }
     }
 }
 
-void CPlayer::Unk412f10()
+void CPlayer::AdvanceObjectHead()
 {
     int v4;
 
     v4 = 0;
     do {
-        unk2ca++;
-        if (unk2ca >= 0x40) {
-            unk2ca = 0;
+        m_objectHead++;
+        if (m_objectHead >= 0x40) {
+            m_objectHead = 0;
         }
-        if (unk2ca == unk2cc) {
-            unk2cc++;
-            if (unk2cc >= 0x40) {
-                unk2cc = 0;
+        if (m_objectHead == m_objectTail) {
+            m_objectTail++;
+            if (m_objectTail >= 0x40) {
+                m_objectTail = 0;
             }
-            while (unk2cc != unk2ca && unk3d0[unk2cc] == 0) {
-                unk2cc++;
-                if (unk2cc >= 0x40) {
-                    unk2cc = 0;
+            while (m_objectTail != m_objectHead && m_objectActive[m_objectTail] == 0) {
+                m_objectTail++;
+                if (m_objectTail >= 0x40) {
+                    m_objectTail = 0;
                 }
             }
         }
         v4++;
-    } while (unk2d0[unk2ca] != 0 && v4 < 0x3f);
+    } while (unk2d0[m_objectHead] != 0 && v4 < 0x3f);
 }
 
-void CPlayer::Unk413040()
+void CPlayer::ClearObjects()
 {
     int v4;
 
     v4 = 0;
     for (; v4 < 0x40; v4++) {
-        unk3d0[v4] = 0;
+        m_objectActive[v4] = 0;
         unk2d0[v4] = 0;
     }
 }
 
-void CPlayer::Unk413090(EffectDesc* p1)
+void CPlayer::InitEffectDesc(EffectDesc* p1)
 {
     p1->unk0 = 0;
     p1->scale = 0;
@@ -101,51 +101,51 @@ void CPlayer::Unk413090(EffectDesc* p1)
     p1->unk3c = 0;
 }
 
-void CPlayer::Unk413100(int p1, int p2, BYTE p3)
+void CPlayer::DrawObjects(int p1, int p2, BYTE p3)
 {
     RECT v28;
     char* v18;
     RECT v14;
     int l4;
 
-    l4 = unk2cc;
-    while (l4 != unk2ca) {
-        if (unk3d0[l4] != 0 && p3 == (unsigned char)m_objects[l4].unk51 && (m_objects[l4].unk8c != 0 || m_game->unk1420e == 0)) {
+    l4 = m_objectTail;
+    while (l4 != m_objectHead) {
+        if (m_objectActive[l4] != 0 && p3 == (unsigned char)m_objects[l4].layer && (m_objects[l4].unk8c != 0 || m_game->unk1420e == 0)) {
             v18 = (char*)&anims[m_objects[l4].pattern].frames[m_objects[l4].frame].duration;
             v28 = MakeRect(0, 0, *(short*)(v18 + 8), *(short*)(v18 + 0xa));
             if (m_objects[l4].facing == -1) {
-                v14.left = (int)m_objects[l4].x + (m_objects[l4].unk54 == 0) * p1 - (*(short*)(v18 + 8) - *(short*)(v18 + 4));
-                v14.top = (p2 + 0xd2) * (m_objects[l4].unk54 == 0) + (int)m_objects[l4].y - *(short*)(v18 + 6);
+                v14.left = (int)m_objects[l4].x + (m_objects[l4].screen == 0) * p1 - (*(short*)(v18 + 8) - *(short*)(v18 + 4));
+                v14.top = (p2 + 0xd2) * (m_objects[l4].screen == 0) + (int)m_objects[l4].y - *(short*)(v18 + 6);
                 v14.right = *(short*)(v18 + 8) + v14.left;
                 v14.bottom = *(short*)(v18 + 0xa) + v14.top;
             } else {
-                v14.left = (int)m_objects[l4].x + (m_objects[l4].unk54 == 0) * p1 - *(short*)(v18 + 4);
-                v14.top = (p2 + 0xd2) * (m_objects[l4].unk54 == 0) + (int)m_objects[l4].y - *(short*)(v18 + 6);
+                v14.left = (int)m_objects[l4].x + (m_objects[l4].screen == 0) * p1 - *(short*)(v18 + 4);
+                v14.top = (p2 + 0xd2) * (m_objects[l4].screen == 0) + (int)m_objects[l4].y - *(short*)(v18 + 6);
                 v14.right = *(short*)(v18 + 8) + v14.left;
                 v14.bottom = *(short*)(v18 + 0xa) + v14.top;
             }
-            if (m_objects[l4].unk5c.top != m_objects[l4].unk5c.bottom) {
-                if (v14.left < m_objects[l4].unk5c.left) {
-                    v28.left = m_objects[l4].unk5c.left - v14.left + v28.left;
-                    v14.left = m_objects[l4].unk5c.left;
+            if (m_objects[l4].clip.top != m_objects[l4].clip.bottom) {
+                if (v14.left < m_objects[l4].clip.left) {
+                    v28.left = m_objects[l4].clip.left - v14.left + v28.left;
+                    v14.left = m_objects[l4].clip.left;
                 }
-                if (v14.right > m_objects[l4].unk5c.right) {
-                    v28.right -= v14.right - m_objects[l4].unk5c.right;
-                    v14.right = m_objects[l4].unk5c.right;
+                if (v14.right > m_objects[l4].clip.right) {
+                    v28.right -= v14.right - m_objects[l4].clip.right;
+                    v14.right = m_objects[l4].clip.right;
                 }
-                if (v14.top < m_objects[l4].unk5c.top) {
-                    v28.top = m_objects[l4].unk5c.top - v14.top + v28.top;
-                    v14.top = m_objects[l4].unk5c.top;
+                if (v14.top < m_objects[l4].clip.top) {
+                    v28.top = m_objects[l4].clip.top - v14.top + v28.top;
+                    v14.top = m_objects[l4].clip.top;
                 }
-                if (v14.bottom > m_objects[l4].unk5c.bottom) {
-                    v28.bottom -= v14.bottom - m_objects[l4].unk5c.bottom;
-                    v14.bottom = m_objects[l4].unk5c.bottom;
+                if (v14.bottom > m_objects[l4].clip.bottom) {
+                    v28.bottom -= v14.bottom - m_objects[l4].clip.bottom;
+                    v14.bottom = m_objects[l4].clip.bottom;
                 }
             }
-            if (m_objects[l4].unk50 == 3) {
+            if (m_objects[l4].scale == 3) {
                 m_graphics->BlitSmear(v14, surfaces[*(WORD*)(v18 + 2)], v28, colorKey, m_objects[l4].facing == -1);
-            } else if (m_objects[l4].unk50 > 0) {
-                m_graphics->BlitEx(v14, surfaces[*(WORD*)(v18 + 2)], v28, colorKey, m_objects[l4].facing == -1, m_objects[l4].unk50 - 1);
+            } else if (m_objects[l4].scale > 0) {
+                m_graphics->BlitEx(v14, surfaces[*(WORD*)(v18 + 2)], v28, colorKey, m_objects[l4].facing == -1, m_objects[l4].scale - 1);
             } else {
                 m_graphics->Blit(v14, surfaces[*(WORD*)(v18 + 2)], v28, colorKey, m_objects[l4].facing == -1);
             }

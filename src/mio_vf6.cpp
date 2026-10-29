@@ -1,4 +1,4 @@
-// CMio::Vf6 (0x5736d0-0x58830f), the per-state update. It is a file of its own,
+// CMio::UpdatePattern (0x5736d0-0x58830f), the per-state update. It is a file of its own,
 // as in the original: its floating-point constants precede the rest of CMio's
 // .rdata, which starts with its constructor's folder name (mio.cpp).
 #include <stdlib.h>
@@ -6,7 +6,7 @@
 #include <math.h>
 #include "efz.h"
 
-void CMio::Vf6()
+void CMio::UpdatePattern()
 {
     WORD x8;
     WORD l4;
@@ -17,7 +17,7 @@ void CMio::Vf6()
     EffectDesc l50;
     l4 = (short)anims[pattern].frames[frame].duration;
     x8 = anims[pattern].frameCount;
-    CPlayer::Unk413090((EffectDesc*)&l50);
+    CPlayer::InitEffectDesc((EffectDesc*)&l50);
     switch (pattern) {
     default:
         unk158 = 0;
@@ -106,7 +106,7 @@ void CMio::Vf6()
             frame++;
             if (frame >= x8) {
                 pattern = 9;
-                Vf0();
+                StartPattern();
             }
         }
         if (y + vy >= 0.0 && frame > 3) {
@@ -114,7 +114,7 @@ void CMio::Vf6()
             unk2c9 = 9;
             CPlayer::FaceOpponent();
             pattern = 0xd;
-            Vf0();
+            StartPattern();
         }
         break;
     case 5:
@@ -146,7 +146,7 @@ void CMio::Vf6()
             frame++;
             if (frame >= x8) {
                 pattern = 9;
-                Vf0();
+                StartPattern();
             }
         }
         if (y + vy >= 0.0 && frame > 3) {
@@ -154,7 +154,7 @@ void CMio::Vf6()
             unk2c9 = 9;
             CPlayer::FaceOpponent();
             pattern = 0xd;
-            Vf0();
+            StartPattern();
         }
         break;
     case 6:
@@ -182,7 +182,7 @@ void CMio::Vf6()
             frame++;
             if (frame >= x8) {
                 pattern = 9;
-                Vf0();
+                StartPattern();
             }
         }
         if (y + vy >= 0.0 && frame > 3) {
@@ -190,7 +190,7 @@ void CMio::Vf6()
             unk2c9 = 9;
             CPlayer::FaceOpponent();
             pattern = 0xd;
-            Vf0();
+            StartPattern();
         }
         break;
     case 7:
@@ -204,7 +204,7 @@ void CMio::Vf6()
             frame++;
             if (frame >= x8) {
                 pattern = 0;
-                Vf0();
+                StartPattern();
             }
         }
         break;
@@ -219,7 +219,7 @@ void CMio::Vf6()
             frame++;
             if (frame >= x8) {
                 pattern = 3;
-                Vf0();
+                StartPattern();
             }
         }
         break;
@@ -238,7 +238,7 @@ void CMio::Vf6()
             y = 0.0;
             unk2c9 = 9;
             pattern = 0xd;
-            Vf0();
+            StartPattern();
         }
         break;
     case 0xd:
@@ -255,7 +255,7 @@ void CMio::Vf6()
                 if (m_inputY == 1) {
                     pattern = 3;
                 }
-                Vf0();
+                StartPattern();
             }
         }
         break;
@@ -276,7 +276,7 @@ void CMio::Vf6()
             frame++;
             if (frame >= x8) {
                 pattern = 9;
-                Vf0();
+                StartPattern();
             }
         }
         if (y + vy >= 0.0 && frame > 3) {
@@ -284,7 +284,7 @@ void CMio::Vf6()
             unk2c9 = 9;
             CPlayer::FaceOpponent();
             pattern = 0xd;
-            Vf0();
+            StartPattern();
         }
         break;
     case 0xf:
@@ -304,7 +304,7 @@ void CMio::Vf6()
             frame++;
             if (frame >= x8) {
                 pattern = 9;
-                Vf0();
+                StartPattern();
             }
         }
         if (y + vy >= 0.0 && frame > 3) {
@@ -312,7 +312,7 @@ void CMio::Vf6()
             unk2c9 = 9;
             CPlayer::FaceOpponent();
             pattern = 0xd;
-            Vf0();
+            StartPattern();
         }
         break;
     case 0x10:
@@ -332,7 +332,7 @@ void CMio::Vf6()
             frame++;
             if (frame >= x8) {
                 pattern = 9;
-                Vf0();
+                StartPattern();
             }
         }
         if (y + vy >= 0.0 && frame > 3) {
@@ -340,7 +340,7 @@ void CMio::Vf6()
             unk2c9 = 9;
             CPlayer::FaceOpponent();
             pattern = 0xd;
-            Vf0();
+            StartPattern();
         }
         break;
     case 0x11:
@@ -357,7 +357,7 @@ void CMio::Vf6()
         }
         if (m_inputY == 1 && unk3138 > 2) {
             pattern = 9;
-            Vf0();
+            StartPattern();
             break;
         }
         timer++;
@@ -374,7 +374,7 @@ void CMio::Vf6()
                 frame = frame - 2;
                 unk3138++;
                 if (unk3138 > 0xf) {
-                    Vf0();
+                    StartPattern();
                     pattern = 9;
                     break;
                 }
@@ -385,7 +385,7 @@ void CMio::Vf6()
             unk2c9 = 9;
             CPlayer::FaceOpponent();
             pattern = 0xd;
-            Vf0();
+            StartPattern();
         }
         break;
     case 0x2f:
@@ -447,7 +447,7 @@ void CMio::Vf6()
                 if (m_inputY == 1) {
                     pattern = 3;
                 }
-                Vf0();
+                StartPattern();
             }
         }
         break;
@@ -483,7 +483,7 @@ void CMio::Vf6()
                 if (m_inputY == 1) {
                     pattern = 3;
                 }
-                Vf0();
+                StartPattern();
             }
         }
         break;
@@ -519,7 +519,7 @@ void CMio::Vf6()
                 if (m_inputY == 1) {
                     pattern = 3;
                 }
-                Vf0();
+                StartPattern();
             }
         }
         break;
@@ -555,7 +555,7 @@ void CMio::Vf6()
                 if (m_inputY == 1) {
                     pattern = 3;
                 }
-                Vf0();
+                StartPattern();
             }
         }
         break;
@@ -591,7 +591,7 @@ void CMio::Vf6()
                 if (m_inputY == 1) {
                     pattern = 3;
                 }
-                Vf0();
+                StartPattern();
             }
         }
         break;
@@ -627,7 +627,7 @@ void CMio::Vf6()
                 if (m_inputY == 1) {
                     pattern = 3;
                 }
-                Vf0();
+                StartPattern();
             }
         }
         break;
@@ -660,7 +660,7 @@ void CMio::Vf6()
             frame++;
             if (frame >= x8) {
                 pattern = 3;
-                Vf0();
+                StartPattern();
             }
         }
         break;
@@ -693,7 +693,7 @@ void CMio::Vf6()
             frame++;
             if (frame >= x8) {
                 pattern = 3;
-                Vf0();
+                StartPattern();
             }
         }
         break;
@@ -726,7 +726,7 @@ void CMio::Vf6()
             frame++;
             if (frame >= x8) {
                 pattern = 3;
-                Vf0();
+                StartPattern();
             }
         }
         break;
@@ -764,10 +764,10 @@ void CMio::Vf6()
             y = 0.0;
             if (unk12c != 0) {
                 pattern = 0x61;
-                Vf0();
+                StartPattern();
             } else {
                 pattern = 0x62;
-                Vf0();
+                StartPattern();
             }
         }
         break;
@@ -805,10 +805,10 @@ void CMio::Vf6()
             y = 0.0;
             if (unk12c != 0) {
                 pattern = 0x61;
-                Vf0();
+                StartPattern();
             } else {
                 pattern = 0x62;
-                Vf0();
+                StartPattern();
             }
         }
         break;
@@ -846,10 +846,10 @@ void CMio::Vf6()
             y = 0.0;
             if (unk12c != 0) {
                 pattern = 0x61;
-                Vf0();
+                StartPattern();
             } else {
                 pattern = 0x62;
-                Vf0();
+                StartPattern();
             }
         }
         break;
@@ -882,10 +882,10 @@ void CMio::Vf6()
             y = 0.0;
             if (unk12c != 0) {
                 pattern = 0x61;
-                Vf0();
+                StartPattern();
             } else {
                 pattern = 0x62;
-                Vf0();
+                StartPattern();
             }
         }
         break;
@@ -918,10 +918,10 @@ void CMio::Vf6()
             y = 0.0;
             if (unk12c != 0) {
                 pattern = 0x61;
-                Vf0();
+                StartPattern();
             } else {
                 pattern = 0x62;
-                Vf0();
+                StartPattern();
             }
         }
         break;
@@ -931,7 +931,7 @@ void CMio::Vf6()
         }
         if (frame > 0 && (char)CPlayer::Unk40ff70() != 0) {
             pattern = 0x46;
-            Vf0();
+            StartPattern();
             break;
         }
         if (frame == 0 && timer == 0) {
@@ -964,10 +964,10 @@ void CMio::Vf6()
             y = 0.0;
             if (unk12c != 0) {
                 pattern = 0x61;
-                Vf0();
+                StartPattern();
             } else {
                 pattern = 0x62;
-                Vf0();
+                StartPattern();
             }
         }
         break;
@@ -977,7 +977,7 @@ void CMio::Vf6()
         }
         if (frame > 0 && (char)CPlayer::Unk40ff70() != 0) {
             pattern = 0x46;
-            Vf0();
+            StartPattern();
             break;
         }
         if (frame == 0 && timer == 0) {
@@ -1010,10 +1010,10 @@ void CMio::Vf6()
             y = 0.0;
             if (unk12c != 0) {
                 pattern = 0x61;
-                Vf0();
+                StartPattern();
             } else {
                 pattern = 0x62;
-                Vf0();
+                StartPattern();
             }
         }
         break;
@@ -1023,7 +1023,7 @@ void CMio::Vf6()
         }
         if (frame > 0 && (char)CPlayer::Unk40ff70() != 0) {
             pattern = 0x46;
-            Vf0();
+            StartPattern();
             break;
         }
         if (frame == 0 && timer == 0) {
@@ -1051,10 +1051,10 @@ void CMio::Vf6()
             y = 0.0;
             if (unk12c != 0) {
                 pattern = 0x61;
-                Vf0();
+                StartPattern();
             } else {
                 pattern = 0x62;
-                Vf0();
+                StartPattern();
             }
         }
         break;
@@ -1064,7 +1064,7 @@ void CMio::Vf6()
         }
         if (frame > 0 && (char)CPlayer::Unk40ff70() != 0) {
             pattern = 0x46;
-            Vf0();
+            StartPattern();
             break;
         }
         if (frame == 0 && timer == 0) {
@@ -1092,10 +1092,10 @@ void CMio::Vf6()
             y = 0.0;
             if (unk12c != 0) {
                 pattern = 0x61;
-                Vf0();
+                StartPattern();
             } else {
                 pattern = 0x62;
-                Vf0();
+                StartPattern();
             }
         }
         break;
@@ -1109,7 +1109,7 @@ void CMio::Vf6()
         timer++;
         if ((char)CPlayer::Unk40ff70() != 0) {
             pattern = 0x46;
-            Vf0();
+            StartPattern();
             break;
         }
         if (timer >= l4) {
@@ -1123,10 +1123,10 @@ void CMio::Vf6()
             y = 0.0;
             if (unk12c != 0) {
                 pattern = 0x61;
-                Vf0();
+                StartPattern();
             } else {
                 pattern = 0x62;
-                Vf0();
+                StartPattern();
             }
         }
         break;
@@ -1149,10 +1149,10 @@ void CMio::Vf6()
             y = 0.0;
             if (unk12c != 0) {
                 pattern = 0x61;
-                Vf0();
+                StartPattern();
             } else {
                 pattern = 0x62;
-                Vf0();
+                StartPattern();
             }
         }
         break;
@@ -1188,10 +1188,10 @@ void CMio::Vf6()
             y = 0.0;
             if (unk12c != 0) {
                 pattern = 0x61;
-                Vf0();
+                StartPattern();
             } else {
                 pattern = 0x62;
-                Vf0();
+                StartPattern();
             }
         }
         break;
@@ -1224,10 +1224,10 @@ void CMio::Vf6()
             y = 0.0;
             if (unk12c != 0) {
                 pattern = 0x61;
-                Vf0();
+                StartPattern();
             } else {
                 pattern = 0x62;
-                Vf0();
+                StartPattern();
             }
         }
         break;
@@ -1252,7 +1252,7 @@ void CMio::Vf6()
                 if (m_inputY == 1) {
                     pattern = 3;
                 }
-                Vf0();
+                StartPattern();
             }
         }
         break;
@@ -1277,7 +1277,7 @@ void CMio::Vf6()
                 if (m_inputY == 1) {
                     pattern = 3;
                 }
-                Vf0();
+                StartPattern();
             }
         }
         break;
@@ -1299,7 +1299,7 @@ void CMio::Vf6()
             frame++;
             if (frame >= x8) {
                 pattern = 3;
-                Vf0();
+                StartPattern();
             }
         }
         break;
@@ -1337,7 +1337,7 @@ void CMio::Vf6()
                 if (m_inputY == 1) {
                     pattern = 3;
                 }
-                Vf0();
+                StartPattern();
             }
         }
         break;
@@ -1375,7 +1375,7 @@ void CMio::Vf6()
                 if (m_inputY == 1) {
                     pattern = 3;
                 }
-                Vf0();
+                StartPattern();
             }
         }
         break;
@@ -1410,7 +1410,7 @@ void CMio::Vf6()
             frame++;
             if (frame >= x8) {
                 pattern = 3;
-                Vf0();
+                StartPattern();
             }
         }
         break;
@@ -1424,7 +1424,7 @@ void CMio::Vf6()
             l50.y = (double)(int)y;
             l50.unk18 = facing;
             l50.layer = 1;
-            Vf9(&l50);
+            SpawnObject(&l50);
             m_gauge = m_gauge + 0x1e;
             vx = unkc0;
             vy = unkc8;
@@ -1447,10 +1447,10 @@ void CMio::Vf6()
             y = 0.0;
             if (unk12c != 0) {
                 pattern = 0x61;
-                Vf0();
+                StartPattern();
             } else {
                 pattern = 0x62;
-                Vf0();
+                StartPattern();
             }
         }
         break;
@@ -1499,10 +1499,10 @@ void CMio::Vf6()
             y = 0.0;
             if (unk12c != 0) {
                 pattern = 0x61;
-                Vf0();
+                StartPattern();
             } else {
                 pattern = 0x62;
-                Vf0();
+                StartPattern();
             }
         }
         break;
@@ -1516,7 +1516,7 @@ void CMio::Vf6()
                 l50.layer = 0;
                 l50.unk0 = 1;
                 l50.unk18 = facing;
-                Vf9(&l50);
+                SpawnObject(&l50);
                 unk3154 = 1;
             }
             if (unk120 != 0) {
@@ -1553,7 +1553,7 @@ void CMio::Vf6()
             frame++;
             if (frame >= x8) {
                 pattern = 0;
-                Vf0();
+                StartPattern();
                 CPlayer::FaceOpponent();
             }
         }
@@ -1568,7 +1568,7 @@ void CMio::Vf6()
                 l50.layer = 0;
                 l50.unk0 = 1;
                 l50.unk18 = facing;
-                Vf9(&l50);
+                SpawnObject(&l50);
                 unk3154 = 1;
             }
             if (unk120 != 0) {
@@ -1605,7 +1605,7 @@ void CMio::Vf6()
             frame++;
             if (frame >= x8) {
                 pattern = 0;
-                Vf0();
+                StartPattern();
                 CPlayer::FaceOpponent();
             }
         }
@@ -1620,7 +1620,7 @@ void CMio::Vf6()
                 l50.layer = 0;
                 l50.unk0 = 1;
                 l50.unk18 = facing;
-                Vf9(&l50);
+                SpawnObject(&l50);
                 unk3154 = 1;
             }
             if (unk120 != 0) {
@@ -1638,7 +1638,7 @@ void CMio::Vf6()
             frame++;
             if (frame >= x8) {
                 pattern = 0;
-                Vf0();
+                StartPattern();
                 CPlayer::FaceOpponent();
             }
         }
@@ -1646,10 +1646,10 @@ void CMio::Vf6()
             y = 0.0;
             if (unk12c != 0) {
                 pattern = 0x61;
-                Vf0();
+                StartPattern();
             } else {
                 pattern = 0x62;
-                Vf0();
+                StartPattern();
             }
         }
         break;
@@ -1663,7 +1663,7 @@ void CMio::Vf6()
                 l50.layer = 0;
                 l50.unk0 = 1;
                 l50.unk18 = facing;
-                Vf9(&l50);
+                SpawnObject(&l50);
                 unk3154 = 1;
             }
             if (unk3138 == 0) {
@@ -1690,10 +1690,10 @@ void CMio::Vf6()
             y = 0.0;
             if (unk12c != 0) {
                 pattern = 0x61;
-                Vf0();
+                StartPattern();
             } else {
                 pattern = 0x62;
-                Vf0();
+                StartPattern();
             }
         }
         break;
@@ -1706,7 +1706,7 @@ void CMio::Vf6()
             l50.unk18 = 1;
             l50.scale = 0;
             l50.layer = 0;
-            Vf9(&l50);
+            SpawnObject(&l50);
         }
         timer++;
         if (timer >= l4) {
@@ -1714,7 +1714,7 @@ void CMio::Vf6()
             frame++;
             if (frame >= x8) {
                 pattern = 0;
-                Vf0();
+                StartPattern();
             }
         }
         break;
@@ -1743,7 +1743,7 @@ void CMio::Vf6()
                 if (m_inputY == 1) {
                     pattern = 3;
                 }
-                Vf0();
+                StartPattern();
             }
         }
         break;
@@ -1766,7 +1766,7 @@ void CMio::Vf6()
             frame++;
             if (frame >= x8) {
                 pattern = 0x63;
-                Vf0();
+                StartPattern();
             }
         }
         break;
@@ -1789,7 +1789,7 @@ void CMio::Vf6()
             frame++;
             if (frame >= x8) {
                 pattern = 0x63;
-                Vf0();
+                StartPattern();
             }
         }
         break;
@@ -1798,7 +1798,7 @@ void CMio::Vf6()
         unk158 = 0;
         if (m_hp > 0 && timer > 0x63 && frame == 0) {
             pattern = 0x60;
-            Vf0();
+            StartPattern();
         }
         if (timer >= l4) {
             timer = 0;
@@ -1808,7 +1808,7 @@ void CMio::Vf6()
             }
             if (frame >= x8) {
                 pattern = 0x60;
-                Vf0();
+                StartPattern();
             }
         }
         break;
@@ -1848,7 +1848,7 @@ void CMio::Vf6()
                 if (m_inputY == 1) {
                     pattern = 3;
                 }
-                Vf0();
+                StartPattern();
             }
         }
         break;
@@ -1888,7 +1888,7 @@ void CMio::Vf6()
                 if (m_inputY == 1) {
                     pattern = 3;
                 }
-                Vf0();
+                StartPattern();
             }
         }
         break;
@@ -1928,7 +1928,7 @@ void CMio::Vf6()
                 if (m_inputY == 1) {
                     pattern = 3;
                 }
-                Vf0();
+                StartPattern();
             }
         }
         break;
@@ -1965,7 +1965,7 @@ void CMio::Vf6()
             }
             if (frame >= x8) {
                 pattern = 3;
-                Vf0();
+                StartPattern();
             }
         }
         break;
@@ -2002,7 +2002,7 @@ void CMio::Vf6()
             }
             if (frame >= x8) {
                 pattern = 3;
-                Vf0();
+                StartPattern();
             }
         }
         break;
@@ -2039,7 +2039,7 @@ void CMio::Vf6()
             }
             if (frame >= x8) {
                 pattern = 3;
-                Vf0();
+                StartPattern();
             }
         }
         break;
@@ -2058,7 +2058,7 @@ void CMio::Vf6()
             frame++;
             if (frame >= x8) {
                 pattern = 9;
-                Vf0();
+                StartPattern();
             }
         }
         if (y + vy >= 0.0) {
@@ -2066,7 +2066,7 @@ void CMio::Vf6()
             unk2c9 = 9;
             CPlayer::FaceOpponent();
             pattern = 0xd;
-            Vf0();
+            StartPattern();
         }
         break;
     case 0x9d:
@@ -2090,7 +2090,7 @@ void CMio::Vf6()
             frame++;
             if (frame >= x8) {
                 pattern = 9;
-                Vf0();
+                StartPattern();
             }
         }
         if (y + vy >= 0.0) {
@@ -2098,7 +2098,7 @@ void CMio::Vf6()
             unk2c9 = 9;
             CPlayer::FaceOpponent();
             pattern = 0xd;
-            Vf0();
+            StartPattern();
         }
         break;
     case 0x9e:
@@ -2122,7 +2122,7 @@ void CMio::Vf6()
             frame++;
             if (frame >= x8) {
                 pattern = 9;
-                Vf0();
+                StartPattern();
             }
         }
         if (y + vy >= 0.0) {
@@ -2130,7 +2130,7 @@ void CMio::Vf6()
             unk2c9 = 9;
             CPlayer::FaceOpponent();
             pattern = 0xd;
-            Vf0();
+            StartPattern();
         }
         break;
     case 0xa1:
@@ -2152,7 +2152,7 @@ void CMio::Vf6()
             frame++;
             if (frame >= x8) {
                 pattern = 9;
-                Vf0();
+                StartPattern();
                 ay = 0.035;
             }
         }
@@ -2182,8 +2182,8 @@ void CMio::Vf6()
         vy = vy + ay;
         if (y + vy > 0.0) {
             pattern = 0xd;
-            Vf0();
-            Vf0();
+            StartPattern();
+            StartPattern();
             y = 0.0;
             break;
         }
@@ -2212,7 +2212,7 @@ void CMio::Vf6()
                 pattern = 6;
             }
             m_attackResult = 0;
-            Vf0();
+            StartPattern();
             break;
         }
         if (frame == 0 && timer == 0) {
@@ -2234,11 +2234,11 @@ void CMio::Vf6()
         }
         if (m_inputX == facing && unk3140 >= 100.0) {
             pattern = 0xb2;
-            Vf0();
+            StartPattern();
         }
         if (m_inputX != facing && unk3138 >= 0x3c) {
             pattern = 0xb2;
-            Vf0();
+            StartPattern();
         }
         break;
     case 0xa4:
@@ -2273,7 +2273,7 @@ void CMio::Vf6()
             if (frame >= x8) {
                 CPlayer::FaceOpponent();
                 pattern = 0;
-                Vf0();
+                StartPattern();
             }
         }
         break;
@@ -2307,7 +2307,7 @@ void CMio::Vf6()
         }
         if (m_inputX == facing && unk3140 >= 120.0) {
             pattern = 9;
-            Vf0();
+            StartPattern();
             vx = 0.9;
             ay = 0.03;
             if (CPlayer::FaceOpponent() != 0) {
@@ -2316,7 +2316,7 @@ void CMio::Vf6()
         }
         if (m_inputX != facing && unk3138 >= 0x30) {
             pattern = 9;
-            Vf0();
+            StartPattern();
             vx = 0.9;
             ay = 0.03;
             if (CPlayer::FaceOpponent() != 0) {
@@ -2354,7 +2354,7 @@ void CMio::Vf6()
         }
         if (m_inputX == -facing && unk3140 >= 120.0) {
             pattern = 9;
-            Vf0();
+            StartPattern();
             vx = -0.9;
             ay = 0.03;
             if (CPlayer::FaceOpponent() != 0) {
@@ -2363,7 +2363,7 @@ void CMio::Vf6()
         }
         if (m_inputX != -facing && unk3138 >= 0x30) {
             pattern = 9;
-            Vf0();
+            StartPattern();
             vx = -0.9;
             ay = 0.03;
             if (CPlayer::FaceOpponent() != 0) {
@@ -2409,7 +2409,7 @@ void CMio::Vf6()
             if (frame >= x8) {
                 pattern = 0;
                 CPlayer::FaceOpponent();
-                Vf0();
+                StartPattern();
             }
         }
         break;
@@ -2439,7 +2439,7 @@ void CMio::Vf6()
             }
             if (frame >= x8) {
                 pattern = 0;
-                Vf0();
+                StartPattern();
             }
         }
         break;
@@ -2469,7 +2469,7 @@ void CMio::Vf6()
             }
             if (frame >= x8) {
                 pattern = 3;
-                Vf0();
+                StartPattern();
             }
         }
         break;
@@ -2506,7 +2506,7 @@ void CMio::Vf6()
             frame++;
             if (frame >= x8) {
                 pattern = 9;
-                Vf0();
+                StartPattern();
             }
         }
         break;
@@ -2544,7 +2544,7 @@ void CMio::Vf6()
                 if (ay == 0.0) {
                     ay = 0.035;
                 }
-                Vf0();
+                StartPattern();
             }
         }
         break;
@@ -2557,7 +2557,7 @@ void CMio::Vf6()
         }
         if (vx == 0.0) {
             pattern = 0;
-            Vf0();
+            StartPattern();
             break;
         }
         if (m_inputY == -1 && frame > 0) {
@@ -2569,7 +2569,7 @@ void CMio::Vf6()
                 pattern = 6;
             }
             m_attackResult = 0;
-            Vf0();
+            StartPattern();
             break;
         }
         timer++;
@@ -2613,7 +2613,7 @@ void CMio::Vf6()
                 frame = frame - 2;
             }
             if (frame >= x8) {
-                Vf0();
+                StartPattern();
                 pattern = 0;
             }
         }
@@ -2638,7 +2638,7 @@ void CMio::Vf6()
                 pattern = 6;
             }
             m_attackResult = 0;
-            Vf0();
+            StartPattern();
             break;
         }
         if (frame == 2 && timer == 0) {
@@ -2656,7 +2656,7 @@ void CMio::Vf6()
             if (frame >= x8) {
                 pattern = 0;
                 CPlayer::FaceOpponent();
-                Vf0();
+                StartPattern();
             }
         }
         break;
@@ -2680,7 +2680,7 @@ void CMio::Vf6()
                 pattern = 6;
             }
             m_attackResult = 0;
-            Vf0();
+            StartPattern();
             break;
         }
         if (frame == 1 && timer == 0) {
@@ -2698,7 +2698,7 @@ void CMio::Vf6()
             if (frame >= x8) {
                 pattern = 0;
                 CPlayer::FaceOpponent();
-                Vf0();
+                StartPattern();
             }
         }
         break;
@@ -2722,7 +2722,7 @@ void CMio::Vf6()
                 pattern = 6;
             }
             m_attackResult = 0;
-            Vf0();
+            StartPattern();
             break;
         }
         if (frame == 2 && timer == 0) {
@@ -2740,7 +2740,7 @@ void CMio::Vf6()
             if (frame >= x8) {
                 pattern = 0;
                 CPlayer::FaceOpponent();
-                Vf0();
+                StartPattern();
             }
         }
         break;
@@ -2764,7 +2764,7 @@ void CMio::Vf6()
                 pattern = 6;
             }
             m_attackResult = 0;
-            Vf0();
+            StartPattern();
             break;
         }
         if (frame == 3 && timer == 0) {
@@ -2782,7 +2782,7 @@ void CMio::Vf6()
             if (frame >= x8) {
                 pattern = 0;
                 CPlayer::FaceOpponent();
-                Vf0();
+                StartPattern();
             }
         }
         break;
@@ -2806,7 +2806,7 @@ void CMio::Vf6()
                 pattern = 6;
             }
             m_attackResult = 0;
-            Vf0();
+            StartPattern();
             break;
         }
         if (frame == 1 && timer == 0) {
@@ -2827,7 +2827,7 @@ void CMio::Vf6()
                     pattern = 3;
                 }
                 CPlayer::FaceOpponent();
-                Vf0();
+                StartPattern();
             }
         }
         break;
@@ -2851,7 +2851,7 @@ void CMio::Vf6()
                 pattern = 6;
             }
             m_attackResult = 0;
-            Vf0();
+            StartPattern();
             break;
         }
         if (frame == 2 && timer == 0) {
@@ -2879,7 +2879,7 @@ void CMio::Vf6()
                     pattern = 3;
                 }
                 CPlayer::FaceOpponent();
-                Vf0();
+                StartPattern();
             }
         }
         break;
@@ -2904,7 +2904,7 @@ void CMio::Vf6()
             if (frame >= x8) {
                 pattern = 3;
                 CPlayer::FaceOpponent();
-                Vf0();
+                StartPattern();
             }
         }
         break;
@@ -2920,7 +2920,7 @@ void CMio::Vf6()
                 pattern = 0x10;
             }
             m_attackResult = 0;
-            Vf0();
+            StartPattern();
             break;
         }
         if (frame == 1 && timer == 0) {
@@ -2931,7 +2931,7 @@ void CMio::Vf6()
         if (y + vy >= 0.0) {
             y = 0.0;
             pattern = 0xd;
-            Vf0();
+            StartPattern();
             break;
         }
         timer++;
@@ -2943,7 +2943,7 @@ void CMio::Vf6()
             }
             if (frame >= x8) {
                 pattern = 9;
-                Vf0();
+                StartPattern();
             }
         }
         break;
@@ -2959,7 +2959,7 @@ void CMio::Vf6()
                 pattern = 0x10;
             }
             m_attackResult = 0;
-            Vf0();
+            StartPattern();
             break;
         }
         if (frame == 1 && timer == 0) {
@@ -2970,7 +2970,7 @@ void CMio::Vf6()
         if (y + vy >= 0.0) {
             y = 0.0;
             pattern = 0xd;
-            Vf0();
+            StartPattern();
             break;
         }
         timer++;
@@ -2982,7 +2982,7 @@ void CMio::Vf6()
             }
             if (frame >= x8) {
                 pattern = 9;
-                Vf0();
+                StartPattern();
             }
         }
         break;
@@ -2998,7 +2998,7 @@ void CMio::Vf6()
                 pattern = 0x10;
             }
             m_attackResult = 0;
-            Vf0();
+            StartPattern();
             break;
         }
         if (frame == 2 && timer == 0) {
@@ -3009,7 +3009,7 @@ void CMio::Vf6()
         if (y + vy >= 0.0) {
             y = 0.0;
             pattern = 0xd;
-            Vf0();
+            StartPattern();
             break;
         }
         timer++;
@@ -3025,7 +3025,7 @@ void CMio::Vf6()
             }
             if (frame >= x8) {
                 pattern = 9;
-                Vf0();
+                StartPattern();
             }
         }
         break;
@@ -3049,7 +3049,7 @@ void CMio::Vf6()
                 pattern = 6;
             }
             m_attackResult = 0;
-            Vf0();
+            StartPattern();
             break;
         }
         if (frame == 2 && timer == 0) {
@@ -3067,7 +3067,7 @@ void CMio::Vf6()
             if (frame >= x8) {
                 pattern = 0;
                 CPlayer::FaceOpponent();
-                Vf0();
+                StartPattern();
             }
         }
         break;
@@ -3091,7 +3091,7 @@ void CMio::Vf6()
                 pattern = 6;
             }
             m_attackResult = 0;
-            Vf0();
+            StartPattern();
             break;
         }
         if (frame == 1 && timer == 0) {
@@ -3109,7 +3109,7 @@ void CMio::Vf6()
             if (frame >= x8) {
                 pattern = 0;
                 CPlayer::FaceOpponent();
-                Vf0();
+                StartPattern();
             }
         }
         break;
@@ -3139,7 +3139,7 @@ void CMio::Vf6()
             if (frame >= x8) {
                 pattern = 0;
                 CPlayer::FaceOpponent();
-                Vf0();
+                StartPattern();
             }
         }
         break;
@@ -3169,7 +3169,7 @@ void CMio::Vf6()
             if (frame >= x8) {
                 pattern = 0;
                 CPlayer::FaceOpponent();
-                Vf0();
+                StartPattern();
             }
         }
         break;
@@ -3193,7 +3193,7 @@ void CMio::Vf6()
                 pattern = 6;
             }
             m_attackResult = 0;
-            Vf0();
+            StartPattern();
             break;
         }
         if (frame == 1 && timer == 0) {
@@ -3214,7 +3214,7 @@ void CMio::Vf6()
                     pattern = 3;
                 }
                 CPlayer::FaceOpponent();
-                Vf0();
+                StartPattern();
             }
         }
         break;
@@ -3238,7 +3238,7 @@ void CMio::Vf6()
                 pattern = 6;
             }
             m_attackResult = 0;
-            Vf0();
+            StartPattern();
             break;
         }
         if (frame == 2 && timer == 0) {
@@ -3262,7 +3262,7 @@ void CMio::Vf6()
                     pattern = 3;
                 }
                 CPlayer::FaceOpponent();
-                Vf0();
+                StartPattern();
             }
         }
         break;
@@ -3301,7 +3301,7 @@ void CMio::Vf6()
                     pattern = 3;
                 }
                 CPlayer::FaceOpponent();
-                Vf0();
+                StartPattern();
             }
         }
         break;
@@ -3318,7 +3318,7 @@ void CMio::Vf6()
                 pattern = 0x10;
             }
             m_attackResult = 0;
-            Vf0();
+            StartPattern();
             break;
         }
         if (frame == 1 && timer == 0) {
@@ -3329,7 +3329,7 @@ void CMio::Vf6()
         if (y + vy >= 0.0) {
             y = 0.0;
             pattern = 0xd;
-            Vf0();
+            StartPattern();
             break;
         }
         timer++;
@@ -3341,7 +3341,7 @@ void CMio::Vf6()
             }
             if (frame >= x8) {
                 pattern = 9;
-                Vf0();
+                StartPattern();
             }
         }
         break;
@@ -3358,7 +3358,7 @@ void CMio::Vf6()
                 pattern = 0x10;
             }
             m_attackResult = 0;
-            Vf0();
+            StartPattern();
             break;
         }
         if (frame == 1 && timer == 0) {
@@ -3369,7 +3369,7 @@ void CMio::Vf6()
         if (y + vy >= 0.0) {
             y = 0.0;
             pattern = 0xd;
-            Vf0();
+            StartPattern();
             break;
         }
         timer++;
@@ -3381,7 +3381,7 @@ void CMio::Vf6()
             }
             if (frame >= x8) {
                 pattern = 9;
-                Vf0();
+                StartPattern();
             }
         }
         break;
@@ -3398,7 +3398,7 @@ void CMio::Vf6()
                 pattern = 0x10;
             }
             m_attackResult = 0;
-            Vf0();
+            StartPattern();
             break;
         }
         if (frame == 2 && timer == 0) {
@@ -3409,7 +3409,7 @@ void CMio::Vf6()
         if (y + vy >= 0.0) {
             y = 0.0;
             pattern = 0xd;
-            Vf0();
+            StartPattern();
             break;
         }
         timer++;
@@ -3421,7 +3421,7 @@ void CMio::Vf6()
             }
             if (frame >= x8) {
                 pattern = 9;
-                Vf0();
+                StartPattern();
             }
         }
         break;
@@ -3442,8 +3442,8 @@ void CMio::Vf6()
             if ((*m_opponent)->x < 40.0) {
                 (*m_opponent)->x = 40.0;
             }
-            Vf0();
-            (*m_opponent)->Vf0();
+            StartPattern();
+            (*m_opponent)->StartPattern();
             pattern = 0xdd;
             (*m_opponent)->pattern = 0x6b;
             l50.type = 0;
@@ -3467,7 +3467,7 @@ void CMio::Vf6()
                     pattern = 3;
                 }
                 CPlayer::FaceOpponent();
-                Vf0();
+                StartPattern();
             }
         }
         break;
@@ -3480,11 +3480,11 @@ void CMio::Vf6()
         }
         if ((unk3138 > 0x258 && frame == 3 || (*m_opponent)->m_hp <= 0) && frame < 5) {
             facing = -facing;
-            (*m_opponent)->Vf0();
+            (*m_opponent)->StartPattern();
             (*m_opponent)->StopMoving();
             (*m_opponent)->pattern = 0x62;
             (*m_opponent)->y = 0.0;
-            (*m_opponent)->Vf0();
+            (*m_opponent)->StartPattern();
             timer = 0;
             frame = 5;
             ay = 0.035;
@@ -3535,13 +3535,13 @@ void CMio::Vf6()
                 l50.unk18 = facing;
                 l50.layer = 0;
                 l50.unk28 = 1;
-                Vf9(&l50);
+                SpawnObject(&l50);
             }
             if (frame == 5) {
                 frame = frame - 2;
             }
             if (frame >= x8) {
-                Vf0();
+                StartPattern();
                 pattern = 0;
             }
         }
@@ -3575,7 +3575,7 @@ void CMio::Vf6()
             y = 0.0;
             vy = 0.0;
             pattern = 0xe0;
-            Vf0();
+            StartPattern();
         }
         break;
     case 0xe0:
@@ -3594,7 +3594,7 @@ void CMio::Vf6()
                 if (m_inputY == 1) {
                     pattern = 3;
                 }
-                Vf0();
+                StartPattern();
             }
         }
         break;
@@ -3623,7 +3623,7 @@ void CMio::Vf6()
                 if (m_inputY == 1) {
                     pattern = 3;
                 }
-                Vf0();
+                StartPattern();
             }
         }
         break;
@@ -3640,7 +3640,7 @@ void CMio::Vf6()
                 pattern = 0x10;
             }
             m_attackResult = 0;
-            Vf0();
+            StartPattern();
             break;
         }
         if (frame == 1 && timer == 0) {
@@ -3651,7 +3651,7 @@ void CMio::Vf6()
         if (y + vy >= 0.0) {
             y = 0.0;
             pattern = 0xd;
-            Vf0();
+            StartPattern();
             break;
         }
         timer++;
@@ -3663,7 +3663,7 @@ void CMio::Vf6()
             }
             if (frame >= x8) {
                 pattern = 9;
-                Vf0();
+                StartPattern();
             }
         }
         break;
@@ -3687,7 +3687,7 @@ void CMio::Vf6()
                 pattern = 6;
             }
             m_attackResult = 0;
-            Vf0();
+            StartPattern();
             break;
         }
         if (frame == 4 && timer == 0) {
@@ -3705,7 +3705,7 @@ void CMio::Vf6()
             if (frame >= x8) {
                 pattern = 0;
                 CPlayer::FaceOpponent();
-                Vf0();
+                StartPattern();
             }
         }
         break;
@@ -3722,7 +3722,7 @@ void CMio::Vf6()
                 pattern = 0x10;
             }
             m_attackResult = 0;
-            Vf0();
+            StartPattern();
             break;
         }
         if (frame == 2 && timer == 0) {
@@ -3733,7 +3733,7 @@ void CMio::Vf6()
         if (y + vy >= 0.0) {
             y = 0.0;
             pattern = 0xd;
-            Vf0();
+            StartPattern();
             break;
         }
         timer++;
@@ -3745,7 +3745,7 @@ void CMio::Vf6()
             }
             if (frame >= x8) {
                 pattern = 9;
-                Vf0();
+                StartPattern();
             }
         }
         break;
@@ -3773,7 +3773,7 @@ void CMio::Vf6()
             }
             if (frame >= x8) {
                 pattern = 0;
-                Vf0();
+                StartPattern();
             }
         }
         break;
@@ -3801,7 +3801,7 @@ void CMio::Vf6()
                 pattern = 6;
             }
             m_attackResult = 0;
-            Vf0();
+            StartPattern();
             break;
         }
         timer++;
@@ -3813,7 +3813,7 @@ void CMio::Vf6()
             }
             if (frame >= x8) {
                 pattern = 0;
-                Vf0();
+                StartPattern();
             }
         }
         break;
@@ -3841,7 +3841,7 @@ void CMio::Vf6()
             }
             if (frame >= x8) {
                 pattern = 0;
-                Vf0();
+                StartPattern();
             }
         }
         break;
@@ -3869,7 +3869,7 @@ void CMio::Vf6()
             }
             if (frame >= x8) {
                 pattern = 3;
-                Vf0();
+                StartPattern();
             }
         }
         break;
@@ -3901,7 +3901,7 @@ void CMio::Vf6()
                     pattern = 3;
                 }
                 CPlayer::FaceOpponent();
-                Vf0();
+                StartPattern();
             }
         }
         break;
@@ -3929,7 +3929,7 @@ void CMio::Vf6()
             m_attackResult = 0;
             if (frame >= x8) {
                 pattern = 0;
-                Vf0();
+                StartPattern();
             }
         }
         break;
@@ -3957,7 +3957,7 @@ void CMio::Vf6()
             }
             if (frame >= x8) {
                 pattern = 0;
-                Vf0();
+                StartPattern();
             }
         }
         break;
@@ -3977,7 +3977,7 @@ void CMio::Vf6()
                 pattern = 6;
             }
             m_attackResult = 0;
-            Vf0();
+            StartPattern();
             break;
         }
         if (frame == 0 && timer == 0) {
@@ -3997,7 +3997,7 @@ void CMio::Vf6()
             }
             if (frame >= x8) {
                 pattern = 0;
-                Vf0();
+                StartPattern();
             }
         }
         break;
@@ -4025,7 +4025,7 @@ void CMio::Vf6()
             }
             if (frame >= x8) {
                 pattern = 0;
-                Vf0();
+                StartPattern();
             }
         }
         break;
@@ -4056,7 +4056,7 @@ void CMio::Vf6()
                 if (m_inputY == 1) {
                     pattern = 3;
                 }
-                Vf0();
+                StartPattern();
             }
         }
         break;
@@ -4087,7 +4087,7 @@ void CMio::Vf6()
                 if (m_inputY == 1) {
                     pattern = 3;
                 }
-                Vf0();
+                StartPattern();
             }
         }
         break;
@@ -4122,7 +4122,7 @@ void CMio::Vf6()
                     pattern = 3;
                 }
                 CPlayer::FaceOpponent();
-                Vf0();
+                StartPattern();
             }
         }
         break;
@@ -4146,7 +4146,7 @@ void CMio::Vf6()
                 pattern = 6;
             }
             m_attackResult = 0;
-            Vf0();
+            StartPattern();
             break;
         }
         if (frame == 2 && timer == 0) {
@@ -4164,7 +4164,7 @@ void CMio::Vf6()
             if (frame >= x8) {
                 pattern = 0;
                 CPlayer::FaceOpponent();
-                Vf0();
+                StartPattern();
             }
         }
         break;
@@ -4188,7 +4188,7 @@ void CMio::Vf6()
                 pattern = 6;
             }
             m_attackResult = 0;
-            Vf0();
+            StartPattern();
             break;
         }
         timer++;
@@ -4206,7 +4206,7 @@ void CMio::Vf6()
             if (frame >= x8) {
                 pattern = 3;
                 CPlayer::FaceOpponent();
-                Vf0();
+                StartPattern();
             }
         }
         break;
@@ -4214,8 +4214,8 @@ void CMio::Vf6()
         vy = vy + ay;
         if (frame == 1 && m_attackResult == 3) {
             (*m_opponent)->StopMoving();
-            (*m_opponent)->Vf0();
-            Vf0();
+            (*m_opponent)->StartPattern();
+            StartPattern();
             CPlayer::StopMoving();
             ay = 0.035;
             pattern = 0xf9;
@@ -4252,8 +4252,8 @@ void CMio::Vf6()
         vy = vy + ay;
         if (frame == 1 && m_attackResult == 3) {
             (*m_opponent)->StopMoving();
-            (*m_opponent)->Vf0();
-            Vf0();
+            (*m_opponent)->StartPattern();
+            StartPattern();
             CPlayer::StopMoving();
             ay = 0.035;
             pattern = 0xf9;
@@ -4302,7 +4302,7 @@ void CMio::Vf6()
         if (vy + y > 0.0) {
             CPlayer::StopMoving();
             y = 0.0;
-            Vf0();
+            StartPattern();
             pattern = 0xd;
             break;
         }
@@ -4338,18 +4338,18 @@ void CMio::Vf6()
             (*m_opponent)->x = facing * 0xf + x;
             CPlayer::DealDamage(0x3e8, 500.0);
             (*m_opponent)->unk124 = (int)(200.0 * m_proration * 0.0001);
-            (*m_opponent)->Vf0();
+            (*m_opponent)->StartPattern();
             l50.type = 0x1c2;
             l50.x = (double)((int)x + facing * 0x23);
             l50.y = (double)((int)y - 0x38);
             l50.scale = 0;
             l50.layer = 1;
             l50.unk18 = facing;
-            Vf9(&l50);
+            SpawnObject(&l50);
             l50.type = 0x1c3;
-            Vf9(&l50);
+            SpawnObject(&l50);
             l50.type = 0x1c4;
-            Vf9(&l50);
+            SpawnObject(&l50);
         }
         timer++;
         if (timer >= l4) {
@@ -4372,7 +4372,7 @@ void CMio::Vf6()
             vy = vy + ay;
         }
         if (y + vy > 0.0 && frame < 9) {
-            Vf0();
+            StartPattern();
             frame = 9;
         }
         if (frame == 9 && timer == 0) {
@@ -4402,7 +4402,7 @@ void CMio::Vf6()
                 frame = frame - 2;
             }
             if (frame >= x8) {
-                Vf0();
+                StartPattern();
                 CPlayer::StopMoving();
                 pattern = 0;
             }
@@ -4420,7 +4420,7 @@ void CMio::Vf6()
             vy = vy + ay;
         }
         if (y + vy > 0.0 && frame < 9) {
-            Vf0();
+            StartPattern();
             frame = 9;
         }
         if (frame == 9 && timer == 0) {
@@ -4450,7 +4450,7 @@ void CMio::Vf6()
                 frame = frame - 2;
             }
             if (frame >= x8) {
-                Vf0();
+                StartPattern();
                 CPlayer::StopMoving();
                 pattern = 0;
             }
@@ -4482,13 +4482,13 @@ void CMio::Vf6()
             l50.scale = 2;
             l50.layer = 1;
             l50.unk18 = -facing;
-            Vf9(&l50);
+            SpawnObject(&l50);
         }
         if (frame > 1 && frame < 9) {
             vy = vy + ay;
         }
         if (y + vy > 0.0 && frame < 9) {
-            Vf0();
+            StartPattern();
             frame = 9;
         }
         if (frame == 9 && timer == 0) {
@@ -4519,7 +4519,7 @@ void CMio::Vf6()
                 frame = frame - 2;
             }
             if (frame >= x8) {
-                Vf0();
+                StartPattern();
                 CPlayer::StopMoving();
                 pattern = 0;
             }
@@ -4528,7 +4528,7 @@ void CMio::Vf6()
         break;
     case 0xfd:
         if (y + vy > 0.0 && frame < 3) {
-            Vf0();
+            StartPattern();
             frame = 3;
         }
         if (frame == 3 && timer == 0) {
@@ -4551,7 +4551,7 @@ void CMio::Vf6()
             }
             if (frame >= x8) {
                 pattern = 0;
-                Vf0();
+                StartPattern();
             }
         }
         break;
@@ -4565,13 +4565,13 @@ void CMio::Vf6()
         if (m_attackResult > 1 && m_command == 0xa && frame == 6) {
             pattern = 0x100;
             m_attackResult = 0;
-            Vf0();
+            StartPattern();
             break;
         }
         if (m_command == 0xb && frame == 6) {
             pattern = 0x111;
             m_attackResult = 0;
-            Vf0();
+            StartPattern();
             break;
         }
         timer++;
@@ -4581,7 +4581,7 @@ void CMio::Vf6()
             m_attackResult = 0;
             if (frame >= x8) {
                 pattern = 0;
-                Vf0();
+                StartPattern();
                 break;
             }
         }
@@ -4612,49 +4612,49 @@ void CMio::Vf6()
             l50.scale = 2;
             l50.layer = 1;
             l50.unk18 = facing;
-            Vf9(&l50);
+            SpawnObject(&l50);
             l50.type = 0x1c1;
             l50.x = (double)((int)x + facing * 0x1e);
             l50.y = (double)((int)y - 0x50);
             l50.scale = 2;
             l50.layer = 1;
             l50.unk18 = facing;
-            Vf9(&l50);
+            SpawnObject(&l50);
             l50.type = 0x1c0;
             l50.x = (double)((int)x + facing * 0x1e);
             l50.y = (double)((int)y - 0x41);
             l50.scale = 2;
             l50.layer = 1;
             l50.unk18 = facing;
-            Vf9(&l50);
+            SpawnObject(&l50);
             l50.type = 0x1c1;
             l50.x = (double)((int)x + facing * 0x1e);
             l50.y = (double)((int)y - 0x32);
             l50.scale = 2;
             l50.layer = 1;
             l50.unk18 = facing;
-            Vf9(&l50);
+            SpawnObject(&l50);
             l50.type = 0x1c0;
             l50.x = (double)((int)x + facing * 0x1e);
             l50.y = (double)((int)y - 0x23);
             l50.scale = 2;
             l50.layer = 1;
             l50.unk18 = facing;
-            Vf9(&l50);
+            SpawnObject(&l50);
             l50.type = 0x1c1;
             l50.x = (double)((int)x + facing * 0x1e);
             l50.y = (double)((int)y - 0x14);
             l50.scale = 2;
             l50.layer = 1;
             l50.unk18 = facing;
-            Vf9(&l50);
+            SpawnObject(&l50);
             l50.type = 0x1c0;
             l50.x = (double)((int)x + facing * 0x1e);
             l50.y = (double)((int)y - 5);
             l50.scale = 2;
             l50.layer = 1;
             l50.unk18 = facing;
-            Vf9(&l50);
+            SpawnObject(&l50);
         }
         timer++;
         if (timer >= l4) {
@@ -4663,7 +4663,7 @@ void CMio::Vf6()
             m_attackResult = 0;
             if (frame >= x8) {
                 pattern = 0;
-                Vf0();
+                StartPattern();
                 break;
             }
         }
@@ -4679,7 +4679,7 @@ void CMio::Vf6()
             l50.unk18 = facing;
             l50.layer = 1;
             l50.scale = 2;
-            Vf9(&l50);
+            SpawnObject(&l50);
         }
         if (frame == 1 && timer == 0) {
             l50.type = 0x197;
@@ -4688,7 +4688,7 @@ void CMio::Vf6()
             l50.unk18 = facing;
             l50.layer = 1;
             l50.scale = 2;
-            Vf9(&l50);
+            SpawnObject(&l50);
         }
         if (frame == 2 && timer == 0) {
             l50.type = 0x197;
@@ -4697,7 +4697,7 @@ void CMio::Vf6()
             l50.unk18 = facing;
             l50.layer = 1;
             l50.scale = 2;
-            Vf9(&l50);
+            SpawnObject(&l50);
         }
         if (frame == 3 && timer == 0) {
             l50.type = 0x197;
@@ -4706,7 +4706,7 @@ void CMio::Vf6()
             l50.unk18 = facing;
             l50.layer = 1;
             l50.scale = 2;
-            Vf9(&l50);
+            SpawnObject(&l50);
         }
         timer++;
         if (timer >= l4) {
@@ -4716,7 +4716,7 @@ void CMio::Vf6()
             if (frame >= x8) {
                 pattern = 0;
                 CPlayer::FaceOpponent();
-                Vf0();
+                StartPattern();
             }
         }
         break;
@@ -4733,7 +4733,7 @@ void CMio::Vf6()
             l50.unk18 = facing;
             l50.layer = 1;
             l50.scale = 0;
-            Vf9(&l50);
+            SpawnObject(&l50);
         }
         timer++;
         if (timer >= l4) {
@@ -4743,7 +4743,7 @@ void CMio::Vf6()
             if (frame >= x8) {
                 pattern = 0;
                 CPlayer::FaceOpponent();
-                Vf0();
+                StartPattern();
             }
         }
         break;
@@ -4789,7 +4789,7 @@ void CMio::Vf6()
             }
             if (frame >= x8) {
                 pattern = 0;
-                Vf0();
+                StartPattern();
             }
         }
         break;
@@ -4835,7 +4835,7 @@ void CMio::Vf6()
             }
             if (frame >= x8) {
                 pattern = 0;
-                Vf0();
+                StartPattern();
             }
         }
         break;
@@ -4898,7 +4898,7 @@ void CMio::Vf6()
             }
             if (frame >= x8) {
                 pattern = 0;
-                Vf0();
+                StartPattern();
             }
         }
         break;
@@ -4937,7 +4937,7 @@ void CMio::Vf6()
             l50.unk18 = facing;
             l50.layer = 1;
             l50.scale = 2;
-            Vf9(&l50);
+            SpawnObject(&l50);
         }
         if ((frame == 8 || frame == 9) && vy + y > 0.0) {
             y = 0.0;
@@ -4960,11 +4960,11 @@ void CMio::Vf6()
             }
             if (frame == 0xb && y < 0.0) {
                 pattern = 9;
-                Vf0();
+                StartPattern();
             }
             if (frame >= x8) {
                 pattern = 0;
-                Vf0();
+                StartPattern();
             }
         }
         break;
@@ -5003,7 +5003,7 @@ void CMio::Vf6()
             l50.unk18 = facing;
             l50.layer = 1;
             l50.scale = 2;
-            Vf9(&l50);
+            SpawnObject(&l50);
         }
         if ((frame == 8 || frame == 9) && vy + y > 0.0) {
             y = 0.0;
@@ -5027,11 +5027,11 @@ void CMio::Vf6()
             }
             if (frame == 0xb && y < 0.0) {
                 pattern = 9;
-                Vf0();
+                StartPattern();
             }
             if (frame >= x8) {
                 pattern = 0;
-                Vf0();
+                StartPattern();
             }
         }
         break;
@@ -5097,7 +5097,7 @@ void CMio::Vf6()
             l50.unk18 = facing;
             l50.layer = 1;
             l50.scale = 2;
-            Vf9(&l50);
+            SpawnObject(&l50);
         }
         if ((frame == 8 || frame == 9) && vy + y > 0.0) {
             y = 0.0;
@@ -5121,11 +5121,11 @@ void CMio::Vf6()
             }
             if (frame == 0xb && y < 0.0) {
                 pattern = 9;
-                Vf0();
+                StartPattern();
             }
             if (frame >= x8) {
                 pattern = 0;
-                Vf0();
+                StartPattern();
             }
         }
         break;
@@ -5143,7 +5143,7 @@ void CMio::Vf6()
             l50.unk18 = facing;
             l50.layer = 1;
             l50.scale = 0;
-            Vf9(&l50);
+            SpawnObject(&l50);
         }
         timer++;
         if (timer >= l4) {
@@ -5152,7 +5152,7 @@ void CMio::Vf6()
             m_attackResult = 3;
             if (frame >= x8) {
                 pattern = 0;
-                Vf0();
+                StartPattern();
             }
         }
         break;
@@ -5170,7 +5170,7 @@ void CMio::Vf6()
             l50.unk18 = facing;
             l50.layer = 1;
             l50.scale = 0;
-            Vf9(&l50);
+            SpawnObject(&l50);
         }
         if (frame == 0xd && timer == 0) {
             unk2c8 = 4;
@@ -5181,7 +5181,7 @@ void CMio::Vf6()
             l50.unk18 = facing;
             l50.layer = 1;
             l50.scale = 0;
-            Vf9(&l50);
+            SpawnObject(&l50);
         }
         timer++;
         if (timer >= l4) {
@@ -5190,7 +5190,7 @@ void CMio::Vf6()
             m_attackResult = 3;
             if (frame >= x8) {
                 pattern = 0;
-                Vf0();
+                StartPattern();
             }
         }
         break;
@@ -5221,7 +5221,7 @@ void CMio::Vf6()
             l50.unk18 = facing;
             l50.layer = 1;
             l50.scale = 0;
-            Vf9(&l50);
+            SpawnObject(&l50);
         }
         timer++;
         if (timer >= l4) {
@@ -5230,7 +5230,7 @@ void CMio::Vf6()
             m_attackResult = 3;
             if (frame >= x8) {
                 pattern = 0;
-                Vf0();
+                StartPattern();
             }
         }
         break;
@@ -5249,7 +5249,7 @@ void CMio::Vf6()
             l50.layer = 0;
             l50.scale = 0;
             l50.unk0 = 1;
-            Vf9(&l50);
+            SpawnObject(&l50);
         }
         timer++;
         if (timer >= l4) {
@@ -5258,7 +5258,7 @@ void CMio::Vf6()
             m_attackResult = 3;
             if (frame >= x8) {
                 pattern = 0;
-                Vf0();
+                StartPattern();
             }
         }
         break;
@@ -5277,7 +5277,7 @@ void CMio::Vf6()
             l50.layer = 0;
             l50.scale = 0;
             l50.unk0 = 1;
-            Vf9(&l50);
+            SpawnObject(&l50);
         }
         timer++;
         if (timer >= l4) {
@@ -5286,7 +5286,7 @@ void CMio::Vf6()
             m_attackResult = 3;
             if (frame >= x8) {
                 pattern = 0;
-                Vf0();
+                StartPattern();
             }
         }
         break;
@@ -5305,7 +5305,7 @@ void CMio::Vf6()
             l50.layer = 0;
             l50.scale = 0;
             l50.unk0 = 1;
-            Vf9(&l50);
+            SpawnObject(&l50);
         }
         timer++;
         if (timer >= l4) {
@@ -5314,7 +5314,7 @@ void CMio::Vf6()
             m_attackResult = 3;
             if (frame >= x8) {
                 pattern = 0;
-                Vf0();
+                StartPattern();
             }
         }
         break;
@@ -5339,7 +5339,7 @@ void CMio::Vf6()
             if (frame >= x8) {
                 pattern = 0;
                 CPlayer::FaceOpponent();
-                Vf0();
+                StartPattern();
             }
         }
         break;
@@ -5353,13 +5353,13 @@ void CMio::Vf6()
         if (m_attackResult > 1 && m_command == 0xa && frame == 6) {
             pattern = 0x110;
             m_attackResult = 0;
-            Vf0();
+            StartPattern();
             break;
         }
         if (m_command == 0xb && frame == 6) {
             pattern = 0x111;
             m_attackResult = 0;
-            Vf0();
+            StartPattern();
             break;
         }
         timer++;
@@ -5369,7 +5369,7 @@ void CMio::Vf6()
             m_attackResult = 0;
             if (frame >= x8) {
                 pattern = 0;
-                Vf0();
+                StartPattern();
                 break;
             }
         }
@@ -5385,7 +5385,7 @@ void CMio::Vf6()
             l50.unk18 = facing;
             l50.layer = 1;
             l50.scale = 2;
-            Vf9(&l50);
+            SpawnObject(&l50);
         }
         if (frame == 1 && timer == 0) {
             l50.type = 0x197;
@@ -5394,7 +5394,7 @@ void CMio::Vf6()
             l50.unk18 = facing;
             l50.layer = 1;
             l50.scale = 2;
-            Vf9(&l50);
+            SpawnObject(&l50);
         }
         if (frame == 2 && timer == 0) {
             l50.type = 0x197;
@@ -5403,7 +5403,7 @@ void CMio::Vf6()
             l50.unk18 = facing;
             l50.layer = 1;
             l50.scale = 2;
-            Vf9(&l50);
+            SpawnObject(&l50);
         }
         if (frame == 3 && timer == 0) {
             l50.type = 0x197;
@@ -5412,7 +5412,7 @@ void CMio::Vf6()
             l50.unk18 = facing;
             l50.layer = 1;
             l50.scale = 2;
-            Vf9(&l50);
+            SpawnObject(&l50);
         }
         timer++;
         if (timer >= l4) {
@@ -5426,7 +5426,7 @@ void CMio::Vf6()
                 l50.unk18 = facing;
                 l50.layer = 1;
                 l50.scale = 0;
-                Vf9(&l50);
+                SpawnObject(&l50);
             }
             if (frame == 8) {
                 m_hitsLeft = 1;
@@ -5435,7 +5435,7 @@ void CMio::Vf6()
             if (frame >= x8) {
                 pattern = 0;
                 CPlayer::FaceOpponent();
-                Vf0();
+                StartPattern();
             }
         }
         break;
@@ -5449,7 +5449,7 @@ void CMio::Vf6()
             l50.unk18 = facing;
             l50.layer = 1;
             l50.scale = 2;
-            Vf9(&l50);
+            SpawnObject(&l50);
         }
         timer++;
         if (timer >= l4) {
@@ -5459,7 +5459,7 @@ void CMio::Vf6()
             if (frame >= x8) {
                 pattern = 0;
                 CPlayer::FaceOpponent();
-                Vf0();
+                StartPattern();
             }
         }
         break;
@@ -5488,7 +5488,7 @@ void CMio::Vf6()
             if (frame >= x8) {
                 pattern = 0;
                 CPlayer::FaceOpponent();
-                Vf0();
+                StartPattern();
             }
         }
         break;
@@ -5517,7 +5517,7 @@ void CMio::Vf6()
             if (frame >= x8) {
                 pattern = 0;
                 CPlayer::FaceOpponent();
-                Vf0();
+                StartPattern();
             }
         }
         break;
@@ -5553,7 +5553,7 @@ void CMio::Vf6()
                 l50.unk18 = 1;
                 l50.layer = 1;
                 l50.scale = 0;
-                Vf9(&l50);
+                SpawnObject(&l50);
                 break;
             }
             if ((WORD)CPlayer::Random(0, 0x64) < 3) {
@@ -5563,7 +5563,7 @@ void CMio::Vf6()
                 l50.unk18 = 1;
                 l50.layer = 1;
                 l50.scale = 0;
-                Vf9(&l50);
+                SpawnObject(&l50);
                 break;
             }
             if ((WORD)CPlayer::Random(0, 0x64) < 7) {
@@ -5573,7 +5573,7 @@ void CMio::Vf6()
                 l50.unk18 = 1;
                 l50.layer = 1;
                 l50.scale = 0;
-                Vf9(&l50);
+                SpawnObject(&l50);
                 break;
             }
         }
@@ -5585,7 +5585,7 @@ void CMio::Vf6()
             if (frame >= x8) {
                 pattern = 0;
                 CPlayer::FaceOpponent();
-                Vf0();
+                StartPattern();
             }
         }
         break;
@@ -5621,7 +5621,7 @@ void CMio::Vf6()
                 l50.unk18 = 1;
                 l50.layer = 1;
                 l50.scale = 0;
-                Vf9(&l50);
+                SpawnObject(&l50);
                 break;
             }
             if ((WORD)CPlayer::Random(0, 0x64) < 3) {
@@ -5631,7 +5631,7 @@ void CMio::Vf6()
                 l50.unk18 = 1;
                 l50.layer = 1;
                 l50.scale = 0;
-                Vf9(&l50);
+                SpawnObject(&l50);
                 break;
             }
             if ((WORD)CPlayer::Random(0, 0x64) < 6) {
@@ -5641,7 +5641,7 @@ void CMio::Vf6()
                 l50.unk18 = 1;
                 l50.layer = 1;
                 l50.scale = 0;
-                Vf9(&l50);
+                SpawnObject(&l50);
                 break;
             }
         }
@@ -5653,7 +5653,7 @@ void CMio::Vf6()
             if (frame >= x8) {
                 pattern = 0;
                 CPlayer::FaceOpponent();
-                Vf0();
+                StartPattern();
             }
         }
         break;
@@ -5693,7 +5693,7 @@ void CMio::Vf6()
                 l50.unk18 = 1;
                 l50.layer = 1;
                 l50.scale = 0;
-                Vf9(&l50);
+                SpawnObject(&l50);
                 break;
             }
             if ((WORD)CPlayer::Random(0, 0x64) < 4) {
@@ -5703,7 +5703,7 @@ void CMio::Vf6()
                 l50.unk18 = 1;
                 l50.layer = 1;
                 l50.scale = 0;
-                Vf9(&l50);
+                SpawnObject(&l50);
                 break;
             }
             if ((WORD)CPlayer::Random(0, 0x64) < 6) {
@@ -5713,7 +5713,7 @@ void CMio::Vf6()
                 l50.unk18 = 1;
                 l50.layer = 1;
                 l50.scale = 0;
-                Vf9(&l50);
+                SpawnObject(&l50);
                 break;
             }
         }
@@ -5725,7 +5725,7 @@ void CMio::Vf6()
             if (frame >= x8) {
                 pattern = 0;
                 CPlayer::FaceOpponent();
-                Vf0();
+                StartPattern();
             }
         }
         break;
@@ -5768,7 +5768,7 @@ void CMio::Vf6()
             l50.unk18 = facing;
             l50.layer = 1;
             l50.scale = 2;
-            Vf9(&l50);
+            SpawnObject(&l50);
         }
         if ((frame == 9 || frame == 0xa) && vy + y > 0.0) {
             y = 0.0;
@@ -5791,13 +5791,13 @@ void CMio::Vf6()
             }
             if (frame == 0xc && y < 0.0) {
                 pattern = 9;
-                Vf0();
+                StartPattern();
             }
             m_attackResult = 0;
             if (frame >= x8) {
                 pattern = 0;
                 CPlayer::FaceOpponent();
-                Vf0();
+                StartPattern();
             }
         }
         break;
@@ -5840,7 +5840,7 @@ void CMio::Vf6()
             l50.unk18 = facing;
             l50.layer = 1;
             l50.scale = 2;
-            Vf9(&l50);
+            SpawnObject(&l50);
         }
         if ((frame == 9 || frame == 0xa) && vy + y > 0.0) {
             y = 0.0;
@@ -5863,13 +5863,13 @@ void CMio::Vf6()
             }
             if (frame == 0xc && y < 0.0) {
                 pattern = 9;
-                Vf0();
+                StartPattern();
             }
             m_attackResult = 0;
             if (frame >= x8) {
                 pattern = 0;
                 CPlayer::FaceOpponent();
-                Vf0();
+                StartPattern();
             }
         }
         break;
@@ -5916,7 +5916,7 @@ void CMio::Vf6()
             l50.unk18 = facing;
             l50.layer = 1;
             l50.scale = 2;
-            Vf9(&l50);
+            SpawnObject(&l50);
         }
         if ((frame == 9 || frame == 0xa) && vy + y > 0.0) {
             y = 0.0;
@@ -5939,13 +5939,13 @@ void CMio::Vf6()
             }
             if (frame == 0xc && y < 0.0) {
                 pattern = 9;
-                Vf0();
+                StartPattern();
             }
             m_attackResult = 0;
             if (frame >= x8) {
                 pattern = 0;
                 CPlayer::FaceOpponent();
-                Vf0();
+                StartPattern();
             }
         }
         break;
@@ -5974,7 +5974,7 @@ void CMio::Vf6()
             l50.unk0 = 0;
             l50.layer = 1;
             l50.unk18 = facing;
-            Vf9(&l50);
+            SpawnObject(&l50);
             unk3140 = 21.0;
             unk2c8 = 6;
         }
@@ -5996,7 +5996,7 @@ void CMio::Vf6()
             if (frame >= x8) {
                 pattern = 0;
                 CPlayer::FaceOpponent();
-                Vf0();
+                StartPattern();
             }
         }
         break;
@@ -6025,7 +6025,7 @@ void CMio::Vf6()
             l50.unk0 = 0;
             l50.layer = 1;
             l50.unk18 = facing;
-            Vf9(&l50);
+            SpawnObject(&l50);
             unk3140 = 15.0;
             unk2c8 = 6;
         }
@@ -6044,7 +6044,7 @@ void CMio::Vf6()
             if (frame >= x8) {
                 pattern = 0;
                 CPlayer::FaceOpponent();
-                Vf0();
+                StartPattern();
             }
         }
         break;
@@ -6076,7 +6076,7 @@ void CMio::Vf6()
             l50.unk0 = 0;
             l50.layer = 1;
             l50.unk18 = facing;
-            Vf9(&l50);
+            SpawnObject(&l50);
             unk2c8 = 6;
         }
         if (m_attackResult == 3 && unk3138 == 0) {
@@ -6089,7 +6089,7 @@ void CMio::Vf6()
             l50.unk0 = 1;
             l50.layer = 1;
             l50.unk18 = facing;
-            Vf9(&l50);
+            SpawnObject(&l50);
         }
         timer++;
         if (timer >= l4) {
@@ -6099,7 +6099,7 @@ void CMio::Vf6()
             if (frame >= x8) {
                 pattern = 0;
                 CPlayer::FaceOpponent();
-                Vf0();
+                StartPattern();
             }
         }
         break;
@@ -6127,15 +6127,15 @@ void CMio::Vf6()
             l50.unk18 = facing;
             l50.layer = 1;
             l50.scale = 0;
-            Vf9(&l50);
+            SpawnObject(&l50);
             l50.x = (double)((int)x - facing * 0x14);
             l50.y = (double)((int)y - 0x2d);
             l50.layer = 0;
-            Vf9(&l50);
+            SpawnObject(&l50);
             l50.x = (double)((int)x - facing * 0x19);
             l50.y = (double)((int)y - 0x19);
             l50.layer = 0;
-            Vf9(&l50);
+            SpawnObject(&l50);
         }
         if (frame == 0x10 && timer == 0) {
             unk2c9 = 0x20;
@@ -6145,13 +6145,13 @@ void CMio::Vf6()
             l50.unk18 = facing;
             l50.layer = 1;
             l50.scale = 0;
-            Vf9(&l50);
+            SpawnObject(&l50);
             l50.x = (double)((int)x - facing * 0x14);
             l50.y = (double)((int)y - 0x2d);
-            Vf9(&l50);
+            SpawnObject(&l50);
             l50.x = (double)((int)x - facing * 0x19);
             l50.y = (double)((int)y - 0x19);
-            Vf9(&l50);
+            SpawnObject(&l50);
         }
         if (frame == 0x14 && timer == 0) {
             unk2c9 = 0x20;
@@ -6161,15 +6161,15 @@ void CMio::Vf6()
             l50.unk18 = facing;
             l50.layer = 1;
             l50.scale = 0;
-            Vf9(&l50);
+            SpawnObject(&l50);
             l50.x = (double)((int)x - facing * 0x14);
             l50.y = (double)((int)y - 0x2d);
             l50.layer = 0;
-            Vf9(&l50);
+            SpawnObject(&l50);
             l50.x = (double)((int)x - facing * 0x19);
             l50.y = (double)((int)y - 0x19);
             l50.layer = 0;
-            Vf9(&l50);
+            SpawnObject(&l50);
         }
         if (frame == 0x18 && timer == 0) {
             unk2c9 = 0x20;
@@ -6179,13 +6179,13 @@ void CMio::Vf6()
             l50.unk18 = facing;
             l50.layer = 1;
             l50.scale = 0;
-            Vf9(&l50);
+            SpawnObject(&l50);
             l50.x = (double)((int)x - facing * 0x14);
             l50.y = (double)((int)y - 0x2d);
-            Vf9(&l50);
+            SpawnObject(&l50);
             l50.x = (double)((int)x - facing * 0x19);
             l50.y = (double)((int)y - 0x19);
-            Vf9(&l50);
+            SpawnObject(&l50);
         }
         timer++;
         if (timer >= l4) {
@@ -6201,7 +6201,7 @@ void CMio::Vf6()
             if (frame >= x8) {
                 pattern = 0;
                 CPlayer::FaceOpponent();
-                Vf0();
+                StartPattern();
             }
         }
         break;
@@ -6229,15 +6229,15 @@ void CMio::Vf6()
             l50.unk18 = facing;
             l50.layer = 1;
             l50.scale = 0;
-            Vf9(&l50);
+            SpawnObject(&l50);
             l50.x = (double)((int)x - facing * 0x14);
             l50.y = (double)((int)y - 0x2d);
             l50.layer = 0;
-            Vf9(&l50);
+            SpawnObject(&l50);
             l50.x = (double)((int)x - facing * 0x19);
             l50.y = (double)((int)y - 0x19);
             l50.layer = 0;
-            Vf9(&l50);
+            SpawnObject(&l50);
         }
         if (frame == 0x10 && timer == 0) {
             unk2c9 = 0x20;
@@ -6247,13 +6247,13 @@ void CMio::Vf6()
             l50.unk18 = facing;
             l50.layer = 1;
             l50.scale = 0;
-            Vf9(&l50);
+            SpawnObject(&l50);
             l50.x = (double)((int)x - facing * 0x14);
             l50.y = (double)((int)y - 0x2d);
-            Vf9(&l50);
+            SpawnObject(&l50);
             l50.x = (double)((int)x - facing * 0x19);
             l50.y = (double)((int)y - 0x19);
-            Vf9(&l50);
+            SpawnObject(&l50);
         }
         if (frame == 0x14 && timer == 0) {
             unk2c9 = 0x20;
@@ -6263,15 +6263,15 @@ void CMio::Vf6()
             l50.unk18 = facing;
             l50.layer = 1;
             l50.scale = 0;
-            Vf9(&l50);
+            SpawnObject(&l50);
             l50.x = (double)((int)x - facing * 0x14);
             l50.y = (double)((int)y - 0x2d);
             l50.layer = 0;
-            Vf9(&l50);
+            SpawnObject(&l50);
             l50.x = (double)((int)x - facing * 0x19);
             l50.y = (double)((int)y - 0x19);
             l50.layer = 0;
-            Vf9(&l50);
+            SpawnObject(&l50);
         }
         if (frame == 0x18 && timer == 0) {
             unk2c9 = 0x20;
@@ -6281,13 +6281,13 @@ void CMio::Vf6()
             l50.unk18 = facing;
             l50.layer = 1;
             l50.scale = 0;
-            Vf9(&l50);
+            SpawnObject(&l50);
             l50.x = (double)((int)x - facing * 0x14);
             l50.y = (double)((int)y - 0x2d);
-            Vf9(&l50);
+            SpawnObject(&l50);
             l50.x = (double)((int)x - facing * 0x19);
             l50.y = (double)((int)y - 0x19);
-            Vf9(&l50);
+            SpawnObject(&l50);
         }
         timer++;
         if (timer >= l4) {
@@ -6303,7 +6303,7 @@ void CMio::Vf6()
             if (frame >= x8) {
                 pattern = 0;
                 CPlayer::FaceOpponent();
-                Vf0();
+                StartPattern();
             }
         }
         break;
@@ -6333,15 +6333,15 @@ void CMio::Vf6()
             l50.unk18 = facing;
             l50.layer = 1;
             l50.scale = 0;
-            Vf9(&l50);
+            SpawnObject(&l50);
             l50.x = (double)((int)x - facing * 0x14);
             l50.y = (double)((int)y - 0x2d);
             l50.layer = 0;
-            Vf9(&l50);
+            SpawnObject(&l50);
             l50.x = (double)((int)x - facing * 0x19);
             l50.y = (double)((int)y - 0x19);
             l50.layer = 0;
-            Vf9(&l50);
+            SpawnObject(&l50);
         }
         if (frame == 0x10 && timer == 0) {
             unk2c9 = 0x20;
@@ -6351,13 +6351,13 @@ void CMio::Vf6()
             l50.unk18 = facing;
             l50.layer = 1;
             l50.scale = 0;
-            Vf9(&l50);
+            SpawnObject(&l50);
             l50.x = (double)((int)x - facing * 0x14);
             l50.y = (double)((int)y - 0x2d);
-            Vf9(&l50);
+            SpawnObject(&l50);
             l50.x = (double)((int)x - facing * 0x19);
             l50.y = (double)((int)y - 0x19);
-            Vf9(&l50);
+            SpawnObject(&l50);
         }
         if (frame == 0x14 && timer == 0) {
             unk2c9 = 0x20;
@@ -6367,15 +6367,15 @@ void CMio::Vf6()
             l50.unk18 = facing;
             l50.layer = 1;
             l50.scale = 0;
-            Vf9(&l50);
+            SpawnObject(&l50);
             l50.x = (double)((int)x - facing * 0x14);
             l50.y = (double)((int)y - 0x2d);
             l50.layer = 0;
-            Vf9(&l50);
+            SpawnObject(&l50);
             l50.x = (double)((int)x - facing * 0x19);
             l50.y = (double)((int)y - 0x19);
             l50.layer = 0;
-            Vf9(&l50);
+            SpawnObject(&l50);
         }
         if (frame == 0x18 && timer == 0) {
             unk2c9 = 0x20;
@@ -6385,13 +6385,13 @@ void CMio::Vf6()
             l50.unk18 = facing;
             l50.layer = 1;
             l50.scale = 0;
-            Vf9(&l50);
+            SpawnObject(&l50);
             l50.x = (double)((int)x - facing * 0x14);
             l50.y = (double)((int)y - 0x2d);
-            Vf9(&l50);
+            SpawnObject(&l50);
             l50.x = (double)((int)x - facing * 0x19);
             l50.y = (double)((int)y - 0x19);
-            Vf9(&l50);
+            SpawnObject(&l50);
         }
         timer++;
         if (timer >= l4) {
@@ -6407,7 +6407,7 @@ void CMio::Vf6()
             if (frame >= x8) {
                 pattern = 0;
                 CPlayer::FaceOpponent();
-                Vf0();
+                StartPattern();
             }
         }
         break;
@@ -6454,7 +6454,7 @@ void CMio::Vf6()
             }
         }
         if (m_hitsLeft == 0 && frame < 0xd && m_pressA == 1) {
-            Vf0();
+            StartPattern();
             pattern = 0x13c;
             CPlayer::StopMoving();
             break;
@@ -6476,7 +6476,7 @@ void CMio::Vf6()
             if (frame >= x8) {
                 pattern = 0x60;
                 CPlayer::FaceOpponent();
-                Vf0();
+                StartPattern();
             }
         }
         break;
@@ -6489,7 +6489,7 @@ void CMio::Vf6()
             unk2c9 = 0x14;
         }
         if (m_attackResult == 3 && frame > 1 && frame < 4 && m_pressB == 1) {
-            Vf0();
+            StartPattern();
             pattern = 0x13d;
             CPlayer::StopMoving();
             break;
@@ -6504,7 +6504,7 @@ void CMio::Vf6()
             if (frame >= x8) {
                 pattern = 0;
                 CPlayer::FaceOpponent();
-                Vf0();
+                StartPattern();
             }
         }
         break;
@@ -6517,7 +6517,7 @@ void CMio::Vf6()
             unk2c9 = 0x14;
         }
         if (m_attackResult == 3 && frame > 2 && frame < 5 && m_pressC == 1) {
-            Vf0();
+            StartPattern();
             pattern = 0x13e;
             CPlayer::StopMoving();
             break;
@@ -6532,7 +6532,7 @@ void CMio::Vf6()
             if (frame >= x8) {
                 pattern = 0;
                 CPlayer::FaceOpponent();
-                Vf0();
+                StartPattern();
             }
         }
         break;
@@ -6545,7 +6545,7 @@ void CMio::Vf6()
             unk2c9 = 0x15;
         }
         if (m_attackResult == 3 && frame > 5 && frame < 7 && m_pressA == 1) {
-            Vf0();
+            StartPattern();
             pattern = 0x13f;
             CPlayer::StopMoving();
             break;
@@ -6560,7 +6560,7 @@ void CMio::Vf6()
             if (frame >= x8) {
                 pattern = 0;
                 CPlayer::FaceOpponent();
-                Vf0();
+                StartPattern();
             }
         }
         break;
@@ -6573,7 +6573,7 @@ void CMio::Vf6()
             unk2c9 = 0x14;
         }
         if (m_attackResult == 3 && frame > 0 && frame < 4 && m_pressB == 1) {
-            Vf0();
+            StartPattern();
             pattern = 0x140;
             CPlayer::StopMoving();
             break;
@@ -6588,7 +6588,7 @@ void CMio::Vf6()
             if (frame >= x8) {
                 pattern = 0;
                 CPlayer::FaceOpponent();
-                Vf0();
+                StartPattern();
             }
         }
         break;
@@ -6601,7 +6601,7 @@ void CMio::Vf6()
             unk2c9 = 0x14;
         }
         if (m_attackResult == 3 && frame > 1 && frame < 4 && m_pressC == 1) {
-            Vf0();
+            StartPattern();
             pattern = 0x141;
             CPlayer::StopMoving();
             break;
@@ -6616,7 +6616,7 @@ void CMio::Vf6()
             if (frame >= x8) {
                 pattern = 0;
                 CPlayer::FaceOpponent();
-                Vf0();
+                StartPattern();
             }
         }
         break;
@@ -6629,7 +6629,7 @@ void CMio::Vf6()
             unk2c9 = 0x14;
         }
         if (m_hitsLeft == 0 && frame > 2 && frame < 5 && m_pressD == 1) {
-            Vf0();
+            StartPattern();
             pattern = 0x142;
             CPlayer::StopMoving();
             break;
@@ -6646,7 +6646,7 @@ void CMio::Vf6()
             if (frame >= x8) {
                 pattern = 0;
                 CPlayer::FaceOpponent();
-                Vf0();
+                StartPattern();
             }
         }
         break;
@@ -6662,13 +6662,13 @@ void CMio::Vf6()
             unk2c9 = 0x14;
         }
         if (m_attackResult == 3 && frame > 2 && frame < 5 && m_command == 0x16) {
-            Vf0();
+            StartPattern();
             pattern = 0x143;
             CPlayer::StopMoving();
             break;
         }
         if (m_attackResult == 3 && frame > 2 && frame < 5 && m_command == 0xc) {
-            Vf0();
+            StartPattern();
             pattern = 0x144;
             CPlayer::StopMoving();
             break;
@@ -6683,7 +6683,7 @@ void CMio::Vf6()
             if (frame >= x8) {
                 pattern = 0;
                 CPlayer::FaceOpponent();
-                Vf0();
+                StartPattern();
             }
         }
         break;
@@ -6732,7 +6732,7 @@ void CMio::Vf6()
             if (frame >= x8) {
                 pattern = 0;
                 CPlayer::FaceOpponent();
-                Vf0();
+                StartPattern();
             }
         }
         break;
@@ -6764,7 +6764,7 @@ void CMio::Vf6()
                 l50.unk18 = facing;
                 l50.layer = 1;
                 l50.scale = 2;
-                Vf9(&l50);
+                SpawnObject(&l50);
             }
             if (frame == 6) {
                 unk3138++;
@@ -6776,7 +6776,7 @@ void CMio::Vf6()
             if (frame >= x8) {
                 pattern = 0;
                 CPlayer::FaceOpponent();
-                Vf0();
+                StartPattern();
             }
         }
         break;
@@ -6802,10 +6802,10 @@ void CMio::Vf6()
         }
         m_game->Unk4080c0(0xf);
         if (m_attackResult == 3 && frame == 3) {
-            Vf0();
+            StartPattern();
             CPlayer::StopMoving();
             pattern = 0x14b;
-            (*m_opponent)->Vf0();
+            (*m_opponent)->StartPattern();
             (*m_opponent)->StopMoving();
             (*m_opponent)->pattern = 0x79;
             (*m_opponent)->y = 0.0;
@@ -6825,7 +6825,7 @@ void CMio::Vf6()
             if (frame >= x8) {
                 pattern = 0;
                 CPlayer::FaceOpponent();
-                Vf0();
+                StartPattern();
             }
         }
         break;
@@ -6844,7 +6844,7 @@ void CMio::Vf6()
         m_game->Unk4080c0(0xf);
         if (unk3140 == 1.0 && (*m_opponent)->pattern != 0x47) {
             CPlayer::DealDamage(0x1388, 800.0);
-            (*m_opponent)->Vf0();
+            (*m_opponent)->StartPattern();
             (*m_opponent)->StopMoving();
             (*m_opponent)->pattern = 0x47;
             (*m_opponent)->unkc8 = -15.0;
@@ -6868,11 +6868,11 @@ void CMio::Vf6()
                 l50.layer = 1;
                 l50.scale = 0;
                 l50.unk28 = 1;
-                Vf9(&l50);
+                SpawnObject(&l50);
                 l50.type = 0x1b9;
                 l50.layer = 0;
                 l50.scale = 2;
-                Vf9(&l50);
+                SpawnObject(&l50);
                 l50.type = 0x1b2;
                 l50.x = (double)((int)(*m_opponent)->x - facing * 0x1e);
                 l50.y = 0.0;
@@ -6880,11 +6880,11 @@ void CMio::Vf6()
                 l50.layer = 1;
                 l50.scale = 0;
                 l50.unk28 = 1;
-                Vf9(&l50);
+                SpawnObject(&l50);
                 l50.type = 0x1b9;
                 l50.layer = 0;
                 l50.scale = 2;
-                Vf9(&l50);
+                SpawnObject(&l50);
                 (*m_opponent)->pattern = 0x63;
                 unk2c8 = 9;
             }
@@ -6896,12 +6896,12 @@ void CMio::Vf6()
                 l50.layer = 1;
                 l50.scale = 0;
                 l50.unk28 = 1;
-                Vf9(&l50);
+                SpawnObject(&l50);
                 l50.type = 0x1b9;
                 l50.layer = 0;
                 l50.y = 0.0;
                 l50.scale = 2;
-                Vf9(&l50);
+                SpawnObject(&l50);
                 l50.type = 0x1b3;
                 l50.x = (double)((int)(*m_opponent)->x - facing * 0x1e);
                 l50.y = 0.0;
@@ -6909,11 +6909,11 @@ void CMio::Vf6()
                 l50.layer = 1;
                 l50.scale = 0;
                 l50.unk28 = 1;
-                Vf9(&l50);
+                SpawnObject(&l50);
                 l50.type = 0x1b9;
                 l50.layer = 0;
                 l50.scale = 2;
-                Vf9(&l50);
+                SpawnObject(&l50);
                 (*m_opponent)->pattern = 0x63;
                 unk2c8 = 9;
             }
@@ -6925,11 +6925,11 @@ void CMio::Vf6()
                 l50.layer = 1;
                 l50.scale = 0;
                 l50.unk28 = 1;
-                Vf9(&l50);
+                SpawnObject(&l50);
                 l50.type = 0x1b9;
                 l50.layer = 0;
                 l50.scale = 2;
-                Vf9(&l50);
+                SpawnObject(&l50);
                 l50.type = 0x1b4;
                 l50.x = (double)(int)(*m_opponent)->x;
                 l50.y = 0.0;
@@ -6937,16 +6937,16 @@ void CMio::Vf6()
                 l50.layer = 1;
                 l50.scale = 0;
                 l50.unk28 = 1;
-                Vf9(&l50);
+                SpawnObject(&l50);
                 l50.type = 0x1b9;
                 l50.layer = 0;
                 l50.scale = 2;
-                Vf9(&l50);
+                SpawnObject(&l50);
                 l50.type = 0x1b9;
                 l50.layer = 0;
                 l50.x = (double)((int)(*m_opponent)->x - facing * 0x3c);
                 l50.scale = 2;
-                Vf9(&l50);
+                SpawnObject(&l50);
                 (*m_opponent)->pattern = 0x63;
                 unk2c8 = 9;
             }
@@ -6958,11 +6958,11 @@ void CMio::Vf6()
                 l50.layer = 1;
                 l50.scale = 0;
                 l50.unk28 = 1;
-                Vf9(&l50);
+                SpawnObject(&l50);
                 l50.type = 0x1b9;
                 l50.layer = 0;
                 l50.scale = 2;
-                Vf9(&l50);
+                SpawnObject(&l50);
                 l50.type = 0x1b5;
                 l50.x = (double)((int)(*m_opponent)->x - facing * 0x1e);
                 l50.y = 0.0;
@@ -6970,11 +6970,11 @@ void CMio::Vf6()
                 l50.layer = 1;
                 l50.scale = 0;
                 l50.unk28 = 1;
-                Vf9(&l50);
+                SpawnObject(&l50);
                 l50.type = 0x1b9;
                 l50.layer = 0;
                 l50.scale = 2;
-                Vf9(&l50);
+                SpawnObject(&l50);
                 (*m_opponent)->pattern = 0x63;
                 unk2c8 = 9;
             }
@@ -6986,11 +6986,11 @@ void CMio::Vf6()
                 l50.layer = 1;
                 l50.scale = 0;
                 l50.unk28 = 1;
-                Vf9(&l50);
+                SpawnObject(&l50);
                 l50.type = 0x1b9;
                 l50.layer = 0;
                 l50.scale = 2;
-                Vf9(&l50);
+                SpawnObject(&l50);
                 l50.type = 0x1b6;
                 l50.x = (double)((int)(*m_opponent)->x + facing * 0xf);
                 l50.y = 0.0;
@@ -6998,15 +6998,15 @@ void CMio::Vf6()
                 l50.layer = 1;
                 l50.scale = 0;
                 l50.unk28 = 1;
-                Vf9(&l50);
+                SpawnObject(&l50);
                 l50.type = 0x1b9;
                 l50.layer = 0;
                 l50.scale = 2;
-                Vf9(&l50);
+                SpawnObject(&l50);
                 l50.type = 0x1b9;
                 l50.layer = 0;
                 l50.x = (double)((int)(*m_opponent)->x - facing * 0x41);
-                Vf9(&l50);
+                SpawnObject(&l50);
                 (*m_opponent)->pattern = 0x63;
                 unk2c8 = 9;
             }
@@ -7018,7 +7018,7 @@ void CMio::Vf6()
                 l50.layer = 1;
                 l50.scale = 0;
                 l50.unk28 = 1;
-                Vf9(&l50);
+                SpawnObject(&l50);
                 l50.type = 0x1b7;
                 l50.x = (double)((int)(*m_opponent)->x - facing * 0x3c);
                 l50.y = 0.0;
@@ -7026,7 +7026,7 @@ void CMio::Vf6()
                 l50.layer = 1;
                 l50.scale = 0;
                 l50.unk28 = 1;
-                Vf9(&l50);
+                SpawnObject(&l50);
                 (*m_opponent)->pattern = 0x63;
                 unk2c8 = 9;
             }
@@ -7034,7 +7034,7 @@ void CMio::Vf6()
             if (frame >= x8) {
                 pattern = 0x47;
                 CPlayer::FaceOpponent();
-                Vf0();
+                StartPattern();
                 CPlayer::StopMoving();
                 unkc8 = -3.0;
                 unkc0 = 0.0;
