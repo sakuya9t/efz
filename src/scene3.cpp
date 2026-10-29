@@ -219,10 +219,10 @@ void CScene3::Draw()
     }
     Unk760060();
     if (m_players[0]->m_shownHits > 1 && m_players[0]->m_comboTimer > 0) {
-        Unk7623b0((int)m_players[0]);
+        Unk7623b0(m_players[0]);
     }
     if (m_players[1]->m_shownHits > 1 && m_players[1]->m_comboTimer > 0) {
-        Unk7623b0((int)m_players[1]);
+        Unk7623b0(m_players[1]);
     }
     if (unk58c != 0) {
         if (unk590 % 2 == 0) {
@@ -806,9 +806,9 @@ void CScene3::Unk766b50()
     n18 = m_players[1]->vx;
     m_players[0]->unkb0 = 0.0;
     m_players[1]->unkb0 = 0.0;
-    v38 = this->Unk767600((int)(ObjBase*)m_players[0], (int)m_players[0]->m_patterns[m_players[0]->pattern].frames + m_players[0]->frame * 0xc8 + 0x90);
-    v28 = this->Unk767600((int)(ObjBase*)m_players[1], (int)m_players[1]->m_patterns[m_players[1]->pattern].frames + m_players[1]->frame * 0xc8 + 0x90);
-    if (Unk767930((int)&v38, (int)&v28) != 0) {
+    v38 = this->Unk767600((ObjBase*)m_players[0], &m_players[0]->m_patterns[m_players[0]->pattern].frames[m_players[0]->frame].box90);
+    v28 = this->Unk767600((ObjBase*)m_players[1], &m_players[1]->m_patterns[m_players[1]->pattern].frames[m_players[1]->frame].box90);
+    if (Unk767930(&v38, &v28) != 0) {
         if (v38.left + v38.right - (v28.left + v28.right) > 0) {
             x3c = v28.right - v38.left;
             (int)(m_players[0]->x <= 160.0);
@@ -884,56 +884,56 @@ void CScene3::Unk766b50()
     }
 }
 
-RECT CScene3::Unk767600(int p1, int p2)
+RECT CScene3::Unk767600(ObjBase* p1, RECT* p2)
 {
     short v18;
     RECT v14;
     short l4;
 
-    l4 = *(short*)(*(char**)(*(char**)((char*)p1 + 8) + *(WORD*)(char*)p1 * 8 + 4) + *(WORD*)((char*)p1 + 2) * 0xc + 4);
-    v18 = *(short*)(*(char**)(*(char**)((char*)p1 + 8) + *(WORD*)(char*)p1 * 8 + 4) + *(WORD*)((char*)p1 + 2) * 0xc + 6);
-    if (*((char*)p1 + 0x48) == 1) {
-        v14.top = (int)(*(double*)((char*)p1 + 0x20) - v18 + *(int*)((char*)p2 + 4));
-        v14.bottom = (int)(*(double*)((char*)p1 + 0x20) - v18 + *(int*)((char*)p2 + 0xc));
-        v14.left = (int)(*(double*)((char*)p1 + 0x18) - 0.5 - l4 + *(int*)(char*)p2);
-        v14.right = (int)(*(double*)((char*)p1 + 0x18) - 0.5 - l4 + *(int*)((char*)p2 + 8));
+    l4 = p1->anims[p1->pattern].frames[p1->frame].x;
+    v18 = p1->anims[p1->pattern].frames[p1->frame].y;
+    if (p1->facing == 1) {
+        v14.top = (int)(p1->y - v18 + p2->top);
+        v14.bottom = (int)(p1->y - v18 + p2->bottom);
+        v14.left = (int)(p1->x - 0.5 - l4 + p2->left);
+        v14.right = (int)(p1->x - 0.5 - l4 + p2->right);
     } else {
-        v14.top = (int)(*(double*)((char*)p1 + 0x20) - v18 + *(int*)((char*)p2 + 4));
-        v14.bottom = (int)(*(double*)((char*)p1 + 0x20) - v18 + *(int*)((char*)p2 + 0xc));
-        v14.left = (int)(*(double*)((char*)p1 + 0x18) + 0.5 + l4 - *(int*)((char*)p2 + 8));
-        v14.right = (int)(*(double*)((char*)p1 + 0x18) + 0.5 + l4 - *(int*)(char*)p2);
+        v14.top = (int)(p1->y - v18 + p2->top);
+        v14.bottom = (int)(p1->y - v18 + p2->bottom);
+        v14.left = (int)(p1->x + 0.5 + l4 - p2->right);
+        v14.right = (int)(p1->x + 0.5 + l4 - p2->left);
     }
     return v14;
 }
 
-RECT CScene3::Unk7677a0(int p1, int p2)
+RECT CScene3::Unk7677a0(CollisionInfo* p1, RECT* p2)
 {
     short v18;
     RECT v14;
     short l4;
 
-    l4 = *(short*)((char*)p1 + 0xcc);
-    v18 = *(short*)((char*)p1 + 0xce);
-    if (*((char*)p1 + 0xe8) == 1) {
-        v14.top = (int)(*(double*)((char*)p1 + 0xe0) - v18 + *(int*)((char*)p2 + 4));
-        v14.bottom = (int)(*(double*)((char*)p1 + 0xe0) - v18 + *(int*)((char*)p2 + 0xc));
-        v14.left = (int)(*(double*)((char*)p1 + 0xd8) - 0.5 - l4 + *(int*)(char*)p2);
-        v14.right = (int)(*(double*)((char*)p1 + 0xd8) - 0.5 - l4 + *(int*)((char*)p2 + 8));
+    l4 = p1->anim.x;
+    v18 = p1->anim.y;
+    if (p1->facing == 1) {
+        v14.top = (int)(p1->y - v18 + p2->top);
+        v14.bottom = (int)(p1->y - v18 + p2->bottom);
+        v14.left = (int)(p1->x - 0.5 - l4 + p2->left);
+        v14.right = (int)(p1->x - 0.5 - l4 + p2->right);
     } else {
-        v14.top = (int)(*(double*)((char*)p1 + 0xe0) - v18 + *(int*)((char*)p2 + 4));
-        v14.bottom = (int)(*(double*)((char*)p1 + 0xe0) - v18 + *(int*)((char*)p2 + 0xc));
-        v14.left = (int)(*(double*)((char*)p1 + 0xd8) + 0.5 + l4 - *(int*)((char*)p2 + 8));
-        v14.right = (int)(*(double*)((char*)p1 + 0xd8) + 0.5 + l4 - *(int*)(char*)p2);
+        v14.top = (int)(p1->y - v18 + p2->top);
+        v14.bottom = (int)(p1->y - v18 + p2->bottom);
+        v14.left = (int)(p1->x + 0.5 + l4 - p2->right);
+        v14.right = (int)(p1->x + 0.5 + l4 - p2->left);
     }
     return v14;
 }
 
-int CScene3::Unk767930(int p1, int p2)
+int CScene3::Unk767930(RECT* p1, RECT* p2)
 {
-    if (*(int*)((char*)p1 + 8) <= *(int*)(char*)p1 || *(int*)((char*)p1 + 4) >= *(int*)((char*)p1 + 0xc) || *(int*)((char*)p2 + 8) <= *(int*)(char*)p2 || *(int*)((char*)p2 + 4) >= *(int*)((char*)p2 + 0xc)) {
+    if (p1->right <= p1->left || p1->top >= p1->bottom || p2->right <= p2->left || p2->top >= p2->bottom) {
         return 0;
     }
-    return ~(*(int*)((char*)p2 + 8) - *(int*)(char*)p1 | *(int*)((char*)p1 + 8) - *(int*)(char*)p2 | *(int*)((char*)p2 + 0xc) - *(int*)((char*)p1 + 4) | *(int*)((char*)p1 + 0xc) - *(int*)((char*)p2 + 4)) >> 0x1f;
+    return ~(p2->right - p1->left | p1->right - p2->left | p2->bottom - p1->top | p1->bottom - p2->top) >> 0x1f;
 }
 
 int CScene3::Unk7679b0(CPlayer* p1, CPlayer* p2, CollisionInfo* p3, CollisionInfo* p4)
@@ -954,26 +954,26 @@ int CScene3::Unk7679b0(CPlayer* p1, CPlayer* p2, CollisionInfo* p3, CollisionInf
     v108 = p4->frame;
     v28c = 0;
     for (; v28c < 4; v28c++) {
-        x40[v28c] = this->Unk7677a0((int)p3, (int)&b1d0.attackBoxes[v28c]);
+        x40[v28c] = this->Unk7677a0(p3, &b1d0.attackBoxes[v28c]);
     }
     v28c = 0;
     for (; v28c < 5; v28c++) {
-        l220[v28c] = this->Unk7677a0((int)p4, (int)&v108.boxes[v28c]);
+        l220[v28c] = this->Unk7677a0(p4, &v108.boxes[v28c]);
     }
-    b29c = this->Unk7677a0((int)p4, (int)&v108.box90);
+    b29c = this->Unk7677a0(p4, &v108.box90);
     if (p1->m_attackResult == 0 && (v108.flagsB0 & 0x20) == 0 && p1->m_hitsLeft > 0 && (p2->unk130 <= 0 || (b1d0.flagsAA & 0x40) <= 0) && p2->Unk4102e0() == 0 && p2->unk13c == 0) {
         if ((b1d0.flagsAA & 0x40) > 0) {
             v28c = 0;
             for (; v28c < 4; v28c++) {
                 v270[v28c][0] = 1;
-                v274 = Unk767930((int)&x40[v28c], (int)&b29c) | v274;
+                v274 = Unk767930(&x40[v28c], &b29c) | v274;
             }
         } else {
             v28c = 0;
             for (; v28c < 4; v28c++) {
                 v278 = 0;
                 for (; v278 < 5; v278++) {
-                    v270[v28c][v278] = Unk767930((int)&x40[v28c], (int)&l220[v278]);
+                    v270[v28c][v278] = Unk767930(&x40[v28c], &l220[v278]);
                     v274 |= v270[v28c][v278];
                 }
             }
@@ -1012,7 +1012,7 @@ int CScene3::Unk7679b0(CPlayer* p1, CPlayer* p2, CollisionInfo* p3, CollisionInf
                     }
                 }
             }
-            if (p2->unk170 != 0 && p2->unk14e >= 0x1e && p2->unk13a == 0 && p2->Unk4100f0((int)&b1d0) != 0 && (b1d0.flagsAA & 0x80) == 0) {
+            if (p2->unk170 != 0 && p2->unk14e >= 0x1e && p2->unk13a == 0 && p2->Unk4100f0(&b1d0) != 0 && (b1d0.flagsAA & 0x80) == 0) {
                 return 1;
             }
         }
@@ -1039,26 +1039,26 @@ void CScene3::Unk767f60(CPlayer* p1, CPlayer* p2, CollisionInfo* p3, CollisionIn
     EffectDesc k2c0;
     v2d4 = 0;
     for (; v2d4 < 4; v2d4++) {
-        x40[v2d4] = this->Unk7677a0((int)p3, (int)&b1d0.attackBoxes[v2d4]);
+        x40[v2d4] = this->Unk7677a0(p3, &b1d0.attackBoxes[v2d4]);
     }
     v2d4 = 0;
     for (; v2d4 < 5; v2d4++) {
-        l220[v2d4] = this->Unk7677a0((int)p4, (int)&v108.boxes[v2d4]);
+        l220[v2d4] = this->Unk7677a0(p4, &v108.boxes[v2d4]);
     }
-    v2e4 = this->Unk7677a0((int)p4, (int)&v108.box90);
+    v2e4 = this->Unk7677a0(p4, &v108.box90);
     if (p3->unke9 == 0 && (v108.flagsB0 & 0x20) == 0 && p3->unkea > 0 && (p2->unk130 <= 0 || (b1d0.flagsAA & 0x40) <= 0) && p2->Unk4102e0() == 0 && p2->unk13c == 0) {
         if ((b1d0.flagsAA & 0x40) > 0) {
             v2d4 = 0;
             for (; v2d4 < 4; v2d4++) {
                 v270[v2d4][0] = 1;
-                v274 = Unk767930((int)&x40[v2d4], (int)&v2e4) | v274;
+                v274 = Unk767930(&x40[v2d4], &v2e4) | v274;
             }
         } else {
             v2d4 = 0;
             for (; v2d4 < 4; v2d4++) {
                 v278 = 0;
                 for (; v278 < 5; v278++) {
-                    v270[v2d4][v278] = Unk767930((int)&x40[v2d4], (int)&l220[v278]);
+                    v270[v2d4][v278] = Unk767930(&x40[v2d4], &l220[v278]);
                     v274 |= v270[v2d4][v278];
                 }
             }
@@ -1111,7 +1111,7 @@ void CScene3::Unk767f60(CPlayer* p1, CPlayer* p2, CollisionInfo* p3, CollisionIn
                 p2->m_attackResult = 6;
                 return;
             }
-            if (p2->unk170 != 0 && p2->unk14e >= 0x1e && p2->unk13a == 0 && p2->Unk4100f0((int)&b1d0) != 0 && (b1d0.flagsAA & 0x80) == 0) {
+            if (p2->unk170 != 0 && p2->unk14e >= 0x1e && p2->unk13a == 0 && p2->Unk4100f0(&b1d0) != 0 && (b1d0.flagsAA & 0x80) == 0) {
                 p1->m_attackResult = 2;
                 p1->m_gauge += b1d0.unkb6;
                 p1->m_hitsLeft--;
@@ -1140,7 +1140,7 @@ void CScene3::Unk767f60(CPlayer* p1, CPlayer* p2, CollisionInfo* p3, CollisionIn
                 p1->unk170 = 1;
                 return;
             }
-            if (p2->unk14e >= 0x1e && p2->y < 0.0 && p2->Unk410050((int)&b1d0, (int)&v108) != 0) {
+            if (p2->unk14e >= 0x1e && p2->y < 0.0 && p2->Unk410050(&b1d0, &v108) != 0) {
                 p1->m_attackResult = 2;
                 p1->m_gauge += b1d0.unkb6;
                 p1->m_hitsLeft--;
@@ -1164,7 +1164,7 @@ void CScene3::Unk767f60(CPlayer* p1, CPlayer* p2, CollisionInfo* p3, CollisionIn
                 p1->unk170 = 1;
                 return;
             }
-            if (p2->Unk410050((int)&b1d0, (int)&v108) != 0 && p2->unk14e >= 0x1e && p2->y == 0.0 && p2->pattern != 0xa8 && p2->pattern != 0xa9) {
+            if (p2->Unk410050(&b1d0, &v108) != 0 && p2->unk14e >= 0x1e && p2->y == 0.0 && p2->pattern != 0xa8 && p2->pattern != 0xa9) {
                 p1->m_attackResult = 2;
                 p1->m_gauge += b1d0.unkb6;
                 p1->m_hitsLeft--;
@@ -1259,7 +1259,7 @@ void CScene3::Unk767f60(CPlayer* p1, CPlayer* p2, CollisionInfo* p3, CollisionIn
                 }
                 return;
             }
-            if (p2->Unk410050((int)&b1d0, (int)&v108) != 0) {
+            if (p2->Unk410050(&b1d0, &v108) != 0) {
                 p1->m_attackResult = 2;
                 p1->m_gauge += b1d0.unkb6;
                 p1->m_hitsLeft--;
@@ -1375,7 +1375,7 @@ void CScene3::Unk767f60(CPlayer* p1, CPlayer* p2, CollisionInfo* p3, CollisionIn
                 p2->StartPattern();
                 p2->FaceOpponent();
             }
-            p1->Unk410790((int)&b1d0);
+            p1->Unk410790(&b1d0);
         }
     }
 }
@@ -1401,25 +1401,25 @@ void CScene3::Unk7697d0(CPlayer* p1, CPlayer* p2, int p3, CollisionInfo* p4)
         mfc = 0;
         v10 = 0;
         for (; v10 < 4; v10++) {
-            a58[v10] = this->Unk767600((int)k14, (int)(x8 + (v10 << 4) + 0x50));
+            a58[v10] = this->Unk767600((ObjBase*)k14, (RECT*)(x8 + (v10 << 4) + 0x50));
         }
         v10 = 0;
         for (; v10 < 5; v10++) {
-            na8[v10] = this->Unk7677a0((int)p4, (int)((v10 << 4) + l4));
+            na8[v10] = this->Unk7677a0(p4, (RECT*)((v10 << 4) + l4));
         }
-        v11c = this->Unk7677a0((int)p4, (int)(l4 + 0x90));
+        v11c = this->Unk7677a0(p4, (RECT*)(l4 + 0x90));
         if ((*(WORD*)(x8 + 0xaa) & 0x40) > 0) {
             v10 = 0;
             for (; v10 < 4; v10++) {
                 vf8[v10][0] = 1;
-                mfc = Unk767930((int)&a58[v10], (int)&v11c) | mfc;
+                mfc = Unk767930(&a58[v10], &v11c) | mfc;
             }
         } else {
             v10 = 0;
             for (; v10 < 4; v10++) {
                 bc = 0;
                 for (; bc < 5; bc++) {
-                    vf8[v10][bc] = Unk767930((int)&a58[v10], (int)&na8[bc]);
+                    vf8[v10][bc] = Unk767930(&a58[v10], &na8[bc]);
                     mfc |= vf8[v10][bc];
                 }
             }
@@ -1466,7 +1466,7 @@ void CScene3::Unk7697d0(CPlayer* p1, CPlayer* p2, int p3, CollisionInfo* p4)
                 p2->m_attackResult = 6;
                 return;
             }
-            if (p2->unk170 != 0 && p2->unk14e >= 0x1e && p2->unk13a == 0 && p2->Unk4100f0((int)x8) != 0 && (*(WORD*)(x8 + 0xaa) & 0x80) == 0) {
+            if (p2->unk170 != 0 && p2->unk14e >= 0x1e && p2->unk13a == 0 && p2->Unk4100f0((PatternFrame*)x8) != 0 && (*(WORD*)(x8 + 0xaa) & 0x80) == 0) {
                 *(int*)(k14 + 0x80) = 2;
                 p1->m_gauge += *(short*)(x8 + 0xb6);
                 (*(short*)(k14 + 0x84))--;
@@ -1495,7 +1495,7 @@ void CScene3::Unk7697d0(CPlayer* p1, CPlayer* p2, int p3, CollisionInfo* p4)
                 p1->unk170 = 1;
                 return;
             }
-            if (p2->unk14e >= 0x1e && p2->y < 0.0 && p2->Unk410050((int)x8, (int)l4) != 0) {
+            if (p2->unk14e >= 0x1e && p2->y < 0.0 && p2->Unk410050((PatternFrame*)x8, (PatternFrame*)l4) != 0) {
                 *(int*)(k14 + 0x80) = 2;
                 p1->m_gauge += *(short*)(x8 + 0xb6);
                 (*(short*)(k14 + 0x84))--;
@@ -1519,7 +1519,7 @@ void CScene3::Unk7697d0(CPlayer* p1, CPlayer* p2, int p3, CollisionInfo* p4)
                 p1->unk170 = 1;
                 return;
             }
-            if (p2->Unk410050((int)x8, (int)l4) != 0 && p2->unk14e >= 0x1e && p2->y == 0.0 && p2->pattern != 0xa8 && p2->pattern != 0xa9) {
+            if (p2->Unk410050((PatternFrame*)x8, (PatternFrame*)l4) != 0 && p2->unk14e >= 0x1e && p2->y == 0.0 && p2->pattern != 0xa8 && p2->pattern != 0xa9) {
                 *(int*)(k14 + 0x80) = 2;
                 p1->m_gauge += *(short*)(x8 + 0xb6);
                 (*(short*)(k14 + 0x84))--;
@@ -1618,7 +1618,7 @@ void CScene3::Unk7697d0(CPlayer* p1, CPlayer* p2, int p3, CollisionInfo* p4)
                 }
                 return;
             }
-            if (p2->Unk410050((int)x8, (int)l4) != 0) {
+            if (p2->Unk410050((PatternFrame*)x8, (PatternFrame*)l4) != 0) {
                 p2->pattern = (*(WORD*)(x8 + 0xaa) & 0x10) / 0x10 + 0x96 + (*(WORD*)(x8 + 0xaa) & 0x20) / 0x20 * 2 + (p2->m_inputY == 1 || (*(WORD*)(x8 + 0xaa) & *(WORD*)(l4 + 0xb0) & 5) == 0 && p2->m_cpu != 0) * 3;
                 if (p2->y < 0.0) {
                     p2->pattern = 0x9c;
@@ -1733,7 +1733,7 @@ void CScene3::Unk7697d0(CPlayer* p1, CPlayer* p2, int p3, CollisionInfo* p4)
                 p2->StartPattern();
                 p2->FaceOpponent();
             }
-            p1->Unk410790((int)x8);
+            p1->Unk410790((PatternFrame*)x8);
         }
     }
 }
@@ -1760,17 +1760,17 @@ void CScene3::Unk76b090(CPlayer* p1, CPlayer* p2, int p3, int p4)
         xfc = 0;
         v14 = 0;
         for (; v14 < 4; v14++) {
-            n58[v14] = this->Unk767600((int)n10, (int)(x8 + (v14 << 4) + 0x50));
+            n58[v14] = this->Unk767600((ObjBase*)n10, (RECT*)(x8 + (v14 << 4) + 0x50));
         }
         v14 = 0;
         for (; v14 < 5; v14++) {
-            ea8[v14] = this->Unk767600((int)l18, (int)((v14 << 4) + l4));
+            ea8[v14] = this->Unk767600((ObjBase*)l18, (RECT*)((v14 << 4) + l4));
         }
         v14 = 0;
         for (; v14 < 4; v14++) {
             rc = 0;
             for (; rc < 5; rc++) {
-                xf8[v14][rc] = Unk767930((int)&n58[v14], (int)&ea8[rc]);
+                xf8[v14][rc] = Unk767930(&n58[v14], &ea8[rc]);
                 xfc |= xf8[v14][rc];
             }
         }
@@ -1875,7 +1875,7 @@ void CScene3::Unk76b090(CPlayer* p1, CPlayer* p2, int p3, int p4)
                     p2->StartPattern();
                     p2->FaceOpponent();
                 }
-                p1->Unk410790((int)x8);
+                p1->Unk410790((PatternFrame*)x8);
             }
             EffectDesc v158;
             v158.unk0 = 0;
@@ -1906,9 +1906,9 @@ void CScene3::Unk76bab0(CPlayer* p1, CPlayer* p2, int p3, int p4)
     x8 = (int)p1->m_patterns[*(WORD*)vc].frames + *(WORD*)(vc + 2) * 0xc8;
     l4 = (int)p2->m_patterns[*(WORD*)l10].frames + *(WORD*)(l10 + 2) * 0xc8;
     if (*(int*)(vc + 0x80) == 0 && *(int*)(l10 + 0x80) == 0 && *(short*)(vc + 0x84) > 0 && *(short*)(l10 + 0x84) > 0 && p1->m_patterns[*(WORD*)vc].unk0 > 0 && p2->m_patterns[*(WORD*)l10].unk0 > 0) {
-        v20 = this->Unk767600((int)vc, x8 + 0x90);
-        v30 = this->Unk767600((int)l10, l4 + 0x90);
-        if (Unk767930((int)&v20, (int)&v30) != 0) {
+        v20 = this->Unk767600((ObjBase*)vc, (RECT*)(x8 + 0x90));
+        v30 = this->Unk767600((ObjBase*)l10, (RECT*)(l4 + 0x90));
+        if (Unk767930(&v20, &v30) != 0) {
             if (p2->m_patterns[*(WORD*)l10].unk0 == p1->m_patterns[*(WORD*)vc].unk0) {
                 *(int*)(vc + 0x80) = 4;
                 *(int*)(l10 + 0x80) = 4;
@@ -1947,17 +1947,17 @@ void CScene3::Unk76bd40(CPlayer* p1, CPlayer* p2, CollisionInfo* p3, CollisionIn
         r1bc = 0;
         vc = 0;
         for (; vc < 4; vc++) {
-            n50[vc] = this->Unk7677a0((int)p3, (int)(l4 + (vc << 4) + 0x50));
+            n50[vc] = this->Unk7677a0(p3, (RECT*)(l4 + (vc << 4) + 0x50));
         }
         vc = 0;
         for (; vc < 5; vc++) {
-            v168[vc] = this->Unk767600((int)l10, (int)&n118.boxes[vc]);
+            v168[vc] = this->Unk767600((ObjBase*)l10, &n118.boxes[vc]);
         }
         vc = 0;
         for (; vc < 4; vc++) {
             x8 = 0;
             for (; x8 < 5; x8++) {
-                k1b8[vc][x8] = Unk767930((int)&n50[vc], (int)&v168[x8]);
+                k1b8[vc][x8] = Unk767930(&n50[vc], &v168[x8]);
                 r1bc |= k1b8[vc][x8];
             }
         }
@@ -2062,7 +2062,7 @@ void CScene3::Unk76bd40(CPlayer* p1, CPlayer* p2, CollisionInfo* p3, CollisionIn
                     p2->StartPattern();
                     p2->FaceOpponent();
                 }
-                p1->Unk410790((int)l4);
+                p1->Unk410790((PatternFrame*)l4);
             }
             EffectDesc n218;
             n218.unk0 = 0;

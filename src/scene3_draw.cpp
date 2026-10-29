@@ -407,35 +407,35 @@ void CScene3::Unk760060()
     }
 }
 
-void CScene3::Unk7623b0(int p1)
+void CScene3::Unk7623b0(CPlayer* p1)
 {
     RECT v24;
     int v14;
     RECT n10;
 
-    v14 = *(short*)((char*)p1 + 0xf4);
+    v14 = p1->m_shownHits;
     if (v14 > 0x63) {
         v14 = 0x63;
     }
-    if (*((char*)p1 + 0x8c) > 0) {
+    if (p1->m_side > 0) {
         v24 = MakeRect(0, 0xac, 0x3d, 0x26);
         n10 = MakeRect(0x102, 0x3f, 0x3d, 0x26);
-        if (*(short*)((char*)p1 + 0x104) <= 6) {
+        if (p1->m_comboTimer <= 6) {
             m_graphics->BlitEx(n10, m_game->m_objectSurface, v24, m_game->m_colorKey, 0, 0);
         } else {
             m_graphics->Blit(n10, m_game->m_objectSurface, v24, m_game->m_colorKey, 0);
         }
         if (v14 > 9) {
-            Unk75db70(0x11e, 0x3b, v14, 1, 0, *(short*)((char*)p1 + 0x104) <= 6);
+            Unk75db70(0x11e, 0x3b, v14, 1, 0, p1->m_comboTimer <= 6);
         } else {
-            Unk75db70(0x11e, 0x3b, v14, 1, 0, *(short*)((char*)p1 + 0x104) <= 6);
+            Unk75db70(0x11e, 0x3b, v14, 1, 0, p1->m_comboTimer <= 6);
         }
-        Unk75db70(0x11d, 0x52, *(int*)((char*)p1 + 0x100), 2, 0, *(short*)((char*)p1 + 0x104) <= 6);
-        Unk75db70(0x113, 0x5c, (int)*(double*)((char*)p1 + 0xf8), 2, 0, *(short*)((char*)p1 + 0x104) <= 6);
-        Unk75db70(0x11d, 0x5c, (int)(*(double*)((char*)p1 + 0xf8) * 10.0) % 0xa, 2, 0, *(short*)((char*)p1 + 0x104) <= 6);
+        Unk75db70(0x11d, 0x52, p1->m_comboDamage, 2, 0, p1->m_comboTimer <= 6);
+        Unk75db70(0x113, 0x5c, (int)p1->m_shownProration, 2, 0, p1->m_comboTimer <= 6);
+        Unk75db70(0x11d, 0x5c, (int)(p1->m_shownProration * 10.0) % 0xa, 2, 0, p1->m_comboTimer <= 6);
         v24 = MakeRect(0x46, 0xe1, 3, 9);
         n10 = MakeRect(0x113, 0x5c, 3, 9);
-        if (*(short*)((char*)p1 + 0x104) <= 6) {
+        if (p1->m_comboTimer <= 6) {
             m_graphics->BlitEx(n10, m_game->m_objectSurface, v24, m_game->m_colorKey, 0, 0);
         } else {
             m_graphics->Blit(n10, m_game->m_objectSurface, v24, m_game->m_colorKey, 0);
@@ -444,22 +444,22 @@ void CScene3::Unk7623b0(int p1)
     }
     v24 = MakeRect(0, 0xac, 0x3d, 0x26);
     n10 = MakeRect(6, 0x3f, 0x3d, 0x26);
-    if (*(short*)((char*)p1 + 0x104) <= 6) {
+    if (p1->m_comboTimer <= 6) {
         m_graphics->BlitEx(n10, m_game->m_objectSurface, v24, m_game->m_colorKey, 0, 0);
     } else {
         m_graphics->Blit(n10, m_game->m_objectSurface, v24, m_game->m_colorKey, 0);
     }
     if (v14 > 9) {
-        Unk75db70(0x22, 0x3b, v14, 1, 0, *(short*)((char*)p1 + 0x104) <= 6);
+        Unk75db70(0x22, 0x3b, v14, 1, 0, p1->m_comboTimer <= 6);
     } else {
-        Unk75db70(0x22, 0x3b, v14, 1, 0, *(short*)((char*)p1 + 0x104) <= 6);
+        Unk75db70(0x22, 0x3b, v14, 1, 0, p1->m_comboTimer <= 6);
     }
-    Unk75db70(0x21, 0x52, *(int*)((char*)p1 + 0x100), 2, 0, *(short*)((char*)p1 + 0x104) <= 6);
-    Unk75db70(0x17, 0x5c, (int)*(double*)((char*)p1 + 0xf8), 2, 0, *(short*)((char*)p1 + 0x104) <= 6);
-    Unk75db70(0x21, 0x5c, (int)(*(double*)((char*)p1 + 0xf8) * 10.0) % 0xa, 2, 0, *(short*)((char*)p1 + 0x104) <= 6);
+    Unk75db70(0x21, 0x52, p1->m_comboDamage, 2, 0, p1->m_comboTimer <= 6);
+    Unk75db70(0x17, 0x5c, (int)p1->m_shownProration, 2, 0, p1->m_comboTimer <= 6);
+    Unk75db70(0x21, 0x5c, (int)(p1->m_shownProration * 10.0) % 0xa, 2, 0, p1->m_comboTimer <= 6);
     v24 = MakeRect(0x46, 0xe1, 3, 9);
     n10 = MakeRect(0x17, 0x5c, 3, 9);
-    if (*(short*)((char*)p1 + 0x104) <= 6) {
+    if (p1->m_comboTimer <= 6) {
         m_graphics->BlitEx(n10, m_game->m_objectSurface, v24, m_game->m_colorKey, 0, 0);
         return;
     }

@@ -85,7 +85,7 @@ void CScene2::Unk76ca50()
                 l10 = 0x16;
             }
         }
-        Unk76da20((int)m_player1Ref, (int)m_player2Ref, 0, l10);
+        Unk76da20(m_player1Ref, (int)m_player2Ref, 0, l10);
         l10 = 0x16;
         while (l10 == 0x13 || l10 == 0x16) {
             l10 = rand() % 0x18;
@@ -96,7 +96,7 @@ void CScene2::Unk76ca50()
                 l10 = 0x16;
             }
         }
-        Unk76da20((int)m_player2Ref, (int)m_player1Ref, 1, l10);
+        Unk76da20(m_player2Ref, (int)m_player1Ref, 1, l10);
         (*m_player1Ref)->m_paletteIndex = 0;
         (*m_player2Ref)->m_paletteIndex = (*m_player2Ref)->unk8d == (*m_player1Ref)->unk8d;
         (*m_player1Ref)->m_cpu = 1;
@@ -124,8 +124,8 @@ void CScene2::Unk76ca50()
         strcat(v38, ".rep");
         if (m_game->m_replayMode == 1) {
             m_game->m_replay.OpenRead((const char*)v38);
-            Unk76da20((int)m_player1Ref, (int)m_player2Ref, 0, m_game->m_replay.Read());
-            Unk76da20((int)m_player2Ref, (int)m_player1Ref, 1, m_game->m_replay.Read());
+            Unk76da20(m_player1Ref, (int)m_player2Ref, 0, m_game->m_replay.Read());
+            Unk76da20(m_player2Ref, (int)m_player1Ref, 1, m_game->m_replay.Read());
             m_game->unkf32 = m_game->m_replay.Read();
             if (m_game->unkf32 > 0x64) {
                 m_game->unk1340 = m_game->unkf32;
@@ -179,13 +179,13 @@ void CScene2::Unk76ca50()
             }
         }
         if (m_game->unk1343[0] == 1) {
-            Unk76da20((int)m_player1Ref, (int)m_player2Ref, 0, l10);
+            Unk76da20(m_player1Ref, (int)m_player2Ref, 0, l10);
             (*m_player1Ref)->m_paletteIndex = 0;
             if ((*m_player1Ref)->unk8d == (*m_player2Ref)->unk8d && (*m_player2Ref)->m_paletteIndex == 0) {
                 (*m_player1Ref)->m_paletteIndex = 1;
             }
         } else {
-            Unk76da20((int)m_player2Ref, (int)m_player1Ref, 1, l10);
+            Unk76da20(m_player2Ref, (int)m_player1Ref, 1, l10);
             (*m_player2Ref)->m_paletteIndex = 0;
             if ((*m_player2Ref)->unk8d == (*m_player1Ref)->unk8d && (*m_player1Ref)->m_paletteIndex == 0) {
                 (*m_player2Ref)->m_paletteIndex = 1;
@@ -352,7 +352,7 @@ void CScene2::Vf2()
 {
 }
 
-void CScene2::Unk76da20(int p1, int p2, char p3, char p4)
+void CScene2::Unk76da20(CPlayer** p1, int p2, char p3, char p4)
 {
     switch (p4) {
     case 0:

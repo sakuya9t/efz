@@ -646,9 +646,9 @@ public:
     // FUNCTION: 0x40ff70
     char Unk40ff70();
     // FUNCTION: 0x410050
-    int Unk410050(int p1, int p2);
+    int Unk410050(PatternFrame* p1, PatternFrame* p2);
     // FUNCTION: 0x4100f0
-    int Unk4100f0(int p1);
+    int Unk4100f0(PatternFrame* p1);
     // FUNCTION: 0x4102e0
     int Unk4102e0();
     // FUNCTION: 0x410340
@@ -671,7 +671,7 @@ public:
     // by p2 / 1000 and counts the hit in the combo and the score.
     void DealDamage(int p1, double p2);
     // FUNCTION: 0x410790
-    void Unk410790(int p1);
+    void Unk410790(PatternFrame* p1);
     // FUNCTION: 0x410840
     void AddScore(int p1);
     // FUNCTION: 0x4108a0
@@ -1349,7 +1349,7 @@ public:
     // FUNCTION: 0x755500
     virtual void Draw();
     // FUNCTION: 0x7586b0
-    void Unk7586b0(int p1, int p2, char p3);
+    void Unk7586b0(CPlayer** p1, int p2, char p3);
     // FUNCTION: 0x759460
     void Unk759460();
     // FUNCTION: 0x7595d0
@@ -1471,7 +1471,7 @@ public:
     // FUNCTION: 0x760060
     void Unk760060();
     // FUNCTION: 0x7623b0
-    void Unk7623b0(int p1);
+    void Unk7623b0(CPlayer* p1);
     // FUNCTION: 0x762c50
     void Unk762c50();
     // FUNCTION: 0x7631f0
@@ -1505,11 +1505,11 @@ public:
     // FUNCTION: 0x766b50
     void Unk766b50();
     // FUNCTION: 0x767600
-    RECT Unk767600(int p1, int p2);
+    RECT Unk767600(ObjBase* p1, RECT* p2);
     // FUNCTION: 0x7677a0
-    RECT Unk7677a0(int p1, int p2);
+    RECT Unk7677a0(CollisionInfo* p1, RECT* p2);
     // FUNCTION: 0x767930
-    int Unk767930(int p1, int p2);
+    int Unk767930(RECT* p1, RECT* p2);
     // FUNCTION: 0x7679b0
     int Unk7679b0(CPlayer* p1, CPlayer* p2, CollisionInfo* p3, CollisionInfo* p4);
     // FUNCTION: 0x767f60
@@ -1565,7 +1565,7 @@ public:
     // FUNCTION: 0x76da10
     virtual void Vf2();
     // FUNCTION: 0x76da20
-    void Unk76da20(int p1, int p2, char p3, char p4);
+    void Unk76da20(CPlayer** p1, int p2, char p3, char p4);
 
     BYTE unk430[0x434 - 0x430];
     int unk434;

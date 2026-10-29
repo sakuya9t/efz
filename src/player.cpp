@@ -520,18 +520,18 @@ char CPlayer::Unk40ff70()
     return 0;
 }
 
-int CPlayer::Unk410050(int p1, int p2)
+int CPlayer::Unk410050(PatternFrame* p1, PatternFrame* p2)
 {
     if (unk13a > 0) {
         return 0;
     }
-    if ((*(WORD*)((char*)p1 + 0xaa) & 0x80) > 0) {
+    if ((p1->flagsAA & 0x80) > 0) {
         return 0;
     }
-    if ((*(WORD*)((char*)p2 + 0xb0) & 0x10) == 0) {
+    if ((p2->flagsB0 & 0x10) == 0) {
         return 0;
     }
-    if ((*(WORD*)((char*)p1 + 0xaa) & 4) == 0 && y < 0.0 && unk14e < 0x1e) {
+    if ((p1->flagsAA & 4) == 0 && y < 0.0 && unk14e < 0x1e) {
         return 0;
     }
     if (Unk4100f0(p1) == 0) {
@@ -540,7 +540,7 @@ int CPlayer::Unk410050(int p1, int p2)
     return 1;
 }
 
-int CPlayer::Unk4100f0(int p1)
+int CPlayer::Unk4100f0(PatternFrame* p1)
 {
     if (m_cpu != 0) {
         if (m_game->unk1364 == 1) {
@@ -551,20 +551,20 @@ int CPlayer::Unk4100f0(int p1)
             if (rand() > unka8 * 1e+04f) {
                 return 0;
             }
-            if ((*(WORD*)((char*)p1 + 0xaa) & 1) == 0) {
+            if ((p1->flagsAA & 1) == 0) {
                 m_inputY = 1;
-            } else if ((*(WORD*)((char*)p1 + 0xaa) & 2) == 0) {
+            } else if ((p1->flagsAA & 2) == 0) {
                 m_inputY = 0;
             }
         }
-        if ((*(WORD*)((char*)p1 + 0xaa) & 2) == 0 && m_inputY == 1 && y == 0.0 || (*(WORD*)((char*)p1 + 0xaa) & 1) == 0 && m_inputY != 1 && y == 0.0) {
+        if ((p1->flagsAA & 2) == 0 && m_inputY == 1 && y == 0.0 || (p1->flagsAA & 1) == 0 && m_inputY != 1 && y == 0.0) {
             return 0;
         }
     } else {
         if (m_inputX != 1 - (((*m_opponent)->x - x > 0.0) << 1) && (Unk410340() == 0 || m_inputX == 0)) {
             return 0;
         }
-        if ((*(WORD*)((char*)p1 + 0xaa) & 2) == 0 && m_inputY == 1 && y == 0.0 || (*(WORD*)((char*)p1 + 0xaa) & 1) == 0 && m_inputY != 1 && y == 0.0) {
+        if ((p1->flagsAA & 2) == 0 && m_inputY == 1 && y == 0.0 || (p1->flagsAA & 1) == 0 && m_inputY != 1 && y == 0.0) {
             return 0;
         }
     }
@@ -643,7 +643,7 @@ void CPlayer::DealDamage(int p1, double p2)
     AddScore(p1 / 0x64 * m_hitsLanded * m_maxHits * m_comboHits);
 }
 
-void CPlayer::Unk410790(int p1)
+void CPlayer::Unk410790(PatternFrame* p1)
 {
     if ((DWORD)m_comboHits > m_maxHits) {
         m_maxHits = m_comboHits;
@@ -652,7 +652,7 @@ void CPlayer::Unk410790(int p1)
         m_maxDamage = m_comboDamage;
     }
     m_hitsLanded++;
-    AddScore(*(short*)((char*)p1 + 0xa0) / 0x64 * m_hitsLanded * m_maxHits * m_comboHits);
+    AddScore(p1->unka0 / 0x64 * m_hitsLanded * m_maxHits * m_comboHits);
 }
 
 void CPlayer::AddScore(int p1)

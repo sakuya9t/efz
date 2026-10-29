@@ -281,9 +281,9 @@ BYTE CScene1::Update()
                 }
                 m_game->PlaySE(6);
                 if (v4 == 0) {
-                    Unk7586b0((int)m_player1Ref, (int)m_player2Ref, 0);
+                    Unk7586b0(m_player1Ref, (int)m_player2Ref, 0);
                 } else {
-                    Unk7586b0((int)m_player2Ref, (int)m_player1Ref, 1);
+                    Unk7586b0(m_player2Ref, (int)m_player1Ref, 1);
                 }
                 unk49e[v4] = 1;
                 unk494[v4] = 0x5a;
@@ -734,7 +734,7 @@ void CScene1::Draw()
     m_graphics->Flip();
 }
 
-void CScene1::Unk7586b0(int p1, int p2, char p3)
+void CScene1::Unk7586b0(CPlayer** p1, int p2, char p3)
 {
     char v2c[40];
 
