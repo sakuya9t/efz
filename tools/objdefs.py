@@ -36,10 +36,11 @@ SHARED = {
 
 # Character classes: (object, class, first address, end address, vtable, constructor,
 # size from the scene code's `new`). Each derives from CPlayer and overrides its virtual
-# slots (named VfN after the slot). Each is two objects, as in the original: <object>_vf6
-# holds UpdatePattern (the per-state update), which comes first, up to the constructor, and <object>
-# the rest of the class. The split shows in .rdata, where UpdatePattern's floating-point constants
-# precede the string section the constructor's folder name is in.
+# slots (named as PLAYER_SLOTS below). Each is two objects, as in the original:
+# <object>_vf6 holds UpdatePattern (the per-state update), which comes first, up to the
+# constructor, and <object> the rest of the class. The split shows in .rdata, where
+# UpdatePattern's floating-point constants precede the string section the constructor's
+# folder name is in.
 CHARACTERS = [
     ('shiori', 'CShiori', 0x4136d0, 0x434060, 0x787df8, 0x422d70, 0x3458),
     ('sayuri', 'CSayuri', 0x434060, 0x451850, 0x788138, 0x4463e0, 0x3458),
