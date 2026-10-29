@@ -834,9 +834,9 @@ public:
     BYTE unk25f;
     short m_inputPos;       // +0x260: the newest entry in m_inputHistory
     short m_command;        // +0x262: the move m_inputHistory makes, 0x63 for none
-    short unk264[0x32];     // the constructor sets all to 0x96
-    char unk2c8;
-    char unk2c9;
+    short m_voices[0x32];   // +0x264: the character's own sound IDs; 0x96 means none
+    char m_playVoice;       // +0x2c8: m_voices index CScene3 plays this frame, -1 none
+    char m_playSound;       // +0x2c9: CGame::m_sounds index CScene3 plays this frame, -1 none
     short m_objectHead;
     short m_objectTail;
     BYTE unk2ce[0x2d0 - 0x2ce];
@@ -870,8 +870,8 @@ public:
     char unk30f4;
     char unk30f5[0x14];     // the constructor sets all to -1
     BYTE unk3109[0x3110 - 0x3109];
-    int unk3110;
-    int unk3114;
+    int m_cpuRoll;          // +0x3110: CpuInput's random number, Random(0, 100) or (0, 1000)
+    int m_cpuAction;        // +0x3114: what CpuInput decided to do
     int unk3118;
     int unk311c;
     int unk3120;

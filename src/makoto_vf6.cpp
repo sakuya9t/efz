@@ -101,7 +101,7 @@ void CMakoto::UpdatePattern()
         }
         if (y + vy >= 0.0 && frame > 3) {
             y = 0.0;
-            unk2c9 = 9;
+            m_playSound = 9;
             CPlayer::FaceOpponent();
             pattern = 0xd;
             StartPattern();
@@ -136,7 +136,7 @@ void CMakoto::UpdatePattern()
         }
         if (y + vy >= 0.0 && frame > 3) {
             y = 0.0;
-            unk2c9 = 9;
+            m_playSound = 9;
             CPlayer::FaceOpponent();
             pattern = 0xd;
             StartPattern();
@@ -167,7 +167,7 @@ void CMakoto::UpdatePattern()
         }
         if (y + vy >= 0.0 && frame > 3) {
             y = 0.0;
-            unk2c9 = 9;
+            m_playSound = 9;
             CPlayer::FaceOpponent();
             pattern = 0xd;
             StartPattern();
@@ -216,7 +216,7 @@ void CMakoto::UpdatePattern()
         }
         if (y + vy >= 0.0) {
             y = 0.0;
-            unk2c9 = 9;
+            m_playSound = 9;
             pattern = 0xd;
             StartPattern();
         }
@@ -258,7 +258,7 @@ void CMakoto::UpdatePattern()
         }
         if (y + vy >= 0.0 && frame > 3) {
             y = 0.0;
-            unk2c9 = 9;
+            m_playSound = 9;
             CPlayer::FaceOpponent();
             pattern = 0xd;
             StartPattern();
@@ -282,7 +282,7 @@ void CMakoto::UpdatePattern()
         }
         if (y + vy >= 0.0 && frame > 3) {
             y = 0.0;
-            unk2c9 = 9;
+            m_playSound = 9;
             CPlayer::FaceOpponent();
             pattern = 0xd;
             StartPattern();
@@ -306,7 +306,7 @@ void CMakoto::UpdatePattern()
         }
         if (y + vy >= 0.0 && frame > 3) {
             y = 0.0;
-            unk2c9 = 9;
+            m_playSound = 9;
             CPlayer::FaceOpponent();
             pattern = 0xd;
             StartPattern();
@@ -321,7 +321,7 @@ void CMakoto::UpdatePattern()
         if (y + vy > 0.0 && frame < 2) {
             timer = 0;
             frame = 2;
-            unk2c9 = 7;
+            m_playSound = 7;
             y = 0.0;
             vy = 0.0;
             ay = 0.0;
@@ -1109,7 +1109,7 @@ void CMakoto::UpdatePattern()
             vx = 0.5;
             vy = -2.5;
             ay = 0.025;
-            unk2c9 = 0x1f;
+            m_playSound = 0x1f;
             l50.type = 0;
             l50.x = (double)(int)x;
             l50.y = (double)(int)y;
@@ -1403,7 +1403,7 @@ void CMakoto::UpdatePattern()
             unk118 -= 0.8;
         }
         if (frame == 0 && timer == 0 && unk3138 == 0) {
-            unk2c9 = 0x1e;
+            m_playSound = 0x1e;
             vy = -0.45;
             vx = -0.1;
             unk3138++;
@@ -1460,7 +1460,7 @@ void CMakoto::UpdatePattern()
             if (unk120 != 0) {
                 unk118 -= 30.0;
             }
-            unk2c9 = 0x21;
+            m_playSound = 0x21;
             vy = -1.5;
             vx = -0.8;
             m_gauge = m_gauge + 0x1e;
@@ -1512,7 +1512,7 @@ void CMakoto::UpdatePattern()
             if (unk120 != 0) {
                 unk118 -= 30.0;
             }
-            unk2c9 = 0x21;
+            m_playSound = 0x21;
             vy = -1.5;
             vx = -0.8;
             m_gauge = m_gauge + 0x1e;
@@ -1564,7 +1564,7 @@ void CMakoto::UpdatePattern()
             if (unk120 != 0) {
                 unk118 -= 30.0;
             }
-            unk2c9 = 0x21;
+            m_playSound = 0x21;
             vx = unkc0;
             vy = unkc8;
             m_gauge = m_gauge + 0x1e;
@@ -1608,7 +1608,7 @@ void CMakoto::UpdatePattern()
                 if (unk120 != 0) {
                     unk118 -= 30.0;
                 }
-                unk2c9 = 0x21;
+                m_playSound = 0x21;
                 vx = unkc0;
                 vy = unkc8;
                 m_gauge = m_gauge + 0x1e;
@@ -1684,7 +1684,7 @@ void CMakoto::UpdatePattern()
             l50.scale = 2;
             l50.layer = 0;
             m_game->CreateEffect((EffectDesc*)&l50);
-            unk2c9 = 7;
+            m_playSound = 7;
         }
         timer++;
         if (timer >= l4) {
@@ -1707,7 +1707,7 @@ void CMakoto::UpdatePattern()
             l50.scale = 2;
             l50.layer = 0;
             m_game->CreateEffect((EffectDesc*)&l50);
-            unk2c9 = 7;
+            m_playSound = 7;
         }
         timer++;
         if (timer >= l4) {
@@ -1988,7 +1988,7 @@ void CMakoto::UpdatePattern()
         }
         if (y + vy >= 0.0) {
             y = 0.0;
-            unk2c9 = 9;
+            m_playSound = 9;
             CPlayer::FaceOpponent();
             pattern = 0xd;
             StartPattern();
@@ -2019,7 +2019,7 @@ void CMakoto::UpdatePattern()
         }
         if (y + vy >= 0.0) {
             y = 0.0;
-            unk2c9 = 9;
+            m_playSound = 9;
             CPlayer::FaceOpponent();
             pattern = 0xd;
             StartPattern();
@@ -2050,7 +2050,7 @@ void CMakoto::UpdatePattern()
         }
         if (y + vy >= 0.0) {
             y = 0.0;
-            unk2c9 = 9;
+            m_playSound = 9;
             CPlayer::FaceOpponent();
             pattern = 0xd;
             StartPattern();
@@ -2066,7 +2066,7 @@ void CMakoto::UpdatePattern()
             l50.layer = 1;
             m_game->CreateEffect((EffectDesc*)&l50);
             m_hitsLeft = 1;
-            unk2c9 = 0x3e;
+            m_playSound = 0x3e;
             unk3138++;
         }
         timer++;
@@ -2098,7 +2098,7 @@ void CMakoto::UpdatePattern()
             l50.layer = 1;
             m_game->CreateEffect((EffectDesc*)&l50);
             m_hitsLeft = 1;
-            unk2c9 = 0x3e;
+            m_playSound = 0x3e;
             m_gauge = m_gauge - 0x3e8;
             unk3138++;
         }
@@ -2201,7 +2201,7 @@ void CMakoto::UpdatePattern()
             CPlayer::Unk4109d0(3);
             ax = -0.015;
             ay = -0.038;
-            unk2c9 = 0x11;
+            m_playSound = 0x11;
         }
         vy = vy + ay;
         vx = vx + ax;
@@ -2245,7 +2245,7 @@ void CMakoto::UpdatePattern()
             CPlayer::Unk4109d0(3);
             ax = 0.015;
             ay = -0.038;
-            unk2c9 = 0x11;
+            m_playSound = 0x11;
         }
         vy = vy + ay;
         vx = vx + ax;
@@ -2295,7 +2295,7 @@ void CMakoto::UpdatePattern()
             CPlayer::Unk410b10(0xb0, 3);
         }
         if (frame == 1 && timer == 0) {
-            unk2c9 = 0x12;
+            m_playSound = 0x12;
             l50.type = 1;
             l50.x = (double)(int)x;
             l50.y = (double)(int)y;
@@ -2434,7 +2434,7 @@ void CMakoto::UpdatePattern()
             CPlayer::Unk410b10(0xb0, 3);
         }
         if (frame == 0 && timer == 0) {
-            unk2c9 = 0x12;
+            m_playSound = 0x12;
             l50.type = 1;
             l50.x = (double)(int)x;
             l50.y = (double)(int)y;
@@ -2500,7 +2500,7 @@ void CMakoto::UpdatePattern()
             y = 0.0;
             timer = 0;
             frame = 0xa;
-            unk2c9 = 9;
+            m_playSound = 9;
         }
         timer++;
         if (timer >= l4) {
@@ -2545,7 +2545,7 @@ void CMakoto::UpdatePattern()
         }
         if (frame == 2 && timer == 0) {
             m_gauge = m_gauge + 5;
-            unk2c9 = 0x15;
+            m_playSound = 0x15;
             m_hitsLeft = 1;
         }
         timer++;
@@ -2587,7 +2587,7 @@ void CMakoto::UpdatePattern()
         }
         if (frame == 1 && timer == 0) {
             m_gauge = m_gauge + 0xf;
-            unk2c9 = 0x14;
+            m_playSound = 0x14;
             m_hitsLeft = 1;
         }
         timer++;
@@ -2617,7 +2617,7 @@ void CMakoto::UpdatePattern()
         }
         if (frame == 3 && timer == 0) {
             m_gauge = m_gauge + 0xf;
-            unk2c9 = 0x14;
+            m_playSound = 0x14;
             m_hitsLeft = 1;
         }
         timer++;
@@ -2628,7 +2628,7 @@ void CMakoto::UpdatePattern()
                 m_attackResult = 0;
             }
             if (frame == 4) {
-                unk2c8 = 0;
+                m_playVoice = 0;
                 l50.type = 0x19d;
                 l50.x = (double)((int)x + facing * 0x22);
                 l50.y = (double)((int)y - 0x1f);
@@ -2659,10 +2659,10 @@ void CMakoto::UpdatePattern()
             m_hitsLeft = 1;
         }
         if (frame == 0xa && m_pressC == 1 && unk3138 < 2) {
-            unk2c8 = 0;
+            m_playVoice = 0;
             timer = 0;
             frame = 6;
-            unk2c8 = 0;
+            m_playVoice = 0;
             m_attackResult = 0;
             m_hitsLeft = 1;
             m_gauge = m_gauge + 0xf;
@@ -2684,7 +2684,7 @@ void CMakoto::UpdatePattern()
             }
             if (frame == 6) {
                 m_hitsLeft = 1;
-                unk2c8 = 0;
+                m_playVoice = 0;
                 l50.type = 0x190;
                 l50.x = (double)((int)x + facing * 0x5a);
                 l50.y = (double)((int)y - 0x32);
@@ -2725,7 +2725,7 @@ void CMakoto::UpdatePattern()
         }
         if (frame == 1 && timer == 0) {
             m_gauge = m_gauge + 5;
-            unk2c9 = 0x15;
+            m_playSound = 0x15;
             m_hitsLeft = 1;
         }
         timer++;
@@ -2770,7 +2770,7 @@ void CMakoto::UpdatePattern()
         }
         if (frame == 2 && timer == 0) {
             m_gauge = m_gauge + 0xd;
-            unk2c9 = 0x14;
+            m_playSound = 0x14;
             m_hitsLeft = 1;
         }
         timer++;
@@ -2812,7 +2812,7 @@ void CMakoto::UpdatePattern()
         }
         if (frame == 2 && timer == 0) {
             m_gauge = m_gauge + 0x19;
-            unk2c9 = 0x14;
+            m_playSound = 0x14;
             m_hitsLeft = 1;
         }
         timer++;
@@ -2856,7 +2856,7 @@ void CMakoto::UpdatePattern()
         }
         if (frame == 2 && timer == 0) {
             m_gauge = m_gauge + 5;
-            unk2c9 = 0x15;
+            m_playSound = 0x15;
             m_hitsLeft = 1;
         }
         if (y + vy >= 0.0) {
@@ -2895,7 +2895,7 @@ void CMakoto::UpdatePattern()
         }
         if (frame == 3 && timer == 0) {
             m_gauge = m_gauge + 0xd;
-            unk2c9 = 0x14;
+            m_playSound = 0x14;
             m_hitsLeft = 1;
         }
         if (y + vy >= 0.0) {
@@ -2950,9 +2950,9 @@ void CMakoto::UpdatePattern()
             frame++;
             if (frame == 4) {
                 m_gauge = m_gauge + 0xf;
-                unk2c9 = 0x14;
+                m_playSound = 0x14;
                 m_hitsLeft = 1;
-                unk2c8 = 0;
+                m_playVoice = 0;
                 l50.type = 0x191;
                 l50.x = (double)((int)x + facing * 0x1b);
                 l50.y = (double)((int)y - 0x1c);
@@ -2981,7 +2981,7 @@ void CMakoto::UpdatePattern()
         }
         if (frame == 6 && timer == 0) {
             m_gauge = m_gauge + 0x14;
-            unk2c9 = 0x14;
+            m_playSound = 0x14;
             m_hitsLeft = 1;
         }
         if (frame > 2) {
@@ -3035,9 +3035,9 @@ void CMakoto::UpdatePattern()
             frame++;
             if (frame == 5) {
                 m_gauge = m_gauge + 0xf;
-                unk2c9 = 0x14;
+                m_playSound = 0x14;
                 m_hitsLeft = 1;
-                unk2c8 = 0;
+                m_playVoice = 0;
                 l50.type = 0x190;
                 l50.x = (double)((int)x + facing * 0x2d);
                 l50.y = (double)((int)y - 0x3e);
@@ -3058,7 +3058,7 @@ void CMakoto::UpdatePattern()
         vy = vy + ay;
         if (frame == 0 && timer == 0) {
             m_gauge = m_gauge + 0x1e;
-            unk2c9 = 0x14;
+            m_playSound = 0x14;
             m_hitsLeft = 1;
             vx = vx / 2.0;
             ay = 0.07;
@@ -3080,7 +3080,7 @@ void CMakoto::UpdatePattern()
             l50.layer = 0;
             l50.unk2c = 7;
             m_game->CreateEffect((EffectDesc*)&l50);
-            unk2c9 = 7;
+            m_playSound = 7;
             pattern = 0xd6;
             StartPattern();
             break;
@@ -3216,7 +3216,7 @@ void CMakoto::UpdatePattern()
                 m_game->CreateEffect((EffectDesc*)&l50);
             }
             if (frame == 4) {
-                unk2c9 = 0x15;
+                m_playSound = 0x15;
                 m_hitsLeft = 1;
                 m_gauge = m_gauge + 0x1e;
             }
@@ -3243,7 +3243,7 @@ void CMakoto::UpdatePattern()
         }
         if (frame == 1 && timer == 0) {
             m_gauge = m_gauge + 5;
-            unk2c9 = 0x15;
+            m_playSound = 0x15;
             m_hitsLeft = 1;
         }
         timer++;
@@ -3274,7 +3274,7 @@ void CMakoto::UpdatePattern()
         }
         if (frame == 2 && timer == 0) {
             m_gauge = m_gauge + 0xa;
-            unk2c9 = 0x14;
+            m_playSound = 0x14;
             m_hitsLeft = 1;
         }
         timer++;
@@ -3303,7 +3303,7 @@ void CMakoto::UpdatePattern()
         }
         if (frame == 3 && timer == 0) {
             m_gauge = m_gauge + 0x19;
-            unk2c9 = 0x14;
+            m_playSound = 0x14;
         }
         if (frame == 3) {
             vy = vy + ay;
@@ -3348,7 +3348,7 @@ void CMakoto::UpdatePattern()
         }
         if (frame == 1 && timer == 0) {
             m_gauge = m_gauge + 5;
-            unk2c9 = 0x15;
+            m_playSound = 0x15;
             m_hitsLeft = 1;
         }
         timer++;
@@ -3379,7 +3379,7 @@ void CMakoto::UpdatePattern()
         }
         if (frame == 2 && timer == 0) {
             m_gauge = m_gauge + 0xa;
-            unk2c9 = 0x14;
+            m_playSound = 0x14;
             m_hitsLeft = 1;
         }
         timer++;
@@ -3408,7 +3408,7 @@ void CMakoto::UpdatePattern()
         }
         if (frame == 2 && timer == 0) {
             m_gauge = m_gauge + 0x19;
-            unk2c9 = 0x14;
+            m_playSound = 0x14;
         }
         timer++;
         if (timer >= l4) {
@@ -3547,8 +3547,8 @@ void CMakoto::UpdatePattern()
                 l50.layer = 1;
                 l50.unk18 = facing;
                 SpawnObject(&l50);
-                unk2c9 = 0x15;
-                unk2c8 = 5;
+                m_playSound = 0x15;
+                m_playVoice = 5;
             }
             if (frame >= x8) {
                 pattern = 0;
@@ -3576,8 +3576,8 @@ void CMakoto::UpdatePattern()
                 l50.layer = 1;
                 l50.unk18 = facing;
                 SpawnObject(&l50);
-                unk2c9 = 0x15;
-                unk2c8 = 5;
+                m_playSound = 0x15;
+                m_playVoice = 5;
             }
             if (frame >= x8) {
                 pattern = 0;
@@ -3612,8 +3612,8 @@ void CMakoto::UpdatePattern()
             l50.layer = 1;
             l50.unk18 = facing;
             SpawnObject(&l50);
-            unk2c9 = 0x15;
-            unk2c8 = 5;
+            m_playSound = 0x15;
+            m_playVoice = 5;
         }
         timer++;
         if (timer >= l4) {
@@ -3629,7 +3629,7 @@ void CMakoto::UpdatePattern()
                 l50.layer = 1;
                 l50.unk18 = facing;
                 SpawnObject(&l50);
-                unk2c9 = 0x15;
+                m_playSound = 0x15;
             }
             if (frame >= x8) {
                 pattern = 0;
@@ -3658,7 +3658,7 @@ void CMakoto::UpdatePattern()
                 l50.unk18 = facing;
                 l50.unk28 = 1;
                 SpawnObject(&l50);
-                unk2c9 = 0x15;
+                m_playSound = 0x15;
             }
             if (frame >= x8) {
                 pattern = 0;
@@ -3687,7 +3687,7 @@ void CMakoto::UpdatePattern()
                 l50.unk18 = facing;
                 l50.unk28 = 1;
                 SpawnObject(&l50);
-                unk2c9 = 0x15;
+                m_playSound = 0x15;
             }
             if (frame >= x8) {
                 pattern = 0;
@@ -3728,7 +3728,7 @@ void CMakoto::UpdatePattern()
                 l50.unk18 = facing;
                 l50.unk28 = 1;
                 SpawnObject(&l50);
-                unk2c9 = 0x15;
+                m_playSound = 0x15;
             }
             if (frame >= x8) {
                 pattern = 0;
@@ -3775,7 +3775,7 @@ void CMakoto::UpdatePattern()
                 m_game->CreateEffect((EffectDesc*)&l50);
             }
             if (frame == 3) {
-                unk2c9 = 0x15;
+                m_playSound = 0x15;
                 m_hitsLeft = 1;
                 m_gauge = m_gauge + 0x1e;
             }
@@ -3824,7 +3824,7 @@ void CMakoto::UpdatePattern()
                 m_game->CreateEffect((EffectDesc*)&l50);
             }
             if (frame == 3) {
-                unk2c9 = 0x15;
+                m_playSound = 0x15;
                 m_hitsLeft = 1;
                 m_gauge = m_gauge + 0x1e;
             }
@@ -3892,7 +3892,7 @@ void CMakoto::UpdatePattern()
                 m_game->CreateEffect((EffectDesc*)&l50);
             }
             if (frame == 3) {
-                unk2c9 = 0x15;
+                m_playSound = 0x15;
                 m_hitsLeft = 1;
                 m_gauge = m_gauge + 0x1e;
             }
@@ -3910,7 +3910,7 @@ void CMakoto::UpdatePattern()
                 m_game->CreateEffect((EffectDesc*)&l50);
             }
             if (frame == 0xd) {
-                unk2c9 = 0x15;
+                m_playSound = 0x15;
                 m_hitsLeft = 1;
                 m_gauge = m_gauge + 0x1e;
             }
@@ -3941,7 +3941,7 @@ void CMakoto::UpdatePattern()
             l50.layer = 1;
             l50.scale = 2;
             SpawnObject(&l50);
-            unk2c8 = 0;
+            m_playVoice = 0;
             unk3148 = 1;
         }
         timer++;
@@ -3977,7 +3977,7 @@ void CMakoto::UpdatePattern()
             l50.layer = 1;
             l50.scale = 2;
             SpawnObject(&l50);
-            unk2c8 = 0;
+            m_playVoice = 0;
             unk3148 = 1;
         }
         timer++;
@@ -4025,7 +4025,7 @@ void CMakoto::UpdatePattern()
             l50.layer = 1;
             l50.scale = 2;
             SpawnObject(&l50);
-            unk2c8 = 0;
+            m_playVoice = 0;
             unk3148 = 1;
         }
         timer++;
@@ -4061,7 +4061,7 @@ void CMakoto::UpdatePattern()
                 l50.unk18 = facing;
                 l50.unk28 = 1;
                 SpawnObject(&l50);
-                unk2c9 = 0x15;
+                m_playSound = 0x15;
             }
             if (frame >= x8) {
                 pattern = 9;
@@ -4302,7 +4302,7 @@ void CMakoto::UpdatePattern()
             l50.y = (double)((int)y - 0x33);
             l50.layer = 0;
             SpawnObject(&l50);
-            unk2c8 = 0;
+            m_playVoice = 0;
         }
         if (frame == 0x12 && timer == 0) {
             l50.unk0 = 0;
@@ -4329,7 +4329,7 @@ void CMakoto::UpdatePattern()
             l50.y = (double)((int)y - 0x33);
             l50.layer = 0;
             SpawnObject(&l50);
-            unk2c8 = 0;
+            m_playVoice = 0;
         }
         vy = vy + ay;
         if (frame < 0x14 && vy > 0.15) {
@@ -4431,7 +4431,7 @@ void CMakoto::UpdatePattern()
             l50.y = (double)((int)y - 0x33);
             l50.layer = 0;
             SpawnObject(&l50);
-            unk2c8 = 0;
+            m_playVoice = 0;
         }
         if (frame == 0x12 && timer == 0) {
             l50.unk0 = 0;
@@ -4458,7 +4458,7 @@ void CMakoto::UpdatePattern()
             l50.y = (double)((int)y - 0x33);
             l50.layer = 0;
             SpawnObject(&l50);
-            unk2c8 = 0;
+            m_playVoice = 0;
         }
         vy = vy + ay;
         if (frame < 0x14 && vy > 0.15) {
@@ -4518,7 +4518,7 @@ void CMakoto::UpdatePattern()
             l50.unk0 = 1;
             l50.layer = 1;
             m_game->CreateEffect((EffectDesc*)&l50);
-            unk2c9 = 0x25;
+            m_playSound = 0x25;
         }
         if (frame == 0xb && timer == 0) {
             CPlayer::StopMoving();
@@ -4564,7 +4564,7 @@ void CMakoto::UpdatePattern()
             l50.y = (double)((int)y - 0x33);
             l50.layer = 0;
             SpawnObject(&l50);
-            unk2c8 = 0;
+            m_playVoice = 0;
         }
         if (frame == 0x12 && timer == 0) {
             l50.unk0 = 0;
@@ -4591,7 +4591,7 @@ void CMakoto::UpdatePattern()
             l50.y = (double)((int)y - 0x33);
             l50.layer = 0;
             SpawnObject(&l50);
-            unk2c8 = 0;
+            m_playVoice = 0;
         }
         vy = vy + ay;
         if (frame < 0x14 && vy > 0.15) {
@@ -4686,7 +4686,7 @@ void CMakoto::UpdatePattern()
                 vx = 1.9;
                 vy = -0.4;
                 x = facing * 0x1e + x;
-                unk2c8 = 4;
+                m_playVoice = 4;
             }
             if (frame == 6) {
                 frame--;
@@ -4764,7 +4764,7 @@ void CMakoto::UpdatePattern()
                 vx = 2.3;
                 vy = -0.65;
                 x = facing * 0x1e + x;
-                unk2c8 = 4;
+                m_playVoice = 4;
                 l50.type = 0x1f;
                 l50.x = (double)(int)x;
                 l50.y = 0.0;
@@ -4800,7 +4800,7 @@ void CMakoto::UpdatePattern()
                 m_game->CreateEffect((EffectDesc*)&l50);
                 unk3138++;
                 m_hitsLeft = 0x13;
-                unk2c9 = 0x25;
+                m_playSound = 0x25;
             }
             vx = 0.0;
             vy = 0.0;
@@ -4861,7 +4861,7 @@ void CMakoto::UpdatePattern()
                 vx = 2.5;
                 vy = -0.8;
                 x = facing * 0x1e + x;
-                unk2c8 = 4;
+                m_playVoice = 4;
             }
             if (frame == 6) {
                 frame--;
@@ -4877,7 +4877,7 @@ void CMakoto::UpdatePattern()
         unk158 = 0;
         if (frame == 0 && timer == 0) {
             m_hitsLeft = 1;
-            unk2c9 = 0x25;
+            m_playSound = 0x25;
             unk14c = 0x78;
             m_gauge = m_gauge - 0xbb8;
             CPlayer::Unk410b10(0xb0, 3);
@@ -4902,7 +4902,7 @@ void CMakoto::UpdatePattern()
         unkd0 = 0;
         if (unk313c == 1 && frame == 5) {
             frame = 6;
-            unk2c8 = 3;
+            m_playVoice = 3;
             timer = 0;
             break;
         }

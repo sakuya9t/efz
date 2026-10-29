@@ -106,7 +106,7 @@ void CMizukaB::UpdatePattern()
         }
         if (y + vy >= 0.0 && frame > 3) {
             y = 0.0;
-            unk2c9 = 9;
+            m_playSound = 9;
             CPlayer::FaceOpponent();
             pattern = 0xd;
             StartPattern();
@@ -142,7 +142,7 @@ void CMizukaB::UpdatePattern()
         }
         if (y + vy >= 0.0 && frame > 3) {
             y = 0.0;
-            unk2c9 = 9;
+            m_playSound = 9;
             CPlayer::FaceOpponent();
             pattern = 0xd;
             StartPattern();
@@ -174,7 +174,7 @@ void CMizukaB::UpdatePattern()
         }
         if (y + vy >= 0.0 && frame > 3) {
             y = 0.0;
-            unk2c9 = 9;
+            m_playSound = 9;
             CPlayer::FaceOpponent();
             pattern = 0xd;
             StartPattern();
@@ -229,7 +229,7 @@ void CMizukaB::UpdatePattern()
         }
         if (y + vy >= 0.0) {
             y = 0.0;
-            unk2c9 = 9;
+            m_playSound = 9;
             pattern = 0xd;
             StartPattern();
         }
@@ -273,7 +273,7 @@ void CMizukaB::UpdatePattern()
         }
         if (y + vy >= 0.0 && frame > 3) {
             y = 0.0;
-            unk2c9 = 9;
+            m_playSound = 9;
             CPlayer::FaceOpponent();
             pattern = 0xd;
             StartPattern();
@@ -298,7 +298,7 @@ void CMizukaB::UpdatePattern()
         }
         if (y + vy >= 0.0 && frame > 3) {
             y = 0.0;
-            unk2c9 = 9;
+            m_playSound = 9;
             CPlayer::FaceOpponent();
             pattern = 0xd;
             StartPattern();
@@ -324,7 +324,7 @@ void CMizukaB::UpdatePattern()
         }
         if (y + vy >= 0.0 && frame > 3) {
             y = 0.0;
-            unk2c9 = 9;
+            m_playSound = 9;
             CPlayer::FaceOpponent();
             pattern = 0xd;
             StartPattern();
@@ -347,7 +347,7 @@ void CMizukaB::UpdatePattern()
         }
         if (y + vy >= 0.0) {
             y = 0.0;
-            unk2c9 = 9;
+            m_playSound = 9;
             pattern = 0xd;
             StartPattern();
         }
@@ -361,7 +361,7 @@ void CMizukaB::UpdatePattern()
         if (y + vy > 0.0 && frame < 2) {
             timer = 0;
             frame = 2;
-            unk2c9 = 7;
+            m_playSound = 7;
             y = 0.0;
             vy = 0.0;
             ay = 0.0;
@@ -1182,7 +1182,7 @@ void CMizukaB::UpdatePattern()
             vx = 0.5;
             vy = -2.5;
             ay = 0.025;
-            unk2c9 = 0x1f;
+            m_playSound = 0x1f;
             l50.type = 0;
             l50.x = (double)(int)x;
             l50.y = (double)(int)y;
@@ -1485,7 +1485,7 @@ void CMizukaB::UpdatePattern()
             unk118 -= 0.8;
         }
         if (frame == 0 && timer == 0 && unk3138 == 0) {
-            unk2c9 = 0x1e;
+            m_playSound = 0x1e;
             vy = -0.45;
             vx = -0.1;
             unk3138++;
@@ -1543,7 +1543,7 @@ void CMizukaB::UpdatePattern()
             if (unk120 != 0) {
                 unk118 -= 30.0;
             }
-            unk2c9 = 0x21;
+            m_playSound = 0x21;
             vy = -1.5;
             vx = -0.8;
             m_gauge = m_gauge + 0x1e;
@@ -1596,7 +1596,7 @@ void CMizukaB::UpdatePattern()
             if (unk120 != 0) {
                 unk118 -= 30.0;
             }
-            unk2c9 = 0x21;
+            m_playSound = 0x21;
             vy = -1.5;
             vx = -0.8;
             m_gauge = m_gauge + 0x1e;
@@ -1649,7 +1649,7 @@ void CMizukaB::UpdatePattern()
             if (unk120 != 0) {
                 unk118 -= 30.0;
             }
-            unk2c9 = 0x21;
+            m_playSound = 0x21;
             vx = unkc0;
             vy = unkc8;
             m_gauge = m_gauge + 0x1e;
@@ -1694,7 +1694,7 @@ void CMizukaB::UpdatePattern()
                 if (unk120 != 0) {
                     unk118 -= 30.0;
                 }
-                unk2c9 = 0x21;
+                m_playSound = 0x21;
                 vx = unkc0;
                 vy = unkc8;
                 m_gauge = m_gauge + 0x1e;
@@ -1774,7 +1774,7 @@ void CMizukaB::UpdatePattern()
             l50.scale = 2;
             l50.layer = 0;
             m_game->CreateEffect((EffectDesc*)&l50);
-            unk2c9 = 7;
+            m_playSound = 7;
         }
         timer++;
         if (timer >= l4) {
@@ -1798,7 +1798,7 @@ void CMizukaB::UpdatePattern()
             l50.scale = 2;
             l50.layer = 0;
             m_game->CreateEffect((EffectDesc*)&l50);
-            unk2c9 = 7;
+            m_playSound = 7;
         }
         timer++;
         if (timer >= l4) {
@@ -2080,7 +2080,7 @@ void CMizukaB::UpdatePattern()
         }
         if (y + vy >= 0.0) {
             y = 0.0;
-            unk2c9 = 9;
+            m_playSound = 9;
             CPlayer::FaceOpponent();
             pattern = 0xd;
             StartPattern();
@@ -2112,7 +2112,7 @@ void CMizukaB::UpdatePattern()
         }
         if (y + vy >= 0.0) {
             y = 0.0;
-            unk2c9 = 9;
+            m_playSound = 9;
             CPlayer::FaceOpponent();
             pattern = 0xd;
             if (unk3458 > 0) {
@@ -2147,7 +2147,7 @@ void CMizukaB::UpdatePattern()
         }
         if (y + vy >= 0.0) {
             y = 0.0;
-            unk2c9 = 9;
+            m_playSound = 9;
             CPlayer::FaceOpponent();
             pattern = 0xd;
             if (unk3458 > 0) {
@@ -2166,7 +2166,7 @@ void CMizukaB::UpdatePattern()
             l50.layer = 1;
             m_game->CreateEffect((EffectDesc*)&l50);
             m_hitsLeft = 1;
-            unk2c9 = 0x3e;
+            m_playSound = 0x3e;
             unk3138++;
         }
         timer++;
@@ -2198,7 +2198,7 @@ void CMizukaB::UpdatePattern()
             l50.layer = 1;
             m_game->CreateEffect((EffectDesc*)&l50);
             m_hitsLeft = 1;
-            unk2c9 = 0x3e;
+            m_playSound = 0x3e;
             m_gauge = m_gauge - 0x3e8;
             unk3138++;
         }
@@ -2308,7 +2308,7 @@ void CMizukaB::UpdatePattern()
             CPlayer::Unk4109d0(3);
             vy = 0.0;
             ay = 0.0;
-            unk2c9 = 0x11;
+            m_playSound = 0x11;
         }
         timer++;
         unk3138++;
@@ -2349,7 +2349,7 @@ void CMizukaB::UpdatePattern()
             vy = 0.0;
             ay = 0.0;
             CPlayer::Unk4109d0(3);
-            unk2c9 = 0x11;
+            m_playSound = 0x11;
         }
         timer++;
         unk3138++;
@@ -2397,7 +2397,7 @@ void CMizukaB::UpdatePattern()
             CPlayer::Unk410b10(0xb0, 3);
         }
         if (frame == 1 && timer == 0) {
-            unk2c9 = 0x12;
+            m_playSound = 0x12;
             l50.type = 1;
             l50.x = (double)(int)x;
             l50.y = (double)(int)y;
@@ -2544,7 +2544,7 @@ void CMizukaB::UpdatePattern()
             CPlayer::Unk410b10(0xb0, 3);
         }
         if (frame == 1 && timer == 0) {
-            unk2c9 = 0x12;
+            m_playSound = 0x12;
             l50.type = 1;
             l50.x = (double)(int)x;
             l50.y = (double)(int)y;
@@ -2800,7 +2800,7 @@ void CMizukaB::UpdatePattern()
             y = 0.0;
             timer = 0;
             frame = 0xa;
-            unk2c9 = 9;
+            m_playSound = 9;
         }
         timer++;
         if (timer >= l4) {
@@ -2846,7 +2846,7 @@ void CMizukaB::UpdatePattern()
         }
         if (frame == 2 && timer == 0) {
             m_gauge = m_gauge + 5;
-            unk2c9 = 0x15;
+            m_playSound = 0x15;
             m_hitsLeft = 1;
         }
         timer++;
@@ -2907,7 +2907,7 @@ void CMizukaB::UpdatePattern()
         }
         if (frame == 2 && timer == 0) {
             m_gauge = m_gauge + 0xf;
-            unk2c9 = 0x14;
+            m_playSound = 0x14;
             m_hitsLeft = 1;
         }
         timer++;
@@ -2938,7 +2938,7 @@ void CMizukaB::UpdatePattern()
         }
         if (frame == 2 && timer == 0) {
             m_gauge = m_gauge + 0xf;
-            unk2c9 = 0x14;
+            m_playSound = 0x14;
             m_hitsLeft = 1;
             l50.type = 0x191;
             l50.x = (double)((int)x - facing * 0x24);
@@ -2986,7 +2986,7 @@ void CMizukaB::UpdatePattern()
             l50.scale = 2;
             l50.layer = 1;
             m_game->CreateEffect((EffectDesc*)&l50);
-            unk2c8 = 0xa;
+            m_playVoice = 0xa;
         }
         if (frame == 4 && timer == 0) {
             m_gauge = m_gauge + 0x23;
@@ -3032,7 +3032,7 @@ void CMizukaB::UpdatePattern()
         }
         if (frame == 1 && timer == 0) {
             m_gauge = m_gauge + 5;
-            unk2c9 = 0x15;
+            m_playSound = 0x15;
             m_hitsLeft = 1;
             l50.type = 0x1ba;
             l50.x = (double)((int)x - facing * 0x28);
@@ -3085,7 +3085,7 @@ void CMizukaB::UpdatePattern()
         }
         if (frame == 2 && timer == 0) {
             m_gauge = m_gauge + 0xd;
-            unk2c9 = 0x14;
+            m_playSound = 0x14;
             m_hitsLeft = 1;
             l50.type = 0x192;
             l50.x = (double)((int)x - facing * 0x1a);
@@ -3143,7 +3143,7 @@ void CMizukaB::UpdatePattern()
         }
         if (frame == 3 && timer == 0 && unk3138 == 0) {
             m_gauge = m_gauge + 0x19;
-            unk2c9 = 0x14;
+            m_playSound = 0x14;
             vx = 2.5;
             unk3138++;
         }
@@ -3208,7 +3208,7 @@ void CMizukaB::UpdatePattern()
         }
         if (frame == 2 && timer == 0) {
             m_gauge = m_gauge + 5;
-            unk2c9 = 0x15;
+            m_playSound = 0x15;
             m_hitsLeft = 1;
             l50.type = 0x1bb;
             l50.x = (double)((int)x - facing * 7);
@@ -3282,7 +3282,7 @@ void CMizukaB::UpdatePattern()
         }
         if (frame == 2 && timer == 0) {
             m_gauge = m_gauge + 0xd;
-            unk2c9 = 0x14;
+            m_playSound = 0x14;
             m_hitsLeft = 2;
             l50.type = 0x194;
             l50.x = (double)((int)x + facing * 0x25);
@@ -3356,7 +3356,7 @@ void CMizukaB::UpdatePattern()
         }
         if (frame == 4 && timer == 0) {
             m_gauge = m_gauge + 0x1e;
-            unk2c9 = 0x14;
+            m_playSound = 0x14;
             m_hitsLeft = 3;
         }
         if (y + vy >= 0.0) {
@@ -3437,7 +3437,7 @@ void CMizukaB::UpdatePattern()
         }
         if (frame == 7 && timer == 0) {
             m_gauge = m_gauge + 0x1e;
-            unk2c9 = 0x14;
+            m_playSound = 0x14;
             m_hitsLeft = 1;
         }
         if (y + vy >= 0.0) {
@@ -3492,7 +3492,7 @@ void CMizukaB::UpdatePattern()
         }
         if (frame == 3 && timer == 0) {
             m_gauge = m_gauge + 0x1e;
-            unk2c9 = 0x14;
+            m_playSound = 0x14;
             m_hitsLeft = 1;
         }
         timer++;
@@ -3511,7 +3511,7 @@ void CMizukaB::UpdatePattern()
         vy = vy + ay;
         if (frame == 0 && timer == 0) {
             m_gauge = m_gauge + 0x1e;
-            unk2c9 = 0x14;
+            m_playSound = 0x14;
             m_hitsLeft = 1;
             vx = vx / 2.0;
             ay = 0.07;
@@ -3700,7 +3700,7 @@ void CMizukaB::UpdatePattern()
         }
         if (frame == 1 && timer == 0) {
             m_gauge = m_gauge + 0xf;
-            unk2c9 = 0x15;
+            m_playSound = 0x15;
             m_hitsLeft = 1;
         }
         if (unk58 == 3 || unk58 == 1) {
@@ -3772,7 +3772,7 @@ void CMizukaB::UpdatePattern()
         }
         if (frame == 3 && timer == 0) {
             m_gauge = m_gauge + 0xf;
-            unk2c9 = 0x14;
+            m_playSound = 0x14;
             m_hitsLeft = 1;
         }
         if (unk58 == 3 || unk58 == 1) {
@@ -3815,11 +3815,11 @@ void CMizukaB::UpdatePattern()
             l50.scale = 2;
             l50.layer = 1;
             m_game->CreateEffect((EffectDesc*)&l50);
-            unk2c8 = 0xa;
+            m_playVoice = 0xa;
         }
         if (frame == 4 && timer == 0) {
             m_gauge = m_gauge + 0x23;
-            unk2c9 = 0x14;
+            m_playSound = 0x14;
             m_hitsLeft = 1;
         }
         if (unk58 == 3 || unk58 == 1) {
@@ -3857,7 +3857,7 @@ void CMizukaB::UpdatePattern()
         }
         if (frame == 1 && timer == 0) {
             m_gauge = m_gauge + 5;
-            unk2c9 = 0x15;
+            m_playSound = 0x15;
             m_hitsLeft = 1;
             l50.type = 0x1ba;
             l50.x = (double)((int)x - facing * 0x28);
@@ -3918,7 +3918,7 @@ void CMizukaB::UpdatePattern()
         }
         if (frame == 2 && timer == 0) {
             m_gauge = m_gauge + 0xf;
-            unk2c9 = 0x14;
+            m_playSound = 0x14;
             m_hitsLeft = 1;
             l50.type = 0x192;
             l50.x = (double)((int)x - facing * 0x1a);
@@ -4088,7 +4088,7 @@ void CMizukaB::UpdatePattern()
             l50.scale = 2;
             l50.layer = 1;
             l50.unk0 = 1;
-            unk2c8 = 0xb;
+            m_playVoice = 0xb;
             l50.unk18 = facing;
             SpawnObject(&l50);
             m_gauge = m_gauge + 0x1e;
@@ -4138,7 +4138,7 @@ void CMizukaB::UpdatePattern()
             l50.scale = 2;
             l50.layer = 1;
             l50.unk0 = 1;
-            unk2c8 = 0xb;
+            m_playVoice = 0xb;
             l50.unk18 = facing;
             SpawnObject(&l50);
             m_gauge = m_gauge + 0x1e;
@@ -4202,7 +4202,7 @@ void CMizukaB::UpdatePattern()
             l50.scale = 2;
             l50.layer = 1;
             l50.unk0 = 1;
-            unk2c8 = 0xb;
+            m_playVoice = 0xb;
             l50.unk18 = facing;
             SpawnObject(&l50);
             m_gauge = m_gauge + 0x1e;
@@ -4318,7 +4318,7 @@ void CMizukaB::UpdatePattern()
             CPlayer::StopMoving();
         }
         if (frame == 4 && timer == 0) {
-            unk2c8 = 2;
+            m_playVoice = 2;
         }
         if (frame == 0xe && timer == 0) {
             l50.type = 0x1bd;
@@ -4336,7 +4336,7 @@ void CMizukaB::UpdatePattern()
             l50.x = (double)((int)x + facing * 0x15);
             l50.y = (double)((int)y - 0x12);
             SpawnObject(&l50);
-            unk2c8 = 3;
+            m_playVoice = 3;
             m_gauge = m_gauge + 0xf;
         }
         timer++;
@@ -4360,7 +4360,7 @@ void CMizukaB::UpdatePattern()
                 l50.x = (double)((int)x + facing * 0x15);
                 l50.y = (double)((int)y - 0xb);
                 SpawnObject(&l50);
-                unk2c8 = 3;
+                m_playVoice = 3;
                 m_gauge = m_gauge + 0xf;
             }
             if (frame >= x8) {
@@ -4377,7 +4377,7 @@ void CMizukaB::UpdatePattern()
             CPlayer::StopMoving();
         }
         if (frame == 4 && timer == 0) {
-            unk2c8 = 2;
+            m_playVoice = 2;
         }
         if (frame == 0xe && timer == 0) {
             l50.type = 0x1c3;
@@ -4395,7 +4395,7 @@ void CMizukaB::UpdatePattern()
             l50.x = (double)((int)x + facing * 0x1a);
             l50.y = (double)((int)y - 0x33);
             SpawnObject(&l50);
-            unk2c8 = 3;
+            m_playVoice = 3;
             m_gauge = m_gauge + 0xf;
         }
         timer++;
@@ -4419,7 +4419,7 @@ void CMizukaB::UpdatePattern()
                 l50.x = (double)((int)x + facing * 0x15);
                 l50.y = (double)((int)y - 0xb);
                 SpawnObject(&l50);
-                unk2c8 = 3;
+                m_playVoice = 3;
                 m_gauge = m_gauge + 0xf;
             }
             if (frame >= x8) {
@@ -4436,7 +4436,7 @@ void CMizukaB::UpdatePattern()
             CPlayer::StopMoving();
         }
         if (frame == 4 && timer == 0) {
-            unk2c8 = 2;
+            m_playVoice = 2;
         }
         if (frame == 0xe && timer == 0) {
             l50.type = 0x1c3;
@@ -4454,7 +4454,7 @@ void CMizukaB::UpdatePattern()
             l50.x = (double)((int)x + facing * 0x1a);
             l50.y = (double)((int)y - 0x33);
             SpawnObject(&l50);
-            unk2c8 = 3;
+            m_playVoice = 3;
             m_gauge = m_gauge + 0xf;
         }
         timer++;
@@ -4478,7 +4478,7 @@ void CMizukaB::UpdatePattern()
                 l50.x = (double)((int)x + facing * 0x1a);
                 l50.y = (double)((int)y - 0x33);
                 SpawnObject(&l50);
-                unk2c8 = 3;
+                m_playVoice = 3;
                 m_gauge = m_gauge + 0xf;
             }
             if (frame >= x8) {
@@ -4625,7 +4625,7 @@ void CMizukaB::UpdatePattern()
             l50.scale = 2;
             l50.layer = 1;
             l50.unk0 = 1;
-            unk2c8 = 0xb;
+            m_playVoice = 0xb;
             l50.unk18 = facing;
             SpawnObject(&l50);
             m_gauge = m_gauge + 0x1e;
@@ -4668,7 +4668,7 @@ void CMizukaB::UpdatePattern()
             l50.scale = 2;
             l50.layer = 1;
             l50.unk0 = 1;
-            unk2c8 = 0xb;
+            m_playVoice = 0xb;
             l50.unk18 = facing;
             SpawnObject(&l50);
             m_gauge = m_gauge + 0x1e;
@@ -4725,7 +4725,7 @@ void CMizukaB::UpdatePattern()
             l50.scale = 2;
             l50.layer = 1;
             SpawnObject(&l50);
-            unk2c8 = 0xb;
+            m_playVoice = 0xb;
             m_gauge = m_gauge + 0x1e;
         }
         timer++;
@@ -4757,7 +4757,7 @@ void CMizukaB::UpdatePattern()
             l50.scale = 2;
             l50.layer = 1;
             l50.unk0 = 1;
-            unk2c8 = 0xb;
+            m_playVoice = 0xb;
             l50.unk18 = facing;
             SpawnObject(&l50);
             m_gauge = m_gauge + 0x2d;
@@ -4787,7 +4787,7 @@ void CMizukaB::UpdatePattern()
             unk58 = 2;
         }
         if (frame == 9 && timer == 0) {
-            unk2c8 = 0xe;
+            m_playVoice = 0xe;
         }
         if (frame == 0xf && timer == 0) {
             vx = 13.0;
@@ -4819,7 +4819,7 @@ void CMizukaB::UpdatePattern()
             unk58 = 2;
         }
         if (frame == 9 && timer == 0) {
-            unk2c8 = 0xe;
+            m_playVoice = 0xe;
         }
         if (frame == 0xf && timer == 0) {
             vx = -13.0;
@@ -4851,7 +4851,7 @@ void CMizukaB::UpdatePattern()
             unk58 = 2;
         }
         if (frame == 9 && timer == 0) {
-            unk2c8 = 0xe;
+            m_playVoice = 0xe;
         }
         if (frame == 0x10 && timer == 0) {
             vx = 0.0;
@@ -4887,7 +4887,7 @@ void CMizukaB::UpdatePattern()
             unk58 = 2;
         }
         if (frame == 9 && timer == 0) {
-            unk2c8 = 0xe;
+            m_playVoice = 0xe;
         }
         if (frame == 0xf && timer == 0) {
             vx = 13.0;
@@ -4924,7 +4924,7 @@ void CMizukaB::UpdatePattern()
             unk58 = 2;
         }
         if (frame == 9 && timer == 0) {
-            unk2c8 = 0xe;
+            m_playVoice = 0xe;
         }
         if (frame == 0xf && timer == 0) {
             vx = -13.0;
@@ -4961,7 +4961,7 @@ void CMizukaB::UpdatePattern()
             unk58 = 2;
         }
         if (frame == 9 && timer == 0) {
-            unk2c8 = 0xe;
+            m_playVoice = 0xe;
         }
         if (frame == 0x10 && timer == 0) {
             vx = 0.0;
@@ -5017,7 +5017,7 @@ void CMizukaB::UpdatePattern()
             l50.scale = 0;
             l50.layer = 1;
             SpawnObject(&l50);
-            unk2c8 = 0x10;
+            m_playVoice = 0x10;
         }
         timer++;
         if (timer >= l4) {
@@ -5067,7 +5067,7 @@ void CMizukaB::UpdatePattern()
             l50.scale = 0;
             l50.layer = 1;
             SpawnObject(&l50);
-            unk2c8 = 0x10;
+            m_playVoice = 0x10;
         }
         timer++;
         if (timer >= l4) {
@@ -5103,7 +5103,7 @@ void CMizukaB::UpdatePattern()
             l50.scale = 2;
             l50.layer = 1;
             m_game->CreateEffect((EffectDesc*)&l50);
-            unk2c9 = 0x25;
+            m_playSound = 0x25;
         }
         if (frame > 2) {
             CPlayer::Unk410a80(0x32, 3);
@@ -5118,7 +5118,7 @@ void CMizukaB::UpdatePattern()
             l50.scale = 0;
             l50.layer = 1;
             SpawnObject(&l50);
-            unk2c8 = 0x10;
+            m_playVoice = 0x10;
         }
         timer++;
         if (timer >= l4) {
@@ -5257,7 +5257,7 @@ void CMizukaB::UpdatePattern()
             l50.layer = 1;
             m_game->CreateEffect((EffectDesc*)&l50);
             CPlayer::Unk410a80(0x32, 0x2d);
-            unk2c9 = 0x25;
+            m_playSound = 0x25;
         }
         if (frame > 6) {
             m_game->Unk4080c0(0xf);
@@ -5304,10 +5304,10 @@ void CMizukaB::UpdatePattern()
             (*m_opponent)->y = -17.0;
         }
         if (frame == 6 && timer == 0) {
-            unk2c8 = 2;
+            m_playVoice = 2;
         }
         if (frame == 0xa && timer == 0) {
-            unk2c8 = 3;
+            m_playVoice = 3;
             l50.type = 0x1c6;
             l50.scale = 0;
             l50.x = x + 20.0;
@@ -5362,10 +5362,10 @@ void CMizukaB::UpdatePattern()
             SpawnObject(&l50);
         }
         if (frame == 6 && timer == 0) {
-            unk2c8 = 2;
+            m_playVoice = 2;
         }
         if (frame == 0x10 && timer == 0) {
-            unk2c8 = 3;
+            m_playVoice = 3;
             l50.type = 0x1c6;
             if (unk3138 == 1) {
                 l50.type = 0x1c7;
@@ -5449,10 +5449,10 @@ void CMizukaB::UpdatePattern()
             SpawnObject(&l50);
         }
         if (frame == 6 && timer == 0) {
-            unk2c8 = 2;
+            m_playVoice = 2;
         }
         if (frame == 0x10 && timer == 0) {
-            unk2c8 = 3;
+            m_playVoice = 3;
             l50.type = 0x1c6;
             if (unk3138 == 1) {
                 l50.type = 0x1c7;
@@ -5525,7 +5525,7 @@ void CMizukaB::UpdatePattern()
                 timer = 0;
                 CPlayer::StopMoving();
                 CPlayer::Unk410a10(0xf, 0xa);
-                unk2c9 = 0x16;
+                m_playSound = 0x16;
                 CPlayer::DealDamage(0x320, 900.0);
                 (*m_opponent)->StartPattern();
                 (*m_opponent)->pattern = 0x62;
@@ -5639,7 +5639,7 @@ void CMizukaB::UpdatePattern()
             if (frame == 2) {
                 (*m_opponent)->y = -99.0;
                 (*m_opponent)->x = facing * 0xf + x;
-                unk2c9 = 0x16;
+                m_playSound = 0x16;
                 l50.type = 0x193;
                 l50.x = (double)(int)x;
                 l50.y = (double)((int)y - 0xfa);
@@ -5723,7 +5723,7 @@ void CMizukaB::UpdatePattern()
             if (frame == 2) {
                 (*m_opponent)->y = -99.0;
                 (*m_opponent)->x = facing * 0xf + x;
-                unk2c9 = 0x16;
+                m_playSound = 0x16;
                 l50.type = 0x193;
                 l50.x = (double)(int)x;
                 l50.y = (double)((int)y - 0xfa);
@@ -5889,7 +5889,7 @@ void CMizukaB::UpdatePattern()
             l50.scale = 2;
             l50.layer = 1;
             m_game->CreateEffect((EffectDesc*)&l50);
-            unk2c9 = 0x25;
+            m_playSound = 0x25;
         }
         if (frame > 3) {
             m_game->Unk4080c0(0xf);
@@ -5944,7 +5944,7 @@ void CMizukaB::UpdatePattern()
             l50.type = 0x47;
             m_game->CreateEffect((EffectDesc*)&l50);
             unk3138++;
-            unk2c9 = 0x25;
+            m_playSound = 0x25;
             m_hitsLeft = 1;
         }
         if (frame > 0) {
@@ -6198,7 +6198,7 @@ void CMizukaB::UpdatePattern()
             l50.unk18 = facing;
             m_game->CreateEffect((EffectDesc*)&l50);
             unk3138++;
-            unk2c9 = 0x25;
+            m_playSound = 0x25;
         }
         if (frame > 3) {
             m_game->Unk4080c0(0xf);
@@ -6379,7 +6379,7 @@ void CMizukaB::UpdatePattern()
             l50.scale = 2;
             l50.layer = 1;
             m_game->CreateEffect((EffectDesc*)&l50);
-            unk2c9 = 0x25;
+            m_playSound = 0x25;
         }
         if (frame > 4 && frame < 6) {
             CPlayer::Unk410a80(0x32, 3);

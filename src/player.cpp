@@ -157,7 +157,7 @@ CPlayer::CPlayer(CPlayer** p1, CGame* p2, CGraphics* p3, CInput* p4, CSound* p5,
     m_paletteIndex = 0;
     v4 = 0;
     for (; v4 < 0x32; v4++) {
-        unk264[v4] = 0x96;
+        m_voices[v4] = 0x96;
     }
     v4 = 0;
     for (; v4 < 0x14; v4++) {
@@ -190,8 +190,8 @@ CPlayer::~CPlayer()
     }
     v4 = 0;
     for (; v4 < 0x32; v4++) {
-        if ((unsigned short)unk264[v4] != 0x96) {
-            m_sound->Release(unk264[v4]);
+        if ((unsigned short)m_voices[v4] != 0x96) {
+            m_sound->Release(m_voices[v4]);
         }
     }
     delete[] anims;
@@ -251,8 +251,8 @@ void CPlayer::Reset()
     for (; v4 < 0xb4; v4++) {
         m_inputHistory[v4] = 0;
     }
-    unk2c8 = -1;
-    unk2c9 = -1;
+    m_playVoice = -1;
+    m_playSound = -1;
     m_objectHead = 0;
     m_objectTail = 0;
     ClearObjects();
@@ -987,8 +987,8 @@ void CPlayer::Unk411ae0()
         _itoa(v30, vc, 0xa);
         strcat(v2c, (const char*)vc);
         strcat(v2c, ".wav");
-        unk264[v30] = m_sound->Load((const char*)v2c);
-        m_sound->SetVolume(unk264[v30], -0x1f4);
+        m_voices[v30] = m_sound->Load((const char*)v2c);
+        m_sound->SetVolume(m_voices[v30], -0x1f4);
     }
 }
 

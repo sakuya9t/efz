@@ -146,9 +146,9 @@ BYTE CScene5::Update()
             m_players[0]->Unk40f580();
             m_players[0]->UpdatePattern();
             m_players[0]->Unk40f580();
-            if (m_players[0]->unk2c9 >= 0 && m_players[0]->unk2c9 < 0x41) {
-                m_sound->Play((short)m_game->m_sounds[m_players[0]->unk2c9], 0);
-                m_players[0]->unk2c9 = -1;
+            if (m_players[0]->m_playSound >= 0 && m_players[0]->m_playSound < 0x41) {
+                m_sound->Play((short)m_game->m_sounds[m_players[0]->m_playSound], 0);
+                m_players[0]->m_playSound = -1;
             }
         } else {
             m_players[1]->UpdatePattern();
@@ -157,9 +157,9 @@ BYTE CScene5::Update()
             m_players[1]->Unk40f580();
             m_players[1]->UpdatePattern();
             m_players[1]->Unk40f580();
-            if (m_players[1]->unk2c9 >= 0 && m_players[1]->unk2c9 < 0x41) {
-                m_sound->Play((short)m_game->m_sounds[m_players[1]->unk2c9], 0);
-                m_players[1]->unk2c9 = -1;
+            if (m_players[1]->m_playSound >= 0 && m_players[1]->m_playSound < 0x41) {
+                m_sound->Play((short)m_game->m_sounds[m_players[1]->m_playSound], 0);
+                m_players[1]->m_playSound = -1;
             }
         }
         if (unk45c == 0x3c) {

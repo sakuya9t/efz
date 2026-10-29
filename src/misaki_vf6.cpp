@@ -101,7 +101,7 @@ void CMisaki::UpdatePattern()
         }
         if (y + vy >= 0.0 && frame > 3) {
             y = 0.0;
-            unk2c9 = 9;
+            m_playSound = 9;
             CPlayer::FaceOpponent();
             pattern = 0xd;
             StartPattern();
@@ -137,7 +137,7 @@ void CMisaki::UpdatePattern()
         }
         if (y + vy >= 0.0 && frame > 3) {
             y = 0.0;
-            unk2c9 = 9;
+            m_playSound = 9;
             CPlayer::FaceOpponent();
             pattern = 0xd;
             StartPattern();
@@ -169,7 +169,7 @@ void CMisaki::UpdatePattern()
         }
         if (y + vy >= 0.0 && frame > 3) {
             y = 0.0;
-            unk2c9 = 9;
+            m_playSound = 9;
             CPlayer::FaceOpponent();
             pattern = 0xd;
             StartPattern();
@@ -218,7 +218,7 @@ void CMisaki::UpdatePattern()
         }
         if (y + vy >= 0.0) {
             y = 0.0;
-            unk2c9 = 9;
+            m_playSound = 9;
             pattern = 0xd;
             StartPattern();
         }
@@ -259,7 +259,7 @@ void CMisaki::UpdatePattern()
         }
         if (y + vy >= 0.0 && frame > 3) {
             y = 0.0;
-            unk2c9 = 9;
+            m_playSound = 9;
             CPlayer::FaceOpponent();
             pattern = 0xd;
             StartPattern();
@@ -283,7 +283,7 @@ void CMisaki::UpdatePattern()
         }
         if (y + vy >= 0.0 && frame > 3) {
             y = 0.0;
-            unk2c9 = 9;
+            m_playSound = 9;
             CPlayer::FaceOpponent();
             pattern = 0xd;
             StartPattern();
@@ -307,7 +307,7 @@ void CMisaki::UpdatePattern()
         }
         if (y + vy >= 0.0 && frame > 3) {
             y = 0.0;
-            unk2c9 = 9;
+            m_playSound = 9;
             CPlayer::FaceOpponent();
             pattern = 0xd;
             StartPattern();
@@ -322,7 +322,7 @@ void CMisaki::UpdatePattern()
         if (y + vy > 0.0 && frame < 2) {
             timer = 0;
             frame = 2;
-            unk2c9 = 7;
+            m_playSound = 7;
             y = 0.0;
             vy = 0.0;
             ay = 0.0;
@@ -1110,7 +1110,7 @@ void CMisaki::UpdatePattern()
             vx = 0.5;
             vy = -2.5;
             ay = 0.025;
-            unk2c9 = 0x1f;
+            m_playSound = 0x1f;
             l50.type = 0;
             l50.x = (double)(int)x;
             l50.y = (double)(int)y;
@@ -1404,7 +1404,7 @@ void CMisaki::UpdatePattern()
             unk118 -= 0.8;
         }
         if (frame == 0 && timer == 0 && unk3138 == 0) {
-            unk2c9 = 0x1e;
+            m_playSound = 0x1e;
             vy = -0.45;
             vx = -0.1;
             unk3138++;
@@ -1461,7 +1461,7 @@ void CMisaki::UpdatePattern()
             if (unk120 != 0) {
                 unk118 -= 30.0;
             }
-            unk2c9 = 0x21;
+            m_playSound = 0x21;
             vy = -1.5;
             vx = -0.8;
             m_gauge = m_gauge + 0x1e;
@@ -1513,7 +1513,7 @@ void CMisaki::UpdatePattern()
             if (unk120 != 0) {
                 unk118 -= 30.0;
             }
-            unk2c9 = 0x21;
+            m_playSound = 0x21;
             vy = -1.5;
             vx = -0.8;
             m_gauge = m_gauge + 0x1e;
@@ -1565,7 +1565,7 @@ void CMisaki::UpdatePattern()
             if (unk120 != 0) {
                 unk118 -= 30.0;
             }
-            unk2c9 = 0x21;
+            m_playSound = 0x21;
             vx = unkc0;
             vy = unkc8;
             m_gauge = m_gauge + 0x1e;
@@ -1609,7 +1609,7 @@ void CMisaki::UpdatePattern()
                 if (unk120 != 0) {
                     unk118 -= 30.0;
                 }
-                unk2c9 = 0x21;
+                m_playSound = 0x21;
                 vx = unkc0;
                 vy = unkc8;
                 m_gauge = m_gauge + 0x1e;
@@ -1685,7 +1685,7 @@ void CMisaki::UpdatePattern()
             l50.scale = 2;
             l50.layer = 0;
             m_game->CreateEffect((EffectDesc*)&l50);
-            unk2c9 = 7;
+            m_playSound = 7;
         }
         timer++;
         if (timer >= l4) {
@@ -1708,7 +1708,7 @@ void CMisaki::UpdatePattern()
             l50.scale = 2;
             l50.layer = 0;
             m_game->CreateEffect((EffectDesc*)&l50);
-            unk2c9 = 7;
+            m_playSound = 7;
         }
         timer++;
         if (timer >= l4) {
@@ -1989,7 +1989,7 @@ void CMisaki::UpdatePattern()
         }
         if (y + vy >= 0.0) {
             y = 0.0;
-            unk2c9 = 9;
+            m_playSound = 9;
             CPlayer::FaceOpponent();
             pattern = 0xd;
             StartPattern();
@@ -2021,7 +2021,7 @@ void CMisaki::UpdatePattern()
         }
         if (y + vy >= 0.0) {
             y = 0.0;
-            unk2c9 = 9;
+            m_playSound = 9;
             CPlayer::FaceOpponent();
             pattern = 0xd;
             StartPattern();
@@ -2053,7 +2053,7 @@ void CMisaki::UpdatePattern()
         }
         if (y + vy >= 0.0) {
             y = 0.0;
-            unk2c9 = 9;
+            m_playSound = 9;
             CPlayer::FaceOpponent();
             pattern = 0xd;
             StartPattern();
@@ -2069,7 +2069,7 @@ void CMisaki::UpdatePattern()
             l50.layer = 1;
             m_game->CreateEffect((EffectDesc*)&l50);
             m_hitsLeft = 1;
-            unk2c9 = 0x3e;
+            m_playSound = 0x3e;
             unk3138++;
         }
         timer++;
@@ -2101,7 +2101,7 @@ void CMisaki::UpdatePattern()
             l50.layer = 1;
             m_game->CreateEffect((EffectDesc*)&l50);
             m_hitsLeft = 1;
-            unk2c9 = 0x3e;
+            m_playSound = 0x3e;
             m_gauge = m_gauge - 0x3e8;
             unk3138++;
         }
@@ -2145,7 +2145,7 @@ void CMisaki::UpdatePattern()
         if (frame < 5 && frame > 2) {
             vx = 2.0;
             if (unk3138 == 0) {
-                unk2c9 = 0x11;
+                m_playSound = 0x11;
             }
         }
         unk158 = 1;
@@ -2180,7 +2180,7 @@ void CMisaki::UpdatePattern()
             vy = 0.0;
             ay = 0.0;
             unk3138 = 1;
-            unk2c9 = 0x11;
+            m_playSound = 0x11;
         }
         if (frame > -1) {
             vx += 0.04;
@@ -2210,7 +2210,7 @@ void CMisaki::UpdatePattern()
             CPlayer::Unk4109d0(3);
             vy = 0.0;
             ay = 0.0;
-            unk2c9 = 0x11;
+            m_playSound = 0x11;
         }
         timer++;
         unk3138++;
@@ -2247,7 +2247,7 @@ void CMisaki::UpdatePattern()
             vy = 0.0;
             ay = 0.0;
             CPlayer::Unk4109d0(3);
-            unk2c9 = 0x11;
+            m_playSound = 0x11;
         }
         timer++;
         unk3138++;
@@ -2291,7 +2291,7 @@ void CMisaki::UpdatePattern()
             CPlayer::Unk410b10(0xb0, 3);
         }
         if (frame == 1 && timer == 0) {
-            unk2c9 = 0x12;
+            m_playSound = 0x12;
             l50.type = 1;
             l50.x = (double)(int)x;
             l50.y = (double)(int)y;
@@ -2430,7 +2430,7 @@ void CMisaki::UpdatePattern()
             CPlayer::Unk410b10(0xb0, 3);
         }
         if (frame == 1 && timer == 0) {
-            unk2c9 = 0x12;
+            m_playSound = 0x12;
             l50.type = 1;
             l50.x = (double)(int)x;
             l50.y = (double)(int)y;
@@ -2505,7 +2505,7 @@ void CMisaki::UpdatePattern()
             y = 0.0;
             timer = 0;
             frame = 0xa;
-            unk2c9 = 9;
+            m_playSound = 9;
         }
         timer++;
         if (timer >= l4) {
@@ -2550,7 +2550,7 @@ void CMisaki::UpdatePattern()
         }
         if (frame == 2 && timer == 0) {
             m_gauge = m_gauge + 5;
-            unk2c9 = 0x15;
+            m_playSound = 0x15;
             m_hitsLeft = 1;
         }
         timer++;
@@ -2592,7 +2592,7 @@ void CMisaki::UpdatePattern()
         }
         if (frame == 3 && timer == 0) {
             m_gauge = m_gauge + 0xf;
-            unk2c9 = 0x14;
+            m_playSound = 0x14;
             m_hitsLeft = 1;
         }
         timer++;
@@ -2622,7 +2622,7 @@ void CMisaki::UpdatePattern()
         }
         if (frame == 4 && timer == 0) {
             m_gauge = m_gauge + 0xf;
-            unk2c9 = 0x14;
+            m_playSound = 0x14;
             m_hitsLeft = 1;
         }
         timer++;
@@ -2664,7 +2664,7 @@ void CMisaki::UpdatePattern()
         }
         if (frame == 4 && timer == 0) {
             m_gauge = m_gauge + 0x23;
-            unk2c9 = 0x12;
+            m_playSound = 0x12;
             m_hitsLeft = 1;
             l50.type = 0x190;
             l50.x = (double)((int)x + facing * 0xf);
@@ -2718,7 +2718,7 @@ void CMisaki::UpdatePattern()
         }
         if (frame == 1 && timer == 0) {
             m_gauge = m_gauge + 5;
-            unk2c9 = 0x15;
+            m_playSound = 0x15;
             m_hitsLeft = 1;
         }
         timer++;
@@ -2763,7 +2763,7 @@ void CMisaki::UpdatePattern()
         }
         if (frame == 2 && timer == 0) {
             m_gauge = m_gauge + 0xd;
-            unk2c9 = 0x14;
+            m_playSound = 0x14;
             m_hitsLeft = 1;
         }
         timer++;
@@ -2801,7 +2801,7 @@ void CMisaki::UpdatePattern()
         }
         if (frame == 3 && timer == 0 && unk3138 == 0) {
             m_gauge = m_gauge + 0x19;
-            unk2c9 = 0x14;
+            m_playSound = 0x14;
             vx = 4.5;
             unk3138++;
         }
@@ -2843,7 +2843,7 @@ void CMisaki::UpdatePattern()
         }
         if (frame == 2 && timer == 0) {
             m_gauge = m_gauge + 5;
-            unk2c9 = 0x15;
+            m_playSound = 0x15;
             m_hitsLeft = 1;
         }
         if (y + vy >= 0.0) {
@@ -2882,7 +2882,7 @@ void CMisaki::UpdatePattern()
         }
         if (frame == 2 && timer == 0) {
             m_gauge = m_gauge + 0xd;
-            unk2c9 = 0x14;
+            m_playSound = 0x14;
             m_hitsLeft = 1;
         }
         if (y + vy >= 0.0) {
@@ -2921,7 +2921,7 @@ void CMisaki::UpdatePattern()
         }
         if (frame == 2 && timer == 0) {
             m_gauge = m_gauge + 0x1e;
-            unk2c9 = 0x14;
+            m_playSound = 0x14;
             m_hitsLeft = 1;
         }
         if (y + vy >= 0.0) {
@@ -2955,7 +2955,7 @@ void CMisaki::UpdatePattern()
         }
         if (frame == 2 && timer == 0) {
             m_gauge = m_gauge + 0xf;
-            unk2c9 = 0x14;
+            m_playSound = 0x14;
             m_hitsLeft = 1;
         }
         if (frame == 5 && timer == 0) {
@@ -3004,7 +3004,7 @@ void CMisaki::UpdatePattern()
         }
         if (frame == 3 && timer == 0) {
             m_gauge = m_gauge + 0x1e;
-            unk2c9 = 0x14;
+            m_playSound = 0x14;
             m_hitsLeft = 1;
         }
         timer++;
@@ -3023,7 +3023,7 @@ void CMisaki::UpdatePattern()
         vy = vy + ay;
         if (frame == 0 && timer == 0) {
             m_gauge = m_gauge + 0x1e;
-            unk2c9 = 0x14;
+            m_playSound = 0x14;
             m_hitsLeft = 1;
             vx = vx / 2.0;
             ay = 0.07;
@@ -3199,7 +3199,7 @@ void CMisaki::UpdatePattern()
         }
         if (frame == 2 && timer == 0) {
             m_gauge = m_gauge + 5;
-            unk2c9 = 0x15;
+            m_playSound = 0x15;
             m_hitsLeft = 1;
         }
         timer++;
@@ -3228,7 +3228,7 @@ void CMisaki::UpdatePattern()
         }
         if (frame == 2 && timer == 0) {
             m_gauge = m_gauge + 0xa;
-            unk2c9 = 0x14;
+            m_playSound = 0x14;
             m_hitsLeft = 1;
         }
         timer++;
@@ -3259,7 +3259,7 @@ void CMisaki::UpdatePattern()
             }
         }
         if (frame == 3 && timer == 0) {
-            unk2c9 = 0x14;
+            m_playSound = 0x14;
             vx = 3.0;
             m_hitsLeft = 1;
             m_gauge = m_gauge + 0x23;
@@ -3294,7 +3294,7 @@ void CMisaki::UpdatePattern()
         }
         if (frame == 1 && timer == 0) {
             m_gauge = m_gauge + 5;
-            unk2c9 = 0x15;
+            m_playSound = 0x15;
             m_hitsLeft = 1;
         }
         timer++;
@@ -3323,7 +3323,7 @@ void CMisaki::UpdatePattern()
         }
         if (frame == 2 && timer == 0) {
             m_gauge = m_gauge + 0xa;
-            unk2c9 = 0x14;
+            m_playSound = 0x14;
             m_hitsLeft = 1;
         }
         timer++;
@@ -3363,7 +3363,7 @@ void CMisaki::UpdatePattern()
             }
         }
         if (frame == 7 && timer == 0) {
-            unk2c9 = 0x14;
+            m_playSound = 0x14;
             m_hitsLeft = 1;
             m_gauge = m_gauge + 0x23;
         }
@@ -3409,7 +3409,7 @@ void CMisaki::UpdatePattern()
             }
         }
         if (frame == 7 && timer == 0) {
-            unk2c9 = 0x14;
+            m_playSound = 0x14;
             m_hitsLeft = 1;
             m_gauge = m_gauge + 0x23;
         }
@@ -3725,7 +3725,7 @@ void CMisaki::UpdatePattern()
         if (frame == 0x12 && timer == 0) {
             vx = 0.0;
             vy = -1.8;
-            unk2c9 = 0x12;
+            m_playSound = 0x12;
             l50.type = 0x199;
             l50.x = (double)(int)x;
             l50.y = (double)((int)y - 0x14);
@@ -3763,7 +3763,7 @@ void CMisaki::UpdatePattern()
         if (y + vy >= 0.0 && frame < 2 && unk3138 == 0) {
             y = 0.0;
             unk3138++;
-            unk2c9 = 9;
+            m_playSound = 9;
             frame = 2;
             timer = 0;
             ay = 0.0;
@@ -3797,7 +3797,7 @@ void CMisaki::UpdatePattern()
             l50.layer = 1;
             l50.unk18 = facing;
             SpawnObject(&l50);
-            unk2c9 = 0x12;
+            m_playSound = 0x12;
             m_gauge = m_gauge + 0x19;
         }
         timer++;
@@ -3828,7 +3828,7 @@ void CMisaki::UpdatePattern()
             l50.layer = 1;
             l50.unk18 = facing;
             SpawnObject(&l50);
-            unk2c9 = 0x12;
+            m_playSound = 0x12;
             m_gauge = m_gauge + 0x19;
         }
         timer++;
@@ -4232,7 +4232,7 @@ void CMisaki::UpdatePattern()
             StartPattern();
             m_attackResult = 0;
             unk14c = 0x5a;
-            unk2c9 = 3;
+            m_playSound = 3;
             pattern = 0x106;
             l50.type = 0;
             l50.x = (double)((int)x - (facing << 3));
@@ -4260,7 +4260,7 @@ void CMisaki::UpdatePattern()
         }
         if (frame == 3 && timer == 0) {
             m_gauge = m_gauge + 0xf;
-            unk2c9 = 0x14;
+            m_playSound = 0x14;
             m_hitsLeft = 1;
             l50.type = 0x191;
             l50.x = (double)((int)x + facing * 0x28);
@@ -4394,7 +4394,7 @@ void CMisaki::UpdatePattern()
             StartPattern();
             m_attackResult = 0;
             unk14c = 0x5a;
-            unk2c9 = 3;
+            m_playSound = 3;
             pattern = 0x106;
             l50.type = 0;
             l50.x = (double)((int)x - (facing << 3));
@@ -4446,7 +4446,7 @@ void CMisaki::UpdatePattern()
         if (frame == 9 && timer == 0) {
             vy = -1.45;
             ay = 0.02;
-            unk2c9 = 0x16;
+            m_playSound = 0x16;
             l50.unk0 = 1;
             l50.type = 0x1a3;
             l50.x = (double)(int)x;
@@ -4507,7 +4507,7 @@ void CMisaki::UpdatePattern()
         if (frame == 9 && timer == 0) {
             vy = -1.8;
             ay = 0.013;
-            unk2c9 = 0x16;
+            m_playSound = 0x16;
             l50.unk0 = 1;
             l50.type = 0x193;
             l50.x = (double)(int)x;
@@ -4558,7 +4558,7 @@ void CMisaki::UpdatePattern()
             l50.unk0 = 1;
             l50.layer = 1;
             m_game->CreateEffect((EffectDesc*)&l50);
-            unk2c9 = 0x25;
+            m_playSound = 0x25;
         }
         if (frame > 6) {
             m_game->Unk4080c0(0xf);
@@ -4572,7 +4572,7 @@ void CMisaki::UpdatePattern()
         if (frame == 9 && timer == 0) {
             vy = -2.5;
             ay = 0.013;
-            unk2c9 = 0x16;
+            m_playSound = 0x16;
             l50.unk0 = 1;
             l50.type = 0x1a7;
             l50.x = (double)(int)x;
@@ -4762,7 +4762,7 @@ void CMisaki::UpdatePattern()
             l50.layer = 1;
             m_game->CreateEffect((EffectDesc*)&l50);
             CPlayer::Unk410a80(0x32, 0x2d);
-            unk2c9 = 0x25;
+            m_playSound = 0x25;
             unk13c = 0x99;
         }
         if (frame > 2) {
@@ -4888,7 +4888,7 @@ void CMisaki::UpdatePattern()
             frame++;
             m_attackResult = 0;
             if (frame == 5) {
-                unk2c9 = 0x12;
+                m_playSound = 0x12;
             }
             if (frame == 8 && unk313c < 0xf) {
                 frame = frame - 3;
@@ -4973,7 +4973,7 @@ void CMisaki::UpdatePattern()
             frame++;
             m_attackResult = 0;
             if (frame == 5) {
-                unk2c9 = 0x12;
+                m_playSound = 0x12;
             }
             if (frame == 8 && unk313c < 0xf) {
                 frame = frame - 3;
@@ -5002,7 +5002,7 @@ void CMisaki::UpdatePattern()
             l50.layer = 1;
             m_game->CreateEffect((EffectDesc*)&l50);
             CPlayer::Unk410a80(0x32, 0x2d);
-            unk2c9 = 0x25;
+            m_playSound = 0x25;
         }
         m_game->Unk4080c0(0xf);
         if (frame > 4) {
@@ -5058,7 +5058,7 @@ void CMisaki::UpdatePattern()
             frame++;
             m_attackResult = 0;
             if (frame == 5) {
-                unk2c9 = 0x12;
+                m_playSound = 0x12;
             }
             if (frame == 8 && unk313c < 0xf) {
                 frame = frame - 3;
@@ -5086,7 +5086,7 @@ void CMisaki::UpdatePattern()
                 timer = 0;
                 CPlayer::StopMoving();
                 CPlayer::Unk410a10(0xf, 0xa);
-                unk2c9 = 0x16;
+                m_playSound = 0x16;
                 CPlayer::DealDamage(0x578, 900.0);
                 (*m_opponent)->unk140 = 0;
                 (*m_opponent)->StartPattern();
@@ -5203,7 +5203,7 @@ void CMisaki::UpdatePattern()
                 (*m_opponent)->facing = -facing;
                 (*m_opponent)->unkc0 = 0.0;
                 (*m_opponent)->unkc8 = -3.5;
-                unk2c9 = 0x1a;
+                m_playSound = 0x1a;
             }
             if (frame == 0x10) {
                 vy = -3.0;
@@ -5212,7 +5212,7 @@ void CMisaki::UpdatePattern()
             if (frame == 0x1b) {
                 vy = -2.0;
                 ay = 0.013;
-                unk2c9 = 0x16;
+                m_playSound = 0x16;
                 l50.unk0 = 1;
                 l50.type = 0x193;
                 l50.x = (double)(int)x;
@@ -5270,7 +5270,7 @@ void CMisaki::UpdatePattern()
             if (frame == 2) {
                 (*m_opponent)->y = -99.0;
                 (*m_opponent)->x = facing * 0xf + x;
-                unk2c9 = 0x16;
+                m_playSound = 0x16;
                 l50.type = 0x193;
                 l50.x = (double)(int)x;
                 l50.y = (double)((int)y - 0xfa);
@@ -5443,7 +5443,7 @@ void CMisaki::UpdatePattern()
             l50.unk0 = 1;
             l50.layer = 1;
             m_game->CreateEffect((EffectDesc*)&l50);
-            unk2c9 = 0x25;
+            m_playSound = 0x25;
             l50.type = 0x47;
             m_game->CreateEffect((EffectDesc*)&l50);
         }
@@ -5452,7 +5452,7 @@ void CMisaki::UpdatePattern()
             frame = 3;
             m_attackResult = 0;
             unk14c = 0xa0;
-            unk2c9 = 3;
+            m_playSound = 3;
             l50.type = 0;
             l50.x = (double)((int)x + facing * 0xa);
             l50.y = (double)((int)y - 0x28);

@@ -91,7 +91,7 @@ void CMisuzu::UpdatePattern()
         }
         if (y + vy >= 0.0 && frame > 2) {
             y = 0.0;
-            unk2c9 = 9;
+            m_playSound = 9;
             CPlayer::FaceOpponent();
             pattern = 0xd;
             StartPattern();
@@ -121,7 +121,7 @@ void CMisuzu::UpdatePattern()
         }
         if (y + vy >= 0.0 && frame > 2) {
             y = 0.0;
-            unk2c9 = 9;
+            m_playSound = 9;
             CPlayer::FaceOpponent();
             pattern = 0xd;
             StartPattern();
@@ -151,7 +151,7 @@ void CMisuzu::UpdatePattern()
         }
         if (y + vy >= 0.0 && frame > 2) {
             y = 0.0;
-            unk2c9 = 9;
+            m_playSound = 9;
             CPlayer::FaceOpponent();
             pattern = 0xd;
             StartPattern();
@@ -198,7 +198,7 @@ void CMisuzu::UpdatePattern()
         if (y + vy >= 0.0) {
             y = 0.0;
             CPlayer::StopMoving();
-            unk2c9 = 9;
+            m_playSound = 9;
             pattern = 0xd;
             StartPattern();
         }
@@ -238,7 +238,7 @@ void CMisuzu::UpdatePattern()
         }
         if (y + vy >= 0.0 && frame > 3) {
             y = 0.0;
-            unk2c9 = 9;
+            m_playSound = 9;
             CPlayer::FaceOpponent();
             pattern = 0xd;
             StartPattern();
@@ -262,7 +262,7 @@ void CMisuzu::UpdatePattern()
         }
         if (y + vy >= 0.0 && frame > 3) {
             y = 0.0;
-            unk2c9 = 9;
+            m_playSound = 9;
             CPlayer::FaceOpponent();
             pattern = 0xd;
             StartPattern();
@@ -286,7 +286,7 @@ void CMisuzu::UpdatePattern()
         }
         if (y + vy >= 0.0 && frame > 3) {
             y = 0.0;
-            unk2c9 = 9;
+            m_playSound = 9;
             CPlayer::FaceOpponent();
             pattern = 0xd;
             StartPattern();
@@ -301,7 +301,7 @@ void CMisuzu::UpdatePattern()
         if (y + vy > 0.0 && frame < 2) {
             timer = 0;
             frame = 2;
-            unk2c9 = 7;
+            m_playSound = 7;
             y = 0.0;
             vy = 0.0;
             ay = 0.0;
@@ -1080,7 +1080,7 @@ void CMisuzu::UpdatePattern()
             vx = 0.5;
             vy = -2.5;
             ay = 0.025;
-            unk2c9 = 0x1f;
+            m_playSound = 0x1f;
             l50.type = 0;
             l50.x = (double)(int)x;
             l50.y = (double)(int)y;
@@ -1368,7 +1368,7 @@ void CMisuzu::UpdatePattern()
             unk118 -= 0.8;
         }
         if (frame == 0 && timer == 0 && unk3138 == 0) {
-            unk2c9 = 0x1e;
+            m_playSound = 0x1e;
             vy = -0.45;
             vx = -0.1;
             unk3138++;
@@ -1425,7 +1425,7 @@ void CMisuzu::UpdatePattern()
             if (unk120 != 0) {
                 unk118 -= 30.0;
             }
-            unk2c9 = 0x21;
+            m_playSound = 0x21;
             vy = -1.5;
             vx = -0.8;
             m_gauge = m_gauge + 0x1e;
@@ -1477,7 +1477,7 @@ void CMisuzu::UpdatePattern()
             if (unk120 != 0) {
                 unk118 -= 30.0;
             }
-            unk2c9 = 0x21;
+            m_playSound = 0x21;
             vy = -1.5;
             vx = -0.8;
             m_gauge = m_gauge + 0x1e;
@@ -1529,7 +1529,7 @@ void CMisuzu::UpdatePattern()
             if (unk120 != 0) {
                 unk118 -= 30.0;
             }
-            unk2c9 = 0x21;
+            m_playSound = 0x21;
             vx = unkc0;
             vy = unkc8;
             m_gauge = m_gauge + 0x1e;
@@ -1573,7 +1573,7 @@ void CMisuzu::UpdatePattern()
                 if (unk120 != 0) {
                     unk118 -= 30.0;
                 }
-                unk2c9 = 0x21;
+                m_playSound = 0x21;
                 vx = unkc0;
                 vy = unkc8;
                 m_gauge = m_gauge + 0x1e;
@@ -1649,7 +1649,7 @@ void CMisuzu::UpdatePattern()
             l50.scale = 2;
             l50.layer = 0;
             m_game->CreateEffect((EffectDesc*)&l50);
-            unk2c9 = 7;
+            m_playSound = 7;
         }
         timer++;
         if (timer >= l4) {
@@ -1672,7 +1672,7 @@ void CMisuzu::UpdatePattern()
             l50.scale = 2;
             l50.layer = 0;
             m_game->CreateEffect((EffectDesc*)&l50);
-            unk2c9 = 7;
+            m_playSound = 7;
         }
         timer++;
         if (timer >= l4) {
@@ -1952,7 +1952,7 @@ void CMisuzu::UpdatePattern()
         }
         if (y + vy >= 0.0) {
             y = 0.0;
-            unk2c9 = 9;
+            m_playSound = 9;
             CPlayer::FaceOpponent();
             pattern = 0xd;
             StartPattern();
@@ -1983,7 +1983,7 @@ void CMisuzu::UpdatePattern()
         }
         if (y + vy >= 0.0) {
             y = 0.0;
-            unk2c9 = 9;
+            m_playSound = 9;
             CPlayer::FaceOpponent();
             pattern = 0xd;
             StartPattern();
@@ -2014,7 +2014,7 @@ void CMisuzu::UpdatePattern()
         }
         if (y + vy >= 0.0) {
             y = 0.0;
-            unk2c9 = 9;
+            m_playSound = 9;
             CPlayer::FaceOpponent();
             pattern = 0xd;
             StartPattern();
@@ -2030,7 +2030,7 @@ void CMisuzu::UpdatePattern()
             l50.layer = 1;
             m_game->CreateEffect((EffectDesc*)&l50);
             m_hitsLeft = 1;
-            unk2c9 = 0x3e;
+            m_playSound = 0x3e;
             unk3138++;
         }
         timer++;
@@ -2062,7 +2062,7 @@ void CMisuzu::UpdatePattern()
             l50.layer = 1;
             m_game->CreateEffect((EffectDesc*)&l50);
             m_hitsLeft = 1;
-            unk2c9 = 0x3e;
+            m_playSound = 0x3e;
             m_gauge = m_gauge - 0x3e8;
             unk3138++;
         }
@@ -2106,7 +2106,7 @@ void CMisuzu::UpdatePattern()
             vx = 1.8;
             vy = -1.2;
             ay = 0.01;
-            unk2c9 = 0x11;
+            m_playSound = 0x11;
         }
         vy = vy + ay;
         timer++;
@@ -2143,7 +2143,7 @@ void CMisuzu::UpdatePattern()
             vx = -1.8;
             vy = -1.3;
             ay = 0.01;
-            unk2c9 = 0x11;
+            m_playSound = 0x11;
             l50.type = 0x1f;
             l50.x = (double)(int)x;
             l50.y = (double)(int)y;
@@ -2177,7 +2177,7 @@ void CMisuzu::UpdatePattern()
         if (frame == 0 && timer == 0 && unk3140 == 0) {
             vx = 1.8;
             vy = -0.3;
-            unk2c9 = 0x11;
+            m_playSound = 0x11;
             unk3140++;
         }
         vy += 0.01;
@@ -2214,7 +2214,7 @@ void CMisuzu::UpdatePattern()
         if (frame == 0 && timer == 0 && unk3140 == 0) {
             vx = -1.8;
             vy = -0.3;
-            unk2c9 = 0x11;
+            m_playSound = 0x11;
             unk3140++;
         }
         vy += 0.01;
@@ -2259,7 +2259,7 @@ void CMisuzu::UpdatePattern()
             CPlayer::Unk410b10(0xb0, 3);
         }
         if (frame == 1 && timer == 0) {
-            unk2c9 = 0x12;
+            m_playSound = 0x12;
             l50.type = 1;
             l50.x = (double)(int)x;
             l50.y = (double)(int)y;
@@ -2396,7 +2396,7 @@ void CMisuzu::UpdatePattern()
             CPlayer::Unk410b10(0xb0, 3);
         }
         if (frame == 0 && timer == 0) {
-            unk2c9 = 0x12;
+            m_playSound = 0x12;
             l50.type = 1;
             l50.x = (double)(int)x;
             l50.y = (double)(int)y;
@@ -2433,7 +2433,7 @@ void CMisuzu::UpdatePattern()
             y = 0.0;
             timer = 0;
             frame = 5;
-            unk2c9 = 9;
+            m_playSound = 9;
         }
         timer++;
         if (timer >= l4) {
@@ -2470,7 +2470,7 @@ void CMisuzu::UpdatePattern()
         }
         if (frame == 1 && timer == 0) {
             m_gauge = m_gauge + 5;
-            unk2c9 = 0x15;
+            m_playSound = 0x15;
             m_hitsLeft = 1;
         }
         timer++;
@@ -2509,7 +2509,7 @@ void CMisuzu::UpdatePattern()
         }
         if (frame == 2 && timer == 0) {
             m_gauge = m_gauge + 0xf;
-            unk2c9 = 0x14;
+            m_playSound = 0x14;
             m_hitsLeft = 1;
         }
         if (frame > 1) {
@@ -2551,7 +2551,7 @@ void CMisuzu::UpdatePattern()
         }
         if (frame == 1 && timer == 0) {
             m_gauge = m_gauge + 0xf;
-            unk2c9 = 0x14;
+            m_playSound = 0x14;
             m_hitsLeft = 1;
         }
         timer++;
@@ -2575,7 +2575,7 @@ void CMisuzu::UpdatePattern()
         }
         if (frame == 4 && timer == 0) {
             m_gauge = m_gauge + 0x23;
-            unk2c9 = 0x14;
+            m_playSound = 0x14;
             m_hitsLeft = 1;
         }
         timer++;
@@ -2609,7 +2609,7 @@ void CMisuzu::UpdatePattern()
         }
         if (frame == 1 && timer == 0) {
             m_gauge = m_gauge + 5;
-            unk2c9 = 0x15;
+            m_playSound = 0x15;
             m_hitsLeft = 1;
         }
         timer++;
@@ -2646,7 +2646,7 @@ void CMisuzu::UpdatePattern()
         }
         if (frame == 2 && timer == 0) {
             m_gauge = m_gauge + 0xd;
-            unk2c9 = 0x14;
+            m_playSound = 0x14;
             m_hitsLeft = 1;
         }
         timer++;
@@ -2671,7 +2671,7 @@ void CMisuzu::UpdatePattern()
         vy = 0.0;
         if (frame == 3 && timer == 0) {
             m_gauge = m_gauge + 0x19;
-            unk2c9 = 0x14;
+            m_playSound = 0x14;
             m_hitsLeft = 1;
         }
         timer++;
@@ -2683,7 +2683,7 @@ void CMisuzu::UpdatePattern()
                 l50.x = (double)((int)x + facing * 0x25);
                 l50.y = (double)((int)y - 2);
                 l50.scale = 2;
-                unk2c8 = 3;
+                m_playVoice = 3;
                 l50.layer = 1;
                 m_game->CreateEffect((EffectDesc*)&l50);
             }
@@ -2717,7 +2717,7 @@ void CMisuzu::UpdatePattern()
         }
         if (frame == 1 && timer == 0) {
             m_gauge = m_gauge + 5;
-            unk2c9 = 0x15;
+            m_playSound = 0x15;
             m_hitsLeft = 1;
         }
         if (y + vy >= 0.0) {
@@ -2756,7 +2756,7 @@ void CMisuzu::UpdatePattern()
         }
         if (frame == 2 && timer == 0) {
             m_gauge = m_gauge + 0xd;
-            unk2c9 = 0x14;
+            m_playSound = 0x14;
             m_hitsLeft = 1;
         }
         if (y + vy >= 0.0) {
@@ -2795,7 +2795,7 @@ void CMisuzu::UpdatePattern()
         }
         if (frame == 3 && timer == 0) {
             m_gauge = m_gauge + 0x1e;
-            unk2c9 = 0x14;
+            m_playSound = 0x14;
             m_hitsLeft = 1;
         }
         if (y + vy >= 0.0) {
@@ -2833,7 +2833,7 @@ void CMisuzu::UpdatePattern()
         }
         if (frame == 2 && timer == 0) {
             m_gauge = m_gauge + 0xf;
-            unk2c9 = 0x14;
+            m_playSound = 0x14;
             m_hitsLeft = 1;
         }
         if (frame == 5 && timer == 0) {
@@ -2872,7 +2872,7 @@ void CMisuzu::UpdatePattern()
         }
         if (frame == 8 && timer == 0) {
             m_gauge = m_gauge + 0x23;
-            unk2c9 = 0x14;
+            m_playSound = 0x14;
             m_hitsLeft = 1;
         }
         if (y < 0.0) {
@@ -2907,7 +2907,7 @@ void CMisuzu::UpdatePattern()
         vy = vy + ay;
         if (frame == 0 && timer == 0) {
             m_gauge = m_gauge + 0x1e;
-            unk2c9 = 0x14;
+            m_playSound = 0x14;
             m_hitsLeft = 1;
             vx = vx / 2.0;
             ay = 0.07;
@@ -2930,7 +2930,7 @@ void CMisuzu::UpdatePattern()
             l50.layer = 0;
             l50.unk2c = 7;
             m_game->CreateEffect((EffectDesc*)&l50);
-            unk2c9 = 7;
+            m_playSound = 7;
             pattern = 0xd6;
             StartPattern();
             break;
@@ -3094,7 +3094,7 @@ void CMisuzu::UpdatePattern()
         }
         if (frame == 1 && timer == 0) {
             m_gauge = m_gauge + 5;
-            unk2c9 = 0x15;
+            m_playSound = 0x15;
             m_hitsLeft = 1;
         }
         if (y + vy >= 0.0) {
@@ -3122,7 +3122,7 @@ void CMisuzu::UpdatePattern()
         }
         if (frame == 2 && timer == 0) {
             m_gauge = m_gauge + 0xa;
-            unk2c9 = 0x15;
+            m_playSound = 0x15;
             m_hitsLeft = 1;
         }
         if (y + vy >= 0.0) {
@@ -3150,7 +3150,7 @@ void CMisuzu::UpdatePattern()
         }
         if (frame == 1 && timer == 0) {
             m_gauge = m_gauge + 0xa;
-            unk2c9 = 0x14;
+            m_playSound = 0x14;
             m_hitsLeft = 1;
         }
         if (y + vy >= 0.0) {
@@ -3273,7 +3273,7 @@ void CMisuzu::UpdatePattern()
             l50.unk18 = facing;
             l50.unk0 = 1;
             l50.layer = 1;
-            unk2c8 = 1;
+            m_playVoice = 1;
             SpawnObject(&l50);
         }
         timer++;
@@ -3298,7 +3298,7 @@ void CMisuzu::UpdatePattern()
             l50.unk0 = 1;
             l50.unk18 = facing;
             l50.layer = 1;
-            unk2c8 = 1;
+            m_playVoice = 1;
             SpawnObject(&l50);
         }
         timer++;
@@ -3340,7 +3340,7 @@ void CMisuzu::UpdatePattern()
             l50.unk18 = facing;
             l50.unk0 = 1;
             l50.layer = 1;
-            unk2c8 = 1;
+            m_playVoice = 1;
             SpawnObject(&l50);
         }
         timer++;
@@ -3555,7 +3555,7 @@ void CMisuzu::UpdatePattern()
             timer = 0;
             frame++;
             if (frame == 0xa) {
-                unk2c8 = 9;
+                m_playVoice = 9;
             }
             if (frame == 0x11) {
                 frame = frame - 2;
@@ -3602,7 +3602,7 @@ void CMisuzu::UpdatePattern()
             timer = 0;
             frame++;
             if (frame == 0xa) {
-                unk2c8 = 9;
+                m_playVoice = 9;
             }
             if (frame == 0x11) {
                 frame = frame - 2;
@@ -3665,7 +3665,7 @@ void CMisuzu::UpdatePattern()
             timer = 0;
             frame++;
             if (frame == 0xa) {
-                unk2c8 = 0xa;
+                m_playVoice = 0xa;
             }
             if (frame == 0x11) {
                 frame = frame - 2;
@@ -3704,7 +3704,7 @@ void CMisuzu::UpdatePattern()
             timer = 0;
             frame++;
             if (frame == 2) {
-                unk2c8 = 9;
+                m_playVoice = 9;
             }
             if (frame == 9) {
                 frame = frame - 2;
@@ -3743,7 +3743,7 @@ void CMisuzu::UpdatePattern()
             timer = 0;
             frame++;
             if (frame == 2) {
-                unk2c8 = 9;
+                m_playVoice = 9;
             }
             if (frame == 9) {
                 frame = frame - 2;
@@ -3798,7 +3798,7 @@ void CMisuzu::UpdatePattern()
             timer = 0;
             frame++;
             if (frame == 2) {
-                unk2c8 = 0xa;
+                m_playVoice = 0xa;
             }
             if (frame == 9) {
                 frame = frame - 2;
@@ -3822,7 +3822,7 @@ void CMisuzu::UpdatePattern()
             l50.layer = 1;
             l50.scale = 2;
             SpawnObject(&l50);
-            unk2c8 = 6;
+            m_playVoice = 6;
         }
         timer++;
         if (timer >= l4) {
@@ -3847,7 +3847,7 @@ void CMisuzu::UpdatePattern()
             l50.layer = 1;
             l50.scale = 2;
             SpawnObject(&l50);
-            unk2c8 = 6;
+            m_playVoice = 6;
         }
         timer++;
         if (timer >= l4) {
@@ -3884,7 +3884,7 @@ void CMisuzu::UpdatePattern()
             l50.layer = 1;
             l50.scale = 2;
             SpawnObject(&l50);
-            unk2c8 = 6;
+            m_playVoice = 6;
         }
         timer++;
         if (timer >= l4) {
@@ -3918,7 +3918,7 @@ void CMisuzu::UpdatePattern()
             frame = 8;
             m_attackResult = 0;
             unk14c = 0x9f;
-            unk2c9 = 3;
+            m_playSound = 3;
             l50.type = 0;
             l50.x = (double)((int)x + facing * 0xa);
             l50.y = (double)((int)y - 0x28);
@@ -3977,7 +3977,7 @@ void CMisuzu::UpdatePattern()
             frame = 8;
             m_attackResult = 0;
             unk14c = 0x9f;
-            unk2c9 = 3;
+            m_playSound = 3;
             l50.type = 0;
             l50.x = (double)((int)x + facing * 0xa);
             l50.y = (double)((int)y - 0x28);
@@ -4031,14 +4031,14 @@ void CMisuzu::UpdatePattern()
             l50.unk0 = 1;
             l50.layer = 1;
             m_game->CreateEffect((EffectDesc*)&l50);
-            unk2c9 = 0x25;
+            m_playSound = 0x25;
         }
         if (m_attackResult == 6 && frame == 7) {
             StartPattern();
             frame = 8;
             m_attackResult = 0;
             unk14c = 0x9f;
-            unk2c9 = 3;
+            m_playSound = 3;
             l50.type = 0;
             l50.x = (double)((int)x + facing * 0xa);
             l50.y = (double)((int)y - 0x28);
@@ -4156,7 +4156,7 @@ void CMisuzu::UpdatePattern()
             frame = 8;
             m_attackResult = 0;
             unk14c = 0x9f;
-            unk2c9 = 3;
+            m_playSound = 3;
             l50.type = 0;
             l50.x = (double)((int)x + facing * 0xa);
             l50.y = (double)((int)y - 0x28);
@@ -4300,7 +4300,7 @@ void CMisuzu::UpdatePattern()
             l50.unk0 = 1;
             l50.layer = 1;
             m_game->CreateEffect((EffectDesc*)&l50);
-            unk2c9 = 0x25;
+            m_playSound = 0x25;
             l50.type = 0x1b8;
             l50.x = (double)((int)x - facing * 0x32);
             l50.y = (double)((int)y + 0xc8);
@@ -4427,7 +4427,7 @@ void CMisuzu::UpdatePattern()
             l50.unk0 = 1;
             l50.layer = 1;
             m_game->CreateEffect((EffectDesc*)&l50);
-            unk2c9 = 0x25;
+            m_playSound = 0x25;
         }
         if (frame == 9 && timer == 0) {
             unk3464 += 3;
@@ -4568,7 +4568,7 @@ void CMisuzu::UpdatePattern()
             l50.unk0 = 1;
             l50.layer = 1;
             m_game->CreateEffect((EffectDesc*)&l50);
-            unk2c9 = 0x25;
+            m_playSound = 0x25;
             l50.type = 0x47;
             m_game->CreateEffect((EffectDesc*)&l50);
         }
@@ -4662,7 +4662,7 @@ void CMisuzu::UpdatePattern()
                 l50.scale = 2;
                 l50.layer = 0;
                 m_game->CreateEffect((EffectDesc*)&l50);
-                unk2c9 = 7;
+                m_playSound = 7;
                 m_game->FadeMusic(0, 0x3e8);
             }
             if (frame >= x8) {

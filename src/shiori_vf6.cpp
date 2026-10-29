@@ -101,7 +101,7 @@ void CShiori::UpdatePattern()
         }
         if (y + vy >= 0.0 && frame > 3) {
             y = 0.0;
-            unk2c9 = 9;
+            m_playSound = 9;
             CPlayer::FaceOpponent();
             pattern = 0xd;
             StartPattern();
@@ -137,7 +137,7 @@ void CShiori::UpdatePattern()
         }
         if (y + vy >= 0.0 && frame > 3) {
             y = 0.0;
-            unk2c9 = 9;
+            m_playSound = 9;
             CPlayer::FaceOpponent();
             pattern = 0xd;
             StartPattern();
@@ -169,7 +169,7 @@ void CShiori::UpdatePattern()
         }
         if (y + vy >= 0.0 && frame > 3) {
             y = 0.0;
-            unk2c9 = 9;
+            m_playSound = 9;
             CPlayer::FaceOpponent();
             pattern = 0xd;
             StartPattern();
@@ -218,7 +218,7 @@ void CShiori::UpdatePattern()
         }
         if (y + vy >= 0.0) {
             y = 0.0;
-            unk2c9 = 9;
+            m_playSound = 9;
             pattern = 0xd;
             StartPattern();
         }
@@ -264,7 +264,7 @@ void CShiori::UpdatePattern()
         }
         if (y + vy >= 0.0 && frame > 3) {
             y = 0.0;
-            unk2c9 = 9;
+            m_playSound = 9;
             CPlayer::FaceOpponent();
             pattern = 0xd;
             StartPattern();
@@ -293,7 +293,7 @@ void CShiori::UpdatePattern()
         }
         if (y + vy >= 0.0 && frame > 3) {
             y = 0.0;
-            unk2c9 = 9;
+            m_playSound = 9;
             CPlayer::FaceOpponent();
             pattern = 0xd;
             StartPattern();
@@ -321,7 +321,7 @@ void CShiori::UpdatePattern()
         }
         if (y + vy >= 0.0 && frame > 3) {
             y = 0.0;
-            unk2c9 = 9;
+            m_playSound = 9;
             CPlayer::FaceOpponent();
             pattern = 0xd;
             StartPattern();
@@ -336,7 +336,7 @@ void CShiori::UpdatePattern()
         if (y + vy > 0.0 && frame < 2) {
             timer = 0;
             frame = 2;
-            unk2c9 = 7;
+            m_playSound = 7;
             y = 0.0;
             vy = 0.0;
             ay = 0.0;
@@ -1123,7 +1123,7 @@ void CShiori::UpdatePattern()
             vx = 0.5;
             vy = -2.5;
             ay = 0.025;
-            unk2c9 = 0x1f;
+            m_playSound = 0x1f;
             l50.type = 0;
             l50.x = (double)(int)x;
             l50.y = (double)(int)y;
@@ -1417,7 +1417,7 @@ void CShiori::UpdatePattern()
             unk118 -= 0.8;
         }
         if (frame == 0 && timer == 0 && unk3138 == 0) {
-            unk2c9 = 0x1e;
+            m_playSound = 0x1e;
             vy = -0.45;
             vx = -0.1;
             unk3138++;
@@ -1474,7 +1474,7 @@ void CShiori::UpdatePattern()
             if (unk120 != 0) {
                 unk118 -= 30.0;
             }
-            unk2c9 = 0x21;
+            m_playSound = 0x21;
             vy = -1.5;
             vx = -0.8;
             m_gauge = m_gauge + 0x1e;
@@ -1526,7 +1526,7 @@ void CShiori::UpdatePattern()
             if (unk120 != 0) {
                 unk118 -= 30.0;
             }
-            unk2c9 = 0x21;
+            m_playSound = 0x21;
             vy = -1.5;
             vx = -0.8;
             m_gauge = m_gauge + 0x1e;
@@ -1578,7 +1578,7 @@ void CShiori::UpdatePattern()
             if (unk120 != 0) {
                 unk118 -= 30.0;
             }
-            unk2c9 = 0x21;
+            m_playSound = 0x21;
             vx = unkc0;
             vy = unkc8;
             m_gauge = m_gauge + 0x1e;
@@ -1622,7 +1622,7 @@ void CShiori::UpdatePattern()
                 if (unk120 != 0) {
                     unk118 -= 30.0;
                 }
-                unk2c9 = 0x21;
+                m_playSound = 0x21;
                 vx = unkc0;
                 vy = unkc8;
                 m_gauge = m_gauge + 0x1e;
@@ -1698,7 +1698,7 @@ void CShiori::UpdatePattern()
             l50.scale = 2;
             l50.layer = 0;
             m_game->CreateEffect((EffectDesc*)&l50);
-            unk2c9 = 7;
+            m_playSound = 7;
         }
         timer++;
         if (timer >= l4) {
@@ -1721,7 +1721,7 @@ void CShiori::UpdatePattern()
             l50.scale = 2;
             l50.layer = 0;
             m_game->CreateEffect((EffectDesc*)&l50);
-            unk2c9 = 7;
+            m_playSound = 7;
         }
         timer++;
         if (timer >= l4) {
@@ -2002,7 +2002,7 @@ void CShiori::UpdatePattern()
         }
         if (y + vy >= 0.0) {
             y = 0.0;
-            unk2c9 = 9;
+            m_playSound = 9;
             CPlayer::FaceOpponent();
             pattern = 0xd;
             StartPattern();
@@ -2033,7 +2033,7 @@ void CShiori::UpdatePattern()
         }
         if (y + vy >= 0.0) {
             y = 0.0;
-            unk2c9 = 9;
+            m_playSound = 9;
             CPlayer::FaceOpponent();
             pattern = 0xd;
             StartPattern();
@@ -2064,7 +2064,7 @@ void CShiori::UpdatePattern()
         }
         if (y + vy >= 0.0) {
             y = 0.0;
-            unk2c9 = 9;
+            m_playSound = 9;
             CPlayer::FaceOpponent();
             pattern = 0xd;
             StartPattern();
@@ -2080,7 +2080,7 @@ void CShiori::UpdatePattern()
             l50.layer = 1;
             m_game->CreateEffect((EffectDesc*)&l50);
             m_hitsLeft = 1;
-            unk2c9 = 0x3e;
+            m_playSound = 0x3e;
             unk3138++;
         }
         timer++;
@@ -2112,7 +2112,7 @@ void CShiori::UpdatePattern()
             l50.layer = 1;
             m_game->CreateEffect((EffectDesc*)&l50);
             m_hitsLeft = 1;
-            unk2c9 = 0x3e;
+            m_playSound = 0x3e;
             m_gauge = m_gauge - 0x3e8;
             unk3138++;
         }
@@ -2202,7 +2202,7 @@ void CShiori::UpdatePattern()
             ax = 0.0;
             y = 0.0;
             unk3138++;
-            unk2c9 = 9;
+            m_playSound = 9;
             frame = 5;
             timer = 0;
         }
@@ -2223,7 +2223,7 @@ void CShiori::UpdatePattern()
             CPlayer::Unk4109d0(3);
             vy = 0.0;
             ay = 0.0;
-            unk2c9 = 0x11;
+            m_playSound = 0x11;
         }
         timer++;
         unk3138++;
@@ -2260,7 +2260,7 @@ void CShiori::UpdatePattern()
             vy = 0.0;
             ay = 0.0;
             CPlayer::Unk4109d0(3);
-            unk2c9 = 0x11;
+            m_playSound = 0x11;
         }
         timer++;
         unk3138++;
@@ -2304,7 +2304,7 @@ void CShiori::UpdatePattern()
             CPlayer::Unk410b10(0xb0, 3);
         }
         if (frame == 1 && timer == 0) {
-            unk2c9 = 0x12;
+            m_playSound = 0x12;
             l50.type = 1;
             l50.x = (double)(int)x;
             l50.y = (double)(int)y;
@@ -2443,7 +2443,7 @@ void CShiori::UpdatePattern()
             CPlayer::Unk410b10(0xb0, 3);
         }
         if (frame == 0 && timer == 0) {
-            unk2c9 = 0x12;
+            m_playSound = 0x12;
             l50.type = 1;
             l50.x = (double)(int)x;
             l50.y = (double)(int)y;
@@ -2510,7 +2510,7 @@ void CShiori::UpdatePattern()
             y = 0.0;
             timer = 0;
             frame = 0xa;
-            unk2c9 = 9;
+            m_playSound = 9;
         }
         timer++;
         if (timer >= l4) {
@@ -2555,7 +2555,7 @@ void CShiori::UpdatePattern()
         }
         if (frame == 2 && timer == 0) {
             m_gauge = m_gauge + 5;
-            unk2c9 = 0x15;
+            m_playSound = 0x15;
             m_hitsLeft = 1;
         }
         timer++;
@@ -2597,7 +2597,7 @@ void CShiori::UpdatePattern()
         }
         if (frame == 1 && timer == 0) {
             m_gauge = m_gauge + 0xf;
-            unk2c9 = 0x14;
+            m_playSound = 0x14;
             m_hitsLeft = 1;
         }
         timer++;
@@ -2627,7 +2627,7 @@ void CShiori::UpdatePattern()
         }
         if (frame == 4 && timer == 0) {
             m_gauge = m_gauge + 0xf;
-            unk2c9 = 0x14;
+            m_playSound = 0x14;
             m_hitsLeft = 1;
         }
         timer++;
@@ -2681,7 +2681,7 @@ void CShiori::UpdatePattern()
         }
         if (frame == 5 && timer == 0) {
             m_gauge = m_gauge + 0x23;
-            unk2c9 = 0x14;
+            m_playSound = 0x14;
             m_hitsLeft = 1;
             l50.type = 0x190;
             l50.x = (double)((int)x + facing * 0x1e);
@@ -2738,7 +2738,7 @@ void CShiori::UpdatePattern()
         }
         if (frame == 1 && timer == 0) {
             m_gauge = m_gauge + 5;
-            unk2c9 = 0x15;
+            m_playSound = 0x15;
             m_hitsLeft = 1;
         }
         timer++;
@@ -2783,7 +2783,7 @@ void CShiori::UpdatePattern()
         }
         if (frame == 2 && timer == 0) {
             m_gauge = m_gauge + 0xd;
-            unk2c9 = 0x14;
+            m_playSound = 0x14;
             m_hitsLeft = 1;
         }
         timer++;
@@ -2816,7 +2816,7 @@ void CShiori::UpdatePattern()
         }
         if (frame == 3 && timer == 0) {
             m_gauge = m_gauge + 0x19;
-            unk2c9 = 0x14;
+            m_playSound = 0x14;
             m_hitsLeft = 1;
         }
         timer++;
@@ -2853,7 +2853,7 @@ void CShiori::UpdatePattern()
         }
         if (frame == 2 && timer == 0) {
             m_gauge = m_gauge + 5;
-            unk2c9 = 0x15;
+            m_playSound = 0x15;
             m_hitsLeft = 1;
         }
         if (y + vy >= 0.0) {
@@ -2892,7 +2892,7 @@ void CShiori::UpdatePattern()
         }
         if (frame == 1 && timer == 0) {
             m_gauge = m_gauge + 0xd;
-            unk2c9 = 0x14;
+            m_playSound = 0x14;
             m_hitsLeft = 1;
         }
         if (y + vy >= 0.0) {
@@ -2934,9 +2934,9 @@ void CShiori::UpdatePattern()
             break;
         }
         if (frame == 2 && timer == 0) {
-            unk2c8 = 2;
+            m_playVoice = 2;
             m_gauge = m_gauge + 0x1e;
-            unk2c9 = 0x14;
+            m_playSound = 0x14;
             m_hitsLeft = 3;
         }
         if (y + vy >= 0.0) {
@@ -3047,7 +3047,7 @@ void CShiori::UpdatePattern()
         }
         if (frame == 1 && timer == 0) {
             m_gauge = m_gauge + 5;
-            unk2c9 = 0x15;
+            m_playSound = 0x15;
             m_hitsLeft = 1;
         }
         timer++;
@@ -3087,7 +3087,7 @@ void CShiori::UpdatePattern()
         }
         if (frame == 2 && timer == 0) {
             m_gauge = m_gauge + 0xa;
-            unk2c9 = 0x14;
+            m_playSound = 0x14;
             m_hitsLeft = 1;
         }
         timer++;
@@ -3111,7 +3111,7 @@ void CShiori::UpdatePattern()
         }
         if (frame == 6 && timer == 0) {
             m_gauge = m_gauge + 0x19;
-            unk2c9 = 0x14;
+            m_playSound = 0x14;
         }
         if (y < 0.0) {
             vy = vy + ay;
@@ -3152,7 +3152,7 @@ void CShiori::UpdatePattern()
         }
         if (frame == 1 && timer == 0) {
             m_gauge = m_gauge + 5;
-            unk2c9 = 0x15;
+            m_playSound = 0x15;
             m_hitsLeft = 1;
         }
         timer++;
@@ -3179,7 +3179,7 @@ void CShiori::UpdatePattern()
         }
         if (frame == 2 && timer == 0) {
             m_gauge = m_gauge + 5;
-            unk2c9 = 0x15;
+            m_playSound = 0x15;
             m_hitsLeft = 1;
         }
         timer++;
@@ -3207,7 +3207,7 @@ void CShiori::UpdatePattern()
         }
         if (frame == 2 && timer == 0) {
             m_gauge = m_gauge + 5;
-            unk2c9 = 0x15;
+            m_playSound = 0x15;
             m_hitsLeft = 1;
         }
         timer++;
@@ -3314,7 +3314,7 @@ void CShiori::UpdatePattern()
                 l50.layer = 1;
                 l50.unk18 = facing;
                 SpawnObject(&l50);
-                unk2c8 = 5;
+                m_playVoice = 5;
             }
             if (frame == 7 && unk3138 > 0) {
                 frame = frame - 2;
@@ -3346,7 +3346,7 @@ void CShiori::UpdatePattern()
                 l50.layer = 1;
                 l50.unk18 = facing;
                 SpawnObject(&l50);
-                unk2c8 = 5;
+                m_playVoice = 5;
             }
             if (frame == 7 && unk3138 > 0) {
                 frame = frame - 2;
@@ -3391,7 +3391,7 @@ void CShiori::UpdatePattern()
             l50.layer = 1;
             l50.unk18 = facing;
             SpawnObject(&l50);
-            unk2c8 = 5;
+            m_playVoice = 5;
         }
         if (unk313c == 0x28) {
             l50.type = 0x1ab;
@@ -3401,7 +3401,7 @@ void CShiori::UpdatePattern()
             l50.layer = 1;
             l50.unk18 = facing;
             SpawnObject(&l50);
-            unk2c8 = 5;
+            m_playVoice = 5;
         }
         if (frame > 4) {
             unk313c++;
@@ -3420,7 +3420,7 @@ void CShiori::UpdatePattern()
                 l50.layer = 1;
                 l50.unk18 = facing;
                 SpawnObject(&l50);
-                unk2c8 = 5;
+                m_playVoice = 5;
             }
             if (frame == 7 && unk3138 > 0) {
                 frame = frame - 2;
@@ -3442,11 +3442,11 @@ void CShiori::UpdatePattern()
             m_hitsLeft = 5;
         }
         if (frame == 4 && timer == 0) {
-            unk2c9 = 0x14;
+            m_playSound = 0x14;
             m_gauge = m_gauge + 1;
         }
         if (frame == 6 && timer == 0) {
-            unk2c9 = 0x14;
+            m_playSound = 0x14;
             m_gauge = m_gauge + 1;
         }
         timer++;
@@ -3476,11 +3476,11 @@ void CShiori::UpdatePattern()
             m_hitsLeft = 9;
         }
         if (frame == 4 && timer == 0) {
-            unk2c9 = 0x14;
+            m_playSound = 0x14;
             m_gauge = m_gauge + 1;
         }
         if (frame == 6 && timer == 0) {
-            unk2c9 = 0x14;
+            m_playSound = 0x14;
             m_gauge = m_gauge + 1;
         }
         timer++;
@@ -3528,11 +3528,11 @@ void CShiori::UpdatePattern()
             SpawnObject(&l50);
         }
         if (frame == 4 && timer == 0) {
-            unk2c9 = 0x14;
+            m_playSound = 0x14;
             m_gauge = m_gauge + 1;
         }
         if (frame == 6 && timer == 0) {
-            unk2c9 = 0x14;
+            m_playSound = 0x14;
             m_gauge = m_gauge + 1;
         }
         timer++;
@@ -3572,7 +3572,7 @@ void CShiori::UpdatePattern()
             m_attackResult = 3;
             if (frame == 4 && timer == 0) {
                 ay = 0.01;
-                unk2c8 = 1;
+                m_playVoice = 1;
                 l50.type = 0x192;
                 l50.x = (double)((int)x + facing * 0xe);
                 l50.y = (double)(int)y;
@@ -3620,7 +3620,7 @@ void CShiori::UpdatePattern()
             m_attackResult = 3;
             if (frame == 4 && timer == 0) {
                 ay = 0.01;
-                unk2c8 = 1;
+                m_playVoice = 1;
                 l50.type = 0x192;
                 l50.x = (double)((int)x + facing * 0xe);
                 l50.y = (double)(int)y;
@@ -3682,7 +3682,7 @@ void CShiori::UpdatePattern()
             m_attackResult = 3;
             if (frame == 4 && timer == 0) {
                 ay = 0.01;
-                unk2c8 = 1;
+                m_playVoice = 1;
                 l50.type = 0x194;
                 l50.x = (double)((int)x + facing * 0xe);
                 l50.y = (double)(int)y;
@@ -3837,7 +3837,7 @@ void CShiori::UpdatePattern()
                 l50.layer = 1;
                 l50.unk18 = facing;
                 SpawnObject(&l50);
-                unk2c8 = 5;
+                m_playVoice = 5;
             }
             if (frame == 7 && unk3138 > 0) {
                 frame = frame - 2;
@@ -3871,7 +3871,7 @@ void CShiori::UpdatePattern()
                 l50.layer = 1;
                 l50.unk18 = facing;
                 SpawnObject(&l50);
-                unk2c8 = 5;
+                m_playVoice = 5;
             }
             if (frame == 7 && unk3138 > 0) {
                 frame = frame - 2;
@@ -3914,7 +3914,7 @@ void CShiori::UpdatePattern()
             l50.unk18 = facing;
             unk3140 = 1;
             SpawnObject(&l50);
-            unk2c8 = 5;
+            m_playVoice = 5;
         }
         if (unk313c == 0x28) {
             l50.type = 0x1ac;
@@ -3925,7 +3925,7 @@ void CShiori::UpdatePattern()
             l50.unk18 = facing;
             unk3140 = 2;
             SpawnObject(&l50);
-            unk2c8 = 5;
+            m_playVoice = 5;
         }
         if (frame > 4) {
             unk313c++;
@@ -3944,7 +3944,7 @@ void CShiori::UpdatePattern()
                 l50.layer = 1;
                 l50.unk18 = facing;
                 SpawnObject(&l50);
-                unk2c8 = 5;
+                m_playVoice = 5;
             }
             if (frame == 7 && unk3138 > 0) {
                 frame = frame - 2;
@@ -3963,7 +3963,7 @@ void CShiori::UpdatePattern()
             unk3138 = 2;
         }
         if (frame == 3 && timer == 0) {
-            unk2c8 = 6;
+            m_playVoice = 6;
             l50.type = 0x1a2;
             l50.x = (double)((int)x + facing * 0x64);
             l50.y = (double)((int)y - 0x1e0);
@@ -3997,7 +3997,7 @@ void CShiori::UpdatePattern()
             unk3138 = 2;
         }
         if (frame == 3 && timer == 0) {
-            unk2c8 = 6;
+            m_playVoice = 6;
             l50.type = 0x1a2;
             l50.x = (double)((int)x + facing * 0xb4);
             l50.y = (double)((int)y - 0x1e0);
@@ -4031,7 +4031,7 @@ void CShiori::UpdatePattern()
             unk3138 = 2;
         }
         if (frame == 3 && timer == 0) {
-            unk2c8 = 6;
+            m_playVoice = 6;
             l50.type = 0x1a2;
             l50.x = (double)((int)x + facing * 0x104);
             l50.y = (double)((int)y - 0x1e0);
@@ -4197,7 +4197,7 @@ void CShiori::UpdatePattern()
             l50.unk0 = 1;
             l50.layer = 1;
             m_game->CreateEffect((EffectDesc*)&l50);
-            unk2c9 = 0x25;
+            m_playSound = 0x25;
             l50.type = 0x47;
             m_game->CreateEffect((EffectDesc*)&l50);
             l50.type = 0x1a3;
@@ -4264,10 +4264,10 @@ void CShiori::UpdatePattern()
             SpawnObject(&l50);
         }
         if (frame == 2 && timer == 0) {
-            unk2c8 = 4;
+            m_playVoice = 4;
         }
         if (frame == 3 && timer == 0) {
-            unk2c8 = 3;
+            m_playVoice = 3;
         }
         if (0) {}
         if (0) {}
@@ -4304,10 +4304,10 @@ void CShiori::UpdatePattern()
         }
         if (unk3138 == 0) {
             if (frame == 2 && timer == 0) {
-                unk2c8 = 4;
+                m_playVoice = 4;
             }
             if (frame == 3 && timer == 0) {
-                unk2c8 = 3;
+                m_playVoice = 3;
             }
         }
         if (frame > 1 && unk313c <= 0 && unk3140 < 5) {
@@ -4363,16 +4363,16 @@ void CShiori::UpdatePattern()
             l50.layer = 1;
             m_game->CreateEffect((EffectDesc*)&l50);
             m_hitsLeft = 0x1e;
-            unk2c9 = 0x25;
+            m_playSound = 0x25;
             CPlayer::StopMoving();
         }
         m_game->Unk4080c0(0xf);
         if (unk3138 == 0) {
             if (frame == 2 && timer == 0) {
-                unk2c8 = 4;
+                m_playVoice = 4;
             }
             if (frame == 3 && timer == 0) {
-                unk2c8 = 3;
+                m_playVoice = 3;
             }
         }
         if (frame > 1 && unk313c <= 0 && unk3140 < 5) {
@@ -4526,7 +4526,7 @@ void CShiori::UpdatePattern()
             l50.unk0 = 1;
             l50.layer = 1;
             m_game->CreateEffect((EffectDesc*)&l50);
-            unk2c9 = 0x25;
+            m_playSound = 0x25;
         }
         if (frame > 2) {
             m_game->Unk4080c0(0xf);
@@ -4645,7 +4645,7 @@ void CShiori::UpdatePattern()
             l50.unk0 = 1;
             l50.layer = 1;
             m_game->CreateEffect((EffectDesc*)&l50);
-            unk2c9 = 0x25;
+            m_playSound = 0x25;
         }
         if (frame > 3) {
             m_game->Unk4080c0(0xf);
@@ -4850,7 +4850,7 @@ void CShiori::UpdatePattern()
             l50.layer = 1;
             m_game->CreateEffect((EffectDesc*)&l50);
             CPlayer::StopMoving();
-            unk2c9 = 0x25;
+            m_playSound = 0x25;
         }
         if (frame > 0) {
             m_game->Unk4080c0(0xf);
@@ -5023,7 +5023,7 @@ void CShiori::UpdatePattern()
             l50.layer = 1;
             m_game->CreateEffect((EffectDesc*)&l50);
             CPlayer::StopMoving();
-            unk2c9 = 0x25;
+            m_playSound = 0x25;
         }
         if (frame > 0) {
             m_game->Unk4080c0(0xf);
@@ -5096,7 +5096,7 @@ void CShiori::UpdatePattern()
             l50.unk0 = 1;
             l50.layer = 1;
             m_game->CreateEffect((EffectDesc*)&l50);
-            unk2c9 = 0x25;
+            m_playSound = 0x25;
             l50.type = 0x47;
             m_game->CreateEffect((EffectDesc*)&l50);
         }

@@ -101,7 +101,7 @@ void CKano::UpdatePattern()
         }
         if (y + vy >= 0.0 && frame > 3) {
             y = 0.0;
-            unk2c9 = 9;
+            m_playSound = 9;
             CPlayer::FaceOpponent();
             pattern = 0xd;
             StartPattern();
@@ -137,7 +137,7 @@ void CKano::UpdatePattern()
         }
         if (y + vy >= 0.0 && frame > 3) {
             y = 0.0;
-            unk2c9 = 9;
+            m_playSound = 9;
             CPlayer::FaceOpponent();
             pattern = 0xd;
             StartPattern();
@@ -169,7 +169,7 @@ void CKano::UpdatePattern()
         }
         if (y + vy >= 0.0 && frame > 3) {
             y = 0.0;
-            unk2c9 = 9;
+            m_playSound = 9;
             CPlayer::FaceOpponent();
             pattern = 0xd;
             StartPattern();
@@ -218,7 +218,7 @@ void CKano::UpdatePattern()
         }
         if (y + vy >= 0.0) {
             y = 0.0;
-            unk2c9 = 9;
+            m_playSound = 9;
             pattern = 0xd;
             StartPattern();
         }
@@ -264,7 +264,7 @@ void CKano::UpdatePattern()
         }
         if (y + vy >= 0.0 && frame > 3) {
             y = 0.0;
-            unk2c9 = 9;
+            m_playSound = 9;
             CPlayer::FaceOpponent();
             pattern = 0xd;
             StartPattern();
@@ -293,7 +293,7 @@ void CKano::UpdatePattern()
         }
         if (y + vy >= 0.0 && frame > 3) {
             y = 0.0;
-            unk2c9 = 9;
+            m_playSound = 9;
             CPlayer::FaceOpponent();
             pattern = 0xd;
             StartPattern();
@@ -321,7 +321,7 @@ void CKano::UpdatePattern()
         }
         if (y + vy >= 0.0 && frame > 3) {
             y = 0.0;
-            unk2c9 = 9;
+            m_playSound = 9;
             CPlayer::FaceOpponent();
             pattern = 0xd;
             StartPattern();
@@ -336,7 +336,7 @@ void CKano::UpdatePattern()
         if (y + vy > 0.0 && frame < 2) {
             timer = 0;
             frame = 2;
-            unk2c9 = 7;
+            m_playSound = 7;
             y = 0.0;
             vy = 0.0;
             ay = 0.0;
@@ -1123,7 +1123,7 @@ void CKano::UpdatePattern()
             vx = 0.5;
             vy = -2.5;
             ay = 0.025;
-            unk2c9 = 0x1f;
+            m_playSound = 0x1f;
             l50.type = 0;
             l50.x = (double)(int)x;
             l50.y = (double)(int)y;
@@ -1417,7 +1417,7 @@ void CKano::UpdatePattern()
             unk118 -= 0.8;
         }
         if (frame == 0 && timer == 0 && unk3138 == 0) {
-            unk2c9 = 0x1e;
+            m_playSound = 0x1e;
             vy = -0.45;
             vx = -0.1;
             unk3138++;
@@ -1474,7 +1474,7 @@ void CKano::UpdatePattern()
             if (unk120 != 0) {
                 unk118 -= 30.0;
             }
-            unk2c9 = 0x21;
+            m_playSound = 0x21;
             vy = -1.5;
             vx = -0.8;
             m_gauge = m_gauge + 0x1e;
@@ -1526,7 +1526,7 @@ void CKano::UpdatePattern()
             if (unk120 != 0) {
                 unk118 -= 30.0;
             }
-            unk2c9 = 0x21;
+            m_playSound = 0x21;
             vy = -1.5;
             vx = -0.8;
             m_gauge = m_gauge + 0x1e;
@@ -1578,7 +1578,7 @@ void CKano::UpdatePattern()
             if (unk120 != 0) {
                 unk118 -= 30.0;
             }
-            unk2c9 = 0x21;
+            m_playSound = 0x21;
             vx = unkc0;
             vy = unkc8;
             m_gauge = m_gauge + 0x1e;
@@ -1622,7 +1622,7 @@ void CKano::UpdatePattern()
                 if (unk120 != 0) {
                     unk118 -= 30.0;
                 }
-                unk2c9 = 0x21;
+                m_playSound = 0x21;
                 vx = unkc0;
                 vy = unkc8;
                 m_gauge = m_gauge + 0x1e;
@@ -1698,7 +1698,7 @@ void CKano::UpdatePattern()
             l50.scale = 2;
             l50.layer = 0;
             m_game->CreateEffect((EffectDesc*)&l50);
-            unk2c9 = 7;
+            m_playSound = 7;
         }
         timer++;
         if (timer >= l4) {
@@ -1721,7 +1721,7 @@ void CKano::UpdatePattern()
             l50.scale = 2;
             l50.layer = 0;
             m_game->CreateEffect((EffectDesc*)&l50);
-            unk2c9 = 7;
+            m_playSound = 7;
         }
         timer++;
         if (timer >= l4) {
@@ -2002,7 +2002,7 @@ void CKano::UpdatePattern()
         }
         if (y + vy >= 0.0) {
             y = 0.0;
-            unk2c9 = 9;
+            m_playSound = 9;
             CPlayer::FaceOpponent();
             pattern = 0xd;
             StartPattern();
@@ -2033,7 +2033,7 @@ void CKano::UpdatePattern()
         }
         if (y + vy >= 0.0) {
             y = 0.0;
-            unk2c9 = 9;
+            m_playSound = 9;
             CPlayer::FaceOpponent();
             pattern = 0xd;
             StartPattern();
@@ -2064,7 +2064,7 @@ void CKano::UpdatePattern()
         }
         if (y + vy >= 0.0) {
             y = 0.0;
-            unk2c9 = 9;
+            m_playSound = 9;
             CPlayer::FaceOpponent();
             pattern = 0xd;
             StartPattern();
@@ -2080,7 +2080,7 @@ void CKano::UpdatePattern()
             l50.layer = 1;
             m_game->CreateEffect((EffectDesc*)&l50);
             m_hitsLeft = 1;
-            unk2c9 = 0x3e;
+            m_playSound = 0x3e;
             unk3138++;
         }
         timer++;
@@ -2112,7 +2112,7 @@ void CKano::UpdatePattern()
             l50.layer = 1;
             m_game->CreateEffect((EffectDesc*)&l50);
             m_hitsLeft = 1;
-            unk2c9 = 0x3e;
+            m_playSound = 0x3e;
             m_gauge = m_gauge - 0x3e8;
             unk3138++;
         }
@@ -2189,7 +2189,7 @@ void CKano::UpdatePattern()
             vy = 0.0;
             ay = 0.0;
             unk3138 = 1;
-            unk2c9 = 0x11;
+            m_playSound = 0x11;
         }
         if (frame > -1) {
             vx += 0.04;
@@ -2216,7 +2216,7 @@ void CKano::UpdatePattern()
             CPlayer::Unk4109d0(3);
             vy = 0.0;
             ay = 0.0;
-            unk2c9 = 0x11;
+            m_playSound = 0x11;
         }
         timer++;
         unk3138++;
@@ -2253,7 +2253,7 @@ void CKano::UpdatePattern()
             vy = 0.0;
             ay = 0.0;
             CPlayer::Unk4109d0(3);
-            unk2c9 = 0x11;
+            m_playSound = 0x11;
         }
         timer++;
         unk3138++;
@@ -2297,7 +2297,7 @@ void CKano::UpdatePattern()
             CPlayer::Unk410b10(0xb0, 3);
         }
         if (frame == 1 && timer == 0) {
-            unk2c9 = 0x12;
+            m_playSound = 0x12;
             l50.type = 1;
             l50.x = (double)(int)x;
             l50.y = (double)(int)y;
@@ -2436,7 +2436,7 @@ void CKano::UpdatePattern()
             CPlayer::Unk410b10(0xb0, 3);
         }
         if (frame == 0 && timer == 0) {
-            unk2c9 = 0x12;
+            m_playSound = 0x12;
             l50.type = 1;
             l50.x = (double)(int)x;
             l50.y = (double)(int)y;
@@ -2505,7 +2505,7 @@ void CKano::UpdatePattern()
             y = 0.0;
             timer = 0;
             frame = 9;
-            unk2c9 = 9;
+            m_playSound = 9;
         }
         timer++;
         if (timer >= l4) {
@@ -2549,7 +2549,7 @@ void CKano::UpdatePattern()
             break;
         }
         if (frame == 2 && timer == 0) {
-            unk2c9 = 0x15;
+            m_playSound = 0x15;
             m_hitsLeft = 1;
         }
         timer++;
@@ -2590,7 +2590,7 @@ void CKano::UpdatePattern()
             break;
         }
         if (frame == 1 && timer == 0) {
-            unk2c9 = 0x14;
+            m_playSound = 0x14;
             m_hitsLeft = 1;
         }
         timer++;
@@ -2619,7 +2619,7 @@ void CKano::UpdatePattern()
             unk158 = 0;
         }
         if (frame == 4 && timer == 0) {
-            unk2c9 = 0x14;
+            m_playSound = 0x14;
             m_hitsLeft = 1;
         }
         timer++;
@@ -2660,7 +2660,7 @@ void CKano::UpdatePattern()
             break;
         }
         if (frame == 4 && timer == 0) {
-            unk2c9 = 0x14;
+            m_playSound = 0x14;
             m_hitsLeft = 1;
         }
         timer++;
@@ -2701,7 +2701,7 @@ void CKano::UpdatePattern()
             break;
         }
         if (frame == 1 && timer == 0) {
-            unk2c9 = 0x15;
+            m_playSound = 0x15;
             m_hitsLeft = 1;
         }
         timer++;
@@ -2745,7 +2745,7 @@ void CKano::UpdatePattern()
             break;
         }
         if (frame == 2 && timer == 0) {
-            unk2c9 = 0x14;
+            m_playSound = 0x14;
             m_hitsLeft = 1;
         }
         timer++;
@@ -2777,7 +2777,7 @@ void CKano::UpdatePattern()
             unk158 = 0;
         }
         if (frame == 1 && timer == 0) {
-            unk2c9 = 0x15;
+            m_playSound = 0x15;
             m_hitsLeft = 1;
         }
         timer++;
@@ -2811,7 +2811,7 @@ void CKano::UpdatePattern()
             break;
         }
         if (frame == 2 && timer == 0) {
-            unk2c9 = 0x15;
+            m_playSound = 0x15;
             m_hitsLeft = 1;
         }
         if (y + vy >= 0.0) {
@@ -2849,11 +2849,11 @@ void CKano::UpdatePattern()
             break;
         }
         if (frame == 3 && timer == 0) {
-            unk2c9 = 0x14;
+            m_playSound = 0x14;
             m_hitsLeft = 2;
         }
         if (frame == 8 && timer == 0) {
-            unk2c9 = 0x14;
+            m_playSound = 0x14;
         }
         if (y + vy >= 0.0) {
             y = 0.0;
@@ -2893,10 +2893,10 @@ void CKano::UpdatePattern()
             m_hitsLeft = 5;
         }
         if (frame == 7 && timer == 0) {
-            unk2c9 = 0x14;
+            m_playSound = 0x14;
         }
         if (frame == 0xa && timer == 0) {
-            unk2c9 = 0x14;
+            m_playSound = 0x14;
         }
         if (y + vy >= 0.0) {
             y = 0.0;
@@ -2935,7 +2935,7 @@ void CKano::UpdatePattern()
             l50.unk18 = facing;
             SpawnObject(&l50);
             unk3138++;
-            unk2c8 = 2;
+            m_playVoice = 2;
             m_gauge = m_gauge - 0x14;
         }
         timer++;
@@ -2993,7 +2993,7 @@ void CKano::UpdatePattern()
         }
         if (frame == 1 && timer == 0) {
             vx = 2.6;
-            unk2c9 = 0x14;
+            m_playSound = 0x14;
             m_hitsLeft = 1;
         }
         if (frame > 0) {
@@ -3140,7 +3140,7 @@ void CKano::UpdatePattern()
             unk158 = 0;
         }
         if (frame == 4 && timer == 0) {
-            unk2c9 = 0x14;
+            m_playSound = 0x14;
             m_hitsLeft = 1;
         }
         timer++;
@@ -3237,7 +3237,7 @@ void CKano::UpdatePattern()
             vx = 1.2;
         }
         if (frame == 1 && timer == 0) {
-            unk2c9 = 0x15;
+            m_playSound = 0x15;
             m_hitsLeft = 1;
         }
         timer++;
@@ -3277,7 +3277,7 @@ void CKano::UpdatePattern()
             vx = 1.2;
         }
         if (frame == 4 && timer == 0) {
-            unk2c9 = 0x14;
+            m_playSound = 0x14;
             m_hitsLeft = 1;
         }
         timer++;
@@ -3317,7 +3317,7 @@ void CKano::UpdatePattern()
             vx = 1.2;
         }
         if (frame == 2 && timer == 0) {
-            unk2c9 = 0x14;
+            m_playSound = 0x14;
             m_hitsLeft = 1;
         }
         timer++;
@@ -3345,7 +3345,7 @@ void CKano::UpdatePattern()
             vx = 1.2;
         }
         if (frame == 1 && timer == 0) {
-            unk2c9 = 0x15;
+            m_playSound = 0x15;
             m_hitsLeft = 1;
         }
         timer++;
@@ -3373,7 +3373,7 @@ void CKano::UpdatePattern()
             vx = 1.2;
         }
         if (frame == 2 && timer == 0) {
-            unk2c9 = 0x15;
+            m_playSound = 0x15;
             m_hitsLeft = 1;
         }
         timer++;
@@ -3401,7 +3401,7 @@ void CKano::UpdatePattern()
             vx = 1.2;
         }
         if (frame == 2 && timer == 0) {
-            unk2c9 = 0x15;
+            m_playSound = 0x15;
             m_hitsLeft = 6;
         }
         timer++;
@@ -3513,7 +3513,7 @@ void CKano::UpdatePattern()
         if (frame == 0 && timer == 0) {
             unk158 = 0;
             CPlayer::StopMoving();
-            unk2c8 = 0;
+            m_playVoice = 0;
         }
         if (frame > 2 && frame < 7) {
             unk3150 += 0x4b;
@@ -3591,7 +3591,7 @@ void CKano::UpdatePattern()
                 l50.layer = 0;
                 l50.unk18 = facing;
                 SpawnObject(&l50);
-                unk2c8 = 1;
+                m_playVoice = 1;
             }
             if (frame >= x8) {
                 pattern = 0;
@@ -3603,7 +3603,7 @@ void CKano::UpdatePattern()
         if (frame == 0 && timer == 0) {
             unk158 = 0;
             CPlayer::StopMoving();
-            unk2c8 = 0;
+            m_playVoice = 0;
         }
         if (frame == 3 && timer == 0) {
             l50.type = 0x196;
@@ -3657,7 +3657,7 @@ void CKano::UpdatePattern()
                 l50.unk0 = 1;
                 l50.unk18 = facing;
                 SpawnObject(&l50);
-                unk2c8 = 3;
+                m_playVoice = 3;
                 unk3170++;
             }
             if (frame >= x8) {
@@ -3670,7 +3670,7 @@ void CKano::UpdatePattern()
         if (frame == 0 && timer == 0) {
             unk158 = 0;
             CPlayer::StopMoving();
-            unk2c8 = 0;
+            m_playVoice = 0;
         }
         if (frame == 3 && timer == 0) {
             l50.type = 0x196;
@@ -3724,7 +3724,7 @@ void CKano::UpdatePattern()
                 l50.unk0 = 1;
                 l50.unk18 = facing;
                 SpawnObject(&l50);
-                unk2c8 = 3;
+                m_playVoice = 3;
                 unk3170++;
                 m_gauge = m_gauge - 0x14;
             }
@@ -3738,7 +3738,7 @@ void CKano::UpdatePattern()
         if (frame == 0 && timer == 0) {
             unk158 = 0;
             CPlayer::StopMoving();
-            unk2c8 = 0;
+            m_playVoice = 0;
         }
         if (frame == 3 && timer == 0) {
             l50.type = 0x196;
@@ -3792,7 +3792,7 @@ void CKano::UpdatePattern()
                 l50.unk0 = 1;
                 l50.unk18 = facing;
                 SpawnObject(&l50);
-                unk2c8 = 3;
+                m_playVoice = 3;
                 unk3170++;
                 m_gauge = m_gauge - 0x32;
             }
@@ -3806,7 +3806,7 @@ void CKano::UpdatePattern()
         if (frame == 0 && timer == 0) {
             unk158 = 0;
             CPlayer::StopMoving();
-            unk2c8 = 0;
+            m_playVoice = 0;
         }
         if (frame == 7 && timer == 0) {
             unk158 = 0;
@@ -3860,7 +3860,7 @@ void CKano::UpdatePattern()
                 l50.unk18 = facing;
                 l50.unk0 = 1;
                 SpawnObject(&l50);
-                unk2c8 = 5;
+                m_playVoice = 5;
                 unk316c++;
             }
             if (frame == 0x13 && unk3138 < 1) {
@@ -3877,7 +3877,7 @@ void CKano::UpdatePattern()
         if (frame == 0 && timer == 0) {
             unk158 = 0;
             CPlayer::StopMoving();
-            unk2c8 = 0;
+            m_playVoice = 0;
         }
         if (frame == 7 && timer == 0) {
             unk158 = 0;
@@ -3932,7 +3932,7 @@ void CKano::UpdatePattern()
                     l50.unk0 = 1;
                     l50.unk18 = facing;
                     SpawnObject(&l50);
-                    unk2c8 = 5;
+                    m_playVoice = 5;
                     unk316c++;
                     m_gauge = m_gauge - 7;
                 }
@@ -3954,7 +3954,7 @@ void CKano::UpdatePattern()
                     l50.unk18 = facing;
                     l50.unk0 = 1;
                     SpawnObject(&l50);
-                    unk2c8 = 5;
+                    m_playVoice = 5;
                     unk316c++;
                     m_gauge = m_gauge - 7;
                 }
@@ -3973,7 +3973,7 @@ void CKano::UpdatePattern()
         if (frame == 0 && timer == 0) {
             unk158 = 0;
             CPlayer::StopMoving();
-            unk2c8 = 0;
+            m_playVoice = 0;
         }
         if (frame == 7 && timer == 0) {
             unk158 = 0;
@@ -4028,7 +4028,7 @@ void CKano::UpdatePattern()
                     l50.unk18 = facing;
                     l50.unk0 = 1;
                     SpawnObject(&l50);
-                    unk2c8 = 5;
+                    m_playVoice = 5;
                     unk316c++;
                     m_gauge = m_gauge - 0xa;
                 }
@@ -4050,7 +4050,7 @@ void CKano::UpdatePattern()
                     l50.unk18 = facing;
                     l50.unk0 = 1;
                     SpawnObject(&l50);
-                    unk2c8 = 5;
+                    m_playVoice = 5;
                     unk316c++;
                     m_gauge = m_gauge - 0xa;
                 }
@@ -4072,7 +4072,7 @@ void CKano::UpdatePattern()
                     l50.unk18 = facing;
                     l50.unk0 = 1;
                     SpawnObject(&l50);
-                    unk2c8 = 5;
+                    m_playVoice = 5;
                     unk316c++;
                     m_gauge = m_gauge - 0xa;
                 }
@@ -4091,7 +4091,7 @@ void CKano::UpdatePattern()
         if (frame == 0 && timer == 0) {
             unk158 = 0;
             CPlayer::StopMoving();
-            unk2c8 = 0;
+            m_playVoice = 0;
         }
         if (frame == 7 && timer == 0) {
             unk158 = 0;
@@ -4146,7 +4146,7 @@ void CKano::UpdatePattern()
                 l50.unk0 = 1;
                 SpawnObject(&l50);
                 unk3168++;
-                unk2c8 = 4;
+                m_playVoice = 4;
                 unk313c = 0x15;
                 unk3138++;
             }
@@ -4160,7 +4160,7 @@ void CKano::UpdatePattern()
         if (frame == 0 && timer == 0) {
             unk158 = 0;
             CPlayer::StopMoving();
-            unk2c8 = 0;
+            m_playVoice = 0;
         }
         if (frame == 7 && timer == 0) {
             unk158 = 0;
@@ -4214,7 +4214,7 @@ void CKano::UpdatePattern()
                 l50.unk18 = facing;
                 l50.unk0 = 1;
                 SpawnObject(&l50);
-                unk2c8 = 4;
+                m_playVoice = 4;
                 unk3168++;
                 unk313c = 0x15;
                 unk3138++;
@@ -4230,7 +4230,7 @@ void CKano::UpdatePattern()
         if (frame == 0 && timer == 0) {
             unk158 = 0;
             CPlayer::StopMoving();
-            unk2c8 = 0;
+            m_playVoice = 0;
         }
         if (frame == 7 && timer == 0) {
             unk158 = 0;
@@ -4285,7 +4285,7 @@ void CKano::UpdatePattern()
                 l50.unk0 = 1;
                 SpawnObject(&l50);
                 unk3168++;
-                unk2c8 = 4;
+                m_playVoice = 4;
                 unk313c = 0x15;
                 unk3138++;
                 m_gauge = m_gauge - 0x32;
@@ -4300,7 +4300,7 @@ void CKano::UpdatePattern()
         if (frame == 0 && timer == 0) {
             unk158 = 0;
             CPlayer::StopMoving();
-            unk2c8 = 0;
+            m_playVoice = 0;
         }
         if (frame == 6 && timer == 0) {
             unk158 = 0;
@@ -4327,7 +4327,7 @@ void CKano::UpdatePattern()
             l50.unk18 = facing;
             SpawnObject(&l50);
             unk3138++;
-            unk2c8 = 2;
+            m_playVoice = 2;
         }
         if (frame == 3 && timer == 0) {
             l50.type = 0x196;
@@ -4367,7 +4367,7 @@ void CKano::UpdatePattern()
         if (frame == 0 && timer == 0) {
             unk158 = 0;
             CPlayer::StopMoving();
-            unk2c8 = 0;
+            m_playVoice = 0;
         }
         if (frame == 6 && timer == 0) {
             unk158 = 0;
@@ -4394,7 +4394,7 @@ void CKano::UpdatePattern()
             l50.unk18 = facing;
             SpawnObject(&l50);
             unk3138++;
-            unk2c8 = 2;
+            m_playVoice = 2;
         }
         if (frame == 3 && timer == 0) {
             l50.type = 0x196;
@@ -4437,7 +4437,7 @@ void CKano::UpdatePattern()
             unk3138 = 2;
         }
         if (frame == 3 && timer == 0) {
-            unk2c8 = 6;
+            m_playVoice = 6;
             l50.type = 0x1a2;
             l50.x = (double)((int)x + facing * 0x64);
             l50.y = (double)((int)y - 0x1e0);
@@ -4471,7 +4471,7 @@ void CKano::UpdatePattern()
             unk3138 = 2;
         }
         if (frame == 3 && timer == 0) {
-            unk2c8 = 6;
+            m_playVoice = 6;
             l50.type = 0x1a2;
             l50.x = (double)((int)x + facing * 0xb4);
             l50.y = (double)((int)y - 0x1e0);
@@ -4505,7 +4505,7 @@ void CKano::UpdatePattern()
             unk3138 = 2;
         }
         if (frame == 3 && timer == 0) {
-            unk2c8 = 6;
+            m_playVoice = 6;
             l50.type = 0x1a2;
             l50.x = (double)((int)x + facing * 0x104);
             l50.y = (double)((int)y - 0x1e0);
@@ -4683,7 +4683,7 @@ void CKano::UpdatePattern()
         if (frame == 0 && timer == 0) {
             unk158 = 0;
             CPlayer::StopMoving();
-            unk2c8 = 0;
+            m_playVoice = 0;
         }
         if (frame == 0xd && timer == 0) {
             unk14c = 0x78;
@@ -4730,7 +4730,7 @@ void CKano::UpdatePattern()
             SpawnObject(&l50);
         }
         if (frame == 0x10 && timer == 0) {
-            unk2c8 = 0x1d;
+            m_playVoice = 0x1d;
         }
         timer++;
         if (timer >= l4) {
@@ -4775,7 +4775,7 @@ void CKano::UpdatePattern()
         if (frame == 0 && timer == 0) {
             unk158 = 0;
             CPlayer::StopMoving();
-            unk2c8 = 0;
+            m_playVoice = 0;
         }
         if (frame == 0xd && timer == 0) {
             unk14c = 0x78;
@@ -4853,7 +4853,7 @@ void CKano::UpdatePattern()
         if (frame == 0 && timer == 0) {
             unk158 = 0;
             CPlayer::StopMoving();
-            unk2c8 = 0;
+            m_playVoice = 0;
         }
         CPlayer::Unk410a80(0x32, 3);
         if (frame == 7 && timer == 0) {
@@ -4897,7 +4897,7 @@ void CKano::UpdatePattern()
             l50.unk0 = 1;
             l50.layer = 1;
             m_game->CreateEffect((EffectDesc*)&l50);
-            unk2c9 = 0x25;
+            m_playSound = 0x25;
         }
         if (frame == 0xd && timer == 0) {
             l50.type = 0x1c1;
@@ -4928,7 +4928,7 @@ void CKano::UpdatePattern()
         if (frame == 0 && timer == 0) {
             unk158 = 0;
             CPlayer::StopMoving();
-            unk2c8 = 0;
+            m_playVoice = 0;
         }
         if (frame == 0xd && timer == 0) {
             unk14c = 0x78;
@@ -5002,7 +5002,7 @@ void CKano::UpdatePattern()
         if (frame == 0 && timer == 0) {
             unk158 = 0;
             CPlayer::StopMoving();
-            unk2c8 = 0;
+            m_playVoice = 0;
         }
         if (frame == 9 && timer == 0) {
             unk14c = 0x78;
@@ -5090,7 +5090,7 @@ void CKano::UpdatePattern()
         if (frame == 0 && timer == 0) {
             unk158 = 0;
             CPlayer::StopMoving();
-            unk2c8 = 0;
+            m_playVoice = 0;
         }
         CPlayer::Unk410a80(0x32, 3);
         if (frame == 7 && timer == 0) {
@@ -5134,7 +5134,7 @@ void CKano::UpdatePattern()
             l50.unk0 = 1;
             l50.layer = 1;
             m_game->CreateEffect((EffectDesc*)&l50);
-            unk2c9 = 0x25;
+            m_playSound = 0x25;
         }
         if (frame == 0xd && timer == 0) {
             l50.type = 0x1c2;
@@ -5178,7 +5178,7 @@ void CKano::UpdatePattern()
         if (frame == 0 && timer == 0) {
             unk158 = 0;
             CPlayer::StopMoving();
-            unk2c8 = 0;
+            m_playVoice = 0;
         }
         if (frame == 2 && timer == 0) {
             unk14c = 0x78;
@@ -5210,7 +5210,7 @@ void CKano::UpdatePattern()
         }
         if (unk313c <= 0 && unk3140 < 3 && frame > 0xf) {
             unk3150 = 0;
-            unk2c8 = 0xe;
+            m_playVoice = 0xe;
             l50.type = 0x19e;
             l50.x = (double)((int)x + facing * 0x1e);
             l50.y = (double)((int)y - 0x28);
@@ -5244,7 +5244,7 @@ void CKano::UpdatePattern()
         if (frame == 0 && timer == 0) {
             unk158 = 0;
             CPlayer::StopMoving();
-            unk2c8 = 0;
+            m_playVoice = 0;
         }
         if (frame == 2 && timer == 0) {
             unk14c = 0x78;
@@ -5276,7 +5276,7 @@ void CKano::UpdatePattern()
         }
         if (unk313c <= 0 && unk3140 < 4 && frame > 0xf) {
             unk3150 = 0;
-            unk2c8 = 0xe;
+            m_playVoice = 0xe;
             l50.type = 0x19f;
             l50.x = (double)((int)x + facing * 0x1e);
             l50.y = (double)((int)y - 0x28);
@@ -5310,7 +5310,7 @@ void CKano::UpdatePattern()
         if (frame == 0 && timer == 0) {
             unk158 = 0;
             CPlayer::StopMoving();
-            unk2c8 = 0;
+            m_playVoice = 0;
         }
         if (frame > 2) {
             m_game->Unk4080c0(0xf);
@@ -5329,7 +5329,7 @@ void CKano::UpdatePattern()
             m_game->CreateEffect((EffectDesc*)&l50);
             m_hitsLeft = 5;
             CPlayer::StopMoving();
-            unk2c9 = 0x25;
+            m_playSound = 0x25;
         }
         if (frame == 6 && timer == 0) {
             unk158 = 0;
@@ -5346,7 +5346,7 @@ void CKano::UpdatePattern()
         }
         if (unk313c <= 0 && unk3140 < 5 && frame > 0xf) {
             unk3150 = 0;
-            unk2c8 = 0xe;
+            m_playVoice = 0xe;
             l50.type = 0x1a0;
             l50.x = (double)((int)x + facing * 0x1e);
             l50.y = (double)((int)y - 0x28);
@@ -5380,7 +5380,7 @@ void CKano::UpdatePattern()
         if (frame == 0 && timer == 0) {
             unk158 = 0;
             CPlayer::StopMoving();
-            unk2c8 = 0;
+            m_playVoice = 0;
         }
         if (frame == 9 && timer == 0) {
             unk14c = 0x78;
@@ -5434,7 +5434,7 @@ void CKano::UpdatePattern()
             l50.unk0 = 1;
             l50.unk18 = facing;
             SpawnObject(&l50);
-            unk2c8 = 0x12;
+            m_playVoice = 0x12;
         }
         timer++;
         if (timer >= l4) {
@@ -5454,7 +5454,7 @@ void CKano::UpdatePattern()
         if (frame == 0 && timer == 0) {
             unk158 = 0;
             CPlayer::StopMoving();
-            unk2c8 = 0;
+            m_playVoice = 0;
         }
         if (frame == 0xd && timer == 0) {
             unk14c = 0x78;
@@ -5508,7 +5508,7 @@ void CKano::UpdatePattern()
             l50.unk0 = 1;
             l50.unk18 = facing;
             SpawnObject(&l50);
-            unk2c8 = 0x11;
+            m_playVoice = 0x11;
         }
         timer++;
         if (timer >= l4) {
@@ -5528,7 +5528,7 @@ void CKano::UpdatePattern()
         if (frame == 0 && timer == 0) {
             unk158 = 0;
             CPlayer::StopMoving();
-            unk2c8 = 0;
+            m_playVoice = 0;
         }
         if (frame == 9 && timer == 0) {
             unk14c = 0x78;
@@ -5582,7 +5582,7 @@ void CKano::UpdatePattern()
             l50.unk0 = 1;
             l50.unk18 = facing;
             SpawnObject(&l50);
-            unk2c8 = 0xf;
+            m_playVoice = 0xf;
         }
         timer++;
         if (timer >= l4) {
@@ -5602,7 +5602,7 @@ void CKano::UpdatePattern()
         if (frame == 0 && timer == 0) {
             unk158 = 0;
             CPlayer::StopMoving();
-            unk2c8 = 0;
+            m_playVoice = 0;
         }
         CPlayer::Unk410a80(0x32, 3);
         if (frame == 7 && timer == 0) {
@@ -5647,7 +5647,7 @@ void CKano::UpdatePattern()
             l50.unk0 = 1;
             l50.layer = 1;
             m_game->CreateEffect((EffectDesc*)&l50);
-            unk2c9 = 0x25;
+            m_playSound = 0x25;
         }
         if (frame == 0xd && timer == 0) {
             l50.type = 0x1b2;
@@ -5678,7 +5678,7 @@ void CKano::UpdatePattern()
         if (frame == 0 && timer == 0) {
             unk158 = 0;
             CPlayer::StopMoving();
-            unk2c8 = 0;
+            m_playVoice = 0;
             unk14c = 0x78;
             m_hitsLeft = 1;
             m_gauge = m_gauge - 0xbb8;
@@ -5691,7 +5691,7 @@ void CKano::UpdatePattern()
             l50.unk0 = 1;
             l50.layer = 1;
             m_game->CreateEffect((EffectDesc*)&l50);
-            unk2c9 = 0x25;
+            m_playSound = 0x25;
             l50.type = 0x47;
             m_game->CreateEffect((EffectDesc*)&l50);
         }
@@ -5725,7 +5725,7 @@ void CKano::UpdatePattern()
     case 0x13c:
         CPlayer::Unk410a80(0x32, 3);
         if (frame == 0 && timer == 0) {
-            unk2c8 = 0x1b;
+            m_playVoice = 0x1b;
         }
         if (frame > 0x11 && (*m_opponent)->pattern == 0x63) {
             (*m_opponent)->timer = 0;

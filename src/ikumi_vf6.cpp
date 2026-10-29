@@ -106,7 +106,7 @@ void CIkumi::UpdatePattern()
         }
         if (y + vy >= 0.0 && frame > 3) {
             y = 0.0;
-            unk2c9 = 9;
+            m_playSound = 9;
             CPlayer::FaceOpponent();
             pattern = 0xd;
             StartPattern();
@@ -142,7 +142,7 @@ void CIkumi::UpdatePattern()
         }
         if (y + vy >= 0.0 && frame > 3) {
             y = 0.0;
-            unk2c9 = 9;
+            m_playSound = 9;
             CPlayer::FaceOpponent();
             pattern = 0xd;
             StartPattern();
@@ -174,7 +174,7 @@ void CIkumi::UpdatePattern()
         }
         if (y + vy >= 0.0 && frame > 3) {
             y = 0.0;
-            unk2c9 = 9;
+            m_playSound = 9;
             CPlayer::FaceOpponent();
             pattern = 0xd;
             StartPattern();
@@ -223,7 +223,7 @@ void CIkumi::UpdatePattern()
         }
         if (y + vy >= 0.0) {
             y = 0.0;
-            unk2c9 = 9;
+            m_playSound = 9;
             pattern = 0xd;
             StartPattern();
         }
@@ -269,7 +269,7 @@ void CIkumi::UpdatePattern()
         }
         if (y + vy >= 0.0 && frame > 3) {
             y = 0.0;
-            unk2c9 = 9;
+            m_playSound = 9;
             CPlayer::FaceOpponent();
             pattern = 0xd;
             StartPattern();
@@ -298,7 +298,7 @@ void CIkumi::UpdatePattern()
         }
         if (y + vy >= 0.0 && frame > 3) {
             y = 0.0;
-            unk2c9 = 9;
+            m_playSound = 9;
             CPlayer::FaceOpponent();
             pattern = 0xd;
             StartPattern();
@@ -326,7 +326,7 @@ void CIkumi::UpdatePattern()
         }
         if (y + vy >= 0.0 && frame > 3) {
             y = 0.0;
-            unk2c9 = 9;
+            m_playSound = 9;
             CPlayer::FaceOpponent();
             pattern = 0xd;
             StartPattern();
@@ -341,7 +341,7 @@ void CIkumi::UpdatePattern()
         if (y + vy > 0.0 && frame < 2) {
             timer = 0;
             frame = 2;
-            unk2c9 = 7;
+            m_playSound = 7;
             y = 0.0;
             vy = 0.0;
             ay = 0.0;
@@ -1128,7 +1128,7 @@ void CIkumi::UpdatePattern()
             vx = 0.5;
             vy = -2.5;
             ay = 0.025;
-            unk2c9 = 0x1f;
+            m_playSound = 0x1f;
             l50.type = 0;
             l50.x = (double)(int)x;
             l50.y = (double)(int)y;
@@ -1422,7 +1422,7 @@ void CIkumi::UpdatePattern()
             unk118 -= 0.8;
         }
         if (frame == 0 && timer == 0 && unk3138 == 0) {
-            unk2c9 = 0x1e;
+            m_playSound = 0x1e;
             vy = -0.45;
             vx = -0.1;
             unk3138++;
@@ -1479,7 +1479,7 @@ void CIkumi::UpdatePattern()
             if (unk120 != 0) {
                 unk118 -= 30.0;
             }
-            unk2c9 = 0x21;
+            m_playSound = 0x21;
             vy = -1.5;
             vx = -0.8;
             m_gauge = m_gauge + 0x1e;
@@ -1531,7 +1531,7 @@ void CIkumi::UpdatePattern()
             if (unk120 != 0) {
                 unk118 -= 30.0;
             }
-            unk2c9 = 0x21;
+            m_playSound = 0x21;
             vy = -1.5;
             vx = -0.8;
             m_gauge = m_gauge + 0x1e;
@@ -1583,7 +1583,7 @@ void CIkumi::UpdatePattern()
             if (unk120 != 0) {
                 unk118 -= 30.0;
             }
-            unk2c9 = 0x21;
+            m_playSound = 0x21;
             vx = unkc0;
             vy = unkc8;
             m_gauge = m_gauge + 0x1e;
@@ -1627,7 +1627,7 @@ void CIkumi::UpdatePattern()
                 if (unk120 != 0) {
                     unk118 -= 30.0;
                 }
-                unk2c9 = 0x21;
+                m_playSound = 0x21;
                 vx = unkc0;
                 vy = unkc8;
                 m_gauge = m_gauge + 0x1e;
@@ -1703,7 +1703,7 @@ void CIkumi::UpdatePattern()
             l50.scale = 2;
             l50.layer = 0;
             m_game->CreateEffect((EffectDesc*)&l50);
-            unk2c9 = 7;
+            m_playSound = 7;
         }
         timer++;
         if (timer >= l4) {
@@ -1726,7 +1726,7 @@ void CIkumi::UpdatePattern()
             l50.scale = 2;
             l50.layer = 0;
             m_game->CreateEffect((EffectDesc*)&l50);
-            unk2c9 = 7;
+            m_playSound = 7;
         }
         timer++;
         if (timer >= l4) {
@@ -2007,7 +2007,7 @@ void CIkumi::UpdatePattern()
         }
         if (y + vy >= 0.0) {
             y = 0.0;
-            unk2c9 = 9;
+            m_playSound = 9;
             CPlayer::FaceOpponent();
             pattern = 0xd;
             StartPattern();
@@ -2038,7 +2038,7 @@ void CIkumi::UpdatePattern()
         }
         if (y + vy >= 0.0) {
             y = 0.0;
-            unk2c9 = 9;
+            m_playSound = 9;
             CPlayer::FaceOpponent();
             pattern = 0xd;
             StartPattern();
@@ -2069,7 +2069,7 @@ void CIkumi::UpdatePattern()
         }
         if (y + vy >= 0.0) {
             y = 0.0;
-            unk2c9 = 9;
+            m_playSound = 9;
             CPlayer::FaceOpponent();
             pattern = 0xd;
             StartPattern();
@@ -2141,7 +2141,7 @@ void CIkumi::UpdatePattern()
             ax = 0.0;
             y = 0.0;
             unk3138++;
-            unk2c9 = 9;
+            m_playSound = 9;
             frame = 4;
             timer = 0;
         }
@@ -2165,7 +2165,7 @@ void CIkumi::UpdatePattern()
             CPlayer::Unk4109d0(3);
             vy = 0.0;
             ay = 0.0;
-            unk2c9 = 0x11;
+            m_playSound = 0x11;
         }
         timer++;
         unk3138++;
@@ -2202,7 +2202,7 @@ void CIkumi::UpdatePattern()
             vy = 0.0;
             ay = 0.0;
             CPlayer::Unk4109d0(3);
-            unk2c9 = 0x11;
+            m_playSound = 0x11;
         }
         timer++;
         unk3138++;
@@ -2246,7 +2246,7 @@ void CIkumi::UpdatePattern()
             CPlayer::Unk410b10(0xb0, 3);
         }
         if (frame == 1 && timer == 0) {
-            unk2c9 = 0x12;
+            m_playSound = 0x12;
             l50.type = 1;
             l50.x = (double)(int)x;
             l50.y = (double)(int)y;
@@ -2385,7 +2385,7 @@ void CIkumi::UpdatePattern()
             CPlayer::Unk410b10(0xb0, 3);
         }
         if (frame == 0 && timer == 0) {
-            unk2c9 = 0x12;
+            m_playSound = 0x12;
             l50.type = 1;
             l50.x = (double)(int)x;
             l50.y = (double)(int)y;
@@ -2453,7 +2453,7 @@ void CIkumi::UpdatePattern()
             y = 0.0;
             timer = 0;
             frame = 4;
-            unk2c9 = 9;
+            m_playSound = 9;
         }
         timer++;
         if (timer >= l4) {
@@ -2498,7 +2498,7 @@ void CIkumi::UpdatePattern()
         }
         if (frame == 1 && timer == 0) {
             m_gauge = m_gauge + 5;
-            unk2c9 = 0x15;
+            m_playSound = 0x15;
             m_hitsLeft = 1;
         }
         timer++;
@@ -2540,7 +2540,7 @@ void CIkumi::UpdatePattern()
         }
         if (frame == 1 && timer == 0) {
             m_gauge = m_gauge + 0xf;
-            unk2c9 = 0x14;
+            m_playSound = 0x14;
             m_hitsLeft = 1;
         }
         timer++;
@@ -2585,7 +2585,7 @@ void CIkumi::UpdatePattern()
         }
         if (frame == 4 && timer == 0) {
             m_gauge = m_gauge + 0xf;
-            unk2c9 = 0x14;
+            m_playSound = 0x14;
             m_hitsLeft = 1;
         }
         timer++;
@@ -2637,7 +2637,7 @@ void CIkumi::UpdatePattern()
         }
         if (frame == 2 && timer == 0) {
             m_gauge = m_gauge + 0x23;
-            unk2c9 = 0x14;
+            m_playSound = 0x14;
             m_hitsLeft = 1;
             vx = 1.0;
         }
@@ -2686,7 +2686,7 @@ void CIkumi::UpdatePattern()
         }
         if (frame == 1 && timer == 0) {
             m_gauge = m_gauge + 5;
-            unk2c9 = 0x15;
+            m_playSound = 0x15;
             m_hitsLeft = 1;
         }
         timer++;
@@ -2731,7 +2731,7 @@ void CIkumi::UpdatePattern()
         }
         if (frame == 2 && timer == 0) {
             m_gauge = m_gauge + 0xd;
-            unk2c9 = 0x14;
+            m_playSound = 0x14;
             m_hitsLeft = 1;
         }
         timer++;
@@ -2762,7 +2762,7 @@ void CIkumi::UpdatePattern()
         }
         if (frame == 2 && timer == 0) {
             m_gauge = m_gauge + 0x19;
-            unk2c9 = 0x14;
+            m_playSound = 0x14;
             m_hitsLeft = 1;
             vx = 1.5;
         }
@@ -2810,7 +2810,7 @@ void CIkumi::UpdatePattern()
         }
         if (frame == 2 && timer == 0) {
             m_gauge = m_gauge + 5;
-            unk2c9 = 0x15;
+            m_playSound = 0x15;
             m_hitsLeft = 1;
         }
         if (y + vy >= 0.0) {
@@ -2849,12 +2849,12 @@ void CIkumi::UpdatePattern()
         }
         if (frame == 1 && timer == 0) {
             m_gauge = m_gauge + 7;
-            unk2c9 = 0x14;
+            m_playSound = 0x14;
             m_hitsLeft = 1;
         }
         if (frame == 5 && timer == 0) {
             m_gauge = m_gauge + 7;
-            unk2c9 = 0x14;
+            m_playSound = 0x14;
             m_hitsLeft = 1;
         }
         if (y + vy >= 0.0) {
@@ -2893,7 +2893,7 @@ void CIkumi::UpdatePattern()
         }
         if (frame == 2 && timer == 0) {
             m_gauge = m_gauge + 0x1e;
-            unk2c9 = 0x14;
+            m_playSound = 0x14;
             m_hitsLeft = 3;
         }
         if (y + vy >= 0.0) {
@@ -2971,7 +2971,7 @@ void CIkumi::UpdatePattern()
             l50.layer = 1;
             m_game->CreateEffect((EffectDesc*)&l50);
             CPlayer::DealDamage(0x384, 750.0);
-            unk2c8 = 0;
+            m_playVoice = 0;
         }
         if (frame == 2 && timer == 0) {
             (*m_opponent)->StartPattern();
@@ -3004,7 +3004,7 @@ void CIkumi::UpdatePattern()
         }
         if (frame == 1 && timer == 0) {
             m_gauge = m_gauge + 5;
-            unk2c9 = 0x15;
+            m_playSound = 0x15;
             m_hitsLeft = 1;
         }
         timer++;
@@ -3044,7 +3044,7 @@ void CIkumi::UpdatePattern()
         }
         if (frame == 2 && timer == 0) {
             m_gauge = m_gauge + 0xa;
-            unk2c9 = 0x14;
+            m_playSound = 0x14;
             m_hitsLeft = 1;
         }
         timer++;
@@ -3069,7 +3069,7 @@ void CIkumi::UpdatePattern()
         }
         if (frame == 4 && timer == 0) {
             m_gauge = m_gauge + 0x19;
-            unk2c9 = 0x14;
+            m_playSound = 0x14;
             m_hitsLeft = 1;
         }
         timer++;
@@ -3097,7 +3097,7 @@ void CIkumi::UpdatePattern()
         }
         if (frame == 1 && timer == 0) {
             m_gauge = m_gauge + 5;
-            unk2c9 = 0x15;
+            m_playSound = 0x15;
             m_hitsLeft = 1;
         }
         timer++;
@@ -3125,7 +3125,7 @@ void CIkumi::UpdatePattern()
         }
         if (frame == 2 && timer == 0) {
             m_gauge = m_gauge + 5;
-            unk2c9 = 0x15;
+            m_playSound = 0x15;
             m_hitsLeft = 1;
         }
         timer++;
@@ -3169,7 +3169,7 @@ void CIkumi::UpdatePattern()
         }
         if (frame == 3 && timer == 0) {
             m_gauge = m_gauge + 0xa;
-            unk2c9 = 0x15;
+            m_playSound = 0x15;
             m_hitsLeft = 1;
         }
         if (y < 0.0) {
@@ -3289,7 +3289,7 @@ void CIkumi::UpdatePattern()
                 l50.unk18 = facing;
                 l50.layer = 1;
                 SpawnObject(&l50);
-                unk2c8 = 5;
+                m_playVoice = 5;
             }
             if (frame >= x8) {
                 frame = frame - 2;
@@ -3406,7 +3406,7 @@ void CIkumi::UpdatePattern()
             unk3138 = 1;
         }
         if (frame == 0xa && timer == 0) {
-            unk2c9 = 0x14;
+            m_playSound = 0x14;
             m_gauge = m_gauge + 0x23;
             l50.type = 0x191;
             l50.x = (double)(int)x;
@@ -3416,7 +3416,7 @@ void CIkumi::UpdatePattern()
             l50.unk0 = 1;
             l50.unk18 = facing;
             SpawnObject(&l50);
-            unk2c8 = 2;
+            m_playVoice = 2;
         }
         if (frame > 0xb) {
             vx -= 0.045;
@@ -3457,7 +3457,7 @@ void CIkumi::UpdatePattern()
             unk3138 = 1;
         }
         if (frame == 0xa && timer == 0) {
-            unk2c9 = 0x14;
+            m_playSound = 0x14;
             m_gauge = m_gauge + 0x23;
             l50.type = 0x191;
             l50.x = (double)(int)x;
@@ -3467,7 +3467,7 @@ void CIkumi::UpdatePattern()
             l50.unk0 = 1;
             l50.unk18 = facing;
             SpawnObject(&l50);
-            unk2c8 = 2;
+            m_playVoice = 2;
         }
         if (frame > 0xb) {
             vx -= 0.045;
@@ -3520,7 +3520,7 @@ void CIkumi::UpdatePattern()
             unk3138 = 1;
         }
         if (frame == 0xa && timer == 0) {
-            unk2c9 = 0x14;
+            m_playSound = 0x14;
             m_gauge = m_gauge + 0x23;
             l50.type = 0x191;
             l50.x = (double)(int)x;
@@ -3530,7 +3530,7 @@ void CIkumi::UpdatePattern()
             l50.unk0 = 1;
             l50.unk18 = facing;
             SpawnObject(&l50);
-            unk2c8 = 2;
+            m_playVoice = 2;
         }
         if (frame > 0xb) {
             vx -= 0.045;
@@ -3582,7 +3582,7 @@ void CIkumi::UpdatePattern()
             }
         }
         if (frame == 9 && timer == 0) {
-            unk2c9 = 0x14;
+            m_playSound = 0x14;
             m_gauge = m_gauge + 0x23;
             l50.type = 0x190;
             l50.x = (double)(int)x;
@@ -3592,7 +3592,7 @@ void CIkumi::UpdatePattern()
             l50.unk0 = 1;
             l50.unk18 = facing;
             SpawnObject(&l50);
-            unk2c8 = 3;
+            m_playVoice = 3;
         }
         timer++;
         if (timer >= l4) {
@@ -3631,7 +3631,7 @@ void CIkumi::UpdatePattern()
             }
         }
         if (frame == 9 && timer == 0) {
-            unk2c9 = 0x14;
+            m_playSound = 0x14;
             m_gauge = m_gauge + 0x23;
             l50.type = 0x190;
             l50.x = (double)(int)x;
@@ -3641,7 +3641,7 @@ void CIkumi::UpdatePattern()
             l50.unk0 = 1;
             l50.unk18 = facing;
             SpawnObject(&l50);
-            unk2c8 = 3;
+            m_playVoice = 3;
         }
         timer++;
         if (timer >= l4) {
@@ -3689,7 +3689,7 @@ void CIkumi::UpdatePattern()
             }
         }
         if (frame == 9 && timer == 0) {
-            unk2c9 = 0x14;
+            m_playSound = 0x14;
             m_gauge = m_gauge + 0x23;
             l50.type = 0x190;
             l50.x = (double)(int)x;
@@ -3699,7 +3699,7 @@ void CIkumi::UpdatePattern()
             l50.unk0 = 1;
             l50.unk18 = facing;
             SpawnObject(&l50);
-            unk2c8 = 3;
+            m_playVoice = 3;
         }
         timer++;
         if (timer >= l4) {
@@ -3777,7 +3777,7 @@ void CIkumi::UpdatePattern()
             (*m_opponent)->StartPattern();
             (*m_opponent)->pattern = 0x6c;
             (*m_opponent)->x = facing * 0x28 + x;
-            unk2c8 = 4;
+            m_playVoice = 4;
         }
         if (frame == 7 && timer == 0) {
             l50.type = 0x1d6;
@@ -3816,7 +3816,7 @@ void CIkumi::UpdatePattern()
             l50.layer = 1;
             l50.unk18 = -facing;
             SpawnObject(&l50);
-            unk2c8 = 5;
+            m_playVoice = 5;
             CPlayer::Unk410a10(4, 0);
         }
         timer++;
@@ -3842,7 +3842,7 @@ void CIkumi::UpdatePattern()
             unk3138 = 1;
         }
         if (frame == 0xa && timer == 0) {
-            unk2c9 = 0x14;
+            m_playSound = 0x14;
             m_gauge = m_gauge + 0x23;
             l50.type = 0x191;
             l50.x = (double)(int)x;
@@ -3852,7 +3852,7 @@ void CIkumi::UpdatePattern()
             l50.unk0 = 1;
             l50.unk18 = facing;
             SpawnObject(&l50);
-            unk2c8 = 2;
+            m_playVoice = 2;
         }
         if (frame > 0xb) {
             vx -= 0.045;
@@ -3905,7 +3905,7 @@ void CIkumi::UpdatePattern()
             unk3138 = 1;
         }
         if (frame == 0xa && timer == 0) {
-            unk2c9 = 0x14;
+            m_playSound = 0x14;
             m_gauge = m_gauge + 0x23;
             l50.type = 0x191;
             l50.x = (double)(int)x;
@@ -3915,7 +3915,7 @@ void CIkumi::UpdatePattern()
             l50.unk0 = 1;
             l50.unk18 = facing;
             SpawnObject(&l50);
-            unk2c8 = 2;
+            m_playVoice = 2;
         }
         if (frame > 0xb) {
             vx -= 0.045;
@@ -3956,7 +3956,7 @@ void CIkumi::UpdatePattern()
             unk3138 = 1;
         }
         if (frame == 0xa && timer == 0) {
-            unk2c9 = 0x14;
+            m_playSound = 0x14;
             m_gauge = m_gauge + 0x23;
             l50.type = 0x191;
             l50.x = (double)(int)x;
@@ -3966,7 +3966,7 @@ void CIkumi::UpdatePattern()
             l50.unk0 = 1;
             l50.unk18 = facing;
             SpawnObject(&l50);
-            unk2c8 = 2;
+            m_playVoice = 2;
         }
         if (frame > 0xb) {
             vx -= 0.045;
@@ -4019,7 +4019,7 @@ void CIkumi::UpdatePattern()
             unk3138 = 1;
         }
         if (frame == 0xa && timer == 0) {
-            unk2c9 = 0x14;
+            m_playSound = 0x14;
             m_gauge = m_gauge + 0x23;
             l50.type = 0x191;
             l50.x = (double)(int)x;
@@ -4029,7 +4029,7 @@ void CIkumi::UpdatePattern()
             l50.unk0 = 1;
             l50.unk18 = facing;
             SpawnObject(&l50);
-            unk2c8 = 2;
+            m_playVoice = 2;
         }
         if (frame > 0xb) {
             vx -= 0.045;
@@ -4081,7 +4081,7 @@ void CIkumi::UpdatePattern()
             }
         }
         if (frame == 9 && timer == 0) {
-            unk2c9 = 0x14;
+            m_playSound = 0x14;
             m_gauge = m_gauge + 0x23;
             l50.type = 0x190;
             l50.x = (double)(int)x;
@@ -4091,7 +4091,7 @@ void CIkumi::UpdatePattern()
             l50.unk0 = 1;
             l50.unk18 = facing;
             SpawnObject(&l50);
-            unk2c8 = 3;
+            m_playVoice = 3;
         }
         timer++;
         if (timer >= l4) {
@@ -4139,7 +4139,7 @@ void CIkumi::UpdatePattern()
             }
         }
         if (frame == 9 && timer == 0) {
-            unk2c9 = 0x14;
+            m_playSound = 0x14;
             m_gauge = m_gauge + 0x23;
             l50.type = 0x190;
             l50.x = (double)(int)x;
@@ -4149,7 +4149,7 @@ void CIkumi::UpdatePattern()
             l50.unk0 = 1;
             l50.unk18 = facing;
             SpawnObject(&l50);
-            unk2c8 = 3;
+            m_playVoice = 3;
         }
         timer++;
         if (timer >= l4) {
@@ -4199,7 +4199,7 @@ void CIkumi::UpdatePattern()
             }
         }
         if (frame == 9 && timer == 0) {
-            unk2c9 = 0x14;
+            m_playSound = 0x14;
             m_gauge = m_gauge + 0x23;
             l50.type = 0x190;
             l50.x = (double)(int)x;
@@ -4209,7 +4209,7 @@ void CIkumi::UpdatePattern()
             l50.unk0 = 1;
             l50.unk18 = facing;
             SpawnObject(&l50);
-            unk2c8 = 3;
+            m_playVoice = 3;
         }
         timer++;
         if (timer >= l4) {
@@ -4257,7 +4257,7 @@ void CIkumi::UpdatePattern()
             }
         }
         if (frame == 9 && timer == 0) {
-            unk2c9 = 0x14;
+            m_playSound = 0x14;
             m_gauge = m_gauge + 0x23;
             l50.type = 0x190;
             l50.x = (double)(int)x;
@@ -4267,7 +4267,7 @@ void CIkumi::UpdatePattern()
             l50.unk0 = 1;
             l50.unk18 = facing;
             SpawnObject(&l50);
-            unk2c8 = 3;
+            m_playVoice = 3;
         }
         timer++;
         if (timer >= l4) {
@@ -4510,7 +4510,7 @@ void CIkumi::UpdatePattern()
             l50.unk0 = 1;
             l50.layer = 1;
             m_game->CreateEffect((EffectDesc*)&l50);
-            unk2c9 = 0x25;
+            m_playSound = 0x25;
         }
         CPlayer::Unk410a80(0x32, 3);
         if (frame == 4 && timer == 0) {
@@ -4523,8 +4523,8 @@ void CIkumi::UpdatePattern()
             l50.unk18 = facing;
             SpawnObject(&l50);
             CPlayer::Unk410a10(0xa, 0);
-            unk2c8 = 6;
-            unk2c8 = 7;
+            m_playVoice = 6;
+            m_playVoice = 7;
         }
         timer++;
         if (timer >= l4) {
@@ -4638,7 +4638,7 @@ void CIkumi::UpdatePattern()
                 (*m_opponent)->y = y - 88.0;
             }
             if (frame == 3) {
-                unk2c8 = 8;
+                m_playVoice = 8;
                 CPlayer::Unk410a10(3, 0x1e);
                 l50.type = 0x19f;
                 l50.x = (double)((int)x + facing * 0x1e);
@@ -4778,7 +4778,7 @@ void CIkumi::UpdatePattern()
                 (*m_opponent)->y = y - 88.0;
             }
             if (frame == 3) {
-                unk2c8 = 8;
+                m_playVoice = 8;
                 CPlayer::Unk410a10(3, 0x1e);
                 l50.type = 0x1a0;
                 l50.x = (double)((int)x + facing * 0x1e);
@@ -4920,7 +4920,7 @@ void CIkumi::UpdatePattern()
                 (*m_opponent)->y = y - 88.0;
             }
             if (frame == 3) {
-                unk2c8 = 8;
+                m_playVoice = 8;
                 CPlayer::Unk410a10(4, 0x1e);
                 l50.type = 0x1a1;
                 l50.x = (double)((int)x + facing * 0x1e);
@@ -5129,7 +5129,7 @@ void CIkumi::UpdatePattern()
             m_attackResult = 0;
             if (frame == 0xe) {
                 unk315c = 1;
-                unk2c8 = 0xa;
+                m_playVoice = 0xa;
                 l50.type = 0x1a7;
                 l50.x = (double)((int)x + facing * 0x29);
                 l50.y = 0.0;
@@ -5187,7 +5187,7 @@ void CIkumi::UpdatePattern()
             m_attackResult = 0;
             if (frame == 0xe) {
                 unk315c = 2;
-                unk2c8 = 0xa;
+                m_playVoice = 0xa;
                 l50.type = 0x1a7;
                 l50.x = (double)((int)x + facing * 0x29);
                 l50.y = 0.0;
@@ -5248,7 +5248,7 @@ void CIkumi::UpdatePattern()
             m_attackResult = 0;
             if (frame == 0xe) {
                 unk315c = 3;
-                unk2c8 = 0xa;
+                m_playVoice = 0xa;
                 l50.type = 0x1a7;
                 l50.x = (double)((int)x + facing * 0x29);
                 l50.y = 0.0;
@@ -5806,7 +5806,7 @@ void CIkumi::UpdatePattern()
             l50.unk0 = 1;
             l50.layer = 1;
             m_game->CreateEffect((EffectDesc*)&l50);
-            unk2c9 = 0x25;
+            m_playSound = 0x25;
             l50.type = 0x47;
             m_game->CreateEffect((EffectDesc*)&l50);
             m_hitsLeft = 1;
@@ -5890,7 +5890,7 @@ void CIkumi::UpdatePattern()
             l50.unk0 = 1;
             l50.layer = 1;
             m_game->CreateEffect((EffectDesc*)&l50);
-            unk2c9 = 0x25;
+            m_playSound = 0x25;
             l50.type = 0x47;
             m_game->CreateEffect((EffectDesc*)&l50);
         }
@@ -6100,7 +6100,7 @@ void CIkumi::Unk694d00()
         }
         if (y + vy >= 0.0 && frame > 3) {
             y = 0.0;
-            unk2c9 = 9;
+            m_playSound = 9;
             CPlayer::FaceOpponent();
             pattern = 0xd;
             StartPattern();
@@ -6136,7 +6136,7 @@ void CIkumi::Unk694d00()
         }
         if (y + vy >= 0.0 && frame > 3) {
             y = 0.0;
-            unk2c9 = 9;
+            m_playSound = 9;
             CPlayer::FaceOpponent();
             pattern = 0xd;
             StartPattern();
@@ -6168,7 +6168,7 @@ void CIkumi::Unk694d00()
         }
         if (y + vy >= 0.0 && frame > 3) {
             y = 0.0;
-            unk2c9 = 9;
+            m_playSound = 9;
             CPlayer::FaceOpponent();
             pattern = 0xd;
             StartPattern();
@@ -6217,7 +6217,7 @@ void CIkumi::Unk694d00()
         }
         if (y + vy >= 0.0) {
             y = 0.0;
-            unk2c9 = 9;
+            m_playSound = 9;
             pattern = 0xd;
             StartPattern();
         }
@@ -6263,7 +6263,7 @@ void CIkumi::Unk694d00()
         }
         if (y + vy >= 0.0 && frame > 3) {
             y = 0.0;
-            unk2c9 = 9;
+            m_playSound = 9;
             CPlayer::FaceOpponent();
             pattern = 0xd;
             StartPattern();
@@ -6292,7 +6292,7 @@ void CIkumi::Unk694d00()
         }
         if (y + vy >= 0.0 && frame > 3) {
             y = 0.0;
-            unk2c9 = 9;
+            m_playSound = 9;
             CPlayer::FaceOpponent();
             pattern = 0xd;
             StartPattern();
@@ -6320,7 +6320,7 @@ void CIkumi::Unk694d00()
         }
         if (y + vy >= 0.0 && frame > 3) {
             y = 0.0;
-            unk2c9 = 9;
+            m_playSound = 9;
             CPlayer::FaceOpponent();
             pattern = 0xd;
             StartPattern();
@@ -6335,7 +6335,7 @@ void CIkumi::Unk694d00()
         if (y + vy > 0.0 && frame < 2) {
             timer = 0;
             frame = 2;
-            unk2c9 = 7;
+            m_playSound = 7;
             y = 0.0;
             vy = 0.0;
             ay = 0.0;
@@ -7122,7 +7122,7 @@ void CIkumi::Unk694d00()
             vx = 0.5;
             vy = -2.5;
             ay = 0.025;
-            unk2c9 = 0x1f;
+            m_playSound = 0x1f;
             l50.type = 0;
             l50.x = (double)(int)x;
             l50.y = (double)(int)y;
@@ -7416,7 +7416,7 @@ void CIkumi::Unk694d00()
             unk118 -= 0.8;
         }
         if (frame == 0 && timer == 0 && unk3138 == 0) {
-            unk2c9 = 0x1e;
+            m_playSound = 0x1e;
             vy = -0.45;
             vx = -0.1;
             unk3138++;
@@ -7473,7 +7473,7 @@ void CIkumi::Unk694d00()
             if (unk120 != 0) {
                 unk118 -= 30.0;
             }
-            unk2c9 = 0x21;
+            m_playSound = 0x21;
             vy = -1.5;
             vx = -0.8;
             m_gauge = m_gauge + 0x1e;
@@ -7525,7 +7525,7 @@ void CIkumi::Unk694d00()
             if (unk120 != 0) {
                 unk118 -= 30.0;
             }
-            unk2c9 = 0x21;
+            m_playSound = 0x21;
             vy = -1.5;
             vx = -0.8;
             m_gauge = m_gauge + 0x1e;
@@ -7577,7 +7577,7 @@ void CIkumi::Unk694d00()
             if (unk120 != 0) {
                 unk118 -= 30.0;
             }
-            unk2c9 = 0x21;
+            m_playSound = 0x21;
             vx = unkc0;
             vy = unkc8;
             m_gauge = m_gauge + 0x1e;
@@ -7621,7 +7621,7 @@ void CIkumi::Unk694d00()
                 if (unk120 != 0) {
                     unk118 -= 30.0;
                 }
-                unk2c9 = 0x21;
+                m_playSound = 0x21;
                 vx = unkc0;
                 vy = unkc8;
                 m_gauge = m_gauge + 0x1e;
@@ -7697,7 +7697,7 @@ void CIkumi::Unk694d00()
             l50.scale = 2;
             l50.layer = 0;
             m_game->CreateEffect((EffectDesc*)&l50);
-            unk2c9 = 7;
+            m_playSound = 7;
         }
         timer++;
         if (timer >= l4) {
@@ -7720,7 +7720,7 @@ void CIkumi::Unk694d00()
             l50.scale = 2;
             l50.layer = 0;
             m_game->CreateEffect((EffectDesc*)&l50);
-            unk2c9 = 7;
+            m_playSound = 7;
         }
         timer++;
         if (timer >= l4) {
@@ -8001,7 +8001,7 @@ void CIkumi::Unk694d00()
         }
         if (y + vy >= 0.0) {
             y = 0.0;
-            unk2c9 = 9;
+            m_playSound = 9;
             CPlayer::FaceOpponent();
             pattern = 0xd;
             StartPattern();
@@ -8032,7 +8032,7 @@ void CIkumi::Unk694d00()
         }
         if (y + vy >= 0.0) {
             y = 0.0;
-            unk2c9 = 9;
+            m_playSound = 9;
             CPlayer::FaceOpponent();
             pattern = 0xd;
             StartPattern();
@@ -8063,7 +8063,7 @@ void CIkumi::Unk694d00()
         }
         if (y + vy >= 0.0) {
             y = 0.0;
-            unk2c9 = 9;
+            m_playSound = 9;
             CPlayer::FaceOpponent();
             pattern = 0xd;
             StartPattern();
@@ -8135,7 +8135,7 @@ void CIkumi::Unk694d00()
             ax = 0.0;
             y = 0.0;
             unk3138++;
-            unk2c9 = 9;
+            m_playSound = 9;
             frame = 4;
             timer = 0;
         }
@@ -8159,7 +8159,7 @@ void CIkumi::Unk694d00()
             CPlayer::Unk4109d0(3);
             vy = 0.0;
             ay = 0.0;
-            unk2c9 = 0x11;
+            m_playSound = 0x11;
         }
         timer++;
         unk3138++;
@@ -8196,7 +8196,7 @@ void CIkumi::Unk694d00()
             vy = 0.0;
             ay = 0.0;
             CPlayer::Unk4109d0(3);
-            unk2c9 = 0x11;
+            m_playSound = 0x11;
         }
         timer++;
         unk3138++;
@@ -8240,7 +8240,7 @@ void CIkumi::Unk694d00()
             CPlayer::Unk410b10(0xb0, 3);
         }
         if (frame == 1 && timer == 0) {
-            unk2c9 = 0x12;
+            m_playSound = 0x12;
             l50.type = 1;
             l50.x = (double)(int)x;
             l50.y = (double)(int)y;
@@ -8379,7 +8379,7 @@ void CIkumi::Unk694d00()
             CPlayer::Unk410b10(0xb0, 3);
         }
         if (frame == 0 && timer == 0) {
-            unk2c9 = 0x12;
+            m_playSound = 0x12;
             l50.type = 1;
             l50.x = (double)(int)x;
             l50.y = (double)(int)y;
@@ -8447,7 +8447,7 @@ void CIkumi::Unk694d00()
             y = 0.0;
             timer = 0;
             frame = 4;
-            unk2c9 = 9;
+            m_playSound = 9;
         }
         timer++;
         if (timer >= l4) {
@@ -8492,7 +8492,7 @@ void CIkumi::Unk694d00()
         }
         if (frame == 1 && timer == 0) {
             m_gauge = m_gauge + 5;
-            unk2c9 = 0x15;
+            m_playSound = 0x15;
             m_hitsLeft = 1;
         }
         timer++;
@@ -8534,7 +8534,7 @@ void CIkumi::Unk694d00()
         }
         if (frame == 1 && timer == 0) {
             m_gauge = m_gauge + 0xf;
-            unk2c9 = 0x14;
+            m_playSound = 0x14;
             m_hitsLeft = 1;
         }
         timer++;
@@ -8579,7 +8579,7 @@ void CIkumi::Unk694d00()
         }
         if (frame == 4 && timer == 0) {
             m_gauge = m_gauge + 0xf;
-            unk2c9 = 0x14;
+            m_playSound = 0x14;
             m_hitsLeft = 1;
         }
         timer++;
@@ -8631,7 +8631,7 @@ void CIkumi::Unk694d00()
         }
         if (frame == 2 && timer == 0) {
             m_gauge = m_gauge + 0x23;
-            unk2c9 = 0x14;
+            m_playSound = 0x14;
             m_hitsLeft = 1;
             vx = 1.0;
         }
@@ -8680,7 +8680,7 @@ void CIkumi::Unk694d00()
         }
         if (frame == 1 && timer == 0) {
             m_gauge = m_gauge + 5;
-            unk2c9 = 0x15;
+            m_playSound = 0x15;
             m_hitsLeft = 1;
         }
         timer++;
@@ -8725,7 +8725,7 @@ void CIkumi::Unk694d00()
         }
         if (frame == 2 && timer == 0) {
             m_gauge = m_gauge + 0xd;
-            unk2c9 = 0x14;
+            m_playSound = 0x14;
             m_hitsLeft = 1;
         }
         timer++;
@@ -8756,7 +8756,7 @@ void CIkumi::Unk694d00()
         }
         if (frame == 2 && timer == 0) {
             m_gauge = m_gauge + 0x19;
-            unk2c9 = 0x14;
+            m_playSound = 0x14;
             m_hitsLeft = 1;
             vx = 1.5;
         }
@@ -8804,7 +8804,7 @@ void CIkumi::Unk694d00()
         }
         if (frame == 2 && timer == 0) {
             m_gauge = m_gauge + 5;
-            unk2c9 = 0x15;
+            m_playSound = 0x15;
             m_hitsLeft = 1;
         }
         if (y + vy >= 0.0) {
@@ -8843,12 +8843,12 @@ void CIkumi::Unk694d00()
         }
         if (frame == 1 && timer == 0) {
             m_gauge = m_gauge + 7;
-            unk2c9 = 0x14;
+            m_playSound = 0x14;
             m_hitsLeft = 1;
         }
         if (frame == 5 && timer == 0) {
             m_gauge = m_gauge + 7;
-            unk2c9 = 0x14;
+            m_playSound = 0x14;
             m_hitsLeft = 1;
         }
         if (y + vy >= 0.0) {
@@ -8887,7 +8887,7 @@ void CIkumi::Unk694d00()
         }
         if (frame == 2 && timer == 0) {
             m_gauge = m_gauge + 0x1e;
-            unk2c9 = 0x14;
+            m_playSound = 0x14;
             m_hitsLeft = 3;
         }
         if (y + vy >= 0.0) {
@@ -8965,7 +8965,7 @@ void CIkumi::Unk694d00()
             l50.layer = 1;
             m_game->CreateEffect((EffectDesc*)&l50);
             CPlayer::DealDamage(0x384, 750.0);
-            unk2c8 = 0;
+            m_playVoice = 0;
         }
         if (frame == 2 && timer == 0) {
             (*m_opponent)->StartPattern();
@@ -8998,7 +8998,7 @@ void CIkumi::Unk694d00()
         }
         if (frame == 1 && timer == 0) {
             m_gauge = m_gauge + 5;
-            unk2c9 = 0x15;
+            m_playSound = 0x15;
             m_hitsLeft = 1;
         }
         timer++;
@@ -9038,7 +9038,7 @@ void CIkumi::Unk694d00()
         }
         if (frame == 2 && timer == 0) {
             m_gauge = m_gauge + 0xa;
-            unk2c9 = 0x14;
+            m_playSound = 0x14;
             m_hitsLeft = 1;
         }
         timer++;
@@ -9063,7 +9063,7 @@ void CIkumi::Unk694d00()
         }
         if (frame == 4 && timer == 0) {
             m_gauge = m_gauge + 0x19;
-            unk2c9 = 0x14;
+            m_playSound = 0x14;
             m_hitsLeft = 1;
         }
         timer++;
@@ -9091,7 +9091,7 @@ void CIkumi::Unk694d00()
         }
         if (frame == 1 && timer == 0) {
             m_gauge = m_gauge + 5;
-            unk2c9 = 0x15;
+            m_playSound = 0x15;
             m_hitsLeft = 1;
         }
         timer++;
@@ -9119,7 +9119,7 @@ void CIkumi::Unk694d00()
         }
         if (frame == 2 && timer == 0) {
             m_gauge = m_gauge + 5;
-            unk2c9 = 0x15;
+            m_playSound = 0x15;
             m_hitsLeft = 1;
         }
         timer++;
@@ -9163,7 +9163,7 @@ void CIkumi::Unk694d00()
         }
         if (frame == 3 && timer == 0) {
             m_gauge = m_gauge + 0xa;
-            unk2c9 = 0x15;
+            m_playSound = 0x15;
             m_hitsLeft = 1;
         }
         if (y < 0.0) {
@@ -9283,7 +9283,7 @@ void CIkumi::Unk694d00()
                 l50.unk18 = facing;
                 l50.layer = 1;
                 SpawnObject(&l50);
-                unk2c8 = 5;
+                m_playVoice = 5;
             }
             if (frame >= x8) {
                 frame = frame - 2;
@@ -9400,7 +9400,7 @@ void CIkumi::Unk694d00()
             unk3138 = 1;
         }
         if (frame == 0xa && timer == 0) {
-            unk2c9 = 0x14;
+            m_playSound = 0x14;
             m_gauge = m_gauge + 0x23;
             l50.type = 0x191;
             l50.x = (double)(int)x;
@@ -9410,7 +9410,7 @@ void CIkumi::Unk694d00()
             l50.unk0 = 1;
             l50.unk18 = facing;
             SpawnObject(&l50);
-            unk2c8 = 2;
+            m_playVoice = 2;
         }
         if (frame > 0xb) {
             vx -= 0.045;
@@ -9451,7 +9451,7 @@ void CIkumi::Unk694d00()
             unk3138 = 1;
         }
         if (frame == 0xa && timer == 0) {
-            unk2c9 = 0x14;
+            m_playSound = 0x14;
             m_gauge = m_gauge + 0x23;
             l50.type = 0x191;
             l50.x = (double)(int)x;
@@ -9461,7 +9461,7 @@ void CIkumi::Unk694d00()
             l50.unk0 = 1;
             l50.unk18 = facing;
             SpawnObject(&l50);
-            unk2c8 = 2;
+            m_playVoice = 2;
         }
         if (frame > 0xb) {
             vx -= 0.045;
@@ -9514,7 +9514,7 @@ void CIkumi::Unk694d00()
             unk3138 = 1;
         }
         if (frame == 0xa && timer == 0) {
-            unk2c9 = 0x14;
+            m_playSound = 0x14;
             m_gauge = m_gauge + 0x23;
             l50.type = 0x191;
             l50.x = (double)(int)x;
@@ -9524,7 +9524,7 @@ void CIkumi::Unk694d00()
             l50.unk0 = 1;
             l50.unk18 = facing;
             SpawnObject(&l50);
-            unk2c8 = 2;
+            m_playVoice = 2;
         }
         if (frame > 0xb) {
             vx -= 0.045;
@@ -9576,7 +9576,7 @@ void CIkumi::Unk694d00()
             }
         }
         if (frame == 9 && timer == 0) {
-            unk2c9 = 0x14;
+            m_playSound = 0x14;
             m_gauge = m_gauge + 0x23;
             l50.type = 0x190;
             l50.x = (double)(int)x;
@@ -9586,7 +9586,7 @@ void CIkumi::Unk694d00()
             l50.unk0 = 1;
             l50.unk18 = facing;
             SpawnObject(&l50);
-            unk2c8 = 3;
+            m_playVoice = 3;
         }
         timer++;
         if (timer >= l4) {
@@ -9622,7 +9622,7 @@ void CIkumi::Unk694d00()
             }
         }
         if (frame == 9 && timer == 0) {
-            unk2c9 = 0x14;
+            m_playSound = 0x14;
             m_gauge = m_gauge + 0x23;
             l50.type = 0x190;
             l50.x = (double)(int)x;
@@ -9632,7 +9632,7 @@ void CIkumi::Unk694d00()
             l50.unk0 = 1;
             l50.unk18 = facing;
             SpawnObject(&l50);
-            unk2c8 = 3;
+            m_playVoice = 3;
         }
         timer++;
         if (timer >= l4) {
@@ -9680,7 +9680,7 @@ void CIkumi::Unk694d00()
             }
         }
         if (frame == 9 && timer == 0) {
-            unk2c9 = 0x14;
+            m_playSound = 0x14;
             m_gauge = m_gauge + 0x23;
             l50.type = 0x190;
             l50.x = (double)(int)x;
@@ -9690,7 +9690,7 @@ void CIkumi::Unk694d00()
             l50.unk0 = 1;
             l50.unk18 = facing;
             SpawnObject(&l50);
-            unk2c8 = 3;
+            m_playVoice = 3;
         }
         timer++;
         if (timer >= l4) {
@@ -9768,7 +9768,7 @@ void CIkumi::Unk694d00()
             (*m_opponent)->StartPattern();
             (*m_opponent)->pattern = 0x6c;
             (*m_opponent)->x = facing * 0x28 + x;
-            unk2c8 = 4;
+            m_playVoice = 4;
         }
         if (frame == 7 && timer == 0) {
             l50.type = 0x1d6;
@@ -9807,7 +9807,7 @@ void CIkumi::Unk694d00()
             l50.layer = 1;
             l50.unk18 = -facing;
             SpawnObject(&l50);
-            unk2c8 = 5;
+            m_playVoice = 5;
             CPlayer::Unk410a10(4, 0);
         }
         timer++;
@@ -9833,7 +9833,7 @@ void CIkumi::Unk694d00()
             unk3138 = 1;
         }
         if (frame == 0xa && timer == 0) {
-            unk2c9 = 0x14;
+            m_playSound = 0x14;
             m_gauge = m_gauge + 0x23;
             l50.type = 0x191;
             l50.x = (double)(int)x;
@@ -9843,7 +9843,7 @@ void CIkumi::Unk694d00()
             l50.unk0 = 1;
             l50.unk18 = facing;
             SpawnObject(&l50);
-            unk2c8 = 2;
+            m_playVoice = 2;
         }
         if (frame > 0xb) {
             vx -= 0.045;
@@ -9896,7 +9896,7 @@ void CIkumi::Unk694d00()
             unk3138 = 1;
         }
         if (frame == 0xa && timer == 0) {
-            unk2c9 = 0x14;
+            m_playSound = 0x14;
             m_gauge = m_gauge + 0x23;
             l50.type = 0x191;
             l50.x = (double)(int)x;
@@ -9906,7 +9906,7 @@ void CIkumi::Unk694d00()
             l50.unk0 = 1;
             l50.unk18 = facing;
             SpawnObject(&l50);
-            unk2c8 = 2;
+            m_playVoice = 2;
         }
         if (frame > 0xb) {
             vx -= 0.045;
@@ -9947,7 +9947,7 @@ void CIkumi::Unk694d00()
             unk3138 = 1;
         }
         if (frame == 0xa && timer == 0) {
-            unk2c9 = 0x14;
+            m_playSound = 0x14;
             m_gauge = m_gauge + 0x23;
             l50.type = 0x191;
             l50.x = (double)(int)x;
@@ -9957,7 +9957,7 @@ void CIkumi::Unk694d00()
             l50.unk0 = 1;
             l50.unk18 = facing;
             SpawnObject(&l50);
-            unk2c8 = 2;
+            m_playVoice = 2;
         }
         if (frame > 0xb) {
             vx -= 0.045;
@@ -10010,7 +10010,7 @@ void CIkumi::Unk694d00()
             unk3138 = 1;
         }
         if (frame == 0xa && timer == 0) {
-            unk2c9 = 0x14;
+            m_playSound = 0x14;
             m_gauge = m_gauge + 0x23;
             l50.type = 0x191;
             l50.x = (double)(int)x;
@@ -10020,7 +10020,7 @@ void CIkumi::Unk694d00()
             l50.unk0 = 1;
             l50.unk18 = facing;
             SpawnObject(&l50);
-            unk2c8 = 2;
+            m_playVoice = 2;
         }
         if (frame > 0xb) {
             vx -= 0.045;
@@ -10072,7 +10072,7 @@ void CIkumi::Unk694d00()
             }
         }
         if (frame == 9 && timer == 0) {
-            unk2c9 = 0x14;
+            m_playSound = 0x14;
             m_gauge = m_gauge + 0x23;
             l50.type = 0x190;
             l50.x = (double)(int)x;
@@ -10082,7 +10082,7 @@ void CIkumi::Unk694d00()
             l50.unk0 = 1;
             l50.unk18 = facing;
             SpawnObject(&l50);
-            unk2c8 = 3;
+            m_playVoice = 3;
         }
         timer++;
         if (timer >= l4) {
@@ -10130,7 +10130,7 @@ void CIkumi::Unk694d00()
             }
         }
         if (frame == 9 && timer == 0) {
-            unk2c9 = 0x14;
+            m_playSound = 0x14;
             m_gauge = m_gauge + 0x23;
             l50.type = 0x190;
             l50.x = (double)(int)x;
@@ -10140,7 +10140,7 @@ void CIkumi::Unk694d00()
             l50.unk0 = 1;
             l50.unk18 = facing;
             SpawnObject(&l50);
-            unk2c8 = 3;
+            m_playVoice = 3;
         }
         timer++;
         if (timer >= l4) {
@@ -10190,7 +10190,7 @@ void CIkumi::Unk694d00()
             }
         }
         if (frame == 9 && timer == 0) {
-            unk2c9 = 0x14;
+            m_playSound = 0x14;
             m_gauge = m_gauge + 0x23;
             l50.type = 0x190;
             l50.x = (double)(int)x;
@@ -10200,7 +10200,7 @@ void CIkumi::Unk694d00()
             l50.unk0 = 1;
             l50.unk18 = facing;
             SpawnObject(&l50);
-            unk2c8 = 3;
+            m_playVoice = 3;
         }
         timer++;
         if (timer >= l4) {
@@ -10248,7 +10248,7 @@ void CIkumi::Unk694d00()
             }
         }
         if (frame == 9 && timer == 0) {
-            unk2c9 = 0x14;
+            m_playSound = 0x14;
             m_gauge = m_gauge + 0x23;
             l50.type = 0x190;
             l50.x = (double)(int)x;
@@ -10258,7 +10258,7 @@ void CIkumi::Unk694d00()
             l50.unk0 = 1;
             l50.unk18 = facing;
             SpawnObject(&l50);
-            unk2c8 = 3;
+            m_playVoice = 3;
         }
         timer++;
         if (timer >= l4) {
@@ -10501,7 +10501,7 @@ void CIkumi::Unk694d00()
             l50.unk0 = 1;
             l50.layer = 1;
             m_game->CreateEffect((EffectDesc*)&l50);
-            unk2c9 = 0x25;
+            m_playSound = 0x25;
         }
         CPlayer::Unk410a80(0x32, 3);
         if (frame == 4 && timer == 0) {
@@ -10514,8 +10514,8 @@ void CIkumi::Unk694d00()
             l50.unk18 = facing;
             SpawnObject(&l50);
             CPlayer::Unk410a10(0xa, 0);
-            unk2c8 = 6;
-            unk2c8 = 7;
+            m_playVoice = 6;
+            m_playVoice = 7;
         }
         timer++;
         if (timer >= l4) {
@@ -10629,7 +10629,7 @@ void CIkumi::Unk694d00()
                 (*m_opponent)->y = y - 88.0;
             }
             if (frame == 3) {
-                unk2c8 = 8;
+                m_playVoice = 8;
                 CPlayer::Unk410a10(3, 0x1e);
                 l50.type = 0x19f;
                 l50.x = (double)((int)x + facing * 0x1e);
@@ -10769,7 +10769,7 @@ void CIkumi::Unk694d00()
                 (*m_opponent)->y = y - 88.0;
             }
             if (frame == 3) {
-                unk2c8 = 8;
+                m_playVoice = 8;
                 CPlayer::Unk410a10(3, 0x1e);
                 l50.type = 0x1a0;
                 l50.x = (double)((int)x + facing * 0x1e);
@@ -10916,7 +10916,7 @@ void CIkumi::Unk694d00()
                 (*m_opponent)->y = y - 88.0;
             }
             if (frame == 3) {
-                unk2c8 = 8;
+                m_playVoice = 8;
                 CPlayer::Unk410a10(4, 0x1e);
                 l50.type = 0x1a1;
                 l50.x = (double)((int)x + facing * 0x1e);
@@ -11125,7 +11125,7 @@ void CIkumi::Unk694d00()
             m_attackResult = 0;
             if (frame == 0xe) {
                 unk315c = 1;
-                unk2c8 = 0xa;
+                m_playVoice = 0xa;
                 l50.type = 0x1a7;
                 l50.x = (double)((int)x + facing * 0x29);
                 l50.y = 0.0;
@@ -11182,7 +11182,7 @@ void CIkumi::Unk694d00()
             m_attackResult = 0;
             if (frame == 0xe) {
                 unk315c = 2;
-                unk2c8 = 0xa;
+                m_playVoice = 0xa;
                 l50.type = 0x1a7;
                 l50.x = (double)((int)x + facing * 0x29);
                 l50.y = 0.0;
@@ -11242,7 +11242,7 @@ void CIkumi::Unk694d00()
             m_attackResult = 0;
             if (frame == 0xe) {
                 unk315c = 3;
-                unk2c8 = 0xa;
+                m_playVoice = 0xa;
                 l50.type = 0x1a7;
                 l50.x = (double)((int)x + facing * 0x29);
                 l50.y = 0.0;

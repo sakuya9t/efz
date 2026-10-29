@@ -91,7 +91,7 @@ void CAkiko::UpdatePattern()
         }
         if (y + vy >= 0.0 && frame > 2) {
             y = 0.0;
-            unk2c9 = 9;
+            m_playSound = 9;
             CPlayer::FaceOpponent();
             pattern = 0xd;
             StartPattern();
@@ -121,7 +121,7 @@ void CAkiko::UpdatePattern()
         }
         if (y + vy >= 0.0 && frame > 2) {
             y = 0.0;
-            unk2c9 = 9;
+            m_playSound = 9;
             CPlayer::FaceOpponent();
             pattern = 0xd;
             StartPattern();
@@ -151,7 +151,7 @@ void CAkiko::UpdatePattern()
         }
         if (y + vy >= 0.0 && frame > 2) {
             y = 0.0;
-            unk2c9 = 9;
+            m_playSound = 9;
             CPlayer::FaceOpponent();
             pattern = 0xd;
             StartPattern();
@@ -198,7 +198,7 @@ void CAkiko::UpdatePattern()
         if (y + vy >= 0.0) {
             y = 0.0;
             CPlayer::StopMoving();
-            unk2c9 = 9;
+            m_playSound = 9;
             pattern = 0xd;
             StartPattern();
         }
@@ -238,7 +238,7 @@ void CAkiko::UpdatePattern()
         }
         if (y + vy >= 0.0 && frame > 2) {
             y = 0.0;
-            unk2c9 = 9;
+            m_playSound = 9;
             CPlayer::FaceOpponent();
             pattern = 0xd;
             StartPattern();
@@ -262,7 +262,7 @@ void CAkiko::UpdatePattern()
         }
         if (y + vy >= 0.0 && frame > 2) {
             y = 0.0;
-            unk2c9 = 9;
+            m_playSound = 9;
             CPlayer::FaceOpponent();
             pattern = 0xd;
             StartPattern();
@@ -286,7 +286,7 @@ void CAkiko::UpdatePattern()
         }
         if (y + vy >= 0.0 && frame > 2) {
             y = 0.0;
-            unk2c9 = 9;
+            m_playSound = 9;
             CPlayer::FaceOpponent();
             pattern = 0xd;
             StartPattern();
@@ -302,7 +302,7 @@ void CAkiko::UpdatePattern()
         }
         unk118--;
         if (frame == 2 && timer == 0) {
-            unk2c9 = 0x11;
+            m_playSound = 0x11;
         }
         vy += 0.03;
         vx = m_inputX * 0.045 * facing + vx;
@@ -332,7 +332,7 @@ void CAkiko::UpdatePattern()
         }
         if (y + vy >= 0.0 && frame > 2) {
             y = 0.0;
-            unk2c9 = 9;
+            m_playSound = 9;
             CPlayer::FaceOpponent();
             pattern = 0xd;
             StartPattern();
@@ -347,7 +347,7 @@ void CAkiko::UpdatePattern()
         if (y + vy > 0.0 && frame < 2) {
             timer = 0;
             frame = 2;
-            unk2c9 = 7;
+            m_playSound = 7;
             y = 0.0;
             vy = 0.0;
             ay = 0.0;
@@ -1126,7 +1126,7 @@ void CAkiko::UpdatePattern()
             vx = 0.5;
             vy = -2.5;
             ay = 0.025;
-            unk2c9 = 0x1f;
+            m_playSound = 0x1f;
             l50.type = 0;
             l50.x = (double)(int)x;
             l50.y = (double)(int)y;
@@ -1414,7 +1414,7 @@ void CAkiko::UpdatePattern()
             unk118 -= 0.8;
         }
         if (frame == 0 && timer == 0 && unk3138 == 0) {
-            unk2c9 = 0x1e;
+            m_playSound = 0x1e;
             vy = -0.45;
             vx = -0.1;
             unk3138++;
@@ -1471,7 +1471,7 @@ void CAkiko::UpdatePattern()
             if (unk120 != 0) {
                 unk118 -= 30.0;
             }
-            unk2c9 = 0x21;
+            m_playSound = 0x21;
             vy = -1.5;
             vx = -0.8;
             m_gauge = m_gauge + 0x1e;
@@ -1523,7 +1523,7 @@ void CAkiko::UpdatePattern()
             if (unk120 != 0) {
                 unk118 -= 30.0;
             }
-            unk2c9 = 0x21;
+            m_playSound = 0x21;
             vy = -1.5;
             vx = -0.8;
             m_gauge = m_gauge + 0x1e;
@@ -1575,7 +1575,7 @@ void CAkiko::UpdatePattern()
             if (unk120 != 0) {
                 unk118 -= 30.0;
             }
-            unk2c9 = 0x21;
+            m_playSound = 0x21;
             vx = unkc0;
             vy = unkc8;
             m_gauge = m_gauge + 0x1e;
@@ -1619,7 +1619,7 @@ void CAkiko::UpdatePattern()
                 if (unk120 != 0) {
                     unk118 -= 30.0;
                 }
-                unk2c9 = 0x21;
+                m_playSound = 0x21;
                 vx = unkc0;
                 vy = unkc8;
                 m_gauge = m_gauge + 0x1e;
@@ -1695,7 +1695,7 @@ void CAkiko::UpdatePattern()
             l50.scale = 2;
             l50.layer = 0;
             m_game->CreateEffect((EffectDesc*)&l50);
-            unk2c9 = 7;
+            m_playSound = 7;
         }
         timer++;
         if (timer >= l4) {
@@ -1718,7 +1718,7 @@ void CAkiko::UpdatePattern()
             l50.scale = 2;
             l50.layer = 0;
             m_game->CreateEffect((EffectDesc*)&l50);
-            unk2c9 = 7;
+            m_playSound = 7;
         }
         timer++;
         if (timer >= l4) {
@@ -1998,7 +1998,7 @@ void CAkiko::UpdatePattern()
         }
         if (y + vy >= 0.0) {
             y = 0.0;
-            unk2c9 = 9;
+            m_playSound = 9;
             CPlayer::FaceOpponent();
             pattern = 0xd;
             StartPattern();
@@ -2029,7 +2029,7 @@ void CAkiko::UpdatePattern()
         }
         if (y + vy >= 0.0) {
             y = 0.0;
-            unk2c9 = 9;
+            m_playSound = 9;
             CPlayer::FaceOpponent();
             pattern = 0xd;
             StartPattern();
@@ -2060,7 +2060,7 @@ void CAkiko::UpdatePattern()
         }
         if (y + vy >= 0.0) {
             y = 0.0;
-            unk2c9 = 9;
+            m_playSound = 9;
             CPlayer::FaceOpponent();
             pattern = 0xd;
             StartPattern();
@@ -2076,7 +2076,7 @@ void CAkiko::UpdatePattern()
             l50.layer = 1;
             m_game->CreateEffect((EffectDesc*)&l50);
             m_hitsLeft = 1;
-            unk2c9 = 0x3e;
+            m_playSound = 0x3e;
             unk3138++;
         }
         timer++;
@@ -2108,7 +2108,7 @@ void CAkiko::UpdatePattern()
             l50.layer = 1;
             m_game->CreateEffect((EffectDesc*)&l50);
             m_hitsLeft = 1;
-            unk2c9 = 0x3e;
+            m_playSound = 0x3e;
             m_gauge = m_gauge - 0x3e8;
             unk3138++;
         }
@@ -2159,7 +2159,7 @@ void CAkiko::UpdatePattern()
                 l50.layer = 0;
                 l50.side = facing == -1;
                 m_game->CreateEffect((EffectDesc*)&l50);
-                unk2c9 = 0x11;
+                m_playSound = 0x11;
             }
             if (frame == 4) {
                 vx = 2.0;
@@ -2192,7 +2192,7 @@ void CAkiko::UpdatePattern()
             timer = 0;
             frame++;
             if (frame == 3) {
-                unk2c9 = 0x11;
+                m_playSound = 0x11;
                 l50.type = 0x1f;
                 l50.x = (double)(int)x;
                 l50.y = (double)(int)y;
@@ -2216,7 +2216,7 @@ void CAkiko::UpdatePattern()
         if (frame == 0 && timer == 0 && unk3140 == 0) {
             vx = 1.8;
             vy = 0.0;
-            unk2c9 = 0x11;
+            m_playSound = 0x11;
             unk3140++;
             CPlayer::Unk4109d0(3);
         }
@@ -2253,7 +2253,7 @@ void CAkiko::UpdatePattern()
         if (frame == 0 && timer == 0 && unk3140 == 0) {
             vx = -1.8;
             vy = 0.0;
-            unk2c9 = 0x11;
+            m_playSound = 0x11;
             unk3140++;
             CPlayer::Unk4109d0(3);
         }
@@ -2298,7 +2298,7 @@ void CAkiko::UpdatePattern()
             CPlayer::Unk410b10(0xb0, 3);
         }
         if (frame == 1 && timer == 0) {
-            unk2c9 = 0x12;
+            m_playSound = 0x12;
             l50.type = 1;
             l50.x = (double)(int)x;
             l50.y = (double)(int)y;
@@ -2435,7 +2435,7 @@ void CAkiko::UpdatePattern()
             CPlayer::Unk410b10(0xb0, 3);
         }
         if (frame == 0 && timer == 0) {
-            unk2c9 = 0x12;
+            m_playSound = 0x12;
             l50.type = 1;
             l50.x = (double)(int)x;
             l50.y = (double)(int)y;
@@ -2472,7 +2472,7 @@ void CAkiko::UpdatePattern()
             y = 0.0;
             timer = 0;
             frame = 7;
-            unk2c9 = 9;
+            m_playSound = 9;
         }
         timer++;
         if (timer >= l4) {
@@ -2506,7 +2506,7 @@ void CAkiko::UpdatePattern()
         }
         if (frame == 1 && timer == 0) {
             m_gauge = m_gauge + 5;
-            unk2c9 = 0x15;
+            m_playSound = 0x15;
             m_hitsLeft = 1;
         }
         timer++;
@@ -2542,7 +2542,7 @@ void CAkiko::UpdatePattern()
         }
         if (frame == 1 && timer == 0) {
             m_gauge = m_gauge + 0xf;
-            unk2c9 = 0x14;
+            m_playSound = 0x14;
             m_hitsLeft = 1;
         }
         timer++;
@@ -2578,7 +2578,7 @@ void CAkiko::UpdatePattern()
         }
         if (frame == 2 && timer == 0) {
             m_gauge = m_gauge + 0xf;
-            unk2c9 = 0x14;
+            m_playSound = 0x14;
             m_hitsLeft = 1;
         }
         timer++;
@@ -2614,7 +2614,7 @@ void CAkiko::UpdatePattern()
         }
         if (frame == 4 && timer == 0) {
             m_gauge = m_gauge + 0x23;
-            unk2c9 = 0x14;
+            m_playSound = 0x14;
             m_hitsLeft = 1;
         }
         timer++;
@@ -2648,7 +2648,7 @@ void CAkiko::UpdatePattern()
         }
         if (frame == 1 && timer == 0) {
             m_gauge = m_gauge + 5;
-            unk2c9 = 0x15;
+            m_playSound = 0x15;
             m_hitsLeft = 1;
         }
         timer++;
@@ -2696,7 +2696,7 @@ void CAkiko::UpdatePattern()
             }
             if (frame == 3) {
                 m_attackResult = 0;
-                unk2c9 = 0x14;
+                m_playSound = 0x14;
             }
             if (frame >= x8) {
                 pattern = 0;
@@ -2714,7 +2714,7 @@ void CAkiko::UpdatePattern()
         }
         if (frame == 2 && timer == 0) {
             m_gauge = m_gauge + 0x19;
-            unk2c9 = 0x14;
+            m_playSound = 0x14;
             m_hitsLeft = 1;
         }
         timer++;
@@ -2754,7 +2754,7 @@ void CAkiko::UpdatePattern()
         }
         if (frame == 1 && timer == 0) {
             m_gauge = m_gauge + 5;
-            unk2c9 = 0x15;
+            m_playSound = 0x15;
             m_hitsLeft = 1;
         }
         if (y + vy >= 0.0) {
@@ -2809,23 +2809,23 @@ void CAkiko::UpdatePattern()
                 m_attackResult = 0;
             }
             if (frame == 2) {
-                unk2c9 = 0x15;
+                m_playSound = 0x15;
                 m_attackResult = 0;
             }
             if (frame == 3) {
-                unk2c9 = 0x15;
+                m_playSound = 0x15;
                 m_attackResult = 0;
             }
             if (frame == 4) {
-                unk2c9 = 0x15;
+                m_playSound = 0x15;
                 m_attackResult = 0;
             }
             if (frame == 5) {
-                unk2c9 = 0x15;
+                m_playSound = 0x15;
                 m_attackResult = 0;
             }
             if (frame == 7) {
-                unk2c9 = 0x14;
+                m_playSound = 0x14;
                 m_attackResult = 0;
             }
             if (frame >= x8) {
@@ -2852,7 +2852,7 @@ void CAkiko::UpdatePattern()
         if (frame == 3 && timer == 0) {
             unk3138 = 0;
             m_gauge = m_gauge + 0x1e;
-            unk2c9 = 0x14;
+            m_playSound = 0x14;
             m_hitsLeft = 3;
         }
         if (y + vy >= 0.0) {
@@ -2891,7 +2891,7 @@ void CAkiko::UpdatePattern()
         }
         if (frame == 2 && timer == 0) {
             m_gauge = m_gauge + 0xf;
-            unk2c9 = 0x14;
+            m_playSound = 0x14;
             m_hitsLeft = 1;
         }
         if (frame == 5 && timer == 0) {
@@ -2942,7 +2942,7 @@ void CAkiko::UpdatePattern()
         }
         if (frame == 3 && timer == 0) {
             m_gauge = m_gauge + 0x1e;
-            unk2c9 = 0x14;
+            m_playSound = 0x14;
             m_hitsLeft = 1;
         }
         timer++;
@@ -2963,7 +2963,7 @@ void CAkiko::UpdatePattern()
         vy = vy + ay;
         if (frame == 0 && timer == 0) {
             m_gauge = m_gauge + 0x1e;
-            unk2c9 = 0x14;
+            m_playSound = 0x14;
             m_hitsLeft = 1;
             vx = vx / 2.0;
             ay = 0.07;
@@ -2986,7 +2986,7 @@ void CAkiko::UpdatePattern()
             l50.layer = 0;
             l50.unk2c = 7;
             m_game->CreateEffect((EffectDesc*)&l50);
-            unk2c9 = 7;
+            m_playSound = 7;
             pattern = 0xd6;
             StartPattern();
             break;
@@ -3133,7 +3133,7 @@ void CAkiko::UpdatePattern()
         }
         if (frame == 1 && timer == 0) {
             m_gauge = m_gauge + 5;
-            unk2c9 = 0x15;
+            m_playSound = 0x15;
             m_hitsLeft = 1;
         }
         if (y + vy >= 0.0) {
@@ -3161,7 +3161,7 @@ void CAkiko::UpdatePattern()
         }
         if (frame == 2 && timer == 0) {
             m_gauge = m_gauge + 0xa;
-            unk2c9 = 0x15;
+            m_playSound = 0x15;
             m_hitsLeft = 1;
         }
         if (y + vy >= 0.0) {
@@ -3189,7 +3189,7 @@ void CAkiko::UpdatePattern()
         }
         if (frame == 1 && timer == 0) {
             m_gauge = m_gauge + 0xa;
-            unk2c9 = 0x14;
+            m_playSound = 0x14;
             m_hitsLeft = 1;
         }
         if (y + vy >= 0.0) {
@@ -3324,7 +3324,7 @@ void CAkiko::UpdatePattern()
             frame++;
             m_attackResult = 3;
             if (frame == 4 && timer == 0) {
-                unk2c8 = 0;
+                m_playVoice = 0;
                 m_gauge = m_gauge + 0x14;
                 l50.unk0 = 1;
                 l50.scale = 0;
@@ -3376,7 +3376,7 @@ void CAkiko::UpdatePattern()
             frame++;
             m_attackResult = 3;
             if (frame == 4 && timer == 0) {
-                unk2c8 = 0;
+                m_playVoice = 0;
                 m_gauge = m_gauge + 0x14;
                 l50.unk0 = 1;
                 l50.scale = 0;
@@ -3451,7 +3451,7 @@ void CAkiko::UpdatePattern()
             frame++;
             m_attackResult = 3;
             if (frame == 4 && timer == 0) {
-                unk2c8 = 0;
+                m_playVoice = 0;
                 m_gauge = m_gauge + 0xa;
                 l50.unk0 = 1;
                 l50.scale = 0;
@@ -3491,7 +3491,7 @@ void CAkiko::UpdatePattern()
                 SpawnObject(&l50);
             }
             if (frame == 8 && timer == 0) {
-                unk2c8 = 0;
+                m_playVoice = 0;
                 m_gauge = m_gauge + 0xa;
                 l50.unk0 = 1;
                 unk3138 = (WORD)CPlayer::Random(0, 9);
@@ -3573,7 +3573,7 @@ void CAkiko::UpdatePattern()
                 vx = 2.0;
                 vy = -0.85;
                 ay = 0.035;
-                unk2c8 = 3;
+                m_playVoice = 3;
             }
             if (frame == 7) {
                 vx = 0.5;
@@ -3618,7 +3618,7 @@ void CAkiko::UpdatePattern()
             }
             if (frame == 3 && timer == 0) {
                 vy = -1.0;
-                unk2c8 = 4;
+                m_playVoice = 4;
                 if (y - (*m_opponent)->y - 50.0 < 3.0 && y - (*m_opponent)->y - 50.0 > -3.0) {
                     break;
                 }
@@ -3678,7 +3678,7 @@ void CAkiko::UpdatePattern()
                 vx = 3.5;
                 vy = -1.4;
                 ay = 0.035;
-                unk2c8 = 3;
+                m_playVoice = 3;
             }
             if (frame == 7) {
                 vx = 0.5;
@@ -3735,7 +3735,7 @@ void CAkiko::UpdatePattern()
                 vx = 3.0;
                 vy = -1.25;
                 ay = 0.035;
-                unk2c8 = 3;
+                m_playVoice = 3;
             }
             if (frame == 7) {
                 vx = 0.5;
@@ -3806,7 +3806,7 @@ void CAkiko::UpdatePattern()
                 vx = 9.0;
                 vy = -3.6;
                 ay = 0.035;
-                unk2c8 = 3;
+                m_playVoice = 3;
             }
             if (frame == 7) {
                 vx = 0.5;
@@ -3870,7 +3870,7 @@ void CAkiko::UpdatePattern()
                 vx = 9.0;
                 vy = -3.6;
                 ay = 0.035;
-                unk2c8 = 3;
+                m_playVoice = 3;
             }
             if (frame == 7) {
                 vx = 0.5;
@@ -3915,7 +3915,7 @@ void CAkiko::UpdatePattern()
             }
             if (frame == 3 && timer == 0) {
                 vy = -1.0;
-                unk2c8 = 4;
+                m_playVoice = 4;
                 if (y - (*m_opponent)->y - 40.0 < 8.0 && y - (*m_opponent)->y - 40.0 > -8.0) {
                     frame = 4;
                 } else {
@@ -3941,7 +3941,7 @@ void CAkiko::UpdatePattern()
             ax = 0.0;
         }
         if (frame == 3 && timer == 0) {
-            unk2c8 = 8;
+            m_playVoice = 8;
             l50.type = 0x19f;
             l50.unk0 = 1;
             l50.x = (double)((int)x + facing * 0x29);
@@ -3969,7 +3969,7 @@ void CAkiko::UpdatePattern()
             ax = 0.0;
         }
         if (frame == 3 && timer == 0) {
-            unk2c8 = 8;
+            m_playVoice = 8;
             l50.type = 0x1a2;
             l50.unk0 = 1;
             l50.x = (double)((int)x + facing * 0x29);
@@ -4016,7 +4016,7 @@ void CAkiko::UpdatePattern()
             ax = 0.0;
         }
         if (frame == 3 && timer == 0) {
-            unk2c8 = 8;
+            m_playVoice = 8;
             l50.type = 0x1a4;
             l50.unk0 = 1;
             l50.x = (double)((int)x + facing * 0x29);
@@ -4045,7 +4045,7 @@ void CAkiko::UpdatePattern()
             m_hitsLeft = 1;
         }
         if (frame == 3 && timer == 0) {
-            unk2c8 = 5;
+            m_playVoice = 5;
         }
         if (frame > 4 && frame < 7) {
             unk3138 += 3;
@@ -4118,7 +4118,7 @@ void CAkiko::UpdatePattern()
             frame++;
             m_attackResult = 0;
             if (frame == 7 && timer == 0) {
-                unk2c8 = 6;
+                m_playVoice = 6;
             }
             if (frame == 0xb && timer == 0) {
                 CPlayer::Unk410a10(4, 0xa);
@@ -4132,7 +4132,7 @@ void CAkiko::UpdatePattern()
                 (*m_opponent)->unkc0 = 0.0;
                 (*m_opponent)->unkc8 = -2.5;
                 CPlayer::DealDamage(0x5dc, 500.0);
-                unk2c8 = 7;
+                m_playVoice = 7;
                 (*m_opponent)->unk128 = 1;
                 l50.type = 0x48;
                 l50.x = (double)((int)x - facing * 0x46);
@@ -4171,7 +4171,7 @@ void CAkiko::UpdatePattern()
             m_hitsLeft = 1;
         }
         if (frame == 3 && timer == 0) {
-            unk2c8 = 5;
+            m_playVoice = 5;
         }
         if (frame > 4 && frame < 7) {
             unk3138 += 4;
@@ -4244,7 +4244,7 @@ void CAkiko::UpdatePattern()
             frame++;
             m_attackResult = 0;
             if (frame == 7 && timer == 0) {
-                unk2c8 = 6;
+                m_playVoice = 6;
             }
             if (frame == 0xb && timer == 0) {
                 CPlayer::Unk410a10(4, 0xa);
@@ -4258,7 +4258,7 @@ void CAkiko::UpdatePattern()
                 (*m_opponent)->unkc0 = 0.0;
                 (*m_opponent)->unkc8 = -2.5;
                 CPlayer::DealDamage(0x5dc, 500.0);
-                unk2c8 = 7;
+                m_playVoice = 7;
                 (*m_opponent)->unk128 = 1;
                 l50.type = 0x48;
                 l50.x = (double)((int)x - facing * 0x46);
@@ -4312,7 +4312,7 @@ void CAkiko::UpdatePattern()
             }
         }
         if (frame == 3 && timer == 0) {
-            unk2c8 = 5;
+            m_playVoice = 5;
         }
         if (frame > 4 && frame < 7) {
             unk3138 += 6;
@@ -4389,7 +4389,7 @@ void CAkiko::UpdatePattern()
             frame++;
             m_attackResult = 0;
             if (frame == 7 && timer == 0) {
-                unk2c8 = 6;
+                m_playVoice = 6;
             }
             if (frame == 0xb && timer == 0) {
                 CPlayer::Unk410a10(4, 0xa);
@@ -4403,7 +4403,7 @@ void CAkiko::UpdatePattern()
                 (*m_opponent)->unkc0 = 0.0;
                 (*m_opponent)->unkc8 = -3.5;
                 CPlayer::DealDamage(0x6d6, 500.0);
-                unk2c8 = 7;
+                m_playVoice = 7;
                 (*m_opponent)->unk128 = 1;
                 l50.type = 0x48;
                 l50.x = (double)((int)x - facing * 0x46);
@@ -4448,7 +4448,7 @@ void CAkiko::UpdatePattern()
             l50.layer = 1;
             l50.unk0 = 1;
             SpawnObject(&l50);
-            unk2c8 = 9;
+            m_playVoice = 9;
         }
         if (frame < 3) {
             CPlayer::Unk410a80(0x19, 0xa);
@@ -4473,7 +4473,7 @@ void CAkiko::UpdatePattern()
             frame++;
             m_attackResult = 0;
             if (frame == 7 && timer == 0) {
-                unk2c8 = 0xc;
+                m_playVoice = 0xc;
                 CPlayer::Unk410a10(7, 0xa);
                 l50.type = 0x1ad;
                 l50.x = (double)((int)x + facing * 0x6e);
@@ -4520,7 +4520,7 @@ void CAkiko::UpdatePattern()
             l50.layer = 1;
             l50.unk0 = 1;
             SpawnObject(&l50);
-            unk2c8 = 9;
+            m_playVoice = 9;
         }
         if (frame < 3) {
             CPlayer::Unk410a80(0x19, 0xa);
@@ -4545,7 +4545,7 @@ void CAkiko::UpdatePattern()
             frame++;
             m_attackResult = 0;
             if (frame == 7 && timer == 0) {
-                unk2c8 = 0xc;
+                m_playVoice = 0xc;
                 CPlayer::Unk410a10(7, 0xa);
                 l50.type = 0x1ad;
                 l50.x = (double)((int)x + facing * 0x82);
@@ -4596,7 +4596,7 @@ void CAkiko::UpdatePattern()
             l50.layer = 1;
             l50.unk0 = 1;
             SpawnObject(&l50);
-            unk2c8 = 9;
+            m_playVoice = 9;
         }
         if (frame < 3) {
             CPlayer::Unk410a80(0x19, 0xa);
@@ -4617,7 +4617,7 @@ void CAkiko::UpdatePattern()
             l50.unk0 = 1;
             l50.layer = 1;
             m_game->CreateEffect((EffectDesc*)&l50);
-            unk2c9 = 0x25;
+            m_playSound = 0x25;
         }
         timer++;
         if (timer >= l4) {
@@ -4625,7 +4625,7 @@ void CAkiko::UpdatePattern()
             frame++;
             m_attackResult = 0;
             if (frame == 7 && timer == 0) {
-                unk2c8 = 0xc;
+                m_playVoice = 0xc;
                 CPlayer::Unk410a10(7, 0xa);
                 l50.type = 0x1ad;
                 l50.x = (double)((int)x + facing * 0xc8);
@@ -4710,7 +4710,7 @@ void CAkiko::UpdatePattern()
         if (frame == 0 && timer == 0) {
             vx = 0.0;
             vy = 0.0;
-            unk2c8 = 0x13;
+            m_playVoice = 0x13;
         }
         timer++;
         if (timer >= l4) {
@@ -4726,7 +4726,7 @@ void CAkiko::UpdatePattern()
                 CPlayer::DealDamage(0x3e8, 500.0);
                 (*m_opponent)->unk128 = 1;
                 l50.type = 0x34;
-                unk2c9 = 0x16;
+                m_playSound = 0x16;
                 l50.x = (double)((int)x + facing * 0x28);
                 l50.y = (double)((int)y - 0x46);
                 l50.scale = 2;
@@ -4787,7 +4787,7 @@ void CAkiko::UpdatePattern()
         if (frame == 0 && timer == 0) {
             vx = 0.0;
             vy = 0.0;
-            unk2c8 = 0x13;
+            m_playVoice = 0x13;
         }
         timer++;
         if (timer >= l4) {
@@ -4803,7 +4803,7 @@ void CAkiko::UpdatePattern()
                 CPlayer::DealDamage(0x3e8, 500.0);
                 (*m_opponent)->unk128 = 1;
                 l50.type = 0x34;
-                unk2c9 = 0x16;
+                m_playSound = 0x16;
                 l50.x = (double)((int)x + facing * 0x28);
                 l50.y = (double)((int)y - 0x46);
                 l50.scale = 2;
@@ -4844,7 +4844,7 @@ void CAkiko::UpdatePattern()
             l50.unk0 = 1;
             l50.layer = 1;
             m_game->CreateEffect((EffectDesc*)&l50);
-            unk2c9 = 0x25;
+            m_playSound = 0x25;
         }
         if (frame == 5 && m_attackResult == 3) {
             StartPattern();
@@ -4868,7 +4868,7 @@ void CAkiko::UpdatePattern()
         if (frame == 0 && timer == 0) {
             vx = 0.0;
             vy = 0.0;
-            unk2c8 = 0x13;
+            m_playVoice = 0x13;
         }
         if (frame < 2) {
             m_game->Unk4080c0(0xf);
@@ -4887,7 +4887,7 @@ void CAkiko::UpdatePattern()
                 CPlayer::DealDamage(0x3e8, 500.0);
                 (*m_opponent)->unk128 = 1;
                 l50.type = 0x34;
-                unk2c9 = 0x16;
+                m_playSound = 0x16;
                 l50.x = (double)((int)x + facing * 0x28);
                 l50.y = (double)((int)y - 0x46);
                 l50.scale = 2;
@@ -5024,7 +5024,7 @@ void CAkiko::UpdatePattern()
                 l50.layer = 1;
                 m_game->CreateEffect((EffectDesc*)&l50);
                 unk3138 = 0;
-                unk2c9 = 0x25;
+                m_playSound = 0x25;
                 m_game->FadeMusic(-0x2710, 0x64);
             }
             if (frame == 8 && unk3138 < 1) {
@@ -5082,7 +5082,7 @@ void CAkiko::UpdatePattern()
                 l50.unk0 = 1;
                 l50.layer = 1;
                 m_game->CreateEffect((EffectDesc*)&l50);
-                unk2c9 = 0x25;
+                m_playSound = 0x25;
                 l50.type = 0x47;
                 m_game->CreateEffect((EffectDesc*)&l50);
             }
@@ -5136,7 +5136,7 @@ void CAkiko::UpdatePattern()
                 l50.unk0 = 1;
                 l50.layer = 0;
                 SpawnObject(&l50);
-                unk2c8 = 0x11;
+                m_playVoice = 0x11;
             }
             if (frame == 2) {
                 m_game->unk1420e = 0x7530;
@@ -5154,13 +5154,13 @@ void CAkiko::UpdatePattern()
                 l50.unk18 = 1;
                 l50.screen = 1;
                 SpawnObject(&l50);
-                unk2c8 = 0x10;
+                m_playVoice = 0x10;
             }
             if (frame == 3) {
                 m_game->unk1420e = 0;
                 (*m_opponent)->m_game->unk1420e = 0;
                 m_game->unk1420c = 0;
-                unk2c8 = 0xe;
+                m_playVoice = 0xe;
                 CPlayer::DealDamage(0x157c, 1000.0);
                 (*m_opponent)->StartPattern();
                 (*m_opponent)->pattern = 0x63;

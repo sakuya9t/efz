@@ -101,7 +101,7 @@ void CMishio::UpdatePattern()
         }
         if (y + vy >= 0.0 && frame > 3) {
             y = 0.0;
-            unk2c9 = 9;
+            m_playSound = 9;
             CPlayer::FaceOpponent();
             pattern = 0xd;
             StartPattern();
@@ -137,7 +137,7 @@ void CMishio::UpdatePattern()
         }
         if (y + vy >= 0.0 && frame > 3) {
             y = 0.0;
-            unk2c9 = 9;
+            m_playSound = 9;
             CPlayer::FaceOpponent();
             pattern = 0xd;
             StartPattern();
@@ -169,7 +169,7 @@ void CMishio::UpdatePattern()
         }
         if (y + vy >= 0.0 && frame > 3) {
             y = 0.0;
-            unk2c9 = 9;
+            m_playSound = 9;
             CPlayer::FaceOpponent();
             pattern = 0xd;
             StartPattern();
@@ -218,7 +218,7 @@ void CMishio::UpdatePattern()
         }
         if (y + vy >= 0.0) {
             y = 0.0;
-            unk2c9 = 9;
+            m_playSound = 9;
             pattern = 0xd;
             StartPattern();
         }
@@ -264,7 +264,7 @@ void CMishio::UpdatePattern()
         }
         if (y + vy >= 0.0 && frame > 3) {
             y = 0.0;
-            unk2c9 = 9;
+            m_playSound = 9;
             CPlayer::FaceOpponent();
             pattern = 0xd;
             StartPattern();
@@ -293,7 +293,7 @@ void CMishio::UpdatePattern()
         }
         if (y + vy >= 0.0 && frame > 3) {
             y = 0.0;
-            unk2c9 = 9;
+            m_playSound = 9;
             CPlayer::FaceOpponent();
             pattern = 0xd;
             StartPattern();
@@ -321,7 +321,7 @@ void CMishio::UpdatePattern()
         }
         if (y + vy >= 0.0 && frame > 3) {
             y = 0.0;
-            unk2c9 = 9;
+            m_playSound = 9;
             CPlayer::FaceOpponent();
             pattern = 0xd;
             StartPattern();
@@ -336,7 +336,7 @@ void CMishio::UpdatePattern()
         if (y + vy > 0.0 && frame < 2) {
             timer = 0;
             frame = 2;
-            unk2c9 = 7;
+            m_playSound = 7;
             y = 0.0;
             vy = 0.0;
             ay = 0.0;
@@ -1123,7 +1123,7 @@ void CMishio::UpdatePattern()
             vx = 0.5;
             vy = -2.5;
             ay = 0.025;
-            unk2c9 = 0x1f;
+            m_playSound = 0x1f;
             l50.type = 0;
             l50.x = (double)(int)x;
             l50.y = (double)(int)y;
@@ -1417,7 +1417,7 @@ void CMishio::UpdatePattern()
             unk118 -= 0.8;
         }
         if (frame == 0 && timer == 0 && unk3138 == 0) {
-            unk2c9 = 0x1e;
+            m_playSound = 0x1e;
             vy = -0.45;
             vx = -0.1;
             unk3138++;
@@ -1474,7 +1474,7 @@ void CMishio::UpdatePattern()
             if (unk120 != 0) {
                 unk118 -= 30.0;
             }
-            unk2c9 = 0x21;
+            m_playSound = 0x21;
             vy = -1.5;
             vx = -0.8;
             m_gauge = m_gauge + 0x1e;
@@ -1526,7 +1526,7 @@ void CMishio::UpdatePattern()
             if (unk120 != 0) {
                 unk118 -= 30.0;
             }
-            unk2c9 = 0x21;
+            m_playSound = 0x21;
             vy = -1.5;
             vx = -0.8;
             m_gauge = m_gauge + 0x1e;
@@ -1578,7 +1578,7 @@ void CMishio::UpdatePattern()
             if (unk120 != 0) {
                 unk118 -= 30.0;
             }
-            unk2c9 = 0x21;
+            m_playSound = 0x21;
             vx = unkc0;
             vy = unkc8;
             m_gauge = m_gauge + 0x1e;
@@ -1622,7 +1622,7 @@ void CMishio::UpdatePattern()
                 if (unk120 != 0) {
                     unk118 -= 30.0;
                 }
-                unk2c9 = 0x21;
+                m_playSound = 0x21;
                 vx = unkc0;
                 vy = unkc8;
                 m_gauge = m_gauge + 0x1e;
@@ -1698,7 +1698,7 @@ void CMishio::UpdatePattern()
             l50.scale = 2;
             l50.layer = 0;
             m_game->CreateEffect((EffectDesc*)&l50);
-            unk2c9 = 7;
+            m_playSound = 7;
         }
         timer++;
         if (timer >= l4) {
@@ -1721,7 +1721,7 @@ void CMishio::UpdatePattern()
             l50.scale = 2;
             l50.layer = 0;
             m_game->CreateEffect((EffectDesc*)&l50);
-            unk2c9 = 7;
+            m_playSound = 7;
         }
         timer++;
         if (timer >= l4) {
@@ -2002,7 +2002,7 @@ void CMishio::UpdatePattern()
         }
         if (y + vy >= 0.0) {
             y = 0.0;
-            unk2c9 = 9;
+            m_playSound = 9;
             CPlayer::FaceOpponent();
             pattern = 0xd;
             StartPattern();
@@ -2033,7 +2033,7 @@ void CMishio::UpdatePattern()
         }
         if (y + vy >= 0.0) {
             y = 0.0;
-            unk2c9 = 9;
+            m_playSound = 9;
             CPlayer::FaceOpponent();
             pattern = 0xd;
             StartPattern();
@@ -2064,7 +2064,7 @@ void CMishio::UpdatePattern()
         }
         if (y + vy >= 0.0) {
             y = 0.0;
-            unk2c9 = 9;
+            m_playSound = 9;
             CPlayer::FaceOpponent();
             pattern = 0xd;
             StartPattern();
@@ -2080,7 +2080,7 @@ void CMishio::UpdatePattern()
             l50.layer = 1;
             m_game->CreateEffect((EffectDesc*)&l50);
             m_hitsLeft = 1;
-            unk2c9 = 0x3e;
+            m_playSound = 0x3e;
             unk3138++;
         }
         timer++;
@@ -2112,7 +2112,7 @@ void CMishio::UpdatePattern()
             l50.layer = 1;
             m_game->CreateEffect((EffectDesc*)&l50);
             m_hitsLeft = 1;
-            unk2c9 = 0x3e;
+            m_playSound = 0x3e;
             m_gauge = m_gauge - 0x3e8;
             unk3138++;
         }
@@ -2194,7 +2194,7 @@ void CMishio::UpdatePattern()
             ax = 0.0;
             y = 0.0;
             unk3138++;
-            unk2c9 = 9;
+            m_playSound = 9;
             frame = 3;
             timer = 0;
         }
@@ -2223,7 +2223,7 @@ void CMishio::UpdatePattern()
             CPlayer::Unk4109d0(3);
             vy = 0.0;
             ay = 0.0;
-            unk2c9 = 0x11;
+            m_playSound = 0x11;
         }
         timer++;
         unk3138++;
@@ -2260,7 +2260,7 @@ void CMishio::UpdatePattern()
             vy = 0.0;
             ay = 0.0;
             CPlayer::Unk4109d0(3);
-            unk2c9 = 0x11;
+            m_playSound = 0x11;
         }
         timer++;
         unk3138++;
@@ -2304,7 +2304,7 @@ void CMishio::UpdatePattern()
             CPlayer::Unk410b10(0xb0, 3);
         }
         if (frame == 1 && timer == 0) {
-            unk2c9 = 0x12;
+            m_playSound = 0x12;
             l50.type = 1;
             l50.x = (double)(int)x;
             l50.y = (double)(int)y;
@@ -2443,7 +2443,7 @@ void CMishio::UpdatePattern()
             CPlayer::Unk410b10(0xb0, 3);
         }
         if (frame == 0 && timer == 0) {
-            unk2c9 = 0x12;
+            m_playSound = 0x12;
             l50.type = 1;
             l50.x = (double)(int)x;
             l50.y = (double)(int)y;
@@ -2510,7 +2510,7 @@ void CMishio::UpdatePattern()
             y = 0.0;
             timer = 0;
             frame = 0xa;
-            unk2c9 = 9;
+            m_playSound = 9;
         }
         timer++;
         if (timer >= l4) {
@@ -2555,7 +2555,7 @@ void CMishio::UpdatePattern()
         }
         if (frame == 1 && timer == 0) {
             m_gauge = m_gauge + 5;
-            unk2c9 = 0x15;
+            m_playSound = 0x15;
             m_hitsLeft = 1;
         }
         timer++;
@@ -2597,7 +2597,7 @@ void CMishio::UpdatePattern()
         }
         if (frame == 3 && timer == 0) {
             m_gauge = m_gauge + 0xf;
-            unk2c9 = 0x14;
+            m_playSound = 0x14;
             m_hitsLeft = 1;
         }
         timer++;
@@ -2630,7 +2630,7 @@ void CMishio::UpdatePattern()
         }
         if (frame == 2 && timer == 0) {
             m_gauge = m_gauge + 0xf;
-            unk2c9 = 0x14;
+            m_playSound = 0x14;
             m_hitsLeft = 1;
         }
         timer++;
@@ -2672,7 +2672,7 @@ void CMishio::UpdatePattern()
         }
         if (frame == 1 && timer == 0) {
             m_gauge = m_gauge + 0x23;
-            unk2c9 = 0x14;
+            m_playSound = 0x14;
             m_hitsLeft = 1;
         }
         timer++;
@@ -2714,7 +2714,7 @@ void CMishio::UpdatePattern()
         }
         if (frame == 1 && timer == 0) {
             m_gauge = m_gauge + 5;
-            unk2c9 = 0x15;
+            m_playSound = 0x15;
             m_hitsLeft = 1;
         }
         timer++;
@@ -2759,7 +2759,7 @@ void CMishio::UpdatePattern()
         }
         if (frame == 2 && timer == 0) {
             m_gauge = m_gauge + 0xd;
-            unk2c9 = 0x14;
+            m_playSound = 0x14;
             m_hitsLeft = 1;
         }
         timer++;
@@ -2792,7 +2792,7 @@ void CMishio::UpdatePattern()
         }
         if (frame == 3 && timer == 0) {
             m_gauge = m_gauge + 0x19;
-            unk2c9 = 0x14;
+            m_playSound = 0x14;
             m_hitsLeft = 1;
         }
         timer++;
@@ -2829,7 +2829,7 @@ void CMishio::UpdatePattern()
         }
         if (frame == 2 && timer == 0) {
             m_gauge = m_gauge + 5;
-            unk2c9 = 0x15;
+            m_playSound = 0x15;
             m_hitsLeft = 1;
         }
         if (y + vy >= 0.0) {
@@ -2868,7 +2868,7 @@ void CMishio::UpdatePattern()
         }
         if (frame == 1 && timer == 0) {
             m_gauge = m_gauge + 0xd;
-            unk2c9 = 0x14;
+            m_playSound = 0x14;
             m_hitsLeft = 1;
         }
         if (y + vy >= 0.0) {
@@ -2907,7 +2907,7 @@ void CMishio::UpdatePattern()
         }
         if (frame == 2 && timer == 0) {
             m_gauge = m_gauge + 0x1e;
-            unk2c9 = 0x14;
+            m_playSound = 0x14;
             m_hitsLeft = 1;
         }
         if (y + vy >= 0.0) {
@@ -2937,7 +2937,7 @@ void CMishio::UpdatePattern()
         }
         if (frame == 8 && timer == 0) {
             m_gauge = m_gauge + 0xf;
-            unk2c9 = 0x14;
+            m_playSound = 0x14;
             m_hitsLeft = 1;
         }
         if (y < 0.0) {
@@ -3001,7 +3001,7 @@ void CMishio::UpdatePattern()
             }
             if (frame == 3 && timer == 0) {
                 m_gauge = m_gauge + 0x1e;
-                unk2c9 = 0x14;
+                m_playSound = 0x14;
                 m_hitsLeft = 1;
             }
             if (frame >= x8) {
@@ -3015,7 +3015,7 @@ void CMishio::UpdatePattern()
         vy = vy + ay;
         if (frame == 0 && timer == 0) {
             m_gauge = m_gauge + 0x1e;
-            unk2c9 = 0x14;
+            m_playSound = 0x14;
             m_hitsLeft = 1;
             vx = vx / 2.0;
             ay = 0.07;
@@ -3037,7 +3037,7 @@ void CMishio::UpdatePattern()
             l50.layer = 0;
             l50.unk2c = 7;
             m_game->CreateEffect((EffectDesc*)&l50);
-            unk2c9 = 7;
+            m_playSound = 7;
             pattern = 0xd6;
             StartPattern();
             break;
@@ -3186,7 +3186,7 @@ void CMishio::UpdatePattern()
         }
         if (frame == 1 && timer == 0) {
             m_gauge = m_gauge + 5;
-            unk2c9 = 0x15;
+            m_playSound = 0x15;
             m_hitsLeft = 1;
         }
         timer++;
@@ -3234,7 +3234,7 @@ void CMishio::UpdatePattern()
         }
         if (frame == 2 && timer == 0) {
             m_gauge = m_gauge + 0xa;
-            unk2c9 = 0x14;
+            m_playSound = 0x14;
             m_hitsLeft = 1;
         }
         timer++;
@@ -3282,7 +3282,7 @@ void CMishio::UpdatePattern()
         }
         if (frame == 2 && timer == 0) {
             m_gauge = m_gauge + 0xa;
-            unk2c9 = 0x14;
+            m_playSound = 0x14;
             m_hitsLeft = 1;
         }
         timer++;
@@ -3311,7 +3311,7 @@ void CMishio::UpdatePattern()
         }
         if (frame == 1 && timer == 0) {
             m_gauge = m_gauge + 5;
-            unk2c9 = 0x15;
+            m_playSound = 0x15;
             m_hitsLeft = 1;
         }
         timer++;
@@ -3347,7 +3347,7 @@ void CMishio::UpdatePattern()
         }
         if (frame == 2 && timer == 0) {
             m_gauge = m_gauge + 5;
-            unk2c9 = 0x15;
+            m_playSound = 0x15;
             m_hitsLeft = 1;
         }
         timer++;
@@ -3383,7 +3383,7 @@ void CMishio::UpdatePattern()
         }
         if (frame == 2 && timer == 0) {
             m_gauge = m_gauge + 5;
-            unk2c9 = 0x15;
+            m_playSound = 0x15;
             m_hitsLeft = 1;
         }
         timer++;
@@ -3529,7 +3529,7 @@ void CMishio::UpdatePattern()
                 m_attackResult = 0;
             }
             if (frame == 3) {
-                unk2c8 = 0;
+                m_playVoice = 0;
             }
             if (frame >= x8) {
                 pattern = 0;
@@ -3560,7 +3560,7 @@ void CMishio::UpdatePattern()
                 m_attackResult = 0;
             }
             if (frame == 3) {
-                unk2c8 = 0;
+                m_playVoice = 0;
             }
             if (frame >= x8) {
                 pattern = 0;
@@ -3608,10 +3608,10 @@ void CMishio::UpdatePattern()
                 m_attackResult = 0;
             }
             if (frame == 3) {
-                unk2c8 = 0;
+                m_playVoice = 0;
             }
             if (frame == 0xc) {
-                unk2c8 = 0;
+                m_playVoice = 0;
             }
             if (frame >= x8) {
                 pattern = 0;
@@ -3679,7 +3679,7 @@ void CMishio::UpdatePattern()
             m_hitsLeft = 4;
         }
         if ((frame == 6 || frame == 9 || frame == 0xc || frame == 0xf) && timer == 0) {
-            unk2c9 = 0x15;
+            m_playSound = 0x15;
             m_gauge = m_gauge + 5;
         }
         timer++;
@@ -3821,7 +3821,7 @@ void CMishio::UpdatePattern()
                 facing = -facing;
             }
             if (frame == 5 && timer == 0) {
-                unk2c8 = 5;
+                m_playVoice = 5;
                 m_hitsLeft = 1;
                 ObjBase::SetVelocity(-45.0, 2.2);
                 m_gauge = m_gauge + 0x14;
@@ -3912,7 +3912,7 @@ void CMishio::UpdatePattern()
             frame++;
             m_attackResult = 0;
             if (frame == 5 && timer == 0) {
-                unk2c8 = 5;
+                m_playVoice = 5;
                 m_hitsLeft = 1;
                 ObjBase::SetVelocity(-45.0, 2.2);
                 m_gauge = m_gauge + 0x14;
@@ -4003,7 +4003,7 @@ void CMishio::UpdatePattern()
             frame++;
             m_attackResult = 0;
             if (frame == 5 && timer == 0) {
-                unk2c8 = 5;
+                m_playVoice = 5;
                 m_hitsLeft = 1;
                 ObjBase::SetVelocity(-90.0, 2.2);
                 m_gauge = m_gauge + 0x14;
@@ -4095,7 +4095,7 @@ void CMishio::UpdatePattern()
             frame++;
             m_attackResult = 0;
             if (frame == 3 && timer == 0) {
-                unk2c8 = 5;
+                m_playVoice = 5;
                 m_hitsLeft = 1;
                 ObjBase::SetVelocity(0.0, 2.2);
                 m_gauge = m_gauge + 0x14;
@@ -4188,7 +4188,7 @@ void CMishio::UpdatePattern()
             frame++;
             m_attackResult = 0;
             if (frame == 4 && timer == 0) {
-                unk2c8 = 5;
+                m_playVoice = 5;
                 m_hitsLeft = 1;
                 ObjBase::SetVelocity(45.0, 2.2);
                 m_gauge = m_gauge + 0x14;
@@ -4281,7 +4281,7 @@ void CMishio::UpdatePattern()
             frame++;
             m_attackResult = 0;
             if (frame == 4 && timer == 0) {
-                unk2c8 = 5;
+                m_playVoice = 5;
                 m_hitsLeft = 1;
                 ObjBase::SetVelocity(90.0, 2.2);
                 m_gauge = m_gauge + 0x14;
@@ -4315,7 +4315,7 @@ void CMishio::UpdatePattern()
             frame++;
             m_attackResult = 0;
             if (frame == 7 && timer == 0) {
-                unk2c8 = 5;
+                m_playVoice = 5;
                 m_hitsLeft = 1;
                 ObjBase::SetVelocity(-90.0, 2.2);
                 m_gauge = m_gauge + 5;
@@ -4355,7 +4355,7 @@ void CMishio::UpdatePattern()
             frame++;
             m_attackResult = 0;
             if (frame == 7 && timer == 0) {
-                unk2c8 = 5;
+                m_playVoice = 5;
                 m_hitsLeft = 1;
                 ObjBase::SetVelocity(-45.0, 2.2);
                 m_gauge = m_gauge + 5;
@@ -4395,7 +4395,7 @@ void CMishio::UpdatePattern()
             frame++;
             m_attackResult = 0;
             if (frame == 7 && timer == 0) {
-                unk2c8 = 5;
+                m_playVoice = 5;
                 m_hitsLeft = 1;
                 ObjBase::SetVelocity(0.0, 2.2);
                 m_gauge = m_gauge + 5;
@@ -4443,7 +4443,7 @@ void CMishio::UpdatePattern()
             frame++;
             m_attackResult = 0;
             if (frame == 8 && timer == 0) {
-                unk2c8 = 5;
+                m_playVoice = 5;
                 m_hitsLeft = 1;
                 ObjBase::SetVelocity(45.0, 2.2);
                 m_gauge = m_gauge + 5;
@@ -4491,7 +4491,7 @@ void CMishio::UpdatePattern()
             frame++;
             m_attackResult = 0;
             if (frame == 8 && timer == 0) {
-                unk2c8 = 5;
+                m_playVoice = 5;
                 m_hitsLeft = 1;
                 ObjBase::SetVelocity(90.0, 2.2);
                 m_gauge = m_gauge + 5;
@@ -4629,7 +4629,7 @@ void CMishio::UpdatePattern()
         }
         vy = vy + ay;
         if (frame == 7 && timer == 0) {
-            unk2c8 = 1;
+            m_playVoice = 1;
             l50.type = 0x190;
             l50.x = (double)((int)x + (facing << 6));
             l50.y = (double)(int)y;
@@ -4658,7 +4658,7 @@ void CMishio::UpdatePattern()
         }
         vy = vy + ay;
         if (frame == 7 && timer == 0) {
-            unk2c8 = 1;
+            m_playVoice = 1;
             l50.type = 0x191;
             l50.x = (double)((int)x + (facing << 6));
             l50.y = (double)(int)y;
@@ -4702,7 +4702,7 @@ void CMishio::UpdatePattern()
         }
         vy = vy + ay;
         if (frame == 7 && timer == 0) {
-            unk2c8 = 2;
+            m_playVoice = 2;
             l50.type = 0x192;
             l50.x = (double)((int)x + facing * 0x14);
             l50.y = (double)((int)y - 0x3c);
@@ -4753,7 +4753,7 @@ void CMishio::UpdatePattern()
             SpawnObject(&l50);
             unk314c = 1;
             m_gauge = m_gauge + 0x19;
-            unk2c8 = 3;
+            m_playVoice = 3;
         }
         timer++;
         if (timer >= l4) {
@@ -4798,7 +4798,7 @@ void CMishio::UpdatePattern()
             SpawnObject(&l50);
             unk314c = 1;
             m_gauge = m_gauge + 0x19;
-            unk2c8 = 3;
+            m_playVoice = 3;
         }
         timer++;
         if (timer >= l4) {
@@ -4843,7 +4843,7 @@ void CMishio::UpdatePattern()
                 SpawnObject(&l50);
             }
             if (frame == 3) {
-                unk2c8 = 5;
+                m_playVoice = 5;
             }
             if (frame >= x8) {
                 pattern = 0;
@@ -4876,7 +4876,7 @@ void CMishio::UpdatePattern()
                 m_attackResult = 0;
             }
             if (frame == 3) {
-                unk2c8 = 5;
+                m_playVoice = 5;
                 vx = 2.5;
                 l50.type = 0x1b5;
                 l50.x = (double)((int)x + facing * 0x26);
@@ -4934,7 +4934,7 @@ void CMishio::UpdatePattern()
                 m_attackResult = 0;
             }
             if (frame == 3) {
-                unk2c8 = 5;
+                m_playVoice = 5;
                 l50.type = 0x1bc;
                 l50.x = (double)((int)x + facing * 0x26);
                 l50.y = (double)((int)y - 0x28);
@@ -4946,7 +4946,7 @@ void CMishio::UpdatePattern()
             if (frame == 9) {
                 m_hitsLeft = 1;
                 m_attackResult = 0;
-                unk2c8 = 5;
+                m_playVoice = 5;
                 l50.type = 0x1b5;
                 l50.x = (double)((int)x + facing * 0x26);
                 l50.y = (double)((int)y - 0x28);
@@ -4980,7 +4980,7 @@ void CMishio::UpdatePattern()
                 m_attackResult = 0;
             }
             if (frame == 3) {
-                unk2c8 = 4;
+                m_playVoice = 4;
                 l50.type = 0x1b6;
                 l50.x = (double)((int)x + facing * 0x26);
                 l50.y = (double)((int)y - 0x28);
@@ -5027,7 +5027,7 @@ void CMishio::UpdatePattern()
                 m_attackResult = 0;
             }
             if (frame == 3) {
-                unk2c8 = 4;
+                m_playVoice = 4;
                 l50.type = 0x1b6;
                 l50.x = (double)((int)x + facing * 0x26);
                 l50.y = (double)((int)y - 0x28);
@@ -5098,7 +5098,7 @@ void CMishio::UpdatePattern()
                 m_attackResult = 0;
             }
             if (frame == 3) {
-                unk2c8 = 4;
+                m_playVoice = 4;
                 l50.type = 0x1bd;
                 l50.x = (double)((int)x + facing * 0x26);
                 l50.y = (double)((int)y - 0x28);
@@ -5117,7 +5117,7 @@ void CMishio::UpdatePattern()
             if (frame == 9) {
                 m_hitsLeft = 1;
                 m_attackResult = 0;
-                unk2c8 = 4;
+                m_playVoice = 4;
                 l50.type = 0x1b6;
                 l50.x = (double)((int)x + facing * 0x26);
                 l50.y = (double)((int)y - 0x28);
@@ -5158,7 +5158,7 @@ void CMishio::UpdatePattern()
                 m_attackResult = 0;
             }
             if (frame == 3) {
-                unk2c8 = 0;
+                m_playVoice = 0;
             }
             if (frame >= x8) {
                 pattern = 0;
@@ -5188,7 +5188,7 @@ void CMishio::UpdatePattern()
                 m_attackResult = 0;
             }
             if (frame == 3) {
-                unk2c8 = 0;
+                m_playVoice = 0;
                 vx = 2.5;
             }
             if (frame >= x8) {
@@ -5235,10 +5235,10 @@ void CMishio::UpdatePattern()
                 m_attackResult = 0;
             }
             if (frame == 3) {
-                unk2c8 = 0;
+                m_playVoice = 0;
             }
             if (frame == 0xc) {
-                unk2c8 = 0;
+                m_playVoice = 0;
             }
             if (frame >= x8) {
                 pattern = 0;
@@ -5637,7 +5637,7 @@ void CMishio::UpdatePattern()
             m_game->CreateEffect((EffectDesc*)&l50);
             m_hitsLeft = 0x63;
             unk3150 = 0;
-            unk2c9 = 0x25;
+            m_playSound = 0x25;
             CPlayer::StopMoving();
         }
         m_game->Unk4080c0(0xf);
@@ -5807,7 +5807,7 @@ void CMishio::UpdatePattern()
             frame++;
             m_attackResult = 0;
             if (frame == 9 && timer == 0) {
-                unk2c8 = 0xa;
+                m_playVoice = 0xa;
                 m_hitsLeft = 1;
                 ObjBase::SetVelocity(-45.0, 2.2);
                 l50.type = 0x1f;
@@ -5921,7 +5921,7 @@ void CMishio::UpdatePattern()
             if (frame == 9 && timer == 0) {
                 m_hitsLeft = 1;
                 ObjBase::SetVelocity(-45.0, 2.2);
-                unk2c8 = 0xa;
+                m_playVoice = 0xa;
                 l50.type = 0x1f;
                 l50.x = (double)(int)x;
                 l50.y = (double)(int)y;
@@ -5966,7 +5966,7 @@ void CMishio::UpdatePattern()
             l50.unk0 = 1;
             l50.layer = 1;
             m_game->CreateEffect((EffectDesc*)&l50);
-            unk2c9 = 0x25;
+            m_playSound = 0x25;
         }
         if (frame > 8 && frame < 0xb && (m_pressA == 1 || m_pressB == 1 || m_pressC == 1 || m_pressD == 1)) {
             if (m_inputY == -1) {
@@ -6036,7 +6036,7 @@ void CMishio::UpdatePattern()
                 m_hitsLeft = 1;
                 ObjBase::SetVelocity(-45.0, 2.2);
                 unk13c = 0x2d;
-                unk2c8 = 0xa;
+                m_playVoice = 0xa;
                 l50.type = 0x1f;
                 l50.x = (double)(int)x;
                 l50.y = (double)(int)y;
@@ -6137,7 +6137,7 @@ void CMishio::UpdatePattern()
             frame++;
             m_attackResult = 0;
             if (frame == 7 && timer == 0) {
-                unk2c8 = 0xa;
+                m_playVoice = 0xa;
                 m_hitsLeft = 1;
                 ObjBase::SetVelocity(-90.0, 2.2);
                 l50.type = 0x19c;
@@ -6239,7 +6239,7 @@ void CMishio::UpdatePattern()
             frame++;
             m_attackResult = 0;
             if (frame == 7 && timer == 0) {
-                unk2c8 = 0xa;
+                m_playVoice = 0xa;
                 m_hitsLeft = 1;
                 ObjBase::SetVelocity(-45.0, 2.2);
                 l50.type = 0x19e;
@@ -6341,7 +6341,7 @@ void CMishio::UpdatePattern()
             frame++;
             m_attackResult = 0;
             if (frame == 7 && timer == 0) {
-                unk2c8 = 0xa;
+                m_playVoice = 0xa;
                 m_hitsLeft = 1;
                 ObjBase::SetVelocity(0.0, 2.2);
                 l50.type = 0x19d;
@@ -6451,7 +6451,7 @@ void CMishio::UpdatePattern()
             frame++;
             m_attackResult = 0;
             if (frame == 8 && timer == 0) {
-                unk2c8 = 0xa;
+                m_playVoice = 0xa;
                 m_hitsLeft = 1;
                 ObjBase::SetVelocity(45.0, 2.2);
                 l50.type = 0x19f;
@@ -6561,7 +6561,7 @@ void CMishio::UpdatePattern()
             frame++;
             m_attackResult = 0;
             if (frame == 8 && timer == 0) {
-                unk2c8 = 0xa;
+                m_playVoice = 0xa;
                 m_hitsLeft = 1;
                 ObjBase::SetVelocity(90.0, 2.2);
                 l50.type = 0x1a0;
@@ -6721,7 +6721,7 @@ void CMishio::UpdatePattern()
             timer = 0;
             frame++;
             if (frame == 6) {
-                unk2c8 = 6;
+                m_playVoice = 6;
                 l50.type = 0x1a1;
                 l50.x = (double)((int)x + facing * 0xf);
                 l50.y = (double)((int)y - 0x94);
@@ -6757,7 +6757,7 @@ void CMishio::UpdatePattern()
                 }
             }
             if (frame == 0xd) {
-                unk2c8 = 8;
+                m_playVoice = 8;
             }
             if (frame == 0xf) {
                 l50.type = 0x1a2;
@@ -6821,7 +6821,7 @@ void CMishio::UpdatePattern()
             frame++;
             if (frame == 6) {
                 unk13c = 0xf;
-                unk2c8 = 6;
+                m_playVoice = 6;
                 l50.type = 0x1a1;
                 l50.x = (double)((int)x + facing * 0xf);
                 l50.y = (double)((int)y - 0x94);
@@ -6857,7 +6857,7 @@ void CMishio::UpdatePattern()
                 }
             }
             if (frame == 0xd) {
-                unk2c8 = 8;
+                m_playVoice = 8;
             }
             if (frame == 0xf) {
                 l50.type = 0x1a3;
@@ -6916,7 +6916,7 @@ void CMishio::UpdatePattern()
             l50.unk0 = 1;
             l50.layer = 1;
             m_game->CreateEffect((EffectDesc*)&l50);
-            unk2c9 = 0x25;
+            m_playSound = 0x25;
             CPlayer::StopMoving();
         }
         timer++;
@@ -6925,7 +6925,7 @@ void CMishio::UpdatePattern()
             frame++;
             if (frame == 6) {
                 unk13c = 0x1e;
-                unk2c8 = 6;
+                m_playVoice = 6;
                 l50.type = 0x1a1;
                 l50.x = (double)((int)x + facing * 0xf);
                 l50.y = (double)((int)y - 0x94);
@@ -6961,7 +6961,7 @@ void CMishio::UpdatePattern()
                 }
             }
             if (frame == 0xd) {
-                unk2c8 = 8;
+                m_playVoice = 8;
             }
             if (frame == 0xf) {
                 l50.type = 0x1a4;
@@ -7040,7 +7040,7 @@ void CMishio::UpdatePattern()
                 unk3138++;
             }
             if (frame == 0xa) {
-                unk2c8 = 9;
+                m_playVoice = 9;
                 vx = -1.3;
                 vy = -0.8;
                 l50.type = 0x1a6;
@@ -7113,7 +7113,7 @@ void CMishio::UpdatePattern()
                 unk3138++;
             }
             if (frame == 0xa) {
-                unk2c8 = 9;
+                m_playVoice = 9;
                 vx = -1.3;
                 vy = -0.8;
                 l50.type = 0x1a8;
@@ -7134,7 +7134,7 @@ void CMishio::UpdatePattern()
                 SpawnObject(&l50);
             }
             if (frame == 0xe && unk313c < 2) {
-                unk2c8 = 9;
+                m_playVoice = 9;
                 unk313c++;
                 frame = frame - 4;
                 if (unk313c == 1) {
@@ -7192,7 +7192,7 @@ void CMishio::UpdatePattern()
             l50.unk0 = 1;
             l50.layer = 1;
             m_game->CreateEffect((EffectDesc*)&l50);
-            unk2c9 = 0x25;
+            m_playSound = 0x25;
             CPlayer::StopMoving();
             unk3140++;
         }
@@ -7216,7 +7216,7 @@ void CMishio::UpdatePattern()
                 unk3138++;
             }
             if (frame == 0xa) {
-                unk2c8 = 9;
+                m_playVoice = 9;
                 vx = -1.3;
                 vy = -0.8;
                 l50.type = 0x1ac;
@@ -7237,7 +7237,7 @@ void CMishio::UpdatePattern()
                 SpawnObject(&l50);
             }
             if (frame == 0xe && unk313c < 4) {
-                unk2c8 = 9;
+                m_playVoice = 9;
                 unk313c++;
                 frame = frame - 4;
                 if (unk313c == 1) {
@@ -7298,7 +7298,7 @@ void CMishio::UpdatePattern()
             l50.unk0 = 1;
             l50.layer = 1;
             m_game->CreateEffect((EffectDesc*)&l50);
-            unk2c9 = 0x25;
+            m_playSound = 0x25;
             l50.type = 0x47;
             m_game->CreateEffect((EffectDesc*)&l50);
             l50.type = 0x1b4;
@@ -7312,7 +7312,7 @@ void CMishio::UpdatePattern()
             SpawnObject(&l50);
         }
         if (frame == 7 && timer == 0) {
-            unk2c8 = 0xb;
+            m_playVoice = 0xb;
             CPlayer::Unk410a10(5, 0);
             unk3158 = 3;
             unk3168 = 0x1194;

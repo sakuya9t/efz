@@ -97,7 +97,7 @@ void CNayuki::UpdatePattern()
         }
         if (y + vy >= 0.0 && frame > 4) {
             y = 0.0;
-            unk2c9 = 9;
+            m_playSound = 9;
             CPlayer::FaceOpponent();
             pattern = 0xd;
             StartPattern();
@@ -131,7 +131,7 @@ void CNayuki::UpdatePattern()
         }
         if (y + vy >= 0.0 && frame > 4) {
             y = 0.0;
-            unk2c9 = 9;
+            m_playSound = 9;
             CPlayer::FaceOpponent();
             pattern = 0xd;
             StartPattern();
@@ -161,7 +161,7 @@ void CNayuki::UpdatePattern()
         }
         if (y + vy >= 0.0 && frame > 4) {
             y = 0.0;
-            unk2c9 = 9;
+            m_playSound = 9;
             CPlayer::FaceOpponent();
             pattern = 0xd;
             StartPattern();
@@ -207,7 +207,7 @@ void CNayuki::UpdatePattern()
         }
         if (y + vy >= 0.0) {
             y = 0.0;
-            unk2c9 = 9;
+            m_playSound = 9;
             pattern = 0xd;
             StartPattern();
         }
@@ -251,7 +251,7 @@ void CNayuki::UpdatePattern()
         }
         if (y + vy >= 0.0 && frame > 3) {
             y = 0.0;
-            unk2c9 = 9;
+            m_playSound = 9;
             CPlayer::FaceOpponent();
             pattern = 0xd;
             StartPattern();
@@ -279,7 +279,7 @@ void CNayuki::UpdatePattern()
         }
         if (y + vy >= 0.0 && frame > 3) {
             y = 0.0;
-            unk2c9 = 9;
+            m_playSound = 9;
             CPlayer::FaceOpponent();
             pattern = 0xd;
             StartPattern();
@@ -306,7 +306,7 @@ void CNayuki::UpdatePattern()
         }
         if (y + vy >= 0.0 && frame > 3) {
             y = 0.0;
-            unk2c9 = 9;
+            m_playSound = 9;
             CPlayer::FaceOpponent();
             pattern = 0xd;
             StartPattern();
@@ -321,7 +321,7 @@ void CNayuki::UpdatePattern()
         if (y + vy > 0.0 && frame < 2) {
             timer = 0;
             frame = 2;
-            unk2c9 = 7;
+            m_playSound = 7;
             y = 0.0;
             vy = 0.0;
             ay = 0.0;
@@ -1100,7 +1100,7 @@ void CNayuki::UpdatePattern()
             vx = 0.5;
             vy = -2.5;
             ay = 0.025;
-            unk2c9 = 0x1f;
+            m_playSound = 0x1f;
             l50.type = 0;
             l50.x = (double)(int)x;
             l50.y = (double)(int)y;
@@ -1388,7 +1388,7 @@ void CNayuki::UpdatePattern()
             unk118 -= 0.8;
         }
         if (frame == 0 && timer == 0 && unk3138 == 0) {
-            unk2c9 = 0x1e;
+            m_playSound = 0x1e;
             vy = -0.45;
             vx = -0.1;
             unk3138++;
@@ -1445,7 +1445,7 @@ void CNayuki::UpdatePattern()
             if (unk120 != 0) {
                 unk118 -= 30.0;
             }
-            unk2c9 = 0x21;
+            m_playSound = 0x21;
             vy = -1.5;
             vx = -0.8;
             m_gauge = m_gauge + 0x1e;
@@ -1497,7 +1497,7 @@ void CNayuki::UpdatePattern()
             if (unk120 != 0) {
                 unk118 -= 30.0;
             }
-            unk2c9 = 0x21;
+            m_playSound = 0x21;
             vy = -1.5;
             vx = -0.8;
             m_gauge = m_gauge + 0x1e;
@@ -1549,7 +1549,7 @@ void CNayuki::UpdatePattern()
             if (unk120 != 0) {
                 unk118 -= 30.0;
             }
-            unk2c9 = 0x21;
+            m_playSound = 0x21;
             vx = unkc0;
             vy = unkc8;
             m_gauge = m_gauge + 0x1e;
@@ -1593,7 +1593,7 @@ void CNayuki::UpdatePattern()
                 if (unk120 != 0) {
                     unk118 -= 30.0;
                 }
-                unk2c9 = 0x21;
+                m_playSound = 0x21;
                 vx = unkc0;
                 vy = unkc8;
                 m_gauge = m_gauge + 0x1e;
@@ -1672,7 +1672,7 @@ void CNayuki::UpdatePattern()
             l50.scale = 2;
             l50.layer = 0;
             m_game->CreateEffect((EffectDesc*)&l50);
-            unk2c9 = 7;
+            m_playSound = 7;
         }
         timer++;
         if (timer >= l4) {
@@ -1695,7 +1695,7 @@ void CNayuki::UpdatePattern()
             l50.scale = 2;
             l50.layer = 0;
             m_game->CreateEffect((EffectDesc*)&l50);
-            unk2c9 = 7;
+            m_playSound = 7;
         }
         timer++;
         if (timer >= l4) {
@@ -1946,7 +1946,7 @@ void CNayuki::UpdatePattern()
         }
         if (y + vy >= 0.0) {
             y = 0.0;
-            unk2c9 = 9;
+            m_playSound = 9;
             CPlayer::FaceOpponent();
             pattern = 0xd;
             StartPattern();
@@ -1977,7 +1977,7 @@ void CNayuki::UpdatePattern()
         }
         if (y + vy >= 0.0) {
             y = 0.0;
-            unk2c9 = 9;
+            m_playSound = 9;
             CPlayer::FaceOpponent();
             pattern = 0xd;
             StartPattern();
@@ -2008,7 +2008,7 @@ void CNayuki::UpdatePattern()
         }
         if (y + vy >= 0.0) {
             y = 0.0;
-            unk2c9 = 9;
+            m_playSound = 9;
             CPlayer::FaceOpponent();
             pattern = 0xd;
             StartPattern();
@@ -2024,7 +2024,7 @@ void CNayuki::UpdatePattern()
             l50.layer = 1;
             m_game->CreateEffect((EffectDesc*)&l50);
             m_hitsLeft = 1;
-            unk2c9 = 0x3e;
+            m_playSound = 0x3e;
             unk3138++;
         }
         timer++;
@@ -2056,7 +2056,7 @@ void CNayuki::UpdatePattern()
             l50.layer = 1;
             m_game->CreateEffect((EffectDesc*)&l50);
             m_hitsLeft = 1;
-            unk2c9 = 0x3e;
+            m_playSound = 0x3e;
             m_gauge = m_gauge - 0x3e8;
             unk3138++;
         }
@@ -2248,7 +2248,7 @@ void CNayuki::UpdatePattern()
             CPlayer::Unk410b10(0xb0, 3);
         }
         if (frame == 1 && timer == 0) {
-            unk2c9 = 0x12;
+            m_playSound = 0x12;
             l50.type = 1;
             l50.x = (double)(int)x;
             l50.y = (double)(int)y;
@@ -2385,7 +2385,7 @@ void CNayuki::UpdatePattern()
             CPlayer::Unk410b10(0xb0, 3);
         }
         if (frame == 1 && timer == 0) {
-            unk2c9 = 0x12;
+            m_playSound = 0x12;
             l50.type = 1;
             l50.x = (double)(int)x;
             l50.y = (double)(int)y;
@@ -2456,7 +2456,7 @@ void CNayuki::UpdatePattern()
             l50.scale = 2;
             l50.layer = 0;
             m_game->CreateEffect((EffectDesc*)&l50);
-            unk2c9 = 7;
+            m_playSound = 7;
         }
         timer++;
         if (timer >= l4) {
@@ -2489,7 +2489,7 @@ void CNayuki::UpdatePattern()
             y = 0.0;
             timer = 0;
             frame = 0xb;
-            unk2c9 = 9;
+            m_playSound = 9;
         }
         timer++;
         if (timer >= l4) {
@@ -2534,7 +2534,7 @@ void CNayuki::UpdatePattern()
         }
         if (frame == 2 && timer == 0) {
             m_gauge = m_gauge + 5;
-            unk2c9 = 0x15;
+            m_playSound = 0x15;
             m_hitsLeft = 1;
         }
         timer++;
@@ -2576,7 +2576,7 @@ void CNayuki::UpdatePattern()
         }
         if (frame == 1 && timer == 0) {
             m_gauge = m_gauge + 0xf;
-            unk2c9 = 0x14;
+            m_playSound = 0x14;
             m_hitsLeft = 1;
         }
         timer++;
@@ -2608,7 +2608,7 @@ void CNayuki::UpdatePattern()
         }
         if (frame == 4 && timer == 0) {
             m_gauge = m_gauge + 0xf;
-            unk2c9 = 0x14;
+            m_playSound = 0x14;
             if (unk3148 > 5) {
                 m_hitsLeft = 1;
             }
@@ -2631,7 +2631,7 @@ void CNayuki::UpdatePattern()
                 l50.scale = 2;
                 l50.layer = 0;
                 m_game->CreateEffect((EffectDesc*)&l50);
-                unk2c9 = 7;
+                m_playSound = 7;
             }
             vy = 0.0;
         }
@@ -2689,7 +2689,7 @@ void CNayuki::UpdatePattern()
         }
         if (frame == 8 && timer == 0) {
             m_gauge = m_gauge + 0x23;
-            unk2c9 = 0x14;
+            m_playSound = 0x14;
             if (unk3148 > 5) {
                 m_hitsLeft = 1;
             }
@@ -2710,7 +2710,7 @@ void CNayuki::UpdatePattern()
             timer = 0;
             frame++;
             if (frame == 0xa) {
-                unk2c8 = 3;
+                m_playVoice = 3;
             }
             if (frame < 9) {
                 m_attackResult = 0;
@@ -2753,7 +2753,7 @@ void CNayuki::UpdatePattern()
         }
         if (frame == 1 && timer == 0) {
             m_gauge = m_gauge + 5;
-            unk2c9 = 0x15;
+            m_playSound = 0x15;
             m_hitsLeft = 1;
         }
         timer++;
@@ -2804,7 +2804,7 @@ void CNayuki::UpdatePattern()
         }
         if (frame == 2 && timer == 0) {
             m_gauge = m_gauge + 0xd;
-            unk2c9 = 0x14;
+            m_playSound = 0x14;
             m_hitsLeft = 1;
         }
         timer++;
@@ -2850,7 +2850,7 @@ void CNayuki::UpdatePattern()
         }
         if (frame == 3 && timer == 0) {
             m_gauge = m_gauge + 0x19;
-            unk2c9 = 0x14;
+            m_playSound = 0x14;
             m_hitsLeft = 1;
         }
         timer++;
@@ -2887,7 +2887,7 @@ void CNayuki::UpdatePattern()
         }
         if (frame == 2 && timer == 0) {
             m_gauge = m_gauge + 5;
-            unk2c9 = 0x15;
+            m_playSound = 0x15;
             m_hitsLeft = 1;
         }
         if (y + vy >= 0.0) {
@@ -2926,7 +2926,7 @@ void CNayuki::UpdatePattern()
         }
         if (frame == 1 && timer == 0) {
             m_gauge = m_gauge + 0xd;
-            unk2c9 = 0x14;
+            m_playSound = 0x14;
             m_hitsLeft = unk3148 / 2 + 2;
         }
         if (y + vy >= 0.0) {
@@ -2965,7 +2965,7 @@ void CNayuki::UpdatePattern()
         }
         if (frame == 2 && timer == 0) {
             m_gauge = m_gauge + 0x1e;
-            unk2c9 = 0x14;
+            m_playSound = 0x14;
             m_hitsLeft = 3;
         }
         if (y + vy >= 0.0) {
@@ -3001,7 +3001,7 @@ void CNayuki::UpdatePattern()
             vy = vy + ay;
         }
         if (frame == 8 && timer == 0) {
-            unk2c9 = 0x14;
+            m_playSound = 0x14;
         }
         timer++;
         if (timer >= l4) {
@@ -3016,7 +3016,7 @@ void CNayuki::UpdatePattern()
         }
         if (y + vy >= 0.0 && frame > 4 && frame < 0xb) {
             y = 0.0;
-            unk2c9 = 9;
+            m_playSound = 9;
             frame = 0xb;
             timer = 0;
             CPlayer::StopMoving();
@@ -3041,7 +3041,7 @@ void CNayuki::UpdatePattern()
         }
         if (frame == 3 && timer == 0) {
             m_gauge = m_gauge + 0x1e;
-            unk2c9 = 0x14;
+            m_playSound = 0x14;
             m_hitsLeft = 1;
         }
         timer++;
@@ -3059,7 +3059,7 @@ void CNayuki::UpdatePattern()
     case 0xd4:
         if (frame == 2 && timer == 0) {
             m_gauge = m_gauge + 0xf;
-            unk2c9 = 0x14;
+            m_playSound = 0x14;
             m_hitsLeft = 1;
             vy -= -1.0;
             ay = 0.035;
@@ -3085,7 +3085,7 @@ void CNayuki::UpdatePattern()
             l50.scale = 2;
             l50.layer = 0;
             m_game->CreateEffect((EffectDesc*)&l50);
-            unk2c9 = 7;
+            m_playSound = 7;
             vx = 0.0;
             vy = 0.0;
             break;
@@ -3111,7 +3111,7 @@ void CNayuki::UpdatePattern()
         vy = vy + ay;
         if (frame == 3 && timer == 0) {
             m_gauge = m_gauge + 0x1e;
-            unk2c9 = 0x14;
+            m_playSound = 0x14;
             m_hitsLeft = 1;
         }
         if (y + vy >= 0.0) {
@@ -3135,7 +3135,7 @@ void CNayuki::UpdatePattern()
         vy = vy + ay;
         if (frame == 2 && timer == 0) {
             m_gauge = m_gauge + 0x1e;
-            unk2c9 = 0x14;
+            m_playSound = 0x14;
             m_hitsLeft = 3;
         }
         if (y + vy > 0.0) {
@@ -3249,7 +3249,7 @@ void CNayuki::UpdatePattern()
         }
         if (frame == 2 && timer == 0) {
             m_gauge = m_gauge + 5;
-            unk2c9 = 0x15;
+            m_playSound = 0x15;
             m_hitsLeft = 1;
         }
         if (y + vy >= 0.0) {
@@ -3288,7 +3288,7 @@ void CNayuki::UpdatePattern()
         }
         if (frame == 1 && timer == 0) {
             m_gauge = m_gauge + 0xd;
-            unk2c9 = 0x14;
+            m_playSound = 0x14;
             m_hitsLeft = unk3148 / 2 + 2;
         }
         if (y + vy >= 0.0) {
@@ -3327,7 +3327,7 @@ void CNayuki::UpdatePattern()
         }
         if (frame == 2 && timer == 0) {
             m_gauge = m_gauge + 0x1e;
-            unk2c9 = 0x14;
+            m_playSound = 0x14;
             m_hitsLeft = 3;
         }
         if (y + vy >= 0.0) {
@@ -3464,7 +3464,7 @@ void CNayuki::UpdatePattern()
             l50.layer = 0;
             l50.unk18 = facing;
             SpawnObject(&l50);
-            unk2c8 = 0;
+            m_playVoice = 0;
             m_gauge = m_gauge + 0x2d;
         }
         timer++;
@@ -3491,7 +3491,7 @@ void CNayuki::UpdatePattern()
             l50.layer = 0;
             l50.unk18 = facing;
             SpawnObject(&l50);
-            unk2c8 = 0;
+            m_playVoice = 0;
             m_gauge = m_gauge + 0x2d;
         }
         timer++;
@@ -3532,7 +3532,7 @@ void CNayuki::UpdatePattern()
             l50.layer = 0;
             l50.unk18 = facing;
             SpawnObject(&l50);
-            unk2c8 = 0;
+            m_playVoice = 0;
             m_gauge = m_gauge + 0x2d;
         }
         timer++;
@@ -3566,7 +3566,7 @@ void CNayuki::UpdatePattern()
             frame++;
             m_attackResult = 0;
             if (frame == 4) {
-                unk2c9 = 0x14;
+                m_playSound = 0x14;
                 m_gauge = m_gauge + 0x2d;
                 vx = 1.2;
                 vy = -2.5;
@@ -3594,7 +3594,7 @@ void CNayuki::UpdatePattern()
             frame++;
             m_attackResult = 0;
             if (frame == 4) {
-                unk2c9 = 0x14;
+                m_playSound = 0x14;
                 m_gauge = m_gauge + 0x2d;
                 vx = 1.7;
                 vy = -1.7;
@@ -3623,7 +3623,7 @@ void CNayuki::UpdatePattern()
             vy = -2.0;
             ay = 0.035;
             pattern = 0x101;
-            unk2c9 = 0x1f;
+            m_playSound = 0x1f;
             l50.type = 0;
             l50.x = (double)(int)x;
             l50.y = (double)(int)y;
@@ -3696,13 +3696,13 @@ void CNayuki::UpdatePattern()
     case 0x103:
         CPlayer::StopMoving();
         if (frame == 0 && timer == 0) {
-            unk2c8 = 4;
+            m_playVoice = 4;
         }
         if (frame == 0xa && timer == 0) {
             unk3148++;
         }
         if (frame == 0xa && timer == 0) {
-            unk2c8 = 5;
+            m_playVoice = 5;
         }
         if (unk3148 > 9) {
             unk3148 = 9;
@@ -3925,7 +3925,7 @@ void CNayuki::UpdatePattern()
             }
         }
         if ((frame == 6 || frame == 0xb) && timer == 0) {
-            unk2c9 = 0x14;
+            m_playSound = 0x14;
         }
         if (y + vx > 0.0 && frame > 5 && frame < 0x10) {
             timer = 0;
@@ -3978,7 +3978,7 @@ void CNayuki::UpdatePattern()
             }
         }
         if ((frame == 4 || frame == 6) && timer == 0) {
-            unk2c9 = 0x15;
+            m_playSound = 0x15;
         }
         timer++;
         if (timer >= 0x18 && unk3148 > 3 && frame == 0xb) {
@@ -4029,7 +4029,7 @@ void CNayuki::UpdatePattern()
             }
         }
         if ((frame == 4 || frame == 6) && timer == 0) {
-            unk2c9 = 0x15;
+            m_playSound = 0x15;
         }
         timer++;
         if (timer >= 0x18 && unk3148 > 3 && frame == 0xb) {
@@ -4090,7 +4090,7 @@ void CNayuki::UpdatePattern()
             }
         }
         if ((frame == 4 || frame == 6) && timer == 0) {
-            unk2c9 = 0x15;
+            m_playSound = 0x15;
         }
         timer++;
         if (timer >= l4 || timer >= l4 - unk3148 * 3 && frame == 0xb || timer >= l4 - 3 && frame == 1 && unk3148 > 2 || timer >= l4 - 3 && frame == 2 && unk3148 > 4) {
@@ -4145,7 +4145,7 @@ void CNayuki::UpdatePattern()
             }
         }
         if ((frame == 4 || frame == 6) && timer == 0) {
-            unk2c9 = 0x15;
+            m_playSound = 0x15;
         }
         timer++;
         if (timer >= l4) {
@@ -4304,7 +4304,7 @@ void CNayuki::UpdatePattern()
             l50.scale = 2;
             l50.layer = 0;
             m_game->CreateEffect((EffectDesc*)&l50);
-            unk2c9 = 7;
+            m_playSound = 7;
             break;
         }
         timer++;
@@ -4335,7 +4335,7 @@ void CNayuki::UpdatePattern()
         }
         if (frame == 3 && timer == 0) {
             m_gauge = m_gauge + 0x23;
-            unk2c9 = 0x14;
+            m_playSound = 0x14;
         }
         if (frame > 8) {
             vy = vy + ay;
@@ -4350,7 +4350,7 @@ void CNayuki::UpdatePattern()
             timer = 0;
             frame++;
             if (frame == 5) {
-                unk2c8 = 3;
+                m_playVoice = 3;
                 m_hitsLeft = 1;
             }
             if (frame < 3) {
@@ -4372,7 +4372,7 @@ void CNayuki::UpdatePattern()
     case 0x10f:
         CPlayer::StopMoving();
         if (frame == 5 && timer == 0) {
-            unk2c8 = 5;
+            m_playVoice = 5;
         }
         if (frame == 5 && timer == 0) {
             unk3148++;
@@ -4404,7 +4404,7 @@ void CNayuki::UpdatePattern()
             }
         }
         if ((frame == 1 || frame == 3) && timer == 0) {
-            unk2c9 = 0x15;
+            m_playSound = 0x15;
         }
         if (frame < 4) {
             if (m_pressA == 1) {
@@ -4476,7 +4476,7 @@ void CNayuki::UpdatePattern()
             }
         }
         if ((frame == 1 || frame == 3) && timer == 0) {
-            unk2c9 = 0x15;
+            m_playSound = 0x15;
         }
         if (frame < 4) {
             if (m_pressA == 1) {
@@ -4559,7 +4559,7 @@ void CNayuki::UpdatePattern()
                 l50.layer = 0;
                 l50.unk18 = facing;
                 SpawnObject(&l50);
-                unk2c8 = 0;
+                m_playVoice = 0;
                 m_gauge = m_gauge + 0x2d;
             }
             if (frame >= x8) {
@@ -4588,7 +4588,7 @@ void CNayuki::UpdatePattern()
             l50.scale = 2;
             l50.layer = 0;
             m_game->CreateEffect((EffectDesc*)&l50);
-            unk2c9 = 7;
+            m_playSound = 7;
             break;
         }
         timer++;
@@ -4619,7 +4619,7 @@ void CNayuki::UpdatePattern()
         }
         if (frame == 3 && timer == 0) {
             m_gauge = m_gauge + 0x23;
-            unk2c9 = 0x14;
+            m_playSound = 0x14;
         }
         if (frame > 8) {
             vy = vy + ay;
@@ -4634,7 +4634,7 @@ void CNayuki::UpdatePattern()
             timer = 0;
             frame++;
             if (frame == 5) {
-                unk2c8 = 3;
+                m_playVoice = 3;
                 m_hitsLeft = 1;
             }
             if (frame < 3) {
@@ -4666,7 +4666,7 @@ void CNayuki::UpdatePattern()
             }
         }
         if ((frame == 1 || frame == 3) && timer == 0) {
-            unk2c9 = 0x15;
+            m_playSound = 0x15;
         }
         if (frame < 4) {
             if (m_pressA == 1) {
@@ -4738,7 +4738,7 @@ void CNayuki::UpdatePattern()
             }
         }
         if ((frame == 1 || frame == 3) && timer == 0) {
-            unk2c9 = 0x15;
+            m_playSound = 0x15;
         }
         if (frame < 4) {
             if (m_pressA == 1) {
@@ -4832,7 +4832,7 @@ void CNayuki::UpdatePattern()
             l50.unk28 = 1;
             l50.unk18 = facing;
             SpawnObject(&l50);
-            unk2c8 = 0;
+            m_playVoice = 0;
         }
         timer++;
         if (timer >= l4 || frame == 5 && timer == l4 - unk3148 * 6) {
@@ -4858,7 +4858,7 @@ void CNayuki::UpdatePattern()
             l50.layer = 0;
             l50.unk18 = facing;
             SpawnObject(&l50);
-            unk2c8 = 0;
+            m_playVoice = 0;
             m_gauge = m_gauge + 0x2d;
         }
         timer++;
@@ -4875,7 +4875,7 @@ void CNayuki::UpdatePattern()
     case 0x118:
         CPlayer::StopMoving();
         if (frame == 0 && timer == 0) {
-            unk2c8 = 4;
+            m_playVoice = 4;
         }
         timer++;
         if (timer >= l4) {
@@ -4901,7 +4901,7 @@ void CNayuki::UpdatePattern()
         }
         if (frame == 3 && timer == 0) {
             m_gauge = m_gauge + 0x19;
-            unk2c9 = 0x14;
+            m_playSound = 0x14;
             m_hitsLeft = 1;
         }
         timer++;
@@ -4956,7 +4956,7 @@ void CNayuki::UpdatePattern()
             l50.unk28 = 1;
             l50.unk18 = facing;
             SpawnObject(&l50);
-            unk2c8 = 0;
+            m_playVoice = 0;
         }
         timer++;
         if (timer >= l4 || frame == 5 && timer == l4 - unk3148 * 6) {
@@ -4990,7 +4990,7 @@ void CNayuki::UpdatePattern()
             l50.unk0 = 1;
             l50.layer = 1;
             m_game->CreateEffect((EffectDesc*)&l50);
-            unk2c9 = 0x25;
+            m_playSound = 0x25;
         }
         if (frame > 2) {
             m_game->Unk4080c0(0xf);
@@ -5005,7 +5005,7 @@ void CNayuki::UpdatePattern()
             l50.unk28 = 1;
             l50.unk18 = facing;
             SpawnObject(&l50);
-            unk2c8 = 0;
+            m_playVoice = 0;
         }
         timer++;
         if (timer >= l4 || frame == 5 && timer == l4 - unk3148 * 6) {
@@ -5192,7 +5192,7 @@ void CNayuki::UpdatePattern()
             l50.unk0 = 1;
             l50.layer = 1;
             m_game->CreateEffect((EffectDesc*)&l50);
-            unk2c9 = 0x25;
+            m_playSound = 0x25;
         }
         if (frame > 3) {
             m_game->Unk4080c0(0xf);
@@ -5282,7 +5282,7 @@ void CNayuki::UpdatePattern()
             l50.unk0 = 1;
             l50.layer = 1;
             m_game->CreateEffect((EffectDesc*)&l50);
-            unk2c9 = 0x25;
+            m_playSound = 0x25;
             l50.type = 0x47;
             m_game->CreateEffect((EffectDesc*)&l50);
         }
@@ -5298,7 +5298,7 @@ void CNayuki::UpdatePattern()
             ay = 0.035;
             pattern = 0x101;
             StartPattern();
-            unk2c9 = 0x1f;
+            m_playSound = 0x1f;
             l50.type = 0;
             l50.x = (double)(int)x;
             l50.y = (double)(int)y;

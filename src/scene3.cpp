@@ -324,20 +324,20 @@ void CScene3::Unk764db0()
     if (unk2d == 2) {
         v4 = 0;
         for (; v4 < 2; v4++) {
-            m_players[v4]->unk2c9 = -1;
-            m_players[v4]->unk2c8 = -1;
+            m_players[v4]->m_playSound = -1;
+            m_players[v4]->m_playVoice = -1;
         }
         return;
     }
     v8 = 0;
     for (; v8 < 2; v8++) {
-        if (m_players[v8]->unk2c9 >= 0 && m_players[v8]->unk2c9 < 0x41) {
-            m_sound->Play((short)m_game->m_sounds[m_players[v8]->unk2c9], 0);
-            m_players[v8]->unk2c9 = -1;
+        if (m_players[v8]->m_playSound >= 0 && m_players[v8]->m_playSound < 0x41) {
+            m_sound->Play((short)m_game->m_sounds[m_players[v8]->m_playSound], 0);
+            m_players[v8]->m_playSound = -1;
         }
-        if (m_players[v8]->unk2c8 >= 0 && m_players[v8]->unk2c8 < 0x32) {
-            m_sound->Play(m_players[v8]->unk264[m_players[v8]->unk2c8], 0);
-            m_players[v8]->unk2c8 = -1;
+        if (m_players[v8]->m_playVoice >= 0 && m_players[v8]->m_playVoice < 0x32) {
+            m_sound->Play(m_players[v8]->m_voices[m_players[v8]->m_playVoice], 0);
+            m_players[v8]->m_playVoice = -1;
         }
     }
 }
