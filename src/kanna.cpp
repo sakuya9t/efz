@@ -2403,22 +2403,22 @@ void CKanna::UpdateObjects()
                     unk3154[v4]++;
                     m_objects[v4].unk84 = 1;
                     if (unk3138 == 0) {
-                        (&m_objects[v4])->SetVelocity(-140.0, 3.0);
+                        m_objects[v4].SetVelocity(-140.0, 3.0);
                     }
                     if (unk3138 == 1) {
-                        (&m_objects[v4])->SetVelocity(-165.0, 3.0);
+                        m_objects[v4].SetVelocity(-165.0, 3.0);
                     }
                     if (unk3138 == 2) {
-                        (&m_objects[v4])->SetVelocity(-170.0, 3.0);
+                        m_objects[v4].SetVelocity(-170.0, 3.0);
                     }
                     if (unk3138 == 3) {
-                        (&m_objects[v4])->SetVelocity(140.0, 3.0);
+                        m_objects[v4].SetVelocity(140.0, 3.0);
                     }
                     if (unk3138 == 4) {
-                        (&m_objects[v4])->SetVelocity(165.0, 3.0);
+                        m_objects[v4].SetVelocity(165.0, 3.0);
                     }
                     if (unk3138 == 5) {
-                        (&m_objects[v4])->SetVelocity(170.0, 3.0);
+                        m_objects[v4].SetVelocity(170.0, 3.0);
                     }
                     unk3138++;
                     if (unk3138 == 6) {

@@ -101,7 +101,7 @@ BYTE CScene3::Update()
         unk2d = 0;
         unk2c = 1;
         if (m_game->m_replayMode > 0) {
-            (&m_game->m_replay)->Close();
+            m_game->m_replay.Close();
             m_game->m_replayMode = 0;
             m_game->StopMusic();
             return 8;
@@ -121,7 +121,7 @@ BYTE CScene3::Update()
             unk2d = 0;
             unk2c = 1;
             if (m_game->m_replayMode > 0) {
-                (&m_game->m_replay)->Close();
+                m_game->m_replay.Close();
                 m_game->m_replayMode = 0;
                 m_game->StopMusic();
                 delete *m_player1Ref;
@@ -591,8 +591,8 @@ void CScene3::Vf2()
     }
     if (m_game->m_replayMode == 1 && unk588 == 0) {
         if (m_game->unk1340 > 0) {
-            unk574 = (&m_game->m_replay)->Read();
-            unk576 = (&m_game->m_replay)->Read();
+            unk574 = m_game->m_replay.Read();
+            unk576 = m_game->m_replay.Read();
         } else {
             unk574 = 0x3e8;
             unk576 = 0x270f;
@@ -604,8 +604,8 @@ void CScene3::Vf2()
         return;
     }
     if (m_game->m_replayMode == 2 && unk588 == 0) {
-        (&m_game->m_replay)->Write(unk574);
-        (&m_game->m_replay)->Write(unk576);
+        m_game->m_replay.Write(unk574);
+        m_game->m_replay.Write(unk576);
     }
 }
 
@@ -666,7 +666,7 @@ void CScene3::Unk7661a0()
 
     if (m_game->unk1364 == 5 && m_game->m_replayMode == 2) {
         CScene::Unk759c90(m_game->m_palette, 0, 0, 0);
-        (&m_game->m_replay)->Close();
+        m_game->m_replay.Close();
         strcpy(v34, "replay\\data");
         _itoa(m_game->unk14282 + 1, vc, 0xa);
         strcat(v34, (const char*)vc);
@@ -674,13 +674,13 @@ void CScene3::Unk7661a0()
         _itoa(m_game->unk14281 + 1, vc, 0xa);
         strcat(v34, (const char*)vc);
         strcat(v34, ".rep");
-        (&m_game->m_replay)->OpenWrite((const char*)v34);
-        (&m_game->m_replay)->Write((*m_player1Ref)->unk8d);
-        (&m_game->m_replay)->Write((*m_player2Ref)->unk8d);
-        (&m_game->m_replay)->Write(0x68);
-        (&m_game->m_replay)->Write(m_game->unkf32);
-        (&m_game->m_replay)->Write((*m_player1Ref)->m_paletteIndex);
-        (&m_game->m_replay)->Write((*m_player2Ref)->m_paletteIndex);
+        m_game->m_replay.OpenWrite((const char*)v34);
+        m_game->m_replay.Write((*m_player1Ref)->unk8d);
+        m_game->m_replay.Write((*m_player2Ref)->unk8d);
+        m_game->m_replay.Write(0x68);
+        m_game->m_replay.Write(m_game->unkf32);
+        m_game->m_replay.Write((*m_player1Ref)->m_paletteIndex);
+        m_game->m_replay.Write((*m_player2Ref)->m_paletteIndex);
         m_game->Reset();
         (*m_player1Ref)->Load();
         (*m_player2Ref)->Load();

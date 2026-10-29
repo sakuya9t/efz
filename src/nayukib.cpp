@@ -1974,7 +1974,7 @@ void CNayukiB::UpdateObjects()
                     m_objects[v4].vy = -2.2;
                     m_objects[v4].unk84 = 0;
                     unk3158[v4]++;
-                    (&m_objects[v4])->SetVelocity((double)(WORD)CPlayer::Random(0, 0x168), (double)((WORD)CPlayer::Random(0, 3) + 2));
+                    m_objects[v4].SetVelocity((double)(WORD)CPlayer::Random(0, 0x168), (double)((WORD)CPlayer::Random(0, 3) + 2));
                 }
                 m_objects[v4].timer++;
                 if (m_objects[v4].timer >= v54) {
@@ -1995,7 +1995,7 @@ void CNayukiB::UpdateObjects()
                     break;
                 }
                 m_objects[v4].facing = facing;
-                (&m_objects[v4])->SetVelocity((double)unk3148, 50.0);
+                m_objects[v4].SetVelocity((double)unk3148, 50.0);
                 m_objects[v4].x = m_objects[v4].vx * unk3154 + x;
                 m_objects[v4].y = y - 50.0 + m_objects[v4].vy * 0.25;
                 if (m_objects[v4].vy < 0.0) {
@@ -2033,7 +2033,7 @@ void CNayukiB::UpdateObjects()
                     break;
                 }
                 m_objects[v4].facing = facing;
-                (&m_objects[v4])->SetVelocity((double)(unk3148 + 0xb4), 50.0);
+                m_objects[v4].SetVelocity((double)(unk3148 + 0xb4), 50.0);
                 m_objects[v4].x = m_objects[v4].vx * unk3154 + x;
                 m_objects[v4].y = y - 50.0 + m_objects[v4].vy * 0.25;
                 if (m_objects[v4].vy < 0.0) {
@@ -2071,7 +2071,7 @@ void CNayukiB::UpdateObjects()
                     break;
                 }
                 m_objects[v4].facing = facing;
-                (&m_objects[v4])->SetVelocity((double)unk3148, 50.0);
+                m_objects[v4].SetVelocity((double)unk3148, 50.0);
                 m_objects[v4].x = m_objects[v4].vx * unk3154 + x;
                 m_objects[v4].y = y - 50.0 + m_objects[v4].vy * 0.25;
                 if (m_objects[v4].vy < 0.0) {
@@ -2099,7 +2099,7 @@ void CNayukiB::UpdateObjects()
                     break;
                 }
                 m_objects[v4].facing = facing;
-                (&m_objects[v4])->SetVelocity((double)(unk3148 + 0xb4), 50.0);
+                m_objects[v4].SetVelocity((double)(unk3148 + 0xb4), 50.0);
                 m_objects[v4].x = m_objects[v4].vx * unk3154 + x;
                 m_objects[v4].y = y - 50.0 + m_objects[v4].vy * 0.25;
                 if (m_objects[v4].vy < 0.0) {
@@ -2126,7 +2126,7 @@ void CNayukiB::UpdateObjects()
                     RemoveObject(v4);
                     break;
                 }
-                (&m_objects[v4])->SetVelocity((double)unk3148, 50.0);
+                m_objects[v4].SetVelocity((double)unk3148, 50.0);
                 m_objects[v4].x = m_objects[v4].vx * unk3154 + x;
                 m_objects[v4].y = y - 50.0 + m_objects[v4].vy * 0.25;
                 if (m_objects[v4].vy < 0.0) {
@@ -2162,7 +2162,7 @@ void CNayukiB::UpdateObjects()
                     RemoveObject(v4);
                     break;
                 }
-                (&m_objects[v4])->SetVelocity((double)(unk3148 + 0xb4), 50.0);
+                m_objects[v4].SetVelocity((double)(unk3148 + 0xb4), 50.0);
                 m_objects[v4].x = m_objects[v4].vx * unk3154 + x;
                 m_objects[v4].y = y - 50.0 + m_objects[v4].vy * 0.25;
                 if (m_objects[v4].vy < 0.0) {
@@ -3449,7 +3449,7 @@ void CNayukiB::UpdateObjects()
                 if (unk3258[v4] < 0xa) {
                     unk3258[v4] = 0xa;
                 }
-                (&m_objects[v4])->SetVelocity((double)unk3158[v4], unk3258[v4] * 0.1);
+                m_objects[v4].SetVelocity((double)unk3158[v4], unk3258[v4] * 0.1);
                 m_objects[v4].timer++;
                 if (m_objects[v4].timer >= v54) {
                     m_objects[v4].timer = 0;
@@ -3468,7 +3468,7 @@ void CNayukiB::UpdateObjects()
                 if (unk3258[v4] < 5) {
                     unk3258[v4] = 5;
                 }
-                (&m_objects[v4])->SetVelocity((double)unk3158[v4], unk3258[v4] * 0.1);
+                m_objects[v4].SetVelocity((double)unk3158[v4], unk3258[v4] * 0.1);
                 m_objects[v4].timer++;
                 if (m_objects[v4].timer >= v54) {
                     m_objects[v4].timer = 0;

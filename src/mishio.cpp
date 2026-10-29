@@ -2478,7 +2478,7 @@ void CMishio::UpdateObjects()
                 if (unk3174[v4] == 0) {
                     m_objects[v4].unk84 = 1;
                     unk3174[v4]++;
-                    (&m_objects[v4])->SetVelocity(50.0, 2.5);
+                    m_objects[v4].SetVelocity(50.0, 2.5);
                 }
                 if (m_objects[v4].frame < 0x1d && m_objects[v4].y + m_objects[v4].vy > 0.0) {
                     m_objects[v4].vx = 0.0;
@@ -2518,7 +2518,7 @@ void CMishio::UpdateObjects()
                 if (unk3174[v4] == 0) {
                     m_objects[v4].unk84 = 1;
                     unk3174[v4]++;
-                    (&m_objects[v4])->SetVelocity(55.0, 2.5);
+                    m_objects[v4].SetVelocity(55.0, 2.5);
                 }
                 if (m_objects[v4].frame < 0x1d && m_objects[v4].y + m_objects[v4].vy > 0.0) {
                     m_objects[v4].vx = 0.0;
@@ -2558,7 +2558,7 @@ void CMishio::UpdateObjects()
                 if (unk3174[v4] == 0) {
                     m_objects[v4].unk84 = 1;
                     unk3174[v4]++;
-                    (&m_objects[v4])->SetVelocity(45.0, 2.5);
+                    m_objects[v4].SetVelocity(45.0, 2.5);
                 }
                 if (m_objects[v4].frame < 0x1d && m_objects[v4].y + m_objects[v4].vy > 0.0) {
                     m_objects[v4].vx = 0.0;
@@ -2598,7 +2598,7 @@ void CMishio::UpdateObjects()
                 if (unk3174[v4] == 0) {
                     m_objects[v4].unk84 = 1;
                     unk3174[v4]++;
-                    (&m_objects[v4])->SetVelocity(60.0, 2.5);
+                    m_objects[v4].SetVelocity(60.0, 2.5);
                 }
                 if (m_objects[v4].frame < 0x1d && m_objects[v4].y + m_objects[v4].vy > 0.0) {
                     m_objects[v4].vx = 0.0;
@@ -2638,7 +2638,7 @@ void CMishio::UpdateObjects()
                 if (unk3174[v4] == 0) {
                     m_objects[v4].unk84 = 1;
                     unk3174[v4]++;
-                    (&m_objects[v4])->SetVelocity(55.0, 2.5);
+                    m_objects[v4].SetVelocity(55.0, 2.5);
                 }
                 if (m_objects[v4].frame < 0x1d && m_objects[v4].y + m_objects[v4].vy > 0.0) {
                     m_objects[v4].vx = 0.0;
@@ -2678,7 +2678,7 @@ void CMishio::UpdateObjects()
                 if (unk3174[v4] == 0) {
                     m_objects[v4].unk84 = 1;
                     unk3174[v4]++;
-                    (&m_objects[v4])->SetVelocity(45.0, 2.5);
+                    m_objects[v4].SetVelocity(45.0, 2.5);
                 }
                 if (m_objects[v4].frame < 0x1d && m_objects[v4].y + m_objects[v4].vy > 0.0) {
                     m_objects[v4].vx = 0.0;
@@ -2718,7 +2718,7 @@ void CMishio::UpdateObjects()
                 if (unk3174[v4] == 0) {
                     m_objects[v4].unk84 = 1;
                     unk3174[v4]++;
-                    (&m_objects[v4])->SetVelocity(40.0, 2.5);
+                    m_objects[v4].SetVelocity(40.0, 2.5);
                 }
                 if (m_objects[v4].frame < 0x1d && m_objects[v4].y + m_objects[v4].vy > 0.0) {
                     m_objects[v4].vx = 0.0;
@@ -2814,7 +2814,7 @@ void CMishio::UpdateObjects()
                 if (unk3174[v4] == 0) {
                     m_objects[v4].unk84 = 1;
                     unk3174[v4]++;
-                    (&m_objects[v4])->SetVelocity(50.0, 2.5);
+                    m_objects[v4].SetVelocity(50.0, 2.5);
                 }
                 if (m_objects[v4].frame < 0x1d && m_objects[v4].y + m_objects[v4].vy > 0.0) {
                     m_objects[v4].vx = 0.0;
@@ -2854,7 +2854,7 @@ void CMishio::UpdateObjects()
                 if (unk3174[v4] == 0) {
                     m_objects[v4].unk84 = 1;
                     unk3174[v4]++;
-                    (&m_objects[v4])->SetVelocity(50.0, 2.5);
+                    m_objects[v4].SetVelocity(50.0, 2.5);
                 }
                 if (m_objects[v4].frame < 0x1d && m_objects[v4].y + m_objects[v4].vy > 0.0) {
                     m_objects[v4].vx = 0.0;
@@ -2932,7 +2932,7 @@ void CMishio::UpdateObjects()
                 if (unk3274[v4] < 1) {
                     unk3274[v4] = 1;
                 }
-                (&m_objects[v4])->SetVelocity((double)(unk3174[v4] - 0x78), (double)((WORD)CPlayer::Random(0, 0x1e) + 0x3c));
+                m_objects[v4].SetVelocity((double)(unk3174[v4] - 0x78), (double)((WORD)CPlayer::Random(0, 0x1e) + 0x3c));
                 l50.type = 0x19b;
                 l50.x = (int)x + (m_objects[v4].vx + 20.0) * facing;
                 l50.y = (int)y - 0x32 + m_objects[v4].vy;
@@ -2965,7 +2965,7 @@ void CMishio::UpdateObjects()
                 if (unk3274[v4] < 1) {
                     unk3274[v4] = 1;
                 }
-                (&m_objects[v4])->SetVelocity((double)(unk3174[v4] - 0x78), (double)((WORD)CPlayer::Random(0, 0x1e) + 0x3c));
+                m_objects[v4].SetVelocity((double)(unk3174[v4] - 0x78), (double)((WORD)CPlayer::Random(0, 0x1e) + 0x3c));
                 l50.type = 0x1b7;
                 l50.x = (int)x + (m_objects[v4].vx + 20.0) * facing;
                 l50.y = (int)y - 0x32 + m_objects[v4].vy;
@@ -3088,7 +3088,7 @@ void CMishio::UpdateObjects()
                 if (unk3274[v4] < 1) {
                     unk3274[v4] = 1;
                 }
-                (&m_objects[v4])->SetVelocity((double)(0x78 - unk3174[v4]), (double)((WORD)CPlayer::Random(0, 0x1e) + 0x3c));
+                m_objects[v4].SetVelocity((double)(0x78 - unk3174[v4]), (double)((WORD)CPlayer::Random(0, 0x1e) + 0x3c));
                 l50.type = 0x19b;
                 l50.x = (int)x + (m_objects[v4].vx + 20.0) * facing;
                 l50.y = (int)y - 0x32 + m_objects[v4].vy;
@@ -3121,7 +3121,7 @@ void CMishio::UpdateObjects()
                 if (unk3274[v4] < 1) {
                     unk3274[v4] = 1;
                 }
-                (&m_objects[v4])->SetVelocity((double)(0x78 - unk3174[v4]), (double)((WORD)CPlayer::Random(0, 0x1e) + 0x3c));
+                m_objects[v4].SetVelocity((double)(0x78 - unk3174[v4]), (double)((WORD)CPlayer::Random(0, 0x1e) + 0x3c));
                 l50.type = 0x1b7;
                 l50.x = (int)x + (m_objects[v4].vx + 20.0) * facing;
                 l50.y = (int)y - 0x32 + m_objects[v4].vy;

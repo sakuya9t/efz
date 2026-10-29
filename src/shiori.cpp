@@ -2678,7 +2678,7 @@ void CShiori::UpdateObjects()
                 if (m_objects[v4].frame == 0 && unk3158[v4] == 0) {
                     m_objects[v4].unk84 = 1;
                     unk3158[v4]++;
-                    (&m_objects[v4])->SetVelocity((double)((WORD)CPlayer::Random(0, 0x5a) - 0x2d), (WORD)CPlayer::Random(0x1e, 0x19) * 0.1);
+                    m_objects[v4].SetVelocity((double)((WORD)CPlayer::Random(0, 0x5a) - 0x2d), (WORD)CPlayer::Random(0x1e, 0x19) * 0.1);
                 }
                 if (m_objects[v4].x > 660.0 || m_objects[v4].x < -20.0) {
                     RemoveObject(v4);

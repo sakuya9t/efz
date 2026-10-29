@@ -275,7 +275,7 @@ void CPlayer::StartPattern()
     unkb8 = 0.0;
     m_attackResult = 0;
     unk170 = 0;
-    (&m_afterimages)->Unk412910();
+    m_afterimages.Unk412910();
 }
 
 void CPlayer::Unk40f170()
@@ -671,9 +671,9 @@ short CPlayer::Random(short p1, short p2)
 
     v8 = rand();
     if (m_game->m_replayMode == 1) {
-        v8 = (&m_game->m_replay)->Read();
+        v8 = m_game->m_replay.Read();
     } else if (m_game->m_replayMode == 2) {
-        (&m_game->m_replay)->Write(v8);
+        m_game->m_replay.Write(v8);
     }
     v4 = p1 + (p2 - p1) * v8 / 0x8000;
     return v4;
@@ -683,7 +683,7 @@ void CPlayer::Unk410940()
 {
     if ((*m_opponent)->unk14c == 0) {
         if (m_afterimages.unk0 > 0) {
-            (&m_afterimages)->Unk412930((ObjBase*)this);
+            m_afterimages.Unk412930((ObjBase*)this);
             m_afterimages.unk2 = 0;
             return;
         }
@@ -695,7 +695,7 @@ void CPlayer::Unk410940()
 
 void CPlayer::Unk4109d0(BYTE p1)
 {
-    (&m_afterimages)->Unk412a10((ObjBase*)this, p1);
+    m_afterimages.Unk412a10((ObjBase*)this, p1);
 }
 
 void CPlayer::Unk410a10(int p1, int p2)
@@ -919,8 +919,8 @@ void CPlayer::Unk4116a0()
         m_patterns[x38].unk2 = k10.ReadInt();
         anims[x38].frameCount = k10.ReadInt();
         f3c = anims[x38].frameCount;
-        (&m_patterns[x38])->Alloc(f3c);
-        (&anims[x38])->Alloc(f3c);
+        m_patterns[x38].Alloc(f3c);
+        anims[x38].Alloc(f3c);
         x44 = 0;
         for (; x44 < f3c; x44++) {
             l48 = (char*)&anims[x38].frames[x44].duration;
@@ -1024,9 +1024,9 @@ void CPlayer::ReadInput()
     }
     v1 = m_input->GetInput(m_side);
     if (m_game->m_replayMode == 1) {
-        v1 = (&m_game->m_replay)->Read();
+        v1 = m_game->m_replay.Read();
     } else if (m_game->m_replayMode == 2) {
-        (&m_game->m_replay)->Write(v1);
+        m_game->m_replay.Write(v1);
     }
     m_inputX = 0;
     m_inputY = 0;

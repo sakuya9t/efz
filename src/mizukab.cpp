@@ -2926,7 +2926,7 @@ void CMizukaB::UpdateObjects()
             case 0x1bc:
                 if (m_objects[v4].frame == 0 && m_objects[v4].timer == 0) {
                     m_objects[v4].unk84 = 1;
-                    (&m_objects[v4])->SetVelocity(0.0, 3.6);
+                    m_objects[v4].SetVelocity(0.0, 3.6);
                 }
                 if (m_objects[v4].unk80 > 0 && m_objects[v4].frame == 0) {
                     m_objects[v4].frame = 1;
@@ -2966,7 +2966,7 @@ void CMizukaB::UpdateObjects()
             case 0x1bd:
                 if (m_objects[v4].frame == 0 && m_objects[v4].timer == 0) {
                     m_objects[v4].unk84 = 1;
-                    (&m_objects[v4])->SetVelocity(0.0, 3.6);
+                    m_objects[v4].SetVelocity(0.0, 3.6);
                 }
                 if (m_objects[v4].unk80 > 0 && m_objects[v4].frame == 0) {
                     m_objects[v4].frame = 1;
@@ -3006,7 +3006,7 @@ void CMizukaB::UpdateObjects()
             case 0x1be:
                 if (m_objects[v4].frame == 0 && m_objects[v4].timer == 0) {
                     m_objects[v4].unk84 = 1;
-                    (&m_objects[v4])->SetVelocity(0.0, 3.6);
+                    m_objects[v4].SetVelocity(0.0, 3.6);
                 }
                 if (m_objects[v4].unk80 > 0 && m_objects[v4].frame == 0) {
                     m_objects[v4].frame = 1;
@@ -3046,7 +3046,7 @@ void CMizukaB::UpdateObjects()
             case 0x1bf:
                 if (m_objects[v4].frame == 0 && m_objects[v4].timer == 0) {
                     m_objects[v4].unk84 = 1;
-                    (&m_objects[v4])->SetVelocity(0.0, 3.6);
+                    m_objects[v4].SetVelocity(0.0, 3.6);
                 }
                 if (m_objects[v4].unk80 > 0 && m_objects[v4].frame == 0) {
                     m_objects[v4].frame = 1;
@@ -3086,7 +3086,7 @@ void CMizukaB::UpdateObjects()
             case 0x1c0:
                 if (m_objects[v4].frame == 0 && m_objects[v4].timer == 0) {
                     m_objects[v4].unk84 = 1;
-                    (&m_objects[v4])->SetVelocity(-35.0, 3.6);
+                    m_objects[v4].SetVelocity(-35.0, 3.6);
                 }
                 if (m_objects[v4].unk80 > 0 && m_objects[v4].frame == 0) {
                     m_objects[v4].frame = 1;
@@ -3126,7 +3126,7 @@ void CMizukaB::UpdateObjects()
             case 0x1c1:
                 if (m_objects[v4].frame == 0 && m_objects[v4].timer == 0) {
                     m_objects[v4].unk84 = 1;
-                    (&m_objects[v4])->SetVelocity(-60.0, 3.6);
+                    m_objects[v4].SetVelocity(-60.0, 3.6);
                 }
                 if (m_objects[v4].unk80 > 0 && m_objects[v4].frame == 0) {
                     m_objects[v4].frame = 1;
@@ -3166,7 +3166,7 @@ void CMizukaB::UpdateObjects()
             case 0x1c2:
                 if (m_objects[v4].frame == 0 && m_objects[v4].timer == 0) {
                     m_objects[v4].unk84 = 1;
-                    (&m_objects[v4])->SetVelocity(-60.0, 3.6);
+                    m_objects[v4].SetVelocity(-60.0, 3.6);
                 }
                 if (m_objects[v4].unk80 > 0 && m_objects[v4].frame == 0) {
                     m_objects[v4].frame = 1;
@@ -3206,7 +3206,7 @@ void CMizukaB::UpdateObjects()
             case 0x1c3:
                 if (m_objects[v4].frame == 0 && m_objects[v4].timer == 0) {
                     m_objects[v4].unk84 = 1;
-                    (&m_objects[v4])->SetVelocity(-85.0, 3.6);
+                    m_objects[v4].SetVelocity(-85.0, 3.6);
                 }
                 if (m_objects[v4].unk80 > 0 && m_objects[v4].frame == 0) {
                     m_objects[v4].frame = 1;
@@ -3272,7 +3272,7 @@ void CMizukaB::UpdateObjects()
                 break;
             case 0x1c5:
                 if (m_objects[v4].frame == 0 && m_objects[v4].timer == 0) {
-                    (&m_objects[v4])->SetVelocity(0.0, 3.6);
+                    m_objects[v4].SetVelocity(0.0, 3.6);
                 }
                 if (m_objects[v4].x > 370.0) {
                     l50.type = 0;
@@ -3299,7 +3299,7 @@ void CMizukaB::UpdateObjects()
                 break;
             case 0x1c6:
                 if (m_objects[v4].frame == 0 && m_objects[v4].timer == 0) {
-                    (&m_objects[v4])->SetVelocity(0.0, 3.6);
+                    m_objects[v4].SetVelocity(0.0, 3.6);
                 }
                 if (m_objects[v4].x > 370.0) {
                     l50.type = 0;
@@ -3326,7 +3326,7 @@ void CMizukaB::UpdateObjects()
                 break;
             case 0x1c7:
                 if (m_objects[v4].frame == 0 && m_objects[v4].timer == 0) {
-                    (&m_objects[v4])->SetVelocity(0.0, 3.6);
+                    m_objects[v4].SetVelocity(0.0, 3.6);
                 }
                 if (m_objects[v4].x > 370.0) {
                     l50.type = 0;

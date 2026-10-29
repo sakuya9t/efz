@@ -123,26 +123,26 @@ void CScene2::Unk76ca50()
         strcat(v38, (const char*)vc);
         strcat(v38, ".rep");
         if (m_game->m_replayMode == 1) {
-            (&m_game->m_replay)->OpenRead((const char*)v38);
-            Unk76da20((int)m_player1Ref, (int)m_player2Ref, 0, (&m_game->m_replay)->Read());
-            Unk76da20((int)m_player2Ref, (int)m_player1Ref, 1, (&m_game->m_replay)->Read());
-            m_game->unkf32 = (&m_game->m_replay)->Read();
+            m_game->m_replay.OpenRead((const char*)v38);
+            Unk76da20((int)m_player1Ref, (int)m_player2Ref, 0, m_game->m_replay.Read());
+            Unk76da20((int)m_player2Ref, (int)m_player1Ref, 1, m_game->m_replay.Read());
+            m_game->unkf32 = m_game->m_replay.Read();
             if (m_game->unkf32 > 0x64) {
                 m_game->unk1340 = m_game->unkf32;
-                m_game->unkf32 = (&m_game->m_replay)->Read();
+                m_game->unkf32 = m_game->m_replay.Read();
             } else {
                 m_game->unk1340 = 0;
             }
-            (*m_player1Ref)->m_paletteIndex = (&m_game->m_replay)->Read();
-            (*m_player2Ref)->m_paletteIndex = (&m_game->m_replay)->Read();
+            (*m_player1Ref)->m_paletteIndex = m_game->m_replay.Read();
+            (*m_player2Ref)->m_paletteIndex = m_game->m_replay.Read();
         } else if (m_game->m_replayMode == 2) {
-            (&m_game->m_replay)->OpenWrite((const char*)v38);
-            (&m_game->m_replay)->Write((*m_player1Ref)->unk8d);
-            (&m_game->m_replay)->Write((*m_player2Ref)->unk8d);
-            (&m_game->m_replay)->Write(0x68);
-            (&m_game->m_replay)->Write(m_game->unkf32);
-            (&m_game->m_replay)->Write((*m_player1Ref)->m_paletteIndex);
-            (&m_game->m_replay)->Write((*m_player2Ref)->m_paletteIndex);
+            m_game->m_replay.OpenWrite((const char*)v38);
+            m_game->m_replay.Write((*m_player1Ref)->unk8d);
+            m_game->m_replay.Write((*m_player2Ref)->unk8d);
+            m_game->m_replay.Write(0x68);
+            m_game->m_replay.Write(m_game->unkf32);
+            m_game->m_replay.Write((*m_player1Ref)->m_paletteIndex);
+            m_game->m_replay.Write((*m_player2Ref)->m_paletteIndex);
         }
     } else if (m_game->unk1364 == 0 && (unsigned char)m_game->unk1378 == 0 || m_game->unk1364 == 2) {
         l10 = 0x16;

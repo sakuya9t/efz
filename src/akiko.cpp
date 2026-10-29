@@ -2547,7 +2547,7 @@ void CAkiko::UpdateObjects()
                     unk3264[v4] = (WORD)CPlayer::Random(0, 0x14) + 0x1e;
                     unk3364[v4] = 0;
                 }
-                (&m_objects[v4])->SetVelocity((double)unk3164[v4], unk3264[v4] * 0.1);
+                m_objects[v4].SetVelocity((double)unk3164[v4], unk3264[v4] * 0.1);
                 unk3264[v4]--;
                 if (unk3264[v4] <= 5) {
                     unk3264[v4] = 5;
@@ -2567,7 +2567,7 @@ void CAkiko::UpdateObjects()
                     unk3264[v4] = (WORD)CPlayer::Random(0, 0x28) + 0x32;
                     unk3364[v4] = 0;
                 }
-                (&m_objects[v4])->SetVelocity((double)unk3164[v4], unk3264[v4] * 0.1);
+                m_objects[v4].SetVelocity((double)unk3164[v4], unk3264[v4] * 0.1);
                 unk3264[v4]--;
                 if (unk3264[v4] <= 0) {
                     unk3264[v4] = 0;
@@ -2599,7 +2599,7 @@ void CAkiko::UpdateObjects()
                     unk3264[v4] = (WORD)CPlayer::Random(0, 0xf) + 0x1e;
                     unk3364[v4] = 0;
                 }
-                (&m_objects[v4])->SetVelocity((double)unk3164[v4], unk3264[v4] * 0.1);
+                m_objects[v4].SetVelocity((double)unk3164[v4], unk3264[v4] * 0.1);
                 unk3264[v4]--;
                 if (unk3264[v4] <= 5) {
                     unk3264[v4] = 5;
@@ -2619,7 +2619,7 @@ void CAkiko::UpdateObjects()
                     unk3264[v4] = (WORD)CPlayer::Random(0, 0x14) + 0x46;
                     unk3364[v4] = 0;
                 }
-                (&m_objects[v4])->SetVelocity((double)unk3164[v4], unk3264[v4] * 0.1);
+                m_objects[v4].SetVelocity((double)unk3164[v4], unk3264[v4] * 0.1);
                 unk3264[v4]--;
                 if (unk3264[v4] <= 0) {
                     unk3264[v4] = 0;
@@ -2651,7 +2651,7 @@ void CAkiko::UpdateObjects()
                     unk3264[v4] = (WORD)CPlayer::Random(0, 0x14) + 0x46;
                     unk3364[v4] = 0;
                 }
-                (&m_objects[v4])->SetVelocity((double)unk3164[v4], unk3264[v4] * 0.1);
+                m_objects[v4].SetVelocity((double)unk3164[v4], unk3264[v4] * 0.1);
                 unk3264[v4]--;
                 if (unk3264[v4] <= 0) {
                     unk3264[v4] = 0;
@@ -2683,7 +2683,7 @@ void CAkiko::UpdateObjects()
                     unk3264[v4] = (WORD)CPlayer::Random(0, 0xf) + 0x1e;
                     unk3364[v4] = 0;
                 }
-                (&m_objects[v4])->SetVelocity((double)unk3164[v4], unk3264[v4] * 0.1);
+                m_objects[v4].SetVelocity((double)unk3164[v4], unk3264[v4] * 0.1);
                 unk3264[v4]--;
                 if (unk3264[v4] <= 5) {
                     unk3264[v4] = 5;

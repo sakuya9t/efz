@@ -63,7 +63,7 @@ BYTE CScene5::Update()
             m_game->m_background = (CAnimBg*)0;
         }
         if (m_game->m_replayMode > 0) {
-            (&m_game->m_replay)->Close();
+            m_game->m_replay.Close();
         }
         if (m_game->unk1364 == 0) {
             if (m_game->unk134c == m_game->unk1342) {

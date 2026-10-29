@@ -2902,7 +2902,7 @@ void CKano::UpdateObjects()
                 if (unk3174[v4] == 0) {
                     m_objects[v4].unk84 = 1;
                     unk3174[v4]++;
-                    (&m_objects[v4])->SetVelocity(70.0, 3.0);
+                    m_objects[v4].SetVelocity(70.0, 3.0);
                 }
                 if (m_objects[v4].unk80 > 0 || m_objects[v4].y > 0.0 || pattern > 0x31 && pattern < 0x96) {
                     l50.type = 0x195;
@@ -2934,7 +2934,7 @@ void CKano::UpdateObjects()
                 if (unk3174[v4] == 0) {
                     m_objects[v4].unk84 = 1;
                     unk3174[v4]++;
-                    (&m_objects[v4])->SetVelocity(55.0, 3.0);
+                    m_objects[v4].SetVelocity(55.0, 3.0);
                 }
                 if (m_objects[v4].unk80 > 0 || m_objects[v4].y > 0.0 || pattern > 0x31 && pattern < 0x96) {
                     l50.type = 0x195;
@@ -2966,7 +2966,7 @@ void CKano::UpdateObjects()
                 if (unk3174[v4] == 0) {
                     m_objects[v4].unk84 = 1;
                     unk3174[v4]++;
-                    (&m_objects[v4])->SetVelocity(40.0, 3.0);
+                    m_objects[v4].SetVelocity(40.0, 3.0);
                 }
                 if (m_objects[v4].unk80 > 0 || m_objects[v4].y > 0.0 || pattern > 0x31 && pattern < 0x96) {
                     l50.type = 0x195;
@@ -2998,7 +2998,7 @@ void CKano::UpdateObjects()
                 if (unk3174[v4] == 0) {
                     m_objects[v4].unk84 = 1;
                     unk3174[v4]++;
-                    (&m_objects[v4])->SetVelocity(25.0, 3.0);
+                    m_objects[v4].SetVelocity(25.0, 3.0);
                 }
                 if (m_objects[v4].unk80 > 0 || m_objects[v4].y > 0.0 || pattern > 0x31 && pattern < 0x96) {
                     l50.type = 0x195;
@@ -3030,7 +3030,7 @@ void CKano::UpdateObjects()
                 if (unk3174[v4] == 0) {
                     m_objects[v4].unk84 = 1;
                     unk3174[v4]++;
-                    (&m_objects[v4])->SetVelocity(10.0, 3.0);
+                    m_objects[v4].SetVelocity(10.0, 3.0);
                 }
                 if (m_objects[v4].unk80 > 0 || m_objects[v4].y > 0.0 || pattern > 0x31 && pattern < 0x96) {
                     l50.type = 0x195;
@@ -3616,7 +3616,7 @@ void CKano::UpdateObjects()
                     unk2c8 = 0x18;
                     m_objects[v4].unk84 = 1;
                     unk3174[v4]++;
-                    (&m_objects[v4])->SetVelocity(60.0, 4.0);
+                    m_objects[v4].SetVelocity(60.0, 4.0);
                 }
                 if (m_objects[v4].y > 0.0) {
                     l50.type = 0x1bf;

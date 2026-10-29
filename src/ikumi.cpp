@@ -3113,7 +3113,7 @@ void CIkumi::UpdateObjects()
                 if (unk3160[v4] == 0) {
                     unk3160[v4]++;
                     unk3260[v4] = (WORD)CPlayer::Random(0x5a, 0x61);
-                    (&m_objects[v4])->SetVelocity((double)-unk3260[v4], (WORD)CPlayer::Random(0, 5) * 0.1 + 3.2);
+                    m_objects[v4].SetVelocity((double)-unk3260[v4], (WORD)CPlayer::Random(0, 5) * 0.1 + 3.2);
                 }
                 if (m_objects[v4].vy > 0.0 && m_objects[v4].frame == 0) {
                     m_objects[v4].timer = 0;
@@ -3165,7 +3165,7 @@ void CIkumi::UpdateObjects()
                 if (unk3160[v4] == 0) {
                     unk3160[v4]++;
                     unk3260[v4] = (WORD)CPlayer::Random(0x5a, 0x64);
-                    (&m_objects[v4])->SetVelocity((double)-unk3260[v4], (WORD)CPlayer::Random(0, 5) * 0.1 + 2.2);
+                    m_objects[v4].SetVelocity((double)-unk3260[v4], (WORD)CPlayer::Random(0, 5) * 0.1 + 2.2);
                 }
                 if (m_objects[v4].vy > 0.0 && m_objects[v4].frame == 0) {
                     m_objects[v4].timer = 0;
@@ -3214,7 +3214,7 @@ void CIkumi::UpdateObjects()
                 if (unk3160[v4] == 0) {
                     unk3160[v4]++;
                     unk3260[v4] = (WORD)CPlayer::Random(0x5a, 0x64);
-                    (&m_objects[v4])->SetVelocity((double)-unk3260[v4], (WORD)CPlayer::Random(0, 5) * 0.1 + 2.8);
+                    m_objects[v4].SetVelocity((double)-unk3260[v4], (WORD)CPlayer::Random(0, 5) * 0.1 + 2.8);
                 }
                 if (m_objects[v4].vy > 0.0 && m_objects[v4].frame == 0) {
                     m_objects[v4].timer = 0;
@@ -4510,7 +4510,7 @@ void CIkumi::Unk6b7900()
                 if (unk3160[v4] == 0) {
                     unk3160[v4]++;
                     unk3260[v4] = (WORD)CPlayer::Random(0x5a, 0x61);
-                    (&m_objects[v4])->SetVelocity((double)-unk3260[v4], (WORD)CPlayer::Random(0, 5) * 0.1 + 3.2);
+                    m_objects[v4].SetVelocity((double)-unk3260[v4], (WORD)CPlayer::Random(0, 5) * 0.1 + 3.2);
                 }
                 if (m_objects[v4].vy > 0.0 && m_objects[v4].frame == 0) {
                     m_objects[v4].timer = 0;
@@ -4556,7 +4556,7 @@ void CIkumi::Unk6b7900()
                 if (unk3160[v4] == 0) {
                     unk3160[v4]++;
                     unk3260[v4] = (WORD)CPlayer::Random(0x5a, 0x64);
-                    (&m_objects[v4])->SetVelocity((double)-unk3260[v4], (WORD)CPlayer::Random(0, 5) * 0.1 + 2.2);
+                    m_objects[v4].SetVelocity((double)-unk3260[v4], (WORD)CPlayer::Random(0, 5) * 0.1 + 2.2);
                 }
                 if (m_objects[v4].vy > 0.0 && m_objects[v4].frame == 0) {
                     m_objects[v4].timer = 0;
@@ -4599,7 +4599,7 @@ void CIkumi::Unk6b7900()
                 if (unk3160[v4] == 0) {
                     unk3160[v4]++;
                     unk3260[v4] = (WORD)CPlayer::Random(0x5a, 0x64);
-                    (&m_objects[v4])->SetVelocity((double)-unk3260[v4], (WORD)CPlayer::Random(0, 5) * 0.1 + 2.8);
+                    m_objects[v4].SetVelocity((double)-unk3260[v4], (WORD)CPlayer::Random(0, 5) * 0.1 + 2.8);
                 }
                 if (m_objects[v4].vy > 0.0 && m_objects[v4].frame == 0) {
                     m_objects[v4].timer = 0;

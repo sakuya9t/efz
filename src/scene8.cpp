@@ -375,15 +375,15 @@ void CScene8::Unk770e30()
             _itoa(v38 + 1, vc, 0xa);
             strcat(v2c, (const char*)vc);
             strcat(v2c, ".rep");
-            v30 = (&m_game->m_replay)->OpenRead((const char*)v2c);
+            v30 = m_game->m_replay.OpenRead((const char*)v2c);
             if (v30 == 0) {
                 unk46e[(v34 * 9 + v38)] = 0;
             } else {
-                ((char (*)[18])&unk46e[0x51])[v34][v38 * 2] = (&m_game->m_replay)->Read();
-                ((char (*)[18])&unk46e[0x51])[v34][v38 * 2 + 1] = (&m_game->m_replay)->Read();
+                ((char (*)[18])&unk46e[0x51])[v34][v38 * 2] = m_game->m_replay.Read();
+                ((char (*)[18])&unk46e[0x51])[v34][v38 * 2 + 1] = m_game->m_replay.Read();
                 unk46e[(v34 * 9 + v38)] = 1;
             }
-            (&m_game->m_replay)->Close();
+            m_game->m_replay.Close();
         }
     }
     if (unk2c == 2) {

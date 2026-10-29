@@ -3424,7 +3424,7 @@ void CMisuzu::UpdateObjects()
             case 0x1b9:
                 if (unk3158[v4] == 0) {
                     unk3158[v4]++;
-                    (&m_objects[v4])->SetVelocity((double)(0x2d - (unk3154 << 1)), 4.0);
+                    m_objects[v4].SetVelocity((double)(0x2d - (unk3154 << 1)), 4.0);
                     m_objects[v4].vx += (WORD)CPlayer::Random(0, 0xa) * 0.1;
                     m_objects[v4].vy += (WORD)CPlayer::Random(0, 0xa) * 0.1;
                     m_objects[v4].unk84 = 1;
