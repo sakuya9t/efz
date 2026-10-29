@@ -10,9 +10,9 @@ OBJECTS = {
     'player': (0x40e630, 0x412b10, 'CPlayer', {
         0x40eae0: 'CPlayer::CPlayer',
         0x40ecb0: 'CPlayer::~CPlayer',
-        0x40f110: 'CPlayer::Vf0',
-        0x410b70: 'CPlayer::Vf11',
-        0x40edf0: 'CPlayer::Vf12',
+        0x40f110: 'CPlayer::StartPattern',
+        0x410b70: 'CPlayer::Load',
+        0x40edf0: 'CPlayer::Reset',
         0x412820: 'PatternData::PatternData',
         0x412840: 'Afterimages::Afterimages',
         0x412870: '??_EPatternData@@QAEPAXI@Z',
@@ -23,8 +23,8 @@ OBJECTS = {
         0x412ad0: 'PatternData::Alloc',
     }),
     'playerobj': (0x412b10, 0x4136d0, 'CPlayer', {
-        0x412b10: 'CPlayer::Vf9',
-        0x412e60: 'CPlayer::Vf10',
+        0x412b10: 'CPlayer::SpawnObject',
+        0x412e60: 'CPlayer::RemoveObject',
     }),
 }
 
@@ -37,8 +37,8 @@ SHARED = {
 # Character classes: (object, class, first address, end address, vtable, constructor,
 # size from the scene code's `new`). Each derives from CPlayer and overrides its virtual
 # slots (named VfN after the slot). Each is two objects, as in the original: <object>_vf6
-# holds Vf6 (the per-state update), which comes first, up to the constructor, and <object>
-# the rest of the class. The split shows in .rdata, where Vf6's floating-point constants
+# holds UpdatePattern (the per-state update), which comes first, up to the constructor, and <object>
+# the rest of the class. The split shows in .rdata, where UpdatePattern's floating-point constants
 # precede the string section the constructor's folder name is in.
 CHARACTERS = [
     ('shiori', 'CShiori', 0x4136d0, 0x434060, 0x787df8, 0x422d70, 0x3458),
@@ -87,13 +87,18 @@ def _vtable(addr, n=13):
     return [struct.unpack_from('<I', _IMAGE, addr - 0x400000 + 4 * k)[0] for k in range(n)]
 
 
+# CPlayer's virtual slots, as src/efz.h names them.
+PLAYER_SLOTS = ['StartPattern', 'DrawGauge', 'ReadCommand', 'Move', 'StartCommand',
+                'CpuInput', 'UpdatePattern', 'UpdateObjects', 'Vf8', 'SpawnObject',
+                'RemoveObject', 'Load', 'Reset']
+
 for _obj, _cls, _lo, _hi, _vt, _ctor, _size in CHARACTERS:
     _names = {_ctor: f'{_cls}::{_cls}'}
     _names.update({a: n for a, n in SHARED.items() if _lo <= a < _hi})
     _names.update({a: n for a, n in EXTRA_NAMES.items() if _lo <= a < _hi})
     for _k, _a in enumerate(_vtable(_vt)):
         if _a != CPLAYER_SLOT11:
-            _names[_a] = f'{_cls}::Vf{_k}'
+            _names[_a] = f'{_cls}::{PLAYER_SLOTS[_k]}'
     OBJECTS[_obj + '_vf6'] = (_lo, _ctor, _cls, _names)
     OBJECTS[_obj] = (_ctor, _hi, _cls, _names)
 

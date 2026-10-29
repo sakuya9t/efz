@@ -2066,9 +2066,9 @@ class Lifter2(Lifter):
                 else:
                     # another object: its declared class's family, or most often a player
                     t = (static_type(obj, self.own_class()) or '').rstrip('*')
-                    fam = vfamily(f'{t}::x') if t else ('CPlayer', None, None)
+                    fam = vfamily(f'{t}::x') if t else vfamily(None)
                     if fam[0] == 'CPlayer':
-                        fam = ('CPlayer', None, None)
+                        fam = vfamily(None)
                 nbytes = self.vslot_bytes(slot, fam)
                 if nbytes is not None:
                     self.args = list(reversed(args))
@@ -3146,7 +3146,7 @@ def vfamily(qual):
         if cls in (c[1], c[2]):
             first = next(x for x in objdefs.CLASSES if x[2] == c[2])
             return c[2], c[6], first[5]
-    return 'CPlayer', None, None
+    return 'CPlayer', objdefs.PLAYER_SLOTS, None
 
 
 def lift(img, syms, start, ret_type=None, this_type=None, qual=None):

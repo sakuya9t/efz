@@ -1297,7 +1297,6 @@ public:
     // FUNCTION: 0x751730
     virtual void Vf1(int p1, int p2, char p3);
 
-    BYTE unk[0x1c - sizeof(CAnimBg)];
 };
 
 // Bg10: derived from CAnimBg.
@@ -1313,7 +1312,6 @@ public:
     // FUNCTION: 0x751df0
     virtual void Vf1(int p1, int p2, char p3);
 
-    BYTE unk[0x1c - sizeof(CAnimBg)];
 };
 
 // Bg12: derived from CAnimBg.
@@ -1329,7 +1327,6 @@ public:
     // FUNCTION: 0x752470
     virtual void Vf1(int p1, int p2, char p3);
 
-    BYTE unk[0x1c - sizeof(CAnimBg)];
 };
 
 // Bg16: derived from CAnimBg.
@@ -1345,7 +1342,6 @@ public:
     // FUNCTION: 0x752dc0
     virtual void Vf1(int p1, int p2, char p3);
 
-    BYTE unk[0x1c - sizeof(CAnimBg)];
 };
 
 // Scene1: derived from CScene.
