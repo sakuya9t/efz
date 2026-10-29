@@ -4,8 +4,12 @@
 //   // FUNCTION: 0x401000      a function or method
 //   // GLOBAL: 0x790150        a global variable
 //   // SIZE: 0x142f0           sizeof a class, from the original `new` call
-// Names starting with Unk are placeholders until the function is understood.
-// Classes are padded to their original size; fields are named as they are recovered.
+// Names starting with Unk are placeholders until the function is understood, and
+// members named unk<offset> until the field is: their type is the one the code reads.
+// Classes are padded to their original size with byte arrays named unk<offset>; an unk
+// byte array with a comment is a real array of unknown purpose. A `// +0x..` comment
+// gives a member's offset. tools/members.py layout checks offsets and sizes, and
+// docs/readability.md says which source changes keep the compiled code.
 #ifndef EFZ_H
 #define EFZ_H
 

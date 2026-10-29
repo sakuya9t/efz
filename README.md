@@ -13,6 +13,12 @@ whose SHA-256 is the original's. Only the timestamp, the PDB's GUID and one coun
 Rich header are set after linking (`tools/postlink.py`). `tools/progress.py` prints the
 per-function numbers.
 
+The source reads fields through named members rather than the lifter's raw offsets
+(`unk2af8[4] = -0x1d` for `*(short*)((char*)this + 0x2b00) = -0x1d`, `(*m_opponent)->x`),
+and still builds the identical exe. [docs/readability.md](docs/readability.md) records
+how, and which readability changes keep the compiled code: renaming members and methods
+does; renaming locals doesn't, since this compiler orders stack slots by their names.
+
 | Source | What it is |
 |---|---|
 | `src/main.cpp` | `WinMain`, the window procedure, the 64 FPS frame timer |
@@ -117,7 +123,10 @@ ssh, name the session's display, e.g. `DISPLAY=:10 make play` for an xrdp deskto
    `#include`s and the globals right after them), updates the declarations in
    `src/efz.h`, compiles and diffs.
    Whatever still differs points at a lifter rule to add. `tools/lifttest.py` relifts
-   every matched function to check that the lifter doesn't regress.
+   every matched function to check that the lifter doesn't regress. The lifter writes
+   fields as raw offsets and predates the names in `src/`: after regenerating an
+   object, `tools/members.py rewrite src/<obj>.cpp` turns its accesses into members
+   again, and its methods need renaming back.
 5. **Fix stack-layout differences by renaming.** This compiler orders stack variables by a
    hash of their names, not by declaration order. If only `[ebp-N]` offsets differ:
    - list each local's slot in the original, top of the frame first
@@ -136,6 +145,7 @@ ssh, name the session's display, e.g. `DISPLAY=:10 make play` for an xrdp deskto
 | `tools/stackorder.py` | Picks local names that reproduce the original stack layout (`--globals`: `.bss` layout) |
 | `tools/progress.py` | Matched functions and bytes, and where the matched prefix of `.text` ends |
 | `tools/lift.py` | Lifts a function (`body 0xADDR`) or an object (`write <obj>`) to C++ |
+| `tools/members.py` | Rewrites raw offset accesses into `efz.h`'s members, renames members and methods, checks `efz.h`'s layout ([docs/readability.md](docs/readability.md)) |
 | `tools/objdefs.py` | Object ranges, class names and signatures for the lifter |
 | `tools/objcheck.sh` | Regenerate, compile and diff objects |
 | `tools/batch.sh` | `objcheck.sh` over many objects, one summary line each |
