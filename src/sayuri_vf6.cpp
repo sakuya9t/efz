@@ -1647,7 +1647,7 @@ void CSayuri::UpdatePattern()
         vx = 0.0;
         vy = 0.0;
         if (frame == 0 && timer == 0) {
-            CPlayer::Unk410a10(3, 0);
+            CPlayer::ShakeScreen(3, 0);
             l50.type = 3;
             l50.x = (double)(int)x;
             l50.y = (double)(int)y;
@@ -1670,7 +1670,7 @@ void CSayuri::UpdatePattern()
         vx = 0.0;
         vy = 0.0;
         if (frame == 0 && timer == 0) {
-            CPlayer::Unk410a10(3, 0);
+            CPlayer::ShakeScreen(3, 0);
             l50.type = 3;
             l50.x = (double)(int)x;
             l50.y = (double)(int)y;
@@ -2203,7 +2203,7 @@ void CSayuri::UpdatePattern()
             vx = 0.0;
             vy = 0.0;
             ay = 0.0;
-            CPlayer::Unk4109d0(3);
+            CPlayer::StartAfterimages(3);
         }
         timer++;
         unk3138++;
@@ -2243,7 +2243,7 @@ void CSayuri::UpdatePattern()
         }
         break;
     case 0xa4:
-        CPlayer::Unk4109d0(2);
+        CPlayer::StartAfterimages(2);
         if (frame == 0 && timer == 0) {
             vx = 0.0;
             vy = 0.0;
@@ -2282,7 +2282,7 @@ void CSayuri::UpdatePattern()
     case 0xa5:
         if (frame == 0 && timer == 0 && unk3138 == 0) {
             vx = 2.0;
-            CPlayer::Unk4109d0(3);
+            CPlayer::StartAfterimages(3);
             vy = 0.0;
             ay = 0.0;
             m_playSound = 0x11;
@@ -2320,7 +2320,7 @@ void CSayuri::UpdatePattern()
             vx = -2.0;
             vy = 0.0;
             ay = 0.0;
-            CPlayer::Unk4109d0(3);
+            CPlayer::StartAfterimages(3);
             m_playSound = 0x11;
         }
         timer++;
@@ -2361,7 +2361,7 @@ void CSayuri::UpdatePattern()
             }
             unk118 = 0.0;
             unk14c = 0x5a;
-            CPlayer::Unk410b10(0xb0, 3);
+            CPlayer::FillBackground(0xb0, 3);
         }
         if (frame == 1 && timer == 0) {
             m_playSound = 0x12;
@@ -2531,7 +2531,7 @@ void CSayuri::UpdatePattern()
             }
             unk118 = 0.0;
             unk14c = 0x5a;
-            CPlayer::Unk410b10(0xb0, 3);
+            CPlayer::FillBackground(0xb0, 3);
         }
         if (frame == 1 && timer == 0) {
             m_playSound = 0x12;
@@ -2596,7 +2596,7 @@ void CSayuri::UpdatePattern()
         break;
     case 0xb4:
         if (frame == 0 && timer == 0) {
-            CPlayer::Unk4109d0(2);
+            CPlayer::StartAfterimages(2);
             vx = 0.0;
             vy = 0.0;
             ay = 0.0;
@@ -3079,7 +3079,7 @@ void CSayuri::UpdatePattern()
         vx = 0.0;
         vy = 0.0;
         if (frame == 0 && timer == 0) {
-            CPlayer::Unk410a10(3, 0);
+            CPlayer::ShakeScreen(3, 0);
             l50.type = 3;
             l50.x = (double)(int)x;
             l50.y = (double)(int)y;
@@ -3179,7 +3179,7 @@ void CSayuri::UpdatePattern()
         }
         break;
     case 0xe6:
-        CPlayer::Unk4109d0(3);
+        CPlayer::StartAfterimages(3);
         vx -= 0.06;
         if (vx < 0.0) {
             vx = 0.0;
@@ -3204,7 +3204,7 @@ void CSayuri::UpdatePattern()
         }
         break;
     case 0xe7:
-        CPlayer::Unk4109d0(3);
+        CPlayer::StartAfterimages(3);
         if (vx > 0.0) {
             vx -= 0.03;
         } else {
@@ -3230,7 +3230,7 @@ void CSayuri::UpdatePattern()
         }
         break;
     case 0xe8:
-        CPlayer::Unk4109d0(3);
+        CPlayer::StartAfterimages(3);
         if (frame == 0 && timer == 0) {
             vx = 1.1;
             vy = -2.5;
@@ -3541,7 +3541,7 @@ void CSayuri::UpdatePattern()
                 (*m_opponent)->unkc8 = -0.9;
                 CPlayer::DealDamage(0x3b6, 900.0);
                 (*m_opponent)->unk14a = 0x5a;
-                CPlayer::Unk410a10(6, 9);
+                CPlayer::ShakeScreen(6, 9);
                 l50.type = 0;
                 l50.x = facing * 0x19 + x;
                 l50.y = -41.0;
@@ -3653,7 +3653,7 @@ void CSayuri::UpdatePattern()
                 (*m_opponent)->unkc8 = -0.9;
                 CPlayer::DealDamage(0x3b6, 900.0);
                 (*m_opponent)->unk14a = 0x5a;
-                CPlayer::Unk410a10(6, 9);
+                CPlayer::ShakeScreen(6, 9);
                 l50.type = 0;
                 l50.x = facing * 0x19 + x;
                 l50.y = -41.0;
@@ -3788,7 +3788,7 @@ void CSayuri::UpdatePattern()
                 (*m_opponent)->unkc8 = -0.9;
                 CPlayer::DealDamage(0x546, 750.0);
                 (*m_opponent)->unk14a = 0x5a;
-                CPlayer::Unk410a10(6, 9);
+                CPlayer::ShakeScreen(6, 9);
                 l50.type = 0;
                 l50.x = facing * 0x19 + x;
                 l50.y = -41.0;
@@ -4509,7 +4509,7 @@ void CSayuri::UpdatePattern()
             CPlayer::StopMoving();
             unk14c = 0x78;
             m_gauge = m_gauge - 0x3e8;
-            CPlayer::Unk410b10(0xb0, 3);
+            CPlayer::FillBackground(0xb0, 3);
             l50.type = 0x44;
             l50.unk2c = 0x13;
             l50.x = (double)((int)x + facing * 0xd);
@@ -4565,7 +4565,7 @@ void CSayuri::UpdatePattern()
                 (*m_opponent)->unkc8 = -2.9;
                 CPlayer::DealDamage(0x8ca, 900.0);
                 (*m_opponent)->unk14a = 0x5a;
-                CPlayer::Unk410a10(0xa, 0xa);
+                CPlayer::ShakeScreen(0xa, 0xa);
                 l50.type = 0x195;
                 l50.x = x;
                 l50.y = 0.0;
@@ -4635,7 +4635,7 @@ void CSayuri::UpdatePattern()
             CPlayer::StopMoving();
             unk14c = 0x78;
             m_gauge = m_gauge - 0x7d0;
-            CPlayer::Unk410b10(0xb0, 3);
+            CPlayer::FillBackground(0xb0, 3);
             l50.type = 0x45;
             l50.unk2c = 5;
             l50.x = (double)((int)x + facing * 0xd);
@@ -4700,7 +4700,7 @@ void CSayuri::UpdatePattern()
                 if (unk313c == 0) {
                     (*m_opponent)->unk14a = 0x12c;
                 }
-                CPlayer::Unk410a10(0xa, 0xa);
+                CPlayer::ShakeScreen(0xa, 0xa);
                 l50.type = 0x195;
                 l50.x = x;
                 l50.y = 0.0;
@@ -4780,7 +4780,7 @@ void CSayuri::UpdatePattern()
             CPlayer::StopMoving();
             unk14c = 0x78;
             m_gauge = m_gauge - 0xbb8;
-            CPlayer::Unk410b10(0xb0, 3);
+            CPlayer::FillBackground(0xb0, 3);
             l50.type = 0x46;
             l50.unk2c = 0x40;
             l50.x = (double)((int)x + facing * 0xd);
@@ -4848,7 +4848,7 @@ void CSayuri::UpdatePattern()
                 if (unk313c < 2) {
                     (*m_opponent)->unk14a = 0x12c;
                 }
-                CPlayer::Unk410a10(0xa, 0xa);
+                CPlayer::ShakeScreen(0xa, 0xa);
                 l50.type = 0x195;
                 l50.x = x;
                 l50.y = 0.0;
@@ -4932,7 +4932,7 @@ void CSayuri::UpdatePattern()
             CPlayer::StopMoving();
             unk14c = 0x78;
             m_gauge = m_gauge - 0x3e8;
-            CPlayer::Unk410b10(0xb0, 3);
+            CPlayer::FillBackground(0xb0, 3);
             l50.type = 0x44;
             l50.unk2c = 0x13;
             l50.x = (double)((int)x + facing * 0x17);
@@ -5003,7 +5003,7 @@ void CSayuri::UpdatePattern()
             CPlayer::StopMoving();
             unk14c = 0x78;
             m_gauge = m_gauge - 0x7d0;
-            CPlayer::Unk410b10(0xb0, 3);
+            CPlayer::FillBackground(0xb0, 3);
             l50.type = 0x45;
             l50.unk2c = 5;
             l50.x = (double)((int)x + facing * 0x17);
@@ -5094,7 +5094,7 @@ void CSayuri::UpdatePattern()
             CPlayer::StopMoving();
             unk14c = 0x78;
             m_gauge = m_gauge - 0xbb8;
-            CPlayer::Unk410b10(0xb0, 3);
+            CPlayer::FillBackground(0xb0, 3);
             l50.type = 0x46;
             l50.unk2c = 0x40;
             l50.x = (double)((int)x + facing * 0x17);
@@ -5207,7 +5207,7 @@ void CSayuri::UpdatePattern()
         if (frame == 1 && timer == 0) {
             unk14c = 0x78;
             m_gauge = m_gauge - 0x3e8;
-            CPlayer::Unk410b10(0xb0, 3);
+            CPlayer::FillBackground(0xb0, 3);
             l50.type = 0x44;
             l50.unk2c = 0x13;
             l50.x = (double)((int)x - facing * 0x18);
@@ -5315,7 +5315,7 @@ void CSayuri::UpdatePattern()
                 l50.layer = 1;
                 m_game->CreateEffect((EffectDesc*)&l50);
                 (*m_opponent)->unk14a = 0x1e;
-                CPlayer::Unk410a10(3, 0);
+                CPlayer::ShakeScreen(3, 0);
             }
         }
         timer++;
@@ -5403,7 +5403,7 @@ void CSayuri::UpdatePattern()
         if (frame == 1 && timer == 0) {
             unk14c = 0x78;
             m_gauge = m_gauge - 0x7d0;
-            CPlayer::Unk410b10(0xb0, 3);
+            CPlayer::FillBackground(0xb0, 3);
             l50.type = 0x45;
             l50.unk2c = 5;
             l50.x = (double)((int)x - facing * 0x18);
@@ -5511,7 +5511,7 @@ void CSayuri::UpdatePattern()
                 l50.layer = 1;
                 m_game->CreateEffect((EffectDesc*)&l50);
                 (*m_opponent)->unk14a = 0x1e;
-                CPlayer::Unk410a10(3, 0);
+                CPlayer::ShakeScreen(3, 0);
             }
         }
         timer++;
@@ -5611,7 +5611,7 @@ void CSayuri::UpdatePattern()
         if (frame == 0 && timer == 0) {
             unk14c = 0x78;
             m_gauge = m_gauge - 0xbb8;
-            CPlayer::Unk410b10(0xb0, 3);
+            CPlayer::FillBackground(0xb0, 3);
             l50.type = 0x46;
             l50.unk2c = 0x40;
             l50.x = (double)((int)x - facing * 0x18);
@@ -5726,7 +5726,7 @@ void CSayuri::UpdatePattern()
                 l50.layer = 1;
                 m_game->CreateEffect((EffectDesc*)&l50);
                 (*m_opponent)->unk14a = 0x1e;
-                CPlayer::Unk410a10(3, 0);
+                CPlayer::ShakeScreen(3, 0);
             }
         }
         timer++;
@@ -5838,7 +5838,7 @@ void CSayuri::UpdatePattern()
         if (frame == 1 && timer == 0) {
             unk14c = 0x78;
             m_gauge = m_gauge - 0xbb8;
-            CPlayer::Unk410b10(0xb0, 3);
+            CPlayer::FillBackground(0xb0, 3);
             l50.type = 0x46;
             l50.unk2c = 0x40;
             l50.x = (double)((int)x - facing * 0x18);
@@ -5933,7 +5933,7 @@ void CSayuri::UpdatePattern()
             if (frame == 2) {
                 x = (*m_opponent)->x;
                 y = 0.0;
-                CPlayer::Unk410a10(6, 0);
+                CPlayer::ShakeScreen(6, 0);
                 (*m_opponent)->pattern = 0x62;
                 (*m_opponent)->y = 0.0;
                 (*m_opponent)->StopMoving();
@@ -5957,7 +5957,7 @@ void CSayuri::UpdatePattern()
             }
             if (frame == 0xa || frame == 0xd || frame == 0x10 || frame == 0x13 || frame == 0x16 || frame == 0x19) {
                 CPlayer::DealDamage(0x64, 998.0);
-                CPlayer::Unk410a10(2, 0);
+                CPlayer::ShakeScreen(2, 0);
                 (*m_opponent)->unk140 = 0x4650;
                 l50.type = 0;
                 l50.x = (double)(int)x;
@@ -5975,7 +5975,7 @@ void CSayuri::UpdatePattern()
             if (frame == 0x1c) {
                 CPlayer::DealDamage(0x32, 999.0);
                 (*m_opponent)->unk140 = 0;
-                CPlayer::Unk410a10(6, 0);
+                CPlayer::ShakeScreen(6, 0);
                 l50.type = 0;
                 l50.x = (double)(int)x;
                 l50.y = (double)(int)y;

@@ -1751,7 +1751,7 @@ void CMio::UpdatePattern()
         vx = 0.0;
         vy = 0.0;
         if (frame == 0 && timer == 0) {
-            CPlayer::Unk410a10(3, 0);
+            CPlayer::ShakeScreen(3, 0);
             l50.type = 3;
             l50.x = (double)(int)x;
             l50.y = (double)(int)y;
@@ -1774,7 +1774,7 @@ void CMio::UpdatePattern()
         vx = 0.0;
         vy = 0.0;
         if (frame == 0 && timer == 0) {
-            CPlayer::Unk410a10(3, 0);
+            CPlayer::ShakeScreen(3, 0);
             l50.type = 3;
             l50.x = (double)(int)x;
             l50.y = (double)(int)y;
@@ -2201,7 +2201,7 @@ void CMio::UpdatePattern()
         break;
     case 0xa3:
         if (frame == 0 && timer == 0) {
-            CPlayer::Unk4109d0(3);
+            CPlayer::StartAfterimages(3);
         }
         if (m_inputY == -1 && frame > 0) {
             pattern = 4;
@@ -2242,7 +2242,7 @@ void CMio::UpdatePattern()
         }
         break;
     case 0xa4:
-        CPlayer::Unk4109d0(2);
+        CPlayer::StartAfterimages(2);
         if (frame == 0 && timer == 0) {
             unk158 = 0;
             vx = 0.0;
@@ -2281,14 +2281,14 @@ void CMio::UpdatePattern()
         if (frame == 0 && timer == 0) {
             vx = 1.2;
             vy = -0.4;
-            CPlayer::Unk4109d0(3);
+            CPlayer::StartAfterimages(3);
             ay = 0.0;
             m_playSound = 0x14;
         }
         if (frame == 3 && timer == 0) {
             vx = 1.8;
             vy = 0.0;
-            CPlayer::Unk4109d0(3);
+            CPlayer::StartAfterimages(3);
             ay = 0.0;
             m_playSound = 0x14;
         }
@@ -2329,13 +2329,13 @@ void CMio::UpdatePattern()
             vx = -1.2;
             vy = -0.4;
             ay = 0.0;
-            CPlayer::Unk4109d0(3);
+            CPlayer::StartAfterimages(3);
             m_playSound = 0x14;
         }
         if (frame == 3 && timer == 0) {
             vx = -1.8;
             vy = 0.0;
-            CPlayer::Unk4109d0(3);
+            CPlayer::StartAfterimages(3);
             ay = 0.0;
             m_playSound = 0x14;
         }
@@ -2382,7 +2382,7 @@ void CMio::UpdatePattern()
             }
             unk118 = 0.0;
             unk14c = 0x5a;
-            CPlayer::Unk410b10(0xb0, 3);
+            CPlayer::FillBackground(0xb0, 3);
         }
         if (frame == 1 && timer == 0) {
             m_playSound = 0x12;
@@ -2521,7 +2521,7 @@ void CMio::UpdatePattern()
             }
             unk118 = 0.0;
             unk14c = 0x5a;
-            CPlayer::Unk410b10(0xb0, 3);
+            CPlayer::FillBackground(0xb0, 3);
         }
         if (frame == 0 && timer == 0) {
             m_playSound = 0x12;
@@ -2584,7 +2584,7 @@ void CMio::UpdatePattern()
         break;
     case 0xb4:
         if (frame == 0 && timer == 0) {
-            CPlayer::Unk4109d0(2);
+            CPlayer::StartAfterimages(2);
             vx = 0.0;
             vy = 0.0;
             ay = 0.0;
@@ -3750,7 +3750,7 @@ void CMio::UpdatePattern()
         }
         break;
     case 0xe6:
-        CPlayer::Unk4109d0(3);
+        CPlayer::StartAfterimages(3);
         vx -= 0.032;
         unk158 = 0;
         if (vx < 0.0) {
@@ -3778,7 +3778,7 @@ void CMio::UpdatePattern()
         }
         break;
     case 0xe7:
-        CPlayer::Unk4109d0(3);
+        CPlayer::StartAfterimages(3);
         vx -= 0.032;
         unk158 = 0;
         if (vx < 0.0) {
@@ -3818,7 +3818,7 @@ void CMio::UpdatePattern()
         }
         break;
     case 0xe8:
-        CPlayer::Unk4109d0(3);
+        CPlayer::StartAfterimages(3);
         unk158 = 0;
         vx -= 0.032;
         if (vx < 0.0) {
@@ -3846,7 +3846,7 @@ void CMio::UpdatePattern()
         }
         break;
     case 0xe9:
-        CPlayer::Unk4109d0(3);
+        CPlayer::StartAfterimages(3);
         unk158 = 0;
         vx -= 0.032;
         if (vx < 0.0) {
@@ -3874,7 +3874,7 @@ void CMio::UpdatePattern()
         }
         break;
     case 0xea:
-        CPlayer::Unk4109d0(3);
+        CPlayer::StartAfterimages(3);
         unk158 = 0;
         vx -= 0.032;
         if (vx < 0.0) {
@@ -3906,7 +3906,7 @@ void CMio::UpdatePattern()
         }
         break;
     case 0xeb:
-        CPlayer::Unk4109d0(3);
+        CPlayer::StartAfterimages(3);
         unk158 = 0;
         if (frame == 0 && timer == 0) {
             ax = 0.0;
@@ -3934,7 +3934,7 @@ void CMio::UpdatePattern()
         }
         break;
     case 0xec:
-        CPlayer::Unk4109d0(3);
+        CPlayer::StartAfterimages(3);
         unk158 = 0;
         vx -= 0.032;
         if (vx < 0.0) {
@@ -3962,7 +3962,7 @@ void CMio::UpdatePattern()
         }
         break;
     case 0xed:
-        CPlayer::Unk4109d0(3);
+        CPlayer::StartAfterimages(3);
         unk158 = 0;
         vx -= 0.032;
         if (vx < 0.0) {
@@ -4002,7 +4002,7 @@ void CMio::UpdatePattern()
         }
         break;
     case 0xee:
-        CPlayer::Unk4109d0(3);
+        CPlayer::StartAfterimages(3);
         unk158 = 0;
         vx -= 0.032;
         if (vx < 0.0) {
@@ -4030,7 +4030,7 @@ void CMio::UpdatePattern()
         }
         break;
     case 0xef:
-        CPlayer::Unk4109d0(3);
+        CPlayer::StartAfterimages(3);
         vx -= 0.032;
         if (vx < 0.0) {
             vx = 0.0;
@@ -4061,7 +4061,7 @@ void CMio::UpdatePattern()
         }
         break;
     case 0xf0:
-        CPlayer::Unk4109d0(3);
+        CPlayer::StartAfterimages(3);
         unk158 = 0;
         vx -= 0.032;
         if (vx < 0.0) {
@@ -4092,7 +4092,7 @@ void CMio::UpdatePattern()
         }
         break;
     case 0xf1:
-        CPlayer::Unk4109d0(3);
+        CPlayer::StartAfterimages(3);
         unk158 = 0;
         vx -= 0.032;
         if (vx < 0.0) {
@@ -5469,7 +5469,7 @@ void CMio::UpdatePattern()
             CPlayer::StopMoving();
             unk14c = 0x78;
             m_gauge = m_gauge - 0x3e8;
-            CPlayer::Unk410b10(0xb0, 3);
+            CPlayer::FillBackground(0xb0, 3);
             l50.type = 9;
             l50.unk2c = 5;
             l50.x = (double)(int)x;
@@ -5498,7 +5498,7 @@ void CMio::UpdatePattern()
             CPlayer::StopMoving();
             unk14c = 0x78;
             m_gauge = m_gauge - 0x3e8;
-            CPlayer::Unk410b10(0xb0, 3);
+            CPlayer::FillBackground(0xb0, 3);
             l50.type = 9;
             l50.unk2c = 5;
             l50.x = (double)(int)x;
@@ -5530,7 +5530,7 @@ void CMio::UpdatePattern()
         if (frame == 4 && timer == 0) {
             unk14c = 0x78;
             m_gauge = m_gauge - 0x3e8;
-            CPlayer::Unk410b10(0xb0, 3);
+            CPlayer::FillBackground(0xb0, 3);
             l50.type = 0x44;
             l50.unk2c = 0x13;
             l50.x = (double)(int)x;
@@ -5598,7 +5598,7 @@ void CMio::UpdatePattern()
         if (frame == 4 && timer == 0) {
             unk14c = 0x78;
             m_gauge = m_gauge - 0x7d0;
-            CPlayer::Unk410b10(0xb0, 3);
+            CPlayer::FillBackground(0xb0, 3);
             l50.type = 0x45;
             l50.unk2c = 5;
             l50.x = (double)(int)x;
@@ -5666,7 +5666,7 @@ void CMio::UpdatePattern()
             unk14c = 0x78;
             m_hitsLeft = 1;
             m_gauge = m_gauge - 0xbb8;
-            CPlayer::Unk410b10(0xb0, 3);
+            CPlayer::FillBackground(0xb0, 3);
             l50.type = 0x46;
             l50.unk2c = 0x40;
             l50.x = (double)(int)x;
@@ -5742,7 +5742,7 @@ void CMio::UpdatePattern()
             CPlayer::StopMoving();
             unk14c = 0x78;
             m_gauge = m_gauge - 0x3e8;
-            CPlayer::Unk410b10(0xb0, 3);
+            CPlayer::FillBackground(0xb0, 3);
             l50.type = 0x44;
             l50.unk2c = 0x13;
             l50.x = (double)(int)x;
@@ -5814,7 +5814,7 @@ void CMio::UpdatePattern()
             CPlayer::StopMoving();
             unk14c = 0x78;
             m_gauge = m_gauge - 0x7d0;
-            CPlayer::Unk410b10(0xb0, 3);
+            CPlayer::FillBackground(0xb0, 3);
             l50.type = 0x45;
             l50.unk2c = 5;
             l50.x = (double)(int)x;
@@ -5886,7 +5886,7 @@ void CMio::UpdatePattern()
             CPlayer::StopMoving();
             unk14c = 0x78;
             m_gauge = m_gauge - 0xbb8;
-            CPlayer::Unk410b10(0xb0, 3);
+            CPlayer::FillBackground(0xb0, 3);
             l50.type = 0x46;
             l50.unk2c = 0x40;
             l50.x = (double)(int)x;
@@ -5955,7 +5955,7 @@ void CMio::UpdatePattern()
             CPlayer::StopMoving();
             unk14c = 0x78;
             m_gauge = m_gauge - 0x3e8;
-            CPlayer::Unk410b10(0xb0, 3);
+            CPlayer::FillBackground(0xb0, 3);
             l50.type = 0x44;
             l50.unk2c = 0x13;
             l50.x = (double)(int)x;
@@ -6006,7 +6006,7 @@ void CMio::UpdatePattern()
             CPlayer::StopMoving();
             unk14c = 0x78;
             m_gauge = m_gauge - 0x7d0;
-            CPlayer::Unk410b10(0xb0, 3);
+            CPlayer::FillBackground(0xb0, 3);
             l50.type = 0x45;
             l50.unk2c = 5;
             l50.x = (double)(int)x;
@@ -6054,7 +6054,7 @@ void CMio::UpdatePattern()
             CPlayer::StopMoving();
             unk14c = 0x78;
             m_gauge = m_gauge - 0xbb8;
-            CPlayer::Unk410b10(0xb0, 3);
+            CPlayer::FillBackground(0xb0, 3);
             l50.type = 0x46;
             l50.unk2c = 0x40;
             l50.x = (double)(int)x;
@@ -6109,7 +6109,7 @@ void CMio::UpdatePattern()
             CPlayer::StopMoving();
             unk14c = 0x78;
             m_gauge = m_gauge - 0x3e8;
-            CPlayer::Unk410b10(0xb0, 3);
+            CPlayer::FillBackground(0xb0, 3);
             l50.type = 0x44;
             l50.unk2c = 0x13;
             l50.x = (double)((int)x - facing * 0xa);
@@ -6211,7 +6211,7 @@ void CMio::UpdatePattern()
             CPlayer::StopMoving();
             unk14c = 0x78;
             m_gauge = m_gauge - 0x7d0;
-            CPlayer::Unk410b10(0xb0, 3);
+            CPlayer::FillBackground(0xb0, 3);
             l50.type = 0x45;
             l50.unk2c = 5;
             l50.x = (double)((int)x - facing * 0xa);
@@ -6313,7 +6313,7 @@ void CMio::UpdatePattern()
             CPlayer::StopMoving();
             unk14c = 0x78;
             m_gauge = m_gauge - 0xbb8;
-            CPlayer::Unk410b10(0xb0, 3);
+            CPlayer::FillBackground(0xb0, 3);
             l50.type = 0x46;
             l50.unk2c = 0x40;
             l50.x = (double)((int)x - facing * 0xa);
@@ -6417,7 +6417,7 @@ void CMio::UpdatePattern()
             CPlayer::StopMoving();
             unk14c = 0x78;
             m_gauge = m_gauge - 0xbb8;
-            CPlayer::Unk410b10(0xb0, 3);
+            CPlayer::FillBackground(0xb0, 3);
             l50.type = 0x46;
             l50.unk2c = 0x40;
             l50.x = (double)(int)x;
@@ -6438,7 +6438,7 @@ void CMio::UpdatePattern()
             break;
         }
         if (frame == 0xd && timer == 0) {
-            CPlayer::Unk410a10(3, 0);
+            CPlayer::ShakeScreen(3, 0);
             l50.type = 3;
             l50.x = (double)(int)x;
             l50.y = (double)(int)y;
@@ -6691,7 +6691,7 @@ void CMio::UpdatePattern()
         if (frame == 0 && timer == 0) {
             CPlayer::StopMoving();
             unk14c = 0x78;
-            CPlayer::Unk410b10(0xb0, 3);
+            CPlayer::FillBackground(0xb0, 3);
             l50.type = 0x46;
             l50.unk2c = 0x40;
             l50.x = (double)(int)x;
@@ -6740,7 +6740,7 @@ void CMio::UpdatePattern()
         if (frame == 0 && timer == 0) {
             CPlayer::StopMoving();
             unk14c = 0x78;
-            CPlayer::Unk410b10(0xb0, 3);
+            CPlayer::FillBackground(0xb0, 3);
             l50.type = 0x46;
             l50.unk2c = 0x40;
             l50.x = (double)((int)x - facing * 0xf);
@@ -6786,7 +6786,7 @@ void CMio::UpdatePattern()
             CPlayer::StopMoving();
             unk14c = 0x78;
             m_gauge = m_gauge - 0xbb8;
-            CPlayer::Unk410b10(0xb0, 3);
+            CPlayer::FillBackground(0xb0, 3);
             l50.type = 0x46;
             l50.unk2c = 0x40;
             l50.x = (double)(int)x;
@@ -6837,7 +6837,7 @@ void CMio::UpdatePattern()
             (*m_opponent)->timer = 0;
         }
         if (frame < 6) {
-            CPlayer::Unk410b10(0xb0, 3);
+            CPlayer::FillBackground(0xb0, 3);
         } else {
             unk3148 = 1.0;
         }

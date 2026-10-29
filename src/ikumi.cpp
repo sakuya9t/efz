@@ -192,19 +192,19 @@ void CIkumi::Move()
 void CIkumi::StartCommand()
 {
     if (pattern < 0xc8) {
-        unk1a8 = 0;
+        m_bufferedPress = 0;
     }
-    if (unk1aa <= 0) {
-        unk1a9 = 0;
+    if (m_dashBufferTime <= 0) {
+        m_dashBufferedPress = 0;
     } else {
-        unk1aa--;
+        m_dashBufferTime--;
     }
-    if (unk1a9 == 0) {
-        unk1aa = 0;
+    if (m_dashBufferedPress == 0) {
+        m_dashBufferTime = 0;
     }
     if (m_command == 0x34 && (unk118 >= 500.0 && m_attackResult > 1 || unk120 > 0 && m_attackResult > 1 && m_attackResult != 6) && (m_patterns[pattern].frames[frame].flagsB0 & 8) > 0 && m_patterns[pattern].unk2 <= m_patterns[0xa7].unk0) {
         StartPattern();
-        CPlayer::Unk40f170();
+        CPlayer::ClearBufferedPress();
         pattern = 0xa7;
         if (y < 0.0) {
             pattern = 0xab;
@@ -214,49 +214,49 @@ void CIkumi::StartCommand()
     if (unk15c < 2) {
         if (m_command == 0x5e && m_gauge >= 0xbb8 && m_hp < 0xd05 && (m_patterns[pattern].frames[frame].flagsB0 & 8) > 0 && y == 0.0 && m_attackResult != 6 && unk3150 == 0 && m_patterns[pattern].unk2 <= m_patterns[0x141].unk0) {
             StartPattern();
-            CPlayer::Unk40f170();
+            CPlayer::ClearBufferedPress();
             pattern = 0x141;
             return;
         }
         if (unk3150 == 0 && m_command == 0x70 && m_gauge >= 0x3e8 && y == 0.0 && (m_patterns[pattern].frames[frame].flagsB0 & 8) > 0 && (pattern >= 0xc8 && m_attackResult >= 2 && m_attackResult != 6 || pattern < 0xc8) && m_patterns[pattern].unk2 <= m_patterns[0x137].unk0) {
             StartPattern();
-            CPlayer::Unk40f170();
+            CPlayer::ClearBufferedPress();
             pattern = 0x137;
             return;
         }
         if (unk3150 == 0 && m_command == 0x6f && y == 0.0 && m_gauge >= 0x3e8 && (m_patterns[pattern].frames[frame].flagsB0 & 8) > 0 && (pattern >= 0xc8 && m_attackResult >= 2 && m_attackResult != 6 || pattern < 0xc8) && m_patterns[pattern].unk2 <= m_patterns[0x136].unk0) {
             StartPattern();
-            CPlayer::Unk40f170();
+            CPlayer::ClearBufferedPress();
             pattern = 0x136;
             return;
         }
         if (unk3150 == 0 && m_command == 0x6e && y == 0.0 && m_gauge >= 0x3e8 && (m_patterns[pattern].frames[frame].flagsB0 & 8) > 0 && (pattern >= 0xc8 && m_attackResult >= 2 && m_attackResult != 6 || pattern < 0xc8) && m_patterns[pattern].unk2 <= m_patterns[0x135].unk0) {
             StartPattern();
-            CPlayer::Unk40f170();
+            CPlayer::ClearBufferedPress();
             pattern = 0x135;
             return;
         }
         if (unk3150 > 0 && m_command == 0xac && m_gauge >= 0xbb8 && y == 0.0 && (m_patterns[pattern].frames[frame].flagsB0 & 8) > 0 && (pattern >= 0xc8 && m_attackResult >= 2 && m_attackResult != 6 || pattern < 0xc8) && m_patterns[pattern].unk2 <= m_patterns[0x140].unk0) {
             StartPattern();
-            CPlayer::Unk40f170();
+            CPlayer::ClearBufferedPress();
             pattern = 0x140;
             return;
         }
         if (unk3150 > 0 && (m_command == 0xab || m_command == 0xac) && m_gauge >= 0x7d0 && y == 0.0 && (m_patterns[pattern].frames[frame].flagsB0 & 8) > 0 && (pattern >= 0xc8 && m_attackResult >= 2 && m_attackResult != 6 || pattern < 0xc8) && m_patterns[pattern].unk2 <= m_patterns[0x13f].unk0) {
             StartPattern();
-            CPlayer::Unk40f170();
+            CPlayer::ClearBufferedPress();
             pattern = 0x13f;
             return;
         }
         if (unk3150 > 0 && (m_command == 0xaa || m_command == 0xab || m_command == 0xac) && m_gauge >= 0x3e8 && y == 0.0 && (m_patterns[pattern].frames[frame].flagsB0 & 8) > 0 && (pattern >= 0xc8 && m_attackResult >= 2 && m_attackResult != 6 || pattern < 0xc8) && m_patterns[pattern].unk2 <= m_patterns[0x13e].unk0) {
             StartPattern();
-            CPlayer::Unk40f170();
+            CPlayer::ClearBufferedPress();
             pattern = 0x13e;
             return;
         }
         if ((m_command == 0xaa || m_command == 0xab || m_command == 0xac) && unk315c > 0 && y == 0.0 && (m_patterns[pattern].frames[frame].flagsB0 & 8) > 0 && (pattern >= 0xc8 && m_attackResult >= 2 && m_attackResult != 6 || pattern < 0xc8) && m_patterns[pattern].unk2 <= m_patterns[0x13b].unk0) {
             StartPattern();
-            CPlayer::Unk40f170();
+            CPlayer::ClearBufferedPress();
             pattern = 0x13b;
             if (unk315c == 2) {
                 pattern = 0x13c;
@@ -268,49 +268,49 @@ void CIkumi::StartCommand()
         }
         if (m_command == 0xac && m_gauge >= 0xbb8 && y == 0.0 && (m_patterns[pattern].frames[frame].flagsB0 & 8) > 0 && (pattern >= 0xc8 && m_attackResult >= 2 && m_attackResult != 6 || pattern < 0xc8) && m_patterns[pattern].unk2 <= m_patterns[0x13a].unk0) {
             StartPattern();
-            CPlayer::Unk40f170();
+            CPlayer::ClearBufferedPress();
             pattern = 0x13a;
             return;
         }
         if ((m_command == 0xab || m_command == 0xac) && m_gauge >= 0x7d0 && y == 0.0 && (m_patterns[pattern].frames[frame].flagsB0 & 8) > 0 && (pattern >= 0xc8 && m_attackResult >= 2 && m_attackResult != 6 || pattern < 0xc8) && m_patterns[pattern].unk2 <= m_patterns[0x139].unk0) {
             StartPattern();
-            CPlayer::Unk40f170();
+            CPlayer::ClearBufferedPress();
             pattern = 0x139;
             return;
         }
         if ((m_command == 0xaa || m_command == 0xab || m_command == 0xac) && m_gauge >= 0x3e8 && y == 0.0 && (m_patterns[pattern].frames[frame].flagsB0 & 8) > 0 && (pattern >= 0xc8 && m_attackResult >= 2 && m_attackResult != 6 || pattern < 0xc8) && m_patterns[pattern].unk2 <= m_patterns[0x138].unk0) {
             StartPattern();
-            CPlayer::Unk40f170();
+            CPlayer::ClearBufferedPress();
             pattern = 0x138;
             return;
         }
         if (m_command == 0x98 && m_gauge >= 0xbb8 && y == 0.0 && (m_patterns[pattern].frames[frame].flagsB0 & 8) > 0 && (pattern >= 0xc8 && m_attackResult >= 2 && m_attackResult != 6 || pattern < 0xc8) && m_patterns[pattern].unk2 <= m_patterns[0x133].unk0) {
             StartPattern();
-            CPlayer::Unk40f170();
+            CPlayer::ClearBufferedPress();
             pattern = 0x133;
             return;
         }
         if ((m_command == 0x98 || m_command == 0x97) && m_gauge >= 0x7d0 && y == 0.0 && (m_patterns[pattern].frames[frame].flagsB0 & 8) > 0 && (pattern >= 0xc8 && m_attackResult >= 2 && m_attackResult != 6 || pattern < 0xc8) && m_patterns[pattern].unk2 <= m_patterns[0x131].unk0) {
             StartPattern();
-            CPlayer::Unk40f170();
+            CPlayer::ClearBufferedPress();
             pattern = 0x131;
             return;
         }
         if ((m_command == 0x96 || m_command == 0x97 || m_command == 0x98) && m_gauge >= 0x3e8 && y == 0.0 && (m_patterns[pattern].frames[frame].flagsB0 & 8) > 0 && (pattern >= 0xc8 && m_attackResult >= 2 && m_attackResult != 6 || pattern < 0xc8) && m_patterns[pattern].unk2 <= m_patterns[0x12f].unk0) {
             StartPattern();
-            CPlayer::Unk40f170();
+            CPlayer::ClearBufferedPress();
             pattern = 0x12f;
             return;
         }
         if (m_command == 0x48 && y == 0.0 && (m_patterns[pattern].frames[frame].flagsB0 & 8) > 0 && (pattern >= 0xc8 && m_attackResult >= 2 && m_attackResult != 6 || pattern < 0xc8) && m_patterns[pattern].unk2 <= m_patterns[0x107].unk0) {
             StartPattern();
-            CPlayer::Unk40f170();
+            CPlayer::ClearBufferedPress();
             pattern = 0x107;
             return;
         }
         if (m_command == 0x16 && (unk118 >= 500.0 || unk120 > 0) && (m_patterns[pattern].frames[frame].flagsB0 & 8) > 0 && y == 0.0 && (pattern >= 0xc8 && m_attackResult >= 2 && m_attackResult != 6 || pattern < 0xc8) && m_patterns[pattern].unk2 <= m_patterns[0x102].unk0) {
             StartPattern();
-            CPlayer::Unk40f170();
+            CPlayer::ClearBufferedPress();
             pattern = 0x102;
             if (unk314c > 5 || unk3150 > 0) {
                 pattern = 0x115;
@@ -330,7 +330,7 @@ void CIkumi::StartCommand()
         }
         if ((m_command == 0x15 || m_command == 0x16) && (m_patterns[pattern].frames[frame].flagsB0 & 8) > 0 && y == 0.0 && (pattern >= 0xc8 && m_attackResult >= 2 && m_attackResult != 6 || pattern < 0xc8) && m_patterns[pattern].unk2 <= m_patterns[0x101].unk0) {
             StartPattern();
-            CPlayer::Unk40f170();
+            CPlayer::ClearBufferedPress();
             pattern = 0x101;
             if (unk314c > 5 || unk3150 > 0) {
                 pattern = 0x114;
@@ -350,13 +350,13 @@ void CIkumi::StartCommand()
         }
         if (m_command == 0x14 && (m_patterns[pattern].frames[frame].flagsB0 & 8) > 0 && y == 0.0 && (pattern >= 0xc8 && m_attackResult >= 2 && m_attackResult != 6 || pattern < 0xc8) && m_patterns[pattern].unk2 <= m_patterns[0x100].unk0) {
             StartPattern();
-            CPlayer::Unk40f170();
+            CPlayer::ClearBufferedPress();
             pattern = 0x100;
             return;
         }
         if (m_command == 0x20 && y == 0.0 && (m_patterns[pattern].frames[frame].flagsB0 & 8) > 0 && (pattern >= 0xc8 && m_attackResult >= 2 && m_attackResult != 6 || pattern < 0xc8) && m_patterns[pattern].unk2 <= m_patterns[0xfc].unk0) {
             StartPattern();
-            CPlayer::Unk40f170();
+            CPlayer::ClearBufferedPress();
             pattern = 0xfc;
             if (unk314c > 5 || unk3150 > 0) {
                 pattern = 0x11c;
@@ -376,7 +376,7 @@ void CIkumi::StartCommand()
         }
         if (m_command == 0x1f && y == 0.0 && (m_patterns[pattern].frames[frame].flagsB0 & 8) > 0 && (pattern >= 0xc8 && m_attackResult >= 2 && m_attackResult != 6 || pattern < 0xc8) && m_patterns[pattern].unk2 <= m_patterns[0xfb].unk0) {
             StartPattern();
-            CPlayer::Unk40f170();
+            CPlayer::ClearBufferedPress();
             pattern = 0xfb;
             if (unk314c > 5 || unk3150 > 0) {
                 pattern = 0x11b;
@@ -396,7 +396,7 @@ void CIkumi::StartCommand()
         }
         if (m_command == 0x1e && y == 0.0 && (m_patterns[pattern].frames[frame].flagsB0 & 8) > 0 && (pattern >= 0xc8 && m_attackResult >= 2 && m_attackResult != 6 || pattern < 0xc8) && m_patterns[pattern].unk2 <= m_patterns[0xfa].unk0) {
             StartPattern();
-            CPlayer::Unk40f170();
+            CPlayer::ClearBufferedPress();
             pattern = 0xfa;
             if (unk314c > 5 || unk3150 > 0) {
                 pattern = 0x11a;
@@ -416,7 +416,7 @@ void CIkumi::StartCommand()
         }
         if (m_command == 0xc && y == 0.0 && (unk118 >= 500.0 || unk120 > 0) && (m_patterns[pattern].frames[frame].flagsB0 & 8) > 0 && (pattern >= 0xc8 && m_attackResult >= 2 && m_attackResult != 6 || pattern < 0xc8) && m_patterns[pattern].unk2 <= m_patterns[0xff].unk0) {
             StartPattern();
-            CPlayer::Unk40f170();
+            CPlayer::ClearBufferedPress();
             pattern = 0xff;
             if (unk314c > 5 || unk3150 > 0) {
                 pattern = 0x10e;
@@ -436,7 +436,7 @@ void CIkumi::StartCommand()
         }
         if ((m_command == 0xb || m_command == 0xc) && y == 0.0 && (m_patterns[pattern].frames[frame].flagsB0 & 8) > 0 && (pattern >= 0xc8 && m_attackResult >= 2 && m_attackResult != 6 || pattern < 0xc8) && m_patterns[pattern].unk2 <= m_patterns[0xfe].unk0) {
             StartPattern();
-            CPlayer::Unk40f170();
+            CPlayer::ClearBufferedPress();
             pattern = 0xfe;
             if (unk314c > 5 || unk3150 > 0) {
                 pattern = 0x10d;
@@ -456,7 +456,7 @@ void CIkumi::StartCommand()
         }
         if (m_command == 0xa && y == 0.0 && (m_patterns[pattern].frames[frame].flagsB0 & 8) > 0 && (pattern >= 0xc8 && m_attackResult >= 2 && m_attackResult != 6 || pattern < 0xc8) && m_patterns[pattern].unk2 <= m_patterns[0xfd].unk0) {
             StartPattern();
-            CPlayer::Unk40f170();
+            CPlayer::ClearBufferedPress();
             pattern = 0xfd;
             return;
         }
@@ -471,7 +471,7 @@ void CIkumi::StartCommand()
                 CPlayer::FaceOpponent();
                 unk159++;
                 unk15a++;
-                unk1a8 = 0;
+                m_bufferedPress = 0;
                 return;
             }
             if ((((*m_opponent)->x - x) * (1 - (m_command << 1)) > 0.0 || 0.0 == (*m_opponent)->x - x && facing == 1 - (m_command << 1)) && m_patterns[pattern].unk2 <= m_patterns[0xa6].unk0 && pattern != 0xaa && (m_patterns[pattern].frames[frame].flagsB0 & 8) > 0 && (pattern >= 0xc8 && m_attackResult >= 2 && m_attackResult != 6 || pattern < 0xc8)) {
@@ -482,7 +482,7 @@ void CIkumi::StartCommand()
                 CPlayer::FaceOpponent();
                 unk159++;
                 unk15a++;
-                unk1a8 = 0;
+                m_bufferedPress = 0;
                 return;
             }
         }
@@ -494,7 +494,7 @@ void CIkumi::StartCommand()
                 pattern = 0xa3;
                 CPlayer::FaceOpponent();
                 unk158++;
-                unk1a8 = 0;
+                m_bufferedPress = 0;
                 return;
             }
             if ((((*m_opponent)->x - x) * (1 - (m_command << 1)) > 0.0 || 0.0 == (*m_opponent)->x - x && facing == 1 - (m_command << 1)) && m_patterns[pattern].unk2 <= m_patterns[0xa4].unk0 && (pattern >= 0xc8 && m_attackResult >= 2 && m_attackResult != 6 || pattern < 0xc8)) {
@@ -503,14 +503,14 @@ void CIkumi::StartCommand()
                 }
                 pattern = 0xa4;
                 CPlayer::FaceOpponent();
-                unk1a8 = 0;
+                m_bufferedPress = 0;
                 return;
             }
         }
     }
     if (unk15c < 3 && m_command == 6 && (m_patterns[pattern].frames[frame].flagsB0 & 8) > 0 && y < 0.0 && unk15a < 1 && m_patterns[pattern].unk2 <= m_patterns[0xe].unk0 && (pattern >= 0xc8 && m_attackResult >= 2 && m_attackResult != 6 || pattern < 0xc8)) {
         StartPattern();
-        CPlayer::Unk40f170();
+        CPlayer::ClearBufferedPress();
         unk15a++;
         pattern = 0xe;
         if (m_inputX == facing) {
@@ -521,10 +521,10 @@ void CIkumi::StartCommand()
         }
         return;
     }
-    if (m_pressA == 1 || (unk1a8 & 0x10) != 0 || (unk1a9 & 0x10) != 0) {
+    if (m_pressA == 1 || (m_bufferedPress & 0x10) != 0 || (m_dashBufferedPress & 0x10) != 0) {
         if (pattern == 0xa3 && m_inputX != -facing) {
             StartPattern();
-            CPlayer::Unk40f170();
+            CPlayer::ClearBufferedPress();
             pattern = 0xe6;
             if (m_inputY == 1) {
                 pattern = 0xe9;
@@ -534,28 +534,28 @@ void CIkumi::StartCommand()
         if (y < 0.0) {
             if (m_patterns[pattern].unk2 <= m_patterns[0xcf].unk0 && (m_patterns[pattern].frames[frame].flagsB0 & 8) > 0 && (pattern >= 0xc8 && m_attackResult >= 2 && m_attackResult != 6 || pattern < 0xc8)) {
                 StartPattern();
-                CPlayer::Unk40f170();
+                CPlayer::ClearBufferedPress();
                 pattern = 0xcf;
             }
             return;
         }
-        if ((m_inputY == 1 || (unk1a8 & 4) != 0 || (unk1a9 & 4) != 0) && m_patterns[pattern].unk2 <= m_patterns[0xcc].unk0 && (m_patterns[pattern].frames[frame].flagsB0 & 8) > 0 && (pattern >= 0xc8 && m_attackResult >= 2 && m_attackResult != 6 || pattern < 0xc8)) {
+        if ((m_inputY == 1 || (m_bufferedPress & 4) != 0 || (m_dashBufferedPress & 4) != 0) && m_patterns[pattern].unk2 <= m_patterns[0xcc].unk0 && (m_patterns[pattern].frames[frame].flagsB0 & 8) > 0 && (pattern >= 0xc8 && m_attackResult >= 2 && m_attackResult != 6 || pattern < 0xc8)) {
             StartPattern();
-            CPlayer::Unk40f170();
+            CPlayer::ClearBufferedPress();
             pattern = 0xcc;
             return;
         }
-        if ((m_inputY == 0 || (unk1a8 & 4) == 0 || (unk1a9 & 4) == 0) && m_patterns[pattern].unk2 <= m_patterns[0xc8].unk0 && (m_patterns[pattern].frames[frame].flagsB0 & 8) > 0 && (pattern >= 0xc8 && m_attackResult >= 2 && m_attackResult != 6 || pattern < 0xc8)) {
+        if ((m_inputY == 0 || (m_bufferedPress & 4) == 0 || (m_dashBufferedPress & 4) == 0) && m_patterns[pattern].unk2 <= m_patterns[0xc8].unk0 && (m_patterns[pattern].frames[frame].flagsB0 & 8) > 0 && (pattern >= 0xc8 && m_attackResult >= 2 && m_attackResult != 6 || pattern < 0xc8)) {
             StartPattern();
-            CPlayer::Unk40f170();
+            CPlayer::ClearBufferedPress();
             pattern = 0xc8;
             return;
         }
     }
-    if (m_pressB == 1 || (unk1a8 & 0x20) != 0 || (unk1a9 & 0x20) != 0) {
+    if (m_pressB == 1 || (m_bufferedPress & 0x20) != 0 || (m_dashBufferedPress & 0x20) != 0) {
         if (pattern == 0xa3 && m_inputX != -facing) {
             StartPattern();
-            CPlayer::Unk40f170();
+            CPlayer::ClearBufferedPress();
             pattern = 0xe7;
             if (m_inputY == 1) {
                 pattern = 0xea;
@@ -565,36 +565,36 @@ void CIkumi::StartCommand()
         if (y < 0.0) {
             if (m_patterns[pattern].unk2 <= m_patterns[0xd0].unk0 && (m_patterns[pattern].frames[frame].flagsB0 & 8) > 0 && (pattern >= 0xc8 && m_attackResult >= 2 && m_attackResult != 6 || pattern < 0xc8)) {
                 StartPattern();
-                CPlayer::Unk40f170();
+                CPlayer::ClearBufferedPress();
                 pattern = 0xd0;
             }
             return;
         }
-        if ((m_inputY == 1 || (unk1a8 & 4) != 0 || (unk1a9 & 4) != 0) && m_patterns[pattern].unk2 <= m_patterns[0xcd].unk0 && (m_patterns[pattern].frames[frame].flagsB0 & 8) > 0 && (pattern >= 0xc8 && m_attackResult >= 2 && m_attackResult != 6 || pattern < 0xc8)) {
+        if ((m_inputY == 1 || (m_bufferedPress & 4) != 0 || (m_dashBufferedPress & 4) != 0) && m_patterns[pattern].unk2 <= m_patterns[0xcd].unk0 && (m_patterns[pattern].frames[frame].flagsB0 & 8) > 0 && (pattern >= 0xc8 && m_attackResult >= 2 && m_attackResult != 6 || pattern < 0xc8)) {
             StartPattern();
-            CPlayer::Unk40f170();
+            CPlayer::ClearBufferedPress();
             pattern = 0xcd;
             return;
         }
-        if (m_inputY == 0 || (unk1a8 & 4) == 0 || (unk1a9 & 4) == 0) {
+        if (m_inputY == 0 || (m_bufferedPress & 4) == 0 || (m_dashBufferedPress & 4) == 0) {
             if (m_patterns[pattern].unk2 <= m_patterns[0xc9].unk0 && (m_patterns[pattern].frames[frame].flagsB0 & 8) > 0 && x - (*m_opponent)->x > -70.0 && x - (*m_opponent)->x < 70.0 && (pattern >= 0xc8 && m_attackResult >= 2 && m_attackResult != 6 || pattern < 0xc8)) {
                 StartPattern();
-                CPlayer::Unk40f170();
+                CPlayer::ClearBufferedPress();
                 pattern = 0xc9;
                 return;
             }
             if (m_patterns[pattern].unk2 <= m_patterns[0xca].unk0 && (m_patterns[pattern].frames[frame].flagsB0 & 8) > 0 && (pattern >= 0xc8 && m_attackResult >= 2 && m_attackResult != 6 || pattern < 0xc8)) {
                 StartPattern();
-                CPlayer::Unk40f170();
+                CPlayer::ClearBufferedPress();
                 pattern = 0xca;
                 return;
             }
         }
     }
-    if (m_pressC == 1 || (unk1a8 & 0x40) != 0 || (unk1a9 & 0x40) != 0) {
+    if (m_pressC == 1 || (m_bufferedPress & 0x40) != 0 || (m_dashBufferedPress & 0x40) != 0) {
         if (pattern == 0xa3 && m_inputX != -facing) {
             StartPattern();
-            CPlayer::Unk40f170();
+            CPlayer::ClearBufferedPress();
             pattern = 0xe8;
             if (m_inputY == 1) {
                 pattern = 0xeb;
@@ -604,33 +604,33 @@ void CIkumi::StartCommand()
         if (y < 0.0) {
             if (m_inputX == facing && m_inputY == 0 && x - (*m_opponent)->x > -100.0 && x - (*m_opponent)->x < 100.0 && (*m_opponent)->y < 0.0 && m_patterns[pattern].unk2 <= m_patterns[0xf8].unk0 && ((*m_opponent)->pattern < 0x32 || (*m_opponent)->pattern > 0x9c) && (m_patterns[pattern].frames[frame].flagsB0 & 8) > 0 && (pattern >= 0xc8 && m_attackResult >= 2 && m_attackResult != 6 || pattern < 0xc8)) {
                 StartPattern();
-                CPlayer::Unk40f170();
+                CPlayer::ClearBufferedPress();
                 pattern = 0xf8;
                 return;
             }
             if (m_patterns[pattern].unk2 <= m_patterns[0xd1].unk0 && (m_patterns[pattern].frames[frame].flagsB0 & 8) > 0 && (pattern >= 0xc8 && m_attackResult >= 2 && m_attackResult != 6 || pattern < 0xc8)) {
                 StartPattern();
-                CPlayer::Unk40f170();
+                CPlayer::ClearBufferedPress();
                 pattern = 0xd1;
             }
             return;
         }
-        if ((m_inputY == 1 || (unk1a8 & 4) != 0 || (unk1a9 & 4) != 0) && m_patterns[pattern].unk2 <= m_patterns[0xce].unk0 && (m_patterns[pattern].frames[frame].flagsB0 & 8) > 0 && (pattern >= 0xc8 && m_attackResult >= 2 && m_attackResult != 6 || pattern < 0xc8)) {
+        if ((m_inputY == 1 || (m_bufferedPress & 4) != 0 || (m_dashBufferedPress & 4) != 0) && m_patterns[pattern].unk2 <= m_patterns[0xce].unk0 && (m_patterns[pattern].frames[frame].flagsB0 & 8) > 0 && (pattern >= 0xc8 && m_attackResult >= 2 && m_attackResult != 6 || pattern < 0xc8)) {
             StartPattern();
-            CPlayer::Unk40f170();
+            CPlayer::ClearBufferedPress();
             pattern = 0xce;
             return;
         }
-        if (m_inputY == 0 || (unk1a8 & 4) == 0 || (unk1a9 & 4) == 0) {
+        if (m_inputY == 0 || (m_bufferedPress & 4) == 0 || (m_dashBufferedPress & 4) == 0) {
             if (m_inputX != 0 && x - (*m_opponent)->x > -30.0 && x - (*m_opponent)->x < 30.0 && m_patterns[pattern].unk2 <= m_patterns[0xdc].unk0 && ((*m_opponent)->pattern < 0x32 || (*m_opponent)->pattern > 0x9c) && (m_patterns[pattern].frames[frame].flagsB0 & 8) > 0 && (pattern >= 0xc8 && m_attackResult >= 2 && m_attackResult != 6 || pattern < 0xc8)) {
                 StartPattern();
-                CPlayer::Unk40f170();
+                CPlayer::ClearBufferedPress();
                 pattern = 0xdc;
                 return;
             }
             if (m_patterns[pattern].unk2 <= m_patterns[0xcb].unk0 && (m_patterns[pattern].frames[frame].flagsB0 & 8) > 0 && (pattern >= 0xc8 && m_attackResult >= 2 && m_attackResult != 6 || pattern < 0xc8)) {
                 StartPattern();
-                CPlayer::Unk40f170();
+                CPlayer::ClearBufferedPress();
                 pattern = 0xcb;
             }
         }
@@ -848,57 +848,57 @@ void CIkumi::Vf8()
         unk3150--;
         unk138 = 2;
         unk13a = 2;
-        CPlayer::Unk4109d0(2);
+        CPlayer::StartAfterimages(2);
         if (unk3158 == 6) {
-            CPlayer::Unk410ac0(0xd5, 9);
+            CPlayer::Tint(0xd5, 9);
         }
         if (unk3158 == 0xc) {
-            CPlayer::Unk410ac0(0xd6, 9);
+            CPlayer::Tint(0xd6, 9);
         }
         if (unk3158 == 0x12) {
-            CPlayer::Unk410ac0(0xea, 9);
+            CPlayer::Tint(0xea, 9);
         }
         if (unk3158 == 0x18) {
-            CPlayer::Unk410ac0(0xe9, 9);
+            CPlayer::Tint(0xe9, 9);
         }
         if (unk3158 == 0x1e) {
-            CPlayer::Unk410ac0(0xe8, 9);
+            CPlayer::Tint(0xe8, 9);
         }
         if (unk3158 == 0x24) {
-            CPlayer::Unk410ac0(0xe7, 9);
+            CPlayer::Tint(0xe7, 9);
         }
         if (unk3158 == 0x2a) {
-            CPlayer::Unk410ac0(0xe6, 9);
+            CPlayer::Tint(0xe6, 9);
         }
         if (unk3158 == 0x30) {
-            CPlayer::Unk410ac0(0xe5, 9);
+            CPlayer::Tint(0xe5, 9);
         }
         if (unk3158 == 0x36) {
-            CPlayer::Unk410ac0(0xe4, 9);
+            CPlayer::Tint(0xe4, 9);
         }
         if (unk3158 == 0x3c) {
-            CPlayer::Unk410ac0(0xe5, 9);
+            CPlayer::Tint(0xe5, 9);
         }
         if (unk3158 == 0x42) {
-            CPlayer::Unk410ac0(0xe6, 9);
+            CPlayer::Tint(0xe6, 9);
         }
         if (unk3158 == 0x48) {
-            CPlayer::Unk410ac0(0xe7, 9);
+            CPlayer::Tint(0xe7, 9);
         }
         if (unk3158 == 0x4e) {
-            CPlayer::Unk410ac0(0xe8, 9);
+            CPlayer::Tint(0xe8, 9);
         }
         if (unk3158 == 0x54) {
-            CPlayer::Unk410ac0(0xe9, 9);
+            CPlayer::Tint(0xe9, 9);
         }
         if (unk3158 == 0x5a) {
-            CPlayer::Unk410ac0(0xea, 9);
+            CPlayer::Tint(0xea, 9);
         }
         if (unk3158 == 0x60) {
-            CPlayer::Unk410ac0(0xd6, 9);
+            CPlayer::Tint(0xd6, 9);
         }
         if (unk3158 == 0x66) {
-            CPlayer::Unk410ac0(0xd5, 9);
+            CPlayer::Tint(0xd5, 9);
         }
         if (unk3150 <= 0) {
             unk314c = 0;

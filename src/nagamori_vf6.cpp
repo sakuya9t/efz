@@ -1686,7 +1686,7 @@ void CNagamori::UpdatePattern()
         vx = 0.0;
         vy = 0.0;
         if (frame == 0 && timer == 0) {
-            CPlayer::Unk410a10(3, 0);
+            CPlayer::ShakeScreen(3, 0);
             l50.type = 3;
             l50.x = (double)(int)x;
             l50.y = (double)(int)y;
@@ -1709,7 +1709,7 @@ void CNagamori::UpdatePattern()
         vx = 0.0;
         vy = 0.0;
         if (frame == 0 && timer == 0) {
-            CPlayer::Unk410a10(3, 0);
+            CPlayer::ShakeScreen(3, 0);
             l50.type = 3;
             l50.x = (double)(int)x;
             l50.y = (double)(int)y;
@@ -2133,7 +2133,7 @@ void CNagamori::UpdatePattern()
         break;
     case 0xa3:
         if (frame == 0 && timer == 0) {
-            CPlayer::Unk4109d0(3);
+            CPlayer::StartAfterimages(3);
         }
         if (m_inputY == -1 && frame > 0) {
             pattern = 4;
@@ -2174,7 +2174,7 @@ void CNagamori::UpdatePattern()
         break;
     case 0xa4:
         unk158 = 0;
-        CPlayer::Unk4109d0(2);
+        CPlayer::StartAfterimages(2);
         if (frame == 0 && timer == 0) {
             vx = 0.0;
             vy = 0.0;
@@ -2210,7 +2210,7 @@ void CNagamori::UpdatePattern()
     case 0xa5:
         if (frame == 0 && timer == 0) {
             vx = 1.8;
-            CPlayer::Unk4109d0(3);
+            CPlayer::StartAfterimages(3);
             vy = 0.0;
             ay = 0.0;
             if (unk3138 == 0) {
@@ -2251,7 +2251,7 @@ void CNagamori::UpdatePattern()
             vx = -1.8;
             vy = 0.0;
             ay = 0.0;
-            CPlayer::Unk4109d0(3);
+            CPlayer::StartAfterimages(3);
             if (unk3138 == 0) {
                 m_playSound = 0x11;
             }
@@ -2295,7 +2295,7 @@ void CNagamori::UpdatePattern()
             }
             unk118 = 0.0;
             unk14c = 0x5a;
-            CPlayer::Unk410b10(0xb0, 3);
+            CPlayer::FillBackground(0xb0, 3);
         }
         if (frame == 1 && timer == 0) {
             m_playSound = 0x12;
@@ -2435,7 +2435,7 @@ void CNagamori::UpdatePattern()
             }
             unk118 = 0.0;
             unk14c = 0x5a;
-            CPlayer::Unk410b10(0xb0, 3);
+            CPlayer::FillBackground(0xb0, 3);
             m_playSound = 0x12;
             l50.type = 1;
             l50.x = (double)(int)x;
@@ -2500,7 +2500,7 @@ void CNagamori::UpdatePattern()
         break;
     case 0xb4:
         if (frame == 0 && timer == 0) {
-            CPlayer::Unk4109d0(2);
+            CPlayer::StartAfterimages(2);
             vx = 0.0;
             vy = 0.0;
             ay = 0.0;
@@ -3034,7 +3034,7 @@ void CNagamori::UpdatePattern()
         if (y + vy >= 0.0) {
             y = 0.0;
             vy = 0.0;
-            CPlayer::Unk410a10(3, 0);
+            CPlayer::ShakeScreen(3, 0);
             l50.type = 3;
             l50.x = (double)(int)x;
             l50.y = (double)(int)y;
@@ -3089,7 +3089,7 @@ void CNagamori::UpdatePattern()
             if (vy + y > 0.0) {
                 frame = 5;
                 timer = 0;
-                CPlayer::Unk410a10(3, 0);
+                CPlayer::ShakeScreen(3, 0);
                 l50.type = 3;
                 l50.x = (double)(int)x;
                 l50.y = (double)(int)y;
@@ -3244,7 +3244,7 @@ void CNagamori::UpdatePattern()
         }
         break;
     case 0xe6:
-        CPlayer::Unk4109d0(3);
+        CPlayer::StartAfterimages(3);
         vx -= 0.03;
         if (vx < 0.0) {
             vx = 0.0;
@@ -3273,7 +3273,7 @@ void CNagamori::UpdatePattern()
         }
         break;
     case 0xe7:
-        CPlayer::Unk4109d0(3);
+        CPlayer::StartAfterimages(3);
         unk158 = 0;
         vx -= 0.03;
         if (vx < 0.0) {
@@ -3315,7 +3315,7 @@ void CNagamori::UpdatePattern()
             break;
         }
         unk158 = 0;
-        CPlayer::Unk4109d0(3);
+        CPlayer::StartAfterimages(3);
         vx -= 0.03;
         if (vx < 0.0) {
             vx = 0.0;
@@ -3343,7 +3343,7 @@ void CNagamori::UpdatePattern()
         }
         break;
     case 0xe9:
-        CPlayer::Unk4109d0(3);
+        CPlayer::StartAfterimages(3);
         vx -= 0.03;
         if (vx < 0.0) {
             vx = 0.0;
@@ -3372,7 +3372,7 @@ void CNagamori::UpdatePattern()
         }
         break;
     case 0xea:
-        CPlayer::Unk4109d0(3);
+        CPlayer::StartAfterimages(3);
         unk158 = 0;
         if (frame == 0 && timer == 0) {
             ax = 0.0;
@@ -3409,7 +3409,7 @@ void CNagamori::UpdatePattern()
         }
         break;
     case 0xeb:
-        CPlayer::Unk4109d0(3);
+        CPlayer::StartAfterimages(3);
         unk158 = 0;
         if (frame == 0 && timer == 0) {
             ax = 0.0;
@@ -3429,7 +3429,7 @@ void CNagamori::UpdatePattern()
                 m_hitsLeft = 1;
                 frame = 5;
                 timer = 0;
-                CPlayer::Unk410a10(3, 0);
+                CPlayer::ShakeScreen(3, 0);
                 vx *= 0.3;
                 l50.type = 3;
                 l50.x = (double)(int)x;
@@ -4531,7 +4531,7 @@ void CNagamori::UpdatePattern()
         if (frame == 2 && timer == 0) {
             unk14c = 0x78;
             m_gauge = m_gauge - 0x3e8;
-            CPlayer::Unk410b10(0xb0, 3);
+            CPlayer::FillBackground(0xb0, 3);
             l50.type = 0x44;
             l50.unk2c = 0x13;
             l50.x = (double)(int)x;
@@ -4563,7 +4563,7 @@ void CNagamori::UpdatePattern()
             m_attackResult = 0;
         }
         if (frame == 0xc && timer == 0) {
-            CPlayer::Unk410a10(3, 0);
+            CPlayer::ShakeScreen(3, 0);
             l50.type = 3;
             l50.x = (double)(int)x;
             l50.y = (double)(int)y;
@@ -4602,7 +4602,7 @@ void CNagamori::UpdatePattern()
         if (frame == 2 && timer == 0) {
             unk14c = 0x78;
             m_gauge = m_gauge - 0x7d0;
-            CPlayer::Unk410b10(0xb0, 3);
+            CPlayer::FillBackground(0xb0, 3);
             l50.type = 0x45;
             l50.unk2c = 5;
             l50.x = (double)(int)x;
@@ -4634,7 +4634,7 @@ void CNagamori::UpdatePattern()
             m_attackResult = 0;
         }
         if (frame == 0x14 && timer == 0) {
-            CPlayer::Unk410a10(3, 0);
+            CPlayer::ShakeScreen(3, 0);
             l50.type = 3;
             l50.x = (double)(int)x;
             l50.y = (double)(int)y;
@@ -4673,7 +4673,7 @@ void CNagamori::UpdatePattern()
         if (frame == 2 && timer == 0) {
             unk14c = 0x78;
             m_gauge = m_gauge - 0xbb8;
-            CPlayer::Unk410b10(0xb0, 3);
+            CPlayer::FillBackground(0xb0, 3);
             l50.type = 0x46;
             l50.unk2c = 0x40;
             l50.x = (double)(int)x;
@@ -4709,7 +4709,7 @@ void CNagamori::UpdatePattern()
             m_attackResult = 0;
         }
         if (frame == 0x14 && timer == 0) {
-            CPlayer::Unk410a10(3, 0);
+            CPlayer::ShakeScreen(3, 0);
             l50.type = 3;
             l50.x = (double)(int)x;
             l50.y = (double)(int)y;
@@ -4788,7 +4788,7 @@ void CNagamori::UpdatePattern()
             l50.scale = 2;
             l50.layer = 1;
             l50.unk2c = 0x16;
-            CPlayer::Unk410a10(0xa, 0xa);
+            CPlayer::ShakeScreen(0xa, 0xa);
             m_game->CreateEffect((EffectDesc*)&l50);
             (*m_opponent)->unk140 = 0;
             CPlayer::DealDamage(0x7d0, 800.0);
@@ -4911,7 +4911,7 @@ void CNagamori::UpdatePattern()
             l50.scale = 2;
             l50.layer = 1;
             l50.unk2c = 0x16;
-            CPlayer::Unk410a10(0xa, 0xa);
+            CPlayer::ShakeScreen(0xa, 0xa);
             m_game->CreateEffect((EffectDesc*)&l50);
             CPlayer::DealDamage(0x7d0, 800.0);
             (*m_opponent)->unk140 = 0;
@@ -5054,7 +5054,7 @@ void CNagamori::UpdatePattern()
             l50.scale = 2;
             l50.layer = 1;
             l50.unk2c = 0x16;
-            CPlayer::Unk410a10(0xa, 0xa);
+            CPlayer::ShakeScreen(0xa, 0xa);
             m_game->CreateEffect((EffectDesc*)&l50);
             CPlayer::DealDamage(0x9c4, 800.0);
             (*m_opponent)->unk140 = 0;
@@ -5137,7 +5137,7 @@ void CNagamori::UpdatePattern()
         if (frame == 2 && timer == 0) {
             unk14c = 0x78;
             m_gauge = m_gauge - 0x3e8;
-            CPlayer::Unk410b10(0xb0, 3);
+            CPlayer::FillBackground(0xb0, 3);
             l50.type = 0x44;
             l50.unk2c = 0x13;
             l50.x = (double)(int)x;
@@ -5181,7 +5181,7 @@ void CNagamori::UpdatePattern()
         if (frame == 2 && timer == 0) {
             unk14c = 0x78;
             m_gauge = m_gauge - 0x3e8;
-            CPlayer::Unk410b10(0xb0, 3);
+            CPlayer::FillBackground(0xb0, 3);
             l50.type = 0x44;
             l50.unk2c = 0x13;
             l50.x = (double)(int)x;
@@ -5224,7 +5224,7 @@ void CNagamori::UpdatePattern()
         if (frame == 3 && timer == 0) {
             unk14c = 0x78;
             m_gauge = m_gauge - 0x3e8;
-            CPlayer::Unk410b10(0xb0, 3);
+            CPlayer::FillBackground(0xb0, 3);
             l50.type = 0x44;
             l50.unk2c = 0x13;
             l50.x = (double)((int)x - (facing << 5));
@@ -5264,7 +5264,7 @@ void CNagamori::UpdatePattern()
             CPlayer::StopMoving();
             unk14c = 0x78;
             m_gauge = m_gauge - 0x3e8;
-            CPlayer::Unk410b10(0xb0, 3);
+            CPlayer::FillBackground(0xb0, 3);
             l50.type = 0x44;
             l50.unk2c = 0x13;
             l50.x = (double)((int)x + facing * 0x17);
@@ -5321,7 +5321,7 @@ void CNagamori::UpdatePattern()
             CPlayer::StopMoving();
             unk14c = 0x78;
             m_gauge = m_gauge - 0x3e8;
-            CPlayer::Unk410b10(0xb0, 3);
+            CPlayer::FillBackground(0xb0, 3);
             l50.type = 0x44;
             l50.unk2c = 0x13;
             l50.x = (double)((int)x + facing * 0x17);
@@ -5378,7 +5378,7 @@ void CNagamori::UpdatePattern()
             CPlayer::StopMoving();
             unk14c = 0x78;
             m_gauge = m_gauge - 0x3e8;
-            CPlayer::Unk410b10(0xb0, 3);
+            CPlayer::FillBackground(0xb0, 3);
             l50.type = 9;
             l50.unk2c = 5;
             l50.x = (double)((int)x + facing * 0x17);
@@ -5441,7 +5441,7 @@ void CNagamori::UpdatePattern()
         if (frame == 6 && timer == 0) {
             unk14c = 0xa0;
             m_gauge = m_gauge - 0xbb8;
-            CPlayer::Unk410b10(0xb0, 3);
+            CPlayer::FillBackground(0xb0, 3);
             l50.type = 0x46;
             l50.unk2c = 0x40;
             l50.x = (double)(int)x;
@@ -5462,7 +5462,7 @@ void CNagamori::UpdatePattern()
         if (frame == 8 && timer == 0) {
             if (unk3140 == 0) {
                 unk14c = 0x4b0;
-                CPlayer::Unk410b10(0xb1, 3);
+                CPlayer::FillBackground(0xb1, 3);
                 l50.unk0 = 1;
                 l50.type = 0x1a1;
                 l50.x = (double)((int)x + facing * 0x1e);
@@ -5502,7 +5502,7 @@ void CNagamori::UpdatePattern()
             }
             if (frame >= x8) {
                 unk3150 = 0x4b0;
-                CPlayer::Unk410b10(0xb1, 3);
+                CPlayer::FillBackground(0xb1, 3);
                 pattern = 0;
                 CPlayer::FaceOpponent();
                 StartPattern();
@@ -5517,7 +5517,7 @@ void CNagamori::UpdatePattern()
         if (frame == 5 && timer == 0) {
             unk14c = 0x78;
             m_gauge = m_gauge - 0x3e8;
-            CPlayer::Unk410b10(0xb0, 3);
+            CPlayer::FillBackground(0xb0, 3);
             l50.type = 0x44;
             l50.unk2c = 0x13;
             l50.x = (double)(int)x;
@@ -5528,7 +5528,7 @@ void CNagamori::UpdatePattern()
             m_game->CreateEffect((EffectDesc*)&l50);
         }
         if (frame == 6 && timer == 0) {
-            CPlayer::Unk410a10(0xa, 5);
+            CPlayer::ShakeScreen(0xa, 5);
             l50.type = 0x1c2;
             l50.x = (double)(int)x;
             l50.y = (double)((int)y - 0x37);
@@ -5564,7 +5564,7 @@ void CNagamori::UpdatePattern()
         if (frame == 5 && timer == 0) {
             unk14c = 0x78;
             m_gauge = m_gauge - 0x7d0;
-            CPlayer::Unk410b10(0xb0, 3);
+            CPlayer::FillBackground(0xb0, 3);
             l50.type = 0x45;
             l50.unk2c = 5;
             l50.x = (double)(int)x;
@@ -5575,7 +5575,7 @@ void CNagamori::UpdatePattern()
             m_game->CreateEffect((EffectDesc*)&l50);
         }
         if (frame == 6 && timer == 0) {
-            CPlayer::Unk410a10(0xa, 5);
+            CPlayer::ShakeScreen(0xa, 5);
             l50.type = 0x1c3;
             l50.x = (double)(int)x;
             l50.y = (double)((int)y - 0x37);
@@ -5611,7 +5611,7 @@ void CNagamori::UpdatePattern()
         if (frame == 5 && timer == 0) {
             unk14c = 0x78;
             m_gauge = m_gauge - 0xbb8;
-            CPlayer::Unk410b10(0xb0, 3);
+            CPlayer::FillBackground(0xb0, 3);
             l50.type = 0x46;
             l50.unk2c = 0x40;
             l50.x = (double)(int)x;
@@ -5622,7 +5622,7 @@ void CNagamori::UpdatePattern()
             m_game->CreateEffect((EffectDesc*)&l50);
         }
         if (frame == 6 && timer == 0) {
-            CPlayer::Unk410a10(0xa, 5);
+            CPlayer::ShakeScreen(0xa, 5);
             l50.type = 0x1c4;
             l50.x = (double)(int)x;
             l50.y = (double)((int)y - 0x37);

@@ -66,29 +66,29 @@ void CScene3::Unk75dd50()
     }
     v30 = MakeRect(vc, x8, 0x140, 0xf0);
     x1c = MakeRect(l4, v20, 0x140, 0xf0);
-    if (m_players[0]->unk30c4 > 0 && m_players[1]->unk30c4 > 0) {
-        if ((char)m_game->unkf33 == 0) {
-            m_graphics->FillRect(x1c, m_players[0]->unk30c0);
+    if (m_players[0]->m_fillTime > 0 && m_players[1]->m_fillTime > 0) {
+        if ((char)m_game->m_fillSide == 0) {
+            m_graphics->FillRect(x1c, m_players[0]->m_fillColor);
         } else {
-            m_graphics->FillRect(x1c, m_players[1]->unk30c0);
+            m_graphics->FillRect(x1c, m_players[1]->m_fillColor);
         }
         if (m_players[0]->unk14c == 0 && m_players[1]->unk14c == 0) {
-            m_players[0]->unk30c4--;
-            m_players[1]->unk30c4--;
-        }
-        return;
-    }
-    if (m_players[0]->unk30c4 > 0) {
-        m_graphics->FillRect(x1c, m_players[0]->unk30c0);
-        if (m_players[0]->unk14c == 0 && m_players[1]->unk14c == 0) {
-            m_players[0]->unk30c4--;
+            m_players[0]->m_fillTime--;
+            m_players[1]->m_fillTime--;
         }
         return;
     }
-    if (m_players[1]->unk30c4 > 0) {
-        m_graphics->FillRect(x1c, m_players[1]->unk30c0);
+    if (m_players[0]->m_fillTime > 0) {
+        m_graphics->FillRect(x1c, m_players[0]->m_fillColor);
         if (m_players[0]->unk14c == 0 && m_players[1]->unk14c == 0) {
-            m_players[1]->unk30c4--;
+            m_players[0]->m_fillTime--;
+        }
+        return;
+    }
+    if (m_players[1]->m_fillTime > 0) {
+        m_graphics->FillRect(x1c, m_players[1]->m_fillColor);
+        if (m_players[0]->unk14c == 0 && m_players[1]->unk14c == 0) {
+            m_players[1]->m_fillTime--;
         }
         return;
     }

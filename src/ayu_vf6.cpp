@@ -1700,7 +1700,7 @@ void CAyu::UpdatePattern()
         vx = 0.0;
         vy = 0.0;
         if (frame == 0 && timer == 0) {
-            CPlayer::Unk410a10(3, 0);
+            CPlayer::ShakeScreen(3, 0);
             l50.type = 3;
             l50.x = (double)(int)x;
             l50.y = (double)(int)y;
@@ -1723,7 +1723,7 @@ void CAyu::UpdatePattern()
         vx = 0.0;
         vy = 0.0;
         if (frame == 0 && timer == 0) {
-            CPlayer::Unk410a10(3, 0);
+            CPlayer::ShakeScreen(3, 0);
             l50.type = 3;
             l50.x = (double)(int)x;
             l50.y = (double)(int)y;
@@ -2146,7 +2146,7 @@ void CAyu::UpdatePattern()
         break;
     case 0xa3:
         if (frame == 0 && timer == 0) {
-            CPlayer::Unk4109d0(2);
+            CPlayer::StartAfterimages(2);
         }
         if (frame == 0 && timer == 0) {
             vx = 0.0;
@@ -2221,7 +2221,7 @@ void CAyu::UpdatePattern()
             vx = 0.0;
             vy = 0.0;
             ay = 0.0;
-            CPlayer::Unk4109d0(2);
+            CPlayer::StartAfterimages(2);
         }
         if (frame > 0 && timer == 0) {
             if (rand() > 0x2710) {
@@ -2418,7 +2418,7 @@ void CAyu::UpdatePattern()
             }
             unk118 = 0.0;
             unk14c = 0x5a;
-            CPlayer::Unk410b10(0xb0, 3);
+            CPlayer::FillBackground(0xb0, 3);
         }
         if (frame == 1 && timer == 0) {
             m_playSound = 0x12;
@@ -2555,7 +2555,7 @@ void CAyu::UpdatePattern()
             }
             unk118 = 0.0;
             unk14c = 0x5a;
-            CPlayer::Unk410b10(0xb0, 3);
+            CPlayer::FillBackground(0xb0, 3);
         }
         if (frame == 0 && timer == 0) {
             m_playSound = 0x12;
@@ -2587,7 +2587,7 @@ void CAyu::UpdatePattern()
         break;
     case 0xb4:
         if (frame == 0 && timer == 0) {
-            CPlayer::Unk4109d0(2);
+            CPlayer::StartAfterimages(2);
             vx = 0.0;
             vy = 0.0;
             ay = 0.0;
@@ -3089,7 +3089,7 @@ void CAyu::UpdatePattern()
             y = 0.0;
             CPlayer::StopMoving();
             vy = 0.0;
-            CPlayer::Unk410a10(3, 0);
+            CPlayer::ShakeScreen(3, 0);
             l50.type = 3;
             l50.x = (double)(int)x;
             l50.y = (double)(int)y;
@@ -3134,7 +3134,7 @@ void CAyu::UpdatePattern()
         vx = 0.0;
         vy = 0.0;
         if (frame == 0 && timer == 0) {
-            CPlayer::Unk410a10(3, 0);
+            CPlayer::ShakeScreen(3, 0);
             l50.type = 3;
             l50.x = (double)(int)x;
             l50.y = (double)(int)y;
@@ -3398,7 +3398,7 @@ void CAyu::UpdatePattern()
             y = 0.0;
             frame = 5;
             timer = 0;
-            CPlayer::Unk410a10(4, 0);
+            CPlayer::ShakeScreen(4, 0);
             (*m_opponent)->x = x;
             (*m_opponent)->y = 0.0;
             (*m_opponent)->pattern = 0x62;
@@ -3783,7 +3783,7 @@ void CAyu::UpdatePattern()
             timer = 0;
             vy = 0.0;
             ay = 0.0;
-            CPlayer::Unk410a10(3, 0);
+            CPlayer::ShakeScreen(3, 0);
             l50.type = 3;
             l50.x = (double)(int)x;
             l50.y = (double)(int)y;
@@ -3852,7 +3852,7 @@ void CAyu::UpdatePattern()
             timer = 0;
             vy = 0.0;
             ay = 0.0;
-            CPlayer::Unk410a10(3, 0);
+            CPlayer::ShakeScreen(3, 0);
             l50.type = 3;
             l50.x = (double)(int)x;
             l50.y = (double)(int)y;
@@ -3941,7 +3941,7 @@ void CAyu::UpdatePattern()
             timer = 0;
             vy = 0.0;
             ay = 0.0;
-            CPlayer::Unk410a10(3, 0);
+            CPlayer::ShakeScreen(3, 0);
             l50.type = 3;
             l50.x = (double)(int)x;
             l50.y = (double)(int)y;
@@ -4105,7 +4105,7 @@ void CAyu::UpdatePattern()
             l50.scale = 2;
             l50.layer = 1;
             m_game->CreateEffect((EffectDesc*)&l50);
-            CPlayer::Unk4109d0(3);
+            CPlayer::StartAfterimages(3);
             vx = 0.0;
             if (unk120 == 0) {
                 unk118 -= 500.0;
@@ -4151,7 +4151,7 @@ void CAyu::UpdatePattern()
         break;
     case 0x107:
         if (frame == 3 && timer == 0) {
-            CPlayer::Unk410a10(3, 0);
+            CPlayer::ShakeScreen(3, 0);
             l50.type = 3;
             l50.x = (double)(int)x;
             l50.y = (double)(int)y;
@@ -4254,7 +4254,7 @@ void CAyu::UpdatePattern()
         if (frame == 1 && timer == 0) {
             unk14c = 0x78;
             m_gauge = m_gauge - 0x3e8;
-            CPlayer::Unk410b10(0xb0, 3);
+            CPlayer::FillBackground(0xb0, 3);
             l50.type = 0x44;
             l50.unk2c = 0x13;
             l50.x = (double)(int)x;
@@ -4297,7 +4297,7 @@ void CAyu::UpdatePattern()
         if (frame == 1 && timer == 0) {
             unk14c = 0x78;
             m_gauge = m_gauge - 0x7d0;
-            CPlayer::Unk410b10(0xb0, 3);
+            CPlayer::FillBackground(0xb0, 3);
             l50.type = 0x45;
             l50.unk2c = 5;
             l50.x = (double)(int)x;
@@ -4340,7 +4340,7 @@ void CAyu::UpdatePattern()
         if (frame == 1 && timer == 0) {
             unk14c = 0x78;
             m_gauge = m_gauge - 0xbb8;
-            CPlayer::Unk410b10(0xb0, 3);
+            CPlayer::FillBackground(0xb0, 3);
             l50.type = 0x46;
             l50.unk2c = 0x40;
             l50.x = (double)(int)x;
@@ -4410,7 +4410,7 @@ void CAyu::UpdatePattern()
         if (frame == 1 && timer == 0) {
             unk14c = 0x78;
             m_gauge = m_gauge - 0x3e8;
-            CPlayer::Unk410b10(0xb0, 3);
+            CPlayer::FillBackground(0xb0, 3);
             l50.type = 0x44;
             l50.unk2c = 0x13;
             l50.x = (double)(int)x;
@@ -4462,7 +4462,7 @@ void CAyu::UpdatePattern()
         if (frame == 1 && timer == 0) {
             unk14c = 0x78;
             m_gauge = m_gauge - 0x7d0;
-            CPlayer::Unk410b10(0xb0, 3);
+            CPlayer::FillBackground(0xb0, 3);
             l50.type = 0x45;
             l50.unk2c = 5;
             l50.x = (double)(int)x;
@@ -4514,7 +4514,7 @@ void CAyu::UpdatePattern()
         if (frame == 1 && timer == 0) {
             unk14c = 0x78;
             m_gauge = m_gauge - 0xbb8;
-            CPlayer::Unk410b10(0xb0, 3);
+            CPlayer::FillBackground(0xb0, 3);
             l50.type = 0x46;
             l50.unk2c = 5;
             l50.x = (double)(int)x;
@@ -4597,7 +4597,7 @@ void CAyu::UpdatePattern()
         if (frame == 0 && timer == 0) {
             unk14c = 0x78;
             m_gauge = m_gauge - 0x3e8;
-            CPlayer::Unk410b10(0xb0, 3);
+            CPlayer::FillBackground(0xb0, 3);
             l50.type = 0x44;
             l50.unk2c = 0x13;
             l50.x = (double)(int)x;
@@ -4612,7 +4612,7 @@ void CAyu::UpdatePattern()
             CPlayer::Unk410a80(0x32, 3);
         }
         if (frame == 8 && timer == 0) {
-            CPlayer::Unk410a10(3, 0x14);
+            CPlayer::ShakeScreen(3, 0x14);
             l50.type = 0x1a5;
             l50.x = facing * 0x28 + x - 30.0;
             l50.y = y;
@@ -4647,7 +4647,7 @@ void CAyu::UpdatePattern()
             unk3138 = 8;
             unk14c = 0x78;
             m_gauge = m_gauge - 0xbb8;
-            CPlayer::Unk410b10(0xb0, 3);
+            CPlayer::FillBackground(0xb0, 3);
             l50.type = 0x46;
             l50.unk2c = 0x40;
             l50.x = (double)(int)x;
@@ -4667,7 +4667,7 @@ void CAyu::UpdatePattern()
         }
         if (frame == 8 && timer == 0) {
             m_hitsLeft = 1;
-            CPlayer::Unk410a10(3, 0xa);
+            CPlayer::ShakeScreen(3, 0xa);
             l50.type = 0x1a5;
             l50.x = facing * 0xa + x;
             l50.y = y;
@@ -4682,7 +4682,7 @@ void CAyu::UpdatePattern()
         }
         if (frame == 0x18 && timer == 0) {
             m_hitsLeft = 1;
-            CPlayer::Unk410a10(5, 0x14);
+            CPlayer::ShakeScreen(5, 0x14);
             l50.type = 0x196;
             l50.x = facing * 0xa + x;
             l50.y = y;
@@ -4697,7 +4697,7 @@ void CAyu::UpdatePattern()
         }
         if (frame == 0x28 && timer == 0) {
             m_hitsLeft = 0x63;
-            CPlayer::Unk410a10(6, 0x3c);
+            CPlayer::ShakeScreen(6, 0x3c);
             l50.type = 0x197;
             l50.x = facing * 0xa + x;
             l50.y = y;
@@ -4736,7 +4736,7 @@ void CAyu::UpdatePattern()
             unk3138 = 8;
             unk14c = 0x78;
             m_gauge = m_gauge - 0x7d0;
-            CPlayer::Unk410b10(0xb0, 3);
+            CPlayer::FillBackground(0xb0, 3);
             l50.type = 0x45;
             l50.unk2c = 5;
             l50.x = (double)(int)x;
@@ -4751,7 +4751,7 @@ void CAyu::UpdatePattern()
             CPlayer::Unk410a80(0x32, 3);
         }
         if (frame == 8 && timer == 0) {
-            CPlayer::Unk410a10(6, 0x3c);
+            CPlayer::ShakeScreen(6, 0x3c);
             l50.type = 0x196;
             l50.x = facing * 0xa + x;
             l50.y = y;
@@ -4791,7 +4791,7 @@ void CAyu::UpdatePattern()
             vx = 0.0;
         }
         if (frame == 0 && timer == 0) {
-            CPlayer::Unk4109d0(5);
+            CPlayer::StartAfterimages(5);
             vx = 0.0;
             vy = 0.0;
             ax = 0.0;
@@ -4799,7 +4799,7 @@ void CAyu::UpdatePattern()
         if (frame == 2 && timer == 0 && unk3138 == 0) {
             unk14c = 0x78;
             m_gauge = m_gauge - 0x3e8;
-            CPlayer::Unk410b10(0xb0, 3);
+            CPlayer::FillBackground(0xb0, 3);
             l50.type = 0x44;
             l50.unk2c = 0x13;
             l50.x = (double)(int)x;
@@ -4848,7 +4848,7 @@ void CAyu::UpdatePattern()
             vx = 0.0;
         }
         if (frame == 0 && timer == 0) {
-            CPlayer::Unk4109d0(5);
+            CPlayer::StartAfterimages(5);
             vx = 0.0;
             vy = 0.0;
             ax = 0.0;
@@ -4856,7 +4856,7 @@ void CAyu::UpdatePattern()
         if (frame == 2 && timer == 0 && unk3138 == 0) {
             unk14c = 0x78;
             m_gauge = m_gauge - 0x7d0;
-            CPlayer::Unk410b10(0xb0, 3);
+            CPlayer::FillBackground(0xb0, 3);
             l50.type = 0x45;
             l50.unk2c = 5;
             l50.x = (double)(int)x;
@@ -4905,7 +4905,7 @@ void CAyu::UpdatePattern()
             vx = 0.0;
         }
         if (frame == 0 && timer == 0) {
-            CPlayer::Unk4109d0(5);
+            CPlayer::StartAfterimages(5);
             vx = 0.0;
             vy = 0.0;
             ax = 0.0;
@@ -4913,7 +4913,7 @@ void CAyu::UpdatePattern()
         if (frame == 1 && timer == 0 && unk3138 == 0) {
             unk14c = 0x78;
             m_gauge = m_gauge - 0xbb8;
-            CPlayer::Unk410b10(0xb0, 3);
+            CPlayer::FillBackground(0xb0, 3);
             l50.type = 0x46;
             l50.unk2c = 0x40;
             l50.x = (double)(int)x;
@@ -4972,7 +4972,7 @@ void CAyu::UpdatePattern()
         if (frame == 2 && timer == 6) {
             unk14c = 0x78;
             m_gauge = m_gauge - 0xfa0;
-            CPlayer::Unk410b10(0xb0, 3);
+            CPlayer::FillBackground(0xb0, 3);
             l50.type = 0x46;
             l50.unk2c = 0x40;
             l50.x = (double)((int)x + facing * 0x1d);

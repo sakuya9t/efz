@@ -518,7 +518,7 @@ void CScene5::Unk774b00()
         m_players[0]->pattern = 0x2f;
         m_players[0]->StartPattern();
         m_players[0]->StopMoving();
-        m_players[0]->unk30bc = 0;
+        m_players[0]->m_tintTime = 0;
         m_players[0]->m_afterimages.unk0 = 0;
         m_players[0]->m_afterimages.unk2 = 0;
         m_players[0]->unk58 = 0;
@@ -532,7 +532,7 @@ void CScene5::Unk774b00()
     m_players[1]->pattern = 0x2f;
     m_players[1]->StartPattern();
     m_players[1]->StopMoving();
-    m_players[1]->unk30bc = 0;
+    m_players[1]->m_tintTime = 0;
     m_players[1]->m_afterimages.unk0 = 0;
     m_players[1]->m_afterimages.unk2 = 0;
     m_players[1]->unk58 = 0;

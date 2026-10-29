@@ -1681,7 +1681,7 @@ void CAkane::UpdatePattern()
         vx = 0.0;
         vy = 0.0;
         if (frame == 0 && timer == 0) {
-            CPlayer::Unk410a10(3, 0);
+            CPlayer::ShakeScreen(3, 0);
             l50.type = 3;
             l50.x = (double)(int)x;
             l50.y = (double)(int)y;
@@ -1704,7 +1704,7 @@ void CAkane::UpdatePattern()
         vx = 0.0;
         vy = 0.0;
         if (frame == 0 && timer == 0) {
-            CPlayer::Unk410a10(3, 0);
+            CPlayer::ShakeScreen(3, 0);
             l50.type = 3;
             l50.x = (double)(int)x;
             l50.y = (double)(int)y;
@@ -2166,7 +2166,7 @@ void CAkane::UpdatePattern()
         }
         break;
     case 0xa4:
-        CPlayer::Unk4109d0(2);
+        CPlayer::StartAfterimages(2);
         unk158 = 0;
         if (frame == 0 && timer == 0) {
             vx = 0.0;
@@ -2204,7 +2204,7 @@ void CAkane::UpdatePattern()
     case 0xa5:
         if (frame == 0 && timer == 0 && unk3138 == 0) {
             vx = 2.0;
-            CPlayer::Unk4109d0(3);
+            CPlayer::StartAfterimages(3);
             vy = 0.0;
             ay = 0.0;
             m_playSound = 0x11;
@@ -2242,7 +2242,7 @@ void CAkane::UpdatePattern()
             vx = -2.0;
             vy = 0.0;
             ay = 0.0;
-            CPlayer::Unk4109d0(3);
+            CPlayer::StartAfterimages(3);
             m_playSound = 0x11;
         }
         timer++;
@@ -2284,7 +2284,7 @@ void CAkane::UpdatePattern()
             }
             unk118 = 0.0;
             unk14c = 0x5a;
-            CPlayer::Unk410b10(0xb0, 3);
+            CPlayer::FillBackground(0xb0, 3);
         }
         if (frame == 1 && timer == 0) {
             m_playSound = 0x12;
@@ -2423,7 +2423,7 @@ void CAkane::UpdatePattern()
             }
             unk118 = 0.0;
             unk14c = 0x5a;
-            CPlayer::Unk410b10(0xb0, 3);
+            CPlayer::FillBackground(0xb0, 3);
         }
         if (frame == 1 && timer == 0) {
             m_playSound = 0x12;
@@ -2487,7 +2487,7 @@ void CAkane::UpdatePattern()
         break;
     case 0xb4:
         if (frame == 0 && timer == 0) {
-            CPlayer::Unk4109d0(2);
+            CPlayer::StartAfterimages(2);
             vx = 0.0;
             vy = 0.0;
             ay = 0.0;
@@ -3035,7 +3035,7 @@ void CAkane::UpdatePattern()
         vx = 0.0;
         vy = 0.0;
         if (frame == 0 && timer == 0) {
-            CPlayer::Unk410a10(3, 0);
+            CPlayer::ShakeScreen(3, 0);
             l50.type = 3;
             l50.x = (double)(int)x;
             l50.y = (double)(int)y;
@@ -3125,7 +3125,7 @@ void CAkane::UpdatePattern()
         }
         break;
     case 0xe6:
-        CPlayer::Unk4109d0(3);
+        CPlayer::StartAfterimages(3);
         vx -= 0.06;
         unk158 = 0;
         if (vx < 0.0) {
@@ -3153,7 +3153,7 @@ void CAkane::UpdatePattern()
         }
         break;
     case 0xe7:
-        CPlayer::Unk4109d0(3);
+        CPlayer::StartAfterimages(3);
         unk158 = 0;
         if (vx > 0.0) {
             vx -= 0.03;
@@ -3194,7 +3194,7 @@ void CAkane::UpdatePattern()
         }
         break;
     case 0xe8:
-        CPlayer::Unk4109d0(3);
+        CPlayer::StartAfterimages(3);
         unk158 = 0;
         if (vx > 0.0) {
             vx -= 0.03;
@@ -3235,7 +3235,7 @@ void CAkane::UpdatePattern()
         }
         break;
     case 0xe9:
-        CPlayer::Unk4109d0(3);
+        CPlayer::StartAfterimages(3);
         vx -= 0.06;
         if (vx < 0.0) {
             vx = 0.0;
@@ -3263,7 +3263,7 @@ void CAkane::UpdatePattern()
         }
         break;
     case 0xea:
-        CPlayer::Unk4109d0(3);
+        CPlayer::StartAfterimages(3);
         unk158 = 0;
         if (vx > 0.0) {
             vx -= 0.03;
@@ -3293,7 +3293,7 @@ void CAkane::UpdatePattern()
         }
         break;
     case 0xeb:
-        CPlayer::Unk4109d0(3);
+        CPlayer::StartAfterimages(3);
         unk158 = 0;
         if (vx > 0.0 && frame < 3) {
             vx -= 0.03;
@@ -3421,7 +3421,7 @@ void CAkane::UpdatePattern()
             (*m_opponent)->pattern = 0x75;
         }
         if (frame == 6 && timer == 0) {
-            CPlayer::Unk410a10(4, 0);
+            CPlayer::ShakeScreen(4, 0);
             l50.type = 3;
             l50.unk2c = 7;
             l50.x = (double)((int)x + facing * 0xf);
@@ -4558,7 +4558,7 @@ void CAkane::UpdatePattern()
             (*m_opponent)->pattern = 0x75;
         }
         if (frame == 6 && timer == 0) {
-            CPlayer::Unk410a10(4, 0);
+            CPlayer::ShakeScreen(4, 0);
             l50.type = 3;
             l50.unk2c = 7;
             l50.x = (double)((int)x + facing * 0xf);
@@ -4807,7 +4807,7 @@ void CAkane::UpdatePattern()
             CPlayer::StopMoving();
             unk14c = 0x78;
             m_gauge = m_gauge - 0x3e8;
-            CPlayer::Unk410b10(0xb0, 3);
+            CPlayer::FillBackground(0xb0, 3);
             l50.type = 0x44;
             l50.unk2c = 0x13;
             l50.x = (double)((int)x + facing * 0x17);
@@ -4862,7 +4862,7 @@ void CAkane::UpdatePattern()
             CPlayer::StopMoving();
             unk14c = 0x78;
             m_gauge = m_gauge - 0x7d0;
-            CPlayer::Unk410b10(0xb0, 3);
+            CPlayer::FillBackground(0xb0, 3);
             l50.type = 0x45;
             l50.unk2c = 5;
             l50.x = (double)((int)x + facing * 0x17);
@@ -4917,7 +4917,7 @@ void CAkane::UpdatePattern()
             CPlayer::StopMoving();
             unk14c = 0x78;
             m_gauge = m_gauge - 0xbb8;
-            CPlayer::Unk410b10(0xb0, 3);
+            CPlayer::FillBackground(0xb0, 3);
             l50.type = 0x46;
             l50.unk2c = 0x40;
             l50.x = (double)((int)x + facing * 0x17);
@@ -4969,7 +4969,7 @@ void CAkane::UpdatePattern()
         if (frame == 2 && timer == 0) {
             unk14c = 0x78;
             m_gauge = m_gauge - 0x3e8;
-            CPlayer::Unk410b10(0xb0, 3);
+            CPlayer::FillBackground(0xb0, 3);
             l50.type = 0x44;
             l50.unk2c = 0x13;
             l50.x = (double)((int)x + facing * 0x17);
@@ -5031,7 +5031,7 @@ void CAkane::UpdatePattern()
         if (frame == 2 && timer == 0) {
             unk14c = 0x78;
             m_gauge = m_gauge - 0x3e8;
-            CPlayer::Unk410b10(0xb0, 3);
+            CPlayer::FillBackground(0xb0, 3);
             l50.type = 0x44;
             l50.unk2c = 0x13;
             l50.x = (double)((int)x + facing * 0x17);
@@ -5093,7 +5093,7 @@ void CAkane::UpdatePattern()
         if (frame == 2 && timer == 0) {
             unk14c = 0x78;
             m_gauge = m_gauge - 0x3e8;
-            CPlayer::Unk410b10(0xb0, 3);
+            CPlayer::FillBackground(0xb0, 3);
             l50.type = 0x44;
             l50.unk2c = 0x13;
             l50.x = (double)((int)x + facing * 0x17);
@@ -5160,7 +5160,7 @@ void CAkane::UpdatePattern()
             CPlayer::StopMoving();
             unk14c = 0x78;
             m_gauge = m_gauge - 0x3e8;
-            CPlayer::Unk410b10(0xb0, 3);
+            CPlayer::FillBackground(0xb0, 3);
             l50.type = 0x44;
             l50.unk2c = 0x13;
             l50.x = (double)((int)x + facing * 0x17);
@@ -5212,7 +5212,7 @@ void CAkane::UpdatePattern()
             CPlayer::StopMoving();
             unk14c = 0x78;
             m_gauge = m_gauge - 0x7d0;
-            CPlayer::Unk410b10(0xb0, 3);
+            CPlayer::FillBackground(0xb0, 3);
             l50.type = 0x45;
             l50.unk2c = 5;
             l50.x = (double)((int)x + facing * 0x17);
@@ -5264,7 +5264,7 @@ void CAkane::UpdatePattern()
             CPlayer::StopMoving();
             unk14c = 0x78;
             m_gauge = m_gauge - 0xbb8;
-            CPlayer::Unk410b10(0xb0, 3);
+            CPlayer::FillBackground(0xb0, 3);
             l50.type = 0x46;
             l50.unk2c = 0x40;
             l50.x = (double)((int)x + facing * 0x17);
@@ -5308,7 +5308,7 @@ void CAkane::UpdatePattern()
             CPlayer::StopMoving();
             unk14c = 0x78;
             m_gauge = m_gauge - 0xbb8;
-            CPlayer::Unk410b10(0xb0, 3);
+            CPlayer::FillBackground(0xb0, 3);
             l50.type = 0x46;
             l50.unk2c = 0x40;
             l50.x = (double)((int)x + facing * 0x17);
@@ -5326,13 +5326,13 @@ void CAkane::UpdatePattern()
         }
         if (frame == 1) {
             vx = 0.8;
-            CPlayer::Unk4109d0(6);
+            CPlayer::StartAfterimages(6);
         }
         if (frame >= 0) {
             CPlayer::Unk410a80(0x32, 0xa);
         }
         if (frame > 0 && frame < 3 && m_attackResult == 3) {
-            CPlayer::Unk4109d0(0);
+            CPlayer::StartAfterimages(0);
             (*m_opponent)->StopMoving();
             (*m_opponent)->StartPattern();
             StartPattern();
@@ -5350,7 +5350,7 @@ void CAkane::UpdatePattern()
         }
         if (frame == 4) {
             (*m_opponent)->pattern = 0x79;
-            CPlayer::Unk410b10(0xb0, 3);
+            CPlayer::FillBackground(0xb0, 3);
             if (unk3138 == 0) {
                 m_comboHits++;
                 m_shownHits++;
@@ -5433,7 +5433,7 @@ void CAkane::UpdatePattern()
         if (frame == 2 && timer == 0) {
             unk14c = 0x78;
             m_gauge = m_gauge - 0xbb8;
-            CPlayer::Unk410b10(0xb0, 3);
+            CPlayer::FillBackground(0xb0, 3);
             l50.type = 9;
             l50.unk2c = 5;
             l50.x = (double)((int)x + facing * 0x17);
@@ -5512,7 +5512,7 @@ void CAkane::UpdatePattern()
         }
         if (frame == 0xb && timer == 0) {
             unk14c = 0x78;
-            CPlayer::Unk410b10(0xb0, 3);
+            CPlayer::FillBackground(0xb0, 3);
             l50.type = 9;
             l50.unk2c = 5;
             l50.x = (double)((int)x + facing * 0x17);
@@ -5626,7 +5626,7 @@ void CAkane::UpdatePattern()
             CPlayer::StopMoving();
             unk14c = 0x78;
             m_gauge = m_gauge - 0x3e8;
-            CPlayer::Unk410b10(0, 0x28);
+            CPlayer::FillBackground(0, 0x28);
             l50.type = 9;
             l50.unk2c = 5;
             l50.x = (double)((int)x + facing * 0x17);

@@ -1642,7 +1642,7 @@ void CMisuzu::UpdatePattern()
         vx = 0.0;
         vy = 0.0;
         if (frame == 0 && timer == 0) {
-            CPlayer::Unk410a10(3, 0);
+            CPlayer::ShakeScreen(3, 0);
             l50.type = 3;
             l50.x = (double)(int)x;
             l50.y = (double)(int)y;
@@ -1665,7 +1665,7 @@ void CMisuzu::UpdatePattern()
         vx = 0.0;
         vy = 0.0;
         if (frame == 0 && timer == 0) {
-            CPlayer::Unk410a10(3, 0);
+            CPlayer::ShakeScreen(3, 0);
             l50.type = 3;
             l50.x = (double)(int)x;
             l50.y = (double)(int)y;
@@ -2088,7 +2088,7 @@ void CMisuzu::UpdatePattern()
         break;
     case 0xa3:
         if (frame == 0 && timer == 0) {
-            CPlayer::Unk4109d0(3);
+            CPlayer::StartAfterimages(3);
         }
         if (frame == 0 && timer == 0) {
             vx = 0.0;
@@ -2137,7 +2137,7 @@ void CMisuzu::UpdatePattern()
             vx = 0.0;
             vy = 0.0;
             ay = 0.0;
-            CPlayer::Unk4109d0(2);
+            CPlayer::StartAfterimages(2);
         }
         if (frame == 3 && timer == 0 && y == 0.0) {
             vx = -1.8;
@@ -2256,7 +2256,7 @@ void CMisuzu::UpdatePattern()
             }
             unk118 = 0.0;
             unk14c = 0x5a;
-            CPlayer::Unk410b10(0xb0, 3);
+            CPlayer::FillBackground(0xb0, 3);
         }
         if (frame == 1 && timer == 0) {
             m_playSound = 0x12;
@@ -2393,7 +2393,7 @@ void CMisuzu::UpdatePattern()
             }
             unk118 = 0.0;
             unk14c = 0x5a;
-            CPlayer::Unk410b10(0xb0, 3);
+            CPlayer::FillBackground(0xb0, 3);
         }
         if (frame == 0 && timer == 0) {
             m_playSound = 0x12;
@@ -2420,7 +2420,7 @@ void CMisuzu::UpdatePattern()
         break;
     case 0xb4:
         if (frame == 0 && timer == 0) {
-            CPlayer::Unk4109d0(2);
+            CPlayer::StartAfterimages(2);
             vx = 0.0;
             vy = 0.0;
             ay = 0.0;
@@ -2922,7 +2922,7 @@ void CMisuzu::UpdatePattern()
             y = 0.0;
             CPlayer::StopMoving();
             vy = 0.0;
-            CPlayer::Unk410a10(3, 0);
+            CPlayer::ShakeScreen(3, 0);
             l50.type = 3;
             l50.x = (double)(int)x;
             l50.y = (double)(int)y;
@@ -2967,7 +2967,7 @@ void CMisuzu::UpdatePattern()
         vx = 0.0;
         vy = 0.0;
         if (frame == 0 && timer == 0) {
-            CPlayer::Unk410a10(3, 0);
+            CPlayer::ShakeScreen(3, 0);
             l50.type = 3;
             l50.x = (double)(int)x;
             l50.y = (double)(int)y;
@@ -3903,7 +3903,7 @@ void CMisuzu::UpdatePattern()
             m_gauge = m_gauge - 0x3e8;
             CPlayer::Unk410a80(0x32, 0x2d);
             unk14c = 0x78;
-            CPlayer::Unk410b10(0xb0, 3);
+            CPlayer::FillBackground(0xb0, 3);
             l50.type = 0x44;
             l50.unk2c = 0x13;
             l50.x = (double)(int)x;
@@ -3962,7 +3962,7 @@ void CMisuzu::UpdatePattern()
             m_gauge = m_gauge - 0x7d0;
             CPlayer::Unk410a80(0x32, 0x2d);
             unk14c = 0x78;
-            CPlayer::Unk410b10(0xb0, 3);
+            CPlayer::FillBackground(0xb0, 3);
             l50.type = 0x45;
             l50.unk2c = 5;
             l50.x = (double)(int)x;
@@ -4022,7 +4022,7 @@ void CMisuzu::UpdatePattern()
             m_gauge = m_gauge - 0xbb8;
             CPlayer::Unk410a80(0x32, 0x2d);
             unk14c = 0x78;
-            CPlayer::Unk410b10(0xb0, 3);
+            CPlayer::FillBackground(0xb0, 3);
             l50.type = 0x46;
             l50.unk2c = 0x40;
             l50.x = (double)(int)x;
@@ -4125,7 +4125,7 @@ void CMisuzu::UpdatePattern()
             m_gauge = m_gauge - 0x3e8;
             CPlayer::Unk410a80(0x32, 0x2d);
             unk14c = 0x78;
-            CPlayer::Unk410b10(0xb0, 3);
+            CPlayer::FillBackground(0xb0, 3);
             l50.type = 0x44;
             l50.unk2c = 0x13;
             l50.x = (double)(int)x;
@@ -4204,7 +4204,7 @@ void CMisuzu::UpdatePattern()
             m_gauge = m_gauge - 0x3e8;
             CPlayer::Unk410a80(0x32, 0x2d);
             unk14c = 0x78;
-            CPlayer::Unk410b10(0xb0, 3);
+            CPlayer::FillBackground(0xb0, 3);
             l50.type = 0x44;
             l50.unk2c = 0x13;
             l50.x = (double)(int)x;
@@ -4246,7 +4246,7 @@ void CMisuzu::UpdatePattern()
             m_gauge = m_gauge - 0x7d0;
             CPlayer::Unk410a80(0x32, 0x2d);
             unk14c = 0x78;
-            CPlayer::Unk410b10(0xb0, 3);
+            CPlayer::FillBackground(0xb0, 3);
             l50.type = 0x45;
             l50.unk2c = 5;
             l50.x = (double)(int)x;
@@ -4291,7 +4291,7 @@ void CMisuzu::UpdatePattern()
             m_gauge = m_gauge - 0xbb8;
             CPlayer::Unk410a80(0x32, 0x2d);
             unk14c = 0x78;
-            CPlayer::Unk410b10(0xb0, 3);
+            CPlayer::FillBackground(0xb0, 3);
             l50.type = 0x46;
             l50.unk2c = 0x40;
             l50.x = (double)(int)x;
@@ -4335,7 +4335,7 @@ void CMisuzu::UpdatePattern()
             m_gauge = m_gauge - 0x3e8;
             CPlayer::Unk410a80(0x32, 0x2d);
             unk14c = 0x78;
-            CPlayer::Unk410b10(0xb0, 3);
+            CPlayer::FillBackground(0xb0, 3);
             l50.type = 0x44;
             l50.unk2c = 0x13;
             l50.x = (double)(int)x;
@@ -4375,7 +4375,7 @@ void CMisuzu::UpdatePattern()
             m_gauge = m_gauge - 0x7d0;
             CPlayer::Unk410a80(0x32, 0x2d);
             unk14c = 0x78;
-            CPlayer::Unk410b10(0xb0, 3);
+            CPlayer::FillBackground(0xb0, 3);
             l50.type = 0x45;
             l50.unk2c = 5;
             l50.x = (double)(int)x;
@@ -4418,7 +4418,7 @@ void CMisuzu::UpdatePattern()
             m_gauge = m_gauge - 0xbb8;
             CPlayer::Unk410a80(0x32, 0x2d);
             unk14c = 0x78;
-            CPlayer::Unk410b10(0xb0, 3);
+            CPlayer::FillBackground(0xb0, 3);
             l50.type = 0x46;
             l50.unk2c = 0x40;
             l50.x = (double)(int)x;
@@ -4458,7 +4458,7 @@ void CMisuzu::UpdatePattern()
             CPlayer::StopMoving();
             CPlayer::Unk410a80(0x32, 3);
             unk14c = 0xb4;
-            CPlayer::Unk410b10(0xb0, 3);
+            CPlayer::FillBackground(0xb0, 3);
             l50.type = 0x44;
             l50.unk2c = 0x13;
             l50.x = (double)(int)x;
@@ -4487,7 +4487,7 @@ void CMisuzu::UpdatePattern()
             CPlayer::StopMoving();
             CPlayer::Unk410a80(0x32, 3);
             unk14c = 0xb4;
-            CPlayer::Unk410b10(0xb0, 3);
+            CPlayer::FillBackground(0xb0, 3);
             l50.type = 0x44;
             l50.unk2c = 0x13;
             l50.x = (double)(int)x;
@@ -4516,7 +4516,7 @@ void CMisuzu::UpdatePattern()
             CPlayer::StopMoving();
             CPlayer::Unk410a80(0x32, 3);
             unk14c = 0xb4;
-            CPlayer::Unk410b10(0xb0, 3);
+            CPlayer::FillBackground(0xb0, 3);
             l50.type = 0x44;
             l50.unk2c = 0x13;
             l50.x = (double)(int)x;
@@ -4559,7 +4559,7 @@ void CMisuzu::UpdatePattern()
         if (frame == 7 && timer == 0) {
             m_gauge = m_gauge - 0xbb8;
             CPlayer::Unk410a80(0x32, 0x2d);
-            CPlayer::Unk410b10(0xb0, 3);
+            CPlayer::FillBackground(0xb0, 3);
             l50.type = 0x46;
             l50.unk2c = 0x40;
             l50.x = (double)(int)x;
@@ -4577,7 +4577,7 @@ void CMisuzu::UpdatePattern()
         }
         if (frame == 0xc && timer == 0) {
             vy = 0.7;
-            CPlayer::Unk410b10(0xb1, 3);
+            CPlayer::FillBackground(0xb1, 3);
             m_game->unk1420e = 0x7530;
             (*m_opponent)->m_game->unk1420e = 0x7530;
             m_game->unk1420c = 0x7530;
@@ -4655,7 +4655,7 @@ void CMisuzu::UpdatePattern()
             }
             if (frame == 0x29) {
                 x = facing * 0x61 + x;
-                CPlayer::Unk410a10(3, 0);
+                CPlayer::ShakeScreen(3, 0);
                 l50.type = 3;
                 l50.x = (double)(int)x;
                 l50.y = (double)(int)y;

@@ -210,7 +210,7 @@ void CScene3::Draw()
     m_game->DrawEffects(unk45c, unk460, 1);
     m_game->DrawEffects(unk45c, unk460, 2);
     m_game->DrawEffects(unk45c, unk460, 3);
-    if ((int)m_game->m_background != 0 && m_players[0]->unk30c4 == 0 && m_players[1]->unk30c4 == 0 && m_game->unk14278 == 0) {
+    if ((int)m_game->m_background != 0 && m_players[0]->m_fillTime == 0 && m_players[1]->m_fillTime == 0 && m_game->unk14278 == 0) {
         m_game->m_background->Vf1(unk45c, unk460, 1);
     }
     if (m_game->unk1420c == 0) {
@@ -1322,7 +1322,7 @@ void CScene3::Unk767f60(CPlayer* p1, CPlayer* p2, CollisionInfo* p3, CollisionIn
                 p2->FaceOpponent();
             } else {
                 p1->m_comboHits = 0;
-                p2->Unk410ac0(0xdf, 3);
+                p2->Tint(0xdf, 3);
                 p1->m_attackResult = 7;
             }
             if ((v108.flagsB0 & 0x10) > 0) {
@@ -1681,7 +1681,7 @@ void CScene3::Unk7697d0(CPlayer* p1, CPlayer* p2, int p3, CollisionInfo* p4)
                 p2->facing = -k14->facing;
             } else {
                 p1->m_comboHits = 0;
-                p2->Unk410ac0(0xe9, 3);
+                p2->Tint(0xe9, 3);
                 k14->unk80 = 7;
             }
             if ((l4->frame.flagsB0 & 0x10) > 0) {
@@ -1835,7 +1835,7 @@ void CScene3::Unk76b090(CPlayer* p1, CPlayer* p2, int p3, int p4)
                     p2->FaceOpponent();
                 } else {
                     p1->m_comboHits = 0;
-                    p2->Unk410ac0(0xdf, 2);
+                    p2->Tint(0xdf, 2);
                 }
                 if ((l4->flagsB0 & 0x10) > 0) {
                     p1->m_comboHits = 0;
@@ -2022,7 +2022,7 @@ void CScene3::Unk76bd40(CPlayer* p1, CPlayer* p2, CollisionInfo* p3, CollisionIn
                     p2->FaceOpponent();
                 } else {
                     p1->m_comboHits = 0;
-                    p2->Unk410ac0(0xdf, 2);
+                    p2->Tint(0xdf, 2);
                 }
                 if ((n118.flagsB0 & 0x10) > 0) {
                     p1->m_comboHits = 0;

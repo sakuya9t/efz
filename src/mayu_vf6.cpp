@@ -1670,7 +1670,7 @@ void CMayu::UpdatePattern()
         vx = 0.0;
         vy = 0.0;
         if (frame == 0 && timer == 0) {
-            CPlayer::Unk410a10(3, 0);
+            CPlayer::ShakeScreen(3, 0);
             l50.type = 3;
             l50.x = (double)(int)x;
             l50.y = (double)(int)y;
@@ -1693,7 +1693,7 @@ void CMayu::UpdatePattern()
         vx = 0.0;
         vy = 0.0;
         if (frame == 0 && timer == 0) {
-            CPlayer::Unk410a10(3, 0);
+            CPlayer::ShakeScreen(3, 0);
             l50.type = 3;
             l50.x = (double)(int)x;
             l50.y = (double)(int)y;
@@ -2152,7 +2152,7 @@ void CMayu::UpdatePattern()
         break;
     case 0xa4:
         if (frame == 0 && timer == 0) {
-            CPlayer::Unk4109d0(2);
+            CPlayer::StartAfterimages(2);
             vx = 0.0;
             vy = 0.0;
         }
@@ -2187,7 +2187,7 @@ void CMayu::UpdatePattern()
     case 0xa5:
         if (frame == 0 && timer == 0) {
             vx = 1.8;
-            CPlayer::Unk4109d0(3);
+            CPlayer::StartAfterimages(3);
             vy = 0.0;
             ay = 0.0;
             if (unk3138 == 0) {
@@ -2228,7 +2228,7 @@ void CMayu::UpdatePattern()
             vx = -1.8;
             vy = 0.0;
             ay = 0.0;
-            CPlayer::Unk4109d0(3);
+            CPlayer::StartAfterimages(3);
             if (unk3138 == 0) {
                 m_playSound = 0x11;
             }
@@ -2271,7 +2271,7 @@ void CMayu::UpdatePattern()
             }
             unk118 = 0.0;
             unk14c = 0x5a;
-            CPlayer::Unk410b10(0xb0, 3);
+            CPlayer::FillBackground(0xb0, 3);
         }
         if (frame == 1 && timer == 0) {
             m_playSound = 0x12;
@@ -2408,7 +2408,7 @@ void CMayu::UpdatePattern()
             }
             unk118 = 0.0;
             unk14c = 0x5a;
-            CPlayer::Unk410b10(0xb0, 3);
+            CPlayer::FillBackground(0xb0, 3);
         }
         if (frame == 0 && timer == 0) {
             m_playSound = 0x12;
@@ -2456,7 +2456,7 @@ void CMayu::UpdatePattern()
         break;
     case 0xb4:
         if (frame == 0 && timer == 0) {
-            CPlayer::Unk4109d0(2);
+            CPlayer::StartAfterimages(2);
             vx = 0.0;
             vy = 0.0;
             ay = 0.0;
@@ -3014,7 +3014,7 @@ void CMayu::UpdatePattern()
         break;
     case 0xe6:
         vy = vy + ay;
-        CPlayer::Unk4109d0(3);
+        CPlayer::StartAfterimages(3);
         if (m_inputY == -1 && frame > 0 && unk15c < 3 && m_attackResult >= 2 && unk15a < 1) {
             unk15a++;
             pattern = 0xe;
@@ -3058,7 +3058,7 @@ void CMayu::UpdatePattern()
         break;
     case 0xe7:
         vy = vy + ay;
-        CPlayer::Unk4109d0(3);
+        CPlayer::StartAfterimages(3);
         if (m_inputY == -1 && frame > 0 && unk15c < 3 && m_attackResult >= 2 && unk15a < 1) {
             unk15a++;
             pattern = 0xe;
@@ -3102,7 +3102,7 @@ void CMayu::UpdatePattern()
         break;
     case 0xe8:
         vy = vy + ay;
-        CPlayer::Unk4109d0(3);
+        CPlayer::StartAfterimages(3);
         if (m_inputY == -1 && frame > 0 && unk15c < 3 && m_attackResult >= 2 && unk15a < 1) {
             unk15a++;
             pattern = 0xe;
@@ -5138,7 +5138,7 @@ void CMayu::UpdatePattern()
         if (frame == 1 && timer == 0) {
             unk14c = 0x78;
             m_gauge = m_gauge - 0x3e8;
-            CPlayer::Unk410b10(0xb0, 3);
+            CPlayer::FillBackground(0xb0, 3);
             l50.type = 0x44;
             l50.unk2c = 0x13;
             l50.x = (double)(int)x;
@@ -5206,7 +5206,7 @@ void CMayu::UpdatePattern()
         if (frame == 1 && timer == 0) {
             unk14c = 0x78;
             m_gauge = m_gauge - 0x7d0;
-            CPlayer::Unk410b10(0xb0, 3);
+            CPlayer::FillBackground(0xb0, 3);
             l50.type = 0x45;
             l50.unk2c = 5;
             l50.x = (double)(int)x;
@@ -5300,7 +5300,7 @@ void CMayu::UpdatePattern()
         if (frame == 1 && timer == 0) {
             unk14c = 0x78;
             m_gauge = m_gauge - 0xbb8;
-            CPlayer::Unk410b10(0xb0, 3);
+            CPlayer::FillBackground(0xb0, 3);
             l50.type = 0x46;
             l50.unk2c = 0x40;
             l50.x = (double)(int)x;
@@ -5395,7 +5395,7 @@ void CMayu::UpdatePattern()
             CPlayer::StopMoving();
             unk14c = 0x78;
             m_gauge = m_gauge - 0xbb8;
-            CPlayer::Unk410b10(0xb0, 3);
+            CPlayer::FillBackground(0xb0, 3);
             l50.type = 0x46;
             l50.unk2c = 0x40;
             l50.x = (double)(int)x;
@@ -5468,7 +5468,7 @@ void CMayu::UpdatePattern()
             CPlayer::StopMoving();
             unk14c = 0x78;
             m_gauge = m_gauge - 0xbb8;
-            CPlayer::Unk410b10(0xb0, 3);
+            CPlayer::FillBackground(0xb0, 3);
             l50.type = 0x46;
             l50.unk2c = 0x40;
             l50.x = (double)(int)x;
@@ -5689,7 +5689,7 @@ void CMayu::UpdatePattern()
             y = 0.0;
             CPlayer::DealDamage(0x578, 960.0);
             (*m_opponent)->unk140 = 0;
-            CPlayer::Unk410a10(0xa, 0xa);
+            CPlayer::ShakeScreen(0xa, 0xa);
             (*m_opponent)->unk14a = 0x78;
             l50.type = 0;
             l50.x = (double)(int)x;
@@ -5757,7 +5757,7 @@ void CMayu::UpdatePattern()
             CPlayer::StopMoving();
             unk14c = 0x78;
             m_gauge = m_gauge - 0x3e8;
-            CPlayer::Unk410b10(0xb0, 3);
+            CPlayer::FillBackground(0xb0, 3);
             l50.type = 0x44;
             l50.unk2c = 0x13;
             l50.x = (double)(int)x;
@@ -5849,7 +5849,7 @@ void CMayu::UpdatePattern()
             CPlayer::StopMoving();
             unk14c = 0x78;
             m_gauge = m_gauge - 0x7d0;
-            CPlayer::Unk410b10(0xb0, 3);
+            CPlayer::FillBackground(0xb0, 3);
             l50.type = 0x45;
             l50.unk2c = 5;
             l50.x = (double)(int)x;
@@ -5941,7 +5941,7 @@ void CMayu::UpdatePattern()
             CPlayer::StopMoving();
             unk14c = 0x78;
             m_gauge = m_gauge - 0xbb8;
-            CPlayer::Unk410b10(0xb0, 3);
+            CPlayer::FillBackground(0xb0, 3);
             l50.type = 0x46;
             l50.unk2c = 0x40;
             l50.x = (double)(int)x;
@@ -6058,7 +6058,7 @@ void CMayu::UpdatePattern()
                     (*m_opponent)->StopMoving();
                     (*m_opponent)->unk14a = 0x7e;
                     CPlayer::DealDamage(0x92e, 750.0);
-                    CPlayer::Unk410a10(0xa, 0);
+                    CPlayer::ShakeScreen(0xa, 0);
                     timer = 0;
                     frame = 0xd;
                     m_playSound = 0x16;
@@ -6192,7 +6192,7 @@ void CMayu::UpdatePattern()
                     (*m_opponent)->x = facing + x;
                     (*m_opponent)->facing = -facing;
                     CPlayer::DealDamage(0x3e8, 980.0);
-                    CPlayer::Unk410a10(0xa, 0);
+                    CPlayer::ShakeScreen(0xa, 0);
                     (*m_opponent)->unk140 = 0x7530;
                     timer = 0;
                     frame = 0xd;
@@ -6209,7 +6209,7 @@ void CMayu::UpdatePattern()
                     (*m_opponent)->facing = -facing;
                     (*m_opponent)->StopMoving();
                     (*m_opponent)->unk14a = 0x7e;
-                    CPlayer::Unk410a10(0xf, 0);
+                    CPlayer::ShakeScreen(0xf, 0);
                     CPlayer::DealDamage(0x834, 980.0);
                     (*m_opponent)->unk140 = 0;
                     timer = 0;
@@ -6356,7 +6356,7 @@ void CMayu::UpdatePattern()
                     (*m_opponent)->x = facing + x;
                     (*m_opponent)->facing = -facing;
                     CPlayer::DealDamage(0x3e8, 980.0);
-                    CPlayer::Unk410a10(0xa, 0);
+                    CPlayer::ShakeScreen(0xa, 0);
                     (*m_opponent)->unk140 = 0x7530;
                     timer = 0;
                     frame = 0xd;
@@ -6375,7 +6375,7 @@ void CMayu::UpdatePattern()
                     (*m_opponent)->unk14a = 0xba;
                     CPlayer::DealDamage(0xed8, 980.0);
                     (*m_opponent)->unk140 = 0;
-                    CPlayer::Unk410a10(0x14, 0x1e);
+                    CPlayer::ShakeScreen(0x14, 0x1e);
                     timer = 0;
                     frame = 0x19;
                     m_playSound = 0x16;
@@ -6500,7 +6500,7 @@ void CMayu::UpdatePattern()
         if (frame == 1 && timer == 0) {
             unk14c = 0x78;
             m_gauge = m_gauge - 0x3e8;
-            CPlayer::Unk410b10(0xb0, 3);
+            CPlayer::FillBackground(0xb0, 3);
             l50.type = 0x44;
             l50.unk2c = 0x13;
             l50.x = (double)((int)x + facing * 0xf);
@@ -6568,7 +6568,7 @@ void CMayu::UpdatePattern()
         if (frame == 1 && timer == 0) {
             unk14c = 0x78;
             m_gauge = m_gauge - 0x7d0;
-            CPlayer::Unk410b10(0xb0, 3);
+            CPlayer::FillBackground(0xb0, 3);
             l50.type = 0x45;
             l50.unk2c = 5;
             l50.x = (double)((int)x + facing * 0xf);
@@ -6639,7 +6639,7 @@ void CMayu::UpdatePattern()
         if (frame == 1 && timer == 0) {
             unk14c = 0x78;
             m_gauge = m_gauge - 0xbb8;
-            CPlayer::Unk410b10(0xb0, 3);
+            CPlayer::FillBackground(0xb0, 3);
             l50.type = 0x46;
             l50.unk2c = 0x40;
             l50.x = (double)((int)x + facing * 0xf);
@@ -6708,7 +6708,7 @@ void CMayu::UpdatePattern()
         if (frame == 0 && timer == 0) {
             unk14c = 0x78;
             m_gauge = m_gauge - 0x3e8;
-            CPlayer::Unk410b10(0xb0, 3);
+            CPlayer::FillBackground(0xb0, 3);
             l50.type = 0x44;
             l50.unk2c = 0x13;
             l50.x = (double)(int)x;
@@ -6832,7 +6832,7 @@ void CMayu::UpdatePattern()
         if (frame == 0 && timer == 0) {
             unk14c = 0x78;
             m_gauge = m_gauge - 0x7d0;
-            CPlayer::Unk410b10(0xb0, 3);
+            CPlayer::FillBackground(0xb0, 3);
             l50.type = 0x45;
             l50.unk2c = 5;
             l50.x = (double)(int)x;
@@ -6957,7 +6957,7 @@ void CMayu::UpdatePattern()
         if (frame == 0 && timer == 0) {
             unk14c = 0x78;
             m_gauge = m_gauge - 0xbb8;
-            CPlayer::Unk410b10(0xb0, 3);
+            CPlayer::FillBackground(0xb0, 3);
             l50.type = 0x46;
             l50.unk2c = 0x40;
             l50.x = (double)(int)x;

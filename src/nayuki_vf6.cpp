@@ -1665,7 +1665,7 @@ void CNayuki::UpdatePattern()
         vx = 0.0;
         vy = 0.0;
         if (frame == 0 && timer == 0) {
-            CPlayer::Unk410a10(3, 0);
+            CPlayer::ShakeScreen(3, 0);
             l50.type = 3;
             l50.x = (double)(int)x;
             l50.y = (double)(int)y;
@@ -1688,7 +1688,7 @@ void CNayuki::UpdatePattern()
         vx = 0.0;
         vy = 0.0;
         if (frame == 0 && timer == 0) {
-            CPlayer::Unk410a10(3, 0);
+            CPlayer::ShakeScreen(3, 0);
             l50.type = 3;
             l50.x = (double)(int)x;
             l50.y = (double)(int)y;
@@ -2082,7 +2082,7 @@ void CNayuki::UpdatePattern()
         break;
     case 0xa3:
         if (frame == 0 && timer == 0) {
-            CPlayer::Unk4109d0(1);
+            CPlayer::StartAfterimages(1);
             CPlayer::StopMoving();
         }
         if (frame < 0xb && frame > 4) {
@@ -2115,7 +2115,7 @@ void CNayuki::UpdatePattern()
         }
         break;
     case 0xa4:
-        CPlayer::Unk4109d0(2);
+        CPlayer::StartAfterimages(2);
         if (frame == 0 && timer == 0) {
             CPlayer::StopMoving();
         }
@@ -2245,7 +2245,7 @@ void CNayuki::UpdatePattern()
             }
             unk118 = 0.0;
             unk14c = 0x5a;
-            CPlayer::Unk410b10(0xb0, 3);
+            CPlayer::FillBackground(0xb0, 3);
         }
         if (frame == 1 && timer == 0) {
             m_playSound = 0x12;
@@ -2382,7 +2382,7 @@ void CNayuki::UpdatePattern()
             }
             unk118 = 0.0;
             unk14c = 0x5a;
-            CPlayer::Unk410b10(0xb0, 3);
+            CPlayer::FillBackground(0xb0, 3);
         }
         if (frame == 1 && timer == 0) {
             m_playSound = 0x12;
@@ -2449,7 +2449,7 @@ void CNayuki::UpdatePattern()
         vx = 0.0;
         vy = 0.0;
         if (frame == 0 && timer == 0) {
-            CPlayer::Unk410a10(3, 0);
+            CPlayer::ShakeScreen(3, 0);
             l50.type = 3;
             l50.x = (double)(int)x;
             l50.y = (double)(int)y;
@@ -2476,7 +2476,7 @@ void CNayuki::UpdatePattern()
         break;
     case 0xb4:
         if (frame == 0 && timer == 0) {
-            CPlayer::Unk4109d0(2);
+            CPlayer::StartAfterimages(2);
             vx = 0.0;
             vy = 0.0;
             ay = 0.0;
@@ -2624,7 +2624,7 @@ void CNayuki::UpdatePattern()
             timer = 0;
             if (frame < 0xa && frame > 5) {
                 frame = 0xa;
-                CPlayer::Unk410a10(3, 0);
+                CPlayer::ShakeScreen(3, 0);
                 l50.type = 3;
                 l50.x = (double)((int)x + facing * 0x1e);
                 l50.y = (double)(int)y;
@@ -3078,7 +3078,7 @@ void CNayuki::UpdatePattern()
             y = 0.0;
             timer = 0;
             frame = 5;
-            CPlayer::Unk410a10(3, 0);
+            CPlayer::ShakeScreen(3, 0);
             l50.type = 3;
             l50.x = (double)((int)x + facing * 0x1e);
             l50.y = (double)(int)y;
@@ -3655,7 +3655,7 @@ void CNayuki::UpdatePattern()
         break;
     case 0x101:
         vy = vy + ay;
-        CPlayer::Unk40f170();
+        CPlayer::ClearBufferedPress();
         timer++;
         if (timer >= l4) {
             timer = 0;
@@ -4181,7 +4181,7 @@ void CNayuki::UpdatePattern()
         if (frame == 7) {
             if (m_command == 1) {
                 StartPattern();
-                CPlayer::Unk40f170();
+                CPlayer::ClearBufferedPress();
                 pattern = 0xa3;
                 if (facing == -1) {
                     pattern = 0xa4;
@@ -4190,7 +4190,7 @@ void CNayuki::UpdatePattern()
             }
             if (m_command == 0) {
                 StartPattern();
-                CPlayer::Unk40f170();
+                CPlayer::ClearBufferedPress();
                 pattern = 0xa4;
                 if (facing == -1) {
                     pattern = 0xa3;
@@ -4199,25 +4199,25 @@ void CNayuki::UpdatePattern()
             }
             if (m_command == 0xa && unk3148 > 0) {
                 StartPattern();
-                CPlayer::Unk40f170();
+                CPlayer::ClearBufferedPress();
                 pattern = 0xfa;
                 break;
             }
             if (m_command == 0xb && unk3148 > 0) {
                 StartPattern();
-                CPlayer::Unk40f170();
+                CPlayer::ClearBufferedPress();
                 pattern = 0xfb;
                 break;
             }
             if (m_command == 0x14 && unk3148 > 0) {
                 StartPattern();
-                CPlayer::Unk40f170();
+                CPlayer::ClearBufferedPress();
                 pattern = 0x104;
                 break;
             }
             if (m_pressA == 1) {
                 StartPattern();
-                CPlayer::Unk40f170();
+                CPlayer::ClearBufferedPress();
                 pattern = 0x113;
                 if (unk3148 > 4) {
                     pattern = 0x10d;
@@ -4226,13 +4226,13 @@ void CNayuki::UpdatePattern()
             }
             if (m_pressB == 1) {
                 StartPattern();
-                CPlayer::Unk40f170();
+                CPlayer::ClearBufferedPress();
                 pattern = 0x112;
                 break;
             }
             if (m_pressC == 1) {
                 StartPattern();
-                CPlayer::Unk40f170();
+                CPlayer::ClearBufferedPress();
                 pattern = 0x114;
                 if (m_inputY == 1) {
                     pattern = 0x119;
@@ -4242,7 +4242,7 @@ void CNayuki::UpdatePattern()
             if (m_pressD == 1) {
                 if (m_inputX == facing) {
                     StartPattern();
-                    CPlayer::Unk40f170();
+                    CPlayer::ClearBufferedPress();
                     pattern = 0x115;
                     if (unk3148 > 4) {
                         pattern = 0x115;
@@ -4251,7 +4251,7 @@ void CNayuki::UpdatePattern()
                 }
                 if (m_inputX == -facing) {
                     StartPattern();
-                    CPlayer::Unk40f170();
+                    CPlayer::ClearBufferedPress();
                     pattern = 0x116;
                     if (unk3148 > 4) {
                         pattern = 0x116;
@@ -4259,7 +4259,7 @@ void CNayuki::UpdatePattern()
                     break;
                 }
                 StartPattern();
-                CPlayer::Unk40f170();
+                CPlayer::ClearBufferedPress();
                 pattern = 0x10f;
                 if (m_inputY == 1) {
                     pattern = 0x118;
@@ -4297,7 +4297,7 @@ void CNayuki::UpdatePattern()
             y = 0.0;
             CPlayer::StopMoving();
             frame = 8;
-            CPlayer::Unk410a10(3, 0);
+            CPlayer::ShakeScreen(3, 0);
             l50.type = 3;
             l50.x = (double)((int)x + facing * 0x1e);
             l50.y = (double)(int)y;
@@ -4409,7 +4409,7 @@ void CNayuki::UpdatePattern()
         if (frame < 4) {
             if (m_pressA == 1) {
                 StartPattern();
-                CPlayer::Unk40f170();
+                CPlayer::ClearBufferedPress();
                 pattern = 0x113;
                 if (unk3148 > 4) {
                     pattern = 0x10d;
@@ -4418,13 +4418,13 @@ void CNayuki::UpdatePattern()
             }
             if (m_pressB == 1) {
                 StartPattern();
-                CPlayer::Unk40f170();
+                CPlayer::ClearBufferedPress();
                 pattern = 0x112;
                 break;
             }
             if (m_pressC == 1) {
                 StartPattern();
-                CPlayer::Unk40f170();
+                CPlayer::ClearBufferedPress();
                 pattern = 0x114;
                 if (m_inputY == 1) {
                     pattern = 0x119;
@@ -4433,7 +4433,7 @@ void CNayuki::UpdatePattern()
             }
             if (m_pressD == 1) {
                 StartPattern();
-                CPlayer::Unk40f170();
+                CPlayer::ClearBufferedPress();
                 pattern = 0x10f;
                 if (m_inputY == 1) {
                     pattern = 0x118;
@@ -4481,7 +4481,7 @@ void CNayuki::UpdatePattern()
         if (frame < 4) {
             if (m_pressA == 1) {
                 StartPattern();
-                CPlayer::Unk40f170();
+                CPlayer::ClearBufferedPress();
                 pattern = 0x113;
                 if (unk3148 > 4) {
                     pattern = 0x10d;
@@ -4490,13 +4490,13 @@ void CNayuki::UpdatePattern()
             }
             if (m_pressB == 1) {
                 StartPattern();
-                CPlayer::Unk40f170();
+                CPlayer::ClearBufferedPress();
                 pattern = 0x112;
                 break;
             }
             if (m_pressC == 1) {
                 StartPattern();
-                CPlayer::Unk40f170();
+                CPlayer::ClearBufferedPress();
                 pattern = 0x114;
                 if (m_inputY == 1) {
                     pattern = 0x119;
@@ -4505,7 +4505,7 @@ void CNayuki::UpdatePattern()
             }
             if (m_pressD == 1) {
                 StartPattern();
-                CPlayer::Unk40f170();
+                CPlayer::ClearBufferedPress();
                 pattern = 0x10f;
                 if (m_inputY == 1) {
                     pattern = 0x118;
@@ -4581,7 +4581,7 @@ void CNayuki::UpdatePattern()
             y = 0.0;
             CPlayer::StopMoving();
             frame = 8;
-            CPlayer::Unk410a10(3, 0);
+            CPlayer::ShakeScreen(3, 0);
             l50.type = 3;
             l50.x = (double)((int)x + facing * 0x1e);
             l50.y = (double)(int)y;
@@ -4671,7 +4671,7 @@ void CNayuki::UpdatePattern()
         if (frame < 4) {
             if (m_pressA == 1) {
                 StartPattern();
-                CPlayer::Unk40f170();
+                CPlayer::ClearBufferedPress();
                 pattern = 0x113;
                 if (unk3148 > 4) {
                     pattern = 0x10d;
@@ -4680,13 +4680,13 @@ void CNayuki::UpdatePattern()
             }
             if (m_pressB == 1) {
                 StartPattern();
-                CPlayer::Unk40f170();
+                CPlayer::ClearBufferedPress();
                 pattern = 0x112;
                 break;
             }
             if (m_pressC == 1) {
                 StartPattern();
-                CPlayer::Unk40f170();
+                CPlayer::ClearBufferedPress();
                 pattern = 0x114;
                 if (m_inputY == 1) {
                     pattern = 0x119;
@@ -4695,7 +4695,7 @@ void CNayuki::UpdatePattern()
             }
             if (m_pressD == 1) {
                 StartPattern();
-                CPlayer::Unk40f170();
+                CPlayer::ClearBufferedPress();
                 pattern = 0x10f;
                 if (m_inputY == 1) {
                     pattern = 0x118;
@@ -4743,7 +4743,7 @@ void CNayuki::UpdatePattern()
         if (frame < 4) {
             if (m_pressA == 1) {
                 StartPattern();
-                CPlayer::Unk40f170();
+                CPlayer::ClearBufferedPress();
                 pattern = 0x113;
                 if (unk3148 > 4) {
                     pattern = 0x10d;
@@ -4752,13 +4752,13 @@ void CNayuki::UpdatePattern()
             }
             if (m_pressB == 1) {
                 StartPattern();
-                CPlayer::Unk40f170();
+                CPlayer::ClearBufferedPress();
                 pattern = 0x112;
                 break;
             }
             if (m_pressC == 1) {
                 StartPattern();
-                CPlayer::Unk40f170();
+                CPlayer::ClearBufferedPress();
                 pattern = 0x114;
                 if (m_inputY == 1) {
                     pattern = 0x119;
@@ -4767,7 +4767,7 @@ void CNayuki::UpdatePattern()
             }
             if (m_pressD == 1) {
                 StartPattern();
-                CPlayer::Unk40f170();
+                CPlayer::ClearBufferedPress();
                 pattern = 0x10f;
                 if (m_inputY == 1) {
                     pattern = 0x118;
@@ -4809,7 +4809,7 @@ void CNayuki::UpdatePattern()
         if (frame == 2 && timer == 0) {
             unk14c = 0x78;
             m_gauge = m_gauge - 0x3e8;
-            CPlayer::Unk410b10(0xb0, 3);
+            CPlayer::FillBackground(0xb0, 3);
             l50.type = 0x44;
             l50.unk2c = 0x13;
             l50.x = (double)(int)x;
@@ -4933,7 +4933,7 @@ void CNayuki::UpdatePattern()
         if (frame == 2 && timer == 0) {
             unk14c = 0x78;
             m_gauge = m_gauge - 0x7d0;
-            CPlayer::Unk410b10(0xb0, 3);
+            CPlayer::FillBackground(0xb0, 3);
             l50.type = 0x45;
             l50.unk2c = 5;
             l50.x = (double)(int)x;
@@ -4981,7 +4981,7 @@ void CNayuki::UpdatePattern()
         if (frame == 2 && timer == 0) {
             unk14c = 0x78;
             m_gauge = m_gauge - 0xbb8;
-            CPlayer::Unk410b10(0xb0, 3);
+            CPlayer::FillBackground(0xb0, 3);
             l50.type = 0x46;
             l50.unk2c = 0x40;
             l50.x = (double)(int)x;
@@ -5025,7 +5025,7 @@ void CNayuki::UpdatePattern()
         if (frame == 3 && timer == 0) {
             unk14c = 0x78;
             m_gauge = m_gauge - 0x3e8;
-            CPlayer::Unk410b10(0xb0, 3);
+            CPlayer::FillBackground(0xb0, 3);
             l50.type = 0x44;
             l50.unk2c = 0x13;
             l50.x = (double)(int)x;
@@ -5104,7 +5104,7 @@ void CNayuki::UpdatePattern()
         if (frame == 3 && timer == 0) {
             unk14c = 0x78;
             m_gauge = m_gauge - 0x7d0;
-            CPlayer::Unk410b10(0xb0, 3);
+            CPlayer::FillBackground(0xb0, 3);
             l50.type = 0x45;
             l50.unk2c = 5;
             l50.x = (double)(int)x;
@@ -5183,7 +5183,7 @@ void CNayuki::UpdatePattern()
         if (frame == 3 && timer == 0) {
             unk14c = 0x78;
             m_gauge = m_gauge - 0xbb8;
-            CPlayer::Unk410b10(0xb0, 3);
+            CPlayer::FillBackground(0xb0, 3);
             l50.type = 0x46;
             l50.unk2c = 0x40;
             l50.x = (double)(int)x;
@@ -5273,7 +5273,7 @@ void CNayuki::UpdatePattern()
         if (frame == 0 && timer == 0) {
             unk14c = 0x78;
             m_gauge = m_gauge - 0xbb8;
-            CPlayer::Unk410b10(0xb0, 3);
+            CPlayer::FillBackground(0xb0, 3);
             l50.type = 0x46;
             l50.unk2c = 0x40;
             l50.x = (double)(int)x;
@@ -5290,7 +5290,7 @@ void CNayuki::UpdatePattern()
             m_game->Unk4080c0(0xf);
         }
         if (frame > 0xa && frame < 0xf) {
-            CPlayer::Unk410a10(3, 0xa);
+            CPlayer::ShakeScreen(3, 0xa);
         }
         if ((char)CPlayer::Unk40ff70() != 0 && frame > 0xe && vx > 4.0) {
             vx = -2.7;
@@ -5357,7 +5357,7 @@ void CNayuki::UpdatePattern()
                     l50.unk2c = 0x16;
                     m_game->CreateEffect((EffectDesc*)&l50);
                     vx = 0.5;
-                    CPlayer::Unk410a10(0xf, 0xa);
+                    CPlayer::ShakeScreen(0xf, 0xa);
                     l50.unk0 = 1;
                     l50.type = 0x1a1;
                     l50.x = (double)(int)x;

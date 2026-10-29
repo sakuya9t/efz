@@ -628,7 +628,8 @@ public:
     // FUNCTION: 0x40ecb0
     ~CPlayer();
     // FUNCTION: 0x40f170
-    void Unk40f170();
+    // Forgets m_bufferedPress and m_dashBufferedPress; called as a move starts.
+    void ClearBufferedPress();
     // FUNCTION: 0x40f190
     // Clears m_inputHistory and m_command.
     void ClearInput();
@@ -681,23 +682,30 @@ public:
     // FUNCTION: 0x410940
     void Unk410940();
     // FUNCTION: 0x4109d0
-    void Unk4109d0(BYTE p1);
+    // Starts drawing afterimages (m_afterimages), for p1.
+    void StartAfterimages(BYTE p1);
     // FUNCTION: 0x410a10
-    void Unk410a10(int p1, int p2);
+    // Shakes the screen p1 pixels, holding for p2 frames.
+    void ShakeScreen(int p1, int p2);
     // FUNCTION: 0x410a40
     void Unk410a40(int p1, int p2);
     // FUNCTION: 0x410a80
     void Unk410a80(int p1, int p2);
     // FUNCTION: 0x410ac0
-    void Unk410ac0(BYTE p1, int p2);
+    // Draws the sprite tinted with colour p1 for p2 frames (half as long in one mode).
+    void Tint(BYTE p1, int p2);
     // FUNCTION: 0x410b10
-    void Unk410b10(BYTE p1, int p2);
+    // Fills the stage background with colour p1 for p2 frames, as supers do.
+    void FillBackground(BYTE p1, int p2);
     // FUNCTION: 0x411080
-    void Unk411080();
+    // <name>\<name>.dat: the sprites.
+    void LoadSprites();
     // FUNCTION: 0x4116a0
-    void Unk4116a0();
+    // <name>\<name>.pat: the animations and the frames' boxes and values.
+    void LoadPatterns();
     // FUNCTION: 0x411ae0
-    void Unk411ae0();
+    // <name>\wave\NN.wav into m_voices.
+    void LoadVoices();
     // FUNCTION: 0x411be0
     void ReadInput();
     // FUNCTION: 0x4121a0
@@ -825,9 +833,10 @@ public:
     int m_holdD;            // +0x19c
     int unk1a0;
     int unk1a4;
-    BYTE unk1a8;
-    BYTE unk1a9;
-    BYTE unk1aa;
+    BYTE m_bufferedPress;   // +0x1a8: the last button input during a special move
+                            // (pattern 0xc8 and up), in m_inputHistory's bits
+    BYTE m_dashBufferedPress; // +0x1a9: the same during a dash (0xa3-0xa6)
+    BYTE m_dashBufferTime;  // +0x1aa: frames m_dashBufferedPress is kept, from 15
     // The last 180 frames of input, a ring buffer: bits 1 forward, 2 back, 4 down, 8 up,
     // 0x10-0x80 the buttons that went down.
     char m_inputHistory[0xb4]; // +0x1ab
@@ -849,12 +858,12 @@ public:
     short unk2af8[0x14];    // y
     BYTE unk2b20[0x2bc0 - 0x2b20];
     Afterimages m_afterimages;
-    char unk30b8;
+    char m_tintColor;       // +0x30b8: Tint's
     BYTE unk30b9[0x30bc - 0x30b9];
-    int unk30bc;
-    char unk30c0;
+    int m_tintTime;         // +0x30bc
+    char m_fillColor;       // +0x30c0: FillBackground's
     BYTE unk30c1[0x30c4 - 0x30c1];
-    int unk30c4;
+    int m_fillTime;         // +0x30c4
     int m_score;            // +0x30c8: below 100,000,000
     int m_scoreHigh;        // +0x30cc: the score's hundred millions
     int m_hitsLanded;       // +0x30d0
@@ -1053,7 +1062,7 @@ public:
     int m_musicVolume;
     short m_musicStep;
     char unkf32;
-    BYTE unkf33;
+    BYTE m_fillSide;              // whose background fill shows when both players have one
     char m_colorKey;              // the object sprite's transparent colour
     PALETTEENTRY m_palette[0x100];
     char unk1335[3];

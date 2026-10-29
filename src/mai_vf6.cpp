@@ -1652,7 +1652,7 @@ void CMai::UpdatePattern()
         vx = 0.0;
         vy = 0.0;
         if (frame == 0 && timer == 0) {
-            CPlayer::Unk410a10(3, 0);
+            CPlayer::ShakeScreen(3, 0);
             l50.type = 3;
             l50.x = (double)(int)x;
             l50.y = (double)(int)y;
@@ -1675,7 +1675,7 @@ void CMai::UpdatePattern()
         vx = 0.0;
         vy = 0.0;
         if (frame == 0 && timer == 0) {
-            CPlayer::Unk410a10(3, 0);
+            CPlayer::ShakeScreen(3, 0);
             l50.type = 3;
             l50.x = (double)(int)x;
             l50.y = (double)(int)y;
@@ -2095,7 +2095,7 @@ void CMai::UpdatePattern()
         if (frame == 0 && timer == 0) {
             vx = 0.0;
             vy = 0.0;
-            CPlayer::Unk4109d0(3);
+            CPlayer::StartAfterimages(3);
         }
         if (frame == 2 && timer == 0) {
             vx = 2.5;
@@ -2130,7 +2130,7 @@ void CMai::UpdatePattern()
         break;
     case 0xa4:
         if (frame == 0 && timer == 0) {
-            CPlayer::Unk4109d0(2);
+            CPlayer::StartAfterimages(2);
             vx = 0.0;
             vy = 0.0;
         }
@@ -2163,7 +2163,7 @@ void CMai::UpdatePattern()
     case 0xa5:
         if (frame == 0 && timer == 0 && unk3138 == 0) {
             vx = 1.3;
-            CPlayer::Unk4109d0(3);
+            CPlayer::StartAfterimages(3);
             vy = 0.0;
             ay = 0.0;
             m_playSound = 0x11;
@@ -2202,7 +2202,7 @@ void CMai::UpdatePattern()
             vx = -1.3;
             vy = 0.0;
             ay = 0.0;
-            CPlayer::Unk4109d0(3);
+            CPlayer::StartAfterimages(3);
             m_playSound = 0x11;
         }
         timer++;
@@ -2238,13 +2238,13 @@ void CMai::UpdatePattern()
         if (frame == 0 && timer == 0) {
             vx = 0.0;
             vy = 0.0;
-            CPlayer::Unk4109d0(0xa);
+            CPlayer::StartAfterimages(0xa);
             if (unk120 == 1) {
                 m_proration = unk118 * 5.0 + m_proration;
             }
             unk118 = 0.0;
             unk14c = 0x5a;
-            CPlayer::Unk410b10(0xb0, 3);
+            CPlayer::FillBackground(0xb0, 3);
         }
         if (frame == 1 && timer == 0) {
             m_playSound = 0x12;
@@ -2376,13 +2376,13 @@ void CMai::UpdatePattern()
             unk313c = (int)(vy * 100.0);
             vx = 0.0;
             vy = 0.0;
-            CPlayer::Unk4109d0(0xa);
+            CPlayer::StartAfterimages(0xa);
             if (unk120 == 1) {
                 m_proration = unk118 * 5.0 + m_proration;
             }
             unk118 = 0.0;
             unk14c = 0x5a;
-            CPlayer::Unk410b10(0xb0, 3);
+            CPlayer::FillBackground(0xb0, 3);
         }
         if (frame == 1 && timer == 0) {
             m_playSound = 0x12;
@@ -2417,7 +2417,7 @@ void CMai::UpdatePattern()
         break;
     case 0xb4:
         if (frame == 0 && timer == 0) {
-            CPlayer::Unk4109d0(2);
+            CPlayer::StartAfterimages(2);
             vx = 0.0;
             vy = 0.0;
             ay = 0.0;
@@ -3471,7 +3471,7 @@ void CMai::UpdatePattern()
             l50.scale = 2;
             l50.layer = 1;
             m_game->CreateEffect((EffectDesc*)&l50);
-            CPlayer::Unk4109d0(3);
+            CPlayer::StartAfterimages(3);
             if (unk3144 == 4) {
                 unk3148 -= 0x3e8;
                 if (unk3148 < 0) {
@@ -3656,7 +3656,7 @@ void CMai::UpdatePattern()
             l50.scale = 2;
             l50.layer = 1;
             m_game->CreateEffect((EffectDesc*)&l50);
-            CPlayer::Unk4109d0(3);
+            CPlayer::StartAfterimages(3);
             if (unk3144 == 4) {
                 unk3148 -= 0x3e8;
                 if (unk3148 < 0) {
@@ -4031,7 +4031,7 @@ void CMai::UpdatePattern()
             l50.scale = 2;
             l50.layer = 1;
             m_game->CreateEffect((EffectDesc*)&l50);
-            CPlayer::Unk4109d0(3);
+            CPlayer::StartAfterimages(3);
             if (unk3144 == 4) {
                 unk3148 -= 0x3e8;
                 if (unk3148 < 0) {
@@ -4189,7 +4189,7 @@ void CMai::UpdatePattern()
             m_hitsLeft = 1;
             unk14c = 0x78;
             m_gauge = m_gauge - 0x3e8;
-            CPlayer::Unk410b10(0xb0, 3);
+            CPlayer::FillBackground(0xb0, 3);
             l50.type = 0x44;
             l50.unk2c = 0x13;
             l50.x = (double)(int)x;
@@ -4258,7 +4258,7 @@ void CMai::UpdatePattern()
             m_hitsLeft = 1;
             unk14c = 0x78;
             m_gauge = m_gauge - 0x7d0;
-            CPlayer::Unk410b10(0xb0, 3);
+            CPlayer::FillBackground(0xb0, 3);
             l50.type = 0x45;
             l50.unk2c = 5;
             l50.x = (double)(int)x;
@@ -4325,7 +4325,7 @@ void CMai::UpdatePattern()
             m_hitsLeft = 1;
             unk14c = 0x78;
             m_gauge = m_gauge - 0xbb8;
-            CPlayer::Unk410b10(0xb0, 3);
+            CPlayer::FillBackground(0xb0, 3);
             l50.type = 0x46;
             l50.unk2c = 0x40;
             l50.x = (double)(int)x;
@@ -4604,7 +4604,7 @@ void CMai::UpdatePattern()
             CPlayer::StopMoving();
             unk14c = 0x78;
             m_gauge = m_gauge - 0xbb8;
-            CPlayer::Unk410b10(0xb0, 3);
+            CPlayer::FillBackground(0xb0, 3);
             l50.type = 0x46;
             l50.unk2c = 0x40;
             l50.x = (double)(int)x;
@@ -4783,7 +4783,7 @@ void CMai::UpdatePattern()
         if (frame == 3 && timer == 0) {
             unk14c = 0x78;
             m_gauge = m_gauge - 0x3e8;
-            CPlayer::Unk410b10(0xb0, 3);
+            CPlayer::FillBackground(0xb0, 3);
             l50.type = 0x44;
             l50.unk2c = 0x13;
             l50.x = (double)((int)x - facing * 0xd);
@@ -4838,7 +4838,7 @@ void CMai::UpdatePattern()
         if (frame == 3 && timer == 0) {
             unk14c = 0x78;
             m_gauge = m_gauge - 0x7d0;
-            CPlayer::Unk410b10(0xb0, 3);
+            CPlayer::FillBackground(0xb0, 3);
             l50.type = 0x45;
             l50.unk2c = 5;
             l50.x = (double)((int)x - facing * 0xd);
@@ -4893,7 +4893,7 @@ void CMai::UpdatePattern()
         if (frame == 3 && timer == 0) {
             unk14c = 0x78;
             m_gauge = m_gauge - 0xbb8;
-            CPlayer::Unk410b10(0xb0, 3);
+            CPlayer::FillBackground(0xb0, 3);
             l50.type = 0x46;
             l50.unk2c = 0x40;
             l50.x = (double)((int)x - facing * 0xd);
@@ -4948,7 +4948,7 @@ void CMai::UpdatePattern()
             CPlayer::StopMoving();
             unk14c = 0x78;
             m_gauge = m_gauge - 0xbb8;
-            CPlayer::Unk410b10(0xb0, 3);
+            CPlayer::FillBackground(0xb0, 3);
             l50.type = 0x46;
             l50.unk2c = 0x40;
             l50.x = (double)((int)x - facing * 0x13);
@@ -4971,7 +4971,7 @@ void CMai::UpdatePattern()
             (*m_opponent)->StartPattern();
             pattern = 0x145;
             (*m_opponent)->pattern = 0x79;
-            CPlayer::Unk410b10(0xb0, 3);
+            CPlayer::FillBackground(0xb0, 3);
         }
         if (frame == 5 && timer == 0) {
             unk3148 = 0;
@@ -4998,11 +4998,11 @@ void CMai::UpdatePattern()
     case 0x145:
         CPlayer::Unk410a80(0x32, 3);
         if (frame < 2) {
-            CPlayer::Unk410b10(0xb0, 3);
+            CPlayer::FillBackground(0xb0, 3);
         }
         if (frame > 1 && frame < 0xa) {
-            CPlayer::Unk410b10(0xb1, 3);
-            (*m_opponent)->Unk410ac0(0xb0, 3);
+            CPlayer::FillBackground(0xb1, 3);
+            (*m_opponent)->Tint(0xb0, 3);
         }
         if (frame == 1 && timer == 0) {
             m_playVoice = 3;

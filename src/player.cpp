@@ -211,8 +211,8 @@ void CPlayer::Reset()
     pattern = 0;
     frame = 0;
     timer = 0;
-    unk30bc = 0;
-    unk30c4 = 0;
+    m_tintTime = 0;
+    m_fillTime = 0;
     m_hp = 0x270f;
     m_comboStartHp = 0x270f;
     unk110 = 0x270f;
@@ -243,8 +243,8 @@ void CPlayer::Reset()
     m_shownProration = 10000.0;
     unk170 = 0;
     m_defense = 1.0;
-    unk1a8 = 0;
-    unk1a9 = 0;
+    m_bufferedPress = 0;
+    m_dashBufferedPress = 0;
     m_command = 0x63;
     m_inputPos = 0;
     v4 = 0;
@@ -278,10 +278,10 @@ void CPlayer::StartPattern()
     m_afterimages.Unk412910();
 }
 
-void CPlayer::Unk40f170()
+void CPlayer::ClearBufferedPress()
 {
-    unk1a8 = 0;
-    unk1a9 = 0;
+    m_bufferedPress = 0;
+    m_dashBufferedPress = 0;
 }
 
 void CPlayer::ClearInput()
@@ -693,12 +693,12 @@ void CPlayer::Unk410940()
     }
 }
 
-void CPlayer::Unk4109d0(BYTE p1)
+void CPlayer::StartAfterimages(BYTE p1)
 {
     m_afterimages.Unk412a10((ObjBase*)this, p1);
 }
 
-void CPlayer::Unk410a10(int p1, int p2)
+void CPlayer::ShakeScreen(int p1, int p2)
 {
     m_game->m_shake = p1;
     m_game->m_shakeHold = p2;
@@ -716,23 +716,23 @@ void CPlayer::Unk410a80(int p1, int p2)
     m_game->unk14244 = p2;
 }
 
-void CPlayer::Unk410ac0(BYTE p1, int p2)
+void CPlayer::Tint(BYTE p1, int p2)
 {
-    unk30b8 = p1;
-    unk30bc = p2;
+    m_tintColor = p1;
+    m_tintTime = p2;
     if (m_game->unk136c == 0) {
-        unk30bc = unk30bc / 2;
+        m_tintTime = m_tintTime / 2;
     }
 }
 
-void CPlayer::Unk410b10(BYTE p1, int p2)
+void CPlayer::FillBackground(BYTE p1, int p2)
 {
-    unk30c0 = p1;
-    unk30c4 = p2;
+    m_fillColor = p1;
+    m_fillTime = p2;
     if (m_game->unk136c == 0) {
-        unk30c4 = unk30c4 / 2;
+        m_fillTime = m_fillTime / 2;
     }
-    m_game->unkf33 = m_side;
+    m_game->m_fillSide = m_side;
 }
 
 void CPlayer::Load()
@@ -741,9 +741,9 @@ void CPlayer::Load()
     char vc[8];
 
     if (unk30e8 == 0) {
-        Unk411080();
-        Unk4116a0();
-        Unk411ae0();
+        LoadSprites();
+        LoadPatterns();
+        LoadVoices();
         unk30e8 = 1;
     } else if (1) {
         if (m_game->unk1338[m_side] != 0) {
@@ -800,7 +800,7 @@ void CPlayer::Load()
     }
 }
 
-void CPlayer::Unk411080()
+void CPlayer::LoadSprites()
 {
     int x74;
     int v70;
@@ -894,7 +894,7 @@ void CPlayer::Unk411080()
     colorKey = m_graphics->GetColorKey(*surfaces);
 }
 
-void CPlayer::Unk4116a0()
+void CPlayer::LoadPatterns()
 {
     int c50;
     PatternFrame* l4c;
@@ -971,7 +971,7 @@ void CPlayer::Unk4116a0()
     }
 }
 
-void CPlayer::Unk411ae0()
+void CPlayer::LoadVoices()
 {
     int v30;
     char v2c[32];
@@ -1084,11 +1084,11 @@ void CPlayer::ReadInput()
     m_inputHistory[m_inputPos] = (m_inputX == 1) + (m_inputX == -1) * 2 + (m_inputY == 1) * 4 + (m_inputY == -1) * 8 + (m_pressA << 4) + (m_pressB << 5) + (m_pressC << 6) + (m_pressD << 7);
     if ((unsigned char)m_inputHistory[m_inputPos] >= 0x10) {
         if (pattern >= 0xc8) {
-            unk1a8 = m_inputHistory[m_inputPos];
+            m_bufferedPress = m_inputHistory[m_inputPos];
         }
         if (pattern >= 0xa3 && pattern <= 0xa6) {
-            unk1a9 = m_inputHistory[m_inputPos];
-            unk1aa = 0xf;
+            m_dashBufferedPress = m_inputHistory[m_inputPos];
+            m_dashBufferTime = 0xf;
         }
     }
     m_inputPos++;
@@ -1150,7 +1150,7 @@ void CPlayer::Unk4121a0(int p1, int p2)
     v14.right = v20.width + v14.left;
     v14.bottom = v20.height + v14.top;
     if (v14.top < 0xf0) {
-        if (unk30bc == 0) {
+        if (m_tintTime == 0) {
             if (unk58 == 3) {
                 m_graphics->BlitSmear(v14, surfaces[v20.surface], v30, colorKey, facing == -1);
             } else if (unk58 > 0) {
@@ -1159,8 +1159,8 @@ void CPlayer::Unk4121a0(int p1, int p2)
                 m_graphics->Blit(v14, surfaces[v20.surface], v30, colorKey, facing == -1);
             }
         } else {
-            m_graphics->BlitTint(v14, surfaces[v20.surface], v30, colorKey, facing == -1, unk30b8);
-            unk30bc--;
+            m_graphics->BlitTint(v14, surfaces[v20.surface], v30, colorKey, facing == -1, m_tintColor);
+            m_tintTime--;
         }
         return;
     }
