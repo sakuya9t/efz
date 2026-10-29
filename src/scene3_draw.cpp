@@ -471,7 +471,7 @@ void CScene3::Unk762c50()
     int v34;
     RECT v30;
     int v20;
-    char* v1c;
+    EffectFrame* v1c;
     int l18;
     RECT v14;
     int l4;
@@ -479,54 +479,54 @@ void CScene3::Unk762c50()
     l18 = 0;
     for (; l18 < 2; l18++) {
         if (m_players[l18]->unk60 != 0) {
-            v1c = (char*)&m_players[l18]->anims[m_players[l18]->pattern].frames[m_players[l18]->frame].duration;
-            if (*(short*)(v1c + 6) < *(short*)(v1c + 0xa)) {
-                v20 = *(short*)(v1c + 6);
+            v1c = &m_players[l18]->anims[m_players[l18]->pattern].frames[m_players[l18]->frame];
+            if (v1c->y < v1c->height) {
+                v20 = v1c->y;
                 l4 = 0;
             } else {
-                v20 = *(short*)(v1c + 0xa);
-                l4 = *(short*)(v1c + 6) - *(short*)(v1c + 0xa);
+                v20 = v1c->height;
+                l4 = v1c->y - v1c->height;
             }
             v30.left = 0;
             v30.top = 0;
-            v30.right = *(short*)(v1c + 8);
+            v30.right = v1c->width;
             v30.bottom = v20;
-            v14.left = (int)m_players[l18]->x + unk45c - *(short*)(v1c + 4) * (m_players[l18]->facing == 1) - (*(short*)(v1c + 8) - *(short*)(v1c + 4)) * (m_players[l18]->facing == -1);
+            v14.left = (int)m_players[l18]->x + unk45c - v1c->x * (m_players[l18]->facing == 1) - (v1c->width - v1c->x) * (m_players[l18]->facing == -1);
             v14.top = 0xd2 - ((int)m_players[l18]->y - (m_players[l18]->y < 0.0)) + unk460 + l4;
-            v14.right = *(short*)(v1c + 8) + v14.left;
+            v14.right = v1c->width + v14.left;
             v14.bottom = v20 / 3 + v14.top;
             if (v14.top < 0xf0 && v14.bottom > 0) {
-                m_graphics->BlitShadow(v14, m_players[l18]->surfaces[*(WORD*)(v1c + 2)], v30, m_players[l18]->colorKey, m_players[l18]->facing == -1, 0xb0);
+                m_graphics->BlitShadow(v14, m_players[l18]->surfaces[v1c->surface], v30, m_players[l18]->colorKey, m_players[l18]->facing == -1, 0xb0);
             }
         }
         v34 = m_players[l18]->m_objectTail;
         while (v34 != m_players[l18]->m_objectHead) {
             if (m_players[l18]->m_objectActive[v34] != 0 && m_players[l18]->m_objects[v34].unk58 != 0 && (m_players[l18]->m_objects[v34].unk8c != 0 || m_game->unk1420e == 0)) {
-                v1c = (char*)&m_players[l18]->anims[m_players[l18]->m_objects[v34].pattern].frames[m_players[l18]->m_objects[v34].frame].duration;
-                if (*(short*)(v1c + 6) < *(short*)(v1c + 0xa)) {
-                    v20 = *(short*)(v1c + 6);
+                v1c = &m_players[l18]->anims[m_players[l18]->m_objects[v34].pattern].frames[m_players[l18]->m_objects[v34].frame];
+                if (v1c->y < v1c->height) {
+                    v20 = v1c->y;
                     l4 = 0;
                 } else {
-                    v20 = *(short*)(v1c + 0xa);
-                    l4 = *(short*)(v1c + 6) - *(short*)(v1c + 0xa);
+                    v20 = v1c->height;
+                    l4 = v1c->y - v1c->height;
                 }
                 v30.left = 0;
                 v30.top = 0;
-                v30.right = *(short*)(v1c + 8);
+                v30.right = v1c->width;
                 v30.bottom = v20;
                 if (m_players[l18]->m_objects[v34].facing == -1) {
-                    v14.left = (int)m_players[l18]->m_objects[v34].x + unk45c - (*(short*)(v1c + 8) - *(short*)(v1c + 4));
+                    v14.left = (int)m_players[l18]->m_objects[v34].x + unk45c - (v1c->width - v1c->x);
                     v14.top = unk460 + 0xd2 - (int)m_players[l18]->m_objects[v34].y + l4;
-                    v14.right = *(short*)(v1c + 8) + v14.left;
+                    v14.right = v1c->width + v14.left;
                     v14.bottom = v20 / 3 + v14.top;
                 } else {
-                    v14.left = (int)m_players[l18]->m_objects[v34].x + unk45c - *(short*)(v1c + 4);
+                    v14.left = (int)m_players[l18]->m_objects[v34].x + unk45c - v1c->x;
                     v14.top = unk460 + 0xd2 - (int)m_players[l18]->m_objects[v34].y + l4;
-                    v14.right = *(short*)(v1c + 8) + v14.left;
+                    v14.right = v1c->width + v14.left;
                     v14.bottom = v20 / 3 + v14.top;
                 }
                 if (v14.top < 0xf0 && v14.bottom > 0) {
-                    m_graphics->BlitShadow(v14, m_players[l18]->surfaces[*(WORD*)(v1c + 2)], v30, m_players[l18]->colorKey, m_players[l18]->m_objects[v34].facing == -1, 0xb0);
+                    m_graphics->BlitShadow(v14, m_players[l18]->surfaces[v1c->surface], v30, m_players[l18]->colorKey, m_players[l18]->m_objects[v34].facing == -1, 0xb0);
                 }
             }
             v34++;

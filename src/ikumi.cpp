@@ -9,8 +9,8 @@ CIkumi::CIkumi(CPlayer** p1, CGame* p2, CGraphics* p3, CInput* p4, CSound* p5, B
 {
     int v4;
 
-    unk3464 = (char*)new EffectAnim[0x1f9];
-    unk3468 = (char*)new PatternData[0x1f9];
+    unk3464 = new EffectAnim[0x1f9];
+    unk3468 = new PatternData[0x1f9];
     Unk6ab6a0(0);
     unk3460 = 0;
     strcpy(m_name, "ikumi");
@@ -86,8 +86,8 @@ CIkumi::~CIkumi()
 {
     anims = (EffectAnim*)unk346c;
     m_patterns = (PatternData*)unk3470;
-    delete[] (EffectAnim*)unk3464;
-    delete[] (PatternData*)unk3468;
+    delete[] unk3464;
+    delete[] unk3468;
     CPlayer::~CPlayer();
 }
 
@@ -102,8 +102,8 @@ void CIkumi::Load()
 void CIkumi::Unk6a5eb0()
 {
     int k2c;
-    char* v28;
-    char* x24;
+    PatternFrame* v28;
+    EffectFrame* x24;
     int x20;
     int n1c;
     int a18;
@@ -115,53 +115,53 @@ void CIkumi::Unk6a5eb0()
     n1c = 0;
     for (; n1c < l4; n1c++) {
         k14 = v10.ReadInt();
-        *(short*)(unk3468 + k14 * 8) = v10.ReadInt();
-        *(short*)(unk3468 + 2 + k14 * 8) = v10.ReadInt();
-        *(unk3464 + k14 * 8) = v10.ReadInt();
-        a18 = *(BYTE*)(unk3464 + k14 * 8);
-        ((PatternData*)((int)unk3468 + k14 * 8))->Alloc(a18);
-        ((EffectAnim*)((int)unk3464 + k14 * 8))->Alloc(a18);
+        unk3468[k14].unk0 = v10.ReadInt();
+        unk3468[k14].unk2 = v10.ReadInt();
+        unk3464[k14].frameCount = v10.ReadInt();
+        a18 = unk3464[k14].frameCount;
+        ((PatternData*)((int)(char*)unk3468 + k14 * 8))->Alloc(a18);
+        ((EffectAnim*)((int)(char*)unk3464 + k14 * 8))->Alloc(a18);
         x20 = 0;
         for (; x20 < a18; x20++) {
-            x24 = (char*)(*(int*)(unk3464 + 4 + k14 * 8) + x20 * 0xc);
-            v28 = (char*)(*(int*)(unk3468 + 4 + k14 * 8) + x20 * 0xc8);
-            *(short*)x24 = (short)v10.ReadInt() * 3;
-            *(short*)(x24 + 2) = v10.ReadInt();
-            *(short*)(x24 + 8) = v10.ReadInt();
-            *(short*)(x24 + 0xa) = v10.ReadInt();
-            *(short*)(x24 + 4) = v10.ReadInt();
-            *(short*)(x24 + 6) = v10.ReadInt();
-            *(short*)(v28 + 0xa0) = v10.ReadInt();
-            *(short*)(v28 + 0xaa) = v10.ReadInt();
-            *(short*)(v28 + 0xac) = v10.ReadInt();
-            *(short*)(v28 + 0xb0) = v10.ReadInt();
-            *(short*)(v28 + 0xb2) = v10.ReadInt();
-            *(short*)(v28 + 0xa8) = v10.ReadInt();
-            *(short*)(v28 + 0xb4) = v10.ReadInt();
-            *(short*)(v28 + 0xb6) = v10.ReadInt();
-            *(float*)(v28 + 0xbc) = (short)v10.ReadShort();
-            *(float*)(v28 + 0xbc) = *(float*)(v28 + 0xbc) / 1e+02f;
-            *(float*)(v28 + 0xb8) = (short)v10.ReadShort();
-            *(float*)(v28 + 0xb8) = *(float*)(v28 + 0xb8) / -1e+02f;
-            *(v28 + 0xc1) = v10.ReadShort();
-            *(v28 + 0xc0) = v10.ReadShort();
-            *(short*)(v28 + 0xc2) = v10.ReadInt();
-            *(short*)(v28 + 0xc4) = v10.ReadInt();
-            *(float*)(v28 + 0xa4) = v10.ReadInt();
-            *(short*)(v28 + 0xae) = v10.ReadInt();
-            v10.Read((void*)(v28 + 0x90), 0x10);
+            x24 = &unk3464[k14].frames[x20];
+            v28 = &unk3468[k14].frames[x20];
+            x24->duration = (short)v10.ReadInt() * 3;
+            x24->surface = v10.ReadInt();
+            x24->width = v10.ReadInt();
+            x24->height = v10.ReadInt();
+            x24->x = v10.ReadInt();
+            x24->y = v10.ReadInt();
+            v28->unka0 = v10.ReadInt();
+            v28->flagsAA = v10.ReadInt();
+            v28->unkac = v10.ReadInt();
+            v28->flagsB0 = v10.ReadInt();
+            v28->unkb2 = v10.ReadInt();
+            v28->unka8 = v10.ReadInt();
+            v28->unkb4 = v10.ReadInt();
+            v28->unkb6 = v10.ReadInt();
+            v28->unkbc = (short)v10.ReadShort();
+            v28->unkbc = v28->unkbc / 1e+02f;
+            v28->unkb8 = (short)v10.ReadShort();
+            v28->unkb8 = v28->unkb8 / -1e+02f;
+            v28->unkc1 = v10.ReadShort();
+            v28->unkc0 = v10.ReadShort();
+            v28->unkc2 = v10.ReadInt();
+            v28->unkc4 = v10.ReadInt();
+            v28->unka4 = v10.ReadInt();
+            v28->unkae = v10.ReadInt();
+            v10.Read((void*)&v28->box90.left, 0x10);
             k2c = 0;
             for (; k2c < 2; k2c++) {
-                v10.Read((void*)((k2c << 4) + v28), 0x10);
+                v10.Read((void*)((k2c << 4) + (char*)v28), 0x10);
             }
-            v10.Read((void*)(v28 + 0x50), 0x10);
+            v10.Read((void*)&v28->attackBoxes[0].left, 0x10);
             k2c = 2;
             for (; k2c < 5; k2c++) {
-                v10.Read((void*)((k2c << 4) + v28), 0x10);
+                v10.Read((void*)((k2c << 4) + (char*)v28), 0x10);
             }
             k2c = 1;
             for (; k2c < 4; k2c++) {
-                v10.Read((void*)(v28 + (k2c << 4) + 0x50), 0x10);
+                v10.Read((void*)&v28->attackBoxes[k2c].left, 0x10);
             }
         }
     }

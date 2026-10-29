@@ -104,25 +104,25 @@ void CPlayer::InitEffectDesc(EffectDesc* p1)
 void CPlayer::DrawObjects(int p1, int p2, BYTE p3)
 {
     RECT v28;
-    char* v18;
+    EffectFrame* v18;
     RECT v14;
     int l4;
 
     l4 = m_objectTail;
     while (l4 != m_objectHead) {
         if (m_objectActive[l4] != 0 && p3 == (unsigned char)m_objects[l4].layer && (m_objects[l4].unk8c != 0 || m_game->unk1420e == 0)) {
-            v18 = (char*)&anims[m_objects[l4].pattern].frames[m_objects[l4].frame].duration;
-            v28 = MakeRect(0, 0, *(short*)(v18 + 8), *(short*)(v18 + 0xa));
+            v18 = &anims[m_objects[l4].pattern].frames[m_objects[l4].frame];
+            v28 = MakeRect(0, 0, v18->width, v18->height);
             if (m_objects[l4].facing == -1) {
-                v14.left = (int)m_objects[l4].x + (m_objects[l4].screen == 0) * p1 - (*(short*)(v18 + 8) - *(short*)(v18 + 4));
-                v14.top = (p2 + 0xd2) * (m_objects[l4].screen == 0) + (int)m_objects[l4].y - *(short*)(v18 + 6);
-                v14.right = *(short*)(v18 + 8) + v14.left;
-                v14.bottom = *(short*)(v18 + 0xa) + v14.top;
+                v14.left = (int)m_objects[l4].x + (m_objects[l4].screen == 0) * p1 - (v18->width - v18->x);
+                v14.top = (p2 + 0xd2) * (m_objects[l4].screen == 0) + (int)m_objects[l4].y - v18->y;
+                v14.right = v18->width + v14.left;
+                v14.bottom = v18->height + v14.top;
             } else {
-                v14.left = (int)m_objects[l4].x + (m_objects[l4].screen == 0) * p1 - *(short*)(v18 + 4);
-                v14.top = (p2 + 0xd2) * (m_objects[l4].screen == 0) + (int)m_objects[l4].y - *(short*)(v18 + 6);
-                v14.right = *(short*)(v18 + 8) + v14.left;
-                v14.bottom = *(short*)(v18 + 0xa) + v14.top;
+                v14.left = (int)m_objects[l4].x + (m_objects[l4].screen == 0) * p1 - v18->x;
+                v14.top = (p2 + 0xd2) * (m_objects[l4].screen == 0) + (int)m_objects[l4].y - v18->y;
+                v14.right = v18->width + v14.left;
+                v14.bottom = v18->height + v14.top;
             }
             if (m_objects[l4].clip.top != m_objects[l4].clip.bottom) {
                 if (v14.left < m_objects[l4].clip.left) {
@@ -143,11 +143,11 @@ void CPlayer::DrawObjects(int p1, int p2, BYTE p3)
                 }
             }
             if (m_objects[l4].scale == 3) {
-                m_graphics->BlitSmear(v14, surfaces[*(WORD*)(v18 + 2)], v28, colorKey, m_objects[l4].facing == -1);
+                m_graphics->BlitSmear(v14, surfaces[v18->surface], v28, colorKey, m_objects[l4].facing == -1);
             } else if (m_objects[l4].scale > 0) {
-                m_graphics->BlitEx(v14, surfaces[*(WORD*)(v18 + 2)], v28, colorKey, m_objects[l4].facing == -1, m_objects[l4].scale - 1);
+                m_graphics->BlitEx(v14, surfaces[v18->surface], v28, colorKey, m_objects[l4].facing == -1, m_objects[l4].scale - 1);
             } else {
-                m_graphics->Blit(v14, surfaces[*(WORD*)(v18 + 2)], v28, colorKey, m_objects[l4].facing == -1);
+                m_graphics->Blit(v14, surfaces[v18->surface], v28, colorKey, m_objects[l4].facing == -1);
             }
         }
         l4++;

@@ -2540,8 +2540,8 @@ public:
     int unk3454;
     char unk3458;
     BYTE unk3459[0x345c - 0x3459];
-    char* unk345c;
-    char* unk3460;
+    EffectAnim* unk345c;          // the second animation and pattern tables
+    PatternData* unk3460;
     int unk3464;
     int unk3468;
     BYTE unk346c[0x3470 - 0x346c];
@@ -2752,8 +2752,8 @@ public:
     int unk3360[0x40]; // indexed
     char unk3460;
     BYTE unk3461[0x3464 - 0x3461];
-    char* unk3464;
-    char* unk3468;
+    EffectAnim* unk3464;          // the second animation and pattern tables
+    PatternData* unk3468;
     int unk346c;
     int unk3470;
     BYTE unk3474[0x3478 - 0x3474];

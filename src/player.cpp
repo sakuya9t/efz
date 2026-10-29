@@ -897,8 +897,8 @@ void CPlayer::Unk411080()
 void CPlayer::Unk4116a0()
 {
     int c50;
-    char* l4c;
-    char* l48;
+    PatternFrame* l4c;
+    EffectFrame* l48;
     int x44;
     int v40;
     int f3c;
@@ -923,45 +923,45 @@ void CPlayer::Unk4116a0()
         anims[x38].Alloc(f3c);
         x44 = 0;
         for (; x44 < f3c; x44++) {
-            l48 = (char*)&anims[x38].frames[x44].duration;
-            l4c = (char*)&m_patterns[x38].frames[x44].boxes[0].left;
-            *(short*)l48 = (short)k10.ReadInt() * 3;
-            *(short*)(l48 + 2) = k10.ReadInt();
-            *(short*)(l48 + 8) = k10.ReadInt();
-            *(short*)(l48 + 0xa) = k10.ReadInt();
-            *(short*)(l48 + 4) = k10.ReadInt();
-            *(short*)(l48 + 6) = k10.ReadInt();
-            *(short*)(l4c + 0xa0) = k10.ReadInt();
-            *(short*)(l4c + 0xaa) = k10.ReadInt();
-            *(short*)(l4c + 0xac) = k10.ReadInt();
-            *(short*)(l4c + 0xb0) = k10.ReadInt();
-            *(short*)(l4c + 0xb2) = k10.ReadInt();
-            *(short*)(l4c + 0xa8) = k10.ReadInt();
-            *(short*)(l4c + 0xb4) = k10.ReadInt();
-            *(short*)(l4c + 0xb6) = k10.ReadInt();
-            *(float*)(l4c + 0xbc) = (short)k10.ReadShort();
-            *(float*)(l4c + 0xbc) = *(float*)(l4c + 0xbc) / 1e+02f;
-            *(float*)(l4c + 0xb8) = (short)k10.ReadShort();
-            *(float*)(l4c + 0xb8) = *(float*)(l4c + 0xb8) / -1e+02f;
-            *(l4c + 0xc1) = k10.ReadShort();
-            *(l4c + 0xc0) = k10.ReadShort();
-            *(short*)(l4c + 0xc2) = k10.ReadInt();
-            *(short*)(l4c + 0xc4) = k10.ReadInt();
-            *(float*)(l4c + 0xa4) = k10.ReadInt();
-            *(short*)(l4c + 0xae) = k10.ReadInt();
-            k10.Read((void*)(l4c + 0x90), 0x10);
+            l48 = &anims[x38].frames[x44];
+            l4c = &m_patterns[x38].frames[x44];
+            l48->duration = (short)k10.ReadInt() * 3;
+            l48->surface = k10.ReadInt();
+            l48->width = k10.ReadInt();
+            l48->height = k10.ReadInt();
+            l48->x = k10.ReadInt();
+            l48->y = k10.ReadInt();
+            l4c->unka0 = k10.ReadInt();
+            l4c->flagsAA = k10.ReadInt();
+            l4c->unkac = k10.ReadInt();
+            l4c->flagsB0 = k10.ReadInt();
+            l4c->unkb2 = k10.ReadInt();
+            l4c->unka8 = k10.ReadInt();
+            l4c->unkb4 = k10.ReadInt();
+            l4c->unkb6 = k10.ReadInt();
+            l4c->unkbc = (short)k10.ReadShort();
+            l4c->unkbc = l4c->unkbc / 1e+02f;
+            l4c->unkb8 = (short)k10.ReadShort();
+            l4c->unkb8 = l4c->unkb8 / -1e+02f;
+            l4c->unkc1 = k10.ReadShort();
+            l4c->unkc0 = k10.ReadShort();
+            l4c->unkc2 = k10.ReadInt();
+            l4c->unkc4 = k10.ReadInt();
+            l4c->unka4 = k10.ReadInt();
+            l4c->unkae = k10.ReadInt();
+            k10.Read((void*)&l4c->box90.left, 0x10);
             c50 = 0;
             for (; c50 < 2; c50++) {
-                k10.Read((void*)((c50 << 4) + l4c), 0x10);
+                k10.Read((void*)((c50 << 4) + (char*)l4c), 0x10);
             }
-            k10.Read((void*)(l4c + 0x50), 0x10);
+            k10.Read((void*)&l4c->attackBoxes[0].left, 0x10);
             c50 = 2;
             for (; c50 < 5; c50++) {
-                k10.Read((void*)((c50 << 4) + l4c), 0x10);
+                k10.Read((void*)((c50 << 4) + (char*)l4c), 0x10);
             }
             c50 = 1;
             for (; c50 < 4; c50++) {
-                k10.Read((void*)(l4c + (c50 << 4) + 0x50), 0x10);
+                k10.Read((void*)&l4c->attackBoxes[c50].left, 0x10);
             }
         }
     }

@@ -1388,27 +1388,27 @@ void CScene3::Unk7697d0(CPlayer* p1, CPlayer* p2, int p3, CollisionInfo* p4)
     int vf8[4][5];
     RECT na8[5];
     RECT a58[4];
-    char* k14;
+    PlayerObject* k14;
     int v10;
     int bc;
-    char* x8;
-    char* l4;
+    PatternFrame* x8;
+    CollisionInfo* l4;
 
-    k14 = ((char*)&p1->m_objects[p3].pattern);
-    x8 = (char*)&p1->m_patterns[*(WORD*)k14].frames[*(WORD*)(k14 + 2)].boxes[0].left;
-    l4 = (char*)p4;
-    if (*(int*)(k14 + 0x80) == 0 && (*(WORD*)(l4 + 0xb0) & 0x20) == 0 && *(short*)(k14 + 0x84) > 0 && (p2->unk130 <= 0 || (*(WORD*)(x8 + 0xaa) & 0x40) <= 0) && p2->Unk4102e0() == 0 && p2->unk13c == 0) {
+    k14 = &p1->m_objects[p3];
+    x8 = &p1->m_patterns[k14->pattern].frames[k14->frame];
+    l4 = p4;
+    if (k14->unk80 == 0 && (l4->frame.flagsB0 & 0x20) == 0 && k14->unk84 > 0 && (p2->unk130 <= 0 || (x8->flagsAA & 0x40) <= 0) && p2->Unk4102e0() == 0 && p2->unk13c == 0) {
         mfc = 0;
         v10 = 0;
         for (; v10 < 4; v10++) {
-            a58[v10] = this->Unk767600((ObjBase*)k14, (RECT*)(x8 + (v10 << 4) + 0x50));
+            a58[v10] = this->Unk767600((ObjBase*)k14, &x8->attackBoxes[v10]);
         }
         v10 = 0;
         for (; v10 < 5; v10++) {
-            na8[v10] = this->Unk7677a0(p4, (RECT*)((v10 << 4) + l4));
+            na8[v10] = this->Unk7677a0(p4, (RECT*)((v10 << 4) + (char*)l4));
         }
-        v11c = this->Unk7677a0(p4, (RECT*)(l4 + 0x90));
-        if ((*(WORD*)(x8 + 0xaa) & 0x40) > 0) {
+        v11c = this->Unk7677a0(p4, &l4->frame.box90);
+        if ((x8->flagsAA & 0x40) > 0) {
             v10 = 0;
             for (; v10 < 4; v10++) {
                 vf8[v10][0] = 1;
@@ -1459,17 +1459,17 @@ void CScene3::Unk7697d0(CPlayer* p1, CPlayer* p2, int p3, CollisionInfo* p4)
                     }
                 }
             }
-            if ((*(WORD*)(l4 + 0xb0) & 0x400) > 0 && (*(WORD*)(x8 + 0xaa) & 0x100) == 0) {
-                (*(short*)(k14 + 0x84))--;
-                *(int*)(k14 + 0x80) = 2;
+            if ((l4->frame.flagsB0 & 0x400) > 0 && (x8->flagsAA & 0x100) == 0) {
+                k14->unk84--;
+                k14->unk80 = 2;
                 p1->m_attackResult = 6;
                 p2->m_attackResult = 6;
                 return;
             }
-            if (p2->unk170 != 0 && p2->unk14e >= 0x1e && p2->unk13a == 0 && p2->Unk4100f0((PatternFrame*)x8) != 0 && (*(WORD*)(x8 + 0xaa) & 0x80) == 0) {
-                *(int*)(k14 + 0x80) = 2;
-                p1->m_gauge += *(short*)(x8 + 0xb6);
-                (*(short*)(k14 + 0x84))--;
+            if (p2->unk170 != 0 && p2->unk14e >= 0x1e && p2->unk13a == 0 && p2->Unk4100f0((PatternFrame*)x8) != 0 && (x8->flagsAA & 0x80) == 0) {
+                k14->unk80 = 2;
+                p1->m_gauge += x8->unkb6;
+                k14->unk84--;
                 p2->unkd0 = 1;
                 k168.unk0 = 0;
                 k168.x = (double)((l10c.right + l10c.left) / 2);
@@ -1482,7 +1482,7 @@ void CScene3::Unk7697d0(CPlayer* p1, CPlayer* p2, int p3, CollisionInfo* p4)
                 k168.unk2c = 0xa;
                 m_game->CreateEffect((EffectDesc*)&k168);
                 p2->StartPattern();
-                p2->facing = -*(k14 + 0x48);
+                p2->facing = -k14->facing;
                 if (p2->y == 0.0) {
                     p2->pattern = (p2->m_inputY == 1) + 0xa8;
                 } else {
@@ -1496,9 +1496,9 @@ void CScene3::Unk7697d0(CPlayer* p1, CPlayer* p2, int p3, CollisionInfo* p4)
                 return;
             }
             if (p2->unk14e >= 0x1e && p2->y < 0.0 && p2->Unk410050((PatternFrame*)x8, (PatternFrame*)l4) != 0) {
-                *(int*)(k14 + 0x80) = 2;
-                p1->m_gauge += *(short*)(x8 + 0xb6);
-                (*(short*)(k14 + 0x84))--;
+                k14->unk80 = 2;
+                p1->m_gauge += x8->unkb6;
+                k14->unk84--;
                 p2->unkd0 = 1;
                 k168.unk0 = 0;
                 k168.x = (double)((l10c.right + l10c.left) / 2);
@@ -1511,7 +1511,7 @@ void CScene3::Unk7697d0(CPlayer* p1, CPlayer* p2, int p3, CollisionInfo* p4)
                 k168.unk2c = 0xa;
                 m_game->CreateEffect((EffectDesc*)&k168);
                 p2->StartPattern();
-                p2->facing = -*(k14 + 0x48);
+                p2->facing = -k14->facing;
                 p2->pattern = 0xaa;
                 p1->ClearInput();
                 p2->ClearInput();
@@ -1520,9 +1520,9 @@ void CScene3::Unk7697d0(CPlayer* p1, CPlayer* p2, int p3, CollisionInfo* p4)
                 return;
             }
             if (p2->Unk410050((PatternFrame*)x8, (PatternFrame*)l4) != 0 && p2->unk14e >= 0x1e && p2->y == 0.0 && p2->pattern != 0xa8 && p2->pattern != 0xa9) {
-                *(int*)(k14 + 0x80) = 2;
-                p1->m_gauge += *(short*)(x8 + 0xb6);
-                (*(short*)(k14 + 0x84))--;
+                k14->unk80 = 2;
+                p1->m_gauge += x8->unkb6;
+                k14->unk84--;
                 p2->unkd0 = 1;
                 k168.unk0 = 0;
                 k168.x = (double)((l10c.right + l10c.left) / 2);
@@ -1535,7 +1535,7 @@ void CScene3::Unk7697d0(CPlayer* p1, CPlayer* p2, int p3, CollisionInfo* p4)
                 k168.unk2c = 0xa;
                 m_game->CreateEffect((EffectDesc*)&k168);
                 p2->StartPattern();
-                p2->facing = -*(k14 + 0x48);
+                p2->facing = -k14->facing;
                 p2->pattern = (p2->m_inputY == 1) + 0xa8;
                 p1->ClearInput();
                 p2->ClearInput();
@@ -1543,8 +1543,8 @@ void CScene3::Unk7697d0(CPlayer* p1, CPlayer* p2, int p3, CollisionInfo* p4)
                 p1->unk170 = 1;
                 return;
             }
-            if ((*(WORD*)(l4 + 0xb0) & 0x200) > 0 && (*(WORD*)(l4 + 0xaa) & 1) > 0 && (*(WORD*)(x8 + 0xaa) & 1) > 0) {
-                (*(short*)(k14 + 0x84))--;
+            if ((l4->frame.flagsB0 & 0x200) > 0 && (l4->frame.flagsAA & 1) > 0 && (x8->flagsAA & 1) > 0) {
+                k14->unk84--;
                 k168.unk0 = 0;
                 k168.x = (double)((l10c.right + l10c.left) / 2);
                 k168.y = (double)((l10c.bottom + l10c.top) / 2);
@@ -1556,20 +1556,20 @@ void CScene3::Unk7697d0(CPlayer* p1, CPlayer* p2, int p3, CollisionInfo* p4)
                 k168.unk2c = 3;
                 m_game->CreateEffect((EffectDesc*)&k168);
                 p1->m_attackResult = 2;
-                p1->unk14a = *(short*)(x8 + 0xc2);
-                p2->unk14a = *(short*)(x8 + 0xc4);
-                p2->m_hp -= *(short*)(x8 + 0xa8);
+                p1->unk14a = x8->unkc2;
+                p2->unk14a = x8->unkc4;
+                p2->m_hp -= x8->unka8;
                 if (p2->m_hp <= 0) {
                     p2->m_hp = 1;
                 }
-                p2->unk134 = *(short*)(x8 + 0xa0) / 0x1e + p2->unk134;
+                p2->unk134 = x8->unka0 / 0x1e + p2->unk134;
                 if (p2->unk134 > 3.6e+02f) {
                     *(int*)&p2->unk134 = 0x43b40000;
                 }
                 return;
             }
-            if ((*(WORD*)(l4 + 0xb0) & 0x200) > 0 && (*(WORD*)(l4 + 0xaa) & 2) > 0 && (*(WORD*)(x8 + 0xaa) & 2) > 0) {
-                (*(short*)(k14 + 0x84))--;
+            if ((l4->frame.flagsB0 & 0x200) > 0 && (l4->frame.flagsAA & 2) > 0 && (x8->flagsAA & 2) > 0) {
+                k14->unk84--;
                 k168.unk0 = 0;
                 k168.x = (double)((l10c.right + l10c.left) / 2);
                 k168.y = (double)((l10c.bottom + l10c.top) / 2);
@@ -1581,20 +1581,20 @@ void CScene3::Unk7697d0(CPlayer* p1, CPlayer* p2, int p3, CollisionInfo* p4)
                 k168.unk2c = 3;
                 m_game->CreateEffect((EffectDesc*)&k168);
                 p1->m_attackResult = 2;
-                p1->unk14a = *(short*)(x8 + 0xc2);
-                p2->unk14a = *(short*)(x8 + 0xc4);
-                p2->m_hp -= *(short*)(x8 + 0xa8);
+                p1->unk14a = x8->unkc2;
+                p2->unk14a = x8->unkc4;
+                p2->m_hp -= x8->unka8;
                 if (p2->m_hp <= 0) {
                     p2->m_hp = 1;
                 }
-                p2->unk134 = *(short*)(x8 + 0xa0) / 0x1e + p2->unk134;
+                p2->unk134 = x8->unka0 / 0x1e + p2->unk134;
                 if (p2->unk134 > 3.6e+02f) {
                     *(int*)&p2->unk134 = 0x43b40000;
                 }
                 return;
             }
-            if ((*(WORD*)(l4 + 0xb0) & 0x200) > 0 && (*(WORD*)(l4 + 0xaa) & 4) > 0 && (*(WORD*)(x8 + 0xaa) & 4) > 0 && p2->y < 0.0) {
-                (*(short*)(k14 + 0x84))--;
+            if ((l4->frame.flagsB0 & 0x200) > 0 && (l4->frame.flagsAA & 4) > 0 && (x8->flagsAA & 4) > 0 && p2->y < 0.0) {
+                k14->unk84--;
                 k168.unk0 = 0;
                 k168.x = (double)((l10c.right + l10c.left) / 2);
                 k168.y = (double)((l10c.bottom + l10c.top) / 2);
@@ -1606,30 +1606,30 @@ void CScene3::Unk7697d0(CPlayer* p1, CPlayer* p2, int p3, CollisionInfo* p4)
                 k168.unk2c = 3;
                 m_game->CreateEffect((EffectDesc*)&k168);
                 p1->m_attackResult = 2;
-                p1->unk14a = *(short*)(x8 + 0xc2);
-                p2->unk14a = *(short*)(x8 + 0xc4);
-                p2->m_hp -= *(short*)(x8 + 0xa8);
+                p1->unk14a = x8->unkc2;
+                p2->unk14a = x8->unkc4;
+                p2->m_hp -= x8->unka8;
                 if (p2->m_hp <= 0) {
                     p2->m_hp = 1;
                 }
-                p2->unk134 = *(short*)(x8 + 0xa0) / 0x1e + p2->unk134;
+                p2->unk134 = x8->unka0 / 0x1e + p2->unk134;
                 if (p2->unk134 > 3.6e+02f) {
                     *(int*)&p2->unk134 = 0x43b40000;
                 }
                 return;
             }
             if (p2->Unk410050((PatternFrame*)x8, (PatternFrame*)l4) != 0) {
-                p2->pattern = (*(WORD*)(x8 + 0xaa) & 0x10) / 0x10 + 0x96 + (*(WORD*)(x8 + 0xaa) & 0x20) / 0x20 * 2 + (p2->m_inputY == 1 || (*(WORD*)(x8 + 0xaa) & *(WORD*)(l4 + 0xb0) & 5) == 0 && p2->m_cpu != 0) * 3;
+                p2->pattern = (x8->flagsAA & 0x10) / 0x10 + 0x96 + (x8->flagsAA & 0x20) / 0x20 * 2 + (p2->m_inputY == 1 || (x8->flagsAA & l4->frame.flagsB0 & 5) == 0 && p2->m_cpu != 0) * 3;
                 if (p2->y < 0.0) {
                     p2->pattern = 0x9c;
                 }
                 p2->StartPattern();
-                p2->facing = -*(k14 + 0x48);
-                *(int*)(k14 + 0x80) = 2;
-                *(short*)(k14 + 0x86) = *(short*)(x8 + 0xc2);
-                p2->unk14a = *(short*)(x8 + 0xc4);
-                p1->m_gauge += *(short*)(x8 + 0xb6);
-                (*(short*)(k14 + 0x84))--;
+                p2->facing = -k14->facing;
+                k14->unk80 = 2;
+                k14->unk86 = x8->unkc2;
+                p2->unk14a = x8->unkc4;
+                p1->m_gauge += x8->unkb6;
+                k14->unk84--;
                 p2->unkd0 = 0;
                 k168.unk0 = 0;
                 k168.x = (double)((l10c.right + l10c.left) / 2);
@@ -1638,18 +1638,18 @@ void CScene3::Unk7697d0(CPlayer* p1, CPlayer* p2, int p3, CollisionInfo* p4)
                 k168.scale = 2;
                 k168.layer = 1;
                 k168.screen = 0;
-                p2->m_hp -= *(short*)(x8 + 0xa8);
+                p2->m_hp -= x8->unka8;
                 if (p2->m_hp <= 0) {
                     p2->m_hp = 1;
                 }
                 if (p1->unk134 > 0.0f) {
-                    p1->unk134 = p1->unk134 - *(short*)(x8 + 0xa0) / 0x1e;
+                    p1->unk134 = p1->unk134 - x8->unka0 / 0x1e;
                     if (p1->unk134 < 0.0f) {
                         p2->unk134 = p2->unk134 - p1->unk134;
                         *(int*)&p1->unk134 = 0;
                     }
                 } else {
-                    p2->unk134 = *(short*)(x8 + 0xa0) / 0x1e + p2->unk134;
+                    p2->unk134 = x8->unka0 / 0x1e + p2->unk134;
                     if (p2->unk134 > 3.6e+02f) {
                         *(int*)&p2->unk134 = 0x43b40000;
                     }
@@ -1660,31 +1660,31 @@ void CScene3::Unk7697d0(CPlayer* p1, CPlayer* p2, int p3, CollisionInfo* p4)
                 m_game->CreateEffect((EffectDesc*)&k168);
                 return;
             }
-            if ((*(WORD*)(l4 + 0xb0) & 4) == 0 && p2->unk138 == 0 || ((*(WORD*)(l4 + 0xb0) & 4) > 0 || p2->unk138 > 0) && (*(WORD*)(x8 + 0xaa) & 0x100) > 0 || (*(WORD*)(x8 + 0xaa) & 0x40) > 0) {
+            if ((l4->frame.flagsB0 & 4) == 0 && p2->unk138 == 0 || ((l4->frame.flagsB0 & 4) > 0 || p2->unk138 > 0) && (x8->flagsAA & 0x100) > 0 || (x8->flagsAA & 0x40) > 0) {
                 if (p2->y >= 0.0) {
-                    if (*(short*)(x8 + 0xae) > 0) {
-                        p2->pattern = *(short*)(x8 + 0xae);
-                    } else if ((*(WORD*)(l4 + 0xb0) & 3) == 3) {
+                    if (x8->unkae > 0) {
+                        p2->pattern = x8->unkae;
+                    } else if ((l4->frame.flagsB0 & 3) == 3) {
                         p2->pattern = 0x3b;
-                    } else if ((*(WORD*)(l4 + 0xb0) & 1) != 0) {
-                        p2->pattern = ((*(WORD*)(x8 + 0xaa) & 8) > 0) * 3 + 0x32 + ((*(WORD*)(x8 + 0xaa) & 0x10) > 0) + ((*(WORD*)(x8 + 0xaa) & 0x20) > 0) * 2;
-                    } else if ((*(WORD*)(l4 + 0xb0) & 2) != 0) {
-                        p2->pattern = ((*(WORD*)(x8 + 0xaa) & 0x10) > 0) + 0x38 + ((*(WORD*)(x8 + 0xaa) & 0x20) > 0) * 2;
+                    } else if ((l4->frame.flagsB0 & 1) != 0) {
+                        p2->pattern = ((x8->flagsAA & 8) > 0) * 3 + 0x32 + ((x8->flagsAA & 0x10) > 0) + ((x8->flagsAA & 0x20) > 0) * 2;
+                    } else if ((l4->frame.flagsB0 & 2) != 0) {
+                        p2->pattern = ((x8->flagsAA & 0x10) > 0) + 0x38 + ((x8->flagsAA & 0x20) > 0) * 2;
                     }
-                } else if (*(short*)(x8 + 0xac) > 0) {
-                    p2->pattern = *(short*)(x8 + 0xac);
+                } else if (x8->unkac > 0) {
+                    p2->pattern = x8->unkac;
                 } else {
                     p2->pattern = 0x3b;
                 }
-                *(int*)(k14 + 0x80) = 3;
+                k14->unk80 = 3;
                 p2->StartPattern();
-                p2->facing = -*(k14 + 0x48);
+                p2->facing = -k14->facing;
             } else {
                 p1->m_comboHits = 0;
                 p2->Unk410ac0(0xe9, 3);
-                *(int*)(k14 + 0x80) = 7;
+                k14->unk80 = 7;
             }
-            if ((*(WORD*)(l4 + 0xb0) & 0x10) > 0) {
+            if ((l4->frame.flagsB0 & 0x10) > 0) {
                 p1->m_comboHits = 0;
                 if (p1->m_proration > 10000.0) {
                     p1->m_proration -= 20.0;
@@ -1692,44 +1692,44 @@ void CScene3::Unk7697d0(CPlayer* p1, CPlayer* p2, int p3, CollisionInfo* p4)
                     p1->m_proration = 10000.0;
                 }
             }
-            p2->unkc0 = *(float*)(x8 + 0xb8);
-            p2->unkc8 = *(float*)(x8 + 0xbc);
+            p2->unkc0 = x8->unkb8;
+            p2->unkc8 = x8->unkbc;
             p2->unkd0 = 0;
             if (p1->m_comboHits == 0) {
                 p2->m_comboStartHp = p2->m_hp;
             }
-            p2->m_hp -= (int)((double)*(short*)(x8 + 0xa0) * p1->AttackFactor() * p2->DefenseFactor() * p1->ProrationFactor());
-            p2->unk124 = (int)(*(short*)(x8 + 0xb2) * (p1->m_proration / 10000.0) * (((*(WORD*)(x8 + 0xaa) & 0x2000) > 0 && (*(WORD*)(l4 + 0xb0) & 0x2000) > 0) + 1));
-            p2->unk128 = (*(WORD*)(x8 + 0xaa) & 0x400) > 0;
-            p2->unk12c = (*(WORD*)(x8 + 0xaa) & 0x800) > 0;
+            p2->m_hp -= (int)((double)x8->unka0 * p1->AttackFactor() * p2->DefenseFactor() * p1->ProrationFactor());
+            p2->unk124 = (int)(x8->unkb2 * (p1->m_proration / 10000.0) * (((x8->flagsAA & 0x2000) > 0 && (l4->frame.flagsB0 & 0x2000) > 0) + 1));
+            p2->unk128 = (x8->flagsAA & 0x400) > 0;
+            p2->unk12c = (x8->flagsAA & 0x800) > 0;
             p2->unk158 = 0;
             p2->unk159 = 0;
             p2->unk15a = 0;
             p1->m_shownProration = p1->m_proration / 100.0;
-            p1->m_proration = *(float*)(x8 + 0xa4) / 1e+03f * p1->m_proration;
+            p1->m_proration = x8->unka4 / 1e+03f * p1->m_proration;
             if (p1->m_proration > 10000.0) {
-                p1->m_proration = *(float*)(x8 + 0xa4) / 1e+03f * p1->m_proration;
+                p1->m_proration = x8->unka4 / 1e+03f * p1->m_proration;
             }
             p1->m_comboHits++;
             p1->m_shownHits = p1->m_comboHits;
             p1->m_comboTimer = 0xb4;
             p1->m_comboDamage = p2->m_comboStartHp - p2->m_hp;
-            p1->m_gauge += *(short*)(x8 + 0xb4);
-            *(short*)(k14 + 0x86) = *(short*)(x8 + 0xc2);
-            p2->unk14a = *(short*)(x8 + 0xc4);
-            (*(short*)(k14 + 0x84))--;
+            p1->m_gauge += x8->unkb4;
+            k14->unk86 = x8->unkc2;
+            p2->unk14a = x8->unkc4;
+            k14->unk84--;
             k168.unk0 = 0;
-            k168.type = *(x8 + 0xc0);
+            k168.type = x8->unkc0;
             k168.x = (double)((l10c.right + l10c.left) / 2);
             k168.y = (double)((l10c.bottom + l10c.top) / 2);
             k168.side = p1->facing < 0;
             k168.scale = 2;
             k168.layer = 1;
             k168.screen = 0;
-            k168.unk2c = *(x8 + 0xc1);
+            k168.unk2c = x8->unkc1;
             m_game->CreateEffect((EffectDesc*)&k168);
             if (p2->m_hp <= 0 && p2->unk140 == 0) {
-                p2->pattern = *(short*)(x8 + 0xac);
+                p2->pattern = x8->unkac;
                 p2->StartPattern();
                 p2->FaceOpponent();
             }
@@ -1745,26 +1745,26 @@ void CScene3::Unk76b090(CPlayer* p1, CPlayer* p2, int p3, int p4)
     int xf8[4][5];
     RECT ea8[5];
     RECT n58[4];
-    char* l18;
+    PlayerObject* l18;
     int v14;
-    char* n10;
+    PlayerObject* n10;
     int rc;
-    char* x8;
-    char* l4;
+    PatternFrame* x8;
+    PatternFrame* l4;
 
-    n10 = ((char*)&p1->m_objects[p3].pattern);
-    l18 = ((char*)&p2->m_objects[p4].pattern);
-    x8 = (char*)&p1->m_patterns[*(WORD*)n10].frames[*(WORD*)(n10 + 2)].boxes[0].left;
-    l4 = (char*)&p2->m_patterns[*(WORD*)l18].frames[*(WORD*)(l18 + 2)].boxes[0].left;
-    if (*(int*)(n10 + 0x80) == 0 && *(short*)(n10 + 0x84) > 0 && (*(WORD*)(x8 + 0xaa) & 0x40) == 0) {
+    n10 = &p1->m_objects[p3];
+    l18 = &p2->m_objects[p4];
+    x8 = &p1->m_patterns[n10->pattern].frames[n10->frame];
+    l4 = &p2->m_patterns[l18->pattern].frames[l18->frame];
+    if (n10->unk80 == 0 && n10->unk84 > 0 && (x8->flagsAA & 0x40) == 0) {
         xfc = 0;
         v14 = 0;
         for (; v14 < 4; v14++) {
-            n58[v14] = this->Unk767600((ObjBase*)n10, (RECT*)(x8 + (v14 << 4) + 0x50));
+            n58[v14] = this->Unk767600((ObjBase*)n10, &x8->attackBoxes[v14]);
         }
         v14 = 0;
         for (; v14 < 5; v14++) {
-            ea8[v14] = this->Unk767600((ObjBase*)l18, (RECT*)((v14 << 4) + l4));
+            ea8[v14] = this->Unk767600((ObjBase*)l18, (RECT*)((v14 << 4) + (char*)l4));
         }
         v14 = 0;
         for (; v14 < 4; v14++) {
@@ -1808,26 +1808,26 @@ void CScene3::Unk76b090(CPlayer* p1, CPlayer* p2, int p3, int p4)
                     }
                 }
             }
-            if ((*(WORD*)(l4 + 0xb0) & 0x10) == 0) {
-                (*(short*)(n10 + 0x84))--;
-                *(int*)(n10 + 0x80) = 5;
+            if ((l4->flagsB0 & 0x10) == 0) {
+                n10->unk84--;
+                n10->unk80 = 5;
             }
-            *(int*)(l18 + 0x80) = 5;
-            if ((*(WORD*)(l4 + 0xb0) & 0x2000) > 0) {
-                *(PatternFrame*)l4 = p2->m_patterns[p2->pattern].frames[p2->frame];
-                if ((*(WORD*)(l4 + 0xb0) & 4) == 0 && p2->unk138 == 0 || ((*(WORD*)(l4 + 0xb0) & 4) > 0 || p2->unk138 > 0) && (*(WORD*)(x8 + 0xaa) & 0x100) > 0 || (*(WORD*)(x8 + 0xaa) & 0x40) > 0) {
+            l18->unk80 = 5;
+            if ((l4->flagsB0 & 0x2000) > 0) {
+                *l4 = p2->m_patterns[p2->pattern].frames[p2->frame];
+                if ((l4->flagsB0 & 4) == 0 && p2->unk138 == 0 || ((l4->flagsB0 & 4) > 0 || p2->unk138 > 0) && (x8->flagsAA & 0x100) > 0 || (x8->flagsAA & 0x40) > 0) {
                     if (p2->y >= 0.0) {
-                        if (*(short*)(x8 + 0xae) > 0) {
-                            p2->pattern = *(short*)(x8 + 0xae);
-                        } else if ((*(WORD*)(l4 + 0xb0) & 3) == 3) {
+                        if (x8->unkae > 0) {
+                            p2->pattern = x8->unkae;
+                        } else if ((l4->flagsB0 & 3) == 3) {
                             p2->pattern = 0x3b;
-                        } else if ((*(WORD*)(l4 + 0xb0) & 1) != 0) {
-                            p2->pattern = ((*(WORD*)(x8 + 0xaa) & 8) > 0) * 3 + 0x32 + ((*(WORD*)(x8 + 0xaa) & 0x10) > 0) + ((*(WORD*)(x8 + 0xaa) & 0x20) > 0) * 2;
-                        } else if ((*(WORD*)(l4 + 0xb0) & 2) != 0) {
-                            p2->pattern = ((*(WORD*)(x8 + 0xaa) & 0x10) > 0) + 0x38 + ((*(WORD*)(x8 + 0xaa) & 0x20) > 0) * 2;
+                        } else if ((l4->flagsB0 & 1) != 0) {
+                            p2->pattern = ((x8->flagsAA & 8) > 0) * 3 + 0x32 + ((x8->flagsAA & 0x10) > 0) + ((x8->flagsAA & 0x20) > 0) * 2;
+                        } else if ((l4->flagsB0 & 2) != 0) {
+                            p2->pattern = ((x8->flagsAA & 0x10) > 0) + 0x38 + ((x8->flagsAA & 0x20) > 0) * 2;
                         }
-                    } else if (*(short*)(x8 + 0xac) > 0) {
-                        p2->pattern = *(short*)(x8 + 0xac);
+                    } else if (x8->unkac > 0) {
+                        p2->pattern = x8->unkac;
                     } else {
                         p2->pattern = 0x3b;
                     }
@@ -1837,7 +1837,7 @@ void CScene3::Unk76b090(CPlayer* p1, CPlayer* p2, int p3, int p4)
                     p1->m_comboHits = 0;
                     p2->Unk410ac0(0xdf, 2);
                 }
-                if ((*(WORD*)(l4 + 0xb0) & 0x10) > 0) {
+                if ((l4->flagsB0 & 0x10) > 0) {
                     p1->m_comboHits = 0;
                     if (p1->m_proration > 10000.0) {
                         p1->m_proration -= 20.0;
@@ -1845,33 +1845,33 @@ void CScene3::Unk76b090(CPlayer* p1, CPlayer* p2, int p3, int p4)
                         p1->m_proration = 10000.0;
                     }
                 }
-                p2->unkc0 = *(float*)(x8 + 0xb8);
-                p2->unkc8 = *(float*)(x8 + 0xbc);
+                p2->unkc0 = x8->unkb8;
+                p2->unkc8 = x8->unkbc;
                 p2->unkd0 = 1;
                 if (p1->m_comboHits == 0) {
                     p2->m_comboStartHp = p2->m_hp;
                 }
-                p2->m_hp -= (int)((double)*(short*)(x8 + 0xa0) * p1->AttackFactor() * p2->DefenseFactor() * p1->ProrationFactor());
-                p2->unk124 = (int)(*(short*)(x8 + 0xb2) * (p1->m_proration / 10000.0 * 0.8));
-                p2->unk128 = (*(WORD*)(x8 + 0xaa) & 0x400) > 0;
-                p2->unk12c = (*(WORD*)(x8 + 0xaa) & 0x800) > 0;
+                p2->m_hp -= (int)((double)x8->unka0 * p1->AttackFactor() * p2->DefenseFactor() * p1->ProrationFactor());
+                p2->unk124 = (int)(x8->unkb2 * (p1->m_proration / 10000.0 * 0.8));
+                p2->unk128 = (x8->flagsAA & 0x400) > 0;
+                p2->unk12c = (x8->flagsAA & 0x800) > 0;
                 p2->unk158 = 0;
                 p2->unk159 = 0;
                 p2->unk15a = 0;
                 p1->m_shownProration = p1->m_proration / 100.0;
-                p1->m_proration = *(float*)(x8 + 0xa4) / 1e+03f * p1->m_proration;
+                p1->m_proration = x8->unka4 / 1e+03f * p1->m_proration;
                 if (p1->m_proration > 10000.0) {
-                    p1->m_proration = *(float*)(x8 + 0xa4) / 1e+03f * p1->m_proration;
+                    p1->m_proration = x8->unka4 / 1e+03f * p1->m_proration;
                 }
                 p1->m_comboHits++;
                 p1->m_shownHits = p1->m_comboHits;
                 p1->m_comboTimer = 0xb4;
                 p1->m_comboDamage = p2->m_comboStartHp - p2->m_hp;
-                p1->m_gauge += *(short*)(x8 + 0xb4);
-                p1->unk14a = *(short*)(x8 + 0xc2);
-                p2->unk14a = *(short*)(x8 + 0xc4);
+                p1->m_gauge += x8->unkb4;
+                p1->unk14a = x8->unkc2;
+                p2->unk14a = x8->unkc4;
                 if (p2->m_hp <= 0 && p2->unk140 == 0) {
-                    p2->pattern = *(short*)(x8 + 0xac);
+                    p2->pattern = x8->unkac;
                     p2->StartPattern();
                     p2->FaceOpponent();
                 }
@@ -1879,14 +1879,14 @@ void CScene3::Unk76b090(CPlayer* p1, CPlayer* p2, int p3, int p4)
             }
             EffectDesc v158;
             v158.unk0 = 0;
-            v158.type = *(x8 + 0xc0);
+            v158.type = x8->unkc0;
             v158.x = (double)((x10c.right + x10c.left) / 2);
             v158.y = (double)((x10c.bottom + x10c.top) / 2);
             v158.side = p1->facing < 0;
             v158.scale = 2;
             v158.layer = 1;
             v158.screen = 0;
-            v158.unk2c = *(x8 + 0xc1);
+            v158.unk2c = x8->unkc1;
             m_game->CreateEffect((EffectDesc*)&v158);
         }
     }
@@ -1896,32 +1896,32 @@ void CScene3::Unk76bab0(CPlayer* p1, CPlayer* p2, int p3, int p4)
 {
     RECT v30;
     RECT v20;
-    char* l10;
-    char* vc;
+    PlayerObject* l10;
+    PlayerObject* vc;
     int x8;
     int l4;
 
-    vc = ((char*)&p1->m_objects[p3].pattern);
-    l10 = ((char*)&p2->m_objects[p4].pattern);
-    x8 = (int)p1->m_patterns[*(WORD*)vc].frames + *(WORD*)(vc + 2) * 0xc8;
-    l4 = (int)p2->m_patterns[*(WORD*)l10].frames + *(WORD*)(l10 + 2) * 0xc8;
-    if (*(int*)(vc + 0x80) == 0 && *(int*)(l10 + 0x80) == 0 && *(short*)(vc + 0x84) > 0 && *(short*)(l10 + 0x84) > 0 && p1->m_patterns[*(WORD*)vc].unk0 > 0 && p2->m_patterns[*(WORD*)l10].unk0 > 0) {
+    vc = &p1->m_objects[p3];
+    l10 = &p2->m_objects[p4];
+    x8 = (int)p1->m_patterns[vc->pattern].frames + vc->frame * 0xc8;
+    l4 = (int)p2->m_patterns[l10->pattern].frames + l10->frame * 0xc8;
+    if (vc->unk80 == 0 && l10->unk80 == 0 && vc->unk84 > 0 && l10->unk84 > 0 && p1->m_patterns[vc->pattern].unk0 > 0 && p2->m_patterns[l10->pattern].unk0 > 0) {
         v20 = this->Unk767600((ObjBase*)vc, (RECT*)(x8 + 0x90));
         v30 = this->Unk767600((ObjBase*)l10, (RECT*)(l4 + 0x90));
         if (Unk767930(&v20, &v30) != 0) {
-            if (p2->m_patterns[*(WORD*)l10].unk0 == p1->m_patterns[*(WORD*)vc].unk0) {
-                *(int*)(vc + 0x80) = 4;
-                *(int*)(l10 + 0x80) = 4;
-            } else if (p2->m_patterns[*(WORD*)l10].unk0 > p1->m_patterns[*(WORD*)vc].unk0) {
-                *(int*)(vc + 0x80) = 4;
-            } else if (p2->m_patterns[*(WORD*)l10].unk0 < p1->m_patterns[*(WORD*)vc].unk0) {
-                *(int*)(l10 + 0x80) = 4;
+            if (p2->m_patterns[l10->pattern].unk0 == p1->m_patterns[vc->pattern].unk0) {
+                vc->unk80 = 4;
+                l10->unk80 = 4;
+            } else if (p2->m_patterns[l10->pattern].unk0 > p1->m_patterns[vc->pattern].unk0) {
+                vc->unk80 = 4;
+            } else if (p2->m_patterns[l10->pattern].unk0 < p1->m_patterns[vc->pattern].unk0) {
+                l10->unk80 = 4;
             }
-            if (p2->m_patterns[*(WORD*)l10].unk0 > 1) {
-                (*(short*)(vc + 0x84))--;
+            if (p2->m_patterns[l10->pattern].unk0 > 1) {
+                vc->unk84--;
             }
-            if (p1->m_patterns[*(WORD*)vc].unk0 > 1) {
-                (*(short*)(l10 + 0x84))--;
+            if (p1->m_patterns[vc->pattern].unk0 > 1) {
+                l10->unk84--;
             }
         }
     }
@@ -1935,19 +1935,19 @@ void CScene3::Unk76bd40(CPlayer* p1, CPlayer* p2, CollisionInfo* p3, CollisionIn
     RECT v168[5];
     PatternFrame n118;
     RECT n50[4];
-    char* l10;
+    PlayerObject* l10;
     int vc;
     int x8;
-    char* l4;
+    CollisionInfo* l4;
 
-    l10 = ((char*)&p2->m_objects[p5].pattern);
-    l4 = (char*)p3;
-    if (p1->m_attackResult == 0 && p1->m_hitsLeft > 0 && (*(WORD*)(l4 + 0xaa) & 0x40) == 0) {
-        n118 = p2->m_patterns[*(WORD*)l10].frames[*(WORD*)(l10 + 2)];
+    l10 = &p2->m_objects[p5];
+    l4 = p3;
+    if (p1->m_attackResult == 0 && p1->m_hitsLeft > 0 && (l4->frame.flagsAA & 0x40) == 0) {
+        n118 = p2->m_patterns[l10->pattern].frames[l10->frame];
         r1bc = 0;
         vc = 0;
         for (; vc < 4; vc++) {
-            n50[vc] = this->Unk7677a0(p3, (RECT*)(l4 + (vc << 4) + 0x50));
+            n50[vc] = this->Unk7677a0(p3, &l4->frame.attackBoxes[vc]);
         }
         vc = 0;
         for (; vc < 5; vc++) {
@@ -1999,22 +1999,22 @@ void CScene3::Unk76bd40(CPlayer* p1, CPlayer* p2, CollisionInfo* p3, CollisionIn
                 p1->m_hitsLeft--;
                 p1->m_attackResult = 5;
             }
-            *(int*)(l10 + 0x80) = 5;
+            l10->unk80 = 5;
             if ((n118.flagsB0 & 0x2000) > 0) {
                 n118 = p4->frame;
-                if ((n118.flagsB0 & 4) == 0 && p2->unk138 == 0 || ((n118.flagsB0 & 4) > 0 || p2->unk138 > 0) && (*(WORD*)(l4 + 0xaa) & 0x100) > 0 || (*(WORD*)(l4 + 0xaa) & 0x40) > 0) {
+                if ((n118.flagsB0 & 4) == 0 && p2->unk138 == 0 || ((n118.flagsB0 & 4) > 0 || p2->unk138 > 0) && (l4->frame.flagsAA & 0x100) > 0 || (l4->frame.flagsAA & 0x40) > 0) {
                     if (p2->y >= 0.0) {
-                        if (*(short*)(l4 + 0xae) > 0) {
-                            p2->pattern = *(short*)(l4 + 0xae);
+                        if (l4->frame.unkae > 0) {
+                            p2->pattern = l4->frame.unkae;
                         } else if ((n118.flagsB0 & 3) == 3) {
                             p2->pattern = 0x3b;
                         } else if ((n118.flagsB0 & 1) != 0) {
-                            p2->pattern = ((*(WORD*)(l4 + 0xaa) & 8) > 0) * 3 + 0x32 + ((*(WORD*)(l4 + 0xaa) & 0x10) > 0) + ((*(WORD*)(l4 + 0xaa) & 0x20) > 0) * 2;
+                            p2->pattern = ((l4->frame.flagsAA & 8) > 0) * 3 + 0x32 + ((l4->frame.flagsAA & 0x10) > 0) + ((l4->frame.flagsAA & 0x20) > 0) * 2;
                         } else if ((n118.flagsB0 & 2) != 0) {
-                            p2->pattern = ((*(WORD*)(l4 + 0xaa) & 0x10) > 0) + 0x38 + ((*(WORD*)(l4 + 0xaa) & 0x20) > 0) * 2;
+                            p2->pattern = ((l4->frame.flagsAA & 0x10) > 0) + 0x38 + ((l4->frame.flagsAA & 0x20) > 0) * 2;
                         }
-                    } else if (*(short*)(l4 + 0xac) > 0) {
-                        p2->pattern = *(short*)(l4 + 0xac);
+                    } else if (l4->frame.unkac > 0) {
+                        p2->pattern = l4->frame.unkac;
                     } else {
                         p2->pattern = 0x3b;
                     }
@@ -2032,33 +2032,33 @@ void CScene3::Unk76bd40(CPlayer* p1, CPlayer* p2, CollisionInfo* p3, CollisionIn
                         p1->m_proration = 10000.0;
                     }
                 }
-                p2->unkc0 = *(float*)(l4 + 0xb8);
-                p2->unkc8 = *(float*)(l4 + 0xbc);
+                p2->unkc0 = l4->frame.unkb8;
+                p2->unkc8 = l4->frame.unkbc;
                 p2->unkd0 = 1;
                 if (p1->m_comboHits == 0) {
                     p2->m_comboStartHp = p2->m_hp;
                 }
-                p2->m_hp -= (int)((double)*(short*)(l4 + 0xa0) * p1->AttackFactor() * p2->DefenseFactor() * p1->ProrationFactor());
-                p2->unk124 = (int)(*(short*)(l4 + 0xb2) * (p1->m_proration / 10000.0 * 0.8));
-                p2->unk128 = (*(WORD*)(l4 + 0xaa) & 0x400) > 0;
-                p2->unk12c = (*(WORD*)(l4 + 0xaa) & 0x800) > 0;
+                p2->m_hp -= (int)((double)l4->frame.unka0 * p1->AttackFactor() * p2->DefenseFactor() * p1->ProrationFactor());
+                p2->unk124 = (int)(l4->frame.unkb2 * (p1->m_proration / 10000.0 * 0.8));
+                p2->unk128 = (l4->frame.flagsAA & 0x400) > 0;
+                p2->unk12c = (l4->frame.flagsAA & 0x800) > 0;
                 p2->unk158 = 0;
                 p2->unk159 = 0;
                 p2->unk15a = 0;
                 p1->m_shownProration = p1->m_proration / 100.0;
-                p1->m_proration = *(float*)(l4 + 0xa4) / 1e+03f * p1->m_proration;
+                p1->m_proration = l4->frame.unka4 / 1e+03f * p1->m_proration;
                 if (p1->m_proration > 10000.0) {
-                    p1->m_proration = *(float*)(l4 + 0xa4) / 1e+03f * p1->m_proration;
+                    p1->m_proration = l4->frame.unka4 / 1e+03f * p1->m_proration;
                 }
                 p1->m_comboHits++;
                 p1->m_shownHits = p1->m_comboHits;
                 p1->m_comboTimer = 0xb4;
                 p1->m_comboDamage = p2->m_comboStartHp - p2->m_hp;
-                p1->m_gauge += *(short*)(l4 + 0xb4);
-                p1->unk14a = *(short*)(l4 + 0xc2);
-                p2->unk14a = *(short*)(l4 + 0xc4);
+                p1->m_gauge += l4->frame.unkb4;
+                p1->unk14a = l4->frame.unkc2;
+                p2->unk14a = l4->frame.unkc4;
                 if (p2->m_hp <= 0 && p2->unk140 == 0) {
-                    p2->pattern = *(short*)(l4 + 0xac);
+                    p2->pattern = l4->frame.unkac;
                     p2->StartPattern();
                     p2->FaceOpponent();
                 }
@@ -2066,14 +2066,14 @@ void CScene3::Unk76bd40(CPlayer* p1, CPlayer* p2, CollisionInfo* p3, CollisionIn
             }
             EffectDesc n218;
             n218.unk0 = 0;
-            n218.type = *(l4 + 0xc0);
+            n218.type = l4->frame.unkc0;
             n218.x = (double)((b1cc.right + b1cc.left) / 2);
             n218.y = (double)((b1cc.bottom + b1cc.top) / 2);
             n218.side = p1->facing < 0;
             n218.scale = 2;
             n218.layer = 1;
             n218.screen = 0;
-            n218.unk2c = *(l4 + 0xc1);
+            n218.unk2c = l4->frame.unkc1;
             m_game->CreateEffect((EffectDesc*)&n218);
         }
     }
