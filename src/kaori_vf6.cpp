@@ -17,7 +17,7 @@ void CKaori::UpdatePattern()
     EffectDesc l50;
     l4 = (short)anims[pattern].frames[frame].duration;
     x8 = anims[pattern].frameCount;
-    CPlayer::InitEffectDesc((EffectDesc*)&l50);
+    InitEffectDesc((EffectDesc*)&l50);
     switch (pattern) {
     default:
         vx = 0.0;
@@ -62,7 +62,7 @@ void CKaori::UpdatePattern()
         vx = 0.0;
         vy = 0.0;
         unk158 = 0;
-        CPlayer::FaceOpponent();
+        FaceOpponent();
         timer++;
         if (timer >= l4) {
             timer = 0;
@@ -75,7 +75,7 @@ void CKaori::UpdatePattern()
     case 4:
         if (frame == 0 && timer == 0) {
             if (unk158 == 0) {
-                CPlayer::FaceOpponent();
+                FaceOpponent();
             }
             vx = 0.0;
         }
@@ -102,7 +102,7 @@ void CKaori::UpdatePattern()
         if (y + vy >= 0.0 && frame > 3) {
             y = 0.0;
             m_playSound = 9;
-            CPlayer::FaceOpponent();
+            FaceOpponent();
             pattern = 0xd;
             StartPattern();
         }
@@ -110,7 +110,7 @@ void CKaori::UpdatePattern()
     case 5:
         if (frame == 0 && timer == 0) {
             if (unk158 == 0) {
-                CPlayer::FaceOpponent();
+                FaceOpponent();
             }
             vx = 0.0;
         }
@@ -138,7 +138,7 @@ void CKaori::UpdatePattern()
         if (y + vy >= 0.0 && frame > 3) {
             y = 0.0;
             m_playSound = 9;
-            CPlayer::FaceOpponent();
+            FaceOpponent();
             pattern = 0xd;
             StartPattern();
         }
@@ -146,7 +146,7 @@ void CKaori::UpdatePattern()
     case 6:
         if (frame == 0 && timer == 0) {
             if (unk158 == 0) {
-                CPlayer::FaceOpponent();
+                FaceOpponent();
             }
             vx = 0.0;
         }
@@ -170,7 +170,7 @@ void CKaori::UpdatePattern()
         if (y + vy >= 0.0 && frame > 3) {
             y = 0.0;
             m_playSound = 9;
-            CPlayer::FaceOpponent();
+            FaceOpponent();
             pattern = 0xd;
             StartPattern();
         }
@@ -179,7 +179,7 @@ void CKaori::UpdatePattern()
         vx = 0.0;
         vy = 0.0;
         unk158 = 0;
-        CPlayer::FaceOpponent();
+        FaceOpponent();
         timer++;
         if (timer >= l4) {
             timer = 0;
@@ -194,7 +194,7 @@ void CKaori::UpdatePattern()
         vx = 0.0;
         vy = 0.0;
         unk158 = 0;
-        CPlayer::FaceOpponent();
+        FaceOpponent();
         timer++;
         if (timer >= l4) {
             timer = 0;
@@ -227,7 +227,7 @@ void CKaori::UpdatePattern()
         vx = 0.0;
         vy = 0.0;
         unk158 = 0;
-        CPlayer::FaceOpponent();
+        FaceOpponent();
         timer++;
         if (timer >= l4) {
             timer = 0;
@@ -261,7 +261,7 @@ void CKaori::UpdatePattern()
         if (y + vy >= 0.0 && frame > 3) {
             y = 0.0;
             m_playSound = 9;
-            CPlayer::FaceOpponent();
+            FaceOpponent();
             pattern = 0xd;
             StartPattern();
         }
@@ -286,7 +286,7 @@ void CKaori::UpdatePattern()
         if (y + vy >= 0.0 && frame > 3) {
             y = 0.0;
             m_playSound = 9;
-            CPlayer::FaceOpponent();
+            FaceOpponent();
             pattern = 0xd;
             StartPattern();
         }
@@ -311,7 +311,7 @@ void CKaori::UpdatePattern()
         if (y + vy >= 0.0 && frame > 3) {
             y = 0.0;
             m_playSound = 9;
-            CPlayer::FaceOpponent();
+            FaceOpponent();
             pattern = 0xd;
             StartPattern();
         }
@@ -867,7 +867,7 @@ void CKaori::UpdatePattern()
         if (unk120 != 0) {
             unk118 -= 0.8;
         }
-        if (frame > 0 && (char)CPlayer::Unk40ff70() != 0) {
+        if (frame > 0 && (char)Unk40ff70() != 0) {
             pattern = 0x46;
             StartPattern();
             break;
@@ -915,7 +915,7 @@ void CKaori::UpdatePattern()
         if (unk120 != 0) {
             unk118 -= 0.8;
         }
-        if (frame > 0 && (char)CPlayer::Unk40ff70() != 0) {
+        if (frame > 0 && (char)Unk40ff70() != 0) {
             pattern = 0x46;
             StartPattern();
             break;
@@ -963,7 +963,7 @@ void CKaori::UpdatePattern()
         if (unk120 != 0) {
             unk118 -= 0.8;
         }
-        if (frame > 0 && (char)CPlayer::Unk40ff70() != 0) {
+        if (frame > 0 && (char)Unk40ff70() != 0) {
             pattern = 0x46;
             StartPattern();
             break;
@@ -1006,7 +1006,7 @@ void CKaori::UpdatePattern()
         if (unk120 != 0) {
             unk118 -= 0.8;
         }
-        if (frame > 0 && (char)CPlayer::Unk40ff70() != 0) {
+        if (frame > 0 && (char)Unk40ff70() != 0) {
             pattern = 0x46;
             StartPattern();
             break;
@@ -1053,7 +1053,7 @@ void CKaori::UpdatePattern()
         vx = unkc0;
         vy = unkc8;
         timer++;
-        if ((char)CPlayer::Unk40ff70() != 0) {
+        if ((char)Unk40ff70() != 0) {
             pattern = 0x46;
             StartPattern();
             break;
@@ -1496,7 +1496,7 @@ void CKaori::UpdatePattern()
             if (frame >= x8) {
                 pattern = 0;
                 StartPattern();
-                CPlayer::FaceOpponent();
+                FaceOpponent();
             }
         }
         break;
@@ -1548,7 +1548,7 @@ void CKaori::UpdatePattern()
             if (frame >= x8) {
                 pattern = 0;
                 StartPattern();
-                CPlayer::FaceOpponent();
+                FaceOpponent();
             }
         }
         break;
@@ -1581,7 +1581,7 @@ void CKaori::UpdatePattern()
             if (frame >= x8) {
                 pattern = 0;
                 StartPattern();
-                CPlayer::FaceOpponent();
+                FaceOpponent();
             }
         }
         if (y + vy >= 0.0) {
@@ -1666,7 +1666,7 @@ void CKaori::UpdatePattern()
             timer = 0;
             frame++;
             if (frame == x8 - 1) {
-                CPlayer::FaceOpponent();
+                FaceOpponent();
             }
             if (frame >= x8) {
                 pattern = 0;
@@ -1681,7 +1681,7 @@ void CKaori::UpdatePattern()
         vx = 0.0;
         vy = 0.0;
         if (frame == 0 && timer == 0) {
-            CPlayer::ShakeScreen(3, 0);
+            ShakeScreen(3, 0);
             l50.type = 3;
             l50.x = (double)(int)x;
             l50.y = (double)(int)y;
@@ -1704,7 +1704,7 @@ void CKaori::UpdatePattern()
         vx = 0.0;
         vy = 0.0;
         if (frame == 0 && timer == 0) {
-            CPlayer::ShakeScreen(3, 0);
+            ShakeScreen(3, 0);
             l50.type = 3;
             l50.x = (double)(int)x;
             l50.y = (double)(int)y;
@@ -1734,7 +1734,7 @@ void CKaori::UpdatePattern()
             timer = 0;
             frame++;
             if (frame == x8) {
-                CPlayer::FaceOpponent();
+                FaceOpponent();
             }
             if (frame >= x8) {
                 pattern = 0x60;
@@ -1771,7 +1771,7 @@ void CKaori::UpdatePattern()
             timer = 0;
             frame++;
             if (frame == x8) {
-                CPlayer::FaceOpponent();
+                FaceOpponent();
             }
             if (frame >= x8) {
                 pattern = 0;
@@ -1811,7 +1811,7 @@ void CKaori::UpdatePattern()
             timer = 0;
             frame++;
             if (frame == x8) {
-                CPlayer::FaceOpponent();
+                FaceOpponent();
             }
             if (frame >= x8) {
                 pattern = 0;
@@ -1851,7 +1851,7 @@ void CKaori::UpdatePattern()
             timer = 0;
             frame++;
             if (frame == x8) {
-                CPlayer::FaceOpponent();
+                FaceOpponent();
             }
             if (frame >= x8) {
                 pattern = 0;
@@ -1891,7 +1891,7 @@ void CKaori::UpdatePattern()
             timer = 0;
             frame++;
             if (frame == x8) {
-                CPlayer::FaceOpponent();
+                FaceOpponent();
             }
             if (frame >= x8) {
                 pattern = 3;
@@ -1928,7 +1928,7 @@ void CKaori::UpdatePattern()
             timer = 0;
             frame++;
             if (frame == x8) {
-                CPlayer::FaceOpponent();
+                FaceOpponent();
             }
             if (frame >= x8) {
                 pattern = 3;
@@ -1965,7 +1965,7 @@ void CKaori::UpdatePattern()
             timer = 0;
             frame++;
             if (frame == x8) {
-                CPlayer::FaceOpponent();
+                FaceOpponent();
             }
             if (frame >= x8) {
                 pattern = 3;
@@ -1993,7 +1993,7 @@ void CKaori::UpdatePattern()
         if (y + vy >= 0.0) {
             y = 0.0;
             m_playSound = 9;
-            CPlayer::FaceOpponent();
+            FaceOpponent();
             pattern = 0xd;
             StartPattern();
         }
@@ -2025,7 +2025,7 @@ void CKaori::UpdatePattern()
         if (y + vy >= 0.0) {
             y = 0.0;
             m_playSound = 9;
-            CPlayer::FaceOpponent();
+            FaceOpponent();
             pattern = 0xd;
             StartPattern();
         }
@@ -2057,14 +2057,14 @@ void CKaori::UpdatePattern()
         if (y + vy >= 0.0) {
             y = 0.0;
             m_playSound = 9;
-            CPlayer::FaceOpponent();
+            FaceOpponent();
             pattern = 0xd;
             StartPattern();
         }
         break;
     case 0xa1:
         if (frame == 0 && timer == 0) {
-            CPlayer::StopMoving();
+            StopMoving();
             l50.type = 9;
             l50.x = (double)(int)x;
             l50.y = (double)((int)y - 0x46);
@@ -2088,7 +2088,7 @@ void CKaori::UpdatePattern()
         break;
     case 0xa2:
         if (frame == 0 && timer == 0) {
-            CPlayer::StopMoving();
+            StopMoving();
         }
         if (frame == 3 && timer == 0) {
             vy = -1.5;
@@ -2096,7 +2096,7 @@ void CKaori::UpdatePattern()
             m_hitsLeft = 1;
         }
         if (frame == 8 && timer == 0) {
-            CPlayer::StopMoving();
+            StopMoving();
             l50.type = 9;
             l50.x = (double)(int)x;
             l50.y = (double)((int)y - 0x46);
@@ -2142,7 +2142,7 @@ void CKaori::UpdatePattern()
             break;
         }
         if (frame == 0 && timer == 0) {
-            CPlayer::StopMoving();
+            StopMoving();
         }
         vx = 1.65;
         unk158 = 1;
@@ -2166,7 +2166,7 @@ void CKaori::UpdatePattern()
         }
         break;
     case 0xa4:
-        CPlayer::StartAfterimages(2);
+        StartAfterimages(2);
         unk158 = 0;
         if (frame == 0 && timer == 0) {
             vx = 0.0;
@@ -2193,7 +2193,7 @@ void CKaori::UpdatePattern()
         }
         if ((frame == 4 || frame == 5) && (facing == 1 && m_command == 1 || facing == -1 && m_command == 0)) {
             StartPattern();
-            CPlayer::StopMoving();
+            StopMoving();
             pattern = 0xfb;
             break;
         }
@@ -2205,7 +2205,7 @@ void CKaori::UpdatePattern()
                 frame = frame - 2;
             }
             if (frame >= x8) {
-                CPlayer::FaceOpponent();
+                FaceOpponent();
                 pattern = 0;
                 StartPattern();
             }
@@ -2214,7 +2214,7 @@ void CKaori::UpdatePattern()
     case 0xa5:
         if (frame == 0 && timer == 0 && unk3138 == 0) {
             vx = 2.0;
-            CPlayer::StartAfterimages(3);
+            StartAfterimages(3);
             vy = 0.0;
             ay = 0.0;
             m_playSound = 0x11;
@@ -2233,7 +2233,7 @@ void CKaori::UpdatePattern()
             StartPattern();
             vx = 1.3;
             ay = 0.03;
-            if (CPlayer::FaceOpponent() != 0) {
+            if (FaceOpponent() != 0) {
                 vx = -vx;
             }
         }
@@ -2242,7 +2242,7 @@ void CKaori::UpdatePattern()
             StartPattern();
             vx = 1.3;
             ay = 0.03;
-            if (CPlayer::FaceOpponent() != 0) {
+            if (FaceOpponent() != 0) {
                 vx = -vx;
             }
         }
@@ -2252,7 +2252,7 @@ void CKaori::UpdatePattern()
             vx = -2.0;
             vy = 0.0;
             ay = 0.0;
-            CPlayer::StartAfterimages(3);
+            StartAfterimages(3);
             m_playSound = 0x11;
         }
         timer++;
@@ -2270,7 +2270,7 @@ void CKaori::UpdatePattern()
             StartPattern();
             vx = -0.9;
             ay = 0.03;
-            if (CPlayer::FaceOpponent() != 0) {
+            if (FaceOpponent() != 0) {
                 vx = -vx;
             }
         }
@@ -2279,7 +2279,7 @@ void CKaori::UpdatePattern()
             StartPattern();
             vx = -0.9;
             ay = 0.03;
-            if (CPlayer::FaceOpponent() != 0) {
+            if (FaceOpponent() != 0) {
                 vx = -vx;
             }
         }
@@ -2294,7 +2294,7 @@ void CKaori::UpdatePattern()
             }
             unk118 = 0.0;
             unk14c = 0x5a;
-            CPlayer::FillBackground(0xb0, 3);
+            FillBackground(0xb0, 3);
         }
         if (frame == 1 && timer == 0) {
             m_playSound = 0x12;
@@ -2320,7 +2320,7 @@ void CKaori::UpdatePattern()
             m_attackResult = 0;
             if (frame >= x8) {
                 pattern = 0;
-                CPlayer::FaceOpponent();
+                FaceOpponent();
                 StartPattern();
             }
         }
@@ -2347,7 +2347,7 @@ void CKaori::UpdatePattern()
             timer = 0;
             frame++;
             if (frame == x8) {
-                CPlayer::FaceOpponent();
+                FaceOpponent();
             }
             if (frame >= x8) {
                 pattern = 0;
@@ -2377,7 +2377,7 @@ void CKaori::UpdatePattern()
             timer = 0;
             frame++;
             if (frame == x8) {
-                CPlayer::FaceOpponent();
+                FaceOpponent();
             }
             if (frame >= x8) {
                 pattern = 3;
@@ -2407,7 +2407,7 @@ void CKaori::UpdatePattern()
             vy = vy + ay;
         }
         if (vy + y > 0.0) {
-            CPlayer::StopMoving();
+            StopMoving();
             y = 0.0;
             pattern = 0xa9;
             break;
@@ -2433,7 +2433,7 @@ void CKaori::UpdatePattern()
             }
             unk118 = 0.0;
             unk14c = 0x5a;
-            CPlayer::FillBackground(0xb0, 3);
+            FillBackground(0xb0, 3);
         }
         if (frame == 1 && timer == 0 && unk3140 == 0) {
             m_playSound = 0x12;
@@ -2501,7 +2501,7 @@ void CKaori::UpdatePattern()
         break;
     case 0xb4:
         if (frame == 0 && timer == 0) {
-            CPlayer::StartAfterimages(2);
+            StartAfterimages(2);
             vx = 0.0;
             vy = 0.0;
             ay = 0.0;
@@ -2510,7 +2510,7 @@ void CKaori::UpdatePattern()
             vy = vy + ay;
         }
         if (y + vy > 0.0 && frame < 4) {
-            CPlayer::StopMoving();
+            StopMoving();
             y = 0.0;
             timer = 0;
             frame = 4;
@@ -2571,7 +2571,7 @@ void CKaori::UpdatePattern()
             }
             if (frame >= x8) {
                 pattern = 0;
-                CPlayer::FaceOpponent();
+                FaceOpponent();
                 StartPattern();
             }
         }
@@ -2613,7 +2613,7 @@ void CKaori::UpdatePattern()
             }
             if (frame >= x8) {
                 pattern = 0;
-                CPlayer::FaceOpponent();
+                FaceOpponent();
                 StartPattern();
             }
         }
@@ -2655,7 +2655,7 @@ void CKaori::UpdatePattern()
             }
             if (frame >= x8) {
                 pattern = 0;
-                CPlayer::FaceOpponent();
+                FaceOpponent();
                 StartPattern();
             }
         }
@@ -2685,7 +2685,7 @@ void CKaori::UpdatePattern()
             }
             if (frame >= x8) {
                 pattern = 0;
-                CPlayer::FaceOpponent();
+                FaceOpponent();
                 StartPattern();
             }
         }
@@ -2730,7 +2730,7 @@ void CKaori::UpdatePattern()
                 if (m_inputY == 1) {
                     pattern = 3;
                 }
-                CPlayer::FaceOpponent();
+                FaceOpponent();
                 StartPattern();
             }
         }
@@ -2785,7 +2785,7 @@ void CKaori::UpdatePattern()
                 if (m_inputY == 1) {
                     pattern = 3;
                 }
-                CPlayer::FaceOpponent();
+                FaceOpponent();
                 StartPattern();
             }
         }
@@ -2830,7 +2830,7 @@ void CKaori::UpdatePattern()
                 if (m_inputY == 1) {
                     pattern = 3;
                 }
-                CPlayer::FaceOpponent();
+                FaceOpponent();
                 StartPattern();
             }
         }
@@ -2957,7 +2957,7 @@ void CKaori::UpdatePattern()
             vy = vy + ay;
         }
         if (frame == 2 && timer == 0) {
-            CPlayer::StopMoving();
+            StopMoving();
         }
         if (frame == 6 && timer == 0) {
             m_gauge = m_gauge + 0x1e;
@@ -2968,7 +2968,7 @@ void CKaori::UpdatePattern()
         }
         if (y + vy >= 0.0) {
             y = 0.0;
-            CPlayer::StopMoving();
+            StopMoving();
             pattern = 0xd;
             StartPattern();
             break;
@@ -3044,7 +3044,7 @@ void CKaori::UpdatePattern()
         vx = 0.0;
         vy = 0.0;
         if (frame == 0 && timer == 0) {
-            CPlayer::ShakeScreen(3, 0);
+            ShakeScreen(3, 0);
             l50.type = 3;
             l50.x = (double)(int)x;
             l50.y = (double)(int)y;
@@ -3063,7 +3063,7 @@ void CKaori::UpdatePattern()
                 if (m_inputY == 1) {
                     pattern = 3;
                 }
-                CPlayer::FaceOpponent();
+                FaceOpponent();
                 StartPattern();
             }
         }
@@ -3105,7 +3105,7 @@ void CKaori::UpdatePattern()
                 if (m_inputY == 1) {
                     pattern = 3;
                 }
-                CPlayer::FaceOpponent();
+                FaceOpponent();
                 StartPattern();
             }
         }
@@ -3132,7 +3132,7 @@ void CKaori::UpdatePattern()
         if (frame == 6 && timer == 0) {
             (*m_opponent)->StartPattern();
             (*m_opponent)->pattern = 0x51;
-            CPlayer::DealDamage(0x4b0, 750.0);
+            DealDamage(0x4b0, 750.0);
             (*m_opponent)->unkc0 = -2.5;
             (*m_opponent)->unkc8 = -1.5;
             m_playSound = 2;
@@ -3143,26 +3143,26 @@ void CKaori::UpdatePattern()
             l50.scale = 2;
             l50.layer = 1;
             SpawnObject(&l50);
-            l50.x = (double)((int)x + -0x32 + (WORD)CPlayer::Random(0, 0x64));
-            l50.y = (double)((int)y + -0x3c + (WORD)CPlayer::Random(0, 0x50));
+            l50.x = (double)((int)x + -0x32 + (WORD)Random(0, 0x64));
+            l50.y = (double)((int)y + -0x3c + (WORD)Random(0, 0x50));
             SpawnObject(&l50);
-            l50.x = (double)((int)x + -0x32 + (WORD)CPlayer::Random(0, 0x64));
-            l50.y = (double)((int)y + -0x3c + (WORD)CPlayer::Random(0, 0x50));
+            l50.x = (double)((int)x + -0x32 + (WORD)Random(0, 0x64));
+            l50.y = (double)((int)y + -0x3c + (WORD)Random(0, 0x50));
             SpawnObject(&l50);
-            l50.x = (double)((int)x + -0x32 + (WORD)CPlayer::Random(0, 0x64));
-            l50.y = (double)((int)y + -0x3c + (WORD)CPlayer::Random(0, 0x50));
+            l50.x = (double)((int)x + -0x32 + (WORD)Random(0, 0x64));
+            l50.y = (double)((int)y + -0x3c + (WORD)Random(0, 0x50));
             SpawnObject(&l50);
-            l50.x = (double)((int)x + -0x32 + (WORD)CPlayer::Random(0, 0x64));
-            l50.y = (double)((int)y + -0x3c + (WORD)CPlayer::Random(0, 0x50));
+            l50.x = (double)((int)x + -0x32 + (WORD)Random(0, 0x64));
+            l50.y = (double)((int)y + -0x3c + (WORD)Random(0, 0x50));
             SpawnObject(&l50);
-            l50.x = (double)((int)x + -0x32 + (WORD)CPlayer::Random(0, 0x64));
-            l50.y = (double)((int)y + -0x3c + (WORD)CPlayer::Random(0, 0x50));
+            l50.x = (double)((int)x + -0x32 + (WORD)Random(0, 0x64));
+            l50.y = (double)((int)y + -0x3c + (WORD)Random(0, 0x50));
             SpawnObject(&l50);
-            l50.x = (double)((int)x + -0x32 + (WORD)CPlayer::Random(0, 0x64));
-            l50.y = (double)((int)y + -0x3c + (WORD)CPlayer::Random(0, 0x50));
+            l50.x = (double)((int)x + -0x32 + (WORD)Random(0, 0x64));
+            l50.y = (double)((int)y + -0x3c + (WORD)Random(0, 0x50));
             SpawnObject(&l50);
-            l50.x = (double)((int)x + -0x32 + (WORD)CPlayer::Random(0, 0x64));
-            l50.y = (double)((int)y + -0x3c + (WORD)CPlayer::Random(0, 0x50));
+            l50.x = (double)((int)x + -0x32 + (WORD)Random(0, 0x64));
+            l50.y = (double)((int)y + -0x3c + (WORD)Random(0, 0x50));
             SpawnObject(&l50);
         }
         timer++;
@@ -3175,13 +3175,13 @@ void CKaori::UpdatePattern()
                 if (m_inputY == 1) {
                     pattern = 3;
                 }
-                CPlayer::FaceOpponent();
+                FaceOpponent();
                 StartPattern();
             }
         }
         break;
     case 0xe6:
-        CPlayer::StartAfterimages(3);
+        StartAfterimages(3);
         vx -= 0.06;
         unk158 = 0;
         if (vx < 0.0) {
@@ -3209,7 +3209,7 @@ void CKaori::UpdatePattern()
         }
         break;
     case 0xe7:
-        CPlayer::StartAfterimages(3);
+        StartAfterimages(3);
         unk158 = 0;
         if (vx > 0.0) {
             vx -= 0.03;
@@ -3250,7 +3250,7 @@ void CKaori::UpdatePattern()
         }
         break;
     case 0xe8:
-        CPlayer::StartAfterimages(3);
+        StartAfterimages(3);
         unk158 = 0;
         if (vx > 0.0) {
             vx -= 0.03;
@@ -3291,7 +3291,7 @@ void CKaori::UpdatePattern()
         }
         break;
     case 0xe9:
-        CPlayer::StartAfterimages(3);
+        StartAfterimages(3);
         vx -= 0.06;
         if (vx < 0.0) {
             vx = 0.0;
@@ -3319,7 +3319,7 @@ void CKaori::UpdatePattern()
         }
         break;
     case 0xea:
-        CPlayer::StartAfterimages(3);
+        StartAfterimages(3);
         unk158 = 0;
         if (vx > 0.0) {
             vx -= 0.03;
@@ -3349,7 +3349,7 @@ void CKaori::UpdatePattern()
         }
         break;
     case 0xeb:
-        CPlayer::StartAfterimages(3);
+        StartAfterimages(3);
         unk158 = 0;
         if (vx > 0.0 && frame < 3) {
             vx -= 0.03;
@@ -3367,7 +3367,7 @@ void CKaori::UpdatePattern()
                 timer = 0;
                 frame = 0x12;
                 y = 0.0;
-                CPlayer::StopMoving();
+                StopMoving();
                 break;
             }
         }
@@ -3440,7 +3440,7 @@ void CKaori::UpdatePattern()
             vx = 0.0;
         }
         if (vy + y > 0.0 && frame == 4) {
-            CPlayer::StopMoving();
+            StopMoving();
             y = 0.0;
             frame = 5;
             timer = 0;
@@ -3476,7 +3476,7 @@ void CKaori::UpdatePattern()
             (*m_opponent)->pattern = 0x75;
         }
         if (frame == 6 && timer == 0) {
-            CPlayer::ShakeScreen(4, 0);
+            ShakeScreen(4, 0);
             l50.type = 3;
             l50.unk2c = 7;
             l50.x = (double)((int)x + facing * 0xf);
@@ -3490,7 +3490,7 @@ void CKaori::UpdatePattern()
             (*m_opponent)->unkc8 = -0.5;
             (*m_opponent)->ay = 0.035;
             (*m_opponent)->x = facing * 0xf + x;
-            CPlayer::DealDamage(0x3e8, 790.0);
+            DealDamage(0x3e8, 790.0);
             (*m_opponent)->unk124 = (int)(200.0 * m_proration * 0.0001);
             (*m_opponent)->StartPattern();
         }
@@ -3501,7 +3501,7 @@ void CKaori::UpdatePattern()
             m_attackResult = 0;
             if (frame >= x8) {
                 pattern = 0;
-                CPlayer::FaceOpponent();
+                FaceOpponent();
                 StartPattern();
             }
         }
@@ -3512,7 +3512,7 @@ void CKaori::UpdatePattern()
             (*m_opponent)->StopMoving();
             (*m_opponent)->StartPattern();
             StartPattern();
-            CPlayer::StopMoving();
+            StopMoving();
             pattern = 0xf9;
             (*m_opponent)->pattern = 0x64;
             l50.type = 0;
@@ -3542,17 +3542,17 @@ void CKaori::UpdatePattern()
         break;
     case 0xf9:
         if (frame < 5) {
-            CPlayer::Unk410a40(0x32, 3);
+            Unk410a40(0x32, 3);
         }
         if (frame < 5) {
-            CPlayer::Unk410a80(0x32, 3);
+            Unk410a80(0x32, 3);
         }
         if (frame == 0 && timer == 1) {
             (*m_opponent)->facing = -facing;
         }
         vy = vy + ay;
         if (vy + y > 0.0 && frame > 7) {
-            CPlayer::StopMoving();
+            StopMoving();
             y = 0.0;
             StartPattern();
             pattern = 0xd;
@@ -3562,7 +3562,7 @@ void CKaori::UpdatePattern()
             (*m_opponent)->y = y - 27.0;
             (*m_opponent)->x = facing * 0x36 + x;
             (*m_opponent)->pattern = 0x45;
-            CPlayer::DealDamage(0x578, 500.0);
+            DealDamage(0x578, 500.0);
             (*m_opponent)->StartPattern();
             l50.type = 0;
             l50.x = (double)((int)x + facing * 0x36);
@@ -3590,7 +3590,7 @@ void CKaori::UpdatePattern()
     case 0xfa:
         if (frame == 0 && timer == 0) {
             unk158 = 0;
-            CPlayer::StopMoving();
+            StopMoving();
         }
         if (frame == 2 && timer == 0) {
             vx = 2.5;
@@ -3628,7 +3628,7 @@ void CKaori::UpdatePattern()
             m_attackResult = 3;
             if (frame >= x8) {
                 pattern = 0;
-                CPlayer::FaceOpponent();
+                FaceOpponent();
                 StartPattern();
             }
         }
@@ -3636,7 +3636,7 @@ void CKaori::UpdatePattern()
     case 0xfb:
         if (frame == 0 && timer == 0) {
             unk158 = 0;
-            CPlayer::StopMoving();
+            StopMoving();
         }
         if (frame == 2 && timer == 0) {
             vx = 4.0;
@@ -3674,7 +3674,7 @@ void CKaori::UpdatePattern()
             m_attackResult = 3;
             if (frame >= x8) {
                 pattern = 0;
-                CPlayer::FaceOpponent();
+                FaceOpponent();
                 StartPattern();
             }
         }
@@ -3682,7 +3682,7 @@ void CKaori::UpdatePattern()
     case 0xfd:
         if (frame == 0 && timer == 0) {
             unk158 = 0;
-            CPlayer::StopMoving();
+            StopMoving();
         }
         if (frame == 6 && timer == 0) {
             m_gauge = m_gauge + 0x2d;
@@ -3705,7 +3705,7 @@ void CKaori::UpdatePattern()
             }
             if (frame >= x8) {
                 StartPattern();
-                CPlayer::FaceOpponent();
+                FaceOpponent();
                 pattern = 0;
             }
         }
@@ -3713,7 +3713,7 @@ void CKaori::UpdatePattern()
     case 0xfe:
         if (frame == 0 && timer == 0) {
             unk158 = 0;
-            CPlayer::StopMoving();
+            StopMoving();
         }
         if (frame == 4 && timer == 0) {
             vx = 2.1;
@@ -3741,7 +3741,7 @@ void CKaori::UpdatePattern()
             }
             if (frame >= x8) {
                 StartPattern();
-                CPlayer::FaceOpponent();
+                FaceOpponent();
                 pattern = 0;
             }
         }
@@ -3749,7 +3749,7 @@ void CKaori::UpdatePattern()
     case 0xff:
         if (frame == 0 && timer == 0) {
             unk158 = 0;
-            CPlayer::StopMoving();
+            StopMoving();
             if (unk120 == 0) {
                 unk118 -= 500.0;
             } else {
@@ -3793,7 +3793,7 @@ void CKaori::UpdatePattern()
             }
             if (frame >= x8) {
                 StartPattern();
-                CPlayer::FaceOpponent();
+                FaceOpponent();
                 pattern = 0;
             }
         }
@@ -3801,7 +3801,7 @@ void CKaori::UpdatePattern()
     case 0x100:
         if (frame == 0 && timer == 0) {
             unk158 = 0;
-            CPlayer::StopMoving();
+            StopMoving();
         }
         if (frame == 3 && timer == 0) {
             l50.type = 0x19a;
@@ -3827,7 +3827,7 @@ void CKaori::UpdatePattern()
             }
             if (frame >= x8) {
                 StartPattern();
-                CPlayer::FaceOpponent();
+                FaceOpponent();
                 pattern = 0;
             }
         }
@@ -3835,7 +3835,7 @@ void CKaori::UpdatePattern()
     case 0x101:
         if (frame == 0 && timer == 0) {
             unk158 = 0;
-            CPlayer::StopMoving();
+            StopMoving();
         }
         if (frame == 3 && timer == 0) {
             l50.type = 0x190;
@@ -3861,7 +3861,7 @@ void CKaori::UpdatePattern()
             }
             if (frame >= x8) {
                 StartPattern();
-                CPlayer::FaceOpponent();
+                FaceOpponent();
                 pattern = 0;
             }
         }
@@ -3869,7 +3869,7 @@ void CKaori::UpdatePattern()
     case 0x102:
         if (frame == 0 && timer == 0) {
             unk158 = 0;
-            CPlayer::StopMoving();
+            StopMoving();
             if (unk120 == 0) {
                 unk118 -= 500.0;
             } else {
@@ -3907,7 +3907,7 @@ void CKaori::UpdatePattern()
             }
             if (frame >= x8) {
                 StartPattern();
-                CPlayer::FaceOpponent();
+                FaceOpponent();
                 pattern = 0;
             }
         }
@@ -3930,7 +3930,7 @@ void CKaori::UpdatePattern()
             }
             if (frame >= x8) {
                 StartPattern();
-                CPlayer::FaceOpponent();
+                FaceOpponent();
                 pattern = 0;
             }
         }
@@ -3959,7 +3959,7 @@ void CKaori::UpdatePattern()
             }
             if (frame >= x8) {
                 StartPattern();
-                CPlayer::FaceOpponent();
+                FaceOpponent();
                 pattern = 0;
             }
         }
@@ -3982,7 +3982,7 @@ void CKaori::UpdatePattern()
             }
             if (frame >= x8) {
                 StartPattern();
-                CPlayer::FaceOpponent();
+                FaceOpponent();
                 pattern = 3;
             }
         }
@@ -4005,7 +4005,7 @@ void CKaori::UpdatePattern()
             }
             if (frame >= x8) {
                 StartPattern();
-                CPlayer::FaceOpponent();
+                FaceOpponent();
                 pattern = 0;
             }
         }
@@ -4032,7 +4032,7 @@ void CKaori::UpdatePattern()
             }
             if (frame >= x8) {
                 StartPattern();
-                CPlayer::FaceOpponent();
+                FaceOpponent();
                 pattern = 0;
             }
         }
@@ -4047,10 +4047,10 @@ void CKaori::UpdatePattern()
             ay = 0.0;
         }
         if (frame == 0 && timer == 0) {
-            CPlayer::StopMoving();
+            StopMoving();
             unk14c = 0x78;
             m_gauge = m_gauge - 0x3e8;
-            CPlayer::FillBackground(0xb0, 3);
+            FillBackground(0xb0, 3);
             l50.type = 0x44;
             l50.unk2c = 0x13;
             l50.x = (double)((int)x + facing * 8);
@@ -4062,7 +4062,7 @@ void CKaori::UpdatePattern()
             m_hitsLeft = 1;
         }
         if (frame < 8) {
-            CPlayer::Unk410a80(0x32, 0xa);
+            Unk410a80(0x32, 0xa);
         }
         if (frame == 6 && m_attackResult == 3) {
             m_game->FlashWhite(9, 0x24, 9);
@@ -4078,13 +4078,13 @@ void CKaori::UpdatePattern()
             m_attackResult = 0;
             if (frame >= x8) {
                 pattern = 0;
-                CPlayer::FaceOpponent();
+                FaceOpponent();
                 StartPattern();
             }
         }
         break;
     case 0x12d:
-        CPlayer::Unk410a80(0x32, 0xa);
+        Unk410a80(0x32, 0xa);
         if (frame == 0 && timer == 0) {
             m_hitsLeft = 2;
         }
@@ -4128,7 +4128,7 @@ void CKaori::UpdatePattern()
             m_attackResult = 0;
             if (frame >= x8) {
                 pattern = 0;
-                CPlayer::FaceOpponent();
+                FaceOpponent();
                 StartPattern();
             }
         }
@@ -4143,10 +4143,10 @@ void CKaori::UpdatePattern()
             ay = 0.0;
         }
         if (frame == 0 && timer == 0) {
-            CPlayer::StopMoving();
+            StopMoving();
             unk14c = 0x78;
             m_gauge = m_gauge - 0x7d0;
-            CPlayer::FillBackground(0xb0, 3);
+            FillBackground(0xb0, 3);
             l50.type = 0x45;
             l50.unk2c = 5;
             l50.x = (double)((int)x + facing * 8);
@@ -4158,7 +4158,7 @@ void CKaori::UpdatePattern()
             m_hitsLeft = 1;
         }
         if (frame < 8) {
-            CPlayer::Unk410a80(0x32, 0xa);
+            Unk410a80(0x32, 0xa);
         }
         if (frame == 6 && m_attackResult == 3) {
             m_game->FlashWhite(9, 0x24, 9);
@@ -4174,13 +4174,13 @@ void CKaori::UpdatePattern()
             m_attackResult = 0;
             if (frame >= x8) {
                 pattern = 0;
-                CPlayer::FaceOpponent();
+                FaceOpponent();
                 StartPattern();
             }
         }
         break;
     case 0x12f:
-        CPlayer::Unk410a80(0x32, 0xa);
+        Unk410a80(0x32, 0xa);
         if (frame == 0 && timer == 0) {
             m_hitsLeft = 2;
         }
@@ -4224,7 +4224,7 @@ void CKaori::UpdatePattern()
             m_attackResult = 0;
             if (frame >= x8) {
                 pattern = 0;
-                CPlayer::FaceOpponent();
+                FaceOpponent();
                 StartPattern();
             }
         }
@@ -4242,10 +4242,10 @@ void CKaori::UpdatePattern()
             ay = 0.0;
         }
         if (frame == 0 && timer == 0) {
-            CPlayer::StopMoving();
+            StopMoving();
             unk14c = 0x78;
             m_gauge = m_gauge - 0xbb8;
-            CPlayer::FillBackground(0xb0, 3);
+            FillBackground(0xb0, 3);
             l50.type = 0x46;
             l50.unk2c = 0x40;
             l50.x = (double)((int)x + facing * 8);
@@ -4257,7 +4257,7 @@ void CKaori::UpdatePattern()
             m_hitsLeft = 1;
         }
         if (frame < 8) {
-            CPlayer::Unk410a80(0x32, 0xa);
+            Unk410a80(0x32, 0xa);
         }
         if (frame == 6 && m_attackResult == 3) {
             m_game->FlashWhite(9, 0x24, 9);
@@ -4273,13 +4273,13 @@ void CKaori::UpdatePattern()
             m_attackResult = 0;
             if (frame >= x8) {
                 pattern = 0;
-                CPlayer::FaceOpponent();
+                FaceOpponent();
                 StartPattern();
             }
         }
         break;
     case 0x131:
-        CPlayer::Unk410a80(0x32, 0xa);
+        Unk410a80(0x32, 0xa);
         m_game->Unk4080c0(0xf);
         if (frame == 0 && timer == 0) {
             m_hitsLeft = 3;
@@ -4324,7 +4324,7 @@ void CKaori::UpdatePattern()
             m_attackResult = 0;
             if (frame >= x8) {
                 pattern = 0;
-                CPlayer::FaceOpponent();
+                FaceOpponent();
                 StartPattern();
             }
         }
@@ -4337,10 +4337,10 @@ void CKaori::UpdatePattern()
             ay = 0.0;
         }
         if (frame == 0 && timer == 0) {
-            CPlayer::StopMoving();
+            StopMoving();
             unk14c = 0x78;
             m_gauge = m_gauge - 0x3e8;
-            CPlayer::FillBackground(0xb0, 3);
+            FillBackground(0xb0, 3);
             l50.type = 0x44;
             l50.unk2c = 0x13;
             l50.x = (double)(int)x;
@@ -4361,7 +4361,7 @@ void CKaori::UpdatePattern()
             vx = 0.0;
         }
         if (frame < 0xd) {
-            CPlayer::Unk410a80(0x32, 0xa);
+            Unk410a80(0x32, 0xa);
         }
         if (frame == 0xc && m_attackResult == 3) {
             (*m_opponent)->StartPattern();
@@ -4380,7 +4380,7 @@ void CKaori::UpdatePattern()
             m_attackResult = 0;
             if (frame >= x8) {
                 pattern = 0;
-                CPlayer::FaceOpponent();
+                FaceOpponent();
                 StartPattern();
             }
         }
@@ -4394,10 +4394,10 @@ void CKaori::UpdatePattern()
         if (frame == 0 && timer == 0) {
             (*m_opponent)->y = 0.0;
             m_hitsLeft = 6;
-            CPlayer::FaceOpponent();
+            FaceOpponent();
         }
         if (frame < 0x24) {
-            CPlayer::Unk410a80(0x32, 0xa);
+            Unk410a80(0x32, 0xa);
         }
         timer++;
         if (timer >= l4) {
@@ -4406,7 +4406,7 @@ void CKaori::UpdatePattern()
             m_attackResult = 0;
             if (frame >= x8) {
                 pattern = 0;
-                CPlayer::FaceOpponent();
+                FaceOpponent();
                 StartPattern();
             }
         }
@@ -4419,10 +4419,10 @@ void CKaori::UpdatePattern()
             ay = 0.0;
         }
         if (frame == 0 && timer == 0) {
-            CPlayer::StopMoving();
+            StopMoving();
             unk14c = 0x78;
             m_gauge = m_gauge - 0x7d0;
-            CPlayer::FillBackground(0xb0, 3);
+            FillBackground(0xb0, 3);
             l50.type = 0x45;
             l50.unk2c = 5;
             l50.x = (double)(int)x;
@@ -4443,7 +4443,7 @@ void CKaori::UpdatePattern()
             vx = 0.0;
         }
         if (frame < 0xd) {
-            CPlayer::Unk410a80(0x32, 0xa);
+            Unk410a80(0x32, 0xa);
         }
         if (frame == 0xc && m_attackResult == 3) {
             (*m_opponent)->StartPattern();
@@ -4462,7 +4462,7 @@ void CKaori::UpdatePattern()
             m_attackResult = 0;
             if (frame >= x8) {
                 pattern = 0;
-                CPlayer::FaceOpponent();
+                FaceOpponent();
                 StartPattern();
             }
         }
@@ -4476,10 +4476,10 @@ void CKaori::UpdatePattern()
         if (frame == 0 && timer == 0) {
             (*m_opponent)->y = 0.0;
             m_hitsLeft = 0xf;
-            CPlayer::FaceOpponent();
+            FaceOpponent();
         }
         if (frame < 0x24) {
-            CPlayer::Unk410a80(0x32, 0xa);
+            Unk410a80(0x32, 0xa);
         }
         timer++;
         if (timer >= l4) {
@@ -4488,7 +4488,7 @@ void CKaori::UpdatePattern()
             m_attackResult = 0;
             if (frame >= x8) {
                 pattern = 0;
-                CPlayer::FaceOpponent();
+                FaceOpponent();
                 StartPattern();
             }
         }
@@ -4502,10 +4502,10 @@ void CKaori::UpdatePattern()
             ay = 0.0;
         }
         if (frame == 0 && timer == 0) {
-            CPlayer::StopMoving();
+            StopMoving();
             unk14c = 0x78;
             m_gauge = m_gauge - 0xbb8;
-            CPlayer::FillBackground(0xb0, 3);
+            FillBackground(0xb0, 3);
             l50.type = 0x46;
             l50.unk2c = 0x40;
             l50.x = (double)(int)x;
@@ -4526,7 +4526,7 @@ void CKaori::UpdatePattern()
             vx = 0.0;
         }
         if (frame < 0xd) {
-            CPlayer::Unk410a80(0x32, 0xa);
+            Unk410a80(0x32, 0xa);
         }
         if (frame == 0xc && m_attackResult == 3) {
             (*m_opponent)->StartPattern();
@@ -4545,7 +4545,7 @@ void CKaori::UpdatePattern()
             m_attackResult = 0;
             if (frame >= x8) {
                 pattern = 0;
-                CPlayer::FaceOpponent();
+                FaceOpponent();
                 StartPattern();
             }
         }
@@ -4560,10 +4560,10 @@ void CKaori::UpdatePattern()
         if (frame == 0 && timer == 0) {
             (*m_opponent)->y = 0.0;
             m_hitsLeft = 0xf;
-            CPlayer::FaceOpponent();
+            FaceOpponent();
         }
         if (frame < 0x24) {
-            CPlayer::Unk410a80(0x32, 0xa);
+            Unk410a80(0x32, 0xa);
         }
         timer++;
         if (timer >= l4) {
@@ -4572,7 +4572,7 @@ void CKaori::UpdatePattern()
             m_attackResult = 0;
             if (frame >= x8) {
                 pattern = 0;
-                CPlayer::FaceOpponent();
+                FaceOpponent();
                 StartPattern();
             }
         }
@@ -4580,15 +4580,15 @@ void CKaori::UpdatePattern()
     case 0x138:
         unk158 = 0;
         if (frame == 0 && timer == 0) {
-            CPlayer::StopMoving();
+            StopMoving();
         }
         if (frame == 8 && timer == 0) {
             unk3138 = (int)(vx * 100.0);
             unk313c = (int)(vy * 100.0);
-            CPlayer::StopMoving();
+            StopMoving();
             unk14c = 0x78;
             m_gauge = m_gauge - 0x3e8;
-            CPlayer::FillBackground(0xb0, 3);
+            FillBackground(0xb0, 3);
             l50.type = 0x44;
             l50.unk2c = 0x13;
             l50.x = (double)((int)x - facing * 0x1f);
@@ -4601,27 +4601,27 @@ void CKaori::UpdatePattern()
         }
         if (frame == 0xc && m_attackResult > 0 && unk3140 == 0) {
             (*m_opponent)->unk14a = 0xb4;
-            CPlayer::StopMoving();
+            StopMoving();
             unk3140++;
         }
         if (frame == 0x10 && m_attackResult > 0 && unk3140 == 1) {
             (*m_opponent)->unk14a = 0xb4;
-            CPlayer::StopMoving();
+            StopMoving();
             unk3140++;
         }
         if (frame == 8) {
-            CPlayer::Unk410a80(0x32, 3);
+            Unk410a80(0x32, 3);
         }
         if (frame == 0xd && y + vy > 0.0) {
             y = 0.0;
-            CPlayer::StopMoving();
+            StopMoving();
             timer = 0;
             frame = 0x20;
             break;
         }
         if ((frame == 0x1e || frame == 0x1f) && y + vy > 0.0) {
             y = 0.0;
-            CPlayer::StopMoving();
+            StopMoving();
             timer = 0;
             frame = 0x20;
             break;
@@ -4668,7 +4668,7 @@ void CKaori::UpdatePattern()
             }
             if (frame >= x8) {
                 pattern = 3;
-                CPlayer::FaceOpponent();
+                FaceOpponent();
                 StartPattern();
             }
         }
@@ -4676,15 +4676,15 @@ void CKaori::UpdatePattern()
     case 0x139:
         unk158 = 0;
         if (frame == 0 && timer == 0) {
-            CPlayer::StopMoving();
+            StopMoving();
         }
         if (frame == 8 && timer == 0) {
             unk3138 = (int)(vx * 100.0);
             unk313c = (int)(vy * 100.0);
-            CPlayer::StopMoving();
+            StopMoving();
             unk14c = 0x78;
             m_gauge = m_gauge - 0x7d0;
-            CPlayer::FillBackground(0xb0, 3);
+            FillBackground(0xb0, 3);
             l50.type = 0x45;
             l50.unk2c = 5;
             l50.x = (double)((int)x - facing * 0x1f);
@@ -4697,27 +4697,27 @@ void CKaori::UpdatePattern()
         }
         if (frame == 0xc && m_attackResult > 0 && unk3140 == 0) {
             (*m_opponent)->unk14a = 0xb4;
-            CPlayer::StopMoving();
+            StopMoving();
             unk3140++;
         }
         if (frame == 0x10 && m_attackResult > 0 && unk3140 == 1) {
             (*m_opponent)->unk14a = 0xb4;
-            CPlayer::StopMoving();
+            StopMoving();
             unk3140++;
         }
         if (frame == 8) {
-            CPlayer::Unk410a80(0x32, 3);
+            Unk410a80(0x32, 3);
         }
         if (frame == 0xd && y + vy > 0.0) {
             y = 0.0;
-            CPlayer::StopMoving();
+            StopMoving();
             timer = 0;
             frame = 0x20;
             break;
         }
         if ((frame == 0x1e || frame == 0x1f) && y + vy > 0.0) {
             y = 0.0;
-            CPlayer::StopMoving();
+            StopMoving();
             timer = 0;
             frame = 0x20;
             break;
@@ -4764,7 +4764,7 @@ void CKaori::UpdatePattern()
             }
             if (frame >= x8) {
                 pattern = 3;
-                CPlayer::FaceOpponent();
+                FaceOpponent();
                 StartPattern();
             }
         }
@@ -4772,15 +4772,15 @@ void CKaori::UpdatePattern()
     case 0x13a:
         unk158 = 0;
         if (frame == 0 && timer == 0) {
-            CPlayer::StopMoving();
+            StopMoving();
         }
         if (frame == 8 && timer == 0) {
             unk3138 = (int)(vx * 100.0);
             unk313c = (int)(vy * 100.0);
-            CPlayer::StopMoving();
+            StopMoving();
             unk14c = 0x78;
             m_gauge = m_gauge - 0xbb8;
-            CPlayer::FillBackground(0xb0, 3);
+            FillBackground(0xb0, 3);
             l50.type = 0x46;
             l50.unk2c = 0x40;
             l50.x = (double)((int)x - facing * 0x1f);
@@ -4796,27 +4796,27 @@ void CKaori::UpdatePattern()
         }
         if (frame == 0xc && m_attackResult > 0 && unk3140 == 0) {
             (*m_opponent)->unk14a = 0xb4;
-            CPlayer::StopMoving();
+            StopMoving();
             unk3140++;
         }
         if (frame == 0x10 && m_attackResult > 0 && unk3140 == 1) {
             (*m_opponent)->unk14a = 0xb4;
-            CPlayer::StopMoving();
+            StopMoving();
             unk3140++;
         }
         if (frame == 8) {
-            CPlayer::Unk410a80(0x32, 3);
+            Unk410a80(0x32, 3);
         }
         if (frame == 0xd && y + vy > 0.0) {
             y = 0.0;
-            CPlayer::StopMoving();
+            StopMoving();
             timer = 0;
             frame = 0x20;
             break;
         }
         if ((frame == 0x1e || frame == 0x1f) && y + vy > 0.0) {
             y = 0.0;
-            CPlayer::StopMoving();
+            StopMoving();
             timer = 0;
             frame = 0x20;
             break;
@@ -4863,7 +4863,7 @@ void CKaori::UpdatePattern()
             }
             if (frame >= x8) {
                 pattern = 3;
-                CPlayer::FaceOpponent();
+                FaceOpponent();
                 StartPattern();
             }
         }
@@ -4872,10 +4872,10 @@ void CKaori::UpdatePattern()
         m_game->Unk4080c0(0xf);
         unk158 = 0;
         if (frame == 0 && timer == 0) {
-            CPlayer::StopMoving();
-            CPlayer::Unk410a80(0x32, 0x2d);
+            StopMoving();
+            Unk410a80(0x32, 0x2d);
             unk14c = 0x78;
-            CPlayer::FillBackground(0xb0, 3);
+            FillBackground(0xb0, 3);
             m_gauge = m_gauge - 0xbb8;
             l50.type = 0x46;
             l50.unk2c = 0x40;
@@ -4911,7 +4911,7 @@ void CKaori::UpdatePattern()
             m_attackResult = 0;
             if (frame >= x8) {
                 pattern = 0;
-                CPlayer::FaceOpponent();
+                FaceOpponent();
                 StartPattern();
             }
         }
@@ -4922,13 +4922,13 @@ void CKaori::UpdatePattern()
         }
         unk158 = 0;
         if (frame < 3) {
-            CPlayer::FillBackground(0xb1, 3);
+            FillBackground(0xb1, 3);
         }
         if (frame == 1 && timer == 0) {
             m_game->unk1420e = 0x7530;
             (*m_opponent)->m_game->unk1420e = 0x7530;
             m_game->unk1420c = 0x7530;
-            CPlayer::DealDamage(0x1388, 1000.0);
+            DealDamage(0x1388, 1000.0);
             (*m_opponent)->StartPattern();
             (*m_opponent)->StopMoving();
             (*m_opponent)->pattern = 0x57;
@@ -4955,7 +4955,7 @@ void CKaori::UpdatePattern()
             m_game->FlashWhite(0x28, 0x32, 0x28);
         }
         if (frame == 3) {
-            CPlayer::Unk410a80(0x32, 3);
+            Unk410a80(0x32, 3);
         }
         if (frame == 3 && timer == 0) {
             m_game->unk1420e = 0;
@@ -4978,7 +4978,7 @@ void CKaori::UpdatePattern()
             m_attackResult = 0;
             if (frame >= x8) {
                 pattern = 0;
-                CPlayer::FaceOpponent();
+                FaceOpponent();
                 StartPattern();
             }
         }

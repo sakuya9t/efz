@@ -17,7 +17,7 @@ void CMai::UpdatePattern()
     EffectDesc l50;
     l4 = (short)anims[pattern].frames[frame].duration;
     x8 = anims[pattern].frameCount;
-    CPlayer::InitEffectDesc((EffectDesc*)&l50);
+    InitEffectDesc((EffectDesc*)&l50);
     switch (pattern) {
     default:
         vx = 0.0;
@@ -58,7 +58,7 @@ void CMai::UpdatePattern()
     case 3:
         vx = 0.0;
         vy = 0.0;
-        CPlayer::FaceOpponent();
+        FaceOpponent();
         timer++;
         if (timer >= l4) {
             timer = 0;
@@ -70,7 +70,7 @@ void CMai::UpdatePattern()
         break;
     case 4:
         if (frame == 0 && timer == 0) {
-            CPlayer::FaceOpponent();
+            FaceOpponent();
             vx = 0.0;
         }
         if (frame == 2 && timer == 0) {
@@ -92,14 +92,14 @@ void CMai::UpdatePattern()
         if (y + vy >= 0.0 && frame > 2) {
             y = 0.0;
             m_playSound = 9;
-            CPlayer::FaceOpponent();
+            FaceOpponent();
             pattern = 0xd;
             StartPattern();
         }
         break;
     case 5:
         if (frame == 0 && timer == 0) {
-            CPlayer::FaceOpponent();
+            FaceOpponent();
             vx = 0.0;
         }
         if (frame == 2 && timer == 0) {
@@ -122,14 +122,14 @@ void CMai::UpdatePattern()
         if (y + vy >= 0.0 && frame > 2) {
             y = 0.0;
             m_playSound = 9;
-            CPlayer::FaceOpponent();
+            FaceOpponent();
             pattern = 0xd;
             StartPattern();
         }
         break;
     case 6:
         if (frame == 0 && timer == 0) {
-            CPlayer::FaceOpponent();
+            FaceOpponent();
             vx = 0.0;
         }
         if (frame == 2 && timer == 0) {
@@ -152,7 +152,7 @@ void CMai::UpdatePattern()
         if (y + vy >= 0.0 && frame > 2) {
             y = 0.0;
             m_playSound = 9;
-            CPlayer::FaceOpponent();
+            FaceOpponent();
             pattern = 0xd;
             StartPattern();
         }
@@ -160,7 +160,7 @@ void CMai::UpdatePattern()
     case 7:
         vx = 0.0;
         vy = 0.0;
-        CPlayer::FaceOpponent();
+        FaceOpponent();
         timer++;
         if (timer >= l4) {
             timer = 0;
@@ -174,7 +174,7 @@ void CMai::UpdatePattern()
     case 8:
         vx = 0.0;
         vy = 0.0;
-        CPlayer::FaceOpponent();
+        FaceOpponent();
         timer++;
         if (timer >= l4) {
             timer = 0;
@@ -205,7 +205,7 @@ void CMai::UpdatePattern()
     case 0xd:
         vx = 0.0;
         vy = 0.0;
-        CPlayer::FaceOpponent();
+        FaceOpponent();
         timer++;
         if (timer >= l4) {
             timer = 0;
@@ -242,7 +242,7 @@ void CMai::UpdatePattern()
         if (y + vy >= 0.0) {
             y = 0.0;
             m_playSound = 9;
-            CPlayer::FaceOpponent();
+            FaceOpponent();
             pattern = 0xd;
             StartPattern();
         }
@@ -270,7 +270,7 @@ void CMai::UpdatePattern()
         if (y + vy >= 0.0) {
             y = 0.0;
             m_playSound = 9;
-            CPlayer::FaceOpponent();
+            FaceOpponent();
             pattern = 0xd;
             StartPattern();
         }
@@ -297,7 +297,7 @@ void CMai::UpdatePattern()
         if (y + vy >= 0.0 && frame > 3) {
             y = 0.0;
             m_playSound = 9;
-            CPlayer::FaceOpponent();
+            FaceOpponent();
             pattern = 0xd;
             StartPattern();
         }
@@ -844,7 +844,7 @@ void CMai::UpdatePattern()
         if (unk120 != 0) {
             unk118 -= 0.8;
         }
-        if (frame > 0 && (char)CPlayer::Unk40ff70() != 0) {
+        if (frame > 0 && (char)Unk40ff70() != 0) {
             pattern = 0x46;
             StartPattern();
             break;
@@ -892,7 +892,7 @@ void CMai::UpdatePattern()
         if (unk120 != 0) {
             unk118 -= 0.8;
         }
-        if (frame > 0 && (char)CPlayer::Unk40ff70() != 0) {
+        if (frame > 0 && (char)Unk40ff70() != 0) {
             pattern = 0x46;
             StartPattern();
             break;
@@ -940,7 +940,7 @@ void CMai::UpdatePattern()
         if (unk120 != 0) {
             unk118 -= 0.8;
         }
-        if (frame > 0 && (char)CPlayer::Unk40ff70() != 0) {
+        if (frame > 0 && (char)Unk40ff70() != 0) {
             pattern = 0x46;
             StartPattern();
             break;
@@ -983,7 +983,7 @@ void CMai::UpdatePattern()
         if (unk120 != 0) {
             unk118 -= 0.8;
         }
-        if (frame > 0 && (char)CPlayer::Unk40ff70() != 0) {
+        if (frame > 0 && (char)Unk40ff70() != 0) {
             pattern = 0x46;
             StartPattern();
             break;
@@ -1030,7 +1030,7 @@ void CMai::UpdatePattern()
         vx = unkc0;
         vy = unkc8;
         timer++;
-        if ((char)CPlayer::Unk40ff70() != 0) {
+        if ((char)Unk40ff70() != 0) {
             pattern = 0x46;
             StartPattern();
             break;
@@ -1467,7 +1467,7 @@ void CMai::UpdatePattern()
             if (frame >= x8) {
                 pattern = 0;
                 StartPattern();
-                CPlayer::FaceOpponent();
+                FaceOpponent();
             }
         }
         break;
@@ -1519,7 +1519,7 @@ void CMai::UpdatePattern()
             if (frame >= x8) {
                 pattern = 0;
                 StartPattern();
-                CPlayer::FaceOpponent();
+                FaceOpponent();
             }
         }
         break;
@@ -1552,7 +1552,7 @@ void CMai::UpdatePattern()
             if (frame >= x8) {
                 pattern = 0;
                 StartPattern();
-                CPlayer::FaceOpponent();
+                FaceOpponent();
             }
         }
         if (y + vy >= 0.0) {
@@ -1637,7 +1637,7 @@ void CMai::UpdatePattern()
             timer = 0;
             frame++;
             if (frame == x8 - 1) {
-                CPlayer::FaceOpponent();
+                FaceOpponent();
             }
             if (frame >= x8) {
                 pattern = 0;
@@ -1652,7 +1652,7 @@ void CMai::UpdatePattern()
         vx = 0.0;
         vy = 0.0;
         if (frame == 0 && timer == 0) {
-            CPlayer::ShakeScreen(3, 0);
+            ShakeScreen(3, 0);
             l50.type = 3;
             l50.x = (double)(int)x;
             l50.y = (double)(int)y;
@@ -1675,7 +1675,7 @@ void CMai::UpdatePattern()
         vx = 0.0;
         vy = 0.0;
         if (frame == 0 && timer == 0) {
-            CPlayer::ShakeScreen(3, 0);
+            ShakeScreen(3, 0);
             l50.type = 3;
             l50.x = (double)(int)x;
             l50.y = (double)(int)y;
@@ -1705,7 +1705,7 @@ void CMai::UpdatePattern()
             timer = 0;
             frame++;
             if (frame == x8) {
-                CPlayer::FaceOpponent();
+                FaceOpponent();
             }
             if (frame >= x8) {
                 pattern = 0x60;
@@ -1741,7 +1741,7 @@ void CMai::UpdatePattern()
             timer = 0;
             frame++;
             if (frame == x8) {
-                CPlayer::FaceOpponent();
+                FaceOpponent();
             }
             if (frame >= x8) {
                 pattern = 0;
@@ -1780,7 +1780,7 @@ void CMai::UpdatePattern()
             timer = 0;
             frame++;
             if (frame == x8) {
-                CPlayer::FaceOpponent();
+                FaceOpponent();
             }
             if (frame >= x8) {
                 pattern = 0;
@@ -1819,7 +1819,7 @@ void CMai::UpdatePattern()
             timer = 0;
             frame++;
             if (frame == x8) {
-                CPlayer::FaceOpponent();
+                FaceOpponent();
             }
             if (frame >= x8) {
                 pattern = 0;
@@ -1858,7 +1858,7 @@ void CMai::UpdatePattern()
             timer = 0;
             frame++;
             if (frame == x8) {
-                CPlayer::FaceOpponent();
+                FaceOpponent();
             }
             if (frame >= x8) {
                 pattern = 3;
@@ -1894,7 +1894,7 @@ void CMai::UpdatePattern()
             timer = 0;
             frame++;
             if (frame == x8) {
-                CPlayer::FaceOpponent();
+                FaceOpponent();
             }
             if (frame >= x8) {
                 pattern = 3;
@@ -1930,7 +1930,7 @@ void CMai::UpdatePattern()
             timer = 0;
             frame++;
             if (frame == x8) {
-                CPlayer::FaceOpponent();
+                FaceOpponent();
             }
             if (frame >= x8) {
                 pattern = 3;
@@ -1958,7 +1958,7 @@ void CMai::UpdatePattern()
         if (y + vy >= 0.0) {
             y = 0.0;
             m_playSound = 9;
-            CPlayer::FaceOpponent();
+            FaceOpponent();
             pattern = 0xd;
             StartPattern();
         }
@@ -1989,7 +1989,7 @@ void CMai::UpdatePattern()
         if (y + vy >= 0.0) {
             y = 0.0;
             m_playSound = 9;
-            CPlayer::FaceOpponent();
+            FaceOpponent();
             pattern = 0xd;
             StartPattern();
         }
@@ -2020,14 +2020,14 @@ void CMai::UpdatePattern()
         if (y + vy >= 0.0) {
             y = 0.0;
             m_playSound = 9;
-            CPlayer::FaceOpponent();
+            FaceOpponent();
             pattern = 0xd;
             StartPattern();
         }
         break;
     case 0xa1:
         if (frame == 0 && timer == 0) {
-            CPlayer::StopMoving();
+            StopMoving();
             l50.type = 9;
             l50.x = (double)(int)x;
             l50.y = (double)((int)y - 0x46);
@@ -2051,7 +2051,7 @@ void CMai::UpdatePattern()
         break;
     case 0xa2:
         if (frame == 0 && timer == 0) {
-            CPlayer::StopMoving();
+            StopMoving();
         }
         if (frame == 2 && timer == 0) {
             vy = -1.5;
@@ -2059,7 +2059,7 @@ void CMai::UpdatePattern()
             m_hitsLeft = 1;
         }
         if (frame == 7 && timer == 0) {
-            CPlayer::StopMoving();
+            StopMoving();
             l50.type = 9;
             l50.x = (double)(int)x;
             l50.y = (double)((int)y - 0x46);
@@ -2095,7 +2095,7 @@ void CMai::UpdatePattern()
         if (frame == 0 && timer == 0) {
             vx = 0.0;
             vy = 0.0;
-            CPlayer::StartAfterimages(3);
+            StartAfterimages(3);
         }
         if (frame == 2 && timer == 0) {
             vx = 2.5;
@@ -2112,7 +2112,7 @@ void CMai::UpdatePattern()
             y = 0.0;
             frame = 5;
             timer = 0;
-            CPlayer::StopMoving();
+            StopMoving();
         }
         timer++;
         if (timer >= l4) {
@@ -2122,7 +2122,7 @@ void CMai::UpdatePattern()
                 frame = 3;
             }
             if (frame >= x8) {
-                CPlayer::FaceOpponent();
+                FaceOpponent();
                 pattern = 3;
                 StartPattern();
             }
@@ -2130,7 +2130,7 @@ void CMai::UpdatePattern()
         break;
     case 0xa4:
         if (frame == 0 && timer == 0) {
-            CPlayer::StartAfterimages(2);
+            StartAfterimages(2);
             vx = 0.0;
             vy = 0.0;
         }
@@ -2154,7 +2154,7 @@ void CMai::UpdatePattern()
             timer = 0;
             frame++;
             if (frame >= x8) {
-                CPlayer::FaceOpponent();
+                FaceOpponent();
                 pattern = 3;
                 StartPattern();
             }
@@ -2163,7 +2163,7 @@ void CMai::UpdatePattern()
     case 0xa5:
         if (frame == 0 && timer == 0 && unk3138 == 0) {
             vx = 1.3;
-            CPlayer::StartAfterimages(3);
+            StartAfterimages(3);
             vy = 0.0;
             ay = 0.0;
             m_playSound = 0x11;
@@ -2183,7 +2183,7 @@ void CMai::UpdatePattern()
             StartPattern();
             vx = 1.1;
             ay = 0.03;
-            if (CPlayer::FaceOpponent() != 0) {
+            if (FaceOpponent() != 0) {
                 vx = -vx;
             }
         }
@@ -2192,7 +2192,7 @@ void CMai::UpdatePattern()
             StartPattern();
             vx = 1.1;
             ay = 0.03;
-            if (CPlayer::FaceOpponent() != 0) {
+            if (FaceOpponent() != 0) {
                 vx = -vx;
             }
         }
@@ -2202,7 +2202,7 @@ void CMai::UpdatePattern()
             vx = -1.3;
             vy = 0.0;
             ay = 0.0;
-            CPlayer::StartAfterimages(3);
+            StartAfterimages(3);
             m_playSound = 0x11;
         }
         timer++;
@@ -2220,7 +2220,7 @@ void CMai::UpdatePattern()
             StartPattern();
             vx = -0.9;
             ay = 0.03;
-            if (CPlayer::FaceOpponent() != 0) {
+            if (FaceOpponent() != 0) {
                 vx = -vx;
             }
         }
@@ -2229,7 +2229,7 @@ void CMai::UpdatePattern()
             StartPattern();
             vx = -0.9;
             ay = 0.03;
-            if (CPlayer::FaceOpponent() != 0) {
+            if (FaceOpponent() != 0) {
                 vx = -vx;
             }
         }
@@ -2238,13 +2238,13 @@ void CMai::UpdatePattern()
         if (frame == 0 && timer == 0) {
             vx = 0.0;
             vy = 0.0;
-            CPlayer::StartAfterimages(0xa);
+            StartAfterimages(0xa);
             if (unk120 == 1) {
                 m_proration = unk118 * 5.0 + m_proration;
             }
             unk118 = 0.0;
             unk14c = 0x5a;
-            CPlayer::FillBackground(0xb0, 3);
+            FillBackground(0xb0, 3);
         }
         if (frame == 1 && timer == 0) {
             m_playSound = 0x12;
@@ -2270,7 +2270,7 @@ void CMai::UpdatePattern()
             m_attackResult = 0;
             if (frame >= x8) {
                 pattern = 0;
-                CPlayer::FaceOpponent();
+                FaceOpponent();
                 StartPattern();
             }
         }
@@ -2296,7 +2296,7 @@ void CMai::UpdatePattern()
             timer = 0;
             frame++;
             if (frame == x8) {
-                CPlayer::FaceOpponent();
+                FaceOpponent();
             }
             if (frame >= x8) {
                 pattern = 0;
@@ -2325,7 +2325,7 @@ void CMai::UpdatePattern()
             timer = 0;
             frame++;
             if (frame == x8) {
-                CPlayer::FaceOpponent();
+                FaceOpponent();
             }
             if (frame >= x8) {
                 pattern = 3;
@@ -2355,7 +2355,7 @@ void CMai::UpdatePattern()
             vy = vy + ay;
         }
         if (vy + y > 0.0) {
-            CPlayer::StopMoving();
+            StopMoving();
             y = 0.0;
             pattern = 0xa9;
             break;
@@ -2376,13 +2376,13 @@ void CMai::UpdatePattern()
             unk313c = (int)(vy * 100.0);
             vx = 0.0;
             vy = 0.0;
-            CPlayer::StartAfterimages(0xa);
+            StartAfterimages(0xa);
             if (unk120 == 1) {
                 m_proration = unk118 * 5.0 + m_proration;
             }
             unk118 = 0.0;
             unk14c = 0x5a;
-            CPlayer::FillBackground(0xb0, 3);
+            FillBackground(0xb0, 3);
         }
         if (frame == 1 && timer == 0) {
             m_playSound = 0x12;
@@ -2417,7 +2417,7 @@ void CMai::UpdatePattern()
         break;
     case 0xb4:
         if (frame == 0 && timer == 0) {
-            CPlayer::StartAfterimages(2);
+            StartAfterimages(2);
             vx = 0.0;
             vy = 0.0;
             ay = 0.0;
@@ -2426,7 +2426,7 @@ void CMai::UpdatePattern()
             vy = vy + ay;
         }
         if (y + vy > 0.0 && frame < 7) {
-            CPlayer::StopMoving();
+            StopMoving();
             y = 0.0;
             timer = 0;
             frame = 7;
@@ -2476,7 +2476,7 @@ void CMai::UpdatePattern()
             }
             if (frame >= x8) {
                 pattern = 0;
-                CPlayer::FaceOpponent();
+                FaceOpponent();
                 StartPattern();
             }
         }
@@ -2512,7 +2512,7 @@ void CMai::UpdatePattern()
             }
             if (frame >= x8) {
                 pattern = 0;
-                CPlayer::FaceOpponent();
+                FaceOpponent();
                 StartPattern();
             }
         }
@@ -2551,7 +2551,7 @@ void CMai::UpdatePattern()
             }
             if (frame >= x8) {
                 pattern = 0;
-                CPlayer::FaceOpponent();
+                FaceOpponent();
                 StartPattern();
             }
         }
@@ -2578,7 +2578,7 @@ void CMai::UpdatePattern()
             }
             if (frame >= x8) {
                 pattern = 0;
-                CPlayer::FaceOpponent();
+                FaceOpponent();
                 StartPattern();
             }
         }
@@ -2615,7 +2615,7 @@ void CMai::UpdatePattern()
                 if (m_inputY == 1) {
                     pattern = 3;
                 }
-                CPlayer::FaceOpponent();
+                FaceOpponent();
                 StartPattern();
             }
         }
@@ -2652,7 +2652,7 @@ void CMai::UpdatePattern()
                 if (m_inputY == 1) {
                     pattern = 3;
                 }
-                CPlayer::FaceOpponent();
+                FaceOpponent();
                 StartPattern();
             }
         }
@@ -2692,7 +2692,7 @@ void CMai::UpdatePattern()
                 if (m_inputY == 1) {
                     pattern = 3;
                 }
-                CPlayer::FaceOpponent();
+                FaceOpponent();
                 StartPattern();
             }
         }
@@ -2861,7 +2861,7 @@ void CMai::UpdatePattern()
             }
             if (frame >= x8) {
                 pattern = 0;
-                CPlayer::FaceOpponent();
+                FaceOpponent();
                 StartPattern();
             }
         }
@@ -2895,7 +2895,7 @@ void CMai::UpdatePattern()
             }
             if (frame >= x8) {
                 pattern = 0;
-                CPlayer::FaceOpponent();
+                FaceOpponent();
                 StartPattern();
             }
         }
@@ -2929,7 +2929,7 @@ void CMai::UpdatePattern()
             }
             if (frame >= x8) {
                 pattern = 0;
-                CPlayer::FaceOpponent();
+                FaceOpponent();
                 StartPattern();
             }
         }
@@ -2974,7 +2974,7 @@ void CMai::UpdatePattern()
             m_attackResult = 0;
             if (frame >= x8) {
                 pattern = 0;
-                CPlayer::FaceOpponent();
+                FaceOpponent();
                 StartPattern();
             }
         }
@@ -3019,7 +3019,7 @@ void CMai::UpdatePattern()
             m_attackResult = 0;
             if (frame >= x8) {
                 pattern = 0;
-                CPlayer::FaceOpponent();
+                FaceOpponent();
                 StartPattern();
             }
         }
@@ -3064,14 +3064,14 @@ void CMai::UpdatePattern()
             m_attackResult = 0;
             if (frame >= x8) {
                 pattern = 0;
-                CPlayer::FaceOpponent();
+                FaceOpponent();
                 StartPattern();
             }
         }
         break;
     case 0xd8:
         if (frame == 0 && timer == 0) {
-            CPlayer::StopMoving();
+            StopMoving();
             m_hitsLeft = 1;
         }
         if (vx > 0.0) {
@@ -3094,7 +3094,7 @@ void CMai::UpdatePattern()
             }
             if (frame >= x8) {
                 pattern = 0;
-                CPlayer::FaceOpponent();
+                FaceOpponent();
                 StartPattern();
             }
         }
@@ -3134,13 +3134,13 @@ void CMai::UpdatePattern()
                 if (m_inputY == 1) {
                     pattern = 3;
                 }
-                CPlayer::FaceOpponent();
+                FaceOpponent();
                 StartPattern();
             }
         }
         break;
     case 0xdd:
-        CPlayer::Unk410a80(0x32, 3);
+        Unk410a80(0x32, 3);
         timer++;
         if (timer >= l4) {
             timer = 0;
@@ -3170,7 +3170,7 @@ void CMai::UpdatePattern()
             if (frame == 4) {
                 (*m_opponent)->y = 0.0;
                 (*m_opponent)->x = x - facing * 0x61;
-                CPlayer::DealDamage(0x4b0, 750.0);
+                DealDamage(0x4b0, 750.0);
                 (*m_opponent)->pattern = 0x61;
                 (*m_opponent)->unk12c = 1;
                 m_attackResult = 3;
@@ -3179,7 +3179,7 @@ void CMai::UpdatePattern()
             }
             if (frame >= x8) {
                 pattern = 0;
-                CPlayer::FaceOpponent();
+                FaceOpponent();
                 StartPattern();
             }
         }
@@ -3274,7 +3274,7 @@ void CMai::UpdatePattern()
             (*m_opponent)->StopMoving();
             (*m_opponent)->StartPattern();
             StartPattern();
-            CPlayer::StopMoving();
+            StopMoving();
             pattern = 0xf1;
             (*m_opponent)->pattern = 0x64;
             l50.type = 0;
@@ -3304,17 +3304,17 @@ void CMai::UpdatePattern()
         break;
     case 0xf1:
         if (frame < 4) {
-            CPlayer::Unk410a40(0x32, 3);
+            Unk410a40(0x32, 3);
         }
         if (frame < 4) {
-            CPlayer::Unk410a80(0x32, 3);
+            Unk410a80(0x32, 3);
         }
         if (frame == 0 && timer == 1) {
             (*m_opponent)->facing = -facing;
         }
         vy = vy + ay;
         if (vy + y > 0.0 && frame > 5) {
-            CPlayer::StopMoving();
+            StopMoving();
             y = 0.0;
             StartPattern();
             pattern = 0xd;
@@ -3335,7 +3335,7 @@ void CMai::UpdatePattern()
             (*m_opponent)->y = y - 60.0;
             (*m_opponent)->x = x - facing * 0x25;
             (*m_opponent)->pattern = 0x45;
-            CPlayer::DealDamage(0x514, 500.0);
+            DealDamage(0x514, 500.0);
             (*m_opponent)->StartPattern();
             (*m_opponent)->unkc0 = -3.0;
             (*m_opponent)->unkc8 = 3.0;
@@ -3376,7 +3376,7 @@ void CMai::UpdatePattern()
             m_attackResult = 0;
             if (frame >= x8) {
                 pattern = 0;
-                CPlayer::FaceOpponent();
+                FaceOpponent();
                 StartPattern();
             }
         }
@@ -3471,7 +3471,7 @@ void CMai::UpdatePattern()
             l50.scale = 2;
             l50.layer = 1;
             m_game->CreateEffect((EffectDesc*)&l50);
-            CPlayer::StartAfterimages(3);
+            StartAfterimages(3);
             if (unk3144 == 4) {
                 unk3148 -= 0x3e8;
                 if (unk3148 < 0) {
@@ -3519,7 +3519,7 @@ void CMai::UpdatePattern()
     case 0xfd:
         vx = 0.0;
         vy = 0.0;
-        CPlayer::FaceOpponent();
+        FaceOpponent();
         timer++;
         if (timer >= l4 || frame == 2 && unk313c == 1 && timer == 0x15) {
             timer = 0;
@@ -3550,7 +3550,7 @@ void CMai::UpdatePattern()
             m_game->CreateEffect((EffectDesc*)&l50);
         }
         if (frame == 5 && timer == 0) {
-            CPlayer::StopMoving();
+            StopMoving();
             if (unk313c > 0x1e) {
                 unk3138 = 1;
             }
@@ -3582,7 +3582,7 @@ void CMai::UpdatePattern()
             m_attackResult = 0;
             if (frame >= x8) {
                 pattern = 0;
-                CPlayer::FaceOpponent();
+                FaceOpponent();
                 StartPattern();
             }
         }
@@ -3603,7 +3603,7 @@ void CMai::UpdatePattern()
             m_game->CreateEffect((EffectDesc*)&l50);
         }
         if (frame == 5 && timer == 0) {
-            CPlayer::StopMoving();
+            StopMoving();
             if (unk313c > 0x1e) {
                 unk3138 = 1;
             }
@@ -3642,7 +3642,7 @@ void CMai::UpdatePattern()
             m_attackResult = 0;
             if (frame >= x8) {
                 pattern = 0;
-                CPlayer::FaceOpponent();
+                FaceOpponent();
                 StartPattern();
             }
         }
@@ -3656,7 +3656,7 @@ void CMai::UpdatePattern()
             l50.scale = 2;
             l50.layer = 1;
             m_game->CreateEffect((EffectDesc*)&l50);
-            CPlayer::StartAfterimages(3);
+            StartAfterimages(3);
             if (unk3144 == 4) {
                 unk3148 -= 0x3e8;
                 if (unk3148 < 0) {
@@ -3685,7 +3685,7 @@ void CMai::UpdatePattern()
             break;
         }
         if (frame == 5 && timer == 0) {
-            CPlayer::StopMoving();
+            StopMoving();
         }
         vx = vx + ax;
         if (vx < 0.0) {
@@ -3706,7 +3706,7 @@ void CMai::UpdatePattern()
                 m_attackResult = 0;
             }
             if (frame >= x8) {
-                CPlayer::FaceOpponent();
+                FaceOpponent();
                 pattern = 0;
                 StartPattern();
             }
@@ -3715,7 +3715,7 @@ void CMai::UpdatePattern()
     case 0x101:
         m_attackResult = 2;
         if (frame == 0 && timer == 0) {
-            CPlayer::StopMoving();
+            StopMoving();
         }
         if (frame == 2 && timer == 0) {
             if (unk3144 != 4) {
@@ -3751,14 +3751,14 @@ void CMai::UpdatePattern()
             if (frame >= x8) {
                 pattern = 0;
                 StartPattern();
-                CPlayer::FaceOpponent();
+                FaceOpponent();
             }
         }
         break;
     case 0x102:
         m_attackResult = 2;
         if (frame == 0 && timer == 0) {
-            CPlayer::StopMoving();
+            StopMoving();
         }
         if (frame == 2 && timer == 0) {
             if (unk3144 != 4) {
@@ -3794,14 +3794,14 @@ void CMai::UpdatePattern()
             if (frame >= x8) {
                 pattern = 0;
                 StartPattern();
-                CPlayer::FaceOpponent();
+                FaceOpponent();
             }
         }
         break;
     case 0x103:
         m_attackResult = 2;
         if (frame == 0 && timer == 0) {
-            CPlayer::StopMoving();
+            StopMoving();
         }
         if (frame == 2 && timer == 0) {
             if (unk3144 != 4) {
@@ -3837,7 +3837,7 @@ void CMai::UpdatePattern()
             if (frame >= x8) {
                 pattern = 0;
                 StartPattern();
-                CPlayer::FaceOpponent();
+                FaceOpponent();
             }
         }
         break;
@@ -3891,7 +3891,7 @@ void CMai::UpdatePattern()
             if (frame >= x8) {
                 pattern = 0;
                 StartPattern();
-                CPlayer::FaceOpponent();
+                FaceOpponent();
             }
         }
         break;
@@ -3915,7 +3915,7 @@ void CMai::UpdatePattern()
             }
             if (frame >= x8) {
                 pattern = 0;
-                CPlayer::FaceOpponent();
+                FaceOpponent();
                 StartPattern();
             }
         }
@@ -3934,7 +3934,7 @@ void CMai::UpdatePattern()
             frame = 0xc;
             timer = 0;
             y = 0.0;
-            CPlayer::StopMoving();
+            StopMoving();
             break;
         }
         timer++;
@@ -3944,14 +3944,14 @@ void CMai::UpdatePattern()
             m_attackResult = 0;
             if (frame >= x8) {
                 pattern = 0;
-                CPlayer::FaceOpponent();
+                FaceOpponent();
                 StartPattern();
             }
         }
         break;
     case 0x107:
         if (frame == 0 && timer == 0) {
-            CPlayer::StopMoving();
+            StopMoving();
         }
         if (frame == 3 && timer == 0) {
             unk3144 = 2;
@@ -3980,13 +3980,13 @@ void CMai::UpdatePattern()
             if (frame >= x8) {
                 pattern = 0;
                 StartPattern();
-                CPlayer::FaceOpponent();
+                FaceOpponent();
             }
         }
         break;
     case 0x108:
         if (frame == 0 && timer == 0) {
-            CPlayer::StopMoving();
+            StopMoving();
         }
         if (frame == 3 && timer == 0) {
             unk3144 = 2;
@@ -4015,13 +4015,13 @@ void CMai::UpdatePattern()
             if (frame >= x8) {
                 pattern = 0;
                 StartPattern();
-                CPlayer::FaceOpponent();
+                FaceOpponent();
             }
         }
         break;
     case 0x109:
         if (frame == 0 && timer == 0) {
-            CPlayer::StopMoving();
+            StopMoving();
         }
         if (frame == 0 && timer == 0) {
             l50.type = 0x21;
@@ -4031,7 +4031,7 @@ void CMai::UpdatePattern()
             l50.scale = 2;
             l50.layer = 1;
             m_game->CreateEffect((EffectDesc*)&l50);
-            CPlayer::StartAfterimages(3);
+            StartAfterimages(3);
             if (unk3144 == 4) {
                 unk3148 -= 0x3e8;
                 if (unk3148 < 0) {
@@ -4070,14 +4070,14 @@ void CMai::UpdatePattern()
             if (frame >= x8) {
                 pattern = 0;
                 StartPattern();
-                CPlayer::FaceOpponent();
+                FaceOpponent();
             }
         }
         break;
     case 0x10a:
         m_attackResult = 2;
         if (frame == 0 && timer == 0) {
-            CPlayer::StopMoving();
+            StopMoving();
         }
         if (frame == 3 && timer == 0) {
             unk3144 = 2;
@@ -4098,14 +4098,14 @@ void CMai::UpdatePattern()
             if (frame >= x8) {
                 pattern = 0;
                 StartPattern();
-                CPlayer::FaceOpponent();
+                FaceOpponent();
             }
         }
         break;
     case 0x10b:
         m_attackResult = 2;
         if (frame == 0 && timer == 0) {
-            CPlayer::StopMoving();
+            StopMoving();
         }
         if (frame == 3 && timer == 0) {
             unk3144 = 2;
@@ -4126,14 +4126,14 @@ void CMai::UpdatePattern()
             if (frame >= x8) {
                 pattern = 0;
                 StartPattern();
-                CPlayer::FaceOpponent();
+                FaceOpponent();
             }
         }
         break;
     case 0x10c:
         m_attackResult = 2;
         if (frame == 0 && timer == 0) {
-            CPlayer::StopMoving();
+            StopMoving();
         }
         if (frame == 3 && timer == 0) {
             unk3144 = 2;
@@ -4154,7 +4154,7 @@ void CMai::UpdatePattern()
             if (frame >= x8) {
                 pattern = 0;
                 StartPattern();
-                CPlayer::FaceOpponent();
+                FaceOpponent();
             }
         }
         break;
@@ -4172,7 +4172,7 @@ void CMai::UpdatePattern()
             if (frame >= x8) {
                 pattern = 0;
                 StartPattern();
-                CPlayer::FaceOpponent();
+                FaceOpponent();
             }
         }
         break;
@@ -4183,13 +4183,13 @@ void CMai::UpdatePattern()
             ay = 0.0;
         }
         if (frame == 2) {
-            CPlayer::Unk410a80(0x32, 3);
+            Unk410a80(0x32, 3);
         }
         if (frame == 2 && timer == 0) {
             m_hitsLeft = 1;
             unk14c = 0x78;
             m_gauge = m_gauge - 0x3e8;
-            CPlayer::FillBackground(0xb0, 3);
+            FillBackground(0xb0, 3);
             l50.type = 0x44;
             l50.unk2c = 0x13;
             l50.x = (double)(int)x;
@@ -4232,7 +4232,7 @@ void CMai::UpdatePattern()
             }
         }
         if (frame > 0 && frame < 0x12) {
-            CPlayer::Unk410a80(0x32, 3);
+            Unk410a80(0x32, 3);
         }
         timer++;
         if (timer >= l4) {
@@ -4252,13 +4252,13 @@ void CMai::UpdatePattern()
             ay = 0.0;
         }
         if (frame == 2) {
-            CPlayer::Unk410a80(0x32, 3);
+            Unk410a80(0x32, 3);
         }
         if (frame == 2 && timer == 0) {
             m_hitsLeft = 1;
             unk14c = 0x78;
             m_gauge = m_gauge - 0x7d0;
-            CPlayer::FillBackground(0xb0, 3);
+            FillBackground(0xb0, 3);
             l50.type = 0x45;
             l50.unk2c = 5;
             l50.x = (double)(int)x;
@@ -4301,7 +4301,7 @@ void CMai::UpdatePattern()
             }
         }
         if (frame > 0 && frame < 0x12) {
-            CPlayer::Unk410a80(0x32, 3);
+            Unk410a80(0x32, 3);
         }
         timer++;
         if (timer >= l4) {
@@ -4316,7 +4316,7 @@ void CMai::UpdatePattern()
         break;
     case 0x131:
         if (frame == 0 && timer == 0) {
-            CPlayer::StopMoving();
+            StopMoving();
         }
         if (frame == 2 && timer == 0) {
             vx = 0.0;
@@ -4325,7 +4325,7 @@ void CMai::UpdatePattern()
             m_hitsLeft = 1;
             unk14c = 0x78;
             m_gauge = m_gauge - 0xbb8;
-            CPlayer::FillBackground(0xb0, 3);
+            FillBackground(0xb0, 3);
             l50.type = 0x46;
             l50.unk2c = 0x40;
             l50.x = (double)(int)x;
@@ -4340,7 +4340,7 @@ void CMai::UpdatePattern()
             m_game->Unk4080c0(0xf);
         }
         if (frame <= 2) {
-            CPlayer::Unk410a80(0x32, 3);
+            Unk410a80(0x32, 3);
         }
         if (frame == 4 && timer == 0) {
             m_playVoice = 0;
@@ -4393,7 +4393,7 @@ void CMai::UpdatePattern()
             }
         }
         if (frame > 0 && frame < 0x12) {
-            CPlayer::Unk410a80(0x32, 3);
+            Unk410a80(0x32, 3);
         }
         timer++;
         if (timer >= l4) {
@@ -4428,7 +4428,7 @@ void CMai::UpdatePattern()
             (*m_opponent)->unkc0 = 0.0;
             (*m_opponent)->unkc8 = -4.0;
             m_attackResult = 2;
-            CPlayer::DealDamage(0x960, 400.0);
+            DealDamage(0x960, 400.0);
             l50.type = 0x34;
             l50.x = (*m_opponent)->x;
             l50.unk2c = 0x16;
@@ -4438,7 +4438,7 @@ void CMai::UpdatePattern()
             m_game->CreateEffect((EffectDesc*)&l50);
         }
         if (frame > 0 && frame < 0xf) {
-            CPlayer::Unk410a80(0x32, 0xa);
+            Unk410a80(0x32, 0xa);
         }
         timer++;
         if (timer >= l4) {
@@ -4459,7 +4459,7 @@ void CMai::UpdatePattern()
             }
             if (frame >= x8) {
                 pattern = 0;
-                CPlayer::FaceOpponent();
+                FaceOpponent();
                 StartPattern();
             }
         }
@@ -4487,7 +4487,7 @@ void CMai::UpdatePattern()
             (*m_opponent)->unkc0 = 0.0;
             (*m_opponent)->unkc8 = -4.0;
             m_attackResult = 2;
-            CPlayer::DealDamage(0xc80, 400.0);
+            DealDamage(0xc80, 400.0);
             l50.type = 0x34;
             l50.x = (*m_opponent)->x;
             l50.unk2c = 0x16;
@@ -4497,7 +4497,7 @@ void CMai::UpdatePattern()
             m_game->CreateEffect((EffectDesc*)&l50);
         }
         if (frame > 0 && frame < 0xf) {
-            CPlayer::Unk410a80(0x32, 0xa);
+            Unk410a80(0x32, 0xa);
         }
         timer++;
         if (timer >= l4) {
@@ -4553,7 +4553,7 @@ void CMai::UpdatePattern()
             (*m_opponent)->unkc0 = 0.0;
             (*m_opponent)->unkc8 = -4.0;
             m_attackResult = 2;
-            CPlayer::DealDamage(0x1194, 400.0);
+            DealDamage(0x1194, 400.0);
             (*m_opponent)->unk124 = (int)(200.0 * m_proration / 10000.0);
             l50.type = 0x34;
             l50.x = (*m_opponent)->x;
@@ -4564,7 +4564,7 @@ void CMai::UpdatePattern()
             m_game->CreateEffect((EffectDesc*)&l50);
         }
         if (frame > 0 && frame < 0xf) {
-            CPlayer::Unk410a80(0x32, 0xa);
+            Unk410a80(0x32, 0xa);
         }
         timer++;
         if (timer >= l4) {
@@ -4598,13 +4598,13 @@ void CMai::UpdatePattern()
         }
         break;
     case 0x135:
-        CPlayer::Unk410a80(0x32, 3);
+        Unk410a80(0x32, 3);
         if (frame == 0 && timer == 0) {
             m_playVoice = 3;
-            CPlayer::StopMoving();
+            StopMoving();
             unk14c = 0x78;
             m_gauge = m_gauge - 0xbb8;
-            CPlayer::FillBackground(0xb0, 3);
+            FillBackground(0xb0, 3);
             l50.type = 0x46;
             l50.unk2c = 0x40;
             l50.x = (double)(int)x;
@@ -4662,7 +4662,7 @@ void CMai::UpdatePattern()
             (*m_opponent)->unk14a = 0;
             (*m_opponent)->unkc0 = 0.0;
             (*m_opponent)->unkc8 = -8.0;
-            CPlayer::DealDamage(0x1068, 750.0);
+            DealDamage(0x1068, 750.0);
             (*m_opponent)->unk124 = (int)(200.0 * m_proration / 10000.0);
             l50.type = 0x34;
             l50.x = (*m_opponent)->x;
@@ -4673,7 +4673,7 @@ void CMai::UpdatePattern()
             m_game->CreateEffect((EffectDesc*)&l50);
         }
         if (frame > 0 && frame < 0xf) {
-            CPlayer::Unk410a80(0x32, 0xa);
+            Unk410a80(0x32, 0xa);
         }
         timer++;
         if (timer >= l4) {
@@ -4783,7 +4783,7 @@ void CMai::UpdatePattern()
         if (frame == 3 && timer == 0) {
             unk14c = 0x78;
             m_gauge = m_gauge - 0x3e8;
-            CPlayer::FillBackground(0xb0, 3);
+            FillBackground(0xb0, 3);
             l50.type = 0x44;
             l50.unk2c = 0x13;
             l50.x = (double)((int)x - facing * 0xd);
@@ -4838,7 +4838,7 @@ void CMai::UpdatePattern()
         if (frame == 3 && timer == 0) {
             unk14c = 0x78;
             m_gauge = m_gauge - 0x7d0;
-            CPlayer::FillBackground(0xb0, 3);
+            FillBackground(0xb0, 3);
             l50.type = 0x45;
             l50.unk2c = 5;
             l50.x = (double)((int)x - facing * 0xd);
@@ -4893,7 +4893,7 @@ void CMai::UpdatePattern()
         if (frame == 3 && timer == 0) {
             unk14c = 0x78;
             m_gauge = m_gauge - 0xbb8;
-            CPlayer::FillBackground(0xb0, 3);
+            FillBackground(0xb0, 3);
             l50.type = 0x46;
             l50.unk2c = 0x40;
             l50.x = (double)((int)x - facing * 0xd);
@@ -4942,13 +4942,13 @@ void CMai::UpdatePattern()
         break;
     case 0x144:
         if (frame < 5) {
-            CPlayer::Unk410a80(0x32, 3);
+            Unk410a80(0x32, 3);
         }
         if (frame == 0 && timer == 0) {
-            CPlayer::StopMoving();
+            StopMoving();
             unk14c = 0x78;
             m_gauge = m_gauge - 0xbb8;
-            CPlayer::FillBackground(0xb0, 3);
+            FillBackground(0xb0, 3);
             l50.type = 0x46;
             l50.unk2c = 0x40;
             l50.x = (double)((int)x - facing * 0x13);
@@ -4971,7 +4971,7 @@ void CMai::UpdatePattern()
             (*m_opponent)->StartPattern();
             pattern = 0x145;
             (*m_opponent)->pattern = 0x79;
-            CPlayer::FillBackground(0xb0, 3);
+            FillBackground(0xb0, 3);
         }
         if (frame == 5 && timer == 0) {
             unk3148 = 0;
@@ -4996,12 +4996,12 @@ void CMai::UpdatePattern()
         }
         break;
     case 0x145:
-        CPlayer::Unk410a80(0x32, 3);
+        Unk410a80(0x32, 3);
         if (frame < 2) {
-            CPlayer::FillBackground(0xb0, 3);
+            FillBackground(0xb0, 3);
         }
         if (frame > 1 && frame < 0xa) {
-            CPlayer::FillBackground(0xb1, 3);
+            FillBackground(0xb1, 3);
             (*m_opponent)->Tint(0xb0, 3);
         }
         if (frame == 1 && timer == 0) {
@@ -5029,7 +5029,7 @@ void CMai::UpdatePattern()
             (*m_opponent)->frame = 0;
             (*m_opponent)->timer = 0;
             (*m_opponent)->unk128 = 1;
-            CPlayer::DealDamage((int)(unk3148 * 0.15 + 3500.0), 500.0);
+            DealDamage((int)(unk3148 * 0.15 + 3500.0), 500.0);
             m_playSound = 0x16;
             (*m_opponent)->facing = -facing;
             (*m_opponent)->unk14a = 0;

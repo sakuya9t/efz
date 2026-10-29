@@ -17,7 +17,7 @@ void CMishio::UpdatePattern()
     EffectDesc l50;
     l4 = (short)anims[pattern].frames[frame].duration;
     x8 = anims[pattern].frameCount;
-    CPlayer::InitEffectDesc((EffectDesc*)&l50);
+    InitEffectDesc((EffectDesc*)&l50);
     switch (pattern) {
     default:
         unk158 = 0;
@@ -62,7 +62,7 @@ void CMishio::UpdatePattern()
         vx = 0.0;
         vy = 0.0;
         unk158 = 0;
-        CPlayer::FaceOpponent();
+        FaceOpponent();
         timer++;
         if (timer >= l4) {
             timer = 0;
@@ -75,7 +75,7 @@ void CMishio::UpdatePattern()
     case 4:
         if (frame == 0 && timer == 0) {
             if (unk158 == 0) {
-                CPlayer::FaceOpponent();
+                FaceOpponent();
             }
             vx = 0.0;
         }
@@ -102,7 +102,7 @@ void CMishio::UpdatePattern()
         if (y + vy >= 0.0 && frame > 3) {
             y = 0.0;
             m_playSound = 9;
-            CPlayer::FaceOpponent();
+            FaceOpponent();
             pattern = 0xd;
             StartPattern();
         }
@@ -110,7 +110,7 @@ void CMishio::UpdatePattern()
     case 5:
         if (frame == 0 && timer == 0) {
             if (unk158 == 0) {
-                CPlayer::FaceOpponent();
+                FaceOpponent();
             }
             vx = 0.0;
         }
@@ -138,7 +138,7 @@ void CMishio::UpdatePattern()
         if (y + vy >= 0.0 && frame > 3) {
             y = 0.0;
             m_playSound = 9;
-            CPlayer::FaceOpponent();
+            FaceOpponent();
             pattern = 0xd;
             StartPattern();
         }
@@ -146,7 +146,7 @@ void CMishio::UpdatePattern()
     case 6:
         if (frame == 0 && timer == 0) {
             if (unk158 == 0) {
-                CPlayer::FaceOpponent();
+                FaceOpponent();
             }
             vx = 0.0;
         }
@@ -170,7 +170,7 @@ void CMishio::UpdatePattern()
         if (y + vy >= 0.0 && frame > 3) {
             y = 0.0;
             m_playSound = 9;
-            CPlayer::FaceOpponent();
+            FaceOpponent();
             pattern = 0xd;
             StartPattern();
         }
@@ -179,7 +179,7 @@ void CMishio::UpdatePattern()
         vx = 0.0;
         vy = 0.0;
         unk158 = 0;
-        CPlayer::FaceOpponent();
+        FaceOpponent();
         timer++;
         if (timer >= l4) {
             timer = 0;
@@ -194,7 +194,7 @@ void CMishio::UpdatePattern()
         vx = 0.0;
         vy = 0.0;
         unk158 = 0;
-        CPlayer::FaceOpponent();
+        FaceOpponent();
         timer++;
         if (timer >= l4) {
             timer = 0;
@@ -227,7 +227,7 @@ void CMishio::UpdatePattern()
         vx = 0.0;
         vy = 0.0;
         unk158 = 0;
-        CPlayer::FaceOpponent();
+        FaceOpponent();
         timer++;
         if (timer >= l4) {
             timer = 0;
@@ -265,7 +265,7 @@ void CMishio::UpdatePattern()
         if (y + vy >= 0.0 && frame > 3) {
             y = 0.0;
             m_playSound = 9;
-            CPlayer::FaceOpponent();
+            FaceOpponent();
             pattern = 0xd;
             StartPattern();
         }
@@ -294,7 +294,7 @@ void CMishio::UpdatePattern()
         if (y + vy >= 0.0 && frame > 3) {
             y = 0.0;
             m_playSound = 9;
-            CPlayer::FaceOpponent();
+            FaceOpponent();
             pattern = 0xd;
             StartPattern();
         }
@@ -322,7 +322,7 @@ void CMishio::UpdatePattern()
         if (y + vy >= 0.0 && frame > 3) {
             y = 0.0;
             m_playSound = 9;
-            CPlayer::FaceOpponent();
+            FaceOpponent();
             pattern = 0xd;
             StartPattern();
         }
@@ -877,7 +877,7 @@ void CMishio::UpdatePattern()
         if (unk120 != 0) {
             unk118 -= 0.8;
         }
-        if (frame > 0 && (char)CPlayer::Unk40ff70() != 0) {
+        if (frame > 0 && (char)Unk40ff70() != 0) {
             pattern = 0x46;
             StartPattern();
             break;
@@ -925,7 +925,7 @@ void CMishio::UpdatePattern()
         if (unk120 != 0) {
             unk118 -= 0.8;
         }
-        if (frame > 0 && (char)CPlayer::Unk40ff70() != 0) {
+        if (frame > 0 && (char)Unk40ff70() != 0) {
             pattern = 0x46;
             StartPattern();
             break;
@@ -973,7 +973,7 @@ void CMishio::UpdatePattern()
         if (unk120 != 0) {
             unk118 -= 0.8;
         }
-        if (frame > 0 && (char)CPlayer::Unk40ff70() != 0) {
+        if (frame > 0 && (char)Unk40ff70() != 0) {
             pattern = 0x46;
             StartPattern();
             break;
@@ -1016,7 +1016,7 @@ void CMishio::UpdatePattern()
         if (unk120 != 0) {
             unk118 -= 0.8;
         }
-        if (frame > 0 && (char)CPlayer::Unk40ff70() != 0) {
+        if (frame > 0 && (char)Unk40ff70() != 0) {
             pattern = 0x46;
             StartPattern();
             break;
@@ -1063,7 +1063,7 @@ void CMishio::UpdatePattern()
         vx = unkc0;
         vy = unkc8;
         timer++;
-        if ((char)CPlayer::Unk40ff70() != 0) {
+        if ((char)Unk40ff70() != 0) {
             pattern = 0x46;
             StartPattern();
             break;
@@ -1506,7 +1506,7 @@ void CMishio::UpdatePattern()
             if (frame >= x8) {
                 pattern = 0;
                 StartPattern();
-                CPlayer::FaceOpponent();
+                FaceOpponent();
             }
         }
         break;
@@ -1558,7 +1558,7 @@ void CMishio::UpdatePattern()
             if (frame >= x8) {
                 pattern = 0;
                 StartPattern();
-                CPlayer::FaceOpponent();
+                FaceOpponent();
             }
         }
         break;
@@ -1591,7 +1591,7 @@ void CMishio::UpdatePattern()
             if (frame >= x8) {
                 pattern = 0;
                 StartPattern();
-                CPlayer::FaceOpponent();
+                FaceOpponent();
             }
         }
         if (y + vy >= 0.0) {
@@ -1676,7 +1676,7 @@ void CMishio::UpdatePattern()
             timer = 0;
             frame++;
             if (frame == x8 - 1) {
-                CPlayer::FaceOpponent();
+                FaceOpponent();
             }
             if (frame >= x8) {
                 pattern = 7;
@@ -1691,7 +1691,7 @@ void CMishio::UpdatePattern()
         vx = 0.0;
         vy = 0.0;
         if (frame == 0 && timer == 0) {
-            CPlayer::ShakeScreen(3, 0);
+            ShakeScreen(3, 0);
             l50.type = 3;
             l50.x = (double)(int)x;
             l50.y = (double)(int)y;
@@ -1714,7 +1714,7 @@ void CMishio::UpdatePattern()
         vx = 0.0;
         vy = 0.0;
         if (frame == 0 && timer == 0) {
-            CPlayer::ShakeScreen(3, 0);
+            ShakeScreen(3, 0);
             l50.type = 3;
             l50.x = (double)(int)x;
             l50.y = (double)(int)y;
@@ -1744,7 +1744,7 @@ void CMishio::UpdatePattern()
             timer = 0;
             frame++;
             if (frame == x8) {
-                CPlayer::FaceOpponent();
+                FaceOpponent();
             }
             if (frame >= x8) {
                 pattern = 0x60;
@@ -1781,7 +1781,7 @@ void CMishio::UpdatePattern()
             timer = 0;
             frame++;
             if (frame == x8) {
-                CPlayer::FaceOpponent();
+                FaceOpponent();
             }
             if (frame >= x8) {
                 pattern = 0;
@@ -1821,7 +1821,7 @@ void CMishio::UpdatePattern()
             timer = 0;
             frame++;
             if (frame == x8) {
-                CPlayer::FaceOpponent();
+                FaceOpponent();
             }
             if (frame >= x8) {
                 pattern = 0;
@@ -1861,7 +1861,7 @@ void CMishio::UpdatePattern()
             timer = 0;
             frame++;
             if (frame == x8) {
-                CPlayer::FaceOpponent();
+                FaceOpponent();
             }
             if (frame >= x8) {
                 pattern = 0;
@@ -1901,7 +1901,7 @@ void CMishio::UpdatePattern()
             timer = 0;
             frame++;
             if (frame == x8) {
-                CPlayer::FaceOpponent();
+                FaceOpponent();
             }
             if (frame >= x8) {
                 pattern = 3;
@@ -1938,7 +1938,7 @@ void CMishio::UpdatePattern()
             timer = 0;
             frame++;
             if (frame == x8) {
-                CPlayer::FaceOpponent();
+                FaceOpponent();
             }
             if (frame >= x8) {
                 pattern = 3;
@@ -1975,7 +1975,7 @@ void CMishio::UpdatePattern()
             timer = 0;
             frame++;
             if (frame == x8) {
-                CPlayer::FaceOpponent();
+                FaceOpponent();
             }
             if (frame >= x8) {
                 pattern = 3;
@@ -2003,7 +2003,7 @@ void CMishio::UpdatePattern()
         if (y + vy >= 0.0) {
             y = 0.0;
             m_playSound = 9;
-            CPlayer::FaceOpponent();
+            FaceOpponent();
             pattern = 0xd;
             StartPattern();
         }
@@ -2034,7 +2034,7 @@ void CMishio::UpdatePattern()
         if (y + vy >= 0.0) {
             y = 0.0;
             m_playSound = 9;
-            CPlayer::FaceOpponent();
+            FaceOpponent();
             pattern = 0xd;
             StartPattern();
         }
@@ -2065,14 +2065,14 @@ void CMishio::UpdatePattern()
         if (y + vy >= 0.0) {
             y = 0.0;
             m_playSound = 9;
-            CPlayer::FaceOpponent();
+            FaceOpponent();
             pattern = 0xd;
             StartPattern();
         }
         break;
     case 0xa1:
         if (frame == 0 && timer == 0) {
-            CPlayer::StopMoving();
+            StopMoving();
             l50.type = 9;
             l50.x = (double)(int)x;
             l50.y = (double)((int)y - 0x3c);
@@ -2096,7 +2096,7 @@ void CMishio::UpdatePattern()
         break;
     case 0xa2:
         if (frame == 0 && timer == 0) {
-            CPlayer::StopMoving();
+            StopMoving();
         }
         if (frame == 2 && timer == 0) {
             vy = -1.5;
@@ -2104,7 +2104,7 @@ void CMishio::UpdatePattern()
             m_hitsLeft = 1;
         }
         if (frame == 6 && timer == 0) {
-            CPlayer::StopMoving();
+            StopMoving();
             l50.type = 9;
             l50.x = (double)(int)x;
             l50.y = (double)((int)y - 0x3c);
@@ -2138,7 +2138,7 @@ void CMishio::UpdatePattern()
         break;
     case 0xa3:
         if (frame == 0 && timer == 0) {
-            CPlayer::StartAfterimages(3);
+            StartAfterimages(3);
         }
         if (m_inputY == -1 && frame > 0) {
             pattern = 4;
@@ -2180,7 +2180,7 @@ void CMishio::UpdatePattern()
         }
         break;
     case 0xa4:
-        CPlayer::StartAfterimages(2);
+        StartAfterimages(2);
         if (frame == 0 && timer == 0) {
             vx = 0.0;
             vy = 0.0;
@@ -2211,7 +2211,7 @@ void CMishio::UpdatePattern()
                 frame = frame - 2;
             }
             if (frame >= x8) {
-                CPlayer::FaceOpponent();
+                FaceOpponent();
                 pattern = 0;
                 StartPattern();
             }
@@ -2220,7 +2220,7 @@ void CMishio::UpdatePattern()
     case 0xa5:
         if (frame == 0 && timer == 0 && unk3138 == 0) {
             vx = 1.3;
-            CPlayer::StartAfterimages(3);
+            StartAfterimages(3);
             vy = 0.0;
             ay = 0.0;
             m_playSound = 0x11;
@@ -2240,7 +2240,7 @@ void CMishio::UpdatePattern()
             StartPattern();
             vx = 1.3;
             ay = 0.03;
-            if (CPlayer::FaceOpponent() != 0) {
+            if (FaceOpponent() != 0) {
                 vx = -vx;
             }
         }
@@ -2249,7 +2249,7 @@ void CMishio::UpdatePattern()
             StartPattern();
             vx = 1.3;
             ay = 0.03;
-            if (CPlayer::FaceOpponent() != 0) {
+            if (FaceOpponent() != 0) {
                 vx = -vx;
             }
         }
@@ -2259,7 +2259,7 @@ void CMishio::UpdatePattern()
             vx = -1.3;
             vy = 0.0;
             ay = 0.0;
-            CPlayer::StartAfterimages(3);
+            StartAfterimages(3);
             m_playSound = 0x11;
         }
         timer++;
@@ -2277,7 +2277,7 @@ void CMishio::UpdatePattern()
             StartPattern();
             vx = -0.9;
             ay = 0.03;
-            if (CPlayer::FaceOpponent() != 0) {
+            if (FaceOpponent() != 0) {
                 vx = -vx;
             }
         }
@@ -2286,7 +2286,7 @@ void CMishio::UpdatePattern()
             StartPattern();
             vx = -0.9;
             ay = 0.03;
-            if (CPlayer::FaceOpponent() != 0) {
+            if (FaceOpponent() != 0) {
                 vx = -vx;
             }
         }
@@ -2301,7 +2301,7 @@ void CMishio::UpdatePattern()
             }
             unk118 = 0.0;
             unk14c = 0x5a;
-            CPlayer::FillBackground(0xb0, 3);
+            FillBackground(0xb0, 3);
         }
         if (frame == 1 && timer == 0) {
             m_playSound = 0x12;
@@ -2327,7 +2327,7 @@ void CMishio::UpdatePattern()
             m_attackResult = 0;
             if (frame >= x8) {
                 pattern = 0;
-                CPlayer::FaceOpponent();
+                FaceOpponent();
                 StartPattern();
             }
         }
@@ -2354,7 +2354,7 @@ void CMishio::UpdatePattern()
             timer = 0;
             frame++;
             if (frame == x8) {
-                CPlayer::FaceOpponent();
+                FaceOpponent();
             }
             if (frame >= x8) {
                 pattern = 0;
@@ -2384,7 +2384,7 @@ void CMishio::UpdatePattern()
             timer = 0;
             frame++;
             if (frame == x8) {
-                CPlayer::FaceOpponent();
+                FaceOpponent();
             }
             if (frame >= x8) {
                 pattern = 3;
@@ -2414,7 +2414,7 @@ void CMishio::UpdatePattern()
             vy = vy + ay;
         }
         if (vy + y > 0.0) {
-            CPlayer::StopMoving();
+            StopMoving();
             y = 0.0;
             pattern = 0xa9;
             break;
@@ -2440,7 +2440,7 @@ void CMishio::UpdatePattern()
             }
             unk118 = 0.0;
             unk14c = 0x5a;
-            CPlayer::FillBackground(0xb0, 3);
+            FillBackground(0xb0, 3);
         }
         if (frame == 0 && timer == 0) {
             m_playSound = 0x12;
@@ -2497,7 +2497,7 @@ void CMishio::UpdatePattern()
         break;
     case 0xb4:
         if (frame == 0 && timer == 0) {
-            CPlayer::StartAfterimages(2);
+            StartAfterimages(2);
             vx = 0.0;
             vy = 0.0;
             ay = 0.0;
@@ -2506,7 +2506,7 @@ void CMishio::UpdatePattern()
             vy = vy + ay;
         }
         if (y + vy > 0.0 && frame < 0xa) {
-            CPlayer::StopMoving();
+            StopMoving();
             y = 0.0;
             timer = 0;
             frame = 0xa;
@@ -2567,7 +2567,7 @@ void CMishio::UpdatePattern()
             }
             if (frame >= x8) {
                 pattern = 0;
-                CPlayer::FaceOpponent();
+                FaceOpponent();
                 StartPattern();
             }
         }
@@ -2612,7 +2612,7 @@ void CMishio::UpdatePattern()
                 if (m_inputY != 1) {
                     pattern = 7;
                 }
-                CPlayer::FaceOpponent();
+                FaceOpponent();
                 StartPattern();
             }
         }
@@ -2642,7 +2642,7 @@ void CMishio::UpdatePattern()
             }
             if (frame >= x8) {
                 pattern = 0;
-                CPlayer::FaceOpponent();
+                FaceOpponent();
                 StartPattern();
             }
         }
@@ -2684,7 +2684,7 @@ void CMishio::UpdatePattern()
             }
             if (frame >= x8) {
                 pattern = 0;
-                CPlayer::FaceOpponent();
+                FaceOpponent();
                 StartPattern();
             }
         }
@@ -2729,7 +2729,7 @@ void CMishio::UpdatePattern()
                 if (m_inputY == 1) {
                     pattern = 3;
                 }
-                CPlayer::FaceOpponent();
+                FaceOpponent();
                 StartPattern();
             }
         }
@@ -2774,7 +2774,7 @@ void CMishio::UpdatePattern()
                 if (m_inputY == 1) {
                     pattern = 3;
                 }
-                CPlayer::FaceOpponent();
+                FaceOpponent();
                 StartPattern();
             }
         }
@@ -2807,7 +2807,7 @@ void CMishio::UpdatePattern()
                 if (m_inputY == 1) {
                     pattern = 3;
                 }
-                CPlayer::FaceOpponent();
+                FaceOpponent();
                 StartPattern();
             }
         }
@@ -2944,7 +2944,7 @@ void CMishio::UpdatePattern()
             vy += 0.035;
         }
         if (y + vy > 0.0) {
-            CPlayer::StopMoving();
+            StopMoving();
             y = 0.0;
             timer = 0;
             frame = 0xc;
@@ -2964,7 +2964,7 @@ void CMishio::UpdatePattern()
                 if (m_inputY == 1) {
                     pattern = 3;
                 }
-                CPlayer::FaceOpponent();
+                FaceOpponent();
                 StartPattern();
             }
         }
@@ -3006,7 +3006,7 @@ void CMishio::UpdatePattern()
             }
             if (frame >= x8) {
                 pattern = 0;
-                CPlayer::FaceOpponent();
+                FaceOpponent();
                 StartPattern();
             }
         }
@@ -3023,13 +3023,13 @@ void CMishio::UpdatePattern()
         if (m_attackResult > 1) {
             pattern = 0xd5;
             StartPattern();
-            CPlayer::StopMoving();
+            StopMoving();
             break;
         }
         if (y + vy >= 0.0) {
             y = 0.0;
             vy = 0.0;
-            CPlayer::ShakeScreen(3, 0);
+            ShakeScreen(3, 0);
             l50.type = 3;
             l50.x = (double)(int)x;
             l50.y = (double)(int)y;
@@ -3074,7 +3074,7 @@ void CMishio::UpdatePattern()
         vx = 0.0;
         vy = 0.0;
         if (frame == 0 && timer == 0) {
-            CPlayer::ShakeScreen(3, 0);
+            ShakeScreen(3, 0);
             l50.type = 3;
             l50.x = (double)(int)x;
             l50.y = (double)(int)y;
@@ -3093,7 +3093,7 @@ void CMishio::UpdatePattern()
                 if (m_inputY == 1) {
                     pattern = 3;
                 }
-                CPlayer::FaceOpponent();
+                FaceOpponent();
                 StartPattern();
             }
         }
@@ -3133,7 +3133,7 @@ void CMishio::UpdatePattern()
                 if (m_inputY == 1) {
                     pattern = 3;
                 }
-                CPlayer::FaceOpponent();
+                FaceOpponent();
                 StartPattern();
             }
         }
@@ -3155,7 +3155,7 @@ void CMishio::UpdatePattern()
                 (*m_opponent)->StartPattern();
             }
             if (frame == 3) {
-                if ((char)CPlayer::Unk40ff70() != 0) {
+                if ((char)Unk40ff70() != 0) {
                     x = facing * 5 + x;
                 }
                 (*m_opponent)->x = x - facing * 5;
@@ -3169,12 +3169,12 @@ void CMishio::UpdatePattern()
             if (frame >= x8) {
                 pattern = 0;
                 StartPattern();
-                CPlayer::FaceOpponent();
+                FaceOpponent();
             }
         }
         break;
     case 0xe6:
-        CPlayer::StartAfterimages(3);
+        StartAfterimages(3);
         unk158 = 0;
         vx -= 0.02;
         if (vx < 0.0) {
@@ -3203,7 +3203,7 @@ void CMishio::UpdatePattern()
         }
         break;
     case 0xe7:
-        CPlayer::StartAfterimages(3);
+        StartAfterimages(3);
         unk158 = 0;
         if (m_inputY == -1 && frame > 0 && unk15c < 3 && m_attackResult == 3) {
             pattern = 4;
@@ -3251,7 +3251,7 @@ void CMishio::UpdatePattern()
         }
         break;
     case 0xe8:
-        CPlayer::StartAfterimages(3);
+        StartAfterimages(3);
         unk158 = 0;
         if (m_inputY == -1 && frame > 0 && unk15c < 3 && m_attackResult == 3) {
             pattern = 4;
@@ -3299,7 +3299,7 @@ void CMishio::UpdatePattern()
         }
         break;
     case 0xe9:
-        CPlayer::StartAfterimages(3);
+        StartAfterimages(3);
         unk158 = 0;
         vx -= 0.02;
         if (vx < 0.0) {
@@ -3328,7 +3328,7 @@ void CMishio::UpdatePattern()
         }
         break;
     case 0xea:
-        CPlayer::StartAfterimages(3);
+        StartAfterimages(3);
         unk158 = 0;
         vx -= 0.045;
         if (vx < 0.0) {
@@ -3364,7 +3364,7 @@ void CMishio::UpdatePattern()
         }
         break;
     case 0xeb:
-        CPlayer::StartAfterimages(3);
+        StartAfterimages(3);
         unk158 = 0;
         vx -= 0.045;
         if (vx < 0.0) {
@@ -3405,7 +3405,7 @@ void CMishio::UpdatePattern()
             (*m_opponent)->StopMoving();
             (*m_opponent)->StartPattern();
             (*m_opponent)->unk128 = 1;
-            CPlayer::StopMoving();
+            StopMoving();
             StartPattern();
             l50.type = 0;
             l50.x = (double)((int)x + (facing << 5));
@@ -3440,14 +3440,14 @@ void CMishio::UpdatePattern()
     case 0xf9:
         unk13e = 2;
         if (frame < 6) {
-            CPlayer::Unk410a40(0x32, 3);
-            CPlayer::Unk410a80(0x32, 3);
+            Unk410a40(0x32, 3);
+            Unk410a80(0x32, 3);
         }
         if (frame > 6) {
             (*m_opponent)->Unk410a80(0x32, 3);
         }
         if (frame == 4 && timer == 0) {
-            CPlayer::DealDamage(0x47e, 500.0);
+            DealDamage(0x47e, 500.0);
             (*m_opponent)->StartPattern();
         }
         if (frame > 1 && frame < 4) {
@@ -3456,7 +3456,7 @@ void CMishio::UpdatePattern()
             (*m_opponent)->x = facing * 0x11 + x;
             (*m_opponent)->y = y + 11.0;
             if (y + vy > 0.0) {
-                CPlayer::StopMoving();
+                StopMoving();
                 y = 0.0;
                 frame = 4;
                 timer = 0;
@@ -3477,7 +3477,7 @@ void CMishio::UpdatePattern()
         if (frame > 6 && y < 0.0) {
             vy += 0.035;
             if (y + vy > 0.0) {
-                CPlayer::StopMoving();
+                StopMoving();
                 y = 0.0;
                 timer = 0;
                 frame = 0x10;
@@ -3516,7 +3516,7 @@ void CMishio::UpdatePattern()
     case 0xfa:
         if (frame == 0 && timer == 0) {
             unk158 = 0;
-            CPlayer::StopMoving();
+            StopMoving();
             m_gauge = m_gauge + 0x2d;
             unk3138 = 5;
             m_hitsLeft = 1;
@@ -3534,7 +3534,7 @@ void CMishio::UpdatePattern()
             if (frame >= x8) {
                 pattern = 0;
                 if (m_attackResult > 0 && unk3158 == 0) {
-                    if ((WORD)CPlayer::Random(0, 0x3e8) < 0x1f4) {
+                    if ((WORD)Random(0, 0x3e8) < 0x1f4) {
                         unk3158 = 1;
                     } else {
                         unk3158 = 2;
@@ -3547,7 +3547,7 @@ void CMishio::UpdatePattern()
     case 0xfb:
         if (frame == 0 && timer == 0) {
             unk158 = 0;
-            CPlayer::StopMoving();
+            StopMoving();
             m_gauge = m_gauge + 0x2d;
             unk3138 = 5;
             m_hitsLeft = 1;
@@ -3565,7 +3565,7 @@ void CMishio::UpdatePattern()
             if (frame >= x8) {
                 pattern = 0;
                 if (m_attackResult > 0 && unk3158 == 0) {
-                    if ((WORD)CPlayer::Random(0, 0x3e8) < 0x1f4) {
+                    if ((WORD)Random(0, 0x3e8) < 0x1f4) {
                         unk3158 = 1;
                     } else {
                         unk3158 = 2;
@@ -3578,7 +3578,7 @@ void CMishio::UpdatePattern()
     case 0xfc:
         if (frame == 0 && timer == 0) {
             unk158 = 0;
-            CPlayer::StopMoving();
+            StopMoving();
             m_gauge = m_gauge + 0x2d;
             m_hitsLeft = 2;
             if (unk120 == 0) {
@@ -3616,7 +3616,7 @@ void CMishio::UpdatePattern()
             if (frame >= x8) {
                 pattern = 0;
                 if (unk3138 > 0 && unk3158 == 0) {
-                    if ((WORD)CPlayer::Random(0, 0x3e8) < 0x1f4) {
+                    if ((WORD)Random(0, 0x3e8) < 0x1f4) {
                         unk3158 = 1;
                     } else {
                         unk3158 = 2;
@@ -3629,7 +3629,7 @@ void CMishio::UpdatePattern()
     case 0xfd:
         if (frame == 0 && timer == 0) {
             unk158 = 0;
-            CPlayer::StopMoving();
+            StopMoving();
             m_hitsLeft = 6;
         }
         if (vx > 0.0) {
@@ -3675,7 +3675,7 @@ void CMishio::UpdatePattern()
     case 0xfe:
         if (frame == 0 && timer == 0) {
             unk158 = 0;
-            CPlayer::StopMoving();
+            StopMoving();
             m_hitsLeft = 4;
         }
         if ((frame == 6 || frame == 9 || frame == 0xc || frame == 0xf) && timer == 0) {
@@ -3713,7 +3713,7 @@ void CMishio::UpdatePattern()
             l50.layer = 1;
             m_game->CreateEffect((EffectDesc*)&l50);
             unk158 = 0;
-            CPlayer::StopMoving();
+            StopMoving();
             m_hitsLeft = 0x63;
         }
         if (vx > 0.0) {
@@ -3759,7 +3759,7 @@ void CMishio::UpdatePattern()
         break;
     case 0x100:
         if (frame == 0 && timer == 0) {
-            CPlayer::StopMoving();
+            StopMoving();
         }
         if (frame > 4 && frame < 7 && (m_pressA == 1 || m_pressB == 1 || m_pressC == 1 || m_pressD == 1)) {
             if (m_inputY == -1) {
@@ -3853,7 +3853,7 @@ void CMishio::UpdatePattern()
         break;
     case 0x101:
         if (frame == 0 && timer == 0) {
-            CPlayer::StopMoving();
+            StopMoving();
         }
         if (frame > 4 && frame < 7 && (m_pressA == 1 || m_pressB == 1 || m_pressC == 1 || m_pressD == 1)) {
             if (m_inputY == -1) {
@@ -3944,7 +3944,7 @@ void CMishio::UpdatePattern()
         break;
     case 0x102:
         if (frame == 0 && timer == 0) {
-            CPlayer::StopMoving();
+            StopMoving();
         }
         if (frame > 4 && frame < 7 && (m_pressA == 1 || m_pressB == 1 || m_pressC == 1 || m_pressD == 1)) {
             if (m_inputY == -1) {
@@ -4036,7 +4036,7 @@ void CMishio::UpdatePattern()
     case 0x103:
         if (frame == 0 && timer == 0) {
             unk158 = 0;
-            CPlayer::StopMoving();
+            StopMoving();
         }
         if (frame > 2 && frame < 5 && (m_pressA == 1 || m_pressB == 1 || m_pressC == 1 || m_pressD == 1)) {
             if (m_inputY == -1) {
@@ -4172,7 +4172,7 @@ void CMishio::UpdatePattern()
         }
         if (frame == 0 && timer == 0) {
             unk158 = 0;
-            CPlayer::StopMoving();
+            StopMoving();
         }
         if (y + vy > 0.0) {
             vy = 0.0;
@@ -4265,7 +4265,7 @@ void CMishio::UpdatePattern()
         }
         if (frame == 0 && timer == 0) {
             unk158 = 0;
-            CPlayer::StopMoving();
+            StopMoving();
         }
         if (y + vy > 0.0) {
             vy = 0.0;
@@ -4307,7 +4307,7 @@ void CMishio::UpdatePattern()
     case 0x106:
         if (frame == 0 && timer == 0) {
             unk158 = 0;
-            CPlayer::StopMoving();
+            StopMoving();
         }
         timer++;
         if (timer >= l4) {
@@ -4347,7 +4347,7 @@ void CMishio::UpdatePattern()
     case 0x107:
         if (frame == 0 && timer == 0) {
             unk158 = 0;
-            CPlayer::StopMoving();
+            StopMoving();
         }
         timer++;
         if (timer >= l4) {
@@ -4387,7 +4387,7 @@ void CMishio::UpdatePattern()
     case 0x108:
         if (frame == 0 && timer == 0) {
             unk158 = 0;
-            CPlayer::StopMoving();
+            StopMoving();
         }
         timer++;
         if (timer >= l4) {
@@ -4435,7 +4435,7 @@ void CMishio::UpdatePattern()
         }
         if (frame == 0 && timer == 0) {
             unk158 = 0;
-            CPlayer::StopMoving();
+            StopMoving();
         }
         timer++;
         if (timer >= l4) {
@@ -4483,7 +4483,7 @@ void CMishio::UpdatePattern()
         }
         if (frame == 0 && timer == 0) {
             unk158 = 0;
-            CPlayer::StopMoving();
+            StopMoving();
         }
         timer++;
         if (timer >= l4) {
@@ -4616,7 +4616,7 @@ void CMishio::UpdatePattern()
                     pattern = 3;
                 }
                 StartPattern();
-                CPlayer::FaceOpponent();
+                FaceOpponent();
                 if (unk3158 == 1) {
                     unk3158 = 0;
                 }
@@ -4625,7 +4625,7 @@ void CMishio::UpdatePattern()
         break;
     case 0x10c:
         if (frame == 0 && timer == 0) {
-            CPlayer::StopMoving();
+            StopMoving();
         }
         vy = vy + ay;
         if (frame == 7 && timer == 0) {
@@ -4654,7 +4654,7 @@ void CMishio::UpdatePattern()
         break;
     case 0x10d:
         if (frame == 0 && timer == 0) {
-            CPlayer::StopMoving();
+            StopMoving();
         }
         vy = vy + ay;
         if (frame == 7 && timer == 0) {
@@ -4698,7 +4698,7 @@ void CMishio::UpdatePattern()
             l50.scale = 2;
             l50.layer = 1;
             m_game->CreateEffect((EffectDesc*)&l50);
-            CPlayer::StopMoving();
+            StopMoving();
         }
         vy = vy + ay;
         if (frame == 7 && timer == 0) {
@@ -4730,7 +4730,7 @@ void CMishio::UpdatePattern()
         break;
     case 0x10f:
         if (frame == 0 && timer == 0) {
-            CPlayer::StopMoving();
+            StopMoving();
         }
         vy = vy + ay;
         if (frame == 5 && timer == 0) {
@@ -4775,7 +4775,7 @@ void CMishio::UpdatePattern()
         break;
     case 0x110:
         if (frame == 0 && timer == 0) {
-            CPlayer::StopMoving();
+            StopMoving();
         }
         vy = vy + ay;
         if (frame == 5 && timer == 0) {
@@ -4821,7 +4821,7 @@ void CMishio::UpdatePattern()
     case 0x111:
         if (frame == 0 && timer == 0) {
             unk158 = 0;
-            CPlayer::StopMoving();
+            StopMoving();
             m_gauge = m_gauge + 0x2d;
             unk3138 = 5;
             m_hitsLeft = 1;
@@ -4857,7 +4857,7 @@ void CMishio::UpdatePattern()
     case 0x112:
         if (frame == 0 && timer == 0) {
             unk158 = 0;
-            CPlayer::StopMoving();
+            StopMoving();
             m_gauge = m_gauge + 0x2d;
             unk3138 = 5;
             m_hitsLeft = 1;
@@ -4898,7 +4898,7 @@ void CMishio::UpdatePattern()
     case 0x113:
         if (frame == 0 && timer == 0) {
             unk158 = 0;
-            CPlayer::StopMoving();
+            StopMoving();
             m_gauge = m_gauge + 0x2d;
             m_hitsLeft = 1;
             if (unk120 == 0) {
@@ -4967,7 +4967,7 @@ void CMishio::UpdatePattern()
     case 0x114:
         if (frame == 0 && timer == 0) {
             unk158 = 0;
-            CPlayer::StopMoving();
+            StopMoving();
             m_gauge = m_gauge + 0x2d;
             unk3138 = 5;
             m_hitsLeft = 1;
@@ -5008,7 +5008,7 @@ void CMishio::UpdatePattern()
     case 0x115:
         if (frame == 0 && timer == 0) {
             unk158 = 0;
-            CPlayer::StopMoving();
+            StopMoving();
             m_gauge = m_gauge + 0x2d;
             unk3138 = 5;
             m_hitsLeft = 1;
@@ -5063,7 +5063,7 @@ void CMishio::UpdatePattern()
     case 0x116:
         if (frame == 0 && timer == 0) {
             unk158 = 0;
-            CPlayer::StopMoving();
+            StopMoving();
             m_gauge = m_gauge + 0x2d;
             m_hitsLeft = 1;
             if (unk120 == 0) {
@@ -5145,7 +5145,7 @@ void CMishio::UpdatePattern()
     case 0x117:
         if (frame == 0 && timer == 0) {
             unk158 = 0;
-            CPlayer::StopMoving();
+            StopMoving();
             m_gauge = m_gauge + 0x2d;
             unk3138 = 5;
             m_hitsLeft = 1;
@@ -5169,7 +5169,7 @@ void CMishio::UpdatePattern()
     case 0x118:
         if (frame == 0 && timer == 0) {
             unk158 = 0;
-            CPlayer::StopMoving();
+            StopMoving();
             m_gauge = m_gauge + 0x2d;
             unk3138 = 5;
             m_hitsLeft = 1;
@@ -5200,7 +5200,7 @@ void CMishio::UpdatePattern()
     case 0x119:
         if (frame == 0 && timer == 0) {
             unk158 = 0;
-            CPlayer::StopMoving();
+            StopMoving();
             m_gauge = m_gauge + 0x2d;
             m_hitsLeft = 2;
             if (unk120 == 0) {
@@ -5342,7 +5342,7 @@ void CMishio::UpdatePattern()
                     pattern = 3;
                 }
                 StartPattern();
-                CPlayer::FaceOpponent();
+                FaceOpponent();
             }
         }
         break;
@@ -5442,7 +5442,7 @@ void CMishio::UpdatePattern()
                     pattern = 3;
                 }
                 StartPattern();
-                CPlayer::FaceOpponent();
+                FaceOpponent();
             }
         }
         break;
@@ -5451,7 +5451,7 @@ void CMishio::UpdatePattern()
             unk158 = 0;
             unk14c = 0x78;
             m_gauge = m_gauge - 0x3e8;
-            CPlayer::FillBackground(0xb0, 3);
+            FillBackground(0xb0, 3);
             l50.type = 0x44;
             l50.unk2c = 0x13;
             l50.x = (double)((int)x - facing * 0x14);
@@ -5462,7 +5462,7 @@ void CMishio::UpdatePattern()
             m_game->CreateEffect((EffectDesc*)&l50);
             m_hitsLeft = 0x63;
             unk3150 = 0;
-            CPlayer::StopMoving();
+            StopMoving();
         }
         if (vx > 0.0) {
             vx -= 0.035;
@@ -5534,7 +5534,7 @@ void CMishio::UpdatePattern()
             unk158 = 0;
             unk14c = 0x78;
             m_gauge = m_gauge - 0x7d0;
-            CPlayer::FillBackground(0xb0, 3);
+            FillBackground(0xb0, 3);
             l50.type = 0x45;
             l50.unk2c = 5;
             l50.x = (double)((int)x - facing * 0x14);
@@ -5545,7 +5545,7 @@ void CMishio::UpdatePattern()
             m_game->CreateEffect((EffectDesc*)&l50);
             m_hitsLeft = 0x63;
             unk3150 = 0;
-            CPlayer::StopMoving();
+            StopMoving();
         }
         if (vx > 0.0) {
             vx -= 0.04;
@@ -5565,10 +5565,10 @@ void CMishio::UpdatePattern()
             (*m_opponent)->pattern = 0x37;
             break;
         }
-        if (frame > 0x15 && frame < 0x1f && (WORD)CPlayer::Random(0, 0x64) < 0xa) {
+        if (frame > 0x15 && frame < 0x1f && (WORD)Random(0, 0x64) < 0xa) {
             l50.type = 0x19a;
-            l50.x = (double)((int)x + ((WORD)CPlayer::Random(0, 0x6e) - 0x14) * facing);
-            l50.y = (double)((int)y - (WORD)CPlayer::Random(0, 0x5a));
+            l50.x = (double)((int)x + ((WORD)Random(0, 0x6e) - 0x14) * facing);
+            l50.y = (double)((int)y - (WORD)Random(0, 0x5a));
             l50.scale = 2;
             l50.layer = 1;
             l50.unk18 = facing;
@@ -5626,7 +5626,7 @@ void CMishio::UpdatePattern()
             unk158 = 0;
             unk14c = 0x78;
             m_gauge = m_gauge - 0xbb8;
-            CPlayer::FillBackground(0xb0, 3);
+            FillBackground(0xb0, 3);
             l50.type = 0x46;
             l50.unk2c = 0x40;
             l50.x = (double)((int)x - facing * 0x14);
@@ -5638,7 +5638,7 @@ void CMishio::UpdatePattern()
             m_hitsLeft = 0x63;
             unk3150 = 0;
             m_playSound = 0x25;
-            CPlayer::StopMoving();
+            StopMoving();
         }
         m_game->Unk4080c0(0xf);
         if (vx > 0.0) {
@@ -5660,19 +5660,19 @@ void CMishio::UpdatePattern()
             (*m_opponent)->pattern = 0x37;
             break;
         }
-        if (frame > 0x15 && frame < 0x1f && (WORD)CPlayer::Random(0, 0x64) < 0xa) {
+        if (frame > 0x15 && frame < 0x1f && (WORD)Random(0, 0x64) < 0xa) {
             l50.type = 0x19a;
-            l50.x = (double)((int)x + ((WORD)CPlayer::Random(0, 0x6e) - 0x14) * facing);
-            l50.y = (double)((int)y - (WORD)CPlayer::Random(0, 0x5a));
+            l50.x = (double)((int)x + ((WORD)Random(0, 0x6e) - 0x14) * facing);
+            l50.y = (double)((int)y - (WORD)Random(0, 0x5a));
             l50.scale = 2;
             l50.layer = 1;
             l50.unk18 = facing;
             SpawnObject(&l50);
         }
-        if (frame > 0x15 && frame < 0x1f && (WORD)CPlayer::Random(0, 0x64) < 5) {
+        if (frame > 0x15 && frame < 0x1f && (WORD)Random(0, 0x64) < 5) {
             l50.type = 0x19b;
-            l50.x = (double)((int)x + ((WORD)CPlayer::Random(0, 0x6e) - 0x14) * facing);
-            l50.y = (double)((int)y - (WORD)CPlayer::Random(0, 0x5a));
+            l50.x = (double)((int)x + ((WORD)Random(0, 0x6e) - 0x14) * facing);
+            l50.y = (double)((int)y - (WORD)Random(0, 0x5a));
             l50.scale = 2;
             l50.layer = 1;
             l50.unk18 = facing;
@@ -5729,10 +5729,10 @@ void CMishio::UpdatePattern()
         if (frame == 0 && timer == 0) {
             unk3154 = 1;
             unk3150 = 0;
-            CPlayer::StopMoving();
+            StopMoving();
             unk14c = 0x78;
             m_gauge = m_gauge - 0x3e8;
-            CPlayer::FillBackground(0xb0, 3);
+            FillBackground(0xb0, 3);
             l50.type = 0x44;
             l50.unk2c = 0x13;
             l50.x = (double)((int)x - facing * 0x14);
@@ -5841,10 +5841,10 @@ void CMishio::UpdatePattern()
         if (frame == 0 && timer == 0) {
             unk3154 = 2;
             unk3150 = 0;
-            CPlayer::StopMoving();
+            StopMoving();
             unk14c = 0x78;
             m_gauge = m_gauge - 0x7d0;
-            CPlayer::FillBackground(0xb0, 3);
+            FillBackground(0xb0, 3);
             l50.type = 0x45;
             l50.unk2c = 5;
             l50.x = (double)((int)x - facing * 0x14);
@@ -5954,10 +5954,10 @@ void CMishio::UpdatePattern()
         if (frame == 0 && timer == 0) {
             unk3154 = 3;
             unk3150 = 0;
-            CPlayer::StopMoving();
+            StopMoving();
             unk14c = 0x78;
             m_gauge = m_gauge - 0xbb8;
-            CPlayer::FillBackground(0xb0, 3);
+            FillBackground(0xb0, 3);
             l50.type = 0x46;
             l50.unk2c = 0x40;
             l50.x = (double)((int)x - facing * 0x14);
@@ -6070,7 +6070,7 @@ void CMishio::UpdatePattern()
         }
         if (frame == 0 && timer == 0) {
             unk158 = 0;
-            CPlayer::StopMoving();
+            StopMoving();
         }
         if (frame > 6 && frame < 9 && unk3150 < unk3154 + 1 && (m_pressA == 1 || m_pressB == 1 || m_pressC == 1 || m_pressD == 1)) {
             if (m_inputY == -1) {
@@ -6172,7 +6172,7 @@ void CMishio::UpdatePattern()
         }
         if (frame == 0 && timer == 0) {
             unk158 = 0;
-            CPlayer::StopMoving();
+            StopMoving();
         }
         if (frame > 6 && frame < 9 && unk3150 < unk3154 + 1 && (m_pressA == 1 || m_pressB == 1 || m_pressC == 1 || m_pressD == 1)) {
             if (m_inputY == -1) {
@@ -6274,7 +6274,7 @@ void CMishio::UpdatePattern()
         }
         if (frame == 0 && timer == 0) {
             unk158 = 0;
-            CPlayer::StopMoving();
+            StopMoving();
         }
         if (frame > 6 && frame < 9 && unk3150 < unk3154 + 1 && (m_pressA == 1 || m_pressB == 1 || m_pressC == 1 || m_pressD == 1)) {
             if (m_inputY == -1) {
@@ -6384,7 +6384,7 @@ void CMishio::UpdatePattern()
         }
         if (frame == 0 && timer == 0) {
             unk158 = 0;
-            CPlayer::StopMoving();
+            StopMoving();
         }
         if (frame > 7 && frame < 0xa && unk3150 < unk3154 + 1 && (m_pressA == 1 || m_pressB == 1 || m_pressC == 1 || m_pressD == 1)) {
             if (m_inputY == -1) {
@@ -6494,7 +6494,7 @@ void CMishio::UpdatePattern()
         }
         if (frame == 0 && timer == 0) {
             unk158 = 0;
-            CPlayer::StopMoving();
+            StopMoving();
         }
         if (frame > 7 && frame < 0xa && unk3150 < unk3154 + 1 && (m_pressA == 1 || m_pressB == 1 || m_pressC == 1 || m_pressD == 1)) {
             if (m_inputY == -1) {
@@ -6689,7 +6689,7 @@ void CMishio::UpdatePattern()
                     pattern = 3;
                 }
                 StartPattern();
-                CPlayer::FaceOpponent();
+                FaceOpponent();
                 if (unk3158 == 1) {
                     unk3158 = 0;
                 }
@@ -6698,14 +6698,14 @@ void CMishio::UpdatePattern()
         break;
     case 0x138:
         if (frame == 0 && timer == 0) {
-            CPlayer::StopMoving();
+            StopMoving();
             unk158 = 0;
         }
         if (frame == 2 && timer == 0) {
             unk158 = 0;
             unk14c = 0x78;
             m_gauge = m_gauge - 0x3e8;
-            CPlayer::FillBackground(0xb0, 3);
+            FillBackground(0xb0, 3);
             l50.type = 0x44;
             l50.unk2c = 0x13;
             l50.x = (double)((int)x + facing * 0x43);
@@ -6714,7 +6714,7 @@ void CMishio::UpdatePattern()
             l50.unk0 = 1;
             l50.layer = 1;
             m_game->CreateEffect((EffectDesc*)&l50);
-            CPlayer::StopMoving();
+            StopMoving();
         }
         timer++;
         if (timer >= l4) {
@@ -6797,14 +6797,14 @@ void CMishio::UpdatePattern()
         break;
     case 0x139:
         if (frame == 0 && timer == 0) {
-            CPlayer::StopMoving();
+            StopMoving();
             unk158 = 0;
         }
         if (frame == 2 && timer == 0) {
             unk158 = 0;
             unk14c = 0x78;
             m_gauge = m_gauge - 0x7d0;
-            CPlayer::FillBackground(0xb0, 3);
+            FillBackground(0xb0, 3);
             l50.type = 0x45;
             l50.unk2c = 5;
             l50.x = (double)((int)x + facing * 0x43);
@@ -6813,7 +6813,7 @@ void CMishio::UpdatePattern()
             l50.unk0 = 1;
             l50.layer = 1;
             m_game->CreateEffect((EffectDesc*)&l50);
-            CPlayer::StopMoving();
+            StopMoving();
         }
         timer++;
         if (timer >= l4) {
@@ -6900,14 +6900,14 @@ void CMishio::UpdatePattern()
             m_game->Unk4080c0(0xf);
         }
         if (frame == 0 && timer == 0) {
-            CPlayer::StopMoving();
+            StopMoving();
             unk158 = 0;
         }
         if (frame == 2 && timer == 0) {
             unk158 = 0;
             unk14c = 0x78;
             m_gauge = m_gauge - 0xbb8;
-            CPlayer::FillBackground(0xb0, 3);
+            FillBackground(0xb0, 3);
             l50.type = 0x46;
             l50.unk2c = 0x40;
             l50.x = (double)((int)x + facing * 0x43);
@@ -6917,7 +6917,7 @@ void CMishio::UpdatePattern()
             l50.layer = 1;
             m_game->CreateEffect((EffectDesc*)&l50);
             m_playSound = 0x25;
-            CPlayer::StopMoving();
+            StopMoving();
         }
         timer++;
         if (timer >= l4) {
@@ -7001,14 +7001,14 @@ void CMishio::UpdatePattern()
         break;
     case 0x13b:
         if (frame == 0 && timer == 0) {
-            CPlayer::StopMoving();
+            StopMoving();
             unk158 = 0;
         }
         if (frame == 2 && timer == 0 && unk3140 == 0) {
             unk158 = 0;
             unk14c = 0x78;
             m_gauge = m_gauge - 0x3e8;
-            CPlayer::FillBackground(0xb0, 3);
+            FillBackground(0xb0, 3);
             l50.type = 0x44;
             l50.unk2c = 0x13;
             l50.x = (double)((int)x - facing * 0x1f);
@@ -7017,14 +7017,14 @@ void CMishio::UpdatePattern()
             l50.unk0 = 1;
             l50.layer = 1;
             m_game->CreateEffect((EffectDesc*)&l50);
-            CPlayer::StopMoving();
+            StopMoving();
             unk3140++;
         }
         if (frame > 9 && y < 0.0) {
             vy += 0.02;
             if (y + vy > 0.0) {
                 y = 0.0;
-                CPlayer::StopMoving();
+                StopMoving();
                 timer = 0;
                 frame = 0x10;
                 break;
@@ -7074,14 +7074,14 @@ void CMishio::UpdatePattern()
         break;
     case 0x13c:
         if (frame == 0 && timer == 0) {
-            CPlayer::StopMoving();
+            StopMoving();
             unk158 = 0;
         }
         if (frame == 2 && timer == 0 && unk3140 == 0) {
             unk158 = 0;
             unk14c = 0x78;
             m_gauge = m_gauge - 0x7d0;
-            CPlayer::FillBackground(0xb0, 3);
+            FillBackground(0xb0, 3);
             l50.type = 0x45;
             l50.unk2c = 5;
             l50.x = (double)((int)x - facing * 0x1f);
@@ -7090,14 +7090,14 @@ void CMishio::UpdatePattern()
             l50.unk0 = 1;
             l50.layer = 1;
             m_game->CreateEffect((EffectDesc*)&l50);
-            CPlayer::StopMoving();
+            StopMoving();
             unk3140++;
         }
         if (frame > 9 && y < 0.0) {
             vy += 0.02;
             if (y + vy > 0.0) {
                 y = 0.0;
-                CPlayer::StopMoving();
+                StopMoving();
                 timer = 0;
                 frame = 0x10;
                 break;
@@ -7176,14 +7176,14 @@ void CMishio::UpdatePattern()
             m_game->Unk4080c0(3);
         }
         if (frame == 0 && timer == 0) {
-            CPlayer::StopMoving();
+            StopMoving();
             unk158 = 0;
         }
         if (frame == 2 && timer == 0 && unk3140 == 0) {
             unk158 = 0;
             unk14c = 0x78;
             m_gauge = m_gauge - 0xbb8;
-            CPlayer::FillBackground(0xb0, 3);
+            FillBackground(0xb0, 3);
             l50.type = 0x46;
             l50.unk2c = 0x40;
             l50.x = (double)((int)x - facing * 0x1f);
@@ -7193,14 +7193,14 @@ void CMishio::UpdatePattern()
             l50.layer = 1;
             m_game->CreateEffect((EffectDesc*)&l50);
             m_playSound = 0x25;
-            CPlayer::StopMoving();
+            StopMoving();
             unk3140++;
         }
         if (frame > 9 && y < 0.0) {
             vy += 0.02;
             if (y + vy > 0.0) {
                 y = 0.0;
-                CPlayer::StopMoving();
+                StopMoving();
                 timer = 0;
                 frame = 0x10;
                 break;
@@ -7283,13 +7283,13 @@ void CMishio::UpdatePattern()
     case 0x13e:
         unk158 = 0;
         if (frame == 0 && timer == 0) {
-            CPlayer::StopMoving();
+            StopMoving();
         }
         if (frame == 0 && timer == 0) {
-            CPlayer::Unk410a80(0x32, 3);
+            Unk410a80(0x32, 3);
             unk14c = 0x78;
             m_gauge = m_gauge - 0xbb8;
-            CPlayer::FillBackground(0xb0, 3);
+            FillBackground(0xb0, 3);
             l50.type = 0x46;
             l50.unk2c = 0x40;
             l50.x = (double)((int)x + facing * 0xd);
@@ -7313,7 +7313,7 @@ void CMishio::UpdatePattern()
         }
         if (frame == 7 && timer == 0) {
             m_playVoice = 0xb;
-            CPlayer::ShakeScreen(5, 0);
+            ShakeScreen(5, 0);
             unk3158 = 3;
             unk3168 = 0x1194;
             l50.type = 0x1b3;

@@ -17,7 +17,7 @@ void CMinagi::UpdatePattern()
     EffectDesc l50;
     l4 = (short)anims[pattern].frames[frame].duration;
     x8 = anims[pattern].frameCount;
-    CPlayer::InitEffectDesc((EffectDesc*)&l50);
+    InitEffectDesc((EffectDesc*)&l50);
     switch (pattern) {
     default:
         unk158 = 0;
@@ -62,7 +62,7 @@ void CMinagi::UpdatePattern()
         vx = 0.0;
         vy = 0.0;
         unk158 = 0;
-        CPlayer::FaceOpponent();
+        FaceOpponent();
         timer++;
         if (timer >= l4) {
             timer = 0;
@@ -75,7 +75,7 @@ void CMinagi::UpdatePattern()
     case 4:
         if (frame == 0 && timer == 0) {
             if (unk158 == 0) {
-                CPlayer::FaceOpponent();
+                FaceOpponent();
             }
             vx = 0.0;
         }
@@ -102,7 +102,7 @@ void CMinagi::UpdatePattern()
         if (y + vy >= 0.0 && frame > 3) {
             y = 0.0;
             m_playSound = 9;
-            CPlayer::FaceOpponent();
+            FaceOpponent();
             pattern = 0xd;
             StartPattern();
         }
@@ -110,7 +110,7 @@ void CMinagi::UpdatePattern()
     case 5:
         if (frame == 0 && timer == 0) {
             if (unk158 == 0) {
-                CPlayer::FaceOpponent();
+                FaceOpponent();
             }
             vx = 0.0;
         }
@@ -138,7 +138,7 @@ void CMinagi::UpdatePattern()
         if (y + vy >= 0.0 && frame > 3) {
             y = 0.0;
             m_playSound = 9;
-            CPlayer::FaceOpponent();
+            FaceOpponent();
             pattern = 0xd;
             StartPattern();
         }
@@ -146,7 +146,7 @@ void CMinagi::UpdatePattern()
     case 6:
         if (frame == 0 && timer == 0) {
             if (unk158 == 0) {
-                CPlayer::FaceOpponent();
+                FaceOpponent();
             }
             vx = 0.0;
         }
@@ -170,7 +170,7 @@ void CMinagi::UpdatePattern()
         if (y + vy >= 0.0 && frame > 3) {
             y = 0.0;
             m_playSound = 9;
-            CPlayer::FaceOpponent();
+            FaceOpponent();
             pattern = 0xd;
             StartPattern();
         }
@@ -179,7 +179,7 @@ void CMinagi::UpdatePattern()
         vx = 0.0;
         vy = 0.0;
         unk158 = 0;
-        CPlayer::FaceOpponent();
+        FaceOpponent();
         timer++;
         if (timer >= l4) {
             timer = 0;
@@ -194,7 +194,7 @@ void CMinagi::UpdatePattern()
         vx = 0.0;
         vy = 0.0;
         unk158 = 0;
-        CPlayer::FaceOpponent();
+        FaceOpponent();
         timer++;
         if (timer >= l4) {
             timer = 0;
@@ -227,7 +227,7 @@ void CMinagi::UpdatePattern()
         vx = 0.0;
         vy = 0.0;
         unk158 = 0;
-        CPlayer::FaceOpponent();
+        FaceOpponent();
         timer++;
         if (timer >= l4) {
             timer = 0;
@@ -260,7 +260,7 @@ void CMinagi::UpdatePattern()
         if (y + vy >= 0.0 && frame > 3) {
             y = 0.0;
             m_playSound = 9;
-            CPlayer::FaceOpponent();
+            FaceOpponent();
             pattern = 0xd;
             StartPattern();
         }
@@ -284,7 +284,7 @@ void CMinagi::UpdatePattern()
         if (y + vy >= 0.0 && frame > 3) {
             y = 0.0;
             m_playSound = 9;
-            CPlayer::FaceOpponent();
+            FaceOpponent();
             pattern = 0xd;
             StartPattern();
         }
@@ -308,7 +308,7 @@ void CMinagi::UpdatePattern()
         if (y + vy >= 0.0 && frame > 3) {
             y = 0.0;
             m_playSound = 9;
-            CPlayer::FaceOpponent();
+            FaceOpponent();
             pattern = 0xd;
             StartPattern();
         }
@@ -864,7 +864,7 @@ void CMinagi::UpdatePattern()
         if (unk120 != 0) {
             unk118 -= 0.8;
         }
-        if (frame > 0 && (char)CPlayer::Unk40ff70() != 0) {
+        if (frame > 0 && (char)Unk40ff70() != 0) {
             pattern = 0x46;
             StartPattern();
             break;
@@ -912,7 +912,7 @@ void CMinagi::UpdatePattern()
         if (unk120 != 0) {
             unk118 -= 0.8;
         }
-        if (frame > 0 && (char)CPlayer::Unk40ff70() != 0) {
+        if (frame > 0 && (char)Unk40ff70() != 0) {
             pattern = 0x46;
             StartPattern();
             break;
@@ -960,7 +960,7 @@ void CMinagi::UpdatePattern()
         if (unk120 != 0) {
             unk118 -= 0.8;
         }
-        if (frame > 0 && (char)CPlayer::Unk40ff70() != 0) {
+        if (frame > 0 && (char)Unk40ff70() != 0) {
             pattern = 0x46;
             StartPattern();
             break;
@@ -1003,7 +1003,7 @@ void CMinagi::UpdatePattern()
         if (unk120 != 0) {
             unk118 -= 0.8;
         }
-        if (frame > 0 && (char)CPlayer::Unk40ff70() != 0) {
+        if (frame > 0 && (char)Unk40ff70() != 0) {
             pattern = 0x46;
             StartPattern();
             break;
@@ -1050,7 +1050,7 @@ void CMinagi::UpdatePattern()
         vx = unkc0;
         vy = unkc8;
         timer++;
-        if ((char)CPlayer::Unk40ff70() != 0) {
+        if ((char)Unk40ff70() != 0) {
             pattern = 0x46;
             StartPattern();
             break;
@@ -1493,7 +1493,7 @@ void CMinagi::UpdatePattern()
             if (frame >= x8) {
                 pattern = 0;
                 StartPattern();
-                CPlayer::FaceOpponent();
+                FaceOpponent();
             }
         }
         break;
@@ -1545,7 +1545,7 @@ void CMinagi::UpdatePattern()
             if (frame >= x8) {
                 pattern = 0;
                 StartPattern();
-                CPlayer::FaceOpponent();
+                FaceOpponent();
             }
         }
         break;
@@ -1578,7 +1578,7 @@ void CMinagi::UpdatePattern()
             if (frame >= x8) {
                 pattern = 0;
                 StartPattern();
-                CPlayer::FaceOpponent();
+                FaceOpponent();
             }
         }
         if (y + vy >= 0.0) {
@@ -1663,7 +1663,7 @@ void CMinagi::UpdatePattern()
             timer = 0;
             frame++;
             if (frame == x8 - 1) {
-                CPlayer::FaceOpponent();
+                FaceOpponent();
             }
             if (frame >= x8) {
                 pattern = 7;
@@ -1678,7 +1678,7 @@ void CMinagi::UpdatePattern()
         vx = 0.0;
         vy = 0.0;
         if (frame == 0 && timer == 0) {
-            CPlayer::ShakeScreen(3, 0);
+            ShakeScreen(3, 0);
             l50.type = 3;
             l50.x = (double)(int)x;
             l50.y = (double)(int)y;
@@ -1701,7 +1701,7 @@ void CMinagi::UpdatePattern()
         vx = 0.0;
         vy = 0.0;
         if (frame == 0 && timer == 0) {
-            CPlayer::ShakeScreen(3, 0);
+            ShakeScreen(3, 0);
             l50.type = 3;
             l50.x = (double)(int)x;
             l50.y = (double)(int)y;
@@ -1731,7 +1731,7 @@ void CMinagi::UpdatePattern()
             timer = 0;
             frame++;
             if (frame == x8) {
-                CPlayer::FaceOpponent();
+                FaceOpponent();
             }
             if (frame >= x8) {
                 pattern = 0x60;
@@ -1768,7 +1768,7 @@ void CMinagi::UpdatePattern()
             timer = 0;
             frame++;
             if (frame == x8) {
-                CPlayer::FaceOpponent();
+                FaceOpponent();
             }
             if (frame >= x8) {
                 pattern = 0;
@@ -1808,7 +1808,7 @@ void CMinagi::UpdatePattern()
             timer = 0;
             frame++;
             if (frame == x8) {
-                CPlayer::FaceOpponent();
+                FaceOpponent();
             }
             if (frame >= x8) {
                 pattern = 0;
@@ -1848,7 +1848,7 @@ void CMinagi::UpdatePattern()
             timer = 0;
             frame++;
             if (frame == x8) {
-                CPlayer::FaceOpponent();
+                FaceOpponent();
             }
             if (frame >= x8) {
                 pattern = 0;
@@ -1888,7 +1888,7 @@ void CMinagi::UpdatePattern()
             timer = 0;
             frame++;
             if (frame == x8) {
-                CPlayer::FaceOpponent();
+                FaceOpponent();
             }
             if (frame >= x8) {
                 pattern = 3;
@@ -1925,7 +1925,7 @@ void CMinagi::UpdatePattern()
             timer = 0;
             frame++;
             if (frame == x8) {
-                CPlayer::FaceOpponent();
+                FaceOpponent();
             }
             if (frame >= x8) {
                 pattern = 3;
@@ -1962,7 +1962,7 @@ void CMinagi::UpdatePattern()
             timer = 0;
             frame++;
             if (frame == x8) {
-                CPlayer::FaceOpponent();
+                FaceOpponent();
             }
             if (frame >= x8) {
                 pattern = 3;
@@ -1990,7 +1990,7 @@ void CMinagi::UpdatePattern()
         if (y + vy >= 0.0) {
             y = 0.0;
             m_playSound = 9;
-            CPlayer::FaceOpponent();
+            FaceOpponent();
             pattern = 0xd;
             StartPattern();
         }
@@ -2022,7 +2022,7 @@ void CMinagi::UpdatePattern()
         if (y + vy >= 0.0) {
             y = 0.0;
             m_playSound = 9;
-            CPlayer::FaceOpponent();
+            FaceOpponent();
             pattern = 0xd;
             StartPattern();
         }
@@ -2054,14 +2054,14 @@ void CMinagi::UpdatePattern()
         if (y + vy >= 0.0) {
             y = 0.0;
             m_playSound = 9;
-            CPlayer::FaceOpponent();
+            FaceOpponent();
             pattern = 0xd;
             StartPattern();
         }
         break;
     case 0xa1:
         if (frame == 0 && timer == 0) {
-            CPlayer::StopMoving();
+            StopMoving();
             l50.type = 9;
             l50.x = (double)(int)x;
             l50.y = (double)((int)y - 0x46);
@@ -2085,7 +2085,7 @@ void CMinagi::UpdatePattern()
         break;
     case 0xa2:
         if (frame == 0 && timer == 0) {
-            CPlayer::StopMoving();
+            StopMoving();
         }
         if (frame == 2 && timer == 0) {
             vy = -1.5;
@@ -2093,7 +2093,7 @@ void CMinagi::UpdatePattern()
             m_hitsLeft = 1;
         }
         if (frame == 6 && timer == 0) {
-            CPlayer::StopMoving();
+            StopMoving();
             l50.type = 9;
             l50.x = (double)(int)x;
             l50.y = (double)((int)y - 0x46);
@@ -2127,8 +2127,8 @@ void CMinagi::UpdatePattern()
         break;
     case 0xa3:
         if (frame == 0 && timer == 0) {
-            CPlayer::StartAfterimages(3);
-            CPlayer::StopMoving();
+            StartAfterimages(3);
+            StopMoving();
         }
         if (m_inputY == -1 && frame > 0) {
             pattern = 4;
@@ -2173,10 +2173,10 @@ void CMinagi::UpdatePattern()
         }
         break;
     case 0xa4:
-        CPlayer::StartAfterimages(2);
+        StartAfterimages(2);
         unk158 = 0;
         if (frame == 0 && timer == 0) {
-            CPlayer::StopMoving();
+            StopMoving();
         }
         if (frame == 2 && timer == 0 && unk3138 == 0) {
             vx = -2.5;
@@ -2214,7 +2214,7 @@ void CMinagi::UpdatePattern()
     case 0xa5:
         if (frame == 0 && timer == 0 && unk3138 == 0) {
             vx = 1.4;
-            CPlayer::StartAfterimages(3);
+            StartAfterimages(3);
             vy = 0.0;
             ay = 0.0;
             m_playSound = 0x11;
@@ -2234,7 +2234,7 @@ void CMinagi::UpdatePattern()
             StartPattern();
             vx = 1.3;
             ay = 0.03;
-            if (CPlayer::FaceOpponent() != 0) {
+            if (FaceOpponent() != 0) {
                 vx = -vx;
             }
         }
@@ -2243,7 +2243,7 @@ void CMinagi::UpdatePattern()
             StartPattern();
             vx = 1.3;
             ay = 0.03;
-            if (CPlayer::FaceOpponent() != 0) {
+            if (FaceOpponent() != 0) {
                 vx = -vx;
             }
         }
@@ -2253,7 +2253,7 @@ void CMinagi::UpdatePattern()
             vx = -1.4;
             vy = 0.0;
             ay = 0.0;
-            CPlayer::StartAfterimages(3);
+            StartAfterimages(3);
             m_playSound = 0x11;
         }
         timer++;
@@ -2271,7 +2271,7 @@ void CMinagi::UpdatePattern()
             StartPattern();
             vx = -0.9;
             ay = 0.03;
-            if (CPlayer::FaceOpponent() != 0) {
+            if (FaceOpponent() != 0) {
                 vx = -vx;
             }
         }
@@ -2280,7 +2280,7 @@ void CMinagi::UpdatePattern()
             StartPattern();
             vx = -0.9;
             ay = 0.03;
-            if (CPlayer::FaceOpponent() != 0) {
+            if (FaceOpponent() != 0) {
                 vx = -vx;
             }
         }
@@ -2295,7 +2295,7 @@ void CMinagi::UpdatePattern()
             }
             unk118 = 0.0;
             unk14c = 0x5a;
-            CPlayer::FillBackground(0xb0, 3);
+            FillBackground(0xb0, 3);
         }
         if (frame == 1 && timer == 0) {
             m_playSound = 0x12;
@@ -2321,7 +2321,7 @@ void CMinagi::UpdatePattern()
             m_attackResult = 0;
             if (frame >= x8) {
                 pattern = 0;
-                CPlayer::FaceOpponent();
+                FaceOpponent();
                 StartPattern();
             }
         }
@@ -2348,7 +2348,7 @@ void CMinagi::UpdatePattern()
             timer = 0;
             frame++;
             if (frame == x8) {
-                CPlayer::FaceOpponent();
+                FaceOpponent();
             }
             if (frame >= x8) {
                 pattern = 0;
@@ -2378,7 +2378,7 @@ void CMinagi::UpdatePattern()
             timer = 0;
             frame++;
             if (frame == x8) {
-                CPlayer::FaceOpponent();
+                FaceOpponent();
             }
             if (frame >= x8) {
                 pattern = 3;
@@ -2408,7 +2408,7 @@ void CMinagi::UpdatePattern()
             vy = vy + ay;
         }
         if (vy + y > 0.0) {
-            CPlayer::StopMoving();
+            StopMoving();
             y = 0.0;
             pattern = 0xa9;
             break;
@@ -2434,7 +2434,7 @@ void CMinagi::UpdatePattern()
             }
             unk118 = 0.0;
             unk14c = 0x5a;
-            CPlayer::FillBackground(0xb0, 3);
+            FillBackground(0xb0, 3);
         }
         if (frame == 1 && timer == 0) {
             m_playSound = 0x12;
@@ -2499,7 +2499,7 @@ void CMinagi::UpdatePattern()
         break;
     case 0xb4:
         if (frame == 0 && timer == 0) {
-            CPlayer::StartAfterimages(2);
+            StartAfterimages(2);
             vx = 0.0;
             vy = 0.0;
             ay = 0.0;
@@ -2508,7 +2508,7 @@ void CMinagi::UpdatePattern()
             vy = vy + ay;
         }
         if (y + vy > 0.0 && frame < 9) {
-            CPlayer::StopMoving();
+            StopMoving();
             y = 0.0;
             timer = 0;
             frame = 9;
@@ -2569,7 +2569,7 @@ void CMinagi::UpdatePattern()
             }
             if (frame >= x8) {
                 pattern = 0;
-                CPlayer::FaceOpponent();
+                FaceOpponent();
                 StartPattern();
             }
         }
@@ -2612,7 +2612,7 @@ void CMinagi::UpdatePattern()
             }
             if (frame >= x8) {
                 pattern = 0;
-                CPlayer::FaceOpponent();
+                FaceOpponent();
                 StartPattern();
             }
         }
@@ -2643,7 +2643,7 @@ void CMinagi::UpdatePattern()
             }
             if (frame >= x8) {
                 pattern = 0;
-                CPlayer::FaceOpponent();
+                FaceOpponent();
                 StartPattern();
             }
         }
@@ -2693,7 +2693,7 @@ void CMinagi::UpdatePattern()
             }
             if (frame >= x8) {
                 pattern = 0;
-                CPlayer::FaceOpponent();
+                FaceOpponent();
                 StartPattern();
             }
         }
@@ -2738,7 +2738,7 @@ void CMinagi::UpdatePattern()
                 if (m_inputY == 1) {
                     pattern = 3;
                 }
-                CPlayer::FaceOpponent();
+                FaceOpponent();
                 StartPattern();
             }
         }
@@ -2783,7 +2783,7 @@ void CMinagi::UpdatePattern()
                 if (m_inputY == 1) {
                     pattern = 3;
                 }
-                CPlayer::FaceOpponent();
+                FaceOpponent();
                 StartPattern();
             }
         }
@@ -2821,7 +2821,7 @@ void CMinagi::UpdatePattern()
                 if (m_inputY == 1) {
                     pattern = 3;
                 }
-                CPlayer::FaceOpponent();
+                FaceOpponent();
                 StartPattern();
             }
         }
@@ -2980,7 +2980,7 @@ void CMinagi::UpdatePattern()
             }
             if (frame >= x8) {
                 pattern = 0;
-                CPlayer::FaceOpponent();
+                FaceOpponent();
                 StartPattern();
             }
         }
@@ -3014,7 +3014,7 @@ void CMinagi::UpdatePattern()
             m_attackResult = 0;
             if (frame >= x8) {
                 pattern = 0;
-                CPlayer::FaceOpponent();
+                FaceOpponent();
                 StartPattern();
             }
         }
@@ -3031,13 +3031,13 @@ void CMinagi::UpdatePattern()
         if (m_attackResult > 1) {
             pattern = 0xd5;
             StartPattern();
-            CPlayer::StopMoving();
+            StopMoving();
             break;
         }
         if (y + vy >= 0.0) {
             y = 0.0;
             vy = 0.0;
-            CPlayer::ShakeScreen(3, 0);
+            ShakeScreen(3, 0);
             l50.type = 3;
             l50.x = (double)(int)x;
             l50.y = (double)(int)y;
@@ -3081,7 +3081,7 @@ void CMinagi::UpdatePattern()
         vx = 0.0;
         vy = 0.0;
         if (frame == 0 && timer == 0) {
-            CPlayer::ShakeScreen(3, 0);
+            ShakeScreen(3, 0);
             l50.type = 3;
             l50.x = (double)(int)x;
             l50.y = (double)(int)y;
@@ -3100,7 +3100,7 @@ void CMinagi::UpdatePattern()
                 if (m_inputY == 1) {
                     pattern = 3;
                 }
-                CPlayer::FaceOpponent();
+                FaceOpponent();
                 StartPattern();
             }
         }
@@ -3117,7 +3117,7 @@ void CMinagi::UpdatePattern()
             vx = 0.0;
             vy = 0.0;
             StartPattern();
-            CPlayer::StopMoving();
+            StopMoving();
             (*m_opponent)->StopMoving();
             (*m_opponent)->StartPattern();
             pattern = 0xdd;
@@ -3134,14 +3134,14 @@ void CMinagi::UpdatePattern()
                 if (m_inputY == 1) {
                     pattern = 3;
                 }
-                CPlayer::FaceOpponent();
+                FaceOpponent();
                 StartPattern();
             }
         }
         break;
     case 0xdd:
         if (frame == 4 && timer == 0) {
-            CPlayer::DealDamage(0x4e2, 750.0);
+            DealDamage(0x4e2, 750.0);
         }
         timer++;
         if (timer >= l4) {
@@ -3153,13 +3153,13 @@ void CMinagi::UpdatePattern()
             }
             if (frame >= x8) {
                 pattern = 0;
-                CPlayer::FaceOpponent();
+                FaceOpponent();
                 StartPattern();
             }
         }
         break;
     case 0xe6:
-        CPlayer::StartAfterimages(3);
+        StartAfterimages(3);
         unk158 = 0;
         vx -= 0.03;
         if (vx < 0.0) {
@@ -3188,7 +3188,7 @@ void CMinagi::UpdatePattern()
         }
         break;
     case 0xe7:
-        CPlayer::StartAfterimages(3);
+        StartAfterimages(3);
         unk158 = 0;
         vx -= 0.03;
         if (vx < 0.0) {
@@ -3217,7 +3217,7 @@ void CMinagi::UpdatePattern()
         }
         break;
     case 0xe8:
-        CPlayer::StartAfterimages(3);
+        StartAfterimages(3);
         unk158 = 0;
         vx -= 0.03;
         if (vx < 0.0) {
@@ -3246,7 +3246,7 @@ void CMinagi::UpdatePattern()
         }
         break;
     case 0xe9:
-        CPlayer::StartAfterimages(3);
+        StartAfterimages(3);
         vx -= 0.03;
         unk158 = 0;
         if (vx < 0.0) {
@@ -3275,7 +3275,7 @@ void CMinagi::UpdatePattern()
         }
         break;
     case 0xea:
-        CPlayer::StartAfterimages(3);
+        StartAfterimages(3);
         vx -= 0.03;
         unk158 = 0;
         if (vx < 0.0) {
@@ -3304,7 +3304,7 @@ void CMinagi::UpdatePattern()
         }
         break;
     case 0xeb:
-        CPlayer::StartAfterimages(3);
+        StartAfterimages(3);
         unk158 = 0;
         vx -= 0.03;
         if (vx < 0.0) {
@@ -3350,7 +3350,7 @@ void CMinagi::UpdatePattern()
             (*m_opponent)->StopMoving();
             (*m_opponent)->StartPattern();
             StartPattern();
-            CPlayer::StopMoving();
+            StopMoving();
             pattern = 0xf9;
             (*m_opponent)->pattern = 0x64;
             l50.type = 0;
@@ -3380,17 +3380,17 @@ void CMinagi::UpdatePattern()
         break;
     case 0xf9:
         if (frame < 8) {
-            CPlayer::Unk410a40(0x32, 3);
+            Unk410a40(0x32, 3);
         }
         if (frame < 8) {
-            CPlayer::Unk410a80(0x32, 3);
+            Unk410a80(0x32, 3);
         }
         if (frame == 0 && timer == 1) {
             (*m_opponent)->facing = -facing;
         }
         vy = vy + ay;
         if (vy + y > 0.0 && frame > 5) {
-            CPlayer::StopMoving();
+            StopMoving();
             y = 0.0;
             StartPattern();
             pattern = 0xd;
@@ -3665,7 +3665,7 @@ void CMinagi::UpdatePattern()
         break;
     case 0x106:
         if (frame == 0 && timer == 0) {
-            CPlayer::StopMoving();
+            StopMoving();
         }
         timer++;
         m_attackResult = 3;
@@ -3691,7 +3691,7 @@ void CMinagi::UpdatePattern()
         break;
     case 0x107:
         if (frame == 0 && timer == 0) {
-            CPlayer::StopMoving();
+            StopMoving();
         }
         timer++;
         m_attackResult = 3;
@@ -3761,7 +3761,7 @@ void CMinagi::UpdatePattern()
         break;
     case 0x109:
         if (frame == 0 && timer == 0) {
-            CPlayer::StopMoving();
+            StopMoving();
         }
         timer++;
         if (timer >= l4) {
@@ -3779,7 +3779,7 @@ void CMinagi::UpdatePattern()
         break;
     case 0x10a:
         if (frame == 0 && timer == 0) {
-            CPlayer::StopMoving();
+            StopMoving();
         }
         timer++;
         if (timer >= l4) {
@@ -3797,7 +3797,7 @@ void CMinagi::UpdatePattern()
         break;
     case 0x10b:
         if (frame == 0 && timer == 0) {
-            CPlayer::StopMoving();
+            StopMoving();
             l50.type = 0x21;
             l50.unk2c = 0xb;
             l50.x = (double)((int)x - facing * 0xa);
@@ -3853,7 +3853,7 @@ void CMinagi::UpdatePattern()
         break;
     case 0x10d:
         if (frame == 0 && timer == 0) {
-            CPlayer::StopMoving();
+            StopMoving();
         }
         timer++;
         if (timer >= l4) {
@@ -3871,7 +3871,7 @@ void CMinagi::UpdatePattern()
         break;
     case 0x10e:
         if (frame == 0 && timer == 0) {
-            CPlayer::StopMoving();
+            StopMoving();
         }
         timer++;
         if (timer >= l4) {
@@ -3889,7 +3889,7 @@ void CMinagi::UpdatePattern()
         break;
     case 0x10f:
         if (frame == 0 && timer == 0) {
-            CPlayer::StopMoving();
+            StopMoving();
             l50.type = 0x21;
             l50.unk2c = 0xb;
             l50.x = (double)((int)x - facing * 0xa);
@@ -3919,7 +3919,7 @@ void CMinagi::UpdatePattern()
         break;
     case 0x110:
         if (frame == 0 && timer == 0) {
-            CPlayer::StopMoving();
+            StopMoving();
         }
         timer++;
         if (timer >= l4) {
@@ -3937,7 +3937,7 @@ void CMinagi::UpdatePattern()
         break;
     case 0x111:
         if (frame == 0 && timer == 0) {
-            CPlayer::StopMoving();
+            StopMoving();
         }
         timer++;
         if (timer >= l4) {
@@ -3955,7 +3955,7 @@ void CMinagi::UpdatePattern()
         break;
     case 0x112:
         if (frame == 0 && timer == 0) {
-            CPlayer::StopMoving();
+            StopMoving();
             l50.type = 0x21;
             l50.unk2c = 0xb;
             l50.x = (double)((int)x - facing * 0xa);
@@ -4048,13 +4048,13 @@ void CMinagi::UpdatePattern()
         break;
     case 0x12c:
         if (frame == 0 && timer == 0) {
-            CPlayer::StopMoving();
+            StopMoving();
         }
         if (frame == 2 && timer == 3) {
-            CPlayer::StopMoving();
+            StopMoving();
             unk14c = 0x78;
             m_gauge = m_gauge - 0x3e8;
-            CPlayer::FillBackground(0xb0, 3);
+            FillBackground(0xb0, 3);
             l50.type = 0x44;
             l50.unk2c = 0x13;
             l50.x = (double)(int)x;
@@ -4071,20 +4071,20 @@ void CMinagi::UpdatePattern()
             m_attackResult = 0;
             if (frame >= x8) {
                 pattern = 0;
-                CPlayer::FaceOpponent();
+                FaceOpponent();
                 StartPattern();
             }
         }
         break;
     case 0x12d:
         if (frame == 0 && timer == 0) {
-            CPlayer::StopMoving();
+            StopMoving();
         }
         if (frame == 2 && timer == 3) {
-            CPlayer::StopMoving();
+            StopMoving();
             unk14c = 0x78;
             m_gauge = m_gauge - 0x7d0;
-            CPlayer::FillBackground(0xb0, 3);
+            FillBackground(0xb0, 3);
             l50.type = 0x45;
             l50.unk2c = 5;
             l50.x = (double)(int)x;
@@ -4101,20 +4101,20 @@ void CMinagi::UpdatePattern()
             m_attackResult = 0;
             if (frame >= x8) {
                 pattern = 0;
-                CPlayer::FaceOpponent();
+                FaceOpponent();
                 StartPattern();
             }
         }
         break;
     case 0x12e:
         if (frame == 0 && timer == 0) {
-            CPlayer::StopMoving();
+            StopMoving();
         }
         if (frame == 2 && timer == 3) {
-            CPlayer::StopMoving();
+            StopMoving();
             unk14c = 0x78;
             m_gauge = m_gauge - 0xbb8;
-            CPlayer::FillBackground(0xb0, 3);
+            FillBackground(0xb0, 3);
             l50.type = 0x46;
             l50.unk2c = 0x40;
             l50.x = (double)(int)x;
@@ -4132,20 +4132,20 @@ void CMinagi::UpdatePattern()
             m_attackResult = 0;
             if (frame >= x8) {
                 pattern = 0;
-                CPlayer::FaceOpponent();
+                FaceOpponent();
                 StartPattern();
             }
         }
         break;
     case 0x12f:
         if (frame == 0 && timer == 0) {
-            CPlayer::StopMoving();
+            StopMoving();
         }
         if (frame == 2 && timer == 0) {
-            CPlayer::StopMoving();
+            StopMoving();
             unk14c = 0x78;
             m_gauge = m_gauge - 0x3e8;
-            CPlayer::FillBackground(0xb0, 3);
+            FillBackground(0xb0, 3);
             l50.type = 0x44;
             l50.unk2c = 0x13;
             l50.x = (double)(int)x;
@@ -4162,20 +4162,20 @@ void CMinagi::UpdatePattern()
             m_attackResult = 0;
             if (frame >= x8) {
                 pattern = 0;
-                CPlayer::FaceOpponent();
+                FaceOpponent();
                 StartPattern();
             }
         }
         break;
     case 0x130:
         if (frame == 0 && timer == 0) {
-            CPlayer::StopMoving();
+            StopMoving();
         }
         if (frame == 2 && timer == 0) {
-            CPlayer::StopMoving();
+            StopMoving();
             unk14c = 0x78;
             m_gauge = m_gauge - 0x7d0;
-            CPlayer::FillBackground(0xb0, 3);
+            FillBackground(0xb0, 3);
             l50.type = 0x45;
             l50.unk2c = 5;
             l50.x = (double)(int)x;
@@ -4192,20 +4192,20 @@ void CMinagi::UpdatePattern()
             m_attackResult = 0;
             if (frame >= x8) {
                 pattern = 0;
-                CPlayer::FaceOpponent();
+                FaceOpponent();
                 StartPattern();
             }
         }
         break;
     case 0x131:
         if (frame == 0 && timer == 0) {
-            CPlayer::StopMoving();
+            StopMoving();
         }
         if (frame == 2 && timer == 0) {
-            CPlayer::StopMoving();
+            StopMoving();
             unk14c = 0x78;
             m_gauge = m_gauge - 0xbb8;
-            CPlayer::FillBackground(0xb0, 3);
+            FillBackground(0xb0, 3);
             l50.type = 0x46;
             l50.unk2c = 0x40;
             l50.x = (double)(int)x;
@@ -4223,20 +4223,20 @@ void CMinagi::UpdatePattern()
             m_attackResult = 0;
             if (frame >= x8) {
                 pattern = 0;
-                CPlayer::FaceOpponent();
+                FaceOpponent();
                 StartPattern();
             }
         }
         break;
     case 0x132:
         if (frame == 0 && timer == 0) {
-            CPlayer::StopMoving();
+            StopMoving();
         }
         if (frame == 1 && timer == 3) {
-            CPlayer::StopMoving();
+            StopMoving();
             unk14c = 0x78;
             m_gauge = m_gauge - 0x3e8;
-            CPlayer::FillBackground(0xb0, 3);
+            FillBackground(0xb0, 3);
             l50.type = 0x44;
             l50.unk2c = 0x13;
             l50.x = (double)((int)x - facing * 0x12);
@@ -4262,13 +4262,13 @@ void CMinagi::UpdatePattern()
         break;
     case 0x133:
         if (frame == 0 && timer == 0) {
-            CPlayer::StopMoving();
+            StopMoving();
         }
         if (frame == 1 && timer == 3) {
-            CPlayer::StopMoving();
+            StopMoving();
             unk14c = 0x78;
             m_gauge = m_gauge - 0x7d0;
-            CPlayer::FillBackground(0xb0, 3);
+            FillBackground(0xb0, 3);
             l50.type = 0x45;
             l50.unk2c = 5;
             l50.x = (double)((int)x - facing * 0x12);
@@ -4294,13 +4294,13 @@ void CMinagi::UpdatePattern()
         break;
     case 0x134:
         if (frame == 0 && timer == 0) {
-            CPlayer::StopMoving();
+            StopMoving();
         }
         if (frame == 1 && timer == 3) {
-            CPlayer::StopMoving();
+            StopMoving();
             unk14c = 0x78;
             m_gauge = m_gauge - 0xbb8;
-            CPlayer::FillBackground(0xb0, 3);
+            FillBackground(0xb0, 3);
             l50.type = 0x46;
             l50.unk2c = 0x40;
             l50.x = (double)((int)x - facing * 0x12);
@@ -4327,13 +4327,13 @@ void CMinagi::UpdatePattern()
         break;
     case 0x135:
         if (frame == 0 && timer == 0) {
-            CPlayer::StopMoving();
+            StopMoving();
         }
         if (frame == 1 && timer == 0) {
-            CPlayer::StopMoving();
+            StopMoving();
             unk14c = 0x78;
             m_gauge = m_gauge - 0x3e8;
-            CPlayer::FillBackground(0xb0, 3);
+            FillBackground(0xb0, 3);
             l50.type = 0x44;
             l50.unk2c = 0x13;
             l50.x = (double)((int)x - facing * 0x12);
@@ -4359,13 +4359,13 @@ void CMinagi::UpdatePattern()
         break;
     case 0x136:
         if (frame == 0 && timer == 0) {
-            CPlayer::StopMoving();
+            StopMoving();
         }
         if (frame == 1 && timer == 0) {
-            CPlayer::StopMoving();
+            StopMoving();
             unk14c = 0x78;
             m_gauge = m_gauge - 0x7d0;
-            CPlayer::FillBackground(0xb0, 3);
+            FillBackground(0xb0, 3);
             l50.type = 0x45;
             l50.unk2c = 5;
             l50.x = (double)((int)x - facing * 0x12);
@@ -4391,13 +4391,13 @@ void CMinagi::UpdatePattern()
         break;
     case 0x137:
         if (frame == 0 && timer == 0) {
-            CPlayer::StopMoving();
+            StopMoving();
         }
         if (frame == 1 && timer == 0) {
-            CPlayer::StopMoving();
+            StopMoving();
             unk14c = 0x78;
             m_gauge = m_gauge - 0xbb8;
-            CPlayer::FillBackground(0xb0, 3);
+            FillBackground(0xb0, 3);
             l50.type = 0x46;
             l50.unk2c = 0x40;
             l50.x = (double)((int)x - facing * 0x12);
@@ -4424,13 +4424,13 @@ void CMinagi::UpdatePattern()
         break;
     case 0x138:
         if (frame == 0 && timer == 0) {
-            CPlayer::StopMoving();
+            StopMoving();
         }
         if (frame == 2 && timer == 3) {
-            CPlayer::StopMoving();
+            StopMoving();
             unk14c = 0x78;
             m_gauge = m_gauge - 0x3e8;
-            CPlayer::FillBackground(0xb0, 3);
+            FillBackground(0xb0, 3);
             l50.type = 0x44;
             l50.unk2c = 0x13;
             l50.x = (double)(int)x;
@@ -4467,20 +4467,20 @@ void CMinagi::UpdatePattern()
             }
             if (frame >= x8) {
                 pattern = 0;
-                CPlayer::FaceOpponent();
+                FaceOpponent();
                 StartPattern();
             }
         }
         break;
     case 0x139:
         if (frame == 0 && timer == 0) {
-            CPlayer::StopMoving();
+            StopMoving();
         }
         if (frame == 2 && timer == 3) {
-            CPlayer::StopMoving();
+            StopMoving();
             unk14c = 0x78;
             m_gauge = m_gauge - 0x7d0;
-            CPlayer::FillBackground(0xb0, 3);
+            FillBackground(0xb0, 3);
             l50.type = 0x45;
             l50.unk2c = 5;
             l50.x = (double)(int)x;
@@ -4517,23 +4517,23 @@ void CMinagi::UpdatePattern()
             }
             if (frame >= x8) {
                 pattern = 0;
-                CPlayer::FaceOpponent();
+                FaceOpponent();
                 StartPattern();
             }
         }
         break;
     case 0x13a:
         if (frame == 0 && timer == 0) {
-            CPlayer::StopMoving();
+            StopMoving();
         }
         if (frame > 2) {
             m_game->Unk4080c0(0xf);
         }
         if (frame == 2 && timer == 3) {
-            CPlayer::StopMoving();
+            StopMoving();
             unk14c = 0x78;
             m_gauge = m_gauge - 0xbb8;
-            CPlayer::FillBackground(0xb0, 3);
+            FillBackground(0xb0, 3);
             l50.type = 0x46;
             l50.unk2c = 0x40;
             l50.x = (double)(int)x;
@@ -4571,7 +4571,7 @@ void CMinagi::UpdatePattern()
             }
             if (frame >= x8) {
                 pattern = 0;
-                CPlayer::FaceOpponent();
+                FaceOpponent();
                 StartPattern();
             }
         }
@@ -4582,11 +4582,11 @@ void CMinagi::UpdatePattern()
             m_game->Unk4080c0(0xf);
         }
         if (frame == 3 && timer == 3) {
-            CPlayer::StopMoving();
+            StopMoving();
             m_gauge = m_gauge - 0xbb8;
-            CPlayer::Unk410a80(0x32, 0x2d);
+            Unk410a80(0x32, 0x2d);
             unk14c = 0x78;
-            CPlayer::FillBackground(0xb0, 3);
+            FillBackground(0xb0, 3);
             l50.type = 0x46;
             l50.unk2c = 0x40;
             l50.x = (double)((int)x - facing * 0xd);
@@ -4612,20 +4612,20 @@ void CMinagi::UpdatePattern()
             }
             if (frame >= x8) {
                 pattern = 0;
-                CPlayer::FaceOpponent();
+                FaceOpponent();
                 StartPattern();
             }
         }
         break;
     case 0x13c:
         if (frame == 0 && timer == 0) {
-            CPlayer::StopMoving();
+            StopMoving();
         }
         if (frame == 2 && timer == 3) {
-            CPlayer::StopMoving();
+            StopMoving();
             unk14c = 0x78;
             m_gauge = m_gauge - 0x3e8;
-            CPlayer::FillBackground(0xb0, 3);
+            FillBackground(0xb0, 3);
             l50.type = 0x44;
             l50.unk2c = 0x13;
             l50.x = (double)(int)x;
@@ -4642,20 +4642,20 @@ void CMinagi::UpdatePattern()
             m_attackResult = 0;
             if (frame >= x8) {
                 pattern = 0;
-                CPlayer::FaceOpponent();
+                FaceOpponent();
                 StartPattern();
             }
         }
         break;
     case 0x13d:
         if (frame == 0 && timer == 0) {
-            CPlayer::StopMoving();
+            StopMoving();
         }
         if (frame == 2 && timer == 3) {
-            CPlayer::StopMoving();
+            StopMoving();
             unk14c = 0x78;
             m_gauge = m_gauge - 0x7d0;
-            CPlayer::FillBackground(0xb0, 3);
+            FillBackground(0xb0, 3);
             l50.type = 0x45;
             l50.unk2c = 5;
             l50.x = (double)(int)x;
@@ -4672,20 +4672,20 @@ void CMinagi::UpdatePattern()
             m_attackResult = 0;
             if (frame >= x8) {
                 pattern = 0;
-                CPlayer::FaceOpponent();
+                FaceOpponent();
                 StartPattern();
             }
         }
         break;
     case 0x13e:
         if (frame == 0 && timer == 0) {
-            CPlayer::StopMoving();
+            StopMoving();
         }
         if (frame == 2 && timer == 3) {
-            CPlayer::StopMoving();
+            StopMoving();
             unk14c = 0x78;
             m_gauge = m_gauge - 0xbb8;
-            CPlayer::FillBackground(0xb0, 3);
+            FillBackground(0xb0, 3);
             l50.type = 0x46;
             l50.unk2c = 0x40;
             l50.x = (double)(int)x;
@@ -4703,20 +4703,20 @@ void CMinagi::UpdatePattern()
             m_attackResult = 0;
             if (frame >= x8) {
                 pattern = 0;
-                CPlayer::FaceOpponent();
+                FaceOpponent();
                 StartPattern();
             }
         }
         break;
     case 0x13f:
         if (frame == 0 && timer == 0) {
-            CPlayer::StopMoving();
+            StopMoving();
         }
         if (frame == 1 && timer == 3) {
-            CPlayer::StopMoving();
+            StopMoving();
             unk14c = 0x78;
             m_gauge = m_gauge - 0x3e8;
-            CPlayer::FillBackground(0xb0, 3);
+            FillBackground(0xb0, 3);
             l50.type = 0x44;
             l50.unk2c = 0x13;
             l50.x = (double)((int)x - facing * 0x12);
@@ -4742,13 +4742,13 @@ void CMinagi::UpdatePattern()
         break;
     case 0x140:
         if (frame == 0 && timer == 0) {
-            CPlayer::StopMoving();
+            StopMoving();
         }
         if (frame == 1 && timer == 3) {
-            CPlayer::StopMoving();
+            StopMoving();
             unk14c = 0x78;
             m_gauge = m_gauge - 0x7d0;
-            CPlayer::FillBackground(0xb0, 3);
+            FillBackground(0xb0, 3);
             l50.type = 0x45;
             l50.unk2c = 5;
             l50.x = (double)((int)x - facing * 0x12);
@@ -4774,13 +4774,13 @@ void CMinagi::UpdatePattern()
         break;
     case 0x141:
         if (frame == 0 && timer == 0) {
-            CPlayer::StopMoving();
+            StopMoving();
         }
         if (frame == 1 && timer == 3) {
-            CPlayer::StopMoving();
+            StopMoving();
             unk14c = 0x78;
             m_gauge = m_gauge - 0xbb8;
-            CPlayer::FillBackground(0xb0, 3);
+            FillBackground(0xb0, 3);
             l50.type = 0x46;
             l50.unk2c = 0x40;
             l50.x = (double)((int)x - facing * 0x12);

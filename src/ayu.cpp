@@ -92,7 +92,7 @@ void CAyu::RemoveObject(short p1)
 
 void CAyu::Move()
 {
-    CPlayer::Unk40e740();
+    Unk40e740();
 }
 
 void CAyu::StartCommand()
@@ -110,7 +110,7 @@ void CAyu::StartCommand()
     }
     if (m_command == 0x34 && (unk118 >= 500.0 && m_attackResult > 1 && m_attackResult != 6 || unk120 > 0 && m_attackResult > 1) && (m_patterns[pattern].frames[frame].flagsB0 & 8) > 0 && m_patterns[pattern].unk2 <= m_patterns[0xa7].unk0) {
         StartPattern();
-        CPlayer::ClearBufferedPress();
+        ClearBufferedPress();
         pattern = 0xa7;
         if (y < 0.0) {
             pattern = 0xab;
@@ -120,31 +120,31 @@ void CAyu::StartCommand()
     if (unk15c < 2) {
         if (m_hp < 0xd05 && m_command == 0x5d && m_gauge >= 0xbb8 && y == 0.0 && m_attackResult != 6 && (m_patterns[pattern].frames[frame].flagsB0 & 8) > 0 && m_patterns[pattern].unk2 <= m_patterns[0x13e].unk0) {
             StartPattern();
-            CPlayer::ClearBufferedPress();
+            ClearBufferedPress();
             pattern = 0x13e;
             return;
         }
         if (m_command == 0x7a && m_gauge >= 0xbb8 && y == 0.0 && (m_patterns[pattern].frames[frame].flagsB0 & 8) > 0 && (pattern >= 0xc8 && m_attackResult >= 2 && m_attackResult != 6 || pattern < 0xc8) && m_patterns[pattern].unk2 <= m_patterns[0x134].unk0) {
             StartPattern();
-            CPlayer::ClearBufferedPress();
+            ClearBufferedPress();
             pattern = 0x134;
             return;
         }
         if ((m_command == 0x79 || m_command == 0x7a) && m_gauge >= 0x7d0 && y == 0.0 && (m_patterns[pattern].frames[frame].flagsB0 & 8) > 0 && (pattern >= 0xc8 && m_attackResult >= 2 && m_attackResult != 6 || pattern < 0xc8) && m_patterns[pattern].unk2 <= m_patterns[0x133].unk0) {
             StartPattern();
-            CPlayer::ClearBufferedPress();
+            ClearBufferedPress();
             pattern = 0x133;
             return;
         }
         if ((m_command == 0x78 || m_command == 0x79 || m_command == 0x7a) && m_gauge >= 0x3e8 && y == 0.0 && (m_patterns[pattern].frames[frame].flagsB0 & 8) > 0 && (pattern >= 0xc8 && m_attackResult >= 2 && m_attackResult != 6 || pattern < 0xc8) && m_patterns[pattern].unk2 <= m_patterns[0x132].unk0) {
             StartPattern();
-            CPlayer::ClearBufferedPress();
+            ClearBufferedPress();
             pattern = 0x132;
             return;
         }
         if (m_command == 0x70 && m_gauge >= 0xbb8 && (m_patterns[pattern].frames[frame].flagsB0 & 8) > 0 && (pattern >= 0xc8 && m_attackResult >= 2 && m_attackResult != 6 || pattern < 0xc8) && m_patterns[pattern].unk2 <= m_patterns[0x12e].unk0) {
             StartPattern();
-            CPlayer::ClearBufferedPress();
+            ClearBufferedPress();
             pattern = 0x12e;
             if (y < 0.0) {
                 pattern = 0x131;
@@ -153,7 +153,7 @@ void CAyu::StartCommand()
         }
         if ((m_command == 0x6f || m_command == 0x70) && m_gauge >= 0x7d0 && (m_patterns[pattern].frames[frame].flagsB0 & 8) > 0 && (pattern >= 0xc8 && m_attackResult >= 2 && m_attackResult != 6 || pattern < 0xc8) && m_patterns[pattern].unk2 <= m_patterns[0x12d].unk0) {
             StartPattern();
-            CPlayer::ClearBufferedPress();
+            ClearBufferedPress();
             pattern = 0x12d;
             if (y < 0.0) {
                 pattern = 0x130;
@@ -162,7 +162,7 @@ void CAyu::StartCommand()
         }
         if ((m_command == 0x6e || m_command == 0x6f || m_command == 0x70) && m_gauge >= 0x3e8 && (m_patterns[pattern].frames[frame].flagsB0 & 8) > 0 && (pattern >= 0xc8 && m_attackResult >= 2 && m_attackResult != 6 || pattern < 0xc8) && m_patterns[pattern].unk2 <= m_patterns[0x12c].unk0) {
             StartPattern();
-            CPlayer::ClearBufferedPress();
+            ClearBufferedPress();
             pattern = 0x12c;
             if (y < 0.0) {
                 pattern = 0x12f;
@@ -171,31 +171,31 @@ void CAyu::StartCommand()
         }
         if (m_command == 0x66 && m_gauge >= 0xbb8 && y == 0.0 && (m_patterns[pattern].frames[frame].flagsB0 & 8) > 0 && (pattern >= 0xc8 && m_attackResult >= 2 && m_attackResult != 6 || pattern < 0xc8) && m_patterns[pattern].unk2 <= m_patterns[0x13d].unk0) {
             StartPattern();
-            CPlayer::ClearBufferedPress();
+            ClearBufferedPress();
             pattern = 0x13d;
             return;
         }
         if ((m_command == 0x65 || m_command == 0x66) && m_gauge >= 0x7d0 && y == 0.0 && (m_patterns[pattern].frames[frame].flagsB0 & 8) > 0 && (pattern >= 0xc8 && m_attackResult >= 2 && m_attackResult != 6 || pattern < 0xc8) && m_patterns[pattern].unk2 <= m_patterns[0x13c].unk0) {
             StartPattern();
-            CPlayer::ClearBufferedPress();
+            ClearBufferedPress();
             pattern = 0x13c;
             return;
         }
         if ((m_command == 0x64 || m_command == 0x65 || m_command == 0x66) && m_gauge >= 0x3e8 && y == 0.0 && (m_patterns[pattern].frames[frame].flagsB0 & 8) > 0 && (pattern >= 0xc8 && m_attackResult >= 2 && m_attackResult != 6 || pattern < 0xc8) && m_patterns[pattern].unk2 <= m_patterns[0x13b].unk0) {
             StartPattern();
-            CPlayer::ClearBufferedPress();
+            ClearBufferedPress();
             pattern = 0x13b;
             return;
         }
         if (m_command == 0x78 && m_gauge >= 0xbb8 && y == 0.0 && (m_patterns[pattern].frames[frame].flagsB0 & 8) > 0 && (pattern >= 0xc8 && m_attackResult >= 2 && m_attackResult != 6 || pattern < 0xc8) && m_patterns[pattern].unk2 <= m_patterns[0x132].unk0) {
             StartPattern();
-            CPlayer::ClearBufferedPress();
+            ClearBufferedPress();
             pattern = 0x132;
             return;
         }
         if (m_command == 0x16 && (unk118 >= 500.0 || unk120 > 0) && (m_patterns[pattern].frames[frame].flagsB0 & 8) > 0 && (pattern >= 0xc8 && m_attackResult >= 2 && m_attackResult != 6 || pattern < 0xc8) && m_patterns[pattern].unk2 <= m_patterns[0xfb].unk0) {
             StartPattern();
-            CPlayer::ClearBufferedPress();
+            ClearBufferedPress();
             pattern = 0xfb;
             if (y < 0.0) {
                 pattern = 0x10b;
@@ -204,56 +204,56 @@ void CAyu::StartCommand()
         }
         if ((m_command == 0x15 || m_command == 0x16) && (m_patterns[pattern].frames[frame].flagsB0 & 8) > 0 && (pattern >= 0xc8 && m_attackResult >= 2 && m_attackResult != 6 || pattern < 0xc8) && m_patterns[pattern].unk2 <= m_patterns[0xfc].unk0) {
             StartPattern();
-            CPlayer::ClearBufferedPress();
+            ClearBufferedPress();
             pattern = 0xfc;
             return;
         }
         if (m_command == 0x14 && (m_patterns[pattern].frames[frame].flagsB0 & 8) > 0 && (pattern >= 0xc8 && m_attackResult >= 2 && m_attackResult != 6 || pattern < 0xc8) && m_patterns[pattern].unk2 <= m_patterns[0xfa].unk0) {
             StartPattern();
-            CPlayer::ClearBufferedPress();
+            ClearBufferedPress();
             pattern = 0xfa;
             return;
         }
         if (m_command == 0x20 && (unk118 >= 500.0 || unk120 > 0) && (m_patterns[pattern].frames[frame].flagsB0 & 8) > 0 && (pattern >= 0xc8 && m_attackResult >= 2 && m_attackResult != 6 || pattern < 0xc8) && m_patterns[pattern].unk2 <= m_patterns[0x102].unk0) {
             StartPattern();
-            CPlayer::ClearBufferedPress();
+            ClearBufferedPress();
             pattern = 0x102;
             return;
         }
         if ((m_command == 0x1f || m_command == 0x20) && (m_patterns[pattern].frames[frame].flagsB0 & 8) > 0 && (pattern >= 0xc8 && m_attackResult >= 2 && m_attackResult != 6 || pattern < 0xc8) && m_patterns[pattern].unk2 <= m_patterns[0x101].unk0) {
             StartPattern();
-            CPlayer::ClearBufferedPress();
+            ClearBufferedPress();
             pattern = 0x101;
             return;
         }
         if (m_command == 0x1e && (m_patterns[pattern].frames[frame].flagsB0 & 8) > 0 && (pattern >= 0xc8 && m_attackResult >= 2 && m_attackResult != 6 || pattern < 0xc8) && m_patterns[pattern].unk2 <= m_patterns[0x100].unk0) {
             StartPattern();
-            CPlayer::ClearBufferedPress();
+            ClearBufferedPress();
             pattern = 0x100;
             return;
         }
         if (m_command == 0xc && (unk118 >= 500.0 || unk120 > 0) && (m_patterns[pattern].frames[frame].flagsB0 & 8) > 0 && y == 0.0 && (pattern >= 0xc8 && m_attackResult >= 2 && m_attackResult != 6 || pattern < 0xc8) && m_patterns[pattern].unk2 <= m_patterns[0x106].unk0) {
             StartPattern();
-            CPlayer::ClearBufferedPress();
+            ClearBufferedPress();
             pattern = 0x106;
             return;
         }
         if ((m_command == 0xb || m_command == 0xc) && (m_patterns[pattern].frames[frame].flagsB0 & 8) > 0 && y == 0.0 && (pattern >= 0xc8 && m_attackResult >= 2 && m_attackResult != 6 || pattern < 0xc8) && m_patterns[pattern].unk2 <= m_patterns[0x105].unk0) {
             StartPattern();
-            CPlayer::ClearBufferedPress();
+            ClearBufferedPress();
             pattern = 0x105;
             return;
         }
         if (m_command == 0xa && (m_patterns[pattern].frames[frame].flagsB0 & 8) > 0 && y == 0.0 && (pattern >= 0xc8 && m_attackResult >= 2 && m_attackResult != 6 || pattern < 0xc8) && m_patterns[pattern].unk2 <= m_patterns[0x104].unk0) {
             StartPattern();
-            CPlayer::ClearBufferedPress();
+            ClearBufferedPress();
             pattern = 0x104;
             return;
         }
     }
     if (unk15c < 3 && m_command == 6 && (m_patterns[pattern].frames[frame].flagsB0 & 8) > 0 && y < 0.0 && unk15a < 1 && m_patterns[pattern].unk2 <= m_patterns[0xe].unk0 && (pattern >= 0xc8 && m_attackResult >= 2 && m_attackResult != 6 || pattern < 0xc8)) {
         StartPattern();
-        CPlayer::ClearBufferedPress();
+        ClearBufferedPress();
         unk15a++;
         pattern = 0xe;
         if (m_inputX == facing) {
@@ -271,7 +271,7 @@ void CAyu::StartCommand()
                     StartPattern();
                 }
                 pattern = 0xa5;
-                CPlayer::FaceOpponent();
+                FaceOpponent();
                 unk159++;
                 unk15a++;
                 m_bufferedPress = 0;
@@ -282,7 +282,7 @@ void CAyu::StartCommand()
                     StartPattern();
                 }
                 pattern = 0xa6;
-                CPlayer::FaceOpponent();
+                FaceOpponent();
                 unk159++;
                 unk15a++;
                 m_bufferedPress = 0;
@@ -295,7 +295,7 @@ void CAyu::StartCommand()
                     StartPattern();
                 }
                 pattern = 0xa3;
-                CPlayer::FaceOpponent();
+                FaceOpponent();
                 unk158++;
                 m_bufferedPress = 0;
                 return;
@@ -305,7 +305,7 @@ void CAyu::StartCommand()
                     StartPattern();
                 }
                 pattern = 0xa4;
-                CPlayer::FaceOpponent();
+                FaceOpponent();
                 unk158++;
                 m_bufferedPress = 0;
                 return;
@@ -316,20 +316,20 @@ void CAyu::StartCommand()
         if (y < 0.0) {
             if (m_patterns[pattern].unk2 <= m_patterns[0xcf].unk0 && (m_patterns[pattern].frames[frame].flagsB0 & 8) > 0 && (pattern >= 0xc8 && m_attackResult >= 2 && m_attackResult != 6 || pattern < 0xc8)) {
                 StartPattern();
-                CPlayer::ClearBufferedPress();
+                ClearBufferedPress();
                 pattern = 0xcf;
             }
             return;
         }
         if ((m_inputY == 1 || (m_bufferedPress & 4) != 0 || (m_dashBufferedPress & 4) != 0) && m_patterns[pattern].unk2 <= m_patterns[0xcc].unk0 && (m_patterns[pattern].frames[frame].flagsB0 & 8) > 0 && (pattern >= 0xc8 && m_attackResult >= 2 && m_attackResult != 6 || pattern < 0xc8)) {
             StartPattern();
-            CPlayer::ClearBufferedPress();
+            ClearBufferedPress();
             pattern = 0xcc;
             return;
         }
         if ((m_inputY == 0 || (m_bufferedPress & 4) == 0 || (m_dashBufferedPress & 4) == 0) && m_patterns[pattern].unk2 <= m_patterns[0xc8].unk0 && (m_patterns[pattern].frames[frame].flagsB0 & 8) > 0 && (pattern >= 0xc8 && m_attackResult >= 2 && m_attackResult != 6 || pattern < 0xc8)) {
             StartPattern();
-            CPlayer::ClearBufferedPress();
+            ClearBufferedPress();
             pattern = 0xc8;
             return;
         }
@@ -338,33 +338,33 @@ void CAyu::StartCommand()
         if (y < 0.0) {
             if (m_patterns[pattern].unk2 <= m_patterns[0xd0].unk0 && (m_patterns[pattern].frames[frame].flagsB0 & 8) > 0 && (pattern >= 0xc8 && m_attackResult >= 2 && m_attackResult != 6 || pattern < 0xc8)) {
                 StartPattern();
-                CPlayer::ClearBufferedPress();
+                ClearBufferedPress();
                 pattern = 0xd0;
             }
             return;
         }
         if ((m_inputY == 1 || (m_bufferedPress & 4) != 0 || (m_dashBufferedPress & 4) != 0) && m_patterns[pattern].unk2 <= m_patterns[0xcd].unk0 && (m_patterns[pattern].frames[frame].flagsB0 & 8) > 0 && (pattern >= 0xc8 && m_attackResult >= 2 && m_attackResult != 6 || pattern < 0xc8)) {
             StartPattern();
-            CPlayer::ClearBufferedPress();
+            ClearBufferedPress();
             pattern = 0xcd;
             return;
         }
         if (m_inputY == 0 || (m_bufferedPress & 4) == 0 || (m_dashBufferedPress & 4) == 0) {
             if (m_patterns[pattern].unk2 <= m_patterns[0xd2].unk0 && (m_patterns[pattern].frames[frame].flagsB0 & 8) > 0 && m_inputX == facing && (pattern >= 0xc8 && m_attackResult >= 2 && m_attackResult != 6 || pattern < 0xc8)) {
                 StartPattern();
-                CPlayer::ClearBufferedPress();
+                ClearBufferedPress();
                 pattern = 0xd2;
                 return;
             }
             if (m_patterns[pattern].unk2 <= m_patterns[0xc9].unk0 && (m_patterns[pattern].frames[frame].flagsB0 & 8) > 0 && x - (*m_opponent)->x > -70.0 && x - (*m_opponent)->x < 70.0 && (pattern >= 0xc8 && m_attackResult >= 2 && m_attackResult != 6 || pattern < 0xc8)) {
                 StartPattern();
-                CPlayer::ClearBufferedPress();
+                ClearBufferedPress();
                 pattern = 0xc9;
                 return;
             }
             if (m_patterns[pattern].unk2 <= m_patterns[0xca].unk0 && (m_patterns[pattern].frames[frame].flagsB0 & 8) > 0 && (pattern >= 0xc8 && m_attackResult >= 2 && m_attackResult != 6 || pattern < 0xc8)) {
                 StartPattern();
-                CPlayer::ClearBufferedPress();
+                ClearBufferedPress();
                 pattern = 0xca;
                 return;
             }
@@ -374,44 +374,44 @@ void CAyu::StartCommand()
         if (y < 0.0) {
             if (m_inputX == facing && m_inputY == 0 && x - (*m_opponent)->x > -100.0 && x - (*m_opponent)->x < 100.0 && (*m_opponent)->y < 0.0 && m_patterns[pattern].unk2 <= m_patterns[0xf0].unk0 && ((*m_opponent)->pattern < 0x32 || (*m_opponent)->pattern > 0x9c) && (m_patterns[pattern].frames[frame].flagsB0 & 8) > 0 && (pattern >= 0xc8 && m_attackResult >= 2 && m_attackResult != 6 || pattern < 0xc8)) {
                 StartPattern();
-                CPlayer::ClearBufferedPress();
+                ClearBufferedPress();
                 pattern = 0xf0;
                 return;
             }
             if (m_patterns[pattern].unk2 <= m_patterns[0xd4].unk0 && (m_patterns[pattern].frames[frame].flagsB0 & 8) > 0 && m_inputY == 1 && (pattern >= 0xc8 && m_attackResult >= 2 && m_attackResult != 6 || pattern < 0xc8)) {
                 StartPattern();
-                CPlayer::ClearBufferedPress();
+                ClearBufferedPress();
                 pattern = 0xd4;
             }
             if (m_patterns[pattern].unk2 <= m_patterns[0xd1].unk0 && (m_patterns[pattern].frames[frame].flagsB0 & 8) > 0 && (pattern >= 0xc8 && m_attackResult >= 2 && m_attackResult != 6 || pattern < 0xc8)) {
                 StartPattern();
-                CPlayer::ClearBufferedPress();
+                ClearBufferedPress();
                 pattern = 0xd1;
             }
             return;
         }
         if ((m_inputY == 1 || (m_bufferedPress & 4) != 0 || (m_dashBufferedPress & 4) != 0) && m_patterns[pattern].unk2 <= m_patterns[0xce].unk0 && (m_patterns[pattern].frames[frame].flagsB0 & 8) > 0 && (pattern >= 0xc8 && m_attackResult >= 2 && m_attackResult != 6 || pattern < 0xc8)) {
             StartPattern();
-            CPlayer::ClearBufferedPress();
+            ClearBufferedPress();
             pattern = 0xce;
             return;
         }
         if (m_inputY == 0 || (m_bufferedPress & 4) == 0 || (m_dashBufferedPress & 4) == 0) {
             if (m_inputX != 0 && (*m_opponent)->y == 0.0 && x - (*m_opponent)->x > -30.0 && x - (*m_opponent)->x < 30.0 && m_patterns[pattern].unk2 <= m_patterns[0xdc].unk0 && (*m_opponent)->y == 0.0 && ((*m_opponent)->pattern < 0x32 || (*m_opponent)->pattern > 0x9c) && (m_patterns[pattern].frames[frame].flagsB0 & 8) > 0 && (pattern >= 0xc8 && m_attackResult >= 2 && m_attackResult != 6 || pattern < 0xc8)) {
                 StartPattern();
-                CPlayer::ClearBufferedPress();
+                ClearBufferedPress();
                 pattern = 0xdc;
                 return;
             }
             if (m_patterns[pattern].unk2 <= m_patterns[0xd3].unk0 && (m_patterns[pattern].frames[frame].flagsB0 & 8) > 0 && m_inputX == facing && (pattern >= 0xc8 && m_attackResult >= 2 && m_attackResult != 6 || pattern < 0xc8)) {
                 StartPattern();
-                CPlayer::ClearBufferedPress();
+                ClearBufferedPress();
                 pattern = 0xd3;
                 return;
             }
             if (m_patterns[pattern].unk2 <= m_patterns[0xcb].unk0 && (m_patterns[pattern].frames[frame].flagsB0 & 8) > 0 && (pattern >= 0xc8 && m_attackResult >= 2 && m_attackResult != 6 || pattern < 0xc8)) {
                 StartPattern();
-                CPlayer::ClearBufferedPress();
+                ClearBufferedPress();
                 pattern = 0xcb;
                 return;
             }
@@ -419,7 +419,7 @@ void CAyu::StartCommand()
     }
     if (unk15c < 1 && (m_pressD == 1 || (m_bufferedPress & 0x80) != 0 || (m_dashBufferedPress & 0x80) != 0) && m_patterns[pattern].unk2 <= m_patterns[0x28].unk0 && (m_patterns[pattern].frames[frame].flagsB0 & 8) > 0 && y < 0.0 && (pattern >= 0xc8 && m_attackResult >= 2 && m_attackResult != 6 || pattern < 0xc8)) {
         StartPattern();
-        CPlayer::ClearBufferedPress();
+        ClearBufferedPress();
         pattern = 0x28;
     }
 }
@@ -784,13 +784,13 @@ void CAyu::CpuInput()
     m_pressC = 0;
     m_pressD = 0;
     unk14e = 0;
-    if ((WORD)CPlayer::Random(0, 0x3e8) < 25.0f * unka8 + (y < 0.0) * 0x1e * unka8 + (m_cpuAction == 3) * 0x190 + (pattern == 0xaa) * 0x12c) {
+    if ((WORD)Random(0, 0x3e8) < 25.0f * unka8 + (y < 0.0) * 0x1e * unka8 + (m_cpuAction == 3) * 0x190 + (pattern == 0xaa) * 0x12c) {
         unk14e = 0x3c;
     }
-    if ((WORD)CPlayer::Random(0, 0x7d0) < ((unk130 > 0) * 4.0 + 1.0) * 8.0 * unka8 * ((pattern > 0x95 && pattern < 0x9d) * 0x7d0 + 1)) {
+    if ((WORD)Random(0, 0x7d0) < ((unk130 > 0) * 4.0 + 1.0) * 8.0 * unka8 * ((pattern > 0x95 && pattern < 0x9d) * 0x7d0 + 1)) {
         unk14e = 0x3c;
     }
-    if ((WORD)CPlayer::Random(0, 0x3e8) < 4e+01f * unka8 && pattern > 0xc7) {
+    if ((WORD)Random(0, 0x3e8) < 4e+01f * unka8 && pattern > 0xc7) {
         unk14e = 0x3c;
     }
     if (unk170 == 1 && m_cpuAction == 2) {
@@ -806,14 +806,14 @@ void CAyu::CpuInput()
     v10 = ((*m_opponent)->x - x) * facing;
     x8 = fabs(y - (*m_opponent)->y);
     if (pattern >= 0x32 && pattern <= 0x96 && timer == 0) {
-        if ((WORD)CPlayer::Random(0, 0x64) < 8.0f * unka8) {
+        if ((WORD)Random(0, 0x64) < 8.0f * unka8) {
             m_cpuAction = 3;
         } else {
             m_cpuAction = 0;
         }
-        m_inputX = 1 - (((WORD)CPlayer::Random(0, 0x64) < 0x32) << 1);
-        m_pressD = (WORD)CPlayer::Random(0, 0xf0) < x8;
-        m_pressD = (WORD)CPlayer::Random(0, 0x140) < v10;
+        m_inputX = 1 - (((WORD)Random(0, 0x64) < 0x32) << 1);
+        m_pressD = (WORD)Random(0, 0xf0) < x8;
+        m_pressD = (WORD)Random(0, 0x140) < v10;
         if ((*m_opponent)->pattern > 0xc7 && (*m_opponent)->pattern < 0xfa && (*m_opponent)->frame < 3 && x8 < 100.0 && v10 < 150.0) {
             m_pressD = 0;
         }
@@ -827,24 +827,24 @@ void CAyu::CpuInput()
     }
     if (pattern == 0xa8 && timer < 6) {
         if ((*m_opponent)->pattern != 0xc8 && (*m_opponent)->pattern != 0xcc && (*m_opponent)->pattern < 0xfa && (*m_opponent)->y == 0.0 && (*m_opponent)->m_hitsLeft == 0) {
-            if (v10 < 40.0 && (WORD)CPlayer::Random(0, 0x64) < unka8 * 3.0f) {
+            if (v10 < 40.0 && (WORD)Random(0, 0x64) < unka8 * 3.0f) {
                 m_pressA = 1;
                 m_inputY = 1;
                 return;
             }
-            if (v10 < 60.0 && (WORD)CPlayer::Random(0, 0x64) < unka8 * 3.0f) {
+            if (v10 < 60.0 && (WORD)Random(0, 0x64) < unka8 * 3.0f) {
                 m_pressA = 1;
                 m_inputY = 0;
                 return;
             }
         }
         if (((*m_opponent)->pattern == 0xc9 || (*m_opponent)->pattern == 0xca || (*m_opponent)->pattern == 0xcd) && (*m_opponent)->pattern < 0xfa && (*m_opponent)->y == 0.0 && (*m_opponent)->m_hitsLeft == 0) {
-            if (v10 > 40.0 && v10 < 80.0 && (WORD)CPlayer::Random(0, 0x64) < unka8 * 3.0f) {
+            if (v10 > 40.0 && v10 < 80.0 && (WORD)Random(0, 0x64) < unka8 * 3.0f) {
                 m_pressB = 1;
                 m_inputY = 0;
                 return;
             }
-            if (v10 > 80.0 && v10 < 140.0 && (WORD)CPlayer::Random(0, 0x64) < unka8 * 3.0f) {
+            if (v10 > 80.0 && v10 < 140.0 && (WORD)Random(0, 0x64) < unka8 * 3.0f) {
                 m_pressA = 2;
                 m_inputY = 0;
                 m_inputX = facing;
@@ -854,61 +854,61 @@ void CAyu::CpuInput()
     }
     if (pattern == 0xa8 || pattern == 0xa9) {
         if (v10 < 100.0) {
-            if ((WORD)CPlayer::Random(0, 0x64) < unka8 * 3.0f && unk118 > 500.0) {
+            if ((WORD)Random(0, 0x64) < unka8 * 3.0f && unk118 > 500.0) {
                 m_command = 0x20;
                 return;
             }
-            if ((WORD)CPlayer::Random(0, 0x64) < unka8 * 3.0f + ((unk118 > 500.0) << 1)) {
+            if ((WORD)Random(0, 0x64) < unka8 * 3.0f + ((unk118 > 500.0) << 1)) {
                 m_command = 0x16;
                 return;
             }
-            if ((WORD)CPlayer::Random(0, 0x64) < unka8 * 4.0f && m_gauge >= 0x3e8) {
-                m_command = (WORD)CPlayer::Random(0, 2) + 0x78;
+            if ((WORD)Random(0, 0x64) < unka8 * 4.0f && m_gauge >= 0x3e8) {
+                m_command = (WORD)Random(0, 2) + 0x78;
                 return;
             }
-            if ((WORD)CPlayer::Random(0, 0x64) < unka8 * 1.0f && m_gauge == 0xbb8) {
+            if ((WORD)Random(0, 0x64) < unka8 * 1.0f && m_gauge == 0xbb8) {
                 m_command = 0x5d;
                 return;
             }
         }
-        if (v10 < 160.0 && (WORD)CPlayer::Random(0, 0x64) < unka8 * 3.0f && unk118 > 500.0) {
+        if (v10 < 160.0 && (WORD)Random(0, 0x64) < unka8 * 3.0f && unk118 > 500.0) {
             m_command = 0xc;
             return;
         }
-        if (v10 < 220.0 && (WORD)CPlayer::Random(0, 0x64) < unka8 * 2 && m_gauge >= 0x7d0) {
-            m_command = (WORD)CPlayer::Random(0, 1) + 0x65;
+        if (v10 < 220.0 && (WORD)Random(0, 0x64) < unka8 * 2 && m_gauge >= 0x7d0) {
+            m_command = (WORD)Random(0, 1) + 0x65;
             return;
         }
-        if (v10 < 220.0 && (WORD)CPlayer::Random(0, 0x64) < unka8 * 5.0f && unk118 > 500.0) {
+        if (v10 < 220.0 && (WORD)Random(0, 0x64) < unka8 * 5.0f && unk118 > 500.0) {
             m_command = 0x16;
             return;
         }
     }
     if (pattern == 0xaa && frame == 1 && timer == 0) {
-        if ((WORD)CPlayer::Random(0, 0x64) < unka8 * 5.0f) {
+        if ((WORD)Random(0, 0x64) < unka8 * 5.0f) {
             m_cpuAction = 3;
             return;
         }
-        if (y - (*m_opponent)->y > 0.0 && y - (*m_opponent)->y < 40.0 && v10 < 80.0 && (WORD)CPlayer::Random(0, 0x64) < unka8 * 5.0f) {
+        if (y - (*m_opponent)->y > 0.0 && y - (*m_opponent)->y < 40.0 && v10 < 80.0 && (WORD)Random(0, 0x64) < unka8 * 5.0f) {
             m_pressA = 1;
             return;
         }
-        if (y - (*m_opponent)->y > -30.0 && y - (*m_opponent)->y < 0.0 && v10 < 100.0 && (WORD)CPlayer::Random(0, 0x64) < unka8 * 5.0f) {
+        if (y - (*m_opponent)->y > -30.0 && y - (*m_opponent)->y < 0.0 && v10 < 100.0 && (WORD)Random(0, 0x64) < unka8 * 5.0f) {
             m_pressB = 1;
             return;
         }
-        if (y - (*m_opponent)->y > -80.0 && y - (*m_opponent)->y < 30.0 && x8 > 30.0 && v10 < 100.0 && (WORD)CPlayer::Random(0, 0x64) < unka8 * 5.0f) {
+        if (y - (*m_opponent)->y > -80.0 && y - (*m_opponent)->y < 30.0 && x8 > 30.0 && v10 < 100.0 && (WORD)Random(0, 0x64) < unka8 * 5.0f) {
             m_pressC = 1;
             m_inputY = 0;
             return;
         }
-        if (x8 < 50.0 && v10 < 100.0 && (WORD)CPlayer::Random(0, 0x64) < unka8 * 2) {
+        if (x8 < 50.0 && v10 < 100.0 && (WORD)Random(0, 0x64) < unka8 * 2) {
             m_command = 0x16;
             return;
         }
     }
-    if (((*m_opponent)->pattern == 0xa8 || (*m_opponent)->pattern == 0xa9 || (*m_opponent)->pattern == 0xaa) && y == 0.0 && (WORD)CPlayer::Random(0, 0x64) < 15.0f * unka8 && m_cpuAction != 2 && (*m_opponent)->unk14c == 0) {
-        m_cpuRoll = (WORD)CPlayer::Random(0, 0x64);
+    if (((*m_opponent)->pattern == 0xa8 || (*m_opponent)->pattern == 0xa9 || (*m_opponent)->pattern == 0xaa) && y == 0.0 && (WORD)Random(0, 0x64) < 15.0f * unka8 && m_cpuAction != 2 && (*m_opponent)->unk14c == 0) {
+        m_cpuRoll = (WORD)Random(0, 0x64);
         if (m_cpuRoll < 4 && unk118 > 500.0) {
             m_command = 0x20;
             return;
@@ -922,7 +922,7 @@ void CAyu::CpuInput()
             return;
         }
         if (m_cpuRoll < 0x11 && m_cpuRoll > 0xc && m_gauge >= 0x3e8) {
-            m_command = (WORD)CPlayer::Random(0, 2) * 0x78;
+            m_command = (WORD)Random(0, 2) * 0x78;
             return;
         }
         if (m_cpuRoll < 0x10 && m_cpuRoll > 0x12 && m_gauge == 0xbb8) {
@@ -930,8 +930,8 @@ void CAyu::CpuInput()
             return;
         }
     }
-    if (((*m_opponent)->pattern == 0xa8 || (*m_opponent)->pattern == 0xa9 || (*m_opponent)->pattern == 0xaa) && y < 0.0 && (WORD)CPlayer::Random(0, 0x64) < 15.0f * unka8 && m_cpuAction != 2 && (*m_opponent)->unk14c == 0) {
-        m_cpuRoll = (WORD)CPlayer::Random(0, 0x64);
+    if (((*m_opponent)->pattern == 0xa8 || (*m_opponent)->pattern == 0xa9 || (*m_opponent)->pattern == 0xaa) && y < 0.0 && (WORD)Random(0, 0x64) < 15.0f * unka8 && m_cpuAction != 2 && (*m_opponent)->unk14c == 0) {
+        m_cpuRoll = (WORD)Random(0, 0x64);
         if (m_cpuRoll < 0x14) {
             m_cpuAction = 2;
             return;
@@ -941,7 +941,7 @@ void CAyu::CpuInput()
             return;
         }
     }
-    if ((unk118 > 500.0 || unk120 > 0) && (WORD)CPlayer::Random(0, 0x64) < 8.0f * unka8 && (*m_opponent)->pattern > 0x95 && (*m_opponent)->pattern < 0x9d && (pattern == 0xfa || pattern == 0xfb || pattern == 0x104 || pattern == 0x105 || pattern == 0x106 || pattern == 0x132 || pattern == 0x133 || pattern == 0x134 || pattern == 0x13b || pattern == 0x13c || pattern == 0x13d)) {
+    if ((unk118 > 500.0 || unk120 > 0) && (WORD)Random(0, 0x64) < 8.0f * unka8 && (*m_opponent)->pattern > 0x95 && (*m_opponent)->pattern < 0x9d && (pattern == 0xfa || pattern == 0xfb || pattern == 0x104 || pattern == 0x105 || pattern == 0x106 || pattern == 0x132 || pattern == 0x133 || pattern == 0x134 || pattern == 0x13b || pattern == 0x13c || pattern == 0x13d)) {
         m_command = 0x34;
         return;
     }
@@ -957,7 +957,7 @@ void CAyu::CpuInput()
     }
     if (m_cpuAction == 4) {
         m_inputY = -1;
-        m_inputX = (WORD)CPlayer::Random(0, 2) - 1;
+        m_inputX = (WORD)Random(0, 2) - 1;
         if (pattern == 4 || pattern == 5 || pattern == 6) {
             m_command = facing == 1;
             if (pattern == 0xa5) {
@@ -977,8 +977,8 @@ void CAyu::CpuInput()
         m_pressB = 1;
         return;
     }
-    if (m_attackResult > 1 && unk14a == 0 && (WORD)CPlayer::Random(0, 0x64) < unka8 * 25.0f && m_cpuAction != 1 && m_cpuAction != 2) {
-        m_cpuRoll = (WORD)CPlayer::Random(0, 0x3e8);
+    if (m_attackResult > 1 && unk14a == 0 && (WORD)Random(0, 0x64) < unka8 * 25.0f && m_cpuAction != 1 && m_cpuAction != 2) {
+        m_cpuRoll = (WORD)Random(0, 0x3e8);
         if (pattern == 0xc8) {
             if ((*m_opponent)->y < 0.0 && m_cpuRoll < 0x12c) {
                 m_pressB = 1;
@@ -993,7 +993,7 @@ void CAyu::CpuInput()
             if (v10 < 80.0 && m_cpuRoll < 0x190) {
                 m_pressA = 1;
                 m_inputY = 0;
-                if (m_attackResult == 2 && (WORD)CPlayer::Random(0, 0x64) < 0x14) {
+                if (m_attackResult == 2 && (WORD)Random(0, 0x64) < 0x14) {
                     m_pressC = 1;
                     m_inputY = 1;
                 }
@@ -1007,12 +1007,12 @@ void CAyu::CpuInput()
             if (m_cpuRoll > 0x3b6) {
                 m_cpuAction = 4;
                 m_inputY = -1;
-                m_inputX = (WORD)CPlayer::Random(0, 2) - 1;
+                m_inputX = (WORD)Random(0, 2) - 1;
                 return;
             }
             if (m_cpuRoll > 0x2bb) {
                 m_cpuAction = 1;
-                if ((WORD)CPlayer::Random(0, 4) == 0) {
+                if ((WORD)Random(0, 4) == 0) {
                     m_cpuAction = 5;
                 }
                 return;
@@ -1056,12 +1056,12 @@ void CAyu::CpuInput()
             if (m_cpuRoll > 0x398) {
                 m_cpuAction = 4;
                 m_inputY = -1;
-                m_inputX = (WORD)CPlayer::Random(0, 2) - 1;
+                m_inputX = (WORD)Random(0, 2) - 1;
                 return;
             }
             if (m_cpuRoll > 0x1f3) {
                 m_cpuAction = 1;
-                if ((WORD)CPlayer::Random(0, 3) == 0) {
+                if ((WORD)Random(0, 3) == 0) {
                     m_cpuAction = 5;
                 }
                 return;
@@ -1077,7 +1077,7 @@ void CAyu::CpuInput()
                 return;
             }
             if ((*m_opponent)->y < 0.0 && m_cpuRoll > 0x18f && m_cpuRoll < 0x1f4 && m_gauge >= 0x3e8) {
-                m_command = (WORD)CPlayer::Random(0, 2) + 0x64;
+                m_command = (WORD)Random(0, 2) + 0x64;
                 return;
             }
             if (m_cpuRoll < (m_attackResult == 3) * 0xc8 + 0xc8) {
@@ -1105,7 +1105,7 @@ void CAyu::CpuInput()
             if (m_cpuRoll > 0x3b6) {
                 m_cpuAction = 4;
                 m_inputY = -1;
-                m_inputX = (WORD)CPlayer::Random(0, 2) - 1;
+                m_inputX = (WORD)Random(0, 2) - 1;
                 return;
             }
             if (m_cpuRoll > 0x289) {
@@ -1135,17 +1135,17 @@ void CAyu::CpuInput()
                 return;
             }
             if (m_cpuRoll > 0xfa && m_cpuRoll < 0x190 && m_attackResult == 3 && m_gauge >= 0x3e8) {
-                m_command = (WORD)CPlayer::Random(0, 2) + 0x64;
+                m_command = (WORD)Random(0, 2) + 0x64;
                 return;
             }
             if (m_cpuRoll > 0x190 && m_cpuRoll < 0x1cc && m_gauge >= 0x3e8) {
-                m_command = (WORD)CPlayer::Random(0, 2) + 0x6e;
+                m_command = (WORD)Random(0, 2) + 0x6e;
                 return;
             }
             if (m_cpuRoll > 0x38e) {
                 m_cpuAction = 4;
                 m_inputY = -1;
-                m_inputX = (WORD)CPlayer::Random(0, 2) - 1;
+                m_inputX = (WORD)Random(0, 2) - 1;
                 return;
             }
             if (m_cpuRoll > 0x289) {
@@ -1167,7 +1167,7 @@ void CAyu::CpuInput()
             if (v10 < 80.0 && m_cpuRoll < 0x190) {
                 m_pressA = 1;
                 m_inputY = 0;
-                if (m_attackResult == 2 && (WORD)CPlayer::Random(0, 0x64) < 0x14) {
+                if (m_attackResult == 2 && (WORD)Random(0, 0x64) < 0x14) {
                     m_pressC = 1;
                     m_inputY = 1;
                 }
@@ -1181,12 +1181,12 @@ void CAyu::CpuInput()
             if (m_cpuRoll > 0x3b6) {
                 m_cpuAction = 4;
                 m_inputY = -1;
-                m_inputX = (WORD)CPlayer::Random(0, 2) - 1;
+                m_inputX = (WORD)Random(0, 2) - 1;
                 return;
             }
             if (m_cpuRoll > 0x2bb) {
                 m_cpuAction = 1;
-                if ((WORD)CPlayer::Random(0, 4) == 0) {
+                if ((WORD)Random(0, 4) == 0) {
                     m_cpuAction = 5;
                 }
                 return;
@@ -1202,7 +1202,7 @@ void CAyu::CpuInput()
                 return;
             }
             if ((*m_opponent)->y < 0.0 && m_cpuRoll > 0x18f && m_cpuRoll < 0x1f4 && m_gauge >= 0x3e8) {
-                m_command = (WORD)CPlayer::Random(0, 2) + 0x64;
+                m_command = (WORD)Random(0, 2) + 0x64;
                 return;
             }
             if (m_cpuRoll < (m_attackResult == 3) * 0xc8 + 0xc8) {
@@ -1230,7 +1230,7 @@ void CAyu::CpuInput()
             if (m_cpuRoll > 0x3b6) {
                 m_cpuAction = 4;
                 m_inputY = -1;
-                m_inputX = (WORD)CPlayer::Random(0, 2) - 1;
+                m_inputX = (WORD)Random(0, 2) - 1;
                 return;
             }
             if (m_cpuRoll > 0x289) {
@@ -1260,11 +1260,11 @@ void CAyu::CpuInput()
                 return;
             }
             if (m_cpuRoll > 0xfa && m_cpuRoll < 0x190 && m_attackResult == 3 && m_gauge >= 0x3e8) {
-                m_command = (WORD)CPlayer::Random(0, 2) + 0x64;
+                m_command = (WORD)Random(0, 2) + 0x64;
                 return;
             }
             if (m_cpuRoll > 0x190 && m_cpuRoll < 0x1cc && m_gauge >= 0x3e8) {
-                m_command = (WORD)CPlayer::Random(0, 2) + 0x6e;
+                m_command = (WORD)Random(0, 2) + 0x6e;
                 return;
             }
             if (m_cpuRoll > 0x289) {
@@ -1288,7 +1288,7 @@ void CAyu::CpuInput()
             }
             if (m_cpuRoll > 0x2bb) {
                 m_cpuAction = 1;
-                if ((WORD)CPlayer::Random(0, 4) == 0) {
+                if ((WORD)Random(0, 4) == 0) {
                     m_cpuAction = 3;
                 }
                 return;
@@ -1304,7 +1304,7 @@ void CAyu::CpuInput()
                 return;
             }
             if (m_cpuRoll > 0x32 && m_cpuRoll < 0x3c && m_gauge >= 0x3e8 && (*m_opponent)->y < 0.0) {
-                m_command = (WORD)CPlayer::Random(0, 2) + 0x6e;
+                m_command = (WORD)Random(0, 2) + 0x6e;
                 return;
             }
             if (m_cpuRoll > 0x3c && m_cpuRoll < 0x12c) {
@@ -1312,7 +1312,7 @@ void CAyu::CpuInput()
                 return;
             }
             if (m_cpuRoll > 0x3b6) {
-                m_inputX = (WORD)CPlayer::Random(0, 2) - 1;
+                m_inputX = (WORD)Random(0, 2) - 1;
                 return;
             }
             if (m_cpuRoll > 0x289) {
@@ -1325,8 +1325,8 @@ void CAyu::CpuInput()
             return;
         }
     }
-    if ((WORD)CPlayer::Random(0, 0x64) < 25.0f * unka8) {
-        m_cpuRoll = (WORD)CPlayer::Random(0, 0x3e8);
+    if ((WORD)Random(0, 0x64) < 25.0f * unka8) {
+        m_cpuRoll = (WORD)Random(0, 0x3e8);
         if (y == 0.0) {
             if ((*m_opponent)->y == 0.0 && (*m_opponent)->pattern != 0x63) {
                 if (v10 < 40.0 && (*m_opponent)->y == 0.0 && m_cpuRoll < 5) {
@@ -1388,7 +1388,7 @@ void CAyu::CpuInput()
                         return;
                     }
                     if (v10 < 80.0 && x8 < 120.0 && m_cpuRoll < 0x11 && m_gauge >= 0x7d0) {
-                        m_command = (WORD)CPlayer::Random(0, 1) + 0x79;
+                        m_command = (WORD)Random(0, 1) + 0x79;
                         return;
                     }
                 }
@@ -1405,7 +1405,7 @@ void CAyu::CpuInput()
                         return;
                     }
                     if (v10 < 120.0 && x8 < 150.0 && m_cpuRoll < 0x11 && m_gauge >= 0x7d0) {
-                        m_command = (WORD)CPlayer::Random(0, 1) + 0x79;
+                        m_command = (WORD)Random(0, 1) + 0x79;
                         return;
                     }
                 }
@@ -1454,28 +1454,28 @@ void CAyu::CpuInput()
             }
         }
     }
-    if (pattern < 0x32 && ((*m_opponent)->pattern > 0x95 && (*m_opponent)->pattern < 0x9c || (*m_opponent)->pattern > 0x31 && (*m_opponent)->pattern < 0x3b) && y == 0.0 && (WORD)CPlayer::Random(0, 0x64) < 1.0f * unka8) {
+    if (pattern < 0x32 && ((*m_opponent)->pattern > 0x95 && (*m_opponent)->pattern < 0x9c || (*m_opponent)->pattern > 0x31 && (*m_opponent)->pattern < 0x3b) && y == 0.0 && (WORD)Random(0, 0x64) < 1.0f * unka8) {
         if (v10 < 100.0) {
             m_command = facing == 1;
         }
         return;
     }
-    if ((WORD)CPlayer::Random(0, 0x3e8) < 2) {
+    if ((WORD)Random(0, 0x3e8) < 2) {
         m_cpuAction = 4;
         return;
     }
-    if ((WORD)CPlayer::Random(0, 0x64) < 2) {
-        if ((WORD)CPlayer::Random(0, 0x64) < 8.0f * unka8) {
+    if ((WORD)Random(0, 0x64) < 2) {
+        if ((WORD)Random(0, 0x64) < 8.0f * unka8) {
             m_cpuAction = 3;
         } else {
             m_cpuAction = 0;
         }
-        if (v10 > 240.0 && y == 0.0 && (WORD)CPlayer::Random(0, 0x64) < 2) {
+        if (v10 > 240.0 && y == 0.0 && (WORD)Random(0, 0x64) < 2) {
             m_inputX = 0;
             m_inputY = -1;
             return;
         }
-        if (v10 < 80.0 && y == 0.0 && (WORD)CPlayer::Random(0, 0x64) < 2) {
+        if (v10 < 80.0 && y == 0.0 && (WORD)Random(0, 0x64) < 2) {
             m_inputX = 0;
             m_inputY = -1;
             return;
@@ -1487,39 +1487,39 @@ void CAyu::CpuInput()
         }
     }
     if (unk1a0 > 0) {
-        if ((char)CPlayer::Unk40ff70() != 0 && unk1a0 > 0xf) {
+        if ((char)Unk40ff70() != 0 && unk1a0 > 0xf) {
             unk1a0 = 0xf;
         }
         m_inputX = 1;
         return;
     }
     if (unk1a4 > 0) {
-        if ((char)CPlayer::Unk40ff70() != 0 && unk1a4 > 0xf) {
+        if ((char)Unk40ff70() != 0 && unk1a4 > 0xf) {
             unk1a4 = 0xf;
         }
         m_inputX = -1;
         return;
     }
-    if ((WORD)CPlayer::Random(0, 0x64) < 0x28 && v10 < 60.0) {
+    if ((WORD)Random(0, 0x64) < 0x28 && v10 < 60.0) {
         if (facing == 1) {
-            unk1a4 = (WORD)CPlayer::Random(0, 0xc8) + 0x1e;
+            unk1a4 = (WORD)Random(0, 0xc8) + 0x1e;
         } else {
-            unk1a0 = (WORD)CPlayer::Random(0, 0xc8) + 0x1e;
+            unk1a0 = (WORD)Random(0, 0xc8) + 0x1e;
         }
     }
-    if ((WORD)CPlayer::Random(0, 0x64) < 0x50) {
+    if ((WORD)Random(0, 0x64) < 0x50) {
         if (facing == 1) {
-            unk1a0 = (WORD)CPlayer::Random(0, 0xc8) + 0x1e;
+            unk1a0 = (WORD)Random(0, 0xc8) + 0x1e;
         } else {
-            unk1a4 = (WORD)CPlayer::Random(0, 0xc8) + 0x1e;
+            unk1a4 = (WORD)Random(0, 0xc8) + 0x1e;
         }
         return;
     }
     if (facing == -1) {
-        unk1a0 = (WORD)CPlayer::Random(0, 0xc8) + 0x1e;
+        unk1a0 = (WORD)Random(0, 0xc8) + 0x1e;
         return;
     }
-    unk1a4 = (WORD)CPlayer::Random(0, 0xc8) + 0x1e;
+    unk1a4 = (WORD)Random(0, 0xc8) + 0x1e;
 }
 
 void CAyu::UpdateObjects()
@@ -1537,7 +1537,7 @@ void CAyu::UpdateObjects()
         if (m_objectActive[v4] != 0 && m_objects[v4].unk86 == 0 && (unk14c == 0 || unk14c > 0 && m_objects[v4].unk88 != 0)) {
             v54 = (short)anims[m_objects[v4].pattern].frames[m_objects[v4].frame].duration;
             v58 = anims[m_objects[v4].pattern].frameCount;
-            CPlayer::InitEffectDesc((EffectDesc*)&l50);
+            InitEffectDesc((EffectDesc*)&l50);
             switch (m_objects[v4].pattern) {
             case 0x190:
                 m_objects[v4].vx = 2.0;
@@ -1869,10 +1869,10 @@ void CAyu::UpdateObjects()
                 if (unk3150[v4] == 0) {
                     m_objects[v4].unk84 = 1;
                     unk3150[v4]++;
-                    m_objects[v4].vx = (WORD)CPlayer::Random(0, 0x64) * 0.01 + 2.5;
-                    m_objects[v4].ay = (WORD)CPlayer::Random(0, 0x64) * 0.00015;
+                    m_objects[v4].vx = (WORD)Random(0, 0x64) * 0.01 + 2.5;
+                    m_objects[v4].ay = (WORD)Random(0, 0x64) * 0.00015;
                     m_objects[v4].vy = 0.5;
-                    m_objects[v4].frame = CPlayer::Random(0, 0xf);
+                    m_objects[v4].frame = Random(0, 0xf);
                 }
                 m_objects[v4].vy = m_objects[v4].vy - m_objects[v4].ay;
                 m_objects[v4].timer++;
@@ -1893,10 +1893,10 @@ void CAyu::UpdateObjects()
                 if (unk3150[v4] == 0) {
                     m_objects[v4].unk84 = 1;
                     unk3150[v4]++;
-                    m_objects[v4].vx = (WORD)CPlayer::Random(0, 0x64) * 0.01 + 1.0;
-                    m_objects[v4].ay = (WORD)CPlayer::Random(0, 0x64) * 0.0002;
+                    m_objects[v4].vx = (WORD)Random(0, 0x64) * 0.01 + 1.0;
+                    m_objects[v4].ay = (WORD)Random(0, 0x64) * 0.0002;
                     m_objects[v4].vy = 0.5;
-                    m_objects[v4].frame = CPlayer::Random(0, 0xf);
+                    m_objects[v4].frame = Random(0, 0xf);
                 }
                 m_objects[v4].vy = m_objects[v4].vy - m_objects[v4].ay;
                 m_objects[v4].timer++;

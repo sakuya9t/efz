@@ -17,7 +17,7 @@ void CMizuka::UpdatePattern()
     EffectDesc l50;
     l4 = (short)anims[pattern].frames[frame].duration;
     x8 = anims[pattern].frameCount;
-    CPlayer::InitEffectDesc((EffectDesc*)&l50);
+    InitEffectDesc((EffectDesc*)&l50);
     switch (pattern) {
     default:
         vx = 0.0;
@@ -66,7 +66,7 @@ void CMizuka::UpdatePattern()
         vy = 0.0;
         unk58 = 0;
         unk158 = 0;
-        CPlayer::FaceOpponent();
+        FaceOpponent();
         timer++;
         if (timer >= l4) {
             timer = 0;
@@ -80,7 +80,7 @@ void CMizuka::UpdatePattern()
         unk58 = 0;
         if (frame == 0 && timer == 0) {
             if (unk158 == 0) {
-                CPlayer::FaceOpponent();
+                FaceOpponent();
             }
             vx = 0.0;
         }
@@ -107,7 +107,7 @@ void CMizuka::UpdatePattern()
         if (y + vy >= 0.0 && frame > 3) {
             y = 0.0;
             m_playSound = 9;
-            CPlayer::FaceOpponent();
+            FaceOpponent();
             pattern = 0xd;
             StartPattern();
         }
@@ -116,7 +116,7 @@ void CMizuka::UpdatePattern()
         unk58 = 0;
         if (frame == 0 && timer == 0) {
             if (unk158 == 0) {
-                CPlayer::FaceOpponent();
+                FaceOpponent();
             }
             vx = 0.0;
         }
@@ -144,7 +144,7 @@ void CMizuka::UpdatePattern()
         if (y + vy >= 0.0 && frame > 3) {
             y = 0.0;
             m_playSound = 9;
-            CPlayer::FaceOpponent();
+            FaceOpponent();
             pattern = 0xd;
             StartPattern();
         }
@@ -153,7 +153,7 @@ void CMizuka::UpdatePattern()
         unk58 = 0;
         if (frame == 0 && timer == 0) {
             if (unk158 == 0) {
-                CPlayer::FaceOpponent();
+                FaceOpponent();
             }
             vx = 0.0;
         }
@@ -177,7 +177,7 @@ void CMizuka::UpdatePattern()
         if (y + vy >= 0.0 && frame > 3) {
             y = 0.0;
             m_playSound = 9;
-            CPlayer::FaceOpponent();
+            FaceOpponent();
             pattern = 0xd;
             StartPattern();
         }
@@ -187,7 +187,7 @@ void CMizuka::UpdatePattern()
         vx = 0.0;
         vy = 0.0;
         unk158 = 0;
-        CPlayer::FaceOpponent();
+        FaceOpponent();
         timer++;
         if (timer >= l4) {
             timer = 0;
@@ -203,7 +203,7 @@ void CMizuka::UpdatePattern()
         vx = 0.0;
         vy = 0.0;
         unk158 = 0;
-        CPlayer::FaceOpponent();
+        FaceOpponent();
         timer++;
         if (timer >= l4) {
             timer = 0;
@@ -238,7 +238,7 @@ void CMizuka::UpdatePattern()
         vx = 0.0;
         vy = 0.0;
         unk158 = 0;
-        CPlayer::FaceOpponent();
+        FaceOpponent();
         timer++;
         if (timer >= l4) {
             timer = 0;
@@ -273,7 +273,7 @@ void CMizuka::UpdatePattern()
         if (y + vy >= 0.0 && frame > 3) {
             y = 0.0;
             m_playSound = 9;
-            CPlayer::FaceOpponent();
+            FaceOpponent();
             pattern = 0xd;
             StartPattern();
         }
@@ -299,7 +299,7 @@ void CMizuka::UpdatePattern()
         if (y + vy >= 0.0 && frame > 3) {
             y = 0.0;
             m_playSound = 9;
-            CPlayer::FaceOpponent();
+            FaceOpponent();
             pattern = 0xd;
             StartPattern();
         }
@@ -325,7 +325,7 @@ void CMizuka::UpdatePattern()
         if (y + vy >= 0.0 && frame > 3) {
             y = 0.0;
             m_playSound = 9;
-            CPlayer::FaceOpponent();
+            FaceOpponent();
             pattern = 0xd;
             StartPattern();
         }
@@ -896,7 +896,7 @@ void CMizuka::UpdatePattern()
         if (unk120 != 0) {
             unk118 -= 0.8;
         }
-        if (frame > 0 && (char)CPlayer::Unk40ff70() != 0) {
+        if (frame > 0 && (char)Unk40ff70() != 0) {
             pattern = 0x46;
             StartPattern();
             break;
@@ -945,7 +945,7 @@ void CMizuka::UpdatePattern()
         if (unk120 != 0) {
             unk118 -= 0.8;
         }
-        if (frame > 0 && (char)CPlayer::Unk40ff70() != 0) {
+        if (frame > 0 && (char)Unk40ff70() != 0) {
             pattern = 0x46;
             StartPattern();
             break;
@@ -994,7 +994,7 @@ void CMizuka::UpdatePattern()
         if (unk120 != 0) {
             unk118 -= 0.8;
         }
-        if (frame > 0 && (char)CPlayer::Unk40ff70() != 0) {
+        if (frame > 0 && (char)Unk40ff70() != 0) {
             pattern = 0x46;
             StartPattern();
             break;
@@ -1038,7 +1038,7 @@ void CMizuka::UpdatePattern()
         if (unk120 != 0) {
             unk118 -= 0.8;
         }
-        if (frame > 0 && (char)CPlayer::Unk40ff70() != 0) {
+        if (frame > 0 && (char)Unk40ff70() != 0) {
             pattern = 0x46;
             StartPattern();
             break;
@@ -1089,7 +1089,7 @@ void CMizuka::UpdatePattern()
             frame = 1;
         }
         timer++;
-        if ((char)CPlayer::Unk40ff70() != 0) {
+        if ((char)Unk40ff70() != 0) {
             pattern = 0x46;
             StartPattern();
             break;
@@ -1553,7 +1553,7 @@ void CMizuka::UpdatePattern()
             if (frame >= x8) {
                 pattern = 0;
                 StartPattern();
-                CPlayer::FaceOpponent();
+                FaceOpponent();
             }
         }
         break;
@@ -1606,7 +1606,7 @@ void CMizuka::UpdatePattern()
             if (frame >= x8) {
                 pattern = 0;
                 StartPattern();
-                CPlayer::FaceOpponent();
+                FaceOpponent();
             }
         }
         break;
@@ -1640,7 +1640,7 @@ void CMizuka::UpdatePattern()
             if (frame >= x8) {
                 pattern = 0;
                 StartPattern();
-                CPlayer::FaceOpponent();
+                FaceOpponent();
             }
         }
         if (y + vy >= 0.0) {
@@ -1726,7 +1726,7 @@ void CMizuka::UpdatePattern()
             timer = 0;
             frame++;
             if (frame == x8) {
-                CPlayer::FaceOpponent();
+                FaceOpponent();
             }
             if (frame >= x8) {
                 pattern = 7;
@@ -1742,7 +1742,7 @@ void CMizuka::UpdatePattern()
         vx = 0.0;
         vy = 0.0;
         if (frame == 0 && timer == 0) {
-            CPlayer::ShakeScreen(3, 0);
+            ShakeScreen(3, 0);
             l50.type = 3;
             l50.x = (double)(int)x;
             l50.y = (double)(int)y;
@@ -1766,7 +1766,7 @@ void CMizuka::UpdatePattern()
         vx = 0.0;
         vy = 0.0;
         if (frame == 0 && timer == 0) {
-            CPlayer::ShakeScreen(3, 0);
+            ShakeScreen(3, 0);
             l50.type = 3;
             l50.x = (double)(int)x;
             l50.y = (double)(int)y;
@@ -1797,7 +1797,7 @@ void CMizuka::UpdatePattern()
             timer = 0;
             frame++;
             if (frame == x8) {
-                CPlayer::FaceOpponent();
+                FaceOpponent();
             }
             if (frame >= x8) {
                 pattern = 0x60;
@@ -1828,7 +1828,7 @@ void CMizuka::UpdatePattern()
             timer = 0;
             frame++;
             if (frame == x8) {
-                CPlayer::FaceOpponent();
+                FaceOpponent();
             }
             if (frame >= x8) {
                 pattern = 0;
@@ -1862,7 +1862,7 @@ void CMizuka::UpdatePattern()
             timer = 0;
             frame++;
             if (frame == x8) {
-                CPlayer::FaceOpponent();
+                FaceOpponent();
             }
             if (frame >= x8) {
                 pattern = 0;
@@ -1896,7 +1896,7 @@ void CMizuka::UpdatePattern()
             timer = 0;
             frame++;
             if (frame == x8) {
-                CPlayer::FaceOpponent();
+                FaceOpponent();
             }
             if (frame >= x8) {
                 pattern = 0;
@@ -1930,7 +1930,7 @@ void CMizuka::UpdatePattern()
             timer = 0;
             frame++;
             if (frame == x8) {
-                CPlayer::FaceOpponent();
+                FaceOpponent();
             }
             if (frame >= x8) {
                 pattern = 3;
@@ -1961,7 +1961,7 @@ void CMizuka::UpdatePattern()
             timer = 0;
             frame++;
             if (frame == x8) {
-                CPlayer::FaceOpponent();
+                FaceOpponent();
             }
             if (frame >= x8) {
                 pattern = 3;
@@ -1992,7 +1992,7 @@ void CMizuka::UpdatePattern()
             timer = 0;
             frame++;
             if (frame == x8) {
-                CPlayer::FaceOpponent();
+                FaceOpponent();
             }
             if (frame >= x8) {
                 pattern = 3;
@@ -2020,7 +2020,7 @@ void CMizuka::UpdatePattern()
         if (y + vy >= 0.0) {
             y = 0.0;
             m_playSound = 9;
-            CPlayer::FaceOpponent();
+            FaceOpponent();
             pattern = 0xd;
             StartPattern();
         }
@@ -2052,7 +2052,7 @@ void CMizuka::UpdatePattern()
         if (y + vy >= 0.0) {
             y = 0.0;
             m_playSound = 9;
-            CPlayer::FaceOpponent();
+            FaceOpponent();
             pattern = 0xd;
             if (unk3458 > 0) {
                 pattern = 0xb3;
@@ -2087,7 +2087,7 @@ void CMizuka::UpdatePattern()
         if (y + vy >= 0.0) {
             y = 0.0;
             m_playSound = 9;
-            CPlayer::FaceOpponent();
+            FaceOpponent();
             pattern = 0xd;
             if (unk3458 > 0) {
                 pattern = 0xb3;
@@ -2097,7 +2097,7 @@ void CMizuka::UpdatePattern()
         break;
     case 0xa3:
         if (frame == 0 && timer == 0) {
-            CPlayer::StopMoving();
+            StopMoving();
         }
         if (frame > 9) {
             unk313c++;
@@ -2134,7 +2134,7 @@ void CMizuka::UpdatePattern()
         break;
     case 0xa4:
         if (frame == 0 && timer == 0) {
-            CPlayer::StopMoving();
+            StopMoving();
         }
         unk158 = 0;
         if (frame == 0 && timer == 0 && unk3138 == 0) {
@@ -2143,7 +2143,7 @@ void CMizuka::UpdatePattern()
         }
         vy += 0.045;
         if (vy + y > 0.0 && frame < 0xc) {
-            CPlayer::StopMoving();
+            StopMoving();
             timer = 0;
             frame = 0xc;
             y = 0.0;
@@ -2176,7 +2176,7 @@ void CMizuka::UpdatePattern()
     case 0xa5:
         if (frame == 0 && timer == 0 && unk3138 == 0) {
             vx = 2.0;
-            CPlayer::StartAfterimages(3);
+            StartAfterimages(3);
             vy = 0.0;
             ay = 0.0;
             m_playSound = 0x11;
@@ -2199,7 +2199,7 @@ void CMizuka::UpdatePattern()
             StartPattern();
             vx = 1.3;
             ay = 0.03;
-            if (CPlayer::FaceOpponent() != 0) {
+            if (FaceOpponent() != 0) {
                 vx = -vx;
             }
         }
@@ -2212,7 +2212,7 @@ void CMizuka::UpdatePattern()
                 pattern = 0xb3;
                 frame = 7;
             }
-            if (CPlayer::FaceOpponent() != 0) {
+            if (FaceOpponent() != 0) {
                 vx = -vx;
             }
         }
@@ -2222,7 +2222,7 @@ void CMizuka::UpdatePattern()
             vx = -2.0;
             vy = 0.0;
             ay = 0.0;
-            CPlayer::StartAfterimages(3);
+            StartAfterimages(3);
             m_playSound = 0x11;
         }
         if (unk3458 > 0) {
@@ -2243,7 +2243,7 @@ void CMizuka::UpdatePattern()
             StartPattern();
             vx = -0.9;
             ay = 0.03;
-            if (CPlayer::FaceOpponent() != 0) {
+            if (FaceOpponent() != 0) {
                 vx = -vx;
             }
         }
@@ -2256,7 +2256,7 @@ void CMizuka::UpdatePattern()
                 pattern = 0xb3;
                 frame = 7;
             }
-            if (CPlayer::FaceOpponent() != 0) {
+            if (FaceOpponent() != 0) {
                 vx = -vx;
             }
         }
@@ -2271,7 +2271,7 @@ void CMizuka::UpdatePattern()
             }
             unk118 = 0.0;
             unk14c = 0x5a;
-            CPlayer::FillBackground(0xb0, 3);
+            FillBackground(0xb0, 3);
         }
         if (frame == 1 && timer == 0) {
             m_playSound = 0x12;
@@ -2297,7 +2297,7 @@ void CMizuka::UpdatePattern()
             m_attackResult = 0;
             if (frame >= x8) {
                 pattern = 0;
-                CPlayer::FaceOpponent();
+                FaceOpponent();
                 StartPattern();
             }
         }
@@ -2325,7 +2325,7 @@ void CMizuka::UpdatePattern()
             timer = 0;
             frame++;
             if (frame == x8) {
-                CPlayer::FaceOpponent();
+                FaceOpponent();
             }
             if (frame >= x8) {
                 pattern = 0;
@@ -2356,7 +2356,7 @@ void CMizuka::UpdatePattern()
             timer = 0;
             frame++;
             if (frame == x8) {
-                CPlayer::FaceOpponent();
+                FaceOpponent();
             }
             if (frame >= x8) {
                 pattern = 3;
@@ -2387,7 +2387,7 @@ void CMizuka::UpdatePattern()
             vy = vy + ay;
         }
         if (vy + y > 0.0) {
-            CPlayer::StopMoving();
+            StopMoving();
             y = 0.0;
             unk3458 = 0;
             pattern = 0xa9;
@@ -2418,7 +2418,7 @@ void CMizuka::UpdatePattern()
             }
             unk118 = 0.0;
             unk14c = 0x5a;
-            CPlayer::FillBackground(0xb0, 3);
+            FillBackground(0xb0, 3);
         }
         if (frame == 1 && timer == 0) {
             m_playSound = 0x12;
@@ -2504,7 +2504,7 @@ void CMizuka::UpdatePattern()
                 vy = 0.0;
             }
         }
-        CPlayer::FaceOpponent();
+        FaceOpponent();
         if (frame > 6) {
             unk3458--;
             if (unk3458 < 0) {
@@ -2698,7 +2698,7 @@ void CMizuka::UpdatePattern()
             }
             if (frame >= x8) {
                 pattern = 0;
-                CPlayer::FaceOpponent();
+                FaceOpponent();
                 StartPattern();
             }
         }
@@ -2750,7 +2750,7 @@ void CMizuka::UpdatePattern()
             }
             if (frame >= x8) {
                 pattern = 0;
-                CPlayer::FaceOpponent();
+                FaceOpponent();
                 StartPattern();
             }
         }
@@ -2788,7 +2788,7 @@ void CMizuka::UpdatePattern()
             }
             if (frame >= x8) {
                 pattern = 0;
-                CPlayer::FaceOpponent();
+                FaceOpponent();
                 StartPattern();
             }
         }
@@ -2796,7 +2796,7 @@ void CMizuka::UpdatePattern()
     case 0xcb:
         unk58 = 0;
         if (frame == 0 && timer == 0) {
-            CPlayer::StopMoving();
+            StopMoving();
         }
         if (frame == 5 && timer == 0) {
             l50.type = 3;
@@ -2820,7 +2820,7 @@ void CMizuka::UpdatePattern()
             }
             if (frame >= x8) {
                 pattern = 0;
-                CPlayer::FaceOpponent();
+                FaceOpponent();
                 StartPattern();
             }
         }
@@ -2873,7 +2873,7 @@ void CMizuka::UpdatePattern()
                 if (m_inputY == 1) {
                     pattern = 3;
                 }
-                CPlayer::FaceOpponent();
+                FaceOpponent();
                 StartPattern();
             }
         }
@@ -2926,7 +2926,7 @@ void CMizuka::UpdatePattern()
                 if (m_inputY == 1) {
                     pattern = 3;
                 }
-                CPlayer::FaceOpponent();
+                FaceOpponent();
                 StartPattern();
             }
         }
@@ -2970,7 +2970,7 @@ void CMizuka::UpdatePattern()
                 if (m_inputY == 1) {
                     pattern = 3;
                 }
-                CPlayer::FaceOpponent();
+                FaceOpponent();
                 StartPattern();
             }
         }
@@ -3309,7 +3309,7 @@ void CMizuka::UpdatePattern()
             m_attackResult = 0;
             if (frame >= x8) {
                 pattern = 0;
-                CPlayer::FaceOpponent();
+                FaceOpponent();
                 StartPattern();
             }
         }
@@ -3326,13 +3326,13 @@ void CMizuka::UpdatePattern()
         if (m_attackResult > 1) {
             pattern = 0xd5;
             StartPattern();
-            CPlayer::StopMoving();
+            StopMoving();
             break;
         }
         if (y + vy >= 0.0) {
             y = 0.0;
             vy = 0.0;
-            CPlayer::ShakeScreen(3, 0);
+            ShakeScreen(3, 0);
             l50.type = 3;
             l50.x = (double)(int)x;
             l50.y = (double)(int)y;
@@ -3376,7 +3376,7 @@ void CMizuka::UpdatePattern()
         vx = 0.0;
         vy = 0.0;
         if (frame == 0 && timer == 0) {
-            CPlayer::ShakeScreen(3, 0);
+            ShakeScreen(3, 0);
             l50.type = 3;
             l50.x = (double)(int)x;
             l50.y = (double)(int)y;
@@ -3395,7 +3395,7 @@ void CMizuka::UpdatePattern()
                 if (m_inputY == 1) {
                     pattern = 3;
                 }
-                CPlayer::FaceOpponent();
+                FaceOpponent();
                 StartPattern();
             }
         }
@@ -3414,7 +3414,7 @@ void CMizuka::UpdatePattern()
             vx = 0.0;
             vy = 0.0;
             StartPattern();
-            CPlayer::StopMoving();
+            StopMoving();
             (*m_opponent)->StopMoving();
             pattern = 0xdd;
             l50.type = 0;
@@ -3435,7 +3435,7 @@ void CMizuka::UpdatePattern()
                 if (m_inputY == 1) {
                     pattern = 3;
                 }
-                CPlayer::FaceOpponent();
+                FaceOpponent();
                 StartPattern();
             }
         }
@@ -3476,7 +3476,7 @@ void CMizuka::UpdatePattern()
             SpawnObject(&l50);
         }
         if (frame == 3) {
-            CPlayer::FaceOpponent();
+            FaceOpponent();
         }
         if ((*m_opponent)->pattern == 0x40 && frame == 3) {
             timer = 0;
@@ -3489,13 +3489,13 @@ void CMizuka::UpdatePattern()
             m_attackResult = 0;
             if (frame >= x8) {
                 pattern = 0;
-                CPlayer::FaceOpponent();
+                FaceOpponent();
                 StartPattern();
             }
         }
         break;
     case 0xe6:
-        CPlayer::StartAfterimages(3);
+        StartAfterimages(3);
         vx -= 0.03;
         if (vx < 0.0) {
             vx = 0.0;
@@ -3543,7 +3543,7 @@ void CMizuka::UpdatePattern()
         }
         break;
     case 0xe7:
-        CPlayer::StartAfterimages(3);
+        StartAfterimages(3);
         unk158 = 0;
         if (m_inputY == -1 && frame > 0 && unk15c < 3 && m_attackResult >= 2) {
             pattern = 4;
@@ -3605,7 +3605,7 @@ void CMizuka::UpdatePattern()
         }
         break;
     case 0xe8:
-        CPlayer::StartAfterimages(3);
+        StartAfterimages(3);
         vx -= 0.03;
         if (vx < 0.0) {
             vx = 0.0;
@@ -3674,7 +3674,7 @@ void CMizuka::UpdatePattern()
             m_attackResult = 0;
             if (frame >= x8) {
                 pattern = 0;
-                CPlayer::FaceOpponent();
+                FaceOpponent();
                 StartPattern();
             }
         }
@@ -3683,7 +3683,7 @@ void CMizuka::UpdatePattern()
         unk58 = 0;
         unk158 = 0;
         if (frame == 0 && timer == 0) {
-            CPlayer::StopMoving();
+            StopMoving();
         }
         if (frame == 9 && timer == 0) {
             l50.type = 0x1f;
@@ -3721,7 +3721,7 @@ void CMizuka::UpdatePattern()
         unk58 = 0;
         unk158 = 0;
         if (frame == 0 && timer == 0) {
-            CPlayer::StopMoving();
+            StopMoving();
         }
         if (frame == 9 && timer == 0) {
             l50.type = 0x1f;
@@ -3758,8 +3758,8 @@ void CMizuka::UpdatePattern()
         unk58 = 0;
         unk158 = 0;
         if (frame == 0 && timer == 0) {
-            CPlayer::StartAfterimages(3);
-            CPlayer::StopMoving();
+            StartAfterimages(3);
+            StopMoving();
             if (unk120 == 0) {
                 unk118 -= 500.0;
             } else {
@@ -3830,7 +3830,7 @@ void CMizuka::UpdatePattern()
         unk58 = 0;
         unk158 = 0;
         if (frame == 0 && timer == 0) {
-            CPlayer::StopMoving();
+            StopMoving();
         }
         if (frame == 6 && timer == 0) {
             l50.type = 0x196;
@@ -3857,7 +3857,7 @@ void CMizuka::UpdatePattern()
         unk58 = 0;
         unk158 = 0;
         if (frame == 0 && timer == 0) {
-            CPlayer::StopMoving();
+            StopMoving();
         }
         if (frame == 6 && timer == 0) {
             l50.type = 0x196;
@@ -3884,7 +3884,7 @@ void CMizuka::UpdatePattern()
         unk58 = 0;
         unk158 = 0;
         if (frame == 0 && timer == 0) {
-            CPlayer::StopMoving();
+            StopMoving();
             if (unk120 == 0) {
                 unk118 -= 500.0;
             } else {
@@ -3923,7 +3923,7 @@ void CMizuka::UpdatePattern()
         unk58 = 0;
         unk158 = 0;
         if (frame == 0 && timer == 0) {
-            CPlayer::StopMoving();
+            StopMoving();
         }
         if (frame == 4 && timer == 0) {
             m_playVoice = 2;
@@ -3974,7 +3974,7 @@ void CMizuka::UpdatePattern()
             if (frame >= x8) {
                 pattern = 0;
                 StartPattern();
-                CPlayer::FaceOpponent();
+                FaceOpponent();
             }
         }
         break;
@@ -3982,7 +3982,7 @@ void CMizuka::UpdatePattern()
         unk58 = 0;
         unk158 = 0;
         if (frame == 0 && timer == 0) {
-            CPlayer::StopMoving();
+            StopMoving();
         }
         if (frame == 4 && timer == 0) {
             m_playVoice = 2;
@@ -4033,7 +4033,7 @@ void CMizuka::UpdatePattern()
             if (frame >= x8) {
                 pattern = 0;
                 StartPattern();
-                CPlayer::FaceOpponent();
+                FaceOpponent();
             }
         }
         break;
@@ -4041,7 +4041,7 @@ void CMizuka::UpdatePattern()
         unk58 = 0;
         unk158 = 0;
         if (frame == 0 && timer == 0) {
-            CPlayer::StopMoving();
+            StopMoving();
         }
         if (frame == 4 && timer == 0) {
             m_playVoice = 2;
@@ -4092,7 +4092,7 @@ void CMizuka::UpdatePattern()
             if (frame >= x8) {
                 pattern = 0;
                 StartPattern();
-                CPlayer::FaceOpponent();
+                FaceOpponent();
             }
         }
         break;
@@ -4100,7 +4100,7 @@ void CMizuka::UpdatePattern()
         unk58 = 0;
         unk158 = 0;
         if (frame == 0 && timer == 0) {
-            CPlayer::StopMoving();
+            StopMoving();
             m_hitsLeft = 1;
         }
         timer++;
@@ -4134,7 +4134,7 @@ void CMizuka::UpdatePattern()
         unk58 = 0;
         unk158 = 0;
         if (frame == 0 && timer == 0) {
-            CPlayer::StopMoving();
+            StopMoving();
             m_hitsLeft = 1;
         }
         timer++;
@@ -4168,7 +4168,7 @@ void CMizuka::UpdatePattern()
         unk58 = 0;
         unk158 = 0;
         if (frame == 0 && timer == 0) {
-            CPlayer::StopMoving();
+            StopMoving();
             m_hitsLeft = 1;
             if (unk120 == 0) {
                 unk118 -= 500.0;
@@ -4184,12 +4184,12 @@ void CMizuka::UpdatePattern()
             m_game->CreateEffect((EffectDesc*)&l50);
         }
         if (frame == 0 && timer == 0) {
-            CPlayer::StopMoving();
+            StopMoving();
             m_hitsLeft = 3;
         }
         if (frame == 5 && timer == 0 && unk3138 < 2) {
             l50.type = 0x1b5;
-            l50.x = (double)((int)x + -0x23 + (WORD)CPlayer::Random(0, 0x46));
+            l50.x = (double)((int)x + -0x23 + (WORD)Random(0, 0x46));
             l50.y = 0.0;
             l50.scale = 2;
             l50.layer = 1;
@@ -4283,7 +4283,7 @@ void CMizuka::UpdatePattern()
     case 0x108:
         unk58 = 0;
         if (frame == 0 && timer == 0) {
-            CPlayer::StartAfterimages(3);
+            StartAfterimages(3);
             vx = 0.0;
             vy = 0.0;
             if (unk120 == 0) {
@@ -4376,13 +4376,13 @@ void CMizuka::UpdatePattern()
         unk58 = 0;
         unk158 = 0;
         if (frame == 0 && timer == 0) {
-            CPlayer::StopMoving();
+            StopMoving();
         }
         if (frame == 3 && timer == 0) {
-            CPlayer::StopMoving();
+            StopMoving();
             unk14c = 0x78;
             m_gauge = m_gauge - 0x3e8;
-            CPlayer::FillBackground(0xb0, 3);
+            FillBackground(0xb0, 3);
             l50.type = 0x44;
             l50.unk2c = 0x13;
             l50.x = (double)((int)x - facing * 0xe);
@@ -4392,13 +4392,13 @@ void CMizuka::UpdatePattern()
             m_game->CreateEffect((EffectDesc*)&l50);
         }
         if (frame > 2) {
-            CPlayer::Unk410a80(0x32, 3);
+            Unk410a80(0x32, 3);
         }
         if (frame == 5 && timer == 0 && unk313c < 7) {
             l50.unk0 = 1;
             l50.type = unk3138 + 0x19b;
-            l50.x = (double)((int)x - ((WORD)CPlayer::Random(0, 0x14) + 0x154 + unk313c * 8) * facing);
-            l50.y = (double)(4 - (WORD)CPlayer::Random(0, 4));
+            l50.x = (double)((int)x - ((WORD)Random(0, 0x14) + 0x154 + unk313c * 8) * facing);
+            l50.y = (double)(4 - (WORD)Random(0, 4));
             l50.unk28 = 1;
             l50.unk18 = facing;
             l50.scale = 0;
@@ -4420,7 +4420,7 @@ void CMizuka::UpdatePattern()
             }
             if (frame >= x8) {
                 pattern = 0;
-                CPlayer::FaceOpponent();
+                FaceOpponent();
                 StartPattern();
             }
         }
@@ -4429,13 +4429,13 @@ void CMizuka::UpdatePattern()
         unk58 = 0;
         unk158 = 0;
         if (frame == 0 && timer == 0) {
-            CPlayer::StopMoving();
+            StopMoving();
         }
         if (frame == 3 && timer == 0) {
-            CPlayer::StopMoving();
+            StopMoving();
             unk14c = 0x78;
             m_gauge = m_gauge - 0x7d0;
-            CPlayer::FillBackground(0xb0, 3);
+            FillBackground(0xb0, 3);
             l50.type = 0x45;
             l50.unk2c = 5;
             l50.x = (double)((int)x - facing * 0xe);
@@ -4445,13 +4445,13 @@ void CMizuka::UpdatePattern()
             m_game->CreateEffect((EffectDesc*)&l50);
         }
         if (frame > 2) {
-            CPlayer::Unk410a80(0x32, 3);
+            Unk410a80(0x32, 3);
         }
         if (frame == 5 && timer == 0 && unk313c < 0x11) {
             l50.unk0 = 1;
             l50.type = unk3138 + 0x19b;
-            l50.x = (double)((int)x - ((WORD)CPlayer::Random(0, 0x14) + 0x154 + unk313c * 8) * facing);
-            l50.y = (double)(4 - (WORD)CPlayer::Random(0, 4));
+            l50.x = (double)((int)x - ((WORD)Random(0, 0x14) + 0x154 + unk313c * 8) * facing);
+            l50.y = (double)(4 - (WORD)Random(0, 4));
             l50.unk28 = 1;
             l50.unk18 = facing;
             l50.scale = 0;
@@ -4473,7 +4473,7 @@ void CMizuka::UpdatePattern()
             }
             if (frame >= x8) {
                 pattern = 0;
-                CPlayer::FaceOpponent();
+                FaceOpponent();
                 StartPattern();
             }
         }
@@ -4482,13 +4482,13 @@ void CMizuka::UpdatePattern()
         unk58 = 0;
         unk158 = 0;
         if (frame == 0 && timer == 0) {
-            CPlayer::StopMoving();
+            StopMoving();
         }
         if (frame == 3 && timer == 0) {
-            CPlayer::StopMoving();
+            StopMoving();
             unk14c = 0x78;
             m_gauge = m_gauge - 0xbb8;
-            CPlayer::FillBackground(0xb0, 3);
+            FillBackground(0xb0, 3);
             l50.type = 0x46;
             l50.unk2c = 0x40;
             l50.x = (double)((int)x - facing * 0xe);
@@ -4502,13 +4502,13 @@ void CMizuka::UpdatePattern()
             m_game->Unk4080c0(0xf);
         }
         if (frame > 2) {
-            CPlayer::Unk410a80(0x32, 3);
+            Unk410a80(0x32, 3);
         }
         if (frame == 5 && timer == 0 && unk313c < 0x23) {
             l50.unk0 = 1;
             l50.type = unk3138 + 0x19b;
-            l50.x = (double)((int)x - ((WORD)CPlayer::Random(0, 0x14) + 0x154 + unk313c * 8) * facing);
-            l50.y = (double)(4 - (WORD)CPlayer::Random(0, 4));
+            l50.x = (double)((int)x - ((WORD)Random(0, 0x14) + 0x154 + unk313c * 8) * facing);
+            l50.y = (double)(4 - (WORD)Random(0, 4));
             l50.unk28 = 1;
             l50.unk18 = facing;
             l50.scale = 0;
@@ -4530,7 +4530,7 @@ void CMizuka::UpdatePattern()
             }
             if (frame >= x8) {
                 pattern = 0;
-                CPlayer::FaceOpponent();
+                FaceOpponent();
                 StartPattern();
             }
         }
@@ -4546,7 +4546,7 @@ void CMizuka::UpdatePattern()
         if (frame == 7 && timer == 0) {
             unk14c = 0x78;
             m_gauge = m_gauge - 0x3e8;
-            CPlayer::FillBackground(0xb0, 3);
+            FillBackground(0xb0, 3);
             l50.type = 0x44;
             l50.unk2c = 0x13;
             l50.x = (double)(int)x;
@@ -4555,7 +4555,7 @@ void CMizuka::UpdatePattern()
             l50.unk0 = 1;
             l50.layer = 1;
             m_game->CreateEffect((EffectDesc*)&l50);
-            CPlayer::Unk410a80(0x32, 0x2d);
+            Unk410a80(0x32, 0x2d);
         }
         if (frame == 8 && timer == 0) {
             l50.type = 0x1b8;
@@ -4580,7 +4580,7 @@ void CMizuka::UpdatePattern()
             m_attackResult = 0;
             if (frame >= x8) {
                 pattern = 0;
-                CPlayer::FaceOpponent();
+                FaceOpponent();
                 StartPattern();
             }
         }
@@ -4596,7 +4596,7 @@ void CMizuka::UpdatePattern()
         if (frame == 7 && timer == 0) {
             unk14c = 0x78;
             m_gauge = m_gauge - 0x7d0;
-            CPlayer::FillBackground(0xb0, 3);
+            FillBackground(0xb0, 3);
             l50.type = 0x45;
             l50.unk2c = 5;
             l50.x = (double)(int)x;
@@ -4605,7 +4605,7 @@ void CMizuka::UpdatePattern()
             l50.unk0 = 1;
             l50.layer = 1;
             m_game->CreateEffect((EffectDesc*)&l50);
-            CPlayer::Unk410a80(0x32, 0x2d);
+            Unk410a80(0x32, 0x2d);
         }
         if (frame == 8 && timer == 0) {
             l50.type = 0x1b8;
@@ -4630,7 +4630,7 @@ void CMizuka::UpdatePattern()
             m_attackResult = 0;
             if (frame >= x8) {
                 pattern = 0;
-                CPlayer::FaceOpponent();
+                FaceOpponent();
                 StartPattern();
             }
         }
@@ -4646,7 +4646,7 @@ void CMizuka::UpdatePattern()
         if (frame == 7 && timer == 0) {
             unk14c = 0x78;
             m_gauge = m_gauge - 0xbb8;
-            CPlayer::FillBackground(0xb0, 3);
+            FillBackground(0xb0, 3);
             l50.type = 0x46;
             l50.unk2c = 0x40;
             l50.x = (double)(int)x;
@@ -4655,7 +4655,7 @@ void CMizuka::UpdatePattern()
             l50.unk0 = 1;
             l50.layer = 1;
             m_game->CreateEffect((EffectDesc*)&l50);
-            CPlayer::Unk410a80(0x32, 0x2d);
+            Unk410a80(0x32, 0x2d);
             m_playSound = 0x25;
         }
         if (frame > 6) {
@@ -4684,13 +4684,13 @@ void CMizuka::UpdatePattern()
             m_attackResult = 0;
             if (frame >= x8) {
                 pattern = 0;
-                CPlayer::FaceOpponent();
+                FaceOpponent();
                 StartPattern();
             }
         }
         break;
     case 0x132:
-        CPlayer::Unk410a80(0x32, 0xf);
+        Unk410a80(0x32, 0xf);
         if (frame == 1 && timer == 0) {
             unk3448 = 2;
             x = 230.0;
@@ -4731,13 +4731,13 @@ void CMizuka::UpdatePattern()
             if (frame >= x8) {
                 pattern = 0;
                 unk3448 = 0;
-                CPlayer::FaceOpponent();
+                FaceOpponent();
                 StartPattern();
             }
         }
         break;
     case 0x133:
-        CPlayer::Unk410a80(0x32, 0xf);
+        Unk410a80(0x32, 0xf);
         if (frame == 1 && timer == 0) {
             unk3448 = 2;
             x = 230.0;
@@ -4817,13 +4817,13 @@ void CMizuka::UpdatePattern()
             if (frame >= x8) {
                 pattern = 0;
                 unk3448 = 0;
-                CPlayer::FaceOpponent();
+                FaceOpponent();
                 StartPattern();
             }
         }
         break;
     case 0x134:
-        CPlayer::Unk410a80(0x32, 0xf);
+        Unk410a80(0x32, 0xf);
         m_game->Unk4080c0(0xf);
         if (frame == 1 && timer == 0) {
             unk3448 = 2;
@@ -4904,15 +4904,15 @@ void CMizuka::UpdatePattern()
             if (frame >= x8) {
                 pattern = 0;
                 unk3448 = 0;
-                CPlayer::FaceOpponent();
+                FaceOpponent();
                 StartPattern();
             }
         }
         break;
     case 0x135:
-        CPlayer::StartAfterimages(2);
+        StartAfterimages(2);
         if (frame < 6) {
-            CPlayer::Unk410a80(0x32, 3);
+            Unk410a80(0x32, 3);
         }
         if (frame < 0xe && (*m_opponent)->pattern == 0x63) {
             (*m_opponent)->StartPattern();
@@ -4922,10 +4922,10 @@ void CMizuka::UpdatePattern()
                 y = 0.0;
                 frame = 0xe;
                 timer = 0;
-                CPlayer::StopMoving();
-                CPlayer::ShakeScreen(0xf, 0xa);
+                StopMoving();
+                ShakeScreen(0xf, 0xa);
                 m_playSound = 0x16;
-                CPlayer::DealDamage(0x320, 900.0);
+                DealDamage(0x320, 900.0);
                 (*m_opponent)->StartPattern();
                 (*m_opponent)->pattern = 0x62;
                 l50.type = 0x190;
@@ -4966,7 +4966,7 @@ void CMizuka::UpdatePattern()
                 (*m_opponent)->StartPattern();
                 (*m_opponent)->pattern = 0x61;
                 (*m_opponent)->unk12c = 1;
-                CPlayer::DealDamage(0x12c, 980.0);
+                DealDamage(0x12c, 980.0);
                 if ((*m_opponent)->m_hp <= 0) {
                     (*m_opponent)->m_hp = 1;
                 }
@@ -4983,7 +4983,7 @@ void CMizuka::UpdatePattern()
             m_attackResult = 0;
             if (frame >= x8) {
                 pattern = 0;
-                CPlayer::FaceOpponent();
+                FaceOpponent();
                 StartPattern();
             }
         }
@@ -4993,10 +4993,10 @@ void CMizuka::UpdatePattern()
             (*m_opponent)->StartPattern();
         }
         if (frame == 1 && timer == 0) {
-            CPlayer::StopMoving();
+            StopMoving();
             unk14c = 0x78;
             m_gauge = m_gauge - 0xbb8;
-            CPlayer::FillBackground(0xb0, 3);
+            FillBackground(0xb0, 3);
             l50.type = 9;
             l50.unk2c = 5;
             l50.x = (double)((int)x + facing * 0x17);
@@ -5005,14 +5005,14 @@ void CMizuka::UpdatePattern()
             l50.unk0 = 1;
             l50.layer = 1;
             m_game->CreateEffect((EffectDesc*)&l50);
-            CPlayer::Unk410a80(0x32, 0x2d);
+            Unk410a80(0x32, 0x2d);
         }
         if (frame < 7) {
-            CPlayer::Unk410a80(0x32, 0x2d);
+            Unk410a80(0x32, 0x2d);
             (*m_opponent)->unk14a = 3;
         }
         if (frame == 7) {
-            CPlayer::Unk410a80(0, 0);
+            Unk410a80(0, 0);
         }
         timer++;
         if (timer >= l4) {
@@ -5073,7 +5073,7 @@ void CMizuka::UpdatePattern()
                 (*m_opponent)->unkc0 = 0.0;
                 (*m_opponent)->unkc8 = -5.0;
                 (*m_opponent)->ay = 0.035;
-                CPlayer::DealDamage(0xdac, 700.0);
+                DealDamage(0xdac, 700.0);
                 (*m_opponent)->unk124 = 0xb4;
             }
             if (frame == 7 && unk3138 < 0xb) {
@@ -5083,7 +5083,7 @@ void CMizuka::UpdatePattern()
             if (frame >= x8) {
                 pattern = 0;
                 StartPattern();
-                CPlayer::FaceOpponent();
+                FaceOpponent();
             }
         }
         break;
@@ -5092,11 +5092,11 @@ void CMizuka::UpdatePattern()
             (*m_opponent)->StartPattern();
         }
         if (frame < 7) {
-            CPlayer::Unk410a80(0x32, 0x2d);
+            Unk410a80(0x32, 0x2d);
             (*m_opponent)->unk14a = 3;
         }
         if (frame == 7) {
-            CPlayer::Unk410a80(0, 0);
+            Unk410a80(0, 0);
         }
         timer++;
         if (timer >= l4) {
@@ -5157,7 +5157,7 @@ void CMizuka::UpdatePattern()
                 (*m_opponent)->pattern = 0x3f;
                 (*m_opponent)->unkc0 = 0.2;
                 (*m_opponent)->unkc8 = -1.9;
-                CPlayer::DealDamage(0x3e8, 1000.0);
+                DealDamage(0x3e8, 1000.0);
                 m_hitsLeft = 1;
             }
             if (frame == 7 && unk3138 < 9) {
@@ -5181,12 +5181,12 @@ void CMizuka::UpdatePattern()
                 l50.unk0 = 1;
                 l50.layer = 1;
                 SpawnObject(&l50);
-                CPlayer::ShakeScreen(0xa, 0x3c);
+                ShakeScreen(0xa, 0x3c);
             }
             if (frame >= x8) {
                 pattern = 0;
                 StartPattern();
-                CPlayer::FaceOpponent();
+                FaceOpponent();
             }
         }
         break;
@@ -5198,9 +5198,9 @@ void CMizuka::UpdatePattern()
             m_hitsLeft = 2;
         }
         if (frame == 6 && timer == 0) {
-            CPlayer::Unk410a80(0x32, 0x2d);
+            Unk410a80(0x32, 0x2d);
             unk14c = 0x78;
-            CPlayer::FillBackground(0xb0, 3);
+            FillBackground(0xb0, 3);
             l50.type = 9;
             l50.unk2c = 5;
             l50.x = (double)((int)x + facing * 0x17);
@@ -5247,11 +5247,11 @@ void CMizuka::UpdatePattern()
             SpawnObject(&l50);
         }
         if (frame == 2 && m_attackResult == 3) {
-            CPlayer::ShakeScreen(6, 0x3c);
+            ShakeScreen(6, 0x3c);
             (*m_opponent)->unk14a = 0x1f4;
         }
         if (frame == 0xa && timer == 0) {
-            CPlayer::ShakeScreen(0xa, 0x3c);
+            ShakeScreen(0xa, 0x3c);
         }
         timer++;
         if (timer >= l4) {
@@ -5271,13 +5271,13 @@ void CMizuka::UpdatePattern()
         break;
     case 0x139:
         if (frame == 0 && timer == 0) {
-            CPlayer::StopMoving();
+            StopMoving();
             if (frame == 1 && timer == 0) {
                 m_gauge = m_gauge - 0xbb8;
             }
-            CPlayer::Unk410a80(0x32, 0x2d);
+            Unk410a80(0x32, 0x2d);
             unk14c = 0x78;
-            CPlayer::FillBackground(0xb0, 3);
+            FillBackground(0xb0, 3);
             l50.type = 9;
             l50.unk2c = 5;
             l50.x = (double)((int)x + facing * 0x17);
@@ -5310,7 +5310,7 @@ void CMizuka::UpdatePattern()
             }
             if (frame >= x8) {
                 pattern = 0;
-                CPlayer::FaceOpponent();
+                FaceOpponent();
                 StartPattern();
             }
         }
@@ -5319,13 +5319,13 @@ void CMizuka::UpdatePattern()
         unk58 = 0;
         unk158 = 0;
         if (frame == 0 && timer == 0) {
-            CPlayer::StopMoving();
+            StopMoving();
         }
         if (frame == 1 && timer == 0) {
-            CPlayer::StopMoving();
+            StopMoving();
             unk14c = 0x78;
             m_gauge = m_gauge - 0xbb8;
-            CPlayer::FillBackground(0xb0, 3);
+            FillBackground(0xb0, 3);
             l50.type = 0x46;
             l50.unk2c = 0x40;
             l50.x = (double)((int)x - facing * 0x17);
@@ -5344,7 +5344,7 @@ void CMizuka::UpdatePattern()
             m_game->Unk4080c0(0xf);
         }
         if (frame > 0) {
-            CPlayer::Unk410a80(0x32, 3);
+            Unk410a80(0x32, 3);
         }
         if (frame > 2 && frame < 8) {
             vy = vy + ay;
@@ -5352,7 +5352,7 @@ void CMizuka::UpdatePattern()
                 timer = 0;
                 frame = 9;
                 y = 0.0;
-                CPlayer::StopMoving();
+                StopMoving();
                 break;
             }
         }
@@ -5378,7 +5378,7 @@ void CMizuka::UpdatePattern()
             }
             if (frame >= x8) {
                 pattern = 0;
-                CPlayer::FaceOpponent();
+                FaceOpponent();
                 StartPattern();
             }
         }
@@ -5389,17 +5389,17 @@ void CMizuka::UpdatePattern()
             (*m_opponent)->timer = 0;
         }
         if (frame < 2) {
-            CPlayer::FillBackground(0xb0, 3);
+            FillBackground(0xb0, 3);
         }
         if (frame < 2) {
-            CPlayer::Unk410a80(0x32, 3);
+            Unk410a80(0x32, 3);
         }
         if (frame < 2) {
-            CPlayer::Unk410a40(0x32, 3);
+            Unk410a40(0x32, 3);
         }
         if (frame == 0 && timer == 0) {
             x = 320.0;
-            CPlayer::StopMoving();
+            StopMoving();
             l50.type = 0x1b2;
             l50.screen = 1;
             l50.x = 0.0;
@@ -5549,7 +5549,7 @@ void CMizuka::UpdatePattern()
             vy += 0.035;
             if (vy + y > 0.0) {
                 StartPattern();
-                CPlayer::StopMoving();
+                StopMoving();
                 pattern = 0xd;
                 y = 0.0;
                 break;
@@ -5569,13 +5569,13 @@ void CMizuka::UpdatePattern()
         unk58 = 0;
         unk158 = 0;
         if (frame == 0 && timer == 0) {
-            CPlayer::StopMoving();
+            StopMoving();
         }
         if (frame == 4 && timer == 0 && unk3138 == 0) {
-            CPlayer::StopMoving();
+            StopMoving();
             unk14c = 0x78;
             m_gauge = m_gauge - 0xbb8;
-            CPlayer::FillBackground(0xb0, 3);
+            FillBackground(0xb0, 3);
             l50.type = 0x46;
             l50.unk2c = 0x40;
             l50.x = (double)((int)x - facing * 0xe);
@@ -5592,7 +5592,7 @@ void CMizuka::UpdatePattern()
         if (frame > 3) {
             m_game->Unk4080c0(0xf);
         }
-        CPlayer::Unk410a80(0x32, 3);
+        Unk410a80(0x32, 3);
         if (frame == 9 && timer == 0) {
             l50.unk0 = 1;
             l50.type = 0x1c4;
@@ -5614,7 +5614,7 @@ void CMizuka::UpdatePattern()
             }
             if (frame >= x8) {
                 pattern = 0;
-                CPlayer::FaceOpponent();
+                FaceOpponent();
                 StartPattern();
             }
         }

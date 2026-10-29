@@ -17,7 +17,7 @@ void CMisuzu::UpdatePattern()
     EffectDesc l50;
     l4 = (short)anims[pattern].frames[frame].duration;
     x8 = anims[pattern].frameCount;
-    CPlayer::InitEffectDesc((EffectDesc*)&l50);
+    InitEffectDesc((EffectDesc*)&l50);
     switch (pattern) {
     default:
         vx = 0.0;
@@ -58,7 +58,7 @@ void CMisuzu::UpdatePattern()
     case 3:
         vx = 0.0;
         vy = 0.0;
-        CPlayer::FaceOpponent();
+        FaceOpponent();
         timer++;
         if (timer >= l4) {
             timer = 0;
@@ -70,7 +70,7 @@ void CMisuzu::UpdatePattern()
         break;
     case 4:
         if (frame == 0 && timer == 0) {
-            CPlayer::FaceOpponent();
+            FaceOpponent();
             vx = 0.0;
         }
         if (frame == 2 && timer == 0) {
@@ -92,14 +92,14 @@ void CMisuzu::UpdatePattern()
         if (y + vy >= 0.0 && frame > 2) {
             y = 0.0;
             m_playSound = 9;
-            CPlayer::FaceOpponent();
+            FaceOpponent();
             pattern = 0xd;
             StartPattern();
         }
         break;
     case 5:
         if (frame == 0 && timer == 0) {
-            CPlayer::FaceOpponent();
+            FaceOpponent();
             vx = 0.0;
         }
         if (frame == 2 && timer == 0) {
@@ -122,14 +122,14 @@ void CMisuzu::UpdatePattern()
         if (y + vy >= 0.0 && frame > 2) {
             y = 0.0;
             m_playSound = 9;
-            CPlayer::FaceOpponent();
+            FaceOpponent();
             pattern = 0xd;
             StartPattern();
         }
         break;
     case 6:
         if (frame == 0 && timer == 0) {
-            CPlayer::FaceOpponent();
+            FaceOpponent();
             vx = 0.0;
         }
         if (frame == 2 && timer == 0) {
@@ -152,7 +152,7 @@ void CMisuzu::UpdatePattern()
         if (y + vy >= 0.0 && frame > 2) {
             y = 0.0;
             m_playSound = 9;
-            CPlayer::FaceOpponent();
+            FaceOpponent();
             pattern = 0xd;
             StartPattern();
         }
@@ -160,7 +160,7 @@ void CMisuzu::UpdatePattern()
     case 7:
         vx = 0.0;
         vy = 0.0;
-        CPlayer::FaceOpponent();
+        FaceOpponent();
         timer++;
         if (timer >= l4) {
             timer = 0;
@@ -174,7 +174,7 @@ void CMisuzu::UpdatePattern()
     case 8:
         vx = 0.0;
         vy = 0.0;
-        CPlayer::FaceOpponent();
+        FaceOpponent();
         timer++;
         if (timer >= l4) {
             timer = 0;
@@ -197,16 +197,16 @@ void CMisuzu::UpdatePattern()
         }
         if (y + vy >= 0.0) {
             y = 0.0;
-            CPlayer::StopMoving();
+            StopMoving();
             m_playSound = 9;
             pattern = 0xd;
             StartPattern();
         }
         break;
     case 0xd:
-        CPlayer::StopMoving();
+        StopMoving();
         y = 0.0;
-        CPlayer::FaceOpponent();
+        FaceOpponent();
         timer++;
         if (timer >= l4) {
             timer = 0;
@@ -239,7 +239,7 @@ void CMisuzu::UpdatePattern()
         if (y + vy >= 0.0 && frame > 3) {
             y = 0.0;
             m_playSound = 9;
-            CPlayer::FaceOpponent();
+            FaceOpponent();
             pattern = 0xd;
             StartPattern();
         }
@@ -263,7 +263,7 @@ void CMisuzu::UpdatePattern()
         if (y + vy >= 0.0 && frame > 3) {
             y = 0.0;
             m_playSound = 9;
-            CPlayer::FaceOpponent();
+            FaceOpponent();
             pattern = 0xd;
             StartPattern();
         }
@@ -287,7 +287,7 @@ void CMisuzu::UpdatePattern()
         if (y + vy >= 0.0 && frame > 3) {
             y = 0.0;
             m_playSound = 9;
-            CPlayer::FaceOpponent();
+            FaceOpponent();
             pattern = 0xd;
             StartPattern();
         }
@@ -834,7 +834,7 @@ void CMisuzu::UpdatePattern()
         if (unk120 != 0) {
             unk118 -= 0.8;
         }
-        if (frame > 0 && (char)CPlayer::Unk40ff70() != 0) {
+        if (frame > 0 && (char)Unk40ff70() != 0) {
             pattern = 0x46;
             StartPattern();
             break;
@@ -882,7 +882,7 @@ void CMisuzu::UpdatePattern()
         if (unk120 != 0) {
             unk118 -= 0.8;
         }
-        if (frame > 0 && (char)CPlayer::Unk40ff70() != 0) {
+        if (frame > 0 && (char)Unk40ff70() != 0) {
             pattern = 0x46;
             StartPattern();
             break;
@@ -930,7 +930,7 @@ void CMisuzu::UpdatePattern()
         if (unk120 != 0) {
             unk118 -= 0.8;
         }
-        if (frame > 0 && (char)CPlayer::Unk40ff70() != 0) {
+        if (frame > 0 && (char)Unk40ff70() != 0) {
             pattern = 0x46;
             StartPattern();
             break;
@@ -973,7 +973,7 @@ void CMisuzu::UpdatePattern()
         if (unk120 != 0) {
             unk118 -= 0.8;
         }
-        if (frame > 0 && (char)CPlayer::Unk40ff70() != 0) {
+        if (frame > 0 && (char)Unk40ff70() != 0) {
             pattern = 0x46;
             StartPattern();
             break;
@@ -1020,7 +1020,7 @@ void CMisuzu::UpdatePattern()
         vx = unkc0;
         vy = unkc8;
         timer++;
-        if ((char)CPlayer::Unk40ff70() != 0) {
+        if ((char)Unk40ff70() != 0) {
             pattern = 0x46;
             StartPattern();
             break;
@@ -1457,7 +1457,7 @@ void CMisuzu::UpdatePattern()
             if (frame >= x8) {
                 pattern = 0;
                 StartPattern();
-                CPlayer::FaceOpponent();
+                FaceOpponent();
             }
         }
         break;
@@ -1509,7 +1509,7 @@ void CMisuzu::UpdatePattern()
             if (frame >= x8) {
                 pattern = 0;
                 StartPattern();
-                CPlayer::FaceOpponent();
+                FaceOpponent();
             }
         }
         break;
@@ -1542,7 +1542,7 @@ void CMisuzu::UpdatePattern()
             if (frame >= x8) {
                 pattern = 0;
                 StartPattern();
-                CPlayer::FaceOpponent();
+                FaceOpponent();
             }
         }
         if (y + vy >= 0.0) {
@@ -1627,7 +1627,7 @@ void CMisuzu::UpdatePattern()
             timer = 0;
             frame++;
             if (frame == x8 - 1) {
-                CPlayer::FaceOpponent();
+                FaceOpponent();
             }
             if (frame >= x8) {
                 pattern = 0;
@@ -1642,7 +1642,7 @@ void CMisuzu::UpdatePattern()
         vx = 0.0;
         vy = 0.0;
         if (frame == 0 && timer == 0) {
-            CPlayer::ShakeScreen(3, 0);
+            ShakeScreen(3, 0);
             l50.type = 3;
             l50.x = (double)(int)x;
             l50.y = (double)(int)y;
@@ -1665,7 +1665,7 @@ void CMisuzu::UpdatePattern()
         vx = 0.0;
         vy = 0.0;
         if (frame == 0 && timer == 0) {
-            CPlayer::ShakeScreen(3, 0);
+            ShakeScreen(3, 0);
             l50.type = 3;
             l50.x = (double)(int)x;
             l50.y = (double)(int)y;
@@ -1694,7 +1694,7 @@ void CMisuzu::UpdatePattern()
             timer = 0;
             frame++;
             if (frame == x8) {
-                CPlayer::FaceOpponent();
+                FaceOpponent();
             }
             if (frame >= x8) {
                 pattern = 0x60;
@@ -1736,7 +1736,7 @@ void CMisuzu::UpdatePattern()
             timer = 0;
             frame++;
             if (frame == x8) {
-                CPlayer::FaceOpponent();
+                FaceOpponent();
             }
             if (frame >= x8) {
                 pattern = 0;
@@ -1775,7 +1775,7 @@ void CMisuzu::UpdatePattern()
             timer = 0;
             frame++;
             if (frame == x8) {
-                CPlayer::FaceOpponent();
+                FaceOpponent();
             }
             if (frame >= x8) {
                 pattern = 0;
@@ -1814,7 +1814,7 @@ void CMisuzu::UpdatePattern()
             timer = 0;
             frame++;
             if (frame == x8) {
-                CPlayer::FaceOpponent();
+                FaceOpponent();
             }
             if (frame >= x8) {
                 pattern = 0;
@@ -1853,7 +1853,7 @@ void CMisuzu::UpdatePattern()
             timer = 0;
             frame++;
             if (frame == x8) {
-                CPlayer::FaceOpponent();
+                FaceOpponent();
             }
             if (frame >= x8) {
                 pattern = 3;
@@ -1889,7 +1889,7 @@ void CMisuzu::UpdatePattern()
             timer = 0;
             frame++;
             if (frame == x8) {
-                CPlayer::FaceOpponent();
+                FaceOpponent();
             }
             if (frame >= x8) {
                 pattern = 3;
@@ -1925,7 +1925,7 @@ void CMisuzu::UpdatePattern()
             timer = 0;
             frame++;
             if (frame == x8) {
-                CPlayer::FaceOpponent();
+                FaceOpponent();
             }
             if (frame >= x8) {
                 pattern = 3;
@@ -1953,7 +1953,7 @@ void CMisuzu::UpdatePattern()
         if (y + vy >= 0.0) {
             y = 0.0;
             m_playSound = 9;
-            CPlayer::FaceOpponent();
+            FaceOpponent();
             pattern = 0xd;
             StartPattern();
         }
@@ -1984,7 +1984,7 @@ void CMisuzu::UpdatePattern()
         if (y + vy >= 0.0) {
             y = 0.0;
             m_playSound = 9;
-            CPlayer::FaceOpponent();
+            FaceOpponent();
             pattern = 0xd;
             StartPattern();
         }
@@ -2015,14 +2015,14 @@ void CMisuzu::UpdatePattern()
         if (y + vy >= 0.0) {
             y = 0.0;
             m_playSound = 9;
-            CPlayer::FaceOpponent();
+            FaceOpponent();
             pattern = 0xd;
             StartPattern();
         }
         break;
     case 0xa1:
         if (frame == 0 && timer == 0) {
-            CPlayer::StopMoving();
+            StopMoving();
             l50.type = 9;
             l50.x = (double)(int)x;
             l50.y = (double)((int)y - 0x46);
@@ -2046,7 +2046,7 @@ void CMisuzu::UpdatePattern()
         break;
     case 0xa2:
         if (frame == 0 && timer == 0) {
-            CPlayer::StopMoving();
+            StopMoving();
         }
         if (frame == 2 && timer == 0) {
             vy = -1.5;
@@ -2054,7 +2054,7 @@ void CMisuzu::UpdatePattern()
             m_hitsLeft = 1;
         }
         if (frame == 7 && timer == 0) {
-            CPlayer::StopMoving();
+            StopMoving();
             l50.type = 9;
             l50.x = (double)(int)x;
             l50.y = (double)((int)y - 0x46);
@@ -2088,7 +2088,7 @@ void CMisuzu::UpdatePattern()
         break;
     case 0xa3:
         if (frame == 0 && timer == 0) {
-            CPlayer::StartAfterimages(3);
+            StartAfterimages(3);
         }
         if (frame == 0 && timer == 0) {
             vx = 0.0;
@@ -2137,7 +2137,7 @@ void CMisuzu::UpdatePattern()
             vx = 0.0;
             vy = 0.0;
             ay = 0.0;
-            CPlayer::StartAfterimages(2);
+            StartAfterimages(2);
         }
         if (frame == 3 && timer == 0 && y == 0.0) {
             vx = -1.8;
@@ -2196,7 +2196,7 @@ void CMisuzu::UpdatePattern()
             StartPattern();
             vx = 1.3;
             ay = 0.03;
-            if (CPlayer::FaceOpponent() != 0) {
+            if (FaceOpponent() != 0) {
                 vx = -vx;
             }
         }
@@ -2205,7 +2205,7 @@ void CMisuzu::UpdatePattern()
             StartPattern();
             vx = 1.3;
             ay = 0.03;
-            if (CPlayer::FaceOpponent() != 0) {
+            if (FaceOpponent() != 0) {
                 vx = -vx;
             }
         }
@@ -2233,7 +2233,7 @@ void CMisuzu::UpdatePattern()
             StartPattern();
             vx = -0.9;
             ay = 0.03;
-            if (CPlayer::FaceOpponent() != 0) {
+            if (FaceOpponent() != 0) {
                 vx = -vx;
             }
         }
@@ -2242,7 +2242,7 @@ void CMisuzu::UpdatePattern()
             StartPattern();
             vx = -0.9;
             ay = 0.03;
-            if (CPlayer::FaceOpponent() != 0) {
+            if (FaceOpponent() != 0) {
                 vx = -vx;
             }
         }
@@ -2256,7 +2256,7 @@ void CMisuzu::UpdatePattern()
             }
             unk118 = 0.0;
             unk14c = 0x5a;
-            CPlayer::FillBackground(0xb0, 3);
+            FillBackground(0xb0, 3);
         }
         if (frame == 1 && timer == 0) {
             m_playSound = 0x12;
@@ -2282,7 +2282,7 @@ void CMisuzu::UpdatePattern()
             m_attackResult = 0;
             if (frame >= x8) {
                 pattern = 0;
-                CPlayer::FaceOpponent();
+                FaceOpponent();
                 StartPattern();
             }
         }
@@ -2308,7 +2308,7 @@ void CMisuzu::UpdatePattern()
             timer = 0;
             frame++;
             if (frame == x8) {
-                CPlayer::FaceOpponent();
+                FaceOpponent();
             }
             if (frame >= x8) {
                 pattern = 0;
@@ -2337,7 +2337,7 @@ void CMisuzu::UpdatePattern()
             timer = 0;
             frame++;
             if (frame == x8) {
-                CPlayer::FaceOpponent();
+                FaceOpponent();
             }
             if (frame >= x8) {
                 pattern = 3;
@@ -2367,7 +2367,7 @@ void CMisuzu::UpdatePattern()
             vy = vy + ay;
         }
         if (vy + y > 0.0) {
-            CPlayer::StopMoving();
+            StopMoving();
             y = 0.0;
             pattern = 0xa9;
             break;
@@ -2393,7 +2393,7 @@ void CMisuzu::UpdatePattern()
             }
             unk118 = 0.0;
             unk14c = 0x5a;
-            CPlayer::FillBackground(0xb0, 3);
+            FillBackground(0xb0, 3);
         }
         if (frame == 0 && timer == 0) {
             m_playSound = 0x12;
@@ -2420,7 +2420,7 @@ void CMisuzu::UpdatePattern()
         break;
     case 0xb4:
         if (frame == 0 && timer == 0) {
-            CPlayer::StartAfterimages(2);
+            StartAfterimages(2);
             vx = 0.0;
             vy = 0.0;
             ay = 0.0;
@@ -2429,7 +2429,7 @@ void CMisuzu::UpdatePattern()
             vy = vy + ay;
         }
         if (y + vy > 0.0 && frame < 5) {
-            CPlayer::StopMoving();
+            StopMoving();
             y = 0.0;
             timer = 0;
             frame = 5;
@@ -2482,7 +2482,7 @@ void CMisuzu::UpdatePattern()
             }
             if (frame >= x8) {
                 pattern = 0;
-                CPlayer::FaceOpponent();
+                FaceOpponent();
                 StartPattern();
             }
         }
@@ -2527,7 +2527,7 @@ void CMisuzu::UpdatePattern()
             }
             if (frame >= x8) {
                 pattern = 0;
-                CPlayer::FaceOpponent();
+                FaceOpponent();
                 StartPattern();
             }
         }
@@ -2563,7 +2563,7 @@ void CMisuzu::UpdatePattern()
             }
             if (frame >= x8) {
                 pattern = 0;
-                CPlayer::FaceOpponent();
+                FaceOpponent();
                 StartPattern();
             }
         }
@@ -2587,7 +2587,7 @@ void CMisuzu::UpdatePattern()
             }
             if (frame >= x8) {
                 pattern = 0;
-                CPlayer::FaceOpponent();
+                FaceOpponent();
                 StartPattern();
             }
         }
@@ -2624,7 +2624,7 @@ void CMisuzu::UpdatePattern()
                 if (m_inputY == 1) {
                     pattern = 3;
                 }
-                CPlayer::FaceOpponent();
+                FaceOpponent();
                 StartPattern();
             }
         }
@@ -2661,7 +2661,7 @@ void CMisuzu::UpdatePattern()
                 if (m_inputY == 1) {
                     pattern = 3;
                 }
-                CPlayer::FaceOpponent();
+                FaceOpponent();
                 StartPattern();
             }
         }
@@ -2695,7 +2695,7 @@ void CMisuzu::UpdatePattern()
                 if (m_inputY == 1) {
                     pattern = 3;
                 }
-                CPlayer::FaceOpponent();
+                FaceOpponent();
                 StartPattern();
             }
         }
@@ -2860,7 +2860,7 @@ void CMisuzu::UpdatePattern()
             }
             if (frame >= x8) {
                 pattern = 0;
-                CPlayer::FaceOpponent();
+                FaceOpponent();
                 StartPattern();
             }
         }
@@ -2878,7 +2878,7 @@ void CMisuzu::UpdatePattern()
         if (y < 0.0) {
             vy += 0.055;
             if (y + vy > 0.0) {
-                CPlayer::StopMoving();
+                StopMoving();
                 y = 0.0;
                 timer = 0;
                 frame = 8;
@@ -2898,7 +2898,7 @@ void CMisuzu::UpdatePattern()
             }
             if (frame >= x8) {
                 pattern = 0;
-                CPlayer::FaceOpponent();
+                FaceOpponent();
                 StartPattern();
             }
         }
@@ -2915,14 +2915,14 @@ void CMisuzu::UpdatePattern()
         if (m_attackResult > 1) {
             pattern = 0xd5;
             StartPattern();
-            CPlayer::StopMoving();
+            StopMoving();
             break;
         }
         if (y + vy >= 0.0) {
             y = 0.0;
-            CPlayer::StopMoving();
+            StopMoving();
             vy = 0.0;
-            CPlayer::ShakeScreen(3, 0);
+            ShakeScreen(3, 0);
             l50.type = 3;
             l50.x = (double)(int)x;
             l50.y = (double)(int)y;
@@ -2967,7 +2967,7 @@ void CMisuzu::UpdatePattern()
         vx = 0.0;
         vy = 0.0;
         if (frame == 0 && timer == 0) {
-            CPlayer::ShakeScreen(3, 0);
+            ShakeScreen(3, 0);
             l50.type = 3;
             l50.x = (double)(int)x;
             l50.y = (double)(int)y;
@@ -2986,7 +2986,7 @@ void CMisuzu::UpdatePattern()
                 if (m_inputY == 1) {
                     pattern = 3;
                 }
-                CPlayer::FaceOpponent();
+                FaceOpponent();
                 StartPattern();
             }
         }
@@ -3026,13 +3026,13 @@ void CMisuzu::UpdatePattern()
                 if (m_inputY == 1) {
                     pattern = 3;
                 }
-                CPlayer::FaceOpponent();
+                FaceOpponent();
                 StartPattern();
             }
         }
         break;
     case 0xdd:
-        CPlayer::Unk410a80(0x32, 0xa);
+        Unk410a80(0x32, 0xa);
         if (frame == 0 && timer == 0) {
             (*m_opponent)->pattern = 0x64;
             (*m_opponent)->StopMoving();
@@ -3049,7 +3049,7 @@ void CMisuzu::UpdatePattern()
             (*m_opponent)->y = -59.0;
             (*m_opponent)->x = facing * 0xf + x;
             (*m_opponent)->unk128 = 1;
-            CPlayer::DealDamage(0x4b0, 750.0);
+            DealDamage(0x4b0, 750.0);
             m_comboHits--;
             m_shownHits--;
             (*m_opponent)->facing = -facing;
@@ -3081,7 +3081,7 @@ void CMisuzu::UpdatePattern()
             }
             if (frame >= x8) {
                 pattern = 0;
-                CPlayer::FaceOpponent();
+                FaceOpponent();
                 StartPattern();
             }
         }
@@ -3176,7 +3176,7 @@ void CMisuzu::UpdatePattern()
             (*m_opponent)->StopMoving();
             (*m_opponent)->StartPattern();
             StartPattern();
-            CPlayer::StopMoving();
+            StopMoving();
             pattern = 0xf9;
             (*m_opponent)->pattern = 0x64;
             l50.type = 0;
@@ -3206,17 +3206,17 @@ void CMisuzu::UpdatePattern()
         break;
     case 0xf9:
         if (frame < 4) {
-            CPlayer::Unk410a40(0x32, 3);
+            Unk410a40(0x32, 3);
         }
         if (frame < 4) {
-            CPlayer::Unk410a80(0x32, 3);
+            Unk410a80(0x32, 3);
         }
         if (frame == 0 && timer == 1) {
             (*m_opponent)->facing = -facing;
         }
         vy = vy + ay;
         if (vy + y > 0.0 && frame > 5) {
-            CPlayer::StopMoving();
+            StopMoving();
             y = 0.0;
             StartPattern();
             pattern = 0xd;
@@ -3240,7 +3240,7 @@ void CMisuzu::UpdatePattern()
             (*m_opponent)->y = y - 39.0;
             (*m_opponent)->x = x - facing * 0x21;
             (*m_opponent)->pattern = 0x3f;
-            CPlayer::DealDamage(0x4b0, 500.0);
+            DealDamage(0x4b0, 500.0);
             (*m_opponent)->StartPattern();
             (*m_opponent)->unkc0 = -2.0;
             (*m_opponent)->unkc8 = 0.0;
@@ -3263,7 +3263,7 @@ void CMisuzu::UpdatePattern()
         break;
     case 0xfa:
         if (frame == 0 && timer == 0) {
-            CPlayer::StopMoving();
+            StopMoving();
         }
         if (frame == 3 && timer == 0) {
             m_gauge = m_gauge + 0xf;
@@ -3288,7 +3288,7 @@ void CMisuzu::UpdatePattern()
         break;
     case 0xfb:
         if (frame == 0 && timer == 0) {
-            CPlayer::StopMoving();
+            StopMoving();
         }
         if (frame == 3 && timer == 0) {
             m_gauge = m_gauge + 0xf;
@@ -3314,7 +3314,7 @@ void CMisuzu::UpdatePattern()
     case 0xfc:
         if (frame == 0 && timer == 0) {
             if (y == 0.0) {
-                CPlayer::StopMoving();
+                StopMoving();
             }
             if (unk120 == 0) {
                 unk118 -= 500.0;
@@ -3330,7 +3330,7 @@ void CMisuzu::UpdatePattern()
             m_game->CreateEffect((EffectDesc*)&l50);
         }
         if (frame == 0 && timer == 0) {
-            CPlayer::StopMoving();
+            StopMoving();
         }
         if (frame == 3 && timer == 0) {
             m_gauge = m_gauge + 0xf;
@@ -3355,7 +3355,7 @@ void CMisuzu::UpdatePattern()
         break;
     case 0xfd:
         if (frame == 0 && timer == 0) {
-            CPlayer::StopMoving();
+            StopMoving();
         }
         timer++;
         if (timer >= l4) {
@@ -3383,7 +3383,7 @@ void CMisuzu::UpdatePattern()
         break;
     case 0xfe:
         if (frame == 0 && timer == 0) {
-            CPlayer::StopMoving();
+            StopMoving();
         }
         timer++;
         if (timer >= l4) {
@@ -3412,7 +3412,7 @@ void CMisuzu::UpdatePattern()
     case 0xff:
         if (frame == 0 && timer == 0) {
             if (y == 0.0) {
-                CPlayer::StopMoving();
+                StopMoving();
             }
             if (unk120 == 0) {
                 unk118 -= 500.0;
@@ -3453,7 +3453,7 @@ void CMisuzu::UpdatePattern()
         break;
     case 0x100:
         if (frame == 0 && timer == 0) {
-            CPlayer::StopMoving();
+            StopMoving();
         }
         if (frame == 5 && timer == 0) {
             m_gauge = m_gauge + 0xf;
@@ -3471,7 +3471,7 @@ void CMisuzu::UpdatePattern()
         break;
     case 0x101:
         if (frame == 0 && timer == 0) {
-            CPlayer::StopMoving();
+            StopMoving();
         }
         if (frame == 5 && timer == 0) {
             m_gauge = m_gauge + 0xf;
@@ -3490,7 +3490,7 @@ void CMisuzu::UpdatePattern()
     case 0x102:
         if (frame == 0 && timer == 0) {
             if (y == 0.0) {
-                CPlayer::StopMoving();
+                StopMoving();
             }
             if (unk120 == 0) {
                 unk118 -= 500.0;
@@ -3622,7 +3622,7 @@ void CMisuzu::UpdatePattern()
             }
         }
         if (frame == 0 && timer == 0) {
-            CPlayer::StopMoving();
+            StopMoving();
             m_hitsLeft = 1;
             if (unk120 == 0) {
                 unk118 -= 500.0;
@@ -3761,7 +3761,7 @@ void CMisuzu::UpdatePattern()
             vy = 0.0;
         }
         if (frame == 0 && timer == 0) {
-            CPlayer::StopMoving();
+            StopMoving();
             m_hitsLeft = 1;
             if (unk120 == 0) {
                 unk118 -= 500.0;
@@ -3811,7 +3811,7 @@ void CMisuzu::UpdatePattern()
         break;
     case 0x109:
         if (frame == 0 && timer == 0) {
-            CPlayer::StopMoving();
+            StopMoving();
         }
         if (frame == 0xc && timer == 0) {
             m_gauge = m_gauge + 0xf;
@@ -3836,7 +3836,7 @@ void CMisuzu::UpdatePattern()
         break;
     case 0x10a:
         if (frame == 0 && timer == 0) {
-            CPlayer::StopMoving();
+            StopMoving();
         }
         if (frame == 0xc && timer == 0) {
             m_gauge = m_gauge + 0xf;
@@ -3861,7 +3861,7 @@ void CMisuzu::UpdatePattern()
         break;
     case 0x10b:
         if (frame == 0 && timer == 0) {
-            CPlayer::StopMoving();
+            StopMoving();
             if (unk120 == 0) {
                 unk118 -= 500.0;
             } else {
@@ -3899,11 +3899,11 @@ void CMisuzu::UpdatePattern()
     case 0x12c:
         unk158 = 0;
         if (frame == 0 && timer == 0) {
-            CPlayer::StopMoving();
+            StopMoving();
             m_gauge = m_gauge - 0x3e8;
-            CPlayer::Unk410a80(0x32, 0x2d);
+            Unk410a80(0x32, 0x2d);
             unk14c = 0x78;
-            CPlayer::FillBackground(0xb0, 3);
+            FillBackground(0xb0, 3);
             l50.type = 0x44;
             l50.unk2c = 0x13;
             l50.x = (double)(int)x;
@@ -3950,7 +3950,7 @@ void CMisuzu::UpdatePattern()
             }
             if (frame >= x8) {
                 pattern = 0;
-                CPlayer::FaceOpponent();
+                FaceOpponent();
                 StartPattern();
             }
         }
@@ -3958,11 +3958,11 @@ void CMisuzu::UpdatePattern()
     case 0x12d:
         unk158 = 0;
         if (frame == 0 && timer == 0) {
-            CPlayer::StopMoving();
+            StopMoving();
             m_gauge = m_gauge - 0x7d0;
-            CPlayer::Unk410a80(0x32, 0x2d);
+            Unk410a80(0x32, 0x2d);
             unk14c = 0x78;
-            CPlayer::FillBackground(0xb0, 3);
+            FillBackground(0xb0, 3);
             l50.type = 0x45;
             l50.unk2c = 5;
             l50.x = (double)(int)x;
@@ -4009,7 +4009,7 @@ void CMisuzu::UpdatePattern()
             }
             if (frame >= x8) {
                 pattern = 0;
-                CPlayer::FaceOpponent();
+                FaceOpponent();
                 StartPattern();
             }
         }
@@ -4018,11 +4018,11 @@ void CMisuzu::UpdatePattern()
         m_game->Unk4080c0(0xf);
         unk158 = 0;
         if (frame == 0 && timer == 0) {
-            CPlayer::StopMoving();
+            StopMoving();
             m_gauge = m_gauge - 0xbb8;
-            CPlayer::Unk410a80(0x32, 0x2d);
+            Unk410a80(0x32, 0x2d);
             unk14c = 0x78;
-            CPlayer::FillBackground(0xb0, 3);
+            FillBackground(0xb0, 3);
             l50.type = 0x46;
             l50.unk2c = 0x40;
             l50.x = (double)(int)x;
@@ -4070,14 +4070,14 @@ void CMisuzu::UpdatePattern()
             }
             if (frame >= x8) {
                 pattern = 0;
-                CPlayer::FaceOpponent();
+                FaceOpponent();
                 StartPattern();
             }
         }
         break;
     case 0x12f:
         if (frame == 0 && timer == 0) {
-            CPlayer::StopMoving();
+            StopMoving();
         }
         if (frame == 1 && timer == 0) {
             l50.type = 0x1b3;
@@ -4113,7 +4113,7 @@ void CMisuzu::UpdatePattern()
             y = 0.0;
             frame = 0xa;
             ay = 0.0;
-            CPlayer::StopMoving();
+            StopMoving();
         }
         break;
     case 0x130:
@@ -4121,11 +4121,11 @@ void CMisuzu::UpdatePattern()
             unk3138 = (int)(vx * 100.0);
             unk313c = (int)(vy * 100.0);
             unk3140 = (int)(ay * 1000.0);
-            CPlayer::StopMoving();
+            StopMoving();
             m_gauge = m_gauge - 0x3e8;
-            CPlayer::Unk410a80(0x32, 0x2d);
+            Unk410a80(0x32, 0x2d);
             unk14c = 0x78;
-            CPlayer::FillBackground(0xb0, 3);
+            FillBackground(0xb0, 3);
             l50.type = 0x44;
             l50.unk2c = 0x13;
             l50.x = (double)(int)x;
@@ -4145,13 +4145,13 @@ void CMisuzu::UpdatePattern()
             vy = vy + ay;
         }
         if (y + vy > 0.0 && y < 0.0) {
-            CPlayer::StopMoving();
+            StopMoving();
             y = 0.0;
             timer = 0;
             frame = 0xb;
         }
         if (m_attackResult == 6 && (frame == 7 || frame == 6)) {
-            CPlayer::StopMoving();
+            StopMoving();
             StartPattern();
             frame = 8;
             m_attackResult = 0;
@@ -4192,19 +4192,19 @@ void CMisuzu::UpdatePattern()
             }
             if (frame >= x8) {
                 pattern = 3;
-                CPlayer::FaceOpponent();
+                FaceOpponent();
                 StartPattern();
             }
         }
         break;
     case 0x133:
         unk158 = 0;
-        CPlayer::StopMoving();
+        StopMoving();
         if (frame == 4 && timer == 0) {
             m_gauge = m_gauge - 0x3e8;
-            CPlayer::Unk410a80(0x32, 0x2d);
+            Unk410a80(0x32, 0x2d);
             unk14c = 0x78;
-            CPlayer::FillBackground(0xb0, 3);
+            FillBackground(0xb0, 3);
             l50.type = 0x44;
             l50.unk2c = 0x13;
             l50.x = (double)(int)x;
@@ -4234,19 +4234,19 @@ void CMisuzu::UpdatePattern()
             }
             if (frame >= x8) {
                 pattern = 0;
-                CPlayer::FaceOpponent();
+                FaceOpponent();
                 StartPattern();
             }
         }
         break;
     case 0x134:
         unk158 = 0;
-        CPlayer::StopMoving();
+        StopMoving();
         if (frame == 4 && timer == 0) {
             m_gauge = m_gauge - 0x7d0;
-            CPlayer::Unk410a80(0x32, 0x2d);
+            Unk410a80(0x32, 0x2d);
             unk14c = 0x78;
-            CPlayer::FillBackground(0xb0, 3);
+            FillBackground(0xb0, 3);
             l50.type = 0x45;
             l50.unk2c = 5;
             l50.x = (double)(int)x;
@@ -4276,7 +4276,7 @@ void CMisuzu::UpdatePattern()
             }
             if (frame >= x8) {
                 pattern = 0;
-                CPlayer::FaceOpponent();
+                FaceOpponent();
                 StartPattern();
             }
         }
@@ -4286,12 +4286,12 @@ void CMisuzu::UpdatePattern()
         if (frame > 3) {
             m_game->Unk4080c0(0xf);
         }
-        CPlayer::StopMoving();
+        StopMoving();
         if (frame == 4 && timer == 0) {
             m_gauge = m_gauge - 0xbb8;
-            CPlayer::Unk410a80(0x32, 0x2d);
+            Unk410a80(0x32, 0x2d);
             unk14c = 0x78;
-            CPlayer::FillBackground(0xb0, 3);
+            FillBackground(0xb0, 3);
             l50.type = 0x46;
             l50.unk2c = 0x40;
             l50.x = (double)(int)x;
@@ -4323,7 +4323,7 @@ void CMisuzu::UpdatePattern()
             }
             if (frame >= x8) {
                 pattern = 0;
-                CPlayer::FaceOpponent();
+                FaceOpponent();
                 StartPattern();
             }
         }
@@ -4331,11 +4331,11 @@ void CMisuzu::UpdatePattern()
     case 0x136:
         unk158 = 0;
         if (frame == 0 && timer == 0) {
-            CPlayer::StopMoving();
+            StopMoving();
             m_gauge = m_gauge - 0x3e8;
-            CPlayer::Unk410a80(0x32, 0x2d);
+            Unk410a80(0x32, 0x2d);
             unk14c = 0x78;
-            CPlayer::FillBackground(0xb0, 3);
+            FillBackground(0xb0, 3);
             l50.type = 0x44;
             l50.unk2c = 0x13;
             l50.x = (double)(int)x;
@@ -4363,7 +4363,7 @@ void CMisuzu::UpdatePattern()
             }
             if (frame >= x8) {
                 pattern = 0;
-                CPlayer::FaceOpponent();
+                FaceOpponent();
                 StartPattern();
             }
         }
@@ -4371,11 +4371,11 @@ void CMisuzu::UpdatePattern()
     case 0x137:
         unk158 = 0;
         if (frame == 0 && timer == 0) {
-            CPlayer::StopMoving();
+            StopMoving();
             m_gauge = m_gauge - 0x7d0;
-            CPlayer::Unk410a80(0x32, 0x2d);
+            Unk410a80(0x32, 0x2d);
             unk14c = 0x78;
-            CPlayer::FillBackground(0xb0, 3);
+            FillBackground(0xb0, 3);
             l50.type = 0x45;
             l50.unk2c = 5;
             l50.x = (double)(int)x;
@@ -4403,7 +4403,7 @@ void CMisuzu::UpdatePattern()
             }
             if (frame >= x8) {
                 pattern = 0;
-                CPlayer::FaceOpponent();
+                FaceOpponent();
                 StartPattern();
             }
         }
@@ -4414,11 +4414,11 @@ void CMisuzu::UpdatePattern()
             m_game->Unk4080c0(0xf);
         }
         if (frame == 0 && timer == 0) {
-            CPlayer::StopMoving();
+            StopMoving();
             m_gauge = m_gauge - 0xbb8;
-            CPlayer::Unk410a80(0x32, 0x2d);
+            Unk410a80(0x32, 0x2d);
             unk14c = 0x78;
-            CPlayer::FillBackground(0xb0, 3);
+            FillBackground(0xb0, 3);
             l50.type = 0x46;
             l50.unk2c = 0x40;
             l50.x = (double)(int)x;
@@ -4447,7 +4447,7 @@ void CMisuzu::UpdatePattern()
             }
             if (frame >= x8) {
                 pattern = 0;
-                CPlayer::FaceOpponent();
+                FaceOpponent();
                 StartPattern();
             }
         }
@@ -4455,10 +4455,10 @@ void CMisuzu::UpdatePattern()
     case 0x139:
         unk158 = 0;
         if (frame == 2 && timer == 0) {
-            CPlayer::StopMoving();
-            CPlayer::Unk410a80(0x32, 3);
+            StopMoving();
+            Unk410a80(0x32, 3);
             unk14c = 0xb4;
-            CPlayer::FillBackground(0xb0, 3);
+            FillBackground(0xb0, 3);
             l50.type = 0x44;
             l50.unk2c = 0x13;
             l50.x = (double)(int)x;
@@ -4476,7 +4476,7 @@ void CMisuzu::UpdatePattern()
             m_attackResult = 0;
             if (frame >= x8) {
                 pattern = 0;
-                CPlayer::FaceOpponent();
+                FaceOpponent();
                 StartPattern();
             }
         }
@@ -4484,10 +4484,10 @@ void CMisuzu::UpdatePattern()
     case 0x13a:
         unk158 = 0;
         if (frame == 2 && timer == 0) {
-            CPlayer::StopMoving();
-            CPlayer::Unk410a80(0x32, 3);
+            StopMoving();
+            Unk410a80(0x32, 3);
             unk14c = 0xb4;
-            CPlayer::FillBackground(0xb0, 3);
+            FillBackground(0xb0, 3);
             l50.type = 0x44;
             l50.unk2c = 0x13;
             l50.x = (double)(int)x;
@@ -4505,7 +4505,7 @@ void CMisuzu::UpdatePattern()
             m_attackResult = 3;
             if (frame >= x8) {
                 pattern = 0;
-                CPlayer::FaceOpponent();
+                FaceOpponent();
                 StartPattern();
             }
         }
@@ -4513,10 +4513,10 @@ void CMisuzu::UpdatePattern()
     case 0x13b:
         unk158 = 0;
         if (frame == 1 && timer == 0) {
-            CPlayer::StopMoving();
-            CPlayer::Unk410a80(0x32, 3);
+            StopMoving();
+            Unk410a80(0x32, 3);
             unk14c = 0xb4;
-            CPlayer::FillBackground(0xb0, 3);
+            FillBackground(0xb0, 3);
             l50.type = 0x44;
             l50.unk2c = 0x13;
             l50.x = (double)(int)x;
@@ -4534,14 +4534,14 @@ void CMisuzu::UpdatePattern()
             m_attackResult = 0;
             if (frame >= x8) {
                 pattern = 0;
-                CPlayer::FaceOpponent();
+                FaceOpponent();
                 StartPattern();
             }
         }
         break;
     case 0x13c:
         unk158 = 0;
-        CPlayer::StopMoving();
+        StopMoving();
         if (frame == 0 && timer == 0) {
             l50.type = 0x1c2;
             l50.x = facing * 7 + x;
@@ -4558,8 +4558,8 @@ void CMisuzu::UpdatePattern()
         }
         if (frame == 7 && timer == 0) {
             m_gauge = m_gauge - 0xbb8;
-            CPlayer::Unk410a80(0x32, 0x2d);
-            CPlayer::FillBackground(0xb0, 3);
+            Unk410a80(0x32, 0x2d);
+            FillBackground(0xb0, 3);
             l50.type = 0x46;
             l50.unk2c = 0x40;
             l50.x = (double)(int)x;
@@ -4577,7 +4577,7 @@ void CMisuzu::UpdatePattern()
         }
         if (frame == 0xc && timer == 0) {
             vy = 0.7;
-            CPlayer::FillBackground(0xb1, 3);
+            FillBackground(0xb1, 3);
             m_game->unk1420e = 0x7530;
             (*m_opponent)->m_game->unk1420e = 0x7530;
             m_game->unk1420c = 0x7530;
@@ -4655,7 +4655,7 @@ void CMisuzu::UpdatePattern()
             }
             if (frame == 0x29) {
                 x = facing * 0x61 + x;
-                CPlayer::ShakeScreen(3, 0);
+                ShakeScreen(3, 0);
                 l50.type = 3;
                 l50.x = (double)(int)x;
                 l50.y = (double)(int)y;
@@ -4694,7 +4694,7 @@ void CMisuzu::UpdatePattern()
             }
             if (frame >= x8) {
                 pattern = 0;
-                CPlayer::FaceOpponent();
+                FaceOpponent();
                 StartPattern();
             }
         }
