@@ -13,14 +13,14 @@ int CPlayer::Unk40e630()
 {
     char v1;
 
-    v1 = *((char*)this + 0x50);
-    if (*(double*)((char*)this + 0x20) < *(double*)(*(char**)*(char**)((char*)this + 0x78) + 0x20)) {
-        *((char*)this + 0x50) = 1;
-        return *((char*)this + 0x50) != v1;
+    v1 = facing;
+    if (x < (*m_opponent)->x) {
+        facing = 1;
+        return facing != v1;
     }
-    if (*(double*)((char*)this + 0x20) > *(double*)(*(char**)*(char**)((char*)this + 0x78) + 0x20)) {
-        *((char*)this + 0x50) = -1;
-        return *((char*)this + 0x50) != v1;
+    if (x > (*m_opponent)->x) {
+        facing = -1;
+        return facing != v1;
     }
     return 0;
 }
@@ -29,259 +29,259 @@ int CPlayer::Unk40e6c0(double p1)
 {
     char v1;
 
-    v1 = *((char*)this + 0x50);
-    if (*(double*)((char*)this + 0x20) < p1) {
-        *((char*)this + 0x50) = 1;
-        return *((char*)this + 0x50) != v1;
+    v1 = facing;
+    if (x < p1) {
+        facing = 1;
+        return facing != v1;
     }
-    if (*(double*)((char*)this + 0x20) > p1) {
-        *((char*)this + 0x50) = -1;
-        return *((char*)this + 0x50) != v1;
+    if (x > p1) {
+        facing = -1;
+        return facing != v1;
     }
     return 0;
 }
 
 void CPlayer::Unk40e740()
 {
-    if (*(double*)((char*)this + 0x28) == 0.0) {
-        *((char*)this + 0x159) = 0;
-        *((char*)this + 0x15a) = 0;
+    if (y == 0.0) {
+        unk159 = 0;
+        unk15a = 0;
     }
-    if (*(double*)((char*)this + 0x28) >= 0.0 && *(WORD*)((char*)this + 8) != 4 && *(WORD*)((char*)this + 8) != 5 && *(WORD*)((char*)this + 8) != 6 && *(WORD*)((char*)this + 8) != 0xa && *(WORD*)((char*)this + 8) != 0xb && *(WORD*)((char*)this + 8) != 0xc) {
-        if (*(int*)((char*)this + 0x15c) < 3 && *((char*)this + 0x189) == -1) {
+    if (y >= 0.0 && pattern != 4 && pattern != 5 && pattern != 6 && pattern != 0xa && pattern != 0xb && pattern != 0xc) {
+        if (unk15c < 3 && m_inputY == -1) {
             Unk40e630();
-            if (*(short*)((char*)this + 0x262) >= 3 && *(short*)((char*)this + 0x262) <= 5) {
-                if (*(short*)((char*)this + 0x262) == 3) {
-                    if (*(WORD*)((char*)this + 8) != 0xa) {
+            if (unk262 >= 3 && unk262 <= 5) {
+                if (unk262 == 3) {
+                    if (pattern != 0xa) {
                         Vf0();
                     }
-                    *(short*)((char*)this + 8) = 0xa;
+                    pattern = 0xa;
                     return;
                 }
-                if (*(short*)((char*)this + 0x262) == 4) {
-                    if (*(WORD*)((char*)this + 8) != 0xb) {
+                if (unk262 == 4) {
+                    if (pattern != 0xb) {
                         Vf0();
                     }
-                    *(short*)((char*)this + 8) = 0xb;
+                    pattern = 0xb;
                     return;
                 }
-                if (*(short*)((char*)this + 0x262) == 5) {
-                    if (*(WORD*)((char*)this + 8) != 0xc) {
+                if (unk262 == 5) {
+                    if (pattern != 0xc) {
                         Vf0();
                     }
-                    *(short*)((char*)this + 8) = 0xc;
+                    pattern = 0xc;
                     return;
                 }
             } else {
-                if (*((char*)this + 0x188) == 0) {
-                    if (*(WORD*)((char*)this + 8) != 4) {
+                if (m_inputX == 0) {
+                    if (pattern != 4) {
                         Vf0();
                     }
-                    *(short*)((char*)this + 8) = 4;
+                    pattern = 4;
                     return;
                 }
-                if (*((char*)this + 0x188) == *((char*)this + 0x50)) {
-                    if (*(WORD*)((char*)this + 8) != 5) {
+                if (m_inputX == facing) {
+                    if (pattern != 5) {
                         Vf0();
                     }
-                    *(short*)((char*)this + 8) = 5;
+                    pattern = 5;
                     return;
                 }
-                if (*((char*)this + 0x188) == -*((char*)this + 0x50)) {
-                    if (*(WORD*)((char*)this + 8) != 6) {
+                if (m_inputX == -facing) {
+                    if (pattern != 6) {
                         Vf0();
                     }
-                    *(short*)((char*)this + 8) = 6;
+                    pattern = 6;
                     return;
                 }
             }
         }
-        if (*((char*)this + 0x189) == 1) {
-            if (*(WORD*)((char*)this + 8) != 8 && *(WORD*)((char*)this + 8) != 3) {
-                *(short*)((char*)this + 8) = 8;
+        if (m_inputY == 1) {
+            if (pattern != 8 && pattern != 3) {
+                pattern = 8;
                 Vf0();
                 Unk40e630();
                 return;
             }
-            if (*(WORD*)((char*)this + 8) != 8) {
-                *(short*)((char*)this + 8) = 3;
+            if (pattern != 8) {
+                pattern = 3;
                 Unk40e630();
                 return;
             }
             return;
         }
-        if (*((char*)this + 0x188) != 0) {
+        if (m_inputX != 0) {
             Unk40e630();
-            if (*((char*)this + 0x188) == *((char*)this + 0x50)) {
-                if (*(WORD*)((char*)this + 8) != 1) {
+            if (m_inputX == facing) {
+                if (pattern != 1) {
                     Vf0();
                 }
-                *(short*)((char*)this + 8) = 1;
+                pattern = 1;
                 return;
             }
-            if (*(WORD*)((char*)this + 8) != 2) {
+            if (pattern != 2) {
                 Vf0();
             }
-            *(short*)((char*)this + 8) = 2;
+            pattern = 2;
             return;
         }
-        if (*(WORD*)((char*)this + 8) == 3 || *(WORD*)((char*)this + 8) == 8) {
-            *(short*)((char*)this + 8) = 7;
+        if (pattern == 3 || pattern == 8) {
+            pattern = 7;
             Unk40e630();
             Vf0();
             return;
         }
-        if (*(WORD*)((char*)this + 8) == 7 || *(WORD*)((char*)this + 8) == 0xd) {
+        if (pattern == 7 || pattern == 0xd) {
             Unk40e630();
             return;
         }
-        if (*(WORD*)((char*)this + 8) != 0) {
+        if (pattern != 0) {
             Vf0();
         }
-        *(short*)((char*)this + 8) = 0;
+        pattern = 0;
         Unk40e630();
     }
 }
 
 CPlayer::CPlayer(int p1, int p2, int p3, int p4, int p5, BYTE p6)
-    : unk78(p1)
+    : m_opponent((CPlayer**)p1)
 {
     int v4;
 
-    *(int*)((char*)this + 0x7c) = p2;
-    *(int*)((char*)this + 0x80) = p3;
-    *(int*)((char*)this + 0x84) = p4;
-    *(int*)((char*)this + 0x88) = p5;
-    *((char*)this + 0x8c) = p6;
-    *((char*)this + 0x8d) = 0;
-    *((char*)this + 0x8e) = 0;
+    m_game = (CGame*)p2;
+    m_graphics = (CGraphics*)p3;
+    m_input = (CInput*)p4;
+    m_sound = (CSound*)p5;
+    m_side = p6;
+    unk8d = 0;
+    m_paletteIndex = 0;
     v4 = 0;
     for (; v4 < 0x32; v4++) {
-        *(short*)((char*)this + v4 * 2 + 0x264) = 0x96;
+        unk264[v4] = 0x96;
     }
     v4 = 0;
     for (; v4 < 0x14; v4++) {
-        *((char*)this + v4 + 0x30f5) = -1;
+        unk30f5[v4] = -1;
     }
-    *(int*)((char*)this + 0x14) = 0;
-    *(int*)((char*)this + 0x10) = (int)(char*)new EffectAnim[0x1f9];
-    *(int*)((char*)this + 0x164) = (int)(char*)new PatternData[0x1f9];
-    *(int*)((char*)this + 0x30c8) = 0;
-    *(int*)((char*)this + 0x30cc) = 0;
-    *(int*)((char*)this + 0x30d0) = 0;
-    *(int*)((char*)this + 0x30d4) = 0;
-    *(int*)((char*)this + 0x30d8) = 0;
-    *(int*)((char*)this + 0x30e8) = 0;
+    surfaces = (IDirectDrawSurface**)0;
+    anims = (EffectAnim*)(int)(char*)new EffectAnim[0x1f9];
+    m_patterns = (PatternData*)(int)(char*)new PatternData[0x1f9];
+    unk30c8 = 0;
+    unk30cc = 0;
+    unk30d0 = 0;
+    unk30d4 = 0;
+    unk30d8 = 0;
+    unk30e8 = 0;
 }
 
 CPlayer::~CPlayer()
 {
     int v4;
 
-    if (*(int*)((char*)this + 0x14) != 0) {
+    if ((int)surfaces != 0) {
         v4 = 0;
-        for (; v4 < *(WORD*)((char*)this + 0x18) + 1; v4++) {
-            if (*(int*)(*(char**)((char*)this + 0x14) + v4 * 4) != 0) {
-                ((IUnknown*)*(int*)(*(char**)((char*)this + 0x14) + v4 * 4))->Release();
-                *(int*)(*(char**)((char*)this + 0x14) + v4 * 4) = 0;
+        for (; v4 < lastSurface + 1; v4++) {
+            if ((int)surfaces[v4] != 0) {
+                ((IUnknown*)surfaces[v4])->Release();
+                surfaces[v4] = (IDirectDrawSurface*)0;
             }
         }
-        delete (char*)*(int*)((char*)this + 0x14);
+        delete (char*)surfaces;
     }
     v4 = 0;
     for (; v4 < 0x32; v4++) {
-        if (*(WORD*)((char*)this + v4 * 2 + 0x264) != 0x96) {
-            ((CSound*)*(int*)((char*)this + 0x88))->Release(*(short*)((char*)this + v4 * 2 + 0x264));
+        if ((unsigned short)unk264[v4] != 0x96) {
+            m_sound->Release(unk264[v4]);
         }
     }
-    delete[] (EffectAnim*)*(int*)((char*)this + 0x10);
-    delete[] (PatternData*)*(int*)((char*)this + 0x164);
+    delete[] anims;
+    delete[] m_patterns;
 }
 
 void CPlayer::Vf12()
 {
     int v4;
 
-    *(double*)((char*)this + 0x20) = *((char*)this + 0x8c) * 0xa0 + 0xf0;
-    *(double*)((char*)this + 0x28) = 0.0;
-    *((char*)this + 0x50) = 1 - (*((char*)this + 0x8c) << 1);
+    x = m_side * 0xa0 + 0xf0;
+    y = 0.0;
+    facing = 1 - (m_side << 1);
     Unk40f1e0();
-    *(double*)((char*)this + 0xb0) = 0.0;
-    *(int*)((char*)this + 0xd0) = 0;
-    *(short*)((char*)this + 8) = 0;
-    *(short*)((char*)this + 0xa) = 0;
-    *(short*)((char*)this + 0xc) = 0;
-    *(int*)((char*)this + 0x30bc) = 0;
-    *(int*)((char*)this + 0x30c4) = 0;
-    *(int*)((char*)this + 0x108) = 0x270f;
-    *(int*)((char*)this + 0x10c) = 0x270f;
-    *(int*)((char*)this + 0x110) = 0x270f;
-    *(short*)((char*)this + 0x148) = 0;
-    *(double*)((char*)this + 0x118) = 0.0;
-    *((char*)this + 0x120) = 0;
-    *(short*)((char*)this + 0x14c) = 0;
-    *((char*)this + 0x159) = 0;
-    *((char*)this + 0x158) = 0;
-    *((char*)this + 0x15a) = 0;
-    *(short*)((char*)this + 0x14e) = 0;
-    *(int*)((char*)this + 0x150) = 0;
-    *((char*)this + 0xac) = 0;
-    *(short*)((char*)this + 0x138) = 0;
-    *(short*)((char*)this + 0x13a) = 0;
-    *(short*)((char*)this + 0x13c) = 0;
-    *(short*)((char*)this + 0x13e) = 0;
-    *(short*)((char*)this + 0x140) = 0;
-    *(int*)((char*)this + 0x15c) = 0;
-    *(int*)((char*)this + 0x160) = 0;
-    *(int*)((char*)this + 0x168) = 0;
-    *(short*)((char*)this + 0x14a) = 0;
-    *(int*)((char*)this + 0x134) = 0;
-    *(short*)((char*)this + 0x174) = 0;
-    *(short*)((char*)this + 0xf4) = 0;
-    *(short*)((char*)this + 0x104) = 0;
-    *(double*)((char*)this + 0x178) = 10000.0;
-    *(double*)((char*)this + 0xf8) = 10000.0;
-    *(int*)((char*)this + 0x170) = 0;
-    *(double*)((char*)this + 0x180) = 1.0;
-    *((char*)this + 0x1a8) = 0;
-    *((char*)this + 0x1a9) = 0;
-    *(short*)((char*)this + 0x262) = 0x63;
-    *(short*)((char*)this + 0x260) = 0;
+    unkb0 = 0.0;
+    unkd0 = 0;
+    pattern = 0;
+    frame = 0;
+    timer = 0;
+    unk30bc = 0;
+    unk30c4 = 0;
+    unk108 = 0x270f;
+    unk10c = 0x270f;
+    unk110 = 0x270f;
+    unk148 = 0;
+    unk118 = 0.0;
+    unk120 = 0;
+    unk14c = 0;
+    unk159 = 0;
+    unk158 = 0;
+    unk15a = 0;
+    unk14e = 0;
+    unk150 = 0;
+    unkac = 0;
+    unk138 = 0;
+    unk13a = 0;
+    unk13c = 0;
+    unk13e = 0;
+    unk140 = 0;
+    unk15c = 0;
+    unk160 = 0;
+    unk168 = 0;
+    unk14a = 0;
+    *(int*)&unk134 = 0;
+    unk174 = 0;
+    unkf4 = 0;
+    unk104 = 0;
+    unk178 = 10000.0;
+    unkf8 = 10000.0;
+    unk170 = 0;
+    unk180 = 1.0;
+    unk1a8 = 0;
+    unk1a9 = 0;
+    unk262 = 0x63;
+    m_inputPos = 0;
     v4 = 0;
     for (; v4 < 0xb4; v4++) {
-        *((char*)this + v4 + 0x1ab) = 0;
+        m_inputHistory[v4] = 0;
     }
-    *((char*)this + 0x2c8) = -1;
-    *((char*)this + 0x2c9) = -1;
-    *(short*)((char*)this + 0x2ca) = 0;
-    *(short*)((char*)this + 0x2cc) = 0;
+    unk2c8 = -1;
+    unk2c9 = -1;
+    unk2ca = 0;
+    unk2cc = 0;
     Unk413040();
-    *(short*)((char*)this + 0x30b4) = 0;
-    *((char*)this + 0x2bc0) = 0;
-    *((char*)this + 0x2bc2) = 0;
-    *(int*)((char*)this + 0x30f0) = 0;
-    *(short*)((char*)this + 0x30ec) = 0;
-    *((char*)this + 0x58) = 0;
-    *(int*)((char*)this + 0x60) = 1;
-    *(int*)((char*)this + 0x30dc) = 0;
-    *(int*)((char*)this + 0x30d4) = 0;
-    *(int*)((char*)this + 0x30d8) = 0;
+    m_afterimages.pos = 0;
+    m_afterimages.unk0 = 0;
+    m_afterimages.unk2 = 0;
+    unk30f0 = 0;
+    unk30ec = 0;
+    unk58 = 0;
+    unk60 = 1;
+    unk30dc = 0;
+    unk30d4 = 0;
+    unk30d8 = 0;
 }
 
 void CPlayer::Vf0()
 {
-    *(short*)((char*)this + 0xa) = 0;
-    *(short*)((char*)this + 0xc) = 0;
-    *(double*)((char*)this + 0xb8) = 0.0;
-    *(int*)((char*)this + 0x168) = 0;
-    *(int*)((char*)this + 0x170) = 0;
-    ((Afterimages*)((char*)this + 0x2bc0))->Unk412910();
+    frame = 0;
+    timer = 0;
+    unkb8 = 0.0;
+    unk168 = 0;
+    unk170 = 0;
+    (&m_afterimages)->Unk412910();
 }
 
 void CPlayer::Unk40f170()
 {
-    *((char*)this + 0x1a8) = 0;
-    *((char*)this + 0x1a9) = 0;
+    unk1a8 = 0;
+    unk1a9 = 0;
 }
 
 void CPlayer::Unk40f190()
@@ -290,52 +290,52 @@ void CPlayer::Unk40f190()
 
     v4 = 0;
     for (; v4 < 0xb4; v4++) {
-        *((char*)this + v4 + 0x1ab) = 0;
+        m_inputHistory[v4] = 0;
     }
-    *(short*)((char*)this + 0x262) = 0x63;
+    unk262 = 0x63;
 }
 
 void CPlayer::Unk40f1e0()
 {
-    *(double*)((char*)this + 0x30) = 0.0;
-    *(double*)((char*)this + 0x38) = 0.0;
-    *(double*)((char*)this + 0x40) = 0.0;
-    *(double*)((char*)this + 0x48) = 0.0;
-    *(double*)((char*)this + 0xb8) = 0.0;
+    vx = 0.0;
+    vy = 0.0;
+    ax = 0.0;
+    ay = 0.0;
+    unkb8 = 0.0;
 }
 
 void CPlayer::Unk40f230()
 {
-    if (*(short*)((char*)this + 0x14a) == 0 && *(short*)(*(char**)*(char**)((char*)this + 0x78) + 0x14c) == 0) {
-        if (*(WORD*)((char*)this + 8) < 0x32 || *(WORD*)((char*)this + 8) > 0x96 || *(WORD*)((char*)this + 8) == 0x60) {
-            *(short*)((char*)this + 0x124) = 0;
-            *(int*)((char*)this + 0x12c) = 0;
-            *(short*)(*(char**)*(char**)((char*)this + 0x78) + 0x174) = 0;
-            if (*(double*)(*(char**)*(char**)((char*)this + 0x78) + 0x178) > 10000.0) {
-                *(double*)(*(char**)*(char**)((char*)this + 0x78) + 0x178) -= 20.0;
+    if (unk14a == 0 && (*m_opponent)->unk14c == 0) {
+        if (pattern < 0x32 || pattern > 0x96 || pattern == 0x60) {
+            unk124 = 0;
+            unk12c = 0;
+            (*m_opponent)->unk174 = 0;
+            if ((*m_opponent)->unk178 > 10000.0) {
+                (*m_opponent)->unk178 -= 20.0;
             } else {
-                *(double*)(*(char**)*(char**)((char*)this + 0x78) + 0x178) = 10000.0;
+                (*m_opponent)->unk178 = 10000.0;
             }
         }
-        if (*(WORD*)((char*)this + 8) < 0x32) {
+        if (pattern < 0x32) {
             Vf3();
-            *(double*)((char*)this + 0xb8) = 0.0;
-            *(double*)(*(char**)*(char**)((char*)this + 0x78) + 0xb8) = 0.0;
-            if (*(short*)((char*)this + 0x30ec) != 0 && *(WORD*)(*(char**)*(char**)((char*)this + 0x78) + 8) < 0x32) {
-                *(short*)((char*)this + 0x148) = 0xbb8;
-                *(int*)((char*)this + 0x108) = *(short*)((char*)this + 0x30ee);
-                if (*(short*)((char*)this + 0x30ec) > 0) {
-                    if (*(short*)((char*)this + 0x30ec) < 0x3e8) {
-                        *(double*)((char*)this + 0x118) = *(short*)((char*)this + 0x30ec);
-                        *((char*)this + 0x120) = 0;
+            unkb8 = 0.0;
+            (*m_opponent)->unkb8 = 0.0;
+            if (unk30ec != 0 && (*m_opponent)->pattern < 0x32) {
+                unk148 = 0xbb8;
+                unk108 = unk30ee;
+                if (unk30ec > 0) {
+                    if (unk30ec < 0x3e8) {
+                        unk118 = unk30ec;
+                        unk120 = 0;
                     } else {
-                        *(double*)((char*)this + 0x118) = 0x7d0 - *(short*)((char*)this + 0x30ec);
-                        *((char*)this + 0x120) = 1;
+                        unk118 = 0x7d0 - unk30ec;
+                        unk120 = 1;
                     }
                 }
             }
         }
-        if (*(WORD*)((char*)this + 8) >= 0x32 && *(WORD*)((char*)this + 8) < 0x96 && *(float*)((char*)this + 0x134) <= 0.0f && (*(WORD*)(*(char**)(*(char**)((char*)this + 0x164) + *(WORD*)((char*)this + 8) * 8 + 4) + *(WORD*)((char*)this + 0xa) * 0xc8 + 0xaa) & 0x400) == 0) {
+        if (pattern >= 0x32 && pattern < 0x96 && unk134 <= 0.0f && (m_patterns[pattern].frames[frame].flagsAA & 0x400) == 0) {
             Unk40f470();
         }
         Vf4();
@@ -344,23 +344,23 @@ void CPlayer::Unk40f230()
 
 void CPlayer::Unk40f470()
 {
-    if (*(short*)((char*)this + 0x124) > 0) {
-        (*(short*)((char*)this + 0x124))--;
+    if (unk124 > 0) {
+        unk124--;
         return;
     }
-    if (*(double*)((char*)this + 0x28) < 0.0 && *(int*)((char*)this + 0x128) == 0 && (*((char*)this + 0x18a) != 0 || *((char*)this + 0x18b) != 0 || *((char*)this + 0x18c) != 0 || *((char*)this + 0x18d) != 0)) {
-        if (*((char*)this + 0x188) == *((char*)this + 0x50)) {
-            if (*(WORD*)((char*)this + 8) != 0x9d) {
+    if (y < 0.0 && unk128 == 0 && (m_pressA != 0 || m_pressB != 0 || m_pressC != 0 || m_pressD != 0)) {
+        if (m_inputX == facing) {
+            if (pattern != 0x9d) {
                 Vf0();
             }
-            *(short*)((char*)this + 8) = 0x9d;
+            pattern = 0x9d;
             return;
         }
-        if (*((char*)this + 0x188) == -*((char*)this + 0x50)) {
-            if (*(WORD*)((char*)this + 8) != 0x9e) {
+        if (m_inputX == -facing) {
+            if (pattern != 0x9e) {
                 Vf0();
             }
-            *(short*)((char*)this + 8) = 0x9e;
+            pattern = 0x9e;
         }
     }
 }
@@ -369,25 +369,25 @@ void CPlayer::Unk40f580()
 {
     int v4;
 
-    v4 = *(short*)((char*)this + 0x2cc);
-    if (*(short*)((char*)this + 0x14a) == 0 && *(short*)(*(char**)*(char**)((char*)this + 0x78) + 0x14c) == 0) {
-        if ((char)Unk40ff70() * *((char*)this + 0x50) * (*(double*)((char*)this + 0x30) + *(double*)((char*)this + 0xb0) + *(double*)(*(char**)*(char**)((char*)this + 0x78) + 0xb8) * (*(int*)(*(char**)*(char**)((char*)this + 0x78) + 0xd0) != 0 && *(short*)((char*)this + 0x14c) == 0)) >= 0.0) {
-            *(double*)((char*)this + 0x20) = (*(double*)((char*)this + 0x30) + *(double*)((char*)this + 0xb0) + *(double*)(*(char**)*(char**)((char*)this + 0x78) + 0xb8) * (*(int*)(*(char**)*(char**)((char*)this + 0x78) + 0xd0) != 0 && *(short*)((char*)this + 0x14c) == 0)) * *((char*)this + 0x50) + *(double*)((char*)this + 0x20);
+    v4 = unk2cc;
+    if (unk14a == 0 && (*m_opponent)->unk14c == 0) {
+        if ((char)Unk40ff70() * facing * (vx + unkb0 + (*m_opponent)->unkb8 * ((*m_opponent)->unkd0 != 0 && unk14c == 0)) >= 0.0) {
+            x = (vx + unkb0 + (*m_opponent)->unkb8 * ((*m_opponent)->unkd0 != 0 && unk14c == 0)) * facing + x;
         }
-        if (((char)((CPlayer*)*(int*)*(char**)((char*)this + 0x78))->Unk40ff70() == 1 && *(double*)(*(char**)*(char**)((char*)this + 0x78) + 0x20) <= 20.0) + 0x14 > *(double*)((char*)this + 0x20)) {
-            *(double*)((char*)this + 0x20) = ((char)((CPlayer*)*(int*)*(char**)((char*)this + 0x78))->Unk40ff70() == 1 && *(double*)(*(char**)*(char**)((char*)this + 0x78) + 0x20) <= 20.0) + 0x14;
-        } else if (0x26b - ((char)((CPlayer*)*(int*)*(char**)((char*)this + 0x78))->Unk40ff70() == -1 && *(double*)(*(char**)*(char**)((char*)this + 0x78) + 0x20) >= 619.0) < *(double*)((char*)this + 0x20)) {
-            *(double*)((char*)this + 0x20) = 0x26b - ((char)((CPlayer*)*(int*)*(char**)((char*)this + 0x78))->Unk40ff70() == -1 && *(double*)(*(char**)*(char**)((char*)this + 0x78) + 0x20) >= 619.0);
+        if (((char)(*m_opponent)->Unk40ff70() == 1 && (*m_opponent)->x <= 20.0) + 0x14 > x) {
+            x = ((char)(*m_opponent)->Unk40ff70() == 1 && (*m_opponent)->x <= 20.0) + 0x14;
+        } else if (0x26b - ((char)(*m_opponent)->Unk40ff70() == -1 && (*m_opponent)->x >= 619.0) < x) {
+            x = 0x26b - ((char)(*m_opponent)->Unk40ff70() == -1 && (*m_opponent)->x >= 619.0);
         }
-        *(double*)((char*)this + 0x28) = *(double*)((char*)this + 0x28) + *(double*)((char*)this + 0x38);
-        if (*(double*)((char*)this + 0x28) > 0.0) {
-            *(double*)((char*)this + 0x28) = 0.0;
+        y = y + vy;
+        if (y > 0.0) {
+            y = 0.0;
         }
     }
-    while (v4 != *(short*)((char*)this + 0x2ca)) {
-        if (*(int*)((char*)this + v4 * 4 + 0x3d0) != 0 && (*(short*)((char*)this + 0x14c) <= 0 || *(int*)((char*)this + v4 * 0x98 + 0x558) != 0) && *(short*)((char*)this + v4 * 0x98 + 0x556) == 0 && *(short*)(*(char**)*(char**)((char*)this + 0x78) + 0x14c) == 0) {
-            *(double*)((char*)this + v4 * 0x98 + 0x4e8) += (*(double*)((char*)this + v4 * 0x98 + 0x4f8) + 0.0 * *(double*)((char*)this + v4 * 0x98 + 0x540)) * *((char*)this + v4 * 0x98 + 0x518);
-            *(double*)((char*)this + v4 * 0x98 + 0x4f0) = *(double*)((char*)this + v4 * 0x98 + 0x4f0) + *(double*)((char*)this + v4 * 0x98 + 0x500);
+    while (v4 != unk2ca) {
+        if (unk3d0[v4] != 0 && (unk14c <= 0 || m_objects[v4].unk88 != 0) && m_objects[v4].unk86 == 0 && (*m_opponent)->unk14c == 0) {
+            m_objects[v4].x += (m_objects[v4].vx + 0.0 * m_objects[v4].unk70) * m_objects[v4].facing;
+            m_objects[v4].y = m_objects[v4].y + m_objects[v4].vy;
         }
         v4++;
         if (v4 >= 0x40) {
@@ -400,71 +400,71 @@ void CPlayer::Unk40f980()
 {
     int v4;
 
-    if (*(short*)(*(char**)*(char**)((char*)this + 0x78) + 0x14c) > 0) {
+    if ((*m_opponent)->unk14c > 0) {
     } else {
-        if (*(short*)((char*)this + 0x14a) > 0) {
-            (*(short*)((char*)this + 0x14a))--;
+        if (unk14a > 0) {
+            unk14a--;
         } else {
-            *(short*)((char*)this + 0x14a) = 0;
+            unk14a = 0;
         }
         if (Unk410340() == 0) {
             if (Unk4103a0() != 0) {
-                *(float*)((char*)this + 0x134) = *(float*)((char*)this + 0x134) - (float)(1.0 / ((*(double*)((char*)this + 0x28) == 0.0) * 4 + 1));
+                unk134 = unk134 - (float)(1.0 / ((y == 0.0) * 4 + 1));
             } else {
-                *(float*)((char*)this + 0x134) -= 0.075f;
+                unk134 -= 0.075f;
             }
-            if (*(float*)((char*)this + 0x134) < 0.0f) {
-                *(int*)((char*)this + 0x134) = 0;
+            if (unk134 < 0.0f) {
+                *(int*)&unk134 = 0;
             }
         }
-        if (*((char*)this + 0x130) > 0) {
-            (*((char*)this + 0x130))--;
+        if (unk130 > 0) {
+            unk130--;
         } else {
-            *((char*)this + 0x130) = 0;
+            unk130 = 0;
         }
-        if ((*(WORD*)(*(char**)(*(char**)((char*)this + 0x164) + *(WORD*)((char*)this + 8) * 8 + 4) + *(WORD*)((char*)this + 0xa) * 0xc8 + 0xb0) & 0x40) > 0) {
-            *((char*)this + 0x130) = 0x1b;
+        if ((m_patterns[pattern].frames[frame].flagsB0 & 0x40) > 0) {
+            unk130 = 0x1b;
         }
-        if (*(short*)((char*)this + 0x138) > 0) {
-            (*(short*)((char*)this + 0x138))--;
+        if (unk138 > 0) {
+            unk138--;
         } else {
-            *(short*)((char*)this + 0x138) = 0;
+            unk138 = 0;
         }
-        if (*(short*)((char*)this + 0x13a) > 0) {
-            (*(short*)((char*)this + 0x13a))--;
+        if (unk13a > 0) {
+            unk13a--;
         } else {
-            *(short*)((char*)this + 0x13a) = 0;
+            unk13a = 0;
         }
-        if (*(short*)((char*)this + 0x13c) > 0) {
-            (*(short*)((char*)this + 0x13c))--;
+        if (unk13c > 0) {
+            unk13c--;
         } else {
-            *(short*)((char*)this + 0x13c) = 0;
+            unk13c = 0;
         }
-        if (*(short*)((char*)this + 0x13e) > 0) {
-            (*(short*)((char*)this + 0x13e))--;
+        if (unk13e > 0) {
+            unk13e--;
         } else {
-            *(short*)((char*)this + 0x13e) = 0;
+            unk13e = 0;
         }
-        if (*(short*)((char*)this + 0x140) > 0) {
-            (*(short*)((char*)this + 0x140))--;
+        if (unk140 > 0) {
+            unk140--;
         } else {
-            *(short*)((char*)this + 0x140) = 0;
+            unk140 = 0;
         }
-        *(double*)((char*)this + 0x118) = (Unk410340() + 1) * (Unk4103a0() == 0 && *((char*)this + 0x120) == 0) * ((*(double*)((char*)this + 0x118) < 500.0) * 2 + 1) / 10.0 + *(double*)((char*)this + 0x118);
-        if (*(double*)((char*)this + 0x118) >= 1000.0 && *((char*)this + 0x120) == 0) {
-            *((char*)this + 0x120) = 1;
-            *(double*)((char*)this + 0x118) = 1000.0;
-        } else if (*(double*)((char*)this + 0x118) <= 0.0) {
-            *((char*)this + 0x120) = 0;
-            *(double*)((char*)this + 0x118) = 0.0;
+        unk118 = (Unk410340() + 1) * (Unk4103a0() == 0 && unk120 == 0) * ((unk118 < 500.0) * 2 + 1) / 10.0 + unk118;
+        if (unk118 >= 1000.0 && unk120 == 0) {
+            unk120 = 1;
+            unk118 = 1000.0;
+        } else if (unk118 <= 0.0) {
+            unk120 = 0;
+            unk118 = 0.0;
         }
-        v4 = *(short*)((char*)this + 0x2cc);
-        while (v4 != *(short*)((char*)this + 0x2ca)) {
-            if (*(int*)((char*)this + v4 * 4 + 0x3d0) != 0) {
-                if (*(short*)((char*)this + v4 * 0x98 + 0x556) > 0) {
-                    (*(short*)((char*)this + v4 * 0x98 + 0x556))--;
+        v4 = unk2cc;
+        while (v4 != unk2ca) {
+            if (unk3d0[v4] != 0) {
+                if (m_objects[v4].unk86 > 0) {
+                    m_objects[v4].unk86--;
                 } else {
-                    *(short*)((char*)this + v4 * 0x98 + 0x556) = 0;
+                    m_objects[v4].unk86 = 0;
                 }
             }
             v4++;
@@ -472,49 +472,49 @@ void CPlayer::Unk40f980()
                 v4 = 0;
             }
         }
-        if (((CPlayer*)*(int*)*(char**)((char*)this + 0x78))->Unk4103a0() != 0) {
-            *(int*)((char*)this + 0x30e4) = 0x384;
-            *(int*)((char*)this + 0x30e0) = 0xc;
+        if ((*m_opponent)->Unk4103a0() != 0) {
+            unk30e4 = 0x384;
+            unk30e0 = 0xc;
         }
-        if ((*(WORD*)(*(char**)*(char**)((char*)this + 0x78) + 8) < 0x32 || *(WORD*)(*(char**)*(char**)((char*)this + 0x78) + 8) >= 0xc8) && *(*(char**)((char*)this + 0x7c) + 0x1350) == 0 && *(int*)(*(char**)((char*)this + 0x7c) + 0x1354) == 0) {
-            if (*(DWORD*)((char*)this + 0x30e4) > 0) {
-                (*(int*)((char*)this + 0x30e4))--;
+        if (((*m_opponent)->pattern < 0x32 || (*m_opponent)->pattern >= 0xc8) && (char)m_game->unk1350 == 0 && m_game->unk1354 == 0) {
+            if ((unsigned long)unk30e4 > 0) {
+                unk30e4--;
             } else {
-                if (*(DWORD*)((char*)this + 0x30e0) > 1) {
-                    (*(int*)((char*)this + 0x30e0))--;
+                if ((unsigned long)unk30e0 > 1) {
+                    unk30e0--;
                 }
-                if (*(DWORD*)((char*)this + 0x30d0) > 0) {
-                    (*(int*)((char*)this + 0x30d0))--;
+                if ((unsigned long)unk30d0 > 0) {
+                    unk30d0--;
                 }
-                *(int*)((char*)this + 0x30e4) = *(int*)((char*)this + 0x30e0) * 5 * 3;
+                unk30e4 = unk30e0 * 5 * 3;
             }
         }
     }
-    if (*(short*)((char*)this + 0x148) < 0) {
-        *(short*)((char*)this + 0x148) = 0;
-    } else if (*(short*)((char*)this + 0x148) > 0xbb8) {
-        *(short*)((char*)this + 0x148) = 0xbb8;
+    if (unk148 < 0) {
+        unk148 = 0;
+    } else if (unk148 > 0xbb8) {
+        unk148 = 0xbb8;
     }
-    if (*(double*)((char*)this + 0x118) < 0.0) {
-        *(double*)((char*)this + 0x118) = 0.0;
-    } else if (*(double*)((char*)this + 0x118) > 1000.0) {
-        *(double*)((char*)this + 0x118) = 1000.0;
+    if (unk118 < 0.0) {
+        unk118 = 0.0;
+    } else if (unk118 > 1000.0) {
+        unk118 = 1000.0;
     }
-    (*(int*)((char*)this + 0x30f0))--;
-    if (*(int*)((char*)this + 0x30f0) <= 0) {
-        *(int*)((char*)this + 0x30f0) = 0x3138;
+    unk30f0--;
+    if (unk30f0 <= 0) {
+        unk30f0 = 0x3138;
     }
-    if (*(short*)((char*)this + 0x104) > 0 && *(short*)((char*)this + 0x174) == 0) {
-        (*(short*)((char*)this + 0x104))--;
+    if (unk104 > 0 && unk174 == 0) {
+        unk104--;
     }
 }
 
 char CPlayer::Unk40ff70()
 {
-    if (*(double*)((char*)this + 0x20) - 20.0 <= (*(double*)(*(char**)*(char**)((char*)this + 0x78) + 0x20) <= 20.0) || *(double*)(*(char**)*(char**)((char*)this + 0x78) + 0x20) - *(double*)((char*)this + 0x20) > 280.0) {
+    if (x - 20.0 <= ((*m_opponent)->x <= 20.0) || (*m_opponent)->x - x > 280.0) {
         return 1;
     }
-    if (*(double*)((char*)this + 0x20) + 20.0 >= 0x27f - (*(double*)(*(char**)*(char**)((char*)this + 0x78) + 0x20) >= 619.0) || *(double*)((char*)this + 0x20) - *(double*)(*(char**)*(char**)((char*)this + 0x78) + 0x20) > 280.0) {
+    if (x + 20.0 >= 0x27f - ((*m_opponent)->x >= 619.0) || x - (*m_opponent)->x > 280.0) {
         return -1;
     }
     return 0;
@@ -522,7 +522,7 @@ char CPlayer::Unk40ff70()
 
 int CPlayer::Unk410050(int p1, int p2)
 {
-    if (*(short*)((char*)this + 0x13a) > 0) {
+    if (unk13a > 0) {
         return 0;
     }
     if ((*(WORD*)((char*)p1 + 0xaa) & 0x80) > 0) {
@@ -531,7 +531,7 @@ int CPlayer::Unk410050(int p1, int p2)
     if ((*(WORD*)((char*)p2 + 0xb0) & 0x10) == 0) {
         return 0;
     }
-    if ((*(WORD*)((char*)p1 + 0xaa) & 4) == 0 && *(double*)((char*)this + 0x28) < 0.0 && *(short*)((char*)this + 0x14e) < 0x1e) {
+    if ((*(WORD*)((char*)p1 + 0xaa) & 4) == 0 && y < 0.0 && unk14e < 0x1e) {
         return 0;
     }
     if (Unk4100f0(p1) == 0) {
@@ -542,29 +542,29 @@ int CPlayer::Unk410050(int p1, int p2)
 
 int CPlayer::Unk4100f0(int p1)
 {
-    if (*(int*)((char*)this + 0xa4) != 0) {
-        if (*(*(char**)((char*)this + 0x7c) + 0x1364) == 1) {
-            if (*(int*)(*(char**)((char*)this + 0x7c) + 0x1348) == 0) {
+    if (unka4 != 0) {
+        if (m_game->unk1364 == 1) {
+            if (m_game->unk1348 == 0) {
                 return 0;
             }
         } else {
-            if (rand() > *(float*)((char*)this + 0xa8) * 1e+04f) {
+            if (rand() > unka8 * 1e+04f) {
                 return 0;
             }
             if ((*(WORD*)((char*)p1 + 0xaa) & 1) == 0) {
-                *((char*)this + 0x189) = 1;
+                m_inputY = 1;
             } else if ((*(WORD*)((char*)p1 + 0xaa) & 2) == 0) {
-                *((char*)this + 0x189) = 0;
+                m_inputY = 0;
             }
         }
-        if ((*(WORD*)((char*)p1 + 0xaa) & 2) == 0 && *((char*)this + 0x189) == 1 && *(double*)((char*)this + 0x28) == 0.0 || (*(WORD*)((char*)p1 + 0xaa) & 1) == 0 && *((char*)this + 0x189) != 1 && *(double*)((char*)this + 0x28) == 0.0) {
+        if ((*(WORD*)((char*)p1 + 0xaa) & 2) == 0 && m_inputY == 1 && y == 0.0 || (*(WORD*)((char*)p1 + 0xaa) & 1) == 0 && m_inputY != 1 && y == 0.0) {
             return 0;
         }
     } else {
-        if (*((char*)this + 0x188) != 1 - ((*(double*)(*(char**)*(char**)((char*)this + 0x78) + 0x20) - *(double*)((char*)this + 0x20) > 0.0) << 1) && (Unk410340() == 0 || *((char*)this + 0x188) == 0)) {
+        if (m_inputX != 1 - (((*m_opponent)->x - x > 0.0) << 1) && (Unk410340() == 0 || m_inputX == 0)) {
             return 0;
         }
-        if ((*(WORD*)((char*)p1 + 0xaa) & 2) == 0 && *((char*)this + 0x189) == 1 && *(double*)((char*)this + 0x28) == 0.0 || (*(WORD*)((char*)p1 + 0xaa) & 1) == 0 && *((char*)this + 0x189) != 1 && *(double*)((char*)this + 0x28) == 0.0) {
+        if ((*(WORD*)((char*)p1 + 0xaa) & 2) == 0 && m_inputY == 1 && y == 0.0 || (*(WORD*)((char*)p1 + 0xaa) & 1) == 0 && m_inputY != 1 && y == 0.0) {
             return 0;
         }
     }
@@ -573,94 +573,94 @@ int CPlayer::Unk4100f0(int p1)
 
 int CPlayer::Unk4102e0()
 {
-    return *(short*)((char*)this + 0x124) <= 0 && *(double*)((char*)this + 0x28) < 0.0 && *(int*)((char*)this + 0x128) == 0 && Unk4103a0() != 0;
+    return unk124 <= 0 && y < 0.0 && unk128 == 0 && Unk4103a0() != 0;
 }
 
 int CPlayer::Unk410340()
 {
-    return *(WORD*)((char*)this + 8) >= 0x96 && *(WORD*)((char*)this + 8) <= 0x9c || *(WORD*)((char*)this + 8) >= 0xa8 && *(WORD*)((char*)this + 8) <= 0xab;
+    return pattern >= 0x96 && pattern <= 0x9c || pattern >= 0xa8 && pattern <= 0xab;
 }
 
 int CPlayer::Unk4103a0()
 {
-    return *(WORD*)((char*)this + 8) >= 0x32 && *(WORD*)((char*)this + 8) < 0x96 && *(WORD*)(*(char**)*(char**)((char*)this + 0x78) + 8) != 0x61 && *(WORD*)(*(char**)*(char**)((char*)this + 0x78) + 8) != 0x62 && *(WORD*)(*(char**)*(char**)((char*)this + 0x78) + 8) != 0x63 && *(WORD*)(*(char**)*(char**)((char*)this + 0x78) + 8) != 0x60;
+    return pattern >= 0x32 && pattern < 0x96 && (*m_opponent)->pattern != 0x61 && (*m_opponent)->pattern != 0x62 && (*m_opponent)->pattern != 0x63 && (*m_opponent)->pattern != 0x60;
 }
 
 int CPlayer::Unk410420()
 {
-    return *(WORD*)((char*)this + 8) == 0xa3 || *(WORD*)((char*)this + 8) == 0xa4 || *(WORD*)((char*)this + 8) == 0xa5 || *(WORD*)((char*)this + 8) == 0xa6;
+    return pattern == 0xa3 || pattern == 0xa4 || pattern == 0xa5 || pattern == 0xa6;
 }
 
 double CPlayer::Unk410480()
 {
-    if (*(*(char**)((char*)this + 0x7c) + 0x1364) == 2) {
-        return *(double*)((char*)this + 0x118) / 10000.0 + 1.0;
+    if (m_game->unk1364 == 2) {
+        return unk118 / 10000.0 + 1.0;
     }
-    if (*(*(char**)((char*)this + 0x7c) + 0x1370) == 1) {
-        return (*(double*)((char*)this + 0x118) / 10000.0 + 1.0) / 2.0;
+    if ((char)m_game->unk1370 == 1) {
+        return (unk118 / 10000.0 + 1.0) / 2.0;
     }
-    if (*(*(char**)((char*)this + 0x7c) + 0x1370) == 2) {
-        return *(double*)((char*)this + 0x118) / 10000.0 + 1.0;
+    if ((char)m_game->unk1370 == 2) {
+        return unk118 / 10000.0 + 1.0;
     }
-    return (*(double*)((char*)this + 0x118) / 10000.0 + 1.0) * 2;
+    return (unk118 / 10000.0 + 1.0) * 2;
 }
 
 double CPlayer::Unk410530()
 {
-    return (*(int*)((char*)this + 0x108) * 0.5 / 10000.0 + 0.5) * *(double*)((char*)this + 0x180);
+    return (unk108 * 0.5 / 10000.0 + 0.5) * unk180;
 }
 
 double CPlayer::Unk410560()
 {
-    if (*(double*)((char*)this + 0x178) / 10000.0 > 1.0) {
+    if (unk178 / 10000.0 > 1.0) {
         return 1.0;
     }
-    return *(double*)((char*)this + 0x178) / 10000.0;
+    return unk178 / 10000.0;
 }
 
 void CPlayer::Unk4105a0(int p1, double p2)
 {
-    if (*(short*)((char*)this + 0x174) == 0) {
-        *(int*)(*(char**)*(char**)((char*)this + 0x78) + 0x10c) = *(int*)(*(char**)*(char**)((char*)this + 0x78) + 0x108);
+    if (unk174 == 0) {
+        (*m_opponent)->unk10c = (*m_opponent)->unk108;
     }
-    *(int*)(*(char**)*(char**)((char*)this + 0x78) + 0x108) -= (int)((double)p1 * this->Unk410480() * ((CPlayer*)*(int*)*(char**)((char*)this + 0x78))->Unk410530() * this->Unk410560());
-    *(double*)((char*)this + 0xf8) = *(double*)((char*)this + 0x178) / 100.0;
-    *(double*)((char*)this + 0x178) = p2 / 1000.0 * *(double*)((char*)this + 0x178);
-    if (*(double*)((char*)this + 0x178) > 10000.0) {
-        *(double*)((char*)this + 0x178) = p2 / 1000.0 * *(double*)((char*)this + 0x178);
+    (*m_opponent)->unk108 -= (int)((double)p1 * this->Unk410480() * (*m_opponent)->Unk410530() * this->Unk410560());
+    unkf8 = unk178 / 100.0;
+    unk178 = p2 / 1000.0 * unk178;
+    if (unk178 > 10000.0) {
+        unk178 = p2 / 1000.0 * unk178;
     }
-    (*(short*)((char*)this + 0x174))++;
-    *(short*)((char*)this + 0xf4) = *(short*)((char*)this + 0x174);
-    *(short*)((char*)this + 0x104) = 0xb4;
-    *(int*)((char*)this + 0x100) = *(int*)(*(char**)*(char**)((char*)this + 0x78) + 0x10c) - *(int*)(*(char**)*(char**)((char*)this + 0x78) + 0x108);
-    if ((DWORD)*(short*)((char*)this + 0x174) > *(int*)((char*)this + 0x30d4)) {
-        *(int*)((char*)this + 0x30d4) = *(short*)((char*)this + 0x174);
+    unk174++;
+    unkf4 = unk174;
+    unk104 = 0xb4;
+    unk100 = (*m_opponent)->unk10c - (*m_opponent)->unk108;
+    if ((DWORD)unk174 > unk30d4) {
+        unk30d4 = unk174;
     }
-    if (*(DWORD*)((char*)this + 0x100) > *(int*)((char*)this + 0x30d8)) {
-        *(int*)((char*)this + 0x30d8) = *(int*)((char*)this + 0x100);
+    if ((unsigned long)unk100 > unk30d8) {
+        unk30d8 = unk100;
     }
-    (*(int*)((char*)this + 0x30d0))++;
-    Unk410840(p1 / 0x64 * *(int*)((char*)this + 0x30d0) * *(int*)((char*)this + 0x30d4) * *(short*)((char*)this + 0x174));
+    unk30d0++;
+    Unk410840(p1 / 0x64 * unk30d0 * unk30d4 * unk174);
 }
 
 void CPlayer::Unk410790(int p1)
 {
-    if ((DWORD)*(short*)((char*)this + 0x174) > *(int*)((char*)this + 0x30d4)) {
-        *(int*)((char*)this + 0x30d4) = *(short*)((char*)this + 0x174);
+    if ((DWORD)unk174 > unk30d4) {
+        unk30d4 = unk174;
     }
-    if (*(DWORD*)((char*)this + 0x100) > *(int*)((char*)this + 0x30d8)) {
-        *(int*)((char*)this + 0x30d8) = *(int*)((char*)this + 0x100);
+    if ((unsigned long)unk100 > unk30d8) {
+        unk30d8 = unk100;
     }
-    (*(int*)((char*)this + 0x30d0))++;
-    Unk410840(*(short*)((char*)p1 + 0xa0) / 0x64 * *(int*)((char*)this + 0x30d0) * *(int*)((char*)this + 0x30d4) * *(short*)((char*)this + 0x174));
+    unk30d0++;
+    Unk410840(*(short*)((char*)p1 + 0xa0) / 0x64 * unk30d0 * unk30d4 * unk174);
 }
 
 void CPlayer::Unk410840(int p1)
 {
-    *(int*)((char*)this + 0x30c8) += p1;
-    while (*(DWORD*)((char*)this + 0x30c8) >= 0x5f5e100) {
-        *(int*)((char*)this + 0x30c8) -= 0x5f5e100;
-        (*(int*)((char*)this + 0x30cc))++;
+    unk30c8 += p1;
+    while ((unsigned long)unk30c8 >= 0x5f5e100) {
+        unk30c8 -= 0x5f5e100;
+        unk30cc++;
     }
 }
 
@@ -670,10 +670,10 @@ short CPlayer::Unk4108a0(short p1, short p2)
     short v4;
 
     v8 = rand();
-    if (*(*(char**)((char*)this + 0x7c) + 0x14283) == 1) {
-        v8 = ((CReplayFile*)(*(int*)((char*)this + 0x7c) + 0x14284))->Read();
-    } else if (*(*(char**)((char*)this + 0x7c) + 0x14283) == 2) {
-        ((CReplayFile*)(*(int*)((char*)this + 0x7c) + 0x14284))->Write(v8);
+    if (m_game->unk14283 == 1) {
+        v8 = (&m_game->m_replay)->Read();
+    } else if (m_game->unk14283 == 2) {
+        (&m_game->m_replay)->Write(v8);
     }
     v4 = p1 + (p2 - p1) * v8 / 0x8000;
     return v4;
@@ -681,58 +681,58 @@ short CPlayer::Unk4108a0(short p1, short p2)
 
 void CPlayer::Unk410940()
 {
-    if (*(short*)(*(char**)*(char**)((char*)this + 0x78) + 0x14c) == 0) {
-        if (*(BYTE*)((char*)this + 0x2bc0) > 0) {
-            ((Afterimages*)((char*)this + 0x2bc0))->Unk412930((ObjBase*)this);
-            *((char*)this + 0x2bc2) = 0;
+    if ((*m_opponent)->unk14c == 0) {
+        if (m_afterimages.unk0 > 0) {
+            (&m_afterimages)->Unk412930((ObjBase*)this);
+            m_afterimages.unk2 = 0;
             return;
         }
-        if (*(BYTE*)((char*)this + 0x2bc2) > 0) {
-            (*((char*)this + 0x2bc2))--;
+        if (m_afterimages.unk2 > 0) {
+            m_afterimages.unk2--;
         }
     }
 }
 
 void CPlayer::Unk4109d0(BYTE p1)
 {
-    ((Afterimages*)((char*)this + 0x2bc0))->Unk412a10((ObjBase*)this, p1);
+    (&m_afterimages)->Unk412a10((ObjBase*)this, p1);
 }
 
 void CPlayer::Unk410a10(int p1, int p2)
 {
-    *(double*)(*(char**)((char*)this + 0x7c) + 0x14210) = p1;
-    *(int*)(*(char**)((char*)this + 0x7c) + 0x14218) = p2;
+    m_game->m_shake = p1;
+    m_game->m_shakeHold = p2;
 }
 
 void CPlayer::Unk410a40(int p1, int p2)
 {
-    *(int*)(*(char**)((char*)this + 0x7c) + 0x14238) = (1 - (*((char*)this + 0x8c) << 1)) * p1;
-    *(int*)(*(char**)((char*)this + 0x7c) + 0x14240) = p2;
+    m_game->unk14238 = (1 - (m_side << 1)) * p1;
+    m_game->unk14240 = p2;
 }
 
 void CPlayer::Unk410a80(int p1, int p2)
 {
-    *(int*)(*(char**)((char*)this + 0x7c) + 0x1423c) = (1 - (*((char*)this + 0x8c) << 1)) * p1;
-    *(int*)(*(char**)((char*)this + 0x7c) + 0x14244) = p2;
+    m_game->unk1423c = (1 - (m_side << 1)) * p1;
+    m_game->unk14244 = p2;
 }
 
 void CPlayer::Unk410ac0(BYTE p1, int p2)
 {
-    *((char*)this + 0x30b8) = p1;
-    *(int*)((char*)this + 0x30bc) = p2;
-    if (*(int*)(*(char**)((char*)this + 0x7c) + 0x136c) == 0) {
-        *(int*)((char*)this + 0x30bc) = *(int*)((char*)this + 0x30bc) / 2;
+    unk30b8 = p1;
+    unk30bc = p2;
+    if (m_game->unk136c == 0) {
+        unk30bc = unk30bc / 2;
     }
 }
 
 void CPlayer::Unk410b10(BYTE p1, int p2)
 {
-    *((char*)this + 0x30c0) = p1;
-    *(int*)((char*)this + 0x30c4) = p2;
-    if (*(int*)(*(char**)((char*)this + 0x7c) + 0x136c) == 0) {
-        *(int*)((char*)this + 0x30c4) = *(int*)((char*)this + 0x30c4) / 2;
+    unk30c0 = p1;
+    unk30c4 = p2;
+    if (m_game->unk136c == 0) {
+        unk30c4 = unk30c4 / 2;
     }
-    *(*(char**)((char*)this + 0x7c) + 0xf33) = *((char*)this + 0x8c);
+    m_game->unkf33 = m_side;
 }
 
 void CPlayer::Vf11()
@@ -740,62 +740,62 @@ void CPlayer::Vf11()
     char v2c[32];
     char vc[8];
 
-    if (*(int*)((char*)this + 0x30e8) == 0) {
+    if (unk30e8 == 0) {
         Unk411080();
         Unk4116a0();
         Unk411ae0();
-        *(int*)((char*)this + 0x30e8) = 1;
+        unk30e8 = 1;
     } else if (1) {
-        if (*(int*)(*(char**)((char*)this + 0x7c) + 0x1338 + *((char*)this + 0x8c) * 4) != 0) {
-            strcpy(v2c, (const char*)((char*)this + 0x94));
+        if (m_game->unk1338[m_side] != 0) {
+            strcpy(v2c, m_name);
             strcat(v2c, "\\");
-            strcat(v2c, (const char*)((char*)this + 0x94));
-            _itoa(*((char*)this + 0x8e) + 1, vc, 0xa);
+            strcat(v2c, m_name);
+            _itoa(m_paletteIndex + 1, vc, 0xa);
             strcat(v2c, (const char*)vc);
             strcat(v2c, ".pal");
-            if (((CGraphics*)*(int*)((char*)this + 0x80))->LoadPaletteDat((PALETTEENTRY*)(*(int*)((char*)this + 0x7c) + 0xf35), (const char*)v2c, 0, *((char*)this + 0x8c) * 0x28 + 0x5f, 0x28) == 0) {
-                strcpy(v2c, (const char*)((char*)this + 0x94));
+            if (m_graphics->LoadPaletteDat(m_game->m_palette, (const char*)v2c, 0, m_side * 0x28 + 0x5f, 0x28) == 0) {
+                strcpy(v2c, m_name);
                 strcat(v2c, "\\");
-                strcat(v2c, (const char*)((char*)this + 0x94));
+                strcat(v2c, m_name);
                 strcat(v2c, ".dat");
-                ((CGraphics*)*(int*)((char*)this + 0x80))->LoadPaletteDat((PALETTEENTRY*)(*(int*)((char*)this + 0x7c) + 0xf35), (const char*)v2c, *((char*)this + 0x8e) * 0x28, *((char*)this + 0x8c) * 0x28 + 0x5f, 0x28);
+                m_graphics->LoadPaletteDat(m_game->m_palette, (const char*)v2c, m_paletteIndex * 0x28, m_side * 0x28 + 0x5f, 0x28);
             }
         } else {
-            strcpy(v2c, (const char*)((char*)this + 0x94));
+            strcpy(v2c, m_name);
             strcat(v2c, "\\");
-            strcat(v2c, (const char*)((char*)this + 0x94));
+            strcat(v2c, m_name);
             strcat(v2c, ".dat");
-            ((CGraphics*)*(int*)((char*)this + 0x80))->LoadPaletteDat((PALETTEENTRY*)(*(int*)((char*)this + 0x7c) + 0xf35), (const char*)v2c, *((char*)this + 0x8e) * 0x28, *((char*)this + 0x8c) * 0x28 + 0x5f, 0x28);
+            m_graphics->LoadPaletteDat(m_game->m_palette, (const char*)v2c, m_paletteIndex * 0x28, m_side * 0x28 + 0x5f, 0x28);
         }
-    } else if (*(int*)(*(char**)((char*)this + 0x7c) + 0x1338 + *((char*)this + 0x8c) * 4) != 0) {
-        strcpy(v2c, (const char*)((char*)this + 0x94));
+    } else if (m_game->unk1338[m_side] != 0) {
+        strcpy(v2c, m_name);
         strcat(v2c, "\\");
-        strcat(v2c, (const char*)((char*)this + 0x94));
-        _itoa(*((char*)this + 0x8e) + 1, vc, 0xa);
+        strcat(v2c, m_name);
+        _itoa(m_paletteIndex + 1, vc, 0xa);
         strcat(v2c, (const char*)vc);
         strcat(v2c, ".pal");
-        if (((CGraphics*)*(int*)((char*)this + 0x80))->LoadPaletteDat((PALETTEENTRY*)(*(int*)((char*)this + 0x7c) + 0xf35), (const char*)v2c, 0, *((char*)this + 0x8c) * 0x28 + 0x5f, 0x28) == 0) {
-            strcpy(v2c, (const char*)((char*)this + 0x94));
+        if (m_graphics->LoadPaletteDat(m_game->m_palette, (const char*)v2c, 0, m_side * 0x28 + 0x5f, 0x28) == 0) {
+            strcpy(v2c, m_name);
             strcat(v2c, "\\000.bmp");
-            ((CGraphics*)*(int*)((char*)this + 0x80))->LoadPaletteBmp((PALETTEENTRY*)(*(int*)((char*)this + 0x7c) + 0xf35), (const char*)v2c, *((char*)this + 0x8e) * 0x28, *((char*)this + 0x8c) * 0x28 + 0x5f, 0x28);
+            m_graphics->LoadPaletteBmp(m_game->m_palette, (const char*)v2c, m_paletteIndex * 0x28, m_side * 0x28 + 0x5f, 0x28);
         }
     } else {
-        strcpy(v2c, (const char*)((char*)this + 0x94));
+        strcpy(v2c, m_name);
         strcat(v2c, "\\000.bmp");
-        ((CGraphics*)*(int*)((char*)this + 0x80))->LoadPaletteBmp((PALETTEENTRY*)(*(int*)((char*)this + 0x7c) + 0xf35), (const char*)v2c, *((char*)this + 0x8e) * 0x28, *((char*)this + 0x8c) * 0x28 + 0x5f, 0x28);
+        m_graphics->LoadPaletteBmp(m_game->m_palette, (const char*)v2c, m_paletteIndex * 0x28, m_side * 0x28 + 0x5f, 0x28);
     }
     Vf12();
-    if (*(int*)((char*)this + 0xa4) == 0) {
-        if ((*(*(char**)((char*)this + 0x7c) + 0x1364) == 0 || *(*(char**)((char*)this + 0x7c) + 0x1364) == 2) && *(*(char**)((char*)this + 0x7c) + 0x1358) == 1) {
-            ((CharRecord*)((char*)this + 0x3118))->Load((const char*)((char*)this + 0x94));
-            (*(int*)((char*)this + 0x3118))++;
-            ((CharRecord*)((char*)this + 0x3118))->Save((const char*)((char*)this + 0x94));
+    if (unka4 == 0) {
+        if ((m_game->unk1364 == 0 || m_game->unk1364 == 2) && m_game->unk1358 == 1) {
+            ((CharRecord*)&unk3118)->Load(m_name);
+            unk3118++;
+            ((CharRecord*)&unk3118)->Save(m_name);
             return;
         }
-        if (*(*(char**)((char*)this + 0x7c) + 0x1364) == 1 || *(*(char**)((char*)this + 0x7c) + 0x1364) == 3 || *(*(char**)((char*)this + 0x7c) + 0x1364) == 4) {
-            ((CharRecord*)((char*)this + 0x3118))->Load((const char*)((char*)this + 0x94));
-            (*(int*)((char*)this + 0x3118))++;
-            ((CharRecord*)((char*)this + 0x3118))->Save((const char*)((char*)this + 0x94));
+        if (m_game->unk1364 == 1 || m_game->unk1364 == 3 || m_game->unk1364 == 4) {
+            ((CharRecord*)&unk3118)->Load(m_name);
+            unk3118++;
+            ((CharRecord*)&unk3118)->Save(m_name);
         }
     }
 }
@@ -816,13 +816,13 @@ void CPlayer::Unk411080()
     char x2c[32];
     char bc[8];
 
-    v70 = (int)operator new(*(WORD*)((char*)this + 0x18) * 4 + 4);
-    *(int*)((char*)this + 0x14) = v70;
+    v70 = (int)operator new(lastSurface * 4 + 4);
+    surfaces = (IDirectDrawSurface**)v70;
     if (1) {
         n38 = 0;
-        strcpy(x2c, (const char*)((char*)this + 0x94));
+        strcpy(x2c, m_name);
         strcat(x2c, "\\");
-        strcat(x2c, (const char*)((char*)this + 0x94));
+        strcat(x2c, m_name);
         strcat(x2c, ".dat");
         d30 = (int)CreateFileA((LPCSTR)x2c, 0x80000000, 0, 0, 3, 0x80, 0);
         h3c = GetFileSize((HANDLE)d30, 0);
@@ -831,8 +831,8 @@ void CPlayer::Unk411080()
         ReadFile((HANDLE)d30, (LPVOID)x44, h3c, (LPDWORD)&v40, 0);
         n38 = *(BYTE*)x44 * 3 + 1;
         l48 = 0;
-        for (; l48 <= *(WORD*)((char*)this + 0x18); l48++) {
-            a34 = ((CGraphics*)*(int*)((char*)this + 0x80))->LoadSurfaceHigh((IDirectDrawSurface**)(*(int*)((char*)this + 0x14) + l48 * 4), (BYTE*)(x44 + n38), 0x80, *((char*)this + 0x8c) * 0x28 + 0x5f);
+        for (; l48 <= lastSurface; l48++) {
+            a34 = m_graphics->LoadSurfaceHigh(&surfaces[l48], (BYTE*)(x44 + n38), 0x80, m_side * 0x28 + 0x5f);
             if (a34 == 0) {
                 _itoa(l48, v68, 0xa);
                 MessageBoxA(0, (LPCSTR)v68, 0, 0);
@@ -842,28 +842,28 @@ void CPlayer::Unk411080()
         }
         CloseHandle((HANDLE)d30);
         delete (char*)x44;
-        if (*(int*)(*(char**)((char*)this + 0x7c) + 0x1338 + *((char*)this + 0x8c) * 4) != 0) {
-            strcpy(x2c, (const char*)((char*)this + 0x94));
+        if (m_game->unk1338[m_side] != 0) {
+            strcpy(x2c, m_name);
             strcat(x2c, "\\");
-            strcat(x2c, (const char*)((char*)this + 0x94));
-            _itoa(*((char*)this + 0x8e) + 1, bc, 0xa);
+            strcat(x2c, m_name);
+            _itoa(m_paletteIndex + 1, bc, 0xa);
             strcat(x2c, (const char*)bc);
             strcat(x2c, ".pal");
-            ((CGraphics*)*(int*)((char*)this + 0x80))->LoadPaletteDat((PALETTEENTRY*)(*(int*)((char*)this + 0x7c) + 0xf35), (const char*)x2c, 0, *((char*)this + 0x8c) * 0x28 + 0x5f, 0x28);
+            m_graphics->LoadPaletteDat(m_game->m_palette, (const char*)x2c, 0, m_side * 0x28 + 0x5f, 0x28);
         } else {
-            ((CGraphics*)*(int*)((char*)this + 0x80))->LoadPaletteDat((PALETTEENTRY*)(*(int*)((char*)this + 0x7c) + 0xf35), (const char*)x2c, *((char*)this + 0x8e) * 0x28, *((char*)this + 0x8c) * 0x28 + 0x5f, 0x28);
+            m_graphics->LoadPaletteDat(m_game->m_palette, (const char*)x2c, m_paletteIndex * 0x28, m_side * 0x28 + 0x5f, 0x28);
         }
     } else {
         a6c = 0;
-        for (; a6c <= *(WORD*)((char*)this + 0x18); a6c++) {
-            strcpy(x2c, (const char*)((char*)this + 0x94));
+        for (; a6c <= lastSurface; a6c++) {
+            strcpy(x2c, m_name);
             strcat(x2c, "\\");
             if (a6c >= 0x3e8) {
                 strcat(x2c, "A");
                 _itoa(a6c, bc, 0xa);
                 strcat(x2c, (const char*)bc);
                 strcat(x2c, ".bmp");
-                ((CGraphics*)*(int*)((char*)this + 0x80))->LoadBmpHigh((IDirectDrawSurface**)(*(int*)((char*)this + 0x14) + a6c * 4), (const char*)x2c, *((char*)this + 0x8c) * 0x28 + 0x5f);
+                m_graphics->LoadBmpHigh(&surfaces[a6c], (const char*)x2c, m_side * 0x28 + 0x5f);
             } else {
                 if (a6c < 0x64) {
                     strcat(x2c, "0");
@@ -874,24 +874,24 @@ void CPlayer::Unk411080()
                 _itoa(a6c, bc, 0xa);
                 strcat(x2c, (const char*)bc);
                 strcat(x2c, ".bmp");
-                ((CGraphics*)*(int*)((char*)this + 0x80))->LoadBmpHigh((IDirectDrawSurface**)(*(int*)((char*)this + 0x14) + a6c * 4), (const char*)x2c, *((char*)this + 0x8c) * 0x28 + 0x5f);
+                m_graphics->LoadBmpHigh(&surfaces[a6c], (const char*)x2c, m_side * 0x28 + 0x5f);
             }
         }
-        if (*(int*)(*(char**)((char*)this + 0x7c) + 0x1338 + *((char*)this + 0x8c) * 4) != 0) {
-            strcpy(x2c, (const char*)((char*)this + 0x94));
+        if (m_game->unk1338[m_side] != 0) {
+            strcpy(x2c, m_name);
             strcat(x2c, "\\");
-            strcat(x2c, (const char*)((char*)this + 0x94));
-            _itoa(*((char*)this + 0x8e) + 1, bc, 0xa);
+            strcat(x2c, m_name);
+            _itoa(m_paletteIndex + 1, bc, 0xa);
             strcat(x2c, (const char*)bc);
             strcat(x2c, ".pal");
-            ((CGraphics*)*(int*)((char*)this + 0x80))->LoadPaletteDat((PALETTEENTRY*)(*(int*)((char*)this + 0x7c) + 0xf35), (const char*)x2c, 0, *((char*)this + 0x8c) * 0x28 + 0x5f, 0x28);
+            m_graphics->LoadPaletteDat(m_game->m_palette, (const char*)x2c, 0, m_side * 0x28 + 0x5f, 0x28);
         } else {
-            strcpy(x2c, (const char*)((char*)this + 0x94));
+            strcpy(x2c, m_name);
             strcat(x2c, "\\000.bmp");
-            ((CGraphics*)*(int*)((char*)this + 0x80))->LoadPaletteBmp((PALETTEENTRY*)(*(int*)((char*)this + 0x7c) + 0xf35), (const char*)x2c, *((char*)this + 0x8e) * 0x28, *((char*)this + 0x8c) * 0x28 + 0x5f, 0x28);
+            m_graphics->LoadPaletteBmp(m_game->m_palette, (const char*)x2c, m_paletteIndex * 0x28, m_side * 0x28 + 0x5f, 0x28);
         }
     }
-    *((char*)this + 0x1a) = ((CGraphics*)*(int*)((char*)this + 0x80))->GetColorKey((IDirectDrawSurface*)*(int*)*(char**)((char*)this + 0x14));
+    colorKey = m_graphics->GetColorKey(*surfaces);
 }
 
 void CPlayer::Unk4116a0()
@@ -906,25 +906,25 @@ void CPlayer::Unk4116a0()
     char x34[32];
     int l4;
 
-    strcpy(x34, (const char*)((char*)this + 0x94));
+    strcpy(x34, m_name);
     strcat(x34, "\\");
-    strcat(x34, (const char*)((char*)this + 0x94));
+    strcat(x34, m_name);
     strcat(x34, ".pat");
     CFile k10(x34, 1);
     l4 = k10.ReadInt();
     v40 = 0;
     for (; v40 < l4; v40++) {
         x38 = k10.ReadInt();
-        *(short*)(*(char**)((char*)this + 0x164) + x38 * 8) = k10.ReadInt();
-        *(short*)(*(char**)((char*)this + 0x164) + 2 + x38 * 8) = k10.ReadInt();
-        *(*(char**)((char*)this + 0x10) + x38 * 8) = k10.ReadInt();
-        f3c = *(BYTE*)(*(char**)((char*)this + 0x10) + x38 * 8);
-        ((PatternData*)(*(int*)((char*)this + 0x164) + x38 * 8))->Alloc(f3c);
-        ((EffectAnim*)(*(int*)((char*)this + 0x10) + x38 * 8))->Alloc(f3c);
+        m_patterns[x38].unk0 = k10.ReadInt();
+        m_patterns[x38].unk2 = k10.ReadInt();
+        anims[x38].frameCount = k10.ReadInt();
+        f3c = anims[x38].frameCount;
+        (&m_patterns[x38])->Alloc(f3c);
+        (&anims[x38])->Alloc(f3c);
         x44 = 0;
         for (; x44 < f3c; x44++) {
-            l48 = (char*)(*(int*)(*(char**)((char*)this + 0x10) + 4 + x38 * 8) + x44 * 0xc);
-            l4c = (char*)(*(int*)(*(char**)((char*)this + 0x164) + 4 + x38 * 8) + x44 * 0xc8);
+            l48 = (char*)&anims[x38].frames[x44].duration;
+            l4c = (char*)&m_patterns[x38].frames[x44].boxes[0].left;
             *(short*)l48 = (short)k10.ReadInt() * 3;
             *(short*)(l48 + 2) = k10.ReadInt();
             *(short*)(l48 + 8) = k10.ReadInt();
@@ -967,7 +967,7 @@ void CPlayer::Unk4116a0()
     }
     v40 = 0;
     for (; v40 < 0x40; v40++) {
-        *(int*)((char*)this + v40 * 0x98 + 0x4d8) = *(int*)((char*)this + 0x10);
+        m_objects[v40].anims = anims;
     }
 }
 
@@ -979,7 +979,7 @@ void CPlayer::Unk411ae0()
 
     v30 = 0;
     for (; v30 < 0x32; v30++) {
-        strcpy(v2c, (const char*)((char*)this + 0x94));
+        strcpy(v2c, m_name);
         strcat(v2c, "\\wave\\");
         if (v30 < 0xa) {
             strcat(v2c, "0");
@@ -987,8 +987,8 @@ void CPlayer::Unk411ae0()
         _itoa(v30, vc, 0xa);
         strcat(v2c, (const char*)vc);
         strcat(v2c, ".wav");
-        *(short*)((char*)this + v30 * 2 + 0x264) = ((CSound*)*(int*)((char*)this + 0x88))->Load((const char*)v2c);
-        ((CSound*)*(int*)((char*)this + 0x88))->SetVolume(*(short*)((char*)this + v30 * 2 + 0x264), -0x1f4);
+        unk264[v30] = m_sound->Load((const char*)v2c);
+        m_sound->SetVolume(unk264[v30], -0x1f4);
     }
 }
 
@@ -996,115 +996,115 @@ void CPlayer::Unk411be0()
 {
     BYTE v1;
 
-    if (*(int*)((char*)this + 0xa4) != 0) {
-        if (*(*(char**)((char*)this + 0x7c) + 0x1364) == 1) {
-            *((char*)this + 0x18a) = 0;
-            *((char*)this + 0x18b) = 0;
-            *((char*)this + 0x18c) = 0;
-            *((char*)this + 0x18d) = 0;
-            *((char*)this + 0x188) = 0;
-            if (*(*(char**)((char*)this + 0x7c) + 0x1346) == 1) {
-                *((char*)this + 0x189) = -1;
-            } else if (*(*(char**)((char*)this + 0x7c) + 0x1346) == 2) {
-                *((char*)this + 0x189) = 1;
+    if (unka4 != 0) {
+        if (m_game->unk1364 == 1) {
+            m_pressA = 0;
+            m_pressB = 0;
+            m_pressC = 0;
+            m_pressD = 0;
+            m_inputX = 0;
+            if ((char)m_game->unk1346 == 1) {
+                m_inputY = -1;
+            } else if ((char)m_game->unk1346 == 2) {
+                m_inputY = 1;
             } else {
-                *((char*)this + 0x189) = 0;
+                m_inputY = 0;
             }
             return;
         }
         Vf5();
-        if (*(*(char**)((char*)this + 0x7c) + 0x1350) != 0 || *(int*)(*(char**)((char*)this + 0x7c) + 0x1354) != 0) {
-            *((char*)this + 0x18a) = 0;
-            *((char*)this + 0x18b) = 0;
-            *((char*)this + 0x18c) = 0;
-            *((char*)this + 0x18d) = 0;
-            *(short*)((char*)this + 0x262) = 0x63;
+        if ((char)m_game->unk1350 != 0 || m_game->unk1354 != 0) {
+            m_pressA = 0;
+            m_pressB = 0;
+            m_pressC = 0;
+            m_pressD = 0;
+            unk262 = 0x63;
         }
         return;
     }
-    v1 = ((CInput*)*(int*)((char*)this + 0x84))->GetInput(*((char*)this + 0x8c));
-    if (*(*(char**)((char*)this + 0x7c) + 0x14283) == 1) {
-        v1 = ((CReplayFile*)(*(int*)((char*)this + 0x7c) + 0x14284))->Read();
-    } else if (*(*(char**)((char*)this + 0x7c) + 0x14283) == 2) {
-        ((CReplayFile*)(*(int*)((char*)this + 0x7c) + 0x14284))->Write(v1);
+    v1 = m_input->GetInput(m_side);
+    if (m_game->unk14283 == 1) {
+        v1 = (&m_game->m_replay)->Read();
+    } else if (m_game->unk14283 == 2) {
+        (&m_game->m_replay)->Write(v1);
     }
-    *((char*)this + 0x188) = 0;
-    *((char*)this + 0x189) = 0;
-    *((char*)this + 0x18a) = 0;
-    *((char*)this + 0x18b) = 0;
-    *((char*)this + 0x18c) = 0;
-    *((char*)this + 0x18d) = 0;
+    m_inputX = 0;
+    m_inputY = 0;
+    m_pressA = 0;
+    m_pressB = 0;
+    m_pressC = 0;
+    m_pressD = 0;
     if ((v1 & 8) > 0) {
-        *((char*)this + 0x189) = -1;
+        m_inputY = -1;
     } else if ((v1 & 4) > 0) {
-        *((char*)this + 0x189) = 1;
+        m_inputY = 1;
     }
-    if (*((char*)this + 0x50) > 0) {
+    if (facing > 0) {
         if ((v1 & 2) > 0) {
-            *((char*)this + 0x188) = -1;
+            m_inputX = -1;
         } else if ((v1 & 1) > 0) {
-            *((char*)this + 0x188) = 1;
+            m_inputX = 1;
         }
     } else if ((v1 & 1) > 0) {
-        *((char*)this + 0x188) = 1;
+        m_inputX = 1;
     } else if ((v1 & 2) > 0) {
-        *((char*)this + 0x188) = -1;
+        m_inputX = -1;
     }
     if ((v1 & 0x10) > 0) {
-        *((char*)this + 0x18a) = *(int*)((char*)this + 0x190) == 0;
-        *(int*)((char*)this + 0x190) = 1;
+        m_pressA = m_holdA == 0;
+        m_holdA = 1;
     } else {
-        *(int*)((char*)this + 0x190) = 0;
+        m_holdA = 0;
     }
     if ((v1 & 0x20) > 0) {
-        *((char*)this + 0x18b) = *(int*)((char*)this + 0x194) == 0;
-        *(int*)((char*)this + 0x194) = 1;
+        m_pressB = m_holdB == 0;
+        m_holdB = 1;
     } else {
-        *(int*)((char*)this + 0x194) = 0;
+        m_holdB = 0;
     }
     if ((v1 & 0x40) > 0) {
-        *((char*)this + 0x18c) = *(int*)((char*)this + 0x198) == 0;
-        *(int*)((char*)this + 0x198) = 1;
+        m_pressC = m_holdC == 0;
+        m_holdC = 1;
     } else {
-        *(int*)((char*)this + 0x198) = 0;
+        m_holdC = 0;
     }
     if ((v1 & 0x80) > 0) {
-        *((char*)this + 0x18d) = *(int*)((char*)this + 0x19c) == 0;
-        *(int*)((char*)this + 0x19c) = 1;
+        m_pressD = m_holdD == 0;
+        m_holdD = 1;
     } else {
-        *(int*)((char*)this + 0x19c) = 0;
+        m_holdD = 0;
     }
-    if (*(*(char**)((char*)this + 0x7c) + 0x1350) != 0 || *(int*)(*(char**)((char*)this + 0x7c) + 0x1354) != 0) {
-        *((char*)this + 0x18a) = 0;
-        *((char*)this + 0x18b) = 0;
-        *((char*)this + 0x18c) = 0;
-        *((char*)this + 0x18d) = 0;
-        *(short*)((char*)this + 0x262) = 0x63;
+    if ((char)m_game->unk1350 != 0 || m_game->unk1354 != 0) {
+        m_pressA = 0;
+        m_pressB = 0;
+        m_pressC = 0;
+        m_pressD = 0;
+        unk262 = 0x63;
     }
-    *((char*)this + *(short*)((char*)this + 0x260) + 0x1ab) = (*((char*)this + 0x188) == 1) + (*((char*)this + 0x188) == -1) * 2 + (*((char*)this + 0x189) == 1) * 4 + (*((char*)this + 0x189) == -1) * 8 + (*((char*)this + 0x18a) << 4) + (*((char*)this + 0x18b) << 5) + (*((char*)this + 0x18c) << 6) + (*((char*)this + 0x18d) << 7);
-    if (*(BYTE*)((char*)this + *(short*)((char*)this + 0x260) + 0x1ab) >= 0x10) {
-        if (*(WORD*)((char*)this + 8) >= 0xc8) {
-            *((char*)this + 0x1a8) = *((char*)this + *(short*)((char*)this + 0x260) + 0x1ab);
+    m_inputHistory[m_inputPos] = (m_inputX == 1) + (m_inputX == -1) * 2 + (m_inputY == 1) * 4 + (m_inputY == -1) * 8 + (m_pressA << 4) + (m_pressB << 5) + (m_pressC << 6) + (m_pressD << 7);
+    if ((unsigned char)m_inputHistory[m_inputPos] >= 0x10) {
+        if (pattern >= 0xc8) {
+            unk1a8 = m_inputHistory[m_inputPos];
         }
-        if (*(WORD*)((char*)this + 8) >= 0xa3 && *(WORD*)((char*)this + 8) <= 0xa6) {
-            *((char*)this + 0x1a9) = *((char*)this + *(short*)((char*)this + 0x260) + 0x1ab);
-            *((char*)this + 0x1aa) = 0xf;
+        if (pattern >= 0xa3 && pattern <= 0xa6) {
+            unk1a9 = m_inputHistory[m_inputPos];
+            unk1aa = 0xf;
         }
     }
-    (*(short*)((char*)this + 0x260))++;
-    if (*(short*)((char*)this + 0x260) >= 0xb4) {
-        *(short*)((char*)this + 0x260) = 0;
+    m_inputPos++;
+    if (m_inputPos >= 0xb4) {
+        m_inputPos = 0;
     }
-    if (*((char*)this + 0x188) == 1 - ((*(double*)(*(char**)*(char**)((char*)this + 0x78) + 0x20) - *(double*)((char*)this + 0x20) > 0.0) << 1) && *(short*)((char*)this + 0x14e) == 0 && *(int*)((char*)this + 0x150) == 0) {
-        *(short*)((char*)this + 0x14e) = 0x3c;
+    if (m_inputX == 1 - (((*m_opponent)->x - x > 0.0) << 1) && unk14e == 0 && unk150 == 0) {
+        unk14e = 0x3c;
     }
-    if (*(short*)(*(char**)*(char**)((char*)this + 0x78) + 0x14a) == 0 && *(short*)((char*)this + 0x14e) > 0) {
-        (*(short*)((char*)this + 0x14e))--;
+    if ((*m_opponent)->unk14a == 0 && unk14e > 0) {
+        unk14e--;
     }
-    if (*((char*)this + 0x188) == 0) {
-        *(int*)((char*)this + 0x150) = 0;
+    if (m_inputX == 0) {
+        unk150 = 0;
     } else {
-        *(int*)((char*)this + 0x150) = 1;
+        unk150 = 1;
     }
     Vf2();
 }
@@ -1117,63 +1117,63 @@ void CPlayer::Unk4121a0(int p1, int p2)
     RECT v14;
     int l4;
 
-    if (*(BYTE*)((char*)this + 0x2bc0) > 0 || *(BYTE*)((char*)this + 0x2bc2) > 0) {
-        v34 = *(short*)((char*)this + 0x30b4) - (*(BYTE*)((char*)this + 0x2bc0) * 3 + *(BYTE*)((char*)this + 0x2bc2));
+    if (m_afterimages.unk0 > 0 || m_afterimages.unk2 > 0) {
+        v34 = m_afterimages.pos - (m_afterimages.unk0 * 3 + m_afterimages.unk2);
         l4 = 0;
-        for (; l4 < *(BYTE*)((char*)this + 0x2bc2) + *(BYTE*)((char*)this + 0x2bc0) * 3; l4 = *(BYTE*)((char*)this + 0x2bc1) + l4) {
+        for (; l4 < m_afterimages.unk2 + m_afterimages.unk0 * 3; l4 = m_afterimages.unk1 + l4) {
             if (v34 >= 0x3c) {
                 v34 -= 0x3c;
             }
             if (v34 < 0) {
                 v34 += 0x3c;
             }
-            v20 = *(EffectFrame*)(char*)(*(int*)(*(char**)((char*)this + 0x10) + *(WORD*)((char*)this + v34 * 2 + 0x2fc4) * 8 + 4) + *(WORD*)((char*)this + v34 * 2 + 0x303c) * 0xc);
+            v20 = anims[m_afterimages.pattern[v34]].frames[m_afterimages.frame[v34]];
             v30.left = 0;
             v30.top = 0;
             v30.right = v20.width;
             v30.bottom = v20.height;
-            v14.left = (int)*(double*)((char*)this + v34 * 8 + 0x2bc8) + p1 - v20.x * (*((char*)this + v34 + 0x2f88) == 1) - (v20.width - v20.x) * (*((char*)this + v34 + 0x2f88) == -1);
-            v14.top = (int)*(double*)((char*)this + v34 * 8 + 0x2da8) + 0xd2 - (*(double*)((char*)this + v34 * 8 + 0x2da8) < 0.0) - v20.y + p2;
+            v14.left = (int)m_afterimages.x[v34] + p1 - v20.x * (m_afterimages.facing[v34] == 1) - (v20.width - v20.x) * (m_afterimages.facing[v34] == -1);
+            v14.top = (int)m_afterimages.y[v34] + 0xd2 - (m_afterimages.y[v34] < 0.0) - v20.y + p2;
             v14.right = v20.width + v14.left;
             v14.bottom = v20.height + v14.top;
-            ((CGraphics*)*(int*)((char*)this + 0x80))->BlitEx(v14, (IDirectDrawSurface*)*(int*)(*(char**)((char*)this + 0x14) + v20.surface * 4), v30, *((char*)this + 0x1a), *((char*)this + v34 + 0x2f88) == -1, 0);
-            v34 = *(BYTE*)((char*)this + 0x2bc1) + v34;
+            m_graphics->BlitEx(v14, surfaces[v20.surface], v30, colorKey, m_afterimages.facing[v34] == -1, 0);
+            v34 = m_afterimages.unk1 + v34;
         }
     }
-    v20 = *(EffectFrame*)(char*)(*(int*)(*(char**)((char*)this + 0x10) + *(WORD*)((char*)this + 8) * 8 + 4) + *(WORD*)((char*)this + 0xa) * 0xc);
+    v20 = anims[pattern].frames[frame];
     v30.left = 0;
     v30.top = 0;
     v30.right = v20.width;
     v30.bottom = v20.height;
-    v14.left = (int)*(double*)((char*)this + 0x20) + p1 - v20.x * (*((char*)this + 0x50) == 1) - (v20.width - v20.x) * (*((char*)this + 0x50) == -1);
-    v14.top = (int)*(double*)((char*)this + 0x28) + 0xd2 - (*(double*)((char*)this + 0x28) < 0.0) - v20.y + p2;
+    v14.left = (int)x + p1 - v20.x * (facing == 1) - (v20.width - v20.x) * (facing == -1);
+    v14.top = (int)y + 0xd2 - (y < 0.0) - v20.y + p2;
     v14.right = v20.width + v14.left;
     v14.bottom = v20.height + v14.top;
     if (v14.top < 0xf0) {
-        if (*(int*)((char*)this + 0x30bc) == 0) {
-            if (*((char*)this + 0x58) == 3) {
-                ((CGraphics*)*(int*)((char*)this + 0x80))->BlitSmear(v14, (IDirectDrawSurface*)*(int*)(*(char**)((char*)this + 0x14) + v20.surface * 4), v30, *((char*)this + 0x1a), *((char*)this + 0x50) == -1);
-            } else if (*((char*)this + 0x58) > 0) {
-                ((CGraphics*)*(int*)((char*)this + 0x80))->BlitEx(v14, (IDirectDrawSurface*)*(int*)(*(char**)((char*)this + 0x14) + v20.surface * 4), v30, *((char*)this + 0x1a), *((char*)this + 0x50) == -1, *((char*)this + 0x58) - 1);
+        if (unk30bc == 0) {
+            if (unk58 == 3) {
+                m_graphics->BlitSmear(v14, surfaces[v20.surface], v30, colorKey, facing == -1);
+            } else if (unk58 > 0) {
+                m_graphics->BlitEx(v14, surfaces[v20.surface], v30, colorKey, facing == -1, unk58 - 1);
             } else {
-                ((CGraphics*)*(int*)((char*)this + 0x80))->Blit(v14, (IDirectDrawSurface*)*(int*)(*(char**)((char*)this + 0x14) + v20.surface * 4), v30, *((char*)this + 0x1a), *((char*)this + 0x50) == -1);
+                m_graphics->Blit(v14, surfaces[v20.surface], v30, colorKey, facing == -1);
             }
         } else {
-            ((CGraphics*)*(int*)((char*)this + 0x80))->BlitTint(v14, (IDirectDrawSurface*)*(int*)(*(char**)((char*)this + 0x14) + v20.surface * 4), v30, *((char*)this + 0x1a), *((char*)this + 0x50) == -1, *((char*)this + 0x30b8));
-            (*(int*)((char*)this + 0x30bc))--;
+            m_graphics->BlitTint(v14, surfaces[v20.surface], v30, colorKey, facing == -1, unk30b8);
+            unk30bc--;
         }
         return;
     }
-    if (*(short*)((char*)this + 0x13e) == 0) {
-        v20 = *(EffectFrame*)*(char**)(*(char**)((char*)this + 0x10) + 0x18c);
+    if (unk13e == 0) {
+        v20 = *anims[0x31].frames;
         v30.left = 0;
         v30.top = 0;
         v30.right = v20.width;
         v30.bottom = v20.height;
-        v14.left = (int)*(double*)((char*)this + 0x20) + p1 - v20.x * (*((char*)this + 0x50) == 1) - (v20.width - v20.x) * (*((char*)this + 0x50) == -1);
+        v14.left = (int)x + p1 - v20.x * (facing == 1) - (v20.width - v20.x) * (facing == -1);
         v14.top = 0xef - v20.y;
         v14.right = v20.width + v14.left;
         v14.bottom = v20.height + v14.top;
-        ((CGraphics*)*(int*)((char*)this + 0x80))->Blit(v14, (IDirectDrawSurface*)*(int*)(*(char**)((char*)this + 0x14) + v20.surface * 4), v30, *((char*)this + 0x1a), *((char*)this + 0x50) == -1);
+        m_graphics->Blit(v14, surfaces[v20.surface], v30, colorKey, facing == -1);
     }
 }

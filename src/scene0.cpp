@@ -9,37 +9,37 @@ CScene0::CScene0(HWND p1, CPlayer** p2, CPlayer** p3, CGame* p4, CGraphics* p5, 
     : CScene(p1, p2, p3, p4, p5, p6, p7)
 {
     if (1) {
-        ((CGame*)*(int*)((char*)this + 0x1c))->LoadDat((IDirectDrawSurface**)((char*)this + 0x434), "system\\title.dat", 0, 1);
-        ((CGame*)*(int*)((char*)this + 0x1c))->LoadDat((IDirectDrawSurface**)((char*)this + 0x438), "system\\title_ob.dat", 0, 0xc1);
-        ((CGraphics*)*(int*)((char*)this + 0x20))->LoadPaletteDat((PALETTEENTRY*)((char*)this + 0x2e), "system\\title.dat", 0, 1, 0xc0);
-        ((CGraphics*)*(int*)((char*)this + 0x20))->LoadPaletteDat((PALETTEENTRY*)((char*)this + 0x2e), "system\\title_ob.dat", 0, 0xc1, 0x30);
+        m_game->LoadDat((IDirectDrawSurface**)&unk434, "system\\title.dat", 0, 1);
+        m_game->LoadDat((IDirectDrawSurface**)&unk438, "system\\title_ob.dat", 0, 0xc1);
+        m_graphics->LoadPaletteDat(m_palette, "system\\title.dat", 0, 1, 0xc0);
+        m_graphics->LoadPaletteDat(m_palette, "system\\title_ob.dat", 0, 0xc1, 0x30);
     } else {
-        ((CGraphics*)*(int*)((char*)this + 0x20))->LoadBmp((IDirectDrawSurface**)((char*)this + 0x434), "system\\title.bmp", 1);
-        ((CGraphics*)*(int*)((char*)this + 0x20))->LoadBmp((IDirectDrawSurface**)((char*)this + 0x438), "system\\title_ob.bmp", 0xc1);
-        ((CGraphics*)*(int*)((char*)this + 0x20))->LoadPaletteBmp((PALETTEENTRY*)((char*)this + 0x2e), "system\\title.bmp", 0, 1, 0xc0);
-        ((CGraphics*)*(int*)((char*)this + 0x20))->LoadPaletteBmp((PALETTEENTRY*)((char*)this + 0x2e), "system\\title_ob.bmp", 0, 0xc1, 0x30);
+        m_graphics->LoadBmp((IDirectDrawSurface**)&unk434, "system\\title.bmp", 1);
+        m_graphics->LoadBmp((IDirectDrawSurface**)&unk438, "system\\title_ob.bmp", 0xc1);
+        m_graphics->LoadPaletteBmp(m_palette, "system\\title.bmp", 0, 1, 0xc0);
+        m_graphics->LoadPaletteBmp(m_palette, "system\\title_ob.bmp", 0, 0xc1, 0x30);
     }
-    *((char*)this + 0x42e) = ((CGraphics*)*(int*)((char*)this + 0x20))->GetColorKey((IDirectDrawSurface*)*(int*)((char*)this + 0x438));
-    *((char*)this + 0x43c) = 0;
-    *(short*)((char*)this + 0x43e) = 0;
-    *((char*)this + 0x442) = 0;
-    *((char*)this + 0x440) = 0;
-    *((char*)this + 0x441) = 0;
-    *((char*)this + 0x2c) = 1;
-    *((char*)this + 0x2d) = 0;
-    *(int*)((char*)this + 0x448) = 0;
-    *(int*)((char*)this + 0x444) = 0;
+    m_colorKey = m_graphics->GetColorKey((IDirectDrawSurface*)unk438);
+    unk43c = 0;
+    unk43e = 0;
+    unk440[2] = 0;
+    unk440[0] = 0;
+    unk440[1] = 0;
+    unk2c = 1;
+    unk2d = 0;
+    unk448 = 0;
+    unk444 = 0;
 }
 
 CScene0::~CScene0()
 {
-    if (*(int*)((char*)this + 0x434) != 0) {
-        ((IUnknown*)*(int*)((char*)this + 0x434))->Release();
-        *(int*)((char*)this + 0x434) = 0;
+    if (unk434 != 0) {
+        ((IUnknown*)unk434)->Release();
+        unk434 = 0;
     }
-    if (*(int*)((char*)this + 0x438) != 0) {
-        ((IUnknown*)*(int*)((char*)this + 0x438))->Release();
-        *(int*)((char*)this + 0x438) = 0;
+    if (unk438 != 0) {
+        ((IUnknown*)unk438)->Release();
+        unk438 = 0;
     }
 }
 
@@ -47,103 +47,103 @@ BYTE CScene0::Update()
 {
     int v4;
 
-    if (*((char*)this + 0x2c) == 1) {
-        *((char*)this + 0x442) = 0;
-        *((char*)this + 0x2c) = 0;
-        ((CGraphics*)*(int*)((char*)this + 0x20))->SetPalette((PALETTEENTRY*)((char*)this + 0x2e));
-    } else if (*((char*)this + 0x2c) == 2) {
-        CScene::Unk759e20((PALETTEENTRY*)((char*)this + 0x2e), 1);
-        *((char*)this + 0x2c) = 0;
-    } else if (*((char*)this + 0x2c) == 3) {
-        ((CGraphics*)*(int*)((char*)this + 0x20))->SetPalette((PALETTEENTRY*)((char*)this + 0x2e));
-        CScene::Unk759e20((PALETTEENTRY*)((char*)this + 0x2e), 1);
-        *((char*)this + 0x2c) = 0;
+    if (unk2c == 1) {
+        unk440[2] = 0;
+        unk2c = 0;
+        m_graphics->SetPalette(m_palette);
+    } else if (unk2c == 2) {
+        CScene::Unk759e20(m_palette, 1);
+        unk2c = 0;
+    } else if (unk2c == 3) {
+        m_graphics->SetPalette(m_palette);
+        CScene::Unk759e20(m_palette, 1);
+        unk2c = 0;
     }
-    if (*(DWORD*)((char*)this + 0x444) > 0x708 && 1) {
-        *(int*)((char*)this + 0x444) = 0;
-        *(*(char**)((char*)this + 0x1c) + 0x1364) = 6;
-        CScene::Unk759c90((PALETTEENTRY*)((char*)this + 0x2e), 1, 0, 0);
-        *((char*)this + 0x2c) = 2;
+    if (unk444 > 0x708 && 1) {
+        unk444 = 0;
+        m_game->unk1364 = 6;
+        CScene::Unk759c90(m_palette, 1, 0, 0);
+        unk2c = 2;
         return 2;
     }
     Vf2();
-    ((CGame*)*(int*)((char*)this + 0x1c))->UpdateInput();
+    m_game->UpdateInput();
     v4 = 0;
     for (; v4 < 2; v4++) {
-        if (*(BYTE*)((char*)this + v4 + 0x440) == 0 && *(*(char**)((char*)this + 0x1c) + 0xe + v4) != 0) {
-            ((CGame*)*(int*)((char*)this + 0x1c))->PlaySE(8);
-            *((char*)this + 0x43c) += *(*(char**)((char*)this + 0x1c) + 0xe + v4);
-            if (*((char*)this + 0x43c) > 6) {
-                *((char*)this + 0x43c) = 0;
+        if (unk440[v4] == 0 && m_game->m_inputY[v4] != 0) {
+            m_game->PlaySE(8);
+            unk43c += m_game->m_inputY[v4];
+            if (unk43c > 6) {
+                unk43c = 0;
             }
-            if (*((char*)this + 0x43c) < 0) {
-                *((char*)this + 0x43c) = 6;
+            if (unk43c < 0) {
+                unk43c = 6;
             }
-            *(short*)((char*)this + 0x43e) = 0;
-            *((char*)this + v4 + 0x440) = 1;
+            unk43e = 0;
+            unk440[v4] = 1;
         }
-        if (*(*(char**)((char*)this + 0x1c) + 0xe + v4) == 0) {
-            *((char*)this + v4 + 0x440) = 0;
-            (*(int*)((char*)this + 0x444))++;
+        if (m_game->m_inputY[v4] == 0) {
+            unk440[v4] = 0;
+            unk444++;
         } else {
-            *(int*)((char*)this + 0x444) = 0;
+            unk444 = 0;
         }
-        if (*(*(char**)((char*)this + 0x1c) + 0x10 + v4) == 1) {
-            switch (*((char*)this + 0x43c)) {
+        if ((char)m_game->m_pressA[v4] == 1) {
+            switch (unk43c) {
             case 0:
-                *(*(char**)((char*)this + 0x1c) + 0x1343) = v4 == 1;
-                *(*(char**)((char*)this + 0x1c) + 0x1344) = v4 == 0;
-                *(*(char**)((char*)this + 0x1c) + 0x1342) = v4;
-                ((CGame*)*(int*)((char*)this + 0x1c))->PlaySE(6);
-                *(*(char**)((char*)this + 0x1c) + 0x1364) = 0;
-                *(*(char**)((char*)this + 0x1c) + 0x134e) = 2;
-                CScene::Unk759c90((PALETTEENTRY*)((char*)this + 0x2e), 1, 0, 0);
-                *((char*)this + 0x2c) = 2;
+                *(char*)&m_game->unk1343[0] = v4 == 1;
+                *(char*)&m_game->unk1343[1] = v4 == 0;
+                m_game->unk1342 = v4;
+                m_game->PlaySE(6);
+                m_game->unk1364 = 0;
+                m_game->unk134e = 2;
+                CScene::Unk759c90(m_palette, 1, 0, 0);
+                unk2c = 2;
                 return 1;
             case 1:
-                *(*(char**)((char*)this + 0x1c) + 0x1343) = v4 == 1;
-                *(*(char**)((char*)this + 0x1c) + 0x1344) = v4 == 0;
-                ((CGame*)*(int*)((char*)this + 0x1c))->PlaySE(6);
-                *(*(char**)((char*)this + 0x1c) + 0x1364) = 3;
-                *(*(char**)((char*)this + 0x1c) + 0x134e) = *(*(char**)((char*)this + 0x1c) + 0x134f);
-                CScene::Unk759c90((PALETTEENTRY*)((char*)this + 0x2e), 1, 0, 0);
-                *((char*)this + 0x2c) = 2;
+                *(char*)&m_game->unk1343[0] = v4 == 1;
+                *(char*)&m_game->unk1343[1] = v4 == 0;
+                m_game->PlaySE(6);
+                m_game->unk1364 = 3;
+                m_game->unk134e = (char)m_game->unk134f;
+                CScene::Unk759c90(m_palette, 1, 0, 0);
+                unk2c = 2;
                 return 1;
             case 2:
-                *(*(char**)((char*)this + 0x1c) + 0x1343) = 0;
-                *(*(char**)((char*)this + 0x1c) + 0x1344) = 0;
-                ((CGame*)*(int*)((char*)this + 0x1c))->PlaySE(6);
-                *(*(char**)((char*)this + 0x1c) + 0x1364) = 4;
-                *(*(char**)((char*)this + 0x1c) + 0x134e) = *(*(char**)((char*)this + 0x1c) + 0x134f);
-                CScene::Unk759c90((PALETTEENTRY*)((char*)this + 0x2e), 1, 0, 0);
-                *((char*)this + 0x2c) = 2;
+                m_game->unk1343[0] = 0;
+                m_game->unk1343[1] = 0;
+                m_game->PlaySE(6);
+                m_game->unk1364 = 4;
+                m_game->unk134e = (char)m_game->unk134f;
+                CScene::Unk759c90(m_palette, 1, 0, 0);
+                unk2c = 2;
                 return 1;
             case 3:
-                *(*(char**)((char*)this + 0x1c) + 0x1343) = v4 == 1;
-                *(*(char**)((char*)this + 0x1c) + 0x1344) = v4 == 0;
-                *(*(char**)((char*)this + 0x1c) + 0x1342) = v4;
-                ((CGame*)*(int*)((char*)this + 0x1c))->PlaySE(6);
-                *(*(char**)((char*)this + 0x1c) + 0x1364) = 1;
-                *(*(char**)((char*)this + 0x1c) + 0x134e) = 2;
-                CScene::Unk759c90((PALETTEENTRY*)((char*)this + 0x2e), 1, 0, 0);
-                *((char*)this + 0x2c) = 2;
+                *(char*)&m_game->unk1343[0] = v4 == 1;
+                *(char*)&m_game->unk1343[1] = v4 == 0;
+                m_game->unk1342 = v4;
+                m_game->PlaySE(6);
+                m_game->unk1364 = 1;
+                m_game->unk134e = 2;
+                CScene::Unk759c90(m_palette, 1, 0, 0);
+                unk2c = 2;
                 return 1;
             case 4:
-                *(*(char**)((char*)this + 0x1c) + 0x1343) = 0;
-                *(*(char**)((char*)this + 0x1c) + 0x1344) = 0;
-                ((CGame*)*(int*)((char*)this + 0x1c))->PlaySE(6);
-                *(*(char**)((char*)this + 0x1c) + 0x1364) = 5;
-                *(*(char**)((char*)this + 0x1c) + 0x134e) = 2;
-                CScene::Unk759c90((PALETTEENTRY*)((char*)this + 0x2e), 1, 0, 0);
-                *((char*)this + 0x2c) = 3;
+                m_game->unk1343[0] = 0;
+                m_game->unk1343[1] = 0;
+                m_game->PlaySE(6);
+                m_game->unk1364 = 5;
+                m_game->unk134e = 2;
+                CScene::Unk759c90(m_palette, 1, 0, 0);
+                unk2c = 3;
                 return 8;
             case 5:
-                ((CGame*)*(int*)((char*)this + 0x1c))->PlaySE(6);
-                CScene::Unk759c90((PALETTEENTRY*)((char*)this + 0x2e), 1, 0, 0);
-                *((char*)this + 0x2c) = 3;
+                m_game->PlaySE(6);
+                CScene::Unk759c90(m_palette, 1, 0, 0);
+                unk2c = 3;
                 return 6;
             case 6:
-                PostMessageA((HWND)*(int*)((char*)this + 8), 0x10, 0, 0);
+                PostMessageA(m_hwnd, 0x10, 0, 0);
             }
         }
     }
@@ -153,10 +153,10 @@ BYTE CScene0::Update()
 
 void CScene0::Draw()
 {
-    ((CGraphics*)*(int*)((char*)this + 0x20))->Blit(MakeRect(0, 0, 0x140, 0xf0), (IDirectDrawSurface*)*(int*)((char*)this + 0x434), MakeRect(0, 0, 0x140, 0xf0), 0, 0);
-    ((CGraphics*)*(int*)((char*)this + 0x20))->Blit(MakeRect(0xc3, 0x82, 0x78, 0x62), (IDirectDrawSurface*)*(int*)((char*)this + 0x438), MakeRect(0, 0, 0x78, 0x62), *((char*)this + 0x42e), 0);
-    ((CGraphics*)*(int*)((char*)this + 0x20))->Blit(MakeRect(0xc3, *((char*)this + 0x43c) * 0xe + 0x82, 0x78, 0xe), (IDirectDrawSurface*)*(int*)((char*)this + 0x438), MakeRect(0, *((char*)this + 0x43c) * 0xe + 0x62, 0x78, 0xe), *((char*)this + 0x42e), 0);
-    ((CGraphics*)*(int*)((char*)this + 0x20))->Flip();
+    m_graphics->Blit(MakeRect(0, 0, 0x140, 0xf0), (IDirectDrawSurface*)unk434, MakeRect(0, 0, 0x140, 0xf0), 0, 0);
+    m_graphics->Blit(MakeRect(0xc3, 0x82, 0x78, 0x62), (IDirectDrawSurface*)unk438, MakeRect(0, 0, 0x78, 0x62), m_colorKey, 0);
+    m_graphics->Blit(MakeRect(0xc3, *((char*)this + 0x43c) * 0xe + 0x82, 0x78, 0xe), (IDirectDrawSurface*)unk438, MakeRect(0, *((char*)this + 0x43c) * 0xe + 0x62, 0x78, 0xe), m_colorKey, 0);
+    m_graphics->Flip();
 }
 
 void CScene0::Vf2()
@@ -164,12 +164,12 @@ void CScene0::Vf2()
     int l10c;
     char v108[256];
 
-    l10c = ((IDirectInputDevice7*)*(int*)(*(char**)((char*)this + 0x24) + 0x1e8))->GetDeviceState(0x100, v108);
+    l10c = m_input->m_keyboard->GetDeviceState(0x100, v108);
     if (l10c < 0 && l10c == 0x8007001e) {
-        ((IDirectInputDevice7*)*(int*)(*(char**)((char*)this + 0x24) + 0x1e8))->Acquire();
+        m_input->m_keyboard->Acquire();
     }
     if ((v108[1] & 0x80) != 0) {
-        PostMessageA((HWND)*(int*)((char*)this + 8), 0x10, 0, 0);
+        PostMessageA(m_hwnd, 0x10, 0, 0);
     }
 }
 
@@ -181,17 +181,17 @@ void CScene0::Unk776820()
 
     v8 = timeGetTime();
     v4 = 0;
-    *(int*)((char*)this + 0x448) = 1;
+    unk448 = 1;
     xc = 0x14;
     for (; xc >= 0; xc--) {
         Draw();
-        ((CGraphics*)*(int*)((char*)this + 0x20))->Darken((PALETTEENTRY*)((char*)this + 0x2e), 1, 0xc1, xc * 3 + 0x28);
+        m_graphics->Darken(m_palette, 1, 0xc1, xc * 3 + 0x28);
         while ((DWORD)(timeGetTime() - v8) < (BYTE)(0x10 - v4)) {
         }
         v8 = timeGetTime();
         v4 = v4 == 0;
     }
-    *(int*)((char*)this + 0x448) = 0;
+    unk448 = 0;
 }
 
 void CScene0::Unk7768d0()
@@ -202,15 +202,15 @@ void CScene0::Unk7768d0()
 
     v8 = timeGetTime();
     v4 = 0;
-    *(int*)((char*)this + 0x448) = 1;
+    unk448 = 1;
     xc = 0;
     for (; xc <= 0x14; xc++) {
         Draw();
-        ((CGraphics*)*(int*)((char*)this + 0x20))->Darken((PALETTEENTRY*)((char*)this + 0x2e), 1, 0xc1, xc * 3 + 0x28);
+        m_graphics->Darken(m_palette, 1, 0xc1, xc * 3 + 0x28);
         while ((DWORD)(timeGetTime() - v8) < (BYTE)(0x10 - v4)) {
         }
         v8 = timeGetTime();
         v4 = v4 == 0;
     }
-    *(int*)((char*)this + 0x448) = 0;
+    unk448 = 0;
 }

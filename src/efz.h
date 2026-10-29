@@ -20,6 +20,7 @@
 
 struct EffectDesc;
 class CAnimBg;
+class CGame;
 
 // A frame of an effect animation, read from system\effect\effect.pat.
 struct EffectFrame {
@@ -454,15 +455,15 @@ struct PatternData {
     // FUNCTION: 0x412820
     PatternData()
     {
-        *(int*)((char*)this + 4) = 0;
+        frames = (PatternFrame*)0;
     }
     // FUNCTION: 0x4128e0
     ~PatternData()
     {
         int v4;
 
-        if (*(int*)((char*)this + 4) != 0) {
-            v4 = *(int*)((char*)this + 4);
+        if ((int)frames != 0) {
+            v4 = (int)frames;
             operator delete((void*)v4);
         }
     }
@@ -473,13 +474,13 @@ struct PatternData {
 
         if (p1 > 0) {
             v4 = (int)operator new(p1 * 0xc8);
-            *(int*)((char*)this + 4) = v4;
+            frames = (PatternFrame*)v4;
         }
     }
 
     short unk0;
     short unk2;
-    void* frames;
+    PatternFrame* frames;
 };
 
 // What a player and each of the objects it spawns have in common: pattern and frame,
@@ -491,8 +492,8 @@ struct ObjBase {
     // Sets the velocity from a direction in degrees and a speed.
     void SetVelocity(double angle, double speed)
     {
-        *(double*)((char*)this + 0x28) = cos(angle / 57.29579143313326) * speed;
-        *(double*)((char*)this + 0x30) = sin(angle / 57.29579143313326) * speed;
+        vx = cos(angle / 57.29579143313326) * speed;
+        vy = sin(angle / 57.29579143313326) * speed;
     }
     // FUNCTION: 0x4c0480
     // The direction of (dx, dy) in degrees.
@@ -501,18 +502,45 @@ struct ObjBase {
         return atan2(dy, dx) * 57.29579143313326;
     }
 
-    short pattern;    // +0
-    short frame;      // +2
-    BYTE unk4[4];
+    WORD pattern;     // +0
+    WORD frame;       // +2: the frame of the pattern's animation
+    WORD timer;       // +4: game frames spent on the current frame
+    BYTE unk6[2];
     EffectAnim* anims; // +8: the character's sprite animations, one per pattern
-    BYTE unkc[0xc];
+    IDirectDrawSurface** surfaces; // +0xc: the character's sprites
+    WORD lastSurface; // +0x10: sprites 0 to lastSurface are loaded
+    char colorKey;    // +0x12: the sprites' transparent colour
+    BYTE unk13[5];
     double x;         // +0x18
-    double y;         // +0x20
+    double y;         // +0x20: 0 on the ground, negative in the air
     double vx;        // +0x28
     double vy;        // +0x30
-    BYTE unk38[0x10];
+    double ax;        // +0x38: most states add or subtract it from vx every frame
+    double ay;        // +0x40: gravity, added to vy every frame
     char facing;      // +0x48: 1 or -1
-    BYTE unk49[7];
+    BYTE unk49[3];
+    int unk4c;
+};
+
+// One of the 64 objects a player spawns (projectiles, its parts of supers...): the
+// 0x98-byte entries of CPlayer's object table.
+struct PlayerObject : ObjBase {
+    char unk50;
+    char unk51;
+    BYTE unk52[2];
+    int unk54;
+    int unk58;
+    RECT unk5c;
+    char unk6c;
+    BYTE unk6d[3];
+    double unk70;
+    double unk78;
+    int unk80;
+    short unk84;
+    short unk86;
+    int unk88;
+    int unk8c;
+    BYTE unk90[8];
 };
 
 // The last 60 positions of a player, for drawing afterimages: x and y, facing, pattern
@@ -521,29 +549,29 @@ struct Afterimages {
     // FUNCTION: 0x412840
     Afterimages()
     {
-        *(short*)((char*)this + 0x4f4) = 0;
-        *(char*)this = 0;
-        *((char*)this + 2) = 0;
+        pos = 0;
+        unk0 = 0;
+        unk2 = 0;
     }
     // FUNCTION: 0x412910
     void Unk412910()
     {
-        *((char*)this + 2) = *(BYTE*)(char*)this * 3;
-        *(char*)this = 0;
+        unk2 = unk0 * 3;
+        unk0 = 0;
     }
     // FUNCTION: 0x412930
     void Unk412930(ObjBase* p1)
     {
-        *((char*)this + 1) = *(char*)this;
-        *((char*)this + 2) = 0;
-        *(double*)((char*)this + *(short*)((char*)this + 0x4f4) * 8 + 8) = *(double*)((char*)p1 + 0x18);
-        *(double*)((char*)this + *(short*)((char*)this + 0x4f4) * 8 + 0x1e8) = *(double*)((char*)p1 + 0x20);
-        *((char*)this + *(short*)((char*)this + 0x4f4) + 0x3c8) = *((char*)p1 + 0x48);
-        *(short*)((char*)this + *(short*)((char*)this + 0x4f4) * 2 + 0x404) = *(short*)(char*)p1;
-        *(short*)((char*)this + *(short*)((char*)this + 0x4f4) * 2 + 0x47c) = *(short*)((char*)p1 + 2);
-        (*(short*)((char*)this + 0x4f4))++;
-        if (*(short*)((char*)this + 0x4f4) >= 0x3c) {
-            *(short*)((char*)this + 0x4f4) = 0;
+        unk1 = unk0;
+        unk2 = 0;
+        x[pos] = p1->x;
+        y[pos] = p1->y;
+        facing[pos] = p1->facing;
+        pattern[pos] = p1->pattern;
+        frame[pos] = p1->frame;
+        pos++;
+        if (pos >= 0x3c) {
+            pos = 0;
         }
     }
     // FUNCTION: 0x412a10
@@ -551,21 +579,31 @@ struct Afterimages {
     {
         int v4;
 
-        if (*(BYTE*)(char*)this == 0 && *(BYTE*)((char*)this + 2) == 0) {
+        if (unk0 == 0 && unk2 == 0) {
             v4 = 0;
             for (; v4 < 0x3c; v4++) {
-                *(double*)((char*)this + v4 * 8 + 8) = *(double*)((char*)p1 + 0x18);
-                *(double*)((char*)this + v4 * 8 + 0x1e8) = *(double*)((char*)p1 + 0x20);
-                *((char*)this + v4 + 0x3c8) = *((char*)p1 + 0x48);
-                *(short*)((char*)this + v4 * 2 + 0x404) = *(short*)(char*)p1;
-                *(short*)((char*)this + v4 * 2 + 0x47c) = *(short*)((char*)p1 + 2);
+                x[v4] = p1->x;
+                y[v4] = p1->y;
+                facing[v4] = p1->facing;
+                pattern[v4] = p1->pattern;
+                frame[v4] = p1->frame;
             }
         }
-        *(char*)this = p2;
-        *((char*)this + 1) = p2;
+        unk0 = p2;
+        unk1 = p2;
     }
 
-    BYTE data[0x4f8];
+    BYTE unk0;
+    BYTE unk1;
+    BYTE unk2;
+    BYTE unk3[0x8 - 0x3];
+    double x[0x3c];         // +8
+    double y[0x3c];         // +0x1e8
+    char facing[0x3c];      // +0x3c8
+    WORD pattern[0x3c];     // +0x404
+    WORD frame[0x3c];       // +0x47c
+    short pos;              // +0x4f4: the slot the next position goes in
+    BYTE unk4f6[0x4f8 - 0x4f6];
 };
 
 // Base of the character classes, one per side. Characters override the pure virtual
@@ -677,11 +715,155 @@ public:
     // FUNCTION: 0x40edf0
     virtual void Vf12();
 
-    BYTE unk58[0x78 - 0x58];
-    int unk78; // set first: initialized before m_afterimages
-    BYTE unk7c[0x2bc0 - 0x7c];
+    char unk58;
+    BYTE unk59[0x60 - 0x59];
+    int unk60;
+    BYTE unk64[0x78 - 0x64];
+    CPlayer** m_opponent;   // +0x78: the other player's slot, g_player1 or g_player2. Set
+                            // first: initialized before m_afterimages
+    CGame* m_game;          // +0x7c
+    CGraphics* m_graphics;  // +0x80
+    CInput* m_input;        // +0x84
+    CSound* m_sound;        // +0x88
+    char m_side;            // +0x8c: 0 for player 1, 1 for player 2
+    char unk8d;
+    char m_paletteIndex;    // +0x8e: which <name>N.pal (N = index + 1)
+    BYTE unk8f[0x94 - 0x8f];
+    char m_name[0x10];      // +0x94: the character's folder and file name, "akane"
+    int unka4;
+    float unka8;
+    char unkac;
+    BYTE unkad[0xb0 - 0xad];
+    double unkb0;
+    double unkb8;
+    double unkc0;
+    double unkc8;
+    int unkd0;
+    BYTE unkd4[0xdc - 0xd4];
+    short unkdc;
+    char unkde;
+    BYTE unkdf[0xe8 - 0xdf];
+    double unke8;
+    BYTE unkf0[0xf2 - 0xf0];
+    short unkf2;
+    short unkf4;
+    BYTE unkf6[0xf8 - 0xf6];
+    double unkf8;
+    int unk100;
+    short unk104;
+    BYTE unk106[0x108 - 0x106];
+    int unk108;
+    int unk10c;
+    int unk110;
+    BYTE unk114[0x118 - 0x114];
+    double unk118;
+    char unk120;
+    BYTE unk121[0x124 - 0x121];
+    short unk124;
+    BYTE unk126[0x128 - 0x126];
+    int unk128;
+    int unk12c;
+    char unk130;
+    BYTE unk131[0x134 - 0x131];
+    float unk134;
+    short unk138;
+    short unk13a;
+    short unk13c;
+    short unk13e;
+    short unk140;
+    BYTE unk142[0x144 - 0x142];
+    int unk144;
+    short unk148;
+    short unk14a;
+    short unk14c;
+    short unk14e;
+    int unk150;
+    BYTE unk154[0x158 - 0x154];
+    BYTE unk158;
+    BYTE unk159;
+    BYTE unk15a;
+    BYTE unk15b;
+    int unk15c;
+    int unk160;
+    PatternData* m_patterns; // +0x164: one per pattern, 505 of them
+    int unk168;
+    short unk16c;
+    BYTE unk16e[0x170 - 0x16e];
+    int unk170;
+    short unk174;
+    BYTE unk176[0x178 - 0x176];
+    double unk178;
+    double unk180;
+    // This frame's input (Unk410b70): the direction relative to facing (1 forward, -1
+    // back), up (-1) or down (1), and whether A-D went down this frame.
+    char m_inputX;          // +0x188
+    char m_inputY;          // +0x189
+    char m_pressA;          // +0x18a
+    char m_pressB;          // +0x18b
+    char m_pressC;          // +0x18c
+    char m_pressD;          // +0x18d
+    BYTE unk18e[0x190 - 0x18e];
+    int m_holdA;            // +0x190: whether A was held last frame
+    int m_holdB;            // +0x194
+    int m_holdC;            // +0x198
+    int m_holdD;            // +0x19c
+    int unk1a0;
+    int unk1a4;
+    BYTE unk1a8;
+    BYTE unk1a9;
+    BYTE unk1aa;
+    // The last 180 frames of input, a ring buffer: bits 1 forward, 2 back, 4 down, 8 up,
+    // 0x10-0x80 the buttons that went down.
+    char m_inputHistory[0xb4]; // +0x1ab
+    BYTE unk25f;
+    short m_inputPos;       // +0x260: the newest entry in m_inputHistory
+    short unk262;
+    short unk264[0x32];     // the constructor sets all to 0x96
+    char unk2c8;
+    char unk2c9;
+    short unk2ca;
+    short unk2cc;
+    BYTE unk2ce[0x2d0 - 0x2ce];
+    int unk2d0[0x40];       // one per object
+    int unk3d0[0x40];       // one per object
+    PlayerObject m_objects[0x40]; // +0x4d0
+    // Per-character offsets the constructors set; throws place the opponent relative to
+    // them.
+    short unk2ad0[0x14];    // x
+    short unk2af8[0x14];    // y
+    BYTE unk2b20[0x2bc0 - 0x2b20];
     Afterimages m_afterimages;
-    BYTE unk30b8[0x3138 - 0x30b8];
+    char unk30b8;
+    BYTE unk30b9[0x30bc - 0x30b9];
+    int unk30bc;
+    char unk30c0;
+    BYTE unk30c1[0x30c4 - 0x30c1];
+    int unk30c4;
+    int unk30c8;
+    int unk30cc;
+    int unk30d0;
+    int unk30d4;
+    int unk30d8;
+    int unk30dc;
+    int unk30e0;
+    int unk30e4;
+    int unk30e8;
+    short unk30ec;
+    short unk30ee;
+    int unk30f0;
+    char unk30f4;
+    char unk30f5[0x14];     // the constructor sets all to -1
+    BYTE unk3109[0x3110 - 0x3109];
+    int unk3110;
+    int unk3114;
+    int unk3118;
+    int unk311c;
+    int unk3120;
+    DWORD unk3124;
+    int unk3128;
+    BYTE unk312c[0x3130 - 0x312c];
+    DWORD unk3130;
+    DWORD unk3134;
 };
 
 // One running effect (sparks, debris, screen flashes...). CGame keeps 640 of them in a
@@ -858,9 +1040,12 @@ public:
     BYTE unkf33;
     BYTE m_colorKey;              // the object sprite's transparent colour
     PALETTEENTRY m_palette[0x100];
-    char unk1335[0xc];
+    char unk1335[3];
+    int unk1338[2];         // one per player
+    char unk1340;
     char m_extraChars;
-    char unk1342[3];
+    char unk1342;
+    BYTE unk1343[2];        // one per player
     BYTE unk1345;
     BYTE unk1346;
     BYTE unk1347;
@@ -870,9 +1055,14 @@ public:
     char unk134e;
     BYTE unk134f;
     BYTE unk1350;
-    char unk1351[3];
+    char unk1351;
+    short unk1352;
     int unk1354;
-    char unk1358[0x1365 - 0x1358];
+    char unk1358;
+    BYTE unk1359[0x135c - 0x1359];
+    int unk135c;
+    int unk1360;
+    char unk1364;
     BYTE unk1365;
     char unk1366;
     char unk1367;
@@ -881,7 +1071,9 @@ public:
     BYTE unk1370;
     char unk1371[3];
     BOOL unk1374;
-    int unk1378;
+    char unk1378;
+    char unk1379;
+    BYTE unk137a[2];
     CAnimBg* m_background;        // the stage's animated background, if it has one
     short m_effectHead;           // next slot CreateEffect uses
     short m_effectTail;           // oldest live slot
@@ -899,7 +1091,15 @@ public:
     int m_shakeY;
     double m_shakeAngleX;         // degrees
     double m_shakeAngleY;
-    char unk14238[0x14260 - 0x14238];
+    int unk14238;
+    int unk1423c;
+    int unk14240;
+    int unk14244;
+    int unk14248;
+    int unk1424c;
+    int unk14250;
+    int unk14254;
+    double unk14258;
     double m_fade;                // -100 to 100
     int m_fadeHold;
     char m_fadeDir;               // 1: FlashWhite, -1: FlashBlack, 0: none
@@ -908,6 +1108,9 @@ public:
     int unk14278;
     BOOL unk1427c;
     BYTE unk14280;
+    char unk14281;
+    char unk14282;
+    char unk14283;
     CReplayFile m_replay;
     int unk14294;                 // spawn counter for the ellipse effects (0x26, 0x35, 0x36)
     int unk14298;                 // random angle in degrees, 0..359
@@ -925,17 +1128,17 @@ public:
     CScene(HWND p1, CPlayer** p2, CPlayer** p3, CGame* p4, CGraphics* p5, CInput* p6,
            CSound* p7)
     {
-        *(int*)((char*)this + 0x14) = (int)p2;
-        *(int*)((char*)this + 0x18) = (int)p3;
-        *(int*)((char*)this + 8) = (int)p1;
-        *(int*)((char*)this + 0xc) = *(int*)(char*)p2;
-        *(int*)((char*)this + 0x10) = *(int*)(char*)p3;
-        *(int*)((char*)this + 0x1c) = (int)p4;
-        *(int*)((char*)this + 0x20) = (int)p5;
-        *(int*)((char*)this + 0x24) = (int)p6;
-        *(int*)((char*)this + 0x28) = (int)p7;
-        *((char*)this + 0x2c) = -1;
-        *((char*)this + 0x2d) = 0;
+        m_player1Ref = p2;
+        m_player2Ref = p3;
+        m_hwnd = p1;
+        m_players[0] = (CPlayer*)*(int*)(char*)p2;
+        m_players[1] = (CPlayer*)*(int*)(char*)p3;
+        m_game = p4;
+        m_graphics = p5;
+        m_input = p6;
+        m_sound = p7;
+        unk2c = -1;
+        unk2d = 0;
     }
     // FUNCTION: 0x759c90
     // Darkens (p2 0) or brightens (p2 1) the palette over 21 frames, drawing each one, and
@@ -953,8 +1156,8 @@ public:
             vc = 0x14;
             for (; vc >= 0; vc--) {
                 Draw();
-                ((CGraphics*)*(int*)((char*)this + 0x20))->Darken(p1, 0, 0xff, vc * 5);
-                ((CSound*)*(int*)((char*)this + 0x28))->SetVolume(*(short*)(*(char**)((char*)this + 0x1c) + 0xf26), p3 - (0x14 - vc) * p4 / 2);
+                m_graphics->Darken(p1, 0, 0xff, vc * 5);
+                m_sound->SetVolume((short)m_game->m_music, p3 - (0x14 - vc) * p4 / 2);
                 while ((DWORD)(timeGetTime() - x8) < (BYTE)(0x10 - l4)) {
                 }
                 x8 = timeGetTime();
@@ -965,8 +1168,8 @@ public:
             l10 = 0x14;
             for (; l10 >= 0; l10--) {
                 Draw();
-                ((CGraphics*)*(int*)((char*)this + 0x20))->Brighten(p1, 0, 0xff, l10 * 5);
-                ((CSound*)*(int*)((char*)this + 0x28))->SetVolume(*(short*)(*(char**)((char*)this + 0x1c) + 0xf26), p3 - (0x14 - l10) * p4 / 2);
+                m_graphics->Brighten(p1, 0, 0xff, l10 * 5);
+                m_sound->SetVolume((short)m_game->m_music, p3 - (0x14 - l10) * p4 / 2);
                 while ((DWORD)(timeGetTime() - x8) < (BYTE)(0x10 - l4)) {
                 }
                 x8 = timeGetTime();
@@ -989,7 +1192,7 @@ public:
             vc = 0;
             for (; vc <= 0x14; vc++) {
                 Draw();
-                ((CGraphics*)*(int*)((char*)this + 0x20))->Darken(p1, 0, 0xff, vc * 5);
+                m_graphics->Darken(p1, 0, 0xff, vc * 5);
                 while ((DWORD)(timeGetTime() - x8) < (BYTE)(0x10 - l4)) {
                 }
                 x8 = timeGetTime();
@@ -1000,7 +1203,7 @@ public:
             l10 = 0;
             for (; l10 <= 0x14; l10++) {
                 Draw();
-                ((CGraphics*)*(int*)((char*)this + 0x20))->Brighten(p1, 0, 0xff, l10 * 5);
+                m_graphics->Brighten(p1, 0, 0xff, l10 * 5);
                 while ((DWORD)(timeGetTime() - x8) < (BYTE)(0x10 - l4)) {
                 }
                 x8 = timeGetTime();
@@ -1015,8 +1218,7 @@ public:
 
     UINT lastMessage;       // set by WndProc to the message it is handling
     HWND m_hwnd;
-    CPlayer* m_player1;     // the players when the scene was made
-    CPlayer* m_player2;
+    CPlayer* m_players[2];  // the players when the scene was made
     CPlayer** m_player1Ref; // WinMain's g_player1 and g_player2
     CPlayer** m_player2Ref;
     CGame* m_game;
@@ -1025,7 +1227,9 @@ public:
     CSound* m_sound;
     char unk2c;
     char unk2d;
-    BYTE unk2e[2];
+    PALETTEENTRY m_palette[0x100]; // +0x2e
+    char m_colorKey;        // +0x42e
+    BYTE unk42f;
 };
 
 // An animated stage background: its frames are system\bg\bgNN\MMM.dat, with NN at +4
@@ -1042,7 +1246,14 @@ public:
     virtual void Vf0() = 0;
     virtual void Vf1(int p1, int p2, char p3) = 0;
 
-    BYTE data[0x18];
+    short unk4;
+    short unk6;
+    int unk8;
+    char* unkc;
+    char* unk10;
+    char* unk14;
+    char unk18;
+    BYTE unk19[0x1c - 0x19];
 };
 
 // Bg01: derived from CAnimBg.
@@ -1132,7 +1343,46 @@ public:
     // FUNCTION: 0x7598d0
     void Unk7598d0();
 
-    BYTE unk[0x560 - sizeof(CScene)];
+    BYTE unk430[0x434 - 0x430];
+    int unk434;
+    int unk438;
+    int unk43c;
+    int unk440;
+    int unk444[0x2]; // indexed
+    char unk44c[0x4]; // indexed
+    double unk450;
+    double unk458;
+    double unk460;
+    double unk468;
+    double unk470;
+    int unk478;
+    int unk47c[0x6]; // indexed
+    short unk494[0x2]; // indexed
+    short unk498[0x2]; // indexed
+    BYTE unk49c[0x2]; // indexed
+    char unk49e[0x2]; // indexed
+    char unk4a0[0x19]; // indexed
+    char unk4b9[0x18]; // indexed
+    BYTE unk4d1[0x4d4 - 0x4d1];
+    int unk4d4[0x18]; // indexed
+    BYTE unk534[0x538 - 0x534];
+    char unk538[0x2]; // indexed
+    char unk53a[0x2]; // indexed
+    char unk53c[0x2]; // indexed
+    char unk53e[0x2]; // indexed
+    short unk540[0x2]; // indexed
+    BYTE unk544[0xd]; // indexed
+    char unk551;
+    char unk552;
+    char unk553;
+    char unk554;
+    BYTE unk555[0x556 - 0x555];
+    char unk556;
+    char unk557;
+    char unk558;
+    char unk559;
+    char unk55a;
+    BYTE unk55b[0x560 - 0x55b];
 };
 
 // Scene6: derived from CScene.
@@ -1164,7 +1414,32 @@ public:
     // FUNCTION: 0x75da30
     void Unk75da30(BYTE p1);
 
-    BYTE unk[0x760 - sizeof(CScene)];
+    BYTE unk430[0x434 - 0x430];
+    int unk434;
+    int unk438;
+    int unk43c;
+    int unk440;
+    int unk444;
+    char unk448;
+    char unk449;
+    char unk44a;
+    BYTE unk44b[0x3]; // indexed
+    BYTE unk44e[0x450 - 0x44e];
+    int unk450;
+    int unk454;
+    int unk458;
+    BYTE unk45c[0x468 - 0x45c];
+    int unk468;
+    int unk46c;
+    BYTE unk470[0x740 - 0x470];
+    char unk740;
+    char unk741;
+    BYTE unk742[0x748 - 0x742];
+    double unk748;
+    int unk750;
+    int unk754;
+    int unk758;
+    BYTE unk75c[0x760 - 0x75c];
 };
 
 // Scene3: derived from CScene.
@@ -1232,7 +1507,29 @@ public:
     // FUNCTION: 0x76bd40
     void Unk76bd40(int p1, int p2, CollisionInfo* p3, CollisionInfo* p4, int p5);
 
-    BYTE unk[0x598 - sizeof(CScene)];
+    BYTE unk430[0x434 - 0x430];
+    int unk434;
+    int unk438;
+    int unk43c;
+    int unk440;
+    int unk444;
+    int unk448;
+    int unk44c;
+    int unk450;
+    int unk454;
+    int unk458;
+    int unk45c;
+    int unk460;
+    RECT unk464[0x11];      // indexed
+    short unk574;
+    short unk576;
+    BYTE unk578;
+    BYTE unk579[0x580 - 0x579];
+    double unk580;
+    int unk588;
+    int unk58c;
+    int unk590;
+    BYTE unk594[0x598 - 0x594];
 };
 
 // Scene2: derived from CScene.
@@ -1254,7 +1551,8 @@ public:
     // FUNCTION: 0x76da20
     void Unk76da20(int p1, int p2, char p3, char p4);
 
-    BYTE unk[0x438 - sizeof(CScene)];
+    BYTE unk430[0x434 - 0x430];
+    int unk434;
 };
 
 // Scene8: derived from CScene.
@@ -1278,7 +1576,33 @@ public:
     // FUNCTION: 0x771230
     void Unk771230();
 
-    BYTE unk[0x758 - sizeof(CScene)];
+    BYTE unk430[0x434 - 0x430];
+    int unk434;
+    int unk438;
+    int unk43c;
+    int unk440;
+    BYTE unk444[0x446 - 0x444];
+    short unk446;
+    short unk448;
+    short unk44a;
+    short unk44c;
+    BYTE unk44e[0x13]; // indexed
+    BYTE unk461[0x462 - 0x461];
+    char unk462;
+    char unk463;
+    char unk464;
+    char unk465;
+    BYTE unk466[0x467 - 0x466];
+    char unk467;
+    BYTE unk468[0x469 - 0x468];
+    char unk469;
+    char unk46a;
+    char unk46b;
+    char unk46c;
+    char unk46d;
+    char unk46e[0x2da]; // indexed
+    double unk748;
+    double unk750;
 };
 
 // Scene5: derived from CScene.
@@ -1300,7 +1624,32 @@ public:
     // FUNCTION: 0x775750
     virtual void Vf2();
 
-    BYTE unk[0x474 - sizeof(CScene)];
+    BYTE unk430[0x434 - 0x430];
+    int unk434;
+    int unk438;
+    int unk43c;
+    int unk440;
+    short unk444;
+    short unk446;
+    short unk448;
+    short unk44a;
+    short unk44c;
+    short unk44e;
+    short unk450;
+    short unk452;
+    short unk454;
+    short unk456;
+    short unk458;
+    short unk45a;
+    short unk45c;
+    char unk45e;
+    char unk45f;
+    char unk460;
+    BYTE unk461[0x464 - 0x461];
+    int unk464;
+    int unk468;
+    int unk46c;
+    int unk470;
 };
 
 // Scene7: derived from CScene.
@@ -1318,7 +1667,11 @@ public:
     // FUNCTION: 0x775d50
     virtual void Vf2();
 
-    BYTE unk[0x448 - sizeof(CScene)];
+    BYTE unk430[0x434 - 0x430];
+    int unk434;
+    double unk438;
+    int unk440;
+    BYTE unk444[0x448 - 0x444];
 };
 
 // Scene0: derived from CScene.
@@ -1340,7 +1693,16 @@ public:
     // FUNCTION: 0x7768d0
     void Unk7768d0();
 
-    BYTE unk[0x44c - sizeof(CScene)];
+    BYTE unk430[0x434 - 0x430];
+    int unk434;
+    int unk438;
+    char unk43c;
+    BYTE unk43d[0x43e - 0x43d];
+    short unk43e;
+    BYTE unk440[0x3]; // indexed
+    BYTE unk443[0x444 - 0x443];
+    DWORD unk444;
+    int unk448;
 };
 
 // Shiori: one of the character classes.
@@ -1374,7 +1736,17 @@ public:
     // FUNCTION: 0x42b190
     virtual void Vf7();
 
-    BYTE unk3138[0x3458 - 0x3138];
+    int unk3138;
+    int unk313c;
+    int unk3140;
+    int unk3144;
+    int unk3148;
+    int unk314c;
+    int unk3150;
+    int unk3154;
+    int unk3158[0x40]; // indexed
+    int unk3258[0x40]; // indexed
+    int unk3358[0x40]; // indexed
 };
 
 // Sayuri: one of the character classes.
@@ -1408,7 +1780,17 @@ public:
     // FUNCTION: 0x44db60
     virtual void Vf7();
 
-    BYTE unk3138[0x3458 - 0x3138];
+    int unk3138;
+    int unk313c;
+    int unk3140;
+    int unk3144;
+    int unk3148;
+    int unk314c;
+    int unk3150;
+    int unk3154[0x40]; // indexed
+    int unk3254[0x40]; // indexed
+    int unk3354[0x40]; // indexed
+    BYTE unk3454[0x3458 - 0x3454];
 };
 
 // Nayuki: one of the character classes.
@@ -1442,7 +1824,19 @@ public:
     // FUNCTION: 0x468870
     virtual void Vf7();
 
-    BYTE unk3138[0x3460 - 0x3138];
+    int unk3138;
+    int unk313c;
+    int unk3140;
+    int unk3144;
+    int unk3148;
+    int unk314c;
+    int unk3150;
+    int unk3154;
+    int unk3158;
+    int unk315c[0x40]; // indexed
+    int unk325c[0x40]; // indexed
+    int unk335c[0x40]; // indexed
+    BYTE unk345c[0x3460 - 0x345c];
 };
 
 // Mizukab: one of the character classes.
@@ -1476,7 +1870,19 @@ public:
     // FUNCTION: 0x4db160
     virtual void Vf7();
 
-    BYTE unk3138[0x3460 - 0x3138];
+    int unk3138;
+    int unk313c;
+    int unk3140;
+    int unk3144;
+    int unk3148[0x40]; // indexed
+    int unk3248[0x40]; // indexed
+    int unk3348[0x40]; // indexed
+    int unk3448;
+    int unk344c;
+    int unk3450;
+    int unk3454;
+    int unk3458;
+    int unk345c;
 };
 
 // Mizuka: one of the character classes.
@@ -1510,7 +1916,19 @@ public:
     // FUNCTION: 0x501e20
     virtual void Vf7();
 
-    BYTE unk3138[0x3460 - 0x3138];
+    int unk3138;
+    int unk313c;
+    int unk3140;
+    int unk3144;
+    int unk3148[0x40]; // indexed
+    int unk3248[0x40]; // indexed
+    int unk3348[0x40]; // indexed
+    int unk3448;
+    int unk344c;
+    int unk3450;
+    int unk3454;
+    int unk3458;
+    BYTE unk345c[0x3460 - 0x345c];
 };
 
 // Misuzu: one of the character classes.
@@ -1544,7 +1962,29 @@ public:
     // FUNCTION: 0x5236d0
     virtual void Vf7();
 
-    BYTE unk3138[0x3488 - 0x3138];
+    int unk3138;
+    int unk313c;
+    int unk3140;
+    int unk3144;
+    int unk3148;
+    int unk314c;
+    int unk3150;
+    int unk3154;
+    int unk3158[0x40]; // indexed
+    int unk3258[0x40]; // indexed
+    int unk3358[0x40]; // indexed
+    int unk3458;
+    int unk345c;
+    int unk3460;
+    int unk3464;
+    int unk3468;
+    int unk346c;
+    int unk3470;
+    int unk3474;
+    int unk3478;
+    int unk347c;
+    int unk3480;
+    BYTE unk3484[0x3488 - 0x3484];
 };
 
 // Mishio: one of the character classes.
@@ -1578,7 +2018,25 @@ public:
     // FUNCTION: 0x54fd30
     virtual void Vf7();
 
-    BYTE unk3138[0x3478 - 0x3138];
+    int unk3138;
+    int unk313c;
+    int unk3140;
+    int unk3144;
+    int unk3148;
+    int unk314c;
+    int unk3150;
+    int unk3154;
+    int unk3158;
+    int unk315c;
+    int unk3160;
+    int unk3164;
+    int unk3168;
+    int unk316c;
+    int unk3170;
+    int unk3174[0x40]; // indexed
+    int unk3274[0x40]; // indexed
+    int unk3374[0x40]; // indexed
+    BYTE unk3474[0x3478 - 0x3474];
 };
 
 // Misaki: one of the character classes.
@@ -1612,7 +2070,13 @@ public:
     // FUNCTION: 0x56f920
     virtual void Vf7();
 
-    BYTE unk3138[0x3448 - 0x3138];
+    int unk3138;
+    int unk313c;
+    int unk3140;
+    int unk3144;
+    int unk3148[0x40]; // indexed
+    int unk3248[0x40]; // indexed
+    int unk3348[0x40]; // indexed
 };
 
 // Mio: one of the character classes.
@@ -1646,7 +2110,15 @@ public:
     // FUNCTION: 0x594ea0
     virtual void Vf7();
 
-    BYTE unk3138[0x3458 - 0x3138];
+    int unk3138;
+    BYTE unk313c[0x3140 - 0x313c];
+    double unk3140;
+    double unk3148;
+    int unk3150;
+    int unk3154;
+    int unk3158[0x40]; // indexed
+    int unk3258[0x40]; // indexed
+    int unk3358[0x40]; // indexed
 };
 
 // Minagi: one of the character classes.
@@ -1680,7 +2152,17 @@ public:
     // FUNCTION: 0x5b2d10
     virtual void Vf7();
 
-    BYTE unk3138[0x3458 - 0x3138];
+    int unk3138;
+    int unk313c;
+    int unk3140;
+    int unk3144;
+    int unk3148;
+    int unk314c;
+    int unk3150;
+    int unk3154[0x40]; // indexed
+    int unk3254[0x40]; // indexed
+    int unk3354[0x40]; // indexed
+    BYTE unk3454[0x3458 - 0x3454];
 };
 
 // Mayu: one of the character classes.
@@ -1714,7 +2196,13 @@ public:
     // FUNCTION: 0x5e5c30
     virtual void Vf7();
 
-    BYTE unk3138[0x3448 - 0x3138];
+    int unk3138;
+    int unk313c;
+    int unk3140;
+    int unk3144;
+    int unk3148[0x40]; // indexed
+    int unk3248[0x40]; // indexed
+    int unk3348[0x40]; // indexed
 };
 
 // Makoto: one of the character classes.
@@ -1748,7 +2236,15 @@ public:
     // FUNCTION: 0x5ff4c0
     virtual void Vf7();
 
-    BYTE unk3138[0x3450 - 0x3138];
+    int unk3138;
+    int unk313c;
+    int unk3140;
+    int unk3144;
+    int unk3148;
+    int unk314c[0x40]; // indexed
+    int unk324c[0x40]; // indexed
+    int unk334c[0x40]; // indexed
+    BYTE unk344c[0x3450 - 0x344c];
 };
 
 // Mai: one of the character classes.
@@ -1782,7 +2278,17 @@ public:
     // FUNCTION: 0x61f750
     virtual void Vf7();
 
-    BYTE unk3138[0x3458 - 0x3138];
+    int unk3138;
+    int unk313c;
+    int unk3140;
+    int unk3144;
+    int unk3148;
+    int unk314c;
+    int unk3150;
+    int unk3154;
+    int unk3158[0x40]; // indexed
+    int unk3258[0x40]; // indexed
+    int unk3358[0x40]; // indexed
 };
 
 // Kanna: one of the character classes.
@@ -1816,7 +2322,17 @@ public:
     // FUNCTION: 0x67cf50
     virtual void Vf7();
 
-    BYTE unk3138[0x3458 - 0x3138];
+    int unk3138;
+    int unk313c;
+    int unk3140;
+    int unk3144;
+    int unk3148;
+    int unk314c;
+    int unk3150;
+    int unk3154[0x40]; // indexed
+    int unk3254[0x40]; // indexed
+    int unk3354[0x40]; // indexed
+    BYTE unk3454[0x3458 - 0x3454];
 };
 
 // Ayu: one of the character classes.
@@ -1850,7 +2366,15 @@ public:
     // FUNCTION: 0x6ef410
     virtual void Vf7();
 
-    BYTE unk3138[0x3450 - 0x3138];
+    int unk3138;
+    int unk313c;
+    int unk3140;
+    int unk3144;
+    int unk3148;
+    int unk314c;
+    int unk3150[0x40]; // indexed
+    int unk3250[0x40]; // indexed
+    int unk3350[0x40]; // indexed
 };
 
 // Akane: one of the character classes.
@@ -1884,7 +2408,15 @@ public:
     // FUNCTION: 0x70bc00
     virtual void Vf7();
 
-    BYTE unk3138[0x3450 - 0x3138];
+    int unk3138;
+    int unk313c;
+    int unk3140;
+    int unk3144;
+    int unk3148;
+    int unk314c[0x40]; // indexed
+    int unk324c[0x40]; // indexed
+    int unk334c[0x40]; // indexed
+    BYTE unk344c[0x3450 - 0x344c];
 };
 
 // Akiko: one of the character classes.
@@ -1918,7 +2450,21 @@ public:
     // FUNCTION: 0x729cc0
     virtual void Vf7();
 
-    BYTE unk3138[0x3468 - 0x3138];
+    int unk3138;
+    int unk313c;
+    int unk3140;
+    int unk3144;
+    int unk3148;
+    int unk314c;
+    int unk3150;
+    int unk3154;
+    int unk3158;
+    int unk315c;
+    int unk3160;
+    int unk3164[0x40]; // indexed
+    int unk3264[0x40]; // indexed
+    int unk3364[0x40]; // indexed
+    BYTE unk3464[0x3468 - 0x3464];
 };
 
 // Nanase: one of the character classes.
@@ -1964,7 +2510,24 @@ public:
     // FUNCTION: 0x497540
     void Unk497540();
 
-    BYTE unk3138[0x3470 - 0x3138];
+    int unk3138;
+    int unk313c;
+    int unk3140;
+    int unk3144;
+    int unk3148;
+    int unk314c[0x40]; // indexed
+    int unk324c[0x40]; // indexed
+    int unk334c[0x40]; // indexed
+    int unk344c;
+    int unk3450;
+    int unk3454;
+    char unk3458;
+    BYTE unk3459[0x345c - 0x3459];
+    char* unk345c;
+    char* unk3460;
+    int unk3464;
+    int unk3468;
+    BYTE unk346c[0x3470 - 0x346c];
 };
 
 // Nagamori: one of the character classes.
@@ -2000,7 +2563,24 @@ public:
     // FUNCTION: 0x4b6680
     virtual void Vf7();
 
-    BYTE unk3138[0x34b0 - 0x3138];
+    int unk3138;
+    int unk313c;
+    int unk3140;
+    int unk3144;
+    int unk3148;
+    int unk314c;
+    int unk3150;
+    int unk3154;
+    int unk3158;
+    int unk315c;
+    int unk3160;
+    int unk3164;
+    int unk3168;
+    char unk316c[0x40]; // indexed
+    int unk31ac[0x40]; // indexed
+    int unk32ac[0x40]; // indexed
+    int unk33ac[0x40]; // indexed
+    BYTE unk34ac[0x34b0 - 0x34ac];
 };
 
 // Kaori: one of the character classes.
@@ -2034,7 +2614,15 @@ public:
     // FUNCTION: 0x640710
     virtual void Vf7();
 
-    BYTE unk3138[0x3450 - 0x3138];
+    int unk3138;
+    int unk313c;
+    int unk3140;
+    int unk3144;
+    int unk3148;
+    int unk314c[0x40]; // indexed
+    int unk324c[0x40]; // indexed
+    int unk334c[0x40]; // indexed
+    BYTE unk344c[0x3450 - 0x344c];
 };
 
 // Kano: one of the character classes.
@@ -2068,7 +2656,25 @@ public:
     // FUNCTION: 0x65cd30
     virtual void Vf7();
 
-    BYTE unk3138[0x3478 - 0x3138];
+    int unk3138;
+    int unk313c;
+    int unk3140;
+    int unk3144;
+    int unk3148;
+    int unk314c;
+    int unk3150;
+    int unk3154;
+    int unk3158;
+    int unk315c;
+    int unk3160;
+    int unk3164;
+    int unk3168;
+    int unk316c;
+    int unk3170;
+    int unk3174[0x40]; // indexed
+    int unk3274[0x40]; // indexed
+    int unk3374[0x40]; // indexed
+    BYTE unk3474[0x3478 - 0x3474];
 };
 
 // Ikumi: one of the character classes.
@@ -2114,7 +2720,26 @@ public:
     // FUNCTION: 0x6b7900
     void Unk6b7900();
 
-    BYTE unk3138[0x3478 - 0x3138];
+    int unk3138;
+    int unk313c;
+    int unk3140;
+    int unk3144;
+    int unk3148;
+    int unk314c;
+    int unk3150;
+    int unk3154;
+    int unk3158;
+    int unk315c;
+    int unk3160[0x40]; // indexed
+    int unk3260[0x40]; // indexed
+    int unk3360[0x40]; // indexed
+    char unk3460;
+    BYTE unk3461[0x3464 - 0x3461];
+    char* unk3464;
+    char* unk3468;
+    int unk346c;
+    int unk3470;
+    BYTE unk3474[0x3478 - 0x3474];
 };
 
 // Exnanase: one of the character classes.
@@ -2150,7 +2775,20 @@ public:
     // FUNCTION: 0x6d6e40
     virtual void Vf7();
 
-    BYTE unk3138[0x3468 - 0x3138];
+    int unk3138;
+    int unk313c;
+    int unk3140;
+    int unk3144;
+    int unk3148;
+    int unk314c;
+    int unk3150;
+    int unk3154[0x40]; // indexed
+    int unk3254[0x40]; // indexed
+    int unk3354[0x40]; // indexed
+    int unk3454;
+    BYTE unk3458[0x3460 - 0x3458];
+    char unk3460;
+    BYTE unk3461[0x3468 - 0x3461];
 };
 
 // Nayukib: one of the character classes.
@@ -2184,7 +2822,17 @@ public:
     // FUNCTION: 0x7472c0
     virtual void Vf7();
 
-    BYTE unk3138[0x3458 - 0x3138];
+    int unk3138;
+    int unk313c;
+    int unk3140;
+    int unk3144;
+    int unk3148;
+    int unk314c;
+    int unk3150;
+    int unk3154;
+    int unk3158[0x40]; // indexed
+    int unk3258[0x40]; // indexed
+    int unk3358[0x40]; // indexed
 };
 
 #endif

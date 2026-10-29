@@ -9,42 +9,42 @@ CKano::CKano(int p1, int p2, int p3, int p4, int p5, BYTE p6)
 {
     int v4;
 
-    strcpy((char*)this + 0x94, "kano");
-    *(short*)((char*)this + 0x18) = 0x434;
-    *(int*)((char*)this + 0x3138) = 0;
-    *(int*)((char*)this + 0x313c) = 0;
-    *(int*)((char*)this + 0x3140) = 0;
-    *(int*)((char*)this + 0x3144) = 0;
-    *(int*)((char*)this + 0x3148) = 0;
-    *(int*)((char*)this + 0x314c) = 0;
-    *(int*)((char*)this + 0x3150) = 0;
-    *(int*)((char*)this + 0x3154) = 0;
-    *(int*)((char*)this + 0x3158) = 0;
-    *(int*)((char*)this + 0x315c) = 0;
-    *(int*)((char*)this + 0x3160) = 0;
-    *(int*)((char*)this + 0x3164) = 0;
-    *(int*)((char*)this + 0x3168) = 0;
-    *(int*)((char*)this + 0x316c) = 0;
-    *(int*)((char*)this + 0x3170) = 0;
-    *(short*)((char*)this + 0x2ad0) = -0xd;
-    *(short*)((char*)this + 0x2af8) = -0x38;
-    *(short*)((char*)this + 0x2ad2) = 0x13;
-    *(short*)((char*)this + 0x2afa) = 0;
-    *(short*)((char*)this + 0x2ad4) = 0xb;
-    *(short*)((char*)this + 0x2afc) = -7;
-    *(short*)((char*)this + 0x2ad6) = -3;
-    *(short*)((char*)this + 0x2afe) = -0x13;
-    *(short*)((char*)this + 0x2ad8) = -0x16;
-    *(short*)((char*)this + 0x2b00) = -0x26;
-    *((char*)this + 0x30f4) = 5;
-    *((char*)this + 0x30f5) = 0x17;
-    *((char*)this + 0x30f6) = 0x18;
-    *((char*)this + 0x30ff) = 0x14;
+    strcpy(m_name, "kano");
+    lastSurface = 0x434;
+    unk3138 = 0;
+    unk313c = 0;
+    unk3140 = 0;
+    unk3144 = 0;
+    unk3148 = 0;
+    unk314c = 0;
+    unk3150 = 0;
+    unk3154 = 0;
+    unk3158 = 0;
+    unk315c = 0;
+    unk3160 = 0;
+    unk3164 = 0;
+    unk3168 = 0;
+    unk316c = 0;
+    unk3170 = 0;
+    unk2ad0[0] = -0xd;
+    unk2af8[0] = -0x38;
+    unk2ad0[1] = 0x13;
+    unk2af8[1] = 0;
+    unk2ad0[2] = 0xb;
+    unk2af8[2] = -7;
+    unk2ad0[3] = -3;
+    unk2af8[3] = -0x13;
+    unk2ad0[4] = -0x16;
+    unk2af8[4] = -0x26;
+    unk30f4 = 5;
+    unk30f5[0] = 0x17;
+    unk30f5[1] = 0x18;
+    unk30f5[0xa] = 0x14;
     v4 = 0;
     for (; v4 < 0x40; v4++) {
-        *(int*)((char*)this + v4 * 4 + 0x3174) = 0;
-        *(int*)((char*)this + v4 * 4 + 0x3274) = 0;
-        *(int*)((char*)this + v4 * 4 + 0x3374) = 0;
+        unk3174[v4] = 0;
+        unk3274[v4] = 0;
+        unk3374[v4] = 0;
     }
 }
 
@@ -52,53 +52,53 @@ void CKano::Vf12()
 {
     int v4;
 
-    *(int*)((char*)this + 0x3138) = 0;
-    *(int*)((char*)this + 0x313c) = 0;
-    *(int*)((char*)this + 0x3140) = 0;
-    *(int*)((char*)this + 0x3144) = 0;
-    *(int*)((char*)this + 0x3148) = 0;
-    *(int*)((char*)this + 0x314c) = 0;
-    *(int*)((char*)this + 0x3150) = 0;
-    *(int*)((char*)this + 0x3154) = 0;
-    *(int*)((char*)this + 0x3158) = 0;
-    *(int*)((char*)this + 0x315c) = 0;
-    *(int*)((char*)this + 0x3160) = 0;
-    *(int*)((char*)this + 0x3164) = 0;
-    *(int*)((char*)this + 0x3168) = 0;
-    *(int*)((char*)this + 0x316c) = 0;
-    *(int*)((char*)this + 0x3170) = 0;
-    *(short*)((char*)this + 0x2ad0) = -4;
-    *(short*)((char*)this + 0x2af8) = -0x39;
-    *(short*)((char*)this + 0x2ad2) = 0x12;
-    *(short*)((char*)this + 0x2afa) = 0;
-    *(short*)((char*)this + 0x2ad4) = 0x15;
-    *(short*)((char*)this + 0x2afc) = -0xc;
-    *(short*)((char*)this + 0x2ad6) = 0x12;
-    *(short*)((char*)this + 0x2afe) = -0xf;
-    *(short*)((char*)this + 0x2ad8) = 0x26;
-    *(short*)((char*)this + 0x2b00) = -0x27;
+    unk3138 = 0;
+    unk313c = 0;
+    unk3140 = 0;
+    unk3144 = 0;
+    unk3148 = 0;
+    unk314c = 0;
+    unk3150 = 0;
+    unk3154 = 0;
+    unk3158 = 0;
+    unk315c = 0;
+    unk3160 = 0;
+    unk3164 = 0;
+    unk3168 = 0;
+    unk316c = 0;
+    unk3170 = 0;
+    unk2ad0[0] = -4;
+    unk2af8[0] = -0x39;
+    unk2ad0[1] = 0x12;
+    unk2af8[1] = 0;
+    unk2ad0[2] = 0x15;
+    unk2af8[2] = -0xc;
+    unk2ad0[3] = 0x12;
+    unk2af8[3] = -0xf;
+    unk2ad0[4] = 0x26;
+    unk2af8[4] = -0x27;
     v4 = 0;
     for (; v4 < 0x40; v4++) {
-        *(int*)((char*)this + v4 * 4 + 0x3174) = 0;
-        *(int*)((char*)this + v4 * 4 + 0x3274) = 0;
-        *(int*)((char*)this + v4 * 4 + 0x3374) = 0;
+        unk3174[v4] = 0;
+        unk3274[v4] = 0;
+        unk3374[v4] = 0;
     }
     CPlayer::Vf12();
 }
 
 void CKano::Vf0()
 {
-    *(int*)((char*)this + 0x3138) = 0;
-    *(int*)((char*)this + 0x313c) = 0;
-    *(int*)((char*)this + 0x3140) = 0;
+    unk3138 = 0;
+    unk313c = 0;
+    unk3140 = 0;
     CPlayer::Vf0();
 }
 
 void CKano::Vf10(short p1)
 {
-    *(int*)((char*)this + p1 * 4 + 0x3174) = 0;
-    *(int*)((char*)this + p1 * 4 + 0x3274) = 0;
-    *(int*)((char*)this + p1 * 4 + 0x3374) = 0;
+    unk3174[p1] = 0;
+    unk3274[p1] = 0;
+    unk3374[p1] = 0;
     CPlayer::Vf10(p1);
 }
 
@@ -109,482 +109,482 @@ void CKano::Vf3()
 
 void CKano::Vf4()
 {
-    if (*(WORD*)((char*)this + 8) < 0xc8) {
-        *((char*)this + 0x1a8) = 0;
+    if (pattern < 0xc8) {
+        unk1a8 = 0;
     }
-    if (*(BYTE*)((char*)this + 0x1aa) <= 0) {
-        *((char*)this + 0x1a9) = 0;
+    if (unk1aa <= 0) {
+        unk1a9 = 0;
     } else {
-        (*((char*)this + 0x1aa))--;
+        unk1aa--;
     }
-    if (*(BYTE*)((char*)this + 0x1a9) == 0) {
-        *((char*)this + 0x1aa) = 0;
+    if (unk1a9 == 0) {
+        unk1aa = 0;
     }
-    if (*(short*)((char*)this + 0x262) == 0x34 && (*(double*)((char*)this + 0x118) >= 500.0 && *(int*)((char*)this + 0x168) > 1 || *((char*)this + 0x120) > 0 && *(int*)((char*)this + 0x168) > 1 && *(int*)((char*)this + 0x168) != 6) && (*(WORD*)(*(char**)(*(char**)((char*)this + 0x164) + *(WORD*)((char*)this + 8) * 8 + 4) + *(WORD*)((char*)this + 0xa) * 0xc8 + 0xb0) & 8) > 0 && *(short*)(*(char**)((char*)this + 0x164) + *(WORD*)((char*)this + 8) * 8 + 2) <= *(short*)(*(char**)((char*)this + 0x164) + 0x538)) {
+    if (unk262 == 0x34 && (unk118 >= 500.0 && unk168 > 1 || unk120 > 0 && unk168 > 1 && unk168 != 6) && (m_patterns[pattern].frames[frame].flagsB0 & 8) > 0 && m_patterns[pattern].unk2 <= m_patterns[0xa7].unk0) {
         Vf0();
         CPlayer::Unk40f170();
-        *(short*)((char*)this + 8) = 0xa7;
-        if (*(double*)((char*)this + 0x28) < 0.0) {
-            *(short*)((char*)this + 8) = 0xab;
+        pattern = 0xa7;
+        if (y < 0.0) {
+            pattern = 0xab;
         }
         return;
     }
-    if (*(int*)((char*)this + 0x15c) < 2) {
-        if (*(int*)((char*)this + 0x108) < 0xd05 && (*(WORD*)((char*)this + 8) == 0xa8 || *(WORD*)((char*)this + 8) == 0xa9) && *(short*)((char*)this + 0x262) == 0xad && *(short*)((char*)this + 0x148) >= 0xbb8 && *(double*)((char*)this + 0x28) == 0.0 && (*(WORD*)(*(char**)(*(char**)((char*)this + 0x164) + *(WORD*)((char*)this + 8) * 8 + 4) + *(WORD*)((char*)this + 0xa) * 0xc8 + 0xb0) & 8) > 0 && (*(WORD*)((char*)this + 8) >= 0xc8 && *(int*)((char*)this + 0x168) >= 2 && *(int*)((char*)this + 0x168) != 6 || *(WORD*)((char*)this + 8) < 0xc8) && *(short*)(*(char**)((char*)this + 0x164) + *(WORD*)((char*)this + 8) * 8 + 2) <= *(short*)(*(char**)((char*)this + 0x164) + 0x9d8)) {
+    if (unk15c < 2) {
+        if (unk108 < 0xd05 && (pattern == 0xa8 || pattern == 0xa9) && unk262 == 0xad && unk148 >= 0xbb8 && y == 0.0 && (m_patterns[pattern].frames[frame].flagsB0 & 8) > 0 && (pattern >= 0xc8 && unk168 >= 2 && unk168 != 6 || pattern < 0xc8) && m_patterns[pattern].unk2 <= m_patterns[0x13b].unk0) {
             Vf0();
             CPlayer::Unk40f170();
-            *(short*)((char*)this + 8) = 0x13b;
+            pattern = 0x13b;
             return;
         }
-        if (*(short*)((char*)this + 0x262) == 0x70 && *(short*)((char*)this + 0x148) >= 0xbb8 && *(double*)((char*)this + 0x28) == 0.0 && (*(WORD*)(*(char**)(*(char**)((char*)this + 0x164) + *(WORD*)((char*)this + 8) * 8 + 4) + *(WORD*)((char*)this + 0xa) * 0xc8 + 0xb0) & 8) > 0 && (*(WORD*)((char*)this + 8) >= 0xc8 && *(int*)((char*)this + 0x168) >= 2 && *(int*)((char*)this + 0x168) != 6 || *(WORD*)((char*)this + 8) < 0xc8) && *(short*)(*(char**)((char*)this + 0x164) + *(WORD*)((char*)this + 8) * 8 + 2) <= *(short*)(*(char**)((char*)this + 0x164) + 0x9d0)) {
+        if (unk262 == 0x70 && unk148 >= 0xbb8 && y == 0.0 && (m_patterns[pattern].frames[frame].flagsB0 & 8) > 0 && (pattern >= 0xc8 && unk168 >= 2 && unk168 != 6 || pattern < 0xc8) && m_patterns[pattern].unk2 <= m_patterns[0x13a].unk0) {
             Vf0();
             CPlayer::Unk40f170();
-            *(short*)((char*)this + 8) = 0x13a;
-            if (*(int*)((char*)this + 0x3150) >= 0x2710) {
-                *(short*)((char*)this + 0xa) = 7;
-                *(short*)((char*)this + 0xc) = 0;
-                *(int*)((char*)this + 0x3150) = 0;
+            pattern = 0x13a;
+            if (unk3150 >= 0x2710) {
+                frame = 7;
+                timer = 0;
+                unk3150 = 0;
             }
             return;
         }
-        if (*(short*)((char*)this + 0x262) == 0x6f && *(short*)((char*)this + 0x148) >= 0x7d0 && *(double*)((char*)this + 0x28) == 0.0 && (*(WORD*)(*(char**)(*(char**)((char*)this + 0x164) + *(WORD*)((char*)this + 8) * 8 + 4) + *(WORD*)((char*)this + 0xa) * 0xc8 + 0xb0) & 8) > 0 && (*(WORD*)((char*)this + 8) >= 0xc8 && *(int*)((char*)this + 0x168) >= 2 && *(int*)((char*)this + 0x168) != 6 || *(WORD*)((char*)this + 8) < 0xc8) && *(short*)(*(char**)((char*)this + 0x164) + *(WORD*)((char*)this + 8) * 8 + 2) <= *(short*)(*(char**)((char*)this + 0x164) + 0x9c8)) {
+        if (unk262 == 0x6f && unk148 >= 0x7d0 && y == 0.0 && (m_patterns[pattern].frames[frame].flagsB0 & 8) > 0 && (pattern >= 0xc8 && unk168 >= 2 && unk168 != 6 || pattern < 0xc8) && m_patterns[pattern].unk2 <= m_patterns[0x139].unk0) {
             Vf0();
             CPlayer::Unk40f170();
-            *(short*)((char*)this + 8) = 0x139;
-            if (*(int*)((char*)this + 0x3150) >= 0x2710) {
-                *(short*)((char*)this + 0xa) = 7;
-                *(short*)((char*)this + 0xc) = 0;
-                *(int*)((char*)this + 0x3150) = 0;
+            pattern = 0x139;
+            if (unk3150 >= 0x2710) {
+                frame = 7;
+                timer = 0;
+                unk3150 = 0;
             }
             return;
         }
-        if (*(short*)((char*)this + 0x262) == 0x6e && *(short*)((char*)this + 0x148) >= 0x3e8 && *(double*)((char*)this + 0x28) == 0.0 && (*(WORD*)(*(char**)(*(char**)((char*)this + 0x164) + *(WORD*)((char*)this + 8) * 8 + 4) + *(WORD*)((char*)this + 0xa) * 0xc8 + 0xb0) & 8) > 0 && (*(WORD*)((char*)this + 8) >= 0xc8 && *(int*)((char*)this + 0x168) >= 2 && *(int*)((char*)this + 0x168) != 6 || *(WORD*)((char*)this + 8) < 0xc8) && *(short*)(*(char**)((char*)this + 0x164) + *(WORD*)((char*)this + 8) * 8 + 2) <= *(short*)(*(char**)((char*)this + 0x164) + 0x9c0)) {
+        if (unk262 == 0x6e && unk148 >= 0x3e8 && y == 0.0 && (m_patterns[pattern].frames[frame].flagsB0 & 8) > 0 && (pattern >= 0xc8 && unk168 >= 2 && unk168 != 6 || pattern < 0xc8) && m_patterns[pattern].unk2 <= m_patterns[0x138].unk0) {
             Vf0();
             CPlayer::Unk40f170();
-            *(short*)((char*)this + 8) = 0x138;
-            if (*(int*)((char*)this + 0x3150) >= 0x2710) {
-                *(short*)((char*)this + 0xa) = 7;
-                *(short*)((char*)this + 0xc) = 0;
-                *(int*)((char*)this + 0x3150) = 0;
+            pattern = 0x138;
+            if (unk3150 >= 0x2710) {
+                frame = 7;
+                timer = 0;
+                unk3150 = 0;
             }
             return;
         }
-        if (*(short*)((char*)this + 0x262) == 0x66 && *(short*)((char*)this + 0x148) >= 0xbb8 && *(double*)((char*)this + 0x28) == 0.0 && (*(WORD*)(*(char**)(*(char**)((char*)this + 0x164) + *(WORD*)((char*)this + 8) * 8 + 4) + *(WORD*)((char*)this + 0xa) * 0xc8 + 0xb0) & 8) > 0 && (*(WORD*)((char*)this + 8) >= 0xc8 && *(int*)((char*)this + 0x168) >= 2 && *(int*)((char*)this + 0x168) != 6 || *(WORD*)((char*)this + 8) < 0xc8) && *(short*)(*(char**)((char*)this + 0x164) + *(WORD*)((char*)this + 8) * 8 + 2) <= *(short*)(*(char**)((char*)this + 0x164) + 0x988)) {
+        if (unk262 == 0x66 && unk148 >= 0xbb8 && y == 0.0 && (m_patterns[pattern].frames[frame].flagsB0 & 8) > 0 && (pattern >= 0xc8 && unk168 >= 2 && unk168 != 6 || pattern < 0xc8) && m_patterns[pattern].unk2 <= m_patterns[0x131].unk0) {
             Vf0();
             CPlayer::Unk40f170();
-            *(short*)((char*)this + 8) = 0x131;
-            if (*(int*)((char*)this + 0x3150) >= 0x2710) {
-                *(short*)((char*)this + 0xa) = 7;
-                *(short*)((char*)this + 0xc) = 0;
-                *(int*)((char*)this + 0x3150) = 0;
+            pattern = 0x131;
+            if (unk3150 >= 0x2710) {
+                frame = 7;
+                timer = 0;
+                unk3150 = 0;
             }
             return;
         }
-        if (*(short*)((char*)this + 0x262) == 0x65 && *(short*)((char*)this + 0x148) >= 0x7d0 && *(double*)((char*)this + 0x28) == 0.0 && (*(WORD*)(*(char**)(*(char**)((char*)this + 0x164) + *(WORD*)((char*)this + 8) * 8 + 4) + *(WORD*)((char*)this + 0xa) * 0xc8 + 0xb0) & 8) > 0 && (*(WORD*)((char*)this + 8) >= 0xc8 && *(int*)((char*)this + 0x168) >= 2 && *(int*)((char*)this + 0x168) != 6 || *(WORD*)((char*)this + 8) < 0xc8) && *(short*)(*(char**)((char*)this + 0x164) + *(WORD*)((char*)this + 8) * 8 + 2) <= *(short*)(*(char**)((char*)this + 0x164) + 0x980)) {
+        if (unk262 == 0x65 && unk148 >= 0x7d0 && y == 0.0 && (m_patterns[pattern].frames[frame].flagsB0 & 8) > 0 && (pattern >= 0xc8 && unk168 >= 2 && unk168 != 6 || pattern < 0xc8) && m_patterns[pattern].unk2 <= m_patterns[0x130].unk0) {
             Vf0();
             CPlayer::Unk40f170();
-            *(short*)((char*)this + 8) = 0x130;
-            if (*(int*)((char*)this + 0x3150) >= 0x2710) {
-                *(short*)((char*)this + 0xa) = 7;
-                *(short*)((char*)this + 0xc) = 0;
-                *(int*)((char*)this + 0x3150) = 0;
+            pattern = 0x130;
+            if (unk3150 >= 0x2710) {
+                frame = 7;
+                timer = 0;
+                unk3150 = 0;
             }
             return;
         }
-        if (*(short*)((char*)this + 0x262) == 0x64 && *(short*)((char*)this + 0x148) >= 0x3e8 && *(double*)((char*)this + 0x28) == 0.0 && (*(WORD*)(*(char**)(*(char**)((char*)this + 0x164) + *(WORD*)((char*)this + 8) * 8 + 4) + *(WORD*)((char*)this + 0xa) * 0xc8 + 0xb0) & 8) > 0 && (*(WORD*)((char*)this + 8) >= 0xc8 && *(int*)((char*)this + 0x168) >= 2 && *(int*)((char*)this + 0x168) != 6 || *(WORD*)((char*)this + 8) < 0xc8) && *(short*)(*(char**)((char*)this + 0x164) + *(WORD*)((char*)this + 8) * 8 + 2) <= *(short*)(*(char**)((char*)this + 0x164) + 0x978)) {
+        if (unk262 == 0x64 && unk148 >= 0x3e8 && y == 0.0 && (m_patterns[pattern].frames[frame].flagsB0 & 8) > 0 && (pattern >= 0xc8 && unk168 >= 2 && unk168 != 6 || pattern < 0xc8) && m_patterns[pattern].unk2 <= m_patterns[0x12f].unk0) {
             Vf0();
             CPlayer::Unk40f170();
-            *(short*)((char*)this + 8) = 0x12f;
-            if (*(int*)((char*)this + 0x3150) >= 0x2710) {
-                *(short*)((char*)this + 0xa) = 7;
-                *(short*)((char*)this + 0xc) = 0;
-                *(int*)((char*)this + 0x3150) = 0;
+            pattern = 0x12f;
+            if (unk3150 >= 0x2710) {
+                frame = 7;
+                timer = 0;
+                unk3150 = 0;
             }
             return;
         }
-        if (*(short*)((char*)this + 0x262) == 0xac && *(double*)((char*)this + 0x28) == 0.0 && *(short*)((char*)this + 0x148) >= 0xbb8 && (*(WORD*)(*(char**)(*(char**)((char*)this + 0x164) + *(WORD*)((char*)this + 8) * 8 + 4) + *(WORD*)((char*)this + 0xa) * 0xc8 + 0xb0) & 8) > 0 && (*(WORD*)((char*)this + 8) >= 0xc8 && *(int*)((char*)this + 0x168) >= 2 && *(int*)((char*)this + 0x168) != 6 || *(WORD*)((char*)this + 8) < 0xc8) && *(short*)(*(char**)((char*)this + 0x164) + *(WORD*)((char*)this + 8) * 8 + 2) <= *(short*)(*(char**)((char*)this + 0x164) + 0x9a0)) {
+        if (unk262 == 0xac && y == 0.0 && unk148 >= 0xbb8 && (m_patterns[pattern].frames[frame].flagsB0 & 8) > 0 && (pattern >= 0xc8 && unk168 >= 2 && unk168 != 6 || pattern < 0xc8) && m_patterns[pattern].unk2 <= m_patterns[0x134].unk0) {
             Vf0();
             CPlayer::Unk40f170();
-            *(short*)((char*)this + 8) = 0x134;
+            pattern = 0x134;
             return;
         }
-        if ((*(short*)((char*)this + 0x262) == 0xab || *(short*)((char*)this + 0x262) == 0xac) && *(double*)((char*)this + 0x28) == 0.0 && *(short*)((char*)this + 0x148) >= 0x7d0 && (*(WORD*)(*(char**)(*(char**)((char*)this + 0x164) + *(WORD*)((char*)this + 8) * 8 + 4) + *(WORD*)((char*)this + 0xa) * 0xc8 + 0xb0) & 8) > 0 && (*(WORD*)((char*)this + 8) >= 0xc8 && *(int*)((char*)this + 0x168) >= 2 && *(int*)((char*)this + 0x168) != 6 || *(WORD*)((char*)this + 8) < 0xc8) && *(short*)(*(char**)((char*)this + 0x164) + *(WORD*)((char*)this + 8) * 8 + 2) <= *(short*)(*(char**)((char*)this + 0x164) + 0x998)) {
+        if ((unk262 == 0xab || unk262 == 0xac) && y == 0.0 && unk148 >= 0x7d0 && (m_patterns[pattern].frames[frame].flagsB0 & 8) > 0 && (pattern >= 0xc8 && unk168 >= 2 && unk168 != 6 || pattern < 0xc8) && m_patterns[pattern].unk2 <= m_patterns[0x133].unk0) {
             Vf0();
             CPlayer::Unk40f170();
-            *(short*)((char*)this + 8) = 0x133;
+            pattern = 0x133;
             return;
         }
-        if ((*(short*)((char*)this + 0x262) == 0xaa || *(short*)((char*)this + 0x262) == 0xab || *(short*)((char*)this + 0x262) == 0xac) && *(double*)((char*)this + 0x28) == 0.0 && *(short*)((char*)this + 0x148) >= 0x3e8 && (*(WORD*)(*(char**)(*(char**)((char*)this + 0x164) + *(WORD*)((char*)this + 8) * 8 + 4) + *(WORD*)((char*)this + 0xa) * 0xc8 + 0xb0) & 8) > 0 && (*(WORD*)((char*)this + 8) >= 0xc8 && *(int*)((char*)this + 0x168) >= 2 && *(int*)((char*)this + 0x168) != 6 || *(WORD*)((char*)this + 8) < 0xc8) && *(short*)(*(char**)((char*)this + 0x164) + *(WORD*)((char*)this + 8) * 8 + 2) <= *(short*)(*(char**)((char*)this + 0x164) + 0x990)) {
+        if ((unk262 == 0xaa || unk262 == 0xab || unk262 == 0xac) && y == 0.0 && unk148 >= 0x3e8 && (m_patterns[pattern].frames[frame].flagsB0 & 8) > 0 && (pattern >= 0xc8 && unk168 >= 2 && unk168 != 6 || pattern < 0xc8) && m_patterns[pattern].unk2 <= m_patterns[0x132].unk0) {
             Vf0();
             CPlayer::Unk40f170();
-            *(short*)((char*)this + 8) = 0x132;
+            pattern = 0x132;
             return;
         }
-        if (*(short*)((char*)this + 0x262) == 0x33 && *(short*)((char*)this + 0x148) >= 0x7d0 && *(double*)((char*)this + 0x28) == 0.0 && (*(WORD*)(*(char**)(*(char**)((char*)this + 0x164) + *(WORD*)((char*)this + 8) * 8 + 4) + *(WORD*)((char*)this + 0xa) * 0xc8 + 0xb0) & 8) > 0 && (*(WORD*)((char*)this + 8) >= 0xc8 && *(int*)((char*)this + 0x168) >= 2 && *(int*)((char*)this + 0x168) != 6 || *(WORD*)((char*)this + 8) < 0xc8) && *(short*)(*(char**)((char*)this + 0x164) + *(WORD*)((char*)this + 8) * 8 + 2) <= *(short*)(*(char**)((char*)this + 0x164) + 0x9a8)) {
+        if (unk262 == 0x33 && unk148 >= 0x7d0 && y == 0.0 && (m_patterns[pattern].frames[frame].flagsB0 & 8) > 0 && (pattern >= 0xc8 && unk168 >= 2 && unk168 != 6 || pattern < 0xc8) && m_patterns[pattern].unk2 <= m_patterns[0x135].unk0) {
             Vf0();
             CPlayer::Unk40f170();
-            *(short*)((char*)this + 8) = 0x135;
-            if (*(int*)((char*)this + 0x3150) >= 0x2710) {
-                *(short*)((char*)this + 0xa) = 7;
-                *(short*)((char*)this + 0xc) = 0;
-                *(int*)((char*)this + 0x3150) = 0;
+            pattern = 0x135;
+            if (unk3150 >= 0x2710) {
+                frame = 7;
+                timer = 0;
+                unk3150 = 0;
             }
             return;
         }
-        if (*(short*)((char*)this + 0x262) == 0x7a && *(short*)((char*)this + 0x148) >= 0xbb8 && *(double*)((char*)this + 0x28) == 0.0 && (*(WORD*)(*(char**)(*(char**)((char*)this + 0x164) + *(WORD*)((char*)this + 8) * 8 + 4) + *(WORD*)((char*)this + 0xa) * 0xc8 + 0xb0) & 8) > 0 && (*(WORD*)((char*)this + 8) >= 0xc8 && *(int*)((char*)this + 0x168) >= 2 && *(int*)((char*)this + 0x168) != 6 || *(WORD*)((char*)this + 8) < 0xc8) && *(short*)(*(char**)((char*)this + 0x164) + *(WORD*)((char*)this + 8) * 8 + 2) <= *(short*)(*(char**)((char*)this + 0x164) + 0x970)) {
+        if (unk262 == 0x7a && unk148 >= 0xbb8 && y == 0.0 && (m_patterns[pattern].frames[frame].flagsB0 & 8) > 0 && (pattern >= 0xc8 && unk168 >= 2 && unk168 != 6 || pattern < 0xc8) && m_patterns[pattern].unk2 <= m_patterns[0x12e].unk0) {
             Vf0();
             CPlayer::Unk40f170();
-            *(short*)((char*)this + 8) = 0x12e;
-            if (*(int*)((char*)this + 0x3150) >= 0x2710) {
-                *(short*)((char*)this + 0xa) = 7;
-                *(short*)((char*)this + 0xc) = 0;
-                *(int*)((char*)this + 0x3150) = 0;
+            pattern = 0x12e;
+            if (unk3150 >= 0x2710) {
+                frame = 7;
+                timer = 0;
+                unk3150 = 0;
             }
             return;
         }
-        if (*(short*)((char*)this + 0x262) == 0x79 && *(short*)((char*)this + 0x148) >= 0x7d0 && *(double*)((char*)this + 0x28) == 0.0 && (*(WORD*)(*(char**)(*(char**)((char*)this + 0x164) + *(WORD*)((char*)this + 8) * 8 + 4) + *(WORD*)((char*)this + 0xa) * 0xc8 + 0xb0) & 8) > 0 && (*(WORD*)((char*)this + 8) >= 0xc8 && *(int*)((char*)this + 0x168) >= 2 && *(int*)((char*)this + 0x168) != 6 || *(WORD*)((char*)this + 8) < 0xc8) && *(short*)(*(char**)((char*)this + 0x164) + *(WORD*)((char*)this + 8) * 8 + 2) <= *(short*)(*(char**)((char*)this + 0x164) + 0x968)) {
+        if (unk262 == 0x79 && unk148 >= 0x7d0 && y == 0.0 && (m_patterns[pattern].frames[frame].flagsB0 & 8) > 0 && (pattern >= 0xc8 && unk168 >= 2 && unk168 != 6 || pattern < 0xc8) && m_patterns[pattern].unk2 <= m_patterns[0x12d].unk0) {
             Vf0();
             CPlayer::Unk40f170();
-            *(short*)((char*)this + 8) = 0x12d;
-            if (*(int*)((char*)this + 0x3150) >= 0x2710) {
-                *(short*)((char*)this + 0xa) = 7;
-                *(short*)((char*)this + 0xc) = 0;
-                *(int*)((char*)this + 0x3150) = 0;
+            pattern = 0x12d;
+            if (unk3150 >= 0x2710) {
+                frame = 7;
+                timer = 0;
+                unk3150 = 0;
             }
             return;
         }
-        if (*(short*)((char*)this + 0x262) == 0x78 && *(short*)((char*)this + 0x148) >= 0x3e8 && *(double*)((char*)this + 0x28) == 0.0 && (*(WORD*)(*(char**)(*(char**)((char*)this + 0x164) + *(WORD*)((char*)this + 8) * 8 + 4) + *(WORD*)((char*)this + 0xa) * 0xc8 + 0xb0) & 8) > 0 && (*(WORD*)((char*)this + 8) >= 0xc8 && *(int*)((char*)this + 0x168) >= 2 && *(int*)((char*)this + 0x168) != 6 || *(WORD*)((char*)this + 8) < 0xc8) && *(short*)(*(char**)((char*)this + 0x164) + *(WORD*)((char*)this + 8) * 8 + 2) <= *(short*)(*(char**)((char*)this + 0x164) + 0x960)) {
+        if (unk262 == 0x78 && unk148 >= 0x3e8 && y == 0.0 && (m_patterns[pattern].frames[frame].flagsB0 & 8) > 0 && (pattern >= 0xc8 && unk168 >= 2 && unk168 != 6 || pattern < 0xc8) && m_patterns[pattern].unk2 <= m_patterns[0x12c].unk0) {
             Vf0();
             CPlayer::Unk40f170();
-            *(short*)((char*)this + 8) = 0x12c;
-            if (*(int*)((char*)this + 0x3150) >= 0x2710) {
-                *(short*)((char*)this + 0xa) = 7;
-                *(short*)((char*)this + 0xc) = 0;
-                *(int*)((char*)this + 0x3150) = 0;
+            pattern = 0x12c;
+            if (unk3150 >= 0x2710) {
+                frame = 7;
+                timer = 0;
+                unk3150 = 0;
             }
             return;
         }
-        if (*(short*)((char*)this + 0x262) == 0x3e && (*(WORD*)(*(char**)(*(char**)((char*)this + 0x164) + *(WORD*)((char*)this + 8) * 8 + 4) + *(WORD*)((char*)this + 0xa) * 0xc8 + 0xb0) & 8) > 0 && (*(WORD*)((char*)this + 8) >= 0xc8 && *(int*)((char*)this + 0x168) >= 2 && *(int*)((char*)this + 0x168) != 6 || *(WORD*)((char*)this + 8) < 0xc8) && *(int*)((char*)this + 0x3168) == 0 && *(short*)(*(char**)((char*)this + 0x164) + *(WORD*)((char*)this + 8) * 8 + 2) <= *(short*)(*(char**)((char*)this + 0x164) + 0x830) && *(double*)((char*)this + 0x28) == 0.0) {
+        if (unk262 == 0x3e && (m_patterns[pattern].frames[frame].flagsB0 & 8) > 0 && (pattern >= 0xc8 && unk168 >= 2 && unk168 != 6 || pattern < 0xc8) && unk3168 == 0 && m_patterns[pattern].unk2 <= m_patterns[0x106].unk0 && y == 0.0) {
             Vf0();
             CPlayer::Unk40f170();
-            *(short*)((char*)this + 8) = 0x106;
-            if (*(int*)((char*)this + 0x3150) >= 0x2710) {
-                *(short*)((char*)this + 0xa) = 7;
-                *(short*)((char*)this + 0xc) = 0;
-                *(int*)((char*)this + 0x3150) = 0x9c4;
+            pattern = 0x106;
+            if (unk3150 >= 0x2710) {
+                frame = 7;
+                timer = 0;
+                unk3150 = 0x9c4;
             }
             return;
         }
-        if (*(short*)((char*)this + 0x262) == 0x3d && (*(WORD*)(*(char**)(*(char**)((char*)this + 0x164) + *(WORD*)((char*)this + 8) * 8 + 4) + *(WORD*)((char*)this + 0xa) * 0xc8 + 0xb0) & 8) > 0 && (*(WORD*)((char*)this + 8) >= 0xc8 && *(int*)((char*)this + 0x168) >= 2 && *(int*)((char*)this + 0x168) != 6 || *(WORD*)((char*)this + 8) < 0xc8) && *(int*)((char*)this + 0x3168) == 0 && *(short*)(*(char**)((char*)this + 0x164) + *(WORD*)((char*)this + 8) * 8 + 2) <= *(short*)(*(char**)((char*)this + 0x164) + 0x828) && *(double*)((char*)this + 0x28) == 0.0) {
+        if (unk262 == 0x3d && (m_patterns[pattern].frames[frame].flagsB0 & 8) > 0 && (pattern >= 0xc8 && unk168 >= 2 && unk168 != 6 || pattern < 0xc8) && unk3168 == 0 && m_patterns[pattern].unk2 <= m_patterns[0x105].unk0 && y == 0.0) {
             Vf0();
             CPlayer::Unk40f170();
-            *(short*)((char*)this + 8) = 0x105;
-            if (*(int*)((char*)this + 0x3150) >= 0x2710) {
-                *(short*)((char*)this + 0xa) = 7;
-                *(short*)((char*)this + 0xc) = 0;
-                *(int*)((char*)this + 0x3150) = 0x1388;
+            pattern = 0x105;
+            if (unk3150 >= 0x2710) {
+                frame = 7;
+                timer = 0;
+                unk3150 = 0x1388;
             }
             return;
         }
-        if (*(short*)((char*)this + 0x262) == 0x3c && (*(WORD*)(*(char**)(*(char**)((char*)this + 0x164) + *(WORD*)((char*)this + 8) * 8 + 4) + *(WORD*)((char*)this + 0xa) * 0xc8 + 0xb0) & 8) > 0 && (*(WORD*)((char*)this + 8) >= 0xc8 && *(int*)((char*)this + 0x168) >= 2 && *(int*)((char*)this + 0x168) != 6 || *(WORD*)((char*)this + 8) < 0xc8) && *(int*)((char*)this + 0x3168) == 0 && *(short*)(*(char**)((char*)this + 0x164) + *(WORD*)((char*)this + 8) * 8 + 2) <= *(short*)(*(char**)((char*)this + 0x164) + 0x820) && *(double*)((char*)this + 0x28) == 0.0) {
+        if (unk262 == 0x3c && (m_patterns[pattern].frames[frame].flagsB0 & 8) > 0 && (pattern >= 0xc8 && unk168 >= 2 && unk168 != 6 || pattern < 0xc8) && unk3168 == 0 && m_patterns[pattern].unk2 <= m_patterns[0x104].unk0 && y == 0.0) {
             Vf0();
             CPlayer::Unk40f170();
-            *(short*)((char*)this + 8) = 0x104;
-            if (*(int*)((char*)this + 0x3150) >= 0x2710) {
-                *(short*)((char*)this + 0xa) = 7;
-                *(short*)((char*)this + 0xc) = 0;
-                *(int*)((char*)this + 0x3150) = 0x1d4c;
+            pattern = 0x104;
+            if (unk3150 >= 0x2710) {
+                frame = 7;
+                timer = 0;
+                unk3150 = 0x1d4c;
             }
             return;
         }
-        if (*(short*)((char*)this + 0x262) == 0x20 && (*(WORD*)(*(char**)(*(char**)((char*)this + 0x164) + *(WORD*)((char*)this + 8) * 8 + 4) + *(WORD*)((char*)this + 0xa) * 0xc8 + 0xb0) & 8) > 0 && (*(WORD*)((char*)this + 8) >= 0xc8 && *(int*)((char*)this + 0x168) >= 2 && *(int*)((char*)this + 0x168) != 6 || *(WORD*)((char*)this + 8) < 0xc8) && *(int*)((char*)this + 0x316c) == 0 && *(short*)(*(char**)((char*)this + 0x164) + *(WORD*)((char*)this + 8) * 8 + 2) <= *(short*)(*(char**)((char*)this + 0x164) + 0x818) && *(double*)((char*)this + 0x28) == 0.0) {
+        if (unk262 == 0x20 && (m_patterns[pattern].frames[frame].flagsB0 & 8) > 0 && (pattern >= 0xc8 && unk168 >= 2 && unk168 != 6 || pattern < 0xc8) && unk316c == 0 && m_patterns[pattern].unk2 <= m_patterns[0x103].unk0 && y == 0.0) {
             Vf0();
             CPlayer::Unk40f170();
-            *(short*)((char*)this + 8) = 0x103;
-            if (*(int*)((char*)this + 0x3150) >= 0x2710) {
-                *(short*)((char*)this + 0xa) = 7;
-                *(short*)((char*)this + 0xc) = 0;
-                *(int*)((char*)this + 0x3150) = 0x9c4;
+            pattern = 0x103;
+            if (unk3150 >= 0x2710) {
+                frame = 7;
+                timer = 0;
+                unk3150 = 0x9c4;
             }
             return;
         }
-        if (*(short*)((char*)this + 0x262) == 0x1f && (*(WORD*)(*(char**)(*(char**)((char*)this + 0x164) + *(WORD*)((char*)this + 8) * 8 + 4) + *(WORD*)((char*)this + 0xa) * 0xc8 + 0xb0) & 8) > 0 && (*(WORD*)((char*)this + 8) >= 0xc8 && *(int*)((char*)this + 0x168) >= 2 && *(int*)((char*)this + 0x168) != 6 || *(WORD*)((char*)this + 8) < 0xc8) && *(int*)((char*)this + 0x316c) == 0 && *(short*)(*(char**)((char*)this + 0x164) + *(WORD*)((char*)this + 8) * 8 + 2) <= *(short*)(*(char**)((char*)this + 0x164) + 0x810) && *(double*)((char*)this + 0x28) == 0.0) {
+        if (unk262 == 0x1f && (m_patterns[pattern].frames[frame].flagsB0 & 8) > 0 && (pattern >= 0xc8 && unk168 >= 2 && unk168 != 6 || pattern < 0xc8) && unk316c == 0 && m_patterns[pattern].unk2 <= m_patterns[0x102].unk0 && y == 0.0) {
             Vf0();
             CPlayer::Unk40f170();
-            *(short*)((char*)this + 8) = 0x102;
-            if (*(int*)((char*)this + 0x3150) >= 0x2710) {
-                *(short*)((char*)this + 0xa) = 7;
-                *(short*)((char*)this + 0xc) = 0;
-                *(int*)((char*)this + 0x3150) = 0x1388;
+            pattern = 0x102;
+            if (unk3150 >= 0x2710) {
+                frame = 7;
+                timer = 0;
+                unk3150 = 0x1388;
             }
             return;
         }
-        if (*(short*)((char*)this + 0x262) == 0x1e && (*(WORD*)(*(char**)(*(char**)((char*)this + 0x164) + *(WORD*)((char*)this + 8) * 8 + 4) + *(WORD*)((char*)this + 0xa) * 0xc8 + 0xb0) & 8) > 0 && (*(WORD*)((char*)this + 8) >= 0xc8 && *(int*)((char*)this + 0x168) >= 2 && *(int*)((char*)this + 0x168) != 6 || *(WORD*)((char*)this + 8) < 0xc8) && *(int*)((char*)this + 0x316c) == 0 && *(short*)(*(char**)((char*)this + 0x164) + *(WORD*)((char*)this + 8) * 8 + 2) <= *(short*)(*(char**)((char*)this + 0x164) + 0x808) && *(double*)((char*)this + 0x28) == 0.0) {
+        if (unk262 == 0x1e && (m_patterns[pattern].frames[frame].flagsB0 & 8) > 0 && (pattern >= 0xc8 && unk168 >= 2 && unk168 != 6 || pattern < 0xc8) && unk316c == 0 && m_patterns[pattern].unk2 <= m_patterns[0x101].unk0 && y == 0.0) {
             Vf0();
             CPlayer::Unk40f170();
-            *(short*)((char*)this + 8) = 0x101;
-            if (*(int*)((char*)this + 0x3150) >= 0x2710) {
-                *(short*)((char*)this + 0xa) = 7;
-                *(short*)((char*)this + 0xc) = 0;
-                *(int*)((char*)this + 0x3150) = 0x1d4c;
+            pattern = 0x101;
+            if (unk3150 >= 0x2710) {
+                frame = 7;
+                timer = 0;
+                unk3150 = 0x1d4c;
             }
             return;
         }
-        if (*(short*)((char*)this + 0x262) == 0xc && (*(WORD*)(*(char**)(*(char**)((char*)this + 0x164) + *(WORD*)((char*)this + 8) * 8 + 4) + *(WORD*)((char*)this + 0xa) * 0xc8 + 0xb0) & 8) > 0 && (*(WORD*)((char*)this + 8) >= 0xc8 && *(int*)((char*)this + 0x168) >= 2 && *(int*)((char*)this + 0x168) != 6 || *(WORD*)((char*)this + 8) < 0xc8) && *(int*)((char*)this + 0x3170) == 0 && *(short*)(*(char**)((char*)this + 0x164) + *(WORD*)((char*)this + 8) * 8 + 2) <= *(short*)(*(char**)((char*)this + 0x164) + 0x800) && *(double*)((char*)this + 0x28) == 0.0) {
+        if (unk262 == 0xc && (m_patterns[pattern].frames[frame].flagsB0 & 8) > 0 && (pattern >= 0xc8 && unk168 >= 2 && unk168 != 6 || pattern < 0xc8) && unk3170 == 0 && m_patterns[pattern].unk2 <= m_patterns[0x100].unk0 && y == 0.0) {
             Vf0();
             CPlayer::Unk40f170();
-            *(short*)((char*)this + 8) = 0x100;
-            if (*(int*)((char*)this + 0x3150) >= 0x2710) {
-                *(short*)((char*)this + 0xa) = 7;
-                *(short*)((char*)this + 0xc) = 0;
-                *(int*)((char*)this + 0x3150) = 0x9c4;
+            pattern = 0x100;
+            if (unk3150 >= 0x2710) {
+                frame = 7;
+                timer = 0;
+                unk3150 = 0x9c4;
             }
             return;
         }
-        if (*(short*)((char*)this + 0x262) == 0xb && (*(WORD*)(*(char**)(*(char**)((char*)this + 0x164) + *(WORD*)((char*)this + 8) * 8 + 4) + *(WORD*)((char*)this + 0xa) * 0xc8 + 0xb0) & 8) > 0 && (*(WORD*)((char*)this + 8) >= 0xc8 && *(int*)((char*)this + 0x168) >= 2 && *(int*)((char*)this + 0x168) != 6 || *(WORD*)((char*)this + 8) < 0xc8) && *(int*)((char*)this + 0x3170) == 0 && *(short*)(*(char**)((char*)this + 0x164) + *(WORD*)((char*)this + 8) * 8 + 2) <= *(short*)(*(char**)((char*)this + 0x164) + 0x7f8) && *(double*)((char*)this + 0x28) == 0.0) {
+        if (unk262 == 0xb && (m_patterns[pattern].frames[frame].flagsB0 & 8) > 0 && (pattern >= 0xc8 && unk168 >= 2 && unk168 != 6 || pattern < 0xc8) && unk3170 == 0 && m_patterns[pattern].unk2 <= m_patterns[0xff].unk0 && y == 0.0) {
             Vf0();
             CPlayer::Unk40f170();
-            *(short*)((char*)this + 8) = 0xff;
-            if (*(int*)((char*)this + 0x3150) >= 0x2710) {
-                *(short*)((char*)this + 0xa) = 7;
-                *(short*)((char*)this + 0xc) = 0;
-                *(int*)((char*)this + 0x3150) = 0x1388;
+            pattern = 0xff;
+            if (unk3150 >= 0x2710) {
+                frame = 7;
+                timer = 0;
+                unk3150 = 0x1388;
             }
             return;
         }
-        if (*(short*)((char*)this + 0x262) == 0xa && (*(WORD*)(*(char**)(*(char**)((char*)this + 0x164) + *(WORD*)((char*)this + 8) * 8 + 4) + *(WORD*)((char*)this + 0xa) * 0xc8 + 0xb0) & 8) > 0 && (*(WORD*)((char*)this + 8) >= 0xc8 && *(int*)((char*)this + 0x168) >= 2 && *(int*)((char*)this + 0x168) != 6 || *(WORD*)((char*)this + 8) < 0xc8) && *(int*)((char*)this + 0x3170) == 0 && *(short*)(*(char**)((char*)this + 0x164) + *(WORD*)((char*)this + 8) * 8 + 2) <= *(short*)(*(char**)((char*)this + 0x164) + 0x7f0) && *(double*)((char*)this + 0x28) == 0.0) {
+        if (unk262 == 0xa && (m_patterns[pattern].frames[frame].flagsB0 & 8) > 0 && (pattern >= 0xc8 && unk168 >= 2 && unk168 != 6 || pattern < 0xc8) && unk3170 == 0 && m_patterns[pattern].unk2 <= m_patterns[0xfe].unk0 && y == 0.0) {
             Vf0();
             CPlayer::Unk40f170();
-            *(short*)((char*)this + 8) = 0xfe;
-            if (*(int*)((char*)this + 0x3150) >= 0x2710) {
-                *(short*)((char*)this + 0xa) = 7;
-                *(short*)((char*)this + 0xc) = 0;
-                *(int*)((char*)this + 0x3150) = 0x1d4c;
+            pattern = 0xfe;
+            if (unk3150 >= 0x2710) {
+                frame = 7;
+                timer = 0;
+                unk3150 = 0x1d4c;
             }
             return;
         }
-        if (*(short*)((char*)this + 0x262) == 0xd && (*(double*)((char*)this + 0x118) >= 500.0 || *((char*)this + 0x120) > 0) && (*(WORD*)(*(char**)(*(char**)((char*)this + 0x164) + *(WORD*)((char*)this + 8) * 8 + 4) + *(WORD*)((char*)this + 0xa) * 0xc8 + 0xb0) & 8) > 0 && (*(WORD*)((char*)this + 8) >= 0xc8 && *(int*)((char*)this + 0x168) >= 2 && *(int*)((char*)this + 0x168) != 6 || *(WORD*)((char*)this + 8) < 0xc8) && *(short*)(*(char**)((char*)this + 0x164) + *(WORD*)((char*)this + 8) * 8 + 2) <= *(short*)(*(char**)((char*)this + 0x164) + 0x7d8) && *(double*)((char*)this + 0x28) == 0.0 && *(int*)((char*)this + 0x3150) < 0x2710) {
+        if (unk262 == 0xd && (unk118 >= 500.0 || unk120 > 0) && (m_patterns[pattern].frames[frame].flagsB0 & 8) > 0 && (pattern >= 0xc8 && unk168 >= 2 && unk168 != 6 || pattern < 0xc8) && m_patterns[pattern].unk2 <= m_patterns[0xfb].unk0 && y == 0.0 && unk3150 < 0x2710) {
             Vf0();
             CPlayer::Unk40f170();
-            *(short*)((char*)this + 8) = 0xfb;
+            pattern = 0xfb;
             return;
         }
     }
-    if (*(int*)((char*)this + 0x15c) < 1 && (*(short*)((char*)this + 0x262) == 0 || *(short*)((char*)this + 0x262) == 1)) {
-        if (*(double*)((char*)this + 0x28) < 0.0 && *(BYTE*)((char*)this + 0x159) < 1) {
-            if (((*(double*)(*(char**)*(char**)((char*)this + 0x78) + 0x20) - *(double*)((char*)this + 0x20)) * (1 - (*(short*)((char*)this + 0x262) << 1)) < 0.0 || 0.0 == *(double*)(*(char**)*(char**)((char*)this + 0x78) + 0x20) - *(double*)((char*)this + 0x20) && *((char*)this + 0x50) == (1 - (*(short*)((char*)this + 0x262) << 1)) * -1) && *(short*)(*(char**)((char*)this + 0x164) + *(WORD*)((char*)this + 8) * 8 + 2) <= *(short*)(*(char**)((char*)this + 0x164) + 0x528) && *(WORD*)((char*)this + 8) != 0xaa && *(double*)((char*)this + 0x28) < -40.0 && (*(WORD*)(*(char**)(*(char**)((char*)this + 0x164) + *(WORD*)((char*)this + 8) * 8 + 4) + *(WORD*)((char*)this + 0xa) * 0xc8 + 0xb0) & 8) > 0 && (*(WORD*)((char*)this + 8) >= 0xc8 && *(int*)((char*)this + 0x168) >= 2 && *(int*)((char*)this + 0x168) != 6 || *(WORD*)((char*)this + 8) < 0xc8)) {
-                if (*(WORD*)((char*)this + 8) != 0xa5) {
+    if (unk15c < 1 && (unk262 == 0 || unk262 == 1)) {
+        if (y < 0.0 && unk159 < 1) {
+            if ((((*m_opponent)->x - x) * (1 - (unk262 << 1)) < 0.0 || 0.0 == (*m_opponent)->x - x && facing == (1 - (unk262 << 1)) * -1) && m_patterns[pattern].unk2 <= m_patterns[0xa5].unk0 && pattern != 0xaa && y < -40.0 && (m_patterns[pattern].frames[frame].flagsB0 & 8) > 0 && (pattern >= 0xc8 && unk168 >= 2 && unk168 != 6 || pattern < 0xc8)) {
+                if (pattern != 0xa5) {
                     Vf0();
                 }
-                *(short*)((char*)this + 8) = 0xa5;
+                pattern = 0xa5;
                 CPlayer::Unk40e630();
-                (*((char*)this + 0x159))++;
-                (*((char*)this + 0x15a))++;
-                *((char*)this + 0x1a8) = 0;
+                unk159++;
+                unk15a++;
+                unk1a8 = 0;
                 return;
             }
-            if (((*(double*)(*(char**)*(char**)((char*)this + 0x78) + 0x20) - *(double*)((char*)this + 0x20)) * (1 - (*(short*)((char*)this + 0x262) << 1)) > 0.0 || 0.0 == *(double*)(*(char**)*(char**)((char*)this + 0x78) + 0x20) - *(double*)((char*)this + 0x20) && *((char*)this + 0x50) == 1 - (*(short*)((char*)this + 0x262) << 1)) && *(short*)(*(char**)((char*)this + 0x164) + *(WORD*)((char*)this + 8) * 8 + 2) <= *(short*)(*(char**)((char*)this + 0x164) + 0x530) && *(WORD*)((char*)this + 8) != 0xaa && (*(WORD*)(*(char**)(*(char**)((char*)this + 0x164) + *(WORD*)((char*)this + 8) * 8 + 4) + *(WORD*)((char*)this + 0xa) * 0xc8 + 0xb0) & 8) > 0 && (*(WORD*)((char*)this + 8) >= 0xc8 && *(int*)((char*)this + 0x168) >= 2 && *(int*)((char*)this + 0x168) != 6 || *(WORD*)((char*)this + 8) < 0xc8)) {
-                if (*(WORD*)((char*)this + 8) != 0xa6) {
+            if ((((*m_opponent)->x - x) * (1 - (unk262 << 1)) > 0.0 || 0.0 == (*m_opponent)->x - x && facing == 1 - (unk262 << 1)) && m_patterns[pattern].unk2 <= m_patterns[0xa6].unk0 && pattern != 0xaa && (m_patterns[pattern].frames[frame].flagsB0 & 8) > 0 && (pattern >= 0xc8 && unk168 >= 2 && unk168 != 6 || pattern < 0xc8)) {
+                if (pattern != 0xa6) {
                     Vf0();
                 }
-                *(short*)((char*)this + 8) = 0xa6;
+                pattern = 0xa6;
                 CPlayer::Unk40e630();
-                (*((char*)this + 0x159))++;
-                (*((char*)this + 0x15a))++;
-                *((char*)this + 0x1a8) = 0;
+                unk159++;
+                unk15a++;
+                unk1a8 = 0;
                 return;
             }
         }
-        if (*(double*)((char*)this + 0x28) == 0.0 && (*(WORD*)(*(char**)(*(char**)((char*)this + 0x164) + *(WORD*)((char*)this + 8) * 8 + 4) + *(WORD*)((char*)this + 0xa) * 0xc8 + 0xb0) & 8) > 0) {
-            if (((*(double*)(*(char**)*(char**)((char*)this + 0x78) + 0x20) - *(double*)((char*)this + 0x20)) * (1 - (*(short*)((char*)this + 0x262) << 1)) < 0.0 || 0.0 == *(double*)(*(char**)*(char**)((char*)this + 0x78) + 0x20) - *(double*)((char*)this + 0x20) && *((char*)this + 0x50) == (1 - (*(short*)((char*)this + 0x262) << 1)) * -1) && *(short*)(*(char**)((char*)this + 0x164) + *(WORD*)((char*)this + 8) * 8 + 2) <= *(short*)(*(char**)((char*)this + 0x164) + 0x518) && (*(WORD*)((char*)this + 8) >= 0xc8 && *(int*)((char*)this + 0x168) >= 2 && *(int*)((char*)this + 0x168) != 6 || *(WORD*)((char*)this + 8) < 0xc8)) {
-                if (*(WORD*)((char*)this + 8) != 0xa3) {
+        if (y == 0.0 && (m_patterns[pattern].frames[frame].flagsB0 & 8) > 0) {
+            if ((((*m_opponent)->x - x) * (1 - (unk262 << 1)) < 0.0 || 0.0 == (*m_opponent)->x - x && facing == (1 - (unk262 << 1)) * -1) && m_patterns[pattern].unk2 <= m_patterns[0xa3].unk0 && (pattern >= 0xc8 && unk168 >= 2 && unk168 != 6 || pattern < 0xc8)) {
+                if (pattern != 0xa3) {
                     Vf0();
                 }
-                *(short*)((char*)this + 8) = 0xa3;
+                pattern = 0xa3;
                 CPlayer::Unk40e630();
-                (*((char*)this + 0x158))++;
-                *((char*)this + 0x1a8) = 0;
+                unk158++;
+                unk1a8 = 0;
                 return;
             }
-            if (((*(double*)(*(char**)*(char**)((char*)this + 0x78) + 0x20) - *(double*)((char*)this + 0x20)) * (1 - (*(short*)((char*)this + 0x262) << 1)) > 0.0 || 0.0 == *(double*)(*(char**)*(char**)((char*)this + 0x78) + 0x20) - *(double*)((char*)this + 0x20) && *((char*)this + 0x50) == 1 - (*(short*)((char*)this + 0x262) << 1)) && *(short*)(*(char**)((char*)this + 0x164) + *(WORD*)((char*)this + 8) * 8 + 2) <= *(short*)(*(char**)((char*)this + 0x164) + 0x520) && (*(WORD*)((char*)this + 8) >= 0xc8 && *(int*)((char*)this + 0x168) >= 2 && *(int*)((char*)this + 0x168) != 6 || *(WORD*)((char*)this + 8) < 0xc8)) {
-                if (*(WORD*)((char*)this + 8) != 0xa4) {
+            if ((((*m_opponent)->x - x) * (1 - (unk262 << 1)) > 0.0 || 0.0 == (*m_opponent)->x - x && facing == 1 - (unk262 << 1)) && m_patterns[pattern].unk2 <= m_patterns[0xa4].unk0 && (pattern >= 0xc8 && unk168 >= 2 && unk168 != 6 || pattern < 0xc8)) {
+                if (pattern != 0xa4) {
                     Vf0();
                 }
-                *(short*)((char*)this + 8) = 0xa4;
+                pattern = 0xa4;
                 CPlayer::Unk40e630();
-                *((char*)this + 0x1a8) = 0;
+                unk1a8 = 0;
                 return;
             }
         }
     }
-    if (*(int*)((char*)this + 0x15c) < 3 && *(short*)((char*)this + 0x262) == 6 && (*(WORD*)(*(char**)(*(char**)((char*)this + 0x164) + *(WORD*)((char*)this + 8) * 8 + 4) + *(WORD*)((char*)this + 0xa) * 0xc8 + 0xb0) & 8) > 0 && *(double*)((char*)this + 0x28) < 0.0 && *(BYTE*)((char*)this + 0x15a) < 1 && *(short*)(*(char**)((char*)this + 0x164) + *(WORD*)((char*)this + 8) * 8 + 2) <= *(short*)(*(char**)((char*)this + 0x164) + 0x70) && (*(WORD*)((char*)this + 8) >= 0xc8 && *(int*)((char*)this + 0x168) >= 2 && *(int*)((char*)this + 0x168) != 6 || *(WORD*)((char*)this + 8) < 0xc8)) {
+    if (unk15c < 3 && unk262 == 6 && (m_patterns[pattern].frames[frame].flagsB0 & 8) > 0 && y < 0.0 && unk15a < 1 && m_patterns[pattern].unk2 <= m_patterns[0xe].unk0 && (pattern >= 0xc8 && unk168 >= 2 && unk168 != 6 || pattern < 0xc8)) {
         Vf0();
         CPlayer::Unk40f170();
-        (*((char*)this + 0x15a))++;
-        *(short*)((char*)this + 8) = 0xe;
-        if (*((char*)this + 0x188) == *((char*)this + 0x50)) {
-            *(short*)((char*)this + 8) = 0xf;
+        unk15a++;
+        pattern = 0xe;
+        if (m_inputX == facing) {
+            pattern = 0xf;
         }
-        if (*((char*)this + 0x188) == -*((char*)this + 0x50)) {
-            *(short*)((char*)this + 8) = 0x10;
+        if (m_inputX == -facing) {
+            pattern = 0x10;
         }
         return;
     }
-    if (*((char*)this + 0x18a) == 1 || (*(BYTE*)((char*)this + 0x1a8) & 0x10) != 0 || (*(BYTE*)((char*)this + 0x1a9) & 0x10) != 0) {
-        if (*(WORD*)((char*)this + 8) == 0xa3 && *((char*)this + 0x188) != -*((char*)this + 0x50)) {
+    if (m_pressA == 1 || (unk1a8 & 0x10) != 0 || (unk1a9 & 0x10) != 0) {
+        if (pattern == 0xa3 && m_inputX != -facing) {
             Vf0();
             CPlayer::Unk40f170();
-            *(short*)((char*)this + 8) = 0xe6;
-            if (*((char*)this + 0x189) == 1) {
-                *(short*)((char*)this + 8) = 0xe9;
+            pattern = 0xe6;
+            if (m_inputY == 1) {
+                pattern = 0xe9;
             }
             return;
         }
-        if (*(double*)((char*)this + 0x28) < 0.0) {
-            if (*(double*)((char*)this + 0x28) < -25.0 && *((char*)this + 0x189) == 1 && *(short*)(*(char**)((char*)this + 0x164) + *(WORD*)((char*)this + 8) * 8 + 2) <= *(short*)(*(char**)((char*)this + 0x164) + 0x6a8) && (*(WORD*)(*(char**)(*(char**)((char*)this + 0x164) + *(WORD*)((char*)this + 8) * 8 + 4) + *(WORD*)((char*)this + 0xa) * 0xc8 + 0xb0) & 8) > 0 && (*(WORD*)((char*)this + 8) >= 0xc8 && *(int*)((char*)this + 0x168) >= 2 && *(int*)((char*)this + 0x168) != 6 || *(WORD*)((char*)this + 8) < 0xc8)) {
+        if (y < 0.0) {
+            if (y < -25.0 && m_inputY == 1 && m_patterns[pattern].unk2 <= m_patterns[0xd5].unk0 && (m_patterns[pattern].frames[frame].flagsB0 & 8) > 0 && (pattern >= 0xc8 && unk168 >= 2 && unk168 != 6 || pattern < 0xc8)) {
                 Vf0();
                 CPlayer::Unk40f170();
-                *(short*)((char*)this + 8) = 0xd5;
+                pattern = 0xd5;
                 return;
             }
-            if (*(short*)(*(char**)((char*)this + 0x164) + *(WORD*)((char*)this + 8) * 8 + 2) <= *(short*)(*(char**)((char*)this + 0x164) + 0x678) && (*(WORD*)(*(char**)(*(char**)((char*)this + 0x164) + *(WORD*)((char*)this + 8) * 8 + 4) + *(WORD*)((char*)this + 0xa) * 0xc8 + 0xb0) & 8) > 0 && (*(WORD*)((char*)this + 8) >= 0xc8 && *(int*)((char*)this + 0x168) >= 2 && *(int*)((char*)this + 0x168) != 6 || *(WORD*)((char*)this + 8) < 0xc8)) {
+            if (m_patterns[pattern].unk2 <= m_patterns[0xcf].unk0 && (m_patterns[pattern].frames[frame].flagsB0 & 8) > 0 && (pattern >= 0xc8 && unk168 >= 2 && unk168 != 6 || pattern < 0xc8)) {
                 Vf0();
                 CPlayer::Unk40f170();
-                *(short*)((char*)this + 8) = 0xcf;
+                pattern = 0xcf;
             }
             return;
         }
-        if ((*((char*)this + 0x189) == 1 || (*(BYTE*)((char*)this + 0x1a8) & 4) != 0 || (*(BYTE*)((char*)this + 0x1a9) & 4) != 0) && *(short*)(*(char**)((char*)this + 0x164) + *(WORD*)((char*)this + 8) * 8 + 2) <= *(short*)(*(char**)((char*)this + 0x164) + 0x660) && (*(WORD*)(*(char**)(*(char**)((char*)this + 0x164) + *(WORD*)((char*)this + 8) * 8 + 4) + *(WORD*)((char*)this + 0xa) * 0xc8 + 0xb0) & 8) > 0 && (*(WORD*)((char*)this + 8) >= 0xc8 && *(int*)((char*)this + 0x168) >= 2 && *(int*)((char*)this + 0x168) != 6 || *(WORD*)((char*)this + 8) < 0xc8)) {
+        if ((m_inputY == 1 || (unk1a8 & 4) != 0 || (unk1a9 & 4) != 0) && m_patterns[pattern].unk2 <= m_patterns[0xcc].unk0 && (m_patterns[pattern].frames[frame].flagsB0 & 8) > 0 && (pattern >= 0xc8 && unk168 >= 2 && unk168 != 6 || pattern < 0xc8)) {
             Vf0();
             CPlayer::Unk40f170();
-            *(short*)((char*)this + 8) = 0xcc;
+            pattern = 0xcc;
             return;
         }
-        if ((*((char*)this + 0x189) == 0 || (*(BYTE*)((char*)this + 0x1a8) & 4) == 0 || (*(BYTE*)((char*)this + 0x1a9) & 4) == 0) && *(short*)(*(char**)((char*)this + 0x164) + *(WORD*)((char*)this + 8) * 8 + 2) <= *(short*)(*(char**)((char*)this + 0x164) + 0x640) && (*(WORD*)(*(char**)(*(char**)((char*)this + 0x164) + *(WORD*)((char*)this + 8) * 8 + 4) + *(WORD*)((char*)this + 0xa) * 0xc8 + 0xb0) & 8) > 0 && (*(WORD*)((char*)this + 8) >= 0xc8 && *(int*)((char*)this + 0x168) >= 2 && *(int*)((char*)this + 0x168) != 6 || *(WORD*)((char*)this + 8) < 0xc8)) {
+        if ((m_inputY == 0 || (unk1a8 & 4) == 0 || (unk1a9 & 4) == 0) && m_patterns[pattern].unk2 <= m_patterns[0xc8].unk0 && (m_patterns[pattern].frames[frame].flagsB0 & 8) > 0 && (pattern >= 0xc8 && unk168 >= 2 && unk168 != 6 || pattern < 0xc8)) {
             Vf0();
             CPlayer::Unk40f170();
-            *(short*)((char*)this + 8) = 0xc8;
+            pattern = 0xc8;
             return;
         }
     }
-    if (*((char*)this + 0x18b) == 1 || (*(BYTE*)((char*)this + 0x1a8) & 0x20) != 0 || (*(BYTE*)((char*)this + 0x1a9) & 0x20) != 0) {
-        if (*(WORD*)((char*)this + 8) == 0xa3 && *((char*)this + 0x188) != -*((char*)this + 0x50)) {
+    if (m_pressB == 1 || (unk1a8 & 0x20) != 0 || (unk1a9 & 0x20) != 0) {
+        if (pattern == 0xa3 && m_inputX != -facing) {
             Vf0();
             CPlayer::Unk40f170();
-            *(short*)((char*)this + 8) = 0xe7;
-            if (*((char*)this + 0x189) == 1) {
-                *(short*)((char*)this + 8) = 0xea;
+            pattern = 0xe7;
+            if (m_inputY == 1) {
+                pattern = 0xea;
             }
             return;
         }
-        if (*(double*)((char*)this + 0x28) < 0.0) {
-            if (*(double*)((char*)this + 0x28) < -30.0 && *((char*)this + 0x189) == 1 && *(short*)(*(char**)((char*)this + 0x164) + *(WORD*)((char*)this + 8) * 8 + 2) <= *(short*)(*(char**)((char*)this + 0x164) + 0x6b0) && (*(WORD*)(*(char**)(*(char**)((char*)this + 0x164) + *(WORD*)((char*)this + 8) * 8 + 4) + *(WORD*)((char*)this + 0xa) * 0xc8 + 0xb0) & 8) > 0 && (*(WORD*)((char*)this + 8) >= 0xc8 && *(int*)((char*)this + 0x168) >= 2 && *(int*)((char*)this + 0x168) != 6 || *(WORD*)((char*)this + 8) < 0xc8)) {
+        if (y < 0.0) {
+            if (y < -30.0 && m_inputY == 1 && m_patterns[pattern].unk2 <= m_patterns[0xd6].unk0 && (m_patterns[pattern].frames[frame].flagsB0 & 8) > 0 && (pattern >= 0xc8 && unk168 >= 2 && unk168 != 6 || pattern < 0xc8)) {
                 Vf0();
                 CPlayer::Unk40f170();
-                *(short*)((char*)this + 8) = 0xd6;
+                pattern = 0xd6;
                 return;
             }
-            if (*(short*)(*(char**)((char*)this + 0x164) + *(WORD*)((char*)this + 8) * 8 + 2) <= *(short*)(*(char**)((char*)this + 0x164) + 0x680) && (*(WORD*)(*(char**)(*(char**)((char*)this + 0x164) + *(WORD*)((char*)this + 8) * 8 + 4) + *(WORD*)((char*)this + 0xa) * 0xc8 + 0xb0) & 8) > 0 && (*(WORD*)((char*)this + 8) >= 0xc8 && *(int*)((char*)this + 0x168) >= 2 && *(int*)((char*)this + 0x168) != 6 || *(WORD*)((char*)this + 8) < 0xc8)) {
+            if (m_patterns[pattern].unk2 <= m_patterns[0xd0].unk0 && (m_patterns[pattern].frames[frame].flagsB0 & 8) > 0 && (pattern >= 0xc8 && unk168 >= 2 && unk168 != 6 || pattern < 0xc8)) {
                 Vf0();
                 CPlayer::Unk40f170();
-                *(short*)((char*)this + 8) = 0xd0;
+                pattern = 0xd0;
             }
             return;
         }
-        if ((*((char*)this + 0x189) == 1 || (*(BYTE*)((char*)this + 0x1a8) & 4) != 0 || (*(BYTE*)((char*)this + 0x1a9) & 4) != 0) && *(short*)(*(char**)((char*)this + 0x164) + *(WORD*)((char*)this + 8) * 8 + 2) <= *(short*)(*(char**)((char*)this + 0x164) + 0x668) && (*(WORD*)(*(char**)(*(char**)((char*)this + 0x164) + *(WORD*)((char*)this + 8) * 8 + 4) + *(WORD*)((char*)this + 0xa) * 0xc8 + 0xb0) & 8) > 0 && (*(WORD*)((char*)this + 8) >= 0xc8 && *(int*)((char*)this + 0x168) >= 2 && *(int*)((char*)this + 0x168) != 6 || *(WORD*)((char*)this + 8) < 0xc8)) {
+        if ((m_inputY == 1 || (unk1a8 & 4) != 0 || (unk1a9 & 4) != 0) && m_patterns[pattern].unk2 <= m_patterns[0xcd].unk0 && (m_patterns[pattern].frames[frame].flagsB0 & 8) > 0 && (pattern >= 0xc8 && unk168 >= 2 && unk168 != 6 || pattern < 0xc8)) {
             Vf0();
             CPlayer::Unk40f170();
-            *(short*)((char*)this + 8) = 0xcd;
+            pattern = 0xcd;
             return;
         }
-        if (*((char*)this + 0x189) == 0 || (*(BYTE*)((char*)this + 0x1a8) & 4) == 0 || (*(BYTE*)((char*)this + 0x1a9) & 4) == 0) {
-            if (*(short*)(*(char**)((char*)this + 0x164) + *(WORD*)((char*)this + 8) * 8 + 2) <= *(short*)(*(char**)((char*)this + 0x164) + 0x6c8) && (*(WORD*)(*(char**)(*(char**)((char*)this + 0x164) + *(WORD*)((char*)this + 8) * 8 + 4) + *(WORD*)((char*)this + 0xa) * 0xc8 + 0xb0) & 8) > 0 && *((char*)this + 0x188) == *((char*)this + 0x50) && (*(WORD*)((char*)this + 8) >= 0xc8 && *(int*)((char*)this + 0x168) >= 2 && *(int*)((char*)this + 0x168) != 6 || *(WORD*)((char*)this + 8) < 0xc8)) {
+        if (m_inputY == 0 || (unk1a8 & 4) == 0 || (unk1a9 & 4) == 0) {
+            if (m_patterns[pattern].unk2 <= m_patterns[0xd9].unk0 && (m_patterns[pattern].frames[frame].flagsB0 & 8) > 0 && m_inputX == facing && (pattern >= 0xc8 && unk168 >= 2 && unk168 != 6 || pattern < 0xc8)) {
                 Vf0();
                 CPlayer::Unk40f170();
-                *(short*)((char*)this + 8) = 0xd9;
+                pattern = 0xd9;
                 return;
             }
-            if (*(short*)(*(char**)((char*)this + 0x164) + *(WORD*)((char*)this + 8) * 8 + 2) <= *(short*)(*(char**)((char*)this + 0x164) + 0x648) && (*(WORD*)(*(char**)(*(char**)((char*)this + 0x164) + *(WORD*)((char*)this + 8) * 8 + 4) + *(WORD*)((char*)this + 0xa) * 0xc8 + 0xb0) & 8) > 0 && *(double*)((char*)this + 0x20) - *(double*)(*(char**)*(char**)((char*)this + 0x78) + 0x20) > -70.0 && *(double*)((char*)this + 0x20) - *(double*)(*(char**)*(char**)((char*)this + 0x78) + 0x20) < 70.0 && (*(WORD*)((char*)this + 8) >= 0xc8 && *(int*)((char*)this + 0x168) >= 2 && *(int*)((char*)this + 0x168) != 6 || *(WORD*)((char*)this + 8) < 0xc8)) {
+            if (m_patterns[pattern].unk2 <= m_patterns[0xc9].unk0 && (m_patterns[pattern].frames[frame].flagsB0 & 8) > 0 && x - (*m_opponent)->x > -70.0 && x - (*m_opponent)->x < 70.0 && (pattern >= 0xc8 && unk168 >= 2 && unk168 != 6 || pattern < 0xc8)) {
                 Vf0();
                 CPlayer::Unk40f170();
-                *(short*)((char*)this + 8) = 0xc9;
+                pattern = 0xc9;
                 return;
             }
-            if (*(short*)(*(char**)((char*)this + 0x164) + *(WORD*)((char*)this + 8) * 8 + 2) <= *(short*)(*(char**)((char*)this + 0x164) + 0x650) && (*(WORD*)(*(char**)(*(char**)((char*)this + 0x164) + *(WORD*)((char*)this + 8) * 8 + 4) + *(WORD*)((char*)this + 0xa) * 0xc8 + 0xb0) & 8) > 0 && (*(WORD*)((char*)this + 8) >= 0xc8 && *(int*)((char*)this + 0x168) >= 2 && *(int*)((char*)this + 0x168) != 6 || *(WORD*)((char*)this + 8) < 0xc8)) {
+            if (m_patterns[pattern].unk2 <= m_patterns[0xca].unk0 && (m_patterns[pattern].frames[frame].flagsB0 & 8) > 0 && (pattern >= 0xc8 && unk168 >= 2 && unk168 != 6 || pattern < 0xc8)) {
                 Vf0();
                 CPlayer::Unk40f170();
-                *(short*)((char*)this + 8) = 0xca;
-                return;
-            }
-        }
-    }
-    if (*((char*)this + 0x18c) == 1 || (*(BYTE*)((char*)this + 0x1a8) & 0x40) != 0 || (*(BYTE*)((char*)this + 0x1a9) & 0x40) != 0) {
-        if (*(WORD*)((char*)this + 8) == 0xa3 && *((char*)this + 0x188) != -*((char*)this + 0x50)) {
-            Vf0();
-            CPlayer::Unk40f170();
-            *(short*)((char*)this + 8) = 0xe8;
-            if (*((char*)this + 0x189) == 1) {
-                *(short*)((char*)this + 8) = 0xeb;
-            }
-            return;
-        }
-        if (*(double*)((char*)this + 0x28) < 0.0) {
-            if (*((char*)this + 0x188) == *((char*)this + 0x50) && *((char*)this + 0x189) == 0 && *(double*)((char*)this + 0x20) - *(double*)(*(char**)*(char**)((char*)this + 0x78) + 0x20) > -100.0 && *(double*)((char*)this + 0x20) - *(double*)(*(char**)*(char**)((char*)this + 0x78) + 0x20) < 100.0 && *(double*)(*(char**)*(char**)((char*)this + 0x78) + 0x28) < 0.0 && *(short*)(*(char**)((char*)this + 0x164) + *(WORD*)((char*)this + 8) * 8 + 2) <= *(short*)(*(char**)((char*)this + 0x164) + 0x7c0) && (*(WORD*)(*(char**)*(char**)((char*)this + 0x78) + 8) < 0x32 || *(WORD*)(*(char**)*(char**)((char*)this + 0x78) + 8) > 0x9c) && (*(WORD*)(*(char**)(*(char**)((char*)this + 0x164) + *(WORD*)((char*)this + 8) * 8 + 4) + *(WORD*)((char*)this + 0xa) * 0xc8 + 0xb0) & 8) > 0 && (*(WORD*)((char*)this + 8) >= 0xc8 && *(int*)((char*)this + 0x168) >= 2 && *(int*)((char*)this + 0x168) != 6 || *(WORD*)((char*)this + 8) < 0xc8)) {
-                Vf0();
-                CPlayer::Unk40f170();
-                *(short*)((char*)this + 8) = 0xf8;
-                return;
-            }
-            if (*(double*)((char*)this + 0x28) < -25.0 && *((char*)this + 0x189) == 1 && *(short*)(*(char**)((char*)this + 0x164) + *(WORD*)((char*)this + 8) * 8 + 2) <= *(short*)(*(char**)((char*)this + 0x164) + 0x6b8) && (*(WORD*)(*(char**)(*(char**)((char*)this + 0x164) + *(WORD*)((char*)this + 8) * 8 + 4) + *(WORD*)((char*)this + 0xa) * 0xc8 + 0xb0) & 8) > 0 && (*(WORD*)((char*)this + 8) >= 0xc8 && *(int*)((char*)this + 0x168) >= 2 && *(int*)((char*)this + 0x168) != 6 || *(WORD*)((char*)this + 8) < 0xc8)) {
-                Vf0();
-                CPlayer::Unk40f170();
-                *(short*)((char*)this + 8) = 0xd7;
-                return;
-            }
-            if (*(short*)(*(char**)((char*)this + 0x164) + *(WORD*)((char*)this + 8) * 8 + 2) <= *(short*)(*(char**)((char*)this + 0x164) + 0x688) && (*(WORD*)(*(char**)(*(char**)((char*)this + 0x164) + *(WORD*)((char*)this + 8) * 8 + 4) + *(WORD*)((char*)this + 0xa) * 0xc8 + 0xb0) & 8) > 0 && (*(WORD*)((char*)this + 8) >= 0xc8 && *(int*)((char*)this + 0x168) >= 2 && *(int*)((char*)this + 0x168) != 6 || *(WORD*)((char*)this + 8) < 0xc8)) {
-                Vf0();
-                CPlayer::Unk40f170();
-                *(short*)((char*)this + 8) = 0xd1;
-                return;
-            }
-        }
-        if ((*((char*)this + 0x189) == 1 || (*(BYTE*)((char*)this + 0x1a8) & 4) != 0 || (*(BYTE*)((char*)this + 0x1a9) & 4) != 0) && *((char*)this + 0x188) == *((char*)this + 0x50) && *(short*)(*(char**)((char*)this + 0x164) + *(WORD*)((char*)this + 8) * 8 + 2) <= *(short*)(*(char**)((char*)this + 0x164) + 0x6a0) && (*(WORD*)(*(char**)(*(char**)((char*)this + 0x164) + *(WORD*)((char*)this + 8) * 8 + 4) + *(WORD*)((char*)this + 0xa) * 0xc8 + 0xb0) & 8) > 0 && (*(WORD*)((char*)this + 8) >= 0xc8 && *(int*)((char*)this + 0x168) >= 2 && *(int*)((char*)this + 0x168) != 6 || *(WORD*)((char*)this + 8) < 0xc8)) {
-            Vf0();
-            CPlayer::Unk40f170();
-            *(short*)((char*)this + 8) = 0xd4;
-            return;
-        }
-        if ((*((char*)this + 0x189) == 1 || (*(BYTE*)((char*)this + 0x1a8) & 4) != 0 || (*(BYTE*)((char*)this + 0x1a9) & 4) != 0) && *(short*)(*(char**)((char*)this + 0x164) + *(WORD*)((char*)this + 8) * 8 + 2) <= *(short*)(*(char**)((char*)this + 0x164) + 0x670) && (*(WORD*)(*(char**)(*(char**)((char*)this + 0x164) + *(WORD*)((char*)this + 8) * 8 + 4) + *(WORD*)((char*)this + 0xa) * 0xc8 + 0xb0) & 8) > 0 && (*(WORD*)((char*)this + 8) >= 0xc8 && *(int*)((char*)this + 0x168) >= 2 && *(int*)((char*)this + 0x168) != 6 || *(WORD*)((char*)this + 8) < 0xc8)) {
-            Vf0();
-            CPlayer::Unk40f170();
-            *(short*)((char*)this + 8) = 0xce;
-            return;
-        }
-        if (*((char*)this + 0x189) == 0 || (*(BYTE*)((char*)this + 0x1a8) & 4) == 0 || (*(BYTE*)((char*)this + 0x1a9) & 4) == 0) {
-            if (*(double*)(*(char**)*(char**)((char*)this + 0x78) + 0x28) == 0.0 && *((char*)this + 0x188) != 0 && *(double*)((char*)this + 0x20) - *(double*)(*(char**)*(char**)((char*)this + 0x78) + 0x20) > -30.0 && *(double*)((char*)this + 0x20) - *(double*)(*(char**)*(char**)((char*)this + 0x78) + 0x20) < 30.0 && *(short*)(*(char**)((char*)this + 0x164) + *(WORD*)((char*)this + 8) * 8 + 2) <= *(short*)(*(char**)((char*)this + 0x164) + 0x6e0) && (*(WORD*)(*(char**)*(char**)((char*)this + 0x78) + 8) < 0x32 || *(WORD*)(*(char**)*(char**)((char*)this + 0x78) + 8) > 0x9c) && (*(WORD*)(*(char**)(*(char**)((char*)this + 0x164) + *(WORD*)((char*)this + 8) * 8 + 4) + *(WORD*)((char*)this + 0xa) * 0xc8 + 0xb0) & 8) > 0 && (*(WORD*)((char*)this + 8) >= 0xc8 && *(int*)((char*)this + 0x168) >= 2 && *(int*)((char*)this + 0x168) != 6 || *(WORD*)((char*)this + 8) < 0xc8)) {
-                Vf0();
-                CPlayer::Unk40f170();
-                *(short*)((char*)this + 8) = 0xdc;
-                return;
-            }
-            if (*(double*)((char*)this + 0x28) == 0.0 && *(short*)(*(char**)((char*)this + 0x164) + *(WORD*)((char*)this + 8) * 8 + 2) <= *(short*)(*(char**)((char*)this + 0x164) + 0x690) && (*(WORD*)(*(char**)(*(char**)((char*)this + 0x164) + *(WORD*)((char*)this + 8) * 8 + 4) + *(WORD*)((char*)this + 0xa) * 0xc8 + 0xb0) & 8) > 0 && *((char*)this + 0x188) == *((char*)this + 0x50) && (*(WORD*)((char*)this + 8) >= 0xc8 && *(int*)((char*)this + 0x168) >= 2 && *(int*)((char*)this + 0x168) != 6 || *(WORD*)((char*)this + 8) < 0xc8)) {
-                Vf0();
-                CPlayer::Unk40f170();
-                *(short*)((char*)this + 8) = 0xd2;
-                return;
-            }
-            if (*(short*)(*(char**)((char*)this + 0x164) + *(WORD*)((char*)this + 8) * 8 + 2) <= *(short*)(*(char**)((char*)this + 0x164) + 0x658) && (*(WORD*)(*(char**)(*(char**)((char*)this + 0x164) + *(WORD*)((char*)this + 8) * 8 + 4) + *(WORD*)((char*)this + 0xa) * 0xc8 + 0xb0) & 8) > 0 && (*(WORD*)((char*)this + 8) >= 0xc8 && *(int*)((char*)this + 0x168) >= 2 && *(int*)((char*)this + 0x168) != 6 || *(WORD*)((char*)this + 8) < 0xc8)) {
-                Vf0();
-                CPlayer::Unk40f170();
-                *(short*)((char*)this + 8) = 0xcb;
+                pattern = 0xca;
                 return;
             }
         }
     }
-    if (*(int*)((char*)this + 0x15c) < 2 && (*((char*)this + 0x18d) == 1 || (*(BYTE*)((char*)this + 0x1a8) & 0x80) != 0 || (*(BYTE*)((char*)this + 0x1a9) & 0x80) != 0) && *(int*)((char*)this + 0x3150) < 0x2710 && *(short*)(*(char**)((char*)this + 0x164) + *(WORD*)((char*)this + 8) * 8 + 2) <= *(short*)(*(char**)((char*)this + 0x164) + 0x7d0) && (*(WORD*)(*(char**)(*(char**)((char*)this + 0x164) + *(WORD*)((char*)this + 8) * 8 + 4) + *(WORD*)((char*)this + 0xa) * 0xc8 + 0xb0) & 8) > 0 && *(double*)((char*)this + 0x28) == 0.0 && (*(WORD*)((char*)this + 8) >= 0xc8 && *(int*)((char*)this + 0x168) >= 2 && *(int*)((char*)this + 0x168) != 6 || *(WORD*)((char*)this + 8) < 0xc8)) {
+    if (m_pressC == 1 || (unk1a8 & 0x40) != 0 || (unk1a9 & 0x40) != 0) {
+        if (pattern == 0xa3 && m_inputX != -facing) {
+            Vf0();
+            CPlayer::Unk40f170();
+            pattern = 0xe8;
+            if (m_inputY == 1) {
+                pattern = 0xeb;
+            }
+            return;
+        }
+        if (y < 0.0) {
+            if (m_inputX == facing && m_inputY == 0 && x - (*m_opponent)->x > -100.0 && x - (*m_opponent)->x < 100.0 && (*m_opponent)->y < 0.0 && m_patterns[pattern].unk2 <= m_patterns[0xf8].unk0 && ((*m_opponent)->pattern < 0x32 || (*m_opponent)->pattern > 0x9c) && (m_patterns[pattern].frames[frame].flagsB0 & 8) > 0 && (pattern >= 0xc8 && unk168 >= 2 && unk168 != 6 || pattern < 0xc8)) {
+                Vf0();
+                CPlayer::Unk40f170();
+                pattern = 0xf8;
+                return;
+            }
+            if (y < -25.0 && m_inputY == 1 && m_patterns[pattern].unk2 <= m_patterns[0xd7].unk0 && (m_patterns[pattern].frames[frame].flagsB0 & 8) > 0 && (pattern >= 0xc8 && unk168 >= 2 && unk168 != 6 || pattern < 0xc8)) {
+                Vf0();
+                CPlayer::Unk40f170();
+                pattern = 0xd7;
+                return;
+            }
+            if (m_patterns[pattern].unk2 <= m_patterns[0xd1].unk0 && (m_patterns[pattern].frames[frame].flagsB0 & 8) > 0 && (pattern >= 0xc8 && unk168 >= 2 && unk168 != 6 || pattern < 0xc8)) {
+                Vf0();
+                CPlayer::Unk40f170();
+                pattern = 0xd1;
+                return;
+            }
+        }
+        if ((m_inputY == 1 || (unk1a8 & 4) != 0 || (unk1a9 & 4) != 0) && m_inputX == facing && m_patterns[pattern].unk2 <= m_patterns[0xd4].unk0 && (m_patterns[pattern].frames[frame].flagsB0 & 8) > 0 && (pattern >= 0xc8 && unk168 >= 2 && unk168 != 6 || pattern < 0xc8)) {
+            Vf0();
+            CPlayer::Unk40f170();
+            pattern = 0xd4;
+            return;
+        }
+        if ((m_inputY == 1 || (unk1a8 & 4) != 0 || (unk1a9 & 4) != 0) && m_patterns[pattern].unk2 <= m_patterns[0xce].unk0 && (m_patterns[pattern].frames[frame].flagsB0 & 8) > 0 && (pattern >= 0xc8 && unk168 >= 2 && unk168 != 6 || pattern < 0xc8)) {
+            Vf0();
+            CPlayer::Unk40f170();
+            pattern = 0xce;
+            return;
+        }
+        if (m_inputY == 0 || (unk1a8 & 4) == 0 || (unk1a9 & 4) == 0) {
+            if ((*m_opponent)->y == 0.0 && m_inputX != 0 && x - (*m_opponent)->x > -30.0 && x - (*m_opponent)->x < 30.0 && m_patterns[pattern].unk2 <= m_patterns[0xdc].unk0 && ((*m_opponent)->pattern < 0x32 || (*m_opponent)->pattern > 0x9c) && (m_patterns[pattern].frames[frame].flagsB0 & 8) > 0 && (pattern >= 0xc8 && unk168 >= 2 && unk168 != 6 || pattern < 0xc8)) {
+                Vf0();
+                CPlayer::Unk40f170();
+                pattern = 0xdc;
+                return;
+            }
+            if (y == 0.0 && m_patterns[pattern].unk2 <= m_patterns[0xd2].unk0 && (m_patterns[pattern].frames[frame].flagsB0 & 8) > 0 && m_inputX == facing && (pattern >= 0xc8 && unk168 >= 2 && unk168 != 6 || pattern < 0xc8)) {
+                Vf0();
+                CPlayer::Unk40f170();
+                pattern = 0xd2;
+                return;
+            }
+            if (m_patterns[pattern].unk2 <= m_patterns[0xcb].unk0 && (m_patterns[pattern].frames[frame].flagsB0 & 8) > 0 && (pattern >= 0xc8 && unk168 >= 2 && unk168 != 6 || pattern < 0xc8)) {
+                Vf0();
+                CPlayer::Unk40f170();
+                pattern = 0xcb;
+                return;
+            }
+        }
+    }
+    if (unk15c < 2 && (m_pressD == 1 || (unk1a8 & 0x80) != 0 || (unk1a9 & 0x80) != 0) && unk3150 < 0x2710 && m_patterns[pattern].unk2 <= m_patterns[0xfa].unk0 && (m_patterns[pattern].frames[frame].flagsB0 & 8) > 0 && y == 0.0 && (pattern >= 0xc8 && unk168 >= 2 && unk168 != 6 || pattern < 0xc8)) {
         Vf0();
         CPlayer::Unk40f170();
-        *(short*)((char*)this + 8) = 0xfa;
+        pattern = 0xfa;
     }
 }
 
@@ -594,35 +594,35 @@ void CKano::Vf1()
     EffectFrame x1c;
     RECT v10;
 
-    if (*(int*)((char*)this + 0x3150) == 0x2710) {
-        x1c = *(EffectFrame*)*(char**)(*(char**)((char*)this + 0x10) + 0x154);
+    if (unk3150 == 0x2710) {
+        x1c = *anims[0x2a].frames;
         v2c = MakeRect(0, 0, x1c.width, x1c.height);
-        if (*((char*)this + 0x8c) == 0) {
+        if (m_side == 0) {
             v10 = MakeRect(0x31 - x1c.x, 0x1f - x1c.y, x1c.width, x1c.height);
         } else {
             v10 = MakeRect(x1c.x + 0x10f - x1c.width, 0x1f - x1c.y, x1c.width, x1c.height);
         }
-        ((CGraphics*)*(int*)((char*)this + 0x80))->Blit(v10, (IDirectDrawSurface*)*(int*)(*(char**)((char*)this + 0x14) + x1c.surface * 4), v2c, *((char*)this + 0x1a), 0);
+        m_graphics->Blit(v10, surfaces[x1c.surface], v2c, colorKey, 0);
     }
-    if (*(int*)((char*)this + 0x3150) != 0 && *(int*)((char*)this + 0x3150) < 0x2710) {
-        x1c = *(EffectFrame*)*(char**)(*(char**)((char*)this + 0x10) + 0x15c);
+    if (unk3150 != 0 && unk3150 < 0x2710) {
+        x1c = *anims[0x2b].frames;
         v2c = MakeRect(0, 0, x1c.width, x1c.height);
-        if (*((char*)this + 0x8c) == 0) {
+        if (m_side == 0) {
             v10 = MakeRect(0x31 - x1c.x, 0x1f - x1c.y, x1c.width, x1c.height);
         } else {
             v10 = MakeRect(x1c.x + 0x10f - x1c.width, 0x1f - x1c.y, x1c.width, x1c.height);
         }
-        ((CGraphics*)*(int*)((char*)this + 0x80))->Blit(v10, (IDirectDrawSurface*)*(int*)(*(char**)((char*)this + 0x14) + x1c.surface * 4), v2c, *((char*)this + 0x1a), 0);
+        m_graphics->Blit(v10, surfaces[x1c.surface], v2c, colorKey, 0);
     }
-    if (*(int*)((char*)this + 0x3150) != 0 && *(int*)((char*)this + 0x3150) < 0x2710) {
-        x1c = *(EffectFrame*)*(char**)(*(char**)((char*)this + 0x10) + 0x164);
-        v2c = MakeRect(0, 0, *(int*)((char*)this + 0x3150) * x1c.width / 0x2710, x1c.height);
-        if (*((char*)this + 0x8c) == 0) {
-            v10 = MakeRect(0x31 - x1c.x, 0x1f - x1c.y, *(int*)((char*)this + 0x3150) * x1c.width / 0x2710, x1c.height);
+    if (unk3150 != 0 && unk3150 < 0x2710) {
+        x1c = *anims[0x2c].frames;
+        v2c = MakeRect(0, 0, unk3150 * x1c.width / 0x2710, x1c.height);
+        if (m_side == 0) {
+            v10 = MakeRect(0x31 - x1c.x, 0x1f - x1c.y, unk3150 * x1c.width / 0x2710, x1c.height);
         } else {
-            v10 = MakeRect(x1c.x + 0x10f - *(int*)((char*)this + 0x3150) * x1c.width / 0x2710, 0x1f - x1c.y, *(int*)((char*)this + 0x3150) * x1c.width / 0x2710, x1c.height);
+            v10 = MakeRect(x1c.x + 0x10f - unk3150 * x1c.width / 0x2710, 0x1f - x1c.y, unk3150 * x1c.width / 0x2710, x1c.height);
         }
-        ((CGraphics*)*(int*)((char*)this + 0x80))->Blit(v10, (IDirectDrawSurface*)*(int*)(*(char**)((char*)this + 0x14) + x1c.surface * 4), v2c, *((char*)this + 0x1a), 0);
+        m_graphics->Blit(v10, surfaces[x1c.surface], v2c, colorKey, 0);
     }
 }
 
@@ -630,51 +630,51 @@ void CKano::Vf8()
 {
     EffectDesc v48;
     CPlayer::Unk413090((EffectDesc*)&v48);
-    if (*(short*)(*(char**)*(char**)((char*)this + 0x78) + 0x14c) == 0 && *(WORD*)((char*)this + 8) < 0x12c) {
-        (*(int*)((char*)this + 0x3154))++;
+    if ((*m_opponent)->unk14c == 0 && pattern < 0x12c) {
+        unk3154++;
     }
-    if (*(int*)((char*)this + 0x3154) > 0x1e - (0x1c - ((int)(*(short*)((char*)this + 0x148) * 0.001) << 2))) {
-        (*(short*)((char*)this + 0x148))++;
-        *(int*)((char*)this + 0x3154) = 0;
+    if (unk3154 > 0x1e - (0x1c - ((int)(unk148 * 0.001) << 2))) {
+        unk148++;
+        unk3154 = 0;
     }
-    if (0.0 != (*(int*)((char*)this + 0x3154) > 0x1e - (0x1c - ((int)(*(short*)((char*)this + 0x148) * 0.001) << 2))) * 0.5 && *(WORD*)((char*)this + 8) == 3) {
-        (*(short*)((char*)this + 0x148))++;
-        *(int*)((char*)this + 0x3154) = 0;
+    if (0.0 != (unk3154 > 0x1e - (0x1c - ((int)(unk148 * 0.001) << 2))) * 0.5 && pattern == 3) {
+        unk148++;
+        unk3154 = 0;
     }
-    if (*(double*)((char*)this + 0x30) == 0.0 && *(short*)(*(char**)*(char**)((char*)this + 0x78) + 0x14c) == 0 && *(WORD*)((char*)this + 8) < 0x12c && (*(WORD*)((char*)this + 8) < 0x32 || *(WORD*)((char*)this + 8) > 0xc8)) {
-        (*(int*)((char*)this + 0x3158))++;
+    if (vx == 0.0 && (*m_opponent)->unk14c == 0 && pattern < 0x12c && (pattern < 0x32 || pattern > 0xc8)) {
+        unk3158++;
     } else {
-        *(int*)((char*)this + 0x3158) = 0;
+        unk3158 = 0;
     }
-    if (*(int*)((char*)this + 0x3158) > 0x276) {
-        *(short*)((char*)this + 0x148) = *(short*)((char*)this + 0x148) + 0x12c;
-        *(int*)((char*)this + 0x3158) = 0;
+    if (unk3158 > 0x276) {
+        unk148 = unk148 + 0x12c;
+        unk3158 = 0;
         v48.type = 0x19b;
-        v48.x = (double)(int)*(double*)((char*)this + 0x20);
-        v48.y = *(double*)((char*)this + 0x28) - 50.0;
+        v48.x = (double)(int)x;
+        v48.y = y - 50.0;
         v48.unk18 = 1;
         v48.unk20 = 0;
         v48.unk21 = 1;
         Vf9(&v48);
     }
-    (*(int*)((char*)this + 0x3160))--;
-    if (*(int*)((char*)this + 0x315c) > 0 && *(int*)((char*)this + 0x3160) <= 0) {
+    unk3160--;
+    if (unk315c > 0 && unk3160 <= 0) {
         v48.type = 0x1c3;
-        v48.x = (double)((int)*(double*)((char*)this + 0x20) + 0x78 - (WORD)CPlayer::Unk4108a0(0, 0xf0) - (int)(*(int*)((char*)this + 0x3164) * 192.0));
+        v48.x = (double)((int)x + 0x78 - (WORD)CPlayer::Unk4108a0(0, 0xf0) - (int)(unk3164 * 192.0));
         v48.y = -480.0;
-        v48.unk18 = *((char*)this + 0x3164);
+        v48.unk18 = *(char*)&unk3164;
         v48.unk20 = 2;
         v48.unk21 = 1;
         v48.unk0 = 1;
         Vf9(&v48);
-        (*(int*)((char*)this + 0x315c))--;
-        *(int*)((char*)this + 0x3160) = 0xb4;
+        unk315c--;
+        unk3160 = 0xb4;
     }
 }
 
 void CKano::Vf9(EffectDesc* p1)
 {
-    Vf10(*(short*)((char*)this + 0x2ca));
+    Vf10(unk2ca);
     CPlayer::Vf9(p1);
 }
 
@@ -684,133 +684,133 @@ void CKano::Vf2()
     BYTE v5;
     int v4;
 
-    *(short*)((char*)this + 0x262) = 0x63;
+    unk262 = 0x63;
     x6 = 0;
-    v4 = *(short*)((char*)this + 0x260) + 0x5a;
-    for (; v4 < *(short*)((char*)this + 0x260) + 0xb4; v4++) {
-        v5 = *((char*)this + (v4 - (v4 >= 0xb4) * 0xb4) + 0x1ab);
+    v4 = m_inputPos + 0x5a;
+    for (; v4 < m_inputPos + 0xb4; v4++) {
+        v5 = m_inputHistory[(v4 - (v4 >= 0xb4) * 0xb4)];
         if ((v5 & 0xf0) != 0 && x6 == 5) {
-            *(short*)((char*)this + 0x262) = ((v5 & 0xe0) > 0) + 0xaa + ((v5 & 0xc0) > 0) + ((v5 & 0x80) > 0);
+            unk262 = ((v5 & 0xe0) > 0) + 0xaa + ((v5 & 0xc0) > 0) + ((v5 & 0x80) > 0);
             return;
         }
-        if ((v5 & 0xf) == (*((char*)this + 0x50) == -1) + 1 && x6 == 4) {
+        if ((v5 & 0xf) == (facing == -1) + 1 && x6 == 4) {
             if ((v5 & 0xf0) != 0) {
-                *(short*)((char*)this + 0x262) = ((v5 & 0xe0) > 0) + 0xa0 + ((v5 & 0xc0) > 0) + ((v5 & 0x80) > 0);
+                unk262 = ((v5 & 0xe0) > 0) + 0xa0 + ((v5 & 0xc0) > 0) + ((v5 & 0x80) > 0);
                 return;
             }
             x6 = 5;
         }
-        if ((v5 & 0xf) == (*((char*)this + 0x50) == -1) + 5 && x6 == 3) {
+        if ((v5 & 0xf) == (facing == -1) + 5 && x6 == 3) {
             x6 = 4;
         }
-        if ((v5 & 0xf) == 2 - (*((char*)this + 0x50) == -1) && x6 == 2) {
+        if ((v5 & 0xf) == 2 - (facing == -1) && x6 == 2) {
             x6 = 3;
         }
-        if ((v5 & 0xf) == 6 - (*((char*)this + 0x50) == -1) && x6 == 1) {
+        if ((v5 & 0xf) == 6 - (facing == -1) && x6 == 1) {
             x6 = 2;
         }
-        if ((v5 & 0xf) == 4 && x6 == 0 && *(short*)((char*)this + 0x148) >= 0x3e8) {
+        if ((v5 & 0xf) == 4 && x6 == 0 && unk148 >= 0x3e8) {
             x6 = 1;
         }
     }
     x6 = 0;
-    v4 = *(short*)((char*)this + 0x260) + 0x69;
-    for (; v4 < *(short*)((char*)this + 0x260) + 0xb4; v4++) {
-        v5 = *((char*)this + (v4 - (v4 >= 0xb4) * 0xb4) + 0x1ab);
+    v4 = m_inputPos + 0x69;
+    for (; v4 < m_inputPos + 0xb4; v4++) {
+        v5 = m_inputHistory[(v4 - (v4 >= 0xb4) * 0xb4)];
         if ((v5 & 0xf0) != 0 && x6 == 4) {
-            *(short*)((char*)this + 0x262) = ((v5 & 0xe0) > 0) + 0x78 + ((v5 & 0xc0) > 0) + ((v5 & 0x80) > 0);
+            unk262 = ((v5 & 0xe0) > 0) + 0x78 + ((v5 & 0xc0) > 0) + ((v5 & 0x80) > 0);
             return;
         }
-        if ((v5 & 0xf) == (*((char*)this + 0x50) == -1) + 5 && x6 == 3) {
+        if ((v5 & 0xf) == (facing == -1) + 5 && x6 == 3) {
             if ((v5 & 0xf0) != 0) {
-                *(short*)((char*)this + 0x262) = ((v5 & 0xe0) > 0) + 0x78 + ((v5 & 0xc0) > 0) + ((v5 & 0x80) > 0);
+                unk262 = ((v5 & 0xe0) > 0) + 0x78 + ((v5 & 0xc0) > 0) + ((v5 & 0x80) > 0);
                 return;
             }
             x6 = 4;
         }
-        if ((v5 & 0xf) == 6 - (*((char*)this + 0x50) == -1) && x6 == 2) {
+        if ((v5 & 0xf) == 6 - (facing == -1) && x6 == 2) {
             x6 = 3;
         }
-        if ((v5 & 0xf) == 2 - (*((char*)this + 0x50) == -1) && x6 == 1) {
+        if ((v5 & 0xf) == 2 - (facing == -1) && x6 == 1) {
             x6 = 2;
         }
-        if ((v5 & 0xf) == (*((char*)this + 0x50) == -1) + 1 && x6 == 0 && *(short*)((char*)this + 0x148) >= 0x3e8) {
+        if ((v5 & 0xf) == (facing == -1) + 1 && x6 == 0 && unk148 >= 0x3e8) {
             x6 = 1;
         }
     }
     x6 = 0;
-    v4 = *(short*)((char*)this + 0x260) + 0x5a;
-    for (; v4 < *(short*)((char*)this + 0x260) + 0xb4; v4++) {
-        v5 = *((char*)this + (v4 - (v4 >= 0xb4) * 0xb4) + 0x1ab);
+    v4 = m_inputPos + 0x5a;
+    for (; v4 < m_inputPos + 0xb4; v4++) {
+        v5 = m_inputHistory[(v4 - (v4 >= 0xb4) * 0xb4)];
         if ((v5 & 0xf0) != 0 && x6 == 6) {
-            *(short*)((char*)this + 0x262) = ((v5 & 0xe0) > 0) + 0x6e + ((v5 & 0xc0) > 0) + ((v5 & 0x80) > 0);
+            unk262 = ((v5 & 0xe0) > 0) + 0x6e + ((v5 & 0xc0) > 0) + ((v5 & 0x80) > 0);
             return;
         }
-        if ((v5 & 0xf) == 2 - (*((char*)this + 0x50) == -1) && x6 == 5) {
+        if ((v5 & 0xf) == 2 - (facing == -1) && x6 == 5) {
             if ((v5 & 0xf0) != 0) {
-                *(short*)((char*)this + 0x262) = ((v5 & 0xe0) > 0) + 0x6e + ((v5 & 0xc0) > 0) + ((v5 & 0x80) > 0);
+                unk262 = ((v5 & 0xe0) > 0) + 0x6e + ((v5 & 0xc0) > 0) + ((v5 & 0x80) > 0);
                 return;
             }
             x6 = 6;
         }
-        if ((v5 & 0xf) == 6 - (*((char*)this + 0x50) == -1) && x6 == 4) {
+        if ((v5 & 0xf) == 6 - (facing == -1) && x6 == 4) {
             x6 = 5;
         }
         if ((v5 & 0xf) == 4 && x6 == 3) {
             x6 = 4;
         }
-        if ((v5 & 0xf) == 2 - (*((char*)this + 0x50) == -1) && x6 == 2) {
+        if ((v5 & 0xf) == 2 - (facing == -1) && x6 == 2) {
             x6 = 3;
         }
-        if ((v5 & 0xf) == 6 - (*((char*)this + 0x50) == -1) && x6 == 1) {
+        if ((v5 & 0xf) == 6 - (facing == -1) && x6 == 1) {
             x6 = 2;
         }
-        if ((v5 & 0xf) == 4 && x6 == 0 && *(short*)((char*)this + 0x148) >= 0x3e8) {
+        if ((v5 & 0xf) == 4 && x6 == 0 && unk148 >= 0x3e8) {
             x6 = 1;
         }
     }
     x6 = 0;
-    v4 = *(short*)((char*)this + 0x260) + 0x5a;
-    for (; v4 < *(short*)((char*)this + 0x260) + 0xb4; v4++) {
-        v5 = *((char*)this + (v4 - (v4 >= 0xb4) * 0xb4) + 0x1ab);
+    v4 = m_inputPos + 0x5a;
+    for (; v4 < m_inputPos + 0xb4; v4++) {
+        v5 = m_inputHistory[(v4 - (v4 >= 0xb4) * 0xb4)];
         if ((v5 & 0xf0) != 0 && x6 == 6) {
-            *(short*)((char*)this + 0x262) = ((v5 & 0xe0) > 0) + 0x64 + ((v5 & 0xc0) > 0) + ((v5 & 0x80) > 0);
+            unk262 = ((v5 & 0xe0) > 0) + 0x64 + ((v5 & 0xc0) > 0) + ((v5 & 0x80) > 0);
             return;
         }
-        if ((v5 & 0xf) == (*((char*)this + 0x50) == -1) + 1 && x6 == 5) {
+        if ((v5 & 0xf) == (facing == -1) + 1 && x6 == 5) {
             if ((v5 & 0xf0) != 0) {
-                *(short*)((char*)this + 0x262) = ((v5 & 0xe0) > 0) + 0x64 + ((v5 & 0xc0) > 0) + ((v5 & 0x80) > 0);
+                unk262 = ((v5 & 0xe0) > 0) + 0x64 + ((v5 & 0xc0) > 0) + ((v5 & 0x80) > 0);
                 return;
             }
             x6 = 6;
         }
-        if ((v5 & 0xf) == (*((char*)this + 0x50) == -1) + 5 && x6 == 4) {
+        if ((v5 & 0xf) == (facing == -1) + 5 && x6 == 4) {
             x6 = 5;
         }
         if ((v5 & 0xf) == 4 && x6 == 3) {
             x6 = 4;
         }
-        if ((v5 & 0xf) == (*((char*)this + 0x50) == -1) + 1 && x6 == 2) {
+        if ((v5 & 0xf) == (facing == -1) + 1 && x6 == 2) {
             x6 = 3;
         }
-        if ((v5 & 0xf) == (*((char*)this + 0x50) == -1) + 5 && x6 == 1) {
+        if ((v5 & 0xf) == (facing == -1) + 5 && x6 == 1) {
             x6 = 2;
         }
-        if ((v5 & 0xf) == 4 && x6 == 0 && *(short*)((char*)this + 0x148) >= 0x3e8) {
+        if ((v5 & 0xf) == 4 && x6 == 0 && unk148 >= 0x3e8) {
             x6 = 1;
         }
     }
     x6 = 0;
-    v4 = *(short*)((char*)this + 0x260) + 0x78;
-    for (; v4 < *(short*)((char*)this + 0x260) + 0xb4; v4++) {
-        v5 = *((char*)this + (v4 - (v4 >= 0xb4) * 0xb4) + 0x1ab);
+    v4 = m_inputPos + 0x78;
+    for (; v4 < m_inputPos + 0xb4; v4++) {
+        v5 = m_inputHistory[(v4 - (v4 >= 0xb4) * 0xb4)];
         if ((v5 & 0xf0) != 0 && x6 == 3) {
-            *(short*)((char*)this + 0x262) = ((v5 & 0xe0) > 0) + 0x3c + ((v5 & 0xc0) > 0) + ((v5 & 0x80) > 0);
+            unk262 = ((v5 & 0xe0) > 0) + 0x3c + ((v5 & 0xc0) > 0) + ((v5 & 0x80) > 0);
             return;
         }
-        if ((v5 & 0xf) == 6 - (*((char*)this + 0x50) == -1) && x6 == 2) {
+        if ((v5 & 0xf) == 6 - (facing == -1) && x6 == 2) {
             if ((v5 & 0xf0) != 0) {
-                *(short*)((char*)this + 0x262) = ((v5 & 0xe0) > 0) + 0x14 + ((v5 & 0xc0) > 0) + ((v5 & 0x80) > 0);
+                unk262 = ((v5 & 0xe0) > 0) + 0x14 + ((v5 & 0xc0) > 0) + ((v5 & 0x80) > 0);
                 return;
             }
             x6 = 3;
@@ -818,26 +818,26 @@ void CKano::Vf2()
         if ((v5 & 0xf) == 4 && x6 == 1) {
             x6 = 2;
         }
-        if ((v5 & 0xf) == 2 - (*((char*)this + 0x50) == -1) && x6 == 0) {
+        if ((v5 & 0xf) == 2 - (facing == -1) && x6 == 0) {
             x6 = 1;
         }
     }
     x6 = 0;
-    v4 = *(short*)((char*)this + 0x260) + 0x87;
-    for (; v4 < *(short*)((char*)this + 0x260) + 0xb4; v4++) {
-        v5 = *((char*)this + (v4 - (v4 >= 0xb4) * 0xb4) + 0x1ab);
+    v4 = m_inputPos + 0x87;
+    for (; v4 < m_inputPos + 0xb4; v4++) {
+        v5 = m_inputHistory[(v4 - (v4 >= 0xb4) * 0xb4)];
         if ((v5 & 0xf0) != 0 && x6 == 3) {
-            *(short*)((char*)this + 0x262) = ((v5 & 0xe0) > 0) + 0xa + ((v5 & 0xc0) > 0) + ((v5 & 0x80) > 0);
+            unk262 = ((v5 & 0xe0) > 0) + 0xa + ((v5 & 0xc0) > 0) + ((v5 & 0x80) > 0);
             return;
         }
-        if ((v5 & 0xf) == (*((char*)this + 0x50) == -1) + 1 && x6 == 2) {
+        if ((v5 & 0xf) == (facing == -1) + 1 && x6 == 2) {
             if ((v5 & 0xf0) != 0) {
-                *(short*)((char*)this + 0x262) = ((v5 & 0xe0) > 0) + 0xa + ((v5 & 0xc0) > 0) + ((v5 & 0x80) > 0);
+                unk262 = ((v5 & 0xe0) > 0) + 0xa + ((v5 & 0xc0) > 0) + ((v5 & 0x80) > 0);
                 return;
             }
             x6 = 3;
         }
-        if ((v5 & 0xf) == (*((char*)this + 0x50) == -1) + 5 && x6 == 1) {
+        if ((v5 & 0xf) == (facing == -1) + 5 && x6 == 1) {
             x6 = 2;
         }
         if ((v5 & 0xf) == 4 && x6 == 0) {
@@ -845,43 +845,43 @@ void CKano::Vf2()
         }
     }
     x6 = 0;
-    v4 = *(short*)((char*)this + 0x260) + 0x87;
-    for (; v4 < *(short*)((char*)this + 0x260) + 0xb4; v4++) {
-        v5 = *((char*)this + (v4 - (v4 >= 0xb4) * 0xb4) + 0x1ab);
+    v4 = m_inputPos + 0x87;
+    for (; v4 < m_inputPos + 0xb4; v4++) {
+        v5 = m_inputHistory[(v4 - (v4 >= 0xb4) * 0xb4)];
         if ((v5 & 0xf0) != 0 && x6 == 3) {
-            *(short*)((char*)this + 0x262) = ((v5 & 0xe0) > 0) + 0x28 + ((v5 & 0xc0) > 0) + ((v5 & 0x80) > 0);
+            unk262 = ((v5 & 0xe0) > 0) + 0x28 + ((v5 & 0xc0) > 0) + ((v5 & 0x80) > 0);
             return;
         }
         if ((v5 & 0xf) == 4 && x6 == 2) {
             if ((v5 & 0xf0) != 0) {
-                *(short*)((char*)this + 0x262) = ((v5 & 0xe0) > 0) + 0x28 + ((v5 & 0xc0) > 0) + ((v5 & 0x80) > 0);
+                unk262 = ((v5 & 0xe0) > 0) + 0x28 + ((v5 & 0xc0) > 0) + ((v5 & 0x80) > 0);
                 return;
             }
             x6 = 3;
         }
-        if ((v5 & 0xf) == 6 - (*((char*)this + 0x50) == -1) && x6 == 1) {
+        if ((v5 & 0xf) == 6 - (facing == -1) && x6 == 1) {
             x6 = 2;
         }
-        if ((v5 & 0xf) == 2 - (*((char*)this + 0x50) == -1) && x6 == 0) {
+        if ((v5 & 0xf) == 2 - (facing == -1) && x6 == 0) {
             x6 = 1;
         }
     }
     x6 = 0;
-    v4 = *(short*)((char*)this + 0x260) + 0x87;
-    for (; v4 < *(short*)((char*)this + 0x260) + 0xb4; v4++) {
-        v5 = *((char*)this + (v4 - (v4 >= 0xb4) * 0xb4) + 0x1ab);
+    v4 = m_inputPos + 0x87;
+    for (; v4 < m_inputPos + 0xb4; v4++) {
+        v5 = m_inputHistory[(v4 - (v4 >= 0xb4) * 0xb4)];
         if ((v5 & 0xf0) != 0 && x6 == 3) {
-            *(short*)((char*)this + 0x262) = ((v5 & 0xe0) > 0) + 0x1e + ((v5 & 0xc0) > 0) + ((v5 & 0x80) > 0);
+            unk262 = ((v5 & 0xe0) > 0) + 0x1e + ((v5 & 0xc0) > 0) + ((v5 & 0x80) > 0);
             return;
         }
-        if ((v5 & 0xf) == 2 - (*((char*)this + 0x50) == -1) && x6 == 2) {
+        if ((v5 & 0xf) == 2 - (facing == -1) && x6 == 2) {
             if ((v5 & 0xf0) != 0) {
-                *(short*)((char*)this + 0x262) = ((v5 & 0xe0) > 0) + 0x1e + ((v5 & 0xc0) > 0) + ((v5 & 0x80) > 0);
+                unk262 = ((v5 & 0xe0) > 0) + 0x1e + ((v5 & 0xc0) > 0) + ((v5 & 0x80) > 0);
                 return;
             }
             x6 = 3;
         }
-        if ((v5 & 0xf) == 6 - (*((char*)this + 0x50) == -1) && x6 == 1) {
+        if ((v5 & 0xf) == 6 - (facing == -1) && x6 == 1) {
             x6 = 2;
         }
         if ((v5 & 0xf) == 4 && x6 == 0) {
@@ -889,11 +889,11 @@ void CKano::Vf2()
         }
     }
     x6 = 0;
-    v4 = *(short*)((char*)this + 0x260) + 0xaf;
-    for (; v4 < *(short*)((char*)this + 0x260) + 0xb4; v4++) {
-        v5 = *((char*)this + (v4 - (v4 >= 0xb4) * 0xb4) + 0x1ab);
+    v4 = m_inputPos + 0xaf;
+    for (; v4 < m_inputPos + 0xb4; v4++) {
+        v5 = m_inputHistory[(v4 - (v4 >= 0xb4) * 0xb4)];
         if ((v5 & 8) != 0 && x6 == 1) {
-            *(short*)((char*)this + 0x262) = 6;
+            unk262 = 6;
             return;
         }
         if ((v5 & 8) == 0 && x6 == 0) {
@@ -901,11 +901,11 @@ void CKano::Vf2()
         }
     }
     x6 = 0;
-    v4 = *(short*)((char*)this + 0x260) + 0x5a;
-    for (; v4 < *(short*)((char*)this + 0x260) + 0xb4; v4++) {
-        v5 = *((char*)this + (v4 - (v4 >= 0xb4) * 0xb4) + 0x1ab);
+    v4 = m_inputPos + 0x5a;
+    for (; v4 < m_inputPos + 0xb4; v4++) {
+        v5 = m_inputHistory[(v4 - (v4 >= 0xb4) * 0xb4)];
         if ((v5 & 0x80) != 0 && x6 == 4) {
-            *(short*)((char*)this + 0x262) = 0x35;
+            unk262 = 0x35;
             return;
         }
         if ((v5 & 0xf) == 4 && x6 == 3) {
@@ -917,16 +917,16 @@ void CKano::Vf2()
         if ((v5 & 0xf) == 4 && x6 == 1) {
             x6 = 2;
         }
-        if ((v5 & 0xf) == 0 && x6 == 0 && *(WORD*)((char*)this + 8) == 0x60) {
+        if ((v5 & 0xf) == 0 && x6 == 0 && pattern == 0x60) {
             x6 = 1;
         }
     }
     x6 = 0;
-    v4 = *(short*)((char*)this + 0x260) + 0x5a;
-    for (; v4 < *(short*)((char*)this + 0x260) + 0xb4; v4++) {
-        v5 = *((char*)this + (v4 - (v4 >= 0xb4) * 0xb4) + 0x1ab);
+    v4 = m_inputPos + 0x5a;
+    for (; v4 < m_inputPos + 0xb4; v4++) {
+        v5 = m_inputHistory[(v4 - (v4 >= 0xb4) * 0xb4)];
         if ((v5 & 0x40) != 0 && x6 == 4) {
-            *(short*)((char*)this + 0x262) = 0x34;
+            unk262 = 0x34;
             return;
         }
         if ((v5 & 0xf) == 4 && x6 == 3) {
@@ -943,11 +943,11 @@ void CKano::Vf2()
         }
     }
     x6 = 0;
-    v4 = *(short*)((char*)this + 0x260) + 0x87;
-    for (; v4 < *(short*)((char*)this + 0x260) + 0xb4; v4++) {
-        v5 = *((char*)this + (v4 - (v4 >= 0xb4) * 0xb4) + 0x1ab);
+    v4 = m_inputPos + 0x87;
+    for (; v4 < m_inputPos + 0xb4; v4++) {
+        v5 = m_inputHistory[(v4 - (v4 >= 0xb4) * 0xb4)];
         if ((v5 & 0x20) != 0 && x6 == 4) {
-            *(short*)((char*)this + 0x262) = 0x33;
+            unk262 = 0x33;
             return;
         }
         if ((v5 & 0xf) == 4 && x6 == 3) {
@@ -964,11 +964,11 @@ void CKano::Vf2()
         }
     }
     x6 = 0;
-    v4 = *(short*)((char*)this + 0x260) + 0x87;
-    for (; v4 < *(short*)((char*)this + 0x260) + 0xb4; v4++) {
-        v5 = *((char*)this + (v4 - (v4 >= 0xb4) * 0xb4) + 0x1ab);
+    v4 = m_inputPos + 0x87;
+    for (; v4 < m_inputPos + 0xb4; v4++) {
+        v5 = m_inputHistory[(v4 - (v4 >= 0xb4) * 0xb4)];
         if ((v5 & 0x10) != 0 && x6 == 4) {
-            *(short*)((char*)this + 0x262) = 0x32;
+            unk262 = 0x32;
             return;
         }
         if ((v5 & 0xf) == 4 && x6 == 3) {
@@ -985,11 +985,11 @@ void CKano::Vf2()
         }
     }
     x6 = 0;
-    v4 = *(short*)((char*)this + 0x260) + 0x87;
-    for (; v4 < *(short*)((char*)this + 0x260) + 0xb4; v4++) {
-        v5 = *((char*)this + (v4 - (v4 >= 0xb4) * 0xb4) + 0x1ab);
+    v4 = m_inputPos + 0x87;
+    for (; v4 < m_inputPos + 0xb4; v4++) {
+        v5 = m_inputHistory[(v4 - (v4 >= 0xb4) * 0xb4)];
         if ((v5 & 0xf) == 1 && x6 == 3) {
-            *(short*)((char*)this + 0x262) = 1;
+            unk262 = 1;
             return;
         }
         if ((v5 & 0xf) == 0 && x6 == 2) {
@@ -1003,11 +1003,11 @@ void CKano::Vf2()
         }
     }
     x6 = 0;
-    v4 = *(short*)((char*)this + 0x260) + 0x87;
-    for (; v4 < *(short*)((char*)this + 0x260) + 0xb4; v4++) {
-        v5 = *((char*)this + (v4 - (v4 >= 0xb4) * 0xb4) + 0x1ab);
+    v4 = m_inputPos + 0x87;
+    for (; v4 < m_inputPos + 0xb4; v4++) {
+        v5 = m_inputHistory[(v4 - (v4 >= 0xb4) * 0xb4)];
         if ((v5 & 0xf) == 2 && x6 == 3) {
-            *(short*)((char*)this + 0x262) = 0;
+            unk262 = 0;
             break;
         }
         if ((v5 & 0xf) == 0 && x6 == 2) {
@@ -1027,868 +1027,868 @@ void CKano::Vf5()
     double v10;
     double x8;
 
-    *(short*)((char*)this + 0x262) = 0x63;
-    if (*(int*)((char*)this + 0x1a0) > 0) {
-        (*(int*)((char*)this + 0x1a0))--;
+    unk262 = 0x63;
+    if (unk1a0 > 0) {
+        unk1a0--;
     }
-    if (*(int*)((char*)this + 0x1a4) > 0) {
-        (*(int*)((char*)this + 0x1a4))--;
+    if (unk1a4 > 0) {
+        unk1a4--;
     }
-    *((char*)this + 0x188) = 0;
-    *((char*)this + 0x189) = 0;
-    *((char*)this + 0x18a) = 0;
-    *((char*)this + 0x18b) = 0;
-    *((char*)this + 0x18c) = 0;
-    *((char*)this + 0x18d) = 0;
-    *(short*)((char*)this + 0x14e) = 0;
-    if ((WORD)CPlayer::Unk4108a0(0, 0x3e8) < 25.0f * *(float*)((char*)this + 0xa8) + (*(double*)((char*)this + 0x28) < 0.0) * 0x1e * *(float*)((char*)this + 0xa8) + (*(int*)((char*)this + 0x3114) == 3) * 0x190 + (*(WORD*)((char*)this + 8) == 0xaa) * 0x12c) {
-        *(short*)((char*)this + 0x14e) = 0x3c;
+    m_inputX = 0;
+    m_inputY = 0;
+    m_pressA = 0;
+    m_pressB = 0;
+    m_pressC = 0;
+    m_pressD = 0;
+    unk14e = 0;
+    if ((WORD)CPlayer::Unk4108a0(0, 0x3e8) < 25.0f * unka8 + (y < 0.0) * 0x1e * unka8 + (unk3114 == 3) * 0x190 + (pattern == 0xaa) * 0x12c) {
+        unk14e = 0x3c;
     }
-    if ((WORD)CPlayer::Unk4108a0(0, 0x7d0) < ((*((char*)this + 0x130) > 0) * 4.0 + 1.0) * 8.0 * *(float*)((char*)this + 0xa8) * ((*(WORD*)((char*)this + 8) > 0x95 && *(WORD*)((char*)this + 8) < 0x9d) * 2 + 1)) {
-        *(short*)((char*)this + 0x14e) = 0x3c;
+    if ((WORD)CPlayer::Unk4108a0(0, 0x7d0) < ((unk130 > 0) * 4.0 + 1.0) * 8.0 * unka8 * ((pattern > 0x95 && pattern < 0x9d) * 2 + 1)) {
+        unk14e = 0x3c;
     }
-    if ((WORD)CPlayer::Unk4108a0(0, 0x3e8) < 4e+01f * *(float*)((char*)this + 0xa8) && *(WORD*)((char*)this + 8) > 0xc7) {
-        *(short*)((char*)this + 0x14e) = 0x3c;
+    if ((WORD)CPlayer::Unk4108a0(0, 0x3e8) < 4e+01f * unka8 && pattern > 0xc7) {
+        unk14e = 0x3c;
     }
-    if (*(int*)((char*)this + 0x170) == 1 && *(int*)((char*)this + 0x3114) == 2) {
-        *(short*)((char*)this + 0x14e) = 0x1e;
-        if (*(WORD*)((char*)this + 8) < 0xc8) {
-            *(int*)((char*)this + 0x3114) = 0;
+    if (unk170 == 1 && unk3114 == 2) {
+        unk14e = 0x1e;
+        if (pattern < 0xc8) {
+            unk3114 = 0;
         }
         return;
     }
-    if (*(WORD*)(*(char**)*(char**)((char*)this + 0x78) + 8) == 0x60) {
+    if ((*m_opponent)->pattern == 0x60) {
         return;
     }
-    v10 = (*(double*)(*(char**)*(char**)((char*)this + 0x78) + 0x20) - *(double*)((char*)this + 0x20)) * *((char*)this + 0x50);
-    x8 = fabs(*(double*)((char*)this + 0x28) - *(double*)(*(char**)*(char**)((char*)this + 0x78) + 0x28));
-    if (*(WORD*)((char*)this + 8) >= 0x32 && *(WORD*)((char*)this + 8) <= 0x96 && *(WORD*)((char*)this + 0xc) == 0) {
-        if ((WORD)CPlayer::Unk4108a0(0, 0x64) < 8.0f * *(float*)((char*)this + 0xa8)) {
-            *(int*)((char*)this + 0x3114) = 3;
+    v10 = ((*m_opponent)->x - x) * facing;
+    x8 = fabs(y - (*m_opponent)->y);
+    if (pattern >= 0x32 && pattern <= 0x96 && timer == 0) {
+        if ((WORD)CPlayer::Unk4108a0(0, 0x64) < 8.0f * unka8) {
+            unk3114 = 3;
         } else {
-            *(int*)((char*)this + 0x3114) = 0;
+            unk3114 = 0;
         }
-        *((char*)this + 0x188) = 1 - (((WORD)CPlayer::Unk4108a0(0, 0x64) < 0x32) << 1);
-        *((char*)this + 0x18d) = (WORD)CPlayer::Unk4108a0(0, 0xf0) < x8;
-        *((char*)this + 0x18d) = (WORD)CPlayer::Unk4108a0(0, 0x140) < v10;
-        if (*(WORD*)(*(char**)*(char**)((char*)this + 0x78) + 8) > 0xc7 && *(WORD*)(*(char**)*(char**)((char*)this + 0x78) + 8) < 0xfa && *(WORD*)(*(char**)*(char**)((char*)this + 0x78) + 0xa) < 3 && x8 < 100.0 && v10 < 150.0) {
-            *((char*)this + 0x18d) = 0;
+        m_inputX = 1 - (((WORD)CPlayer::Unk4108a0(0, 0x64) < 0x32) << 1);
+        m_pressD = (WORD)CPlayer::Unk4108a0(0, 0xf0) < x8;
+        m_pressD = (WORD)CPlayer::Unk4108a0(0, 0x140) < v10;
+        if ((*m_opponent)->pattern > 0xc7 && (*m_opponent)->pattern < 0xfa && (*m_opponent)->frame < 3 && x8 < 100.0 && v10 < 150.0) {
+            m_pressD = 0;
         }
         return;
     }
-    if ((*(WORD*)((char*)this + 8) >= 4 && *(WORD*)((char*)this + 8) <= 6 || *(WORD*)((char*)this + 8) >= 0xa && *(WORD*)((char*)this + 8) <= 0xc) && *(double*)((char*)this + 0x28) == 0.0) {
+    if ((pattern >= 4 && pattern <= 6 || pattern >= 0xa && pattern <= 0xc) && y == 0.0) {
         return;
     }
-    if (*(WORD*)(*(char**)*(char**)((char*)this + 0x78) + 8) >= 0x32 && *(WORD*)(*(char**)*(char**)((char*)this + 0x78) + 8) < 0x96 && *(WORD*)((char*)this + 8) == 0x108 && *(short*)((char*)this + 0x16c) > 1) {
+    if ((*m_opponent)->pattern >= 0x32 && (*m_opponent)->pattern < 0x96 && pattern == 0x108 && unk16c > 1) {
         return;
     }
-    if (*(WORD*)((char*)this + 8) == 0xa8 && *(WORD*)((char*)this + 0xc) < 6) {
-        if (*(WORD*)(*(char**)*(char**)((char*)this + 0x78) + 8) != 0xc8 && *(WORD*)(*(char**)*(char**)((char*)this + 0x78) + 8) != 0xcc && *(WORD*)(*(char**)*(char**)((char*)this + 0x78) + 8) < 0xfa && *(double*)(*(char**)*(char**)((char*)this + 0x78) + 0x28) == 0.0 && *(short*)(*(char**)*(char**)((char*)this + 0x78) + 0x16c) == 0) {
-            if (v10 < 40.0 && (WORD)CPlayer::Unk4108a0(0, 0x64) < *(float*)((char*)this + 0xa8) * 3.0f) {
-                *((char*)this + 0x18a) = 1;
-                *((char*)this + 0x189) = 1;
+    if (pattern == 0xa8 && timer < 6) {
+        if ((*m_opponent)->pattern != 0xc8 && (*m_opponent)->pattern != 0xcc && (*m_opponent)->pattern < 0xfa && (*m_opponent)->y == 0.0 && (*m_opponent)->unk16c == 0) {
+            if (v10 < 40.0 && (WORD)CPlayer::Unk4108a0(0, 0x64) < unka8 * 3.0f) {
+                m_pressA = 1;
+                m_inputY = 1;
                 return;
             }
-            if (v10 < 60.0 && (WORD)CPlayer::Unk4108a0(0, 0x64) < *(float*)((char*)this + 0xa8) * 2) {
-                *((char*)this + 0x18a) = 1;
-                *((char*)this + 0x189) = 0;
+            if (v10 < 60.0 && (WORD)CPlayer::Unk4108a0(0, 0x64) < unka8 * 2) {
+                m_pressA = 1;
+                m_inputY = 0;
                 return;
             }
         }
-        if ((*(WORD*)(*(char**)*(char**)((char*)this + 0x78) + 8) == 0xc9 || *(WORD*)(*(char**)*(char**)((char*)this + 0x78) + 8) == 0xca || *(WORD*)(*(char**)*(char**)((char*)this + 0x78) + 8) == 0xcd) && *(WORD*)(*(char**)*(char**)((char*)this + 0x78) + 8) < 0xfa && *(double*)(*(char**)*(char**)((char*)this + 0x78) + 0x28) == 0.0 && *(short*)(*(char**)*(char**)((char*)this + 0x78) + 0x16c) == 0) {
-            if (v10 > 20.0 && v10 < 60.0 && (WORD)CPlayer::Unk4108a0(0, 0x64) < *(float*)((char*)this + 0xa8) * 2) {
-                *((char*)this + 0x18b) = 1;
-                *((char*)this + 0x189) = 1;
-                *((char*)this + 0x188) = 0;
+        if (((*m_opponent)->pattern == 0xc9 || (*m_opponent)->pattern == 0xca || (*m_opponent)->pattern == 0xcd) && (*m_opponent)->pattern < 0xfa && (*m_opponent)->y == 0.0 && (*m_opponent)->unk16c == 0) {
+            if (v10 > 20.0 && v10 < 60.0 && (WORD)CPlayer::Unk4108a0(0, 0x64) < unka8 * 2) {
+                m_pressB = 1;
+                m_inputY = 1;
+                m_inputX = 0;
                 return;
             }
-            if (v10 > 60.0 && v10 < 80.0 && (WORD)CPlayer::Unk4108a0(0, 0x64) < *(float*)((char*)this + 0xa8) * 2) {
-                *((char*)this + 0x18a) = 3;
-                *((char*)this + 0x189) = 1;
+            if (v10 > 60.0 && v10 < 80.0 && (WORD)CPlayer::Unk4108a0(0, 0x64) < unka8 * 2) {
+                m_pressA = 3;
+                m_inputY = 1;
                 return;
             }
         }
     }
-    if (*(WORD*)((char*)this + 8) == 0xa8 || *(WORD*)((char*)this + 8) == 0xa9) {
+    if (pattern == 0xa8 || pattern == 0xa9) {
         if (v10 < 100.0) {
-            if ((WORD)CPlayer::Unk4108a0(0, 0x64) < *(float*)((char*)this + 0xa8) * 3.0f && *(double*)((char*)this + 0x118) > 500.0) {
-                *(short*)((char*)this + 0x262) = 0x16;
+            if ((WORD)CPlayer::Unk4108a0(0, 0x64) < unka8 * 3.0f && unk118 > 500.0) {
+                unk262 = 0x16;
                 return;
             }
-            if ((WORD)CPlayer::Unk4108a0(0, 0x64) < *(float*)((char*)this + 0xa8) * 1.0f && *(double*)((char*)this + 0x118) > 500.0) {
-                *(short*)((char*)this + 0x262) = 0xc;
+            if ((WORD)CPlayer::Unk4108a0(0, 0x64) < unka8 * 1.0f && unk118 > 500.0) {
+                unk262 = 0xc;
                 return;
             }
-            if ((WORD)CPlayer::Unk4108a0(0, 0x64) < *(float*)((char*)this + 0xa8) * 2 && v10 < 80.0 && *(short*)((char*)this + 0x148) >= 0x3e8) {
-                *(short*)((char*)this + 0x262) = (WORD)CPlayer::Unk4108a0(0, 3) + 0x78;
+            if ((WORD)CPlayer::Unk4108a0(0, 0x64) < unka8 * 2 && v10 < 80.0 && unk148 >= 0x3e8) {
+                unk262 = (WORD)CPlayer::Unk4108a0(0, 3) + 0x78;
                 return;
             }
-            if ((WORD)CPlayer::Unk4108a0(0, 0x64) < *(float*)((char*)this + 0xa8) * 1.0f && v10 < 150.0 && *(short*)((char*)this + 0x148) == 0xbb8) {
-                *(short*)((char*)this + 0x262) = 0x5f;
+            if ((WORD)CPlayer::Unk4108a0(0, 0x64) < unka8 * 1.0f && v10 < 150.0 && unk148 == 0xbb8) {
+                unk262 = 0x5f;
                 return;
             }
         }
         if (v10 < 220.0) {
-            if ((WORD)CPlayer::Unk4108a0(0, 0x64) < *(float*)((char*)this + 0xa8) * 3.0f && *(double*)((char*)this + 0x118) > 500.0) {
-                *(short*)((char*)this + 0x262) = 0xc;
+            if ((WORD)CPlayer::Unk4108a0(0, 0x64) < unka8 * 3.0f && unk118 > 500.0) {
+                unk262 = 0xc;
                 return;
             }
-            if ((WORD)CPlayer::Unk4108a0(0, 0x64) < *(float*)((char*)this + 0xa8) * 1.0f && *(short*)((char*)this + 0x148) == 0xbb8) {
-                *(short*)((char*)this + 0x262) = 0x5f;
+            if ((WORD)CPlayer::Unk4108a0(0, 0x64) < unka8 * 1.0f && unk148 == 0xbb8) {
+                unk262 = 0x5f;
                 return;
             }
         }
         if (v10 > 220.0) {
-            if ((WORD)CPlayer::Unk4108a0(0, 0x64) < *(float*)((char*)this + 0xa8) * 1.0f && *(double*)((char*)this + 0x118) > 500.0) {
-                *(short*)((char*)this + 0x262) = (WORD)CPlayer::Unk4108a0(0, 3) + 0xa;
+            if ((WORD)CPlayer::Unk4108a0(0, 0x64) < unka8 * 1.0f && unk118 > 500.0) {
+                unk262 = (WORD)CPlayer::Unk4108a0(0, 3) + 0xa;
                 return;
             }
-            if ((WORD)CPlayer::Unk4108a0(0, 0x64) < *(float*)((char*)this + 0xa8) * 1.0f && *(short*)((char*)this + 0x148) == 0xbb8) {
-                *(short*)((char*)this + 0x262) = 0x5f;
+            if ((WORD)CPlayer::Unk4108a0(0, 0x64) < unka8 * 1.0f && unk148 == 0xbb8) {
+                unk262 = 0x5f;
                 return;
             }
         }
     }
-    if (*(WORD*)((char*)this + 8) == 0xaa && *(WORD*)((char*)this + 0xa) == 1 && *(WORD*)((char*)this + 0xc) == 0) {
-        if ((WORD)CPlayer::Unk4108a0(0, 0x64) < *(float*)((char*)this + 0xa8) * 5.0f) {
-            *(int*)((char*)this + 0x3114) = 3;
+    if (pattern == 0xaa && frame == 1 && timer == 0) {
+        if ((WORD)CPlayer::Unk4108a0(0, 0x64) < unka8 * 5.0f) {
+            unk3114 = 3;
             return;
         }
-        if (*(double*)((char*)this + 0x28) - *(double*)(*(char**)*(char**)((char*)this + 0x78) + 0x28) < 0.0 && *(double*)((char*)this + 0x28) - *(double*)(*(char**)*(char**)((char*)this + 0x78) + 0x28) > -40.0 && v10 < 80.0 && (WORD)CPlayer::Unk4108a0(0, 0x64) < *(float*)((char*)this + 0xa8) * 5.0f) {
-            *((char*)this + 0x18a) = 1;
+        if (y - (*m_opponent)->y < 0.0 && y - (*m_opponent)->y > -40.0 && v10 < 80.0 && (WORD)CPlayer::Unk4108a0(0, 0x64) < unka8 * 5.0f) {
+            m_pressA = 1;
             return;
         }
-        if (*(double*)((char*)this + 0x28) - *(double*)(*(char**)*(char**)((char*)this + 0x78) + 0x28) > -100.0 && *(double*)((char*)this + 0x28) - *(double*)(*(char**)*(char**)((char*)this + 0x78) + 0x28) < -50.0 && v10 < 100.0 && (WORD)CPlayer::Unk4108a0(0, 0x64) < *(float*)((char*)this + 0xa8) * 5.0f) {
-            *((char*)this + 0x18b) = 1;
+        if (y - (*m_opponent)->y > -100.0 && y - (*m_opponent)->y < -50.0 && v10 < 100.0 && (WORD)CPlayer::Unk4108a0(0, 0x64) < unka8 * 5.0f) {
+            m_pressB = 1;
             return;
         }
-        if (*(double*)((char*)this + 0x28) - *(double*)(*(char**)*(char**)((char*)this + 0x78) + 0x28) > -100.0 && *(double*)((char*)this + 0x28) - *(double*)(*(char**)*(char**)((char*)this + 0x78) + 0x28) < -50.0 && v10 < 120.0 && (WORD)CPlayer::Unk4108a0(0, 0x64) < *(float*)((char*)this + 0xa8) * 5.0f) {
-            *((char*)this + 0x18c) = 1;
-            *((char*)this + 0x189) = 0;
+        if (y - (*m_opponent)->y > -100.0 && y - (*m_opponent)->y < -50.0 && v10 < 120.0 && (WORD)CPlayer::Unk4108a0(0, 0x64) < unka8 * 5.0f) {
+            m_pressC = 1;
+            m_inputY = 0;
             return;
         }
-        if (x8 < 50.0 && v10 < 100.0 && (WORD)CPlayer::Unk4108a0(0, 0x64) < *(float*)((char*)this + 0xa8) * 2) {
-            *(short*)((char*)this + 0x262) = 0x16;
-            return;
-        }
-    }
-    if ((*(WORD*)(*(char**)*(char**)((char*)this + 0x78) + 8) == 0xa8 || *(WORD*)(*(char**)*(char**)((char*)this + 0x78) + 8) == 0xa9 || *(WORD*)(*(char**)*(char**)((char*)this + 0x78) + 8) == 0xaa) && *(double*)((char*)this + 0x28) == 0.0 && (WORD)CPlayer::Unk4108a0(0, 0x64) < 15.0f * *(float*)((char*)this + 0xa8) && *(int*)((char*)this + 0x3114) != 2 && *(short*)(*(char**)*(char**)((char*)this + 0x78) + 0x14c) == 0) {
-        *(int*)((char*)this + 0x3110) = (WORD)CPlayer::Unk4108a0(0, 0x64);
-        if (*(int*)((char*)this + 0x3110) < 3 && *(double*)((char*)this + 0x118) > 500.0) {
-            *(short*)((char*)this + 0x262) = 0x16;
-            return;
-        }
-        if (*(int*)((char*)this + 0x3110) < 4 && *(double*)((char*)this + 0x118) > 500.0) {
-            *(short*)((char*)this + 0x262) = 0xc;
-            return;
-        }
-        if (*(int*)((char*)this + 0x3110) < 0x11 && *(int*)((char*)this + 0x3110) > 0xc && *(short*)((char*)this + 0x148) >= 0x3e8) {
-            *(short*)((char*)this + 0x262) = (WORD)CPlayer::Unk4108a0(0, 3) + 0x78;
-            return;
-        }
-        if (*(int*)((char*)this + 0x3110) > 0x55) {
-            *(int*)((char*)this + 0x3114) = 2;
+        if (x8 < 50.0 && v10 < 100.0 && (WORD)CPlayer::Unk4108a0(0, 0x64) < unka8 * 2) {
+            unk262 = 0x16;
             return;
         }
     }
-    if ((*(WORD*)(*(char**)*(char**)((char*)this + 0x78) + 8) == 0xa8 || *(WORD*)(*(char**)*(char**)((char*)this + 0x78) + 8) == 0xa9 || *(WORD*)(*(char**)*(char**)((char*)this + 0x78) + 8) == 0xaa) && *(double*)((char*)this + 0x28) < 0.0 && (WORD)CPlayer::Unk4108a0(0, 0x64) < 15.0f * *(float*)((char*)this + 0xa8) && *(int*)((char*)this + 0x3114) != 2 && *(short*)(*(char**)*(char**)((char*)this + 0x78) + 0x14c) == 0) {
-        *(int*)((char*)this + 0x3110) = (WORD)CPlayer::Unk4108a0(0, 0x64);
-        if (*(int*)((char*)this + 0x3110) < 3 && *(double*)((char*)this + 0x118) > 500.0) {
-            *(short*)((char*)this + 0x262) = 0x16;
+    if (((*m_opponent)->pattern == 0xa8 || (*m_opponent)->pattern == 0xa9 || (*m_opponent)->pattern == 0xaa) && y == 0.0 && (WORD)CPlayer::Unk4108a0(0, 0x64) < 15.0f * unka8 && unk3114 != 2 && (*m_opponent)->unk14c == 0) {
+        unk3110 = (WORD)CPlayer::Unk4108a0(0, 0x64);
+        if (unk3110 < 3 && unk118 > 500.0) {
+            unk262 = 0x16;
             return;
         }
-        if (*(int*)((char*)this + 0x3110) < 0x11 && *(int*)((char*)this + 0x3110) > 0xc && *(short*)((char*)this + 0x148) >= 0x3e8) {
-            *(short*)((char*)this + 0x262) = (WORD)CPlayer::Unk4108a0(0, 3) + 0x78;
+        if (unk3110 < 4 && unk118 > 500.0) {
+            unk262 = 0xc;
             return;
         }
-        if (*(int*)((char*)this + 0x3110) > 0x55) {
-            *(int*)((char*)this + 0x3114) = 2;
+        if (unk3110 < 0x11 && unk3110 > 0xc && unk148 >= 0x3e8) {
+            unk262 = (WORD)CPlayer::Unk4108a0(0, 3) + 0x78;
+            return;
+        }
+        if (unk3110 > 0x55) {
+            unk3114 = 2;
             return;
         }
     }
-    if ((*(double*)((char*)this + 0x118) > 500.0 || *((char*)this + 0x120) > 0) && (WORD)CPlayer::Unk4108a0(0, 0x64) < 8.0f * *(float*)((char*)this + 0xa8) && *(WORD*)(*(char**)*(char**)((char*)this + 0x78) + 8) > 0x95 && *(WORD*)(*(char**)*(char**)((char*)this + 0x78) + 8) < 0x9d && (*(WORD*)((char*)this + 8) == 0xfa || *(WORD*)((char*)this + 8) == 0xfb || *(WORD*)((char*)this + 8) == 0xfc || *(WORD*)((char*)this + 8) == 0x10e || *(WORD*)((char*)this + 8) == 0x10f || *(WORD*)((char*)this + 8) == 0x110)) {
-        *(short*)((char*)this + 0x262) = 0x34;
+    if (((*m_opponent)->pattern == 0xa8 || (*m_opponent)->pattern == 0xa9 || (*m_opponent)->pattern == 0xaa) && y < 0.0 && (WORD)CPlayer::Unk4108a0(0, 0x64) < 15.0f * unka8 && unk3114 != 2 && (*m_opponent)->unk14c == 0) {
+        unk3110 = (WORD)CPlayer::Unk4108a0(0, 0x64);
+        if (unk3110 < 3 && unk118 > 500.0) {
+            unk262 = 0x16;
+            return;
+        }
+        if (unk3110 < 0x11 && unk3110 > 0xc && unk148 >= 0x3e8) {
+            unk262 = (WORD)CPlayer::Unk4108a0(0, 3) + 0x78;
+            return;
+        }
+        if (unk3110 > 0x55) {
+            unk3114 = 2;
+            return;
+        }
+    }
+    if ((unk118 > 500.0 || unk120 > 0) && (WORD)CPlayer::Unk4108a0(0, 0x64) < 8.0f * unka8 && (*m_opponent)->pattern > 0x95 && (*m_opponent)->pattern < 0x9d && (pattern == 0xfa || pattern == 0xfb || pattern == 0xfc || pattern == 0x10e || pattern == 0x10f || pattern == 0x110)) {
+        unk262 = 0x34;
         return;
     }
-    if (*(int*)((char*)this + 0x3114) > 0 && *(WORD*)((char*)this + 8) > 0x31 && *(WORD*)((char*)this + 8) < 0x9e) {
-        *(int*)((char*)this + 0x3114) = 0;
+    if (unk3114 > 0 && pattern > 0x31 && pattern < 0x9e) {
+        unk3114 = 0;
     }
-    if (*(int*)((char*)this + 0x3114) == 1 && *(WORD*)((char*)this + 8) < 0xc8) {
-        *(int*)((char*)this + 0x3114) = 0;
+    if (unk3114 == 1 && pattern < 0xc8) {
+        unk3114 = 0;
     }
-    if (*(int*)((char*)this + 0x3114) == 2 && *(int*)((char*)this + 0x170) != 1) {
-        *(int*)((char*)this + 0x3114) = 0;
+    if (unk3114 == 2 && unk170 != 1) {
+        unk3114 = 0;
         return;
     }
-    if (*(int*)((char*)this + 0x3114) == 4) {
-        *((char*)this + 0x189) = -1;
-        *((char*)this + 0x188) = (WORD)CPlayer::Unk4108a0(0, 2) - 1;
-        if (*(WORD*)((char*)this + 8) == 4 || *(WORD*)((char*)this + 8) == 5 || *(WORD*)((char*)this + 8) == 6) {
-            *(short*)((char*)this + 0x262) = *((char*)this + 0x50) == 1;
-            if (*(WORD*)((char*)this + 8) == 0xa5) {
-                *(int*)((char*)this + 0x3114) = 0;
+    if (unk3114 == 4) {
+        m_inputY = -1;
+        m_inputX = (WORD)CPlayer::Unk4108a0(0, 2) - 1;
+        if (pattern == 4 || pattern == 5 || pattern == 6) {
+            unk262 = facing == 1;
+            if (pattern == 0xa5) {
+                unk3114 = 0;
             }
-            *((char*)this + 0x189) = 0;
-            *((char*)this + 0x188) = 0;
+            m_inputY = 0;
+            m_inputX = 0;
             return;
         }
     }
-    if (*(int*)((char*)this + 0x3114) == 5 && *(WORD*)((char*)this + 8) < 0x32) {
-        *(short*)((char*)this + 0x262) = *((char*)this + 0x50) == 1;
-        if (*(WORD*)((char*)this + 8) == 0xa3) {
-            *(int*)((char*)this + 0x3114) = 0;
+    if (unk3114 == 5 && pattern < 0x32) {
+        unk262 = facing == 1;
+        if (pattern == 0xa3) {
+            unk3114 = 0;
         }
         return;
     }
-    if (*(int*)((char*)this + 0x3114) == 6 && *(WORD*)((char*)this + 8) < 0x32) {
-        *(short*)((char*)this + 0x262) = *((char*)this + 0x50) == 1;
-        if (*(WORD*)((char*)this + 8) == 0xa3) {
-            *(int*)((char*)this + 0x3114) = 7;
+    if (unk3114 == 6 && pattern < 0x32) {
+        unk262 = facing == 1;
+        if (pattern == 0xa3) {
+            unk3114 = 7;
         }
         return;
     }
-    if (*(int*)((char*)this + 0x3114) == 7 && *(WORD*)((char*)this + 8) == 0xa3) {
-        *((char*)this + 0x18a) = 1;
-        if (*(WORD*)((char*)this + 8) == 0xe6) {
-            *(int*)((char*)this + 0x3114) = 0;
+    if (unk3114 == 7 && pattern == 0xa3) {
+        m_pressA = 1;
+        if (pattern == 0xe6) {
+            unk3114 = 0;
         }
         return;
     }
-    if (*(int*)((char*)this + 0x3114) == 8 && *(WORD*)((char*)this + 8) < 0x32) {
-        *(short*)((char*)this + 0x262) = *((char*)this + 0x50) == 1;
-        if (*(WORD*)((char*)this + 8) == 0xa3) {
-            *(int*)((char*)this + 0x3114) = 9;
+    if (unk3114 == 8 && pattern < 0x32) {
+        unk262 = facing == 1;
+        if (pattern == 0xa3) {
+            unk3114 = 9;
         }
         return;
     }
-    if (*(int*)((char*)this + 0x3114) == 9 && *(WORD*)((char*)this + 8) == 0xa3) {
-        *((char*)this + 0x18b) = 1;
-        if (*(WORD*)((char*)this + 8) == 0xe7) {
-            *(int*)((char*)this + 0x3114) = 0;
+    if (unk3114 == 9 && pattern == 0xa3) {
+        m_pressB = 1;
+        if (pattern == 0xe7) {
+            unk3114 = 0;
         }
         return;
     }
-    if (*(int*)((char*)this + 0x3114) == 0xa && *(WORD*)((char*)this + 8) < 0x32) {
-        *(short*)((char*)this + 0x262) = *((char*)this + 0x50) == 1;
-        if (*(WORD*)((char*)this + 8) == 0xa3) {
-            *(int*)((char*)this + 0x3114) = 0xb;
+    if (unk3114 == 0xa && pattern < 0x32) {
+        unk262 = facing == 1;
+        if (pattern == 0xa3) {
+            unk3114 = 0xb;
         }
         return;
     }
-    if (*(int*)((char*)this + 0x3114) == 0xb && *(WORD*)((char*)this + 8) == 0xa3) {
-        *((char*)this + 0x18c) = 1;
-        if (*(WORD*)((char*)this + 8) == 0xe8) {
-            *(int*)((char*)this + 0x3114) = 0;
+    if (unk3114 == 0xb && pattern == 0xa3) {
+        m_pressC = 1;
+        if (pattern == 0xe8) {
+            unk3114 = 0;
         }
         return;
     }
-    if (*(int*)((char*)this + 0x3114) == 0xc && *(WORD*)((char*)this + 8) < 0x32) {
-        *((char*)this + 0x18a) = 1;
-        *((char*)this + 0x189) = 1;
-        if (*(WORD*)((char*)this + 8) == 0xcc) {
-            *(int*)((char*)this + 0x3114) = 0;
+    if (unk3114 == 0xc && pattern < 0x32) {
+        m_pressA = 1;
+        m_inputY = 1;
+        if (pattern == 0xcc) {
+            unk3114 = 0;
         }
         return;
     }
-    if (*(int*)((char*)this + 0x168) > 1 && *(short*)((char*)this + 0x14a) == 0 && (WORD)CPlayer::Unk4108a0(0, 0x64) < *(float*)((char*)this + 0xa8) * 25.0f && *(int*)((char*)this + 0x3114) != 1 && *(int*)((char*)this + 0x3114) != 2) {
-        *(int*)((char*)this + 0x3110) = (WORD)CPlayer::Unk4108a0(0, 0x3e8);
-        if (*(WORD*)((char*)this + 8) == 0xc8) {
-            if (*(double*)(*(char**)*(char**)((char*)this + 0x78) + 0x28) < 0.0 && *(int*)((char*)this + 0x3110) < 0x12c) {
-                *((char*)this + 0x18b) = 1;
-                *((char*)this + 0x189) = 0;
+    if (unk168 > 1 && unk14a == 0 && (WORD)CPlayer::Unk4108a0(0, 0x64) < unka8 * 25.0f && unk3114 != 1 && unk3114 != 2) {
+        unk3110 = (WORD)CPlayer::Unk4108a0(0, 0x3e8);
+        if (pattern == 0xc8) {
+            if ((*m_opponent)->y < 0.0 && unk3110 < 0x12c) {
+                m_pressB = 1;
+                m_inputY = 0;
                 return;
             }
-            if (v10 < 50.0 && *(int*)((char*)this + 0x3110) < 0x190) {
-                *((char*)this + 0x18a) = 1;
-                *((char*)this + 0x189) = 0;
-                if (*(int*)((char*)this + 0x168) == 2 && (WORD)CPlayer::Unk4108a0(0, 0x64) < 0x1e) {
-                    *((char*)this + 0x18c) = 1;
-                    *((char*)this + 0x189) = 1;
+            if (v10 < 50.0 && unk3110 < 0x190) {
+                m_pressA = 1;
+                m_inputY = 0;
+                if (unk168 == 2 && (WORD)CPlayer::Unk4108a0(0, 0x64) < 0x1e) {
+                    m_pressC = 1;
+                    m_inputY = 1;
                 }
                 return;
             }
-            if (v10 < 125.0 && *(int*)((char*)this + 0x3110) > 0x18f && *(int*)((char*)this + 0x3110) < 0x2bc) {
-                *((char*)this + 0x18b) = 1;
-                *((char*)this + 0x189) = 0;
+            if (v10 < 125.0 && unk3110 > 0x18f && unk3110 < 0x2bc) {
+                m_pressB = 1;
+                m_inputY = 0;
                 return;
             }
-            if (*(int*)((char*)this + 0x3110) > 0x3ca) {
-                *(int*)((char*)this + 0x3114) = 4;
-                *((char*)this + 0x189) = -1;
-                *((char*)this + 0x188) = (WORD)CPlayer::Unk4108a0(0, 2) - 1;
+            if (unk3110 > 0x3ca) {
+                unk3114 = 4;
+                m_inputY = -1;
+                m_inputX = (WORD)CPlayer::Unk4108a0(0, 2) - 1;
                 return;
             }
-            if (*(int*)((char*)this + 0x3110) > 0x2bb) {
-                *(int*)((char*)this + 0x3114) = 1;
+            if (unk3110 > 0x2bb) {
+                unk3114 = 1;
                 if ((WORD)CPlayer::Unk4108a0(0, 2) == 0) {
-                    *(int*)((char*)this + 0x3114) = 6;
+                    unk3114 = 6;
                 }
                 if ((WORD)CPlayer::Unk4108a0(0, 2) == 0) {
-                    *(int*)((char*)this + 0x3114) = 8;
+                    unk3114 = 8;
                 }
                 return;
             }
         }
-        if (*(WORD*)((char*)this + 8) == 0xc9) {
-            if (*(double*)(*(char**)*(char**)((char*)this + 0x78) + 0x28) < 0.0 && *(int*)((char*)this + 0x3110) < 0x12c && *(int*)((char*)this + 0x168) == 3) {
-                *(short*)((char*)this + 0x262) = (WORD)CPlayer::Unk4108a0(0, 2) + 0x14;
+        if (pattern == 0xc9) {
+            if ((*m_opponent)->y < 0.0 && unk3110 < 0x12c && unk168 == 3) {
+                unk262 = (WORD)CPlayer::Unk4108a0(0, 2) + 0x14;
                 return;
             }
-            if (*(double*)(*(char**)*(char**)((char*)this + 0x78) + 0x28) < 0.0 && *(int*)((char*)this + 0x3110) > 0x12b && *(int*)((char*)this + 0x3110) < 0x140 && *(short*)((char*)this + 0x148) >= 0x3e8) {
-                *(short*)((char*)this + 0x262) = (WORD)CPlayer::Unk4108a0(0, 3) + 0x78;
+            if ((*m_opponent)->y < 0.0 && unk3110 > 0x12b && unk3110 < 0x140 && unk148 >= 0x3e8) {
+                unk262 = (WORD)CPlayer::Unk4108a0(0, 3) + 0x78;
                 return;
             }
-            if (*(double*)(*(char**)*(char**)((char*)this + 0x78) + 0x28) < 0.0 && *(int*)((char*)this + 0x3110) > 0x140 && *(int*)((char*)this + 0x3110) < 0x258 && *(int*)((char*)this + 0x168) == 3) {
-                *((char*)this + 0x188) = *((char*)this + 0x50);
-                *((char*)this + 0x189) = -1;
+            if ((*m_opponent)->y < 0.0 && unk3110 > 0x140 && unk3110 < 0x258 && unk168 == 3) {
+                m_inputX = facing;
+                m_inputY = -1;
                 return;
             }
-            if (*(int*)((char*)this + 0x3110) < 0xc8) {
-                *((char*)this + 0x18c) = 1;
-                *((char*)this + 0x189) = 1;
+            if (unk3110 < 0xc8) {
+                m_pressC = 1;
+                m_inputY = 1;
                 return;
             }
-            if (*(int*)((char*)this + 0x3110) > 0xc8 && *(int*)((char*)this + 0x3110) < 0x1c2 && v10 < 90.0) {
-                *((char*)this + 0x18b) = 1;
-                *((char*)this + 0x189) = 0;
+            if (unk3110 > 0xc8 && unk3110 < 0x1c2 && v10 < 90.0) {
+                m_pressB = 1;
+                m_inputY = 0;
                 return;
             }
-            if (*(double*)(*(char**)*(char**)((char*)this + 0x78) + 0x28) < 0.0 && *(int*)((char*)this + 0x3110) > 0x1c2 && *(int*)((char*)this + 0x3110) < 0x2bc) {
-                *((char*)this + 0x18c) = 1;
+            if ((*m_opponent)->y < 0.0 && unk3110 > 0x1c2 && unk3110 < 0x2bc) {
+                m_pressC = 1;
                 return;
             }
-            if (*(int*)((char*)this + 0x3110) > 0x384) {
-                *(int*)((char*)this + 0x3114) = 4;
-                *((char*)this + 0x189) = -1;
-                *((char*)this + 0x188) = (WORD)CPlayer::Unk4108a0(0, 2) - 1;
+            if (unk3110 > 0x384) {
+                unk3114 = 4;
+                m_inputY = -1;
+                m_inputX = (WORD)CPlayer::Unk4108a0(0, 2) - 1;
                 return;
             }
-            if (*(int*)((char*)this + 0x3110) > 0x2bc) {
-                *(int*)((char*)this + 0x3114) = 1;
+            if (unk3110 > 0x2bc) {
+                unk3114 = 1;
                 if ((WORD)CPlayer::Unk4108a0(0, 1) == 0) {
-                    *(int*)((char*)this + 0x3114) = 6;
+                    unk3114 = 6;
                     if (v10 > 80.0) {
-                        *(int*)((char*)this + 0x3114) = 8;
+                        unk3114 = 8;
                     }
                     return;
                 }
             }
         }
-        if (*(WORD*)((char*)this + 8) == 0xca) {
-            if (*(double*)(*(char**)*(char**)((char*)this + 0x78) + 0x28) < 0.0 && *(int*)((char*)this + 0x3110) > 0x12b && *(int*)((char*)this + 0x3110) < 0x140) {
-                *(short*)((char*)this + 0x262) = 0xa;
+        if (pattern == 0xca) {
+            if ((*m_opponent)->y < 0.0 && unk3110 > 0x12b && unk3110 < 0x140) {
+                unk262 = 0xa;
                 return;
             }
-            if (*(double*)(*(char**)*(char**)((char*)this + 0x78) + 0x28) < 0.0 && *(int*)((char*)this + 0x3110) > 0x140 && *(int*)((char*)this + 0x3110) < 0x258 && v10 < 100.0) {
-                *((char*)this + 0x18c) = 1;
+            if ((*m_opponent)->y < 0.0 && unk3110 > 0x140 && unk3110 < 0x258 && v10 < 100.0) {
+                m_pressC = 1;
                 return;
             }
-            if (*(int*)((char*)this + 0x3110) < 0x1f4 && *(int*)((char*)this + 0x168) == 3 && v10 < 80.0) {
-                *((char*)this + 0x18c) = 1;
-                *((char*)this + 0x189) = 0;
+            if (unk3110 < 0x1f4 && unk168 == 3 && v10 < 80.0) {
+                m_pressC = 1;
+                m_inputY = 0;
                 return;
             }
-            if (*(int*)((char*)this + 0x3110) > 0x2bc) {
-                *(int*)((char*)this + 0x3114) = 1;
+            if (unk3110 > 0x2bc) {
+                unk3114 = 1;
                 if ((WORD)CPlayer::Unk4108a0(0, 1) == 0) {
-                    *(int*)((char*)this + 0x3114) = 6;
+                    unk3114 = 6;
                     if (v10 > 110.0) {
-                        *(int*)((char*)this + 0x3114) = 8;
+                        unk3114 = 8;
                     }
                     return;
                 }
             }
         }
-        if (*(WORD*)((char*)this + 8) == 0xcb) {
-            if (*(double*)(*(char**)*(char**)((char*)this + 0x78) + 0x28) < 0.0 && *(int*)((char*)this + 0x3110) < 0x12c && *(int*)((char*)this + 0x168) == 3) {
-                *(short*)((char*)this + 0x262) = 0xa;
+        if (pattern == 0xcb) {
+            if ((*m_opponent)->y < 0.0 && unk3110 < 0x12c && unk168 == 3) {
+                unk262 = 0xa;
                 return;
             }
-            if (*(double*)(*(char**)*(char**)((char*)this + 0x78) + 0x28) < 0.0 && *(int*)((char*)this + 0x3110) > 0x12b && *(int*)((char*)this + 0x3110) < 0x140 && *(short*)((char*)this + 0x148) >= 0x3e8 && v10 < 90.0) {
-                *(short*)((char*)this + 0x262) = (WORD)CPlayer::Unk4108a0(0, 3) + 0x78;
+            if ((*m_opponent)->y < 0.0 && unk3110 > 0x12b && unk3110 < 0x140 && unk148 >= 0x3e8 && v10 < 90.0) {
+                unk262 = (WORD)CPlayer::Unk4108a0(0, 3) + 0x78;
                 return;
             }
-            if (*(int*)((char*)this + 0x3110) > 0 && *(int*)((char*)this + 0x3110) < 0xc8 && *(int*)((char*)this + 0x168) == 3) {
-                *(short*)((char*)this + 0x262) = 0xa;
+            if (unk3110 > 0 && unk3110 < 0xc8 && unk168 == 3) {
+                unk262 = 0xa;
                 return;
             }
-            if (*(int*)((char*)this + 0x3110) > 0xc8 && *(int*)((char*)this + 0x3110) < 0xfa) {
-                *(short*)((char*)this + 0x262) = (WORD)CPlayer::Unk4108a0(0, 3) + 0x1e;
+            if (unk3110 > 0xc8 && unk3110 < 0xfa) {
+                unk262 = (WORD)CPlayer::Unk4108a0(0, 3) + 0x1e;
                 return;
             }
-            if (*(int*)((char*)this + 0x3110) > 0x15e && *(int*)((char*)this + 0x3110) < 0x190 && *(double*)((char*)this + 0x118) > 500.0) {
-                *(short*)((char*)this + 0x262) = 0x34;
+            if (unk3110 > 0x15e && unk3110 < 0x190 && unk118 > 500.0) {
+                unk262 = 0x34;
                 return;
             }
-            if (*(int*)((char*)this + 0x3110) > 0x190 && *(int*)((char*)this + 0x3110) < 0x1ae && *(int*)((char*)this + 0x168) == 3 && *(short*)((char*)this + 0x148) == 0xbb8) {
-                *(short*)((char*)this + 0x262) = 0x5f;
+            if (unk3110 > 0x190 && unk3110 < 0x1ae && unk168 == 3 && unk148 == 0xbb8) {
+                unk262 = 0x5f;
                 return;
             }
-            if (*(int*)((char*)this + 0x3110) > 0x1ae && *(int*)((char*)this + 0x3110) < 0x21c && *(int*)((char*)this + 0x168) != 3) {
-                *(short*)((char*)this + 0x262) = 0x28;
+            if (unk3110 > 0x1ae && unk3110 < 0x21c && unk168 != 3) {
+                unk262 = 0x28;
                 if (v10 > 120.0) {
-                    *(short*)((char*)this + 0x262) = 0x29;
+                    unk262 = 0x29;
                 }
                 return;
             }
-            if (*(int*)((char*)this + 0x3110) > 0x38e && *(int*)((char*)this + 0x168) == 3) {
-                *(int*)((char*)this + 0x3114) = 4;
-                *((char*)this + 0x189) = -1;
-                *((char*)this + 0x188) = (WORD)CPlayer::Unk4108a0(0, 2) - 1;
+            if (unk3110 > 0x38e && unk168 == 3) {
+                unk3114 = 4;
+                m_inputY = -1;
+                m_inputX = (WORD)CPlayer::Unk4108a0(0, 2) - 1;
                 return;
             }
-            if (*(int*)((char*)this + 0x3110) > 0x289) {
-                *(int*)((char*)this + 0x3114) = 1;
+            if (unk3110 > 0x289) {
+                unk3114 = 1;
                 return;
             }
         }
-        if (*(WORD*)((char*)this + 8) == 0xcc) {
-            if (*(double*)(*(char**)*(char**)((char*)this + 0x78) + 0x28) < 0.0 && *(int*)((char*)this + 0x3110) < 0x12c) {
-                *((char*)this + 0x18b) = 1;
-                *((char*)this + 0x189) = 1;
+        if (pattern == 0xcc) {
+            if ((*m_opponent)->y < 0.0 && unk3110 < 0x12c) {
+                m_pressB = 1;
+                m_inputY = 1;
                 return;
             }
-            if (v10 < 50.0 && *(int*)((char*)this + 0x3110) < 0x190) {
-                *((char*)this + 0x18a) = 1;
-                *((char*)this + 0x189) = 0;
-                if (*(int*)((char*)this + 0x168) == 2 && (WORD)CPlayer::Unk4108a0(0, 0x64) < 0x14) {
-                    *((char*)this + 0x18c) = 1;
-                    *((char*)this + 0x189) = 1;
+            if (v10 < 50.0 && unk3110 < 0x190) {
+                m_pressA = 1;
+                m_inputY = 0;
+                if (unk168 == 2 && (WORD)CPlayer::Unk4108a0(0, 0x64) < 0x14) {
+                    m_pressC = 1;
+                    m_inputY = 1;
                 }
                 return;
             }
-            if (v10 < 135.0 && *(int*)((char*)this + 0x3110) < 0x258) {
-                *((char*)this + 0x18b) = 1;
-                *((char*)this + 0x189) = 0;
+            if (v10 < 135.0 && unk3110 < 0x258) {
+                m_pressB = 1;
+                m_inputY = 0;
                 return;
             }
-            if (*(int*)((char*)this + 0x3110) > 0x3b6) {
-                *(int*)((char*)this + 0x3114) = 4;
-                *((char*)this + 0x189) = -1;
-                *((char*)this + 0x188) = (WORD)CPlayer::Unk4108a0(0, 2) - 1;
+            if (unk3110 > 0x3b6) {
+                unk3114 = 4;
+                m_inputY = -1;
+                m_inputX = (WORD)CPlayer::Unk4108a0(0, 2) - 1;
                 return;
             }
-            if (*(int*)((char*)this + 0x3110) > 0x2bb) {
-                *(int*)((char*)this + 0x3114) = 1;
+            if (unk3110 > 0x2bb) {
+                unk3114 = 1;
                 if ((WORD)CPlayer::Unk4108a0(0, 1) == 0) {
-                    *(int*)((char*)this + 0x3114) = 6;
+                    unk3114 = 6;
                     if (v10 > 110.0) {
-                        *(int*)((char*)this + 0x3114) = 8;
+                        unk3114 = 8;
                     }
                     return;
                 }
                 return;
             }
         }
-        if (*(WORD*)((char*)this + 8) == 0xcd) {
-            if (*(double*)(*(char**)*(char**)((char*)this + 0x78) + 0x28) < 0.0 && *(int*)((char*)this + 0x3110) > 0x140 && *(int*)((char*)this + 0x3110) < 0x258 && v10 < 100.0) {
-                *((char*)this + 0x18c) = 1;
+        if (pattern == 0xcd) {
+            if ((*m_opponent)->y < 0.0 && unk3110 > 0x140 && unk3110 < 0x258 && v10 < 100.0) {
+                m_pressC = 1;
                 return;
             }
-            if (*(int*)((char*)this + 0x3110) < 0x64) {
-                *((char*)this + 0x18c) = 1;
-                *((char*)this + 0x189) = 1;
+            if (unk3110 < 0x64) {
+                m_pressC = 1;
+                m_inputY = 1;
                 return;
             }
-            if (*(int*)((char*)this + 0x3110) > 0x64 && *(int*)((char*)this + 0x3110) < 0x12c && v10 < 100.0) {
-                *((char*)this + 0x18b) = 1;
-                *((char*)this + 0x189) = 0;
+            if (unk3110 > 0x64 && unk3110 < 0x12c && v10 < 100.0) {
+                m_pressB = 1;
+                m_inputY = 0;
                 return;
             }
-            if (*(double*)(*(char**)*(char**)((char*)this + 0x78) + 0x28) < 0.0 && *(int*)((char*)this + 0x3110) > 0x12c && *(int*)((char*)this + 0x3110) < 0x258) {
-                *((char*)this + 0x18c) = 1;
+            if ((*m_opponent)->y < 0.0 && unk3110 > 0x12c && unk3110 < 0x258) {
+                m_pressC = 1;
                 return;
             }
-            if (*(int*)((char*)this + 0x3110) > 0x384) {
-                *(int*)((char*)this + 0x3114) = 4;
-                *((char*)this + 0x189) = -1;
-                *((char*)this + 0x188) = (WORD)CPlayer::Unk4108a0(0, 2) - 1;
+            if (unk3110 > 0x384) {
+                unk3114 = 4;
+                m_inputY = -1;
+                m_inputX = (WORD)CPlayer::Unk4108a0(0, 2) - 1;
                 return;
             }
-            if (*(int*)((char*)this + 0x3110) > 0x2bc) {
-                *(int*)((char*)this + 0x3114) = 1;
+            if (unk3110 > 0x2bc) {
+                unk3114 = 1;
                 if ((WORD)CPlayer::Unk4108a0(0, 1) == 0) {
-                    *(int*)((char*)this + 0x3114) = 6;
+                    unk3114 = 6;
                     if (v10 > 110.0) {
-                        *(int*)((char*)this + 0x3114) = 8;
+                        unk3114 = 8;
                     }
                 }
                 return;
             }
         }
-        if (*(WORD*)((char*)this + 8) == 0xce) {
-            if (*(double*)(*(char**)*(char**)((char*)this + 0x78) + 0x28) < 0.0 && *(int*)((char*)this + 0x3110) < 0x12c && *(int*)((char*)this + 0x168) == 3) {
-                *(short*)((char*)this + 0x262) = 0xa;
+        if (pattern == 0xce) {
+            if ((*m_opponent)->y < 0.0 && unk3110 < 0x12c && unk168 == 3) {
+                unk262 = 0xa;
                 return;
             }
-            if (*(double*)(*(char**)*(char**)((char*)this + 0x78) + 0x28) < 0.0 && *(int*)((char*)this + 0x3110) > 0x12b && *(int*)((char*)this + 0x3110) < 0x140 && *(short*)((char*)this + 0x148) >= 0x3e8 && v10 < 90.0) {
-                *(short*)((char*)this + 0x262) = (WORD)CPlayer::Unk4108a0(0, 3) + 0x78;
+            if ((*m_opponent)->y < 0.0 && unk3110 > 0x12b && unk3110 < 0x140 && unk148 >= 0x3e8 && v10 < 90.0) {
+                unk262 = (WORD)CPlayer::Unk4108a0(0, 3) + 0x78;
                 return;
             }
-            if (*(int*)((char*)this + 0x3110) > 0 && *(int*)((char*)this + 0x3110) < 0xc8 && *(int*)((char*)this + 0x168) == 3) {
-                *(short*)((char*)this + 0x262) = 0xa;
+            if (unk3110 > 0 && unk3110 < 0xc8 && unk168 == 3) {
+                unk262 = 0xa;
                 return;
             }
-            if (*(int*)((char*)this + 0x3110) > 0xc8 && *(int*)((char*)this + 0x3110) < 0xfa) {
-                *(short*)((char*)this + 0x262) = (WORD)CPlayer::Unk4108a0(0, 3) + 0x1e;
+            if (unk3110 > 0xc8 && unk3110 < 0xfa) {
+                unk262 = (WORD)CPlayer::Unk4108a0(0, 3) + 0x1e;
                 return;
             }
-            if (*(int*)((char*)this + 0x3110) > 0x15e && *(int*)((char*)this + 0x3110) < 0x190 && *(double*)((char*)this + 0x118) > 500.0) {
-                *(short*)((char*)this + 0x262) = 0x34;
+            if (unk3110 > 0x15e && unk3110 < 0x190 && unk118 > 500.0) {
+                unk262 = 0x34;
                 return;
             }
-            if (*(int*)((char*)this + 0x3110) > 0x1ae && *(int*)((char*)this + 0x3110) < 0x21c && *(int*)((char*)this + 0x168) != 3) {
-                *(short*)((char*)this + 0x262) = 0x28;
+            if (unk3110 > 0x1ae && unk3110 < 0x21c && unk168 != 3) {
+                unk262 = 0x28;
                 if (v10 > 120.0) {
-                    *(short*)((char*)this + 0x262) = 0x29;
+                    unk262 = 0x29;
                 }
                 return;
             }
-            if (*(int*)((char*)this + 0x3110) > 0x289) {
-                *(int*)((char*)this + 0x3114) = 1;
+            if (unk3110 > 0x289) {
+                unk3114 = 1;
                 return;
             }
         }
-        if (*(WORD*)((char*)this + 8) == 0xcf) {
-            if (*(double*)(*(char**)*(char**)((char*)this + 0x78) + 0x28) < 0.0 && *(int*)((char*)this + 0x3110) < 0x12c) {
-                *((char*)this + 0x18b) = 1;
+        if (pattern == 0xcf) {
+            if ((*m_opponent)->y < 0.0 && unk3110 < 0x12c) {
+                m_pressB = 1;
                 return;
             }
-            if (v10 < 60.0 && *(int*)((char*)this + 0x3110) < 0x190) {
-                *((char*)this + 0x18a) = 1;
+            if (v10 < 60.0 && unk3110 < 0x190) {
+                m_pressA = 1;
                 return;
             }
-            if (v10 < 125.0 && *(int*)((char*)this + 0x3110) > 0x18f && *(int*)((char*)this + 0x3110) < 0x2bc) {
-                *((char*)this + 0x18c) = 1;
-                *((char*)this + 0x189) = 0;
+            if (v10 < 125.0 && unk3110 > 0x18f && unk3110 < 0x2bc) {
+                m_pressC = 1;
+                m_inputY = 0;
                 return;
             }
-            if (*(int*)((char*)this + 0x3110) > 0x2bb) {
-                *(int*)((char*)this + 0x3114) = 1;
+            if (unk3110 > 0x2bb) {
+                unk3114 = 1;
                 if ((WORD)CPlayer::Unk4108a0(0, 4) == 0) {
-                    *(int*)((char*)this + 0x3114) = 3;
+                    unk3114 = 3;
                 }
                 return;
             }
         }
-        if (*(WORD*)((char*)this + 8) == 0xd0) {
-            if (*(int*)((char*)this + 0x3110) > 0x14 && *(int*)((char*)this + 0x3110) < 0x3c && *(int*)((char*)this + 0x168) == 3 && *(double*)(*(char**)*(char**)((char*)this + 0x78) + 0x28) < 0.0) {
-                *(short*)((char*)this + 0x262) = 0xa;
+        if (pattern == 0xd0) {
+            if (unk3110 > 0x14 && unk3110 < 0x3c && unk168 == 3 && (*m_opponent)->y < 0.0) {
+                unk262 = 0xa;
                 return;
             }
-            if (*(int*)((char*)this + 0x3110) > 0x50 && *(int*)((char*)this + 0x3110) < 0x12c) {
-                *((char*)this + 0x18c) = 1;
+            if (unk3110 > 0x50 && unk3110 < 0x12c) {
+                m_pressC = 1;
                 return;
             }
-            if (*(int*)((char*)this + 0x3110) > 0x3b6) {
-                *((char*)this + 0x188) = (WORD)CPlayer::Unk4108a0(0, 2) - 1;
+            if (unk3110 > 0x3b6) {
+                m_inputX = (WORD)CPlayer::Unk4108a0(0, 2) - 1;
                 return;
             }
-            if (*(int*)((char*)this + 0x3110) > 0x289) {
-                *(int*)((char*)this + 0x3114) = 3;
-                return;
-            }
-        }
-        if (*(WORD*)((char*)this + 8) == 0xd1) {
-            if (*(int*)((char*)this + 0x3110) > 0x3b6) {
-                *((char*)this + 0x188) = (WORD)CPlayer::Unk4108a0(0, 2) - 1;
-                return;
-            }
-            if (*(int*)((char*)this + 0x3110) > 0x289) {
-                *(int*)((char*)this + 0x3114) = 3;
+            if (unk3110 > 0x289) {
+                unk3114 = 3;
                 return;
             }
         }
-        if (*(WORD*)((char*)this + 8) == 0xe7) {
-            if (*(double*)(*(char**)*(char**)((char*)this + 0x78) + 0x28) < 0.0 && *(int*)((char*)this + 0x3110) < 0x12c && *(int*)((char*)this + 0x168) == 3) {
-                *(short*)((char*)this + 0x262) = (WORD)CPlayer::Unk4108a0(0, 2) + 0x14;
+        if (pattern == 0xd1) {
+            if (unk3110 > 0x3b6) {
+                m_inputX = (WORD)CPlayer::Unk4108a0(0, 2) - 1;
                 return;
             }
-            if (*(int*)((char*)this + 0x3110) > 0xc8 && *(int*)((char*)this + 0x3110) < 0xdc && v10 < 90.0 && *(int*)((char*)this + 0x168) == 3 && *(short*)((char*)this + 0x148) >= 0x3e8) {
-                *(short*)((char*)this + 0x262) = (WORD)CPlayer::Unk4108a0(0, 3) + 0x78;
+            if (unk3110 > 0x289) {
+                unk3114 = 3;
                 return;
             }
-            if (*(int*)((char*)this + 0x3110) > 0x15e && *(int*)((char*)this + 0x3110) < 0x190 && *(double*)((char*)this + 0x118) > 500.0) {
-                *(short*)((char*)this + 0x262) = 0x34;
+        }
+        if (pattern == 0xe7) {
+            if ((*m_opponent)->y < 0.0 && unk3110 < 0x12c && unk168 == 3) {
+                unk262 = (WORD)CPlayer::Unk4108a0(0, 2) + 0x14;
                 return;
             }
-            if (*(int*)((char*)this + 0x3110) > 0x289 && (WORD)CPlayer::Unk4108a0(0, 2) == 0) {
-                *(int*)((char*)this + 0x3114) = 0xc;
+            if (unk3110 > 0xc8 && unk3110 < 0xdc && v10 < 90.0 && unk168 == 3 && unk148 >= 0x3e8) {
+                unk262 = (WORD)CPlayer::Unk4108a0(0, 3) + 0x78;
+                return;
+            }
+            if (unk3110 > 0x15e && unk3110 < 0x190 && unk118 > 500.0) {
+                unk262 = 0x34;
+                return;
+            }
+            if (unk3110 > 0x289 && (WORD)CPlayer::Unk4108a0(0, 2) == 0) {
+                unk3114 = 0xc;
                 if (v10 > 110.0) {
-                    *(int*)((char*)this + 0x3114) = 8;
+                    unk3114 = 8;
                 }
             }
         }
-        if (*(WORD*)((char*)this + 8) == 0xe8) {
-            if (*(double*)(*(char**)*(char**)((char*)this + 0x78) + 0x28) < 0.0 && *(int*)((char*)this + 0x3110) < 0x12c && *(int*)((char*)this + 0x168) == 3) {
-                *(short*)((char*)this + 0x262) = 0xa;
+        if (pattern == 0xe8) {
+            if ((*m_opponent)->y < 0.0 && unk3110 < 0x12c && unk168 == 3) {
+                unk262 = 0xa;
                 return;
             }
-            if (*(double*)(*(char**)*(char**)((char*)this + 0x78) + 0x28) < 0.0 && *(int*)((char*)this + 0x3110) > 0x12b && *(int*)((char*)this + 0x3110) < 0x140 && *(short*)((char*)this + 0x148) >= 0x3e8 && v10 < 90.0) {
-                *(short*)((char*)this + 0x262) = (WORD)CPlayer::Unk4108a0(0, 3) + 0x78;
+            if ((*m_opponent)->y < 0.0 && unk3110 > 0x12b && unk3110 < 0x140 && unk148 >= 0x3e8 && v10 < 90.0) {
+                unk262 = (WORD)CPlayer::Unk4108a0(0, 3) + 0x78;
                 return;
             }
-            if (*(int*)((char*)this + 0x3110) > 0 && *(int*)((char*)this + 0x3110) < 0xc8 && *(int*)((char*)this + 0x168) == 3) {
-                *(short*)((char*)this + 0x262) = 0xa;
+            if (unk3110 > 0 && unk3110 < 0xc8 && unk168 == 3) {
+                unk262 = 0xa;
                 return;
             }
-            if (*(int*)((char*)this + 0x3110) > 0xc8 && *(int*)((char*)this + 0x3110) < 0xfa) {
-                *(short*)((char*)this + 0x262) = (WORD)CPlayer::Unk4108a0(0, 3) + 0x1e;
+            if (unk3110 > 0xc8 && unk3110 < 0xfa) {
+                unk262 = (WORD)CPlayer::Unk4108a0(0, 3) + 0x1e;
                 return;
             }
-            if (*(int*)((char*)this + 0x3110) > 0x15e && *(int*)((char*)this + 0x3110) < 0x190 && *(double*)((char*)this + 0x118) > 500.0) {
-                *(short*)((char*)this + 0x262) = 0x34;
+            if (unk3110 > 0x15e && unk3110 < 0x190 && unk118 > 500.0) {
+                unk262 = 0x34;
                 return;
             }
-            if (*(int*)((char*)this + 0x3110) > 0x190 && *(int*)((char*)this + 0x3110) < 0x1ae && *(int*)((char*)this + 0x168) == 3 && *(short*)((char*)this + 0x148) == 0xbb8) {
-                *(short*)((char*)this + 0x262) = 0x5f;
+            if (unk3110 > 0x190 && unk3110 < 0x1ae && unk168 == 3 && unk148 == 0xbb8) {
+                unk262 = 0x5f;
                 return;
             }
-            if (*(int*)((char*)this + 0x3110) > 0x1ae && *(int*)((char*)this + 0x3110) < 0x21c && *(int*)((char*)this + 0x168) != 3) {
-                *(short*)((char*)this + 0x262) = 0x28;
+            if (unk3110 > 0x1ae && unk3110 < 0x21c && unk168 != 3) {
+                unk262 = 0x28;
                 if (v10 > 120.0) {
-                    *(short*)((char*)this + 0x262) = 0x29;
+                    unk262 = 0x29;
                 }
                 return;
             }
-            if (*(int*)((char*)this + 0x3110) > 0x38e && *(int*)((char*)this + 0x168) == 3) {
-                *(int*)((char*)this + 0x3114) = 4;
-                *((char*)this + 0x189) = -1;
-                *((char*)this + 0x188) = (WORD)CPlayer::Unk4108a0(0, 2) - 1;
+            if (unk3110 > 0x38e && unk168 == 3) {
+                unk3114 = 4;
+                m_inputY = -1;
+                m_inputX = (WORD)CPlayer::Unk4108a0(0, 2) - 1;
                 return;
             }
-            if (*(int*)((char*)this + 0x3110) > 0x289) {
-                *(int*)((char*)this + 0x3114) = 1;
+            if (unk3110 > 0x289) {
+                unk3114 = 1;
                 return;
             }
         }
     }
-    if ((WORD)CPlayer::Unk4108a0(0, 0x64) < 25.0f * *(float*)((char*)this + 0xa8)) {
-        *(int*)((char*)this + 0x3110) = (WORD)CPlayer::Unk4108a0(0, 0x3e8);
-        if (*(double*)((char*)this + 0x28) == 0.0) {
-            if (*(double*)(*(char**)*(char**)((char*)this + 0x78) + 0x28) == 0.0 && *(WORD*)(*(char**)*(char**)((char*)this + 0x78) + 8) != 0x63) {
-                if (v10 < 40.0 && *(double*)(*(char**)*(char**)((char*)this + 0x78) + 0x28) == 0.0 && *(int*)((char*)this + 0x3110) < 5) {
-                    *((char*)this + 0x18c) = 1;
-                    *((char*)this + 0x188) = -*((char*)this + 0x50);
-                    *((char*)this + 0x189) = 0;
+    if ((WORD)CPlayer::Unk4108a0(0, 0x64) < 25.0f * unka8) {
+        unk3110 = (WORD)CPlayer::Unk4108a0(0, 0x3e8);
+        if (y == 0.0) {
+            if ((*m_opponent)->y == 0.0 && (*m_opponent)->pattern != 0x63) {
+                if (v10 < 40.0 && (*m_opponent)->y == 0.0 && unk3110 < 5) {
+                    m_pressC = 1;
+                    m_inputX = -facing;
+                    m_inputY = 0;
                     return;
                 }
-                if (v10 < 50.0 && *(int*)((char*)this + 0x3110) < 0x17) {
-                    *((char*)this + 0x18a) = 1;
-                    *((char*)this + 0x189) = 1;
+                if (v10 < 50.0 && unk3110 < 0x17) {
+                    m_pressA = 1;
+                    m_inputY = 1;
                     return;
                 }
-                if (v10 < 75.0 && *(int*)((char*)this + 0x3110) < 0x1e) {
-                    *((char*)this + 0x18a) = 1;
-                    *((char*)this + 0x189) = 0;
+                if (v10 < 75.0 && unk3110 < 0x1e) {
+                    m_pressA = 1;
+                    m_inputY = 0;
                     return;
                 }
-                if (v10 < 80.0 && *(int*)((char*)this + 0x3110) < 0x28 && *(int*)((char*)this + 0x3110) > 0x1e) {
-                    *((char*)this + 0x18b) = 1;
-                    *((char*)this + 0x189) = 1;
+                if (v10 < 80.0 && unk3110 < 0x28 && unk3110 > 0x1e) {
+                    m_pressB = 1;
+                    m_inputY = 1;
                     return;
                 }
-                if (v10 < 80.0 && *(int*)((char*)this + 0x3110) < 0x34 && *(int*)((char*)this + 0x3110) > 0x28 || v10 > 80.0 && v10 < 130.0 && *(int*)((char*)this + 0x3110) < 0x50 && *(int*)((char*)this + 0x3110) > 0x34) {
-                    *((char*)this + 0x18b) = 1;
-                    *((char*)this + 0x189) = 0;
+                if (v10 < 80.0 && unk3110 < 0x34 && unk3110 > 0x28 || v10 > 80.0 && v10 < 130.0 && unk3110 < 0x50 && unk3110 > 0x34) {
+                    m_pressB = 1;
+                    m_inputY = 0;
                     return;
                 }
-                if (v10 > 80.0 && v10 < 140.0 && *(int*)((char*)this + 0x3110) < 0x64 && *(int*)((char*)this + 0x3110) > 0x50) {
-                    *(int*)((char*)this + 0x3114) = 8;
+                if (v10 > 80.0 && v10 < 140.0 && unk3110 < 0x64 && unk3110 > 0x50) {
+                    unk3114 = 8;
                     return;
                 }
-                if (v10 > 70.0 && v10 < 120.0 && *(int*)((char*)this + 0x3110) < 0x78 && *(int*)((char*)this + 0x3110) > 0x64) {
-                    *(int*)((char*)this + 0x3114) = 8;
+                if (v10 > 70.0 && v10 < 120.0 && unk3110 < 0x78 && unk3110 > 0x64) {
+                    unk3114 = 8;
                     return;
                 }
-                if (v10 < 90.0 && v10 > 70.0 && *(int*)((char*)this + 0x3110) < 0x82 && *(int*)((char*)this + 0x3110) > 0x78) {
-                    *((char*)this + 0x18c) = 1;
-                    *((char*)this + 0x189) = 1;
+                if (v10 < 90.0 && v10 > 70.0 && unk3110 < 0x82 && unk3110 > 0x78) {
+                    m_pressC = 1;
+                    m_inputY = 1;
                     return;
                 }
-                if (v10 < 120.0 && v10 > 70.0 && *(int*)((char*)this + 0x3110) < 0x91 && *(int*)((char*)this + 0x3110) > 0x82) {
-                    *((char*)this + 0x18c) = 1;
-                    *((char*)this + 0x189) = 0;
+                if (v10 < 120.0 && v10 > 70.0 && unk3110 < 0x91 && unk3110 > 0x82) {
+                    m_pressC = 1;
+                    m_inputY = 0;
                     return;
                 }
-                if (v10 > 100.0 && v10 < 140.0 && *(int*)((char*)this + 0x3110) < 0x98 && *(int*)((char*)this + 0x3110) > 0x91) {
-                    *(int*)((char*)this + 0x3114) = 0xa;
+                if (v10 > 100.0 && v10 < 140.0 && unk3110 < 0x98 && unk3110 > 0x91) {
+                    unk3114 = 0xa;
                     return;
                 }
-                if (v10 < 80.0 && *(int*)((char*)this + 0x3110) < 0xa5 && *(int*)((char*)this + 0x3110) > 0x91 && *(double*)((char*)this + 0x118) > 500.0 && *(WORD*)(*(char**)*(char**)((char*)this + 0x78) + 8) > 0xc7) {
-                    *(short*)((char*)this + 0x262) = 0x16;
+                if (v10 < 80.0 && unk3110 < 0xa5 && unk3110 > 0x91 && unk118 > 500.0 && (*m_opponent)->pattern > 0xc7) {
+                    unk262 = 0x16;
                     return;
                 }
-                if (v10 < 80.0 && *(int*)((char*)this + 0x3110) < 0xaa && *(int*)((char*)this + 0x3110) > 0xa5 && *(short*)((char*)this + 0x148) >= 0x3e8 && *(WORD*)(*(char**)*(char**)((char*)this + 0x78) + 8) > 0xc7) {
-                    *(short*)((char*)this + 0x262) = (WORD)CPlayer::Unk4108a0(0, 3) + 0x78;
+                if (v10 < 80.0 && unk3110 < 0xaa && unk3110 > 0xa5 && unk148 >= 0x3e8 && (*m_opponent)->pattern > 0xc7) {
+                    unk262 = (WORD)CPlayer::Unk4108a0(0, 3) + 0x78;
                     return;
                 }
-                if (v10 > 200.0 && *(int*)((char*)this + 0x3110) < 0xaa && *(int*)((char*)this + 0x3110) > 0xa5 && *(short*)((char*)this + 0x148) >= 0x3e8 && *(WORD*)(*(char**)*(char**)((char*)this + 0x78) + 8) > 0xc7) {
-                    *(short*)((char*)this + 0x262) = (WORD)CPlayer::Unk4108a0(0, 3) + 0x82;
+                if (v10 > 200.0 && unk3110 < 0xaa && unk3110 > 0xa5 && unk148 >= 0x3e8 && (*m_opponent)->pattern > 0xc7) {
+                    unk262 = (WORD)CPlayer::Unk4108a0(0, 3) + 0x82;
                     return;
                 }
-                if (v10 > 200.0 && *(int*)((char*)this + 0x3110) < 0xbe && *(int*)((char*)this + 0x3110) > 0xaa) {
-                    *(short*)((char*)this + 0x262) = (WORD)CPlayer::Unk4108a0(0, 3) + 0xa;
+                if (v10 > 200.0 && unk3110 < 0xbe && unk3110 > 0xaa) {
+                    unk262 = (WORD)CPlayer::Unk4108a0(0, 3) + 0xa;
                     return;
                 }
-                if (v10 > 80.0 && v10 < 120.0 && *(int*)((char*)this + 0x3110) < 0xd2 && *(int*)((char*)this + 0x3110) > 0xbe) {
-                    *(short*)((char*)this + 0x262) = 0x28;
+                if (v10 > 80.0 && v10 < 120.0 && unk3110 < 0xd2 && unk3110 > 0xbe) {
+                    unk262 = 0x28;
                     return;
                 }
-                if (v10 > 140.0 && v10 < 180.0 && *(int*)((char*)this + 0x3110) < 0xd2 && *(int*)((char*)this + 0x3110) > 0xbe) {
-                    *(short*)((char*)this + 0x262) = 0x29;
+                if (v10 > 140.0 && v10 < 180.0 && unk3110 < 0xd2 && unk3110 > 0xbe) {
+                    unk262 = 0x29;
                     return;
                 }
-                if (v10 > 200.0 && v10 < 240.0 && *(int*)((char*)this + 0x3110) < 0xd2 && *(int*)((char*)this + 0x3110) > 0xbe) {
-                    *(short*)((char*)this + 0x262) = 0x2a;
+                if (v10 > 200.0 && v10 < 240.0 && unk3110 < 0xd2 && unk3110 > 0xbe) {
+                    unk262 = 0x2a;
                     return;
                 }
             }
-            if (*(double*)(*(char**)*(char**)((char*)this + 0x78) + 0x28) < 0.0) {
-                if (*(double*)(*(char**)*(char**)((char*)this + 0x78) + 0x38) < 0.0) {
-                    if (v10 < 80.0 && x8 < 120.0 && *(int*)((char*)this + 0x3110) < 0xa) {
-                        *((char*)this + 0x189) = -1;
-                        *((char*)this + 0x188) = -*((char*)this + 0x50);
+            if ((*m_opponent)->y < 0.0) {
+                if ((*m_opponent)->vy < 0.0) {
+                    if (v10 < 80.0 && x8 < 120.0 && unk3110 < 0xa) {
+                        m_inputY = -1;
+                        m_inputX = -facing;
                         return;
                     }
-                    if (v10 < 80.0 && *(int*)((char*)this + 0x3110) < 0xf && *(short*)((char*)this + 0x148) >= 0x3e8) {
-                        *(short*)((char*)this + 0x262) = (WORD)CPlayer::Unk4108a0(0, 3) + 0x78;
+                    if (v10 < 80.0 && unk3110 < 0xf && unk148 >= 0x3e8) {
+                        unk262 = (WORD)CPlayer::Unk4108a0(0, 3) + 0x78;
                         return;
                     }
                 }
-                if (*(double*)(*(char**)*(char**)((char*)this + 0x78) + 0x38) > 0.0) {
-                    if (v10 < 90.0 && x8 < 140.0 && *(int*)((char*)this + 0x3110) < 6 && (*(double*)((char*)this + 0x118) > 500.0 || *((char*)this + 0x120) > 0)) {
-                        *(short*)((char*)this + 0x262) = 0x16;
+                if ((*m_opponent)->vy > 0.0) {
+                    if (v10 < 90.0 && x8 < 140.0 && unk3110 < 6 && (unk118 > 500.0 || unk120 > 0)) {
+                        unk262 = 0x16;
                         return;
                     }
-                    if (v10 < 90.0 && x8 < 140.0 && x8 > 100.0 && *(int*)((char*)this + 0x3110) < 0x23 && *(int*)((char*)this + 0x3110) > 0xa) {
-                        *((char*)this + 0x18b) = 1;
-                        *((char*)this + 0x189) = 0;
+                    if (v10 < 90.0 && x8 < 140.0 && x8 > 100.0 && unk3110 < 0x23 && unk3110 > 0xa) {
+                        m_pressB = 1;
+                        m_inputY = 0;
                         return;
                     }
-                    if (v10 > 100.0 && v10 < 140.0 && x8 < 180.0 && x8 > 140.0 && *(int*)((char*)this + 0x3110) < 0x3c && *(int*)((char*)this + 0x3110) > 0x23) {
-                        *((char*)this + 0x18c) = 1;
-                        *((char*)this + 0x189) = 0;
+                    if (v10 > 100.0 && v10 < 140.0 && x8 < 180.0 && x8 > 140.0 && unk3110 < 0x3c && unk3110 > 0x23) {
+                        m_pressC = 1;
+                        m_inputY = 0;
                         return;
                     }
-                    if (v10 > 100.0 && v10 < 140.0 && x8 < 140.0 && x8 > 100.0 && *(int*)((char*)this + 0x3110) < 0x50 && *(int*)((char*)this + 0x3110) > 0x3c) {
-                        *((char*)this + 0x18b) = 1;
-                        *((char*)this + 0x189) = 0;
+                    if (v10 > 100.0 && v10 < 140.0 && x8 < 140.0 && x8 > 100.0 && unk3110 < 0x50 && unk3110 > 0x3c) {
+                        m_pressB = 1;
+                        m_inputY = 0;
                         return;
                     }
-                    if (v10 < 80.0 && *(int*)((char*)this + 0x3110) < 0x6e && *(int*)((char*)this + 0x3110) > 0x50 && *(double*)(*(char**)*(char**)((char*)this + 0x78) + 0x28) < -50.0 && *(short*)((char*)this + 0x148) >= 0x3e8) {
-                        *(short*)((char*)this + 0x262) = (WORD)CPlayer::Unk4108a0(0, 3) + 0x78;
+                    if (v10 < 80.0 && unk3110 < 0x6e && unk3110 > 0x50 && (*m_opponent)->y < -50.0 && unk148 >= 0x3e8) {
+                        unk262 = (WORD)CPlayer::Unk4108a0(0, 3) + 0x78;
                         return;
                     }
                 }
             }
         }
-        if (*(double*)((char*)this + 0x28) < 0.0 && *(int*)((char*)this + 0x3114) != 3) {
-            if (*(double*)(*(char**)*(char**)((char*)this + 0x78) + 0x28) == 0.0) {
-                if (v10 < 80.0 && x8 < 100.0 && *(int*)((char*)this + 0x3110) < 0x32) {
-                    *((char*)this + 0x18a) = 1;
+        if (y < 0.0 && unk3114 != 3) {
+            if ((*m_opponent)->y == 0.0) {
+                if (v10 < 80.0 && x8 < 100.0 && unk3110 < 0x32) {
+                    m_pressA = 1;
                     return;
                 }
-                if (v10 > 60.0 && v10 < 120.0 && x8 > 90.0 && x8 < 120.0 && *(double*)(*(char**)*(char**)((char*)this + 0x78) + 0x28) < *(double*)((char*)this + 0x28) && *(int*)((char*)this + 0x3110) > 0x32 && *(int*)((char*)this + 0x3110) < 0x78) {
-                    *((char*)this + 0x18b) = 1;
+                if (v10 > 60.0 && v10 < 120.0 && x8 > 90.0 && x8 < 120.0 && (*m_opponent)->y < y && unk3110 > 0x32 && unk3110 < 0x78) {
+                    m_pressB = 1;
                     return;
                 }
-                if (v10 > 80.0 && v10 < 140.0 && x8 > 100.0 && x8 < 180.0 && *(int*)((char*)this + 0x3110) > 0x78 && *(int*)((char*)this + 0x3110) < 0xaa) {
-                    *((char*)this + 0x18c) = 1;
+                if (v10 > 80.0 && v10 < 140.0 && x8 > 100.0 && x8 < 180.0 && unk3110 > 0x78 && unk3110 < 0xaa) {
+                    m_pressC = 1;
                     return;
                 }
-                if ((WORD)CPlayer::Unk4108a0(0, 0x140) < v10 - 100.0 && x8 < 90.0 && *(int*)((char*)this + 0x3110) > 0xaa && *(int*)((char*)this + 0x3110) < 0xdc) {
-                    *(short*)((char*)this + 0x262) = (WORD)CPlayer::Unk4108a0(0, 3) + 0xa;
+                if ((WORD)CPlayer::Unk4108a0(0, 0x140) < v10 - 100.0 && x8 < 90.0 && unk3110 > 0xaa && unk3110 < 0xdc) {
+                    unk262 = (WORD)CPlayer::Unk4108a0(0, 3) + 0xa;
                     return;
                 }
-                if (v10 > 100.0 && *(int*)((char*)this + 0x3110) > 0xf0 && *(int*)((char*)this + 0x3110) < 0x14a && x8 + 40.0 > v10 && x8 - 40.0 < v10) {
-                    *(short*)((char*)this + 0x262) = (WORD)CPlayer::Unk4108a0(0, 3) + 0x28;
+                if (v10 > 100.0 && unk3110 > 0xf0 && unk3110 < 0x14a && x8 + 40.0 > v10 && x8 - 40.0 < v10) {
+                    unk262 = (WORD)CPlayer::Unk4108a0(0, 3) + 0x28;
                     return;
                 }
             }
-            if (*(double*)(*(char**)*(char**)((char*)this + 0x78) + 0x28) < 0.0) {
-                if (v10 < 80.0 && x8 < 100.0 && *(int*)((char*)this + 0x3110) < 0x14) {
-                    *((char*)this + 0x18a) = 1;
+            if ((*m_opponent)->y < 0.0) {
+                if (v10 < 80.0 && x8 < 100.0 && unk3110 < 0x14) {
+                    m_pressA = 1;
                     return;
                 }
-                if (v10 > 60.0 && v10 < 120.0 && x8 > 90.0 && x8 < 120.0 && *(double*)(*(char**)*(char**)((char*)this + 0x78) + 0x28) < *(double*)((char*)this + 0x28) && *(int*)((char*)this + 0x3110) > 0x14 && *(int*)((char*)this + 0x3110) < 0x28) {
-                    *((char*)this + 0x18b) = 1;
+                if (v10 > 60.0 && v10 < 120.0 && x8 > 90.0 && x8 < 120.0 && (*m_opponent)->y < y && unk3110 > 0x14 && unk3110 < 0x28) {
+                    m_pressB = 1;
                     return;
                 }
-                if (v10 > 80.0 && v10 < 140.0 && x8 > 100.0 && x8 < 180.0 && *(int*)((char*)this + 0x3110) > 0x28 && *(int*)((char*)this + 0x3110) < 0x32) {
-                    *((char*)this + 0x18c) = 1;
+                if (v10 > 80.0 && v10 < 140.0 && x8 > 100.0 && x8 < 180.0 && unk3110 > 0x28 && unk3110 < 0x32) {
+                    m_pressC = 1;
                     return;
                 }
-                if ((WORD)CPlayer::Unk4108a0(0, 0x140) < v10 - 100.0 && x8 < 180.0 && *(int*)((char*)this + 0x3110) > 0xaa && *(int*)((char*)this + 0x3110) < 0xf0) {
-                    *(short*)((char*)this + 0x262) = (WORD)CPlayer::Unk4108a0(0, 3) + 0xa;
+                if ((WORD)CPlayer::Unk4108a0(0, 0x140) < v10 - 100.0 && x8 < 180.0 && unk3110 > 0xaa && unk3110 < 0xf0) {
+                    unk262 = (WORD)CPlayer::Unk4108a0(0, 3) + 0xa;
                     return;
                 }
             }
         }
     }
-    if (*(WORD*)((char*)this + 8) < 0x32 && (*(WORD*)(*(char**)*(char**)((char*)this + 0x78) + 8) > 0x95 && *(WORD*)(*(char**)*(char**)((char*)this + 0x78) + 8) < 0x9c || *(WORD*)(*(char**)*(char**)((char*)this + 0x78) + 8) > 0x31 && *(WORD*)(*(char**)*(char**)((char*)this + 0x78) + 8) < 0x3b) && *(double*)((char*)this + 0x28) == 0.0 && (WORD)CPlayer::Unk4108a0(0, 0x64) < 3.0f * *(float*)((char*)this + 0xa8)) {
-        *(short*)((char*)this + 0x262) = *((char*)this + 0x50) == 1;
+    if (pattern < 0x32 && ((*m_opponent)->pattern > 0x95 && (*m_opponent)->pattern < 0x9c || (*m_opponent)->pattern > 0x31 && (*m_opponent)->pattern < 0x3b) && y == 0.0 && (WORD)CPlayer::Unk4108a0(0, 0x64) < 3.0f * unka8) {
+        unk262 = facing == 1;
         return;
     }
-    if (*(WORD*)((char*)this + 8) < 0x32 && *(WORD*)(*(char**)*(char**)((char*)this + 0x78) + 8) < 0x32 && v10 > 60.0 && v10 < 140.0 && (WORD)CPlayer::Unk4108a0(0, 0x64) < 2.0f * *(float*)((char*)this + 0xa8) && *(double*)((char*)this + 0x20) > 120.0 && *(double*)((char*)this + 0x20) < 520.0) {
-        *(short*)((char*)this + 0x262) = -((*((char*)this + 0x50) == 1) - 1);
+    if (pattern < 0x32 && (*m_opponent)->pattern < 0x32 && v10 > 60.0 && v10 < 140.0 && (WORD)CPlayer::Unk4108a0(0, 0x64) < 2.0f * unka8 && x > 120.0 && x < 520.0) {
+        unk262 = -((facing == 1) - 1);
         return;
     }
     if ((WORD)CPlayer::Unk4108a0(0, 0x3e8) < 2) {
-        *(int*)((char*)this + 0x3114) = 4;
+        unk3114 = 4;
         return;
     }
     if ((WORD)CPlayer::Unk4108a0(0, 0x64) < 2) {
-        if ((WORD)CPlayer::Unk4108a0(0, 0x64) < 8.0f * *(float*)((char*)this + 0xa8)) {
-            *(int*)((char*)this + 0x3114) = 3;
+        if ((WORD)CPlayer::Unk4108a0(0, 0x64) < 8.0f * unka8) {
+            unk3114 = 3;
         } else {
-            *(int*)((char*)this + 0x3114) = 0;
+            unk3114 = 0;
         }
-        if (v10 > 180.0 && *(double*)((char*)this + 0x28) == 0.0 && (WORD)CPlayer::Unk4108a0(0, 0x64) < 2) {
-            *((char*)this + 0x188) = 0;
-            *((char*)this + 0x189) = -1;
+        if (v10 > 180.0 && y == 0.0 && (WORD)CPlayer::Unk4108a0(0, 0x64) < 2) {
+            m_inputX = 0;
+            m_inputY = -1;
             return;
         }
-        if (v10 < 170.0 && v10 > 140.0 && *(double*)((char*)this + 0x28) == 0.0 && *(WORD*)(*(char**)*(char**)((char*)this + 0x78) + 8) < 0x32) {
-            *((char*)this + 0x188) = *((char*)this + 0x50);
-            *((char*)this + 0x189) = -1;
+        if (v10 < 170.0 && v10 > 140.0 && y == 0.0 && (*m_opponent)->pattern < 0x32) {
+            m_inputX = facing;
+            m_inputY = -1;
             return;
         }
     }
-    if (*(int*)((char*)this + 0x1a0) > 0) {
-        if ((char)CPlayer::Unk40ff70() != 0 && *(int*)((char*)this + 0x1a0) > 0xf) {
-            *(int*)((char*)this + 0x1a0) = 0xf;
+    if (unk1a0 > 0) {
+        if ((char)CPlayer::Unk40ff70() != 0 && unk1a0 > 0xf) {
+            unk1a0 = 0xf;
         }
-        *((char*)this + 0x188) = 1;
+        m_inputX = 1;
         return;
     }
-    if (*(int*)((char*)this + 0x1a4) > 0) {
-        if ((char)CPlayer::Unk40ff70() != 0 && *(int*)((char*)this + 0x1a4) > 0xf) {
-            *(int*)((char*)this + 0x1a4) = 0xf;
+    if (unk1a4 > 0) {
+        if ((char)CPlayer::Unk40ff70() != 0 && unk1a4 > 0xf) {
+            unk1a4 = 0xf;
         }
-        *((char*)this + 0x188) = -1;
+        m_inputX = -1;
         return;
     }
     if ((WORD)CPlayer::Unk4108a0(0, 0x64) < 0x32 && v10 < 120.0) {
-        if (*((char*)this + 0x50) == 1) {
-            *(int*)((char*)this + 0x1a4) = (WORD)CPlayer::Unk4108a0(0, 0xc8) + 0x2d;
+        if (facing == 1) {
+            unk1a4 = (WORD)CPlayer::Unk4108a0(0, 0xc8) + 0x2d;
         } else {
-            *(int*)((char*)this + 0x1a0) = (WORD)CPlayer::Unk4108a0(0, 0xc8) + 0x2d;
+            unk1a0 = (WORD)CPlayer::Unk4108a0(0, 0xc8) + 0x2d;
         }
     }
     if ((WORD)CPlayer::Unk4108a0(0, 0x64) < 0x1e) {
-        if (*((char*)this + 0x50) == 1) {
-            *(int*)((char*)this + 0x1a0) = (WORD)CPlayer::Unk4108a0(0, 0xc8) + 0x1e;
+        if (facing == 1) {
+            unk1a0 = (WORD)CPlayer::Unk4108a0(0, 0xc8) + 0x1e;
         } else {
-            *(int*)((char*)this + 0x1a4) = (WORD)CPlayer::Unk4108a0(0, 0xc8) + 0x1e;
+            unk1a4 = (WORD)CPlayer::Unk4108a0(0, 0xc8) + 0x1e;
         }
         return;
     }
-    if (*((char*)this + 0x50) == -1) {
-        *(int*)((char*)this + 0x1a0) = (WORD)CPlayer::Unk4108a0(0, 0xc8) + 0x1e;
+    if (facing == -1) {
+        unk1a0 = (WORD)CPlayer::Unk4108a0(0, 0xc8) + 0x1e;
         return;
     }
-    *(int*)((char*)this + 0x1a4) = (WORD)CPlayer::Unk4108a0(0, 0xc8) + 0x1e;
+    unk1a4 = (WORD)CPlayer::Unk4108a0(0, 0xc8) + 0x1e;
 }
 
 void CKano::Vf7()
@@ -1897,354 +1897,354 @@ void CKano::Vf7()
     WORD v54;
     int v4;
 
-    if (*(short*)(*(char**)*(char**)((char*)this + 0x78) + 0x14c) > 0) {
+    if ((*m_opponent)->unk14c > 0) {
         return;
     }
-    v4 = *(short*)((char*)this + 0x2cc);
+    v4 = unk2cc;
     EffectDesc l50;
-    while (v4 != *(short*)((char*)this + 0x2ca)) {
-        if (*(int*)((char*)this + v4 * 4 + 0x3d0) != 0 && *(short*)((char*)this + v4 * 0x98 + 0x556) == 0 && (*(short*)((char*)this + 0x14c) == 0 || *(short*)((char*)this + 0x14c) > 0 && *(int*)((char*)this + v4 * 0x98 + 0x558) != 0)) {
-            v54 = *(short*)(*(char**)(*(char**)((char*)this + 0x10) + *(WORD*)((char*)this + v4 * 0x98 + 0x4d0) * 8 + 4) + *(WORD*)((char*)this + v4 * 0x98 + 0x4d2) * 0xc);
-            v58 = *(BYTE*)(*(char**)((char*)this + 0x10) + *(WORD*)((char*)this + v4 * 0x98 + 0x4d0) * 8);
+    while (v4 != unk2ca) {
+        if (unk3d0[v4] != 0 && m_objects[v4].unk86 == 0 && (unk14c == 0 || unk14c > 0 && m_objects[v4].unk88 != 0)) {
+            v54 = (short)anims[m_objects[v4].pattern].frames[m_objects[v4].frame].duration;
+            v58 = anims[m_objects[v4].pattern].frameCount;
             CPlayer::Unk413090((EffectDesc*)&l50);
-            switch (*(WORD*)((char*)this + v4 * 0x98 + 0x4d0)) {
+            switch (m_objects[v4].pattern) {
             case 0x190:
-                if (*(WORD*)((char*)this + v4 * 0x98 + 0x4d2) == 0) {
-                    *(short*)((char*)this + v4 * 0x98 + 0x554) = 1;
+                if (m_objects[v4].frame == 0) {
+                    m_objects[v4].unk84 = 1;
                 }
-                (*(short*)((char*)this + v4 * 0x98 + 0x4d4))++;
-                if (*(WORD*)((char*)this + v4 * 0x98 + 0x4d4) >= v54) {
-                    *(short*)((char*)this + v4 * 0x98 + 0x4d4) = 0;
-                    (*(short*)((char*)this + v4 * 0x98 + 0x4d2))++;
-                    *(int*)((char*)this + v4 * 0x98 + 0x550) = 0;
-                    if (*(WORD*)((char*)this + v4 * 0x98 + 0x4d2) >= v58) {
+                m_objects[v4].timer++;
+                if (m_objects[v4].timer >= v54) {
+                    m_objects[v4].timer = 0;
+                    m_objects[v4].frame++;
+                    m_objects[v4].unk80 = 0;
+                    if (m_objects[v4].frame >= v58) {
                         Vf10(v4);
                     }
                 }
                 break;
             case 0x191:
-                if (*(int*)((char*)this + v4 * 4 + 0x3174) == 0) {
-                    *(short*)((char*)this + v4 * 0x98 + 0x554) = 1;
-                    (*(int*)((char*)this + v4 * 4 + 0x3174))++;
-                    *(double*)((char*)this + v4 * 0x98 + 0x4f8) = 3.0;
+                if (unk3174[v4] == 0) {
+                    m_objects[v4].unk84 = 1;
+                    unk3174[v4]++;
+                    m_objects[v4].vx = 3.0;
                 }
-                if (*(int*)((char*)this + v4 * 0x98 + 0x550) > 0) {
+                if (m_objects[v4].unk80 > 0) {
                     l50.type = 0x193;
-                    l50.x = (double)(int)*(double*)((char*)this + v4 * 0x98 + 0x4e8);
-                    l50.y = (double)(int)*(double*)((char*)this + v4 * 0x98 + 0x4f0);
+                    l50.x = (double)(int)m_objects[v4].x;
+                    l50.y = (double)(int)m_objects[v4].y;
                     l50.unk20 = 2;
                     l50.unk21 = 1;
-                    l50.unk18 = *((char*)this + 0x50);
+                    l50.unk18 = facing;
                     Vf9(&l50);
-                    (*(int*)((char*)this + 0x316c))--;
+                    unk316c--;
                     Vf10(v4);
                     break;
                 }
-                if (*(double*)((char*)this + v4 * 0x98 + 0x4e8) > 680.0 || *(double*)((char*)this + v4 * 0x98 + 0x4e8) < -40.0) {
+                if (m_objects[v4].x > 680.0 || m_objects[v4].x < -40.0) {
                     Vf10(v4);
-                    (*(int*)((char*)this + 0x316c))--;
+                    unk316c--;
                 }
-                *(double*)((char*)this + v4 * 0x98 + 0x4f8) -= 0.03;
-                if (*(double*)((char*)this + v4 * 0x98 + 0x4f8) < 1.5) {
-                    *(double*)((char*)this + v4 * 0x98 + 0x4f8) = 1.5;
+                m_objects[v4].vx -= 0.03;
+                if (m_objects[v4].vx < 1.5) {
+                    m_objects[v4].vx = 1.5;
                 }
-                (*(short*)((char*)this + v4 * 0x98 + 0x4d4))++;
-                if (*(WORD*)((char*)this + v4 * 0x98 + 0x4d4) >= v54) {
-                    *(short*)((char*)this + v4 * 0x98 + 0x4d4) = 0;
-                    (*(short*)((char*)this + v4 * 0x98 + 0x4d2))++;
-                    *(int*)((char*)this + v4 * 0x98 + 0x550) = 0;
-                    if (*(WORD*)((char*)this + v4 * 0x98 + 0x4d2) >= v58) {
-                        *(short*)((char*)this + v4 * 0x98 + 0x4d2) = 6;
+                m_objects[v4].timer++;
+                if (m_objects[v4].timer >= v54) {
+                    m_objects[v4].timer = 0;
+                    m_objects[v4].frame++;
+                    m_objects[v4].unk80 = 0;
+                    if (m_objects[v4].frame >= v58) {
+                        m_objects[v4].frame = 6;
                     }
                 }
                 break;
             case 0x192:
-                (*(short*)((char*)this + v4 * 0x98 + 0x4d4))++;
-                if (*(WORD*)((char*)this + v4 * 0x98 + 0x4d4) >= v54) {
-                    *(short*)((char*)this + v4 * 0x98 + 0x4d4) = 0;
-                    (*(short*)((char*)this + v4 * 0x98 + 0x4d2))++;
-                    *(int*)((char*)this + v4 * 0x98 + 0x550) = 0;
-                    if (*(WORD*)((char*)this + v4 * 0x98 + 0x4d2) == 1) {
+                m_objects[v4].timer++;
+                if (m_objects[v4].timer >= v54) {
+                    m_objects[v4].timer = 0;
+                    m_objects[v4].frame++;
+                    m_objects[v4].unk80 = 0;
+                    if (m_objects[v4].frame == 1) {
                         l50.type = 0x191;
-                        l50.x = (double)((int)*(double*)((char*)this + v4 * 0x98 + 0x4e8) + *((char*)this + v4 * 0x98 + 0x518) * 0x28);
-                        l50.y = (double)(int)*(double*)((char*)this + v4 * 0x98 + 0x4f0);
+                        l50.x = (double)((int)m_objects[v4].x + m_objects[v4].facing * 0x28);
+                        l50.y = (double)(int)m_objects[v4].y;
                         l50.unk20 = 2;
                         l50.unk21 = 1;
-                        l50.unk18 = *((char*)this + 0x50);
+                        l50.unk18 = facing;
                         Vf9(&l50);
                     }
-                    if (*(WORD*)((char*)this + v4 * 0x98 + 0x4d2) >= v58) {
+                    if (m_objects[v4].frame >= v58) {
                         Vf10(v4);
                     }
                 }
                 break;
             case 0x193:
-                (*(short*)((char*)this + v4 * 0x98 + 0x4d4))++;
-                if (*(WORD*)((char*)this + v4 * 0x98 + 0x4d2) == 0) {
-                    *(short*)((char*)this + v4 * 0x98 + 0x554) = 1;
+                m_objects[v4].timer++;
+                if (m_objects[v4].frame == 0) {
+                    m_objects[v4].unk84 = 1;
                 }
-                if (*(WORD*)((char*)this + v4 * 0x98 + 0x4d4) >= v54) {
-                    *(short*)((char*)this + v4 * 0x98 + 0x4d4) = 0;
-                    (*(short*)((char*)this + v4 * 0x98 + 0x4d2))++;
-                    *(int*)((char*)this + v4 * 0x98 + 0x550) = 0;
-                    if (*(WORD*)((char*)this + v4 * 0x98 + 0x4d2) >= v58) {
+                if (m_objects[v4].timer >= v54) {
+                    m_objects[v4].timer = 0;
+                    m_objects[v4].frame++;
+                    m_objects[v4].unk80 = 0;
+                    if (m_objects[v4].frame >= v58) {
                         Vf10(v4);
                     }
                 }
                 break;
             case 0x194:
-                if (*(int*)((char*)this + v4 * 4 + 0x3174) == 0) {
-                    *(short*)((char*)this + v4 * 0x98 + 0x554) = 1;
-                    (*(int*)((char*)this + v4 * 4 + 0x3174))++;
-                    *(double*)((char*)this + v4 * 0x98 + 0x500) = -3.0;
-                    *(double*)((char*)this + v4 * 0x98 + 0x4f8) = 0.0;
+                if (unk3174[v4] == 0) {
+                    m_objects[v4].unk84 = 1;
+                    unk3174[v4]++;
+                    m_objects[v4].vy = -3.0;
+                    m_objects[v4].vx = 0.0;
                 }
-                if (*(double*)((char*)this + v4 * 0x98 + 0x4f8) == 0.0) {
-                    *(double*)((char*)this + v4 * 0x98 + 0x500) += 0.045;
-                    if (*(double*)((char*)this + v4 * 0x98 + 0x500) > 0.0) {
-                        *(double*)((char*)this + v4 * 0x98 + 0x500) = 0.0;
+                if (m_objects[v4].vx == 0.0) {
+                    m_objects[v4].vy += 0.045;
+                    if (m_objects[v4].vy > 0.0) {
+                        m_objects[v4].vy = 0.0;
                     }
                 }
-                if (*(int*)((char*)this + v4 * 0x98 + 0x550) > 0 || *(double*)((char*)this + v4 * 0x98 + 0x4f0) > 0.0) {
+                if (m_objects[v4].unk80 > 0 || m_objects[v4].y > 0.0) {
                     l50.type = 0x195;
-                    l50.x = (double)(int)*(double*)((char*)this + v4 * 0x98 + 0x4e8);
-                    l50.y = (double)(int)*(double*)((char*)this + v4 * 0x98 + 0x4f0);
+                    l50.x = (double)(int)m_objects[v4].x;
+                    l50.y = (double)(int)m_objects[v4].y;
                     l50.unk20 = 2;
                     l50.unk21 = 1;
-                    l50.unk18 = *((char*)this + 0x50);
+                    l50.unk18 = facing;
                     Vf9(&l50);
                     Vf10(v4);
                     break;
                 }
-                (*(short*)((char*)this + v4 * 0x98 + 0x4d4))++;
-                if (*(WORD*)((char*)this + v4 * 0x98 + 0x4d4) >= v54) {
-                    *(short*)((char*)this + v4 * 0x98 + 0x4d4) = 0;
-                    (*(short*)((char*)this + v4 * 0x98 + 0x4d2))++;
-                    *(int*)((char*)this + v4 * 0x98 + 0x550) = 0;
-                    if (*(WORD*)((char*)this + v4 * 0x98 + 0x4d2) == 0x10) {
-                        if (*(int*)((char*)this + v4 * 4 + 0x3174) < 4) {
-                            *(short*)((char*)this + v4 * 0x98 + 0x4d2) = 0;
-                            (*(int*)((char*)this + v4 * 4 + 0x3174))++;
+                m_objects[v4].timer++;
+                if (m_objects[v4].timer >= v54) {
+                    m_objects[v4].timer = 0;
+                    m_objects[v4].frame++;
+                    m_objects[v4].unk80 = 0;
+                    if (m_objects[v4].frame == 0x10) {
+                        if (unk3174[v4] < 4) {
+                            m_objects[v4].frame = 0;
+                            unk3174[v4]++;
                             break;
                         }
-                        *(double*)((char*)this + v4 * 0x98 + 0x4f8) = 3.0;
-                        *(double*)((char*)this + v4 * 0x98 + 0x500) = 0.8;
-                        *(short*)((char*)this + v4 * 0x98 + 0x554) = 1;
+                        m_objects[v4].vx = 3.0;
+                        m_objects[v4].vy = 0.8;
+                        m_objects[v4].unk84 = 1;
                     }
-                    if (*(WORD*)((char*)this + v4 * 0x98 + 0x4d2) >= v58) {
-                        (*(short*)((char*)this + v4 * 0x98 + 0x4d2))--;
+                    if (m_objects[v4].frame >= v58) {
+                        m_objects[v4].frame--;
                     }
                 }
                 break;
             case 0x195:
-                (*(short*)((char*)this + v4 * 0x98 + 0x4d4))++;
-                if (*(WORD*)((char*)this + v4 * 0x98 + 0x4d4) >= v54) {
-                    *(short*)((char*)this + v4 * 0x98 + 0x4d4) = 0;
-                    (*(short*)((char*)this + v4 * 0x98 + 0x4d2))++;
-                    *(int*)((char*)this + v4 * 0x98 + 0x550) = 0;
-                    if (*(WORD*)((char*)this + v4 * 0x98 + 0x4d2) >= v58) {
+                m_objects[v4].timer++;
+                if (m_objects[v4].timer >= v54) {
+                    m_objects[v4].timer = 0;
+                    m_objects[v4].frame++;
+                    m_objects[v4].unk80 = 0;
+                    if (m_objects[v4].frame >= v58) {
                         Vf10(v4);
                     }
                 }
                 break;
             case 0x196:
-                (*(short*)((char*)this + v4 * 0x98 + 0x4d4))++;
-                if (*(WORD*)((char*)this + v4 * 0x98 + 0x4d4) >= v54) {
-                    *(short*)((char*)this + v4 * 0x98 + 0x4d4) = 0;
-                    (*(short*)((char*)this + v4 * 0x98 + 0x4d2))++;
-                    *(int*)((char*)this + v4 * 0x98 + 0x550) = 0;
-                    if (*(WORD*)((char*)this + v4 * 0x98 + 0x4d2) >= v58) {
+                m_objects[v4].timer++;
+                if (m_objects[v4].timer >= v54) {
+                    m_objects[v4].timer = 0;
+                    m_objects[v4].frame++;
+                    m_objects[v4].unk80 = 0;
+                    if (m_objects[v4].frame >= v58) {
                         Vf10(v4);
                     }
                 }
                 break;
             case 0x197:
-                (*(short*)((char*)this + v4 * 0x98 + 0x4d4))++;
-                if (*(WORD*)((char*)this + v4 * 0x98 + 0x4d4) >= v54) {
-                    *(short*)((char*)this + v4 * 0x98 + 0x4d4) = 0;
-                    (*(short*)((char*)this + v4 * 0x98 + 0x4d2))++;
-                    *(int*)((char*)this + v4 * 0x98 + 0x550) = 0;
-                    if (*(WORD*)((char*)this + v4 * 0x98 + 0x4d2) >= v58) {
+                m_objects[v4].timer++;
+                if (m_objects[v4].timer >= v54) {
+                    m_objects[v4].timer = 0;
+                    m_objects[v4].frame++;
+                    m_objects[v4].unk80 = 0;
+                    if (m_objects[v4].frame >= v58) {
                         Vf10(v4);
                     }
                 }
                 break;
             case 0x198:
-                (*(short*)((char*)this + v4 * 0x98 + 0x4d4))++;
-                if (*(WORD*)((char*)this + v4 * 0x98 + 0x4d4) >= v54) {
-                    *(short*)((char*)this + v4 * 0x98 + 0x4d4) = 0;
-                    (*(short*)((char*)this + v4 * 0x98 + 0x4d2))++;
-                    *(int*)((char*)this + v4 * 0x98 + 0x550) = 0;
-                    if (*(WORD*)((char*)this + v4 * 0x98 + 0x4d2) >= v58) {
+                m_objects[v4].timer++;
+                if (m_objects[v4].timer >= v54) {
+                    m_objects[v4].timer = 0;
+                    m_objects[v4].frame++;
+                    m_objects[v4].unk80 = 0;
+                    if (m_objects[v4].frame >= v58) {
                         Vf10(v4);
                     }
                 }
                 break;
             case 0x199:
-                if (*(int*)((char*)this + v4 * 4 + 0x3174) == 0) {
-                    *(short*)((char*)this + v4 * 0x98 + 0x554) = 1;
-                    (*(int*)((char*)this + v4 * 4 + 0x3174))++;
+                if (unk3174[v4] == 0) {
+                    m_objects[v4].unk84 = 1;
+                    unk3174[v4]++;
                 }
-                if (*(WORD*)((char*)this + 8) == 0xd2) {
-                    *(int*)((char*)this + 0x168) = *(int*)((char*)this + v4 * 0x98 + 0x550);
+                if (pattern == 0xd2) {
+                    unk168 = m_objects[v4].unk80;
                 }
-                (*(short*)((char*)this + v4 * 0x98 + 0x4d4))++;
-                if (*(WORD*)((char*)this + v4 * 0x98 + 0x4d4) >= v54) {
-                    *(short*)((char*)this + v4 * 0x98 + 0x4d4) = 0;
-                    (*(short*)((char*)this + v4 * 0x98 + 0x4d2))++;
-                    if (*(WORD*)((char*)this + v4 * 0x98 + 0x4d2) == 1) {
-                        *(int*)((char*)this + v4 * 0x98 + 0x550) = 0;
+                m_objects[v4].timer++;
+                if (m_objects[v4].timer >= v54) {
+                    m_objects[v4].timer = 0;
+                    m_objects[v4].frame++;
+                    if (m_objects[v4].frame == 1) {
+                        m_objects[v4].unk80 = 0;
                     }
-                    if (*(WORD*)((char*)this + v4 * 0x98 + 0x4d2) >= v58) {
+                    if (m_objects[v4].frame >= v58) {
                         Vf10(v4);
                     }
                 }
                 break;
             case 0x19a:
-                if (*(int*)((char*)this + v4 * 4 + 0x3174) == 0) {
-                    *(short*)((char*)this + v4 * 0x98 + 0x554) = 1;
-                    (*(int*)((char*)this + v4 * 4 + 0x3174))++;
+                if (unk3174[v4] == 0) {
+                    m_objects[v4].unk84 = 1;
+                    unk3174[v4]++;
                 }
-                (*(short*)((char*)this + v4 * 0x98 + 0x4d4))++;
-                if (*(WORD*)((char*)this + v4 * 0x98 + 0x4d4) >= v54) {
-                    *(short*)((char*)this + v4 * 0x98 + 0x4d4) = 0;
-                    (*(short*)((char*)this + v4 * 0x98 + 0x4d2))++;
-                    *(int*)((char*)this + v4 * 0x98 + 0x550) = 0;
-                    if (*(WORD*)((char*)this + v4 * 0x98 + 0x4d2) >= v58) {
+                m_objects[v4].timer++;
+                if (m_objects[v4].timer >= v54) {
+                    m_objects[v4].timer = 0;
+                    m_objects[v4].frame++;
+                    m_objects[v4].unk80 = 0;
+                    if (m_objects[v4].frame >= v58) {
                         Vf10(v4);
                     }
                 }
                 break;
             case 0x19b:
-                if (*(int*)((char*)this + v4 * 4 + 0x3174) == 0) {
-                    (*(int*)((char*)this + v4 * 4 + 0x3174))++;
-                    *(double*)((char*)this + v4 * 0x98 + 0x500) = -0.2;
+                if (unk3174[v4] == 0) {
+                    unk3174[v4]++;
+                    m_objects[v4].vy = -0.2;
                 }
-                if (*(WORD*)((char*)this + v4 * 0x98 + 0x4d2) == 1) {
-                    *((char*)this + v4 * 0x98 + 0x520) = 1;
+                if (m_objects[v4].frame == 1) {
+                    m_objects[v4].unk50 = 1;
                 }
-                (*(short*)((char*)this + v4 * 0x98 + 0x4d4))++;
-                if (*(WORD*)((char*)this + v4 * 0x98 + 0x4d4) >= v54) {
-                    *(short*)((char*)this + v4 * 0x98 + 0x4d4) = 0;
-                    (*(short*)((char*)this + v4 * 0x98 + 0x4d2))++;
-                    *(int*)((char*)this + v4 * 0x98 + 0x550) = 0;
-                    if (*(WORD*)((char*)this + v4 * 0x98 + 0x4d2) >= v58) {
+                m_objects[v4].timer++;
+                if (m_objects[v4].timer >= v54) {
+                    m_objects[v4].timer = 0;
+                    m_objects[v4].frame++;
+                    m_objects[v4].unk80 = 0;
+                    if (m_objects[v4].frame >= v58) {
                         Vf10(v4);
                     }
                 }
                 break;
             case 0x19c:
-                if (*(int*)((char*)this + v4 * 4 + 0x3174) == 0) {
-                    *(short*)((char*)this + v4 * 0x98 + 0x554) = 1;
-                    (*(int*)((char*)this + v4 * 4 + 0x3174))++;
-                    *((char*)this + 0x2c8) = 0xa;
-                    *(double*)((char*)this + v4 * 0x98 + 0x4f8) = 3.5;
-                    *(double*)((char*)this + v4 * 0x98 + 0x500) = 2.0;
+                if (unk3174[v4] == 0) {
+                    m_objects[v4].unk84 = 1;
+                    unk3174[v4]++;
+                    unk2c8 = 0xa;
+                    m_objects[v4].vx = 3.5;
+                    m_objects[v4].vy = 2.0;
                 }
-                if (*(int*)((char*)this + v4 * 0x98 + 0x550) > 0 && *(int*)((char*)this + v4 * 0x98 + 0x550) != 6 || *(double*)((char*)this + v4 * 0x98 + 0x4f0) > 0.0) {
-                    *(short*)((char*)this + v4 * 0x98 + 0x4d2) = 0;
-                    *(short*)((char*)this + v4 * 0x98 + 0x4d4) = 0;
-                    *(short*)((char*)this + v4 * 0x98 + 0x4d0) = 0x19d;
+                if (m_objects[v4].unk80 > 0 && m_objects[v4].unk80 != 6 || m_objects[v4].y > 0.0) {
+                    m_objects[v4].frame = 0;
+                    m_objects[v4].timer = 0;
+                    m_objects[v4].pattern = 0x19d;
                     l50.type = 0x1a5;
-                    l50.x = (double)(int)*(double*)((char*)this + v4 * 0x98 + 0x4e8);
-                    l50.y = (double)(int)*(double*)((char*)this + v4 * 0x98 + 0x4f0);
+                    l50.x = (double)(int)m_objects[v4].x;
+                    l50.y = (double)(int)m_objects[v4].y;
                     l50.unk20 = 2;
                     l50.unk21 = 1;
-                    l50.unk18 = *((char*)this + 0x50);
+                    l50.unk18 = facing;
                     Vf9(&l50);
                     break;
                 }
-                (*(short*)((char*)this + v4 * 0x98 + 0x4d4))++;
-                if (*(WORD*)((char*)this + v4 * 0x98 + 0x4d4) >= v54) {
-                    *(short*)((char*)this + v4 * 0x98 + 0x4d4) = 0;
-                    (*(short*)((char*)this + v4 * 0x98 + 0x4d2))++;
-                    *(int*)((char*)this + v4 * 0x98 + 0x550) = 0;
-                    if (*(WORD*)((char*)this + v4 * 0x98 + 0x4d2) >= v58) {
-                        *(short*)((char*)this + v4 * 0x98 + 0x4d2) = 0;
+                m_objects[v4].timer++;
+                if (m_objects[v4].timer >= v54) {
+                    m_objects[v4].timer = 0;
+                    m_objects[v4].frame++;
+                    m_objects[v4].unk80 = 0;
+                    if (m_objects[v4].frame >= v58) {
+                        m_objects[v4].frame = 0;
                     }
                 }
                 break;
             case 0x19d:
-                if (*(WORD*)((char*)this + v4 * 0x98 + 0x4d2) == 0 && *(WORD*)((char*)this + v4 * 0x98 + 0x4d4) == 0) {
-                    *(double*)((char*)this + v4 * 0x98 + 0x4f8) = 0.0;
-                    *(double*)((char*)this + v4 * 0x98 + 0x500) = 0.0;
-                    if (*(WORD*)((char*)this + 8) == 0x130) {
-                        *(double*)((char*)this + v4 * 0x98 + 0x500) = -1.5;
+                if (m_objects[v4].frame == 0 && m_objects[v4].timer == 0) {
+                    m_objects[v4].vx = 0.0;
+                    m_objects[v4].vy = 0.0;
+                    if (pattern == 0x130) {
+                        m_objects[v4].vy = -1.5;
                     }
-                    if (*(int*)((char*)this + v4 * 4 + 0x3174) == 0) {
+                    if (unk3174[v4] == 0) {
                         l50.type = 0x1a5;
-                        l50.x = (double)(int)*(double*)((char*)this + v4 * 0x98 + 0x4e8);
-                        l50.y = (double)(int)*(double*)((char*)this + v4 * 0x98 + 0x4f0);
+                        l50.x = (double)(int)m_objects[v4].x;
+                        l50.y = (double)(int)m_objects[v4].y;
                         l50.unk20 = 2;
                         l50.unk21 = 1;
-                        l50.unk18 = *((char*)this + 0x50);
+                        l50.unk18 = facing;
                         Vf9(&l50);
                     }
-                    if (*(int*)((char*)this + v4 * 4 + 0x3174) == 1) {
+                    if (unk3174[v4] == 1) {
                         l50.type = 0x1a5;
-                        l50.x = (double)((int)*(double*)((char*)this + v4 * 0x98 + 0x4e8) + *((char*)this + 0x50) * 0x32);
-                        l50.y = (double)((int)*(double*)((char*)this + v4 * 0x98 + 0x4f0) - 0x28);
+                        l50.x = (double)((int)m_objects[v4].x + facing * 0x32);
+                        l50.y = (double)((int)m_objects[v4].y - 0x28);
                         l50.unk20 = 2;
                         l50.unk21 = 1;
-                        l50.unk18 = *((char*)this + 0x50);
+                        l50.unk18 = facing;
                         Vf9(&l50);
                     }
-                    if (*(int*)((char*)this + v4 * 4 + 0x3174) == 2) {
+                    if (unk3174[v4] == 2) {
                         l50.type = 0x1a5;
-                        l50.x = (double)((int)*(double*)((char*)this + v4 * 0x98 + 0x4e8) - *((char*)this + 0x50) * 0x1e);
-                        l50.y = (double)((int)*(double*)((char*)this + v4 * 0x98 + 0x4f0) - 0x46);
+                        l50.x = (double)((int)m_objects[v4].x - facing * 0x1e);
+                        l50.y = (double)((int)m_objects[v4].y - 0x46);
                         l50.unk20 = 2;
                         l50.unk21 = 1;
-                        l50.unk18 = *((char*)this + 0x50);
+                        l50.unk18 = facing;
                         Vf9(&l50);
                     }
-                    if (*(int*)((char*)this + v4 * 4 + 0x3174) == 3) {
+                    if (unk3174[v4] == 3) {
                         l50.type = 0x1a5;
-                        l50.x = (double)((int)*(double*)((char*)this + v4 * 0x98 + 0x4e8) + *((char*)this + 0x50) * 0x14);
-                        l50.y = (double)((int)*(double*)((char*)this + v4 * 0x98 + 0x4f0) + 0xa);
+                        l50.x = (double)((int)m_objects[v4].x + facing * 0x14);
+                        l50.y = (double)((int)m_objects[v4].y + 0xa);
                         l50.unk20 = 2;
                         l50.unk21 = 1;
-                        l50.unk18 = *((char*)this + 0x50);
+                        l50.unk18 = facing;
                         Vf9(&l50);
                     }
-                    if (*(int*)((char*)this + v4 * 4 + 0x3174) == 4) {
+                    if (unk3174[v4] == 4) {
                         l50.type = 0x1a5;
-                        l50.x = (double)((int)*(double*)((char*)this + v4 * 0x98 + 0x4e8) - *((char*)this + 0x50) * 0xa);
-                        l50.y = (double)((int)*(double*)((char*)this + v4 * 0x98 + 0x4f0) - 0x14);
+                        l50.x = (double)((int)m_objects[v4].x - facing * 0xa);
+                        l50.y = (double)((int)m_objects[v4].y - 0x14);
                         l50.unk20 = 2;
                         l50.unk21 = 1;
-                        l50.unk18 = *((char*)this + 0x50);
+                        l50.unk18 = facing;
                         Vf9(&l50);
                     }
-                    if (*(int*)((char*)this + v4 * 4 + 0x3174) == 5) {
+                    if (unk3174[v4] == 5) {
                         l50.type = 0x1a5;
-                        l50.x = (double)((int)*(double*)((char*)this + v4 * 0x98 + 0x4e8) + *((char*)this + 0x50) * 0x1e);
-                        l50.y = (double)(int)*(double*)((char*)this + v4 * 0x98 + 0x4f0);
+                        l50.x = (double)((int)m_objects[v4].x + facing * 0x1e);
+                        l50.y = (double)(int)m_objects[v4].y;
                         l50.unk20 = 2;
                         l50.unk21 = 1;
-                        l50.unk18 = *((char*)this + 0x50);
+                        l50.unk18 = facing;
                         Vf9(&l50);
                     }
-                    *(int*)((char*)this + v4 * 4 + 0x3274) = (WORD)CPlayer::Unk4108a0(0, 3);
-                    if (*(int*)((char*)this + v4 * 4 + 0x3274) == 0) {
-                        *((char*)this + 0x2c8) = 0xb;
+                    unk3274[v4] = (WORD)CPlayer::Unk4108a0(0, 3);
+                    if (unk3274[v4] == 0) {
+                        unk2c8 = 0xb;
                     }
-                    if (*(int*)((char*)this + v4 * 4 + 0x3274) == 1) {
-                        *((char*)this + 0x2c8) = 0xc;
+                    if (unk3274[v4] == 1) {
+                        unk2c8 = 0xc;
                     }
-                    if (*(int*)((char*)this + v4 * 4 + 0x3274) == 2) {
-                        *((char*)this + 0x2c8) = 0xd;
+                    if (unk3274[v4] == 2) {
+                        unk2c8 = 0xd;
                     }
                 }
-                (*(short*)((char*)this + v4 * 0x98 + 0x4d4))++;
-                if (*(WORD*)((char*)this + v4 * 0x98 + 0x4d4) >= v54) {
-                    *(short*)((char*)this + v4 * 0x98 + 0x4d4) = 0;
-                    (*(short*)((char*)this + v4 * 0x98 + 0x4d2))++;
-                    *(int*)((char*)this + v4 * 0x98 + 0x550) = 0;
-                    if (*(WORD*)((char*)this + v4 * 0x98 + 0x4d2) >= v58) {
-                        if (*(int*)((char*)this + v4 * 4 + 0x3174) < 6) {
-                            *(short*)((char*)this + v4 * 0x98 + 0x4d2) = 0;
-                            (*(int*)((char*)this + v4 * 4 + 0x3174))++;
+                m_objects[v4].timer++;
+                if (m_objects[v4].timer >= v54) {
+                    m_objects[v4].timer = 0;
+                    m_objects[v4].frame++;
+                    m_objects[v4].unk80 = 0;
+                    if (m_objects[v4].frame >= v58) {
+                        if (unk3174[v4] < 6) {
+                            m_objects[v4].frame = 0;
+                            unk3174[v4]++;
                         } else {
                             Vf10(v4);
                         }
@@ -2252,1491 +2252,1491 @@ void CKano::Vf7()
                 }
                 break;
             case 0x19e:
-                if (*(int*)((char*)this + v4 * 4 + 0x3174) == 0) {
-                    *(short*)((char*)this + v4 * 0x98 + 0x554) = 1;
-                    (*(int*)((char*)this + v4 * 4 + 0x3174))++;
-                    *(double*)((char*)this + v4 * 0x98 + 0x4f8) = -2.5;
-                    *(double*)((char*)this + v4 * 0x98 + 0x500) = -1.5;
+                if (unk3174[v4] == 0) {
+                    m_objects[v4].unk84 = 1;
+                    unk3174[v4]++;
+                    m_objects[v4].vx = -2.5;
+                    m_objects[v4].vy = -1.5;
                 }
-                if (*(WORD*)((char*)this + v4 * 0x98 + 0x4d2) < 0xe) {
-                    *(double*)((char*)this + v4 * 0x98 + 0x4f8) += 0.025;
-                    if (*(double*)((char*)this + v4 * 0x98 + 0x4f0) < *(double*)(*(char**)*(char**)((char*)this + 0x78) + 0x28) - 50.0) {
-                        *(double*)((char*)this + v4 * 0x98 + 0x500) += 0.035;
+                if (m_objects[v4].frame < 0xe) {
+                    m_objects[v4].vx += 0.025;
+                    if (m_objects[v4].y < (*m_opponent)->y - 50.0) {
+                        m_objects[v4].vy += 0.035;
                     }
-                    if (*(double*)((char*)this + v4 * 0x98 + 0x4f0) > *(double*)(*(char**)*(char**)((char*)this + 0x78) + 0x28) - 50.0) {
-                        *(double*)((char*)this + v4 * 0x98 + 0x500) -= 0.035;
+                    if (m_objects[v4].y > (*m_opponent)->y - 50.0) {
+                        m_objects[v4].vy -= 0.035;
                     }
-                    if (*(double*)((char*)this + v4 * 0x98 + 0x500) < -1.5) {
-                        *(double*)((char*)this + v4 * 0x98 + 0x500) = -1.5;
+                    if (m_objects[v4].vy < -1.5) {
+                        m_objects[v4].vy = -1.5;
                     }
-                    if (*(double*)((char*)this + v4 * 0x98 + 0x500) > 1.5) {
-                        *(double*)((char*)this + v4 * 0x98 + 0x500) = 1.5;
+                    if (m_objects[v4].vy > 1.5) {
+                        m_objects[v4].vy = 1.5;
                     }
-                    (*(int*)((char*)this + v4 * 4 + 0x3274))--;
-                    if (*(int*)((char*)this + v4 * 4 + 0x3274) <= 0) {
+                    unk3274[v4]--;
+                    if (unk3274[v4] <= 0) {
                         l50.type = 0x1a6;
-                        l50.x = (double)(int)*(double*)((char*)this + v4 * 0x98 + 0x4e8);
-                        l50.y = (double)(int)*(double*)((char*)this + v4 * 0x98 + 0x4f0);
+                        l50.x = (double)(int)m_objects[v4].x;
+                        l50.y = (double)(int)m_objects[v4].y;
                         l50.unk20 = 2;
                         l50.unk21 = 1;
-                        l50.unk18 = *((char*)this + 0x50);
+                        l50.unk18 = facing;
                         Vf9(&l50);
-                        *(int*)((char*)this + v4 * 4 + 0x3274) = 6;
+                        unk3274[v4] = 6;
                     }
                 }
-                if ((*(int*)((char*)this + v4 * 0x98 + 0x550) > 0 && *(int*)((char*)this + v4 * 0x98 + 0x550) != 6 || *(double*)((char*)this + v4 * 0x98 + 0x4f0) > 0.0) && *(WORD*)((char*)this + v4 * 0x98 + 0x4d2) < 0xe) {
-                    *(short*)((char*)this + v4 * 0x98 + 0x4d2) = 0xe;
-                    *(short*)((char*)this + v4 * 0x98 + 0x4d4) = 0;
-                    *(double*)((char*)this + v4 * 0x98 + 0x4f8) = 0.0;
-                    *(double*)((char*)this + v4 * 0x98 + 0x500) = 0.0;
+                if ((m_objects[v4].unk80 > 0 && m_objects[v4].unk80 != 6 || m_objects[v4].y > 0.0) && m_objects[v4].frame < 0xe) {
+                    m_objects[v4].frame = 0xe;
+                    m_objects[v4].timer = 0;
+                    m_objects[v4].vx = 0.0;
+                    m_objects[v4].vy = 0.0;
                     break;
                 }
-                if (*(double*)((char*)this + v4 * 0x98 + 0x4e8) < -80.0 || *(double*)((char*)this + v4 * 0x98 + 0x4e8) > 720.0) {
+                if (m_objects[v4].x < -80.0 || m_objects[v4].x > 720.0) {
                     Vf10(v4);
                 }
-                (*(short*)((char*)this + v4 * 0x98 + 0x4d4))++;
-                if (*(WORD*)((char*)this + v4 * 0x98 + 0x4d4) >= v54) {
-                    *(short*)((char*)this + v4 * 0x98 + 0x4d4) = 0;
-                    (*(short*)((char*)this + v4 * 0x98 + 0x4d2))++;
-                    *(int*)((char*)this + v4 * 0x98 + 0x550) = 0;
-                    if (*(WORD*)((char*)this + v4 * 0x98 + 0x4d2) == 0xe) {
-                        *(short*)((char*)this + v4 * 0x98 + 0x4d2) = 4;
+                m_objects[v4].timer++;
+                if (m_objects[v4].timer >= v54) {
+                    m_objects[v4].timer = 0;
+                    m_objects[v4].frame++;
+                    m_objects[v4].unk80 = 0;
+                    if (m_objects[v4].frame == 0xe) {
+                        m_objects[v4].frame = 4;
                     }
-                    if (*(WORD*)((char*)this + v4 * 0x98 + 0x4d2) >= v58) {
+                    if (m_objects[v4].frame >= v58) {
                         Vf10(v4);
                     }
                 }
                 break;
             case 0x19f:
-                if (*(int*)((char*)this + v4 * 4 + 0x3174) == 0) {
-                    *(short*)((char*)this + v4 * 0x98 + 0x554) = 1;
-                    (*(int*)((char*)this + v4 * 4 + 0x3174))++;
-                    *(double*)((char*)this + v4 * 0x98 + 0x4f8) = -2.5;
-                    *(double*)((char*)this + v4 * 0x98 + 0x500) = -1.5;
+                if (unk3174[v4] == 0) {
+                    m_objects[v4].unk84 = 1;
+                    unk3174[v4]++;
+                    m_objects[v4].vx = -2.5;
+                    m_objects[v4].vy = -1.5;
                 }
-                if (*(WORD*)((char*)this + v4 * 0x98 + 0x4d2) < 0xe) {
-                    *(double*)((char*)this + v4 * 0x98 + 0x4f8) += 0.025;
-                    if (*(double*)((char*)this + v4 * 0x98 + 0x4f0) < *(double*)(*(char**)*(char**)((char*)this + 0x78) + 0x28) - 50.0) {
-                        *(double*)((char*)this + v4 * 0x98 + 0x500) += 0.035;
+                if (m_objects[v4].frame < 0xe) {
+                    m_objects[v4].vx += 0.025;
+                    if (m_objects[v4].y < (*m_opponent)->y - 50.0) {
+                        m_objects[v4].vy += 0.035;
                     }
-                    if (*(double*)((char*)this + v4 * 0x98 + 0x4f0) > *(double*)(*(char**)*(char**)((char*)this + 0x78) + 0x28) - 50.0) {
-                        *(double*)((char*)this + v4 * 0x98 + 0x500) -= 0.035;
+                    if (m_objects[v4].y > (*m_opponent)->y - 50.0) {
+                        m_objects[v4].vy -= 0.035;
                     }
-                    if (*(double*)((char*)this + v4 * 0x98 + 0x500) < -1.5) {
-                        *(double*)((char*)this + v4 * 0x98 + 0x500) = -1.5;
+                    if (m_objects[v4].vy < -1.5) {
+                        m_objects[v4].vy = -1.5;
                     }
-                    if (*(double*)((char*)this + v4 * 0x98 + 0x500) > 1.5) {
-                        *(double*)((char*)this + v4 * 0x98 + 0x500) = 1.5;
+                    if (m_objects[v4].vy > 1.5) {
+                        m_objects[v4].vy = 1.5;
                     }
-                    (*(int*)((char*)this + v4 * 4 + 0x3274))--;
-                    if (*(int*)((char*)this + v4 * 4 + 0x3274) <= 0) {
+                    unk3274[v4]--;
+                    if (unk3274[v4] <= 0) {
                         l50.type = 0x1a6;
-                        l50.x = (double)(int)*(double*)((char*)this + v4 * 0x98 + 0x4e8);
-                        l50.y = (double)(int)*(double*)((char*)this + v4 * 0x98 + 0x4f0);
+                        l50.x = (double)(int)m_objects[v4].x;
+                        l50.y = (double)(int)m_objects[v4].y;
                         l50.unk20 = 2;
                         l50.unk21 = 1;
-                        l50.unk18 = *((char*)this + 0x50);
+                        l50.unk18 = facing;
                         Vf9(&l50);
-                        *(int*)((char*)this + v4 * 4 + 0x3274) = 6;
+                        unk3274[v4] = 6;
                     }
                 }
-                if ((*(int*)((char*)this + v4 * 0x98 + 0x550) > 0 && *(int*)((char*)this + v4 * 0x98 + 0x550) != 6 || *(double*)((char*)this + v4 * 0x98 + 0x4f0) > 0.0) && *(WORD*)((char*)this + v4 * 0x98 + 0x4d2) < 0xe) {
-                    *(short*)((char*)this + v4 * 0x98 + 0x4d2) = 0xe;
-                    *(short*)((char*)this + v4 * 0x98 + 0x4d4) = 0;
-                    *(double*)((char*)this + v4 * 0x98 + 0x4f8) = 0.0;
-                    *(double*)((char*)this + v4 * 0x98 + 0x500) = 0.0;
+                if ((m_objects[v4].unk80 > 0 && m_objects[v4].unk80 != 6 || m_objects[v4].y > 0.0) && m_objects[v4].frame < 0xe) {
+                    m_objects[v4].frame = 0xe;
+                    m_objects[v4].timer = 0;
+                    m_objects[v4].vx = 0.0;
+                    m_objects[v4].vy = 0.0;
                     break;
                 }
-                if (*(double*)((char*)this + v4 * 0x98 + 0x4e8) < -80.0 || *(double*)((char*)this + v4 * 0x98 + 0x4e8) > 720.0) {
+                if (m_objects[v4].x < -80.0 || m_objects[v4].x > 720.0) {
                     Vf10(v4);
                 }
-                (*(short*)((char*)this + v4 * 0x98 + 0x4d4))++;
-                if (*(WORD*)((char*)this + v4 * 0x98 + 0x4d4) >= v54) {
-                    *(short*)((char*)this + v4 * 0x98 + 0x4d4) = 0;
-                    (*(short*)((char*)this + v4 * 0x98 + 0x4d2))++;
-                    *(int*)((char*)this + v4 * 0x98 + 0x550) = 0;
-                    if (*(WORD*)((char*)this + v4 * 0x98 + 0x4d2) == 0xe) {
-                        *(short*)((char*)this + v4 * 0x98 + 0x4d2) = 4;
+                m_objects[v4].timer++;
+                if (m_objects[v4].timer >= v54) {
+                    m_objects[v4].timer = 0;
+                    m_objects[v4].frame++;
+                    m_objects[v4].unk80 = 0;
+                    if (m_objects[v4].frame == 0xe) {
+                        m_objects[v4].frame = 4;
                     }
-                    if (*(WORD*)((char*)this + v4 * 0x98 + 0x4d2) >= v58) {
+                    if (m_objects[v4].frame >= v58) {
                         Vf10(v4);
                     }
                 }
                 break;
             case 0x1a0:
-                if (*(int*)((char*)this + v4 * 4 + 0x3174) == 0) {
-                    *(short*)((char*)this + v4 * 0x98 + 0x554) = 1;
-                    (*(int*)((char*)this + v4 * 4 + 0x3174))++;
-                    *(double*)((char*)this + v4 * 0x98 + 0x4f8) = -2.5;
-                    *(double*)((char*)this + v4 * 0x98 + 0x500) = -1.5;
+                if (unk3174[v4] == 0) {
+                    m_objects[v4].unk84 = 1;
+                    unk3174[v4]++;
+                    m_objects[v4].vx = -2.5;
+                    m_objects[v4].vy = -1.5;
                 }
-                if (*(WORD*)((char*)this + v4 * 0x98 + 0x4d2) < 0xe) {
-                    *(double*)((char*)this + v4 * 0x98 + 0x4f8) += 0.025;
-                    if (*(double*)((char*)this + v4 * 0x98 + 0x4f0) < *(double*)(*(char**)*(char**)((char*)this + 0x78) + 0x28) - 50.0) {
-                        *(double*)((char*)this + v4 * 0x98 + 0x500) += 0.035;
+                if (m_objects[v4].frame < 0xe) {
+                    m_objects[v4].vx += 0.025;
+                    if (m_objects[v4].y < (*m_opponent)->y - 50.0) {
+                        m_objects[v4].vy += 0.035;
                     }
-                    if (*(double*)((char*)this + v4 * 0x98 + 0x4f0) > *(double*)(*(char**)*(char**)((char*)this + 0x78) + 0x28) - 50.0) {
-                        *(double*)((char*)this + v4 * 0x98 + 0x500) -= 0.035;
+                    if (m_objects[v4].y > (*m_opponent)->y - 50.0) {
+                        m_objects[v4].vy -= 0.035;
                     }
-                    if (*(double*)((char*)this + v4 * 0x98 + 0x500) < -1.5) {
-                        *(double*)((char*)this + v4 * 0x98 + 0x500) = -1.5;
+                    if (m_objects[v4].vy < -1.5) {
+                        m_objects[v4].vy = -1.5;
                     }
-                    if (*(double*)((char*)this + v4 * 0x98 + 0x500) > 1.5) {
-                        *(double*)((char*)this + v4 * 0x98 + 0x500) = 1.5;
+                    if (m_objects[v4].vy > 1.5) {
+                        m_objects[v4].vy = 1.5;
                     }
-                    (*(int*)((char*)this + v4 * 4 + 0x3274))--;
-                    if (*(int*)((char*)this + v4 * 4 + 0x3274) <= 0) {
+                    unk3274[v4]--;
+                    if (unk3274[v4] <= 0) {
                         l50.type = 0x1a6;
-                        l50.x = (double)(int)*(double*)((char*)this + v4 * 0x98 + 0x4e8);
-                        l50.y = (double)(int)*(double*)((char*)this + v4 * 0x98 + 0x4f0);
+                        l50.x = (double)(int)m_objects[v4].x;
+                        l50.y = (double)(int)m_objects[v4].y;
                         l50.unk20 = 2;
                         l50.unk21 = 1;
-                        l50.unk18 = *((char*)this + 0x50);
+                        l50.unk18 = facing;
                         Vf9(&l50);
-                        *(int*)((char*)this + v4 * 4 + 0x3274) = 6;
+                        unk3274[v4] = 6;
                     }
                 }
-                if ((*(int*)((char*)this + v4 * 0x98 + 0x550) > 0 && *(int*)((char*)this + v4 * 0x98 + 0x550) != 6 || *(double*)((char*)this + v4 * 0x98 + 0x4f0) > 0.0) && *(WORD*)((char*)this + v4 * 0x98 + 0x4d2) < 0xe) {
-                    *(short*)((char*)this + v4 * 0x98 + 0x4d2) = 0xe;
-                    *(short*)((char*)this + v4 * 0x98 + 0x4d4) = 0;
-                    *(double*)((char*)this + v4 * 0x98 + 0x4f8) = 0.0;
-                    *(double*)((char*)this + v4 * 0x98 + 0x500) = 0.0;
+                if ((m_objects[v4].unk80 > 0 && m_objects[v4].unk80 != 6 || m_objects[v4].y > 0.0) && m_objects[v4].frame < 0xe) {
+                    m_objects[v4].frame = 0xe;
+                    m_objects[v4].timer = 0;
+                    m_objects[v4].vx = 0.0;
+                    m_objects[v4].vy = 0.0;
                     break;
                 }
-                if (*(double*)((char*)this + v4 * 0x98 + 0x4e8) < -80.0 || *(double*)((char*)this + v4 * 0x98 + 0x4e8) > 720.0) {
+                if (m_objects[v4].x < -80.0 || m_objects[v4].x > 720.0) {
                     Vf10(v4);
                 }
-                (*(short*)((char*)this + v4 * 0x98 + 0x4d4))++;
-                if (*(WORD*)((char*)this + v4 * 0x98 + 0x4d4) >= v54) {
-                    *(short*)((char*)this + v4 * 0x98 + 0x4d4) = 0;
-                    (*(short*)((char*)this + v4 * 0x98 + 0x4d2))++;
-                    *(int*)((char*)this + v4 * 0x98 + 0x550) = 0;
-                    if (*(WORD*)((char*)this + v4 * 0x98 + 0x4d2) == 0xe) {
-                        *(short*)((char*)this + v4 * 0x98 + 0x4d2) = 4;
+                m_objects[v4].timer++;
+                if (m_objects[v4].timer >= v54) {
+                    m_objects[v4].timer = 0;
+                    m_objects[v4].frame++;
+                    m_objects[v4].unk80 = 0;
+                    if (m_objects[v4].frame == 0xe) {
+                        m_objects[v4].frame = 4;
                     }
-                    if (*(WORD*)((char*)this + v4 * 0x98 + 0x4d2) >= v58) {
+                    if (m_objects[v4].frame >= v58) {
                         Vf10(v4);
                     }
                 }
                 break;
             case 0x1a1:
-                if (*(int*)((char*)this + v4 * 4 + 0x3174) == 0) {
-                    *(short*)((char*)this + v4 * 0x98 + 0x554) = 1;
-                    (*(int*)((char*)this + v4 * 4 + 0x3174))++;
-                    *(double*)((char*)this + v4 * 0x98 + 0x4f8) = -2.5;
-                    *(double*)((char*)this + v4 * 0x98 + 0x500) = -1.5;
+                if (unk3174[v4] == 0) {
+                    m_objects[v4].unk84 = 1;
+                    unk3174[v4]++;
+                    m_objects[v4].vx = -2.5;
+                    m_objects[v4].vy = -1.5;
                 }
-                if (*(WORD*)((char*)this + v4 * 0x98 + 0x4d2) < 0xe) {
-                    *(double*)((char*)this + v4 * 0x98 + 0x4f8) += 0.025;
-                    if (*(double*)((char*)this + v4 * 0x98 + 0x4f0) < *(double*)(*(char**)*(char**)((char*)this + 0x78) + 0x28) - 50.0) {
-                        *(double*)((char*)this + v4 * 0x98 + 0x500) += 0.035;
+                if (m_objects[v4].frame < 0xe) {
+                    m_objects[v4].vx += 0.025;
+                    if (m_objects[v4].y < (*m_opponent)->y - 50.0) {
+                        m_objects[v4].vy += 0.035;
                     }
-                    if (*(double*)((char*)this + v4 * 0x98 + 0x4f0) > *(double*)(*(char**)*(char**)((char*)this + 0x78) + 0x28) - 50.0) {
-                        *(double*)((char*)this + v4 * 0x98 + 0x500) -= 0.035;
+                    if (m_objects[v4].y > (*m_opponent)->y - 50.0) {
+                        m_objects[v4].vy -= 0.035;
                     }
-                    if (*(double*)((char*)this + v4 * 0x98 + 0x500) < -1.5) {
-                        *(double*)((char*)this + v4 * 0x98 + 0x500) = -1.5;
+                    if (m_objects[v4].vy < -1.5) {
+                        m_objects[v4].vy = -1.5;
                     }
-                    if (*(double*)((char*)this + v4 * 0x98 + 0x500) > 1.5) {
-                        *(double*)((char*)this + v4 * 0x98 + 0x500) = 1.5;
+                    if (m_objects[v4].vy > 1.5) {
+                        m_objects[v4].vy = 1.5;
                     }
-                    (*(int*)((char*)this + v4 * 4 + 0x3274))--;
-                    if (*(int*)((char*)this + v4 * 4 + 0x3274) <= 0) {
+                    unk3274[v4]--;
+                    if (unk3274[v4] <= 0) {
                         l50.type = 0x1a6;
-                        l50.x = (double)(int)*(double*)((char*)this + v4 * 0x98 + 0x4e8);
-                        l50.y = (double)(int)*(double*)((char*)this + v4 * 0x98 + 0x4f0);
+                        l50.x = (double)(int)m_objects[v4].x;
+                        l50.y = (double)(int)m_objects[v4].y;
                         l50.unk20 = 2;
                         l50.unk21 = 1;
-                        l50.unk18 = *((char*)this + 0x50);
+                        l50.unk18 = facing;
                         Vf9(&l50);
-                        *(int*)((char*)this + v4 * 4 + 0x3274) = 6;
+                        unk3274[v4] = 6;
                     }
                 }
-                if ((*(int*)((char*)this + v4 * 0x98 + 0x550) > 0 && *(int*)((char*)this + v4 * 0x98 + 0x550) != 6 || *(double*)((char*)this + v4 * 0x98 + 0x4f0) > 0.0) && *(WORD*)((char*)this + v4 * 0x98 + 0x4d2) < 0xe) {
-                    *(short*)((char*)this + v4 * 0x98 + 0x4d2) = 0xe;
-                    *(short*)((char*)this + v4 * 0x98 + 0x4d4) = 0;
-                    *(double*)((char*)this + v4 * 0x98 + 0x4f8) = 0.0;
-                    *(double*)((char*)this + v4 * 0x98 + 0x500) = 0.0;
+                if ((m_objects[v4].unk80 > 0 && m_objects[v4].unk80 != 6 || m_objects[v4].y > 0.0) && m_objects[v4].frame < 0xe) {
+                    m_objects[v4].frame = 0xe;
+                    m_objects[v4].timer = 0;
+                    m_objects[v4].vx = 0.0;
+                    m_objects[v4].vy = 0.0;
                     break;
                 }
-                if (*(double*)((char*)this + v4 * 0x98 + 0x4e8) < -80.0 || *(double*)((char*)this + v4 * 0x98 + 0x4e8) > 720.0) {
+                if (m_objects[v4].x < -80.0 || m_objects[v4].x > 720.0) {
                     Vf10(v4);
                 }
-                (*(short*)((char*)this + v4 * 0x98 + 0x4d4))++;
-                if (*(WORD*)((char*)this + v4 * 0x98 + 0x4d4) >= v54) {
-                    *(short*)((char*)this + v4 * 0x98 + 0x4d4) = 0;
-                    (*(short*)((char*)this + v4 * 0x98 + 0x4d2))++;
-                    *(int*)((char*)this + v4 * 0x98 + 0x550) = 0;
-                    if (*(WORD*)((char*)this + v4 * 0x98 + 0x4d2) == 0xe) {
-                        *(short*)((char*)this + v4 * 0x98 + 0x4d2) = 4;
+                m_objects[v4].timer++;
+                if (m_objects[v4].timer >= v54) {
+                    m_objects[v4].timer = 0;
+                    m_objects[v4].frame++;
+                    m_objects[v4].unk80 = 0;
+                    if (m_objects[v4].frame == 0xe) {
+                        m_objects[v4].frame = 4;
                     }
-                    if (*(WORD*)((char*)this + v4 * 0x98 + 0x4d2) >= v58) {
+                    if (m_objects[v4].frame >= v58) {
                         Vf10(v4);
                     }
                 }
                 break;
             case 0x1a2:
-                if (*(int*)((char*)this + v4 * 4 + 0x3174) == 0) {
-                    *(short*)((char*)this + v4 * 0x98 + 0x554) = 1;
-                    (*(int*)((char*)this + v4 * 4 + 0x3174))++;
-                    *(double*)((char*)this + v4 * 0x98 + 0x4f8) = -2.5;
-                    *(double*)((char*)this + v4 * 0x98 + 0x500) = -1.5;
+                if (unk3174[v4] == 0) {
+                    m_objects[v4].unk84 = 1;
+                    unk3174[v4]++;
+                    m_objects[v4].vx = -2.5;
+                    m_objects[v4].vy = -1.5;
                 }
-                if (*(WORD*)((char*)this + v4 * 0x98 + 0x4d2) < 0xe) {
-                    *(double*)((char*)this + v4 * 0x98 + 0x4f8) += 0.025;
-                    if (*(double*)((char*)this + v4 * 0x98 + 0x4f0) < *(double*)(*(char**)*(char**)((char*)this + 0x78) + 0x28) - 50.0) {
-                        *(double*)((char*)this + v4 * 0x98 + 0x500) += 0.035;
+                if (m_objects[v4].frame < 0xe) {
+                    m_objects[v4].vx += 0.025;
+                    if (m_objects[v4].y < (*m_opponent)->y - 50.0) {
+                        m_objects[v4].vy += 0.035;
                     }
-                    if (*(double*)((char*)this + v4 * 0x98 + 0x4f0) > *(double*)(*(char**)*(char**)((char*)this + 0x78) + 0x28) - 50.0) {
-                        *(double*)((char*)this + v4 * 0x98 + 0x500) -= 0.035;
+                    if (m_objects[v4].y > (*m_opponent)->y - 50.0) {
+                        m_objects[v4].vy -= 0.035;
                     }
-                    if (*(double*)((char*)this + v4 * 0x98 + 0x500) < -1.5) {
-                        *(double*)((char*)this + v4 * 0x98 + 0x500) = -1.5;
+                    if (m_objects[v4].vy < -1.5) {
+                        m_objects[v4].vy = -1.5;
                     }
-                    if (*(double*)((char*)this + v4 * 0x98 + 0x500) > 1.5) {
-                        *(double*)((char*)this + v4 * 0x98 + 0x500) = 1.5;
+                    if (m_objects[v4].vy > 1.5) {
+                        m_objects[v4].vy = 1.5;
                     }
-                    (*(int*)((char*)this + v4 * 4 + 0x3274))--;
-                    if (*(int*)((char*)this + v4 * 4 + 0x3274) <= 0) {
+                    unk3274[v4]--;
+                    if (unk3274[v4] <= 0) {
                         l50.type = 0x1a6;
-                        l50.x = (double)(int)*(double*)((char*)this + v4 * 0x98 + 0x4e8);
-                        l50.y = (double)(int)*(double*)((char*)this + v4 * 0x98 + 0x4f0);
+                        l50.x = (double)(int)m_objects[v4].x;
+                        l50.y = (double)(int)m_objects[v4].y;
                         l50.unk20 = 2;
                         l50.unk21 = 1;
-                        l50.unk18 = *((char*)this + 0x50);
+                        l50.unk18 = facing;
                         Vf9(&l50);
-                        *(int*)((char*)this + v4 * 4 + 0x3274) = 6;
+                        unk3274[v4] = 6;
                     }
                 }
-                if ((*(int*)((char*)this + v4 * 0x98 + 0x550) > 0 && *(int*)((char*)this + v4 * 0x98 + 0x550) != 6 || *(double*)((char*)this + v4 * 0x98 + 0x4f0) > 0.0) && *(WORD*)((char*)this + v4 * 0x98 + 0x4d2) < 0xe) {
-                    *(short*)((char*)this + v4 * 0x98 + 0x4d2) = 0xe;
-                    *(short*)((char*)this + v4 * 0x98 + 0x4d4) = 0;
-                    *(double*)((char*)this + v4 * 0x98 + 0x4f8) = 0.0;
-                    *(double*)((char*)this + v4 * 0x98 + 0x500) = 0.0;
+                if ((m_objects[v4].unk80 > 0 && m_objects[v4].unk80 != 6 || m_objects[v4].y > 0.0) && m_objects[v4].frame < 0xe) {
+                    m_objects[v4].frame = 0xe;
+                    m_objects[v4].timer = 0;
+                    m_objects[v4].vx = 0.0;
+                    m_objects[v4].vy = 0.0;
                     break;
                 }
-                if (*(double*)((char*)this + v4 * 0x98 + 0x4e8) < -80.0 || *(double*)((char*)this + v4 * 0x98 + 0x4e8) > 720.0) {
+                if (m_objects[v4].x < -80.0 || m_objects[v4].x > 720.0) {
                     Vf10(v4);
                 }
-                (*(short*)((char*)this + v4 * 0x98 + 0x4d4))++;
-                if (*(WORD*)((char*)this + v4 * 0x98 + 0x4d4) >= v54) {
-                    *(short*)((char*)this + v4 * 0x98 + 0x4d4) = 0;
-                    (*(short*)((char*)this + v4 * 0x98 + 0x4d2))++;
-                    *(int*)((char*)this + v4 * 0x98 + 0x550) = 0;
-                    if (*(WORD*)((char*)this + v4 * 0x98 + 0x4d2) == 0xe) {
-                        *(short*)((char*)this + v4 * 0x98 + 0x4d2) = 4;
+                m_objects[v4].timer++;
+                if (m_objects[v4].timer >= v54) {
+                    m_objects[v4].timer = 0;
+                    m_objects[v4].frame++;
+                    m_objects[v4].unk80 = 0;
+                    if (m_objects[v4].frame == 0xe) {
+                        m_objects[v4].frame = 4;
                     }
-                    if (*(WORD*)((char*)this + v4 * 0x98 + 0x4d2) >= v58) {
+                    if (m_objects[v4].frame >= v58) {
                         Vf10(v4);
                     }
                 }
                 break;
             case 0x1a3:
-                if (*(int*)((char*)this + v4 * 4 + 0x3174) == 0) {
-                    *(short*)((char*)this + v4 * 0x98 + 0x554) = 1;
-                    (*(int*)((char*)this + v4 * 4 + 0x3174))++;
-                    *((char*)this + 0x2c8) = 7;
-                    *(double*)((char*)this + v4 * 0x98 + 0x4f8) = 0.0;
+                if (unk3174[v4] == 0) {
+                    m_objects[v4].unk84 = 1;
+                    unk3174[v4]++;
+                    unk2c8 = 7;
+                    m_objects[v4].vx = 0.0;
                 }
-                *(double*)((char*)this + v4 * 0x98 + 0x4f8) += 0.005;
-                (*(short*)((char*)this + v4 * 0x98 + 0x4d4))++;
-                if (*(WORD*)((char*)this + v4 * 0x98 + 0x4d4) >= v54) {
-                    *(short*)((char*)this + v4 * 0x98 + 0x4d4) = 0;
-                    (*(short*)((char*)this + v4 * 0x98 + 0x4d2))++;
-                    *(int*)((char*)this + v4 * 0x98 + 0x550) = 0;
-                    if (*(WORD*)((char*)this + v4 * 0x98 + 0x4d2) >= v58) {
-                        *(short*)((char*)this + v4 * 0x98 + 0x4d2) = 0;
-                        *(short*)((char*)this + v4 * 0x98 + 0x4d0) = 0x1a4;
+                m_objects[v4].vx += 0.005;
+                m_objects[v4].timer++;
+                if (m_objects[v4].timer >= v54) {
+                    m_objects[v4].timer = 0;
+                    m_objects[v4].frame++;
+                    m_objects[v4].unk80 = 0;
+                    if (m_objects[v4].frame >= v58) {
+                        m_objects[v4].frame = 0;
+                        m_objects[v4].pattern = 0x1a4;
                     }
                 }
                 break;
             case 0x1a4:
-                if (*(int*)((char*)this + v4 * 4 + 0x3274) == 0) {
-                    *(short*)((char*)this + v4 * 0x98 + 0x554) = 0x63;
-                    (*(int*)((char*)this + v4 * 4 + 0x3274))++;
-                    *(double*)((char*)this + v4 * 0x98 + 0x4f8) = 4.0;
-                    *((char*)this + 0x2c8) = 8;
+                if (unk3274[v4] == 0) {
+                    m_objects[v4].unk84 = 0x63;
+                    unk3274[v4]++;
+                    m_objects[v4].vx = 4.0;
+                    unk2c8 = 8;
                 }
-                if (*(int*)((char*)this + v4 * 0x98 + 0x550) > 0 && *(int*)((char*)this + v4 * 4 + 0x3374) == 0) {
-                    *((char*)this + 0x2c8) = 9;
-                    (*(int*)((char*)this + v4 * 4 + 0x3374))++;
+                if (m_objects[v4].unk80 > 0 && unk3374[v4] == 0) {
+                    unk2c8 = 9;
+                    unk3374[v4]++;
                 }
-                if (*(double*)((char*)this + v4 * 0x98 + 0x4e8) > 740.0 || *(double*)((char*)this + v4 * 0x98 + 0x4e8) < -100.0) {
+                if (m_objects[v4].x > 740.0 || m_objects[v4].x < -100.0) {
                     Vf10(v4);
                 }
-                (*(short*)((char*)this + v4 * 0x98 + 0x4d4))++;
-                if (*(WORD*)((char*)this + v4 * 0x98 + 0x4d4) >= v54) {
-                    *(short*)((char*)this + v4 * 0x98 + 0x4d4) = 0;
-                    (*(short*)((char*)this + v4 * 0x98 + 0x4d2))++;
-                    *(int*)((char*)this + v4 * 0x98 + 0x550) = 0;
-                    if (*(WORD*)((char*)this + v4 * 0x98 + 0x4d2) >= v58) {
-                        *(short*)((char*)this + v4 * 0x98 + 0x4d2) = 0;
+                m_objects[v4].timer++;
+                if (m_objects[v4].timer >= v54) {
+                    m_objects[v4].timer = 0;
+                    m_objects[v4].frame++;
+                    m_objects[v4].unk80 = 0;
+                    if (m_objects[v4].frame >= v58) {
+                        m_objects[v4].frame = 0;
                     }
                 }
                 break;
             case 0x1a5:
-                if (*(int*)((char*)this + v4 * 4 + 0x3174) == 0) {
-                    *(short*)((char*)this + v4 * 0x98 + 0x554) = 1;
-                    (*(int*)((char*)this + v4 * 4 + 0x3174))++;
+                if (unk3174[v4] == 0) {
+                    m_objects[v4].unk84 = 1;
+                    unk3174[v4]++;
                 }
-                (*(short*)((char*)this + v4 * 0x98 + 0x4d4))++;
-                if (*(WORD*)((char*)this + v4 * 0x98 + 0x4d4) >= v54) {
-                    *(short*)((char*)this + v4 * 0x98 + 0x4d4) = 0;
-                    (*(short*)((char*)this + v4 * 0x98 + 0x4d2))++;
-                    *(int*)((char*)this + v4 * 0x98 + 0x550) = 0;
-                    if (*(WORD*)((char*)this + v4 * 0x98 + 0x4d2) >= v58) {
+                m_objects[v4].timer++;
+                if (m_objects[v4].timer >= v54) {
+                    m_objects[v4].timer = 0;
+                    m_objects[v4].frame++;
+                    m_objects[v4].unk80 = 0;
+                    if (m_objects[v4].frame >= v58) {
                         Vf10(v4);
                     }
                 }
                 break;
             case 0x1a6:
-                (*(short*)((char*)this + v4 * 0x98 + 0x4d4))++;
-                if (*(WORD*)((char*)this + v4 * 0x98 + 0x4d4) >= v54) {
-                    *(short*)((char*)this + v4 * 0x98 + 0x4d4) = 0;
-                    (*(short*)((char*)this + v4 * 0x98 + 0x4d2))++;
-                    *(int*)((char*)this + v4 * 0x98 + 0x550) = 0;
-                    if (*(WORD*)((char*)this + v4 * 0x98 + 0x4d2) >= v58) {
+                m_objects[v4].timer++;
+                if (m_objects[v4].timer >= v54) {
+                    m_objects[v4].timer = 0;
+                    m_objects[v4].frame++;
+                    m_objects[v4].unk80 = 0;
+                    if (m_objects[v4].frame >= v58) {
                         Vf10(v4);
                     }
                 }
                 break;
             case 0x1a7:
-                if (*(int*)((char*)this + v4 * 4 + 0x3174) == 0) {
-                    *(short*)((char*)this + v4 * 0x98 + 0x554) = 1;
-                    *(double*)((char*)this + v4 * 0x98 + 0x4f8) = 4.0;
-                    (*(int*)((char*)this + v4 * 4 + 0x3174))++;
+                if (unk3174[v4] == 0) {
+                    m_objects[v4].unk84 = 1;
+                    m_objects[v4].vx = 4.0;
+                    unk3174[v4]++;
                 }
-                (*(int*)((char*)this + v4 * 4 + 0x3274))--;
-                if ((*(double*)((char*)this + v4 * 0x98 + 0x4e8) > 640.0 || *(double*)((char*)this + v4 * 0x98 + 0x4e8) < 0.0) && *(int*)((char*)this + v4 * 0x98 + 0x550) == 0) {
+                unk3274[v4]--;
+                if ((m_objects[v4].x > 640.0 || m_objects[v4].x < 0.0) && m_objects[v4].unk80 == 0) {
                     Vf10(v4);
                 }
-                if (*(int*)((char*)this + v4 * 0x98 + 0x550) > 0) {
-                    *(double*)((char*)this + v4 * 0x98 + 0x4f8) = 0.5;
-                    *(double*)((char*)this + v4 * 0x98 + 0x500) = -2.5;
-                    (*(int*)((char*)this + v4 * 4 + 0x3274))--;
-                    if (*(int*)((char*)this + v4 * 4 + 0x3174) < 8 && *(int*)((char*)this + v4 * 4 + 0x3274) <= 0) {
+                if (m_objects[v4].unk80 > 0) {
+                    m_objects[v4].vx = 0.5;
+                    m_objects[v4].vy = -2.5;
+                    unk3274[v4]--;
+                    if (unk3174[v4] < 8 && unk3274[v4] <= 0) {
                         l50.type = 0x195;
-                        l50.x = (double)((int)*(double*)((char*)this + v4 * 0x98 + 0x4e8) + -0x32 + (WORD)CPlayer::Unk4108a0(0, 0x64));
-                        l50.y = (double)((int)*(double*)((char*)this + v4 * 0x98 + 0x4f0) + (WORD)CPlayer::Unk4108a0(0, 0x14));
+                        l50.x = (double)((int)m_objects[v4].x + -0x32 + (WORD)CPlayer::Unk4108a0(0, 0x64));
+                        l50.y = (double)((int)m_objects[v4].y + (WORD)CPlayer::Unk4108a0(0, 0x14));
                         l50.unk20 = 2;
                         l50.unk21 = 1;
-                        l50.unk18 = *((char*)this + 0x50);
+                        l50.unk18 = facing;
                         Vf9(&l50);
-                        (*(int*)((char*)this + v4 * 4 + 0x3174))++;
-                        *(int*)((char*)this + v4 * 4 + 0x3274) = 0xf;
+                        unk3174[v4]++;
+                        unk3274[v4] = 0xf;
                     }
-                    if (*(int*)((char*)this + v4 * 4 + 0x3174) > 7) {
+                    if (unk3174[v4] > 7) {
                         Vf10(v4);
                     }
                 }
-                (*(short*)((char*)this + v4 * 0x98 + 0x4d4))++;
-                if (*(WORD*)((char*)this + v4 * 0x98 + 0x4d4) >= v54) {
-                    *(short*)((char*)this + v4 * 0x98 + 0x4d4) = 0;
-                    (*(short*)((char*)this + v4 * 0x98 + 0x4d2))++;
-                    if (*(WORD*)((char*)this + v4 * 0x98 + 0x4d2) >= v58) {
-                        *(short*)((char*)this + v4 * 0x98 + 0x4d2) = 0;
-                        if (*(int*)((char*)this + v4 * 0x98 + 0x550) == 0) {
+                m_objects[v4].timer++;
+                if (m_objects[v4].timer >= v54) {
+                    m_objects[v4].timer = 0;
+                    m_objects[v4].frame++;
+                    if (m_objects[v4].frame >= v58) {
+                        m_objects[v4].frame = 0;
+                        if (m_objects[v4].unk80 == 0) {
                             l50.type = (WORD)CPlayer::Unk4108a0(0, 4) + 0x1a8;
-                            l50.x = (double)((int)*(double*)((char*)this + v4 * 0x98 + 0x4e8) + (WORD)CPlayer::Unk4108a0(0, 0xa));
-                            l50.y = (double)((int)*(double*)((char*)this + v4 * 0x98 + 0x4f0) + -5 + (WORD)CPlayer::Unk4108a0(0, 0xa));
+                            l50.x = (double)((int)m_objects[v4].x + (WORD)CPlayer::Unk4108a0(0, 0xa));
+                            l50.y = (double)((int)m_objects[v4].y + -5 + (WORD)CPlayer::Unk4108a0(0, 0xa));
                             l50.unk20 = 2;
                             l50.unk21 = 1;
-                            l50.unk18 = *((char*)this + 0x50);
+                            l50.unk18 = facing;
                             Vf9(&l50);
                         }
                     }
                 }
                 break;
             case 0x1a8:
-                if (*(int*)((char*)this + v4 * 4 + 0x3174) == 0) {
-                    *(short*)((char*)this + v4 * 0x98 + 0x554) = 1;
-                    (*(int*)((char*)this + v4 * 4 + 0x3174))++;
+                if (unk3174[v4] == 0) {
+                    m_objects[v4].unk84 = 1;
+                    unk3174[v4]++;
                 }
-                (*(short*)((char*)this + v4 * 0x98 + 0x4d4))++;
-                if (*(WORD*)((char*)this + v4 * 0x98 + 0x4d4) >= v54) {
-                    *(short*)((char*)this + v4 * 0x98 + 0x4d4) = 0;
-                    (*(short*)((char*)this + v4 * 0x98 + 0x4d2))++;
-                    *(int*)((char*)this + v4 * 0x98 + 0x550) = 0;
-                    if (*(WORD*)((char*)this + v4 * 0x98 + 0x4d2) >= v58) {
+                m_objects[v4].timer++;
+                if (m_objects[v4].timer >= v54) {
+                    m_objects[v4].timer = 0;
+                    m_objects[v4].frame++;
+                    m_objects[v4].unk80 = 0;
+                    if (m_objects[v4].frame >= v58) {
                         Vf10(v4);
                     }
                 }
                 break;
             case 0x1a9:
-                if (*(int*)((char*)this + v4 * 4 + 0x3174) == 0) {
-                    *(short*)((char*)this + v4 * 0x98 + 0x554) = 1;
-                    (*(int*)((char*)this + v4 * 4 + 0x3174))++;
+                if (unk3174[v4] == 0) {
+                    m_objects[v4].unk84 = 1;
+                    unk3174[v4]++;
                 }
-                (*(short*)((char*)this + v4 * 0x98 + 0x4d4))++;
-                if (*(WORD*)((char*)this + v4 * 0x98 + 0x4d4) >= v54) {
-                    *(short*)((char*)this + v4 * 0x98 + 0x4d4) = 0;
-                    (*(short*)((char*)this + v4 * 0x98 + 0x4d2))++;
-                    *(int*)((char*)this + v4 * 0x98 + 0x550) = 0;
-                    if (*(WORD*)((char*)this + v4 * 0x98 + 0x4d2) >= v58) {
+                m_objects[v4].timer++;
+                if (m_objects[v4].timer >= v54) {
+                    m_objects[v4].timer = 0;
+                    m_objects[v4].frame++;
+                    m_objects[v4].unk80 = 0;
+                    if (m_objects[v4].frame >= v58) {
                         Vf10(v4);
                     }
                 }
                 break;
             case 0x1aa:
-                if (*(int*)((char*)this + v4 * 4 + 0x3174) == 0) {
-                    *(short*)((char*)this + v4 * 0x98 + 0x554) = 1;
-                    (*(int*)((char*)this + v4 * 4 + 0x3174))++;
+                if (unk3174[v4] == 0) {
+                    m_objects[v4].unk84 = 1;
+                    unk3174[v4]++;
                 }
-                (*(short*)((char*)this + v4 * 0x98 + 0x4d4))++;
-                if (*(WORD*)((char*)this + v4 * 0x98 + 0x4d4) >= v54) {
-                    *(short*)((char*)this + v4 * 0x98 + 0x4d4) = 0;
-                    (*(short*)((char*)this + v4 * 0x98 + 0x4d2))++;
-                    *(int*)((char*)this + v4 * 0x98 + 0x550) = 0;
-                    if (*(WORD*)((char*)this + v4 * 0x98 + 0x4d2) >= v58) {
+                m_objects[v4].timer++;
+                if (m_objects[v4].timer >= v54) {
+                    m_objects[v4].timer = 0;
+                    m_objects[v4].frame++;
+                    m_objects[v4].unk80 = 0;
+                    if (m_objects[v4].frame >= v58) {
                         Vf10(v4);
                     }
                 }
                 break;
             case 0x1ab:
-                if (*(int*)((char*)this + v4 * 4 + 0x3174) == 0) {
-                    *(short*)((char*)this + v4 * 0x98 + 0x554) = 1;
-                    (*(int*)((char*)this + v4 * 4 + 0x3174))++;
+                if (unk3174[v4] == 0) {
+                    m_objects[v4].unk84 = 1;
+                    unk3174[v4]++;
                 }
-                (*(short*)((char*)this + v4 * 0x98 + 0x4d4))++;
-                if (*(WORD*)((char*)this + v4 * 0x98 + 0x4d4) >= v54) {
-                    *(short*)((char*)this + v4 * 0x98 + 0x4d4) = 0;
-                    (*(short*)((char*)this + v4 * 0x98 + 0x4d2))++;
-                    *(int*)((char*)this + v4 * 0x98 + 0x550) = 0;
-                    if (*(WORD*)((char*)this + v4 * 0x98 + 0x4d2) >= v58) {
+                m_objects[v4].timer++;
+                if (m_objects[v4].timer >= v54) {
+                    m_objects[v4].timer = 0;
+                    m_objects[v4].frame++;
+                    m_objects[v4].unk80 = 0;
+                    if (m_objects[v4].frame >= v58) {
                         Vf10(v4);
                     }
                 }
                 break;
             case 0x1ac:
-                if (*(int*)((char*)this + v4 * 4 + 0x3174) == 0) {
-                    *(short*)((char*)this + v4 * 0x98 + 0x554) = 7;
-                    (*(int*)((char*)this + v4 * 4 + 0x3174))++;
-                    *(double*)((char*)this + v4 * 0x98 + 0x4f8) = 4.5;
+                if (unk3174[v4] == 0) {
+                    m_objects[v4].unk84 = 7;
+                    unk3174[v4]++;
+                    m_objects[v4].vx = 4.5;
                 }
-                if (*(int*)((char*)this + v4 * 0x98 + 0x550) > 0 && *(WORD*)((char*)this + v4 * 0x98 + 0x4d2) == 0) {
-                    *(short*)((char*)this + v4 * 0x98 + 0x4d2) = 1;
-                    *(short*)((char*)this + v4 * 0x98 + 0x4d4) = 0;
-                    *(double*)((char*)this + v4 * 0x98 + 0x4f8) = 0.0;
-                    *((char*)this + 0x2c8) = 0x10;
+                if (m_objects[v4].unk80 > 0 && m_objects[v4].frame == 0) {
+                    m_objects[v4].frame = 1;
+                    m_objects[v4].timer = 0;
+                    m_objects[v4].vx = 0.0;
+                    unk2c8 = 0x10;
                 }
-                if (*(double*)((char*)this + v4 * 0x98 + 0x4e8) > 680.0 || *(double*)((char*)this + v4 * 0x98 + 0x4e8) < -40.0) {
+                if (m_objects[v4].x > 680.0 || m_objects[v4].x < -40.0) {
                     Vf10(v4);
                 }
-                (*(short*)((char*)this + v4 * 0x98 + 0x4d4))++;
-                if (*(WORD*)((char*)this + v4 * 0x98 + 0x4d4) >= v54) {
-                    *(short*)((char*)this + v4 * 0x98 + 0x4d4) = 0;
-                    (*(short*)((char*)this + v4 * 0x98 + 0x4d2))++;
-                    *(int*)((char*)this + v4 * 0x98 + 0x550) = 0;
-                    if (*(int*)((char*)this + v4 * 4 + 0x3374) <= 0) {
+                m_objects[v4].timer++;
+                if (m_objects[v4].timer >= v54) {
+                    m_objects[v4].timer = 0;
+                    m_objects[v4].frame++;
+                    m_objects[v4].unk80 = 0;
+                    if (unk3374[v4] <= 0) {
                         l50.type = 0x195;
-                        l50.x = (double)((int)*(double*)((char*)this + v4 * 0x98 + 0x4e8) + -0x32 + (WORD)CPlayer::Unk4108a0(0, 0x64));
-                        l50.y = (double)((int)*(double*)((char*)this + v4 * 0x98 + 0x4f0) + -0x32 + (WORD)CPlayer::Unk4108a0(0, 0x64));
+                        l50.x = (double)((int)m_objects[v4].x + -0x32 + (WORD)CPlayer::Unk4108a0(0, 0x64));
+                        l50.y = (double)((int)m_objects[v4].y + -0x32 + (WORD)CPlayer::Unk4108a0(0, 0x64));
                         l50.unk20 = 2;
                         l50.unk21 = 1;
-                        l50.unk18 = *((char*)this + 0x50);
+                        l50.unk18 = facing;
                         Vf9(&l50);
-                        *(int*)((char*)this + v4 * 4 + 0x3374) = 2;
+                        unk3374[v4] = 2;
                     }
-                    (*(int*)((char*)this + v4 * 4 + 0x3374))--;
-                    if (*(WORD*)((char*)this + v4 * 0x98 + 0x4d2) >= v58) {
+                    unk3374[v4]--;
+                    if (m_objects[v4].frame >= v58) {
                         Vf10(v4);
                     }
                 }
                 break;
             case 0x1ad:
-                if (*(int*)((char*)this + v4 * 4 + 0x3174) == 0) {
-                    *(short*)((char*)this + v4 * 0x98 + 0x554) = 5;
-                    (*(int*)((char*)this + v4 * 4 + 0x3174))++;
+                if (unk3174[v4] == 0) {
+                    m_objects[v4].unk84 = 5;
+                    unk3174[v4]++;
                 }
-                (*(int*)((char*)this + v4 * 4 + 0x3274))++;
-                if (*(short*)((char*)this + v4 * 0x98 + 0x554) == 0 || *(int*)((char*)this + v4 * 4 + 0x3274) > 0x4b0) {
+                unk3274[v4]++;
+                if (m_objects[v4].unk84 == 0 || unk3274[v4] > 0x4b0) {
                     Vf10(v4);
                 }
-                (*(short*)((char*)this + v4 * 0x98 + 0x4d4))++;
-                if (*(WORD*)((char*)this + v4 * 0x98 + 0x4d4) >= v54) {
-                    *(short*)((char*)this + v4 * 0x98 + 0x4d4) = 0;
-                    (*(short*)((char*)this + v4 * 0x98 + 0x4d2))++;
-                    if (*(WORD*)((char*)this + v4 * 0x98 + 0x4d2) == 8 || *(WORD*)((char*)this + v4 * 0x98 + 0x4d2) == 0xe || *(WORD*)((char*)this + v4 * 0x98 + 0x4d2) == 0x14 || *(WORD*)((char*)this + v4 * 0x98 + 0x4d2) == 0x1a) {
-                        *(int*)((char*)this + v4 * 0x98 + 0x550) = 0;
+                m_objects[v4].timer++;
+                if (m_objects[v4].timer >= v54) {
+                    m_objects[v4].timer = 0;
+                    m_objects[v4].frame++;
+                    if (m_objects[v4].frame == 8 || m_objects[v4].frame == 0xe || m_objects[v4].frame == 0x14 || m_objects[v4].frame == 0x1a) {
+                        m_objects[v4].unk80 = 0;
                     }
-                    if (*(WORD*)((char*)this + v4 * 0x98 + 0x4d2) >= v58) {
-                        *(short*)((char*)this + v4 * 0x98 + 0x4d2) = 8;
+                    if (m_objects[v4].frame >= v58) {
+                        m_objects[v4].frame = 8;
                     }
                 }
                 break;
             case 0x1ae:
-                if (*(WORD*)((char*)this + v4 * 0x98 + 0x4d2) == 0xb && *(WORD*)((char*)this + v4 * 0x98 + 0x4d4) == 0) {
+                if (m_objects[v4].frame == 0xb && m_objects[v4].timer == 0) {
                     l50.type = 0x1af;
-                    l50.x = (double)(int)*(double*)((char*)this + v4 * 0x98 + 0x4e8);
-                    l50.y = (double)(int)*(double*)((char*)this + v4 * 0x98 + 0x4f0);
+                    l50.x = (double)(int)m_objects[v4].x;
+                    l50.y = (double)(int)m_objects[v4].y;
                     l50.unk20 = 2;
                     l50.unk21 = 1;
-                    l50.unk18 = *((char*)this + 0x50);
+                    l50.unk18 = facing;
                     Vf9(&l50);
-                    *((char*)this + 0x2c8) = 0x13;
+                    unk2c8 = 0x13;
                 }
-                (*(short*)((char*)this + v4 * 0x98 + 0x4d4))++;
-                if (*(WORD*)((char*)this + v4 * 0x98 + 0x4d4) >= v54) {
-                    *(short*)((char*)this + v4 * 0x98 + 0x4d4) = 0;
-                    (*(short*)((char*)this + v4 * 0x98 + 0x4d2))++;
-                    *(int*)((char*)this + v4 * 0x98 + 0x550) = 0;
-                    if (*(WORD*)((char*)this + v4 * 0x98 + 0x4d2) >= v58) {
+                m_objects[v4].timer++;
+                if (m_objects[v4].timer >= v54) {
+                    m_objects[v4].timer = 0;
+                    m_objects[v4].frame++;
+                    m_objects[v4].unk80 = 0;
+                    if (m_objects[v4].frame >= v58) {
                         Vf10(v4);
                     }
                 }
                 break;
             case 0x1af:
-                if (*(int*)((char*)this + v4 * 0x98 + 0x550) > 1 && (*(WORD*)((char*)this + v4 * 0x98 + 0x4d2) == 0xa || *(WORD*)((char*)this + v4 * 0x98 + 0x4d2) == 0xb)) {
-                    *(short*)((char*)this + v4 * 0x98 + 0x4d4) = 0;
-                    *(short*)((char*)this + v4 * 0x98 + 0x4d2) = 0xc;
-                    *(int*)((char*)this + v4 * 4 + 0x3374) = 2;
-                    (*(int*)((char*)this + v4 * 4 + 0x3274))++;
+                if (m_objects[v4].unk80 > 1 && (m_objects[v4].frame == 0xa || m_objects[v4].frame == 0xb)) {
+                    m_objects[v4].timer = 0;
+                    m_objects[v4].frame = 0xc;
+                    unk3374[v4] = 2;
+                    unk3274[v4]++;
                 }
-                if (*(WORD*)((char*)this + v4 * 0x98 + 0x4d2) > 9 && *(WORD*)((char*)this + v4 * 0x98 + 0x4d2) < 0xe) {
-                    if (*(double*)((char*)this + 0x28) == 0.0 && *(double*)((char*)this + v4 * 0x98 + 0x4e8) + 30.0 > *(double*)((char*)this + 0x20) && *(double*)((char*)this + v4 * 0x98 + 0x4e8) - 30.0 < *(double*)((char*)this + 0x20) && *(int*)((char*)this + v4 * 4 + 0x3374) <= 0) {
-                        if (*(WORD*)((char*)this + v4 * 0x98 + 0x4d2) > 0xb) {
-                            *(short*)((char*)this + v4 * 0x98 + 0x4d4) = 0;
-                            *(short*)((char*)this + v4 * 0x98 + 0x4d2) = 0xa;
+                if (m_objects[v4].frame > 9 && m_objects[v4].frame < 0xe) {
+                    if (y == 0.0 && m_objects[v4].x + 30.0 > x && m_objects[v4].x - 30.0 < x && unk3374[v4] <= 0) {
+                        if (m_objects[v4].frame > 0xb) {
+                            m_objects[v4].timer = 0;
+                            m_objects[v4].frame = 0xa;
                             break;
                         }
-                    } else if (*(WORD*)((char*)this + v4 * 0x98 + 0x4d2) != 0xc && *(WORD*)((char*)this + v4 * 0x98 + 0x4d2) != 0xd) {
-                        *(short*)((char*)this + v4 * 0x98 + 0x4d4) = 0;
-                        *(short*)((char*)this + v4 * 0x98 + 0x4d2) = 0xc;
+                    } else if (m_objects[v4].frame != 0xc && m_objects[v4].frame != 0xd) {
+                        m_objects[v4].timer = 0;
+                        m_objects[v4].frame = 0xc;
                         break;
                     }
                 }
-                (*(int*)((char*)this + v4 * 4 + 0x3174))++;
-                if ((*(int*)((char*)this + v4 * 4 + 0x3174) > 0x960 || *(int*)((char*)this + v4 * 4 + 0x3274) > 9) && *(WORD*)((char*)this + v4 * 0x98 + 0x4d2) < 0xe) {
-                    *(short*)((char*)this + v4 * 0x98 + 0x4d4) = 0;
-                    *(short*)((char*)this + v4 * 0x98 + 0x4d2) = 0xe;
+                unk3174[v4]++;
+                if ((unk3174[v4] > 0x960 || unk3274[v4] > 9) && m_objects[v4].frame < 0xe) {
+                    m_objects[v4].timer = 0;
+                    m_objects[v4].frame = 0xe;
                     break;
                 }
-                (*(short*)((char*)this + v4 * 0x98 + 0x4d4))++;
-                if (*(WORD*)((char*)this + v4 * 0x98 + 0x4d4) >= v54) {
-                    *(short*)((char*)this + v4 * 0x98 + 0x4d4) = 0;
-                    (*(short*)((char*)this + v4 * 0x98 + 0x4d2))++;
-                    *(int*)((char*)this + v4 * 0x98 + 0x550) = 0;
-                    if (*(WORD*)((char*)this + v4 * 0x98 + 0x4d2) == 0xc) {
-                        *(short*)((char*)this + v4 * 0x98 + 0x4d2) = *(WORD*)((char*)this + v4 * 0x98 + 0x4d2) - 2;
+                m_objects[v4].timer++;
+                if (m_objects[v4].timer >= v54) {
+                    m_objects[v4].timer = 0;
+                    m_objects[v4].frame++;
+                    m_objects[v4].unk80 = 0;
+                    if (m_objects[v4].frame == 0xc) {
+                        m_objects[v4].frame = m_objects[v4].frame - 2;
                     }
-                    if (*(WORD*)((char*)this + v4 * 0x98 + 0x4d2) == 0xe) {
-                        *(short*)((char*)this + v4 * 0x98 + 0x4d2) = *(WORD*)((char*)this + v4 * 0x98 + 0x4d2) - 2;
-                        (*(int*)((char*)this + v4 * 4 + 0x3374))--;
+                    if (m_objects[v4].frame == 0xe) {
+                        m_objects[v4].frame = m_objects[v4].frame - 2;
+                        unk3374[v4]--;
                     }
-                    if (*(WORD*)((char*)this + v4 * 0x98 + 0x4d2) >= v58) {
+                    if (m_objects[v4].frame >= v58) {
                         Vf10(v4);
                     }
                 }
                 break;
             case 0x1b0:
-                (*(short*)((char*)this + v4 * 0x98 + 0x4d4))++;
-                *(short*)((char*)this + v4 * 0x98 + 0x554) = 1;
-                if (*(WORD*)((char*)this + v4 * 0x98 + 0x4d4) >= v54) {
-                    *(short*)((char*)this + v4 * 0x98 + 0x4d4) = 0;
-                    (*(short*)((char*)this + v4 * 0x98 + 0x4d2))++;
-                    *(int*)((char*)this + v4 * 0x98 + 0x550) = 0;
-                    if (*(WORD*)((char*)this + v4 * 0x98 + 0x4d2) == 0xe && (WORD)CPlayer::Unk4108a0(0, 3) < 2) {
+                m_objects[v4].timer++;
+                m_objects[v4].unk84 = 1;
+                if (m_objects[v4].timer >= v54) {
+                    m_objects[v4].timer = 0;
+                    m_objects[v4].frame++;
+                    m_objects[v4].unk80 = 0;
+                    if (m_objects[v4].frame == 0xe && (WORD)CPlayer::Unk4108a0(0, 3) < 2) {
                         l50.type = 0x1b1;
-                        l50.x = (double)(int)*(double*)((char*)this + v4 * 0x98 + 0x4e8);
-                        l50.y = (double)((int)*(double*)((char*)this + v4 * 0x98 + 0x4f0) - (WORD)CPlayer::Unk4108a0(0, 0x96));
+                        l50.x = (double)(int)m_objects[v4].x;
+                        l50.y = (double)((int)m_objects[v4].y - (WORD)CPlayer::Unk4108a0(0, 0x96));
                         l50.unk20 = 2;
                         l50.unk21 = 1;
-                        l50.unk18 = *((char*)this + 0x50);
+                        l50.unk18 = facing;
                         Vf9(&l50);
                     }
-                    if (*(WORD*)((char*)this + v4 * 0x98 + 0x4d2) >= v58) {
+                    if (m_objects[v4].frame >= v58) {
                         Vf10(v4);
                     }
                 }
                 break;
             case 0x1b1:
-                (*(short*)((char*)this + v4 * 0x98 + 0x4d4))++;
-                if (*(WORD*)((char*)this + v4 * 0x98 + 0x4d4) >= v54) {
-                    *(short*)((char*)this + v4 * 0x98 + 0x4d4) = 0;
-                    (*(short*)((char*)this + v4 * 0x98 + 0x4d2))++;
-                    *(int*)((char*)this + v4 * 0x98 + 0x550) = 0;
-                    if (*(WORD*)((char*)this + v4 * 0x98 + 0x4d2) >= v58) {
+                m_objects[v4].timer++;
+                if (m_objects[v4].timer >= v54) {
+                    m_objects[v4].timer = 0;
+                    m_objects[v4].frame++;
+                    m_objects[v4].unk80 = 0;
+                    if (m_objects[v4].frame >= v58) {
                         Vf10(v4);
                     }
                 }
                 break;
             case 0x1b2:
-                if (*(int*)((char*)this + v4 * 4 + 0x3174) == 0) {
-                    *((char*)this + 0x2c8) = 0x17;
-                    *(short*)((char*)this + v4 * 0x98 + 0x554) = 0x63;
-                    *(int*)((char*)this + v4 * 4 + 0x3174) = 1;
-                    *(double*)((char*)this + v4 * 0x98 + 0x4f8) = 3.0;
-                    *(double*)((char*)this + v4 * 0x98 + 0x500) = -1.2;
+                if (unk3174[v4] == 0) {
+                    unk2c8 = 0x17;
+                    m_objects[v4].unk84 = 0x63;
+                    unk3174[v4] = 1;
+                    m_objects[v4].vx = 3.0;
+                    m_objects[v4].vy = -1.2;
                 }
-                if (*(int*)((char*)this + v4 * 4 + 0x3174) == 1) {
-                    *(double*)((char*)this + v4 * 0x98 + 0x500) += 0.05;
-                    if (*(double*)((char*)this + v4 * 0x98 + 0x500) > 0.0) {
-                        *(double*)((char*)this + v4 * 0x98 + 0x500) = 0.0;
-                        *(int*)((char*)this + v4 * 4 + 0x3174) = 2;
-                        *(short*)((char*)this + v4 * 0x98 + 0x4d4) = 0;
-                        *(short*)((char*)this + v4 * 0x98 + 0x4d2) = 1;
+                if (unk3174[v4] == 1) {
+                    m_objects[v4].vy += 0.05;
+                    if (m_objects[v4].vy > 0.0) {
+                        m_objects[v4].vy = 0.0;
+                        unk3174[v4] = 2;
+                        m_objects[v4].timer = 0;
+                        m_objects[v4].frame = 1;
                     }
                 }
-                if (*(int*)((char*)this + v4 * 4 + 0x3174) == 2) {
-                    *(double*)((char*)this + v4 * 0x98 + 0x4f8) += 0.0;
+                if (unk3174[v4] == 2) {
+                    m_objects[v4].vx += 0.0;
                 }
-                if (*(double*)((char*)this + v4 * 0x98 + 0x4e8) < -40.0 || *(double*)((char*)this + v4 * 0x98 + 0x4e8) > 680.0) {
+                if (m_objects[v4].x < -40.0 || m_objects[v4].x > 680.0) {
                     Vf10(v4);
                 }
-                if (*(WORD*)((char*)this + v4 * 0x98 + 0x4d4) == 0) {
+                if (m_objects[v4].timer == 0) {
                     l50.type = 0x1b0;
-                    l50.x = (double)((int)*(double*)((char*)this + v4 * 0x98 + 0x4e8) + (WORD)CPlayer::Unk4108a0(0, 0x28));
-                    l50.y = (double)((int)*(double*)((char*)this + v4 * 0x98 + 0x4f0) + (WORD)CPlayer::Unk4108a0(0, 0x14));
+                    l50.x = (double)((int)m_objects[v4].x + (WORD)CPlayer::Unk4108a0(0, 0x28));
+                    l50.y = (double)((int)m_objects[v4].y + (WORD)CPlayer::Unk4108a0(0, 0x14));
                     l50.unk20 = 2;
                     l50.unk21 = 1;
-                    l50.unk18 = *((char*)this + 0x50);
+                    l50.unk18 = facing;
                     Vf9(&l50);
                 }
-                (*(short*)((char*)this + v4 * 0x98 + 0x4d4))++;
-                if (*(WORD*)((char*)this + v4 * 0x98 + 0x4d4) >= v54) {
-                    *(short*)((char*)this + v4 * 0x98 + 0x4d4) = 0;
-                    *(int*)((char*)this + v4 * 0x98 + 0x550) = 0;
+                m_objects[v4].timer++;
+                if (m_objects[v4].timer >= v54) {
+                    m_objects[v4].timer = 0;
+                    m_objects[v4].unk80 = 0;
                 }
                 break;
             case 0x1b3:
-                if (*(int*)((char*)this + v4 * 4 + 0x3174) == 0) {
-                    *(short*)((char*)this + v4 * 0x98 + 0x554) = 1;
-                    (*(int*)((char*)this + v4 * 4 + 0x3174))++;
-                    ((ObjBase*)((char*)this + v4 * 0x98 + 0x4d0))->SetVelocity(70.0, 3.0);
+                if (unk3174[v4] == 0) {
+                    m_objects[v4].unk84 = 1;
+                    unk3174[v4]++;
+                    (&m_objects[v4])->SetVelocity(70.0, 3.0);
                 }
-                if (*(int*)((char*)this + v4 * 0x98 + 0x550) > 0 || *(double*)((char*)this + v4 * 0x98 + 0x4f0) > 0.0 || *(WORD*)((char*)this + 8) > 0x31 && *(WORD*)((char*)this + 8) < 0x96) {
+                if (m_objects[v4].unk80 > 0 || m_objects[v4].y > 0.0 || pattern > 0x31 && pattern < 0x96) {
                     l50.type = 0x195;
-                    l50.x = (double)(int)*(double*)((char*)this + v4 * 0x98 + 0x4e8);
-                    l50.y = (double)(int)*(double*)((char*)this + v4 * 0x98 + 0x4f0);
+                    l50.x = (double)(int)m_objects[v4].x;
+                    l50.y = (double)(int)m_objects[v4].y;
                     l50.unk20 = 2;
                     l50.unk21 = 1;
-                    l50.unk18 = *((char*)this + 0x50);
+                    l50.unk18 = facing;
                     Vf9(&l50);
                     Vf10(v4);
-                    (*(int*)((char*)this + 0x3168))--;
+                    unk3168--;
                     break;
                 }
-                if (*(double*)((char*)this + v4 * 0x98 + 0x4e8) > 680.0 || *(double*)((char*)this + v4 * 0x98 + 0x4e8) < -40.0) {
+                if (m_objects[v4].x > 680.0 || m_objects[v4].x < -40.0) {
                     Vf10(v4);
-                    (*(int*)((char*)this + 0x3168))--;
+                    unk3168--;
                 }
-                (*(short*)((char*)this + v4 * 0x98 + 0x4d4))++;
-                if (*(WORD*)((char*)this + v4 * 0x98 + 0x4d4) >= v54) {
-                    *(short*)((char*)this + v4 * 0x98 + 0x4d4) = 0;
-                    (*(short*)((char*)this + v4 * 0x98 + 0x4d2))++;
-                    *(int*)((char*)this + v4 * 0x98 + 0x550) = 0;
-                    if (*(WORD*)((char*)this + v4 * 0x98 + 0x4d2) >= v58) {
-                        (*(short*)((char*)this + v4 * 0x98 + 0x4d2))--;
+                m_objects[v4].timer++;
+                if (m_objects[v4].timer >= v54) {
+                    m_objects[v4].timer = 0;
+                    m_objects[v4].frame++;
+                    m_objects[v4].unk80 = 0;
+                    if (m_objects[v4].frame >= v58) {
+                        m_objects[v4].frame--;
                     }
                 }
                 break;
             case 0x1b4:
-                if (*(int*)((char*)this + v4 * 4 + 0x3174) == 0) {
-                    *(short*)((char*)this + v4 * 0x98 + 0x554) = 1;
-                    (*(int*)((char*)this + v4 * 4 + 0x3174))++;
-                    ((ObjBase*)((char*)this + v4 * 0x98 + 0x4d0))->SetVelocity(55.0, 3.0);
+                if (unk3174[v4] == 0) {
+                    m_objects[v4].unk84 = 1;
+                    unk3174[v4]++;
+                    (&m_objects[v4])->SetVelocity(55.0, 3.0);
                 }
-                if (*(int*)((char*)this + v4 * 0x98 + 0x550) > 0 || *(double*)((char*)this + v4 * 0x98 + 0x4f0) > 0.0 || *(WORD*)((char*)this + 8) > 0x31 && *(WORD*)((char*)this + 8) < 0x96) {
+                if (m_objects[v4].unk80 > 0 || m_objects[v4].y > 0.0 || pattern > 0x31 && pattern < 0x96) {
                     l50.type = 0x195;
-                    l50.x = (double)(int)*(double*)((char*)this + v4 * 0x98 + 0x4e8);
-                    l50.y = (double)(int)*(double*)((char*)this + v4 * 0x98 + 0x4f0);
+                    l50.x = (double)(int)m_objects[v4].x;
+                    l50.y = (double)(int)m_objects[v4].y;
                     l50.unk20 = 2;
                     l50.unk21 = 1;
-                    l50.unk18 = *((char*)this + 0x50);
+                    l50.unk18 = facing;
                     Vf9(&l50);
                     Vf10(v4);
-                    (*(int*)((char*)this + 0x3168))--;
+                    unk3168--;
                     break;
                 }
-                if (*(double*)((char*)this + v4 * 0x98 + 0x4e8) > 680.0 || *(double*)((char*)this + v4 * 0x98 + 0x4e8) < -40.0) {
+                if (m_objects[v4].x > 680.0 || m_objects[v4].x < -40.0) {
                     Vf10(v4);
-                    (*(int*)((char*)this + 0x3168))--;
+                    unk3168--;
                 }
-                (*(short*)((char*)this + v4 * 0x98 + 0x4d4))++;
-                if (*(WORD*)((char*)this + v4 * 0x98 + 0x4d4) >= v54) {
-                    *(short*)((char*)this + v4 * 0x98 + 0x4d4) = 0;
-                    (*(short*)((char*)this + v4 * 0x98 + 0x4d2))++;
-                    *(int*)((char*)this + v4 * 0x98 + 0x550) = 0;
-                    if (*(WORD*)((char*)this + v4 * 0x98 + 0x4d2) >= v58) {
-                        (*(short*)((char*)this + v4 * 0x98 + 0x4d2))--;
+                m_objects[v4].timer++;
+                if (m_objects[v4].timer >= v54) {
+                    m_objects[v4].timer = 0;
+                    m_objects[v4].frame++;
+                    m_objects[v4].unk80 = 0;
+                    if (m_objects[v4].frame >= v58) {
+                        m_objects[v4].frame--;
                     }
                 }
                 break;
             case 0x1b5:
-                if (*(int*)((char*)this + v4 * 4 + 0x3174) == 0) {
-                    *(short*)((char*)this + v4 * 0x98 + 0x554) = 1;
-                    (*(int*)((char*)this + v4 * 4 + 0x3174))++;
-                    ((ObjBase*)((char*)this + v4 * 0x98 + 0x4d0))->SetVelocity(40.0, 3.0);
+                if (unk3174[v4] == 0) {
+                    m_objects[v4].unk84 = 1;
+                    unk3174[v4]++;
+                    (&m_objects[v4])->SetVelocity(40.0, 3.0);
                 }
-                if (*(int*)((char*)this + v4 * 0x98 + 0x550) > 0 || *(double*)((char*)this + v4 * 0x98 + 0x4f0) > 0.0 || *(WORD*)((char*)this + 8) > 0x31 && *(WORD*)((char*)this + 8) < 0x96) {
+                if (m_objects[v4].unk80 > 0 || m_objects[v4].y > 0.0 || pattern > 0x31 && pattern < 0x96) {
                     l50.type = 0x195;
-                    l50.x = (double)(int)*(double*)((char*)this + v4 * 0x98 + 0x4e8);
-                    l50.y = (double)(int)*(double*)((char*)this + v4 * 0x98 + 0x4f0);
+                    l50.x = (double)(int)m_objects[v4].x;
+                    l50.y = (double)(int)m_objects[v4].y;
                     l50.unk20 = 2;
                     l50.unk21 = 1;
-                    l50.unk18 = *((char*)this + 0x50);
+                    l50.unk18 = facing;
                     Vf9(&l50);
                     Vf10(v4);
-                    (*(int*)((char*)this + 0x3168))--;
+                    unk3168--;
                     break;
                 }
-                if (*(double*)((char*)this + v4 * 0x98 + 0x4e8) > 680.0 || *(double*)((char*)this + v4 * 0x98 + 0x4e8) < -40.0) {
+                if (m_objects[v4].x > 680.0 || m_objects[v4].x < -40.0) {
                     Vf10(v4);
-                    (*(int*)((char*)this + 0x3168))--;
+                    unk3168--;
                 }
-                (*(short*)((char*)this + v4 * 0x98 + 0x4d4))++;
-                if (*(WORD*)((char*)this + v4 * 0x98 + 0x4d4) >= v54) {
-                    *(short*)((char*)this + v4 * 0x98 + 0x4d4) = 0;
-                    (*(short*)((char*)this + v4 * 0x98 + 0x4d2))++;
-                    *(int*)((char*)this + v4 * 0x98 + 0x550) = 0;
-                    if (*(WORD*)((char*)this + v4 * 0x98 + 0x4d2) >= v58) {
-                        (*(short*)((char*)this + v4 * 0x98 + 0x4d2))--;
+                m_objects[v4].timer++;
+                if (m_objects[v4].timer >= v54) {
+                    m_objects[v4].timer = 0;
+                    m_objects[v4].frame++;
+                    m_objects[v4].unk80 = 0;
+                    if (m_objects[v4].frame >= v58) {
+                        m_objects[v4].frame--;
                     }
                 }
                 break;
             case 0x1b6:
-                if (*(int*)((char*)this + v4 * 4 + 0x3174) == 0) {
-                    *(short*)((char*)this + v4 * 0x98 + 0x554) = 1;
-                    (*(int*)((char*)this + v4 * 4 + 0x3174))++;
-                    ((ObjBase*)((char*)this + v4 * 0x98 + 0x4d0))->SetVelocity(25.0, 3.0);
+                if (unk3174[v4] == 0) {
+                    m_objects[v4].unk84 = 1;
+                    unk3174[v4]++;
+                    (&m_objects[v4])->SetVelocity(25.0, 3.0);
                 }
-                if (*(int*)((char*)this + v4 * 0x98 + 0x550) > 0 || *(double*)((char*)this + v4 * 0x98 + 0x4f0) > 0.0 || *(WORD*)((char*)this + 8) > 0x31 && *(WORD*)((char*)this + 8) < 0x96) {
+                if (m_objects[v4].unk80 > 0 || m_objects[v4].y > 0.0 || pattern > 0x31 && pattern < 0x96) {
                     l50.type = 0x195;
-                    l50.x = (double)(int)*(double*)((char*)this + v4 * 0x98 + 0x4e8);
-                    l50.y = (double)(int)*(double*)((char*)this + v4 * 0x98 + 0x4f0);
+                    l50.x = (double)(int)m_objects[v4].x;
+                    l50.y = (double)(int)m_objects[v4].y;
                     l50.unk20 = 2;
                     l50.unk21 = 1;
-                    l50.unk18 = *((char*)this + 0x50);
+                    l50.unk18 = facing;
                     Vf9(&l50);
                     Vf10(v4);
-                    (*(int*)((char*)this + 0x3168))--;
+                    unk3168--;
                     break;
                 }
-                if (*(double*)((char*)this + v4 * 0x98 + 0x4e8) > 680.0 || *(double*)((char*)this + v4 * 0x98 + 0x4e8) < -40.0) {
+                if (m_objects[v4].x > 680.0 || m_objects[v4].x < -40.0) {
                     Vf10(v4);
-                    (*(int*)((char*)this + 0x3168))--;
+                    unk3168--;
                 }
-                (*(short*)((char*)this + v4 * 0x98 + 0x4d4))++;
-                if (*(WORD*)((char*)this + v4 * 0x98 + 0x4d4) >= v54) {
-                    *(short*)((char*)this + v4 * 0x98 + 0x4d4) = 0;
-                    (*(short*)((char*)this + v4 * 0x98 + 0x4d2))++;
-                    *(int*)((char*)this + v4 * 0x98 + 0x550) = 0;
-                    if (*(WORD*)((char*)this + v4 * 0x98 + 0x4d2) >= v58) {
-                        (*(short*)((char*)this + v4 * 0x98 + 0x4d2))--;
+                m_objects[v4].timer++;
+                if (m_objects[v4].timer >= v54) {
+                    m_objects[v4].timer = 0;
+                    m_objects[v4].frame++;
+                    m_objects[v4].unk80 = 0;
+                    if (m_objects[v4].frame >= v58) {
+                        m_objects[v4].frame--;
                     }
                 }
                 break;
             case 0x1b7:
-                if (*(int*)((char*)this + v4 * 4 + 0x3174) == 0) {
-                    *(short*)((char*)this + v4 * 0x98 + 0x554) = 1;
-                    (*(int*)((char*)this + v4 * 4 + 0x3174))++;
-                    ((ObjBase*)((char*)this + v4 * 0x98 + 0x4d0))->SetVelocity(10.0, 3.0);
+                if (unk3174[v4] == 0) {
+                    m_objects[v4].unk84 = 1;
+                    unk3174[v4]++;
+                    (&m_objects[v4])->SetVelocity(10.0, 3.0);
                 }
-                if (*(int*)((char*)this + v4 * 0x98 + 0x550) > 0 || *(double*)((char*)this + v4 * 0x98 + 0x4f0) > 0.0 || *(WORD*)((char*)this + 8) > 0x31 && *(WORD*)((char*)this + 8) < 0x96) {
+                if (m_objects[v4].unk80 > 0 || m_objects[v4].y > 0.0 || pattern > 0x31 && pattern < 0x96) {
                     l50.type = 0x195;
-                    l50.x = (double)(int)*(double*)((char*)this + v4 * 0x98 + 0x4e8);
-                    l50.y = (double)(int)*(double*)((char*)this + v4 * 0x98 + 0x4f0);
+                    l50.x = (double)(int)m_objects[v4].x;
+                    l50.y = (double)(int)m_objects[v4].y;
                     l50.unk20 = 2;
                     l50.unk21 = 1;
-                    l50.unk18 = *((char*)this + 0x50);
+                    l50.unk18 = facing;
                     Vf9(&l50);
                     Vf10(v4);
-                    (*(int*)((char*)this + 0x3168))--;
+                    unk3168--;
                     break;
                 }
-                if (*(double*)((char*)this + v4 * 0x98 + 0x4e8) > 680.0 || *(double*)((char*)this + v4 * 0x98 + 0x4e8) < -40.0) {
+                if (m_objects[v4].x > 680.0 || m_objects[v4].x < -40.0) {
                     Vf10(v4);
-                    (*(int*)((char*)this + 0x3168))--;
+                    unk3168--;
                 }
-                (*(short*)((char*)this + v4 * 0x98 + 0x4d4))++;
-                if (*(WORD*)((char*)this + v4 * 0x98 + 0x4d4) >= v54) {
-                    *(short*)((char*)this + v4 * 0x98 + 0x4d4) = 0;
-                    (*(short*)((char*)this + v4 * 0x98 + 0x4d2))++;
-                    *(int*)((char*)this + v4 * 0x98 + 0x550) = 0;
-                    if (*(WORD*)((char*)this + v4 * 0x98 + 0x4d2) >= v58) {
-                        (*(short*)((char*)this + v4 * 0x98 + 0x4d2))--;
+                m_objects[v4].timer++;
+                if (m_objects[v4].timer >= v54) {
+                    m_objects[v4].timer = 0;
+                    m_objects[v4].frame++;
+                    m_objects[v4].unk80 = 0;
+                    if (m_objects[v4].frame >= v58) {
+                        m_objects[v4].frame--;
                     }
                 }
                 break;
             case 0x1b8:
-                if (*(int*)((char*)this + v4 * 4 + 0x3174) == 0) {
-                    *(short*)((char*)this + v4 * 0x98 + 0x554) = 1;
-                    (*(int*)((char*)this + v4 * 4 + 0x3174))++;
-                    *(double*)((char*)this + v4 * 0x98 + 0x500) = -3.0;
-                    *(double*)((char*)this + v4 * 0x98 + 0x4f8) = 0.0;
+                if (unk3174[v4] == 0) {
+                    m_objects[v4].unk84 = 1;
+                    unk3174[v4]++;
+                    m_objects[v4].vy = -3.0;
+                    m_objects[v4].vx = 0.0;
                 }
-                if (*(double*)((char*)this + v4 * 0x98 + 0x4f8) == 0.0) {
-                    *(double*)((char*)this + v4 * 0x98 + 0x500) += 0.045;
-                    if (*(double*)((char*)this + v4 * 0x98 + 0x500) > 0.0) {
-                        *(double*)((char*)this + v4 * 0x98 + 0x500) = 0.0;
+                if (m_objects[v4].vx == 0.0) {
+                    m_objects[v4].vy += 0.045;
+                    if (m_objects[v4].vy > 0.0) {
+                        m_objects[v4].vy = 0.0;
                     }
                 }
-                if (*(WORD*)((char*)this + 8) > 0x31 && *(WORD*)((char*)this + 8) < 0x96) {
+                if (pattern > 0x31 && pattern < 0x96) {
                     l50.type = 0x195;
-                    l50.x = (double)(int)*(double*)((char*)this + v4 * 0x98 + 0x4e8);
-                    l50.y = (double)(int)*(double*)((char*)this + v4 * 0x98 + 0x4f0);
+                    l50.x = (double)(int)m_objects[v4].x;
+                    l50.y = (double)(int)m_objects[v4].y;
                     l50.unk20 = 2;
                     l50.unk21 = 1;
-                    l50.unk18 = *((char*)this + 0x50);
+                    l50.unk18 = facing;
                     Vf9(&l50);
                     Vf10(v4);
-                    (*(int*)((char*)this + 0x3168))--;
+                    unk3168--;
                     break;
                 }
-                if (*(int*)((char*)this + v4 * 4 + 0x3174) > 2 && *(WORD*)((char*)this + v4 * 0x98 + 0x4d4) == 0) {
-                    if (*((char*)this + v4 * 0x98 + 0x518) == 1) {
+                if (unk3174[v4] > 2 && m_objects[v4].timer == 0) {
+                    if (m_objects[v4].facing == 1) {
                         l50.type = 0x1b3;
-                        if (*(double*)((char*)this + v4 * 0x98 + 0x4e8) > *(double*)(*(char**)*(char**)((char*)this + 0x78) + 0x20)) {
-                            if (((ObjBase*)((char*)this + 8))->AngleTo(*(double*)((char*)this + v4 * 0x98 + 0x4e8) - *(double*)(*(char**)*(char**)((char*)this + 0x78) + 0x20), *(double*)((char*)this + v4 * 0x98 + 0x4f0) - *(double*)(*(char**)*(char**)((char*)this + 0x78) + 0x28)) < 70.0) {
+                        if (m_objects[v4].x > (*m_opponent)->x) {
+                            if (((ObjBase*)&pattern)->AngleTo(m_objects[v4].x - (*m_opponent)->x, m_objects[v4].y - (*m_opponent)->y) < 70.0) {
                                 l50.type = 0x1b4;
                             }
-                            if (((ObjBase*)((char*)this + 8))->AngleTo(*(double*)((char*)this + v4 * 0x98 + 0x4e8) - *(double*)(*(char**)*(char**)((char*)this + 0x78) + 0x20), *(double*)((char*)this + v4 * 0x98 + 0x4f0) - *(double*)(*(char**)*(char**)((char*)this + 0x78) + 0x28)) < 55.0) {
+                            if (((ObjBase*)&pattern)->AngleTo(m_objects[v4].x - (*m_opponent)->x, m_objects[v4].y - (*m_opponent)->y) < 55.0) {
                                 l50.type = 0x1b5;
                             }
-                            if (((ObjBase*)((char*)this + 8))->AngleTo(*(double*)((char*)this + v4 * 0x98 + 0x4e8) - *(double*)(*(char**)*(char**)((char*)this + 0x78) + 0x20), *(double*)((char*)this + v4 * 0x98 + 0x4f0) - *(double*)(*(char**)*(char**)((char*)this + 0x78) + 0x28)) < 40.0) {
+                            if (((ObjBase*)&pattern)->AngleTo(m_objects[v4].x - (*m_opponent)->x, m_objects[v4].y - (*m_opponent)->y) < 40.0) {
                                 l50.type = 0x1b6;
                             }
-                            if (((ObjBase*)((char*)this + 8))->AngleTo(*(double*)((char*)this + v4 * 0x98 + 0x4e8) - *(double*)(*(char**)*(char**)((char*)this + 0x78) + 0x20), *(double*)((char*)this + v4 * 0x98 + 0x4f0) - *(double*)(*(char**)*(char**)((char*)this + 0x78) + 0x28)) < 25.0) {
+                            if (((ObjBase*)&pattern)->AngleTo(m_objects[v4].x - (*m_opponent)->x, m_objects[v4].y - (*m_opponent)->y) < 25.0) {
                                 l50.type = 0x1b7;
                             }
                         }
-                        if (*(double*)((char*)this + v4 * 0x98 + 0x4e8) < *(double*)(*(char**)*(char**)((char*)this + 0x78) + 0x20)) {
-                            if (((ObjBase*)((char*)this + 8))->AngleTo(*(double*)(*(char**)*(char**)((char*)this + 0x78) + 0x20) - *(double*)((char*)this + v4 * 0x98 + 0x4e8), *(double*)(*(char**)*(char**)((char*)this + 0x78) + 0x28) - *(double*)((char*)this + v4 * 0x98 + 0x4f0)) < 70.0) {
+                        if (m_objects[v4].x < (*m_opponent)->x) {
+                            if (((ObjBase*)&pattern)->AngleTo((*m_opponent)->x - m_objects[v4].x, (*m_opponent)->y - m_objects[v4].y) < 70.0) {
                                 l50.type = 0x1b4;
                             }
-                            if (((ObjBase*)((char*)this + 8))->AngleTo(*(double*)(*(char**)*(char**)((char*)this + 0x78) + 0x20) - *(double*)((char*)this + v4 * 0x98 + 0x4e8), *(double*)(*(char**)*(char**)((char*)this + 0x78) + 0x28) - *(double*)((char*)this + v4 * 0x98 + 0x4f0)) < 55.0) {
+                            if (((ObjBase*)&pattern)->AngleTo((*m_opponent)->x - m_objects[v4].x, (*m_opponent)->y - m_objects[v4].y) < 55.0) {
                                 l50.type = 0x1b5;
                             }
-                            if (((ObjBase*)((char*)this + 8))->AngleTo(*(double*)(*(char**)*(char**)((char*)this + 0x78) + 0x20) - *(double*)((char*)this + v4 * 0x98 + 0x4e8), *(double*)(*(char**)*(char**)((char*)this + 0x78) + 0x28) - *(double*)((char*)this + v4 * 0x98 + 0x4f0)) < 40.0) {
+                            if (((ObjBase*)&pattern)->AngleTo((*m_opponent)->x - m_objects[v4].x, (*m_opponent)->y - m_objects[v4].y) < 40.0) {
                                 l50.type = 0x1b6;
                             }
-                            if (((ObjBase*)((char*)this + 8))->AngleTo(*(double*)(*(char**)*(char**)((char*)this + 0x78) + 0x20) - *(double*)((char*)this + v4 * 0x98 + 0x4e8), *(double*)(*(char**)*(char**)((char*)this + 0x78) + 0x28) - *(double*)((char*)this + v4 * 0x98 + 0x4f0)) < 25.0) {
+                            if (((ObjBase*)&pattern)->AngleTo((*m_opponent)->x - m_objects[v4].x, (*m_opponent)->y - m_objects[v4].y) < 25.0) {
                                 l50.type = 0x1b7;
                             }
                         }
                     }
-                    if (*((char*)this + v4 * 0x98 + 0x518) == -1) {
+                    if (m_objects[v4].facing == -1) {
                         l50.type = 0x1b3;
-                        if (*(double*)((char*)this + v4 * 0x98 + 0x4e8) > *(double*)(*(char**)*(char**)((char*)this + 0x78) + 0x20)) {
-                            if (((ObjBase*)((char*)this + 8))->AngleTo(*(double*)((char*)this + v4 * 0x98 + 0x4e8) - *(double*)(*(char**)*(char**)((char*)this + 0x78) + 0x20), *(double*)((char*)this + v4 * 0x98 + 0x4f0) - *(double*)(*(char**)*(char**)((char*)this + 0x78) + 0x28)) > 110.0) {
+                        if (m_objects[v4].x > (*m_opponent)->x) {
+                            if (((ObjBase*)&pattern)->AngleTo(m_objects[v4].x - (*m_opponent)->x, m_objects[v4].y - (*m_opponent)->y) > 110.0) {
                                 l50.type = 0x1b4;
                             }
-                            if (((ObjBase*)((char*)this + 8))->AngleTo(*(double*)((char*)this + v4 * 0x98 + 0x4e8) - *(double*)(*(char**)*(char**)((char*)this + 0x78) + 0x20), *(double*)((char*)this + v4 * 0x98 + 0x4f0) - *(double*)(*(char**)*(char**)((char*)this + 0x78) + 0x28)) > 125.0) {
+                            if (((ObjBase*)&pattern)->AngleTo(m_objects[v4].x - (*m_opponent)->x, m_objects[v4].y - (*m_opponent)->y) > 125.0) {
                                 l50.type = 0x1b5;
                             }
-                            if (((ObjBase*)((char*)this + 8))->AngleTo(*(double*)((char*)this + v4 * 0x98 + 0x4e8) - *(double*)(*(char**)*(char**)((char*)this + 0x78) + 0x20), *(double*)((char*)this + v4 * 0x98 + 0x4f0) - *(double*)(*(char**)*(char**)((char*)this + 0x78) + 0x28)) > 140.0) {
+                            if (((ObjBase*)&pattern)->AngleTo(m_objects[v4].x - (*m_opponent)->x, m_objects[v4].y - (*m_opponent)->y) > 140.0) {
                                 l50.type = 0x1b6;
                             }
-                            if (((ObjBase*)((char*)this + 8))->AngleTo(*(double*)((char*)this + v4 * 0x98 + 0x4e8) - *(double*)(*(char**)*(char**)((char*)this + 0x78) + 0x20), *(double*)((char*)this + v4 * 0x98 + 0x4f0) - *(double*)(*(char**)*(char**)((char*)this + 0x78) + 0x28)) > 165.0) {
+                            if (((ObjBase*)&pattern)->AngleTo(m_objects[v4].x - (*m_opponent)->x, m_objects[v4].y - (*m_opponent)->y) > 165.0) {
                                 l50.type = 0x1b7;
                             }
                         }
-                        if (*(double*)((char*)this + v4 * 0x98 + 0x4e8) > *(double*)(*(char**)*(char**)((char*)this + 0x78) + 0x20)) {
-                            if (((ObjBase*)((char*)this + 8))->AngleTo(*(double*)(*(char**)*(char**)((char*)this + 0x78) + 0x20) - *(double*)((char*)this + v4 * 0x98 + 0x4e8), *(double*)(*(char**)*(char**)((char*)this + 0x78) + 0x28) - *(double*)((char*)this + v4 * 0x98 + 0x4f0)) > 110.0) {
+                        if (m_objects[v4].x > (*m_opponent)->x) {
+                            if (((ObjBase*)&pattern)->AngleTo((*m_opponent)->x - m_objects[v4].x, (*m_opponent)->y - m_objects[v4].y) > 110.0) {
                                 l50.type = 0x1b4;
                             }
-                            if (((ObjBase*)((char*)this + 8))->AngleTo(*(double*)(*(char**)*(char**)((char*)this + 0x78) + 0x20) - *(double*)((char*)this + v4 * 0x98 + 0x4e8), *(double*)(*(char**)*(char**)((char*)this + 0x78) + 0x28) - *(double*)((char*)this + v4 * 0x98 + 0x4f0)) > 125.0) {
+                            if (((ObjBase*)&pattern)->AngleTo((*m_opponent)->x - m_objects[v4].x, (*m_opponent)->y - m_objects[v4].y) > 125.0) {
                                 l50.type = 0x1b5;
                             }
-                            if (((ObjBase*)((char*)this + 8))->AngleTo(*(double*)(*(char**)*(char**)((char*)this + 0x78) + 0x20) - *(double*)((char*)this + v4 * 0x98 + 0x4e8), *(double*)(*(char**)*(char**)((char*)this + 0x78) + 0x28) - *(double*)((char*)this + v4 * 0x98 + 0x4f0)) > 140.0) {
+                            if (((ObjBase*)&pattern)->AngleTo((*m_opponent)->x - m_objects[v4].x, (*m_opponent)->y - m_objects[v4].y) > 140.0) {
                                 l50.type = 0x1b6;
                             }
-                            if (((ObjBase*)((char*)this + 8))->AngleTo(*(double*)(*(char**)*(char**)((char*)this + 0x78) + 0x20) - *(double*)((char*)this + v4 * 0x98 + 0x4e8), *(double*)(*(char**)*(char**)((char*)this + 0x78) + 0x28) - *(double*)((char*)this + v4 * 0x98 + 0x4f0)) > 165.0) {
+                            if (((ObjBase*)&pattern)->AngleTo((*m_opponent)->x - m_objects[v4].x, (*m_opponent)->y - m_objects[v4].y) > 165.0) {
                                 l50.type = 0x1b7;
                             }
                         }
                     }
-                    l50.x = (double)(int)*(double*)((char*)this + v4 * 0x98 + 0x4e8);
-                    l50.y = (double)(int)*(double*)((char*)this + v4 * 0x98 + 0x4f0);
+                    l50.x = (double)(int)m_objects[v4].x;
+                    l50.y = (double)(int)m_objects[v4].y;
                     l50.unk20 = 2;
                     l50.unk21 = 1;
                     l50.unk0 = 1;
-                    l50.unk18 = *((char*)this + 0x50);
+                    l50.unk18 = facing;
                     Vf9(&l50);
                     Vf10(v4);
                     break;
                 }
-                (*(short*)((char*)this + v4 * 0x98 + 0x4d4))++;
-                if (*(WORD*)((char*)this + v4 * 0x98 + 0x4d4) >= v54) {
-                    *(short*)((char*)this + v4 * 0x98 + 0x4d4) = 0;
-                    (*(short*)((char*)this + v4 * 0x98 + 0x4d2))++;
-                    *(int*)((char*)this + v4 * 0x98 + 0x550) = 0;
-                    if (*(WORD*)((char*)this + v4 * 0x98 + 0x4d2) >= v58) {
-                        *(short*)((char*)this + v4 * 0x98 + 0x4d2) = 0;
-                        (*(int*)((char*)this + v4 * 4 + 0x3174))++;
+                m_objects[v4].timer++;
+                if (m_objects[v4].timer >= v54) {
+                    m_objects[v4].timer = 0;
+                    m_objects[v4].frame++;
+                    m_objects[v4].unk80 = 0;
+                    if (m_objects[v4].frame >= v58) {
+                        m_objects[v4].frame = 0;
+                        unk3174[v4]++;
                     }
                 }
                 break;
             case 0x1b9:
-                if (*(int*)((char*)this + v4 * 4 + 0x3174) == 0) {
-                    *(short*)((char*)this + v4 * 0x98 + 0x554) = 1;
-                    (*(int*)((char*)this + v4 * 4 + 0x3174))++;
-                    *(double*)((char*)this + v4 * 0x98 + 0x500) = -3.0;
-                    *(double*)((char*)this + v4 * 0x98 + 0x4f8) = 0.0;
+                if (unk3174[v4] == 0) {
+                    m_objects[v4].unk84 = 1;
+                    unk3174[v4]++;
+                    m_objects[v4].vy = -3.0;
+                    m_objects[v4].vx = 0.0;
                 }
-                if (*(double*)((char*)this + v4 * 0x98 + 0x4f8) == 0.0) {
-                    *(double*)((char*)this + v4 * 0x98 + 0x500) += 0.045;
-                    if (*(double*)((char*)this + v4 * 0x98 + 0x500) > 0.0) {
-                        *(double*)((char*)this + v4 * 0x98 + 0x500) = 0.0;
+                if (m_objects[v4].vx == 0.0) {
+                    m_objects[v4].vy += 0.045;
+                    if (m_objects[v4].vy > 0.0) {
+                        m_objects[v4].vy = 0.0;
                     }
                 }
-                if (*(WORD*)((char*)this + 8) > 0x31 && *(WORD*)((char*)this + 8) < 0x96) {
+                if (pattern > 0x31 && pattern < 0x96) {
                     l50.type = 0x195;
-                    l50.x = (double)(int)*(double*)((char*)this + v4 * 0x98 + 0x4e8);
-                    l50.y = (double)(int)*(double*)((char*)this + v4 * 0x98 + 0x4f0);
+                    l50.x = (double)(int)m_objects[v4].x;
+                    l50.y = (double)(int)m_objects[v4].y;
                     l50.unk20 = 2;
                     l50.unk21 = 1;
-                    l50.unk18 = *((char*)this + 0x50);
+                    l50.unk18 = facing;
                     Vf9(&l50);
                     Vf10(v4);
-                    (*(int*)((char*)this + 0x3168))--;
+                    unk3168--;
                     break;
                 }
-                if (*(int*)((char*)this + v4 * 4 + 0x3174) > 2 && *(int*)((char*)this + v4 * 4 + 0x3374) > 0xf) {
-                    if (*((char*)this + v4 * 0x98 + 0x518) == 1) {
+                if (unk3174[v4] > 2 && unk3374[v4] > 0xf) {
+                    if (m_objects[v4].facing == 1) {
                         l50.type = 0x1b3;
-                        if (*(double*)((char*)this + v4 * 0x98 + 0x4e8) > *(double*)(*(char**)*(char**)((char*)this + 0x78) + 0x20)) {
-                            if (((ObjBase*)((char*)this + 8))->AngleTo(*(double*)((char*)this + v4 * 0x98 + 0x4e8) - *(double*)(*(char**)*(char**)((char*)this + 0x78) + 0x20), *(double*)((char*)this + v4 * 0x98 + 0x4f0) - *(double*)(*(char**)*(char**)((char*)this + 0x78) + 0x28)) < 70.0) {
+                        if (m_objects[v4].x > (*m_opponent)->x) {
+                            if (((ObjBase*)&pattern)->AngleTo(m_objects[v4].x - (*m_opponent)->x, m_objects[v4].y - (*m_opponent)->y) < 70.0) {
                                 l50.type = 0x1b4;
                             }
-                            if (((ObjBase*)((char*)this + 8))->AngleTo(*(double*)((char*)this + v4 * 0x98 + 0x4e8) - *(double*)(*(char**)*(char**)((char*)this + 0x78) + 0x20), *(double*)((char*)this + v4 * 0x98 + 0x4f0) - *(double*)(*(char**)*(char**)((char*)this + 0x78) + 0x28)) < 55.0) {
+                            if (((ObjBase*)&pattern)->AngleTo(m_objects[v4].x - (*m_opponent)->x, m_objects[v4].y - (*m_opponent)->y) < 55.0) {
                                 l50.type = 0x1b5;
                             }
-                            if (((ObjBase*)((char*)this + 8))->AngleTo(*(double*)((char*)this + v4 * 0x98 + 0x4e8) - *(double*)(*(char**)*(char**)((char*)this + 0x78) + 0x20), *(double*)((char*)this + v4 * 0x98 + 0x4f0) - *(double*)(*(char**)*(char**)((char*)this + 0x78) + 0x28)) < 40.0) {
+                            if (((ObjBase*)&pattern)->AngleTo(m_objects[v4].x - (*m_opponent)->x, m_objects[v4].y - (*m_opponent)->y) < 40.0) {
                                 l50.type = 0x1b6;
                             }
-                            if (((ObjBase*)((char*)this + 8))->AngleTo(*(double*)((char*)this + v4 * 0x98 + 0x4e8) - *(double*)(*(char**)*(char**)((char*)this + 0x78) + 0x20), *(double*)((char*)this + v4 * 0x98 + 0x4f0) - *(double*)(*(char**)*(char**)((char*)this + 0x78) + 0x28)) < 25.0) {
+                            if (((ObjBase*)&pattern)->AngleTo(m_objects[v4].x - (*m_opponent)->x, m_objects[v4].y - (*m_opponent)->y) < 25.0) {
                                 l50.type = 0x1b7;
                             }
                         }
-                        if (*(double*)((char*)this + v4 * 0x98 + 0x4e8) < *(double*)(*(char**)*(char**)((char*)this + 0x78) + 0x20)) {
-                            if (((ObjBase*)((char*)this + 8))->AngleTo(*(double*)(*(char**)*(char**)((char*)this + 0x78) + 0x20) - *(double*)((char*)this + v4 * 0x98 + 0x4e8), *(double*)(*(char**)*(char**)((char*)this + 0x78) + 0x28) - *(double*)((char*)this + v4 * 0x98 + 0x4f0)) < 70.0) {
+                        if (m_objects[v4].x < (*m_opponent)->x) {
+                            if (((ObjBase*)&pattern)->AngleTo((*m_opponent)->x - m_objects[v4].x, (*m_opponent)->y - m_objects[v4].y) < 70.0) {
                                 l50.type = 0x1b4;
                             }
-                            if (((ObjBase*)((char*)this + 8))->AngleTo(*(double*)(*(char**)*(char**)((char*)this + 0x78) + 0x20) - *(double*)((char*)this + v4 * 0x98 + 0x4e8), *(double*)(*(char**)*(char**)((char*)this + 0x78) + 0x28) - *(double*)((char*)this + v4 * 0x98 + 0x4f0)) < 55.0) {
+                            if (((ObjBase*)&pattern)->AngleTo((*m_opponent)->x - m_objects[v4].x, (*m_opponent)->y - m_objects[v4].y) < 55.0) {
                                 l50.type = 0x1b5;
                             }
-                            if (((ObjBase*)((char*)this + 8))->AngleTo(*(double*)(*(char**)*(char**)((char*)this + 0x78) + 0x20) - *(double*)((char*)this + v4 * 0x98 + 0x4e8), *(double*)(*(char**)*(char**)((char*)this + 0x78) + 0x28) - *(double*)((char*)this + v4 * 0x98 + 0x4f0)) < 40.0) {
+                            if (((ObjBase*)&pattern)->AngleTo((*m_opponent)->x - m_objects[v4].x, (*m_opponent)->y - m_objects[v4].y) < 40.0) {
                                 l50.type = 0x1b6;
                             }
-                            if (((ObjBase*)((char*)this + 8))->AngleTo(*(double*)(*(char**)*(char**)((char*)this + 0x78) + 0x20) - *(double*)((char*)this + v4 * 0x98 + 0x4e8), *(double*)(*(char**)*(char**)((char*)this + 0x78) + 0x28) - *(double*)((char*)this + v4 * 0x98 + 0x4f0)) < 25.0) {
+                            if (((ObjBase*)&pattern)->AngleTo((*m_opponent)->x - m_objects[v4].x, (*m_opponent)->y - m_objects[v4].y) < 25.0) {
                                 l50.type = 0x1b7;
                             }
                         }
                     }
-                    if (*((char*)this + v4 * 0x98 + 0x518) == -1) {
+                    if (m_objects[v4].facing == -1) {
                         l50.type = 0x1b3;
-                        if (*(double*)((char*)this + v4 * 0x98 + 0x4e8) > *(double*)(*(char**)*(char**)((char*)this + 0x78) + 0x20)) {
-                            if (((ObjBase*)((char*)this + 8))->AngleTo(*(double*)((char*)this + v4 * 0x98 + 0x4e8) - *(double*)(*(char**)*(char**)((char*)this + 0x78) + 0x20), *(double*)((char*)this + v4 * 0x98 + 0x4f0) - *(double*)(*(char**)*(char**)((char*)this + 0x78) + 0x28)) > 110.0) {
+                        if (m_objects[v4].x > (*m_opponent)->x) {
+                            if (((ObjBase*)&pattern)->AngleTo(m_objects[v4].x - (*m_opponent)->x, m_objects[v4].y - (*m_opponent)->y) > 110.0) {
                                 l50.type = 0x1b4;
                             }
-                            if (((ObjBase*)((char*)this + 8))->AngleTo(*(double*)((char*)this + v4 * 0x98 + 0x4e8) - *(double*)(*(char**)*(char**)((char*)this + 0x78) + 0x20), *(double*)((char*)this + v4 * 0x98 + 0x4f0) - *(double*)(*(char**)*(char**)((char*)this + 0x78) + 0x28)) > 125.0) {
+                            if (((ObjBase*)&pattern)->AngleTo(m_objects[v4].x - (*m_opponent)->x, m_objects[v4].y - (*m_opponent)->y) > 125.0) {
                                 l50.type = 0x1b5;
                             }
-                            if (((ObjBase*)((char*)this + 8))->AngleTo(*(double*)((char*)this + v4 * 0x98 + 0x4e8) - *(double*)(*(char**)*(char**)((char*)this + 0x78) + 0x20), *(double*)((char*)this + v4 * 0x98 + 0x4f0) - *(double*)(*(char**)*(char**)((char*)this + 0x78) + 0x28)) > 140.0) {
+                            if (((ObjBase*)&pattern)->AngleTo(m_objects[v4].x - (*m_opponent)->x, m_objects[v4].y - (*m_opponent)->y) > 140.0) {
                                 l50.type = 0x1b6;
                             }
-                            if (((ObjBase*)((char*)this + 8))->AngleTo(*(double*)((char*)this + v4 * 0x98 + 0x4e8) - *(double*)(*(char**)*(char**)((char*)this + 0x78) + 0x20), *(double*)((char*)this + v4 * 0x98 + 0x4f0) - *(double*)(*(char**)*(char**)((char*)this + 0x78) + 0x28)) > 165.0) {
+                            if (((ObjBase*)&pattern)->AngleTo(m_objects[v4].x - (*m_opponent)->x, m_objects[v4].y - (*m_opponent)->y) > 165.0) {
                                 l50.type = 0x1b7;
                             }
                         }
-                        if (*(double*)((char*)this + v4 * 0x98 + 0x4e8) > *(double*)(*(char**)*(char**)((char*)this + 0x78) + 0x20)) {
-                            if (((ObjBase*)((char*)this + 8))->AngleTo(*(double*)(*(char**)*(char**)((char*)this + 0x78) + 0x20) - *(double*)((char*)this + v4 * 0x98 + 0x4e8), *(double*)(*(char**)*(char**)((char*)this + 0x78) + 0x28) - *(double*)((char*)this + v4 * 0x98 + 0x4f0)) > 110.0) {
+                        if (m_objects[v4].x > (*m_opponent)->x) {
+                            if (((ObjBase*)&pattern)->AngleTo((*m_opponent)->x - m_objects[v4].x, (*m_opponent)->y - m_objects[v4].y) > 110.0) {
                                 l50.type = 0x1b4;
                             }
-                            if (((ObjBase*)((char*)this + 8))->AngleTo(*(double*)(*(char**)*(char**)((char*)this + 0x78) + 0x20) - *(double*)((char*)this + v4 * 0x98 + 0x4e8), *(double*)(*(char**)*(char**)((char*)this + 0x78) + 0x28) - *(double*)((char*)this + v4 * 0x98 + 0x4f0)) > 125.0) {
+                            if (((ObjBase*)&pattern)->AngleTo((*m_opponent)->x - m_objects[v4].x, (*m_opponent)->y - m_objects[v4].y) > 125.0) {
                                 l50.type = 0x1b5;
                             }
-                            if (((ObjBase*)((char*)this + 8))->AngleTo(*(double*)(*(char**)*(char**)((char*)this + 0x78) + 0x20) - *(double*)((char*)this + v4 * 0x98 + 0x4e8), *(double*)(*(char**)*(char**)((char*)this + 0x78) + 0x28) - *(double*)((char*)this + v4 * 0x98 + 0x4f0)) > 140.0) {
+                            if (((ObjBase*)&pattern)->AngleTo((*m_opponent)->x - m_objects[v4].x, (*m_opponent)->y - m_objects[v4].y) > 140.0) {
                                 l50.type = 0x1b6;
                             }
-                            if (((ObjBase*)((char*)this + 8))->AngleTo(*(double*)(*(char**)*(char**)((char*)this + 0x78) + 0x20) - *(double*)((char*)this + v4 * 0x98 + 0x4e8), *(double*)(*(char**)*(char**)((char*)this + 0x78) + 0x28) - *(double*)((char*)this + v4 * 0x98 + 0x4f0)) > 165.0) {
+                            if (((ObjBase*)&pattern)->AngleTo((*m_opponent)->x - m_objects[v4].x, (*m_opponent)->y - m_objects[v4].y) > 165.0) {
                                 l50.type = 0x1b7;
                             }
                         }
                     }
-                    l50.x = (double)(int)*(double*)((char*)this + v4 * 0x98 + 0x4e8);
-                    l50.y = (double)(int)*(double*)((char*)this + v4 * 0x98 + 0x4f0);
+                    l50.x = (double)(int)m_objects[v4].x;
+                    l50.y = (double)(int)m_objects[v4].y;
                     l50.unk20 = 2;
                     l50.unk21 = 1;
-                    l50.unk18 = *((char*)this + 0x50);
+                    l50.unk18 = facing;
                     l50.unk0 = 1;
                     Vf9(&l50);
-                    (*(int*)((char*)this + 0x3168))++;
-                    if (*(int*)((char*)this + v4 * 4 + 0x3274) == 2) {
+                    unk3168++;
+                    if (unk3274[v4] == 2) {
                         Vf10(v4);
-                        (*(int*)((char*)this + 0x3168))--;
+                        unk3168--;
                     }
-                    (*(int*)((char*)this + v4 * 4 + 0x3274))++;
-                    *(int*)((char*)this + v4 * 4 + 0x3374) = 0;
+                    unk3274[v4]++;
+                    unk3374[v4] = 0;
                     break;
                 }
-                (*(int*)((char*)this + v4 * 4 + 0x3374))++;
-                (*(short*)((char*)this + v4 * 0x98 + 0x4d4))++;
-                if (*(WORD*)((char*)this + v4 * 0x98 + 0x4d4) >= v54) {
-                    *(short*)((char*)this + v4 * 0x98 + 0x4d4) = 0;
-                    (*(short*)((char*)this + v4 * 0x98 + 0x4d2))++;
-                    *(int*)((char*)this + v4 * 0x98 + 0x550) = 0;
-                    if (*(WORD*)((char*)this + v4 * 0x98 + 0x4d2) >= v58) {
-                        *(short*)((char*)this + v4 * 0x98 + 0x4d2) = 0;
-                        (*(int*)((char*)this + v4 * 4 + 0x3174))++;
+                unk3374[v4]++;
+                m_objects[v4].timer++;
+                if (m_objects[v4].timer >= v54) {
+                    m_objects[v4].timer = 0;
+                    m_objects[v4].frame++;
+                    m_objects[v4].unk80 = 0;
+                    if (m_objects[v4].frame >= v58) {
+                        m_objects[v4].frame = 0;
+                        unk3174[v4]++;
                     }
                 }
                 break;
             case 0x1ba:
-                if (*(int*)((char*)this + v4 * 4 + 0x3174) == 0) {
-                    *(short*)((char*)this + v4 * 0x98 + 0x554) = 1;
-                    (*(int*)((char*)this + v4 * 4 + 0x3174))++;
-                    *(double*)((char*)this + v4 * 0x98 + 0x500) = -3.0;
-                    *(double*)((char*)this + v4 * 0x98 + 0x4f8) = 0.0;
+                if (unk3174[v4] == 0) {
+                    m_objects[v4].unk84 = 1;
+                    unk3174[v4]++;
+                    m_objects[v4].vy = -3.0;
+                    m_objects[v4].vx = 0.0;
                 }
-                if (*(double*)((char*)this + v4 * 0x98 + 0x4f8) == 0.0) {
-                    *(double*)((char*)this + v4 * 0x98 + 0x500) += 0.045;
-                    if (*(double*)((char*)this + v4 * 0x98 + 0x500) > 0.0) {
-                        *(double*)((char*)this + v4 * 0x98 + 0x500) = 0.0;
+                if (m_objects[v4].vx == 0.0) {
+                    m_objects[v4].vy += 0.045;
+                    if (m_objects[v4].vy > 0.0) {
+                        m_objects[v4].vy = 0.0;
                     }
                 }
-                if (*(WORD*)((char*)this + 8) > 0x31 && *(WORD*)((char*)this + 8) < 0x96) {
+                if (pattern > 0x31 && pattern < 0x96) {
                     l50.type = 0x195;
-                    l50.x = (double)(int)*(double*)((char*)this + v4 * 0x98 + 0x4e8);
-                    l50.y = (double)(int)*(double*)((char*)this + v4 * 0x98 + 0x4f0);
+                    l50.x = (double)(int)m_objects[v4].x;
+                    l50.y = (double)(int)m_objects[v4].y;
                     l50.unk20 = 2;
                     l50.unk21 = 1;
-                    l50.unk18 = *((char*)this + 0x50);
+                    l50.unk18 = facing;
                     Vf9(&l50);
                     Vf10(v4);
-                    (*(int*)((char*)this + 0x3168))--;
+                    unk3168--;
                     break;
                 }
-                if (*(int*)((char*)this + v4 * 4 + 0x3174) > 2 && *(int*)((char*)this + v4 * 4 + 0x3374) > 0xf) {
-                    if (*((char*)this + v4 * 0x98 + 0x518) == 1) {
+                if (unk3174[v4] > 2 && unk3374[v4] > 0xf) {
+                    if (m_objects[v4].facing == 1) {
                         l50.type = 0x1b3;
-                        if (*(double*)((char*)this + v4 * 0x98 + 0x4e8) > *(double*)(*(char**)*(char**)((char*)this + 0x78) + 0x20)) {
-                            if (((ObjBase*)((char*)this + 8))->AngleTo(*(double*)((char*)this + v4 * 0x98 + 0x4e8) - *(double*)(*(char**)*(char**)((char*)this + 0x78) + 0x20), *(double*)((char*)this + v4 * 0x98 + 0x4f0) - *(double*)(*(char**)*(char**)((char*)this + 0x78) + 0x28)) < 70.0) {
+                        if (m_objects[v4].x > (*m_opponent)->x) {
+                            if (((ObjBase*)&pattern)->AngleTo(m_objects[v4].x - (*m_opponent)->x, m_objects[v4].y - (*m_opponent)->y) < 70.0) {
                                 l50.type = 0x1b4;
                             }
-                            if (((ObjBase*)((char*)this + 8))->AngleTo(*(double*)((char*)this + v4 * 0x98 + 0x4e8) - *(double*)(*(char**)*(char**)((char*)this + 0x78) + 0x20), *(double*)((char*)this + v4 * 0x98 + 0x4f0) - *(double*)(*(char**)*(char**)((char*)this + 0x78) + 0x28)) < 55.0) {
+                            if (((ObjBase*)&pattern)->AngleTo(m_objects[v4].x - (*m_opponent)->x, m_objects[v4].y - (*m_opponent)->y) < 55.0) {
                                 l50.type = 0x1b5;
                             }
-                            if (((ObjBase*)((char*)this + 8))->AngleTo(*(double*)((char*)this + v4 * 0x98 + 0x4e8) - *(double*)(*(char**)*(char**)((char*)this + 0x78) + 0x20), *(double*)((char*)this + v4 * 0x98 + 0x4f0) - *(double*)(*(char**)*(char**)((char*)this + 0x78) + 0x28)) < 40.0) {
+                            if (((ObjBase*)&pattern)->AngleTo(m_objects[v4].x - (*m_opponent)->x, m_objects[v4].y - (*m_opponent)->y) < 40.0) {
                                 l50.type = 0x1b6;
                             }
-                            if (((ObjBase*)((char*)this + 8))->AngleTo(*(double*)((char*)this + v4 * 0x98 + 0x4e8) - *(double*)(*(char**)*(char**)((char*)this + 0x78) + 0x20), *(double*)((char*)this + v4 * 0x98 + 0x4f0) - *(double*)(*(char**)*(char**)((char*)this + 0x78) + 0x28)) < 25.0) {
+                            if (((ObjBase*)&pattern)->AngleTo(m_objects[v4].x - (*m_opponent)->x, m_objects[v4].y - (*m_opponent)->y) < 25.0) {
                                 l50.type = 0x1b7;
                             }
                         }
-                        if (*(double*)((char*)this + v4 * 0x98 + 0x4e8) < *(double*)(*(char**)*(char**)((char*)this + 0x78) + 0x20)) {
-                            if (((ObjBase*)((char*)this + 8))->AngleTo(*(double*)(*(char**)*(char**)((char*)this + 0x78) + 0x20) - *(double*)((char*)this + v4 * 0x98 + 0x4e8), *(double*)(*(char**)*(char**)((char*)this + 0x78) + 0x28) - *(double*)((char*)this + v4 * 0x98 + 0x4f0)) < 70.0) {
+                        if (m_objects[v4].x < (*m_opponent)->x) {
+                            if (((ObjBase*)&pattern)->AngleTo((*m_opponent)->x - m_objects[v4].x, (*m_opponent)->y - m_objects[v4].y) < 70.0) {
                                 l50.type = 0x1b4;
                             }
-                            if (((ObjBase*)((char*)this + 8))->AngleTo(*(double*)(*(char**)*(char**)((char*)this + 0x78) + 0x20) - *(double*)((char*)this + v4 * 0x98 + 0x4e8), *(double*)(*(char**)*(char**)((char*)this + 0x78) + 0x28) - *(double*)((char*)this + v4 * 0x98 + 0x4f0)) < 55.0) {
+                            if (((ObjBase*)&pattern)->AngleTo((*m_opponent)->x - m_objects[v4].x, (*m_opponent)->y - m_objects[v4].y) < 55.0) {
                                 l50.type = 0x1b5;
                             }
-                            if (((ObjBase*)((char*)this + 8))->AngleTo(*(double*)(*(char**)*(char**)((char*)this + 0x78) + 0x20) - *(double*)((char*)this + v4 * 0x98 + 0x4e8), *(double*)(*(char**)*(char**)((char*)this + 0x78) + 0x28) - *(double*)((char*)this + v4 * 0x98 + 0x4f0)) < 40.0) {
+                            if (((ObjBase*)&pattern)->AngleTo((*m_opponent)->x - m_objects[v4].x, (*m_opponent)->y - m_objects[v4].y) < 40.0) {
                                 l50.type = 0x1b6;
                             }
-                            if (((ObjBase*)((char*)this + 8))->AngleTo(*(double*)(*(char**)*(char**)((char*)this + 0x78) + 0x20) - *(double*)((char*)this + v4 * 0x98 + 0x4e8), *(double*)(*(char**)*(char**)((char*)this + 0x78) + 0x28) - *(double*)((char*)this + v4 * 0x98 + 0x4f0)) < 25.0) {
+                            if (((ObjBase*)&pattern)->AngleTo((*m_opponent)->x - m_objects[v4].x, (*m_opponent)->y - m_objects[v4].y) < 25.0) {
                                 l50.type = 0x1b7;
                             }
                         }
                     }
-                    if (*((char*)this + v4 * 0x98 + 0x518) == -1) {
+                    if (m_objects[v4].facing == -1) {
                         l50.type = 0x1b3;
-                        if (*(double*)((char*)this + v4 * 0x98 + 0x4e8) > *(double*)(*(char**)*(char**)((char*)this + 0x78) + 0x20)) {
-                            if (((ObjBase*)((char*)this + 8))->AngleTo(*(double*)((char*)this + v4 * 0x98 + 0x4e8) - *(double*)(*(char**)*(char**)((char*)this + 0x78) + 0x20), *(double*)((char*)this + v4 * 0x98 + 0x4f0) - *(double*)(*(char**)*(char**)((char*)this + 0x78) + 0x28)) > 110.0) {
+                        if (m_objects[v4].x > (*m_opponent)->x) {
+                            if (((ObjBase*)&pattern)->AngleTo(m_objects[v4].x - (*m_opponent)->x, m_objects[v4].y - (*m_opponent)->y) > 110.0) {
                                 l50.type = 0x1b4;
                             }
-                            if (((ObjBase*)((char*)this + 8))->AngleTo(*(double*)((char*)this + v4 * 0x98 + 0x4e8) - *(double*)(*(char**)*(char**)((char*)this + 0x78) + 0x20), *(double*)((char*)this + v4 * 0x98 + 0x4f0) - *(double*)(*(char**)*(char**)((char*)this + 0x78) + 0x28)) > 125.0) {
+                            if (((ObjBase*)&pattern)->AngleTo(m_objects[v4].x - (*m_opponent)->x, m_objects[v4].y - (*m_opponent)->y) > 125.0) {
                                 l50.type = 0x1b5;
                             }
-                            if (((ObjBase*)((char*)this + 8))->AngleTo(*(double*)((char*)this + v4 * 0x98 + 0x4e8) - *(double*)(*(char**)*(char**)((char*)this + 0x78) + 0x20), *(double*)((char*)this + v4 * 0x98 + 0x4f0) - *(double*)(*(char**)*(char**)((char*)this + 0x78) + 0x28)) > 140.0) {
+                            if (((ObjBase*)&pattern)->AngleTo(m_objects[v4].x - (*m_opponent)->x, m_objects[v4].y - (*m_opponent)->y) > 140.0) {
                                 l50.type = 0x1b6;
                             }
-                            if (((ObjBase*)((char*)this + 8))->AngleTo(*(double*)((char*)this + v4 * 0x98 + 0x4e8) - *(double*)(*(char**)*(char**)((char*)this + 0x78) + 0x20), *(double*)((char*)this + v4 * 0x98 + 0x4f0) - *(double*)(*(char**)*(char**)((char*)this + 0x78) + 0x28)) > 165.0) {
+                            if (((ObjBase*)&pattern)->AngleTo(m_objects[v4].x - (*m_opponent)->x, m_objects[v4].y - (*m_opponent)->y) > 165.0) {
                                 l50.type = 0x1b7;
                             }
                         }
-                        if (*(double*)((char*)this + v4 * 0x98 + 0x4e8) > *(double*)(*(char**)*(char**)((char*)this + 0x78) + 0x20)) {
-                            if (((ObjBase*)((char*)this + 8))->AngleTo(*(double*)(*(char**)*(char**)((char*)this + 0x78) + 0x20) - *(double*)((char*)this + v4 * 0x98 + 0x4e8), *(double*)(*(char**)*(char**)((char*)this + 0x78) + 0x28) - *(double*)((char*)this + v4 * 0x98 + 0x4f0)) > 110.0) {
+                        if (m_objects[v4].x > (*m_opponent)->x) {
+                            if (((ObjBase*)&pattern)->AngleTo((*m_opponent)->x - m_objects[v4].x, (*m_opponent)->y - m_objects[v4].y) > 110.0) {
                                 l50.type = 0x1b4;
                             }
-                            if (((ObjBase*)((char*)this + 8))->AngleTo(*(double*)(*(char**)*(char**)((char*)this + 0x78) + 0x20) - *(double*)((char*)this + v4 * 0x98 + 0x4e8), *(double*)(*(char**)*(char**)((char*)this + 0x78) + 0x28) - *(double*)((char*)this + v4 * 0x98 + 0x4f0)) > 125.0) {
+                            if (((ObjBase*)&pattern)->AngleTo((*m_opponent)->x - m_objects[v4].x, (*m_opponent)->y - m_objects[v4].y) > 125.0) {
                                 l50.type = 0x1b5;
                             }
-                            if (((ObjBase*)((char*)this + 8))->AngleTo(*(double*)(*(char**)*(char**)((char*)this + 0x78) + 0x20) - *(double*)((char*)this + v4 * 0x98 + 0x4e8), *(double*)(*(char**)*(char**)((char*)this + 0x78) + 0x28) - *(double*)((char*)this + v4 * 0x98 + 0x4f0)) > 140.0) {
+                            if (((ObjBase*)&pattern)->AngleTo((*m_opponent)->x - m_objects[v4].x, (*m_opponent)->y - m_objects[v4].y) > 140.0) {
                                 l50.type = 0x1b6;
                             }
-                            if (((ObjBase*)((char*)this + 8))->AngleTo(*(double*)(*(char**)*(char**)((char*)this + 0x78) + 0x20) - *(double*)((char*)this + v4 * 0x98 + 0x4e8), *(double*)(*(char**)*(char**)((char*)this + 0x78) + 0x28) - *(double*)((char*)this + v4 * 0x98 + 0x4f0)) > 165.0) {
+                            if (((ObjBase*)&pattern)->AngleTo((*m_opponent)->x - m_objects[v4].x, (*m_opponent)->y - m_objects[v4].y) > 165.0) {
                                 l50.type = 0x1b7;
                             }
                         }
                     }
-                    l50.x = (double)(int)*(double*)((char*)this + v4 * 0x98 + 0x4e8);
-                    l50.y = (double)(int)*(double*)((char*)this + v4 * 0x98 + 0x4f0);
+                    l50.x = (double)(int)m_objects[v4].x;
+                    l50.y = (double)(int)m_objects[v4].y;
                     l50.unk20 = 2;
                     l50.unk21 = 1;
-                    l50.unk18 = *((char*)this + 0x50);
+                    l50.unk18 = facing;
                     l50.unk0 = 1;
                     Vf9(&l50);
-                    (*(int*)((char*)this + 0x3168))++;
-                    if (*(int*)((char*)this + v4 * 4 + 0x3274) == 4) {
+                    unk3168++;
+                    if (unk3274[v4] == 4) {
                         Vf10(v4);
-                        (*(int*)((char*)this + 0x3168))--;
+                        unk3168--;
                     }
-                    (*(int*)((char*)this + v4 * 4 + 0x3274))++;
-                    *(int*)((char*)this + v4 * 4 + 0x3374) = 0;
+                    unk3274[v4]++;
+                    unk3374[v4] = 0;
                     break;
                 }
-                (*(int*)((char*)this + v4 * 4 + 0x3374))++;
-                (*(short*)((char*)this + v4 * 0x98 + 0x4d4))++;
-                if (*(WORD*)((char*)this + v4 * 0x98 + 0x4d4) >= v54) {
-                    *(short*)((char*)this + v4 * 0x98 + 0x4d4) = 0;
-                    (*(short*)((char*)this + v4 * 0x98 + 0x4d2))++;
-                    *(int*)((char*)this + v4 * 0x98 + 0x550) = 0;
-                    if (*(WORD*)((char*)this + v4 * 0x98 + 0x4d2) >= v58) {
-                        *(short*)((char*)this + v4 * 0x98 + 0x4d2) = 0;
-                        (*(int*)((char*)this + v4 * 4 + 0x3174))++;
+                unk3374[v4]++;
+                m_objects[v4].timer++;
+                if (m_objects[v4].timer >= v54) {
+                    m_objects[v4].timer = 0;
+                    m_objects[v4].frame++;
+                    m_objects[v4].unk80 = 0;
+                    if (m_objects[v4].frame >= v58) {
+                        m_objects[v4].frame = 0;
+                        unk3174[v4]++;
                     }
                 }
                 break;
             case 0x1bb:
-                if (*(WORD*)((char*)this + v4 * 0x98 + 0x4d4) == 0) {
+                if (m_objects[v4].timer == 0) {
                     l50.type = 0x190;
-                    l50.x = (double)(int)*(double*)((char*)this + v4 * 0x98 + 0x4e8);
-                    l50.y = (double)(int)*(double*)((char*)this + v4 * 0x98 + 0x4f0);
+                    l50.x = (double)(int)m_objects[v4].x;
+                    l50.y = (double)(int)m_objects[v4].y;
                     l50.unk20 = 2;
                     l50.unk21 = 1;
-                    l50.unk18 = *((char*)this + 0x50);
+                    l50.unk18 = facing;
                     Vf9(&l50);
                 }
-                if (*(WORD*)((char*)this + 8) > 0x31 && *(WORD*)((char*)this + 8) < 0x96) {
+                if (pattern > 0x31 && pattern < 0x96) {
                     Vf10(v4);
-                    (*(int*)((char*)this + 0x3170))--;
+                    unk3170--;
                     break;
                 }
-                (*(short*)((char*)this + v4 * 0x98 + 0x4d4))++;
-                if (*(WORD*)((char*)this + v4 * 0x98 + 0x4d4) >= v54) {
-                    *(short*)((char*)this + v4 * 0x98 + 0x4d4) = 0;
-                    (*(short*)((char*)this + v4 * 0x98 + 0x4d2))++;
-                    *(int*)((char*)this + v4 * 0x98 + 0x550) = 0;
-                    if (*(WORD*)((char*)this + v4 * 0x98 + 0x4d2) >= v58) {
-                        if (*(int*)((char*)this + v4 * 4 + 0x3174) < 0) {
-                            (*(short*)((char*)this + v4 * 0x98 + 0x4d2))--;
-                            (*(int*)((char*)this + v4 * 4 + 0x3174))++;
+                m_objects[v4].timer++;
+                if (m_objects[v4].timer >= v54) {
+                    m_objects[v4].timer = 0;
+                    m_objects[v4].frame++;
+                    m_objects[v4].unk80 = 0;
+                    if (m_objects[v4].frame >= v58) {
+                        if (unk3174[v4] < 0) {
+                            m_objects[v4].frame--;
+                            unk3174[v4]++;
                             break;
                         }
                         Vf10(v4);
-                        (*(int*)((char*)this + 0x3170))--;
+                        unk3170--;
                     }
                 }
                 break;
             case 0x1bd:
-                if (*(WORD*)((char*)this + v4 * 0x98 + 0x4d4) == 0) {
+                if (m_objects[v4].timer == 0) {
                     l50.type = 0x190;
-                    l50.x = (double)((int)*(double*)((char*)this + v4 * 0x98 + 0x4e8) + (*(int*)((char*)this + v4 * 4 + 0x3174) * 0x19 - 0x32) * *((char*)this + v4 * 0x98 + 0x518));
-                    l50.y = (double)(int)*(double*)((char*)this + v4 * 0x98 + 0x4f0);
+                    l50.x = (double)((int)m_objects[v4].x + (unk3174[v4] * 0x19 - 0x32) * m_objects[v4].facing);
+                    l50.y = (double)(int)m_objects[v4].y;
                     l50.unk20 = 2;
                     l50.unk21 = 1;
-                    l50.unk18 = *((char*)this + 0x50);
+                    l50.unk18 = facing;
                     Vf9(&l50);
                 }
-                if (*(WORD*)((char*)this + 8) > 0x31 && *(WORD*)((char*)this + 8) < 0x96) {
+                if (pattern > 0x31 && pattern < 0x96) {
                     Vf10(v4);
-                    (*(int*)((char*)this + 0x3170))--;
+                    unk3170--;
                     break;
                 }
-                (*(short*)((char*)this + v4 * 0x98 + 0x4d4))++;
-                if (*(WORD*)((char*)this + v4 * 0x98 + 0x4d4) >= v54) {
-                    *(short*)((char*)this + v4 * 0x98 + 0x4d4) = 0;
-                    (*(short*)((char*)this + v4 * 0x98 + 0x4d2))++;
-                    *(int*)((char*)this + v4 * 0x98 + 0x550) = 0;
-                    if (*(WORD*)((char*)this + v4 * 0x98 + 0x4d2) >= v58) {
-                        if (*(int*)((char*)this + v4 * 4 + 0x3174) < 4) {
-                            (*(short*)((char*)this + v4 * 0x98 + 0x4d2))--;
-                            (*(int*)((char*)this + v4 * 4 + 0x3174))++;
+                m_objects[v4].timer++;
+                if (m_objects[v4].timer >= v54) {
+                    m_objects[v4].timer = 0;
+                    m_objects[v4].frame++;
+                    m_objects[v4].unk80 = 0;
+                    if (m_objects[v4].frame >= v58) {
+                        if (unk3174[v4] < 4) {
+                            m_objects[v4].frame--;
+                            unk3174[v4]++;
                             break;
                         }
                         Vf10(v4);
-                        (*(int*)((char*)this + 0x3170))--;
+                        unk3170--;
                     }
                 }
                 break;
             case 0x1bc:
-                if (*(WORD*)((char*)this + v4 * 0x98 + 0x4d4) == 0) {
+                if (m_objects[v4].timer == 0) {
                     l50.type = 0x190;
-                    l50.x = (double)((int)*(double*)((char*)this + v4 * 0x98 + 0x4e8) + (*(int*)((char*)this + v4 * 4 + 0x3174) - 1) * 0x19 * *((char*)this + v4 * 0x98 + 0x518));
-                    l50.y = (double)(int)*(double*)((char*)this + v4 * 0x98 + 0x4f0);
+                    l50.x = (double)((int)m_objects[v4].x + (unk3174[v4] - 1) * 0x19 * m_objects[v4].facing);
+                    l50.y = (double)(int)m_objects[v4].y;
                     l50.unk20 = 2;
                     l50.unk21 = 1;
-                    l50.unk18 = *((char*)this + 0x50);
+                    l50.unk18 = facing;
                     Vf9(&l50);
                 }
-                if (*(WORD*)((char*)this + 8) > 0x31 && *(WORD*)((char*)this + 8) < 0x96) {
+                if (pattern > 0x31 && pattern < 0x96) {
                     Vf10(v4);
-                    (*(int*)((char*)this + 0x3170))--;
+                    unk3170--;
                     break;
                 }
-                (*(short*)((char*)this + v4 * 0x98 + 0x4d4))++;
-                if (*(WORD*)((char*)this + v4 * 0x98 + 0x4d4) >= v54) {
-                    *(short*)((char*)this + v4 * 0x98 + 0x4d4) = 0;
-                    (*(short*)((char*)this + v4 * 0x98 + 0x4d2))++;
-                    *(int*)((char*)this + v4 * 0x98 + 0x550) = 0;
-                    if (*(WORD*)((char*)this + v4 * 0x98 + 0x4d2) >= v58) {
-                        if (*(int*)((char*)this + v4 * 4 + 0x3174) < 2) {
-                            (*(short*)((char*)this + v4 * 0x98 + 0x4d2))--;
-                            (*(int*)((char*)this + v4 * 4 + 0x3174))++;
+                m_objects[v4].timer++;
+                if (m_objects[v4].timer >= v54) {
+                    m_objects[v4].timer = 0;
+                    m_objects[v4].frame++;
+                    m_objects[v4].unk80 = 0;
+                    if (m_objects[v4].frame >= v58) {
+                        if (unk3174[v4] < 2) {
+                            m_objects[v4].frame--;
+                            unk3174[v4]++;
                             break;
                         }
                         Vf10(v4);
-                        (*(int*)((char*)this + 0x3170))--;
+                        unk3170--;
                     }
                 }
                 break;
             case 0x1be:
-                if (*(WORD*)((char*)this + v4 * 0x98 + 0x4d4) == 0 && *(WORD*)((char*)this + v4 * 0x98 + 0x4d2) == 0) {
+                if (m_objects[v4].timer == 0 && m_objects[v4].frame == 0) {
                     CPlayer::Unk410a10(0xa, 0xa);
-                    *((char*)this + 0x2c8) = 0x14;
-                    *(short*)((char*)this + v4 * 0x98 + 0x554) = 1;
+                    unk2c8 = 0x14;
+                    m_objects[v4].unk84 = 1;
                 }
-                if (*(WORD*)((char*)this + v4 * 0x98 + 0x4d2) > 8 && *(WORD*)((char*)this + v4 * 0x98 + 0x4d2) < 0xb && *(int*)((char*)this + v4 * 4 + 0x3174) < 6 && *(int*)((char*)this + v4 * 4 + 0x3274) <= 0) {
+                if (m_objects[v4].frame > 8 && m_objects[v4].frame < 0xb && unk3174[v4] < 6 && unk3274[v4] <= 0) {
                     l50.type = 0x1c0;
-                    l50.x = (double)((int)*(double*)((char*)this + v4 * 0x98 + 0x4e8) + -0x50 + (WORD)CPlayer::Unk4108a0(0, 0xa0));
-                    l50.y = (double)((int)*(double*)((char*)this + v4 * 0x98 + 0x4f0) + 0xf - (WORD)CPlayer::Unk4108a0(0, 0x1e));
+                    l50.x = (double)((int)m_objects[v4].x + -0x50 + (WORD)CPlayer::Unk4108a0(0, 0xa0));
+                    l50.y = (double)((int)m_objects[v4].y + 0xf - (WORD)CPlayer::Unk4108a0(0, 0x1e));
                     l50.unk20 = 2;
                     l50.unk21 = 1;
-                    l50.unk18 = *((char*)this + 0x50);
+                    l50.unk18 = facing;
                     Vf9(&l50);
                     l50.type = 0x1bf;
                     Vf9(&l50);
-                    *(int*)((char*)this + v4 * 4 + 0x3274) = 0x2d;
-                    (*(int*)((char*)this + v4 * 4 + 0x3174))++;
+                    unk3274[v4] = 0x2d;
+                    unk3174[v4]++;
                     CPlayer::Unk410a10(5, 5);
-                    *((char*)this + 0x2c8) = 0x15;
+                    unk2c8 = 0x15;
                 }
-                (*(int*)((char*)this + v4 * 4 + 0x3274))--;
-                *(double*)((char*)this + v4 * 0x98 + 0x4e8) = *(double*)((char*)this + 0x20);
-                (*(short*)((char*)this + v4 * 0x98 + 0x4d4))++;
-                if (*(WORD*)((char*)this + v4 * 0x98 + 0x4d4) >= v54) {
-                    *(short*)((char*)this + v4 * 0x98 + 0x4d4) = 0;
-                    (*(short*)((char*)this + v4 * 0x98 + 0x4d2))++;
-                    *(int*)((char*)this + v4 * 0x98 + 0x550) = 0;
-                    if (*(WORD*)((char*)this + v4 * 0x98 + 0x4d2) == 0xb && *(WORD*)((char*)this + 0xa) == 0xd) {
-                        *(short*)((char*)this + v4 * 0x98 + 0x4d2) = *(WORD*)((char*)this + v4 * 0x98 + 0x4d2) - 2;
+                unk3274[v4]--;
+                m_objects[v4].x = x;
+                m_objects[v4].timer++;
+                if (m_objects[v4].timer >= v54) {
+                    m_objects[v4].timer = 0;
+                    m_objects[v4].frame++;
+                    m_objects[v4].unk80 = 0;
+                    if (m_objects[v4].frame == 0xb && frame == 0xd) {
+                        m_objects[v4].frame = m_objects[v4].frame - 2;
                     }
-                    if (*(WORD*)((char*)this + v4 * 0x98 + 0x4d2) >= v58) {
+                    if (m_objects[v4].frame >= v58) {
                         Vf10(v4);
                     }
                 }
                 break;
             case 0x1bf:
-                *(double*)((char*)this + v4 * 0x98 + 0x4e8) = *(double*)((char*)this + 0x20);
-                (*(short*)((char*)this + v4 * 0x98 + 0x4d4))++;
-                if (*(WORD*)((char*)this + v4 * 0x98 + 0x4d4) >= v54) {
-                    *(short*)((char*)this + v4 * 0x98 + 0x4d4) = 0;
-                    (*(short*)((char*)this + v4 * 0x98 + 0x4d2))++;
-                    *(int*)((char*)this + v4 * 0x98 + 0x550) = 0;
-                    if (*(WORD*)((char*)this + v4 * 0x98 + 0x4d2) >= v58) {
+                m_objects[v4].x = x;
+                m_objects[v4].timer++;
+                if (m_objects[v4].timer >= v54) {
+                    m_objects[v4].timer = 0;
+                    m_objects[v4].frame++;
+                    m_objects[v4].unk80 = 0;
+                    if (m_objects[v4].frame >= v58) {
                         Vf10(v4);
                     }
                 }
                 break;
             case 0x1c0:
-                (*(short*)((char*)this + v4 * 0x98 + 0x4d4))++;
-                if (*(WORD*)((char*)this + v4 * 0x98 + 0x4d4) >= v54) {
-                    *(short*)((char*)this + v4 * 0x98 + 0x4d4) = 0;
-                    (*(short*)((char*)this + v4 * 0x98 + 0x4d2))++;
-                    *(int*)((char*)this + v4 * 0x98 + 0x550) = 0;
-                    if (*(WORD*)((char*)this + v4 * 0x98 + 0x4d2) == 2) {
+                m_objects[v4].timer++;
+                if (m_objects[v4].timer >= v54) {
+                    m_objects[v4].timer = 0;
+                    m_objects[v4].frame++;
+                    m_objects[v4].unk80 = 0;
+                    if (m_objects[v4].frame == 2) {
                         l50.type = 0x1c6;
-                        l50.x = (double)(int)*(double*)((char*)this + 0x20);
+                        l50.x = (double)(int)x;
                         l50.y = 0.0;
                         l50.unk20 = 2;
                         l50.unk21 = 0;
-                        l50.unk18 = *((char*)this + 0x50);
+                        l50.unk18 = facing;
                         Vf9(&l50);
                     }
-                    if (*(WORD*)((char*)this + v4 * 0x98 + 0x4d2) >= v58) {
+                    if (m_objects[v4].frame >= v58) {
                         Vf10(v4);
                     }
                 }
                 break;
             case 0x1c1:
-                if (*(WORD*)((char*)this + v4 * 0x98 + 0x4d4) == 0 && *(WORD*)((char*)this + v4 * 0x98 + 0x4d2) == 0) {
-                    *((char*)this + 0x2c8) = 0x16;
+                if (m_objects[v4].timer == 0 && m_objects[v4].frame == 0) {
+                    unk2c8 = 0x16;
                 }
-                if (*(WORD*)((char*)this + v4 * 0x98 + 0x4d2) == 0xe && *(WORD*)((char*)this + v4 * 0x98 + 0x4d4) == 0) {
+                if (m_objects[v4].frame == 0xe && m_objects[v4].timer == 0) {
                     l50.type = 0x1be;
-                    l50.x = (double)(int)*(double*)((char*)this + v4 * 0x98 + 0x4e8);
-                    l50.y = (double)(int)*(double*)((char*)this + v4 * 0x98 + 0x4f0);
+                    l50.x = (double)(int)m_objects[v4].x;
+                    l50.y = (double)(int)m_objects[v4].y;
                     l50.unk20 = 2;
                     l50.unk21 = 1;
-                    l50.unk18 = *((char*)this + 0x50);
+                    l50.unk18 = facing;
                     Vf9(&l50);
                     l50.type = 0x1bf;
                     Vf9(&l50);
-                    *(int*)((char*)this + v4 * 4 + 0x3274) = 0x2d;
-                    (*(int*)((char*)this + v4 * 4 + 0x3174))++;
+                    unk3274[v4] = 0x2d;
+                    unk3174[v4]++;
                     CPlayer::Unk410a10(5, 5);
                 }
-                *(double*)((char*)this + v4 * 0x98 + 0x4e8) = *(double*)((char*)this + 0x20);
-                (*(short*)((char*)this + v4 * 0x98 + 0x4d4))++;
-                if (*(WORD*)((char*)this + v4 * 0x98 + 0x4d4) >= v54) {
-                    *(short*)((char*)this + v4 * 0x98 + 0x4d4) = 0;
-                    (*(short*)((char*)this + v4 * 0x98 + 0x4d2))++;
-                    *(int*)((char*)this + v4 * 0x98 + 0x550) = 0;
-                    if (*(WORD*)((char*)this + v4 * 0x98 + 0x4d2) >= v58) {
+                m_objects[v4].x = x;
+                m_objects[v4].timer++;
+                if (m_objects[v4].timer >= v54) {
+                    m_objects[v4].timer = 0;
+                    m_objects[v4].frame++;
+                    m_objects[v4].unk80 = 0;
+                    if (m_objects[v4].frame >= v58) {
                         Vf10(v4);
                     }
                 }
                 break;
             case 0x1c2:
-                if (*(int*)((char*)this + v4 * 4 + 0x3174) == 0) {
-                    *((char*)this + 0x2c8) = 0x17;
-                    *(short*)((char*)this + v4 * 0x98 + 0x554) = 1;
-                    (*(int*)((char*)this + v4 * 4 + 0x3174))++;
-                    *(double*)((char*)this + v4 * 0x98 + 0x4f8) = 6.0;
-                    *(double*)((char*)this + v4 * 0x98 + 0x500) = -6.0;
+                if (unk3174[v4] == 0) {
+                    unk2c8 = 0x17;
+                    m_objects[v4].unk84 = 1;
+                    unk3174[v4]++;
+                    m_objects[v4].vx = 6.0;
+                    m_objects[v4].vy = -6.0;
                 }
-                if (*(double*)((char*)this + v4 * 0x98 + 0x4f0) < -1600.0) {
+                if (m_objects[v4].y < -1600.0) {
                     Vf10(v4);
                     break;
                 }
-                (*(short*)((char*)this + v4 * 0x98 + 0x4d4))++;
-                if (*(WORD*)((char*)this + v4 * 0x98 + 0x4d4) >= v54) {
-                    *(short*)((char*)this + v4 * 0x98 + 0x4d4) = 0;
-                    (*(short*)((char*)this + v4 * 0x98 + 0x4d2))++;
-                    *(int*)((char*)this + v4 * 0x98 + 0x550) = 0;
-                    if (*(WORD*)((char*)this + v4 * 0x98 + 0x4d2) >= v58) {
-                        *(short*)((char*)this + v4 * 0x98 + 0x4d2) = 0;
+                m_objects[v4].timer++;
+                if (m_objects[v4].timer >= v54) {
+                    m_objects[v4].timer = 0;
+                    m_objects[v4].frame++;
+                    m_objects[v4].unk80 = 0;
+                    if (m_objects[v4].frame >= v58) {
+                        m_objects[v4].frame = 0;
                     }
                 }
                 break;
             case 0x1c3:
-                if (*(int*)((char*)this + v4 * 4 + 0x3174) == 0) {
-                    *((char*)this + 0x2c8) = 0x18;
-                    *(short*)((char*)this + v4 * 0x98 + 0x554) = 1;
-                    (*(int*)((char*)this + v4 * 4 + 0x3174))++;
-                    ((ObjBase*)((char*)this + v4 * 0x98 + 0x4d0))->SetVelocity(60.0, 4.0);
+                if (unk3174[v4] == 0) {
+                    unk2c8 = 0x18;
+                    m_objects[v4].unk84 = 1;
+                    unk3174[v4]++;
+                    (&m_objects[v4])->SetVelocity(60.0, 4.0);
                 }
-                if (*(double*)((char*)this + v4 * 0x98 + 0x4f0) > 0.0) {
+                if (m_objects[v4].y > 0.0) {
                     l50.type = 0x1bf;
-                    l50.x = (double)(int)*(double*)((char*)this + v4 * 0x98 + 0x4e8);
+                    l50.x = (double)(int)m_objects[v4].x;
                     l50.y = 0.0;
                     l50.unk20 = 2;
                     l50.unk21 = 0;
-                    l50.unk18 = *((char*)this + 0x3164);
+                    l50.unk18 = *(char*)&unk3164;
                     Vf9(&l50);
                     l50.type = 0x1c4;
                     l50.unk21 = 1;
-                    l50.unk18 = *((char*)this + 0x3164);
+                    l50.unk18 = *(char*)&unk3164;
                     Vf9(&l50);
                     l50.type = 0x1c5;
                     l50.unk21 = 1;
-                    l50.unk18 = *((char*)this + 0x3164);
+                    l50.unk18 = *(char*)&unk3164;
                     Vf9(&l50);
                     Vf10(v4);
                     break;
                 }
-                (*(short*)((char*)this + v4 * 0x98 + 0x4d4))++;
-                if (*(WORD*)((char*)this + v4 * 0x98 + 0x4d4) >= v54) {
-                    *(short*)((char*)this + v4 * 0x98 + 0x4d4) = 0;
-                    (*(short*)((char*)this + v4 * 0x98 + 0x4d2))++;
-                    *(int*)((char*)this + v4 * 0x98 + 0x550) = 0;
-                    if (*(WORD*)((char*)this + v4 * 0x98 + 0x4d2) >= v58) {
-                        *(short*)((char*)this + v4 * 0x98 + 0x4d2) = 0;
+                m_objects[v4].timer++;
+                if (m_objects[v4].timer >= v54) {
+                    m_objects[v4].timer = 0;
+                    m_objects[v4].frame++;
+                    m_objects[v4].unk80 = 0;
+                    if (m_objects[v4].frame >= v58) {
+                        m_objects[v4].frame = 0;
                     }
                 }
                 break;
             case 0x1c4:
-                (*(short*)((char*)this + v4 * 0x98 + 0x4d4))++;
-                if (*(WORD*)((char*)this + v4 * 0x98 + 0x4d4) >= v54) {
-                    *(short*)((char*)this + v4 * 0x98 + 0x4d4) = 0;
-                    (*(short*)((char*)this + v4 * 0x98 + 0x4d2))++;
-                    *(int*)((char*)this + v4 * 0x98 + 0x550) = 0;
-                    if (*(WORD*)((char*)this + v4 * 0x98 + 0x4d2) >= v58) {
+                m_objects[v4].timer++;
+                if (m_objects[v4].timer >= v54) {
+                    m_objects[v4].timer = 0;
+                    m_objects[v4].frame++;
+                    m_objects[v4].unk80 = 0;
+                    if (m_objects[v4].frame >= v58) {
                         Vf10(v4);
                     }
                 }
                 break;
             case 0x1c5:
-                if (*(WORD*)((char*)this + v4 * 0x98 + 0x4d4) == 0 && *(WORD*)((char*)this + v4 * 0x98 + 0x4d2) == 0) {
-                    *(short*)((char*)this + v4 * 0x98 + 0x554) = 1;
-                    *((char*)this + 0x2c8) = 0x19;
+                if (m_objects[v4].timer == 0 && m_objects[v4].frame == 0) {
+                    m_objects[v4].unk84 = 1;
+                    unk2c8 = 0x19;
                     CPlayer::Unk410a10(0xa, 0);
                 }
-                (*(short*)((char*)this + v4 * 0x98 + 0x4d4))++;
-                if (*(WORD*)((char*)this + v4 * 0x98 + 0x4d4) >= v54) {
-                    *(short*)((char*)this + v4 * 0x98 + 0x4d4) = 0;
-                    (*(short*)((char*)this + v4 * 0x98 + 0x4d2))++;
-                    *(int*)((char*)this + v4 * 0x98 + 0x550) = 0;
-                    if (*(WORD*)((char*)this + v4 * 0x98 + 0x4d2) >= v58) {
+                m_objects[v4].timer++;
+                if (m_objects[v4].timer >= v54) {
+                    m_objects[v4].timer = 0;
+                    m_objects[v4].frame++;
+                    m_objects[v4].unk80 = 0;
+                    if (m_objects[v4].frame >= v58) {
                         Vf10(v4);
                     }
                 }
                 break;
             case 0x1c6:
-                if (*(WORD*)((char*)this + v4 * 0x98 + 0x4d4) == 0 && *(WORD*)((char*)this + v4 * 0x98 + 0x4d2) == 0) {
-                    *(short*)((char*)this + v4 * 0x98 + 0x554) = 1;
+                if (m_objects[v4].timer == 0 && m_objects[v4].frame == 0) {
+                    m_objects[v4].unk84 = 1;
                 }
-                (*(short*)((char*)this + v4 * 0x98 + 0x4d4))++;
-                if (*(WORD*)((char*)this + v4 * 0x98 + 0x4d4) >= v54) {
-                    *(short*)((char*)this + v4 * 0x98 + 0x4d4) = 0;
-                    (*(short*)((char*)this + v4 * 0x98 + 0x4d2))++;
-                    *(int*)((char*)this + v4 * 0x98 + 0x550) = 0;
-                    if (*(WORD*)((char*)this + v4 * 0x98 + 0x4d2) >= v58) {
+                m_objects[v4].timer++;
+                if (m_objects[v4].timer >= v54) {
+                    m_objects[v4].timer = 0;
+                    m_objects[v4].frame++;
+                    m_objects[v4].unk80 = 0;
+                    if (m_objects[v4].frame >= v58) {
                         Vf10(v4);
                     }
                 }
                 break;
             case 0x1c7:
-                if (*(int*)((char*)this + 0x190) == 0 && *(WORD*)((char*)this + v4 * 0x98 + 0x4d2) < 0xf) {
-                    *(short*)((char*)this + v4 * 0x98 + 0x4d2) = 0xf;
-                    *(short*)((char*)this + v4 * 0x98 + 0x4d4) = 0;
-                    *((char*)this + 0x2c8) = 0x1c;
-                    *((char*)this + 0x2c8) = 6;
+                if (m_holdA == 0 && m_objects[v4].frame < 0xf) {
+                    m_objects[v4].frame = 0xf;
+                    m_objects[v4].timer = 0;
+                    unk2c8 = 0x1c;
+                    unk2c8 = 6;
                 }
-                if (*(WORD*)((char*)this + 8) > 0x31 && *(WORD*)((char*)this + 8) < 0x96) {
+                if (pattern > 0x31 && pattern < 0x96) {
                     Vf10(v4);
                     break;
                 }
-                if (*(WORD*)((char*)this + v4 * 0x98 + 0x4d2) < 0xf) {
-                    *(double*)((char*)this + v4 * 0x98 + 0x4f8) += 0.0025;
+                if (m_objects[v4].frame < 0xf) {
+                    m_objects[v4].vx += 0.0025;
                 } else {
-                    *(double*)((char*)this + v4 * 0x98 + 0x4f8) = 0.0;
+                    m_objects[v4].vx = 0.0;
                 }
-                if (*(WORD*)((char*)this + v4 * 0x98 + 0x4d2) == 0xf && *(WORD*)((char*)this + v4 * 0x98 + 0x4d4) == 0) {
+                if (m_objects[v4].frame == 0xf && m_objects[v4].timer == 0) {
                     l50.type = 0x19a;
-                    l50.x = (double)(int)*(double*)((char*)this + v4 * 0x98 + 0x4e8);
+                    l50.x = (double)(int)m_objects[v4].x;
                     l50.y = 0.0;
-                    if (*(int*)((char*)this + v4 * 4 + 0x3174) == 1) {
-                        l50.x = *(double*)((char*)this + v4 * 0x98 + 0x4e8) - *((char*)this + 0x50) * 0x2d;
+                    if (unk3174[v4] == 1) {
+                        l50.x = m_objects[v4].x - facing * 0x2d;
                     }
-                    if (*(int*)((char*)this + v4 * 4 + 0x3174) == 2) {
-                        l50.x = *(double*)((char*)this + v4 * 0x98 + 0x4e8) + *((char*)this + 0x50) * 0x2d;
+                    if (unk3174[v4] == 2) {
+                        l50.x = m_objects[v4].x + facing * 0x2d;
                     }
-                    if (*(int*)((char*)this + v4 * 4 + 0x3174) == 3) {
-                        l50.x = *(double*)((char*)this + v4 * 0x98 + 0x4e8) - *((char*)this + 0x50) * 0x5a;
+                    if (unk3174[v4] == 3) {
+                        l50.x = m_objects[v4].x - facing * 0x5a;
                     }
-                    if (*(int*)((char*)this + v4 * 4 + 0x3174) == 4) {
-                        l50.x = *(double*)((char*)this + v4 * 0x98 + 0x4e8) + *((char*)this + 0x50) * 0x5a;
+                    if (unk3174[v4] == 4) {
+                        l50.x = m_objects[v4].x + facing * 0x5a;
                     }
                     l50.unk20 = 2;
                     l50.unk21 = 1;
-                    l50.unk18 = *((char*)this + 0x50);
+                    l50.unk18 = facing;
                     Vf9(&l50);
                 }
-                (*(short*)((char*)this + v4 * 0x98 + 0x4d4))++;
-                if (*(WORD*)((char*)this + v4 * 0x98 + 0x4d4) >= v54) {
-                    *(short*)((char*)this + v4 * 0x98 + 0x4d4) = 0;
-                    (*(short*)((char*)this + v4 * 0x98 + 0x4d2))++;
-                    *(int*)((char*)this + v4 * 0x98 + 0x550) = 0;
-                    if (*(WORD*)((char*)this + v4 * 0x98 + 0x4d2) == 0xf) {
-                        *(short*)((char*)this + v4 * 0x98 + 0x4d2) = 0;
+                m_objects[v4].timer++;
+                if (m_objects[v4].timer >= v54) {
+                    m_objects[v4].timer = 0;
+                    m_objects[v4].frame++;
+                    m_objects[v4].unk80 = 0;
+                    if (m_objects[v4].frame == 0xf) {
+                        m_objects[v4].frame = 0;
                     }
-                    if (*(WORD*)((char*)this + v4 * 0x98 + 0x4d2) >= v58) {
-                        if (*(int*)((char*)this + v4 * 4 + 0x3174) < 2) {
-                            (*(short*)((char*)this + v4 * 0x98 + 0x4d2))--;
-                            (*(int*)((char*)this + v4 * 4 + 0x3174))++;
+                    if (m_objects[v4].frame >= v58) {
+                        if (unk3174[v4] < 2) {
+                            m_objects[v4].frame--;
+                            unk3174[v4]++;
                         } else {
                             Vf10(v4);
                         }
@@ -3744,197 +3744,197 @@ void CKano::Vf7()
                 }
                 break;
             case 0x1c8:
-                (*(short*)((char*)this + v4 * 0x98 + 0x4d4))++;
-                if (*(WORD*)((char*)this + v4 * 0x98 + 0x4d4) >= v54) {
-                    *(short*)((char*)this + v4 * 0x98 + 0x4d4) = 0;
-                    (*(short*)((char*)this + v4 * 0x98 + 0x4d2))++;
-                    *(int*)((char*)this + v4 * 0x98 + 0x550) = 0;
-                    if (*(WORD*)((char*)this + v4 * 0x98 + 0x4d2) >= v58) {
+                m_objects[v4].timer++;
+                if (m_objects[v4].timer >= v54) {
+                    m_objects[v4].timer = 0;
+                    m_objects[v4].frame++;
+                    m_objects[v4].unk80 = 0;
+                    if (m_objects[v4].frame >= v58) {
                         Vf10(v4);
                         l50.type = 0x34;
                         l50.y = -87.0;
-                        l50.x = (double)(int)(*((char*)this + 0x50) * 0x1f + *(double*)((char*)this + 0x20));
+                        l50.x = (double)(int)(facing * 0x1f + x);
                         l50.unk20 = 2;
                         l50.unk21 = 1;
-                        ((CGame*)*(int*)((char*)this + 0x7c))->CreateEffect((EffectDesc*)&l50);
-                        *(short*)(*(char**)*(char**)((char*)this + 0x78) + 8) = 0x65;
-                        *(short*)(*(char**)*(char**)((char*)this + 0x78) + 0x14a) = 0x270f;
-                        *((char*)this + 0x2c8) = 0x1c;
+                        m_game->CreateEffect((EffectDesc*)&l50);
+                        (*m_opponent)->pattern = 0x65;
+                        (*m_opponent)->unk14a = 0x270f;
+                        unk2c8 = 0x1c;
                         CPlayer::Unk4105a0(0x1388, 850.0);
-                        *(int*)((char*)this + 0x3138) = 1;
+                        unk3138 = 1;
                     }
                 }
                 break;
             case 0x1ef:
-                *(double*)((char*)this + v4 * 0x98 + 0x4f8) = -0.02;
-                *(int*)((char*)this + v4 * 0x98 + 0x55c) = 0x7530;
-                (*(short*)((char*)this + v4 * 0x98 + 0x4d4))++;
-                if (*(WORD*)((char*)this + 8) != 0x57) {
+                m_objects[v4].vx = -0.02;
+                m_objects[v4].unk8c = 0x7530;
+                m_objects[v4].timer++;
+                if (pattern != 0x57) {
                     Vf10(v4);
                 }
-                if (*(WORD*)((char*)this + v4 * 0x98 + 0x4d4) >= v54) {
-                    *(short*)((char*)this + v4 * 0x98 + 0x4d4) = 0;
-                    (*(short*)((char*)this + v4 * 0x98 + 0x4d2))++;
-                    *(int*)((char*)this + v4 * 0x98 + 0x550) = 0;
-                    if (*(WORD*)((char*)this + v4 * 0x98 + 0x4d2) >= v58) {
-                        *(short*)((char*)this + v4 * 0x98 + 0x4d2) = 0;
+                if (m_objects[v4].timer >= v54) {
+                    m_objects[v4].timer = 0;
+                    m_objects[v4].frame++;
+                    m_objects[v4].unk80 = 0;
+                    if (m_objects[v4].frame >= v58) {
+                        m_objects[v4].frame = 0;
                     }
                 }
                 break;
             case 0x1f0:
-                if (*(WORD*)((char*)this + 8) != 0x53 && *(WORD*)((char*)this + 8) != 0x54 && *(WORD*)((char*)this + 8) != 0x55 && *(WORD*)((char*)this + 8) != 0x56 || *(WORD*)((char*)this + 8) == 0x53 && *(WORD*)((char*)this + 0xa) > 1 || *(WORD*)((char*)this + 8) == 0x54 && *(WORD*)((char*)this + 0xa) > 1) {
+                if (pattern != 0x53 && pattern != 0x54 && pattern != 0x55 && pattern != 0x56 || pattern == 0x53 && frame > 1 || pattern == 0x54 && frame > 1) {
                     l50.type = 0x1f1;
-                    l50.x = (double)((int)*(double*)((char*)this + 0x20) + *((char*)this + 0x50) * 0x17);
-                    l50.y = (double)((int)*(double*)((char*)this + 0x28) - 4);
+                    l50.x = (double)((int)x + facing * 0x17);
+                    l50.y = (double)((int)y - 4);
                     l50.unk20 = 0;
                     l50.unk21 = 1;
-                    l50.unk18 = *((char*)this + 0x50);
+                    l50.unk18 = facing;
                     Vf9(&l50);
                     l50.type = 0x1f1;
-                    l50.x = (double)((int)*(double*)((char*)this + 0x20) - (*((char*)this + 0x50) << 2));
-                    l50.y = (double)((int)*(double*)((char*)this + 0x28) - 6);
+                    l50.x = (double)((int)x - (facing << 2));
+                    l50.y = (double)((int)y - 6);
                     l50.unk20 = 0;
                     l50.unk21 = 1;
-                    l50.unk18 = *((char*)this + 0x50);
+                    l50.unk18 = facing;
                     Vf9(&l50);
                     l50.type = 0x1f1;
-                    l50.x = (double)((int)*(double*)((char*)this + 0x20) - *((char*)this + 0x50) * 0xe);
-                    l50.y = (double)((int)*(double*)((char*)this + 0x28) - 0x1a);
+                    l50.x = (double)((int)x - facing * 0xe);
+                    l50.y = (double)((int)y - 0x1a);
                     l50.unk20 = 0;
                     l50.unk21 = 1;
-                    l50.unk18 = *((char*)this + 0x50);
+                    l50.unk18 = facing;
                     Vf9(&l50);
                     l50.type = 0x1f1;
-                    l50.x = (double)(int)*(double*)((char*)this + 0x20);
-                    l50.y = (double)(int)*(double*)((char*)this + 0x28);
+                    l50.x = (double)(int)x;
+                    l50.y = (double)(int)y;
                     l50.unk20 = 0;
                     l50.unk21 = 1;
-                    l50.unk18 = *((char*)this + 0x50);
+                    l50.unk18 = facing;
                     Vf9(&l50);
                     l50.type = 0x1f1;
-                    l50.x = (double)((int)*(double*)((char*)this + 0x20) + *((char*)this + 0x50) * 0x1e);
-                    l50.y = (double)((int)*(double*)((char*)this + 0x28) - 0x28);
+                    l50.x = (double)((int)x + facing * 0x1e);
+                    l50.y = (double)((int)y - 0x28);
                     l50.unk20 = 0;
                     l50.unk21 = 1;
-                    l50.unk18 = *((char*)this + 0x50);
+                    l50.unk18 = facing;
                     Vf9(&l50);
                     l50.type = 0x1f1;
-                    l50.x = (double)((int)*(double*)((char*)this + 0x20) - *((char*)this + 0x50) * 0x19);
-                    l50.y = (double)((int)*(double*)((char*)this + 0x28) - 0x50);
+                    l50.x = (double)((int)x - facing * 0x19);
+                    l50.y = (double)((int)y - 0x50);
                     l50.unk20 = 0;
                     l50.unk21 = 1;
-                    l50.unk18 = *((char*)this + 0x50);
+                    l50.unk18 = facing;
                     Vf9(&l50);
                     l50.type = 0x1f2;
-                    l50.x = (double)((int)*(double*)((char*)this + 0x20) - *((char*)this + 0x50) * 0x23);
-                    l50.y = (double)((int)*(double*)((char*)this + 0x28) - 0x2a);
+                    l50.x = (double)((int)x - facing * 0x23);
+                    l50.y = (double)((int)y - 0x2a);
                     l50.unk20 = 0;
                     l50.unk21 = 1;
-                    l50.unk18 = *((char*)this + 0x50);
+                    l50.unk18 = facing;
                     Vf9(&l50);
                     l50.type = 0x1f2;
-                    l50.x = (double)((int)*(double*)((char*)this + 0x20) - *((char*)this + 0x50) * 0x12);
-                    l50.y = (double)((int)*(double*)((char*)this + 0x28) - 0x14);
+                    l50.x = (double)((int)x - facing * 0x12);
+                    l50.y = (double)((int)y - 0x14);
                     l50.unk20 = 0;
                     l50.unk21 = 1;
-                    l50.unk18 = *((char*)this + 0x50);
+                    l50.unk18 = facing;
                     Vf9(&l50);
                     l50.type = 0x1f2;
-                    l50.x = (double)((int)*(double*)((char*)this + 0x20) + *((char*)this + 0x50) * 2);
-                    l50.y = (double)((int)*(double*)((char*)this + 0x28) - 0x41);
+                    l50.x = (double)((int)x + facing * 2);
+                    l50.y = (double)((int)y - 0x41);
                     l50.unk20 = 0;
                     l50.unk21 = 1;
-                    l50.unk18 = *((char*)this + 0x50);
+                    l50.unk18 = facing;
                     Vf9(&l50);
                     l50.type = 0x1f2;
-                    l50.x = (double)((int)*(double*)((char*)this + 0x20) + (*((char*)this + 0x50) << 4));
-                    l50.y = (double)((int)*(double*)((char*)this + 0x28) - 0x50);
+                    l50.x = (double)((int)x + (facing << 4));
+                    l50.y = (double)((int)y - 0x50);
                     l50.unk20 = 0;
                     l50.unk21 = 1;
-                    l50.unk18 = *((char*)this + 0x50);
+                    l50.unk18 = facing;
                     Vf9(&l50);
-                    *((char*)this + 0x2c9) = 0x22;
+                    unk2c9 = 0x22;
                     Vf10(v4);
-                    *(int*)((char*)this + 0x3144) = 0;
+                    unk3144 = 0;
                     break;
                 }
-                (*(short*)((char*)this + v4 * 0x98 + 0x4d4))++;
-                if (*(WORD*)((char*)this + v4 * 0x98 + 0x4d4) >= v54) {
-                    *(short*)((char*)this + v4 * 0x98 + 0x4d4) = 0;
-                    (*(short*)((char*)this + v4 * 0x98 + 0x4d2))++;
-                    *(int*)((char*)this + v4 * 0x98 + 0x550) = 0;
-                    if (*(WORD*)((char*)this + v4 * 0x98 + 0x4d2) >= v58) {
-                        *(short*)((char*)this + v4 * 0x98 + 0x4d2) = 0;
+                m_objects[v4].timer++;
+                if (m_objects[v4].timer >= v54) {
+                    m_objects[v4].timer = 0;
+                    m_objects[v4].frame++;
+                    m_objects[v4].unk80 = 0;
+                    if (m_objects[v4].frame >= v58) {
+                        m_objects[v4].frame = 0;
                     }
                 }
                 break;
             case 0x1f1:
-                if (*(WORD*)((char*)this + v4 * 0x98 + 0x4d2) == 0 && *(WORD*)((char*)this + v4 * 0x98 + 0x4d4) == 0 && *(int*)((char*)this + v4 * 4 + 0x3174) == 0) {
-                    *(int*)((char*)this + v4 * 4 + 0x3274) = (rand() > 0x3e80) * 0x28 + 0x50 + (rand() > 0x3e80) * 0x14;
-                    (*(int*)((char*)this + v4 * 4 + 0x3174))++;
-                    *(double*)((char*)this + v4 * 0x98 + 0x4f8) = (rand() > 0x3e80) * 1.2 + (rand() > 0x3e80) * 0.7 + (rand() > 0x3e80) * 1.7 + -1.8;
-                    *(double*)((char*)this + v4 * 0x98 + 0x500) = -1.2 - ((rand() > 0x3e80) * 0.6 + (rand() > 0x3e80) * 0.9 + (rand() > 0x3e80) * 1.4);
+                if (m_objects[v4].frame == 0 && m_objects[v4].timer == 0 && unk3174[v4] == 0) {
+                    unk3274[v4] = (rand() > 0x3e80) * 0x28 + 0x50 + (rand() > 0x3e80) * 0x14;
+                    unk3174[v4]++;
+                    m_objects[v4].vx = (rand() > 0x3e80) * 1.2 + (rand() > 0x3e80) * 0.7 + (rand() > 0x3e80) * 1.7 + -1.8;
+                    m_objects[v4].vy = -1.2 - ((rand() > 0x3e80) * 0.6 + (rand() > 0x3e80) * 0.9 + (rand() > 0x3e80) * 1.4);
                 }
-                *(double*)((char*)this + v4 * 0x98 + 0x500) += 0.05;
-                if (*(double*)((char*)this + v4 * 0x98 + 0x4f0) > 0.0 && *(double*)((char*)this + v4 * 0x98 + 0x500) > 0.0) {
-                    *(double*)((char*)this + v4 * 0x98 + 0x500) = -*(double*)((char*)this + v4 * 0x98 + 0x500);
+                m_objects[v4].vy += 0.05;
+                if (m_objects[v4].y > 0.0 && m_objects[v4].vy > 0.0) {
+                    m_objects[v4].vy = -m_objects[v4].vy;
                 }
-                if (*(int*)((char*)this + v4 * 4 + 0x3274) < 0xa) {
-                    *((char*)this + v4 * 0x98 + 0x520) = 1;
+                if (unk3274[v4] < 0xa) {
+                    m_objects[v4].unk50 = 1;
                 }
-                if (*(int*)((char*)this + v4 * 4 + 0x3274) < 0) {
+                if (unk3274[v4] < 0) {
                     Vf10(v4);
                     break;
                 }
-                (*(short*)((char*)this + v4 * 0x98 + 0x4d4))++;
-                (*(int*)((char*)this + v4 * 4 + 0x3274))--;
-                if (*(WORD*)((char*)this + v4 * 0x98 + 0x4d4) >= v54) {
-                    *(short*)((char*)this + v4 * 0x98 + 0x4d4) = 0;
-                    (*(short*)((char*)this + v4 * 0x98 + 0x4d2))++;
-                    *(int*)((char*)this + v4 * 0x98 + 0x550) = 0;
-                    if (*(WORD*)((char*)this + v4 * 0x98 + 0x4d2) >= v58) {
-                        *(short*)((char*)this + v4 * 0x98 + 0x4d2) = 0;
+                m_objects[v4].timer++;
+                unk3274[v4]--;
+                if (m_objects[v4].timer >= v54) {
+                    m_objects[v4].timer = 0;
+                    m_objects[v4].frame++;
+                    m_objects[v4].unk80 = 0;
+                    if (m_objects[v4].frame >= v58) {
+                        m_objects[v4].frame = 0;
                     }
                 }
                 break;
             case 0x1f2:
-                if (*(WORD*)((char*)this + v4 * 0x98 + 0x4d2) == 0 && *(WORD*)((char*)this + v4 * 0x98 + 0x4d4) == 0 && *(int*)((char*)this + v4 * 4 + 0x3174) == 0) {
-                    *(int*)((char*)this + v4 * 4 + 0x3274) = (rand() > 0x3e80) * 0x3c + 0x78 + (rand() > 0x3e80) * 0x28;
-                    (*(int*)((char*)this + v4 * 4 + 0x3174))++;
-                    *(double*)((char*)this + v4 * 0x98 + 0x4f8) = (double)(rand() > 0x3e80) + (rand() > 0x3e80) * 0.5 + (rand() > 0x3e80) * 1.5 + -1.5;
-                    *(double*)((char*)this + v4 * 0x98 + 0x500) = -1.0 - ((rand() > 0x3e80) * 0.5 + (rand() > 0x3e80) * 0.8 + (rand() > 0x3e80) * 1.2);
+                if (m_objects[v4].frame == 0 && m_objects[v4].timer == 0 && unk3174[v4] == 0) {
+                    unk3274[v4] = (rand() > 0x3e80) * 0x3c + 0x78 + (rand() > 0x3e80) * 0x28;
+                    unk3174[v4]++;
+                    m_objects[v4].vx = (double)(rand() > 0x3e80) + (rand() > 0x3e80) * 0.5 + (rand() > 0x3e80) * 1.5 + -1.5;
+                    m_objects[v4].vy = -1.0 - ((rand() > 0x3e80) * 0.5 + (rand() > 0x3e80) * 0.8 + (rand() > 0x3e80) * 1.2);
                 }
-                *(double*)((char*)this + v4 * 0x98 + 0x500) += 0.03;
-                if (*(double*)((char*)this + v4 * 0x98 + 0x4f0) > 0.0 && *(double*)((char*)this + v4 * 0x98 + 0x500) > 0.0) {
-                    *(double*)((char*)this + v4 * 0x98 + 0x500) = -*(double*)((char*)this + v4 * 0x98 + 0x500);
+                m_objects[v4].vy += 0.03;
+                if (m_objects[v4].y > 0.0 && m_objects[v4].vy > 0.0) {
+                    m_objects[v4].vy = -m_objects[v4].vy;
                 }
-                if (*(int*)((char*)this + v4 * 4 + 0x3274) < 0xa) {
-                    *((char*)this + v4 * 0x98 + 0x520) = 1;
+                if (unk3274[v4] < 0xa) {
+                    m_objects[v4].unk50 = 1;
                 }
-                if (*(int*)((char*)this + v4 * 4 + 0x3274) < 0) {
+                if (unk3274[v4] < 0) {
                     Vf10(v4);
                     break;
                 }
-                (*(short*)((char*)this + v4 * 0x98 + 0x4d4))++;
-                (*(int*)((char*)this + v4 * 4 + 0x3274))--;
-                if (*(WORD*)((char*)this + v4 * 0x98 + 0x4d4) >= v54) {
-                    *(short*)((char*)this + v4 * 0x98 + 0x4d4) = 0;
-                    (*(short*)((char*)this + v4 * 0x98 + 0x4d2))++;
-                    *(int*)((char*)this + v4 * 0x98 + 0x550) = 0;
-                    if (*(WORD*)((char*)this + v4 * 0x98 + 0x4d2) >= v58) {
-                        *(short*)((char*)this + v4 * 0x98 + 0x4d2) = 0;
+                m_objects[v4].timer++;
+                unk3274[v4]--;
+                if (m_objects[v4].timer >= v54) {
+                    m_objects[v4].timer = 0;
+                    m_objects[v4].frame++;
+                    m_objects[v4].unk80 = 0;
+                    if (m_objects[v4].frame >= v58) {
+                        m_objects[v4].frame = 0;
                     }
                 }
                 break;
             case 0x1f3:
-                *(double*)((char*)this + v4 * 0x98 + 0x4e8) = *(double*)((char*)this + 0x20);
-                *(double*)((char*)this + v4 * 0x98 + 0x4f0) = *(double*)((char*)this + 0x28);
-                (*(short*)((char*)this + v4 * 0x98 + 0x4d4))++;
-                if (*(WORD*)((char*)this + v4 * 0x98 + 0x4d4) >= v54) {
-                    *(short*)((char*)this + v4 * 0x98 + 0x4d4) = 0;
-                    (*(short*)((char*)this + v4 * 0x98 + 0x4d2))++;
-                    *(int*)((char*)this + v4 * 0x98 + 0x550) = 0;
-                    if (*(WORD*)((char*)this + v4 * 0x98 + 0x4d2) >= v58) {
+                m_objects[v4].x = x;
+                m_objects[v4].y = y;
+                m_objects[v4].timer++;
+                if (m_objects[v4].timer >= v54) {
+                    m_objects[v4].timer = 0;
+                    m_objects[v4].frame++;
+                    m_objects[v4].unk80 = 0;
+                    if (m_objects[v4].frame >= v58) {
                         Vf10(v4);
                     }
                 }

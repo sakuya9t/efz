@@ -11,1610 +11,1610 @@ void CMayu::Vf6()
     WORD x8;
     WORD l4;
 
-    if (*(short*)((char*)this + 0x14a) > 0 || *(short*)(*(char**)*(char**)((char*)this + 0x78) + 0x14c) > 0) {
+    if (unk14a > 0 || (*m_opponent)->unk14c > 0) {
         return;
     }
     EffectDesc l50;
-    l4 = *(short*)(*(char**)(*(char**)((char*)this + 0x10) + *(WORD*)((char*)this + 8) * 8 + 4) + *(WORD*)((char*)this + 0xa) * 0xc);
-    x8 = *(BYTE*)(*(char**)((char*)this + 0x10) + *(WORD*)((char*)this + 8) * 8);
+    l4 = (short)anims[pattern].frames[frame].duration;
+    x8 = anims[pattern].frameCount;
     CPlayer::Unk413090((EffectDesc*)&l50);
-    switch (*(WORD*)((char*)this + 8)) {
+    switch (pattern) {
     default:
-        *(double*)((char*)this + 0x30) = 0.0;
-        *(double*)((char*)this + 0x38) = 0.0;
-        (*(short*)((char*)this + 0xc))++;
-        if (*(WORD*)((char*)this + 0xc) >= l4) {
-            *(short*)((char*)this + 0xc) = 0;
-            (*(short*)((char*)this + 0xa))++;
-            if (*(WORD*)((char*)this + 0xa) >= x8) {
-                *(short*)((char*)this + 0xa) = 0;
+        vx = 0.0;
+        vy = 0.0;
+        timer++;
+        if (timer >= l4) {
+            timer = 0;
+            frame++;
+            if (frame >= x8) {
+                frame = 0;
             }
         }
         break;
     case 1:
-        *(double*)((char*)this + 0x30) = 0.9;
-        *(double*)((char*)this + 0x38) = 0.0;
-        (*(short*)((char*)this + 0xc))++;
-        if (*(WORD*)((char*)this + 0xc) >= l4) {
-            *(short*)((char*)this + 0xc) = 0;
-            (*(short*)((char*)this + 0xa))++;
-            if (*(WORD*)((char*)this + 0xa) >= x8) {
-                *(short*)((char*)this + 0xa) = 0;
+        vx = 0.9;
+        vy = 0.0;
+        timer++;
+        if (timer >= l4) {
+            timer = 0;
+            frame++;
+            if (frame >= x8) {
+                frame = 0;
             }
         }
         break;
     case 2:
-        *(double*)((char*)this + 0x30) = -0.9;
-        *(double*)((char*)this + 0x38) = 0.0;
-        (*(short*)((char*)this + 0xc))++;
-        if (*(WORD*)((char*)this + 0xc) >= l4) {
-            *(short*)((char*)this + 0xc) = 0;
-            (*(short*)((char*)this + 0xa))++;
-            if (*(WORD*)((char*)this + 0xa) >= x8) {
-                *(short*)((char*)this + 0xa) = 0;
+        vx = -0.9;
+        vy = 0.0;
+        timer++;
+        if (timer >= l4) {
+            timer = 0;
+            frame++;
+            if (frame >= x8) {
+                frame = 0;
             }
         }
         break;
     case 3:
-        *(double*)((char*)this + 0x30) = 0.0;
-        *(double*)((char*)this + 0x38) = 0.0;
+        vx = 0.0;
+        vy = 0.0;
         CPlayer::Unk40e630();
-        (*(short*)((char*)this + 0xc))++;
-        if (*(WORD*)((char*)this + 0xc) >= l4) {
-            *(short*)((char*)this + 0xc) = 0;
-            (*(short*)((char*)this + 0xa))++;
-            if (*(WORD*)((char*)this + 0xa) >= x8) {
-                *(short*)((char*)this + 0xa) = 0;
+        timer++;
+        if (timer >= l4) {
+            timer = 0;
+            frame++;
+            if (frame >= x8) {
+                frame = 0;
             }
         }
         break;
     case 4:
-        if (*(WORD*)((char*)this + 0xa) == 0 && *(WORD*)((char*)this + 0xc) == 0) {
+        if (frame == 0 && timer == 0) {
             CPlayer::Unk40e630();
-            *(double*)((char*)this + 0x30) = 0.0;
+            vx = 0.0;
         }
-        if (*(WORD*)((char*)this + 0xa) == 3 && *(WORD*)((char*)this + 0xc) == 0) {
-            *(double*)((char*)this + 0x48) = 0.055;
-            *(double*)((char*)this + 0x38) = -2.8;
-            *((char*)this + 0x2c8) = 1;
+        if (frame == 3 && timer == 0) {
+            ay = 0.055;
+            vy = -2.8;
+            unk2c8 = 1;
         }
-        if (*(WORD*)((char*)this + 0xa) > 4) {
-            *(double*)((char*)this + 0x38) = *(double*)((char*)this + 0x38) + *(double*)((char*)this + 0x48);
+        if (frame > 4) {
+            vy = vy + ay;
         }
-        (*(short*)((char*)this + 0xc))++;
-        if (*(WORD*)((char*)this + 0xc) >= l4) {
-            *(short*)((char*)this + 0xc) = 0;
-            (*(short*)((char*)this + 0xa))++;
-            if (*(WORD*)((char*)this + 0xa) >= x8) {
-                *(short*)((char*)this + 0xa) = *(WORD*)((char*)this + 0xa) - 4;
+        timer++;
+        if (timer >= l4) {
+            timer = 0;
+            frame++;
+            if (frame >= x8) {
+                frame = frame - 4;
             }
         }
-        if (*(double*)((char*)this + 0x28) + *(double*)((char*)this + 0x38) >= 0.0 && *(WORD*)((char*)this + 0xa) > 3) {
-            *(double*)((char*)this + 0x28) = 0.0;
-            *((char*)this + 0x2c9) = 9;
+        if (y + vy >= 0.0 && frame > 3) {
+            y = 0.0;
+            unk2c9 = 9;
             CPlayer::Unk40e630();
-            *(short*)((char*)this + 8) = 0xd;
+            pattern = 0xd;
             Vf0();
         }
         break;
     case 5:
-        if (*(WORD*)((char*)this + 0xa) == 0 && *(WORD*)((char*)this + 0xc) == 0) {
+        if (frame == 0 && timer == 0) {
             CPlayer::Unk40e630();
-            *(double*)((char*)this + 0x30) = 0.0;
+            vx = 0.0;
         }
-        if (*(WORD*)((char*)this + 0xa) == 3 && *(WORD*)((char*)this + 0xc) == 0) {
-            *(double*)((char*)this + 0x48) = 0.055;
-            *(double*)((char*)this + 0x38) = -2.8;
-            *(double*)((char*)this + 0x30) = 1.0;
-            *((char*)this + 0x2c8) = 1;
+        if (frame == 3 && timer == 0) {
+            ay = 0.055;
+            vy = -2.8;
+            vx = 1.0;
+            unk2c8 = 1;
         }
-        if (*(WORD*)((char*)this + 0xa) > 4) {
-            *(double*)((char*)this + 0x38) = *(double*)((char*)this + 0x38) + *(double*)((char*)this + 0x48);
+        if (frame > 4) {
+            vy = vy + ay;
         }
-        (*(short*)((char*)this + 0xc))++;
-        if (*(WORD*)((char*)this + 0xc) >= l4) {
-            *(short*)((char*)this + 0xc) = 0;
-            (*(short*)((char*)this + 0xa))++;
-            if (*(WORD*)((char*)this + 0xa) >= x8) {
-                *(short*)((char*)this + 0xa) = *(WORD*)((char*)this + 0xa) - 4;
+        timer++;
+        if (timer >= l4) {
+            timer = 0;
+            frame++;
+            if (frame >= x8) {
+                frame = frame - 4;
             }
         }
-        if (*(double*)((char*)this + 0x28) + *(double*)((char*)this + 0x38) >= 0.0 && *(WORD*)((char*)this + 0xa) > 3) {
-            *(double*)((char*)this + 0x28) = 0.0;
-            *((char*)this + 0x2c9) = 9;
+        if (y + vy >= 0.0 && frame > 3) {
+            y = 0.0;
+            unk2c9 = 9;
             CPlayer::Unk40e630();
-            *(short*)((char*)this + 8) = 0xd;
+            pattern = 0xd;
             Vf0();
         }
         break;
     case 6:
-        if (*(WORD*)((char*)this + 0xa) == 0 && *(WORD*)((char*)this + 0xc) == 0) {
+        if (frame == 0 && timer == 0) {
             CPlayer::Unk40e630();
-            *(double*)((char*)this + 0x30) = 0.0;
+            vx = 0.0;
         }
-        if (*(WORD*)((char*)this + 0xa) == 3 && *(WORD*)((char*)this + 0xc) == 0) {
-            *(double*)((char*)this + 0x48) = 0.055;
-            *(double*)((char*)this + 0x38) = -2.8;
-            *(double*)((char*)this + 0x30) = -1.0;
-            *((char*)this + 0x2c8) = 1;
+        if (frame == 3 && timer == 0) {
+            ay = 0.055;
+            vy = -2.8;
+            vx = -1.0;
+            unk2c8 = 1;
         }
-        if (*(WORD*)((char*)this + 0xa) > 4) {
-            *(double*)((char*)this + 0x38) = *(double*)((char*)this + 0x38) + *(double*)((char*)this + 0x48);
+        if (frame > 4) {
+            vy = vy + ay;
         }
-        (*(short*)((char*)this + 0xc))++;
-        if (*(WORD*)((char*)this + 0xc) >= l4) {
-            *(short*)((char*)this + 0xc) = 0;
-            (*(short*)((char*)this + 0xa))++;
-            if (*(WORD*)((char*)this + 0xa) >= x8) {
-                *(short*)((char*)this + 0xa) = *(WORD*)((char*)this + 0xa) - 4;
+        timer++;
+        if (timer >= l4) {
+            timer = 0;
+            frame++;
+            if (frame >= x8) {
+                frame = frame - 4;
             }
         }
-        if (*(double*)((char*)this + 0x28) + *(double*)((char*)this + 0x38) >= 0.0 && *(WORD*)((char*)this + 0xa) > 3) {
-            *(double*)((char*)this + 0x28) = 0.0;
-            *((char*)this + 0x2c9) = 9;
+        if (y + vy >= 0.0 && frame > 3) {
+            y = 0.0;
+            unk2c9 = 9;
             CPlayer::Unk40e630();
-            *(short*)((char*)this + 8) = 0xd;
+            pattern = 0xd;
             Vf0();
         }
         break;
     case 7:
-        *(double*)((char*)this + 0x30) = 0.0;
-        *(double*)((char*)this + 0x38) = 0.0;
+        vx = 0.0;
+        vy = 0.0;
         CPlayer::Unk40e630();
-        (*(short*)((char*)this + 0xc))++;
-        if (*(WORD*)((char*)this + 0xc) >= l4) {
-            *(short*)((char*)this + 0xc) = 0;
-            (*(short*)((char*)this + 0xa))++;
-            if (*(WORD*)((char*)this + 0xa) >= x8) {
-                *(short*)((char*)this + 8) = 0;
+        timer++;
+        if (timer >= l4) {
+            timer = 0;
+            frame++;
+            if (frame >= x8) {
+                pattern = 0;
                 Vf0();
             }
         }
         break;
     case 8:
-        *(double*)((char*)this + 0x30) = 0.0;
-        *(double*)((char*)this + 0x38) = 0.0;
+        vx = 0.0;
+        vy = 0.0;
         CPlayer::Unk40e630();
-        (*(short*)((char*)this + 0xc))++;
-        if (*(WORD*)((char*)this + 0xc) >= l4) {
-            *(short*)((char*)this + 0xc) = 0;
-            (*(short*)((char*)this + 0xa))++;
-            if (*(WORD*)((char*)this + 0xa) >= x8) {
-                *(short*)((char*)this + 8) = 3;
+        timer++;
+        if (timer >= l4) {
+            timer = 0;
+            frame++;
+            if (frame >= x8) {
+                pattern = 3;
                 Vf0();
             }
         }
         break;
     case 9:
-        *(double*)((char*)this + 0x38) = *(double*)((char*)this + 0x38) + *(double*)((char*)this + 0x48);
-        (*(short*)((char*)this + 0xc))++;
-        if (*(WORD*)((char*)this + 0xc) >= l4) {
-            *(short*)((char*)this + 0xc) = 0;
-            (*(short*)((char*)this + 0xa))++;
-            if (*(WORD*)((char*)this + 0xa) >= x8) {
-                *(short*)((char*)this + 0xa) = 0;
+        vy = vy + ay;
+        timer++;
+        if (timer >= l4) {
+            timer = 0;
+            frame++;
+            if (frame >= x8) {
+                frame = 0;
             }
         }
-        if (*(double*)((char*)this + 0x28) + *(double*)((char*)this + 0x38) >= 0.0) {
-            *(double*)((char*)this + 0x28) = 0.0;
-            *((char*)this + 0x2c9) = 9;
-            *(short*)((char*)this + 8) = 0xd;
+        if (y + vy >= 0.0) {
+            y = 0.0;
+            unk2c9 = 9;
+            pattern = 0xd;
             Vf0();
         }
         break;
     case 0xa:
-        *(double*)((char*)this + 0x38) = *(double*)((char*)this + 0x38) + *(double*)((char*)this + 0x48);
-        (*(short*)((char*)this + 0xc))++;
-        if (*(WORD*)((char*)this + 0xc) >= l4) {
-            *(short*)((char*)this + 0xc) = 0;
-            (*(short*)((char*)this + 0xa))++;
-            if (*(WORD*)((char*)this + 0xa) >= x8) {
-                *(short*)((char*)this + 0xa) = 0;
+        vy = vy + ay;
+        timer++;
+        if (timer >= l4) {
+            timer = 0;
+            frame++;
+            if (frame >= x8) {
+                frame = 0;
             }
         }
-        if (*(double*)((char*)this + 0x28) + *(double*)((char*)this + 0x38) >= 0.0) {
-            *(double*)((char*)this + 0x28) = 0.0;
-            *((char*)this + 0x2c9) = 9;
-            *(short*)((char*)this + 8) = 0xd;
+        if (y + vy >= 0.0) {
+            y = 0.0;
+            unk2c9 = 9;
+            pattern = 0xd;
             Vf0();
         }
         break;
     case 0xd:
-        *(double*)((char*)this + 0x30) = 0.0;
-        *(double*)((char*)this + 0x38) = 0.0;
+        vx = 0.0;
+        vy = 0.0;
         CPlayer::Unk40e630();
-        (*(short*)((char*)this + 0xc))++;
-        if (*(WORD*)((char*)this + 0xc) >= l4) {
-            *(short*)((char*)this + 0xc) = 0;
-            (*(short*)((char*)this + 0xa))++;
-            if (*(WORD*)((char*)this + 0xa) >= x8) {
-                *(short*)((char*)this + 8) = 7;
-                if (*((char*)this + 0x189) == 1) {
-                    *(short*)((char*)this + 8) = 3;
+        timer++;
+        if (timer >= l4) {
+            timer = 0;
+            frame++;
+            if (frame >= x8) {
+                pattern = 7;
+                if (m_inputY == 1) {
+                    pattern = 3;
                 }
                 Vf0();
             }
         }
         break;
     case 0xe:
-        *(double*)((char*)this + 0x48) = 0.055;
-        if (*(WORD*)((char*)this + 0xa) == 0 && *(WORD*)((char*)this + 0xc) == 0) {
-            *(double*)((char*)this + 0x38) = -3.2;
-            *(double*)((char*)this + 0x30) = 0.0;
+        ay = 0.055;
+        if (frame == 0 && timer == 0) {
+            vy = -3.2;
+            vx = 0.0;
         }
-        *(double*)((char*)this + 0x38) = *(double*)((char*)this + 0x38) + *(double*)((char*)this + 0x48);
-        (*(short*)((char*)this + 0xc))++;
-        if (*(WORD*)((char*)this + 0xc) >= l4) {
-            *(short*)((char*)this + 0xc) = 0;
-            (*(short*)((char*)this + 0xa))++;
-            if (*(WORD*)((char*)this + 0xa) >= x8) {
-                *(short*)((char*)this + 0xa) = *(WORD*)((char*)this + 0xa) - 4;
+        vy = vy + ay;
+        timer++;
+        if (timer >= l4) {
+            timer = 0;
+            frame++;
+            if (frame >= x8) {
+                frame = frame - 4;
             }
         }
-        if (*(double*)((char*)this + 0x28) + *(double*)((char*)this + 0x38) >= 0.0 && *(WORD*)((char*)this + 0xa) > 3) {
-            *(double*)((char*)this + 0x28) = 0.0;
-            *((char*)this + 0x2c9) = 9;
+        if (y + vy >= 0.0 && frame > 3) {
+            y = 0.0;
+            unk2c9 = 9;
             CPlayer::Unk40e630();
-            *(short*)((char*)this + 8) = 0xd;
+            pattern = 0xd;
             Vf0();
         }
         break;
     case 0xf:
-        *(double*)((char*)this + 0x48) = 0.055;
-        if (*(WORD*)((char*)this + 0xa) == 0 && *(WORD*)((char*)this + 0xc) == 0) {
-            *(double*)((char*)this + 0x38) = -3.2;
-            *(double*)((char*)this + 0x30) = 1.0;
+        ay = 0.055;
+        if (frame == 0 && timer == 0) {
+            vy = -3.2;
+            vx = 1.0;
         }
-        *(double*)((char*)this + 0x38) = *(double*)((char*)this + 0x38) + *(double*)((char*)this + 0x48);
-        (*(short*)((char*)this + 0xc))++;
-        if (*(WORD*)((char*)this + 0xc) >= l4) {
-            *(short*)((char*)this + 0xc) = 0;
-            (*(short*)((char*)this + 0xa))++;
-            if (*(WORD*)((char*)this + 0xa) >= x8) {
-                *(short*)((char*)this + 0xa) = *(WORD*)((char*)this + 0xa) - 4;
+        vy = vy + ay;
+        timer++;
+        if (timer >= l4) {
+            timer = 0;
+            frame++;
+            if (frame >= x8) {
+                frame = frame - 4;
             }
         }
-        if (*(double*)((char*)this + 0x28) + *(double*)((char*)this + 0x38) >= 0.0 && *(WORD*)((char*)this + 0xa) > 3) {
-            *(double*)((char*)this + 0x28) = 0.0;
-            *((char*)this + 0x2c9) = 9;
+        if (y + vy >= 0.0 && frame > 3) {
+            y = 0.0;
+            unk2c9 = 9;
             CPlayer::Unk40e630();
-            *(short*)((char*)this + 8) = 0xd;
+            pattern = 0xd;
             Vf0();
         }
         break;
     case 0x10:
-        *(double*)((char*)this + 0x48) = 0.055;
-        if (*(WORD*)((char*)this + 0xa) == 0 && *(WORD*)((char*)this + 0xc) == 0) {
-            *(double*)((char*)this + 0x38) = -3.2;
-            *(double*)((char*)this + 0x30) = -1.0;
+        ay = 0.055;
+        if (frame == 0 && timer == 0) {
+            vy = -3.2;
+            vx = -1.0;
         }
-        *(double*)((char*)this + 0x38) = *(double*)((char*)this + 0x38) + *(double*)((char*)this + 0x48);
-        (*(short*)((char*)this + 0xc))++;
-        if (*(WORD*)((char*)this + 0xc) >= l4) {
-            *(short*)((char*)this + 0xc) = 0;
-            (*(short*)((char*)this + 0xa))++;
-            if (*(WORD*)((char*)this + 0xa) >= x8) {
-                *(short*)((char*)this + 0xa) = *(WORD*)((char*)this + 0xa) - 4;
+        vy = vy + ay;
+        timer++;
+        if (timer >= l4) {
+            timer = 0;
+            frame++;
+            if (frame >= x8) {
+                frame = frame - 4;
             }
         }
-        if (*(double*)((char*)this + 0x28) + *(double*)((char*)this + 0x38) >= 0.0 && *(WORD*)((char*)this + 0xa) > 3) {
-            *(double*)((char*)this + 0x28) = 0.0;
-            *((char*)this + 0x2c9) = 9;
+        if (y + vy >= 0.0 && frame > 3) {
+            y = 0.0;
+            unk2c9 = 9;
             CPlayer::Unk40e630();
-            *(short*)((char*)this + 8) = 0xd;
+            pattern = 0xd;
             Vf0();
         }
         break;
     case 0x2f:
-        if (*(WORD*)((char*)this + 0xa) == 0 && *(WORD*)((char*)this + 0xc) == 0) {
-            *(double*)((char*)this + 0x30) = 0.0;
-            *(double*)((char*)this + 0x48) = 0.035;
+        if (frame == 0 && timer == 0) {
+            vx = 0.0;
+            ay = 0.035;
         }
-        *(double*)((char*)this + 0x38) = *(double*)((char*)this + 0x38) + *(double*)((char*)this + 0x48);
-        if (*(double*)((char*)this + 0x28) + *(double*)((char*)this + 0x38) > 0.0 && *(WORD*)((char*)this + 0xa) < 2) {
-            *(short*)((char*)this + 0xc) = 0;
-            *(short*)((char*)this + 0xa) = 2;
-            *((char*)this + 0x2c9) = 7;
-            *(double*)((char*)this + 0x28) = 0.0;
-            *(double*)((char*)this + 0x38) = 0.0;
-            *(double*)((char*)this + 0x48) = 0.0;
-            *(double*)((char*)this + 0x30) = 0.0;
+        vy = vy + ay;
+        if (y + vy > 0.0 && frame < 2) {
+            timer = 0;
+            frame = 2;
+            unk2c9 = 7;
+            y = 0.0;
+            vy = 0.0;
+            ay = 0.0;
+            vx = 0.0;
         }
-        (*(short*)((char*)this + 0xc))++;
-        if (*(WORD*)((char*)this + 0xc) >= l4) {
-            *(short*)((char*)this + 0xc) = 0;
-            (*(short*)((char*)this + 0xa))++;
-            if (*(WORD*)((char*)this + 0xa) == 2) {
-                *(short*)((char*)this + 0xa) = *(WORD*)((char*)this + 0xa) - 2;
+        timer++;
+        if (timer >= l4) {
+            timer = 0;
+            frame++;
+            if (frame == 2) {
+                frame = frame - 2;
             }
-            if (*(WORD*)((char*)this + 0xa) >= x8) {
-                (*(short*)((char*)this + 0xa))--;
+            if (frame >= x8) {
+                frame--;
             }
         }
         break;
     case 0x32:
-        if (*((char*)this + 0x120) != 0) {
-            *(double*)((char*)this + 0x118) -= 0.6;
+        if (unk120 != 0) {
+            unk118 -= 0.6;
         }
-        if (*(WORD*)((char*)this + 0xa) == 0 && *(WORD*)((char*)this + 0xc) == 0) {
-            *(short*)((char*)this + 0x148) = *(short*)((char*)this + 0x148) + 0xa;
-            *(double*)((char*)this + 0x30) = (2.0 - *(double*)(*(char**)*(char**)((char*)this + 0x78) + 0x178) / 10000.0) * -1.1;
-            if (*((char*)this + 0x120) != 0) {
-                *(double*)((char*)this + 0x118) -= 10.0;
+        if (frame == 0 && timer == 0) {
+            unk148 = unk148 + 0xa;
+            vx = (2.0 - (*m_opponent)->unk178 / 10000.0) * -1.1;
+            if (unk120 != 0) {
+                unk118 -= 10.0;
             }
         }
-        *(double*)((char*)this + 0x38) = 0.0;
-        *(double*)((char*)this + 0x28) = 0.0;
-        *(double*)((char*)this + 0x30) += 0.06;
-        if (*(double*)((char*)this + 0x30) > 0.0) {
-            *(double*)((char*)this + 0x30) = 0.0;
+        vy = 0.0;
+        y = 0.0;
+        vx += 0.06;
+        if (vx > 0.0) {
+            vx = 0.0;
         }
-        if (*(double*)((char*)this + 0x20) - 20.0 <= 0.0 || *(double*)((char*)this + 0x20) + 20.0 >= 639.0) {
-            *(double*)((char*)this + 0xb8) = (1.0 - (*(double*)((char*)this + 0x28) < 0.0) * 0.2) * *(double*)((char*)this + 0x30);
+        if (x - 20.0 <= 0.0 || x + 20.0 >= 639.0) {
+            unkb8 = (1.0 - (y < 0.0) * 0.2) * vx;
         } else {
-            *(double*)((char*)this + 0xb8) = 0.0;
+            unkb8 = 0.0;
         }
-        (*(short*)((char*)this + 0xc))++;
-        if (*(WORD*)((char*)this + 0xc) >= l4) {
-            *(short*)((char*)this + 0xc) = 0;
-            (*(short*)((char*)this + 0xa))++;
-            if (*(WORD*)((char*)this + 0xa) >= x8) {
-                *(short*)((char*)this + 8) = 0;
-                if (*((char*)this + 0x189) == 1) {
-                    *(short*)((char*)this + 8) = 3;
+        timer++;
+        if (timer >= l4) {
+            timer = 0;
+            frame++;
+            if (frame >= x8) {
+                pattern = 0;
+                if (m_inputY == 1) {
+                    pattern = 3;
                 }
                 Vf0();
             }
         }
         break;
     case 0x33:
-        if (*((char*)this + 0x120) != 0) {
-            *(double*)((char*)this + 0x118) -= 0.6;
+        if (unk120 != 0) {
+            unk118 -= 0.6;
         }
-        if (*(WORD*)((char*)this + 0xa) == 0 && *(WORD*)((char*)this + 0xc) == 0) {
-            *(short*)((char*)this + 0x148) = *(short*)((char*)this + 0x148) + 0xf;
-            *(double*)((char*)this + 0x30) = (2.0 - *(double*)(*(char**)*(char**)((char*)this + 0x78) + 0x178) / 10000.0) * -1.5;
-            if (*((char*)this + 0x120) != 0) {
-                *(double*)((char*)this + 0x118) -= 20.0;
+        if (frame == 0 && timer == 0) {
+            unk148 = unk148 + 0xf;
+            vx = (2.0 - (*m_opponent)->unk178 / 10000.0) * -1.5;
+            if (unk120 != 0) {
+                unk118 -= 20.0;
             }
         }
-        *(double*)((char*)this + 0x38) = 0.0;
-        *(double*)((char*)this + 0x28) = 0.0;
-        *(double*)((char*)this + 0x30) += 0.06;
-        if (*(double*)((char*)this + 0x30) > 0.0) {
-            *(double*)((char*)this + 0x30) = 0.0;
+        vy = 0.0;
+        y = 0.0;
+        vx += 0.06;
+        if (vx > 0.0) {
+            vx = 0.0;
         }
-        if (*(double*)((char*)this + 0x20) - 20.0 <= 0.0 || *(double*)((char*)this + 0x20) + 20.0 >= 639.0) {
-            *(double*)((char*)this + 0xb8) = (1.0 - (*(double*)((char*)this + 0x28) < 0.0) * 0.2) * *(double*)((char*)this + 0x30);
+        if (x - 20.0 <= 0.0 || x + 20.0 >= 639.0) {
+            unkb8 = (1.0 - (y < 0.0) * 0.2) * vx;
         } else {
-            *(double*)((char*)this + 0xb8) = 0.0;
+            unkb8 = 0.0;
         }
-        (*(short*)((char*)this + 0xc))++;
-        if (*(WORD*)((char*)this + 0xc) >= l4) {
-            *(short*)((char*)this + 0xc) = 0;
-            (*(short*)((char*)this + 0xa))++;
-            if (*(WORD*)((char*)this + 0xa) >= x8) {
-                *(short*)((char*)this + 8) = 0;
-                if (*((char*)this + 0x189) == 1) {
-                    *(short*)((char*)this + 8) = 3;
+        timer++;
+        if (timer >= l4) {
+            timer = 0;
+            frame++;
+            if (frame >= x8) {
+                pattern = 0;
+                if (m_inputY == 1) {
+                    pattern = 3;
                 }
                 Vf0();
             }
         }
         break;
     case 0x34:
-        if (*((char*)this + 0x120) != 0) {
-            *(double*)((char*)this + 0x118) -= 0.6;
+        if (unk120 != 0) {
+            unk118 -= 0.6;
         }
-        if (*(WORD*)((char*)this + 0xa) == 0 && *(WORD*)((char*)this + 0xc) == 0) {
-            *(short*)((char*)this + 0x148) = *(short*)((char*)this + 0x148) + 0x14;
-            *(double*)((char*)this + 0x30) = (2.0 - *(double*)(*(char**)*(char**)((char*)this + 0x78) + 0x178) / 10000.0) * -1.8;
-            if (*((char*)this + 0x120) != 0) {
-                *(double*)((char*)this + 0x118) -= 30.0;
+        if (frame == 0 && timer == 0) {
+            unk148 = unk148 + 0x14;
+            vx = (2.0 - (*m_opponent)->unk178 / 10000.0) * -1.8;
+            if (unk120 != 0) {
+                unk118 -= 30.0;
             }
         }
-        *(double*)((char*)this + 0x38) = 0.0;
-        *(double*)((char*)this + 0x28) = 0.0;
-        *(double*)((char*)this + 0x30) += 0.06;
-        if (*(double*)((char*)this + 0x30) > 0.0) {
-            *(double*)((char*)this + 0x30) = 0.0;
+        vy = 0.0;
+        y = 0.0;
+        vx += 0.06;
+        if (vx > 0.0) {
+            vx = 0.0;
         }
-        if (*(double*)((char*)this + 0x20) - 20.0 <= 0.0 || *(double*)((char*)this + 0x20) + 20.0 >= 639.0) {
-            *(double*)((char*)this + 0xb8) = (1.0 - (*(double*)((char*)this + 0x28) < 0.0) * 0.2) * *(double*)((char*)this + 0x30);
+        if (x - 20.0 <= 0.0 || x + 20.0 >= 639.0) {
+            unkb8 = (1.0 - (y < 0.0) * 0.2) * vx;
         } else {
-            *(double*)((char*)this + 0xb8) = 0.0;
+            unkb8 = 0.0;
         }
-        (*(short*)((char*)this + 0xc))++;
-        if (*(WORD*)((char*)this + 0xc) >= l4) {
-            *(short*)((char*)this + 0xc) = 0;
-            (*(short*)((char*)this + 0xa))++;
-            if (*(WORD*)((char*)this + 0xa) >= x8) {
-                *(short*)((char*)this + 8) = 0;
-                if (*((char*)this + 0x189) == 1) {
-                    *(short*)((char*)this + 8) = 3;
+        timer++;
+        if (timer >= l4) {
+            timer = 0;
+            frame++;
+            if (frame >= x8) {
+                pattern = 0;
+                if (m_inputY == 1) {
+                    pattern = 3;
                 }
                 Vf0();
             }
         }
         break;
     case 0x35:
-        if (*((char*)this + 0x120) != 0) {
-            *(double*)((char*)this + 0x118) -= 0.6;
+        if (unk120 != 0) {
+            unk118 -= 0.6;
         }
-        if (*(WORD*)((char*)this + 0xa) == 0 && *(WORD*)((char*)this + 0xc) == 0) {
-            *(short*)((char*)this + 0x148) = *(short*)((char*)this + 0x148) + 0xa;
-            *(double*)((char*)this + 0x30) = (2.0 - *(double*)(*(char**)*(char**)((char*)this + 0x78) + 0x178) / 10000.0) * -1.1;
-            if (*((char*)this + 0x120) != 0) {
-                *(double*)((char*)this + 0x118) -= 10.0;
+        if (frame == 0 && timer == 0) {
+            unk148 = unk148 + 0xa;
+            vx = (2.0 - (*m_opponent)->unk178 / 10000.0) * -1.1;
+            if (unk120 != 0) {
+                unk118 -= 10.0;
             }
         }
-        *(double*)((char*)this + 0x38) = 0.0;
-        *(double*)((char*)this + 0x28) = 0.0;
-        *(double*)((char*)this + 0x30) += 0.06;
-        if (*(double*)((char*)this + 0x30) > 0.0) {
-            *(double*)((char*)this + 0x30) = 0.0;
+        vy = 0.0;
+        y = 0.0;
+        vx += 0.06;
+        if (vx > 0.0) {
+            vx = 0.0;
         }
-        if (*(double*)((char*)this + 0x20) - 20.0 <= 0.0 || *(double*)((char*)this + 0x20) + 20.0 >= 639.0) {
-            *(double*)((char*)this + 0xb8) = (1.0 - (*(double*)((char*)this + 0x28) < 0.0) * 0.2) * *(double*)((char*)this + 0x30);
+        if (x - 20.0 <= 0.0 || x + 20.0 >= 639.0) {
+            unkb8 = (1.0 - (y < 0.0) * 0.2) * vx;
         } else {
-            *(double*)((char*)this + 0xb8) = 0.0;
+            unkb8 = 0.0;
         }
-        (*(short*)((char*)this + 0xc))++;
-        if (*(WORD*)((char*)this + 0xc) >= l4) {
-            *(short*)((char*)this + 0xc) = 0;
-            (*(short*)((char*)this + 0xa))++;
-            if (*(WORD*)((char*)this + 0xa) >= x8) {
-                *(short*)((char*)this + 8) = 0;
-                if (*((char*)this + 0x189) == 1) {
-                    *(short*)((char*)this + 8) = 3;
+        timer++;
+        if (timer >= l4) {
+            timer = 0;
+            frame++;
+            if (frame >= x8) {
+                pattern = 0;
+                if (m_inputY == 1) {
+                    pattern = 3;
                 }
                 Vf0();
             }
         }
         break;
     case 0x36:
-        if (*((char*)this + 0x120) != 0) {
-            *(double*)((char*)this + 0x118) -= 0.6;
+        if (unk120 != 0) {
+            unk118 -= 0.6;
         }
-        if (*(WORD*)((char*)this + 0xa) == 0 && *(WORD*)((char*)this + 0xc) == 0) {
-            *(short*)((char*)this + 0x148) = *(short*)((char*)this + 0x148) + 0xf;
-            *(double*)((char*)this + 0x30) = (2.0 - *(double*)(*(char**)*(char**)((char*)this + 0x78) + 0x178) / 10000.0) * -1.5;
-            if (*((char*)this + 0x120) != 0) {
-                *(double*)((char*)this + 0x118) -= 20.0;
+        if (frame == 0 && timer == 0) {
+            unk148 = unk148 + 0xf;
+            vx = (2.0 - (*m_opponent)->unk178 / 10000.0) * -1.5;
+            if (unk120 != 0) {
+                unk118 -= 20.0;
             }
         }
-        *(double*)((char*)this + 0x38) = 0.0;
-        *(double*)((char*)this + 0x28) = 0.0;
-        *(double*)((char*)this + 0x30) += 0.06;
-        if (*(double*)((char*)this + 0x30) > 0.0) {
-            *(double*)((char*)this + 0x30) = 0.0;
+        vy = 0.0;
+        y = 0.0;
+        vx += 0.06;
+        if (vx > 0.0) {
+            vx = 0.0;
         }
-        if (*(double*)((char*)this + 0x20) - 20.0 <= 0.0 || *(double*)((char*)this + 0x20) + 20.0 >= 639.0) {
-            *(double*)((char*)this + 0xb8) = (1.0 - (*(double*)((char*)this + 0x28) < 0.0) * 0.2) * *(double*)((char*)this + 0x30);
+        if (x - 20.0 <= 0.0 || x + 20.0 >= 639.0) {
+            unkb8 = (1.0 - (y < 0.0) * 0.2) * vx;
         } else {
-            *(double*)((char*)this + 0xb8) = 0.0;
+            unkb8 = 0.0;
         }
-        (*(short*)((char*)this + 0xc))++;
-        if (*(WORD*)((char*)this + 0xc) >= l4) {
-            *(short*)((char*)this + 0xc) = 0;
-            (*(short*)((char*)this + 0xa))++;
-            if (*(WORD*)((char*)this + 0xa) >= x8) {
-                *(short*)((char*)this + 8) = 0;
-                if (*((char*)this + 0x189) == 1) {
-                    *(short*)((char*)this + 8) = 3;
+        timer++;
+        if (timer >= l4) {
+            timer = 0;
+            frame++;
+            if (frame >= x8) {
+                pattern = 0;
+                if (m_inputY == 1) {
+                    pattern = 3;
                 }
                 Vf0();
             }
         }
         break;
     case 0x37:
-        if (*((char*)this + 0x120) != 0) {
-            *(double*)((char*)this + 0x118) -= 0.6;
+        if (unk120 != 0) {
+            unk118 -= 0.6;
         }
-        if (*(WORD*)((char*)this + 0xa) == 0 && *(WORD*)((char*)this + 0xc) == 0) {
-            *(short*)((char*)this + 0x148) = *(short*)((char*)this + 0x148) + 0x14;
-            *(double*)((char*)this + 0x30) = (2.0 - *(double*)(*(char**)*(char**)((char*)this + 0x78) + 0x178) / 10000.0) * -1.8;
-            if (*((char*)this + 0x120) != 0) {
-                *(double*)((char*)this + 0x118) -= 30.0;
+        if (frame == 0 && timer == 0) {
+            unk148 = unk148 + 0x14;
+            vx = (2.0 - (*m_opponent)->unk178 / 10000.0) * -1.8;
+            if (unk120 != 0) {
+                unk118 -= 30.0;
             }
         }
-        *(double*)((char*)this + 0x38) = 0.0;
-        *(double*)((char*)this + 0x28) = 0.0;
-        *(double*)((char*)this + 0x30) += 0.06;
-        if (*(double*)((char*)this + 0x30) > 0.0) {
-            *(double*)((char*)this + 0x30) = 0.0;
+        vy = 0.0;
+        y = 0.0;
+        vx += 0.06;
+        if (vx > 0.0) {
+            vx = 0.0;
         }
-        if (*(double*)((char*)this + 0x20) - 20.0 <= 0.0 || *(double*)((char*)this + 0x20) + 20.0 >= 639.0) {
-            *(double*)((char*)this + 0xb8) = (1.0 - (*(double*)((char*)this + 0x28) < 0.0) * 0.2) * *(double*)((char*)this + 0x30);
+        if (x - 20.0 <= 0.0 || x + 20.0 >= 639.0) {
+            unkb8 = (1.0 - (y < 0.0) * 0.2) * vx;
         } else {
-            *(double*)((char*)this + 0xb8) = 0.0;
+            unkb8 = 0.0;
         }
-        (*(short*)((char*)this + 0xc))++;
-        if (*(WORD*)((char*)this + 0xc) >= l4) {
-            *(short*)((char*)this + 0xc) = 0;
-            (*(short*)((char*)this + 0xa))++;
-            if (*(WORD*)((char*)this + 0xa) >= x8) {
-                *(short*)((char*)this + 8) = 0;
-                if (*((char*)this + 0x189) == 1) {
-                    *(short*)((char*)this + 8) = 3;
+        timer++;
+        if (timer >= l4) {
+            timer = 0;
+            frame++;
+            if (frame >= x8) {
+                pattern = 0;
+                if (m_inputY == 1) {
+                    pattern = 3;
                 }
                 Vf0();
             }
         }
         break;
     case 0x38:
-        if (*((char*)this + 0x120) != 0) {
-            *(double*)((char*)this + 0x118) -= 0.6;
+        if (unk120 != 0) {
+            unk118 -= 0.6;
         }
-        if (*(WORD*)((char*)this + 0xa) == 0 && *(WORD*)((char*)this + 0xc) == 0) {
-            *(short*)((char*)this + 0x148) = *(short*)((char*)this + 0x148) + 0xa;
-            *(double*)((char*)this + 0x30) = (2.0 - *(double*)(*(char**)*(char**)((char*)this + 0x78) + 0x178) / 10000.0) * -1.1;
-            if (*((char*)this + 0x120) != 0) {
-                *(double*)((char*)this + 0x118) -= 10.0;
+        if (frame == 0 && timer == 0) {
+            unk148 = unk148 + 0xa;
+            vx = (2.0 - (*m_opponent)->unk178 / 10000.0) * -1.1;
+            if (unk120 != 0) {
+                unk118 -= 10.0;
             }
         }
-        *(double*)((char*)this + 0x38) = 0.0;
-        *(double*)((char*)this + 0x28) = 0.0;
-        *(double*)((char*)this + 0x30) += 0.06;
-        if (*(double*)((char*)this + 0x30) > 0.0) {
-            *(double*)((char*)this + 0x30) = 0.0;
+        vy = 0.0;
+        y = 0.0;
+        vx += 0.06;
+        if (vx > 0.0) {
+            vx = 0.0;
         }
-        if (*(double*)((char*)this + 0x20) - 20.0 <= 0.0 || *(double*)((char*)this + 0x20) + 20.0 >= 639.0) {
-            *(double*)((char*)this + 0xb8) = (1.0 - (*(double*)((char*)this + 0x28) < 0.0) * 0.2) * *(double*)((char*)this + 0x30);
+        if (x - 20.0 <= 0.0 || x + 20.0 >= 639.0) {
+            unkb8 = (1.0 - (y < 0.0) * 0.2) * vx;
         } else {
-            *(double*)((char*)this + 0xb8) = 0.0;
+            unkb8 = 0.0;
         }
-        (*(short*)((char*)this + 0xc))++;
-        if (*(WORD*)((char*)this + 0xc) >= l4) {
-            *(short*)((char*)this + 0xc) = 0;
-            (*(short*)((char*)this + 0xa))++;
-            if (*(WORD*)((char*)this + 0xa) >= x8) {
-                *(short*)((char*)this + 8) = 3;
+        timer++;
+        if (timer >= l4) {
+            timer = 0;
+            frame++;
+            if (frame >= x8) {
+                pattern = 3;
                 Vf0();
             }
         }
         break;
     case 0x39:
-        if (*((char*)this + 0x120) != 0) {
-            *(double*)((char*)this + 0x118) -= 0.6;
+        if (unk120 != 0) {
+            unk118 -= 0.6;
         }
-        if (*(WORD*)((char*)this + 0xa) == 0 && *(WORD*)((char*)this + 0xc) == 0) {
-            *(short*)((char*)this + 0x148) = *(short*)((char*)this + 0x148) + 0xf;
-            *(double*)((char*)this + 0x30) = (2.0 - *(double*)(*(char**)*(char**)((char*)this + 0x78) + 0x178) / 10000.0) * -1.5;
-            if (*((char*)this + 0x120) != 0) {
-                *(double*)((char*)this + 0x118) -= 20.0;
+        if (frame == 0 && timer == 0) {
+            unk148 = unk148 + 0xf;
+            vx = (2.0 - (*m_opponent)->unk178 / 10000.0) * -1.5;
+            if (unk120 != 0) {
+                unk118 -= 20.0;
             }
         }
-        *(double*)((char*)this + 0x38) = 0.0;
-        *(double*)((char*)this + 0x28) = 0.0;
-        *(double*)((char*)this + 0x30) += 0.06;
-        if (*(double*)((char*)this + 0x30) > 0.0) {
-            *(double*)((char*)this + 0x30) = 0.0;
+        vy = 0.0;
+        y = 0.0;
+        vx += 0.06;
+        if (vx > 0.0) {
+            vx = 0.0;
         }
-        if (*(double*)((char*)this + 0x20) - 20.0 <= 0.0 || *(double*)((char*)this + 0x20) + 20.0 >= 639.0) {
-            *(double*)((char*)this + 0xb8) = (1.0 - (*(double*)((char*)this + 0x28) < 0.0) * 0.2) * *(double*)((char*)this + 0x30);
+        if (x - 20.0 <= 0.0 || x + 20.0 >= 639.0) {
+            unkb8 = (1.0 - (y < 0.0) * 0.2) * vx;
         } else {
-            *(double*)((char*)this + 0xb8) = 0.0;
+            unkb8 = 0.0;
         }
-        (*(short*)((char*)this + 0xc))++;
-        if (*(WORD*)((char*)this + 0xc) >= l4) {
-            *(short*)((char*)this + 0xc) = 0;
-            (*(short*)((char*)this + 0xa))++;
-            if (*(WORD*)((char*)this + 0xa) >= x8) {
-                *(short*)((char*)this + 8) = 3;
+        timer++;
+        if (timer >= l4) {
+            timer = 0;
+            frame++;
+            if (frame >= x8) {
+                pattern = 3;
                 Vf0();
             }
         }
         break;
     case 0x3a:
-        if (*((char*)this + 0x120) != 0) {
-            *(double*)((char*)this + 0x118) -= 0.6;
+        if (unk120 != 0) {
+            unk118 -= 0.6;
         }
-        if (*(WORD*)((char*)this + 0xa) == 0 && *(WORD*)((char*)this + 0xc) == 0) {
-            *(short*)((char*)this + 0x148) = *(short*)((char*)this + 0x148) + 0x14;
-            *(double*)((char*)this + 0x30) = (2.0 - *(double*)(*(char**)*(char**)((char*)this + 0x78) + 0x178) / 10000.0) * -1.8;
-            if (*((char*)this + 0x120) != 0) {
-                *(double*)((char*)this + 0x118) -= 30.0;
+        if (frame == 0 && timer == 0) {
+            unk148 = unk148 + 0x14;
+            vx = (2.0 - (*m_opponent)->unk178 / 10000.0) * -1.8;
+            if (unk120 != 0) {
+                unk118 -= 30.0;
             }
         }
-        *(double*)((char*)this + 0x38) = 0.0;
-        *(double*)((char*)this + 0x28) = 0.0;
-        *(double*)((char*)this + 0x30) += 0.06;
-        if (*(double*)((char*)this + 0x30) > 0.0) {
-            *(double*)((char*)this + 0x30) = 0.0;
+        vy = 0.0;
+        y = 0.0;
+        vx += 0.06;
+        if (vx > 0.0) {
+            vx = 0.0;
         }
-        if (*(double*)((char*)this + 0x20) - 20.0 <= 0.0 || *(double*)((char*)this + 0x20) + 20.0 >= 639.0) {
-            *(double*)((char*)this + 0xb8) = (1.0 - (*(double*)((char*)this + 0x28) < 0.0) * 0.2) * *(double*)((char*)this + 0x30);
+        if (x - 20.0 <= 0.0 || x + 20.0 >= 639.0) {
+            unkb8 = (1.0 - (y < 0.0) * 0.2) * vx;
         } else {
-            *(double*)((char*)this + 0xb8) = 0.0;
+            unkb8 = 0.0;
         }
-        (*(short*)((char*)this + 0xc))++;
-        if (*(WORD*)((char*)this + 0xc) >= l4) {
-            *(short*)((char*)this + 0xc) = 0;
-            (*(short*)((char*)this + 0xa))++;
-            if (*(WORD*)((char*)this + 0xa) >= x8) {
-                *(short*)((char*)this + 8) = 3;
+        timer++;
+        if (timer >= l4) {
+            timer = 0;
+            frame++;
+            if (frame >= x8) {
+                pattern = 3;
                 Vf0();
             }
         }
         break;
     case 0x3b:
-        if (*((char*)this + 0x120) != 0) {
-            *(double*)((char*)this + 0x118) -= 0.8;
+        if (unk120 != 0) {
+            unk118 -= 0.8;
         }
-        if (*(WORD*)((char*)this + 0xa) == 0 && *(WORD*)((char*)this + 0xc) == 0) {
-            *(short*)((char*)this + 0x148) = *(short*)((char*)this + 0x148) + 0x1e;
-            *(double*)((char*)this + 0x30) = *(double*)((char*)this + 0xc0);
-            *(double*)((char*)this + 0x38) = *(double*)((char*)this + 0x38) * 0.75 + *(double*)((char*)this + 0xc8);
-            if (*(double*)((char*)this + 0x38) < -2.0) {
-                *(double*)((char*)this + 0x38) = -2.0;
-            } else if (*(double*)((char*)this + 0x38) > -0.5) {
-                *(double*)((char*)this + 0x38) = -0.5;
+        if (frame == 0 && timer == 0) {
+            unk148 = unk148 + 0x1e;
+            vx = unkc0;
+            vy = vy * 0.75 + unkc8;
+            if (vy < -2.0) {
+                vy = -2.0;
+            } else if (vy > -0.5) {
+                vy = -0.5;
             }
-            *(double*)((char*)this + 0x48) = 0.032;
+            ay = 0.032;
         }
-        if (*(double*)((char*)this + 0x38) <= 0.0) {
-            *(short*)((char*)this + 0xa) = 1;
-            *(short*)((char*)this + 0xc) = 0;
+        if (vy <= 0.0) {
+            frame = 1;
+            timer = 0;
         }
-        if (*(double*)((char*)this + 0x38) >= 0.0 && *(WORD*)((char*)this + 0xa) <= 1) {
-            *(short*)((char*)this + 0xa) = 2;
-            *(short*)((char*)this + 0xc) = 0;
+        if (vy >= 0.0 && frame <= 1) {
+            frame = 2;
+            timer = 0;
         }
-        *(double*)((char*)this + 0x38) = *(double*)((char*)this + 0x38) + *(double*)((char*)this + 0x48);
-        (*(short*)((char*)this + 0xc))++;
-        if (*(WORD*)((char*)this + 0xc) >= l4) {
-            *(short*)((char*)this + 0xc) = 0;
-            (*(short*)((char*)this + 0xa))++;
-            if (*(WORD*)((char*)this + 0xa) >= x8) {
-                *(short*)((char*)this + 0xa) = *(WORD*)((char*)this + 0xa) - 2;
+        vy = vy + ay;
+        timer++;
+        if (timer >= l4) {
+            timer = 0;
+            frame++;
+            if (frame >= x8) {
+                frame = frame - 2;
             }
         }
-        if (*(double*)((char*)this + 0x28) + *(double*)((char*)this + 0x38) >= 0.0 && *(WORD*)((char*)this + 0xa) > 1) {
-            *(double*)((char*)this + 0x28) = 0.0;
-            if (*(int*)((char*)this + 0x12c) != 0) {
-                *(short*)((char*)this + 8) = 0x61;
+        if (y + vy >= 0.0 && frame > 1) {
+            y = 0.0;
+            if (unk12c != 0) {
+                pattern = 0x61;
                 Vf0();
             } else {
-                *(short*)((char*)this + 8) = 0x62;
+                pattern = 0x62;
                 Vf0();
             }
         }
         break;
     case 0x3c:
-        if (*((char*)this + 0x120) != 0) {
-            *(double*)((char*)this + 0x118) -= 0.8;
+        if (unk120 != 0) {
+            unk118 -= 0.8;
         }
-        if (*(WORD*)((char*)this + 0xa) == 0 && *(WORD*)((char*)this + 0xc) == 0) {
-            *(short*)((char*)this + 0x148) = *(short*)((char*)this + 0x148) + 0x1e;
-            *(double*)((char*)this + 0x30) = *(double*)((char*)this + 0xc0);
-            *(double*)((char*)this + 0x38) = *(double*)((char*)this + 0x38) * 0.75 + *(double*)((char*)this + 0xc8);
-            if (*(double*)((char*)this + 0x38) < -4.0) {
-                *(double*)((char*)this + 0x38) = -4.0;
-            } else if (*(double*)((char*)this + 0x38) > -0.5) {
-                *(double*)((char*)this + 0x38) = -0.5;
+        if (frame == 0 && timer == 0) {
+            unk148 = unk148 + 0x1e;
+            vx = unkc0;
+            vy = vy * 0.75 + unkc8;
+            if (vy < -4.0) {
+                vy = -4.0;
+            } else if (vy > -0.5) {
+                vy = -0.5;
             }
-            *(double*)((char*)this + 0x48) = 0.032;
+            ay = 0.032;
         }
-        if (*(double*)((char*)this + 0x38) <= 0.0) {
-            *(short*)((char*)this + 0xa) = 1;
-            *(short*)((char*)this + 0xc) = 0;
+        if (vy <= 0.0) {
+            frame = 1;
+            timer = 0;
         }
-        if (*(double*)((char*)this + 0x38) >= 0.0 && *(WORD*)((char*)this + 0xa) <= 1) {
-            *(short*)((char*)this + 0xa) = 2;
-            *(short*)((char*)this + 0xc) = 0;
+        if (vy >= 0.0 && frame <= 1) {
+            frame = 2;
+            timer = 0;
         }
-        *(double*)((char*)this + 0x38) = *(double*)((char*)this + 0x38) + *(double*)((char*)this + 0x48);
-        (*(short*)((char*)this + 0xc))++;
-        if (*(WORD*)((char*)this + 0xc) >= l4) {
-            *(short*)((char*)this + 0xc) = 0;
-            (*(short*)((char*)this + 0xa))++;
-            if (*(WORD*)((char*)this + 0xa) >= x8) {
-                *(short*)((char*)this + 0xa) = *(WORD*)((char*)this + 0xa) - 2;
+        vy = vy + ay;
+        timer++;
+        if (timer >= l4) {
+            timer = 0;
+            frame++;
+            if (frame >= x8) {
+                frame = frame - 2;
             }
         }
-        if (*(double*)((char*)this + 0x28) + *(double*)((char*)this + 0x38) >= 0.0 && *(WORD*)((char*)this + 0xa) > 1) {
-            *(double*)((char*)this + 0x28) = 0.0;
-            if (*(int*)((char*)this + 0x12c) != 0) {
-                *(short*)((char*)this + 8) = 0x61;
+        if (y + vy >= 0.0 && frame > 1) {
+            y = 0.0;
+            if (unk12c != 0) {
+                pattern = 0x61;
                 Vf0();
             } else {
-                *(short*)((char*)this + 8) = 0x62;
+                pattern = 0x62;
                 Vf0();
             }
         }
         break;
     case 0x3d:
-        if (*((char*)this + 0x120) != 0) {
-            *(double*)((char*)this + 0x118) -= 0.8;
+        if (unk120 != 0) {
+            unk118 -= 0.8;
         }
-        if (*(WORD*)((char*)this + 0xa) == 0 && *(WORD*)((char*)this + 0xc) == 0) {
-            *(short*)((char*)this + 0x148) = *(short*)((char*)this + 0x148) + 0x1e;
-            *(double*)((char*)this + 0x30) = *(double*)((char*)this + 0xc0);
-            *(double*)((char*)this + 0x38) = *(double*)((char*)this + 0x38) * 0.75 + *(double*)((char*)this + 0xc8);
-            if (*(double*)((char*)this + 0x38) < -6.0) {
-                *(double*)((char*)this + 0x38) = -6.0;
-            } else if (*(double*)((char*)this + 0x38) > -0.5) {
-                *(double*)((char*)this + 0x38) = -0.5;
+        if (frame == 0 && timer == 0) {
+            unk148 = unk148 + 0x1e;
+            vx = unkc0;
+            vy = vy * 0.75 + unkc8;
+            if (vy < -6.0) {
+                vy = -6.0;
+            } else if (vy > -0.5) {
+                vy = -0.5;
             }
-            *(double*)((char*)this + 0x48) = 0.032;
+            ay = 0.032;
         }
-        if (*(double*)((char*)this + 0x38) <= 0.0) {
-            *(short*)((char*)this + 0xa) = 1;
-            *(short*)((char*)this + 0xc) = 0;
+        if (vy <= 0.0) {
+            frame = 1;
+            timer = 0;
         }
-        if (*(double*)((char*)this + 0x38) >= 0.0 && *(WORD*)((char*)this + 0xa) <= 1) {
-            *(short*)((char*)this + 0xa) = 2;
-            *(short*)((char*)this + 0xc) = 0;
+        if (vy >= 0.0 && frame <= 1) {
+            frame = 2;
+            timer = 0;
         }
-        *(double*)((char*)this + 0x38) = *(double*)((char*)this + 0x38) + *(double*)((char*)this + 0x48);
-        (*(short*)((char*)this + 0xc))++;
-        if (*(WORD*)((char*)this + 0xc) >= l4) {
-            *(short*)((char*)this + 0xc) = 0;
-            (*(short*)((char*)this + 0xa))++;
-            if (*(WORD*)((char*)this + 0xa) >= x8) {
-                *(short*)((char*)this + 0xa) = *(WORD*)((char*)this + 0xa) - 2;
+        vy = vy + ay;
+        timer++;
+        if (timer >= l4) {
+            timer = 0;
+            frame++;
+            if (frame >= x8) {
+                frame = frame - 2;
             }
         }
-        if (*(double*)((char*)this + 0x28) + *(double*)((char*)this + 0x38) >= 0.0 && *(WORD*)((char*)this + 0xa) > 1) {
-            *(double*)((char*)this + 0x28) = 0.0;
-            if (*(int*)((char*)this + 0x12c) != 0) {
-                *(short*)((char*)this + 8) = 0x61;
+        if (y + vy >= 0.0 && frame > 1) {
+            y = 0.0;
+            if (unk12c != 0) {
+                pattern = 0x61;
                 Vf0();
             } else {
-                *(short*)((char*)this + 8) = 0x62;
+                pattern = 0x62;
                 Vf0();
             }
         }
         break;
     case 0x3e:
-        if (*((char*)this + 0x120) != 0) {
-            *(double*)((char*)this + 0x118) -= 0.8;
+        if (unk120 != 0) {
+            unk118 -= 0.8;
         }
-        if (*(WORD*)((char*)this + 0xa) == 0 && *(WORD*)((char*)this + 0xc) == 0) {
-            *(short*)((char*)this + 0x148) = *(short*)((char*)this + 0x148) + 0x1e;
-            *(double*)((char*)this + 0x30) = *(double*)((char*)this + 0xc0);
-            *(double*)((char*)this + 0x38) = *(double*)((char*)this + 0x38) * 0.75 + *(double*)((char*)this + 0xc8);
-            *(double*)((char*)this + 0x48) = 0.032;
+        if (frame == 0 && timer == 0) {
+            unk148 = unk148 + 0x1e;
+            vx = unkc0;
+            vy = vy * 0.75 + unkc8;
+            ay = 0.032;
         }
-        if (*(double*)((char*)this + 0x38) <= 0.0) {
-            *(short*)((char*)this + 0xa) = 1;
-            *(short*)((char*)this + 0xc) = 0;
+        if (vy <= 0.0) {
+            frame = 1;
+            timer = 0;
         }
-        if (*(double*)((char*)this + 0x38) >= 0.0 && *(WORD*)((char*)this + 0xa) <= 1) {
-            *(short*)((char*)this + 0xa) = 2;
-            *(short*)((char*)this + 0xc) = 0;
+        if (vy >= 0.0 && frame <= 1) {
+            frame = 2;
+            timer = 0;
         }
-        *(double*)((char*)this + 0x38) = *(double*)((char*)this + 0x38) + *(double*)((char*)this + 0x48);
-        (*(short*)((char*)this + 0xc))++;
-        if (*(WORD*)((char*)this + 0xc) >= l4) {
-            *(short*)((char*)this + 0xc) = 0;
-            (*(short*)((char*)this + 0xa))++;
-            if (*(WORD*)((char*)this + 0xa) >= x8) {
-                *(short*)((char*)this + 0xa) = *(WORD*)((char*)this + 0xa) - 2;
+        vy = vy + ay;
+        timer++;
+        if (timer >= l4) {
+            timer = 0;
+            frame++;
+            if (frame >= x8) {
+                frame = frame - 2;
             }
         }
-        if (*(double*)((char*)this + 0x28) + *(double*)((char*)this + 0x38) >= 0.0 && *(WORD*)((char*)this + 0xa) > 1) {
-            *(double*)((char*)this + 0x28) = 0.0;
-            if (*(int*)((char*)this + 0x12c) != 0) {
-                *(short*)((char*)this + 8) = 0x61;
+        if (y + vy >= 0.0 && frame > 1) {
+            y = 0.0;
+            if (unk12c != 0) {
+                pattern = 0x61;
                 Vf0();
             } else {
-                *(short*)((char*)this + 8) = 0x62;
+                pattern = 0x62;
                 Vf0();
             }
         }
         break;
     case 0x3f:
-        if (*((char*)this + 0x120) != 0) {
-            *(double*)((char*)this + 0x118) -= 0.8;
+        if (unk120 != 0) {
+            unk118 -= 0.8;
         }
-        if (*(WORD*)((char*)this + 0xa) == 0 && *(WORD*)((char*)this + 0xc) == 0) {
-            *(short*)((char*)this + 0x148) = *(short*)((char*)this + 0x148) + 0x1e;
-            *(double*)((char*)this + 0x30) = *(double*)((char*)this + 0xc0);
-            *(double*)((char*)this + 0x38) = *(double*)((char*)this + 0xc8);
-            *(double*)((char*)this + 0x48) = 0.032;
+        if (frame == 0 && timer == 0) {
+            unk148 = unk148 + 0x1e;
+            vx = unkc0;
+            vy = unkc8;
+            ay = 0.032;
         }
-        if (*(double*)((char*)this + 0x38) <= 0.0) {
-            *(short*)((char*)this + 0xa) = 1;
-            *(short*)((char*)this + 0xc) = 0;
+        if (vy <= 0.0) {
+            frame = 1;
+            timer = 0;
         }
-        if (*(double*)((char*)this + 0x38) >= 0.0 && *(WORD*)((char*)this + 0xa) <= 1) {
-            *(short*)((char*)this + 0xa) = 2;
-            *(short*)((char*)this + 0xc) = 0;
+        if (vy >= 0.0 && frame <= 1) {
+            frame = 2;
+            timer = 0;
         }
-        *(double*)((char*)this + 0x38) = *(double*)((char*)this + 0x38) + *(double*)((char*)this + 0x48);
-        (*(short*)((char*)this + 0xc))++;
-        if (*(WORD*)((char*)this + 0xc) >= l4) {
-            *(short*)((char*)this + 0xc) = 0;
-            (*(short*)((char*)this + 0xa))++;
-            if (*(WORD*)((char*)this + 0xa) >= x8) {
-                *(short*)((char*)this + 0xa) = *(WORD*)((char*)this + 0xa) - 2;
+        vy = vy + ay;
+        timer++;
+        if (timer >= l4) {
+            timer = 0;
+            frame++;
+            if (frame >= x8) {
+                frame = frame - 2;
             }
         }
-        if (*(double*)((char*)this + 0x28) + *(double*)((char*)this + 0x38) >= 0.0 && *(WORD*)((char*)this + 0xa) > 1) {
-            *(double*)((char*)this + 0x28) = 0.0;
-            if (*(int*)((char*)this + 0x12c) != 0) {
-                *(short*)((char*)this + 8) = 0x61;
+        if (y + vy >= 0.0 && frame > 1) {
+            y = 0.0;
+            if (unk12c != 0) {
+                pattern = 0x61;
                 Vf0();
             } else {
-                *(short*)((char*)this + 8) = 0x62;
+                pattern = 0x62;
                 Vf0();
             }
         }
         break;
     case 0x40:
-        if (*((char*)this + 0x120) != 0) {
-            *(double*)((char*)this + 0x118) -= 0.8;
+        if (unk120 != 0) {
+            unk118 -= 0.8;
         }
-        if (*(WORD*)((char*)this + 0xa) > 0 && (char)CPlayer::Unk40ff70() != 0) {
-            *(short*)((char*)this + 8) = 0x46;
+        if (frame > 0 && (char)CPlayer::Unk40ff70() != 0) {
+            pattern = 0x46;
             Vf0();
             break;
         }
-        if (*(WORD*)((char*)this + 0xa) == 0 && *(WORD*)((char*)this + 0xc) == 0) {
-            *(short*)((char*)this + 0x148) = *(short*)((char*)this + 0x148) + 0x1e;
-            *(double*)((char*)this + 0x30) = *(double*)((char*)this + 0xc0);
-            *(double*)((char*)this + 0x38) = *(double*)((char*)this + 0x38) * 0.75 + *(double*)((char*)this + 0xc8);
-            if (*(double*)((char*)this + 0x38) < -2.0) {
-                *(double*)((char*)this + 0x38) = -2.0;
-            } else if (*(double*)((char*)this + 0x38) > -0.5) {
-                *(double*)((char*)this + 0x38) = -0.5;
+        if (frame == 0 && timer == 0) {
+            unk148 = unk148 + 0x1e;
+            vx = unkc0;
+            vy = vy * 0.75 + unkc8;
+            if (vy < -2.0) {
+                vy = -2.0;
+            } else if (vy > -0.5) {
+                vy = -0.5;
             }
-            *(double*)((char*)this + 0x48) = 0.032;
+            ay = 0.032;
         }
-        if (*(double*)((char*)this + 0x38) <= 0.0) {
-            *(short*)((char*)this + 0xa) = 1;
-            *(short*)((char*)this + 0xc) = 0;
+        if (vy <= 0.0) {
+            frame = 1;
+            timer = 0;
         }
-        if (*(double*)((char*)this + 0x38) >= 0.0 && *(WORD*)((char*)this + 0xa) <= 1) {
-            *(short*)((char*)this + 0xa) = 2;
-            *(short*)((char*)this + 0xc) = 0;
+        if (vy >= 0.0 && frame <= 1) {
+            frame = 2;
+            timer = 0;
         }
-        *(double*)((char*)this + 0x38) = *(double*)((char*)this + 0x38) + *(double*)((char*)this + 0x48);
-        (*(short*)((char*)this + 0xc))++;
-        if (*(WORD*)((char*)this + 0xc) >= l4) {
-            *(short*)((char*)this + 0xc) = 0;
-            (*(short*)((char*)this + 0xa))++;
-            if (*(WORD*)((char*)this + 0xa) >= x8) {
-                *(short*)((char*)this + 0xa) = *(WORD*)((char*)this + 0xa) - 2;
+        vy = vy + ay;
+        timer++;
+        if (timer >= l4) {
+            timer = 0;
+            frame++;
+            if (frame >= x8) {
+                frame = frame - 2;
             }
         }
-        if (*(double*)((char*)this + 0x28) + *(double*)((char*)this + 0x38) >= 0.0 && *(WORD*)((char*)this + 0xa) > 1) {
-            *(double*)((char*)this + 0x28) = 0.0;
-            if (*(int*)((char*)this + 0x12c) != 0) {
-                *(short*)((char*)this + 8) = 0x61;
+        if (y + vy >= 0.0 && frame > 1) {
+            y = 0.0;
+            if (unk12c != 0) {
+                pattern = 0x61;
                 Vf0();
             } else {
-                *(short*)((char*)this + 8) = 0x62;
+                pattern = 0x62;
                 Vf0();
             }
         }
         break;
     case 0x41:
-        if (*((char*)this + 0x120) != 0) {
-            *(double*)((char*)this + 0x118) -= 0.8;
+        if (unk120 != 0) {
+            unk118 -= 0.8;
         }
-        if (*(WORD*)((char*)this + 0xa) > 0 && (char)CPlayer::Unk40ff70() != 0) {
-            *(short*)((char*)this + 8) = 0x46;
+        if (frame > 0 && (char)CPlayer::Unk40ff70() != 0) {
+            pattern = 0x46;
             Vf0();
             break;
         }
-        if (*(WORD*)((char*)this + 0xa) == 0 && *(WORD*)((char*)this + 0xc) == 0) {
-            *(short*)((char*)this + 0x148) = *(short*)((char*)this + 0x148) + 0x1e;
-            *(double*)((char*)this + 0x30) = *(double*)((char*)this + 0xc0);
-            *(double*)((char*)this + 0x38) = *(double*)((char*)this + 0x38) * 0.75 + *(double*)((char*)this + 0xc8);
-            if (*(double*)((char*)this + 0x38) < -4.0) {
-                *(double*)((char*)this + 0x38) = -4.0;
-            } else if (*(double*)((char*)this + 0x38) > -0.5) {
-                *(double*)((char*)this + 0x38) = -0.5;
+        if (frame == 0 && timer == 0) {
+            unk148 = unk148 + 0x1e;
+            vx = unkc0;
+            vy = vy * 0.75 + unkc8;
+            if (vy < -4.0) {
+                vy = -4.0;
+            } else if (vy > -0.5) {
+                vy = -0.5;
             }
-            *(double*)((char*)this + 0x48) = 0.032;
+            ay = 0.032;
         }
-        if (*(double*)((char*)this + 0x38) <= 0.0) {
-            *(short*)((char*)this + 0xa) = 1;
-            *(short*)((char*)this + 0xc) = 0;
+        if (vy <= 0.0) {
+            frame = 1;
+            timer = 0;
         }
-        if (*(double*)((char*)this + 0x38) >= 0.0 && *(WORD*)((char*)this + 0xa) <= 1) {
-            *(short*)((char*)this + 0xa) = 2;
-            *(short*)((char*)this + 0xc) = 0;
+        if (vy >= 0.0 && frame <= 1) {
+            frame = 2;
+            timer = 0;
         }
-        *(double*)((char*)this + 0x38) = *(double*)((char*)this + 0x38) + *(double*)((char*)this + 0x48);
-        (*(short*)((char*)this + 0xc))++;
-        if (*(WORD*)((char*)this + 0xc) >= l4) {
-            *(short*)((char*)this + 0xc) = 0;
-            (*(short*)((char*)this + 0xa))++;
-            if (*(WORD*)((char*)this + 0xa) >= x8) {
-                *(short*)((char*)this + 0xa) = *(WORD*)((char*)this + 0xa) - 2;
+        vy = vy + ay;
+        timer++;
+        if (timer >= l4) {
+            timer = 0;
+            frame++;
+            if (frame >= x8) {
+                frame = frame - 2;
             }
         }
-        if (*(double*)((char*)this + 0x28) + *(double*)((char*)this + 0x38) >= 0.0 && *(WORD*)((char*)this + 0xa) > 1) {
-            *(double*)((char*)this + 0x28) = 0.0;
-            if (*(int*)((char*)this + 0x12c) != 0) {
-                *(short*)((char*)this + 8) = 0x61;
+        if (y + vy >= 0.0 && frame > 1) {
+            y = 0.0;
+            if (unk12c != 0) {
+                pattern = 0x61;
                 Vf0();
             } else {
-                *(short*)((char*)this + 8) = 0x62;
+                pattern = 0x62;
                 Vf0();
             }
         }
         break;
     case 0x42:
-        if (*((char*)this + 0x120) != 0) {
-            *(double*)((char*)this + 0x118) -= 0.8;
+        if (unk120 != 0) {
+            unk118 -= 0.8;
         }
-        if (*(WORD*)((char*)this + 0xa) > 0 && (char)CPlayer::Unk40ff70() != 0) {
-            *(short*)((char*)this + 8) = 0x46;
+        if (frame > 0 && (char)CPlayer::Unk40ff70() != 0) {
+            pattern = 0x46;
             Vf0();
             break;
         }
-        if (*(WORD*)((char*)this + 0xa) == 0 && *(WORD*)((char*)this + 0xc) == 0) {
-            *(short*)((char*)this + 0x148) = *(short*)((char*)this + 0x148) + 0x1e;
-            *(double*)((char*)this + 0x30) = *(double*)((char*)this + 0xc0);
-            *(double*)((char*)this + 0x38) = *(double*)((char*)this + 0x38) * 0.75 + *(double*)((char*)this + 0xc8);
-            *(double*)((char*)this + 0x48) = 0.032;
+        if (frame == 0 && timer == 0) {
+            unk148 = unk148 + 0x1e;
+            vx = unkc0;
+            vy = vy * 0.75 + unkc8;
+            ay = 0.032;
         }
-        if (*(double*)((char*)this + 0x38) <= 0.0) {
-            *(short*)((char*)this + 0xa) = 1;
-            *(short*)((char*)this + 0xc) = 0;
+        if (vy <= 0.0) {
+            frame = 1;
+            timer = 0;
         }
-        if (*(double*)((char*)this + 0x38) >= 0.0 && *(WORD*)((char*)this + 0xa) <= 1) {
-            *(short*)((char*)this + 0xa) = 2;
-            *(short*)((char*)this + 0xc) = 0;
+        if (vy >= 0.0 && frame <= 1) {
+            frame = 2;
+            timer = 0;
         }
-        *(double*)((char*)this + 0x38) = *(double*)((char*)this + 0x38) + *(double*)((char*)this + 0x48);
-        (*(short*)((char*)this + 0xc))++;
-        if (*(WORD*)((char*)this + 0xc) >= l4) {
-            *(short*)((char*)this + 0xc) = 0;
-            (*(short*)((char*)this + 0xa))++;
-            if (*(WORD*)((char*)this + 0xa) >= x8) {
-                *(short*)((char*)this + 0xa) = *(WORD*)((char*)this + 0xa) - 2;
+        vy = vy + ay;
+        timer++;
+        if (timer >= l4) {
+            timer = 0;
+            frame++;
+            if (frame >= x8) {
+                frame = frame - 2;
             }
         }
-        if (*(double*)((char*)this + 0x28) + *(double*)((char*)this + 0x38) >= 0.0 && *(WORD*)((char*)this + 0xa) > 1) {
-            *(double*)((char*)this + 0x28) = 0.0;
-            if (*(int*)((char*)this + 0x12c) != 0) {
-                *(short*)((char*)this + 8) = 0x61;
+        if (y + vy >= 0.0 && frame > 1) {
+            y = 0.0;
+            if (unk12c != 0) {
+                pattern = 0x61;
                 Vf0();
             } else {
-                *(short*)((char*)this + 8) = 0x62;
+                pattern = 0x62;
                 Vf0();
             }
         }
         break;
     case 0x43:
-        if (*((char*)this + 0x120) != 0) {
-            *(double*)((char*)this + 0x118) -= 0.8;
+        if (unk120 != 0) {
+            unk118 -= 0.8;
         }
-        if (*(WORD*)((char*)this + 0xa) > 0 && (char)CPlayer::Unk40ff70() != 0) {
-            *(short*)((char*)this + 8) = 0x46;
+        if (frame > 0 && (char)CPlayer::Unk40ff70() != 0) {
+            pattern = 0x46;
             Vf0();
             break;
         }
-        if (*(WORD*)((char*)this + 0xa) == 0 && *(WORD*)((char*)this + 0xc) == 0) {
-            *(short*)((char*)this + 0x148) = *(short*)((char*)this + 0x148) + 0x1e;
-            *(double*)((char*)this + 0x30) = *(double*)((char*)this + 0xc0);
-            *(double*)((char*)this + 0x38) = *(double*)((char*)this + 0xc8);
-            *(double*)((char*)this + 0x48) = 0.032;
+        if (frame == 0 && timer == 0) {
+            unk148 = unk148 + 0x1e;
+            vx = unkc0;
+            vy = unkc8;
+            ay = 0.032;
         }
-        if (*(double*)((char*)this + 0x38) <= 0.0) {
-            *(short*)((char*)this + 0xa) = 1;
-            *(short*)((char*)this + 0xc) = 0;
+        if (vy <= 0.0) {
+            frame = 1;
+            timer = 0;
         }
-        if (*(double*)((char*)this + 0x38) >= 0.0 && *(WORD*)((char*)this + 0xa) <= 1) {
-            *(short*)((char*)this + 0xa) = 2;
-            *(short*)((char*)this + 0xc) = 0;
+        if (vy >= 0.0 && frame <= 1) {
+            frame = 2;
+            timer = 0;
         }
-        *(double*)((char*)this + 0x38) = *(double*)((char*)this + 0x38) + *(double*)((char*)this + 0x48);
-        (*(short*)((char*)this + 0xc))++;
-        if (*(WORD*)((char*)this + 0xc) >= l4) {
-            *(short*)((char*)this + 0xc) = 0;
-            (*(short*)((char*)this + 0xa))++;
-            if (*(WORD*)((char*)this + 0xa) >= x8) {
-                *(short*)((char*)this + 0xa) = *(WORD*)((char*)this + 0xa) - 2;
+        vy = vy + ay;
+        timer++;
+        if (timer >= l4) {
+            timer = 0;
+            frame++;
+            if (frame >= x8) {
+                frame = frame - 2;
             }
         }
-        if (*(double*)((char*)this + 0x28) + *(double*)((char*)this + 0x38) >= 0.0 && *(WORD*)((char*)this + 0xa) > 1) {
-            *(double*)((char*)this + 0x28) = 0.0;
-            if (*(int*)((char*)this + 0x12c) != 0) {
-                *(short*)((char*)this + 8) = 0x61;
+        if (y + vy >= 0.0 && frame > 1) {
+            y = 0.0;
+            if (unk12c != 0) {
+                pattern = 0x61;
                 Vf0();
             } else {
-                *(short*)((char*)this + 8) = 0x62;
+                pattern = 0x62;
                 Vf0();
             }
         }
         break;
     case 0x44:
-        if (*((char*)this + 0x120) != 0) {
-            *(double*)((char*)this + 0x118) -= 1.5;
+        if (unk120 != 0) {
+            unk118 -= 1.5;
         }
-        *(short*)((char*)this + 0x148) = *(short*)((char*)this + 0x148) + 3;
-        *(double*)((char*)this + 0x30) = *(double*)((char*)this + 0xc0);
-        *(double*)((char*)this + 0x38) = *(double*)((char*)this + 0xc8);
-        (*(short*)((char*)this + 0xc))++;
+        unk148 = unk148 + 3;
+        vx = unkc0;
+        vy = unkc8;
+        timer++;
         if ((char)CPlayer::Unk40ff70() != 0) {
-            *(short*)((char*)this + 8) = 0x46;
+            pattern = 0x46;
             Vf0();
             break;
         }
-        if (*(WORD*)((char*)this + 0xc) >= l4) {
-            *(short*)((char*)this + 0xc) = 0;
-            (*(short*)((char*)this + 0xa))++;
-            if (*(WORD*)((char*)this + 0xa) >= x8) {
-                *(short*)((char*)this + 0xa) = *(WORD*)((char*)this + 0xa) - 2;
+        if (timer >= l4) {
+            timer = 0;
+            frame++;
+            if (frame >= x8) {
+                frame = frame - 2;
             }
         }
-        if (*(double*)((char*)this + 0x28) + *(double*)((char*)this + 0x38) >= 0.0) {
-            *(double*)((char*)this + 0x28) = 0.0;
-            if (*(int*)((char*)this + 0x12c) != 0) {
-                *(short*)((char*)this + 8) = 0x61;
+        if (y + vy >= 0.0) {
+            y = 0.0;
+            if (unk12c != 0) {
+                pattern = 0x61;
                 Vf0();
             } else {
-                *(short*)((char*)this + 8) = 0x62;
+                pattern = 0x62;
                 Vf0();
             }
         }
         break;
     case 0x45:
-        if (*((char*)this + 0x120) != 0) {
-            *(double*)((char*)this + 0x118) -= 1.5;
+        if (unk120 != 0) {
+            unk118 -= 1.5;
         }
-        *(short*)((char*)this + 0x148) = *(short*)((char*)this + 0x148) + 3;
-        *(double*)((char*)this + 0x30) = *(double*)((char*)this + 0xc0);
-        *(double*)((char*)this + 0x38) = *(double*)((char*)this + 0xc8);
-        (*(short*)((char*)this + 0xc))++;
-        if (*(WORD*)((char*)this + 0xc) >= l4) {
-            *(short*)((char*)this + 0xc) = 0;
-            (*(short*)((char*)this + 0xa))++;
-            if (*(WORD*)((char*)this + 0xa) >= x8) {
-                *(short*)((char*)this + 0xa) = *(WORD*)((char*)this + 0xa) - 2;
+        unk148 = unk148 + 3;
+        vx = unkc0;
+        vy = unkc8;
+        timer++;
+        if (timer >= l4) {
+            timer = 0;
+            frame++;
+            if (frame >= x8) {
+                frame = frame - 2;
             }
         }
-        if (*(double*)((char*)this + 0x28) + *(double*)((char*)this + 0x38) >= 0.0) {
-            *(double*)((char*)this + 0x28) = 0.0;
-            if (*(int*)((char*)this + 0x12c) != 0) {
-                *(short*)((char*)this + 8) = 0x61;
+        if (y + vy >= 0.0) {
+            y = 0.0;
+            if (unk12c != 0) {
+                pattern = 0x61;
                 Vf0();
             } else {
-                *(short*)((char*)this + 8) = 0x62;
+                pattern = 0x62;
                 Vf0();
             }
         }
         break;
     case 0x46:
-        if (*((char*)this + 0x120) != 0) {
-            *(double*)((char*)this + 0x118) -= 0.8;
+        if (unk120 != 0) {
+            unk118 -= 0.8;
         }
-        if (*(WORD*)((char*)this + 0xa) == 0 && *(WORD*)((char*)this + 0xc) == 0 && *(int*)((char*)this + 0x3138) == 0) {
-            *(short*)((char*)this + 0x148) = *(short*)((char*)this + 0x148) + 0x1e;
-            (*(int*)((char*)this + 0x3138))++;
-            *(short*)((char*)this + 0x124) = *(short*)((char*)this + 0x124) + 0x78;
-            *(double*)((char*)this + 0x30) = 0.5;
-            *(double*)((char*)this + 0x38) = -2.5;
-            *(double*)((char*)this + 0x48) = 0.025;
-            *((char*)this + 0x2c9) = 0x1f;
+        if (frame == 0 && timer == 0 && unk3138 == 0) {
+            unk148 = unk148 + 0x1e;
+            unk3138++;
+            unk124 = unk124 + 0x78;
+            vx = 0.5;
+            vy = -2.5;
+            ay = 0.025;
+            unk2c9 = 0x1f;
             l50.type = 0;
-            l50.x = (double)(int)*(double*)((char*)this + 0x20);
-            l50.y = (double)(int)*(double*)((char*)this + 0x28);
+            l50.x = (double)(int)x;
+            l50.y = (double)(int)y;
             l50.unk20 = 2;
             l50.unk21 = 1;
-            ((CGame*)*(int*)((char*)this + 0x7c))->CreateEffect((EffectDesc*)&l50);
+            m_game->CreateEffect((EffectDesc*)&l50);
         }
-        *(double*)((char*)this + 0x38) = *(double*)((char*)this + 0x38) + *(double*)((char*)this + 0x48);
-        (*(short*)((char*)this + 0xc))++;
-        if (*(WORD*)((char*)this + 0xc) >= l4) {
-            *(short*)((char*)this + 0xc) = 0;
-            (*(short*)((char*)this + 0xa))++;
-            if (*(WORD*)((char*)this + 0xa) >= x8) {
-                *(short*)((char*)this + 0xa) = 0;
+        vy = vy + ay;
+        timer++;
+        if (timer >= l4) {
+            timer = 0;
+            frame++;
+            if (frame >= x8) {
+                frame = 0;
             }
         }
-        if (*(double*)((char*)this + 0x28) + *(double*)((char*)this + 0x38) >= 0.0 && *(WORD*)((char*)this + 0xa) > 1) {
-            *(double*)((char*)this + 0x28) = 0.0;
-            if (*(int*)((char*)this + 0x12c) != 0) {
-                *(short*)((char*)this + 8) = 0x61;
+        if (y + vy >= 0.0 && frame > 1) {
+            y = 0.0;
+            if (unk12c != 0) {
+                pattern = 0x61;
                 Vf0();
             } else {
-                *(short*)((char*)this + 8) = 0x62;
+                pattern = 0x62;
                 Vf0();
             }
         }
         break;
     case 0x47:
-        if (*((char*)this + 0x120) != 0) {
-            *(double*)((char*)this + 0x118) -= 0.8;
+        if (unk120 != 0) {
+            unk118 -= 0.8;
         }
-        if (*(WORD*)((char*)this + 0xa) == 0 && *(WORD*)((char*)this + 0xc) == 0) {
-            *(short*)((char*)this + 0x148) = *(short*)((char*)this + 0x148) + 0x1e;
-            *(double*)((char*)this + 0x30) = *(double*)((char*)this + 0xc0);
-            *(double*)((char*)this + 0x38) = *(double*)((char*)this + 0xc8);
-            *(double*)((char*)this + 0x48) = 0.072;
+        if (frame == 0 && timer == 0) {
+            unk148 = unk148 + 0x1e;
+            vx = unkc0;
+            vy = unkc8;
+            ay = 0.072;
         }
-        if (*(double*)((char*)this + 0x38) <= 0.0) {
-            *(short*)((char*)this + 0xa) = 1;
-            *(short*)((char*)this + 0xc) = 0;
+        if (vy <= 0.0) {
+            frame = 1;
+            timer = 0;
         }
-        if (*(double*)((char*)this + 0x38) >= 0.0 && *(WORD*)((char*)this + 0xa) <= 1) {
-            *(short*)((char*)this + 0xa) = 2;
-            *(short*)((char*)this + 0xc) = 0;
+        if (vy >= 0.0 && frame <= 1) {
+            frame = 2;
+            timer = 0;
         }
-        *(double*)((char*)this + 0x38) = *(double*)((char*)this + 0x38) + *(double*)((char*)this + 0x48);
-        (*(short*)((char*)this + 0xc))++;
-        if (*(WORD*)((char*)this + 0xc) >= l4) {
-            *(short*)((char*)this + 0xc) = 0;
-            (*(short*)((char*)this + 0xa))++;
-            if (*(WORD*)((char*)this + 0xa) >= x8) {
-                *(short*)((char*)this + 0xa) = *(WORD*)((char*)this + 0xa) - 2;
+        vy = vy + ay;
+        timer++;
+        if (timer >= l4) {
+            timer = 0;
+            frame++;
+            if (frame >= x8) {
+                frame = frame - 2;
             }
         }
-        if (*(double*)((char*)this + 0x28) + *(double*)((char*)this + 0x38) >= 0.0 && *(WORD*)((char*)this + 0xa) > 1) {
-            *(double*)((char*)this + 0x28) = 0.0;
-            if (*(int*)((char*)this + 0x12c) != 0) {
-                *(short*)((char*)this + 8) = 0x61;
+        if (y + vy >= 0.0 && frame > 1) {
+            y = 0.0;
+            if (unk12c != 0) {
+                pattern = 0x61;
                 Vf0();
             } else {
-                *(short*)((char*)this + 8) = 0x62;
+                pattern = 0x62;
                 Vf0();
             }
         }
         break;
     case 0x48:
-        if (*((char*)this + 0x120) != 0) {
-            *(double*)((char*)this + 0x118) -= 0.8;
+        if (unk120 != 0) {
+            unk118 -= 0.8;
         }
-        *(double*)((char*)this + 0x30) = 0.0;
-        *(double*)((char*)this + 0x38) = 0.0;
-        if (*(double*)((char*)this + 0x20) - 20.0 <= 0.0 || *(double*)((char*)this + 0x20) + 20.0 >= 639.0) {
-            *(double*)((char*)this + 0xb8) = (1.0 - (*(double*)(*(char**)*(char**)((char*)this + 0x78) + 0x28) < 0.0) * 0.25) * *(double*)((char*)this + 0x30);
+        vx = 0.0;
+        vy = 0.0;
+        if (x - 20.0 <= 0.0 || x + 20.0 >= 639.0) {
+            unkb8 = (1.0 - ((*m_opponent)->y < 0.0) * 0.25) * vx;
         } else {
-            *(double*)((char*)this + 0xb8) = 0.0;
+            unkb8 = 0.0;
         }
-        (*(short*)((char*)this + 0xc))++;
-        if (*(WORD*)((char*)this + 0xc) >= l4) {
-            *(short*)((char*)this + 0xc) = 0;
-            (*(short*)((char*)this + 0xa))++;
-            if (*(WORD*)((char*)this + 0xa) >= x8) {
-                *(short*)((char*)this + 8) = 7;
-                if (*((char*)this + 0x189) == 1) {
-                    *(short*)((char*)this + 8) = 3;
+        timer++;
+        if (timer >= l4) {
+            timer = 0;
+            frame++;
+            if (frame >= x8) {
+                pattern = 7;
+                if (m_inputY == 1) {
+                    pattern = 3;
                 }
                 Vf0();
             }
         }
         break;
     case 0x49:
-        if (*((char*)this + 0x120) != 0) {
-            *(double*)((char*)this + 0x118) -= 0.8;
+        if (unk120 != 0) {
+            unk118 -= 0.8;
         }
-        *(double*)((char*)this + 0x30) = 0.0;
-        *(double*)((char*)this + 0x38) = 0.0;
-        if (*(double*)((char*)this + 0x20) - 20.0 <= 0.0 || *(double*)((char*)this + 0x20) + 20.0 >= 639.0) {
-            *(double*)((char*)this + 0xb8) = (1.0 - (*(double*)(*(char**)*(char**)((char*)this + 0x78) + 0x28) < 0.0) * 0.25) * *(double*)((char*)this + 0x30);
+        vx = 0.0;
+        vy = 0.0;
+        if (x - 20.0 <= 0.0 || x + 20.0 >= 639.0) {
+            unkb8 = (1.0 - ((*m_opponent)->y < 0.0) * 0.25) * vx;
         } else {
-            *(double*)((char*)this + 0xb8) = 0.0;
+            unkb8 = 0.0;
         }
-        (*(short*)((char*)this + 0xc))++;
-        if (*(WORD*)((char*)this + 0xc) >= l4) {
-            *(short*)((char*)this + 0xc) = 0;
-            (*(short*)((char*)this + 0xa))++;
-            if (*(WORD*)((char*)this + 0xa) >= x8) {
-                *(short*)((char*)this + 8) = 7;
-                if (*((char*)this + 0x189) == 1) {
-                    *(short*)((char*)this + 8) = 3;
+        timer++;
+        if (timer >= l4) {
+            timer = 0;
+            frame++;
+            if (frame >= x8) {
+                pattern = 7;
+                if (m_inputY == 1) {
+                    pattern = 3;
                 }
                 Vf0();
             }
         }
         break;
     case 0x4a:
-        if (*((char*)this + 0x120) != 0) {
-            *(double*)((char*)this + 0x118) -= 0.8;
+        if (unk120 != 0) {
+            unk118 -= 0.8;
         }
-        *(double*)((char*)this + 0x30) = 0.0;
-        *(double*)((char*)this + 0x38) = 0.0;
-        if (*(double*)((char*)this + 0x20) - 20.0 <= 0.0 || *(double*)((char*)this + 0x20) + 20.0 >= 639.0) {
-            *(double*)((char*)this + 0xb8) = (1.0 - (*(double*)(*(char**)*(char**)((char*)this + 0x78) + 0x28) < 0.0) * 0.25) * *(double*)((char*)this + 0x30);
+        vx = 0.0;
+        vy = 0.0;
+        if (x - 20.0 <= 0.0 || x + 20.0 >= 639.0) {
+            unkb8 = (1.0 - ((*m_opponent)->y < 0.0) * 0.25) * vx;
         } else {
-            *(double*)((char*)this + 0xb8) = 0.0;
+            unkb8 = 0.0;
         }
-        (*(short*)((char*)this + 0xc))++;
-        if (*(WORD*)((char*)this + 0xc) >= l4) {
-            *(short*)((char*)this + 0xc) = 0;
-            (*(short*)((char*)this + 0xa))++;
-            if (*(WORD*)((char*)this + 0xa) >= x8) {
-                *(short*)((char*)this + 8) = 3;
+        timer++;
+        if (timer >= l4) {
+            timer = 0;
+            frame++;
+            if (frame >= x8) {
+                pattern = 3;
                 Vf0();
             }
         }
         break;
     case 0x4b:
-        if (*((char*)this + 0x120) != 0) {
-            *(double*)((char*)this + 0x118) -= 0.6;
+        if (unk120 != 0) {
+            unk118 -= 0.6;
         }
-        if (*(WORD*)((char*)this + 0xa) == 0 && *(WORD*)((char*)this + 0xc) == 0) {
-            *(short*)((char*)this + 0x148) = *(short*)((char*)this + 0x148) + 0x1e;
-            if (*((char*)this + 0x120) != 0) {
-                *(double*)((char*)this + 0x118) -= 30.0;
+        if (frame == 0 && timer == 0) {
+            unk148 = unk148 + 0x1e;
+            if (unk120 != 0) {
+                unk118 -= 30.0;
             }
-            *(double*)((char*)this + 0x30) = 2.2;
+            vx = 2.2;
         }
-        *(double*)((char*)this + 0x38) = 0.0;
-        *(double*)((char*)this + 0x28) = 0.0;
-        *(double*)((char*)this + 0x48) = 0.0;
-        *(double*)((char*)this + 0x40) = 0.06;
-        *(double*)((char*)this + 0x30) = *(double*)((char*)this + 0x30) - *(double*)((char*)this + 0x40);
-        if (*(double*)((char*)this + 0x30) < 0.0) {
-            *(double*)((char*)this + 0x30) = 0.0;
+        vy = 0.0;
+        y = 0.0;
+        ay = 0.0;
+        ax = 0.06;
+        vx = vx - ax;
+        if (vx < 0.0) {
+            vx = 0.0;
         }
-        if (*(double*)((char*)this + 0x20) - 20.0 <= 0.0 || *(double*)((char*)this + 0x20) + 20.0 >= 639.0) {
-            *(double*)((char*)this + 0xb8) = (1.0 - (*(double*)(*(char**)*(char**)((char*)this + 0x78) + 0x28) < 0.0) * 0.25) * *(double*)((char*)this + 0x30);
+        if (x - 20.0 <= 0.0 || x + 20.0 >= 639.0) {
+            unkb8 = (1.0 - ((*m_opponent)->y < 0.0) * 0.25) * vx;
         } else {
-            *(double*)((char*)this + 0xb8) = 0.0;
+            unkb8 = 0.0;
         }
-        (*(short*)((char*)this + 0xc))++;
-        if (*(WORD*)((char*)this + 0xc) >= l4) {
-            *(short*)((char*)this + 0xc) = 0;
-            (*(short*)((char*)this + 0xa))++;
-            if (*(WORD*)((char*)this + 0xa) >= x8) {
-                *(short*)((char*)this + 8) = 7;
-                if (*((char*)this + 0x189) == 1) {
-                    *(short*)((char*)this + 8) = 3;
+        timer++;
+        if (timer >= l4) {
+            timer = 0;
+            frame++;
+            if (frame >= x8) {
+                pattern = 7;
+                if (m_inputY == 1) {
+                    pattern = 3;
                 }
                 Vf0();
             }
         }
         break;
     case 0x4c:
-        if (*((char*)this + 0x120) != 0) {
-            *(double*)((char*)this + 0x118) -= 0.6;
+        if (unk120 != 0) {
+            unk118 -= 0.6;
         }
-        if (*(WORD*)((char*)this + 0xa) == 0 && *(WORD*)((char*)this + 0xc) == 0) {
-            *(short*)((char*)this + 0x148) = *(short*)((char*)this + 0x148) + 0x1e;
-            if (*((char*)this + 0x120) != 0) {
-                *(double*)((char*)this + 0x118) -= 30.0;
+        if (frame == 0 && timer == 0) {
+            unk148 = unk148 + 0x1e;
+            if (unk120 != 0) {
+                unk118 -= 30.0;
             }
-            *(double*)((char*)this + 0x30) = 2.2;
+            vx = 2.2;
         }
-        *(double*)((char*)this + 0x38) = 0.0;
-        *(double*)((char*)this + 0x28) = 0.0;
-        *(double*)((char*)this + 0x48) = 0.0;
-        *(double*)((char*)this + 0x40) = 0.06;
-        *(double*)((char*)this + 0x30) = *(double*)((char*)this + 0x30) - *(double*)((char*)this + 0x40);
-        if (*(double*)((char*)this + 0x30) < 0.0) {
-            *(double*)((char*)this + 0x30) = 0.0;
+        vy = 0.0;
+        y = 0.0;
+        ay = 0.0;
+        ax = 0.06;
+        vx = vx - ax;
+        if (vx < 0.0) {
+            vx = 0.0;
         }
-        if (*(double*)((char*)this + 0x20) - 20.0 <= 0.0 || *(double*)((char*)this + 0x20) + 20.0 >= 639.0) {
-            *(double*)((char*)this + 0xb8) = (1.0 - (*(double*)(*(char**)*(char**)((char*)this + 0x78) + 0x28) < 0.0) * 0.25) * *(double*)((char*)this + 0x30);
+        if (x - 20.0 <= 0.0 || x + 20.0 >= 639.0) {
+            unkb8 = (1.0 - ((*m_opponent)->y < 0.0) * 0.25) * vx;
         } else {
-            *(double*)((char*)this + 0xb8) = 0.0;
+            unkb8 = 0.0;
         }
-        (*(short*)((char*)this + 0xc))++;
-        if (*(WORD*)((char*)this + 0xc) >= l4) {
-            *(short*)((char*)this + 0xc) = 0;
-            (*(short*)((char*)this + 0xa))++;
-            if (*(WORD*)((char*)this + 0xa) >= x8) {
-                *(short*)((char*)this + 8) = 7;
-                if (*((char*)this + 0x189) == 1) {
-                    *(short*)((char*)this + 8) = 3;
+        timer++;
+        if (timer >= l4) {
+            timer = 0;
+            frame++;
+            if (frame >= x8) {
+                pattern = 7;
+                if (m_inputY == 1) {
+                    pattern = 3;
                 }
                 Vf0();
             }
         }
         break;
     case 0x4d:
-        if (*((char*)this + 0x120) != 0) {
-            *(double*)((char*)this + 0x118) -= 0.6;
+        if (unk120 != 0) {
+            unk118 -= 0.6;
         }
-        if (*(WORD*)((char*)this + 0xa) == 0 && *(WORD*)((char*)this + 0xc) == 0) {
-            *(short*)((char*)this + 0x148) = *(short*)((char*)this + 0x148) + 0x1e;
-            if (*((char*)this + 0x120) != 0) {
-                *(double*)((char*)this + 0x118) -= 30.0;
+        if (frame == 0 && timer == 0) {
+            unk148 = unk148 + 0x1e;
+            if (unk120 != 0) {
+                unk118 -= 30.0;
             }
-            *(double*)((char*)this + 0x30) = 2.2;
+            vx = 2.2;
         }
-        *(double*)((char*)this + 0x38) = 0.0;
-        *(double*)((char*)this + 0x28) = 0.0;
-        *(double*)((char*)this + 0x48) = 0.0;
-        *(double*)((char*)this + 0x40) = 0.06;
-        *(double*)((char*)this + 0x30) = *(double*)((char*)this + 0x30) - *(double*)((char*)this + 0x40);
-        if (*(double*)((char*)this + 0x30) < 0.0) {
-            *(double*)((char*)this + 0x30) = 0.0;
+        vy = 0.0;
+        y = 0.0;
+        ay = 0.0;
+        ax = 0.06;
+        vx = vx - ax;
+        if (vx < 0.0) {
+            vx = 0.0;
         }
-        if (*(double*)((char*)this + 0x20) - 20.0 <= 0.0 || *(double*)((char*)this + 0x20) + 20.0 >= 639.0) {
-            *(double*)((char*)this + 0xb8) = (1.0 - (*(double*)(*(char**)*(char**)((char*)this + 0x78) + 0x28) < 0.0) * 0.25) * *(double*)((char*)this + 0x30);
+        if (x - 20.0 <= 0.0 || x + 20.0 >= 639.0) {
+            unkb8 = (1.0 - ((*m_opponent)->y < 0.0) * 0.25) * vx;
         } else {
-            *(double*)((char*)this + 0xb8) = 0.0;
+            unkb8 = 0.0;
         }
-        (*(short*)((char*)this + 0xc))++;
-        if (*(WORD*)((char*)this + 0xc) >= l4) {
-            *(short*)((char*)this + 0xc) = 0;
-            (*(short*)((char*)this + 0xa))++;
-            if (*(WORD*)((char*)this + 0xa) >= x8) {
-                *(short*)((char*)this + 8) = 3;
+        timer++;
+        if (timer >= l4) {
+            timer = 0;
+            frame++;
+            if (frame >= x8) {
+                pattern = 3;
                 Vf0();
             }
         }
         break;
     case 0x51:
-        if (*((char*)this + 0x120) != 0) {
-            *(double*)((char*)this + 0x118) -= 0.8;
+        if (unk120 != 0) {
+            unk118 -= 0.8;
         }
-        if (*(WORD*)((char*)this + 0xa) == 0 && *(WORD*)((char*)this + 0xc) == 0) {
+        if (frame == 0 && timer == 0) {
             l50.type = 0x1f3;
-            l50.x = (double)(int)*(double*)((char*)this + 0x20);
-            l50.y = (double)(int)*(double*)((char*)this + 0x28);
-            l50.unk18 = *((char*)this + 0x50);
+            l50.x = (double)(int)x;
+            l50.y = (double)(int)y;
+            l50.unk18 = facing;
             l50.unk21 = 1;
             Vf9(&l50);
-            *(short*)((char*)this + 0x148) = *(short*)((char*)this + 0x148) + 0x1e;
-            *(double*)((char*)this + 0x30) = *(double*)((char*)this + 0xc0);
-            *(double*)((char*)this + 0x38) = *(double*)((char*)this + 0xc8);
-            *(double*)((char*)this + 0x48) = 0.032;
+            unk148 = unk148 + 0x1e;
+            vx = unkc0;
+            vy = unkc8;
+            ay = 0.032;
         }
-        *(double*)((char*)this + 0x30) += 0.02;
-        *(double*)((char*)this + 0x38) = *(double*)((char*)this + 0x38) + *(double*)((char*)this + 0x48);
-        if (*(double*)((char*)this + 0x30) > 0.0) {
-            *(double*)((char*)this + 0x30) = 0.0;
+        vx += 0.02;
+        vy = vy + ay;
+        if (vx > 0.0) {
+            vx = 0.0;
         }
-        (*(short*)((char*)this + 0xc))++;
-        if (*(WORD*)((char*)this + 0xc) >= l4) {
-            *(short*)((char*)this + 0xc) = 0;
-            (*(short*)((char*)this + 0xa))++;
-            if (*(WORD*)((char*)this + 0xa) >= x8) {
-                (*(short*)((char*)this + 0xa))--;
+        timer++;
+        if (timer >= l4) {
+            timer = 0;
+            frame++;
+            if (frame >= x8) {
+                frame--;
             }
         }
-        if (*(double*)((char*)this + 0x28) + *(double*)((char*)this + 0x38) >= 0.0 && *(WORD*)((char*)this + 0xa) == 1) {
-            *(double*)((char*)this + 0x28) = 0.0;
-            if (*(int*)((char*)this + 0x12c) != 0) {
-                *(short*)((char*)this + 8) = 0x61;
+        if (y + vy >= 0.0 && frame == 1) {
+            y = 0.0;
+            if (unk12c != 0) {
+                pattern = 0x61;
                 Vf0();
             } else {
-                *(short*)((char*)this + 8) = 0x62;
+                pattern = 0x62;
                 Vf0();
             }
         }
         break;
     case 0x52:
-        if (*((char*)this + 0x120) != 0) {
-            *(double*)((char*)this + 0x118) -= 0.8;
+        if (unk120 != 0) {
+            unk118 -= 0.8;
         }
-        if (*(WORD*)((char*)this + 0xa) == 0 && *(WORD*)((char*)this + 0xc) == 0 && *(int*)((char*)this + 0x3138) == 0) {
-            *((char*)this + 0x2c9) = 0x1e;
-            *(double*)((char*)this + 0x38) = -0.45;
-            *(double*)((char*)this + 0x30) = -0.1;
-            (*(int*)((char*)this + 0x3138))++;
-            *(short*)((char*)this + 0x148) = *(short*)((char*)this + 0x148) + 0x1e;
+        if (frame == 0 && timer == 0 && unk3138 == 0) {
+            unk2c9 = 0x1e;
+            vy = -0.45;
+            vx = -0.1;
+            unk3138++;
+            unk148 = unk148 + 0x1e;
         }
-        if (*(WORD*)((char*)this + 0xa) == 4 && *(WORD*)((char*)this + 0xc) == 0) {
-            *(double*)((char*)this + 0x30) = *(double*)((char*)this + 0xc0);
-            *(double*)((char*)this + 0x38) = *(double*)((char*)this + 0xc8);
-            *(double*)((char*)this + 0x48) = 0.032;
+        if (frame == 4 && timer == 0) {
+            vx = unkc0;
+            vy = unkc8;
+            ay = 0.032;
         }
-        if (*(double*)((char*)this + 0x38) > 0.0 && *(WORD*)((char*)this + 0xa) == 4) {
-            *(short*)((char*)this + 0xa) = 5;
-            *(short*)((char*)this + 0xc) = 0;
+        if (vy > 0.0 && frame == 4) {
+            frame = 5;
+            timer = 0;
         }
-        if (*(WORD*)((char*)this + 0xa) > 3) {
-            *(double*)((char*)this + 0x38) = *(double*)((char*)this + 0x38) + *(double*)((char*)this + 0x48);
+        if (frame > 3) {
+            vy = vy + ay;
         }
-        (*(short*)((char*)this + 0xc))++;
-        if (*(WORD*)((char*)this + 0xc) >= l4) {
-            *(short*)((char*)this + 0xc) = 0;
-            (*(short*)((char*)this + 0xa))++;
-            if (*(WORD*)((char*)this + 0xa) == 4 && *(int*)((char*)this + 0x3138) < 8) {
-                *(short*)((char*)this + 0xa) = 0;
-                (*(int*)((char*)this + 0x3138))++;
+        timer++;
+        if (timer >= l4) {
+            timer = 0;
+            frame++;
+            if (frame == 4 && unk3138 < 8) {
+                frame = 0;
+                unk3138++;
             }
-            if (*(WORD*)((char*)this + 0xa) >= x8) {
-                *(short*)((char*)this + 0xa) = *(WORD*)((char*)this + 0xa) - 2;
+            if (frame >= x8) {
+                frame = frame - 2;
             }
         }
-        if (*(double*)((char*)this + 0x28) + *(double*)((char*)this + 0x38) >= 0.0 && *(WORD*)((char*)this + 0xa) > 4) {
-            *(double*)((char*)this + 0x28) = 0.0;
-            if (*(int*)((char*)this + 0x12c) != 0) {
-                *(short*)((char*)this + 8) = 0x61;
+        if (y + vy >= 0.0 && frame > 4) {
+            y = 0.0;
+            if (unk12c != 0) {
+                pattern = 0x61;
                 Vf0();
             } else {
-                *(short*)((char*)this + 8) = 0x62;
+                pattern = 0x62;
                 Vf0();
             }
         }
         break;
     case 0x53:
-        if (*(WORD*)((char*)this + 0xa) == 0 && *(WORD*)((char*)this + 0xc) == 0) {
-            if (*(int*)((char*)this + 0x3144) == 0) {
+        if (frame == 0 && timer == 0) {
+            if (unk3144 == 0) {
                 l50.type = 0x1f0;
-                l50.x = (double)(int)*(double*)((char*)this + 0x20);
-                l50.y = (double)(int)*(double*)((char*)this + 0x28);
+                l50.x = (double)(int)x;
+                l50.y = (double)(int)y;
                 l50.unk20 = 0;
                 l50.unk21 = 0;
                 l50.unk0 = 1;
-                l50.unk18 = *((char*)this + 0x50);
+                l50.unk18 = facing;
                 Vf9(&l50);
-                *(int*)((char*)this + 0x3144) = 1;
+                unk3144 = 1;
             }
-            if (*((char*)this + 0x120) != 0) {
-                *(double*)((char*)this + 0x118) -= 30.0;
+            if (unk120 != 0) {
+                unk118 -= 30.0;
             }
-            *((char*)this + 0x2c9) = 0x21;
-            *(double*)((char*)this + 0x38) = -1.5;
-            *(double*)((char*)this + 0x30) = -0.8;
-            *(short*)((char*)this + 0x148) = *(short*)((char*)this + 0x148) + 0x1e;
+            unk2c9 = 0x21;
+            vy = -1.5;
+            vx = -0.8;
+            unk148 = unk148 + 0x1e;
         }
-        *(double*)((char*)this + 0x38) += 0.04;
-        if (*(WORD*)((char*)this + 0xa) == 0 && *(double*)((char*)this + 0x38) + *(double*)((char*)this + 0x28) > 0.0) {
-            *(double*)((char*)this + 0x28) = 0.0;
-            *(double*)((char*)this + 0x38) = 0.0;
-            *(short*)((char*)this + 0xc) = 0;
-            *(short*)((char*)this + 0xa) = 1;
+        vy += 0.04;
+        if (frame == 0 && vy + y > 0.0) {
+            y = 0.0;
+            vy = 0.0;
+            timer = 0;
+            frame = 1;
             break;
         }
-        if (*(WORD*)((char*)this + 0xa) == 1) {
-            *(double*)((char*)this + 0x30) += 0.01;
+        if (frame == 1) {
+            vx += 0.01;
         }
-        if (*(WORD*)((char*)this + 0xa) == 2 && *(WORD*)((char*)this + 0xc) == 0) {
-            *(double*)((char*)this + 0x30) = -2.0;
+        if (frame == 2 && timer == 0) {
+            vx = -2.0;
         }
-        if (*(WORD*)((char*)this + 0xa) > 1) {
-            *(double*)((char*)this + 0x30) += 0.06;
+        if (frame > 1) {
+            vx += 0.06;
         }
-        if (*(double*)((char*)this + 0x30) > 0.0) {
-            *(double*)((char*)this + 0x30) = 0.0;
+        if (vx > 0.0) {
+            vx = 0.0;
         }
-        (*(short*)((char*)this + 0xc))++;
-        if (*(WORD*)((char*)this + 0xc) >= l4) {
-            *(short*)((char*)this + 0xc) = 0;
-            (*(short*)((char*)this + 0xa))++;
-            if (*(WORD*)((char*)this + 0xa) >= x8) {
-                *(short*)((char*)this + 8) = 0;
+        timer++;
+        if (timer >= l4) {
+            timer = 0;
+            frame++;
+            if (frame >= x8) {
+                pattern = 0;
                 Vf0();
                 CPlayer::Unk40e630();
             }
         }
         break;
     case 0x54:
-        if (*(WORD*)((char*)this + 0xa) == 0 && *(WORD*)((char*)this + 0xc) == 0) {
-            if (*(int*)((char*)this + 0x3144) == 0) {
+        if (frame == 0 && timer == 0) {
+            if (unk3144 == 0) {
                 l50.type = 0x1f0;
-                l50.x = (double)(int)*(double*)((char*)this + 0x20);
-                l50.y = (double)(int)*(double*)((char*)this + 0x28);
+                l50.x = (double)(int)x;
+                l50.y = (double)(int)y;
                 l50.unk20 = 0;
                 l50.unk21 = 0;
                 l50.unk0 = 1;
-                l50.unk18 = *((char*)this + 0x50);
+                l50.unk18 = facing;
                 Vf9(&l50);
-                *(int*)((char*)this + 0x3144) = 1;
+                unk3144 = 1;
             }
-            if (*((char*)this + 0x120) != 0) {
-                *(double*)((char*)this + 0x118) -= 30.0;
+            if (unk120 != 0) {
+                unk118 -= 30.0;
             }
-            *((char*)this + 0x2c9) = 0x21;
-            *(double*)((char*)this + 0x38) = -1.5;
-            *(double*)((char*)this + 0x30) = -0.8;
-            *(short*)((char*)this + 0x148) = *(short*)((char*)this + 0x148) + 0x1e;
+            unk2c9 = 0x21;
+            vy = -1.5;
+            vx = -0.8;
+            unk148 = unk148 + 0x1e;
         }
-        *(double*)((char*)this + 0x38) += 0.04;
-        if (*(WORD*)((char*)this + 0xa) == 0 && *(double*)((char*)this + 0x38) + *(double*)((char*)this + 0x28) > 0.0) {
-            *(double*)((char*)this + 0x28) = 0.0;
-            *(double*)((char*)this + 0x38) = 0.0;
-            *(short*)((char*)this + 0xc) = 0;
-            *(short*)((char*)this + 0xa) = 1;
+        vy += 0.04;
+        if (frame == 0 && vy + y > 0.0) {
+            y = 0.0;
+            vy = 0.0;
+            timer = 0;
+            frame = 1;
             break;
         }
-        if (*(WORD*)((char*)this + 0xa) == 1) {
-            *(double*)((char*)this + 0x30) += 0.01;
+        if (frame == 1) {
+            vx += 0.01;
         }
-        if (*(WORD*)((char*)this + 0xa) == 2 && *(WORD*)((char*)this + 0xc) == 0) {
-            *(double*)((char*)this + 0x30) = -2.0;
+        if (frame == 2 && timer == 0) {
+            vx = -2.0;
         }
-        if (*(WORD*)((char*)this + 0xa) > 1) {
-            *(double*)((char*)this + 0x30) += 0.06;
+        if (frame > 1) {
+            vx += 0.06;
         }
-        if (*(double*)((char*)this + 0x30) > 0.0) {
-            *(double*)((char*)this + 0x30) = 0.0;
+        if (vx > 0.0) {
+            vx = 0.0;
         }
-        (*(short*)((char*)this + 0xc))++;
-        if (*(WORD*)((char*)this + 0xc) >= l4) {
-            *(short*)((char*)this + 0xc) = 0;
-            (*(short*)((char*)this + 0xa))++;
-            if (*(WORD*)((char*)this + 0xa) >= x8) {
-                *(short*)((char*)this + 8) = 0;
+        timer++;
+        if (timer >= l4) {
+            timer = 0;
+            frame++;
+            if (frame >= x8) {
+                pattern = 0;
                 Vf0();
                 CPlayer::Unk40e630();
             }
         }
         break;
     case 0x55:
-        if (*(WORD*)((char*)this + 0xa) == 0 && *(WORD*)((char*)this + 0xc) == 0) {
-            if (*(int*)((char*)this + 0x3144) == 0) {
+        if (frame == 0 && timer == 0) {
+            if (unk3144 == 0) {
                 l50.type = 0x1f0;
-                l50.x = (double)(int)*(double*)((char*)this + 0x20);
-                l50.y = (double)(int)*(double*)((char*)this + 0x28);
+                l50.x = (double)(int)x;
+                l50.y = (double)(int)y;
                 l50.unk20 = 0;
                 l50.unk21 = 0;
                 l50.unk0 = 1;
-                l50.unk18 = *((char*)this + 0x50);
+                l50.unk18 = facing;
                 Vf9(&l50);
-                *(int*)((char*)this + 0x3144) = 1;
+                unk3144 = 1;
             }
-            if (*((char*)this + 0x120) != 0) {
-                *(double*)((char*)this + 0x118) -= 30.0;
+            if (unk120 != 0) {
+                unk118 -= 30.0;
             }
-            *((char*)this + 0x2c9) = 0x21;
-            *(double*)((char*)this + 0x30) = *(double*)((char*)this + 0xc0);
-            *(double*)((char*)this + 0x38) = *(double*)((char*)this + 0xc8);
-            *(short*)((char*)this + 0x148) = *(short*)((char*)this + 0x148) + 0x1e;
+            unk2c9 = 0x21;
+            vx = unkc0;
+            vy = unkc8;
+            unk148 = unk148 + 0x1e;
         }
-        *(double*)((char*)this + 0x38) += 0.04;
-        (*(short*)((char*)this + 0xc))++;
-        if (*(WORD*)((char*)this + 0xc) >= l4) {
-            *(short*)((char*)this + 0xc) = 0;
-            (*(short*)((char*)this + 0xa))++;
-            if (*(WORD*)((char*)this + 0xa) >= x8) {
-                *(short*)((char*)this + 8) = 0;
+        vy += 0.04;
+        timer++;
+        if (timer >= l4) {
+            timer = 0;
+            frame++;
+            if (frame >= x8) {
+                pattern = 0;
                 Vf0();
                 CPlayer::Unk40e630();
             }
         }
-        if (*(double*)((char*)this + 0x28) + *(double*)((char*)this + 0x38) >= 0.0) {
-            *(double*)((char*)this + 0x28) = 0.0;
-            if (*(int*)((char*)this + 0x12c) != 0) {
-                *(short*)((char*)this + 8) = 0x61;
+        if (y + vy >= 0.0) {
+            y = 0.0;
+            if (unk12c != 0) {
+                pattern = 0x61;
                 Vf0();
             } else {
-                *(short*)((char*)this + 8) = 0x62;
+                pattern = 0x62;
                 Vf0();
             }
         }
         break;
     case 0x56:
-        if (*(WORD*)((char*)this + 0xa) == 0 && *(WORD*)((char*)this + 0xc) == 0) {
-            if (*(int*)((char*)this + 0x3144) == 0) {
+        if (frame == 0 && timer == 0) {
+            if (unk3144 == 0) {
                 l50.type = 0x1f0;
-                l50.x = (double)(int)*(double*)((char*)this + 0x20);
-                l50.y = (double)(int)*(double*)((char*)this + 0x28);
+                l50.x = (double)(int)x;
+                l50.y = (double)(int)y;
                 l50.unk20 = 0;
                 l50.unk21 = 0;
                 l50.unk0 = 1;
-                l50.unk18 = *((char*)this + 0x50);
+                l50.unk18 = facing;
                 Vf9(&l50);
-                *(int*)((char*)this + 0x3144) = 1;
+                unk3144 = 1;
             }
-            if (*(int*)((char*)this + 0x3138) == 0) {
-                if (*((char*)this + 0x120) != 0) {
-                    *(double*)((char*)this + 0x118) -= 30.0;
+            if (unk3138 == 0) {
+                if (unk120 != 0) {
+                    unk118 -= 30.0;
                 }
-                *((char*)this + 0x2c9) = 0x21;
-                *(double*)((char*)this + 0x30) = *(double*)((char*)this + 0xc0);
-                *(double*)((char*)this + 0x38) = *(double*)((char*)this + 0xc8);
-                *(short*)((char*)this + 0x148) = *(short*)((char*)this + 0x148) + 0x1e;
-                (*(int*)((char*)this + 0x3138))++;
+                unk2c9 = 0x21;
+                vx = unkc0;
+                vy = unkc8;
+                unk148 = unk148 + 0x1e;
+                unk3138++;
             }
         }
-        *(double*)((char*)this + 0x38) += 0.06;
-        (*(short*)((char*)this + 0xc))++;
-        if (*(WORD*)((char*)this + 0xc) >= l4) {
-            *(short*)((char*)this + 0xc) = 0;
-            (*(short*)((char*)this + 0xa))++;
-            if (*(WORD*)((char*)this + 0xa) >= x8) {
-                *(short*)((char*)this + 0xa) = 0;
+        vy += 0.06;
+        timer++;
+        if (timer >= l4) {
+            timer = 0;
+            frame++;
+            if (frame >= x8) {
+                frame = 0;
             }
         }
-        if (*(double*)((char*)this + 0x28) + *(double*)((char*)this + 0x38) >= 0.0) {
-            *(double*)((char*)this + 0x28) = 0.0;
-            if (*(int*)((char*)this + 0x12c) != 0) {
-                *(short*)((char*)this + 8) = 0x61;
+        if (y + vy >= 0.0) {
+            y = 0.0;
+            if (unk12c != 0) {
+                pattern = 0x61;
                 Vf0();
             } else {
-                *(short*)((char*)this + 8) = 0x62;
+                pattern = 0x62;
                 Vf0();
             }
         }
         break;
     case 0x57:
-        if (*(WORD*)((char*)this + 0xa) == 0 && *(WORD*)((char*)this + 0xc) == 0) {
+        if (frame == 0 && timer == 0) {
             l50.type = 0x1ef;
             l50.x = 60.0;
             l50.y = 40.0;
@@ -1624,830 +1624,830 @@ void CMayu::Vf6()
             l50.unk21 = 0;
             Vf9(&l50);
         }
-        (*(short*)((char*)this + 0xc))++;
-        if (*(WORD*)((char*)this + 0xc) >= l4) {
-            *(short*)((char*)this + 0xc) = 0;
-            (*(short*)((char*)this + 0xa))++;
-            if (*(WORD*)((char*)this + 0xa) >= x8) {
-                *(short*)((char*)this + 8) = 0;
+        timer++;
+        if (timer >= l4) {
+            timer = 0;
+            frame++;
+            if (frame >= x8) {
+                pattern = 0;
                 Vf0();
             }
         }
         break;
     case 0x60:
-        if (*(WORD*)((char*)this + 0xa) < 9) {
-            *(double*)((char*)this + 0x38) = *(double*)((char*)this + 0x38) + *(double*)((char*)this + 0x48);
+        if (frame < 9) {
+            vy = vy + ay;
         }
-        (*(short*)((char*)this + 0xc))++;
-        if (*(WORD*)((char*)this + 0xc) >= l4) {
-            *(short*)((char*)this + 0xc) = 0;
-            (*(short*)((char*)this + 0xa))++;
-            if (*(WORD*)((char*)this + 0xa) == 3) {
-                *(double*)((char*)this + 0x38) = -1.8;
-                *(double*)((char*)this + 0x48) = 0.05;
+        timer++;
+        if (timer >= l4) {
+            timer = 0;
+            frame++;
+            if (frame == 3) {
+                vy = -1.8;
+                ay = 0.05;
             }
-            if (*(WORD*)((char*)this + 0xa) == 9) {
-                *(short*)((char*)this + 0xa) = *(WORD*)((char*)this + 0xa) - 4;
+            if (frame == 9) {
+                frame = frame - 4;
             }
-            if (*(WORD*)((char*)this + 0xa) < 9 && *(WORD*)((char*)this + 0xa) > 4 && *(double*)((char*)this + 0x28) + *(double*)((char*)this + 0x38) > 0.0) {
-                *(double*)((char*)this + 0x28) = 0.0;
-                *(double*)((char*)this + 0x38) = 0.0;
-                *(short*)((char*)this + 0xa) = 9;
+            if (frame < 9 && frame > 4 && y + vy > 0.0) {
+                y = 0.0;
+                vy = 0.0;
+                frame = 9;
             }
-            if (*(WORD*)((char*)this + 0xa) == x8 - 1) {
+            if (frame == x8 - 1) {
                 CPlayer::Unk40e630();
             }
-            if (*(WORD*)((char*)this + 0xa) >= x8) {
-                *(short*)((char*)this + 8) = 7;
-                if (*((char*)this + 0x189) == 1) {
-                    *(short*)((char*)this + 8) = 3;
+            if (frame >= x8) {
+                pattern = 7;
+                if (m_inputY == 1) {
+                    pattern = 3;
                 }
                 Vf0();
             }
         }
         break;
     case 0x61:
-        *(double*)((char*)this + 0x30) = 0.0;
-        *(double*)((char*)this + 0x38) = 0.0;
-        if (*(WORD*)((char*)this + 0xa) == 0 && *(WORD*)((char*)this + 0xc) == 0) {
+        vx = 0.0;
+        vy = 0.0;
+        if (frame == 0 && timer == 0) {
             CPlayer::Unk410a10(3, 0);
             l50.type = 3;
-            l50.x = (double)(int)*(double*)((char*)this + 0x20);
-            l50.y = (double)(int)*(double*)((char*)this + 0x28);
+            l50.x = (double)(int)x;
+            l50.y = (double)(int)y;
             l50.unk20 = 2;
             l50.unk21 = 0;
-            ((CGame*)*(int*)((char*)this + 0x7c))->CreateEffect((EffectDesc*)&l50);
-            *((char*)this + 0x2c9) = 7;
+            m_game->CreateEffect((EffectDesc*)&l50);
+            unk2c9 = 7;
         }
-        (*(short*)((char*)this + 0xc))++;
-        if (*(WORD*)((char*)this + 0xc) >= l4) {
-            *(short*)((char*)this + 0xc) = 0;
-            (*(short*)((char*)this + 0xa))++;
-            if (*(WORD*)((char*)this + 0xa) >= x8) {
-                *(short*)((char*)this + 8) = 0x63;
+        timer++;
+        if (timer >= l4) {
+            timer = 0;
+            frame++;
+            if (frame >= x8) {
+                pattern = 0x63;
                 Vf0();
             }
         }
         break;
     case 0x62:
-        *(double*)((char*)this + 0x30) = 0.0;
-        *(double*)((char*)this + 0x38) = 0.0;
-        if (*(WORD*)((char*)this + 0xa) == 0 && *(WORD*)((char*)this + 0xc) == 0) {
+        vx = 0.0;
+        vy = 0.0;
+        if (frame == 0 && timer == 0) {
             CPlayer::Unk410a10(3, 0);
             l50.type = 3;
-            l50.x = (double)(int)*(double*)((char*)this + 0x20);
-            l50.y = (double)(int)*(double*)((char*)this + 0x28);
+            l50.x = (double)(int)x;
+            l50.y = (double)(int)y;
             l50.unk20 = 2;
             l50.unk21 = 0;
-            ((CGame*)*(int*)((char*)this + 0x7c))->CreateEffect((EffectDesc*)&l50);
-            *((char*)this + 0x2c9) = 7;
+            m_game->CreateEffect((EffectDesc*)&l50);
+            unk2c9 = 7;
         }
-        (*(short*)((char*)this + 0xc))++;
-        if (*(WORD*)((char*)this + 0xc) >= l4) {
-            *(short*)((char*)this + 0xc) = 0;
-            (*(short*)((char*)this + 0xa))++;
-            if (*(WORD*)((char*)this + 0xa) >= x8) {
-                *(short*)((char*)this + 8) = 0x63;
+        timer++;
+        if (timer >= l4) {
+            timer = 0;
+            frame++;
+            if (frame >= x8) {
+                pattern = 0x63;
                 Vf0();
             }
         }
         break;
     case 0x63:
-        (*(short*)((char*)this + 0xc))++;
-        if (*(int*)((char*)this + 0x108) > 0 && *(WORD*)((char*)this + 0xc) > 0x45 && *(WORD*)((char*)this + 0xa) == 0) {
-            *(short*)((char*)this + 8) = 0x60;
+        timer++;
+        if (unk108 > 0 && timer > 0x45 && frame == 0) {
+            pattern = 0x60;
             Vf0();
         }
-        if (*(WORD*)((char*)this + 0xc) >= l4) {
-            *(short*)((char*)this + 0xc) = 0;
-            (*(short*)((char*)this + 0xa))++;
-            if (*(WORD*)((char*)this + 0xa) == x8) {
+        if (timer >= l4) {
+            timer = 0;
+            frame++;
+            if (frame == x8) {
                 CPlayer::Unk40e630();
             }
-            if (*(WORD*)((char*)this + 0xa) >= x8) {
-                *(short*)((char*)this + 8) = 0x60;
+            if (frame >= x8) {
+                pattern = 0x60;
                 Vf0();
             }
         }
         break;
     case 0x96:
-        if (*((char*)this + 0x189) == 1) {
-            *(short*)((char*)this + 8) = 0x99;
+        if (m_inputY == 1) {
+            pattern = 0x99;
         }
-        if (*((char*)this + 0x189) != 1) {
-            *(short*)((char*)this + 8) = 0x96;
+        if (m_inputY != 1) {
+            pattern = 0x96;
         }
-        if (*(WORD*)((char*)this + 0xa) == 0 && *(WORD*)((char*)this + 0xc) == 0) {
-            *(short*)((char*)this + 0x148) = *(short*)((char*)this + 0x148) + 0xa;
-            *(double*)((char*)this + 0x30) = -1.5;
-            *(double*)((char*)this + 0x38) = 0.0;
-            *(double*)((char*)this + 0x28) = 0.0;
+        if (frame == 0 && timer == 0) {
+            unk148 = unk148 + 0xa;
+            vx = -1.5;
+            vy = 0.0;
+            y = 0.0;
         }
-        *(double*)((char*)this + 0x38) = 0.0;
-        *(double*)((char*)this + 0x30) += 0.06;
-        if (*(double*)((char*)this + 0x30) > 0.0) {
-            *(double*)((char*)this + 0x30) = 0.0;
+        vy = 0.0;
+        vx += 0.06;
+        if (vx > 0.0) {
+            vx = 0.0;
         }
-        if (*(double*)((char*)this + 0x20) - 20.0 <= 0.0 || *(double*)((char*)this + 0x20) + 20.0 >= 639.0) {
-            *(double*)((char*)this + 0xb8) = *(double*)((char*)this + 0x30);
+        if (x - 20.0 <= 0.0 || x + 20.0 >= 639.0) {
+            unkb8 = vx;
         } else {
-            *(double*)((char*)this + 0xb8) = 0.0;
+            unkb8 = 0.0;
         }
-        (*(short*)((char*)this + 0xc))++;
-        if (*(WORD*)((char*)this + 0xc) >= l4) {
-            *(short*)((char*)this + 0xc) = 0;
-            (*(short*)((char*)this + 0xa))++;
-            if (*(WORD*)((char*)this + 0xa) == x8) {
+        timer++;
+        if (timer >= l4) {
+            timer = 0;
+            frame++;
+            if (frame == x8) {
                 CPlayer::Unk40e630();
             }
-            if (*(WORD*)((char*)this + 0xa) >= x8) {
-                *(short*)((char*)this + 8) = 0;
-                if (*((char*)this + 0x189) == 1) {
-                    *(short*)((char*)this + 8) = 3;
+            if (frame >= x8) {
+                pattern = 0;
+                if (m_inputY == 1) {
+                    pattern = 3;
                 }
                 Vf0();
             }
         }
         break;
     case 0x97:
-        if (*((char*)this + 0x189) == 1) {
-            *(short*)((char*)this + 8) = 0x9a;
+        if (m_inputY == 1) {
+            pattern = 0x9a;
         }
-        if (*((char*)this + 0x189) != 1) {
-            *(short*)((char*)this + 8) = 0x97;
+        if (m_inputY != 1) {
+            pattern = 0x97;
         }
-        if (*(WORD*)((char*)this + 0xa) == 0 && *(WORD*)((char*)this + 0xc) == 0) {
-            *(short*)((char*)this + 0x148) = *(short*)((char*)this + 0x148) + 0xf;
-            *(double*)((char*)this + 0x30) = -1.8;
-            *(double*)((char*)this + 0x38) = 0.0;
-            *(double*)((char*)this + 0x28) = 0.0;
+        if (frame == 0 && timer == 0) {
+            unk148 = unk148 + 0xf;
+            vx = -1.8;
+            vy = 0.0;
+            y = 0.0;
         }
-        *(double*)((char*)this + 0x38) = 0.0;
-        *(double*)((char*)this + 0x30) += 0.06;
-        if (*(double*)((char*)this + 0x30) > 0.0) {
-            *(double*)((char*)this + 0x30) = 0.0;
+        vy = 0.0;
+        vx += 0.06;
+        if (vx > 0.0) {
+            vx = 0.0;
         }
-        if (*(double*)((char*)this + 0x20) - 20.0 <= 0.0 || *(double*)((char*)this + 0x20) + 20.0 >= 639.0) {
-            *(double*)((char*)this + 0xb8) = *(double*)((char*)this + 0x30);
+        if (x - 20.0 <= 0.0 || x + 20.0 >= 639.0) {
+            unkb8 = vx;
         } else {
-            *(double*)((char*)this + 0xb8) = 0.0;
+            unkb8 = 0.0;
         }
-        (*(short*)((char*)this + 0xc))++;
-        if (*(WORD*)((char*)this + 0xc) >= l4) {
-            *(short*)((char*)this + 0xc) = 0;
-            (*(short*)((char*)this + 0xa))++;
-            if (*(WORD*)((char*)this + 0xa) == x8) {
+        timer++;
+        if (timer >= l4) {
+            timer = 0;
+            frame++;
+            if (frame == x8) {
                 CPlayer::Unk40e630();
             }
-            if (*(WORD*)((char*)this + 0xa) >= x8) {
-                *(short*)((char*)this + 8) = 0;
-                if (*((char*)this + 0x189) == 1) {
-                    *(short*)((char*)this + 8) = 3;
+            if (frame >= x8) {
+                pattern = 0;
+                if (m_inputY == 1) {
+                    pattern = 3;
                 }
                 Vf0();
             }
         }
         break;
     case 0x98:
-        if (*((char*)this + 0x189) == 1) {
-            *(short*)((char*)this + 8) = 0x9b;
+        if (m_inputY == 1) {
+            pattern = 0x9b;
         }
-        if (*((char*)this + 0x189) != 1) {
-            *(short*)((char*)this + 8) = 0x98;
+        if (m_inputY != 1) {
+            pattern = 0x98;
         }
-        if (*(WORD*)((char*)this + 0xa) == 0 && *(WORD*)((char*)this + 0xc) == 0) {
-            *(short*)((char*)this + 0x148) = *(short*)((char*)this + 0x148) + 0x14;
-            *(double*)((char*)this + 0x30) = -2.3;
-            *(double*)((char*)this + 0x38) = 0.0;
-            *(double*)((char*)this + 0x28) = 0.0;
+        if (frame == 0 && timer == 0) {
+            unk148 = unk148 + 0x14;
+            vx = -2.3;
+            vy = 0.0;
+            y = 0.0;
         }
-        *(double*)((char*)this + 0x38) = 0.0;
-        *(double*)((char*)this + 0x30) += 0.06;
-        if (*(double*)((char*)this + 0x30) > 0.0) {
-            *(double*)((char*)this + 0x30) = 0.0;
+        vy = 0.0;
+        vx += 0.06;
+        if (vx > 0.0) {
+            vx = 0.0;
         }
-        if (*(double*)((char*)this + 0x20) - 20.0 <= 0.0 || *(double*)((char*)this + 0x20) + 20.0 >= 639.0) {
-            *(double*)((char*)this + 0xb8) = *(double*)((char*)this + 0x30);
+        if (x - 20.0 <= 0.0 || x + 20.0 >= 639.0) {
+            unkb8 = vx;
         } else {
-            *(double*)((char*)this + 0xb8) = 0.0;
+            unkb8 = 0.0;
         }
-        (*(short*)((char*)this + 0xc))++;
-        if (*(WORD*)((char*)this + 0xc) >= l4) {
-            *(short*)((char*)this + 0xc) = 0;
-            (*(short*)((char*)this + 0xa))++;
-            if (*(WORD*)((char*)this + 0xa) == x8) {
+        timer++;
+        if (timer >= l4) {
+            timer = 0;
+            frame++;
+            if (frame == x8) {
                 CPlayer::Unk40e630();
             }
-            if (*(WORD*)((char*)this + 0xa) >= x8) {
-                *(short*)((char*)this + 8) = 0;
-                if (*((char*)this + 0x189) == 1) {
-                    *(short*)((char*)this + 8) = 3;
+            if (frame >= x8) {
+                pattern = 0;
+                if (m_inputY == 1) {
+                    pattern = 3;
                 }
                 Vf0();
             }
         }
         break;
     case 0x99:
-        if (*((char*)this + 0x189) == 1) {
-            *(short*)((char*)this + 8) = 0x99;
+        if (m_inputY == 1) {
+            pattern = 0x99;
         }
-        if (*((char*)this + 0x189) != 1) {
-            *(short*)((char*)this + 8) = 0x96;
+        if (m_inputY != 1) {
+            pattern = 0x96;
         }
-        if (*(WORD*)((char*)this + 0xa) == 0 && *(WORD*)((char*)this + 0xc) == 0) {
-            *(short*)((char*)this + 0x148) = *(short*)((char*)this + 0x148) + 0xa;
-            *(double*)((char*)this + 0x30) = -1.5;
-            *(double*)((char*)this + 0x38) = 0.0;
-            *(double*)((char*)this + 0x28) = 0.0;
+        if (frame == 0 && timer == 0) {
+            unk148 = unk148 + 0xa;
+            vx = -1.5;
+            vy = 0.0;
+            y = 0.0;
         }
-        *(double*)((char*)this + 0x38) = 0.0;
-        *(double*)((char*)this + 0x30) += 0.06;
-        if (*(double*)((char*)this + 0x30) > 0.0) {
-            *(double*)((char*)this + 0x30) = 0.0;
+        vy = 0.0;
+        vx += 0.06;
+        if (vx > 0.0) {
+            vx = 0.0;
         }
-        if (*(double*)((char*)this + 0x20) - 20.0 <= 0.0 || *(double*)((char*)this + 0x20) + 20.0 >= 639.0) {
-            *(double*)((char*)this + 0xb8) = *(double*)((char*)this + 0x30);
+        if (x - 20.0 <= 0.0 || x + 20.0 >= 639.0) {
+            unkb8 = vx;
         } else {
-            *(double*)((char*)this + 0xb8) = 0.0;
+            unkb8 = 0.0;
         }
-        (*(short*)((char*)this + 0xc))++;
-        if (*(WORD*)((char*)this + 0xc) >= l4) {
-            *(short*)((char*)this + 0xc) = 0;
-            (*(short*)((char*)this + 0xa))++;
-            if (*(WORD*)((char*)this + 0xa) == x8) {
+        timer++;
+        if (timer >= l4) {
+            timer = 0;
+            frame++;
+            if (frame == x8) {
                 CPlayer::Unk40e630();
             }
-            if (*(WORD*)((char*)this + 0xa) >= x8) {
-                *(short*)((char*)this + 8) = 3;
+            if (frame >= x8) {
+                pattern = 3;
                 Vf0();
             }
         }
         break;
     case 0x9a:
-        if (*((char*)this + 0x189) == 1) {
-            *(short*)((char*)this + 8) = 0x9a;
+        if (m_inputY == 1) {
+            pattern = 0x9a;
         }
-        if (*((char*)this + 0x189) != 1) {
-            *(short*)((char*)this + 8) = 0x97;
+        if (m_inputY != 1) {
+            pattern = 0x97;
         }
-        if (*(WORD*)((char*)this + 0xa) == 0 && *(WORD*)((char*)this + 0xc) == 0) {
-            *(short*)((char*)this + 0x148) = *(short*)((char*)this + 0x148) + 0xf;
-            *(double*)((char*)this + 0x30) = -1.8;
-            *(double*)((char*)this + 0x38) = 0.0;
-            *(double*)((char*)this + 0x28) = 0.0;
+        if (frame == 0 && timer == 0) {
+            unk148 = unk148 + 0xf;
+            vx = -1.8;
+            vy = 0.0;
+            y = 0.0;
         }
-        *(double*)((char*)this + 0x38) = 0.0;
-        *(double*)((char*)this + 0x30) += 0.06;
-        if (*(double*)((char*)this + 0x30) > 0.0) {
-            *(double*)((char*)this + 0x30) = 0.0;
+        vy = 0.0;
+        vx += 0.06;
+        if (vx > 0.0) {
+            vx = 0.0;
         }
-        if (*(double*)((char*)this + 0x20) - 20.0 <= 0.0 || *(double*)((char*)this + 0x20) + 20.0 >= 639.0) {
-            *(double*)((char*)this + 0xb8) = *(double*)((char*)this + 0x30);
+        if (x - 20.0 <= 0.0 || x + 20.0 >= 639.0) {
+            unkb8 = vx;
         } else {
-            *(double*)((char*)this + 0xb8) = 0.0;
+            unkb8 = 0.0;
         }
-        (*(short*)((char*)this + 0xc))++;
-        if (*(WORD*)((char*)this + 0xc) >= l4) {
-            *(short*)((char*)this + 0xc) = 0;
-            (*(short*)((char*)this + 0xa))++;
-            if (*(WORD*)((char*)this + 0xa) == x8) {
+        timer++;
+        if (timer >= l4) {
+            timer = 0;
+            frame++;
+            if (frame == x8) {
                 CPlayer::Unk40e630();
             }
-            if (*(WORD*)((char*)this + 0xa) >= x8) {
-                *(short*)((char*)this + 8) = 3;
+            if (frame >= x8) {
+                pattern = 3;
                 Vf0();
             }
         }
         break;
     case 0x9b:
-        if (*((char*)this + 0x189) == 1) {
-            *(short*)((char*)this + 8) = 0x9b;
+        if (m_inputY == 1) {
+            pattern = 0x9b;
         }
-        if (*((char*)this + 0x189) != 1) {
-            *(short*)((char*)this + 8) = 0x98;
+        if (m_inputY != 1) {
+            pattern = 0x98;
         }
-        if (*(WORD*)((char*)this + 0xa) == 0 && *(WORD*)((char*)this + 0xc) == 0) {
-            *(short*)((char*)this + 0x148) = *(short*)((char*)this + 0x148) + 0x14;
-            *(double*)((char*)this + 0x30) = -2.3;
-            *(double*)((char*)this + 0x38) = 0.0;
-            *(double*)((char*)this + 0x28) = 0.0;
+        if (frame == 0 && timer == 0) {
+            unk148 = unk148 + 0x14;
+            vx = -2.3;
+            vy = 0.0;
+            y = 0.0;
         }
-        *(double*)((char*)this + 0x38) = 0.0;
-        *(double*)((char*)this + 0x30) += 0.06;
-        if (*(double*)((char*)this + 0x30) > 0.0) {
-            *(double*)((char*)this + 0x30) = 0.0;
+        vy = 0.0;
+        vx += 0.06;
+        if (vx > 0.0) {
+            vx = 0.0;
         }
-        if (*(double*)((char*)this + 0x20) - 20.0 <= 0.0 || *(double*)((char*)this + 0x20) + 20.0 >= 639.0) {
-            *(double*)((char*)this + 0xb8) = *(double*)((char*)this + 0x30);
+        if (x - 20.0 <= 0.0 || x + 20.0 >= 639.0) {
+            unkb8 = vx;
         } else {
-            *(double*)((char*)this + 0xb8) = 0.0;
+            unkb8 = 0.0;
         }
-        (*(short*)((char*)this + 0xc))++;
-        if (*(WORD*)((char*)this + 0xc) >= l4) {
-            *(short*)((char*)this + 0xc) = 0;
-            (*(short*)((char*)this + 0xa))++;
-            if (*(WORD*)((char*)this + 0xa) == x8) {
+        timer++;
+        if (timer >= l4) {
+            timer = 0;
+            frame++;
+            if (frame == x8) {
                 CPlayer::Unk40e630();
             }
-            if (*(WORD*)((char*)this + 0xa) >= x8) {
-                *(short*)((char*)this + 8) = 3;
+            if (frame >= x8) {
+                pattern = 3;
                 Vf0();
             }
         }
         break;
     case 0x9c:
-        if (*(WORD*)((char*)this + 0xa) == 0 && *(WORD*)((char*)this + 0xc) == 0) {
-            *(double*)((char*)this + 0x38) = -2.6;
-            *(short*)((char*)this + 0x148) = *(short*)((char*)this + 0x148) + 0xf;
-            *(double*)((char*)this + 0x48) = 0.06;
+        if (frame == 0 && timer == 0) {
+            vy = -2.6;
+            unk148 = unk148 + 0xf;
+            ay = 0.06;
         }
-        *(double*)((char*)this + 0x30) = -1.2;
-        *(double*)((char*)this + 0x38) = *(double*)((char*)this + 0x38) + *(double*)((char*)this + 0x48);
-        (*(short*)((char*)this + 0xc))++;
-        if (*(WORD*)((char*)this + 0xc) >= l4) {
-            *(short*)((char*)this + 0xc) = 0;
-            (*(short*)((char*)this + 0xa))++;
-            if (*(WORD*)((char*)this + 0xa) >= x8) {
-                *(short*)((char*)this + 8) = 9;
+        vx = -1.2;
+        vy = vy + ay;
+        timer++;
+        if (timer >= l4) {
+            timer = 0;
+            frame++;
+            if (frame >= x8) {
+                pattern = 9;
                 Vf0();
             }
         }
-        if (*(double*)((char*)this + 0x28) + *(double*)((char*)this + 0x38) >= 0.0) {
-            *(double*)((char*)this + 0x28) = 0.0;
-            *((char*)this + 0x2c9) = 9;
+        if (y + vy >= 0.0) {
+            y = 0.0;
+            unk2c9 = 9;
             CPlayer::Unk40e630();
-            *(short*)((char*)this + 8) = 0xd;
+            pattern = 0xd;
             Vf0();
         }
         break;
     case 0x9d:
-        *(double*)((char*)this + 0x30) = 1.0;
-        *(double*)((char*)this + 0x48) = 0.045;
-        if (*(WORD*)((char*)this + 0xa) == 0 && *(WORD*)((char*)this + 0xc) == 0) {
-            *(double*)((char*)this + 0x38) = -2.3;
+        vx = 1.0;
+        ay = 0.045;
+        if (frame == 0 && timer == 0) {
+            vy = -2.3;
             l50.type = 8;
-            l50.x = (double)(int)*(double*)((char*)this + 0x20);
-            l50.y = (double)(int)*(double*)((char*)this + 0x28);
+            l50.x = (double)(int)x;
+            l50.y = (double)(int)y;
             l50.unk20 = 2;
             l50.unk21 = 0;
-            ((CGame*)*(int*)((char*)this + 0x7c))->CreateEffect((EffectDesc*)&l50);
+            m_game->CreateEffect((EffectDesc*)&l50);
         } else {
-            *(double*)((char*)this + 0x38) = *(double*)((char*)this + 0x38) + *(double*)((char*)this + 0x48);
+            vy = vy + ay;
         }
-        (*(short*)((char*)this + 0xc))++;
-        if (*(WORD*)((char*)this + 0xc) >= l4) {
-            *(short*)((char*)this + 0xc) = 0;
-            (*(short*)((char*)this + 0xa))++;
-            if (*(WORD*)((char*)this + 0xa) >= x8) {
-                *(short*)((char*)this + 8) = 9;
+        timer++;
+        if (timer >= l4) {
+            timer = 0;
+            frame++;
+            if (frame >= x8) {
+                pattern = 9;
                 Vf0();
             }
         }
-        if (*(double*)((char*)this + 0x28) + *(double*)((char*)this + 0x38) >= 0.0) {
-            *(double*)((char*)this + 0x28) = 0.0;
-            *((char*)this + 0x2c9) = 9;
+        if (y + vy >= 0.0) {
+            y = 0.0;
+            unk2c9 = 9;
             CPlayer::Unk40e630();
-            *(short*)((char*)this + 8) = 0xd;
+            pattern = 0xd;
             Vf0();
         }
         break;
     case 0x9e:
-        *(double*)((char*)this + 0x30) = -1.0;
-        *(double*)((char*)this + 0x48) = 0.045;
-        if (*(WORD*)((char*)this + 0xa) == 0 && *(WORD*)((char*)this + 0xc) == 0) {
-            *(double*)((char*)this + 0x38) = -2.3;
+        vx = -1.0;
+        ay = 0.045;
+        if (frame == 0 && timer == 0) {
+            vy = -2.3;
             l50.type = 8;
-            l50.x = (double)(int)*(double*)((char*)this + 0x20);
-            l50.y = (double)(int)*(double*)((char*)this + 0x28);
+            l50.x = (double)(int)x;
+            l50.y = (double)(int)y;
             l50.unk20 = 2;
             l50.unk21 = 0;
-            ((CGame*)*(int*)((char*)this + 0x7c))->CreateEffect((EffectDesc*)&l50);
+            m_game->CreateEffect((EffectDesc*)&l50);
         } else {
-            *(double*)((char*)this + 0x38) = *(double*)((char*)this + 0x38) + *(double*)((char*)this + 0x48);
+            vy = vy + ay;
         }
-        (*(short*)((char*)this + 0xc))++;
-        if (*(WORD*)((char*)this + 0xc) >= l4) {
-            *(short*)((char*)this + 0xc) = 0;
-            (*(short*)((char*)this + 0xa))++;
-            if (*(WORD*)((char*)this + 0xa) >= x8) {
-                *(short*)((char*)this + 8) = 9;
+        timer++;
+        if (timer >= l4) {
+            timer = 0;
+            frame++;
+            if (frame >= x8) {
+                pattern = 9;
                 Vf0();
             }
         }
-        if (*(double*)((char*)this + 0x28) + *(double*)((char*)this + 0x38) >= 0.0) {
-            *(double*)((char*)this + 0x28) = 0.0;
-            *((char*)this + 0x2c9) = 9;
+        if (y + vy >= 0.0) {
+            y = 0.0;
+            unk2c9 = 9;
             CPlayer::Unk40e630();
-            *(short*)((char*)this + 8) = 0xd;
+            pattern = 0xd;
             Vf0();
         }
         break;
     case 0xa1:
-        if (*(WORD*)((char*)this + 0xa) == 0 && *(WORD*)((char*)this + 0xc) == 0) {
+        if (frame == 0 && timer == 0) {
             CPlayer::Unk40f1e0();
             l50.type = 9;
-            l50.x = (double)(int)*(double*)((char*)this + 0x20);
-            l50.y = (double)((int)*(double*)((char*)this + 0x28) - 0x3c);
+            l50.x = (double)(int)x;
+            l50.y = (double)((int)y - 0x3c);
             l50.unk20 = 2;
             l50.unk21 = 1;
-            ((CGame*)*(int*)((char*)this + 0x7c))->CreateEffect((EffectDesc*)&l50);
-            *(short*)((char*)this + 0x16c) = 1;
-            *((char*)this + 0x2c9) = 0x3e;
-            (*(int*)((char*)this + 0x3138))++;
+            m_game->CreateEffect((EffectDesc*)&l50);
+            unk16c = 1;
+            unk2c9 = 0x3e;
+            unk3138++;
         }
-        (*(short*)((char*)this + 0xc))++;
-        if (*(WORD*)((char*)this + 0xc) >= l4) {
-            *(short*)((char*)this + 0xc) = 0;
-            (*(short*)((char*)this + 0xa))++;
-            if (*(WORD*)((char*)this + 0xa) >= x8) {
-                *(short*)((char*)this + 8) = 9;
+        timer++;
+        if (timer >= l4) {
+            timer = 0;
+            frame++;
+            if (frame >= x8) {
+                pattern = 9;
                 Vf0();
-                *(double*)((char*)this + 0x48) = 0.035;
+                ay = 0.035;
             }
         }
         break;
     case 0xa2:
-        if (*(WORD*)((char*)this + 0xa) == 0 && *(WORD*)((char*)this + 0xc) == 0) {
+        if (frame == 0 && timer == 0) {
             CPlayer::Unk40f1e0();
         }
-        if (*(WORD*)((char*)this + 0xa) == 3 && *(WORD*)((char*)this + 0xc) == 0) {
-            *(double*)((char*)this + 0x38) = -1.5;
-            *(double*)((char*)this + 0x48) = 0.025;
-            *(short*)((char*)this + 0x16c) = 1;
+        if (frame == 3 && timer == 0) {
+            vy = -1.5;
+            ay = 0.025;
+            unk16c = 1;
         }
-        if (*(WORD*)((char*)this + 0xa) == 6 && *(WORD*)((char*)this + 0xc) == 0) {
+        if (frame == 6 && timer == 0) {
             CPlayer::Unk40f1e0();
             l50.type = 9;
-            l50.x = (double)(int)*(double*)((char*)this + 0x20);
-            l50.y = (double)((int)*(double*)((char*)this + 0x28) - 0x3c);
+            l50.x = (double)(int)x;
+            l50.y = (double)((int)y - 0x3c);
             l50.unk20 = 2;
             l50.unk21 = 1;
-            ((CGame*)*(int*)((char*)this + 0x7c))->CreateEffect((EffectDesc*)&l50);
-            *(short*)((char*)this + 0x16c) = 1;
-            *((char*)this + 0x2c9) = 0x3e;
-            *(short*)((char*)this + 0x148) = *(short*)((char*)this + 0x148) - 0x3e8;
-            (*(int*)((char*)this + 0x3138))++;
+            m_game->CreateEffect((EffectDesc*)&l50);
+            unk16c = 1;
+            unk2c9 = 0x3e;
+            unk148 = unk148 - 0x3e8;
+            unk3138++;
         }
-        *(double*)((char*)this + 0x38) = *(double*)((char*)this + 0x38) + *(double*)((char*)this + 0x48);
-        if (*(double*)((char*)this + 0x28) + *(double*)((char*)this + 0x38) > 0.0) {
-            *(short*)((char*)this + 8) = 0xd;
+        vy = vy + ay;
+        if (y + vy > 0.0) {
+            pattern = 0xd;
             Vf0();
             Vf0();
-            *(double*)((char*)this + 0x28) = 0.0;
+            y = 0.0;
             break;
         }
-        (*(short*)((char*)this + 0xc))++;
-        if (*(WORD*)((char*)this + 0xc) >= l4) {
-            *(short*)((char*)this + 0xc) = 0;
-            (*(short*)((char*)this + 0xa))++;
-            if (*(WORD*)((char*)this + 0xa) == 0xc) {
-                *(double*)((char*)this + 0x48) = 0.035;
+        timer++;
+        if (timer >= l4) {
+            timer = 0;
+            frame++;
+            if (frame == 0xc) {
+                ay = 0.035;
             }
-            if (*(WORD*)((char*)this + 0xa) >= x8) {
-                *(short*)((char*)this + 0xa) = *(WORD*)((char*)this + 0xa) - 4;
+            if (frame >= x8) {
+                frame = frame - 4;
             }
         }
         break;
     case 0xa3:
-        if (*(WORD*)((char*)this + 0xa) == 0 && *(WORD*)((char*)this + 0xc) == 0) {
-            *(double*)((char*)this + 0x38) = 0.0;
-            *(double*)((char*)this + 0x48) = 0.0;
+        if (frame == 0 && timer == 0) {
+            vy = 0.0;
+            ay = 0.0;
         }
-        *(double*)((char*)this + 0x38) = *(double*)((char*)this + 0x38) + *(double*)((char*)this + 0x48);
-        if (*(WORD*)((char*)this + 0xa) == 6) {
-            *(double*)((char*)this + 0x30) -= 0.05;
-            if (*(double*)((char*)this + 0x30) < 0.5) {
-                *(double*)((char*)this + 0x30) = 0.5;
+        vy = vy + ay;
+        if (frame == 6) {
+            vx -= 0.05;
+            if (vx < 0.5) {
+                vx = 0.5;
             }
         }
-        if (*(WORD*)((char*)this + 0xa) == 2 && *(WORD*)((char*)this + 0xc) == 0) {
-            *(double*)((char*)this + 0x30) = 2.5;
-            *(double*)((char*)this + 0x38) = -1.6;
-            *(double*)((char*)this + 0x48) = 0.05;
+        if (frame == 2 && timer == 0) {
+            vx = 2.5;
+            vy = -1.6;
+            ay = 0.05;
         }
-        if (*(WORD*)((char*)this + 0xa) == 6 && *(WORD*)((char*)this + 0xc) == 0) {
-            *(double*)((char*)this + 0x48) = 0.08;
+        if (frame == 6 && timer == 0) {
+            ay = 0.08;
         }
-        if (*(double*)((char*)this + 0x28) + *(double*)((char*)this + 0x38) > 0.0) {
-            *(short*)((char*)this + 8) = 0xb2;
+        if (y + vy > 0.0) {
+            pattern = 0xb2;
             Vf0();
             break;
         }
-        (*(short*)((char*)this + 0xc))++;
-        if (*(WORD*)((char*)this + 0xc) >= l4) {
-            *(short*)((char*)this + 0xc) = 0;
-            (*(short*)((char*)this + 0xa))++;
-            if (*(WORD*)((char*)this + 0xa) == 6) {
-                if (*((char*)this + 0x188) == -*((char*)this + 0x50)) {
-                    *(double*)((char*)this + 0x48) = 0.08;
+        timer++;
+        if (timer >= l4) {
+            timer = 0;
+            frame++;
+            if (frame == 6) {
+                if (m_inputX == -facing) {
+                    ay = 0.08;
                     break;
                 }
-                (*(int*)((char*)this + 0x3138))++;
-                if (*(int*)((char*)this + 0x3138) < 7) {
-                    *(short*)((char*)this + 0xa) = *(WORD*)((char*)this + 0xa) - 2;
-                    (*(int*)((char*)this + 0x3138))++;
+                unk3138++;
+                if (unk3138 < 7) {
+                    frame = frame - 2;
+                    unk3138++;
                 }
             }
         }
         break;
     case 0xa4:
-        if (*(WORD*)((char*)this + 0xa) == 0 && *(WORD*)((char*)this + 0xc) == 0) {
+        if (frame == 0 && timer == 0) {
             CPlayer::Unk4109d0(2);
-            *(double*)((char*)this + 0x30) = 0.0;
-            *(double*)((char*)this + 0x38) = 0.0;
+            vx = 0.0;
+            vy = 0.0;
         }
-        if (*(WORD*)((char*)this + 0xa) > 0) {
-            *(double*)((char*)this + 0x30) += 0.055;
+        if (frame > 0) {
+            vx += 0.055;
         }
-        if (*(double*)((char*)this + 0x30) > 0.0) {
-            *(double*)((char*)this + 0x30) = 0.0;
+        if (vx > 0.0) {
+            vx = 0.0;
         }
-        if (*(double*)((char*)this + 0x28) + *(double*)((char*)this + 0x38) > 0.0) {
+        if (y + vy > 0.0) {
             CPlayer::Unk40f1e0();
-            *(double*)((char*)this + 0x28) = 0.0;
+            y = 0.0;
             Vf0();
-            *(short*)((char*)this + 8) = 0xd;
+            pattern = 0xd;
             break;
         }
-        *(double*)((char*)this + 0x38) = *(double*)((char*)this + 0x38) + *(double*)((char*)this + 0x48);
-        (*(short*)((char*)this + 0xc))++;
-        if (*(WORD*)((char*)this + 0xc) >= l4) {
-            *(short*)((char*)this + 0xc) = 0;
-            (*(short*)((char*)this + 0xa))++;
-            if (*(WORD*)((char*)this + 0xa) == 3) {
-                *(double*)((char*)this + 0x30) = -3.5;
-                *(double*)((char*)this + 0x38) = -1.5;
-                *(double*)((char*)this + 0x48) = 0.05;
+        vy = vy + ay;
+        timer++;
+        if (timer >= l4) {
+            timer = 0;
+            frame++;
+            if (frame == 3) {
+                vx = -3.5;
+                vy = -1.5;
+                ay = 0.05;
             }
-            if (*(WORD*)((char*)this + 0xa) >= x8) {
-                *(short*)((char*)this + 0xa) = *(WORD*)((char*)this + 0xa) - 4;
+            if (frame >= x8) {
+                frame = frame - 4;
             }
         }
         break;
     case 0xa5:
-        if (*(WORD*)((char*)this + 0xa) == 0 && *(WORD*)((char*)this + 0xc) == 0) {
-            *(double*)((char*)this + 0x30) = 1.8;
+        if (frame == 0 && timer == 0) {
+            vx = 1.8;
             CPlayer::Unk4109d0(3);
-            *(double*)((char*)this + 0x38) = 0.0;
-            *(double*)((char*)this + 0x48) = 0.0;
-            if (*(int*)((char*)this + 0x3138) == 0) {
-                *((char*)this + 0x2c9) = 0x11;
+            vy = 0.0;
+            ay = 0.0;
+            if (unk3138 == 0) {
+                unk2c9 = 0x11;
             }
         }
-        (*(short*)((char*)this + 0xc))++;
-        (*(int*)((char*)this + 0x3138))++;
-        (*(int*)((char*)this + 0x313c))++;
-        if (*(WORD*)((char*)this + 0xc) >= l4) {
-            *(short*)((char*)this + 0xc) = 0;
-            (*(short*)((char*)this + 0xa))++;
-            if (*(WORD*)((char*)this + 0xa) >= x8) {
-                *(short*)((char*)this + 0xa) = *(WORD*)((char*)this + 0xa) - 2;
+        timer++;
+        unk3138++;
+        unk313c++;
+        if (timer >= l4) {
+            timer = 0;
+            frame++;
+            if (frame >= x8) {
+                frame = frame - 2;
             }
         }
-        if (*((char*)this + 0x188) == *((char*)this + 0x50) && *(int*)((char*)this + 0x313c) >= 0x78) {
-            *(short*)((char*)this + 8) = 9;
+        if (m_inputX == facing && unk313c >= 0x78) {
+            pattern = 9;
             Vf0();
-            *(double*)((char*)this + 0x30) = 1.3;
-            *(double*)((char*)this + 0x48) = 0.03;
+            vx = 1.3;
+            ay = 0.03;
             if (CPlayer::Unk40e630() != 0) {
-                *(double*)((char*)this + 0x30) = -*(double*)((char*)this + 0x30);
+                vx = -vx;
             }
         }
-        if (*((char*)this + 0x188) != *((char*)this + 0x50) && *(int*)((char*)this + 0x3138) >= 0x30) {
-            *(short*)((char*)this + 8) = 9;
+        if (m_inputX != facing && unk3138 >= 0x30) {
+            pattern = 9;
             Vf0();
-            *(double*)((char*)this + 0x30) = 1.3;
-            *(double*)((char*)this + 0x48) = 0.03;
+            vx = 1.3;
+            ay = 0.03;
             if (CPlayer::Unk40e630() != 0) {
-                *(double*)((char*)this + 0x30) = -*(double*)((char*)this + 0x30);
+                vx = -vx;
             }
         }
         break;
     case 0xa6:
-        if (*(WORD*)((char*)this + 0xa) == 0 && *(WORD*)((char*)this + 0xc) == 0) {
-            *(double*)((char*)this + 0x30) = -1.8;
-            *(double*)((char*)this + 0x38) = 0.0;
-            *(double*)((char*)this + 0x48) = 0.0;
+        if (frame == 0 && timer == 0) {
+            vx = -1.8;
+            vy = 0.0;
+            ay = 0.0;
             CPlayer::Unk4109d0(3);
-            if (*(int*)((char*)this + 0x3138) == 0) {
-                *((char*)this + 0x2c9) = 0x11;
+            if (unk3138 == 0) {
+                unk2c9 = 0x11;
             }
         }
-        (*(short*)((char*)this + 0xc))++;
-        (*(int*)((char*)this + 0x3138))++;
-        (*(int*)((char*)this + 0x313c))++;
-        if (*(WORD*)((char*)this + 0xc) >= l4) {
-            *(short*)((char*)this + 0xc) = 0;
-            (*(short*)((char*)this + 0xa))++;
-            if (*(WORD*)((char*)this + 0xa) >= x8) {
-                *(short*)((char*)this + 0xa) = *(WORD*)((char*)this + 0xa) - 2;
+        timer++;
+        unk3138++;
+        unk313c++;
+        if (timer >= l4) {
+            timer = 0;
+            frame++;
+            if (frame >= x8) {
+                frame = frame - 2;
             }
         }
-        if (*((char*)this + 0x188) == -*((char*)this + 0x50) && *(int*)((char*)this + 0x313c) >= 0x78) {
-            *(short*)((char*)this + 8) = 9;
+        if (m_inputX == -facing && unk313c >= 0x78) {
+            pattern = 9;
             Vf0();
-            *(double*)((char*)this + 0x30) = -0.9;
-            *(double*)((char*)this + 0x48) = 0.03;
+            vx = -0.9;
+            ay = 0.03;
             if (CPlayer::Unk40e630() != 0) {
-                *(double*)((char*)this + 0x30) = -*(double*)((char*)this + 0x30);
+                vx = -vx;
             }
         }
-        if (*((char*)this + 0x188) != -*((char*)this + 0x50) && *(int*)((char*)this + 0x3138) >= 0x30) {
-            *(short*)((char*)this + 8) = 9;
+        if (m_inputX != -facing && unk3138 >= 0x30) {
+            pattern = 9;
             Vf0();
-            *(double*)((char*)this + 0x30) = -0.9;
-            *(double*)((char*)this + 0x48) = 0.03;
+            vx = -0.9;
+            ay = 0.03;
             if (CPlayer::Unk40e630() != 0) {
-                *(double*)((char*)this + 0x30) = -*(double*)((char*)this + 0x30);
+                vx = -vx;
             }
         }
         break;
     case 0xa7:
-        if (*(WORD*)((char*)this + 0xa) == 0 && *(WORD*)((char*)this + 0xc) == 0) {
-            *(double*)((char*)this + 0x30) = 0.0;
-            *(double*)((char*)this + 0x38) = 0.0;
-            if (*((char*)this + 0x120) == 1) {
-                *(double*)((char*)this + 0x178) = *(double*)((char*)this + 0x118) * 5.0 + *(double*)((char*)this + 0x178);
+        if (frame == 0 && timer == 0) {
+            vx = 0.0;
+            vy = 0.0;
+            if (unk120 == 1) {
+                unk178 = unk118 * 5.0 + unk178;
             }
-            *(double*)((char*)this + 0x118) = 0.0;
-            *(short*)((char*)this + 0x14c) = 0x5a;
+            unk118 = 0.0;
+            unk14c = 0x5a;
             CPlayer::Unk410b10(0xb0, 3);
         }
-        if (*(WORD*)((char*)this + 0xa) == 1 && *(WORD*)((char*)this + 0xc) == 0) {
-            *((char*)this + 0x2c9) = 0x12;
+        if (frame == 1 && timer == 0) {
+            unk2c9 = 0x12;
             l50.type = 1;
-            l50.x = (double)(int)*(double*)((char*)this + 0x20);
-            l50.y = (double)(int)*(double*)((char*)this + 0x28);
+            l50.x = (double)(int)x;
+            l50.y = (double)(int)y;
             l50.unk20 = 2;
             l50.unk21 = 1;
-            ((CGame*)*(int*)((char*)this + 0x7c))->CreateEffect((EffectDesc*)&l50);
+            m_game->CreateEffect((EffectDesc*)&l50);
         }
-        if (*(WORD*)((char*)this + 0xa) == 2 && *(WORD*)((char*)this + 0xc) == 0) {
+        if (frame == 2 && timer == 0) {
             l50.type = 4;
-            l50.x = (double)(int)*(double*)((char*)this + 0x20);
-            l50.y = (double)(int)*(double*)((char*)this + 0x28);
+            l50.x = (double)(int)x;
+            l50.y = (double)(int)y;
             l50.unk20 = 2;
             l50.unk21 = 1;
-            ((CGame*)*(int*)((char*)this + 0x7c))->CreateEffect((EffectDesc*)&l50);
+            m_game->CreateEffect((EffectDesc*)&l50);
         }
-        (*(short*)((char*)this + 0xc))++;
-        if (*(WORD*)((char*)this + 0xc) >= l4) {
-            *(short*)((char*)this + 0xc) = 0;
-            (*(short*)((char*)this + 0xa))++;
-            *(int*)((char*)this + 0x168) = 0;
-            if (*(WORD*)((char*)this + 0xa) >= x8) {
-                *(short*)((char*)this + 8) = 0;
+        timer++;
+        if (timer >= l4) {
+            timer = 0;
+            frame++;
+            unk168 = 0;
+            if (frame >= x8) {
+                pattern = 0;
                 CPlayer::Unk40e630();
                 Vf0();
             }
         }
         break;
     case 0xa8:
-        if (*(WORD*)((char*)this + 0xa) == 0 && *(WORD*)((char*)this + 0xc) == 0) {
-            *(double*)((char*)this + 0x30) = 0.0;
-            *(double*)((char*)this + 0x38) = 0.0;
-            *(double*)((char*)this + 0x28) = 0.0;
-            *(double*)((char*)this + 0x48) = 0.0;
-            *(short*)((char*)this + 0x14e) = 0;
-            *(double*)((char*)this + 0xb8) = 0.0;
-            *(double*)((char*)this + 0x40) = 0.0;
+        if (frame == 0 && timer == 0) {
+            vx = 0.0;
+            vy = 0.0;
+            y = 0.0;
+            ay = 0.0;
+            unk14e = 0;
+            unkb8 = 0.0;
+            ax = 0.0;
             l50.type = 8;
-            l50.x = (double)(int)*(double*)((char*)this + 0x20);
-            l50.y = (double)(int)*(double*)((char*)this + 0x28);
+            l50.x = (double)(int)x;
+            l50.y = (double)(int)y;
             l50.unk20 = 2;
             l50.unk21 = 1;
-            ((CGame*)*(int*)((char*)this + 0x7c))->CreateEffect((EffectDesc*)&l50);
+            m_game->CreateEffect((EffectDesc*)&l50);
         }
-        (*(short*)((char*)this + 0xc))++;
-        if (*(WORD*)((char*)this + 0xc) >= l4) {
-            *(short*)((char*)this + 0xc) = 0;
-            (*(short*)((char*)this + 0xa))++;
-            if (*(WORD*)((char*)this + 0xa) == x8) {
+        timer++;
+        if (timer >= l4) {
+            timer = 0;
+            frame++;
+            if (frame == x8) {
                 CPlayer::Unk40e630();
             }
-            if (*(WORD*)((char*)this + 0xa) >= x8) {
-                *(short*)((char*)this + 8) = 0;
+            if (frame >= x8) {
+                pattern = 0;
                 Vf0();
             }
         }
         break;
     case 0xa9:
-        if (*(WORD*)((char*)this + 0xa) == 0 && *(WORD*)((char*)this + 0xc) == 0) {
-            *(double*)((char*)this + 0x30) = 0.0;
-            *(double*)((char*)this + 0x38) = 0.0;
-            *(double*)((char*)this + 0x28) = 0.0;
-            *(double*)((char*)this + 0x48) = 0.0;
-            *(short*)((char*)this + 0x14e) = 0;
-            *(double*)((char*)this + 0xb8) = 0.0;
-            *(double*)((char*)this + 0x40) = 0.0;
+        if (frame == 0 && timer == 0) {
+            vx = 0.0;
+            vy = 0.0;
+            y = 0.0;
+            ay = 0.0;
+            unk14e = 0;
+            unkb8 = 0.0;
+            ax = 0.0;
             l50.type = 8;
-            l50.x = (double)(int)*(double*)((char*)this + 0x20);
-            l50.y = (double)(int)*(double*)((char*)this + 0x28);
+            l50.x = (double)(int)x;
+            l50.y = (double)(int)y;
             l50.unk20 = 2;
             l50.unk21 = 1;
-            ((CGame*)*(int*)((char*)this + 0x7c))->CreateEffect((EffectDesc*)&l50);
+            m_game->CreateEffect((EffectDesc*)&l50);
         }
-        (*(short*)((char*)this + 0xc))++;
-        if (*(WORD*)((char*)this + 0xc) >= l4) {
-            *(short*)((char*)this + 0xc) = 0;
-            (*(short*)((char*)this + 0xa))++;
-            if (*(WORD*)((char*)this + 0xa) == x8) {
+        timer++;
+        if (timer >= l4) {
+            timer = 0;
+            frame++;
+            if (frame == x8) {
                 CPlayer::Unk40e630();
             }
-            if (*(WORD*)((char*)this + 0xa) >= x8) {
-                *(short*)((char*)this + 8) = 3;
+            if (frame >= x8) {
+                pattern = 3;
                 Vf0();
             }
         }
         break;
     case 0xaa:
-        if (*(WORD*)((char*)this + 0xa) == 0 && *(WORD*)((char*)this + 0xc) == 0) {
-            *(int*)((char*)this + 0x3138) = (int)(*(double*)((char*)this + 0x30) * 100.0);
-            *(int*)((char*)this + 0x313c) = (int)(*(double*)((char*)this + 0x38) * 100.0);
-            *(double*)((char*)this + 0x30) = 0.0;
-            *(double*)((char*)this + 0x38) = 0.0;
-            *(short*)((char*)this + 0x14e) = 0;
-            *(double*)((char*)this + 0xb8) = 0.0;
-            *(short*)((char*)this + 0x14c) = 0x3c;
+        if (frame == 0 && timer == 0) {
+            unk3138 = (int)(vx * 100.0);
+            unk313c = (int)(vy * 100.0);
+            vx = 0.0;
+            vy = 0.0;
+            unk14e = 0;
+            unkb8 = 0.0;
+            unk14c = 0x3c;
         }
-        if (*(short*)((char*)this + 0x14c) == 0 && *(int*)((char*)this + 0x3140) == 0) {
-            (*(int*)((char*)this + 0x3140))++;
-            *(double*)((char*)this + 0x30) = *(int*)((char*)this + 0x3138) * 0.01;
-            *(double*)((char*)this + 0x38) = *(int*)((char*)this + 0x313c) * 0.01;
+        if (unk14c == 0 && unk3140 == 0) {
+            unk3140++;
+            vx = unk3138 * 0.01;
+            vy = unk313c * 0.01;
         }
-        if (*(short*)((char*)this + 0x14c) == 0) {
-            *(double*)((char*)this + 0x38) = *(double*)((char*)this + 0x38) + *(double*)((char*)this + 0x48);
+        if (unk14c == 0) {
+            vy = vy + ay;
         }
-        if (*(double*)((char*)this + 0x38) + *(double*)((char*)this + 0x28) > 0.0) {
+        if (vy + y > 0.0) {
             CPlayer::Unk40f1e0();
-            *(double*)((char*)this + 0x28) = 0.0;
-            *(short*)((char*)this + 8) = 0xa9;
+            y = 0.0;
+            pattern = 0xa9;
             break;
         }
-        (*(short*)((char*)this + 0xc))++;
-        if (*(WORD*)((char*)this + 0xc) >= l4) {
-            *(short*)((char*)this + 0xc) = 0;
-            (*(short*)((char*)this + 0xa))++;
-            if (*(WORD*)((char*)this + 0xa) >= x8) {
-                *(short*)((char*)this + 8) = 9;
+        timer++;
+        if (timer >= l4) {
+            timer = 0;
+            frame++;
+            if (frame >= x8) {
+                pattern = 9;
                 Vf0();
             }
         }
         break;
     case 0xab:
-        if (*(WORD*)((char*)this + 0xa) == 0 && *(WORD*)((char*)this + 0xc) == 0) {
-            *(int*)((char*)this + 0x3138) = (int)(*(double*)((char*)this + 0x30) * 100.0);
-            *(int*)((char*)this + 0x313c) = (int)(*(double*)((char*)this + 0x38) * 100.0);
-            *(double*)((char*)this + 0x30) = 0.0;
-            *(double*)((char*)this + 0x38) = 0.0;
-            if (*(double*)((char*)this + 0x48) == 0.0) {
-                *(double*)((char*)this + 0x48) = 0.035;
+        if (frame == 0 && timer == 0) {
+            unk3138 = (int)(vx * 100.0);
+            unk313c = (int)(vy * 100.0);
+            vx = 0.0;
+            vy = 0.0;
+            if (ay == 0.0) {
+                ay = 0.035;
             }
-            if (*((char*)this + 0x120) == 1) {
-                *(double*)((char*)this + 0x178) = *(double*)((char*)this + 0x118) * 5.0 + *(double*)((char*)this + 0x178);
+            if (unk120 == 1) {
+                unk178 = unk118 * 5.0 + unk178;
             }
-            *(double*)((char*)this + 0x118) = 0.0;
-            *(short*)((char*)this + 0x14c) = 0x5a;
+            unk118 = 0.0;
+            unk14c = 0x5a;
             CPlayer::Unk410b10(0xb0, 3);
         }
-        if (*(WORD*)((char*)this + 0xa) == 0 && *(WORD*)((char*)this + 0xc) == 0) {
-            *((char*)this + 0x2c9) = 0x12;
+        if (frame == 0 && timer == 0) {
+            unk2c9 = 0x12;
             l50.type = 1;
-            l50.x = (double)(int)*(double*)((char*)this + 0x20);
-            l50.y = (double)(int)*(double*)((char*)this + 0x28);
+            l50.x = (double)(int)x;
+            l50.y = (double)(int)y;
             l50.unk20 = 2;
             l50.unk21 = 1;
-            ((CGame*)*(int*)((char*)this + 0x7c))->CreateEffect((EffectDesc*)&l50);
+            m_game->CreateEffect((EffectDesc*)&l50);
         }
-        (*(short*)((char*)this + 0xc))++;
-        if (*(WORD*)((char*)this + 0xc) >= l4) {
-            *(short*)((char*)this + 0xc) = 0;
-            (*(short*)((char*)this + 0xa))++;
-            *(int*)((char*)this + 0x168) = 0;
-            if (*(WORD*)((char*)this + 0xa) >= x8) {
-                *(short*)((char*)this + 8) = 9;
-                *(double*)((char*)this + 0x30) = *(int*)((char*)this + 0x3138) * 0.01;
-                *(double*)((char*)this + 0x38) = *(int*)((char*)this + 0x313c) * 0.01;
-                if (*(double*)((char*)this + 0x48) == 0.0) {
-                    *(double*)((char*)this + 0x48) = 0.035;
+        timer++;
+        if (timer >= l4) {
+            timer = 0;
+            frame++;
+            unk168 = 0;
+            if (frame >= x8) {
+                pattern = 9;
+                vx = unk3138 * 0.01;
+                vy = unk313c * 0.01;
+                if (ay == 0.0) {
+                    ay = 0.035;
                 }
                 Vf0();
             }
         }
         break;
     case 0xb2:
-        *(double*)((char*)this + 0x30) -= 0.08;
-        if (*(double*)((char*)this + 0x30) < 0.0) {
-            *(double*)((char*)this + 0x30) = 0.0;
+        vx -= 0.08;
+        if (vx < 0.0) {
+            vx = 0.0;
         }
-        (*(short*)((char*)this + 0xc))++;
-        if (*(WORD*)((char*)this + 0xc) >= l4) {
-            *(short*)((char*)this + 0xc) = 0;
-            (*(short*)((char*)this + 0xa))++;
-            if (*(WORD*)((char*)this + 0xa) >= x8) {
-                *(short*)((char*)this + 8) = 7;
-                if (*((char*)this + 0x189) == 1) {
-                    *(short*)((char*)this + 8) = 3;
+        timer++;
+        if (timer >= l4) {
+            timer = 0;
+            frame++;
+            if (frame >= x8) {
+                pattern = 7;
+                if (m_inputY == 1) {
+                    pattern = 3;
                 }
                 Vf0();
                 break;
@@ -2455,194 +2455,194 @@ void CMayu::Vf6()
         }
         break;
     case 0xb4:
-        if (*(WORD*)((char*)this + 0xa) == 0 && *(WORD*)((char*)this + 0xc) == 0) {
+        if (frame == 0 && timer == 0) {
             CPlayer::Unk4109d0(2);
-            *(double*)((char*)this + 0x30) = 0.0;
-            *(double*)((char*)this + 0x38) = 0.0;
-            *(double*)((char*)this + 0x48) = 0.0;
+            vx = 0.0;
+            vy = 0.0;
+            ay = 0.0;
         }
-        if (*(double*)((char*)this + 0x28) < 0.0) {
-            *(double*)((char*)this + 0x38) = *(double*)((char*)this + 0x38) + *(double*)((char*)this + 0x48);
+        if (y < 0.0) {
+            vy = vy + ay;
         }
-        if (*(double*)((char*)this + 0x28) + *(double*)((char*)this + 0x38) > 0.0 && *(WORD*)((char*)this + 0xa) < 0xc) {
+        if (y + vy > 0.0 && frame < 0xc) {
             CPlayer::Unk40f1e0();
-            *(double*)((char*)this + 0x28) = 0.0;
-            *(short*)((char*)this + 0xc) = 0;
-            *(short*)((char*)this + 0xa) = 0xc;
-            *((char*)this + 0x2c9) = 9;
+            y = 0.0;
+            timer = 0;
+            frame = 0xc;
+            unk2c9 = 9;
         }
-        (*(short*)((char*)this + 0xc))++;
-        if (*(WORD*)((char*)this + 0xc) >= l4) {
-            *(short*)((char*)this + 0xc) = 0;
-            (*(short*)((char*)this + 0xa))++;
-            if (*(WORD*)((char*)this + 0xa) == 3) {
-                *(double*)((char*)this + 0x30) = -0.5;
-                *(double*)((char*)this + 0x38) = -1.0;
-                *(double*)((char*)this + 0x48) = 0.028;
+        timer++;
+        if (timer >= l4) {
+            timer = 0;
+            frame++;
+            if (frame == 3) {
+                vx = -0.5;
+                vy = -1.0;
+                ay = 0.028;
             }
-            if (*(WORD*)((char*)this + 0xa) == 0xc) {
-                *(short*)((char*)this + 0xa) = *(WORD*)((char*)this + 0xa) - 4;
+            if (frame == 0xc) {
+                frame = frame - 4;
             }
-            if (*(WORD*)((char*)this + 0xa) >= x8) {
+            if (frame >= x8) {
                 Vf0();
-                *(short*)((char*)this + 8) = 0;
+                pattern = 0;
             }
         }
         break;
     case 0xc8:
-        *(double*)((char*)this + 0x30) = 0.0;
-        *(double*)((char*)this + 0x38) = 0.0;
-        if (*((char*)this + 0x189) == -1 && *(WORD*)((char*)this + 0xa) > 0 && *(int*)((char*)this + 0x15c) < 3 && *(int*)((char*)this + 0x168) >= 2) {
-            *(short*)((char*)this + 8) = 4;
-            if (*((char*)this + 0x188) == *((char*)this + 0x50)) {
-                *(short*)((char*)this + 8) = 5;
+        vx = 0.0;
+        vy = 0.0;
+        if (m_inputY == -1 && frame > 0 && unk15c < 3 && unk168 >= 2) {
+            pattern = 4;
+            if (m_inputX == facing) {
+                pattern = 5;
             }
-            if (*((char*)this + 0x188) == -*((char*)this + 0x50)) {
-                *(short*)((char*)this + 8) = 6;
+            if (m_inputX == -facing) {
+                pattern = 6;
             }
-            *(int*)((char*)this + 0x168) = 0;
+            unk168 = 0;
             Vf0();
             break;
         }
-        if (*(WORD*)((char*)this + 0xa) == 1 && *(WORD*)((char*)this + 0xc) == 0) {
-            *(short*)((char*)this + 0x148) = *(short*)((char*)this + 0x148) + 5;
-            *((char*)this + 0x2c9) = 0x15;
-            *(short*)((char*)this + 0x16c) = 1;
+        if (frame == 1 && timer == 0) {
+            unk148 = unk148 + 5;
+            unk2c9 = 0x15;
+            unk16c = 1;
         }
-        (*(short*)((char*)this + 0xc))++;
-        if (*(WORD*)((char*)this + 0xc) >= l4) {
-            *(short*)((char*)this + 0xc) = 0;
-            (*(short*)((char*)this + 0xa))++;
-            if (*(WORD*)((char*)this + 0xa) < 3) {
-                *(int*)((char*)this + 0x168) = 0;
+        timer++;
+        if (timer >= l4) {
+            timer = 0;
+            frame++;
+            if (frame < 3) {
+                unk168 = 0;
             }
-            if (*(WORD*)((char*)this + 0xa) >= x8) {
-                *(short*)((char*)this + 8) = 0;
+            if (frame >= x8) {
+                pattern = 0;
                 CPlayer::Unk40e630();
                 Vf0();
             }
         }
         break;
     case 0xc9:
-        if (*((char*)this + 0x189) == -1 && *(WORD*)((char*)this + 0xa) > 0 && *(int*)((char*)this + 0x15c) < 3 && *(int*)((char*)this + 0x168) >= 2) {
-            *(short*)((char*)this + 8) = 4;
-            if (*((char*)this + 0x188) == *((char*)this + 0x50)) {
-                *(short*)((char*)this + 8) = 5;
+        if (m_inputY == -1 && frame > 0 && unk15c < 3 && unk168 >= 2) {
+            pattern = 4;
+            if (m_inputX == facing) {
+                pattern = 5;
             }
-            if (*((char*)this + 0x188) == -*((char*)this + 0x50)) {
-                *(short*)((char*)this + 8) = 6;
+            if (m_inputX == -facing) {
+                pattern = 6;
             }
-            *(int*)((char*)this + 0x168) = 0;
+            unk168 = 0;
             Vf0();
             break;
         }
-        if (*(WORD*)((char*)this + 0xa) == 0 && *(WORD*)((char*)this + 0xc) == 0) {
-            *(double*)((char*)this + 0x30) = 0.0;
-            *(double*)((char*)this + 0x38) = 0.0;
+        if (frame == 0 && timer == 0) {
+            vx = 0.0;
+            vy = 0.0;
         }
-        if (*(WORD*)((char*)this + 0xa) == 2 && *(WORD*)((char*)this + 0xc) == 0) {
-            *(short*)((char*)this + 0x148) = *(short*)((char*)this + 0x148) + 0xf;
-            *((char*)this + 0x2c9) = 0x14;
-            *(short*)((char*)this + 0x16c) = 1;
+        if (frame == 2 && timer == 0) {
+            unk148 = unk148 + 0xf;
+            unk2c9 = 0x14;
+            unk16c = 1;
         }
-        (*(short*)((char*)this + 0xc))++;
-        if (*(WORD*)((char*)this + 0xc) >= l4) {
-            *(short*)((char*)this + 0xc) = 0;
-            (*(short*)((char*)this + 0xa))++;
-            if (*(WORD*)((char*)this + 0xa) < 4) {
-                *(int*)((char*)this + 0x168) = 0;
+        timer++;
+        if (timer >= l4) {
+            timer = 0;
+            frame++;
+            if (frame < 4) {
+                unk168 = 0;
             }
-            if (*(WORD*)((char*)this + 0xa) >= x8) {
-                *(short*)((char*)this + 8) = 0;
+            if (frame >= x8) {
+                pattern = 0;
                 CPlayer::Unk40e630();
                 Vf0();
             }
         }
         break;
     case 0xca:
-        *(double*)((char*)this + 0x30) -= 0.02;
-        if (*(double*)((char*)this + 0x30) <= 0.0) {
-            *(double*)((char*)this + 0x30) = 0.0;
+        vx -= 0.02;
+        if (vx <= 0.0) {
+            vx = 0.0;
         }
-        if (*(WORD*)((char*)this + 0xa) == 0 && *(WORD*)((char*)this + 0xc) == 0) {
-            *(double*)((char*)this + 0x30) = 0.0;
-            *(double*)((char*)this + 0x38) = 0.0;
+        if (frame == 0 && timer == 0) {
+            vx = 0.0;
+            vy = 0.0;
         }
-        if (*(WORD*)((char*)this + 0xa) == 2 && *(WORD*)((char*)this + 0xc) == 0) {
-            *(short*)((char*)this + 0x148) = *(short*)((char*)this + 0x148) + 0xf;
-            *((char*)this + 0x2c9) = 0x14;
-            *(short*)((char*)this + 0x16c) = 1;
-            *(double*)((char*)this + 0x30) = 1.2;
+        if (frame == 2 && timer == 0) {
+            unk148 = unk148 + 0xf;
+            unk2c9 = 0x14;
+            unk16c = 1;
+            vx = 1.2;
         }
-        (*(short*)((char*)this + 0xc))++;
-        if (*(WORD*)((char*)this + 0xc) >= l4) {
-            *(short*)((char*)this + 0xc) = 0;
-            (*(short*)((char*)this + 0xa))++;
-            if (*(WORD*)((char*)this + 0xa) < 4) {
-                *(int*)((char*)this + 0x168) = 0;
+        timer++;
+        if (timer >= l4) {
+            timer = 0;
+            frame++;
+            if (frame < 4) {
+                unk168 = 0;
             }
-            if (*(WORD*)((char*)this + 0xa) >= x8) {
-                *(short*)((char*)this + 8) = 0;
+            if (frame >= x8) {
+                pattern = 0;
                 CPlayer::Unk40e630();
                 Vf0();
             }
         }
         break;
     case 0xcb:
-        if (*(WORD*)((char*)this + 0xa) == 0 && *(WORD*)((char*)this + 0xc) == 0) {
-            *(double*)((char*)this + 0x30) = 0.0;
-            *(double*)((char*)this + 0x38) = 0.0;
-            *(short*)((char*)this + 0x16c) = 2;
+        if (frame == 0 && timer == 0) {
+            vx = 0.0;
+            vy = 0.0;
+            unk16c = 2;
         }
-        if (*(WORD*)((char*)this + 0xa) == 1 && *(WORD*)((char*)this + 0xc) == 0) {
-            *(short*)((char*)this + 0x148) = *(short*)((char*)this + 0x148) + 0x23;
-            *((char*)this + 0x2c9) = 0x14;
+        if (frame == 1 && timer == 0) {
+            unk148 = unk148 + 0x23;
+            unk2c9 = 0x14;
         }
-        (*(short*)((char*)this + 0xc))++;
-        if (*(WORD*)((char*)this + 0xc) >= l4) {
-            *(short*)((char*)this + 0xc) = 0;
-            (*(short*)((char*)this + 0xa))++;
-            if (*(WORD*)((char*)this + 0xa) < 6) {
-                *(int*)((char*)this + 0x168) = 0;
+        timer++;
+        if (timer >= l4) {
+            timer = 0;
+            frame++;
+            if (frame < 6) {
+                unk168 = 0;
             }
-            if (*(WORD*)((char*)this + 0xa) >= x8) {
-                *(short*)((char*)this + 8) = 0;
+            if (frame >= x8) {
+                pattern = 0;
                 CPlayer::Unk40e630();
                 Vf0();
             }
         }
         break;
     case 0xcc:
-        *(double*)((char*)this + 0x30) = 0.0;
-        *(double*)((char*)this + 0x38) = 0.0;
-        if (*((char*)this + 0x189) == -1 && *(WORD*)((char*)this + 0xa) > 0 && *(int*)((char*)this + 0x15c) < 3 && *(int*)((char*)this + 0x168) >= 2) {
-            *(short*)((char*)this + 8) = 4;
-            if (*((char*)this + 0x188) == *((char*)this + 0x50)) {
-                *(short*)((char*)this + 8) = 5;
+        vx = 0.0;
+        vy = 0.0;
+        if (m_inputY == -1 && frame > 0 && unk15c < 3 && unk168 >= 2) {
+            pattern = 4;
+            if (m_inputX == facing) {
+                pattern = 5;
             }
-            if (*((char*)this + 0x188) == -*((char*)this + 0x50)) {
-                *(short*)((char*)this + 8) = 6;
+            if (m_inputX == -facing) {
+                pattern = 6;
             }
-            *(int*)((char*)this + 0x168) = 0;
+            unk168 = 0;
             Vf0();
             break;
         }
-        if (*(WORD*)((char*)this + 0xa) == 1 && *(WORD*)((char*)this + 0xc) == 0) {
-            *(short*)((char*)this + 0x148) = *(short*)((char*)this + 0x148) + 5;
-            *((char*)this + 0x2c9) = 0x15;
-            *(short*)((char*)this + 0x16c) = 1;
+        if (frame == 1 && timer == 0) {
+            unk148 = unk148 + 5;
+            unk2c9 = 0x15;
+            unk16c = 1;
         }
-        (*(short*)((char*)this + 0xc))++;
-        if (*(WORD*)((char*)this + 0xc) >= l4) {
-            *(short*)((char*)this + 0xc) = 0;
-            (*(short*)((char*)this + 0xa))++;
-            if (*(WORD*)((char*)this + 0xa) < 3) {
-                *(int*)((char*)this + 0x168) = 0;
+        timer++;
+        if (timer >= l4) {
+            timer = 0;
+            frame++;
+            if (frame < 3) {
+                unk168 = 0;
             }
-            if (*(WORD*)((char*)this + 0xa) >= x8) {
-                *(short*)((char*)this + 8) = 0;
-                if (*((char*)this + 0x189) == 1) {
-                    *(short*)((char*)this + 8) = 3;
+            if (frame >= x8) {
+                pattern = 0;
+                if (m_inputY == 1) {
+                    pattern = 3;
                 }
                 CPlayer::Unk40e630();
                 Vf0();
@@ -2650,50 +2650,50 @@ void CMayu::Vf6()
         }
         break;
     case 0xcd:
-        if (*(WORD*)((char*)this + 0xa) == 0 && *(WORD*)((char*)this + 0xc) == 0) {
+        if (frame == 0 && timer == 0) {
             CPlayer::Unk40f1e0();
         }
-        if (*((char*)this + 0x189) == -1 && *(WORD*)((char*)this + 0xa) > 0 && *(int*)((char*)this + 0x15c) < 3 && *(int*)((char*)this + 0x168) >= 2) {
-            *(short*)((char*)this + 8) = 4;
-            if (*((char*)this + 0x188) == *((char*)this + 0x50)) {
-                *(short*)((char*)this + 8) = 5;
+        if (m_inputY == -1 && frame > 0 && unk15c < 3 && unk168 >= 2) {
+            pattern = 4;
+            if (m_inputX == facing) {
+                pattern = 5;
             }
-            if (*((char*)this + 0x188) == -*((char*)this + 0x50)) {
-                *(short*)((char*)this + 8) = 6;
+            if (m_inputX == -facing) {
+                pattern = 6;
             }
-            *(int*)((char*)this + 0x168) = 0;
+            unk168 = 0;
             Vf0();
             break;
         }
-        if (*(WORD*)((char*)this + 0xa) == 2 && *(WORD*)((char*)this + 0xc) == 0) {
-            *(short*)((char*)this + 0x148) = *(short*)((char*)this + 0x148) + 0xd;
-            *((char*)this + 0x2c9) = 0x14;
-            *(short*)((char*)this + 0x16c) = 1;
+        if (frame == 2 && timer == 0) {
+            unk148 = unk148 + 0xd;
+            unk2c9 = 0x14;
+            unk16c = 1;
         }
-        if (*(double*)((char*)this + 0x30) > 0.0) {
-            *(double*)((char*)this + 0x30) -= 0.025;
-            if (*(double*)((char*)this + 0x30) < 0.0) {
-                *(double*)((char*)this + 0x30) = 0.0;
+        if (vx > 0.0) {
+            vx -= 0.025;
+            if (vx < 0.0) {
+                vx = 0.0;
             }
         }
-        (*(short*)((char*)this + 0xc))++;
-        if (*(WORD*)((char*)this + 0xc) >= l4) {
-            *(short*)((char*)this + 0xc) = 0;
-            (*(short*)((char*)this + 0xa))++;
-            if (*(WORD*)((char*)this + 0xa) == 3) {
-                *(double*)((char*)this + 0x30) = 1.5;
+        timer++;
+        if (timer >= l4) {
+            timer = 0;
+            frame++;
+            if (frame == 3) {
+                vx = 1.5;
             }
-            if (*(WORD*)((char*)this + 0xa) == 6 && *(int*)((char*)this + 0x3138) < 1) {
-                *(short*)((char*)this + 0xa) = *(WORD*)((char*)this + 0xa) - 2;
-                (*(int*)((char*)this + 0x3138))++;
+            if (frame == 6 && unk3138 < 1) {
+                frame = frame - 2;
+                unk3138++;
             }
-            if (*(WORD*)((char*)this + 0xa) < 2) {
-                *(int*)((char*)this + 0x168) = 0;
+            if (frame < 2) {
+                unk168 = 0;
             }
-            if (*(WORD*)((char*)this + 0xa) >= x8) {
-                *(short*)((char*)this + 8) = 0;
-                if (*((char*)this + 0x189) == 1) {
-                    *(short*)((char*)this + 8) = 3;
+            if (frame >= x8) {
+                pattern = 0;
+                if (m_inputY == 1) {
+                    pattern = 3;
                 }
                 CPlayer::Unk40e630();
                 Vf0();
@@ -2701,35 +2701,35 @@ void CMayu::Vf6()
         }
         break;
     case 0xce:
-        if (*(WORD*)((char*)this + 0xa) == 0 && *(WORD*)((char*)this + 0xc) == 0) {
+        if (frame == 0 && timer == 0) {
             CPlayer::Unk40f1e0();
         }
-        if (*(WORD*)((char*)this + 0xa) == 3 && *(WORD*)((char*)this + 0xc) == 0) {
-            *(short*)((char*)this + 0x148) = *(short*)((char*)this + 0x148) + 0x19;
-            *(double*)((char*)this + 0x30) = 3.0;
+        if (frame == 3 && timer == 0) {
+            unk148 = unk148 + 0x19;
+            vx = 3.0;
         }
-        if (*(WORD*)((char*)this + 0xa) > 1) {
-            *(double*)((char*)this + 0x30) -= 0.07;
-            if (*(double*)((char*)this + 0x30) < 0.0) {
-                *(double*)((char*)this + 0x30) = 0.0;
+        if (frame > 1) {
+            vx -= 0.07;
+            if (vx < 0.0) {
+                vx = 0.0;
             }
-            if (*(double*)((char*)this + 0x30) == 0.0) {
-                *(short*)((char*)this + 0x16c) = 0;
+            if (vx == 0.0) {
+                unk16c = 0;
             }
         }
-        (*(short*)((char*)this + 0xc))++;
-        if (*(WORD*)((char*)this + 0xc) >= l4) {
-            *(short*)((char*)this + 0xc) = 0;
-            (*(short*)((char*)this + 0xa))++;
-            *(int*)((char*)this + 0x168) = 0;
-            if (*(WORD*)((char*)this + 0xa) == 3) {
-                *((char*)this + 0x2c9) = 0x14;
-                *(short*)((char*)this + 0x16c) = 1;
+        timer++;
+        if (timer >= l4) {
+            timer = 0;
+            frame++;
+            unk168 = 0;
+            if (frame == 3) {
+                unk2c9 = 0x14;
+                unk16c = 1;
             }
-            if (*(WORD*)((char*)this + 0xa) >= x8) {
-                *(short*)((char*)this + 8) = 0;
-                if (*((char*)this + 0x189) == 1) {
-                    *(short*)((char*)this + 8) = 3;
+            if (frame >= x8) {
+                pattern = 0;
+                if (m_inputY == 1) {
+                    pattern = 3;
                 }
                 CPlayer::Unk40e630();
                 Vf0();
@@ -2737,202 +2737,202 @@ void CMayu::Vf6()
         }
         break;
     case 0xcf:
-        *(double*)((char*)this + 0x38) = *(double*)((char*)this + 0x38) + *(double*)((char*)this + 0x48);
-        if (*((char*)this + 0x189) == -1 && *(WORD*)((char*)this + 0xa) > 0 && *(int*)((char*)this + 0x15c) < 3 && *(int*)((char*)this + 0x168) >= 2 && *(BYTE*)((char*)this + 0x15a) < 1) {
-            *(short*)((char*)this + 8) = 0xe;
-            (*((char*)this + 0x15a))++;
-            if (*((char*)this + 0x188) == *((char*)this + 0x50)) {
-                *(short*)((char*)this + 8) = 0xf;
+        vy = vy + ay;
+        if (m_inputY == -1 && frame > 0 && unk15c < 3 && unk168 >= 2 && unk15a < 1) {
+            pattern = 0xe;
+            unk15a++;
+            if (m_inputX == facing) {
+                pattern = 0xf;
             }
-            if (*((char*)this + 0x188) == -*((char*)this + 0x50)) {
-                *(short*)((char*)this + 8) = 0x10;
+            if (m_inputX == -facing) {
+                pattern = 0x10;
             }
-            *(int*)((char*)this + 0x168) = 0;
+            unk168 = 0;
             Vf0();
             break;
         }
-        if (*(WORD*)((char*)this + 0xa) == 1 && *(WORD*)((char*)this + 0xc) == 0) {
-            *(short*)((char*)this + 0x148) = *(short*)((char*)this + 0x148) + 5;
-            *((char*)this + 0x2c9) = 0x15;
-            *(short*)((char*)this + 0x16c) = 1;
+        if (frame == 1 && timer == 0) {
+            unk148 = unk148 + 5;
+            unk2c9 = 0x15;
+            unk16c = 1;
         }
-        if (*(double*)((char*)this + 0x28) + *(double*)((char*)this + 0x38) >= 0.0) {
-            *(double*)((char*)this + 0x28) = 0.0;
-            *(short*)((char*)this + 8) = 0xd;
+        if (y + vy >= 0.0) {
+            y = 0.0;
+            pattern = 0xd;
             Vf0();
             break;
         }
-        (*(short*)((char*)this + 0xc))++;
-        if (*(WORD*)((char*)this + 0xc) >= l4) {
-            *(short*)((char*)this + 0xc) = 0;
-            (*(short*)((char*)this + 0xa))++;
-            if (*(WORD*)((char*)this + 0xa) < 3) {
-                *(int*)((char*)this + 0x168) = 0;
+        timer++;
+        if (timer >= l4) {
+            timer = 0;
+            frame++;
+            if (frame < 3) {
+                unk168 = 0;
             }
-            if (*(WORD*)((char*)this + 0xa) >= x8) {
+            if (frame >= x8) {
                 Vf0();
-                *(short*)((char*)this + 8) = 9;
+                pattern = 9;
             }
         }
         break;
     case 0xd0:
-        *(double*)((char*)this + 0x38) = *(double*)((char*)this + 0x38) + *(double*)((char*)this + 0x48);
-        if (*((char*)this + 0x189) == -1 && *(WORD*)((char*)this + 0xa) > 0 && *(int*)((char*)this + 0x15c) < 3 && *(int*)((char*)this + 0x168) >= 2 && *(BYTE*)((char*)this + 0x15a) < 1) {
-            (*((char*)this + 0x15a))++;
-            *(short*)((char*)this + 8) = 0xe;
-            if (*((char*)this + 0x188) == *((char*)this + 0x50)) {
-                *(short*)((char*)this + 8) = 0xf;
+        vy = vy + ay;
+        if (m_inputY == -1 && frame > 0 && unk15c < 3 && unk168 >= 2 && unk15a < 1) {
+            unk15a++;
+            pattern = 0xe;
+            if (m_inputX == facing) {
+                pattern = 0xf;
             }
-            if (*((char*)this + 0x188) == -*((char*)this + 0x50)) {
-                *(short*)((char*)this + 8) = 0x10;
+            if (m_inputX == -facing) {
+                pattern = 0x10;
             }
-            *(int*)((char*)this + 0x168) = 0;
+            unk168 = 0;
             Vf0();
             break;
         }
-        if (*(WORD*)((char*)this + 0xa) == 3 && *(WORD*)((char*)this + 0xc) == 0) {
-            *(short*)((char*)this + 0x148) = *(short*)((char*)this + 0x148) + 0xd;
-            *(short*)((char*)this + 0x16c) = 1;
-            *((char*)this + 0x2c9) = 0x14;
+        if (frame == 3 && timer == 0) {
+            unk148 = unk148 + 0xd;
+            unk16c = 1;
+            unk2c9 = 0x14;
         }
-        if (*(double*)((char*)this + 0x28) + *(double*)((char*)this + 0x38) >= 0.0) {
-            *(double*)((char*)this + 0x28) = 0.0;
-            *(short*)((char*)this + 8) = 0xd;
+        if (y + vy >= 0.0) {
+            y = 0.0;
+            pattern = 0xd;
             Vf0();
             break;
         }
-        (*(short*)((char*)this + 0xc))++;
-        if (*(WORD*)((char*)this + 0xc) >= l4) {
-            *(short*)((char*)this + 0xc) = 0;
-            (*(short*)((char*)this + 0xa))++;
-            if (*(WORD*)((char*)this + 0xa) < 2) {
-                *(int*)((char*)this + 0x168) = 0;
+        timer++;
+        if (timer >= l4) {
+            timer = 0;
+            frame++;
+            if (frame < 2) {
+                unk168 = 0;
             }
-            if (*(WORD*)((char*)this + 0xa) >= x8) {
-                *(short*)((char*)this + 8) = 9;
+            if (frame >= x8) {
+                pattern = 9;
                 Vf0();
             }
         }
         break;
     case 0xd1:
-        *(double*)((char*)this + 0x38) = *(double*)((char*)this + 0x38) + *(double*)((char*)this + 0x48);
-        if (*((char*)this + 0x189) == -1 && *(WORD*)((char*)this + 0xa) > 0 && *(int*)((char*)this + 0x15c) < 3 && *(int*)((char*)this + 0x168) >= 2 && *(BYTE*)((char*)this + 0x15a) < 1) {
-            (*((char*)this + 0x15a))++;
-            *(short*)((char*)this + 8) = 0xe;
-            if (*((char*)this + 0x188) == *((char*)this + 0x50)) {
-                *(short*)((char*)this + 8) = 0xf;
+        vy = vy + ay;
+        if (m_inputY == -1 && frame > 0 && unk15c < 3 && unk168 >= 2 && unk15a < 1) {
+            unk15a++;
+            pattern = 0xe;
+            if (m_inputX == facing) {
+                pattern = 0xf;
             }
-            if (*((char*)this + 0x188) == -*((char*)this + 0x50)) {
-                *(short*)((char*)this + 8) = 0x10;
+            if (m_inputX == -facing) {
+                pattern = 0x10;
             }
-            *(int*)((char*)this + 0x168) = 0;
+            unk168 = 0;
             Vf0();
             break;
         }
-        if (*(WORD*)((char*)this + 0xa) == 4 && *(WORD*)((char*)this + 0xc) == 0) {
-            *(short*)((char*)this + 0x148) = *(short*)((char*)this + 0x148) + 0x1e;
-            *((char*)this + 0x2c9) = 0x14;
-            *(short*)((char*)this + 0x16c) = 1;
+        if (frame == 4 && timer == 0) {
+            unk148 = unk148 + 0x1e;
+            unk2c9 = 0x14;
+            unk16c = 1;
         }
-        if (*(double*)((char*)this + 0x28) + *(double*)((char*)this + 0x38) >= 0.0) {
-            *(double*)((char*)this + 0x28) = 0.0;
-            *(short*)((char*)this + 8) = 0xd;
+        if (y + vy >= 0.0) {
+            y = 0.0;
+            pattern = 0xd;
             Vf0();
             break;
         }
-        (*(short*)((char*)this + 0xc))++;
-        if (*(WORD*)((char*)this + 0xc) >= l4) {
-            *(short*)((char*)this + 0xc) = 0;
-            (*(short*)((char*)this + 0xa))++;
-            if (*(WORD*)((char*)this + 0xa) < 4) {
-                *(int*)((char*)this + 0x168) = 0;
+        timer++;
+        if (timer >= l4) {
+            timer = 0;
+            frame++;
+            if (frame < 4) {
+                unk168 = 0;
             }
-            if (*(WORD*)((char*)this + 0xa) >= x8) {
-                *(short*)((char*)this + 8) = 9;
+            if (frame >= x8) {
+                pattern = 9;
                 Vf0();
             }
         }
         break;
     case 0xd2:
-        if (*(double*)((char*)this + 0x30) <= 0.0) {
-            *(double*)((char*)this + 0x30) = 0.0;
+        if (vx <= 0.0) {
+            vx = 0.0;
         }
-        if (*(WORD*)((char*)this + 0xa) == 0 && *(WORD*)((char*)this + 0xc) == 0) {
-            *(double*)((char*)this + 0x30) = 0.0;
-            *(double*)((char*)this + 0x38) = 0.0;
+        if (frame == 0 && timer == 0) {
+            vx = 0.0;
+            vy = 0.0;
         }
-        if (*(double*)((char*)this + 0x28) < 0.0) {
-            *(double*)((char*)this + 0x38) = *(double*)((char*)this + 0x38) + *(double*)((char*)this + 0x48);
-            if (*(double*)((char*)this + 0x28) + *(double*)((char*)this + 0x38) > 0.0) {
-                *(double*)((char*)this + 0x28) = 0.0;
-                *(double*)((char*)this + 0x38) = 0.0;
-                *(short*)((char*)this + 0xc) = 0;
-                *(short*)((char*)this + 0xa) = 5;
+        if (y < 0.0) {
+            vy = vy + ay;
+            if (y + vy > 0.0) {
+                y = 0.0;
+                vy = 0.0;
+                timer = 0;
+                frame = 5;
                 break;
             }
         }
-        if (*(WORD*)((char*)this + 0xa) > 4) {
-            *(double*)((char*)this + 0x30) -= 0.036;
-            if (*(double*)((char*)this + 0x30) < 0.0) {
-                *(double*)((char*)this + 0x30) = 0.0;
+        if (frame > 4) {
+            vx -= 0.036;
+            if (vx < 0.0) {
+                vx = 0.0;
             }
         }
-        if (*(WORD*)((char*)this + 0xa) == 2 && *(WORD*)((char*)this + 0xc) == 0) {
-            *(short*)((char*)this + 0x148) = *(short*)((char*)this + 0x148) + 0xf;
-            *((char*)this + 0x2c9) = 0x14;
-            *(short*)((char*)this + 0x16c) = 1;
+        if (frame == 2 && timer == 0) {
+            unk148 = unk148 + 0xf;
+            unk2c9 = 0x14;
+            unk16c = 1;
         }
-        (*(short*)((char*)this + 0xc))++;
-        if (*(WORD*)((char*)this + 0xc) >= l4) {
-            *(short*)((char*)this + 0xc) = 0;
-            (*(short*)((char*)this + 0xa))++;
-            if (*(WORD*)((char*)this + 0xa) == 1) {
-                *(double*)((char*)this + 0x30) = 1.0;
-                *(double*)((char*)this + 0x38) = -2.6;
-                *(double*)((char*)this + 0x48) = 0.065;
+        timer++;
+        if (timer >= l4) {
+            timer = 0;
+            frame++;
+            if (frame == 1) {
+                vx = 1.0;
+                vy = -2.6;
+                ay = 0.065;
             }
-            if (*(WORD*)((char*)this + 0xa) < 4) {
-                *(int*)((char*)this + 0x168) = 0;
+            if (frame < 4) {
+                unk168 = 0;
             }
-            if (*(WORD*)((char*)this + 0xa) >= x8) {
-                *(short*)((char*)this + 8) = 0;
+            if (frame >= x8) {
+                pattern = 0;
                 CPlayer::Unk40e630();
                 Vf0();
             }
         }
         break;
     case 0xd3:
-        if (*(WORD*)((char*)this + 0xa) == 0 && *(WORD*)((char*)this + 0xc) == 0) {
+        if (frame == 0 && timer == 0) {
             CPlayer::Unk40f1e0();
         }
-        if (*((char*)this + 0x189) == -1 && *(WORD*)((char*)this + 0xa) > 0 && *(int*)((char*)this + 0x15c) < 3 && *(int*)((char*)this + 0x168) >= 2) {
-            *(short*)((char*)this + 8) = 4;
-            if (*((char*)this + 0x188) == *((char*)this + 0x50)) {
-                *(short*)((char*)this + 8) = 5;
+        if (m_inputY == -1 && frame > 0 && unk15c < 3 && unk168 >= 2) {
+            pattern = 4;
+            if (m_inputX == facing) {
+                pattern = 5;
             }
-            if (*((char*)this + 0x188) == -*((char*)this + 0x50)) {
-                *(short*)((char*)this + 8) = 6;
+            if (m_inputX == -facing) {
+                pattern = 6;
             }
-            *(int*)((char*)this + 0x168) = 0;
+            unk168 = 0;
             Vf0();
             break;
         }
-        if (*(WORD*)((char*)this + 0xa) == 2 && *(WORD*)((char*)this + 0xc) == 0) {
-            *(short*)((char*)this + 0x148) = *(short*)((char*)this + 0x148) + 0xd;
-            *((char*)this + 0x2c9) = 0x14;
-            *(short*)((char*)this + 0x16c) = 1;
+        if (frame == 2 && timer == 0) {
+            unk148 = unk148 + 0xd;
+            unk2c9 = 0x14;
+            unk16c = 1;
         }
-        (*(short*)((char*)this + 0xc))++;
-        if (*(WORD*)((char*)this + 0xc) >= l4) {
-            *(short*)((char*)this + 0xc) = 0;
-            (*(short*)((char*)this + 0xa))++;
-            if (*(WORD*)((char*)this + 0xa) < 2) {
-                *(int*)((char*)this + 0x168) = 0;
+        timer++;
+        if (timer >= l4) {
+            timer = 0;
+            frame++;
+            if (frame < 2) {
+                unk168 = 0;
             }
-            if (*(WORD*)((char*)this + 0xa) >= x8) {
-                *(short*)((char*)this + 8) = 0;
-                if (*((char*)this + 0x189) == 1) {
-                    *(short*)((char*)this + 8) = 3;
+            if (frame >= x8) {
+                pattern = 0;
+                if (m_inputY == 1) {
+                    pattern = 3;
                 }
                 CPlayer::Unk40e630();
                 Vf0();
@@ -2940,1624 +2940,1624 @@ void CMayu::Vf6()
         }
         break;
     case 0xdc:
-        *(double*)((char*)this + 0x30) = 0.0;
-        *(double*)((char*)this + 0x38) = 0.0;
-        if (*(WORD*)((char*)this + 0xa) == 1 && *(int*)((char*)this + 0x168) == 3) {
+        vx = 0.0;
+        vy = 0.0;
+        if (frame == 1 && unk168 == 3) {
             CPlayer::Unk40f1e0();
             Vf0();
-            ((CPlayer*)*(int*)*(char**)((char*)this + 0x78))->Unk40f1e0();
-            ((CPlayer*)*(int*)*(char**)((char*)this + 0x78))->Vf0();
-            *(short*)((char*)this + 8) = 0xdd;
-            *(short*)(*(char**)*(char**)((char*)this + 0x78) + 8) = 0x6b;
+            (*m_opponent)->Unk40f1e0();
+            (*m_opponent)->Vf0();
+            pattern = 0xdd;
+            (*m_opponent)->pattern = 0x6b;
             l50.type = 0;
-            l50.x = (double)((int)*(double*)((char*)this + 0x20) + *((char*)this + 0x50) * 0x25);
-            l50.y = (double)((int)*(double*)((char*)this + 0x28) - 0x30);
+            l50.x = (double)((int)x + facing * 0x25);
+            l50.y = (double)((int)y - 0x30);
             l50.unk20 = 2;
             l50.unk21 = 1;
-            ((CGame*)*(int*)((char*)this + 0x7c))->CreateEffect((EffectDesc*)&l50);
+            m_game->CreateEffect((EffectDesc*)&l50);
             break;
         }
-        (*(short*)((char*)this + 0xc))++;
-        if (*(WORD*)((char*)this + 0xc) >= l4) {
-            *(short*)((char*)this + 0xc) = 0;
-            (*(short*)((char*)this + 0xa))++;
-            *(int*)((char*)this + 0x168) = 0;
-            if (*(WORD*)((char*)this + 0xa) == 1 && *(WORD*)((char*)this + 0xc) == 0 && *(double*)(*(char**)*(char**)((char*)this + 0x78) + 0x28) == 0.0) {
-                *(short*)((char*)this + 0x16c) = 1;
+        timer++;
+        if (timer >= l4) {
+            timer = 0;
+            frame++;
+            unk168 = 0;
+            if (frame == 1 && timer == 0 && (*m_opponent)->y == 0.0) {
+                unk16c = 1;
             } else {
-                *(short*)((char*)this + 0x16c) = 0;
+                unk16c = 0;
             }
-            if (*(WORD*)((char*)this + 0xa) >= x8) {
-                *(short*)((char*)this + 8) = 0;
+            if (frame >= x8) {
+                pattern = 0;
                 CPlayer::Unk40e630();
                 Vf0();
             }
         }
         break;
     case 0xdd:
-        if (*(WORD*)((char*)this + 0xa) == 0 && *(WORD*)((char*)this + 0xc) == 0) {
-            *(double*)((char*)this + 0x20) = *(double*)(*(char**)*(char**)((char*)this + 0x78) + 0x20) - *(short*)(*(char**)*(char**)((char*)this + 0x78) + 0x2ad0) * *((char*)this + 0x50);
-            *(double*)((char*)this + 0x28) = *(short*)(*(char**)*(char**)((char*)this + 0x78) + 0x2af8) + 0x1e;
+        if (frame == 0 && timer == 0) {
+            x = (*m_opponent)->x - (*m_opponent)->unk2ad0[0] * facing;
+            y = (*m_opponent)->unk2af8[0] + 0x1e;
         }
-        if (*(WORD*)((char*)this + 0xa) == 3 && *(WORD*)((char*)this + 0xc) == 0) {
-            *(short*)(*(char**)*(char**)((char*)this + 0x78) + 8) = 0x3b;
-            ((CPlayer*)*(int*)*(char**)((char*)this + 0x78))->Vf0();
-            *(double*)(*(char**)*(char**)((char*)this + 0x78) + 0xc0) = -2.5;
-            *(double*)(*(char**)*(char**)((char*)this + 0x78) + 0xc8) = -1.0;
-            *(double*)(*(char**)*(char**)((char*)this + 0x78) + 0x48) = 0.035;
-            *(double*)((char*)this + 0x30) = -1.8;
-            *(double*)((char*)this + 0x38) = -1.9;
-            *(double*)((char*)this + 0x48) = 0.04;
+        if (frame == 3 && timer == 0) {
+            (*m_opponent)->pattern = 0x3b;
+            (*m_opponent)->Vf0();
+            (*m_opponent)->unkc0 = -2.5;
+            (*m_opponent)->unkc8 = -1.0;
+            (*m_opponent)->ay = 0.035;
+            vx = -1.8;
+            vy = -1.9;
+            ay = 0.04;
             l50.type = 0;
             l50.unk2c = 2;
-            l50.x = (double)(int)*(double*)((char*)this + 0x20);
-            l50.y = (double)((int)*(double*)((char*)this + 0x28) - 0x2d);
+            l50.x = (double)(int)x;
+            l50.y = (double)((int)y - 0x2d);
             l50.unk20 = 2;
             l50.unk21 = 1;
-            ((CGame*)*(int*)((char*)this + 0x7c))->CreateEffect((EffectDesc*)&l50);
+            m_game->CreateEffect((EffectDesc*)&l50);
             CPlayer::Unk4105a0(0x3e8, 750.0);
         }
-        if (*(WORD*)((char*)this + 0xa) > 2) {
-            *(double*)((char*)this + 0x38) = *(double*)((char*)this + 0x38) + *(double*)((char*)this + 0x48);
+        if (frame > 2) {
+            vy = vy + ay;
         }
-        (*(short*)((char*)this + 0xc))++;
-        if (*(WORD*)((char*)this + 0xc) >= l4) {
-            *(short*)((char*)this + 0xc) = 0;
-            (*(short*)((char*)this + 0xa))++;
-            *(int*)((char*)this + 0x168) = 0;
-            if (*(WORD*)((char*)this + 0xa) >= x8) {
-                *(short*)((char*)this + 8) = 9;
+        timer++;
+        if (timer >= l4) {
+            timer = 0;
+            frame++;
+            unk168 = 0;
+            if (frame >= x8) {
+                pattern = 9;
                 CPlayer::Unk40e630();
                 Vf0();
             }
         }
         break;
     case 0xe6:
-        *(double*)((char*)this + 0x38) = *(double*)((char*)this + 0x38) + *(double*)((char*)this + 0x48);
+        vy = vy + ay;
         CPlayer::Unk4109d0(3);
-        if (*((char*)this + 0x189) == -1 && *(WORD*)((char*)this + 0xa) > 0 && *(int*)((char*)this + 0x15c) < 3 && *(int*)((char*)this + 0x168) >= 2 && *(BYTE*)((char*)this + 0x15a) < 1) {
-            (*((char*)this + 0x15a))++;
-            *(short*)((char*)this + 8) = 0xe;
-            if (*((char*)this + 0x188) == *((char*)this + 0x50)) {
-                *(short*)((char*)this + 8) = 0xf;
+        if (m_inputY == -1 && frame > 0 && unk15c < 3 && unk168 >= 2 && unk15a < 1) {
+            unk15a++;
+            pattern = 0xe;
+            if (m_inputX == facing) {
+                pattern = 0xf;
             }
-            if (*((char*)this + 0x188) == -*((char*)this + 0x50)) {
-                *(short*)((char*)this + 8) = 0x10;
+            if (m_inputX == -facing) {
+                pattern = 0x10;
             }
-            *(int*)((char*)this + 0x168) = 0;
+            unk168 = 0;
             Vf0();
             break;
         }
-        if (*(WORD*)((char*)this + 0xa) == 0 && *(WORD*)((char*)this + 0xc) == 0) {
-            *(double*)((char*)this + 0x30) = 0.5;
+        if (frame == 0 && timer == 0) {
+            vx = 0.5;
         }
-        if (*(WORD*)((char*)this + 0xa) == 1 && *(WORD*)((char*)this + 0xc) == 0) {
-            *(short*)((char*)this + 0x148) = *(short*)((char*)this + 0x148) + 5;
-            *((char*)this + 0x2c9) = 0x15;
-            *(short*)((char*)this + 0x16c) = 1;
+        if (frame == 1 && timer == 0) {
+            unk148 = unk148 + 5;
+            unk2c9 = 0x15;
+            unk16c = 1;
         }
-        if (*(double*)((char*)this + 0x28) + *(double*)((char*)this + 0x38) >= 0.0) {
-            *(double*)((char*)this + 0x28) = 0.0;
-            *(short*)((char*)this + 8) = 0xe9;
+        if (y + vy >= 0.0) {
+            y = 0.0;
+            pattern = 0xe9;
             Vf0();
-            *(short*)((char*)this + 0xa) = 2;
+            frame = 2;
             break;
         }
-        (*(short*)((char*)this + 0xc))++;
-        if (*(WORD*)((char*)this + 0xc) >= l4) {
-            *(short*)((char*)this + 0xc) = 0;
-            (*(short*)((char*)this + 0xa))++;
-            if (*(WORD*)((char*)this + 0xa) < 3) {
-                *(int*)((char*)this + 0x168) = 0;
+        timer++;
+        if (timer >= l4) {
+            timer = 0;
+            frame++;
+            if (frame < 3) {
+                unk168 = 0;
             }
-            if (*(WORD*)((char*)this + 0xa) >= x8) {
-                *(short*)((char*)this + 8) = 0xa;
+            if (frame >= x8) {
+                pattern = 0xa;
                 Vf0();
             }
         }
         break;
     case 0xe7:
-        *(double*)((char*)this + 0x38) = *(double*)((char*)this + 0x38) + *(double*)((char*)this + 0x48);
+        vy = vy + ay;
         CPlayer::Unk4109d0(3);
-        if (*((char*)this + 0x189) == -1 && *(WORD*)((char*)this + 0xa) > 0 && *(int*)((char*)this + 0x15c) < 3 && *(int*)((char*)this + 0x168) >= 2 && *(BYTE*)((char*)this + 0x15a) < 1) {
-            (*((char*)this + 0x15a))++;
-            *(short*)((char*)this + 8) = 0xe;
-            if (*((char*)this + 0x188) == *((char*)this + 0x50)) {
-                *(short*)((char*)this + 8) = 0xf;
+        if (m_inputY == -1 && frame > 0 && unk15c < 3 && unk168 >= 2 && unk15a < 1) {
+            unk15a++;
+            pattern = 0xe;
+            if (m_inputX == facing) {
+                pattern = 0xf;
             }
-            if (*((char*)this + 0x188) == -*((char*)this + 0x50)) {
-                *(short*)((char*)this + 8) = 0x10;
+            if (m_inputX == -facing) {
+                pattern = 0x10;
             }
-            *(int*)((char*)this + 0x168) = 0;
+            unk168 = 0;
             Vf0();
             break;
         }
-        if (*(WORD*)((char*)this + 0xa) == 0 && *(WORD*)((char*)this + 0xc) == 0) {
-            *(double*)((char*)this + 0x30) = 0.5;
+        if (frame == 0 && timer == 0) {
+            vx = 0.5;
         }
-        if (*(WORD*)((char*)this + 0xa) == 1 && *(WORD*)((char*)this + 0xc) == 0) {
-            *(short*)((char*)this + 0x148) = *(short*)((char*)this + 0x148) + 0xd;
-            *(short*)((char*)this + 0x16c) = 2;
-            *((char*)this + 0x2c9) = 0x14;
+        if (frame == 1 && timer == 0) {
+            unk148 = unk148 + 0xd;
+            unk16c = 2;
+            unk2c9 = 0x14;
         }
-        if (*(double*)((char*)this + 0x28) + *(double*)((char*)this + 0x38) >= 0.0) {
-            *(double*)((char*)this + 0x28) = 0.0;
-            *(short*)((char*)this + 8) = 0xe9;
+        if (y + vy >= 0.0) {
+            y = 0.0;
+            pattern = 0xe9;
             Vf0();
-            *(short*)((char*)this + 0xa) = 1;
+            frame = 1;
             break;
         }
-        (*(short*)((char*)this + 0xc))++;
-        if (*(WORD*)((char*)this + 0xc) >= l4) {
-            *(short*)((char*)this + 0xc) = 0;
-            (*(short*)((char*)this + 0xa))++;
-            if (*(WORD*)((char*)this + 0xa) < 5) {
-                *(int*)((char*)this + 0x168) = 0;
+        timer++;
+        if (timer >= l4) {
+            timer = 0;
+            frame++;
+            if (frame < 5) {
+                unk168 = 0;
             }
-            if (*(WORD*)((char*)this + 0xa) >= x8) {
-                *(short*)((char*)this + 8) = 0xa;
+            if (frame >= x8) {
+                pattern = 0xa;
                 Vf0();
             }
         }
         break;
     case 0xe8:
-        *(double*)((char*)this + 0x38) = *(double*)((char*)this + 0x38) + *(double*)((char*)this + 0x48);
+        vy = vy + ay;
         CPlayer::Unk4109d0(3);
-        if (*((char*)this + 0x189) == -1 && *(WORD*)((char*)this + 0xa) > 0 && *(int*)((char*)this + 0x15c) < 3 && *(int*)((char*)this + 0x168) >= 2 && *(BYTE*)((char*)this + 0x15a) < 1) {
-            (*((char*)this + 0x15a))++;
-            *(short*)((char*)this + 8) = 0xe;
-            if (*((char*)this + 0x188) == *((char*)this + 0x50)) {
-                *(short*)((char*)this + 8) = 0xf;
+        if (m_inputY == -1 && frame > 0 && unk15c < 3 && unk168 >= 2 && unk15a < 1) {
+            unk15a++;
+            pattern = 0xe;
+            if (m_inputX == facing) {
+                pattern = 0xf;
             }
-            if (*((char*)this + 0x188) == -*((char*)this + 0x50)) {
-                *(short*)((char*)this + 8) = 0x10;
+            if (m_inputX == -facing) {
+                pattern = 0x10;
             }
-            *(int*)((char*)this + 0x168) = 0;
+            unk168 = 0;
             Vf0();
             break;
         }
-        if (*(WORD*)((char*)this + 0xa) == 0 && *(WORD*)((char*)this + 0xc) == 0) {
-            *(double*)((char*)this + 0x30) = 0.5;
+        if (frame == 0 && timer == 0) {
+            vx = 0.5;
         }
-        if (*(WORD*)((char*)this + 0xa) == 1 && *(WORD*)((char*)this + 0xc) == 0) {
-            *(short*)((char*)this + 0x148) = *(short*)((char*)this + 0x148) + 0xa;
-            *((char*)this + 0x2c9) = 0x14;
-            *(short*)((char*)this + 0x16c) = 1;
+        if (frame == 1 && timer == 0) {
+            unk148 = unk148 + 0xa;
+            unk2c9 = 0x14;
+            unk16c = 1;
         }
-        if (*(double*)((char*)this + 0x28) + *(double*)((char*)this + 0x38) >= 0.0) {
-            *(double*)((char*)this + 0x28) = 0.0;
-            *(short*)((char*)this + 8) = 0xe9;
+        if (y + vy >= 0.0) {
+            y = 0.0;
+            pattern = 0xe9;
             Vf0();
-            *(short*)((char*)this + 0xa) = 1;
+            frame = 1;
             break;
         }
-        (*(short*)((char*)this + 0xc))++;
-        if (*(WORD*)((char*)this + 0xc) >= l4) {
-            *(short*)((char*)this + 0xc) = 0;
-            (*(short*)((char*)this + 0xa))++;
-            if (*(WORD*)((char*)this + 0xa) < 4) {
-                *(int*)((char*)this + 0x168) = 0;
+        timer++;
+        if (timer >= l4) {
+            timer = 0;
+            frame++;
+            if (frame < 4) {
+                unk168 = 0;
             }
-            if (*(WORD*)((char*)this + 0xa) >= x8) {
-                *(short*)((char*)this + 8) = 0xa;
+            if (frame >= x8) {
+                pattern = 0xa;
                 Vf0();
             }
         }
         break;
     case 0xe9:
-        *(double*)((char*)this + 0x30) = 0.0;
-        *(double*)((char*)this + 0x38) = 0.0;
+        vx = 0.0;
+        vy = 0.0;
         CPlayer::Unk40e630();
-        (*(short*)((char*)this + 0xc))++;
-        if (*(WORD*)((char*)this + 0xc) >= l4) {
-            *(short*)((char*)this + 0xc) = 0;
-            *(int*)((char*)this + 0x168) = 3;
-            (*(short*)((char*)this + 0xa))++;
-            if (*(WORD*)((char*)this + 0xa) >= x8) {
-                *(short*)((char*)this + 8) = 7;
-                if (*((char*)this + 0x189) == 1) {
-                    *(short*)((char*)this + 8) = 3;
+        timer++;
+        if (timer >= l4) {
+            timer = 0;
+            unk168 = 3;
+            frame++;
+            if (frame >= x8) {
+                pattern = 7;
+                if (m_inputY == 1) {
+                    pattern = 3;
                 }
                 Vf0();
             }
         }
         break;
     case 0xf8:
-        *(double*)((char*)this + 0x38) = *(double*)((char*)this + 0x38) + *(double*)((char*)this + 0x48);
-        if (*(WORD*)((char*)this + 0xa) == 2 && *(int*)((char*)this + 0x168) == 3) {
-            ((CPlayer*)*(int*)*(char**)((char*)this + 0x78))->Unk40f1e0();
-            ((CPlayer*)*(int*)*(char**)((char*)this + 0x78))->Vf0();
-            *(int*)(*(char**)*(char**)((char*)this + 0x78) + 0x128) = 1;
+        vy = vy + ay;
+        if (frame == 2 && unk168 == 3) {
+            (*m_opponent)->Unk40f1e0();
+            (*m_opponent)->Vf0();
+            (*m_opponent)->unk128 = 1;
             l50.type = 0;
-            l50.x = (double)((int)*(double*)((char*)this + 0x20) + *((char*)this + 0x50) * 0x16);
-            l50.y = (double)((int)*(double*)((char*)this + 0x28) - 0x36);
+            l50.x = (double)((int)x + facing * 0x16);
+            l50.y = (double)((int)y - 0x36);
             l50.unk20 = 2;
             l50.unk21 = 1;
-            ((CGame*)*(int*)((char*)this + 0x7c))->CreateEffect((EffectDesc*)&l50);
-            *(short*)((char*)this + 0xa) = 0;
-            *(short*)((char*)this + 0xc) = 0;
-            *(short*)((char*)this + 8) = 0xf9;
-            *(short*)(*(char**)*(char**)((char*)this + 0x78) + 8) = 0x67;
-            *(double*)(*(char**)*(char**)((char*)this + 0x78) + 0x20) = *((char*)this + 0x50) * 0x16 + *(double*)((char*)this + 0x20);
-            *(double*)(*(char**)*(char**)((char*)this + 0x78) + 0x28) = *(double*)((char*)this + 0x28) - 52.0;
+            m_game->CreateEffect((EffectDesc*)&l50);
+            frame = 0;
+            timer = 0;
+            pattern = 0xf9;
+            (*m_opponent)->pattern = 0x67;
+            (*m_opponent)->x = facing * 0x16 + x;
+            (*m_opponent)->y = y - 52.0;
             break;
         }
-        (*(short*)((char*)this + 0xc))++;
-        if (*(WORD*)((char*)this + 0xc) >= l4) {
-            *(short*)((char*)this + 0xc) = 0;
-            (*(short*)((char*)this + 0xa))++;
-            if (*(WORD*)((char*)this + 0xa) == 2 && *(double*)(*(char**)*(char**)((char*)this + 0x78) + 0x28) < 0.0 && (*(WORD*)(*(char**)*(char**)((char*)this + 0x78) + 8) < 0x32 || *(WORD*)(*(char**)*(char**)((char*)this + 0x78) + 8) > 0x95)) {
-                *(short*)((char*)this + 0x16c) = 1;
+        timer++;
+        if (timer >= l4) {
+            timer = 0;
+            frame++;
+            if (frame == 2 && (*m_opponent)->y < 0.0 && ((*m_opponent)->pattern < 0x32 || (*m_opponent)->pattern > 0x95)) {
+                unk16c = 1;
             } else {
-                *(short*)((char*)this + 0x16c) = 0;
+                unk16c = 0;
             }
-            *(int*)((char*)this + 0x168) = 0;
-            if (*(WORD*)((char*)this + 0xa) >= x8) {
-                *(short*)((char*)this + 8) = 0xd1;
-                *(short*)((char*)this + 0xa) = 2;
+            unk168 = 0;
+            if (frame >= x8) {
+                pattern = 0xd1;
+                frame = 2;
             }
         }
         break;
     case 0xf9:
-        *(short*)((char*)this + 0x13e) = 2;
-        if (*(WORD*)((char*)this + 0xa) < 0xb) {
-            if (*(double*)((char*)this + 0x20) > 6100.0 && *((char*)this + 0x50) == 1) {
-                *(double*)((char*)this + 0x20) = 6100.0;
-                *(double*)((char*)this + 0x30) = 0.0;
+        unk13e = 2;
+        if (frame < 0xb) {
+            if (x > 6100.0 && facing == 1) {
+                x = 6100.0;
+                vx = 0.0;
             }
-            if (*(double*)((char*)this + 0x20) < 30.0 && *((char*)this + 0x50) == -1) {
-                *(double*)((char*)this + 0x20) = 30.0;
-                *(double*)((char*)this + 0x30) = 0.0;
+            if (x < 30.0 && facing == -1) {
+                x = 30.0;
+                vx = 0.0;
             }
             CPlayer::Unk410a40(0x32, 3);
             CPlayer::Unk410a80(0x32, 3);
         }
-        if (*(WORD*)((char*)this + 0xa) < 0xa || *(WORD*)((char*)this + 0xa) > 0xb && *(WORD*)((char*)this + 0xa) < 0xf) {
-            *(double*)((char*)this + 0x38) = *(double*)((char*)this + 0x38) + *(double*)((char*)this + 0x48);
-            if (*(double*)((char*)this + 0x38) + *(double*)((char*)this + 0x28) > 0.0) {
-                if (*(WORD*)((char*)this + 0xa) < 0xa) {
-                    *(double*)((char*)this + 0x28) = 0.0;
+        if (frame < 0xa || frame > 0xb && frame < 0xf) {
+            vy = vy + ay;
+            if (vy + y > 0.0) {
+                if (frame < 0xa) {
+                    y = 0.0;
                     CPlayer::Unk40f1e0();
-                    ((CPlayer*)*(int*)*(char**)((char*)this + 0x78))->Vf0();
-                    *(short*)(*(char**)*(char**)((char*)this + 0x78) + 8) = 0x62;
-                    *(double*)(*(char**)*(char**)((char*)this + 0x78) + 0x28) = 0.0;
-                    *(double*)(*(char**)*(char**)((char*)this + 0x78) + 0x20) = *((char*)this + 0x50) + *(double*)((char*)this + 0x20);
-                    *(*(char**)*(char**)((char*)this + 0x78) + 0x50) = -*((char*)this + 0x50);
-                    ((CPlayer*)*(int*)*(char**)((char*)this + 0x78))->Unk40f1e0();
+                    (*m_opponent)->Vf0();
+                    (*m_opponent)->pattern = 0x62;
+                    (*m_opponent)->y = 0.0;
+                    (*m_opponent)->x = facing + x;
+                    (*m_opponent)->facing = -facing;
+                    (*m_opponent)->Unk40f1e0();
                     CPlayer::Unk4105a0(0x3e8, 500.0);
                     l50.type = 0;
-                    l50.x = (double)(int)*(double*)((char*)this + 0x20);
-                    l50.y = (double)(int)*(double*)((char*)this + 0x28);
+                    l50.x = (double)(int)x;
+                    l50.y = (double)(int)y;
                     l50.unk20 = 2;
                     l50.unk21 = 1;
-                    ((CGame*)*(int*)((char*)this + 0x7c))->CreateEffect((EffectDesc*)&l50);
-                    *(short*)((char*)this + 0xc) = 0;
-                    *(short*)((char*)this + 0xa) = 0xa;
-                    *((char*)this + 0x2c9) = 2;
+                    m_game->CreateEffect((EffectDesc*)&l50);
+                    timer = 0;
+                    frame = 0xa;
+                    unk2c9 = 2;
                     break;
                 }
-                if (*(WORD*)((char*)this + 0xa) == 0xe) {
-                    *(double*)((char*)this + 0x28) = 0.0;
+                if (frame == 0xe) {
+                    y = 0.0;
                     CPlayer::Unk40f1e0();
-                    *(short*)((char*)this + 0xc) = 0;
-                    *(short*)((char*)this + 0xa) = 0xf;
+                    timer = 0;
+                    frame = 0xf;
                     break;
                 }
             }
         }
-        if (*(WORD*)((char*)this + 0xa) < 1) {
-            *(short*)(*(char**)*(char**)((char*)this + 0x78) + 8) = 0x67;
-            *(double*)(*(char**)*(char**)((char*)this + 0x78) + 0x20) = *((char*)this + 0x50) * 0x16 + *(double*)((char*)this + 0x20);
-            *(double*)(*(char**)*(char**)((char*)this + 0x78) + 0x28) = *(double*)((char*)this + 0x28) - 52.0;
+        if (frame < 1) {
+            (*m_opponent)->pattern = 0x67;
+            (*m_opponent)->x = facing * 0x16 + x;
+            (*m_opponent)->y = y - 52.0;
         }
-        if (*(WORD*)((char*)this + 0xa) == 1) {
-            *(short*)(*(char**)*(char**)((char*)this + 0x78) + 8) = 0x67;
-            *(double*)(*(char**)*(char**)((char*)this + 0x78) + 0x20) = (15.0 + *(double*)((char*)this + 0x30)) * *((char*)this + 0x50) + *(double*)((char*)this + 0x20);
-            *(double*)(*(char**)*(char**)((char*)this + 0x78) + 0x28) = -70.0 + *(double*)((char*)this + 0x38) + *(double*)((char*)this + 0x28);
+        if (frame == 1) {
+            (*m_opponent)->pattern = 0x67;
+            (*m_opponent)->x = (15.0 + vx) * facing + x;
+            (*m_opponent)->y = -70.0 + vy + y;
         }
-        if (*(WORD*)((char*)this + 0xa) == 2) {
-            *(short*)(*(char**)*(char**)((char*)this + 0x78) + 8) = 0x76;
-            *(double*)(*(char**)*(char**)((char*)this + 0x78) + 0x20) = (-25.0 + *(double*)((char*)this + 0x30)) * *((char*)this + 0x50) + *(double*)((char*)this + 0x20);
-            *(double*)(*(char**)*(char**)((char*)this + 0x78) + 0x28) = -65.0 + *(double*)((char*)this + 0x38) + *(double*)((char*)this + 0x28);
-            *(*(char**)*(char**)((char*)this + 0x78) + 0x50) = *((char*)this + 0x50);
+        if (frame == 2) {
+            (*m_opponent)->pattern = 0x76;
+            (*m_opponent)->x = (-25.0 + vx) * facing + x;
+            (*m_opponent)->y = -65.0 + vy + y;
+            (*m_opponent)->facing = facing;
         }
-        if (*(WORD*)((char*)this + 0xa) == 3) {
-            *(short*)(*(char**)*(char**)((char*)this + 0x78) + 8) = 0x75;
-            *(double*)(*(char**)*(char**)((char*)this + 0x78) + 0x20) = (-28.0 + *(double*)((char*)this + 0x30)) * *((char*)this + 0x50) + *(double*)((char*)this + 0x20);
-            *(double*)(*(char**)*(char**)((char*)this + 0x78) + 0x28) = -43.0 + *(double*)((char*)this + 0x38) + *(double*)((char*)this + 0x28);
-            *(*(char**)*(char**)((char*)this + 0x78) + 0x50) = *((char*)this + 0x50);
+        if (frame == 3) {
+            (*m_opponent)->pattern = 0x75;
+            (*m_opponent)->x = (-28.0 + vx) * facing + x;
+            (*m_opponent)->y = -43.0 + vy + y;
+            (*m_opponent)->facing = facing;
         }
-        if (*(WORD*)((char*)this + 0xa) == 4) {
-            *(short*)(*(char**)*(char**)((char*)this + 0x78) + 8) = 0x75;
-            *(double*)(*(char**)*(char**)((char*)this + 0x78) + 0x20) = (-12.0 + *(double*)((char*)this + 0x30)) * *((char*)this + 0x50) + *(double*)((char*)this + 0x20);
-            *(double*)(*(char**)*(char**)((char*)this + 0x78) + 0x28) = -29.0 + *(double*)((char*)this + 0x38) + *(double*)((char*)this + 0x28);
-            *(*(char**)*(char**)((char*)this + 0x78) + 0x50) = *((char*)this + 0x50);
+        if (frame == 4) {
+            (*m_opponent)->pattern = 0x75;
+            (*m_opponent)->x = (-12.0 + vx) * facing + x;
+            (*m_opponent)->y = -29.0 + vy + y;
+            (*m_opponent)->facing = facing;
         }
-        if (*(WORD*)((char*)this + 0xa) == 5) {
-            *(short*)(*(char**)*(char**)((char*)this + 0x78) + 8) = 0x68;
-            *(double*)(*(char**)*(char**)((char*)this + 0x78) + 0x20) = (12.0 + *(double*)((char*)this + 0x30)) * *((char*)this + 0x50) + *(double*)((char*)this + 0x20);
-            *(double*)(*(char**)*(char**)((char*)this + 0x78) + 0x28) = -23.0 + *(double*)((char*)this + 0x38) + *(double*)((char*)this + 0x28);
-            *(*(char**)*(char**)((char*)this + 0x78) + 0x50) = -*((char*)this + 0x50);
+        if (frame == 5) {
+            (*m_opponent)->pattern = 0x68;
+            (*m_opponent)->x = (12.0 + vx) * facing + x;
+            (*m_opponent)->y = -23.0 + vy + y;
+            (*m_opponent)->facing = -facing;
         }
-        if (*(WORD*)((char*)this + 0xa) == 6) {
-            *(short*)(*(char**)*(char**)((char*)this + 0x78) + 8) = 0x68;
-            *(double*)(*(char**)*(char**)((char*)this + 0x78) + 0x20) = (23.0 + *(double*)((char*)this + 0x30)) * *((char*)this + 0x50) + *(double*)((char*)this + 0x20);
-            *(double*)(*(char**)*(char**)((char*)this + 0x78) + 0x28) = -36.0 + *(double*)((char*)this + 0x38) + *(double*)((char*)this + 0x28);
-            *(*(char**)*(char**)((char*)this + 0x78) + 0x50) = -*((char*)this + 0x50);
+        if (frame == 6) {
+            (*m_opponent)->pattern = 0x68;
+            (*m_opponent)->x = (23.0 + vx) * facing + x;
+            (*m_opponent)->y = -36.0 + vy + y;
+            (*m_opponent)->facing = -facing;
         }
-        if (*(WORD*)((char*)this + 0xa) == 7) {
-            *(short*)(*(char**)*(char**)((char*)this + 0x78) + 8) = 0x67;
-            *(double*)(*(char**)*(char**)((char*)this + 0x78) + 0x20) = (28.0 + *(double*)((char*)this + 0x30)) * *((char*)this + 0x50) + *(double*)((char*)this + 0x20);
-            *(double*)(*(char**)*(char**)((char*)this + 0x78) + 0x28) = -58.0 + *(double*)((char*)this + 0x38) + *(double*)((char*)this + 0x28);
-            *(*(char**)*(char**)((char*)this + 0x78) + 0x50) = -*((char*)this + 0x50);
+        if (frame == 7) {
+            (*m_opponent)->pattern = 0x67;
+            (*m_opponent)->x = (28.0 + vx) * facing + x;
+            (*m_opponent)->y = -58.0 + vy + y;
+            (*m_opponent)->facing = -facing;
         }
-        if (*(WORD*)((char*)this + 0xa) == 8) {
-            *(short*)(*(char**)*(char**)((char*)this + 0x78) + 8) = 0x67;
-            *(double*)(*(char**)*(char**)((char*)this + 0x78) + 0x20) = (14.0 + *(double*)((char*)this + 0x30)) * *((char*)this + 0x50) + *(double*)((char*)this + 0x20);
-            *(double*)(*(char**)*(char**)((char*)this + 0x78) + 0x28) = -73.0 + *(double*)((char*)this + 0x38) + *(double*)((char*)this + 0x28);
-            *(*(char**)*(char**)((char*)this + 0x78) + 0x50) = -*((char*)this + 0x50);
+        if (frame == 8) {
+            (*m_opponent)->pattern = 0x67;
+            (*m_opponent)->x = (14.0 + vx) * facing + x;
+            (*m_opponent)->y = -73.0 + vy + y;
+            (*m_opponent)->facing = -facing;
         }
-        if (*(WORD*)((char*)this + 0xa) == 9) {
-            *(short*)(*(char**)*(char**)((char*)this + 0x78) + 8) = 0x76;
-            *(double*)(*(char**)*(char**)((char*)this + 0x78) + 0x20) = (-12.0 + *(double*)((char*)this + 0x30)) * *((char*)this + 0x50) + *(double*)((char*)this + 0x20);
-            *(double*)(*(char**)*(char**)((char*)this + 0x78) + 0x28) = -78.0 + *(double*)((char*)this + 0x38) + *(double*)((char*)this + 0x28);
-            *(*(char**)*(char**)((char*)this + 0x78) + 0x50) = *((char*)this + 0x50);
+        if (frame == 9) {
+            (*m_opponent)->pattern = 0x76;
+            (*m_opponent)->x = (-12.0 + vx) * facing + x;
+            (*m_opponent)->y = -78.0 + vy + y;
+            (*m_opponent)->facing = facing;
         }
-        (*(short*)((char*)this + 0xc))++;
-        if (*(WORD*)((char*)this + 0xc) >= l4) {
-            *(short*)((char*)this + 0xc) = 0;
-            (*(short*)((char*)this + 0xa))++;
-            *(int*)((char*)this + 0x168) = 0;
-            if (*(WORD*)((char*)this + 0xa) == 0xa) {
-                *(short*)((char*)this + 0xa) = *(WORD*)((char*)this + 0xa) - 8;
+        timer++;
+        if (timer >= l4) {
+            timer = 0;
+            frame++;
+            unk168 = 0;
+            if (frame == 0xa) {
+                frame = frame - 8;
             }
-            if (*(WORD*)((char*)this + 0xa) == 0xc) {
-                *(double*)((char*)this + 0x30) = -0.8;
-                *(double*)((char*)this + 0x38) = -1.0;
-                *(double*)((char*)this + 0x48) = 0.035;
+            if (frame == 0xc) {
+                vx = -0.8;
+                vy = -1.0;
+                ay = 0.035;
             }
-            if (*(WORD*)((char*)this + 0xa) >= x8) {
+            if (frame >= x8) {
                 Vf0();
                 CPlayer::Unk40e630();
-                *(short*)((char*)this + 8) = 3;
+                pattern = 3;
             }
         }
         break;
     case 0xfa:
-        if (*(WORD*)((char*)this + 0xa) == 0 && *(WORD*)((char*)this + 0xc) == 0) {
+        if (frame == 0 && timer == 0) {
             CPlayer::Unk40f1e0();
-            *(short*)((char*)this + 0x16c) = 0;
+            unk16c = 0;
         }
-        if (*(WORD*)((char*)this + 0xa) > 2 && *(WORD*)((char*)this + 0xa) < 8 && *(int*)((char*)this + 0x168) == 3) {
-            ((CPlayer*)*(int*)*(char**)((char*)this + 0x78))->Vf0();
-            ((CPlayer*)*(int*)*(char**)((char*)this + 0x78))->Unk40f1e0();
-            *(short*)(*(char**)*(char**)((char*)this + 0x78) + 8) = 0x6b;
+        if (frame > 2 && frame < 8 && unk168 == 3) {
+            (*m_opponent)->Vf0();
+            (*m_opponent)->Unk40f1e0();
+            (*m_opponent)->pattern = 0x6b;
             Vf0();
-            *(short*)((char*)this + 8) = 0xfd;
-            *(double*)((char*)this + 0x28) = *(short*)((char*)this + 0x2af8) + 0x32;
-            *(double*)((char*)this + 0x20) = *(double*)(*(char**)*(char**)((char*)this + 0x78) + 0x20) + (-*(short*)((char*)this + 0x2ad0) - 0x14) * *((char*)this + 0x50);
+            pattern = 0xfd;
+            y = unk2af8[0] + 0x32;
+            x = (*m_opponent)->x + (-unk2ad0[0] - 0x14) * facing;
             l50.type = 0;
-            l50.x = (double)((int)*(double*)((char*)this + 0x20) + *((char*)this + 0x50) * 7);
-            l50.y = (double)((int)*(double*)((char*)this + 0x28) - 0x2c);
+            l50.x = (double)((int)x + facing * 7);
+            l50.y = (double)((int)y - 0x2c);
             l50.unk20 = 2;
             l50.unk21 = 1;
-            ((CGame*)*(int*)((char*)this + 0x7c))->CreateEffect((EffectDesc*)&l50);
+            m_game->CreateEffect((EffectDesc*)&l50);
             break;
         }
-        if (*(WORD*)((char*)this + 0xa) > 2 && *(WORD*)((char*)this + 0xa) < 8) {
-            if (*(double*)(*(char**)*(char**)((char*)this + 0x78) + 0x28) == 0.0) {
-                *(short*)((char*)this + 0x16c) = 1;
+        if (frame > 2 && frame < 8) {
+            if ((*m_opponent)->y == 0.0) {
+                unk16c = 1;
             } else {
-                *(short*)((char*)this + 0x16c) = 0;
+                unk16c = 0;
             }
         }
-        if (*(WORD*)((char*)this + 0xa) == 6) {
-            *(int*)((char*)this + 0x3140) = 1;
+        if (frame == 6) {
+            unk3140 = 1;
         }
-        if (*(WORD*)((char*)this + 0xa) > 7) {
-            *(double*)((char*)this + 0x30) -= 0.035;
-            if (*(double*)((char*)this + 0x30) < 0.0) {
-                *(double*)((char*)this + 0x30) = 0.0;
+        if (frame > 7) {
+            vx -= 0.035;
+            if (vx < 0.0) {
+                vx = 0.0;
             }
         }
-        (*(short*)((char*)this + 0xc))++;
-        if (*(WORD*)((char*)this + 0xc) >= l4) {
-            *(short*)((char*)this + 0xc) = 0;
-            (*(short*)((char*)this + 0xa))++;
-            *(int*)((char*)this + 0x168) = 0;
-            if (*(WORD*)((char*)this + 0xa) == 1) {
-                *(short*)((char*)this + 0x16c) = 0;
+        timer++;
+        if (timer >= l4) {
+            timer = 0;
+            frame++;
+            unk168 = 0;
+            if (frame == 1) {
+                unk16c = 0;
             }
-            if (*(WORD*)((char*)this + 0xa) == 3) {
-                *(double*)((char*)this + 0x30) = 1.8;
+            if (frame == 3) {
+                vx = 1.8;
             }
-            if (*(WORD*)((char*)this + 0xa) == 8) {
-                *(short*)((char*)this + 0xa) = 3;
-                (*(int*)((char*)this + 0x3138))++;
+            if (frame == 8) {
+                frame = 3;
+                unk3138++;
             }
-            if (*(WORD*)((char*)this + 0xa) == 6 && *(int*)((char*)this + 0x3138) > 1) {
-                *(short*)((char*)this + 0xa) = 8;
+            if (frame == 6 && unk3138 > 1) {
+                frame = 8;
             }
-            if (*(WORD*)((char*)this + 0xa) >= x8) {
+            if (frame >= x8) {
                 Vf0();
-                *(short*)((char*)this + 8) = 3;
+                pattern = 3;
                 CPlayer::Unk40e630();
             }
         }
         break;
     case 0xfb:
-        if (*(WORD*)((char*)this + 0xa) == 0 && *(WORD*)((char*)this + 0xc) == 0) {
+        if (frame == 0 && timer == 0) {
             CPlayer::Unk40f1e0();
-            *(short*)((char*)this + 0x16c) = 0;
+            unk16c = 0;
         }
-        if (*(WORD*)((char*)this + 0xa) > 2 && *(WORD*)((char*)this + 0xa) < 8 && *(int*)((char*)this + 0x168) == 3) {
-            ((CPlayer*)*(int*)*(char**)((char*)this + 0x78))->Vf0();
-            ((CPlayer*)*(int*)*(char**)((char*)this + 0x78))->Unk40f1e0();
-            *(short*)(*(char**)*(char**)((char*)this + 0x78) + 8) = 0x6b;
+        if (frame > 2 && frame < 8 && unk168 == 3) {
+            (*m_opponent)->Vf0();
+            (*m_opponent)->Unk40f1e0();
+            (*m_opponent)->pattern = 0x6b;
             Vf0();
-            *(short*)((char*)this + 8) = 0xfd;
-            *(double*)((char*)this + 0x28) = *(short*)((char*)this + 0x2af8) + 0x32;
-            *(double*)((char*)this + 0x20) = *(double*)(*(char**)*(char**)((char*)this + 0x78) + 0x20) + (-*(short*)((char*)this + 0x2ad0) - 0x14) * *((char*)this + 0x50);
+            pattern = 0xfd;
+            y = unk2af8[0] + 0x32;
+            x = (*m_opponent)->x + (-unk2ad0[0] - 0x14) * facing;
             l50.type = 0;
-            l50.x = (double)((int)*(double*)((char*)this + 0x20) + *((char*)this + 0x50) * 7);
-            l50.y = (double)((int)*(double*)((char*)this + 0x28) - 0x2c);
+            l50.x = (double)((int)x + facing * 7);
+            l50.y = (double)((int)y - 0x2c);
             l50.unk20 = 2;
             l50.unk21 = 1;
-            ((CGame*)*(int*)((char*)this + 0x7c))->CreateEffect((EffectDesc*)&l50);
+            m_game->CreateEffect((EffectDesc*)&l50);
             break;
         }
-        if (*(WORD*)((char*)this + 0xa) > 2 && *(WORD*)((char*)this + 0xa) < 8 && *(int*)((char*)this + 0x3140) > 0) {
-            if (*(double*)(*(char**)*(char**)((char*)this + 0x78) + 0x28) == 0.0) {
-                *(short*)((char*)this + 0x16c) = 1;
+        if (frame > 2 && frame < 8 && unk3140 > 0) {
+            if ((*m_opponent)->y == 0.0) {
+                unk16c = 1;
             } else {
-                *(short*)((char*)this + 0x16c) = 0;
+                unk16c = 0;
             }
         }
-        if (*(WORD*)((char*)this + 0xa) == 6) {
-            *(int*)((char*)this + 0x3140) = 1;
+        if (frame == 6) {
+            unk3140 = 1;
         }
-        if (*(WORD*)((char*)this + 0xa) > 7) {
-            *(double*)((char*)this + 0x30) -= 0.035;
-            if (*(double*)((char*)this + 0x30) < 0.0) {
-                *(double*)((char*)this + 0x30) = 0.0;
+        if (frame > 7) {
+            vx -= 0.035;
+            if (vx < 0.0) {
+                vx = 0.0;
             }
         }
-        (*(short*)((char*)this + 0xc))++;
-        if (*(WORD*)((char*)this + 0xc) >= l4) {
-            *(short*)((char*)this + 0xc) = 0;
-            (*(short*)((char*)this + 0xa))++;
-            *(int*)((char*)this + 0x168) = 0;
-            if (*(WORD*)((char*)this + 0xa) == 1) {
-                *(short*)((char*)this + 0x16c) = 0;
+        timer++;
+        if (timer >= l4) {
+            timer = 0;
+            frame++;
+            unk168 = 0;
+            if (frame == 1) {
+                unk16c = 0;
             }
-            if (*(WORD*)((char*)this + 0xa) == 3) {
-                *(double*)((char*)this + 0x30) = 2.4;
+            if (frame == 3) {
+                vx = 2.4;
             }
-            if (*(WORD*)((char*)this + 0xa) == 8) {
-                *(short*)((char*)this + 0xa) = 3;
-                (*(int*)((char*)this + 0x3138))++;
+            if (frame == 8) {
+                frame = 3;
+                unk3138++;
             }
-            if (*(WORD*)((char*)this + 0xa) == 6 && *(int*)((char*)this + 0x3138) > 2) {
-                *(short*)((char*)this + 0xa) = 8;
+            if (frame == 6 && unk3138 > 2) {
+                frame = 8;
             }
-            if (*(WORD*)((char*)this + 0xa) >= x8) {
+            if (frame >= x8) {
                 Vf0();
-                *(short*)((char*)this + 8) = 3;
+                pattern = 3;
                 CPlayer::Unk40e630();
             }
         }
         break;
     case 0xfc:
-        if (*(WORD*)((char*)this + 0xa) == 0 && *(WORD*)((char*)this + 0xc) == 0) {
-            *(short*)((char*)this + 0x16c) = 0;
+        if (frame == 0 && timer == 0) {
+            unk16c = 0;
             CPlayer::Unk40f1e0();
-            if (*((char*)this + 0x120) == 0) {
-                *(double*)((char*)this + 0x118) -= 500.0;
+            if (unk120 == 0) {
+                unk118 -= 500.0;
             } else {
-                *(double*)((char*)this + 0x118) -= 250.0;
+                unk118 -= 250.0;
             }
             l50.type = 0x21;
             l50.unk2c = 0xb;
-            l50.x = (double)((int)*(double*)((char*)this + 0x20) + *((char*)this + 0x50) * 0x14);
-            l50.y = (double)((int)*(double*)((char*)this + 0x28) - 0x32);
+            l50.x = (double)((int)x + facing * 0x14);
+            l50.y = (double)((int)y - 0x32);
             l50.unk20 = 2;
             l50.unk21 = 1;
-            ((CGame*)*(int*)((char*)this + 0x7c))->CreateEffect((EffectDesc*)&l50);
+            m_game->CreateEffect((EffectDesc*)&l50);
         }
-        if (*(WORD*)((char*)this + 0xa) > 2 && *(WORD*)((char*)this + 0xa) < 8 && *(int*)((char*)this + 0x168) == 3) {
-            ((CPlayer*)*(int*)*(char**)((char*)this + 0x78))->Vf0();
-            ((CPlayer*)*(int*)*(char**)((char*)this + 0x78))->Unk40f1e0();
-            *(short*)(*(char**)*(char**)((char*)this + 0x78) + 8) = 0x6b;
+        if (frame > 2 && frame < 8 && unk168 == 3) {
+            (*m_opponent)->Vf0();
+            (*m_opponent)->Unk40f1e0();
+            (*m_opponent)->pattern = 0x6b;
             Vf0();
             CPlayer::Unk40f1e0();
-            *(short*)((char*)this + 8) = 0xfe;
-            *(double*)((char*)this + 0x28) = *(short*)((char*)this + 0x2af8) + 0x32;
-            *(double*)((char*)this + 0x20) = *(double*)(*(char**)*(char**)((char*)this + 0x78) + 0x20) + (-*(short*)((char*)this + 0x2ad0) - 0x14) * *((char*)this + 0x50);
+            pattern = 0xfe;
+            y = unk2af8[0] + 0x32;
+            x = (*m_opponent)->x + (-unk2ad0[0] - 0x14) * facing;
             l50.type = 0;
-            l50.x = (double)((int)*(double*)((char*)this + 0x20) + *((char*)this + 0x50) * 7);
-            l50.y = (double)((int)*(double*)((char*)this + 0x28) - 0x2c);
+            l50.x = (double)((int)x + facing * 7);
+            l50.y = (double)((int)y - 0x2c);
             l50.unk20 = 2;
             l50.unk21 = 1;
-            ((CGame*)*(int*)((char*)this + 0x7c))->CreateEffect((EffectDesc*)&l50);
+            m_game->CreateEffect((EffectDesc*)&l50);
             break;
         }
-        if (*(WORD*)((char*)this + 0xa) > 2 && *(WORD*)((char*)this + 0xa) < 8) {
-            if (*(double*)(*(char**)*(char**)((char*)this + 0x78) + 0x28) == 0.0) {
-                *(short*)((char*)this + 0x16c) = 1;
+        if (frame > 2 && frame < 8) {
+            if ((*m_opponent)->y == 0.0) {
+                unk16c = 1;
             } else {
-                *(short*)((char*)this + 0x16c) = 0;
+                unk16c = 0;
             }
         }
-        if (*(WORD*)((char*)this + 0xa) == 6) {
-            *(int*)((char*)this + 0x3140) = 1;
+        if (frame == 6) {
+            unk3140 = 1;
         }
-        if (*(WORD*)((char*)this + 0xa) > 7) {
-            *(double*)((char*)this + 0x30) -= 0.035;
-            if (*(double*)((char*)this + 0x30) < 0.0) {
-                *(double*)((char*)this + 0x30) = 0.0;
+        if (frame > 7) {
+            vx -= 0.035;
+            if (vx < 0.0) {
+                vx = 0.0;
             }
         }
-        (*(short*)((char*)this + 0xc))++;
-        if (*(WORD*)((char*)this + 0xc) >= l4) {
-            *(short*)((char*)this + 0xc) = 0;
-            (*(short*)((char*)this + 0xa))++;
-            *(int*)((char*)this + 0x168) = 0;
-            if (*(WORD*)((char*)this + 0xa) == 1) {
-                *(short*)((char*)this + 0x16c) = 0;
+        timer++;
+        if (timer >= l4) {
+            timer = 0;
+            frame++;
+            unk168 = 0;
+            if (frame == 1) {
+                unk16c = 0;
             }
-            if (*(WORD*)((char*)this + 0xa) == 3) {
-                *(double*)((char*)this + 0x30) = 1.8;
+            if (frame == 3) {
+                vx = 1.8;
             }
-            if (*(WORD*)((char*)this + 0xa) == 8) {
-                *(short*)((char*)this + 0xa) = 3;
-                (*(int*)((char*)this + 0x3138))++;
+            if (frame == 8) {
+                frame = 3;
+                unk3138++;
             }
-            if (*(WORD*)((char*)this + 0xa) == 6 && *(int*)((char*)this + 0x3138) > 1) {
-                *(short*)((char*)this + 0xa) = 8;
+            if (frame == 6 && unk3138 > 1) {
+                frame = 8;
             }
-            if (*(WORD*)((char*)this + 0xa) >= x8) {
+            if (frame >= x8) {
                 Vf0();
-                *(short*)((char*)this + 8) = 3;
+                pattern = 3;
                 CPlayer::Unk40e630();
             }
         }
         break;
     case 0xfd:
-        if (*(WORD*)((char*)this + 0xa) < 3) {
-            *(double*)((char*)this + 0x30) -= 0.035;
-            if (*(double*)((char*)this + 0x30) < 0.0) {
-                *(double*)((char*)this + 0x30) = 0.0;
+        if (frame < 3) {
+            vx -= 0.035;
+            if (vx < 0.0) {
+                vx = 0.0;
             }
-            if ((char)((CPlayer*)*(int*)*(char**)((char*)this + 0x78))->Unk40ff70() != 0) {
+            if ((char)(*m_opponent)->Unk40ff70() != 0) {
                 CPlayer::Unk40f1e0();
-                ((CPlayer*)*(int*)*(char**)((char*)this + 0x78))->Unk40f1e0();
+                (*m_opponent)->Unk40f1e0();
             }
-            if ((char)((CPlayer*)*(int*)*(char**)((char*)this + 0x78))->Unk40ff70() == 0) {
-                *(double*)(*(char**)*(char**)((char*)this + 0x78) + 0x20) = (*(short*)((char*)this + 0x2ad0) + 0x14) * *((char*)this + 0x50) + *(double*)((char*)this + 0x20);
+            if ((char)(*m_opponent)->Unk40ff70() == 0) {
+                (*m_opponent)->x = (unk2ad0[0] + 0x14) * facing + x;
             }
         }
-        if (*(WORD*)((char*)this + 0xa) == 3) {
-            *(short*)(*(char**)*(char**)((char*)this + 0x78) + 8) = 0x76;
-            *(double*)(*(char**)*(char**)((char*)this + 0x78) + 0x20) = (15.0 + *(double*)((char*)this + 0x30)) * *((char*)this + 0x50) + *(double*)((char*)this + 0x20);
-            *(double*)(*(char**)*(char**)((char*)this + 0x78) + 0x28) = -69.0 + *(double*)((char*)this + 0x38) + *(double*)((char*)this + 0x28);
+        if (frame == 3) {
+            (*m_opponent)->pattern = 0x76;
+            (*m_opponent)->x = (15.0 + vx) * facing + x;
+            (*m_opponent)->y = -69.0 + vy + y;
         }
-        if (*(WORD*)((char*)this + 0xa) > 2) {
-            *(double*)((char*)this + 0x38) = *(double*)((char*)this + 0x38) + *(double*)((char*)this + 0x48);
+        if (frame > 2) {
+            vy = vy + ay;
         }
-        if (*(WORD*)((char*)this + 0xa) > 3 && *(double*)((char*)this + 0x38) + *(double*)((char*)this + 0x28) > 0.0) {
+        if (frame > 3 && vy + y > 0.0) {
             Vf0();
             CPlayer::Unk40f1e0();
-            *(short*)((char*)this + 8) = 3;
-            *(double*)((char*)this + 0x28) = 0.0;
+            pattern = 3;
+            y = 0.0;
             break;
         }
-        if (*(WORD*)((char*)this + 0xa) == 4 && *(WORD*)((char*)this + 0xc) == 0) {
-            ((CPlayer*)*(int*)*(char**)((char*)this + 0x78))->Vf0();
-            *(short*)(*(char**)*(char**)((char*)this + 0x78) + 8) = 0x3f;
-            *(double*)(*(char**)*(char**)((char*)this + 0x78) + 0x20) = (-31.0 + *(double*)((char*)this + 0x30)) * *((char*)this + 0x50) + *(double*)((char*)this + 0x20);
-            *(double*)(*(char**)*(char**)((char*)this + 0x78) + 0x28) = -33.0 + *(double*)((char*)this + 0x38) + *(double*)((char*)this + 0x28);
+        if (frame == 4 && timer == 0) {
+            (*m_opponent)->Vf0();
+            (*m_opponent)->pattern = 0x3f;
+            (*m_opponent)->x = (-31.0 + vx) * facing + x;
+            (*m_opponent)->y = -33.0 + vy + y;
             CPlayer::Unk4105a0(0x1f4, 750.0);
-            (*(short*)((char*)this + 0x174))--;
-            (*(short*)((char*)this + 0xf4))--;
-            *(double*)(*(char**)*(char**)((char*)this + 0x78) + 0xc0) = 0.8;
-            *(double*)(*(char**)*(char**)((char*)this + 0x78) + 0xc8) = -3.2;
+            unk174--;
+            unkf4--;
+            (*m_opponent)->unkc0 = 0.8;
+            (*m_opponent)->unkc8 = -3.2;
         }
-        if (*(WORD*)((char*)this + 0xa) < 4) {
+        if (frame < 4) {
             CPlayer::Unk410a40(0x32, 3);
             CPlayer::Unk410a80(0x32, 3);
         }
-        (*(short*)((char*)this + 0xc))++;
-        if (*(WORD*)((char*)this + 0xc) >= l4) {
-            *(short*)((char*)this + 0xc) = 0;
-            (*(short*)((char*)this + 0xa))++;
-            *(int*)((char*)this + 0x168) = 3;
-            if (*(WORD*)((char*)this + 0xa) == 3) {
-                *(double*)((char*)this + 0x30) = -1.0;
-                *(double*)((char*)this + 0x38) = -1.3;
-                *(double*)((char*)this + 0x48) = 0.03;
+        timer++;
+        if (timer >= l4) {
+            timer = 0;
+            frame++;
+            unk168 = 3;
+            if (frame == 3) {
+                vx = -1.0;
+                vy = -1.3;
+                ay = 0.03;
             }
-            if (*(WORD*)((char*)this + 0xa) >= x8) {
-                *(short*)((char*)this + 8) = 0;
+            if (frame >= x8) {
+                pattern = 0;
                 Vf0();
             }
         }
         break;
     case 0xfe:
-        if (*(WORD*)((char*)this + 0xa) < 3) {
-            *(double*)((char*)this + 0x30) -= 0.035;
-            if (*(double*)((char*)this + 0x30) < 0.0) {
-                *(double*)((char*)this + 0x30) = 0.0;
+        if (frame < 3) {
+            vx -= 0.035;
+            if (vx < 0.0) {
+                vx = 0.0;
             }
-            if ((char)((CPlayer*)*(int*)*(char**)((char*)this + 0x78))->Unk40ff70() != 0) {
+            if ((char)(*m_opponent)->Unk40ff70() != 0) {
                 CPlayer::Unk40f1e0();
-                ((CPlayer*)*(int*)*(char**)((char*)this + 0x78))->Unk40f1e0();
+                (*m_opponent)->Unk40f1e0();
             }
-            if ((char)((CPlayer*)*(int*)*(char**)((char*)this + 0x78))->Unk40ff70() == 0) {
-                *(double*)(*(char**)*(char**)((char*)this + 0x78) + 0x20) = (*(short*)((char*)this + 0x2ad0) + 0x14) * *((char*)this + 0x50) + *(double*)((char*)this + 0x20);
+            if ((char)(*m_opponent)->Unk40ff70() == 0) {
+                (*m_opponent)->x = (unk2ad0[0] + 0x14) * facing + x;
             }
         }
-        if (*(WORD*)((char*)this + 0xa) == 3) {
-            *(short*)(*(char**)*(char**)((char*)this + 0x78) + 8) = 0x76;
-            *(double*)(*(char**)*(char**)((char*)this + 0x78) + 0x20) = (15.0 + *(double*)((char*)this + 0x30)) * *((char*)this + 0x50) + *(double*)((char*)this + 0x20);
-            *(double*)(*(char**)*(char**)((char*)this + 0x78) + 0x28) = -69.0 + *(double*)((char*)this + 0x38) + *(double*)((char*)this + 0x28);
+        if (frame == 3) {
+            (*m_opponent)->pattern = 0x76;
+            (*m_opponent)->x = (15.0 + vx) * facing + x;
+            (*m_opponent)->y = -69.0 + vy + y;
         }
-        if (*(WORD*)((char*)this + 0xa) > 2) {
-            *(double*)((char*)this + 0x38) = *(double*)((char*)this + 0x38) + *(double*)((char*)this + 0x48);
+        if (frame > 2) {
+            vy = vy + ay;
         }
-        if (*(WORD*)((char*)this + 0xa) > 3 && *(double*)((char*)this + 0x38) + *(double*)((char*)this + 0x28) > 0.0) {
+        if (frame > 3 && vy + y > 0.0) {
             Vf0();
             CPlayer::Unk40f1e0();
-            *(short*)((char*)this + 8) = 3;
-            *(double*)((char*)this + 0x28) = 0.0;
+            pattern = 3;
+            y = 0.0;
             break;
         }
-        if (*(WORD*)((char*)this + 0xa) == 4 && *(WORD*)((char*)this + 0xc) == 0) {
-            ((CPlayer*)*(int*)*(char**)((char*)this + 0x78))->Vf0();
-            *(short*)(*(char**)*(char**)((char*)this + 0x78) + 8) = 0x43;
-            *(double*)(*(char**)*(char**)((char*)this + 0x78) + 0x20) = (-41.0 + *(double*)((char*)this + 0x30)) * *((char*)this + 0x50) + *(double*)((char*)this + 0x20);
-            *(double*)(*(char**)*(char**)((char*)this + 0x78) + 0x28) = -43.0 + *(double*)((char*)this + 0x38) + *(double*)((char*)this + 0x28);
+        if (frame == 4 && timer == 0) {
+            (*m_opponent)->Vf0();
+            (*m_opponent)->pattern = 0x43;
+            (*m_opponent)->x = (-41.0 + vx) * facing + x;
+            (*m_opponent)->y = -43.0 + vy + y;
             CPlayer::Unk4105a0(0x3e8, 800.0);
-            (*(short*)((char*)this + 0x174))--;
-            (*(short*)((char*)this + 0xf4))--;
-            *(*(char**)*(char**)((char*)this + 0x78) + 0x50) = *((char*)this + 0x50);
-            *(double*)(*(char**)*(char**)((char*)this + 0x78) + 0xc0) = -4.0;
-            *(double*)(*(char**)*(char**)((char*)this + 0x78) + 0xc8) = -0.8;
+            unk174--;
+            unkf4--;
+            (*m_opponent)->facing = facing;
+            (*m_opponent)->unkc0 = -4.0;
+            (*m_opponent)->unkc8 = -0.8;
         }
-        if (*(WORD*)((char*)this + 0xa) < 4) {
+        if (frame < 4) {
             CPlayer::Unk410a40(0x32, 3);
             CPlayer::Unk410a80(0x32, 3);
         }
-        (*(short*)((char*)this + 0xc))++;
-        if (*(WORD*)((char*)this + 0xc) >= l4) {
-            *(short*)((char*)this + 0xc) = 0;
-            (*(short*)((char*)this + 0xa))++;
-            *(int*)((char*)this + 0x168) = 0;
-            if (*(WORD*)((char*)this + 0xa) == 3) {
-                *(double*)((char*)this + 0x30) = -1.0;
-                *(double*)((char*)this + 0x38) = -2.1;
-                *(double*)((char*)this + 0x48) = 0.025;
+        timer++;
+        if (timer >= l4) {
+            timer = 0;
+            frame++;
+            unk168 = 0;
+            if (frame == 3) {
+                vx = -1.0;
+                vy = -2.1;
+                ay = 0.025;
             }
-            if (*(WORD*)((char*)this + 0xa) >= x8) {
-                *(short*)((char*)this + 8) = 0;
+            if (frame >= x8) {
+                pattern = 0;
                 Vf0();
             }
         }
         break;
     case 0xff:
-        if (*(WORD*)((char*)this + 0xa) == 0 && *(WORD*)((char*)this + 0xc) == 0) {
-            *(double*)((char*)this + 0x30) *= 0.3;
-            *(double*)((char*)this + 0x38) *= 0.5;
-            *(double*)((char*)this + 0x48) = 0.035;
-            *(short*)((char*)this + 0x16c) = 9;
+        if (frame == 0 && timer == 0) {
+            vx *= 0.3;
+            vy *= 0.5;
+            ay = 0.035;
+            unk16c = 9;
         }
-        if ((*(WORD*)((char*)this + 0xa) == 1 || *(WORD*)((char*)this + 0xa) == 3 || *(WORD*)((char*)this + 0xa) == 7) && *(WORD*)((char*)this + 0xc) == 0) {
-            *((char*)this + 0x2c9) = 0x15;
+        if ((frame == 1 || frame == 3 || frame == 7) && timer == 0) {
+            unk2c9 = 0x15;
         }
-        if (*(WORD*)((char*)this + 0xa) > 0xa) {
-            *(double*)((char*)this + 0x38) = *(double*)((char*)this + 0x38) + *(double*)((char*)this + 0x48);
+        if (frame > 0xa) {
+            vy = vy + ay;
         }
-        if (*(double*)((char*)this + 0x28) + *(double*)((char*)this + 0x38) > 0.0) {
+        if (y + vy > 0.0) {
             Vf0();
             CPlayer::Unk40f1e0();
-            *(short*)((char*)this + 8) = 0x102;
-            *(double*)((char*)this + 0x28) = 0.0;
+            pattern = 0x102;
+            y = 0.0;
             break;
         }
-        (*(short*)((char*)this + 0xc))++;
-        if (*(WORD*)((char*)this + 0xc) >= l4) {
-            *(short*)((char*)this + 0xc) = 0;
-            (*(short*)((char*)this + 0xa))++;
-            *(int*)((char*)this + 0x168) = 0;
-            if (*(WORD*)((char*)this + 0xa) == 5 && *(int*)((char*)this + 0x3138) < 3) {
-                (*(int*)((char*)this + 0x3138))++;
-                *(short*)((char*)this + 0xa) = 0;
+        timer++;
+        if (timer >= l4) {
+            timer = 0;
+            frame++;
+            unk168 = 0;
+            if (frame == 5 && unk3138 < 3) {
+                unk3138++;
+                frame = 0;
             }
         }
-        if (*(WORD*)((char*)this + 0xa) >= x8) {
-            *(short*)((char*)this + 0xa) = *(WORD*)((char*)this + 0xa) - 4;
+        if (frame >= x8) {
+            frame = frame - 4;
         }
         break;
     case 0x100:
-        if (*(WORD*)((char*)this + 0xa) == 0 && *(WORD*)((char*)this + 0xc) == 0) {
+        if (frame == 0 && timer == 0) {
             CPlayer::Unk40e630();
             CPlayer::Unk40f1e0();
         }
-        if (*(WORD*)((char*)this + 0xa) == 3 && *(WORD*)((char*)this + 0xc) == 0) {
-            *(double*)((char*)this + 0x30) = 0.5;
-            *(double*)((char*)this + 0x38) = 3.0;
-            *(short*)((char*)this + 0x16c) = 1;
-            *((char*)this + 0x2c9) = 0x23;
-            *(short*)((char*)this + 0x148) = *(short*)((char*)this + 0x148) + 0x23;
+        if (frame == 3 && timer == 0) {
+            vx = 0.5;
+            vy = 3.0;
+            unk16c = 1;
+            unk2c9 = 0x23;
+            unk148 = unk148 + 0x23;
         }
-        if (*(double*)((char*)this + 0x28) + *(double*)((char*)this + 0x38) > 0.0 && *(WORD*)((char*)this + 0xa) > 2) {
-            *(short*)((char*)this + 0xc) = 0;
-            *(short*)((char*)this + 0xa) = 0;
-            *(double*)((char*)this + 0x28) = 0.0;
+        if (y + vy > 0.0 && frame > 2) {
+            timer = 0;
+            frame = 0;
+            y = 0.0;
             CPlayer::Unk40f1e0();
-            *(short*)((char*)this + 8) = 0x101;
+            pattern = 0x101;
             break;
         }
-        (*(short*)((char*)this + 0xc))++;
-        if (*(WORD*)((char*)this + 0xc) >= l4) {
-            *(short*)((char*)this + 0xc) = 0;
-            (*(short*)((char*)this + 0xa))++;
-            if (*(short*)((char*)this + 0x16c) > 0) {
-                *(int*)((char*)this + 0x168) = 0;
+        timer++;
+        if (timer >= l4) {
+            timer = 0;
+            frame++;
+            if (unk16c > 0) {
+                unk168 = 0;
             }
-            if (*(WORD*)((char*)this + 0xa) >= x8) {
-                *(short*)((char*)this + 0xa) = *(WORD*)((char*)this + 0xa) - 2;
+            if (frame >= x8) {
+                frame = frame - 2;
             }
         }
         break;
     case 0x101:
-        *(double*)((char*)this + 0x30) -= 0.04;
-        if (*(double*)((char*)this + 0x30) < 0.0) {
-            *(double*)((char*)this + 0x30) = 0.0;
+        vx -= 0.04;
+        if (vx < 0.0) {
+            vx = 0.0;
         }
-        (*(short*)((char*)this + 0xc))++;
-        if (*(WORD*)((char*)this + 0xc) >= l4) {
-            *(short*)((char*)this + 0xc) = 0;
-            (*(short*)((char*)this + 0xa))++;
-            if (*(WORD*)((char*)this + 0xa) >= x8) {
-                *(short*)((char*)this + 8) = 3;
+        timer++;
+        if (timer >= l4) {
+            timer = 0;
+            frame++;
+            if (frame >= x8) {
+                pattern = 3;
                 Vf0();
             }
         }
         break;
     case 0x102:
-        *(double*)((char*)this + 0x30) -= 0.04;
-        if (*(double*)((char*)this + 0x30) < 0.0) {
-            *(double*)((char*)this + 0x30) = 0.0;
+        vx -= 0.04;
+        if (vx < 0.0) {
+            vx = 0.0;
         }
-        (*(short*)((char*)this + 0xc))++;
-        if (*(WORD*)((char*)this + 0xc) >= l4) {
-            *(short*)((char*)this + 0xc) = 0;
-            (*(short*)((char*)this + 0xa))++;
-            if (*(WORD*)((char*)this + 0xa) >= x8) {
-                *(short*)((char*)this + 8) = 3;
+        timer++;
+        if (timer >= l4) {
+            timer = 0;
+            frame++;
+            if (frame >= x8) {
+                pattern = 3;
                 Vf0();
             }
         }
         break;
     case 0x103:
-        if (*(WORD*)((char*)this + 0xa) > 8 && *(WORD*)((char*)this + 0xa) < 0xf && *(int*)((char*)this + 0x190) > 0) {
+        if (frame > 8 && frame < 0xf && m_holdA > 0) {
             Vf0();
-            *(short*)((char*)this + 8) = 0x106;
+            pattern = 0x106;
             break;
         }
-        if (*(WORD*)((char*)this + 0xa) > 8 && *(WORD*)((char*)this + 0xa) < 0xf && *(int*)((char*)this + 0x194) > 0) {
+        if (frame > 8 && frame < 0xf && m_holdB > 0) {
             Vf0();
-            *(short*)((char*)this + 8) = 0x107;
+            pattern = 0x107;
             break;
         }
-        if (*(WORD*)((char*)this + 0xa) == 0 && *(WORD*)((char*)this + 0xc) == 0) {
+        if (frame == 0 && timer == 0) {
             CPlayer::Unk40f1e0();
         }
-        if (*(WORD*)((char*)this + 0xa) > 7) {
-            *(double*)((char*)this + 0x30) -= 0.02;
-            if (*(double*)((char*)this + 0x30) < 0.0) {
-                *(double*)((char*)this + 0x30) = 0.0;
+        if (frame > 7) {
+            vx -= 0.02;
+            if (vx < 0.0) {
+                vx = 0.0;
             }
         }
-        if (*(WORD*)((char*)this + 0xa) == 7 && *(WORD*)((char*)this + 0xc) == 0) {
-            *(short*)((char*)this + 0x16c) = 1;
-            *(double*)((char*)this + 0x30) = 3.0;
+        if (frame == 7 && timer == 0) {
+            unk16c = 1;
+            vx = 3.0;
         }
-        (*(short*)((char*)this + 0xc))++;
-        if (*(WORD*)((char*)this + 0xc) >= l4) {
-            *(short*)((char*)this + 0xc) = 0;
-            (*(short*)((char*)this + 0xa))++;
-            if (*(short*)((char*)this + 0x16c) > 0) {
-                *(int*)((char*)this + 0x168) = 0;
+        timer++;
+        if (timer >= l4) {
+            timer = 0;
+            frame++;
+            if (unk16c > 0) {
+                unk168 = 0;
             }
-            if (*(WORD*)((char*)this + 0xa) == 0xc && *(int*)((char*)this + 0x3138) < 3) {
-                *(short*)((char*)this + 0xa) = *(WORD*)((char*)this + 0xa) - 4;
-                (*(int*)((char*)this + 0x3138))++;
+            if (frame == 0xc && unk3138 < 3) {
+                frame = frame - 4;
+                unk3138++;
             }
-            if (*(WORD*)((char*)this + 0xa) >= x8) {
-                *(short*)((char*)this + 8) = 3;
+            if (frame >= x8) {
+                pattern = 3;
                 Vf0();
                 CPlayer::Unk40e630();
             }
         }
         break;
     case 0x104:
-        if (*(WORD*)((char*)this + 0xa) == 0 && *(WORD*)((char*)this + 0xc) == 0) {
+        if (frame == 0 && timer == 0) {
             CPlayer::Unk40f1e0();
         }
-        *(double*)((char*)this + 0x38) = *(double*)((char*)this + 0x38) + *(double*)((char*)this + 0x48);
-        if (*(WORD*)((char*)this + 0xa) > 0xd) {
-            *(double*)((char*)this + 0x30) -= 0.03;
-            if (*(double*)((char*)this + 0x30) < 0.0) {
-                *(double*)((char*)this + 0x30) = 0.0;
+        vy = vy + ay;
+        if (frame > 0xd) {
+            vx -= 0.03;
+            if (vx < 0.0) {
+                vx = 0.0;
             }
         }
-        if (*(short*)((char*)this + 0x262) == 0xa && *(WORD*)((char*)this + 0xa) > 0xd) {
+        if (unk262 == 0xa && frame > 0xd) {
             Vf0();
-            *(short*)((char*)this + 8) = 0x122;
+            pattern = 0x122;
             break;
         }
-        if (*(double*)((char*)this + 0x28) < 0.0 && *(double*)((char*)this + 0x38) > 0.0 && *((char*)this + 0x18a) == 1) {
+        if (y < 0.0 && vy > 0.0 && m_pressA == 1) {
             Vf0();
             CPlayer::Unk40f1e0();
-            *(short*)((char*)this + 8) = 0x100;
+            pattern = 0x100;
             break;
         }
-        if (*(double*)((char*)this + 0x38) + *(double*)((char*)this + 0x28) > 0.0 && *(WORD*)((char*)this + 0xa) > 5 && *(WORD*)((char*)this + 0xa) < 0xa) {
-            *(short*)((char*)this + 0xa) = 0xe;
-            *(short*)((char*)this + 0xc) = 0;
-            *(double*)((char*)this + 0x28) = 0.0;
-            *(double*)((char*)this + 0x38) = 0.0;
-            *(double*)((char*)this + 0x48) = 0.0;
+        if (vy + y > 0.0 && frame > 5 && frame < 0xa) {
+            frame = 0xe;
+            timer = 0;
+            y = 0.0;
+            vy = 0.0;
+            ay = 0.0;
             break;
         }
-        if (*(double*)((char*)this + 0x38) + *(double*)((char*)this + 0x28) > 0.0 && *(WORD*)((char*)this + 0xa) > 9 && *(WORD*)((char*)this + 0xa) < 0xe) {
-            *(short*)((char*)this + 0xa) = 0xe;
-            *(short*)((char*)this + 0xc) = 0;
-            *(double*)((char*)this + 0x28) = 0.0;
-            *(double*)((char*)this + 0x38) = 0.0;
-            *(double*)((char*)this + 0x48) = 0.0;
+        if (vy + y > 0.0 && frame > 9 && frame < 0xe) {
+            frame = 0xe;
+            timer = 0;
+            y = 0.0;
+            vy = 0.0;
+            ay = 0.0;
             break;
         }
-        (*(short*)((char*)this + 0xc))++;
-        if (*(WORD*)((char*)this + 0xc) >= l4) {
-            *(short*)((char*)this + 0xc) = 0;
-            (*(short*)((char*)this + 0xa))++;
-            if (*(WORD*)((char*)this + 0xa) == 1) {
-                *(int*)((char*)this + 0x168) = 0;
+        timer++;
+        if (timer >= l4) {
+            timer = 0;
+            frame++;
+            if (frame == 1) {
+                unk168 = 0;
             }
-            if (*(WORD*)((char*)this + 0xa) == 3) {
-                *(double*)((char*)this + 0x30) = 1.2;
-                *(double*)((char*)this + 0x38) = -3.3;
-                *(double*)((char*)this + 0x48) = 0.055;
-                *(short*)((char*)this + 0x16c) = 1;
+            if (frame == 3) {
+                vx = 1.2;
+                vy = -3.3;
+                ay = 0.055;
+                unk16c = 1;
             }
-            if (*(WORD*)((char*)this + 0xa) == 0xa) {
-                *(short*)((char*)this + 0xa) = *(WORD*)((char*)this + 0xa) - 4;
+            if (frame == 0xa) {
+                frame = frame - 4;
             }
-            if (*(WORD*)((char*)this + 0xa) == 0xe) {
-                *(short*)((char*)this + 0xa) = *(WORD*)((char*)this + 0xa) - 4;
+            if (frame == 0xe) {
+                frame = frame - 4;
             }
-            if (*(WORD*)((char*)this + 0xa) >= x8) {
-                *(short*)((char*)this + 8) = 3;
+            if (frame >= x8) {
+                pattern = 3;
                 Vf0();
                 CPlayer::Unk40e630();
             }
         }
         break;
     case 0x105:
-        if (*(WORD*)((char*)this + 0xa) == 0 && *(WORD*)((char*)this + 0xc) == 0) {
+        if (frame == 0 && timer == 0) {
             CPlayer::Unk40f1e0();
-            if (*((char*)this + 0x120) == 0) {
-                *(double*)((char*)this + 0x118) -= 500.0;
+            if (unk120 == 0) {
+                unk118 -= 500.0;
             } else {
-                *(double*)((char*)this + 0x118) -= 250.0;
+                unk118 -= 250.0;
             }
             l50.type = 0x21;
             l50.unk2c = 0xb;
-            l50.x = (double)((int)*(double*)((char*)this + 0x20) + *((char*)this + 0x50) * 0x14);
-            l50.y = (double)((int)*(double*)((char*)this + 0x28) - 0x32);
+            l50.x = (double)((int)x + facing * 0x14);
+            l50.y = (double)((int)y - 0x32);
             l50.unk20 = 2;
             l50.unk21 = 1;
-            ((CGame*)*(int*)((char*)this + 0x7c))->CreateEffect((EffectDesc*)&l50);
-            *(double*)((char*)this + 0x28) -= 25.0;
-            *(double*)((char*)this + 0x30) = 3.0;
-            *(short*)((char*)this + 0x16c) = 1;
+            m_game->CreateEffect((EffectDesc*)&l50);
+            y -= 25.0;
+            vx = 3.0;
+            unk16c = 1;
         }
-        *(double*)((char*)this + 0x38) = *(double*)((char*)this + 0x38) + *(double*)((char*)this + 0x48);
-        if (*(WORD*)((char*)this + 0xa) > 9) {
-            *(double*)((char*)this + 0x30) -= 0.03;
-            if (*(double*)((char*)this + 0x30) < 0.0) {
-                *(double*)((char*)this + 0x30) = 0.0;
+        vy = vy + ay;
+        if (frame > 9) {
+            vx -= 0.03;
+            if (vx < 0.0) {
+                vx = 0.0;
             }
         }
-        if (*(int*)((char*)this + 0x168) > 1 && *(WORD*)((char*)this + 0xa) > 1 && *(WORD*)((char*)this + 0xa) < 6) {
-            *(short*)((char*)this + 0xa) = 6;
-            *(short*)((char*)this + 0xc) = 0;
-            *(double*)((char*)this + 0x30) = -*(double*)((char*)this + 0x30) * 0.1;
-            *(double*)((char*)this + 0x38) = -1.5;
-            *(double*)((char*)this + 0x48) = 0.036;
+        if (unk168 > 1 && frame > 1 && frame < 6) {
+            frame = 6;
+            timer = 0;
+            vx = -vx * 0.1;
+            vy = -1.5;
+            ay = 0.036;
             break;
         }
-        if (*(double*)((char*)this + 0x38) + *(double*)((char*)this + 0x28) > 0.0 && *(WORD*)((char*)this + 0xa) > 5 && *(WORD*)((char*)this + 0xa) < 0xa) {
-            *(short*)((char*)this + 0xa) = 0xa;
-            *(short*)((char*)this + 0xc) = 0;
-            *(double*)((char*)this + 0x28) = 0.0;
-            *(double*)((char*)this + 0x38) = 0.0;
-            *(double*)((char*)this + 0x48) = 0.0;
+        if (vy + y > 0.0 && frame > 5 && frame < 0xa) {
+            frame = 0xa;
+            timer = 0;
+            y = 0.0;
+            vy = 0.0;
+            ay = 0.0;
             break;
         }
-        (*(short*)((char*)this + 0xc))++;
-        if (*(WORD*)((char*)this + 0xc) >= l4) {
-            *(short*)((char*)this + 0xc) = 0;
-            (*(short*)((char*)this + 0xa))++;
-            if (*(short*)((char*)this + 0x16c) > 0) {
-                *(int*)((char*)this + 0x168) = 0;
+        timer++;
+        if (timer >= l4) {
+            timer = 0;
+            frame++;
+            if (unk16c > 0) {
+                unk168 = 0;
             }
-            if (*(WORD*)((char*)this + 0xa) == 6) {
-                if (*(int*)((char*)this + 0x3138) < 4) {
-                    *(short*)((char*)this + 0xa) = *(WORD*)((char*)this + 0xa) - 4;
-                    (*(int*)((char*)this + 0x3138))++;
+            if (frame == 6) {
+                if (unk3138 < 4) {
+                    frame = frame - 4;
+                    unk3138++;
                 } else {
-                    *(short*)((char*)this + 0xa) = 0xa;
-                    *(double*)((char*)this + 0x28) = 0.0;
+                    frame = 0xa;
+                    y = 0.0;
                     break;
                 }
             }
-            if (*(WORD*)((char*)this + 0xa) == 0xa) {
-                *(short*)((char*)this + 0xa) = *(WORD*)((char*)this + 0xa) - 4;
+            if (frame == 0xa) {
+                frame = frame - 4;
             }
-            if (*(WORD*)((char*)this + 0xa) >= x8) {
-                *(short*)((char*)this + 8) = 3;
+            if (frame >= x8) {
+                pattern = 3;
                 Vf0();
                 CPlayer::Unk40e630();
             }
         }
         break;
     case 0x106:
-        *(double*)((char*)this + 0x30) -= 0.035;
-        if (*(double*)((char*)this + 0x30) < 0.0) {
-            *(double*)((char*)this + 0x30) = 0.0;
+        vx -= 0.035;
+        if (vx < 0.0) {
+            vx = 0.0;
         }
-        if (*(double*)((char*)this + 0x28) < 0.0) {
-            *(double*)((char*)this + 0x48) = 0.055;
-            *(double*)((char*)this + 0x38) = *(double*)((char*)this + 0x38) + *(double*)((char*)this + 0x48);
+        if (y < 0.0) {
+            ay = 0.055;
+            vy = vy + ay;
         }
-        if (*(WORD*)((char*)this + 0xa) > 4 && *(WORD*)((char*)this + 0xa) < 0xf && *(double*)((char*)this + 0x28) + *(double*)((char*)this + 0x38) > 0.0) {
-            *(short*)((char*)this + 0xc) = 0;
-            *(short*)((char*)this + 0xa) = 0xf;
-            *(double*)((char*)this + 0x28) = 0.0;
+        if (frame > 4 && frame < 0xf && y + vy > 0.0) {
+            timer = 0;
+            frame = 0xf;
+            y = 0.0;
             CPlayer::Unk40f1e0();
             break;
         }
-        (*(short*)((char*)this + 0xc))++;
-        if (*(WORD*)((char*)this + 0xc) >= l4) {
-            *(short*)((char*)this + 0xc) = 0;
-            (*(short*)((char*)this + 0xa))++;
-            if (*(WORD*)((char*)this + 0xa) < 7) {
-                *(int*)((char*)this + 0x168) = 0;
+        timer++;
+        if (timer >= l4) {
+            timer = 0;
+            frame++;
+            if (frame < 7) {
+                unk168 = 0;
             }
-            if (*(WORD*)((char*)this + 0xa) == 4) {
-                *(double*)((char*)this + 0x38) = -3.3;
-                *(short*)((char*)this + 0x16c) = 3;
+            if (frame == 4) {
+                vy = -3.3;
+                unk16c = 3;
             }
-            if (*(WORD*)((char*)this + 0xa) == 0xf) {
-                *(short*)((char*)this + 0xa) = *(WORD*)((char*)this + 0xa) - 4;
+            if (frame == 0xf) {
+                frame = frame - 4;
             }
-            if (*(WORD*)((char*)this + 0xa) >= x8) {
+            if (frame >= x8) {
                 Vf0();
-                *(short*)((char*)this + 8) = 3;
+                pattern = 3;
             }
         }
         break;
     case 0x107:
-        if (*(WORD*)((char*)this + 0xa) == 0 && *(WORD*)((char*)this + 0xc) == 0) {
+        if (frame == 0 && timer == 0) {
             CPlayer::Unk40f1e0();
         }
-        *(double*)((char*)this + 0x38) = *(double*)((char*)this + 0x38) + *(double*)((char*)this + 0x48);
-        if (*(WORD*)((char*)this + 0xa) > 0xa) {
-            *(double*)((char*)this + 0x30) -= 0.03;
-            if (*(double*)((char*)this + 0x30) < 0.0) {
-                *(double*)((char*)this + 0x30) = 0.0;
+        vy = vy + ay;
+        if (frame > 0xa) {
+            vx -= 0.03;
+            if (vx < 0.0) {
+                vx = 0.0;
             }
         }
-        if (*(double*)((char*)this + 0x28) < 0.0 && *(double*)((char*)this + 0x38) > 0.0 && *((char*)this + 0x18a) == 1) {
+        if (y < 0.0 && vy > 0.0 && m_pressA == 1) {
             Vf0();
             CPlayer::Unk40f1e0();
-            *(short*)((char*)this + 8) = 0x100;
+            pattern = 0x100;
             break;
         }
-        if (*(double*)((char*)this + 0x38) + *(double*)((char*)this + 0x28) > 0.0 && *(WORD*)((char*)this + 0xa) > 2 && *(WORD*)((char*)this + 0xa) < 0xa) {
+        if (vy + y > 0.0 && frame > 2 && frame < 0xa) {
             Vf0();
             CPlayer::Unk40f1e0();
-            *(double*)((char*)this + 0x28) = 0.0;
-            *(short*)((char*)this + 8) = 0x102;
+            y = 0.0;
+            pattern = 0x102;
             break;
         }
-        (*(short*)((char*)this + 0xc))++;
-        if (*(WORD*)((char*)this + 0xc) >= l4) {
-            *(short*)((char*)this + 0xc) = 0;
-            (*(short*)((char*)this + 0xa))++;
-            if (*(WORD*)((char*)this + 0xa) == 1) {
-                *(int*)((char*)this + 0x168) = 0;
+        timer++;
+        if (timer >= l4) {
+            timer = 0;
+            frame++;
+            if (frame == 1) {
+                unk168 = 0;
             }
-            if (*(WORD*)((char*)this + 0xa) == 3) {
-                *(double*)((char*)this + 0x30) = 0.8;
-                *(double*)((char*)this + 0x38) = -3.1;
-                *(double*)((char*)this + 0x48) = 0.055;
-                *(short*)((char*)this + 0x16c) = 1;
+            if (frame == 3) {
+                vx = 0.8;
+                vy = -3.1;
+                ay = 0.055;
+                unk16c = 1;
             }
-            if (*(WORD*)((char*)this + 0xa) >= x8) {
-                *(short*)((char*)this + 0xa) = *(WORD*)((char*)this + 0xa) - 4;
+            if (frame >= x8) {
+                frame = frame - 4;
             }
         }
         break;
     case 0x108:
-        *(double*)((char*)this + 0x30) -= 0.05;
-        if (*(double*)((char*)this + 0x30) < 0.0) {
-            *(double*)((char*)this + 0x30) = 0.0;
+        vx -= 0.05;
+        if (vx < 0.0) {
+            vx = 0.0;
         }
-        (*(short*)((char*)this + 0xc))++;
-        if (*(WORD*)((char*)this + 0xc) >= l4) {
-            *(short*)((char*)this + 0xc) = 0;
-            (*(short*)((char*)this + 0xa))++;
-            *(int*)((char*)this + 0x168) = 0;
-            if (*(WORD*)((char*)this + 0xa) >= x8) {
+        timer++;
+        if (timer >= l4) {
+            timer = 0;
+            frame++;
+            unk168 = 0;
+            if (frame >= x8) {
                 Vf0();
-                *(short*)((char*)this + 8) = 3;
+                pattern = 3;
                 CPlayer::Unk40f1e0();
             }
         }
         break;
     case 0x109:
-        *(double*)((char*)this + 0x30) -= 0.05;
-        if (*(double*)((char*)this + 0x30) < 0.0) {
-            *(double*)((char*)this + 0x30) = 0.0;
+        vx -= 0.05;
+        if (vx < 0.0) {
+            vx = 0.0;
         }
-        (*(short*)((char*)this + 0xc))++;
-        if (*(WORD*)((char*)this + 0xc) >= l4) {
-            *(short*)((char*)this + 0xc) = 0;
-            (*(short*)((char*)this + 0xa))++;
-            *(int*)((char*)this + 0x168) = 0;
-            if (*(WORD*)((char*)this + 0xa) >= x8) {
+        timer++;
+        if (timer >= l4) {
+            timer = 0;
+            frame++;
+            unk168 = 0;
+            if (frame >= x8) {
                 Vf0();
-                *(short*)((char*)this + 8) = 3;
+                pattern = 3;
                 CPlayer::Unk40f1e0();
             }
         }
         break;
     case 0x10a:
-        if (*(WORD*)((char*)this + 0xa) == 0 && *(WORD*)((char*)this + 0xc) == 0) {
-            *(double*)((char*)this + 0x30) = 0.0;
-            *(double*)((char*)this + 0x38) = 0.0;
-            *(short*)((char*)this + 0x16c) = 1;
+        if (frame == 0 && timer == 0) {
+            vx = 0.0;
+            vy = 0.0;
+            unk16c = 1;
         }
-        if (*(WORD*)((char*)this + 0xa) == 2 && *(WORD*)((char*)this + 0xc) == 0) {
-            *((char*)this + 0x2c9) = 0x15;
-            *(short*)((char*)this + 0x148) = *(short*)((char*)this + 0x148) + 0x23;
-            *(short*)((char*)this + 0x16c) = 1;
+        if (frame == 2 && timer == 0) {
+            unk2c9 = 0x15;
+            unk148 = unk148 + 0x23;
+            unk16c = 1;
         }
-        if (*(WORD*)((char*)this + 0xa) > 1) {
-            *(double*)((char*)this + 0x38) = *(double*)((char*)this + 0x38) + *(double*)((char*)this + 0x48);
-            *(double*)((char*)this + 0x30) -= 0.06;
-            if (*(double*)((char*)this + 0x30) < 0.0) {
-                *(double*)((char*)this + 0x30) = 0.0;
+        if (frame > 1) {
+            vy = vy + ay;
+            vx -= 0.06;
+            if (vx < 0.0) {
+                vx = 0.0;
             }
         }
-        if (*(double*)((char*)this + 0x28) + *(double*)((char*)this + 0x38) > 0.0 && *(WORD*)((char*)this + 0xa) == 7) {
-            *(short*)((char*)this + 0xa) = 8;
-            *(short*)((char*)this + 0xc) = 0;
-            *(double*)((char*)this + 0x28) = 0.0;
+        if (y + vy > 0.0 && frame == 7) {
+            frame = 8;
+            timer = 0;
+            y = 0.0;
             CPlayer::Unk40f1e0();
         }
-        (*(short*)((char*)this + 0xc))++;
-        if (*(WORD*)((char*)this + 0xc) >= l4) {
-            *(short*)((char*)this + 0xc) = 0;
-            (*(short*)((char*)this + 0xa))++;
-            *(int*)((char*)this + 0x168) = 0;
-            if (*(WORD*)((char*)this + 0xa) == 2) {
-                *(double*)((char*)this + 0x48) = 0.09;
-                *(double*)((char*)this + 0x38) = -3.0;
-                *(double*)((char*)this + 0x30) = 3.0;
+        timer++;
+        if (timer >= l4) {
+            timer = 0;
+            frame++;
+            unk168 = 0;
+            if (frame == 2) {
+                ay = 0.09;
+                vy = -3.0;
+                vx = 3.0;
             }
-            if (*(WORD*)((char*)this + 0xa) == 6 && *(int*)((char*)this + 0x3138) < 1) {
-                *(short*)((char*)this + 0xa) = *(WORD*)((char*)this + 0xa) - 2;
-                (*(int*)((char*)this + 0x3138))++;
+            if (frame == 6 && unk3138 < 1) {
+                frame = frame - 2;
+                unk3138++;
             }
-            if (*(WORD*)((char*)this + 0xa) >= x8) {
-                *(short*)((char*)this + 8) = 0;
+            if (frame >= x8) {
+                pattern = 0;
                 CPlayer::Unk40e630();
                 Vf0();
             }
         }
         break;
     case 0x10b:
-        if (*(WORD*)((char*)this + 0xa) == 0 && *(WORD*)((char*)this + 0xc) == 0) {
-            *(double*)((char*)this + 0x30) = 0.0;
-            *(double*)((char*)this + 0x38) = 0.0;
-            *(short*)((char*)this + 0x16c) = 1;
+        if (frame == 0 && timer == 0) {
+            vx = 0.0;
+            vy = 0.0;
+            unk16c = 1;
         }
-        if (*(WORD*)((char*)this + 0xa) == 2 && *(WORD*)((char*)this + 0xc) == 0) {
-            *((char*)this + 0x2c9) = 0x15;
-            *(short*)((char*)this + 0x148) = *(short*)((char*)this + 0x148) + 0x23;
-            *(short*)((char*)this + 0x16c) = 1;
+        if (frame == 2 && timer == 0) {
+            unk2c9 = 0x15;
+            unk148 = unk148 + 0x23;
+            unk16c = 1;
         }
-        if (*(WORD*)((char*)this + 0xa) > 1) {
-            *(double*)((char*)this + 0x38) = *(double*)((char*)this + 0x38) + *(double*)((char*)this + 0x48);
-            *(double*)((char*)this + 0x30) -= 0.06;
-            if (*(double*)((char*)this + 0x30) < 0.0) {
-                *(double*)((char*)this + 0x30) = 0.0;
+        if (frame > 1) {
+            vy = vy + ay;
+            vx -= 0.06;
+            if (vx < 0.0) {
+                vx = 0.0;
             }
         }
-        if (*(double*)((char*)this + 0x28) + *(double*)((char*)this + 0x38) > 0.0 && *(WORD*)((char*)this + 0xa) == 7) {
-            *(short*)((char*)this + 0xa) = 8;
-            *(short*)((char*)this + 0xc) = 0;
-            *(double*)((char*)this + 0x28) = 0.0;
+        if (y + vy > 0.0 && frame == 7) {
+            frame = 8;
+            timer = 0;
+            y = 0.0;
             CPlayer::Unk40f1e0();
         }
-        (*(short*)((char*)this + 0xc))++;
-        if (*(WORD*)((char*)this + 0xc) >= l4) {
-            *(short*)((char*)this + 0xc) = 0;
-            (*(short*)((char*)this + 0xa))++;
-            *(int*)((char*)this + 0x168) = 0;
-            if (*(WORD*)((char*)this + 0xa) == 2) {
-                *(double*)((char*)this + 0x48) = 0.11;
-                *(double*)((char*)this + 0x38) = -4.5;
-                *(double*)((char*)this + 0x30) = 4.0;
+        timer++;
+        if (timer >= l4) {
+            timer = 0;
+            frame++;
+            unk168 = 0;
+            if (frame == 2) {
+                ay = 0.11;
+                vy = -4.5;
+                vx = 4.0;
             }
-            if (*(WORD*)((char*)this + 0xa) == 6 && *(int*)((char*)this + 0x3138) < 1) {
-                *(short*)((char*)this + 0xa) = *(WORD*)((char*)this + 0xa) - 2;
-                (*(int*)((char*)this + 0x3138))++;
+            if (frame == 6 && unk3138 < 1) {
+                frame = frame - 2;
+                unk3138++;
             }
-            if (*(WORD*)((char*)this + 0xa) >= x8) {
-                *(short*)((char*)this + 8) = 0;
+            if (frame >= x8) {
+                pattern = 0;
                 CPlayer::Unk40e630();
                 Vf0();
             }
         }
         break;
     case 0x10c:
-        if (*(WORD*)((char*)this + 0xa) == 0 && *(WORD*)((char*)this + 0xc) == 0) {
-            *(double*)((char*)this + 0x30) = 0.0;
-            *(double*)((char*)this + 0x38) = 0.0;
-            *(short*)((char*)this + 0x16c) = 1;
-            if (*((char*)this + 0x120) == 0) {
-                *(double*)((char*)this + 0x118) -= 500.0;
+        if (frame == 0 && timer == 0) {
+            vx = 0.0;
+            vy = 0.0;
+            unk16c = 1;
+            if (unk120 == 0) {
+                unk118 -= 500.0;
             } else {
-                *(double*)((char*)this + 0x118) -= 250.0;
+                unk118 -= 250.0;
             }
             l50.type = 0x21;
             l50.unk2c = 0xb;
-            l50.x = (double)((int)*(double*)((char*)this + 0x20) + *((char*)this + 0x50) * 0x14);
-            l50.y = (double)((int)*(double*)((char*)this + 0x28) - 0x32);
+            l50.x = (double)((int)x + facing * 0x14);
+            l50.y = (double)((int)y - 0x32);
             l50.unk20 = 2;
             l50.unk21 = 1;
-            ((CGame*)*(int*)((char*)this + 0x7c))->CreateEffect((EffectDesc*)&l50);
+            m_game->CreateEffect((EffectDesc*)&l50);
         }
-        if (*(WORD*)((char*)this + 0xa) == 2 && *(WORD*)((char*)this + 0xc) == 0) {
-            *((char*)this + 0x2c9) = 0x15;
-            *(short*)((char*)this + 0x148) = *(short*)((char*)this + 0x148) + 0x23;
-            *(short*)((char*)this + 0x16c) = 1;
+        if (frame == 2 && timer == 0) {
+            unk2c9 = 0x15;
+            unk148 = unk148 + 0x23;
+            unk16c = 1;
         }
-        if (*(WORD*)((char*)this + 0xa) > 1) {
-            *(double*)((char*)this + 0x38) = *(double*)((char*)this + 0x38) + *(double*)((char*)this + 0x48);
-            *(double*)((char*)this + 0x30) -= 0.04;
-            if (*(double*)((char*)this + 0x30) < 0.0) {
-                *(double*)((char*)this + 0x30) = 0.0;
+        if (frame > 1) {
+            vy = vy + ay;
+            vx -= 0.04;
+            if (vx < 0.0) {
+                vx = 0.0;
             }
         }
-        if (*(double*)((char*)this + 0x28) + *(double*)((char*)this + 0x38) > 0.0 && *(WORD*)((char*)this + 0xa) > 8 && *(WORD*)((char*)this + 0xa) < 0xd) {
-            *(short*)((char*)this + 0xa) = 0xd;
-            *(short*)((char*)this + 0xc) = 0;
-            *(double*)((char*)this + 0x28) = 0.0;
+        if (y + vy > 0.0 && frame > 8 && frame < 0xd) {
+            frame = 0xd;
+            timer = 0;
+            y = 0.0;
             CPlayer::Unk40f1e0();
         }
-        (*(short*)((char*)this + 0xc))++;
-        if (*(WORD*)((char*)this + 0xc) >= l4) {
-            *(short*)((char*)this + 0xc) = 0;
-            (*(short*)((char*)this + 0xa))++;
-            if (*(WORD*)((char*)this + 0xa) == 1) {
-                *(int*)((char*)this + 0x168) = 0;
+        timer++;
+        if (timer >= l4) {
+            timer = 0;
+            frame++;
+            if (frame == 1) {
+                unk168 = 0;
             }
-            if (*(WORD*)((char*)this + 0xa) == 2) {
-                *(double*)((char*)this + 0x48) = 0.09;
-                *(double*)((char*)this + 0x38) = -4.0;
-                *(double*)((char*)this + 0x30) = 2.0;
+            if (frame == 2) {
+                ay = 0.09;
+                vy = -4.0;
+                vx = 2.0;
             }
-            if (*(WORD*)((char*)this + 0xa) == 6 && *(int*)((char*)this + 0x3138) < 1) {
-                *(short*)((char*)this + 0xa) = *(WORD*)((char*)this + 0xa) - 2;
-                (*(int*)((char*)this + 0x3138))++;
+            if (frame == 6 && unk3138 < 1) {
+                frame = frame - 2;
+                unk3138++;
             }
-            if (*(WORD*)((char*)this + 0xa) == 0xd) {
-                *(short*)((char*)this + 0xa) = *(WORD*)((char*)this + 0xa) - 4;
+            if (frame == 0xd) {
+                frame = frame - 4;
             }
-            if (*(WORD*)((char*)this + 0xa) >= x8) {
+            if (frame >= x8) {
                 Vf0();
-                *(short*)((char*)this + 8) = 0;
+                pattern = 0;
             }
         }
         break;
     case 0x10d:
-        if (*(WORD*)((char*)this + 0xa) == 0 && *(WORD*)((char*)this + 0xc) == 0) {
+        if (frame == 0 && timer == 0) {
             CPlayer::Unk40f1e0();
         }
-        if (*(WORD*)((char*)this + 0xa) == 3 && *(WORD*)((char*)this + 0xc) == 0) {
-            *(double*)((char*)this + 0x30) = 0.5;
-            *(double*)((char*)this + 0x38) = 3.0;
-            *(short*)((char*)this + 0x16c) = 1;
-            *((char*)this + 0x2c9) = 0x23;
-            *(short*)((char*)this + 0x148) = *(short*)((char*)this + 0x148) + 0x23;
+        if (frame == 3 && timer == 0) {
+            vx = 0.5;
+            vy = 3.0;
+            unk16c = 1;
+            unk2c9 = 0x23;
+            unk148 = unk148 + 0x23;
         }
-        if (*(double*)((char*)this + 0x28) + *(double*)((char*)this + 0x38) > 0.0 && *(WORD*)((char*)this + 0xa) > 2) {
-            *(short*)((char*)this + 0xc) = 0;
-            *(short*)((char*)this + 0xa) = 0;
-            *(double*)((char*)this + 0x28) = 0.0;
+        if (y + vy > 0.0 && frame > 2) {
+            timer = 0;
+            frame = 0;
+            y = 0.0;
             CPlayer::Unk40f1e0();
-            *(short*)((char*)this + 8) = 0x108;
+            pattern = 0x108;
             break;
         }
-        (*(short*)((char*)this + 0xc))++;
-        if (*(WORD*)((char*)this + 0xc) >= l4) {
-            *(short*)((char*)this + 0xc) = 0;
-            (*(short*)((char*)this + 0xa))++;
-            if (*(short*)((char*)this + 0x16c) > 0) {
-                *(int*)((char*)this + 0x168) = 0;
+        timer++;
+        if (timer >= l4) {
+            timer = 0;
+            frame++;
+            if (unk16c > 0) {
+                unk168 = 0;
             }
-            if (*(WORD*)((char*)this + 0xa) >= x8) {
-                *(short*)((char*)this + 0xa) = *(WORD*)((char*)this + 0xa) - 2;
+            if (frame >= x8) {
+                frame = frame - 2;
             }
         }
         break;
     case 0x10e:
-        if (*(WORD*)((char*)this + 0xa) == 0 && *(WORD*)((char*)this + 0xc) == 0) {
+        if (frame == 0 && timer == 0) {
             CPlayer::Unk40f1e0();
         }
-        if (*(WORD*)((char*)this + 0xa) == 3 && *(WORD*)((char*)this + 0xc) == 0) {
-            *(double*)((char*)this + 0x30) = 2.2;
-            *(double*)((char*)this + 0x38) = 2.2;
-            *(short*)((char*)this + 0x16c) = 1;
-            *((char*)this + 0x2c9) = 0x23;
-            *(short*)((char*)this + 0x148) = *(short*)((char*)this + 0x148) + 0x23;
+        if (frame == 3 && timer == 0) {
+            vx = 2.2;
+            vy = 2.2;
+            unk16c = 1;
+            unk2c9 = 0x23;
+            unk148 = unk148 + 0x23;
         }
-        if (*(double*)((char*)this + 0x28) + *(double*)((char*)this + 0x38) > 0.0 && *(WORD*)((char*)this + 0xa) > 2) {
-            *(short*)((char*)this + 0xc) = 0;
-            *(short*)((char*)this + 0xa) = 0;
-            *(double*)((char*)this + 0x28) = 0.0;
+        if (y + vy > 0.0 && frame > 2) {
+            timer = 0;
+            frame = 0;
+            y = 0.0;
             CPlayer::Unk40f1e0();
-            *(short*)((char*)this + 8) = 0x108;
+            pattern = 0x108;
             break;
         }
-        (*(short*)((char*)this + 0xc))++;
-        if (*(WORD*)((char*)this + 0xc) >= l4) {
-            *(short*)((char*)this + 0xc) = 0;
-            (*(short*)((char*)this + 0xa))++;
-            if (*(short*)((char*)this + 0x16c) > 0) {
-                *(int*)((char*)this + 0x168) = 0;
+        timer++;
+        if (timer >= l4) {
+            timer = 0;
+            frame++;
+            if (unk16c > 0) {
+                unk168 = 0;
             }
-            if (*(WORD*)((char*)this + 0xa) >= x8) {
-                *(short*)((char*)this + 0xa) = *(WORD*)((char*)this + 0xa) - 2;
+            if (frame >= x8) {
+                frame = frame - 2;
             }
         }
         break;
     case 0x10f:
-        if (*(WORD*)((char*)this + 0xa) == 0 && *(WORD*)((char*)this + 0xc) == 0) {
-            *(short*)((char*)this + 0x148) = *(short*)((char*)this + 0x148) + 0x28;
-            *(short*)((char*)this + 0x16c) = 4;
+        if (frame == 0 && timer == 0) {
+            unk148 = unk148 + 0x28;
+            unk16c = 4;
         }
-        if (*(WORD*)((char*)this + 0xa) > 9 && *(WORD*)((char*)this + 0xa) < 0xe) {
-            *(double*)((char*)this + 0x38) = *(double*)((char*)this + 0x38) + *(double*)((char*)this + 0x48);
-            if (*(double*)((char*)this + 0x38) + *(double*)((char*)this + 0x28) > 0.0) {
-                *(double*)((char*)this + 0x28) = 0.0;
+        if (frame > 9 && frame < 0xe) {
+            vy = vy + ay;
+            if (vy + y > 0.0) {
+                y = 0.0;
                 CPlayer::Unk40f1e0();
                 Vf0();
-                *(short*)((char*)this + 0xa) = 0xe;
+                frame = 0xe;
                 break;
             }
         }
-        if (*(WORD*)((char*)this + 0xa) < 7) {
-            *(double*)((char*)this + 0x38) = *(double*)((char*)this + 0x38) + *(double*)((char*)this + 0x48);
-            if (*(double*)((char*)this + 0x38) + *(double*)((char*)this + 0x28) > 0.0) {
-                *(double*)((char*)this + 0x28) = 0.0;
-                *(double*)((char*)this + 0x38) = 0.0;
+        if (frame < 7) {
+            vy = vy + ay;
+            if (vy + y > 0.0) {
+                y = 0.0;
+                vy = 0.0;
                 Vf0();
-                *(int*)((char*)this + 0x3138) = (int)(*(double*)((char*)this + 0x30) * 100.0);
-                *(double*)((char*)this + 0x30) = 0.0;
-                *(short*)((char*)this + 0xa) = 7;
+                unk3138 = (int)(vx * 100.0);
+                vx = 0.0;
+                frame = 7;
                 break;
             }
         }
-        (*(short*)((char*)this + 0xc))++;
-        if (*(WORD*)((char*)this + 0xc) >= l4) {
-            *(short*)((char*)this + 0xc) = 0;
-            (*(short*)((char*)this + 0xa))++;
-            *(int*)((char*)this + 0x168) = 0;
-            if (*(WORD*)((char*)this + 0xa) == 7 || *(WORD*)((char*)this + 0xa) == 0xe) {
-                *(short*)((char*)this + 0xa) = *(WORD*)((char*)this + 0xa) - 4;
-                (*(int*)((char*)this + 0x3138))++;
+        timer++;
+        if (timer >= l4) {
+            timer = 0;
+            frame++;
+            unk168 = 0;
+            if (frame == 7 || frame == 0xe) {
+                frame = frame - 4;
+                unk3138++;
             }
-            if (*(WORD*)((char*)this + 0xa) == 9) {
-                *(double*)((char*)this + 0x30) = *(int*)((char*)this + 0x3138) * 0.005;
-                *(double*)((char*)this + 0x38) = -0.8;
+            if (frame == 9) {
+                vx = unk3138 * 0.005;
+                vy = -0.8;
             }
-            if (*(WORD*)((char*)this + 0xa) >= x8) {
-                *(short*)((char*)this + 8) = 3;
+            if (frame >= x8) {
+                pattern = 3;
                 Vf0();
             }
         }
         break;
     case 0x110:
-        if (*(WORD*)((char*)this + 0xa) == 0 && *(WORD*)((char*)this + 0xc) == 0) {
+        if (frame == 0 && timer == 0) {
             CPlayer::Unk40f1e0();
         }
-        if (*(WORD*)((char*)this + 0xa) > 0x13 && *(short*)((char*)this + 0x262) == 0xa) {
+        if (frame > 0x13 && unk262 == 0xa) {
             Vf0();
-            *(short*)((char*)this + 8) = 0x106;
+            pattern = 0x106;
             break;
         }
-        if (*(WORD*)((char*)this + 0xa) == 4 && *(WORD*)((char*)this + 0xc) == 0) {
-            *(double*)((char*)this + 0x48) = 0.03;
-            *(double*)((char*)this + 0x38) = -2.0;
-            *(double*)((char*)this + 0x30) = -3.0;
+        if (frame == 4 && timer == 0) {
+            ay = 0.03;
+            vy = -2.0;
+            vx = -3.0;
         }
-        if (*(WORD*)((char*)this + 0xa) > 0xf && *(WORD*)((char*)this + 0xa) < 0x14) {
-            if (*((char*)this + 0x188) == *((char*)this + 0x50)) {
-                *(double*)((char*)this + 0x30) += 0.015;
+        if (frame > 0xf && frame < 0x14) {
+            if (m_inputX == facing) {
+                vx += 0.015;
             }
-            if (*((char*)this + 0x188) == -*((char*)this + 0x50)) {
-                *(double*)((char*)this + 0x30) -= 0.015;
+            if (m_inputX == -facing) {
+                vx -= 0.015;
             }
-            if (*(double*)((char*)this + 0x30) < -2.5) {
-                *(double*)((char*)this + 0x30) = -2.5;
-            } else if (*(double*)((char*)this + 0x30) > 2.5) {
-                *(double*)((char*)this + 0x30) = 2.5;
+            if (vx < -2.5) {
+                vx = -2.5;
+            } else if (vx > 2.5) {
+                vx = 2.5;
             }
-            if (*((char*)this + 0x18a) == 1) {
+            if (m_pressA == 1) {
                 Vf0();
-                *(short*)((char*)this + 8) = 0x10d;
-                if (*((char*)this + 0x188) == -*((char*)this + 0x50)) {
-                    *((char*)this + 0x50) = -*((char*)this + 0x50);
+                pattern = 0x10d;
+                if (m_inputX == -facing) {
+                    facing = -facing;
                 }
                 break;
             }
-            if (*((char*)this + 0x18b) == 1) {
+            if (m_pressB == 1) {
                 Vf0();
-                *(short*)((char*)this + 8) = 0x10e;
-                if (*((char*)this + 0x188) == -*((char*)this + 0x50)) {
-                    *((char*)this + 0x50) = -*((char*)this + 0x50);
+                pattern = 0x10e;
+                if (m_inputX == -facing) {
+                    facing = -facing;
                 }
                 break;
             }
-            if (*((char*)this + 0x18c) == 1) {
+            if (m_pressC == 1) {
                 Vf0();
-                *(short*)((char*)this + 8) = 0x10f;
-                if (*((char*)this + 0x188) == -*((char*)this + 0x50)) {
-                    *((char*)this + 0x50) = -*((char*)this + 0x50);
+                pattern = 0x10f;
+                if (m_inputX == -facing) {
+                    facing = -facing;
                 }
                 break;
             }
         }
-        if (*(WORD*)((char*)this + 0xa) > 4 && *(WORD*)((char*)this + 0xa) < 0xc || *(WORD*)((char*)this + 0xa) > 0xf && *(WORD*)((char*)this + 0xa) < 0x14) {
-            *(double*)((char*)this + 0x38) = *(double*)((char*)this + 0x38) + *(double*)((char*)this + 0x48);
+        if (frame > 4 && frame < 0xc || frame > 0xf && frame < 0x14) {
+            vy = vy + ay;
         }
-        if (*(WORD*)((char*)this + 0xa) > 0xb && *(WORD*)((char*)this + 0xa) < 0x10) {
-            if (*((char*)this + 0x50) == 1) {
-                *(double*)((char*)this + 0x20) = *(int*)(*(char**)((char*)this + 0x7c) + 0x14248) + 0xf;
+        if (frame > 0xb && frame < 0x10) {
+            if (facing == 1) {
+                x = m_game->unk14248 + 0xf;
             }
-            if (*((char*)this + 0x50) == -1) {
-                *(double*)((char*)this + 0x20) = *(int*)(*(char**)((char*)this + 0x7c) + 0x14250) - 0xf;
+            if (facing == -1) {
+                x = m_game->unk14250 - 0xf;
             }
         }
-        if (*(double*)((char*)this + 0x28) + *(double*)((char*)this + 0x38) >= 0.0 && *(WORD*)((char*)this + 0xa) > 4 && *(WORD*)((char*)this + 0xa) < 0x14) {
-            *(double*)((char*)this + 0x28) = 0.0;
+        if (y + vy >= 0.0 && frame > 4 && frame < 0x14) {
+            y = 0.0;
             CPlayer::Unk40f1e0();
-            *(short*)((char*)this + 0xa) = 0x14;
-            *(short*)((char*)this + 0xc) = 0;
+            frame = 0x14;
+            timer = 0;
             break;
         }
-        if ((char)CPlayer::Unk40ff70() != 0 && *(WORD*)((char*)this + 0xa) > 4 && *(WORD*)((char*)this + 0xa) < 0xc) {
-            *(double*)((char*)this + 0x30) = 0.0;
-            *(double*)((char*)this + 0x38) = 0.0;
-            *(short*)((char*)this + 0xa) = 0xc;
-            *(short*)((char*)this + 0xc) = 0;
-            *((char*)this + 0x2c9) = 0x1a;
+        if ((char)CPlayer::Unk40ff70() != 0 && frame > 4 && frame < 0xc) {
+            vx = 0.0;
+            vy = 0.0;
+            frame = 0xc;
+            timer = 0;
+            unk2c9 = 0x1a;
             break;
         }
-        (*(short*)((char*)this + 0xc))++;
-        if (*(WORD*)((char*)this + 0xc) >= l4) {
-            *(short*)((char*)this + 0xc) = 0;
-            (*(short*)((char*)this + 0xa))++;
-            if (*(WORD*)((char*)this + 0xa) == 0xc) {
-                *(short*)((char*)this + 0xa) = *(WORD*)((char*)this + 0xa) - 4;
+        timer++;
+        if (timer >= l4) {
+            timer = 0;
+            frame++;
+            if (frame == 0xc) {
+                frame = frame - 4;
             }
-            if (*(WORD*)((char*)this + 0xa) == 0x10) {
-                *(double*)((char*)this + 0x30) = 1.5;
-                *(double*)((char*)this + 0x38) = -2.5;
-                *(double*)((char*)this + 0x48) = 0.035;
+            if (frame == 0x10) {
+                vx = 1.5;
+                vy = -2.5;
+                ay = 0.035;
             }
-            if (*(WORD*)((char*)this + 0xa) == 0x14) {
-                *(short*)((char*)this + 0xa) = *(WORD*)((char*)this + 0xa) - 4;
+            if (frame == 0x14) {
+                frame = frame - 4;
             }
-            if (*(WORD*)((char*)this + 0xa) >= x8) {
-                *(short*)((char*)this + 8) = 3;
+            if (frame >= x8) {
+                pattern = 3;
                 Vf0();
                 CPlayer::Unk40e630();
             }
         }
         break;
     case 0x111:
-        if (*(WORD*)((char*)this + 0xa) == 0 && *(WORD*)((char*)this + 0xc) == 0) {
+        if (frame == 0 && timer == 0) {
             CPlayer::Unk40f1e0();
         }
-        if (*(WORD*)((char*)this + 0xa) == 4 && *(WORD*)((char*)this + 0xc) == 0) {
-            *(double*)((char*)this + 0x48) = 0.03;
-            *(double*)((char*)this + 0x38) = -1.5;
-            *(double*)((char*)this + 0x30) = -3.0;
+        if (frame == 4 && timer == 0) {
+            ay = 0.03;
+            vy = -1.5;
+            vx = -3.0;
         }
-        if (*(WORD*)((char*)this + 0xa) == 0x12 && *(double*)(*(char**)*(char**)((char*)this + 0x78) + 0x28) == 0.0) {
-            *(short*)((char*)this + 0x16c) = 1;
+        if (frame == 0x12 && (*m_opponent)->y == 0.0) {
+            unk16c = 1;
         } else {
-            *(short*)((char*)this + 0x16c) = 0;
+            unk16c = 0;
         }
-        if (*(WORD*)((char*)this + 0xa) == 0x12 && *(int*)((char*)this + 0x168) == 3) {
-            ((CPlayer*)*(int*)*(char**)((char*)this + 0x78))->Vf0();
-            ((CPlayer*)*(int*)*(char**)((char*)this + 0x78))->Unk40f1e0();
-            *(short*)(*(char**)*(char**)((char*)this + 0x78) + 8) = 0x6b;
+        if (frame == 0x12 && unk168 == 3) {
+            (*m_opponent)->Vf0();
+            (*m_opponent)->Unk40f1e0();
+            (*m_opponent)->pattern = 0x6b;
             Vf0();
             CPlayer::Unk40f1e0();
-            *(short*)((char*)this + 8) = 0x113;
-            *(double*)((char*)this + 0x28) = *(short*)((char*)this + 0x2af8) + 0x32;
-            *(double*)((char*)this + 0x20) = *(double*)(*(char**)*(char**)((char*)this + 0x78) + 0x20) + (-*(short*)((char*)this + 0x2ad0) - 0x14) * *((char*)this + 0x50);
+            pattern = 0x113;
+            y = unk2af8[0] + 0x32;
+            x = (*m_opponent)->x + (-unk2ad0[0] - 0x14) * facing;
             l50.type = 0;
-            l50.x = (double)((int)*(double*)((char*)this + 0x20) + *((char*)this + 0x50) * 7);
-            l50.y = (double)((int)*(double*)((char*)this + 0x28) - 0x2c);
+            l50.x = (double)((int)x + facing * 7);
+            l50.y = (double)((int)y - 0x2c);
             l50.unk20 = 2;
             l50.unk21 = 1;
-            ((CGame*)*(int*)((char*)this + 0x7c))->CreateEffect((EffectDesc*)&l50);
+            m_game->CreateEffect((EffectDesc*)&l50);
             break;
         }
-        if (*(WORD*)((char*)this + 0xa) > 4 && *(WORD*)((char*)this + 0xa) < 0xc || *(WORD*)((char*)this + 0xa) > 0xf && *(WORD*)((char*)this + 0xa) < 0x13) {
-            *(double*)((char*)this + 0x38) = *(double*)((char*)this + 0x38) + *(double*)((char*)this + 0x48);
+        if (frame > 4 && frame < 0xc || frame > 0xf && frame < 0x13) {
+            vy = vy + ay;
         }
-        if (*(WORD*)((char*)this + 0xa) > 0xb && *(WORD*)((char*)this + 0xa) < 0x10) {
-            if (*((char*)this + 0x50) == 1) {
-                *(double*)((char*)this + 0x20) = *(int*)(*(char**)((char*)this + 0x7c) + 0x14248) + 0xf;
+        if (frame > 0xb && frame < 0x10) {
+            if (facing == 1) {
+                x = m_game->unk14248 + 0xf;
             }
-            if (*((char*)this + 0x50) == -1) {
-                *(double*)((char*)this + 0x20) = *(int*)(*(char**)((char*)this + 0x7c) + 0x14250) - 0xf;
+            if (facing == -1) {
+                x = m_game->unk14250 - 0xf;
             }
         }
-        if (*(double*)((char*)this + 0x28) + *(double*)((char*)this + 0x38) >= 0.0 && *(WORD*)((char*)this + 0xa) > 0xf && *(WORD*)((char*)this + 0xa) < 0x13) {
-            *(double*)((char*)this + 0x28) = 0.0;
+        if (y + vy >= 0.0 && frame > 0xf && frame < 0x13) {
+            y = 0.0;
             CPlayer::Unk40f1e0();
-            *(short*)((char*)this + 0xa) = 0x14;
-            *(short*)((char*)this + 0xc) = 0;
+            frame = 0x14;
+            timer = 0;
             break;
         }
-        if ((char)CPlayer::Unk40ff70() != 0 && *(WORD*)((char*)this + 0xa) > 4 && *(WORD*)((char*)this + 0xa) < 0xc) {
-            *(double*)((char*)this + 0x30) = 0.0;
-            *(double*)((char*)this + 0x38) = 0.0;
-            *(short*)((char*)this + 0xa) = 0xc;
-            *(short*)((char*)this + 0xc) = 0;
-            *((char*)this + 0x2c9) = 0x1a;
+        if ((char)CPlayer::Unk40ff70() != 0 && frame > 4 && frame < 0xc) {
+            vx = 0.0;
+            vy = 0.0;
+            frame = 0xc;
+            timer = 0;
+            unk2c9 = 0x1a;
             break;
         }
-        (*(short*)((char*)this + 0xc))++;
-        if (*(WORD*)((char*)this + 0xc) >= l4) {
-            *(short*)((char*)this + 0xc) = 0;
-            (*(short*)((char*)this + 0xa))++;
-            if (*(WORD*)((char*)this + 0xa) == 0xc) {
-                *(short*)((char*)this + 0xa) = *(WORD*)((char*)this + 0xa) - 4;
+        timer++;
+        if (timer >= l4) {
+            timer = 0;
+            frame++;
+            if (frame == 0xc) {
+                frame = frame - 4;
             }
-            if (*(WORD*)((char*)this + 0xa) == 0x10) {
-                *(double*)((char*)this + 0x30) = 2.2;
-                *(double*)((char*)this + 0x38) = -0.5;
-                *(double*)((char*)this + 0x48) = 0.035;
+            if (frame == 0x10) {
+                vx = 2.2;
+                vy = -0.5;
+                ay = 0.035;
             }
-            if (*(WORD*)((char*)this + 0xa) == 0x13) {
-                (*(short*)((char*)this + 0xa))--;
+            if (frame == 0x13) {
+                frame--;
             }
-            if (*(WORD*)((char*)this + 0xa) >= x8) {
-                *(short*)((char*)this + 8) = 3;
+            if (frame >= x8) {
+                pattern = 3;
                 Vf0();
                 CPlayer::Unk40e630();
             }
         }
         break;
     case 0x112:
-        if (*(WORD*)((char*)this + 0xa) == 0 && *(WORD*)((char*)this + 0xc) == 0) {
+        if (frame == 0 && timer == 0) {
             CPlayer::Unk40f1e0();
         }
-        if (*(WORD*)((char*)this + 0xa) > 0x13 && *(short*)((char*)this + 0x262) == 0xa) {
+        if (frame > 0x13 && unk262 == 0xa) {
             Vf0();
-            *(short*)((char*)this + 8) = 0x106;
+            pattern = 0x106;
             break;
         }
-        if (*(WORD*)((char*)this + 0xa) == 4 && *(WORD*)((char*)this + 0xc) == 0) {
-            *(double*)((char*)this + 0x48) = 0.03;
-            *(double*)((char*)this + 0x38) = -2.0;
-            *(double*)((char*)this + 0x30) = 3.0;
+        if (frame == 4 && timer == 0) {
+            ay = 0.03;
+            vy = -2.0;
+            vx = 3.0;
         }
-        if (*(WORD*)((char*)this + 0xa) > 0xf && *(WORD*)((char*)this + 0xa) < 0x14) {
-            if (*((char*)this + 0x188) == *((char*)this + 0x50)) {
-                *(double*)((char*)this + 0x30) += 0.015;
+        if (frame > 0xf && frame < 0x14) {
+            if (m_inputX == facing) {
+                vx += 0.015;
             }
-            if (*((char*)this + 0x188) == -*((char*)this + 0x50)) {
-                *(double*)((char*)this + 0x30) -= 0.015;
+            if (m_inputX == -facing) {
+                vx -= 0.015;
             }
-            if (*(double*)((char*)this + 0x30) < -2.5) {
-                *(double*)((char*)this + 0x30) = -2.5;
-            } else if (*(double*)((char*)this + 0x30) > 2.5) {
-                *(double*)((char*)this + 0x30) = 2.5;
+            if (vx < -2.5) {
+                vx = -2.5;
+            } else if (vx > 2.5) {
+                vx = 2.5;
             }
-            if (*((char*)this + 0x18a) == 1) {
+            if (m_pressA == 1) {
                 Vf0();
-                *(short*)((char*)this + 8) = 0x10d;
-                if (*((char*)this + 0x188) == -*((char*)this + 0x50)) {
-                    *((char*)this + 0x50) = -*((char*)this + 0x50);
+                pattern = 0x10d;
+                if (m_inputX == -facing) {
+                    facing = -facing;
                 }
                 break;
             }
-            if (*((char*)this + 0x18b) == 1) {
+            if (m_pressB == 1) {
                 Vf0();
-                *(short*)((char*)this + 8) = 0x10e;
-                if (*((char*)this + 0x188) == -*((char*)this + 0x50)) {
-                    *((char*)this + 0x50) = -*((char*)this + 0x50);
+                pattern = 0x10e;
+                if (m_inputX == -facing) {
+                    facing = -facing;
                 }
                 break;
             }
-            if (*((char*)this + 0x18c) == 1) {
+            if (m_pressC == 1) {
                 Vf0();
-                *(short*)((char*)this + 8) = 0x10f;
-                if (*((char*)this + 0x188) == -*((char*)this + 0x50)) {
-                    *((char*)this + 0x50) = -*((char*)this + 0x50);
+                pattern = 0x10f;
+                if (m_inputX == -facing) {
+                    facing = -facing;
                 }
                 break;
             }
         }
-        if (*(WORD*)((char*)this + 0xa) > 4 && *(WORD*)((char*)this + 0xa) < 0xc || *(WORD*)((char*)this + 0xa) > 0xf && *(WORD*)((char*)this + 0xa) < 0x14) {
-            *(double*)((char*)this + 0x38) = *(double*)((char*)this + 0x38) + *(double*)((char*)this + 0x48);
+        if (frame > 4 && frame < 0xc || frame > 0xf && frame < 0x14) {
+            vy = vy + ay;
         }
-        if (*(WORD*)((char*)this + 0xa) > 0xb && *(WORD*)((char*)this + 0xa) < 0x10) {
-            if (*((char*)this + 0x50) == 1) {
-                *(double*)((char*)this + 0x20) = *(int*)(*(char**)((char*)this + 0x7c) + 0x14248) + 0xf;
+        if (frame > 0xb && frame < 0x10) {
+            if (facing == 1) {
+                x = m_game->unk14248 + 0xf;
             }
-            if (*((char*)this + 0x50) == -1) {
-                *(double*)((char*)this + 0x20) = *(int*)(*(char**)((char*)this + 0x7c) + 0x14250) - 0xf;
+            if (facing == -1) {
+                x = m_game->unk14250 - 0xf;
             }
         }
-        if (*(double*)((char*)this + 0x28) + *(double*)((char*)this + 0x38) >= 0.0 && *(WORD*)((char*)this + 0xa) > 4 && *(WORD*)((char*)this + 0xa) < 0x14) {
-            *(double*)((char*)this + 0x28) = 0.0;
+        if (y + vy >= 0.0 && frame > 4 && frame < 0x14) {
+            y = 0.0;
             CPlayer::Unk40f1e0();
-            *(short*)((char*)this + 0xa) = 0x14;
-            *(short*)((char*)this + 0xc) = 0;
+            frame = 0x14;
+            timer = 0;
             break;
         }
-        if ((char)CPlayer::Unk40ff70() != 0 && *(WORD*)((char*)this + 0xa) > 4 && *(WORD*)((char*)this + 0xa) < 0xc) {
-            *(double*)((char*)this + 0x30) = 0.0;
-            *(double*)((char*)this + 0x38) = 0.0;
-            *((char*)this + 0x50) = -*((char*)this + 0x50);
-            *(short*)((char*)this + 0xa) = 0xc;
-            *(short*)((char*)this + 0xc) = 0;
-            *((char*)this + 0x2c9) = 0x1a;
+        if ((char)CPlayer::Unk40ff70() != 0 && frame > 4 && frame < 0xc) {
+            vx = 0.0;
+            vy = 0.0;
+            facing = -facing;
+            frame = 0xc;
+            timer = 0;
+            unk2c9 = 0x1a;
             break;
         }
-        (*(short*)((char*)this + 0xc))++;
-        if (*(WORD*)((char*)this + 0xc) >= l4) {
-            *(short*)((char*)this + 0xc) = 0;
-            (*(short*)((char*)this + 0xa))++;
-            if (*(WORD*)((char*)this + 0xa) == 0xc) {
-                *(short*)((char*)this + 0xa) = *(WORD*)((char*)this + 0xa) - 4;
+        timer++;
+        if (timer >= l4) {
+            timer = 0;
+            frame++;
+            if (frame == 0xc) {
+                frame = frame - 4;
             }
-            if (*(WORD*)((char*)this + 0xa) == 0x10) {
-                *(double*)((char*)this + 0x30) = 1.5;
-                *(double*)((char*)this + 0x38) = -2.5;
-                *(double*)((char*)this + 0x48) = 0.035;
+            if (frame == 0x10) {
+                vx = 1.5;
+                vy = -2.5;
+                ay = 0.035;
             }
-            if (*(WORD*)((char*)this + 0xa) == 0x14) {
-                *(short*)((char*)this + 0xa) = *(WORD*)((char*)this + 0xa) - 4;
+            if (frame == 0x14) {
+                frame = frame - 4;
             }
-            if (*(WORD*)((char*)this + 0xa) >= x8) {
-                *(short*)((char*)this + 8) = 3;
+            if (frame >= x8) {
+                pattern = 3;
                 Vf0();
                 CPlayer::Unk40e630();
             }
@@ -4566,251 +4566,251 @@ void CMayu::Vf6()
     case 0x113:
         CPlayer::Unk410a40(0x32, 3);
         CPlayer::Unk410a80(0x32, 3);
-        if (*(WORD*)((char*)this + 0xa) == 4) {
-            *(short*)(*(char**)*(char**)((char*)this + 0x78) + 8) = 0x67;
-            *(double*)(*(char**)*(char**)((char*)this + 0x78) + 0x20) = (23.0 + *(double*)((char*)this + 0x30)) * *((char*)this + 0x50) + *(double*)((char*)this + 0x20);
-            *(double*)(*(char**)*(char**)((char*)this + 0x78) + 0x28) = -54.0 + *(double*)((char*)this + 0x38) + *(double*)((char*)this + 0x28);
+        if (frame == 4) {
+            (*m_opponent)->pattern = 0x67;
+            (*m_opponent)->x = (23.0 + vx) * facing + x;
+            (*m_opponent)->y = -54.0 + vy + y;
         }
-        if (*(WORD*)((char*)this + 0xa) == 5) {
-            *(short*)(*(char**)*(char**)((char*)this + 0x78) + 8) = 0x67;
-            *(double*)(*(char**)*(char**)((char*)this + 0x78) + 0x20) = (15.0 + *(double*)((char*)this + 0x30)) * *((char*)this + 0x50) + *(double*)((char*)this + 0x20);
-            *(double*)(*(char**)*(char**)((char*)this + 0x78) + 0x28) = -70.0 + *(double*)((char*)this + 0x38) + *(double*)((char*)this + 0x28);
+        if (frame == 5) {
+            (*m_opponent)->pattern = 0x67;
+            (*m_opponent)->x = (15.0 + vx) * facing + x;
+            (*m_opponent)->y = -70.0 + vy + y;
         }
-        if (*(WORD*)((char*)this + 0xa) == 6) {
-            *(short*)(*(char**)*(char**)((char*)this + 0x78) + 8) = 0x76;
-            *(double*)(*(char**)*(char**)((char*)this + 0x78) + 0x20) = (-31.0 + *(double*)((char*)this + 0x30)) * *((char*)this + 0x50) + *(double*)((char*)this + 0x20);
-            *(double*)(*(char**)*(char**)((char*)this + 0x78) + 0x28) = -62.0 + *(double*)((char*)this + 0x38) + *(double*)((char*)this + 0x28);
-            *(*(char**)*(char**)((char*)this + 0x78) + 0x50) = *((char*)this + 0x50);
+        if (frame == 6) {
+            (*m_opponent)->pattern = 0x76;
+            (*m_opponent)->x = (-31.0 + vx) * facing + x;
+            (*m_opponent)->y = -62.0 + vy + y;
+            (*m_opponent)->facing = facing;
         }
-        if (*(WORD*)((char*)this + 0xa) == 7) {
-            *(short*)(*(char**)*(char**)((char*)this + 0x78) + 8) = 0x75;
-            *(double*)(*(char**)*(char**)((char*)this + 0x78) + 0x20) = (-34.0 + *(double*)((char*)this + 0x30)) * *((char*)this + 0x50) + *(double*)((char*)this + 0x20);
-            *(double*)(*(char**)*(char**)((char*)this + 0x78) + 0x28) = -34.0 + *(double*)((char*)this + 0x38) + *(double*)((char*)this + 0x28);
-            *(*(char**)*(char**)((char*)this + 0x78) + 0x50) = *((char*)this + 0x50);
+        if (frame == 7) {
+            (*m_opponent)->pattern = 0x75;
+            (*m_opponent)->x = (-34.0 + vx) * facing + x;
+            (*m_opponent)->y = -34.0 + vy + y;
+            (*m_opponent)->facing = facing;
         }
-        if (*(WORD*)((char*)this + 0xa) == 8) {
-            *(short*)(*(char**)*(char**)((char*)this + 0x78) + 8) = 0x68;
-            *(double*)(*(char**)*(char**)((char*)this + 0x78) + 0x20) = (-6.0 + *(double*)((char*)this + 0x30)) * *((char*)this + 0x50) + *(double*)((char*)this + 0x20);
-            *(double*)(*(char**)*(char**)((char*)this + 0x78) + 0x28) = -3.0 + *(double*)((char*)this + 0x38) + *(double*)((char*)this + 0x28);
-            *(*(char**)*(char**)((char*)this + 0x78) + 0x50) = -*((char*)this + 0x50);
+        if (frame == 8) {
+            (*m_opponent)->pattern = 0x68;
+            (*m_opponent)->x = (-6.0 + vx) * facing + x;
+            (*m_opponent)->y = -3.0 + vy + y;
+            (*m_opponent)->facing = -facing;
         }
-        if (*(WORD*)((char*)this + 0xa) == 9) {
-            *(short*)(*(char**)*(char**)((char*)this + 0x78) + 8) = 0x68;
-            *(double*)(*(char**)*(char**)((char*)this + 0x78) + 0x20) = (-4.0 + *(double*)((char*)this + 0x30)) * *((char*)this + 0x50) + *(double*)((char*)this + 0x20);
-            *(double*)(*(char**)*(char**)((char*)this + 0x78) + 0x28) = -2.0 + *(double*)((char*)this + 0x38) + *(double*)((char*)this + 0x28);
-            *(*(char**)*(char**)((char*)this + 0x78) + 0x50) = -*((char*)this + 0x50);
+        if (frame == 9) {
+            (*m_opponent)->pattern = 0x68;
+            (*m_opponent)->x = (-4.0 + vx) * facing + x;
+            (*m_opponent)->y = -2.0 + vy + y;
+            (*m_opponent)->facing = -facing;
         }
-        if (*(WORD*)((char*)this + 0xa) == 0xa && *(WORD*)((char*)this + 0xc) == 0) {
-            ((CPlayer*)*(int*)*(char**)((char*)this + 0x78))->Unk40f1e0();
-            ((CPlayer*)*(int*)*(char**)((char*)this + 0x78))->Vf0();
-            *(short*)(*(char**)*(char**)((char*)this + 0x78) + 8) = 0x62;
-            *(double*)(*(char**)*(char**)((char*)this + 0x78) + 0x28) = 0.0;
-            *(double*)(*(char**)*(char**)((char*)this + 0x78) + 0x20) = *(double*)((char*)this + 0x20);
+        if (frame == 0xa && timer == 0) {
+            (*m_opponent)->Unk40f1e0();
+            (*m_opponent)->Vf0();
+            (*m_opponent)->pattern = 0x62;
+            (*m_opponent)->y = 0.0;
+            (*m_opponent)->x = x;
             CPlayer::Unk4105a0(0x4b0, 960.0);
             l50.type = 0;
-            l50.x = (double)(int)*(double*)((char*)this + 0x20);
-            l50.y = (double)(int)*(double*)((char*)this + 0x28);
+            l50.x = (double)(int)x;
+            l50.y = (double)(int)y;
             l50.unk2c = 2;
             l50.unk20 = 2;
             l50.unk21 = 1;
-            ((CGame*)*(int*)((char*)this + 0x7c))->CreateEffect((EffectDesc*)&l50);
+            m_game->CreateEffect((EffectDesc*)&l50);
         }
-        if (*(WORD*)((char*)this + 0xa) == 0x13 && *(double*)((char*)this + 0x28) + *(double*)((char*)this + 0x38) > 0.0) {
+        if (frame == 0x13 && y + vy > 0.0) {
             Vf0();
             CPlayer::Unk40f1e0();
-            *(double*)((char*)this + 0x28) = 0.0;
-            *(short*)((char*)this + 8) = 0xd;
+            y = 0.0;
+            pattern = 0xd;
             break;
         }
-        if (*(WORD*)((char*)this + 0xa) > 0xf) {
-            *(double*)((char*)this + 0x38) = *(double*)((char*)this + 0x38) + *(double*)((char*)this + 0x48);
+        if (frame > 0xf) {
+            vy = vy + ay;
         }
-        if (*(WORD*)((char*)this + 0xa) > 0xd && *(WORD*)(*(char**)*(char**)((char*)this + 0x78) + 8) == 0x63) {
-            *(short*)(*(char**)*(char**)((char*)this + 0x78) + 0xc) = 0;
+        if (frame > 0xd && (*m_opponent)->pattern == 0x63) {
+            (*m_opponent)->timer = 0;
         }
-        (*(short*)((char*)this + 0xc))++;
-        if (*(WORD*)((char*)this + 0xc) >= l4) {
-            *(short*)((char*)this + 0xc) = 0;
-            (*(short*)((char*)this + 0xa))++;
-            *(int*)((char*)this + 0x168) = 0;
-            if (*(WORD*)((char*)this + 0xa) == 0x10) {
-                *(double*)((char*)this + 0x30) = -0.5;
-                *(double*)((char*)this + 0x38) = -1.3;
-                *(double*)((char*)this + 0x48) = 0.05;
+        timer++;
+        if (timer >= l4) {
+            timer = 0;
+            frame++;
+            unk168 = 0;
+            if (frame == 0x10) {
+                vx = -0.5;
+                vy = -1.3;
+                ay = 0.05;
             }
-            if (*(WORD*)((char*)this + 0xa) >= x8) {
-                (*(short*)((char*)this + 0xa))--;
+            if (frame >= x8) {
+                frame--;
             }
         }
         break;
     case 0x118:
-        if (*(WORD*)((char*)this + 0xa) == 0 && *(WORD*)((char*)this + 0xc) == 0) {
+        if (frame == 0 && timer == 0) {
             CPlayer::Unk40e630();
             CPlayer::Unk40f1e0();
-            *(short*)((char*)this + 0x16c) = 1;
+            unk16c = 1;
         }
-        if (*(double*)((char*)this + 0x28) + *(double*)((char*)this + 0x38) > 0.0 && *(WORD*)((char*)this + 0xa) > 4) {
-            *(short*)((char*)this + 0xc) = 0;
-            *(short*)((char*)this + 0xa) = 0xc;
-            *(double*)((char*)this + 0x28) = 0.0;
+        if (y + vy > 0.0 && frame > 4) {
+            timer = 0;
+            frame = 0xc;
+            y = 0.0;
             CPlayer::Unk40f1e0();
             break;
         }
-        if (*(WORD*)((char*)this + 0xa) == 5 && *(int*)((char*)this + 0x168) == 3) {
-            *(double*)((char*)this + 0x30) *= 0.15;
-            *(double*)((char*)this + 0x38) *= 0.15;
+        if (frame == 5 && unk168 == 3) {
+            vx *= 0.15;
+            vy *= 0.15;
             Vf0();
-            *(short*)((char*)this + 8) = 0x123;
+            pattern = 0x123;
             break;
         }
-        (*(short*)((char*)this + 0xc))++;
-        if (*(WORD*)((char*)this + 0xc) >= l4) {
-            *(short*)((char*)this + 0xc) = 0;
-            (*(short*)((char*)this + 0xa))++;
-            *(int*)((char*)this + 0x168) = 0;
-            if (*(WORD*)((char*)this + 0xa) == 5) {
-                *(double*)((char*)this + 0x30) = 0.7;
-                *(double*)((char*)this + 0x38) = 2.0;
+        timer++;
+        if (timer >= l4) {
+            timer = 0;
+            frame++;
+            unk168 = 0;
+            if (frame == 5) {
+                vx = 0.7;
+                vy = 2.0;
             }
-            if (*(WORD*)((char*)this + 0xa) == 6) {
-                (*(short*)((char*)this + 0xa))--;
+            if (frame == 6) {
+                frame--;
             }
-            if (*(WORD*)((char*)this + 0xa) == 0xc) {
-                *(short*)((char*)this + 0xa) = *(WORD*)((char*)this + 0xa) - 6;
+            if (frame == 0xc) {
+                frame = frame - 6;
             }
-            if (*(WORD*)((char*)this + 0xa) >= x8) {
+            if (frame >= x8) {
                 Vf0();
                 CPlayer::Unk40e630();
-                *(short*)((char*)this + 8) = 3;
+                pattern = 3;
             }
         }
         break;
     case 0x119:
-        if (*(WORD*)((char*)this + 0xa) == 0 && *(WORD*)((char*)this + 0xc) == 0) {
+        if (frame == 0 && timer == 0) {
             CPlayer::Unk40e630();
             CPlayer::Unk40f1e0();
-            *(short*)((char*)this + 0x16c) = 1;
+            unk16c = 1;
         }
-        if (*(double*)((char*)this + 0x28) + *(double*)((char*)this + 0x38) > 0.0 && *(WORD*)((char*)this + 0xa) > 4) {
-            *(short*)((char*)this + 0xc) = 0;
-            *(short*)((char*)this + 0xa) = 0xc;
-            *(double*)((char*)this + 0x28) = 0.0;
+        if (y + vy > 0.0 && frame > 4) {
+            timer = 0;
+            frame = 0xc;
+            y = 0.0;
             CPlayer::Unk40f1e0();
             break;
         }
-        if (*(WORD*)((char*)this + 0xa) == 5 && *(int*)((char*)this + 0x168) == 3) {
-            *(double*)((char*)this + 0x30) *= 0.15;
-            *(double*)((char*)this + 0x38) *= 0.15;
+        if (frame == 5 && unk168 == 3) {
+            vx *= 0.15;
+            vy *= 0.15;
             Vf0();
-            *(short*)((char*)this + 8) = 0x123;
+            pattern = 0x123;
             break;
         }
-        (*(short*)((char*)this + 0xc))++;
-        if (*(WORD*)((char*)this + 0xc) >= l4) {
-            *(short*)((char*)this + 0xc) = 0;
-            (*(short*)((char*)this + 0xa))++;
-            *(int*)((char*)this + 0x168) = 0;
-            if (*(WORD*)((char*)this + 0xa) == 5) {
-                *(double*)((char*)this + 0x30) = 2.0;
-                *(double*)((char*)this + 0x38) = 2.0;
+        timer++;
+        if (timer >= l4) {
+            timer = 0;
+            frame++;
+            unk168 = 0;
+            if (frame == 5) {
+                vx = 2.0;
+                vy = 2.0;
             }
-            if (*(WORD*)((char*)this + 0xa) == 6) {
-                (*(short*)((char*)this + 0xa))--;
+            if (frame == 6) {
+                frame--;
             }
-            if (*(WORD*)((char*)this + 0xa) == 0xc) {
-                *(short*)((char*)this + 0xa) = *(WORD*)((char*)this + 0xa) - 6;
+            if (frame == 0xc) {
+                frame = frame - 6;
             }
-            if (*(WORD*)((char*)this + 0xa) >= x8) {
+            if (frame >= x8) {
                 Vf0();
                 CPlayer::Unk40e630();
-                *(short*)((char*)this + 8) = 3;
+                pattern = 3;
             }
         }
         break;
     case 0x11a:
-        if (*(WORD*)((char*)this + 0xa) == 0 && *(WORD*)((char*)this + 0xc) == 0) {
+        if (frame == 0 && timer == 0) {
             CPlayer::Unk40e630();
             CPlayer::Unk40f1e0();
-            if (*((char*)this + 0x120) == 0) {
-                *(double*)((char*)this + 0x118) -= 500.0;
+            if (unk120 == 0) {
+                unk118 -= 500.0;
             } else {
-                *(double*)((char*)this + 0x118) -= 250.0;
+                unk118 -= 250.0;
             }
             l50.type = 0x21;
             l50.unk2c = 0xb;
-            l50.x = (double)((int)*(double*)((char*)this + 0x20) + *((char*)this + 0x50) * 0x14);
-            l50.y = (double)((int)*(double*)((char*)this + 0x28) - 0x32);
+            l50.x = (double)((int)x + facing * 0x14);
+            l50.y = (double)((int)y - 0x32);
             l50.unk20 = 2;
             l50.unk21 = 1;
-            ((CGame*)*(int*)((char*)this + 0x7c))->CreateEffect((EffectDesc*)&l50);
-            (*(int*)((char*)this + 0x3138))++;
+            m_game->CreateEffect((EffectDesc*)&l50);
+            unk3138++;
         }
-        if (*(WORD*)((char*)this + 0xa) == 0 && *(WORD*)((char*)this + 0xc) == 0) {
+        if (frame == 0 && timer == 0) {
             CPlayer::Unk40f1e0();
-            *(short*)((char*)this + 0x16c) = 1;
+            unk16c = 1;
         }
-        if (*(double*)((char*)this + 0x28) + *(double*)((char*)this + 0x38) > 0.0 && *(WORD*)((char*)this + 0xa) > 4) {
-            *(short*)((char*)this + 0xc) = 0;
-            *(short*)((char*)this + 0xa) = 0xc;
-            *(double*)((char*)this + 0x28) = 0.0;
+        if (y + vy > 0.0 && frame > 4) {
+            timer = 0;
+            frame = 0xc;
+            y = 0.0;
             CPlayer::Unk40f1e0();
             break;
         }
-        if (*(WORD*)((char*)this + 0xa) == 5 && *(int*)((char*)this + 0x168) == 3) {
-            *(short*)((char*)this + 0xc) = 0;
-            *(short*)((char*)this + 0xa) = 8;
-            *(short*)((char*)this + 0x16c) = 0x63;
+        if (frame == 5 && unk168 == 3) {
+            timer = 0;
+            frame = 8;
+            unk16c = 0x63;
             break;
         }
-        (*(short*)((char*)this + 0xc))++;
-        if (*(WORD*)((char*)this + 0xc) >= l4) {
-            *(short*)((char*)this + 0xc) = 0;
-            (*(short*)((char*)this + 0xa))++;
-            *(int*)((char*)this + 0x168) = 0;
-            if (*(WORD*)((char*)this + 0xa) == 5) {
-                *(double*)((char*)this + 0x30) = 2.0;
-                *(double*)((char*)this + 0x38) = 2.0;
+        timer++;
+        if (timer >= l4) {
+            timer = 0;
+            frame++;
+            unk168 = 0;
+            if (frame == 5) {
+                vx = 2.0;
+                vy = 2.0;
             }
-            if (*(WORD*)((char*)this + 0xa) == 6) {
-                (*(short*)((char*)this + 0xa))--;
+            if (frame == 6) {
+                frame--;
             }
-            if (*(WORD*)((char*)this + 0xa) == 0xc) {
-                *(short*)((char*)this + 0xa) = *(WORD*)((char*)this + 0xa) - 6;
+            if (frame == 0xc) {
+                frame = frame - 6;
             }
-            if (*(WORD*)((char*)this + 0xa) >= x8) {
+            if (frame >= x8) {
                 Vf0();
                 CPlayer::Unk40e630();
-                *(short*)((char*)this + 8) = 3;
+                pattern = 3;
             }
         }
         break;
     case 0x11b:
-        *(double*)((char*)this + 0x30) = 0.0;
-        *(double*)((char*)this + 0x38) = 0.0;
-        if (*(WORD*)((char*)this + 0xa) == 2 && *(int*)((char*)this + 0x168) == 3) {
+        vx = 0.0;
+        vy = 0.0;
+        if (frame == 2 && unk168 == 3) {
             CPlayer::Unk40f1e0();
             Vf0();
-            ((CPlayer*)*(int*)*(char**)((char*)this + 0x78))->Unk40f1e0();
-            ((CPlayer*)*(int*)*(char**)((char*)this + 0x78))->Vf0();
-            *(short*)((char*)this + 8) = 0x11c;
-            *(short*)(*(char**)*(char**)((char*)this + 0x78) + 8) = 0x6b;
+            (*m_opponent)->Unk40f1e0();
+            (*m_opponent)->Vf0();
+            pattern = 0x11c;
+            (*m_opponent)->pattern = 0x6b;
             break;
         }
-        (*(short*)((char*)this + 0xc))++;
-        if (*(WORD*)((char*)this + 0xc) >= l4) {
-            *(short*)((char*)this + 0xc) = 0;
-            (*(short*)((char*)this + 0xa))++;
-            *(int*)((char*)this + 0x168) = 0;
-            if (*(WORD*)((char*)this + 0xa) == 2 && *(WORD*)((char*)this + 0xc) == 0 && *(double*)(*(char**)*(char**)((char*)this + 0x78) + 0x28) == 0.0 && (*(WORD*)(*(char**)*(char**)((char*)this + 0x78) + 8) < 0x32 || *(WORD*)(*(char**)*(char**)((char*)this + 0x78) + 8) > 0x95)) {
-                *(short*)((char*)this + 0x16c) = 1;
+        timer++;
+        if (timer >= l4) {
+            timer = 0;
+            frame++;
+            unk168 = 0;
+            if (frame == 2 && timer == 0 && (*m_opponent)->y == 0.0 && ((*m_opponent)->pattern < 0x32 || (*m_opponent)->pattern > 0x95)) {
+                unk16c = 1;
             } else {
-                *(short*)((char*)this + 0x16c) = 0;
+                unk16c = 0;
             }
-            if (*(WORD*)((char*)this + 0xa) == 2) {
-                *(short*)((char*)this + 0x148) = *(short*)((char*)this + 0x148) + 0x19;
+            if (frame == 2) {
+                unk148 = unk148 + 0x19;
             }
-            if (*(WORD*)((char*)this + 0xa) >= x8) {
-                *(short*)((char*)this + 8) = 0;
+            if (frame >= x8) {
+                pattern = 0;
                 CPlayer::Unk40e630();
                 Vf0();
             }
@@ -4818,702 +4818,702 @@ void CMayu::Vf6()
         break;
     case 0x11c:
         CPlayer::Unk410a80(-0x32, 3);
-        *(short*)(*(char**)*(char**)((char*)this + 0x78) + 0x14a) = 3;
-        (*(short*)((char*)this + 0xc))++;
-        if (*(WORD*)((char*)this + 0xa) > 3) {
-            *(double*)((char*)this + 0x30) = 1.0;
-            *(double*)((char*)this + 0x38) += 0.025;
+        (*m_opponent)->unk14a = 3;
+        timer++;
+        if (frame > 3) {
+            vx = 1.0;
+            vy += 0.025;
         }
-        if (*(WORD*)((char*)this + 0xa) > 3 && *(double*)((char*)this + 0x38) + *(double*)((char*)this + 0x28) > 0.0) {
+        if (frame > 3 && vy + y > 0.0) {
             CPlayer::Unk40f1e0();
-            *(double*)((char*)this + 0x28) = 0.0;
+            y = 0.0;
             Vf0();
-            ((CPlayer*)*(int*)*(char**)((char*)this + 0x78))->Vf0();
-            *(short*)((char*)this + 8) = 0xd;
-            *(short*)(*(char**)*(char**)((char*)this + 0x78) + 8) = 0x48;
+            (*m_opponent)->Vf0();
+            pattern = 0xd;
+            (*m_opponent)->pattern = 0x48;
             break;
         }
-        if (*(WORD*)((char*)this + 0xc) >= l4) {
-            *(short*)((char*)this + 0xc) = 0;
-            (*(short*)((char*)this + 0xa))++;
-            *(int*)((char*)this + 0x168) = 0;
-            if (*(WORD*)((char*)this + 0xa) == 1) {
-                *(double*)((char*)this + 0x20) = *(double*)(*(char**)*(char**)((char*)this + 0x78) + 0x20) - *(short*)(*(char**)*(char**)((char*)this + 0x78) + 0x2ad0) * *((char*)this + 0x50);
-                *(double*)((char*)this + 0x28) = *(double*)(*(char**)*(char**)((char*)this + 0x78) + 0x28) + *(short*)(*(char**)*(char**)((char*)this + 0x78) + 0x2af8) - 20.0;
+        if (timer >= l4) {
+            timer = 0;
+            frame++;
+            unk168 = 0;
+            if (frame == 1) {
+                x = (*m_opponent)->x - (*m_opponent)->unk2ad0[0] * facing;
+                y = (*m_opponent)->y + (*m_opponent)->unk2af8[0] - 20.0;
             }
-            if (*(WORD*)((char*)this + 0xa) >= x8) {
-                *(short*)((char*)this + 0xa) = *(WORD*)((char*)this + 0xa) - 2;
+            if (frame >= x8) {
+                frame = frame - 2;
             }
         }
         break;
     case 0x11d:
-        if (*(WORD*)((char*)this + 0xa) == 0 && *(WORD*)((char*)this + 0xc) == 0) {
+        if (frame == 0 && timer == 0) {
             CPlayer::Unk40f1e0();
         }
-        if (*(WORD*)((char*)this + 0xa) == 3 && *(WORD*)((char*)this + 0xc) == 0) {
-            *(double*)((char*)this + 0x30) = 0.5;
-            *(double*)((char*)this + 0x38) = 3.0;
-            *(short*)((char*)this + 0x16c) = 1;
-            *((char*)this + 0x2c9) = 0x23;
-            *(short*)((char*)this + 0x148) = *(short*)((char*)this + 0x148) + 0x23;
+        if (frame == 3 && timer == 0) {
+            vx = 0.5;
+            vy = 3.0;
+            unk16c = 1;
+            unk2c9 = 0x23;
+            unk148 = unk148 + 0x23;
         }
-        if (*(int*)((char*)this + 0x168) > 0) {
+        if (unk168 > 0) {
             Vf0();
             CPlayer::Unk40f1e0();
-            *(short*)((char*)this + 8) = 0x120;
+            pattern = 0x120;
             break;
         }
-        if (*(double*)((char*)this + 0x28) + *(double*)((char*)this + 0x38) > 0.0 && *(WORD*)((char*)this + 0xa) > 2) {
-            *(short*)((char*)this + 0xc) = 0;
-            *(short*)((char*)this + 0xa) = 0;
-            *(double*)((char*)this + 0x28) = 0.0;
+        if (y + vy > 0.0 && frame > 2) {
+            timer = 0;
+            frame = 0;
+            y = 0.0;
             CPlayer::Unk40f1e0();
-            *(short*)((char*)this + 8) = 0x109;
+            pattern = 0x109;
             break;
         }
-        (*(short*)((char*)this + 0xc))++;
-        if (*(WORD*)((char*)this + 0xc) >= l4) {
-            *(short*)((char*)this + 0xc) = 0;
-            (*(short*)((char*)this + 0xa))++;
-            if (*(short*)((char*)this + 0x16c) > 0) {
-                *(int*)((char*)this + 0x168) = 0;
+        timer++;
+        if (timer >= l4) {
+            timer = 0;
+            frame++;
+            if (unk16c > 0) {
+                unk168 = 0;
             }
-            if (*(WORD*)((char*)this + 0xa) >= x8) {
-                *(short*)((char*)this + 0xa) = *(WORD*)((char*)this + 0xa) - 2;
+            if (frame >= x8) {
+                frame = frame - 2;
             }
         }
         break;
     case 0x11e:
-        if (*(WORD*)((char*)this + 0xa) == 0 && *(WORD*)((char*)this + 0xc) == 0) {
+        if (frame == 0 && timer == 0) {
             CPlayer::Unk40f1e0();
         }
-        if (*(WORD*)((char*)this + 0xa) == 3 && *(WORD*)((char*)this + 0xc) == 0) {
-            *(double*)((char*)this + 0x30) = 2.2;
-            *(double*)((char*)this + 0x38) = 2.2;
-            *(short*)((char*)this + 0x16c) = 1;
-            *((char*)this + 0x2c9) = 0x23;
-            *(short*)((char*)this + 0x148) = *(short*)((char*)this + 0x148) + 0x23;
+        if (frame == 3 && timer == 0) {
+            vx = 2.2;
+            vy = 2.2;
+            unk16c = 1;
+            unk2c9 = 0x23;
+            unk148 = unk148 + 0x23;
         }
-        if (*(int*)((char*)this + 0x168) > 0) {
+        if (unk168 > 0) {
             Vf0();
             CPlayer::Unk40f1e0();
-            *(short*)((char*)this + 8) = 0x120;
+            pattern = 0x120;
             break;
         }
-        if (*(double*)((char*)this + 0x28) + *(double*)((char*)this + 0x38) > 0.0 && *(WORD*)((char*)this + 0xa) > 2) {
-            *(short*)((char*)this + 0xc) = 0;
-            *(short*)((char*)this + 0xa) = 0;
-            *(double*)((char*)this + 0x28) = 0.0;
+        if (y + vy > 0.0 && frame > 2) {
+            timer = 0;
+            frame = 0;
+            y = 0.0;
             CPlayer::Unk40f1e0();
-            *(short*)((char*)this + 8) = 0x109;
+            pattern = 0x109;
             break;
         }
-        (*(short*)((char*)this + 0xc))++;
-        if (*(WORD*)((char*)this + 0xc) >= l4) {
-            *(short*)((char*)this + 0xc) = 0;
-            (*(short*)((char*)this + 0xa))++;
-            if (*(short*)((char*)this + 0x16c) > 0) {
-                *(int*)((char*)this + 0x168) = 0;
+        timer++;
+        if (timer >= l4) {
+            timer = 0;
+            frame++;
+            if (unk16c > 0) {
+                unk168 = 0;
             }
-            if (*(WORD*)((char*)this + 0xa) >= x8) {
-                *(short*)((char*)this + 0xa) = *(WORD*)((char*)this + 0xa) - 2;
+            if (frame >= x8) {
+                frame = frame - 2;
             }
         }
         break;
     case 0x11f:
-        if (*(WORD*)((char*)this + 0xa) == 0 && *(WORD*)((char*)this + 0xc) == 0) {
+        if (frame == 0 && timer == 0) {
             CPlayer::Unk40f1e0();
         }
-        if (*(WORD*)((char*)this + 0xa) == 3 && *(WORD*)((char*)this + 0xc) == 0) {
-            *(double*)((char*)this + 0x30) = 4.0;
-            *(double*)((char*)this + 0x38) = 1.5;
-            *(short*)((char*)this + 0x16c) = 1;
-            *((char*)this + 0x2c9) = 0x23;
-            *(short*)((char*)this + 0x148) = *(short*)((char*)this + 0x148) + 0x23;
+        if (frame == 3 && timer == 0) {
+            vx = 4.0;
+            vy = 1.5;
+            unk16c = 1;
+            unk2c9 = 0x23;
+            unk148 = unk148 + 0x23;
         }
-        if (*(int*)((char*)this + 0x168) > 0) {
+        if (unk168 > 0) {
             Vf0();
             CPlayer::Unk40f1e0();
-            *(short*)((char*)this + 8) = 0x120;
+            pattern = 0x120;
             break;
         }
-        if (*(double*)((char*)this + 0x28) + *(double*)((char*)this + 0x38) > 0.0 && *(WORD*)((char*)this + 0xa) > 2) {
-            *(short*)((char*)this + 0xc) = 0;
-            *(short*)((char*)this + 0xa) = 0;
-            *(double*)((char*)this + 0x28) = 0.0;
+        if (y + vy > 0.0 && frame > 2) {
+            timer = 0;
+            frame = 0;
+            y = 0.0;
             CPlayer::Unk40f1e0();
-            *(short*)((char*)this + 8) = 0x109;
+            pattern = 0x109;
             break;
         }
-        (*(short*)((char*)this + 0xc))++;
-        if (*(WORD*)((char*)this + 0xc) >= l4) {
-            *(short*)((char*)this + 0xc) = 0;
-            (*(short*)((char*)this + 0xa))++;
-            if (*(short*)((char*)this + 0x16c) > 0) {
-                *(int*)((char*)this + 0x168) = 0;
+        timer++;
+        if (timer >= l4) {
+            timer = 0;
+            frame++;
+            if (unk16c > 0) {
+                unk168 = 0;
             }
-            if (*(WORD*)((char*)this + 0xa) >= x8) {
-                *(short*)((char*)this + 0xa) = *(WORD*)((char*)this + 0xa) - 2;
+            if (frame >= x8) {
+                frame = frame - 2;
             }
         }
         break;
     case 0x120:
-        if (*(WORD*)((char*)this + 0xa) == 0 && *(WORD*)((char*)this + 0xc) == 0) {
-            *(double*)((char*)this + 0x30) = -0.4;
-            *(double*)((char*)this + 0x38) = -0.9;
-            *(double*)((char*)this + 0x48) = 0.045;
+        if (frame == 0 && timer == 0) {
+            vx = -0.4;
+            vy = -0.9;
+            ay = 0.045;
         }
-        *(double*)((char*)this + 0x38) = *(double*)((char*)this + 0x38) + *(double*)((char*)this + 0x48);
-        if (*(double*)((char*)this + 0x28) + *(double*)((char*)this + 0x38) > 0.0 && *(WORD*)((char*)this + 0xa) < 8) {
-            *(short*)((char*)this + 0xc) = 0;
-            *(short*)((char*)this + 0xa) = 8;
-            *(double*)((char*)this + 0x28) = 0.0;
+        vy = vy + ay;
+        if (y + vy > 0.0 && frame < 8) {
+            timer = 0;
+            frame = 8;
+            y = 0.0;
             CPlayer::Unk40f1e0();
             break;
         }
-        (*(short*)((char*)this + 0xc))++;
-        if (*(WORD*)((char*)this + 0xc) >= l4) {
-            *(short*)((char*)this + 0xc) = 0;
-            (*(short*)((char*)this + 0xa))++;
-            if (*(short*)((char*)this + 0x16c) > 0) {
-                *(int*)((char*)this + 0x168) = 0;
+        timer++;
+        if (timer >= l4) {
+            timer = 0;
+            frame++;
+            if (unk16c > 0) {
+                unk168 = 0;
             }
-            if (*(WORD*)((char*)this + 0xa) == 8) {
-                *(short*)((char*)this + 0xa) = *(WORD*)((char*)this + 0xa) - 4;
+            if (frame == 8) {
+                frame = frame - 4;
             }
-            if (*(WORD*)((char*)this + 0xa) >= x8) {
+            if (frame >= x8) {
                 Vf0();
                 CPlayer::Unk40e630();
-                *(short*)((char*)this + 8) = 3;
+                pattern = 3;
             }
         }
         break;
     case 0x121:
-        if (*(WORD*)((char*)this + 0xa) == 0 && *(WORD*)((char*)this + 0xc) == 0) {
+        if (frame == 0 && timer == 0) {
             CPlayer::Unk40f1e0();
         }
-        if (*(WORD*)((char*)this + 0xa) == 4 && *(WORD*)((char*)this + 0xc) == 0) {
-            *(double*)((char*)this + 0x48) = 0.03;
-            *(double*)((char*)this + 0x38) = -1.5;
-            *(double*)((char*)this + 0x30) = -3.0;
+        if (frame == 4 && timer == 0) {
+            ay = 0.03;
+            vy = -1.5;
+            vx = -3.0;
         }
-        if (*(WORD*)((char*)this + 0xa) == 0x12 && *(double*)(*(char**)*(char**)((char*)this + 0x78) + 0x28) == 0.0) {
-            *(short*)((char*)this + 0x16c) = 1;
+        if (frame == 0x12 && (*m_opponent)->y == 0.0) {
+            unk16c = 1;
         } else {
-            *(short*)((char*)this + 0x16c) = 0;
+            unk16c = 0;
         }
-        if (*(WORD*)((char*)this + 0xa) > 4 && *(WORD*)((char*)this + 0xa) < 0xc || *(WORD*)((char*)this + 0xa) > 0xf && *(WORD*)((char*)this + 0xa) < 0x13) {
-            *(double*)((char*)this + 0x38) = *(double*)((char*)this + 0x38) + *(double*)((char*)this + 0x48);
+        if (frame > 4 && frame < 0xc || frame > 0xf && frame < 0x13) {
+            vy = vy + ay;
         }
-        if (*(WORD*)((char*)this + 0xa) > 0xb && *(WORD*)((char*)this + 0xa) < 0x10) {
-            if (*((char*)this + 0x50) == 1) {
-                *(double*)((char*)this + 0x20) = *(int*)(*(char**)((char*)this + 0x7c) + 0x14248) + 0xf;
+        if (frame > 0xb && frame < 0x10) {
+            if (facing == 1) {
+                x = m_game->unk14248 + 0xf;
             }
-            if (*((char*)this + 0x50) == -1) {
-                *(double*)((char*)this + 0x20) = *(int*)(*(char**)((char*)this + 0x7c) + 0x14250) - 0xf;
+            if (facing == -1) {
+                x = m_game->unk14250 - 0xf;
             }
         }
-        if (*(double*)((char*)this + 0x28) + *(double*)((char*)this + 0x38) >= 0.0 && *(WORD*)((char*)this + 0xa) > 0xf && *(WORD*)((char*)this + 0xa) < 0x13) {
-            *(double*)((char*)this + 0x28) = 0.0;
+        if (y + vy >= 0.0 && frame > 0xf && frame < 0x13) {
+            y = 0.0;
             CPlayer::Unk40f1e0();
-            *(short*)((char*)this + 0xa) = 0x14;
-            *(short*)((char*)this + 0xc) = 0;
+            frame = 0x14;
+            timer = 0;
             break;
         }
-        if ((char)CPlayer::Unk40ff70() != 0 && *(WORD*)((char*)this + 0xa) > 4 && *(WORD*)((char*)this + 0xa) < 0xc) {
-            *(double*)((char*)this + 0x30) = 0.0;
-            *(double*)((char*)this + 0x38) = 0.0;
-            *(short*)((char*)this + 0xa) = 0xc;
-            *(short*)((char*)this + 0xc) = 0;
-            *((char*)this + 0x2c9) = 0x1a;
+        if ((char)CPlayer::Unk40ff70() != 0 && frame > 4 && frame < 0xc) {
+            vx = 0.0;
+            vy = 0.0;
+            frame = 0xc;
+            timer = 0;
+            unk2c9 = 0x1a;
             break;
         }
-        (*(short*)((char*)this + 0xc))++;
-        if (*(WORD*)((char*)this + 0xc) >= l4) {
-            *(short*)((char*)this + 0xc) = 0;
-            (*(short*)((char*)this + 0xa))++;
-            if (*(WORD*)((char*)this + 0xa) == 0xc) {
-                *(short*)((char*)this + 0xa) = *(WORD*)((char*)this + 0xa) - 4;
+        timer++;
+        if (timer >= l4) {
+            timer = 0;
+            frame++;
+            if (frame == 0xc) {
+                frame = frame - 4;
             }
-            if (*(WORD*)((char*)this + 0xa) == 0x10) {
+            if (frame == 0x10) {
                 Vf0();
                 CPlayer::Unk40f1e0();
-                *(short*)((char*)this + 8) = 0x11f;
-                if (*(double*)((char*)this + 0x20) - *(double*)(*(char**)*(char**)((char*)this + 0x78) + 0x20) < 140.0 && *(double*)((char*)this + 0x20) - *(double*)(*(char**)*(char**)((char*)this + 0x78) + 0x20) > -140.0) {
-                    *(short*)((char*)this + 8) = 0x11e;
+                pattern = 0x11f;
+                if (x - (*m_opponent)->x < 140.0 && x - (*m_opponent)->x > -140.0) {
+                    pattern = 0x11e;
                 }
-                if (*(double*)((char*)this + 0x20) - *(double*)(*(char**)*(char**)((char*)this + 0x78) + 0x20) < 70.0 && *(double*)((char*)this + 0x20) - *(double*)(*(char**)*(char**)((char*)this + 0x78) + 0x20) > -70.0) {
-                    *(short*)((char*)this + 8) = 0x11d;
+                if (x - (*m_opponent)->x < 70.0 && x - (*m_opponent)->x > -70.0) {
+                    pattern = 0x11d;
                 }
                 break;
             }
-            if (*(WORD*)((char*)this + 0xa) == 0x13) {
-                (*(short*)((char*)this + 0xa))--;
+            if (frame == 0x13) {
+                frame--;
             }
-            if (*(WORD*)((char*)this + 0xa) >= x8) {
-                *(short*)((char*)this + 8) = 3;
+            if (frame >= x8) {
+                pattern = 3;
                 Vf0();
                 CPlayer::Unk40e630();
             }
         }
         break;
     case 0x122:
-        *(double*)((char*)this + 0x30) -= 0.035;
-        if (*(double*)((char*)this + 0x30) < 0.0) {
-            *(double*)((char*)this + 0x30) = 0.0;
+        vx -= 0.035;
+        if (vx < 0.0) {
+            vx = 0.0;
         }
-        if (*(double*)((char*)this + 0x28) < 0.0) {
-            *(double*)((char*)this + 0x48) = 0.055;
-            *(double*)((char*)this + 0x38) = *(double*)((char*)this + 0x38) + *(double*)((char*)this + 0x48);
+        if (y < 0.0) {
+            ay = 0.055;
+            vy = vy + ay;
         }
-        if (*(WORD*)((char*)this + 0xa) > 4 && *(WORD*)((char*)this + 0xa) < 0xf && *(double*)((char*)this + 0x28) + *(double*)((char*)this + 0x38) > 0.0) {
-            *(short*)((char*)this + 0xc) = 0;
-            *(short*)((char*)this + 0xa) = 0xf;
-            *(double*)((char*)this + 0x28) = 0.0;
+        if (frame > 4 && frame < 0xf && y + vy > 0.0) {
+            timer = 0;
+            frame = 0xf;
+            y = 0.0;
             CPlayer::Unk40f1e0();
             break;
         }
-        (*(short*)((char*)this + 0xc))++;
-        if (*(WORD*)((char*)this + 0xc) >= l4) {
-            *(short*)((char*)this + 0xc) = 0;
-            (*(short*)((char*)this + 0xa))++;
-            if (*(WORD*)((char*)this + 0xa) < 7) {
-                *(int*)((char*)this + 0x168) = 0;
+        timer++;
+        if (timer >= l4) {
+            timer = 0;
+            frame++;
+            if (frame < 7) {
+                unk168 = 0;
             }
-            if (*(WORD*)((char*)this + 0xa) == 4) {
-                *(double*)((char*)this + 0x38) = -3.3;
-                *(short*)((char*)this + 0x16c) = 3;
+            if (frame == 4) {
+                vy = -3.3;
+                unk16c = 3;
             }
-            if (*(WORD*)((char*)this + 0xa) == 0xf) {
-                *(short*)((char*)this + 0xa) = *(WORD*)((char*)this + 0xa) - 4;
+            if (frame == 0xf) {
+                frame = frame - 4;
             }
-            if (*(WORD*)((char*)this + 0xa) >= x8) {
+            if (frame >= x8) {
                 Vf0();
-                *(short*)((char*)this + 8) = 3;
+                pattern = 3;
             }
         }
         break;
     case 0x123:
-        if (*(WORD*)((char*)this + 0xa) == 0 && *(WORD*)((char*)this + 0xc) == 0) {
+        if (frame == 0 && timer == 0) {
             CPlayer::Unk40e630();
             CPlayer::Unk40f1e0();
-            *(short*)((char*)this + 0x16c) = 5;
+            unk16c = 5;
         }
-        if (*(WORD*)((char*)this + 0xa) > 0xe) {
-            *(double*)((char*)this + 0x38) = *(double*)((char*)this + 0x38) + *(double*)((char*)this + 0x48);
-            if (*(double*)((char*)this + 0x28) + *(double*)((char*)this + 0x38) > 0.0) {
-                *(short*)((char*)this + 0xc) = 0;
-                *(short*)((char*)this + 0xa) = 0x16;
-                *(double*)((char*)this + 0x28) = 0.0;
+        if (frame > 0xe) {
+            vy = vy + ay;
+            if (y + vy > 0.0) {
+                timer = 0;
+                frame = 0x16;
+                y = 0.0;
                 CPlayer::Unk40f1e0();
                 break;
             }
         }
-        (*(short*)((char*)this + 0xc))++;
-        if (*(WORD*)((char*)this + 0xc) >= l4) {
-            *(short*)((char*)this + 0xc) = 0;
-            (*(short*)((char*)this + 0xa))++;
-            *(int*)((char*)this + 0x168) = 0;
-            if (*(WORD*)((char*)this + 0xa) == 0xe) {
-                *(double*)((char*)this + 0x30) = 0.5;
-                *(double*)((char*)this + 0x38) = 0.0;
-                *(double*)((char*)this + 0x48) = 0.045;
+        timer++;
+        if (timer >= l4) {
+            timer = 0;
+            frame++;
+            unk168 = 0;
+            if (frame == 0xe) {
+                vx = 0.5;
+                vy = 0.0;
+                ay = 0.045;
             }
-            if (*(WORD*)((char*)this + 0xa) == 0x16) {
-                *(short*)((char*)this + 0xa) = *(WORD*)((char*)this + 0xa) - 4;
+            if (frame == 0x16) {
+                frame = frame - 4;
             }
-            if (*(WORD*)((char*)this + 0xa) >= x8) {
+            if (frame >= x8) {
                 Vf0();
                 CPlayer::Unk40e630();
-                *(short*)((char*)this + 8) = 3;
+                pattern = 3;
             }
         }
         break;
     case 0x12c:
-        if (*(WORD*)((char*)this + 0xa) == 0 && *(WORD*)((char*)this + 0xc) == 0) {
-            *(double*)((char*)this + 0x30) = 0.0;
-            *(double*)((char*)this + 0x38) = 0.0;
-            *(double*)((char*)this + 0x48) = 0.0;
+        if (frame == 0 && timer == 0) {
+            vx = 0.0;
+            vy = 0.0;
+            ay = 0.0;
         }
-        if (*(WORD*)((char*)this + 0xa) == 1 && *(WORD*)((char*)this + 0xc) == 0) {
-            *(short*)((char*)this + 0x14c) = 0x78;
-            *(short*)((char*)this + 0x148) = *(short*)((char*)this + 0x148) - 0x3e8;
+        if (frame == 1 && timer == 0) {
+            unk14c = 0x78;
+            unk148 = unk148 - 0x3e8;
             CPlayer::Unk410b10(0xb0, 3);
             l50.type = 0x44;
             l50.unk2c = 0x13;
-            l50.x = (double)(int)*(double*)((char*)this + 0x20);
-            l50.y = (double)((int)*(double*)((char*)this + 0x28) - 0x28);
+            l50.x = (double)(int)x;
+            l50.y = (double)((int)y - 0x28);
             l50.unk20 = 2;
             l50.unk0 = 1;
             l50.unk21 = 1;
-            ((CGame*)*(int*)((char*)this + 0x7c))->CreateEffect((EffectDesc*)&l50);
-            *(short*)((char*)this + 0x13c) = 0x7e;
+            m_game->CreateEffect((EffectDesc*)&l50);
+            unk13c = 0x7e;
             CPlayer::Unk410a80(0x32, 0x78);
         }
-        if (*(WORD*)((char*)this + 0xa) >= 1) {
-            *(short*)((char*)this + 0xf2) = 0xa;
+        if (frame >= 1) {
+            unkf2 = 0xa;
         }
-        if ((*(WORD*)((char*)this + 0xa) == 2 || *(WORD*)((char*)this + 0xa) == 7) && *(WORD*)((char*)this + 0xc) == 0) {
-            *((char*)this + 0x2c9) = 0x15;
-            *(short*)((char*)this + 0x16c) = 1;
+        if ((frame == 2 || frame == 7) && timer == 0) {
+            unk2c9 = 0x15;
+            unk16c = 1;
         }
-        if (*(WORD*)((char*)this + 0xa) == 0x10 && *(WORD*)((char*)this + 0xc) == 0) {
-            *((char*)this + 0x2c9) = 0x14;
-            *(short*)((char*)this + 0x16c) = 1;
+        if (frame == 0x10 && timer == 0) {
+            unk2c9 = 0x14;
+            unk16c = 1;
         }
-        (*(short*)((char*)this + 0xc))++;
-        if (*(WORD*)((char*)this + 0xc) >= l4) {
-            *(short*)((char*)this + 0xc) = 0;
-            (*(short*)((char*)this + 0xa))++;
-            if (*(short*)((char*)this + 0x16c) > 0) {
-                *(int*)((char*)this + 0x168) = 0;
+        timer++;
+        if (timer >= l4) {
+            timer = 0;
+            frame++;
+            if (unk16c > 0) {
+                unk168 = 0;
             }
-            if (*(WORD*)((char*)this + 0xa) == 2) {
-                *(short*)((char*)this + 0x13c) = 9;
+            if (frame == 2) {
+                unk13c = 9;
             }
-            if (*(WORD*)((char*)this + 0xa) == 6) {
-                *(double*)((char*)this + 0x20) = *((char*)this + 0x50) * 0xf + *(double*)((char*)this + 0x20);
+            if (frame == 6) {
+                x = facing * 0xf + x;
             }
-            if (*(WORD*)((char*)this + 0xa) == 7) {
-                *(double*)((char*)this + 0x20) = *((char*)this + 0x50) * 0xf + *(double*)((char*)this + 0x20);
+            if (frame == 7) {
+                x = facing * 0xf + x;
             }
-            if (*(WORD*)((char*)this + 0xa) == 9) {
-                *(double*)((char*)this + 0x20) = *((char*)this + 0x50) * 0xf + *(double*)((char*)this + 0x20);
+            if (frame == 9) {
+                x = facing * 0xf + x;
             }
-            if (*(WORD*)((char*)this + 0xa) == 0xa) {
-                if (*(int*)((char*)this + 0x3138) > 1) {
-                    *(short*)((char*)this + 0xa) = 0xc;
+            if (frame == 0xa) {
+                if (unk3138 > 1) {
+                    frame = 0xc;
                     break;
                 }
-                *(double*)((char*)this + 0x20) = *((char*)this + 0x50) * 0xf + *(double*)((char*)this + 0x20);
+                x = facing * 0xf + x;
             }
-            if (*(WORD*)((char*)this + 0xa) == 0xc && *(int*)((char*)this + 0x3138) < 1) {
-                *(short*)((char*)this + 0xa) = 2;
-                (*(int*)((char*)this + 0x3138))++;
+            if (frame == 0xc && unk3138 < 1) {
+                frame = 2;
+                unk3138++;
             }
-            if (*(WORD*)((char*)this + 0xa) >= x8) {
-                *(short*)((char*)this + 8) = 3;
+            if (frame >= x8) {
+                pattern = 3;
                 Vf0();
             }
         }
         break;
     case 0x12d:
-        if (*(WORD*)((char*)this + 0xa) == 0 && *(WORD*)((char*)this + 0xc) == 0) {
-            *(double*)((char*)this + 0x30) = 0.0;
-            *(double*)((char*)this + 0x38) = 0.0;
-            *(double*)((char*)this + 0x48) = 0.0;
+        if (frame == 0 && timer == 0) {
+            vx = 0.0;
+            vy = 0.0;
+            ay = 0.0;
         }
-        if (*(WORD*)((char*)this + 0xa) == 1 && *(WORD*)((char*)this + 0xc) == 0) {
-            *(short*)((char*)this + 0x14c) = 0x78;
-            *(short*)((char*)this + 0x148) = *(short*)((char*)this + 0x148) - 0x7d0;
+        if (frame == 1 && timer == 0) {
+            unk14c = 0x78;
+            unk148 = unk148 - 0x7d0;
             CPlayer::Unk410b10(0xb0, 3);
             l50.type = 0x45;
             l50.unk2c = 5;
-            l50.x = (double)(int)*(double*)((char*)this + 0x20);
-            l50.y = (double)((int)*(double*)((char*)this + 0x28) - 0x28);
+            l50.x = (double)(int)x;
+            l50.y = (double)((int)y - 0x28);
             l50.unk20 = 2;
             l50.unk0 = 1;
             l50.unk21 = 1;
-            ((CGame*)*(int*)((char*)this + 0x7c))->CreateEffect((EffectDesc*)&l50);
-            *(short*)((char*)this + 0x13c) = 0x84;
+            m_game->CreateEffect((EffectDesc*)&l50);
+            unk13c = 0x84;
             CPlayer::Unk410a80(0x32, 0x78);
         }
-        if (*(WORD*)((char*)this + 0xa) >= 1) {
-            *(short*)((char*)this + 0xf2) = 0xa;
+        if (frame >= 1) {
+            unkf2 = 0xa;
         }
-        if ((*(WORD*)((char*)this + 0xa) == 2 || *(WORD*)((char*)this + 0xa) == 7) && *(WORD*)((char*)this + 0xc) == 0) {
-            *((char*)this + 0x2c9) = 0x15;
-            *(short*)((char*)this + 0x16c) = 1;
+        if ((frame == 2 || frame == 7) && timer == 0) {
+            unk2c9 = 0x15;
+            unk16c = 1;
         }
-        if (*(WORD*)((char*)this + 0xa) == 0xe && *(WORD*)((char*)this + 0xc) == 0) {
-            *((char*)this + 0x2c9) = 0x14;
-            *(short*)((char*)this + 0x16c) = 1;
+        if (frame == 0xe && timer == 0) {
+            unk2c9 = 0x14;
+            unk16c = 1;
         }
-        if (*(WORD*)((char*)this + 0xa) == 0x15 && *(WORD*)((char*)this + 0xc) == 0) {
-            *((char*)this + 0x2c9) = 0x15;
-            *(short*)((char*)this + 0x16c) = 1;
+        if (frame == 0x15 && timer == 0) {
+            unk2c9 = 0x15;
+            unk16c = 1;
         }
-        if (*(WORD*)((char*)this + 0xa) > 0x14 && *(WORD*)((char*)this + 0xa) < 0x1c) {
-            *(double*)((char*)this + 0x38) = *(double*)((char*)this + 0x38) + *(double*)((char*)this + 0x48);
-            *(double*)((char*)this + 0x30) -= 0.04;
-            if (*(double*)((char*)this + 0x30) < 0.0) {
-                *(double*)((char*)this + 0x30) = 0.0;
+        if (frame > 0x14 && frame < 0x1c) {
+            vy = vy + ay;
+            vx -= 0.04;
+            if (vx < 0.0) {
+                vx = 0.0;
             }
         }
-        if (*(WORD*)((char*)this + 0xa) > 0x14 && *(WORD*)((char*)this + 0xa) < 0x1c && *(double*)((char*)this + 0x28) + *(double*)((char*)this + 0x38) > 0.0) {
-            *(short*)((char*)this + 0xa) = 0x1c;
-            *(short*)((char*)this + 0xc) = 0;
-            *(double*)((char*)this + 0x28) = 0.0;
+        if (frame > 0x14 && frame < 0x1c && y + vy > 0.0) {
+            frame = 0x1c;
+            timer = 0;
+            y = 0.0;
             CPlayer::Unk40f1e0();
             break;
         }
-        (*(short*)((char*)this + 0xc))++;
-        if (*(WORD*)((char*)this + 0xc) >= l4) {
-            *(short*)((char*)this + 0xc) = 0;
-            (*(short*)((char*)this + 0xa))++;
-            if (*(short*)((char*)this + 0x16c) > 0) {
-                *(int*)((char*)this + 0x168) = 0;
+        timer++;
+        if (timer >= l4) {
+            timer = 0;
+            frame++;
+            if (unk16c > 0) {
+                unk168 = 0;
             }
-            if (*(WORD*)((char*)this + 0xa) == 2) {
-                *(short*)((char*)this + 0x13c) = 0x1e;
+            if (frame == 2) {
+                unk13c = 0x1e;
             }
-            if (*(WORD*)((char*)this + 0xa) == 6) {
-                *(double*)((char*)this + 0x20) = *((char*)this + 0x50) * 0xf + *(double*)((char*)this + 0x20);
+            if (frame == 6) {
+                x = facing * 0xf + x;
             }
-            if (*(WORD*)((char*)this + 0xa) == 7) {
-                *(double*)((char*)this + 0x20) = *((char*)this + 0x50) * 0xf + *(double*)((char*)this + 0x20);
+            if (frame == 7) {
+                x = facing * 0xf + x;
             }
-            if (*(WORD*)((char*)this + 0xa) == 9) {
-                *(double*)((char*)this + 0x20) = *((char*)this + 0x50) * 0xf + *(double*)((char*)this + 0x20);
+            if (frame == 9) {
+                x = facing * 0xf + x;
             }
-            if (*(WORD*)((char*)this + 0xa) == 0xa) {
-                if (*(int*)((char*)this + 0x3138) > 2) {
-                    *(short*)((char*)this + 0xa) = 0xc;
+            if (frame == 0xa) {
+                if (unk3138 > 2) {
+                    frame = 0xc;
                     break;
                 }
-                *(double*)((char*)this + 0x20) = *((char*)this + 0x50) * 0xf + *(double*)((char*)this + 0x20);
+                x = facing * 0xf + x;
             }
-            if (*(WORD*)((char*)this + 0xa) == 0xc && *(int*)((char*)this + 0x3138) < 2) {
-                *(short*)((char*)this + 0xa) = 2;
-                (*(int*)((char*)this + 0x3138))++;
+            if (frame == 0xc && unk3138 < 2) {
+                frame = 2;
+                unk3138++;
             }
-            if (*(WORD*)((char*)this + 0xa) == 0x14) {
-                *(double*)((char*)this + 0x48) = 0.06;
-                *(double*)((char*)this + 0x38) = -3.0;
-                *(double*)((char*)this + 0x30) = 2.0;
+            if (frame == 0x14) {
+                ay = 0.06;
+                vy = -3.0;
+                vx = 2.0;
             }
-            if (*(WORD*)((char*)this + 0xa) == 0x1c) {
-                *(short*)((char*)this + 0xa) = *(WORD*)((char*)this + 0xa) - 4;
+            if (frame == 0x1c) {
+                frame = frame - 4;
             }
-            if (*(WORD*)((char*)this + 0xa) >= x8) {
-                *(short*)((char*)this + 8) = 0xa;
+            if (frame >= x8) {
+                pattern = 0xa;
                 Vf0();
             }
         }
         break;
     case 0x12e:
-        if (*(WORD*)((char*)this + 0xa) == 0 && *(WORD*)((char*)this + 0xc) == 0) {
-            *(double*)((char*)this + 0x30) = 0.0;
-            *(double*)((char*)this + 0x38) = 0.0;
-            *(double*)((char*)this + 0x48) = 0.0;
+        if (frame == 0 && timer == 0) {
+            vx = 0.0;
+            vy = 0.0;
+            ay = 0.0;
         }
-        if (*(WORD*)((char*)this + 0xa) == 1 && *(WORD*)((char*)this + 0xc) == 0) {
-            *(short*)((char*)this + 0x14c) = 0x78;
-            *(short*)((char*)this + 0x148) = *(short*)((char*)this + 0x148) - 0xbb8;
+        if (frame == 1 && timer == 0) {
+            unk14c = 0x78;
+            unk148 = unk148 - 0xbb8;
             CPlayer::Unk410b10(0xb0, 3);
             l50.type = 0x46;
             l50.unk2c = 0x40;
-            l50.x = (double)(int)*(double*)((char*)this + 0x20);
-            l50.y = (double)((int)*(double*)((char*)this + 0x28) - 0x28);
+            l50.x = (double)(int)x;
+            l50.y = (double)((int)y - 0x28);
             l50.unk20 = 2;
             l50.unk0 = 1;
             l50.unk21 = 1;
-            ((CGame*)*(int*)((char*)this + 0x7c))->CreateEffect((EffectDesc*)&l50);
-            *(short*)((char*)this + 0x13c) = 0x84;
+            m_game->CreateEffect((EffectDesc*)&l50);
+            unk13c = 0x84;
             CPlayer::Unk410a80(0x32, 0x78);
-            *((char*)this + 0x2c9) = 0x25;
+            unk2c9 = 0x25;
         }
-        if (*(WORD*)((char*)this + 0xa) > 1) {
-            ((CGame*)*(int*)((char*)this + 0x7c))->Unk4080c0(0xf);
+        if (frame > 1) {
+            m_game->Unk4080c0(0xf);
         }
-        if ((*(WORD*)((char*)this + 0xa) == 2 || *(WORD*)((char*)this + 0xa) == 7) && *(WORD*)((char*)this + 0xc) == 0) {
-            *((char*)this + 0x2c9) = 0x15;
-            *(short*)((char*)this + 0x16c) = 1;
+        if ((frame == 2 || frame == 7) && timer == 0) {
+            unk2c9 = 0x15;
+            unk16c = 1;
         }
-        if (*(WORD*)((char*)this + 0xa) == 0xe && *(WORD*)((char*)this + 0xc) == 0) {
-            *((char*)this + 0x2c9) = 0x14;
-            *(short*)((char*)this + 0x16c) = 1;
+        if (frame == 0xe && timer == 0) {
+            unk2c9 = 0x14;
+            unk16c = 1;
         }
-        if (*(WORD*)((char*)this + 0xa) == 0x12 && *(WORD*)((char*)this + 0xc) == 0) {
-            *((char*)this + 0x2c9) = 0x15;
-            *(short*)((char*)this + 0x16c) = 1;
-            *(double*)((char*)this + 0x30) = 3.0;
+        if (frame == 0x12 && timer == 0) {
+            unk2c9 = 0x15;
+            unk16c = 1;
+            vx = 3.0;
         }
-        if (*(WORD*)((char*)this + 0xa) > 0x12 && *(WORD*)((char*)this + 0xa) < 0x17) {
-            *(double*)((char*)this + 0x30) -= 0.04;
-            if (*(double*)((char*)this + 0x30) < 0.0) {
-                *(double*)((char*)this + 0x30) = 0.0;
+        if (frame > 0x12 && frame < 0x17) {
+            vx -= 0.04;
+            if (vx < 0.0) {
+                vx = 0.0;
             }
         }
-        if (*(WORD*)((char*)this + 0xa) > 0x14 && *(WORD*)((char*)this + 0xa) < 0x17 || *(WORD*)((char*)this + 0xa) > 0x1c) {
-            *(double*)((char*)this + 0x38) = *(double*)((char*)this + 0x38) + *(double*)((char*)this + 0x48);
-            *(double*)((char*)this + 0x30) -= 0.04;
-            if (*(double*)((char*)this + 0x30) < 0.0) {
-                *(double*)((char*)this + 0x30) = 0.0;
+        if (frame > 0x14 && frame < 0x17 || frame > 0x1c) {
+            vy = vy + ay;
+            vx -= 0.04;
+            if (vx < 0.0) {
+                vx = 0.0;
             }
         }
-        if (*(WORD*)((char*)this + 0xa) == 0x18 && *(WORD*)((char*)this + 0xc) == 0) {
-            *(double*)((char*)this + 0x30) = 1.8;
-            *(short*)((char*)this + 0x16c) = 0x63;
+        if (frame == 0x18 && timer == 0) {
+            vx = 1.8;
+            unk16c = 0x63;
         }
-        if (*(WORD*)((char*)this + 0xa) == 0x20 && *(WORD*)((char*)this + 0xc) == 0) {
-            *((char*)this + 0x2c9) = 0x14;
-            *(short*)((char*)this + 0x16c) = 1;
+        if (frame == 0x20 && timer == 0) {
+            unk2c9 = 0x14;
+            unk16c = 1;
         }
-        (*(short*)((char*)this + 0xc))++;
-        if (*(WORD*)((char*)this + 0xc) >= l4) {
-            *(short*)((char*)this + 0xc) = 0;
-            (*(short*)((char*)this + 0xa))++;
-            if (*(short*)((char*)this + 0x16c) > 0 || *(WORD*)((char*)this + 0xa) < 0x22 && *(WORD*)((char*)this + 0xa) > 0x1b) {
-                *(int*)((char*)this + 0x168) = 0;
+        timer++;
+        if (timer >= l4) {
+            timer = 0;
+            frame++;
+            if (unk16c > 0 || frame < 0x22 && frame > 0x1b) {
+                unk168 = 0;
             }
-            if (*(WORD*)((char*)this + 0xa) == 2) {
-                *(short*)((char*)this + 0x13c) = 0x3c;
+            if (frame == 2) {
+                unk13c = 0x3c;
             }
-            if (*(WORD*)((char*)this + 0xa) == 6) {
-                *(double*)((char*)this + 0x20) = *((char*)this + 0x50) * 0xf + *(double*)((char*)this + 0x20);
+            if (frame == 6) {
+                x = facing * 0xf + x;
             }
-            if (*(WORD*)((char*)this + 0xa) == 7) {
-                *(double*)((char*)this + 0x20) = *((char*)this + 0x50) * 0xf + *(double*)((char*)this + 0x20);
+            if (frame == 7) {
+                x = facing * 0xf + x;
             }
-            if (*(WORD*)((char*)this + 0xa) == 9) {
-                *(double*)((char*)this + 0x20) = *((char*)this + 0x50) * 0xf + *(double*)((char*)this + 0x20);
+            if (frame == 9) {
+                x = facing * 0xf + x;
             }
-            if (*(WORD*)((char*)this + 0xa) == 0xa) {
-                if (*(int*)((char*)this + 0x3138) > 3) {
-                    *(short*)((char*)this + 0xa) = 0xc;
+            if (frame == 0xa) {
+                if (unk3138 > 3) {
+                    frame = 0xc;
                     break;
                 }
-                *(double*)((char*)this + 0x20) = *((char*)this + 0x50) * 0xf + *(double*)((char*)this + 0x20);
+                x = facing * 0xf + x;
             }
-            if (*(WORD*)((char*)this + 0xa) == 0xc && *(int*)((char*)this + 0x3138) < 3) {
-                *(short*)((char*)this + 0xa) = 2;
-                (*(int*)((char*)this + 0x3138))++;
+            if (frame == 0xc && unk3138 < 3) {
+                frame = 2;
+                unk3138++;
             }
-            if (*(WORD*)((char*)this + 0xa) == 0x1c && *(int*)((char*)this + 0x3138) < 8) {
-                *(short*)((char*)this + 0xa) = *(WORD*)((char*)this + 0xa) - 4;
-                (*(int*)((char*)this + 0x3138))++;
+            if (frame == 0x1c && unk3138 < 8) {
+                frame = frame - 4;
+                unk3138++;
             }
-            if (*(WORD*)((char*)this + 0xa) >= x8) {
-                *(short*)((char*)this + 8) = 3;
+            if (frame >= x8) {
+                pattern = 3;
                 Vf0();
             }
         }
         break;
     case 0x12f:
-        if (*(WORD*)((char*)this + 0xa) == 0 && *(WORD*)((char*)this + 0xc) == 0) {
+        if (frame == 0 && timer == 0) {
             CPlayer::Unk40f1e0();
-            *(short*)((char*)this + 0x14c) = 0x78;
-            *(short*)((char*)this + 0x148) = *(short*)((char*)this + 0x148) - 0xbb8;
+            unk14c = 0x78;
+            unk148 = unk148 - 0xbb8;
             CPlayer::Unk410b10(0xb0, 3);
             l50.type = 0x46;
             l50.unk2c = 0x40;
-            l50.x = (double)(int)*(double*)((char*)this + 0x20);
-            l50.y = (double)((int)*(double*)((char*)this + 0x28) - 0x28);
+            l50.x = (double)(int)x;
+            l50.y = (double)((int)y - 0x28);
             l50.unk20 = 2;
             l50.unk0 = 1;
             l50.unk21 = 1;
-            ((CGame*)*(int*)((char*)this + 0x7c))->CreateEffect((EffectDesc*)&l50);
-            *((char*)this + 0x2c9) = 0x25;
+            m_game->CreateEffect((EffectDesc*)&l50);
+            unk2c9 = 0x25;
             l50.type = 0x47;
-            ((CGame*)*(int*)((char*)this + 0x7c))->CreateEffect((EffectDesc*)&l50);
+            m_game->CreateEffect((EffectDesc*)&l50);
         }
-        if (*(WORD*)((char*)this + 0xa) > 1) {
-            ((CGame*)*(int*)((char*)this + 0x7c))->Unk4080c0(0xf);
+        if (frame > 1) {
+            m_game->Unk4080c0(0xf);
         }
-        if (*(WORD*)((char*)this + 0xa) >= 0 && *(WORD*)((char*)this + 0xa) < 3) {
+        if (frame >= 0 && frame < 3) {
             CPlayer::Unk410a80(0x32, 3);
         }
-        if (*(WORD*)((char*)this + 0xa) == 6 && *(int*)((char*)this + 0x168) == 3) {
-            ((CPlayer*)*(int*)*(char**)((char*)this + 0x78))->Vf0();
-            ((CPlayer*)*(int*)*(char**)((char*)this + 0x78))->Unk40f1e0();
-            *(short*)(*(char**)*(char**)((char*)this + 0x78) + 8) = 0x6b;
+        if (frame == 6 && unk168 == 3) {
+            (*m_opponent)->Vf0();
+            (*m_opponent)->Unk40f1e0();
+            (*m_opponent)->pattern = 0x6b;
             Vf0();
             CPlayer::Unk40f1e0();
-            *(short*)((char*)this + 8) = 0x131;
-            *(double*)((char*)this + 0x28) = *(short*)((char*)this + 0x2af8) + 0x32;
-            *(double*)((char*)this + 0x20) = *(double*)(*(char**)*(char**)((char*)this + 0x78) + 0x20) + (-*(short*)((char*)this + 0x2ad0) - 0x14) * *((char*)this + 0x50);
+            pattern = 0x131;
+            y = unk2af8[0] + 0x32;
+            x = (*m_opponent)->x + (-unk2ad0[0] - 0x14) * facing;
             l50.type = 0;
-            l50.x = (double)((int)*(double*)(*(char**)*(char**)((char*)this + 0x78) + 0x20) + *(short*)((char*)this + 0x2ad0));
-            l50.y = (double)((int)*(double*)(*(char**)*(char**)((char*)this + 0x78) + 0x28) + *(short*)((char*)this + 0x2af8));
+            l50.x = (double)((int)(*m_opponent)->x + unk2ad0[0]);
+            l50.y = (double)((int)(*m_opponent)->y + unk2af8[0]);
             l50.unk20 = 2;
             l50.unk21 = 1;
-            ((CGame*)*(int*)((char*)this + 0x7c))->CreateEffect((EffectDesc*)&l50);
+            m_game->CreateEffect((EffectDesc*)&l50);
             break;
         }
-        if (*(WORD*)((char*)this + 0xa) > 2 && *(WORD*)((char*)this + 0xa) < 7) {
-            *(double*)((char*)this + 0x38) = *(double*)((char*)this + 0x38) + *(double*)((char*)this + 0x48);
+        if (frame > 2 && frame < 7) {
+            vy = vy + ay;
         }
-        if (*(WORD*)((char*)this + 0xa) == 6 && *(double*)((char*)this + 0x28) + *(double*)((char*)this + 0x38) > 0.0) {
+        if (frame == 6 && y + vy > 0.0) {
             CPlayer::Unk40f1e0();
-            *(double*)((char*)this + 0x28) = 0.0;
-            *(short*)((char*)this + 0xc) = 0;
-            *(short*)((char*)this + 0xa) = 7;
+            y = 0.0;
+            timer = 0;
+            frame = 7;
             break;
         }
-        if (*(WORD*)((char*)this + 0xa) == 6 && *(double*)(*(char**)*(char**)((char*)this + 0x78) + 0x28) >= 0.0) {
-            *(short*)((char*)this + 0x16c) = 1;
+        if (frame == 6 && (*m_opponent)->y >= 0.0) {
+            unk16c = 1;
         } else {
-            *(short*)((char*)this + 0x16c) = 0;
+            unk16c = 0;
         }
-        (*(short*)((char*)this + 0xc))++;
-        if (*(WORD*)((char*)this + 0xc) >= l4) {
-            *(short*)((char*)this + 0xc) = 0;
-            (*(short*)((char*)this + 0xa))++;
-            *(int*)((char*)this + 0x168) = 0;
-            if (*(WORD*)((char*)this + 0xa) == 3) {
-                *(double*)((char*)this + 0x30) = 1.5;
-                *(double*)((char*)this + 0x38) = -2.0;
-                *(double*)((char*)this + 0x48) = 0.045;
+        timer++;
+        if (timer >= l4) {
+            timer = 0;
+            frame++;
+            unk168 = 0;
+            if (frame == 3) {
+                vx = 1.5;
+                vy = -2.0;
+                ay = 0.045;
             }
-            if (*(WORD*)((char*)this + 0xa) >= x8) {
-                *(short*)((char*)this + 8) = 0;
+            if (frame >= x8) {
+                pattern = 0;
                 CPlayer::Unk40e630();
                 Vf0();
             }
         }
         break;
     case 0x130:
-        if (*(WORD*)((char*)this + 0xa) == 0 && *(WORD*)((char*)this + 0xc) == 0) {
+        if (frame == 0 && timer == 0) {
             CPlayer::Unk40f1e0();
-            *(short*)((char*)this + 0x14c) = 0x78;
-            *(short*)((char*)this + 0x148) = *(short*)((char*)this + 0x148) - 0xbb8;
+            unk14c = 0x78;
+            unk148 = unk148 - 0xbb8;
             CPlayer::Unk410b10(0xb0, 3);
             l50.type = 0x46;
             l50.unk2c = 0x40;
-            l50.x = (double)(int)*(double*)((char*)this + 0x20);
-            l50.y = (double)((int)*(double*)((char*)this + 0x28) - 0x28);
+            l50.x = (double)(int)x;
+            l50.y = (double)((int)y - 0x28);
             l50.unk20 = 2;
             l50.unk0 = 1;
             l50.unk21 = 1;
-            ((CGame*)*(int*)((char*)this + 0x7c))->CreateEffect((EffectDesc*)&l50);
-            *((char*)this + 0x2c9) = 0x25;
+            m_game->CreateEffect((EffectDesc*)&l50);
+            unk2c9 = 0x25;
             l50.type = 0x47;
-            ((CGame*)*(int*)((char*)this + 0x7c))->CreateEffect((EffectDesc*)&l50);
+            m_game->CreateEffect((EffectDesc*)&l50);
         }
-        ((CGame*)*(int*)((char*)this + 0x7c))->Unk4080c0(0xf);
-        if (*(WORD*)((char*)this + 0xa) >= 0 && *(WORD*)((char*)this + 0xa) < 3) {
+        m_game->Unk4080c0(0xf);
+        if (frame >= 0 && frame < 3) {
             CPlayer::Unk410a80(0x32, 3);
         }
-        if (*(WORD*)((char*)this + 0xa) == 4 && *(int*)((char*)this + 0x168) == 3) {
-            ((CPlayer*)*(int*)*(char**)((char*)this + 0x78))->Vf0();
-            ((CPlayer*)*(int*)*(char**)((char*)this + 0x78))->Unk40f1e0();
-            *(short*)(*(char**)*(char**)((char*)this + 0x78) + 8) = 0x6b;
+        if (frame == 4 && unk168 == 3) {
+            (*m_opponent)->Vf0();
+            (*m_opponent)->Unk40f1e0();
+            (*m_opponent)->pattern = 0x6b;
             Vf0();
             CPlayer::Unk40f1e0();
-            *(short*)((char*)this + 8) = 0x132;
-            *(short*)(*(char**)*(char**)((char*)this + 0x78) + 0x14a) = 0x78;
-            *(double*)(*(char**)*(char**)((char*)this + 0x78) + 0x20) = *((char*)this + 0x50) * 0x1e + *(double*)((char*)this + 0x20);
+            pattern = 0x132;
+            (*m_opponent)->unk14a = 0x78;
+            (*m_opponent)->x = facing * 0x1e + x;
             l50.type = 0;
-            l50.x = (double)((int)*(double*)((char*)this + 0x20) + *((char*)this + 0x50) * 0x2c);
-            l50.y = (double)((int)*(double*)((char*)this + 0x28) - 7);
+            l50.x = (double)((int)x + facing * 0x2c);
+            l50.y = (double)((int)y - 7);
             l50.unk20 = 2;
             l50.unk21 = 1;
-            ((CGame*)*(int*)((char*)this + 0x7c))->CreateEffect((EffectDesc*)&l50);
+            m_game->CreateEffect((EffectDesc*)&l50);
             break;
         }
-        (*(short*)((char*)this + 0xc))++;
-        if (*(WORD*)((char*)this + 0xc) >= l4) {
-            *(short*)((char*)this + 0xc) = 0;
-            (*(short*)((char*)this + 0xa))++;
-            *(int*)((char*)this + 0x168) = 0;
-            if (*(WORD*)((char*)this + 0xa) == 4 && *(double*)(*(char**)*(char**)((char*)this + 0x78) + 0x28) >= 0.0) {
-                *(short*)((char*)this + 0x16c) = 1;
+        timer++;
+        if (timer >= l4) {
+            timer = 0;
+            frame++;
+            unk168 = 0;
+            if (frame == 4 && (*m_opponent)->y >= 0.0) {
+                unk16c = 1;
             } else {
-                *(short*)((char*)this + 0x16c) = 0;
+                unk16c = 0;
             }
-            if (*(WORD*)((char*)this + 0xa) >= x8) {
-                *(short*)((char*)this + 8) = 0;
+            if (frame >= x8) {
+                pattern = 0;
                 CPlayer::Unk40e630();
                 Vf0();
             }
@@ -5522,1586 +5522,1586 @@ void CMayu::Vf6()
     case 0x131:
         CPlayer::Unk410a40(0x32, 3);
         CPlayer::Unk410a80(0x32, 3);
-        ((CGame*)*(int*)((char*)this + 0x7c))->Unk4080c0(0xf);
-        if (*(WORD*)((char*)this + 0xa) > 3) {
-            *(double*)((char*)this + 0x38) = *(double*)((char*)this + 0x38) + *(double*)((char*)this + 0x48);
+        m_game->Unk4080c0(0xf);
+        if (frame > 3) {
+            vy = vy + ay;
         }
-        if (*(WORD*)((char*)this + 0xa) == 4) {
-            *(short*)(*(char**)*(char**)((char*)this + 0x78) + 0x140) = 0x7530;
-            *(short*)(*(char**)*(char**)((char*)this + 0x78) + 8) = 0x67;
-            *(double*)(*(char**)*(char**)((char*)this + 0x78) + 0x20) = (23.0 + *(double*)((char*)this + 0x30)) * *((char*)this + 0x50) + *(double*)((char*)this + 0x20);
-            *(double*)(*(char**)*(char**)((char*)this + 0x78) + 0x28) = -52.0 + *(double*)((char*)this + 0x38) + *(double*)((char*)this + 0x28);
+        if (frame == 4) {
+            (*m_opponent)->unk140 = 0x7530;
+            (*m_opponent)->pattern = 0x67;
+            (*m_opponent)->x = (23.0 + vx) * facing + x;
+            (*m_opponent)->y = -52.0 + vy + y;
         }
-        if (*(WORD*)((char*)this + 0xa) == 5) {
-            *(short*)(*(char**)*(char**)((char*)this + 0x78) + 8) = 0x67;
-            *(double*)(*(char**)*(char**)((char*)this + 0x78) + 0x20) = (15.0 + *(double*)((char*)this + 0x30)) * *((char*)this + 0x50) + *(double*)((char*)this + 0x20);
-            *(double*)(*(char**)*(char**)((char*)this + 0x78) + 0x28) = -70.0 + *(double*)((char*)this + 0x38) + *(double*)((char*)this + 0x28);
+        if (frame == 5) {
+            (*m_opponent)->pattern = 0x67;
+            (*m_opponent)->x = (15.0 + vx) * facing + x;
+            (*m_opponent)->y = -70.0 + vy + y;
         }
-        if (*(WORD*)((char*)this + 0xa) == 6) {
-            *(short*)(*(char**)*(char**)((char*)this + 0x78) + 8) = 0x76;
-            *(double*)(*(char**)*(char**)((char*)this + 0x78) + 0x20) = (-31.0 + *(double*)((char*)this + 0x30)) * *((char*)this + 0x50) + *(double*)((char*)this + 0x20);
-            *(double*)(*(char**)*(char**)((char*)this + 0x78) + 0x28) = -65.0 + *(double*)((char*)this + 0x38) + *(double*)((char*)this + 0x28);
-            *(*(char**)*(char**)((char*)this + 0x78) + 0x50) = *((char*)this + 0x50);
+        if (frame == 6) {
+            (*m_opponent)->pattern = 0x76;
+            (*m_opponent)->x = (-31.0 + vx) * facing + x;
+            (*m_opponent)->y = -65.0 + vy + y;
+            (*m_opponent)->facing = facing;
         }
-        if (*(WORD*)((char*)this + 0xa) == 7) {
-            *(short*)(*(char**)*(char**)((char*)this + 0x78) + 8) = 0x75;
-            *(double*)(*(char**)*(char**)((char*)this + 0x78) + 0x20) = (-36.0 + *(double*)((char*)this + 0x30)) * *((char*)this + 0x50) + *(double*)((char*)this + 0x20);
-            *(double*)(*(char**)*(char**)((char*)this + 0x78) + 0x28) = -32.0 + *(double*)((char*)this + 0x38) + *(double*)((char*)this + 0x28);
-            *(*(char**)*(char**)((char*)this + 0x78) + 0x50) = *((char*)this + 0x50);
+        if (frame == 7) {
+            (*m_opponent)->pattern = 0x75;
+            (*m_opponent)->x = (-36.0 + vx) * facing + x;
+            (*m_opponent)->y = -32.0 + vy + y;
+            (*m_opponent)->facing = facing;
         }
-        if (*(WORD*)((char*)this + 0xa) == 8) {
-            *(short*)(*(char**)*(char**)((char*)this + 0x78) + 8) = 0x68;
-            *(double*)(*(char**)*(char**)((char*)this + 0x78) + 0x20) = (-7.0 + *(double*)((char*)this + 0x30)) * *((char*)this + 0x50) + *(double*)((char*)this + 0x20);
-            *(double*)(*(char**)*(char**)((char*)this + 0x78) + 0x28) = -8.0 + *(double*)((char*)this + 0x38) + *(double*)((char*)this + 0x28);
-            *(*(char**)*(char**)((char*)this + 0x78) + 0x50) = -*((char*)this + 0x50);
+        if (frame == 8) {
+            (*m_opponent)->pattern = 0x68;
+            (*m_opponent)->x = (-7.0 + vx) * facing + x;
+            (*m_opponent)->y = -8.0 + vy + y;
+            (*m_opponent)->facing = -facing;
         }
-        if (*(WORD*)((char*)this + 0xa) == 9 || *(WORD*)((char*)this + 0xa) == 0xa) {
-            *(short*)(*(char**)*(char**)((char*)this + 0x78) + 8) = 0x68;
-            *(double*)(*(char**)*(char**)((char*)this + 0x78) + 0x20) = (-4.0 + *(double*)((char*)this + 0x30)) * *((char*)this + 0x50) + *(double*)((char*)this + 0x20);
-            *(double*)(*(char**)*(char**)((char*)this + 0x78) + 0x28) = -6.0 + *(double*)((char*)this + 0x38) + *(double*)((char*)this + 0x28);
-            *(*(char**)*(char**)((char*)this + 0x78) + 0x50) = -*((char*)this + 0x50);
+        if (frame == 9 || frame == 0xa) {
+            (*m_opponent)->pattern = 0x68;
+            (*m_opponent)->x = (-4.0 + vx) * facing + x;
+            (*m_opponent)->y = -6.0 + vy + y;
+            (*m_opponent)->facing = -facing;
         }
-        if (*(WORD*)((char*)this + 0xa) > 8 && *(double*)((char*)this + 0x38) + *(double*)((char*)this + 0x28) > 0.0) {
+        if (frame > 8 && vy + y > 0.0) {
             CPlayer::Unk40f1e0();
             Vf0();
-            ((CPlayer*)*(int*)*(char**)((char*)this + 0x78))->Unk40f1e0();
-            ((CPlayer*)*(int*)*(char**)((char*)this + 0x78))->Vf0();
-            *(short*)(*(char**)*(char**)((char*)this + 0x78) + 8) = 0x62;
-            *(double*)(*(char**)*(char**)((char*)this + 0x78) + 0x28) = 0.0;
-            *(double*)(*(char**)*(char**)((char*)this + 0x78) + 0x20) = *(double*)((char*)this + 0x20);
-            *(double*)((char*)this + 0x28) = 0.0;
-            *(short*)((char*)this + 8) = 0x133;
+            (*m_opponent)->Unk40f1e0();
+            (*m_opponent)->Vf0();
+            (*m_opponent)->pattern = 0x62;
+            (*m_opponent)->y = 0.0;
+            (*m_opponent)->x = x;
+            y = 0.0;
+            pattern = 0x133;
             CPlayer::Unk4105a0(0x3e8, 960.0);
             l50.type = 0;
-            l50.x = (double)(int)*(double*)((char*)this + 0x20);
-            l50.y = (double)(int)*(double*)((char*)this + 0x28);
+            l50.x = (double)(int)x;
+            l50.y = (double)(int)y;
             l50.unk2c = 2;
             l50.unk20 = 2;
             l50.unk21 = 1;
-            ((CGame*)*(int*)((char*)this + 0x7c))->CreateEffect((EffectDesc*)&l50);
+            m_game->CreateEffect((EffectDesc*)&l50);
             break;
         }
-        (*(short*)((char*)this + 0xc))++;
-        if (*(WORD*)((char*)this + 0xc) >= l4) {
-            *(short*)((char*)this + 0xc) = 0;
-            (*(short*)((char*)this + 0xa))++;
-            *(int*)((char*)this + 0x168) = 0;
-            if (*(WORD*)((char*)this + 0xa) == 4) {
-                *(double*)((char*)this + 0x30) = (1 - ((*(double*)((char*)this + 0x20) > 320.0) << 1)) * 0.6 * *((char*)this + 0x50);
-                *(double*)((char*)this + 0x38) = -5.0;
-                *(double*)((char*)this + 0x48) = 0.06;
+        timer++;
+        if (timer >= l4) {
+            timer = 0;
+            frame++;
+            unk168 = 0;
+            if (frame == 4) {
+                vx = (1 - ((x > 320.0) << 1)) * 0.6 * facing;
+                vy = -5.0;
+                ay = 0.06;
             }
-            if (*(WORD*)((char*)this + 0xa) >= x8) {
-                *(short*)((char*)this + 0xa) = *(WORD*)((char*)this + 0xa) - 2;
+            if (frame >= x8) {
+                frame = frame - 2;
             }
         }
         break;
     case 0x132:
         CPlayer::Unk410a40(0x32, 3);
         CPlayer::Unk410a80(0x32, 3);
-        ((CGame*)*(int*)((char*)this + 0x7c))->Unk4080c0(0xf);
-        (*(short*)((char*)this + 0xc))++;
-        if (*(WORD*)((char*)this + 0xc) >= l4) {
-            *(short*)((char*)this + 0xc) = 0;
-            (*(short*)((char*)this + 0xa))++;
-            *(int*)((char*)this + 0x168) = 0;
-            if (*(WORD*)((char*)this + 0xa) >= x8) {
+        m_game->Unk4080c0(0xf);
+        timer++;
+        if (timer >= l4) {
+            timer = 0;
+            frame++;
+            unk168 = 0;
+            if (frame >= x8) {
                 Vf0();
-                *(short*)((char*)this + 8) = 0x131;
-                *(short*)((char*)this + 0xa) = 4;
-                *(short*)(*(char**)*(char**)((char*)this + 0x78) + 0x14a) = 0;
-                *(double*)((char*)this + 0x30) = (1 - ((*(double*)((char*)this + 0x20) > 320.0) << 1)) * 0.6 * *((char*)this + 0x50);
-                *(double*)((char*)this + 0x38) = -5.0;
-                *(double*)((char*)this + 0x48) = 0.06;
+                pattern = 0x131;
+                frame = 4;
+                (*m_opponent)->unk14a = 0;
+                vx = (1 - ((x > 320.0) << 1)) * 0.6 * facing;
+                vy = -5.0;
+                ay = 0.06;
             }
         }
         break;
     case 0x133:
-        ((CPlayer*)*(int*)*(char**)((char*)this + 0x78))->Unk410a80(0x32, 3);
-        ((CGame*)*(int*)((char*)this + 0x7c))->Unk4080c0(0xf);
-        *(short*)((char*)this + 0x13e) = 2;
-        if (*(WORD*)(*(char**)*(char**)((char*)this + 0x78) + 8) == 0x63) {
-            *(short*)(*(char**)*(char**)((char*)this + 0x78) + 0xc) = 0;
+        (*m_opponent)->Unk410a80(0x32, 3);
+        m_game->Unk4080c0(0xf);
+        unk13e = 2;
+        if ((*m_opponent)->pattern == 0x63) {
+            (*m_opponent)->timer = 0;
         }
-        if (*(int*)((char*)this + 0x3138) > 0x78 && *(int*)((char*)this + 0x3138) < 0x2d0 && *(WORD*)((char*)this + 0xa) > 5 && *(WORD*)((char*)this + 0xa) < 0xc && (WORD)CPlayer::Unk4108a0(0, 0x64) < 5) {
+        if (unk3138 > 0x78 && unk3138 < 0x2d0 && frame > 5 && frame < 0xc && (WORD)CPlayer::Unk4108a0(0, 0x64) < 5) {
             l50.type = 0x195;
-            l50.x = *(double*)((char*)this + 0x20) + 80.0 - (WORD)CPlayer::Unk4108a0(0, 0xa0);
+            l50.x = x + 80.0 - (WORD)CPlayer::Unk4108a0(0, 0xa0);
             l50.y = (double)-(WORD)CPlayer::Unk4108a0(0, 0x32);
             l50.unk20 = 0;
             l50.unk21 = 1;
-            l50.unk18 = *((char*)this + 0x50);
+            l50.unk18 = facing;
             Vf9(&l50);
         }
-        if (*(WORD*)((char*)this + 0xa) > 3) {
-            *(double*)((char*)this + 0x38) = *(double*)((char*)this + 0x38) + *(double*)((char*)this + 0x48);
+        if (frame > 3) {
+            vy = vy + ay;
         }
-        if (*(WORD*)((char*)this + 0xa) > 5) {
-            (*(int*)((char*)this + 0x3138))++;
+        if (frame > 5) {
+            unk3138++;
         }
-        if (*(int*)((char*)this + 0x3138) == 0x50) {
+        if (unk3138 == 0x50) {
             l50.type = 0x191;
-            l50.x = (double)((int)*(double*)((char*)this + 0x20) + *((char*)this + 0x50) * 0x1e);
+            l50.x = (double)((int)x + facing * 0x1e);
             l50.y = -320.0;
             l50.unk20 = 0;
             l50.unk21 = 1;
             l50.unk0 = 1;
             l50.unk28 = 1;
-            l50.unk18 = *((char*)this + 0x50);
+            l50.unk18 = facing;
             Vf9(&l50);
         }
-        if (*(int*)((char*)this + 0x3138) == 0x78) {
+        if (unk3138 == 0x78) {
             l50.type = 0x192;
-            l50.x = (double)((int)*(double*)((char*)this + 0x20) - *((char*)this + 0x50) * 0x14);
+            l50.x = (double)((int)x - facing * 0x14);
             l50.y = -320.0;
             l50.unk20 = 0;
             l50.unk21 = 1;
             l50.unk28 = 1;
-            l50.unk18 = *((char*)this + 0x50);
+            l50.unk18 = facing;
             l50.unk0 = 1;
             Vf9(&l50);
         }
-        if (*(WORD*)((char*)this + 0xa) == 9 && *(double*)((char*)this + 0x38) + *(double*)((char*)this + 0x28) > 0.0) {
+        if (frame == 9 && vy + y > 0.0) {
             CPlayer::Unk40f1e0();
-            *(short*)((char*)this + 0xc) = 0;
-            *(short*)((char*)this + 0xa) = 0xa;
-            ((CPlayer*)*(int*)*(char**)((char*)this + 0x78))->Unk40f1e0();
-            ((CPlayer*)*(int*)*(char**)((char*)this + 0x78))->Vf0();
-            *(short*)(*(char**)*(char**)((char*)this + 0x78) + 8) = 0x62;
-            *(double*)((char*)this + 0x28) = 0.0;
-            *(short*)(*(char**)*(char**)((char*)this + 0x78) + 0x140) = 0x7530;
+            timer = 0;
+            frame = 0xa;
+            (*m_opponent)->Unk40f1e0();
+            (*m_opponent)->Vf0();
+            (*m_opponent)->pattern = 0x62;
+            y = 0.0;
+            (*m_opponent)->unk140 = 0x7530;
             CPlayer::Unk4105a0(0x12c, 960.0);
             l50.type = 0;
-            l50.x = (double)(int)*(double*)((char*)this + 0x20);
-            l50.y = (double)(int)*(double*)((char*)this + 0x28);
+            l50.x = (double)(int)x;
+            l50.y = (double)(int)y;
             l50.unk2c = 2;
             l50.unk20 = 2;
             l50.unk21 = 1;
-            ((CGame*)*(int*)((char*)this + 0x7c))->CreateEffect((EffectDesc*)&l50);
+            m_game->CreateEffect((EffectDesc*)&l50);
             break;
         }
-        if (*(WORD*)((char*)this + 0xa) == 0xf && *(double*)((char*)this + 0x38) + *(double*)((char*)this + 0x28) > 0.0) {
+        if (frame == 0xf && vy + y > 0.0) {
             CPlayer::Unk40f1e0();
-            *(short*)((char*)this + 0xc) = 0;
-            *(short*)((char*)this + 0xa) = 0x10;
-            ((CPlayer*)*(int*)*(char**)((char*)this + 0x78))->Unk40f1e0();
-            ((CPlayer*)*(int*)*(char**)((char*)this + 0x78))->Vf0();
-            *(short*)(*(char**)*(char**)((char*)this + 0x78) + 8) = 0x62;
-            *(double*)((char*)this + 0x28) = 0.0;
+            timer = 0;
+            frame = 0x10;
+            (*m_opponent)->Unk40f1e0();
+            (*m_opponent)->Vf0();
+            (*m_opponent)->pattern = 0x62;
+            y = 0.0;
             CPlayer::Unk4105a0(0x578, 960.0);
-            *(short*)(*(char**)*(char**)((char*)this + 0x78) + 0x140) = 0;
+            (*m_opponent)->unk140 = 0;
             CPlayer::Unk410a10(0xa, 0xa);
-            *(short*)(*(char**)*(char**)((char*)this + 0x78) + 0x14a) = 0x78;
+            (*m_opponent)->unk14a = 0x78;
             l50.type = 0;
-            l50.x = (double)(int)*(double*)((char*)this + 0x20);
-            l50.y = (double)(int)*(double*)((char*)this + 0x28);
+            l50.x = (double)(int)x;
+            l50.y = (double)(int)y;
             l50.unk2c = 0x16;
             l50.unk20 = 2;
             l50.unk21 = 1;
-            ((CGame*)*(int*)((char*)this + 0x7c))->CreateEffect((EffectDesc*)&l50);
+            m_game->CreateEffect((EffectDesc*)&l50);
             break;
         }
-        if (*(WORD*)((char*)this + 0xa) == 0x14 && *(double*)((char*)this + 0x38) + *(double*)((char*)this + 0x28) > 0.0) {
+        if (frame == 0x14 && vy + y > 0.0) {
             CPlayer::Unk40f1e0();
-            *(short*)((char*)this + 0xc) = 0;
-            *(short*)((char*)this + 0xa) = 0x15;
-            ((CPlayer*)*(int*)*(char**)((char*)this + 0x78))->Unk40f1e0();
-            ((CPlayer*)*(int*)*(char**)((char*)this + 0x78))->Vf0();
-            *(double*)((char*)this + 0x28) = 0.0;
+            timer = 0;
+            frame = 0x15;
+            (*m_opponent)->Unk40f1e0();
+            (*m_opponent)->Vf0();
+            y = 0.0;
             break;
         }
-        if (*(WORD*)((char*)this + 0xa) == 0xb && *(int*)((char*)this + 0x3138) > 0x334) {
-            *(short*)((char*)this + 0xa) = 0xc;
-            *(short*)((char*)this + 0xc) = 0;
-            *(double*)((char*)this + 0x38) = -5.0;
-            *(double*)((char*)this + 0x48) = 0.06;
+        if (frame == 0xb && unk3138 > 0x334) {
+            frame = 0xc;
+            timer = 0;
+            vy = -5.0;
+            ay = 0.06;
             break;
         }
-        (*(short*)((char*)this + 0xc))++;
-        if (*(WORD*)((char*)this + 0xc) >= l4) {
-            *(short*)((char*)this + 0xc) = 0;
-            (*(short*)((char*)this + 0xa))++;
-            *(int*)((char*)this + 0x168) = 0;
-            if (*(WORD*)((char*)this + 0xa) == 6) {
-                *(double*)((char*)this + 0x30) = 0.0;
-                *(double*)((char*)this + 0x38) = -3.9;
-                *(double*)((char*)this + 0x48) = 0.08;
+        timer++;
+        if (timer >= l4) {
+            timer = 0;
+            frame++;
+            unk168 = 0;
+            if (frame == 6) {
+                vx = 0.0;
+                vy = -3.9;
+                ay = 0.08;
             }
-            if (*(WORD*)((char*)this + 0xa) == 0xc) {
-                if (*(int*)((char*)this + 0x3138) <= 0x2da) {
-                    *(short*)((char*)this + 0xa) = 6;
-                    *(double*)((char*)this + 0x30) = 0.0;
-                    *(double*)((char*)this + 0x38) = -3.9;
-                    *(double*)((char*)this + 0x48) = 0.08;
+            if (frame == 0xc) {
+                if (unk3138 <= 0x2da) {
+                    frame = 6;
+                    vx = 0.0;
+                    vy = -3.9;
+                    ay = 0.08;
                 } else {
-                    *(short*)((char*)this + 0xa) = 0xb;
+                    frame = 0xb;
                 }
             }
-            if (*(WORD*)((char*)this + 0xa) == 0x12) {
-                *(double*)((char*)this + 0x30) = -0.6;
-                *(double*)((char*)this + 0x38) = -1.5;
-                *(double*)((char*)this + 0x48) = 0.038;
+            if (frame == 0x12) {
+                vx = -0.6;
+                vy = -1.5;
+                ay = 0.038;
             }
-            if (*(WORD*)((char*)this + 0xa) == 0x1f && *(int*)((char*)this + 0x313c) < 4) {
-                *(short*)((char*)this + 0xa) = *(WORD*)((char*)this + 0xa) - 2;
-                (*(int*)((char*)this + 0x313c))++;
+            if (frame == 0x1f && unk313c < 4) {
+                frame = frame - 2;
+                unk313c++;
             }
-            if (*(WORD*)((char*)this + 0xa) >= x8) {
+            if (frame >= x8) {
                 Vf0();
-                *(short*)((char*)this + 8) = 0;
+                pattern = 0;
                 CPlayer::Unk40e630();
             }
         }
         break;
     case 0x134:
-        if (*(WORD*)((char*)this + 0xa) == 0 && *(WORD*)((char*)this + 0xc) == 0) {
+        if (frame == 0 && timer == 0) {
             CPlayer::Unk40f1e0();
-            *(short*)((char*)this + 0x14c) = 0x78;
-            *(short*)((char*)this + 0x148) = *(short*)((char*)this + 0x148) - 0x3e8;
+            unk14c = 0x78;
+            unk148 = unk148 - 0x3e8;
             CPlayer::Unk410b10(0xb0, 3);
             l50.type = 0x44;
             l50.unk2c = 0x13;
-            l50.x = (double)(int)*(double*)((char*)this + 0x20);
-            l50.y = (double)((int)*(double*)((char*)this + 0x28) - 0x28);
+            l50.x = (double)(int)x;
+            l50.y = (double)((int)y - 0x28);
             l50.unk20 = 2;
             l50.unk0 = 1;
             l50.unk21 = 1;
-            ((CGame*)*(int*)((char*)this + 0x7c))->CreateEffect((EffectDesc*)&l50);
+            m_game->CreateEffect((EffectDesc*)&l50);
         }
-        if (*(WORD*)((char*)this + 0xa) >= 0 && *(WORD*)((char*)this + 0xa) < 3) {
+        if (frame >= 0 && frame < 3) {
             CPlayer::Unk410a80(0x32, 3);
         }
-        if ((*(WORD*)((char*)this + 0xa) == 3 || *(WORD*)((char*)this + 0xa) == 4) && *(int*)((char*)this + 0x168) == 3) {
-            if (*(double*)((char*)this + 0x20) > 580.0) {
-                *(double*)((char*)this + 0x20) = 580.0;
-                *(double*)((char*)this + 0x30) = 0.0;
+        if ((frame == 3 || frame == 4) && unk168 == 3) {
+            if (x > 580.0) {
+                x = 580.0;
+                vx = 0.0;
             }
-            if (*(double*)((char*)this + 0x20) < 60.0) {
-                *(double*)((char*)this + 0x20) = 60.0;
-                *(double*)((char*)this + 0x30) = 0.0;
+            if (x < 60.0) {
+                x = 60.0;
+                vx = 0.0;
             }
-            ((CPlayer*)*(int*)*(char**)((char*)this + 0x78))->Vf0();
-            ((CPlayer*)*(int*)*(char**)((char*)this + 0x78))->Unk40f1e0();
-            *(short*)(*(char**)*(char**)((char*)this + 0x78) + 8) = 0x67;
-            *(double*)(*(char**)*(char**)((char*)this + 0x78) + 0x20) = *((char*)this + 0x50) * 0x16 + *(double*)((char*)this + 0x20);
-            *(double*)(*(char**)*(char**)((char*)this + 0x78) + 0x28) = *(double*)((char*)this + 0x28) - 52.0;
+            (*m_opponent)->Vf0();
+            (*m_opponent)->Unk40f1e0();
+            (*m_opponent)->pattern = 0x67;
+            (*m_opponent)->x = facing * 0x16 + x;
+            (*m_opponent)->y = y - 52.0;
             Vf0();
-            *(double*)((char*)this + 0x48) = 0.025;
-            *(short*)((char*)this + 8) = 0x137;
+            ay = 0.025;
+            pattern = 0x137;
             l50.type = 0;
-            l50.x = (double)((int)*(double*)((char*)this + 0x20) + *((char*)this + 0x50) * 0x2c);
-            l50.y = (double)((int)*(double*)((char*)this + 0x28) - 0x2c);
+            l50.x = (double)((int)x + facing * 0x2c);
+            l50.y = (double)((int)y - 0x2c);
             l50.unk20 = 2;
             l50.unk21 = 1;
-            ((CGame*)*(int*)((char*)this + 0x7c))->CreateEffect((EffectDesc*)&l50);
+            m_game->CreateEffect((EffectDesc*)&l50);
             break;
         }
-        if (*(WORD*)((char*)this + 0xa) > 4 && *(WORD*)((char*)this + 0xa) < 0x70) {
-            *(double*)((char*)this + 0x38) = *(double*)((char*)this + 0x38) + *(double*)((char*)this + 0x48);
+        if (frame > 4 && frame < 0x70) {
+            vy = vy + ay;
         }
-        if (*(WORD*)((char*)this + 0xa) < 0xc && *(double*)((char*)this + 0x28) + *(double*)((char*)this + 0x38) > 0.0) {
+        if (frame < 0xc && y + vy > 0.0) {
             CPlayer::Unk40f1e0();
-            *(double*)((char*)this + 0x28) = 0.0;
-            *(short*)((char*)this + 0xc) = 0;
-            *(short*)((char*)this + 0xa) = 0xc;
+            y = 0.0;
+            timer = 0;
+            frame = 0xc;
             break;
         }
-        if (*(WORD*)((char*)this + 0xa) > 6) {
-            *(double*)((char*)this + 0x30) -= 0.025;
+        if (frame > 6) {
+            vx -= 0.025;
         }
-        if (*(double*)((char*)this + 0x30) < 0.0) {
-            *(double*)((char*)this + 0x30) = 0.0;
+        if (vx < 0.0) {
+            vx = 0.0;
         }
-        if ((*(WORD*)((char*)this + 0xa) == 3 || *(WORD*)((char*)this + 0xa) == 4) && *(double*)(*(char**)*(char**)((char*)this + 0x78) + 0x28) < 0.0) {
-            *(short*)((char*)this + 0x16c) = 1;
+        if ((frame == 3 || frame == 4) && (*m_opponent)->y < 0.0) {
+            unk16c = 1;
         } else {
-            *(short*)((char*)this + 0x16c) = 0;
+            unk16c = 0;
         }
-        (*(short*)((char*)this + 0xc))++;
-        if (*(WORD*)((char*)this + 0xc) >= l4) {
-            *(short*)((char*)this + 0xc) = 0;
-            (*(short*)((char*)this + 0xa))++;
-            *(int*)((char*)this + 0x168) = 0;
-            if (*(WORD*)((char*)this + 0xa) == 3) {
-                *(double*)((char*)this + 0x30) = 2.0;
-                *(double*)((char*)this + 0x38) = -3.2;
-                *(double*)((char*)this + 0x48) = 0.035;
-                *(short*)((char*)this + 0x13c) = 6;
+        timer++;
+        if (timer >= l4) {
+            timer = 0;
+            frame++;
+            unk168 = 0;
+            if (frame == 3) {
+                vx = 2.0;
+                vy = -3.2;
+                ay = 0.035;
+                unk13c = 6;
             }
-            if (*(WORD*)((char*)this + 0xa) == 5 && *(int*)((char*)this + 0x3138) < 1) {
-                *(short*)((char*)this + 0xa) = *(WORD*)((char*)this + 0xa) - 2;
-                (*(int*)((char*)this + 0x3138))++;
+            if (frame == 5 && unk3138 < 1) {
+                frame = frame - 2;
+                unk3138++;
             }
-            if (*(WORD*)((char*)this + 0xa) == 6) {
-                *(double*)((char*)this + 0x38) *= 0.5;
+            if (frame == 6) {
+                vy *= 0.5;
             }
-            if (*(WORD*)((char*)this + 0xa) == 0xc) {
-                *(short*)((char*)this + 0xa) = *(WORD*)((char*)this + 0xa) - 4;
+            if (frame == 0xc) {
+                frame = frame - 4;
             }
-            if (*(WORD*)((char*)this + 0xa) >= x8) {
-                *(short*)((char*)this + 8) = 3;
+            if (frame >= x8) {
+                pattern = 3;
                 CPlayer::Unk40e630();
                 Vf0();
             }
         }
         break;
     case 0x135:
-        if (*(WORD*)((char*)this + 0xa) == 0 && *(WORD*)((char*)this + 0xc) == 0) {
+        if (frame == 0 && timer == 0) {
             CPlayer::Unk40f1e0();
-            *(short*)((char*)this + 0x14c) = 0x78;
-            *(short*)((char*)this + 0x148) = *(short*)((char*)this + 0x148) - 0x7d0;
+            unk14c = 0x78;
+            unk148 = unk148 - 0x7d0;
             CPlayer::Unk410b10(0xb0, 3);
             l50.type = 0x45;
             l50.unk2c = 5;
-            l50.x = (double)(int)*(double*)((char*)this + 0x20);
-            l50.y = (double)((int)*(double*)((char*)this + 0x28) - 0x28);
+            l50.x = (double)(int)x;
+            l50.y = (double)((int)y - 0x28);
             l50.unk20 = 2;
             l50.unk0 = 1;
             l50.unk21 = 1;
-            ((CGame*)*(int*)((char*)this + 0x7c))->CreateEffect((EffectDesc*)&l50);
+            m_game->CreateEffect((EffectDesc*)&l50);
         }
-        if (*(WORD*)((char*)this + 0xa) >= 0 && *(WORD*)((char*)this + 0xa) < 3) {
+        if (frame >= 0 && frame < 3) {
             CPlayer::Unk410a80(0x32, 3);
         }
-        if ((*(WORD*)((char*)this + 0xa) == 3 || *(WORD*)((char*)this + 0xa) == 4) && *(int*)((char*)this + 0x168) == 3) {
-            if (*(double*)((char*)this + 0x20) > 580.0) {
-                *(double*)((char*)this + 0x20) = 580.0;
-                *(double*)((char*)this + 0x30) = 0.0;
+        if ((frame == 3 || frame == 4) && unk168 == 3) {
+            if (x > 580.0) {
+                x = 580.0;
+                vx = 0.0;
             }
-            if (*(double*)((char*)this + 0x20) < 60.0) {
-                *(double*)((char*)this + 0x20) = 60.0;
-                *(double*)((char*)this + 0x30) = 0.0;
+            if (x < 60.0) {
+                x = 60.0;
+                vx = 0.0;
             }
-            ((CPlayer*)*(int*)*(char**)((char*)this + 0x78))->Vf0();
-            ((CPlayer*)*(int*)*(char**)((char*)this + 0x78))->Unk40f1e0();
-            *(short*)(*(char**)*(char**)((char*)this + 0x78) + 8) = 0x67;
-            *(double*)(*(char**)*(char**)((char*)this + 0x78) + 0x20) = *((char*)this + 0x50) * 0x16 + *(double*)((char*)this + 0x20);
-            *(double*)(*(char**)*(char**)((char*)this + 0x78) + 0x28) = *(double*)((char*)this + 0x28) - 52.0;
+            (*m_opponent)->Vf0();
+            (*m_opponent)->Unk40f1e0();
+            (*m_opponent)->pattern = 0x67;
+            (*m_opponent)->x = facing * 0x16 + x;
+            (*m_opponent)->y = y - 52.0;
             Vf0();
-            *(double*)((char*)this + 0x48) = 0.025;
-            *(short*)((char*)this + 8) = 0x138;
+            ay = 0.025;
+            pattern = 0x138;
             l50.type = 0;
-            l50.x = (double)((int)*(double*)((char*)this + 0x20) + *((char*)this + 0x50) * 0x2c);
-            l50.y = (double)((int)*(double*)((char*)this + 0x28) - 0x2c);
+            l50.x = (double)((int)x + facing * 0x2c);
+            l50.y = (double)((int)y - 0x2c);
             l50.unk20 = 2;
             l50.unk21 = 1;
-            ((CGame*)*(int*)((char*)this + 0x7c))->CreateEffect((EffectDesc*)&l50);
+            m_game->CreateEffect((EffectDesc*)&l50);
             break;
         }
-        if (*(WORD*)((char*)this + 0xa) > 4 && *(WORD*)((char*)this + 0xa) < 0x70) {
-            *(double*)((char*)this + 0x38) = *(double*)((char*)this + 0x38) + *(double*)((char*)this + 0x48);
+        if (frame > 4 && frame < 0x70) {
+            vy = vy + ay;
         }
-        if (*(WORD*)((char*)this + 0xa) < 0xc && *(double*)((char*)this + 0x28) + *(double*)((char*)this + 0x38) > 0.0) {
+        if (frame < 0xc && y + vy > 0.0) {
             CPlayer::Unk40f1e0();
-            *(double*)((char*)this + 0x28) = 0.0;
-            *(short*)((char*)this + 0xc) = 0;
-            *(short*)((char*)this + 0xa) = 0xc;
+            y = 0.0;
+            timer = 0;
+            frame = 0xc;
             break;
         }
-        if (*(WORD*)((char*)this + 0xa) > 6) {
-            *(double*)((char*)this + 0x30) -= 0.025;
+        if (frame > 6) {
+            vx -= 0.025;
         }
-        if (*(double*)((char*)this + 0x30) < 0.0) {
-            *(double*)((char*)this + 0x30) = 0.0;
+        if (vx < 0.0) {
+            vx = 0.0;
         }
-        if ((*(WORD*)((char*)this + 0xa) == 3 || *(WORD*)((char*)this + 0xa) == 4) && *(double*)(*(char**)*(char**)((char*)this + 0x78) + 0x28) < 0.0) {
-            *(short*)((char*)this + 0x16c) = 1;
+        if ((frame == 3 || frame == 4) && (*m_opponent)->y < 0.0) {
+            unk16c = 1;
         } else {
-            *(short*)((char*)this + 0x16c) = 0;
+            unk16c = 0;
         }
-        (*(short*)((char*)this + 0xc))++;
-        if (*(WORD*)((char*)this + 0xc) >= l4) {
-            *(short*)((char*)this + 0xc) = 0;
-            (*(short*)((char*)this + 0xa))++;
-            *(int*)((char*)this + 0x168) = 0;
-            if (*(WORD*)((char*)this + 0xa) == 3) {
-                *(double*)((char*)this + 0x30) = 2.0;
-                *(double*)((char*)this + 0x38) = -3.2;
-                *(double*)((char*)this + 0x48) = 0.035;
-                *(short*)((char*)this + 0x13c) = 0xc;
+        timer++;
+        if (timer >= l4) {
+            timer = 0;
+            frame++;
+            unk168 = 0;
+            if (frame == 3) {
+                vx = 2.0;
+                vy = -3.2;
+                ay = 0.035;
+                unk13c = 0xc;
             }
-            if (*(WORD*)((char*)this + 0xa) == 5 && *(int*)((char*)this + 0x3138) < 3) {
-                *(short*)((char*)this + 0xa) = *(WORD*)((char*)this + 0xa) - 2;
-                (*(int*)((char*)this + 0x3138))++;
+            if (frame == 5 && unk3138 < 3) {
+                frame = frame - 2;
+                unk3138++;
             }
-            if (*(WORD*)((char*)this + 0xa) == 6) {
-                *(double*)((char*)this + 0x38) *= 0.5;
+            if (frame == 6) {
+                vy *= 0.5;
             }
-            if (*(WORD*)((char*)this + 0xa) == 0xc) {
-                *(short*)((char*)this + 0xa) = *(WORD*)((char*)this + 0xa) - 4;
+            if (frame == 0xc) {
+                frame = frame - 4;
             }
-            if (*(WORD*)((char*)this + 0xa) >= x8) {
-                *(short*)((char*)this + 8) = 3;
+            if (frame >= x8) {
+                pattern = 3;
                 CPlayer::Unk40e630();
                 Vf0();
             }
         }
         break;
     case 0x136:
-        if (*(WORD*)((char*)this + 0xa) == 0 && *(WORD*)((char*)this + 0xc) == 0) {
+        if (frame == 0 && timer == 0) {
             CPlayer::Unk40f1e0();
-            *(short*)((char*)this + 0x14c) = 0x78;
-            *(short*)((char*)this + 0x148) = *(short*)((char*)this + 0x148) - 0xbb8;
+            unk14c = 0x78;
+            unk148 = unk148 - 0xbb8;
             CPlayer::Unk410b10(0xb0, 3);
             l50.type = 0x46;
             l50.unk2c = 0x40;
-            l50.x = (double)(int)*(double*)((char*)this + 0x20);
-            l50.y = (double)((int)*(double*)((char*)this + 0x28) - 0x28);
+            l50.x = (double)(int)x;
+            l50.y = (double)((int)y - 0x28);
             l50.unk20 = 2;
             l50.unk0 = 1;
             l50.unk21 = 1;
-            ((CGame*)*(int*)((char*)this + 0x7c))->CreateEffect((EffectDesc*)&l50);
-            *((char*)this + 0x2c9) = 0x25;
+            m_game->CreateEffect((EffectDesc*)&l50);
+            unk2c9 = 0x25;
         }
-        ((CGame*)*(int*)((char*)this + 0x7c))->Unk4080c0(0xf);
-        if (*(WORD*)((char*)this + 0xa) >= 0 && *(WORD*)((char*)this + 0xa) < 3) {
+        m_game->Unk4080c0(0xf);
+        if (frame >= 0 && frame < 3) {
             CPlayer::Unk410a80(0x32, 3);
         }
-        if ((*(WORD*)((char*)this + 0xa) == 3 || *(WORD*)((char*)this + 0xa) == 4) && *(int*)((char*)this + 0x168) == 3) {
-            if (*(double*)((char*)this + 0x20) > 580.0) {
-                *(double*)((char*)this + 0x20) = 580.0;
-                *(double*)((char*)this + 0x30) = 0.0;
+        if ((frame == 3 || frame == 4) && unk168 == 3) {
+            if (x > 580.0) {
+                x = 580.0;
+                vx = 0.0;
             }
-            if (*(double*)((char*)this + 0x20) < 60.0) {
-                *(double*)((char*)this + 0x20) = 60.0;
-                *(double*)((char*)this + 0x30) = 0.0;
+            if (x < 60.0) {
+                x = 60.0;
+                vx = 0.0;
             }
-            ((CPlayer*)*(int*)*(char**)((char*)this + 0x78))->Vf0();
-            ((CPlayer*)*(int*)*(char**)((char*)this + 0x78))->Unk40f1e0();
-            *(short*)(*(char**)*(char**)((char*)this + 0x78) + 8) = 0x67;
-            *(double*)(*(char**)*(char**)((char*)this + 0x78) + 0x20) = *((char*)this + 0x50) * 0x16 + *(double*)((char*)this + 0x20);
-            *(double*)(*(char**)*(char**)((char*)this + 0x78) + 0x28) = *(double*)((char*)this + 0x28) - 52.0;
+            (*m_opponent)->Vf0();
+            (*m_opponent)->Unk40f1e0();
+            (*m_opponent)->pattern = 0x67;
+            (*m_opponent)->x = facing * 0x16 + x;
+            (*m_opponent)->y = y - 52.0;
             Vf0();
-            *(double*)((char*)this + 0x48) = 0.025;
-            *(short*)((char*)this + 8) = 0x139;
+            ay = 0.025;
+            pattern = 0x139;
             l50.type = 0;
-            l50.x = (double)((int)*(double*)((char*)this + 0x20) + *((char*)this + 0x50) * 0x2c);
-            l50.y = (double)((int)*(double*)((char*)this + 0x28) - 0x2c);
+            l50.x = (double)((int)x + facing * 0x2c);
+            l50.y = (double)((int)y - 0x2c);
             l50.unk20 = 2;
             l50.unk21 = 1;
-            ((CGame*)*(int*)((char*)this + 0x7c))->CreateEffect((EffectDesc*)&l50);
+            m_game->CreateEffect((EffectDesc*)&l50);
             break;
         }
-        if (*(WORD*)((char*)this + 0xa) > 6) {
-            *(double*)((char*)this + 0x30) -= 0.025;
+        if (frame > 6) {
+            vx -= 0.025;
         }
-        if (*(double*)((char*)this + 0x30) < 0.0) {
-            *(double*)((char*)this + 0x30) = 0.0;
+        if (vx < 0.0) {
+            vx = 0.0;
         }
-        if (*(WORD*)((char*)this + 0xa) > 4 && *(WORD*)((char*)this + 0xa) < 0x70) {
-            *(double*)((char*)this + 0x38) = *(double*)((char*)this + 0x38) + *(double*)((char*)this + 0x48);
+        if (frame > 4 && frame < 0x70) {
+            vy = vy + ay;
         }
-        if (*(WORD*)((char*)this + 0xa) < 0xc && *(double*)((char*)this + 0x28) + *(double*)((char*)this + 0x38) > 0.0) {
+        if (frame < 0xc && y + vy > 0.0) {
             CPlayer::Unk40f1e0();
-            *(double*)((char*)this + 0x28) = 0.0;
-            *(short*)((char*)this + 0xc) = 0;
-            *(short*)((char*)this + 0xa) = 0xc;
+            y = 0.0;
+            timer = 0;
+            frame = 0xc;
             break;
         }
-        if ((*(WORD*)((char*)this + 0xa) == 3 || *(WORD*)((char*)this + 0xa) == 4) && *(double*)(*(char**)*(char**)((char*)this + 0x78) + 0x28) < 0.0) {
-            *(short*)((char*)this + 0x16c) = 1;
+        if ((frame == 3 || frame == 4) && (*m_opponent)->y < 0.0) {
+            unk16c = 1;
         } else {
-            *(short*)((char*)this + 0x16c) = 0;
+            unk16c = 0;
         }
-        (*(short*)((char*)this + 0xc))++;
-        if (*(WORD*)((char*)this + 0xc) >= l4) {
-            *(short*)((char*)this + 0xc) = 0;
-            (*(short*)((char*)this + 0xa))++;
-            *(int*)((char*)this + 0x168) = 0;
-            if (*(WORD*)((char*)this + 0xa) == 3) {
-                *(double*)((char*)this + 0x30) = 2.0;
-                *(double*)((char*)this + 0x38) = -3.2;
-                *(double*)((char*)this + 0x48) = 0.035;
-                *(short*)((char*)this + 0x13c) = 0x12;
+        timer++;
+        if (timer >= l4) {
+            timer = 0;
+            frame++;
+            unk168 = 0;
+            if (frame == 3) {
+                vx = 2.0;
+                vy = -3.2;
+                ay = 0.035;
+                unk13c = 0x12;
             }
-            if (*(WORD*)((char*)this + 0xa) == 5 && *(int*)((char*)this + 0x3138) < 5) {
-                *(short*)((char*)this + 0xa) = *(WORD*)((char*)this + 0xa) - 2;
-                (*(int*)((char*)this + 0x3138))++;
+            if (frame == 5 && unk3138 < 5) {
+                frame = frame - 2;
+                unk3138++;
             }
-            if (*(WORD*)((char*)this + 0xa) == 6) {
-                *(double*)((char*)this + 0x38) *= 0.5;
+            if (frame == 6) {
+                vy *= 0.5;
             }
-            if (*(WORD*)((char*)this + 0xa) == 0xc) {
-                *(short*)((char*)this + 0xa) = *(WORD*)((char*)this + 0xa) - 4;
+            if (frame == 0xc) {
+                frame = frame - 4;
             }
-            if (*(WORD*)((char*)this + 0xa) >= x8) {
-                *(short*)((char*)this + 8) = 3;
+            if (frame >= x8) {
+                pattern = 3;
                 CPlayer::Unk40e630();
                 Vf0();
             }
         }
         break;
     case 0x137:
-        *(short*)((char*)this + 0x13e) = 2;
-        if (*(WORD*)((char*)this + 0xa) < 0xe) {
-            if (*(double*)((char*)this + 0x20) > 580.0) {
-                *(double*)((char*)this + 0x20) = 580.0;
-                *(double*)((char*)this + 0x30) = 0.0;
+        unk13e = 2;
+        if (frame < 0xe) {
+            if (x > 580.0) {
+                x = 580.0;
+                vx = 0.0;
             }
-            if (*(double*)((char*)this + 0x20) < 60.0) {
-                *(double*)((char*)this + 0x20) = 60.0;
-                *(double*)((char*)this + 0x30) = 0.0;
+            if (x < 60.0) {
+                x = 60.0;
+                vx = 0.0;
             }
             CPlayer::Unk410a40(0x32, 3);
             CPlayer::Unk410a80(0x32, 3);
         }
-        if (*(WORD*)((char*)this + 0xa) < 0xd || *(WORD*)((char*)this + 0xa) > 0xe && *(WORD*)((char*)this + 0xa) < 0x12) {
-            *(double*)((char*)this + 0x38) = *(double*)((char*)this + 0x38) + *(double*)((char*)this + 0x48);
-            if (*(double*)((char*)this + 0x38) + *(double*)((char*)this + 0x28) > 0.0) {
-                if (*(WORD*)((char*)this + 0xa) < 0xd) {
-                    *(double*)((char*)this + 0x28) = 0.0;
+        if (frame < 0xd || frame > 0xe && frame < 0x12) {
+            vy = vy + ay;
+            if (vy + y > 0.0) {
+                if (frame < 0xd) {
+                    y = 0.0;
                     CPlayer::Unk40f1e0();
-                    ((CPlayer*)*(int*)*(char**)((char*)this + 0x78))->Vf0();
-                    *(short*)(*(char**)*(char**)((char*)this + 0x78) + 8) = 0x62;
-                    *(double*)(*(char**)*(char**)((char*)this + 0x78) + 0x28) = 0.0;
-                    *(double*)(*(char**)*(char**)((char*)this + 0x78) + 0x20) = *((char*)this + 0x50) + *(double*)((char*)this + 0x20);
-                    *(*(char**)*(char**)((char*)this + 0x78) + 0x50) = -*((char*)this + 0x50);
-                    ((CPlayer*)*(int*)*(char**)((char*)this + 0x78))->Unk40f1e0();
-                    *(short*)(*(char**)*(char**)((char*)this + 0x78) + 0x14a) = 0x7e;
+                    (*m_opponent)->Vf0();
+                    (*m_opponent)->pattern = 0x62;
+                    (*m_opponent)->y = 0.0;
+                    (*m_opponent)->x = facing + x;
+                    (*m_opponent)->facing = -facing;
+                    (*m_opponent)->Unk40f1e0();
+                    (*m_opponent)->unk14a = 0x7e;
                     CPlayer::Unk4105a0(0x92e, 750.0);
                     CPlayer::Unk410a10(0xa, 0);
-                    *(short*)((char*)this + 0xc) = 0;
-                    *(short*)((char*)this + 0xa) = 0xd;
-                    *((char*)this + 0x2c9) = 0x16;
+                    timer = 0;
+                    frame = 0xd;
+                    unk2c9 = 0x16;
                     break;
                 }
-                if (*(WORD*)((char*)this + 0xa) == 0x11) {
-                    *(double*)((char*)this + 0x28) = 0.0;
+                if (frame == 0x11) {
+                    y = 0.0;
                     CPlayer::Unk40f1e0();
-                    *(short*)((char*)this + 0xc) = 0;
-                    *(short*)((char*)this + 0xa) = 0x12;
+                    timer = 0;
+                    frame = 0x12;
                     break;
                 }
             }
         }
-        if (*(WORD*)((char*)this + 0xa) < 0xd) {
-            *(double*)((char*)this + 0x30) -= 0.025;
-            if (*(double*)((char*)this + 0x30) < 0.0) {
-                *(double*)((char*)this + 0x30) = 0.0;
+        if (frame < 0xd) {
+            vx -= 0.025;
+            if (vx < 0.0) {
+                vx = 0.0;
             }
         }
-        if (*(WORD*)((char*)this + 0xa) < 4) {
-            *(short*)(*(char**)*(char**)((char*)this + 0x78) + 8) = 0x67;
-            *(double*)(*(char**)*(char**)((char*)this + 0x78) + 0x20) = *((char*)this + 0x50) * 0x16 + *(double*)((char*)this + 0x20);
-            *(double*)(*(char**)*(char**)((char*)this + 0x78) + 0x28) = *(double*)((char*)this + 0x28) - 52.0;
+        if (frame < 4) {
+            (*m_opponent)->pattern = 0x67;
+            (*m_opponent)->x = facing * 0x16 + x;
+            (*m_opponent)->y = y - 52.0;
         }
-        if (*(WORD*)((char*)this + 0xa) == 4) {
-            *(short*)(*(char**)*(char**)((char*)this + 0x78) + 8) = 0x67;
-            *(double*)(*(char**)*(char**)((char*)this + 0x78) + 0x20) = (15.0 + *(double*)((char*)this + 0x30)) * *((char*)this + 0x50) + *(double*)((char*)this + 0x20);
-            *(double*)(*(char**)*(char**)((char*)this + 0x78) + 0x28) = -70.0 + *(double*)((char*)this + 0x38) + *(double*)((char*)this + 0x28);
+        if (frame == 4) {
+            (*m_opponent)->pattern = 0x67;
+            (*m_opponent)->x = (15.0 + vx) * facing + x;
+            (*m_opponent)->y = -70.0 + vy + y;
         }
-        if (*(WORD*)((char*)this + 0xa) == 5) {
-            *(short*)(*(char**)*(char**)((char*)this + 0x78) + 8) = 0x76;
-            *(double*)(*(char**)*(char**)((char*)this + 0x78) + 0x20) = (-25.0 + *(double*)((char*)this + 0x30)) * *((char*)this + 0x50) + *(double*)((char*)this + 0x20);
-            *(double*)(*(char**)*(char**)((char*)this + 0x78) + 0x28) = -65.0 + *(double*)((char*)this + 0x38) + *(double*)((char*)this + 0x28);
-            *(*(char**)*(char**)((char*)this + 0x78) + 0x50) = *((char*)this + 0x50);
+        if (frame == 5) {
+            (*m_opponent)->pattern = 0x76;
+            (*m_opponent)->x = (-25.0 + vx) * facing + x;
+            (*m_opponent)->y = -65.0 + vy + y;
+            (*m_opponent)->facing = facing;
         }
-        if (*(WORD*)((char*)this + 0xa) == 6) {
-            *(short*)(*(char**)*(char**)((char*)this + 0x78) + 8) = 0x75;
-            *(double*)(*(char**)*(char**)((char*)this + 0x78) + 0x20) = (-28.0 + *(double*)((char*)this + 0x30)) * *((char*)this + 0x50) + *(double*)((char*)this + 0x20);
-            *(double*)(*(char**)*(char**)((char*)this + 0x78) + 0x28) = -43.0 + *(double*)((char*)this + 0x38) + *(double*)((char*)this + 0x28);
-            *(*(char**)*(char**)((char*)this + 0x78) + 0x50) = *((char*)this + 0x50);
+        if (frame == 6) {
+            (*m_opponent)->pattern = 0x75;
+            (*m_opponent)->x = (-28.0 + vx) * facing + x;
+            (*m_opponent)->y = -43.0 + vy + y;
+            (*m_opponent)->facing = facing;
         }
-        if (*(WORD*)((char*)this + 0xa) == 7) {
-            *(short*)(*(char**)*(char**)((char*)this + 0x78) + 8) = 0x75;
-            *(double*)(*(char**)*(char**)((char*)this + 0x78) + 0x20) = (-12.0 + *(double*)((char*)this + 0x30)) * *((char*)this + 0x50) + *(double*)((char*)this + 0x20);
-            *(double*)(*(char**)*(char**)((char*)this + 0x78) + 0x28) = -29.0 + *(double*)((char*)this + 0x38) + *(double*)((char*)this + 0x28);
-            *(*(char**)*(char**)((char*)this + 0x78) + 0x50) = *((char*)this + 0x50);
+        if (frame == 7) {
+            (*m_opponent)->pattern = 0x75;
+            (*m_opponent)->x = (-12.0 + vx) * facing + x;
+            (*m_opponent)->y = -29.0 + vy + y;
+            (*m_opponent)->facing = facing;
         }
-        if (*(WORD*)((char*)this + 0xa) == 8) {
-            *(short*)(*(char**)*(char**)((char*)this + 0x78) + 8) = 0x68;
-            *(double*)(*(char**)*(char**)((char*)this + 0x78) + 0x20) = (12.0 + *(double*)((char*)this + 0x30)) * *((char*)this + 0x50) + *(double*)((char*)this + 0x20);
-            *(double*)(*(char**)*(char**)((char*)this + 0x78) + 0x28) = -23.0 + *(double*)((char*)this + 0x38) + *(double*)((char*)this + 0x28);
-            *(*(char**)*(char**)((char*)this + 0x78) + 0x50) = -*((char*)this + 0x50);
+        if (frame == 8) {
+            (*m_opponent)->pattern = 0x68;
+            (*m_opponent)->x = (12.0 + vx) * facing + x;
+            (*m_opponent)->y = -23.0 + vy + y;
+            (*m_opponent)->facing = -facing;
         }
-        if (*(WORD*)((char*)this + 0xa) == 9) {
-            *(short*)(*(char**)*(char**)((char*)this + 0x78) + 8) = 0x68;
-            *(double*)(*(char**)*(char**)((char*)this + 0x78) + 0x20) = (23.0 + *(double*)((char*)this + 0x30)) * *((char*)this + 0x50) + *(double*)((char*)this + 0x20);
-            *(double*)(*(char**)*(char**)((char*)this + 0x78) + 0x28) = -36.0 + *(double*)((char*)this + 0x38) + *(double*)((char*)this + 0x28);
-            *(*(char**)*(char**)((char*)this + 0x78) + 0x50) = -*((char*)this + 0x50);
+        if (frame == 9) {
+            (*m_opponent)->pattern = 0x68;
+            (*m_opponent)->x = (23.0 + vx) * facing + x;
+            (*m_opponent)->y = -36.0 + vy + y;
+            (*m_opponent)->facing = -facing;
         }
-        if (*(WORD*)((char*)this + 0xa) == 0xa) {
-            *(short*)(*(char**)*(char**)((char*)this + 0x78) + 8) = 0x67;
-            *(double*)(*(char**)*(char**)((char*)this + 0x78) + 0x20) = (28.0 + *(double*)((char*)this + 0x30)) * *((char*)this + 0x50) + *(double*)((char*)this + 0x20);
-            *(double*)(*(char**)*(char**)((char*)this + 0x78) + 0x28) = -58.0 + *(double*)((char*)this + 0x38) + *(double*)((char*)this + 0x28);
-            *(*(char**)*(char**)((char*)this + 0x78) + 0x50) = -*((char*)this + 0x50);
+        if (frame == 0xa) {
+            (*m_opponent)->pattern = 0x67;
+            (*m_opponent)->x = (28.0 + vx) * facing + x;
+            (*m_opponent)->y = -58.0 + vy + y;
+            (*m_opponent)->facing = -facing;
         }
-        if (*(WORD*)((char*)this + 0xa) == 0xb) {
-            *(short*)(*(char**)*(char**)((char*)this + 0x78) + 8) = 0x67;
-            *(double*)(*(char**)*(char**)((char*)this + 0x78) + 0x20) = (14.0 + *(double*)((char*)this + 0x30)) * *((char*)this + 0x50) + *(double*)((char*)this + 0x20);
-            *(double*)(*(char**)*(char**)((char*)this + 0x78) + 0x28) = -73.0 + *(double*)((char*)this + 0x38) + *(double*)((char*)this + 0x28);
-            *(*(char**)*(char**)((char*)this + 0x78) + 0x50) = -*((char*)this + 0x50);
+        if (frame == 0xb) {
+            (*m_opponent)->pattern = 0x67;
+            (*m_opponent)->x = (14.0 + vx) * facing + x;
+            (*m_opponent)->y = -73.0 + vy + y;
+            (*m_opponent)->facing = -facing;
         }
-        if (*(WORD*)((char*)this + 0xa) == 0xc) {
-            *(short*)(*(char**)*(char**)((char*)this + 0x78) + 8) = 0x76;
-            *(double*)(*(char**)*(char**)((char*)this + 0x78) + 0x20) = (-12.0 + *(double*)((char*)this + 0x30)) * *((char*)this + 0x50) + *(double*)((char*)this + 0x20);
-            *(double*)(*(char**)*(char**)((char*)this + 0x78) + 0x28) = -78.0 + *(double*)((char*)this + 0x38) + *(double*)((char*)this + 0x28);
-            *(*(char**)*(char**)((char*)this + 0x78) + 0x50) = *((char*)this + 0x50);
+        if (frame == 0xc) {
+            (*m_opponent)->pattern = 0x76;
+            (*m_opponent)->x = (-12.0 + vx) * facing + x;
+            (*m_opponent)->y = -78.0 + vy + y;
+            (*m_opponent)->facing = facing;
         }
-        (*(short*)((char*)this + 0xc))++;
-        if (*(WORD*)((char*)this + 0xc) >= l4) {
-            *(short*)((char*)this + 0xc) = 0;
-            (*(short*)((char*)this + 0xa))++;
-            *(int*)((char*)this + 0x168) = 0;
-            if (*(WORD*)((char*)this + 0xa) == 0xd) {
-                *(short*)((char*)this + 0xa) = *(WORD*)((char*)this + 0xa) - 8;
+        timer++;
+        if (timer >= l4) {
+            timer = 0;
+            frame++;
+            unk168 = 0;
+            if (frame == 0xd) {
+                frame = frame - 8;
             }
-            if (*(WORD*)((char*)this + 0xa) == 0xf) {
-                *(short*)(*(char**)*(char**)((char*)this + 0x78) + 0x14a) = 3;
-                *(double*)((char*)this + 0x30) = -1.2;
-                *(double*)((char*)this + 0x38) = -2.0;
-                *(double*)((char*)this + 0x48) = 0.035;
-                *(double*)(*(char**)*(char**)((char*)this + 0x78) + 0x28) = -1.0;
-                ((CPlayer*)*(int*)*(char**)((char*)this + 0x78))->Vf0();
-                ((CPlayer*)*(int*)*(char**)((char*)this + 0x78))->Unk40f1e0();
-                *(double*)(*(char**)*(char**)((char*)this + 0x78) + 0xc0) = -1.2;
-                *(double*)(*(char**)*(char**)((char*)this + 0x78) + 0xc8) = -2.0;
-                *(short*)(*(char**)*(char**)((char*)this + 0x78) + 8) = 0x3b;
+            if (frame == 0xf) {
+                (*m_opponent)->unk14a = 3;
+                vx = -1.2;
+                vy = -2.0;
+                ay = 0.035;
+                (*m_opponent)->y = -1.0;
+                (*m_opponent)->Vf0();
+                (*m_opponent)->Unk40f1e0();
+                (*m_opponent)->unkc0 = -1.2;
+                (*m_opponent)->unkc8 = -2.0;
+                (*m_opponent)->pattern = 0x3b;
             }
-            if (*(WORD*)((char*)this + 0xa) >= x8) {
+            if (frame >= x8) {
                 Vf0();
                 CPlayer::Unk40e630();
-                *(short*)((char*)this + 8) = 3;
+                pattern = 3;
             }
         }
         break;
     case 0x138:
-        *(short*)((char*)this + 0x13e) = 2;
-        if (*(WORD*)((char*)this + 0xa) < 0x19) {
-            if (*(double*)((char*)this + 0x20) > 580.0) {
-                *(double*)((char*)this + 0x20) = 580.0;
-                *(double*)((char*)this + 0x30) = 0.0;
+        unk13e = 2;
+        if (frame < 0x19) {
+            if (x > 580.0) {
+                x = 580.0;
+                vx = 0.0;
             }
-            if (*(double*)((char*)this + 0x20) < 60.0) {
-                *(double*)((char*)this + 0x20) = 60.0;
-                *(double*)((char*)this + 0x30) = 0.0;
+            if (x < 60.0) {
+                x = 60.0;
+                vx = 0.0;
             }
             CPlayer::Unk410a40(0x32, 3);
             CPlayer::Unk410a80(0x32, 3);
         }
-        if (*(WORD*)((char*)this + 0xa) < 0xd || *(WORD*)((char*)this + 0xa) > 0xe && *(WORD*)((char*)this + 0xa) < 0x19 || *(WORD*)((char*)this + 0xa) > 0x1a && *(WORD*)((char*)this + 0xa) < 0x1e) {
-            *(double*)((char*)this + 0x38) = *(double*)((char*)this + 0x38) + *(double*)((char*)this + 0x48);
-            if (*(double*)((char*)this + 0x38) + *(double*)((char*)this + 0x28) > 0.0) {
-                if (*(WORD*)((char*)this + 0xa) < 0xd) {
-                    *(double*)((char*)this + 0x28) = 0.0;
+        if (frame < 0xd || frame > 0xe && frame < 0x19 || frame > 0x1a && frame < 0x1e) {
+            vy = vy + ay;
+            if (vy + y > 0.0) {
+                if (frame < 0xd) {
+                    y = 0.0;
                     CPlayer::Unk40f1e0();
-                    ((CPlayer*)*(int*)*(char**)((char*)this + 0x78))->Vf0();
-                    *(short*)(*(char**)*(char**)((char*)this + 0x78) + 8) = 0x62;
-                    *(double*)(*(char**)*(char**)((char*)this + 0x78) + 0x28) = 0.0;
-                    ((CPlayer*)*(int*)*(char**)((char*)this + 0x78))->Unk40f1e0();
-                    *(short*)(*(char**)*(char**)((char*)this + 0x78) + 0x14a) = 0x96;
-                    *(double*)(*(char**)*(char**)((char*)this + 0x78) + 0x20) = *((char*)this + 0x50) + *(double*)((char*)this + 0x20);
-                    *(*(char**)*(char**)((char*)this + 0x78) + 0x50) = -*((char*)this + 0x50);
+                    (*m_opponent)->Vf0();
+                    (*m_opponent)->pattern = 0x62;
+                    (*m_opponent)->y = 0.0;
+                    (*m_opponent)->Unk40f1e0();
+                    (*m_opponent)->unk14a = 0x96;
+                    (*m_opponent)->x = facing + x;
+                    (*m_opponent)->facing = -facing;
                     CPlayer::Unk4105a0(0x3e8, 980.0);
                     CPlayer::Unk410a10(0xa, 0);
-                    *(short*)(*(char**)*(char**)((char*)this + 0x78) + 0x140) = 0x7530;
-                    *(short*)((char*)this + 0xc) = 0;
-                    *(short*)((char*)this + 0xa) = 0xd;
-                    *((char*)this + 0x2c9) = 0x16;
+                    (*m_opponent)->unk140 = 0x7530;
+                    timer = 0;
+                    frame = 0xd;
+                    unk2c9 = 0x16;
                     break;
                 }
-                if (*(WORD*)((char*)this + 0xa) > 0xe && *(WORD*)((char*)this + 0xa) < 0x19) {
-                    *(double*)((char*)this + 0x28) = 0.0;
+                if (frame > 0xe && frame < 0x19) {
+                    y = 0.0;
                     CPlayer::Unk40f1e0();
-                    ((CPlayer*)*(int*)*(char**)((char*)this + 0x78))->Vf0();
-                    *(short*)(*(char**)*(char**)((char*)this + 0x78) + 8) = 0x62;
-                    *(double*)(*(char**)*(char**)((char*)this + 0x78) + 0x28) = 0.0;
-                    *(double*)(*(char**)*(char**)((char*)this + 0x78) + 0x20) = *((char*)this + 0x50) + *(double*)((char*)this + 0x20);
-                    *(*(char**)*(char**)((char*)this + 0x78) + 0x50) = -*((char*)this + 0x50);
-                    ((CPlayer*)*(int*)*(char**)((char*)this + 0x78))->Unk40f1e0();
-                    *(short*)(*(char**)*(char**)((char*)this + 0x78) + 0x14a) = 0x7e;
+                    (*m_opponent)->Vf0();
+                    (*m_opponent)->pattern = 0x62;
+                    (*m_opponent)->y = 0.0;
+                    (*m_opponent)->x = facing + x;
+                    (*m_opponent)->facing = -facing;
+                    (*m_opponent)->Unk40f1e0();
+                    (*m_opponent)->unk14a = 0x7e;
                     CPlayer::Unk410a10(0xf, 0);
                     CPlayer::Unk4105a0(0x834, 980.0);
-                    *(short*)(*(char**)*(char**)((char*)this + 0x78) + 0x140) = 0;
-                    *(short*)((char*)this + 0xc) = 0;
-                    *(short*)((char*)this + 0xa) = 0x19;
-                    *((char*)this + 0x2c9) = 0x16;
+                    (*m_opponent)->unk140 = 0;
+                    timer = 0;
+                    frame = 0x19;
+                    unk2c9 = 0x16;
                     break;
                 }
-                if (*(WORD*)((char*)this + 0xa) == 0x1d) {
-                    *(double*)((char*)this + 0x28) = 0.0;
+                if (frame == 0x1d) {
+                    y = 0.0;
                     CPlayer::Unk40f1e0();
-                    *(short*)((char*)this + 0xc) = 0;
-                    *(short*)((char*)this + 0xa) = 0x1e;
+                    timer = 0;
+                    frame = 0x1e;
                     break;
                 }
             }
         }
-        if (*(WORD*)((char*)this + 0xa) < 0xd) {
-            *(double*)((char*)this + 0x30) -= 0.025;
-            if (*(double*)((char*)this + 0x30) < 0.0) {
-                *(double*)((char*)this + 0x30) = 0.0;
+        if (frame < 0xd) {
+            vx -= 0.025;
+            if (vx < 0.0) {
+                vx = 0.0;
             }
         }
-        if (*(WORD*)((char*)this + 0xa) > 0xe && *(WORD*)((char*)this + 0xa) < 0x19) {
-            *(double*)((char*)this + 0x30) += 0.025;
-            if (*(double*)((char*)this + 0x30) > 0.0) {
-                *(double*)((char*)this + 0x30) = 0.0;
+        if (frame > 0xe && frame < 0x19) {
+            vx += 0.025;
+            if (vx > 0.0) {
+                vx = 0.0;
             }
         }
-        if (*(WORD*)((char*)this + 0xa) < 4) {
-            *(short*)(*(char**)*(char**)((char*)this + 0x78) + 8) = 0x67;
-            *(double*)(*(char**)*(char**)((char*)this + 0x78) + 0x20) = *((char*)this + 0x50) * 0x16 + *(double*)((char*)this + 0x20);
-            *(double*)(*(char**)*(char**)((char*)this + 0x78) + 0x28) = *(double*)((char*)this + 0x28) - 52.0;
+        if (frame < 4) {
+            (*m_opponent)->pattern = 0x67;
+            (*m_opponent)->x = facing * 0x16 + x;
+            (*m_opponent)->y = y - 52.0;
         }
-        if (*(WORD*)((char*)this + 0xa) == 4 || *(WORD*)((char*)this + 0xa) == 0xf || *(WORD*)((char*)this + 0xa) == 0x10) {
-            *(short*)(*(char**)*(char**)((char*)this + 0x78) + 8) = 0x67;
-            *(double*)(*(char**)*(char**)((char*)this + 0x78) + 0x20) = (15.0 + *(double*)((char*)this + 0x30)) * *((char*)this + 0x50) + *(double*)((char*)this + 0x20);
-            *(double*)(*(char**)*(char**)((char*)this + 0x78) + 0x28) = -70.0 + *(double*)((char*)this + 0x38) + *(double*)((char*)this + 0x28);
+        if (frame == 4 || frame == 0xf || frame == 0x10) {
+            (*m_opponent)->pattern = 0x67;
+            (*m_opponent)->x = (15.0 + vx) * facing + x;
+            (*m_opponent)->y = -70.0 + vy + y;
         }
-        if (*(WORD*)((char*)this + 0xa) == 5 || *(WORD*)((char*)this + 0xa) == 0x11) {
-            *(short*)(*(char**)*(char**)((char*)this + 0x78) + 8) = 0x76;
-            *(double*)(*(char**)*(char**)((char*)this + 0x78) + 0x20) = (-25.0 + *(double*)((char*)this + 0x30)) * *((char*)this + 0x50) + *(double*)((char*)this + 0x20);
-            *(double*)(*(char**)*(char**)((char*)this + 0x78) + 0x28) = -65.0 + *(double*)((char*)this + 0x38) + *(double*)((char*)this + 0x28);
-            *(*(char**)*(char**)((char*)this + 0x78) + 0x50) = *((char*)this + 0x50);
+        if (frame == 5 || frame == 0x11) {
+            (*m_opponent)->pattern = 0x76;
+            (*m_opponent)->x = (-25.0 + vx) * facing + x;
+            (*m_opponent)->y = -65.0 + vy + y;
+            (*m_opponent)->facing = facing;
         }
-        if (*(WORD*)((char*)this + 0xa) == 6 || *(WORD*)((char*)this + 0xa) == 0x12) {
-            *(short*)(*(char**)*(char**)((char*)this + 0x78) + 8) = 0x75;
-            *(double*)(*(char**)*(char**)((char*)this + 0x78) + 0x20) = (-28.0 + *(double*)((char*)this + 0x30)) * *((char*)this + 0x50) + *(double*)((char*)this + 0x20);
-            *(double*)(*(char**)*(char**)((char*)this + 0x78) + 0x28) = -43.0 + *(double*)((char*)this + 0x38) + *(double*)((char*)this + 0x28);
-            *(*(char**)*(char**)((char*)this + 0x78) + 0x50) = *((char*)this + 0x50);
+        if (frame == 6 || frame == 0x12) {
+            (*m_opponent)->pattern = 0x75;
+            (*m_opponent)->x = (-28.0 + vx) * facing + x;
+            (*m_opponent)->y = -43.0 + vy + y;
+            (*m_opponent)->facing = facing;
         }
-        if (*(WORD*)((char*)this + 0xa) == 7 || *(WORD*)((char*)this + 0xa) == 0x13) {
-            *(short*)(*(char**)*(char**)((char*)this + 0x78) + 8) = 0x75;
-            *(double*)(*(char**)*(char**)((char*)this + 0x78) + 0x20) = (-12.0 + *(double*)((char*)this + 0x30)) * *((char*)this + 0x50) + *(double*)((char*)this + 0x20);
-            *(double*)(*(char**)*(char**)((char*)this + 0x78) + 0x28) = -29.0 + *(double*)((char*)this + 0x38) + *(double*)((char*)this + 0x28);
-            *(*(char**)*(char**)((char*)this + 0x78) + 0x50) = *((char*)this + 0x50);
+        if (frame == 7 || frame == 0x13) {
+            (*m_opponent)->pattern = 0x75;
+            (*m_opponent)->x = (-12.0 + vx) * facing + x;
+            (*m_opponent)->y = -29.0 + vy + y;
+            (*m_opponent)->facing = facing;
         }
-        if (*(WORD*)((char*)this + 0xa) == 8 || *(WORD*)((char*)this + 0xa) == 0x14) {
-            *(short*)(*(char**)*(char**)((char*)this + 0x78) + 8) = 0x68;
-            *(double*)(*(char**)*(char**)((char*)this + 0x78) + 0x20) = (12.0 + *(double*)((char*)this + 0x30)) * *((char*)this + 0x50) + *(double*)((char*)this + 0x20);
-            *(double*)(*(char**)*(char**)((char*)this + 0x78) + 0x28) = -23.0 + *(double*)((char*)this + 0x38) + *(double*)((char*)this + 0x28);
-            *(*(char**)*(char**)((char*)this + 0x78) + 0x50) = -*((char*)this + 0x50);
+        if (frame == 8 || frame == 0x14) {
+            (*m_opponent)->pattern = 0x68;
+            (*m_opponent)->x = (12.0 + vx) * facing + x;
+            (*m_opponent)->y = -23.0 + vy + y;
+            (*m_opponent)->facing = -facing;
         }
-        if (*(WORD*)((char*)this + 0xa) == 9 || *(WORD*)((char*)this + 0xa) == 0x15) {
-            *(short*)(*(char**)*(char**)((char*)this + 0x78) + 8) = 0x68;
-            *(double*)(*(char**)*(char**)((char*)this + 0x78) + 0x20) = (23.0 + *(double*)((char*)this + 0x30)) * *((char*)this + 0x50) + *(double*)((char*)this + 0x20);
-            *(double*)(*(char**)*(char**)((char*)this + 0x78) + 0x28) = -36.0 + *(double*)((char*)this + 0x38) + *(double*)((char*)this + 0x28);
-            *(*(char**)*(char**)((char*)this + 0x78) + 0x50) = -*((char*)this + 0x50);
+        if (frame == 9 || frame == 0x15) {
+            (*m_opponent)->pattern = 0x68;
+            (*m_opponent)->x = (23.0 + vx) * facing + x;
+            (*m_opponent)->y = -36.0 + vy + y;
+            (*m_opponent)->facing = -facing;
         }
-        if (*(WORD*)((char*)this + 0xa) == 0xa || *(WORD*)((char*)this + 0xa) == 0x16) {
-            *(short*)(*(char**)*(char**)((char*)this + 0x78) + 8) = 0x67;
-            *(double*)(*(char**)*(char**)((char*)this + 0x78) + 0x20) = (28.0 + *(double*)((char*)this + 0x30)) * *((char*)this + 0x50) + *(double*)((char*)this + 0x20);
-            *(double*)(*(char**)*(char**)((char*)this + 0x78) + 0x28) = -58.0 + *(double*)((char*)this + 0x38) + *(double*)((char*)this + 0x28);
-            *(*(char**)*(char**)((char*)this + 0x78) + 0x50) = -*((char*)this + 0x50);
+        if (frame == 0xa || frame == 0x16) {
+            (*m_opponent)->pattern = 0x67;
+            (*m_opponent)->x = (28.0 + vx) * facing + x;
+            (*m_opponent)->y = -58.0 + vy + y;
+            (*m_opponent)->facing = -facing;
         }
-        if (*(WORD*)((char*)this + 0xa) == 0xb || *(WORD*)((char*)this + 0xa) == 0x17) {
-            *(short*)(*(char**)*(char**)((char*)this + 0x78) + 8) = 0x67;
-            *(double*)(*(char**)*(char**)((char*)this + 0x78) + 0x20) = (14.0 + *(double*)((char*)this + 0x30)) * *((char*)this + 0x50) + *(double*)((char*)this + 0x20);
-            *(double*)(*(char**)*(char**)((char*)this + 0x78) + 0x28) = -73.0 + *(double*)((char*)this + 0x38) + *(double*)((char*)this + 0x28);
-            *(*(char**)*(char**)((char*)this + 0x78) + 0x50) = -*((char*)this + 0x50);
+        if (frame == 0xb || frame == 0x17) {
+            (*m_opponent)->pattern = 0x67;
+            (*m_opponent)->x = (14.0 + vx) * facing + x;
+            (*m_opponent)->y = -73.0 + vy + y;
+            (*m_opponent)->facing = -facing;
         }
-        if (*(WORD*)((char*)this + 0xa) == 0xc || *(WORD*)((char*)this + 0xa) == 0x18) {
-            *(short*)(*(char**)*(char**)((char*)this + 0x78) + 8) = 0x76;
-            *(double*)(*(char**)*(char**)((char*)this + 0x78) + 0x20) = (-12.0 + *(double*)((char*)this + 0x30)) * *((char*)this + 0x50) + *(double*)((char*)this + 0x20);
-            *(double*)(*(char**)*(char**)((char*)this + 0x78) + 0x28) = -78.0 + *(double*)((char*)this + 0x38) + *(double*)((char*)this + 0x28);
-            *(*(char**)*(char**)((char*)this + 0x78) + 0x50) = *((char*)this + 0x50);
+        if (frame == 0xc || frame == 0x18) {
+            (*m_opponent)->pattern = 0x76;
+            (*m_opponent)->x = (-12.0 + vx) * facing + x;
+            (*m_opponent)->y = -78.0 + vy + y;
+            (*m_opponent)->facing = facing;
         }
-        (*(short*)((char*)this + 0xc))++;
-        if (*(WORD*)((char*)this + 0xc) >= l4) {
-            *(short*)((char*)this + 0xc) = 0;
-            (*(short*)((char*)this + 0xa))++;
-            *(int*)((char*)this + 0x168) = 0;
-            if (*(WORD*)((char*)this + 0xa) == 0xd || *(WORD*)((char*)this + 0xa) == 0x19) {
-                *(short*)((char*)this + 0xa) = *(WORD*)((char*)this + 0xa) - 8;
+        timer++;
+        if (timer >= l4) {
+            timer = 0;
+            frame++;
+            unk168 = 0;
+            if (frame == 0xd || frame == 0x19) {
+                frame = frame - 8;
             }
-            if (*(WORD*)((char*)this + 0xa) == 0xf) {
-                *(double*)((char*)this + 0x30) = -4.0;
-                *(double*)((char*)this + 0x38) = -4.0;
-                *(double*)((char*)this + 0x48) = 0.025;
-                *(short*)(*(char**)*(char**)((char*)this + 0x78) + 0x14a) = 3;
+            if (frame == 0xf) {
+                vx = -4.0;
+                vy = -4.0;
+                ay = 0.025;
+                (*m_opponent)->unk14a = 3;
             }
-            if (*(WORD*)((char*)this + 0xa) == 0x1b) {
-                *(double*)((char*)this + 0x30) = -1.8;
-                *(double*)((char*)this + 0x38) = -2.3;
-                *(double*)((char*)this + 0x48) = 0.035;
-                ((CPlayer*)*(int*)*(char**)((char*)this + 0x78))->Vf0();
-                ((CPlayer*)*(int*)*(char**)((char*)this + 0x78))->Unk40f1e0();
-                *(double*)(*(char**)*(char**)((char*)this + 0x78) + 0xc0) = -1.8;
-                *(double*)(*(char**)*(char**)((char*)this + 0x78) + 0xc8) = -2.3;
-                *(short*)(*(char**)*(char**)((char*)this + 0x78) + 8) = 0x3b;
+            if (frame == 0x1b) {
+                vx = -1.8;
+                vy = -2.3;
+                ay = 0.035;
+                (*m_opponent)->Vf0();
+                (*m_opponent)->Unk40f1e0();
+                (*m_opponent)->unkc0 = -1.8;
+                (*m_opponent)->unkc8 = -2.3;
+                (*m_opponent)->pattern = 0x3b;
             }
-            if (*(WORD*)((char*)this + 0xa) >= x8) {
+            if (frame >= x8) {
                 Vf0();
                 CPlayer::Unk40e630();
-                *(short*)((char*)this + 8) = 3;
+                pattern = 3;
             }
         }
         break;
     case 0x139:
-        *(short*)((char*)this + 0x13e) = 2;
-        ((CGame*)*(int*)((char*)this + 0x7c))->Unk4080c0(0xf);
-        if (*(WORD*)((char*)this + 0xa) < 0x19) {
-            if (*(double*)((char*)this + 0x20) > 580.0) {
-                *(double*)((char*)this + 0x20) = 580.0;
-                *(double*)((char*)this + 0x30) = 0.0;
+        unk13e = 2;
+        m_game->Unk4080c0(0xf);
+        if (frame < 0x19) {
+            if (x > 580.0) {
+                x = 580.0;
+                vx = 0.0;
             }
-            if (*(double*)((char*)this + 0x20) < 60.0) {
-                *(double*)((char*)this + 0x20) = 60.0;
-                *(double*)((char*)this + 0x30) = 0.0;
+            if (x < 60.0) {
+                x = 60.0;
+                vx = 0.0;
             }
             CPlayer::Unk410a40(0x32, 3);
             CPlayer::Unk410a80(0x32, 3);
         }
-        if (*(WORD*)((char*)this + 0xa) < 0xd || *(WORD*)((char*)this + 0xa) > 0xe && *(WORD*)((char*)this + 0xa) < 0x19 || *(WORD*)((char*)this + 0xa) > 0x1a && *(WORD*)((char*)this + 0xa) < 0x1e) {
-            *(double*)((char*)this + 0x38) = *(double*)((char*)this + 0x38) + *(double*)((char*)this + 0x48);
-            if (*(double*)((char*)this + 0x38) + *(double*)((char*)this + 0x28) > 0.0) {
-                if (*(WORD*)((char*)this + 0xa) < 0xd) {
-                    *(double*)((char*)this + 0x28) = 0.0;
+        if (frame < 0xd || frame > 0xe && frame < 0x19 || frame > 0x1a && frame < 0x1e) {
+            vy = vy + ay;
+            if (vy + y > 0.0) {
+                if (frame < 0xd) {
+                    y = 0.0;
                     CPlayer::Unk40f1e0();
-                    ((CPlayer*)*(int*)*(char**)((char*)this + 0x78))->Vf0();
-                    *(short*)(*(char**)*(char**)((char*)this + 0x78) + 8) = 0x62;
-                    *(double*)(*(char**)*(char**)((char*)this + 0x78) + 0x28) = 0.0;
-                    ((CPlayer*)*(int*)*(char**)((char*)this + 0x78))->Unk40f1e0();
-                    *(short*)(*(char**)*(char**)((char*)this + 0x78) + 0x14a) = 0x96;
-                    *(double*)(*(char**)*(char**)((char*)this + 0x78) + 0x20) = *((char*)this + 0x50) + *(double*)((char*)this + 0x20);
-                    *(*(char**)*(char**)((char*)this + 0x78) + 0x50) = -*((char*)this + 0x50);
+                    (*m_opponent)->Vf0();
+                    (*m_opponent)->pattern = 0x62;
+                    (*m_opponent)->y = 0.0;
+                    (*m_opponent)->Unk40f1e0();
+                    (*m_opponent)->unk14a = 0x96;
+                    (*m_opponent)->x = facing + x;
+                    (*m_opponent)->facing = -facing;
                     CPlayer::Unk4105a0(0x3e8, 980.0);
                     CPlayer::Unk410a10(0xa, 0);
-                    *(short*)(*(char**)*(char**)((char*)this + 0x78) + 0x140) = 0x7530;
-                    *(short*)((char*)this + 0xc) = 0;
-                    *(short*)((char*)this + 0xa) = 0xd;
-                    *((char*)this + 0x2c9) = 0x16;
+                    (*m_opponent)->unk140 = 0x7530;
+                    timer = 0;
+                    frame = 0xd;
+                    unk2c9 = 0x16;
                     break;
                 }
-                if (*(WORD*)((char*)this + 0xa) > 0xe && *(WORD*)((char*)this + 0xa) < 0x19) {
-                    *(double*)((char*)this + 0x28) = 0.0;
+                if (frame > 0xe && frame < 0x19) {
+                    y = 0.0;
                     CPlayer::Unk40f1e0();
-                    ((CPlayer*)*(int*)*(char**)((char*)this + 0x78))->Vf0();
-                    *(short*)(*(char**)*(char**)((char*)this + 0x78) + 8) = 0x62;
-                    *(double*)(*(char**)*(char**)((char*)this + 0x78) + 0x28) = 0.0;
-                    *(double*)(*(char**)*(char**)((char*)this + 0x78) + 0x20) = *((char*)this + 0x50) + *(double*)((char*)this + 0x20);
-                    *(*(char**)*(char**)((char*)this + 0x78) + 0x50) = -*((char*)this + 0x50);
-                    ((CPlayer*)*(int*)*(char**)((char*)this + 0x78))->Unk40f1e0();
-                    *(short*)(*(char**)*(char**)((char*)this + 0x78) + 0x14a) = 0xba;
+                    (*m_opponent)->Vf0();
+                    (*m_opponent)->pattern = 0x62;
+                    (*m_opponent)->y = 0.0;
+                    (*m_opponent)->x = facing + x;
+                    (*m_opponent)->facing = -facing;
+                    (*m_opponent)->Unk40f1e0();
+                    (*m_opponent)->unk14a = 0xba;
                     CPlayer::Unk4105a0(0xed8, 980.0);
-                    *(short*)(*(char**)*(char**)((char*)this + 0x78) + 0x140) = 0;
+                    (*m_opponent)->unk140 = 0;
                     CPlayer::Unk410a10(0x14, 0x1e);
-                    *(short*)((char*)this + 0xc) = 0;
-                    *(short*)((char*)this + 0xa) = 0x19;
-                    *((char*)this + 0x2c9) = 0x16;
+                    timer = 0;
+                    frame = 0x19;
+                    unk2c9 = 0x16;
                     break;
                 }
-                if (*(WORD*)((char*)this + 0xa) == 0x1d) {
-                    *(double*)((char*)this + 0x28) = 0.0;
+                if (frame == 0x1d) {
+                    y = 0.0;
                     CPlayer::Unk40f1e0();
-                    *(short*)((char*)this + 0xc) = 0;
-                    *(short*)((char*)this + 0xa) = 0x1e;
+                    timer = 0;
+                    frame = 0x1e;
                     break;
                 }
             }
         }
-        if (*(WORD*)((char*)this + 0xa) < 0xd) {
-            *(double*)((char*)this + 0x30) -= 0.025;
-            if (*(double*)((char*)this + 0x30) < 0.0) {
-                *(double*)((char*)this + 0x30) = 0.0;
+        if (frame < 0xd) {
+            vx -= 0.025;
+            if (vx < 0.0) {
+                vx = 0.0;
             }
         }
-        if (*(WORD*)((char*)this + 0xa) > 0xe && *(WORD*)((char*)this + 0xa) < 0x19) {
-            *(double*)((char*)this + 0x30) += 0.025;
-            if (*(double*)((char*)this + 0x30) > 0.0) {
-                *(double*)((char*)this + 0x30) = 0.0;
+        if (frame > 0xe && frame < 0x19) {
+            vx += 0.025;
+            if (vx > 0.0) {
+                vx = 0.0;
             }
         }
-        if (*(WORD*)((char*)this + 0xa) < 4) {
-            *(short*)(*(char**)*(char**)((char*)this + 0x78) + 8) = 0x67;
-            *(double*)(*(char**)*(char**)((char*)this + 0x78) + 0x20) = *((char*)this + 0x50) * 0x16 + *(double*)((char*)this + 0x20);
-            *(double*)(*(char**)*(char**)((char*)this + 0x78) + 0x28) = *(double*)((char*)this + 0x28) - 52.0;
+        if (frame < 4) {
+            (*m_opponent)->pattern = 0x67;
+            (*m_opponent)->x = facing * 0x16 + x;
+            (*m_opponent)->y = y - 52.0;
         }
-        if (*(WORD*)((char*)this + 0xa) == 4 || *(WORD*)((char*)this + 0xa) == 0xf || *(WORD*)((char*)this + 0xa) == 0x10) {
-            *(short*)(*(char**)*(char**)((char*)this + 0x78) + 8) = 0x67;
-            *(double*)(*(char**)*(char**)((char*)this + 0x78) + 0x20) = (15.0 + *(double*)((char*)this + 0x30)) * *((char*)this + 0x50) + *(double*)((char*)this + 0x20);
-            *(double*)(*(char**)*(char**)((char*)this + 0x78) + 0x28) = -70.0 + *(double*)((char*)this + 0x38) + *(double*)((char*)this + 0x28);
+        if (frame == 4 || frame == 0xf || frame == 0x10) {
+            (*m_opponent)->pattern = 0x67;
+            (*m_opponent)->x = (15.0 + vx) * facing + x;
+            (*m_opponent)->y = -70.0 + vy + y;
         }
-        if (*(WORD*)((char*)this + 0xa) == 5 || *(WORD*)((char*)this + 0xa) == 0x11) {
-            *(short*)(*(char**)*(char**)((char*)this + 0x78) + 8) = 0x76;
-            *(double*)(*(char**)*(char**)((char*)this + 0x78) + 0x20) = (-25.0 + *(double*)((char*)this + 0x30)) * *((char*)this + 0x50) + *(double*)((char*)this + 0x20);
-            *(double*)(*(char**)*(char**)((char*)this + 0x78) + 0x28) = -65.0 + *(double*)((char*)this + 0x38) + *(double*)((char*)this + 0x28);
-            *(*(char**)*(char**)((char*)this + 0x78) + 0x50) = *((char*)this + 0x50);
+        if (frame == 5 || frame == 0x11) {
+            (*m_opponent)->pattern = 0x76;
+            (*m_opponent)->x = (-25.0 + vx) * facing + x;
+            (*m_opponent)->y = -65.0 + vy + y;
+            (*m_opponent)->facing = facing;
         }
-        if (*(WORD*)((char*)this + 0xa) == 6 || *(WORD*)((char*)this + 0xa) == 0x12) {
-            *(short*)(*(char**)*(char**)((char*)this + 0x78) + 8) = 0x75;
-            *(double*)(*(char**)*(char**)((char*)this + 0x78) + 0x20) = (-28.0 + *(double*)((char*)this + 0x30)) * *((char*)this + 0x50) + *(double*)((char*)this + 0x20);
-            *(double*)(*(char**)*(char**)((char*)this + 0x78) + 0x28) = -43.0 + *(double*)((char*)this + 0x38) + *(double*)((char*)this + 0x28);
-            *(*(char**)*(char**)((char*)this + 0x78) + 0x50) = *((char*)this + 0x50);
+        if (frame == 6 || frame == 0x12) {
+            (*m_opponent)->pattern = 0x75;
+            (*m_opponent)->x = (-28.0 + vx) * facing + x;
+            (*m_opponent)->y = -43.0 + vy + y;
+            (*m_opponent)->facing = facing;
         }
-        if (*(WORD*)((char*)this + 0xa) == 7 || *(WORD*)((char*)this + 0xa) == 0x13) {
-            *(short*)(*(char**)*(char**)((char*)this + 0x78) + 8) = 0x75;
-            *(double*)(*(char**)*(char**)((char*)this + 0x78) + 0x20) = (-12.0 + *(double*)((char*)this + 0x30)) * *((char*)this + 0x50) + *(double*)((char*)this + 0x20);
-            *(double*)(*(char**)*(char**)((char*)this + 0x78) + 0x28) = -29.0 + *(double*)((char*)this + 0x38) + *(double*)((char*)this + 0x28);
-            *(*(char**)*(char**)((char*)this + 0x78) + 0x50) = *((char*)this + 0x50);
+        if (frame == 7 || frame == 0x13) {
+            (*m_opponent)->pattern = 0x75;
+            (*m_opponent)->x = (-12.0 + vx) * facing + x;
+            (*m_opponent)->y = -29.0 + vy + y;
+            (*m_opponent)->facing = facing;
         }
-        if (*(WORD*)((char*)this + 0xa) == 8 || *(WORD*)((char*)this + 0xa) == 0x14) {
-            *(short*)(*(char**)*(char**)((char*)this + 0x78) + 8) = 0x68;
-            *(double*)(*(char**)*(char**)((char*)this + 0x78) + 0x20) = (12.0 + *(double*)((char*)this + 0x30)) * *((char*)this + 0x50) + *(double*)((char*)this + 0x20);
-            *(double*)(*(char**)*(char**)((char*)this + 0x78) + 0x28) = -23.0 + *(double*)((char*)this + 0x38) + *(double*)((char*)this + 0x28);
-            *(*(char**)*(char**)((char*)this + 0x78) + 0x50) = -*((char*)this + 0x50);
+        if (frame == 8 || frame == 0x14) {
+            (*m_opponent)->pattern = 0x68;
+            (*m_opponent)->x = (12.0 + vx) * facing + x;
+            (*m_opponent)->y = -23.0 + vy + y;
+            (*m_opponent)->facing = -facing;
         }
-        if (*(WORD*)((char*)this + 0xa) == 9 || *(WORD*)((char*)this + 0xa) == 0x15) {
-            *(short*)(*(char**)*(char**)((char*)this + 0x78) + 8) = 0x68;
-            *(double*)(*(char**)*(char**)((char*)this + 0x78) + 0x20) = (23.0 + *(double*)((char*)this + 0x30)) * *((char*)this + 0x50) + *(double*)((char*)this + 0x20);
-            *(double*)(*(char**)*(char**)((char*)this + 0x78) + 0x28) = -36.0 + *(double*)((char*)this + 0x38) + *(double*)((char*)this + 0x28);
-            *(*(char**)*(char**)((char*)this + 0x78) + 0x50) = -*((char*)this + 0x50);
+        if (frame == 9 || frame == 0x15) {
+            (*m_opponent)->pattern = 0x68;
+            (*m_opponent)->x = (23.0 + vx) * facing + x;
+            (*m_opponent)->y = -36.0 + vy + y;
+            (*m_opponent)->facing = -facing;
         }
-        if (*(WORD*)((char*)this + 0xa) == 0xa || *(WORD*)((char*)this + 0xa) == 0x16) {
-            *(short*)(*(char**)*(char**)((char*)this + 0x78) + 8) = 0x67;
-            *(double*)(*(char**)*(char**)((char*)this + 0x78) + 0x20) = (28.0 + *(double*)((char*)this + 0x30)) * *((char*)this + 0x50) + *(double*)((char*)this + 0x20);
-            *(double*)(*(char**)*(char**)((char*)this + 0x78) + 0x28) = -58.0 + *(double*)((char*)this + 0x38) + *(double*)((char*)this + 0x28);
-            *(*(char**)*(char**)((char*)this + 0x78) + 0x50) = -*((char*)this + 0x50);
+        if (frame == 0xa || frame == 0x16) {
+            (*m_opponent)->pattern = 0x67;
+            (*m_opponent)->x = (28.0 + vx) * facing + x;
+            (*m_opponent)->y = -58.0 + vy + y;
+            (*m_opponent)->facing = -facing;
         }
-        if (*(WORD*)((char*)this + 0xa) == 0xb || *(WORD*)((char*)this + 0xa) == 0x17) {
-            *(short*)(*(char**)*(char**)((char*)this + 0x78) + 8) = 0x67;
-            *(double*)(*(char**)*(char**)((char*)this + 0x78) + 0x20) = (14.0 + *(double*)((char*)this + 0x30)) * *((char*)this + 0x50) + *(double*)((char*)this + 0x20);
-            *(double*)(*(char**)*(char**)((char*)this + 0x78) + 0x28) = -73.0 + *(double*)((char*)this + 0x38) + *(double*)((char*)this + 0x28);
-            *(*(char**)*(char**)((char*)this + 0x78) + 0x50) = -*((char*)this + 0x50);
+        if (frame == 0xb || frame == 0x17) {
+            (*m_opponent)->pattern = 0x67;
+            (*m_opponent)->x = (14.0 + vx) * facing + x;
+            (*m_opponent)->y = -73.0 + vy + y;
+            (*m_opponent)->facing = -facing;
         }
-        if (*(WORD*)((char*)this + 0xa) == 0xc || *(WORD*)((char*)this + 0xa) == 0x18) {
-            *(short*)(*(char**)*(char**)((char*)this + 0x78) + 8) = 0x76;
-            *(double*)(*(char**)*(char**)((char*)this + 0x78) + 0x20) = (-12.0 + *(double*)((char*)this + 0x30)) * *((char*)this + 0x50) + *(double*)((char*)this + 0x20);
-            *(double*)(*(char**)*(char**)((char*)this + 0x78) + 0x28) = -78.0 + *(double*)((char*)this + 0x38) + *(double*)((char*)this + 0x28);
-            *(*(char**)*(char**)((char*)this + 0x78) + 0x50) = *((char*)this + 0x50);
+        if (frame == 0xc || frame == 0x18) {
+            (*m_opponent)->pattern = 0x76;
+            (*m_opponent)->x = (-12.0 + vx) * facing + x;
+            (*m_opponent)->y = -78.0 + vy + y;
+            (*m_opponent)->facing = facing;
         }
-        (*(short*)((char*)this + 0xc))++;
-        if (*(WORD*)((char*)this + 0xc) >= l4) {
-            *(short*)((char*)this + 0xc) = 0;
-            (*(short*)((char*)this + 0xa))++;
-            *(int*)((char*)this + 0x168) = 0;
-            if (*(WORD*)((char*)this + 0xa) == 0xd || *(WORD*)((char*)this + 0xa) == 0x19) {
-                *(short*)((char*)this + 0xa) = *(WORD*)((char*)this + 0xa) - 8;
+        timer++;
+        if (timer >= l4) {
+            timer = 0;
+            frame++;
+            unk168 = 0;
+            if (frame == 0xd || frame == 0x19) {
+                frame = frame - 8;
             }
-            if (*(WORD*)((char*)this + 0xa) == 0xf) {
-                *(double*)((char*)this + 0x30) = -4.0;
-                *(double*)((char*)this + 0x38) = -7.0;
-                *(double*)((char*)this + 0x48) = 0.025;
-                *(short*)(*(char**)*(char**)((char*)this + 0x78) + 0x14a) = 3;
+            if (frame == 0xf) {
+                vx = -4.0;
+                vy = -7.0;
+                ay = 0.025;
+                (*m_opponent)->unk14a = 3;
             }
-            if (*(WORD*)((char*)this + 0xa) == 0x1b) {
-                *(double*)((char*)this + 0x30) = -1.8;
-                *(double*)((char*)this + 0x38) = -2.3;
-                *(double*)((char*)this + 0x48) = 0.035;
-                ((CPlayer*)*(int*)*(char**)((char*)this + 0x78))->Vf0();
-                ((CPlayer*)*(int*)*(char**)((char*)this + 0x78))->Unk40f1e0();
-                *(double*)(*(char**)*(char**)((char*)this + 0x78) + 0xc0) = -1.8;
-                *(double*)(*(char**)*(char**)((char*)this + 0x78) + 0xc8) = -2.3;
-                *(short*)(*(char**)*(char**)((char*)this + 0x78) + 8) = 0x3b;
+            if (frame == 0x1b) {
+                vx = -1.8;
+                vy = -2.3;
+                ay = 0.035;
+                (*m_opponent)->Vf0();
+                (*m_opponent)->Unk40f1e0();
+                (*m_opponent)->unkc0 = -1.8;
+                (*m_opponent)->unkc8 = -2.3;
+                (*m_opponent)->pattern = 0x3b;
             }
-            if (*(WORD*)((char*)this + 0xa) >= x8) {
+            if (frame >= x8) {
                 Vf0();
                 CPlayer::Unk40e630();
-                *(short*)((char*)this + 8) = 3;
+                pattern = 3;
             }
         }
         break;
     case 0x13a:
-        if (*(WORD*)((char*)this + 0xa) == 0 && *(WORD*)((char*)this + 0xc) == 0) {
-            *(double*)((char*)this + 0x30) = 0.0;
-            *(double*)((char*)this + 0x38) = 0.0;
-            *(double*)((char*)this + 0x48) = 0.0;
+        if (frame == 0 && timer == 0) {
+            vx = 0.0;
+            vy = 0.0;
+            ay = 0.0;
         }
-        if (*(WORD*)((char*)this + 0xa) == 1 && *(WORD*)((char*)this + 0xc) == 0) {
-            *(short*)((char*)this + 0x14c) = 0x78;
-            *(short*)((char*)this + 0x148) = *(short*)((char*)this + 0x148) - 0x3e8;
+        if (frame == 1 && timer == 0) {
+            unk14c = 0x78;
+            unk148 = unk148 - 0x3e8;
             CPlayer::Unk410b10(0xb0, 3);
             l50.type = 0x44;
             l50.unk2c = 0x13;
-            l50.x = (double)((int)*(double*)((char*)this + 0x20) + *((char*)this + 0x50) * 0xf);
-            l50.y = (double)((int)*(double*)((char*)this + 0x28) - 0x22);
+            l50.x = (double)((int)x + facing * 0xf);
+            l50.y = (double)((int)y - 0x22);
             l50.unk20 = 2;
             l50.unk0 = 1;
             l50.unk21 = 1;
-            ((CGame*)*(int*)((char*)this + 0x7c))->CreateEffect((EffectDesc*)&l50);
+            m_game->CreateEffect((EffectDesc*)&l50);
             CPlayer::Unk410a80(0x32, 0x78);
-            *(short*)((char*)this + 0x16c) = 0xc;
+            unk16c = 0xc;
         }
-        if (*(WORD*)((char*)this + 0xc) == 0 && (*(WORD*)((char*)this + 0xa) == 9 || *(WORD*)((char*)this + 0xa) == 0xb || *(WORD*)((char*)this + 0xa) == 0xd || *(WORD*)((char*)this + 0xa) == 0xf)) {
-            *((char*)this + 0x2c9) = 0x15;
+        if (timer == 0 && (frame == 9 || frame == 0xb || frame == 0xd || frame == 0xf)) {
+            unk2c9 = 0x15;
         }
-        if (*(WORD*)((char*)this + 0xa) > 7 && *(WORD*)((char*)this + 0xa) < 0x10) {
-            if (*((char*)this + 0x188) == *((char*)this + 0x50)) {
-                *(double*)((char*)this + 0x30) += 0.012;
+        if (frame > 7 && frame < 0x10) {
+            if (m_inputX == facing) {
+                vx += 0.012;
             }
-            if (*((char*)this + 0x188) == -*((char*)this + 0x50)) {
-                *(double*)((char*)this + 0x30) -= 0.012;
+            if (m_inputX == -facing) {
+                vx -= 0.012;
             }
-            if (*(double*)((char*)this + 0x30) < -1.2) {
-                *(double*)((char*)this + 0x30) = -1.2;
-            } else if (*(double*)((char*)this + 0x30) > 1.2) {
-                *(double*)((char*)this + 0x30) = 1.2;
+            if (vx < -1.2) {
+                vx = -1.2;
+            } else if (vx > 1.2) {
+                vx = 1.2;
             }
         }
-        if (*(WORD*)((char*)this + 0xa) > 0xf) {
-            if (*(double*)((char*)this + 0x30) > 0.0) {
-                *(double*)((char*)this + 0x30) -= 0.01;
-                if (*(double*)((char*)this + 0x30) < 0.0) {
-                    *(double*)((char*)this + 0x30) = 0.0;
+        if (frame > 0xf) {
+            if (vx > 0.0) {
+                vx -= 0.01;
+                if (vx < 0.0) {
+                    vx = 0.0;
                 }
             }
-            if (*(double*)((char*)this + 0x30) < 0.0) {
-                *(double*)((char*)this + 0x30) += 0.01;
-                if (*(double*)((char*)this + 0x30) > 0.0) {
-                    *(double*)((char*)this + 0x30) = 0.0;
+            if (vx < 0.0) {
+                vx += 0.01;
+                if (vx > 0.0) {
+                    vx = 0.0;
                 }
             }
         }
-        (*(short*)((char*)this + 0xc))++;
-        if (*(WORD*)((char*)this + 0xc) >= l4) {
-            *(short*)((char*)this + 0xc) = 0;
-            (*(short*)((char*)this + 0xa))++;
-            if (*(WORD*)((char*)this + 0xa) == 0x10 && *(int*)((char*)this + 0x3138) < 3) {
-                *(short*)((char*)this + 0xa) = *(WORD*)((char*)this + 0xa) - 4;
-                (*(int*)((char*)this + 0x3138))++;
+        timer++;
+        if (timer >= l4) {
+            timer = 0;
+            frame++;
+            if (frame == 0x10 && unk3138 < 3) {
+                frame = frame - 4;
+                unk3138++;
             }
-            if (*(WORD*)((char*)this + 0xa) == 1 || *(WORD*)((char*)this + 0xa) == 9 || *(WORD*)((char*)this + 0xa) == 0xb || *(WORD*)((char*)this + 0xa) == 0xd || *(WORD*)((char*)this + 0xa) == 0xf || *(WORD*)((char*)this + 0xa) == 0x10) {
-                *(int*)((char*)this + 0x168) = 0;
+            if (frame == 1 || frame == 9 || frame == 0xb || frame == 0xd || frame == 0xf || frame == 0x10) {
+                unk168 = 0;
             }
-            if (*(WORD*)((char*)this + 0xa) >= x8) {
-                *(short*)((char*)this + 8) = 0;
+            if (frame >= x8) {
+                pattern = 0;
                 Vf0();
             }
         }
         break;
     case 0x13b:
-        if (*(WORD*)((char*)this + 0xa) == 0 && *(WORD*)((char*)this + 0xc) == 0) {
-            *(double*)((char*)this + 0x30) = 0.0;
-            *(double*)((char*)this + 0x38) = 0.0;
-            *(double*)((char*)this + 0x48) = 0.0;
+        if (frame == 0 && timer == 0) {
+            vx = 0.0;
+            vy = 0.0;
+            ay = 0.0;
         }
-        if (*(WORD*)((char*)this + 0xa) == 1 && *(WORD*)((char*)this + 0xc) == 0) {
-            *(short*)((char*)this + 0x14c) = 0x78;
-            *(short*)((char*)this + 0x148) = *(short*)((char*)this + 0x148) - 0x7d0;
+        if (frame == 1 && timer == 0) {
+            unk14c = 0x78;
+            unk148 = unk148 - 0x7d0;
             CPlayer::Unk410b10(0xb0, 3);
             l50.type = 0x45;
             l50.unk2c = 5;
-            l50.x = (double)((int)*(double*)((char*)this + 0x20) + *((char*)this + 0x50) * 0xf);
-            l50.y = (double)((int)*(double*)((char*)this + 0x28) - 0x22);
+            l50.x = (double)((int)x + facing * 0xf);
+            l50.y = (double)((int)y - 0x22);
             l50.unk20 = 2;
             l50.unk0 = 1;
             l50.unk21 = 1;
-            ((CGame*)*(int*)((char*)this + 0x7c))->CreateEffect((EffectDesc*)&l50);
+            m_game->CreateEffect((EffectDesc*)&l50);
             CPlayer::Unk410a80(0x32, 0x78);
-            *(short*)((char*)this + 0x16c) = 0x63;
+            unk16c = 0x63;
         }
-        if (*(WORD*)((char*)this + 0xc) == 0 && (*(WORD*)((char*)this + 0xa) == 9 || *(WORD*)((char*)this + 0xa) == 0xb || *(WORD*)((char*)this + 0xa) == 0xd || *(WORD*)((char*)this + 0xa) == 0xf)) {
-            *((char*)this + 0x2c9) = 0x15;
+        if (timer == 0 && (frame == 9 || frame == 0xb || frame == 0xd || frame == 0xf)) {
+            unk2c9 = 0x15;
         }
-        if (*(WORD*)((char*)this + 0xa) > 7 && *(WORD*)((char*)this + 0xa) < 0x10) {
-            if (*((char*)this + 0x188) == *((char*)this + 0x50)) {
-                *(double*)((char*)this + 0x30) += 0.012;
+        if (frame > 7 && frame < 0x10) {
+            if (m_inputX == facing) {
+                vx += 0.012;
             }
-            if (*((char*)this + 0x188) == -*((char*)this + 0x50)) {
-                *(double*)((char*)this + 0x30) -= 0.012;
+            if (m_inputX == -facing) {
+                vx -= 0.012;
             }
-            if (*(double*)((char*)this + 0x30) < -1.3) {
-                *(double*)((char*)this + 0x30) = -1.3;
-            } else if (*(double*)((char*)this + 0x30) > 1.3) {
-                *(double*)((char*)this + 0x30) = 1.3;
+            if (vx < -1.3) {
+                vx = -1.3;
+            } else if (vx > 1.3) {
+                vx = 1.3;
             }
         }
-        if (*(WORD*)((char*)this + 0xa) > 0xf) {
-            if (*(double*)((char*)this + 0x30) > 0.0) {
-                *(double*)((char*)this + 0x30) -= 0.01;
-                if (*(double*)((char*)this + 0x30) < 0.0) {
-                    *(double*)((char*)this + 0x30) = 0.0;
+        if (frame > 0xf) {
+            if (vx > 0.0) {
+                vx -= 0.01;
+                if (vx < 0.0) {
+                    vx = 0.0;
                 }
             }
-            if (*(double*)((char*)this + 0x30) < 0.0) {
-                *(double*)((char*)this + 0x30) += 0.01;
-                if (*(double*)((char*)this + 0x30) > 0.0) {
-                    *(double*)((char*)this + 0x30) = 0.0;
+            if (vx < 0.0) {
+                vx += 0.01;
+                if (vx > 0.0) {
+                    vx = 0.0;
                 }
             }
         }
-        (*(short*)((char*)this + 0xc))++;
-        if (*(WORD*)((char*)this + 0xc) >= l4) {
-            *(short*)((char*)this + 0xc) = 0;
-            (*(short*)((char*)this + 0xa))++;
-            if (*(WORD*)((char*)this + 0xa) == 0x10 && *(int*)((char*)this + 0x3138) < 5) {
-                *(short*)((char*)this + 0xa) = *(WORD*)((char*)this + 0xa) - 4;
-                (*(int*)((char*)this + 0x3138))++;
+        timer++;
+        if (timer >= l4) {
+            timer = 0;
+            frame++;
+            if (frame == 0x10 && unk3138 < 5) {
+                frame = frame - 4;
+                unk3138++;
             }
-            if (*(WORD*)((char*)this + 0xa) == 1 || *(WORD*)((char*)this + 0xa) == 9 || *(WORD*)((char*)this + 0xa) == 0xb || *(WORD*)((char*)this + 0xa) == 0xd || *(WORD*)((char*)this + 0xa) == 0xf || *(WORD*)((char*)this + 0xa) == 0x10) {
-                *(int*)((char*)this + 0x168) = 0;
+            if (frame == 1 || frame == 9 || frame == 0xb || frame == 0xd || frame == 0xf || frame == 0x10) {
+                unk168 = 0;
             }
-            if (*(WORD*)((char*)this + 0xa) >= x8) {
-                *(short*)((char*)this + 8) = 0;
+            if (frame >= x8) {
+                pattern = 0;
                 Vf0();
             }
         }
         break;
     case 0x13c:
-        if (*(WORD*)((char*)this + 0xa) == 0 && *(WORD*)((char*)this + 0xc) == 0) {
-            *(double*)((char*)this + 0x30) = 0.0;
-            *(double*)((char*)this + 0x38) = 0.0;
-            *(double*)((char*)this + 0x48) = 0.0;
+        if (frame == 0 && timer == 0) {
+            vx = 0.0;
+            vy = 0.0;
+            ay = 0.0;
         }
-        if (*(WORD*)((char*)this + 0xa) > 0) {
-            ((CGame*)*(int*)((char*)this + 0x7c))->Unk4080c0(0xf);
+        if (frame > 0) {
+            m_game->Unk4080c0(0xf);
         }
-        if (*(WORD*)((char*)this + 0xa) == 1 && *(WORD*)((char*)this + 0xc) == 0) {
-            *(short*)((char*)this + 0x14c) = 0x78;
-            *(short*)((char*)this + 0x148) = *(short*)((char*)this + 0x148) - 0xbb8;
+        if (frame == 1 && timer == 0) {
+            unk14c = 0x78;
+            unk148 = unk148 - 0xbb8;
             CPlayer::Unk410b10(0xb0, 3);
             l50.type = 0x46;
             l50.unk2c = 0x40;
-            l50.x = (double)((int)*(double*)((char*)this + 0x20) + *((char*)this + 0x50) * 0xf);
-            l50.y = (double)((int)*(double*)((char*)this + 0x28) - 0x22);
+            l50.x = (double)((int)x + facing * 0xf);
+            l50.y = (double)((int)y - 0x22);
             l50.unk20 = 2;
             l50.unk0 = 1;
             l50.unk21 = 1;
-            ((CGame*)*(int*)((char*)this + 0x7c))->CreateEffect((EffectDesc*)&l50);
+            m_game->CreateEffect((EffectDesc*)&l50);
             CPlayer::Unk410a80(0x32, 0x78);
-            *(short*)((char*)this + 0x16c) = 0x63;
-            *((char*)this + 0x2c9) = 0x25;
+            unk16c = 0x63;
+            unk2c9 = 0x25;
         }
-        if (*(WORD*)((char*)this + 0xc) == 0 && (*(WORD*)((char*)this + 0xa) == 9 || *(WORD*)((char*)this + 0xa) == 0xb || *(WORD*)((char*)this + 0xa) == 0xd || *(WORD*)((char*)this + 0xa) == 0xf)) {
-            *((char*)this + 0x2c9) = 0x15;
+        if (timer == 0 && (frame == 9 || frame == 0xb || frame == 0xd || frame == 0xf)) {
+            unk2c9 = 0x15;
         }
-        if (*(WORD*)((char*)this + 0xa) > 7 && *(WORD*)((char*)this + 0xa) < 0x10) {
-            if (*((char*)this + 0x188) == *((char*)this + 0x50)) {
-                *(double*)((char*)this + 0x30) += 0.012;
+        if (frame > 7 && frame < 0x10) {
+            if (m_inputX == facing) {
+                vx += 0.012;
             }
-            if (*((char*)this + 0x188) == -*((char*)this + 0x50)) {
-                *(double*)((char*)this + 0x30) -= 0.012;
+            if (m_inputX == -facing) {
+                vx -= 0.012;
             }
-            if (*(double*)((char*)this + 0x30) < -1.4) {
-                *(double*)((char*)this + 0x30) = -1.4;
-            } else if (*(double*)((char*)this + 0x30) > 1.4) {
-                *(double*)((char*)this + 0x30) = 1.4;
+            if (vx < -1.4) {
+                vx = -1.4;
+            } else if (vx > 1.4) {
+                vx = 1.4;
             }
         }
-        if (*(WORD*)((char*)this + 0xa) > 0xf) {
-            if (*(double*)((char*)this + 0x30) > 0.0) {
-                *(double*)((char*)this + 0x30) -= 0.01;
-                if (*(double*)((char*)this + 0x30) < 0.0) {
-                    *(double*)((char*)this + 0x30) = 0.0;
+        if (frame > 0xf) {
+            if (vx > 0.0) {
+                vx -= 0.01;
+                if (vx < 0.0) {
+                    vx = 0.0;
                 }
             }
-            if (*(double*)((char*)this + 0x30) < 0.0) {
-                *(double*)((char*)this + 0x30) += 0.01;
-                if (*(double*)((char*)this + 0x30) > 0.0) {
-                    *(double*)((char*)this + 0x30) = 0.0;
+            if (vx < 0.0) {
+                vx += 0.01;
+                if (vx > 0.0) {
+                    vx = 0.0;
                 }
             }
         }
-        (*(short*)((char*)this + 0xc))++;
-        if (*(WORD*)((char*)this + 0xc) >= l4) {
-            *(short*)((char*)this + 0xc) = 0;
-            (*(short*)((char*)this + 0xa))++;
-            if (*(WORD*)((char*)this + 0xa) == 0x10 && *(int*)((char*)this + 0x3138) < 0xa) {
-                *(short*)((char*)this + 0xa) = *(WORD*)((char*)this + 0xa) - 4;
-                (*(int*)((char*)this + 0x3138))++;
+        timer++;
+        if (timer >= l4) {
+            timer = 0;
+            frame++;
+            if (frame == 0x10 && unk3138 < 0xa) {
+                frame = frame - 4;
+                unk3138++;
             }
-            if (*(WORD*)((char*)this + 0xa) == 1 || *(WORD*)((char*)this + 0xa) == 9 || *(WORD*)((char*)this + 0xa) == 0xb || *(WORD*)((char*)this + 0xa) == 0xd || *(WORD*)((char*)this + 0xa) == 0xf || *(WORD*)((char*)this + 0xa) == 0x10) {
-                *(int*)((char*)this + 0x168) = 0;
+            if (frame == 1 || frame == 9 || frame == 0xb || frame == 0xd || frame == 0xf || frame == 0x10) {
+                unk168 = 0;
             }
-            if (*(WORD*)((char*)this + 0xa) >= x8) {
-                *(short*)((char*)this + 8) = 0;
+            if (frame >= x8) {
+                pattern = 0;
                 Vf0();
             }
         }
         break;
     case 0x13d:
-        if (*(WORD*)((char*)this + 0xa) == 0 && *(WORD*)((char*)this + 0xc) == 0) {
-            *(double*)((char*)this + 0x30) = 0.0;
-            *(double*)((char*)this + 0x38) = 0.0;
-            *(double*)((char*)this + 0x48) = 0.0;
+        if (frame == 0 && timer == 0) {
+            vx = 0.0;
+            vy = 0.0;
+            ay = 0.0;
         }
-        if (*(WORD*)((char*)this + 0xa) == 0 && *(WORD*)((char*)this + 0xc) == 0) {
-            *(short*)((char*)this + 0x14c) = 0x78;
-            *(short*)((char*)this + 0x148) = *(short*)((char*)this + 0x148) - 0x3e8;
+        if (frame == 0 && timer == 0) {
+            unk14c = 0x78;
+            unk148 = unk148 - 0x3e8;
             CPlayer::Unk410b10(0xb0, 3);
             l50.type = 0x44;
             l50.unk2c = 0x13;
-            l50.x = (double)(int)*(double*)((char*)this + 0x20);
-            l50.y = (double)((int)*(double*)((char*)this + 0x28) - 0x28);
+            l50.x = (double)(int)x;
+            l50.y = (double)((int)y - 0x28);
             l50.unk20 = 2;
             l50.unk0 = 1;
             l50.unk21 = 1;
-            ((CGame*)*(int*)((char*)this + 0x7c))->CreateEffect((EffectDesc*)&l50);
-            *(short*)((char*)this + 0x16c) = 1;
+            m_game->CreateEffect((EffectDesc*)&l50);
+            unk16c = 1;
             CPlayer::Unk410a80(0x32, 0x78);
         }
-        if (*(WORD*)((char*)this + 0xa) > 0xd && *(WORD*)((char*)this + 0xa) < 0x12 && *(int*)((char*)this + 0x168) == 3) {
+        if (frame > 0xd && frame < 0x12 && unk168 == 3) {
             Vf0();
             CPlayer::Unk40f1e0();
-            ((CPlayer*)*(int*)*(char**)((char*)this + 0x78))->Unk40f1e0();
-            *(short*)(*(char**)*(char**)((char*)this + 0x78) + 0x14a) = 0xb4;
-            *(double*)(*(char**)*(char**)((char*)this + 0x78) + 0x28) = 0.0;
-            *(short*)(*(char**)*(char**)((char*)this + 0x78) + 8) = 0x49;
-            *(double*)(*(char**)*(char**)((char*)this + 0x78) + 0x20) = *((char*)this + 0x50) * 0x1e + *(double*)((char*)this + 0x20);
-            *(short*)((char*)this + 8) = 0x13e;
-            *(*(char**)*(char**)((char*)this + 0x78) + 0x50) = -*((char*)this + 0x50);
+            (*m_opponent)->Unk40f1e0();
+            (*m_opponent)->unk14a = 0xb4;
+            (*m_opponent)->y = 0.0;
+            (*m_opponent)->pattern = 0x49;
+            (*m_opponent)->x = facing * 0x1e + x;
+            pattern = 0x13e;
+            (*m_opponent)->facing = -facing;
             break;
         }
-        if (*(double*)((char*)this + 0x30) > 0.0) {
-            *(double*)((char*)this + 0x30) -= 0.035;
+        if (vx > 0.0) {
+            vx -= 0.035;
         }
-        if (*(double*)((char*)this + 0x30) < 0.0) {
-            *(double*)((char*)this + 0x30) = 0.0;
+        if (vx < 0.0) {
+            vx = 0.0;
         }
-        if (*(int*)((char*)this + 0x168) > 0 && *(WORD*)((char*)this + 0xa) < 0x12 && *(WORD*)((char*)this + 0xa) > 0xd) {
-            *(short*)((char*)this + 0xc) = 0;
-            *(short*)((char*)this + 0xa) = 0x12;
+        if (unk168 > 0 && frame < 0x12 && frame > 0xd) {
+            timer = 0;
+            frame = 0x12;
             break;
         }
-        (*(short*)((char*)this + 0xc))++;
-        if (*(WORD*)((char*)this + 0xc) >= l4) {
-            *(short*)((char*)this + 0xc) = 0;
-            (*(short*)((char*)this + 0xa))++;
-            if (*(WORD*)((char*)this + 0xa) == 0xe) {
-                *(double*)((char*)this + 0x30) = 3.2;
+        timer++;
+        if (timer >= l4) {
+            timer = 0;
+            frame++;
+            if (frame == 0xe) {
+                vx = 3.2;
             }
-            if (*(WORD*)((char*)this + 0xa) == 0x12 && *(int*)((char*)this + 0x3138) < 2) {
-                (*(int*)((char*)this + 0x3138))++;
-                *(short*)((char*)this + 0xa) = *(WORD*)((char*)this + 0xa) - 4;
+            if (frame == 0x12 && unk3138 < 2) {
+                unk3138++;
+                frame = frame - 4;
             }
-            if (*(WORD*)((char*)this + 0xa) >= x8) {
-                *(short*)((char*)this + 8) = 3;
+            if (frame >= x8) {
+                pattern = 3;
                 Vf0();
             }
         }
         break;
     case 0x13e:
-        if (*(WORD*)((char*)this + 0xa) == 0 && *(WORD*)((char*)this + 0xc) == 0) {
-            *(short*)((char*)this + 0x16c) = 0x63;
+        if (frame == 0 && timer == 0) {
+            unk16c = 0x63;
         }
-        if ((*(WORD*)((char*)this + 0xa) == 5 || *(WORD*)((char*)this + 0xa) == 0xa) && *(WORD*)((char*)this + 0xc) == 0) {
-            *((char*)this + 0x2c9) = 0x15;
+        if ((frame == 5 || frame == 0xa) && timer == 0) {
+            unk2c9 = 0x15;
         }
-        if (*(double*)((char*)this + 0x30) > 0.0) {
-            *(double*)((char*)this + 0x30) -= 0.035;
+        if (vx > 0.0) {
+            vx -= 0.035;
         }
-        if (*(double*)((char*)this + 0x30) < 0.0) {
-            *(double*)((char*)this + 0x30) = 0.0;
+        if (vx < 0.0) {
+            vx = 0.0;
         }
-        if (*(double*)((char*)this + 0x28) < 0.0) {
-            *(double*)((char*)this + 0x48) = 0.055;
-            *(double*)((char*)this + 0x38) = *(double*)((char*)this + 0x38) + *(double*)((char*)this + 0x48);
+        if (y < 0.0) {
+            ay = 0.055;
+            vy = vy + ay;
         }
-        if (*(WORD*)((char*)this + 0xa) > 0x12 && *(WORD*)((char*)this + 0xa) < 0x1f && *(double*)((char*)this + 0x28) + *(double*)((char*)this + 0x38) > 0.0) {
-            *(short*)((char*)this + 0xc) = 0;
-            *(short*)((char*)this + 0xa) = 0x1f;
-            *(double*)((char*)this + 0x28) = 0.0;
+        if (frame > 0x12 && frame < 0x1f && y + vy > 0.0) {
+            timer = 0;
+            frame = 0x1f;
+            y = 0.0;
             CPlayer::Unk40f1e0();
             break;
         }
-        (*(short*)((char*)this + 0xc))++;
-        if (*(WORD*)((char*)this + 0xc) >= l4) {
-            *(short*)((char*)this + 0xc) = 0;
-            (*(short*)((char*)this + 0xa))++;
-            *(int*)((char*)this + 0x168) = 0;
-            if (*(WORD*)((char*)this + 0xa) == 9) {
-                *(double*)((char*)this + 0x20) = *((char*)this + 0x50) * 0xf + *(double*)((char*)this + 0x20);
+        timer++;
+        if (timer >= l4) {
+            timer = 0;
+            frame++;
+            unk168 = 0;
+            if (frame == 9) {
+                x = facing * 0xf + x;
             }
-            if (*(WORD*)((char*)this + 0xa) == 0xa) {
-                *(double*)((char*)this + 0x20) = *((char*)this + 0x50) * 0xf + *(double*)((char*)this + 0x20);
+            if (frame == 0xa) {
+                x = facing * 0xf + x;
             }
-            if (*(WORD*)((char*)this + 0xa) == 0xc) {
-                *(double*)((char*)this + 0x20) = *((char*)this + 0x50) * 0xf + *(double*)((char*)this + 0x20);
+            if (frame == 0xc) {
+                x = facing * 0xf + x;
             }
-            if (*(WORD*)((char*)this + 0xa) == 0xd) {
-                if (*(int*)((char*)this + 0x3138) > 1) {
-                    *(short*)((char*)this + 0xa) = 0xf;
+            if (frame == 0xd) {
+                if (unk3138 > 1) {
+                    frame = 0xf;
                     break;
                 }
-                *(double*)((char*)this + 0x20) = *((char*)this + 0x50) * 0xf + *(double*)((char*)this + 0x20);
+                x = facing * 0xf + x;
             }
-            if (*(WORD*)((char*)this + 0xa) == 0xf && *(int*)((char*)this + 0x3138) < 1) {
-                *(short*)((char*)this + 0xa) = 5;
-                (*(int*)((char*)this + 0x3138))++;
+            if (frame == 0xf && unk3138 < 1) {
+                frame = 5;
+                unk3138++;
             }
-            if (*(WORD*)((char*)this + 0xa) == 0x13) {
-                *(double*)((char*)this + 0x38) = -3.3;
-                *(double*)((char*)this + 0x30) = 1.5;
-                *(short*)((char*)this + 0x16c) = 3;
+            if (frame == 0x13) {
+                vy = -3.3;
+                vx = 1.5;
+                unk16c = 3;
             }
-            if (*(WORD*)((char*)this + 0xa) == 0x1f) {
-                *(short*)((char*)this + 0xa) = *(WORD*)((char*)this + 0xa) - 4;
+            if (frame == 0x1f) {
+                frame = frame - 4;
             }
-            if (*(WORD*)((char*)this + 0xa) >= x8) {
-                *(short*)((char*)this + 8) = 3;
+            if (frame >= x8) {
+                pattern = 3;
                 Vf0();
             }
         }
         break;
     case 0x13f:
-        if (*(WORD*)((char*)this + 0xa) == 0 && *(WORD*)((char*)this + 0xc) == 0) {
-            *(double*)((char*)this + 0x30) = 0.0;
-            *(double*)((char*)this + 0x38) = 0.0;
-            *(double*)((char*)this + 0x48) = 0.0;
+        if (frame == 0 && timer == 0) {
+            vx = 0.0;
+            vy = 0.0;
+            ay = 0.0;
         }
-        if (*(WORD*)((char*)this + 0xa) == 0 && *(WORD*)((char*)this + 0xc) == 0) {
-            *(short*)((char*)this + 0x14c) = 0x78;
-            *(short*)((char*)this + 0x148) = *(short*)((char*)this + 0x148) - 0x7d0;
+        if (frame == 0 && timer == 0) {
+            unk14c = 0x78;
+            unk148 = unk148 - 0x7d0;
             CPlayer::Unk410b10(0xb0, 3);
             l50.type = 0x45;
             l50.unk2c = 5;
-            l50.x = (double)(int)*(double*)((char*)this + 0x20);
-            l50.y = (double)((int)*(double*)((char*)this + 0x28) - 0x28);
+            l50.x = (double)(int)x;
+            l50.y = (double)((int)y - 0x28);
             l50.unk20 = 2;
             l50.unk0 = 1;
             l50.unk21 = 1;
-            ((CGame*)*(int*)((char*)this + 0x7c))->CreateEffect((EffectDesc*)&l50);
-            *(short*)((char*)this + 0x16c) = 1;
+            m_game->CreateEffect((EffectDesc*)&l50);
+            unk16c = 1;
             CPlayer::Unk410a80(0x32, 0x78);
         }
-        if (*(WORD*)((char*)this + 0xa) > 0xd && *(WORD*)((char*)this + 0xa) < 0x12 && *(int*)((char*)this + 0x168) == 3) {
+        if (frame > 0xd && frame < 0x12 && unk168 == 3) {
             Vf0();
             CPlayer::Unk40f1e0();
-            ((CPlayer*)*(int*)*(char**)((char*)this + 0x78))->Unk40f1e0();
-            *(short*)(*(char**)*(char**)((char*)this + 0x78) + 0x14a) = 0xb4;
-            *(double*)(*(char**)*(char**)((char*)this + 0x78) + 0x28) = 0.0;
-            *(short*)(*(char**)*(char**)((char*)this + 0x78) + 8) = 0x49;
-            *(double*)(*(char**)*(char**)((char*)this + 0x78) + 0x20) = *((char*)this + 0x50) * 0x1e + *(double*)((char*)this + 0x20);
-            *(short*)((char*)this + 8) = 0x140;
-            *(*(char**)*(char**)((char*)this + 0x78) + 0x50) = -*((char*)this + 0x50);
+            (*m_opponent)->Unk40f1e0();
+            (*m_opponent)->unk14a = 0xb4;
+            (*m_opponent)->y = 0.0;
+            (*m_opponent)->pattern = 0x49;
+            (*m_opponent)->x = facing * 0x1e + x;
+            pattern = 0x140;
+            (*m_opponent)->facing = -facing;
             break;
         }
-        if (*(double*)((char*)this + 0x30) > 0.0) {
-            *(double*)((char*)this + 0x30) -= 0.035;
+        if (vx > 0.0) {
+            vx -= 0.035;
         }
-        if (*(double*)((char*)this + 0x30) < 0.0) {
-            *(double*)((char*)this + 0x30) = 0.0;
+        if (vx < 0.0) {
+            vx = 0.0;
         }
-        if (*(int*)((char*)this + 0x168) > 0 && *(WORD*)((char*)this + 0xa) < 0x12 && *(WORD*)((char*)this + 0xa) > 0xd) {
-            *(short*)((char*)this + 0xc) = 0;
-            *(short*)((char*)this + 0xa) = 0x12;
+        if (unk168 > 0 && frame < 0x12 && frame > 0xd) {
+            timer = 0;
+            frame = 0x12;
             break;
         }
-        (*(short*)((char*)this + 0xc))++;
-        if (*(WORD*)((char*)this + 0xc) >= l4) {
-            *(short*)((char*)this + 0xc) = 0;
-            (*(short*)((char*)this + 0xa))++;
-            if (*(WORD*)((char*)this + 0xa) == 0xe) {
-                *(double*)((char*)this + 0x30) = 4.0;
+        timer++;
+        if (timer >= l4) {
+            timer = 0;
+            frame++;
+            if (frame == 0xe) {
+                vx = 4.0;
             }
-            if (*(WORD*)((char*)this + 0xa) == 0x12 && *(int*)((char*)this + 0x3138) < 3) {
-                (*(int*)((char*)this + 0x3138))++;
-                *(short*)((char*)this + 0xa) = *(WORD*)((char*)this + 0xa) - 4;
+            if (frame == 0x12 && unk3138 < 3) {
+                unk3138++;
+                frame = frame - 4;
             }
-            if (*(WORD*)((char*)this + 0xa) >= x8) {
-                *(short*)((char*)this + 8) = 3;
+            if (frame >= x8) {
+                pattern = 3;
                 Vf0();
             }
         }
         break;
     case 0x140:
-        if (*(WORD*)((char*)this + 0xa) == 0 && *(WORD*)((char*)this + 0xc) == 0) {
-            *(short*)((char*)this + 0x16c) = 0x63;
+        if (frame == 0 && timer == 0) {
+            unk16c = 0x63;
         }
-        if ((*(WORD*)((char*)this + 0xa) == 5 || *(WORD*)((char*)this + 0xa) == 0xa) && *(WORD*)((char*)this + 0xc) == 0) {
-            *((char*)this + 0x2c9) = 0x15;
+        if ((frame == 5 || frame == 0xa) && timer == 0) {
+            unk2c9 = 0x15;
         }
-        if (*(double*)((char*)this + 0x30) > 0.0) {
-            *(double*)((char*)this + 0x30) -= 0.035;
+        if (vx > 0.0) {
+            vx -= 0.035;
         }
-        if (*(double*)((char*)this + 0x30) < 0.0) {
-            *(double*)((char*)this + 0x30) = 0.0;
+        if (vx < 0.0) {
+            vx = 0.0;
         }
-        if (*(double*)((char*)this + 0x28) < 0.0) {
-            *(double*)((char*)this + 0x48) = 0.055;
-            *(double*)((char*)this + 0x38) = *(double*)((char*)this + 0x38) + *(double*)((char*)this + 0x48);
+        if (y < 0.0) {
+            ay = 0.055;
+            vy = vy + ay;
         }
-        if (*(WORD*)((char*)this + 0xa) > 0x19 && *(WORD*)((char*)this + 0xa) < 0x26 && *(double*)((char*)this + 0x28) + *(double*)((char*)this + 0x38) > 0.0) {
-            *(short*)((char*)this + 0xc) = 0;
-            *(short*)((char*)this + 0xa) = 0x26;
-            *(double*)((char*)this + 0x28) = 0.0;
+        if (frame > 0x19 && frame < 0x26 && y + vy > 0.0) {
+            timer = 0;
+            frame = 0x26;
+            y = 0.0;
             CPlayer::Unk40f1e0();
             break;
         }
-        (*(short*)((char*)this + 0xc))++;
-        if (*(WORD*)((char*)this + 0xc) >= l4) {
-            *(short*)((char*)this + 0xc) = 0;
-            (*(short*)((char*)this + 0xa))++;
-            *(int*)((char*)this + 0x168) = 0;
-            if (*(WORD*)((char*)this + 0xa) == 9) {
-                *(double*)((char*)this + 0x20) = *((char*)this + 0x50) * 0xf + *(double*)((char*)this + 0x20);
+        timer++;
+        if (timer >= l4) {
+            timer = 0;
+            frame++;
+            unk168 = 0;
+            if (frame == 9) {
+                x = facing * 0xf + x;
             }
-            if (*(WORD*)((char*)this + 0xa) == 0xa) {
-                *(double*)((char*)this + 0x20) = *((char*)this + 0x50) * 0xf + *(double*)((char*)this + 0x20);
+            if (frame == 0xa) {
+                x = facing * 0xf + x;
             }
-            if (*(WORD*)((char*)this + 0xa) == 0xc) {
-                *(double*)((char*)this + 0x20) = *((char*)this + 0x50) * 0xf + *(double*)((char*)this + 0x20);
+            if (frame == 0xc) {
+                x = facing * 0xf + x;
             }
-            if (*(WORD*)((char*)this + 0xa) == 0xd) {
-                if (*(int*)((char*)this + 0x3138) > 1) {
-                    *(short*)((char*)this + 0xa) = 0xf;
+            if (frame == 0xd) {
+                if (unk3138 > 1) {
+                    frame = 0xf;
                     break;
                 }
-                *(double*)((char*)this + 0x20) = *((char*)this + 0x50) * 0xf + *(double*)((char*)this + 0x20);
+                x = facing * 0xf + x;
             }
-            if (*(WORD*)((char*)this + 0xa) == 0xf && *(int*)((char*)this + 0x3138) < 2) {
-                *(short*)((char*)this + 0xa) = 5;
-                (*(int*)((char*)this + 0x3138))++;
+            if (frame == 0xf && unk3138 < 2) {
+                frame = 5;
+                unk3138++;
             }
-            if (*(WORD*)((char*)this + 0xa) == 0x19) {
-                *(double*)((char*)this + 0x38) = -4.0;
-                *(double*)((char*)this + 0x30) = 1.6;
-                *(short*)((char*)this + 0x16c) = 4;
+            if (frame == 0x19) {
+                vy = -4.0;
+                vx = 1.6;
+                unk16c = 4;
             }
-            if (*(WORD*)((char*)this + 0xa) == 0x26) {
-                *(short*)((char*)this + 0xa) = *(WORD*)((char*)this + 0xa) - 4;
+            if (frame == 0x26) {
+                frame = frame - 4;
             }
-            if (*(WORD*)((char*)this + 0xa) >= x8) {
-                *(short*)((char*)this + 8) = 3;
+            if (frame >= x8) {
+                pattern = 3;
                 Vf0();
             }
         }
         break;
     case 0x141:
-        if (*(WORD*)((char*)this + 0xa) == 0 && *(WORD*)((char*)this + 0xc) == 0) {
-            *(double*)((char*)this + 0x30) = 0.0;
-            *(double*)((char*)this + 0x38) = 0.0;
-            *(double*)((char*)this + 0x48) = 0.0;
+        if (frame == 0 && timer == 0) {
+            vx = 0.0;
+            vy = 0.0;
+            ay = 0.0;
         }
-        ((CGame*)*(int*)((char*)this + 0x7c))->Unk4080c0(0xf);
-        if (*(WORD*)((char*)this + 0xa) == 0 && *(WORD*)((char*)this + 0xc) == 0) {
-            *(short*)((char*)this + 0x14c) = 0x78;
-            *(short*)((char*)this + 0x148) = *(short*)((char*)this + 0x148) - 0xbb8;
+        m_game->Unk4080c0(0xf);
+        if (frame == 0 && timer == 0) {
+            unk14c = 0x78;
+            unk148 = unk148 - 0xbb8;
             CPlayer::Unk410b10(0xb0, 3);
             l50.type = 0x46;
             l50.unk2c = 0x40;
-            l50.x = (double)(int)*(double*)((char*)this + 0x20);
-            l50.y = (double)((int)*(double*)((char*)this + 0x28) - 0x28);
+            l50.x = (double)(int)x;
+            l50.y = (double)((int)y - 0x28);
             l50.unk20 = 2;
             l50.unk0 = 1;
             l50.unk21 = 1;
-            ((CGame*)*(int*)((char*)this + 0x7c))->CreateEffect((EffectDesc*)&l50);
-            *(short*)((char*)this + 0x16c) = 1;
+            m_game->CreateEffect((EffectDesc*)&l50);
+            unk16c = 1;
             CPlayer::Unk410a80(0x32, 0x78);
-            *((char*)this + 0x2c9) = 0x25;
+            unk2c9 = 0x25;
         }
-        if (*(WORD*)((char*)this + 0xa) > 0xd && *(WORD*)((char*)this + 0xa) < 0x12 && *(int*)((char*)this + 0x168) == 3) {
+        if (frame > 0xd && frame < 0x12 && unk168 == 3) {
             Vf0();
             CPlayer::Unk40f1e0();
-            ((CPlayer*)*(int*)*(char**)((char*)this + 0x78))->Unk40f1e0();
-            *(short*)(*(char**)*(char**)((char*)this + 0x78) + 0x14a) = 0xb4;
-            *(double*)(*(char**)*(char**)((char*)this + 0x78) + 0x28) = 0.0;
-            *(short*)(*(char**)*(char**)((char*)this + 0x78) + 8) = 0x49;
-            *(double*)(*(char**)*(char**)((char*)this + 0x78) + 0x20) = *((char*)this + 0x50) * 0x1e + *(double*)((char*)this + 0x20);
-            *(short*)((char*)this + 8) = 0x142;
-            *(*(char**)*(char**)((char*)this + 0x78) + 0x50) = -*((char*)this + 0x50);
+            (*m_opponent)->Unk40f1e0();
+            (*m_opponent)->unk14a = 0xb4;
+            (*m_opponent)->y = 0.0;
+            (*m_opponent)->pattern = 0x49;
+            (*m_opponent)->x = facing * 0x1e + x;
+            pattern = 0x142;
+            (*m_opponent)->facing = -facing;
             break;
         }
-        if (*(double*)((char*)this + 0x30) > 0.0) {
-            *(double*)((char*)this + 0x30) -= 0.035;
+        if (vx > 0.0) {
+            vx -= 0.035;
         }
-        if (*(double*)((char*)this + 0x30) < 0.0) {
-            *(double*)((char*)this + 0x30) = 0.0;
+        if (vx < 0.0) {
+            vx = 0.0;
         }
-        if (*(int*)((char*)this + 0x168) > 0 && *(WORD*)((char*)this + 0xa) < 0x12 && *(WORD*)((char*)this + 0xa) > 0xd) {
-            *(short*)((char*)this + 0xc) = 0;
-            *(short*)((char*)this + 0xa) = 0x12;
+        if (unk168 > 0 && frame < 0x12 && frame > 0xd) {
+            timer = 0;
+            frame = 0x12;
             break;
         }
-        (*(short*)((char*)this + 0xc))++;
-        if (*(WORD*)((char*)this + 0xc) >= l4) {
-            *(short*)((char*)this + 0xc) = 0;
-            (*(short*)((char*)this + 0xa))++;
-            if (*(WORD*)((char*)this + 0xa) == 0xe) {
-                *(double*)((char*)this + 0x30) = 4.5;
+        timer++;
+        if (timer >= l4) {
+            timer = 0;
+            frame++;
+            if (frame == 0xe) {
+                vx = 4.5;
             }
-            if (*(WORD*)((char*)this + 0xa) == 0x12 && *(int*)((char*)this + 0x3138) < 3) {
-                (*(int*)((char*)this + 0x3138))++;
-                *(short*)((char*)this + 0xa) = *(WORD*)((char*)this + 0xa) - 4;
+            if (frame == 0x12 && unk3138 < 3) {
+                unk3138++;
+                frame = frame - 4;
             }
-            if (*(WORD*)((char*)this + 0xa) >= x8) {
-                *(short*)((char*)this + 8) = 3;
+            if (frame >= x8) {
+                pattern = 3;
                 Vf0();
             }
         }
         break;
     case 0x142:
-        if (*(WORD*)((char*)this + 0xa) == 0 && *(WORD*)((char*)this + 0xc) == 0) {
-            *(short*)((char*)this + 0x16c) = 0x63;
+        if (frame == 0 && timer == 0) {
+            unk16c = 0x63;
         }
-        if ((*(WORD*)((char*)this + 0xa) == 5 || *(WORD*)((char*)this + 0xa) == 0xa) && *(WORD*)((char*)this + 0xc) == 0) {
-            *((char*)this + 0x2c9) = 0x15;
+        if ((frame == 5 || frame == 0xa) && timer == 0) {
+            unk2c9 = 0x15;
         }
-        if (*(double*)((char*)this + 0x30) > 0.0) {
-            *(double*)((char*)this + 0x30) -= 0.025;
+        if (vx > 0.0) {
+            vx -= 0.025;
         }
-        if (*(double*)((char*)this + 0x30) < 0.0) {
-            *(double*)((char*)this + 0x30) = 0.0;
+        if (vx < 0.0) {
+            vx = 0.0;
         }
-        if (*(double*)((char*)this + 0x28) < 0.0) {
-            *(double*)((char*)this + 0x48) = 0.045;
-            *(double*)((char*)this + 0x38) = *(double*)((char*)this + 0x38) + *(double*)((char*)this + 0x48);
+        if (y < 0.0) {
+            ay = 0.045;
+            vy = vy + ay;
         }
-        if (*(WORD*)((char*)this + 0xa) > 0x1b && *(WORD*)((char*)this + 0xa) < 0x21 && *(double*)((char*)this + 0x28) + *(double*)((char*)this + 0x38) > 0.0) {
-            *(short*)((char*)this + 0xc) = 0;
-            *(short*)((char*)this + 0xa) = 0x21;
-            *(double*)((char*)this + 0x28) = 0.0;
+        if (frame > 0x1b && frame < 0x21 && y + vy > 0.0) {
+            timer = 0;
+            frame = 0x21;
+            y = 0.0;
             CPlayer::Unk40f1e0();
             break;
         }
-        if (*(WORD*)((char*)this + 0xa) > 0x25 && *(WORD*)((char*)this + 0xa) < 0x2a && *(double*)((char*)this + 0x28) + *(double*)((char*)this + 0x38) > 0.0) {
-            *(short*)((char*)this + 0xc) = 0;
-            *(short*)((char*)this + 0xa) = 0x2a;
-            *(double*)((char*)this + 0x28) = 0.0;
+        if (frame > 0x25 && frame < 0x2a && y + vy > 0.0) {
+            timer = 0;
+            frame = 0x2a;
+            y = 0.0;
             CPlayer::Unk40f1e0();
             break;
         }
-        if (*(WORD*)((char*)this + 0xa) > 0x2c && *(WORD*)((char*)this + 0xa) < 0x43 && *(double*)((char*)this + 0x28) + *(double*)((char*)this + 0x38) > 0.0) {
-            *(short*)((char*)this + 0xc) = 0;
-            *(short*)((char*)this + 0xa) = 0x43;
-            *(double*)((char*)this + 0x28) = 0.0;
+        if (frame > 0x2c && frame < 0x43 && y + vy > 0.0) {
+            timer = 0;
+            frame = 0x43;
+            y = 0.0;
             CPlayer::Unk40f1e0();
             break;
         }
-        (*(short*)((char*)this + 0xc))++;
-        if (*(WORD*)((char*)this + 0xc) >= l4) {
-            *(short*)((char*)this + 0xc) = 0;
-            (*(short*)((char*)this + 0xa))++;
-            *(int*)((char*)this + 0x168) = 0;
-            if (*(WORD*)((char*)this + 0xa) == 9) {
-                *(double*)((char*)this + 0x20) = *((char*)this + 0x50) * 0xf + *(double*)((char*)this + 0x20);
+        timer++;
+        if (timer >= l4) {
+            timer = 0;
+            frame++;
+            unk168 = 0;
+            if (frame == 9) {
+                x = facing * 0xf + x;
             }
-            if (*(WORD*)((char*)this + 0xa) == 0xa) {
-                *(double*)((char*)this + 0x20) = *((char*)this + 0x50) * 0xf + *(double*)((char*)this + 0x20);
+            if (frame == 0xa) {
+                x = facing * 0xf + x;
             }
-            if (*(WORD*)((char*)this + 0xa) == 0xc) {
-                *(double*)((char*)this + 0x20) = *((char*)this + 0x50) * 0xf + *(double*)((char*)this + 0x20);
+            if (frame == 0xc) {
+                x = facing * 0xf + x;
             }
-            if (*(WORD*)((char*)this + 0xa) == 0xd) {
-                *(double*)((char*)this + 0x20) = *((char*)this + 0x50) * 0xf + *(double*)((char*)this + 0x20);
+            if (frame == 0xd) {
+                x = facing * 0xf + x;
             }
-            if (*(WORD*)((char*)this + 0xa) == 0xf && *(int*)((char*)this + 0x3138) < 0xa) {
-                (*(int*)((char*)this + 0x3138))++;
-                *(short*)((char*)this + 0xa) = 5;
+            if (frame == 0xf && unk3138 < 0xa) {
+                unk3138++;
+                frame = 5;
             }
-            if (*(WORD*)((char*)this + 0xa) == 0x13) {
-                *(double*)((char*)this + 0x20) = *((char*)this + 0x50) * 0xf + *(double*)((char*)this + 0x20);
+            if (frame == 0x13) {
+                x = facing * 0xf + x;
             }
-            if (*(WORD*)((char*)this + 0xa) == 0x14) {
-                *(double*)((char*)this + 0x20) = *((char*)this + 0x50) * 0xf + *(double*)((char*)this + 0x20);
+            if (frame == 0x14) {
+                x = facing * 0xf + x;
             }
-            if (*(WORD*)((char*)this + 0xa) == 0x16) {
-                *(double*)((char*)this + 0x20) = *((char*)this + 0x50) * 0xf + *(double*)((char*)this + 0x20);
+            if (frame == 0x16) {
+                x = facing * 0xf + x;
             }
-            if (*(WORD*)((char*)this + 0xa) == 0xf && *(int*)((char*)this + 0x3138) < 8) {
-                *(short*)((char*)this + 0xa) = 5;
-                (*(int*)((char*)this + 0x3138))++;
+            if (frame == 0xf && unk3138 < 8) {
+                frame = 5;
+                unk3138++;
             }
-            if (*(WORD*)((char*)this + 0xa) == 0x1c) {
-                *(double*)((char*)this + 0x38) = -1.8;
-                *(double*)((char*)this + 0x30) = 1.5;
-                *(short*)((char*)this + 0x16c) = 1;
+            if (frame == 0x1c) {
+                vy = -1.8;
+                vx = 1.5;
+                unk16c = 1;
             }
-            if (*(WORD*)((char*)this + 0xa) == 0x25) {
-                *(double*)((char*)this + 0x38) = -2.6;
-                *(double*)((char*)this + 0x30) = 1.5;
-                *(short*)((char*)this + 0x16c) = 1;
+            if (frame == 0x25) {
+                vy = -2.6;
+                vx = 1.5;
+                unk16c = 1;
             }
-            if (*(WORD*)((char*)this + 0xa) == 0x2d) {
-                *(double*)((char*)this + 0x38) = -4.5;
-                *(double*)((char*)this + 0x30) = 2.2;
-                *(short*)((char*)this + 0x16c) = 8;
+            if (frame == 0x2d) {
+                vy = -4.5;
+                vx = 2.2;
+                unk16c = 8;
             }
-            if (*(WORD*)((char*)this + 0xa) == 0x43) {
-                *(short*)((char*)this + 0xa) = *(WORD*)((char*)this + 0xa) - 4;
+            if (frame == 0x43) {
+                frame = frame - 4;
             }
-            if (*(WORD*)((char*)this + 0xa) >= x8) {
-                *(short*)((char*)this + 8) = 3;
+            if (frame >= x8) {
+                pattern = 3;
                 Vf0();
             }
         }

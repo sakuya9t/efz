@@ -7,44 +7,44 @@
 
 void CPlayer::Vf9(EffectDesc* p1)
 {
-    *(int*)((char*)this + *(short*)((char*)this + 0x2ca) * 4 + 0x3d0) = 1;
-    *(int*)((char*)this + *(short*)((char*)this + 0x2ca) * 4 + 0x2d0) = *(int*)(char*)p1;
-    *(short*)((char*)this + *(short*)((char*)this + 0x2ca) * 0x98 + 0x4d0) = *(short*)((char*)p1 + 4);
-    *(short*)((char*)this + *(short*)((char*)this + 0x2ca) * 0x98 + 0x4d2) = 0;
-    *(short*)((char*)this + *(short*)((char*)this + 0x2ca) * 0x98 + 0x4d4) = 0;
-    *(double*)((char*)this + *(short*)((char*)this + 0x2ca) * 0x98 + 0x4e8) = *(double*)((char*)p1 + 8);
-    *(double*)((char*)this + *(short*)((char*)this + 0x2ca) * 0x98 + 0x4f0) = *(double*)((char*)p1 + 0x10);
-    *(double*)((char*)this + *(short*)((char*)this + 0x2ca) * 0x98 + 0x4f8) = 0.0;
-    *(double*)((char*)this + *(short*)((char*)this + 0x2ca) * 0x98 + 0x500) = 0.0;
-    *(double*)((char*)this + *(short*)((char*)this + 0x2ca) * 0x98 + 0x508) = 0.0;
-    *(double*)((char*)this + *(short*)((char*)this + 0x2ca) * 0x98 + 0x510) = 0.0;
-    *((char*)this + *(short*)((char*)this + 0x2ca) * 0x98 + 0x518) = *((char*)p1 + 0x18);
-    *(int*)((char*)this + *(short*)((char*)this + 0x2ca) * 0x98 + 0x51c) = *(int*)((char*)p1 + 0x1c);
-    *((char*)this + *(short*)((char*)this + 0x2ca) * 0x98 + 0x520) = *((char*)p1 + 0x20);
-    *((char*)this + *(short*)((char*)this + 0x2ca) * 0x98 + 0x53c) = *((char*)p1 + 0x2c);
-    *(int*)((char*)this + *(short*)((char*)this + 0x2ca) * 0x98 + 0x524) = *(int*)((char*)p1 + 0x24);
-    *((char*)this + *(short*)((char*)this + 0x2ca) * 0x98 + 0x521) = *((char*)p1 + 0x21);
-    *(int*)((char*)this + *(short*)((char*)this + 0x2ca) * 0x98 + 0x528) = *(int*)((char*)p1 + 0x28);
-    *(int*)((char*)this + *(short*)((char*)this + 0x2ca) * 0x98 + 0x558) = *(int*)((char*)p1 + 0x30);
-    *(int*)((char*)this + *(short*)((char*)this + 0x2ca) * 0x98 + 0x55c) = 0;
-    *(RECT*)(char*)((char*)this + *(short*)((char*)this + 0x2ca) * 0x98 + 0x52c) = *(RECT*)((char*)p1 + 0x34);
-    *(int*)((char*)this + *(short*)((char*)this + 0x2ca) * 0x98 + 0x550) = 0;
-    *(short*)((char*)this + *(short*)((char*)this + 0x2ca) * 0x98 + 0x554) = 0;
-    *(short*)((char*)this + *(short*)((char*)this + 0x2ca) * 0x98 + 0x556) = 0;
-    *(double*)((char*)this + *(short*)((char*)this + 0x2ca) * 0x98 + 0x540) = 0.0;
-    *(double*)((char*)this + *(short*)((char*)this + 0x2ca) * 0x98 + 0x548) = 0.0;
+    unk3d0[unk2ca] = 1;
+    unk2d0[unk2ca] = p1->unk0;
+    m_objects[unk2ca].pattern = p1->type;
+    m_objects[unk2ca].frame = 0;
+    m_objects[unk2ca].timer = 0;
+    m_objects[unk2ca].x = p1->x;
+    m_objects[unk2ca].y = p1->y;
+    m_objects[unk2ca].vx = 0.0;
+    m_objects[unk2ca].vy = 0.0;
+    m_objects[unk2ca].ax = 0.0;
+    m_objects[unk2ca].ay = 0.0;
+    m_objects[unk2ca].facing = (char)p1->unk18;
+    m_objects[unk2ca].unk4c = p1->side;
+    m_objects[unk2ca].unk50 = (char)p1->unk20;
+    m_objects[unk2ca].unk6c = (char)p1->unk2c;
+    m_objects[unk2ca].unk54 = p1->unk24;
+    m_objects[unk2ca].unk51 = (char)p1->unk21;
+    m_objects[unk2ca].unk58 = p1->unk28;
+    m_objects[unk2ca].unk88 = p1->unk30;
+    m_objects[unk2ca].unk8c = 0;
+    m_objects[unk2ca].unk5c = *(tagRECT*)&p1->unk34;
+    m_objects[unk2ca].unk80 = 0;
+    m_objects[unk2ca].unk84 = 0;
+    m_objects[unk2ca].unk86 = 0;
+    m_objects[unk2ca].unk70 = 0.0;
+    m_objects[unk2ca].unk78 = 0.0;
     Unk412f10();
 }
 
 void CPlayer::Vf10(short p1)
 {
-    *(int*)((char*)this + p1 * 4 + 0x3d0) = 0;
-    *(int*)((char*)this + p1 * 4 + 0x2d0) = 0;
-    if (p1 == *(short*)((char*)this + 0x2cc)) {
-        while (*(short*)((char*)this + 0x2cc) != *(short*)((char*)this + 0x2ca) && *(int*)((char*)this + *(short*)((char*)this + 0x2cc) * 4 + 0x3d0) == 0) {
-            (*(short*)((char*)this + 0x2cc))++;
-            if (*(short*)((char*)this + 0x2cc) >= 0x40) {
-                *(short*)((char*)this + 0x2cc) = 0;
+    unk3d0[p1] = 0;
+    unk2d0[p1] = 0;
+    if (p1 == unk2cc) {
+        while (unk2cc != unk2ca && unk3d0[unk2cc] == 0) {
+            unk2cc++;
+            if (unk2cc >= 0x40) {
+                unk2cc = 0;
             }
         }
     }
@@ -56,24 +56,24 @@ void CPlayer::Unk412f10()
 
     v4 = 0;
     do {
-        (*(short*)((char*)this + 0x2ca))++;
-        if (*(short*)((char*)this + 0x2ca) >= 0x40) {
-            *(short*)((char*)this + 0x2ca) = 0;
+        unk2ca++;
+        if (unk2ca >= 0x40) {
+            unk2ca = 0;
         }
-        if (*(short*)((char*)this + 0x2ca) == *(short*)((char*)this + 0x2cc)) {
-            (*(short*)((char*)this + 0x2cc))++;
-            if (*(short*)((char*)this + 0x2cc) >= 0x40) {
-                *(short*)((char*)this + 0x2cc) = 0;
+        if (unk2ca == unk2cc) {
+            unk2cc++;
+            if (unk2cc >= 0x40) {
+                unk2cc = 0;
             }
-            while (*(short*)((char*)this + 0x2cc) != *(short*)((char*)this + 0x2ca) && *(int*)((char*)this + *(short*)((char*)this + 0x2cc) * 4 + 0x3d0) == 0) {
-                (*(short*)((char*)this + 0x2cc))++;
-                if (*(short*)((char*)this + 0x2cc) >= 0x40) {
-                    *(short*)((char*)this + 0x2cc) = 0;
+            while (unk2cc != unk2ca && unk3d0[unk2cc] == 0) {
+                unk2cc++;
+                if (unk2cc >= 0x40) {
+                    unk2cc = 0;
                 }
             }
         }
         v4++;
-    } while (*(int*)((char*)this + *(short*)((char*)this + 0x2ca) * 4 + 0x2d0) != 0 && v4 < 0x3f);
+    } while (unk2d0[unk2ca] != 0 && v4 < 0x3f);
 }
 
 void CPlayer::Unk413040()
@@ -82,23 +82,23 @@ void CPlayer::Unk413040()
 
     v4 = 0;
     for (; v4 < 0x40; v4++) {
-        *(int*)((char*)this + v4 * 4 + 0x3d0) = 0;
-        *(int*)((char*)this + v4 * 4 + 0x2d0) = 0;
+        unk3d0[v4] = 0;
+        unk2d0[v4] = 0;
     }
 }
 
 void CPlayer::Unk413090(EffectDesc* p1)
 {
-    *(int*)(char*)p1 = 0;
-    *((char*)p1 + 0x20) = 0;
-    *((char*)p1 + 0x2c) = -1;
-    *(int*)((char*)p1 + 0x24) = 0;
-    *(int*)((char*)p1 + 0x28) = 0;
-    *(int*)((char*)p1 + 0x30) = 0;
-    *(int*)((char*)p1 + 0x38) = 0;
-    *(int*)((char*)p1 + 0x40) = 0;
-    *(int*)((char*)p1 + 0x34) = 0;
-    *(int*)((char*)p1 + 0x3c) = 0;
+    p1->unk0 = 0;
+    p1->unk20 = 0;
+    p1->unk2c = -1;
+    p1->unk24 = 0;
+    p1->unk28 = 0;
+    p1->unk30 = 0;
+    p1->unk38 = 0;
+    p1->unk40 = 0;
+    p1->unk34 = 0;
+    p1->unk3c = 0;
 }
 
 void CPlayer::Unk413100(int p1, int p2, BYTE p3)
@@ -108,46 +108,46 @@ void CPlayer::Unk413100(int p1, int p2, BYTE p3)
     RECT v14;
     int l4;
 
-    l4 = *(short*)((char*)this + 0x2cc);
-    while (l4 != *(short*)((char*)this + 0x2ca)) {
-        if (*(int*)((char*)this + l4 * 4 + 0x3d0) != 0 && p3 == *(BYTE*)((char*)this + l4 * 0x98 + 0x521) && (*(int*)((char*)this + l4 * 0x98 + 0x55c) != 0 || *(short*)(*(char**)((char*)this + 0x7c) + 0x1420e) == 0)) {
-            v18 = (char*)(*(int*)(*(char**)((char*)this + 0x10) + *(WORD*)((char*)this + l4 * 0x98 + 0x4d0) * 8 + 4) + *(WORD*)((char*)this + l4 * 0x98 + 0x4d2) * 0xc);
+    l4 = unk2cc;
+    while (l4 != unk2ca) {
+        if (unk3d0[l4] != 0 && p3 == (unsigned char)m_objects[l4].unk51 && (m_objects[l4].unk8c != 0 || m_game->unk1420e == 0)) {
+            v18 = (char*)&anims[m_objects[l4].pattern].frames[m_objects[l4].frame].duration;
             v28 = MakeRect(0, 0, *(short*)(v18 + 8), *(short*)(v18 + 0xa));
-            if (*((char*)this + l4 * 0x98 + 0x518) == -1) {
-                v14.left = (int)*(double*)((char*)this + l4 * 0x98 + 0x4e8) + (*(int*)((char*)this + l4 * 0x98 + 0x524) == 0) * p1 - (*(short*)(v18 + 8) - *(short*)(v18 + 4));
-                v14.top = (p2 + 0xd2) * (*(int*)((char*)this + l4 * 0x98 + 0x524) == 0) + (int)*(double*)((char*)this + l4 * 0x98 + 0x4f0) - *(short*)(v18 + 6);
+            if (m_objects[l4].facing == -1) {
+                v14.left = (int)m_objects[l4].x + (m_objects[l4].unk54 == 0) * p1 - (*(short*)(v18 + 8) - *(short*)(v18 + 4));
+                v14.top = (p2 + 0xd2) * (m_objects[l4].unk54 == 0) + (int)m_objects[l4].y - *(short*)(v18 + 6);
                 v14.right = *(short*)(v18 + 8) + v14.left;
                 v14.bottom = *(short*)(v18 + 0xa) + v14.top;
             } else {
-                v14.left = (int)*(double*)((char*)this + l4 * 0x98 + 0x4e8) + (*(int*)((char*)this + l4 * 0x98 + 0x524) == 0) * p1 - *(short*)(v18 + 4);
-                v14.top = (p2 + 0xd2) * (*(int*)((char*)this + l4 * 0x98 + 0x524) == 0) + (int)*(double*)((char*)this + l4 * 0x98 + 0x4f0) - *(short*)(v18 + 6);
+                v14.left = (int)m_objects[l4].x + (m_objects[l4].unk54 == 0) * p1 - *(short*)(v18 + 4);
+                v14.top = (p2 + 0xd2) * (m_objects[l4].unk54 == 0) + (int)m_objects[l4].y - *(short*)(v18 + 6);
                 v14.right = *(short*)(v18 + 8) + v14.left;
                 v14.bottom = *(short*)(v18 + 0xa) + v14.top;
             }
-            if (*(int*)((char*)this + l4 * 0x98 + 0x530) != *(int*)((char*)this + l4 * 0x98 + 0x538)) {
-                if (v14.left < *(int*)((char*)this + l4 * 0x98 + 0x52c)) {
-                    v28.left = *(int*)((char*)this + l4 * 0x98 + 0x52c) - v14.left + v28.left;
-                    v14.left = *(int*)((char*)this + l4 * 0x98 + 0x52c);
+            if (m_objects[l4].unk5c.top != m_objects[l4].unk5c.bottom) {
+                if (v14.left < m_objects[l4].unk5c.left) {
+                    v28.left = m_objects[l4].unk5c.left - v14.left + v28.left;
+                    v14.left = m_objects[l4].unk5c.left;
                 }
-                if (v14.right > *(int*)((char*)this + l4 * 0x98 + 0x534)) {
-                    v28.right -= v14.right - *(int*)((char*)this + l4 * 0x98 + 0x534);
-                    v14.right = *(int*)((char*)this + l4 * 0x98 + 0x534);
+                if (v14.right > m_objects[l4].unk5c.right) {
+                    v28.right -= v14.right - m_objects[l4].unk5c.right;
+                    v14.right = m_objects[l4].unk5c.right;
                 }
-                if (v14.top < *(int*)((char*)this + l4 * 0x98 + 0x530)) {
-                    v28.top = *(int*)((char*)this + l4 * 0x98 + 0x530) - v14.top + v28.top;
-                    v14.top = *(int*)((char*)this + l4 * 0x98 + 0x530);
+                if (v14.top < m_objects[l4].unk5c.top) {
+                    v28.top = m_objects[l4].unk5c.top - v14.top + v28.top;
+                    v14.top = m_objects[l4].unk5c.top;
                 }
-                if (v14.bottom > *(int*)((char*)this + l4 * 0x98 + 0x538)) {
-                    v28.bottom -= v14.bottom - *(int*)((char*)this + l4 * 0x98 + 0x538);
-                    v14.bottom = *(int*)((char*)this + l4 * 0x98 + 0x538);
+                if (v14.bottom > m_objects[l4].unk5c.bottom) {
+                    v28.bottom -= v14.bottom - m_objects[l4].unk5c.bottom;
+                    v14.bottom = m_objects[l4].unk5c.bottom;
                 }
             }
-            if (*((char*)this + l4 * 0x98 + 0x520) == 3) {
-                ((CGraphics*)*(int*)((char*)this + 0x80))->BlitSmear(v14, (IDirectDrawSurface*)*(int*)(*(char**)((char*)this + 0x14) + *(WORD*)(v18 + 2) * 4), v28, *((char*)this + 0x1a), *((char*)this + l4 * 0x98 + 0x518) == -1);
-            } else if (*((char*)this + l4 * 0x98 + 0x520) > 0) {
-                ((CGraphics*)*(int*)((char*)this + 0x80))->BlitEx(v14, (IDirectDrawSurface*)*(int*)(*(char**)((char*)this + 0x14) + *(WORD*)(v18 + 2) * 4), v28, *((char*)this + 0x1a), *((char*)this + l4 * 0x98 + 0x518) == -1, *((char*)this + l4 * 0x98 + 0x520) - 1);
+            if (m_objects[l4].unk50 == 3) {
+                m_graphics->BlitSmear(v14, surfaces[*(WORD*)(v18 + 2)], v28, colorKey, m_objects[l4].facing == -1);
+            } else if (m_objects[l4].unk50 > 0) {
+                m_graphics->BlitEx(v14, surfaces[*(WORD*)(v18 + 2)], v28, colorKey, m_objects[l4].facing == -1, m_objects[l4].unk50 - 1);
             } else {
-                ((CGraphics*)*(int*)((char*)this + 0x80))->Blit(v14, (IDirectDrawSurface*)*(int*)(*(char**)((char*)this + 0x14) + *(WORD*)(v18 + 2) * 4), v28, *((char*)this + 0x1a), *((char*)this + l4 * 0x98 + 0x518) == -1);
+                m_graphics->Blit(v14, surfaces[*(WORD*)(v18 + 2)], v28, colorKey, m_objects[l4].facing == -1);
             }
         }
         l4++;

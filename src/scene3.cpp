@@ -16,44 +16,44 @@ int g_fkeyHeld = 0;
 CScene3::CScene3(HWND p1, CPlayer** p2, CPlayer** p3, CGame* p4, CGraphics* p5, CInput* p6, CSound* p7)
     : CScene(p1, p2, p3, p4, p5, p6, p7)
 {
-    *(int*)((char*)this + 0x440) = 0;
-    *(int*)((char*)this + 0x444) = -0x32;
-    *(int*)((char*)this + 0x448) = *(int*)((char*)this + 0x440);
-    *(int*)((char*)this + 0x44c) = *(int*)((char*)this + 0x444);
-    *(int*)((char*)this + 0x450) = 5;
-    *(int*)((char*)this + 0x454) = -0xa0;
-    *(int*)((char*)this + 0x458) = 0;
-    *((char*)this + 0x2c) = 1;
-    *((char*)this + 0x2d) = 0;
-    *(short*)((char*)this + 0x574) = 0;
-    *(short*)((char*)this + 0x576) = 0x270f;
-    *((char*)this + 0x578) = 3;
-    *(int*)((char*)this + 0x588) = 0;
-    *(double*)((char*)this + 0x580) = 0.0;
-    *(int*)((char*)this + 0x58c) = 0;
-    *(int*)((char*)this + 0x590) = 0;
-    *(int*)((char*)this + 0x434) = 0;
-    *(int*)((char*)this + 0x438) = 0;
-    *(int*)((char*)this + 0x43c) = 0;
-    *(int*)(*(char**)((char*)this + 0x1c) + 0x1354) = 0;
-    *(*(char**)((char*)this + 0x1c) + 0x1350) = 1;
-    *(RECT*)((char*)this + 0x464) = MakeRect(0, 0xea, 8, 0xa);
-    *(RECT*)((char*)this + 0x474) = MakeRect(0, 0xd2, 0x10, 0xf);
-    *(RECT*)((char*)this + 0x484) = MakeRect(0, 0xe1, 7, 9);
-    *(RECT*)((char*)this + 0x494) = MakeRect(0, 0x11a, 0xe, 0x16);
-    *(RECT*)((char*)this + 0x4a4) = MakeRect(0, 0x160, 8, 0xc);
-    *(RECT*)((char*)this + 0x4b4) = MakeRect(0, 0x154, 8, 0xc);
-    *(RECT*)((char*)this + 0x4c4) = MakeRect(0, 0x148, 8, 0xc);
-    *(RECT*)((char*)this + 0x4d4) = MakeRect(0, 0x13c, 8, 0xc);
-    *(RECT*)((char*)this + 0x4e4) = MakeRect(0, 0x130, 8, 0xc);
-    *(RECT*)((char*)this + 0x4f4) = MakeRect(0, 0x16c, 7, 0xa);
-    *(RECT*)((char*)this + 0x504) = MakeRect(0, 0x176, 7, 0xa);
-    *(RECT*)((char*)this + 0x514) = MakeRect(0, 0x180, 7, 0xa);
-    *(RECT*)((char*)this + 0x524) = MakeRect(0, 0x18a, 7, 0xa);
-    *(RECT*)((char*)this + 0x534) = MakeRect(0, 0x194, 7, 0xa);
-    *(RECT*)((char*)this + 0x544) = MakeRect(0, 0x19e, 7, 0xa);
-    *(RECT*)((char*)this + 0x554) = MakeRect(0, 0x1a8, 7, 0xa);
-    *(RECT*)((char*)this + 0x564) = MakeRect(0, 0x1b2, 7, 0xa);
+    unk440 = 0;
+    unk444 = -0x32;
+    unk448 = unk440;
+    unk44c = unk444;
+    unk450 = 5;
+    unk454 = -0xa0;
+    unk458 = 0;
+    unk2c = 1;
+    unk2d = 0;
+    unk574 = 0;
+    unk576 = 0x270f;
+    unk578 = 3;
+    unk588 = 0;
+    unk580 = 0.0;
+    unk58c = 0;
+    unk590 = 0;
+    unk434 = 0;
+    unk438 = 0;
+    unk43c = 0;
+    m_game->unk1354 = 0;
+    m_game->unk1350 = 1;
+    unk464[0] = MakeRect(0, 0xea, 8, 0xa);
+    unk464[1] = MakeRect(0, 0xd2, 0x10, 0xf);
+    unk464[2] = MakeRect(0, 0xe1, 7, 9);
+    unk464[3] = MakeRect(0, 0x11a, 0xe, 0x16);
+    unk464[4] = MakeRect(0, 0x160, 8, 0xc);
+    unk464[5] = MakeRect(0, 0x154, 8, 0xc);
+    unk464[6] = MakeRect(0, 0x148, 8, 0xc);
+    unk464[7] = MakeRect(0, 0x13c, 8, 0xc);
+    unk464[8] = MakeRect(0, 0x130, 8, 0xc);
+    unk464[9] = MakeRect(0, 0x16c, 7, 0xa);
+    unk464[0xa] = MakeRect(0, 0x176, 7, 0xa);
+    unk464[0xb] = MakeRect(0, 0x180, 7, 0xa);
+    unk464[0xc] = MakeRect(0, 0x18a, 7, 0xa);
+    unk464[0xd] = MakeRect(0, 0x194, 7, 0xa);
+    unk464[0xe] = MakeRect(0, 0x19e, 7, 0xa);
+    unk464[0xf] = MakeRect(0, 0x1a8, 7, 0xa);
+    unk464[0x10] = MakeRect(0, 0x1b2, 7, 0xa);
 }
 
 CScene3::~CScene3()
@@ -64,181 +64,181 @@ BYTE CScene3::Update()
 {
     int v4;
 
-    if ((DWORD)(timeGetTime() - *(int*)((char*)this + 0x438)) >= 0x3e8) {
-        *(int*)((char*)this + 0x438) = timeGetTime();
-        *(int*)((char*)this + 0x43c) = *(int*)((char*)this + 0x434);
-        *(int*)((char*)this + 0x434) = 0;
+    if ((DWORD)(timeGetTime() - unk438) >= 0x3e8) {
+        unk438 = timeGetTime();
+        unk43c = unk434;
+        unk434 = 0;
     }
-    (*(int*)((char*)this + 0x434))++;
-    if (*((char*)this + 0x2c) == 1) {
-        *(*(char**)((char*)this + 0x1c) + 0x1350) = 1;
-        *(int*)((char*)this + 0xc) = *(int*)*(char**)((char*)this + 0x14);
-        *(int*)((char*)this + 0x10) = *(int*)*(char**)((char*)this + 0x18);
-        *(int*)((char*)this + 0x440) = 0;
-        *(int*)((char*)this + 0x444) = -0x32;
-        *(int*)((char*)this + 0x448) = *(int*)((char*)this + 0x440);
-        *(int*)((char*)this + 0x44c) = *(int*)((char*)this + 0x444);
-        *(int*)((char*)this + 0x450) = 5;
-        *(int*)((char*)this + 0x454) = -0xa0;
-        *(int*)((char*)this + 0x458) = 0;
-        *((char*)this + 0x578) = 3;
-        *(short*)((char*)this + 0x574) = 0;
-        *(short*)((char*)this + 0x576) = 0x270f;
+    unk434++;
+    if (unk2c == 1) {
+        m_game->unk1350 = 1;
+        m_players[0] = *m_player1Ref;
+        m_players[1] = *m_player2Ref;
+        unk440 = 0;
+        unk444 = -0x32;
+        unk448 = unk440;
+        unk44c = unk444;
+        unk450 = 5;
+        unk454 = -0xa0;
+        unk458 = 0;
+        unk578 = 3;
+        unk574 = 0;
+        unk576 = 0x270f;
         Unk7647b0();
         Draw();
-        CScene::Unk759e20((PALETTEENTRY*)(*(int*)((char*)this + 0x1c) + 0xf35), 0);
-        *((char*)this + 0x2c) = 0;
-    } else if (*((char*)this + 0x2d) == 1) {
-        CScene::Unk759c90((PALETTEENTRY*)(*(int*)((char*)this + 0x1c) + 0xf35), 1, 0, 0x64);
-        delete (CPlayer*)*(int*)*(char**)((char*)this + 0x14);
-        *(int*)*(char**)((char*)this + 0x14) = 0;
-        delete (CPlayer*)*(int*)*(char**)((char*)this + 0x18);
-        *(int*)*(char**)((char*)this + 0x18) = 0;
-        if (*(int*)(*(char**)((char*)this + 0x1c) + 0x137c) != 0) {
-            delete (char*)*(int*)(*(char**)((char*)this + 0x1c) + 0x137c);
-            *(int*)(*(char**)((char*)this + 0x1c) + 0x137c) = 0;
+        CScene::Unk759e20(m_game->m_palette, 0);
+        unk2c = 0;
+    } else if (unk2d == 1) {
+        CScene::Unk759c90(m_game->m_palette, 1, 0, 0x64);
+        delete *m_player1Ref;
+        *m_player1Ref = (CPlayer*)0;
+        delete *m_player2Ref;
+        *m_player2Ref = (CPlayer*)0;
+        if ((int)m_game->m_background != 0) {
+            delete (char*)m_game->m_background;
+            m_game->m_background = (CAnimBg*)0;
         }
-        *((char*)this + 0x2d) = 0;
-        *((char*)this + 0x2c) = 1;
-        if (*(*(char**)((char*)this + 0x1c) + 0x14283) > 0) {
-            ((CReplayFile*)(*(int*)((char*)this + 0x1c) + 0x14284))->Close();
-            *(*(char**)((char*)this + 0x1c) + 0x14283) = 0;
-            ((CGame*)*(int*)((char*)this + 0x1c))->StopMusic();
+        unk2d = 0;
+        unk2c = 1;
+        if (m_game->unk14283 > 0) {
+            (&m_game->m_replay)->Close();
+            m_game->unk14283 = 0;
+            m_game->StopMusic();
             return 8;
         }
-        if (*(*(char**)((char*)this + 0x1c) + 0x1364) == 6) {
+        if (m_game->unk1364 == 6) {
             return 0;
         }
         return 1;
     }
     Vf2();
-    if (*(int*)((char*)this + 0x588) != 0) {
+    if (unk588 != 0) {
         return 3;
     }
-    if (*((char*)this + 0x2d) == 2) {
-        *((char*)this + 0x578) = 1;
+    if (unk2d == 2) {
+        unk578 = 1;
         if (Unk765fa0() != 0) {
-            *((char*)this + 0x2d) = 0;
-            *((char*)this + 0x2c) = 1;
-            if (*(*(char**)((char*)this + 0x1c) + 0x14283) > 0) {
-                ((CReplayFile*)(*(int*)((char*)this + 0x1c) + 0x14284))->Close();
-                *(*(char**)((char*)this + 0x1c) + 0x14283) = 0;
-                ((CGame*)*(int*)((char*)this + 0x1c))->StopMusic();
-                delete (CPlayer*)*(int*)*(char**)((char*)this + 0x14);
-                *(int*)*(char**)((char*)this + 0x14) = 0;
-                delete (CPlayer*)*(int*)*(char**)((char*)this + 0x18);
-                *(int*)*(char**)((char*)this + 0x18) = 0;
-                if (*(int*)(*(char**)((char*)this + 0x1c) + 0x137c) != 0) {
-                    delete (char*)*(int*)(*(char**)((char*)this + 0x1c) + 0x137c);
-                    *(int*)(*(char**)((char*)this + 0x1c) + 0x137c) = 0;
+            unk2d = 0;
+            unk2c = 1;
+            if (m_game->unk14283 > 0) {
+                (&m_game->m_replay)->Close();
+                m_game->unk14283 = 0;
+                m_game->StopMusic();
+                delete *m_player1Ref;
+                *m_player1Ref = (CPlayer*)0;
+                delete *m_player2Ref;
+                *m_player2Ref = (CPlayer*)0;
+                if ((int)m_game->m_background != 0) {
+                    delete (char*)m_game->m_background;
+                    m_game->m_background = (CAnimBg*)0;
                 }
                 return 8;
             }
             return 5;
         }
-    } else if (*(int*)(*(char**)((char*)this + 0x1c) + 0x1427c) != 0) {
-        *((char*)this + 0x578) = *(*(char**)((char*)this + 0x1c) + 0x14280);
-        *(int*)(*(char**)((char*)this + 0x1c) + 0x1427c) = 0;
+    } else if (m_game->unk1427c != 0) {
+        unk578 = m_game->unk14280;
+        m_game->unk1427c = 0;
     }
     v4 = 0;
-    for (; v4 < *(BYTE*)((char*)this + 0x578); v4++) {
-        ((CPlayer*)*(int*)((char*)this + 0xc))->Unk411be0();
-        ((CPlayer*)*(int*)((char*)this + 0x10))->Unk411be0();
+    for (; v4 < unk578; v4++) {
+        m_players[0]->Unk411be0();
+        m_players[1]->Unk411be0();
         Unk766070();
-        ((CPlayer*)*(int*)((char*)this + 0xc))->Unk40f230();
-        ((CPlayer*)*(int*)((char*)this + 0x10))->Unk40f230();
-        ((CPlayer*)*(int*)((char*)this + 0xc))->Vf8();
-        ((CPlayer*)*(int*)((char*)this + 0x10))->Vf8();
-        ((CPlayer*)*(int*)((char*)this + 0xc))->Vf6();
-        ((CPlayer*)*(int*)((char*)this + 0x10))->Vf6();
-        ((CPlayer*)*(int*)((char*)this + 0xc))->Vf7();
-        ((CPlayer*)*(int*)((char*)this + 0x10))->Vf7();
-        if (*(int*)(*(char**)((char*)this + 0x1c) + 0x1354) == 0 && *(*(char**)((char*)this + 0x1c) + 0x1350) == 0) {
+        m_players[0]->Unk40f230();
+        m_players[1]->Unk40f230();
+        m_players[0]->Vf8();
+        m_players[1]->Vf8();
+        m_players[0]->Vf6();
+        m_players[1]->Vf6();
+        m_players[0]->Vf7();
+        m_players[1]->Vf7();
+        if (m_game->unk1354 == 0 && (char)m_game->unk1350 == 0) {
             Unk766480();
         }
         Unk766b50();
-        ((CPlayer*)*(int*)((char*)this + 0xc))->Unk40f580();
-        ((CPlayer*)*(int*)((char*)this + 0x10))->Unk40f580();
-        if (*(short*)(*(char**)((char*)this + 0xc) + 0x14c) > 0) {
-            (*(short*)(*(char**)((char*)this + 0xc) + 0x14c))--;
+        m_players[0]->Unk40f580();
+        m_players[1]->Unk40f580();
+        if (m_players[0]->unk14c > 0) {
+            m_players[0]->unk14c--;
         } else {
-            *(short*)(*(char**)((char*)this + 0xc) + 0x14c) = 0;
+            m_players[0]->unk14c = 0;
         }
-        if (*(short*)(*(char**)((char*)this + 0x10) + 0x14c) > 0) {
-            (*(short*)(*(char**)((char*)this + 0x10) + 0x14c))--;
+        if (m_players[1]->unk14c > 0) {
+            m_players[1]->unk14c--;
         } else {
-            *(short*)(*(char**)((char*)this + 0x10) + 0x14c) = 0;
+            m_players[1]->unk14c = 0;
         }
-        ((CPlayer*)*(int*)((char*)this + 0xc))->Unk40f980();
-        ((CPlayer*)*(int*)((char*)this + 0x10))->Unk40f980();
+        m_players[0]->Unk40f980();
+        m_players[1]->Unk40f980();
         Unk764db0();
         Unk764f10();
         Unk765040();
     }
-    ((CGame*)*(int*)((char*)this + 0x1c))->UpdateFade();
-    ((CGame*)*(int*)((char*)this + 0x1c))->UpdateTimers();
+    m_game->UpdateFade();
+    m_game->UpdateTimers();
     Unk7647b0();
-    if (*(int*)(*(char**)((char*)this + 0x1c) + 0x136c) != 0 || *(int*)(*(char**)((char*)this + 0x1c) + 0x136c) == 0 && *(int*)(*(char**)((char*)this + 0x1c) + 0x1368) != 0) {
+    if (m_game->unk136c != 0 || m_game->unk136c == 0 && m_game->unk1368 != 0) {
         Draw();
     }
-    ((CGame*)*(int*)((char*)this + 0x1c))->UpdateEffects();
-    if (*(int*)(*(char**)((char*)this + 0x1c) + 0x137c) != 0) {
-        ((CAnimBg*)*(int*)(*(char**)((char*)this + 0x1c) + 0x137c))->Vf0();
+    m_game->UpdateEffects();
+    if ((int)m_game->m_background != 0) {
+        m_game->m_background->Vf0();
     }
     return 3;
 }
 
 void CScene3::Draw()
 {
-    ((CPlayer*)*(int*)((char*)this + 0xc))->Unk410940();
-    ((CPlayer*)*(int*)((char*)this + 0x10))->Unk410940();
+    m_players[0]->Unk410940();
+    m_players[1]->Unk410940();
     Unk75dd50();
     Unk75e240();
     Unk762c50();
-    ((CGame*)*(int*)((char*)this + 0x1c))->DrawEffects(*(int*)((char*)this + 0x45c), *(int*)((char*)this + 0x460), 0);
-    ((CPlayer*)*(int*)((char*)this + 0xc))->Unk413100(*(int*)((char*)this + 0x45c), *(int*)((char*)this + 0x460), 0);
-    ((CPlayer*)*(int*)((char*)this + 0x10))->Unk413100(*(int*)((char*)this + 0x45c), *(int*)((char*)this + 0x460), 0);
-    if (*(WORD*)(*(char**)((char*)this + 0x10) + 8) >= 0xc8) {
-        ((CPlayer*)*(int*)((char*)this + 0xc))->Unk4121a0(*(int*)((char*)this + 0x45c) + ((CPlayer*)*(int*)((char*)this + 0xc))->Unk4103a0() * (*(short*)(*(char**)((char*)this + 0xc) + 0x14a) % 2) * 2, *(int*)((char*)this + 0x460));
-        ((CPlayer*)*(int*)((char*)this + 0x10))->Unk4121a0(*(int*)((char*)this + 0x45c) + ((CPlayer*)*(int*)((char*)this + 0x10))->Unk4103a0() * (*(short*)(*(char**)((char*)this + 0x10) + 0x14a) % 2) * 2, *(int*)((char*)this + 0x460));
+    m_game->DrawEffects(unk45c, unk460, 0);
+    m_players[0]->Unk413100(unk45c, unk460, 0);
+    m_players[1]->Unk413100(unk45c, unk460, 0);
+    if (m_players[1]->pattern >= 0xc8) {
+        m_players[0]->Unk4121a0(unk45c + m_players[0]->Unk4103a0() * (m_players[0]->unk14a % 2) * 2, unk460);
+        m_players[1]->Unk4121a0(unk45c + m_players[1]->Unk4103a0() * (m_players[1]->unk14a % 2) * 2, unk460);
     } else {
-        ((CPlayer*)*(int*)((char*)this + 0x10))->Unk4121a0(*(int*)((char*)this + 0x45c) + ((CPlayer*)*(int*)((char*)this + 0x10))->Unk4103a0() * (*(short*)(*(char**)((char*)this + 0x10) + 0x14a) % 2) * 2, *(int*)((char*)this + 0x460));
-        ((CPlayer*)*(int*)((char*)this + 0xc))->Unk4121a0(*(int*)((char*)this + 0x45c) + ((CPlayer*)*(int*)((char*)this + 0xc))->Unk4103a0() * (*(short*)(*(char**)((char*)this + 0xc) + 0x14a) % 2) * 2, *(int*)((char*)this + 0x460));
+        m_players[1]->Unk4121a0(unk45c + m_players[1]->Unk4103a0() * (m_players[1]->unk14a % 2) * 2, unk460);
+        m_players[0]->Unk4121a0(unk45c + m_players[0]->Unk4103a0() * (m_players[0]->unk14a % 2) * 2, unk460);
     }
-    ((CPlayer*)*(int*)((char*)this + 0xc))->Unk413100(*(int*)((char*)this + 0x45c), *(int*)((char*)this + 0x460), 1);
-    ((CPlayer*)*(int*)((char*)this + 0x10))->Unk413100(*(int*)((char*)this + 0x45c), *(int*)((char*)this + 0x460), 1);
-    ((CGame*)*(int*)((char*)this + 0x1c))->DrawEffects(*(int*)((char*)this + 0x45c), *(int*)((char*)this + 0x460), 1);
-    ((CGame*)*(int*)((char*)this + 0x1c))->DrawEffects(*(int*)((char*)this + 0x45c), *(int*)((char*)this + 0x460), 2);
-    ((CGame*)*(int*)((char*)this + 0x1c))->DrawEffects(*(int*)((char*)this + 0x45c), *(int*)((char*)this + 0x460), 3);
-    if (*(int*)(*(char**)((char*)this + 0x1c) + 0x137c) != 0 && *(int*)(*(char**)((char*)this + 0xc) + 0x30c4) == 0 && *(int*)(*(char**)((char*)this + 0x10) + 0x30c4) == 0 && *(int*)(*(char**)((char*)this + 0x1c) + 0x14278) == 0) {
-        ((CAnimBg*)*(int*)(*(char**)((char*)this + 0x1c) + 0x137c))->Vf1(*(int*)((char*)this + 0x45c), *(int*)((char*)this + 0x460), 1);
+    m_players[0]->Unk413100(unk45c, unk460, 1);
+    m_players[1]->Unk413100(unk45c, unk460, 1);
+    m_game->DrawEffects(unk45c, unk460, 1);
+    m_game->DrawEffects(unk45c, unk460, 2);
+    m_game->DrawEffects(unk45c, unk460, 3);
+    if ((int)m_game->m_background != 0 && m_players[0]->unk30c4 == 0 && m_players[1]->unk30c4 == 0 && m_game->unk14278 == 0) {
+        m_game->m_background->Vf1(unk45c, unk460, 1);
     }
-    if (*(short*)(*(char**)((char*)this + 0x1c) + 0x1420c) == 0) {
-        ((CPlayer*)*(int*)((char*)this + 0xc))->Vf1();
-        ((CPlayer*)*(int*)((char*)this + 0x10))->Vf1();
+    if (m_game->unk1420c == 0) {
+        m_players[0]->Vf1();
+        m_players[1]->Vf1();
     }
     Unk760060();
-    if (*(short*)(*(char**)((char*)this + 0xc) + 0xf4) > 1 && *(short*)(*(char**)((char*)this + 0xc) + 0x104) > 0) {
-        Unk7623b0(*(int*)((char*)this + 0xc));
+    if (m_players[0]->unkf4 > 1 && m_players[0]->unk104 > 0) {
+        Unk7623b0((int)m_players[0]);
     }
-    if (*(short*)(*(char**)((char*)this + 0x10) + 0xf4) > 1 && *(short*)(*(char**)((char*)this + 0x10) + 0x104) > 0) {
-        Unk7623b0(*(int*)((char*)this + 0x10));
+    if (m_players[1]->unkf4 > 1 && m_players[1]->unk104 > 0) {
+        Unk7623b0((int)m_players[1]);
     }
-    if (*(int*)((char*)this + 0x58c) != 0) {
-        if (*(int*)((char*)this + 0x590) % 2 == 0) {
-            ((CGraphics*)*(int*)((char*)this + 0x20))->Screenshot(*(int*)((char*)this + 0x590) / 2, (PALETTEENTRY*)(*(int*)((char*)this + 0x1c) + 0xf35));
+    if (unk58c != 0) {
+        if (unk590 % 2 == 0) {
+            m_graphics->Screenshot(unk590 / 2, m_game->m_palette);
         }
-        (*(int*)((char*)this + 0x590))++;
+        unk590++;
     }
     if (0) {
-        Unk75db70(0x50, 0x64, *(int*)(*(char**)((char*)this + 0xc) + 0x108), 2, 0, 0);
-        Unk75db70(0x50, 0x6e, *(WORD*)(*(char**)((char*)this + 0xc) + 8), 2, 0, 0);
-        Unk75db70(0x50, 0x78, *(WORD*)(*(char**)((char*)this + 0xc) + 0xa), 2, 0, 0);
-        Unk75db70(0x50, 0x82, *(WORD*)(*(char**)((char*)this + 0xc) + 0xc), 2, 0, 0);
-        Unk75db70(0x118, 0x64, *(int*)(*(char**)((char*)this + 0x10) + 0x108), 2, 0, 0);
-        Unk75db70(0x118, 0x6e, *(WORD*)(*(char**)((char*)this + 0x10) + 8), 2, 0, 0);
-        Unk75db70(0x118, 0x78, *(WORD*)(*(char**)((char*)this + 0x10) + 0xa), 2, 0, 0);
-        Unk75db70(0x118, 0x82, *(WORD*)(*(char**)((char*)this + 0x10) + 0xc), 2, 0, 0);
+        Unk75db70(0x50, 0x64, m_players[0]->unk108, 2, 0, 0);
+        Unk75db70(0x50, 0x6e, m_players[0]->pattern, 2, 0, 0);
+        Unk75db70(0x50, 0x78, m_players[0]->frame, 2, 0, 0);
+        Unk75db70(0x50, 0x82, m_players[0]->timer, 2, 0, 0);
+        Unk75db70(0x118, 0x64, m_players[1]->unk108, 2, 0, 0);
+        Unk75db70(0x118, 0x6e, m_players[1]->pattern, 2, 0, 0);
+        Unk75db70(0x118, 0x78, m_players[1]->frame, 2, 0, 0);
+        Unk75db70(0x118, 0x82, m_players[1]->timer, 2, 0, 0);
     }
     Unk7631f0();
 }
@@ -248,72 +248,72 @@ void CScene3::Unk7647b0()
     int v8;
     int v4;
 
-    *(int*)((char*)this + 0x448) = *(int*)((char*)this + 0x440);
-    if (*(int*)(*(char**)((char*)this + 0x1c) + 0x14240) > 0) {
-        *(int*)((char*)this + 0x448) = *(int*)(*(char**)((char*)this + 0x1c) + 0x14238);
-        if (*(short*)(*(char**)((char*)this + 0xc) + 0x14a) == 0 && *(short*)(*(char**)((char*)this + 0x10) + 0x14a) == 0 && *(short*)(*(char**)((char*)this + 0xc) + 0x14c) == 0 && *(short*)(*(char**)((char*)this + 0x10) + 0x14c) == 0) {
-            (*(int*)(*(char**)((char*)this + 0x1c) + 0x14240))--;
+    unk448 = unk440;
+    if (m_game->unk14240 > 0) {
+        unk448 = m_game->unk14238;
+        if (m_players[0]->unk14a == 0 && m_players[1]->unk14a == 0 && m_players[0]->unk14c == 0 && m_players[1]->unk14c == 0) {
+            m_game->unk14240--;
         }
     }
-    v4 = 0xa0 - (int)((*(double*)(*(char**)((char*)this + 0xc) + 0x20) * (*(int*)((char*)this + 0x448) + 0x32) + *(double*)(*(char**)((char*)this + 0x10) + 0x20) * (0x32 - *(int*)((char*)this + 0x448))) / 100.0);
+    v4 = 0xa0 - (int)((m_players[0]->x * (unk448 + 0x32) + m_players[1]->x * (0x32 - unk448)) / 100.0);
     if (v4 < -0x13f) {
         v4 = -0x13f;
     } else if (v4 > 0) {
         v4 = 0;
     }
-    if (*(int*)((char*)this + 0x454) < v4) {
-        *(int*)((char*)this + 0x454) -= (*(int*)((char*)this + 0x454) - v4) / 0xf - 1;
-        if (*(int*)((char*)this + 0x454) > v4) {
-            *(int*)((char*)this + 0x454) = v4;
+    if (unk454 < v4) {
+        unk454 -= (unk454 - v4) / 0xf - 1;
+        if (unk454 > v4) {
+            unk454 = v4;
         }
     } else {
-        *(int*)((char*)this + 0x454) -= (*(int*)((char*)this + 0x454) - v4) / 0xf + 1;
-        if (*(int*)((char*)this + 0x454) < v4) {
-            *(int*)((char*)this + 0x454) = v4;
+        unk454 -= (unk454 - v4) / 0xf + 1;
+        if (unk454 < v4) {
+            unk454 = v4;
         }
     }
-    if (*(int*)((char*)this + 0x44c) < *(int*)((char*)this + 0x444)) {
-        *(int*)((char*)this + 0x44c) += *(int*)((char*)this + 0x450);
-        if (*(int*)((char*)this + 0x44c) > *(int*)((char*)this + 0x444)) {
-            *(int*)((char*)this + 0x44c) = *(int*)((char*)this + 0x444);
+    if (unk44c < unk444) {
+        unk44c += unk450;
+        if (unk44c > unk444) {
+            unk44c = unk444;
         }
     } else {
-        *(int*)((char*)this + 0x44c) += *(int*)((char*)this + 0x450);
-        if (*(int*)((char*)this + 0x44c) > *(int*)((char*)this + 0x444)) {
-            *(int*)((char*)this + 0x44c) = *(int*)((char*)this + 0x444);
+        unk44c += unk450;
+        if (unk44c > unk444) {
+            unk44c = unk444;
         }
     }
-    if (*(double*)(*(char**)((char*)this + 0xc) + 0x28) < -240.0 || *(double*)(*(char**)((char*)this + 0x10) + 0x28) < -240.0) {
-        *(int*)((char*)this + 0x44c) = *(int*)((char*)this + 0x444);
+    if (m_players[0]->y < -240.0 || m_players[1]->y < -240.0) {
+        unk44c = unk444;
     } else {
-        *(int*)((char*)this + 0x44c) = 0x14;
+        unk44c = 0x14;
     }
-    if (*(int*)(*(char**)((char*)this + 0x1c) + 0x14244) > 0) {
-        *(int*)((char*)this + 0x44c) = *(int*)(*(char**)((char*)this + 0x1c) + 0x1423c) * (1 - ((*(double*)(*(char**)((char*)this + 0xc) + 0x28) < *(double*)(*(char**)((char*)this + 0x10) + 0x28)) << 1));
-        if (*(short*)(*(char**)((char*)this + 0xc) + 0x14a) == 0 && *(short*)(*(char**)((char*)this + 0x10) + 0x14a) == 0 && *(short*)(*(char**)((char*)this + 0xc) + 0x14c) == 0 && *(short*)(*(char**)((char*)this + 0x10) + 0x14c) == 0) {
-            (*(int*)(*(char**)((char*)this + 0x1c) + 0x14244))--;
+    if (m_game->unk14244 > 0) {
+        unk44c = m_game->unk1423c * (1 - ((m_players[0]->y < m_players[1]->y) << 1));
+        if (m_players[0]->unk14a == 0 && m_players[1]->unk14a == 0 && m_players[0]->unk14c == 0 && m_players[1]->unk14c == 0) {
+            m_game->unk14244--;
         }
     }
-    if ((v8 = -(((int)*(double*)(*(char**)((char*)this + 0xc) + 0x28) - (*(double*)(*(char**)((char*)this + 0xc) + 0x28) < 0.0) + (int)*(double*)(*(char**)((char*)this + 0x10) + 0x28) - (*(double*)(*(char**)((char*)this + 0x10) + 0x28) < 0.0)) / 2) + ((int)*(double*)(*(char**)((char*)this + 0xc) + 0x28) - (*(double*)(*(char**)((char*)this + 0xc) + 0x28) < 0.0) - (int)*(double*)(*(char**)((char*)this + 0x10) + 0x28) + (*(double*)(*(char**)((char*)this + 0x10) + 0x28) < 0.0)) * *(int*)((char*)this + 0x44c) / 0x64 * ((*(double*)(*(char**)((char*)this + 0xc) + 0x28) - *(double*)(*(char**)((char*)this + 0x10) + 0x28) < 0.0) * 2 + -1)) < 0) {
+    if ((v8 = -(((int)m_players[0]->y - (m_players[0]->y < 0.0) + (int)m_players[1]->y - (m_players[1]->y < 0.0)) / 2) + ((int)m_players[0]->y - (m_players[0]->y < 0.0) - (int)m_players[1]->y + (m_players[1]->y < 0.0)) * unk44c / 0x64 * ((m_players[0]->y - m_players[1]->y < 0.0) * 2 + -1)) < 0) {
         v8 = 0;
     } else if (v8 > 0xf0) {
         v8 = 0xf0;
     }
-    if (*(int*)((char*)this + 0x458) < v8) {
-        *(int*)((char*)this + 0x458) -= (*(int*)((char*)this + 0x458) - v8) / 0xa - 1;
-        if (*(int*)((char*)this + 0x458) > v8) {
-            *(int*)((char*)this + 0x458) = v8;
+    if (unk458 < v8) {
+        unk458 -= (unk458 - v8) / 0xa - 1;
+        if (unk458 > v8) {
+            unk458 = v8;
         }
     } else {
-        *(int*)((char*)this + 0x458) -= (*(int*)((char*)this + 0x458) - v8) / 0xa + 1;
-        if (*(int*)((char*)this + 0x458) < v8) {
-            *(int*)((char*)this + 0x458) = v8;
+        unk458 -= (unk458 - v8) / 0xa + 1;
+        if (unk458 < v8) {
+            unk458 = v8;
         }
     }
-    ((CGame*)*(int*)((char*)this + 0x1c))->UpdateShake();
-    *(RECT*)(char*)(*(int*)((char*)this + 0x1c) + 0x14248) = MakeRect(-*(int*)((char*)this + 0x454), -*(int*)((char*)this + 0x458) - 0xd2, 0x140, 0xf0);
-    *(int*)((char*)this + 0x45c) = *(int*)((char*)this + 0x454) + *(int*)(*(char**)((char*)this + 0x1c) + 0x1421c);
-    *(int*)((char*)this + 0x460) = *(int*)((char*)this + 0x458) + *(int*)(*(char**)((char*)this + 0x1c) + 0x14220);
+    m_game->UpdateShake();
+    *(tagRECT*)&m_game->unk14248 = MakeRect(-unk454, -unk458 - 0xd2, 0x140, 0xf0);
+    unk45c = unk454 + m_game->m_shakeX;
+    unk460 = unk458 + m_game->m_shakeY;
 }
 
 void CScene3::Unk764db0()
@@ -321,23 +321,23 @@ void CScene3::Unk764db0()
     int v8;
     int v4;
 
-    if (*((char*)this + 0x2d) == 2) {
+    if (unk2d == 2) {
         v4 = 0;
         for (; v4 < 2; v4++) {
-            *(*(char**)((char*)this + v4 * 4 + 0xc) + 0x2c9) = -1;
-            *(*(char**)((char*)this + v4 * 4 + 0xc) + 0x2c8) = -1;
+            m_players[v4]->unk2c9 = -1;
+            m_players[v4]->unk2c8 = -1;
         }
         return;
     }
     v8 = 0;
     for (; v8 < 2; v8++) {
-        if (*(*(char**)((char*)this + v8 * 4 + 0xc) + 0x2c9) >= 0 && *(*(char**)((char*)this + v8 * 4 + 0xc) + 0x2c9) < 0x41) {
-            ((CSound*)*(int*)((char*)this + 0x28))->Play(*(short*)(*(char**)((char*)this + 0x1c) + 0xea4 + *(*(char**)((char*)this + v8 * 4 + 0xc) + 0x2c9) * 2), 0);
-            *(*(char**)((char*)this + v8 * 4 + 0xc) + 0x2c9) = -1;
+        if (m_players[v8]->unk2c9 >= 0 && m_players[v8]->unk2c9 < 0x41) {
+            m_sound->Play((short)m_game->m_sounds[m_players[v8]->unk2c9], 0);
+            m_players[v8]->unk2c9 = -1;
         }
-        if (*(*(char**)((char*)this + v8 * 4 + 0xc) + 0x2c8) >= 0 && *(*(char**)((char*)this + v8 * 4 + 0xc) + 0x2c8) < 0x32) {
-            ((CSound*)*(int*)((char*)this + 0x28))->Play(*(short*)(*(char**)((char*)this + v8 * 4 + 0xc) + 0x264 + *(*(char**)((char*)this + v8 * 4 + 0xc) + 0x2c8) * 2), 0);
-            *(*(char**)((char*)this + v8 * 4 + 0xc) + 0x2c8) = -1;
+        if (m_players[v8]->unk2c8 >= 0 && m_players[v8]->unk2c8 < 0x32) {
+            m_sound->Play(m_players[v8]->unk264[m_players[v8]->unk2c8], 0);
+            m_players[v8]->unk2c8 = -1;
         }
     }
 }
@@ -347,10 +347,10 @@ void CScene3::Unk764f10()
     int v8;
     int v4;
 
-    if (*((char*)this + 0x2d) == 2) {
-        v8 = *(short*)(*(char**)((char*)this + 0x1c) + 0x1382);
-        while (v8 != *(short*)(*(char**)((char*)this + 0x1c) + 0x1380)) {
-            *(*(char**)((char*)this + 0x1c) + 0x2a74 + v8 * 0x70) = -1;
+    if (unk2d == 2) {
+        v8 = m_game->m_effectTail;
+        while (v8 != m_game->m_effectHead) {
+            m_game->m_effects[v8].unk6c = -1;
             v8++;
             if (v8 >= 0x280) {
                 v8 = 0;
@@ -358,11 +358,11 @@ void CScene3::Unk764f10()
         }
         return;
     }
-    v4 = *(short*)(*(char**)((char*)this + 0x1c) + 0x1382);
-    while (v4 != *(short*)(*(char**)((char*)this + 0x1c) + 0x1380)) {
-        if (*(*(char**)((char*)this + 0x1c) + 0x2a74 + v4 * 0x70) >= 0 && *(*(char**)((char*)this + 0x1c) + 0x2a74 + v4 * 0x70) < 0x41) {
-            ((CSound*)*(int*)((char*)this + 0x28))->Play(*(short*)(*(char**)((char*)this + 0x1c) + 0xea4 + *(*(char**)((char*)this + 0x1c) + 0x2a74 + v4 * 0x70) * 2), 0);
-            *(*(char**)((char*)this + 0x1c) + 0x2a74 + v4 * 0x70) = -1;
+    v4 = m_game->m_effectTail;
+    while (v4 != m_game->m_effectHead) {
+        if ((char)m_game->m_effects[v4].unk6c >= 0 && (char)m_game->m_effects[v4].unk6c < 0x41) {
+            m_sound->Play((short)m_game->m_sounds[(char)m_game->m_effects[v4].unk6c], 0);
+            m_game->m_effects[v4].unk6c = -1;
         }
         v4++;
         if (v4 >= 0x280) {
@@ -373,57 +373,57 @@ void CScene3::Unk764f10()
 
 void CScene3::Unk765040()
 {
-    if (*(short*)((char*)this + 0x574) != 0) {
+    if (unk574 != 0) {
         return;
     }
-    if (*(*(char**)((char*)this + 0x1c) + 0x1364) == 1) {
+    if (m_game->unk1364 == 1) {
         return;
     }
-    if (*(int*)(*(char**)((char*)this + 0x1c) + 0x1354) != 0) {
-        *(*(char**)((char*)this + 0xc) + 0x18a) = 0;
-        *(*(char**)((char*)this + 0xc) + 0x18b) = 0;
-        *(*(char**)((char*)this + 0xc) + 0x18c) = 0;
-        *(*(char**)((char*)this + 0xc) + 0x18d) = 0;
-        *(*(char**)((char*)this + 0x10) + 0x18a) = 0;
-        *(*(char**)((char*)this + 0x10) + 0x18b) = 0;
-        *(*(char**)((char*)this + 0x10) + 0x18c) = 0;
-        *(*(char**)((char*)this + 0x10) + 0x18d) = 0;
-        if (*(WORD*)(*(char**)((char*)this + 0xc) + 8) >= 0x32 && ((CPlayer*)*(int*)((char*)this + 0xc))->Unk410420() == 0 || *(WORD*)(*(char**)((char*)this + 0x10) + 8) >= 0x32 && ((CPlayer*)*(int*)((char*)this + 0x10))->Unk410420() == 0 || *((char*)this + 0x2d) == 2) {
+    if (m_game->unk1354 != 0) {
+        m_players[0]->m_pressA = 0;
+        m_players[0]->m_pressB = 0;
+        m_players[0]->m_pressC = 0;
+        m_players[0]->m_pressD = 0;
+        m_players[1]->m_pressA = 0;
+        m_players[1]->m_pressB = 0;
+        m_players[1]->m_pressC = 0;
+        m_players[1]->m_pressD = 0;
+        if (m_players[0]->pattern >= 0x32 && m_players[0]->Unk410420() == 0 || m_players[1]->pattern >= 0x32 && m_players[1]->Unk410420() == 0 || unk2d == 2) {
             return;
         }
-        *(int*)(*(char**)((char*)this + 0x1c) + 0x1354) = 0;
-        *(int*)(*(char**)((char*)this + 0xc) + 0x108) = 0x270f;
-        *(int*)(*(char**)((char*)this + 0x10) + 0x108) = 0x270f;
-        *(*(char**)((char*)this + 0x1c) + 0x1350) = 2;
+        m_game->unk1354 = 0;
+        m_players[0]->unk108 = 0x270f;
+        m_players[1]->unk108 = 0x270f;
+        m_game->unk1350 = 2;
         return;
     }
     EffectDesc v48;
-    if (*(int*)(*(char**)((char*)this + 0xc) + 0x108) <= 0 && *(int*)(*(char**)((char*)this + 0x10) + 0x108) <= 0) {
-        (*(*(char**)((char*)this + 0xc) + 0xac))++;
-        (*(*(char**)((char*)this + 0x10) + 0xac))++;
-        if (*(*(char**)((char*)this + 0xc) + 0xac) >= *(*(char**)((char*)this + 0x1c) + 0x134e)) {
-            (*(*(char**)((char*)this + 0xc) + 0xac))--;
+    if (m_players[0]->unk108 <= 0 && m_players[1]->unk108 <= 0) {
+        m_players[0]->unkac++;
+        m_players[1]->unkac++;
+        if (m_players[0]->unkac >= m_game->unk134e) {
+            m_players[0]->unkac--;
         }
-        if (*(*(char**)((char*)this + 0x10) + 0xac) >= *(*(char**)((char*)this + 0x1c) + 0x134e)) {
-            (*(*(char**)((char*)this + 0x10) + 0xac))--;
+        if (m_players[1]->unkac >= m_game->unk134e) {
+            m_players[1]->unkac--;
         }
-        *(short*)(*(char**)((char*)this + 0xc) + 8) = 0x3b;
-        ((CPlayer*)*(int*)((char*)this + 0xc))->Vf0();
-        *(short*)(*(char**)((char*)this + 0x10) + 8) = 0x3b;
-        ((CPlayer*)*(int*)((char*)this + 0x10))->Vf0();
-        *(int*)(*(char**)((char*)this + 0x1c) + 0x1354) = 1;
-        if (*(*(char**)((char*)this + 0x1c) + 0x134d) < 9) {
-            (*(*(char**)((char*)this + 0x1c) + 0x134d))++;
+        m_players[0]->pattern = 0x3b;
+        m_players[0]->Vf0();
+        m_players[1]->pattern = 0x3b;
+        m_players[1]->Vf0();
+        m_game->unk1354 = 1;
+        if (m_game->unk134d < 9) {
+            m_game->unk134d++;
         }
         return;
     }
-    if (*(int*)(*(char**)((char*)this + 0xc) + 0x108) <= 0 && *(short*)(*(char**)((char*)this + 0xc) + 0x140) == 0) {
-        *(int*)(*(char**)((char*)this + 0x10) + 0x30dc) += *(int*)(*(char**)((char*)this + 0x10) + 0x108);
-        if (*(*(char**)((char*)this + 0x10) + 0xac) < *(*(char**)((char*)this + 0x1c) + 0x134e) - 1) {
-            (*(*(char**)((char*)this + 0x10) + 0xac))++;
-            *(short*)(*(char**)((char*)this + 0xc) + 0x14c) = *(short*)(*(char**)((char*)this + 0xc) + 0x14c) + 0xb4;
-            *(short*)(*(char**)((char*)this + 0x10) + 0x14c) = *(short*)(*(char**)((char*)this + 0x10) + 0x14c) + 0xb4;
-            ((CPlayer*)*(int*)((char*)this + 0xc))->Vf0();
+    if (m_players[0]->unk108 <= 0 && m_players[0]->unk140 == 0) {
+        m_players[1]->unk30dc += m_players[1]->unk108;
+        if (m_players[1]->unkac < m_game->unk134e - 1) {
+            m_players[1]->unkac++;
+            m_players[0]->unk14c = m_players[0]->unk14c + 0xb4;
+            m_players[1]->unk14c = m_players[1]->unk14c + 0xb4;
+            m_players[0]->Vf0();
             v48.unk0 = 0;
             v48.x = 80.0;
             v48.y = 100.0;
@@ -433,27 +433,27 @@ void CScene3::Unk765040()
             v48.unk24 = 1;
             v48.type = 0x13;
             v48.unk2c = 0x1d;
-            ((CGame*)*(int*)((char*)this + 0x1c))->CreateEffect((EffectDesc*)&v48);
-            *(int*)(*(char**)((char*)this + 0x1c) + 0x1354) = 1;
-            if (*(*(char**)((char*)this + 0x1c) + 0x134d) < 9) {
-                (*(*(char**)((char*)this + 0x1c) + 0x134d))++;
+            m_game->CreateEffect((EffectDesc*)&v48);
+            m_game->unk1354 = 1;
+            if (m_game->unk134d < 9) {
+                m_game->unk134d++;
             }
         } else {
-            (*(*(char**)((char*)this + 0x10) + 0xac))++;
-            ((CPlayer*)*(int*)((char*)this + 0xc))->Vf0();
-            *(int*)(*(char**)((char*)this + 0x1c) + 0x1354) = 1;
-            *((char*)this + 0x2d) = 2;
-            *(double*)((char*)this + 0x580) = 0.0;
-            *(*(char**)((char*)this + 0x1c) + 0x134c) = 1;
+            m_players[1]->unkac++;
+            m_players[0]->Vf0();
+            m_game->unk1354 = 1;
+            unk2d = 2;
+            unk580 = 0.0;
+            m_game->unk134c = 1;
         }
         return;
     }
-    if (*(int*)(*(char**)((char*)this + 0x10) + 0x108) <= 0 && *(short*)(*(char**)((char*)this + 0x10) + 0x140) == 0) {
-        *(int*)(*(char**)((char*)this + 0xc) + 0x30dc) += *(int*)(*(char**)((char*)this + 0xc) + 0x108);
-        if (*(*(char**)((char*)this + 0xc) + 0xac) < *(*(char**)((char*)this + 0x1c) + 0x134e) - 1) {
-            (*(*(char**)((char*)this + 0xc) + 0xac))++;
-            *(short*)(*(char**)((char*)this + 0xc) + 0x14c) = *(short*)(*(char**)((char*)this + 0xc) + 0x14c) + 0xb4;
-            *(short*)(*(char**)((char*)this + 0x10) + 0x14c) = *(short*)(*(char**)((char*)this + 0x10) + 0x14c) + 0xb4;
+    if (m_players[1]->unk108 <= 0 && m_players[1]->unk140 == 0) {
+        m_players[0]->unk30dc += m_players[0]->unk108;
+        if (m_players[0]->unkac < m_game->unk134e - 1) {
+            m_players[0]->unkac++;
+            m_players[0]->unk14c = m_players[0]->unk14c + 0xb4;
+            m_players[1]->unk14c = m_players[1]->unk14c + 0xb4;
             v48.unk0 = 0;
             v48.x = 240.0;
             v48.y = 100.0;
@@ -463,20 +463,20 @@ void CScene3::Unk765040()
             v48.unk24 = 1;
             v48.type = 0x13;
             v48.unk2c = 0x1d;
-            ((CGame*)*(int*)((char*)this + 0x1c))->CreateEffect((EffectDesc*)&v48);
-            ((CPlayer*)*(int*)((char*)this + 0x10))->Vf0();
-            *(int*)(*(char**)((char*)this + 0x1c) + 0x1354) = 1;
-            if (*(*(char**)((char*)this + 0x1c) + 0x134d) < 9) {
-                (*(*(char**)((char*)this + 0x1c) + 0x134d))++;
+            m_game->CreateEffect((EffectDesc*)&v48);
+            m_players[1]->Vf0();
+            m_game->unk1354 = 1;
+            if (m_game->unk134d < 9) {
+                m_game->unk134d++;
             }
             return;
         }
-        (*(*(char**)((char*)this + 0xc) + 0xac))++;
-        ((CPlayer*)*(int*)((char*)this + 0x10))->Vf0();
-        *(int*)(*(char**)((char*)this + 0x1c) + 0x1354) = 1;
-        *((char*)this + 0x2d) = 2;
-        *(double*)((char*)this + 0x580) = 0.0;
-        *(*(char**)((char*)this + 0x1c) + 0x134c) = 0;
+        m_players[0]->unkac++;
+        m_players[1]->Vf0();
+        m_game->unk1354 = 1;
+        unk2d = 2;
+        unk580 = 0.0;
+        m_game->unk134c = 0;
     }
 }
 
@@ -485,79 +485,79 @@ void CScene3::Vf2()
     int l10c;
     char v108[256];
 
-    l10c = ((IDirectInputDevice7*)*(int*)(*(char**)((char*)this + 0x24) + 0x1e8))->GetDeviceState(0x100, v108);
+    l10c = m_input->m_keyboard->GetDeviceState(0x100, v108);
     if (l10c < 0 && l10c == 0x8007001e) {
-        ((IDirectInputDevice7*)*(int*)(*(char**)((char*)this + 0x24) + 0x1e8))->Acquire();
+        m_input->m_keyboard->Acquire();
     }
-    if (*(*(char**)((char*)this + 0x1c) + 0x14283) == 1 && *(int*)(*(char**)((char*)this + 0x1c) + 0x14284) != 0) {
-        *(int*)(*(char**)((char*)this + 0x1c) + 0x14284) = 0;
-        *((char*)this + 0x2d) = 1;
+    if (m_game->unk14283 == 1 && m_game->m_replay.m_eof != 0) {
+        m_game->m_replay.m_eof = 0;
+        unk2d = 1;
     }
-    if (*((char*)this + 0x2d) == 0 && *(*(char**)((char*)this + 0x1c) + 0x1364) == 6) {
-        ((CGame*)*(int*)((char*)this + 0x1c))->UpdateInput();
-        if (*(*(char**)((char*)this + 0x1c) + 0x10) != 0 || *(*(char**)((char*)this + 0x1c) + 0x11) != 0 || *(*(char**)((char*)this + 0x1c) + 0x12) != 0 || *(*(char**)((char*)this + 0x1c) + 0x13) != 0 || (v108[1] & 0x80) != 0) {
-            *((char*)this + 0x2d) = 1;
-            ((CGame*)*(int*)((char*)this + 0x1c))->StopMusic();
-            *(int*)((char*)this + 0x588) = 0;
+    if (unk2d == 0 && m_game->unk1364 == 6) {
+        m_game->UpdateInput();
+        if ((char)m_game->m_pressA[0] != 0 || (char)m_game->m_pressA[1] != 0 || (char)m_game->m_pressB[0] != 0 || (char)m_game->m_pressB[1] != 0 || (v108[1] & 0x80) != 0) {
+            unk2d = 1;
+            m_game->StopMusic();
+            unk588 = 0;
         }
     }
-    if (*((char*)this + 0x2d) == 0 && (v108[1] & 0x80) != 0) {
-        *((char*)this + 0x2d) = 1;
-        *(int*)((char*)this + 0x588) = 0;
+    if (unk2d == 0 && (v108[1] & 0x80) != 0) {
+        unk2d = 1;
+        unk588 = 0;
     }
-    if ((v108[62] & 0x80) != 0 && *(*(char**)((char*)this + 0x1c) + 0x1350) == 0 && *(int*)(*(char**)((char*)this + 0x1c) + 0x1354) == 0 && *(*(char**)((char*)this + 0x1c) + 0x1364) != 0 && *(*(char**)((char*)this + 0x1c) + 0x1364) != 2 && *(*(char**)((char*)this + 0x1c) + 0x1364) != 6) {
-        *(short*)((char*)this + 0x574) = *(short*)((char*)this + 0x574) + 5;
-        if (*(short*)((char*)this + 0x574) > 0x7d0) {
-            *(short*)((char*)this + 0x574) = 0;
+    if ((v108[62] & 0x80) != 0 && (char)m_game->unk1350 == 0 && m_game->unk1354 == 0 && m_game->unk1364 != 0 && m_game->unk1364 != 2 && m_game->unk1364 != 6) {
+        unk574 = unk574 + 5;
+        if (unk574 > 0x7d0) {
+            unk574 = 0;
         }
-        *(short*)((char*)this + 0x576) = 0x270f;
-        *(short*)(*(char**)((char*)this + 0xc) + 0x30ec) = *(short*)((char*)this + 0x574);
-        *(short*)(*(char**)((char*)this + 0x10) + 0x30ec) = *(short*)((char*)this + 0x574);
-        *(short*)(*(char**)((char*)this + 0xc) + 0x30ee) = *(short*)((char*)this + 0x576);
-        *(short*)(*(char**)((char*)this + 0x10) + 0x30ee) = *(short*)((char*)this + 0x576);
-    } else if ((v108[63] & 0x80) != 0 && g_fkeyHeld == 0 && *(*(char**)((char*)this + 0x1c) + 0x1364) != 0 && *(*(char**)((char*)this + 0x1c) + 0x1364) != 2 && *(*(char**)((char*)this + 0x1c) + 0x1364) != 6) {
-        if (*(short*)((char*)this + 0x574) == 0x3e8) {
-            if (*(short*)((char*)this + 0x576) == 0xd04) {
-                *(short*)((char*)this + 0x574) = 0x7d0;
+        unk576 = 0x270f;
+        m_players[0]->unk30ec = unk574;
+        m_players[1]->unk30ec = unk574;
+        m_players[0]->unk30ee = unk576;
+        m_players[1]->unk30ee = unk576;
+    } else if ((v108[63] & 0x80) != 0 && g_fkeyHeld == 0 && m_game->unk1364 != 0 && m_game->unk1364 != 2 && m_game->unk1364 != 6) {
+        if (unk574 == 0x3e8) {
+            if (unk576 == 0xd04) {
+                unk574 = 0x7d0;
             } else {
-                *(short*)((char*)this + 0x576) = 0xd04;
+                unk576 = 0xd04;
             }
         } else {
-            *(short*)((char*)this + 0x574) = 0x3e8;
+            unk574 = 0x3e8;
         }
-        *(short*)(*(char**)((char*)this + 0xc) + 0x30ec) = *(short*)((char*)this + 0x574);
-        *(short*)(*(char**)((char*)this + 0x10) + 0x30ec) = *(short*)((char*)this + 0x574);
-        *(short*)(*(char**)((char*)this + 0xc) + 0x30ee) = *(short*)((char*)this + 0x576);
-        *(short*)(*(char**)((char*)this + 0x10) + 0x30ee) = *(short*)((char*)this + 0x576);
+        m_players[0]->unk30ec = unk574;
+        m_players[1]->unk30ec = unk574;
+        m_players[0]->unk30ee = unk576;
+        m_players[1]->unk30ee = unk576;
         g_fkeyHeld = 1;
     }
-    if (*(*(char**)((char*)this + 0x1c) + 0x1364) == 1) {
+    if (m_game->unk1364 == 1) {
         if ((v108[64] & 0x80) != 0 && g_fkeyHeld == 0) {
-            (*(*(char**)((char*)this + 0x1c) + 0x1346))++;
-            if (*(*(char**)((char*)this + 0x1c) + 0x1346) > 2) {
-                *(*(char**)((char*)this + 0x1c) + 0x1346) = 0;
+            m_game->unk1346++;
+            if ((char)m_game->unk1346 > 2) {
+                m_game->unk1346 = 0;
             }
             g_fkeyHeld = 1;
         } else if ((v108[65] & 0x80) != 0 && g_fkeyHeld == 0) {
-            *(int*)(*(char**)((char*)this + 0x1c) + 0x1348) = *(int*)(*(char**)((char*)this + 0x1c) + 0x1348) == 0;
+            m_game->unk1348 = m_game->unk1348 == 0;
             g_fkeyHeld = 1;
         }
-    } else if (*(*(char**)((char*)this + 0x1c) + 0x1364) == 5 && *(*(char**)((char*)this + 0x1c) + 0x14283) == 2 && (v108[64] & 0x80) != 0) {
+    } else if (m_game->unk1364 == 5 && m_game->unk14283 == 2 && (v108[64] & 0x80) != 0) {
         Unk7661a0();
     }
     if ((v108[66] & 0x80) != 0 && g_fkeyHeld == 0) {
-        *(int*)((char*)this + 0x588) = *(int*)((char*)this + 0x588) == 0;
+        unk588 = unk588 == 0;
         g_fkeyHeld = 1;
     }
-    if (*(short*)((char*)this + 0x574) == 0x7d0) {
-        *(short*)((char*)this + 0x574) = 0;
-        *(short*)((char*)this + 0x576) = 0x270f;
-        *(short*)(*(char**)((char*)this + 0xc) + 0x30ec) = *(short*)((char*)this + 0x574);
-        *(short*)(*(char**)((char*)this + 0x10) + 0x30ec) = *(short*)((char*)this + 0x574);
-        *(short*)(*(char**)((char*)this + 0xc) + 0x30ee) = *(short*)((char*)this + 0x576);
-        *(short*)(*(char**)((char*)this + 0x10) + 0x30ee) = *(short*)((char*)this + 0x576);
-        *(int*)(*(char**)((char*)this + 0xc) + 0x108) = 0x270f;
-        *(int*)(*(char**)((char*)this + 0x10) + 0x108) = 0x270f;
+    if (unk574 == 0x7d0) {
+        unk574 = 0;
+        unk576 = 0x270f;
+        m_players[0]->unk30ec = unk574;
+        m_players[1]->unk30ec = unk574;
+        m_players[0]->unk30ee = unk576;
+        m_players[1]->unk30ee = unk576;
+        m_players[0]->unk108 = 0x270f;
+        m_players[1]->unk108 = 0x270f;
     }
     if ((v108[63] & 0x80) != 0 || (v108[64] & 0x80) != 0 || (v108[65] & 0x80) != 0 || (v108[66] & 0x80) != 0) {
         g_fkeyHeld = 1;
@@ -567,56 +567,56 @@ void CScene3::Vf2()
     if (1) {
     } else {
         if ((v108[59] & 0x80) != 0) {
-            *((char*)this + 0x578) = 1;
+            unk578 = 1;
         }
         if ((v108[60] & 0x80) != 0) {
-            *((char*)this + 0x578) = 2;
+            unk578 = 2;
         }
         if ((v108[61] & 0x80) != 0) {
-            *((char*)this + 0x578) = 3;
+            unk578 = 3;
         }
         if ((v108[67] & 0x80) != 0) {
-            *(int*)((char*)this + 0x58c) = 1;
+            unk58c = 1;
         }
         if ((v108[68] & 0x80) != 0) {
-            *(int*)((char*)this + 0x58c) = 0;
+            unk58c = 0;
         }
         if ((v108[87] & 0x80) != 0) {
-            *(int*)((char*)this + 0x590) = 0;
+            unk590 = 0;
         }
         if ((v108[88] & 0x80) != 0) {
-            *(int*)(*(char**)((char*)this + 0xc) + 0x108) = 1;
-            *(int*)(*(char**)((char*)this + 0x10) + 0x108) = 1;
+            m_players[0]->unk108 = 1;
+            m_players[1]->unk108 = 1;
         }
     }
-    if (*(*(char**)((char*)this + 0x1c) + 0x14283) == 1 && *(int*)((char*)this + 0x588) == 0) {
-        if (*(*(char**)((char*)this + 0x1c) + 0x1340) > 0) {
-            *(short*)((char*)this + 0x574) = ((CReplayFile*)(*(int*)((char*)this + 0x1c) + 0x14284))->Read();
-            *(short*)((char*)this + 0x576) = ((CReplayFile*)(*(int*)((char*)this + 0x1c) + 0x14284))->Read();
+    if (m_game->unk14283 == 1 && unk588 == 0) {
+        if (m_game->unk1340 > 0) {
+            unk574 = (&m_game->m_replay)->Read();
+            unk576 = (&m_game->m_replay)->Read();
         } else {
-            *(short*)((char*)this + 0x574) = 0x3e8;
-            *(short*)((char*)this + 0x576) = 0x270f;
+            unk574 = 0x3e8;
+            unk576 = 0x270f;
         }
-        *(short*)(*(char**)((char*)this + 0xc) + 0x30ec) = *(short*)((char*)this + 0x574);
-        *(short*)(*(char**)((char*)this + 0x10) + 0x30ec) = *(short*)((char*)this + 0x574);
-        *(short*)(*(char**)((char*)this + 0xc) + 0x30ee) = *(short*)((char*)this + 0x576);
-        *(short*)(*(char**)((char*)this + 0x10) + 0x30ee) = *(short*)((char*)this + 0x576);
+        m_players[0]->unk30ec = unk574;
+        m_players[1]->unk30ec = unk574;
+        m_players[0]->unk30ee = unk576;
+        m_players[1]->unk30ee = unk576;
         return;
     }
-    if (*(*(char**)((char*)this + 0x1c) + 0x14283) == 2 && *(int*)((char*)this + 0x588) == 0) {
-        ((CReplayFile*)(*(int*)((char*)this + 0x1c) + 0x14284))->Write(*(short*)((char*)this + 0x574));
-        ((CReplayFile*)(*(int*)((char*)this + 0x1c) + 0x14284))->Write(*(short*)((char*)this + 0x576));
+    if (m_game->unk14283 == 2 && unk588 == 0) {
+        (&m_game->m_replay)->Write(unk574);
+        (&m_game->m_replay)->Write(unk576);
     }
 }
 
 int CScene3::Unk765fa0()
 {
-    if (*(double*)((char*)this + 0x580) < 100.0) {
-        ((CGraphics*)*(int*)((char*)this + 0x20))->Brighten((PALETTEENTRY*)(*(int*)((char*)this + 0x1c) + 0xf35), 0, 0xff, (int)(100.0 - *(double*)((char*)this + 0x580)));
-        ((CSound*)*(int*)((char*)this + 0x28))->SetVolume(*(short*)(*(char**)((char*)this + 0x1c) + 0xf26), (int)(-*(double*)((char*)this + 0x580) * 100.0 / 2.0) + *(int*)(*(char**)((char*)this + 0x1c) + 0xf2c));
+    if (unk580 < 100.0) {
+        m_graphics->Brighten(m_game->m_palette, 0, 0xff, (int)(100.0 - unk580));
+        m_sound->SetVolume((short)m_game->m_music, (int)(-unk580 * 100.0 / 2.0) + m_game->m_musicVolume);
     }
-    (*(double*)((char*)this + 0x580))++;
-    if (*(double*)((char*)this + 0x580) >= 200.0) {
+    unk580++;
+    if (unk580 >= 200.0) {
         return 1;
     }
     return 0;
@@ -624,11 +624,11 @@ int CScene3::Unk765fa0()
 
 void CScene3::Unk766070()
 {
-    if (*(*(char**)((char*)this + 0x1c) + 0x1350) == 0) {
+    if ((char)m_game->unk1350 == 0) {
         return;
     }
     EffectDesc v48;
-    switch (*(*(char**)((char*)this + 0x1c) + 0x1350)) {
+    switch ((char)m_game->unk1350) {
     case 1:
         v48.unk0 = 0;
         v48.x = 160.0;
@@ -639,9 +639,9 @@ void CScene3::Unk766070()
         v48.unk24 = 1;
         v48.type = 0x1b;
         v48.unk2c = -1;
-        ((CGame*)*(int*)((char*)this + 0x1c))->CreateEffect((EffectDesc*)&v48);
-        *(*(char**)((char*)this + 0x1c) + 0x1350) = 0x63;
-        *(short*)(*(char**)((char*)this + 0x1c) + 0x1352) = 0x12c;
+        m_game->CreateEffect((EffectDesc*)&v48);
+        m_game->unk1350 = 0x63;
+        m_game->unk1352 = 0x12c;
         break;
     case 2:
         v48.unk0 = 0;
@@ -652,10 +652,10 @@ void CScene3::Unk766070()
         v48.unk21 = 2;
         v48.unk24 = 1;
         v48.type = 5;
-        v48.unk2c = *(*(char**)((char*)this + 0x1c) + 0x134d) + 0xb;
-        ((CGame*)*(int*)((char*)this + 0x1c))->CreateEffect((EffectDesc*)&v48);
-        *(*(char**)((char*)this + 0x1c) + 0x1350) = 0x63;
-        *(short*)(*(char**)((char*)this + 0x1c) + 0x1352) = 0x10e;
+        v48.unk2c = m_game->unk134d + 0xb;
+        m_game->CreateEffect((EffectDesc*)&v48);
+        m_game->unk1350 = 0x63;
+        m_game->unk1352 = 0x10e;
     }
 }
 
@@ -664,40 +664,40 @@ void CScene3::Unk7661a0()
     char v34[40];
     char vc[8];
 
-    if (*(*(char**)((char*)this + 0x1c) + 0x1364) == 5 && *(*(char**)((char*)this + 0x1c) + 0x14283) == 2) {
-        CScene::Unk759c90((PALETTEENTRY*)(*(int*)((char*)this + 0x1c) + 0xf35), 0, 0, 0);
-        ((CReplayFile*)(*(int*)((char*)this + 0x1c) + 0x14284))->Close();
+    if (m_game->unk1364 == 5 && m_game->unk14283 == 2) {
+        CScene::Unk759c90(m_game->m_palette, 0, 0, 0);
+        (&m_game->m_replay)->Close();
         strcpy(v34, "replay\\data");
-        _itoa(*(*(char**)((char*)this + 0x1c) + 0x14282) + 1, vc, 0xa);
+        _itoa(m_game->unk14282 + 1, vc, 0xa);
         strcat(v34, (const char*)vc);
         strcat(v34, "-");
-        _itoa(*(*(char**)((char*)this + 0x1c) + 0x14281) + 1, vc, 0xa);
+        _itoa(m_game->unk14281 + 1, vc, 0xa);
         strcat(v34, (const char*)vc);
         strcat(v34, ".rep");
-        ((CReplayFile*)(*(int*)((char*)this + 0x1c) + 0x14284))->OpenWrite((const char*)v34);
-        ((CReplayFile*)(*(int*)((char*)this + 0x1c) + 0x14284))->Write(*(*(char**)*(char**)((char*)this + 0x14) + 0x8d));
-        ((CReplayFile*)(*(int*)((char*)this + 0x1c) + 0x14284))->Write(*(*(char**)*(char**)((char*)this + 0x18) + 0x8d));
-        ((CReplayFile*)(*(int*)((char*)this + 0x1c) + 0x14284))->Write(0x68);
-        ((CReplayFile*)(*(int*)((char*)this + 0x1c) + 0x14284))->Write(*(*(char**)((char*)this + 0x1c) + 0xf32));
-        ((CReplayFile*)(*(int*)((char*)this + 0x1c) + 0x14284))->Write(*(*(char**)*(char**)((char*)this + 0x14) + 0x8e));
-        ((CReplayFile*)(*(int*)((char*)this + 0x1c) + 0x14284))->Write(*(*(char**)*(char**)((char*)this + 0x18) + 0x8e));
-        ((CGame*)*(int*)((char*)this + 0x1c))->Reset();
-        ((CPlayer*)*(int*)*(char**)((char*)this + 0x14))->Vf11();
-        ((CPlayer*)*(int*)*(char**)((char*)this + 0x18))->Vf11();
-        *(short*)(*(char**)((char*)this + 0xc) + 0x30ec) = *(short*)((char*)this + 0x574);
-        *(short*)(*(char**)((char*)this + 0x10) + 0x30ec) = *(short*)((char*)this + 0x574);
-        *(*(char**)((char*)this + 0x1c) + 0x1350) = 1;
-        *(int*)((char*)this + 0x440) = 0;
-        *(int*)((char*)this + 0x444) = -0x32;
-        *(int*)((char*)this + 0x448) = *(int*)((char*)this + 0x440);
-        *(int*)((char*)this + 0x44c) = *(int*)((char*)this + 0x444);
-        *(int*)((char*)this + 0x450) = 5;
-        *(int*)((char*)this + 0x454) = -0xa0;
-        *(int*)((char*)this + 0x458) = 0;
-        *((char*)this + 0x578) = 3;
+        (&m_game->m_replay)->OpenWrite((const char*)v34);
+        (&m_game->m_replay)->Write((*m_player1Ref)->unk8d);
+        (&m_game->m_replay)->Write((*m_player2Ref)->unk8d);
+        (&m_game->m_replay)->Write(0x68);
+        (&m_game->m_replay)->Write((char)m_game->unkf32);
+        (&m_game->m_replay)->Write((*m_player1Ref)->m_paletteIndex);
+        (&m_game->m_replay)->Write((*m_player2Ref)->m_paletteIndex);
+        m_game->Reset();
+        (*m_player1Ref)->Vf11();
+        (*m_player2Ref)->Vf11();
+        m_players[0]->unk30ec = unk574;
+        m_players[1]->unk30ec = unk574;
+        m_game->unk1350 = 1;
+        unk440 = 0;
+        unk444 = -0x32;
+        unk448 = unk440;
+        unk44c = unk444;
+        unk450 = 5;
+        unk454 = -0xa0;
+        unk458 = 0;
+        unk578 = 3;
         Unk7647b0();
         Draw();
-        CScene::Unk759e20((PALETTEENTRY*)(*(int*)((char*)this + 0x1c) + 0xf35), 0);
+        CScene::Unk759e20(m_game->m_palette, 0);
     }
 }
 
@@ -710,26 +710,26 @@ void CScene3::Unk766480()
     int lf4;
     CollisionInfo vf0;
 
-    x1e8.frame = *(PatternFrame*)(char*)(*(int*)(*(char**)(*(char**)((char*)this + 0xc) + 0x164) + *(WORD*)(*(char**)((char*)this + 0xc) + 8) * 8 + 4) + *(WORD*)(*(char**)((char*)this + 0xc) + 0xa) * 0xc8);
-    x1e8.anim = *(EffectFrame*)(char*)(*(int*)(*(char**)(*(char**)((char*)this + 0xc) + 0x10) + *(WORD*)(*(char**)((char*)this + 0xc) + 8) * 8 + 4) + *(WORD*)(*(char**)((char*)this + 0xc) + 0xa) * 0xc);
-    x1e8.x = *(double*)(*(char**)((char*)this + 0xc) + 0x20);
-    x1e8.y = *(double*)(*(char**)((char*)this + 0xc) + 0x28);
-    x1e8.facing = *(*(char**)((char*)this + 0xc) + 0x50);
-    vf0.frame = *(PatternFrame*)(char*)(*(int*)(*(char**)(*(char**)((char*)this + 0x10) + 0x164) + *(WORD*)(*(char**)((char*)this + 0x10) + 8) * 8 + 4) + *(WORD*)(*(char**)((char*)this + 0x10) + 0xa) * 0xc8);
-    vf0.anim = *(EffectFrame*)(char*)(*(int*)(*(char**)(*(char**)((char*)this + 0x10) + 0x10) + *(WORD*)(*(char**)((char*)this + 0x10) + 8) * 8 + 4) + *(WORD*)(*(char**)((char*)this + 0x10) + 0xa) * 0xc);
-    vf0.x = *(double*)(*(char**)((char*)this + 0x10) + 0x20);
-    vf0.y = *(double*)(*(char**)((char*)this + 0x10) + 0x28);
-    vf0.facing = *(*(char**)((char*)this + 0x10) + 0x50);
-    lf4 = Unk7679b0(*(int*)((char*)this + 0xc), *(int*)((char*)this + 0x10), (CollisionInfo*)&x1e8, (CollisionInfo*)&vf0);
-    v1ec = Unk7679b0(*(int*)((char*)this + 0x10), *(int*)((char*)this + 0xc), (CollisionInfo*)&vf0, (CollisionInfo*)&x1e8);
-    *(int*)(*(char**)((char*)this + 0xc) + 0x144) = 0;
-    *(int*)(*(char**)((char*)this + 0x10) + 0x144) = 0;
-    vf8 = *(short*)(*(char**)((char*)this + 0xc) + 0x2cc);
-    while (vf8 != *(short*)(*(char**)((char*)this + 0xc) + 0x2ca)) {
-        l1f0 = *(short*)(*(char**)((char*)this + 0x10) + 0x2cc);
-        while (l1f0 != *(short*)(*(char**)((char*)this + 0x10) + 0x2ca)) {
-            if (*(int*)(*(char**)((char*)this + 0xc) + 0x3d0 + vf8 * 4) != 0 && *(int*)(*(char**)((char*)this + 0x10) + 0x3d0 + l1f0 * 4) != 0) {
-                Unk76bab0(*(int*)((char*)this + 0xc), *(int*)((char*)this + 0x10), vf8, l1f0);
+    x1e8.frame = m_players[0]->m_patterns[m_players[0]->pattern].frames[m_players[0]->frame];
+    x1e8.anim = m_players[0]->anims[m_players[0]->pattern].frames[m_players[0]->frame];
+    x1e8.x = m_players[0]->x;
+    x1e8.y = m_players[0]->y;
+    x1e8.facing = m_players[0]->facing;
+    vf0.frame = m_players[1]->m_patterns[m_players[1]->pattern].frames[m_players[1]->frame];
+    vf0.anim = m_players[1]->anims[m_players[1]->pattern].frames[m_players[1]->frame];
+    vf0.x = m_players[1]->x;
+    vf0.y = m_players[1]->y;
+    vf0.facing = m_players[1]->facing;
+    lf4 = Unk7679b0((int)m_players[0], (int)m_players[1], (CollisionInfo*)&x1e8, (CollisionInfo*)&vf0);
+    v1ec = Unk7679b0((int)m_players[1], (int)m_players[0], (CollisionInfo*)&vf0, (CollisionInfo*)&x1e8);
+    m_players[0]->unk144 = 0;
+    m_players[1]->unk144 = 0;
+    vf8 = m_players[0]->unk2cc;
+    while (vf8 != m_players[0]->unk2ca) {
+        l1f0 = m_players[1]->unk2cc;
+        while (l1f0 != m_players[1]->unk2ca) {
+            if (m_players[0]->unk3d0[vf8] != 0 && m_players[1]->unk3d0[l1f0] != 0) {
+                Unk76bab0((int)m_players[0], (int)m_players[1], vf8, l1f0);
             }
             l1f0++;
             if (l1f0 >= 0x40) {
@@ -741,13 +741,13 @@ void CScene3::Unk766480()
             vf8 = 0;
         }
     }
-    vf8 = *(short*)(*(char**)((char*)this + 0xc) + 0x2cc);
-    while (vf8 != *(short*)(*(char**)((char*)this + 0xc) + 0x2ca)) {
-        l1f0 = *(short*)(*(char**)((char*)this + 0x10) + 0x2cc);
-        while (l1f0 != *(short*)(*(char**)((char*)this + 0x10) + 0x2ca)) {
-            if (*(int*)(*(char**)((char*)this + 0xc) + 0x3d0 + vf8 * 4) != 0 && *(int*)(*(char**)((char*)this + 0x10) + 0x3d0 + l1f0 * 4) != 0) {
-                Unk76b090(*(int*)((char*)this + 0xc), *(int*)((char*)this + 0x10), vf8, l1f0);
-                Unk76b090(*(int*)((char*)this + 0x10), *(int*)((char*)this + 0xc), l1f0, vf8);
+    vf8 = m_players[0]->unk2cc;
+    while (vf8 != m_players[0]->unk2ca) {
+        l1f0 = m_players[1]->unk2cc;
+        while (l1f0 != m_players[1]->unk2ca) {
+            if (m_players[0]->unk3d0[vf8] != 0 && m_players[1]->unk3d0[l1f0] != 0) {
+                Unk76b090((int)m_players[0], (int)m_players[1], vf8, l1f0);
+                Unk76b090((int)m_players[1], (int)m_players[0], l1f0, vf8);
             }
             l1f0++;
             if (l1f0 >= 0x40) {
@@ -759,37 +759,37 @@ void CScene3::Unk766480()
             vf8 = 0;
         }
     }
-    vf8 = *(short*)(*(char**)((char*)this + 0x10) + 0x2cc);
-    while (vf8 != *(short*)(*(char**)((char*)this + 0x10) + 0x2ca)) {
-        if (*(int*)(*(char**)((char*)this + 0x10) + 0x3d0 + vf8 * 4) != 0) {
-            Unk7697d0(*(int*)((char*)this + 0x10), *(int*)((char*)this + 0xc), vf8, (CollisionInfo*)&x1e8);
-            Unk76bd40(*(int*)((char*)this + 0xc), *(int*)((char*)this + 0x10), (CollisionInfo*)&x1e8, (CollisionInfo*)&vf0, vf8);
+    vf8 = m_players[1]->unk2cc;
+    while (vf8 != m_players[1]->unk2ca) {
+        if (m_players[1]->unk3d0[vf8] != 0) {
+            Unk7697d0((int)m_players[1], (int)m_players[0], vf8, (CollisionInfo*)&x1e8);
+            Unk76bd40((int)m_players[0], (int)m_players[1], (CollisionInfo*)&x1e8, (CollisionInfo*)&vf0, vf8);
         }
         vf8++;
         if (vf8 >= 0x40) {
             vf8 = 0;
         }
     }
-    vf8 = *(short*)(*(char**)((char*)this + 0xc) + 0x2cc);
-    while (vf8 != *(short*)(*(char**)((char*)this + 0xc) + 0x2ca)) {
-        if (*(int*)(*(char**)((char*)this + 0xc) + 0x3d0 + vf8 * 4) != 0) {
-            Unk7697d0(*(int*)((char*)this + 0xc), *(int*)((char*)this + 0x10), vf8, (CollisionInfo*)&vf0);
-            Unk76bd40(*(int*)((char*)this + 0x10), *(int*)((char*)this + 0xc), (CollisionInfo*)&vf0, (CollisionInfo*)&x1e8, vf8);
+    vf8 = m_players[0]->unk2cc;
+    while (vf8 != m_players[0]->unk2ca) {
+        if (m_players[0]->unk3d0[vf8] != 0) {
+            Unk7697d0((int)m_players[0], (int)m_players[1], vf8, (CollisionInfo*)&vf0);
+            Unk76bd40((int)m_players[1], (int)m_players[0], (CollisionInfo*)&vf0, (CollisionInfo*)&x1e8, vf8);
         }
         vf8++;
         if (vf8 >= 0x40) {
             vf8 = 0;
         }
     }
-    x1e8.unke9 = *(*(char**)((char*)this + 0xc) + 0x168);
-    x1e8.unkea = *(short*)(*(char**)((char*)this + 0xc) + 0x16c);
-    vf0.unke9 = *(*(char**)((char*)this + 0x10) + 0x168);
-    vf0.unkea = *(short*)(*(char**)((char*)this + 0x10) + 0x16c);
+    x1e8.unke9 = *(char*)&m_players[0]->unk168;
+    x1e8.unkea = m_players[0]->unk16c;
+    vf0.unke9 = *(char*)&m_players[1]->unk168;
+    vf0.unkea = m_players[1]->unk16c;
     if (v1ec == 0) {
-        Unk767f60(*(int*)((char*)this + 0xc), *(int*)((char*)this + 0x10), (CollisionInfo*)&x1e8, (CollisionInfo*)&vf0);
+        Unk767f60((int)m_players[0], (int)m_players[1], (CollisionInfo*)&x1e8, (CollisionInfo*)&vf0);
     }
     if (lf4 == 0) {
-        Unk767f60(*(int*)((char*)this + 0x10), *(int*)((char*)this + 0xc), (CollisionInfo*)&vf0, (CollisionInfo*)&x1e8);
+        Unk767f60((int)m_players[1], (int)m_players[0], (CollisionInfo*)&vf0, (CollisionInfo*)&x1e8);
     }
 }
 
@@ -802,84 +802,84 @@ void CScene3::Unk766b50()
     double v10;
     double x8;
 
-    v10 = *(double*)(*(char**)((char*)this + 0xc) + 0x30);
-    n18 = *(double*)(*(char**)((char*)this + 0x10) + 0x30);
-    *(double*)(*(char**)((char*)this + 0xc) + 0xb0) = 0.0;
-    *(double*)(*(char**)((char*)this + 0x10) + 0xb0) = 0.0;
-    v38 = this->Unk767600((int)(ObjBase*)(CPlayer*)*(int*)((char*)this + 0xc), *(int*)(*(char**)(*(char**)((char*)this + 0xc) + 0x164) + *(WORD*)(*(char**)((char*)this + 0xc) + 8) * 8 + 4) + *(WORD*)(*(char**)((char*)this + 0xc) + 0xa) * 0xc8 + 0x90);
-    v28 = this->Unk767600((int)(ObjBase*)(CPlayer*)*(int*)((char*)this + 0x10), *(int*)(*(char**)(*(char**)((char*)this + 0x10) + 0x164) + *(WORD*)(*(char**)((char*)this + 0x10) + 8) * 8 + 4) + *(WORD*)(*(char**)((char*)this + 0x10) + 0xa) * 0xc8 + 0x90);
+    v10 = m_players[0]->vx;
+    n18 = m_players[1]->vx;
+    m_players[0]->unkb0 = 0.0;
+    m_players[1]->unkb0 = 0.0;
+    v38 = this->Unk767600((int)(ObjBase*)m_players[0], (int)m_players[0]->m_patterns[m_players[0]->pattern].frames + m_players[0]->frame * 0xc8 + 0x90);
+    v28 = this->Unk767600((int)(ObjBase*)m_players[1], (int)m_players[1]->m_patterns[m_players[1]->pattern].frames + m_players[1]->frame * 0xc8 + 0x90);
     if (Unk767930((int)&v38, (int)&v28) != 0) {
         if (v38.left + v38.right - (v28.left + v28.right) > 0) {
             x3c = v28.right - v38.left;
-            (int)(*(double*)(*(char**)((char*)this + 0xc) + 0x20) <= 160.0);
-            *(double*)(*(char**)((char*)this + 0xc) + 0x20) += x3c / 2.0;
-            (int)(*(double*)(*(char**)((char*)this + 0xc) + 0x20) > 160.0);
-            *(double*)(*(char**)((char*)this + 0x10) + 0x20) = *(double*)(*(char**)((char*)this + 0x10) + 0x20) - x3c / 2.0;
-            if ((char)((CPlayer*)*(int*)((char*)this + 0xc))->Unk40ff70() == -1) {
-                v10 = (*(*(char**)((char*)this + 0xc) + 0x50) * v10 < 0.0) * v10;
-                n18 = (*(*(char**)((char*)this + 0xc) + 0x50) * v10 + *(*(char**)((char*)this + 0x10) + 0x50) * n18 < 0.0) * n18;
-                if (*(*(char**)((char*)this + 0xc) + 0x50) * v10 < *(*(char**)((char*)this + 0x10) + 0x50) * n18) {
-                    x8 = (*(*(char**)((char*)this + 0xc) + 0x50) * v10 + *(*(char**)((char*)this + 0x10) + 0x50) * n18) / 2.0;
-                    n18 = *(*(char**)((char*)this + 0x10) + 0x50) * x8;
-                    *(double*)(*(char**)((char*)this + 0xc) + 0xb0) = v10 - *(double*)(*(char**)((char*)this + 0xc) + 0x30);
-                    *(double*)(*(char**)((char*)this + 0x10) + 0xb0) = n18 - *(double*)(*(char**)((char*)this + 0x10) + 0x30);
+            (int)(m_players[0]->x <= 160.0);
+            m_players[0]->x += x3c / 2.0;
+            (int)(m_players[0]->x > 160.0);
+            m_players[1]->x = m_players[1]->x - x3c / 2.0;
+            if ((char)m_players[0]->Unk40ff70() == -1) {
+                v10 = (m_players[0]->facing * v10 < 0.0) * v10;
+                n18 = (m_players[0]->facing * v10 + m_players[1]->facing * n18 < 0.0) * n18;
+                if (m_players[0]->facing * v10 < m_players[1]->facing * n18) {
+                    x8 = (m_players[0]->facing * v10 + m_players[1]->facing * n18) / 2.0;
+                    n18 = m_players[1]->facing * x8;
+                    m_players[0]->unkb0 = v10 - m_players[0]->vx;
+                    m_players[1]->unkb0 = n18 - m_players[1]->vx;
                 }
                 return;
             }
-            if ((char)((CPlayer*)*(int*)((char*)this + 0x10))->Unk40ff70() == 1) {
-                n18 = (*(*(char**)((char*)this + 0x10) + 0x50) * n18 > 0.0) * n18;
-                v10 = (*(*(char**)((char*)this + 0x10) + 0x50) * n18 + *(*(char**)((char*)this + 0xc) + 0x50) * v10 > 0.0) * v10;
-                if (*(*(char**)((char*)this + 0x10) + 0x50) * n18 > *(*(char**)((char*)this + 0xc) + 0x50) * v10) {
-                    x8 = (*(*(char**)((char*)this + 0xc) + 0x50) * v10 + *(*(char**)((char*)this + 0x10) + 0x50) * n18) / 2.0;
-                    v10 = *(*(char**)((char*)this + 0xc) + 0x50) * x8;
-                    *(double*)(*(char**)((char*)this + 0xc) + 0xb0) = v10 - *(double*)(*(char**)((char*)this + 0xc) + 0x30);
-                    *(double*)(*(char**)((char*)this + 0x10) + 0xb0) = n18 - *(double*)(*(char**)((char*)this + 0x10) + 0x30);
+            if ((char)m_players[1]->Unk40ff70() == 1) {
+                n18 = (m_players[1]->facing * n18 > 0.0) * n18;
+                v10 = (m_players[1]->facing * n18 + m_players[0]->facing * v10 > 0.0) * v10;
+                if (m_players[1]->facing * n18 > m_players[0]->facing * v10) {
+                    x8 = (m_players[0]->facing * v10 + m_players[1]->facing * n18) / 2.0;
+                    v10 = m_players[0]->facing * x8;
+                    m_players[0]->unkb0 = v10 - m_players[0]->vx;
+                    m_players[1]->unkb0 = n18 - m_players[1]->vx;
                 }
                 return;
             }
-            if (*(*(char**)((char*)this + 0x10) + 0x50) * n18 >= 0.0 && *(*(char**)((char*)this + 0xc) + 0x50) * v10 <= 0.0) {
-                x8 = (*(*(char**)((char*)this + 0xc) + 0x50) * v10 + *(*(char**)((char*)this + 0x10) + 0x50) * n18) / 2.0;
-                v10 = *(*(char**)((char*)this + 0xc) + 0x50) * x8;
-                n18 = *(*(char**)((char*)this + 0x10) + 0x50) * x8;
-                *(double*)(*(char**)((char*)this + 0xc) + 0xb0) = v10 - *(double*)(*(char**)((char*)this + 0xc) + 0x30);
-                *(double*)(*(char**)((char*)this + 0x10) + 0xb0) = n18 - *(double*)(*(char**)((char*)this + 0x10) + 0x30);
+            if (m_players[1]->facing * n18 >= 0.0 && m_players[0]->facing * v10 <= 0.0) {
+                x8 = (m_players[0]->facing * v10 + m_players[1]->facing * n18) / 2.0;
+                v10 = m_players[0]->facing * x8;
+                n18 = m_players[1]->facing * x8;
+                m_players[0]->unkb0 = v10 - m_players[0]->vx;
+                m_players[1]->unkb0 = n18 - m_players[1]->vx;
                 return;
             }
             return;
         }
         x3c = v28.left - v38.right;
-        (int)(*(double*)(*(char**)((char*)this + 0x10) + 0x20) >= 479.0);
-        *(double*)(*(char**)((char*)this + 0xc) + 0x20) += x3c / 2.0;
-        (int)(*(double*)(*(char**)((char*)this + 0x10) + 0x20) < 479.0);
-        *(double*)(*(char**)((char*)this + 0x10) + 0x20) = *(double*)(*(char**)((char*)this + 0x10) + 0x20) - x3c / 2.0;
-        if ((char)((CPlayer*)*(int*)((char*)this + 0xc))->Unk40ff70() == 1) {
-            v10 = (*(*(char**)((char*)this + 0xc) + 0x50) * v10 > 0.0) * v10;
-            n18 = (*(*(char**)((char*)this + 0xc) + 0x50) * v10 + *(*(char**)((char*)this + 0x10) + 0x50) * n18 > 0.0) * n18;
-            if (*(*(char**)((char*)this + 0xc) + 0x50) * v10 > *(*(char**)((char*)this + 0x10) + 0x50) * n18) {
-                x8 = (*(*(char**)((char*)this + 0xc) + 0x50) * v10 + *(*(char**)((char*)this + 0x10) + 0x50) * n18) / 2.0;
-                n18 = *(*(char**)((char*)this + 0x10) + 0x50) * x8;
-                *(double*)(*(char**)((char*)this + 0xc) + 0xb0) = v10 - *(double*)(*(char**)((char*)this + 0xc) + 0x30);
-                *(double*)(*(char**)((char*)this + 0x10) + 0xb0) = n18 - *(double*)(*(char**)((char*)this + 0x10) + 0x30);
+        (int)(m_players[1]->x >= 479.0);
+        m_players[0]->x += x3c / 2.0;
+        (int)(m_players[1]->x < 479.0);
+        m_players[1]->x = m_players[1]->x - x3c / 2.0;
+        if ((char)m_players[0]->Unk40ff70() == 1) {
+            v10 = (m_players[0]->facing * v10 > 0.0) * v10;
+            n18 = (m_players[0]->facing * v10 + m_players[1]->facing * n18 > 0.0) * n18;
+            if (m_players[0]->facing * v10 > m_players[1]->facing * n18) {
+                x8 = (m_players[0]->facing * v10 + m_players[1]->facing * n18) / 2.0;
+                n18 = m_players[1]->facing * x8;
+                m_players[0]->unkb0 = v10 - m_players[0]->vx;
+                m_players[1]->unkb0 = n18 - m_players[1]->vx;
             }
             return;
         }
-        if ((char)((CPlayer*)*(int*)((char*)this + 0x10))->Unk40ff70() == -1) {
-            n18 = (*(*(char**)((char*)this + 0x10) + 0x50) * n18 < 0.0) * n18;
-            v10 = (*(*(char**)((char*)this + 0x10) + 0x50) * n18 + *(*(char**)((char*)this + 0xc) + 0x50) * v10 < 0.0) * v10;
-            if (*(*(char**)((char*)this + 0xc) + 0x50) * v10 < *(*(char**)((char*)this + 0x10) + 0x50) * n18) {
-                x8 = (*(*(char**)((char*)this + 0xc) + 0x50) * v10 + *(*(char**)((char*)this + 0x10) + 0x50) * n18) / 2.0;
-                v10 = *(*(char**)((char*)this + 0xc) + 0x50) * x8;
-                *(double*)(*(char**)((char*)this + 0xc) + 0xb0) = v10 - *(double*)(*(char**)((char*)this + 0xc) + 0x30);
-                *(double*)(*(char**)((char*)this + 0x10) + 0xb0) = n18 - *(double*)(*(char**)((char*)this + 0x10) + 0x30);
+        if ((char)m_players[1]->Unk40ff70() == -1) {
+            n18 = (m_players[1]->facing * n18 < 0.0) * n18;
+            v10 = (m_players[1]->facing * n18 + m_players[0]->facing * v10 < 0.0) * v10;
+            if (m_players[0]->facing * v10 < m_players[1]->facing * n18) {
+                x8 = (m_players[0]->facing * v10 + m_players[1]->facing * n18) / 2.0;
+                v10 = m_players[0]->facing * x8;
+                m_players[0]->unkb0 = v10 - m_players[0]->vx;
+                m_players[1]->unkb0 = n18 - m_players[1]->vx;
             }
             return;
         }
-        if (*(*(char**)((char*)this + 0x10) + 0x50) * n18 <= 0.0 && *(*(char**)((char*)this + 0xc) + 0x50) * v10 >= 0.0) {
-            x8 = (*(*(char**)((char*)this + 0xc) + 0x50) * v10 + *(*(char**)((char*)this + 0x10) + 0x50) * n18) / 2.0;
-            v10 = *(*(char**)((char*)this + 0xc) + 0x50) * x8;
-            n18 = *(*(char**)((char*)this + 0x10) + 0x50) * x8;
-            *(double*)(*(char**)((char*)this + 0xc) + 0xb0) = v10 - *(double*)(*(char**)((char*)this + 0xc) + 0x30);
-            *(double*)(*(char**)((char*)this + 0x10) + 0xb0) = n18 - *(double*)(*(char**)((char*)this + 0x10) + 0x30);
+        if (m_players[1]->facing * n18 <= 0.0 && m_players[0]->facing * v10 >= 0.0) {
+            x8 = (m_players[0]->facing * v10 + m_players[1]->facing * n18) / 2.0;
+            v10 = m_players[0]->facing * x8;
+            n18 = m_players[1]->facing * x8;
+            m_players[0]->unkb0 = v10 - m_players[0]->vx;
+            m_players[1]->unkb0 = n18 - m_players[1]->vx;
         }
     }
 }
@@ -950,8 +950,8 @@ int CScene3::Unk7679b0(int p1, int p2, CollisionInfo* p3, CollisionInfo* p4)
     RECT x40[4];
 
     v274 = 0;
-    b1d0 = *(PatternFrame*)(char*)p3;
-    v108 = *(PatternFrame*)(char*)p4;
+    b1d0 = p3->frame;
+    v108 = p4->frame;
     v28c = 0;
     for (; v28c < 4; v28c++) {
         x40[v28c] = this->Unk7677a0((int)p3, (int)&b1d0.attackBoxes[v28c]);
@@ -1034,8 +1034,8 @@ void CScene3::Unk767f60(int p1, int p2, CollisionInfo* p3, CollisionInfo* p4)
     RECT x40[4];
 
     v274 = 0;
-    b1d0 = *(PatternFrame*)(char*)p3;
-    v108 = *(PatternFrame*)(char*)p4;
+    b1d0 = p3->frame;
+    v108 = p4->frame;
     EffectDesc k2c0;
     v2d4 = 0;
     for (; v2d4 < 4; v2d4++) {
@@ -1046,7 +1046,7 @@ void CScene3::Unk767f60(int p1, int p2, CollisionInfo* p3, CollisionInfo* p4)
         l220[v2d4] = this->Unk7677a0((int)p4, (int)&v108.boxes[v2d4]);
     }
     v2e4 = this->Unk7677a0((int)p4, (int)&v108.box90);
-    if (*((char*)p3 + 0xe9) == 0 && (v108.flagsB0 & 0x20) == 0 && *(short*)((char*)p3 + 0xea) > 0 && (*((char*)p2 + 0x130) <= 0 || (b1d0.flagsAA & 0x40) <= 0) && ((CPlayer*)p2)->Unk4102e0() == 0 && *(short*)((char*)p2 + 0x13c) == 0) {
+    if (p3->unke9 == 0 && (v108.flagsB0 & 0x20) == 0 && p3->unkea > 0 && (*((char*)p2 + 0x130) <= 0 || (b1d0.flagsAA & 0x40) <= 0) && ((CPlayer*)p2)->Unk4102e0() == 0 && *(short*)((char*)p2 + 0x13c) == 0) {
         if ((b1d0.flagsAA & 0x40) > 0) {
             v2d4 = 0;
             for (; v2d4 < 4; v2d4++) {
@@ -1125,7 +1125,7 @@ void CScene3::Unk767f60(int p1, int p2, CollisionInfo* p3, CollisionInfo* p4)
                 k2c0.unk24 = 0;
                 k2c0.type = 0x11;
                 k2c0.unk2c = 0xa;
-                ((CGame*)*(int*)((char*)this + 0x1c))->CreateEffect((EffectDesc*)&k2c0);
+                m_game->CreateEffect((EffectDesc*)&k2c0);
                 ((CPlayer*)p2)->Vf0();
                 ((CPlayer*)p2)->Unk40e630();
                 if (*(double*)((char*)p2 + 0x28) == 0.0) {
@@ -1154,7 +1154,7 @@ void CScene3::Unk767f60(int p1, int p2, CollisionInfo* p3, CollisionInfo* p4)
                 k2c0.unk24 = 0;
                 k2c0.type = 0x11;
                 k2c0.unk2c = 0xa;
-                ((CGame*)*(int*)((char*)this + 0x1c))->CreateEffect((EffectDesc*)&k2c0);
+                m_game->CreateEffect((EffectDesc*)&k2c0);
                 ((CPlayer*)p2)->Vf0();
                 ((CPlayer*)p2)->Unk40e630();
                 *(short*)((char*)p2 + 8) = 0xaa;
@@ -1178,7 +1178,7 @@ void CScene3::Unk767f60(int p1, int p2, CollisionInfo* p3, CollisionInfo* p4)
                 k2c0.unk24 = 0;
                 k2c0.type = 0x11;
                 k2c0.unk2c = 0xa;
-                ((CGame*)*(int*)((char*)this + 0x1c))->CreateEffect((EffectDesc*)&k2c0);
+                m_game->CreateEffect((EffectDesc*)&k2c0);
                 ((CPlayer*)p2)->Vf0();
                 ((CPlayer*)p2)->Unk40e630();
                 *(short*)((char*)p2 + 8) = (*((char*)p2 + 0x189) == 1) + 0xa8;
@@ -1199,7 +1199,7 @@ void CScene3::Unk767f60(int p1, int p2, CollisionInfo* p3, CollisionInfo* p4)
                 k2c0.unk24 = 0;
                 k2c0.type = 2;
                 k2c0.unk2c = 3;
-                ((CGame*)*(int*)((char*)this + 0x1c))->CreateEffect((EffectDesc*)&k2c0);
+                m_game->CreateEffect((EffectDesc*)&k2c0);
                 *(int*)((char*)p1 + 0x168) = 2;
                 *(short*)((char*)p1 + 0x14a) = b1d0.unkc2;
                 *(short*)((char*)p2 + 0x14a) = b1d0.unkc4;
@@ -1224,7 +1224,7 @@ void CScene3::Unk767f60(int p1, int p2, CollisionInfo* p3, CollisionInfo* p4)
                 k2c0.unk24 = 0;
                 k2c0.type = 2;
                 k2c0.unk2c = 3;
-                ((CGame*)*(int*)((char*)this + 0x1c))->CreateEffect((EffectDesc*)&k2c0);
+                m_game->CreateEffect((EffectDesc*)&k2c0);
                 *(int*)((char*)p1 + 0x168) = 2;
                 *(short*)((char*)p1 + 0x14a) = b1d0.unkc2;
                 *(short*)((char*)p2 + 0x14a) = b1d0.unkc4;
@@ -1249,7 +1249,7 @@ void CScene3::Unk767f60(int p1, int p2, CollisionInfo* p3, CollisionInfo* p4)
                 k2c0.unk24 = 0;
                 k2c0.type = 2;
                 k2c0.unk2c = 3;
-                ((CGame*)*(int*)((char*)this + 0x1c))->CreateEffect((EffectDesc*)&k2c0);
+                m_game->CreateEffect((EffectDesc*)&k2c0);
                 *(int*)((char*)p1 + 0x168) = 2;
                 *(short*)((char*)p1 + 0x14a) = b1d0.unkc2;
                 *(short*)((char*)p2 + 0x14a) = b1d0.unkc4;
@@ -1298,7 +1298,7 @@ void CScene3::Unk767f60(int p1, int p2, CollisionInfo* p3, CollisionInfo* p4)
                 *(int*)((char*)p2 + 0x154) = 0;
                 k2c0.type = 2;
                 k2c0.unk2c = 3;
-                ((CGame*)*(int*)((char*)this + 0x1c))->CreateEffect((EffectDesc*)&k2c0);
+                m_game->CreateEffect((EffectDesc*)&k2c0);
                 return;
             }
             if ((v108.flagsB0 & 4) == 0 && *(short*)((char*)p2 + 0x138) == 0 || ((v108.flagsB0 & 4) > 0 || *(short*)((char*)p2 + 0x138) > 0) && (b1d0.flagsAA & 0x100) > 0 || (b1d0.flagsAA & 0x40) > 0) {
@@ -1369,7 +1369,7 @@ void CScene3::Unk767f60(int p1, int p2, CollisionInfo* p3, CollisionInfo* p4)
             k2c0.unk21 = 1;
             k2c0.unk24 = 0;
             k2c0.unk2c = b1d0.unkc1;
-            ((CGame*)*(int*)((char*)this + 0x1c))->CreateEffect((EffectDesc*)&k2c0);
+            m_game->CreateEffect((EffectDesc*)&k2c0);
             if (*(int*)((char*)p2 + 0x108) <= 0 && *(short*)((char*)p2 + 0x140) == 0) {
                 *(short*)((char*)p2 + 8) = b1d0.unkac;
                 ((CPlayer*)p2)->Vf0();
@@ -1480,7 +1480,7 @@ void CScene3::Unk7697d0(int p1, int p2, int p3, CollisionInfo* p4)
                 k168.unk24 = 0;
                 k168.type = 0x11;
                 k168.unk2c = 0xa;
-                ((CGame*)*(int*)((char*)this + 0x1c))->CreateEffect((EffectDesc*)&k168);
+                m_game->CreateEffect((EffectDesc*)&k168);
                 ((CPlayer*)p2)->Vf0();
                 *((char*)p2 + 0x50) = -*(k14 + 0x48);
                 if (*(double*)((char*)p2 + 0x28) == 0.0) {
@@ -1509,7 +1509,7 @@ void CScene3::Unk7697d0(int p1, int p2, int p3, CollisionInfo* p4)
                 k168.unk24 = 0;
                 k168.type = 0x11;
                 k168.unk2c = 0xa;
-                ((CGame*)*(int*)((char*)this + 0x1c))->CreateEffect((EffectDesc*)&k168);
+                m_game->CreateEffect((EffectDesc*)&k168);
                 ((CPlayer*)p2)->Vf0();
                 *((char*)p2 + 0x50) = -*(k14 + 0x48);
                 *(short*)((char*)p2 + 8) = 0xaa;
@@ -1533,7 +1533,7 @@ void CScene3::Unk7697d0(int p1, int p2, int p3, CollisionInfo* p4)
                 k168.unk24 = 0;
                 k168.type = 0x11;
                 k168.unk2c = 0xa;
-                ((CGame*)*(int*)((char*)this + 0x1c))->CreateEffect((EffectDesc*)&k168);
+                m_game->CreateEffect((EffectDesc*)&k168);
                 ((CPlayer*)p2)->Vf0();
                 *((char*)p2 + 0x50) = -*(k14 + 0x48);
                 *(short*)((char*)p2 + 8) = (*((char*)p2 + 0x189) == 1) + 0xa8;
@@ -1554,7 +1554,7 @@ void CScene3::Unk7697d0(int p1, int p2, int p3, CollisionInfo* p4)
                 k168.unk24 = 0;
                 k168.type = 2;
                 k168.unk2c = 3;
-                ((CGame*)*(int*)((char*)this + 0x1c))->CreateEffect((EffectDesc*)&k168);
+                m_game->CreateEffect((EffectDesc*)&k168);
                 *(int*)((char*)p1 + 0x168) = 2;
                 *(short*)((char*)p1 + 0x14a) = *(short*)(x8 + 0xc2);
                 *(short*)((char*)p2 + 0x14a) = *(short*)(x8 + 0xc4);
@@ -1579,7 +1579,7 @@ void CScene3::Unk7697d0(int p1, int p2, int p3, CollisionInfo* p4)
                 k168.unk24 = 0;
                 k168.type = 2;
                 k168.unk2c = 3;
-                ((CGame*)*(int*)((char*)this + 0x1c))->CreateEffect((EffectDesc*)&k168);
+                m_game->CreateEffect((EffectDesc*)&k168);
                 *(int*)((char*)p1 + 0x168) = 2;
                 *(short*)((char*)p1 + 0x14a) = *(short*)(x8 + 0xc2);
                 *(short*)((char*)p2 + 0x14a) = *(short*)(x8 + 0xc4);
@@ -1604,7 +1604,7 @@ void CScene3::Unk7697d0(int p1, int p2, int p3, CollisionInfo* p4)
                 k168.unk24 = 0;
                 k168.type = 2;
                 k168.unk2c = 3;
-                ((CGame*)*(int*)((char*)this + 0x1c))->CreateEffect((EffectDesc*)&k168);
+                m_game->CreateEffect((EffectDesc*)&k168);
                 *(int*)((char*)p1 + 0x168) = 2;
                 *(short*)((char*)p1 + 0x14a) = *(short*)(x8 + 0xc2);
                 *(short*)((char*)p2 + 0x14a) = *(short*)(x8 + 0xc4);
@@ -1657,7 +1657,7 @@ void CScene3::Unk7697d0(int p1, int p2, int p3, CollisionInfo* p4)
                 *(int*)((char*)p2 + 0x154) = 1;
                 k168.type = 2;
                 k168.unk2c = 3;
-                ((CGame*)*(int*)((char*)this + 0x1c))->CreateEffect((EffectDesc*)&k168);
+                m_game->CreateEffect((EffectDesc*)&k168);
                 return;
             }
             if ((*(WORD*)(l4 + 0xb0) & 4) == 0 && *(short*)((char*)p2 + 0x138) == 0 || ((*(WORD*)(l4 + 0xb0) & 4) > 0 || *(short*)((char*)p2 + 0x138) > 0) && (*(WORD*)(x8 + 0xaa) & 0x100) > 0 || (*(WORD*)(x8 + 0xaa) & 0x40) > 0) {
@@ -1727,7 +1727,7 @@ void CScene3::Unk7697d0(int p1, int p2, int p3, CollisionInfo* p4)
             k168.unk21 = 1;
             k168.unk24 = 0;
             k168.unk2c = *(x8 + 0xc1);
-            ((CGame*)*(int*)((char*)this + 0x1c))->CreateEffect((EffectDesc*)&k168);
+            m_game->CreateEffect((EffectDesc*)&k168);
             if (*(int*)((char*)p2 + 0x108) <= 0 && *(short*)((char*)p2 + 0x140) == 0) {
                 *(short*)((char*)p2 + 8) = *(short*)(x8 + 0xac);
                 ((CPlayer*)p2)->Vf0();
@@ -1887,7 +1887,7 @@ void CScene3::Unk76b090(int p1, int p2, int p3, int p4)
             v158.unk21 = 1;
             v158.unk24 = 0;
             v158.unk2c = *(x8 + 0xc1);
-            ((CGame*)*(int*)((char*)this + 0x1c))->CreateEffect((EffectDesc*)&v158);
+            m_game->CreateEffect((EffectDesc*)&v158);
         }
     }
 }
@@ -2001,7 +2001,7 @@ void CScene3::Unk76bd40(int p1, int p2, CollisionInfo* p3, CollisionInfo* p4, in
             }
             *(int*)(l10 + 0x80) = 5;
             if ((n118.flagsB0 & 0x2000) > 0) {
-                n118 = *(PatternFrame*)(char*)p4;
+                n118 = p4->frame;
                 if ((n118.flagsB0 & 4) == 0 && *(short*)((char*)p2 + 0x138) == 0 || ((n118.flagsB0 & 4) > 0 || *(short*)((char*)p2 + 0x138) > 0) && (*(WORD*)(l4 + 0xaa) & 0x100) > 0 || (*(WORD*)(l4 + 0xaa) & 0x40) > 0) {
                     if (*(double*)((char*)p2 + 0x28) >= 0.0) {
                         if (*(short*)(l4 + 0xae) > 0) {
@@ -2074,7 +2074,7 @@ void CScene3::Unk76bd40(int p1, int p2, CollisionInfo* p3, CollisionInfo* p4, in
             n218.unk21 = 1;
             n218.unk24 = 0;
             n218.unk2c = *(l4 + 0xc1);
-            ((CGame*)*(int*)((char*)this + 0x1c))->CreateEffect((EffectDesc*)&n218);
+            m_game->CreateEffect((EffectDesc*)&n218);
         }
     }
 }
