@@ -2164,7 +2164,7 @@ void CMishio::UpdateObjects()
                         l50.y = (double)((int)m_objects[v4].y + 0x32 - (WORD)Random(0, 0x64));
                         l50.scale = 2;
                         l50.layer = 1;
-                        l50.unk18 = facing;
+                        l50.facing = facing;
                         SpawnObject(&l50);
                         unk3174[v4] = 0xf;
                     }
@@ -2230,7 +2230,7 @@ void CMishio::UpdateObjects()
                         l50.y = (double)((int)y - 0x50 - (WORD)Random(0, 0x32));
                         l50.scale = 2;
                         l50.layer = 1;
-                        l50.unk18 = facing;
+                        l50.facing = facing;
                         SpawnObject(&l50);
                         unk3174[v4] = 0xc;
                     }
@@ -2261,7 +2261,7 @@ void CMishio::UpdateObjects()
                         l50.y = (double)((int)y - 0x32 - (WORD)Random(0, 0x32));
                         l50.scale = 2;
                         l50.layer = 1;
-                        l50.unk18 = facing;
+                        l50.facing = facing;
                         SpawnObject(&l50);
                         unk3174[v4] = 0xc;
                     }
@@ -2292,7 +2292,7 @@ void CMishio::UpdateObjects()
                         l50.y = (double)((int)y - 0x14 - (WORD)Random(0, 0x32));
                         l50.scale = 2;
                         l50.layer = 1;
-                        l50.unk18 = facing;
+                        l50.facing = facing;
                         SpawnObject(&l50);
                         unk3174[v4] = 0xc;
                     }
@@ -2323,7 +2323,7 @@ void CMishio::UpdateObjects()
                         l50.y = (double)((int)y + 0x19 - (WORD)Random(0, 0x32));
                         l50.scale = 2;
                         l50.layer = 1;
-                        l50.unk18 = facing;
+                        l50.facing = facing;
                         SpawnObject(&l50);
                         unk3174[v4] = 0xc;
                     }
@@ -2354,7 +2354,7 @@ void CMishio::UpdateObjects()
                         l50.y = (double)((int)y + 0x14 - (WORD)Random(0, 0x32));
                         l50.scale = 2;
                         l50.layer = 1;
-                        l50.unk18 = facing;
+                        l50.facing = facing;
                         SpawnObject(&l50);
                         unk3174[v4] = 0xc;
                     }
@@ -2938,7 +2938,7 @@ void CMishio::UpdateObjects()
                 l50.y = (int)y - 0x32 + m_objects[v4].vy;
                 l50.scale = 2;
                 l50.layer = 1;
-                l50.unk18 = facing;
+                l50.facing = facing;
                 SpawnObject(&l50);
                 m_objects[v4].vx = 0.0;
                 m_objects[v4].vy = 0.0;
@@ -2971,7 +2971,7 @@ void CMishio::UpdateObjects()
                 l50.y = (int)y - 0x32 + m_objects[v4].vy;
                 l50.scale = 2;
                 l50.layer = 1;
-                l50.unk18 = facing;
+                l50.facing = facing;
                 SpawnObject(&l50);
                 m_objects[v4].vx = 0.0;
                 m_objects[v4].vy = 0.0;
@@ -3026,7 +3026,7 @@ void CMishio::UpdateObjects()
                     l50.y = (double)((int)m_objects[v4].y + 0x32 - (WORD)Random(0, 0x64));
                     l50.scale = 2;
                     l50.layer = 1;
-                    l50.unk18 = facing;
+                    l50.facing = facing;
                     SpawnObject(&l50);
                 }
                 m_objects[v4].timer++;
@@ -3056,7 +3056,7 @@ void CMishio::UpdateObjects()
                     l50.y = (double)((int)m_objects[v4].y + 0x32 - (WORD)Random(0, 0x64));
                     l50.scale = 2;
                     l50.layer = 1;
-                    l50.unk18 = facing;
+                    l50.facing = facing;
                     SpawnObject(&l50);
                 }
                 m_objects[v4].timer++;
@@ -3094,7 +3094,7 @@ void CMishio::UpdateObjects()
                 l50.y = (int)y - 0x32 + m_objects[v4].vy;
                 l50.scale = 2;
                 l50.layer = 1;
-                l50.unk18 = facing;
+                l50.facing = facing;
                 SpawnObject(&l50);
                 m_objects[v4].vx = 0.0;
                 m_objects[v4].vy = 0.0;
@@ -3127,7 +3127,7 @@ void CMishio::UpdateObjects()
                 l50.y = (int)y - 0x32 + m_objects[v4].vy;
                 l50.scale = 2;
                 l50.layer = 1;
-                l50.unk18 = facing;
+                l50.facing = facing;
                 SpawnObject(&l50);
                 m_objects[v4].vx = 0.0;
                 m_objects[v4].vy = 0.0;
@@ -3163,70 +3163,70 @@ void CMishio::UpdateObjects()
                     l50.y = (double)((int)y - 4);
                     l50.scale = 0;
                     l50.layer = 1;
-                    l50.unk18 = facing;
+                    l50.facing = facing;
                     SpawnObject(&l50);
                     l50.type = 0x1f1;
                     l50.x = (double)((int)x - (facing << 2));
                     l50.y = (double)((int)y - 6);
                     l50.scale = 0;
                     l50.layer = 1;
-                    l50.unk18 = facing;
+                    l50.facing = facing;
                     SpawnObject(&l50);
                     l50.type = 0x1f1;
                     l50.x = (double)((int)x - facing * 0xe);
                     l50.y = (double)((int)y - 0x1a);
                     l50.scale = 0;
                     l50.layer = 1;
-                    l50.unk18 = facing;
+                    l50.facing = facing;
                     SpawnObject(&l50);
                     l50.type = 0x1f1;
                     l50.x = (double)(int)x;
                     l50.y = (double)(int)y;
                     l50.scale = 0;
                     l50.layer = 1;
-                    l50.unk18 = facing;
+                    l50.facing = facing;
                     SpawnObject(&l50);
                     l50.type = 0x1f1;
                     l50.x = (double)((int)x + facing * 0x1e);
                     l50.y = (double)((int)y - 0x28);
                     l50.scale = 0;
                     l50.layer = 1;
-                    l50.unk18 = facing;
+                    l50.facing = facing;
                     SpawnObject(&l50);
                     l50.type = 0x1f1;
                     l50.x = (double)((int)x - facing * 0x19);
                     l50.y = (double)((int)y - 0x50);
                     l50.scale = 0;
                     l50.layer = 1;
-                    l50.unk18 = facing;
+                    l50.facing = facing;
                     SpawnObject(&l50);
                     l50.type = 0x1f2;
                     l50.x = (double)((int)x - facing * 0x23);
                     l50.y = (double)((int)y - 0x2a);
                     l50.scale = 0;
                     l50.layer = 1;
-                    l50.unk18 = facing;
+                    l50.facing = facing;
                     SpawnObject(&l50);
                     l50.type = 0x1f2;
                     l50.x = (double)((int)x - facing * 0x12);
                     l50.y = (double)((int)y - 0x14);
                     l50.scale = 0;
                     l50.layer = 1;
-                    l50.unk18 = facing;
+                    l50.facing = facing;
                     SpawnObject(&l50);
                     l50.type = 0x1f2;
                     l50.x = (double)((int)x + facing * 2);
                     l50.y = (double)((int)y - 0x41);
                     l50.scale = 0;
                     l50.layer = 1;
-                    l50.unk18 = facing;
+                    l50.facing = facing;
                     SpawnObject(&l50);
                     l50.type = 0x1f2;
                     l50.x = (double)((int)x + (facing << 4));
                     l50.y = (double)((int)y - 0x50);
                     l50.scale = 0;
                     l50.layer = 1;
-                    l50.unk18 = facing;
+                    l50.facing = facing;
                     SpawnObject(&l50);
                     m_playSound = 0x22;
                     RemoveObject(v4);

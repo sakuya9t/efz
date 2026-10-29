@@ -1377,7 +1377,7 @@ void CNayukiB::UpdatePattern()
             l50.type = 0x1f3;
             l50.x = (double)(int)x;
             l50.y = (double)(int)y;
-            l50.unk18 = facing;
+            l50.facing = facing;
             l50.layer = 1;
             SpawnObject(&l50);
             m_gauge = m_gauge + 0x1e;
@@ -1464,7 +1464,7 @@ void CNayukiB::UpdatePattern()
                 l50.scale = 0;
                 l50.layer = 0;
                 l50.unk0 = 1;
-                l50.unk18 = facing;
+                l50.facing = facing;
                 SpawnObject(&l50);
                 unk3144 = 1;
             }
@@ -1516,7 +1516,7 @@ void CNayukiB::UpdatePattern()
                 l50.scale = 0;
                 l50.layer = 0;
                 l50.unk0 = 1;
-                l50.unk18 = facing;
+                l50.facing = facing;
                 SpawnObject(&l50);
                 unk3144 = 1;
             }
@@ -1568,7 +1568,7 @@ void CNayukiB::UpdatePattern()
                 l50.scale = 0;
                 l50.layer = 0;
                 l50.unk0 = 1;
-                l50.unk18 = facing;
+                l50.facing = facing;
                 SpawnObject(&l50);
                 unk3144 = 1;
             }
@@ -1611,7 +1611,7 @@ void CNayukiB::UpdatePattern()
                 l50.scale = 0;
                 l50.layer = 0;
                 l50.unk0 = 1;
-                l50.unk18 = facing;
+                l50.facing = facing;
                 SpawnObject(&l50);
                 unk3144 = 1;
             }
@@ -1652,7 +1652,7 @@ void CNayukiB::UpdatePattern()
             l50.x = 60.0;
             l50.y = 40.0;
             l50.screen = 1;
-            l50.unk18 = 1;
+            l50.facing = 1;
             l50.scale = 0;
             l50.layer = 0;
             SpawnObject(&l50);
@@ -4439,7 +4439,7 @@ void CNayukiB::UpdatePattern()
                 l50.scale = 2;
                 l50.unk0 = 1;
                 l50.layer = 1;
-                l50.unk18 = facing;
+                l50.facing = facing;
                 SpawnObject(&l50);
                 m_playVoice = 5;
                 l50.type = 0x1f;
@@ -4499,7 +4499,7 @@ void CNayukiB::UpdatePattern()
                 l50.scale = 2;
                 l50.unk0 = 1;
                 l50.layer = 1;
-                l50.unk18 = facing;
+                l50.facing = facing;
                 SpawnObject(&l50);
                 m_playVoice = 5;
                 l50.type = 0x1f;
@@ -4563,7 +4563,7 @@ void CNayukiB::UpdatePattern()
                 l50.scale = 2;
                 l50.unk0 = 1;
                 l50.layer = 1;
-                l50.unk18 = facing;
+                l50.facing = facing;
                 SpawnObject(&l50);
                 m_playVoice = 5;
                 l50.type = 0x1f;
@@ -4621,7 +4621,7 @@ void CNayukiB::UpdatePattern()
                 l50.scale = 2;
                 l50.unk0 = 1;
                 l50.layer = 1;
-                l50.unk18 = facing;
+                l50.facing = facing;
                 SpawnObject(&l50);
                 l50.type = 0x199;
                 l50.x = (double)((int)x - facing * 0x32);
@@ -4629,7 +4629,7 @@ void CNayukiB::UpdatePattern()
                 l50.scale = 2;
                 l50.unk0 = 1;
                 l50.layer = 1;
-                l50.unk18 = facing;
+                l50.facing = facing;
                 SpawnObject(&l50);
                 unk3154 = facing;
                 unk314c = 1;
@@ -4679,7 +4679,7 @@ void CNayukiB::UpdatePattern()
                 l50.scale = 2;
                 l50.unk0 = 1;
                 l50.layer = 1;
-                l50.unk18 = facing;
+                l50.facing = facing;
                 SpawnObject(&l50);
                 l50.type = 0x199;
                 l50.x = (double)((int)x - facing * 0x32);
@@ -4687,7 +4687,7 @@ void CNayukiB::UpdatePattern()
                 l50.scale = 2;
                 l50.unk0 = 1;
                 l50.layer = 1;
-                l50.unk18 = facing;
+                l50.facing = facing;
                 SpawnObject(&l50);
                 unk3154 = facing;
                 unk314c = 2;
@@ -4741,7 +4741,7 @@ void CNayukiB::UpdatePattern()
                 l50.scale = 2;
                 l50.unk0 = 1;
                 l50.layer = 1;
-                l50.unk18 = facing;
+                l50.facing = facing;
                 SpawnObject(&l50);
                 l50.type = 0x199;
                 l50.x = (double)((int)x - facing * 0x32);
@@ -4749,7 +4749,7 @@ void CNayukiB::UpdatePattern()
                 l50.scale = 2;
                 l50.unk0 = 1;
                 l50.layer = 1;
-                l50.unk18 = facing;
+                l50.facing = facing;
                 SpawnObject(&l50);
                 unk3154 = facing;
                 unk314c = 3;
@@ -4826,7 +4826,7 @@ void CNayukiB::UpdatePattern()
                 l50.scale = 0;
                 l50.unk0 = 1;
                 l50.layer = 1;
-                l50.unk18 = facing;
+                l50.facing = facing;
                 SpawnObject(&l50);
                 l50.type = 0x19d;
                 l50.x = (double)((int)x + facing * 0x3c);
@@ -4834,7 +4834,7 @@ void CNayukiB::UpdatePattern()
                 l50.scale = 0;
                 l50.unk0 = 1;
                 l50.layer = 1;
-                l50.unk18 = facing;
+                l50.facing = facing;
                 SpawnObject(&l50);
                 l50.type = 0x19e;
                 l50.x = (double)((int)x + facing * 0x3c);
@@ -4842,7 +4842,7 @@ void CNayukiB::UpdatePattern()
                 l50.scale = 0;
                 l50.unk0 = 1;
                 l50.layer = 1;
-                l50.unk18 = facing;
+                l50.facing = facing;
                 SpawnObject(&l50);
                 l50.type = 0x19f;
                 l50.x = (double)((int)x + facing * 0x3c);
@@ -4850,7 +4850,7 @@ void CNayukiB::UpdatePattern()
                 l50.scale = 0;
                 l50.unk0 = 1;
                 l50.layer = 1;
-                l50.unk18 = facing;
+                l50.facing = facing;
                 SpawnObject(&l50);
                 l50.type = 0x1a1;
                 l50.x = (double)((int)x + facing * 0x3c);
@@ -4858,7 +4858,7 @@ void CNayukiB::UpdatePattern()
                 l50.scale = 0;
                 l50.unk0 = 1;
                 l50.layer = 1;
-                l50.unk18 = facing;
+                l50.facing = facing;
                 SpawnObject(&l50);
                 l50.type = 0x1a2;
                 l50.x = (double)((int)x + facing * 0x3c);
@@ -4866,7 +4866,7 @@ void CNayukiB::UpdatePattern()
                 l50.scale = 0;
                 l50.unk0 = 1;
                 l50.layer = 1;
-                l50.unk18 = facing;
+                l50.facing = facing;
                 SpawnObject(&l50);
                 l50.type = 0x1a3;
                 if (facing == -1) {
@@ -4877,7 +4877,7 @@ void CNayukiB::UpdatePattern()
                 l50.scale = 0;
                 l50.unk0 = 1;
                 l50.layer = 1;
-                l50.unk18 = 1;
+                l50.facing = 1;
                 SpawnObject(&l50);
                 l50.type = 0x1a5;
                 l50.x = (double)((int)x + facing * 0x3c);
@@ -4885,7 +4885,7 @@ void CNayukiB::UpdatePattern()
                 l50.scale = 0;
                 l50.unk0 = 1;
                 l50.layer = 1;
-                l50.unk18 = 1;
+                l50.facing = 1;
                 SpawnObject(&l50);
                 l50.type = 0x1a7;
                 l50.x = (double)((int)x + facing * 0x3c);
@@ -4893,7 +4893,7 @@ void CNayukiB::UpdatePattern()
                 l50.scale = 0;
                 l50.unk0 = 1;
                 l50.layer = 1;
-                l50.unk18 = facing;
+                l50.facing = facing;
                 SpawnObject(&l50);
                 l50.type = 0x1a9;
                 l50.x = (double)((int)x + facing * 0x3c);
@@ -4901,7 +4901,7 @@ void CNayukiB::UpdatePattern()
                 l50.scale = 0;
                 l50.unk0 = 1;
                 l50.layer = 1;
-                l50.unk18 = facing;
+                l50.facing = facing;
                 SpawnObject(&l50);
             }
             m_attackResult = 0;

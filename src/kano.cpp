@@ -652,7 +652,7 @@ void CKano::Vf8()
         v48.type = 0x19b;
         v48.x = (double)(int)x;
         v48.y = y - 50.0;
-        v48.unk18 = 1;
+        v48.facing = 1;
         v48.scale = 0;
         v48.layer = 1;
         SpawnObject(&v48);
@@ -662,7 +662,7 @@ void CKano::Vf8()
         v48.type = 0x1c3;
         v48.x = (double)((int)x + 0x78 - (WORD)Random(0, 0xf0) - (int)(unk3164 * 192.0));
         v48.y = -480.0;
-        v48.unk18 = *(char*)&unk3164;
+        v48.facing = *(char*)&unk3164;
         v48.scale = 2;
         v48.layer = 1;
         v48.unk0 = 1;
@@ -1934,7 +1934,7 @@ void CKano::UpdateObjects()
                     l50.y = (double)(int)m_objects[v4].y;
                     l50.scale = 2;
                     l50.layer = 1;
-                    l50.unk18 = facing;
+                    l50.facing = facing;
                     SpawnObject(&l50);
                     unk316c--;
                     RemoveObject(v4);
@@ -1970,7 +1970,7 @@ void CKano::UpdateObjects()
                         l50.y = (double)(int)m_objects[v4].y;
                         l50.scale = 2;
                         l50.layer = 1;
-                        l50.unk18 = facing;
+                        l50.facing = facing;
                         SpawnObject(&l50);
                     }
                     if (m_objects[v4].frame >= v58) {
@@ -2011,7 +2011,7 @@ void CKano::UpdateObjects()
                     l50.y = (double)(int)m_objects[v4].y;
                     l50.scale = 2;
                     l50.layer = 1;
-                    l50.unk18 = facing;
+                    l50.facing = facing;
                     SpawnObject(&l50);
                     RemoveObject(v4);
                     break;
@@ -2150,7 +2150,7 @@ void CKano::UpdateObjects()
                     l50.y = (double)(int)m_objects[v4].y;
                     l50.scale = 2;
                     l50.layer = 1;
-                    l50.unk18 = facing;
+                    l50.facing = facing;
                     SpawnObject(&l50);
                     break;
                 }
@@ -2177,7 +2177,7 @@ void CKano::UpdateObjects()
                         l50.y = (double)(int)m_objects[v4].y;
                         l50.scale = 2;
                         l50.layer = 1;
-                        l50.unk18 = facing;
+                        l50.facing = facing;
                         SpawnObject(&l50);
                     }
                     if (unk3174[v4] == 1) {
@@ -2186,7 +2186,7 @@ void CKano::UpdateObjects()
                         l50.y = (double)((int)m_objects[v4].y - 0x28);
                         l50.scale = 2;
                         l50.layer = 1;
-                        l50.unk18 = facing;
+                        l50.facing = facing;
                         SpawnObject(&l50);
                     }
                     if (unk3174[v4] == 2) {
@@ -2195,7 +2195,7 @@ void CKano::UpdateObjects()
                         l50.y = (double)((int)m_objects[v4].y - 0x46);
                         l50.scale = 2;
                         l50.layer = 1;
-                        l50.unk18 = facing;
+                        l50.facing = facing;
                         SpawnObject(&l50);
                     }
                     if (unk3174[v4] == 3) {
@@ -2204,7 +2204,7 @@ void CKano::UpdateObjects()
                         l50.y = (double)((int)m_objects[v4].y + 0xa);
                         l50.scale = 2;
                         l50.layer = 1;
-                        l50.unk18 = facing;
+                        l50.facing = facing;
                         SpawnObject(&l50);
                     }
                     if (unk3174[v4] == 4) {
@@ -2213,7 +2213,7 @@ void CKano::UpdateObjects()
                         l50.y = (double)((int)m_objects[v4].y - 0x14);
                         l50.scale = 2;
                         l50.layer = 1;
-                        l50.unk18 = facing;
+                        l50.facing = facing;
                         SpawnObject(&l50);
                     }
                     if (unk3174[v4] == 5) {
@@ -2222,7 +2222,7 @@ void CKano::UpdateObjects()
                         l50.y = (double)(int)m_objects[v4].y;
                         l50.scale = 2;
                         l50.layer = 1;
-                        l50.unk18 = facing;
+                        l50.facing = facing;
                         SpawnObject(&l50);
                     }
                     unk3274[v4] = (WORD)Random(0, 3);
@@ -2279,7 +2279,7 @@ void CKano::UpdateObjects()
                         l50.y = (double)(int)m_objects[v4].y;
                         l50.scale = 2;
                         l50.layer = 1;
-                        l50.unk18 = facing;
+                        l50.facing = facing;
                         SpawnObject(&l50);
                         unk3274[v4] = 6;
                     }
@@ -2335,7 +2335,7 @@ void CKano::UpdateObjects()
                         l50.y = (double)(int)m_objects[v4].y;
                         l50.scale = 2;
                         l50.layer = 1;
-                        l50.unk18 = facing;
+                        l50.facing = facing;
                         SpawnObject(&l50);
                         unk3274[v4] = 6;
                     }
@@ -2391,7 +2391,7 @@ void CKano::UpdateObjects()
                         l50.y = (double)(int)m_objects[v4].y;
                         l50.scale = 2;
                         l50.layer = 1;
-                        l50.unk18 = facing;
+                        l50.facing = facing;
                         SpawnObject(&l50);
                         unk3274[v4] = 6;
                     }
@@ -2447,7 +2447,7 @@ void CKano::UpdateObjects()
                         l50.y = (double)(int)m_objects[v4].y;
                         l50.scale = 2;
                         l50.layer = 1;
-                        l50.unk18 = facing;
+                        l50.facing = facing;
                         SpawnObject(&l50);
                         unk3274[v4] = 6;
                     }
@@ -2503,7 +2503,7 @@ void CKano::UpdateObjects()
                         l50.y = (double)(int)m_objects[v4].y;
                         l50.scale = 2;
                         l50.layer = 1;
-                        l50.unk18 = facing;
+                        l50.facing = facing;
                         SpawnObject(&l50);
                         unk3274[v4] = 6;
                     }
@@ -2620,7 +2620,7 @@ void CKano::UpdateObjects()
                         l50.y = (double)((int)m_objects[v4].y + (WORD)Random(0, 0x14));
                         l50.scale = 2;
                         l50.layer = 1;
-                        l50.unk18 = facing;
+                        l50.facing = facing;
                         SpawnObject(&l50);
                         unk3174[v4]++;
                         unk3274[v4] = 0xf;
@@ -2641,7 +2641,7 @@ void CKano::UpdateObjects()
                             l50.y = (double)((int)m_objects[v4].y + -5 + (WORD)Random(0, 0xa));
                             l50.scale = 2;
                             l50.layer = 1;
-                            l50.unk18 = facing;
+                            l50.facing = facing;
                             SpawnObject(&l50);
                         }
                     }
@@ -2733,7 +2733,7 @@ void CKano::UpdateObjects()
                         l50.y = (double)((int)m_objects[v4].y + -0x32 + (WORD)Random(0, 0x64));
                         l50.scale = 2;
                         l50.layer = 1;
-                        l50.unk18 = facing;
+                        l50.facing = facing;
                         SpawnObject(&l50);
                         unk3374[v4] = 2;
                     }
@@ -2771,7 +2771,7 @@ void CKano::UpdateObjects()
                     l50.y = (double)(int)m_objects[v4].y;
                     l50.scale = 2;
                     l50.layer = 1;
-                    l50.unk18 = facing;
+                    l50.facing = facing;
                     SpawnObject(&l50);
                     m_playVoice = 0x13;
                 }
@@ -2841,7 +2841,7 @@ void CKano::UpdateObjects()
                         l50.y = (double)((int)m_objects[v4].y - (WORD)Random(0, 0x96));
                         l50.scale = 2;
                         l50.layer = 1;
-                        l50.unk18 = facing;
+                        l50.facing = facing;
                         SpawnObject(&l50);
                     }
                     if (m_objects[v4].frame >= v58) {
@@ -2889,7 +2889,7 @@ void CKano::UpdateObjects()
                     l50.y = (double)((int)m_objects[v4].y + (WORD)Random(0, 0x14));
                     l50.scale = 2;
                     l50.layer = 1;
-                    l50.unk18 = facing;
+                    l50.facing = facing;
                     SpawnObject(&l50);
                 }
                 m_objects[v4].timer++;
@@ -2910,7 +2910,7 @@ void CKano::UpdateObjects()
                     l50.y = (double)(int)m_objects[v4].y;
                     l50.scale = 2;
                     l50.layer = 1;
-                    l50.unk18 = facing;
+                    l50.facing = facing;
                     SpawnObject(&l50);
                     RemoveObject(v4);
                     unk3168--;
@@ -2942,7 +2942,7 @@ void CKano::UpdateObjects()
                     l50.y = (double)(int)m_objects[v4].y;
                     l50.scale = 2;
                     l50.layer = 1;
-                    l50.unk18 = facing;
+                    l50.facing = facing;
                     SpawnObject(&l50);
                     RemoveObject(v4);
                     unk3168--;
@@ -2974,7 +2974,7 @@ void CKano::UpdateObjects()
                     l50.y = (double)(int)m_objects[v4].y;
                     l50.scale = 2;
                     l50.layer = 1;
-                    l50.unk18 = facing;
+                    l50.facing = facing;
                     SpawnObject(&l50);
                     RemoveObject(v4);
                     unk3168--;
@@ -3006,7 +3006,7 @@ void CKano::UpdateObjects()
                     l50.y = (double)(int)m_objects[v4].y;
                     l50.scale = 2;
                     l50.layer = 1;
-                    l50.unk18 = facing;
+                    l50.facing = facing;
                     SpawnObject(&l50);
                     RemoveObject(v4);
                     unk3168--;
@@ -3038,7 +3038,7 @@ void CKano::UpdateObjects()
                     l50.y = (double)(int)m_objects[v4].y;
                     l50.scale = 2;
                     l50.layer = 1;
-                    l50.unk18 = facing;
+                    l50.facing = facing;
                     SpawnObject(&l50);
                     RemoveObject(v4);
                     unk3168--;
@@ -3077,7 +3077,7 @@ void CKano::UpdateObjects()
                     l50.y = (double)(int)m_objects[v4].y;
                     l50.scale = 2;
                     l50.layer = 1;
-                    l50.unk18 = facing;
+                    l50.facing = facing;
                     SpawnObject(&l50);
                     RemoveObject(v4);
                     unk3168--;
@@ -3151,7 +3151,7 @@ void CKano::UpdateObjects()
                     l50.scale = 2;
                     l50.layer = 1;
                     l50.unk0 = 1;
-                    l50.unk18 = facing;
+                    l50.facing = facing;
                     SpawnObject(&l50);
                     RemoveObject(v4);
                     break;
@@ -3186,7 +3186,7 @@ void CKano::UpdateObjects()
                     l50.y = (double)(int)m_objects[v4].y;
                     l50.scale = 2;
                     l50.layer = 1;
-                    l50.unk18 = facing;
+                    l50.facing = facing;
                     SpawnObject(&l50);
                     RemoveObject(v4);
                     unk3168--;
@@ -3259,7 +3259,7 @@ void CKano::UpdateObjects()
                     l50.y = (double)(int)m_objects[v4].y;
                     l50.scale = 2;
                     l50.layer = 1;
-                    l50.unk18 = facing;
+                    l50.facing = facing;
                     l50.unk0 = 1;
                     SpawnObject(&l50);
                     unk3168++;
@@ -3302,7 +3302,7 @@ void CKano::UpdateObjects()
                     l50.y = (double)(int)m_objects[v4].y;
                     l50.scale = 2;
                     l50.layer = 1;
-                    l50.unk18 = facing;
+                    l50.facing = facing;
                     SpawnObject(&l50);
                     RemoveObject(v4);
                     unk3168--;
@@ -3375,7 +3375,7 @@ void CKano::UpdateObjects()
                     l50.y = (double)(int)m_objects[v4].y;
                     l50.scale = 2;
                     l50.layer = 1;
-                    l50.unk18 = facing;
+                    l50.facing = facing;
                     l50.unk0 = 1;
                     SpawnObject(&l50);
                     unk3168++;
@@ -3406,7 +3406,7 @@ void CKano::UpdateObjects()
                     l50.y = (double)(int)m_objects[v4].y;
                     l50.scale = 2;
                     l50.layer = 1;
-                    l50.unk18 = facing;
+                    l50.facing = facing;
                     SpawnObject(&l50);
                 }
                 if (pattern > 0x31 && pattern < 0x96) {
@@ -3437,7 +3437,7 @@ void CKano::UpdateObjects()
                     l50.y = (double)(int)m_objects[v4].y;
                     l50.scale = 2;
                     l50.layer = 1;
-                    l50.unk18 = facing;
+                    l50.facing = facing;
                     SpawnObject(&l50);
                 }
                 if (pattern > 0x31 && pattern < 0x96) {
@@ -3468,7 +3468,7 @@ void CKano::UpdateObjects()
                     l50.y = (double)(int)m_objects[v4].y;
                     l50.scale = 2;
                     l50.layer = 1;
-                    l50.unk18 = facing;
+                    l50.facing = facing;
                     SpawnObject(&l50);
                 }
                 if (pattern > 0x31 && pattern < 0x96) {
@@ -3504,7 +3504,7 @@ void CKano::UpdateObjects()
                     l50.y = (double)((int)m_objects[v4].y + 0xf - (WORD)Random(0, 0x1e));
                     l50.scale = 2;
                     l50.layer = 1;
-                    l50.unk18 = facing;
+                    l50.facing = facing;
                     SpawnObject(&l50);
                     l50.type = 0x1bf;
                     SpawnObject(&l50);
@@ -3552,7 +3552,7 @@ void CKano::UpdateObjects()
                         l50.y = 0.0;
                         l50.scale = 2;
                         l50.layer = 0;
-                        l50.unk18 = facing;
+                        l50.facing = facing;
                         SpawnObject(&l50);
                     }
                     if (m_objects[v4].frame >= v58) {
@@ -3570,7 +3570,7 @@ void CKano::UpdateObjects()
                     l50.y = (double)(int)m_objects[v4].y;
                     l50.scale = 2;
                     l50.layer = 1;
-                    l50.unk18 = facing;
+                    l50.facing = facing;
                     SpawnObject(&l50);
                     l50.type = 0x1bf;
                     SpawnObject(&l50);
@@ -3624,15 +3624,15 @@ void CKano::UpdateObjects()
                     l50.y = 0.0;
                     l50.scale = 2;
                     l50.layer = 0;
-                    l50.unk18 = *(char*)&unk3164;
+                    l50.facing = *(char*)&unk3164;
                     SpawnObject(&l50);
                     l50.type = 0x1c4;
                     l50.layer = 1;
-                    l50.unk18 = *(char*)&unk3164;
+                    l50.facing = *(char*)&unk3164;
                     SpawnObject(&l50);
                     l50.type = 0x1c5;
                     l50.layer = 1;
-                    l50.unk18 = *(char*)&unk3164;
+                    l50.facing = *(char*)&unk3164;
                     SpawnObject(&l50);
                     RemoveObject(v4);
                     break;
@@ -3722,7 +3722,7 @@ void CKano::UpdateObjects()
                     }
                     l50.scale = 2;
                     l50.layer = 1;
-                    l50.unk18 = facing;
+                    l50.facing = facing;
                     SpawnObject(&l50);
                 }
                 m_objects[v4].timer++;
@@ -3788,70 +3788,70 @@ void CKano::UpdateObjects()
                     l50.y = (double)((int)y - 4);
                     l50.scale = 0;
                     l50.layer = 1;
-                    l50.unk18 = facing;
+                    l50.facing = facing;
                     SpawnObject(&l50);
                     l50.type = 0x1f1;
                     l50.x = (double)((int)x - (facing << 2));
                     l50.y = (double)((int)y - 6);
                     l50.scale = 0;
                     l50.layer = 1;
-                    l50.unk18 = facing;
+                    l50.facing = facing;
                     SpawnObject(&l50);
                     l50.type = 0x1f1;
                     l50.x = (double)((int)x - facing * 0xe);
                     l50.y = (double)((int)y - 0x1a);
                     l50.scale = 0;
                     l50.layer = 1;
-                    l50.unk18 = facing;
+                    l50.facing = facing;
                     SpawnObject(&l50);
                     l50.type = 0x1f1;
                     l50.x = (double)(int)x;
                     l50.y = (double)(int)y;
                     l50.scale = 0;
                     l50.layer = 1;
-                    l50.unk18 = facing;
+                    l50.facing = facing;
                     SpawnObject(&l50);
                     l50.type = 0x1f1;
                     l50.x = (double)((int)x + facing * 0x1e);
                     l50.y = (double)((int)y - 0x28);
                     l50.scale = 0;
                     l50.layer = 1;
-                    l50.unk18 = facing;
+                    l50.facing = facing;
                     SpawnObject(&l50);
                     l50.type = 0x1f1;
                     l50.x = (double)((int)x - facing * 0x19);
                     l50.y = (double)((int)y - 0x50);
                     l50.scale = 0;
                     l50.layer = 1;
-                    l50.unk18 = facing;
+                    l50.facing = facing;
                     SpawnObject(&l50);
                     l50.type = 0x1f2;
                     l50.x = (double)((int)x - facing * 0x23);
                     l50.y = (double)((int)y - 0x2a);
                     l50.scale = 0;
                     l50.layer = 1;
-                    l50.unk18 = facing;
+                    l50.facing = facing;
                     SpawnObject(&l50);
                     l50.type = 0x1f2;
                     l50.x = (double)((int)x - facing * 0x12);
                     l50.y = (double)((int)y - 0x14);
                     l50.scale = 0;
                     l50.layer = 1;
-                    l50.unk18 = facing;
+                    l50.facing = facing;
                     SpawnObject(&l50);
                     l50.type = 0x1f2;
                     l50.x = (double)((int)x + facing * 2);
                     l50.y = (double)((int)y - 0x41);
                     l50.scale = 0;
                     l50.layer = 1;
-                    l50.unk18 = facing;
+                    l50.facing = facing;
                     SpawnObject(&l50);
                     l50.type = 0x1f2;
                     l50.x = (double)((int)x + (facing << 4));
                     l50.y = (double)((int)y - 0x50);
                     l50.scale = 0;
                     l50.layer = 1;
-                    l50.unk18 = facing;
+                    l50.facing = facing;
                     SpawnObject(&l50);
                     m_playSound = 0x22;
                     RemoveObject(v4);

@@ -1367,7 +1367,7 @@ void CMinagi::UpdatePattern()
             l50.type = 0x1f3;
             l50.x = (double)(int)x;
             l50.y = (double)(int)y;
-            l50.unk18 = facing;
+            l50.facing = facing;
             l50.layer = 1;
             SpawnObject(&l50);
             m_gauge = m_gauge + 0x1e;
@@ -1454,7 +1454,7 @@ void CMinagi::UpdatePattern()
                 l50.scale = 0;
                 l50.layer = 0;
                 l50.unk0 = 1;
-                l50.unk18 = facing;
+                l50.facing = facing;
                 SpawnObject(&l50);
                 unk3144 = 1;
             }
@@ -1506,7 +1506,7 @@ void CMinagi::UpdatePattern()
                 l50.scale = 0;
                 l50.layer = 0;
                 l50.unk0 = 1;
-                l50.unk18 = facing;
+                l50.facing = facing;
                 SpawnObject(&l50);
                 unk3144 = 1;
             }
@@ -1558,7 +1558,7 @@ void CMinagi::UpdatePattern()
                 l50.scale = 0;
                 l50.layer = 0;
                 l50.unk0 = 1;
-                l50.unk18 = facing;
+                l50.facing = facing;
                 SpawnObject(&l50);
                 unk3144 = 1;
             }
@@ -1601,7 +1601,7 @@ void CMinagi::UpdatePattern()
                 l50.scale = 0;
                 l50.layer = 0;
                 l50.unk0 = 1;
-                l50.unk18 = facing;
+                l50.facing = facing;
                 SpawnObject(&l50);
                 unk3144 = 1;
             }
@@ -1642,7 +1642,7 @@ void CMinagi::UpdatePattern()
             l50.x = 60.0;
             l50.y = 40.0;
             l50.screen = 1;
-            l50.unk18 = 1;
+            l50.facing = 1;
             l50.scale = 0;
             l50.layer = 0;
             SpawnObject(&l50);
@@ -3411,7 +3411,7 @@ void CMinagi::UpdatePattern()
                 l50.type = 0x1c5;
                 l50.x = facing * 6 + x;
                 l50.y = y - 14.0;
-                l50.unk18 = facing;
+                l50.facing = facing;
                 l50.layer = 1;
                 l50.scale = 0;
                 l50.unk0 = 1;
@@ -3677,7 +3677,7 @@ void CMinagi::UpdatePattern()
                 l50.type = 0x1ad;
                 l50.x = facing * 0x41 + x;
                 l50.y = y - 54.0;
-                l50.unk18 = facing;
+                l50.facing = facing;
                 l50.layer = 1;
                 l50.unk0 = 1;
                 unk314c++;
@@ -3703,7 +3703,7 @@ void CMinagi::UpdatePattern()
                 l50.type = 0x1ae;
                 l50.x = facing * 0x41 + x;
                 l50.y = y - 54.0;
-                l50.unk18 = facing;
+                l50.facing = facing;
                 l50.layer = 1;
                 l50.unk0 = 1;
                 unk314c++;
@@ -3743,7 +3743,7 @@ void CMinagi::UpdatePattern()
                 l50.type = 0x1af;
                 l50.x = facing * 0x41 + x;
                 l50.y = y - 54.0;
-                l50.unk18 = facing;
+                l50.facing = facing;
                 l50.layer = 1;
                 l50.unk0 = 1;
                 SpawnObject(&l50);
@@ -4450,7 +4450,7 @@ void CMinagi::UpdatePattern()
                 l50.x = (double)((int)x + facing * 0x1e);
                 l50.y = (double)((int)y - 0x32);
                 l50.scale = 2;
-                l50.unk18 = facing;
+                l50.facing = facing;
                 l50.layer = 1;
                 SpawnObject(&l50);
                 unk3138 = 0x1e;
@@ -4500,7 +4500,7 @@ void CMinagi::UpdatePattern()
                 l50.x = (double)((int)x + facing * 0x1e);
                 l50.y = (double)((int)y - 0x32);
                 l50.scale = 2;
-                l50.unk18 = facing;
+                l50.facing = facing;
                 l50.layer = 1;
                 SpawnObject(&l50);
                 unk3138 = 0x15;
@@ -4554,7 +4554,7 @@ void CMinagi::UpdatePattern()
                 l50.x = (double)((int)x + facing * 0x1e);
                 l50.y = (double)((int)y - 0x32);
                 l50.scale = 2;
-                l50.unk18 = facing;
+                l50.facing = facing;
                 l50.layer = 1;
                 SpawnObject(&l50);
                 unk3138 = 0xc;

@@ -1375,7 +1375,7 @@ void CNanase::UpdatePattern()
             l50.type = 0x1f3;
             l50.x = (double)(int)x;
             l50.y = (double)(int)y;
-            l50.unk18 = facing;
+            l50.facing = facing;
             l50.layer = 1;
             SpawnObject(&l50);
             m_gauge = m_gauge + 0x1e;
@@ -1462,7 +1462,7 @@ void CNanase::UpdatePattern()
                 l50.scale = 0;
                 l50.layer = 0;
                 l50.unk0 = 1;
-                l50.unk18 = facing;
+                l50.facing = facing;
                 SpawnObject(&l50);
                 unk3144 = 1;
             }
@@ -1514,7 +1514,7 @@ void CNanase::UpdatePattern()
                 l50.scale = 0;
                 l50.layer = 0;
                 l50.unk0 = 1;
-                l50.unk18 = facing;
+                l50.facing = facing;
                 SpawnObject(&l50);
                 unk3144 = 1;
             }
@@ -1566,7 +1566,7 @@ void CNanase::UpdatePattern()
                 l50.scale = 0;
                 l50.layer = 0;
                 l50.unk0 = 1;
-                l50.unk18 = facing;
+                l50.facing = facing;
                 SpawnObject(&l50);
                 unk3144 = 1;
             }
@@ -1609,7 +1609,7 @@ void CNanase::UpdatePattern()
                 l50.scale = 0;
                 l50.layer = 0;
                 l50.unk0 = 1;
-                l50.unk18 = facing;
+                l50.facing = facing;
                 SpawnObject(&l50);
                 unk3144 = 1;
             }
@@ -1650,7 +1650,7 @@ void CNanase::UpdatePattern()
             l50.x = 60.0;
             l50.y = 40.0;
             l50.screen = 1;
-            l50.unk18 = 1;
+            l50.facing = 1;
             l50.scale = 0;
             l50.layer = 1;
             SpawnObject(&l50);
@@ -3886,7 +3886,7 @@ void CNanase::UpdatePattern()
             l50.type = 0x190;
             l50.x = (double)((int)x + facing * 0x4b);
             l50.y = (double)((int)y - 0x2c);
-            l50.unk18 = facing;
+            l50.facing = facing;
             l50.layer = 0;
             l50.unk28 = 1;
             l50.unk0 = 1;
@@ -3895,7 +3895,7 @@ void CNanase::UpdatePattern()
             l50.type = 0x191;
             l50.x = (double)((int)x + facing * 0x4b);
             l50.y = (double)((int)y - 0x2c);
-            l50.unk18 = facing;
+            l50.facing = facing;
             l50.layer = 1;
             l50.scale = 2;
             SpawnObject(&l50);
@@ -3945,7 +3945,7 @@ void CNanase::UpdatePattern()
             l50.type = 0x190;
             l50.x = (double)((int)x + facing * 0x4b);
             l50.y = (double)((int)y - 0x2c);
-            l50.unk18 = facing;
+            l50.facing = facing;
             l50.layer = 0;
             l50.scale = 0;
             l50.unk0 = 1;
@@ -3954,7 +3954,7 @@ void CNanase::UpdatePattern()
             l50.type = 0x191;
             l50.x = (double)((int)x + facing * 0x4b);
             l50.y = (double)((int)y - 0x2c);
-            l50.unk18 = facing;
+            l50.facing = facing;
             l50.layer = 1;
             l50.scale = 2;
             SpawnObject(&l50);
@@ -4032,7 +4032,7 @@ void CNanase::UpdatePattern()
             l50.type = 0x19d;
             l50.x = (double)((int)x + facing * 0x4b);
             l50.y = (double)((int)y - 0x2c);
-            l50.unk18 = facing;
+            l50.facing = facing;
             l50.layer = 0;
             l50.scale = 0;
             l50.unk0 = 1;
@@ -4041,7 +4041,7 @@ void CNanase::UpdatePattern()
             l50.type = 0x191;
             l50.x = (double)((int)x + facing * 0x4b);
             l50.y = (double)((int)y - 0x2c);
-            l50.unk18 = facing;
+            l50.facing = facing;
             l50.layer = 1;
             l50.scale = 2;
             SpawnObject(&l50);
@@ -4091,7 +4091,7 @@ void CNanase::UpdatePattern()
             l50.type = (WORD)Random(0, 1) + 0x199;
             l50.x = (double)(int)(facing * (0x28 - (WORD)Random(0, 0x46)) + x);
             l50.y = (double)(int)y;
-            l50.unk18 = facing;
+            l50.facing = facing;
             l50.layer = 1;
             l50.scale = 0;
             SpawnObject(&l50);
@@ -4166,7 +4166,7 @@ void CNanase::UpdatePattern()
             l50.type = (WORD)Random(0, 1) + 0x199;
             l50.x = (double)(int)(facing * (0x28 - (WORD)Random(0, 0x46)) + x);
             l50.y = (double)(int)y;
-            l50.unk18 = facing;
+            l50.facing = facing;
             l50.layer = 1;
             l50.scale = 0;
             SpawnObject(&l50);
@@ -4261,7 +4261,7 @@ void CNanase::UpdatePattern()
             l50.type = 0x1ad;
             l50.x = (double)((int)x + (facing << 4));
             l50.y = (double)(int)y;
-            l50.unk18 = facing;
+            l50.facing = facing;
             l50.layer = 1;
             l50.scale = 0;
             SpawnObject(&l50);
@@ -4557,7 +4557,7 @@ void CNanase::UpdatePattern()
             l50.type = 0x19c;
             l50.x = (double)(int)x;
             l50.y = (double)((int)y - 0x26);
-            l50.unk18 = facing;
+            l50.facing = facing;
             l50.layer = 1;
             l50.scale = 2;
             SpawnObject(&l50);
@@ -4647,7 +4647,7 @@ void CNanase::UpdatePattern()
                 l50.type = 0x1af;
                 l50.x = (double)(int)x;
                 l50.y = (double)((int)y - 0x26);
-                l50.unk18 = facing;
+                l50.facing = facing;
                 l50.layer = 0;
                 l50.scale = 2;
                 l50.unk0 = 1;
@@ -4696,7 +4696,7 @@ void CNanase::UpdatePattern()
             l50.type = 0x1a3;
             l50.x = (double)((int)x + facing * 0x28);
             l50.y = (double)((int)y - 0x28);
-            l50.unk18 = facing;
+            l50.facing = facing;
             l50.scale = 0;
             l50.unk0 = 1;
             l50.layer = 1;
@@ -4705,7 +4705,7 @@ void CNanase::UpdatePattern()
             l50.type = 0x1a7;
             l50.scale = 2;
             l50.unk0 = 1;
-            l50.unk18 = facing;
+            l50.facing = facing;
             SpawnObject(&l50);
             unk344c = 1;
             Unk48e140(1);
@@ -4748,7 +4748,7 @@ void CNanase::UpdatePattern()
             l50.type = 0x1a4;
             l50.x = (double)((int)x + facing * 0x28);
             l50.y = (double)((int)y - 0x28);
-            l50.unk18 = facing;
+            l50.facing = facing;
             l50.scale = 0;
             l50.unk0 = 1;
             l50.layer = 1;
@@ -4757,7 +4757,7 @@ void CNanase::UpdatePattern()
             l50.type = 0x1a7;
             l50.scale = 2;
             l50.unk0 = 1;
-            l50.unk18 = facing;
+            l50.facing = facing;
             SpawnObject(&l50);
             unk344c = 1;
             Unk48e140(1);
@@ -4804,7 +4804,7 @@ void CNanase::UpdatePattern()
             l50.type = 0x1ac;
             l50.x = (double)((int)x + facing * 0x28);
             l50.y = (double)((int)y - 0x28);
-            l50.unk18 = facing;
+            l50.facing = facing;
             l50.scale = 0;
             l50.unk0 = 1;
             l50.layer = 1;
@@ -4813,7 +4813,7 @@ void CNanase::UpdatePattern()
             l50.type = 0x1a7;
             l50.scale = 2;
             l50.unk0 = 1;
-            l50.unk18 = facing;
+            l50.facing = facing;
             SpawnObject(&l50);
             unk344c = 1;
             Unk48e140(1);
@@ -6195,7 +6195,7 @@ void CNanase::Unk47c130()
             l50.type = 0x1f3;
             l50.x = (double)(int)x;
             l50.y = (double)(int)y;
-            l50.unk18 = facing;
+            l50.facing = facing;
             l50.layer = 1;
             SpawnObject(&l50);
             m_gauge = m_gauge + 0x1e;
@@ -6282,7 +6282,7 @@ void CNanase::Unk47c130()
                 l50.scale = 0;
                 l50.layer = 0;
                 l50.unk0 = 1;
-                l50.unk18 = facing;
+                l50.facing = facing;
                 SpawnObject(&l50);
                 unk3144 = 1;
             }
@@ -6334,7 +6334,7 @@ void CNanase::Unk47c130()
                 l50.scale = 0;
                 l50.layer = 0;
                 l50.unk0 = 1;
-                l50.unk18 = facing;
+                l50.facing = facing;
                 SpawnObject(&l50);
                 unk3144 = 1;
             }
@@ -6386,7 +6386,7 @@ void CNanase::Unk47c130()
                 l50.scale = 0;
                 l50.layer = 0;
                 l50.unk0 = 1;
-                l50.unk18 = facing;
+                l50.facing = facing;
                 SpawnObject(&l50);
                 unk3144 = 1;
             }
@@ -6429,7 +6429,7 @@ void CNanase::Unk47c130()
                 l50.scale = 0;
                 l50.layer = 0;
                 l50.unk0 = 1;
-                l50.unk18 = facing;
+                l50.facing = facing;
                 SpawnObject(&l50);
                 unk3144 = 1;
             }
@@ -6470,7 +6470,7 @@ void CNanase::Unk47c130()
             l50.x = 60.0;
             l50.y = 40.0;
             l50.screen = 1;
-            l50.unk18 = 1;
+            l50.facing = 1;
             l50.scale = 0;
             l50.layer = 1;
             SpawnObject(&l50);
@@ -8684,14 +8684,14 @@ void CNanase::Unk47c130()
             l50.type = 0x190;
             l50.x = (double)((int)x + facing * 0x4b);
             l50.y = (double)((int)y - 0x2c);
-            l50.unk18 = facing;
+            l50.facing = facing;
             l50.layer = 0;
             l50.scale = 0;
             SpawnObject(&l50);
             l50.type = 0x191;
             l50.x = (double)((int)x + facing * 0x4b);
             l50.y = (double)((int)y - 0x2c);
-            l50.unk18 = facing;
+            l50.facing = facing;
             l50.layer = 1;
             l50.scale = 2;
             SpawnObject(&l50);
@@ -8733,14 +8733,14 @@ void CNanase::Unk47c130()
             l50.type = 0x190;
             l50.x = (double)((int)x + facing * 0x4b);
             l50.y = (double)((int)y - 0x2c);
-            l50.unk18 = facing;
+            l50.facing = facing;
             l50.layer = 0;
             l50.scale = 0;
             SpawnObject(&l50);
             l50.type = 0x191;
             l50.x = (double)((int)x + facing * 0x4b);
             l50.y = (double)((int)y - 0x2c);
-            l50.unk18 = facing;
+            l50.facing = facing;
             l50.layer = 1;
             l50.scale = 2;
             SpawnObject(&l50);
@@ -8782,14 +8782,14 @@ void CNanase::Unk47c130()
             l50.type = 0x195;
             l50.x = (double)((int)x + facing * 0x4b);
             l50.y = (double)((int)y - 0x2c);
-            l50.unk18 = facing;
+            l50.facing = facing;
             l50.layer = 0;
             l50.scale = 0;
             SpawnObject(&l50);
             l50.type = 0x191;
             l50.x = (double)((int)x + facing * 0x4b);
             l50.y = (double)((int)y - 0x2c);
-            l50.unk18 = facing;
+            l50.facing = facing;
             l50.layer = 1;
             l50.scale = 2;
             SpawnObject(&l50);
@@ -8825,7 +8825,7 @@ void CNanase::Unk47c130()
             l50.type = (WORD)Random(0, 3) + 0x195;
             l50.x = (double)(int)(facing * (0x28 - (WORD)Random(0, 0x46)) + x);
             l50.y = (double)(int)y;
-            l50.unk18 = facing;
+            l50.facing = facing;
             l50.layer = 1;
             l50.scale = 0;
             SpawnObject(&l50);
@@ -8892,7 +8892,7 @@ void CNanase::Unk47c130()
             l50.type = (WORD)Random(0, 3) + 0x195;
             l50.x = (double)(int)(facing * (0x28 - (WORD)Random(0, 0x46)) + x);
             l50.y = (double)(int)y;
-            l50.unk18 = facing;
+            l50.facing = facing;
             l50.layer = 1;
             l50.scale = 0;
             SpawnObject(&l50);
@@ -8983,7 +8983,7 @@ void CNanase::Unk47c130()
             l50.type = (WORD)Random(0, 3) + 0x195;
             l50.x = (double)(int)(facing * (0x28 - (WORD)Random(0, 0x46)) + x + unk3138 * 0x50 * facing);
             l50.y = (double)(int)y;
-            l50.unk18 = facing;
+            l50.facing = facing;
             l50.layer = 1;
             l50.scale = 0;
             SpawnObject(&l50);
@@ -9072,7 +9072,7 @@ void CNanase::Unk47c130()
                 l50.y = (double)((int)y - 0x30);
                 l50.scale = 2;
                 l50.layer = 1;
-                l50.unk18 = facing;
+                l50.facing = facing;
                 SpawnObject(&l50);
                 m_playVoice = 6;
             }
@@ -9095,7 +9095,7 @@ void CNanase::Unk47c130()
             l50.type = 0x195;
             l50.x = (double)((int)x + facing * 0x1e);
             l50.y = (double)((int)y - 0x1e);
-            l50.unk18 = facing;
+            l50.facing = facing;
             l50.layer = 1;
             l50.scale = 2;
             SpawnObject(&l50);
@@ -9127,7 +9127,7 @@ void CNanase::Unk47c130()
             l50.type = 0x195;
             l50.x = (double)((int)x + facing * 0x1e);
             l50.y = (double)((int)y - 0x1e);
-            l50.unk18 = facing;
+            l50.facing = facing;
             l50.layer = 1;
             l50.scale = 2;
             SpawnObject(&l50);
@@ -9365,7 +9365,7 @@ void CNanase::Unk47c130()
             l50.type = 0x19c;
             l50.x = (double)(int)x;
             l50.y = (double)((int)y - 0x26);
-            l50.unk18 = facing;
+            l50.facing = facing;
             l50.layer = 1;
             l50.scale = 2;
             SpawnObject(&l50);
@@ -9430,14 +9430,14 @@ void CNanase::Unk47c130()
             l50.type = 0x1a3;
             l50.x = (double)((int)x + facing * 0x28);
             l50.y = (double)((int)y - 0x28);
-            l50.unk18 = facing;
+            l50.facing = facing;
             l50.scale = 0;
             l50.unk0 = 1;
             l50.layer = 1;
             SpawnObject(&l50);
             l50.type = 0x1a7;
             l50.scale = 2;
-            l50.unk18 = facing;
+            l50.facing = facing;
             l50.unk0 = 1;
             l50.layer = 1;
             SpawnObject(&l50);
@@ -9481,7 +9481,7 @@ void CNanase::Unk47c130()
             l50.type = 0x1a4;
             l50.x = (double)((int)x + facing * 0x28);
             l50.y = (double)((int)y - 0x28);
-            l50.unk18 = facing;
+            l50.facing = facing;
             l50.scale = 0;
             l50.unk0 = 1;
             l50.layer = 1;
@@ -9490,7 +9490,7 @@ void CNanase::Unk47c130()
             l50.type = 0x1a7;
             l50.scale = 2;
             l50.unk0 = 1;
-            l50.unk18 = facing;
+            l50.facing = facing;
             SpawnObject(&l50);
             unk344c = 1;
             Unk48e140(1);
@@ -9537,7 +9537,7 @@ void CNanase::Unk47c130()
             l50.type = 0x1a5;
             l50.x = (double)((int)x + facing * 0x28);
             l50.y = (double)((int)y - 0x28);
-            l50.unk18 = facing;
+            l50.facing = facing;
             l50.scale = 0;
             l50.unk0 = 1;
             l50.layer = 1;
@@ -9546,7 +9546,7 @@ void CNanase::Unk47c130()
             l50.type = 0x1a7;
             l50.scale = 2;
             l50.unk0 = 1;
-            l50.unk18 = facing;
+            l50.facing = facing;
             SpawnObject(&l50);
             unk344c = 1;
             Unk48e140(1);

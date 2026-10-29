@@ -2099,7 +2099,7 @@ void CKanna::UpdatePattern()
             l50.type = 0x1f3;
             l50.x = (double)(int)x;
             l50.y = (double)(int)y;
-            l50.unk18 = facing;
+            l50.facing = facing;
             l50.layer = 1;
             SpawnObject(&l50);
             m_gauge = m_gauge + 0x1e;
@@ -2186,7 +2186,7 @@ void CKanna::UpdatePattern()
                 l50.scale = 0;
                 l50.layer = 0;
                 l50.unk0 = 1;
-                l50.unk18 = facing;
+                l50.facing = facing;
                 SpawnObject(&l50);
                 unk3144 = 1;
             }
@@ -2238,7 +2238,7 @@ void CKanna::UpdatePattern()
                 l50.scale = 0;
                 l50.layer = 0;
                 l50.unk0 = 1;
-                l50.unk18 = facing;
+                l50.facing = facing;
                 SpawnObject(&l50);
                 unk3144 = 1;
             }
@@ -2290,7 +2290,7 @@ void CKanna::UpdatePattern()
                 l50.scale = 0;
                 l50.layer = 0;
                 l50.unk0 = 1;
-                l50.unk18 = facing;
+                l50.facing = facing;
                 SpawnObject(&l50);
                 unk3144 = 1;
             }
@@ -2333,7 +2333,7 @@ void CKanna::UpdatePattern()
                 l50.scale = 0;
                 l50.layer = 0;
                 l50.unk0 = 1;
-                l50.unk18 = facing;
+                l50.facing = facing;
                 SpawnObject(&l50);
                 unk3144 = 1;
             }
@@ -2374,7 +2374,7 @@ void CKanna::UpdatePattern()
             l50.x = 60.0;
             l50.y = 40.0;
             l50.screen = 1;
-            l50.unk18 = 1;
+            l50.facing = 1;
             l50.scale = 0;
             l50.layer = 0;
             SpawnObject(&l50);
@@ -3257,7 +3257,7 @@ void CKanna::UpdatePattern()
             l50.scale = 2;
             l50.layer = 1;
             l50.unk0 = 1;
-            l50.unk18 = facing;
+            l50.facing = facing;
             SpawnObject(&l50);
         }
         if (m_inputY == -1 && frame > 0 && unk15c < 3 && m_attackResult >= 2) {
@@ -3313,7 +3313,7 @@ void CKanna::UpdatePattern()
             l50.y = (double)(int)y;
             l50.scale = 2;
             l50.layer = 1;
-            l50.unk18 = facing;
+            l50.facing = facing;
             l50.unk0 = 1;
             SpawnObject(&l50);
         }
@@ -3366,7 +3366,7 @@ void CKanna::UpdatePattern()
             l50.scale = 2;
             l50.layer = 1;
             l50.unk0 = 1;
-            l50.unk18 = facing;
+            l50.facing = facing;
             SpawnObject(&l50);
         }
         timer++;
@@ -3463,7 +3463,7 @@ void CKanna::UpdatePattern()
             l50.scale = 2;
             l50.layer = 1;
             l50.unk0 = 1;
-            l50.unk18 = facing;
+            l50.facing = facing;
             SpawnObject(&l50);
         }
         timer++;
@@ -3609,7 +3609,7 @@ void CKanna::UpdatePattern()
             l50.scale = 2;
             l50.layer = 1;
             l50.unk0 = 1;
-            l50.unk18 = facing;
+            l50.facing = facing;
             SpawnObject(&l50);
         }
         if (y + vy >= 0.0) {
@@ -3670,7 +3670,7 @@ void CKanna::UpdatePattern()
             l50.scale = 2;
             l50.layer = 1;
             l50.unk0 = 1;
-            l50.unk18 = facing;
+            l50.facing = facing;
             SpawnObject(&l50);
         }
         if (y + vy >= 0.0) {
@@ -4185,7 +4185,7 @@ void CKanna::UpdatePattern()
             l50.scale = 2;
             l50.layer = 1;
             l50.unk0 = 1;
-            l50.unk18 = facing;
+            l50.facing = facing;
             SpawnObject(&l50);
         }
         timer++;
@@ -4245,7 +4245,7 @@ void CKanna::UpdatePattern()
             l50.scale = 2;
             l50.layer = 1;
             l50.unk0 = 1;
-            l50.unk18 = facing;
+            l50.facing = facing;
             SpawnObject(&l50);
         }
         timer++;
@@ -4282,7 +4282,7 @@ void CKanna::UpdatePattern()
             l50.scale = 2;
             l50.layer = 1;
             l50.unk0 = 1;
-            l50.unk18 = facing;
+            l50.facing = facing;
             SpawnObject(&l50);
         }
         timer++;
@@ -4326,7 +4326,7 @@ void CKanna::UpdatePattern()
                 l50.x = x;
                 l50.y = y;
                 l50.unk0 = 1;
-                l50.unk18 = facing;
+                l50.facing = facing;
                 l50.scale = 2;
                 l50.layer = 1;
                 SpawnObject(&l50);
@@ -4362,7 +4362,7 @@ void CKanna::UpdatePattern()
             l50.x = x;
             l50.y = y;
             l50.unk0 = 1;
-            l50.unk18 = facing;
+            l50.facing = facing;
             l50.scale = 2;
             l50.layer = 1;
             SpawnObject(&l50);
@@ -4424,7 +4424,7 @@ void CKanna::UpdatePattern()
             l50.scale = 0;
             l50.layer = 1;
             l50.side = -((facing == 1) - 1);
-            l50.unk18 = facing;
+            l50.facing = facing;
             l50.unk28 = 1;
             l50.unk0 = 1;
             SpawnObject(&l50);
@@ -4455,7 +4455,7 @@ void CKanna::UpdatePattern()
             l50.scale = 0;
             l50.layer = 1;
             l50.side = -((facing == 1) - 1);
-            l50.unk18 = facing;
+            l50.facing = facing;
             l50.unk28 = 1;
             l50.unk0 = 1;
             SpawnObject(&l50);
@@ -4486,7 +4486,7 @@ void CKanna::UpdatePattern()
             l50.scale = 0;
             l50.layer = 1;
             l50.side = -((facing == 1) - 1);
-            l50.unk18 = facing;
+            l50.facing = facing;
             l50.unk28 = 1;
             l50.unk0 = 1;
             SpawnObject(&l50);
@@ -4517,7 +4517,7 @@ void CKanna::UpdatePattern()
             l50.scale = 2;
             l50.layer = 1;
             l50.side = -((facing == 1) - 1);
-            l50.unk18 = facing;
+            l50.facing = facing;
             l50.unk28 = 0;
             l50.unk0 = 1;
             SpawnObject(&l50);
@@ -4529,7 +4529,7 @@ void CKanna::UpdatePattern()
             l50.scale = 2;
             l50.layer = 1;
             l50.side = -((facing == 1) - 1);
-            l50.unk18 = facing;
+            l50.facing = facing;
             l50.unk28 = 0;
             l50.unk0 = 1;
             SpawnObject(&l50);
@@ -4571,7 +4571,7 @@ void CKanna::UpdatePattern()
             l50.layer = 1;
             l50.unk0 = 1;
             l50.side = -((facing == 1) - 1);
-            l50.unk18 = facing;
+            l50.facing = facing;
             l50.unk28 = 0;
             SpawnObject(&l50);
         }
@@ -4617,7 +4617,7 @@ void CKanna::UpdatePattern()
             l50.type = 0x19f;
             l50.x = x - facing * 0x23;
             l50.y = y - 67.0;
-            l50.unk18 = facing;
+            l50.facing = facing;
             l50.scale = 2;
             l50.layer = 0;
             l50.unk2c = -1;
@@ -4643,7 +4643,7 @@ void CKanna::UpdatePattern()
                 }
                 l50.x = x - facing * 0x12c;
                 l50.y = (double)((WORD)Random(0, 0x140) - 0x140);
-                l50.unk18 = facing;
+                l50.facing = facing;
                 l50.scale = 2;
                 SpawnObject(&l50);
             }
@@ -4700,13 +4700,13 @@ void CKanna::UpdatePattern()
             l50.type = 0x1a2;
             l50.x = x + 0.0 - 30.0;
             l50.y = y;
-            l50.unk18 = facing;
+            l50.facing = facing;
             l50.scale = 2;
             l50.layer = 1;
             l50.unk0 = 1;
             SpawnObject(&l50);
             l50.x = x - facing * 0x28 - 30.0;
-            l50.unk18 = -facing;
+            l50.facing = -facing;
             SpawnObject(&l50);
             m_playSound = 0x12;
         }
@@ -4754,7 +4754,7 @@ void CKanna::UpdatePattern()
             l50.type = 0x1aa;
             l50.x = x;
             l50.y = y;
-            l50.unk18 = facing;
+            l50.facing = facing;
             l50.scale = 2;
             l50.layer = 1;
             l50.unk0 = 1;
@@ -4798,7 +4798,7 @@ void CKanna::UpdatePattern()
             l50.y = (double)(int)y;
             l50.scale = 2;
             l50.layer = 1;
-            l50.unk18 = facing;
+            l50.facing = facing;
             l50.unk0 = 1;
             SpawnObject(&l50);
         }
@@ -4809,7 +4809,7 @@ void CKanna::UpdatePattern()
             l50.scale = 2;
             l50.layer = 1;
             l50.unk0 = 1;
-            l50.unk18 = facing;
+            l50.facing = facing;
             SpawnObject(&l50);
         }
         if ((frame == 8 || frame == 0x12) && m_attackResult == 3) {
@@ -4822,7 +4822,7 @@ void CKanna::UpdatePattern()
             l50.scale = 2;
             l50.layer = 1;
             l50.unk0 = 1;
-            l50.unk18 = facing;
+            l50.facing = facing;
             SpawnObject(&l50);
             (*m_opponent)->unk140 = 0x7530;
         }
@@ -4852,7 +4852,7 @@ void CKanna::UpdatePattern()
             l50.layer = 0;
             l50.unk0 = 1;
             l50.screen = 1;
-            l50.unk18 = 1;
+            l50.facing = 1;
             l50.unk30 = 1;
             SpawnObject(&l50);
             l50.type = 0x1b5;
@@ -4862,7 +4862,7 @@ void CKanna::UpdatePattern()
             l50.layer = 0;
             l50.unk0 = 1;
             l50.screen = 1;
-            l50.unk18 = 1;
+            l50.facing = 1;
             l50.unk30 = 1;
             SpawnObject(&l50);
             l50.type = 0x1b6;
@@ -4872,7 +4872,7 @@ void CKanna::UpdatePattern()
             l50.layer = 1;
             l50.unk0 = 1;
             l50.screen = 1;
-            l50.unk18 = 1;
+            l50.facing = 1;
             l50.unk30 = 1;
             SpawnObject(&l50);
             m_playVoice = 0xb;
@@ -4891,7 +4891,7 @@ void CKanna::UpdatePattern()
             l50.scale = 2;
             l50.layer = 1;
             l50.unk0 = 1;
-            l50.unk18 = 1;
+            l50.facing = 1;
             l50.unk30 = 1;
             SpawnObject(&l50);
             (*m_opponent)->m_game->unk1420e = 0;
@@ -4905,7 +4905,7 @@ void CKanna::UpdatePattern()
             l50.scale = 2;
             l50.layer = 1;
             l50.unk0 = 1;
-            l50.unk18 = 1;
+            l50.facing = 1;
             l50.unk30 = 1;
             SpawnObject(&l50);
             l50.x = x + 40.0;
@@ -4969,7 +4969,7 @@ void CKanna::UpdatePattern()
                 l50.scale = 2;
                 l50.layer = 1;
                 l50.unk0 = 1;
-                l50.unk18 = facing;
+                l50.facing = facing;
                 l50.unk30 = 1;
                 SpawnObject(&l50);
             }

@@ -1963,7 +1963,7 @@ void CMizukaB::UpdateObjects()
                     l50.y = 0.0;
                     l50.scale = 0;
                     l50.layer = 1;
-                    l50.unk18 = m_objects[v4].facing;
+                    l50.facing = m_objects[v4].facing;
                     SpawnObject(&l50);
                 }
                 m_objects[v4].timer++;
@@ -1986,7 +1986,7 @@ void CMizukaB::UpdateObjects()
                     l50.y = 0.0;
                     l50.scale = 0;
                     l50.layer = 1;
-                    l50.unk18 = m_objects[v4].facing;
+                    l50.facing = m_objects[v4].facing;
                     SpawnObject(&l50);
                 }
                 m_objects[v4].timer++;
@@ -2009,7 +2009,7 @@ void CMizukaB::UpdateObjects()
                     l50.y = 0.0;
                     l50.scale = 0;
                     l50.layer = 1;
-                    l50.unk18 = m_objects[v4].facing;
+                    l50.facing = m_objects[v4].facing;
                     SpawnObject(&l50);
                 }
                 m_objects[v4].timer++;
@@ -3254,7 +3254,7 @@ void CMizukaB::UpdateObjects()
                     l50.y = m_objects[v4].y;
                     l50.scale = 2;
                     l50.layer = 1;
-                    l50.unk18 = m_objects[v4].facing;
+                    l50.facing = m_objects[v4].facing;
                     SpawnObject(&l50);
                 }
                 m_objects[v4].timer++;
@@ -3566,7 +3566,7 @@ void CMizukaB::UpdateObjects()
                     }
                     l50.y = (double)(4 - (WORD)Random(0, 4));
                     l50.unk28 = 1;
-                    l50.unk18 = -m_objects[v4].facing;
+                    l50.facing = -m_objects[v4].facing;
                     l50.scale = 0;
                     l50.layer = 1;
                     unk3148[v4]++;
@@ -3602,7 +3602,7 @@ void CMizukaB::UpdateObjects()
                     }
                     l50.y = (double)(4 - (WORD)Random(0, 4));
                     l50.unk28 = 1;
-                    l50.unk18 = m_objects[v4].facing;
+                    l50.facing = m_objects[v4].facing;
                     l50.scale = 0;
                     l50.layer = 1;
                     unk3148[v4]++;
@@ -3633,7 +3633,7 @@ void CMizukaB::UpdateObjects()
                     l50.x = (double)((int)x - ((WORD)Random(0, 0x14) + 0x154 + unk313c * 8) * facing);
                     l50.y = (double)(4 - (WORD)Random(0, 4));
                     l50.unk28 = 1;
-                    l50.unk18 = m_objects[v4].facing;
+                    l50.facing = m_objects[v4].facing;
                     l50.scale = 0;
                     l50.layer = 1;
                     unk3148[v4]++;
@@ -3730,7 +3730,7 @@ void CMizukaB::UpdateObjects()
                         l50.x = m_objects[v4].x;
                         l50.y = m_objects[v4].y;
                         l50.unk0 = 1;
-                        l50.unk18 = facing;
+                        l50.facing = facing;
                         l50.scale = 2;
                         l50.layer = 1;
                         SpawnObject(&l50);
@@ -3854,7 +3854,7 @@ void CMizukaB::UpdateObjects()
                         l50.x = m_objects[v4].x;
                         l50.y = m_objects[v4].y;
                         l50.unk0 = 1;
-                        l50.unk18 = facing;
+                        l50.facing = facing;
                         l50.scale = 2;
                         l50.layer = 1;
                         SpawnObject(&l50);
@@ -3989,7 +3989,7 @@ void CMizukaB::UpdateObjects()
                         l50.x = m_objects[v4].x;
                         l50.y = m_objects[v4].y;
                         l50.unk0 = 1;
-                        l50.unk18 = facing;
+                        l50.facing = facing;
                         l50.scale = 2;
                         l50.layer = 1;
                         SpawnObject(&l50);
@@ -4037,7 +4037,7 @@ void CMizukaB::UpdateObjects()
                     l50.x = m_objects[v4].x + facing * 0x78;
                     l50.y = 0.0;
                     l50.unk0 = 1;
-                    l50.unk18 = m_objects[v4].facing;
+                    l50.facing = m_objects[v4].facing;
                     l50.scale = 2;
                     l50.layer = 1;
                     SpawnObject(&l50);
@@ -4074,70 +4074,70 @@ void CMizukaB::UpdateObjects()
                     l50.y = (double)((int)y - 4);
                     l50.scale = 0;
                     l50.layer = 1;
-                    l50.unk18 = facing;
+                    l50.facing = facing;
                     SpawnObject(&l50);
                     l50.type = 0x1f1;
                     l50.x = (double)((int)x - (facing << 2));
                     l50.y = (double)((int)y - 6);
                     l50.scale = 0;
                     l50.layer = 1;
-                    l50.unk18 = facing;
+                    l50.facing = facing;
                     SpawnObject(&l50);
                     l50.type = 0x1f1;
                     l50.x = (double)((int)x - facing * 0xe);
                     l50.y = (double)((int)y - 0x1a);
                     l50.scale = 0;
                     l50.layer = 1;
-                    l50.unk18 = facing;
+                    l50.facing = facing;
                     SpawnObject(&l50);
                     l50.type = 0x1f1;
                     l50.x = (double)(int)x;
                     l50.y = (double)(int)y;
                     l50.scale = 0;
                     l50.layer = 1;
-                    l50.unk18 = facing;
+                    l50.facing = facing;
                     SpawnObject(&l50);
                     l50.type = 0x1f1;
                     l50.x = (double)((int)x + facing * 0x1e);
                     l50.y = (double)((int)y - 0x28);
                     l50.scale = 0;
                     l50.layer = 1;
-                    l50.unk18 = facing;
+                    l50.facing = facing;
                     SpawnObject(&l50);
                     l50.type = 0x1f1;
                     l50.x = (double)((int)x - facing * 0x19);
                     l50.y = (double)((int)y - 0x50);
                     l50.scale = 0;
                     l50.layer = 1;
-                    l50.unk18 = facing;
+                    l50.facing = facing;
                     SpawnObject(&l50);
                     l50.type = 0x1f2;
                     l50.x = (double)((int)x - facing * 0x23);
                     l50.y = (double)((int)y - 0x2a);
                     l50.scale = 0;
                     l50.layer = 1;
-                    l50.unk18 = facing;
+                    l50.facing = facing;
                     SpawnObject(&l50);
                     l50.type = 0x1f2;
                     l50.x = (double)((int)x - facing * 0x12);
                     l50.y = (double)((int)y - 0x14);
                     l50.scale = 0;
                     l50.layer = 1;
-                    l50.unk18 = facing;
+                    l50.facing = facing;
                     SpawnObject(&l50);
                     l50.type = 0x1f2;
                     l50.x = (double)((int)x + facing * 2);
                     l50.y = (double)((int)y - 0x41);
                     l50.scale = 0;
                     l50.layer = 1;
-                    l50.unk18 = facing;
+                    l50.facing = facing;
                     SpawnObject(&l50);
                     l50.type = 0x1f2;
                     l50.x = (double)((int)x + (facing << 4));
                     l50.y = (double)((int)y - 0x50);
                     l50.scale = 0;
                     l50.layer = 1;
-                    l50.unk18 = facing;
+                    l50.facing = facing;
                     SpawnObject(&l50);
                     m_playSound = 0x22;
                     RemoveObject(v4);

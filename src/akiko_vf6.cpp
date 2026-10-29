@@ -1377,7 +1377,7 @@ void CAkiko::UpdatePattern()
             l50.type = 0x1f3;
             l50.x = (double)(int)x;
             l50.y = (double)(int)y;
-            l50.unk18 = facing;
+            l50.facing = facing;
             l50.layer = 1;
             SpawnObject(&l50);
             m_gauge = m_gauge + 0x1e;
@@ -1464,7 +1464,7 @@ void CAkiko::UpdatePattern()
                 l50.scale = 0;
                 l50.layer = 0;
                 l50.unk0 = 1;
-                l50.unk18 = facing;
+                l50.facing = facing;
                 SpawnObject(&l50);
                 unk3144 = 1;
             }
@@ -1516,7 +1516,7 @@ void CAkiko::UpdatePattern()
                 l50.scale = 0;
                 l50.layer = 0;
                 l50.unk0 = 1;
-                l50.unk18 = facing;
+                l50.facing = facing;
                 SpawnObject(&l50);
                 unk3144 = 1;
             }
@@ -1568,7 +1568,7 @@ void CAkiko::UpdatePattern()
                 l50.scale = 0;
                 l50.layer = 0;
                 l50.unk0 = 1;
-                l50.unk18 = facing;
+                l50.facing = facing;
                 SpawnObject(&l50);
                 unk3144 = 1;
             }
@@ -1611,7 +1611,7 @@ void CAkiko::UpdatePattern()
                 l50.scale = 0;
                 l50.layer = 0;
                 l50.unk0 = 1;
-                l50.unk18 = facing;
+                l50.facing = facing;
                 SpawnObject(&l50);
                 unk3144 = 1;
             }
@@ -1652,7 +1652,7 @@ void CAkiko::UpdatePattern()
             l50.x = 60.0;
             l50.y = 40.0;
             l50.screen = 1;
-            l50.unk18 = 1;
+            l50.facing = 1;
             l50.scale = 0;
             l50.layer = 0;
             SpawnObject(&l50);
@@ -3112,7 +3112,7 @@ void CAkiko::UpdatePattern()
                 l50.type = 0x1a7;
                 l50.x = x - facing * 0x28;
                 l50.y = 0.0;
-                l50.unk18 = facing;
+                l50.facing = facing;
                 l50.scale = 0;
                 l50.unk0 = 1;
                 l50.layer = 0;
@@ -3272,7 +3272,7 @@ void CAkiko::UpdatePattern()
                 l50.type = 0x1a8;
                 l50.x = facing * 0x25 + x;
                 l50.y = -56.0;
-                l50.unk18 = facing;
+                l50.facing = facing;
                 l50.scale = 0;
                 l50.unk0 = 1;
                 l50.layer = 1;
@@ -3346,7 +3346,7 @@ void CAkiko::UpdatePattern()
                 for (; unk3140 < unk313c; unk3140++) {
                     l50.x = facing * 0x28 + x;
                     l50.y = y + -57.0 - (WORD)Random(0, 0x14);
-                    l50.unk18 = facing;
+                    l50.facing = facing;
                     l50.layer = 1;
                     l50.unk28 = 1;
                     SpawnObject(&l50);
@@ -3354,7 +3354,7 @@ void CAkiko::UpdatePattern()
                 l50.type = 0x190;
                 l50.x = facing * 0x1e + x;
                 l50.y = y + -65.0;
-                l50.unk18 = facing;
+                l50.facing = facing;
                 l50.scale = 2;
                 l50.layer = 1;
                 l50.unk28 = 0;
@@ -3404,14 +3404,14 @@ void CAkiko::UpdatePattern()
                         l50.y = y + -57.0 - (WORD)Random(0, 0x14);
                     }
                     l50.unk28 = 1;
-                    l50.unk18 = facing;
+                    l50.facing = facing;
                     l50.layer = 1;
                     SpawnObject(&l50);
                 }
                 l50.type = 0x190;
                 l50.x = facing * 0x1e + x;
                 l50.y = y + -65.0;
-                l50.unk18 = facing;
+                l50.facing = facing;
                 l50.scale = 2;
                 l50.layer = 1;
                 l50.unk28 = 0;
@@ -3477,14 +3477,14 @@ void CAkiko::UpdatePattern()
                     if (unk3138 < 8 && unk3138 > 3) {
                         l50.y = y + -57.0 - (WORD)Random(0, 0x14);
                     }
-                    l50.unk18 = facing;
+                    l50.facing = facing;
                     l50.layer = 1;
                     SpawnObject(&l50);
                 }
                 l50.type = 0x190;
                 l50.x = facing * 0x1e + x;
                 l50.y = y + -65.0;
-                l50.unk18 = facing;
+                l50.facing = facing;
                 l50.scale = 2;
                 l50.layer = 1;
                 l50.unk28 = 0;
@@ -3516,14 +3516,14 @@ void CAkiko::UpdatePattern()
                     if (unk3138 < 8 && unk3138 > 3) {
                         l50.y = y + -57.0 - (WORD)Random(0, 0x14);
                     }
-                    l50.unk18 = facing;
+                    l50.facing = facing;
                     l50.layer = 1;
                     SpawnObject(&l50);
                 }
                 l50.type = 0x190;
                 l50.x = facing * 0x1e + x;
                 l50.y = y + -65.0;
-                l50.unk18 = facing;
+                l50.facing = facing;
                 l50.scale = 2;
                 l50.layer = 1;
                 l50.unk28 = 0;
@@ -3948,7 +3948,7 @@ void CAkiko::UpdatePattern()
             l50.y = (double)((int)y - 0x37);
             l50.scale = 2;
             l50.layer = 1;
-            l50.unk18 = facing;
+            l50.facing = facing;
             SpawnObject(&l50);
         }
         timer++;
@@ -3976,7 +3976,7 @@ void CAkiko::UpdatePattern()
             l50.y = (double)((int)y - 0x37);
             l50.scale = 2;
             l50.layer = 1;
-            l50.unk18 = facing;
+            l50.facing = facing;
             SpawnObject(&l50);
         }
         timer++;
@@ -4023,7 +4023,7 @@ void CAkiko::UpdatePattern()
             l50.y = (double)((int)y - 0x37);
             l50.scale = 2;
             l50.layer = 1;
-            l50.unk18 = facing;
+            l50.facing = facing;
             SpawnObject(&l50);
         }
         timer++;
@@ -4147,7 +4147,7 @@ void CAkiko::UpdatePattern()
                 l50.y = (double)(int)y;
                 l50.scale = 0;
                 l50.layer = 1;
-                l50.unk18 = facing;
+                l50.facing = facing;
                 SpawnObject(&l50);
                 l50.type = 0x19e;
                 l50.unk0 = 1;
@@ -4155,7 +4155,7 @@ void CAkiko::UpdatePattern()
                 l50.y = (double)(int)y;
                 l50.scale = 0;
                 l50.layer = 1;
-                l50.unk18 = facing;
+                l50.facing = facing;
                 SpawnObject(&l50);
             }
             if (frame >= x8) {
@@ -4273,7 +4273,7 @@ void CAkiko::UpdatePattern()
                 l50.y = (double)(int)y;
                 l50.scale = 0;
                 l50.layer = 1;
-                l50.unk18 = facing;
+                l50.facing = facing;
                 SpawnObject(&l50);
                 l50.type = 0x19e;
                 l50.unk0 = 1;
@@ -4281,7 +4281,7 @@ void CAkiko::UpdatePattern()
                 l50.y = (double)(int)y;
                 l50.scale = 0;
                 l50.layer = 1;
-                l50.unk18 = facing;
+                l50.facing = facing;
                 SpawnObject(&l50);
             }
             if (frame >= x8) {
@@ -4418,7 +4418,7 @@ void CAkiko::UpdatePattern()
                 l50.y = (double)(int)y;
                 l50.scale = 0;
                 l50.layer = 1;
-                l50.unk18 = facing;
+                l50.facing = facing;
                 SpawnObject(&l50);
                 l50.type = 0x19e;
                 l50.unk0 = 1;
@@ -4426,7 +4426,7 @@ void CAkiko::UpdatePattern()
                 l50.y = (double)(int)y;
                 l50.scale = 0;
                 l50.layer = 1;
-                l50.unk18 = facing;
+                l50.facing = facing;
                 SpawnObject(&l50);
             }
             if (frame >= x8) {
@@ -4443,7 +4443,7 @@ void CAkiko::UpdatePattern()
             l50.unk28 = 1;
             l50.x = x - facing * 0x168;
             l50.y = 0.0;
-            l50.unk18 = facing;
+            l50.facing = facing;
             l50.scale = 0;
             l50.layer = 1;
             l50.unk0 = 1;
@@ -4480,7 +4480,7 @@ void CAkiko::UpdatePattern()
                 l50.y = (double)(int)y;
                 l50.scale = 2;
                 l50.unk0 = 1;
-                l50.unk18 = facing;
+                l50.facing = facing;
                 l50.layer = 1;
                 SpawnObject(&l50);
                 SpawnObject(&l50);
@@ -4515,7 +4515,7 @@ void CAkiko::UpdatePattern()
             l50.unk28 = 1;
             l50.x = x - facing * 0x168;
             l50.y = 0.0;
-            l50.unk18 = facing;
+            l50.facing = facing;
             l50.scale = 0;
             l50.layer = 1;
             l50.unk0 = 1;
@@ -4552,7 +4552,7 @@ void CAkiko::UpdatePattern()
                 l50.y = (double)(int)y;
                 l50.scale = 2;
                 l50.unk0 = 1;
-                l50.unk18 = facing;
+                l50.facing = facing;
                 l50.layer = 1;
                 SpawnObject(&l50);
                 SpawnObject(&l50);
@@ -4591,7 +4591,7 @@ void CAkiko::UpdatePattern()
             l50.unk28 = 1;
             l50.x = x - facing * 0x168;
             l50.y = 0.0;
-            l50.unk18 = facing;
+            l50.facing = facing;
             l50.scale = 0;
             l50.layer = 1;
             l50.unk0 = 1;
@@ -4632,7 +4632,7 @@ void CAkiko::UpdatePattern()
                 l50.y = (double)(int)y;
                 l50.scale = 2;
                 l50.unk0 = 1;
-                l50.unk18 = facing;
+                l50.facing = facing;
                 l50.layer = 1;
                 SpawnObject(&l50);
                 SpawnObject(&l50);
@@ -5131,7 +5131,7 @@ void CAkiko::UpdatePattern()
                 l50.type = 0x1a9;
                 l50.x = (double)((int)x + facing * 0x3c);
                 l50.y = (double)(int)y;
-                l50.unk18 = facing;
+                l50.facing = facing;
                 l50.scale = 0;
                 l50.unk0 = 1;
                 l50.layer = 0;
@@ -5151,7 +5151,7 @@ void CAkiko::UpdatePattern()
                 l50.layer = 1;
                 l50.unk0 = 1;
                 l50.unk28 = 0;
-                l50.unk18 = 1;
+                l50.facing = 1;
                 l50.screen = 1;
                 SpawnObject(&l50);
                 m_playVoice = 0x10;

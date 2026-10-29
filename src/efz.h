@@ -941,7 +941,7 @@ struct EffectDesc {
     short unk6;
     double x;
     double y;
-    BYTE unk18;  // copied to Effect::unk48
+    BYTE facing;  // an object's; copied to Effect::unk48 for an effect
     BYTE unk19;
     short unk1a;
     int side;
@@ -954,10 +954,7 @@ struct EffectDesc {
     BYTE unk2d;
     short unk2e;
     int unk30;
-    int unk34;
-    int unk38;
-    int unk3c;
-    int unk40;
+    RECT clip;   // an object's PlayerObject::clip
     int unk44;
 };
 

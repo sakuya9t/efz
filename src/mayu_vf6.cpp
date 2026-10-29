@@ -1344,7 +1344,7 @@ void CMayu::UpdatePattern()
             l50.type = 0x1f3;
             l50.x = (double)(int)x;
             l50.y = (double)(int)y;
-            l50.unk18 = facing;
+            l50.facing = facing;
             l50.layer = 1;
             SpawnObject(&l50);
             m_gauge = m_gauge + 0x1e;
@@ -1431,7 +1431,7 @@ void CMayu::UpdatePattern()
                 l50.scale = 0;
                 l50.layer = 0;
                 l50.unk0 = 1;
-                l50.unk18 = facing;
+                l50.facing = facing;
                 SpawnObject(&l50);
                 unk3144 = 1;
             }
@@ -1483,7 +1483,7 @@ void CMayu::UpdatePattern()
                 l50.scale = 0;
                 l50.layer = 0;
                 l50.unk0 = 1;
-                l50.unk18 = facing;
+                l50.facing = facing;
                 SpawnObject(&l50);
                 unk3144 = 1;
             }
@@ -1535,7 +1535,7 @@ void CMayu::UpdatePattern()
                 l50.scale = 0;
                 l50.layer = 0;
                 l50.unk0 = 1;
-                l50.unk18 = facing;
+                l50.facing = facing;
                 SpawnObject(&l50);
                 unk3144 = 1;
             }
@@ -1578,7 +1578,7 @@ void CMayu::UpdatePattern()
                 l50.scale = 0;
                 l50.layer = 0;
                 l50.unk0 = 1;
-                l50.unk18 = facing;
+                l50.facing = facing;
                 SpawnObject(&l50);
                 unk3144 = 1;
             }
@@ -1619,7 +1619,7 @@ void CMayu::UpdatePattern()
             l50.x = 60.0;
             l50.y = 40.0;
             l50.screen = 1;
-            l50.unk18 = 1;
+            l50.facing = 1;
             l50.scale = 0;
             l50.layer = 0;
             SpawnObject(&l50);
@@ -5629,7 +5629,7 @@ void CMayu::UpdatePattern()
             l50.y = (double)-(WORD)Random(0, 0x32);
             l50.scale = 0;
             l50.layer = 1;
-            l50.unk18 = facing;
+            l50.facing = facing;
             SpawnObject(&l50);
         }
         if (frame > 3) {
@@ -5646,7 +5646,7 @@ void CMayu::UpdatePattern()
             l50.layer = 1;
             l50.unk0 = 1;
             l50.unk28 = 1;
-            l50.unk18 = facing;
+            l50.facing = facing;
             SpawnObject(&l50);
         }
         if (unk3138 == 0x78) {
@@ -5656,7 +5656,7 @@ void CMayu::UpdatePattern()
             l50.scale = 0;
             l50.layer = 1;
             l50.unk28 = 1;
-            l50.unk18 = facing;
+            l50.facing = facing;
             l50.unk0 = 1;
             SpawnObject(&l50);
         }

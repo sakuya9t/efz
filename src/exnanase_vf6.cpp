@@ -1370,7 +1370,7 @@ void CEXNanase::UpdatePattern()
             l50.type = 0x1f3;
             l50.x = (double)(int)x;
             l50.y = (double)(int)y;
-            l50.unk18 = facing;
+            l50.facing = facing;
             l50.layer = 1;
             SpawnObject(&l50);
             m_gauge = m_gauge + 0x1e;
@@ -1457,7 +1457,7 @@ void CEXNanase::UpdatePattern()
                 l50.scale = 0;
                 l50.layer = 0;
                 l50.unk0 = 1;
-                l50.unk18 = facing;
+                l50.facing = facing;
                 SpawnObject(&l50);
                 unk3144 = 1;
             }
@@ -1509,7 +1509,7 @@ void CEXNanase::UpdatePattern()
                 l50.scale = 0;
                 l50.layer = 0;
                 l50.unk0 = 1;
-                l50.unk18 = facing;
+                l50.facing = facing;
                 SpawnObject(&l50);
                 unk3144 = 1;
             }
@@ -1561,7 +1561,7 @@ void CEXNanase::UpdatePattern()
                 l50.scale = 0;
                 l50.layer = 0;
                 l50.unk0 = 1;
-                l50.unk18 = facing;
+                l50.facing = facing;
                 SpawnObject(&l50);
                 unk3144 = 1;
             }
@@ -1604,7 +1604,7 @@ void CEXNanase::UpdatePattern()
                 l50.scale = 0;
                 l50.layer = 0;
                 l50.unk0 = 1;
-                l50.unk18 = facing;
+                l50.facing = facing;
                 SpawnObject(&l50);
                 unk3144 = 1;
             }
@@ -1645,7 +1645,7 @@ void CEXNanase::UpdatePattern()
             l50.x = 60.0;
             l50.y = 40.0;
             l50.screen = 1;
-            l50.unk18 = 1;
+            l50.facing = 1;
             l50.scale = 0;
             l50.layer = 0;
             SpawnObject(&l50);
@@ -3810,7 +3810,7 @@ void CEXNanase::UpdatePattern()
             l50.x = (double)((int)x + facing * 0x28);
             l50.y = (double)((int)y - 0x50);
             l50.scale = 2;
-            l50.unk18 = facing;
+            l50.facing = facing;
             l50.unk0 = 1;
             l50.layer = 1;
             SpawnObject(&l50);
@@ -3942,7 +3942,7 @@ void CEXNanase::UpdatePattern()
                 l50.type = 0x191;
                 l50.x = (double)(int)x;
                 l50.y = (double)((int)y - 0x3a);
-                l50.unk18 = facing;
+                l50.facing = facing;
                 l50.scale = 2;
                 l50.layer = 1;
                 SpawnObject(&l50);
@@ -3974,7 +3974,7 @@ void CEXNanase::UpdatePattern()
             l50.type = 0x192;
             l50.x = (double)(int)x;
             l50.y = (double)((int)y - 0x3a);
-            l50.unk18 = facing;
+            l50.facing = facing;
             l50.scale = 2;
             l50.layer = 1;
             SpawnObject(&l50);
@@ -4027,7 +4027,7 @@ void CEXNanase::UpdatePattern()
             l50.type = 0x193;
             l50.x = (double)(int)x;
             l50.y = (double)((int)y - 0x3a);
-            l50.unk18 = facing;
+            l50.facing = facing;
             l50.scale = 2;
             l50.layer = 1;
             SpawnObject(&l50);
@@ -4086,7 +4086,7 @@ void CEXNanase::UpdatePattern()
                 l50.type = 0x194;
                 l50.x = (double)(int)x;
                 l50.y = (double)(int)y;
-                l50.unk18 = facing;
+                l50.facing = facing;
                 l50.scale = 2;
                 l50.layer = 0;
                 SpawnObject(&l50);
@@ -4143,7 +4143,7 @@ void CEXNanase::UpdatePattern()
                 l50.type = 0x195;
                 l50.x = (double)(int)x;
                 l50.y = (double)(int)y;
-                l50.unk18 = facing;
+                l50.facing = facing;
                 l50.scale = 2;
                 l50.layer = 0;
                 SpawnObject(&l50);
@@ -4206,7 +4206,7 @@ void CEXNanase::UpdatePattern()
                 l50.type = 0x196;
                 l50.x = (double)(int)x;
                 l50.y = (double)(int)y;
-                l50.unk18 = facing;
+                l50.facing = facing;
                 l50.scale = 2;
                 l50.layer = 0;
                 SpawnObject(&l50);
@@ -4415,7 +4415,7 @@ void CEXNanase::UpdatePattern()
             l50.scale = 2;
             l50.unk0 = 1;
             l50.layer = 1;
-            l50.unk18 = 1;
+            l50.facing = 1;
             SpawnObject(&l50);
             m_playVoice = 4;
         }
@@ -4426,7 +4426,7 @@ void CEXNanase::UpdatePattern()
             l50.scale = 2;
             l50.unk0 = 1;
             l50.layer = 1;
-            l50.unk18 = 1;
+            l50.facing = 1;
             SpawnObject(&l50);
             m_playVoice = 3;
         }
@@ -4467,7 +4467,7 @@ void CEXNanase::UpdatePattern()
                 l50.scale = 2;
                 l50.unk0 = 1;
                 l50.layer = 1;
-                l50.unk18 = facing;
+                l50.facing = facing;
                 SpawnObject(&l50);
                 (*m_opponent)->pattern = 0x3f;
                 (*m_opponent)->StartPattern();
@@ -4674,7 +4674,7 @@ void CEXNanase::UpdatePattern()
             l50.scale = 2;
             l50.unk0 = 1;
             l50.layer = 1;
-            l50.unk18 = facing;
+            l50.facing = facing;
             SpawnObject(&l50);
         }
         if (frame == 8 && (m_command == 0x64 || m_command == 0x6e) && m_gauge >= 0x3e8) {
@@ -4764,7 +4764,7 @@ void CEXNanase::UpdatePattern()
             l50.scale = 2;
             l50.unk0 = 1;
             l50.layer = 1;
-            l50.unk18 = facing;
+            l50.facing = facing;
             SpawnObject(&l50);
         }
         Unk410a80(-0x32, 3);
@@ -4889,7 +4889,7 @@ void CEXNanase::UpdatePattern()
                 l50.scale = 2;
                 l50.unk0 = 1;
                 l50.layer = 1;
-                l50.unk18 = facing;
+                l50.facing = facing;
                 SpawnObject(&l50);
                 (*m_opponent)->pattern = 0x3f;
                 (*m_opponent)->StartPattern();
@@ -5016,7 +5016,7 @@ void CEXNanase::UpdatePattern()
                 l50.scale = 2;
                 l50.unk0 = 1;
                 l50.layer = 1;
-                l50.unk18 = facing;
+                l50.facing = facing;
                 SpawnObject(&l50);
                 (*m_opponent)->pattern = 0x3f;
                 (*m_opponent)->StartPattern();
@@ -5127,7 +5127,7 @@ void CEXNanase::UpdatePattern()
             l50.scale = 2;
             l50.unk0 = 1;
             l50.layer = 1;
-            l50.unk18 = 1;
+            l50.facing = 1;
             SpawnObject(&l50);
             m_playVoice = 4;
         }
@@ -5138,7 +5138,7 @@ void CEXNanase::UpdatePattern()
             l50.scale = 2;
             l50.unk0 = 1;
             l50.layer = 1;
-            l50.unk18 = 1;
+            l50.facing = 1;
             SpawnObject(&l50);
             m_playVoice = 3;
         }
@@ -5170,7 +5170,7 @@ void CEXNanase::UpdatePattern()
                 l50.scale = 2;
                 l50.unk0 = 1;
                 l50.layer = 1;
-                l50.unk18 = facing;
+                l50.facing = facing;
                 SpawnObject(&l50);
                 (*m_opponent)->pattern = 0x3f;
                 (*m_opponent)->StartPattern();
@@ -5227,12 +5227,12 @@ void CEXNanase::UpdatePattern()
             l50.scale = 2;
             l50.unk0 = 1;
             l50.layer = 1;
-            l50.unk18 = facing;
+            l50.facing = facing;
             SpawnObject(&l50);
             l50.type = 0x19f;
             l50.unk0 = 1;
             l50.layer = 0;
-            l50.unk18 = facing;
+            l50.facing = facing;
             SpawnObject(&l50);
         }
         timer++;
@@ -5281,12 +5281,12 @@ void CEXNanase::UpdatePattern()
             l50.scale = 2;
             l50.unk0 = 1;
             l50.layer = 1;
-            l50.unk18 = facing;
+            l50.facing = facing;
             SpawnObject(&l50);
             l50.type = 0x19f;
             l50.unk0 = 1;
             l50.layer = 0;
-            l50.unk18 = facing;
+            l50.facing = facing;
             SpawnObject(&l50);
         }
         timer++;
@@ -5338,12 +5338,12 @@ void CEXNanase::UpdatePattern()
             l50.scale = 2;
             l50.unk0 = 1;
             l50.layer = 1;
-            l50.unk18 = facing;
+            l50.facing = facing;
             SpawnObject(&l50);
             l50.type = 0x19f;
             l50.unk0 = 1;
             l50.layer = 0;
-            l50.unk18 = facing;
+            l50.facing = facing;
             SpawnObject(&l50);
         }
         timer++;
@@ -5406,7 +5406,7 @@ void CEXNanase::UpdatePattern()
                 l50.scale = 2;
                 l50.unk0 = 1;
                 l50.layer = 1;
-                l50.unk18 = facing;
+                l50.facing = facing;
                 SpawnObject(&l50);
             }
         }
@@ -5443,7 +5443,7 @@ void CEXNanase::UpdatePattern()
                 l50.scale = 2;
                 l50.unk0 = 1;
                 l50.layer = 1;
-                l50.unk18 = facing;
+                l50.facing = facing;
                 SpawnObject(&l50);
             }
             if (frame == 0xb) {
@@ -5454,7 +5454,7 @@ void CEXNanase::UpdatePattern()
                 l50.scale = 2;
                 l50.unk0 = 1;
                 l50.layer = 1;
-                l50.unk18 = facing;
+                l50.facing = facing;
                 SpawnObject(&l50);
             }
             if (frame >= x8) {
@@ -5500,12 +5500,12 @@ void CEXNanase::UpdatePattern()
             l50.scale = 2;
             l50.unk0 = 1;
             l50.layer = 1;
-            l50.unk18 = facing;
+            l50.facing = facing;
             SpawnObject(&l50);
             l50.type = 0x19f;
             l50.unk0 = 1;
             l50.layer = 0;
-            l50.unk18 = facing;
+            l50.facing = facing;
             SpawnObject(&l50);
         }
         if (frame == 5 && timer == 0xf) {

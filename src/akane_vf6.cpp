@@ -1370,7 +1370,7 @@ void CAkane::UpdatePattern()
             l50.type = 0x1f3;
             l50.x = (double)(int)x;
             l50.y = (double)(int)y;
-            l50.unk18 = facing;
+            l50.facing = facing;
             l50.layer = 1;
             SpawnObject(&l50);
             m_gauge = m_gauge + 0x1e;
@@ -1457,7 +1457,7 @@ void CAkane::UpdatePattern()
                 l50.scale = 0;
                 l50.layer = 0;
                 l50.unk0 = 1;
-                l50.unk18 = facing;
+                l50.facing = facing;
                 SpawnObject(&l50);
                 unk3148 = 1;
             }
@@ -1509,7 +1509,7 @@ void CAkane::UpdatePattern()
                 l50.scale = 0;
                 l50.layer = 0;
                 l50.unk0 = 1;
-                l50.unk18 = facing;
+                l50.facing = facing;
                 SpawnObject(&l50);
                 unk3148 = 1;
             }
@@ -1561,7 +1561,7 @@ void CAkane::UpdatePattern()
                 l50.scale = 0;
                 l50.layer = 0;
                 l50.unk0 = 1;
-                l50.unk18 = facing;
+                l50.facing = facing;
                 SpawnObject(&l50);
                 unk3148 = 1;
             }
@@ -1604,7 +1604,7 @@ void CAkane::UpdatePattern()
                 l50.scale = 0;
                 l50.layer = 0;
                 l50.unk0 = 1;
-                l50.unk18 = facing;
+                l50.facing = facing;
                 SpawnObject(&l50);
                 unk3148 = 1;
             }
@@ -1645,7 +1645,7 @@ void CAkane::UpdatePattern()
             l50.x = 60.0;
             l50.y = 40.0;
             l50.screen = 1;
-            l50.unk18 = 1;
+            l50.facing = 1;
             l50.scale = 0;
             l50.layer = 0;
             SpawnObject(&l50);
@@ -3494,7 +3494,7 @@ void CAkane::UpdatePattern()
                 l50.type = 0x19e;
                 l50.x = (double)((facing == 1) * 0x118 + (facing == -1) * 0x2a8);
                 l50.y = -80.0;
-                l50.unk18 = facing;
+                l50.facing = facing;
                 l50.scale = 0;
                 l50.unk0 = 1;
                 l50.layer = 1;
@@ -3506,7 +3506,7 @@ void CAkane::UpdatePattern()
                 l50.type = 0x19e;
                 l50.x = (double)((facing == 1) * -0x28 + (facing == -1) * 0x168);
                 l50.y = -80.0;
-                l50.unk18 = facing;
+                l50.facing = facing;
                 l50.scale = 0;
                 l50.unk0 = 1;
                 l50.layer = 1;
@@ -3517,7 +3517,7 @@ void CAkane::UpdatePattern()
                 l50.unk28 = 1;
                 l50.x = (x + (*m_opponent)->x) / 2.0 - facing * 0xa0;
                 l50.y = -80.0;
-                l50.unk18 = facing;
+                l50.facing = facing;
                 l50.scale = 0;
                 l50.unk0 = 1;
                 l50.layer = 1;
@@ -3551,7 +3551,7 @@ void CAkane::UpdatePattern()
                 l50.type = 0x19f;
                 l50.x = (double)((facing == 1) * 0x118 + (facing == -1) * 0x2a8);
                 l50.y = 0.0;
-                l50.unk18 = facing;
+                l50.facing = facing;
                 l50.scale = 0;
                 l50.unk0 = 1;
                 l50.layer = 1;
@@ -3563,7 +3563,7 @@ void CAkane::UpdatePattern()
                 l50.type = 0x19f;
                 l50.x = (double)((facing == 1) * -0x28 + (facing == -1) * 0x168);
                 l50.y = 0.0;
-                l50.unk18 = facing;
+                l50.facing = facing;
                 l50.scale = 0;
                 l50.unk0 = 1;
                 l50.layer = 1;
@@ -3574,7 +3574,7 @@ void CAkane::UpdatePattern()
                 l50.type = 0x19f;
                 l50.x = (x + (*m_opponent)->x) / 2.0 - facing * 0xa0;
                 l50.y = 0.0;
-                l50.unk18 = facing;
+                l50.facing = facing;
                 l50.scale = 0;
                 l50.unk0 = 1;
                 l50.layer = 1;
@@ -3619,7 +3619,7 @@ void CAkane::UpdatePattern()
                 l50.type = 0x199;
                 l50.x = (double)((facing == -1) * 0x118 + (facing == 1) * 0x2a8);
                 l50.y = 0.0;
-                l50.unk18 = -facing;
+                l50.facing = -facing;
                 l50.scale = 0;
                 l50.unk0 = 1;
                 l50.layer = 1;
@@ -3631,7 +3631,7 @@ void CAkane::UpdatePattern()
                 l50.type = 0x199;
                 l50.x = (double)((facing == -1) * -0x28 + (facing == 1) * 0x168);
                 l50.y = 0.0;
-                l50.unk18 = -facing;
+                l50.facing = -facing;
                 l50.scale = 0;
                 l50.unk0 = 1;
                 l50.layer = 1;
@@ -3642,7 +3642,7 @@ void CAkane::UpdatePattern()
                 l50.type = 0x199;
                 l50.x = (x + (*m_opponent)->x) / 2.0 + facing * 0xa0;
                 l50.y = 0.0;
-                l50.unk18 = -facing;
+                l50.facing = -facing;
                 l50.scale = 0;
                 l50.unk0 = 1;
                 l50.layer = 1;
@@ -4229,21 +4229,21 @@ void CAkane::UpdatePattern()
             l50.y = (double)((int)y - 0x2d);
             l50.scale = 0;
             l50.layer = 1;
-            l50.unk18 = facing;
+            l50.facing = facing;
             SpawnObject(&l50);
             l50.type = 0x190;
             l50.x = (double)((int)x + facing * 0x14);
             l50.y = (double)((int)y - 0x19);
             l50.scale = 0;
             l50.layer = 1;
-            l50.unk18 = facing;
+            l50.facing = facing;
             SpawnObject(&l50);
             l50.type = 0x190;
             l50.x = (double)((int)x + facing * 0x36);
             l50.y = (double)((int)y - 0x18);
             l50.scale = 0;
             l50.layer = 1;
-            l50.unk18 = facing;
+            l50.facing = facing;
             SpawnObject(&l50);
         }
         vy = vy + ay;
@@ -4281,21 +4281,21 @@ void CAkane::UpdatePattern()
             l50.y = (double)((int)y - 0x2d);
             l50.scale = 0;
             l50.layer = 1;
-            l50.unk18 = facing;
+            l50.facing = facing;
             SpawnObject(&l50);
             l50.type = 0x191;
             l50.x = (double)((int)x + facing * 0x14);
             l50.y = (double)((int)y - 0x19);
             l50.scale = 0;
             l50.layer = 1;
-            l50.unk18 = facing;
+            l50.facing = facing;
             SpawnObject(&l50);
             l50.type = 0x191;
             l50.x = (double)((int)x + facing * 0x36);
             l50.y = (double)((int)y - 0x18);
             l50.scale = 0;
             l50.layer = 1;
-            l50.unk18 = facing;
+            l50.facing = facing;
             SpawnObject(&l50);
         }
         vy = vy + ay;
@@ -4347,21 +4347,21 @@ void CAkane::UpdatePattern()
             l50.y = (double)((int)y - 0x2d);
             l50.scale = 0;
             l50.layer = 1;
-            l50.unk18 = facing;
+            l50.facing = facing;
             SpawnObject(&l50);
             l50.type = 0x192;
             l50.x = (double)((int)x + facing * 0x14);
             l50.y = (double)((int)y - 0x19);
             l50.scale = 0;
             l50.layer = 1;
-            l50.unk18 = facing;
+            l50.facing = facing;
             SpawnObject(&l50);
             l50.type = 0x192;
             l50.x = (double)((int)x + facing * 0x36);
             l50.y = (double)((int)y - 0x18);
             l50.scale = 0;
             l50.layer = 1;
-            l50.unk18 = facing;
+            l50.facing = facing;
             SpawnObject(&l50);
         }
         vy = vy + ay;
@@ -4830,7 +4830,7 @@ void CAkane::UpdatePattern()
             if ((WORD)Random(0, 0x64) < 0x32) {
                 l50.layer = 0;
             }
-            l50.unk18 = facing;
+            l50.facing = facing;
             SpawnObject(&l50);
         }
         timer++;
@@ -4885,7 +4885,7 @@ void CAkane::UpdatePattern()
             if ((WORD)Random(0, 0x64) < 0x32) {
                 l50.layer = 0;
             }
-            l50.unk18 = facing;
+            l50.facing = facing;
             SpawnObject(&l50);
         }
         timer++;
@@ -4942,7 +4942,7 @@ void CAkane::UpdatePattern()
             if ((WORD)Random(0, 0x64) < 0x32) {
                 l50.layer = 0;
             }
-            l50.unk18 = facing;
+            l50.facing = facing;
             SpawnObject(&l50);
         }
         timer++;
@@ -4992,7 +4992,7 @@ void CAkane::UpdatePattern()
                 l50.x = (double)(int)x;
                 l50.y = (double)((int)y - 0x32);
                 l50.scale = 2;
-                l50.unk18 = facing;
+                l50.facing = facing;
                 l50.unk0 = 1;
                 l50.layer = 1;
                 SpawnObject(&l50);
@@ -5000,14 +5000,14 @@ void CAkane::UpdatePattern()
                 l50.x = (double)(int)x;
                 l50.y = (double)(int)y;
                 l50.scale = 2;
-                l50.unk18 = facing;
+                l50.facing = facing;
                 l50.layer = 1;
                 m_game->CreateEffect((EffectDesc*)&l50);
                 l50.type = 0x1f;
                 l50.x = (double)(int)x;
                 l50.y = (double)(int)y;
                 l50.scale = 0;
-                l50.unk18 = facing;
+                l50.facing = facing;
                 l50.layer = 1;
                 m_game->CreateEffect((EffectDesc*)&l50);
             }
@@ -5054,7 +5054,7 @@ void CAkane::UpdatePattern()
                 l50.x = (double)((int)x + facing * 0x64);
                 l50.y = (double)((int)y - 0x32);
                 l50.scale = 2;
-                l50.unk18 = facing;
+                l50.facing = facing;
                 l50.unk0 = 1;
                 l50.layer = 1;
                 SpawnObject(&l50);
@@ -5062,14 +5062,14 @@ void CAkane::UpdatePattern()
                 l50.x = (double)(int)x;
                 l50.y = (double)(int)y;
                 l50.scale = 2;
-                l50.unk18 = facing;
+                l50.facing = facing;
                 l50.layer = 1;
                 m_game->CreateEffect((EffectDesc*)&l50);
                 l50.type = 0x1f;
                 l50.x = (double)(int)x;
                 l50.y = (double)(int)y;
                 l50.scale = 0;
-                l50.unk18 = facing;
+                l50.facing = facing;
                 l50.layer = 1;
                 m_game->CreateEffect((EffectDesc*)&l50);
             }
@@ -5116,7 +5116,7 @@ void CAkane::UpdatePattern()
                 l50.x = (double)(int)x;
                 l50.y = (double)((int)y - 0x96);
                 l50.scale = 2;
-                l50.unk18 = facing;
+                l50.facing = facing;
                 l50.unk0 = 1;
                 l50.layer = 1;
                 SpawnObject(&l50);
@@ -5124,14 +5124,14 @@ void CAkane::UpdatePattern()
                 l50.x = (double)(int)x;
                 l50.y = (double)(int)y;
                 l50.scale = 2;
-                l50.unk18 = facing;
+                l50.facing = facing;
                 l50.layer = 1;
                 m_game->CreateEffect((EffectDesc*)&l50);
                 l50.type = 0x1f;
                 l50.x = (double)(int)x;
                 l50.y = (double)(int)y;
                 l50.scale = 0;
-                l50.unk18 = facing;
+                l50.facing = facing;
                 l50.layer = 1;
                 m_game->CreateEffect((EffectDesc*)&l50);
             }
@@ -5176,7 +5176,7 @@ void CAkane::UpdatePattern()
             l50.layer = 1;
             l50.unk0 = 1;
             l50.unk28 = 1;
-            l50.unk18 = facing;
+            l50.facing = facing;
             l50.unk30 = 1;
             SpawnObject(&l50);
             unk3144 = 2;
@@ -5228,7 +5228,7 @@ void CAkane::UpdatePattern()
             l50.layer = 1;
             l50.unk0 = 1;
             l50.unk28 = 1;
-            l50.unk18 = facing;
+            l50.facing = facing;
             l50.unk30 = 1;
             SpawnObject(&l50);
             unk3144 = 2;
@@ -5280,7 +5280,7 @@ void CAkane::UpdatePattern()
             l50.layer = 1;
             l50.unk0 = 1;
             l50.unk28 = 1;
-            l50.unk18 = facing;
+            l50.facing = facing;
             l50.unk30 = 1;
             SpawnObject(&l50);
             unk3144 = 2;
@@ -5358,7 +5358,7 @@ void CAkane::UpdatePattern()
                 l50.unk2c = 2;
                 l50.x = (double)(int)(x + 50.0 - (WORD)Random(0, 0x64));
                 l50.y = (double)((WORD)Random(0, 0x64) - 0x64);
-                l50.unk18 = facing;
+                l50.facing = facing;
                 l50.scale = 2;
                 l50.unk0 = 1;
                 l50.layer = 1;
@@ -5391,7 +5391,7 @@ void CAkane::UpdatePattern()
                     l50.layer = 0;
                     l50.unk0 = 1;
                     l50.unk28 = 0;
-                    l50.unk18 = 1;
+                    l50.facing = 1;
                     l50.screen = 1;
                     SpawnObject(&l50);
                     m_playVoice = 4;
@@ -5532,7 +5532,7 @@ void CAkane::UpdatePattern()
             l50.y = (double)(int)(*m_opponent)->y;
             l50.scale = 0;
             l50.unk0 = 1;
-            l50.unk18 = facing;
+            l50.facing = facing;
             l50.layer = 1;
             SpawnObject(&l50);
         }
@@ -5542,7 +5542,7 @@ void CAkane::UpdatePattern()
             l50.y = (double)((int)(*m_opponent)->y + 0x40);
             l50.scale = 0;
             l50.unk0 = 1;
-            l50.unk18 = facing;
+            l50.facing = facing;
             l50.layer = 1;
             SpawnObject(&l50);
         }
@@ -5552,7 +5552,7 @@ void CAkane::UpdatePattern()
             l50.y = (double)((int)(*m_opponent)->y + 0x80);
             l50.scale = 0;
             l50.unk0 = 1;
-            l50.unk18 = facing;
+            l50.facing = facing;
             l50.layer = 1;
             SpawnObject(&l50);
         }
@@ -5562,7 +5562,7 @@ void CAkane::UpdatePattern()
             l50.y = (double)(int)(*m_opponent)->y;
             l50.scale = 0;
             l50.unk0 = 1;
-            l50.unk18 = facing;
+            l50.facing = facing;
             l50.layer = 1;
             SpawnObject(&l50);
         }
@@ -5572,7 +5572,7 @@ void CAkane::UpdatePattern()
             l50.y = (double)((int)(*m_opponent)->y + 0x50);
             l50.scale = 0;
             l50.unk0 = 1;
-            l50.unk18 = facing;
+            l50.facing = facing;
             l50.layer = 1;
             SpawnObject(&l50);
         }
@@ -5582,7 +5582,7 @@ void CAkane::UpdatePattern()
             l50.y = (double)((int)(*m_opponent)->y + 0x7d);
             l50.scale = 0;
             l50.unk0 = 1;
-            l50.unk18 = facing;
+            l50.facing = facing;
             l50.layer = 1;
             SpawnObject(&l50);
         }
@@ -5592,7 +5592,7 @@ void CAkane::UpdatePattern()
             l50.y = 0.0;
             l50.scale = 0;
             l50.unk0 = 1;
-            l50.unk18 = facing;
+            l50.facing = facing;
             l50.layer = 1;
             SpawnObject(&l50);
         }
@@ -5650,7 +5650,7 @@ void CAkane::UpdatePattern()
                 l50.type = 0x192;
                 l50.x = (double)((int)x + facing * 0x1e);
                 l50.y = (double)((int)y - 0x1e);
-                l50.unk18 = facing;
+                l50.facing = facing;
                 l50.layer = 1;
                 l50.scale = 2;
                 SpawnObject(&l50);

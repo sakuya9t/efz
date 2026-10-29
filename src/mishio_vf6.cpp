@@ -1380,7 +1380,7 @@ void CMishio::UpdatePattern()
             l50.type = 0x1f3;
             l50.x = (double)(int)x;
             l50.y = (double)(int)y;
-            l50.unk18 = facing;
+            l50.facing = facing;
             l50.layer = 1;
             SpawnObject(&l50);
             m_gauge = m_gauge + 0x1e;
@@ -1467,7 +1467,7 @@ void CMishio::UpdatePattern()
                 l50.scale = 0;
                 l50.layer = 0;
                 l50.unk0 = 1;
-                l50.unk18 = facing;
+                l50.facing = facing;
                 SpawnObject(&l50);
                 unk3144 = 1;
             }
@@ -1519,7 +1519,7 @@ void CMishio::UpdatePattern()
                 l50.scale = 0;
                 l50.layer = 0;
                 l50.unk0 = 1;
-                l50.unk18 = facing;
+                l50.facing = facing;
                 SpawnObject(&l50);
                 unk3144 = 1;
             }
@@ -1571,7 +1571,7 @@ void CMishio::UpdatePattern()
                 l50.scale = 0;
                 l50.layer = 0;
                 l50.unk0 = 1;
-                l50.unk18 = facing;
+                l50.facing = facing;
                 SpawnObject(&l50);
                 unk3144 = 1;
             }
@@ -1614,7 +1614,7 @@ void CMishio::UpdatePattern()
                 l50.scale = 0;
                 l50.layer = 0;
                 l50.unk0 = 1;
-                l50.unk18 = facing;
+                l50.facing = facing;
                 SpawnObject(&l50);
                 unk3144 = 1;
             }
@@ -1655,7 +1655,7 @@ void CMishio::UpdatePattern()
             l50.x = 60.0;
             l50.y = 40.0;
             l50.screen = 1;
-            l50.unk18 = 1;
+            l50.facing = 1;
             l50.scale = 0;
             l50.layer = 0;
             SpawnObject(&l50);
@@ -3835,7 +3835,7 @@ void CMishio::UpdatePattern()
                 l50.type = 0x194;
                 l50.x = (double)(int)x;
                 l50.y = (double)(int)y;
-                l50.unk18 = facing;
+                l50.facing = facing;
                 l50.layer = 1;
                 l50.scale = 2;
                 SpawnObject(&l50);
@@ -3926,7 +3926,7 @@ void CMishio::UpdatePattern()
                 l50.type = 0x194;
                 l50.x = (double)(int)x;
                 l50.y = (double)(int)y;
-                l50.unk18 = facing;
+                l50.facing = facing;
                 l50.layer = 1;
                 l50.scale = 2;
                 SpawnObject(&l50);
@@ -4017,7 +4017,7 @@ void CMishio::UpdatePattern()
                 l50.type = 0x193;
                 l50.x = (double)(int)x;
                 l50.y = (double)(int)y;
-                l50.unk18 = facing;
+                l50.facing = facing;
                 l50.layer = 1;
                 l50.scale = 2;
                 SpawnObject(&l50);
@@ -4102,7 +4102,7 @@ void CMishio::UpdatePattern()
                 l50.type = 0x195;
                 l50.x = (double)(int)x;
                 l50.y = (double)(int)y;
-                l50.unk18 = facing;
+                l50.facing = facing;
                 l50.layer = 1;
                 l50.scale = 2;
                 SpawnObject(&l50);
@@ -4195,7 +4195,7 @@ void CMishio::UpdatePattern()
                 l50.type = 0x196;
                 l50.x = (double)(int)x;
                 l50.y = (double)(int)y;
-                l50.unk18 = facing;
+                l50.facing = facing;
                 l50.layer = 1;
                 l50.scale = 2;
                 SpawnObject(&l50);
@@ -4288,7 +4288,7 @@ void CMishio::UpdatePattern()
                 l50.type = 0x197;
                 l50.x = (double)(int)x;
                 l50.y = (double)(int)y;
-                l50.unk18 = facing;
+                l50.facing = facing;
                 l50.layer = 1;
                 l50.scale = 2;
                 SpawnObject(&l50);
@@ -4322,7 +4322,7 @@ void CMishio::UpdatePattern()
                 l50.type = 0x193;
                 l50.x = (double)(int)x;
                 l50.y = (double)(int)y;
-                l50.unk18 = facing;
+                l50.facing = facing;
                 l50.layer = 1;
                 l50.scale = 2;
                 SpawnObject(&l50);
@@ -4362,7 +4362,7 @@ void CMishio::UpdatePattern()
                 l50.type = 0x194;
                 l50.x = (double)(int)x;
                 l50.y = (double)(int)y;
-                l50.unk18 = facing;
+                l50.facing = facing;
                 l50.layer = 1;
                 l50.scale = 2;
                 SpawnObject(&l50);
@@ -4402,7 +4402,7 @@ void CMishio::UpdatePattern()
                 l50.type = 0x195;
                 l50.x = (double)(int)x;
                 l50.y = (double)(int)y;
-                l50.unk18 = facing;
+                l50.facing = facing;
                 l50.layer = 1;
                 l50.scale = 2;
                 SpawnObject(&l50);
@@ -4450,7 +4450,7 @@ void CMishio::UpdatePattern()
                 l50.type = 0x196;
                 l50.x = (double)(int)x;
                 l50.y = (double)(int)y;
-                l50.unk18 = facing;
+                l50.facing = facing;
                 l50.layer = 1;
                 l50.scale = 2;
                 SpawnObject(&l50);
@@ -4498,7 +4498,7 @@ void CMishio::UpdatePattern()
                 l50.type = 0x197;
                 l50.x = (double)(int)x;
                 l50.y = (double)(int)y;
-                l50.unk18 = facing;
+                l50.facing = facing;
                 l50.layer = 1;
                 l50.scale = 2;
                 SpawnObject(&l50);
@@ -4633,7 +4633,7 @@ void CMishio::UpdatePattern()
             l50.type = 0x190;
             l50.x = (double)((int)x + (facing << 6));
             l50.y = (double)(int)y;
-            l50.unk18 = facing;
+            l50.facing = facing;
             l50.layer = 1;
             l50.scale = 2;
             l50.unk0 = 1;
@@ -4662,7 +4662,7 @@ void CMishio::UpdatePattern()
             l50.type = 0x191;
             l50.x = (double)((int)x + (facing << 6));
             l50.y = (double)(int)y;
-            l50.unk18 = facing;
+            l50.facing = facing;
             l50.layer = 1;
             l50.scale = 2;
             l50.unk0 = 1;
@@ -4706,7 +4706,7 @@ void CMishio::UpdatePattern()
             l50.type = 0x192;
             l50.x = (double)((int)x + facing * 0x14);
             l50.y = (double)((int)y - 0x3c);
-            l50.unk18 = facing;
+            l50.facing = facing;
             l50.layer = 1;
             l50.scale = 2;
             l50.unk0 = 1;
@@ -4746,7 +4746,7 @@ void CMishio::UpdatePattern()
                 }
             }
             l50.y = (double)(int)y;
-            l50.unk18 = facing;
+            l50.facing = facing;
             l50.layer = 1;
             l50.scale = 2;
             l50.unk0 = 1;
@@ -4791,7 +4791,7 @@ void CMishio::UpdatePattern()
                 }
             }
             l50.y = (double)(int)y;
-            l50.unk18 = facing;
+            l50.facing = facing;
             l50.layer = 1;
             l50.scale = 2;
             l50.unk0 = 1;
@@ -4839,7 +4839,7 @@ void CMishio::UpdatePattern()
                 l50.y = (double)((int)y - 0x28);
                 l50.scale = 2;
                 l50.layer = 1;
-                l50.unk18 = facing;
+                l50.facing = facing;
                 SpawnObject(&l50);
             }
             if (frame == 3) {
@@ -4883,7 +4883,7 @@ void CMishio::UpdatePattern()
                 l50.y = (double)((int)y - 0x28);
                 l50.scale = 2;
                 l50.layer = 1;
-                l50.unk18 = facing;
+                l50.facing = facing;
                 SpawnObject(&l50);
             }
             if (frame >= x8) {
@@ -4940,7 +4940,7 @@ void CMishio::UpdatePattern()
                 l50.y = (double)((int)y - 0x28);
                 l50.scale = 2;
                 l50.layer = 1;
-                l50.unk18 = facing;
+                l50.facing = facing;
                 SpawnObject(&l50);
             }
             if (frame == 9) {
@@ -4952,7 +4952,7 @@ void CMishio::UpdatePattern()
                 l50.y = (double)((int)y - 0x28);
                 l50.scale = 2;
                 l50.layer = 1;
-                l50.unk18 = facing;
+                l50.facing = facing;
                 SpawnObject(&l50);
             }
             if (frame >= x8) {
@@ -4986,14 +4986,14 @@ void CMishio::UpdatePattern()
                 l50.y = (double)((int)y - 0x28);
                 l50.scale = 2;
                 l50.layer = 1;
-                l50.unk18 = facing;
+                l50.facing = facing;
                 SpawnObject(&l50);
                 l50.type = 0x1b8;
                 l50.x = (double)(int)x;
                 l50.y = (double)(int)y;
                 l50.scale = 2;
                 l50.layer = 1;
-                l50.unk18 = facing;
+                l50.facing = facing;
                 SpawnObject(&l50);
             }
             if (frame >= x8) {
@@ -5033,14 +5033,14 @@ void CMishio::UpdatePattern()
                 l50.y = (double)((int)y - 0x28);
                 l50.scale = 2;
                 l50.layer = 1;
-                l50.unk18 = facing;
+                l50.facing = facing;
                 SpawnObject(&l50);
                 l50.type = 0x1b8;
                 l50.x = (double)(int)x;
                 l50.y = (double)(int)y;
                 l50.scale = 2;
                 l50.layer = 1;
-                l50.unk18 = facing;
+                l50.facing = facing;
                 SpawnObject(&l50);
                 l50.type = 0x1ba;
                 l50.unk0 = 1;
@@ -5048,7 +5048,7 @@ void CMishio::UpdatePattern()
                 l50.y = (double)((int)y - 0x3c);
                 l50.scale = 2;
                 l50.layer = 1;
-                l50.unk18 = facing;
+                l50.facing = facing;
                 SpawnObject(&l50);
             }
             if (frame >= x8) {
@@ -5104,14 +5104,14 @@ void CMishio::UpdatePattern()
                 l50.y = (double)((int)y - 0x28);
                 l50.scale = 2;
                 l50.layer = 1;
-                l50.unk18 = facing;
+                l50.facing = facing;
                 SpawnObject(&l50);
                 l50.type = 0x1b8;
                 l50.x = (double)(int)x;
                 l50.y = (double)(int)y;
                 l50.scale = 2;
                 l50.layer = 1;
-                l50.unk18 = facing;
+                l50.facing = facing;
                 SpawnObject(&l50);
             }
             if (frame == 9) {
@@ -5123,14 +5123,14 @@ void CMishio::UpdatePattern()
                 l50.y = (double)((int)y - 0x28);
                 l50.scale = 2;
                 l50.layer = 1;
-                l50.unk18 = facing;
+                l50.facing = facing;
                 SpawnObject(&l50);
                 l50.type = 0x1b8;
                 l50.x = (double)(int)x;
                 l50.y = (double)(int)y;
                 l50.scale = 2;
                 l50.layer = 1;
-                l50.unk18 = facing;
+                l50.facing = facing;
                 SpawnObject(&l50);
             }
             if (frame >= x8) {
@@ -5571,7 +5571,7 @@ void CMishio::UpdatePattern()
             l50.y = (double)((int)y - (WORD)Random(0, 0x5a));
             l50.scale = 2;
             l50.layer = 1;
-            l50.unk18 = facing;
+            l50.facing = facing;
             SpawnObject(&l50);
         }
         timer++;
@@ -5666,7 +5666,7 @@ void CMishio::UpdatePattern()
             l50.y = (double)((int)y - (WORD)Random(0, 0x5a));
             l50.scale = 2;
             l50.layer = 1;
-            l50.unk18 = facing;
+            l50.facing = facing;
             SpawnObject(&l50);
         }
         if (frame > 0x15 && frame < 0x1f && (WORD)Random(0, 0x64) < 5) {
@@ -5675,7 +5675,7 @@ void CMishio::UpdatePattern()
             l50.y = (double)((int)y - (WORD)Random(0, 0x5a));
             l50.scale = 2;
             l50.layer = 1;
-            l50.unk18 = facing;
+            l50.facing = facing;
             SpawnObject(&l50);
         }
         timer++;
@@ -5821,7 +5821,7 @@ void CMishio::UpdatePattern()
                 l50.unk0 = 1;
                 l50.x = (double)(int)x;
                 l50.y = (double)(int)y;
-                l50.unk18 = facing;
+                l50.facing = facing;
                 l50.layer = 1;
                 l50.scale = 2;
                 SpawnObject(&l50);
@@ -5933,7 +5933,7 @@ void CMishio::UpdatePattern()
                 l50.unk0 = 1;
                 l50.x = (double)(int)x;
                 l50.y = (double)(int)y;
-                l50.unk18 = facing;
+                l50.facing = facing;
                 l50.layer = 1;
                 l50.scale = 2;
                 SpawnObject(&l50);
@@ -6048,7 +6048,7 @@ void CMishio::UpdatePattern()
                 l50.unk0 = 1;
                 l50.x = (double)(int)x;
                 l50.y = (double)(int)y;
-                l50.unk18 = facing;
+                l50.facing = facing;
                 l50.layer = 1;
                 l50.scale = 2;
                 SpawnObject(&l50);
@@ -6144,7 +6144,7 @@ void CMishio::UpdatePattern()
                 l50.unk0 = 1;
                 l50.x = (double)(int)x;
                 l50.y = (double)(int)y;
-                l50.unk18 = facing;
+                l50.facing = facing;
                 l50.layer = 1;
                 l50.scale = 2;
                 SpawnObject(&l50);
@@ -6246,7 +6246,7 @@ void CMishio::UpdatePattern()
                 l50.unk0 = 1;
                 l50.x = (double)(int)x;
                 l50.y = (double)(int)y;
-                l50.unk18 = facing;
+                l50.facing = facing;
                 l50.layer = 1;
                 l50.scale = 2;
                 SpawnObject(&l50);
@@ -6348,7 +6348,7 @@ void CMishio::UpdatePattern()
                 l50.unk0 = 1;
                 l50.x = (double)(int)x;
                 l50.y = (double)(int)y;
-                l50.unk18 = facing;
+                l50.facing = facing;
                 l50.layer = 1;
                 l50.scale = 2;
                 SpawnObject(&l50);
@@ -6457,7 +6457,7 @@ void CMishio::UpdatePattern()
                 l50.type = 0x19f;
                 l50.x = (double)(int)x;
                 l50.y = (double)(int)y;
-                l50.unk18 = facing;
+                l50.facing = facing;
                 l50.unk0 = 1;
                 l50.layer = 1;
                 l50.scale = 2;
@@ -6567,7 +6567,7 @@ void CMishio::UpdatePattern()
                 l50.type = 0x1a0;
                 l50.x = (double)(int)x;
                 l50.y = (double)(int)y;
-                l50.unk18 = facing;
+                l50.facing = facing;
                 l50.layer = 1;
                 l50.unk0 = 1;
                 l50.scale = 2;
@@ -6728,7 +6728,7 @@ void CMishio::UpdatePattern()
                 l50.scale = 2;
                 l50.unk0 = 1;
                 l50.layer = 1;
-                l50.unk18 = facing;
+                l50.facing = facing;
                 SpawnObject(&l50);
                 l50.type = 0x1ad;
                 l50.x = (double)((int)x + facing * 0xf);
@@ -6736,7 +6736,7 @@ void CMishio::UpdatePattern()
                 l50.scale = 2;
                 l50.unk0 = 1;
                 l50.layer = 1;
-                l50.unk18 = facing;
+                l50.facing = facing;
                 SpawnObject(&l50);
             }
             if (frame == 0xa) {
@@ -6747,7 +6747,7 @@ void CMishio::UpdatePattern()
                     l50.scale = 2;
                     l50.unk0 = 1;
                     l50.layer = 1;
-                    l50.unk18 = facing;
+                    l50.facing = facing;
                     SpawnObject(&l50);
                     break;
                 }
@@ -6775,7 +6775,7 @@ void CMishio::UpdatePattern()
                 l50.scale = 2;
                 l50.unk0 = 1;
                 l50.layer = 1;
-                l50.unk18 = facing;
+                l50.facing = facing;
                 SpawnObject(&l50);
             }
             if (frame == 0x10 && unk313c < 2) {
@@ -6828,7 +6828,7 @@ void CMishio::UpdatePattern()
                 l50.scale = 2;
                 l50.unk0 = 1;
                 l50.layer = 1;
-                l50.unk18 = facing;
+                l50.facing = facing;
                 SpawnObject(&l50);
                 l50.type = 0x1ad;
                 l50.x = (double)((int)x + facing * 0xf);
@@ -6836,7 +6836,7 @@ void CMishio::UpdatePattern()
                 l50.scale = 2;
                 l50.unk0 = 1;
                 l50.layer = 1;
-                l50.unk18 = facing;
+                l50.facing = facing;
                 SpawnObject(&l50);
             }
             if (frame == 0xa) {
@@ -6847,7 +6847,7 @@ void CMishio::UpdatePattern()
                     l50.scale = 2;
                     l50.unk0 = 1;
                     l50.layer = 1;
-                    l50.unk18 = facing;
+                    l50.facing = facing;
                     SpawnObject(&l50);
                     break;
                 }
@@ -6875,7 +6875,7 @@ void CMishio::UpdatePattern()
                 l50.scale = 2;
                 l50.unk0 = 1;
                 l50.layer = 1;
-                l50.unk18 = facing;
+                l50.facing = facing;
                 SpawnObject(&l50);
             }
             if (frame == 0x10 && unk313c < 2) {
@@ -6932,7 +6932,7 @@ void CMishio::UpdatePattern()
                 l50.scale = 2;
                 l50.unk0 = 1;
                 l50.layer = 1;
-                l50.unk18 = facing;
+                l50.facing = facing;
                 SpawnObject(&l50);
                 l50.type = 0x1ad;
                 l50.x = (double)((int)x + facing * 0xf);
@@ -6940,7 +6940,7 @@ void CMishio::UpdatePattern()
                 l50.scale = 2;
                 l50.unk0 = 1;
                 l50.layer = 1;
-                l50.unk18 = facing;
+                l50.facing = facing;
                 SpawnObject(&l50);
             }
             if (frame == 0xa) {
@@ -6951,7 +6951,7 @@ void CMishio::UpdatePattern()
                     l50.scale = 2;
                     l50.unk0 = 1;
                     l50.layer = 1;
-                    l50.unk18 = facing;
+                    l50.facing = facing;
                     SpawnObject(&l50);
                     break;
                 }
@@ -6979,7 +6979,7 @@ void CMishio::UpdatePattern()
                 l50.scale = 2;
                 l50.unk0 = 1;
                 l50.layer = 1;
-                l50.unk18 = facing;
+                l50.facing = facing;
                 SpawnObject(&l50);
             }
             if (frame == 0x10 && unk313c < 2) {
@@ -7049,7 +7049,7 @@ void CMishio::UpdatePattern()
                 l50.scale = 2;
                 l50.unk0 = 1;
                 l50.layer = 1;
-                l50.unk18 = facing;
+                l50.facing = facing;
                 SpawnObject(&l50);
                 l50.type = 0x1a5;
                 l50.x = (double)((int)x + facing * 0x32);
@@ -7057,7 +7057,7 @@ void CMishio::UpdatePattern()
                 l50.scale = 2;
                 l50.unk0 = 1;
                 l50.layer = 1;
-                l50.unk18 = facing;
+                l50.facing = facing;
                 SpawnObject(&l50);
             }
             if (frame == 0x10) {
@@ -7122,7 +7122,7 @@ void CMishio::UpdatePattern()
                 l50.scale = 2;
                 l50.unk0 = 1;
                 l50.layer = 1;
-                l50.unk18 = facing;
+                l50.facing = facing;
                 SpawnObject(&l50);
                 l50.type = 0x1a5;
                 l50.x = (double)((int)x + facing * 0x32);
@@ -7130,7 +7130,7 @@ void CMishio::UpdatePattern()
                 l50.scale = 2;
                 l50.unk0 = 1;
                 l50.layer = 1;
-                l50.unk18 = facing;
+                l50.facing = facing;
                 SpawnObject(&l50);
             }
             if (frame == 0xe && unk313c < 2) {
@@ -7148,7 +7148,7 @@ void CMishio::UpdatePattern()
                 l50.scale = 2;
                 l50.unk0 = 1;
                 l50.layer = 1;
-                l50.unk18 = facing;
+                l50.facing = facing;
                 SpawnObject(&l50);
                 l50.type = 0x1a5;
                 l50.x = (double)((int)x + facing * 0x32);
@@ -7156,7 +7156,7 @@ void CMishio::UpdatePattern()
                 l50.scale = 2;
                 l50.unk0 = 1;
                 l50.layer = 1;
-                l50.unk18 = facing;
+                l50.facing = facing;
                 SpawnObject(&l50);
             }
             if (frame == 0x10) {
@@ -7225,7 +7225,7 @@ void CMishio::UpdatePattern()
                 l50.scale = 2;
                 l50.unk0 = 1;
                 l50.layer = 1;
-                l50.unk18 = facing;
+                l50.facing = facing;
                 SpawnObject(&l50);
                 l50.type = 0x1a5;
                 l50.x = (double)((int)x + facing * 0x32);
@@ -7233,7 +7233,7 @@ void CMishio::UpdatePattern()
                 l50.scale = 2;
                 l50.unk0 = 1;
                 l50.layer = 1;
-                l50.unk18 = facing;
+                l50.facing = facing;
                 SpawnObject(&l50);
             }
             if (frame == 0xe && unk313c < 4) {
@@ -7257,7 +7257,7 @@ void CMishio::UpdatePattern()
                 l50.scale = 2;
                 l50.unk0 = 1;
                 l50.layer = 1;
-                l50.unk18 = facing;
+                l50.facing = facing;
                 SpawnObject(&l50);
                 l50.type = 0x1a5;
                 l50.x = (double)((int)x + facing * 0x32);
@@ -7265,7 +7265,7 @@ void CMishio::UpdatePattern()
                 l50.scale = 2;
                 l50.unk0 = 1;
                 l50.layer = 1;
-                l50.unk18 = facing;
+                l50.facing = facing;
                 SpawnObject(&l50);
             }
             if (frame == 0x10) {
@@ -7307,7 +7307,7 @@ void CMishio::UpdatePattern()
             l50.scale = 2;
             l50.unk0 = 1;
             l50.layer = 1;
-            l50.unk18 = facing;
+            l50.facing = facing;
             l50.unk30 = 1;
             SpawnObject(&l50);
         }
@@ -7322,7 +7322,7 @@ void CMishio::UpdatePattern()
             l50.scale = 2;
             l50.unk0 = 1;
             l50.layer = 0;
-            l50.unk18 = facing;
+            l50.facing = facing;
             SpawnObject(&l50);
             l50.type = 0x1ad;
             l50.x = (double)((int)x + facing * 5);
@@ -7330,7 +7330,7 @@ void CMishio::UpdatePattern()
             l50.scale = 2;
             l50.unk0 = 1;
             l50.layer = 0;
-            l50.unk18 = facing;
+            l50.facing = facing;
             SpawnObject(&l50);
             l50.type = 0x1ad;
             l50.x = (double)((int)x + facing * 0x2d);
@@ -7338,7 +7338,7 @@ void CMishio::UpdatePattern()
             l50.scale = 2;
             l50.unk0 = 1;
             l50.layer = 0;
-            l50.unk18 = facing;
+            l50.facing = facing;
             SpawnObject(&l50);
             l50.type = 0x1ad;
             l50.x = (double)((int)x - facing * 0x23);
@@ -7346,7 +7346,7 @@ void CMishio::UpdatePattern()
             l50.scale = 2;
             l50.unk0 = 1;
             l50.layer = 0;
-            l50.unk18 = facing;
+            l50.facing = facing;
             SpawnObject(&l50);
         }
         timer++;

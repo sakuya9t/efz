@@ -1380,7 +1380,7 @@ void CShiori::UpdatePattern()
             l50.type = 0x1f3;
             l50.x = (double)(int)x;
             l50.y = (double)(int)y;
-            l50.unk18 = facing;
+            l50.facing = facing;
             l50.layer = 1;
             SpawnObject(&l50);
             m_gauge = m_gauge + 0x1e;
@@ -1467,7 +1467,7 @@ void CShiori::UpdatePattern()
                 l50.scale = 0;
                 l50.layer = 0;
                 l50.unk0 = 1;
-                l50.unk18 = facing;
+                l50.facing = facing;
                 SpawnObject(&l50);
                 unk3144 = 1;
             }
@@ -1519,7 +1519,7 @@ void CShiori::UpdatePattern()
                 l50.scale = 0;
                 l50.layer = 0;
                 l50.unk0 = 1;
-                l50.unk18 = facing;
+                l50.facing = facing;
                 SpawnObject(&l50);
                 unk3144 = 1;
             }
@@ -1571,7 +1571,7 @@ void CShiori::UpdatePattern()
                 l50.scale = 0;
                 l50.layer = 0;
                 l50.unk0 = 1;
-                l50.unk18 = facing;
+                l50.facing = facing;
                 SpawnObject(&l50);
                 unk3144 = 1;
             }
@@ -1614,7 +1614,7 @@ void CShiori::UpdatePattern()
                 l50.scale = 0;
                 l50.layer = 0;
                 l50.unk0 = 1;
-                l50.unk18 = facing;
+                l50.facing = facing;
                 SpawnObject(&l50);
                 unk3144 = 1;
             }
@@ -1655,7 +1655,7 @@ void CShiori::UpdatePattern()
             l50.x = 60.0;
             l50.y = 40.0;
             l50.screen = 1;
-            l50.unk18 = 1;
+            l50.facing = 1;
             l50.scale = 0;
             l50.layer = 1;
             SpawnObject(&l50);
@@ -2689,7 +2689,7 @@ void CShiori::UpdatePattern()
             l50.scale = 2;
             l50.unk2c = 1;
             l50.layer = 1;
-            l50.unk18 = facing;
+            l50.facing = facing;
             SpawnObject(&l50);
         }
         timer++;
@@ -3312,7 +3312,7 @@ void CShiori::UpdatePattern()
                 l50.y = (double)((int)y - 0x28);
                 l50.scale = 2;
                 l50.layer = 1;
-                l50.unk18 = facing;
+                l50.facing = facing;
                 SpawnObject(&l50);
                 m_playVoice = 5;
             }
@@ -3344,7 +3344,7 @@ void CShiori::UpdatePattern()
                 l50.y = (double)((int)y - 0x28);
                 l50.scale = 2;
                 l50.layer = 1;
-                l50.unk18 = facing;
+                l50.facing = facing;
                 SpawnObject(&l50);
                 m_playVoice = 5;
             }
@@ -3389,7 +3389,7 @@ void CShiori::UpdatePattern()
             l50.y = (double)((int)y - 0x14);
             l50.scale = 2;
             l50.layer = 1;
-            l50.unk18 = facing;
+            l50.facing = facing;
             SpawnObject(&l50);
             m_playVoice = 5;
         }
@@ -3399,7 +3399,7 @@ void CShiori::UpdatePattern()
             l50.y = (double)((int)y - 0x3c);
             l50.scale = 2;
             l50.layer = 1;
-            l50.unk18 = facing;
+            l50.facing = facing;
             SpawnObject(&l50);
             m_playVoice = 5;
         }
@@ -3418,7 +3418,7 @@ void CShiori::UpdatePattern()
                 l50.scale = 2;
                 l50.unk2c = 1;
                 l50.layer = 1;
-                l50.unk18 = facing;
+                l50.facing = facing;
                 SpawnObject(&l50);
                 m_playVoice = 5;
             }
@@ -3520,7 +3520,7 @@ void CShiori::UpdatePattern()
         }
         if (frame == 3 && timer == 0 && unk3138 == 0) {
             l50.type = 0x1a1;
-            l50.unk18 = facing;
+            l50.facing = facing;
             l50.x = (double)((int)x + facing * 0x17);
             l50.y = (double)((int)y - 0x30);
             l50.scale = 2;
@@ -3576,14 +3576,14 @@ void CShiori::UpdatePattern()
                 l50.type = 0x192;
                 l50.x = (double)((int)x + facing * 0xe);
                 l50.y = (double)(int)y;
-                l50.unk18 = facing;
+                l50.facing = facing;
                 l50.layer = 1;
                 l50.scale = 0;
                 SpawnObject(&l50);
                 l50.type = 0x192;
                 l50.x = (double)((int)x + facing * 0x3c);
                 l50.y = (double)((int)y - 0x10);
-                l50.unk18 = facing;
+                l50.facing = facing;
                 l50.layer = 1;
                 l50.scale = 0;
                 SpawnObject(&l50);
@@ -3624,14 +3624,14 @@ void CShiori::UpdatePattern()
                 l50.type = 0x192;
                 l50.x = (double)((int)x + facing * 0xe);
                 l50.y = (double)(int)y;
-                l50.unk18 = facing;
+                l50.facing = facing;
                 l50.layer = 1;
                 l50.scale = 0;
                 SpawnObject(&l50);
                 l50.type = 0x192;
                 l50.x = (double)((int)x + facing * 0x3c);
                 l50.y = (double)((int)y - 0x10);
-                l50.unk18 = facing;
+                l50.facing = facing;
                 l50.layer = 1;
                 l50.scale = 0;
                 SpawnObject(&l50);
@@ -3686,14 +3686,14 @@ void CShiori::UpdatePattern()
                 l50.type = 0x194;
                 l50.x = (double)((int)x + facing * 0xe);
                 l50.y = (double)(int)y;
-                l50.unk18 = facing;
+                l50.facing = facing;
                 l50.layer = 1;
                 l50.scale = 0;
                 SpawnObject(&l50);
                 l50.type = 0x194;
                 l50.x = (double)((int)x + facing * 0x3c);
                 l50.y = (double)((int)y - 0x10);
-                l50.unk18 = facing;
+                l50.facing = facing;
                 l50.layer = 1;
                 l50.scale = 0;
                 SpawnObject(&l50);
@@ -3724,7 +3724,7 @@ void CShiori::UpdatePattern()
                 l50.type = 0x197;
                 l50.x = (double)((int)x - facing * 0x1e);
                 l50.y = (double)((int)y - 0x1e);
-                l50.unk18 = facing;
+                l50.facing = facing;
                 l50.layer = 1;
                 l50.scale = 2;
                 SpawnObject(&l50);
@@ -3755,7 +3755,7 @@ void CShiori::UpdatePattern()
                 l50.type = 0x19a;
                 l50.x = (double)((int)x - facing * 0x1e);
                 l50.y = (double)((int)y - 0x1e);
-                l50.unk18 = facing;
+                l50.facing = facing;
                 l50.layer = 1;
                 l50.scale = 2;
                 SpawnObject(&l50);
@@ -3798,7 +3798,7 @@ void CShiori::UpdatePattern()
                 l50.type = 0x1c4;
                 l50.x = (double)((int)x - facing * 0x1e);
                 l50.y = (double)((int)y - 0x1e);
-                l50.unk18 = facing;
+                l50.facing = facing;
                 l50.layer = 1;
                 l50.scale = 2;
                 SpawnObject(&l50);
@@ -3835,7 +3835,7 @@ void CShiori::UpdatePattern()
                 l50.y = (double)((int)y - 0x30);
                 l50.scale = 2;
                 l50.layer = 1;
-                l50.unk18 = facing;
+                l50.facing = facing;
                 SpawnObject(&l50);
                 m_playVoice = 5;
             }
@@ -3869,7 +3869,7 @@ void CShiori::UpdatePattern()
                 l50.y = (double)((int)y - 0x30);
                 l50.scale = 2;
                 l50.layer = 1;
-                l50.unk18 = facing;
+                l50.facing = facing;
                 SpawnObject(&l50);
                 m_playVoice = 5;
             }
@@ -3911,7 +3911,7 @@ void CShiori::UpdatePattern()
             l50.y = (double)((int)y - 0x26);
             l50.scale = 2;
             l50.layer = 1;
-            l50.unk18 = facing;
+            l50.facing = facing;
             unk3140 = 1;
             SpawnObject(&l50);
             m_playVoice = 5;
@@ -3922,7 +3922,7 @@ void CShiori::UpdatePattern()
             l50.y = (double)((int)y - 0x48);
             l50.scale = 2;
             l50.layer = 1;
-            l50.unk18 = facing;
+            l50.facing = facing;
             unk3140 = 2;
             SpawnObject(&l50);
             m_playVoice = 5;
@@ -3942,7 +3942,7 @@ void CShiori::UpdatePattern()
                 l50.scale = 2;
                 l50.unk2c = 1;
                 l50.layer = 1;
-                l50.unk18 = facing;
+                l50.facing = facing;
                 SpawnObject(&l50);
                 m_playVoice = 5;
             }
@@ -3967,7 +3967,7 @@ void CShiori::UpdatePattern()
             l50.type = 0x1a2;
             l50.x = (double)((int)x + facing * 0x64);
             l50.y = (double)((int)y - 0x1e0);
-            l50.unk18 = facing;
+            l50.facing = facing;
             l50.layer = 1;
             l50.scale = 2;
             SpawnObject(&l50);
@@ -4001,7 +4001,7 @@ void CShiori::UpdatePattern()
             l50.type = 0x1a2;
             l50.x = (double)((int)x + facing * 0xb4);
             l50.y = (double)((int)y - 0x1e0);
-            l50.unk18 = facing;
+            l50.facing = facing;
             l50.layer = 1;
             l50.scale = 2;
             SpawnObject(&l50);
@@ -4035,7 +4035,7 @@ void CShiori::UpdatePattern()
             l50.type = 0x1a2;
             l50.x = (double)((int)x + facing * 0x104);
             l50.y = (double)((int)y - 0x1e0);
-            l50.unk18 = facing;
+            l50.facing = facing;
             l50.layer = 1;
             l50.scale = 2;
             SpawnObject(&l50);
@@ -4076,7 +4076,7 @@ void CShiori::UpdatePattern()
                 l50.type = 0x197;
                 l50.x = (double)((int)x - facing * 0x1e);
                 l50.y = (double)((int)y - 0x1e);
-                l50.unk18 = facing;
+                l50.facing = facing;
                 l50.layer = 1;
                 l50.scale = 2;
                 SpawnObject(&l50);
@@ -4111,7 +4111,7 @@ void CShiori::UpdatePattern()
                 l50.type = 0x1c2;
                 l50.x = (double)((int)x - facing * 0x1e);
                 l50.y = (double)((int)y - 0x1e);
-                l50.unk18 = facing;
+                l50.facing = facing;
                 l50.layer = 1;
                 l50.scale = 2;
                 SpawnObject(&l50);
@@ -4158,7 +4158,7 @@ void CShiori::UpdatePattern()
                 l50.type = 0x1c4;
                 l50.x = (double)((int)x - facing * 0x1e);
                 l50.y = (double)((int)y - 0x1e);
-                l50.unk18 = facing;
+                l50.facing = facing;
                 l50.layer = 1;
                 l50.scale = 2;
                 SpawnObject(&l50);
@@ -4206,7 +4206,7 @@ void CShiori::UpdatePattern()
             l50.scale = 0;
             l50.unk0 = 1;
             l50.layer = 1;
-            l50.unk18 = facing;
+            l50.facing = facing;
             l50.unk30 = 1;
             SpawnObject(&l50);
         }
@@ -4215,7 +4215,7 @@ void CShiori::UpdatePattern()
             l50.type = 0x19a;
             l50.x = (double)((int)x + facing * 0x47);
             l50.y = (double)((int)y - 0x36);
-            l50.unk18 = facing;
+            l50.facing = facing;
             l50.scale = 0;
             l50.layer = 1;
             SpawnObject(&l50);
@@ -4256,7 +4256,7 @@ void CShiori::UpdatePattern()
             l50.type = 0x1ad;
             l50.x = (double)((int)x - facing * 0xf);
             l50.y = (double)(int)y;
-            l50.unk18 = facing;
+            l50.facing = facing;
             l50.scale = 2;
             l50.layer = 1;
             SpawnObject(&l50);
@@ -4314,7 +4314,7 @@ void CShiori::UpdatePattern()
             l50.unk0 = 1;
             l50.x = (double)((int)x - facing * 0xf);
             l50.y = (double)(int)y;
-            l50.unk18 = facing;
+            l50.facing = facing;
             l50.scale = 2;
             l50.layer = 1;
             if (unk3140 == 0) {
@@ -4380,7 +4380,7 @@ void CShiori::UpdatePattern()
             l50.type = 0x1ad;
             l50.x = (double)((int)x - facing * 0xf);
             l50.y = (double)(int)y;
-            l50.unk18 = facing;
+            l50.facing = facing;
             l50.scale = 2;
             l50.layer = 1;
             if (unk3140 == 0) {
@@ -4439,7 +4439,7 @@ void CShiori::UpdatePattern()
             l50.type = 0x1b5;
             l50.x = (double)((int)x + facing * 0x32);
             l50.y = 0.0;
-            l50.unk18 = facing;
+            l50.facing = facing;
             l50.scale = 2;
             l50.layer = 1;
             SpawnObject(&l50);
@@ -4486,7 +4486,7 @@ void CShiori::UpdatePattern()
             l50.type = 0x1b6;
             l50.x = (double)((int)x + facing * 0x32);
             l50.y = 0.0;
-            l50.unk18 = facing;
+            l50.facing = facing;
             l50.scale = 2;
             l50.layer = 1;
             SpawnObject(&l50);
@@ -4536,7 +4536,7 @@ void CShiori::UpdatePattern()
             l50.type = 0x1b7;
             l50.x = (double)((int)x + facing * 0x32);
             l50.y = 0.0;
-            l50.unk18 = facing;
+            l50.facing = facing;
             l50.scale = 2;
             l50.layer = 1;
             SpawnObject(&l50);
@@ -4570,7 +4570,7 @@ void CShiori::UpdatePattern()
             l50.type = 0x1a7;
             l50.x = (double)(int)x;
             l50.y = (double)(int)y;
-            l50.unk18 = facing;
+            l50.facing = facing;
             l50.scale = 2;
             l50.layer = 1;
             SpawnObject(&l50);
@@ -4611,7 +4611,7 @@ void CShiori::UpdatePattern()
             l50.type = 0x1a8;
             l50.x = (double)(int)x;
             l50.y = (double)(int)y;
-            l50.unk18 = facing;
+            l50.facing = facing;
             l50.scale = 2;
             l50.layer = 1;
             SpawnObject(&l50);
@@ -4656,7 +4656,7 @@ void CShiori::UpdatePattern()
             l50.type = 0x1a9;
             l50.x = (double)(int)x;
             l50.y = (double)(int)y;
-            l50.unk18 = facing;
+            l50.facing = facing;
             l50.scale = 2;
             l50.layer = 1;
             SpawnObject(&l50);
@@ -4715,12 +4715,12 @@ void CShiori::UpdatePattern()
             l50.type = 0x1b3;
             l50.x = (double)((int)x + facing * 0x1e - facing * 0x30 * ((WORD)Random(0, 2) == 0));
             l50.y = (double)((int)y + -0x20 + (WORD)Random(0, 5));
-            l50.unk18 = facing;
+            l50.facing = facing;
             l50.scale = 0;
             l50.layer = 1;
             SpawnObject(&l50);
             l50.type = 0x1b4;
-            l50.unk18 = facing;
+            l50.facing = facing;
             l50.scale = 2;
             SpawnObject(&l50);
             unk3138 = 6;
@@ -4792,12 +4792,12 @@ void CShiori::UpdatePattern()
             l50.type = 0x1b3;
             l50.x = (double)((int)x + facing * 0x1e - facing * 0x30 * ((WORD)Random(0, 2) == 0));
             l50.y = (double)((int)y + -0x20 + (WORD)Random(0, 5));
-            l50.unk18 = facing;
+            l50.facing = facing;
             l50.scale = 0;
             l50.layer = 1;
             SpawnObject(&l50);
             l50.type = 0x1b4;
-            l50.unk18 = facing;
+            l50.facing = facing;
             l50.scale = 2;
             SpawnObject(&l50);
             unk3138 = 6;
@@ -4873,12 +4873,12 @@ void CShiori::UpdatePattern()
             l50.type = 0x1b3;
             l50.x = (double)((int)x + facing * 0x1e - facing * 0x30 * ((WORD)Random(0, 2) == 0));
             l50.y = (double)((int)y + -0x20 + (WORD)Random(0, 5));
-            l50.unk18 = facing;
+            l50.facing = facing;
             l50.scale = 0;
             l50.layer = 1;
             SpawnObject(&l50);
             l50.type = 0x1b4;
-            l50.unk18 = facing;
+            l50.facing = facing;
             l50.scale = 2;
             SpawnObject(&l50);
             unk3138 = 6;
@@ -4929,12 +4929,12 @@ void CShiori::UpdatePattern()
             l50.type = 0x1b3;
             l50.x = (double)((int)x + facing * 0x11 - facing * 0x30 * ((WORD)Random(0, 2) == 0));
             l50.y = (double)((int)y - 0x16);
-            l50.unk18 = facing;
+            l50.facing = facing;
             l50.scale = 0;
             l50.layer = 1;
             SpawnObject(&l50);
             l50.type = 0x1b4;
-            l50.unk18 = facing;
+            l50.facing = facing;
             l50.scale = 2;
             SpawnObject(&l50);
             unk3138 = 6;
@@ -4979,12 +4979,12 @@ void CShiori::UpdatePattern()
             l50.type = 0x1b3;
             l50.x = (double)((int)x + facing * 0x11 - facing * 0x30 * ((WORD)Random(0, 2) == 0));
             l50.y = (double)((int)y - 0x16);
-            l50.unk18 = facing;
+            l50.facing = facing;
             l50.scale = 0;
             l50.layer = 1;
             SpawnObject(&l50);
             l50.type = 0x1b4;
-            l50.unk18 = facing;
+            l50.facing = facing;
             l50.scale = 2;
             SpawnObject(&l50);
             unk3138 = 6;
@@ -5033,12 +5033,12 @@ void CShiori::UpdatePattern()
             l50.type = 0x1b3;
             l50.x = (double)((int)x + facing * 0x11 - facing * 0x30 * ((WORD)Random(0, 2) == 0));
             l50.y = (double)((int)y - 0x16);
-            l50.unk18 = facing;
+            l50.facing = facing;
             l50.scale = 0;
             l50.layer = 1;
             SpawnObject(&l50);
             l50.type = 0x1b4;
-            l50.unk18 = facing;
+            l50.facing = facing;
             l50.scale = 2;
             SpawnObject(&l50);
             unk3138 = 6;
@@ -5076,7 +5076,7 @@ void CShiori::UpdatePattern()
             l50.scale = 0;
             l50.unk0 = 1;
             l50.layer = 1;
-            l50.unk18 = -facing;
+            l50.facing = -facing;
             l50.unk30 = 1;
             SpawnObject(&l50);
         }
@@ -5105,7 +5105,7 @@ void CShiori::UpdatePattern()
             l50.type = 0x1b8;
             l50.x = (double)((int)x + facing * 0x14);
             l50.y = (double)((int)y - 0x34);
-            l50.unk18 = facing;
+            l50.facing = facing;
             l50.scale = 2;
             l50.layer = 1;
             SpawnObject(&l50);
@@ -5150,7 +5150,7 @@ void CShiori::UpdatePattern()
             l50.type = 0x1bd;
             l50.x = (*m_opponent)->x;
             l50.y = (*m_opponent)->y;
-            l50.unk18 = facing;
+            l50.facing = facing;
             l50.scale = 0;
             l50.layer = 0;
             SpawnObject(&l50);

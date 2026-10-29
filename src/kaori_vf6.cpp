@@ -1370,7 +1370,7 @@ void CKaori::UpdatePattern()
             l50.type = 0x1f3;
             l50.x = (double)(int)x;
             l50.y = (double)(int)y;
-            l50.unk18 = facing;
+            l50.facing = facing;
             l50.layer = 1;
             SpawnObject(&l50);
             m_gauge = m_gauge + 0x1e;
@@ -1457,7 +1457,7 @@ void CKaori::UpdatePattern()
                 l50.scale = 0;
                 l50.layer = 0;
                 l50.unk0 = 1;
-                l50.unk18 = facing;
+                l50.facing = facing;
                 SpawnObject(&l50);
                 unk3148 = 1;
             }
@@ -1509,7 +1509,7 @@ void CKaori::UpdatePattern()
                 l50.scale = 0;
                 l50.layer = 0;
                 l50.unk0 = 1;
-                l50.unk18 = facing;
+                l50.facing = facing;
                 SpawnObject(&l50);
                 unk3148 = 1;
             }
@@ -1561,7 +1561,7 @@ void CKaori::UpdatePattern()
                 l50.scale = 0;
                 l50.layer = 0;
                 l50.unk0 = 1;
-                l50.unk18 = facing;
+                l50.facing = facing;
                 SpawnObject(&l50);
                 unk3148 = 1;
             }
@@ -1604,7 +1604,7 @@ void CKaori::UpdatePattern()
                 l50.scale = 0;
                 l50.layer = 0;
                 l50.unk0 = 1;
-                l50.unk18 = facing;
+                l50.facing = facing;
                 SpawnObject(&l50);
                 unk3148 = 1;
             }
@@ -1645,7 +1645,7 @@ void CKaori::UpdatePattern()
             l50.x = 60.0;
             l50.y = 40.0;
             l50.screen = 1;
-            l50.unk18 = 1;
+            l50.facing = 1;
             l50.scale = 0;
             l50.layer = 1;
             SpawnObject(&l50);
@@ -3139,7 +3139,7 @@ void CKaori::UpdatePattern()
             l50.type = 0x191;
             l50.x = (double)((int)x + facing * 0x14);
             l50.y = (double)((int)y - 0x3c);
-            l50.unk18 = facing;
+            l50.facing = facing;
             l50.scale = 2;
             l50.layer = 1;
             SpawnObject(&l50);
@@ -3809,7 +3809,7 @@ void CKaori::UpdatePattern()
             l50.y = (double)(int)y;
             l50.scale = 2;
             l50.layer = 1;
-            l50.unk18 = facing;
+            l50.facing = facing;
             SpawnObject(&l50);
         }
         if (frame == 4 && timer == 0) {
@@ -3843,7 +3843,7 @@ void CKaori::UpdatePattern()
             l50.y = (double)(int)y;
             l50.scale = 2;
             l50.layer = 1;
-            l50.unk18 = facing;
+            l50.facing = facing;
             SpawnObject(&l50);
         }
         if (frame == 4 && timer == 0) {
@@ -3889,7 +3889,7 @@ void CKaori::UpdatePattern()
             l50.y = (double)(int)y;
             l50.scale = 2;
             l50.layer = 1;
-            l50.unk18 = facing;
+            l50.facing = facing;
             SpawnObject(&l50);
         }
         if (frame == 4 && timer == 0) {
@@ -4100,7 +4100,7 @@ void CKaori::UpdatePattern()
             l50.y = (double)(int)y;
             l50.scale = 2;
             l50.layer = 1;
-            l50.unk18 = facing;
+            l50.facing = facing;
             SpawnObject(&l50);
         }
         if (frame == 0xa && timer == 0) {
@@ -4109,7 +4109,7 @@ void CKaori::UpdatePattern()
             l50.y = (double)(int)y;
             l50.scale = 2;
             l50.layer = 1;
-            l50.unk18 = facing;
+            l50.facing = facing;
             SpawnObject(&l50);
         }
         if (frame == 0x12 && timer == 0) {
@@ -4118,7 +4118,7 @@ void CKaori::UpdatePattern()
             l50.y = (double)(int)y;
             l50.scale = 2;
             l50.layer = 1;
-            l50.unk18 = facing;
+            l50.facing = facing;
             SpawnObject(&l50);
         }
         timer++;
@@ -4196,7 +4196,7 @@ void CKaori::UpdatePattern()
             l50.y = (double)(int)y;
             l50.scale = 2;
             l50.layer = 1;
-            l50.unk18 = facing;
+            l50.facing = facing;
             SpawnObject(&l50);
         }
         if (frame == 0xa && timer == 0) {
@@ -4205,7 +4205,7 @@ void CKaori::UpdatePattern()
             l50.y = (double)(int)y;
             l50.scale = 2;
             l50.layer = 1;
-            l50.unk18 = facing;
+            l50.facing = facing;
             SpawnObject(&l50);
         }
         if (frame == 0x12 && timer == 0) {
@@ -4214,7 +4214,7 @@ void CKaori::UpdatePattern()
             l50.y = (double)(int)y;
             l50.scale = 2;
             l50.layer = 1;
-            l50.unk18 = facing;
+            l50.facing = facing;
             SpawnObject(&l50);
         }
         timer++;
@@ -4296,7 +4296,7 @@ void CKaori::UpdatePattern()
             l50.y = (double)(int)y;
             l50.scale = 2;
             l50.layer = 1;
-            l50.unk18 = facing;
+            l50.facing = facing;
             SpawnObject(&l50);
         }
         if (frame == 0xa && timer == 0) {
@@ -4305,7 +4305,7 @@ void CKaori::UpdatePattern()
             l50.y = (double)(int)y;
             l50.scale = 2;
             l50.layer = 1;
-            l50.unk18 = facing;
+            l50.facing = facing;
             SpawnObject(&l50);
         }
         if (frame == 0x12 && timer == 0) {
@@ -4314,7 +4314,7 @@ void CKaori::UpdatePattern()
             l50.y = (double)(int)y;
             l50.scale = 2;
             l50.layer = 1;
-            l50.unk18 = facing;
+            l50.facing = facing;
             SpawnObject(&l50);
         }
         timer++;
@@ -4939,7 +4939,7 @@ void CKaori::UpdatePattern()
             l50.y = 0.0;
             l50.scale = 0;
             l50.screen = 1;
-            l50.unk18 = 1;
+            l50.facing = 1;
             l50.layer = 0;
             SpawnObject(&l50);
             l50.type = 0x199;
@@ -4947,7 +4947,7 @@ void CKaori::UpdatePattern()
             l50.y = 0.0;
             l50.scale = 0;
             l50.screen = 1;
-            l50.unk18 = 1;
+            l50.facing = 1;
             l50.layer = 1;
             SpawnObject(&l50);
         }

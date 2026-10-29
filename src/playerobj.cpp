@@ -18,7 +18,7 @@ void CPlayer::SpawnObject(EffectDesc* p1)
     m_objects[m_objectHead].vy = 0.0;
     m_objects[m_objectHead].ax = 0.0;
     m_objects[m_objectHead].ay = 0.0;
-    m_objects[m_objectHead].facing = (char)p1->unk18;
+    m_objects[m_objectHead].facing = (char)p1->facing;
     m_objects[m_objectHead].side = p1->side;
     m_objects[m_objectHead].scale = (char)p1->scale;
     m_objects[m_objectHead].unk6c = (char)p1->unk2c;
@@ -27,7 +27,7 @@ void CPlayer::SpawnObject(EffectDesc* p1)
     m_objects[m_objectHead].unk58 = p1->unk28;
     m_objects[m_objectHead].unk88 = p1->unk30;
     m_objects[m_objectHead].unk8c = 0;
-    m_objects[m_objectHead].clip = *(tagRECT*)&p1->unk34;
+    m_objects[m_objectHead].clip = p1->clip;
     m_objects[m_objectHead].unk80 = 0;
     m_objects[m_objectHead].unk84 = 0;
     m_objects[m_objectHead].unk86 = 0;
@@ -95,10 +95,10 @@ void CPlayer::InitEffectDesc(EffectDesc* p1)
     p1->screen = 0;
     p1->unk28 = 0;
     p1->unk30 = 0;
-    p1->unk38 = 0;
-    p1->unk40 = 0;
-    p1->unk34 = 0;
-    p1->unk3c = 0;
+    p1->clip.top = 0;
+    p1->clip.bottom = 0;
+    p1->clip.left = 0;
+    p1->clip.right = 0;
 }
 
 void CPlayer::DrawObjects(int p1, int p2, BYTE p3)

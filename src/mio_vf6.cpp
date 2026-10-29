@@ -1422,7 +1422,7 @@ void CMio::UpdatePattern()
             l50.type = 0x1f3;
             l50.x = (double)(int)x;
             l50.y = (double)(int)y;
-            l50.unk18 = facing;
+            l50.facing = facing;
             l50.layer = 1;
             SpawnObject(&l50);
             m_gauge = m_gauge + 0x1e;
@@ -1515,7 +1515,7 @@ void CMio::UpdatePattern()
                 l50.scale = 0;
                 l50.layer = 0;
                 l50.unk0 = 1;
-                l50.unk18 = facing;
+                l50.facing = facing;
                 SpawnObject(&l50);
                 unk3154 = 1;
             }
@@ -1567,7 +1567,7 @@ void CMio::UpdatePattern()
                 l50.scale = 0;
                 l50.layer = 0;
                 l50.unk0 = 1;
-                l50.unk18 = facing;
+                l50.facing = facing;
                 SpawnObject(&l50);
                 unk3154 = 1;
             }
@@ -1619,7 +1619,7 @@ void CMio::UpdatePattern()
                 l50.scale = 0;
                 l50.layer = 0;
                 l50.unk0 = 1;
-                l50.unk18 = facing;
+                l50.facing = facing;
                 SpawnObject(&l50);
                 unk3154 = 1;
             }
@@ -1662,7 +1662,7 @@ void CMio::UpdatePattern()
                 l50.scale = 0;
                 l50.layer = 0;
                 l50.unk0 = 1;
-                l50.unk18 = facing;
+                l50.facing = facing;
                 SpawnObject(&l50);
                 unk3154 = 1;
             }
@@ -1703,7 +1703,7 @@ void CMio::UpdatePattern()
             l50.x = 60.0;
             l50.y = 40.0;
             l50.screen = 1;
-            l50.unk18 = 1;
+            l50.facing = 1;
             l50.scale = 0;
             l50.layer = 0;
             SpawnObject(&l50);
@@ -3532,7 +3532,7 @@ void CMio::UpdatePattern()
                 l50.y = (double)(int)y;
                 l50.scale = 0;
                 l50.unk0 = 1;
-                l50.unk18 = facing;
+                l50.facing = facing;
                 l50.layer = 0;
                 l50.unk28 = 1;
                 SpawnObject(&l50);
@@ -4344,7 +4344,7 @@ void CMio::UpdatePattern()
             l50.y = (double)((int)y - 0x38);
             l50.scale = 0;
             l50.layer = 1;
-            l50.unk18 = facing;
+            l50.facing = facing;
             SpawnObject(&l50);
             l50.type = 0x1c3;
             SpawnObject(&l50);
@@ -4481,7 +4481,7 @@ void CMio::UpdatePattern()
             l50.y = (double)((int)y - 0x32);
             l50.scale = 2;
             l50.layer = 1;
-            l50.unk18 = -facing;
+            l50.facing = -facing;
             SpawnObject(&l50);
         }
         if (frame > 1 && frame < 9) {
@@ -4611,49 +4611,49 @@ void CMio::UpdatePattern()
             l50.y = (double)((int)y - 0x5f);
             l50.scale = 2;
             l50.layer = 1;
-            l50.unk18 = facing;
+            l50.facing = facing;
             SpawnObject(&l50);
             l50.type = 0x1c1;
             l50.x = (double)((int)x + facing * 0x1e);
             l50.y = (double)((int)y - 0x50);
             l50.scale = 2;
             l50.layer = 1;
-            l50.unk18 = facing;
+            l50.facing = facing;
             SpawnObject(&l50);
             l50.type = 0x1c0;
             l50.x = (double)((int)x + facing * 0x1e);
             l50.y = (double)((int)y - 0x41);
             l50.scale = 2;
             l50.layer = 1;
-            l50.unk18 = facing;
+            l50.facing = facing;
             SpawnObject(&l50);
             l50.type = 0x1c1;
             l50.x = (double)((int)x + facing * 0x1e);
             l50.y = (double)((int)y - 0x32);
             l50.scale = 2;
             l50.layer = 1;
-            l50.unk18 = facing;
+            l50.facing = facing;
             SpawnObject(&l50);
             l50.type = 0x1c0;
             l50.x = (double)((int)x + facing * 0x1e);
             l50.y = (double)((int)y - 0x23);
             l50.scale = 2;
             l50.layer = 1;
-            l50.unk18 = facing;
+            l50.facing = facing;
             SpawnObject(&l50);
             l50.type = 0x1c1;
             l50.x = (double)((int)x + facing * 0x1e);
             l50.y = (double)((int)y - 0x14);
             l50.scale = 2;
             l50.layer = 1;
-            l50.unk18 = facing;
+            l50.facing = facing;
             SpawnObject(&l50);
             l50.type = 0x1c0;
             l50.x = (double)((int)x + facing * 0x1e);
             l50.y = (double)((int)y - 5);
             l50.scale = 2;
             l50.layer = 1;
-            l50.unk18 = facing;
+            l50.facing = facing;
             SpawnObject(&l50);
         }
         timer++;
@@ -4676,7 +4676,7 @@ void CMio::UpdatePattern()
             l50.type = 0x197;
             l50.x = (double)((int)x + facing * 0x8a);
             l50.y = (double)((int)y - 0x32);
-            l50.unk18 = facing;
+            l50.facing = facing;
             l50.layer = 1;
             l50.scale = 2;
             SpawnObject(&l50);
@@ -4685,7 +4685,7 @@ void CMio::UpdatePattern()
             l50.type = 0x197;
             l50.x = (double)((int)x + facing * 0x64);
             l50.y = (double)((int)y - 0x32);
-            l50.unk18 = facing;
+            l50.facing = facing;
             l50.layer = 1;
             l50.scale = 2;
             SpawnObject(&l50);
@@ -4694,7 +4694,7 @@ void CMio::UpdatePattern()
             l50.type = 0x197;
             l50.x = (double)((int)x + facing * 0x3e);
             l50.y = (double)((int)y - 0x32);
-            l50.unk18 = facing;
+            l50.facing = facing;
             l50.layer = 1;
             l50.scale = 2;
             SpawnObject(&l50);
@@ -4703,7 +4703,7 @@ void CMio::UpdatePattern()
             l50.type = 0x197;
             l50.x = (double)((int)x + facing * 0x18);
             l50.y = (double)((int)y - 0x32);
-            l50.unk18 = facing;
+            l50.facing = facing;
             l50.layer = 1;
             l50.scale = 2;
             SpawnObject(&l50);
@@ -4730,7 +4730,7 @@ void CMio::UpdatePattern()
             l50.type = 0x198;
             l50.x = (double)((int)x - facing * 9);
             l50.y = (double)((int)y - 0x3a);
-            l50.unk18 = facing;
+            l50.facing = facing;
             l50.layer = 1;
             l50.scale = 0;
             SpawnObject(&l50);
@@ -4934,7 +4934,7 @@ void CMio::UpdatePattern()
             l50.type = 0x194;
             l50.x = (double)((int)x + facing * 0x3c);
             l50.y = (double)((int)y - 0x2f);
-            l50.unk18 = facing;
+            l50.facing = facing;
             l50.layer = 1;
             l50.scale = 2;
             SpawnObject(&l50);
@@ -5000,7 +5000,7 @@ void CMio::UpdatePattern()
             l50.type = 0x194;
             l50.x = (double)((int)x + facing * 0x3c);
             l50.y = (double)((int)y - 0x2f);
-            l50.unk18 = facing;
+            l50.facing = facing;
             l50.layer = 1;
             l50.scale = 2;
             SpawnObject(&l50);
@@ -5094,7 +5094,7 @@ void CMio::UpdatePattern()
             l50.type = 0x1bc;
             l50.x = (double)((int)x + facing * 0x3c);
             l50.y = (double)((int)y - 0x2f);
-            l50.unk18 = facing;
+            l50.facing = facing;
             l50.layer = 1;
             l50.scale = 2;
             SpawnObject(&l50);
@@ -5140,7 +5140,7 @@ void CMio::UpdatePattern()
             l50.type = 0x195;
             l50.x = (double)((int)x + facing * 0x1d);
             l50.y = (double)((int)y - 0x32);
-            l50.unk18 = facing;
+            l50.facing = facing;
             l50.layer = 1;
             l50.scale = 0;
             SpawnObject(&l50);
@@ -5167,7 +5167,7 @@ void CMio::UpdatePattern()
             l50.type = 0x195;
             l50.x = (double)((int)x + facing * 0x1d);
             l50.y = (double)((int)y - 0x32);
-            l50.unk18 = facing;
+            l50.facing = facing;
             l50.layer = 1;
             l50.scale = 0;
             SpawnObject(&l50);
@@ -5178,7 +5178,7 @@ void CMio::UpdatePattern()
             l50.type = 0x195;
             l50.x = (double)((int)x + facing * 0x1d);
             l50.y = (double)((int)y - 0x32);
-            l50.unk18 = facing;
+            l50.facing = facing;
             l50.layer = 1;
             l50.scale = 0;
             SpawnObject(&l50);
@@ -5218,7 +5218,7 @@ void CMio::UpdatePattern()
             l50.type = 0x196;
             l50.x = (double)((int)x + facing * 0x1d);
             l50.y = (double)((int)y - 0x32);
-            l50.unk18 = facing;
+            l50.facing = facing;
             l50.layer = 1;
             l50.scale = 0;
             SpawnObject(&l50);
@@ -5245,7 +5245,7 @@ void CMio::UpdatePattern()
             l50.type = 0x1c5;
             l50.x = (double)((int)x + facing * 0x58);
             l50.y = -3.0;
-            l50.unk18 = facing;
+            l50.facing = facing;
             l50.layer = 0;
             l50.scale = 0;
             l50.unk0 = 1;
@@ -5273,7 +5273,7 @@ void CMio::UpdatePattern()
             l50.type = 0x1c5;
             l50.x = (double)((int)x + (facing << 7));
             l50.y = -3.0;
-            l50.unk18 = facing;
+            l50.facing = facing;
             l50.layer = 0;
             l50.scale = 0;
             l50.unk0 = 1;
@@ -5301,7 +5301,7 @@ void CMio::UpdatePattern()
             l50.type = 0x1c5;
             l50.x = (double)((int)x + facing * 0xbc);
             l50.y = -3.0;
-            l50.unk18 = facing;
+            l50.facing = facing;
             l50.layer = 0;
             l50.scale = 0;
             l50.unk0 = 1;
@@ -5382,7 +5382,7 @@ void CMio::UpdatePattern()
             l50.type = 0x197;
             l50.x = (double)((int)x + facing * 0x8a);
             l50.y = (double)((int)y - 0x32);
-            l50.unk18 = facing;
+            l50.facing = facing;
             l50.layer = 1;
             l50.scale = 2;
             SpawnObject(&l50);
@@ -5391,7 +5391,7 @@ void CMio::UpdatePattern()
             l50.type = 0x197;
             l50.x = (double)((int)x + facing * 0x64);
             l50.y = (double)((int)y - 0x32);
-            l50.unk18 = facing;
+            l50.facing = facing;
             l50.layer = 1;
             l50.scale = 2;
             SpawnObject(&l50);
@@ -5400,7 +5400,7 @@ void CMio::UpdatePattern()
             l50.type = 0x197;
             l50.x = (double)((int)x + facing * 0x3e);
             l50.y = (double)((int)y - 0x32);
-            l50.unk18 = facing;
+            l50.facing = facing;
             l50.layer = 1;
             l50.scale = 2;
             SpawnObject(&l50);
@@ -5409,7 +5409,7 @@ void CMio::UpdatePattern()
             l50.type = 0x197;
             l50.x = (double)((int)x + facing * 0x18);
             l50.y = (double)((int)y - 0x32);
-            l50.unk18 = facing;
+            l50.facing = facing;
             l50.layer = 1;
             l50.scale = 2;
             SpawnObject(&l50);
@@ -5423,7 +5423,7 @@ void CMio::UpdatePattern()
                 l50.type = 0x198;
                 l50.x = (double)((int)x - facing * 9);
                 l50.y = (double)((int)y - 0x3a);
-                l50.unk18 = facing;
+                l50.facing = facing;
                 l50.layer = 1;
                 l50.scale = 0;
                 SpawnObject(&l50);
@@ -5446,7 +5446,7 @@ void CMio::UpdatePattern()
             l50.unk0 = 1;
             l50.x = (double)((int)x + facing * 0x1e);
             l50.y = (double)((int)y - 0x30);
-            l50.unk18 = facing;
+            l50.facing = facing;
             l50.layer = 1;
             l50.scale = 2;
             SpawnObject(&l50);
@@ -5550,7 +5550,7 @@ void CMio::UpdatePattern()
                 l50.type = 0x19b;
                 l50.x = (double)(int)(((WORD)Random(0, 0x96) - 0x3c) * facing + x);
                 l50.y = -480.0;
-                l50.unk18 = 1;
+                l50.facing = 1;
                 l50.layer = 1;
                 l50.scale = 0;
                 SpawnObject(&l50);
@@ -5560,7 +5560,7 @@ void CMio::UpdatePattern()
                 l50.type = 0x19d;
                 l50.x = (double)(int)(((WORD)Random(0, 0x96) - 0x3c) * facing + x);
                 l50.y = -480.0;
-                l50.unk18 = 1;
+                l50.facing = 1;
                 l50.layer = 1;
                 l50.scale = 0;
                 SpawnObject(&l50);
@@ -5570,7 +5570,7 @@ void CMio::UpdatePattern()
                 l50.type = 0x19c;
                 l50.x = (double)(int)(((WORD)Random(0, 0x96) - 0x3c) * facing + x);
                 l50.y = -480.0;
-                l50.unk18 = 1;
+                l50.facing = 1;
                 l50.layer = 1;
                 l50.scale = 0;
                 SpawnObject(&l50);
@@ -5618,7 +5618,7 @@ void CMio::UpdatePattern()
                 l50.type = 0x19b;
                 l50.x = (double)(int)(((WORD)Random(0, 0x96) - 0x3c) * facing + x);
                 l50.y = -480.0;
-                l50.unk18 = 1;
+                l50.facing = 1;
                 l50.layer = 1;
                 l50.scale = 0;
                 SpawnObject(&l50);
@@ -5628,7 +5628,7 @@ void CMio::UpdatePattern()
                 l50.type = 0x19d;
                 l50.x = (double)(int)(((WORD)Random(0, 0x96) - 0x3c) * facing + x);
                 l50.y = -480.0;
-                l50.unk18 = 1;
+                l50.facing = 1;
                 l50.layer = 1;
                 l50.scale = 0;
                 SpawnObject(&l50);
@@ -5638,7 +5638,7 @@ void CMio::UpdatePattern()
                 l50.type = 0x19c;
                 l50.x = (double)(int)(((WORD)Random(0, 0x96) - 0x3c) * facing + x);
                 l50.y = -480.0;
-                l50.unk18 = 1;
+                l50.facing = 1;
                 l50.layer = 1;
                 l50.scale = 0;
                 SpawnObject(&l50);
@@ -5690,7 +5690,7 @@ void CMio::UpdatePattern()
                 l50.type = 0x19b;
                 l50.x = (double)(int)(((WORD)Random(0, 0x96) - 0x3c) * facing + x);
                 l50.y = -480.0;
-                l50.unk18 = 1;
+                l50.facing = 1;
                 l50.layer = 1;
                 l50.scale = 0;
                 SpawnObject(&l50);
@@ -5700,7 +5700,7 @@ void CMio::UpdatePattern()
                 l50.type = 0x19d;
                 l50.x = (double)(int)(((WORD)Random(0, 0x96) - 0x3c) * facing + x);
                 l50.y = -480.0;
-                l50.unk18 = 1;
+                l50.facing = 1;
                 l50.layer = 1;
                 l50.scale = 0;
                 SpawnObject(&l50);
@@ -5710,7 +5710,7 @@ void CMio::UpdatePattern()
                 l50.type = 0x19c;
                 l50.x = (double)(int)(((WORD)Random(0, 0x96) - 0x3c) * facing + x);
                 l50.y = -480.0;
-                l50.unk18 = 1;
+                l50.facing = 1;
                 l50.layer = 1;
                 l50.scale = 0;
                 SpawnObject(&l50);
@@ -5765,7 +5765,7 @@ void CMio::UpdatePattern()
             l50.type = 0x1a2;
             l50.x = (double)((int)x + facing * 0x3c);
             l50.y = (double)((int)y - 0x2f);
-            l50.unk18 = facing;
+            l50.facing = facing;
             l50.layer = 1;
             l50.scale = 2;
             SpawnObject(&l50);
@@ -5837,7 +5837,7 @@ void CMio::UpdatePattern()
             l50.type = 0x1a8;
             l50.x = (double)((int)x + facing * 0x3c);
             l50.y = (double)((int)y - 0x2f);
-            l50.unk18 = facing;
+            l50.facing = facing;
             l50.layer = 1;
             l50.scale = 2;
             SpawnObject(&l50);
@@ -5913,7 +5913,7 @@ void CMio::UpdatePattern()
             l50.type = 0x1a9;
             l50.x = (double)((int)x + facing * 0x3c);
             l50.y = (double)((int)y - 0x2f);
-            l50.unk18 = facing;
+            l50.facing = facing;
             l50.layer = 1;
             l50.scale = 2;
             SpawnObject(&l50);
@@ -5973,7 +5973,7 @@ void CMio::UpdatePattern()
             l50.scale = 2;
             l50.unk0 = 0;
             l50.layer = 1;
-            l50.unk18 = facing;
+            l50.facing = facing;
             SpawnObject(&l50);
             unk3140 = 21.0;
             m_playVoice = 6;
@@ -6024,7 +6024,7 @@ void CMio::UpdatePattern()
             l50.scale = 2;
             l50.unk0 = 0;
             l50.layer = 1;
-            l50.unk18 = facing;
+            l50.facing = facing;
             SpawnObject(&l50);
             unk3140 = 15.0;
             m_playVoice = 6;
@@ -6075,7 +6075,7 @@ void CMio::UpdatePattern()
             l50.scale = 2;
             l50.unk0 = 0;
             l50.layer = 1;
-            l50.unk18 = facing;
+            l50.facing = facing;
             SpawnObject(&l50);
             m_playVoice = 6;
         }
@@ -6088,7 +6088,7 @@ void CMio::UpdatePattern()
             l50.scale = 2;
             l50.unk0 = 1;
             l50.layer = 1;
-            l50.unk18 = facing;
+            l50.facing = facing;
             SpawnObject(&l50);
         }
         timer++;
@@ -6124,7 +6124,7 @@ void CMio::UpdatePattern()
             l50.type = 0x1aa;
             l50.x = (double)((int)x - facing * 0xf);
             l50.y = (double)((int)y - 0x41);
-            l50.unk18 = facing;
+            l50.facing = facing;
             l50.layer = 1;
             l50.scale = 0;
             SpawnObject(&l50);
@@ -6142,7 +6142,7 @@ void CMio::UpdatePattern()
             l50.type = 0x1aa;
             l50.x = (double)((int)x - facing * 0xf);
             l50.y = (double)((int)y - 0x41);
-            l50.unk18 = facing;
+            l50.facing = facing;
             l50.layer = 1;
             l50.scale = 0;
             SpawnObject(&l50);
@@ -6158,7 +6158,7 @@ void CMio::UpdatePattern()
             l50.type = 0x1aa;
             l50.x = (double)((int)x - facing * 0xf);
             l50.y = (double)((int)y - 0x41);
-            l50.unk18 = facing;
+            l50.facing = facing;
             l50.layer = 1;
             l50.scale = 0;
             SpawnObject(&l50);
@@ -6176,7 +6176,7 @@ void CMio::UpdatePattern()
             l50.type = 0x1aa;
             l50.x = (double)((int)x - facing * 0xf);
             l50.y = (double)((int)y - 0x41);
-            l50.unk18 = facing;
+            l50.facing = facing;
             l50.layer = 1;
             l50.scale = 0;
             SpawnObject(&l50);
@@ -6226,7 +6226,7 @@ void CMio::UpdatePattern()
             l50.type = 0x1aa;
             l50.x = (double)((int)x - facing * 0xf);
             l50.y = (double)((int)y - 0x41);
-            l50.unk18 = facing;
+            l50.facing = facing;
             l50.layer = 1;
             l50.scale = 0;
             SpawnObject(&l50);
@@ -6244,7 +6244,7 @@ void CMio::UpdatePattern()
             l50.type = 0x1aa;
             l50.x = (double)((int)x - facing * 0xf);
             l50.y = (double)((int)y - 0x41);
-            l50.unk18 = facing;
+            l50.facing = facing;
             l50.layer = 1;
             l50.scale = 0;
             SpawnObject(&l50);
@@ -6260,7 +6260,7 @@ void CMio::UpdatePattern()
             l50.type = 0x1aa;
             l50.x = (double)((int)x - facing * 0xf);
             l50.y = (double)((int)y - 0x41);
-            l50.unk18 = facing;
+            l50.facing = facing;
             l50.layer = 1;
             l50.scale = 0;
             SpawnObject(&l50);
@@ -6278,7 +6278,7 @@ void CMio::UpdatePattern()
             l50.type = 0x1aa;
             l50.x = (double)((int)x - facing * 0xf);
             l50.y = (double)((int)y - 0x41);
-            l50.unk18 = facing;
+            l50.facing = facing;
             l50.layer = 1;
             l50.scale = 0;
             SpawnObject(&l50);
@@ -6330,7 +6330,7 @@ void CMio::UpdatePattern()
             l50.type = 0x1aa;
             l50.x = (double)((int)x - facing * 0xf);
             l50.y = (double)((int)y - 0x41);
-            l50.unk18 = facing;
+            l50.facing = facing;
             l50.layer = 1;
             l50.scale = 0;
             SpawnObject(&l50);
@@ -6348,7 +6348,7 @@ void CMio::UpdatePattern()
             l50.type = 0x1aa;
             l50.x = (double)((int)x - facing * 0xf);
             l50.y = (double)((int)y - 0x41);
-            l50.unk18 = facing;
+            l50.facing = facing;
             l50.layer = 1;
             l50.scale = 0;
             SpawnObject(&l50);
@@ -6364,7 +6364,7 @@ void CMio::UpdatePattern()
             l50.type = 0x1aa;
             l50.x = (double)((int)x - facing * 0xf);
             l50.y = (double)((int)y - 0x41);
-            l50.unk18 = facing;
+            l50.facing = facing;
             l50.layer = 1;
             l50.scale = 0;
             SpawnObject(&l50);
@@ -6382,7 +6382,7 @@ void CMio::UpdatePattern()
             l50.type = 0x1aa;
             l50.x = (double)((int)x - facing * 0xf);
             l50.y = (double)((int)y - 0x41);
-            l50.unk18 = facing;
+            l50.facing = facing;
             l50.layer = 1;
             l50.scale = 0;
             SpawnObject(&l50);
@@ -6761,7 +6761,7 @@ void CMio::UpdatePattern()
                 l50.type = 0x1ba;
                 l50.x = (double)((int)x + facing * 0xb);
                 l50.y = (double)((int)y - 0x35);
-                l50.unk18 = facing;
+                l50.facing = facing;
                 l50.layer = 1;
                 l50.scale = 2;
                 SpawnObject(&l50);
@@ -6864,7 +6864,7 @@ void CMio::UpdatePattern()
                 l50.type = 0x1ab;
                 l50.x = (double)((int)(*m_opponent)->x + facing * 0x1e);
                 l50.y = 0.0;
-                l50.unk18 = facing;
+                l50.facing = facing;
                 l50.layer = 1;
                 l50.scale = 0;
                 l50.unk28 = 1;
@@ -6876,7 +6876,7 @@ void CMio::UpdatePattern()
                 l50.type = 0x1b2;
                 l50.x = (double)((int)(*m_opponent)->x - facing * 0x1e);
                 l50.y = 0.0;
-                l50.unk18 = facing;
+                l50.facing = facing;
                 l50.layer = 1;
                 l50.scale = 0;
                 l50.unk28 = 1;
@@ -6892,7 +6892,7 @@ void CMio::UpdatePattern()
                 l50.type = 0x1ac;
                 l50.x = (double)((int)(*m_opponent)->x + facing * 0x28);
                 l50.y = -40.0;
-                l50.unk18 = facing;
+                l50.facing = facing;
                 l50.layer = 1;
                 l50.scale = 0;
                 l50.unk28 = 1;
@@ -6905,7 +6905,7 @@ void CMio::UpdatePattern()
                 l50.type = 0x1b3;
                 l50.x = (double)((int)(*m_opponent)->x - facing * 0x1e);
                 l50.y = 0.0;
-                l50.unk18 = facing;
+                l50.facing = facing;
                 l50.layer = 1;
                 l50.scale = 0;
                 l50.unk28 = 1;
@@ -6921,7 +6921,7 @@ void CMio::UpdatePattern()
                 l50.type = 0x1ad;
                 l50.x = (double)((int)(*m_opponent)->x + facing * 0x3c);
                 l50.y = 0.0;
-                l50.unk18 = facing;
+                l50.facing = facing;
                 l50.layer = 1;
                 l50.scale = 0;
                 l50.unk28 = 1;
@@ -6933,7 +6933,7 @@ void CMio::UpdatePattern()
                 l50.type = 0x1b4;
                 l50.x = (double)(int)(*m_opponent)->x;
                 l50.y = 0.0;
-                l50.unk18 = facing;
+                l50.facing = facing;
                 l50.layer = 1;
                 l50.scale = 0;
                 l50.unk28 = 1;
@@ -6954,7 +6954,7 @@ void CMio::UpdatePattern()
                 l50.type = 0x1ae;
                 l50.x = (double)((int)(*m_opponent)->x + facing * 0x1e);
                 l50.y = 0.0;
-                l50.unk18 = facing;
+                l50.facing = facing;
                 l50.layer = 1;
                 l50.scale = 0;
                 l50.unk28 = 1;
@@ -6966,7 +6966,7 @@ void CMio::UpdatePattern()
                 l50.type = 0x1b5;
                 l50.x = (double)((int)(*m_opponent)->x - facing * 0x1e);
                 l50.y = 0.0;
-                l50.unk18 = facing;
+                l50.facing = facing;
                 l50.layer = 1;
                 l50.scale = 0;
                 l50.unk28 = 1;
@@ -6982,7 +6982,7 @@ void CMio::UpdatePattern()
                 l50.type = 0x1af;
                 l50.x = (double)((int)(*m_opponent)->x + facing * 0x3c);
                 l50.y = 0.0;
-                l50.unk18 = facing;
+                l50.facing = facing;
                 l50.layer = 1;
                 l50.scale = 0;
                 l50.unk28 = 1;
@@ -6994,7 +6994,7 @@ void CMio::UpdatePattern()
                 l50.type = 0x1b6;
                 l50.x = (double)((int)(*m_opponent)->x + facing * 0xf);
                 l50.y = 0.0;
-                l50.unk18 = facing;
+                l50.facing = facing;
                 l50.layer = 1;
                 l50.scale = 0;
                 l50.unk28 = 1;
@@ -7014,7 +7014,7 @@ void CMio::UpdatePattern()
                 l50.type = 0x1b0;
                 l50.x = (double)((int)(*m_opponent)->x + facing * 0x3c);
                 l50.y = 0.0;
-                l50.unk18 = facing;
+                l50.facing = facing;
                 l50.layer = 1;
                 l50.scale = 0;
                 l50.unk28 = 1;
@@ -7022,7 +7022,7 @@ void CMio::UpdatePattern()
                 l50.type = 0x1b7;
                 l50.x = (double)((int)(*m_opponent)->x - facing * 0x3c);
                 l50.y = 0.0;
-                l50.unk18 = facing;
+                l50.facing = facing;
                 l50.layer = 1;
                 l50.scale = 0;
                 l50.unk28 = 1;

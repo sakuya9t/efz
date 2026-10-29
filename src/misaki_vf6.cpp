@@ -1367,7 +1367,7 @@ void CMisaki::UpdatePattern()
             l50.type = 0x1f3;
             l50.x = (double)(int)x;
             l50.y = (double)(int)y;
-            l50.unk18 = facing;
+            l50.facing = facing;
             l50.layer = 1;
             SpawnObject(&l50);
             m_gauge = m_gauge + 0x1e;
@@ -1454,7 +1454,7 @@ void CMisaki::UpdatePattern()
                 l50.scale = 0;
                 l50.layer = 0;
                 l50.unk0 = 1;
-                l50.unk18 = facing;
+                l50.facing = facing;
                 SpawnObject(&l50);
                 unk3144 = 1;
             }
@@ -1506,7 +1506,7 @@ void CMisaki::UpdatePattern()
                 l50.scale = 0;
                 l50.layer = 0;
                 l50.unk0 = 1;
-                l50.unk18 = facing;
+                l50.facing = facing;
                 SpawnObject(&l50);
                 unk3144 = 1;
             }
@@ -1558,7 +1558,7 @@ void CMisaki::UpdatePattern()
                 l50.scale = 0;
                 l50.layer = 0;
                 l50.unk0 = 1;
-                l50.unk18 = facing;
+                l50.facing = facing;
                 SpawnObject(&l50);
                 unk3144 = 1;
             }
@@ -1601,7 +1601,7 @@ void CMisaki::UpdatePattern()
                 l50.scale = 0;
                 l50.layer = 0;
                 l50.unk0 = 1;
-                l50.unk18 = facing;
+                l50.facing = facing;
                 SpawnObject(&l50);
                 unk3144 = 1;
             }
@@ -1642,7 +1642,7 @@ void CMisaki::UpdatePattern()
             l50.x = 60.0;
             l50.y = 40.0;
             l50.screen = 1;
-            l50.unk18 = 1;
+            l50.facing = 1;
             l50.scale = 0;
             l50.layer = 0;
             SpawnObject(&l50);
@@ -2672,7 +2672,7 @@ void CMisaki::UpdatePattern()
             l50.scale = 2;
             l50.unk2c = 1;
             l50.layer = 1;
-            l50.unk18 = facing;
+            l50.facing = facing;
             SpawnObject(&l50);
         }
         timer++;
@@ -3706,7 +3706,7 @@ void CMisaki::UpdatePattern()
             l50.y = (double)(int)y;
             l50.scale = 2;
             l50.layer = 1;
-            l50.unk18 = facing;
+            l50.facing = facing;
             m_game->CreateEffect((EffectDesc*)&l50);
             vx = 1.2;
             vy = -2.9;
@@ -3731,7 +3731,7 @@ void CMisaki::UpdatePattern()
             l50.y = (double)((int)y - 0x14);
             l50.scale = 2;
             l50.layer = 1;
-            l50.unk18 = facing;
+            l50.facing = facing;
             SpawnObject(&l50);
             m_hitsLeft = 1;
         }
@@ -3795,7 +3795,7 @@ void CMisaki::UpdatePattern()
             l50.y = (double)(int)y;
             l50.scale = 2;
             l50.layer = 1;
-            l50.unk18 = facing;
+            l50.facing = facing;
             SpawnObject(&l50);
             m_playSound = 0x12;
             m_gauge = m_gauge + 0x19;
@@ -3826,7 +3826,7 @@ void CMisaki::UpdatePattern()
             l50.y = (double)(int)y;
             l50.scale = 2;
             l50.layer = 1;
-            l50.unk18 = facing;
+            l50.facing = facing;
             SpawnObject(&l50);
             m_playSound = 0x12;
             m_gauge = m_gauge + 0x19;
@@ -3872,7 +3872,7 @@ void CMisaki::UpdatePattern()
             l50.y = (double)(int)y;
             l50.scale = 2;
             l50.layer = 1;
-            l50.unk18 = facing;
+            l50.facing = facing;
             SpawnObject(&l50);
             m_gauge = m_gauge + 0xf;
         }
@@ -4266,7 +4266,7 @@ void CMisaki::UpdatePattern()
             l50.x = (double)((int)x + facing * 0x28);
             l50.y = (double)(int)y;
             l50.scale = 2;
-            l50.unk18 = facing;
+            l50.facing = facing;
             l50.unk0 = 1;
             l50.layer = 1;
             SpawnObject(&l50);
@@ -4451,7 +4451,7 @@ void CMisaki::UpdatePattern()
             l50.type = 0x1a3;
             l50.x = (double)(int)x;
             l50.y = (double)(int)y;
-            l50.unk18 = facing;
+            l50.facing = facing;
             l50.scale = 2;
             l50.layer = 1;
             SpawnObject(&l50);
@@ -4512,7 +4512,7 @@ void CMisaki::UpdatePattern()
             l50.type = 0x193;
             l50.x = (double)(int)x;
             l50.y = (double)(int)y;
-            l50.unk18 = facing;
+            l50.facing = facing;
             l50.scale = 2;
             l50.layer = 1;
             SpawnObject(&l50);
@@ -4577,7 +4577,7 @@ void CMisaki::UpdatePattern()
             l50.type = 0x1a7;
             l50.x = (double)(int)x;
             l50.y = (double)(int)y;
-            l50.unk18 = facing;
+            l50.facing = facing;
             l50.scale = 2;
             l50.layer = 1;
             SpawnObject(&l50);
@@ -4630,7 +4630,7 @@ void CMisaki::UpdatePattern()
                 l50.type = 0x19b;
                 l50.x = (double)((int)x + facing * 0x14);
                 l50.y = (double)((int)y - 0x4a);
-                l50.unk18 = facing;
+                l50.facing = facing;
                 l50.scale = 0;
                 l50.layer = 1;
                 unk3138++;
@@ -4640,7 +4640,7 @@ void CMisaki::UpdatePattern()
                 l50.type = 0x19d;
                 l50.x = (double)((int)x + facing * 0x14);
                 l50.y = (double)((int)y - 0x4a);
-                l50.unk18 = facing;
+                l50.facing = facing;
                 l50.scale = 0;
                 l50.layer = 1;
                 unk3138++;
@@ -4650,7 +4650,7 @@ void CMisaki::UpdatePattern()
                 l50.type = 0x19f;
                 l50.x = (double)((int)x + facing * 0x14);
                 l50.y = (double)((int)y - 0x4a);
-                l50.unk18 = facing;
+                l50.facing = facing;
                 l50.scale = 0;
                 l50.layer = 1;
                 SpawnObject(&l50);
@@ -4700,7 +4700,7 @@ void CMisaki::UpdatePattern()
                 l50.type = 0x19b;
                 l50.x = (double)((int)x + facing * 0x14);
                 l50.y = (double)((int)y - 0x4a);
-                l50.unk18 = facing;
+                l50.facing = facing;
                 l50.scale = 0;
                 l50.layer = 1;
                 unk3138++;
@@ -4710,7 +4710,7 @@ void CMisaki::UpdatePattern()
                 l50.type = 0x19d;
                 l50.x = (double)((int)x + facing * 0x14);
                 l50.y = (double)((int)y - 0x4a);
-                l50.unk18 = facing;
+                l50.facing = facing;
                 l50.scale = 0;
                 l50.layer = 1;
                 unk3138++;
@@ -4720,7 +4720,7 @@ void CMisaki::UpdatePattern()
                 l50.type = 0x19f;
                 l50.x = (double)((int)x + facing * 0x14);
                 l50.y = (double)((int)y - 0x4a);
-                l50.unk18 = facing;
+                l50.facing = facing;
                 l50.scale = 0;
                 l50.layer = 1;
                 SpawnObject(&l50);
@@ -4774,7 +4774,7 @@ void CMisaki::UpdatePattern()
                 l50.type = 0x19b;
                 l50.x = (double)((int)x + facing * 0x14);
                 l50.y = (double)((int)y - 0x4a);
-                l50.unk18 = facing;
+                l50.facing = facing;
                 l50.scale = 0;
                 l50.layer = 1;
                 unk3138++;
@@ -4784,7 +4784,7 @@ void CMisaki::UpdatePattern()
                 l50.type = 0x19d;
                 l50.x = (double)((int)x + facing * 0x14);
                 l50.y = (double)((int)y - 0x4a);
-                l50.unk18 = facing;
+                l50.facing = facing;
                 l50.scale = 0;
                 l50.layer = 1;
                 unk3138++;
@@ -4794,7 +4794,7 @@ void CMisaki::UpdatePattern()
                 l50.type = 0x19f;
                 l50.x = (double)((int)x + facing * 0x14);
                 l50.y = (double)((int)y - 0x4a);
-                l50.unk18 = facing;
+                l50.facing = facing;
                 l50.scale = 0;
                 l50.layer = 1;
                 SpawnObject(&l50);
@@ -4847,7 +4847,7 @@ void CMisaki::UpdatePattern()
             l50.y = (double)(int)y;
             l50.scale = 2;
             l50.layer = 1;
-            l50.unk18 = facing;
+            l50.facing = facing;
             SpawnObject(&l50);
         }
         if (frame > 4 && frame < 8) {
@@ -4932,7 +4932,7 @@ void CMisaki::UpdatePattern()
             l50.y = (double)(int)y;
             l50.scale = 2;
             l50.layer = 1;
-            l50.unk18 = facing;
+            l50.facing = facing;
             SpawnObject(&l50);
         }
         if (frame > 4 && frame < 8) {
@@ -5017,7 +5017,7 @@ void CMisaki::UpdatePattern()
             l50.y = (double)(int)y;
             l50.scale = 2;
             l50.layer = 1;
-            l50.unk18 = facing;
+            l50.facing = facing;
             SpawnObject(&l50);
         }
         if (frame > 4 && frame < 8) {
@@ -5096,7 +5096,7 @@ void CMisaki::UpdatePattern()
                 l50.y = (double)(int)y;
                 l50.scale = 2;
                 l50.layer = 1;
-                l50.unk18 = facing;
+                l50.facing = facing;
                 SpawnObject(&l50);
                 l50.type = 0;
                 m_game->CreateEffect((EffectDesc*)&l50);
@@ -5217,7 +5217,7 @@ void CMisaki::UpdatePattern()
                 l50.type = 0x193;
                 l50.x = (double)(int)x;
                 l50.y = (double)(int)y;
-                l50.unk18 = facing;
+                l50.facing = facing;
                 l50.scale = 2;
                 l50.layer = 1;
                 SpawnObject(&l50);
@@ -5276,7 +5276,7 @@ void CMisaki::UpdatePattern()
                 l50.y = (double)((int)y - 0xfa);
                 l50.scale = 2;
                 l50.unk0 = 1;
-                l50.unk18 = facing;
+                l50.facing = facing;
                 l50.layer = 1;
                 SpawnObject(&l50);
             }
@@ -5319,14 +5319,14 @@ void CMisaki::UpdatePattern()
                 l50.y = (double)((int)y + 4);
                 l50.scale = 0;
                 l50.unk0 = 1;
-                l50.unk18 = facing;
+                l50.facing = facing;
                 l50.layer = 1;
                 m_game->CreateEffect((EffectDesc*)&l50);
                 l50.type = 0x191;
                 l50.x = (double)((int)x + facing * 0x28);
                 l50.y = (double)(int)y;
                 l50.scale = 2;
-                l50.unk18 = facing;
+                l50.facing = facing;
                 l50.unk0 = 1;
                 l50.layer = 1;
                 SpawnObject(&l50);
@@ -5369,14 +5369,14 @@ void CMisaki::UpdatePattern()
             l50.y = (double)((int)y + 4);
             l50.scale = 0;
             l50.unk0 = 1;
-            l50.unk18 = facing;
+            l50.facing = facing;
             l50.layer = 1;
             m_game->CreateEffect((EffectDesc*)&l50);
             l50.type = 0x192;
             l50.x = (double)((int)x + facing * 0x2d);
             l50.y = (double)(int)y;
             l50.scale = 2;
-            l50.unk18 = facing;
+            l50.facing = facing;
             l50.unk0 = 1;
             l50.layer = 1;
             SpawnObject(&l50);
@@ -5387,14 +5387,14 @@ void CMisaki::UpdatePattern()
             l50.y = (double)((int)y + 4);
             l50.scale = 0;
             l50.unk0 = 1;
-            l50.unk18 = facing;
+            l50.facing = facing;
             l50.layer = 1;
             m_game->CreateEffect((EffectDesc*)&l50);
             l50.type = 0x191;
             l50.x = (double)((int)x + facing * 0x28);
             l50.y = (double)(int)y;
             l50.scale = 2;
-            l50.unk18 = facing;
+            l50.facing = facing;
             l50.unk0 = 1;
             l50.layer = 1;
             SpawnObject(&l50);

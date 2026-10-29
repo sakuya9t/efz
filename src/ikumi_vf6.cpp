@@ -1385,7 +1385,7 @@ void CIkumi::UpdatePattern()
             l50.type = 0x1f3;
             l50.x = (double)(int)x;
             l50.y = (double)(int)y;
-            l50.unk18 = facing;
+            l50.facing = facing;
             l50.layer = 1;
             SpawnObject(&l50);
             m_gauge = m_gauge + 0x1e;
@@ -1472,7 +1472,7 @@ void CIkumi::UpdatePattern()
                 l50.scale = 0;
                 l50.layer = 0;
                 l50.unk0 = 1;
-                l50.unk18 = facing;
+                l50.facing = facing;
                 SpawnObject(&l50);
                 unk3144 = 1;
             }
@@ -1524,7 +1524,7 @@ void CIkumi::UpdatePattern()
                 l50.scale = 0;
                 l50.layer = 0;
                 l50.unk0 = 1;
-                l50.unk18 = facing;
+                l50.facing = facing;
                 SpawnObject(&l50);
                 unk3144 = 1;
             }
@@ -1576,7 +1576,7 @@ void CIkumi::UpdatePattern()
                 l50.scale = 0;
                 l50.layer = 0;
                 l50.unk0 = 1;
-                l50.unk18 = facing;
+                l50.facing = facing;
                 SpawnObject(&l50);
                 unk3144 = 1;
             }
@@ -1619,7 +1619,7 @@ void CIkumi::UpdatePattern()
                 l50.scale = 0;
                 l50.layer = 0;
                 l50.unk0 = 1;
-                l50.unk18 = facing;
+                l50.facing = facing;
                 SpawnObject(&l50);
                 unk3144 = 1;
             }
@@ -1660,7 +1660,7 @@ void CIkumi::UpdatePattern()
             l50.x = 60.0;
             l50.y = 40.0;
             l50.screen = 1;
-            l50.unk18 = 1;
+            l50.facing = 1;
             l50.scale = 0;
             l50.layer = 0;
             SpawnObject(&l50);
@@ -3286,7 +3286,7 @@ void CIkumi::UpdatePattern()
                 l50.x = (double)((int)x + facing * 0x2a);
                 l50.y = (double)((int)y - 0x46);
                 l50.scale = 2;
-                l50.unk18 = facing;
+                l50.facing = facing;
                 l50.layer = 1;
                 SpawnObject(&l50);
                 m_playVoice = 5;
@@ -3313,7 +3313,7 @@ void CIkumi::UpdatePattern()
                 l50.scale = 2;
                 l50.layer = 1;
                 l50.unk0 = 1;
-                l50.unk18 = facing;
+                l50.facing = facing;
                 SpawnObject(&l50);
                 l50.type = 0x193;
                 SpawnObject(&l50);
@@ -3346,7 +3346,7 @@ void CIkumi::UpdatePattern()
                 l50.scale = 2;
                 l50.layer = 1;
                 l50.unk0 = 1;
-                l50.unk18 = facing;
+                l50.facing = facing;
                 SpawnObject(&l50);
                 l50.type = 0x193;
                 SpawnObject(&l50);
@@ -3379,7 +3379,7 @@ void CIkumi::UpdatePattern()
                 l50.scale = 2;
                 l50.layer = 1;
                 l50.unk0 = 1;
-                l50.unk18 = facing;
+                l50.facing = facing;
                 SpawnObject(&l50);
                 l50.type = 0x193;
                 SpawnObject(&l50);
@@ -3414,7 +3414,7 @@ void CIkumi::UpdatePattern()
             l50.scale = 2;
             l50.layer = 1;
             l50.unk0 = 1;
-            l50.unk18 = facing;
+            l50.facing = facing;
             SpawnObject(&l50);
             m_playVoice = 2;
         }
@@ -3465,7 +3465,7 @@ void CIkumi::UpdatePattern()
             l50.scale = 2;
             l50.layer = 1;
             l50.unk0 = 1;
-            l50.unk18 = facing;
+            l50.facing = facing;
             SpawnObject(&l50);
             m_playVoice = 2;
         }
@@ -3528,7 +3528,7 @@ void CIkumi::UpdatePattern()
             l50.scale = 2;
             l50.layer = 1;
             l50.unk0 = 1;
-            l50.unk18 = facing;
+            l50.facing = facing;
             SpawnObject(&l50);
             m_playVoice = 2;
         }
@@ -3590,7 +3590,7 @@ void CIkumi::UpdatePattern()
             l50.scale = 2;
             l50.layer = 1;
             l50.unk0 = 1;
-            l50.unk18 = facing;
+            l50.facing = facing;
             SpawnObject(&l50);
             m_playVoice = 3;
         }
@@ -3639,7 +3639,7 @@ void CIkumi::UpdatePattern()
             l50.scale = 2;
             l50.layer = 1;
             l50.unk0 = 1;
-            l50.unk18 = facing;
+            l50.facing = facing;
             SpawnObject(&l50);
             m_playVoice = 3;
         }
@@ -3697,7 +3697,7 @@ void CIkumi::UpdatePattern()
             l50.scale = 2;
             l50.layer = 1;
             l50.unk0 = 1;
-            l50.unk18 = facing;
+            l50.facing = facing;
             SpawnObject(&l50);
             m_playVoice = 3;
         }
@@ -3785,7 +3785,7 @@ void CIkumi::UpdatePattern()
             l50.y = (double)((int)y - 0x2e);
             l50.scale = 0;
             l50.layer = 1;
-            l50.unk18 = facing;
+            l50.facing = facing;
             SpawnObject(&l50);
         }
         if (frame == 0xc && timer == 0x5a) {
@@ -3794,7 +3794,7 @@ void CIkumi::UpdatePattern()
             l50.x = (double)((int)x + facing * 0x2b);
             l50.y = (double)((int)y - 0x2e);
             l50.scale = 2;
-            l50.unk18 = facing;
+            l50.facing = facing;
             l50.layer = 1;
             SpawnObject(&l50);
             DealDamage(0xfa, 600.0);
@@ -3807,14 +3807,14 @@ void CIkumi::UpdatePattern()
             l50.y = (double)((int)y - 0x2e);
             l50.scale = 0;
             l50.layer = 1;
-            l50.unk18 = facing;
+            l50.facing = facing;
             SpawnObject(&l50);
             l50.type = 0x1dd;
             l50.x = (double)((int)x + facing * 0x2b);
             l50.y = (double)((int)y - 0x2e);
             l50.scale = 0;
             l50.layer = 1;
-            l50.unk18 = -facing;
+            l50.facing = -facing;
             SpawnObject(&l50);
             m_playVoice = 5;
             ShakeScreen(4, 0);
@@ -3850,7 +3850,7 @@ void CIkumi::UpdatePattern()
             l50.scale = 2;
             l50.layer = 1;
             l50.unk0 = 1;
-            l50.unk18 = facing;
+            l50.facing = facing;
             SpawnObject(&l50);
             m_playVoice = 2;
         }
@@ -3913,7 +3913,7 @@ void CIkumi::UpdatePattern()
             l50.scale = 2;
             l50.layer = 1;
             l50.unk0 = 1;
-            l50.unk18 = facing;
+            l50.facing = facing;
             SpawnObject(&l50);
             m_playVoice = 2;
         }
@@ -3964,7 +3964,7 @@ void CIkumi::UpdatePattern()
             l50.scale = 2;
             l50.layer = 1;
             l50.unk0 = 1;
-            l50.unk18 = facing;
+            l50.facing = facing;
             SpawnObject(&l50);
             m_playVoice = 2;
         }
@@ -4027,7 +4027,7 @@ void CIkumi::UpdatePattern()
             l50.scale = 2;
             l50.layer = 1;
             l50.unk0 = 1;
-            l50.unk18 = facing;
+            l50.facing = facing;
             SpawnObject(&l50);
             m_playVoice = 2;
         }
@@ -4089,7 +4089,7 @@ void CIkumi::UpdatePattern()
             l50.scale = 2;
             l50.layer = 1;
             l50.unk0 = 1;
-            l50.unk18 = facing;
+            l50.facing = facing;
             SpawnObject(&l50);
             m_playVoice = 3;
         }
@@ -4147,7 +4147,7 @@ void CIkumi::UpdatePattern()
             l50.scale = 2;
             l50.layer = 1;
             l50.unk0 = 1;
-            l50.unk18 = facing;
+            l50.facing = facing;
             SpawnObject(&l50);
             m_playVoice = 3;
         }
@@ -4207,7 +4207,7 @@ void CIkumi::UpdatePattern()
             l50.scale = 2;
             l50.layer = 1;
             l50.unk0 = 1;
-            l50.unk18 = facing;
+            l50.facing = facing;
             SpawnObject(&l50);
             m_playVoice = 3;
         }
@@ -4265,7 +4265,7 @@ void CIkumi::UpdatePattern()
             l50.scale = 2;
             l50.layer = 1;
             l50.unk0 = 1;
-            l50.unk18 = facing;
+            l50.facing = facing;
             SpawnObject(&l50);
             m_playVoice = 3;
         }
@@ -4312,7 +4312,7 @@ void CIkumi::UpdatePattern()
                 l50.scale = 2;
                 l50.layer = 1;
                 l50.unk0 = 1;
-                l50.unk18 = facing;
+                l50.facing = facing;
                 SpawnObject(&l50);
                 l50.type = 0x19a;
                 SpawnObject(&l50);
@@ -4345,7 +4345,7 @@ void CIkumi::UpdatePattern()
                 l50.scale = 2;
                 l50.layer = 1;
                 l50.unk0 = 1;
-                l50.unk18 = facing;
+                l50.facing = facing;
                 SpawnObject(&l50);
                 l50.type = 0x19a;
                 SpawnObject(&l50);
@@ -4378,7 +4378,7 @@ void CIkumi::UpdatePattern()
                 l50.scale = 2;
                 l50.layer = 1;
                 l50.unk0 = 1;
-                l50.unk18 = facing;
+                l50.facing = facing;
                 SpawnObject(&l50);
                 l50.type = 0x19a;
                 SpawnObject(&l50);
@@ -4411,7 +4411,7 @@ void CIkumi::UpdatePattern()
                 l50.scale = 2;
                 l50.layer = 1;
                 l50.unk0 = 1;
-                l50.unk18 = facing;
+                l50.facing = facing;
                 SpawnObject(&l50);
                 l50.type = 0x19c;
                 SpawnObject(&l50);
@@ -4444,7 +4444,7 @@ void CIkumi::UpdatePattern()
                 l50.scale = 2;
                 l50.layer = 1;
                 l50.unk0 = 1;
-                l50.unk18 = facing;
+                l50.facing = facing;
                 SpawnObject(&l50);
                 l50.type = 0x19c;
                 SpawnObject(&l50);
@@ -4477,7 +4477,7 @@ void CIkumi::UpdatePattern()
                 l50.scale = 2;
                 l50.layer = 1;
                 l50.unk0 = 1;
-                l50.unk18 = facing;
+                l50.facing = facing;
                 SpawnObject(&l50);
                 l50.type = 0x19c;
                 SpawnObject(&l50);
@@ -4520,7 +4520,7 @@ void CIkumi::UpdatePattern()
             l50.scale = 2;
             l50.unk0 = 1;
             l50.layer = 1;
-            l50.unk18 = facing;
+            l50.facing = facing;
             SpawnObject(&l50);
             ShakeScreen(0xa, 0);
             m_playVoice = 6;
@@ -4619,9 +4619,9 @@ void CIkumi::UpdatePattern()
             l50.scale = 0;
             l50.layer = 1;
             if ((WORD)Random(0, 0x64) < 0x32) {
-                l50.unk18 = facing;
+                l50.facing = facing;
             } else {
-                l50.unk18 = -facing;
+                l50.facing = -facing;
             }
             SpawnObject(&l50);
         }
@@ -4646,14 +4646,14 @@ void CIkumi::UpdatePattern()
                 l50.scale = 2;
                 l50.layer = 1;
                 l50.unk0 = 1;
-                l50.unk18 = facing;
+                l50.facing = facing;
                 SpawnObject(&l50);
                 l50.type = 0x19f;
                 l50.x = (double)((int)x + facing * 0x1e);
                 l50.y = -160.0;
                 l50.scale = 2;
                 l50.layer = 1;
-                l50.unk18 = facing;
+                l50.facing = facing;
                 SpawnObject(&l50);
             }
             if (unk3138 < 8 && frame == 7) {
@@ -4759,9 +4759,9 @@ void CIkumi::UpdatePattern()
             l50.scale = 0;
             l50.layer = 1;
             if ((WORD)Random(0, 0x64) < 0x32) {
-                l50.unk18 = facing;
+                l50.facing = facing;
             } else {
-                l50.unk18 = -facing;
+                l50.facing = -facing;
             }
             SpawnObject(&l50);
         }
@@ -4786,14 +4786,14 @@ void CIkumi::UpdatePattern()
                 l50.scale = 2;
                 l50.layer = 1;
                 l50.unk0 = 1;
-                l50.unk18 = facing;
+                l50.facing = facing;
                 SpawnObject(&l50);
                 l50.type = 0x1a0;
                 l50.x = (double)((int)x + facing * 0x1e);
                 l50.y = -160.0;
                 l50.scale = 2;
                 l50.layer = 1;
-                l50.unk18 = facing;
+                l50.facing = facing;
                 SpawnObject(&l50);
             }
             if (unk3138 < 0xc && frame == 7) {
@@ -4904,7 +4904,7 @@ void CIkumi::UpdatePattern()
             l50.y = (double)((int)y - 0x32 - (WORD)Random(0, 0x14));
             l50.scale = 0;
             l50.layer = 1;
-            l50.unk18 = facing;
+            l50.facing = facing;
             SpawnObject(&l50);
         }
         timer++;
@@ -4928,14 +4928,14 @@ void CIkumi::UpdatePattern()
                 l50.scale = 2;
                 l50.layer = 1;
                 l50.unk0 = 1;
-                l50.unk18 = facing;
+                l50.facing = facing;
                 SpawnObject(&l50);
                 l50.type = 0x1a1;
                 l50.x = (double)((int)x + facing * 0x1e);
                 l50.y = -160.0;
                 l50.scale = 2;
                 l50.layer = 1;
-                l50.unk18 = facing;
+                l50.facing = facing;
                 SpawnObject(&l50);
             }
             if (unk3138 < 0xc && frame == 7) {
@@ -4994,7 +4994,7 @@ void CIkumi::UpdatePattern()
                 l50.y = 0.0;
                 l50.scale = 1;
                 l50.unk0 = 1;
-                l50.unk18 = facing;
+                l50.facing = facing;
                 l50.layer = 0;
                 SpawnObject(&l50);
             }
@@ -5036,7 +5036,7 @@ void CIkumi::UpdatePattern()
                 l50.y = 0.0;
                 l50.scale = 1;
                 l50.unk0 = 1;
-                l50.unk18 = facing;
+                l50.facing = facing;
                 l50.layer = 0;
                 SpawnObject(&l50);
             }
@@ -5078,7 +5078,7 @@ void CIkumi::UpdatePattern()
                 l50.y = 0.0;
                 l50.scale = 1;
                 l50.unk0 = 1;
-                l50.unk18 = facing;
+                l50.facing = facing;
                 l50.layer = 0;
                 SpawnObject(&l50);
             }
@@ -5135,7 +5135,7 @@ void CIkumi::UpdatePattern()
                 l50.y = 0.0;
                 l50.scale = 2;
                 l50.unk0 = 1;
-                l50.unk18 = facing;
+                l50.facing = facing;
                 l50.layer = 0;
                 SpawnObject(&l50);
             }
@@ -5193,7 +5193,7 @@ void CIkumi::UpdatePattern()
                 l50.y = 0.0;
                 l50.scale = 2;
                 l50.unk0 = 1;
-                l50.unk18 = facing;
+                l50.facing = facing;
                 l50.layer = 0;
                 SpawnObject(&l50);
             }
@@ -5254,7 +5254,7 @@ void CIkumi::UpdatePattern()
                 l50.y = 0.0;
                 l50.scale = 2;
                 l50.unk0 = 1;
-                l50.unk18 = facing;
+                l50.facing = facing;
                 l50.layer = 0;
                 SpawnObject(&l50);
             }
@@ -5300,7 +5300,7 @@ void CIkumi::UpdatePattern()
                 l50.y = 0.0;
                 l50.scale = 2;
                 l50.unk0 = 1;
-                l50.unk18 = facing;
+                l50.facing = facing;
                 l50.layer = 1;
                 SpawnObject(&l50);
                 l50.type = 0x1a7;
@@ -5344,7 +5344,7 @@ void CIkumi::UpdatePattern()
                 l50.y = 0.0;
                 l50.scale = 2;
                 l50.unk0 = 1;
-                l50.unk18 = facing;
+                l50.facing = facing;
                 l50.layer = 1;
                 SpawnObject(&l50);
                 l50.type = 0x1a9;
@@ -5352,7 +5352,7 @@ void CIkumi::UpdatePattern()
                 l50.y = -10.0;
                 l50.scale = 2;
                 l50.unk0 = 1;
-                l50.unk18 = facing;
+                l50.facing = facing;
                 l50.layer = 1;
                 SpawnObject(&l50);
                 l50.type = 0x1a7;
@@ -5363,7 +5363,7 @@ void CIkumi::UpdatePattern()
                 l50.y = -10.0;
                 l50.scale = 2;
                 l50.unk0 = 1;
-                l50.unk18 = facing;
+                l50.facing = facing;
                 l50.layer = 1;
                 SpawnObject(&l50);
                 l50.type = 0x1a7;
@@ -5374,7 +5374,7 @@ void CIkumi::UpdatePattern()
                 l50.y = 10.0;
                 l50.scale = 2;
                 l50.unk0 = 1;
-                l50.unk18 = facing;
+                l50.facing = facing;
                 l50.layer = 1;
                 SpawnObject(&l50);
                 l50.type = 0x1a7;
@@ -5385,7 +5385,7 @@ void CIkumi::UpdatePattern()
                 l50.y = 10.0;
                 l50.scale = 2;
                 l50.unk0 = 1;
-                l50.unk18 = facing;
+                l50.facing = facing;
                 l50.layer = 1;
                 SpawnObject(&l50);
                 l50.type = 0x1a7;
@@ -5432,7 +5432,7 @@ void CIkumi::UpdatePattern()
                 l50.y = 0.0;
                 l50.scale = 2;
                 l50.unk0 = 1;
-                l50.unk18 = facing;
+                l50.facing = facing;
                 l50.layer = 1;
                 SpawnObject(&l50);
                 l50.type = 0x1a9;
@@ -5440,7 +5440,7 @@ void CIkumi::UpdatePattern()
                 l50.y = -10.0;
                 l50.scale = 2;
                 l50.unk0 = 1;
-                l50.unk18 = facing;
+                l50.facing = facing;
                 l50.layer = 1;
                 SpawnObject(&l50);
                 l50.type = 0x1a7;
@@ -5451,7 +5451,7 @@ void CIkumi::UpdatePattern()
                 l50.y = -10.0;
                 l50.scale = 2;
                 l50.unk0 = 1;
-                l50.unk18 = facing;
+                l50.facing = facing;
                 l50.layer = 1;
                 SpawnObject(&l50);
                 l50.type = 0x1a7;
@@ -5462,7 +5462,7 @@ void CIkumi::UpdatePattern()
                 l50.y = 0.0;
                 l50.scale = 2;
                 l50.unk0 = 1;
-                l50.unk18 = facing;
+                l50.facing = facing;
                 l50.layer = 1;
                 SpawnObject(&l50);
                 l50.type = 0x1a7;
@@ -5473,7 +5473,7 @@ void CIkumi::UpdatePattern()
                 l50.y = 0.0;
                 l50.scale = 2;
                 l50.unk0 = 1;
-                l50.unk18 = facing;
+                l50.facing = facing;
                 l50.layer = 1;
                 SpawnObject(&l50);
                 l50.type = 0x1a7;
@@ -5484,7 +5484,7 @@ void CIkumi::UpdatePattern()
                 l50.y = 10.0;
                 l50.scale = 2;
                 l50.unk0 = 1;
-                l50.unk18 = facing;
+                l50.facing = facing;
                 l50.layer = 1;
                 SpawnObject(&l50);
                 l50.type = 0x1a7;
@@ -5495,7 +5495,7 @@ void CIkumi::UpdatePattern()
                 l50.y = 10.0;
                 l50.scale = 2;
                 l50.unk0 = 1;
-                l50.unk18 = facing;
+                l50.facing = facing;
                 l50.layer = 1;
                 SpawnObject(&l50);
                 l50.type = 0x1a7;
@@ -5549,7 +5549,7 @@ void CIkumi::UpdatePattern()
                 l50.y = 0.0;
                 l50.scale = 2;
                 l50.unk0 = 1;
-                l50.unk18 = facing;
+                l50.facing = facing;
                 l50.layer = 1;
                 SpawnObject(&l50);
                 l50.type = 0x1a7;
@@ -5607,7 +5607,7 @@ void CIkumi::UpdatePattern()
                 l50.y = 0.0;
                 l50.scale = 2;
                 l50.unk0 = 1;
-                l50.unk18 = facing;
+                l50.facing = facing;
                 l50.layer = 1;
                 SpawnObject(&l50);
                 l50.type = 0x1a9;
@@ -5615,7 +5615,7 @@ void CIkumi::UpdatePattern()
                 l50.y = -10.0;
                 l50.scale = 2;
                 l50.unk0 = 1;
-                l50.unk18 = facing;
+                l50.facing = facing;
                 l50.layer = 1;
                 SpawnObject(&l50);
                 l50.type = 0x1a7;
@@ -5626,7 +5626,7 @@ void CIkumi::UpdatePattern()
                 l50.y = -10.0;
                 l50.scale = 2;
                 l50.unk0 = 1;
-                l50.unk18 = facing;
+                l50.facing = facing;
                 l50.layer = 1;
                 SpawnObject(&l50);
                 l50.type = 0x1a7;
@@ -5637,7 +5637,7 @@ void CIkumi::UpdatePattern()
                 l50.y = 10.0;
                 l50.scale = 2;
                 l50.unk0 = 1;
-                l50.unk18 = facing;
+                l50.facing = facing;
                 l50.layer = 1;
                 SpawnObject(&l50);
                 l50.type = 0x1a7;
@@ -5648,7 +5648,7 @@ void CIkumi::UpdatePattern()
                 l50.y = 10.0;
                 l50.scale = 2;
                 l50.unk0 = 1;
-                l50.unk18 = facing;
+                l50.facing = facing;
                 l50.layer = 1;
                 SpawnObject(&l50);
                 l50.type = 0x1a7;
@@ -5709,7 +5709,7 @@ void CIkumi::UpdatePattern()
                 l50.y = 0.0;
                 l50.scale = 2;
                 l50.unk0 = 1;
-                l50.unk18 = facing;
+                l50.facing = facing;
                 l50.layer = 1;
                 SpawnObject(&l50);
                 l50.type = 0x1a9;
@@ -5717,7 +5717,7 @@ void CIkumi::UpdatePattern()
                 l50.y = -10.0;
                 l50.scale = 2;
                 l50.unk0 = 1;
-                l50.unk18 = facing;
+                l50.facing = facing;
                 l50.layer = 1;
                 SpawnObject(&l50);
                 l50.type = 0x1a7;
@@ -5728,7 +5728,7 @@ void CIkumi::UpdatePattern()
                 l50.y = -10.0;
                 l50.scale = 2;
                 l50.unk0 = 1;
-                l50.unk18 = facing;
+                l50.facing = facing;
                 l50.layer = 1;
                 SpawnObject(&l50);
                 l50.type = 0x1a7;
@@ -5739,7 +5739,7 @@ void CIkumi::UpdatePattern()
                 l50.y = 0.0;
                 l50.scale = 2;
                 l50.unk0 = 1;
-                l50.unk18 = facing;
+                l50.facing = facing;
                 l50.layer = 1;
                 SpawnObject(&l50);
                 l50.type = 0x1a7;
@@ -5750,7 +5750,7 @@ void CIkumi::UpdatePattern()
                 l50.y = 0.0;
                 l50.scale = 2;
                 l50.unk0 = 1;
-                l50.unk18 = facing;
+                l50.facing = facing;
                 l50.layer = 1;
                 SpawnObject(&l50);
                 l50.type = 0x1a7;
@@ -5761,7 +5761,7 @@ void CIkumi::UpdatePattern()
                 l50.y = 10.0;
                 l50.scale = 2;
                 l50.unk0 = 1;
-                l50.unk18 = facing;
+                l50.facing = facing;
                 l50.layer = 1;
                 SpawnObject(&l50);
                 l50.type = 0x1a7;
@@ -5772,7 +5772,7 @@ void CIkumi::UpdatePattern()
                 l50.y = 10.0;
                 l50.scale = 2;
                 l50.unk0 = 1;
-                l50.unk18 = facing;
+                l50.facing = facing;
                 l50.layer = 1;
                 SpawnObject(&l50);
                 l50.type = 0x1a7;
@@ -5900,7 +5900,7 @@ void CIkumi::UpdatePattern()
             l50.y = (double)((int)(*m_opponent)->y + 0xa0);
             l50.scale = 0;
             l50.unk0 = 1;
-            l50.unk18 = facing;
+            l50.facing = facing;
             l50.layer = 1;
             SpawnObject(&l50);
         }
@@ -5910,7 +5910,7 @@ void CIkumi::UpdatePattern()
             l50.y = (double)((int)(*m_opponent)->y + 0x78);
             l50.scale = 0;
             l50.unk0 = 1;
-            l50.unk18 = -facing;
+            l50.facing = -facing;
             l50.layer = 1;
             SpawnObject(&l50);
         }
@@ -5920,7 +5920,7 @@ void CIkumi::UpdatePattern()
             l50.y = (double)((int)(*m_opponent)->y + 0x118);
             l50.scale = 0;
             l50.unk0 = 1;
-            l50.unk18 = facing;
+            l50.facing = facing;
             l50.layer = 1;
             SpawnObject(&l50);
         }
@@ -5930,7 +5930,7 @@ void CIkumi::UpdatePattern()
             l50.y = (double)((int)(*m_opponent)->y + 0x118);
             l50.scale = 0;
             l50.unk0 = 1;
-            l50.unk18 = -facing;
+            l50.facing = -facing;
             l50.layer = 1;
             SpawnObject(&l50);
         }
@@ -5940,7 +5940,7 @@ void CIkumi::UpdatePattern()
             l50.y = (double)((int)y - 0x14a);
             l50.scale = 0;
             l50.unk0 = 1;
-            l50.unk18 = facing;
+            l50.facing = facing;
             l50.unk28 = 1;
             l50.layer = 1;
             SpawnObject(&l50);
@@ -5949,7 +5949,7 @@ void CIkumi::UpdatePattern()
             l50.y = (double)((int)y - 0x1ef);
             l50.scale = 0;
             l50.unk0 = 1;
-            l50.unk18 = facing;
+            l50.facing = facing;
             l50.unk28 = 1;
             l50.layer = 1;
             SpawnObject(&l50);
@@ -5958,7 +5958,7 @@ void CIkumi::UpdatePattern()
             l50.y = (double)((int)y - 0x14a);
             l50.scale = 0;
             l50.unk0 = 1;
-            l50.unk18 = -facing;
+            l50.facing = -facing;
             l50.unk28 = 1;
             l50.layer = 1;
             SpawnObject(&l50);
@@ -5967,7 +5967,7 @@ void CIkumi::UpdatePattern()
             l50.y = (double)((int)y - 0x1ef);
             l50.scale = 0;
             l50.unk0 = 1;
-            l50.unk18 = -facing;
+            l50.facing = -facing;
             l50.unk28 = 1;
             l50.layer = 0;
             SpawnObject(&l50);
@@ -5978,7 +5978,7 @@ void CIkumi::UpdatePattern()
             l50.y = (double)((int)y + 8);
             l50.scale = 2;
             l50.unk0 = 1;
-            l50.unk18 = facing;
+            l50.facing = facing;
             l50.layer = 1;
             SpawnObject(&l50);
         }
@@ -7379,7 +7379,7 @@ void CIkumi::Unk694d00()
             l50.type = 0x1f3;
             l50.x = (double)(int)x;
             l50.y = (double)(int)y;
-            l50.unk18 = facing;
+            l50.facing = facing;
             l50.layer = 1;
             SpawnObject(&l50);
             m_gauge = m_gauge + 0x1e;
@@ -7466,7 +7466,7 @@ void CIkumi::Unk694d00()
                 l50.scale = 0;
                 l50.layer = 0;
                 l50.unk0 = 1;
-                l50.unk18 = facing;
+                l50.facing = facing;
                 SpawnObject(&l50);
                 unk3144 = 1;
             }
@@ -7518,7 +7518,7 @@ void CIkumi::Unk694d00()
                 l50.scale = 0;
                 l50.layer = 0;
                 l50.unk0 = 1;
-                l50.unk18 = facing;
+                l50.facing = facing;
                 SpawnObject(&l50);
                 unk3144 = 1;
             }
@@ -7570,7 +7570,7 @@ void CIkumi::Unk694d00()
                 l50.scale = 0;
                 l50.layer = 0;
                 l50.unk0 = 1;
-                l50.unk18 = facing;
+                l50.facing = facing;
                 SpawnObject(&l50);
                 unk3144 = 1;
             }
@@ -7613,7 +7613,7 @@ void CIkumi::Unk694d00()
                 l50.scale = 0;
                 l50.layer = 0;
                 l50.unk0 = 1;
-                l50.unk18 = facing;
+                l50.facing = facing;
                 SpawnObject(&l50);
                 unk3144 = 1;
             }
@@ -7654,7 +7654,7 @@ void CIkumi::Unk694d00()
             l50.x = 60.0;
             l50.y = 40.0;
             l50.screen = 1;
-            l50.unk18 = 1;
+            l50.facing = 1;
             l50.scale = 0;
             l50.layer = 0;
             SpawnObject(&l50);
@@ -9280,7 +9280,7 @@ void CIkumi::Unk694d00()
                 l50.x = (double)((int)x + facing * 0x2a);
                 l50.y = (double)((int)y - 0x46);
                 l50.scale = 2;
-                l50.unk18 = facing;
+                l50.facing = facing;
                 l50.layer = 1;
                 SpawnObject(&l50);
                 m_playVoice = 5;
@@ -9307,7 +9307,7 @@ void CIkumi::Unk694d00()
                 l50.scale = 2;
                 l50.layer = 1;
                 l50.unk0 = 1;
-                l50.unk18 = facing;
+                l50.facing = facing;
                 SpawnObject(&l50);
                 l50.type = 0x193;
                 SpawnObject(&l50);
@@ -9340,7 +9340,7 @@ void CIkumi::Unk694d00()
                 l50.scale = 2;
                 l50.layer = 1;
                 l50.unk0 = 1;
-                l50.unk18 = facing;
+                l50.facing = facing;
                 SpawnObject(&l50);
                 l50.type = 0x193;
                 SpawnObject(&l50);
@@ -9373,7 +9373,7 @@ void CIkumi::Unk694d00()
                 l50.scale = 2;
                 l50.layer = 1;
                 l50.unk0 = 1;
-                l50.unk18 = facing;
+                l50.facing = facing;
                 SpawnObject(&l50);
                 l50.type = 0x193;
                 SpawnObject(&l50);
@@ -9408,7 +9408,7 @@ void CIkumi::Unk694d00()
             l50.scale = 2;
             l50.layer = 1;
             l50.unk0 = 1;
-            l50.unk18 = facing;
+            l50.facing = facing;
             SpawnObject(&l50);
             m_playVoice = 2;
         }
@@ -9459,7 +9459,7 @@ void CIkumi::Unk694d00()
             l50.scale = 2;
             l50.layer = 1;
             l50.unk0 = 1;
-            l50.unk18 = facing;
+            l50.facing = facing;
             SpawnObject(&l50);
             m_playVoice = 2;
         }
@@ -9522,7 +9522,7 @@ void CIkumi::Unk694d00()
             l50.scale = 2;
             l50.layer = 1;
             l50.unk0 = 1;
-            l50.unk18 = facing;
+            l50.facing = facing;
             SpawnObject(&l50);
             m_playVoice = 2;
         }
@@ -9584,7 +9584,7 @@ void CIkumi::Unk694d00()
             l50.scale = 2;
             l50.layer = 1;
             l50.unk0 = 1;
-            l50.unk18 = facing;
+            l50.facing = facing;
             SpawnObject(&l50);
             m_playVoice = 3;
         }
@@ -9630,7 +9630,7 @@ void CIkumi::Unk694d00()
             l50.scale = 2;
             l50.layer = 1;
             l50.unk0 = 1;
-            l50.unk18 = facing;
+            l50.facing = facing;
             SpawnObject(&l50);
             m_playVoice = 3;
         }
@@ -9688,7 +9688,7 @@ void CIkumi::Unk694d00()
             l50.scale = 2;
             l50.layer = 1;
             l50.unk0 = 1;
-            l50.unk18 = facing;
+            l50.facing = facing;
             SpawnObject(&l50);
             m_playVoice = 3;
         }
@@ -9776,7 +9776,7 @@ void CIkumi::Unk694d00()
             l50.y = (double)((int)y - 0x2e);
             l50.scale = 0;
             l50.layer = 1;
-            l50.unk18 = facing;
+            l50.facing = facing;
             SpawnObject(&l50);
         }
         if (frame == 0xc && timer == 0x5a) {
@@ -9785,7 +9785,7 @@ void CIkumi::Unk694d00()
             l50.x = (double)((int)x + facing * 0x2b);
             l50.y = (double)((int)y - 0x2e);
             l50.scale = 2;
-            l50.unk18 = facing;
+            l50.facing = facing;
             l50.layer = 1;
             SpawnObject(&l50);
             DealDamage(0x1f4, 700.0);
@@ -9798,14 +9798,14 @@ void CIkumi::Unk694d00()
             l50.y = (double)((int)y - 0x2e);
             l50.scale = 0;
             l50.layer = 1;
-            l50.unk18 = facing;
+            l50.facing = facing;
             SpawnObject(&l50);
             l50.type = 0x1dd;
             l50.x = (double)((int)x + facing * 0x2b);
             l50.y = (double)((int)y - 0x2e);
             l50.scale = 0;
             l50.layer = 1;
-            l50.unk18 = -facing;
+            l50.facing = -facing;
             SpawnObject(&l50);
             m_playVoice = 5;
             ShakeScreen(4, 0);
@@ -9841,7 +9841,7 @@ void CIkumi::Unk694d00()
             l50.scale = 2;
             l50.layer = 1;
             l50.unk0 = 1;
-            l50.unk18 = facing;
+            l50.facing = facing;
             SpawnObject(&l50);
             m_playVoice = 2;
         }
@@ -9904,7 +9904,7 @@ void CIkumi::Unk694d00()
             l50.scale = 2;
             l50.layer = 1;
             l50.unk0 = 1;
-            l50.unk18 = facing;
+            l50.facing = facing;
             SpawnObject(&l50);
             m_playVoice = 2;
         }
@@ -9955,7 +9955,7 @@ void CIkumi::Unk694d00()
             l50.scale = 2;
             l50.layer = 1;
             l50.unk0 = 1;
-            l50.unk18 = facing;
+            l50.facing = facing;
             SpawnObject(&l50);
             m_playVoice = 2;
         }
@@ -10018,7 +10018,7 @@ void CIkumi::Unk694d00()
             l50.scale = 2;
             l50.layer = 1;
             l50.unk0 = 1;
-            l50.unk18 = facing;
+            l50.facing = facing;
             SpawnObject(&l50);
             m_playVoice = 2;
         }
@@ -10080,7 +10080,7 @@ void CIkumi::Unk694d00()
             l50.scale = 2;
             l50.layer = 1;
             l50.unk0 = 1;
-            l50.unk18 = facing;
+            l50.facing = facing;
             SpawnObject(&l50);
             m_playVoice = 3;
         }
@@ -10138,7 +10138,7 @@ void CIkumi::Unk694d00()
             l50.scale = 2;
             l50.layer = 1;
             l50.unk0 = 1;
-            l50.unk18 = facing;
+            l50.facing = facing;
             SpawnObject(&l50);
             m_playVoice = 3;
         }
@@ -10198,7 +10198,7 @@ void CIkumi::Unk694d00()
             l50.scale = 2;
             l50.layer = 1;
             l50.unk0 = 1;
-            l50.unk18 = facing;
+            l50.facing = facing;
             SpawnObject(&l50);
             m_playVoice = 3;
         }
@@ -10256,7 +10256,7 @@ void CIkumi::Unk694d00()
             l50.scale = 2;
             l50.layer = 1;
             l50.unk0 = 1;
-            l50.unk18 = facing;
+            l50.facing = facing;
             SpawnObject(&l50);
             m_playVoice = 3;
         }
@@ -10303,7 +10303,7 @@ void CIkumi::Unk694d00()
                 l50.scale = 2;
                 l50.layer = 1;
                 l50.unk0 = 1;
-                l50.unk18 = facing;
+                l50.facing = facing;
                 SpawnObject(&l50);
                 l50.type = 0x19a;
                 SpawnObject(&l50);
@@ -10336,7 +10336,7 @@ void CIkumi::Unk694d00()
                 l50.scale = 2;
                 l50.layer = 1;
                 l50.unk0 = 1;
-                l50.unk18 = facing;
+                l50.facing = facing;
                 SpawnObject(&l50);
                 l50.type = 0x19a;
                 SpawnObject(&l50);
@@ -10369,7 +10369,7 @@ void CIkumi::Unk694d00()
                 l50.scale = 2;
                 l50.layer = 1;
                 l50.unk0 = 1;
-                l50.unk18 = facing;
+                l50.facing = facing;
                 SpawnObject(&l50);
                 l50.type = 0x19a;
                 SpawnObject(&l50);
@@ -10402,7 +10402,7 @@ void CIkumi::Unk694d00()
                 l50.scale = 2;
                 l50.layer = 1;
                 l50.unk0 = 1;
-                l50.unk18 = facing;
+                l50.facing = facing;
                 SpawnObject(&l50);
                 l50.type = 0x19c;
                 SpawnObject(&l50);
@@ -10435,7 +10435,7 @@ void CIkumi::Unk694d00()
                 l50.scale = 2;
                 l50.layer = 1;
                 l50.unk0 = 1;
-                l50.unk18 = facing;
+                l50.facing = facing;
                 SpawnObject(&l50);
                 l50.type = 0x19c;
                 SpawnObject(&l50);
@@ -10468,7 +10468,7 @@ void CIkumi::Unk694d00()
                 l50.scale = 2;
                 l50.layer = 1;
                 l50.unk0 = 1;
-                l50.unk18 = facing;
+                l50.facing = facing;
                 SpawnObject(&l50);
                 l50.type = 0x19c;
                 SpawnObject(&l50);
@@ -10511,7 +10511,7 @@ void CIkumi::Unk694d00()
             l50.scale = 2;
             l50.unk0 = 1;
             l50.layer = 1;
-            l50.unk18 = facing;
+            l50.facing = facing;
             SpawnObject(&l50);
             ShakeScreen(0xa, 0);
             m_playVoice = 6;
@@ -10610,9 +10610,9 @@ void CIkumi::Unk694d00()
             l50.scale = 0;
             l50.layer = 1;
             if ((WORD)Random(0, 0x64) < 0x32) {
-                l50.unk18 = facing;
+                l50.facing = facing;
             } else {
-                l50.unk18 = -facing;
+                l50.facing = -facing;
             }
             SpawnObject(&l50);
         }
@@ -10637,14 +10637,14 @@ void CIkumi::Unk694d00()
                 l50.scale = 2;
                 l50.layer = 1;
                 l50.unk0 = 1;
-                l50.unk18 = facing;
+                l50.facing = facing;
                 SpawnObject(&l50);
                 l50.type = 0x19f;
                 l50.x = (double)((int)x + facing * 0x1e);
                 l50.y = -160.0;
                 l50.scale = 2;
                 l50.layer = 1;
-                l50.unk18 = facing;
+                l50.facing = facing;
                 SpawnObject(&l50);
             }
             if (unk3138 < 8 && frame == 7) {
@@ -10750,9 +10750,9 @@ void CIkumi::Unk694d00()
             l50.scale = 0;
             l50.layer = 1;
             if ((WORD)Random(0, 0x64) < 0x32) {
-                l50.unk18 = facing;
+                l50.facing = facing;
             } else {
-                l50.unk18 = -facing;
+                l50.facing = -facing;
             }
             SpawnObject(&l50);
         }
@@ -10777,14 +10777,14 @@ void CIkumi::Unk694d00()
                 l50.scale = 2;
                 l50.layer = 1;
                 l50.unk0 = 1;
-                l50.unk18 = facing;
+                l50.facing = facing;
                 SpawnObject(&l50);
                 l50.type = 0x1a0;
                 l50.x = (double)((int)x + facing * 0x1e);
                 l50.y = -160.0;
                 l50.scale = 2;
                 l50.layer = 1;
-                l50.unk18 = facing;
+                l50.facing = facing;
                 SpawnObject(&l50);
             }
             if (unk3138 < 0xc && frame == 7) {
@@ -10896,11 +10896,11 @@ void CIkumi::Unk694d00()
             l50.scale = 0;
             l50.layer = 1;
             if ((WORD)Random(0, 0x64) < 0x32) {
-                l50.unk18 = facing;
+                l50.facing = facing;
             } else {
-                l50.unk18 = -facing;
+                l50.facing = -facing;
             }
-            l50.unk18 = facing;
+            l50.facing = facing;
             SpawnObject(&l50);
         }
         timer++;
@@ -10924,14 +10924,14 @@ void CIkumi::Unk694d00()
                 l50.scale = 2;
                 l50.layer = 1;
                 l50.unk0 = 1;
-                l50.unk18 = facing;
+                l50.facing = facing;
                 SpawnObject(&l50);
                 l50.type = 0x1a1;
                 l50.x = (double)((int)x + facing * 0x1e);
                 l50.y = -160.0;
                 l50.scale = 2;
                 l50.layer = 1;
-                l50.unk18 = facing;
+                l50.facing = facing;
                 SpawnObject(&l50);
             }
             if (unk3138 < 0xc && frame == 7) {
@@ -10990,7 +10990,7 @@ void CIkumi::Unk694d00()
                 l50.y = 0.0;
                 l50.scale = 1;
                 l50.unk0 = 1;
-                l50.unk18 = facing;
+                l50.facing = facing;
                 l50.layer = 0;
                 SpawnObject(&l50);
             }
@@ -11032,7 +11032,7 @@ void CIkumi::Unk694d00()
                 l50.y = 0.0;
                 l50.scale = 1;
                 l50.unk0 = 1;
-                l50.unk18 = facing;
+                l50.facing = facing;
                 l50.layer = 0;
                 SpawnObject(&l50);
             }
@@ -11074,7 +11074,7 @@ void CIkumi::Unk694d00()
                 l50.y = 0.0;
                 l50.scale = 1;
                 l50.unk0 = 1;
-                l50.unk18 = facing;
+                l50.facing = facing;
                 l50.layer = 0;
                 SpawnObject(&l50);
             }
@@ -11131,7 +11131,7 @@ void CIkumi::Unk694d00()
                 l50.y = 0.0;
                 l50.scale = 2;
                 l50.unk0 = 1;
-                l50.unk18 = facing;
+                l50.facing = facing;
                 l50.layer = 0;
                 SpawnObject(&l50);
             }
@@ -11188,7 +11188,7 @@ void CIkumi::Unk694d00()
                 l50.y = 0.0;
                 l50.scale = 2;
                 l50.unk0 = 1;
-                l50.unk18 = facing;
+                l50.facing = facing;
                 l50.layer = 0;
                 SpawnObject(&l50);
             }
@@ -11248,7 +11248,7 @@ void CIkumi::Unk694d00()
                 l50.y = 0.0;
                 l50.scale = 2;
                 l50.unk0 = 1;
-                l50.unk18 = facing;
+                l50.facing = facing;
                 l50.layer = 0;
                 SpawnObject(&l50);
             }
@@ -11293,7 +11293,7 @@ void CIkumi::Unk694d00()
                 l50.y = 0.0;
                 l50.scale = 2;
                 l50.unk0 = 1;
-                l50.unk18 = facing;
+                l50.facing = facing;
                 l50.layer = 1;
                 SpawnObject(&l50);
                 l50.type = 0x1a7;
@@ -11337,7 +11337,7 @@ void CIkumi::Unk694d00()
                 l50.y = 0.0;
                 l50.scale = 2;
                 l50.unk0 = 1;
-                l50.unk18 = facing;
+                l50.facing = facing;
                 l50.layer = 1;
                 SpawnObject(&l50);
                 l50.type = 0x1a9;
@@ -11345,7 +11345,7 @@ void CIkumi::Unk694d00()
                 l50.y = -10.0;
                 l50.scale = 2;
                 l50.unk0 = 1;
-                l50.unk18 = facing;
+                l50.facing = facing;
                 l50.layer = 1;
                 SpawnObject(&l50);
                 l50.type = 0x1a7;
@@ -11356,7 +11356,7 @@ void CIkumi::Unk694d00()
                 l50.y = -10.0;
                 l50.scale = 2;
                 l50.unk0 = 1;
-                l50.unk18 = facing;
+                l50.facing = facing;
                 l50.layer = 1;
                 SpawnObject(&l50);
                 l50.type = 0x1a7;
@@ -11367,7 +11367,7 @@ void CIkumi::Unk694d00()
                 l50.y = 10.0;
                 l50.scale = 2;
                 l50.unk0 = 1;
-                l50.unk18 = facing;
+                l50.facing = facing;
                 l50.layer = 1;
                 SpawnObject(&l50);
                 l50.type = 0x1a7;
@@ -11378,7 +11378,7 @@ void CIkumi::Unk694d00()
                 l50.y = 10.0;
                 l50.scale = 2;
                 l50.unk0 = 1;
-                l50.unk18 = facing;
+                l50.facing = facing;
                 l50.layer = 1;
                 SpawnObject(&l50);
                 l50.type = 0x1a7;
@@ -11425,7 +11425,7 @@ void CIkumi::Unk694d00()
                 l50.y = 0.0;
                 l50.scale = 2;
                 l50.unk0 = 1;
-                l50.unk18 = facing;
+                l50.facing = facing;
                 l50.layer = 1;
                 SpawnObject(&l50);
                 l50.type = 0x1a9;
@@ -11433,7 +11433,7 @@ void CIkumi::Unk694d00()
                 l50.y = -10.0;
                 l50.scale = 2;
                 l50.unk0 = 1;
-                l50.unk18 = facing;
+                l50.facing = facing;
                 l50.layer = 1;
                 SpawnObject(&l50);
                 l50.type = 0x1a7;
@@ -11444,7 +11444,7 @@ void CIkumi::Unk694d00()
                 l50.y = -10.0;
                 l50.scale = 2;
                 l50.unk0 = 1;
-                l50.unk18 = facing;
+                l50.facing = facing;
                 l50.layer = 1;
                 SpawnObject(&l50);
                 l50.type = 0x1a7;
@@ -11455,7 +11455,7 @@ void CIkumi::Unk694d00()
                 l50.y = 0.0;
                 l50.scale = 2;
                 l50.unk0 = 1;
-                l50.unk18 = facing;
+                l50.facing = facing;
                 l50.layer = 1;
                 SpawnObject(&l50);
                 l50.type = 0x1a7;
@@ -11466,7 +11466,7 @@ void CIkumi::Unk694d00()
                 l50.y = 0.0;
                 l50.scale = 2;
                 l50.unk0 = 1;
-                l50.unk18 = facing;
+                l50.facing = facing;
                 l50.layer = 1;
                 SpawnObject(&l50);
                 l50.type = 0x1a7;
@@ -11477,7 +11477,7 @@ void CIkumi::Unk694d00()
                 l50.y = 10.0;
                 l50.scale = 2;
                 l50.unk0 = 1;
-                l50.unk18 = facing;
+                l50.facing = facing;
                 l50.layer = 1;
                 SpawnObject(&l50);
                 l50.type = 0x1a7;
@@ -11488,7 +11488,7 @@ void CIkumi::Unk694d00()
                 l50.y = 10.0;
                 l50.scale = 2;
                 l50.unk0 = 1;
-                l50.unk18 = facing;
+                l50.facing = facing;
                 l50.layer = 1;
                 SpawnObject(&l50);
                 l50.type = 0x1a7;
@@ -11542,7 +11542,7 @@ void CIkumi::Unk694d00()
                 l50.y = 0.0;
                 l50.scale = 2;
                 l50.unk0 = 1;
-                l50.unk18 = facing;
+                l50.facing = facing;
                 l50.layer = 1;
                 SpawnObject(&l50);
                 l50.type = 0x1a7;
@@ -11600,7 +11600,7 @@ void CIkumi::Unk694d00()
                 l50.y = 0.0;
                 l50.scale = 2;
                 l50.unk0 = 1;
-                l50.unk18 = facing;
+                l50.facing = facing;
                 l50.layer = 1;
                 SpawnObject(&l50);
                 l50.type = 0x1a9;
@@ -11608,7 +11608,7 @@ void CIkumi::Unk694d00()
                 l50.y = -10.0;
                 l50.scale = 2;
                 l50.unk0 = 1;
-                l50.unk18 = facing;
+                l50.facing = facing;
                 l50.layer = 1;
                 SpawnObject(&l50);
                 l50.type = 0x1a7;
@@ -11619,7 +11619,7 @@ void CIkumi::Unk694d00()
                 l50.y = -10.0;
                 l50.scale = 2;
                 l50.unk0 = 1;
-                l50.unk18 = facing;
+                l50.facing = facing;
                 l50.layer = 1;
                 SpawnObject(&l50);
                 l50.type = 0x1a7;
@@ -11630,7 +11630,7 @@ void CIkumi::Unk694d00()
                 l50.y = 10.0;
                 l50.scale = 2;
                 l50.unk0 = 1;
-                l50.unk18 = facing;
+                l50.facing = facing;
                 l50.layer = 1;
                 SpawnObject(&l50);
                 l50.type = 0x1a7;
@@ -11641,7 +11641,7 @@ void CIkumi::Unk694d00()
                 l50.y = 10.0;
                 l50.scale = 2;
                 l50.unk0 = 1;
-                l50.unk18 = facing;
+                l50.facing = facing;
                 l50.layer = 1;
                 SpawnObject(&l50);
                 l50.type = 0x1a7;
@@ -11702,7 +11702,7 @@ void CIkumi::Unk694d00()
                 l50.y = 0.0;
                 l50.scale = 2;
                 l50.unk0 = 1;
-                l50.unk18 = facing;
+                l50.facing = facing;
                 l50.layer = 1;
                 SpawnObject(&l50);
                 l50.type = 0x1a9;
@@ -11710,7 +11710,7 @@ void CIkumi::Unk694d00()
                 l50.y = -10.0;
                 l50.scale = 2;
                 l50.unk0 = 1;
-                l50.unk18 = facing;
+                l50.facing = facing;
                 l50.layer = 1;
                 SpawnObject(&l50);
                 l50.type = 0x1a7;
@@ -11721,7 +11721,7 @@ void CIkumi::Unk694d00()
                 l50.y = -10.0;
                 l50.scale = 2;
                 l50.unk0 = 1;
-                l50.unk18 = facing;
+                l50.facing = facing;
                 l50.layer = 1;
                 SpawnObject(&l50);
                 l50.type = 0x1a7;
@@ -11732,7 +11732,7 @@ void CIkumi::Unk694d00()
                 l50.y = 0.0;
                 l50.scale = 2;
                 l50.unk0 = 1;
-                l50.unk18 = facing;
+                l50.facing = facing;
                 l50.layer = 1;
                 SpawnObject(&l50);
                 l50.type = 0x1a7;
@@ -11743,7 +11743,7 @@ void CIkumi::Unk694d00()
                 l50.y = 0.0;
                 l50.scale = 2;
                 l50.unk0 = 1;
-                l50.unk18 = facing;
+                l50.facing = facing;
                 l50.layer = 1;
                 SpawnObject(&l50);
                 l50.type = 0x1a7;
@@ -11754,7 +11754,7 @@ void CIkumi::Unk694d00()
                 l50.y = 10.0;
                 l50.scale = 2;
                 l50.unk0 = 1;
-                l50.unk18 = facing;
+                l50.facing = facing;
                 l50.layer = 1;
                 SpawnObject(&l50);
                 l50.type = 0x1a7;
@@ -11765,7 +11765,7 @@ void CIkumi::Unk694d00()
                 l50.y = 10.0;
                 l50.scale = 2;
                 l50.unk0 = 1;
-                l50.unk18 = facing;
+                l50.facing = facing;
                 l50.layer = 1;
                 SpawnObject(&l50);
                 l50.type = 0x1a7;

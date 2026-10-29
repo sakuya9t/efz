@@ -1366,7 +1366,7 @@ void CMakoto::UpdatePattern()
             l50.type = 0x1f3;
             l50.x = (double)(int)x;
             l50.y = (double)(int)y;
-            l50.unk18 = facing;
+            l50.facing = facing;
             l50.layer = 1;
             SpawnObject(&l50);
             m_gauge = m_gauge + 0x1e;
@@ -1453,7 +1453,7 @@ void CMakoto::UpdatePattern()
                 l50.scale = 0;
                 l50.layer = 0;
                 l50.unk0 = 1;
-                l50.unk18 = facing;
+                l50.facing = facing;
                 SpawnObject(&l50);
                 unk3144 = 1;
             }
@@ -1505,7 +1505,7 @@ void CMakoto::UpdatePattern()
                 l50.scale = 0;
                 l50.layer = 0;
                 l50.unk0 = 1;
-                l50.unk18 = facing;
+                l50.facing = facing;
                 SpawnObject(&l50);
                 unk3144 = 1;
             }
@@ -1557,7 +1557,7 @@ void CMakoto::UpdatePattern()
                 l50.scale = 0;
                 l50.layer = 0;
                 l50.unk0 = 1;
-                l50.unk18 = facing;
+                l50.facing = facing;
                 SpawnObject(&l50);
                 unk3144 = 1;
             }
@@ -1600,7 +1600,7 @@ void CMakoto::UpdatePattern()
                 l50.scale = 0;
                 l50.layer = 0;
                 l50.unk0 = 1;
-                l50.unk18 = facing;
+                l50.facing = facing;
                 SpawnObject(&l50);
                 unk3144 = 1;
             }
@@ -1641,7 +1641,7 @@ void CMakoto::UpdatePattern()
             l50.x = 60.0;
             l50.y = 40.0;
             l50.screen = 1;
-            l50.unk18 = 1;
+            l50.facing = 1;
             l50.scale = 0;
             l50.layer = 0;
             SpawnObject(&l50);
@@ -2632,7 +2632,7 @@ void CMakoto::UpdatePattern()
                 l50.type = 0x19d;
                 l50.x = (double)((int)x + facing * 0x22);
                 l50.y = (double)((int)y - 0x1f);
-                l50.unk18 = facing;
+                l50.facing = facing;
                 l50.layer = 1;
                 l50.scale = 2;
                 SpawnObject(&l50);
@@ -2670,7 +2670,7 @@ void CMakoto::UpdatePattern()
             l50.type = 0x190;
             l50.x = (double)((int)x + facing * 0x5a);
             l50.y = (double)((int)y - 0x32);
-            l50.unk18 = facing;
+            l50.facing = facing;
             l50.layer = 1;
             l50.scale = 2;
             SpawnObject(&l50);
@@ -2688,7 +2688,7 @@ void CMakoto::UpdatePattern()
                 l50.type = 0x190;
                 l50.x = (double)((int)x + facing * 0x5a);
                 l50.y = (double)((int)y - 0x32);
-                l50.unk18 = facing;
+                l50.facing = facing;
                 l50.layer = 1;
                 l50.scale = 2;
                 SpawnObject(&l50);
@@ -2956,7 +2956,7 @@ void CMakoto::UpdatePattern()
                 l50.type = 0x191;
                 l50.x = (double)((int)x + facing * 0x1b);
                 l50.y = (double)((int)y - 0x1c);
-                l50.unk18 = facing;
+                l50.facing = facing;
                 l50.layer = 1;
                 l50.scale = 2;
                 SpawnObject(&l50);
@@ -3041,7 +3041,7 @@ void CMakoto::UpdatePattern()
                 l50.type = 0x190;
                 l50.x = (double)((int)x + facing * 0x2d);
                 l50.y = (double)((int)y - 0x3e);
-                l50.unk18 = facing;
+                l50.facing = facing;
                 l50.layer = 1;
                 l50.scale = 2;
                 SpawnObject(&l50);
@@ -3545,7 +3545,7 @@ void CMakoto::UpdatePattern()
                 l50.scale = 0;
                 l50.unk0 = 1;
                 l50.layer = 1;
-                l50.unk18 = facing;
+                l50.facing = facing;
                 SpawnObject(&l50);
                 m_playSound = 0x15;
                 m_playVoice = 5;
@@ -3574,7 +3574,7 @@ void CMakoto::UpdatePattern()
                 l50.scale = 0;
                 l50.unk0 = 1;
                 l50.layer = 1;
-                l50.unk18 = facing;
+                l50.facing = facing;
                 SpawnObject(&l50);
                 m_playSound = 0x15;
                 m_playVoice = 5;
@@ -3610,7 +3610,7 @@ void CMakoto::UpdatePattern()
             l50.scale = 0;
             l50.unk0 = 1;
             l50.layer = 1;
-            l50.unk18 = facing;
+            l50.facing = facing;
             SpawnObject(&l50);
             m_playSound = 0x15;
             m_playVoice = 5;
@@ -3627,7 +3627,7 @@ void CMakoto::UpdatePattern()
                 l50.scale = 0;
                 l50.unk0 = 1;
                 l50.layer = 1;
-                l50.unk18 = facing;
+                l50.facing = facing;
                 SpawnObject(&l50);
                 m_playSound = 0x15;
             }
@@ -3655,7 +3655,7 @@ void CMakoto::UpdatePattern()
                 l50.scale = 0;
                 l50.unk0 = 1;
                 l50.layer = 1;
-                l50.unk18 = facing;
+                l50.facing = facing;
                 l50.unk28 = 1;
                 SpawnObject(&l50);
                 m_playSound = 0x15;
@@ -3684,7 +3684,7 @@ void CMakoto::UpdatePattern()
                 l50.scale = 0;
                 l50.unk0 = 1;
                 l50.layer = 1;
-                l50.unk18 = facing;
+                l50.facing = facing;
                 l50.unk28 = 1;
                 SpawnObject(&l50);
                 m_playSound = 0x15;
@@ -3725,7 +3725,7 @@ void CMakoto::UpdatePattern()
                 l50.scale = 0;
                 l50.unk0 = 1;
                 l50.layer = 1;
-                l50.unk18 = facing;
+                l50.facing = facing;
                 l50.unk28 = 1;
                 SpawnObject(&l50);
                 m_playSound = 0x15;
@@ -3929,7 +3929,7 @@ void CMakoto::UpdatePattern()
             l50.type = 0x19a;
             l50.x = (double)((int)x + facing * 0x24);
             l50.y = (double)((int)y - 0x4e);
-            l50.unk18 = facing;
+            l50.facing = facing;
             l50.layer = 1;
             l50.unk0 = 1;
             l50.scale = 2;
@@ -3937,7 +3937,7 @@ void CMakoto::UpdatePattern()
             l50.type = 0x192;
             l50.x = (double)((int)x + facing * 0x24);
             l50.y = (double)((int)y - 0x4e);
-            l50.unk18 = facing;
+            l50.facing = facing;
             l50.layer = 1;
             l50.scale = 2;
             SpawnObject(&l50);
@@ -3965,7 +3965,7 @@ void CMakoto::UpdatePattern()
             l50.type = 0x19b;
             l50.x = (double)((int)x - facing * 0x24);
             l50.y = (double)((int)y - 0x4e);
-            l50.unk18 = facing;
+            l50.facing = facing;
             l50.layer = 1;
             l50.unk0 = 1;
             l50.scale = 2;
@@ -3973,7 +3973,7 @@ void CMakoto::UpdatePattern()
             l50.type = 0x192;
             l50.x = (double)((int)x - facing * 0x24);
             l50.y = (double)((int)y - 0x4e);
-            l50.unk18 = -facing;
+            l50.facing = -facing;
             l50.layer = 1;
             l50.scale = 2;
             SpawnObject(&l50);
@@ -4014,14 +4014,14 @@ void CMakoto::UpdatePattern()
             l50.x = (double)((int)x + facing * 0x24);
             l50.y = (double)((int)y - 0x4e);
             l50.unk0 = 1;
-            l50.unk18 = facing;
+            l50.facing = facing;
             l50.layer = 1;
             l50.scale = 2;
             SpawnObject(&l50);
             l50.type = 0x192;
             l50.x = (double)((int)x + facing * 0x24);
             l50.y = (double)((int)y - 0x4e);
-            l50.unk18 = facing;
+            l50.facing = facing;
             l50.layer = 1;
             l50.scale = 2;
             SpawnObject(&l50);
@@ -4058,7 +4058,7 @@ void CMakoto::UpdatePattern()
                 l50.scale = 0;
                 l50.unk0 = 1;
                 l50.layer = 1;
-                l50.unk18 = facing;
+                l50.facing = facing;
                 l50.unk28 = 1;
                 SpawnObject(&l50);
                 m_playSound = 0x15;
@@ -4089,7 +4089,7 @@ void CMakoto::UpdatePattern()
             l50.scale = 2;
             l50.unk0 = 1;
             l50.layer = 1;
-            l50.unk18 = facing;
+            l50.facing = facing;
             SpawnObject(&l50);
         }
         timer++;
@@ -4143,7 +4143,7 @@ void CMakoto::UpdatePattern()
             l50.scale = 2;
             l50.unk0 = 1;
             l50.layer = 1;
-            l50.unk18 = facing;
+            l50.facing = facing;
             SpawnObject(&l50);
         }
         timer++;
@@ -4197,7 +4197,7 @@ void CMakoto::UpdatePattern()
             l50.scale = 2;
             l50.unk0 = 1;
             l50.layer = 1;
-            l50.unk18 = facing;
+            l50.facing = facing;
             SpawnObject(&l50);
         }
         timer++;
@@ -4281,14 +4281,14 @@ void CMakoto::UpdatePattern()
             l50.type = 0x19f;
             l50.x = (double)(int)x;
             l50.y = 0.0;
-            l50.unk18 = facing;
+            l50.facing = facing;
             l50.scale = 2;
             l50.layer = 1;
             SpawnObject(&l50);
             l50.type = 0x191;
             l50.x = (double)((int)x + facing * 0x1b);
             l50.y = (double)((int)y - 0x1c);
-            l50.unk18 = facing;
+            l50.facing = facing;
             l50.layer = 1;
             l50.scale = 2;
             SpawnObject(&l50);
@@ -4315,7 +4315,7 @@ void CMakoto::UpdatePattern()
             l50.type = 0x191;
             l50.x = (double)((int)x + facing * 0x1b);
             l50.y = (double)((int)y - 0x1c);
-            l50.unk18 = facing;
+            l50.facing = facing;
             l50.layer = 1;
             l50.scale = 2;
             SpawnObject(&l50);
@@ -4410,14 +4410,14 @@ void CMakoto::UpdatePattern()
             l50.type = 0x1a0;
             l50.x = (double)(int)x;
             l50.y = 0.0;
-            l50.unk18 = facing;
+            l50.facing = facing;
             l50.scale = 2;
             l50.layer = 1;
             SpawnObject(&l50);
             l50.type = 0x191;
             l50.x = (double)((int)x + facing * 0x1b);
             l50.y = (double)((int)y - 0x1c);
-            l50.unk18 = facing;
+            l50.facing = facing;
             l50.layer = 1;
             l50.scale = 2;
             SpawnObject(&l50);
@@ -4444,7 +4444,7 @@ void CMakoto::UpdatePattern()
             l50.type = 0x191;
             l50.x = (double)((int)x + facing * 0x1b);
             l50.y = (double)((int)y - 0x1c);
-            l50.unk18 = facing;
+            l50.facing = facing;
             l50.layer = 1;
             l50.scale = 2;
             SpawnObject(&l50);
@@ -4543,14 +4543,14 @@ void CMakoto::UpdatePattern()
             l50.type = 0x1a1;
             l50.x = (double)(int)x;
             l50.y = 0.0;
-            l50.unk18 = facing;
+            l50.facing = facing;
             l50.scale = 2;
             l50.layer = 1;
             SpawnObject(&l50);
             l50.type = 0x191;
             l50.x = (double)((int)x + facing * 0x1b);
             l50.y = (double)((int)y - 0x1c);
-            l50.unk18 = facing;
+            l50.facing = facing;
             l50.layer = 1;
             l50.scale = 2;
             SpawnObject(&l50);
@@ -4577,7 +4577,7 @@ void CMakoto::UpdatePattern()
             l50.type = 0x191;
             l50.x = (double)((int)x + facing * 0x1b);
             l50.y = (double)((int)y - 0x1c);
-            l50.unk18 = facing;
+            l50.facing = facing;
             l50.layer = 1;
             l50.scale = 2;
             SpawnObject(&l50);
@@ -4650,7 +4650,7 @@ void CMakoto::UpdatePattern()
             l50.scale = 2;
             l50.unk0 = 1;
             l50.layer = 0;
-            l50.unk18 = -facing;
+            l50.facing = -facing;
             SpawnObject(&l50);
         }
         if (frame < 5) {
@@ -4727,7 +4727,7 @@ void CMakoto::UpdatePattern()
             l50.scale = 2;
             l50.unk0 = 1;
             l50.layer = 0;
-            l50.unk18 = -facing;
+            l50.facing = -facing;
             SpawnObject(&l50);
         }
         if (frame < 5) {
@@ -4825,7 +4825,7 @@ void CMakoto::UpdatePattern()
             l50.scale = 2;
             l50.unk0 = 1;
             l50.layer = 0;
-            l50.unk18 = -facing;
+            l50.facing = -facing;
             SpawnObject(&l50);
         }
         if (frame < 5) {
@@ -4928,7 +4928,7 @@ void CMakoto::UpdatePattern()
                 l50.scale = 0;
                 l50.unk0 = 1;
                 l50.layer = 1;
-                l50.unk18 = facing;
+                l50.facing = facing;
                 SpawnObject(&l50);
             }
             if (frame == 6) {

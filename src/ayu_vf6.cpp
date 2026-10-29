@@ -1389,7 +1389,7 @@ void CAyu::UpdatePattern()
             l50.type = 0x1f3;
             l50.x = (double)(int)x;
             l50.y = (double)(int)y;
-            l50.unk18 = facing;
+            l50.facing = facing;
             l50.layer = 1;
             SpawnObject(&l50);
             m_gauge = m_gauge + 0x1e;
@@ -1476,7 +1476,7 @@ void CAyu::UpdatePattern()
                 l50.scale = 0;
                 l50.layer = 0;
                 l50.unk0 = 1;
-                l50.unk18 = facing;
+                l50.facing = facing;
                 SpawnObject(&l50);
                 unk3144 = 1;
             }
@@ -1528,7 +1528,7 @@ void CAyu::UpdatePattern()
                 l50.scale = 0;
                 l50.layer = 0;
                 l50.unk0 = 1;
-                l50.unk18 = facing;
+                l50.facing = facing;
                 SpawnObject(&l50);
                 unk3144 = 1;
             }
@@ -1580,7 +1580,7 @@ void CAyu::UpdatePattern()
                 l50.scale = 0;
                 l50.layer = 0;
                 l50.unk0 = 1;
-                l50.unk18 = facing;
+                l50.facing = facing;
                 SpawnObject(&l50);
                 unk3144 = 1;
             }
@@ -1623,7 +1623,7 @@ void CAyu::UpdatePattern()
                 l50.scale = 0;
                 l50.layer = 0;
                 l50.unk0 = 1;
-                l50.unk18 = facing;
+                l50.facing = facing;
                 SpawnObject(&l50);
                 unk3144 = 1;
             }
@@ -1664,7 +1664,7 @@ void CAyu::UpdatePattern()
             l50.x = 60.0;
             l50.y = 40.0;
             l50.screen = 1;
-            l50.unk18 = 1;
+            l50.facing = 1;
             l50.scale = 0;
             l50.layer = 0;
             SpawnObject(&l50);
@@ -2158,7 +2158,7 @@ void CAyu::UpdatePattern()
                 l50.type = 0x191;
                 l50.x = (double)((int)x - facing * 0xb);
                 l50.y = (double)((int)y - 0x32);
-                l50.unk18 = facing;
+                l50.facing = facing;
                 l50.layer = 0;
                 SpawnObject(&l50);
             }
@@ -2166,7 +2166,7 @@ void CAyu::UpdatePattern()
                 l50.type = 0x192;
                 l50.x = (double)((int)x - facing * 0x19);
                 l50.y = (double)((int)y - 0x46);
-                l50.unk18 = facing;
+                l50.facing = facing;
                 l50.layer = 0;
                 SpawnObject(&l50);
             }
@@ -2174,7 +2174,7 @@ void CAyu::UpdatePattern()
                 l50.type = 0x191;
                 l50.x = (double)((int)x + facing * 6);
                 l50.y = (double)((int)y - 0x50);
-                l50.unk18 = facing;
+                l50.facing = facing;
                 l50.layer = 0;
                 SpawnObject(&l50);
             }
@@ -2228,7 +2228,7 @@ void CAyu::UpdatePattern()
                 l50.type = 0x191;
                 l50.x = (double)((int)x - facing * 0x46);
                 l50.y = (double)((int)y - 0x25);
-                l50.unk18 = facing;
+                l50.facing = facing;
                 l50.layer = 0;
                 SpawnObject(&l50);
             }
@@ -2236,7 +2236,7 @@ void CAyu::UpdatePattern()
                 l50.type = 0x192;
                 l50.x = (double)((int)x - facing * 0x22);
                 l50.y = (double)((int)y - 0x3a);
-                l50.unk18 = facing;
+                l50.facing = facing;
                 l50.layer = 0;
                 SpawnObject(&l50);
             }
@@ -2244,7 +2244,7 @@ void CAyu::UpdatePattern()
                 l50.type = 0x191;
                 l50.x = (double)((int)x + facing * 0x18);
                 l50.y = (double)((int)y - 0x2e);
-                l50.unk18 = facing;
+                l50.facing = facing;
                 l50.layer = 0;
                 SpawnObject(&l50);
             }
@@ -2295,7 +2295,7 @@ void CAyu::UpdatePattern()
                 l50.type = 0x191;
                 l50.x = (double)((int)x - facing * 0xb);
                 l50.y = (double)((int)y - 0x32);
-                l50.unk18 = facing;
+                l50.facing = facing;
                 l50.layer = 0;
                 SpawnObject(&l50);
             }
@@ -2303,7 +2303,7 @@ void CAyu::UpdatePattern()
                 l50.type = 0x192;
                 l50.x = (double)((int)x - facing * 0x19);
                 l50.y = (double)((int)y - 0x46);
-                l50.unk18 = facing;
+                l50.facing = facing;
                 l50.layer = 0;
                 SpawnObject(&l50);
             }
@@ -2311,7 +2311,7 @@ void CAyu::UpdatePattern()
                 l50.type = 0x191;
                 l50.x = (double)((int)x + facing * 6);
                 l50.y = (double)((int)y - 0x50);
-                l50.unk18 = facing;
+                l50.facing = facing;
                 l50.layer = 0;
                 SpawnObject(&l50);
             }
@@ -2358,7 +2358,7 @@ void CAyu::UpdatePattern()
                 l50.type = 0x191;
                 l50.x = (double)((int)x - facing * 0x46);
                 l50.y = (double)((int)y - 0x25);
-                l50.unk18 = facing;
+                l50.facing = facing;
                 l50.layer = 0;
                 SpawnObject(&l50);
             }
@@ -2366,7 +2366,7 @@ void CAyu::UpdatePattern()
                 l50.type = 0x192;
                 l50.x = (double)((int)x - facing * 0x22);
                 l50.y = (double)((int)y - 0x3a);
-                l50.unk18 = facing;
+                l50.facing = facing;
                 l50.layer = 0;
                 SpawnObject(&l50);
             }
@@ -2374,7 +2374,7 @@ void CAyu::UpdatePattern()
                 l50.type = 0x191;
                 l50.x = (double)((int)x + facing * 0x18);
                 l50.y = (double)((int)y - 0x2e);
-                l50.unk18 = facing;
+                l50.facing = facing;
                 l50.layer = 0;
                 SpawnObject(&l50);
             }
@@ -3507,7 +3507,7 @@ void CAyu::UpdatePattern()
             l50.type = 0x190;
             l50.x = facing * 0x28 + x;
             l50.y = y + -54.0;
-            l50.unk18 = facing;
+            l50.facing = facing;
             l50.layer = 1;
             SpawnObject(&l50);
         }
@@ -3572,7 +3572,7 @@ void CAyu::UpdatePattern()
             l50.type = 0x198;
             l50.x = (double)((int)x + facing * 0x28);
             l50.y = (double)((int)y - 0x36);
-            l50.unk18 = facing;
+            l50.facing = facing;
             l50.layer = 1;
             SpawnObject(&l50);
         }
@@ -3624,7 +3624,7 @@ void CAyu::UpdatePattern()
             l50.type = 0x190;
             l50.x = facing * 0x28 + x;
             l50.y = y + -54.0;
-            l50.unk18 = facing;
+            l50.facing = facing;
             l50.layer = 1;
             SpawnObject(&l50);
         }
@@ -4228,7 +4228,7 @@ void CAyu::UpdatePattern()
                 l50.type = 0x199;
                 l50.x = (double)((int)x + facing * 0x14);
                 l50.y = (double)((int)y + 0x1e);
-                l50.unk18 = facing;
+                l50.facing = facing;
                 l50.layer = 1;
                 SpawnObject(&l50);
             }
@@ -4269,7 +4269,7 @@ void CAyu::UpdatePattern()
             l50.type = 0x195;
             l50.x = (double)((int)x + facing * 0xf);
             l50.y = (double)((int)y - 0x2a);
-            l50.unk18 = facing;
+            l50.facing = facing;
             l50.scale = 2;
             l50.layer = 1;
             SpawnObject(&l50);
@@ -4312,7 +4312,7 @@ void CAyu::UpdatePattern()
             l50.type = 0x1a3;
             l50.x = (double)((int)x + facing * 0xf);
             l50.y = (double)((int)y - 0x2a);
-            l50.unk18 = facing;
+            l50.facing = facing;
             l50.scale = 2;
             l50.layer = 1;
             SpawnObject(&l50);
@@ -4360,7 +4360,7 @@ void CAyu::UpdatePattern()
             l50.type = 0x1a4;
             l50.x = (double)((int)x + facing * 0xf);
             l50.y = (double)((int)y - 0x16);
-            l50.unk18 = facing;
+            l50.facing = facing;
             l50.scale = 2;
             l50.layer = 1;
             SpawnObject(&l50);
@@ -4371,7 +4371,7 @@ void CAyu::UpdatePattern()
             l50.type = 0x1a4;
             l50.x = (double)((int)x + facing * 0xf);
             l50.y = (double)((int)y - 0x3e);
-            l50.unk18 = facing;
+            l50.facing = facing;
             l50.scale = 2;
             l50.layer = 1;
             SpawnObject(&l50);
@@ -4382,7 +4382,7 @@ void CAyu::UpdatePattern()
             l50.type = 0x1a4;
             l50.x = (double)((int)x + facing * 0xf);
             l50.y = (double)((int)y - 0x2a);
-            l50.unk18 = facing;
+            l50.facing = facing;
             l50.scale = 2;
             l50.layer = 1;
             SpawnObject(&l50);
@@ -4427,7 +4427,7 @@ void CAyu::UpdatePattern()
             l50.type = 0x195;
             l50.x = (double)((int)x + facing * 0xf);
             l50.y = (double)((int)y - 0x2a);
-            l50.unk18 = facing;
+            l50.facing = facing;
             l50.scale = 2;
             l50.layer = 1;
             SpawnObject(&l50);
@@ -4479,7 +4479,7 @@ void CAyu::UpdatePattern()
             l50.type = 0x1a3;
             l50.x = (double)((int)x + facing * 0xf);
             l50.y = (double)((int)y - 0x2a);
-            l50.unk18 = facing;
+            l50.facing = facing;
             l50.scale = 2;
             l50.layer = 1;
             SpawnObject(&l50);
@@ -4536,7 +4536,7 @@ void CAyu::UpdatePattern()
             l50.type = 0x1a4;
             l50.x = (double)((int)x + facing * 0xf);
             l50.y = (double)((int)y - 0x16);
-            l50.unk18 = facing;
+            l50.facing = facing;
             l50.scale = 2;
             l50.layer = 1;
             SpawnObject(&l50);
@@ -4549,7 +4549,7 @@ void CAyu::UpdatePattern()
             l50.type = 0x1a4;
             l50.x = (double)((int)x + facing * 0xf);
             l50.y = (double)((int)y - 0x3e);
-            l50.unk18 = facing;
+            l50.facing = facing;
             l50.scale = 2;
             l50.layer = 1;
             SpawnObject(&l50);
@@ -4562,7 +4562,7 @@ void CAyu::UpdatePattern()
             l50.type = 0x1a4;
             l50.x = (double)((int)x + facing * 0xf);
             l50.y = (double)((int)y - 0x2a);
-            l50.unk18 = facing;
+            l50.facing = facing;
             l50.scale = 2;
             l50.layer = 1;
             SpawnObject(&l50);
@@ -4616,12 +4616,12 @@ void CAyu::UpdatePattern()
             l50.type = 0x1a5;
             l50.x = facing * 0x28 + x - 30.0;
             l50.y = y;
-            l50.unk18 = facing;
+            l50.facing = facing;
             l50.scale = 2;
             l50.layer = 1;
             SpawnObject(&l50);
             l50.x = x - facing * 0x28 - 30.0;
-            l50.unk18 = -facing;
+            l50.facing = -facing;
             SpawnObject(&l50);
             m_playSound = 0x12;
         }
@@ -4671,12 +4671,12 @@ void CAyu::UpdatePattern()
             l50.type = 0x1a5;
             l50.x = facing * 0xa + x;
             l50.y = y;
-            l50.unk18 = facing;
+            l50.facing = facing;
             l50.scale = 2;
             l50.layer = 1;
             SpawnObject(&l50);
             l50.x = x - facing * 0xa;
-            l50.unk18 = -facing;
+            l50.facing = -facing;
             SpawnObject(&l50);
             m_playSound = 0x12;
         }
@@ -4686,12 +4686,12 @@ void CAyu::UpdatePattern()
             l50.type = 0x196;
             l50.x = facing * 0xa + x;
             l50.y = y;
-            l50.unk18 = facing;
+            l50.facing = facing;
             l50.scale = 2;
             l50.layer = 1;
             SpawnObject(&l50);
             l50.x = x - facing * 0xa;
-            l50.unk18 = -facing;
+            l50.facing = -facing;
             SpawnObject(&l50);
             m_playSound = 0x12;
         }
@@ -4701,12 +4701,12 @@ void CAyu::UpdatePattern()
             l50.type = 0x197;
             l50.x = facing * 0xa + x;
             l50.y = y;
-            l50.unk18 = facing;
+            l50.facing = facing;
             l50.scale = 2;
             l50.layer = 1;
             SpawnObject(&l50);
             l50.x = x - facing * 0xa;
-            l50.unk18 = -facing;
+            l50.facing = -facing;
             SpawnObject(&l50);
             m_playSound = 0x12;
         }
@@ -4755,12 +4755,12 @@ void CAyu::UpdatePattern()
             l50.type = 0x196;
             l50.x = facing * 0xa + x;
             l50.y = y;
-            l50.unk18 = facing;
+            l50.facing = facing;
             l50.scale = 2;
             l50.layer = 1;
             SpawnObject(&l50);
             l50.x = x - facing * 0xa;
-            l50.unk18 = -facing;
+            l50.facing = -facing;
             SpawnObject(&l50);
             m_playSound = 0x12;
         }
@@ -4815,7 +4815,7 @@ void CAyu::UpdatePattern()
             l50.type = 0x1a2;
             l50.x = facing * 0x44 + x;
             l50.y = y - 63.0;
-            l50.unk18 = facing;
+            l50.facing = facing;
             l50.scale = 2;
             l50.layer = 1;
             l50.unk2c = -1;
@@ -4872,7 +4872,7 @@ void CAyu::UpdatePattern()
             l50.type = 0x1a2;
             l50.x = facing * 0x44 + x;
             l50.y = y - 63.0;
-            l50.unk18 = facing;
+            l50.facing = facing;
             l50.scale = 2;
             l50.layer = 1;
             l50.unk2c = -1;
@@ -4933,7 +4933,7 @@ void CAyu::UpdatePattern()
             l50.type = 0x1a2;
             l50.x = facing * 0x44 + x;
             l50.y = y - 63.0;
-            l50.unk18 = facing;
+            l50.facing = facing;
             l50.scale = 2;
             l50.layer = 1;
             l50.unk2c = -1;
@@ -4993,7 +4993,7 @@ void CAyu::UpdatePattern()
             l50.type = 0x19e;
             l50.x = x - (facing << 2);
             l50.y = y - 45.0;
-            l50.unk18 = facing;
+            l50.facing = facing;
             l50.scale = 2;
             l50.layer = 0;
             l50.unk2c = -1;
@@ -5009,7 +5009,7 @@ void CAyu::UpdatePattern()
             l50.type = 0x19f;
             l50.x = x;
             l50.y = y - 45.0;
-            l50.unk18 = facing;
+            l50.facing = facing;
             l50.scale = 2;
             l50.layer = 1;
             l50.unk2c = -1;
@@ -5027,7 +5027,7 @@ void CAyu::UpdatePattern()
             }
             l50.x = x - facing * 0x12c;
             l50.y = (double)((WORD)Random(0, 0x140) - 0x140);
-            l50.unk18 = facing;
+            l50.facing = facing;
             l50.scale = 2;
             SpawnObject(&l50);
         }
@@ -5046,7 +5046,7 @@ void CAyu::UpdatePattern()
                 l50.type = 0x19f;
                 l50.x = x;
                 l50.y = y - 45.0;
-                l50.unk18 = facing;
+                l50.facing = facing;
                 l50.scale = 2;
                 l50.layer = 1;
                 l50.unk2c = -1;

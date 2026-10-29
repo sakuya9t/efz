@@ -356,7 +356,7 @@ void CGame::CreateEffect(EffectDesc* desc)
     m_effects[m_effectHead].timer = 0;
     m_effects[m_effectHead].x = desc->x;
     m_effects[m_effectHead].y = desc->y;
-    m_effects[m_effectHead].unk48 = desc->unk18;
+    m_effects[m_effectHead].unk48 = desc->facing;
     m_effects[m_effectHead].side = desc->side;
     m_effects[m_effectHead].scale = desc->scale;
     m_effects[m_effectHead].unk6c = desc->unk2c;

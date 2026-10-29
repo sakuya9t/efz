@@ -1792,7 +1792,7 @@ void CMisaki::UpdateObjects()
                         l50.y = (double)((int)m_objects[v4].y + 0x28);
                         l50.scale = 2;
                         l50.layer = 1;
-                        l50.unk18 = facing;
+                        l50.facing = facing;
                         SpawnObject(&l50);
                     }
                     if (m_objects[v4].y >= -80.0) {
@@ -1801,7 +1801,7 @@ void CMisaki::UpdateObjects()
                         l50.y = 0.0;
                         l50.scale = 2;
                         l50.layer = 1;
-                        l50.unk18 = facing;
+                        l50.facing = facing;
                         SpawnObject(&l50);
                     }
                     unk3248[v4]++;
@@ -1829,7 +1829,7 @@ void CMisaki::UpdateObjects()
                     l50.y = (double)(int)m_objects[v4].y;
                     l50.scale = 2;
                     l50.layer = 1;
-                    l50.unk18 = facing;
+                    l50.facing = facing;
                     SpawnObject(&l50);
                 }
                 m_objects[v4].timer++;
@@ -1967,7 +1967,7 @@ void CMisaki::UpdateObjects()
                     l50.y = (double)(int)m_objects[v4].y;
                     l50.scale = 0;
                     l50.layer = 1;
-                    l50.unk18 = facing;
+                    l50.facing = facing;
                     SpawnObject(&l50);
                     m_playVoice = 1;
                 }
@@ -2021,7 +2021,7 @@ void CMisaki::UpdateObjects()
                     l50.y = (double)(int)m_objects[v4].y;
                     l50.scale = 0;
                     l50.layer = 1;
-                    l50.unk18 = facing;
+                    l50.facing = facing;
                     SpawnObject(&l50);
                     m_playVoice = 1;
                 }
@@ -2075,7 +2075,7 @@ void CMisaki::UpdateObjects()
                     l50.y = (double)(int)m_objects[v4].y;
                     l50.scale = 0;
                     l50.layer = 1;
-                    l50.unk18 = facing;
+                    l50.facing = facing;
                     SpawnObject(&l50);
                     m_playVoice = 1;
                 }
@@ -2118,7 +2118,7 @@ void CMisaki::UpdateObjects()
                     l50.y = 0.0;
                     l50.scale = 2;
                     l50.layer = 1;
-                    l50.unk18 = facing;
+                    l50.facing = facing;
                     SpawnObject(&l50);
                     unk3148[v4]++;
                 }
@@ -2156,7 +2156,7 @@ void CMisaki::UpdateObjects()
                         l50.y = (double)((int)m_objects[v4].y + 0x28);
                         l50.scale = 2;
                         l50.layer = 1;
-                        l50.unk18 = facing;
+                        l50.facing = facing;
                         SpawnObject(&l50);
                     }
                     if (m_objects[v4].y >= -80.0) {
@@ -2165,7 +2165,7 @@ void CMisaki::UpdateObjects()
                         l50.y = 0.0;
                         l50.scale = 2;
                         l50.layer = 1;
-                        l50.unk18 = facing;
+                        l50.facing = facing;
                         SpawnObject(&l50);
                     }
                     unk3248[v4]++;
@@ -2187,7 +2187,7 @@ void CMisaki::UpdateObjects()
                     l50.y = (double)(int)m_objects[v4].y;
                     l50.scale = 2;
                     l50.layer = 1;
-                    l50.unk18 = facing;
+                    l50.facing = facing;
                     SpawnObject(&l50);
                 }
                 m_objects[v4].timer++;
@@ -2227,7 +2227,7 @@ void CMisaki::UpdateObjects()
                         l50.y = (double)((int)m_objects[v4].y + 0x28);
                         l50.scale = 2;
                         l50.layer = 1;
-                        l50.unk18 = facing;
+                        l50.facing = facing;
                         SpawnObject(&l50);
                     }
                     if (m_objects[v4].y >= -80.0) {
@@ -2236,7 +2236,7 @@ void CMisaki::UpdateObjects()
                         l50.y = 0.0;
                         l50.scale = 2;
                         l50.layer = 1;
-                        l50.unk18 = facing;
+                        l50.facing = facing;
                         SpawnObject(&l50);
                     }
                     unk3248[v4]++;
@@ -2264,7 +2264,7 @@ void CMisaki::UpdateObjects()
                     l50.y = (double)(int)m_objects[v4].y;
                     l50.scale = 2;
                     l50.layer = 1;
-                    l50.unk18 = facing;
+                    l50.facing = facing;
                     SpawnObject(&l50);
                 }
                 m_objects[v4].timer++;
@@ -2323,70 +2323,70 @@ void CMisaki::UpdateObjects()
                     l50.y = (double)((int)y - 4);
                     l50.scale = 0;
                     l50.layer = 1;
-                    l50.unk18 = facing;
+                    l50.facing = facing;
                     SpawnObject(&l50);
                     l50.type = 0x1f1;
                     l50.x = (double)((int)x - (facing << 2));
                     l50.y = (double)((int)y - 6);
                     l50.scale = 0;
                     l50.layer = 1;
-                    l50.unk18 = facing;
+                    l50.facing = facing;
                     SpawnObject(&l50);
                     l50.type = 0x1f1;
                     l50.x = (double)((int)x - facing * 0xe);
                     l50.y = (double)((int)y - 0x1a);
                     l50.scale = 0;
                     l50.layer = 1;
-                    l50.unk18 = facing;
+                    l50.facing = facing;
                     SpawnObject(&l50);
                     l50.type = 0x1f1;
                     l50.x = (double)(int)x;
                     l50.y = (double)(int)y;
                     l50.scale = 0;
                     l50.layer = 1;
-                    l50.unk18 = facing;
+                    l50.facing = facing;
                     SpawnObject(&l50);
                     l50.type = 0x1f1;
                     l50.x = (double)((int)x + facing * 0x1e);
                     l50.y = (double)((int)y - 0x28);
                     l50.scale = 0;
                     l50.layer = 1;
-                    l50.unk18 = facing;
+                    l50.facing = facing;
                     SpawnObject(&l50);
                     l50.type = 0x1f1;
                     l50.x = (double)((int)x - facing * 0x19);
                     l50.y = (double)((int)y - 0x50);
                     l50.scale = 0;
                     l50.layer = 1;
-                    l50.unk18 = facing;
+                    l50.facing = facing;
                     SpawnObject(&l50);
                     l50.type = 0x1f2;
                     l50.x = (double)((int)x - facing * 0x23);
                     l50.y = (double)((int)y - 0x2a);
                     l50.scale = 0;
                     l50.layer = 1;
-                    l50.unk18 = facing;
+                    l50.facing = facing;
                     SpawnObject(&l50);
                     l50.type = 0x1f2;
                     l50.x = (double)((int)x - facing * 0x12);
                     l50.y = (double)((int)y - 0x14);
                     l50.scale = 0;
                     l50.layer = 1;
-                    l50.unk18 = facing;
+                    l50.facing = facing;
                     SpawnObject(&l50);
                     l50.type = 0x1f2;
                     l50.x = (double)((int)x + facing * 2);
                     l50.y = (double)((int)y - 0x41);
                     l50.scale = 0;
                     l50.layer = 1;
-                    l50.unk18 = facing;
+                    l50.facing = facing;
                     SpawnObject(&l50);
                     l50.type = 0x1f2;
                     l50.x = (double)((int)x + (facing << 4));
                     l50.y = (double)((int)y - 0x50);
                     l50.scale = 0;
                     l50.layer = 1;
-                    l50.unk18 = facing;
+                    l50.facing = facing;
                     SpawnObject(&l50);
                     m_playSound = 0x22;
                     RemoveObject(v4);
