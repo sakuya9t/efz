@@ -624,7 +624,7 @@ public:
     // FUNCTION: 0x40e740
     void Unk40e740();
     // FUNCTION: 0x40eae0
-    CPlayer(int p1, int p2, int p3, int p4, int p5, BYTE p6);
+    CPlayer(CPlayer** p1, CGame* p2, CGraphics* p3, CInput* p4, CSound* p5, BYTE p6);
     // FUNCTION: 0x40ecb0
     ~CPlayer();
     // FUNCTION: 0x40f170
@@ -1349,7 +1349,7 @@ public:
     // FUNCTION: 0x755500
     virtual void Draw();
     // FUNCTION: 0x7586b0
-    void Unk7586b0(CPlayer** p1, int p2, char p3);
+    void Unk7586b0(CPlayer** p1, CPlayer** p2, char p3);
     // FUNCTION: 0x759460
     void Unk759460();
     // FUNCTION: 0x7595d0
@@ -1565,7 +1565,7 @@ public:
     // FUNCTION: 0x76da10
     virtual void Vf2();
     // FUNCTION: 0x76da20
-    void Unk76da20(CPlayer** p1, int p2, char p3, char p4);
+    void Unk76da20(CPlayer** p1, CPlayer** p2, char p3, char p4);
 
     BYTE unk430[0x434 - 0x430];
     int unk434;
@@ -1728,7 +1728,7 @@ public:
     // FUNCTION: 0x4136d0
     virtual void UpdatePattern();
     // FUNCTION: 0x422d70
-    CShiori(int p1, int p2, int p3, int p4, int p5, BYTE p6);
+    CShiori(CPlayer** p1, CGame* p2, CGraphics* p3, CInput* p4, CSound* p5, BYTE p6);
     // FUNCTION: 0x422f40
     virtual void Reset();
     // FUNCTION: 0x423090
@@ -1772,7 +1772,7 @@ public:
     // FUNCTION: 0x434060
     virtual void UpdatePattern();
     // FUNCTION: 0x4463e0
-    CSayuri(int p1, int p2, int p3, int p4, int p5, BYTE p6);
+    CSayuri(CPlayer** p1, CGame* p2, CGraphics* p3, CInput* p4, CSound* p5, BYTE p6);
     // FUNCTION: 0x446590
     virtual void Reset();
     // FUNCTION: 0x4466d0
@@ -1816,7 +1816,7 @@ public:
     // FUNCTION: 0x451850
     virtual void UpdatePattern();
     // FUNCTION: 0x461090
-    CNayuki(int p1, int p2, int p3, int p4, int p5, BYTE p6);
+    CNayuki(CPlayer** p1, CGame* p2, CGraphics* p3, CInput* p4, CSound* p5, BYTE p6);
     // FUNCTION: 0x461260
     virtual void Reset();
     // FUNCTION: 0x4613b0
@@ -1862,7 +1862,7 @@ public:
     // FUNCTION: 0x4c04b0
     virtual void UpdatePattern();
     // FUNCTION: 0x4d2850
-    CMizukaB(int p1, int p2, int p3, int p4, int p5, BYTE p6);
+    CMizukaB(CPlayer** p1, CGame* p2, CGraphics* p3, CInput* p4, CSound* p5, BYTE p6);
     // FUNCTION: 0x4d29e0
     virtual void Reset();
     // FUNCTION: 0x4d2b00
@@ -1908,7 +1908,7 @@ public:
     // FUNCTION: 0x4e7ec0
     virtual void UpdatePattern();
     // FUNCTION: 0x4f8300
-    CMizuka(int p1, int p2, int p3, int p4, int p5, BYTE p6);
+    CMizuka(CPlayer** p1, CGame* p2, CGraphics* p3, CInput* p4, CSound* p5, BYTE p6);
     // FUNCTION: 0x4f8480
     virtual void Reset();
     // FUNCTION: 0x4f8590
@@ -1954,7 +1954,7 @@ public:
     // FUNCTION: 0x50c4b0
     virtual void UpdatePattern();
     // FUNCTION: 0x519e00
-    CMisuzu(int p1, int p2, int p3, int p4, int p5, BYTE p6);
+    CMisuzu(CPlayer** p1, CGame* p2, CGraphics* p3, CInput* p4, CSound* p5, BYTE p6);
     // FUNCTION: 0x51a070
     virtual void Reset();
     // FUNCTION: 0x51a2a0
@@ -2010,7 +2010,7 @@ public:
     // FUNCTION: 0x530bc0
     virtual void UpdatePattern();
     // FUNCTION: 0x546480
-    CMishio(int p1, int p2, int p3, int p4, int p5, BYTE p6);
+    CMishio(CPlayer** p1, CGame* p2, CGraphics* p3, CInput* p4, CSound* p5, BYTE p6);
     // FUNCTION: 0x546690
     virtual void Reset();
     // FUNCTION: 0x546830
@@ -2062,7 +2062,7 @@ public:
     // FUNCTION: 0x5571f0
     virtual void UpdatePattern();
     // FUNCTION: 0x567900
-    CMisaki(int p1, int p2, int p3, int p4, int p5, BYTE p6);
+    CMisaki(CPlayer** p1, CGame* p2, CGraphics* p3, CInput* p4, CSound* p5, BYTE p6);
     // FUNCTION: 0x567a90
     virtual void Reset();
     // FUNCTION: 0x567ba0
@@ -2102,7 +2102,7 @@ public:
     // FUNCTION: 0x5736d0
     virtual void UpdatePattern();
     // FUNCTION: 0x588310
-    CMio(int p1, int p2, int p3, int p4, int p5, BYTE p6);
+    CMio(CPlayer** p1, CGame* p2, CGraphics* p3, CInput* p4, CSound* p5, BYTE p6);
     // FUNCTION: 0x5884b0
     virtual void Reset();
     // FUNCTION: 0x5885d0
@@ -2144,7 +2144,7 @@ public:
     // FUNCTION: 0x59c4a0
     virtual void UpdatePattern();
     // FUNCTION: 0x5a9fa0
-    CMinagi(int p1, int p2, int p3, int p4, int p5, BYTE p6);
+    CMinagi(CPlayer** p1, CGame* p2, CGraphics* p3, CInput* p4, CSound* p5, BYTE p6);
     // FUNCTION: 0x5aa180
     virtual void Reset();
     // FUNCTION: 0x5aa340
@@ -2188,7 +2188,7 @@ public:
     // FUNCTION: 0x5c8580
     virtual void UpdatePattern();
     // FUNCTION: 0x5dddf0
-    CMayu(int p1, int p2, int p3, int p4, int p5, BYTE p6);
+    CMayu(CPlayer** p1, CGame* p2, CGraphics* p3, CInput* p4, CSound* p5, BYTE p6);
     // FUNCTION: 0x5ddf90
     virtual void Reset();
     // FUNCTION: 0x5de0a0
@@ -2228,7 +2228,7 @@ public:
     // FUNCTION: 0x5e85f0
     virtual void UpdatePattern();
     // FUNCTION: 0x5f6d90
-    CMakoto(int p1, int p2, int p3, int p4, int p5, BYTE p6);
+    CMakoto(CPlayer** p1, CGame* p2, CGraphics* p3, CInput* p4, CSound* p5, BYTE p6);
     // FUNCTION: 0x5f6f20
     virtual void Reset();
     // FUNCTION: 0x5f7040
@@ -2270,7 +2270,7 @@ public:
     // FUNCTION: 0x607930
     virtual void UpdatePattern();
     // FUNCTION: 0x6163b0
-    CMai(int p1, int p2, int p3, int p4, int p5, BYTE p6);
+    CMai(CPlayer** p1, CGame* p2, CGraphics* p3, CInput* p4, CSound* p5, BYTE p6);
     // FUNCTION: 0x616570
     virtual void Reset();
     // FUNCTION: 0x6166c0
@@ -2314,7 +2314,7 @@ public:
     // FUNCTION: 0x667570
     virtual void UpdatePattern();
     // FUNCTION: 0x675c80
-    CKanna(int p1, int p2, int p3, int p4, int p5, BYTE p6);
+    CKanna(CPlayer** p1, CGame* p2, CGraphics* p3, CInput* p4, CSound* p5, BYTE p6);
     // FUNCTION: 0x675e20
     virtual void Reset();
     // FUNCTION: 0x675f40
@@ -2358,7 +2358,7 @@ public:
     // FUNCTION: 0x6d93f0
     virtual void UpdatePattern();
     // FUNCTION: 0x6e8130
-    CAyu(int p1, int p2, int p3, int p4, int p5, BYTE p6);
+    CAyu(CPlayer** p1, CGame* p2, CGraphics* p3, CInput* p4, CSound* p5, BYTE p6);
     // FUNCTION: 0x6e82f0
     virtual void Reset();
     // FUNCTION: 0x6e8420
@@ -2400,7 +2400,7 @@ public:
     // FUNCTION: 0x6f2f20
     virtual void UpdatePattern();
     // FUNCTION: 0x7039d0
-    CAkane(int p1, int p2, int p3, int p4, int p5, BYTE p6);
+    CAkane(CPlayer** p1, CGame* p2, CGraphics* p3, CInput* p4, CSound* p5, BYTE p6);
     // FUNCTION: 0x703b70
     virtual void Reset();
     // FUNCTION: 0x703c90
@@ -2442,7 +2442,7 @@ public:
     // FUNCTION: 0x712500
     virtual void UpdatePattern();
     // FUNCTION: 0x7219a0
-    CAkiko(int p1, int p2, int p3, int p4, int p5, BYTE p6);
+    CAkiko(CPlayer** p1, CGame* p2, CGraphics* p3, CInput* p4, CSound* p5, BYTE p6);
     // FUNCTION: 0x721ba0
     virtual void Reset();
     // FUNCTION: 0x721d10
@@ -2492,7 +2492,7 @@ public:
     // FUNCTION: 0x47c130
     void Unk47c130();
     // FUNCTION: 0x48a720
-    CNanase(int p1, int p2, int p3, int p4, int p5, BYTE p6);
+    CNanase(CPlayer** p1, CGame* p2, CGraphics* p3, CInput* p4, CSound* p5, BYTE p6);
     // FUNCTION: 0x48a9b0
     virtual void Reset();
     // FUNCTION: 0x48ab00
@@ -2553,7 +2553,7 @@ public:
     // FUNCTION: 0x49d610
     virtual void UpdatePattern();
     // FUNCTION: 0x4add90
-    CNagamori(int p1, int p2, int p3, int p4, int p5, BYTE p6);
+    CNagamori(CPlayer** p1, CGame* p2, CGraphics* p3, CInput* p4, CSound* p5, BYTE p6);
     // FUNCTION: 0x4adfa0
     virtual void Reset();
     // FUNCTION: 0x4ae130
@@ -2606,7 +2606,7 @@ public:
     // FUNCTION: 0x62a5e0
     virtual void UpdatePattern();
     // FUNCTION: 0x638d90
-    CKaori(int p1, int p2, int p3, int p4, int p5, BYTE p6);
+    CKaori(CPlayer** p1, CGame* p2, CGraphics* p3, CInput* p4, CSound* p5, BYTE p6);
     // FUNCTION: 0x638f10
     virtual void Reset();
     // FUNCTION: 0x639030
@@ -2648,7 +2648,7 @@ public:
     // FUNCTION: 0x6429c0
     virtual void UpdatePattern();
     // FUNCTION: 0x653a20
-    CKano(int p1, int p2, int p3, int p4, int p5, BYTE p6);
+    CKano(CPlayer** p1, CGame* p2, CGraphics* p3, CInput* p4, CSound* p5, BYTE p6);
     // FUNCTION: 0x653c30
     virtual void Reset();
     // FUNCTION: 0x653dd0
@@ -2702,7 +2702,7 @@ public:
     // FUNCTION: 0x694d00
     void Unk694d00();
     // FUNCTION: 0x6a59c0
-    CIkumi(int p1, int p2, int p3, int p4, int p5, BYTE p6);
+    CIkumi(CPlayer** p1, CGame* p2, CGraphics* p3, CInput* p4, CSound* p5, BYTE p6);
     // FUNCTION: 0x6a5c50
     virtual void Reset();
     // FUNCTION: 0x6a5dc0
@@ -2765,7 +2765,7 @@ public:
     // FUNCTION: 0x6be9c0
     virtual void UpdatePattern();
     // FUNCTION: 0x6cfbb0
-    CEXNanase(int p1, int p2, int p3, int p4, int p5, BYTE p6);
+    CEXNanase(CPlayer** p1, CGame* p2, CGraphics* p3, CInput* p4, CSound* p5, BYTE p6);
     // FUNCTION: 0x6cfd80
     virtual void Reset();
     // FUNCTION: 0x6cfed0
@@ -2814,7 +2814,7 @@ public:
     // FUNCTION: 0x730710
     virtual void UpdatePattern();
     // FUNCTION: 0x73e790
-    CNayukiB(int p1, int p2, int p3, int p4, int p5, BYTE p6);
+    CNayukiB(CPlayer** p1, CGame* p2, CGraphics* p3, CInput* p4, CSound* p5, BYTE p6);
     // FUNCTION: 0x73e970
     virtual void Reset();
     // FUNCTION: 0x73eac0

@@ -426,7 +426,9 @@ class Rewriter:
         if k == CK.CXX_THIS_EXPR:
             return Ptr(pointee(c.type), 'this', PRIMARY, is_this=True)
         if k in (CK.DECL_REF_EXPR, CK.MEMBER_REF_EXPR, CK.ARRAY_SUBSCRIPT_EXPR):
-            if is_pointer(c.type) and is_record(pointee(c.type)):
+            if is_pointer(c.type) and (is_record(pointee(c.type)) or
+                                       is_pointer(pointee(c.type))):
+                # a pointer to a struct, or to a pointer (CPlayer** p1: *p1)
                 return Ptr(pointee(c.type), cursor=c)
             return None
         if k == CK.CSTYLE_CAST_EXPR:

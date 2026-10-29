@@ -7,7 +7,7 @@
 #include <math.h>
 #include "efz.h"
 
-CSayuri::CSayuri(int p1, int p2, int p3, int p4, int p5, BYTE p6)
+CSayuri::CSayuri(CPlayer** p1, CGame* p2, CGraphics* p3, CInput* p4, CSound* p5, BYTE p6)
     : CPlayer(p1, p2, p3, p4, p5, p6)
 {
     int v4;

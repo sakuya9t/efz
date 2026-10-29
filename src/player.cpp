@@ -143,15 +143,15 @@ void CPlayer::Unk40e740()
     }
 }
 
-CPlayer::CPlayer(int p1, int p2, int p3, int p4, int p5, BYTE p6)
-    : m_opponent((CPlayer**)p1)
+CPlayer::CPlayer(CPlayer** p1, CGame* p2, CGraphics* p3, CInput* p4, CSound* p5, BYTE p6)
+    : m_opponent(p1)
 {
     int v4;
 
-    m_game = (CGame*)p2;
-    m_graphics = (CGraphics*)p3;
-    m_input = (CInput*)p4;
-    m_sound = (CSound*)p5;
+    m_game = p2;
+    m_graphics = p3;
+    m_input = p4;
+    m_sound = p5;
     m_side = p6;
     unk8d = 0;
     m_paletteIndex = 0;

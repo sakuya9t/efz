@@ -281,9 +281,9 @@ BYTE CScene1::Update()
                 }
                 m_game->PlaySE(6);
                 if (v4 == 0) {
-                    Unk7586b0(m_player1Ref, (int)m_player2Ref, 0);
+                    Unk7586b0(m_player1Ref, m_player2Ref, 0);
                 } else {
-                    Unk7586b0(m_player2Ref, (int)m_player1Ref, 1);
+                    Unk7586b0(m_player2Ref, m_player1Ref, 1);
                 }
                 unk49e[v4] = 1;
                 unk494[v4] = 0x5a;
@@ -734,99 +734,99 @@ void CScene1::Draw()
     m_graphics->Flip();
 }
 
-void CScene1::Unk7586b0(CPlayer** p1, int p2, char p3)
+void CScene1::Unk7586b0(CPlayer** p1, CPlayer** p2, char p3)
 {
     char v2c[40];
 
     switch (unk53c[p3]) {
     case 0:
-        *(int*)(char*)p1 = (int)new CNanase(p2, (int)m_game, (int)m_graphics, (int)m_input, (int)m_sound, p3);
+        *p1 = new CNanase(p2, m_game, m_graphics, m_input, m_sound, p3);
         break;
     case 1:
-        *(int*)(char*)p1 = (int)new CAyu(p2, (int)m_game, (int)m_graphics, (int)m_input, (int)m_sound, p3);
+        *p1 = new CAyu(p2, m_game, m_graphics, m_input, m_sound, p3);
         break;
     case 2:
-        *(int*)(char*)p1 = (int)new CMai(p2, (int)m_game, (int)m_graphics, (int)m_input, (int)m_sound, p3);
+        *p1 = new CMai(p2, m_game, m_graphics, m_input, m_sound, p3);
         break;
     case 3:
-        *(int*)(char*)p1 = (int)new CMakoto(p2, (int)m_game, (int)m_graphics, (int)m_input, (int)m_sound, p3);
+        *p1 = new CMakoto(p2, m_game, m_graphics, m_input, m_sound, p3);
         break;
     case 4:
-        *(int*)(char*)p1 = (int)new CAkane(p2, (int)m_game, (int)m_graphics, (int)m_input, (int)m_sound, p3);
+        *p1 = new CAkane(p2, m_game, m_graphics, m_input, m_sound, p3);
         break;
     case 5:
-        *(int*)(char*)p1 = (int)new CMayu(p2, (int)m_game, (int)m_graphics, (int)m_input, (int)m_sound, p3);
+        *p1 = new CMayu(p2, m_game, m_graphics, m_input, m_sound, p3);
         break;
     case 6:
-        *(int*)(char*)p1 = (int)new CNagamori(p2, (int)m_game, (int)m_graphics, (int)m_input, (int)m_sound, p3);
+        *p1 = new CNagamori(p2, m_game, m_graphics, m_input, m_sound, p3);
         break;
     case 7:
-        *(int*)(char*)p1 = (int)new CMisaki(p2, (int)m_game, (int)m_graphics, (int)m_input, (int)m_sound, p3);
+        *p1 = new CMisaki(p2, m_game, m_graphics, m_input, m_sound, p3);
         break;
     case 8:
-        *(int*)(char*)p1 = (int)new CShiori(p2, (int)m_game, (int)m_graphics, (int)m_input, (int)m_sound, p3);
+        *p1 = new CShiori(p2, m_game, m_graphics, m_input, m_sound, p3);
         break;
     case 9:
-        *(int*)(char*)p1 = (int)new CSayuri(p2, (int)m_game, (int)m_graphics, (int)m_input, (int)m_sound, p3);
+        *p1 = new CSayuri(p2, m_game, m_graphics, m_input, m_sound, p3);
         break;
     case 0xa:
-        *(int*)(char*)p1 = (int)new CNayuki(p2, (int)m_game, (int)m_graphics, (int)m_input, (int)m_sound, p3);
+        *p1 = new CNayuki(p2, m_game, m_graphics, m_input, m_sound, p3);
         break;
     case 0xb:
-        *(int*)(char*)p1 = (int)new CMio(p2, (int)m_game, (int)m_graphics, (int)m_input, (int)m_sound, p3);
+        *p1 = new CMio(p2, m_game, m_graphics, m_input, m_sound, p3);
         break;
     case 0xc:
-        *(int*)(char*)p1 = (int)new CEXNanase(p2, (int)m_game, (int)m_graphics, (int)m_input, (int)m_sound, p3);
+        *p1 = new CEXNanase(p2, m_game, m_graphics, m_input, m_sound, p3);
         break;
     case 0xd:
-        *(int*)(char*)p1 = (int)new CKaori(p2, (int)m_game, (int)m_graphics, (int)m_input, (int)m_sound, p3);
+        *p1 = new CKaori(p2, m_game, m_graphics, m_input, m_sound, p3);
         break;
     case 0xe:
-        *(int*)(char*)p1 = (int)new CIkumi(p2, (int)m_game, (int)m_graphics, (int)m_input, (int)m_sound, p3);
+        *p1 = new CIkumi(p2, m_game, m_graphics, m_input, m_sound, p3);
         break;
     case 0xf:
-        *(int*)(char*)p1 = (int)new CMishio(p2, (int)m_game, (int)m_graphics, (int)m_input, (int)m_sound, p3);
+        *p1 = new CMishio(p2, m_game, m_graphics, m_input, m_sound, p3);
         break;
     case 0x10:
-        *(int*)(char*)p1 = (int)new CAkiko(p2, (int)m_game, (int)m_graphics, (int)m_input, (int)m_sound, p3);
+        *p1 = new CAkiko(p2, m_game, m_graphics, m_input, m_sound, p3);
         break;
     case 0x11:
-        *(int*)(char*)p1 = (int)new CNayukiB(p2, (int)m_game, (int)m_graphics, (int)m_input, (int)m_sound, p3);
+        *p1 = new CNayukiB(p2, m_game, m_graphics, m_input, m_sound, p3);
         break;
     case 0x12:
-        *(int*)(char*)p1 = (int)new CMizukaB(p2, (int)m_game, (int)m_graphics, (int)m_input, (int)m_sound, p3);
+        *p1 = new CMizukaB(p2, m_game, m_graphics, m_input, m_sound, p3);
         break;
     case 0x13:
-        *(int*)(char*)p1 = (int)new CKanna(p2, (int)m_game, (int)m_graphics, (int)m_input, (int)m_sound, p3);
+        *p1 = new CKanna(p2, m_game, m_graphics, m_input, m_sound, p3);
         break;
     case 0x14:
-        *(int*)(char*)p1 = (int)new CKano(p2, (int)m_game, (int)m_graphics, (int)m_input, (int)m_sound, p3);
+        *p1 = new CKano(p2, m_game, m_graphics, m_input, m_sound, p3);
         break;
     case 0x15:
-        *(int*)(char*)p1 = (int)new CMinagi(p2, (int)m_game, (int)m_graphics, (int)m_input, (int)m_sound, p3);
+        *p1 = new CMinagi(p2, m_game, m_graphics, m_input, m_sound, p3);
         break;
     case 0x16:
-        *(int*)(char*)p1 = (int)new CNayuki(p2, (int)m_game, (int)m_graphics, (int)m_input, (int)m_sound, p3);
+        *p1 = new CNayuki(p2, m_game, m_graphics, m_input, m_sound, p3);
         break;
     case 0x17:
-        *(int*)(char*)p1 = (int)new CMisuzu(p2, (int)m_game, (int)m_graphics, (int)m_input, (int)m_sound, p3);
+        *p1 = new CMisuzu(p2, m_game, m_graphics, m_input, m_sound, p3);
     }
-    *(*(char**)(char*)p1 + 0x8d) = unk53c[p3];
-    m_players[p3] = (CPlayer*)*(int*)(char*)p1;
-    *(int*)(*(char**)(char*)p1 + 0xa4) = m_game->unk1343[p3];
+    (*p1)->unk8d = unk53c[p3];
+    m_players[p3] = *p1;
+    (*p1)->m_cpu = m_game->unk1343[p3];
     if (1) {
         strcpy(v2c, "system\\");
-        strcat(v2c, (const char*)(*(int*)(char*)p1 + 0x94));
+        strcat(v2c, (*p1)->m_name);
         strcat(v2c, "\\");
-        strcat(v2c, (const char*)(*(int*)(char*)p1 + 0x94));
+        strcat(v2c, (*p1)->m_name);
         strcat(v2c, ".dat");
         m_game->LoadDat((IDirectDrawSurface**)&unk444[p3], (const char*)v2c, 0, p3 * 0x28 + 0xaf);
         m_graphics->LoadPaletteDat(m_palette, (const char*)v2c, unk53e[p3] * 0x28, p3 * 0x28 + 0xaf, 0x28);
     } else {
         strcpy(v2c, "system\\");
-        strcat(v2c, (const char*)(*(int*)(char*)p1 + 0x94));
+        strcat(v2c, (*p1)->m_name);
         strcat(v2c, "\\");
-        strcat(v2c, (const char*)(*(int*)(char*)p1 + 0x94));
+        strcat(v2c, (*p1)->m_name);
         strcat(v2c, ".bmp");
         m_graphics->LoadBmp((IDirectDrawSurface**)&unk444[p3], (const char*)v2c, p3 * 0x28 + 0xaf);
         m_graphics->LoadPaletteBmp(m_palette, (const char*)v2c, unk53e[p3] * 0x28, p3 * 0x28 + 0xaf, 0x28);
