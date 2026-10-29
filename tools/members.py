@@ -53,8 +53,9 @@ lib.clang_getCursorBinaryOperatorKind.restype = ctypes.c_int
 lib.clang_getCursorUnaryOperatorKind.argtypes = [ci.Cursor]
 lib.clang_getCursorUnaryOperatorKind.restype = ctypes.c_int
 
+# Not calls: passing a struct by value wraps a call in an implicit copy with its extent.
 EXPLICIT_KINDS = {CK.PAREN_EXPR, CK.CSTYLE_CAST_EXPR, CK.UNARY_OPERATOR, CK.BINARY_OPERATOR,
-                  CK.COMPOUND_ASSIGNMENT_OPERATOR, CK.CALL_EXPR, CK.ARRAY_SUBSCRIPT_EXPR,
+                  CK.COMPOUND_ASSIGNMENT_OPERATOR, CK.ARRAY_SUBSCRIPT_EXPR,
                   CK.CONDITIONAL_OPERATOR}
 
 
@@ -367,6 +368,7 @@ class Rewriter:
         self.locals = set()
         self.stats = collections.Counter()
         self.ctx_of = {}
+        self.subobject = False
 
     # source text
     def text(self, c):
@@ -575,6 +577,11 @@ class Rewriter:
                 text, sep, prec = '*' + paren(ptext, pprec, UNARYP), '.', UNARYP
         while True:
             ct = canon(t)
+            if want is not None and off == 0 and not terms and (not text or sep == '->') and \
+                    unqualified(ct) == unqualified(want) and ct.kind == TK.RECORD:
+                # a base class subobject: this, or what a pointer points to
+                self.subobject = True
+                return text, prec, t
             if want is not None and off == 0 and not terms and text and sep != '->':
                 # an address: stop at the member of the wanted type, or at an array of it
                 if unqualified(ct) == unqualified(want) or (
@@ -733,6 +740,10 @@ class Rewriter:
                 v = self.sem(c)
                 if isinstance(v, LVal):
                     return self.render_value(v, ctx)
+        if k == CK.MEMBER_REF_EXPR:
+            r = self.render_base_member(c)
+            if r is not None:
+                return r
         if k in (CK.PAREN_EXPR,):
             ch = self.children(c)
             if len(ch) == 1:
@@ -787,6 +798,30 @@ class Rewriter:
                 return self.prec_of(ch[0])
         return OTHER
 
+    def render_base_member(self, c):
+        """((ObjBase*)((char*)this + 8))->AngleTo -> AngleTo: the inherited member, without
+        the null test an upcast would compile to."""
+        ch = self.children(c)
+        if not ch:
+            return None
+        base = self.strip(ch[0])
+        if base.kind != CK.CSTYLE_CAST_EXPR or not is_pointer(base.type):
+            return None
+        v = self.sem(base)
+        if not isinstance(v, TAddr) or not is_record(v.utype):
+            return None
+        try:
+            self.subobject = False
+            text, prec, T = self.walk(v.addr, None, c, want_address=True, want=v.utype)
+        except Unresolved:
+            return None
+        if not self.subobject:
+            return None
+        self.stats['access'] += 1
+        if not text:
+            return c.spelling, PRIMARY
+        return paren(text, prec) + '->' + c.spelling, PRIMARY
+
     def render_value(self, v, ctx):
         """An access used as a value (or in a context we don't otherwise know)."""
         self.stats['access'] += 1
@@ -838,7 +873,11 @@ class Rewriter:
         if not addr.ptr or (addr.const == 0 and not addr.terms):
             return None
         try:
+            self.subobject = False
             text, prec, T = self.walk(addr, None, node, want_address=True, want=want)
+            if self.subobject:
+                # (ObjBase*)this would test this for null; &pattern doesn't
+                text, prec, T = self.walk(addr, None, node, want_address=True)
         except Unresolved:
             return None
         ct = canon(T)

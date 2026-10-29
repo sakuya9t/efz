@@ -155,7 +155,7 @@ void CScene0::Draw()
 {
     m_graphics->Blit(MakeRect(0, 0, 0x140, 0xf0), (IDirectDrawSurface*)unk434, MakeRect(0, 0, 0x140, 0xf0), 0, 0);
     m_graphics->Blit(MakeRect(0xc3, 0x82, 0x78, 0x62), (IDirectDrawSurface*)unk438, MakeRect(0, 0, 0x78, 0x62), m_colorKey, 0);
-    m_graphics->Blit(MakeRect(0xc3, *((char*)this + 0x43c) * 0xe + 0x82, 0x78, 0xe), (IDirectDrawSurface*)unk438, MakeRect(0, *((char*)this + 0x43c) * 0xe + 0x62, 0x78, 0xe), m_colorKey, 0);
+    m_graphics->Blit(MakeRect(0xc3, unk43c * 0xe + 0x82, 0x78, 0xe), (IDirectDrawSurface*)unk438, MakeRect(0, unk43c * 0xe + 0x62, 0x78, 0xe), m_colorKey, 0);
     m_graphics->Flip();
 }
 

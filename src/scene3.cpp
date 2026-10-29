@@ -720,8 +720,8 @@ void CScene3::Unk766480()
     vf0.x = m_players[1]->x;
     vf0.y = m_players[1]->y;
     vf0.facing = m_players[1]->facing;
-    lf4 = Unk7679b0((int)m_players[0], (int)m_players[1], (CollisionInfo*)&x1e8, (CollisionInfo*)&vf0);
-    v1ec = Unk7679b0((int)m_players[1], (int)m_players[0], (CollisionInfo*)&vf0, (CollisionInfo*)&x1e8);
+    lf4 = Unk7679b0(m_players[0], m_players[1], (CollisionInfo*)&x1e8, (CollisionInfo*)&vf0);
+    v1ec = Unk7679b0(m_players[1], m_players[0], (CollisionInfo*)&vf0, (CollisionInfo*)&x1e8);
     m_players[0]->unk144 = 0;
     m_players[1]->unk144 = 0;
     vf8 = m_players[0]->unk2cc;
@@ -729,7 +729,7 @@ void CScene3::Unk766480()
         l1f0 = m_players[1]->unk2cc;
         while (l1f0 != m_players[1]->unk2ca) {
             if (m_players[0]->unk3d0[vf8] != 0 && m_players[1]->unk3d0[l1f0] != 0) {
-                Unk76bab0((int)m_players[0], (int)m_players[1], vf8, l1f0);
+                Unk76bab0(m_players[0], m_players[1], vf8, l1f0);
             }
             l1f0++;
             if (l1f0 >= 0x40) {
@@ -746,8 +746,8 @@ void CScene3::Unk766480()
         l1f0 = m_players[1]->unk2cc;
         while (l1f0 != m_players[1]->unk2ca) {
             if (m_players[0]->unk3d0[vf8] != 0 && m_players[1]->unk3d0[l1f0] != 0) {
-                Unk76b090((int)m_players[0], (int)m_players[1], vf8, l1f0);
-                Unk76b090((int)m_players[1], (int)m_players[0], l1f0, vf8);
+                Unk76b090(m_players[0], m_players[1], vf8, l1f0);
+                Unk76b090(m_players[1], m_players[0], l1f0, vf8);
             }
             l1f0++;
             if (l1f0 >= 0x40) {
@@ -762,8 +762,8 @@ void CScene3::Unk766480()
     vf8 = m_players[1]->unk2cc;
     while (vf8 != m_players[1]->unk2ca) {
         if (m_players[1]->unk3d0[vf8] != 0) {
-            Unk7697d0((int)m_players[1], (int)m_players[0], vf8, (CollisionInfo*)&x1e8);
-            Unk76bd40((int)m_players[0], (int)m_players[1], (CollisionInfo*)&x1e8, (CollisionInfo*)&vf0, vf8);
+            Unk7697d0(m_players[1], m_players[0], vf8, (CollisionInfo*)&x1e8);
+            Unk76bd40(m_players[0], m_players[1], (CollisionInfo*)&x1e8, (CollisionInfo*)&vf0, vf8);
         }
         vf8++;
         if (vf8 >= 0x40) {
@@ -773,8 +773,8 @@ void CScene3::Unk766480()
     vf8 = m_players[0]->unk2cc;
     while (vf8 != m_players[0]->unk2ca) {
         if (m_players[0]->unk3d0[vf8] != 0) {
-            Unk7697d0((int)m_players[0], (int)m_players[1], vf8, (CollisionInfo*)&vf0);
-            Unk76bd40((int)m_players[1], (int)m_players[0], (CollisionInfo*)&vf0, (CollisionInfo*)&x1e8, vf8);
+            Unk7697d0(m_players[0], m_players[1], vf8, (CollisionInfo*)&vf0);
+            Unk76bd40(m_players[1], m_players[0], (CollisionInfo*)&vf0, (CollisionInfo*)&x1e8, vf8);
         }
         vf8++;
         if (vf8 >= 0x40) {
@@ -786,10 +786,10 @@ void CScene3::Unk766480()
     vf0.unke9 = *(char*)&m_players[1]->unk168;
     vf0.unkea = m_players[1]->unk16c;
     if (v1ec == 0) {
-        Unk767f60((int)m_players[0], (int)m_players[1], (CollisionInfo*)&x1e8, (CollisionInfo*)&vf0);
+        Unk767f60(m_players[0], m_players[1], (CollisionInfo*)&x1e8, (CollisionInfo*)&vf0);
     }
     if (lf4 == 0) {
-        Unk767f60((int)m_players[1], (int)m_players[0], (CollisionInfo*)&vf0, (CollisionInfo*)&x1e8);
+        Unk767f60(m_players[1], m_players[0], (CollisionInfo*)&vf0, (CollisionInfo*)&x1e8);
     }
 }
 
@@ -936,7 +936,7 @@ int CScene3::Unk767930(int p1, int p2)
     return ~(*(int*)((char*)p2 + 8) - *(int*)(char*)p1 | *(int*)((char*)p1 + 8) - *(int*)(char*)p2 | *(int*)((char*)p2 + 0xc) - *(int*)((char*)p1 + 4) | *(int*)((char*)p1 + 0xc) - *(int*)((char*)p2 + 4)) >> 0x1f;
 }
 
-int CScene3::Unk7679b0(int p1, int p2, CollisionInfo* p3, CollisionInfo* p4)
+int CScene3::Unk7679b0(CPlayer* p1, CPlayer* p2, CollisionInfo* p3, CollisionInfo* p4)
 {
     RECT b29c;
     int v28c;
@@ -961,7 +961,7 @@ int CScene3::Unk7679b0(int p1, int p2, CollisionInfo* p3, CollisionInfo* p4)
         l220[v28c] = this->Unk7677a0((int)p4, (int)&v108.boxes[v28c]);
     }
     b29c = this->Unk7677a0((int)p4, (int)&v108.box90);
-    if (*(int*)((char*)p1 + 0x168) == 0 && (v108.flagsB0 & 0x20) == 0 && *(short*)((char*)p1 + 0x16c) > 0 && (*((char*)p2 + 0x130) <= 0 || (b1d0.flagsAA & 0x40) <= 0) && ((CPlayer*)p2)->Unk4102e0() == 0 && *(short*)((char*)p2 + 0x13c) == 0) {
+    if (p1->unk168 == 0 && (v108.flagsB0 & 0x20) == 0 && p1->unk16c > 0 && (p2->unk130 <= 0 || (b1d0.flagsAA & 0x40) <= 0) && p2->Unk4102e0() == 0 && p2->unk13c == 0) {
         if ((b1d0.flagsAA & 0x40) > 0) {
             v28c = 0;
             for (; v28c < 4; v28c++) {
@@ -1012,7 +1012,7 @@ int CScene3::Unk7679b0(int p1, int p2, CollisionInfo* p3, CollisionInfo* p4)
                     }
                 }
             }
-            if (*(int*)((char*)p2 + 0x170) != 0 && *(short*)((char*)p2 + 0x14e) >= 0x1e && *(short*)((char*)p2 + 0x13a) == 0 && ((CPlayer*)p2)->Unk4100f0((int)&b1d0) != 0 && (b1d0.flagsAA & 0x80) == 0) {
+            if (p2->unk170 != 0 && p2->unk14e >= 0x1e && p2->unk13a == 0 && p2->Unk4100f0((int)&b1d0) != 0 && (b1d0.flagsAA & 0x80) == 0) {
                 return 1;
             }
         }
@@ -1020,7 +1020,7 @@ int CScene3::Unk7679b0(int p1, int p2, CollisionInfo* p3, CollisionInfo* p4)
     return 0;
 }
 
-void CScene3::Unk767f60(int p1, int p2, CollisionInfo* p3, CollisionInfo* p4)
+void CScene3::Unk767f60(CPlayer* p1, CPlayer* p2, CollisionInfo* p3, CollisionInfo* p4)
 {
     RECT v2e4;
     int v2d4;
@@ -1046,7 +1046,7 @@ void CScene3::Unk767f60(int p1, int p2, CollisionInfo* p3, CollisionInfo* p4)
         l220[v2d4] = this->Unk7677a0((int)p4, (int)&v108.boxes[v2d4]);
     }
     v2e4 = this->Unk7677a0((int)p4, (int)&v108.box90);
-    if (p3->unke9 == 0 && (v108.flagsB0 & 0x20) == 0 && p3->unkea > 0 && (*((char*)p2 + 0x130) <= 0 || (b1d0.flagsAA & 0x40) <= 0) && ((CPlayer*)p2)->Unk4102e0() == 0 && *(short*)((char*)p2 + 0x13c) == 0) {
+    if (p3->unke9 == 0 && (v108.flagsB0 & 0x20) == 0 && p3->unkea > 0 && (p2->unk130 <= 0 || (b1d0.flagsAA & 0x40) <= 0) && p2->Unk4102e0() == 0 && p2->unk13c == 0) {
         if ((b1d0.flagsAA & 0x40) > 0) {
             v2d4 = 0;
             for (; v2d4 < 4; v2d4++) {
@@ -1098,201 +1098,201 @@ void CScene3::Unk767f60(int p1, int p2, CollisionInfo* p3, CollisionInfo* p4)
                 }
             }
             if ((v108.flagsB0 & 0x1000) > 0 && (b1d0.flagsAA & 0x100) == 0 && (b1d0.flagsAA & 1) > 0) {
-                (*(short*)((char*)p1 + 0x16c))--;
-                *(int*)((char*)p1 + 0x168) = 2;
-                *(int*)((char*)p1 + 0x168) = 6;
-                *(int*)((char*)p2 + 0x168) = 6;
+                p1->unk16c--;
+                p1->unk168 = 2;
+                p1->unk168 = 6;
+                p2->unk168 = 6;
                 return;
             }
             if ((v108.flagsB0 & 0x800) > 0 && (b1d0.flagsAA & 0x100) == 0 && (b1d0.flagsAA & 2) > 0) {
-                (*(short*)((char*)p1 + 0x16c))--;
-                *(int*)((char*)p1 + 0x168) = 2;
-                *(int*)((char*)p1 + 0x168) = 6;
-                *(int*)((char*)p2 + 0x168) = 6;
+                p1->unk16c--;
+                p1->unk168 = 2;
+                p1->unk168 = 6;
+                p2->unk168 = 6;
                 return;
             }
-            if (*(int*)((char*)p2 + 0x170) != 0 && *(short*)((char*)p2 + 0x14e) >= 0x1e && *(short*)((char*)p2 + 0x13a) == 0 && ((CPlayer*)p2)->Unk4100f0((int)&b1d0) != 0 && (b1d0.flagsAA & 0x80) == 0) {
-                *(int*)((char*)p1 + 0x168) = 2;
-                *(short*)((char*)p1 + 0x148) += b1d0.unkb6;
-                (*(short*)((char*)p1 + 0x16c))--;
-                *(int*)((char*)p2 + 0xd0) = 1;
+            if (p2->unk170 != 0 && p2->unk14e >= 0x1e && p2->unk13a == 0 && p2->Unk4100f0((int)&b1d0) != 0 && (b1d0.flagsAA & 0x80) == 0) {
+                p1->unk168 = 2;
+                p1->unk148 += b1d0.unkb6;
+                p1->unk16c--;
+                p2->unkd0 = 1;
                 k2c0.unk0 = 0;
                 k2c0.x = (double)((v2d0.right + v2d0.left) / 2);
                 k2c0.y = (double)((v2d0.bottom + v2d0.top) / 2);
-                k2c0.side = *((char*)p2 + 0x50) == -1;
+                k2c0.side = p2->facing == -1;
                 k2c0.unk20 = 2;
                 k2c0.unk21 = 1;
                 k2c0.unk24 = 0;
                 k2c0.type = 0x11;
                 k2c0.unk2c = 0xa;
                 m_game->CreateEffect((EffectDesc*)&k2c0);
-                ((CPlayer*)p2)->Vf0();
-                ((CPlayer*)p2)->Unk40e630();
-                if (*(double*)((char*)p2 + 0x28) == 0.0) {
-                    *(short*)((char*)p2 + 8) = (*((char*)p2 + 0x189) == 1) + 0xa8;
+                p2->Vf0();
+                p2->Unk40e630();
+                if (p2->y == 0.0) {
+                    p2->pattern = (p2->m_inputY == 1) + 0xa8;
                 } else {
-                    *(short*)((char*)p2 + 8) = 0xaa;
+                    p2->pattern = 0xaa;
                 }
-                ((CPlayer*)p1)->Unk40f190();
-                ((CPlayer*)p2)->Unk40f190();
-                *(short*)((char*)p2 + 0x14c) = 0x3c;
-                *(int*)((char*)p2 + 0x170) = 0;
-                *(int*)((char*)p1 + 0x170) = 1;
+                p1->Unk40f190();
+                p2->Unk40f190();
+                p2->unk14c = 0x3c;
+                p2->unk170 = 0;
+                p1->unk170 = 1;
                 return;
             }
-            if (*(short*)((char*)p2 + 0x14e) >= 0x1e && *(double*)((char*)p2 + 0x28) < 0.0 && ((CPlayer*)p2)->Unk410050((int)&b1d0, (int)&v108) != 0) {
-                *(int*)((char*)p1 + 0x168) = 2;
-                *(short*)((char*)p1 + 0x148) += b1d0.unkb6;
-                (*(short*)((char*)p1 + 0x16c))--;
-                *(int*)((char*)p2 + 0xd0) = 1;
+            if (p2->unk14e >= 0x1e && p2->y < 0.0 && p2->Unk410050((int)&b1d0, (int)&v108) != 0) {
+                p1->unk168 = 2;
+                p1->unk148 += b1d0.unkb6;
+                p1->unk16c--;
+                p2->unkd0 = 1;
                 k2c0.unk0 = 0;
                 k2c0.x = (double)((v2d0.right + v2d0.left) / 2);
                 k2c0.y = (double)((v2d0.bottom + v2d0.top) / 2);
-                k2c0.side = *((char*)p2 + 0x50) == -1;
+                k2c0.side = p2->facing == -1;
                 k2c0.unk20 = 2;
                 k2c0.unk21 = 1;
                 k2c0.unk24 = 0;
                 k2c0.type = 0x11;
                 k2c0.unk2c = 0xa;
                 m_game->CreateEffect((EffectDesc*)&k2c0);
-                ((CPlayer*)p2)->Vf0();
-                ((CPlayer*)p2)->Unk40e630();
-                *(short*)((char*)p2 + 8) = 0xaa;
-                ((CPlayer*)p1)->Unk40f190();
-                ((CPlayer*)p2)->Unk40f190();
-                *(short*)((char*)p2 + 0x14c) = 0x3c;
-                *(int*)((char*)p1 + 0x170) = 1;
+                p2->Vf0();
+                p2->Unk40e630();
+                p2->pattern = 0xaa;
+                p1->Unk40f190();
+                p2->Unk40f190();
+                p2->unk14c = 0x3c;
+                p1->unk170 = 1;
                 return;
             }
-            if (((CPlayer*)p2)->Unk410050((int)&b1d0, (int)&v108) != 0 && *(short*)((char*)p2 + 0x14e) >= 0x1e && *(double*)((char*)p2 + 0x28) == 0.0 && *(WORD*)((char*)p2 + 8) != 0xa8 && *(WORD*)((char*)p2 + 8) != 0xa9) {
-                *(int*)((char*)p1 + 0x168) = 2;
-                *(short*)((char*)p1 + 0x148) += b1d0.unkb6;
-                (*(short*)((char*)p1 + 0x16c))--;
-                *(int*)((char*)p2 + 0xd0) = 1;
+            if (p2->Unk410050((int)&b1d0, (int)&v108) != 0 && p2->unk14e >= 0x1e && p2->y == 0.0 && p2->pattern != 0xa8 && p2->pattern != 0xa9) {
+                p1->unk168 = 2;
+                p1->unk148 += b1d0.unkb6;
+                p1->unk16c--;
+                p2->unkd0 = 1;
                 k2c0.unk0 = 0;
                 k2c0.x = (double)((v2d0.right + v2d0.left) / 2);
                 k2c0.y = (double)((v2d0.bottom + v2d0.top) / 2);
-                k2c0.side = *((char*)p2 + 0x50) == -1;
+                k2c0.side = p2->facing == -1;
                 k2c0.unk20 = 2;
                 k2c0.unk21 = 1;
                 k2c0.unk24 = 0;
                 k2c0.type = 0x11;
                 k2c0.unk2c = 0xa;
                 m_game->CreateEffect((EffectDesc*)&k2c0);
-                ((CPlayer*)p2)->Vf0();
-                ((CPlayer*)p2)->Unk40e630();
-                *(short*)((char*)p2 + 8) = (*((char*)p2 + 0x189) == 1) + 0xa8;
-                ((CPlayer*)p1)->Unk40f190();
-                ((CPlayer*)p2)->Unk40f190();
-                *(short*)((char*)p2 + 0x14c) = 0x3c;
-                *(int*)((char*)p1 + 0x170) = 1;
+                p2->Vf0();
+                p2->Unk40e630();
+                p2->pattern = (p2->m_inputY == 1) + 0xa8;
+                p1->Unk40f190();
+                p2->Unk40f190();
+                p2->unk14c = 0x3c;
+                p1->unk170 = 1;
                 return;
             }
             if ((v108.flagsB0 & 0x200) > 0 && (v108.flagsAA & 1) > 0 && (b1d0.flagsAA & 1) > 0) {
-                (*(short*)((char*)p1 + 0x16c))--;
+                p1->unk16c--;
                 k2c0.unk0 = 0;
                 k2c0.x = (double)((v2d0.right + v2d0.left) / 2);
                 k2c0.y = (double)((v2d0.bottom + v2d0.top) / 2);
-                k2c0.side = *((char*)p2 + 0x50) == -1;
+                k2c0.side = p2->facing == -1;
                 k2c0.unk20 = 2;
                 k2c0.unk21 = 1;
                 k2c0.unk24 = 0;
                 k2c0.type = 2;
                 k2c0.unk2c = 3;
                 m_game->CreateEffect((EffectDesc*)&k2c0);
-                *(int*)((char*)p1 + 0x168) = 2;
-                *(short*)((char*)p1 + 0x14a) = b1d0.unkc2;
-                *(short*)((char*)p2 + 0x14a) = b1d0.unkc4;
-                *(int*)((char*)p2 + 0x108) -= b1d0.unka8;
-                if (*(int*)((char*)p2 + 0x108) <= 0) {
-                    *(int*)((char*)p2 + 0x108) = 1;
+                p1->unk168 = 2;
+                p1->unk14a = b1d0.unkc2;
+                p2->unk14a = b1d0.unkc4;
+                p2->unk108 -= b1d0.unka8;
+                if (p2->unk108 <= 0) {
+                    p2->unk108 = 1;
                 }
-                *(float*)((char*)p2 + 0x134) = b1d0.unka0 / 0x1e + *(float*)((char*)p2 + 0x134);
-                if (*(float*)((char*)p2 + 0x134) > 3.6e+02f) {
-                    *(int*)((char*)p2 + 0x134) = 0x43b40000;
+                p2->unk134 = b1d0.unka0 / 0x1e + p2->unk134;
+                if (p2->unk134 > 3.6e+02f) {
+                    *(int*)&p2->unk134 = 0x43b40000;
                 }
                 return;
             }
             if ((v108.flagsB0 & 0x200) > 0 && (v108.flagsAA & 2) > 0 && (b1d0.flagsAA & 2) > 0) {
-                (*(short*)((char*)p1 + 0x16c))--;
+                p1->unk16c--;
                 k2c0.unk0 = 0;
                 k2c0.x = (double)((v2d0.right + v2d0.left) / 2);
                 k2c0.y = (double)((v2d0.bottom + v2d0.top) / 2);
-                k2c0.side = *((char*)p2 + 0x50) == -1;
+                k2c0.side = p2->facing == -1;
                 k2c0.unk20 = 2;
                 k2c0.unk21 = 1;
                 k2c0.unk24 = 0;
                 k2c0.type = 2;
                 k2c0.unk2c = 3;
                 m_game->CreateEffect((EffectDesc*)&k2c0);
-                *(int*)((char*)p1 + 0x168) = 2;
-                *(short*)((char*)p1 + 0x14a) = b1d0.unkc2;
-                *(short*)((char*)p2 + 0x14a) = b1d0.unkc4;
-                *(int*)((char*)p2 + 0x108) -= b1d0.unka8;
-                if (*(int*)((char*)p2 + 0x108) <= 0) {
-                    *(int*)((char*)p2 + 0x108) = 1;
+                p1->unk168 = 2;
+                p1->unk14a = b1d0.unkc2;
+                p2->unk14a = b1d0.unkc4;
+                p2->unk108 -= b1d0.unka8;
+                if (p2->unk108 <= 0) {
+                    p2->unk108 = 1;
                 }
-                *(float*)((char*)p2 + 0x134) = b1d0.unka0 / 0x1e + *(float*)((char*)p2 + 0x134);
-                if (*(float*)((char*)p2 + 0x134) > 3.6e+02f) {
-                    *(int*)((char*)p2 + 0x134) = 0x43b40000;
+                p2->unk134 = b1d0.unka0 / 0x1e + p2->unk134;
+                if (p2->unk134 > 3.6e+02f) {
+                    *(int*)&p2->unk134 = 0x43b40000;
                 }
                 return;
             }
-            if ((v108.flagsB0 & 0x200) > 0 && (v108.flagsAA & 4) > 0 && (b1d0.flagsAA & 4) > 0 && *(double*)((char*)p2 + 0x28) < 0.0) {
-                (*(short*)((char*)p1 + 0x16c))--;
+            if ((v108.flagsB0 & 0x200) > 0 && (v108.flagsAA & 4) > 0 && (b1d0.flagsAA & 4) > 0 && p2->y < 0.0) {
+                p1->unk16c--;
                 k2c0.unk0 = 0;
                 k2c0.x = (double)((v2d0.right + v2d0.left) / 2);
                 k2c0.y = (double)((v2d0.bottom + v2d0.top) / 2);
-                k2c0.side = *((char*)p2 + 0x50) == -1;
+                k2c0.side = p2->facing == -1;
                 k2c0.unk20 = 2;
                 k2c0.unk21 = 1;
                 k2c0.unk24 = 0;
                 k2c0.type = 2;
                 k2c0.unk2c = 3;
                 m_game->CreateEffect((EffectDesc*)&k2c0);
-                *(int*)((char*)p1 + 0x168) = 2;
-                *(short*)((char*)p1 + 0x14a) = b1d0.unkc2;
-                *(short*)((char*)p2 + 0x14a) = b1d0.unkc4;
-                *(int*)((char*)p2 + 0x108) -= b1d0.unka8;
-                if (*(int*)((char*)p2 + 0x108) <= 0) {
-                    *(int*)((char*)p2 + 0x108) = 1;
+                p1->unk168 = 2;
+                p1->unk14a = b1d0.unkc2;
+                p2->unk14a = b1d0.unkc4;
+                p2->unk108 -= b1d0.unka8;
+                if (p2->unk108 <= 0) {
+                    p2->unk108 = 1;
                 }
                 return;
             }
-            if (((CPlayer*)p2)->Unk410050((int)&b1d0, (int)&v108) != 0) {
-                *(int*)((char*)p1 + 0x168) = 2;
-                *(short*)((char*)p1 + 0x148) += b1d0.unkb6;
-                (*(short*)((char*)p1 + 0x16c))--;
-                *(int*)((char*)p2 + 0xd0) = 1;
+            if (p2->Unk410050((int)&b1d0, (int)&v108) != 0) {
+                p1->unk168 = 2;
+                p1->unk148 += b1d0.unkb6;
+                p1->unk16c--;
+                p2->unkd0 = 1;
                 k2c0.unk0 = 0;
                 k2c0.x = (double)((v2d0.right + v2d0.left) / 2);
                 k2c0.y = (double)((v2d0.bottom + v2d0.top) / 2);
-                k2c0.side = *((char*)p2 + 0x50) == -1;
+                k2c0.side = p2->facing == -1;
                 k2c0.unk20 = 2;
                 k2c0.unk21 = 1;
                 k2c0.unk24 = 0;
-                *(short*)((char*)p2 + 8) = (b1d0.flagsAA & 0x10) / 0x10 + 0x96 + (b1d0.flagsAA & 0x20) / 0x20 * 2 + (*((char*)p2 + 0x189) == 1 || (b1d0.flagsAA & v108.flagsB0 & 5) == 0 && *(int*)((char*)p2 + 0xa4) != 0) * 3;
-                if (*(double*)((char*)p2 + 0x28) < 0.0) {
-                    *(short*)((char*)p2 + 8) = 0x9c;
+                p2->pattern = (b1d0.flagsAA & 0x10) / 0x10 + 0x96 + (b1d0.flagsAA & 0x20) / 0x20 * 2 + (p2->m_inputY == 1 || (b1d0.flagsAA & v108.flagsB0 & 5) == 0 && p2->unka4 != 0) * 3;
+                if (p2->y < 0.0) {
+                    p2->pattern = 0x9c;
                 }
-                ((CPlayer*)p2)->Vf0();
-                ((CPlayer*)p2)->Unk40e630();
-                *(short*)((char*)p1 + 0x14a) = b1d0.unkc2;
-                *(short*)((char*)p2 + 0x14a) = b1d0.unkc4;
-                *(int*)((char*)p2 + 0x108) -= b1d0.unka8;
-                if (*(int*)((char*)p2 + 0x108) <= 0) {
-                    *(int*)((char*)p2 + 0x108) = 1;
+                p2->Vf0();
+                p2->Unk40e630();
+                p1->unk14a = b1d0.unkc2;
+                p2->unk14a = b1d0.unkc4;
+                p2->unk108 -= b1d0.unka8;
+                if (p2->unk108 <= 0) {
+                    p2->unk108 = 1;
                 }
-                if (*(float*)((char*)p1 + 0x134) > 0.0f) {
-                    *(float*)((char*)p1 + 0x134) = *(float*)((char*)p1 + 0x134) - b1d0.unka0 / 0x1e;
-                    if (*(float*)((char*)p1 + 0x134) < 0.0f) {
-                        *(float*)((char*)p2 + 0x134) = *(float*)((char*)p2 + 0x134) - *(float*)((char*)p1 + 0x134);
-                        *(int*)((char*)p1 + 0x134) = 0;
+                if (p1->unk134 > 0.0f) {
+                    p1->unk134 = p1->unk134 - b1d0.unka0 / 0x1e;
+                    if (p1->unk134 < 0.0f) {
+                        p2->unk134 = p2->unk134 - p1->unk134;
+                        *(int*)&p1->unk134 = 0;
                     }
                 } else {
-                    *(float*)((char*)p2 + 0x134) = b1d0.unka0 / 0x1e + *(float*)((char*)p2 + 0x134);
-                    if (*(float*)((char*)p2 + 0x134) > 3.6e+02f) {
-                        *(int*)((char*)p2 + 0x134) = 0x43b40000;
+                    p2->unk134 = b1d0.unka0 / 0x1e + p2->unk134;
+                    if (p2->unk134 > 3.6e+02f) {
+                        *(int*)&p2->unk134 = 0x43b40000;
                     }
                 }
                 *(int*)((char*)p2 + 0x154) = 0;
@@ -1301,86 +1301,86 @@ void CScene3::Unk767f60(int p1, int p2, CollisionInfo* p3, CollisionInfo* p4)
                 m_game->CreateEffect((EffectDesc*)&k2c0);
                 return;
             }
-            if ((v108.flagsB0 & 4) == 0 && *(short*)((char*)p2 + 0x138) == 0 || ((v108.flagsB0 & 4) > 0 || *(short*)((char*)p2 + 0x138) > 0) && (b1d0.flagsAA & 0x100) > 0 || (b1d0.flagsAA & 0x40) > 0) {
-                if (*(double*)((char*)p2 + 0x28) >= 0.0) {
+            if ((v108.flagsB0 & 4) == 0 && p2->unk138 == 0 || ((v108.flagsB0 & 4) > 0 || p2->unk138 > 0) && (b1d0.flagsAA & 0x100) > 0 || (b1d0.flagsAA & 0x40) > 0) {
+                if (p2->y >= 0.0) {
                     if (b1d0.unkae > 0) {
-                        *(short*)((char*)p2 + 8) = b1d0.unkae;
+                        p2->pattern = b1d0.unkae;
                     } else if ((v108.flagsB0 & 3) == 3) {
-                        *(short*)((char*)p2 + 8) = 0x3b;
+                        p2->pattern = 0x3b;
                     } else if ((v108.flagsB0 & 1) != 0) {
-                        *(short*)((char*)p2 + 8) = ((b1d0.flagsAA & 8) > 0) * 3 + 0x32 + ((b1d0.flagsAA & 0x10) > 0) + ((b1d0.flagsAA & 0x20) > 0) * 2;
+                        p2->pattern = ((b1d0.flagsAA & 8) > 0) * 3 + 0x32 + ((b1d0.flagsAA & 0x10) > 0) + ((b1d0.flagsAA & 0x20) > 0) * 2;
                     } else if ((v108.flagsB0 & 2) != 0) {
-                        *(short*)((char*)p2 + 8) = ((b1d0.flagsAA & 0x10) > 0) + 0x38 + ((b1d0.flagsAA & 0x20) > 0) * 2;
+                        p2->pattern = ((b1d0.flagsAA & 0x10) > 0) + 0x38 + ((b1d0.flagsAA & 0x20) > 0) * 2;
                     }
                 } else if (b1d0.unkac > 0) {
-                    *(short*)((char*)p2 + 8) = b1d0.unkac;
+                    p2->pattern = b1d0.unkac;
                 } else {
-                    *(short*)((char*)p2 + 8) = 0x3b;
+                    p2->pattern = 0x3b;
                 }
-                *(int*)((char*)p1 + 0x168) = 3;
-                ((CPlayer*)p2)->Vf0();
-                ((CPlayer*)p2)->Unk40e630();
+                p1->unk168 = 3;
+                p2->Vf0();
+                p2->Unk40e630();
             } else {
-                *(short*)((char*)p1 + 0x174) = 0;
-                ((CPlayer*)p2)->Unk410ac0(0xdf, 3);
-                *(int*)((char*)p1 + 0x168) = 7;
+                p1->unk174 = 0;
+                p2->Unk410ac0(0xdf, 3);
+                p1->unk168 = 7;
             }
             if ((v108.flagsB0 & 0x10) > 0) {
-                *(short*)((char*)p1 + 0x174) = 0;
-                if (*(double*)((char*)p1 + 0x178) > 10000.0) {
-                    *(double*)((char*)p1 + 0x178) -= 20.0;
+                p1->unk174 = 0;
+                if (p1->unk178 > 10000.0) {
+                    p1->unk178 -= 20.0;
                 } else {
-                    *(double*)((char*)p1 + 0x178) = 10000.0;
+                    p1->unk178 = 10000.0;
                 }
             }
-            *(double*)((char*)p2 + 0xc0) = b1d0.unkb8;
-            *(double*)((char*)p2 + 0xc8) = b1d0.unkbc;
-            *(int*)((char*)p2 + 0xd0) = 1;
-            if (*(short*)((char*)p1 + 0x174) == 0) {
-                *(int*)((char*)p2 + 0x10c) = *(int*)((char*)p2 + 0x108);
+            p2->unkc0 = b1d0.unkb8;
+            p2->unkc8 = b1d0.unkbc;
+            p2->unkd0 = 1;
+            if (p1->unk174 == 0) {
+                p2->unk10c = p2->unk108;
             }
-            *(int*)((char*)p1 + 0x144) = (b1d0.flagsAA & 0x2000) > 0 && (v108.flagsB0 & 0x2000) > 0;
-            *(int*)((char*)p2 + 0x108) -= (int)((double)b1d0.unka0 * ((CPlayer*)p1)->Unk410480() * ((CPlayer*)p2)->Unk410530() * ((CPlayer*)p1)->Unk410560());
-            *(short*)((char*)p2 + 0x124) = (int)(b1d0.unkb2 * (*(double*)((char*)p1 + 0x178) / 10000.0 * 0.8));
-            *(int*)((char*)p2 + 0x128) = (b1d0.flagsAA & 0x400) > 0;
-            *(int*)((char*)p2 + 0x12c) = (b1d0.flagsAA & 0x800) > 0;
-            *((char*)p2 + 0x158) = 0;
-            *((char*)p2 + 0x159) = 0;
-            *((char*)p2 + 0x15a) = 0;
-            *(double*)((char*)p1 + 0xf8) = *(double*)((char*)p1 + 0x178) / 100.0;
-            *(double*)((char*)p1 + 0x178) = b1d0.unka4 / 1e+03f * *(double*)((char*)p1 + 0x178);
-            if (*(double*)((char*)p1 + 0x178) > 10000.0) {
-                *(double*)((char*)p1 + 0x178) = b1d0.unka4 / 1e+03f * *(double*)((char*)p1 + 0x178);
+            p1->unk144 = (b1d0.flagsAA & 0x2000) > 0 && (v108.flagsB0 & 0x2000) > 0;
+            p2->unk108 -= (int)((double)b1d0.unka0 * p1->Unk410480() * p2->Unk410530() * p1->Unk410560());
+            p2->unk124 = (int)(b1d0.unkb2 * (p1->unk178 / 10000.0 * 0.8));
+            p2->unk128 = (b1d0.flagsAA & 0x400) > 0;
+            p2->unk12c = (b1d0.flagsAA & 0x800) > 0;
+            p2->unk158 = 0;
+            p2->unk159 = 0;
+            p2->unk15a = 0;
+            p1->unkf8 = p1->unk178 / 100.0;
+            p1->unk178 = b1d0.unka4 / 1e+03f * p1->unk178;
+            if (p1->unk178 > 10000.0) {
+                p1->unk178 = b1d0.unka4 / 1e+03f * p1->unk178;
             }
-            (*(short*)((char*)p1 + 0x174))++;
-            *(short*)((char*)p1 + 0xf4) = *(short*)((char*)p1 + 0x174);
-            *(short*)((char*)p1 + 0x104) = 0xb4;
-            *(int*)((char*)p1 + 0x100) = *(int*)((char*)p2 + 0x10c) - *(int*)((char*)p2 + 0x108);
-            *(short*)((char*)p1 + 0x148) += b1d0.unkb4;
-            *(short*)((char*)p1 + 0x14a) = b1d0.unkc2;
-            *(short*)((char*)p2 + 0x14a) = b1d0.unkc4;
-            (*(short*)((char*)p1 + 0x16c))--;
+            p1->unk174++;
+            p1->unkf4 = p1->unk174;
+            p1->unk104 = 0xb4;
+            p1->unk100 = p2->unk10c - p2->unk108;
+            p1->unk148 += b1d0.unkb4;
+            p1->unk14a = b1d0.unkc2;
+            p2->unk14a = b1d0.unkc4;
+            p1->unk16c--;
             k2c0.unk0 = 0;
             k2c0.type = b1d0.unkc0;
             k2c0.x = (double)((v2d0.right + v2d0.left) / 2);
             k2c0.y = (double)((v2d0.bottom + v2d0.top) / 2);
-            k2c0.side = *((char*)p1 + 0x50) < 0;
+            k2c0.side = p1->facing < 0;
             k2c0.unk20 = 2;
             k2c0.unk21 = 1;
             k2c0.unk24 = 0;
             k2c0.unk2c = b1d0.unkc1;
             m_game->CreateEffect((EffectDesc*)&k2c0);
-            if (*(int*)((char*)p2 + 0x108) <= 0 && *(short*)((char*)p2 + 0x140) == 0) {
-                *(short*)((char*)p2 + 8) = b1d0.unkac;
-                ((CPlayer*)p2)->Vf0();
-                ((CPlayer*)p2)->Unk40e630();
+            if (p2->unk108 <= 0 && p2->unk140 == 0) {
+                p2->pattern = b1d0.unkac;
+                p2->Vf0();
+                p2->Unk40e630();
             }
-            ((CPlayer*)p1)->Unk410790((int)&b1d0);
+            p1->Unk410790((int)&b1d0);
         }
     }
 }
 
-void CScene3::Unk7697d0(int p1, int p2, int p3, CollisionInfo* p4)
+void CScene3::Unk7697d0(CPlayer* p1, CPlayer* p2, int p3, CollisionInfo* p4)
 {
     RECT v11c;
     RECT l10c;
@@ -1394,10 +1394,10 @@ void CScene3::Unk7697d0(int p1, int p2, int p3, CollisionInfo* p4)
     char* x8;
     char* l4;
 
-    k14 = (char*)(p1 + p3 * 0x98 + 0x4d0);
-    x8 = (char*)(*(int*)(*(char**)((char*)p1 + 0x164) + *(WORD*)k14 * 8 + 4) + *(WORD*)(k14 + 2) * 0xc8);
+    k14 = ((char*)&p1->m_objects[p3].pattern);
+    x8 = (char*)&p1->m_patterns[*(WORD*)k14].frames[*(WORD*)(k14 + 2)].boxes[0].left;
     l4 = (char*)p4;
-    if (*(int*)(k14 + 0x80) == 0 && (*(WORD*)(l4 + 0xb0) & 0x20) == 0 && *(short*)(k14 + 0x84) > 0 && (*((char*)p2 + 0x130) <= 0 || (*(WORD*)(x8 + 0xaa) & 0x40) <= 0) && ((CPlayer*)p2)->Unk4102e0() == 0 && *(short*)((char*)p2 + 0x13c) == 0) {
+    if (*(int*)(k14 + 0x80) == 0 && (*(WORD*)(l4 + 0xb0) & 0x20) == 0 && *(short*)(k14 + 0x84) > 0 && (p2->unk130 <= 0 || (*(WORD*)(x8 + 0xaa) & 0x40) <= 0) && p2->Unk4102e0() == 0 && p2->unk13c == 0) {
         mfc = 0;
         v10 = 0;
         for (; v10 < 4; v10++) {
@@ -1462,85 +1462,85 @@ void CScene3::Unk7697d0(int p1, int p2, int p3, CollisionInfo* p4)
             if ((*(WORD*)(l4 + 0xb0) & 0x400) > 0 && (*(WORD*)(x8 + 0xaa) & 0x100) == 0) {
                 (*(short*)(k14 + 0x84))--;
                 *(int*)(k14 + 0x80) = 2;
-                *(int*)((char*)p1 + 0x168) = 6;
-                *(int*)((char*)p2 + 0x168) = 6;
+                p1->unk168 = 6;
+                p2->unk168 = 6;
                 return;
             }
-            if (*(int*)((char*)p2 + 0x170) != 0 && *(short*)((char*)p2 + 0x14e) >= 0x1e && *(short*)((char*)p2 + 0x13a) == 0 && ((CPlayer*)p2)->Unk4100f0((int)x8) != 0 && (*(WORD*)(x8 + 0xaa) & 0x80) == 0) {
+            if (p2->unk170 != 0 && p2->unk14e >= 0x1e && p2->unk13a == 0 && p2->Unk4100f0((int)x8) != 0 && (*(WORD*)(x8 + 0xaa) & 0x80) == 0) {
                 *(int*)(k14 + 0x80) = 2;
-                *(short*)((char*)p1 + 0x148) += *(short*)(x8 + 0xb6);
+                p1->unk148 += *(short*)(x8 + 0xb6);
                 (*(short*)(k14 + 0x84))--;
-                *(int*)((char*)p2 + 0xd0) = 1;
+                p2->unkd0 = 1;
                 k168.unk0 = 0;
                 k168.x = (double)((l10c.right + l10c.left) / 2);
                 k168.y = (double)((l10c.bottom + l10c.top) / 2);
-                k168.side = *((char*)p2 + 0x50) == -1;
+                k168.side = p2->facing == -1;
                 k168.unk20 = 2;
                 k168.unk21 = 1;
                 k168.unk24 = 0;
                 k168.type = 0x11;
                 k168.unk2c = 0xa;
                 m_game->CreateEffect((EffectDesc*)&k168);
-                ((CPlayer*)p2)->Vf0();
-                *((char*)p2 + 0x50) = -*(k14 + 0x48);
-                if (*(double*)((char*)p2 + 0x28) == 0.0) {
-                    *(short*)((char*)p2 + 8) = (*((char*)p2 + 0x189) == 1) + 0xa8;
+                p2->Vf0();
+                p2->facing = -*(k14 + 0x48);
+                if (p2->y == 0.0) {
+                    p2->pattern = (p2->m_inputY == 1) + 0xa8;
                 } else {
-                    *(short*)((char*)p2 + 8) = 0xaa;
+                    p2->pattern = 0xaa;
                 }
-                ((CPlayer*)p1)->Unk40f190();
-                ((CPlayer*)p2)->Unk40f190();
-                *(short*)((char*)p2 + 0x14c) = 0x3c;
-                *(int*)((char*)p2 + 0x170) = 0;
-                *(int*)((char*)p1 + 0x170) = 1;
+                p1->Unk40f190();
+                p2->Unk40f190();
+                p2->unk14c = 0x3c;
+                p2->unk170 = 0;
+                p1->unk170 = 1;
                 return;
             }
-            if (*(short*)((char*)p2 + 0x14e) >= 0x1e && *(double*)((char*)p2 + 0x28) < 0.0 && ((CPlayer*)p2)->Unk410050((int)x8, (int)l4) != 0) {
+            if (p2->unk14e >= 0x1e && p2->y < 0.0 && p2->Unk410050((int)x8, (int)l4) != 0) {
                 *(int*)(k14 + 0x80) = 2;
-                *(short*)((char*)p1 + 0x148) += *(short*)(x8 + 0xb6);
+                p1->unk148 += *(short*)(x8 + 0xb6);
                 (*(short*)(k14 + 0x84))--;
-                *(int*)((char*)p2 + 0xd0) = 1;
+                p2->unkd0 = 1;
                 k168.unk0 = 0;
                 k168.x = (double)((l10c.right + l10c.left) / 2);
                 k168.y = (double)((l10c.bottom + l10c.top) / 2);
-                k168.side = *((char*)p2 + 0x50) == -1;
+                k168.side = p2->facing == -1;
                 k168.unk20 = 2;
                 k168.unk21 = 1;
                 k168.unk24 = 0;
                 k168.type = 0x11;
                 k168.unk2c = 0xa;
                 m_game->CreateEffect((EffectDesc*)&k168);
-                ((CPlayer*)p2)->Vf0();
-                *((char*)p2 + 0x50) = -*(k14 + 0x48);
-                *(short*)((char*)p2 + 8) = 0xaa;
-                ((CPlayer*)p1)->Unk40f190();
-                ((CPlayer*)p2)->Unk40f190();
-                *(short*)((char*)p2 + 0x14c) = 0x3c;
-                *(int*)((char*)p1 + 0x170) = 1;
+                p2->Vf0();
+                p2->facing = -*(k14 + 0x48);
+                p2->pattern = 0xaa;
+                p1->Unk40f190();
+                p2->Unk40f190();
+                p2->unk14c = 0x3c;
+                p1->unk170 = 1;
                 return;
             }
-            if (((CPlayer*)p2)->Unk410050((int)x8, (int)l4) != 0 && *(short*)((char*)p2 + 0x14e) >= 0x1e && *(double*)((char*)p2 + 0x28) == 0.0 && *(WORD*)((char*)p2 + 8) != 0xa8 && *(WORD*)((char*)p2 + 8) != 0xa9) {
+            if (p2->Unk410050((int)x8, (int)l4) != 0 && p2->unk14e >= 0x1e && p2->y == 0.0 && p2->pattern != 0xa8 && p2->pattern != 0xa9) {
                 *(int*)(k14 + 0x80) = 2;
-                *(short*)((char*)p1 + 0x148) += *(short*)(x8 + 0xb6);
+                p1->unk148 += *(short*)(x8 + 0xb6);
                 (*(short*)(k14 + 0x84))--;
-                *(int*)((char*)p2 + 0xd0) = 1;
+                p2->unkd0 = 1;
                 k168.unk0 = 0;
                 k168.x = (double)((l10c.right + l10c.left) / 2);
                 k168.y = (double)((l10c.bottom + l10c.top) / 2);
-                k168.side = *((char*)p2 + 0x50) == -1;
+                k168.side = p2->facing == -1;
                 k168.unk20 = 2;
                 k168.unk21 = 1;
                 k168.unk24 = 0;
                 k168.type = 0x11;
                 k168.unk2c = 0xa;
                 m_game->CreateEffect((EffectDesc*)&k168);
-                ((CPlayer*)p2)->Vf0();
-                *((char*)p2 + 0x50) = -*(k14 + 0x48);
-                *(short*)((char*)p2 + 8) = (*((char*)p2 + 0x189) == 1) + 0xa8;
-                ((CPlayer*)p1)->Unk40f190();
-                ((CPlayer*)p2)->Unk40f190();
-                *(short*)((char*)p2 + 0x14c) = 0x3c;
-                *(int*)((char*)p1 + 0x170) = 1;
+                p2->Vf0();
+                p2->facing = -*(k14 + 0x48);
+                p2->pattern = (p2->m_inputY == 1) + 0xa8;
+                p1->Unk40f190();
+                p2->Unk40f190();
+                p2->unk14c = 0x3c;
+                p1->unk170 = 1;
                 return;
             }
             if ((*(WORD*)(l4 + 0xb0) & 0x200) > 0 && (*(WORD*)(l4 + 0xaa) & 1) > 0 && (*(WORD*)(x8 + 0xaa) & 1) > 0) {
@@ -1548,23 +1548,23 @@ void CScene3::Unk7697d0(int p1, int p2, int p3, CollisionInfo* p4)
                 k168.unk0 = 0;
                 k168.x = (double)((l10c.right + l10c.left) / 2);
                 k168.y = (double)((l10c.bottom + l10c.top) / 2);
-                k168.side = *((char*)p2 + 0x50) == -1;
+                k168.side = p2->facing == -1;
                 k168.unk20 = 2;
                 k168.unk21 = 1;
                 k168.unk24 = 0;
                 k168.type = 2;
                 k168.unk2c = 3;
                 m_game->CreateEffect((EffectDesc*)&k168);
-                *(int*)((char*)p1 + 0x168) = 2;
-                *(short*)((char*)p1 + 0x14a) = *(short*)(x8 + 0xc2);
-                *(short*)((char*)p2 + 0x14a) = *(short*)(x8 + 0xc4);
-                *(int*)((char*)p2 + 0x108) -= *(short*)(x8 + 0xa8);
-                if (*(int*)((char*)p2 + 0x108) <= 0) {
-                    *(int*)((char*)p2 + 0x108) = 1;
+                p1->unk168 = 2;
+                p1->unk14a = *(short*)(x8 + 0xc2);
+                p2->unk14a = *(short*)(x8 + 0xc4);
+                p2->unk108 -= *(short*)(x8 + 0xa8);
+                if (p2->unk108 <= 0) {
+                    p2->unk108 = 1;
                 }
-                *(float*)((char*)p2 + 0x134) = *(short*)(x8 + 0xa0) / 0x1e + *(float*)((char*)p2 + 0x134);
-                if (*(float*)((char*)p2 + 0x134) > 3.6e+02f) {
-                    *(int*)((char*)p2 + 0x134) = 0x43b40000;
+                p2->unk134 = *(short*)(x8 + 0xa0) / 0x1e + p2->unk134;
+                if (p2->unk134 > 3.6e+02f) {
+                    *(int*)&p2->unk134 = 0x43b40000;
                 }
                 return;
             }
@@ -1573,85 +1573,85 @@ void CScene3::Unk7697d0(int p1, int p2, int p3, CollisionInfo* p4)
                 k168.unk0 = 0;
                 k168.x = (double)((l10c.right + l10c.left) / 2);
                 k168.y = (double)((l10c.bottom + l10c.top) / 2);
-                k168.side = *((char*)p2 + 0x50) == -1;
+                k168.side = p2->facing == -1;
                 k168.unk20 = 2;
                 k168.unk21 = 1;
                 k168.unk24 = 0;
                 k168.type = 2;
                 k168.unk2c = 3;
                 m_game->CreateEffect((EffectDesc*)&k168);
-                *(int*)((char*)p1 + 0x168) = 2;
-                *(short*)((char*)p1 + 0x14a) = *(short*)(x8 + 0xc2);
-                *(short*)((char*)p2 + 0x14a) = *(short*)(x8 + 0xc4);
-                *(int*)((char*)p2 + 0x108) -= *(short*)(x8 + 0xa8);
-                if (*(int*)((char*)p2 + 0x108) <= 0) {
-                    *(int*)((char*)p2 + 0x108) = 1;
+                p1->unk168 = 2;
+                p1->unk14a = *(short*)(x8 + 0xc2);
+                p2->unk14a = *(short*)(x8 + 0xc4);
+                p2->unk108 -= *(short*)(x8 + 0xa8);
+                if (p2->unk108 <= 0) {
+                    p2->unk108 = 1;
                 }
-                *(float*)((char*)p2 + 0x134) = *(short*)(x8 + 0xa0) / 0x1e + *(float*)((char*)p2 + 0x134);
-                if (*(float*)((char*)p2 + 0x134) > 3.6e+02f) {
-                    *(int*)((char*)p2 + 0x134) = 0x43b40000;
+                p2->unk134 = *(short*)(x8 + 0xa0) / 0x1e + p2->unk134;
+                if (p2->unk134 > 3.6e+02f) {
+                    *(int*)&p2->unk134 = 0x43b40000;
                 }
                 return;
             }
-            if ((*(WORD*)(l4 + 0xb0) & 0x200) > 0 && (*(WORD*)(l4 + 0xaa) & 4) > 0 && (*(WORD*)(x8 + 0xaa) & 4) > 0 && *(double*)((char*)p2 + 0x28) < 0.0) {
+            if ((*(WORD*)(l4 + 0xb0) & 0x200) > 0 && (*(WORD*)(l4 + 0xaa) & 4) > 0 && (*(WORD*)(x8 + 0xaa) & 4) > 0 && p2->y < 0.0) {
                 (*(short*)(k14 + 0x84))--;
                 k168.unk0 = 0;
                 k168.x = (double)((l10c.right + l10c.left) / 2);
                 k168.y = (double)((l10c.bottom + l10c.top) / 2);
-                k168.side = *((char*)p2 + 0x50) == -1;
+                k168.side = p2->facing == -1;
                 k168.unk20 = 2;
                 k168.unk21 = 1;
                 k168.unk24 = 0;
                 k168.type = 2;
                 k168.unk2c = 3;
                 m_game->CreateEffect((EffectDesc*)&k168);
-                *(int*)((char*)p1 + 0x168) = 2;
-                *(short*)((char*)p1 + 0x14a) = *(short*)(x8 + 0xc2);
-                *(short*)((char*)p2 + 0x14a) = *(short*)(x8 + 0xc4);
-                *(int*)((char*)p2 + 0x108) -= *(short*)(x8 + 0xa8);
-                if (*(int*)((char*)p2 + 0x108) <= 0) {
-                    *(int*)((char*)p2 + 0x108) = 1;
+                p1->unk168 = 2;
+                p1->unk14a = *(short*)(x8 + 0xc2);
+                p2->unk14a = *(short*)(x8 + 0xc4);
+                p2->unk108 -= *(short*)(x8 + 0xa8);
+                if (p2->unk108 <= 0) {
+                    p2->unk108 = 1;
                 }
-                *(float*)((char*)p2 + 0x134) = *(short*)(x8 + 0xa0) / 0x1e + *(float*)((char*)p2 + 0x134);
-                if (*(float*)((char*)p2 + 0x134) > 3.6e+02f) {
-                    *(int*)((char*)p2 + 0x134) = 0x43b40000;
+                p2->unk134 = *(short*)(x8 + 0xa0) / 0x1e + p2->unk134;
+                if (p2->unk134 > 3.6e+02f) {
+                    *(int*)&p2->unk134 = 0x43b40000;
                 }
                 return;
             }
-            if (((CPlayer*)p2)->Unk410050((int)x8, (int)l4) != 0) {
-                *(short*)((char*)p2 + 8) = (*(WORD*)(x8 + 0xaa) & 0x10) / 0x10 + 0x96 + (*(WORD*)(x8 + 0xaa) & 0x20) / 0x20 * 2 + (*((char*)p2 + 0x189) == 1 || (*(WORD*)(x8 + 0xaa) & *(WORD*)(l4 + 0xb0) & 5) == 0 && *(int*)((char*)p2 + 0xa4) != 0) * 3;
-                if (*(double*)((char*)p2 + 0x28) < 0.0) {
-                    *(short*)((char*)p2 + 8) = 0x9c;
+            if (p2->Unk410050((int)x8, (int)l4) != 0) {
+                p2->pattern = (*(WORD*)(x8 + 0xaa) & 0x10) / 0x10 + 0x96 + (*(WORD*)(x8 + 0xaa) & 0x20) / 0x20 * 2 + (p2->m_inputY == 1 || (*(WORD*)(x8 + 0xaa) & *(WORD*)(l4 + 0xb0) & 5) == 0 && p2->unka4 != 0) * 3;
+                if (p2->y < 0.0) {
+                    p2->pattern = 0x9c;
                 }
-                ((CPlayer*)p2)->Vf0();
-                *((char*)p2 + 0x50) = -*(k14 + 0x48);
+                p2->Vf0();
+                p2->facing = -*(k14 + 0x48);
                 *(int*)(k14 + 0x80) = 2;
                 *(short*)(k14 + 0x86) = *(short*)(x8 + 0xc2);
-                *(short*)((char*)p2 + 0x14a) = *(short*)(x8 + 0xc4);
-                *(short*)((char*)p1 + 0x148) += *(short*)(x8 + 0xb6);
+                p2->unk14a = *(short*)(x8 + 0xc4);
+                p1->unk148 += *(short*)(x8 + 0xb6);
                 (*(short*)(k14 + 0x84))--;
-                *(int*)((char*)p2 + 0xd0) = 0;
+                p2->unkd0 = 0;
                 k168.unk0 = 0;
                 k168.x = (double)((l10c.right + l10c.left) / 2);
                 k168.y = (double)((l10c.bottom + l10c.top) / 2);
-                k168.side = *((char*)p1 + 0x50) < 0;
+                k168.side = p1->facing < 0;
                 k168.unk20 = 2;
                 k168.unk21 = 1;
                 k168.unk24 = 0;
-                *(int*)((char*)p2 + 0x108) -= *(short*)(x8 + 0xa8);
-                if (*(int*)((char*)p2 + 0x108) <= 0) {
-                    *(int*)((char*)p2 + 0x108) = 1;
+                p2->unk108 -= *(short*)(x8 + 0xa8);
+                if (p2->unk108 <= 0) {
+                    p2->unk108 = 1;
                 }
-                if (*(float*)((char*)p1 + 0x134) > 0.0f) {
-                    *(float*)((char*)p1 + 0x134) = *(float*)((char*)p1 + 0x134) - *(short*)(x8 + 0xa0) / 0x1e;
-                    if (*(float*)((char*)p1 + 0x134) < 0.0f) {
-                        *(float*)((char*)p2 + 0x134) = *(float*)((char*)p2 + 0x134) - *(float*)((char*)p1 + 0x134);
-                        *(int*)((char*)p1 + 0x134) = 0;
+                if (p1->unk134 > 0.0f) {
+                    p1->unk134 = p1->unk134 - *(short*)(x8 + 0xa0) / 0x1e;
+                    if (p1->unk134 < 0.0f) {
+                        p2->unk134 = p2->unk134 - p1->unk134;
+                        *(int*)&p1->unk134 = 0;
                     }
                 } else {
-                    *(float*)((char*)p2 + 0x134) = *(short*)(x8 + 0xa0) / 0x1e + *(float*)((char*)p2 + 0x134);
-                    if (*(float*)((char*)p2 + 0x134) > 3.6e+02f) {
-                        *(int*)((char*)p2 + 0x134) = 0x43b40000;
+                    p2->unk134 = *(short*)(x8 + 0xa0) / 0x1e + p2->unk134;
+                    if (p2->unk134 > 3.6e+02f) {
+                        *(int*)&p2->unk134 = 0x43b40000;
                     }
                 }
                 *(int*)((char*)p2 + 0x154) = 1;
@@ -1660,85 +1660,85 @@ void CScene3::Unk7697d0(int p1, int p2, int p3, CollisionInfo* p4)
                 m_game->CreateEffect((EffectDesc*)&k168);
                 return;
             }
-            if ((*(WORD*)(l4 + 0xb0) & 4) == 0 && *(short*)((char*)p2 + 0x138) == 0 || ((*(WORD*)(l4 + 0xb0) & 4) > 0 || *(short*)((char*)p2 + 0x138) > 0) && (*(WORD*)(x8 + 0xaa) & 0x100) > 0 || (*(WORD*)(x8 + 0xaa) & 0x40) > 0) {
-                if (*(double*)((char*)p2 + 0x28) >= 0.0) {
+            if ((*(WORD*)(l4 + 0xb0) & 4) == 0 && p2->unk138 == 0 || ((*(WORD*)(l4 + 0xb0) & 4) > 0 || p2->unk138 > 0) && (*(WORD*)(x8 + 0xaa) & 0x100) > 0 || (*(WORD*)(x8 + 0xaa) & 0x40) > 0) {
+                if (p2->y >= 0.0) {
                     if (*(short*)(x8 + 0xae) > 0) {
-                        *(short*)((char*)p2 + 8) = *(short*)(x8 + 0xae);
+                        p2->pattern = *(short*)(x8 + 0xae);
                     } else if ((*(WORD*)(l4 + 0xb0) & 3) == 3) {
-                        *(short*)((char*)p2 + 8) = 0x3b;
+                        p2->pattern = 0x3b;
                     } else if ((*(WORD*)(l4 + 0xb0) & 1) != 0) {
-                        *(short*)((char*)p2 + 8) = ((*(WORD*)(x8 + 0xaa) & 8) > 0) * 3 + 0x32 + ((*(WORD*)(x8 + 0xaa) & 0x10) > 0) + ((*(WORD*)(x8 + 0xaa) & 0x20) > 0) * 2;
+                        p2->pattern = ((*(WORD*)(x8 + 0xaa) & 8) > 0) * 3 + 0x32 + ((*(WORD*)(x8 + 0xaa) & 0x10) > 0) + ((*(WORD*)(x8 + 0xaa) & 0x20) > 0) * 2;
                     } else if ((*(WORD*)(l4 + 0xb0) & 2) != 0) {
-                        *(short*)((char*)p2 + 8) = ((*(WORD*)(x8 + 0xaa) & 0x10) > 0) + 0x38 + ((*(WORD*)(x8 + 0xaa) & 0x20) > 0) * 2;
+                        p2->pattern = ((*(WORD*)(x8 + 0xaa) & 0x10) > 0) + 0x38 + ((*(WORD*)(x8 + 0xaa) & 0x20) > 0) * 2;
                     }
                 } else if (*(short*)(x8 + 0xac) > 0) {
-                    *(short*)((char*)p2 + 8) = *(short*)(x8 + 0xac);
+                    p2->pattern = *(short*)(x8 + 0xac);
                 } else {
-                    *(short*)((char*)p2 + 8) = 0x3b;
+                    p2->pattern = 0x3b;
                 }
                 *(int*)(k14 + 0x80) = 3;
-                ((CPlayer*)p2)->Vf0();
-                *((char*)p2 + 0x50) = -*(k14 + 0x48);
+                p2->Vf0();
+                p2->facing = -*(k14 + 0x48);
             } else {
-                *(short*)((char*)p1 + 0x174) = 0;
-                ((CPlayer*)p2)->Unk410ac0(0xe9, 3);
+                p1->unk174 = 0;
+                p2->Unk410ac0(0xe9, 3);
                 *(int*)(k14 + 0x80) = 7;
             }
             if ((*(WORD*)(l4 + 0xb0) & 0x10) > 0) {
-                *(short*)((char*)p1 + 0x174) = 0;
-                if (*(double*)((char*)p1 + 0x178) > 10000.0) {
-                    *(double*)((char*)p1 + 0x178) -= 20.0;
+                p1->unk174 = 0;
+                if (p1->unk178 > 10000.0) {
+                    p1->unk178 -= 20.0;
                 } else {
-                    *(double*)((char*)p1 + 0x178) = 10000.0;
+                    p1->unk178 = 10000.0;
                 }
             }
-            *(double*)((char*)p2 + 0xc0) = *(float*)(x8 + 0xb8);
-            *(double*)((char*)p2 + 0xc8) = *(float*)(x8 + 0xbc);
-            *(int*)((char*)p2 + 0xd0) = 0;
-            if (*(short*)((char*)p1 + 0x174) == 0) {
-                *(int*)((char*)p2 + 0x10c) = *(int*)((char*)p2 + 0x108);
+            p2->unkc0 = *(float*)(x8 + 0xb8);
+            p2->unkc8 = *(float*)(x8 + 0xbc);
+            p2->unkd0 = 0;
+            if (p1->unk174 == 0) {
+                p2->unk10c = p2->unk108;
             }
-            *(int*)((char*)p2 + 0x108) -= (int)((double)*(short*)(x8 + 0xa0) * ((CPlayer*)p1)->Unk410480() * ((CPlayer*)p2)->Unk410530() * ((CPlayer*)p1)->Unk410560());
-            *(short*)((char*)p2 + 0x124) = (int)(*(short*)(x8 + 0xb2) * (*(double*)((char*)p1 + 0x178) / 10000.0) * (((*(WORD*)(x8 + 0xaa) & 0x2000) > 0 && (*(WORD*)(l4 + 0xb0) & 0x2000) > 0) + 1));
-            *(int*)((char*)p2 + 0x128) = (*(WORD*)(x8 + 0xaa) & 0x400) > 0;
-            *(int*)((char*)p2 + 0x12c) = (*(WORD*)(x8 + 0xaa) & 0x800) > 0;
-            *((char*)p2 + 0x158) = 0;
-            *((char*)p2 + 0x159) = 0;
-            *((char*)p2 + 0x15a) = 0;
-            *(double*)((char*)p1 + 0xf8) = *(double*)((char*)p1 + 0x178) / 100.0;
-            *(double*)((char*)p1 + 0x178) = *(float*)(x8 + 0xa4) / 1e+03f * *(double*)((char*)p1 + 0x178);
-            if (*(double*)((char*)p1 + 0x178) > 10000.0) {
-                *(double*)((char*)p1 + 0x178) = *(float*)(x8 + 0xa4) / 1e+03f * *(double*)((char*)p1 + 0x178);
+            p2->unk108 -= (int)((double)*(short*)(x8 + 0xa0) * p1->Unk410480() * p2->Unk410530() * p1->Unk410560());
+            p2->unk124 = (int)(*(short*)(x8 + 0xb2) * (p1->unk178 / 10000.0) * (((*(WORD*)(x8 + 0xaa) & 0x2000) > 0 && (*(WORD*)(l4 + 0xb0) & 0x2000) > 0) + 1));
+            p2->unk128 = (*(WORD*)(x8 + 0xaa) & 0x400) > 0;
+            p2->unk12c = (*(WORD*)(x8 + 0xaa) & 0x800) > 0;
+            p2->unk158 = 0;
+            p2->unk159 = 0;
+            p2->unk15a = 0;
+            p1->unkf8 = p1->unk178 / 100.0;
+            p1->unk178 = *(float*)(x8 + 0xa4) / 1e+03f * p1->unk178;
+            if (p1->unk178 > 10000.0) {
+                p1->unk178 = *(float*)(x8 + 0xa4) / 1e+03f * p1->unk178;
             }
-            (*(short*)((char*)p1 + 0x174))++;
-            *(short*)((char*)p1 + 0xf4) = *(short*)((char*)p1 + 0x174);
-            *(short*)((char*)p1 + 0x104) = 0xb4;
-            *(int*)((char*)p1 + 0x100) = *(int*)((char*)p2 + 0x10c) - *(int*)((char*)p2 + 0x108);
-            *(short*)((char*)p1 + 0x148) += *(short*)(x8 + 0xb4);
+            p1->unk174++;
+            p1->unkf4 = p1->unk174;
+            p1->unk104 = 0xb4;
+            p1->unk100 = p2->unk10c - p2->unk108;
+            p1->unk148 += *(short*)(x8 + 0xb4);
             *(short*)(k14 + 0x86) = *(short*)(x8 + 0xc2);
-            *(short*)((char*)p2 + 0x14a) = *(short*)(x8 + 0xc4);
+            p2->unk14a = *(short*)(x8 + 0xc4);
             (*(short*)(k14 + 0x84))--;
             k168.unk0 = 0;
             k168.type = *(x8 + 0xc0);
             k168.x = (double)((l10c.right + l10c.left) / 2);
             k168.y = (double)((l10c.bottom + l10c.top) / 2);
-            k168.side = *((char*)p1 + 0x50) < 0;
+            k168.side = p1->facing < 0;
             k168.unk20 = 2;
             k168.unk21 = 1;
             k168.unk24 = 0;
             k168.unk2c = *(x8 + 0xc1);
             m_game->CreateEffect((EffectDesc*)&k168);
-            if (*(int*)((char*)p2 + 0x108) <= 0 && *(short*)((char*)p2 + 0x140) == 0) {
-                *(short*)((char*)p2 + 8) = *(short*)(x8 + 0xac);
-                ((CPlayer*)p2)->Vf0();
-                ((CPlayer*)p2)->Unk40e630();
+            if (p2->unk108 <= 0 && p2->unk140 == 0) {
+                p2->pattern = *(short*)(x8 + 0xac);
+                p2->Vf0();
+                p2->Unk40e630();
             }
-            ((CPlayer*)p1)->Unk410790((int)x8);
+            p1->Unk410790((int)x8);
         }
     }
 }
 
-void CScene3::Unk76b090(int p1, int p2, int p3, int p4)
+void CScene3::Unk76b090(CPlayer* p1, CPlayer* p2, int p3, int p4)
 {
     RECT x10c;
     int xfc;
@@ -1752,10 +1752,10 @@ void CScene3::Unk76b090(int p1, int p2, int p3, int p4)
     char* x8;
     char* l4;
 
-    n10 = (char*)(p1 + p3 * 0x98 + 0x4d0);
-    l18 = (char*)(p2 + p4 * 0x98 + 0x4d0);
-    x8 = (char*)(*(int*)(*(char**)((char*)p1 + 0x164) + *(WORD*)n10 * 8 + 4) + *(WORD*)(n10 + 2) * 0xc8);
-    l4 = (char*)(*(int*)(*(char**)((char*)p2 + 0x164) + *(WORD*)l18 * 8 + 4) + *(WORD*)(l18 + 2) * 0xc8);
+    n10 = ((char*)&p1->m_objects[p3].pattern);
+    l18 = ((char*)&p2->m_objects[p4].pattern);
+    x8 = (char*)&p1->m_patterns[*(WORD*)n10].frames[*(WORD*)(n10 + 2)].boxes[0].left;
+    l4 = (char*)&p2->m_patterns[*(WORD*)l18].frames[*(WORD*)(l18 + 2)].boxes[0].left;
     if (*(int*)(n10 + 0x80) == 0 && *(short*)(n10 + 0x84) > 0 && (*(WORD*)(x8 + 0xaa) & 0x40) == 0) {
         xfc = 0;
         v14 = 0;
@@ -1814,75 +1814,75 @@ void CScene3::Unk76b090(int p1, int p2, int p3, int p4)
             }
             *(int*)(l18 + 0x80) = 5;
             if ((*(WORD*)(l4 + 0xb0) & 0x2000) > 0) {
-                *(PatternFrame*)l4 = *(PatternFrame*)(char*)(*(int*)(*(char**)((char*)p2 + 0x164) + *(WORD*)((char*)p2 + 8) * 8 + 4) + *(WORD*)((char*)p2 + 0xa) * 0xc8);
-                if ((*(WORD*)(l4 + 0xb0) & 4) == 0 && *(short*)((char*)p2 + 0x138) == 0 || ((*(WORD*)(l4 + 0xb0) & 4) > 0 || *(short*)((char*)p2 + 0x138) > 0) && (*(WORD*)(x8 + 0xaa) & 0x100) > 0 || (*(WORD*)(x8 + 0xaa) & 0x40) > 0) {
-                    if (*(double*)((char*)p2 + 0x28) >= 0.0) {
+                *(PatternFrame*)l4 = p2->m_patterns[p2->pattern].frames[p2->frame];
+                if ((*(WORD*)(l4 + 0xb0) & 4) == 0 && p2->unk138 == 0 || ((*(WORD*)(l4 + 0xb0) & 4) > 0 || p2->unk138 > 0) && (*(WORD*)(x8 + 0xaa) & 0x100) > 0 || (*(WORD*)(x8 + 0xaa) & 0x40) > 0) {
+                    if (p2->y >= 0.0) {
                         if (*(short*)(x8 + 0xae) > 0) {
-                            *(short*)((char*)p2 + 8) = *(short*)(x8 + 0xae);
+                            p2->pattern = *(short*)(x8 + 0xae);
                         } else if ((*(WORD*)(l4 + 0xb0) & 3) == 3) {
-                            *(short*)((char*)p2 + 8) = 0x3b;
+                            p2->pattern = 0x3b;
                         } else if ((*(WORD*)(l4 + 0xb0) & 1) != 0) {
-                            *(short*)((char*)p2 + 8) = ((*(WORD*)(x8 + 0xaa) & 8) > 0) * 3 + 0x32 + ((*(WORD*)(x8 + 0xaa) & 0x10) > 0) + ((*(WORD*)(x8 + 0xaa) & 0x20) > 0) * 2;
+                            p2->pattern = ((*(WORD*)(x8 + 0xaa) & 8) > 0) * 3 + 0x32 + ((*(WORD*)(x8 + 0xaa) & 0x10) > 0) + ((*(WORD*)(x8 + 0xaa) & 0x20) > 0) * 2;
                         } else if ((*(WORD*)(l4 + 0xb0) & 2) != 0) {
-                            *(short*)((char*)p2 + 8) = ((*(WORD*)(x8 + 0xaa) & 0x10) > 0) + 0x38 + ((*(WORD*)(x8 + 0xaa) & 0x20) > 0) * 2;
+                            p2->pattern = ((*(WORD*)(x8 + 0xaa) & 0x10) > 0) + 0x38 + ((*(WORD*)(x8 + 0xaa) & 0x20) > 0) * 2;
                         }
                     } else if (*(short*)(x8 + 0xac) > 0) {
-                        *(short*)((char*)p2 + 8) = *(short*)(x8 + 0xac);
+                        p2->pattern = *(short*)(x8 + 0xac);
                     } else {
-                        *(short*)((char*)p2 + 8) = 0x3b;
+                        p2->pattern = 0x3b;
                     }
-                    ((CPlayer*)p2)->Vf0();
-                    ((CPlayer*)p2)->Unk40e630();
+                    p2->Vf0();
+                    p2->Unk40e630();
                 } else {
-                    *(short*)((char*)p1 + 0x174) = 0;
-                    ((CPlayer*)p2)->Unk410ac0(0xdf, 2);
+                    p1->unk174 = 0;
+                    p2->Unk410ac0(0xdf, 2);
                 }
                 if ((*(WORD*)(l4 + 0xb0) & 0x10) > 0) {
-                    *(short*)((char*)p1 + 0x174) = 0;
-                    if (*(double*)((char*)p1 + 0x178) > 10000.0) {
-                        *(double*)((char*)p1 + 0x178) -= 20.0;
+                    p1->unk174 = 0;
+                    if (p1->unk178 > 10000.0) {
+                        p1->unk178 -= 20.0;
                     } else {
-                        *(double*)((char*)p1 + 0x178) = 10000.0;
+                        p1->unk178 = 10000.0;
                     }
                 }
-                *(double*)((char*)p2 + 0xc0) = *(float*)(x8 + 0xb8);
-                *(double*)((char*)p2 + 0xc8) = *(float*)(x8 + 0xbc);
-                *(int*)((char*)p2 + 0xd0) = 1;
-                if (*(short*)((char*)p1 + 0x174) == 0) {
-                    *(int*)((char*)p2 + 0x10c) = *(int*)((char*)p2 + 0x108);
+                p2->unkc0 = *(float*)(x8 + 0xb8);
+                p2->unkc8 = *(float*)(x8 + 0xbc);
+                p2->unkd0 = 1;
+                if (p1->unk174 == 0) {
+                    p2->unk10c = p2->unk108;
                 }
-                *(int*)((char*)p2 + 0x108) -= (int)((double)*(short*)(x8 + 0xa0) * ((CPlayer*)p1)->Unk410480() * ((CPlayer*)p2)->Unk410530() * ((CPlayer*)p1)->Unk410560());
-                *(short*)((char*)p2 + 0x124) = (int)(*(short*)(x8 + 0xb2) * (*(double*)((char*)p1 + 0x178) / 10000.0 * 0.8));
-                *(int*)((char*)p2 + 0x128) = (*(WORD*)(x8 + 0xaa) & 0x400) > 0;
-                *(int*)((char*)p2 + 0x12c) = (*(WORD*)(x8 + 0xaa) & 0x800) > 0;
-                *((char*)p2 + 0x158) = 0;
-                *((char*)p2 + 0x159) = 0;
-                *((char*)p2 + 0x15a) = 0;
-                *(double*)((char*)p1 + 0xf8) = *(double*)((char*)p1 + 0x178) / 100.0;
-                *(double*)((char*)p1 + 0x178) = *(float*)(x8 + 0xa4) / 1e+03f * *(double*)((char*)p1 + 0x178);
-                if (*(double*)((char*)p1 + 0x178) > 10000.0) {
-                    *(double*)((char*)p1 + 0x178) = *(float*)(x8 + 0xa4) / 1e+03f * *(double*)((char*)p1 + 0x178);
+                p2->unk108 -= (int)((double)*(short*)(x8 + 0xa0) * p1->Unk410480() * p2->Unk410530() * p1->Unk410560());
+                p2->unk124 = (int)(*(short*)(x8 + 0xb2) * (p1->unk178 / 10000.0 * 0.8));
+                p2->unk128 = (*(WORD*)(x8 + 0xaa) & 0x400) > 0;
+                p2->unk12c = (*(WORD*)(x8 + 0xaa) & 0x800) > 0;
+                p2->unk158 = 0;
+                p2->unk159 = 0;
+                p2->unk15a = 0;
+                p1->unkf8 = p1->unk178 / 100.0;
+                p1->unk178 = *(float*)(x8 + 0xa4) / 1e+03f * p1->unk178;
+                if (p1->unk178 > 10000.0) {
+                    p1->unk178 = *(float*)(x8 + 0xa4) / 1e+03f * p1->unk178;
                 }
-                (*(short*)((char*)p1 + 0x174))++;
-                *(short*)((char*)p1 + 0xf4) = *(short*)((char*)p1 + 0x174);
-                *(short*)((char*)p1 + 0x104) = 0xb4;
-                *(int*)((char*)p1 + 0x100) = *(int*)((char*)p2 + 0x10c) - *(int*)((char*)p2 + 0x108);
-                *(short*)((char*)p1 + 0x148) += *(short*)(x8 + 0xb4);
-                *(short*)((char*)p1 + 0x14a) = *(short*)(x8 + 0xc2);
-                *(short*)((char*)p2 + 0x14a) = *(short*)(x8 + 0xc4);
-                if (*(int*)((char*)p2 + 0x108) <= 0 && *(short*)((char*)p2 + 0x140) == 0) {
-                    *(short*)((char*)p2 + 8) = *(short*)(x8 + 0xac);
-                    ((CPlayer*)p2)->Vf0();
-                    ((CPlayer*)p2)->Unk40e630();
+                p1->unk174++;
+                p1->unkf4 = p1->unk174;
+                p1->unk104 = 0xb4;
+                p1->unk100 = p2->unk10c - p2->unk108;
+                p1->unk148 += *(short*)(x8 + 0xb4);
+                p1->unk14a = *(short*)(x8 + 0xc2);
+                p2->unk14a = *(short*)(x8 + 0xc4);
+                if (p2->unk108 <= 0 && p2->unk140 == 0) {
+                    p2->pattern = *(short*)(x8 + 0xac);
+                    p2->Vf0();
+                    p2->Unk40e630();
                 }
-                ((CPlayer*)p1)->Unk410790((int)x8);
+                p1->Unk410790((int)x8);
             }
             EffectDesc v158;
             v158.unk0 = 0;
             v158.type = *(x8 + 0xc0);
             v158.x = (double)((x10c.right + x10c.left) / 2);
             v158.y = (double)((x10c.bottom + x10c.top) / 2);
-            v158.side = *((char*)p1 + 0x50) < 0;
+            v158.side = p1->facing < 0;
             v158.unk20 = 2;
             v158.unk21 = 1;
             v158.unk24 = 0;
@@ -1892,7 +1892,7 @@ void CScene3::Unk76b090(int p1, int p2, int p3, int p4)
     }
 }
 
-void CScene3::Unk76bab0(int p1, int p2, int p3, int p4)
+void CScene3::Unk76bab0(CPlayer* p1, CPlayer* p2, int p3, int p4)
 {
     RECT v30;
     RECT v20;
@@ -1901,33 +1901,33 @@ void CScene3::Unk76bab0(int p1, int p2, int p3, int p4)
     int x8;
     int l4;
 
-    vc = (char*)(p1 + p3 * 0x98 + 0x4d0);
-    l10 = (char*)(p2 + p4 * 0x98 + 0x4d0);
-    x8 = *(int*)(*(char**)((char*)p1 + 0x164) + *(WORD*)vc * 8 + 4) + *(WORD*)(vc + 2) * 0xc8;
-    l4 = *(int*)(*(char**)((char*)p2 + 0x164) + *(WORD*)l10 * 8 + 4) + *(WORD*)(l10 + 2) * 0xc8;
-    if (*(int*)(vc + 0x80) == 0 && *(int*)(l10 + 0x80) == 0 && *(short*)(vc + 0x84) > 0 && *(short*)(l10 + 0x84) > 0 && *(short*)(*(char**)((char*)p1 + 0x164) + *(WORD*)vc * 8) > 0 && *(short*)(*(char**)((char*)p2 + 0x164) + *(WORD*)l10 * 8) > 0) {
+    vc = ((char*)&p1->m_objects[p3].pattern);
+    l10 = ((char*)&p2->m_objects[p4].pattern);
+    x8 = (int)p1->m_patterns[*(WORD*)vc].frames + *(WORD*)(vc + 2) * 0xc8;
+    l4 = (int)p2->m_patterns[*(WORD*)l10].frames + *(WORD*)(l10 + 2) * 0xc8;
+    if (*(int*)(vc + 0x80) == 0 && *(int*)(l10 + 0x80) == 0 && *(short*)(vc + 0x84) > 0 && *(short*)(l10 + 0x84) > 0 && p1->m_patterns[*(WORD*)vc].unk0 > 0 && p2->m_patterns[*(WORD*)l10].unk0 > 0) {
         v20 = this->Unk767600((int)vc, x8 + 0x90);
         v30 = this->Unk767600((int)l10, l4 + 0x90);
         if (Unk767930((int)&v20, (int)&v30) != 0) {
-            if (*(short*)(*(char**)((char*)p2 + 0x164) + *(WORD*)l10 * 8) == *(short*)(*(char**)((char*)p1 + 0x164) + *(WORD*)vc * 8)) {
+            if (p2->m_patterns[*(WORD*)l10].unk0 == p1->m_patterns[*(WORD*)vc].unk0) {
                 *(int*)(vc + 0x80) = 4;
                 *(int*)(l10 + 0x80) = 4;
-            } else if (*(short*)(*(char**)((char*)p2 + 0x164) + *(WORD*)l10 * 8) > *(short*)(*(char**)((char*)p1 + 0x164) + *(WORD*)vc * 8)) {
+            } else if (p2->m_patterns[*(WORD*)l10].unk0 > p1->m_patterns[*(WORD*)vc].unk0) {
                 *(int*)(vc + 0x80) = 4;
-            } else if (*(short*)(*(char**)((char*)p2 + 0x164) + *(WORD*)l10 * 8) < *(short*)(*(char**)((char*)p1 + 0x164) + *(WORD*)vc * 8)) {
+            } else if (p2->m_patterns[*(WORD*)l10].unk0 < p1->m_patterns[*(WORD*)vc].unk0) {
                 *(int*)(l10 + 0x80) = 4;
             }
-            if (*(short*)(*(char**)((char*)p2 + 0x164) + *(WORD*)l10 * 8) > 1) {
+            if (p2->m_patterns[*(WORD*)l10].unk0 > 1) {
                 (*(short*)(vc + 0x84))--;
             }
-            if (*(short*)(*(char**)((char*)p1 + 0x164) + *(WORD*)vc * 8) > 1) {
+            if (p1->m_patterns[*(WORD*)vc].unk0 > 1) {
                 (*(short*)(l10 + 0x84))--;
             }
         }
     }
 }
 
-void CScene3::Unk76bd40(int p1, int p2, CollisionInfo* p3, CollisionInfo* p4, int p5)
+void CScene3::Unk76bd40(CPlayer* p1, CPlayer* p2, CollisionInfo* p3, CollisionInfo* p4, int p5)
 {
     RECT b1cc;
     int r1bc;
@@ -1940,10 +1940,10 @@ void CScene3::Unk76bd40(int p1, int p2, CollisionInfo* p3, CollisionInfo* p4, in
     int x8;
     char* l4;
 
-    l10 = (char*)(p2 + p5 * 0x98 + 0x4d0);
+    l10 = ((char*)&p2->m_objects[p5].pattern);
     l4 = (char*)p3;
-    if (*(int*)((char*)p1 + 0x168) == 0 && *(short*)((char*)p1 + 0x16c) > 0 && (*(WORD*)(l4 + 0xaa) & 0x40) == 0) {
-        n118 = *(PatternFrame*)(char*)(*(int*)(*(char**)((char*)p2 + 0x164) + *(WORD*)l10 * 8 + 4) + *(WORD*)(l10 + 2) * 0xc8);
+    if (p1->unk168 == 0 && p1->unk16c > 0 && (*(WORD*)(l4 + 0xaa) & 0x40) == 0) {
+        n118 = p2->m_patterns[*(WORD*)l10].frames[*(WORD*)(l10 + 2)];
         r1bc = 0;
         vc = 0;
         for (; vc < 4; vc++) {
@@ -1996,80 +1996,80 @@ void CScene3::Unk76bd40(int p1, int p2, CollisionInfo* p3, CollisionInfo* p4, in
                 }
             }
             if ((n118.flagsB0 & 0x10) == 0) {
-                (*(short*)((char*)p1 + 0x16c))--;
-                *(int*)((char*)p1 + 0x168) = 5;
+                p1->unk16c--;
+                p1->unk168 = 5;
             }
             *(int*)(l10 + 0x80) = 5;
             if ((n118.flagsB0 & 0x2000) > 0) {
                 n118 = p4->frame;
-                if ((n118.flagsB0 & 4) == 0 && *(short*)((char*)p2 + 0x138) == 0 || ((n118.flagsB0 & 4) > 0 || *(short*)((char*)p2 + 0x138) > 0) && (*(WORD*)(l4 + 0xaa) & 0x100) > 0 || (*(WORD*)(l4 + 0xaa) & 0x40) > 0) {
-                    if (*(double*)((char*)p2 + 0x28) >= 0.0) {
+                if ((n118.flagsB0 & 4) == 0 && p2->unk138 == 0 || ((n118.flagsB0 & 4) > 0 || p2->unk138 > 0) && (*(WORD*)(l4 + 0xaa) & 0x100) > 0 || (*(WORD*)(l4 + 0xaa) & 0x40) > 0) {
+                    if (p2->y >= 0.0) {
                         if (*(short*)(l4 + 0xae) > 0) {
-                            *(short*)((char*)p2 + 8) = *(short*)(l4 + 0xae);
+                            p2->pattern = *(short*)(l4 + 0xae);
                         } else if ((n118.flagsB0 & 3) == 3) {
-                            *(short*)((char*)p2 + 8) = 0x3b;
+                            p2->pattern = 0x3b;
                         } else if ((n118.flagsB0 & 1) != 0) {
-                            *(short*)((char*)p2 + 8) = ((*(WORD*)(l4 + 0xaa) & 8) > 0) * 3 + 0x32 + ((*(WORD*)(l4 + 0xaa) & 0x10) > 0) + ((*(WORD*)(l4 + 0xaa) & 0x20) > 0) * 2;
+                            p2->pattern = ((*(WORD*)(l4 + 0xaa) & 8) > 0) * 3 + 0x32 + ((*(WORD*)(l4 + 0xaa) & 0x10) > 0) + ((*(WORD*)(l4 + 0xaa) & 0x20) > 0) * 2;
                         } else if ((n118.flagsB0 & 2) != 0) {
-                            *(short*)((char*)p2 + 8) = ((*(WORD*)(l4 + 0xaa) & 0x10) > 0) + 0x38 + ((*(WORD*)(l4 + 0xaa) & 0x20) > 0) * 2;
+                            p2->pattern = ((*(WORD*)(l4 + 0xaa) & 0x10) > 0) + 0x38 + ((*(WORD*)(l4 + 0xaa) & 0x20) > 0) * 2;
                         }
                     } else if (*(short*)(l4 + 0xac) > 0) {
-                        *(short*)((char*)p2 + 8) = *(short*)(l4 + 0xac);
+                        p2->pattern = *(short*)(l4 + 0xac);
                     } else {
-                        *(short*)((char*)p2 + 8) = 0x3b;
+                        p2->pattern = 0x3b;
                     }
-                    ((CPlayer*)p2)->Vf0();
-                    ((CPlayer*)p2)->Unk40e630();
+                    p2->Vf0();
+                    p2->Unk40e630();
                 } else {
-                    *(short*)((char*)p1 + 0x174) = 0;
-                    ((CPlayer*)p2)->Unk410ac0(0xdf, 2);
+                    p1->unk174 = 0;
+                    p2->Unk410ac0(0xdf, 2);
                 }
                 if ((n118.flagsB0 & 0x10) > 0) {
-                    *(short*)((char*)p1 + 0x174) = 0;
-                    if (*(double*)((char*)p1 + 0x178) > 10000.0) {
-                        *(double*)((char*)p1 + 0x178) -= 20.0;
+                    p1->unk174 = 0;
+                    if (p1->unk178 > 10000.0) {
+                        p1->unk178 -= 20.0;
                     } else {
-                        *(double*)((char*)p1 + 0x178) = 10000.0;
+                        p1->unk178 = 10000.0;
                     }
                 }
-                *(double*)((char*)p2 + 0xc0) = *(float*)(l4 + 0xb8);
-                *(double*)((char*)p2 + 0xc8) = *(float*)(l4 + 0xbc);
-                *(int*)((char*)p2 + 0xd0) = 1;
-                if (*(short*)((char*)p1 + 0x174) == 0) {
-                    *(int*)((char*)p2 + 0x10c) = *(int*)((char*)p2 + 0x108);
+                p2->unkc0 = *(float*)(l4 + 0xb8);
+                p2->unkc8 = *(float*)(l4 + 0xbc);
+                p2->unkd0 = 1;
+                if (p1->unk174 == 0) {
+                    p2->unk10c = p2->unk108;
                 }
-                *(int*)((char*)p2 + 0x108) -= (int)((double)*(short*)(l4 + 0xa0) * ((CPlayer*)p1)->Unk410480() * ((CPlayer*)p2)->Unk410530() * ((CPlayer*)p1)->Unk410560());
-                *(short*)((char*)p2 + 0x124) = (int)(*(short*)(l4 + 0xb2) * (*(double*)((char*)p1 + 0x178) / 10000.0 * 0.8));
-                *(int*)((char*)p2 + 0x128) = (*(WORD*)(l4 + 0xaa) & 0x400) > 0;
-                *(int*)((char*)p2 + 0x12c) = (*(WORD*)(l4 + 0xaa) & 0x800) > 0;
-                *((char*)p2 + 0x158) = 0;
-                *((char*)p2 + 0x159) = 0;
-                *((char*)p2 + 0x15a) = 0;
-                *(double*)((char*)p1 + 0xf8) = *(double*)((char*)p1 + 0x178) / 100.0;
-                *(double*)((char*)p1 + 0x178) = *(float*)(l4 + 0xa4) / 1e+03f * *(double*)((char*)p1 + 0x178);
-                if (*(double*)((char*)p1 + 0x178) > 10000.0) {
-                    *(double*)((char*)p1 + 0x178) = *(float*)(l4 + 0xa4) / 1e+03f * *(double*)((char*)p1 + 0x178);
+                p2->unk108 -= (int)((double)*(short*)(l4 + 0xa0) * p1->Unk410480() * p2->Unk410530() * p1->Unk410560());
+                p2->unk124 = (int)(*(short*)(l4 + 0xb2) * (p1->unk178 / 10000.0 * 0.8));
+                p2->unk128 = (*(WORD*)(l4 + 0xaa) & 0x400) > 0;
+                p2->unk12c = (*(WORD*)(l4 + 0xaa) & 0x800) > 0;
+                p2->unk158 = 0;
+                p2->unk159 = 0;
+                p2->unk15a = 0;
+                p1->unkf8 = p1->unk178 / 100.0;
+                p1->unk178 = *(float*)(l4 + 0xa4) / 1e+03f * p1->unk178;
+                if (p1->unk178 > 10000.0) {
+                    p1->unk178 = *(float*)(l4 + 0xa4) / 1e+03f * p1->unk178;
                 }
-                (*(short*)((char*)p1 + 0x174))++;
-                *(short*)((char*)p1 + 0xf4) = *(short*)((char*)p1 + 0x174);
-                *(short*)((char*)p1 + 0x104) = 0xb4;
-                *(int*)((char*)p1 + 0x100) = *(int*)((char*)p2 + 0x10c) - *(int*)((char*)p2 + 0x108);
-                *(short*)((char*)p1 + 0x148) += *(short*)(l4 + 0xb4);
-                *(short*)((char*)p1 + 0x14a) = *(short*)(l4 + 0xc2);
-                *(short*)((char*)p2 + 0x14a) = *(short*)(l4 + 0xc4);
-                if (*(int*)((char*)p2 + 0x108) <= 0 && *(short*)((char*)p2 + 0x140) == 0) {
-                    *(short*)((char*)p2 + 8) = *(short*)(l4 + 0xac);
-                    ((CPlayer*)p2)->Vf0();
-                    ((CPlayer*)p2)->Unk40e630();
+                p1->unk174++;
+                p1->unkf4 = p1->unk174;
+                p1->unk104 = 0xb4;
+                p1->unk100 = p2->unk10c - p2->unk108;
+                p1->unk148 += *(short*)(l4 + 0xb4);
+                p1->unk14a = *(short*)(l4 + 0xc2);
+                p2->unk14a = *(short*)(l4 + 0xc4);
+                if (p2->unk108 <= 0 && p2->unk140 == 0) {
+                    p2->pattern = *(short*)(l4 + 0xac);
+                    p2->Vf0();
+                    p2->Unk40e630();
                 }
-                ((CPlayer*)p1)->Unk410790((int)l4);
+                p1->Unk410790((int)l4);
             }
             EffectDesc n218;
             n218.unk0 = 0;
             n218.type = *(l4 + 0xc0);
             n218.x = (double)((b1cc.right + b1cc.left) / 2);
             n218.y = (double)((b1cc.bottom + b1cc.top) / 2);
-            n218.side = *((char*)p1 + 0x50) < 0;
+            n218.side = p1->facing < 0;
             n218.unk20 = 2;
             n218.unk21 = 1;
             n218.unk24 = 0;

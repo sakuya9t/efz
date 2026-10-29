@@ -292,42 +292,42 @@ void CScene5::Draw()
     int v8;
     int v4;
 
-    m_graphics->Blit(MakeRect(0, 0, 0x140, 0xa0), m_game->unke98, MakeRect(*(short*)((char*)this + 0x444), 0x140, 0x140, 0xa0), 0, 0);
+    m_graphics->Blit(MakeRect(0, 0, 0x140, 0xa0), m_game->unke98, MakeRect(unk444, 0x140, 0x140, 0xa0), 0, 0);
     m_graphics->FillRect(MakeRect(0, 0xa0, 0x140, 0x50), 0xb0);
     if (m_game->unk134c == 1) {
         m_players[0]->Unk4121a0(-unk444, -0x50);
     } else {
         m_players[1]->Unk4121a0(-unk444, -0x50);
     }
-    m_graphics->FillRect(MakeRect(0x140 - *(short*)((char*)this + 0x450), 0, *(short*)((char*)this + 0x450), 0xf0), 0xe7);
-    m_graphics->FillRect(MakeRect(0, 0, *(short*)((char*)this + 0x450), 0xf0), 0xe7);
+    m_graphics->FillRect(MakeRect(0x140 - unk450, 0, unk450, 0xf0), 0xe7);
+    m_graphics->FillRect(MakeRect(0, 0, unk450, 0xf0), 0xe7);
     v4 = -0xf0;
     for (; v4 <= 0xf0; v4 += 0x50) {
         if (unk44c <= 0xa0) {
-            m_graphics->Blit(MakeRect(*(short*)((char*)this + 0x450) - 0xa0, *(short*)((char*)this + 0x44e) + v4, 0xa0, 0x30), (IDirectDrawSurface*)unk434, MakeRect(*(short*)((char*)this + 0x44c), 0x30, 0xa0, 0x30), (char)m_game->m_colorKey, 0);
-            m_graphics->Blit(MakeRect(0xa0 - *(short*)((char*)this + 0x450) + 0xa0, *(short*)((char*)this + 0x44e) + v4, 0xa0 - *(short*)((char*)this + 0x44c), 0x30), (IDirectDrawSurface*)unk434, MakeRect(*(short*)((char*)this + 0x44c) + 0xa0, 0x30, 0xa0 - *(short*)((char*)this + 0x44c), 0x30), (char)m_game->m_colorKey, 0);
-            m_graphics->Blit(MakeRect(0xa0 - *(short*)((char*)this + 0x450) + 0x140 - *(short*)((char*)this + 0x44c), *(short*)((char*)this + 0x44e) + v4, *(short*)((char*)this + 0x44c), 0x30), (IDirectDrawSurface*)unk434, MakeRect(0, 0x30, *(short*)((char*)this + 0x44c), 0x30), (char)m_game->m_colorKey, 0);
+            m_graphics->Blit(MakeRect(unk450 - 0xa0, unk44e + v4, 0xa0, 0x30), (IDirectDrawSurface*)unk434, MakeRect(unk44c, 0x30, 0xa0, 0x30), (char)m_game->m_colorKey, 0);
+            m_graphics->Blit(MakeRect(0xa0 - unk450 + 0xa0, unk44e + v4, 0xa0 - unk44c, 0x30), (IDirectDrawSurface*)unk434, MakeRect(unk44c + 0xa0, 0x30, 0xa0 - unk44c, 0x30), (char)m_game->m_colorKey, 0);
+            m_graphics->Blit(MakeRect(0xa0 - unk450 + 0x140 - unk44c, unk44e + v4, unk44c, 0x30), (IDirectDrawSurface*)unk434, MakeRect(0, 0x30, unk44c, 0x30), (char)m_game->m_colorKey, 0);
         } else {
-            m_graphics->Blit(MakeRect(*(short*)((char*)this + 0x450) - 0xa0, *(short*)((char*)this + 0x44e) + v4, 0x140 - *(short*)((char*)this + 0x44c), 0x30), (IDirectDrawSurface*)unk434, MakeRect(*(short*)((char*)this + 0x44c), 0x30, 0x140 - *(short*)((char*)this + 0x44c), 0x30), (char)m_game->m_colorKey, 0);
-            m_graphics->Blit(MakeRect(*(short*)((char*)this + 0x450) + 0xa0 - *(short*)((char*)this + 0x44c), *(short*)((char*)this + 0x44e) + v4, *(short*)((char*)this + 0x44c) - 0xa0, 0x30), (IDirectDrawSurface*)unk434, MakeRect(0, 0x30, *(short*)((char*)this + 0x44c) - 0xa0, 0x30), (char)m_game->m_colorKey, 0);
-            m_graphics->Blit(MakeRect(0xa0 - *(short*)((char*)this + 0x450) + 0xa0, *(short*)((char*)this + 0x44e) + v4, 0xa0, 0x30), (IDirectDrawSurface*)unk434, MakeRect(*(short*)((char*)this + 0x44c) - 0xa0, 0x30, 0xa0, 0x30), (char)m_game->m_colorKey, 0);
+            m_graphics->Blit(MakeRect(unk450 - 0xa0, unk44e + v4, 0x140 - unk44c, 0x30), (IDirectDrawSurface*)unk434, MakeRect(unk44c, 0x30, 0x140 - unk44c, 0x30), (char)m_game->m_colorKey, 0);
+            m_graphics->Blit(MakeRect(unk450 + 0xa0 - unk44c, unk44e + v4, unk44c - 0xa0, 0x30), (IDirectDrawSurface*)unk434, MakeRect(0, 0x30, unk44c - 0xa0, 0x30), (char)m_game->m_colorKey, 0);
+            m_graphics->Blit(MakeRect(0xa0 - unk450 + 0xa0, unk44e + v4, 0xa0, 0x30), (IDirectDrawSurface*)unk434, MakeRect(unk44c - 0xa0, 0x30, 0xa0, 0x30), (char)m_game->m_colorKey, 0);
         }
     }
     v4 = -0xf0;
     for (; v4 <= 0xf0; v4 += 0x50) {
         if (unk448 <= 0xa0) {
-            m_graphics->Blit(MakeRect(*(short*)((char*)this + 0x450) - 0xa0, *(short*)((char*)this + 0x44a) + v4, 0xa0, 0x30), (IDirectDrawSurface*)unk434, MakeRect(*(short*)((char*)this + 0x448), 0, 0xa0, 0x30), (char)m_game->m_colorKey, 0);
-            m_graphics->Blit(MakeRect(0xa0 - *(short*)((char*)this + 0x450) + 0xa0, *(short*)((char*)this + 0x44a) + v4, 0xa0 - *(short*)((char*)this + 0x448), 0x30), (IDirectDrawSurface*)unk434, MakeRect(*(short*)((char*)this + 0x448) + 0xa0, 0, 0xa0 - *(short*)((char*)this + 0x448), 0x30), (char)m_game->m_colorKey, 0);
-            m_graphics->Blit(MakeRect(0xa0 - *(short*)((char*)this + 0x450) + 0x140 - *(short*)((char*)this + 0x448), *(short*)((char*)this + 0x44a) + v4, *(short*)((char*)this + 0x448), 0x30), (IDirectDrawSurface*)unk434, MakeRect(0, 0, *(short*)((char*)this + 0x448), 0x30), (char)m_game->m_colorKey, 0);
+            m_graphics->Blit(MakeRect(unk450 - 0xa0, unk44a + v4, 0xa0, 0x30), (IDirectDrawSurface*)unk434, MakeRect(unk448, 0, 0xa0, 0x30), (char)m_game->m_colorKey, 0);
+            m_graphics->Blit(MakeRect(0xa0 - unk450 + 0xa0, unk44a + v4, 0xa0 - unk448, 0x30), (IDirectDrawSurface*)unk434, MakeRect(unk448 + 0xa0, 0, 0xa0 - unk448, 0x30), (char)m_game->m_colorKey, 0);
+            m_graphics->Blit(MakeRect(0xa0 - unk450 + 0x140 - unk448, unk44a + v4, unk448, 0x30), (IDirectDrawSurface*)unk434, MakeRect(0, 0, unk448, 0x30), (char)m_game->m_colorKey, 0);
         } else {
-            m_graphics->Blit(MakeRect(*(short*)((char*)this + 0x450) - 0xa0, *(short*)((char*)this + 0x44a) + v4, 0x140 - *(short*)((char*)this + 0x448), 0x30), (IDirectDrawSurface*)unk434, MakeRect(*(short*)((char*)this + 0x448), 0, 0x140 - *(short*)((char*)this + 0x448), 0x30), (char)m_game->m_colorKey, 0);
-            m_graphics->Blit(MakeRect(*(short*)((char*)this + 0x450) + 0xa0 - *(short*)((char*)this + 0x448), *(short*)((char*)this + 0x44a) + v4, *(short*)((char*)this + 0x448) - 0xa0, 0x30), (IDirectDrawSurface*)unk434, MakeRect(0, 0, *(short*)((char*)this + 0x448) - 0xa0, 0x30), (char)m_game->m_colorKey, 0);
-            m_graphics->Blit(MakeRect(0xa0 - *(short*)((char*)this + 0x450) + 0xa0, *(short*)((char*)this + 0x44a) + v4, 0xa0, 0x30), (IDirectDrawSurface*)unk434, MakeRect(*(short*)((char*)this + 0x448) - 0xa0, 0, 0xa0, 0x30), (char)m_game->m_colorKey, 0);
+            m_graphics->Blit(MakeRect(unk450 - 0xa0, unk44a + v4, 0x140 - unk448, 0x30), (IDirectDrawSurface*)unk434, MakeRect(unk448, 0, 0x140 - unk448, 0x30), (char)m_game->m_colorKey, 0);
+            m_graphics->Blit(MakeRect(unk450 + 0xa0 - unk448, unk44a + v4, unk448 - 0xa0, 0x30), (IDirectDrawSurface*)unk434, MakeRect(0, 0, unk448 - 0xa0, 0x30), (char)m_game->m_colorKey, 0);
+            m_graphics->Blit(MakeRect(0xa0 - unk450 + 0xa0, unk44a + v4, 0xa0, 0x30), (IDirectDrawSurface*)unk434, MakeRect(unk448 - 0xa0, 0, 0xa0, 0x30), (char)m_game->m_colorKey, 0);
         }
     }
-    m_graphics->Blit(MakeRect(*(short*)((char*)this + 0x454) + 0x50, 0, 0x140, 0xf0), (IDirectDrawSurface*)unk440, MakeRect(0, 0, 0x140, 0xf0), m_colorKey, 0);
+    m_graphics->Blit(MakeRect(unk454 + 0x50, 0, 0x140, 0xf0), (IDirectDrawSurface*)unk440, MakeRect(0, 0, 0x140, 0xf0), m_colorKey, 0);
     if (unk45e < 2) {
-        m_graphics->Blit(MakeRect(0, *(short*)((char*)this + 0x458), 0x140, 0xf0), (IDirectDrawSurface*)unk43c, MakeRect(0, 0, 0x140, 0xf0), (char)m_game->m_colorKey, 0);
+        m_graphics->Blit(MakeRect(0, unk458, 0x140, 0xf0), (IDirectDrawSurface*)unk43c, MakeRect(0, 0, 0x140, 0xf0), (char)m_game->m_colorKey, 0);
     } else if (unk45e == 2) {
         m_graphics->Blit(MakeRect(0x57, 0x5a, 0x99, 0x19), (IDirectDrawSurface*)unk438, MakeRect(0, 0x1da, 0x99, 0x19), (char)m_game->m_colorKey, 0);
         if (unk45f == 0) {
@@ -338,7 +338,7 @@ void CScene5::Draw()
             m_graphics->Blit(MakeRect(0xaf, 0x7c, 0x27, 0x14), (IDirectDrawSurface*)unk438, MakeRect(0x33, 0x1f4, 0x27, 0x14), (char)m_game->m_colorKey, 0);
         }
     } else if (unk45e == 3) {
-        m_graphics->Blit(MakeRect(0x49, 9, 0xd6, 0x2a), (IDirectDrawSurface*)unk438, MakeRect(0, (*(*(char**)((char*)this + 0x1c) + 0x1358) - 1) * 0x2a, 0xd6, 0x2a), (char)m_game->m_colorKey, 0);
+        m_graphics->Blit(MakeRect(0x49, 9, 0xd6, 0x2a), (IDirectDrawSurface*)unk438, MakeRect(0, (m_game->unk1358 - 1) * 0x2a, 0xd6, 0x2a), (char)m_game->m_colorKey, 0);
         m_graphics->Blit(MakeRect(9, 0x3b, 0x34, 0x12), (IDirectDrawSurface*)unk438, MakeRect(0, 0x161, 0x34, 0x12), (char)m_game->m_colorKey, 0);
         Unk774a10(0x136, 0x3a, unk464);
         m_graphics->Blit(MakeRect(9, 0x56, 0x6a, 0x1d), (IDirectDrawSurface*)unk438, MakeRect(0, 0x173, 0x6a, 0x1d), (char)m_game->m_colorKey, 0);

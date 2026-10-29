@@ -59,7 +59,7 @@ void CScene7::Draw()
     if (unk438 > 2280.0) {
         m_graphics->Blit(MakeRect(0, 0, 0x140, 0xf0), (IDirectDrawSurface*)unk434, MakeRect(0, 0x8e8, 0x140, 0xf0), 0, 0);
     } else {
-        m_graphics->Blit(MakeRect(0, 0, 0x140, 0xf0), (IDirectDrawSurface*)unk434, MakeRect(0, (int)*(double*)((char*)this + 0x438), 0x140, 0xf0), 0, 0);
+        m_graphics->Blit(MakeRect(0, 0, 0x140, 0xf0), (IDirectDrawSurface*)unk434, MakeRect(0, (int)unk438, 0x140, 0xf0), 0, 0);
     }
     m_graphics->Flip();
 }

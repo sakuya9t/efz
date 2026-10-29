@@ -2621,7 +2621,7 @@ void CMizuka::Vf7()
                 break;
             case 0x1a3:
                 if (m_objects[v4].frame >= 4 && m_objects[v4].frame < 0x25) {
-                    unk3348[v4] = (int)((ObjBase*)&pattern)->AngleTo((*m_opponent)->x - m_objects[v4].x, (*m_opponent)->y - 50.0 - m_objects[v4].y);
+                    unk3348[v4] = (int)AngleTo((*m_opponent)->x - m_objects[v4].x, (*m_opponent)->y - 50.0 - m_objects[v4].y);
                     (&m_objects[v4])->SetVelocity((double)unk3348[v4], -0.00875);
                     m_objects[v4].ax = m_objects[v4].vx;
                     m_objects[v4].ay = m_objects[v4].vy;

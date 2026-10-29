@@ -2094,7 +2094,7 @@ void CMai::Vf7()
                         m_objects[v4].unk84 = 1;
                     }
                     if (unk3258[v4] < 3 && m_objects[v4].unk84 > 0) {
-                        unk3358[v4] = (int)((ObjBase*)&pattern)->AngleTo((*m_opponent)->x - m_objects[v4].x, (*m_opponent)->y - 50.0 - m_objects[v4].y);
+                        unk3358[v4] = (int)AngleTo((*m_opponent)->x - m_objects[v4].x, (*m_opponent)->y - 50.0 - m_objects[v4].y);
                         (&m_objects[v4])->SetVelocity((double)unk3358[v4], -0.00875);
                         m_objects[v4].ax = m_objects[v4].vx;
                         m_objects[v4].ay = m_objects[v4].vy;

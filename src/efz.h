@@ -1495,17 +1495,17 @@ public:
     // FUNCTION: 0x767930
     int Unk767930(int p1, int p2);
     // FUNCTION: 0x7679b0
-    int Unk7679b0(int p1, int p2, CollisionInfo* p3, CollisionInfo* p4);
+    int Unk7679b0(CPlayer* p1, CPlayer* p2, CollisionInfo* p3, CollisionInfo* p4);
     // FUNCTION: 0x767f60
-    void Unk767f60(int p1, int p2, CollisionInfo* p3, CollisionInfo* p4);
+    void Unk767f60(CPlayer* p1, CPlayer* p2, CollisionInfo* p3, CollisionInfo* p4);
     // FUNCTION: 0x7697d0
-    void Unk7697d0(int p1, int p2, int p3, CollisionInfo* p4);
+    void Unk7697d0(CPlayer* p1, CPlayer* p2, int p3, CollisionInfo* p4);
     // FUNCTION: 0x76b090
-    void Unk76b090(int p1, int p2, int p3, int p4);
+    void Unk76b090(CPlayer* p1, CPlayer* p2, int p3, int p4);
     // FUNCTION: 0x76bab0
-    void Unk76bab0(int p1, int p2, int p3, int p4);
+    void Unk76bab0(CPlayer* p1, CPlayer* p2, int p3, int p4);
     // FUNCTION: 0x76bd40
-    void Unk76bd40(int p1, int p2, CollisionInfo* p3, CollisionInfo* p4, int p5);
+    void Unk76bd40(CPlayer* p1, CPlayer* p2, CollisionInfo* p3, CollisionInfo* p4, int p5);
 
     BYTE unk430[0x434 - 0x430];
     int unk434;

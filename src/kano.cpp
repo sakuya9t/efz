@@ -3087,30 +3087,30 @@ void CKano::Vf7()
                     if (m_objects[v4].facing == 1) {
                         l50.type = 0x1b3;
                         if (m_objects[v4].x > (*m_opponent)->x) {
-                            if (((ObjBase*)&pattern)->AngleTo(m_objects[v4].x - (*m_opponent)->x, m_objects[v4].y - (*m_opponent)->y) < 70.0) {
+                            if (AngleTo(m_objects[v4].x - (*m_opponent)->x, m_objects[v4].y - (*m_opponent)->y) < 70.0) {
                                 l50.type = 0x1b4;
                             }
-                            if (((ObjBase*)&pattern)->AngleTo(m_objects[v4].x - (*m_opponent)->x, m_objects[v4].y - (*m_opponent)->y) < 55.0) {
+                            if (AngleTo(m_objects[v4].x - (*m_opponent)->x, m_objects[v4].y - (*m_opponent)->y) < 55.0) {
                                 l50.type = 0x1b5;
                             }
-                            if (((ObjBase*)&pattern)->AngleTo(m_objects[v4].x - (*m_opponent)->x, m_objects[v4].y - (*m_opponent)->y) < 40.0) {
+                            if (AngleTo(m_objects[v4].x - (*m_opponent)->x, m_objects[v4].y - (*m_opponent)->y) < 40.0) {
                                 l50.type = 0x1b6;
                             }
-                            if (((ObjBase*)&pattern)->AngleTo(m_objects[v4].x - (*m_opponent)->x, m_objects[v4].y - (*m_opponent)->y) < 25.0) {
+                            if (AngleTo(m_objects[v4].x - (*m_opponent)->x, m_objects[v4].y - (*m_opponent)->y) < 25.0) {
                                 l50.type = 0x1b7;
                             }
                         }
                         if (m_objects[v4].x < (*m_opponent)->x) {
-                            if (((ObjBase*)&pattern)->AngleTo((*m_opponent)->x - m_objects[v4].x, (*m_opponent)->y - m_objects[v4].y) < 70.0) {
+                            if (AngleTo((*m_opponent)->x - m_objects[v4].x, (*m_opponent)->y - m_objects[v4].y) < 70.0) {
                                 l50.type = 0x1b4;
                             }
-                            if (((ObjBase*)&pattern)->AngleTo((*m_opponent)->x - m_objects[v4].x, (*m_opponent)->y - m_objects[v4].y) < 55.0) {
+                            if (AngleTo((*m_opponent)->x - m_objects[v4].x, (*m_opponent)->y - m_objects[v4].y) < 55.0) {
                                 l50.type = 0x1b5;
                             }
-                            if (((ObjBase*)&pattern)->AngleTo((*m_opponent)->x - m_objects[v4].x, (*m_opponent)->y - m_objects[v4].y) < 40.0) {
+                            if (AngleTo((*m_opponent)->x - m_objects[v4].x, (*m_opponent)->y - m_objects[v4].y) < 40.0) {
                                 l50.type = 0x1b6;
                             }
-                            if (((ObjBase*)&pattern)->AngleTo((*m_opponent)->x - m_objects[v4].x, (*m_opponent)->y - m_objects[v4].y) < 25.0) {
+                            if (AngleTo((*m_opponent)->x - m_objects[v4].x, (*m_opponent)->y - m_objects[v4].y) < 25.0) {
                                 l50.type = 0x1b7;
                             }
                         }
@@ -3118,30 +3118,30 @@ void CKano::Vf7()
                     if (m_objects[v4].facing == -1) {
                         l50.type = 0x1b3;
                         if (m_objects[v4].x > (*m_opponent)->x) {
-                            if (((ObjBase*)&pattern)->AngleTo(m_objects[v4].x - (*m_opponent)->x, m_objects[v4].y - (*m_opponent)->y) > 110.0) {
+                            if (AngleTo(m_objects[v4].x - (*m_opponent)->x, m_objects[v4].y - (*m_opponent)->y) > 110.0) {
                                 l50.type = 0x1b4;
                             }
-                            if (((ObjBase*)&pattern)->AngleTo(m_objects[v4].x - (*m_opponent)->x, m_objects[v4].y - (*m_opponent)->y) > 125.0) {
+                            if (AngleTo(m_objects[v4].x - (*m_opponent)->x, m_objects[v4].y - (*m_opponent)->y) > 125.0) {
                                 l50.type = 0x1b5;
                             }
-                            if (((ObjBase*)&pattern)->AngleTo(m_objects[v4].x - (*m_opponent)->x, m_objects[v4].y - (*m_opponent)->y) > 140.0) {
+                            if (AngleTo(m_objects[v4].x - (*m_opponent)->x, m_objects[v4].y - (*m_opponent)->y) > 140.0) {
                                 l50.type = 0x1b6;
                             }
-                            if (((ObjBase*)&pattern)->AngleTo(m_objects[v4].x - (*m_opponent)->x, m_objects[v4].y - (*m_opponent)->y) > 165.0) {
+                            if (AngleTo(m_objects[v4].x - (*m_opponent)->x, m_objects[v4].y - (*m_opponent)->y) > 165.0) {
                                 l50.type = 0x1b7;
                             }
                         }
                         if (m_objects[v4].x > (*m_opponent)->x) {
-                            if (((ObjBase*)&pattern)->AngleTo((*m_opponent)->x - m_objects[v4].x, (*m_opponent)->y - m_objects[v4].y) > 110.0) {
+                            if (AngleTo((*m_opponent)->x - m_objects[v4].x, (*m_opponent)->y - m_objects[v4].y) > 110.0) {
                                 l50.type = 0x1b4;
                             }
-                            if (((ObjBase*)&pattern)->AngleTo((*m_opponent)->x - m_objects[v4].x, (*m_opponent)->y - m_objects[v4].y) > 125.0) {
+                            if (AngleTo((*m_opponent)->x - m_objects[v4].x, (*m_opponent)->y - m_objects[v4].y) > 125.0) {
                                 l50.type = 0x1b5;
                             }
-                            if (((ObjBase*)&pattern)->AngleTo((*m_opponent)->x - m_objects[v4].x, (*m_opponent)->y - m_objects[v4].y) > 140.0) {
+                            if (AngleTo((*m_opponent)->x - m_objects[v4].x, (*m_opponent)->y - m_objects[v4].y) > 140.0) {
                                 l50.type = 0x1b6;
                             }
-                            if (((ObjBase*)&pattern)->AngleTo((*m_opponent)->x - m_objects[v4].x, (*m_opponent)->y - m_objects[v4].y) > 165.0) {
+                            if (AngleTo((*m_opponent)->x - m_objects[v4].x, (*m_opponent)->y - m_objects[v4].y) > 165.0) {
                                 l50.type = 0x1b7;
                             }
                         }
@@ -3196,30 +3196,30 @@ void CKano::Vf7()
                     if (m_objects[v4].facing == 1) {
                         l50.type = 0x1b3;
                         if (m_objects[v4].x > (*m_opponent)->x) {
-                            if (((ObjBase*)&pattern)->AngleTo(m_objects[v4].x - (*m_opponent)->x, m_objects[v4].y - (*m_opponent)->y) < 70.0) {
+                            if (AngleTo(m_objects[v4].x - (*m_opponent)->x, m_objects[v4].y - (*m_opponent)->y) < 70.0) {
                                 l50.type = 0x1b4;
                             }
-                            if (((ObjBase*)&pattern)->AngleTo(m_objects[v4].x - (*m_opponent)->x, m_objects[v4].y - (*m_opponent)->y) < 55.0) {
+                            if (AngleTo(m_objects[v4].x - (*m_opponent)->x, m_objects[v4].y - (*m_opponent)->y) < 55.0) {
                                 l50.type = 0x1b5;
                             }
-                            if (((ObjBase*)&pattern)->AngleTo(m_objects[v4].x - (*m_opponent)->x, m_objects[v4].y - (*m_opponent)->y) < 40.0) {
+                            if (AngleTo(m_objects[v4].x - (*m_opponent)->x, m_objects[v4].y - (*m_opponent)->y) < 40.0) {
                                 l50.type = 0x1b6;
                             }
-                            if (((ObjBase*)&pattern)->AngleTo(m_objects[v4].x - (*m_opponent)->x, m_objects[v4].y - (*m_opponent)->y) < 25.0) {
+                            if (AngleTo(m_objects[v4].x - (*m_opponent)->x, m_objects[v4].y - (*m_opponent)->y) < 25.0) {
                                 l50.type = 0x1b7;
                             }
                         }
                         if (m_objects[v4].x < (*m_opponent)->x) {
-                            if (((ObjBase*)&pattern)->AngleTo((*m_opponent)->x - m_objects[v4].x, (*m_opponent)->y - m_objects[v4].y) < 70.0) {
+                            if (AngleTo((*m_opponent)->x - m_objects[v4].x, (*m_opponent)->y - m_objects[v4].y) < 70.0) {
                                 l50.type = 0x1b4;
                             }
-                            if (((ObjBase*)&pattern)->AngleTo((*m_opponent)->x - m_objects[v4].x, (*m_opponent)->y - m_objects[v4].y) < 55.0) {
+                            if (AngleTo((*m_opponent)->x - m_objects[v4].x, (*m_opponent)->y - m_objects[v4].y) < 55.0) {
                                 l50.type = 0x1b5;
                             }
-                            if (((ObjBase*)&pattern)->AngleTo((*m_opponent)->x - m_objects[v4].x, (*m_opponent)->y - m_objects[v4].y) < 40.0) {
+                            if (AngleTo((*m_opponent)->x - m_objects[v4].x, (*m_opponent)->y - m_objects[v4].y) < 40.0) {
                                 l50.type = 0x1b6;
                             }
-                            if (((ObjBase*)&pattern)->AngleTo((*m_opponent)->x - m_objects[v4].x, (*m_opponent)->y - m_objects[v4].y) < 25.0) {
+                            if (AngleTo((*m_opponent)->x - m_objects[v4].x, (*m_opponent)->y - m_objects[v4].y) < 25.0) {
                                 l50.type = 0x1b7;
                             }
                         }
@@ -3227,30 +3227,30 @@ void CKano::Vf7()
                     if (m_objects[v4].facing == -1) {
                         l50.type = 0x1b3;
                         if (m_objects[v4].x > (*m_opponent)->x) {
-                            if (((ObjBase*)&pattern)->AngleTo(m_objects[v4].x - (*m_opponent)->x, m_objects[v4].y - (*m_opponent)->y) > 110.0) {
+                            if (AngleTo(m_objects[v4].x - (*m_opponent)->x, m_objects[v4].y - (*m_opponent)->y) > 110.0) {
                                 l50.type = 0x1b4;
                             }
-                            if (((ObjBase*)&pattern)->AngleTo(m_objects[v4].x - (*m_opponent)->x, m_objects[v4].y - (*m_opponent)->y) > 125.0) {
+                            if (AngleTo(m_objects[v4].x - (*m_opponent)->x, m_objects[v4].y - (*m_opponent)->y) > 125.0) {
                                 l50.type = 0x1b5;
                             }
-                            if (((ObjBase*)&pattern)->AngleTo(m_objects[v4].x - (*m_opponent)->x, m_objects[v4].y - (*m_opponent)->y) > 140.0) {
+                            if (AngleTo(m_objects[v4].x - (*m_opponent)->x, m_objects[v4].y - (*m_opponent)->y) > 140.0) {
                                 l50.type = 0x1b6;
                             }
-                            if (((ObjBase*)&pattern)->AngleTo(m_objects[v4].x - (*m_opponent)->x, m_objects[v4].y - (*m_opponent)->y) > 165.0) {
+                            if (AngleTo(m_objects[v4].x - (*m_opponent)->x, m_objects[v4].y - (*m_opponent)->y) > 165.0) {
                                 l50.type = 0x1b7;
                             }
                         }
                         if (m_objects[v4].x > (*m_opponent)->x) {
-                            if (((ObjBase*)&pattern)->AngleTo((*m_opponent)->x - m_objects[v4].x, (*m_opponent)->y - m_objects[v4].y) > 110.0) {
+                            if (AngleTo((*m_opponent)->x - m_objects[v4].x, (*m_opponent)->y - m_objects[v4].y) > 110.0) {
                                 l50.type = 0x1b4;
                             }
-                            if (((ObjBase*)&pattern)->AngleTo((*m_opponent)->x - m_objects[v4].x, (*m_opponent)->y - m_objects[v4].y) > 125.0) {
+                            if (AngleTo((*m_opponent)->x - m_objects[v4].x, (*m_opponent)->y - m_objects[v4].y) > 125.0) {
                                 l50.type = 0x1b5;
                             }
-                            if (((ObjBase*)&pattern)->AngleTo((*m_opponent)->x - m_objects[v4].x, (*m_opponent)->y - m_objects[v4].y) > 140.0) {
+                            if (AngleTo((*m_opponent)->x - m_objects[v4].x, (*m_opponent)->y - m_objects[v4].y) > 140.0) {
                                 l50.type = 0x1b6;
                             }
-                            if (((ObjBase*)&pattern)->AngleTo((*m_opponent)->x - m_objects[v4].x, (*m_opponent)->y - m_objects[v4].y) > 165.0) {
+                            if (AngleTo((*m_opponent)->x - m_objects[v4].x, (*m_opponent)->y - m_objects[v4].y) > 165.0) {
                                 l50.type = 0x1b7;
                             }
                         }
@@ -3312,30 +3312,30 @@ void CKano::Vf7()
                     if (m_objects[v4].facing == 1) {
                         l50.type = 0x1b3;
                         if (m_objects[v4].x > (*m_opponent)->x) {
-                            if (((ObjBase*)&pattern)->AngleTo(m_objects[v4].x - (*m_opponent)->x, m_objects[v4].y - (*m_opponent)->y) < 70.0) {
+                            if (AngleTo(m_objects[v4].x - (*m_opponent)->x, m_objects[v4].y - (*m_opponent)->y) < 70.0) {
                                 l50.type = 0x1b4;
                             }
-                            if (((ObjBase*)&pattern)->AngleTo(m_objects[v4].x - (*m_opponent)->x, m_objects[v4].y - (*m_opponent)->y) < 55.0) {
+                            if (AngleTo(m_objects[v4].x - (*m_opponent)->x, m_objects[v4].y - (*m_opponent)->y) < 55.0) {
                                 l50.type = 0x1b5;
                             }
-                            if (((ObjBase*)&pattern)->AngleTo(m_objects[v4].x - (*m_opponent)->x, m_objects[v4].y - (*m_opponent)->y) < 40.0) {
+                            if (AngleTo(m_objects[v4].x - (*m_opponent)->x, m_objects[v4].y - (*m_opponent)->y) < 40.0) {
                                 l50.type = 0x1b6;
                             }
-                            if (((ObjBase*)&pattern)->AngleTo(m_objects[v4].x - (*m_opponent)->x, m_objects[v4].y - (*m_opponent)->y) < 25.0) {
+                            if (AngleTo(m_objects[v4].x - (*m_opponent)->x, m_objects[v4].y - (*m_opponent)->y) < 25.0) {
                                 l50.type = 0x1b7;
                             }
                         }
                         if (m_objects[v4].x < (*m_opponent)->x) {
-                            if (((ObjBase*)&pattern)->AngleTo((*m_opponent)->x - m_objects[v4].x, (*m_opponent)->y - m_objects[v4].y) < 70.0) {
+                            if (AngleTo((*m_opponent)->x - m_objects[v4].x, (*m_opponent)->y - m_objects[v4].y) < 70.0) {
                                 l50.type = 0x1b4;
                             }
-                            if (((ObjBase*)&pattern)->AngleTo((*m_opponent)->x - m_objects[v4].x, (*m_opponent)->y - m_objects[v4].y) < 55.0) {
+                            if (AngleTo((*m_opponent)->x - m_objects[v4].x, (*m_opponent)->y - m_objects[v4].y) < 55.0) {
                                 l50.type = 0x1b5;
                             }
-                            if (((ObjBase*)&pattern)->AngleTo((*m_opponent)->x - m_objects[v4].x, (*m_opponent)->y - m_objects[v4].y) < 40.0) {
+                            if (AngleTo((*m_opponent)->x - m_objects[v4].x, (*m_opponent)->y - m_objects[v4].y) < 40.0) {
                                 l50.type = 0x1b6;
                             }
-                            if (((ObjBase*)&pattern)->AngleTo((*m_opponent)->x - m_objects[v4].x, (*m_opponent)->y - m_objects[v4].y) < 25.0) {
+                            if (AngleTo((*m_opponent)->x - m_objects[v4].x, (*m_opponent)->y - m_objects[v4].y) < 25.0) {
                                 l50.type = 0x1b7;
                             }
                         }
@@ -3343,30 +3343,30 @@ void CKano::Vf7()
                     if (m_objects[v4].facing == -1) {
                         l50.type = 0x1b3;
                         if (m_objects[v4].x > (*m_opponent)->x) {
-                            if (((ObjBase*)&pattern)->AngleTo(m_objects[v4].x - (*m_opponent)->x, m_objects[v4].y - (*m_opponent)->y) > 110.0) {
+                            if (AngleTo(m_objects[v4].x - (*m_opponent)->x, m_objects[v4].y - (*m_opponent)->y) > 110.0) {
                                 l50.type = 0x1b4;
                             }
-                            if (((ObjBase*)&pattern)->AngleTo(m_objects[v4].x - (*m_opponent)->x, m_objects[v4].y - (*m_opponent)->y) > 125.0) {
+                            if (AngleTo(m_objects[v4].x - (*m_opponent)->x, m_objects[v4].y - (*m_opponent)->y) > 125.0) {
                                 l50.type = 0x1b5;
                             }
-                            if (((ObjBase*)&pattern)->AngleTo(m_objects[v4].x - (*m_opponent)->x, m_objects[v4].y - (*m_opponent)->y) > 140.0) {
+                            if (AngleTo(m_objects[v4].x - (*m_opponent)->x, m_objects[v4].y - (*m_opponent)->y) > 140.0) {
                                 l50.type = 0x1b6;
                             }
-                            if (((ObjBase*)&pattern)->AngleTo(m_objects[v4].x - (*m_opponent)->x, m_objects[v4].y - (*m_opponent)->y) > 165.0) {
+                            if (AngleTo(m_objects[v4].x - (*m_opponent)->x, m_objects[v4].y - (*m_opponent)->y) > 165.0) {
                                 l50.type = 0x1b7;
                             }
                         }
                         if (m_objects[v4].x > (*m_opponent)->x) {
-                            if (((ObjBase*)&pattern)->AngleTo((*m_opponent)->x - m_objects[v4].x, (*m_opponent)->y - m_objects[v4].y) > 110.0) {
+                            if (AngleTo((*m_opponent)->x - m_objects[v4].x, (*m_opponent)->y - m_objects[v4].y) > 110.0) {
                                 l50.type = 0x1b4;
                             }
-                            if (((ObjBase*)&pattern)->AngleTo((*m_opponent)->x - m_objects[v4].x, (*m_opponent)->y - m_objects[v4].y) > 125.0) {
+                            if (AngleTo((*m_opponent)->x - m_objects[v4].x, (*m_opponent)->y - m_objects[v4].y) > 125.0) {
                                 l50.type = 0x1b5;
                             }
-                            if (((ObjBase*)&pattern)->AngleTo((*m_opponent)->x - m_objects[v4].x, (*m_opponent)->y - m_objects[v4].y) > 140.0) {
+                            if (AngleTo((*m_opponent)->x - m_objects[v4].x, (*m_opponent)->y - m_objects[v4].y) > 140.0) {
                                 l50.type = 0x1b6;
                             }
-                            if (((ObjBase*)&pattern)->AngleTo((*m_opponent)->x - m_objects[v4].x, (*m_opponent)->y - m_objects[v4].y) > 165.0) {
+                            if (AngleTo((*m_opponent)->x - m_objects[v4].x, (*m_opponent)->y - m_objects[v4].y) > 165.0) {
                                 l50.type = 0x1b7;
                             }
                         }

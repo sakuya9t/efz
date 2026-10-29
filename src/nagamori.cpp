@@ -1998,8 +1998,8 @@ void CNagamori::Vf7()
                     unk316c[v4] = 0;
                 }
                 if (m_objects[v4].unk80 == 3) {
-                    unk31ac[v4] = (int)((ObjBase*)&pattern)->AngleTo(m_objects[v4].x - (*m_opponent)->x, m_objects[v4].y - (*m_opponent)->y - 50.0);
-                    ((ObjBase*)&(*m_opponent)->pattern)->SetVelocity((double)unk31ac[v4], 2.2);
+                    unk31ac[v4] = (int)AngleTo(m_objects[v4].x - (*m_opponent)->x, m_objects[v4].y - (*m_opponent)->y - 50.0);
+                    (*m_opponent)->SetVelocity((double)unk31ac[v4], 2.2);
                     if ((*m_opponent)->facing == 1) {
                         (*m_opponent)->vx *= -1.0;
                     }
@@ -3850,8 +3850,8 @@ void CNagamori::Vf7()
                     unk316c[v4] = 0;
                 }
                 if (m_objects[v4].unk80 == 3) {
-                    unk31ac[v4] = (int)((ObjBase*)&pattern)->AngleTo(m_objects[v4].x - (*m_opponent)->x, m_objects[v4].y - (*m_opponent)->y - 50.0);
-                    ((ObjBase*)&(*m_opponent)->pattern)->SetVelocity((double)unk31ac[v4], 2.2);
+                    unk31ac[v4] = (int)AngleTo(m_objects[v4].x - (*m_opponent)->x, m_objects[v4].y - (*m_opponent)->y - 50.0);
+                    (*m_opponent)->SetVelocity((double)unk31ac[v4], 2.2);
                     if ((*m_opponent)->facing == 1) {
                         (*m_opponent)->vx *= -1.0;
                     }

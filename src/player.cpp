@@ -182,7 +182,7 @@ CPlayer::~CPlayer()
         v4 = 0;
         for (; v4 < lastSurface + 1; v4++) {
             if ((int)surfaces[v4] != 0) {
-                ((IUnknown*)surfaces[v4])->Release();
+                surfaces[v4]->Release();
                 surfaces[v4] = (IDirectDrawSurface*)0;
             }
         }
