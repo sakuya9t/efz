@@ -3716,6 +3716,8 @@ class Protos:
         d = parse_decl(decl)
         if d:
             name, ret, params = d
+            if re.search(r'~\s*%s\s*\(' % re.escape(cls), decl):
+                name = '~' + cls        # parse_decl drops the ~
             if name == cls or name == '~' + cls:
                 ret = 'void'
             self.methods[f'{cls}::{name}'] = [ret, params]
@@ -3895,6 +3897,9 @@ def rewrite_patterns(nodes, syms, ctx):
                         and slot_of(cs.lhs) is fin.rhs.slot:
                     st.lhs.slot.temp = True
                     fin.rhs.slot.temp = True
+                    proto = syms.protos.lookup(name)
+                    if proto and not getattr(ctor, 'ptypes', None):
+                        ctor.ptypes = proto[1]  # pointer parameters take casts
                     out.append(StmtNode(Assign(fin.lhs, NewObject(name.rpartition('::')[0], ctor))))
                     k += 3
                     continue
