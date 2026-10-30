@@ -6,7 +6,7 @@
 #include <math.h>
 #include "efz.h"
 
-CScene2::CScene2(HWND p1, CPlayer** p2, CPlayer** p3, CGame* p4, CGraphics* p5, CInput* p6, CSound* p7)
+CScene2::CScene2(HWND p1, PTR32(CPlayer)* p2, PTR32(CPlayer)* p3, CGame* p4, CGraphics* p5, CInput* p6, CSound* p7)
     : CScene(p1, p2, p3, p4, p5, p6, p7)
 {
     unk434 = 0;
@@ -15,7 +15,7 @@ CScene2::CScene2(HWND p1, CPlayer** p2, CPlayer** p3, CGame* p4, CGraphics* p5, 
 CScene2::~CScene2()
 {
     if (unk434 != 0) {
-        ((IUnknown*)unk434)->Release();
+        (TOPTR(IUnknown*, unk434))->Release();
         unk434 = 0;
     }
 }
@@ -43,11 +43,11 @@ BYTE CScene2::Update()
     strcat(v2c, (const char*)v34);
     if (1) {
         strcat(v2c, ".dat");
-        m_game->LoadDat((IDirectDrawSurface**)&unk434, (const char*)v2c, 0, 1);
+        m_game->LoadDat((PTR32(IDirectDrawSurface)*)&unk434, (const char*)v2c, 0, 1);
         m_graphics->LoadPaletteDat(m_palette, (const char*)v2c, 0, 1, 0xfe);
     } else {
         strcat(v2c, ".bmp");
-        m_graphics->LoadBmp((IDirectDrawSurface**)&unk434, (const char*)v2c, 1);
+        m_graphics->LoadBmp((PTR32(IDirectDrawSurface)*)&unk434, (const char*)v2c, 1);
         m_graphics->LoadPaletteBmp(m_palette, (const char*)v2c, 0, 1, 0xfe);
     }
     Draw();
@@ -55,7 +55,7 @@ BYTE CScene2::Update()
     Unk76ca50();
     CScene::Unk759c90(m_palette, 0, -0x1f4, 0xc8);
     if (unk434 != 0) {
-        ((IUnknown*)unk434)->Release();
+        (TOPTR(IUnknown*, unk434))->Release();
         unk434 = 0;
     }
     m_game->PlayMusic(m_game->unkf32 + 0xa);
@@ -64,7 +64,7 @@ BYTE CScene2::Update()
 
 void CScene2::Draw()
 {
-    m_graphics->Blit(MakeRect(0, 0, 0x140, 0xf0), (IDirectDrawSurface*)unk434, MakeRect(0, 0, 0x140, 0xf0), 0, 0);
+    m_graphics->Blit(MakeRect(0, 0, 0x140, 0xf0), TOPTR(IDirectDrawSurface*, unk434), MakeRect(0, 0, 0x140, 0xf0), 0, 0);
     m_graphics->Flip();
 }
 
@@ -352,7 +352,7 @@ void CScene2::Vf2()
 {
 }
 
-void CScene2::Unk76da20(CPlayer** p1, CPlayer** p2, char p3, char p4)
+void CScene2::Unk76da20(PTR32(CPlayer)* p1, PTR32(CPlayer)* p2, char p3, char p4)
 {
     switch (p4) {
     case 0:

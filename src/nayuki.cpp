@@ -7,7 +7,7 @@
 #include <math.h>
 #include "efz.h"
 
-CNayuki::CNayuki(CPlayer** p1, CGame* p2, CGraphics* p3, CInput* p4, CSound* p5, BYTE p6)
+CNayuki::CNayuki(PTR32(CPlayer)* p1, CGame* p2, CGraphics* p3, CInput* p4, CSound* p5, BYTE p6)
     : CPlayer(p1, p2, p3, p4, p5, p6)
 {
     int v4;
@@ -428,7 +428,7 @@ void CNayuki::DrawGauge()
         v10 = MakeRect(x1c.x + 0x118, 0xbf - x1c.y, x1c.width, x1c.height);
     }
     m_graphics->Blit(v10, surfaces[x1c.surface], v2c, colorKey, 0);
-    x1c = *(EffectFrame*)*(char**)((char*)&anims[unk3148].frameCount + 0x114);
+    x1c = *(EffectFrame*)PTRAT((char*)&anims[unk3148].frameCount + 0x114);
     v2c = MakeRect(0, 0, x1c.width, x1c.height);
     if (m_side == 0) {
         v10 = MakeRect(2 - x1c.x, 0xbf - x1c.y, x1c.width, x1c.height);

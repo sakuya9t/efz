@@ -5,21 +5,21 @@
 #include <math.h>
 #include "efz.h"
 
-CScene0::CScene0(HWND p1, CPlayer** p2, CPlayer** p3, CGame* p4, CGraphics* p5, CInput* p6, CSound* p7)
+CScene0::CScene0(HWND p1, PTR32(CPlayer)* p2, PTR32(CPlayer)* p3, CGame* p4, CGraphics* p5, CInput* p6, CSound* p7)
     : CScene(p1, p2, p3, p4, p5, p6, p7)
 {
     if (1) {
-        m_game->LoadDat((IDirectDrawSurface**)&unk434, "system\\title.dat", 0, 1);
-        m_game->LoadDat((IDirectDrawSurface**)&unk438, "system\\title_ob.dat", 0, 0xc1);
+        m_game->LoadDat((PTR32(IDirectDrawSurface)*)&unk434, "system\\title.dat", 0, 1);
+        m_game->LoadDat((PTR32(IDirectDrawSurface)*)&unk438, "system\\title_ob.dat", 0, 0xc1);
         m_graphics->LoadPaletteDat(m_palette, "system\\title.dat", 0, 1, 0xc0);
         m_graphics->LoadPaletteDat(m_palette, "system\\title_ob.dat", 0, 0xc1, 0x30);
     } else {
-        m_graphics->LoadBmp((IDirectDrawSurface**)&unk434, "system\\title.bmp", 1);
-        m_graphics->LoadBmp((IDirectDrawSurface**)&unk438, "system\\title_ob.bmp", 0xc1);
+        m_graphics->LoadBmp((PTR32(IDirectDrawSurface)*)&unk434, "system\\title.bmp", 1);
+        m_graphics->LoadBmp((PTR32(IDirectDrawSurface)*)&unk438, "system\\title_ob.bmp", 0xc1);
         m_graphics->LoadPaletteBmp(m_palette, "system\\title.bmp", 0, 1, 0xc0);
         m_graphics->LoadPaletteBmp(m_palette, "system\\title_ob.bmp", 0, 0xc1, 0x30);
     }
-    m_colorKey = m_graphics->GetColorKey((IDirectDrawSurface*)unk438);
+    m_colorKey = m_graphics->GetColorKey(TOPTR(IDirectDrawSurface*, unk438));
     unk43c = 0;
     unk43e = 0;
     unk440[2] = 0;
@@ -34,11 +34,11 @@ CScene0::CScene0(HWND p1, CPlayer** p2, CPlayer** p3, CGame* p4, CGraphics* p5, 
 CScene0::~CScene0()
 {
     if (unk434 != 0) {
-        ((IUnknown*)unk434)->Release();
+        (TOPTR(IUnknown*, unk434))->Release();
         unk434 = 0;
     }
     if (unk438 != 0) {
-        ((IUnknown*)unk438)->Release();
+        (TOPTR(IUnknown*, unk438))->Release();
         unk438 = 0;
     }
 }
@@ -153,9 +153,9 @@ BYTE CScene0::Update()
 
 void CScene0::Draw()
 {
-    m_graphics->Blit(MakeRect(0, 0, 0x140, 0xf0), (IDirectDrawSurface*)unk434, MakeRect(0, 0, 0x140, 0xf0), 0, 0);
-    m_graphics->Blit(MakeRect(0xc3, 0x82, 0x78, 0x62), (IDirectDrawSurface*)unk438, MakeRect(0, 0, 0x78, 0x62), m_colorKey, 0);
-    m_graphics->Blit(MakeRect(0xc3, unk43c * 0xe + 0x82, 0x78, 0xe), (IDirectDrawSurface*)unk438, MakeRect(0, unk43c * 0xe + 0x62, 0x78, 0xe), m_colorKey, 0);
+    m_graphics->Blit(MakeRect(0, 0, 0x140, 0xf0), TOPTR(IDirectDrawSurface*, unk434), MakeRect(0, 0, 0x140, 0xf0), 0, 0);
+    m_graphics->Blit(MakeRect(0xc3, 0x82, 0x78, 0x62), TOPTR(IDirectDrawSurface*, unk438), MakeRect(0, 0, 0x78, 0x62), m_colorKey, 0);
+    m_graphics->Blit(MakeRect(0xc3, unk43c * 0xe + 0x82, 0x78, 0xe), TOPTR(IDirectDrawSurface*, unk438), MakeRect(0, unk43c * 0xe + 0x62, 0x78, 0xe), m_colorKey, 0);
     m_graphics->Flip();
 }
 

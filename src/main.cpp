@@ -120,6 +120,9 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
         g_scenes[8] = NULL;
     }
     g_scenesReady = 1;
+#ifdef EFZ_TRACE
+    TraceStart(g_game, g_scenes, &g_scene);
+#endif
 
     while (1) {
         if (PeekMessage(&msg, NULL, 0, 0, PM_NOREMOVE)) {
@@ -128,11 +131,18 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
             TranslateMessage(&msg);
             DispatchMessage(&msg);
         } else {
+#ifdef EFZ_TRACE
+            if (TraceQuit(g_scene))
+                break;
+#endif
             g_game->unk1368 = !g_game->unk1368;
             if (g_scenes[g_scene] != NULL) {
                 g_sound.UpdateLoop(g_game->m_music);
                 g_scene = g_scenes[g_scene]->Update();
             }
+#ifdef EFZ_TRACE
+            if (!TraceFast())
+#endif
             WaitForSingleObject(g_frameEvent, INFINITE);
         }
     }

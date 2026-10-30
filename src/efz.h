@@ -13,6 +13,10 @@
 #ifndef EFZ_H
 #define EFZ_H
 
+#ifdef EFZ_NATIVE
+// The native build (port/, CMakeLists.txt): SDL3 in place of Win32 and DirectX.
+#include "efz_native.h"
+#else
 #include <windows.h>
 #include <ddraw.h>
 #define DIRECTINPUT_VERSION 0x0700
@@ -21,6 +25,29 @@
 #include <dsound.h>
 #include <string.h>
 #include <math.h>
+
+// The game's structures hold pointers in 32 bits, and its code keeps pointers in ints
+// too. These macros mark the pointer members and each cast between a pointer and an
+// integer, so that the native build, whose pointers are 64 bits wide, can keep them as
+// 32-bit handles (port/guest.h). Here they are what the original was compiled from.
+//   PTR32(T)        a pointer member of type T*
+//   PTRAT(addr)     the pointer stored at addr, as a char*
+//   PTRSET(addr, p) stores the pointer p at addr
+//   TOPTR(T*, v)    the 32-bit value v as a pointer
+//   TOINT(T, p)     the pointer p as the 32-bit integer type T
+// And for floating point, which the original computed on the x87 at double precision:
+//   F32             a float in the game's structures; arithmetic on one is in double
+//                   precision, rounded to float only when it is stored
+//   F32CAST(x)      a cast to float inside an expression, which this compiler drops:
+//                   the value goes on unrounded (the native build makes it a double)
+#define PTR32(T) T*
+#define PTRAT(addr) (*(char**)(addr))
+#define PTRSET(addr, p) (*(char**)(addr) = (p))
+#define TOPTR(T, v) ((T)(v))
+#define TOINT(T, p) ((T)(p))
+#define F32 float
+#define F32CAST(x) ((float)(x))
+#endif
 
 struct EffectDesc;
 class CAnimBg;
@@ -59,7 +86,7 @@ struct EffectAnim {
     BYTE frameCount;
     BYTE unk1;
     WORD unk2;
-    EffectFrame* frames;
+    PTR32(EffectFrame) frames;
 };
 
 // Win32 file wrapper used by the loaders.
@@ -201,29 +228,30 @@ public:
     // Restores the display mode and releases the DirectDraw objects.
     void Shutdown();
     // FUNCTION: 0x408c40
-    void ReleaseSurface(IDirectDrawSurface** surface);
+    void ReleaseSurface(PTR32(IDirectDrawSurface)* surface);
     // FUNCTION: 0x408c70
     // Posts WM_CLOSE to the game window.
     BOOL Close();
     // FUNCTION: 0x408ca0
     BOOL RestorePrimary();
     // FUNCTION: 0x408cd0
-    BOOL RestoreSurface(IDirectDrawSurface** surface);
+    BOOL RestoreSurface(PTR32(IDirectDrawSurface)* surface);
     // FUNCTION: 0x408d00
     // Loads an 8-bit .bmp into a new surface, adding `base` to every pixel; returns
     // the image's rectangle.
-    RECT LoadBmp(IDirectDrawSurface** surface, const char* name, BYTE base);
+    RECT LoadBmp(PTR32(IDirectDrawSurface)* surface, const char* name, BYTE base);
     // FUNCTION: 0x409090
     // The same, but pixels 40 and above map to 175 and up instead of having base added.
-    RECT LoadBmpHigh(IDirectDrawSurface** surface, const char* name, BYTE base);
+    RECT LoadBmpHigh(PTR32(IDirectDrawSurface)* surface, const char* name, BYTE base);
     // FUNCTION: 0x409470
     // Creates a surface from an image inside a .dat file; returns the bytes consumed,
     // or 0 on failure. With rle nonzero, a byte above rle repeats the previous colour
     // (byte - rle) more times.
-    int LoadSurface(IDirectDrawSurface** surface, BYTE* data, BYTE rle, BYTE base);
+    int LoadSurface(PTR32(IDirectDrawSurface)* surface, BYTE* data, BYTE rle, BYTE base);
     // FUNCTION: 0x409740
     // LoadSurface with LoadBmpHigh's mapping.
-    int LoadSurfaceHigh(IDirectDrawSurface** surface, BYTE* data, BYTE rle, BYTE base);
+    int LoadSurfaceHigh(PTR32(IDirectDrawSurface)* surface, BYTE* data, BYTE rle,
+                        BYTE base);
     // FUNCTION: 0x409a90
     // Copies `src` of `surface` to `dst` on the back buffer, clipped to 320x240, skipping
     // pixels equal to `key` (if nonzero), mirrored if `flip`. Returns FALSE if a surface
@@ -311,10 +339,10 @@ public:
     // a * b == m_quarterSquares[256 + a + b] - m_quarterSquares[256 + a - b].
     // BuildBlendTables uses it for squared colour distances.
     WORD m_quarterSquares[0x200];
-    IDirectDraw* m_dd;
-    IDirectDrawSurface* m_primary;
-    IDirectDrawSurface* m_back;
-    IDirectDrawPalette* m_ddpal;
+    PTR32(IDirectDraw) m_dd;
+    PTR32(IDirectDrawSurface) m_primary;
+    PTR32(IDirectDrawSurface) m_back;
+    PTR32(IDirectDrawPalette) m_ddpal;
 };
 
 // FUNCTION: 0x40c590
@@ -356,9 +384,9 @@ public:
     // lower codes its buttons.
     short m_bindings[2][8];
     HWND m_hwnd;
-    IDirectInput7* m_di;
-    IDirectInputDevice7* m_keyboard;
-    IDirectInputDevice7* m_joysticks[2];
+    PTR32(IDirectInput7) m_di;
+    PTR32(IDirectInputDevice7) m_keyboard;
+    PTR32(IDirectInputDevice7) m_joysticks[2];
     int unk1f4;
 };
 
@@ -409,10 +437,10 @@ public:
     DWORD m_loopLength;  // bytes
     DWORD m_loopEnd;
     HWND m_hwnd;
-    IDirectSound* m_ds;
-    BYTE* m_data[0x96];
+    PTR32(IDirectSound) m_ds;
+    PTR32(BYTE) m_data[0x96];
     DWORD m_size[0x96];
-    IDirectSoundBuffer* m_buffers[0x96];
+    PTR32(IDirectSoundBuffer) m_buffers[0x96];
 };
 
 // One frame of a pattern's data (boxes, physics values), copied whole by some scenes.
@@ -423,7 +451,7 @@ struct PatternFrame {
     RECT box90;
     short unka0;
     short unka2;
-    float unka4;
+    F32 unka4;
     short unka8;
     WORD flagsAA;
     short unkac;
@@ -432,8 +460,8 @@ struct PatternFrame {
     short unkb2;
     short unkb4;
     short unkb6;
-    float unkb8;
-    float unkbc;
+    F32 unkb8;
+    F32 unkbc;
     char unkc0;
     char unkc1;
     short unkc2;
@@ -468,7 +496,7 @@ struct PatternData {
 
         if ((int)frames != 0) {
             v4 = (int)frames;
-            operator delete((void*)v4);
+            operator delete(TOPTR(void*, v4));
         }
     }
     // FUNCTION: 0x412ad0
@@ -477,14 +505,14 @@ struct PatternData {
         int v4;
 
         if (p1 > 0) {
-            v4 = (int)operator new(p1 * 0xc8);
-            frames = (PatternFrame*)v4;
+            v4 = TOINT(int, operator new(p1 * 0xc8));
+            frames = TOPTR(PatternFrame*, v4);
         }
     }
 
     short unk0;
     short unk2;
-    PatternFrame* frames;
+    PTR32(PatternFrame) frames;
 };
 
 // What a player and each of the objects it spawns have in common: pattern and frame,
@@ -510,8 +538,9 @@ struct ObjBase {
     WORD frame;       // +2: the frame of the pattern's animation
     WORD timer;       // +4: game frames spent on the current frame
     BYTE unk6[2];
-    EffectAnim* anims; // +8: the character's sprite animations, one per pattern
-    IDirectDrawSurface** surfaces; // +0xc: the character's sprites
+    PTR32(EffectAnim) anims;                   // +8: the character's sprite animations, one
+                                               // per pattern
+    PTR32(PTR32(IDirectDrawSurface)) surfaces; // +0xc: the character's sprites
     WORD lastSurface; // +0x10: sprites 0 to lastSurface are loaded
     char colorKey;    // +0x12: the sprites' transparent colour
     BYTE unk13[5];
@@ -624,7 +653,7 @@ public:
     // FUNCTION: 0x40e740
     void Unk40e740();
     // FUNCTION: 0x40eae0
-    CPlayer(CPlayer** p1, CGame* p2, CGraphics* p3, CInput* p4, CSound* p5, BYTE p6);
+    CPlayer(PTR32(CPlayer)* p1, CGame* p2, CGraphics* p3, CInput* p4, CSound* p5, BYTE p6);
     // FUNCTION: 0x40ecb0
     ~CPlayer();
     // FUNCTION: 0x40f170
@@ -742,19 +771,20 @@ public:
     BYTE unk59[0x60 - 0x59];
     int unk60;
     BYTE unk64[0x78 - 0x64];
-    CPlayer** m_opponent;   // +0x78: the other player's slot, g_player1 or g_player2. Set
-                            // first: initialized before m_afterimages
-    CGame* m_game;          // +0x7c
-    CGraphics* m_graphics;  // +0x80
-    CInput* m_input;        // +0x84
-    CSound* m_sound;        // +0x88
+    PTR32(PTR32(CPlayer)) m_opponent; // +0x78: the other player's slot, g_player1 or
+                                      // g_player2. Set first: initialized before
+                                      // m_afterimages
+    PTR32(CGame) m_game;              // +0x7c
+    PTR32(CGraphics) m_graphics;      // +0x80
+    PTR32(CInput) m_input;            // +0x84
+    PTR32(CSound) m_sound;            // +0x88
     char m_side;            // +0x8c: 0 for player 1, 1 for player 2
     char m_charId;          // +0x8d: the character's number on the select screen
     char m_paletteIndex;    // +0x8e: which <name>N.pal (N = index + 1)
     BYTE unk8f[0x94 - 0x8f];
     char m_name[0x10];      // +0x94: the character's folder and file name, "akane"
     int m_cpu;
-    float unka8;
+    F32 unka8;
     char unkac;
     BYTE unkad[0xb0 - 0xad];
     double unkb0;
@@ -788,7 +818,7 @@ public:
     int unk12c;
     char unk130;
     BYTE unk131[0x134 - 0x131];
-    float unk134;
+    F32 unk134;
     short unk138;
     short unk13a;
     short unk13c;
@@ -808,7 +838,7 @@ public:
     BYTE unk15b;
     int unk15c;
     int unk160;
-    PatternData* m_patterns; // +0x164: one per pattern, 505 of them
+    PTR32(PatternData) m_patterns; // +0x164: one per pattern, 505 of them
     int m_attackResult;     // +0x168: of the current attack: 0 none yet, 2 guarded, 3 hit,
                             // 6 clashed
     short m_hitsLeft;       // +0x16c: hits the current attack can still land
@@ -989,7 +1019,8 @@ public:
     // Loads the 920 effect sprites from system\effect\effect.dat, then system\object.dat.
     void LoadEffects();
     // FUNCTION: 0x406db0
-    void LoadDat(IDirectDrawSurface** surface, const char* name, BYTE rle, BYTE offset);
+    void LoadDat(PTR32(IDirectDrawSurface)* surface, const char* name, BYTE rle,
+                 BYTE offset);
     // FUNCTION: 0x406e60
     // Reads the effect animations from system\effect\effect.pat.
     void LoadEffectAnims();
@@ -1037,9 +1068,9 @@ public:
     // misuzu, minagi or kano is missing, -1 if one of exnanase, ikumi or kaori is.
     void CheckExtraChars();
 
-    CGraphics* m_graphics;
-    CInput* m_input;
-    CSound* m_sound;
+    PTR32(CGraphics) m_graphics;
+    PTR32(CInput) m_input;
+    PTR32(CSound) m_sound;
     // Per player: direction (-1, 0, 1), and for the four buttons whether they went
     // down this frame and whether they are held.
     char m_inputX[2];
@@ -1052,10 +1083,10 @@ public:
     BOOL m_holdB[2];
     BOOL m_holdC[2];
     BOOL m_holdD[2];
-    IDirectDrawSurface* m_surfaces[0x398]; // effect sprites
-    IDirectDrawSurface* unke98;
-    IDirectDrawSurface* unke9c;
-    IDirectDrawSurface* m_objectSurface;   // system\object.dat
+    PTR32(IDirectDrawSurface) m_surfaces[0x398]; // effect sprites
+    PTR32(IDirectDrawSurface) unke98;
+    PTR32(IDirectDrawSurface) unke9c;
+    PTR32(IDirectDrawSurface) m_objectSurface;   // system\object.dat
     WORD m_sounds[0x41];          // sound IDs; 0x96 means none
     WORD m_music;                 // sound ID of the music; passed to the sound system every frame
     int m_musicTarget;
@@ -1099,7 +1130,7 @@ public:
     char unk1378;
     char unk1379;
     BYTE unk137a[2];
-    CAnimBg* m_background;        // the stage's animated background, if it has one
+    PTR32(CAnimBg) m_background;  // the stage's animated background, if it has one
     short m_effectHead;           // next slot CreateEffect uses
     short m_effectTail;           // oldest live slot
     int m_effectActive[0x280];
@@ -1107,7 +1138,7 @@ public:
     BYTE m_effectUnk2784[0x280];
     char unk2a04[4];
     Effect m_effects[0x280];
-    EffectAnim* m_effectAnims;
+    PTR32(EffectAnim) m_effectAnims;
     short unk1420c;
     short unk1420e;
     double m_shake;               // amplitude in pixels
@@ -1147,8 +1178,8 @@ public:
 class CScene {
 public:
     // FUNCTION: 0x759c10
-    CScene(HWND p1, CPlayer** p2, CPlayer** p3, CGame* p4, CGraphics* p5, CInput* p6,
-           CSound* p7)
+    CScene(HWND p1, PTR32(CPlayer)* p2, PTR32(CPlayer)* p3, CGame* p4, CGraphics* p5,
+           CInput* p6, CSound* p7)
     {
         m_player1Ref = p2;
         m_player2Ref = p3;
@@ -1240,13 +1271,13 @@ public:
 
     UINT lastMessage;       // set by WndProc to the message it is handling
     HWND m_hwnd;
-    CPlayer* m_players[2];  // the players when the scene was made
-    CPlayer** m_player1Ref; // WinMain's g_player1 and g_player2
-    CPlayer** m_player2Ref;
-    CGame* m_game;
-    CGraphics* m_graphics;
-    CInput* m_input;
-    CSound* m_sound;
+    PTR32(CPlayer) m_players[2];        // the players when the scene was made
+    PTR32(PTR32(CPlayer)) m_player1Ref; // WinMain's g_player1 and g_player2
+    PTR32(PTR32(CPlayer)) m_player2Ref;
+    PTR32(CGame) m_game;
+    PTR32(CGraphics) m_graphics;
+    PTR32(CInput) m_input;
+    PTR32(CSound) m_sound;
     char unk2c;
     char unk2d;
     PALETTEENTRY m_palette[0x100]; // +0x2e
@@ -1276,10 +1307,10 @@ public:
 
     short m_number;         // +4: NN in system\bg\bgNN
     short m_lastFrame;      // +6: frames 0 to m_lastFrame
-    CGraphics* m_graphics;  // +8
-    IDirectDrawSurface** m_surfaces; // +0xc: one per frame
-    BgObject* m_objects;    // +0x10
-    EffectAnim* m_anims;    // +0x14
+    PTR32(CGraphics) m_graphics;                 // +8
+    PTR32(PTR32(IDirectDrawSurface)) m_surfaces; // +0xc: one per frame
+    PTR32(BgObject) m_objects;                   // +0x10
+    PTR32(EffectAnim) m_anims;                   // +0x14
     char m_colorKey;        // +0x18
     BYTE unk19[0x1c - 0x19];
 };
@@ -1349,7 +1380,7 @@ public:
 class CScene1 : public CScene {
 public:
     // FUNCTION: 0x753260
-    CScene1(HWND p1, CPlayer** p2, CPlayer** p3, CGame* p4, CGraphics* p5, CInput* p6, CSound* p7);
+    CScene1(HWND p1, PTR32(CPlayer)* p2, PTR32(CPlayer)* p3, CGame* p4, CGraphics* p5, CInput* p6, CSound* p7);
     // FUNCTION: 0x7538b0
     ~CScene1();
     // FUNCTION: 0x7539f0
@@ -1357,7 +1388,7 @@ public:
     // FUNCTION: 0x755500
     virtual void Draw();
     // FUNCTION: 0x7586b0
-    void Unk7586b0(CPlayer** p1, CPlayer** p2, char p3);
+    void Unk7586b0(PTR32(CPlayer)* p1, PTR32(CPlayer)* p2, char p3);
     // FUNCTION: 0x759460
     void Unk759460();
     // FUNCTION: 0x7595d0
@@ -1414,7 +1445,7 @@ public:
 class CScene6 : public CScene {
 public:
     // FUNCTION: 0x759f30
-    CScene6(HWND p1, CPlayer** p2, CPlayer** p3, CGame* p4, CGraphics* p5, CInput* p6, CSound* p7);
+    CScene6(HWND p1, PTR32(CPlayer)* p2, PTR32(CPlayer)* p3, CGame* p4, CGraphics* p5, CInput* p6, CSound* p7);
     // FUNCTION: 0x75a3b0
     ~CScene6();
     // FUNCTION: 0x75a4c0
@@ -1480,7 +1511,7 @@ public:
     // FUNCTION: 0x7631f0
     void Unk7631f0();
     // FUNCTION: 0x7633a0
-    CScene3(HWND p1, CPlayer** p2, CPlayer** p3, CGame* p4, CGraphics* p5, CInput* p6, CSound* p7);
+    CScene3(HWND p1, PTR32(CPlayer)* p2, PTR32(CPlayer)* p3, CGame* p4, CGraphics* p5, CInput* p6, CSound* p7);
     // FUNCTION: 0x763c00
     ~CScene3();
     // FUNCTION: 0x763c20
@@ -1556,7 +1587,7 @@ public:
 class CScene2 : public CScene {
 public:
     // FUNCTION: 0x76c6f0
-    CScene2(HWND p1, CPlayer** p2, CPlayer** p3, CGame* p4, CGraphics* p5, CInput* p6, CSound* p7);
+    CScene2(HWND p1, PTR32(CPlayer)* p2, PTR32(CPlayer)* p3, CGame* p4, CGraphics* p5, CInput* p6, CSound* p7);
     // FUNCTION: 0x76c740
     ~CScene2();
     // FUNCTION: 0x76c790
@@ -1568,7 +1599,7 @@ public:
     // FUNCTION: 0x76da10
     virtual void Vf2();
     // FUNCTION: 0x76da20
-    void Unk76da20(CPlayer** p1, CPlayer** p2, char p3, char p4);
+    void Unk76da20(PTR32(CPlayer)* p1, PTR32(CPlayer)* p2, char p3, char p4);
 
     BYTE unk430[0x434 - 0x430];
     int unk434;
@@ -1579,7 +1610,7 @@ public:
 class CScene8 : public CScene {
 public:
     // FUNCTION: 0x76e480
-    CScene8(HWND p1, CPlayer** p2, CPlayer** p3, CGame* p4, CGraphics* p5, CInput* p6, CSound* p7);
+    CScene8(HWND p1, PTR32(CPlayer)* p2, PTR32(CPlayer)* p3, CGame* p4, CGraphics* p5, CInput* p6, CSound* p7);
     // FUNCTION: 0x76efe0
     ~CScene8();
     // FUNCTION: 0x76f060
@@ -1629,7 +1660,7 @@ public:
 class CScene5 : public CScene {
 public:
     // FUNCTION: 0x7712f0
-    CScene5(HWND p1, CPlayer** p2, CPlayer** p3, CGame* p4, CGraphics* p5, CInput* p6, CSound* p7);
+    CScene5(HWND p1, PTR32(CPlayer)* p2, PTR32(CPlayer)* p3, CGame* p4, CGraphics* p5, CInput* p6, CSound* p7);
     // FUNCTION: 0x771400
     ~CScene5();
     // FUNCTION: 0x7714e0
@@ -1676,7 +1707,7 @@ public:
 class CScene7 : public CScene {
 public:
     // FUNCTION: 0x7758b0
-    CScene7(HWND p1, CPlayer** p2, CPlayer** p3, CGame* p4, CGraphics* p5, CInput* p6, CSound* p7);
+    CScene7(HWND p1, PTR32(CPlayer)* p2, PTR32(CPlayer)* p3, CGame* p4, CGraphics* p5, CInput* p6, CSound* p7);
     // FUNCTION: 0x7759a0
     ~CScene7();
     // FUNCTION: 0x7759f0
@@ -1698,7 +1729,7 @@ public:
 class CScene0 : public CScene {
 public:
     // FUNCTION: 0x775d60
-    CScene0(HWND p1, CPlayer** p2, CPlayer** p3, CGame* p4, CGraphics* p5, CInput* p6, CSound* p7);
+    CScene0(HWND p1, PTR32(CPlayer)* p2, PTR32(CPlayer)* p3, CGame* p4, CGraphics* p5, CInput* p6, CSound* p7);
     // FUNCTION: 0x775f30
     ~CScene0();
     // FUNCTION: 0x775fb0
@@ -1731,7 +1762,7 @@ public:
     // FUNCTION: 0x4136d0
     virtual void UpdatePattern();
     // FUNCTION: 0x422d70
-    CShiori(CPlayer** p1, CGame* p2, CGraphics* p3, CInput* p4, CSound* p5, BYTE p6);
+    CShiori(PTR32(CPlayer)* p1, CGame* p2, CGraphics* p3, CInput* p4, CSound* p5, BYTE p6);
     // FUNCTION: 0x422f40
     virtual void Reset();
     // FUNCTION: 0x423090
@@ -1775,7 +1806,7 @@ public:
     // FUNCTION: 0x434060
     virtual void UpdatePattern();
     // FUNCTION: 0x4463e0
-    CSayuri(CPlayer** p1, CGame* p2, CGraphics* p3, CInput* p4, CSound* p5, BYTE p6);
+    CSayuri(PTR32(CPlayer)* p1, CGame* p2, CGraphics* p3, CInput* p4, CSound* p5, BYTE p6);
     // FUNCTION: 0x446590
     virtual void Reset();
     // FUNCTION: 0x4466d0
@@ -1819,7 +1850,7 @@ public:
     // FUNCTION: 0x451850
     virtual void UpdatePattern();
     // FUNCTION: 0x461090
-    CNayuki(CPlayer** p1, CGame* p2, CGraphics* p3, CInput* p4, CSound* p5, BYTE p6);
+    CNayuki(PTR32(CPlayer)* p1, CGame* p2, CGraphics* p3, CInput* p4, CSound* p5, BYTE p6);
     // FUNCTION: 0x461260
     virtual void Reset();
     // FUNCTION: 0x4613b0
@@ -1865,7 +1896,7 @@ public:
     // FUNCTION: 0x4c04b0
     virtual void UpdatePattern();
     // FUNCTION: 0x4d2850
-    CMizukaB(CPlayer** p1, CGame* p2, CGraphics* p3, CInput* p4, CSound* p5, BYTE p6);
+    CMizukaB(PTR32(CPlayer)* p1, CGame* p2, CGraphics* p3, CInput* p4, CSound* p5, BYTE p6);
     // FUNCTION: 0x4d29e0
     virtual void Reset();
     // FUNCTION: 0x4d2b00
@@ -1911,7 +1942,7 @@ public:
     // FUNCTION: 0x4e7ec0
     virtual void UpdatePattern();
     // FUNCTION: 0x4f8300
-    CMizuka(CPlayer** p1, CGame* p2, CGraphics* p3, CInput* p4, CSound* p5, BYTE p6);
+    CMizuka(PTR32(CPlayer)* p1, CGame* p2, CGraphics* p3, CInput* p4, CSound* p5, BYTE p6);
     // FUNCTION: 0x4f8480
     virtual void Reset();
     // FUNCTION: 0x4f8590
@@ -1957,7 +1988,7 @@ public:
     // FUNCTION: 0x50c4b0
     virtual void UpdatePattern();
     // FUNCTION: 0x519e00
-    CMisuzu(CPlayer** p1, CGame* p2, CGraphics* p3, CInput* p4, CSound* p5, BYTE p6);
+    CMisuzu(PTR32(CPlayer)* p1, CGame* p2, CGraphics* p3, CInput* p4, CSound* p5, BYTE p6);
     // FUNCTION: 0x51a070
     virtual void Reset();
     // FUNCTION: 0x51a2a0
@@ -2013,7 +2044,7 @@ public:
     // FUNCTION: 0x530bc0
     virtual void UpdatePattern();
     // FUNCTION: 0x546480
-    CMishio(CPlayer** p1, CGame* p2, CGraphics* p3, CInput* p4, CSound* p5, BYTE p6);
+    CMishio(PTR32(CPlayer)* p1, CGame* p2, CGraphics* p3, CInput* p4, CSound* p5, BYTE p6);
     // FUNCTION: 0x546690
     virtual void Reset();
     // FUNCTION: 0x546830
@@ -2065,7 +2096,7 @@ public:
     // FUNCTION: 0x5571f0
     virtual void UpdatePattern();
     // FUNCTION: 0x567900
-    CMisaki(CPlayer** p1, CGame* p2, CGraphics* p3, CInput* p4, CSound* p5, BYTE p6);
+    CMisaki(PTR32(CPlayer)* p1, CGame* p2, CGraphics* p3, CInput* p4, CSound* p5, BYTE p6);
     // FUNCTION: 0x567a90
     virtual void Reset();
     // FUNCTION: 0x567ba0
@@ -2105,7 +2136,7 @@ public:
     // FUNCTION: 0x5736d0
     virtual void UpdatePattern();
     // FUNCTION: 0x588310
-    CMio(CPlayer** p1, CGame* p2, CGraphics* p3, CInput* p4, CSound* p5, BYTE p6);
+    CMio(PTR32(CPlayer)* p1, CGame* p2, CGraphics* p3, CInput* p4, CSound* p5, BYTE p6);
     // FUNCTION: 0x5884b0
     virtual void Reset();
     // FUNCTION: 0x5885d0
@@ -2147,7 +2178,7 @@ public:
     // FUNCTION: 0x59c4a0
     virtual void UpdatePattern();
     // FUNCTION: 0x5a9fa0
-    CMinagi(CPlayer** p1, CGame* p2, CGraphics* p3, CInput* p4, CSound* p5, BYTE p6);
+    CMinagi(PTR32(CPlayer)* p1, CGame* p2, CGraphics* p3, CInput* p4, CSound* p5, BYTE p6);
     // FUNCTION: 0x5aa180
     virtual void Reset();
     // FUNCTION: 0x5aa340
@@ -2191,7 +2222,7 @@ public:
     // FUNCTION: 0x5c8580
     virtual void UpdatePattern();
     // FUNCTION: 0x5dddf0
-    CMayu(CPlayer** p1, CGame* p2, CGraphics* p3, CInput* p4, CSound* p5, BYTE p6);
+    CMayu(PTR32(CPlayer)* p1, CGame* p2, CGraphics* p3, CInput* p4, CSound* p5, BYTE p6);
     // FUNCTION: 0x5ddf90
     virtual void Reset();
     // FUNCTION: 0x5de0a0
@@ -2231,7 +2262,7 @@ public:
     // FUNCTION: 0x5e85f0
     virtual void UpdatePattern();
     // FUNCTION: 0x5f6d90
-    CMakoto(CPlayer** p1, CGame* p2, CGraphics* p3, CInput* p4, CSound* p5, BYTE p6);
+    CMakoto(PTR32(CPlayer)* p1, CGame* p2, CGraphics* p3, CInput* p4, CSound* p5, BYTE p6);
     // FUNCTION: 0x5f6f20
     virtual void Reset();
     // FUNCTION: 0x5f7040
@@ -2273,7 +2304,7 @@ public:
     // FUNCTION: 0x607930
     virtual void UpdatePattern();
     // FUNCTION: 0x6163b0
-    CMai(CPlayer** p1, CGame* p2, CGraphics* p3, CInput* p4, CSound* p5, BYTE p6);
+    CMai(PTR32(CPlayer)* p1, CGame* p2, CGraphics* p3, CInput* p4, CSound* p5, BYTE p6);
     // FUNCTION: 0x616570
     virtual void Reset();
     // FUNCTION: 0x6166c0
@@ -2317,7 +2348,7 @@ public:
     // FUNCTION: 0x667570
     virtual void UpdatePattern();
     // FUNCTION: 0x675c80
-    CKanna(CPlayer** p1, CGame* p2, CGraphics* p3, CInput* p4, CSound* p5, BYTE p6);
+    CKanna(PTR32(CPlayer)* p1, CGame* p2, CGraphics* p3, CInput* p4, CSound* p5, BYTE p6);
     // FUNCTION: 0x675e20
     virtual void Reset();
     // FUNCTION: 0x675f40
@@ -2361,7 +2392,7 @@ public:
     // FUNCTION: 0x6d93f0
     virtual void UpdatePattern();
     // FUNCTION: 0x6e8130
-    CAyu(CPlayer** p1, CGame* p2, CGraphics* p3, CInput* p4, CSound* p5, BYTE p6);
+    CAyu(PTR32(CPlayer)* p1, CGame* p2, CGraphics* p3, CInput* p4, CSound* p5, BYTE p6);
     // FUNCTION: 0x6e82f0
     virtual void Reset();
     // FUNCTION: 0x6e8420
@@ -2403,7 +2434,7 @@ public:
     // FUNCTION: 0x6f2f20
     virtual void UpdatePattern();
     // FUNCTION: 0x7039d0
-    CAkane(CPlayer** p1, CGame* p2, CGraphics* p3, CInput* p4, CSound* p5, BYTE p6);
+    CAkane(PTR32(CPlayer)* p1, CGame* p2, CGraphics* p3, CInput* p4, CSound* p5, BYTE p6);
     // FUNCTION: 0x703b70
     virtual void Reset();
     // FUNCTION: 0x703c90
@@ -2445,7 +2476,7 @@ public:
     // FUNCTION: 0x712500
     virtual void UpdatePattern();
     // FUNCTION: 0x7219a0
-    CAkiko(CPlayer** p1, CGame* p2, CGraphics* p3, CInput* p4, CSound* p5, BYTE p6);
+    CAkiko(PTR32(CPlayer)* p1, CGame* p2, CGraphics* p3, CInput* p4, CSound* p5, BYTE p6);
     // FUNCTION: 0x721ba0
     virtual void Reset();
     // FUNCTION: 0x721d10
@@ -2495,7 +2526,7 @@ public:
     // FUNCTION: 0x47c130
     void Unk47c130();
     // FUNCTION: 0x48a720
-    CNanase(CPlayer** p1, CGame* p2, CGraphics* p3, CInput* p4, CSound* p5, BYTE p6);
+    CNanase(PTR32(CPlayer)* p1, CGame* p2, CGraphics* p3, CInput* p4, CSound* p5, BYTE p6);
     // FUNCTION: 0x48a9b0
     virtual void Reset();
     // FUNCTION: 0x48ab00
@@ -2542,8 +2573,8 @@ public:
     int unk3454;
     char unk3458;
     BYTE unk3459[0x345c - 0x3459];
-    EffectAnim* unk345c;          // the second animation and pattern tables
-    PatternData* unk3460;
+    PTR32(EffectAnim) unk345c;    // the second animation and pattern tables
+    PTR32(PatternData) unk3460;
     int unk3464;
     int unk3468;
     BYTE unk346c[0x3470 - 0x346c];
@@ -2556,7 +2587,8 @@ public:
     // FUNCTION: 0x49d610
     virtual void UpdatePattern();
     // FUNCTION: 0x4add90
-    CNagamori(CPlayer** p1, CGame* p2, CGraphics* p3, CInput* p4, CSound* p5, BYTE p6);
+    CNagamori(PTR32(CPlayer)* p1, CGame* p2, CGraphics* p3, CInput* p4, CSound* p5,
+              BYTE p6);
     // FUNCTION: 0x4adfa0
     virtual void Reset();
     // FUNCTION: 0x4ae130
@@ -2609,7 +2641,7 @@ public:
     // FUNCTION: 0x62a5e0
     virtual void UpdatePattern();
     // FUNCTION: 0x638d90
-    CKaori(CPlayer** p1, CGame* p2, CGraphics* p3, CInput* p4, CSound* p5, BYTE p6);
+    CKaori(PTR32(CPlayer)* p1, CGame* p2, CGraphics* p3, CInput* p4, CSound* p5, BYTE p6);
     // FUNCTION: 0x638f10
     virtual void Reset();
     // FUNCTION: 0x639030
@@ -2651,7 +2683,7 @@ public:
     // FUNCTION: 0x6429c0
     virtual void UpdatePattern();
     // FUNCTION: 0x653a20
-    CKano(CPlayer** p1, CGame* p2, CGraphics* p3, CInput* p4, CSound* p5, BYTE p6);
+    CKano(PTR32(CPlayer)* p1, CGame* p2, CGraphics* p3, CInput* p4, CSound* p5, BYTE p6);
     // FUNCTION: 0x653c30
     virtual void Reset();
     // FUNCTION: 0x653dd0
@@ -2705,7 +2737,7 @@ public:
     // FUNCTION: 0x694d00
     void Unk694d00();
     // FUNCTION: 0x6a59c0
-    CIkumi(CPlayer** p1, CGame* p2, CGraphics* p3, CInput* p4, CSound* p5, BYTE p6);
+    CIkumi(PTR32(CPlayer)* p1, CGame* p2, CGraphics* p3, CInput* p4, CSound* p5, BYTE p6);
     // FUNCTION: 0x6a5c50
     virtual void Reset();
     // FUNCTION: 0x6a5dc0
@@ -2754,8 +2786,8 @@ public:
     int unk3360[0x40]; // indexed
     char unk3460;
     BYTE unk3461[0x3464 - 0x3461];
-    EffectAnim* unk3464;          // the second animation and pattern tables
-    PatternData* unk3468;
+    PTR32(EffectAnim) unk3464;    // the second animation and pattern tables
+    PTR32(PatternData) unk3468;
     int unk346c;
     int unk3470;
     BYTE unk3474[0x3478 - 0x3474];
@@ -2768,7 +2800,8 @@ public:
     // FUNCTION: 0x6be9c0
     virtual void UpdatePattern();
     // FUNCTION: 0x6cfbb0
-    CEXNanase(CPlayer** p1, CGame* p2, CGraphics* p3, CInput* p4, CSound* p5, BYTE p6);
+    CEXNanase(PTR32(CPlayer)* p1, CGame* p2, CGraphics* p3, CInput* p4, CSound* p5,
+              BYTE p6);
     // FUNCTION: 0x6cfd80
     virtual void Reset();
     // FUNCTION: 0x6cfed0
@@ -2817,7 +2850,7 @@ public:
     // FUNCTION: 0x730710
     virtual void UpdatePattern();
     // FUNCTION: 0x73e790
-    CNayukiB(CPlayer** p1, CGame* p2, CGraphics* p3, CInput* p4, CSound* p5, BYTE p6);
+    CNayukiB(PTR32(CPlayer)* p1, CGame* p2, CGraphics* p3, CInput* p4, CSound* p5, BYTE p6);
     // FUNCTION: 0x73e970
     virtual void Reset();
     // FUNCTION: 0x73eac0
@@ -2853,5 +2886,14 @@ public:
     int unk3258[0x40]; // indexed
     int unk3358[0x40]; // indexed
 };
+
+#ifdef EFZ_TRACE
+// src/trace.cpp: the replay test's harness, in make trace and the native build.
+void TraceStart(CGame* game, CScene** scenes, BYTE* scene);
+int TraceFast();
+int TraceQuit(BYTE scene);
+void TraceTick(CScene3* scene);
+int TraceInput(BYTE player, BYTE* input);
+#endif
 
 #endif

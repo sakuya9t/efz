@@ -24,6 +24,24 @@ Statements about the game are **observed** (read from the matched source) or **i
   EfzRevival 1.02h already requires. With the ruleset off, the replay test must pass
   unchanged.
 
+## Running it
+
+The harness is `src/trace.cpp`, built into efz.exe by `make trace` (the original's
+code, with hooks in `CScene3::Update`, `CInput::GetInput` and the main loop) and always
+into the native game. It records a replay with scripted random input or plays one
+without the menus, and logs the status below after every tick. `tools/compat.py` runs
+the original under wine and the native game, and compares:
+
+```sh
+make trace && tools/native.sh
+tools/compat.py fuzz 20            # record 20 random matches; play each in both
+tools/compat.py record 1-1 1:6:3:0:0:42 --ticks 3000   # Ayu against Nagamori, stage 3
+tools/compat.py play 1-1           # the original twice, the native game once
+tools/compat.py --windows check    # the native Windows build, under 64-bit wine
+```
+
+The comparison leaves out a field until the game has set it (the combo damage, below).
+
 ## The replay format
 
 **Observed.** `replay\dataN-M.rep` (N, M = 1-9, 81 slots, `src/scene8.cpp`) is a stream
@@ -32,8 +50,8 @@ reads the words back strictly in the order it wrote them.
 
 | Part | Words | Where |
 |---|---|---|
-| Header | P1 character, P2 character, `0x68`, stage, P1 palette, P2 palette | written `src/scene3.cpp:677-683`, read `src/scene2.cpp:126-137` |
-| Each fight frame, not while paused | Two values the F4/F5 keys set; the second is the HP the players are reset to (`src/player.cpp:326`) | `CScene3::Vf2`, `src/scene3.cpp:592-608` |
+| Header | P1 character, P2 character, `0x68`, stage, P1 palette, P2 palette | written `src/scene3.cpp:680-686`, read `src/scene2.cpp:126-137` |
+| Each fight frame, not while paused | Two values the F4/F5 keys set; the second is the HP the players are reset to (`src/player.cpp:326`) | `CScene3::Vf2`, `src/scene3.cpp:595-611` |
 | Each player's input | One word: bits `1` right, `2` left, `4` down, `8` up, `0x10`-`0x80` A-D | `src/player.cpp:1027-1029`, decoded at `:1037-1084` |
 | Each random draw through `CPlayer::Random` (`0x4108a0`) | The `rand()` value when recording; on playback the word replaces it | `src/player.cpp:667-680` |
 
@@ -61,7 +79,7 @@ earlier versions.
 | The game's effects | Plain `rand()` (`src/effect.cpp`) | Visual; left out |
 | The CPU's random guard (`src/player.cpp:551`) | Plain `rand()` | Never runs in a recorded fight: replays are recorded from the title menu's replay item, which makes both players human (`src/scene0.cpp:132-133`) |
 | `key.ini` bytes `0x21`-`0x26` (read into `CGame`, `src/game.cpp:37-43`) | Not stored in the replay | Tests run with one fixed `key.ini` |
-| Uninitialised variables | Whatever memory held | See the open questions |
+| Uninitialised variables | Whatever memory held | See "Answered": `CPlayer::m_hitsLeft` decides some hits |
 | Menus, character select, results | Only the fight is recorded | Out of scope |
 
 ## Rules for changes in the fork
@@ -74,7 +92,14 @@ earlier versions.
   helper and her dash feathers use `rand()`.
 - **Keep the floating point.** Damage is `(int)(base × three double factors)`
   (`src/player.cpp:626`) and positions are doubles. A different compiler, SSE instead of
-  x87, or another FPU precision can flip the truncation and change the HP by one.
+  x87, or another FPU precision can flip the truncation and change the HP by one. In
+  the shared sources that means: floats through `F32` (computed in double, rounded when
+  stored), `F32CAST` for a cast to float inside an expression (the original drops it),
+  and `sin`, `cos` and `atan2` only through `x87.h`'s versions in the native build
+  ([native.md](native.md)).
+- **Keep the order of side effects.** The original evaluates a call's arguments right
+  to left; a call with two random draws as arguments needs them drawn in that order
+  natively (two do, `#ifdef EFZ_NATIVE`).
 - **A change that isn't meant to change the game passes the replay test unchanged.**
   This covers SDL3, widescreen, input rebinding and the like.
 
@@ -86,9 +111,12 @@ What the test compares for each player on each frame. Offsets are in `CPlayer`.
 |---|---|---|
 | HP | `m_hp`, `+0x108` | 9999 full (`src/player.cpp:216`) |
 | HP when the current combo began | `m_comboStartHp`, `+0x10c` | `src/player.cpp:624` |
-| The combo's damage so far | `m_comboDamage`, `+0x100` | `src/player.cpp:635` |
+| The combo's damage so far | `m_comboDamage`, `+0x100` | `src/player.cpp:635`. **Observed:** uninitialised until a combo starts: garbage, different on every run of the original. Compared while the hit count is above 0 |
 | Hits in the current combo | `m_comboHits`, `+0x174` | `src/player.cpp:632` |
 | Position | `x`, `y`, `+0x20`, `+0x28` | Doubles; y is negative in the air. Compared bit for bit |
+| Velocity | `vx`, `vy`, `+0x30`, `+0x38` | Doubles, compared bit for bit |
+| Frame of the action | `frame`, `+0xa` | |
+| Facing | `facing`, `+0x50` | 1 or -1 |
 | Action | `pattern`, `+0x8` | e.g. Ayu's forward dash is `0xa3` |
 | Gauge | `m_gauge`, `+0x148` | A level per 1000, 3000 full: moves test `>= 0x3e8`, `0x7d0` and `0xbb8` |
 
@@ -96,11 +124,38 @@ The list grows as more fields are identified. The replay word offset is logged w
 each frame too: if the fork and the original read different words first, the bug is in
 what the fork consumes; if the words agree and the status differs, it is game logic.
 
+## Answered
+
+- **Does the original play each replay the same way every time?** Nearly always, not
+  always. **Observed:** of 154 replays (114 it recorded, 40 the native game recorded;
+  [native.md](native.md)), it played 5 differently from run to run: an attack that
+  hits in some runs misses in others, the rest of the match then parting. The cause is
+  `CPlayer::m_hitsLeft` (`+0x16c`), the hits the current attack can still land: each
+  attack's code sets it during the attack and each hit takes one off, but nothing sets
+  it before a player's first attack, and the hit test (`CScene3::Unk767f60`,
+  `src/scene3.cpp:1052`) requires it above 0. The frame an attack's box first appears
+  is tested once before its code sets the field (Mizuka's state `0xc8` sets it on
+  frame 2, at the update after the one that starts that frame; Kaori's `0xcd` on frame
+  3). So a player's first attack hits there when the heap's garbage is positive as a
+  short. Memory dumps of a run that hits and one that misses show it on all five: the
+  attacker's field holds 27022, 20255, 19239, 19272 and 7196 in the one and -23847,
+  -27669, -6235, -17603 and -13365 in the other. The native game's memory starts
+  zeroed, so such an attack never hits there, which is one of the original's two
+  outcomes; on all 5 the native game plays exactly as one of the original's runs.
+  EfzRevival 1.02h doesn't initialise the field either (it only reads it to draw
+  hitboxes), so two players on it could part the same way. `tools/compat.py` replays
+  the original again when the native game parts from it, and reports a replay on which
+  the original varies.
+- **Is the original the same on every CPU?** No, though rarely does it show. `sin`,
+  `cos` and `atan2` are the x87's `fsin`, `fcos` and `fpatan`, whose last bits are
+  each CPU's own: this AMD Zen 4's differ from the correctly rounded value on a third
+  of inputs, which changes a velocity set from an angle (`ObjBase::SetVelocity`) by one
+  unit in the last place about once in a thousand calls. Intel's microcode differs again. The native game uses the
+  correctly rounded value on every machine; `EFZ_HOST_X87` builds it with the
+  machine's own instead ([native.md](native.md)).
+
 ## Open questions
 
-- Does the original play each replay the same way every time? Uninitialised variables
-  (EfzRevival fixes some) could make it vary. Playing every test replay several times on
-  the original answers it, and has to come before trusting any comparison.
 - Feathers share the 64-slot object table with projectiles. When it is full the oldest
   object stops being updated (`CPlayer::Unk412f10`, `src/playerobj.cpp:53`), so a
   random number of feathers could drop a projectile in one playback only. Whether Ayu

@@ -15,10 +15,10 @@ CBg12::CBg12(CGraphics* p1)
     m_graphics = p1;
     m_number = 0xc;
     m_lastFrame = 1;
-    v8 = (int)operator new(8);
-    m_surfaces = (IDirectDrawSurface**)v8;
-    xc = (int)operator new(0xe0);
-    m_objects = (BgObject*)xc;
+    v8 = TOINT(int, operator new(8));
+    m_surfaces = TOPTR(PTR32(IDirectDrawSurface)*, v8);
+    xc = TOINT(int, operator new(0xe0));
+    m_objects = TOPTR(BgObject*, xc);
     m_anims = new EffectAnim[2];
     CAnimBg::Load();
     CAnimBg::Unk751030();

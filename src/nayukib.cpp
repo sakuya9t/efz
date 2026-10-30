@@ -4,7 +4,7 @@
 #include <math.h>
 #include "efz.h"
 
-CNayukiB::CNayukiB(CPlayer** p1, CGame* p2, CGraphics* p3, CInput* p4, CSound* p5, BYTE p6)
+CNayukiB::CNayukiB(PTR32(CPlayer)* p1, CGame* p2, CGraphics* p3, CInput* p4, CSound* p5, BYTE p6)
     : CPlayer(p1, p2, p3, p4, p5, p6)
 {
     int v4;
@@ -1974,7 +1974,15 @@ void CNayukiB::UpdateObjects()
                     m_objects[v4].vy = -2.2;
                     m_objects[v4].unk84 = 0;
                     unk3158[v4]++;
+#ifdef EFZ_NATIVE
+                    // The original computes the arguments right to left, so the speed draws first.
+                    {
+                        double speed = (double)((WORD)Random(0, 3) + 2);
+                        m_objects[v4].SetVelocity((double)(WORD)Random(0, 0x168), speed);
+                    }
+#else
                     m_objects[v4].SetVelocity((double)(WORD)Random(0, 0x168), (double)((WORD)Random(0, 3) + 2));
+#endif
                 }
                 m_objects[v4].timer++;
                 if (m_objects[v4].timer >= v54) {

@@ -143,7 +143,7 @@ void CPlayer::Unk40e740()
     }
 }
 
-CPlayer::CPlayer(CPlayer** p1, CGame* p2, CGraphics* p3, CInput* p4, CSound* p5, BYTE p6)
+CPlayer::CPlayer(PTR32(CPlayer)* p1, CGame* p2, CGraphics* p3, CInput* p4, CSound* p5, BYTE p6)
     : m_opponent(p1)
 {
     int v4;
@@ -163,7 +163,7 @@ CPlayer::CPlayer(CPlayer** p1, CGame* p2, CGraphics* p3, CInput* p4, CSound* p5,
     for (; v4 < 0x14; v4++) {
         m_rivals[v4] = -1;
     }
-    surfaces = (IDirectDrawSurface**)0;
+    surfaces = (PTR32(IDirectDrawSurface)*)0;
     anims = new EffectAnim[0x1f9];
     m_patterns = new PatternData[0x1f9];
     m_score = 0;
@@ -409,7 +409,7 @@ void CPlayer::Unk40f980()
         }
         if (Unk410340() == 0) {
             if (Unk4103a0() != 0) {
-                unk134 = unk134 - (float)(1.0 / ((y == 0.0) * 4 + 1));
+                unk134 = unk134 - F32CAST(1.0 / ((y == 0.0) * 4 + 1));
             } else {
                 unk134 -= 0.075f;
             }
@@ -816,8 +816,8 @@ void CPlayer::LoadSprites()
     char x2c[32];
     char bc[8];
 
-    v70 = (int)operator new(lastSurface * 4 + 4);
-    surfaces = (IDirectDrawSurface**)v70;
+    v70 = TOINT(int, operator new(lastSurface * 4 + 4));
+    surfaces = TOPTR(PTR32(IDirectDrawSurface)*, v70);
     if (1) {
         n38 = 0;
         strcpy(x2c, m_name);
@@ -826,8 +826,8 @@ void CPlayer::LoadSprites()
         strcat(x2c, ".dat");
         d30 = (int)CreateFileA((LPCSTR)x2c, 0x80000000, 0, 0, 3, 0x80, 0);
         h3c = GetFileSize((HANDLE)d30, 0);
-        x74 = (int)operator new(h3c);
-        x44 = (char*)x74;
+        x74 = TOINT(int, operator new(h3c));
+        x44 = TOPTR(char*, x74);
         ReadFile((HANDLE)d30, (LPVOID)x44, h3c, (LPDWORD)&v40, 0);
         n38 = *(BYTE*)x44 * 3 + 1;
         l48 = 0;

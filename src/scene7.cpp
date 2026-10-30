@@ -5,14 +5,14 @@
 #include <math.h>
 #include "efz.h"
 
-CScene7::CScene7(HWND p1, CPlayer** p2, CPlayer** p3, CGame* p4, CGraphics* p5, CInput* p6, CSound* p7)
+CScene7::CScene7(HWND p1, PTR32(CPlayer)* p2, PTR32(CPlayer)* p3, CGame* p4, CGraphics* p5, CInput* p6, CSound* p7)
     : CScene(p1, p2, p3, p4, p5, p6, p7)
 {
     if (1) {
-        m_game->LoadDat((IDirectDrawSurface**)&unk434, "system\\stfr.dat", 0, 1);
+        m_game->LoadDat((PTR32(IDirectDrawSurface)*)&unk434, "system\\stfr.dat", 0, 1);
         m_graphics->LoadPaletteDat(m_palette, "system\\stfr.dat", 0, 1, 0xfe);
     } else {
-        m_graphics->LoadBmp((IDirectDrawSurface**)&unk434, "system\\stfr.bmp", 1);
+        m_graphics->LoadBmp((PTR32(IDirectDrawSurface)*)&unk434, "system\\stfr.bmp", 1);
         m_graphics->LoadPaletteBmp(m_palette, "system\\stfr.bmp", 0, 1, 0xfe);
     }
     unk438 = 0.0;
@@ -22,7 +22,7 @@ CScene7::CScene7(HWND p1, CPlayer** p2, CPlayer** p3, CGame* p4, CGraphics* p5, 
 CScene7::~CScene7()
 {
     if (unk434 != 0) {
-        ((IUnknown*)unk434)->Release();
+        (TOPTR(IUnknown*, unk434))->Release();
         unk434 = 0;
     }
 }
@@ -57,9 +57,9 @@ BYTE CScene7::Update()
 void CScene7::Draw()
 {
     if (unk438 > 2280.0) {
-        m_graphics->Blit(MakeRect(0, 0, 0x140, 0xf0), (IDirectDrawSurface*)unk434, MakeRect(0, 0x8e8, 0x140, 0xf0), 0, 0);
+        m_graphics->Blit(MakeRect(0, 0, 0x140, 0xf0), TOPTR(IDirectDrawSurface*, unk434), MakeRect(0, 0x8e8, 0x140, 0xf0), 0, 0);
     } else {
-        m_graphics->Blit(MakeRect(0, 0, 0x140, 0xf0), (IDirectDrawSurface*)unk434, MakeRect(0, (int)unk438, 0x140, 0xf0), 0, 0);
+        m_graphics->Blit(MakeRect(0, 0, 0x140, 0xf0), TOPTR(IDirectDrawSurface*, unk434), MakeRect(0, (int)unk438, 0x140, 0xf0), 0, 0);
     }
     m_graphics->Flip();
 }

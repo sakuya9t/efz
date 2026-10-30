@@ -283,7 +283,7 @@ void CGame::LoadEffects()
     m_colorKey = m_graphics->GetColorKey(m_objectSurface);
 }
 
-void CGame::LoadDat(IDirectDrawSurface** surface, const char* name, BYTE rle, BYTE offset)
+void CGame::LoadDat(PTR32(IDirectDrawSurface)* surface, const char* name, BYTE rle, BYTE offset)
 {
     BYTE* data;
     DWORD dwRead;

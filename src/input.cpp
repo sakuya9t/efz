@@ -184,6 +184,10 @@ BYTE CInput::GetInput(BYTE player)
 
     if (player > 1)
         return 0;
+#ifdef EFZ_TRACE
+    if (TraceInput(player, &result))
+        return result;
+#endif
     result = 0;
     binding = m_bindings[player];
     if (m_keyboard) {

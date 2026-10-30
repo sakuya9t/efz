@@ -5,6 +5,9 @@
 #   make link       link build/efz.exe
 #   make check      link and compare it with $(EFZ_DIR)/efz.exe: they are identical
 #   make play       play build/efz.exe under wine on $(DISPLAY) (tools/play.sh)
+#   make trace      build/trace/efz.exe: efz.exe with the replay test's harness
+#   make native     the native game (CMakeLists.txt, docs/native.md) for Linux, and
+#                   make native-windows for Windows, built in docker (tools/native.sh)
 # One-time setup: toolchain/setup.sh
 
 # Compiler flags confirmed by matching WinMain (0x401000).  The original was built by
@@ -13,7 +16,7 @@
 # CRT (libcmt), which the original links (it imports CreateThread and the Tls functions).
 CFLAGS = /nologo /c /Od /GS /W3 /Zi /MT /D WIN32 /D NDEBUG /D _WINDOWS /D _MBCS
 
-SRCS := $(wildcard src/*.cpp)
+SRCS := $(filter-out src/trace.cpp,$(wildcard src/*.cpp))
 HDRS := $(wildcard src/*.h)
 OBJS := $(SRCS:src/%.cpp=build/%.obj)
 
@@ -65,6 +68,29 @@ check: build/efz.exe
 
 play: build/efz.exe
 	EFZ_DIR='$(EFZ_DIR)' tools/play.sh
+
+native:
+	tools/native.sh linux
+
+native-windows:
+	tools/native.sh windows
+
+# The replay test's harness (src/trace.cpp, docs/compat.md): efz.exe's objects, but
+# main, scene3 and input compiled again with its hooks (EFZ_TRACE), and trace.obj.
+# Every other function is the original's code, byte for byte.
+TRACE_HOOKED = main scene3 input
+trace: build/trace/efz.exe
+
+build/trace/%.obj: build/src/%.cpp $(HDRS:src/%=build/src/%) Makefile | build/trace
+	tools/msvc cl $(CFLAGS) /D EFZ_TRACE /Fo$@ /Fdbuild/trace/$*.pdb $<
+
+build/trace:
+	mkdir -p $@
+
+build/trace/efz.exe: $(OBJS) $(TRACE_HOOKED:%=build/trace/%.obj) build/trace/trace.obj build/efz.res
+	tools/msvc link /nologo /subsystem:windows /incremental:no /out:$@ \
+		$(foreach o,$(LINK_ORDER),$(if $(filter $(o),$(TRACE_HOOKED)),build/trace,build)/$(o).obj) \
+		build/trace/trace.obj build/efz.res $(LIBS)
 
 # The icon, efz.exe's only resource, comes from the original.
 build/efz.ico: | build
@@ -471,6 +497,6 @@ revival-flags:
 clean:
 	rm -rf build
 
-.PHONY: all diff link check play clean revival revival-diff revival-range revival-flags revival-names revival-decomp revival-check revival-launcher revival-launcher-check revival-launcher-order revival-dll revival-dll-diff revival-dll-check revival-dll-check-image revival-ddraw revival-ddraw-diff revival-ddraw-layout revival-ddraw-check
+.PHONY: all diff link check play clean trace native native-windows revival revival-diff revival-range revival-flags revival-names revival-decomp revival-check revival-launcher revival-launcher-check revival-launcher-order revival-dll revival-dll-diff revival-dll-check revival-dll-check-image revival-ddraw revival-ddraw-diff revival-ddraw-layout revival-ddraw-check
 .SECONDARY:
 .DELETE_ON_ERROR:

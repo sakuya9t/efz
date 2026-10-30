@@ -4,7 +4,7 @@
 #include <math.h>
 #include "efz.h"
 
-CNanase::CNanase(CPlayer** p1, CGame* p2, CGraphics* p3, CInput* p4, CSound* p5, BYTE p6)
+CNanase::CNanase(PTR32(CPlayer)* p1, CGame* p2, CGraphics* p3, CInput* p4, CSound* p5, BYTE p6)
     : CPlayer(p1, p2, p3, p4, p5, p6)
 {
     int v4;
@@ -81,8 +81,8 @@ void CNanase::Reset()
 
 CNanase::~CNanase()
 {
-    anims = (EffectAnim*)unk3464;
-    m_patterns = (PatternData*)unk3468;
+    anims = TOPTR(EffectAnim*, unk3464);
+    m_patterns = TOPTR(PatternData*, unk3468);
     delete[] unk345c;
     delete[] unk3460;
     CPlayer::~CPlayer();
@@ -488,8 +488,8 @@ void CNanase::Unk48d940()
         unk3460[k14].unk2 = v10.ReadInt();
         unk345c[k14].frameCount = v10.ReadInt();
         a18 = unk345c[k14].frameCount;
-        ((PatternData*)((int)(char*)unk3460 + k14 * 8))->Alloc(a18);
-        ((EffectAnim*)((int)(char*)unk345c + k14 * 8))->Alloc(a18);
+        (TOPTR(PatternData*, TOINT(int, (char*)unk3460) + k14 * 8))->Alloc(a18);
+        (TOPTR(EffectAnim*, TOINT(int, (char*)unk345c) + k14 * 8))->Alloc(a18);
         x20 = 0;
         for (; x20 < a18; x20++) {
             x24 = &unk345c[k14].frames[x20];
@@ -570,22 +570,22 @@ void CNanase::Unk48e140(char p1)
     int v4;
 
     if (p1 == 1 && unk3458 == 0) {
-        anims = (EffectAnim*)(int)unk345c;
+        anims = TOPTR(EffectAnim*, (int)unk345c);
         v4 = 0;
         for (; v4 < 0x40; v4++) {
-            m_objects[v4].anims = (EffectAnim*)(int)unk345c;
+            m_objects[v4].anims = TOPTR(EffectAnim*, (int)unk345c);
         }
-        m_patterns = (PatternData*)(int)unk3460;
+        m_patterns = TOPTR(PatternData*, (int)unk3460);
         unk3458 = 1;
         return;
     }
     if (p1 == 0 && unk3458 == 1) {
-        anims = (EffectAnim*)unk3464;
+        anims = TOPTR(EffectAnim*, unk3464);
         v8 = 0;
         for (; v8 < 0x40; v8++) {
-            m_objects[v8].anims = (EffectAnim*)unk3464;
+            m_objects[v8].anims = TOPTR(EffectAnim*, unk3464);
         }
-        m_patterns = (PatternData*)unk3468;
+        m_patterns = TOPTR(PatternData*, unk3468);
         unk3458 = 0;
     }
 }

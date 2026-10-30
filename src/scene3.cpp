@@ -13,7 +13,7 @@
 // Set while one of F5-F8 is held, so that each press acts once (Vf2).
 int g_fkeyHeld = 0;
 
-CScene3::CScene3(HWND p1, CPlayer** p2, CPlayer** p3, CGame* p4, CGraphics* p5, CInput* p6, CSound* p7)
+CScene3::CScene3(HWND p1, PTR32(CPlayer)* p2, PTR32(CPlayer)* p3, CGame* p4, CGraphics* p5, CInput* p6, CSound* p7)
     : CScene(p1, p2, p3, p4, p5, p6, p7)
 {
     unk440 = 0;
@@ -174,6 +174,9 @@ BYTE CScene3::Update()
         Unk764db0();
         Unk764f10();
         Unk765040();
+#ifdef EFZ_TRACE
+        TraceTick(this);
+#endif
     }
     m_game->UpdateFade();
     m_game->UpdateTimers();
@@ -1906,8 +1909,8 @@ void CScene3::Unk76bab0(CPlayer* p1, CPlayer* p2, int p3, int p4)
     x8 = (int)p1->m_patterns[vc->pattern].frames + vc->frame * 0xc8;
     l4 = (int)p2->m_patterns[l10->pattern].frames + l10->frame * 0xc8;
     if (vc->unk80 == 0 && l10->unk80 == 0 && vc->unk84 > 0 && l10->unk84 > 0 && p1->m_patterns[vc->pattern].unk0 > 0 && p2->m_patterns[l10->pattern].unk0 > 0) {
-        v20 = this->Unk767600((ObjBase*)vc, (RECT*)(x8 + 0x90));
-        v30 = this->Unk767600((ObjBase*)l10, (RECT*)(l4 + 0x90));
+        v20 = this->Unk767600((ObjBase*)vc, TOPTR(RECT*, x8 + 0x90));
+        v30 = this->Unk767600((ObjBase*)l10, TOPTR(RECT*, l4 + 0x90));
         if (Unk767930(&v20, &v30) != 0) {
             if (p2->m_patterns[l10->pattern].unk0 == p1->m_patterns[vc->pattern].unk0) {
                 vc->unk80 = 4;

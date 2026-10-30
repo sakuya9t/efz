@@ -43,8 +43,8 @@ void CAnimBg::Load()
             strcat(v2c, ".dat");
             v34 = (int)CreateFileA((LPCSTR)v2c, 0x80000000, 0, 0, 3, 0x80, 0);
             v38 = GetFileSize((HANDLE)v34, 0);
-            v48 = (int)operator new(v38);
-            h40 = (char*)v48;
+            v48 = TOINT(int, operator new(v38));
+            h40 = TOPTR(char*, v48);
             ReadFile((HANDLE)v34, (LPVOID)h40, v38, (LPDWORD)&a3c, 0);
             m_graphics->LoadSurface(&m_surfaces[v30], (BYTE*)(h40 + *(BYTE*)h40 * 3 + 1), 0, 1);
             CloseHandle((HANDLE)v34);
@@ -153,10 +153,10 @@ CBg01::CBg01(CGraphics* p1)
     m_graphics = p1;
     m_number = 1;
     m_lastFrame = 0x39;
-    v8 = (int)operator new(0xe8);
-    m_surfaces = (IDirectDrawSurface**)v8;
-    xc = (int)operator new(0xe0);
-    m_objects = (BgObject*)xc;
+    v8 = TOINT(int, operator new(0xe8));
+    m_surfaces = TOPTR(PTR32(IDirectDrawSurface)*, v8);
+    xc = TOINT(int, operator new(0xe0));
+    m_objects = TOPTR(BgObject*, xc);
     m_anims = new EffectAnim[2];
     CAnimBg::Load();
     CAnimBg::Unk751030();

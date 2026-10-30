@@ -8,7 +8,7 @@
 #include <math.h>
 #include "efz.h"
 
-CShiori::CShiori(CPlayer** p1, CGame* p2, CGraphics* p3, CInput* p4, CSound* p5, BYTE p6)
+CShiori::CShiori(PTR32(CPlayer)* p1, CGame* p2, CGraphics* p3, CInput* p4, CSound* p5, BYTE p6)
     : CPlayer(p1, p2, p3, p4, p5, p6)
 {
     int v4;
@@ -2678,7 +2678,15 @@ void CShiori::UpdateObjects()
                 if (m_objects[v4].frame == 0 && unk3158[v4] == 0) {
                     m_objects[v4].unk84 = 1;
                     unk3158[v4]++;
+#ifdef EFZ_NATIVE
+                    // The original computes the arguments right to left, so the speed draws first.
+                    {
+                        double speed = (WORD)Random(0x1e, 0x19) * 0.1;
+                        m_objects[v4].SetVelocity((double)((WORD)Random(0, 0x5a) - 0x2d), speed);
+                    }
+#else
                     m_objects[v4].SetVelocity((double)((WORD)Random(0, 0x5a) - 0x2d), (WORD)Random(0x1e, 0x19) * 0.1);
+#endif
                 }
                 if (m_objects[v4].x > 660.0 || m_objects[v4].x < -20.0) {
                     RemoveObject(v4);

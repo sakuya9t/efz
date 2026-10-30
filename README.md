@@ -19,6 +19,11 @@ and still builds the identical exe. [docs/readability.md](docs/readability.md) r
 how, and which readability changes keep the compiled code: renaming members and methods
 does; renaming locals doesn't, since this compiler orders stack slots by their names.
 
+**The same sources also build into a native game** for Windows, macOS and Linux:
+64-bit, on SDL3, without wine. It plays the original's replays tick for tick, the
+characters' positions to the bit (the replay test of [docs/compat.md](docs/compat.md)).
+See [The native game](#the-native-game) and [docs/native.md](docs/native.md).
+
 | Source | What it is |
 |---|---|
 | `src/main.cpp` | `WinMain`, the window procedure, the 64 FPS frame timer |
@@ -38,6 +43,8 @@ does; renaming locals doesn't, since this compiler orders stack slots by their n
 | `src/scene0.cpp` ... `scene8.cpp` | The scenes `WinMain` runs: 0 title, 1 character select, 2 match setup, 3 the fight, 5 results, 6 config, 7 staff roll, 8 replays |
 | `src/scene3_draw.cpp` | The drawing helpers of scene 3, the fight |
 | `src/efz.rc` | The icon resource (the icon itself is taken from the original at build time) |
+| `src/trace.cpp` | The replay test's harness (`make trace` and the native game), not part of efz.exe |
+| `port/` | The native game's platform layer on SDL3, in place of `main.cpp`, `graphics.cpp`, `input.cpp` and `sound.cpp`; 32-bit handles for the game's pointers; the original's floating point |
 
 ## Game files
 
@@ -101,6 +108,33 @@ ssh, name the session's display, e.g. `DISPLAY=:10 make play` for an xrdp deskto
 - **Controls.** The keyboard, as bound in `key.ini`. Joysticks aren't passed into the
   container.
 
+## The native game
+
+```sh
+tools/native.sh                    # build/native/efz for Linux, in docker; runs the tests
+tools/native.sh windows            # build/windows/efz.exe for 64-bit Windows
+build/native/efz --data "$EFZ_DIR"
+```
+
+Or with CMake directly, on any of the three systems: `cmake -B build/native && cmake
+--build build/native`. It needs CMake and a C++17 compiler; SDL3 is downloaded and
+linked statically. The game reads its data from `--data` (a folder with an EFZ 4.02
+install) and writes `key.ini`, records, replays and screenshots to `--save` (default:
+the data folder, or the user's preferences folder if that is read-only). Alt+Enter
+toggles full screen; controllers work as DirectInput joysticks did and can be plugged in
+at any time.
+
+`make check` still builds the original byte for byte from the same sources: where the
+native build needs something else, `src/efz.h`'s macros expand to the original's
+casts. [docs/native.md](docs/native.md) has how the native game keeps the original's
+memory layout (32-bit handles in place of pointers) and floating point (the x87's, on
+every CPU), and the replay test that checks it:
+
+```sh
+make trace                          # efz.exe with the replay test's harness
+tools/compat.py fuzz 20             # record 20 random matches with it; play in both games
+```
+
 ## Matching workflow
 
 1. **Annotate.** Put `// FUNCTION: 0xADDR` above the function or its declaration, and
@@ -126,7 +160,9 @@ ssh, name the session's display, e.g. `DISPLAY=:10 make play` for an xrdp deskto
    every matched function to check that the lifter doesn't regress. The lifter writes
    fields as raw offsets and predates the names in `src/`: after regenerating an
    object, `tools/members.py rewrite src/<obj>.cpp` turns its accesses into members
-   again, and its methods need renaming back.
+   again, and its methods need renaming back. Then `tools/portify.py src/<obj>.cpp`
+   marks its casts between pointers and ints for the native build
+   ([docs/native.md](docs/native.md)), without changing the matched code.
 5. **Fix stack-layout differences by renaming.** This compiler orders stack variables by a
    hash of their names, not by declaration order. If only `[ebp-N]` offsets differ:
    - list each local's slot in the original, top of the frame first
@@ -158,6 +194,9 @@ ssh, name the session's display, e.g. `DISPLAY=:10 make play` for an xrdp deskto
 | `tools/icon.py` | Writes the original's icon as an `.ico` for `src/efz.rc` |
 | `tools/postlink.py` | Sets the timestamp, PDB GUID and Rich header count after linking |
 | `tools/play.sh` | Plays the built (or original) `efz.exe` under wine on an X display |
+| `tools/native.sh` | Builds the native game (Linux, or Windows with MinGW-w64) in docker |
+| `tools/portify.py` | Marks the pointer casts of lifted code for the native build's 32-bit handles |
+| `tools/compat.py` | The replay test: records replays with the original, plays them in both games, compares tick by tick |
 | `tools/msvc11` | Run Visual C++ 2012 tools (EfzRevival's toolchain) in the container |
 | `tools/libmatch.py` | Finds the functions of prebuilt `.lib`/`.obj` files in a binary, relocations masked |
 | `tools/rtti.py` | Lists an MSVC binary's vtables, with their classes, through its RTTI |
@@ -243,8 +282,10 @@ See [docs/recon.md](docs/recon.md). In short:
 4. **Byte-identical exe.** *Done:* `make check`. Still to do: run it in CI (that needs
    a legitimately obtained `efz.exe` on the runner).
 5. **Modern fork.** Starting from the matched source:
+   - run natively on Windows, macOS and Linux, 64-bit. *Done:* the native game
+     ([docs/native.md](docs/native.md)), checked against the original by replays.
+   - replace DirectDraw, DirectInput and DirectSound with SDL3. *Done* (`port/`).
    - separate the deterministic 64 FPS simulation from the platform layer
-   - replace DirectDraw, DirectInput and DirectSound with SDL3
    - reach parity with EfzRevival: rollback netplay, spectating, replays, training tools
    - add widescreen and HD output, in-game input binding and controller hot-plug
    - add mod support for characters, stages and palettes
