@@ -110,6 +110,25 @@ ssh, name the session's display, e.g. `DISPLAY=:10 make play` for an xrdp deskto
 
 ## The native game
 
+One command builds the game from this checkout, as far as anything changed, and
+starts it:
+
+```sh
+tools/run.sh --data /path/to/EFZ           # Linux, macOS
+tools\run.cmd --data C:\path\to\EFZ        # Windows
+```
+
+It needs CMake 3.16 or later and a C++17 compiler: on Windows, Visual Studio 2019 or
+later (its Build Tools are enough, and bring CMake) or MinGW-w64; on macOS, the Xcode
+command line tools and CMake; on Linux, also the development files of X11 and of ALSA
+or PulseAudio, which SDL3 builds its back ends from. A Linux machine without them builds
+in docker instead, if it has docker. The script says what is missing and how to install
+it. The first build downloads SDL3 and takes a few minutes; `--build-only` only builds.
+The game's data can also come from `EFZ_DIR`, and the scripts pass other options to
+the game (`--fullscreen`, `--save DIR`).
+
+In docker, and for Windows from Linux:
+
 ```sh
 tools/native.sh                    # build/native/efz for Linux, in docker; runs the tests
 tools/native.sh windows            # build/windows/efz.exe for 64-bit Windows
@@ -117,12 +136,11 @@ build/native/efz --data "$EFZ_DIR"
 ```
 
 Or with CMake directly, on any of the three systems: `cmake -B build/native && cmake
---build build/native`. It needs CMake and a C++17 compiler; SDL3 is downloaded and
-linked statically. The game reads its data from `--data` (a folder with an EFZ 4.02
-install) and writes `key.ini`, records, replays and screenshots to `--save` (default:
-the data folder, or the user's preferences folder if that is read-only). Alt+Enter
-toggles full screen; controllers work as DirectInput joysticks did and can be plugged in
-at any time.
+--build build/native`. SDL3 is downloaded and linked statically. The game reads its
+data from `--data` (a folder with an EFZ 4.02 install) and writes `key.ini`, records,
+replays and screenshots to `--save` (default: the data folder, or the user's
+preferences folder if that is read-only). Alt+Enter toggles full screen; controllers
+work as DirectInput joysticks did and can be plugged in at any time.
 
 `make check` still builds the original byte for byte from the same sources: where the
 native build needs something else, `src/efz.h`'s macros expand to the original's
@@ -194,6 +212,7 @@ tools/compat.py fuzz 20             # record 20 random matches with it; play in 
 | `tools/icon.py` | Writes the original's icon as an `.ico` for `src/efz.rc` |
 | `tools/postlink.py` | Sets the timestamp, PDB GUID and Rich header count after linking |
 | `tools/play.sh` | Plays the built (or original) `efz.exe` under wine on an X display |
+| `tools/run.sh`, `tools/run.cmd` | Build the native game and start it, on Linux and macOS, or on Windows |
 | `tools/native.sh` | Builds the native game (Linux, or Windows with MinGW-w64) in docker |
 | `tools/portify.py` | Marks the pointer casts of lifted code for the native build's 32-bit handles |
 | `tools/compat.py` | The replay test: records replays with the original, plays them in both games, compares tick by tick |

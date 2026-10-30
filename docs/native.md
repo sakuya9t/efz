@@ -13,6 +13,21 @@ change keeps that true.
 
 ## Building and playing
 
+On each system one script builds the game, as far as anything changed, and starts it:
+
+```sh
+tools/run.sh --data "$EFZ_DIR"     # Linux, macOS: build/run/efz (in efz.app on macOS)
+tools\run.cmd --data C:\EFZ        # Windows: build\run\RelWithDebInfo\efz.exe
+```
+
+They build with CMake in `build/run`, of the build type the replay test checks
+(RelWithDebInfo, CMakeLists.txt's default). They find CMake where the usual installers
+put it (on Windows, Visual Studio's own as well), and when the machine lacks something
+they say what and how to install it. On Linux without the compiler and the libraries'
+development files, `tools/run.sh` builds in docker with `tools/native.sh` instead
+(`EFZ_BUILD=host` or `docker` chooses). `--build-only` only builds; other options go to
+the game. CI builds with these scripts and checks that they start the game.
+
 ```sh
 tools/native.sh                    # build/native/efz for Linux, in the efz-native image
 tools/native.sh windows            # build/windows/efz.exe for 64-bit Windows (MinGW-w64)
@@ -23,9 +38,9 @@ build/native/efz --data "$EFZ_DIR"
 With CMake and a compiler on the machine, plain CMake works on all three systems:
 
 ```sh
-cmake -B build/native -DCMAKE_BUILD_TYPE=Release
-cmake --build build/native --config Release
-ctest --test-dir build/native -C Release
+cmake -B build/native
+cmake --build build/native --config RelWithDebInfo
+ctest --test-dir build/native -C RelWithDebInfo
 ```
 
 CMake downloads SDL3 3.4.18, pinned by SHA-256, and links it statically.

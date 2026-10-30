@@ -1,4 +1,5 @@
-# Builds the native game (CMakeLists.txt) on each platform it targets and checks that the
+# Builds the native game (CMakeLists.txt) on each platform it targets, with the script
+# that builds and starts it there (tools/run.sh, tools/run.cmd), and checks that the
 # emulation of the original's floating point gives the same bits there
 # (tests/x87_test.cpp). The replay test itself needs the game's data, so it runs
 # locally (tools/compat.py).
@@ -39,18 +40,45 @@ jobs:
             libdecor-0-dev libegl-dev libgl-dev libgles-dev libdrm-dev libgbm-dev \
             libasound2-dev libpulse-dev libpipewire-0.3-dev libudev-dev libdbus-1-dev \
             libibus-1.0-dev
-      - name: Configure
-        run: cmake -S . -B build/native -DCMAKE_BUILD_TYPE=Release
+      # With the compilers here, not in docker as the script would without them.
       - name: Build
-        run: cmake --build build/native --config Release --parallel
+        if: runner.os != 'Windows'
+        env:
+          EFZ_BUILD: host
+        run: tools/run.sh --build-only
+      - name: Build
+        if: runner.os == 'Windows'
+        run: tools\run.cmd --build-only
       - name: Test
-        run: ctest --test-dir build/native --build-config Release --output-on-failure
+        run: ctest --test-dir build/run --build-config RelWithDebInfo --output-on-failure
+      # The script starts the game it built, which finds no game data here: it says so
+      # and exits with 1, and the script passes both on.
+      - name: Start
+        if: runner.os != 'Windows'
+        env:
+          EFZ_BUILD: host
+        run: |
+          mkdir empty
+          status=0
+          tools/run.sh --data empty > start.txt 2>&1 || status=$?
+          cat start.txt
+          [ $status = 1 ] && grep -q 'no game data' start.txt
+      - name: Start
+        if: runner.os == 'Windows'
+        shell: cmd
+        run: |
+          mkdir empty
+          call tools\run.cmd --data empty > start.txt 2>&1
+          set status=%errorlevel%
+          type start.txt
+          if not "%status%"=="1" exit /b 1
+          findstr /c:"no game data" start.txt
       - uses: actions/upload-artifact@v4
         with:
           name: efz-${{ matrix.name }}
           path: |
-            build/native/efz
-            build/native/efz.exe
-            build/native/Release/efz.exe
-            build/native/efz.app
+            build/run/efz
+            build/run/efz.exe
+            build/run/RelWithDebInfo/efz.exe
+            build/run/efz.app
           if-no-files-found: ignore
