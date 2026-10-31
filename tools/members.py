@@ -23,6 +23,10 @@ Usage:
     tools/members.py rewrite [files...]             rewrite src/*.cpp (and efz.h) in place
     tools/members.py check [files...]               what rewrite would change, as a diff
     tools/members.py layout                         check efz.h's offsets and sizes
+    tools/members.py fields                         every class's members as JSON:
+                                                    {class: [[offset, size, name]]},
+                                                    class names in lower case, bases'
+                                                    members flattened in (tools/compat.py)
     tools/members.py rename RENAMES                 rename members and methods: lines
                                                     "Class::member name"
 
@@ -1083,6 +1087,35 @@ def check_layout():
     return errors
 
 
+def dump_fields():
+    """{class: [[offset, size, name]]}: each class's members, with its bases' at their
+    offsets, arrays as one member."""
+    header = os.path.join(SRC, 'efz.h')
+    tu = parse(os.path.join(SRC, 'main.cpp'), ci.Index.create())
+    layouts = Layouts(tu)
+    out = {}
+
+    def flatten(t, base):
+        rows = []
+        for fl in layouts.fields(t):
+            if fl.base:
+                rows += flatten(fl.type, base + fl.off)
+            else:
+                rows.append([base + fl.off, max(canon(fl.type).get_size(), 0), fl.name])
+        return rows
+
+    def visit(c):
+        for x in c.get_children():
+            f = x.location.file
+            if f is None or os.path.abspath(f.name) != header:
+                continue
+            if x.kind in (CK.CLASS_DECL, CK.STRUCT_DECL) and x.is_definition():
+                out.setdefault(x.spelling.lower(), sorted(flatten(x.type, 0)))
+                visit(x)
+    visit(tu.cursor)
+    json.dump(out, sys.stdout)
+
+
 # --- renaming ----------------------------------------------------------------------
 
 def read_renames(path):
@@ -1181,6 +1214,10 @@ def main():
     if args and args[0] == 'rename':
         renames = read_renames(args[1])
         sys.exit(1 if rename([os.path.abspath(a) for a in args[2:]], renames) else 0)
+    if args and args[0] == 'fields':
+        include_farm()
+        dump_fields()
+        return
     if not args or args[0] not in ('scan', 'rewrite', 'check', 'layout'):
         print(__doc__)
         sys.exit(2)

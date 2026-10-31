@@ -14,14 +14,21 @@ Rich header are set after linking (`tools/postlink.py`). `tools/progress.py` pri
 per-function numbers.
 
 The source reads fields through named members rather than the lifter's raw offsets
-(`m_pointY[4] = -0x1d` for `*(short*)((char*)this + 0x2b00) = -0x1d`, `(*m_opponent)->x`),
-and still builds the identical exe. [docs/readability.md](docs/readability.md) records
-how, and which readability changes keep the compiled code: renaming members and methods
-does; renaming locals doesn't, since this compiler orders stack slots by their names.
+(`m_pointY[4] = -0x1d` for `*(short*)((char*)this + 0x2b00) = -0x1d`, `(*m_opponent)->x`).
+[docs/readability.md](docs/readability.md) records how, and which readability changes
+keep the compiled code.
+
+**Since 31 October 2026 the source is free to change** for readability and the fork:
+the git tag `compat-reference` keeps the last source that builds the identical exe, and
+the compatibility suite of [docs/compat.md](docs/compat.md), not the bytes, checks that
+every change still plays the original's game. It plays 254 fights (replays, and the
+game's CPU against itself and against scripted input; 1.2 million ticks) in the build
+under test and compares the whole game state, hashed after every tick, with the
+original's.
 
 **The same sources also build into a native game** for Windows, macOS and Linux:
-64-bit, on SDL3, without wine. It plays the original's replays tick for tick, the
-characters' positions to the bit (the replay test of [docs/compat.md](docs/compat.md)).
+64-bit, on SDL3, without wine. It plays the suite exactly as the original does, every
+byte of the game state on every tick ([docs/compat.md](docs/compat.md)).
 See [The native game](#the-native-game) and [docs/native.md](docs/native.md).
 
 | Source | What it is |
@@ -43,7 +50,7 @@ See [The native game](#the-native-game) and [docs/native.md](docs/native.md).
 | `src/scene0.cpp` ... `scene8.cpp` | The scenes `WinMain` runs: 0 title, 1 character select, 2 match setup, 3 the fight, 5 results, 6 config, 7 staff roll, 8 replays |
 | `src/scene3_draw.cpp` | The drawing helpers of scene 3, the fight |
 | `src/efz.rc` | The icon resource (the icon itself is taken from the original at build time) |
-| `src/trace.cpp` | The replay test's harness (`make trace` and the native game), not part of efz.exe |
+| `src/trace.cpp` | The compatibility test's harness (`make trace` and the native game), not part of efz.exe |
 | `port/` | The native game's platform layer on SDL3, in place of `main.cpp`, `graphics.cpp`, `input.cpp` and `sound.cpp`; 32-bit handles for the game's pointers; the original's floating point |
 
 ## Game files
@@ -142,15 +149,16 @@ replays and screenshots to `--save` (default: the data folder, or the user's
 preferences folder if that is read-only). Alt+Enter toggles full screen; controllers
 work as DirectInput joysticks did and can be plugged in at any time.
 
-`make check` still builds the original byte for byte from the same sources: where the
-native build needs something else, `src/efz.h`'s macros expand to the original's
-casts. [docs/native.md](docs/native.md) has how the native game keeps the original's
-memory layout (32-bit handles in place of pointers) and floating point (the x87's, on
-every CPU), and the replay test that checks it:
+The original's compiler still builds the same sources: where the native build needs
+something else, `src/efz.h`'s macros expand to the original's casts.
+[docs/native.md](docs/native.md) has how the native game keeps the original's memory
+layout (32-bit handles in place of pointers) and floating point (the x87's, on every
+CPU); [docs/compat.md](docs/compat.md) the suite that checks it:
 
 ```sh
-make trace                          # efz.exe with the replay test's harness
-tools/compat.py fuzz 20             # record 20 random matches with it; play in both games
+tools/compat.py check               # the native game plays the 254 cases (about 2 minutes)
+tools/compat.py explain cpu-03      # where a failing case parts from the original, by member
+tools/compat.py coverage            # which lines of src/ the suite runs
 ```
 
 ## Matching workflow
@@ -215,7 +223,7 @@ tools/compat.py fuzz 20             # record 20 random matches with it; play in 
 | `tools/run.sh`, `tools/run.cmd` | Build the native game and start it, on Linux and macOS, or on Windows |
 | `tools/native.sh` | Builds the native game (Linux, or Windows with MinGW-w64) in docker |
 | `tools/portify.py` | Marks the pointer casts of lifted code for the native build's 32-bit handles |
-| `tools/compat.py` | The replay test: records replays with the original, plays them in both games, compares tick by tick |
+| `tools/compat.py` | The compatibility test: plays the suite (`tests/compat/`) in a build and compares its state, tick by tick, with the original's (the `compat-reference` tag, under wine) |
 | `tools/msvc11` | Run Visual C++ 2012 tools (EfzRevival's toolchain) in the container |
 | `tools/libmatch.py` | Finds the functions of prebuilt `.lib`/`.obj` files in a binary, relocations masked |
 | `tools/rtti.py` | Lists an MSVC binary's vtables, with their classes, through its RTTI |
@@ -298,9 +306,12 @@ See [docs/recon.md](docs/recon.md). In short:
    3. effects and projectiles. *Done:* `CGame::UpdateEffect` and `CPlayer`'s object table.
    4. the 24 character classes. *Done.*
    5. the scenes and menus (`0x750d30`–`0x77697e`). *Done.*
-4. **Byte-identical exe.** *Done:* `make check`. Still to do: run it in CI (that needs
-   a legitimately obtained `efz.exe` on the runner).
-5. **Modern fork.** Starting from the matched source:
+4. **Byte-identical exe.** *Done:* `make check`, kept at the tag `compat-reference`.
+5. **Compatibility suite.** *Done:* [docs/compat.md](docs/compat.md). 254 fights
+   compared on every byte of the game state with the original; what it runs is
+   measured (`tools/compat.py coverage`). Still to do: run it in CI (that needs a
+   legitimately obtained EFZ on the runner).
+6. **Modern fork.** Starting from the matched source:
    - run natively on Windows, macOS and Linux, 64-bit. *Done:* the native game
      ([docs/native.md](docs/native.md)), checked against the original by replays.
    - replace DirectDraw, DirectInput and DirectSound with SDL3. *Done* (`port/`).
@@ -308,7 +319,7 @@ See [docs/recon.md](docs/recon.md). In short:
    - reach parity with EfzRevival: rollback netplay, spectating, replays, training tools
    - add widescreen and HD output, in-game input binding and controller hot-plug
    - add mod support for characters, stages and palettes
-6. **UE5.** Host the simulation core as a UE5 C++ module and render it with new assets.
+7. **UE5.** Host the simulation core as a UE5 C++ module and render it with new assets.
 
 EfzRevival 1.02h, alongside:
 

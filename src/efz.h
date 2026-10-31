@@ -40,6 +40,8 @@
 //                   precision, rounded to float only when it is stored
 //   F32CAST(x)      a cast to float inside an expression, which this compiler drops:
 //                   the value goes on unrounded (the native build makes it a double)
+//   FABSF(x)        fabs of a float expression: <math.h>'s float overload, which gets
+//                   its argument as a float, rounded (the native build rounds it)
 #define PTR32(T) T*
 #define PTRAT(addr) (*(char**)(addr))
 #define PTRSET(addr, p) (*(char**)(addr) = (p))
@@ -47,6 +49,7 @@
 #define TOINT(T, p) ((T)(p))
 #define F32 float
 #define F32CAST(x) ((float)(x))
+#define FABSF(x) fabs(x)
 #endif
 
 struct EffectDesc;

@@ -485,7 +485,7 @@ void CGame::UpdateEffect(short index)
         break;
     case 0x2f:
         if (FIRST_FRAME) {
-            m_effects[index].vx = (m_effects[index].side * 2 - 1) * -fabs(sin((float)rand()) * 4.0f);
+            m_effects[index].vx = (m_effects[index].side * 2 - 1) * -FABSF(sin((float)rand()) * 4.0f);
             m_effects[index].vy = -(double)rand() / 7000.0 - 2.0;
         }
         m_effects[index].vy += 0.2;

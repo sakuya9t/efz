@@ -5,6 +5,8 @@
 *.pat
 *.wav
 *.rep
+# but not the compatibility suite's: fights recorded by the test, no game data
+!tests/compat/replays/*.rep
 efz-unpacked/
 uploads/
 

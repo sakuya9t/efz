@@ -1,0 +1,270 @@
+# The compatibility test's cases (tools/compat.py, docs/compat.md), one per line:
+#   NAME replay [TICKS]      replays/NAME.rep played back; both players human
+#   NAME cpu SPEC TICKS      a fight with nothing recorded: SPEC = P1:P2:STAGE:PAL1:PAL2:
+#                            SEED:C1:C2, characters and stage by replay number, C1 and C2
+#                            1 for the game's CPU, 0 for the harness's scripted input
+# Every case's reference digest is in reference.txt.
+
+# Replays of random fights the original recorded (compat, fuzz1, fuzz3) and the native
+# game recorded (fuzz2, fuzz4), from before the readable source; 5,000 to 6,000 ticks.
+compat-1-1 replay
+compat-1-2 replay
+compat-1-3 replay
+compat-1-4 replay
+compat-1-5 replay
+compat-1-6 replay
+compat-1-7 replay
+compat-1-8 replay
+compat-1-9 replay
+compat-2-1 replay
+compat-2-2 replay
+compat-2-3 replay
+compat-9-8 replay
+compat-9-9 replay
+fuzz1-1-1 replay
+fuzz1-1-2 replay
+fuzz1-1-3 replay
+fuzz1-1-4 replay
+fuzz1-1-5 replay
+fuzz1-1-6 replay
+fuzz1-1-7 replay
+fuzz1-1-8 replay
+fuzz1-1-9 replay
+fuzz1-2-1 replay
+fuzz1-2-2 replay
+fuzz1-2-3 replay
+fuzz1-2-4 replay
+fuzz1-2-5 replay
+fuzz1-2-6 replay
+fuzz1-2-7 replay
+fuzz1-2-8 replay
+fuzz1-2-9 replay
+fuzz1-3-1 replay
+fuzz1-3-2 replay
+fuzz1-3-3 replay
+fuzz1-3-4 replay
+fuzz1-3-5 replay
+fuzz1-3-6 replay
+fuzz1-3-7 replay
+fuzz1-3-8 replay
+fuzz1-3-9 replay
+fuzz1-4-1 replay
+fuzz1-4-2 replay
+fuzz1-4-3 replay
+fuzz1-4-4 replay
+fuzz1-4-5 replay
+fuzz1-4-6 replay
+fuzz1-4-7 replay
+fuzz1-4-8 replay
+fuzz1-4-9 replay
+fuzz1-5-1 replay
+fuzz1-5-2 replay
+fuzz1-5-3 replay
+fuzz1-5-4 replay
+fuzz1-5-5 replay
+fuzz1-5-6 replay
+fuzz1-5-7 replay
+fuzz1-5-8 replay
+fuzz1-5-9 replay
+fuzz1-6-1 replay
+fuzz1-6-2 replay
+fuzz1-6-3 replay
+fuzz1-6-4 replay
+fuzz1-6-5 replay
+fuzz1-6-6 replay
+fuzz1-6-7 replay
+fuzz1-6-8 replay
+fuzz1-6-9 replay
+fuzz1-7-1 replay
+fuzz1-7-2 replay
+fuzz1-7-3 replay
+fuzz1-7-4 replay
+fuzz1-7-5 replay
+fuzz1-7-6 replay
+fuzz1-7-7 replay
+fuzz1-7-8 replay
+fuzz1-7-9 replay
+fuzz1-8-1 replay
+fuzz1-8-2 replay
+fuzz1-8-3 replay
+fuzz1-8-4 replay
+fuzz1-8-5 replay
+fuzz1-8-6 replay
+fuzz1-8-7 replay
+fuzz1-8-8 replay
+fuzz1-8-9 replay
+fuzz1-9-1 replay
+fuzz1-9-2 replay
+fuzz1-9-3 replay
+fuzz1-9-4 replay
+fuzz1-9-5 replay
+fuzz1-9-6 replay
+fuzz1-9-7 replay
+fuzz1-9-8 replay
+fuzz2-1-1 replay
+fuzz2-1-2 replay
+fuzz2-1-3 replay
+fuzz2-1-4 replay
+fuzz2-1-5 replay
+fuzz2-1-6 replay
+fuzz2-1-7 replay
+fuzz2-1-8 replay
+fuzz2-1-9 replay
+fuzz2-2-1 replay
+fuzz2-2-2 replay
+fuzz2-2-3 replay
+fuzz2-2-4 replay
+fuzz2-2-5 replay
+fuzz2-2-6 replay
+fuzz2-2-7 replay
+fuzz2-2-8 replay
+fuzz2-2-9 replay
+fuzz2-3-1 replay
+fuzz2-3-2 replay
+fuzz2-3-3 replay
+fuzz2-3-4 replay
+fuzz2-3-5 replay
+fuzz2-3-6 replay
+fuzz2-3-7 replay
+fuzz2-3-8 replay
+fuzz2-3-9 replay
+fuzz2-4-1 replay
+fuzz2-4-2 replay
+fuzz2-4-3 replay
+fuzz3-1-1 replay
+fuzz3-1-2 replay
+fuzz3-1-3 replay
+fuzz3-1-4 replay
+fuzz3-1-5 replay
+fuzz3-1-6 replay
+fuzz3-1-7 replay
+fuzz3-1-8 replay
+fuzz3-1-9 replay
+fuzz3-2-1 replay
+fuzz3-2-2 replay
+fuzz3-2-3 replay
+fuzz3-2-4 replay
+fuzz3-2-5 replay
+fuzz3-2-6 replay
+fuzz3-2-7 replay
+fuzz3-2-8 replay
+fuzz3-2-9 replay
+fuzz3-3-1 replay
+fuzz3-3-2 replay
+fuzz4-1-1 replay
+fuzz4-1-2 replay
+fuzz4-1-3 replay
+fuzz4-1-4 replay
+fuzz4-1-5 replay
+fuzz4-1-6 replay
+fuzz4-1-7 replay
+fuzz4-1-8 replay
+fuzz4-1-9 replay
+fuzz4-2-1 replay
+
+# CPU fights: each character as the CPU against another CPU, on each side, and
+# against scripted input. The CPU never plays in a replay.
+cpu-00 cpu 0:3:0:0:1:1000:1:1 4000
+cpu-01 cpu 1:10:1:0:1:1001:1:1 4000
+cpu-02 cpu 2:17:2:0:1:1002:1:1 4000
+cpu-03 cpu 3:24:3:0:1:1003:1:1 4000
+cpu-04 cpu 4:6:4:0:1:1004:1:1 4000
+cpu-05 cpu 5:13:5:0:1:1005:1:1 4000
+cpu-06 cpu 6:20:6:0:1:1006:1:1 4000
+cpu-07 cpu 7:2:7:0:1:1007:1:1 4000
+cpu-08 cpu 8:9:8:0:1:1008:1:1 4000
+cpu-09 cpu 9:16:9:0:1:1009:1:1 4000
+cpu-10 cpu 10:23:10:0:1:1010:1:1 4000
+cpu-11 cpu 11:5:11:0:1:1011:1:1 4000
+cpu-12 cpu 12:12:12:0:1:1012:1:1 4000
+cpu-13 cpu 13:19:13:0:1:1013:1:1 4000
+cpu-14 cpu 14:1:14:0:1:1014:1:1 4000
+cpu-15 cpu 15:8:15:0:1:1015:1:1 4000
+cpu-16 cpu 16:15:16:0:1:1016:1:1 4000
+cpu-17 cpu 17:22:17:0:1:1017:1:1 4000
+cpu-18 cpu 18:4:18:0:1:1018:1:1 4000
+cpu-19 cpu 19:11:19:0:1:1019:1:1 4000
+cpu-20 cpu 20:18:20:0:1:1020:1:1 4000
+cpu-21 cpu 21:0:21:0:1:1021:1:1 4000
+cpu-22 cpu 22:7:22:0:1:1022:1:1 4000
+cpu-23 cpu 23:14:0:0:1:1023:1:1 4000
+cpu-24 cpu 24:21:1:0:1:1024:1:1 4000
+bot-00 cpu 5:0:2:2:3:2000:0:1 4000
+bot-01 cpu 16:1:7:2:3:2001:0:1 4000
+bot-02 cpu 2:2:12:2:3:2002:0:1 4000
+bot-03 cpu 13:3:17:2:3:2003:0:1 4000
+bot-04 cpu 24:4:22:2:3:2004:0:1 4000
+bot-05 cpu 10:5:4:2:3:2005:0:1 4000
+bot-06 cpu 21:6:9:2:3:2006:0:1 4000
+bot-07 cpu 7:7:14:2:3:2007:0:1 4000
+bot-08 cpu 18:8:19:2:3:2008:0:1 4000
+bot-09 cpu 4:9:1:2:3:2009:0:1 4000
+bot-10 cpu 15:10:6:2:3:2010:0:1 4000
+bot-11 cpu 1:11:11:2:3:2011:0:1 4000
+bot-12 cpu 12:12:16:2:3:2012:0:1 4000
+bot-13 cpu 23:13:21:2:3:2013:0:1 4000
+bot-14 cpu 9:14:3:2:3:2014:0:1 4000
+bot-15 cpu 20:15:8:2:3:2015:0:1 4000
+bot-16 cpu 6:16:13:2:3:2016:0:1 4000
+bot-17 cpu 17:17:18:2:3:2017:0:1 4000
+bot-18 cpu 3:18:0:2:3:2018:0:1 4000
+bot-19 cpu 14:19:5:2:3:2019:0:1 4000
+bot-20 cpu 0:20:10:2:3:2020:0:1 4000
+bot-21 cpu 11:21:15:2:3:2021:0:1 4000
+bot-22 cpu 22:22:20:2:3:2022:0:1 4000
+bot-23 cpu 8:23:2:2:3:2023:0:1 4000
+bot-24 cpu 19:24:7:2:3:2024:0:1 4000
+
+# Replays the reference recorded with the harness's scripted input (tools/compat.py
+# add-fuzz 50 fuzz5- --seed 5 --ticks 4000): random characters and stages, the
+# controls' motions including supers' and dashes.
+fuzz5-001 replay
+fuzz5-002 replay
+fuzz5-003 replay
+fuzz5-004 replay
+fuzz5-005 replay
+fuzz5-006 replay
+fuzz5-007 replay
+fuzz5-008 replay
+fuzz5-009 replay
+fuzz5-010 replay
+fuzz5-011 replay
+fuzz5-012 replay
+fuzz5-013 replay
+fuzz5-014 replay
+fuzz5-015 replay
+fuzz5-016 replay
+fuzz5-017 replay
+fuzz5-018 replay
+fuzz5-019 replay
+fuzz5-020 replay
+fuzz5-021 replay
+fuzz5-022 replay
+fuzz5-023 replay
+fuzz5-024 replay
+fuzz5-025 replay
+fuzz5-026 replay
+fuzz5-027 replay
+fuzz5-028 replay
+fuzz5-029 replay
+fuzz5-030 replay
+fuzz5-031 replay
+fuzz5-032 replay
+fuzz5-033 replay
+fuzz5-034 replay
+fuzz5-035 replay
+fuzz5-036 replay
+fuzz5-037 replay
+fuzz5-038 replay
+fuzz5-039 replay
+fuzz5-040 replay
+fuzz5-041 replay
+fuzz5-042 replay
+fuzz5-043 replay
+fuzz5-044 replay
+fuzz5-045 replay
+fuzz5-046 replay
+fuzz5-047 replay
+fuzz5-048 replay
+fuzz5-049 replay
+fuzz5-050 replay

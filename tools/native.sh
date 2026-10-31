@@ -3,6 +3,7 @@
 # which has CMake, the compilers and what SDL3 needs (toolchain/native.Dockerfile).
 #   tools/native.sh                 build/native/efz for Linux; runs on the host
 #   tools/native.sh windows         build/windows/efz.exe for 64-bit Windows (MinGW-w64)
+#   tools/native.sh coverage        build/coverage/efz, instrumented for gcov
 #   tools/native.sh linux -DEFZ_HOST_X87=ON ...   with CMake options
 # then run the tests (ctest) for the Linux build.
 #
@@ -17,7 +18,8 @@ target=${1:-linux}
 case $target in
     linux) dir=build/native; toolchain= ;;
     windows) dir=build/windows; toolchain=-DCMAKE_TOOLCHAIN_FILE=toolchain/mingw-w64.cmake ;;
-    *) echo "tools/native.sh: unknown target $target (linux or windows)" >&2; exit 1 ;;
+    coverage) dir=build/coverage; toolchain=-DEFZ_COVERAGE=ON ;;
+    *) echo "tools/native.sh: unknown target $target (linux, windows or coverage)" >&2; exit 1 ;;
 esac
 
 cache=$HOME/.cache/efz-native

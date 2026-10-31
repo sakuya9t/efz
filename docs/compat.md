@@ -1,46 +1,136 @@
 # Backward compatibility
 
 The modern fork has to play the same game as the original 4.02 `efz.exe`. This document
-records how that is tested (decided 28 October 2026), what the original's replays can and
-cannot reproduce, and the rules a change has to follow so the test keeps working.
+records how that is tested (decided 28 October 2026; the whole game state and a fixed
+reference since 31 October 2026), what the original's replays can and cannot reproduce,
+and the rules a change has to follow so the test keeps working.
 
 Statements about the game are **observed** (read from the matched source) or **inferred**.
 
 ## Decisions
 
-- **The test is a replay.** A replay played back in the fork must give the same
-  character status, frame by frame, as the same replay played back in the original. If
-  P1 takes a heavy attack at frame 144 and loses 432 HP, and P2 takes a full combo at
-  frame 3400 and loses 5529 HP in all, the fork shows the same frames and the same
-  numbers.
-- **Compare the characters' status, not visual effects.** What is compared is each
-  player's state on every frame (see "Status" below). Particles, feathers and other
-  effects are left out.
-- **The per-frame status is the comparison; the events are the report.** A position
-  that drifts by 0.001 changes no hit until one whiffs many frames later, so the first
-  frame whose status differs is where the bug is. The event list (hits, damage, combo
-  totals) is printed around that frame for reading.
+- **The test is a suite of fights** (`tests/compat/suite.txt`): replays, and fights of
+  the game's CPU (which never plays in a replay). Each must play in the fork exactly as
+  it plays in the original, tick by tick. If P1 takes a heavy attack at frame 144 and
+  loses 432 HP, and P2 takes a full combo at frame 3400 and loses 5529 HP in all, the
+  fork shows the same frames and the same numbers.
+- **The original is fixed: the git tag `compat-reference`.** Since 31 October 2026 the
+  source no longer has to build `efz.exe` byte for byte: names, types and structure may
+  change. The reference is the last source that did (`make check` there), built with
+  the test's harness and run under wine; `tests/compat/reference.txt` holds the digest
+  of its log for every case. A change passes when every case's log is the reference's,
+  byte for byte.
+- **Compare the whole game state.** After every tick the harness hashes both players
+  (all of CPlayer and the character class, the 64 objects of each), the fight scene, the
+  game object and the effects, pointers left out. Visual effects are compared too: they
+  follow the same code and the same `rand()`, and a change to them is a change.
+- **The status is the report.** The log also prints each player's action, frame,
+  position, velocity, HP, combo and gauge. The first tick on which a block's hash
+  differs is where the bug is; `tools/compat.py explain` names the members that differ.
 - A change that touches the simulation sits behind a negotiated ruleset, as netplay with
-  EfzRevival 1.02h already requires. With the ruleset off, the replay test must pass
+  EfzRevival 1.02h already requires. With the ruleset off, the suite must pass
   unchanged.
 
 ## Running it
 
-The harness is `src/trace.cpp`, built into efz.exe by `make trace` (the original's
-code, with hooks in `CScene3::Update`, `CInput::GetInput` and the main loop) and always
-into the native game. It records a replay with scripted random input or plays one
-without the menus, and logs the status below after every tick. `tools/compat.py` runs
-the original under wine and the native game, and compares:
-
 ```sh
-make trace && tools/native.sh
-tools/compat.py fuzz 20            # record 20 random matches; play each in both
-tools/compat.py record 1-1 1:6:3:0:0:42 --ticks 3000   # Ayu against Nagamori, stage 3
-tools/compat.py play 1-1           # the original twice, the native game once
-tools/compat.py --windows check    # the native Windows build, under 64-bit wine
+tools/native.sh                      # build/native/efz
+tools/compat.py check                # every case in the native game (about 2 minutes, -j 16)
+tools/compat.py check fuzz5- cpu-03  # some: by name, or a prefix ending in -
+tools/compat.py --windows check      # build/windows/efz.exe, under 64-bit wine
+tools/compat.py check --exe build/trace/efz.exe   # any 32-bit build with the harness, under wine
+tools/compat.py explain cpu-03       # where and how a failing case parts from the reference
+tools/compat.py coverage             # what the suite runs: lines of src/, actions per character
 ```
 
-The comparison leaves out a field until the game has set it (the combo damage, below).
+`EFZ_DIR` names the original game's folder (its data; the suite has none of it). Work
+folders, wine prefixes and the reference's logs are in `$EFZ_COMPAT` (default
+`~/.local/share/efz-decomp/compat2`). A check needs only the data and the build to test;
+`explain` also runs the reference (below), so it needs the toolchain's docker images.
+
+## The suite
+
+`tests/compat/suite.txt`, one case per line:
+
+| Kind | Cases | What |
+|---|---|---|
+| `NAME replay` | 204 | `tests/compat/replays/NAME.rep` played back, both players human. 154 random fights from before the readable source (114 the original recorded, 40 the native game), 3,000 to 6,000 ticks; 50 the reference recorded with the harness's newer scripted input (more motions: supers, dashes, double motions), 4,000 ticks |
+| `NAME cpu SPEC TICKS` | 50 | A fight nothing records: characters, stage, palettes and seed (`P1:P2:STAGE:PAL1:PAL2:SEED:C1:C2`), each side the game's CPU (`1`) or the harness's scripted input (`0`). `cpu-NN`: character NN's CPU against another CPU; `bot-NN`: against scripted input |
+
+In all 254 cases, 1,223,436 ticks (about 5.3 hours of fighting). Adding cases:
+
+```sh
+tools/compat.py add-fuzz 20 fuzz6- --seed 6 --ticks 4000   # the reference records 20 replays
+tools/compat.py add-cpu cpu-ayu-mai 1:2:5:0:0:77:1:1 6000   # a CPU fight
+tools/compat.py reference --update fuzz6- cpu-ayu-mai        # their digests
+```
+
+then commit the new replays, `suite.txt` and `reference.txt`.
+
+## The reference
+
+`tools/compat.py build-reference` extracts the tag `compat-reference` and runs
+`make trace check` in it: `make check` proves its `efz.exe` is the original byte for
+byte, and `build/reference/efz.exe` is that code with the harness (`src/trace.cpp`,
+hooked into `WinMain`, `CScene3::Update` and `CInput::GetInput`; every other function
+is the original's code). `tools/compat.py reference` plays every case in it under wine
+(16 at a time, about 4 minutes) and checks each log's digest against `reference.txt`.
+
+To make two runs of the original comparable on every byte, the harness changes four
+things in the reference, and the native game does the same:
+
+| | The original | The reference and the native game | Why it is the same game |
+|---|---|---|---|
+| Memory from `new` | The heap's garbage | Zeroed (the native game's arena always was) | Initialised members are the same; an uninitialised one, `CPlayer::m_hitsLeft`, decided a few hits by the garbage (see "Answered"): zero is one of the original's outcomes |
+| `sin`, `cos`, `atan2` | The CPU's `fsin`, `fcos`, `fpatan`, whose last bits differ between CPUs | Correctly rounded to the x87's 64 bits: `port/x87.cpp`, which MinGW builds into the reference (`tools/x87ref.cpp`) | One of the CPUs' results; the same on every machine |
+| `rand()` | Seeded from the clock | Seeded with the case's seed (replays: 1) | Only effects and the CPU use it (see below) |
+| The rectangle a throw's hit spark is placed at (`CScene3::Unk7679b0`, `Unk767f60`, `Unk7697d0`) | Read from stack memory the code never set | Zeroed | Only the spark's position |
+
+While a replay plays, the harness also has the controls read as untouched, so what the
+menus and `CGame`'s polling see is the same everywhere.
+
+## What is compared
+
+The log (`src/trace.cpp`) starts with a line naming its format; then each line is one
+tick: the tick, the replay's read position, each player's status (below), and an
+FNV-1a hash of each block of state:
+
+| Block | What |
+|---|---|
+| `p1`, `p2` | The player's `CPlayer` (`0x3138` bytes), without its object table |
+| `p1obj`, `p2obj` | Its 64 objects (`PlayerObject`, `0x98` bytes each) |
+| `p1char`, `p2char` | The character class's own members (from `CPlayer`'s end to its size) |
+| `scene` | The fight scene's (`CScene3`) members |
+| `game` | `CGame`, without the effects |
+| `fx` | The effects' ring buffer: 640 `Effect`s and their bookkeeping |
+
+Left out: pointers (the vtable, `m_game`, sprite tables..., Nanase's and Ikumi's second
+pattern tables), which differ between builds; `CScene3`'s frames-per-second count and
+`lastMessage`, which follow the clock and the window system. Everything else is
+compared bit for bit, padding included. The hashes rely on the original's layout,
+which the native build keeps (`port/layout.cpp`): a change of layout needs the harness
+to hash the members it moved by name.
+
+With `EFZ_TRACE_DUMP` the harness writes every block's bytes, which `explain` diffs
+between the reference and the build and maps to members through `tools/members.py
+fields` (needs the libclang Python package):
+
+```
+cpu-01: FAILED
+  tick 2015: first difference
+    tick 2015: state differs in fx
+  tick 2015, block fx: 2 bytes differ
+    effect 258: reference active 1 type 0x38 frame 0 timer 0 x 41.0 y -63.0 ...
+    effect 258: build     active 1 type 0x38 frame 0 timer 0 x 57.0 y -61.0 ...
+```
+
+## Coverage
+
+`tools/compat.py coverage` builds the native game with gcov (`tools/native.sh
+coverage`), plays every case in it, and prints for each source file the share of its
+lines the suite runs and how many of its functions it never runs, then the actions each
+character reached. `build/coverage/gcov/*.gcov` has each line with its count. A change
+to code the suite never runs is not tested by it: add a case that runs it.
 
 ## The replay format
 
@@ -74,12 +164,12 @@ earlier versions.
 
 | What | Why | How the test handles it |
 |---|---|---|
-| Ayu's dash feathers (`0x191`, `0x192`) on 66, 44 and their air versions (states `0xa3`-`0xa6`) | Plain `rand()` (`src/ayu_vf6.cpp:2157-2373`, `src/ayu.cpp:1562-1605`) | Visual only; left out |
-| The burst of objects `0x1f1`/`0x1f2` every character spawns from its object `0x1f0` (e.g. `src/kano.cpp:3784`) | Plain `rand()` for their lifetimes and speeds (e.g. `src/nayuki.cpp:2425-2460`) | **Inferred** visual; left out |
-| The game's effects | Plain `rand()` (`src/effect.cpp`) | Visual; left out |
-| The CPU's random guard (`src/player.cpp:551`) | Plain `rand()` | Never runs in a recorded fight: replays are recorded from the title menu's replay item, which makes both players human (`src/scene0.cpp:132-133`) |
+| Ayu's dash feathers (`0x191`, `0x192`) on 66, 44 and their air versions (states `0xa3`-`0xa6`) | Plain `rand()` (`src/ayu_vf6.cpp:2157-2373`, `src/ayu.cpp:1562-1605`) | Visual only; compared, with `rand()` seeded the same in both games |
+| The burst of objects `0x1f1`/`0x1f2` every character spawns from its object `0x1f0` (e.g. `src/kano.cpp:3784`) | Plain `rand()` for their lifetimes and speeds (e.g. `src/nayuki.cpp:2425-2460`) | **Inferred** visual; compared, as above |
+| The game's effects | Plain `rand()` (`src/effect.cpp`) | Visual; compared, as above |
+| The CPU (`CpuInput`, and its random guard, `src/player.cpp:551`) | Plain `rand()` and `CPlayer::Random`, which records nothing a CPU's input could be replayed from | Never runs in a recorded fight: replays are recorded from the title menu's replay item, which makes both players human (`src/scene0.cpp:132-133`). The suite's `cpu` cases play it from a seed instead |
 | `key.ini` bytes `0x21`-`0x26` (read into `CGame`, `src/game.cpp:37-43`) | Not stored in the replay | Tests run with one fixed `key.ini` |
-| Uninitialised variables | Whatever memory held | See "Answered": `CPlayer::m_hitsLeft` decides some hits |
+| Uninitialised variables | Whatever memory held | Zeroed in the reference and the native game ("The reference"); see "Answered": `CPlayer::m_hitsLeft` decides some hits |
 | Menus, character select, results | Only the fight is recorded | Out of scope |
 
 ## Rules for changes in the fork
@@ -100,12 +190,15 @@ earlier versions.
 - **Keep the order of side effects.** The original evaluates a call's arguments right
   to left; a call with two random draws as arguments needs them drawn in that order
   natively (two do, `#ifdef EFZ_NATIVE`).
-- **A change that isn't meant to change the game passes the replay test unchanged.**
-  This covers SDL3, widescreen, input rebinding and the like.
+- **A change that isn't meant to change the game passes the suite unchanged**
+  (`tools/compat.py check`). This covers renames and other readability work, SDL3,
+  widescreen, input rebinding and the like. Code the suite doesn't run (`coverage`)
+  isn't tested by it: add a case that does before changing it.
 
-## Status
+## The status line
 
-What the test compares for each player on each frame. Offsets are in `CPlayer`.
+What the log prints for each player on each tick, besides the hashes. Offsets are in
+`CPlayer`.
 
 | Field | Member and offset | Notes |
 |---|---|---|
@@ -120,9 +213,9 @@ What the test compares for each player on each frame. Offsets are in `CPlayer`.
 | Action | `pattern`, `+0x8` | e.g. Ayu's forward dash is `0xa3` |
 | Gauge | `m_gauge`, `+0x148` | A level per 1000, 3000 full: moves test `>= 0x3e8`, `0x7d0` and `0xbb8` |
 
-The list grows as more fields are identified. The replay word offset is logged with
-each frame too: if the fork and the original read different words first, the bug is in
-what the fork consumes; if the words agree and the status differs, it is game logic.
+The replay word offset is logged with each tick too: if the fork and the original read
+different words first, the bug is in what the fork consumes; if the words agree and
+the state differs, it is game logic.
 
 ## Answered
 
@@ -143,16 +236,21 @@ what the fork consumes; if the words agree and the status differs, it is game lo
   zeroed, so such an attack never hits there, which is one of the original's two
   outcomes; on all 5 the native game plays exactly as one of the original's runs.
   EfzRevival 1.02h doesn't initialise the field either (it only reads it to draw
-  hitboxes), so two players on it could part the same way. `tools/compat.py` replays
-  the original again when the native game parts from it, and reports a replay on which
-  the original varies.
+  hitboxes), so two players on it could part the same way. The reference zeroes the
+  heap as the native game does, so the suite has one outcome.
 - **Is the original the same on every CPU?** No, though rarely does it show. `sin`,
   `cos` and `atan2` are the x87's `fsin`, `fcos` and `fpatan`, whose last bits are
   each CPU's own: this AMD Zen 4's differ from the correctly rounded value on a third
   of inputs, which changes a velocity set from an angle (`ObjBase::SetVelocity`) by one
   unit in the last place about once in a thousand calls. Intel's microcode differs again. The native game uses the
   correctly rounded value on every machine; `EFZ_HOST_X87` builds it with the
-  machine's own instead ([native.md](native.md)).
+  machine's own instead ([native.md](native.md)). Effects show it often: with them in
+  the comparison, 3 of the first 3 cases parted on this machine until the reference
+  took the correctly rounded values too.
+- **Does `<math.h>`'s float `sin` round to float?** No. Visual C++ .NET 2003 drops the
+  cast in its inline `sinf`, so `sin((float)rand()) * 6.0f` (effect `0x2e`) is the
+  64-bit result times 6, rounded to double. `fabs` of a float expression does round: its
+  argument is passed as a float (effect `0x2f`, `FABSF` in `src/efz.h`).
 
 ## Open questions
 

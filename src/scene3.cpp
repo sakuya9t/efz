@@ -947,6 +947,12 @@ int CScene3::Unk7679b0(CPlayer* p1, CPlayer* p2, CollisionInfo* p3, CollisionInf
     int v278;
     int v274;
     int v270[4][5];
+#if defined(EFZ_NATIVE) || defined(EFZ_TRACE)
+    // Only [i][0] is set for a throw; the rest, read when placing the hit spark, is
+    // whatever the stack held (the effect's position varies). Zeroed in the native and
+    // test builds.
+    memset(v270, 0, sizeof(v270));
+#endif
     RECT l220[5];
     PatternFrame b1d0;
     PatternFrame v108;
@@ -1031,6 +1037,12 @@ void CScene3::Unk767f60(CPlayer* p1, CPlayer* p2, CollisionInfo* p3, CollisionIn
     int v278;
     int v274;
     int v270[4][5];
+#if defined(EFZ_NATIVE) || defined(EFZ_TRACE)
+    // Only [i][0] is set for a throw; the rest, read when placing the hit spark, is
+    // whatever the stack held (the effect's position varies). Zeroed in the native and
+    // test builds.
+    memset(v270, 0, sizeof(v270));
+#endif
     RECT l220[5];
     PatternFrame b1d0;
     PatternFrame v108;
@@ -1389,6 +1401,12 @@ void CScene3::Unk7697d0(CPlayer* p1, CPlayer* p2, int p3, CollisionInfo* p4)
     RECT l10c;
     int mfc;
     int vf8[4][5];
+#if defined(EFZ_NATIVE) || defined(EFZ_TRACE)
+    // Only [i][0] is set for a throw; the rest, read when placing the hit spark, is
+    // whatever the stack held (the effect's position varies). Zeroed in the native and
+    // test builds.
+    memset(vf8, 0, sizeof(vf8));
+#endif
     RECT na8[5];
     RECT a58[4];
     PlayerObject* k14;
