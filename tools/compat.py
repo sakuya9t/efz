@@ -71,7 +71,7 @@ NATIVE_IMAGE = 'efz-native'
 FIELDS = ['action', 'frame', 'x', 'y', 'vx', 'vy', 'hp', 'combo start hp', 'combo damage',
           'hits', 'gauge', 'facing']
 BLOCKS = ['p1', 'p1obj', 'p1char', 'p2', 'p2obj', 'p2char', 'scene', 'game', 'fx']
-# Characters by replay number (CScene2::Unk76da20), the stages a fight can use.
+# Characters by replay number (CScene2::CreateCharacter), the stages a fight can use.
 CHARACTER_NAMES = ['nanase', 'ayu', 'mai', 'makoto', 'akane', 'mayu', 'nagamori', 'misaki',
                    'shiori', 'sayuri', 'nayuki', 'mio', 'exnanase', 'kaori', 'ikumi',
                    'mishio', 'akiko', 'nayukib', 'mizukab', 'kanna', 'kano', 'minagi',
@@ -297,8 +297,9 @@ class Build:
         trace = os.path.join(game, 'trace.txt')
         if os.path.exists(trace):
             os.remove(trace)
-        if self.kind == 'native':
+        if self.kind in ('native', 'windows'):  # SDL3, without a display or sound
             env.update(SDL_VIDEO_DRIVER='offscreen', SDL_AUDIO_DRIVER='dummy')
+        if self.kind == 'native':
             subprocess.run([self.path, '--data', efz_dir(), '--save', game],
                            env=dict(os.environ, **self.env, **env), cwd=game, timeout=timeout,
                            stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL, check=False)
