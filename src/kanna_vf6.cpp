@@ -11,7 +11,7 @@ void CKanna::UpdatePattern()
     WORD x8;
     WORD l4;
 
-    if (unk14a > 0 || (*m_opponent)->unk14c > 0) {
+    if (m_hitstop > 0 || (*m_opponent)->m_freezeTime > 0) {
         return;
     }
     EffectDesc l50;
@@ -20,7 +20,7 @@ void CKanna::UpdatePattern()
     InitEffectDesc((EffectDesc*)&l50);
     switch (pattern) {
     default:
-        unk158 = 0;
+        m_dashMomentum = 0;
         vx = 0.0;
         vy = 0.0;
         timer++;
@@ -32,8 +32,8 @@ void CKanna::UpdatePattern()
             }
         }
         break;
-    case 1:
-        unk158 = 0;
+    case kWalkForward:
+        m_dashMomentum = 0;
         vx = 0.8;
         vy = 0.0;
         timer++;
@@ -45,8 +45,8 @@ void CKanna::UpdatePattern()
             }
         }
         break;
-    case 2:
-        unk158 = 0;
+    case kWalkBack:
+        m_dashMomentum = 0;
         vx = -0.8;
         vy = 0.0;
         timer++;
@@ -58,10 +58,10 @@ void CKanna::UpdatePattern()
             }
         }
         break;
-    case 3:
+    case kCrouch:
         vx = 0.0;
         vy = 0.0;
-        unk158 = 0;
+        m_dashMomentum = 0;
         FaceOpponent();
         timer++;
         if (timer >= l4) {
@@ -72,30 +72,30 @@ void CKanna::UpdatePattern()
             }
         }
         break;
-    case 4:
+    case kJump:
         if (frame == 0 && timer == 0) {
             FaceOpponent();
             vx = 0.0;
         }
-        unk3140++;
-        if (unk3140 > unk3148) {
-            if (m_inputY == -1 && unk15a < 2) {
-                unk15a++;
-                pattern = 0xe;
+        m_patternVar3++;
+        if (m_patternVar3 > m_airMoveDelay) {
+            if (m_inputY == -1 && m_airActions < 2) {
+                m_airActions++;
+                pattern = kAirJump;
                 if (m_inputX == facing) {
-                    pattern = 0xf;
+                    pattern = kAirJumpForward;
                 }
                 if (m_inputX == -facing) {
-                    pattern = 0x10;
+                    pattern = kAirJumpBack;
                 }
                 m_attackResult = 0;
                 StartPattern();
                 break;
             }
             if (m_inputY == 1) {
-                pattern = 9;
-                if (unk15a < 2 && m_inputX != 0 && unk15c < 3) {
-                    unk15a++;
+                pattern = kFall;
+                if (m_airActions < 2 && m_inputX != 0 && m_sealLevel < 3) {
+                    m_airActions++;
                     if (m_inputX == facing) {
                         pattern = 0x12;
                     }
@@ -109,17 +109,17 @@ void CKanna::UpdatePattern()
                 StartPattern();
                 break;
             }
-            if (unk15a < 2 && unk15c < 3) {
+            if (m_airActions < 2 && m_sealLevel < 3) {
                 if (m_inputX == facing) {
                     pattern = 0x11;
-                    unk15a++;
+                    m_airActions++;
                     StartPattern();
                     m_attackResult = 0;
                     break;
                 }
                 if (m_inputX == -facing) {
                     pattern = 0x13;
-                    unk15a++;
+                    m_airActions++;
                     StartPattern();
                     m_attackResult = 0;
                     break;
@@ -139,7 +139,7 @@ void CKanna::UpdatePattern()
             timer = 0;
             frame++;
             if (frame >= x8) {
-                pattern = 0xa;
+                pattern = kSuperJump;
                 StartPattern();
             }
         }
@@ -147,35 +147,35 @@ void CKanna::UpdatePattern()
             y = 0.0;
             m_playSound = 9;
             FaceOpponent();
-            pattern = 0xd;
+            pattern = kLand;
             StartPattern();
         }
         break;
-    case 5:
+    case kJumpForward:
         if (frame == 0 && timer == 0) {
             FaceOpponent();
             vx = 0.0;
         }
-        unk3140++;
-        if (unk3140 > unk3148) {
-            if (m_inputY == -1 && unk15a < 2) {
-                unk15a++;
-                pattern = 0xe;
+        m_patternVar3++;
+        if (m_patternVar3 > m_airMoveDelay) {
+            if (m_inputY == -1 && m_airActions < 2) {
+                m_airActions++;
+                pattern = kAirJump;
                 if (m_inputX == facing) {
-                    pattern = 0xf;
+                    pattern = kAirJumpForward;
                 }
                 if (m_inputX == -facing) {
-                    pattern = 0x10;
+                    pattern = kAirJumpBack;
                 }
                 m_attackResult = 0;
                 StartPattern();
                 break;
             }
             if (m_inputY == 1) {
-                pattern = 9;
+                pattern = kFall;
                 StartPattern();
-                if (unk15a < 2 && m_inputX != 0 && unk15c < 3) {
-                    unk15a++;
+                if (m_airActions < 2 && m_inputX != 0 && m_sealLevel < 3) {
+                    m_airActions++;
                     if (m_inputX == facing) {
                         pattern = 0x12;
                     }
@@ -187,17 +187,17 @@ void CKanna::UpdatePattern()
                 }
                 break;
             }
-            if (unk15a < 2 && unk15c < 3) {
+            if (m_airActions < 2 && m_sealLevel < 3) {
                 if (m_inputX == facing) {
                     pattern = 0x11;
-                    unk15a++;
+                    m_airActions++;
                     StartPattern();
                     m_attackResult = 0;
                     break;
                 }
                 if (m_inputX == -facing) {
                     pattern = 0x13;
-                    unk15a++;
+                    m_airActions++;
                     StartPattern();
                     m_attackResult = 0;
                     break;
@@ -218,7 +218,7 @@ void CKanna::UpdatePattern()
             timer = 0;
             frame++;
             if (frame >= x8) {
-                pattern = 0xa;
+                pattern = kSuperJump;
                 StartPattern();
             }
         }
@@ -226,35 +226,35 @@ void CKanna::UpdatePattern()
             y = 0.0;
             m_playSound = 9;
             FaceOpponent();
-            pattern = 0xd;
+            pattern = kLand;
             StartPattern();
         }
         break;
-    case 6:
+    case kJumpBack:
         if (frame == 0 && timer == 0) {
             FaceOpponent();
             vx = 0.0;
         }
-        unk3140++;
-        if (unk3140 > unk3148) {
-            if (m_inputY == -1 && unk15a < 2) {
-                unk15a++;
-                pattern = 0xe;
+        m_patternVar3++;
+        if (m_patternVar3 > m_airMoveDelay) {
+            if (m_inputY == -1 && m_airActions < 2) {
+                m_airActions++;
+                pattern = kAirJump;
                 if (m_inputX == facing) {
-                    pattern = 0xf;
+                    pattern = kAirJumpForward;
                 }
                 if (m_inputX == -facing) {
-                    pattern = 0x10;
+                    pattern = kAirJumpBack;
                 }
                 m_attackResult = 0;
                 StartPattern();
                 break;
             }
             if (m_inputY == 1) {
-                pattern = 9;
+                pattern = kFall;
                 StartPattern();
-                if (unk15a < 2 && m_inputX != 0 && unk15c < 3) {
-                    unk15a++;
+                if (m_airActions < 2 && m_inputX != 0 && m_sealLevel < 3) {
+                    m_airActions++;
                     if (m_inputX == facing) {
                         pattern = 0x12;
                     }
@@ -266,17 +266,17 @@ void CKanna::UpdatePattern()
                 }
                 break;
             }
-            if (unk15a < 2 && unk15c < 3) {
+            if (m_airActions < 2 && m_sealLevel < 3) {
                 if (m_inputX == facing) {
                     pattern = 0x11;
-                    unk15a++;
+                    m_airActions++;
                     StartPattern();
                     m_attackResult = 0;
                     break;
                 }
                 if (m_inputX == -facing) {
                     pattern = 0x13;
-                    unk15a++;
+                    m_airActions++;
                     StartPattern();
                     m_attackResult = 0;
                     break;
@@ -297,7 +297,7 @@ void CKanna::UpdatePattern()
             timer = 0;
             frame++;
             if (frame >= x8) {
-                pattern = 0xa;
+                pattern = kSuperJump;
                 StartPattern();
             }
         }
@@ -305,62 +305,62 @@ void CKanna::UpdatePattern()
             y = 0.0;
             m_playSound = 9;
             FaceOpponent();
-            pattern = 0xd;
+            pattern = kLand;
             StartPattern();
         }
         break;
-    case 7:
+    case kStandUp:
         vx = 0.0;
         vy = 0.0;
-        unk158 = 0;
+        m_dashMomentum = 0;
         FaceOpponent();
         timer++;
         if (timer >= l4) {
             timer = 0;
             frame++;
             if (frame >= x8) {
-                pattern = 0;
+                pattern = kStand;
                 StartPattern();
             }
         }
         break;
-    case 8:
+    case kCrouchDown:
         vx = 0.0;
         vy = 0.0;
-        unk158 = 0;
+        m_dashMomentum = 0;
         FaceOpponent();
         timer++;
         if (timer >= l4) {
             timer = 0;
             frame++;
             if (frame >= x8) {
-                pattern = 3;
+                pattern = kCrouch;
                 StartPattern();
             }
         }
         break;
-    case 9:
+    case kFall:
         vy = vy + ay;
-        unk3140++;
-        if (unk3140 > 0) {
-            if (m_inputY == -1 && unk15c < 3 && unk15a < 2) {
-                unk15a++;
-                pattern = 0xe;
+        m_patternVar3++;
+        if (m_patternVar3 > 0) {
+            if (m_inputY == -1 && m_sealLevel < 3 && m_airActions < 2) {
+                m_airActions++;
+                pattern = kAirJump;
                 if (m_inputX == facing) {
-                    pattern = 0xf;
+                    pattern = kAirJumpForward;
                 }
                 if (m_inputX == -facing) {
-                    pattern = 0x10;
+                    pattern = kAirJumpBack;
                 }
                 m_attackResult = 0;
                 StartPattern();
                 break;
             }
             if (m_inputY == 1) {
-                pattern = 9;
+                pattern = kFall;
                 StartPattern();
-                if (unk15a < 2 && m_inputX != 0 && unk15c < 3) {
-                    unk15a++;
+                if (m_airActions < 2 && m_inputX != 0 && m_sealLevel < 3) {
+                    m_airActions++;
                     if (m_inputX == facing) {
                         pattern = 0x12;
                     }
@@ -372,17 +372,17 @@ void CKanna::UpdatePattern()
                 }
                 break;
             }
-            if (unk15a < 2 && unk15c < 3) {
+            if (m_airActions < 2 && m_sealLevel < 3) {
                 if (m_inputX == facing) {
                     pattern = 0x11;
-                    unk15a++;
+                    m_airActions++;
                     StartPattern();
                     m_attackResult = 0;
                     break;
                 }
                 if (m_inputX == -facing) {
                     pattern = 0x13;
-                    unk15a++;
+                    m_airActions++;
                     StartPattern();
                     m_attackResult = 0;
                     break;
@@ -400,38 +400,38 @@ void CKanna::UpdatePattern()
         if (y + vy >= 0.0) {
             y = 0.0;
             m_playSound = 9;
-            pattern = 0xd;
+            pattern = kLand;
             StartPattern();
         }
         break;
-    case 0xa:
+    case kSuperJump:
         vy = vy + ay;
-        unk158 = 0;
-        if (unk3138 == 0) {
+        m_dashMomentum = 0;
+        if (m_patternVar1 == 0) {
             vx *= 0.3;
-            unk3138++;
+            m_patternVar1++;
         }
         if (vy > 0.4) {
             vy = 0.4;
         }
-        if (m_inputY == -1 && unk15c < 3 && unk15a < 2) {
-            unk15a++;
-            pattern = 0xe;
+        if (m_inputY == -1 && m_sealLevel < 3 && m_airActions < 2) {
+            m_airActions++;
+            pattern = kAirJump;
             if (m_inputX == facing) {
-                pattern = 0xf;
+                pattern = kAirJumpForward;
             }
             if (m_inputX == -facing) {
-                pattern = 0x10;
+                pattern = kAirJumpBack;
             }
             m_attackResult = 0;
             StartPattern();
             break;
         }
         if (m_inputY == 1) {
-            pattern = 9;
+            pattern = kFall;
             StartPattern();
-            if (unk15a < 2 && m_inputX != 0 && unk15c < 3) {
-                unk15a++;
+            if (m_airActions < 2 && m_inputX != 0 && m_sealLevel < 3) {
+                m_airActions++;
                 if (m_inputX == facing) {
                     pattern = 0x12;
                 }
@@ -443,17 +443,17 @@ void CKanna::UpdatePattern()
                 break;
             }
         }
-        if (unk15a < 2 && unk15c < 3) {
+        if (m_airActions < 2 && m_sealLevel < 3) {
             if (m_inputX == facing) {
                 pattern = 0x11;
-                unk15a++;
+                m_airActions++;
                 StartPattern();
                 m_attackResult = 0;
                 break;
             }
             if (m_inputX == -facing) {
                 pattern = 0x13;
-                unk15a++;
+                m_airActions++;
                 StartPattern();
                 m_attackResult = 0;
                 break;
@@ -470,53 +470,53 @@ void CKanna::UpdatePattern()
         if (y + vy >= 0.0) {
             y = 0.0;
             m_playSound = 9;
-            pattern = 0xd;
+            pattern = kLand;
             StartPattern();
         }
         break;
-    case 0xd:
+    case kLand:
         vx = 0.0;
         vy = 0.0;
-        unk158 = 0;
+        m_dashMomentum = 0;
         FaceOpponent();
         timer++;
         if (timer >= l4) {
             timer = 0;
             frame++;
             if (frame >= x8) {
-                pattern = 7;
+                pattern = kStandUp;
                 if (m_inputY == 1) {
-                    pattern = 3;
+                    pattern = kCrouch;
                 }
                 StartPattern();
             }
         }
         break;
-    case 0xe:
+    case kAirJump:
         if (frame == 0 && timer == 0) {
             vx = 0.0;
             vy = 0.0;
         }
-        unk3140++;
-        if (unk3140 > unk3148) {
-            if (m_inputY == -1 && unk15c < 3 && unk15a < 2) {
-                unk15a++;
-                pattern = 0xe;
+        m_patternVar3++;
+        if (m_patternVar3 > m_airMoveDelay) {
+            if (m_inputY == -1 && m_sealLevel < 3 && m_airActions < 2) {
+                m_airActions++;
+                pattern = kAirJump;
                 if (m_inputX == facing) {
-                    pattern = 0xf;
+                    pattern = kAirJumpForward;
                 }
                 if (m_inputX == -facing) {
-                    pattern = 0x10;
+                    pattern = kAirJumpBack;
                 }
                 m_attackResult = 0;
                 StartPattern();
                 break;
             }
             if (m_inputY == 1) {
-                pattern = 9;
+                pattern = kFall;
                 StartPattern();
-                if (unk15a < 2 && m_inputX != 0 && unk15c < 3) {
-                    unk15a++;
+                if (m_airActions < 2 && m_inputX != 0 && m_sealLevel < 3) {
+                    m_airActions++;
                     if (m_inputX == facing) {
                         pattern = 0x12;
                     }
@@ -528,17 +528,17 @@ void CKanna::UpdatePattern()
                 }
                 break;
             }
-            if (unk15a < 2 && unk15c < 3) {
+            if (m_airActions < 2 && m_sealLevel < 3) {
                 if (m_inputX == facing) {
                     pattern = 0x11;
-                    unk15a++;
+                    m_airActions++;
                     StartPattern();
                     m_attackResult = 0;
                     break;
                 }
                 if (m_inputX == -facing) {
                     pattern = 0x13;
-                    unk15a++;
+                    m_airActions++;
                     StartPattern();
                     m_attackResult = 0;
                     break;
@@ -559,7 +559,7 @@ void CKanna::UpdatePattern()
             timer = 0;
             frame++;
             if (frame >= x8) {
-                pattern = 0xa;
+                pattern = kSuperJump;
                 StartPattern();
             }
         }
@@ -567,35 +567,35 @@ void CKanna::UpdatePattern()
             y = 0.0;
             m_playSound = 9;
             FaceOpponent();
-            pattern = 0xd;
+            pattern = kLand;
             StartPattern();
         }
         break;
-    case 0xf:
+    case kAirJumpForward:
         if (frame == 0 && timer == 0) {
             vx = 0.0;
             vy = 0.0;
         }
-        unk3140++;
-        if (unk3140 > unk3148) {
-            if (m_inputY == -1 && unk15c < 3 && unk15a < 2) {
-                unk15a++;
-                pattern = 0xe;
+        m_patternVar3++;
+        if (m_patternVar3 > m_airMoveDelay) {
+            if (m_inputY == -1 && m_sealLevel < 3 && m_airActions < 2) {
+                m_airActions++;
+                pattern = kAirJump;
                 if (m_inputX == facing) {
-                    pattern = 0xf;
+                    pattern = kAirJumpForward;
                 }
                 if (m_inputX == -facing) {
-                    pattern = 0x10;
+                    pattern = kAirJumpBack;
                 }
                 m_attackResult = 0;
                 StartPattern();
                 break;
             }
             if (m_inputY == 1) {
-                pattern = 9;
+                pattern = kFall;
                 StartPattern();
-                if (unk15a < 2 && m_inputX != 0 && unk15c < 3) {
-                    unk15a++;
+                if (m_airActions < 2 && m_inputX != 0 && m_sealLevel < 3) {
+                    m_airActions++;
                     if (m_inputX == facing) {
                         pattern = 0x12;
                     }
@@ -607,17 +607,17 @@ void CKanna::UpdatePattern()
                 }
                 break;
             }
-            if (unk15a < 2 && unk15c < 3) {
+            if (m_airActions < 2 && m_sealLevel < 3) {
                 if (m_inputX == facing) {
                     pattern = 0x11;
-                    unk15a++;
+                    m_airActions++;
                     StartPattern();
                     m_attackResult = 0;
                     break;
                 }
                 if (m_inputX == -facing) {
                     pattern = 0x13;
-                    unk15a++;
+                    m_airActions++;
                     StartPattern();
                     m_attackResult = 0;
                     break;
@@ -638,7 +638,7 @@ void CKanna::UpdatePattern()
             timer = 0;
             frame++;
             if (frame >= x8) {
-                pattern = 0xa;
+                pattern = kSuperJump;
                 StartPattern();
             }
         }
@@ -646,35 +646,35 @@ void CKanna::UpdatePattern()
             y = 0.0;
             m_playSound = 9;
             FaceOpponent();
-            pattern = 0xd;
+            pattern = kLand;
             StartPattern();
         }
         break;
-    case 0x10:
+    case kAirJumpBack:
         if (frame == 0 && timer == 0) {
             vx = 0.0;
             vy = 0.0;
         }
-        unk3140++;
-        if (unk3140 > unk3148) {
-            if (m_inputY == -1 && unk15c < 3 && unk15a < 2) {
-                unk15a++;
-                pattern = 0xe;
+        m_patternVar3++;
+        if (m_patternVar3 > m_airMoveDelay) {
+            if (m_inputY == -1 && m_sealLevel < 3 && m_airActions < 2) {
+                m_airActions++;
+                pattern = kAirJump;
                 if (m_inputX == facing) {
-                    pattern = 0xf;
+                    pattern = kAirJumpForward;
                 }
                 if (m_inputX == -facing) {
-                    pattern = 0x10;
+                    pattern = kAirJumpBack;
                 }
                 m_attackResult = 0;
                 StartPattern();
                 break;
             }
             if (m_inputY == 1) {
-                pattern = 9;
+                pattern = kFall;
                 StartPattern();
-                if (unk15a < 2 && m_inputX != 0 && unk15c < 3) {
-                    unk15a++;
+                if (m_airActions < 2 && m_inputX != 0 && m_sealLevel < 3) {
+                    m_airActions++;
                     if (m_inputX == facing) {
                         pattern = 0x12;
                     }
@@ -686,17 +686,17 @@ void CKanna::UpdatePattern()
                 }
                 break;
             }
-            if (unk15a < 2 && unk15c < 3) {
+            if (m_airActions < 2 && m_sealLevel < 3) {
                 if (m_inputX == facing) {
                     pattern = 0x11;
-                    unk15a++;
+                    m_airActions++;
                     StartPattern();
                     m_attackResult = 0;
                     break;
                 }
                 if (m_inputX == -facing) {
                     pattern = 0x13;
-                    unk15a++;
+                    m_airActions++;
                     StartPattern();
                     m_attackResult = 0;
                     break;
@@ -717,7 +717,7 @@ void CKanna::UpdatePattern()
             timer = 0;
             frame++;
             if (frame >= x8) {
-                pattern = 0xa;
+                pattern = kSuperJump;
                 StartPattern();
             }
         }
@@ -725,7 +725,7 @@ void CKanna::UpdatePattern()
             y = 0.0;
             m_playSound = 9;
             FaceOpponent();
-            pattern = 0xd;
+            pattern = kLand;
             StartPattern();
         }
         break;
@@ -734,26 +734,26 @@ void CKanna::UpdatePattern()
             vx = 0.0;
             vy = 0.0;
         }
-        unk3140++;
-        if (unk3140 > unk3148) {
-            if (m_inputY == -1 && unk15c < 3 && unk15a < 2) {
-                unk15a++;
-                pattern = 0xe;
+        m_patternVar3++;
+        if (m_patternVar3 > m_airMoveDelay) {
+            if (m_inputY == -1 && m_sealLevel < 3 && m_airActions < 2) {
+                m_airActions++;
+                pattern = kAirJump;
                 if (m_inputX == facing) {
-                    pattern = 0xf;
+                    pattern = kAirJumpForward;
                 }
                 if (m_inputX == -facing) {
-                    pattern = 0x10;
+                    pattern = kAirJumpBack;
                 }
                 m_attackResult = 0;
                 StartPattern();
                 break;
             }
             if (m_inputY == 1) {
-                pattern = 9;
+                pattern = kFall;
                 StartPattern();
-                if (unk15a < 2 && m_inputX != 0 && unk15c < 3) {
-                    unk15a++;
+                if (m_airActions < 2 && m_inputX != 0 && m_sealLevel < 3) {
+                    m_airActions++;
                     if (m_inputX == facing) {
                         pattern = 0x12;
                     }
@@ -765,17 +765,17 @@ void CKanna::UpdatePattern()
                 }
                 break;
             }
-            if (unk15a < 2 && unk15c < 3) {
+            if (m_airActions < 2 && m_sealLevel < 3) {
                 if (m_inputX == facing) {
                     pattern = 0x11;
-                    unk15a++;
+                    m_airActions++;
                     StartPattern();
                     m_attackResult = 0;
                     break;
                 }
                 if (m_inputX == -facing) {
                     pattern = 0x13;
-                    unk15a++;
+                    m_airActions++;
                     StartPattern();
                     m_attackResult = 0;
                     break;
@@ -796,7 +796,7 @@ void CKanna::UpdatePattern()
             timer = 0;
             frame++;
             if (frame >= x8) {
-                pattern = 0xa;
+                pattern = kSuperJump;
                 StartPattern();
             }
         }
@@ -804,7 +804,7 @@ void CKanna::UpdatePattern()
             y = 0.0;
             m_playSound = 9;
             FaceOpponent();
-            pattern = 0xd;
+            pattern = kLand;
             StartPattern();
         }
         break;
@@ -813,26 +813,26 @@ void CKanna::UpdatePattern()
             vx = 0.0;
             vy = 0.0;
         }
-        unk3140++;
-        if (unk3140 > unk3148) {
-            if (m_inputY == -1 && unk15c < 3 && unk15a < 2) {
-                unk15a++;
-                pattern = 0xe;
+        m_patternVar3++;
+        if (m_patternVar3 > m_airMoveDelay) {
+            if (m_inputY == -1 && m_sealLevel < 3 && m_airActions < 2) {
+                m_airActions++;
+                pattern = kAirJump;
                 if (m_inputX == facing) {
-                    pattern = 0xf;
+                    pattern = kAirJumpForward;
                 }
                 if (m_inputX == -facing) {
-                    pattern = 0x10;
+                    pattern = kAirJumpBack;
                 }
                 m_attackResult = 0;
                 StartPattern();
                 break;
             }
             if (m_inputY == 1) {
-                pattern = 9;
+                pattern = kFall;
                 StartPattern();
-                if (unk15a < 2 && m_inputX != 0 && unk15c < 3) {
-                    unk15a++;
+                if (m_airActions < 2 && m_inputX != 0 && m_sealLevel < 3) {
+                    m_airActions++;
                     if (m_inputX == facing) {
                         pattern = 0x12;
                     }
@@ -844,17 +844,17 @@ void CKanna::UpdatePattern()
                 }
                 break;
             }
-            if (unk15a < 2 && unk15c < 3) {
+            if (m_airActions < 2 && m_sealLevel < 3) {
                 if (m_inputX == facing) {
                     pattern = 0x11;
-                    unk15a++;
+                    m_airActions++;
                     StartPattern();
                     m_attackResult = 0;
                     break;
                 }
                 if (m_inputX == -facing) {
                     pattern = 0x13;
-                    unk15a++;
+                    m_airActions++;
                     StartPattern();
                     m_attackResult = 0;
                     break;
@@ -875,7 +875,7 @@ void CKanna::UpdatePattern()
             timer = 0;
             frame++;
             if (frame >= x8) {
-                pattern = 0xa;
+                pattern = kSuperJump;
                 StartPattern();
             }
         }
@@ -883,7 +883,7 @@ void CKanna::UpdatePattern()
             y = 0.0;
             m_playSound = 9;
             FaceOpponent();
-            pattern = 0xd;
+            pattern = kLand;
             StartPattern();
         }
         break;
@@ -892,26 +892,26 @@ void CKanna::UpdatePattern()
             vx = 0.0;
             vy = 0.0;
         }
-        unk3140++;
-        if (unk3140 > unk3148) {
-            if (m_inputY == -1 && unk15c < 3 && unk15a < 2) {
-                unk15a++;
-                pattern = 0xe;
+        m_patternVar3++;
+        if (m_patternVar3 > m_airMoveDelay) {
+            if (m_inputY == -1 && m_sealLevel < 3 && m_airActions < 2) {
+                m_airActions++;
+                pattern = kAirJump;
                 if (m_inputX == facing) {
-                    pattern = 0xf;
+                    pattern = kAirJumpForward;
                 }
                 if (m_inputX == -facing) {
-                    pattern = 0x10;
+                    pattern = kAirJumpBack;
                 }
                 m_attackResult = 0;
                 StartPattern();
                 break;
             }
             if (m_inputY == 1) {
-                pattern = 9;
+                pattern = kFall;
                 StartPattern();
-                if (unk15a < 2 && m_inputX != 0 && unk15c < 3) {
-                    unk15a++;
+                if (m_airActions < 2 && m_inputX != 0 && m_sealLevel < 3) {
+                    m_airActions++;
                     if (m_inputX == facing) {
                         pattern = 0x12;
                     }
@@ -923,17 +923,17 @@ void CKanna::UpdatePattern()
                 }
                 break;
             }
-            if (unk15a < 2 && unk15c < 3) {
+            if (m_airActions < 2 && m_sealLevel < 3) {
                 if (m_inputX == facing) {
                     pattern = 0x11;
-                    unk15a++;
+                    m_airActions++;
                     StartPattern();
                     m_attackResult = 0;
                     break;
                 }
                 if (m_inputX == -facing) {
                     pattern = 0x13;
-                    unk15a++;
+                    m_airActions++;
                     StartPattern();
                     m_attackResult = 0;
                     break;
@@ -954,7 +954,7 @@ void CKanna::UpdatePattern()
             timer = 0;
             frame++;
             if (frame >= x8) {
-                pattern = 0xa;
+                pattern = kSuperJump;
                 StartPattern();
             }
         }
@@ -962,7 +962,7 @@ void CKanna::UpdatePattern()
             y = 0.0;
             m_playSound = 9;
             FaceOpponent();
-            pattern = 0xd;
+            pattern = kLand;
             StartPattern();
         }
         break;
@@ -971,26 +971,26 @@ void CKanna::UpdatePattern()
             vx = 0.0;
             vy = 0.0;
         }
-        unk3140++;
-        if (unk3140 > unk3148) {
-            if (m_inputY == -1 && unk15c < 3 && unk15a < 2) {
-                unk15a++;
-                pattern = 0xe;
+        m_patternVar3++;
+        if (m_patternVar3 > m_airMoveDelay) {
+            if (m_inputY == -1 && m_sealLevel < 3 && m_airActions < 2) {
+                m_airActions++;
+                pattern = kAirJump;
                 if (m_inputX == facing) {
-                    pattern = 0xf;
+                    pattern = kAirJumpForward;
                 }
                 if (m_inputX == -facing) {
-                    pattern = 0x10;
+                    pattern = kAirJumpBack;
                 }
                 m_attackResult = 0;
                 StartPattern();
                 break;
             }
             if (m_inputY == 1) {
-                pattern = 9;
+                pattern = kFall;
                 StartPattern();
-                if (unk15a < 2 && m_inputX != 0 && unk15c < 3) {
-                    unk15a++;
+                if (m_airActions < 2 && m_inputX != 0 && m_sealLevel < 3) {
+                    m_airActions++;
                     if (m_inputX == facing) {
                         pattern = 0x12;
                     }
@@ -1002,17 +1002,17 @@ void CKanna::UpdatePattern()
                 }
                 break;
             }
-            if (unk15a < 2 && unk15c < 3) {
+            if (m_airActions < 2 && m_sealLevel < 3) {
                 if (m_inputX == facing) {
                     pattern = 0x11;
-                    unk15a++;
+                    m_airActions++;
                     StartPattern();
                     m_attackResult = 0;
                     break;
                 }
                 if (m_inputX == -facing) {
                     pattern = 0x13;
-                    unk15a++;
+                    m_airActions++;
                     StartPattern();
                     m_attackResult = 0;
                     break;
@@ -1033,7 +1033,7 @@ void CKanna::UpdatePattern()
             timer = 0;
             frame++;
             if (frame >= x8) {
-                pattern = 0xa;
+                pattern = kSuperJump;
                 StartPattern();
             }
         }
@@ -1041,11 +1041,11 @@ void CKanna::UpdatePattern()
             y = 0.0;
             m_playSound = 9;
             FaceOpponent();
-            pattern = 0xd;
+            pattern = kLand;
             StartPattern();
         }
         break;
-    case 0x2f:
+    case kResultLoserFall:
         if (frame == 0 && timer == 0) {
             vx = 0.0;
             ay = 0.035;
@@ -1072,16 +1072,16 @@ void CKanna::UpdatePattern()
             }
         }
         break;
-    case 0x32:
-        if (unk120 != 0) {
-            unk118 -= 0.6;
+    case kHitStandHighLight:
+        if (m_rfBlue != 0) {
+            m_rfGauge -= 0.6;
         }
-        unk158 = 0;
+        m_dashMomentum = 0;
         if (frame == 0 && timer == 0) {
             m_gauge = m_gauge + 0xa;
             vx = (2.0 - (*m_opponent)->m_proration / 10000.0) * -1.1;
-            if (unk120 != 0) {
-                unk118 -= 10.0;
+            if (m_rfBlue != 0) {
+                m_rfGauge -= 10.0;
             }
         }
         vy = 0.0;
@@ -1091,33 +1091,33 @@ void CKanna::UpdatePattern()
             vx = 0.0;
         }
         if (x - 20.0 <= 0.0 || x + 20.0 >= 639.0) {
-            unkb8 = (1.0 - (y < 0.0) * 0.2) * vx;
+            m_cornerPushback = (1.0 - (y < 0.0) * 0.2) * vx;
         } else {
-            unkb8 = 0.0;
+            m_cornerPushback = 0.0;
         }
         timer++;
         if (timer >= l4) {
             timer = 0;
             frame++;
             if (frame >= x8) {
-                pattern = 0;
+                pattern = kStand;
                 if (m_inputY == 1) {
-                    pattern = 3;
+                    pattern = kCrouch;
                 }
                 StartPattern();
             }
         }
         break;
-    case 0x33:
-        if (unk120 != 0) {
-            unk118 -= 0.6;
+    case kHitStandHighMedium:
+        if (m_rfBlue != 0) {
+            m_rfGauge -= 0.6;
         }
-        unk158 = 0;
+        m_dashMomentum = 0;
         if (frame == 0 && timer == 0) {
             m_gauge = m_gauge + 0xf;
             vx = (2.0 - (*m_opponent)->m_proration / 10000.0) * -1.5;
-            if (unk120 != 0) {
-                unk118 -= 20.0;
+            if (m_rfBlue != 0) {
+                m_rfGauge -= 20.0;
             }
         }
         vy = 0.0;
@@ -1127,33 +1127,33 @@ void CKanna::UpdatePattern()
             vx = 0.0;
         }
         if (x - 20.0 <= 0.0 || x + 20.0 >= 639.0) {
-            unkb8 = (1.0 - (y < 0.0) * 0.2) * vx;
+            m_cornerPushback = (1.0 - (y < 0.0) * 0.2) * vx;
         } else {
-            unkb8 = 0.0;
+            m_cornerPushback = 0.0;
         }
         timer++;
         if (timer >= l4) {
             timer = 0;
             frame++;
             if (frame >= x8) {
-                pattern = 0;
+                pattern = kStand;
                 if (m_inputY == 1) {
-                    pattern = 3;
+                    pattern = kCrouch;
                 }
                 StartPattern();
             }
         }
         break;
-    case 0x34:
-        if (unk120 != 0) {
-            unk118 -= 0.6;
+    case kHitStandHighHeavy:
+        if (m_rfBlue != 0) {
+            m_rfGauge -= 0.6;
         }
-        unk158 = 0;
+        m_dashMomentum = 0;
         if (frame == 0 && timer == 0) {
             m_gauge = m_gauge + 0x14;
             vx = (2.0 - (*m_opponent)->m_proration / 10000.0) * -1.8;
-            if (unk120 != 0) {
-                unk118 -= 30.0;
+            if (m_rfBlue != 0) {
+                m_rfGauge -= 30.0;
             }
         }
         vy = 0.0;
@@ -1163,33 +1163,33 @@ void CKanna::UpdatePattern()
             vx = 0.0;
         }
         if (x - 20.0 <= 0.0 || x + 20.0 >= 639.0) {
-            unkb8 = (1.0 - (y < 0.0) * 0.2) * vx;
+            m_cornerPushback = (1.0 - (y < 0.0) * 0.2) * vx;
         } else {
-            unkb8 = 0.0;
+            m_cornerPushback = 0.0;
         }
         timer++;
         if (timer >= l4) {
             timer = 0;
             frame++;
             if (frame >= x8) {
-                pattern = 0;
+                pattern = kStand;
                 if (m_inputY == 1) {
-                    pattern = 3;
+                    pattern = kCrouch;
                 }
                 StartPattern();
             }
         }
         break;
-    case 0x35:
-        if (unk120 != 0) {
-            unk118 -= 0.6;
+    case kHitStandLowLight:
+        if (m_rfBlue != 0) {
+            m_rfGauge -= 0.6;
         }
-        unk158 = 0;
+        m_dashMomentum = 0;
         if (frame == 0 && timer == 0) {
             m_gauge = m_gauge + 0xa;
             vx = (2.0 - (*m_opponent)->m_proration / 10000.0) * -1.1;
-            if (unk120 != 0) {
-                unk118 -= 10.0;
+            if (m_rfBlue != 0) {
+                m_rfGauge -= 10.0;
             }
         }
         vy = 0.0;
@@ -1199,33 +1199,33 @@ void CKanna::UpdatePattern()
             vx = 0.0;
         }
         if (x - 20.0 <= 0.0 || x + 20.0 >= 639.0) {
-            unkb8 = (1.0 - (y < 0.0) * 0.2) * vx;
+            m_cornerPushback = (1.0 - (y < 0.0) * 0.2) * vx;
         } else {
-            unkb8 = 0.0;
+            m_cornerPushback = 0.0;
         }
         timer++;
         if (timer >= l4) {
             timer = 0;
             frame++;
             if (frame >= x8) {
-                pattern = 0;
+                pattern = kStand;
                 if (m_inputY == 1) {
-                    pattern = 3;
+                    pattern = kCrouch;
                 }
                 StartPattern();
             }
         }
         break;
-    case 0x36:
-        if (unk120 != 0) {
-            unk118 -= 0.6;
+    case kHitStandLowMedium:
+        if (m_rfBlue != 0) {
+            m_rfGauge -= 0.6;
         }
-        unk158 = 0;
+        m_dashMomentum = 0;
         if (frame == 0 && timer == 0) {
             m_gauge = m_gauge + 0xf;
             vx = (2.0 - (*m_opponent)->m_proration / 10000.0) * -1.5;
-            if (unk120 != 0) {
-                unk118 -= 20.0;
+            if (m_rfBlue != 0) {
+                m_rfGauge -= 20.0;
             }
         }
         vy = 0.0;
@@ -1235,33 +1235,33 @@ void CKanna::UpdatePattern()
             vx = 0.0;
         }
         if (x - 20.0 <= 0.0 || x + 20.0 >= 639.0) {
-            unkb8 = (1.0 - (y < 0.0) * 0.2) * vx;
+            m_cornerPushback = (1.0 - (y < 0.0) * 0.2) * vx;
         } else {
-            unkb8 = 0.0;
+            m_cornerPushback = 0.0;
         }
         timer++;
         if (timer >= l4) {
             timer = 0;
             frame++;
             if (frame >= x8) {
-                pattern = 0;
+                pattern = kStand;
                 if (m_inputY == 1) {
-                    pattern = 3;
+                    pattern = kCrouch;
                 }
                 StartPattern();
             }
         }
         break;
-    case 0x37:
-        if (unk120 != 0) {
-            unk118 -= 0.6;
+    case kHitStandLowHeavy:
+        if (m_rfBlue != 0) {
+            m_rfGauge -= 0.6;
         }
-        unk158 = 0;
+        m_dashMomentum = 0;
         if (frame == 0 && timer == 0) {
             m_gauge = m_gauge + 0x14;
             vx = (2.0 - (*m_opponent)->m_proration / 10000.0) * -1.8;
-            if (unk120 != 0) {
-                unk118 -= 30.0;
+            if (m_rfBlue != 0) {
+                m_rfGauge -= 30.0;
             }
         }
         vy = 0.0;
@@ -1271,33 +1271,33 @@ void CKanna::UpdatePattern()
             vx = 0.0;
         }
         if (x - 20.0 <= 0.0 || x + 20.0 >= 639.0) {
-            unkb8 = (1.0 - (y < 0.0) * 0.2) * vx;
+            m_cornerPushback = (1.0 - (y < 0.0) * 0.2) * vx;
         } else {
-            unkb8 = 0.0;
+            m_cornerPushback = 0.0;
         }
         timer++;
         if (timer >= l4) {
             timer = 0;
             frame++;
             if (frame >= x8) {
-                pattern = 0;
+                pattern = kStand;
                 if (m_inputY == 1) {
-                    pattern = 3;
+                    pattern = kCrouch;
                 }
                 StartPattern();
             }
         }
         break;
-    case 0x38:
-        if (unk120 != 0) {
-            unk118 -= 0.6;
+    case kHitCrouchLight:
+        if (m_rfBlue != 0) {
+            m_rfGauge -= 0.6;
         }
-        unk158 = 0;
+        m_dashMomentum = 0;
         if (frame == 0 && timer == 0) {
             m_gauge = m_gauge + 0xa;
             vx = (2.0 - (*m_opponent)->m_proration / 10000.0) * -1.1;
-            if (unk120 != 0) {
-                unk118 -= 10.0;
+            if (m_rfBlue != 0) {
+                m_rfGauge -= 10.0;
             }
         }
         vy = 0.0;
@@ -1307,30 +1307,30 @@ void CKanna::UpdatePattern()
             vx = 0.0;
         }
         if (x - 20.0 <= 0.0 || x + 20.0 >= 639.0) {
-            unkb8 = (1.0 - (y < 0.0) * 0.2) * vx;
+            m_cornerPushback = (1.0 - (y < 0.0) * 0.2) * vx;
         } else {
-            unkb8 = 0.0;
+            m_cornerPushback = 0.0;
         }
         timer++;
         if (timer >= l4) {
             timer = 0;
             frame++;
             if (frame >= x8) {
-                pattern = 3;
+                pattern = kCrouch;
                 StartPattern();
             }
         }
         break;
-    case 0x39:
-        if (unk120 != 0) {
-            unk118 -= 0.6;
+    case kHitCrouchMedium:
+        if (m_rfBlue != 0) {
+            m_rfGauge -= 0.6;
         }
-        unk158 = 0;
+        m_dashMomentum = 0;
         if (frame == 0 && timer == 0) {
             m_gauge = m_gauge + 0xf;
             vx = (2.0 - (*m_opponent)->m_proration / 10000.0) * -1.5;
-            if (unk120 != 0) {
-                unk118 -= 20.0;
+            if (m_rfBlue != 0) {
+                m_rfGauge -= 20.0;
             }
         }
         vy = 0.0;
@@ -1340,30 +1340,30 @@ void CKanna::UpdatePattern()
             vx = 0.0;
         }
         if (x - 20.0 <= 0.0 || x + 20.0 >= 639.0) {
-            unkb8 = (1.0 - (y < 0.0) * 0.2) * vx;
+            m_cornerPushback = (1.0 - (y < 0.0) * 0.2) * vx;
         } else {
-            unkb8 = 0.0;
+            m_cornerPushback = 0.0;
         }
         timer++;
         if (timer >= l4) {
             timer = 0;
             frame++;
             if (frame >= x8) {
-                pattern = 3;
+                pattern = kCrouch;
                 StartPattern();
             }
         }
         break;
-    case 0x3a:
-        if (unk120 != 0) {
-            unk118 -= 0.6;
+    case kHitCrouchHeavy:
+        if (m_rfBlue != 0) {
+            m_rfGauge -= 0.6;
         }
-        unk158 = 0;
+        m_dashMomentum = 0;
         if (frame == 0 && timer == 0) {
             m_gauge = m_gauge + 0x14;
             vx = (2.0 - (*m_opponent)->m_proration / 10000.0) * -1.8;
-            if (unk120 != 0) {
-                unk118 -= 30.0;
+            if (m_rfBlue != 0) {
+                m_rfGauge -= 30.0;
             }
         }
         vy = 0.0;
@@ -1373,28 +1373,28 @@ void CKanna::UpdatePattern()
             vx = 0.0;
         }
         if (x - 20.0 <= 0.0 || x + 20.0 >= 639.0) {
-            unkb8 = (1.0 - (y < 0.0) * 0.2) * vx;
+            m_cornerPushback = (1.0 - (y < 0.0) * 0.2) * vx;
         } else {
-            unkb8 = 0.0;
+            m_cornerPushback = 0.0;
         }
         timer++;
         if (timer >= l4) {
             timer = 0;
             frame++;
             if (frame >= x8) {
-                pattern = 3;
+                pattern = kCrouch;
                 StartPattern();
             }
         }
         break;
-    case 0x3b:
-        if (unk120 != 0) {
-            unk118 -= 0.8;
+    case kHitAir:
+        if (m_rfBlue != 0) {
+            m_rfGauge -= 0.8;
         }
         if (frame == 0 && timer == 0) {
             m_gauge = m_gauge + 0x1e;
-            vx = unkc0;
-            vy = vy * 0.75 + unkc8;
+            vx = m_hitVx;
+            vy = vy * 0.75 + m_hitVy;
             if (vy < -2.0) {
                 vy = -2.0;
             } else if (vy > -0.5) {
@@ -1421,23 +1421,23 @@ void CKanna::UpdatePattern()
         }
         if (y + vy >= 0.0 && frame > 1) {
             y = 0.0;
-            if (unk12c != 0) {
-                pattern = 0x61;
+            if (m_landHittable != 0) {
+                pattern = kKnockdownHittable;
                 StartPattern();
             } else {
-                pattern = 0x62;
+                pattern = kKnockdown;
                 StartPattern();
             }
         }
         break;
-    case 0x3c:
-        if (unk120 != 0) {
-            unk118 -= 0.8;
+    case kHitAirHigh:
+        if (m_rfBlue != 0) {
+            m_rfGauge -= 0.8;
         }
         if (frame == 0 && timer == 0) {
             m_gauge = m_gauge + 0x1e;
-            vx = unkc0;
-            vy = vy * 0.75 + unkc8;
+            vx = m_hitVx;
+            vy = vy * 0.75 + m_hitVy;
             if (vy < -4.0) {
                 vy = -4.0;
             } else if (vy > -0.5) {
@@ -1464,23 +1464,23 @@ void CKanna::UpdatePattern()
         }
         if (y + vy >= 0.0 && frame > 1) {
             y = 0.0;
-            if (unk12c != 0) {
-                pattern = 0x61;
+            if (m_landHittable != 0) {
+                pattern = kKnockdownHittable;
                 StartPattern();
             } else {
-                pattern = 0x62;
+                pattern = kKnockdown;
                 StartPattern();
             }
         }
         break;
-    case 0x3d:
-        if (unk120 != 0) {
-            unk118 -= 0.8;
+    case kHitAirHigher:
+        if (m_rfBlue != 0) {
+            m_rfGauge -= 0.8;
         }
         if (frame == 0 && timer == 0) {
             m_gauge = m_gauge + 0x1e;
-            vx = unkc0;
-            vy = vy * 0.75 + unkc8;
+            vx = m_hitVx;
+            vy = vy * 0.75 + m_hitVy;
             if (vy < -6.0) {
                 vy = -6.0;
             } else if (vy > -0.5) {
@@ -1507,23 +1507,23 @@ void CKanna::UpdatePattern()
         }
         if (y + vy >= 0.0 && frame > 1) {
             y = 0.0;
-            if (unk12c != 0) {
-                pattern = 0x61;
+            if (m_landHittable != 0) {
+                pattern = kKnockdownHittable;
                 StartPattern();
             } else {
-                pattern = 0x62;
+                pattern = kKnockdown;
                 StartPattern();
             }
         }
         break;
-    case 0x3e:
-        if (unk120 != 0) {
-            unk118 -= 0.8;
+    case kHitAirCarry:
+        if (m_rfBlue != 0) {
+            m_rfGauge -= 0.8;
         }
         if (frame == 0 && timer == 0) {
             m_gauge = m_gauge + 0x1e;
-            vx = unkc0;
-            vy = vy * 0.75 + unkc8;
+            vx = m_hitVx;
+            vy = vy * 0.75 + m_hitVy;
             ay = 0.032;
         }
         if (vy <= 0.0) {
@@ -1545,23 +1545,23 @@ void CKanna::UpdatePattern()
         }
         if (y + vy >= 0.0 && frame > 1) {
             y = 0.0;
-            if (unk12c != 0) {
-                pattern = 0x61;
+            if (m_landHittable != 0) {
+                pattern = kKnockdownHittable;
                 StartPattern();
             } else {
-                pattern = 0x62;
+                pattern = kKnockdown;
                 StartPattern();
             }
         }
         break;
-    case 0x3f:
-        if (unk120 != 0) {
-            unk118 -= 0.8;
+    case kHitAirLaunch:
+        if (m_rfBlue != 0) {
+            m_rfGauge -= 0.8;
         }
         if (frame == 0 && timer == 0) {
             m_gauge = m_gauge + 0x1e;
-            vx = unkc0;
-            vy = unkc8;
+            vx = m_hitVx;
+            vy = m_hitVy;
             ay = 0.032;
         }
         if (vy <= 0.0) {
@@ -1583,28 +1583,28 @@ void CKanna::UpdatePattern()
         }
         if (y + vy >= 0.0 && frame > 1) {
             y = 0.0;
-            if (unk12c != 0) {
-                pattern = 0x61;
+            if (m_landHittable != 0) {
+                pattern = kKnockdownHittable;
                 StartPattern();
             } else {
-                pattern = 0x62;
+                pattern = kKnockdown;
                 StartPattern();
             }
         }
         break;
-    case 0x40:
-        if (unk120 != 0) {
-            unk118 -= 0.8;
+    case kHitAirWallBounce:
+        if (m_rfBlue != 0) {
+            m_rfGauge -= 0.8;
         }
-        if (frame > 0 && (char)Unk40ff70() != 0) {
-            pattern = 0x46;
+        if (frame > 0 && (char)AtScreenEdge() != 0) {
+            pattern = kHitWallBounce;
             StartPattern();
             break;
         }
         if (frame == 0 && timer == 0) {
             m_gauge = m_gauge + 0x1e;
-            vx = unkc0;
-            vy = vy * 0.75 + unkc8;
+            vx = m_hitVx;
+            vy = vy * 0.75 + m_hitVy;
             if (vy < -2.0) {
                 vy = -2.0;
             } else if (vy > -0.5) {
@@ -1631,28 +1631,28 @@ void CKanna::UpdatePattern()
         }
         if (y + vy >= 0.0 && frame > 1) {
             y = 0.0;
-            if (unk12c != 0) {
-                pattern = 0x61;
+            if (m_landHittable != 0) {
+                pattern = kKnockdownHittable;
                 StartPattern();
             } else {
-                pattern = 0x62;
+                pattern = kKnockdown;
                 StartPattern();
             }
         }
         break;
-    case 0x41:
-        if (unk120 != 0) {
-            unk118 -= 0.8;
+    case kHitAirHighWallBounce:
+        if (m_rfBlue != 0) {
+            m_rfGauge -= 0.8;
         }
-        if (frame > 0 && (char)Unk40ff70() != 0) {
-            pattern = 0x46;
+        if (frame > 0 && (char)AtScreenEdge() != 0) {
+            pattern = kHitWallBounce;
             StartPattern();
             break;
         }
         if (frame == 0 && timer == 0) {
             m_gauge = m_gauge + 0x1e;
-            vx = unkc0;
-            vy = vy * 0.75 + unkc8;
+            vx = m_hitVx;
+            vy = vy * 0.75 + m_hitVy;
             if (vy < -4.0) {
                 vy = -4.0;
             } else if (vy > -0.5) {
@@ -1679,28 +1679,28 @@ void CKanna::UpdatePattern()
         }
         if (y + vy >= 0.0 && frame > 1) {
             y = 0.0;
-            if (unk12c != 0) {
-                pattern = 0x61;
+            if (m_landHittable != 0) {
+                pattern = kKnockdownHittable;
                 StartPattern();
             } else {
-                pattern = 0x62;
+                pattern = kKnockdown;
                 StartPattern();
             }
         }
         break;
-    case 0x42:
-        if (unk120 != 0) {
-            unk118 -= 0.8;
+    case kHitAirCarryWallBounce:
+        if (m_rfBlue != 0) {
+            m_rfGauge -= 0.8;
         }
-        if (frame > 0 && (char)Unk40ff70() != 0) {
-            pattern = 0x46;
+        if (frame > 0 && (char)AtScreenEdge() != 0) {
+            pattern = kHitWallBounce;
             StartPattern();
             break;
         }
         if (frame == 0 && timer == 0) {
             m_gauge = m_gauge + 0x1e;
-            vx = unkc0;
-            vy = vy * 0.75 + unkc8;
+            vx = m_hitVx;
+            vy = vy * 0.75 + m_hitVy;
             ay = 0.032;
         }
         if (vy <= 0.0) {
@@ -1722,28 +1722,28 @@ void CKanna::UpdatePattern()
         }
         if (y + vy >= 0.0 && frame > 1) {
             y = 0.0;
-            if (unk12c != 0) {
-                pattern = 0x61;
+            if (m_landHittable != 0) {
+                pattern = kKnockdownHittable;
                 StartPattern();
             } else {
-                pattern = 0x62;
+                pattern = kKnockdown;
                 StartPattern();
             }
         }
         break;
-    case 0x43:
-        if (unk120 != 0) {
-            unk118 -= 0.8;
+    case kHitAirLaunchWallBounce:
+        if (m_rfBlue != 0) {
+            m_rfGauge -= 0.8;
         }
-        if (frame > 0 && (char)Unk40ff70() != 0) {
-            pattern = 0x46;
+        if (frame > 0 && (char)AtScreenEdge() != 0) {
+            pattern = kHitWallBounce;
             StartPattern();
             break;
         }
         if (frame == 0 && timer == 0) {
             m_gauge = m_gauge + 0x1e;
-            vx = unkc0;
-            vy = unkc8;
+            vx = m_hitVx;
+            vy = m_hitVy;
             ay = 0.032;
         }
         if (vy <= 0.0) {
@@ -1765,25 +1765,25 @@ void CKanna::UpdatePattern()
         }
         if (y + vy >= 0.0 && frame > 1) {
             y = 0.0;
-            if (unk12c != 0) {
-                pattern = 0x61;
+            if (m_landHittable != 0) {
+                pattern = kKnockdownHittable;
                 StartPattern();
             } else {
-                pattern = 0x62;
+                pattern = kKnockdown;
                 StartPattern();
             }
         }
         break;
-    case 0x44:
-        if (unk120 != 0) {
-            unk118 -= 1.5;
+    case kHitBlownAwayWallBounce:
+        if (m_rfBlue != 0) {
+            m_rfGauge -= 1.5;
         }
         m_gauge = m_gauge + 3;
-        vx = unkc0;
-        vy = unkc8;
+        vx = m_hitVx;
+        vy = m_hitVy;
         timer++;
-        if ((char)Unk40ff70() != 0) {
-            pattern = 0x46;
+        if ((char)AtScreenEdge() != 0) {
+            pattern = kHitWallBounce;
             StartPattern();
             break;
         }
@@ -1796,22 +1796,22 @@ void CKanna::UpdatePattern()
         }
         if (y + vy >= 0.0) {
             y = 0.0;
-            if (unk12c != 0) {
-                pattern = 0x61;
+            if (m_landHittable != 0) {
+                pattern = kKnockdownHittable;
                 StartPattern();
             } else {
-                pattern = 0x62;
+                pattern = kKnockdown;
                 StartPattern();
             }
         }
         break;
-    case 0x45:
-        if (unk120 != 0) {
-            unk118 -= 1.5;
+    case kHitBlownAway:
+        if (m_rfBlue != 0) {
+            m_rfGauge -= 1.5;
         }
         m_gauge = m_gauge + 3;
-        vx = unkc0;
-        vy = unkc8;
+        vx = m_hitVx;
+        vy = m_hitVy;
         timer++;
         if (timer >= l4) {
             timer = 0;
@@ -1822,23 +1822,23 @@ void CKanna::UpdatePattern()
         }
         if (y + vy >= 0.0) {
             y = 0.0;
-            if (unk12c != 0) {
-                pattern = 0x61;
+            if (m_landHittable != 0) {
+                pattern = kKnockdownHittable;
                 StartPattern();
             } else {
-                pattern = 0x62;
+                pattern = kKnockdown;
                 StartPattern();
             }
         }
         break;
-    case 0x46:
-        if (unk120 != 0) {
-            unk118 -= 0.8;
+    case kHitWallBounce:
+        if (m_rfBlue != 0) {
+            m_rfGauge -= 0.8;
         }
-        if (frame == 0 && timer == 0 && unk3138 == 0) {
+        if (frame == 0 && timer == 0 && m_patternVar1 == 0) {
             m_gauge = m_gauge + 0x1e;
-            unk3138++;
-            unk124 = unk124 + 0x78;
+            m_patternVar1++;
+            m_untechTime = m_untechTime + 0x78;
             vx = 0.5;
             vy = -2.5;
             ay = 0.025;
@@ -1861,23 +1861,23 @@ void CKanna::UpdatePattern()
         }
         if (y + vy >= 0.0 && frame > 1) {
             y = 0.0;
-            if (unk12c != 0) {
-                pattern = 0x61;
+            if (m_landHittable != 0) {
+                pattern = kKnockdownHittable;
                 StartPattern();
             } else {
-                pattern = 0x62;
+                pattern = kKnockdown;
                 StartPattern();
             }
         }
         break;
-    case 0x47:
-        if (unk120 != 0) {
-            unk118 -= 0.8;
+    case kHitAirHeavy:
+        if (m_rfBlue != 0) {
+            m_rfGauge -= 0.8;
         }
         if (frame == 0 && timer == 0) {
             m_gauge = m_gauge + 0x1e;
-            vx = unkc0;
-            vy = unkc8;
+            vx = m_hitVx;
+            vy = m_hitVy;
             ay = 0.072;
         }
         if (vy <= 0.0) {
@@ -1899,96 +1899,96 @@ void CKanna::UpdatePattern()
         }
         if (y + vy >= 0.0 && frame > 1) {
             y = 0.0;
-            if (unk12c != 0) {
-                pattern = 0x61;
+            if (m_landHittable != 0) {
+                pattern = kKnockdownHittable;
                 StartPattern();
             } else {
-                pattern = 0x62;
+                pattern = kKnockdown;
                 StartPattern();
             }
         }
         break;
-    case 0x48:
-        if (unk120 != 0) {
-            unk118 -= 0.8;
+    case kHitStandHighHold:
+        if (m_rfBlue != 0) {
+            m_rfGauge -= 0.8;
         }
-        unk158 = 0;
+        m_dashMomentum = 0;
         vx = 0.0;
         vy = 0.0;
         if (x - 20.0 <= 0.0 || x + 20.0 >= 639.0) {
-            unkb8 = (1.0 - ((*m_opponent)->y < 0.0) * 0.25) * vx;
+            m_cornerPushback = (1.0 - ((*m_opponent)->y < 0.0) * 0.25) * vx;
         } else {
-            unkb8 = 0.0;
+            m_cornerPushback = 0.0;
         }
         timer++;
         if (timer >= l4) {
             timer = 0;
             frame++;
             if (frame >= x8) {
-                pattern = 7;
+                pattern = kStandUp;
                 if (m_inputY == 1) {
-                    pattern = 3;
+                    pattern = kCrouch;
                 }
                 StartPattern();
             }
         }
         break;
-    case 0x49:
-        if (unk120 != 0) {
-            unk118 -= 0.8;
+    case kHitStandLowHold:
+        if (m_rfBlue != 0) {
+            m_rfGauge -= 0.8;
         }
-        unk158 = 0;
+        m_dashMomentum = 0;
         vx = 0.0;
         vy = 0.0;
         if (x - 20.0 <= 0.0 || x + 20.0 >= 639.0) {
-            unkb8 = (1.0 - ((*m_opponent)->y < 0.0) * 0.25) * vx;
+            m_cornerPushback = (1.0 - ((*m_opponent)->y < 0.0) * 0.25) * vx;
         } else {
-            unkb8 = 0.0;
+            m_cornerPushback = 0.0;
         }
         timer++;
         if (timer >= l4) {
             timer = 0;
             frame++;
             if (frame >= x8) {
-                pattern = 7;
+                pattern = kStandUp;
                 if (m_inputY == 1) {
-                    pattern = 3;
+                    pattern = kCrouch;
                 }
                 StartPattern();
             }
         }
         break;
-    case 0x4a:
-        if (unk120 != 0) {
-            unk118 -= 0.8;
+    case kHitCrouchHold:
+        if (m_rfBlue != 0) {
+            m_rfGauge -= 0.8;
         }
-        unk158 = 0;
+        m_dashMomentum = 0;
         vx = 0.0;
         vy = 0.0;
         if (x - 20.0 <= 0.0 || x + 20.0 >= 639.0) {
-            unkb8 = (1.0 - ((*m_opponent)->y < 0.0) * 0.25) * vx;
+            m_cornerPushback = (1.0 - ((*m_opponent)->y < 0.0) * 0.25) * vx;
         } else {
-            unkb8 = 0.0;
+            m_cornerPushback = 0.0;
         }
         timer++;
         if (timer >= l4) {
             timer = 0;
             frame++;
             if (frame >= x8) {
-                pattern = 3;
+                pattern = kCrouch;
                 StartPattern();
             }
         }
         break;
-    case 0x4b:
-        if (unk120 != 0) {
-            unk118 -= 0.6;
+    case kHitStandHighPull:
+        if (m_rfBlue != 0) {
+            m_rfGauge -= 0.6;
         }
-        unk158 = 0;
+        m_dashMomentum = 0;
         if (frame == 0 && timer == 0) {
             m_gauge = m_gauge + 0x1e;
-            if (unk120 != 0) {
-                unk118 -= 30.0;
+            if (m_rfBlue != 0) {
+                m_rfGauge -= 30.0;
             }
             vx = 2.2;
         }
@@ -2001,32 +2001,32 @@ void CKanna::UpdatePattern()
             vx = 0.0;
         }
         if (x - 20.0 <= 0.0 || x + 20.0 >= 639.0) {
-            unkb8 = (1.0 - ((*m_opponent)->y < 0.0) * 0.25) * vx;
+            m_cornerPushback = (1.0 - ((*m_opponent)->y < 0.0) * 0.25) * vx;
         } else {
-            unkb8 = 0.0;
+            m_cornerPushback = 0.0;
         }
         timer++;
         if (timer >= l4) {
             timer = 0;
             frame++;
             if (frame >= x8) {
-                pattern = 7;
+                pattern = kStandUp;
                 if (m_inputY == 1) {
-                    pattern = 3;
+                    pattern = kCrouch;
                 }
                 StartPattern();
             }
         }
         break;
-    case 0x4c:
-        if (unk120 != 0) {
-            unk118 -= 0.6;
+    case kHitStandLowPull:
+        if (m_rfBlue != 0) {
+            m_rfGauge -= 0.6;
         }
-        unk158 = 0;
+        m_dashMomentum = 0;
         if (frame == 0 && timer == 0) {
             m_gauge = m_gauge + 0x1e;
-            if (unk120 != 0) {
-                unk118 -= 30.0;
+            if (m_rfBlue != 0) {
+                m_rfGauge -= 30.0;
             }
             vx = 2.2;
         }
@@ -2039,32 +2039,32 @@ void CKanna::UpdatePattern()
             vx = 0.0;
         }
         if (x - 20.0 <= 0.0 || x + 20.0 >= 639.0) {
-            unkb8 = (1.0 - ((*m_opponent)->y < 0.0) * 0.25) * vx;
+            m_cornerPushback = (1.0 - ((*m_opponent)->y < 0.0) * 0.25) * vx;
         } else {
-            unkb8 = 0.0;
+            m_cornerPushback = 0.0;
         }
         timer++;
         if (timer >= l4) {
             timer = 0;
             frame++;
             if (frame >= x8) {
-                pattern = 7;
+                pattern = kStandUp;
                 if (m_inputY == 1) {
-                    pattern = 3;
+                    pattern = kCrouch;
                 }
                 StartPattern();
             }
         }
         break;
-    case 0x4d:
-        if (unk120 != 0) {
-            unk118 -= 0.6;
+    case kHitCrouchPull:
+        if (m_rfBlue != 0) {
+            m_rfGauge -= 0.6;
         }
-        unk158 = 0;
+        m_dashMomentum = 0;
         if (frame == 0 && timer == 0) {
             m_gauge = m_gauge + 0x1e;
-            if (unk120 != 0) {
-                unk118 -= 30.0;
+            if (m_rfBlue != 0) {
+                m_rfGauge -= 30.0;
             }
             vx = 2.2;
         }
@@ -2077,23 +2077,23 @@ void CKanna::UpdatePattern()
             vx = 0.0;
         }
         if (x - 20.0 <= 0.0 || x + 20.0 >= 639.0) {
-            unkb8 = (1.0 - ((*m_opponent)->y < 0.0) * 0.25) * vx;
+            m_cornerPushback = (1.0 - ((*m_opponent)->y < 0.0) * 0.25) * vx;
         } else {
-            unkb8 = 0.0;
+            m_cornerPushback = 0.0;
         }
         timer++;
         if (timer >= l4) {
             timer = 0;
             frame++;
             if (frame >= x8) {
-                pattern = 3;
+                pattern = kCrouch;
                 StartPattern();
             }
         }
         break;
-    case 0x51:
-        if (unk120 != 0) {
-            unk118 -= 0.8;
+    case kHitBurn:
+        if (m_rfBlue != 0) {
+            m_rfGauge -= 0.8;
         }
         if (frame == 0 && timer == 0) {
             l50.type = 0x1f3;
@@ -2103,8 +2103,8 @@ void CKanna::UpdatePattern()
             l50.layer = 1;
             SpawnObject(&l50);
             m_gauge = m_gauge + 0x1e;
-            vx = unkc0;
-            vy = unkc8;
+            vx = m_hitVx;
+            vy = m_hitVy;
             ay = 0.032;
         }
         vx += 0.02;
@@ -2122,29 +2122,29 @@ void CKanna::UpdatePattern()
         }
         if (y + vy >= 0.0 && frame == 1) {
             y = 0.0;
-            if (unk12c != 0) {
-                pattern = 0x61;
+            if (m_landHittable != 0) {
+                pattern = kKnockdownHittable;
                 StartPattern();
             } else {
-                pattern = 0x62;
+                pattern = kKnockdown;
                 StartPattern();
             }
         }
         break;
-    case 0x52:
-        if (unk120 != 0) {
-            unk118 -= 0.8;
+    case kHitShock:
+        if (m_rfBlue != 0) {
+            m_rfGauge -= 0.8;
         }
-        if (frame == 0 && timer == 0 && unk3138 == 0) {
+        if (frame == 0 && timer == 0 && m_patternVar1 == 0) {
             m_playSound = 0x1e;
             vy = -0.45;
             vx = -0.1;
-            unk3138++;
+            m_patternVar1++;
             m_gauge = m_gauge + 0x1e;
         }
         if (frame == 4 && timer == 0) {
-            vx = unkc0;
-            vy = unkc8;
+            vx = m_hitVx;
+            vy = m_hitVy;
             ay = 0.032;
         }
         if (vy > 0.0 && frame == 4) {
@@ -2158,9 +2158,9 @@ void CKanna::UpdatePattern()
         if (timer >= l4) {
             timer = 0;
             frame++;
-            if (frame == 4 && unk3138 < 8) {
+            if (frame == 4 && m_patternVar1 < 8) {
                 frame = 0;
-                unk3138++;
+                m_patternVar1++;
             }
             if (frame >= x8) {
                 frame = frame - 2;
@@ -2168,30 +2168,30 @@ void CKanna::UpdatePattern()
         }
         if (y + vy >= 0.0 && frame > 4) {
             y = 0.0;
-            if (unk12c != 0) {
-                pattern = 0x61;
+            if (m_landHittable != 0) {
+                pattern = kKnockdownHittable;
                 StartPattern();
             } else {
-                pattern = 0x62;
+                pattern = kKnockdown;
                 StartPattern();
             }
         }
         break;
-    case 0x53:
+    case kEncased:
         if (frame == 0 && timer == 0) {
-            if (unk3144 == 0) {
+            if (m_encasedBreakOut == 0) {
                 l50.type = 0x1f0;
                 l50.x = (double)(int)x;
                 l50.y = (double)(int)y;
                 l50.scale = 0;
                 l50.layer = 0;
-                l50.unk0 = 1;
+                l50.keep = 1;
                 l50.facing = facing;
                 SpawnObject(&l50);
-                unk3144 = 1;
+                m_encasedBreakOut = 1;
             }
-            if (unk120 != 0) {
-                unk118 -= 30.0;
+            if (m_rfBlue != 0) {
+                m_rfGauge -= 30.0;
             }
             m_playSound = 0x21;
             vy = -1.5;
@@ -2223,27 +2223,27 @@ void CKanna::UpdatePattern()
             timer = 0;
             frame++;
             if (frame >= x8) {
-                pattern = 0;
+                pattern = kStand;
                 StartPattern();
                 FaceOpponent();
             }
         }
         break;
-    case 0x54:
+    case kEncased2:
         if (frame == 0 && timer == 0) {
-            if (unk3144 == 0) {
+            if (m_encasedBreakOut == 0) {
                 l50.type = 0x1f0;
                 l50.x = (double)(int)x;
                 l50.y = (double)(int)y;
                 l50.scale = 0;
                 l50.layer = 0;
-                l50.unk0 = 1;
+                l50.keep = 1;
                 l50.facing = facing;
                 SpawnObject(&l50);
-                unk3144 = 1;
+                m_encasedBreakOut = 1;
             }
-            if (unk120 != 0) {
-                unk118 -= 30.0;
+            if (m_rfBlue != 0) {
+                m_rfGauge -= 30.0;
             }
             m_playSound = 0x21;
             vy = -1.5;
@@ -2275,31 +2275,31 @@ void CKanna::UpdatePattern()
             timer = 0;
             frame++;
             if (frame >= x8) {
-                pattern = 0;
+                pattern = kStand;
                 StartPattern();
                 FaceOpponent();
             }
         }
         break;
-    case 0x55:
+    case kEncasedAir:
         if (frame == 0 && timer == 0) {
-            if (unk3144 == 0) {
+            if (m_encasedBreakOut == 0) {
                 l50.type = 0x1f0;
                 l50.x = (double)(int)x;
                 l50.y = (double)(int)y;
                 l50.scale = 0;
                 l50.layer = 0;
-                l50.unk0 = 1;
+                l50.keep = 1;
                 l50.facing = facing;
                 SpawnObject(&l50);
-                unk3144 = 1;
+                m_encasedBreakOut = 1;
             }
-            if (unk120 != 0) {
-                unk118 -= 30.0;
+            if (m_rfBlue != 0) {
+                m_rfGauge -= 30.0;
             }
             m_playSound = 0x21;
-            vx = unkc0;
-            vy = unkc8;
+            vx = m_hitVx;
+            vy = m_hitVy;
             m_gauge = m_gauge + 0x1e;
         }
         vy += 0.04;
@@ -2308,44 +2308,44 @@ void CKanna::UpdatePattern()
             timer = 0;
             frame++;
             if (frame >= x8) {
-                pattern = 0;
+                pattern = kStand;
                 StartPattern();
                 FaceOpponent();
             }
         }
         if (y + vy >= 0.0) {
             y = 0.0;
-            if (unk12c != 0) {
-                pattern = 0x61;
+            if (m_landHittable != 0) {
+                pattern = kKnockdownHittable;
                 StartPattern();
             } else {
-                pattern = 0x62;
+                pattern = kKnockdown;
                 StartPattern();
             }
         }
         break;
-    case 0x56:
+    case kEncasedSpin:
         if (frame == 0 && timer == 0) {
-            if (unk3144 == 0) {
+            if (m_encasedBreakOut == 0) {
                 l50.type = 0x1f0;
                 l50.x = (double)(int)x;
                 l50.y = (double)(int)y;
                 l50.scale = 0;
                 l50.layer = 0;
-                l50.unk0 = 1;
+                l50.keep = 1;
                 l50.facing = facing;
                 SpawnObject(&l50);
-                unk3144 = 1;
+                m_encasedBreakOut = 1;
             }
-            if (unk3138 == 0) {
-                if (unk120 != 0) {
-                    unk118 -= 30.0;
+            if (m_patternVar1 == 0) {
+                if (m_rfBlue != 0) {
+                    m_rfGauge -= 30.0;
                 }
                 m_playSound = 0x21;
-                vx = unkc0;
-                vy = unkc8;
+                vx = m_hitVx;
+                vy = m_hitVy;
                 m_gauge = m_gauge + 0x1e;
-                unk3138++;
+                m_patternVar1++;
             }
         }
         vy += 0.06;
@@ -2359,16 +2359,16 @@ void CKanna::UpdatePattern()
         }
         if (y + vy >= 0.0) {
             y = 0.0;
-            if (unk12c != 0) {
-                pattern = 0x61;
+            if (m_landHittable != 0) {
+                pattern = kKnockdownHittable;
                 StartPattern();
             } else {
-                pattern = 0x62;
+                pattern = kKnockdown;
                 StartPattern();
             }
         }
         break;
-    case 0x57:
+    case kFallInDarkness:
         if (frame == 0 && timer == 0) {
             l50.type = 0x1ef;
             l50.x = 60.0;
@@ -2384,12 +2384,12 @@ void CKanna::UpdatePattern()
             timer = 0;
             frame++;
             if (frame >= x8) {
-                pattern = 0;
+                pattern = kStand;
                 StartPattern();
             }
         }
         break;
-    case 0x60:
+    case kWakeUp:
         timer++;
         if (timer >= l4) {
             timer = 0;
@@ -2398,15 +2398,15 @@ void CKanna::UpdatePattern()
                 FaceOpponent();
             }
             if (frame >= x8) {
-                pattern = 7;
+                pattern = kStandUp;
                 if (m_inputY == 1) {
-                    pattern = 3;
+                    pattern = kCrouch;
                 }
                 StartPattern();
             }
         }
         break;
-    case 0x61:
+    case kKnockdownHittable:
         vx = 0.0;
         vy = 0.0;
         if (frame == 0 && timer == 0) {
@@ -2424,12 +2424,12 @@ void CKanna::UpdatePattern()
             timer = 0;
             frame++;
             if (frame >= x8) {
-                pattern = 0x63;
+                pattern = kLyingDown;
                 StartPattern();
             }
         }
         break;
-    case 0x62:
+    case kKnockdown:
         vx = 0.0;
         vy = 0.0;
         if (frame == 0 && timer == 0) {
@@ -2447,16 +2447,16 @@ void CKanna::UpdatePattern()
             timer = 0;
             frame++;
             if (frame >= x8) {
-                pattern = 0x63;
+                pattern = kLyingDown;
                 StartPattern();
             }
         }
         break;
-    case 0x63:
+    case kLyingDown:
         if (m_hp > 0 && timer > 0x3c && frame == 0) {
-            pattern = 0x60;
+            pattern = kWakeUp;
             StartPattern();
-            unk158 = 0;
+            m_dashMomentum = 0;
         }
         timer++;
         if (timer >= l4) {
@@ -2466,14 +2466,14 @@ void CKanna::UpdatePattern()
                 FaceOpponent();
             }
             if (frame >= x8) {
-                pattern = 0x60;
+                pattern = kWakeUp;
                 StartPattern();
             }
         }
         break;
-    case 0x96:
+    case kGuardStandLight:
         if (frame == 0 && timer == 0) {
-            unk158 = 0;
+            m_dashMomentum = 0;
             m_gauge = m_gauge + 0xa;
             vx = -1.5;
             vy = 0.0;
@@ -2485,9 +2485,9 @@ void CKanna::UpdatePattern()
             vx = 0.0;
         }
         if (x - 20.0 <= 0.0 || x + 20.0 >= 639.0) {
-            unkb8 = vx;
+            m_cornerPushback = vx;
         } else {
-            unkb8 = 0.0;
+            m_cornerPushback = 0.0;
         }
         timer++;
         if (timer >= l4) {
@@ -2497,17 +2497,17 @@ void CKanna::UpdatePattern()
                 FaceOpponent();
             }
             if (frame >= x8) {
-                pattern = 0;
+                pattern = kStand;
                 if (m_inputY == 1) {
-                    pattern = 3;
+                    pattern = kCrouch;
                 }
                 StartPattern();
             }
         }
         break;
-    case 0x97:
+    case kGuardStandMedium:
         if (frame == 0 && timer == 0) {
-            unk158 = 0;
+            m_dashMomentum = 0;
             m_gauge = m_gauge + 0xf;
             vx = -1.8;
             vy = 0.0;
@@ -2519,9 +2519,9 @@ void CKanna::UpdatePattern()
             vx = 0.0;
         }
         if (x - 20.0 <= 0.0 || x + 20.0 >= 639.0) {
-            unkb8 = vx;
+            m_cornerPushback = vx;
         } else {
-            unkb8 = 0.0;
+            m_cornerPushback = 0.0;
         }
         timer++;
         if (timer >= l4) {
@@ -2531,17 +2531,17 @@ void CKanna::UpdatePattern()
                 FaceOpponent();
             }
             if (frame >= x8) {
-                pattern = 0;
+                pattern = kStand;
                 if (m_inputY == 1) {
-                    pattern = 3;
+                    pattern = kCrouch;
                 }
                 StartPattern();
             }
         }
         break;
-    case 0x98:
+    case kGuardStandHeavy:
         if (frame == 0 && timer == 0) {
-            unk158 = 0;
+            m_dashMomentum = 0;
             m_gauge = m_gauge + 0x14;
             vx = -2.3;
             vy = 0.0;
@@ -2553,9 +2553,9 @@ void CKanna::UpdatePattern()
             vx = 0.0;
         }
         if (x - 20.0 <= 0.0 || x + 20.0 >= 639.0) {
-            unkb8 = vx;
+            m_cornerPushback = vx;
         } else {
-            unkb8 = 0.0;
+            m_cornerPushback = 0.0;
         }
         timer++;
         if (timer >= l4) {
@@ -2565,17 +2565,17 @@ void CKanna::UpdatePattern()
                 FaceOpponent();
             }
             if (frame >= x8) {
-                pattern = 0;
+                pattern = kStand;
                 if (m_inputY == 1) {
-                    pattern = 3;
+                    pattern = kCrouch;
                 }
                 StartPattern();
             }
         }
         break;
-    case 0x99:
+    case kGuardCrouchLight:
         if (frame == 0 && timer == 0) {
-            unk158 = 0;
+            m_dashMomentum = 0;
             m_gauge = m_gauge + 0xa;
             vx = -1.5;
             vy = 0.0;
@@ -2587,9 +2587,9 @@ void CKanna::UpdatePattern()
             vx = 0.0;
         }
         if (x - 20.0 <= 0.0 || x + 20.0 >= 639.0) {
-            unkb8 = vx;
+            m_cornerPushback = vx;
         } else {
-            unkb8 = 0.0;
+            m_cornerPushback = 0.0;
         }
         timer++;
         if (timer >= l4) {
@@ -2599,14 +2599,14 @@ void CKanna::UpdatePattern()
                 FaceOpponent();
             }
             if (frame >= x8) {
-                pattern = 3;
+                pattern = kCrouch;
                 StartPattern();
             }
         }
         break;
-    case 0x9a:
+    case kGuardCrouchMedium:
         if (frame == 0 && timer == 0) {
-            unk158 = 0;
+            m_dashMomentum = 0;
             m_gauge = m_gauge + 0xf;
             vx = -1.8;
             vy = 0.0;
@@ -2618,9 +2618,9 @@ void CKanna::UpdatePattern()
             vx = 0.0;
         }
         if (x - 20.0 <= 0.0 || x + 20.0 >= 639.0) {
-            unkb8 = vx;
+            m_cornerPushback = vx;
         } else {
-            unkb8 = 0.0;
+            m_cornerPushback = 0.0;
         }
         timer++;
         if (timer >= l4) {
@@ -2630,14 +2630,14 @@ void CKanna::UpdatePattern()
                 FaceOpponent();
             }
             if (frame >= x8) {
-                pattern = 3;
+                pattern = kCrouch;
                 StartPattern();
             }
         }
         break;
-    case 0x9b:
+    case kGuardCrouchHeavy:
         if (frame == 0 && timer == 0) {
-            unk158 = 0;
+            m_dashMomentum = 0;
             m_gauge = m_gauge + 0x14;
             vx = -2.3;
             vy = 0.0;
@@ -2649,9 +2649,9 @@ void CKanna::UpdatePattern()
             vx = 0.0;
         }
         if (x - 20.0 <= 0.0 || x + 20.0 >= 639.0) {
-            unkb8 = vx;
+            m_cornerPushback = vx;
         } else {
-            unkb8 = 0.0;
+            m_cornerPushback = 0.0;
         }
         timer++;
         if (timer >= l4) {
@@ -2661,12 +2661,12 @@ void CKanna::UpdatePattern()
                 FaceOpponent();
             }
             if (frame >= x8) {
-                pattern = 3;
+                pattern = kCrouch;
                 StartPattern();
             }
         }
         break;
-    case 0x9c:
+    case kGuardAir:
         if (frame == 0 && timer == 0) {
             vy = -2.6;
             m_gauge = m_gauge + 0xf;
@@ -2679,7 +2679,7 @@ void CKanna::UpdatePattern()
             timer = 0;
             frame++;
             if (frame >= x8) {
-                pattern = 9;
+                pattern = kFall;
                 StartPattern();
             }
         }
@@ -2687,14 +2687,14 @@ void CKanna::UpdatePattern()
             y = 0.0;
             m_playSound = 9;
             FaceOpponent();
-            pattern = 0xd;
+            pattern = kLand;
             StartPattern();
         }
         break;
-    case 0x9d:
+    case kAirRecoveryForward:
         vx = 1.0;
         ay = 0.045;
-        unk158 = 0;
+        m_dashMomentum = 0;
         if (frame == 0 && timer == 0) {
             vy = -2.3;
             l50.type = 8;
@@ -2711,7 +2711,7 @@ void CKanna::UpdatePattern()
             timer = 0;
             frame++;
             if (frame >= x8) {
-                pattern = 9;
+                pattern = kFall;
                 StartPattern();
             }
         }
@@ -2719,14 +2719,14 @@ void CKanna::UpdatePattern()
             y = 0.0;
             m_playSound = 9;
             FaceOpponent();
-            pattern = 0xd;
+            pattern = kLand;
             StartPattern();
         }
         break;
-    case 0x9e:
+    case kAirRecoveryBack:
         vx = -1.0;
         ay = 0.045;
-        unk158 = 0;
+        m_dashMomentum = 0;
         if (frame == 0 && timer == 0) {
             vy = -2.3;
             l50.type = 8;
@@ -2743,7 +2743,7 @@ void CKanna::UpdatePattern()
             timer = 0;
             frame++;
             if (frame >= x8) {
-                pattern = 9;
+                pattern = kFall;
                 StartPattern();
             }
         }
@@ -2751,11 +2751,11 @@ void CKanna::UpdatePattern()
             y = 0.0;
             m_playSound = 9;
             FaceOpponent();
-            pattern = 0xd;
+            pattern = kLand;
             StartPattern();
         }
         break;
-    case 0xa3:
+    case kDashForward:
         if (frame == 0 && timer == 0) {
             StartAfterimages(3);
             StopMoving();
@@ -2790,13 +2790,13 @@ void CKanna::UpdatePattern()
                 frame = frame - 2;
             }
             if (frame >= x8) {
-                pattern = 0;
+                pattern = kStand;
                 StartPattern();
                 break;
             }
         }
         break;
-    case 0xa4:
+    case kDashBack:
         if (frame == 0 && timer == 0) {
             StartAfterimages(3);
             StopMoving();
@@ -2813,7 +2813,7 @@ void CKanna::UpdatePattern()
                 y = 0.0;
                 StartPattern();
                 StopMoving();
-                pattern = 0xd;
+                pattern = kLand;
                 break;
             }
         }
@@ -2827,31 +2827,31 @@ void CKanna::UpdatePattern()
             }
         }
         break;
-    case 0xa5:
+    case kAirDashForward:
         if (frame == 0 && timer == 0) {
             vx = 0.0;
             vy = 0.0;
         }
-        unk3140++;
-        if (unk3140 > unk3148) {
-            if (m_inputY == -1 && unk15c < 3 && unk15a < 2) {
-                unk15a++;
-                pattern = 0xe;
+        m_patternVar3++;
+        if (m_patternVar3 > m_airMoveDelay) {
+            if (m_inputY == -1 && m_sealLevel < 3 && m_airActions < 2) {
+                m_airActions++;
+                pattern = kAirJump;
                 if (m_inputX == facing) {
-                    pattern = 0xf;
+                    pattern = kAirJumpForward;
                 }
                 if (m_inputX == -facing) {
-                    pattern = 0x10;
+                    pattern = kAirJumpBack;
                 }
                 m_attackResult = 0;
                 StartPattern();
                 break;
             }
             if (m_inputY == 1) {
-                pattern = 9;
+                pattern = kFall;
                 StartPattern();
-                if (unk15a < 2 && m_inputX != 0 && unk15c < 3) {
-                    unk15a++;
+                if (m_airActions < 2 && m_inputX != 0 && m_sealLevel < 3) {
+                    m_airActions++;
                     if (m_inputX == facing) {
                         pattern = 0x12;
                     }
@@ -2863,17 +2863,17 @@ void CKanna::UpdatePattern()
                 }
                 break;
             }
-            if (unk15a < 2 && unk15c < 3) {
+            if (m_airActions < 2 && m_sealLevel < 3) {
                 if (m_inputX == facing) {
                     pattern = 0x11;
-                    unk15a++;
+                    m_airActions++;
                     StartPattern();
                     m_attackResult = 0;
                     break;
                 }
                 if (m_inputX == -facing) {
                     pattern = 0x13;
-                    unk15a++;
+                    m_airActions++;
                     StartPattern();
                     m_attackResult = 0;
                     break;
@@ -2894,7 +2894,7 @@ void CKanna::UpdatePattern()
             timer = 0;
             frame++;
             if (frame >= x8) {
-                pattern = 0xa;
+                pattern = kSuperJump;
                 StartPattern();
             }
         }
@@ -2902,35 +2902,35 @@ void CKanna::UpdatePattern()
             y = 0.0;
             m_playSound = 9;
             FaceOpponent();
-            pattern = 0xd;
+            pattern = kLand;
             StartPattern();
         }
         break;
-    case 0xa6:
+    case kAirDashBack:
         if (frame == 0 && timer == 0) {
             vx = 0.0;
             vy = 0.0;
         }
-        unk3140++;
-        if (unk3140 > unk3148) {
-            if (m_inputY == -1 && unk15c < 3 && unk15a < 2) {
-                unk15a++;
-                pattern = 0xe;
+        m_patternVar3++;
+        if (m_patternVar3 > m_airMoveDelay) {
+            if (m_inputY == -1 && m_sealLevel < 3 && m_airActions < 2) {
+                m_airActions++;
+                pattern = kAirJump;
                 if (m_inputX == facing) {
-                    pattern = 0xf;
+                    pattern = kAirJumpForward;
                 }
                 if (m_inputX == -facing) {
-                    pattern = 0x10;
+                    pattern = kAirJumpBack;
                 }
                 m_attackResult = 0;
                 StartPattern();
                 break;
             }
             if (m_inputY == 1) {
-                pattern = 9;
+                pattern = kFall;
                 StartPattern();
-                if (unk15a < 2 && m_inputX != 0 && unk15c < 3) {
-                    unk15a++;
+                if (m_airActions < 2 && m_inputX != 0 && m_sealLevel < 3) {
+                    m_airActions++;
                     if (m_inputX == facing) {
                         pattern = 0x12;
                     }
@@ -2942,17 +2942,17 @@ void CKanna::UpdatePattern()
                 }
                 break;
             }
-            if (unk15a < 2 && unk15c < 3) {
+            if (m_airActions < 2 && m_sealLevel < 3) {
                 if (m_inputX == facing) {
                     pattern = 0x11;
-                    unk15a++;
+                    m_airActions++;
                     StartPattern();
                     m_attackResult = 0;
                     break;
                 }
                 if (m_inputX == -facing) {
                     pattern = 0x13;
-                    unk15a++;
+                    m_airActions++;
                     StartPattern();
                     m_attackResult = 0;
                     break;
@@ -2973,7 +2973,7 @@ void CKanna::UpdatePattern()
             timer = 0;
             frame++;
             if (frame >= x8) {
-                pattern = 0xa;
+                pattern = kSuperJump;
                 StartPattern();
             }
         }
@@ -2981,20 +2981,20 @@ void CKanna::UpdatePattern()
             y = 0.0;
             m_playSound = 9;
             FaceOpponent();
-            pattern = 0xd;
+            pattern = kLand;
             StartPattern();
         }
         break;
-    case 0xa7:
+    case kInstantCharge:
         if (frame == 0 && timer == 0) {
-            unk158 = 0;
+            m_dashMomentum = 0;
             vx = 0.0;
             vy = 0.0;
-            if (unk120 == 1) {
-                m_proration = unk118 * 5.0 + m_proration;
+            if (m_rfBlue == 1) {
+                m_proration = m_rfGauge * 5.0 + m_proration;
             }
-            unk118 = 0.0;
-            unk14c = 0x5a;
+            m_rfGauge = 0.0;
+            m_freezeTime = 0x5a;
             FillBackground(0xb0, 3);
         }
         if (frame == 1 && timer == 0) {
@@ -3020,21 +3020,21 @@ void CKanna::UpdatePattern()
             frame++;
             m_attackResult = 0;
             if (frame >= x8) {
-                pattern = 0;
+                pattern = kStand;
                 FaceOpponent();
                 StartPattern();
             }
         }
         break;
-    case 0xa8:
+    case kRecoilGuardStand:
         if (frame == 0 && timer == 0) {
-            unk158 = 0;
+            m_dashMomentum = 0;
             vx = 0.0;
             vy = 0.0;
             y = 0.0;
             ay = 0.0;
-            unk14e = 0;
-            unkb8 = 0.0;
+            m_recoilGuardWindow = 0;
+            m_cornerPushback = 0.0;
             ax = 0.0;
             l50.type = 8;
             l50.x = (double)(int)x;
@@ -3051,20 +3051,20 @@ void CKanna::UpdatePattern()
                 FaceOpponent();
             }
             if (frame >= x8) {
-                pattern = 0;
+                pattern = kStand;
                 StartPattern();
             }
         }
         break;
-    case 0xa9:
+    case kRecoilGuardCrouch:
         if (frame == 0 && timer == 0) {
-            unk158 = 0;
+            m_dashMomentum = 0;
             vx = 0.0;
             vy = 0.0;
             y = 0.0;
             ay = 0.0;
-            unk14e = 0;
-            unkb8 = 0.0;
+            m_recoilGuardWindow = 0;
+            m_cornerPushback = 0.0;
             ax = 0.0;
             l50.type = 8;
             l50.x = (double)(int)x;
@@ -3081,36 +3081,36 @@ void CKanna::UpdatePattern()
                 FaceOpponent();
             }
             if (frame >= x8) {
-                pattern = 3;
+                pattern = kCrouch;
                 StartPattern();
             }
         }
         break;
-    case 0xaa:
+    case kRecoilGuardAir:
         if (frame == 0 && timer == 0) {
-            unk3138 = (int)(vx * 100.0);
-            unk313c = (int)(vy * 100.0);
+            m_patternVar1 = (int)(vx * 100.0);
+            m_patternVar2 = (int)(vy * 100.0);
             vx = 0.0;
             vy = 0.0;
             if (ay == 0.0) {
                 ay = 0.035;
             }
-            unk14e = 0;
-            unkb8 = 0.0;
-            unk14c = 0x3c;
+            m_recoilGuardWindow = 0;
+            m_cornerPushback = 0.0;
+            m_freezeTime = 0x3c;
         }
-        if (unk14c == 0 && unk3140 == 0) {
-            unk3140++;
-            vx = unk3138 * 0.01;
-            vy = unk313c * 0.01;
+        if (m_freezeTime == 0 && m_patternVar3 == 0) {
+            m_patternVar3++;
+            vx = m_patternVar1 * 0.01;
+            vy = m_patternVar2 * 0.01;
         }
-        if (unk14c == 0) {
+        if (m_freezeTime == 0) {
             vy = vy + ay;
         }
         if (vy + y > 0.0) {
             StopMoving();
             y = 0.0;
-            pattern = 0xa9;
+            pattern = kRecoilGuardCrouch;
             break;
         }
         timer++;
@@ -3118,22 +3118,22 @@ void CKanna::UpdatePattern()
             timer = 0;
             frame++;
             if (frame >= x8) {
-                pattern = 9;
+                pattern = kFall;
                 StartPattern();
             }
         }
         break;
-    case 0xab:
+    case kAirInstantCharge:
         if (frame == 0 && timer == 0) {
-            unk3138 = (int)(vx * 100.0);
-            unk313c = (int)(vy * 100.0);
+            m_patternVar1 = (int)(vx * 100.0);
+            m_patternVar2 = (int)(vy * 100.0);
             vx = 0.0;
             vy = 0.0;
-            if (unk120 == 1) {
-                m_proration = unk118 * 5.0 + m_proration;
+            if (m_rfBlue == 1) {
+                m_proration = m_rfGauge * 5.0 + m_proration;
             }
-            unk118 = 0.0;
-            unk14c = 0x5a;
+            m_rfGauge = 0.0;
+            m_freezeTime = 0x5a;
             FillBackground(0xb0, 3);
         }
         if (frame == 1 && timer == 0) {
@@ -3159,28 +3159,28 @@ void CKanna::UpdatePattern()
             frame++;
             m_attackResult = 0;
             if (frame >= x8) {
-                pattern = 9;
-                vx = unk3138 * 0.01;
-                vy = unk313c * 0.01;
+                pattern = kFall;
+                vx = m_patternVar1 * 0.01;
+                vy = m_patternVar2 * 0.01;
                 ay = 0.035;
                 StartPattern();
             }
         }
         break;
-    case 0xb2:
+    case kDashStop:
         vx -= 0.03;
         vx = vx;
         if (vx < 0.0) {
             vx = 0.0;
-            unk158 = 0;
+            m_dashMomentum = 0;
         }
-        if (m_inputY == -1 && frame > 0 && unk15c < 3) {
-            pattern = 4;
+        if (m_inputY == -1 && frame > 0 && m_sealLevel < 3) {
+            pattern = kJump;
             if (m_inputX == facing) {
-                pattern = 5;
+                pattern = kJumpForward;
             }
             if (m_inputX == -facing) {
-                pattern = 6;
+                pattern = kJumpBack;
             }
             m_attackResult = 0;
             StartPattern();
@@ -3191,30 +3191,30 @@ void CKanna::UpdatePattern()
             timer = 0;
             frame++;
             if (frame >= x8) {
-                pattern = 0;
+                pattern = kStand;
                 StartPattern();
                 break;
             }
         }
         break;
-    case 0xc8:
-        if (unk158 == 0) {
+    case k5A:
+        if (m_dashMomentum == 0) {
             vx = 0.0;
             vy = 0.0;
         }
-        if (vx > 0.0 && unk158 == 1) {
+        if (vx > 0.0 && m_dashMomentum == 1) {
             vx -= 0.06;
         } else {
             vx = 0.0;
-            unk158 = 0;
+            m_dashMomentum = 0;
         }
-        if (m_inputY == -1 && frame > 0 && unk15c < 3 && m_attackResult >= 2) {
-            pattern = 4;
+        if (m_inputY == -1 && frame > 0 && m_sealLevel < 3 && m_attackResult >= 2) {
+            pattern = kJump;
             if (m_inputX == facing) {
-                pattern = 5;
+                pattern = kJumpForward;
             }
             if (m_inputX == -facing) {
-                pattern = 6;
+                pattern = kJumpBack;
             }
             m_attackResult = 0;
             StartPattern();
@@ -3233,22 +3233,22 @@ void CKanna::UpdatePattern()
                 m_attackResult = 0;
             }
             if (frame >= x8) {
-                pattern = 0;
+                pattern = kStand;
                 FaceOpponent();
                 StartPattern();
             }
         }
         break;
-    case 0xc9:
-        if (unk158 == 0) {
+    case k5BClose:
+        if (m_dashMomentum == 0) {
             vx = 0.0;
             vy = 0.0;
         }
-        if (vx > 0.0 && unk158 == 1) {
+        if (vx > 0.0 && m_dashMomentum == 1) {
             vx -= 0.03;
         } else {
             vx = 0.0;
-            unk158 = 0;
+            m_dashMomentum = 0;
         }
         if (frame == 1 && timer == 0) {
             l50.type = 0x1a4;
@@ -3256,17 +3256,17 @@ void CKanna::UpdatePattern()
             l50.y = (double)(int)y;
             l50.scale = 2;
             l50.layer = 1;
-            l50.unk0 = 1;
+            l50.keep = 1;
             l50.facing = facing;
             SpawnObject(&l50);
         }
-        if (m_inputY == -1 && frame > 0 && unk15c < 3 && m_attackResult >= 2) {
-            pattern = 4;
+        if (m_inputY == -1 && frame > 0 && m_sealLevel < 3 && m_attackResult >= 2) {
+            pattern = kJump;
             if (m_inputX == facing) {
-                pattern = 5;
+                pattern = kJumpForward;
             }
             if (m_inputX == -facing) {
-                pattern = 6;
+                pattern = kJumpBack;
             }
             m_attackResult = 0;
             StartPattern();
@@ -3285,22 +3285,22 @@ void CKanna::UpdatePattern()
                 m_attackResult = 0;
             }
             if (frame >= x8) {
-                pattern = 0;
+                pattern = kStand;
                 FaceOpponent();
                 StartPattern();
             }
         }
         break;
-    case 0xca:
-        if (unk158 == 0) {
+    case k5BFar:
+        if (m_dashMomentum == 0) {
             vx = 0.0;
             vy = 0.0;
         }
-        if (vx > 0.0 && unk158 == 1) {
+        if (vx > 0.0 && m_dashMomentum == 1) {
             vx -= 0.06;
         } else {
             vx = 0.0;
-            unk158 = 0;
+            m_dashMomentum = 0;
         }
         if (frame == 4 && timer == 0) {
             m_gauge = m_gauge + 0xf;
@@ -3314,7 +3314,7 @@ void CKanna::UpdatePattern()
             l50.scale = 2;
             l50.layer = 1;
             l50.facing = facing;
-            l50.unk0 = 1;
+            l50.keep = 1;
             SpawnObject(&l50);
         }
         timer++;
@@ -3325,30 +3325,30 @@ void CKanna::UpdatePattern()
                 m_attackResult = 0;
             }
             if (frame >= x8) {
-                pattern = 0;
+                pattern = kStand;
                 FaceOpponent();
                 StartPattern();
             }
         }
         break;
-    case 0xcb:
-        if (unk158 == 0) {
+    case k5C:
+        if (m_dashMomentum == 0) {
             vx = 0.0;
             vy = 0.0;
         }
-        if (vx > 0.0 && unk158 == 1) {
+        if (vx > 0.0 && m_dashMomentum == 1) {
             vx -= 0.06;
         } else {
             vx = 0.0;
-            unk158 = 0;
+            m_dashMomentum = 0;
         }
-        if (m_inputY == -1 && frame > 0 && unk15c < 3 && m_attackResult == 3) {
-            pattern = 4;
+        if (m_inputY == -1 && frame > 0 && m_sealLevel < 3 && m_attackResult == 3) {
+            pattern = kJump;
             if (m_inputX == facing) {
-                pattern = 5;
+                pattern = kJumpForward;
             }
             if (m_inputX == -facing) {
-                pattern = 6;
+                pattern = kJumpBack;
             }
             m_attackResult = 0;
             StartPattern();
@@ -3365,7 +3365,7 @@ void CKanna::UpdatePattern()
             l50.y = (double)(int)y;
             l50.scale = 2;
             l50.layer = 1;
-            l50.unk0 = 1;
+            l50.keep = 1;
             l50.facing = facing;
             SpawnObject(&l50);
         }
@@ -3377,30 +3377,30 @@ void CKanna::UpdatePattern()
                 m_attackResult = 0;
             }
             if (frame >= x8) {
-                pattern = 0;
+                pattern = kStand;
                 FaceOpponent();
                 StartPattern();
             }
         }
         break;
-    case 0xcc:
-        if (unk158 == 0) {
+    case k2A:
+        if (m_dashMomentum == 0) {
             vx = 0.0;
             vy = 0.0;
         }
-        if (vx > 0.0 && unk158 == 1) {
+        if (vx > 0.0 && m_dashMomentum == 1) {
             vx -= 0.03;
         } else {
             vx = 0.0;
-            unk158 = 0;
+            m_dashMomentum = 0;
         }
-        if (m_inputY == -1 && frame > 0 && unk15c < 3 && m_attackResult >= 2) {
-            pattern = 4;
+        if (m_inputY == -1 && frame > 0 && m_sealLevel < 3 && m_attackResult >= 2) {
+            pattern = kJump;
             if (m_inputX == facing) {
-                pattern = 5;
+                pattern = kJumpForward;
             }
             if (m_inputX == -facing) {
-                pattern = 6;
+                pattern = kJumpBack;
             }
             m_attackResult = 0;
             StartPattern();
@@ -3419,33 +3419,33 @@ void CKanna::UpdatePattern()
                 m_attackResult = 0;
             }
             if (frame >= x8) {
-                pattern = 0;
+                pattern = kStand;
                 if (m_inputY == 1) {
-                    pattern = 3;
+                    pattern = kCrouch;
                 }
                 FaceOpponent();
                 StartPattern();
             }
         }
         break;
-    case 0xcd:
-        if (unk158 == 0) {
+    case k2B:
+        if (m_dashMomentum == 0) {
             vx = 0.0;
             vy = 0.0;
         }
-        if (vx > 0.0 && unk158 == 1) {
+        if (vx > 0.0 && m_dashMomentum == 1) {
             vx -= 0.03;
         } else {
             vx = 0.0;
-            unk158 = 0;
+            m_dashMomentum = 0;
         }
-        if (m_inputY == -1 && frame > 0 && unk15c < 3 && m_attackResult >= 2) {
-            pattern = 4;
+        if (m_inputY == -1 && frame > 0 && m_sealLevel < 3 && m_attackResult >= 2) {
+            pattern = kJump;
             if (m_inputX == facing) {
-                pattern = 5;
+                pattern = kJumpForward;
             }
             if (m_inputX == -facing) {
-                pattern = 6;
+                pattern = kJumpBack;
             }
             m_attackResult = 0;
             StartPattern();
@@ -3462,7 +3462,7 @@ void CKanna::UpdatePattern()
             l50.y = (double)(int)y;
             l50.scale = 2;
             l50.layer = 1;
-            l50.unk0 = 1;
+            l50.keep = 1;
             l50.facing = facing;
             SpawnObject(&l50);
         }
@@ -3474,24 +3474,24 @@ void CKanna::UpdatePattern()
                 m_attackResult = 0;
             }
             if (frame >= x8) {
-                pattern = 0;
+                pattern = kStand;
                 if (m_inputY == 1) {
-                    pattern = 3;
+                    pattern = kCrouch;
                 }
                 FaceOpponent();
                 StartPattern();
             }
         }
         break;
-    case 0xce:
-        if (unk158 == 0 && frame == 0 && timer == 0) {
+    case k2C:
+        if (m_dashMomentum == 0 && frame == 0 && timer == 0) {
             vx = 0.0;
             vy = 0.0;
         }
-        if (vx > 0.0 && unk158 == 1 && frame < 3) {
+        if (vx > 0.0 && m_dashMomentum == 1 && frame < 3) {
             vx -= 0.03;
         } else {
-            unk158 = 0;
+            m_dashMomentum = 0;
         }
         if (vx < 0.0) {
             vx = 0.0;
@@ -3499,10 +3499,10 @@ void CKanna::UpdatePattern()
         if (frame == 1 && timer == 0) {
             m_hitsLeft = 1;
         }
-        if (frame == 3 && timer == 0 && unk3138 == 0) {
+        if (frame == 3 && timer == 0 && m_patternVar1 == 0) {
             m_gauge = m_gauge + 0x19;
             m_playSound = 0x14;
-            unk3138++;
+            m_patternVar1++;
         }
         timer++;
         if (timer >= l4) {
@@ -3510,37 +3510,37 @@ void CKanna::UpdatePattern()
             frame++;
             m_attackResult = 0;
             if (frame >= x8) {
-                pattern = 0;
+                pattern = kStand;
                 if (m_inputY == 1) {
-                    pattern = 3;
+                    pattern = kCrouch;
                 }
                 FaceOpponent();
                 StartPattern();
             }
         }
         break;
-    case 0xcf:
+    case kJumpA:
         vy = vy + ay;
-        if (m_inputY == -1 && frame > 0 && unk15c < 3 && m_attackResult >= 2 && unk15a < 2) {
-            unk15a++;
-            pattern = 0xe;
+        if (m_inputY == -1 && frame > 0 && m_sealLevel < 3 && m_attackResult >= 2 && m_airActions < 2) {
+            m_airActions++;
+            pattern = kAirJump;
             if (m_inputX == facing) {
-                pattern = 0xf;
+                pattern = kAirJumpForward;
             }
             if (m_inputX == -facing) {
-                pattern = 0x10;
+                pattern = kAirJumpBack;
             }
             m_attackResult = 0;
             StartPattern();
             break;
         }
-        if (m_inputY == 0 && m_inputX != 0 && frame > 0 && m_attackResult >= 2 && unk15a < 2 && unk15c < 3) {
-            unk15a++;
+        if (m_inputY == 0 && m_inputX != 0 && frame > 0 && m_attackResult >= 2 && m_airActions < 2 && m_sealLevel < 3) {
+            m_airActions++;
             if (m_inputX == facing) {
-                pattern = 0xa5;
+                pattern = kAirDashForward;
             }
             if (m_inputX == -facing) {
-                pattern = 0xa6;
+                pattern = kAirDashBack;
             }
             m_attackResult = 0;
             StartPattern();
@@ -3553,7 +3553,7 @@ void CKanna::UpdatePattern()
         }
         if (y + vy >= 0.0) {
             y = 0.0;
-            pattern = 0xd;
+            pattern = kLand;
             StartPattern();
             break;
         }
@@ -3565,33 +3565,33 @@ void CKanna::UpdatePattern()
                 m_attackResult = 0;
             }
             if (frame >= x8) {
-                pattern = 9;
+                pattern = kFall;
                 StartPattern();
             }
         }
         break;
-    case 0xd0:
+    case kJumpB:
         vy = vy + ay;
-        if (m_inputY == -1 && frame > 0 && unk15c < 3 && m_attackResult >= 2 && unk15a < 2) {
-            unk15a++;
-            pattern = 0xe;
+        if (m_inputY == -1 && frame > 0 && m_sealLevel < 3 && m_attackResult >= 2 && m_airActions < 2) {
+            m_airActions++;
+            pattern = kAirJump;
             if (m_inputX == facing) {
-                pattern = 0xf;
+                pattern = kAirJumpForward;
             }
             if (m_inputX == -facing) {
-                pattern = 0x10;
+                pattern = kAirJumpBack;
             }
             m_attackResult = 0;
             StartPattern();
             break;
         }
-        if (m_inputY == 0 && m_inputX != 0 && frame > 0 && unk15c < 3 && m_attackResult >= 2 && unk15a < 2) {
-            unk15a++;
+        if (m_inputY == 0 && m_inputX != 0 && frame > 0 && m_sealLevel < 3 && m_attackResult >= 2 && m_airActions < 2) {
+            m_airActions++;
             if (m_inputX == facing) {
-                pattern = 0xa5;
+                pattern = kAirDashForward;
             }
             if (m_inputX == -facing) {
-                pattern = 0xa6;
+                pattern = kAirDashBack;
             }
             m_attackResult = 0;
             StartPattern();
@@ -3608,13 +3608,13 @@ void CKanna::UpdatePattern()
             l50.y = (double)(int)y;
             l50.scale = 2;
             l50.layer = 1;
-            l50.unk0 = 1;
+            l50.keep = 1;
             l50.facing = facing;
             SpawnObject(&l50);
         }
         if (y + vy >= 0.0) {
             y = 0.0;
-            pattern = 0xd;
+            pattern = kLand;
             StartPattern();
             break;
         }
@@ -3626,33 +3626,33 @@ void CKanna::UpdatePattern()
                 m_attackResult = 0;
             }
             if (frame >= x8) {
-                pattern = 9;
+                pattern = kFall;
                 StartPattern();
             }
         }
         break;
-    case 0xd1:
+    case kJumpC:
         vy = vy + ay;
-        if (m_inputY == -1 && frame > 0 && unk15c < 3 && m_attackResult >= 2 && unk15a < 2) {
-            unk15a++;
-            pattern = 0xe;
+        if (m_inputY == -1 && frame > 0 && m_sealLevel < 3 && m_attackResult >= 2 && m_airActions < 2) {
+            m_airActions++;
+            pattern = kAirJump;
             if (m_inputX == facing) {
-                pattern = 0xf;
+                pattern = kAirJumpForward;
             }
             if (m_inputX == -facing) {
-                pattern = 0x10;
+                pattern = kAirJumpBack;
             }
             m_attackResult = 0;
             StartPattern();
             break;
         }
-        if (m_inputY == 0 && m_inputX != 0 && frame > 0 && unk15c < 3 && m_attackResult >= 2 && unk15a < 2) {
-            unk15a++;
+        if (m_inputY == 0 && m_inputX != 0 && frame > 0 && m_sealLevel < 3 && m_attackResult >= 2 && m_airActions < 2) {
+            m_airActions++;
             if (m_inputX == facing) {
-                pattern = 0xa5;
+                pattern = kAirDashForward;
             }
             if (m_inputX == -facing) {
-                pattern = 0xa6;
+                pattern = kAirDashBack;
             }
             m_attackResult = 0;
             StartPattern();
@@ -3669,13 +3669,13 @@ void CKanna::UpdatePattern()
             l50.y = (double)(int)y;
             l50.scale = 2;
             l50.layer = 1;
-            l50.unk0 = 1;
+            l50.keep = 1;
             l50.facing = facing;
             SpawnObject(&l50);
         }
         if (y + vy >= 0.0) {
             y = 0.0;
-            pattern = 0xd;
+            pattern = kLand;
             StartPattern();
             break;
         }
@@ -3687,12 +3687,12 @@ void CKanna::UpdatePattern()
                 m_attackResult = 0;
             }
             if (frame >= x8) {
-                pattern = 9;
+                pattern = kFall;
                 StartPattern();
             }
         }
         break;
-    case 0xd2:
+    case kUnused6B:
         if (frame == 0 && timer == 0) {
             vx = 0.0;
             vy = 0.0;
@@ -3728,20 +3728,20 @@ void CKanna::UpdatePattern()
                 }
             }
             if (frame >= x8) {
-                pattern = 0;
+                pattern = kStand;
                 FaceOpponent();
                 StartPattern();
             }
         }
         break;
-    case 0xd3:
-        if (m_inputY == -1 && frame > 0 && unk15c < 3 && m_attackResult >= 2) {
-            pattern = 4;
+    case kUnused6C:
+        if (m_inputY == -1 && frame > 0 && m_sealLevel < 3 && m_attackResult >= 2) {
+            pattern = kJump;
             if (m_inputX == facing) {
-                pattern = 5;
+                pattern = kJumpForward;
             }
             if (m_inputX == -facing) {
-                pattern = 6;
+                pattern = kJumpBack;
             }
             m_attackResult = 0;
             StartPattern();
@@ -3762,13 +3762,13 @@ void CKanna::UpdatePattern()
             frame++;
             m_attackResult = 0;
             if (frame >= x8) {
-                pattern = 0;
+                pattern = kStand;
                 FaceOpponent();
                 StartPattern();
             }
         }
         break;
-    case 0xd4:
+    case kUnusedJump2C:
         vy = vy + ay;
         if (frame == 0 && timer == 0) {
             m_gauge = m_gauge + 0x1e;
@@ -3778,7 +3778,7 @@ void CKanna::UpdatePattern()
             ay = 0.07;
         }
         if (m_attackResult > 1) {
-            pattern = 0xd5;
+            pattern = kUnusedJump2CRebound;
             StartPattern();
             StopMoving();
             break;
@@ -3792,9 +3792,9 @@ void CKanna::UpdatePattern()
             l50.y = (double)(int)y;
             l50.scale = 2;
             l50.layer = 0;
-            l50.unk2c = 7;
+            l50.sound = 7;
             m_game->CreateEffect((EffectDesc*)&l50);
-            pattern = 0xd6;
+            pattern = kUnusedJump2CLanding;
             StartPattern();
             break;
         }
@@ -3808,7 +3808,7 @@ void CKanna::UpdatePattern()
             }
         }
         break;
-    case 0xd5:
+    case kUnusedJump2CRebound:
         ay = 0.042;
         vy = vy + ay;
         if (frame == 0 && timer == 0) {
@@ -3821,12 +3821,12 @@ void CKanna::UpdatePattern()
             frame++;
             m_attackResult = 0;
             if (frame >= x8) {
-                pattern = 9;
+                pattern = kFall;
                 StartPattern();
             }
         }
         break;
-    case 0xd6:
+    case kUnusedJump2CLanding:
         vx = 0.0;
         vy = 0.0;
         if (frame == 0 && timer == 0) {
@@ -3836,7 +3836,7 @@ void CKanna::UpdatePattern()
             l50.y = (double)(int)y;
             l50.scale = 2;
             l50.layer = 0;
-            l50.unk2c = 7;
+            l50.sound = 7;
             m_game->CreateEffect((EffectDesc*)&l50);
         }
         timer++;
@@ -3845,16 +3845,16 @@ void CKanna::UpdatePattern()
             frame++;
             m_attackResult = 0;
             if (frame >= x8) {
-                pattern = 7;
+                pattern = kStandUp;
                 if (m_inputY == 1) {
-                    pattern = 3;
+                    pattern = kCrouch;
                 }
                 FaceOpponent();
                 StartPattern();
             }
         }
         break;
-    case 0xdc:
+    case kUnusedThrow:
         vx = 0.0;
         vy = 0.0;
         if (frame == 1 && timer == 0 && (*m_opponent)->y == 0.0) {
@@ -3869,8 +3869,8 @@ void CKanna::UpdatePattern()
             StopMoving();
             (*m_opponent)->StopMoving();
             (*m_opponent)->StartPattern();
-            pattern = 0xdd;
-            (*m_opponent)->unk128 = 1;
+            pattern = kUnusedThrowHit;
+            (*m_opponent)->m_noAirRecovery = 1;
             l50.type = 0;
             l50.x = (double)((int)x + facing * 0x25);
             l50.y = (double)((int)y - 0x2a);
@@ -3885,16 +3885,16 @@ void CKanna::UpdatePattern()
             frame++;
             m_attackResult = 0;
             if (frame >= x8) {
-                pattern = 0;
+                pattern = kStand;
                 if (m_inputY == 1) {
-                    pattern = 3;
+                    pattern = kCrouch;
                 }
                 FaceOpponent();
                 StartPattern();
             }
         }
         break;
-    case 0xdd:
+    case kUnusedThrowHit:
         if (frame == 4 && timer == 0) {
             DealDamage(0x4e2, 750.0);
         }
@@ -3904,7 +3904,7 @@ void CKanna::UpdatePattern()
             frame++;
             m_attackResult = 0;
             if (frame == 1) {
-                (*m_opponent)->pattern = 0x67;
+                (*m_opponent)->pattern = kThrownDoubledOver;
                 (*m_opponent)->StopMoving();
                 (*m_opponent)->StartPattern();
                 (*m_opponent)->y = -86.0;
@@ -3924,20 +3924,20 @@ void CKanna::UpdatePattern()
                 (*m_opponent)->x = facing * 0x24 + x;
                 (*m_opponent)->facing = -facing;
                 ShakeScreen(3, 0);
-                (*m_opponent)->pattern = 0x61;
+                (*m_opponent)->pattern = kKnockdownHittable;
                 (*m_opponent)->StopMoving();
                 (*m_opponent)->StartPattern();
             }
             if (frame >= x8) {
-                pattern = 0;
+                pattern = kStand;
                 FaceOpponent();
                 StartPattern();
             }
         }
         break;
-    case 0xe6:
+    case kUnusedDashA:
         StartAfterimages(3);
-        unk158 = 0;
+        m_dashMomentum = 0;
         vx -= 0.03;
         if (vx < 0.0) {
             vx = 0.0;
@@ -3959,14 +3959,14 @@ void CKanna::UpdatePattern()
                 m_attackResult = 0;
             }
             if (frame >= x8) {
-                pattern = 0;
+                pattern = kStand;
                 StartPattern();
             }
         }
         break;
-    case 0xe7:
+    case kUnusedDashB:
         StartAfterimages(3);
-        unk158 = 0;
+        m_dashMomentum = 0;
         vx -= 0.03;
         if (vx < 0.0) {
             vx = 0.0;
@@ -3988,23 +3988,23 @@ void CKanna::UpdatePattern()
                 m_attackResult = 0;
             }
             if (frame >= x8) {
-                pattern = 0;
+                pattern = kStand;
                 StartPattern();
             }
         }
         break;
-    case 0xe8:
+    case kUnusedDashC:
         StartAfterimages(3);
-        unk158 = 0;
+        m_dashMomentum = 0;
         if (frame < 3) {
-            if (unk158 == 0) {
+            if (m_dashMomentum == 0) {
                 vx = 0.0;
             }
-            if (vx > 0.0 && unk158 == 1) {
+            if (vx > 0.0 && m_dashMomentum == 1) {
                 vx -= 0.06;
             } else {
                 vx = 0.0;
-                unk158 = 0;
+                m_dashMomentum = 0;
             }
         }
         if (frame == 3 && timer == 0) {
@@ -4025,15 +4025,15 @@ void CKanna::UpdatePattern()
                 m_attackResult = 0;
             }
             if (frame >= x8) {
-                pattern = 0;
+                pattern = kStand;
                 StartPattern();
             }
         }
         break;
-    case 0xe9:
+    case kUnusedDash2A:
         StartAfterimages(3);
         vx -= 0.03;
-        unk158 = 0;
+        m_dashMomentum = 0;
         if (vx < 0.0) {
             vx = 0.0;
         }
@@ -4054,15 +4054,15 @@ void CKanna::UpdatePattern()
                 m_attackResult = 0;
             }
             if (frame >= x8) {
-                pattern = 3;
+                pattern = kCrouch;
                 StartPattern();
             }
         }
         break;
-    case 0xea:
+    case kUnusedDash2B:
         StartAfterimages(3);
         vx -= 0.03;
-        unk158 = 0;
+        m_dashMomentum = 0;
         if (vx < 0.0) {
             vx = 0.0;
         }
@@ -4083,23 +4083,23 @@ void CKanna::UpdatePattern()
                 m_attackResult = 0;
             }
             if (frame >= x8) {
-                pattern = 3;
+                pattern = kCrouch;
                 StartPattern();
             }
         }
         break;
-    case 0xeb:
+    case kUnusedDash2C:
         StartAfterimages(3);
-        unk158 = 0;
+        m_dashMomentum = 0;
         if (frame < 3) {
-            if (unk158 == 0) {
+            if (m_dashMomentum == 0) {
                 vx = 0.0;
             }
-            if (vx > 0.0 && unk158 == 1) {
+            if (vx > 0.0 && m_dashMomentum == 1) {
                 vx -= 0.06;
             } else {
                 vx = 0.0;
-                unk158 = 0;
+                m_dashMomentum = 0;
             }
         }
         if (frame > 2 && frame < 0xf) {
@@ -4129,25 +4129,25 @@ void CKanna::UpdatePattern()
                 ay = 0.032;
             }
             if (frame >= x8) {
-                pattern = 0;
+                pattern = kStand;
                 StartPattern();
             }
         }
         break;
-    case 0xf9:
+    case kUnusedF9:
         if (frame == 0 && timer == 0) {
             unkdc = 4;
             unkde = -0x14;
             vx = 0.0;
             m_hitsLeft = 1;
-            unk14e = 0;
-            unk14c = 0x3c;
+            m_recoilGuardWindow = 0;
+            m_freezeTime = 0x3c;
             l50.type = 0x28;
             l50.x = (double)((int)x + facing * 0xa);
             l50.y = (double)((int)y - 0x28);
             l50.scale = 2;
             l50.layer = 1;
-            l50.unk2c = 0x13;
+            l50.sound = 0x13;
             m_game->CreateEffect((EffectDesc*)&l50);
         }
         timer++;
@@ -4156,13 +4156,13 @@ void CKanna::UpdatePattern()
             frame++;
             m_attackResult = 0;
             if (frame >= x8) {
-                pattern = 0;
+                pattern = kStand;
                 FaceOpponent();
                 StartPattern();
             }
         }
         break;
-    case 0xfa:
+    case k236:
         if (frame == 0 && timer == 0) {
             StopMoving();
         }
@@ -4184,7 +4184,7 @@ void CKanna::UpdatePattern()
             l50.y = (double)((int)y - 0x28);
             l50.scale = 2;
             l50.layer = 1;
-            l50.unk0 = 1;
+            l50.keep = 1;
             l50.facing = facing;
             SpawnObject(&l50);
         }
@@ -4196,22 +4196,22 @@ void CKanna::UpdatePattern()
                 m_attackResult = 0;
             }
             if (frame >= x8) {
-                pattern = 0;
+                pattern = kStand;
                 StartPattern();
             }
         }
         break;
-    case 0xfb:
+    case k236C:
         if (frame == 0 && timer == 0) {
             StopMoving();
             StartAfterimages(3);
-            if (unk120 == 0) {
-                unk118 -= 500.0;
+            if (m_rfBlue == 0) {
+                m_rfGauge -= 500.0;
             } else {
-                unk118 -= 250.0;
+                m_rfGauge -= 250.0;
             }
             l50.type = 0x21;
-            l50.unk2c = 0xb;
+            l50.sound = 0xb;
             l50.x = (double)(int)x;
             l50.y = (double)((int)y - 0x32);
             l50.scale = 2;
@@ -4244,7 +4244,7 @@ void CKanna::UpdatePattern()
             l50.y = (double)(int)y;
             l50.scale = 2;
             l50.layer = 1;
-            l50.unk0 = 1;
+            l50.keep = 1;
             l50.facing = facing;
             SpawnObject(&l50);
         }
@@ -4256,12 +4256,12 @@ void CKanna::UpdatePattern()
                 m_attackResult = 0;
             }
             if (frame >= x8) {
-                pattern = 0;
+                pattern = kStand;
                 StartPattern();
             }
         }
         break;
-    case 0xfd:
+    case kAir236:
         if (frame == 0 && timer == 0) {
             vx *= 0.3;
             vy *= 0.3;
@@ -4281,7 +4281,7 @@ void CKanna::UpdatePattern()
             l50.y = (double)((int)y - 0x28);
             l50.scale = 2;
             l50.layer = 1;
-            l50.unk0 = 1;
+            l50.keep = 1;
             l50.facing = facing;
             SpawnObject(&l50);
         }
@@ -4293,12 +4293,12 @@ void CKanna::UpdatePattern()
                 m_attackResult = 0;
             }
             if (frame >= x8) {
-                pattern = 9;
+                pattern = kFall;
                 StartPattern();
             }
         }
         break;
-    case 0x100:
+    case k623:
         if (frame == 0 && timer == 0) {
             StopMoving();
             m_hitsLeft = 2;
@@ -4309,7 +4309,7 @@ void CKanna::UpdatePattern()
                 y = 0.0;
                 StartPattern();
                 StopMoving();
-                pattern = 0x103;
+                pattern = k623Landing;
                 break;
             }
         }
@@ -4325,7 +4325,7 @@ void CKanna::UpdatePattern()
                 l50.type = 0x1b9;
                 l50.x = x;
                 l50.y = y;
-                l50.unk0 = 1;
+                l50.keep = 1;
                 l50.facing = facing;
                 l50.scale = 2;
                 l50.layer = 1;
@@ -4336,24 +4336,24 @@ void CKanna::UpdatePattern()
             }
         }
         break;
-    case 0x101:
+    case k623C:
         if (frame == 0 && timer == 0) {
             StartAfterimages(1);
-            if (unk313c == 0) {
+            if (m_patternVar2 == 0) {
                 StopMoving();
-                if (unk120 == 0) {
-                    unk118 -= 500.0;
+                if (m_rfBlue == 0) {
+                    m_rfGauge -= 500.0;
                 } else {
-                    unk118 -= 250.0;
+                    m_rfGauge -= 250.0;
                 }
                 l50.type = 0x21;
-                l50.unk2c = 0xb;
+                l50.sound = 0xb;
                 l50.x = (double)(int)x;
                 l50.y = (double)((int)y - 0x32);
                 l50.scale = 2;
                 l50.layer = 1;
                 m_game->CreateEffect((EffectDesc*)&l50);
-                unk313c++;
+                m_patternVar2++;
             }
             m_hitsLeft = 1;
         }
@@ -4361,7 +4361,7 @@ void CKanna::UpdatePattern()
             l50.type = 0x1b9;
             l50.x = x;
             l50.y = y;
-            l50.unk0 = 1;
+            l50.keep = 1;
             l50.facing = facing;
             l50.scale = 2;
             l50.layer = 1;
@@ -4373,7 +4373,7 @@ void CKanna::UpdatePattern()
                 y = 0.0;
                 StartPattern();
                 StopMoving();
-                pattern = 0x103;
+                pattern = k623Landing;
                 break;
             }
         }
@@ -4382,38 +4382,38 @@ void CKanna::UpdatePattern()
             timer = 0;
             frame++;
             m_attackResult = 0;
-            if (frame == 3 && unk313c == 1) {
+            if (frame == 3 && m_patternVar2 == 1) {
                 vy = -3.5;
                 ay = 0.015;
-                unk313c++;
+                m_patternVar2++;
             }
-            if (frame == 8 && unk3138 < 5) {
+            if (frame == 8 && m_patternVar1 < 5) {
                 frame = 0;
-                unk3138++;
+                m_patternVar1++;
             }
             if (frame == 9) {
                 m_hitsLeft = 1;
             }
             if (frame >= x8) {
                 StartPattern();
-                pattern = 9;
+                pattern = kFall;
             }
         }
         break;
-    case 0x103:
+    case k623Landing:
         timer++;
         if (timer >= l4) {
             timer = 0;
             frame++;
             m_attackResult = 0;
             if (frame >= x8) {
-                pattern = 3;
+                pattern = kCrouch;
                 FaceOpponent();
                 StartPattern();
             }
         }
         break;
-    case 0x107:
+    case k214A:
         if (frame == 0 && timer == 0) {
             StopMoving();
         }
@@ -4425,8 +4425,8 @@ void CKanna::UpdatePattern()
             l50.layer = 1;
             l50.side = -((facing == 1) - 1);
             l50.facing = facing;
-            l50.unk28 = 1;
-            l50.unk0 = 1;
+            l50.shadow = 1;
+            l50.keep = 1;
             SpawnObject(&l50);
             m_gauge = m_gauge + 0x2d;
             m_playVoice = 2;
@@ -4439,12 +4439,12 @@ void CKanna::UpdatePattern()
                 m_attackResult = 0;
             }
             if (frame >= x8) {
-                pattern = 0;
+                pattern = kStand;
                 StartPattern();
             }
         }
         break;
-    case 0x108:
+    case k214B:
         if (frame == 0 && timer == 0) {
             StopMoving();
         }
@@ -4456,8 +4456,8 @@ void CKanna::UpdatePattern()
             l50.layer = 1;
             l50.side = -((facing == 1) - 1);
             l50.facing = facing;
-            l50.unk28 = 1;
-            l50.unk0 = 1;
+            l50.shadow = 1;
+            l50.keep = 1;
             SpawnObject(&l50);
             m_gauge = m_gauge + 0x2d;
             m_playVoice = 2;
@@ -4470,12 +4470,12 @@ void CKanna::UpdatePattern()
                 m_attackResult = 0;
             }
             if (frame >= x8) {
-                pattern = 0;
+                pattern = kStand;
                 StartPattern();
             }
         }
         break;
-    case 0x109:
+    case k214C:
         if (frame == 0 && timer == 0) {
             StopMoving();
         }
@@ -4487,8 +4487,8 @@ void CKanna::UpdatePattern()
             l50.layer = 1;
             l50.side = -((facing == 1) - 1);
             l50.facing = facing;
-            l50.unk28 = 1;
-            l50.unk0 = 1;
+            l50.shadow = 1;
+            l50.keep = 1;
             SpawnObject(&l50);
             m_gauge = m_gauge + 0x2d;
             m_playVoice = 2;
@@ -4501,12 +4501,12 @@ void CKanna::UpdatePattern()
                 m_attackResult = 0;
             }
             if (frame >= x8) {
-                pattern = 0;
+                pattern = kStand;
                 StartPattern();
             }
         }
         break;
-    case 0x10a:
+    case k41236:
         if (frame == 0 && timer == 0) {
             StopMoving();
         }
@@ -4518,8 +4518,8 @@ void CKanna::UpdatePattern()
             l50.layer = 1;
             l50.side = -((facing == 1) - 1);
             l50.facing = facing;
-            l50.unk28 = 0;
-            l50.unk0 = 1;
+            l50.shadow = 0;
+            l50.keep = 1;
             SpawnObject(&l50);
         }
         if (frame == 8 && timer == 0) {
@@ -4530,8 +4530,8 @@ void CKanna::UpdatePattern()
             l50.layer = 1;
             l50.side = -((facing == 1) - 1);
             l50.facing = facing;
-            l50.unk28 = 0;
-            l50.unk0 = 1;
+            l50.shadow = 0;
+            l50.keep = 1;
             SpawnObject(&l50);
             m_gauge = m_gauge + 0x2d;
             m_playVoice = 2;
@@ -4541,22 +4541,22 @@ void CKanna::UpdatePattern()
             timer = 0;
             frame++;
             if (frame >= x8) {
-                pattern = 0;
+                pattern = kStand;
                 StartPattern();
             }
         }
         break;
-    case 0x10b:
+    case k41236C:
         if (frame == 0 && timer == 0) {
             StopMoving();
             StartAfterimages(3);
-            if (unk120 == 0) {
-                unk118 -= 500.0;
+            if (m_rfBlue == 0) {
+                m_rfGauge -= 500.0;
             } else {
-                unk118 -= 250.0;
+                m_rfGauge -= 250.0;
             }
             l50.type = 0x21;
-            l50.unk2c = 0xb;
+            l50.sound = 0xb;
             l50.x = (double)(int)x;
             l50.y = (double)((int)y - 0x32);
             l50.scale = 2;
@@ -4569,10 +4569,10 @@ void CKanna::UpdatePattern()
             l50.y = (double)((int)y - 0x3f);
             l50.scale = 2;
             l50.layer = 1;
-            l50.unk0 = 1;
+            l50.keep = 1;
             l50.side = -((facing == 1) - 1);
             l50.facing = facing;
-            l50.unk28 = 0;
+            l50.shadow = 0;
             SpawnObject(&l50);
         }
         if (frame == 8 && timer == 0) {
@@ -4584,34 +4584,34 @@ void CKanna::UpdatePattern()
             timer = 0;
             frame++;
             if (frame >= x8) {
-                pattern = 0;
+                pattern = kStand;
                 StartPattern();
             }
         }
         break;
-    case 0x12c:
+    case k236236A:
         if (frame == 0 && timer == 0) {
             vx = 0.0;
             vy = 0.0;
             ay = 0.0;
         }
         if (frame == 0 && timer == 0) {
-            unk14c = 0xc6;
+            m_freezeTime = 0xc6;
             m_gauge = m_gauge - 0xbb8;
             FillBackground(0xb0, 3);
             l50.type = 0x46;
-            l50.unk2c = 0x40;
+            l50.sound = 0x40;
             l50.x = (double)((int)x + facing * 0x1d);
             l50.y = (double)((int)y - 0x3f);
             l50.scale = 2;
-            l50.unk0 = 1;
+            l50.keep = 1;
             l50.layer = 1;
             m_game->CreateEffect((EffectDesc*)&l50);
             m_hitsLeft = 0x63;
             m_playSound = 0x25;
         }
         if (frame > 2) {
-            m_game->Unk4080c0(0xf);
+            m_game->FlashNegative(0xf);
         }
         if (frame == 7 && timer == 0) {
             l50.type = 0x19f;
@@ -4620,23 +4620,23 @@ void CKanna::UpdatePattern()
             l50.facing = facing;
             l50.scale = 2;
             l50.layer = 0;
-            l50.unk2c = -1;
-            l50.unk30 = 1;
-            l50.unk0 = 1;
+            l50.sound = -1;
+            l50.movesInFreeze = 1;
+            l50.keep = 1;
             SpawnObject(&l50);
         }
         if (frame > 3) {
-            Unk410a80(0x32, 3);
+            FocusCameraY(0x32, 3);
         }
         if (frame == 0xd && timer == 0) {
             m_playVoice = 5;
         }
         if (frame > 0xd && frame < 0x11) {
-            unk313c++;
-            if ((WORD)Random(0, 0x64) > unk313c * 0.08 + 60.0) {
+            m_patternVar2++;
+            if ((WORD)Random(0, 0x64) > m_patternVar2 * 0.08 + 60.0) {
                 l50.type = 0x1a1;
                 l50.layer = 1;
-                l50.unk0 = 1;
+                l50.keep = 1;
                 if ((WORD)Random(0, 0x64) > 0x32) {
                     l50.type = 0x1a0;
                     l50.layer = 0;
@@ -4653,47 +4653,47 @@ void CKanna::UpdatePattern()
             timer = 0;
             frame++;
             m_attackResult = 0;
-            if (unk3138 < 0xd && frame == 0x11) {
+            if (m_patternVar1 < 0xd && frame == 0x11) {
                 frame = frame - 3;
-                unk3138++;
+                m_patternVar1++;
                 break;
             }
             if (frame >= x8) {
                 FaceOpponent();
                 StartPattern();
-                pattern = 0;
+                pattern = kStand;
                 if (y < 0.0) {
-                    pattern = 9;
+                    pattern = kFall;
                     ay = 0.035;
                 }
             }
         }
         break;
-    case 0x12f:
+    case k236236B:
         vx = 0.0;
         vy = 0.0;
         if (frame == 0 && timer == 0) {
             vx = 0.0;
             vy = 0.0;
             ay = 0.0;
-            unk3138 = 0xa;
+            m_patternVar1 = 0xa;
         }
         if (frame == 0 && timer == 0) {
-            unk14c = 0x78;
+            m_freezeTime = 0x78;
             m_gauge = m_gauge - 0xbb8;
             FillBackground(0xb0, 3);
             l50.type = 0x46;
-            l50.unk2c = 0x40;
+            l50.sound = 0x40;
             l50.x = (double)(int)x;
             l50.y = (double)((int)y - 0x28);
             l50.scale = 2;
-            l50.unk0 = 1;
+            l50.keep = 1;
             l50.layer = 1;
             m_game->CreateEffect((EffectDesc*)&l50);
             m_hitsLeft = 0x63;
         }
         if (frame > 6 && frame < 0xc) {
-            Unk410a80(0x32, 3);
+            FocusCameraY(0x32, 3);
         }
         if (frame == 8 && timer == 0) {
             ShakeScreen(3, 0x14);
@@ -4703,7 +4703,7 @@ void CKanna::UpdatePattern()
             l50.facing = facing;
             l50.scale = 2;
             l50.layer = 1;
-            l50.unk0 = 1;
+            l50.keep = 1;
             SpawnObject(&l50);
             l50.x = x - facing * 0x28 - 30.0;
             l50.facing = -facing;
@@ -4715,18 +4715,18 @@ void CKanna::UpdatePattern()
             timer = 0;
             frame++;
             m_attackResult = 0;
-            if (frame == 0xd && unk3138 > 0) {
+            if (frame == 0xd && m_patternVar1 > 0) {
                 frame = frame - 2;
-                unk3138--;
+                m_patternVar1--;
             }
             if (frame >= x8) {
-                pattern = 0;
+                pattern = kStand;
                 FaceOpponent();
                 StartPattern();
             }
         }
         break;
-    case 0x132:
+    case kAir236236B:
         vx = 0.0;
         vy = 0.0;
         if (frame == 0 && timer == 0) {
@@ -4735,20 +4735,20 @@ void CKanna::UpdatePattern()
             ay = 0.035;
         }
         if (frame == 0 && timer == 0) {
-            unk14c = 0x78;
+            m_freezeTime = 0x78;
             m_gauge = m_gauge - 0xbb8;
             FillBackground(0xb0, 0x21);
             l50.type = 0x46;
-            l50.unk2c = 0x40;
+            l50.sound = 0x40;
             l50.x = (double)(int)x;
             l50.y = (double)((int)y - 0x28);
             l50.scale = 2;
-            l50.unk0 = 1;
+            l50.keep = 1;
             l50.layer = 1;
             m_game->CreateEffect((EffectDesc*)&l50);
         }
         if (frame > 6 && frame < 0xc) {
-            Unk410a80(0x32, 3);
+            FocusCameraY(0x32, 3);
         }
         if (frame == 8 && timer == 0) {
             l50.type = 0x1aa;
@@ -4757,7 +4757,7 @@ void CKanna::UpdatePattern()
             l50.facing = facing;
             l50.scale = 2;
             l50.layer = 1;
-            l50.unk0 = 1;
+            l50.keep = 1;
             SpawnObject(&l50);
         }
         timer++;
@@ -4766,26 +4766,26 @@ void CKanna::UpdatePattern()
             frame++;
             m_attackResult = 0;
             if (frame >= x8) {
-                pattern = 9;
+                pattern = kFall;
                 FaceOpponent();
                 StartPattern();
             }
         }
         break;
-    case 0x135:
+    case kLv4:
         if (frame == 0 && timer == 0) {
             StopMoving();
         }
         if (frame == 4 && timer == 0) {
-            unk14c = 0x78;
+            m_freezeTime = 0x78;
             m_gauge = m_gauge - 0xbb8;
             FillBackground(0xb0, 3);
             l50.type = 0x46;
-            l50.unk2c = 0x40;
+            l50.sound = 0x40;
             l50.x = (double)(int)x;
             l50.y = (double)((int)y - 0x28);
             l50.scale = 2;
-            l50.unk0 = 1;
+            l50.keep = 1;
             l50.layer = 1;
             m_game->CreateEffect((EffectDesc*)&l50);
             l50.type = 0x47;
@@ -4799,7 +4799,7 @@ void CKanna::UpdatePattern()
             l50.scale = 2;
             l50.layer = 1;
             l50.facing = facing;
-            l50.unk0 = 1;
+            l50.keep = 1;
             SpawnObject(&l50);
         }
         if (frame == 0x10 && timer == 0) {
@@ -4808,12 +4808,12 @@ void CKanna::UpdatePattern()
             l50.y = (double)(int)y;
             l50.scale = 2;
             l50.layer = 1;
-            l50.unk0 = 1;
+            l50.keep = 1;
             l50.facing = facing;
             SpawnObject(&l50);
         }
         if ((frame == 8 || frame == 0x12) && m_attackResult == 3) {
-            (*m_opponent)->unk14a = 0x10e;
+            (*m_opponent)->m_hitstop = 0x10e;
         }
         if (frame == 0x20 && timer == 0) {
             l50.type = 0x1b0;
@@ -4821,26 +4821,26 @@ void CKanna::UpdatePattern()
             l50.y = (double)(int)y;
             l50.scale = 2;
             l50.layer = 1;
-            l50.unk0 = 1;
+            l50.keep = 1;
             l50.facing = facing;
             SpawnObject(&l50);
-            (*m_opponent)->unk140 = 0x7530;
+            (*m_opponent)->m_koDelay = 0x7530;
         }
         if (frame == 0x2c && timer == 0) {
-            unk14c = 0x23a;
+            m_freezeTime = 0x23a;
             FillBackground(0xb0, 0xbb8);
             l50.type = 9;
-            l50.unk2c = 5;
+            l50.sound = 5;
             l50.x = (double)(int)x;
             l50.y = (double)((int)y - 0x28);
             l50.scale = 2;
-            l50.unk0 = 1;
+            l50.keep = 1;
             l50.layer = 1;
             m_game->CreateEffect((EffectDesc*)&l50);
             m_hitsLeft = 0x63;
             (*m_opponent)->x = x;
             m_playVoice = 0xa;
-            m_game->unk1420e = 0x7530;
+            m_game->m_hideObjectsTime = 0x7530;
         }
         if (frame == 0x33 && timer == 0) {
             vy = -7.5;
@@ -4850,37 +4850,37 @@ void CKanna::UpdatePattern()
             l50.y = 0.0;
             l50.scale = 2;
             l50.layer = 0;
-            l50.unk0 = 1;
+            l50.keep = 1;
             l50.screen = 1;
             l50.facing = 1;
-            l50.unk30 = 1;
+            l50.movesInFreeze = 1;
             SpawnObject(&l50);
             l50.type = 0x1b5;
             l50.x = 0.0;
             l50.y = 0.0;
             l50.scale = 2;
             l50.layer = 0;
-            l50.unk0 = 1;
+            l50.keep = 1;
             l50.screen = 1;
             l50.facing = 1;
-            l50.unk30 = 1;
+            l50.movesInFreeze = 1;
             SpawnObject(&l50);
             l50.type = 0x1b6;
             l50.x = 0.0;
             l50.y = 0.0;
             l50.scale = 2;
             l50.layer = 1;
-            l50.unk0 = 1;
+            l50.keep = 1;
             l50.screen = 1;
             l50.facing = 1;
-            l50.unk30 = 1;
+            l50.movesInFreeze = 1;
             SpawnObject(&l50);
             m_playVoice = 0xb;
         }
         if (frame == 0x35 && m_attackResult == 3) {
             timer = 0;
             frame = 0x36;
-            (*m_opponent)->unk14a = 0xbb8;
+            (*m_opponent)->m_hitstop = 0xbb8;
             vy = -0.05;
             ay = 0.0;
             FillBackground(0xb0, 3);
@@ -4890,11 +4890,11 @@ void CKanna::UpdatePattern()
             l50.y = y - 160.0;
             l50.scale = 2;
             l50.layer = 1;
-            l50.unk0 = 1;
+            l50.keep = 1;
             l50.facing = 1;
-            l50.unk30 = 1;
+            l50.movesInFreeze = 1;
             SpawnObject(&l50);
-            (*m_opponent)->m_game->unk1420e = 0;
+            (*m_opponent)->m_game->m_hideObjectsTime = 0;
         }
         if (frame == 0x37 && timer == 0) {
             vy = -7.0;
@@ -4904,9 +4904,9 @@ void CKanna::UpdatePattern()
             l50.y = y - 150.0;
             l50.scale = 2;
             l50.layer = 1;
-            l50.unk0 = 1;
+            l50.keep = 1;
             l50.facing = 1;
-            l50.unk30 = 1;
+            l50.movesInFreeze = 1;
             SpawnObject(&l50);
             l50.x = x + 40.0;
             l50.y = y - 140.0;
@@ -4920,13 +4920,13 @@ void CKanna::UpdatePattern()
             SpawnObject(&l50);
         }
         if (frame == 0x37 && m_attackResult == 3) {
-            (*m_opponent)->unk140 = 0;
+            (*m_opponent)->m_koDelay = 0;
         }
         if (frame > 0 && frame < 0x37) {
-            Unk410a80(0x32, 3);
+            FocusCameraY(0x32, 3);
         }
         if (frame > 0x25 && frame < 0x37) {
-            Unk410a40(0x32, 3);
+            FocusCameraX(0x32, 3);
         }
         if (y < 0.0) {
             vy = vy + ay;
@@ -4938,7 +4938,7 @@ void CKanna::UpdatePattern()
             StopMoving();
             StartPattern();
             y = 0.0;
-            pattern = 0xd;
+            pattern = kLand;
             break;
         }
         timer++;
@@ -4948,19 +4948,19 @@ void CKanna::UpdatePattern()
             if (frame < 0x12 || frame == 0x23 || frame > 0x32) {
                 m_attackResult = 0;
             }
-            if (frame == 0xe && unk3138 > 0) {
+            if (frame == 0xe && m_patternVar1 > 0) {
                 frame = frame - 2;
-                unk3138--;
+                m_patternVar1--;
             }
             if (frame == 0x1b && (m_attackResult != 3 || (*m_opponent)->m_hp <= 0)) {
                 StartPattern();
                 FaceOpponent();
-                pattern = 0;
+                pattern = kStand;
                 break;
             }
             if (frame == 0x24 && m_attackResult != 3) {
                 StartPattern();
-                pattern = 0x136;
+                pattern = kLv4Miss;
             }
             if (frame == 0x2b) {
                 l50.type = 0x1b1;
@@ -4968,9 +4968,9 @@ void CKanna::UpdatePattern()
                 l50.y = (double)(int)y;
                 l50.scale = 2;
                 l50.layer = 1;
-                l50.unk0 = 1;
+                l50.keep = 1;
                 l50.facing = facing;
-                l50.unk30 = 1;
+                l50.movesInFreeze = 1;
                 SpawnObject(&l50);
             }
             if (frame == 0x35) {
@@ -4984,7 +4984,7 @@ void CKanna::UpdatePattern()
             }
         }
         break;
-    case 0x136:
+    case kLv4Miss:
         if (frame == 0 && timer == 0) {
             vx = 0.0;
             vy = 0.0;
@@ -4996,7 +4996,7 @@ void CKanna::UpdatePattern()
             frame++;
             m_attackResult = 0;
             if (frame >= x8) {
-                pattern = 0;
+                pattern = kStand;
                 FaceOpponent();
                 StartPattern();
             }

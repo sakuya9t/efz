@@ -76,7 +76,7 @@ void CAnimBg::Load()
     m_colorKey = m_graphics->GetColorKey(*m_surfaces);
 }
 
-void CAnimBg::Unk751030()
+void CAnimBg::LoadAnims()
 {
     int h60;
     int l5c;
@@ -159,7 +159,7 @@ CBg01::CBg01(CGraphics* p1)
     m_objects = TOPTR(BgObject*, xc);
     m_anims = new EffectAnim[2];
     CAnimBg::Load();
-    CAnimBg::Unk751030();
+    CAnimBg::LoadAnims();
     v4 = 0;
     for (; v4 < 2; v4++) {
         m_objects[v4].pattern = v4;
@@ -189,7 +189,7 @@ CBg01::~CBg01()
     delete m_anims;
 }
 
-void CBg01::Vf0()
+void CBg01::Update()
 {
     WORD xc;
     WORD v8;
@@ -200,8 +200,8 @@ void CBg01::Vf0()
         v8 = (short)m_anims[m_objects[v4].pattern].frames[m_objects[v4].frame].duration;
         xc = m_anims[m_objects[v4].pattern].frameCount;
         switch (m_objects[v4].pattern) {
-        case 0:
-        case 1:
+        case kStand:
+        case kWalkForward:
             m_objects[v4].timer++;
             if (m_objects[v4].timer >= v8) {
                 m_objects[v4].timer = 0;
@@ -214,7 +214,7 @@ void CBg01::Vf0()
     }
 }
 
-void CBg01::Vf1(int p1, int p2, char p3)
+void CBg01::Draw(int p1, int p2, char p3)
 {
     int v30;
     RECT v2c;

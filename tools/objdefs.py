@@ -17,9 +17,9 @@ OBJECTS = {
         0x412840: 'Afterimages::Afterimages',
         0x412870: '??_EPatternData@@QAEPAXI@Z',
         0x4128e0: 'PatternData::~PatternData',
-        0x412910: 'Afterimages::Unk412910',
-        0x412930: 'Afterimages::Unk412930',
-        0x412a10: 'Afterimages::Unk412a10',
+        0x412910: 'Afterimages::Stop',
+        0x412930: 'Afterimages::Record',
+        0x412a10: 'Afterimages::Start',
         0x412ad0: 'PatternData::Alloc',
     }),
     'playerobj': (0x412b10, 0x4136d0, 'CPlayer', {
@@ -108,10 +108,10 @@ for _obj, _cls, _lo, _hi, _vt, _ctor, _size in CHARACTERS:
 # The destructors set the vtable but are never called.
 SCENE_SLOTS = ['Draw', 'Update', 'Vf2']
 BG_SLOTS = ['Vf0', 'Vf1']
-_BG_BASE = {0x750d30: 'CAnimBg::Load', 0x751030: 'CAnimBg::Unk751030',
+_BG_BASE = {0x750d30: 'CAnimBg::Load', 0x751030: 'CAnimBg::LoadAnims',
             0x7519f0: 'CAnimBg::CAnimBg', 0x751a10: '??_GEffectAnim@@QAEPAXI@Z'}
-_SCENE_BASE = {0x759c10: 'CScene::CScene', 0x759c90: 'CScene::Unk759c90',
-               0x759e20: 'CScene::Unk759e20'}
+_SCENE_BASE = {0x759c10: 'CScene::CScene', 0x759c90: 'CScene::FadeOut',
+               0x759e20: 'CScene::FadeIn'}
 CLASSES = [
     ('bg01', 'CBg01', 'CAnimBg', 0x750d30, 0x751a40, 0x7890b0, BG_SLOTS, 0x751370, 0x751500, 0x1c,
      _BG_BASE, 0x7519f0),

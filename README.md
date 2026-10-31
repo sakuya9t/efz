@@ -16,7 +16,10 @@ per-function numbers.
 The source reads fields through named members rather than the lifter's raw offsets
 (`m_pointY[4] = -0x1d` for `*(short*)((char*)this + 0x2b00) = -0x1d`, `(*m_opponent)->x`).
 [docs/readability.md](docs/readability.md) records how, and which readability changes
-keep the compiled code.
+keep the compiled code. Members, methods, actions (`pattern = kInstantCharge`),
+commands (`m_command == kCmd236A`) and frame flags (`kStateCancellable`) have names;
+[docs/naming/](docs/naming/README.md) has the research behind them: each character's
+move list and mechanics, and the original's bugs found on the way.
 
 **Since 31 October 2026 the source is free to change** for readability and the fork:
 the git tag `compat-reference` keeps the last source that builds the identical exe, and
@@ -223,6 +226,7 @@ tools/compat.py coverage            # which lines of src/ the suite runs
 | `tools/run.sh`, `tools/run.cmd` | Build the native game and start it, on Linux and macOS, or on Windows |
 | `tools/native.sh` | Builds the native game (Linux, or Windows with MinGW-w64) in docker |
 | `tools/portify.py` | Marks the pointer casts of lifted code for the native build's 32-bit handles |
+| `tools/constants.py` | Names bare action, command, flag and effect numbers: declares `tools/constants.txt`'s constants in `src/efz.h` and puts them in the code where clang shows what a number is |
 | `tools/compat.py` | The compatibility test: plays the suite (`tests/compat/`) in a build and compares its state, tick by tick, with the original's (the `compat-reference` tag, under wine) |
 | `tools/msvc11` | Run Visual C++ 2012 tools (EfzRevival's toolchain) in the container |
 | `tools/libmatch.py` | Finds the functions of prebuilt `.lib`/`.obj` files in a binary, relocations masked |

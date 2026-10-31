@@ -11,7 +11,7 @@ void CMishio::UpdatePattern()
     WORD x8;
     WORD l4;
 
-    if (unk14a > 0 || (*m_opponent)->unk14c > 0) {
+    if (m_hitstop > 0 || (*m_opponent)->m_freezeTime > 0) {
         return;
     }
     EffectDesc l50;
@@ -20,7 +20,7 @@ void CMishio::UpdatePattern()
     InitEffectDesc((EffectDesc*)&l50);
     switch (pattern) {
     default:
-        unk158 = 0;
+        m_dashMomentum = 0;
         vx = 0.0;
         vy = 0.0;
         timer++;
@@ -32,8 +32,8 @@ void CMishio::UpdatePattern()
             }
         }
         break;
-    case 1:
-        unk158 = 0;
+    case kWalkForward:
+        m_dashMomentum = 0;
         vx = 0.4;
         vy = 0.0;
         timer++;
@@ -45,8 +45,8 @@ void CMishio::UpdatePattern()
             }
         }
         break;
-    case 2:
-        unk158 = 0;
+    case kWalkBack:
+        m_dashMomentum = 0;
         vx = -0.4;
         vy = 0.0;
         timer++;
@@ -58,10 +58,10 @@ void CMishio::UpdatePattern()
             }
         }
         break;
-    case 3:
+    case kCrouch:
         vx = 0.0;
         vy = 0.0;
-        unk158 = 0;
+        m_dashMomentum = 0;
         FaceOpponent();
         timer++;
         if (timer >= l4) {
@@ -72,9 +72,9 @@ void CMishio::UpdatePattern()
             }
         }
         break;
-    case 4:
+    case kJump:
         if (frame == 0 && timer == 0) {
-            if (unk158 == 0) {
+            if (m_dashMomentum == 0) {
                 FaceOpponent();
             }
             vx = 0.0;
@@ -82,9 +82,9 @@ void CMishio::UpdatePattern()
         if (frame == 2 && timer == 0) {
             ay = 0.04;
             vy = -2.45;
-            if (unk158 == 1) {
+            if (m_dashMomentum == 1) {
                 vx = 0.3;
-                unk158 = 0;
+                m_dashMomentum = 0;
             }
         }
         if (frame > 2) {
@@ -95,7 +95,7 @@ void CMishio::UpdatePattern()
             timer = 0;
             frame++;
             if (frame >= x8) {
-                pattern = 9;
+                pattern = kFall;
                 StartPattern();
             }
         }
@@ -103,13 +103,13 @@ void CMishio::UpdatePattern()
             y = 0.0;
             m_playSound = 9;
             FaceOpponent();
-            pattern = 0xd;
+            pattern = kLand;
             StartPattern();
         }
         break;
-    case 5:
+    case kJumpForward:
         if (frame == 0 && timer == 0) {
-            if (unk158 == 0) {
+            if (m_dashMomentum == 0) {
                 FaceOpponent();
             }
             vx = 0.0;
@@ -118,9 +118,9 @@ void CMishio::UpdatePattern()
             ay = 0.04;
             vy = -2.45;
             vx = 0.7;
-            if (unk158 == 1) {
+            if (m_dashMomentum == 1) {
                 vx = 1.1;
-                unk158 = 0;
+                m_dashMomentum = 0;
             }
         }
         if (frame > 2) {
@@ -131,7 +131,7 @@ void CMishio::UpdatePattern()
             timer = 0;
             frame++;
             if (frame >= x8) {
-                pattern = 9;
+                pattern = kFall;
                 StartPattern();
             }
         }
@@ -139,13 +139,13 @@ void CMishio::UpdatePattern()
             y = 0.0;
             m_playSound = 9;
             FaceOpponent();
-            pattern = 0xd;
+            pattern = kLand;
             StartPattern();
         }
         break;
-    case 6:
+    case kJumpBack:
         if (frame == 0 && timer == 0) {
-            if (unk158 == 0) {
+            if (m_dashMomentum == 0) {
                 FaceOpponent();
             }
             vx = 0.0;
@@ -163,7 +163,7 @@ void CMishio::UpdatePattern()
             timer = 0;
             frame++;
             if (frame >= x8) {
-                pattern = 9;
+                pattern = kFall;
                 StartPattern();
             }
         }
@@ -171,43 +171,43 @@ void CMishio::UpdatePattern()
             y = 0.0;
             m_playSound = 9;
             FaceOpponent();
-            pattern = 0xd;
+            pattern = kLand;
             StartPattern();
         }
         break;
-    case 7:
+    case kStandUp:
         vx = 0.0;
         vy = 0.0;
-        unk158 = 0;
+        m_dashMomentum = 0;
         FaceOpponent();
         timer++;
         if (timer >= l4) {
             timer = 0;
             frame++;
             if (frame >= x8) {
-                pattern = 0;
+                pattern = kStand;
                 StartPattern();
             }
         }
         break;
-    case 8:
+    case kCrouchDown:
         vx = 0.0;
         vy = 0.0;
-        unk158 = 0;
+        m_dashMomentum = 0;
         FaceOpponent();
         timer++;
         if (timer >= l4) {
             timer = 0;
             frame++;
             if (frame >= x8) {
-                pattern = 3;
+                pattern = kCrouch;
                 StartPattern();
             }
         }
         break;
-    case 9:
+    case kFall:
         vy = vy + ay;
-        unk158 = 0;
+        m_dashMomentum = 0;
         timer++;
         if (timer >= l4) {
             timer = 0;
@@ -219,37 +219,37 @@ void CMishio::UpdatePattern()
         if (y + vy >= 0.0) {
             y = 0.0;
             m_playSound = 9;
-            pattern = 0xd;
+            pattern = kLand;
             StartPattern();
         }
         break;
-    case 0xd:
+    case kLand:
         vx = 0.0;
         vy = 0.0;
-        unk158 = 0;
+        m_dashMomentum = 0;
         FaceOpponent();
         timer++;
         if (timer >= l4) {
             timer = 0;
             frame++;
             if (frame >= x8) {
-                pattern = 0;
+                pattern = kStand;
                 if (m_inputY == 1) {
-                    pattern = 3;
+                    pattern = kCrouch;
                 }
                 StartPattern();
             }
         }
         break;
-    case 0xe:
+    case kAirJump:
         ay = 0.04;
-        unk158 = 0;
+        m_dashMomentum = 0;
         if (frame == 0 && timer == 0) {
             vy = -2.45;
             vx = 0.0;
-            if (unk158 == 1) {
+            if (m_dashMomentum == 1) {
                 vx = 0.4;
-                unk158 = 0;
+                m_dashMomentum = 0;
             }
         }
         vy = vy + ay;
@@ -258,7 +258,7 @@ void CMishio::UpdatePattern()
             timer = 0;
             frame++;
             if (frame >= x8) {
-                pattern = 9;
+                pattern = kFall;
                 StartPattern();
             }
         }
@@ -266,19 +266,19 @@ void CMishio::UpdatePattern()
             y = 0.0;
             m_playSound = 9;
             FaceOpponent();
-            pattern = 0xd;
+            pattern = kLand;
             StartPattern();
         }
         break;
-    case 0xf:
+    case kAirJumpForward:
         ay = 0.04;
-        unk158 = 0;
+        m_dashMomentum = 0;
         if (frame == 0 && timer == 0) {
             vy = -2.45;
             vx = 0.7;
-            if (unk158 == 1) {
+            if (m_dashMomentum == 1) {
                 vx = 1.1;
-                unk158 = 0;
+                m_dashMomentum = 0;
             }
         }
         vy = vy + ay;
@@ -287,7 +287,7 @@ void CMishio::UpdatePattern()
             timer = 0;
             frame++;
             if (frame >= x8) {
-                pattern = 9;
+                pattern = kFall;
                 StartPattern();
             }
         }
@@ -295,18 +295,18 @@ void CMishio::UpdatePattern()
             y = 0.0;
             m_playSound = 9;
             FaceOpponent();
-            pattern = 0xd;
+            pattern = kLand;
             StartPattern();
         }
         break;
-    case 0x10:
+    case kAirJumpBack:
         ay = 0.04;
-        unk158 = 0;
+        m_dashMomentum = 0;
         if (frame == 0 && timer == 0) {
             vy = -2.45;
             vx = -0.7;
-            if (unk158 == 1) {
-                unk158 = 0;
+            if (m_dashMomentum == 1) {
+                m_dashMomentum = 0;
             }
         }
         vy = vy + ay;
@@ -315,7 +315,7 @@ void CMishio::UpdatePattern()
             timer = 0;
             frame++;
             if (frame >= x8) {
-                pattern = 9;
+                pattern = kFall;
                 StartPattern();
             }
         }
@@ -323,11 +323,11 @@ void CMishio::UpdatePattern()
             y = 0.0;
             m_playSound = 9;
             FaceOpponent();
-            pattern = 0xd;
+            pattern = kLand;
             StartPattern();
         }
         break;
-    case 0x2f:
+    case kResultLoserFall:
         if (frame == 0 && timer == 0) {
             vx = 0.0;
             ay = 0.035;
@@ -354,16 +354,16 @@ void CMishio::UpdatePattern()
             }
         }
         break;
-    case 0x32:
-        if (unk120 != 0) {
-            unk118 -= 0.6;
+    case kHitStandHighLight:
+        if (m_rfBlue != 0) {
+            m_rfGauge -= 0.6;
         }
-        unk158 = 0;
+        m_dashMomentum = 0;
         if (frame == 0 && timer == 0) {
             m_gauge = m_gauge + 0xa;
             vx = (2.0 - (*m_opponent)->m_proration / 10000.0) * -1.1;
-            if (unk120 != 0) {
-                unk118 -= 10.0;
+            if (m_rfBlue != 0) {
+                m_rfGauge -= 10.0;
             }
         }
         vy = 0.0;
@@ -373,33 +373,33 @@ void CMishio::UpdatePattern()
             vx = 0.0;
         }
         if (x - 20.0 <= 0.0 || x + 20.0 >= 639.0) {
-            unkb8 = (1.0 - (y < 0.0) * 0.2) * vx;
+            m_cornerPushback = (1.0 - (y < 0.0) * 0.2) * vx;
         } else {
-            unkb8 = 0.0;
+            m_cornerPushback = 0.0;
         }
         timer++;
         if (timer >= l4) {
             timer = 0;
             frame++;
             if (frame >= x8) {
-                pattern = 0;
+                pattern = kStand;
                 if (m_inputY == 1) {
-                    pattern = 3;
+                    pattern = kCrouch;
                 }
                 StartPattern();
             }
         }
         break;
-    case 0x33:
-        if (unk120 != 0) {
-            unk118 -= 0.6;
+    case kHitStandHighMedium:
+        if (m_rfBlue != 0) {
+            m_rfGauge -= 0.6;
         }
-        unk158 = 0;
+        m_dashMomentum = 0;
         if (frame == 0 && timer == 0) {
             m_gauge = m_gauge + 0xf;
             vx = (2.0 - (*m_opponent)->m_proration / 10000.0) * -1.5;
-            if (unk120 != 0) {
-                unk118 -= 20.0;
+            if (m_rfBlue != 0) {
+                m_rfGauge -= 20.0;
             }
         }
         vy = 0.0;
@@ -409,33 +409,33 @@ void CMishio::UpdatePattern()
             vx = 0.0;
         }
         if (x - 20.0 <= 0.0 || x + 20.0 >= 639.0) {
-            unkb8 = (1.0 - (y < 0.0) * 0.2) * vx;
+            m_cornerPushback = (1.0 - (y < 0.0) * 0.2) * vx;
         } else {
-            unkb8 = 0.0;
+            m_cornerPushback = 0.0;
         }
         timer++;
         if (timer >= l4) {
             timer = 0;
             frame++;
             if (frame >= x8) {
-                pattern = 0;
+                pattern = kStand;
                 if (m_inputY == 1) {
-                    pattern = 3;
+                    pattern = kCrouch;
                 }
                 StartPattern();
             }
         }
         break;
-    case 0x34:
-        if (unk120 != 0) {
-            unk118 -= 0.6;
+    case kHitStandHighHeavy:
+        if (m_rfBlue != 0) {
+            m_rfGauge -= 0.6;
         }
-        unk158 = 0;
+        m_dashMomentum = 0;
         if (frame == 0 && timer == 0) {
             m_gauge = m_gauge + 0x14;
             vx = (2.0 - (*m_opponent)->m_proration / 10000.0) * -1.8;
-            if (unk120 != 0) {
-                unk118 -= 30.0;
+            if (m_rfBlue != 0) {
+                m_rfGauge -= 30.0;
             }
         }
         vy = 0.0;
@@ -445,33 +445,33 @@ void CMishio::UpdatePattern()
             vx = 0.0;
         }
         if (x - 20.0 <= 0.0 || x + 20.0 >= 639.0) {
-            unkb8 = (1.0 - (y < 0.0) * 0.2) * vx;
+            m_cornerPushback = (1.0 - (y < 0.0) * 0.2) * vx;
         } else {
-            unkb8 = 0.0;
+            m_cornerPushback = 0.0;
         }
         timer++;
         if (timer >= l4) {
             timer = 0;
             frame++;
             if (frame >= x8) {
-                pattern = 0;
+                pattern = kStand;
                 if (m_inputY == 1) {
-                    pattern = 3;
+                    pattern = kCrouch;
                 }
                 StartPattern();
             }
         }
         break;
-    case 0x35:
-        if (unk120 != 0) {
-            unk118 -= 0.6;
+    case kHitStandLowLight:
+        if (m_rfBlue != 0) {
+            m_rfGauge -= 0.6;
         }
-        unk158 = 0;
+        m_dashMomentum = 0;
         if (frame == 0 && timer == 0) {
             m_gauge = m_gauge + 0xa;
             vx = (2.0 - (*m_opponent)->m_proration / 10000.0) * -1.1;
-            if (unk120 != 0) {
-                unk118 -= 10.0;
+            if (m_rfBlue != 0) {
+                m_rfGauge -= 10.0;
             }
         }
         vy = 0.0;
@@ -481,33 +481,33 @@ void CMishio::UpdatePattern()
             vx = 0.0;
         }
         if (x - 20.0 <= 0.0 || x + 20.0 >= 639.0) {
-            unkb8 = (1.0 - (y < 0.0) * 0.2) * vx;
+            m_cornerPushback = (1.0 - (y < 0.0) * 0.2) * vx;
         } else {
-            unkb8 = 0.0;
+            m_cornerPushback = 0.0;
         }
         timer++;
         if (timer >= l4) {
             timer = 0;
             frame++;
             if (frame >= x8) {
-                pattern = 0;
+                pattern = kStand;
                 if (m_inputY == 1) {
-                    pattern = 3;
+                    pattern = kCrouch;
                 }
                 StartPattern();
             }
         }
         break;
-    case 0x36:
-        if (unk120 != 0) {
-            unk118 -= 0.6;
+    case kHitStandLowMedium:
+        if (m_rfBlue != 0) {
+            m_rfGauge -= 0.6;
         }
-        unk158 = 0;
+        m_dashMomentum = 0;
         if (frame == 0 && timer == 0) {
             m_gauge = m_gauge + 0xf;
             vx = (2.0 - (*m_opponent)->m_proration / 10000.0) * -1.5;
-            if (unk120 != 0) {
-                unk118 -= 20.0;
+            if (m_rfBlue != 0) {
+                m_rfGauge -= 20.0;
             }
         }
         vy = 0.0;
@@ -517,32 +517,32 @@ void CMishio::UpdatePattern()
             vx = 0.0;
         }
         if (x - 20.0 <= 0.0 || x + 20.0 >= 639.0) {
-            unkb8 = (1.0 - (y < 0.0) * 0.2) * vx;
+            m_cornerPushback = (1.0 - (y < 0.0) * 0.2) * vx;
         } else {
-            unkb8 = 0.0;
+            m_cornerPushback = 0.0;
         }
         timer++;
         if (timer >= l4) {
             timer = 0;
             frame++;
             if (frame >= x8) {
-                pattern = 0;
+                pattern = kStand;
                 if (m_inputY == 1) {
-                    pattern = 3;
+                    pattern = kCrouch;
                 }
                 StartPattern();
             }
         }
         break;
-    case 0x37:
-        if (unk120 != 0) {
-            unk118 -= 0.6;
+    case kHitStandLowHeavy:
+        if (m_rfBlue != 0) {
+            m_rfGauge -= 0.6;
         }
         if (frame == 0 && timer == 0) {
             m_gauge = m_gauge + 0x14;
             vx = (2.0 - (*m_opponent)->m_proration / 10000.0) * -1.8;
-            if (unk120 != 0) {
-                unk118 -= 30.0;
+            if (m_rfBlue != 0) {
+                m_rfGauge -= 30.0;
             }
         }
         vy = 0.0;
@@ -552,33 +552,33 @@ void CMishio::UpdatePattern()
             vx = 0.0;
         }
         if (x - 20.0 <= 0.0 || x + 20.0 >= 639.0) {
-            unkb8 = (1.0 - (y < 0.0) * 0.2) * vx;
+            m_cornerPushback = (1.0 - (y < 0.0) * 0.2) * vx;
         } else {
-            unkb8 = 0.0;
+            m_cornerPushback = 0.0;
         }
         timer++;
         if (timer >= l4) {
             timer = 0;
             frame++;
             if (frame >= x8) {
-                pattern = 0;
+                pattern = kStand;
                 if (m_inputY == 1) {
-                    pattern = 3;
+                    pattern = kCrouch;
                 }
                 StartPattern();
             }
         }
         break;
-    case 0x38:
-        if (unk120 != 0) {
-            unk118 -= 0.6;
+    case kHitCrouchLight:
+        if (m_rfBlue != 0) {
+            m_rfGauge -= 0.6;
         }
-        unk158 = 0;
+        m_dashMomentum = 0;
         if (frame == 0 && timer == 0) {
             m_gauge = m_gauge + 0xa;
             vx = (2.0 - (*m_opponent)->m_proration / 10000.0) * -1.1;
-            if (unk120 != 0) {
-                unk118 -= 10.0;
+            if (m_rfBlue != 0) {
+                m_rfGauge -= 10.0;
             }
         }
         vy = 0.0;
@@ -588,30 +588,30 @@ void CMishio::UpdatePattern()
             vx = 0.0;
         }
         if (x - 20.0 <= 0.0 || x + 20.0 >= 639.0) {
-            unkb8 = (1.0 - (y < 0.0) * 0.2) * vx;
+            m_cornerPushback = (1.0 - (y < 0.0) * 0.2) * vx;
         } else {
-            unkb8 = 0.0;
+            m_cornerPushback = 0.0;
         }
         timer++;
         if (timer >= l4) {
             timer = 0;
             frame++;
             if (frame >= x8) {
-                pattern = 3;
+                pattern = kCrouch;
                 StartPattern();
             }
         }
         break;
-    case 0x39:
-        if (unk120 != 0) {
-            unk118 -= 0.6;
+    case kHitCrouchMedium:
+        if (m_rfBlue != 0) {
+            m_rfGauge -= 0.6;
         }
-        unk158 = 0;
+        m_dashMomentum = 0;
         if (frame == 0 && timer == 0) {
             m_gauge = m_gauge + 0xf;
             vx = (2.0 - (*m_opponent)->m_proration / 10000.0) * -1.5;
-            if (unk120 != 0) {
-                unk118 -= 20.0;
+            if (m_rfBlue != 0) {
+                m_rfGauge -= 20.0;
             }
         }
         vy = 0.0;
@@ -621,30 +621,30 @@ void CMishio::UpdatePattern()
             vx = 0.0;
         }
         if (x - 20.0 <= 0.0 || x + 20.0 >= 639.0) {
-            unkb8 = (1.0 - (y < 0.0) * 0.2) * vx;
+            m_cornerPushback = (1.0 - (y < 0.0) * 0.2) * vx;
         } else {
-            unkb8 = 0.0;
+            m_cornerPushback = 0.0;
         }
         timer++;
         if (timer >= l4) {
             timer = 0;
             frame++;
             if (frame >= x8) {
-                pattern = 3;
+                pattern = kCrouch;
                 StartPattern();
             }
         }
         break;
-    case 0x3a:
-        if (unk120 != 0) {
-            unk118 -= 0.6;
+    case kHitCrouchHeavy:
+        if (m_rfBlue != 0) {
+            m_rfGauge -= 0.6;
         }
-        unk158 = 0;
+        m_dashMomentum = 0;
         if (frame == 0 && timer == 0) {
             m_gauge = m_gauge + 0x14;
             vx = (2.0 - (*m_opponent)->m_proration / 10000.0) * -1.8;
-            if (unk120 != 0) {
-                unk118 -= 30.0;
+            if (m_rfBlue != 0) {
+                m_rfGauge -= 30.0;
             }
         }
         vy = 0.0;
@@ -654,28 +654,28 @@ void CMishio::UpdatePattern()
             vx = 0.0;
         }
         if (x - 20.0 <= 0.0 || x + 20.0 >= 639.0) {
-            unkb8 = (1.0 - (y < 0.0) * 0.2) * vx;
+            m_cornerPushback = (1.0 - (y < 0.0) * 0.2) * vx;
         } else {
-            unkb8 = 0.0;
+            m_cornerPushback = 0.0;
         }
         timer++;
         if (timer >= l4) {
             timer = 0;
             frame++;
             if (frame >= x8) {
-                pattern = 3;
+                pattern = kCrouch;
                 StartPattern();
             }
         }
         break;
-    case 0x3b:
-        if (unk120 != 0) {
-            unk118 -= 0.8;
+    case kHitAir:
+        if (m_rfBlue != 0) {
+            m_rfGauge -= 0.8;
         }
         if (frame == 0 && timer == 0) {
             m_gauge = m_gauge + 0x1e;
-            vx = unkc0;
-            vy = vy * 0.75 + unkc8;
+            vx = m_hitVx;
+            vy = vy * 0.75 + m_hitVy;
             if (vy < -2.0) {
                 vy = -2.0;
             } else if (vy > -0.5) {
@@ -702,23 +702,23 @@ void CMishio::UpdatePattern()
         }
         if (y + vy >= 0.0 && frame > 1) {
             y = 0.0;
-            if (unk12c != 0) {
-                pattern = 0x61;
+            if (m_landHittable != 0) {
+                pattern = kKnockdownHittable;
                 StartPattern();
             } else {
-                pattern = 0x62;
+                pattern = kKnockdown;
                 StartPattern();
             }
         }
         break;
-    case 0x3c:
-        if (unk120 != 0) {
-            unk118 -= 0.8;
+    case kHitAirHigh:
+        if (m_rfBlue != 0) {
+            m_rfGauge -= 0.8;
         }
         if (frame == 0 && timer == 0) {
             m_gauge = m_gauge + 0x1e;
-            vx = unkc0;
-            vy = vy * 0.75 + unkc8;
+            vx = m_hitVx;
+            vy = vy * 0.75 + m_hitVy;
             if (vy < -4.0) {
                 vy = -4.0;
             } else if (vy > -0.5) {
@@ -745,23 +745,23 @@ void CMishio::UpdatePattern()
         }
         if (y + vy >= 0.0 && frame > 1) {
             y = 0.0;
-            if (unk12c != 0) {
-                pattern = 0x61;
+            if (m_landHittable != 0) {
+                pattern = kKnockdownHittable;
                 StartPattern();
             } else {
-                pattern = 0x62;
+                pattern = kKnockdown;
                 StartPattern();
             }
         }
         break;
-    case 0x3d:
-        if (unk120 != 0) {
-            unk118 -= 0.8;
+    case kHitAirHigher:
+        if (m_rfBlue != 0) {
+            m_rfGauge -= 0.8;
         }
         if (frame == 0 && timer == 0) {
             m_gauge = m_gauge + 0x1e;
-            vx = unkc0;
-            vy = vy * 0.75 + unkc8;
+            vx = m_hitVx;
+            vy = vy * 0.75 + m_hitVy;
             if (vy < -6.0) {
                 vy = -6.0;
             } else if (vy > -0.5) {
@@ -788,23 +788,23 @@ void CMishio::UpdatePattern()
         }
         if (y + vy >= 0.0 && frame > 1) {
             y = 0.0;
-            if (unk12c != 0) {
-                pattern = 0x61;
+            if (m_landHittable != 0) {
+                pattern = kKnockdownHittable;
                 StartPattern();
             } else {
-                pattern = 0x62;
+                pattern = kKnockdown;
                 StartPattern();
             }
         }
         break;
-    case 0x3e:
-        if (unk120 != 0) {
-            unk118 -= 0.8;
+    case kHitAirCarry:
+        if (m_rfBlue != 0) {
+            m_rfGauge -= 0.8;
         }
         if (frame == 0 && timer == 0) {
             m_gauge = m_gauge + 0x1e;
-            vx = unkc0;
-            vy = vy * 0.75 + unkc8;
+            vx = m_hitVx;
+            vy = vy * 0.75 + m_hitVy;
             ay = 0.032;
         }
         if (vy <= 0.0) {
@@ -826,23 +826,23 @@ void CMishio::UpdatePattern()
         }
         if (y + vy >= 0.0 && frame > 1) {
             y = 0.0;
-            if (unk12c != 0) {
-                pattern = 0x61;
+            if (m_landHittable != 0) {
+                pattern = kKnockdownHittable;
                 StartPattern();
             } else {
-                pattern = 0x62;
+                pattern = kKnockdown;
                 StartPattern();
             }
         }
         break;
-    case 0x3f:
-        if (unk120 != 0) {
-            unk118 -= 0.8;
+    case kHitAirLaunch:
+        if (m_rfBlue != 0) {
+            m_rfGauge -= 0.8;
         }
         if (frame == 0 && timer == 0) {
             m_gauge = m_gauge + 0x1e;
-            vx = unkc0;
-            vy = unkc8;
+            vx = m_hitVx;
+            vy = m_hitVy;
             ay = 0.032;
         }
         if (vy <= 0.0) {
@@ -864,28 +864,28 @@ void CMishio::UpdatePattern()
         }
         if (y + vy >= 0.0 && frame > 1) {
             y = 0.0;
-            if (unk12c != 0) {
-                pattern = 0x61;
+            if (m_landHittable != 0) {
+                pattern = kKnockdownHittable;
                 StartPattern();
             } else {
-                pattern = 0x62;
+                pattern = kKnockdown;
                 StartPattern();
             }
         }
         break;
-    case 0x40:
-        if (unk120 != 0) {
-            unk118 -= 0.8;
+    case kHitAirWallBounce:
+        if (m_rfBlue != 0) {
+            m_rfGauge -= 0.8;
         }
-        if (frame > 0 && (char)Unk40ff70() != 0) {
-            pattern = 0x46;
+        if (frame > 0 && (char)AtScreenEdge() != 0) {
+            pattern = kHitWallBounce;
             StartPattern();
             break;
         }
         if (frame == 0 && timer == 0) {
             m_gauge = m_gauge + 0x1e;
-            vx = unkc0;
-            vy = vy * 0.75 + unkc8;
+            vx = m_hitVx;
+            vy = vy * 0.75 + m_hitVy;
             if (vy < -2.0) {
                 vy = -2.0;
             } else if (vy > -0.5) {
@@ -912,28 +912,28 @@ void CMishio::UpdatePattern()
         }
         if (y + vy >= 0.0 && frame > 1) {
             y = 0.0;
-            if (unk12c != 0) {
-                pattern = 0x61;
+            if (m_landHittable != 0) {
+                pattern = kKnockdownHittable;
                 StartPattern();
             } else {
-                pattern = 0x62;
+                pattern = kKnockdown;
                 StartPattern();
             }
         }
         break;
-    case 0x41:
-        if (unk120 != 0) {
-            unk118 -= 0.8;
+    case kHitAirHighWallBounce:
+        if (m_rfBlue != 0) {
+            m_rfGauge -= 0.8;
         }
-        if (frame > 0 && (char)Unk40ff70() != 0) {
-            pattern = 0x46;
+        if (frame > 0 && (char)AtScreenEdge() != 0) {
+            pattern = kHitWallBounce;
             StartPattern();
             break;
         }
         if (frame == 0 && timer == 0) {
             m_gauge = m_gauge + 0x1e;
-            vx = unkc0;
-            vy = vy * 0.75 + unkc8;
+            vx = m_hitVx;
+            vy = vy * 0.75 + m_hitVy;
             if (vy < -4.0) {
                 vy = -4.0;
             } else if (vy > -0.5) {
@@ -960,28 +960,28 @@ void CMishio::UpdatePattern()
         }
         if (y + vy >= 0.0 && frame > 1) {
             y = 0.0;
-            if (unk12c != 0) {
-                pattern = 0x61;
+            if (m_landHittable != 0) {
+                pattern = kKnockdownHittable;
                 StartPattern();
             } else {
-                pattern = 0x62;
+                pattern = kKnockdown;
                 StartPattern();
             }
         }
         break;
-    case 0x42:
-        if (unk120 != 0) {
-            unk118 -= 0.8;
+    case kHitAirCarryWallBounce:
+        if (m_rfBlue != 0) {
+            m_rfGauge -= 0.8;
         }
-        if (frame > 0 && (char)Unk40ff70() != 0) {
-            pattern = 0x46;
+        if (frame > 0 && (char)AtScreenEdge() != 0) {
+            pattern = kHitWallBounce;
             StartPattern();
             break;
         }
         if (frame == 0 && timer == 0) {
             m_gauge = m_gauge + 0x1e;
-            vx = unkc0;
-            vy = vy * 0.75 + unkc8;
+            vx = m_hitVx;
+            vy = vy * 0.75 + m_hitVy;
             ay = 0.032;
         }
         if (vy <= 0.0) {
@@ -1003,28 +1003,28 @@ void CMishio::UpdatePattern()
         }
         if (y + vy >= 0.0 && frame > 1) {
             y = 0.0;
-            if (unk12c != 0) {
-                pattern = 0x61;
+            if (m_landHittable != 0) {
+                pattern = kKnockdownHittable;
                 StartPattern();
             } else {
-                pattern = 0x62;
+                pattern = kKnockdown;
                 StartPattern();
             }
         }
         break;
-    case 0x43:
-        if (unk120 != 0) {
-            unk118 -= 0.8;
+    case kHitAirLaunchWallBounce:
+        if (m_rfBlue != 0) {
+            m_rfGauge -= 0.8;
         }
-        if (frame > 0 && (char)Unk40ff70() != 0) {
-            pattern = 0x46;
+        if (frame > 0 && (char)AtScreenEdge() != 0) {
+            pattern = kHitWallBounce;
             StartPattern();
             break;
         }
         if (frame == 0 && timer == 0) {
             m_gauge = m_gauge + 0x1e;
-            vx = unkc0;
-            vy = unkc8;
+            vx = m_hitVx;
+            vy = m_hitVy;
             ay = 0.032;
         }
         if (vy <= 0.0) {
@@ -1046,25 +1046,25 @@ void CMishio::UpdatePattern()
         }
         if (y + vy >= 0.0 && frame > 1) {
             y = 0.0;
-            if (unk12c != 0) {
-                pattern = 0x61;
+            if (m_landHittable != 0) {
+                pattern = kKnockdownHittable;
                 StartPattern();
             } else {
-                pattern = 0x62;
+                pattern = kKnockdown;
                 StartPattern();
             }
         }
         break;
-    case 0x44:
-        if (unk120 != 0) {
-            unk118 -= 1.5;
+    case kHitBlownAwayWallBounce:
+        if (m_rfBlue != 0) {
+            m_rfGauge -= 1.5;
         }
         m_gauge = m_gauge + 3;
-        vx = unkc0;
-        vy = unkc8;
+        vx = m_hitVx;
+        vy = m_hitVy;
         timer++;
-        if ((char)Unk40ff70() != 0) {
-            pattern = 0x46;
+        if ((char)AtScreenEdge() != 0) {
+            pattern = kHitWallBounce;
             StartPattern();
             break;
         }
@@ -1077,22 +1077,22 @@ void CMishio::UpdatePattern()
         }
         if (y + vy >= 0.0) {
             y = 0.0;
-            if (unk12c != 0) {
-                pattern = 0x61;
+            if (m_landHittable != 0) {
+                pattern = kKnockdownHittable;
                 StartPattern();
             } else {
-                pattern = 0x62;
+                pattern = kKnockdown;
                 StartPattern();
             }
         }
         break;
-    case 0x45:
-        if (unk120 != 0) {
-            unk118 -= 1.5;
+    case kHitBlownAway:
+        if (m_rfBlue != 0) {
+            m_rfGauge -= 1.5;
         }
         m_gauge = m_gauge + 3;
-        vx = unkc0;
-        vy = unkc8;
+        vx = m_hitVx;
+        vy = m_hitVy;
         timer++;
         if (timer >= l4) {
             timer = 0;
@@ -1103,23 +1103,23 @@ void CMishio::UpdatePattern()
         }
         if (y + vy >= 0.0) {
             y = 0.0;
-            if (unk12c != 0) {
-                pattern = 0x61;
+            if (m_landHittable != 0) {
+                pattern = kKnockdownHittable;
                 StartPattern();
             } else {
-                pattern = 0x62;
+                pattern = kKnockdown;
                 StartPattern();
             }
         }
         break;
-    case 0x46:
-        if (unk120 != 0) {
-            unk118 -= 0.8;
+    case kHitWallBounce:
+        if (m_rfBlue != 0) {
+            m_rfGauge -= 0.8;
         }
-        if (frame == 0 && timer == 0 && unk3138 == 0) {
+        if (frame == 0 && timer == 0 && m_patternVar1 == 0) {
             m_gauge = m_gauge + 0x1e;
-            unk3138++;
-            unk124 = unk124 + 0x78;
+            m_patternVar1++;
+            m_untechTime = m_untechTime + 0x78;
             vx = 0.5;
             vy = -2.5;
             ay = 0.025;
@@ -1142,23 +1142,23 @@ void CMishio::UpdatePattern()
         }
         if (y + vy >= 0.0 && frame > 1) {
             y = 0.0;
-            if (unk12c != 0) {
-                pattern = 0x61;
+            if (m_landHittable != 0) {
+                pattern = kKnockdownHittable;
                 StartPattern();
             } else {
-                pattern = 0x62;
+                pattern = kKnockdown;
                 StartPattern();
             }
         }
         break;
-    case 0x47:
-        if (unk120 != 0) {
-            unk118 -= 0.8;
+    case kHitAirHeavy:
+        if (m_rfBlue != 0) {
+            m_rfGauge -= 0.8;
         }
         if (frame == 0 && timer == 0) {
             m_gauge = m_gauge + 0x1e;
-            vx = unkc0;
-            vy = unkc8;
+            vx = m_hitVx;
+            vy = m_hitVy;
             ay = 0.072;
         }
         if (vy <= 0.0) {
@@ -1180,96 +1180,96 @@ void CMishio::UpdatePattern()
         }
         if (y + vy >= 0.0 && frame > 1) {
             y = 0.0;
-            if (unk12c != 0) {
-                pattern = 0x61;
+            if (m_landHittable != 0) {
+                pattern = kKnockdownHittable;
                 StartPattern();
             } else {
-                pattern = 0x62;
+                pattern = kKnockdown;
                 StartPattern();
             }
         }
         break;
-    case 0x48:
-        if (unk120 != 0) {
-            unk118 -= 0.8;
+    case kHitStandHighHold:
+        if (m_rfBlue != 0) {
+            m_rfGauge -= 0.8;
         }
-        unk158 = 0;
+        m_dashMomentum = 0;
         vx = 0.0;
         vy = 0.0;
         if (x - 20.0 <= 0.0 || x + 20.0 >= 639.0) {
-            unkb8 = (1.0 - ((*m_opponent)->y < 0.0) * 0.25) * vx;
+            m_cornerPushback = (1.0 - ((*m_opponent)->y < 0.0) * 0.25) * vx;
         } else {
-            unkb8 = 0.0;
+            m_cornerPushback = 0.0;
         }
         timer++;
         if (timer >= l4) {
             timer = 0;
             frame++;
             if (frame >= x8) {
-                pattern = 7;
+                pattern = kStandUp;
                 if (m_inputY == 1) {
-                    pattern = 3;
+                    pattern = kCrouch;
                 }
                 StartPattern();
             }
         }
         break;
-    case 0x49:
-        if (unk120 != 0) {
-            unk118 -= 0.8;
+    case kHitStandLowHold:
+        if (m_rfBlue != 0) {
+            m_rfGauge -= 0.8;
         }
-        unk158 = 0;
+        m_dashMomentum = 0;
         vx = 0.0;
         vy = 0.0;
         if (x - 20.0 <= 0.0 || x + 20.0 >= 639.0) {
-            unkb8 = (1.0 - ((*m_opponent)->y < 0.0) * 0.25) * vx;
+            m_cornerPushback = (1.0 - ((*m_opponent)->y < 0.0) * 0.25) * vx;
         } else {
-            unkb8 = 0.0;
+            m_cornerPushback = 0.0;
         }
         timer++;
         if (timer >= l4) {
             timer = 0;
             frame++;
             if (frame >= x8) {
-                pattern = 7;
+                pattern = kStandUp;
                 if (m_inputY == 1) {
-                    pattern = 3;
+                    pattern = kCrouch;
                 }
                 StartPattern();
             }
         }
         break;
-    case 0x4a:
-        if (unk120 != 0) {
-            unk118 -= 0.8;
+    case kHitCrouchHold:
+        if (m_rfBlue != 0) {
+            m_rfGauge -= 0.8;
         }
-        unk158 = 0;
+        m_dashMomentum = 0;
         vx = 0.0;
         vy = 0.0;
         if (x - 20.0 <= 0.0 || x + 20.0 >= 639.0) {
-            unkb8 = (1.0 - ((*m_opponent)->y < 0.0) * 0.25) * vx;
+            m_cornerPushback = (1.0 - ((*m_opponent)->y < 0.0) * 0.25) * vx;
         } else {
-            unkb8 = 0.0;
+            m_cornerPushback = 0.0;
         }
         timer++;
         if (timer >= l4) {
             timer = 0;
             frame++;
             if (frame >= x8) {
-                pattern = 3;
+                pattern = kCrouch;
                 StartPattern();
             }
         }
         break;
-    case 0x4b:
-        if (unk120 != 0) {
-            unk118 -= 0.6;
+    case kHitStandHighPull:
+        if (m_rfBlue != 0) {
+            m_rfGauge -= 0.6;
         }
-        unk158 = 0;
+        m_dashMomentum = 0;
         if (frame == 0 && timer == 0) {
             m_gauge = m_gauge + 0x1e;
-            if (unk120 != 0) {
-                unk118 -= 30.0;
+            if (m_rfBlue != 0) {
+                m_rfGauge -= 30.0;
             }
             vx = 2.2;
         }
@@ -1282,32 +1282,32 @@ void CMishio::UpdatePattern()
             vx = 0.0;
         }
         if (x - 20.0 <= 0.0 || x + 20.0 >= 639.0) {
-            unkb8 = (1.0 - ((*m_opponent)->y < 0.0) * 0.25) * vx;
+            m_cornerPushback = (1.0 - ((*m_opponent)->y < 0.0) * 0.25) * vx;
         } else {
-            unkb8 = 0.0;
+            m_cornerPushback = 0.0;
         }
         timer++;
         if (timer >= l4) {
             timer = 0;
             frame++;
             if (frame >= x8) {
-                pattern = 7;
+                pattern = kStandUp;
                 if (m_inputY == 1) {
-                    pattern = 3;
+                    pattern = kCrouch;
                 }
                 StartPattern();
             }
         }
         break;
-    case 0x4c:
-        if (unk120 != 0) {
-            unk118 -= 0.6;
+    case kHitStandLowPull:
+        if (m_rfBlue != 0) {
+            m_rfGauge -= 0.6;
         }
-        unk158 = 0;
+        m_dashMomentum = 0;
         if (frame == 0 && timer == 0) {
             m_gauge = m_gauge + 0x1e;
-            if (unk120 != 0) {
-                unk118 -= 30.0;
+            if (m_rfBlue != 0) {
+                m_rfGauge -= 30.0;
             }
             vx = 2.2;
         }
@@ -1320,32 +1320,32 @@ void CMishio::UpdatePattern()
             vx = 0.0;
         }
         if (x - 20.0 <= 0.0 || x + 20.0 >= 639.0) {
-            unkb8 = (1.0 - ((*m_opponent)->y < 0.0) * 0.25) * vx;
+            m_cornerPushback = (1.0 - ((*m_opponent)->y < 0.0) * 0.25) * vx;
         } else {
-            unkb8 = 0.0;
+            m_cornerPushback = 0.0;
         }
         timer++;
         if (timer >= l4) {
             timer = 0;
             frame++;
             if (frame >= x8) {
-                pattern = 7;
+                pattern = kStandUp;
                 if (m_inputY == 1) {
-                    pattern = 3;
+                    pattern = kCrouch;
                 }
                 StartPattern();
             }
         }
         break;
-    case 0x4d:
-        if (unk120 != 0) {
-            unk118 -= 0.6;
+    case kHitCrouchPull:
+        if (m_rfBlue != 0) {
+            m_rfGauge -= 0.6;
         }
-        unk158 = 0;
+        m_dashMomentum = 0;
         if (frame == 0 && timer == 0) {
             m_gauge = m_gauge + 0x1e;
-            if (unk120 != 0) {
-                unk118 -= 30.0;
+            if (m_rfBlue != 0) {
+                m_rfGauge -= 30.0;
             }
             vx = 2.2;
         }
@@ -1358,23 +1358,23 @@ void CMishio::UpdatePattern()
             vx = 0.0;
         }
         if (x - 20.0 <= 0.0 || x + 20.0 >= 639.0) {
-            unkb8 = (1.0 - ((*m_opponent)->y < 0.0) * 0.25) * vx;
+            m_cornerPushback = (1.0 - ((*m_opponent)->y < 0.0) * 0.25) * vx;
         } else {
-            unkb8 = 0.0;
+            m_cornerPushback = 0.0;
         }
         timer++;
         if (timer >= l4) {
             timer = 0;
             frame++;
             if (frame >= x8) {
-                pattern = 3;
+                pattern = kCrouch;
                 StartPattern();
             }
         }
         break;
-    case 0x51:
-        if (unk120 != 0) {
-            unk118 -= 0.8;
+    case kHitBurn:
+        if (m_rfBlue != 0) {
+            m_rfGauge -= 0.8;
         }
         if (frame == 0 && timer == 0) {
             l50.type = 0x1f3;
@@ -1384,8 +1384,8 @@ void CMishio::UpdatePattern()
             l50.layer = 1;
             SpawnObject(&l50);
             m_gauge = m_gauge + 0x1e;
-            vx = unkc0;
-            vy = unkc8;
+            vx = m_hitVx;
+            vy = m_hitVy;
             ay = 0.032;
         }
         vx += 0.02;
@@ -1403,29 +1403,29 @@ void CMishio::UpdatePattern()
         }
         if (y + vy >= 0.0 && frame == 1) {
             y = 0.0;
-            if (unk12c != 0) {
-                pattern = 0x61;
+            if (m_landHittable != 0) {
+                pattern = kKnockdownHittable;
                 StartPattern();
             } else {
-                pattern = 0x62;
+                pattern = kKnockdown;
                 StartPattern();
             }
         }
         break;
-    case 0x52:
-        if (unk120 != 0) {
-            unk118 -= 0.8;
+    case kHitShock:
+        if (m_rfBlue != 0) {
+            m_rfGauge -= 0.8;
         }
-        if (frame == 0 && timer == 0 && unk3138 == 0) {
+        if (frame == 0 && timer == 0 && m_patternVar1 == 0) {
             m_playSound = 0x1e;
             vy = -0.45;
             vx = -0.1;
-            unk3138++;
+            m_patternVar1++;
             m_gauge = m_gauge + 0x1e;
         }
         if (frame == 4 && timer == 0) {
-            vx = unkc0;
-            vy = unkc8;
+            vx = m_hitVx;
+            vy = m_hitVy;
             ay = 0.032;
         }
         if (vy > 0.0 && frame == 4) {
@@ -1439,9 +1439,9 @@ void CMishio::UpdatePattern()
         if (timer >= l4) {
             timer = 0;
             frame++;
-            if (frame == 4 && unk3138 < 8) {
+            if (frame == 4 && m_patternVar1 < 8) {
                 frame = 0;
-                unk3138++;
+                m_patternVar1++;
             }
             if (frame >= x8) {
                 frame = frame - 2;
@@ -1449,30 +1449,30 @@ void CMishio::UpdatePattern()
         }
         if (y + vy >= 0.0 && frame > 4) {
             y = 0.0;
-            if (unk12c != 0) {
-                pattern = 0x61;
+            if (m_landHittable != 0) {
+                pattern = kKnockdownHittable;
                 StartPattern();
             } else {
-                pattern = 0x62;
+                pattern = kKnockdown;
                 StartPattern();
             }
         }
         break;
-    case 0x53:
+    case kEncased:
         if (frame == 0 && timer == 0) {
-            if (unk3144 == 0) {
+            if (m_encasedBreakOut == 0) {
                 l50.type = 0x1f0;
                 l50.x = (double)(int)x;
                 l50.y = (double)(int)y;
                 l50.scale = 0;
                 l50.layer = 0;
-                l50.unk0 = 1;
+                l50.keep = 1;
                 l50.facing = facing;
                 SpawnObject(&l50);
-                unk3144 = 1;
+                m_encasedBreakOut = 1;
             }
-            if (unk120 != 0) {
-                unk118 -= 30.0;
+            if (m_rfBlue != 0) {
+                m_rfGauge -= 30.0;
             }
             m_playSound = 0x21;
             vy = -1.5;
@@ -1504,27 +1504,27 @@ void CMishio::UpdatePattern()
             timer = 0;
             frame++;
             if (frame >= x8) {
-                pattern = 0;
+                pattern = kStand;
                 StartPattern();
                 FaceOpponent();
             }
         }
         break;
-    case 0x54:
+    case kEncased2:
         if (frame == 0 && timer == 0) {
-            if (unk3144 == 0) {
+            if (m_encasedBreakOut == 0) {
                 l50.type = 0x1f0;
                 l50.x = (double)(int)x;
                 l50.y = (double)(int)y;
                 l50.scale = 0;
                 l50.layer = 0;
-                l50.unk0 = 1;
+                l50.keep = 1;
                 l50.facing = facing;
                 SpawnObject(&l50);
-                unk3144 = 1;
+                m_encasedBreakOut = 1;
             }
-            if (unk120 != 0) {
-                unk118 -= 30.0;
+            if (m_rfBlue != 0) {
+                m_rfGauge -= 30.0;
             }
             m_playSound = 0x21;
             vy = -1.5;
@@ -1556,31 +1556,31 @@ void CMishio::UpdatePattern()
             timer = 0;
             frame++;
             if (frame >= x8) {
-                pattern = 0;
+                pattern = kStand;
                 StartPattern();
                 FaceOpponent();
             }
         }
         break;
-    case 0x55:
+    case kEncasedAir:
         if (frame == 0 && timer == 0) {
-            if (unk3144 == 0) {
+            if (m_encasedBreakOut == 0) {
                 l50.type = 0x1f0;
                 l50.x = (double)(int)x;
                 l50.y = (double)(int)y;
                 l50.scale = 0;
                 l50.layer = 0;
-                l50.unk0 = 1;
+                l50.keep = 1;
                 l50.facing = facing;
                 SpawnObject(&l50);
-                unk3144 = 1;
+                m_encasedBreakOut = 1;
             }
-            if (unk120 != 0) {
-                unk118 -= 30.0;
+            if (m_rfBlue != 0) {
+                m_rfGauge -= 30.0;
             }
             m_playSound = 0x21;
-            vx = unkc0;
-            vy = unkc8;
+            vx = m_hitVx;
+            vy = m_hitVy;
             m_gauge = m_gauge + 0x1e;
         }
         vy += 0.04;
@@ -1589,44 +1589,44 @@ void CMishio::UpdatePattern()
             timer = 0;
             frame++;
             if (frame >= x8) {
-                pattern = 0;
+                pattern = kStand;
                 StartPattern();
                 FaceOpponent();
             }
         }
         if (y + vy >= 0.0) {
             y = 0.0;
-            if (unk12c != 0) {
-                pattern = 0x61;
+            if (m_landHittable != 0) {
+                pattern = kKnockdownHittable;
                 StartPattern();
             } else {
-                pattern = 0x62;
+                pattern = kKnockdown;
                 StartPattern();
             }
         }
         break;
-    case 0x56:
+    case kEncasedSpin:
         if (frame == 0 && timer == 0) {
-            if (unk3144 == 0) {
+            if (m_encasedBreakOut == 0) {
                 l50.type = 0x1f0;
                 l50.x = (double)(int)x;
                 l50.y = (double)(int)y;
                 l50.scale = 0;
                 l50.layer = 0;
-                l50.unk0 = 1;
+                l50.keep = 1;
                 l50.facing = facing;
                 SpawnObject(&l50);
-                unk3144 = 1;
+                m_encasedBreakOut = 1;
             }
-            if (unk3138 == 0) {
-                if (unk120 != 0) {
-                    unk118 -= 30.0;
+            if (m_patternVar1 == 0) {
+                if (m_rfBlue != 0) {
+                    m_rfGauge -= 30.0;
                 }
                 m_playSound = 0x21;
-                vx = unkc0;
-                vy = unkc8;
+                vx = m_hitVx;
+                vy = m_hitVy;
                 m_gauge = m_gauge + 0x1e;
-                unk3138++;
+                m_patternVar1++;
             }
         }
         vy += 0.06;
@@ -1640,16 +1640,16 @@ void CMishio::UpdatePattern()
         }
         if (y + vy >= 0.0) {
             y = 0.0;
-            if (unk12c != 0) {
-                pattern = 0x61;
+            if (m_landHittable != 0) {
+                pattern = kKnockdownHittable;
                 StartPattern();
             } else {
-                pattern = 0x62;
+                pattern = kKnockdown;
                 StartPattern();
             }
         }
         break;
-    case 0x57:
+    case kFallInDarkness:
         if (frame == 0 && timer == 0) {
             l50.type = 0x1ef;
             l50.x = 60.0;
@@ -1665,12 +1665,12 @@ void CMishio::UpdatePattern()
             timer = 0;
             frame++;
             if (frame >= x8) {
-                pattern = 0;
+                pattern = kStand;
                 StartPattern();
             }
         }
         break;
-    case 0x60:
+    case kWakeUp:
         timer++;
         if (timer >= l4) {
             timer = 0;
@@ -1679,15 +1679,15 @@ void CMishio::UpdatePattern()
                 FaceOpponent();
             }
             if (frame >= x8) {
-                pattern = 7;
+                pattern = kStandUp;
                 if (m_inputY == 1) {
-                    pattern = 3;
+                    pattern = kCrouch;
                 }
                 StartPattern();
             }
         }
         break;
-    case 0x61:
+    case kKnockdownHittable:
         vx = 0.0;
         vy = 0.0;
         if (frame == 0 && timer == 0) {
@@ -1705,12 +1705,12 @@ void CMishio::UpdatePattern()
             timer = 0;
             frame++;
             if (frame >= x8) {
-                pattern = 0x63;
+                pattern = kLyingDown;
                 StartPattern();
             }
         }
         break;
-    case 0x62:
+    case kKnockdown:
         vx = 0.0;
         vy = 0.0;
         if (frame == 0 && timer == 0) {
@@ -1728,16 +1728,16 @@ void CMishio::UpdatePattern()
             timer = 0;
             frame++;
             if (frame >= x8) {
-                pattern = 0x63;
+                pattern = kLyingDown;
                 StartPattern();
             }
         }
         break;
-    case 0x63:
+    case kLyingDown:
         timer++;
-        unk158 = 0;
+        m_dashMomentum = 0;
         if (m_hp > 0 && timer > 0x63 && frame == 0) {
-            pattern = 0x60;
+            pattern = kWakeUp;
             StartPattern();
         }
         if (timer >= l4) {
@@ -1747,20 +1747,20 @@ void CMishio::UpdatePattern()
                 FaceOpponent();
             }
             if (frame >= x8) {
-                pattern = 0x60;
+                pattern = kWakeUp;
                 StartPattern();
             }
         }
         break;
-    case 0x96:
+    case kGuardStandLight:
         if (m_inputY == 1) {
-            pattern = 0x99;
+            pattern = kGuardCrouchLight;
         }
         if (m_inputY != 1) {
-            pattern = 0x96;
+            pattern = kGuardStandLight;
         }
         if (frame == 0 && timer == 0) {
-            unk158 = 0;
+            m_dashMomentum = 0;
             m_gauge = m_gauge + 0xa;
             vx = -1.5;
             vy = 0.0;
@@ -1772,9 +1772,9 @@ void CMishio::UpdatePattern()
             vx = 0.0;
         }
         if (x - 20.0 <= 0.0 || x + 20.0 >= 639.0) {
-            unkb8 = vx;
+            m_cornerPushback = vx;
         } else {
-            unkb8 = 0.0;
+            m_cornerPushback = 0.0;
         }
         timer++;
         if (timer >= l4) {
@@ -1784,23 +1784,23 @@ void CMishio::UpdatePattern()
                 FaceOpponent();
             }
             if (frame >= x8) {
-                pattern = 0;
+                pattern = kStand;
                 if (m_inputY == 1) {
-                    pattern = 3;
+                    pattern = kCrouch;
                 }
                 StartPattern();
             }
         }
         break;
-    case 0x97:
+    case kGuardStandMedium:
         if (m_inputY == 1) {
-            pattern = 0x9a;
+            pattern = kGuardCrouchMedium;
         }
         if (m_inputY != 1) {
-            pattern = 0x97;
+            pattern = kGuardStandMedium;
         }
         if (frame == 0 && timer == 0) {
-            unk158 = 0;
+            m_dashMomentum = 0;
             m_gauge = m_gauge + 0xf;
             vx = -1.8;
             vy = 0.0;
@@ -1812,9 +1812,9 @@ void CMishio::UpdatePattern()
             vx = 0.0;
         }
         if (x - 20.0 <= 0.0 || x + 20.0 >= 639.0) {
-            unkb8 = vx;
+            m_cornerPushback = vx;
         } else {
-            unkb8 = 0.0;
+            m_cornerPushback = 0.0;
         }
         timer++;
         if (timer >= l4) {
@@ -1824,23 +1824,23 @@ void CMishio::UpdatePattern()
                 FaceOpponent();
             }
             if (frame >= x8) {
-                pattern = 0;
+                pattern = kStand;
                 if (m_inputY == 1) {
-                    pattern = 3;
+                    pattern = kCrouch;
                 }
                 StartPattern();
             }
         }
         break;
-    case 0x98:
+    case kGuardStandHeavy:
         if (m_inputY == 1) {
-            pattern = 0x9b;
+            pattern = kGuardCrouchHeavy;
         }
         if (m_inputY != 1) {
-            pattern = 0x98;
+            pattern = kGuardStandHeavy;
         }
         if (frame == 0 && timer == 0) {
-            unk158 = 0;
+            m_dashMomentum = 0;
             m_gauge = m_gauge + 0x14;
             vx = -2.3;
             vy = 0.0;
@@ -1852,9 +1852,9 @@ void CMishio::UpdatePattern()
             vx = 0.0;
         }
         if (x - 20.0 <= 0.0 || x + 20.0 >= 639.0) {
-            unkb8 = vx;
+            m_cornerPushback = vx;
         } else {
-            unkb8 = 0.0;
+            m_cornerPushback = 0.0;
         }
         timer++;
         if (timer >= l4) {
@@ -1864,23 +1864,23 @@ void CMishio::UpdatePattern()
                 FaceOpponent();
             }
             if (frame >= x8) {
-                pattern = 0;
+                pattern = kStand;
                 if (m_inputY == 1) {
-                    pattern = 3;
+                    pattern = kCrouch;
                 }
                 StartPattern();
             }
         }
         break;
-    case 0x99:
+    case kGuardCrouchLight:
         if (m_inputY == 1) {
-            pattern = 0x99;
+            pattern = kGuardCrouchLight;
         }
         if (m_inputY != 1) {
-            pattern = 0x96;
+            pattern = kGuardStandLight;
         }
         if (frame == 0 && timer == 0) {
-            unk158 = 0;
+            m_dashMomentum = 0;
             m_gauge = m_gauge + 0xa;
             vx = -1.5;
             vy = 0.0;
@@ -1892,9 +1892,9 @@ void CMishio::UpdatePattern()
             vx = 0.0;
         }
         if (x - 20.0 <= 0.0 || x + 20.0 >= 639.0) {
-            unkb8 = vx;
+            m_cornerPushback = vx;
         } else {
-            unkb8 = 0.0;
+            m_cornerPushback = 0.0;
         }
         timer++;
         if (timer >= l4) {
@@ -1904,20 +1904,20 @@ void CMishio::UpdatePattern()
                 FaceOpponent();
             }
             if (frame >= x8) {
-                pattern = 3;
+                pattern = kCrouch;
                 StartPattern();
             }
         }
         break;
-    case 0x9a:
+    case kGuardCrouchMedium:
         if (m_inputY == 1) {
-            pattern = 0x9a;
+            pattern = kGuardCrouchMedium;
         }
         if (m_inputY != 1) {
-            pattern = 0x97;
+            pattern = kGuardStandMedium;
         }
         if (frame == 0 && timer == 0) {
-            unk158 = 0;
+            m_dashMomentum = 0;
             m_gauge = m_gauge + 0xf;
             vx = -1.8;
             vy = 0.0;
@@ -1929,9 +1929,9 @@ void CMishio::UpdatePattern()
             vx = 0.0;
         }
         if (x - 20.0 <= 0.0 || x + 20.0 >= 639.0) {
-            unkb8 = vx;
+            m_cornerPushback = vx;
         } else {
-            unkb8 = 0.0;
+            m_cornerPushback = 0.0;
         }
         timer++;
         if (timer >= l4) {
@@ -1941,20 +1941,20 @@ void CMishio::UpdatePattern()
                 FaceOpponent();
             }
             if (frame >= x8) {
-                pattern = 3;
+                pattern = kCrouch;
                 StartPattern();
             }
         }
         break;
-    case 0x9b:
+    case kGuardCrouchHeavy:
         if (m_inputY == 1) {
-            pattern = 0x9b;
+            pattern = kGuardCrouchHeavy;
         }
         if (m_inputY != 1) {
-            pattern = 0x98;
+            pattern = kGuardStandHeavy;
         }
         if (frame == 0 && timer == 0) {
-            unk158 = 0;
+            m_dashMomentum = 0;
             m_gauge = m_gauge + 0x14;
             vx = -2.3;
             vy = 0.0;
@@ -1966,9 +1966,9 @@ void CMishio::UpdatePattern()
             vx = 0.0;
         }
         if (x - 20.0 <= 0.0 || x + 20.0 >= 639.0) {
-            unkb8 = vx;
+            m_cornerPushback = vx;
         } else {
-            unkb8 = 0.0;
+            m_cornerPushback = 0.0;
         }
         timer++;
         if (timer >= l4) {
@@ -1978,12 +1978,12 @@ void CMishio::UpdatePattern()
                 FaceOpponent();
             }
             if (frame >= x8) {
-                pattern = 3;
+                pattern = kCrouch;
                 StartPattern();
             }
         }
         break;
-    case 0x9c:
+    case kGuardAir:
         if (frame == 0 && timer == 0) {
             vy = -2.6;
             m_gauge = m_gauge + 0xf;
@@ -1996,7 +1996,7 @@ void CMishio::UpdatePattern()
             timer = 0;
             frame++;
             if (frame >= x8) {
-                pattern = 9;
+                pattern = kFall;
                 StartPattern();
             }
         }
@@ -2004,11 +2004,11 @@ void CMishio::UpdatePattern()
             y = 0.0;
             m_playSound = 9;
             FaceOpponent();
-            pattern = 0xd;
+            pattern = kLand;
             StartPattern();
         }
         break;
-    case 0x9d:
+    case kAirRecoveryForward:
         vx = 1.0;
         ay = 0.045;
         if (frame == 0 && timer == 0) {
@@ -2027,7 +2027,7 @@ void CMishio::UpdatePattern()
             timer = 0;
             frame++;
             if (frame >= x8) {
-                pattern = 9;
+                pattern = kFall;
                 StartPattern();
             }
         }
@@ -2035,11 +2035,11 @@ void CMishio::UpdatePattern()
             y = 0.0;
             m_playSound = 9;
             FaceOpponent();
-            pattern = 0xd;
+            pattern = kLand;
             StartPattern();
         }
         break;
-    case 0x9e:
+    case kAirRecoveryBack:
         vx = -1.0;
         ay = 0.045;
         if (frame == 0 && timer == 0) {
@@ -2058,7 +2058,7 @@ void CMishio::UpdatePattern()
             timer = 0;
             frame++;
             if (frame >= x8) {
-                pattern = 9;
+                pattern = kFall;
                 StartPattern();
             }
         }
@@ -2066,7 +2066,7 @@ void CMishio::UpdatePattern()
             y = 0.0;
             m_playSound = 9;
             FaceOpponent();
-            pattern = 0xd;
+            pattern = kLand;
             StartPattern();
         }
         break;
@@ -2081,20 +2081,20 @@ void CMishio::UpdatePattern()
             m_game->CreateEffect((EffectDesc*)&l50);
             m_hitsLeft = 1;
             m_playSound = 0x3e;
-            unk3138++;
+            m_patternVar1++;
         }
         timer++;
         if (timer >= l4) {
             timer = 0;
             frame++;
             if (frame >= x8) {
-                pattern = 9;
+                pattern = kFall;
                 StartPattern();
                 ay = 0.035;
             }
         }
         break;
-    case 0xa2:
+    case kWakeUpAttack:
         if (frame == 0 && timer == 0) {
             StopMoving();
         }
@@ -2114,11 +2114,11 @@ void CMishio::UpdatePattern()
             m_hitsLeft = 1;
             m_playSound = 0x3e;
             m_gauge = m_gauge - 0x3e8;
-            unk3138++;
+            m_patternVar1++;
         }
         vy = vy + ay;
         if (y + vy > 0.0) {
-            pattern = 0xd;
+            pattern = kLand;
             StartPattern();
             StartPattern();
             y = 0.0;
@@ -2136,17 +2136,17 @@ void CMishio::UpdatePattern()
             }
         }
         break;
-    case 0xa3:
+    case kDashForward:
         if (frame == 0 && timer == 0) {
             StartAfterimages(3);
         }
         if (m_inputY == -1 && frame > 0) {
-            pattern = 4;
+            pattern = kJump;
             if (m_inputX == facing) {
-                pattern = 5;
+                pattern = kJumpForward;
             }
             if (m_inputX == -facing) {
-                pattern = 6;
+                pattern = kJumpBack;
             }
             m_attackResult = 0;
             StartPattern();
@@ -2159,10 +2159,10 @@ void CMishio::UpdatePattern()
         if (frame == 5 && timer == 0) {
             vx = 1.0;
         }
-        unk158 = 1;
+        m_dashMomentum = 1;
         timer++;
-        unk3138++;
-        unk313c++;
+        m_patternVar1++;
+        m_patternVar2++;
         if (timer >= l4) {
             timer = 0;
             frame++;
@@ -2170,16 +2170,16 @@ void CMishio::UpdatePattern()
                 frame = frame - 2;
             }
         }
-        if (m_inputX == facing && unk313c >= 0x78) {
-            pattern = 0xb2;
+        if (m_inputX == facing && m_patternVar2 >= 0x78) {
+            pattern = kDashStop;
             StartPattern();
         }
-        if (m_inputX != facing && unk3138 >= 0x3c) {
-            pattern = 0xb2;
+        if (m_inputX != facing && m_patternVar1 >= 0x3c) {
+            pattern = kDashStop;
             StartPattern();
         }
         break;
-    case 0xa4:
+    case kDashBack:
         StartAfterimages(2);
         if (frame == 0 && timer == 0) {
             vx = 0.0;
@@ -2188,12 +2188,12 @@ void CMishio::UpdatePattern()
         if (frame > 0 && frame < 3) {
             vy = vy + ay;
         }
-        if (frame > 0 && vy + y >= 0.0 && unk3138 == 0) {
+        if (frame > 0 && vy + y >= 0.0 && m_patternVar1 == 0) {
             vx = 0.0;
             vy = 0.0;
             ax = 0.0;
             y = 0.0;
-            unk3138++;
+            m_patternVar1++;
             m_playSound = 9;
             frame = 3;
             timer = 0;
@@ -2212,13 +2212,13 @@ void CMishio::UpdatePattern()
             }
             if (frame >= x8) {
                 FaceOpponent();
-                pattern = 0;
+                pattern = kStand;
                 StartPattern();
             }
         }
         break;
-    case 0xa5:
-        if (frame == 0 && timer == 0 && unk3138 == 0) {
+    case kAirDashForward:
+        if (frame == 0 && timer == 0 && m_patternVar1 == 0) {
             vx = 1.3;
             StartAfterimages(3);
             vy = 0.0;
@@ -2226,8 +2226,8 @@ void CMishio::UpdatePattern()
             m_playSound = 0x11;
         }
         timer++;
-        unk3138++;
-        unk313c++;
+        m_patternVar1++;
+        m_patternVar2++;
         if (timer >= l4) {
             timer = 0;
             frame++;
@@ -2235,8 +2235,8 @@ void CMishio::UpdatePattern()
                 frame = frame - 2;
             }
         }
-        if (m_inputX == facing && unk313c >= 0x78) {
-            pattern = 9;
+        if (m_inputX == facing && m_patternVar2 >= 0x78) {
+            pattern = kFall;
             StartPattern();
             vx = 1.3;
             ay = 0.03;
@@ -2244,8 +2244,8 @@ void CMishio::UpdatePattern()
                 vx = -vx;
             }
         }
-        if (m_inputX != facing && unk3138 >= 0x27) {
-            pattern = 9;
+        if (m_inputX != facing && m_patternVar1 >= 0x27) {
+            pattern = kFall;
             StartPattern();
             vx = 1.3;
             ay = 0.03;
@@ -2254,8 +2254,8 @@ void CMishio::UpdatePattern()
             }
         }
         break;
-    case 0xa6:
-        if (frame == 0 && timer == 0 && unk3138 == 0) {
+    case kAirDashBack:
+        if (frame == 0 && timer == 0 && m_patternVar1 == 0) {
             vx = -1.3;
             vy = 0.0;
             ay = 0.0;
@@ -2263,8 +2263,8 @@ void CMishio::UpdatePattern()
             m_playSound = 0x11;
         }
         timer++;
-        unk3138++;
-        unk313c++;
+        m_patternVar1++;
+        m_patternVar2++;
         if (timer >= l4) {
             timer = 0;
             frame++;
@@ -2272,8 +2272,8 @@ void CMishio::UpdatePattern()
                 frame = frame - 2;
             }
         }
-        if (m_inputX == -facing && unk313c >= 0x78) {
-            pattern = 9;
+        if (m_inputX == -facing && m_patternVar2 >= 0x78) {
+            pattern = kFall;
             StartPattern();
             vx = -0.9;
             ay = 0.03;
@@ -2281,8 +2281,8 @@ void CMishio::UpdatePattern()
                 vx = -vx;
             }
         }
-        if (m_inputX != -facing && unk3138 >= 0x30) {
-            pattern = 9;
+        if (m_inputX != -facing && m_patternVar1 >= 0x30) {
+            pattern = kFall;
             StartPattern();
             vx = -0.9;
             ay = 0.03;
@@ -2291,16 +2291,16 @@ void CMishio::UpdatePattern()
             }
         }
         break;
-    case 0xa7:
+    case kInstantCharge:
         if (frame == 0 && timer == 0) {
-            unk158 = 0;
+            m_dashMomentum = 0;
             vx = 0.0;
             vy = 0.0;
-            if (unk120 == 1) {
-                m_proration = unk118 * 5.0 + m_proration;
+            if (m_rfBlue == 1) {
+                m_proration = m_rfGauge * 5.0 + m_proration;
             }
-            unk118 = 0.0;
-            unk14c = 0x5a;
+            m_rfGauge = 0.0;
+            m_freezeTime = 0x5a;
             FillBackground(0xb0, 3);
         }
         if (frame == 1 && timer == 0) {
@@ -2326,21 +2326,21 @@ void CMishio::UpdatePattern()
             frame++;
             m_attackResult = 0;
             if (frame >= x8) {
-                pattern = 0;
+                pattern = kStand;
                 FaceOpponent();
                 StartPattern();
             }
         }
         break;
-    case 0xa8:
+    case kRecoilGuardStand:
         if (frame == 0 && timer == 0) {
-            unk158 = 0;
+            m_dashMomentum = 0;
             vx = 0.0;
             vy = 0.0;
             y = 0.0;
             ay = 0.0;
-            unk14e = 0;
-            unkb8 = 0.0;
+            m_recoilGuardWindow = 0;
+            m_cornerPushback = 0.0;
             ax = 0.0;
             l50.type = 8;
             l50.x = (double)(int)x;
@@ -2357,20 +2357,20 @@ void CMishio::UpdatePattern()
                 FaceOpponent();
             }
             if (frame >= x8) {
-                pattern = 0;
+                pattern = kStand;
                 StartPattern();
             }
         }
         break;
-    case 0xa9:
+    case kRecoilGuardCrouch:
         if (frame == 0 && timer == 0) {
-            unk158 = 0;
+            m_dashMomentum = 0;
             vx = 0.0;
             vy = 0.0;
             y = 0.0;
             ay = 0.0;
-            unk14e = 0;
-            unkb8 = 0.0;
+            m_recoilGuardWindow = 0;
+            m_cornerPushback = 0.0;
             ax = 0.0;
             l50.type = 8;
             l50.x = (double)(int)x;
@@ -2387,36 +2387,36 @@ void CMishio::UpdatePattern()
                 FaceOpponent();
             }
             if (frame >= x8) {
-                pattern = 3;
+                pattern = kCrouch;
                 StartPattern();
             }
         }
         break;
-    case 0xaa:
+    case kRecoilGuardAir:
         if (frame == 0 && timer == 0) {
-            unk3138 = (int)(vx * 100.0);
-            unk313c = (int)(vy * 100.0);
+            m_patternVar1 = (int)(vx * 100.0);
+            m_patternVar2 = (int)(vy * 100.0);
             if (ay == 0.0) {
                 ay = 0.035;
             }
             vx = 0.0;
             vy = 0.0;
-            unk14e = 0;
-            unkb8 = 0.0;
-            unk14c = 0x3c;
+            m_recoilGuardWindow = 0;
+            m_cornerPushback = 0.0;
+            m_freezeTime = 0x3c;
         }
-        if (unk14c == 0 && unk3140 == 0) {
-            unk3140++;
-            vx = unk3138 * 0.01;
-            vy = unk313c * 0.01;
+        if (m_freezeTime == 0 && m_patternVar3 == 0) {
+            m_patternVar3++;
+            vx = m_patternVar1 * 0.01;
+            vy = m_patternVar2 * 0.01;
         }
-        if (unk14c == 0) {
+        if (m_freezeTime == 0) {
             vy = vy + ay;
         }
         if (vy + y > 0.0) {
             StopMoving();
             y = 0.0;
-            pattern = 0xa9;
+            pattern = kRecoilGuardCrouch;
             break;
         }
         timer++;
@@ -2424,22 +2424,22 @@ void CMishio::UpdatePattern()
             timer = 0;
             frame++;
             if (frame >= x8) {
-                pattern = 9;
+                pattern = kFall;
                 StartPattern();
             }
         }
         break;
-    case 0xab:
+    case kAirInstantCharge:
         if (frame == 0 && timer == 0) {
-            unk3138 = (int)(vx * 100.0);
-            unk313c = (int)(vy * 100.0);
+            m_patternVar1 = (int)(vx * 100.0);
+            m_patternVar2 = (int)(vy * 100.0);
             vx = 0.0;
             vy = 0.0;
-            if (unk120 == 1) {
-                m_proration = unk118 * 5.0 + m_proration;
+            if (m_rfBlue == 1) {
+                m_proration = m_rfGauge * 5.0 + m_proration;
             }
-            unk118 = 0.0;
-            unk14c = 0x5a;
+            m_rfGauge = 0.0;
+            m_freezeTime = 0x5a;
             FillBackground(0xb0, 3);
         }
         if (frame == 0 && timer == 0) {
@@ -2457,28 +2457,28 @@ void CMishio::UpdatePattern()
             frame++;
             m_attackResult = 0;
             if (frame >= x8) {
-                pattern = 9;
-                vx = unk3138 * 0.01;
-                vy = unk313c * 0.01;
+                pattern = kFall;
+                vx = m_patternVar1 * 0.01;
+                vy = m_patternVar2 * 0.01;
                 ay = 0.035;
                 StartPattern();
             }
         }
         break;
-    case 0xb2:
+    case kDashStop:
         vx -= 0.03;
         vx = vx;
         if (vx < 0.0) {
             vx = 0.0;
-            unk158 = 0;
+            m_dashMomentum = 0;
         }
         if (m_inputY == -1 && frame > 0) {
-            pattern = 4;
+            pattern = kJump;
             if (m_inputX == facing) {
-                pattern = 5;
+                pattern = kJumpForward;
             }
             if (m_inputX == -facing) {
-                pattern = 6;
+                pattern = kJumpBack;
             }
             m_attackResult = 0;
             StartPattern();
@@ -2489,7 +2489,7 @@ void CMishio::UpdatePattern()
             timer = 0;
             frame++;
             if (frame >= x8) {
-                pattern = 0;
+                pattern = kStand;
                 StartPattern();
                 break;
             }
@@ -2526,28 +2526,28 @@ void CMishio::UpdatePattern()
             }
             if (frame >= x8) {
                 StartPattern();
-                pattern = 0;
+                pattern = kStand;
             }
         }
         break;
-    case 0xc8:
-        if (unk158 == 0) {
+    case k5A:
+        if (m_dashMomentum == 0) {
             vx = 0.0;
             vy = 0.0;
         }
-        if (vx > 0.0 && unk158 == 1) {
+        if (vx > 0.0 && m_dashMomentum == 1) {
             vx -= 0.03;
         } else {
             vx = 0.0;
-            unk158 = 0;
+            m_dashMomentum = 0;
         }
-        if (m_inputY == -1 && frame > 0 && unk15c < 3 && m_attackResult >= 2) {
-            pattern = 4;
+        if (m_inputY == -1 && frame > 0 && m_sealLevel < 3 && m_attackResult >= 2) {
+            pattern = kJump;
             if (m_inputX == facing) {
-                pattern = 5;
+                pattern = kJumpForward;
             }
             if (m_inputX == -facing) {
-                pattern = 6;
+                pattern = kJumpBack;
             }
             m_attackResult = 0;
             StartPattern();
@@ -2566,30 +2566,30 @@ void CMishio::UpdatePattern()
                 m_attackResult = 0;
             }
             if (frame >= x8) {
-                pattern = 0;
+                pattern = kStand;
                 FaceOpponent();
                 StartPattern();
             }
         }
         break;
-    case 0xc9:
-        if (unk158 == 0) {
+    case k5BClose:
+        if (m_dashMomentum == 0) {
             vx = 0.0;
             vy = 0.0;
         }
-        if (vx > 0.0 && unk158 == 1) {
+        if (vx > 0.0 && m_dashMomentum == 1) {
             vx -= 0.03;
         } else {
             vx = 0.0;
-            unk158 = 0;
+            m_dashMomentum = 0;
         }
-        if (m_inputY == -1 && frame > 0 && unk15c < 3 && m_attackResult >= 2) {
-            pattern = 4;
+        if (m_inputY == -1 && frame > 0 && m_sealLevel < 3 && m_attackResult >= 2) {
+            pattern = kJump;
             if (m_inputX == facing) {
-                pattern = 5;
+                pattern = kJumpForward;
             }
             if (m_inputX == -facing) {
-                pattern = 6;
+                pattern = kJumpBack;
             }
             m_attackResult = 0;
             StartPattern();
@@ -2608,25 +2608,25 @@ void CMishio::UpdatePattern()
                 m_attackResult = 0;
             }
             if (frame >= x8) {
-                pattern = 3;
+                pattern = kCrouch;
                 if (m_inputY != 1) {
-                    pattern = 7;
+                    pattern = kStandUp;
                 }
                 FaceOpponent();
                 StartPattern();
             }
         }
         break;
-    case 0xca:
-        if (unk158 == 0) {
+    case k5BFar:
+        if (m_dashMomentum == 0) {
             vx = 0.0;
             vy = 0.0;
         }
-        if (vx > 0.0 && unk158 == 1) {
+        if (vx > 0.0 && m_dashMomentum == 1) {
             vx -= 0.03;
         } else {
             vx = 0.0;
-            unk158 = 0;
+            m_dashMomentum = 0;
         }
         if (frame == 2 && timer == 0) {
             m_gauge = m_gauge + 0xf;
@@ -2641,34 +2641,34 @@ void CMishio::UpdatePattern()
                 m_attackResult = 0;
             }
             if (frame >= x8) {
-                pattern = 0;
+                pattern = kStand;
                 FaceOpponent();
                 StartPattern();
             }
         }
         break;
-    case 0xcb:
-        if (unk158 == 0) {
+    case k5C:
+        if (m_dashMomentum == 0) {
             vx = 0.0;
             vy = 0.0;
         }
-        if (m_inputY == -1 && frame > 0 && unk15c < 3 && m_attackResult >= 2) {
-            pattern = 4;
+        if (m_inputY == -1 && frame > 0 && m_sealLevel < 3 && m_attackResult >= 2) {
+            pattern = kJump;
             if (m_inputX == facing) {
-                pattern = 5;
+                pattern = kJumpForward;
             }
             if (m_inputX == -facing) {
-                pattern = 6;
+                pattern = kJumpBack;
             }
             m_attackResult = 0;
             StartPattern();
             break;
         }
-        if (vx > 0.0 && unk158 == 1) {
+        if (vx > 0.0 && m_dashMomentum == 1) {
             vx -= 0.06;
         } else {
             vx = 0.0;
-            unk158 = 0;
+            m_dashMomentum = 0;
         }
         if (frame == 1 && timer == 0) {
             m_gauge = m_gauge + 0x23;
@@ -2683,30 +2683,30 @@ void CMishio::UpdatePattern()
                 m_attackResult = 0;
             }
             if (frame >= x8) {
-                pattern = 0;
+                pattern = kStand;
                 FaceOpponent();
                 StartPattern();
             }
         }
         break;
-    case 0xcc:
-        if (unk158 == 0) {
+    case k2A:
+        if (m_dashMomentum == 0) {
             vx = 0.0;
             vy = 0.0;
         }
-        if (vx > 0.0 && unk158 == 1) {
+        if (vx > 0.0 && m_dashMomentum == 1) {
             vx -= 0.03;
         } else {
             vx = 0.0;
-            unk158 = 0;
+            m_dashMomentum = 0;
         }
-        if (m_inputY == -1 && frame > 0 && unk15c < 3 && m_attackResult >= 2) {
-            pattern = 4;
+        if (m_inputY == -1 && frame > 0 && m_sealLevel < 3 && m_attackResult >= 2) {
+            pattern = kJump;
             if (m_inputX == facing) {
-                pattern = 5;
+                pattern = kJumpForward;
             }
             if (m_inputX == -facing) {
-                pattern = 6;
+                pattern = kJumpBack;
             }
             m_attackResult = 0;
             StartPattern();
@@ -2725,33 +2725,33 @@ void CMishio::UpdatePattern()
                 m_attackResult = 0;
             }
             if (frame >= x8) {
-                pattern = 7;
+                pattern = kStandUp;
                 if (m_inputY == 1) {
-                    pattern = 3;
+                    pattern = kCrouch;
                 }
                 FaceOpponent();
                 StartPattern();
             }
         }
         break;
-    case 0xcd:
-        if (unk158 == 0) {
+    case k2B:
+        if (m_dashMomentum == 0) {
             vx = 0.0;
             vy = 0.0;
         }
-        if (vx > 0.0 && unk158 == 1) {
+        if (vx > 0.0 && m_dashMomentum == 1) {
             vx -= 0.03;
         } else {
             vx = 0.0;
-            unk158 = 0;
+            m_dashMomentum = 0;
         }
-        if (m_inputY == -1 && frame > 0 && unk15c < 3 && m_attackResult >= 2) {
-            pattern = 4;
+        if (m_inputY == -1 && frame > 0 && m_sealLevel < 3 && m_attackResult >= 2) {
+            pattern = kJump;
             if (m_inputX == facing) {
-                pattern = 5;
+                pattern = kJumpForward;
             }
             if (m_inputX == -facing) {
-                pattern = 6;
+                pattern = kJumpBack;
             }
             m_attackResult = 0;
             StartPattern();
@@ -2770,25 +2770,25 @@ void CMishio::UpdatePattern()
                 m_attackResult = 0;
             }
             if (frame >= x8) {
-                pattern = 7;
+                pattern = kStandUp;
                 if (m_inputY == 1) {
-                    pattern = 3;
+                    pattern = kCrouch;
                 }
                 FaceOpponent();
                 StartPattern();
             }
         }
         break;
-    case 0xce:
-        if (unk158 == 0) {
+    case k2C:
+        if (m_dashMomentum == 0) {
             vx = 0.0;
             vy = 0.0;
         }
-        if (vx > 0.0 && unk158 == 1) {
+        if (vx > 0.0 && m_dashMomentum == 1) {
             vx -= 0.03;
         } else {
             vx = 0.0;
-            unk158 = 0;
+            m_dashMomentum = 0;
         }
         if (frame == 3 && timer == 0) {
             m_gauge = m_gauge + 0x19;
@@ -2803,25 +2803,25 @@ void CMishio::UpdatePattern()
                 m_attackResult = 0;
             }
             if (frame >= x8) {
-                pattern = 7;
+                pattern = kStandUp;
                 if (m_inputY == 1) {
-                    pattern = 3;
+                    pattern = kCrouch;
                 }
                 FaceOpponent();
                 StartPattern();
             }
         }
         break;
-    case 0xcf:
+    case kJumpA:
         vy = vy + ay;
-        if (m_inputY == -1 && frame > 0 && unk15c < 3 && m_attackResult >= 2 && unk15a == 0) {
-            unk15a++;
-            pattern = 0xe;
+        if (m_inputY == -1 && frame > 0 && m_sealLevel < 3 && m_attackResult >= 2 && m_airActions == 0) {
+            m_airActions++;
+            pattern = kAirJump;
             if (m_inputX == facing) {
-                pattern = 0xf;
+                pattern = kAirJumpForward;
             }
             if (m_inputX == -facing) {
-                pattern = 0x10;
+                pattern = kAirJumpBack;
             }
             m_attackResult = 0;
             StartPattern();
@@ -2834,7 +2834,7 @@ void CMishio::UpdatePattern()
         }
         if (y + vy >= 0.0) {
             y = 0.0;
-            pattern = 0xd;
+            pattern = kLand;
             StartPattern();
             break;
         }
@@ -2846,21 +2846,21 @@ void CMishio::UpdatePattern()
                 m_attackResult = 0;
             }
             if (frame >= x8) {
-                pattern = 9;
+                pattern = kFall;
                 StartPattern();
             }
         }
         break;
-    case 0xd0:
+    case kJumpB:
         vy = vy + ay;
-        if (m_inputY == -1 && frame > 0 && unk15c < 3 && m_attackResult >= 2 && unk15a == 0) {
-            unk15a++;
-            pattern = 0xe;
+        if (m_inputY == -1 && frame > 0 && m_sealLevel < 3 && m_attackResult >= 2 && m_airActions == 0) {
+            m_airActions++;
+            pattern = kAirJump;
             if (m_inputX == facing) {
-                pattern = 0xf;
+                pattern = kAirJumpForward;
             }
             if (m_inputX == -facing) {
-                pattern = 0x10;
+                pattern = kAirJumpBack;
             }
             m_attackResult = 0;
             StartPattern();
@@ -2873,7 +2873,7 @@ void CMishio::UpdatePattern()
         }
         if (y + vy >= 0.0) {
             y = 0.0;
-            pattern = 0xd;
+            pattern = kLand;
             StartPattern();
             break;
         }
@@ -2885,21 +2885,21 @@ void CMishio::UpdatePattern()
                 m_attackResult = 0;
             }
             if (frame >= x8) {
-                pattern = 9;
+                pattern = kFall;
                 StartPattern();
             }
         }
         break;
-    case 0xd1:
+    case kJumpC:
         vy = vy + ay;
-        if (m_inputY == -1 && frame > 0 && unk15c < 3 && m_attackResult >= 2 && unk15a == 0) {
-            unk15a++;
-            pattern = 0xe;
+        if (m_inputY == -1 && frame > 0 && m_sealLevel < 3 && m_attackResult >= 2 && m_airActions == 0) {
+            m_airActions++;
+            pattern = kAirJump;
             if (m_inputX == facing) {
-                pattern = 0xf;
+                pattern = kAirJumpForward;
             }
             if (m_inputX == -facing) {
-                pattern = 0x10;
+                pattern = kAirJumpBack;
             }
             m_attackResult = 0;
             StartPattern();
@@ -2912,7 +2912,7 @@ void CMishio::UpdatePattern()
         }
         if (y + vy >= 0.0) {
             y = 0.0;
-            pattern = 0xd;
+            pattern = kLand;
             StartPattern();
             break;
         }
@@ -2924,16 +2924,16 @@ void CMishio::UpdatePattern()
                 m_attackResult = 0;
             }
             if (frame >= x8) {
-                pattern = 9;
+                pattern = kFall;
                 StartPattern();
             }
         }
         break;
-    case 0xd2:
+    case k6B:
         if (frame == 0 && timer == 0) {
             vx = 0.0;
             vy = 0.0;
-            unk158 = 0;
+            m_dashMomentum = 0;
         }
         if (frame == 8 && timer == 0) {
             m_gauge = m_gauge + 0xf;
@@ -2960,37 +2960,37 @@ void CMishio::UpdatePattern()
                 vy = -1.3;
             }
             if (frame >= x8) {
-                pattern = 0;
+                pattern = kStand;
                 if (m_inputY == 1) {
-                    pattern = 3;
+                    pattern = kCrouch;
                 }
                 FaceOpponent();
                 StartPattern();
             }
         }
         break;
-    case 0xd3:
-        if (unk158 == 0) {
+    case k6C:
+        if (m_dashMomentum == 0) {
             vx = 0.0;
             vy = 0.0;
         }
-        if (m_inputY == -1 && frame > 0 && unk15c < 3 && m_attackResult >= 2) {
-            pattern = 4;
+        if (m_inputY == -1 && frame > 0 && m_sealLevel < 3 && m_attackResult >= 2) {
+            pattern = kJump;
             if (m_inputX == facing) {
-                pattern = 5;
+                pattern = kJumpForward;
             }
             if (m_inputX == -facing) {
-                pattern = 6;
+                pattern = kJumpBack;
             }
             m_attackResult = 0;
             StartPattern();
             break;
         }
-        if (vx > 0.0 && unk158 == 1) {
+        if (vx > 0.0 && m_dashMomentum == 1) {
             vx -= 0.06;
         } else {
             vx = 0.0;
-            unk158 = 0;
+            m_dashMomentum = 0;
         }
         timer++;
         if (timer >= l4) {
@@ -3005,13 +3005,13 @@ void CMishio::UpdatePattern()
                 m_hitsLeft = 1;
             }
             if (frame >= x8) {
-                pattern = 0;
+                pattern = kStand;
                 FaceOpponent();
                 StartPattern();
             }
         }
         break;
-    case 0xd4:
+    case kAirDiveUnused:
         vy = vy + ay;
         if (frame == 0 && timer == 0) {
             m_gauge = m_gauge + 0x1e;
@@ -3021,7 +3021,7 @@ void CMishio::UpdatePattern()
             ay = 0.07;
         }
         if (m_attackResult > 1) {
-            pattern = 0xd5;
+            pattern = kAirDiveBounce;
             StartPattern();
             StopMoving();
             break;
@@ -3035,10 +3035,10 @@ void CMishio::UpdatePattern()
             l50.y = (double)(int)y;
             l50.scale = 2;
             l50.layer = 0;
-            l50.unk2c = 7;
+            l50.sound = 7;
             m_game->CreateEffect((EffectDesc*)&l50);
             m_playSound = 7;
-            pattern = 0xd6;
+            pattern = kAirDiveLanding;
             StartPattern();
             break;
         }
@@ -3052,7 +3052,7 @@ void CMishio::UpdatePattern()
             }
         }
         break;
-    case 0xd5:
+    case kAirDiveBounce:
         ay = 0.042;
         vy = vy + ay;
         if (frame == 0 && timer == 0) {
@@ -3065,12 +3065,12 @@ void CMishio::UpdatePattern()
             frame++;
             m_attackResult = 0;
             if (frame >= x8) {
-                pattern = 9;
+                pattern = kFall;
                 StartPattern();
             }
         }
         break;
-    case 0xd6:
+    case kAirDiveLanding:
         vx = 0.0;
         vy = 0.0;
         if (frame == 0 && timer == 0) {
@@ -3080,7 +3080,7 @@ void CMishio::UpdatePattern()
             l50.y = (double)(int)y;
             l50.scale = 2;
             l50.layer = 0;
-            l50.unk2c = 7;
+            l50.sound = 7;
             m_game->CreateEffect((EffectDesc*)&l50);
         }
         timer++;
@@ -3089,28 +3089,28 @@ void CMishio::UpdatePattern()
             frame++;
             m_attackResult = 0;
             if (frame >= x8) {
-                pattern = 7;
+                pattern = kStandUp;
                 if (m_inputY == 1) {
-                    pattern = 3;
+                    pattern = kCrouch;
                 }
                 FaceOpponent();
                 StartPattern();
             }
         }
         break;
-    case 0xdc:
+    case kThrow:
         vx = 0.0;
         vy = 0.0;
-        unk158 = 0;
+        m_dashMomentum = 0;
         if (frame == 2 && m_attackResult == 3) {
             vx = 0.0;
             vy = 0.0;
-            unkb8 = 0.0;
+            m_cornerPushback = 0.0;
             StartPattern();
             (*m_opponent)->StartPattern();
             (*m_opponent)->StopMoving();
-            pattern = 0xdd;
-            (*m_opponent)->pattern = 0x6b;
+            pattern = kThrowConnected;
+            (*m_opponent)->pattern = kThrownStandHigh2;
             l50.type = 0;
             l50.x = (double)((int)x + facing * 0x24);
             l50.y = (double)((int)y - 0x2e);
@@ -3129,16 +3129,16 @@ void CMishio::UpdatePattern()
                 m_hitsLeft = 0;
             }
             if (frame >= x8) {
-                pattern = 7;
+                pattern = kStandUp;
                 if (m_inputY == 1) {
-                    pattern = 3;
+                    pattern = kCrouch;
                 }
                 FaceOpponent();
                 StartPattern();
             }
         }
         break;
-    case 0xdd:
+    case kThrowConnected:
         timer++;
         if (timer >= l4) {
             timer = 0;
@@ -3146,20 +3146,20 @@ void CMishio::UpdatePattern()
             m_attackResult = 3;
             if (frame == 1) {
                 (*m_opponent)->x = facing * 0x1e + x;
-                (*m_opponent)->pattern = 0x6c;
+                (*m_opponent)->pattern = kThrownStandLow2;
                 (*m_opponent)->StartPattern();
             }
             if (frame == 2) {
                 (*m_opponent)->x = facing * 0xd + x;
-                (*m_opponent)->pattern = 0x6c;
+                (*m_opponent)->pattern = kThrownStandLow2;
                 (*m_opponent)->StartPattern();
             }
             if (frame == 3) {
-                if ((char)Unk40ff70() != 0) {
+                if ((char)AtScreenEdge() != 0) {
                     x = facing * 5 + x;
                 }
                 (*m_opponent)->x = x - facing * 5;
-                (*m_opponent)->pattern = 0x34;
+                (*m_opponent)->pattern = kHitStandHighHeavy;
                 (*m_opponent)->StartPattern();
                 (*m_opponent)->facing = -(*m_opponent)->facing;
             }
@@ -3167,15 +3167,15 @@ void CMishio::UpdatePattern()
                 facing = -facing;
             }
             if (frame >= x8) {
-                pattern = 0;
+                pattern = kStand;
                 StartPattern();
                 FaceOpponent();
             }
         }
         break;
-    case 0xe6:
+    case kDashA:
         StartAfterimages(3);
-        unk158 = 0;
+        m_dashMomentum = 0;
         vx -= 0.02;
         if (vx < 0.0) {
             vx = 0.0;
@@ -3197,21 +3197,21 @@ void CMishio::UpdatePattern()
                 m_attackResult = 0;
             }
             if (frame >= x8) {
-                pattern = 0;
+                pattern = kStand;
                 StartPattern();
             }
         }
         break;
-    case 0xe7:
+    case kDashB:
         StartAfterimages(3);
-        unk158 = 0;
-        if (m_inputY == -1 && frame > 0 && unk15c < 3 && m_attackResult == 3) {
-            pattern = 4;
+        m_dashMomentum = 0;
+        if (m_inputY == -1 && frame > 0 && m_sealLevel < 3 && m_attackResult == 3) {
+            pattern = kJump;
             if (m_inputX == facing) {
-                pattern = 5;
+                pattern = kJumpForward;
             }
             if (m_inputX == -facing) {
-                pattern = 6;
+                pattern = kJumpBack;
             }
             m_attackResult = 0;
             StartPattern();
@@ -3245,21 +3245,21 @@ void CMishio::UpdatePattern()
                 m_attackResult = 0;
             }
             if (frame >= x8) {
-                pattern = 0;
+                pattern = kStand;
                 StartPattern();
             }
         }
         break;
-    case 0xe8:
+    case kDashC:
         StartAfterimages(3);
-        unk158 = 0;
-        if (m_inputY == -1 && frame > 0 && unk15c < 3 && m_attackResult == 3) {
-            pattern = 4;
+        m_dashMomentum = 0;
+        if (m_inputY == -1 && frame > 0 && m_sealLevel < 3 && m_attackResult == 3) {
+            pattern = kJump;
             if (m_inputX == facing) {
-                pattern = 5;
+                pattern = kJumpForward;
             }
             if (m_inputX == -facing) {
-                pattern = 6;
+                pattern = kJumpBack;
             }
             m_attackResult = 0;
             StartPattern();
@@ -3293,14 +3293,14 @@ void CMishio::UpdatePattern()
                 m_attackResult = 0;
             }
             if (frame >= x8) {
-                pattern = 0;
+                pattern = kStand;
                 StartPattern();
             }
         }
         break;
-    case 0xe9:
+    case kDash2A:
         StartAfterimages(3);
-        unk158 = 0;
+        m_dashMomentum = 0;
         vx -= 0.02;
         if (vx < 0.0) {
             vx = 0.0;
@@ -3322,14 +3322,14 @@ void CMishio::UpdatePattern()
                 m_attackResult = 0;
             }
             if (frame >= x8) {
-                pattern = 3;
+                pattern = kCrouch;
                 StartPattern();
             }
         }
         break;
-    case 0xea:
+    case kDash2B:
         StartAfterimages(3);
-        unk158 = 0;
+        m_dashMomentum = 0;
         vx -= 0.045;
         if (vx < 0.0) {
             vx = 0.0;
@@ -3358,14 +3358,14 @@ void CMishio::UpdatePattern()
                 m_attackResult = 0;
             }
             if (frame >= x8) {
-                pattern = 3;
+                pattern = kCrouch;
                 StartPattern();
             }
         }
         break;
-    case 0xeb:
+    case kDash2C:
         StartAfterimages(3);
-        unk158 = 0;
+        m_dashMomentum = 0;
         vx -= 0.045;
         if (vx < 0.0) {
             vx = 0.0;
@@ -3394,17 +3394,17 @@ void CMishio::UpdatePattern()
                 m_attackResult = 0;
             }
             if (frame >= x8) {
-                pattern = 3;
+                pattern = kCrouch;
                 StartPattern();
             }
         }
         break;
-    case 0xf8:
+    case kAirThrow:
         vy = vy + ay;
         if (frame == 1 && m_attackResult == 3) {
             (*m_opponent)->StopMoving();
             (*m_opponent)->StartPattern();
-            (*m_opponent)->unk128 = 1;
+            (*m_opponent)->m_noAirRecovery = 1;
             StopMoving();
             StartPattern();
             l50.type = 0;
@@ -3415,8 +3415,8 @@ void CMishio::UpdatePattern()
             m_game->CreateEffect((EffectDesc*)&l50);
             frame = 0;
             timer = 0;
-            pattern = 0xf9;
-            (*m_opponent)->pattern = 0x67;
+            pattern = kAirThrowConnected;
+            (*m_opponent)->pattern = kThrownDoubledOver;
             (*m_opponent)->x = facing * 0x1d + x;
             (*m_opponent)->y = y - 73.0;
             break;
@@ -3425,26 +3425,26 @@ void CMishio::UpdatePattern()
         if (timer >= l4) {
             timer = 0;
             frame++;
-            if (frame == 1 && (*m_opponent)->y < 0.0 && ((*m_opponent)->pattern < 0x32 || (*m_opponent)->pattern > 0x95)) {
+            if (frame == 1 && (*m_opponent)->y < 0.0 && ((*m_opponent)->pattern < kFirstHitReaction || (*m_opponent)->pattern > kLastHitReaction)) {
                 m_hitsLeft = 1;
             } else {
                 m_hitsLeft = 0;
             }
             m_attackResult = 0;
             if (frame >= x8) {
-                pattern = 0xd1;
+                pattern = kJumpC;
                 frame = 2;
             }
         }
         break;
-    case 0xf9:
-        unk13e = 2;
+    case kAirThrowConnected:
+        m_hideOffscreenMarker = 2;
         if (frame < 6) {
-            Unk410a40(0x32, 3);
-            Unk410a80(0x32, 3);
+            FocusCameraX(0x32, 3);
+            FocusCameraY(0x32, 3);
         }
         if (frame > 6) {
-            (*m_opponent)->Unk410a80(0x32, 3);
+            (*m_opponent)->FocusCameraY(0x32, 3);
         }
         if (frame == 4 && timer == 0) {
             DealDamage(0x47e, 500.0);
@@ -3452,7 +3452,7 @@ void CMishio::UpdatePattern()
         }
         if (frame > 1 && frame < 4) {
             vy += 0.05;
-            (*m_opponent)->pattern = 0x76;
+            (*m_opponent)->pattern = kThrownAirborneInverted;
             (*m_opponent)->x = facing * 0x11 + x;
             (*m_opponent)->y = y + 11.0;
             if (y + vy > 0.0) {
@@ -3463,13 +3463,13 @@ void CMishio::UpdatePattern()
                 (*m_opponent)->y = 0.0;
                 (*m_opponent)->x = x - facing * 6;
                 (*m_opponent)->StartPattern();
-                (*m_opponent)->pattern = 0x62;
+                (*m_opponent)->pattern = kKnockdown;
                 l50.type = 0;
                 l50.x = (double)((int)x - facing * 9);
                 l50.y = (double)((int)y + 4);
                 l50.scale = 2;
                 l50.layer = 1;
-                l50.unk2c = 2;
+                l50.sound = 2;
                 m_game->CreateEffect((EffectDesc*)&l50);
                 break;
             }
@@ -3490,7 +3490,7 @@ void CMishio::UpdatePattern()
             frame++;
             m_attackResult = 0;
             if (frame == 1) {
-                (*m_opponent)->pattern = 0x75;
+                (*m_opponent)->pattern = kThrownDoubledOverInverted;
                 (*m_opponent)->y = y - 22.0;
                 (*m_opponent)->x = facing * 0x27 + x;
             }
@@ -3509,16 +3509,16 @@ void CMishio::UpdatePattern()
             }
             if (frame >= x8) {
                 StartPattern();
-                pattern = 0;
+                pattern = kStand;
             }
         }
         break;
-    case 0xfa:
+    case k623A:
         if (frame == 0 && timer == 0) {
-            unk158 = 0;
+            m_dashMomentum = 0;
             StopMoving();
             m_gauge = m_gauge + 0x2d;
-            unk3138 = 5;
+            m_patternVar1 = 5;
             m_hitsLeft = 1;
         }
         timer++;
@@ -3532,24 +3532,24 @@ void CMishio::UpdatePattern()
                 m_playVoice = 0;
             }
             if (frame >= x8) {
-                pattern = 0;
-                if (m_attackResult > 0 && unk3158 == 0) {
+                pattern = kStand;
+                if (m_attackResult > 0 && m_powerUp == 0) {
                     if ((WORD)Random(0, 0x3e8) < 0x1f4) {
-                        unk3158 = 1;
+                        m_powerUp = 1;
                     } else {
-                        unk3158 = 2;
+                        m_powerUp = 2;
                     }
                 }
                 StartPattern();
             }
         }
         break;
-    case 0xfb:
+    case k623B:
         if (frame == 0 && timer == 0) {
-            unk158 = 0;
+            m_dashMomentum = 0;
             StopMoving();
             m_gauge = m_gauge + 0x2d;
-            unk3138 = 5;
+            m_patternVar1 = 5;
             m_hitsLeft = 1;
         }
         timer++;
@@ -3563,31 +3563,31 @@ void CMishio::UpdatePattern()
                 m_playVoice = 0;
             }
             if (frame >= x8) {
-                pattern = 0;
-                if (m_attackResult > 0 && unk3158 == 0) {
+                pattern = kStand;
+                if (m_attackResult > 0 && m_powerUp == 0) {
                     if ((WORD)Random(0, 0x3e8) < 0x1f4) {
-                        unk3158 = 1;
+                        m_powerUp = 1;
                     } else {
-                        unk3158 = 2;
+                        m_powerUp = 2;
                     }
                 }
                 StartPattern();
             }
         }
         break;
-    case 0xfc:
+    case k623C:
         if (frame == 0 && timer == 0) {
-            unk158 = 0;
+            m_dashMomentum = 0;
             StopMoving();
             m_gauge = m_gauge + 0x2d;
             m_hitsLeft = 2;
-            if (unk120 == 0) {
-                unk118 -= 500.0;
+            if (m_rfBlue == 0) {
+                m_rfGauge -= 500.0;
             } else {
-                unk118 -= 250.0;
+                m_rfGauge -= 250.0;
             }
             l50.type = 0x21;
-            l50.unk2c = 0xb;
+            l50.sound = 0xb;
             l50.x = (double)(int)x;
             l50.y = (double)((int)y - 0x32);
             l50.scale = 2;
@@ -3598,7 +3598,7 @@ void CMishio::UpdatePattern()
             ax = 0.0;
         }
         if (m_attackResult > 0) {
-            unk3138 = 1;
+            m_patternVar1 = 1;
         }
         timer++;
         if (timer >= l4) {
@@ -3614,21 +3614,21 @@ void CMishio::UpdatePattern()
                 m_playVoice = 0;
             }
             if (frame >= x8) {
-                pattern = 0;
-                if (unk3138 > 0 && unk3158 == 0) {
+                pattern = kStand;
+                if (m_patternVar1 > 0 && m_powerUp == 0) {
                     if ((WORD)Random(0, 0x3e8) < 0x1f4) {
-                        unk3158 = 1;
+                        m_powerUp = 1;
                     } else {
-                        unk3158 = 2;
+                        m_powerUp = 2;
                     }
                 }
                 StartPattern();
             }
         }
         break;
-    case 0xfd:
+    case k236B:
         if (frame == 0 && timer == 0) {
-            unk158 = 0;
+            m_dashMomentum = 0;
             StopMoving();
             m_hitsLeft = 6;
         }
@@ -3658,8 +3658,8 @@ void CMishio::UpdatePattern()
                 m_game->CreateEffect((EffectDesc*)&l50);
                 vx = 3.0;
             }
-            if (frame == 7 && unk3138 < 2) {
-                unk3138++;
+            if (frame == 7 && m_patternVar1 < 2) {
+                m_patternVar1++;
                 frame = frame - 2;
                 break;
             }
@@ -3667,14 +3667,14 @@ void CMishio::UpdatePattern()
                 frame = 0x16;
             }
             if (frame >= x8) {
-                pattern = 0;
+                pattern = kStand;
                 StartPattern();
             }
         }
         break;
-    case 0xfe:
+    case k236A:
         if (frame == 0 && timer == 0) {
-            unk158 = 0;
+            m_dashMomentum = 0;
             StopMoving();
             m_hitsLeft = 4;
         }
@@ -3693,26 +3693,26 @@ void CMishio::UpdatePattern()
                 m_attackResult = 0;
             }
             if (frame >= x8) {
-                pattern = 0;
+                pattern = kStand;
                 StartPattern();
             }
         }
         break;
-    case 0xff:
+    case k236C:
         if (frame == 0 && timer == 0) {
-            if (unk120 == 0) {
-                unk118 -= 500.0;
+            if (m_rfBlue == 0) {
+                m_rfGauge -= 500.0;
             } else {
-                unk118 -= 250.0;
+                m_rfGauge -= 250.0;
             }
             l50.type = 0x21;
-            l50.unk2c = 0xb;
+            l50.sound = 0xb;
             l50.x = (double)(int)x;
             l50.y = (double)((int)y - 0x32);
             l50.scale = 2;
             l50.layer = 1;
             m_game->CreateEffect((EffectDesc*)&l50);
-            unk158 = 0;
+            m_dashMomentum = 0;
             StopMoving();
             m_hitsLeft = 0x63;
         }
@@ -3742,8 +3742,8 @@ void CMishio::UpdatePattern()
                 m_game->CreateEffect((EffectDesc*)&l50);
                 vx = 3.2;
             }
-            if (frame == 7 && unk3138 < 2) {
-                unk3138++;
+            if (frame == 7 && m_patternVar1 < 2) {
+                m_patternVar1++;
                 frame = frame - 2;
                 m_attackResult = 0;
                 break;
@@ -3752,12 +3752,12 @@ void CMishio::UpdatePattern()
                 frame = 0x1f;
             }
             if (frame >= x8) {
-                pattern = 0;
+                pattern = kStand;
                 StartPattern();
             }
         }
         break;
-    case 0x100:
+    case k214C:
         if (frame == 0 && timer == 0) {
             StopMoving();
         }
@@ -3765,17 +3765,17 @@ void CMishio::UpdatePattern()
             if (m_inputY == -1) {
                 if (m_inputX == 0) {
                     StartPattern();
-                    pattern = 0x106;
+                    pattern = k214Follow8;
                     break;
                 }
                 if (m_inputX == facing) {
                     StartPattern();
-                    pattern = 0x107;
+                    pattern = k214Follow9;
                     break;
                 }
                 if (m_inputX == -facing) {
                     StartPattern();
-                    pattern = 0x107;
+                    pattern = k214Follow9;
                     facing = -facing;
                     break;
                 }
@@ -3783,12 +3783,12 @@ void CMishio::UpdatePattern()
             if (m_inputY == 0) {
                 if (m_inputX == facing) {
                     StartPattern();
-                    pattern = 0x108;
+                    pattern = k214Follow6;
                     break;
                 }
                 if (m_inputX == -facing) {
                     StartPattern();
-                    pattern = 0x108;
+                    pattern = k214Follow6;
                     facing = -facing;
                     break;
                 }
@@ -3796,17 +3796,17 @@ void CMishio::UpdatePattern()
             if (m_inputY == 1) {
                 if (m_inputX == 0) {
                     StartPattern();
-                    pattern = 0x10a;
+                    pattern = k214Follow2;
                     break;
                 }
                 if (m_inputX == facing) {
                     StartPattern();
-                    pattern = 0x109;
+                    pattern = k214Follow3;
                     break;
                 }
                 if (m_inputX == -facing) {
                     StartPattern();
-                    pattern = 0x109;
+                    pattern = k214Follow3;
                     facing = -facing;
                     break;
                 }
@@ -3840,18 +3840,18 @@ void CMishio::UpdatePattern()
                 l50.scale = 2;
                 SpawnObject(&l50);
             }
-            if (frame == 7 && unk3138 < 4) {
+            if (frame == 7 && m_patternVar1 < 4) {
                 frame = frame - 2;
-                unk3138++;
+                m_patternVar1++;
             }
             if (frame >= x8) {
                 frame = 0;
-                pattern = 0x11a;
+                pattern = k214Recovery;
                 StartPattern();
             }
         }
         break;
-    case 0x101:
+    case k214A:
         if (frame == 0 && timer == 0) {
             StopMoving();
         }
@@ -3859,17 +3859,17 @@ void CMishio::UpdatePattern()
             if (m_inputY == -1) {
                 if (m_inputX == 0) {
                     StartPattern();
-                    pattern = 0x106;
+                    pattern = k214Follow8;
                     break;
                 }
                 if (m_inputX == facing) {
                     StartPattern();
-                    pattern = 0x107;
+                    pattern = k214Follow9;
                     break;
                 }
                 if (m_inputX == -facing) {
                     StartPattern();
-                    pattern = 0x107;
+                    pattern = k214Follow9;
                     facing = -facing;
                     break;
                 }
@@ -3877,12 +3877,12 @@ void CMishio::UpdatePattern()
             if (m_inputY == 0) {
                 if (m_inputX == facing) {
                     StartPattern();
-                    pattern = 0x108;
+                    pattern = k214Follow6;
                     break;
                 }
                 if (m_inputX == -facing) {
                     StartPattern();
-                    pattern = 0x108;
+                    pattern = k214Follow6;
                     facing = -facing;
                     break;
                 }
@@ -3890,17 +3890,17 @@ void CMishio::UpdatePattern()
             if (m_inputY == 1) {
                 if (m_inputX == 0) {
                     StartPattern();
-                    pattern = 0x10a;
+                    pattern = k214Follow2;
                     break;
                 }
                 if (m_inputX == facing) {
                     StartPattern();
-                    pattern = 0x109;
+                    pattern = k214Follow3;
                     break;
                 }
                 if (m_inputX == -facing) {
                     StartPattern();
-                    pattern = 0x109;
+                    pattern = k214Follow3;
                     facing = -facing;
                     break;
                 }
@@ -3931,18 +3931,18 @@ void CMishio::UpdatePattern()
                 l50.scale = 2;
                 SpawnObject(&l50);
             }
-            if (frame == 7 && unk3138 < 4) {
+            if (frame == 7 && m_patternVar1 < 4) {
                 frame = frame - 2;
-                unk3138++;
+                m_patternVar1++;
             }
             if (frame >= x8) {
                 frame = 0;
-                pattern = 0x11a;
+                pattern = k214Recovery;
                 StartPattern();
             }
         }
         break;
-    case 0x102:
+    case k214B:
         if (frame == 0 && timer == 0) {
             StopMoving();
         }
@@ -3950,17 +3950,17 @@ void CMishio::UpdatePattern()
             if (m_inputY == -1) {
                 if (m_inputX == 0) {
                     StartPattern();
-                    pattern = 0x106;
+                    pattern = k214Follow8;
                     break;
                 }
                 if (m_inputX == facing) {
                     StartPattern();
-                    pattern = 0x107;
+                    pattern = k214Follow9;
                     break;
                 }
                 if (m_inputX == -facing) {
                     StartPattern();
-                    pattern = 0x107;
+                    pattern = k214Follow9;
                     facing = -facing;
                     break;
                 }
@@ -3968,12 +3968,12 @@ void CMishio::UpdatePattern()
             if (m_inputY == 0) {
                 if (m_inputX == facing) {
                     StartPattern();
-                    pattern = 0x108;
+                    pattern = k214Follow6;
                     break;
                 }
                 if (m_inputX == -facing) {
                     StartPattern();
-                    pattern = 0x108;
+                    pattern = k214Follow6;
                     facing = -facing;
                     break;
                 }
@@ -3981,17 +3981,17 @@ void CMishio::UpdatePattern()
             if (m_inputY == 1) {
                 if (m_inputX == 0) {
                     StartPattern();
-                    pattern = 0x10a;
+                    pattern = k214Follow2;
                     break;
                 }
                 if (m_inputX == facing) {
                     StartPattern();
-                    pattern = 0x109;
+                    pattern = k214Follow3;
                     break;
                 }
                 if (m_inputX == -facing) {
                     StartPattern();
-                    pattern = 0x109;
+                    pattern = k214Follow3;
                     facing = -facing;
                     break;
                 }
@@ -4022,37 +4022,37 @@ void CMishio::UpdatePattern()
                 l50.scale = 2;
                 SpawnObject(&l50);
             }
-            if (frame == 7 && unk3138 < 4) {
+            if (frame == 7 && m_patternVar1 < 4) {
                 frame = frame - 2;
-                unk3138++;
+                m_patternVar1++;
             }
             if (frame >= x8) {
                 frame = 0;
-                pattern = 0x11a;
+                pattern = k214Recovery;
                 StartPattern();
             }
         }
         break;
-    case 0x103:
+    case kAir214A:
         if (frame == 0 && timer == 0) {
-            unk158 = 0;
+            m_dashMomentum = 0;
             StopMoving();
         }
         if (frame > 2 && frame < 5 && (m_pressA == 1 || m_pressB == 1 || m_pressC == 1 || m_pressD == 1)) {
             if (m_inputY == -1) {
                 if (m_inputX == 0) {
                     StartPattern();
-                    pattern = 0x106;
+                    pattern = k214Follow8;
                     break;
                 }
                 if (m_inputX == facing) {
                     StartPattern();
-                    pattern = 0x107;
+                    pattern = k214Follow9;
                     break;
                 }
                 if (m_inputX == -facing) {
                     StartPattern();
-                    pattern = 0x107;
+                    pattern = k214Follow9;
                     facing = -facing;
                     break;
                 }
@@ -4060,12 +4060,12 @@ void CMishio::UpdatePattern()
             if (m_inputY == 0) {
                 if (m_inputX == facing) {
                     StartPattern();
-                    pattern = 0x108;
+                    pattern = k214Follow6;
                     break;
                 }
                 if (m_inputX == -facing) {
                     StartPattern();
-                    pattern = 0x108;
+                    pattern = k214Follow6;
                     facing = -facing;
                     break;
                 }
@@ -4073,17 +4073,17 @@ void CMishio::UpdatePattern()
             if (m_inputY == 1) {
                 if (m_inputX == 0) {
                     StartPattern();
-                    pattern = 0x10a;
+                    pattern = k214Follow2;
                     break;
                 }
                 if (m_inputX == facing) {
                     StartPattern();
-                    pattern = 0x109;
+                    pattern = k214Follow3;
                     break;
                 }
                 if (m_inputX == -facing) {
                     StartPattern();
-                    pattern = 0x109;
+                    pattern = k214Follow3;
                     facing = -facing;
                     break;
                 }
@@ -4107,33 +4107,33 @@ void CMishio::UpdatePattern()
                 l50.scale = 2;
                 SpawnObject(&l50);
             }
-            if (frame == 5 && unk3138 < 4) {
-                unk3138++;
+            if (frame == 5 && m_patternVar1 < 4) {
+                m_patternVar1++;
                 frame = frame - 2;
                 break;
             }
             if (frame >= x8) {
-                pattern = 0x11b;
+                pattern = k214Recovery2;
                 frame = 0;
             }
         }
         break;
-    case 0x104:
+    case kAir214B:
         if (frame > 3 && frame < 6 && (m_pressA == 1 || m_pressB == 1 || m_pressC == 1 || m_pressD == 1)) {
             if (m_inputY == -1) {
                 if (m_inputX == 0) {
                     StartPattern();
-                    pattern = 0x106;
+                    pattern = k214Follow8;
                     break;
                 }
                 if (m_inputX == facing) {
                     StartPattern();
-                    pattern = 0x107;
+                    pattern = k214Follow9;
                     break;
                 }
                 if (m_inputX == -facing) {
                     StartPattern();
-                    pattern = 0x107;
+                    pattern = k214Follow9;
                     facing = -facing;
                     break;
                 }
@@ -4141,12 +4141,12 @@ void CMishio::UpdatePattern()
             if (m_inputY == 0) {
                 if (m_inputX == facing) {
                     StartPattern();
-                    pattern = 0x108;
+                    pattern = k214Follow6;
                     break;
                 }
                 if (m_inputX == -facing) {
                     StartPattern();
-                    pattern = 0x108;
+                    pattern = k214Follow6;
                     facing = -facing;
                     break;
                 }
@@ -4154,24 +4154,24 @@ void CMishio::UpdatePattern()
             if (m_inputY == 1) {
                 if (m_inputX == 0) {
                     StartPattern();
-                    pattern = 0x10a;
+                    pattern = k214Follow2;
                     break;
                 }
                 if (m_inputX == facing) {
                     StartPattern();
-                    pattern = 0x109;
+                    pattern = k214Follow3;
                     break;
                 }
                 if (m_inputX == -facing) {
                     StartPattern();
-                    pattern = 0x109;
+                    pattern = k214Follow3;
                     facing = -facing;
                     break;
                 }
             }
         }
         if (frame == 0 && timer == 0) {
-            unk158 = 0;
+            m_dashMomentum = 0;
             StopMoving();
         }
         if (y + vy > 0.0) {
@@ -4179,7 +4179,7 @@ void CMishio::UpdatePattern()
             y = 0.0;
             frame = 7;
             timer = 0;
-            pattern = 0x11b;
+            pattern = k214Recovery2;
             break;
         }
         timer++;
@@ -4200,33 +4200,33 @@ void CMishio::UpdatePattern()
                 l50.scale = 2;
                 SpawnObject(&l50);
             }
-            if (frame == 6 && unk3138 < 4) {
-                unk3138++;
+            if (frame == 6 && m_patternVar1 < 4) {
+                m_patternVar1++;
                 frame = frame - 2;
                 break;
             }
             if (frame >= x8) {
-                pattern = 0x11a;
+                pattern = k214Recovery;
                 frame = 0;
             }
         }
         break;
-    case 0x105:
+    case kAir214C:
         if (frame > 3 && frame < 6 && (m_pressA == 1 || m_pressB == 1 || m_pressC == 1 || m_pressD == 1)) {
             if (m_inputY == -1) {
                 if (m_inputX == 0) {
                     StartPattern();
-                    pattern = 0x106;
+                    pattern = k214Follow8;
                     break;
                 }
                 if (m_inputX == facing) {
                     StartPattern();
-                    pattern = 0x107;
+                    pattern = k214Follow9;
                     break;
                 }
                 if (m_inputX == -facing) {
                     StartPattern();
-                    pattern = 0x107;
+                    pattern = k214Follow9;
                     facing = -facing;
                     break;
                 }
@@ -4234,12 +4234,12 @@ void CMishio::UpdatePattern()
             if (m_inputY == 0) {
                 if (m_inputX == facing) {
                     StartPattern();
-                    pattern = 0x108;
+                    pattern = k214Follow6;
                     break;
                 }
                 if (m_inputX == -facing) {
                     StartPattern();
-                    pattern = 0x108;
+                    pattern = k214Follow6;
                     facing = -facing;
                     break;
                 }
@@ -4247,24 +4247,24 @@ void CMishio::UpdatePattern()
             if (m_inputY == 1) {
                 if (m_inputX == 0) {
                     StartPattern();
-                    pattern = 0x10a;
+                    pattern = k214Follow2;
                     break;
                 }
                 if (m_inputX == facing) {
                     StartPattern();
-                    pattern = 0x109;
+                    pattern = k214Follow3;
                     break;
                 }
                 if (m_inputX == -facing) {
                     StartPattern();
-                    pattern = 0x109;
+                    pattern = k214Follow3;
                     facing = -facing;
                     break;
                 }
             }
         }
         if (frame == 0 && timer == 0) {
-            unk158 = 0;
+            m_dashMomentum = 0;
             StopMoving();
         }
         if (y + vy > 0.0) {
@@ -4272,7 +4272,7 @@ void CMishio::UpdatePattern()
             y = 0.0;
             frame = 7;
             timer = 0;
-            pattern = 0x11b;
+            pattern = k214Recovery2;
             break;
         }
         timer++;
@@ -4293,20 +4293,20 @@ void CMishio::UpdatePattern()
                 l50.scale = 2;
                 SpawnObject(&l50);
             }
-            if (frame == 6 && unk3138 < 4) {
-                unk3138++;
+            if (frame == 6 && m_patternVar1 < 4) {
+                m_patternVar1++;
                 frame = frame - 2;
                 break;
             }
             if (frame >= x8) {
-                pattern = 0x11a;
+                pattern = k214Recovery;
                 frame = 0;
             }
         }
         break;
-    case 0x106:
+    case k214Follow8:
         if (frame == 0 && timer == 0) {
-            unk158 = 0;
+            m_dashMomentum = 0;
             StopMoving();
         }
         timer++;
@@ -4327,26 +4327,26 @@ void CMishio::UpdatePattern()
                 l50.scale = 2;
                 SpawnObject(&l50);
             }
-            if (frame == 4 && unk3138 < 0) {
-                unk3138++;
+            if (frame == 4 && m_patternVar1 < 0) {
+                m_patternVar1++;
                 frame = frame - 2;
                 break;
             }
-            if (frame == 9 && unk3138 < 4) {
-                unk3138++;
+            if (frame == 9 && m_patternVar1 < 4) {
+                m_patternVar1++;
                 frame = frame - 2;
                 break;
             }
             if (frame >= x8) {
-                pattern = 0x10b;
+                pattern = k214FollowRecovery;
                 frame = 0;
-                unk313c++;
+                m_patternVar2++;
             }
         }
         break;
-    case 0x107:
+    case k214Follow9:
         if (frame == 0 && timer == 0) {
-            unk158 = 0;
+            m_dashMomentum = 0;
             StopMoving();
         }
         timer++;
@@ -4367,26 +4367,26 @@ void CMishio::UpdatePattern()
                 l50.scale = 2;
                 SpawnObject(&l50);
             }
-            if (frame == 4 && unk3138 < 0) {
-                unk3138++;
+            if (frame == 4 && m_patternVar1 < 0) {
+                m_patternVar1++;
                 frame = frame - 2;
                 break;
             }
-            if (frame == 9 && unk3138 < 4) {
-                unk3138++;
+            if (frame == 9 && m_patternVar1 < 4) {
+                m_patternVar1++;
                 frame = frame - 2;
                 break;
             }
             if (frame >= x8) {
-                pattern = 0x10b;
+                pattern = k214FollowRecovery;
                 frame = 0;
-                unk313c++;
+                m_patternVar2++;
             }
         }
         break;
-    case 0x108:
+    case k214Follow6:
         if (frame == 0 && timer == 0) {
-            unk158 = 0;
+            m_dashMomentum = 0;
             StopMoving();
         }
         timer++;
@@ -4407,34 +4407,34 @@ void CMishio::UpdatePattern()
                 l50.scale = 2;
                 SpawnObject(&l50);
             }
-            if (frame == 4 && unk3138 < 0) {
-                unk3138++;
+            if (frame == 4 && m_patternVar1 < 0) {
+                m_patternVar1++;
                 frame = frame - 2;
                 break;
             }
-            if (frame == 9 && unk3138 < 4) {
-                unk3138++;
+            if (frame == 9 && m_patternVar1 < 4) {
+                m_patternVar1++;
                 frame = frame - 2;
                 break;
             }
             if (frame >= x8) {
-                pattern = 0x10b;
+                pattern = k214FollowRecovery;
                 frame = 0;
-                unk313c++;
+                m_patternVar2++;
             }
         }
         break;
-    case 0x109:
+    case k214Follow3:
         if (y + vy > 0.0) {
             vy = 0.0;
             y = 0.0;
             frame = 7;
             timer = 0;
-            pattern = 0x10b;
+            pattern = k214FollowRecovery;
             break;
         }
         if (frame == 0 && timer == 0) {
-            unk158 = 0;
+            m_dashMomentum = 0;
             StopMoving();
         }
         timer++;
@@ -4455,34 +4455,34 @@ void CMishio::UpdatePattern()
                 l50.scale = 2;
                 SpawnObject(&l50);
             }
-            if (frame == 4 && unk3138 < 0) {
-                unk3138++;
+            if (frame == 4 && m_patternVar1 < 0) {
+                m_patternVar1++;
                 frame = frame - 2;
                 break;
             }
-            if (frame == 0xa && unk3138 < 4) {
-                unk3138++;
+            if (frame == 0xa && m_patternVar1 < 4) {
+                m_patternVar1++;
                 frame = frame - 2;
                 break;
             }
             if (frame >= x8) {
-                pattern = 0x10b;
+                pattern = k214FollowRecovery;
                 frame = 0;
-                unk313c++;
+                m_patternVar2++;
             }
         }
         break;
-    case 0x10a:
+    case k214Follow2:
         if (y + vy > 0.0) {
             vy = 0.0;
             y = 0.0;
             frame = 7;
             timer = 0;
-            pattern = 0x10b;
+            pattern = k214FollowRecovery;
             break;
         }
         if (frame == 0 && timer == 0) {
-            unk158 = 0;
+            m_dashMomentum = 0;
             StopMoving();
         }
         timer++;
@@ -4503,49 +4503,49 @@ void CMishio::UpdatePattern()
                 l50.scale = 2;
                 SpawnObject(&l50);
             }
-            if (frame == 4 && unk3138 < 0) {
-                unk3138++;
+            if (frame == 4 && m_patternVar1 < 0) {
+                m_patternVar1++;
                 frame = frame - 2;
                 break;
             }
-            if (frame == 0xa && unk3138 < 4) {
-                unk3138++;
+            if (frame == 0xa && m_patternVar1 < 4) {
+                m_patternVar1++;
                 frame = frame - 2;
                 break;
             }
             if (frame >= x8) {
-                pattern = 0x10b;
+                pattern = k214FollowRecovery;
                 frame = 0;
-                unk313c++;
+                m_patternVar2++;
             }
         }
         break;
-    case 0x10b:
-        if (unk3140 == 0) {
+    case k214FollowRecovery:
+        if (m_patternVar3 == 0) {
             vx *= 0.5;
             if (vy < 0.0) {
                 vy *= 0.75;
             }
-            unk3140++;
+            m_patternVar3++;
         }
-        if (unk313c == 0 && frame < 5 && (m_pressA == 1 || m_pressB == 1 || m_pressC == 1 || m_pressD == 1)) {
+        if (m_patternVar2 == 0 && frame < 5 && (m_pressA == 1 || m_pressB == 1 || m_pressC == 1 || m_pressD == 1)) {
             if (m_inputY == -1) {
                 if (m_inputX == 0) {
                     StartPattern();
-                    pattern = 0x106;
-                    unk313c++;
+                    pattern = k214Follow8;
+                    m_patternVar2++;
                     break;
                 }
                 if (m_inputX == facing) {
                     StartPattern();
-                    pattern = 0x107;
-                    unk313c++;
+                    pattern = k214Follow9;
+                    m_patternVar2++;
                     break;
                 }
                 if (m_inputX == -facing) {
                     StartPattern();
-                    pattern = 0x107;
-                    unk313c++;
+                    pattern = k214Follow9;
+                    m_patternVar2++;
                     facing = -facing;
                     break;
                 }
@@ -4553,14 +4553,14 @@ void CMishio::UpdatePattern()
             if (m_inputY == 0) {
                 if (m_inputX == facing) {
                     StartPattern();
-                    pattern = 0x108;
-                    unk313c++;
+                    pattern = k214Follow6;
+                    m_patternVar2++;
                     break;
                 }
                 if (m_inputX == -facing) {
                     StartPattern();
-                    pattern = 0x108;
-                    unk313c++;
+                    pattern = k214Follow6;
+                    m_patternVar2++;
                     facing = -facing;
                     break;
                 }
@@ -4568,20 +4568,20 @@ void CMishio::UpdatePattern()
             if (m_inputY == 1) {
                 if (m_inputX == 0) {
                     StartPattern();
-                    pattern = 0x10a;
-                    unk313c++;
+                    pattern = k214Follow2;
+                    m_patternVar2++;
                     break;
                 }
                 if (m_inputX == facing) {
                     StartPattern();
-                    pattern = 0x109;
-                    unk313c++;
+                    pattern = k214Follow3;
+                    m_patternVar2++;
                     break;
                 }
                 if (m_inputX == -facing) {
                     StartPattern();
-                    pattern = 0x109;
-                    unk313c++;
+                    pattern = k214Follow3;
+                    m_patternVar2++;
                     facing = -facing;
                     break;
                 }
@@ -4611,19 +4611,19 @@ void CMishio::UpdatePattern()
                 frame = frame - 2;
             }
             if (frame >= x8) {
-                pattern = 7;
+                pattern = kStandUp;
                 if (m_inputY == 1) {
-                    pattern = 3;
+                    pattern = kCrouch;
                 }
                 StartPattern();
                 FaceOpponent();
-                if (unk3158 == 1) {
-                    unk3158 = 0;
+                if (m_powerUp == 1) {
+                    m_powerUp = 0;
                 }
             }
         }
         break;
-    case 0x10c:
+    case k412A:
         if (frame == 0 && timer == 0) {
             StopMoving();
         }
@@ -4636,9 +4636,9 @@ void CMishio::UpdatePattern()
             l50.facing = facing;
             l50.layer = 1;
             l50.scale = 2;
-            l50.unk0 = 1;
+            l50.keep = 1;
             SpawnObject(&l50);
-            unk3148 = 1;
+            m_shotOut = 1;
             m_gauge = m_gauge + 0x19;
         }
         timer++;
@@ -4648,11 +4648,11 @@ void CMishio::UpdatePattern()
             m_attackResult = 0;
             if (frame >= x8) {
                 StartPattern();
-                pattern = 0;
+                pattern = kStand;
             }
         }
         break;
-    case 0x10d:
+    case k412B:
         if (frame == 0 && timer == 0) {
             StopMoving();
         }
@@ -4665,9 +4665,9 @@ void CMishio::UpdatePattern()
             l50.facing = facing;
             l50.layer = 1;
             l50.scale = 2;
-            l50.unk0 = 1;
+            l50.keep = 1;
             SpawnObject(&l50);
-            unk3148 = 1;
+            m_shotOut = 1;
             m_gauge = m_gauge + 0x19;
         }
         timer++;
@@ -4677,22 +4677,22 @@ void CMishio::UpdatePattern()
             m_attackResult = 3;
             if (frame >= x8) {
                 StartPattern();
-                pattern = 0;
-                if (unk3158 == 2) {
-                    unk3158 = 0;
+                pattern = kStand;
+                if (m_powerUp == 2) {
+                    m_powerUp = 0;
                 }
             }
         }
         break;
-    case 0x10e:
+    case k412C:
         if (frame == 0 && timer == 0) {
-            if (unk120 == 0) {
-                unk118 -= 500.0;
+            if (m_rfBlue == 0) {
+                m_rfGauge -= 500.0;
             } else {
-                unk118 -= 250.0;
+                m_rfGauge -= 250.0;
             }
             l50.type = 0x21;
-            l50.unk2c = 0xb;
+            l50.sound = 0xb;
             l50.x = (double)(int)x;
             l50.y = (double)((int)y - 0x32);
             l50.scale = 2;
@@ -4709,9 +4709,9 @@ void CMishio::UpdatePattern()
             l50.facing = facing;
             l50.layer = 1;
             l50.scale = 2;
-            l50.unk0 = 1;
+            l50.keep = 1;
             SpawnObject(&l50);
-            unk3148 = 1;
+            m_shotOut = 1;
             m_gauge = m_gauge + 0x19;
         }
         timer++;
@@ -4721,14 +4721,14 @@ void CMishio::UpdatePattern()
             m_attackResult = 0;
             if (frame >= x8) {
                 StartPattern();
-                pattern = 0;
-                if (unk3158 == 2) {
-                    unk3158 = 0;
+                pattern = kStand;
+                if (m_powerUp == 2) {
+                    m_powerUp = 0;
                 }
             }
         }
         break;
-    case 0x10f:
+    case k22A:
         if (frame == 0 && timer == 0) {
             StopMoving();
         }
@@ -4749,9 +4749,9 @@ void CMishio::UpdatePattern()
             l50.facing = facing;
             l50.layer = 1;
             l50.scale = 2;
-            l50.unk0 = 1;
+            l50.keep = 1;
             SpawnObject(&l50);
-            unk314c = 1;
+            m_fieldOut = 1;
             m_gauge = m_gauge + 0x19;
             m_playVoice = 3;
         }
@@ -4760,20 +4760,20 @@ void CMishio::UpdatePattern()
             timer = 0;
             frame++;
             m_attackResult = 3;
-            if (frame == 0xa && unk3138 < 2) {
-                unk3138++;
+            if (frame == 0xa && m_patternVar1 < 2) {
+                m_patternVar1++;
                 frame = frame - 2;
             }
             if (frame >= x8) {
                 StartPattern();
-                pattern = 0;
-                if (unk3158 == 2) {
-                    unk3158 = 0;
+                pattern = kStand;
+                if (m_powerUp == 2) {
+                    m_powerUp = 0;
                 }
             }
         }
         break;
-    case 0x110:
+    case k22B:
         if (frame == 0 && timer == 0) {
             StopMoving();
         }
@@ -4794,9 +4794,9 @@ void CMishio::UpdatePattern()
             l50.facing = facing;
             l50.layer = 1;
             l50.scale = 2;
-            l50.unk0 = 1;
+            l50.keep = 1;
             SpawnObject(&l50);
-            unk314c = 1;
+            m_fieldOut = 1;
             m_gauge = m_gauge + 0x19;
             m_playVoice = 3;
         }
@@ -4805,25 +4805,25 @@ void CMishio::UpdatePattern()
             timer = 0;
             frame++;
             m_attackResult = 3;
-            if (frame == 0xa && unk3138 < 2) {
-                unk3138++;
+            if (frame == 0xa && m_patternVar1 < 2) {
+                m_patternVar1++;
                 frame = frame - 2;
             }
             if (frame >= x8) {
                 StartPattern();
-                pattern = 0;
-                if (unk3158 == 2) {
-                    unk3158 = 0;
+                pattern = kStand;
+                if (m_powerUp == 2) {
+                    m_powerUp = 0;
                 }
             }
         }
         break;
-    case 0x111:
+    case k623APower1:
         if (frame == 0 && timer == 0) {
-            unk158 = 0;
+            m_dashMomentum = 0;
             StopMoving();
             m_gauge = m_gauge + 0x2d;
-            unk3138 = 5;
+            m_patternVar1 = 5;
             m_hitsLeft = 1;
         }
         timer++;
@@ -4846,20 +4846,20 @@ void CMishio::UpdatePattern()
                 m_playVoice = 5;
             }
             if (frame >= x8) {
-                pattern = 0;
-                if (unk3158 == 1) {
-                    unk3158 = 0;
+                pattern = kStand;
+                if (m_powerUp == 1) {
+                    m_powerUp = 0;
                 }
                 StartPattern();
             }
         }
         break;
-    case 0x112:
+    case k623BPower1:
         if (frame == 0 && timer == 0) {
-            unk158 = 0;
+            m_dashMomentum = 0;
             StopMoving();
             m_gauge = m_gauge + 0x2d;
-            unk3138 = 5;
+            m_patternVar1 = 5;
             m_hitsLeft = 1;
         }
         if (vx > 0.0) {
@@ -4887,27 +4887,27 @@ void CMishio::UpdatePattern()
                 SpawnObject(&l50);
             }
             if (frame >= x8) {
-                pattern = 0;
-                if (unk3158 == 1) {
-                    unk3158 = 0;
+                pattern = kStand;
+                if (m_powerUp == 1) {
+                    m_powerUp = 0;
                 }
                 StartPattern();
             }
         }
         break;
-    case 0x113:
+    case k623CPower1:
         if (frame == 0 && timer == 0) {
-            unk158 = 0;
+            m_dashMomentum = 0;
             StopMoving();
             m_gauge = m_gauge + 0x2d;
             m_hitsLeft = 1;
-            if (unk120 == 0) {
-                unk118 -= 500.0;
+            if (m_rfBlue == 0) {
+                m_rfGauge -= 500.0;
             } else {
-                unk118 -= 250.0;
+                m_rfGauge -= 250.0;
             }
             l50.type = 0x21;
-            l50.unk2c = 0xb;
+            l50.sound = 0xb;
             l50.x = (double)(int)x;
             l50.y = (double)((int)y - 0x32);
             l50.scale = 2;
@@ -4918,7 +4918,7 @@ void CMishio::UpdatePattern()
             ax = 0.0;
         }
         if (m_attackResult > 0) {
-            unk3138 = 1;
+            m_patternVar1 = 1;
         }
         if (vx > 0.0) {
             vx -= 0.02500000037252903;
@@ -4956,20 +4956,20 @@ void CMishio::UpdatePattern()
                 SpawnObject(&l50);
             }
             if (frame >= x8) {
-                pattern = 0;
-                if (unk3158 == 1) {
-                    unk3158 = 0;
+                pattern = kStand;
+                if (m_powerUp == 1) {
+                    m_powerUp = 0;
                 }
                 StartPattern();
             }
         }
         break;
-    case 0x114:
+    case k623APower2:
         if (frame == 0 && timer == 0) {
-            unk158 = 0;
+            m_dashMomentum = 0;
             StopMoving();
             m_gauge = m_gauge + 0x2d;
-            unk3138 = 5;
+            m_patternVar1 = 5;
             m_hitsLeft = 1;
         }
         timer++;
@@ -4997,20 +4997,20 @@ void CMishio::UpdatePattern()
                 SpawnObject(&l50);
             }
             if (frame >= x8) {
-                pattern = 0;
-                if (unk3158 == 2) {
-                    unk3158 = 0;
+                pattern = kStand;
+                if (m_powerUp == 2) {
+                    m_powerUp = 0;
                 }
                 StartPattern();
             }
         }
         break;
-    case 0x115:
+    case k623BPower2:
         if (frame == 0 && timer == 0) {
-            unk158 = 0;
+            m_dashMomentum = 0;
             StopMoving();
             m_gauge = m_gauge + 0x2d;
-            unk3138 = 5;
+            m_patternVar1 = 5;
             m_hitsLeft = 1;
         }
         if (vx > 0.0) {
@@ -5043,7 +5043,7 @@ void CMishio::UpdatePattern()
                 l50.facing = facing;
                 SpawnObject(&l50);
                 l50.type = 0x1ba;
-                l50.unk0 = 1;
+                l50.keep = 1;
                 l50.x = (double)((int)x + facing * 0x5a);
                 l50.y = (double)((int)y - 0x3c);
                 l50.scale = 2;
@@ -5052,27 +5052,27 @@ void CMishio::UpdatePattern()
                 SpawnObject(&l50);
             }
             if (frame >= x8) {
-                pattern = 0;
-                if (unk3158 == 2) {
-                    unk3158 = 0;
+                pattern = kStand;
+                if (m_powerUp == 2) {
+                    m_powerUp = 0;
                 }
                 StartPattern();
             }
         }
         break;
-    case 0x116:
+    case k623CPower2:
         if (frame == 0 && timer == 0) {
-            unk158 = 0;
+            m_dashMomentum = 0;
             StopMoving();
             m_gauge = m_gauge + 0x2d;
             m_hitsLeft = 1;
-            if (unk120 == 0) {
-                unk118 -= 500.0;
+            if (m_rfBlue == 0) {
+                m_rfGauge -= 500.0;
             } else {
-                unk118 -= 250.0;
+                m_rfGauge -= 250.0;
             }
             l50.type = 0x21;
-            l50.unk2c = 0xb;
+            l50.sound = 0xb;
             l50.x = (double)(int)x;
             l50.y = (double)((int)y - 0x32);
             l50.scale = 2;
@@ -5082,7 +5082,7 @@ void CMishio::UpdatePattern()
             ax = 0.0;
         }
         if (m_attackResult > 0) {
-            unk3138 = 1;
+            m_patternVar1 = 1;
         }
         if (vx > 0.0) {
             vx -= 0.02500000037252903;
@@ -5134,20 +5134,20 @@ void CMishio::UpdatePattern()
                 SpawnObject(&l50);
             }
             if (frame >= x8) {
-                pattern = 0;
-                if (unk3158 == 2) {
-                    unk3158 = 0;
+                pattern = kStand;
+                if (m_powerUp == 2) {
+                    m_powerUp = 0;
                 }
                 StartPattern();
             }
         }
         break;
-    case 0x117:
+    case k623APower3:
         if (frame == 0 && timer == 0) {
-            unk158 = 0;
+            m_dashMomentum = 0;
             StopMoving();
             m_gauge = m_gauge + 0x2d;
-            unk3138 = 5;
+            m_patternVar1 = 5;
             m_hitsLeft = 1;
         }
         timer++;
@@ -5161,17 +5161,17 @@ void CMishio::UpdatePattern()
                 m_playVoice = 0;
             }
             if (frame >= x8) {
-                pattern = 0;
+                pattern = kStand;
                 StartPattern();
             }
         }
         break;
-    case 0x118:
+    case k623BPower3:
         if (frame == 0 && timer == 0) {
-            unk158 = 0;
+            m_dashMomentum = 0;
             StopMoving();
             m_gauge = m_gauge + 0x2d;
-            unk3138 = 5;
+            m_patternVar1 = 5;
             m_hitsLeft = 1;
         }
         if (vx > 0.0) {
@@ -5192,24 +5192,24 @@ void CMishio::UpdatePattern()
                 vx = 2.5;
             }
             if (frame >= x8) {
-                pattern = 0;
+                pattern = kStand;
                 StartPattern();
             }
         }
         break;
-    case 0x119:
+    case k623CPower3:
         if (frame == 0 && timer == 0) {
-            unk158 = 0;
+            m_dashMomentum = 0;
             StopMoving();
             m_gauge = m_gauge + 0x2d;
             m_hitsLeft = 2;
-            if (unk120 == 0) {
-                unk118 -= 500.0;
+            if (m_rfBlue == 0) {
+                m_rfGauge -= 500.0;
             } else {
-                unk118 -= 250.0;
+                m_rfGauge -= 250.0;
             }
             l50.type = 0x21;
-            l50.unk2c = 0xb;
+            l50.sound = 0xb;
             l50.x = (double)(int)x;
             l50.y = (double)((int)y - 0x32);
             l50.scale = 2;
@@ -5219,7 +5219,7 @@ void CMishio::UpdatePattern()
             ax = 0.0;
         }
         if (m_attackResult > 0) {
-            unk3138 = 1;
+            m_patternVar1 = 1;
         }
         if (vx > 0.0) {
             vx -= 0.02500000037252903;
@@ -5241,37 +5241,37 @@ void CMishio::UpdatePattern()
                 m_playVoice = 0;
             }
             if (frame >= x8) {
-                pattern = 0;
+                pattern = kStand;
                 StartPattern();
             }
         }
         break;
-    case 0x11a:
-        if (unk3140 == 0) {
+    case k214Recovery:
+        if (m_patternVar3 == 0) {
             vx *= 0.5;
             if (vy < 0.0) {
                 vy *= 0.75;
             }
-            unk3140++;
+            m_patternVar3++;
         }
-        if (unk313c == 0 && frame < 5 && (m_pressA == 1 || m_pressB == 1 || m_pressC == 1 || m_pressD == 1)) {
+        if (m_patternVar2 == 0 && frame < 5 && (m_pressA == 1 || m_pressB == 1 || m_pressC == 1 || m_pressD == 1)) {
             if (m_inputY == -1) {
                 if (m_inputX == 0) {
                     StartPattern();
-                    pattern = 0x106;
-                    unk313c++;
+                    pattern = k214Follow8;
+                    m_patternVar2++;
                     break;
                 }
                 if (m_inputX == facing) {
                     StartPattern();
-                    pattern = 0x107;
-                    unk313c++;
+                    pattern = k214Follow9;
+                    m_patternVar2++;
                     break;
                 }
                 if (m_inputX == -facing) {
                     StartPattern();
-                    pattern = 0x107;
-                    unk313c++;
+                    pattern = k214Follow9;
+                    m_patternVar2++;
                     facing = -facing;
                     break;
                 }
@@ -5279,14 +5279,14 @@ void CMishio::UpdatePattern()
             if (m_inputY == 0) {
                 if (m_inputX == facing) {
                     StartPattern();
-                    pattern = 0x108;
-                    unk313c++;
+                    pattern = k214Follow6;
+                    m_patternVar2++;
                     break;
                 }
                 if (m_inputX == -facing) {
                     StartPattern();
-                    pattern = 0x108;
-                    unk313c++;
+                    pattern = k214Follow6;
+                    m_patternVar2++;
                     facing = -facing;
                     break;
                 }
@@ -5294,20 +5294,20 @@ void CMishio::UpdatePattern()
             if (m_inputY == 1) {
                 if (m_inputX == 0) {
                     StartPattern();
-                    pattern = 0x10a;
-                    unk313c++;
+                    pattern = k214Follow2;
+                    m_patternVar2++;
                     break;
                 }
                 if (m_inputX == facing) {
                     StartPattern();
-                    pattern = 0x109;
-                    unk313c++;
+                    pattern = k214Follow3;
+                    m_patternVar2++;
                     break;
                 }
                 if (m_inputX == -facing) {
                     StartPattern();
-                    pattern = 0x109;
-                    unk313c++;
+                    pattern = k214Follow3;
+                    m_patternVar2++;
                     facing = -facing;
                     break;
                 }
@@ -5337,41 +5337,41 @@ void CMishio::UpdatePattern()
                 frame = frame - 2;
             }
             if (frame >= x8) {
-                pattern = 7;
+                pattern = kStandUp;
                 if (m_inputY == 1) {
-                    pattern = 3;
+                    pattern = kCrouch;
                 }
                 StartPattern();
                 FaceOpponent();
             }
         }
         break;
-    case 0x11b:
-        if (unk3140 == 0) {
+    case k214Recovery2:
+        if (m_patternVar3 == 0) {
             vx *= 0.5;
             if (vy < 0.0) {
                 vy *= 0.75;
             }
-            unk3140++;
+            m_patternVar3++;
         }
-        if (unk313c == 0 && frame < 5 && (m_pressA == 1 || m_pressB == 1 || m_pressC == 1 || m_pressD == 1)) {
+        if (m_patternVar2 == 0 && frame < 5 && (m_pressA == 1 || m_pressB == 1 || m_pressC == 1 || m_pressD == 1)) {
             if (m_inputY == -1) {
                 if (m_inputX == 0) {
                     StartPattern();
-                    pattern = 0x106;
-                    unk313c++;
+                    pattern = k214Follow8;
+                    m_patternVar2++;
                     break;
                 }
                 if (m_inputX == facing) {
                     StartPattern();
-                    pattern = 0x107;
-                    unk313c++;
+                    pattern = k214Follow9;
+                    m_patternVar2++;
                     break;
                 }
                 if (m_inputX == -facing) {
                     StartPattern();
-                    pattern = 0x107;
-                    unk313c++;
+                    pattern = k214Follow9;
+                    m_patternVar2++;
                     facing = -facing;
                     break;
                 }
@@ -5379,14 +5379,14 @@ void CMishio::UpdatePattern()
             if (m_inputY == 0) {
                 if (m_inputX == facing) {
                     StartPattern();
-                    pattern = 0x108;
-                    unk313c++;
+                    pattern = k214Follow6;
+                    m_patternVar2++;
                     break;
                 }
                 if (m_inputX == -facing) {
                     StartPattern();
-                    pattern = 0x108;
-                    unk313c++;
+                    pattern = k214Follow6;
+                    m_patternVar2++;
                     facing = -facing;
                     break;
                 }
@@ -5394,20 +5394,20 @@ void CMishio::UpdatePattern()
             if (m_inputY == 1) {
                 if (m_inputX == 0) {
                     StartPattern();
-                    pattern = 0x10a;
-                    unk313c++;
+                    pattern = k214Follow2;
+                    m_patternVar2++;
                     break;
                 }
                 if (m_inputX == facing) {
                     StartPattern();
-                    pattern = 0x109;
-                    unk313c++;
+                    pattern = k214Follow3;
+                    m_patternVar2++;
                     break;
                 }
                 if (m_inputX == -facing) {
                     StartPattern();
-                    pattern = 0x109;
-                    unk313c++;
+                    pattern = k214Follow3;
+                    m_patternVar2++;
                     facing = -facing;
                     break;
                 }
@@ -5437,31 +5437,31 @@ void CMishio::UpdatePattern()
                 frame = frame - 2;
             }
             if (frame >= x8) {
-                pattern = 7;
+                pattern = kStandUp;
                 if (m_inputY == 1) {
-                    pattern = 3;
+                    pattern = kCrouch;
                 }
                 StartPattern();
                 FaceOpponent();
             }
         }
         break;
-    case 0x12c:
+    case k236236A:
         if (frame == 0 && timer == 0) {
-            unk158 = 0;
-            unk14c = 0x78;
+            m_dashMomentum = 0;
+            m_freezeTime = 0x78;
             m_gauge = m_gauge - 0x3e8;
             FillBackground(0xb0, 3);
             l50.type = 0x44;
-            l50.unk2c = 0x13;
+            l50.sound = 0x13;
             l50.x = (double)((int)x - facing * 0x14);
             l50.y = (double)((int)y - 0x2a);
             l50.scale = 2;
-            l50.unk0 = 1;
+            l50.keep = 1;
             l50.layer = 1;
             m_game->CreateEffect((EffectDesc*)&l50);
             m_hitsLeft = 0x63;
-            unk3150 = 0;
+            m_superCounter = 0;
             StopMoving();
         }
         if (vx > 0.0) {
@@ -5470,16 +5470,16 @@ void CMishio::UpdatePattern()
                 vx = 0.0;
             }
         }
-        if (m_attackResult == 3 && unk3150 == 0) {
-            (*m_opponent)->unk14a = 0xb4;
-            unk14a = 0x5a;
-            unk3150++;
+        if (m_attackResult == 3 && m_superCounter == 0) {
+            (*m_opponent)->m_hitstop = 0xb4;
+            m_hitstop = 0x5a;
+            m_superCounter++;
         }
         if (m_attackResult == 3 && (*m_opponent)->y < 0.0 && frame < 0xa) {
             (*m_opponent)->StartPattern();
             (*m_opponent)->StopMoving();
             (*m_opponent)->y = 0.0;
-            (*m_opponent)->pattern = 0x37;
+            (*m_opponent)->pattern = kHitStandLowHeavy;
             break;
         }
         timer++;
@@ -5502,8 +5502,8 @@ void CMishio::UpdatePattern()
                 m_game->CreateEffect((EffectDesc*)&l50);
                 vx = 3.5;
             }
-            if (frame == 0xa && unk3138 < 2) {
-                unk3138++;
+            if (frame == 0xa && m_patternVar1 < 2) {
+                m_patternVar1++;
                 frame = frame - 2;
                 break;
             }
@@ -5511,40 +5511,40 @@ void CMishio::UpdatePattern()
                 frame = 0x22;
                 break;
             }
-            if (frame == 0x14 && unk313c < 2) {
+            if (frame == 0x14 && m_patternVar2 < 2) {
                 frame = 0xb;
-                unk313c++;
+                m_patternVar2++;
             }
-            if (frame == 0x1f && unk3140 < 3) {
+            if (frame == 0x1f && m_patternVar3 < 3) {
                 frame = 0x16;
-                unk3140++;
+                m_patternVar3++;
                 m_attackResult = 0;
             }
             if (frame >= x8 || frame == 0x28) {
-                pattern = 0;
+                pattern = kStand;
                 StartPattern();
-                if (unk3158 == 1) {
-                    unk3158 = 0;
+                if (m_powerUp == 1) {
+                    m_powerUp = 0;
                 }
             }
         }
         break;
-    case 0x12d:
+    case k236236B:
         if (frame == 0 && timer == 0) {
-            unk158 = 0;
-            unk14c = 0x78;
+            m_dashMomentum = 0;
+            m_freezeTime = 0x78;
             m_gauge = m_gauge - 0x7d0;
             FillBackground(0xb0, 3);
             l50.type = 0x45;
-            l50.unk2c = 5;
+            l50.sound = 5;
             l50.x = (double)((int)x - facing * 0x14);
             l50.y = (double)((int)y - 0x2a);
             l50.scale = 2;
-            l50.unk0 = 1;
+            l50.keep = 1;
             l50.layer = 1;
             m_game->CreateEffect((EffectDesc*)&l50);
             m_hitsLeft = 0x63;
-            unk3150 = 0;
+            m_superCounter = 0;
             StopMoving();
         }
         if (vx > 0.0) {
@@ -5553,16 +5553,16 @@ void CMishio::UpdatePattern()
                 vx = 0.0;
             }
         }
-        if (m_attackResult == 3 && unk3150 == 0) {
-            (*m_opponent)->unk14a = 0xb4;
-            unk14a = 0x5a;
-            unk3150++;
+        if (m_attackResult == 3 && m_superCounter == 0) {
+            (*m_opponent)->m_hitstop = 0xb4;
+            m_hitstop = 0x5a;
+            m_superCounter++;
         }
         if (m_attackResult == 3 && (*m_opponent)->y < 0.0 && frame < 0xa) {
             (*m_opponent)->StartPattern();
             (*m_opponent)->StopMoving();
             (*m_opponent)->y = 0.0;
-            (*m_opponent)->pattern = 0x37;
+            (*m_opponent)->pattern = kHitStandLowHeavy;
             break;
         }
         if (frame > 0x15 && frame < 0x1f && (WORD)Random(0, 0x64) < 0xa) {
@@ -5594,8 +5594,8 @@ void CMishio::UpdatePattern()
                 m_game->CreateEffect((EffectDesc*)&l50);
                 vx = 4.0;
             }
-            if (frame == 0xa && unk3138 < 2) {
-                unk3138++;
+            if (frame == 0xa && m_patternVar1 < 2) {
+                m_patternVar1++;
                 frame = frame - 2;
                 break;
             }
@@ -5603,61 +5603,61 @@ void CMishio::UpdatePattern()
                 frame = 0x28;
                 break;
             }
-            if (frame == 0x14 && unk313c < 3) {
+            if (frame == 0x14 && m_patternVar2 < 3) {
                 frame = 0xb;
-                unk313c++;
+                m_patternVar2++;
             }
-            if (frame == 0x1f && unk3140 < 4) {
+            if (frame == 0x1f && m_patternVar3 < 4) {
                 frame = 0x16;
-                unk3140++;
+                m_patternVar3++;
                 m_attackResult = 0;
             }
             if (frame >= x8 || frame == 0x28) {
-                pattern = 0;
+                pattern = kStand;
                 StartPattern();
-                if (unk3158 == 1) {
-                    unk3158 = 0;
+                if (m_powerUp == 1) {
+                    m_powerUp = 0;
                 }
             }
         }
         break;
-    case 0x12e:
+    case k236236C:
         if (frame == 0 && timer == 0) {
-            unk158 = 0;
-            unk14c = 0x78;
+            m_dashMomentum = 0;
+            m_freezeTime = 0x78;
             m_gauge = m_gauge - 0xbb8;
             FillBackground(0xb0, 3);
             l50.type = 0x46;
-            l50.unk2c = 0x40;
+            l50.sound = 0x40;
             l50.x = (double)((int)x - facing * 0x14);
             l50.y = (double)((int)y - 0x2a);
             l50.scale = 2;
-            l50.unk0 = 1;
+            l50.keep = 1;
             l50.layer = 1;
             m_game->CreateEffect((EffectDesc*)&l50);
             m_hitsLeft = 0x63;
-            unk3150 = 0;
+            m_superCounter = 0;
             m_playSound = 0x25;
             StopMoving();
         }
-        m_game->Unk4080c0(0xf);
+        m_game->FlashNegative(0xf);
         if (vx > 0.0) {
             vx -= 0.045;
             if (vx < 0.0) {
                 vx = 0.0;
             }
         }
-        if (m_attackResult == 3 && unk3150 == 0) {
-            (*m_opponent)->unk14a = 0xb4;
-            unk14a = 0x5a;
-            unk3150++;
-            m_game->Unk4080c0(0x5d);
+        if (m_attackResult == 3 && m_superCounter == 0) {
+            (*m_opponent)->m_hitstop = 0xb4;
+            m_hitstop = 0x5a;
+            m_superCounter++;
+            m_game->FlashNegative(0x5d);
         }
         if (m_attackResult == 3 && (*m_opponent)->y < 0.0 && frame < 0xa) {
             (*m_opponent)->StartPattern();
             (*m_opponent)->StopMoving();
             (*m_opponent)->y = 0.0;
-            (*m_opponent)->pattern = 0x37;
+            (*m_opponent)->pattern = kHitStandLowHeavy;
             break;
         }
         if (frame > 0x15 && frame < 0x1f && (WORD)Random(0, 0x64) < 0xa) {
@@ -5698,8 +5698,8 @@ void CMishio::UpdatePattern()
                 m_game->CreateEffect((EffectDesc*)&l50);
                 vx = 5.0;
             }
-            if (frame == 0xa && unk3138 < 2) {
-                unk3138++;
+            if (frame == 0xa && m_patternVar1 < 2) {
+                m_patternVar1++;
                 frame = frame - 2;
                 break;
             }
@@ -5707,38 +5707,38 @@ void CMishio::UpdatePattern()
                 frame = 0x28;
                 break;
             }
-            if (frame == 0x14 && unk313c < 3) {
+            if (frame == 0x14 && m_patternVar2 < 3) {
                 frame = 0xb;
-                unk313c++;
+                m_patternVar2++;
             }
-            if (frame == 0x1f && unk3140 < 8) {
+            if (frame == 0x1f && m_patternVar3 < 8) {
                 frame = 0x16;
-                unk3140++;
+                m_patternVar3++;
                 m_attackResult = 0;
             }
             if (frame >= x8 || frame == 0x28) {
-                pattern = 0;
+                pattern = kStand;
                 StartPattern();
-                if (unk3158 == 1) {
-                    unk3158 = 0;
+                if (m_powerUp == 1) {
+                    m_powerUp = 0;
                 }
             }
         }
         break;
-    case 0x12f:
+    case k214214A:
         if (frame == 0 && timer == 0) {
-            unk3154 = 1;
-            unk3150 = 0;
+            m_superLevel = 1;
+            m_superCounter = 0;
             StopMoving();
-            unk14c = 0x78;
+            m_freezeTime = 0x78;
             m_gauge = m_gauge - 0x3e8;
             FillBackground(0xb0, 3);
             l50.type = 0x44;
-            l50.unk2c = 0x13;
+            l50.sound = 0x13;
             l50.x = (double)((int)x - facing * 0x14);
             l50.y = (double)((int)y - 0x2a);
             l50.scale = 2;
-            l50.unk0 = 1;
+            l50.keep = 1;
             l50.layer = 1;
             m_game->CreateEffect((EffectDesc*)&l50);
         }
@@ -5746,35 +5746,35 @@ void CMishio::UpdatePattern()
             if (m_inputY == -1) {
                 if (m_inputX == 0) {
                     StartPattern();
-                    pattern = 0x132;
-                    unk3150++;
+                    pattern = k214214Follow8;
+                    m_superCounter++;
                     break;
                 }
                 if (m_inputX == facing) {
                     StartPattern();
-                    pattern = 0x133;
-                    unk3150++;
+                    pattern = k214214Follow9;
+                    m_superCounter++;
                     break;
                 }
                 if (m_inputX == -facing) {
                     StartPattern();
-                    pattern = 0x133;
+                    pattern = k214214Follow9;
                     facing = -facing;
-                    unk3150++;
+                    m_superCounter++;
                     break;
                 }
             }
             if (m_inputY == 0) {
                 if (m_inputX == facing) {
                     StartPattern();
-                    pattern = 0x134;
-                    unk3150++;
+                    pattern = k214214Follow6;
+                    m_superCounter++;
                     break;
                 }
                 if (m_inputX == -facing) {
                     StartPattern();
-                    pattern = 0x134;
-                    unk3150++;
+                    pattern = k214214Follow6;
+                    m_superCounter++;
                     facing = -facing;
                     break;
                 }
@@ -5782,20 +5782,20 @@ void CMishio::UpdatePattern()
             if (m_inputY == 1) {
                 if (m_inputX == 0) {
                     StartPattern();
-                    pattern = 0x136;
-                    unk3150++;
+                    pattern = k214214Follow2;
+                    m_superCounter++;
                     break;
                 }
                 if (m_inputX == facing) {
                     StartPattern();
-                    pattern = 0x135;
-                    unk3150++;
+                    pattern = k214214Follow3;
+                    m_superCounter++;
                     break;
                 }
                 if (m_inputX == -facing) {
                     StartPattern();
-                    pattern = 0x135;
-                    unk3150++;
+                    pattern = k214214Follow3;
+                    m_superCounter++;
                     facing = -facing;
                     break;
                 }
@@ -5818,7 +5818,7 @@ void CMishio::UpdatePattern()
                 l50.side = facing == -1;
                 m_game->CreateEffect((EffectDesc*)&l50);
                 l50.type = 0x19e;
-                l50.unk0 = 1;
+                l50.keep = 1;
                 l50.x = (double)(int)x;
                 l50.y = (double)(int)y;
                 l50.facing = facing;
@@ -5826,31 +5826,31 @@ void CMishio::UpdatePattern()
                 l50.scale = 2;
                 SpawnObject(&l50);
             }
-            if (frame == 0xb && unk3138 < 4) {
+            if (frame == 0xb && m_patternVar1 < 4) {
                 frame = frame - 2;
-                unk3138++;
+                m_patternVar1++;
             }
             if (frame >= x8) {
                 frame = 0;
-                pattern = 0x137;
+                pattern = k214214Recovery;
                 StartPattern();
             }
         }
         break;
-    case 0x130:
+    case k214214B:
         if (frame == 0 && timer == 0) {
-            unk3154 = 2;
-            unk3150 = 0;
+            m_superLevel = 2;
+            m_superCounter = 0;
             StopMoving();
-            unk14c = 0x78;
+            m_freezeTime = 0x78;
             m_gauge = m_gauge - 0x7d0;
             FillBackground(0xb0, 3);
             l50.type = 0x45;
-            l50.unk2c = 5;
+            l50.sound = 5;
             l50.x = (double)((int)x - facing * 0x14);
             l50.y = (double)((int)y - 0x2a);
             l50.scale = 2;
-            l50.unk0 = 1;
+            l50.keep = 1;
             l50.layer = 1;
             m_game->CreateEffect((EffectDesc*)&l50);
         }
@@ -5858,35 +5858,35 @@ void CMishio::UpdatePattern()
             if (m_inputY == -1) {
                 if (m_inputX == 0) {
                     StartPattern();
-                    pattern = 0x132;
-                    unk3150++;
+                    pattern = k214214Follow8;
+                    m_superCounter++;
                     break;
                 }
                 if (m_inputX == facing) {
                     StartPattern();
-                    pattern = 0x133;
-                    unk3150++;
+                    pattern = k214214Follow9;
+                    m_superCounter++;
                     break;
                 }
                 if (m_inputX == -facing) {
                     StartPattern();
-                    pattern = 0x133;
+                    pattern = k214214Follow9;
                     facing = -facing;
-                    unk3150++;
+                    m_superCounter++;
                     break;
                 }
             }
             if (m_inputY == 0) {
                 if (m_inputX == facing) {
                     StartPattern();
-                    pattern = 0x134;
-                    unk3150++;
+                    pattern = k214214Follow6;
+                    m_superCounter++;
                     break;
                 }
                 if (m_inputX == -facing) {
                     StartPattern();
-                    pattern = 0x134;
-                    unk3150++;
+                    pattern = k214214Follow6;
+                    m_superCounter++;
                     facing = -facing;
                     break;
                 }
@@ -5894,20 +5894,20 @@ void CMishio::UpdatePattern()
             if (m_inputY == 1) {
                 if (m_inputX == 0) {
                     StartPattern();
-                    pattern = 0x136;
-                    unk3150++;
+                    pattern = k214214Follow2;
+                    m_superCounter++;
                     break;
                 }
                 if (m_inputX == facing) {
                     StartPattern();
-                    pattern = 0x135;
-                    unk3150++;
+                    pattern = k214214Follow3;
+                    m_superCounter++;
                     break;
                 }
                 if (m_inputX == -facing) {
                     StartPattern();
-                    pattern = 0x135;
-                    unk3150++;
+                    pattern = k214214Follow3;
+                    m_superCounter++;
                     facing = -facing;
                     break;
                 }
@@ -5930,7 +5930,7 @@ void CMishio::UpdatePattern()
                 l50.side = facing == -1;
                 m_game->CreateEffect((EffectDesc*)&l50);
                 l50.type = 0x19e;
-                l50.unk0 = 1;
+                l50.keep = 1;
                 l50.x = (double)(int)x;
                 l50.y = (double)(int)y;
                 l50.facing = facing;
@@ -5938,32 +5938,32 @@ void CMishio::UpdatePattern()
                 l50.scale = 2;
                 SpawnObject(&l50);
             }
-            if (frame == 0xb && unk3138 < 4) {
+            if (frame == 0xb && m_patternVar1 < 4) {
                 frame = frame - 2;
-                unk3138++;
+                m_patternVar1++;
             }
             if (frame >= x8) {
                 frame = 0;
-                pattern = 0x137;
+                pattern = k214214Recovery;
                 StartPattern();
             }
         }
         break;
-    case 0x131:
-        m_game->Unk4080c0(0xf);
+    case k214214C:
+        m_game->FlashNegative(0xf);
         if (frame == 0 && timer == 0) {
-            unk3154 = 3;
-            unk3150 = 0;
+            m_superLevel = 3;
+            m_superCounter = 0;
             StopMoving();
-            unk14c = 0x78;
+            m_freezeTime = 0x78;
             m_gauge = m_gauge - 0xbb8;
             FillBackground(0xb0, 3);
             l50.type = 0x46;
-            l50.unk2c = 0x40;
+            l50.sound = 0x40;
             l50.x = (double)((int)x - facing * 0x14);
             l50.y = (double)((int)y - 0x2a);
             l50.scale = 2;
-            l50.unk0 = 1;
+            l50.keep = 1;
             l50.layer = 1;
             m_game->CreateEffect((EffectDesc*)&l50);
             m_playSound = 0x25;
@@ -5972,35 +5972,35 @@ void CMishio::UpdatePattern()
             if (m_inputY == -1) {
                 if (m_inputX == 0) {
                     StartPattern();
-                    pattern = 0x132;
-                    unk3150++;
+                    pattern = k214214Follow8;
+                    m_superCounter++;
                     break;
                 }
                 if (m_inputX == facing) {
                     StartPattern();
-                    pattern = 0x133;
-                    unk3150++;
+                    pattern = k214214Follow9;
+                    m_superCounter++;
                     break;
                 }
                 if (m_inputX == -facing) {
                     StartPattern();
-                    pattern = 0x133;
+                    pattern = k214214Follow9;
                     facing = -facing;
-                    unk3150++;
+                    m_superCounter++;
                     break;
                 }
             }
             if (m_inputY == 0) {
                 if (m_inputX == facing) {
                     StartPattern();
-                    pattern = 0x134;
-                    unk3150++;
+                    pattern = k214214Follow6;
+                    m_superCounter++;
                     break;
                 }
                 if (m_inputX == -facing) {
                     StartPattern();
-                    pattern = 0x134;
-                    unk3150++;
+                    pattern = k214214Follow6;
+                    m_superCounter++;
                     facing = -facing;
                     break;
                 }
@@ -6008,20 +6008,20 @@ void CMishio::UpdatePattern()
             if (m_inputY == 1) {
                 if (m_inputX == 0) {
                     StartPattern();
-                    pattern = 0x136;
-                    unk3150++;
+                    pattern = k214214Follow2;
+                    m_superCounter++;
                     break;
                 }
                 if (m_inputX == facing) {
                     StartPattern();
-                    pattern = 0x135;
-                    unk3150++;
+                    pattern = k214214Follow3;
+                    m_superCounter++;
                     break;
                 }
                 if (m_inputX == -facing) {
                     StartPattern();
-                    pattern = 0x135;
-                    unk3150++;
+                    pattern = k214214Follow3;
+                    m_superCounter++;
                     facing = -facing;
                     break;
                 }
@@ -6035,7 +6035,7 @@ void CMishio::UpdatePattern()
             if (frame == 9 && timer == 0) {
                 m_hitsLeft = 1;
                 ObjBase::SetVelocity(-45.0, 2.2);
-                unk13c = 0x2d;
+                m_invulTime = 0x2d;
                 m_playVoice = 0xa;
                 l50.type = 0x1f;
                 l50.x = (double)(int)x;
@@ -6045,7 +6045,7 @@ void CMishio::UpdatePattern()
                 l50.side = facing == -1;
                 m_game->CreateEffect((EffectDesc*)&l50);
                 l50.type = 0x19e;
-                l50.unk0 = 1;
+                l50.keep = 1;
                 l50.x = (double)(int)x;
                 l50.y = (double)(int)y;
                 l50.facing = facing;
@@ -6053,58 +6053,58 @@ void CMishio::UpdatePattern()
                 l50.scale = 2;
                 SpawnObject(&l50);
             }
-            if (frame == 0xb && unk3138 < 4) {
+            if (frame == 0xb && m_patternVar1 < 4) {
                 frame = frame - 2;
-                unk3138++;
+                m_patternVar1++;
             }
             if (frame >= x8) {
                 frame = 0;
-                pattern = 0x137;
+                pattern = k214214Recovery;
                 StartPattern();
             }
         }
         break;
-    case 0x132:
-        if (unk3154 == 3) {
-            m_game->Unk4080c0(0xf);
+    case k214214Follow8:
+        if (m_superLevel == 3) {
+            m_game->FlashNegative(0xf);
         }
         if (frame == 0 && timer == 0) {
-            unk158 = 0;
+            m_dashMomentum = 0;
             StopMoving();
         }
-        if (frame > 6 && frame < 9 && unk3150 < unk3154 + 1 && (m_pressA == 1 || m_pressB == 1 || m_pressC == 1 || m_pressD == 1)) {
+        if (frame > 6 && frame < 9 && m_superCounter < m_superLevel + 1 && (m_pressA == 1 || m_pressB == 1 || m_pressC == 1 || m_pressD == 1)) {
             if (m_inputY == -1) {
                 if (m_inputX == 0) {
                     StartPattern();
-                    pattern = 0x132;
-                    unk3150++;
+                    pattern = k214214Follow8;
+                    m_superCounter++;
                     break;
                 }
                 if (m_inputX == facing) {
                     StartPattern();
-                    pattern = 0x133;
-                    unk3150++;
+                    pattern = k214214Follow9;
+                    m_superCounter++;
                     break;
                 }
                 if (m_inputX == -facing) {
                     StartPattern();
-                    pattern = 0x133;
+                    pattern = k214214Follow9;
                     facing = -facing;
-                    unk3150++;
+                    m_superCounter++;
                     break;
                 }
             }
             if (m_inputY == 0) {
                 if (m_inputX == facing) {
                     StartPattern();
-                    pattern = 0x134;
-                    unk3150++;
+                    pattern = k214214Follow6;
+                    m_superCounter++;
                     break;
                 }
                 if (m_inputX == -facing) {
                     StartPattern();
-                    pattern = 0x134;
-                    unk3150++;
+                    pattern = k214214Follow6;
+                    m_superCounter++;
                     facing = -facing;
                     break;
                 }
@@ -6112,20 +6112,20 @@ void CMishio::UpdatePattern()
             if (m_inputY == 1) {
                 if (m_inputX == 0) {
                     StartPattern();
-                    pattern = 0x136;
-                    unk3150++;
+                    pattern = k214214Follow2;
+                    m_superCounter++;
                     break;
                 }
                 if (m_inputX == facing) {
                     StartPattern();
-                    pattern = 0x135;
-                    unk3150++;
+                    pattern = k214214Follow3;
+                    m_superCounter++;
                     break;
                 }
                 if (m_inputX == -facing) {
                     StartPattern();
-                    pattern = 0x135;
-                    unk3150++;
+                    pattern = k214214Follow3;
+                    m_superCounter++;
                     facing = -facing;
                     break;
                 }
@@ -6141,7 +6141,7 @@ void CMishio::UpdatePattern()
                 m_hitsLeft = 1;
                 ObjBase::SetVelocity(-90.0, 2.2);
                 l50.type = 0x19c;
-                l50.unk0 = 1;
+                l50.keep = 1;
                 l50.x = (double)(int)x;
                 l50.y = (double)(int)y;
                 l50.facing = facing;
@@ -6149,64 +6149,64 @@ void CMishio::UpdatePattern()
                 l50.scale = 2;
                 SpawnObject(&l50);
             }
-            if (frame == 4 && unk3138 < 0) {
-                unk3138++;
+            if (frame == 4 && m_patternVar1 < 0) {
+                m_patternVar1++;
                 frame = frame - 2;
                 break;
             }
-            if (frame == 9 && unk3138 < 4) {
-                unk3138++;
+            if (frame == 9 && m_patternVar1 < 4) {
+                m_patternVar1++;
                 frame = frame - 2;
                 break;
             }
             if (frame >= x8) {
-                pattern = 0x137;
+                pattern = k214214Recovery;
                 frame = 0;
-                unk313c++;
+                m_patternVar2++;
             }
         }
         break;
-    case 0x133:
-        if (unk3154 == 3) {
-            m_game->Unk4080c0(0xf);
+    case k214214Follow9:
+        if (m_superLevel == 3) {
+            m_game->FlashNegative(0xf);
         }
         if (frame == 0 && timer == 0) {
-            unk158 = 0;
+            m_dashMomentum = 0;
             StopMoving();
         }
-        if (frame > 6 && frame < 9 && unk3150 < unk3154 + 1 && (m_pressA == 1 || m_pressB == 1 || m_pressC == 1 || m_pressD == 1)) {
+        if (frame > 6 && frame < 9 && m_superCounter < m_superLevel + 1 && (m_pressA == 1 || m_pressB == 1 || m_pressC == 1 || m_pressD == 1)) {
             if (m_inputY == -1) {
                 if (m_inputX == 0) {
                     StartPattern();
-                    pattern = 0x132;
-                    unk3150++;
+                    pattern = k214214Follow8;
+                    m_superCounter++;
                     break;
                 }
                 if (m_inputX == facing) {
                     StartPattern();
-                    pattern = 0x133;
-                    unk3150++;
+                    pattern = k214214Follow9;
+                    m_superCounter++;
                     break;
                 }
                 if (m_inputX == -facing) {
                     StartPattern();
-                    pattern = 0x133;
+                    pattern = k214214Follow9;
                     facing = -facing;
-                    unk3150++;
+                    m_superCounter++;
                     break;
                 }
             }
             if (m_inputY == 0) {
                 if (m_inputX == facing) {
                     StartPattern();
-                    pattern = 0x134;
-                    unk3150++;
+                    pattern = k214214Follow6;
+                    m_superCounter++;
                     break;
                 }
                 if (m_inputX == -facing) {
                     StartPattern();
-                    pattern = 0x134;
-                    unk3150++;
+                    pattern = k214214Follow6;
+                    m_superCounter++;
                     facing = -facing;
                     break;
                 }
@@ -6214,20 +6214,20 @@ void CMishio::UpdatePattern()
             if (m_inputY == 1) {
                 if (m_inputX == 0) {
                     StartPattern();
-                    pattern = 0x136;
-                    unk3150++;
+                    pattern = k214214Follow2;
+                    m_superCounter++;
                     break;
                 }
                 if (m_inputX == facing) {
                     StartPattern();
-                    pattern = 0x135;
-                    unk3150++;
+                    pattern = k214214Follow3;
+                    m_superCounter++;
                     break;
                 }
                 if (m_inputX == -facing) {
                     StartPattern();
-                    pattern = 0x135;
-                    unk3150++;
+                    pattern = k214214Follow3;
+                    m_superCounter++;
                     facing = -facing;
                     break;
                 }
@@ -6243,7 +6243,7 @@ void CMishio::UpdatePattern()
                 m_hitsLeft = 1;
                 ObjBase::SetVelocity(-45.0, 2.2);
                 l50.type = 0x19e;
-                l50.unk0 = 1;
+                l50.keep = 1;
                 l50.x = (double)(int)x;
                 l50.y = (double)(int)y;
                 l50.facing = facing;
@@ -6251,64 +6251,64 @@ void CMishio::UpdatePattern()
                 l50.scale = 2;
                 SpawnObject(&l50);
             }
-            if (frame == 4 && unk3138 < 0) {
-                unk3138++;
+            if (frame == 4 && m_patternVar1 < 0) {
+                m_patternVar1++;
                 frame = frame - 2;
                 break;
             }
-            if (frame == 9 && unk3138 < 4) {
-                unk3138++;
+            if (frame == 9 && m_patternVar1 < 4) {
+                m_patternVar1++;
                 frame = frame - 2;
                 break;
             }
             if (frame >= x8) {
-                pattern = 0x137;
+                pattern = k214214Recovery;
                 frame = 0;
-                unk313c++;
+                m_patternVar2++;
             }
         }
         break;
-    case 0x134:
-        if (unk3154 == 3) {
-            m_game->Unk4080c0(0xf);
+    case k214214Follow6:
+        if (m_superLevel == 3) {
+            m_game->FlashNegative(0xf);
         }
         if (frame == 0 && timer == 0) {
-            unk158 = 0;
+            m_dashMomentum = 0;
             StopMoving();
         }
-        if (frame > 6 && frame < 9 && unk3150 < unk3154 + 1 && (m_pressA == 1 || m_pressB == 1 || m_pressC == 1 || m_pressD == 1)) {
+        if (frame > 6 && frame < 9 && m_superCounter < m_superLevel + 1 && (m_pressA == 1 || m_pressB == 1 || m_pressC == 1 || m_pressD == 1)) {
             if (m_inputY == -1) {
                 if (m_inputX == 0) {
                     StartPattern();
-                    pattern = 0x132;
-                    unk3150++;
+                    pattern = k214214Follow8;
+                    m_superCounter++;
                     break;
                 }
                 if (m_inputX == facing) {
                     StartPattern();
-                    pattern = 0x133;
-                    unk3150++;
+                    pattern = k214214Follow9;
+                    m_superCounter++;
                     break;
                 }
                 if (m_inputX == -facing) {
                     StartPattern();
-                    pattern = 0x133;
+                    pattern = k214214Follow9;
                     facing = -facing;
-                    unk3150++;
+                    m_superCounter++;
                     break;
                 }
             }
             if (m_inputY == 0) {
                 if (m_inputX == facing) {
                     StartPattern();
-                    pattern = 0x134;
-                    unk3150++;
+                    pattern = k214214Follow6;
+                    m_superCounter++;
                     break;
                 }
                 if (m_inputX == -facing) {
                     StartPattern();
-                    pattern = 0x134;
-                    unk3150++;
+                    pattern = k214214Follow6;
+                    m_superCounter++;
                     facing = -facing;
                     break;
                 }
@@ -6316,20 +6316,20 @@ void CMishio::UpdatePattern()
             if (m_inputY == 1) {
                 if (m_inputX == 0) {
                     StartPattern();
-                    pattern = 0x136;
-                    unk3150++;
+                    pattern = k214214Follow2;
+                    m_superCounter++;
                     break;
                 }
                 if (m_inputX == facing) {
                     StartPattern();
-                    pattern = 0x135;
-                    unk3150++;
+                    pattern = k214214Follow3;
+                    m_superCounter++;
                     break;
                 }
                 if (m_inputX == -facing) {
                     StartPattern();
-                    pattern = 0x135;
-                    unk3150++;
+                    pattern = k214214Follow3;
+                    m_superCounter++;
                     facing = -facing;
                     break;
                 }
@@ -6345,7 +6345,7 @@ void CMishio::UpdatePattern()
                 m_hitsLeft = 1;
                 ObjBase::SetVelocity(0.0, 2.2);
                 l50.type = 0x19d;
-                l50.unk0 = 1;
+                l50.keep = 1;
                 l50.x = (double)(int)x;
                 l50.y = (double)(int)y;
                 l50.facing = facing;
@@ -6353,72 +6353,72 @@ void CMishio::UpdatePattern()
                 l50.scale = 2;
                 SpawnObject(&l50);
             }
-            if (frame == 4 && unk3138 < 0) {
-                unk3138++;
+            if (frame == 4 && m_patternVar1 < 0) {
+                m_patternVar1++;
                 frame = frame - 2;
                 break;
             }
-            if (frame == 9 && unk3138 < 4) {
-                unk3138++;
+            if (frame == 9 && m_patternVar1 < 4) {
+                m_patternVar1++;
                 frame = frame - 2;
                 break;
             }
             if (frame >= x8) {
-                pattern = 0x137;
+                pattern = k214214Recovery;
                 frame = 0;
-                unk313c++;
+                m_patternVar2++;
             }
         }
         break;
-    case 0x135:
-        if (unk3154 == 3) {
-            m_game->Unk4080c0(0xf);
+    case k214214Follow3:
+        if (m_superLevel == 3) {
+            m_game->FlashNegative(0xf);
         }
         if (y + vy > 0.0) {
             vy = 0.0;
             y = 0.0;
             frame = 7;
             timer = 0;
-            pattern = 0x137;
+            pattern = k214214Recovery;
             break;
         }
         if (frame == 0 && timer == 0) {
-            unk158 = 0;
+            m_dashMomentum = 0;
             StopMoving();
         }
-        if (frame > 7 && frame < 0xa && unk3150 < unk3154 + 1 && (m_pressA == 1 || m_pressB == 1 || m_pressC == 1 || m_pressD == 1)) {
+        if (frame > 7 && frame < 0xa && m_superCounter < m_superLevel + 1 && (m_pressA == 1 || m_pressB == 1 || m_pressC == 1 || m_pressD == 1)) {
             if (m_inputY == -1) {
                 if (m_inputX == 0) {
                     StartPattern();
-                    pattern = 0x132;
-                    unk3150++;
+                    pattern = k214214Follow8;
+                    m_superCounter++;
                     break;
                 }
                 if (m_inputX == facing) {
                     StartPattern();
-                    pattern = 0x133;
-                    unk3150++;
+                    pattern = k214214Follow9;
+                    m_superCounter++;
                     break;
                 }
                 if (m_inputX == -facing) {
                     StartPattern();
-                    pattern = 0x133;
+                    pattern = k214214Follow9;
                     facing = -facing;
-                    unk3150++;
+                    m_superCounter++;
                     break;
                 }
             }
             if (m_inputY == 0) {
                 if (m_inputX == facing) {
                     StartPattern();
-                    pattern = 0x134;
-                    unk3150++;
+                    pattern = k214214Follow6;
+                    m_superCounter++;
                     break;
                 }
                 if (m_inputX == -facing) {
                     StartPattern();
-                    pattern = 0x134;
-                    unk3150++;
+                    pattern = k214214Follow6;
+                    m_superCounter++;
                     facing = -facing;
                     break;
                 }
@@ -6426,20 +6426,20 @@ void CMishio::UpdatePattern()
             if (m_inputY == 1) {
                 if (m_inputX == 0) {
                     StartPattern();
-                    pattern = 0x136;
-                    unk3150++;
+                    pattern = k214214Follow2;
+                    m_superCounter++;
                     break;
                 }
                 if (m_inputX == facing) {
                     StartPattern();
-                    pattern = 0x135;
-                    unk3150++;
+                    pattern = k214214Follow3;
+                    m_superCounter++;
                     break;
                 }
                 if (m_inputX == -facing) {
                     StartPattern();
-                    pattern = 0x135;
-                    unk3150++;
+                    pattern = k214214Follow3;
+                    m_superCounter++;
                     facing = -facing;
                     break;
                 }
@@ -6458,77 +6458,77 @@ void CMishio::UpdatePattern()
                 l50.x = (double)(int)x;
                 l50.y = (double)(int)y;
                 l50.facing = facing;
-                l50.unk0 = 1;
+                l50.keep = 1;
                 l50.layer = 1;
                 l50.scale = 2;
                 SpawnObject(&l50);
             }
-            if (frame == 4 && unk3138 < 0) {
-                unk3138++;
+            if (frame == 4 && m_patternVar1 < 0) {
+                m_patternVar1++;
                 frame = frame - 2;
                 break;
             }
-            if (frame == 0xa && unk3138 < 4) {
-                unk3138++;
+            if (frame == 0xa && m_patternVar1 < 4) {
+                m_patternVar1++;
                 frame = frame - 2;
                 break;
             }
             if (frame >= x8) {
-                pattern = 0x137;
+                pattern = k214214Recovery;
                 frame = 0;
-                unk313c++;
+                m_patternVar2++;
             }
         }
         break;
-    case 0x136:
-        if (unk3154 == 3) {
-            m_game->Unk4080c0(0xf);
+    case k214214Follow2:
+        if (m_superLevel == 3) {
+            m_game->FlashNegative(0xf);
         }
         if (y + vy > 0.0) {
             vy = 0.0;
             y = 0.0;
             frame = 7;
             timer = 0;
-            pattern = 0x137;
+            pattern = k214214Recovery;
             break;
         }
         if (frame == 0 && timer == 0) {
-            unk158 = 0;
+            m_dashMomentum = 0;
             StopMoving();
         }
-        if (frame > 7 && frame < 0xa && unk3150 < unk3154 + 1 && (m_pressA == 1 || m_pressB == 1 || m_pressC == 1 || m_pressD == 1)) {
+        if (frame > 7 && frame < 0xa && m_superCounter < m_superLevel + 1 && (m_pressA == 1 || m_pressB == 1 || m_pressC == 1 || m_pressD == 1)) {
             if (m_inputY == -1) {
                 if (m_inputX == 0) {
                     StartPattern();
-                    pattern = 0x132;
-                    unk3150++;
+                    pattern = k214214Follow8;
+                    m_superCounter++;
                     break;
                 }
                 if (m_inputX == facing) {
                     StartPattern();
-                    pattern = 0x133;
-                    unk3150++;
+                    pattern = k214214Follow9;
+                    m_superCounter++;
                     break;
                 }
                 if (m_inputX == -facing) {
                     StartPattern();
-                    pattern = 0x133;
+                    pattern = k214214Follow9;
                     facing = -facing;
-                    unk3150++;
+                    m_superCounter++;
                     break;
                 }
             }
             if (m_inputY == 0) {
                 if (m_inputX == facing) {
                     StartPattern();
-                    pattern = 0x134;
-                    unk3150++;
+                    pattern = k214214Follow6;
+                    m_superCounter++;
                     break;
                 }
                 if (m_inputX == -facing) {
                     StartPattern();
-                    pattern = 0x134;
-                    unk3150++;
+                    pattern = k214214Follow6;
+                    m_superCounter++;
                     facing = -facing;
                     break;
                 }
@@ -6536,20 +6536,20 @@ void CMishio::UpdatePattern()
             if (m_inputY == 1) {
                 if (m_inputX == 0) {
                     StartPattern();
-                    pattern = 0x136;
-                    unk3150++;
+                    pattern = k214214Follow2;
+                    m_superCounter++;
                     break;
                 }
                 if (m_inputX == facing) {
                     StartPattern();
-                    pattern = 0x135;
-                    unk3150++;
+                    pattern = k214214Follow3;
+                    m_superCounter++;
                     break;
                 }
                 if (m_inputX == -facing) {
                     StartPattern();
-                    pattern = 0x135;
-                    unk3150++;
+                    pattern = k214214Follow3;
+                    m_superCounter++;
                     facing = -facing;
                     break;
                 }
@@ -6569,71 +6569,71 @@ void CMishio::UpdatePattern()
                 l50.y = (double)(int)y;
                 l50.facing = facing;
                 l50.layer = 1;
-                l50.unk0 = 1;
+                l50.keep = 1;
                 l50.scale = 2;
                 SpawnObject(&l50);
             }
-            if (frame == 4 && unk3138 < 0) {
-                unk3138++;
+            if (frame == 4 && m_patternVar1 < 0) {
+                m_patternVar1++;
                 frame = frame - 2;
                 break;
             }
-            if (frame == 0xa && unk3138 < 4) {
-                unk3138++;
+            if (frame == 0xa && m_patternVar1 < 4) {
+                m_patternVar1++;
                 frame = frame - 2;
                 break;
             }
             if (frame >= x8) {
-                pattern = 0x137;
+                pattern = k214214Recovery;
                 frame = 0;
-                unk313c++;
+                m_patternVar2++;
             }
         }
         break;
-    case 0x137:
-        if (unk3154 == 3) {
-            m_game->Unk4080c0(0xf);
+    case k214214Recovery:
+        if (m_superLevel == 3) {
+            m_game->FlashNegative(0xf);
         }
-        if (unk3140 == 0) {
+        if (m_patternVar3 == 0) {
             vx *= 0.5;
             if (vy < 0.0) {
                 vy *= 0.75;
             }
-            unk3140++;
+            m_patternVar3++;
         }
-        if (unk3150 < unk3154 + 1 && frame < 5 && (m_pressA == 1 || m_pressB == 1 || m_pressC == 1 || m_pressD == 1)) {
+        if (m_superCounter < m_superLevel + 1 && frame < 5 && (m_pressA == 1 || m_pressB == 1 || m_pressC == 1 || m_pressD == 1)) {
             if (m_inputY == -1) {
                 if (m_inputX == 0) {
                     StartPattern();
-                    pattern = 0x132;
-                    unk3150++;
+                    pattern = k214214Follow8;
+                    m_superCounter++;
                     break;
                 }
                 if (m_inputX == facing) {
                     StartPattern();
-                    pattern = 0x133;
-                    unk3150++;
+                    pattern = k214214Follow9;
+                    m_superCounter++;
                     break;
                 }
                 if (m_inputX == -facing) {
                     StartPattern();
-                    pattern = 0x133;
+                    pattern = k214214Follow9;
                     facing = -facing;
-                    unk3150++;
+                    m_superCounter++;
                     break;
                 }
             }
             if (m_inputY == 0) {
                 if (m_inputX == facing) {
                     StartPattern();
-                    pattern = 0x134;
-                    unk3150++;
+                    pattern = k214214Follow6;
+                    m_superCounter++;
                     break;
                 }
                 if (m_inputX == -facing) {
                     StartPattern();
-                    pattern = 0x134;
-                    unk3150++;
+                    pattern = k214214Follow6;
+                    m_superCounter++;
                     facing = -facing;
                     break;
                 }
@@ -6641,20 +6641,20 @@ void CMishio::UpdatePattern()
             if (m_inputY == 1) {
                 if (m_inputX == 0) {
                     StartPattern();
-                    pattern = 0x136;
-                    unk3150++;
+                    pattern = k214214Follow2;
+                    m_superCounter++;
                     break;
                 }
                 if (m_inputX == facing) {
                     StartPattern();
-                    pattern = 0x135;
-                    unk3150++;
+                    pattern = k214214Follow3;
+                    m_superCounter++;
                     break;
                 }
                 if (m_inputX == -facing) {
                     StartPattern();
-                    pattern = 0x135;
-                    unk3150++;
+                    pattern = k214214Follow3;
+                    m_superCounter++;
                     facing = -facing;
                     break;
                 }
@@ -6684,34 +6684,34 @@ void CMishio::UpdatePattern()
                 frame = frame - 2;
             }
             if (frame >= x8) {
-                pattern = 7;
+                pattern = kStandUp;
                 if (m_inputY == 1) {
-                    pattern = 3;
+                    pattern = kCrouch;
                 }
                 StartPattern();
                 FaceOpponent();
-                if (unk3158 == 1) {
-                    unk3158 = 0;
+                if (m_powerUp == 1) {
+                    m_powerUp = 0;
                 }
             }
         }
         break;
-    case 0x138:
+    case k641236A:
         if (frame == 0 && timer == 0) {
             StopMoving();
-            unk158 = 0;
+            m_dashMomentum = 0;
         }
         if (frame == 2 && timer == 0) {
-            unk158 = 0;
-            unk14c = 0x78;
+            m_dashMomentum = 0;
+            m_freezeTime = 0x78;
             m_gauge = m_gauge - 0x3e8;
             FillBackground(0xb0, 3);
             l50.type = 0x44;
-            l50.unk2c = 0x13;
+            l50.sound = 0x13;
             l50.x = (double)((int)x + facing * 0x43);
             l50.y = (double)((int)y - 0x29);
             l50.scale = 2;
-            l50.unk0 = 1;
+            l50.keep = 1;
             l50.layer = 1;
             m_game->CreateEffect((EffectDesc*)&l50);
             StopMoving();
@@ -6726,7 +6726,7 @@ void CMishio::UpdatePattern()
                 l50.x = (double)((int)x + facing * 0xf);
                 l50.y = (double)((int)y - 0x94);
                 l50.scale = 2;
-                l50.unk0 = 1;
+                l50.keep = 1;
                 l50.layer = 1;
                 l50.facing = facing;
                 SpawnObject(&l50);
@@ -6734,25 +6734,25 @@ void CMishio::UpdatePattern()
                 l50.x = (double)((int)x + facing * 0xf);
                 l50.y = (double)((int)y - 0x94);
                 l50.scale = 2;
-                l50.unk0 = 1;
+                l50.keep = 1;
                 l50.layer = 1;
                 l50.facing = facing;
                 SpawnObject(&l50);
             }
             if (frame == 0xa) {
-                if (unk3138 > 8) {
+                if (m_patternVar1 > 8) {
                     l50.type = 0x1a5;
                     l50.x = (double)((int)x + facing * 0xf);
                     l50.y = (double)((int)y - 0x94);
                     l50.scale = 2;
-                    l50.unk0 = 1;
+                    l50.keep = 1;
                     l50.layer = 1;
                     l50.facing = facing;
                     SpawnObject(&l50);
                     break;
                 }
                 if (m_holdA > 0) {
-                    unk3138++;
+                    m_patternVar1++;
                     frame = frame - 4;
                 }
             }
@@ -6761,56 +6761,56 @@ void CMishio::UpdatePattern()
             }
             if (frame == 0xf) {
                 l50.type = 0x1a2;
-                if (unk3138 > 8) {
+                if (m_patternVar1 > 8) {
                     l50.type = 0x1ae;
                 }
                 l50.x = (double)((int)x + facing * 0x68);
                 l50.y = (double)((int)y - 0x32);
-                if (unk313c == 1) {
+                if (m_patternVar2 == 1) {
                     l50.y = (double)((int)y - 0x3c);
                 }
-                if (unk313c == 2) {
+                if (m_patternVar2 == 2) {
                     l50.y = (double)((int)y - 0x28);
                 }
                 l50.scale = 2;
-                l50.unk0 = 1;
+                l50.keep = 1;
                 l50.layer = 1;
                 l50.facing = facing;
                 SpawnObject(&l50);
             }
-            if (frame == 0x10 && unk313c < 2) {
+            if (frame == 0x10 && m_patternVar2 < 2) {
                 frame = frame - 2;
-                unk313c++;
+                m_patternVar2++;
             }
-            if (frame == 0x12 && unk313c < 6) {
-                unk313c++;
+            if (frame == 0x12 && m_patternVar2 < 6) {
+                m_patternVar2++;
                 frame = frame - 2;
             }
             if (frame >= x8) {
-                pattern = 0;
+                pattern = kStand;
                 StartPattern();
-                if (unk3158 == 2) {
-                    unk3158 = 0;
+                if (m_powerUp == 2) {
+                    m_powerUp = 0;
                 }
             }
         }
         break;
-    case 0x139:
+    case k641236B:
         if (frame == 0 && timer == 0) {
             StopMoving();
-            unk158 = 0;
+            m_dashMomentum = 0;
         }
         if (frame == 2 && timer == 0) {
-            unk158 = 0;
-            unk14c = 0x78;
+            m_dashMomentum = 0;
+            m_freezeTime = 0x78;
             m_gauge = m_gauge - 0x7d0;
             FillBackground(0xb0, 3);
             l50.type = 0x45;
-            l50.unk2c = 5;
+            l50.sound = 5;
             l50.x = (double)((int)x + facing * 0x43);
             l50.y = (double)((int)y - 0x29);
             l50.scale = 2;
-            l50.unk0 = 1;
+            l50.keep = 1;
             l50.layer = 1;
             m_game->CreateEffect((EffectDesc*)&l50);
             StopMoving();
@@ -6820,13 +6820,13 @@ void CMishio::UpdatePattern()
             timer = 0;
             frame++;
             if (frame == 6) {
-                unk13c = 0xf;
+                m_invulTime = 0xf;
                 m_playVoice = 6;
                 l50.type = 0x1a1;
                 l50.x = (double)((int)x + facing * 0xf);
                 l50.y = (double)((int)y - 0x94);
                 l50.scale = 2;
-                l50.unk0 = 1;
+                l50.keep = 1;
                 l50.layer = 1;
                 l50.facing = facing;
                 SpawnObject(&l50);
@@ -6834,25 +6834,25 @@ void CMishio::UpdatePattern()
                 l50.x = (double)((int)x + facing * 0xf);
                 l50.y = (double)((int)y - 0x94);
                 l50.scale = 2;
-                l50.unk0 = 1;
+                l50.keep = 1;
                 l50.layer = 1;
                 l50.facing = facing;
                 SpawnObject(&l50);
             }
             if (frame == 0xa) {
-                if (unk3138 > 8) {
+                if (m_patternVar1 > 8) {
                     l50.type = 0x1a5;
                     l50.x = (double)((int)x + facing * 0xf);
                     l50.y = (double)((int)y - 0x94);
                     l50.scale = 2;
-                    l50.unk0 = 1;
+                    l50.keep = 1;
                     l50.layer = 1;
                     l50.facing = facing;
                     SpawnObject(&l50);
                     break;
                 }
                 if (m_holdB > 0) {
-                    unk3138++;
+                    m_patternVar1++;
                     frame = frame - 4;
                 }
             }
@@ -6861,59 +6861,59 @@ void CMishio::UpdatePattern()
             }
             if (frame == 0xf) {
                 l50.type = 0x1a3;
-                if (unk3138 > 8) {
+                if (m_patternVar1 > 8) {
                     l50.type = 0x1af;
                 }
                 l50.x = (double)((int)x + facing * 0x68);
                 l50.y = (double)((int)y - 0x32);
-                if (unk313c == 1) {
+                if (m_patternVar2 == 1) {
                     l50.y = (double)((int)y - 0x3c);
                 }
-                if (unk313c == 2) {
+                if (m_patternVar2 == 2) {
                     l50.y = (double)((int)y - 0x28);
                 }
                 l50.scale = 2;
-                l50.unk0 = 1;
+                l50.keep = 1;
                 l50.layer = 1;
                 l50.facing = facing;
                 SpawnObject(&l50);
             }
-            if (frame == 0x10 && unk313c < 2) {
+            if (frame == 0x10 && m_patternVar2 < 2) {
                 frame = frame - 2;
-                unk313c++;
+                m_patternVar2++;
             }
-            if (frame == 0x12 && unk313c < 6) {
-                unk313c++;
+            if (frame == 0x12 && m_patternVar2 < 6) {
+                m_patternVar2++;
                 frame = frame - 2;
             }
             if (frame >= x8) {
-                pattern = 0;
+                pattern = kStand;
                 StartPattern();
-                if (unk3158 == 2) {
-                    unk3158 = 0;
+                if (m_powerUp == 2) {
+                    m_powerUp = 0;
                 }
             }
         }
         break;
-    case 0x13a:
+    case k641236C:
         if (frame > 2) {
-            m_game->Unk4080c0(0xf);
+            m_game->FlashNegative(0xf);
         }
         if (frame == 0 && timer == 0) {
             StopMoving();
-            unk158 = 0;
+            m_dashMomentum = 0;
         }
         if (frame == 2 && timer == 0) {
-            unk158 = 0;
-            unk14c = 0x78;
+            m_dashMomentum = 0;
+            m_freezeTime = 0x78;
             m_gauge = m_gauge - 0xbb8;
             FillBackground(0xb0, 3);
             l50.type = 0x46;
-            l50.unk2c = 0x40;
+            l50.sound = 0x40;
             l50.x = (double)((int)x + facing * 0x43);
             l50.y = (double)((int)y - 0x29);
             l50.scale = 2;
-            l50.unk0 = 1;
+            l50.keep = 1;
             l50.layer = 1;
             m_game->CreateEffect((EffectDesc*)&l50);
             m_playSound = 0x25;
@@ -6924,13 +6924,13 @@ void CMishio::UpdatePattern()
             timer = 0;
             frame++;
             if (frame == 6) {
-                unk13c = 0x1e;
+                m_invulTime = 0x1e;
                 m_playVoice = 6;
                 l50.type = 0x1a1;
                 l50.x = (double)((int)x + facing * 0xf);
                 l50.y = (double)((int)y - 0x94);
                 l50.scale = 2;
-                l50.unk0 = 1;
+                l50.keep = 1;
                 l50.layer = 1;
                 l50.facing = facing;
                 SpawnObject(&l50);
@@ -6938,25 +6938,25 @@ void CMishio::UpdatePattern()
                 l50.x = (double)((int)x + facing * 0xf);
                 l50.y = (double)((int)y - 0x94);
                 l50.scale = 2;
-                l50.unk0 = 1;
+                l50.keep = 1;
                 l50.layer = 1;
                 l50.facing = facing;
                 SpawnObject(&l50);
             }
             if (frame == 0xa) {
-                if (unk3138 > 8) {
+                if (m_patternVar1 > 8) {
                     l50.type = 0x1a5;
                     l50.x = (double)((int)x + facing * 0xf);
                     l50.y = (double)((int)y - 0x94);
                     l50.scale = 2;
-                    l50.unk0 = 1;
+                    l50.keep = 1;
                     l50.layer = 1;
                     l50.facing = facing;
                     SpawnObject(&l50);
                     break;
                 }
                 if (m_holdC > 0) {
-                    unk3138++;
+                    m_patternVar1++;
                     frame = frame - 4;
                 }
             }
@@ -6965,60 +6965,60 @@ void CMishio::UpdatePattern()
             }
             if (frame == 0xf) {
                 l50.type = 0x1a4;
-                if (unk3138 > 8) {
+                if (m_patternVar1 > 8) {
                     l50.type = 0x1b0;
                 }
                 l50.x = (double)((int)x + facing * 0x68);
                 l50.y = (double)((int)y - 0x32);
-                if (unk313c == 1) {
+                if (m_patternVar2 == 1) {
                     l50.y = (double)((int)y - 0x3c);
                 }
-                if (unk313c == 2) {
+                if (m_patternVar2 == 2) {
                     l50.y = (double)((int)y - 0x28);
                 }
                 l50.scale = 2;
-                l50.unk0 = 1;
+                l50.keep = 1;
                 l50.layer = 1;
                 l50.facing = facing;
                 SpawnObject(&l50);
             }
-            if (frame == 0x10 && unk313c < 2) {
+            if (frame == 0x10 && m_patternVar2 < 2) {
                 frame = frame - 2;
-                unk313c++;
+                m_patternVar2++;
             }
-            if (frame == 0x12 && unk313c < 6) {
-                unk313c++;
+            if (frame == 0x12 && m_patternVar2 < 6) {
+                m_patternVar2++;
                 frame = frame - 2;
             }
             if (frame >= x8) {
-                pattern = 0;
+                pattern = kStand;
                 StartPattern();
-                if (unk3158 == 2) {
-                    unk3158 = 0;
+                if (m_powerUp == 2) {
+                    m_powerUp = 0;
                 }
             }
         }
         break;
-    case 0x13b:
+    case kAir236236A:
         if (frame == 0 && timer == 0) {
             StopMoving();
-            unk158 = 0;
+            m_dashMomentum = 0;
         }
-        if (frame == 2 && timer == 0 && unk3140 == 0) {
-            unk158 = 0;
-            unk14c = 0x78;
+        if (frame == 2 && timer == 0 && m_patternVar3 == 0) {
+            m_dashMomentum = 0;
+            m_freezeTime = 0x78;
             m_gauge = m_gauge - 0x3e8;
             FillBackground(0xb0, 3);
             l50.type = 0x44;
-            l50.unk2c = 0x13;
+            l50.sound = 0x13;
             l50.x = (double)((int)x - facing * 0x1f);
             l50.y = (double)((int)y - 0x61);
             l50.scale = 2;
-            l50.unk0 = 1;
+            l50.keep = 1;
             l50.layer = 1;
             m_game->CreateEffect((EffectDesc*)&l50);
             StopMoving();
-            unk3140++;
+            m_patternVar3++;
         }
         if (frame > 9 && y < 0.0) {
             vy += 0.02;
@@ -7035,9 +7035,9 @@ void CMishio::UpdatePattern()
             timer = 0;
             frame++;
             m_attackResult = 3;
-            if (frame == 5 && unk3138 < 5) {
+            if (frame == 5 && m_patternVar1 < 5) {
                 frame = frame - 3;
-                unk3138++;
+                m_patternVar1++;
             }
             if (frame == 0xa) {
                 m_playVoice = 9;
@@ -7047,7 +7047,7 @@ void CMishio::UpdatePattern()
                 l50.x = (double)((int)x + facing * 0x32);
                 l50.y = (double)((int)y - 0x20);
                 l50.scale = 2;
-                l50.unk0 = 1;
+                l50.keep = 1;
                 l50.layer = 1;
                 l50.facing = facing;
                 SpawnObject(&l50);
@@ -7055,7 +7055,7 @@ void CMishio::UpdatePattern()
                 l50.x = (double)((int)x + facing * 0x32);
                 l50.y = (double)((int)y - 0x20);
                 l50.scale = 2;
-                l50.unk0 = 1;
+                l50.keep = 1;
                 l50.layer = 1;
                 l50.facing = facing;
                 SpawnObject(&l50);
@@ -7064,34 +7064,34 @@ void CMishio::UpdatePattern()
                 frame = frame - 2;
             }
             if (frame >= x8) {
-                pattern = 0;
+                pattern = kStand;
                 StartPattern();
-                if (unk3158 == 2) {
-                    unk3158 = 0;
+                if (m_powerUp == 2) {
+                    m_powerUp = 0;
                 }
             }
         }
         break;
-    case 0x13c:
+    case kAir236236B:
         if (frame == 0 && timer == 0) {
             StopMoving();
-            unk158 = 0;
+            m_dashMomentum = 0;
         }
-        if (frame == 2 && timer == 0 && unk3140 == 0) {
-            unk158 = 0;
-            unk14c = 0x78;
+        if (frame == 2 && timer == 0 && m_patternVar3 == 0) {
+            m_dashMomentum = 0;
+            m_freezeTime = 0x78;
             m_gauge = m_gauge - 0x7d0;
             FillBackground(0xb0, 3);
             l50.type = 0x45;
-            l50.unk2c = 5;
+            l50.sound = 5;
             l50.x = (double)((int)x - facing * 0x1f);
             l50.y = (double)((int)y - 0x61);
             l50.scale = 2;
-            l50.unk0 = 1;
+            l50.keep = 1;
             l50.layer = 1;
             m_game->CreateEffect((EffectDesc*)&l50);
             StopMoving();
-            unk3140++;
+            m_patternVar3++;
         }
         if (frame > 9 && y < 0.0) {
             vy += 0.02;
@@ -7108,9 +7108,9 @@ void CMishio::UpdatePattern()
             timer = 0;
             frame++;
             m_attackResult = 3;
-            if (frame == 5 && unk3138 < 5) {
+            if (frame == 5 && m_patternVar1 < 5) {
                 frame = frame - 3;
-                unk3138++;
+                m_patternVar1++;
             }
             if (frame == 0xa) {
                 m_playVoice = 9;
@@ -7120,7 +7120,7 @@ void CMishio::UpdatePattern()
                 l50.x = (double)((int)x + facing * 0x32);
                 l50.y = (double)((int)y - 0x20);
                 l50.scale = 2;
-                l50.unk0 = 1;
+                l50.keep = 1;
                 l50.layer = 1;
                 l50.facing = facing;
                 SpawnObject(&l50);
@@ -7128,25 +7128,25 @@ void CMishio::UpdatePattern()
                 l50.x = (double)((int)x + facing * 0x32);
                 l50.y = (double)((int)y - 0x20);
                 l50.scale = 2;
-                l50.unk0 = 1;
+                l50.keep = 1;
                 l50.layer = 1;
                 l50.facing = facing;
                 SpawnObject(&l50);
             }
-            if (frame == 0xe && unk313c < 2) {
+            if (frame == 0xe && m_patternVar2 < 2) {
                 m_playVoice = 9;
-                unk313c++;
+                m_patternVar2++;
                 frame = frame - 4;
-                if (unk313c == 1) {
+                if (m_patternVar2 == 1) {
                     l50.type = 0x1b1;
                 }
-                if (unk313c == 2) {
+                if (m_patternVar2 == 2) {
                     l50.type = 0x1a7;
                 }
                 l50.x = (double)((int)x + facing * 0x32);
                 l50.y = (double)((int)y - 0x20);
                 l50.scale = 2;
-                l50.unk0 = 1;
+                l50.keep = 1;
                 l50.layer = 1;
                 l50.facing = facing;
                 SpawnObject(&l50);
@@ -7154,7 +7154,7 @@ void CMishio::UpdatePattern()
                 l50.x = (double)((int)x + facing * 0x32);
                 l50.y = (double)((int)y - 0x20);
                 l50.scale = 2;
-                l50.unk0 = 1;
+                l50.keep = 1;
                 l50.layer = 1;
                 l50.facing = facing;
                 SpawnObject(&l50);
@@ -7163,38 +7163,38 @@ void CMishio::UpdatePattern()
                 frame = frame - 2;
             }
             if (frame >= x8) {
-                pattern = 0;
+                pattern = kStand;
                 StartPattern();
-                if (unk3158 == 2) {
-                    unk3158 = 0;
+                if (m_powerUp == 2) {
+                    m_powerUp = 0;
                 }
             }
         }
         break;
-    case 0x13d:
+    case kAir236236C:
         if (frame > 2) {
-            m_game->Unk4080c0(3);
+            m_game->FlashNegative(3);
         }
         if (frame == 0 && timer == 0) {
             StopMoving();
-            unk158 = 0;
+            m_dashMomentum = 0;
         }
-        if (frame == 2 && timer == 0 && unk3140 == 0) {
-            unk158 = 0;
-            unk14c = 0x78;
+        if (frame == 2 && timer == 0 && m_patternVar3 == 0) {
+            m_dashMomentum = 0;
+            m_freezeTime = 0x78;
             m_gauge = m_gauge - 0xbb8;
             FillBackground(0xb0, 3);
             l50.type = 0x46;
-            l50.unk2c = 0x40;
+            l50.sound = 0x40;
             l50.x = (double)((int)x - facing * 0x1f);
             l50.y = (double)((int)y - 0x61);
             l50.scale = 2;
-            l50.unk0 = 1;
+            l50.keep = 1;
             l50.layer = 1;
             m_game->CreateEffect((EffectDesc*)&l50);
             m_playSound = 0x25;
             StopMoving();
-            unk3140++;
+            m_patternVar3++;
         }
         if (frame > 9 && y < 0.0) {
             vy += 0.02;
@@ -7211,9 +7211,9 @@ void CMishio::UpdatePattern()
             timer = 0;
             frame++;
             m_attackResult = 3;
-            if (frame == 5 && unk3138 < 5) {
+            if (frame == 5 && m_patternVar1 < 5) {
                 frame = frame - 3;
-                unk3138++;
+                m_patternVar1++;
             }
             if (frame == 0xa) {
                 m_playVoice = 9;
@@ -7223,7 +7223,7 @@ void CMishio::UpdatePattern()
                 l50.x = (double)((int)x + facing * 0x32);
                 l50.y = (double)((int)y - 0x20);
                 l50.scale = 2;
-                l50.unk0 = 1;
+                l50.keep = 1;
                 l50.layer = 1;
                 l50.facing = facing;
                 SpawnObject(&l50);
@@ -7231,31 +7231,31 @@ void CMishio::UpdatePattern()
                 l50.x = (double)((int)x + facing * 0x32);
                 l50.y = (double)((int)y - 0x20);
                 l50.scale = 2;
-                l50.unk0 = 1;
+                l50.keep = 1;
                 l50.layer = 1;
                 l50.facing = facing;
                 SpawnObject(&l50);
             }
-            if (frame == 0xe && unk313c < 4) {
+            if (frame == 0xe && m_patternVar2 < 4) {
                 m_playVoice = 9;
-                unk313c++;
+                m_patternVar2++;
                 frame = frame - 4;
-                if (unk313c == 1) {
+                if (m_patternVar2 == 1) {
                     l50.type = 0x1ab;
                 }
-                if (unk313c == 2) {
+                if (m_patternVar2 == 2) {
                     l50.type = 0x1b2;
                 }
-                if (unk313c == 3) {
+                if (m_patternVar2 == 3) {
                     l50.type = 0x1aa;
                 }
-                if (unk313c == 4) {
+                if (m_patternVar2 == 4) {
                     l50.type = 0x1a9;
                 }
                 l50.x = (double)((int)x + facing * 0x32);
                 l50.y = (double)((int)y - 0x20);
                 l50.scale = 2;
-                l50.unk0 = 1;
+                l50.keep = 1;
                 l50.layer = 1;
                 l50.facing = facing;
                 SpawnObject(&l50);
@@ -7263,7 +7263,7 @@ void CMishio::UpdatePattern()
                 l50.x = (double)((int)x + facing * 0x32);
                 l50.y = (double)((int)y - 0x20);
                 l50.scale = 2;
-                l50.unk0 = 1;
+                l50.keep = 1;
                 l50.layer = 1;
                 l50.facing = facing;
                 SpawnObject(&l50);
@@ -7272,30 +7272,30 @@ void CMishio::UpdatePattern()
                 frame = frame - 2;
             }
             if (frame >= x8) {
-                pattern = 0;
+                pattern = kStand;
                 StartPattern();
-                if (unk3158 == 2) {
-                    unk3158 = 0;
+                if (m_powerUp == 2) {
+                    m_powerUp = 0;
                 }
             }
         }
         break;
-    case 0x13e:
-        unk158 = 0;
+    case kLv4:
+        m_dashMomentum = 0;
         if (frame == 0 && timer == 0) {
             StopMoving();
         }
         if (frame == 0 && timer == 0) {
-            Unk410a80(0x32, 3);
-            unk14c = 0x78;
+            FocusCameraY(0x32, 3);
+            m_freezeTime = 0x78;
             m_gauge = m_gauge - 0xbb8;
             FillBackground(0xb0, 3);
             l50.type = 0x46;
-            l50.unk2c = 0x40;
+            l50.sound = 0x40;
             l50.x = (double)((int)x + facing * 0xd);
             l50.y = (double)((int)y - 0x34);
             l50.scale = 2;
-            l50.unk0 = 1;
+            l50.keep = 1;
             l50.layer = 1;
             m_game->CreateEffect((EffectDesc*)&l50);
             m_playSound = 0x25;
@@ -7305,22 +7305,22 @@ void CMishio::UpdatePattern()
             l50.x = (double)((int)x + facing * 0xd);
             l50.y = (double)((int)y - 0x34);
             l50.scale = 2;
-            l50.unk0 = 1;
+            l50.keep = 1;
             l50.layer = 1;
             l50.facing = facing;
-            l50.unk30 = 1;
+            l50.movesInFreeze = 1;
             SpawnObject(&l50);
         }
         if (frame == 7 && timer == 0) {
             m_playVoice = 0xb;
             ShakeScreen(5, 0);
-            unk3158 = 3;
-            unk3168 = 0x1194;
+            m_powerUp = 3;
+            m_powerUpTime = 0x1194;
             l50.type = 0x1b3;
             l50.x = (double)((int)x + facing * 5);
             l50.y = (double)((int)y - 0x2d);
             l50.scale = 2;
-            l50.unk0 = 1;
+            l50.keep = 1;
             l50.layer = 0;
             l50.facing = facing;
             SpawnObject(&l50);
@@ -7328,7 +7328,7 @@ void CMishio::UpdatePattern()
             l50.x = (double)((int)x + facing * 5);
             l50.y = (double)(int)y;
             l50.scale = 2;
-            l50.unk0 = 1;
+            l50.keep = 1;
             l50.layer = 0;
             l50.facing = facing;
             SpawnObject(&l50);
@@ -7336,7 +7336,7 @@ void CMishio::UpdatePattern()
             l50.x = (double)((int)x + facing * 0x2d);
             l50.y = (double)(int)y;
             l50.scale = 2;
-            l50.unk0 = 1;
+            l50.keep = 1;
             l50.layer = 0;
             l50.facing = facing;
             SpawnObject(&l50);
@@ -7344,7 +7344,7 @@ void CMishio::UpdatePattern()
             l50.x = (double)((int)x - facing * 0x23);
             l50.y = (double)(int)y;
             l50.scale = 2;
-            l50.unk0 = 1;
+            l50.keep = 1;
             l50.layer = 0;
             l50.facing = facing;
             SpawnObject(&l50);
@@ -7354,12 +7354,12 @@ void CMishio::UpdatePattern()
             timer = 0;
             frame++;
             m_attackResult = 0;
-            if (frame == 0xa && unk3138 < 5) {
-                unk3138++;
+            if (frame == 0xa && m_patternVar1 < 5) {
+                m_patternVar1++;
                 frame = frame - 2;
             }
             if (frame >= x8) {
-                pattern = 0;
+                pattern = kStand;
                 StartPattern();
             }
         }

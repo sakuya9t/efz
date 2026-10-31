@@ -20,7 +20,7 @@ CBg16::CBg16(CGraphics* p1)
     m_objects = TOPTR(BgObject*, xc);
     m_anims = new EffectAnim[4];
     CAnimBg::Load();
-    CAnimBg::Unk751030();
+    CAnimBg::LoadAnims();
     v4 = 0;
     for (; v4 < 4; v4++) {
         m_objects[v4].pattern = v4;
@@ -50,7 +50,7 @@ CBg16::~CBg16()
     delete m_anims;
 }
 
-void CBg16::Vf0()
+void CBg16::Update()
 {
     short xc;
     short v8;
@@ -61,25 +61,25 @@ void CBg16::Vf0()
         v8 = (short)m_anims[m_objects[v4].pattern].frames[m_objects[v4].frame].duration;
         xc = m_anims[m_objects[v4].pattern].frameCount;
         switch (m_objects[v4].pattern) {
-        case 0:
+        case kStand:
             m_objects[v4].x++;
             if (m_objects[v4].x >= 850.0) {
                 m_objects[v4].x -= 850.0;
             }
             break;
-        case 1:
+        case kWalkForward:
             m_objects[v4].x += 1.4;
             if (m_objects[v4].x >= 806.0) {
                 m_objects[v4].x -= 806.0;
             }
             break;
-        case 2:
+        case kWalkBack:
             m_objects[v4].x += 1.8;
             if (m_objects[v4].x >= 789.0) {
                 m_objects[v4].x -= 789.0;
             }
             break;
-        case 3:
+        case kCrouch:
             m_objects[v4].x += 2.2;
             if (m_objects[v4].x >= 947.0) {
                 m_objects[v4].x = 947.0;
@@ -88,7 +88,7 @@ void CBg16::Vf0()
     }
 }
 
-void CBg16::Vf1(int p1, int p2, char p3)
+void CBg16::Draw(int p1, int p2, char p3)
 {
     int l40;
     RECT v3c;

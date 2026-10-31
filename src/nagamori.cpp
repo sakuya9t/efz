@@ -11,18 +11,18 @@ CNagamori::CNagamori(PTR32(CPlayer)* p1, CGame* p2, CGraphics* p3, CInput* p4, C
 
     strcpy(m_name, "nagamori");
     lastSurface = 0x2d7;
-    unk3138 = 0;
-    unk313c = 0;
-    unk3140 = 0;
-    unk3148 = 0;
-    unk3144 = 0;
-    unk314c = 0;
-    unk3150 = 0;
+    m_patternVar1 = 0;
+    m_patternVar2 = 0;
+    m_patternVar3 = 0;
+    m_shotState = 0;
+    m_encasedBreakOut = 0;
+    m_keepBombs = 0;
+    m_lv4Time = 0;
     unk3158 = 0;
-    unk3160 = 0;
+    m_bombsPlaced = 0;
     unk315c = 0;
-    unk3164 = 0;
-    unk3168 = 0;
+    m_bouncerDrops = 0;
+    m_bouncerOut = 0;
     m_pointX[0] = -2;
     m_pointY[0] = -0x3d;
     m_pointX[1] = 0x15;
@@ -41,10 +41,10 @@ CNagamori::CNagamori(PTR32(CPlayer)* p1, CGame* p2, CGraphics* p3, CInput* p4, C
     m_rivals[0xa] = 6;
     v4 = 0;
     for (; v4 < 0x40; v4++) {
-        unk316c[v4] = 0;
-        unk31ac[v4] = 0;
-        unk32ac[v4] = 0;
-        unk33ac[v4] = 0;
+        m_objectTriggered[v4] = 0;
+        m_objectState[v4] = 0;
+        m_objectTimer[v4] = 0;
+        m_objectPhase[v4] = 0;
     }
 }
 
@@ -52,18 +52,18 @@ void CNagamori::Reset()
 {
     int v4;
 
-    unk3138 = 0;
-    unk313c = 0;
-    unk3140 = 0;
-    unk3148 = 0;
-    unk3144 = 0;
-    unk314c = 0;
-    unk3150 = 0;
+    m_patternVar1 = 0;
+    m_patternVar2 = 0;
+    m_patternVar3 = 0;
+    m_shotState = 0;
+    m_encasedBreakOut = 0;
+    m_keepBombs = 0;
+    m_lv4Time = 0;
     unk3158 = 0;
-    unk3160 = 0;
+    m_bombsPlaced = 0;
     unk315c = 0;
-    unk3164 = 0;
-    unk3168 = 0;
+    m_bouncerDrops = 0;
+    m_bouncerOut = 0;
     m_pointX[0] = -2;
     m_pointY[0] = -0x3d;
     m_pointX[1] = 0x15;
@@ -76,39 +76,39 @@ void CNagamori::Reset()
     m_pointY[4] = -0x17;
     v4 = 0;
     for (; v4 < 0x40; v4++) {
-        unk316c[v4] = 0;
-        unk31ac[v4] = 0;
-        unk32ac[v4] = 0;
-        unk33ac[v4] = 0;
+        m_objectTriggered[v4] = 0;
+        m_objectState[v4] = 0;
+        m_objectTimer[v4] = 0;
+        m_objectPhase[v4] = 0;
     }
     CPlayer::Reset();
 }
 
 void CNagamori::StartPattern()
 {
-    unk3138 = 0;
-    unk313c = 0;
-    unk3140 = 0;
+    m_patternVar1 = 0;
+    m_patternVar2 = 0;
+    m_patternVar3 = 0;
     CPlayer::StartPattern();
 }
 
 void CNagamori::RemoveObject(short p1)
 {
-    unk316c[p1] = 0;
-    unk31ac[p1] = 0;
-    unk32ac[p1] = 0;
-    unk33ac[p1] = 0;
+    m_objectTriggered[p1] = 0;
+    m_objectState[p1] = 0;
+    m_objectTimer[p1] = 0;
+    m_objectPhase[p1] = 0;
     CPlayer::RemoveObject(p1);
 }
 
-void CNagamori::Unk4ae1d0(short p1, short p2, short p3, short p4)
+void CNagamori::TriggerObjectsNear(short p1, short p2, short p3, short p4)
 {
     int v4;
 
     v4 = m_objectTail;
     while (v4 != m_objectHead) {
         if (m_objectActive[v4] != 0 && fabs(p1 - m_objects[v4].x) < p3 && fabs(p2 - m_objects[v4].y) < p4) {
-            unk316c[v4] = 1;
+            m_objectTriggered[v4] = 1;
         }
         v4++;
         if (v4 >= 0x40) {
@@ -119,12 +119,12 @@ void CNagamori::Unk4ae1d0(short p1, short p2, short p3, short p4)
 
 void CNagamori::Move()
 {
-    Unk40e740();
+    MoveOnGround();
 }
 
 void CNagamori::StartCommand()
 {
-    if (pattern < 0xc8) {
+    if (pattern < kFirstCharacterAction) {
         m_bufferedPress = 0;
     }
     if (m_dashBufferTime <= 0) {
@@ -135,251 +135,251 @@ void CNagamori::StartCommand()
     if (m_dashBufferedPress == 0) {
         m_dashBufferTime = 0;
     }
-    if (m_command == 0x34 && (unk118 >= 500.0 && m_attackResult > 1 && m_attackResult != 6 || unk120 > 0 && m_attackResult > 1) && (m_patterns[pattern].frames[frame].flagsB0 & 8) > 0 && unk3150 == 0 && m_patterns[pattern].unk2 <= m_patterns[0xa7].unk0) {
+    if (m_command == kCmd22C && (m_rfGauge >= 500.0 && m_attackResult > 1 && m_attackResult != 6 || m_rfBlue > 0 && m_attackResult > 1) && (m_patterns[pattern].frames[frame].flagsB0 & kStateCancellable) > 0 && m_lv4Time == 0 && m_patterns[pattern].cancelLevel <= m_patterns[kInstantCharge].level) {
         StartPattern();
         ClearBufferedPress();
-        pattern = 0xa7;
+        pattern = kInstantCharge;
         if (y < 0.0) {
-            pattern = 0xab;
+            pattern = kAirInstantCharge;
         }
         return;
     }
-    if (unk15c < 2) {
-        if (m_hp < 0xd05 && m_command == 0x5b && m_gauge >= 0xbb8 && (m_patterns[pattern].frames[frame].flagsB0 & 8) > 0 && y == 0.0 && m_attackResult != 6 && m_patterns[pattern].unk2 <= m_patterns[0x138].unk0) {
+    if (m_sealLevel < 2) {
+        if (m_hp < 0xd05 && m_command == kCmd6BA65A && m_gauge >= 0xbb8 && (m_patterns[pattern].frames[frame].flagsB0 & kStateCancellable) > 0 && y == 0.0 && m_attackResult != 6 && m_patterns[pattern].cancelLevel <= m_patterns[kLv4].level) {
             StartPattern();
             ClearBufferedPress();
-            pattern = 0x138;
+            pattern = kLv4;
             return;
         }
-        if (m_command == 0x7a && m_gauge >= 0xbb8 && unk3148 == 0 && y == 0.0 && (m_patterns[pattern].frames[frame].flagsB0 & 8) > 0 && m_patterns[pattern].unk2 <= m_patterns[0x13b].unk0 && (pattern >= 0xc8 && m_attackResult >= 2 && m_attackResult != 6 || pattern < 0xc8)) {
+        if (m_command == kCmd641236C && m_gauge >= 0xbb8 && m_shotState == 0 && y == 0.0 && (m_patterns[pattern].frames[frame].flagsB0 & kStateCancellable) > 0 && m_patterns[pattern].cancelLevel <= m_patterns[k6413Lv3].level && (pattern >= kFirstCharacterAction && m_attackResult >= 2 && m_attackResult != 6 || pattern < kFirstCharacterAction)) {
             StartPattern();
             ClearBufferedPress();
-            pattern = 0x13b;
+            pattern = k6413Lv3;
             return;
         }
-        if ((m_command == 0x79 || m_command == 0x7a) && unk3148 == 0 && m_gauge >= 0x7d0 && y == 0.0 && (m_patterns[pattern].frames[frame].flagsB0 & 8) > 0 && m_patterns[pattern].unk2 <= m_patterns[0x13a].unk0 && (pattern >= 0xc8 && m_attackResult >= 2 && m_attackResult != 6 || pattern < 0xc8)) {
+        if ((m_command == kCmd641236B || m_command == kCmd641236C) && m_shotState == 0 && m_gauge >= 0x7d0 && y == 0.0 && (m_patterns[pattern].frames[frame].flagsB0 & kStateCancellable) > 0 && m_patterns[pattern].cancelLevel <= m_patterns[k6413Lv2].level && (pattern >= kFirstCharacterAction && m_attackResult >= 2 && m_attackResult != 6 || pattern < kFirstCharacterAction)) {
             StartPattern();
             ClearBufferedPress();
-            pattern = 0x13a;
+            pattern = k6413Lv2;
             return;
         }
-        if ((m_command == 0x78 || m_command == 0x79 || m_command == 0x7a) && unk3148 == 0 && m_gauge >= 0x3e8 && y == 0.0 && (m_patterns[pattern].frames[frame].flagsB0 & 8) > 0 && m_patterns[pattern].unk2 <= m_patterns[0x139].unk0 && (pattern >= 0xc8 && m_attackResult >= 2 && m_attackResult != 6 || pattern < 0xc8)) {
+        if ((m_command == kCmd641236A || m_command == kCmd641236B || m_command == kCmd641236C) && m_shotState == 0 && m_gauge >= 0x3e8 && y == 0.0 && (m_patterns[pattern].frames[frame].flagsB0 & kStateCancellable) > 0 && m_patterns[pattern].cancelLevel <= m_patterns[k6413Lv1].level && (pattern >= kFirstCharacterAction && m_attackResult >= 2 && m_attackResult != 6 || pattern < kFirstCharacterAction)) {
             StartPattern();
             ClearBufferedPress();
-            pattern = 0x139;
+            pattern = k6413Lv1;
             return;
         }
-        if (m_command == 0x70 && m_gauge >= 0x3e8 && (m_patterns[pattern].frames[frame].flagsB0 & 8) > 0 && unk3148 == 0 && unk3168 == 0 && y == 0.0 && m_patterns[pattern].unk2 <= m_patterns[0x134].unk0 && (pattern >= 0xc8 && m_attackResult >= 2 && m_attackResult != 6 || pattern < 0xc8)) {
+        if (m_command == kCmd214214C && m_gauge >= 0x3e8 && (m_patterns[pattern].frames[frame].flagsB0 & kStateCancellable) > 0 && m_shotState == 0 && m_bouncerOut == 0 && y == 0.0 && m_patterns[pattern].cancelLevel <= m_patterns[k214214C].level && (pattern >= kFirstCharacterAction && m_attackResult >= 2 && m_attackResult != 6 || pattern < kFirstCharacterAction)) {
             StartPattern();
             ClearBufferedPress();
-            pattern = 0x134;
+            pattern = k214214C;
             if (y < 0.0) {
-                pattern = 0x137;
+                pattern = kAir214214C;
             }
             return;
         }
-        if (m_command == 0x6f && m_gauge >= 0x3e8 && (m_patterns[pattern].frames[frame].flagsB0 & 8) > 0 && unk3148 == 0 && m_patterns[pattern].unk2 <= m_patterns[0x132].unk0 && (pattern >= 0xc8 && m_attackResult >= 2 && m_attackResult != 6 || pattern < 0xc8)) {
+        if (m_command == kCmd214214B && m_gauge >= 0x3e8 && (m_patterns[pattern].frames[frame].flagsB0 & kStateCancellable) > 0 && m_shotState == 0 && m_patterns[pattern].cancelLevel <= m_patterns[k214214B].level && (pattern >= kFirstCharacterAction && m_attackResult >= 2 && m_attackResult != 6 || pattern < kFirstCharacterAction)) {
             StartPattern();
             ClearBufferedPress();
-            pattern = 0x132;
+            pattern = k214214B;
             if (y < 0.0) {
-                pattern = 0x135;
+                pattern = kAir214214B;
             }
             return;
         }
-        if (m_command == 0x6e && m_gauge >= 0x3e8 && (m_patterns[pattern].frames[frame].flagsB0 & 8) > 0 && unk3148 == 0 && m_patterns[pattern].unk2 <= m_patterns[0x133].unk0 && (pattern >= 0xc8 && m_attackResult >= 2 && m_attackResult != 6 || pattern < 0xc8)) {
+        if (m_command == kCmd214214A && m_gauge >= 0x3e8 && (m_patterns[pattern].frames[frame].flagsB0 & kStateCancellable) > 0 && m_shotState == 0 && m_patterns[pattern].cancelLevel <= m_patterns[k214214A].level && (pattern >= kFirstCharacterAction && m_attackResult >= 2 && m_attackResult != 6 || pattern < kFirstCharacterAction)) {
             StartPattern();
             ClearBufferedPress();
-            pattern = 0x133;
+            pattern = k214214A;
             if (y < 0.0) {
-                pattern = 0x136;
+                pattern = kAir214214A;
             }
             return;
         }
-        if (m_command == 0x66 && m_gauge >= 0xbb8 && y == 0.0 && (m_patterns[pattern].frames[frame].flagsB0 & 8) > 0 && m_patterns[pattern].unk2 <= m_patterns[0x12e].unk0 && (pattern >= 0xc8 && m_attackResult >= 2 && m_attackResult != 6 || pattern < 0xc8)) {
+        if (m_command == kCmd236236C && m_gauge >= 0xbb8 && y == 0.0 && (m_patterns[pattern].frames[frame].flagsB0 & kStateCancellable) > 0 && m_patterns[pattern].cancelLevel <= m_patterns[k236236Lv3].level && (pattern >= kFirstCharacterAction && m_attackResult >= 2 && m_attackResult != 6 || pattern < kFirstCharacterAction)) {
             StartPattern();
             ClearBufferedPress();
-            pattern = 0x12e;
+            pattern = k236236Lv3;
             return;
         }
-        if ((m_command == 0x65 || m_command == 0x66) && m_gauge >= 0x7d0 && y == 0.0 && (m_patterns[pattern].frames[frame].flagsB0 & 8) > 0 && m_patterns[pattern].unk2 <= m_patterns[0x12d].unk0 && (pattern >= 0xc8 && m_attackResult >= 2 && m_attackResult != 6 || pattern < 0xc8)) {
+        if ((m_command == kCmd236236B || m_command == kCmd236236C) && m_gauge >= 0x7d0 && y == 0.0 && (m_patterns[pattern].frames[frame].flagsB0 & kStateCancellable) > 0 && m_patterns[pattern].cancelLevel <= m_patterns[k236236Lv2].level && (pattern >= kFirstCharacterAction && m_attackResult >= 2 && m_attackResult != 6 || pattern < kFirstCharacterAction)) {
             StartPattern();
             ClearBufferedPress();
-            pattern = 0x12d;
+            pattern = k236236Lv2;
             return;
         }
-        if ((m_command == 0x64 || m_command == 0x65 || m_command == 0x66) && m_gauge >= 0x3e8 && y == 0.0 && (m_patterns[pattern].frames[frame].flagsB0 & 8) > 0 && m_patterns[pattern].unk2 <= m_patterns[0x12c].unk0 && (pattern >= 0xc8 && m_attackResult >= 2 && m_attackResult != 6 || pattern < 0xc8)) {
+        if ((m_command == kCmd236236A || m_command == kCmd236236B || m_command == kCmd236236C) && m_gauge >= 0x3e8 && y == 0.0 && (m_patterns[pattern].frames[frame].flagsB0 & kStateCancellable) > 0 && m_patterns[pattern].cancelLevel <= m_patterns[k236236Lv1].level && (pattern >= kFirstCharacterAction && m_attackResult >= 2 && m_attackResult != 6 || pattern < kFirstCharacterAction)) {
             StartPattern();
             ClearBufferedPress();
-            pattern = 0x12c;
+            pattern = k236236Lv1;
             return;
         }
-        if (m_command == 0x2a && (unk118 >= 500.0 || unk120 > 0) && (m_patterns[pattern].frames[frame].flagsB0 & 8) > 0 && y == 0.0 && unk3148 == 0 && m_patterns[pattern].unk2 <= m_patterns[0x110].unk0 && (pattern >= 0xc8 && m_attackResult >= 2 && m_attackResult != 6 || pattern < 0xc8)) {
+        if (m_command == kCmd412C && (m_rfGauge >= 500.0 || m_rfBlue > 0) && (m_patterns[pattern].frames[frame].flagsB0 & kStateCancellable) > 0 && y == 0.0 && m_shotState == 0 && m_patterns[pattern].cancelLevel <= m_patterns[k412C].level && (pattern >= kFirstCharacterAction && m_attackResult >= 2 && m_attackResult != 6 || pattern < kFirstCharacterAction)) {
             StartPattern();
             ClearBufferedPress();
-            pattern = 0x110;
+            pattern = k412C;
             return;
         }
-        if ((m_command == 0x29 || m_command == 0x2a) && (m_patterns[pattern].frames[frame].flagsB0 & 8) > 0 && y == 0.0 && unk3148 == 0 && m_patterns[pattern].unk2 <= m_patterns[0x10f].unk0 && (pattern >= 0xc8 && m_attackResult >= 2 && m_attackResult != 6 || pattern < 0xc8)) {
+        if ((m_command == kCmd412B || m_command == kCmd412C) && (m_patterns[pattern].frames[frame].flagsB0 & kStateCancellable) > 0 && y == 0.0 && m_shotState == 0 && m_patterns[pattern].cancelLevel <= m_patterns[k412B].level && (pattern >= kFirstCharacterAction && m_attackResult >= 2 && m_attackResult != 6 || pattern < kFirstCharacterAction)) {
             StartPattern();
             ClearBufferedPress();
-            pattern = 0x10f;
+            pattern = k412B;
             return;
         }
-        if (m_command == 0x28 && (m_patterns[pattern].frames[frame].flagsB0 & 8) > 0 && y == 0.0 && unk3148 == 0 && m_patterns[pattern].unk2 <= m_patterns[0x10e].unk0 && (pattern >= 0xc8 && m_attackResult >= 2 && m_attackResult != 6 || pattern < 0xc8)) {
+        if (m_command == kCmd412A && (m_patterns[pattern].frames[frame].flagsB0 & kStateCancellable) > 0 && y == 0.0 && m_shotState == 0 && m_patterns[pattern].cancelLevel <= m_patterns[k412A].level && (pattern >= kFirstCharacterAction && m_attackResult >= 2 && m_attackResult != 6 || pattern < kFirstCharacterAction)) {
             StartPattern();
             ClearBufferedPress();
-            pattern = 0x10e;
+            pattern = k412A;
             return;
         }
-        if (m_command == 0x16 && (unk118 >= 500.0 || unk120 > 0) && (m_patterns[pattern].frames[frame].flagsB0 & 8) > 0 && unk3148 == 0 && m_patterns[pattern].unk2 <= m_patterns[0xfc].unk0 && (pattern >= 0xc8 && m_attackResult >= 2 && m_attackResult != 6 || pattern < 0xc8)) {
+        if (m_command == kCmd623C && (m_rfGauge >= 500.0 || m_rfBlue > 0) && (m_patterns[pattern].frames[frame].flagsB0 & kStateCancellable) > 0 && m_shotState == 0 && m_patterns[pattern].cancelLevel <= m_patterns[k623C].level && (pattern >= kFirstCharacterAction && m_attackResult >= 2 && m_attackResult != 6 || pattern < kFirstCharacterAction)) {
             StartPattern();
             ClearBufferedPress();
-            pattern = 0xfc;
+            pattern = k623C;
             return;
         }
-        if ((m_command == 0x15 || m_command == 0x16) && (m_patterns[pattern].frames[frame].flagsB0 & 8) > 0 && unk3148 == 0 && m_patterns[pattern].unk2 <= m_patterns[0xfb].unk0 && (pattern >= 0xc8 && m_attackResult >= 2 && m_attackResult != 6 || pattern < 0xc8)) {
+        if ((m_command == kCmd623B || m_command == kCmd623C) && (m_patterns[pattern].frames[frame].flagsB0 & kStateCancellable) > 0 && m_shotState == 0 && m_patterns[pattern].cancelLevel <= m_patterns[k623B].level && (pattern >= kFirstCharacterAction && m_attackResult >= 2 && m_attackResult != 6 || pattern < kFirstCharacterAction)) {
             StartPattern();
             ClearBufferedPress();
-            pattern = 0xfb;
+            pattern = k623B;
             return;
         }
-        if (m_command == 0x14 && (m_patterns[pattern].frames[frame].flagsB0 & 8) > 0 && unk3148 == 0 && m_patterns[pattern].unk2 <= m_patterns[0xfa].unk0 && (pattern >= 0xc8 && m_attackResult >= 2 && m_attackResult != 6 || pattern < 0xc8)) {
+        if (m_command == kCmd623A && (m_patterns[pattern].frames[frame].flagsB0 & kStateCancellable) > 0 && m_shotState == 0 && m_patterns[pattern].cancelLevel <= m_patterns[k623A].level && (pattern >= kFirstCharacterAction && m_attackResult >= 2 && m_attackResult != 6 || pattern < kFirstCharacterAction)) {
             StartPattern();
             ClearBufferedPress();
-            pattern = 0xfa;
+            pattern = k623A;
             return;
         }
-        if (m_command == 0x20 && (m_patterns[pattern].frames[frame].flagsB0 & 8) > 0 && unk3148 == 0 && m_gauge > 0x32 && m_patterns[pattern].unk2 <= m_patterns[0x101].unk0 && (pattern >= 0xc8 && m_attackResult >= 2 && m_attackResult != 6 || pattern < 0xc8)) {
+        if (m_command == kCmd214C && (m_patterns[pattern].frames[frame].flagsB0 & kStateCancellable) > 0 && m_shotState == 0 && m_gauge > 0x32 && m_patterns[pattern].cancelLevel <= m_patterns[k214C].level && (pattern >= kFirstCharacterAction && m_attackResult >= 2 && m_attackResult != 6 || pattern < kFirstCharacterAction)) {
             StartPattern();
             ClearBufferedPress();
-            pattern = 0x101;
+            pattern = k214C;
             if (y < 0.0) {
-                pattern = 0x115;
+                pattern = kAir214C;
             }
             return;
         }
-        if (m_command == 0x1f && (m_patterns[pattern].frames[frame].flagsB0 & 8) > 0 && unk3148 == 0 && m_gauge > 0x32 && m_patterns[pattern].unk2 <= m_patterns[0x100].unk0 && (pattern >= 0xc8 && m_attackResult >= 2 && m_attackResult != 6 || pattern < 0xc8)) {
+        if (m_command == kCmd214B && (m_patterns[pattern].frames[frame].flagsB0 & kStateCancellable) > 0 && m_shotState == 0 && m_gauge > 0x32 && m_patterns[pattern].cancelLevel <= m_patterns[k214B].level && (pattern >= kFirstCharacterAction && m_attackResult >= 2 && m_attackResult != 6 || pattern < kFirstCharacterAction)) {
             StartPattern();
             ClearBufferedPress();
-            pattern = 0x100;
+            pattern = k214B;
             if (y < 0.0) {
-                pattern = 0x114;
+                pattern = kAir214B;
             }
             return;
         }
-        if (m_command == 0x1e && (m_patterns[pattern].frames[frame].flagsB0 & 8) > 0 && unk3148 == 0 && m_gauge > 0x32 && m_patterns[pattern].unk2 <= m_patterns[0xff].unk0 && (pattern >= 0xc8 && m_attackResult >= 2 && m_attackResult != 6 || pattern < 0xc8)) {
+        if (m_command == kCmd214A && (m_patterns[pattern].frames[frame].flagsB0 & kStateCancellable) > 0 && m_shotState == 0 && m_gauge > 0x32 && m_patterns[pattern].cancelLevel <= m_patterns[k214A].level && (pattern >= kFirstCharacterAction && m_attackResult >= 2 && m_attackResult != 6 || pattern < kFirstCharacterAction)) {
             StartPattern();
             ClearBufferedPress();
-            pattern = 0xff;
+            pattern = k214A;
             if (y < 0.0) {
-                pattern = 0x113;
+                pattern = kAir214A;
             }
             return;
         }
-        if (m_command == 0xc && (m_patterns[pattern].frames[frame].flagsB0 & 8) > 0 && y < 0.0 && unk3148 == 0 && m_gauge > 0x32 && m_patterns[pattern].unk2 <= m_patterns[0x106].unk0 && (pattern >= 0xc8 && m_attackResult >= 2 && m_attackResult != 6 || pattern < 0xc8)) {
+        if (m_command == kCmd236C && (m_patterns[pattern].frames[frame].flagsB0 & kStateCancellable) > 0 && y < 0.0 && m_shotState == 0 && m_gauge > 0x32 && m_patterns[pattern].cancelLevel <= m_patterns[kAir236C].level && (pattern >= kFirstCharacterAction && m_attackResult >= 2 && m_attackResult != 6 || pattern < kFirstCharacterAction)) {
             StartPattern();
             ClearBufferedPress();
-            pattern = 0x106;
+            pattern = kAir236C;
             return;
         }
-        if (m_command == 0xb && (m_patterns[pattern].frames[frame].flagsB0 & 8) > 0 && y < 0.0 && unk3148 == 0 && m_gauge > 0x32 && m_patterns[pattern].unk2 <= m_patterns[0x105].unk0 && (pattern >= 0xc8 && m_attackResult >= 2 && m_attackResult != 6 || pattern < 0xc8)) {
+        if (m_command == kCmd236B && (m_patterns[pattern].frames[frame].flagsB0 & kStateCancellable) > 0 && y < 0.0 && m_shotState == 0 && m_gauge > 0x32 && m_patterns[pattern].cancelLevel <= m_patterns[kAir236B].level && (pattern >= kFirstCharacterAction && m_attackResult >= 2 && m_attackResult != 6 || pattern < kFirstCharacterAction)) {
             StartPattern();
             ClearBufferedPress();
-            pattern = 0x105;
+            pattern = kAir236B;
             return;
         }
-        if (m_command == 0xa && (m_patterns[pattern].frames[frame].flagsB0 & 8) > 0 && y < 0.0 && unk3148 == 0 && m_gauge > 0x32 && m_patterns[pattern].unk2 <= m_patterns[0x104].unk0 && (pattern >= 0xc8 && m_attackResult >= 2 && m_attackResult != 6 || pattern < 0xc8)) {
+        if (m_command == kCmd236A && (m_patterns[pattern].frames[frame].flagsB0 & kStateCancellable) > 0 && y < 0.0 && m_shotState == 0 && m_gauge > 0x32 && m_patterns[pattern].cancelLevel <= m_patterns[kAir236A].level && (pattern >= kFirstCharacterAction && m_attackResult >= 2 && m_attackResult != 6 || pattern < kFirstCharacterAction)) {
             StartPattern();
             ClearBufferedPress();
-            pattern = 0x104;
+            pattern = kAir236A;
             return;
         }
-        if (m_command == 0xc && unk3148 == 0 && (unk118 >= 500.0 || unk120 > 0) && (m_patterns[pattern].frames[frame].flagsB0 & 8) > 0 && y == 0.0 && m_patterns[pattern].unk2 <= m_patterns[0x10d].unk0 && (pattern >= 0xc8 && m_attackResult >= 2 && m_attackResult != 6 || pattern < 0xc8)) {
+        if (m_command == kCmd236C && m_shotState == 0 && (m_rfGauge >= 500.0 || m_rfBlue > 0) && (m_patterns[pattern].frames[frame].flagsB0 & kStateCancellable) > 0 && y == 0.0 && m_patterns[pattern].cancelLevel <= m_patterns[k236C].level && (pattern >= kFirstCharacterAction && m_attackResult >= 2 && m_attackResult != 6 || pattern < kFirstCharacterAction)) {
             StartPattern();
             ClearBufferedPress();
-            pattern = 0x10d;
+            pattern = k236C;
             return;
         }
-        if (m_command == 0xc && unk3148 != 0 && (m_patterns[pattern].frames[frame].flagsB0 & 8) > 0 && y == 0.0 && m_patterns[pattern].unk2 <= m_patterns[0x118].unk0 && (pattern >= 0xc8 && m_attackResult >= 2 && m_attackResult != 6 || pattern < 0xc8)) {
+        if (m_command == kCmd236C && m_shotState != 0 && (m_patterns[pattern].frames[frame].flagsB0 & kStateCancellable) > 0 && y == 0.0 && m_patterns[pattern].cancelLevel <= m_patterns[k236CShotForward].level && (pattern >= kFirstCharacterAction && m_attackResult >= 2 && m_attackResult != 6 || pattern < kFirstCharacterAction)) {
             StartPattern();
             ClearBufferedPress();
-            pattern = 0x118;
+            pattern = k236CShotForward;
             return;
         }
-        if ((m_command == 0xb || m_command == 0xc) && (m_patterns[pattern].frames[frame].flagsB0 & 8) > 0 && y == 0.0 && m_patterns[pattern].unk2 <= m_patterns[0x10c].unk0 && (pattern >= 0xc8 && m_attackResult >= 2 && m_attackResult != 6 || pattern < 0xc8)) {
+        if ((m_command == kCmd236B || m_command == kCmd236C) && (m_patterns[pattern].frames[frame].flagsB0 & kStateCancellable) > 0 && y == 0.0 && m_patterns[pattern].cancelLevel <= m_patterns[k236B].level && (pattern >= kFirstCharacterAction && m_attackResult >= 2 && m_attackResult != 6 || pattern < kFirstCharacterAction)) {
             StartPattern();
             ClearBufferedPress();
-            pattern = 0x10c;
-            if (unk3148 != 0) {
-                pattern = 0x117;
+            pattern = k236B;
+            if (m_shotState != 0) {
+                pattern = k236BShotDown;
             }
             return;
         }
-        if (m_command == 0xa && (m_patterns[pattern].frames[frame].flagsB0 & 8) > 0 && y == 0.0 && m_patterns[pattern].unk2 <= m_patterns[0x10b].unk0 && (pattern >= 0xc8 && m_attackResult >= 2 && m_attackResult != 6 || pattern < 0xc8)) {
+        if (m_command == kCmd236A && (m_patterns[pattern].frames[frame].flagsB0 & kStateCancellable) > 0 && y == 0.0 && m_patterns[pattern].cancelLevel <= m_patterns[k236A].level && (pattern >= kFirstCharacterAction && m_attackResult >= 2 && m_attackResult != 6 || pattern < kFirstCharacterAction)) {
             StartPattern();
             ClearBufferedPress();
-            pattern = 0x10b;
-            if (unk3148 != 0) {
-                pattern = 0x116;
+            pattern = k236A;
+            if (m_shotState != 0) {
+                pattern = k236AShotUp;
             }
             return;
         }
     }
-    if (unk15c < 3 && m_command == 6 && (m_patterns[pattern].frames[frame].flagsB0 & 8) > 0 && y < 0.0 && unk15a < 1 && m_patterns[pattern].unk2 <= m_patterns[0xe].unk0 && (pattern >= 0xc8 && m_attackResult >= 2 && m_attackResult != 6 || pattern < 0xc8)) {
+    if (m_sealLevel < 3 && m_command == kCmdUp && (m_patterns[pattern].frames[frame].flagsB0 & kStateCancellable) > 0 && y < 0.0 && m_airActions < 1 && m_patterns[pattern].cancelLevel <= m_patterns[kAirJump].level && (pattern >= kFirstCharacterAction && m_attackResult >= 2 && m_attackResult != 6 || pattern < kFirstCharacterAction)) {
         StartPattern();
         ClearBufferedPress();
-        unk15a++;
-        pattern = 0xe;
+        m_airActions++;
+        pattern = kAirJump;
         if (m_inputX == facing) {
-            pattern = 0xf;
+            pattern = kAirJumpForward;
         }
         if (m_inputX == -facing) {
-            pattern = 0x10;
+            pattern = kAirJumpBack;
         }
         return;
     }
-    if (unk15c < 1 && (m_command == 0 || m_command == 1)) {
-        if (y < 0.0 && unk159 < 1) {
-            if ((((*m_opponent)->x - x) * (1 - (m_command << 1)) < 0.0 || 0.0 == (*m_opponent)->x - x && facing == (1 - (m_command << 1)) * -1) && m_patterns[pattern].unk2 <= m_patterns[0xa5].unk0 && pattern != 0xaa && y < -40.0 && (m_patterns[pattern].frames[frame].flagsB0 & 8) > 0 && (pattern >= 0xc8 && m_attackResult >= 2 && m_attackResult != 6 || pattern < 0xc8)) {
-                if (pattern != 0xa5) {
+    if (m_sealLevel < 1 && (m_command == kCmdDashLeft || m_command == kCmdDashRight)) {
+        if (y < 0.0 && m_airDashes < 1) {
+            if ((((*m_opponent)->x - x) * (1 - (m_command << 1)) < 0.0 || 0.0 == (*m_opponent)->x - x && facing == (1 - (m_command << 1)) * -1) && m_patterns[pattern].cancelLevel <= m_patterns[kAirDashForward].level && pattern != kRecoilGuardAir && y < -40.0 && (m_patterns[pattern].frames[frame].flagsB0 & kStateCancellable) > 0 && (pattern >= kFirstCharacterAction && m_attackResult >= 2 && m_attackResult != 6 || pattern < kFirstCharacterAction)) {
+                if (pattern != kAirDashForward) {
                     StartPattern();
                 }
-                pattern = 0xa5;
+                pattern = kAirDashForward;
                 FaceOpponent();
-                unk159++;
-                unk15a++;
+                m_airDashes++;
+                m_airActions++;
                 m_bufferedPress = 0;
                 return;
             }
-            if ((((*m_opponent)->x - x) * (1 - (m_command << 1)) > 0.0 || 0.0 == (*m_opponent)->x - x && facing == 1 - (m_command << 1)) && m_patterns[pattern].unk2 <= m_patterns[0xa6].unk0 && pattern != 0xaa && (m_patterns[pattern].frames[frame].flagsB0 & 8) > 0 && (pattern >= 0xc8 && m_attackResult >= 2 && m_attackResult != 6 || pattern < 0xc8)) {
-                if (pattern != 0xa6) {
+            if ((((*m_opponent)->x - x) * (1 - (m_command << 1)) > 0.0 || 0.0 == (*m_opponent)->x - x && facing == 1 - (m_command << 1)) && m_patterns[pattern].cancelLevel <= m_patterns[kAirDashBack].level && pattern != kRecoilGuardAir && (m_patterns[pattern].frames[frame].flagsB0 & kStateCancellable) > 0 && (pattern >= kFirstCharacterAction && m_attackResult >= 2 && m_attackResult != 6 || pattern < kFirstCharacterAction)) {
+                if (pattern != kAirDashBack) {
                     StartPattern();
                 }
-                pattern = 0xa6;
+                pattern = kAirDashBack;
                 FaceOpponent();
-                unk159++;
-                unk15a++;
+                m_airDashes++;
+                m_airActions++;
                 m_bufferedPress = 0;
                 return;
             }
         }
-        if (y == 0.0 && (m_patterns[pattern].frames[frame].flagsB0 & 8) > 0) {
-            if ((((*m_opponent)->x - x) * (1 - (m_command << 1)) < 0.0 || 0.0 == (*m_opponent)->x - x && facing == (1 - (m_command << 1)) * -1) && m_patterns[pattern].unk2 <= m_patterns[0xa3].unk0 && (pattern >= 0xc8 && m_attackResult >= 2 && m_attackResult != 6 || pattern < 0xc8)) {
-                if (pattern != 0xa3) {
+        if (y == 0.0 && (m_patterns[pattern].frames[frame].flagsB0 & kStateCancellable) > 0) {
+            if ((((*m_opponent)->x - x) * (1 - (m_command << 1)) < 0.0 || 0.0 == (*m_opponent)->x - x && facing == (1 - (m_command << 1)) * -1) && m_patterns[pattern].cancelLevel <= m_patterns[kDashForward].level && (pattern >= kFirstCharacterAction && m_attackResult >= 2 && m_attackResult != 6 || pattern < kFirstCharacterAction)) {
+                if (pattern != kDashForward) {
                     StartPattern();
                 }
-                pattern = 0xa3;
+                pattern = kDashForward;
                 FaceOpponent();
-                unk158++;
+                m_dashMomentum++;
                 m_bufferedPress = 0;
                 return;
             }
-            if ((((*m_opponent)->x - x) * (1 - (m_command << 1)) > 0.0 || 0.0 == (*m_opponent)->x - x && facing == 1 - (m_command << 1)) && m_patterns[pattern].unk2 <= m_patterns[0xa4].unk0 && (pattern >= 0xc8 && m_attackResult >= 2 && m_attackResult != 6 || pattern < 0xc8)) {
-                if (pattern != 0xa4) {
+            if ((((*m_opponent)->x - x) * (1 - (m_command << 1)) > 0.0 || 0.0 == (*m_opponent)->x - x && facing == 1 - (m_command << 1)) && m_patterns[pattern].cancelLevel <= m_patterns[kDashBack].level && (pattern >= kFirstCharacterAction && m_attackResult >= 2 && m_attackResult != 6 || pattern < kFirstCharacterAction)) {
+                if (pattern != kDashBack) {
                     StartPattern();
                 }
-                pattern = 0xa4;
+                pattern = kDashBack;
                 FaceOpponent();
                 m_bufferedPress = 0;
                 return;
@@ -387,125 +387,125 @@ void CNagamori::StartCommand()
         }
     }
     if (m_pressA == 1 || (m_bufferedPress & 0x10) != 0 || (m_dashBufferedPress & 0x10) != 0) {
-        if (pattern == 0xa3 && m_inputX != -facing) {
+        if (pattern == kDashForward && m_inputX != -facing) {
             StartPattern();
             ClearBufferedPress();
-            pattern = 0xe6;
+            pattern = kDashA;
             if (m_inputY == 1) {
-                pattern = 0xe9;
+                pattern = kDash2A;
             }
             return;
         }
         if (y < 0.0) {
-            if (m_patterns[pattern].unk2 <= m_patterns[0xcf].unk0 && (m_patterns[pattern].frames[frame].flagsB0 & 8) > 0 && (pattern >= 0xc8 && m_attackResult >= 2 && m_attackResult != 6 || pattern < 0xc8)) {
+            if (m_patterns[pattern].cancelLevel <= m_patterns[kJumpA].level && (m_patterns[pattern].frames[frame].flagsB0 & kStateCancellable) > 0 && (pattern >= kFirstCharacterAction && m_attackResult >= 2 && m_attackResult != 6 || pattern < kFirstCharacterAction)) {
                 StartPattern();
                 ClearBufferedPress();
-                pattern = 0xcf;
+                pattern = kJumpA;
             }
             return;
         }
-        if ((m_inputY == 1 || (m_bufferedPress & 4) != 0 || (m_dashBufferedPress & 4) != 0) && m_patterns[pattern].unk2 <= m_patterns[0xcc].unk0 && (m_patterns[pattern].frames[frame].flagsB0 & 8) > 0 && (pattern >= 0xc8 && m_attackResult >= 2 && m_attackResult != 6 || pattern < 0xc8)) {
+        if ((m_inputY == 1 || (m_bufferedPress & 4) != 0 || (m_dashBufferedPress & 4) != 0) && m_patterns[pattern].cancelLevel <= m_patterns[k2A].level && (m_patterns[pattern].frames[frame].flagsB0 & kStateCancellable) > 0 && (pattern >= kFirstCharacterAction && m_attackResult >= 2 && m_attackResult != 6 || pattern < kFirstCharacterAction)) {
             StartPattern();
             ClearBufferedPress();
-            pattern = 0xcc;
+            pattern = k2A;
             return;
         }
-        if ((m_inputY == 0 || (m_bufferedPress & 4) == 0 || (m_dashBufferedPress & 4) == 0) && m_patterns[pattern].unk2 <= m_patterns[0xc8].unk0 && (m_patterns[pattern].frames[frame].flagsB0 & 8) > 0 && (pattern >= 0xc8 && m_attackResult >= 2 && m_attackResult != 6 || pattern < 0xc8)) {
+        if ((m_inputY == 0 || (m_bufferedPress & 4) == 0 || (m_dashBufferedPress & 4) == 0) && m_patterns[pattern].cancelLevel <= m_patterns[k5A].level && (m_patterns[pattern].frames[frame].flagsB0 & kStateCancellable) > 0 && (pattern >= kFirstCharacterAction && m_attackResult >= 2 && m_attackResult != 6 || pattern < kFirstCharacterAction)) {
             StartPattern();
             ClearBufferedPress();
-            pattern = 0xc8;
+            pattern = k5A;
             return;
         }
     }
     if (m_pressB == 1 || (m_bufferedPress & 0x20) != 0 || (m_dashBufferedPress & 0x20) != 0) {
-        if (pattern == 0xa3 && m_inputX != -facing) {
+        if (pattern == kDashForward && m_inputX != -facing) {
             StartPattern();
             ClearBufferedPress();
-            pattern = 0xe7;
+            pattern = kDashB;
             if (m_inputY == 1) {
-                pattern = 0xea;
+                pattern = kDash2B;
             }
             return;
         }
         if (y < 0.0) {
-            if (m_patterns[pattern].unk2 <= m_patterns[0xd0].unk0 && (m_patterns[pattern].frames[frame].flagsB0 & 8) > 0 && (pattern >= 0xc8 && m_attackResult >= 2 && m_attackResult != 6 || pattern < 0xc8)) {
+            if (m_patterns[pattern].cancelLevel <= m_patterns[kJumpB].level && (m_patterns[pattern].frames[frame].flagsB0 & kStateCancellable) > 0 && (pattern >= kFirstCharacterAction && m_attackResult >= 2 && m_attackResult != 6 || pattern < kFirstCharacterAction)) {
                 StartPattern();
                 ClearBufferedPress();
-                pattern = 0xd0;
+                pattern = kJumpB;
             }
             return;
         }
-        if ((m_inputY == 1 || (m_bufferedPress & 4) != 0 || (m_dashBufferedPress & 4) != 0) && m_patterns[pattern].unk2 <= m_patterns[0xcd].unk0 && (m_patterns[pattern].frames[frame].flagsB0 & 8) > 0 && (pattern >= 0xc8 && m_attackResult >= 2 && m_attackResult != 6 || pattern < 0xc8)) {
+        if ((m_inputY == 1 || (m_bufferedPress & 4) != 0 || (m_dashBufferedPress & 4) != 0) && m_patterns[pattern].cancelLevel <= m_patterns[k2B].level && (m_patterns[pattern].frames[frame].flagsB0 & kStateCancellable) > 0 && (pattern >= kFirstCharacterAction && m_attackResult >= 2 && m_attackResult != 6 || pattern < kFirstCharacterAction)) {
             StartPattern();
             ClearBufferedPress();
-            pattern = 0xcd;
+            pattern = k2B;
             return;
         }
         if (m_inputY == 0 || (m_bufferedPress & 4) == 0 || (m_dashBufferedPress & 4) == 0) {
-            if (m_patterns[pattern].unk2 <= m_patterns[0xd8].unk0 && (m_patterns[pattern].frames[frame].flagsB0 & 8) > 0 && m_inputX == facing) {
+            if (m_patterns[pattern].cancelLevel <= m_patterns[k6B].level && (m_patterns[pattern].frames[frame].flagsB0 & kStateCancellable) > 0 && m_inputX == facing) {
                 StartPattern();
                 ClearBufferedPress();
-                pattern = 0xd8;
+                pattern = k6B;
                 return;
             }
-            if (m_patterns[pattern].unk2 <= m_patterns[0xc9].unk0 && (m_patterns[pattern].frames[frame].flagsB0 & 8) > 0 && x - (*m_opponent)->x > -70.0 && x - (*m_opponent)->x < 70.0 && (pattern >= 0xc8 && m_attackResult >= 2 && m_attackResult != 6 || pattern < 0xc8)) {
+            if (m_patterns[pattern].cancelLevel <= m_patterns[k5BClose].level && (m_patterns[pattern].frames[frame].flagsB0 & kStateCancellable) > 0 && x - (*m_opponent)->x > -70.0 && x - (*m_opponent)->x < 70.0 && (pattern >= kFirstCharacterAction && m_attackResult >= 2 && m_attackResult != 6 || pattern < kFirstCharacterAction)) {
                 StartPattern();
                 ClearBufferedPress();
-                pattern = 0xc9;
+                pattern = k5BClose;
                 return;
             }
-            if (m_patterns[pattern].unk2 <= m_patterns[0xca].unk0 && (m_patterns[pattern].frames[frame].flagsB0 & 8) > 0 && (pattern >= 0xc8 && m_attackResult >= 2 && m_attackResult != 6 || pattern < 0xc8)) {
+            if (m_patterns[pattern].cancelLevel <= m_patterns[k5BFar].level && (m_patterns[pattern].frames[frame].flagsB0 & kStateCancellable) > 0 && (pattern >= kFirstCharacterAction && m_attackResult >= 2 && m_attackResult != 6 || pattern < kFirstCharacterAction)) {
                 StartPattern();
                 ClearBufferedPress();
-                pattern = 0xca;
+                pattern = k5BFar;
                 return;
             }
         }
     }
     if (m_pressC == 1 || (m_bufferedPress & 0x40) != 0 || (m_dashBufferedPress & 0x40) != 0) {
-        if (pattern == 0xa3 && m_inputX != -facing) {
+        if (pattern == kDashForward && m_inputX != -facing) {
             StartPattern();
             ClearBufferedPress();
-            pattern = 0xe8;
+            pattern = kDashC;
             if (m_inputY == 1) {
-                pattern = 0xeb;
+                pattern = kDash2C;
             }
             return;
         }
         if (y < 0.0) {
-            if (m_inputX == facing && m_inputY == 0 && x - (*m_opponent)->x > -100.0 && x - (*m_opponent)->x < 100.0 && (*m_opponent)->y < 0.0 && m_patterns[pattern].unk2 <= m_patterns[0xf8].unk0 && ((*m_opponent)->pattern < 0x32 || (*m_opponent)->pattern > 0x9c) && (m_patterns[pattern].frames[frame].flagsB0 & 8) > 0 && (pattern >= 0xc8 && m_attackResult >= 2 && m_attackResult != 6 || pattern < 0xc8)) {
+            if (m_inputX == facing && m_inputY == 0 && x - (*m_opponent)->x > -100.0 && x - (*m_opponent)->x < 100.0 && (*m_opponent)->y < 0.0 && m_patterns[pattern].cancelLevel <= m_patterns[kAirThrow].level && ((*m_opponent)->pattern < kFirstHitReaction || (*m_opponent)->pattern > kGuardAir) && (m_patterns[pattern].frames[frame].flagsB0 & kStateCancellable) > 0 && (pattern >= kFirstCharacterAction && m_attackResult >= 2 && m_attackResult != 6 || pattern < kFirstCharacterAction)) {
                 StartPattern();
                 ClearBufferedPress();
-                pattern = 0xf8;
+                pattern = kAirThrow;
                 return;
             }
-            if (m_patterns[pattern].unk2 <= m_patterns[0xd1].unk0 && (m_patterns[pattern].frames[frame].flagsB0 & 8) > 0 && (pattern >= 0xc8 && m_attackResult >= 2 && m_attackResult != 6 || pattern < 0xc8)) {
+            if (m_patterns[pattern].cancelLevel <= m_patterns[kJumpC].level && (m_patterns[pattern].frames[frame].flagsB0 & kStateCancellable) > 0 && (pattern >= kFirstCharacterAction && m_attackResult >= 2 && m_attackResult != 6 || pattern < kFirstCharacterAction)) {
                 StartPattern();
                 ClearBufferedPress();
-                pattern = 0xd1;
+                pattern = kJumpC;
             }
             return;
         }
-        if ((m_inputY == 1 || (m_bufferedPress & 4) != 0 || (m_dashBufferedPress & 4) != 0) && m_patterns[pattern].unk2 <= m_patterns[0xce].unk0 && (m_patterns[pattern].frames[frame].flagsB0 & 8) > 0 && (pattern >= 0xc8 && m_attackResult >= 2 && m_attackResult != 6 || pattern < 0xc8)) {
+        if ((m_inputY == 1 || (m_bufferedPress & 4) != 0 || (m_dashBufferedPress & 4) != 0) && m_patterns[pattern].cancelLevel <= m_patterns[k2C].level && (m_patterns[pattern].frames[frame].flagsB0 & kStateCancellable) > 0 && (pattern >= kFirstCharacterAction && m_attackResult >= 2 && m_attackResult != 6 || pattern < kFirstCharacterAction)) {
             StartPattern();
             ClearBufferedPress();
-            pattern = 0xce;
-            if (unk3148 > 0) {
-                pattern = 0xd7;
+            pattern = k2C;
+            if (m_shotState > 0) {
+                pattern = k2CShotOut;
             }
             return;
         }
         if (m_inputY == 0 || (m_bufferedPress & 4) == 0 || (m_dashBufferedPress & 4) == 0) {
-            if (m_inputX != 0 && (*m_opponent)->y == 0.0 && x - (*m_opponent)->x > -30.0 && x - (*m_opponent)->x < 30.0 && m_patterns[pattern].unk2 <= m_patterns[0xdc].unk0 && ((*m_opponent)->pattern < 0x32 || (*m_opponent)->pattern > 0x9c) && (m_patterns[pattern].frames[frame].flagsB0 & 8) > 0 && (pattern >= 0xc8 && m_attackResult >= 2 && m_attackResult != 6 || pattern < 0xc8)) {
+            if (m_inputX != 0 && (*m_opponent)->y == 0.0 && x - (*m_opponent)->x > -30.0 && x - (*m_opponent)->x < 30.0 && m_patterns[pattern].cancelLevel <= m_patterns[kThrow].level && ((*m_opponent)->pattern < kFirstHitReaction || (*m_opponent)->pattern > kGuardAir) && (m_patterns[pattern].frames[frame].flagsB0 & kStateCancellable) > 0 && (pattern >= kFirstCharacterAction && m_attackResult >= 2 && m_attackResult != 6 || pattern < kFirstCharacterAction)) {
                 StartPattern();
                 ClearBufferedPress();
-                pattern = 0xdc;
+                pattern = kThrow;
                 return;
             }
-            if (m_patterns[pattern].unk2 <= m_patterns[0xcb].unk0 && (m_patterns[pattern].frames[frame].flagsB0 & 8) > 0 && (pattern >= 0xc8 && m_attackResult >= 2 && m_attackResult != 6 || pattern < 0xc8)) {
+            if (m_patterns[pattern].cancelLevel <= m_patterns[k5C].level && (m_patterns[pattern].frames[frame].flagsB0 & kStateCancellable) > 0 && (pattern >= kFirstCharacterAction && m_attackResult >= 2 && m_attackResult != 6 || pattern < kFirstCharacterAction)) {
                 StartPattern();
                 ClearBufferedPress();
-                pattern = 0xcb;
+                pattern = k5C;
             }
         }
     }
@@ -517,7 +517,7 @@ void CNagamori::DrawGauge()
     EffectFrame x1c;
     RECT v10;
 
-    if (unk3150 > 0) {
+    if (m_lv4Time > 0) {
         x1c = *anims[0x2b].frames;
         v2c = MakeRect(0, 0, x1c.width, x1c.height);
         if (m_side == 0) {
@@ -527,19 +527,19 @@ void CNagamori::DrawGauge()
         }
         m_graphics->Blit(v10, surfaces[x1c.surface], v2c, colorKey, 0);
     }
-    if (unk3150 > 0) {
+    if (m_lv4Time > 0) {
         x1c = *anims[0x2c].frames;
-        v2c = MakeRect(0, 0, unk3150 * x1c.width / 0x4b0, x1c.height);
+        v2c = MakeRect(0, 0, m_lv4Time * x1c.width / 0x4b0, x1c.height);
         if (m_side == 0) {
-            v10 = MakeRect(0x31 - x1c.x, 0x1f - x1c.y, unk3150 * x1c.width / 0x4b0, x1c.height);
+            v10 = MakeRect(0x31 - x1c.x, 0x1f - x1c.y, m_lv4Time * x1c.width / 0x4b0, x1c.height);
         } else {
-            v10 = MakeRect(x1c.x + 0x10f - unk3150 * x1c.width / 0x4b0, 0x1f - x1c.y, unk3150 * x1c.width / 0x4b0, x1c.height);
+            v10 = MakeRect(x1c.x + 0x10f - m_lv4Time * x1c.width / 0x4b0, 0x1f - x1c.y, m_lv4Time * x1c.width / 0x4b0, x1c.height);
         }
         m_graphics->Blit(v10, surfaces[x1c.surface], v2c, colorKey, 0);
     }
 }
 
-void CNagamori::Vf8()
+void CNagamori::PreUpdate()
 {
     if (unk315c > 0) {
         unk315c--;
@@ -558,7 +558,7 @@ void CNagamori::ReadCommand()
     BYTE v5;
     int v4;
 
-    m_command = 0x63;
+    m_command = kCmdNone;
     x6 = 0;
     v4 = m_inputPos + 0x2d;
     for (; v4 < m_inputPos + 0xb4; v4++) {
@@ -567,7 +567,7 @@ void CNagamori::ReadCommand()
             break;
         }
         if ((v5 & 0x10) != 0 && x6 == 5) {
-            m_command = 0x5b;
+            m_command = kCmd6BA65A;
             return;
         }
         if (v5 == 0 && x6 == 4) {
@@ -597,12 +597,12 @@ void CNagamori::ReadCommand()
     for (; v4 < m_inputPos + 0xb4; v4++) {
         v5 = m_inputHistory[(v4 - (v4 >= 0xb4) * 0xb4)];
         if ((v5 & 0xf0) != 0 && x6 == 4) {
-            m_command = ((v5 & 0xe0) > 0) + 0x78 + ((v5 & 0xc0) > 0) + ((v5 & 0x80) > 0);
+            m_command = ((v5 & 0xe0) > 0) + kCmd641236A + ((v5 & 0xc0) > 0) + ((v5 & 0x80) > 0);
             return;
         }
         if ((v5 & 0xf) == (facing == -1) + 5 && x6 == 3) {
             if ((v5 & 0xf0) != 0) {
-                m_command = ((v5 & 0xe0) > 0) + 0x78 + ((v5 & 0xc0) > 0) + ((v5 & 0x80) > 0);
+                m_command = ((v5 & 0xe0) > 0) + kCmd641236A + ((v5 & 0xc0) > 0) + ((v5 & 0x80) > 0);
                 return;
             }
             x6 = 4;
@@ -622,12 +622,12 @@ void CNagamori::ReadCommand()
     for (; v4 < m_inputPos + 0xb4; v4++) {
         v5 = m_inputHistory[(v4 - (v4 >= 0xb4) * 0xb4)];
         if ((v5 & 0xf0) != 0 && x6 == 6) {
-            m_command = ((v5 & 0xe0) > 0) + 0x6e + ((v5 & 0xc0) > 0) + ((v5 & 0x80) > 0);
+            m_command = ((v5 & 0xe0) > 0) + kCmd214214A + ((v5 & 0xc0) > 0) + ((v5 & 0x80) > 0);
             return;
         }
         if ((v5 & 0xf) == 2 - (facing == -1) && x6 == 5) {
             if ((v5 & 0xf0) != 0) {
-                m_command = ((v5 & 0xe0) > 0) + 0x6e + ((v5 & 0xc0) > 0) + ((v5 & 0x80) > 0);
+                m_command = ((v5 & 0xe0) > 0) + kCmd214214A + ((v5 & 0xc0) > 0) + ((v5 & 0x80) > 0);
                 return;
             }
             x6 = 6;
@@ -653,12 +653,12 @@ void CNagamori::ReadCommand()
     for (; v4 < m_inputPos + 0xb4; v4++) {
         v5 = m_inputHistory[(v4 - (v4 >= 0xb4) * 0xb4)];
         if ((v5 & 0xf0) != 0 && x6 == 6) {
-            m_command = ((v5 & 0xe0) > 0) + 0x64 + ((v5 & 0xc0) > 0) + ((v5 & 0x80) > 0);
+            m_command = ((v5 & 0xe0) > 0) + kCmd236236A + ((v5 & 0xc0) > 0) + ((v5 & 0x80) > 0);
             return;
         }
         if ((v5 & 0xf) == (facing == -1) + 1 && x6 == 5) {
             if ((v5 & 0xf0) != 0) {
-                m_command = ((v5 & 0xe0) > 0) + 0x64 + ((v5 & 0xc0) > 0) + ((v5 & 0x80) > 0);
+                m_command = ((v5 & 0xe0) > 0) + kCmd236236A + ((v5 & 0xc0) > 0) + ((v5 & 0x80) > 0);
                 return;
             }
             x6 = 6;
@@ -684,12 +684,12 @@ void CNagamori::ReadCommand()
     for (; v4 < m_inputPos + 0xb4; v4++) {
         v5 = m_inputHistory[(v4 - (v4 >= 0xb4) * 0xb4)];
         if ((v5 & 0xf0) != 0 && x6 == 3) {
-            m_command = ((v5 & 0xe0) > 0) + 0x28 + ((v5 & 0xc0) > 0) + ((v5 & 0x80) > 0);
+            m_command = ((v5 & 0xe0) > 0) + kCmd412A + ((v5 & 0xc0) > 0) + ((v5 & 0x80) > 0);
             return;
         }
         if ((v5 & 0xf) == 4 && x6 == 2) {
             if ((v5 & 0xf0) != 0) {
-                m_command = ((v5 & 0xe0) > 0) + 0x28 + ((v5 & 0xc0) > 0) + ((v5 & 0x80) > 0);
+                m_command = ((v5 & 0xe0) > 0) + kCmd412A + ((v5 & 0xc0) > 0) + ((v5 & 0x80) > 0);
                 return;
             }
             x6 = 3;
@@ -706,12 +706,12 @@ void CNagamori::ReadCommand()
     for (; v4 < m_inputPos + 0xb4; v4++) {
         v5 = m_inputHistory[(v4 - (v4 >= 0xb4) * 0xb4)];
         if ((v5 & 0xf0) != 0 && x6 == 3) {
-            m_command = ((v5 & 0xe0) > 0) + 0x14 + ((v5 & 0xc0) > 0) + ((v5 & 0x80) > 0);
+            m_command = ((v5 & 0xe0) > 0) + kCmd623A + ((v5 & 0xc0) > 0) + ((v5 & 0x80) > 0);
             return;
         }
         if ((v5 & 0xf) == (facing == -1) + 5 && x6 == 2) {
             if ((v5 & 0xf0) != 0) {
-                m_command = ((v5 & 0xe0) > 0) + 0x14 + ((v5 & 0xc0) > 0) + ((v5 & 0x80) > 0);
+                m_command = ((v5 & 0xe0) > 0) + kCmd623A + ((v5 & 0xc0) > 0) + ((v5 & 0x80) > 0);
                 return;
             }
             x6 = 3;
@@ -728,12 +728,12 @@ void CNagamori::ReadCommand()
     for (; v4 < m_inputPos + 0xb4; v4++) {
         v5 = m_inputHistory[(v4 - (v4 >= 0xb4) * 0xb4)];
         if ((v5 & 0xf0) != 0 && x6 == 3) {
-            m_command = ((v5 & 0xe0) > 0) + 0xa + ((v5 & 0xc0) > 0) + ((v5 & 0x80) > 0);
+            m_command = ((v5 & 0xe0) > 0) + kCmd236A + ((v5 & 0xc0) > 0) + ((v5 & 0x80) > 0);
             return;
         }
         if ((v5 & 0xf) == (facing == -1) + 1 && x6 == 2) {
             if ((v5 & 0xf0) != 0) {
-                m_command = ((v5 & 0xe0) > 0) + 0xa + ((v5 & 0xc0) > 0) + ((v5 & 0x80) > 0);
+                m_command = ((v5 & 0xe0) > 0) + kCmd236A + ((v5 & 0xc0) > 0) + ((v5 & 0x80) > 0);
                 return;
             }
             x6 = 3;
@@ -750,12 +750,12 @@ void CNagamori::ReadCommand()
     for (; v4 < m_inputPos + 0xb4; v4++) {
         v5 = m_inputHistory[(v4 - (v4 >= 0xb4) * 0xb4)];
         if ((v5 & 0xf0) != 0 && x6 == 3) {
-            m_command = ((v5 & 0xe0) > 0) + 0x1e + ((v5 & 0xc0) > 0) + ((v5 & 0x80) > 0);
+            m_command = ((v5 & 0xe0) > 0) + kCmd214A + ((v5 & 0xc0) > 0) + ((v5 & 0x80) > 0);
             return;
         }
         if ((v5 & 0xf) == 2 - (facing == -1) && x6 == 2) {
             if ((v5 & 0xf0) != 0) {
-                m_command = ((v5 & 0xe0) > 0) + 0x1e + ((v5 & 0xc0) > 0) + ((v5 & 0x80) > 0);
+                m_command = ((v5 & 0xe0) > 0) + kCmd214A + ((v5 & 0xc0) > 0) + ((v5 & 0x80) > 0);
                 return;
             }
             x6 = 3;
@@ -772,7 +772,7 @@ void CNagamori::ReadCommand()
     for (; v4 < m_inputPos + 0xb4; v4++) {
         v5 = m_inputHistory[(v4 - (v4 >= 0xb4) * 0xb4)];
         if ((v5 & 8) != 0 && x6 == 1) {
-            m_command = 6;
+            m_command = kCmdUp;
             return;
         }
         if ((v5 & 8) == 0 && x6 == 0) {
@@ -784,7 +784,7 @@ void CNagamori::ReadCommand()
     for (; v4 < m_inputPos + 0xb4; v4++) {
         v5 = m_inputHistory[(v4 - (v4 >= 0xb4) * 0xb4)];
         if ((v5 & 0x80) != 0 && x6 == 4) {
-            m_command = 0x35;
+            m_command = kCmd22D;
             return;
         }
         if ((v5 & 0xf) == 4 && x6 == 3) {
@@ -796,7 +796,7 @@ void CNagamori::ReadCommand()
         if ((v5 & 0xf) == 4 && x6 == 1) {
             x6 = 2;
         }
-        if ((v5 & 0xf) == 0 && x6 == 0 && pattern == 0x60) {
+        if ((v5 & 0xf) == 0 && x6 == 0 && pattern == kWakeUp) {
             x6 = 1;
         }
     }
@@ -805,7 +805,7 @@ void CNagamori::ReadCommand()
     for (; v4 < m_inputPos + 0xb4; v4++) {
         v5 = m_inputHistory[(v4 - (v4 >= 0xb4) * 0xb4)];
         if ((v5 & 0x40) != 0 && x6 == 4) {
-            m_command = 0x34;
+            m_command = kCmd22C;
             return;
         }
         if ((v5 & 0xf) == 4 && x6 == 3) {
@@ -826,7 +826,7 @@ void CNagamori::ReadCommand()
     for (; v4 < m_inputPos + 0xb4; v4++) {
         v5 = m_inputHistory[(v4 - (v4 >= 0xb4) * 0xb4)];
         if ((v5 & 0x20) != 0 && x6 == 4) {
-            m_command = 0x33;
+            m_command = kCmd22B;
             return;
         }
         if ((v5 & 0xf) == 4 && x6 == 3) {
@@ -847,7 +847,7 @@ void CNagamori::ReadCommand()
     for (; v4 < m_inputPos + 0xb4; v4++) {
         v5 = m_inputHistory[(v4 - (v4 >= 0xb4) * 0xb4)];
         if ((v5 & 0x10) != 0 && x6 == 4) {
-            m_command = 0x32;
+            m_command = kCmd22A;
             return;
         }
         if ((v5 & 0xf) == 4 && x6 == 3) {
@@ -868,7 +868,7 @@ void CNagamori::ReadCommand()
     for (; v4 < m_inputPos + 0xb4; v4++) {
         v5 = m_inputHistory[(v4 - (v4 >= 0xb4) * 0xb4)];
         if ((v5 & 0xf) == 1 && x6 == 3) {
-            m_command = 1;
+            m_command = kCmdDashRight;
             return;
         }
         if ((v5 & 0xf) == 0 && x6 == 2) {
@@ -886,7 +886,7 @@ void CNagamori::ReadCommand()
     for (; v4 < m_inputPos + 0xb4; v4++) {
         v5 = m_inputHistory[(v4 - (v4 >= 0xb4) * 0xb4)];
         if ((v5 & 0xf) == 2 && x6 == 3) {
-            m_command = 0;
+            m_command = kCmdDashLeft;
             break;
         }
         if ((v5 & 0xf) == 0 && x6 == 2) {
@@ -906,12 +906,12 @@ void CNagamori::CpuInput()
     double v10;
     double x8;
 
-    m_command = 0x63;
-    if (unk1a0 > 0) {
-        unk1a0--;
+    m_command = kCmdNone;
+    if (m_cpuWalkRight > 0) {
+        m_cpuWalkRight--;
     }
-    if (unk1a4 > 0) {
-        unk1a4--;
+    if (m_cpuWalkLeft > 0) {
+        m_cpuWalkLeft--;
     }
     m_inputX = 0;
     m_inputY = 0;
@@ -919,30 +919,30 @@ void CNagamori::CpuInput()
     m_pressB = 0;
     m_pressC = 0;
     m_pressD = 0;
-    unk14e = 0;
-    if ((WORD)Random(0, 0x3e8) < 25.0f * unka8 + (y < 0.0) * 0x1e * unka8 + (m_cpuAction == 3) * 0x190 + (pattern == 0xaa) * 0x12c) {
-        unk14e = 0x3c;
+    m_recoilGuardWindow = 0;
+    if ((WORD)Random(0, 0x3e8) < 25.0f * m_cpuSkill + (y < 0.0) * 0x1e * m_cpuSkill + (m_cpuAction == 3) * 0x190 + (pattern == kRecoilGuardAir) * 0x12c) {
+        m_recoilGuardWindow = 0x3c;
     }
-    if ((WORD)Random(0, 0x7d0) < ((unk130 > 0) * 4.0 + 1.0) * 8.0 * unka8 * ((pattern > 0x95 && pattern < 0x9d) * 2 + 1)) {
-        unk14e = 0x3c;
+    if ((WORD)Random(0, 0x7d0) < ((m_throwProtect > 0) * 4.0 + 1.0) * 8.0 * m_cpuSkill * ((pattern > kLastHitReaction && pattern < kAirRecoveryForward) * 2 + 1)) {
+        m_recoilGuardWindow = 0x3c;
     }
-    if ((WORD)Random(0, 0x3e8) < 4e+01f * unka8 && pattern > 0xc7) {
-        unk14e = 0x3c;
+    if ((WORD)Random(0, 0x3e8) < 4e+01f * m_cpuSkill && pattern > kLastSharedAction) {
+        m_recoilGuardWindow = 0x3c;
     }
-    if (unk170 == 1 && m_cpuAction == 2) {
-        unk14e = 0x1e;
-        if (pattern < 0xc8) {
+    if (m_canRecoilCounter == 1 && m_cpuAction == 2) {
+        m_recoilGuardWindow = 0x1e;
+        if (pattern < kFirstCharacterAction) {
             m_cpuAction = 0;
         }
         return;
     }
-    if ((*m_opponent)->pattern == 0x60) {
+    if ((*m_opponent)->pattern == kWakeUp) {
         return;
     }
     v10 = ((*m_opponent)->x - x) * facing;
     x8 = fabs(y - (*m_opponent)->y);
-    if (pattern >= 0x32 && pattern <= 0x96 && timer == 0) {
-        if ((WORD)Random(0, 0x64) < 8.0f * unka8) {
+    if (pattern >= kFirstHitReaction && pattern <= kFirstGuard && timer == 0) {
+        if ((WORD)Random(0, 0x64) < 8.0f * m_cpuSkill) {
             m_cpuAction = 3;
         } else {
             m_cpuAction = 0;
@@ -950,157 +950,157 @@ void CNagamori::CpuInput()
         m_inputX = 1 - (((WORD)Random(0, 0x64) < 0x32) << 1);
         m_pressD = (WORD)Random(0, 0xf0) < x8;
         m_pressD = (WORD)Random(0, 0x140) < v10;
-        if ((*m_opponent)->pattern > 0xc7 && (*m_opponent)->pattern < 0xfa && (*m_opponent)->frame < 3 && x8 < 100.0 && v10 < 150.0) {
+        if ((*m_opponent)->pattern > kLastSharedAction && (*m_opponent)->pattern < 0xfa && (*m_opponent)->frame < 3 && x8 < 100.0 && v10 < 150.0) {
             m_pressD = 0;
         }
         return;
     }
-    if ((pattern >= 4 && pattern <= 6 || pattern >= 0xa && pattern <= 0xc) && y == 0.0) {
+    if ((pattern >= kJump && pattern <= kJumpBack || pattern >= kSuperJump && pattern <= kSuperJumpBack) && y == 0.0) {
         return;
     }
-    if ((*m_opponent)->pattern >= 0x32 && (*m_opponent)->pattern < 0x96 && pattern == 0x108 && m_hitsLeft > 1) {
+    if ((*m_opponent)->pattern >= kFirstHitReaction && (*m_opponent)->pattern < kFirstGuard && pattern == 0x108 && m_hitsLeft > 1) {
         return;
     }
-    if (pattern == 0xa8 && timer < 6) {
+    if (pattern == kRecoilGuardStand && timer < 6) {
         if ((*m_opponent)->pattern != 0xc8 && (*m_opponent)->pattern != 0xcc && (*m_opponent)->pattern < 0xfa && (*m_opponent)->y == 0.0 && (*m_opponent)->m_hitsLeft == 0) {
-            if (v10 < 40.0 && (WORD)Random(0, 0x64) < unka8 * 3.0f) {
+            if (v10 < 40.0 && (WORD)Random(0, 0x64) < m_cpuSkill * 3.0f) {
                 m_pressA = 1;
                 m_inputY = 1;
                 return;
             }
-            if (v10 < 60.0 && (WORD)Random(0, 0x64) < unka8 * 3.0f) {
+            if (v10 < 60.0 && (WORD)Random(0, 0x64) < m_cpuSkill * 3.0f) {
                 m_pressA = 1;
                 m_inputY = 0;
                 return;
             }
         }
         if (((*m_opponent)->pattern == 0xc9 || (*m_opponent)->pattern == 0xca || (*m_opponent)->pattern == 0xcd) && (*m_opponent)->pattern < 0xfa && (*m_opponent)->y == 0.0 && (*m_opponent)->m_hitsLeft == 0) {
-            if (v10 > 40.0 && v10 < 80.0 && (WORD)Random(0, 0x64) < unka8 * 3.0f) {
+            if (v10 > 40.0 && v10 < 80.0 && (WORD)Random(0, 0x64) < m_cpuSkill * 3.0f) {
                 m_pressB = 1;
                 m_inputY = 1;
                 m_inputX = 0;
                 return;
             }
-            if (v10 > 60.0 && v10 < 120.0 && (WORD)Random(0, 0x64) < unka8 * 3.0f) {
+            if (v10 > 60.0 && v10 < 120.0 && (WORD)Random(0, 0x64) < m_cpuSkill * 3.0f) {
                 m_pressA = 3;
                 m_inputY = 1;
                 return;
             }
         }
     }
-    if (pattern == 0xa8 || pattern == 0xa9) {
+    if (pattern == kRecoilGuardStand || pattern == kRecoilGuardCrouch) {
         if (v10 < 100.0) {
-            if ((WORD)Random(0, 0x64) < unka8 * 3.0f && unk118 > 500.0) {
-                m_command = 0xc;
+            if ((WORD)Random(0, 0x64) < m_cpuSkill * 3.0f && m_rfGauge > 500.0) {
+                m_command = kCmd236C;
                 return;
             }
-            if ((WORD)Random(0, 0x64) < unka8 * 3.0f + ((unk118 > 500.0) << 1)) {
+            if ((WORD)Random(0, 0x64) < m_cpuSkill * 3.0f + ((m_rfGauge > 500.0) << 1)) {
                 m_command = 0x48;
                 return;
             }
-            if ((WORD)Random(0, 0x64) < unka8 * 3.0f + ((unk118 > 500.0) << 1)) {
-                m_command = ((WORD)Random(0, 1) == 1) * 2 + 0x14;
+            if ((WORD)Random(0, 0x64) < m_cpuSkill * 3.0f + ((m_rfGauge > 500.0) << 1)) {
+                m_command = ((WORD)Random(0, 1) == 1) * 2 + kCmd623A;
                 return;
             }
-            if ((WORD)Random(0, 0x64) < unka8 * 3.0f && v10 < 60.0 && m_gauge >= 0x7d0) {
-                m_command = 0x65;
+            if ((WORD)Random(0, 0x64) < m_cpuSkill * 3.0f && v10 < 60.0 && m_gauge >= 0x7d0) {
+                m_command = kCmd236236B;
                 return;
             }
-            if ((WORD)Random(0, 0x64) < unka8 * 3.0f && v10 < 150.0 && m_gauge == 0xbb8) {
-                m_command = 0x66;
+            if ((WORD)Random(0, 0x64) < m_cpuSkill * 3.0f && v10 < 150.0 && m_gauge == 0xbb8) {
+                m_command = kCmd236236C;
                 return;
             }
         }
-        if (v10 < 160.0 && (WORD)Random(0, 0x64) < unka8 * 3.0f && unk118 > 500.0) {
-            m_command = 0xc;
+        if (v10 < 160.0 && (WORD)Random(0, 0x64) < m_cpuSkill * 3.0f && m_rfGauge > 500.0) {
+            m_command = kCmd236C;
             return;
         }
-        if (v10 < 220.0 && v10 > 160.0 && (WORD)Random(0, 0x64) < unka8 * 1.0f) {
+        if (v10 < 220.0 && v10 > 160.0 && (WORD)Random(0, 0x64) < m_cpuSkill * 1.0f) {
             m_command = (WORD)Random(0, 2) + 0x46;
             return;
         }
-        if (v10 > 220.0 && (WORD)Random(0, 0x64) < unka8 * 1.0f && unk118 > 500.0) {
-            m_command = (WORD)Random(0, 2) + 0xa;
+        if (v10 > 220.0 && (WORD)Random(0, 0x64) < m_cpuSkill * 1.0f && m_rfGauge > 500.0) {
+            m_command = (WORD)Random(0, 2) + kCmd236A;
             return;
         }
     }
-    if (pattern == 0xaa && frame == 1 && timer == 0) {
-        if ((WORD)Random(0, 0x64) < unka8 * 5.0f) {
+    if (pattern == kRecoilGuardAir && frame == 1 && timer == 0) {
+        if ((WORD)Random(0, 0x64) < m_cpuSkill * 5.0f) {
             m_cpuAction = 3;
             return;
         }
-        if (y - (*m_opponent)->y < 0.0 && y - (*m_opponent)->y > -40.0 && v10 < 80.0 && (WORD)Random(0, 0x64) < unka8 * 5.0f) {
+        if (y - (*m_opponent)->y < 0.0 && y - (*m_opponent)->y > -40.0 && v10 < 80.0 && (WORD)Random(0, 0x64) < m_cpuSkill * 5.0f) {
             m_pressA = 1;
             return;
         }
-        if (y - (*m_opponent)->y > -30.0 && y - (*m_opponent)->y < 0.0 && v10 < 100.0 && (WORD)Random(0, 0x64) < unka8 * 5.0f) {
+        if (y - (*m_opponent)->y > -30.0 && y - (*m_opponent)->y < 0.0 && v10 < 100.0 && (WORD)Random(0, 0x64) < m_cpuSkill * 5.0f) {
             m_pressB = 1;
             return;
         }
-        if (y - (*m_opponent)->y > -50.0 && y - (*m_opponent)->y < 50.0 && x8 < 60.0 && v10 < 120.0 && (WORD)Random(0, 0x64) < unka8 * 5.0f) {
+        if (y - (*m_opponent)->y > -50.0 && y - (*m_opponent)->y < 50.0 && x8 < 60.0 && v10 < 120.0 && (WORD)Random(0, 0x64) < m_cpuSkill * 5.0f) {
             m_pressC = 1;
             m_inputY = 0;
             return;
         }
-        if (x8 < 50.0 && v10 < 100.0 && (WORD)Random(0, 0x64) < unka8 * 2) {
-            m_command = 0x16;
+        if (x8 < 50.0 && v10 < 100.0 && (WORD)Random(0, 0x64) < m_cpuSkill * 2) {
+            m_command = kCmd623C;
             return;
         }
     }
-    if (((*m_opponent)->pattern == 0xa8 || (*m_opponent)->pattern == 0xa9 || (*m_opponent)->pattern == 0xaa) && y == 0.0 && (WORD)Random(0, 0x64) < 15.0f * unka8 && m_cpuAction != 2 && (*m_opponent)->unk14c == 0) {
+    if (((*m_opponent)->pattern == kRecoilGuardStand || (*m_opponent)->pattern == kRecoilGuardCrouch || (*m_opponent)->pattern == kRecoilGuardAir) && y == 0.0 && (WORD)Random(0, 0x64) < 15.0f * m_cpuSkill && m_cpuAction != 2 && (*m_opponent)->m_freezeTime == 0) {
         m_cpuRoll = (WORD)Random(0, 0x64);
-        if (m_cpuRoll < 3 && unk118 > 500.0) {
+        if (m_cpuRoll < 3 && m_rfGauge > 500.0) {
             m_command = 0x48;
             return;
         }
-        if (m_cpuRoll < 7 && unk118 > 500.0) {
-            m_command = 0xc;
+        if (m_cpuRoll < 7 && m_rfGauge > 500.0) {
+            m_command = kCmd236C;
             return;
         }
-        if (m_cpuRoll < 0xa && unk118 > 500.0) {
-            m_command = 0x14;
+        if (m_cpuRoll < 0xa && m_rfGauge > 500.0) {
+            m_command = kCmd623A;
             return;
         }
-        if (m_cpuRoll < 0xd && unk118 > 500.0) {
-            m_command = 0x16;
+        if (m_cpuRoll < 0xd && m_rfGauge > 500.0) {
+            m_command = kCmd623C;
             return;
         }
         if (m_cpuRoll < 0x11 && m_cpuRoll > 0xc && m_gauge >= 0x7d0) {
-            m_command = (WORD)Random(0, 1) + 0x65;
+            m_command = (WORD)Random(0, 1) + kCmd236236B;
             return;
         }
     }
-    if (((*m_opponent)->pattern == 0xa8 || (*m_opponent)->pattern == 0xa9 || (*m_opponent)->pattern == 0xaa) && y < 0.0 && (WORD)Random(0, 0x64) < 15.0f * unka8 && m_cpuAction != 2 && (*m_opponent)->unk14c == 0) {
+    if (((*m_opponent)->pattern == kRecoilGuardStand || (*m_opponent)->pattern == kRecoilGuardCrouch || (*m_opponent)->pattern == kRecoilGuardAir) && y < 0.0 && (WORD)Random(0, 0x64) < 15.0f * m_cpuSkill && m_cpuAction != 2 && (*m_opponent)->m_freezeTime == 0) {
         m_cpuRoll = (WORD)Random(0, 0x64);
         if (m_cpuRoll < 0x14) {
             m_cpuAction = 2;
             return;
         }
         if (v10 < 100.0 && m_cpuRoll < 0x16) {
-            m_command = 0x16;
+            m_command = kCmd623C;
             return;
         }
     }
-    if ((unk118 > 500.0 || unk120 > 0) && (WORD)Random(0, 0x64) < 8.0f * unka8 && (*m_opponent)->pattern > 0x95 && (*m_opponent)->pattern < 0x9d && (pattern == 0xfa || pattern == 0xfb || pattern == 0xfc || pattern == 0x10e || pattern == 0x10f || pattern == 0x110)) {
-        m_command = 0x34;
+    if ((m_rfGauge > 500.0 || m_rfBlue > 0) && (WORD)Random(0, 0x64) < 8.0f * m_cpuSkill && (*m_opponent)->pattern > kLastHitReaction && (*m_opponent)->pattern < kAirRecoveryForward && (pattern == k623A || pattern == k623B || pattern == k623C || pattern == k412A || pattern == k412B || pattern == k412C)) {
+        m_command = kCmd22C;
         return;
     }
-    if (m_cpuAction > 0 && pattern > 0x31 && pattern < 0x9e) {
+    if (m_cpuAction > 0 && pattern > kLastFreeAction && pattern < kAirRecoveryBack) {
         m_cpuAction = 0;
     }
-    if (m_cpuAction == 1 && pattern < 0xc8) {
+    if (m_cpuAction == 1 && pattern < kFirstCharacterAction) {
         m_cpuAction = 0;
     }
-    if (m_cpuAction == 2 && unk170 != 1) {
+    if (m_cpuAction == 2 && m_canRecoilCounter != 1) {
         m_cpuAction = 0;
         return;
     }
     if (m_cpuAction == 4) {
         m_inputY = -1;
         m_inputX = (WORD)Random(0, 2) - 1;
-        if (pattern == 4 || pattern == 5 || pattern == 6) {
+        if (pattern == kJump || pattern == kJumpForward || pattern == kJumpBack) {
             m_command = facing == 1;
-            if (pattern == 0xa5) {
+            if (pattern == kAirDashForward) {
                 m_cpuAction = 0;
             }
             m_inputY = 0;
@@ -1108,58 +1108,58 @@ void CNagamori::CpuInput()
             return;
         }
     }
-    if (m_cpuAction == 5 && pattern < 0x32) {
+    if (m_cpuAction == 5 && pattern < kFirstHitReaction) {
         m_command = facing == 1;
-        if (pattern == 0xa3) {
+        if (pattern == kDashForward) {
             m_cpuAction = 0;
         }
         return;
     }
-    if (m_cpuAction == 6 && pattern < 0x32) {
+    if (m_cpuAction == 6 && pattern < kFirstHitReaction) {
         m_command = facing == 1;
-        if (pattern == 0xa3) {
+        if (pattern == kDashForward) {
             m_cpuAction = 7;
         }
         return;
     }
-    if (m_cpuAction == 7 && pattern == 0xa3) {
+    if (m_cpuAction == 7 && pattern == kDashForward) {
         m_pressA = 1;
-        if (pattern == 0xe6) {
+        if (pattern == kDashA) {
             m_cpuAction = 0;
         }
         return;
     }
-    if (m_cpuAction == 8 && pattern < 0x32) {
+    if (m_cpuAction == 8 && pattern < kFirstHitReaction) {
         m_command = facing == 1;
-        if (pattern == 0xa3) {
+        if (pattern == kDashForward) {
             m_cpuAction = 9;
         }
         return;
     }
-    if (m_cpuAction == 9 && pattern == 0xa3) {
+    if (m_cpuAction == 9 && pattern == kDashForward) {
         m_pressB = 1;
-        if (pattern == 0xe7) {
+        if (pattern == kDashB) {
             m_cpuAction = 0;
         }
         return;
     }
-    if (m_cpuAction == 0xa && pattern < 0x32) {
+    if (m_cpuAction == 0xa && pattern < kFirstHitReaction) {
         m_command = facing == 1;
-        if (pattern == 0xa3) {
+        if (pattern == kDashForward) {
             m_cpuAction = 0xb;
         }
         return;
     }
-    if (m_cpuAction == 0xb && pattern == 0xa3) {
+    if (m_cpuAction == 0xb && pattern == kDashForward) {
         m_pressC = 1;
-        if (pattern == 0xe8) {
+        if (pattern == kDashC) {
             m_cpuAction = 0;
         }
         return;
     }
-    if (m_attackResult > 1 && unk14a == 0 && (WORD)Random(0, 0x64) < unka8 * 25.0f && m_cpuAction != 1 && m_cpuAction != 2) {
+    if (m_attackResult > 1 && m_hitstop == 0 && (WORD)Random(0, 0x64) < m_cpuSkill * 25.0f && m_cpuAction != 1 && m_cpuAction != 2) {
         m_cpuRoll = (WORD)Random(0, 0x3e8);
-        if (pattern == 0xc8) {
+        if (pattern == k5A) {
             if ((*m_opponent)->y < 0.0 && m_cpuRoll < 0x12c) {
                 m_pressB = 1;
                 m_inputY = 0;
@@ -1204,13 +1204,13 @@ void CNagamori::CpuInput()
                 return;
             }
         }
-        if (pattern == 0xc9) {
+        if (pattern == k5BClose) {
             if ((*m_opponent)->y < 0.0 && m_cpuRoll < 0x12c && m_attackResult == 3) {
-                m_command = (WORD)Random(0, 2) + 0x14;
+                m_command = (WORD)Random(0, 2) + kCmd623A;
                 return;
             }
             if ((*m_opponent)->y < 0.0 && m_cpuRoll > 0x12b && m_cpuRoll < 0x140) {
-                m_command = 0x1f;
+                m_command = kCmd214B;
                 return;
             }
             if ((*m_opponent)->y < 0.0 && m_cpuRoll > 0x140 && m_cpuRoll < 0x258 && v10 < 100.0) {
@@ -1248,13 +1248,13 @@ void CNagamori::CpuInput()
                 }
             }
         }
-        if (pattern == 0xca) {
+        if (pattern == k5BFar) {
             if ((*m_opponent)->y < 0.0 && m_cpuRoll < 0x12c && m_attackResult == 3) {
-                m_command = (WORD)Random(0, 2) + 0x14;
+                m_command = (WORD)Random(0, 2) + kCmd623A;
                 return;
             }
             if ((*m_opponent)->y < 0.0 && m_cpuRoll > 0x12b && m_cpuRoll < 0x140) {
-                m_command = 0x1f;
+                m_command = kCmd214B;
                 return;
             }
             if ((*m_opponent)->y < 0.0 && m_cpuRoll > 0x140 && m_cpuRoll < 0x258 && v10 < 100.0) {
@@ -1267,11 +1267,11 @@ void CNagamori::CpuInput()
                 return;
             }
             if (m_cpuRoll > 0x1f3 && m_cpuRoll < 0x226) {
-                m_command = (((WORD)Random(0, 2) == 0) << 1) * (unk118 > 500.0) + 0xa;
+                m_command = (((WORD)Random(0, 2) == 0) << 1) * (m_rfGauge > 500.0) + kCmd236A;
                 return;
             }
             if (m_cpuRoll > 0x225 && m_cpuRoll < 0x2a8) {
-                m_command = (WORD)Random(0, 2) + 0x1e;
+                m_command = (WORD)Random(0, 2) + kCmd214A;
                 return;
             }
             if (m_cpuRoll > 0x3b6) {
@@ -1291,41 +1291,41 @@ void CNagamori::CpuInput()
                 }
             }
         }
-        if (pattern == 0xcb) {
+        if (pattern == k5C) {
             if ((*m_opponent)->y < 0.0 && m_cpuRoll < 0x12c && m_attackResult == 3) {
-                m_command = (WORD)Random(0, 2) + 0x14;
+                m_command = (WORD)Random(0, 2) + kCmd623A;
                 return;
             }
             if ((*m_opponent)->y < 0.0 && m_cpuRoll > 0x12b && m_cpuRoll < 0x140) {
-                m_command = 0x1f;
+                m_command = kCmd214B;
                 return;
             }
             if (m_cpuRoll > 0 && m_cpuRoll < 0xc8) {
-                m_command = (((WORD)Random(0, 3) == 0) << 1) * (unk118 > 500.0) + 0xa;
+                m_command = (((WORD)Random(0, 3) == 0) << 1) * (m_rfGauge > 500.0) + kCmd236A;
                 return;
             }
             if (m_cpuRoll > 0xc8 && m_cpuRoll < 0xfa && v10 < 90.0 && m_attackResult == 3) {
-                m_command = 0x14;
+                m_command = kCmd623A;
                 return;
             }
-            if (m_cpuRoll > 0xfa && m_cpuRoll < 0x15e && v10 < 120.0 && unk118 > 500.0) {
+            if (m_cpuRoll > 0xfa && m_cpuRoll < 0x15e && v10 < 120.0 && m_rfGauge > 500.0) {
                 m_command = 0x48;
                 return;
             }
-            if (m_cpuRoll > 0x15e && m_cpuRoll < 0x190 && unk118 > 500.0) {
-                m_command = 0x34;
+            if (m_cpuRoll > 0x15e && m_cpuRoll < 0x190 && m_rfGauge > 500.0) {
+                m_command = kCmd22C;
                 return;
             }
             if (m_cpuRoll > 0x190 && m_cpuRoll < 0x1ae && m_attackResult == 3 && m_gauge >= 0x3e8 && v10 < 90.0) {
-                m_command = (WORD)Random(0, 2) + 0x64;
+                m_command = (WORD)Random(0, 2) + kCmd236236A;
                 return;
             }
             if (m_cpuRoll > 0x1ae && m_cpuRoll < 0x21c) {
-                m_command = (WORD)Random(0, 2) + 0x1e;
+                m_command = (WORD)Random(0, 2) + kCmd214A;
                 return;
             }
             if (m_cpuRoll > 0x21c && m_cpuRoll < 0x23a && m_gauge >= 0x3e8) {
-                m_command = (WORD)Random(0, 2) + 0x6e;
+                m_command = (WORD)Random(0, 2) + kCmd214214A;
                 return;
             }
             if (m_cpuRoll > 0x38e && m_attackResult == 3) {
@@ -1339,7 +1339,7 @@ void CNagamori::CpuInput()
                 return;
             }
         }
-        if (pattern == 0xcc) {
+        if (pattern == k2A) {
             if ((*m_opponent)->y < 0.0 && m_cpuRoll < 0x12c) {
                 m_pressB = 1;
                 m_inputY = 1;
@@ -1378,13 +1378,13 @@ void CNagamori::CpuInput()
                 return;
             }
         }
-        if (pattern == 0xcd) {
+        if (pattern == k2B) {
             if ((*m_opponent)->y < 0.0 && m_cpuRoll < 0x12c && m_attackResult == 3) {
-                m_command = (WORD)Random(0, 2) + 0x14;
+                m_command = (WORD)Random(0, 2) + kCmd623A;
                 return;
             }
             if ((*m_opponent)->y < 0.0 && m_cpuRoll > 0x12b && m_cpuRoll < 0x140) {
-                m_command = 0x1f;
+                m_command = kCmd214B;
                 return;
             }
             if ((*m_opponent)->y < 0.0 && m_cpuRoll > 0x140 && m_cpuRoll < 0x258 && v10 < 100.0) {
@@ -1422,29 +1422,29 @@ void CNagamori::CpuInput()
                 return;
             }
         }
-        if (pattern == 0xce) {
+        if (pattern == k2C) {
             if (m_cpuRoll > 0 && m_cpuRoll < 0x96) {
-                m_command = (((WORD)Random(0, 3) == 0) << 1) * (unk118 > 500.0) + 0xa;
+                m_command = (((WORD)Random(0, 3) == 0) << 1) * (m_rfGauge > 500.0) + kCmd236A;
                 return;
             }
             if (m_cpuRoll > 0x96 && m_cpuRoll < 0x15e && v10 < 90.0 && m_attackResult == 3) {
-                m_command = (WORD)Random(0, 2) + 0x14;
+                m_command = (WORD)Random(0, 2) + kCmd623A;
                 return;
             }
-            if (m_cpuRoll > 0x15e && m_cpuRoll < 0x190 && unk118 > 500.0) {
-                m_command = 0x34;
+            if (m_cpuRoll > 0x15e && m_cpuRoll < 0x190 && m_rfGauge > 500.0) {
+                m_command = kCmd22C;
                 return;
             }
             if (m_cpuRoll > 0x190 && m_cpuRoll < 0x1c2 && m_attackResult == 3 && m_gauge >= 0x3e8 && v10 < 90.0) {
-                m_command = (WORD)Random(0, 2) + 0x64;
+                m_command = (WORD)Random(0, 2) + kCmd236236A;
                 return;
             }
             if (m_cpuRoll > 0x1c2 && m_cpuRoll < 0x280) {
-                m_command = (WORD)Random(0, 2) + 0x1e;
+                m_command = (WORD)Random(0, 2) + kCmd214A;
                 return;
             }
             if (m_cpuRoll > 0x280 && m_cpuRoll < 0x2bc && m_gauge >= 0x3e8) {
-                m_command = (WORD)Random(0, 2) + 0x6e;
+                m_command = (WORD)Random(0, 2) + kCmd214214A;
                 return;
             }
             if (m_cpuRoll > 0x2bc) {
@@ -1458,7 +1458,7 @@ void CNagamori::CpuInput()
                 return;
             }
         }
-        if (pattern == 0xcf) {
+        if (pattern == kJumpA) {
             if ((*m_opponent)->y < 0.0 && m_cpuRoll < 0x12c) {
                 m_pressB = 1;
                 return;
@@ -1480,17 +1480,17 @@ void CNagamori::CpuInput()
                 return;
             }
         }
-        if (pattern == 0xd0) {
+        if (pattern == kJumpB) {
             if (m_cpuRoll < 0x14 && m_attackResult == 3 && (*m_opponent)->y < 0.0) {
-                m_command = 0x14;
+                m_command = kCmd623A;
                 return;
             }
             if (m_cpuRoll > 0x14 && m_cpuRoll < 0x3c && m_attackResult == 3 && (*m_opponent)->y < 0.0) {
-                m_command = 0x1f;
+                m_command = kCmd214B;
                 return;
             }
             if (m_cpuRoll > 0x3c && m_cpuRoll < 0x50 && m_gauge >= 0x3e8 && (*m_opponent)->y < 0.0) {
-                m_command = (WORD)Random(0, 2) + 0x6e;
+                m_command = (WORD)Random(0, 2) + kCmd214214A;
                 return;
             }
             if (m_cpuRoll > 0x50 && m_cpuRoll < 0x12c) {
@@ -1506,13 +1506,13 @@ void CNagamori::CpuInput()
                 return;
             }
         }
-        if (pattern == 0xd1) {
+        if (pattern == kJumpC) {
             if (m_cpuRoll < 0x14 && m_attackResult == 3 && (*m_opponent)->y < 0.0) {
-                m_command = 0x14;
+                m_command = kCmd623A;
                 return;
             }
             if (m_cpuRoll > 0x14 && m_cpuRoll < 0x5a && m_attackResult == 3 && (*m_opponent)->y < 0.0) {
-                m_command = 0x1f;
+                m_command = kCmd214B;
                 return;
             }
             if (m_cpuRoll > 0x3b6) {
@@ -1524,37 +1524,37 @@ void CNagamori::CpuInput()
                 return;
             }
         }
-        if (pattern == 0xe7) {
+        if (pattern == kDashB) {
             if ((*m_opponent)->y < 0.0 && m_cpuRoll < 0x12c && m_attackResult == 3) {
-                m_command = (WORD)Random(0, 2) + 0x14;
+                m_command = (WORD)Random(0, 2) + kCmd623A;
                 return;
             }
             if ((*m_opponent)->y < 0.0 && m_cpuRoll > 0x12b && m_cpuRoll < 0x140) {
-                m_command = 0x1f;
+                m_command = kCmd214B;
                 return;
             }
             if (m_cpuRoll > 0 && m_cpuRoll < 0xc8) {
-                m_command = (((WORD)Random(0, 3) == 0) << 1) * (unk118 > 500.0) + 0xa;
+                m_command = (((WORD)Random(0, 3) == 0) << 1) * (m_rfGauge > 500.0) + kCmd236A;
                 return;
             }
             if (m_cpuRoll > 0xc8 && m_cpuRoll < 0xfa && v10 < 90.0 && m_attackResult == 3) {
-                m_command = 0x14;
+                m_command = kCmd623A;
                 return;
             }
-            if (m_cpuRoll > 0xfa && m_cpuRoll < 0x15e && v10 < 120.0 && unk118 > 500.0) {
+            if (m_cpuRoll > 0xfa && m_cpuRoll < 0x15e && v10 < 120.0 && m_rfGauge > 500.0) {
                 m_command = 0x48;
                 return;
             }
-            if (m_cpuRoll > 0x15e && m_cpuRoll < 0x190 && unk118 > 500.0) {
-                m_command = 0x34;
+            if (m_cpuRoll > 0x15e && m_cpuRoll < 0x190 && m_rfGauge > 500.0) {
+                m_command = kCmd22C;
                 return;
             }
             if (m_cpuRoll > 0x190 && m_cpuRoll < 0x2bc) {
-                m_command = (WORD)Random(0, 2) + 0x1e;
+                m_command = (WORD)Random(0, 2) + kCmd214A;
                 return;
             }
             if (m_cpuRoll > 0x2bc && m_cpuRoll < 0x2da && m_gauge >= 0x3e8) {
-                m_command = (WORD)Random(0, 2) + 0x6e;
+                m_command = (WORD)Random(0, 2) + kCmd214214A;
                 return;
             }
             if (m_cpuRoll > 0x289 && (WORD)Random(0, 3) == 0) {
@@ -1565,10 +1565,10 @@ void CNagamori::CpuInput()
             }
         }
     }
-    if ((WORD)Random(0, 0x64) < 25.0f * unka8) {
+    if ((WORD)Random(0, 0x64) < 25.0f * m_cpuSkill) {
         m_cpuRoll = (WORD)Random(0, 0x3e8);
         if (y == 0.0) {
-            if ((*m_opponent)->y == 0.0 && (*m_opponent)->pattern != 0x63) {
+            if ((*m_opponent)->y == 0.0 && (*m_opponent)->pattern != kLyingDown) {
                 if (v10 < 40.0 && (*m_opponent)->y == 0.0 && m_cpuRoll < 5) {
                     m_pressC = 1;
                     m_inputX = -facing;
@@ -1599,7 +1599,7 @@ void CNagamori::CpuInput()
                     m_cpuAction = 8;
                     return;
                 }
-                if (v10 < 80.0 && m_cpuRoll < 0x50 && m_cpuRoll > 0x25 && (*m_opponent)->pattern > 0x31 && (*m_opponent)->pattern < 0x9d) {
+                if (v10 < 80.0 && m_cpuRoll < 0x50 && m_cpuRoll > 0x25 && (*m_opponent)->pattern > kLastFreeAction && (*m_opponent)->pattern < kAirRecoveryForward) {
                     m_pressC = 1;
                     m_inputY = 1;
                     return;
@@ -1615,7 +1615,7 @@ void CNagamori::CpuInput()
                     return;
                 }
                 if (v10 < 80.0 && m_cpuRoll < 0x2a && m_cpuRoll > 0x28) {
-                    m_command = 0x14;
+                    m_command = kCmd623A;
                     return;
                 }
                 if (m_cpuRoll < 0x2a && m_cpuRoll > 0x32) {
@@ -1624,11 +1624,11 @@ void CNagamori::CpuInput()
                     return;
                 }
                 if ((WORD)Random(0, 0x140) < v10 - 70.0 && vy > 0.0 && (*m_opponent)->y > y && m_cpuRoll > 0xeb && m_cpuRoll < 0xfa) {
-                    m_command = (WORD)Random(0, 2) + 0x1e;
+                    m_command = (WORD)Random(0, 2) + kCmd214A;
                     return;
                 }
                 if (v10 > 180.0 && m_cpuRoll > 0xfa && m_cpuRoll < 0xfc && m_gauge >= 0x3e8) {
-                    m_command = (WORD)Random(0, 2) + 0x6e;
+                    m_command = (WORD)Random(0, 2) + kCmd214214A;
                     return;
                 }
             }
@@ -1645,14 +1645,14 @@ void CNagamori::CpuInput()
                         return;
                     }
                     if (v10 < 80.0 && x8 < 120.0 && m_cpuRoll < 0x11) {
-                        m_command = 0x15;
+                        m_command = kCmd623B;
                         return;
                     }
                 }
                 if ((*m_opponent)->vy > 0.0) {
                     if (v10 < 80.0 && x8 < 120.0) {
-                        if (m_cpuRoll < (unk118 > 500.0 || unk120 > 0) * 5 + 6) {
-                            m_command = 0x15;
+                        if (m_cpuRoll < (m_rfGauge > 500.0 || m_rfBlue > 0) * 5 + 6) {
+                            m_command = kCmd623B;
                             return;
                         }
                     }
@@ -1662,7 +1662,7 @@ void CNagamori::CpuInput()
                         return;
                     }
                     if (v10 < 120.0 && x8 < 100.0 && m_cpuRoll < 0x11 && m_gauge >= 0x7d0) {
-                        m_command = (WORD)Random(0, 1) + 0x65;
+                        m_command = (WORD)Random(0, 1) + kCmd236236B;
                         return;
                     }
                 }
@@ -1685,18 +1685,18 @@ void CNagamori::CpuInput()
                     return;
                 }
                 if ((WORD)Random(0, 0x140) < v10 - 70.0 && m_cpuRoll > 0x10e && m_cpuRoll < 0x15e) {
-                    m_command = (WORD)Random(0, 2) + 0x1e;
+                    m_command = (WORD)Random(0, 2) + kCmd214A;
                     return;
                 }
                 if (v10 > 180.0 && m_cpuRoll > 0x15e && m_cpuRoll < 0x160 && m_gauge >= 0x3e8) {
-                    m_command = (WORD)Random(0, 2) + 0x6e;
+                    m_command = (WORD)Random(0, 2) + kCmd214214A;
                     return;
                 }
             }
             if ((*m_opponent)->y < 0.0) {
                 if (v10 < 80.0 && x8 < 80.0 && (*m_opponent)->y < y) {
-                    if (m_cpuRoll < (unk118 > 500.0 || unk120 > 0) * 0x14 + 6) {
-                        m_command = 0x14;
+                    if (m_cpuRoll < (m_rfGauge > 500.0 || m_rfBlue > 0) * 0x14 + 6) {
+                        m_command = kCmd623A;
                         return;
                     }
                 }
@@ -1709,17 +1709,17 @@ void CNagamori::CpuInput()
                     return;
                 }
                 if (v10 > 180.0 && m_cpuRoll > 0xeb && m_cpuRoll < 0xfa) {
-                    m_command = (WORD)Random(0, 2) + 0x1e;
+                    m_command = (WORD)Random(0, 2) + kCmd214A;
                     return;
                 }
                 if (v10 > 180.0 && m_cpuRoll > 0xfa && m_cpuRoll < 0xfc && m_gauge >= 0x3e8) {
-                    m_command = (WORD)Random(0, 2) + 0x6e;
+                    m_command = (WORD)Random(0, 2) + kCmd214214A;
                     return;
                 }
             }
         }
     }
-    if (pattern < 0x32 && ((*m_opponent)->pattern > 0x95 && (*m_opponent)->pattern < 0x9c || (*m_opponent)->pattern > 0x31 && (*m_opponent)->pattern < 0x3b) && y == 0.0 && (WORD)Random(0, 0x64) < 3.0f * unka8) {
+    if (pattern < kFirstHitReaction && ((*m_opponent)->pattern > kLastHitReaction && (*m_opponent)->pattern < kGuardAir || (*m_opponent)->pattern > kLastFreeAction && (*m_opponent)->pattern < kHitAir) && y == 0.0 && (WORD)Random(0, 0x64) < 3.0f * m_cpuSkill) {
         m_command = facing == 1;
         return;
     }
@@ -1728,7 +1728,7 @@ void CNagamori::CpuInput()
         return;
     }
     if ((WORD)Random(0, 0x64) < 2) {
-        if ((WORD)Random(0, 0x64) < 8.0f * unka8) {
+        if ((WORD)Random(0, 0x64) < 8.0f * m_cpuSkill) {
             m_cpuAction = 3;
         } else {
             m_cpuAction = 0;
@@ -1749,40 +1749,40 @@ void CNagamori::CpuInput()
             return;
         }
     }
-    if (unk1a0 > 0) {
-        if ((char)Unk40ff70() != 0 && unk1a0 > 0xf) {
-            unk1a0 = 0xf;
+    if (m_cpuWalkRight > 0) {
+        if ((char)AtScreenEdge() != 0 && m_cpuWalkRight > 0xf) {
+            m_cpuWalkRight = 0xf;
         }
         m_inputX = 1;
         return;
     }
-    if (unk1a4 > 0) {
-        if ((char)Unk40ff70() != 0 && unk1a4 > 0xf) {
-            unk1a4 = 0xf;
+    if (m_cpuWalkLeft > 0) {
+        if ((char)AtScreenEdge() != 0 && m_cpuWalkLeft > 0xf) {
+            m_cpuWalkLeft = 0xf;
         }
         m_inputX = -1;
         return;
     }
     if ((WORD)Random(0, 0x64) < 0x32 && v10 < 100.0) {
         if (facing == 1) {
-            unk1a4 = (WORD)Random(0, 0xc8) + 0x1e;
+            m_cpuWalkLeft = (WORD)Random(0, 0xc8) + 0x1e;
         } else {
-            unk1a0 = (WORD)Random(0, 0xc8) + 0x1e;
+            m_cpuWalkRight = (WORD)Random(0, 0xc8) + 0x1e;
         }
     }
     if ((WORD)Random(0, 0x64) < 0x3c) {
         if (facing == 1) {
-            unk1a0 = (WORD)Random(0, 0xc8) + 0x1e;
+            m_cpuWalkRight = (WORD)Random(0, 0xc8) + 0x1e;
         } else {
-            unk1a4 = (WORD)Random(0, 0xc8) + 0x1e;
+            m_cpuWalkLeft = (WORD)Random(0, 0xc8) + 0x1e;
         }
         return;
     }
     if (facing == -1) {
-        unk1a0 = (WORD)Random(0, 0xc8) + 0x1e;
+        m_cpuWalkRight = (WORD)Random(0, 0xc8) + 0x1e;
         return;
     }
-    unk1a4 = (WORD)Random(0, 0xc8) + 0x1e;
+    m_cpuWalkLeft = (WORD)Random(0, 0xc8) + 0x1e;
 }
 
 void CNagamori::UpdateObjects()
@@ -1791,20 +1791,20 @@ void CNagamori::UpdateObjects()
     WORD v54;
     int v4;
 
-    if ((*m_opponent)->unk14c > 0) {
+    if ((*m_opponent)->m_freezeTime > 0) {
         return;
     }
     v4 = m_objectTail;
     EffectDesc l50;
     while (v4 != m_objectHead) {
-        if (m_objectActive[v4] != 0 && m_objects[v4].unk86 == 0 && (unk14c == 0 || unk14c > 0 && m_objects[v4].unk88 != 0)) {
+        if (m_objectActive[v4] != 0 && m_objects[v4].hitstop == 0 && (m_freezeTime == 0 || m_freezeTime > 0 && m_objects[v4].movesInFreeze != 0)) {
             v54 = (short)anims[m_objects[v4].pattern].frames[m_objects[v4].frame].duration;
             v58 = anims[m_objects[v4].pattern].frameCount;
             InitEffectDesc((EffectDesc*)&l50);
             switch (m_objects[v4].pattern) {
-            case 0x190:
-                if (unk33ac[v4] == 0) {
-                    unk33ac[v4] = unk3158 + 0xa;
+            case kObjBomb:
+                if (m_objectPhase[v4] == 0) {
+                    m_objectPhase[v4] = unk3158 + 0xa;
                 }
                 if (m_objects[v4].ay == 0.0) {
                     m_objects[v4].ay = -0.015;
@@ -1816,79 +1816,79 @@ void CNagamori::UpdateObjects()
                     m_objects[v4].ay = 0.015;
                 }
                 m_objects[v4].vy = m_objects[v4].vy + m_objects[v4].ay;
-                if (unk316c[v4] == 1 && unk32ac[v4] <= 0) {
-                    l50.unk0 = 0;
-                    l50.type = 0x195;
+                if (m_objectTriggered[v4] == 1 && m_objectTimer[v4] <= 0) {
+                    l50.keep = 0;
+                    l50.type = kObjExplosion;
                     l50.x = (double)(int)m_objects[v4].x;
                     l50.y = (double)(int)m_objects[v4].y;
                     l50.facing = m_objects[v4].facing;
                     l50.scale = 2;
                     l50.layer = 1;
                     SpawnObject(&l50);
-                    unk316c[v4] = 0;
-                    unk32ac[v4] = 0x78;
-                    if (unk314c == 0) {
+                    m_objectTriggered[v4] = 0;
+                    m_objectTimer[v4] = 0x78;
+                    if (m_keepBombs == 0) {
                         RemoveObject(v4);
                     }
                     break;
                 }
-                unk316c[v4] = 0;
+                m_objectTriggered[v4] = 0;
                 m_objects[v4].timer++;
-                unk32ac[v4]--;
+                m_objectTimer[v4]--;
                 if (m_objects[v4].timer >= v54) {
                     m_objects[v4].timer = 0;
                     m_objects[v4].frame++;
-                    m_objects[v4].unk80 = 0;
+                    m_objects[v4].attackResult = 0;
                     if (m_objects[v4].frame >= v58) {
-                        if (unk31ac[v4] < 0x10) {
+                        if (m_objectState[v4] < 0x10) {
                             m_objects[v4].frame = 0;
-                            unk31ac[v4]++;
+                            m_objectState[v4]++;
                         } else {
                             RemoveObject(v4);
                         }
                     }
                 }
                 break;
-            case 0x191:
+            case kObjBouncer:
                 if (m_objects[v4].frame == 0 && m_objects[v4].timer == 0) {
                     m_objects[v4].vx = 0.75;
                     m_objects[v4].vy = -2.5;
-                    unk3164 = 0;
-                    unk3168 = 1;
+                    m_bouncerDrops = 0;
+                    m_bouncerOut = 1;
                 }
                 m_objects[v4].vy += 0.045;
                 if (m_objects[v4].vy + m_objects[v4].y >= 0.0) {
                     m_objects[v4].vy = -m_objects[v4].vy;
                     m_objects[v4].y = 0.0;
                 }
-                if (m_objects[v4].timer == 0 && unk33ac[v4] >= 0x14) {
-                    l50.unk0 = 0;
-                    l50.type = 0x19a;
+                if (m_objects[v4].timer == 0 && m_objectPhase[v4] >= 0x14) {
+                    l50.keep = 0;
+                    l50.type = kObjBouncerDrop;
                     l50.x = (double)(int)m_objects[v4].x;
                     l50.y = (double)(int)m_objects[v4].y;
                     l50.facing = m_objects[v4].facing;
                     l50.scale = 2;
                     l50.layer = 1;
-                    unk33ac[v4] = 0;
+                    m_objectPhase[v4] = 0;
                     SpawnObject(&l50);
                 }
                 if (m_objects[v4].x > 680.0 || m_objects[v4].x < -40.0) {
                     RemoveObject(v4);
-                    unk3168 = 0;
+                    m_bouncerOut = 0;
                 }
                 m_objects[v4].timer++;
                 if (m_objects[v4].timer >= v54) {
                     m_objects[v4].timer = 0;
                     m_objects[v4].frame++;
-                    unk33ac[v4]++;
-                    m_objects[v4].unk80 = 0;
+                    m_objectPhase[v4]++;
+                    m_objects[v4].attackResult = 0;
                     if (m_objects[v4].frame >= v58) {
                         m_objects[v4].frame = 9;
                     }
                 }
                 break;
-            case 0x192:
-                unk32ac[v4]--;
+            case kObjSuperBomb:
+                m_objectTimer[v4]--;
                 if (m_objects[v4].ay == 0.0) {
                     m_objects[v4].ay = -0.015;
                 }
@@ -1899,38 +1899,38 @@ void CNagamori::UpdateObjects()
                     m_objects[v4].ay = 0.015;
                 }
                 m_objects[v4].vy = m_objects[v4].vy + m_objects[v4].ay;
-                if (unk316c[v4] == 1 && unk32ac[v4] <= 0) {
-                    l50.unk0 = 0;
-                    l50.type = 0x195;
+                if (m_objectTriggered[v4] == 1 && m_objectTimer[v4] <= 0) {
+                    l50.keep = 0;
+                    l50.type = kObjExplosion;
                     l50.x = (double)(int)m_objects[v4].x;
                     l50.y = (double)(int)m_objects[v4].y;
                     l50.facing = m_objects[v4].facing;
                     l50.scale = 2;
                     l50.layer = 1;
                     SpawnObject(&l50);
-                    unk316c[v4] = 0;
-                    unk32ac[v4] = 0x78;
+                    m_objectTriggered[v4] = 0;
+                    m_objectTimer[v4] = 0x78;
                     break;
                 }
-                unk316c[v4] = 0;
+                m_objectTriggered[v4] = 0;
                 m_objects[v4].timer++;
                 if (m_objects[v4].timer >= v54) {
                     m_objects[v4].timer = 0;
                     m_objects[v4].frame++;
-                    m_objects[v4].unk80 = 0;
+                    m_objects[v4].attackResult = 0;
                     if (m_objects[v4].frame >= v58) {
-                        if (unk31ac[v4] < 0xc) {
+                        if (m_objectState[v4] < 0xc) {
                             m_objects[v4].frame = 0;
-                            unk31ac[v4]++;
+                            m_objectState[v4]++;
                         } else {
                             RemoveObject(v4);
                         }
                     }
                 }
                 break;
-            case 0x193:
-                if (unk33ac[v4] == 0) {
-                    unk33ac[v4] = unk3158 + 0xa;
+            case kObjSuperBombBig:
+                if (m_objectPhase[v4] == 0) {
+                    m_objectPhase[v4] = unk3158 + 0xa;
                 }
                 if (m_objects[v4].ay == 0.0) {
                     m_objects[v4].ay = -0.015;
@@ -1942,81 +1942,81 @@ void CNagamori::UpdateObjects()
                     m_objects[v4].ay = 0.015;
                 }
                 m_objects[v4].vy = m_objects[v4].vy + m_objects[v4].ay;
-                if (unk316c[v4] == 1 && unk32ac[v4] <= 0) {
-                    l50.unk0 = 0;
-                    l50.type = 0x1c6;
+                if (m_objectTriggered[v4] == 1 && m_objectTimer[v4] <= 0) {
+                    l50.keep = 0;
+                    l50.type = kObjExplosionBig;
                     l50.x = (double)(int)m_objects[v4].x;
                     l50.y = (double)(int)m_objects[v4].y;
                     l50.facing = m_objects[v4].facing;
                     l50.scale = 2;
                     l50.layer = 1;
                     SpawnObject(&l50);
-                    unk316c[v4] = 0;
-                    unk32ac[v4] = 0x78;
-                    if (unk314c == 0) {
+                    m_objectTriggered[v4] = 0;
+                    m_objectTimer[v4] = 0x78;
+                    if (m_keepBombs == 0) {
                         RemoveObject(v4);
                     }
                     break;
                 }
-                unk316c[v4] = 0;
+                m_objectTriggered[v4] = 0;
                 m_objects[v4].timer++;
-                unk32ac[v4]--;
+                m_objectTimer[v4]--;
                 if (m_objects[v4].timer >= v54) {
                     m_objects[v4].timer = 0;
                     m_objects[v4].frame++;
-                    m_objects[v4].unk80 = 0;
+                    m_objects[v4].attackResult = 0;
                     if (m_objects[v4].frame >= v58) {
-                        if (unk31ac[v4] < 0x10) {
+                        if (m_objectState[v4] < 0x10) {
                             m_objects[v4].frame = 0;
-                            unk31ac[v4]++;
+                            m_objectState[v4]++;
                         } else {
                             RemoveObject(v4);
                         }
                     }
                 }
                 break;
-            case 0x194:
+            case kObj2CFx:
                 m_objects[v4].timer++;
                 if (m_objects[v4].timer >= v54) {
                     m_objects[v4].timer = 0;
                     m_objects[v4].frame++;
-                    m_objects[v4].unk80 = 0;
+                    m_objects[v4].attackResult = 0;
                     if (m_objects[v4].frame >= v58) {
                         RemoveObject(v4);
                     }
                 }
                 break;
-            case 0x195:
+            case kObjExplosion:
                 m_objects[v4].vx = 0.0;
                 m_objects[v4].vy = 0.0;
                 if (m_objects[v4].frame == 5 && m_objects[v4].timer == 0) {
                     m_playVoice = 1;
                 }
                 if (m_objects[v4].frame == 0xe && m_objects[v4].timer == 0) {
-                    m_objects[v4].unk84 = 1;
-                    Unk4ae1d0((int)m_objects[v4].x, (int)m_objects[v4].y, 0x5a, 0x5a);
-                    unk316c[v4] = 0;
+                    m_objects[v4].hitsLeft = 1;
+                    TriggerObjectsNear((int)m_objects[v4].x, (int)m_objects[v4].y, 0x5a, 0x5a);
+                    m_objectTriggered[v4] = 0;
                 }
-                if (m_objects[v4].unk80 == 3) {
-                    unk31ac[v4] = (int)AngleTo(m_objects[v4].x - (*m_opponent)->x, m_objects[v4].y - (*m_opponent)->y - 50.0);
-                    (*m_opponent)->SetVelocity((double)unk31ac[v4], 2.2);
+                if (m_objects[v4].attackResult == 3) {
+                    m_objectState[v4] = (int)AngleTo(m_objects[v4].x - (*m_opponent)->x, m_objects[v4].y - (*m_opponent)->y - 50.0);
+                    (*m_opponent)->SetVelocity((double)m_objectState[v4], 2.2);
                     if ((*m_opponent)->facing == 1) {
                         (*m_opponent)->vx *= -1.0;
                     }
-                    m_objects[v4].unk80 = 1;
+                    m_objects[v4].attackResult = 1;
                 }
                 m_objects[v4].timer++;
                 if (m_objects[v4].timer >= v54) {
                     m_objects[v4].timer = 0;
                     m_objects[v4].frame++;
-                    m_objects[v4].unk80 = 0;
+                    m_objects[v4].attackResult = 0;
                     if (m_objects[v4].frame >= v58) {
                         RemoveObject(v4);
                     }
                 }
                 break;
-            case 0x196:
-                if (unk33ac[v4] == 2) {
+            case kObjBombB:
+                if (m_objectPhase[v4] == 2) {
                     if (m_objects[v4].ay == 0.0) {
                         m_objects[v4].ay = -0.015;
                     }
@@ -2028,52 +2028,52 @@ void CNagamori::UpdateObjects()
                     }
                     m_objects[v4].vy = m_objects[v4].vy + m_objects[v4].ay;
                 }
-                if (unk33ac[v4] == 0) {
+                if (m_objectPhase[v4] == 0) {
                     m_objects[v4].vx = 1.8;
-                    unk33ac[v4] = 1;
+                    m_objectPhase[v4] = 1;
                 }
-                if (unk33ac[v4] == 1) {
+                if (m_objectPhase[v4] == 1) {
                     m_objects[v4].vx -= 0.015;
                     if (m_objects[v4].vx < 0.0) {
                         m_objects[v4].vx = 0.0;
-                        unk33ac[v4] = 2;
+                        m_objectPhase[v4] = 2;
                     }
                 }
-                if (unk316c[v4] == 1 && unk32ac[v4] <= 0 && unk33ac[v4] == 2) {
-                    l50.unk0 = 0;
-                    l50.type = 0x195;
+                if (m_objectTriggered[v4] == 1 && m_objectTimer[v4] <= 0 && m_objectPhase[v4] == 2) {
+                    l50.keep = 0;
+                    l50.type = kObjExplosion;
                     l50.x = (double)(int)m_objects[v4].x;
                     l50.y = (double)(int)m_objects[v4].y;
                     l50.facing = m_objects[v4].facing;
                     l50.scale = 2;
                     l50.layer = 1;
                     SpawnObject(&l50);
-                    unk316c[v4] = 0;
-                    unk32ac[v4] = 0x78;
-                    if (unk314c == 0) {
+                    m_objectTriggered[v4] = 0;
+                    m_objectTimer[v4] = 0x78;
+                    if (m_keepBombs == 0) {
                         RemoveObject(v4);
                     }
                     break;
                 }
-                unk316c[v4] = 0;
+                m_objectTriggered[v4] = 0;
                 m_objects[v4].timer++;
-                unk32ac[v4]--;
+                m_objectTimer[v4]--;
                 if (m_objects[v4].timer >= v54) {
                     m_objects[v4].timer = 0;
                     m_objects[v4].frame++;
-                    m_objects[v4].unk80 = 0;
+                    m_objects[v4].attackResult = 0;
                     if (m_objects[v4].frame >= v58) {
-                        if (unk31ac[v4] < 0x10) {
+                        if (m_objectState[v4] < 0x10) {
                             m_objects[v4].frame = 0;
-                            unk31ac[v4]++;
+                            m_objectState[v4]++;
                         } else {
                             RemoveObject(v4);
                         }
                     }
                 }
                 break;
-            case 0x197:
-                if (unk33ac[v4] == 2) {
+            case kObjBombC:
+                if (m_objectPhase[v4] == 2) {
                     if (m_objects[v4].ay == 0.0) {
                         m_objects[v4].ay = -0.015;
                     }
@@ -2085,55 +2085,55 @@ void CNagamori::UpdateObjects()
                     }
                     m_objects[v4].vy = m_objects[v4].vy + m_objects[v4].ay;
                 }
-                if (unk33ac[v4] == 0) {
+                if (m_objectPhase[v4] == 0) {
                     m_objects[v4].vx = 1.8;
                     m_objects[v4].vy = -1.8;
-                    unk33ac[v4] = 1;
+                    m_objectPhase[v4] = 1;
                 }
-                if (unk33ac[v4] == 1) {
+                if (m_objectPhase[v4] == 1) {
                     m_objects[v4].vx -= 0.015;
                     m_objects[v4].vy += 0.015;
                     if (m_objects[v4].vx < 0.0) {
                         m_objects[v4].vx = 0.0;
                         m_objects[v4].vy = 0.0;
-                        unk33ac[v4] = 2;
+                        m_objectPhase[v4] = 2;
                     }
                 }
-                if (unk316c[v4] == 1 && unk32ac[v4] <= 0 && unk33ac[v4] == 2) {
-                    l50.unk0 = 0;
-                    l50.type = 0x195;
+                if (m_objectTriggered[v4] == 1 && m_objectTimer[v4] <= 0 && m_objectPhase[v4] == 2) {
+                    l50.keep = 0;
+                    l50.type = kObjExplosion;
                     l50.x = (double)(int)m_objects[v4].x;
                     l50.y = (double)(int)m_objects[v4].y;
                     l50.facing = m_objects[v4].facing;
                     l50.scale = 2;
                     l50.layer = 1;
                     SpawnObject(&l50);
-                    unk316c[v4] = 0;
-                    unk32ac[v4] = 0x78;
-                    if (unk314c == 0) {
+                    m_objectTriggered[v4] = 0;
+                    m_objectTimer[v4] = 0x78;
+                    if (m_keepBombs == 0) {
                         RemoveObject(v4);
                     }
                     break;
                 }
-                unk316c[v4] = 0;
+                m_objectTriggered[v4] = 0;
                 m_objects[v4].timer++;
-                unk32ac[v4]--;
+                m_objectTimer[v4]--;
                 if (m_objects[v4].timer >= v54) {
                     m_objects[v4].timer = 0;
                     m_objects[v4].frame++;
-                    m_objects[v4].unk80 = 0;
+                    m_objects[v4].attackResult = 0;
                     if (m_objects[v4].frame >= v58) {
-                        if (unk31ac[v4] < 0x10) {
+                        if (m_objectState[v4] < 0x10) {
                             m_objects[v4].frame = 0;
-                            unk31ac[v4]++;
+                            m_objectState[v4]++;
                         } else {
                             RemoveObject(v4);
                         }
                     }
                 }
                 break;
-            case 0x198:
-                if (unk33ac[v4] == 2) {
+            case kObjBombAirC:
+                if (m_objectPhase[v4] == 2) {
                     if (m_objects[v4].ay == 0.0) {
                         m_objects[v4].ay = -0.015;
                     }
@@ -2145,60 +2145,60 @@ void CNagamori::UpdateObjects()
                     }
                     m_objects[v4].vy = m_objects[v4].vy + m_objects[v4].ay;
                 }
-                if (unk33ac[v4] == 0) {
+                if (m_objectPhase[v4] == 0) {
                     m_objects[v4].vx = 1.8;
                     m_objects[v4].vy = 1.8;
-                    unk33ac[v4] = 1;
+                    m_objectPhase[v4] = 1;
                 }
-                if (unk33ac[v4] == 1) {
+                if (m_objectPhase[v4] == 1) {
                     m_objects[v4].vx -= 0.015;
                     m_objects[v4].vy -= 0.015;
                     if (m_objects[v4].y > -10.0) {
                         m_objects[v4].vy = 0.0;
                         m_objects[v4].vx = 0.0;
-                        unk33ac[v4] = 2;
+                        m_objectPhase[v4] = 2;
                     }
                     if (m_objects[v4].vx < 0.0) {
                         m_objects[v4].vx = 0.0;
                         m_objects[v4].vy = 0.0;
-                        unk33ac[v4] = 2;
+                        m_objectPhase[v4] = 2;
                     }
                 }
-                if (unk316c[v4] == 1 && unk32ac[v4] <= 0 && unk33ac[v4] == 2) {
-                    l50.unk0 = 0;
-                    l50.type = 0x195;
+                if (m_objectTriggered[v4] == 1 && m_objectTimer[v4] <= 0 && m_objectPhase[v4] == 2) {
+                    l50.keep = 0;
+                    l50.type = kObjExplosion;
                     l50.x = (double)(int)m_objects[v4].x;
                     l50.y = (double)(int)m_objects[v4].y;
                     l50.facing = m_objects[v4].facing;
                     l50.scale = 2;
                     l50.layer = 1;
                     SpawnObject(&l50);
-                    unk316c[v4] = 0;
-                    unk32ac[v4] = 0x78;
-                    if (unk314c == 0) {
+                    m_objectTriggered[v4] = 0;
+                    m_objectTimer[v4] = 0x78;
+                    if (m_keepBombs == 0) {
                         RemoveObject(v4);
                     }
                     break;
                 }
-                unk316c[v4] = 0;
+                m_objectTriggered[v4] = 0;
                 m_objects[v4].timer++;
-                unk32ac[v4]--;
+                m_objectTimer[v4]--;
                 if (m_objects[v4].timer >= v54) {
                     m_objects[v4].timer = 0;
                     m_objects[v4].frame++;
-                    m_objects[v4].unk80 = 0;
+                    m_objects[v4].attackResult = 0;
                     if (m_objects[v4].frame >= v58) {
-                        if (unk31ac[v4] < 0x10) {
+                        if (m_objectState[v4] < 0x10) {
                             m_objects[v4].frame = 0;
-                            unk31ac[v4]++;
+                            m_objectState[v4]++;
                         } else {
                             RemoveObject(v4);
                         }
                     }
                 }
                 break;
-            case 0x199:
-                if (unk33ac[v4] == 2) {
+            case kObjBombRise:
+                if (m_objectPhase[v4] == 2) {
                     if (m_objects[v4].ay == 0.0) {
                         m_objects[v4].ay = -0.015;
                     }
@@ -2210,132 +2210,132 @@ void CNagamori::UpdateObjects()
                     }
                     m_objects[v4].vy = m_objects[v4].vy + m_objects[v4].ay;
                 }
-                if (unk33ac[v4] == 0) {
+                if (m_objectPhase[v4] == 0) {
                     m_objects[v4].vy = -1.2;
-                    unk33ac[v4] = 1;
+                    m_objectPhase[v4] = 1;
                 }
-                if (unk33ac[v4] == 1) {
+                if (m_objectPhase[v4] == 1) {
                     m_objects[v4].vy += 0.015;
                     if (m_objects[v4].y > -10.0) {
                         m_objects[v4].vy = 0.0;
-                        unk33ac[v4] = 2;
+                        m_objectPhase[v4] = 2;
                     }
                     if (m_objects[v4].vy > 0.0) {
                         m_objects[v4].vx = 0.0;
                         m_objects[v4].vy = 0.0;
-                        unk33ac[v4] = 2;
+                        m_objectPhase[v4] = 2;
                     }
                 }
-                if (unk316c[v4] == 1 && unk32ac[v4] <= 0 && unk33ac[v4] == 2) {
-                    l50.unk0 = 0;
-                    l50.type = 0x195;
+                if (m_objectTriggered[v4] == 1 && m_objectTimer[v4] <= 0 && m_objectPhase[v4] == 2) {
+                    l50.keep = 0;
+                    l50.type = kObjExplosion;
                     l50.x = (double)(int)m_objects[v4].x;
                     l50.y = (double)(int)m_objects[v4].y;
                     l50.facing = m_objects[v4].facing;
                     l50.scale = 2;
                     l50.layer = 1;
                     SpawnObject(&l50);
-                    unk316c[v4] = 0;
-                    unk32ac[v4] = 0x78;
-                    if (unk314c == 0) {
+                    m_objectTriggered[v4] = 0;
+                    m_objectTimer[v4] = 0x78;
+                    if (m_keepBombs == 0) {
                         RemoveObject(v4);
                     }
                     break;
                 }
-                unk316c[v4] = 0;
+                m_objectTriggered[v4] = 0;
                 m_objects[v4].timer++;
-                unk32ac[v4]--;
+                m_objectTimer[v4]--;
                 if (m_objects[v4].timer >= v54) {
                     m_objects[v4].timer = 0;
                     m_objects[v4].frame++;
-                    m_objects[v4].unk80 = 0;
+                    m_objects[v4].attackResult = 0;
                     if (m_objects[v4].frame >= v58) {
-                        if (unk31ac[v4] < 0xa) {
+                        if (m_objectState[v4] < 0xa) {
                             m_objects[v4].frame = 0;
-                            unk31ac[v4]++;
+                            m_objectState[v4]++;
                         } else {
                             RemoveObject(v4);
                         }
                     }
                 }
                 break;
-            case 0x19a:
+            case kObjBouncerDrop:
                 m_objects[v4].vx = 0.0;
                 m_objects[v4].vy = 0.0;
                 if (m_objects[v4].frame == 5 && m_objects[v4].timer == 0) {
                     m_playVoice = 1;
                 }
                 if (m_objects[v4].frame == 6 && m_objects[v4].timer == 0) {
-                    unk3164++;
-                    if (unk3164 > 2) {
-                        unk3164 = 0;
+                    m_bouncerDrops++;
+                    if (m_bouncerDrops > 2) {
+                        m_bouncerDrops = 0;
                     }
-                    l50.unk0 = 0;
-                    l50.type = 0x1c1;
+                    l50.keep = 0;
+                    l50.type = kObjBombFwd;
                     l50.x = (double)(int)m_objects[v4].x;
                     l50.y = (double)(int)m_objects[v4].y;
                     l50.facing = m_objects[v4].facing;
                     l50.scale = 2;
                     l50.layer = 1;
                     SpawnObject(&l50);
-                    l50.type = 0x19f;
+                    l50.type = kObjBombBack;
                     SpawnObject(&l50);
-                    l50.type = 0x199;
+                    l50.type = kObjBombRise;
                     SpawnObject(&l50);
                 }
                 m_objects[v4].timer++;
                 if (m_objects[v4].timer >= v54) {
                     m_objects[v4].timer = 0;
                     m_objects[v4].frame++;
-                    m_objects[v4].unk80 = 0;
+                    m_objects[v4].attackResult = 0;
                     if (m_objects[v4].frame >= v58) {
                         RemoveObject(v4);
                     }
                 }
                 break;
-            case 0x19b:
-                Unk4ae1d0((int)m_objects[v4].x, (int)m_objects[v4].y, 0x1e, 0x1e);
-                if (unk3154 == 1) {
+            case kObjShotA:
+                TriggerObjectsNear((int)m_objects[v4].x, (int)m_objects[v4].y, 0x1e, 0x1e);
+                if (m_shotOrder == 1) {
                     m_objects[v4].vy -= 2.5;
-                    if (unk31ac[v4] > 1) {
+                    if (m_objectState[v4] > 1) {
                         m_objects[v4].vx *= 0.5;
                     }
-                    unk3154 = 0;
+                    m_shotOrder = 0;
                 }
-                if (unk3154 == -1) {
+                if (m_shotOrder == -1) {
                     m_objects[v4].vy += 2.5;
-                    if (unk31ac[v4] > 1) {
+                    if (m_objectState[v4] > 1) {
                         m_objects[v4].vx *= 0.5;
                     }
-                    unk3154 = 0;
+                    m_shotOrder = 0;
                 }
-                if (unk3154 == 2) {
-                    unk3148 = 1;
-                    unk31ac[v4] = 1;
+                if (m_shotOrder == 2) {
+                    m_shotState = 1;
+                    m_objectState[v4] = 1;
                     m_objects[v4].vx = 3.0;
                     if (facing != m_objects[v4].facing) {
                         m_objects[v4].facing = facing;
                     }
-                    unk3154 = 0;
+                    m_shotOrder = 0;
                 }
-                if (m_objects[v4].frame == 0 && m_objects[v4].timer == 0 && unk31ac[v4] == 0) {
+                if (m_objects[v4].frame == 0 && m_objects[v4].timer == 0 && m_objectState[v4] == 0) {
                     m_objects[v4].vx = 4.2;
                     m_objects[v4].vy = 0.0;
-                    m_objects[v4].unk84 = 1;
-                    unk31ac[v4] = 1;
+                    m_objects[v4].hitsLeft = 1;
+                    m_objectState[v4] = 1;
                 }
-                if (unk31ac[v4] == 1) {
+                if (m_objectState[v4] == 1) {
                     m_objects[v4].vx -= 0.045;
                     if (m_objects[v4].vx < 0.0) {
                         m_objects[v4].vx = 0.0;
                     }
                 }
-                if (m_objects[v4].vx == 0.0 && unk31ac[v4] == 1) {
-                    unk31ac[v4] = 2;
-                    unk3148 = 2;
-                    m_objects[v4].unk84 = 0;
+                if (m_objects[v4].vx == 0.0 && m_objectState[v4] == 1) {
+                    m_objectState[v4] = 2;
+                    m_shotState = 2;
+                    m_objects[v4].hitsLeft = 0;
                 }
-                if (unk31ac[v4] >= 2) {
+                if (m_objectState[v4] >= 2) {
                     if (m_objects[v4].y < y - 50.0) {
                         m_objects[v4].vy += 0.06;
                     }
@@ -2358,9 +2358,9 @@ void CNagamori::UpdateObjects()
                     } else if (m_objects[v4].vx > 2.0) {
                         m_objects[v4].vx = 2.0;
                     }
-                    if (m_objects[v4].y > y - 70.0 && m_objects[v4].y < y - 20.0 && m_objects[v4].x > x - 10.0 && m_objects[v4].x < x + 10.0 && unk3148 >= 2) {
+                    if (m_objects[v4].y > y - 70.0 && m_objects[v4].y < y - 20.0 && m_objects[v4].x > x - 10.0 && m_objects[v4].x < x + 10.0 && m_shotState >= 2) {
                         RemoveObject(v4);
-                        unk3148 = 0;
+                        m_shotState = 0;
                         m_playSound = 0x1a;
                         break;
                     }
@@ -2369,55 +2369,55 @@ void CNagamori::UpdateObjects()
                 if (m_objects[v4].timer >= v54) {
                     m_objects[v4].timer = 0;
                     m_objects[v4].frame++;
-                    m_objects[v4].unk80 = 0;
+                    m_objects[v4].attackResult = 0;
                     if (m_objects[v4].frame >= v58) {
                         m_objects[v4].frame = m_objects[v4].frame - 2;
                     }
                 }
                 break;
-            case 0x19c:
-                Unk4ae1d0((int)m_objects[v4].x, (int)m_objects[v4].y, 0x1e, 0x1e);
-                if (unk3154 == 1) {
+            case kObjShotB:
+                TriggerObjectsNear((int)m_objects[v4].x, (int)m_objects[v4].y, 0x1e, 0x1e);
+                if (m_shotOrder == 1) {
                     m_objects[v4].vy -= 2.5;
-                    if (unk31ac[v4] > 1) {
+                    if (m_objectState[v4] > 1) {
                         m_objects[v4].vx *= 0.5;
                     }
-                    unk3154 = 0;
+                    m_shotOrder = 0;
                 }
-                if (unk3154 == -1) {
+                if (m_shotOrder == -1) {
                     m_objects[v4].vy += 2.5;
-                    if (unk31ac[v4] > 1) {
+                    if (m_objectState[v4] > 1) {
                         m_objects[v4].vx *= 0.5;
                     }
-                    unk3154 = 0;
+                    m_shotOrder = 0;
                 }
-                if (unk3154 == 2) {
-                    unk3148 = 1;
-                    unk31ac[v4] = 1;
+                if (m_shotOrder == 2) {
+                    m_shotState = 1;
+                    m_objectState[v4] = 1;
                     m_objects[v4].vx = 3.0;
                     if (facing != m_objects[v4].facing) {
                         m_objects[v4].facing = facing;
                     }
-                    unk3154 = 0;
+                    m_shotOrder = 0;
                 }
-                if (m_objects[v4].frame == 0 && m_objects[v4].timer == 0 && unk31ac[v4] == 0) {
+                if (m_objects[v4].frame == 0 && m_objects[v4].timer == 0 && m_objectState[v4] == 0) {
                     m_objects[v4].vx = 2.0;
                     m_objects[v4].vy = -2.3;
-                    m_objects[v4].unk84 = 1;
-                    unk31ac[v4] = 1;
+                    m_objects[v4].hitsLeft = 1;
+                    m_objectState[v4] = 1;
                 }
-                if (unk31ac[v4] == 1) {
+                if (m_objectState[v4] == 1) {
                     m_objects[v4].vx -= 0.03;
                     if (m_objects[v4].vx < 0.0) {
                         m_objects[v4].vx = 0.0;
                     }
                 }
-                if (m_objects[v4].vx == 0.0 && unk31ac[v4] == 1) {
-                    unk31ac[v4] = 2;
-                    unk3148 = 2;
-                    m_objects[v4].unk84 = 0;
+                if (m_objects[v4].vx == 0.0 && m_objectState[v4] == 1) {
+                    m_objectState[v4] = 2;
+                    m_shotState = 2;
+                    m_objects[v4].hitsLeft = 0;
                 }
-                if (unk31ac[v4] >= 2) {
+                if (m_objectState[v4] >= 2) {
                     if (m_objects[v4].y < y - 50.0) {
                         m_objects[v4].vy += 0.06;
                     }
@@ -2440,9 +2440,9 @@ void CNagamori::UpdateObjects()
                     } else if (m_objects[v4].vx > 2.0) {
                         m_objects[v4].vx = 2.0;
                     }
-                    if (m_objects[v4].y > y - 70.0 && m_objects[v4].y < y - 20.0 && m_objects[v4].x > x - 10.0 && m_objects[v4].x < x + 10.0 && unk3148 >= 2) {
+                    if (m_objects[v4].y > y - 70.0 && m_objects[v4].y < y - 20.0 && m_objects[v4].x > x - 10.0 && m_objects[v4].x < x + 10.0 && m_shotState >= 2) {
                         RemoveObject(v4);
-                        unk3148 = 0;
+                        m_shotState = 0;
                         m_playSound = 0x1a;
                         break;
                     }
@@ -2451,54 +2451,54 @@ void CNagamori::UpdateObjects()
                 if (m_objects[v4].timer >= v54) {
                     m_objects[v4].timer = 0;
                     m_objects[v4].frame++;
-                    m_objects[v4].unk80 = 0;
+                    m_objects[v4].attackResult = 0;
                     if (m_objects[v4].frame >= v58) {
                         m_objects[v4].frame = m_objects[v4].frame - 2;
                     }
                 }
                 break;
-            case 0x19d:
-                if (unk3154 == 1) {
+            case kObjShotC:
+                if (m_shotOrder == 1) {
                     m_objects[v4].vy -= 2.5;
-                    if (unk31ac[v4] > 1) {
+                    if (m_objectState[v4] > 1) {
                         m_objects[v4].vx *= 0.5;
                     }
-                    unk3154 = 0;
+                    m_shotOrder = 0;
                 }
-                if (unk3154 == -1) {
+                if (m_shotOrder == -1) {
                     m_objects[v4].vy += 2.5;
-                    if (unk31ac[v4] > 1) {
+                    if (m_objectState[v4] > 1) {
                         m_objects[v4].vx *= 0.5;
                     }
-                    unk3154 = 0;
+                    m_shotOrder = 0;
                 }
-                if (unk3154 == 2) {
-                    unk3148 = 1;
-                    unk31ac[v4] = 1;
+                if (m_shotOrder == 2) {
+                    m_shotState = 1;
+                    m_objectState[v4] = 1;
                     m_objects[v4].vx = 3.0;
                     if (facing != m_objects[v4].facing) {
                         m_objects[v4].facing = facing;
                     }
-                    unk3154 = 0;
+                    m_shotOrder = 0;
                 }
-                if (m_objects[v4].frame == 0 && m_objects[v4].timer == 0 && unk31ac[v4] == 0) {
+                if (m_objects[v4].frame == 0 && m_objects[v4].timer == 0 && m_objectState[v4] == 0) {
                     m_objects[v4].vx = 2.7;
                     m_objects[v4].vy = 0.0;
-                    m_objects[v4].unk84 = 1;
-                    unk31ac[v4] = 1;
+                    m_objects[v4].hitsLeft = 1;
+                    m_objectState[v4] = 1;
                 }
-                if (unk31ac[v4] == 1) {
+                if (m_objectState[v4] == 1) {
                     m_objects[v4].vx -= 0.02;
                     if (m_objects[v4].vx < 0.0) {
                         m_objects[v4].vx = 0.0;
                     }
                 }
-                if (m_objects[v4].vx == 0.0 && unk31ac[v4] == 1) {
-                    unk31ac[v4] = 2;
-                    unk3148 = 2;
-                    m_objects[v4].unk84 = 0;
+                if (m_objects[v4].vx == 0.0 && m_objectState[v4] == 1) {
+                    m_objectState[v4] = 2;
+                    m_shotState = 2;
+                    m_objects[v4].hitsLeft = 0;
                 }
-                if (unk31ac[v4] >= 2) {
+                if (m_objectState[v4] >= 2) {
                     if (m_objects[v4].y < y - 50.0) {
                         m_objects[v4].vy += 0.06;
                     }
@@ -2521,39 +2521,39 @@ void CNagamori::UpdateObjects()
                     } else if (m_objects[v4].vx > 2.0) {
                         m_objects[v4].vx = 2.0;
                     }
-                    if (unk31ac[v4] > 1 && unk32ac[v4] > 0x59 && unk33ac[v4] < 5) {
-                        l50.unk0 = 0;
-                        l50.type = 0x190;
+                    if (m_objectState[v4] > 1 && m_objectTimer[v4] > 0x59 && m_objectPhase[v4] < 5) {
+                        l50.keep = 0;
+                        l50.type = kObjBomb;
                         l50.x = (double)(int)m_objects[v4].x;
                         l50.y = (double)(int)m_objects[v4].y;
                         l50.facing = m_objects[v4].facing;
                         l50.scale = 2;
                         l50.layer = 1;
                         SpawnObject(&l50);
-                        l50.type = 0x19e;
+                        l50.type = kObjPlaceFx;
                         SpawnObject(&l50);
-                        unk32ac[v4] = 0;
-                        unk33ac[v4]++;
+                        m_objectTimer[v4] = 0;
+                        m_objectPhase[v4]++;
                     }
-                    if (m_objects[v4].y > y - 70.0 && m_objects[v4].y < y - 20.0 && m_objects[v4].x > x - 10.0 && m_objects[v4].x < x + 10.0 && unk3148 >= 2) {
+                    if (m_objects[v4].y > y - 70.0 && m_objects[v4].y < y - 20.0 && m_objects[v4].x > x - 10.0 && m_objects[v4].x < x + 10.0 && m_shotState >= 2) {
                         RemoveObject(v4);
-                        unk3148 = 0;
+                        m_shotState = 0;
                         m_playSound = 0x1a;
                         break;
                     }
                 }
                 m_objects[v4].timer++;
-                unk32ac[v4]++;
+                m_objectTimer[v4]++;
                 if (m_objects[v4].timer >= v54) {
                     m_objects[v4].timer = 0;
                     m_objects[v4].frame++;
-                    m_objects[v4].unk80 = 0;
+                    m_objects[v4].attackResult = 0;
                     if (m_objects[v4].frame >= v58) {
                         m_objects[v4].frame = m_objects[v4].frame - 2;
                     }
                 }
                 break;
-            case 0x19e:
+            case kObjPlaceFx:
                 m_objects[v4].vx = 0.0;
                 m_objects[v4].vy = 0.0;
                 if (m_objects[v4].frame == 5 && m_objects[v4].timer == 0) {
@@ -2563,14 +2563,14 @@ void CNagamori::UpdateObjects()
                 if (m_objects[v4].timer >= v54) {
                     m_objects[v4].timer = 0;
                     m_objects[v4].frame++;
-                    m_objects[v4].unk80 = 0;
+                    m_objects[v4].attackResult = 0;
                     if (m_objects[v4].frame >= v58) {
                         RemoveObject(v4);
                     }
                 }
                 break;
-            case 0x19f:
-                if (unk33ac[v4] == 2) {
+            case kObjBombBack:
+                if (m_objectPhase[v4] == 2) {
                     if (m_objects[v4].ay == 0.0) {
                         m_objects[v4].ay = -0.015;
                     }
@@ -2582,458 +2582,458 @@ void CNagamori::UpdateObjects()
                     }
                     m_objects[v4].vy = m_objects[v4].vy + m_objects[v4].ay;
                 }
-                if (unk33ac[v4] == 0) {
+                if (m_objectPhase[v4] == 0) {
                     m_objects[v4].vx = -1.2;
                     m_objects[v4].vy = 1.2;
-                    unk33ac[v4] = 1;
+                    m_objectPhase[v4] = 1;
                 }
-                if (unk33ac[v4] == 1) {
+                if (m_objectPhase[v4] == 1) {
                     m_objects[v4].vx += 0.015;
                     m_objects[v4].vy -= 0.015;
                     if (m_objects[v4].y > -10.0) {
                         m_objects[v4].vy = 0.0;
                         m_objects[v4].vx = 0.0;
-                        unk33ac[v4] = 2;
+                        m_objectPhase[v4] = 2;
                     }
                     if (m_objects[v4].vx > 0.0) {
                         m_objects[v4].vx = 0.0;
                         m_objects[v4].vy = 0.0;
-                        unk33ac[v4] = 2;
+                        m_objectPhase[v4] = 2;
                     }
                 }
-                if (unk316c[v4] == 1 && unk32ac[v4] <= 0 && unk33ac[v4] == 2) {
-                    l50.unk0 = 0;
-                    l50.type = 0x195;
+                if (m_objectTriggered[v4] == 1 && m_objectTimer[v4] <= 0 && m_objectPhase[v4] == 2) {
+                    l50.keep = 0;
+                    l50.type = kObjExplosion;
                     l50.x = (double)(int)m_objects[v4].x;
                     l50.y = (double)(int)m_objects[v4].y;
                     l50.facing = m_objects[v4].facing;
                     l50.scale = 2;
                     l50.layer = 1;
                     SpawnObject(&l50);
-                    unk316c[v4] = 0;
-                    unk32ac[v4] = 0x78;
-                    if (unk314c == 0) {
+                    m_objectTriggered[v4] = 0;
+                    m_objectTimer[v4] = 0x78;
+                    if (m_keepBombs == 0) {
                         RemoveObject(v4);
                     }
                     break;
                 }
-                unk316c[v4] = 0;
+                m_objectTriggered[v4] = 0;
                 m_objects[v4].timer++;
-                unk32ac[v4]--;
+                m_objectTimer[v4]--;
                 if (m_objects[v4].timer >= v54) {
                     m_objects[v4].timer = 0;
                     m_objects[v4].frame++;
-                    m_objects[v4].unk80 = 0;
+                    m_objects[v4].attackResult = 0;
                     if (m_objects[v4].frame >= v58) {
-                        if (unk31ac[v4] < 0xa) {
+                        if (m_objectState[v4] < 0xa) {
                             m_objects[v4].frame = 0;
-                            unk31ac[v4]++;
+                            m_objectState[v4]++;
                         } else {
                             RemoveObject(v4);
                         }
                     }
                 }
                 break;
-            case 0x1a0:
+            case kObjUnused1a0:
                 m_objects[v4].vx = 0.0;
                 m_objects[v4].vy = 0.0;
                 if (m_objects[v4].frame == 5 && m_objects[v4].timer == 0) {
                     m_playVoice = 1;
-                    unk314c = 0;
+                    m_keepBombs = 0;
                 }
                 m_objects[v4].timer++;
                 if (m_objects[v4].timer >= v54) {
                     m_objects[v4].timer = 0;
                     m_objects[v4].frame++;
-                    m_objects[v4].unk80 = 0;
+                    m_objects[v4].attackResult = 0;
                     if (m_objects[v4].frame >= v58) {
                         RemoveObject(v4);
-                        unk314c = 0;
+                        m_keepBombs = 0;
                     }
                 }
                 break;
-            case 0x1a1:
-                unk3150--;
-                unk14c = 0x4b0;
-                (*m_opponent)->unk13a = 1;
-                unk13c = 1;
+            case kObjLv4Director:
+                m_lv4Time--;
+                m_freezeTime = 0x4b0;
+                (*m_opponent)->m_noGuardTime = 1;
+                m_invulTime = 1;
                 m_gauge = 0;
-                (*m_opponent)->unk140 = 2;
-                if (unk3150 == 0) {
-                    unk14c = 0;
-                    (*m_opponent)->unk13a = 0;
+                (*m_opponent)->m_koDelay = 2;
+                if (m_lv4Time == 0) {
+                    m_freezeTime = 0;
+                    (*m_opponent)->m_noGuardTime = 0;
                     RemoveObject(v4);
                     m_playSound = 0x16;
-                    (*m_opponent)->pattern = 0x3b;
-                    (*m_opponent)->unk140 = 0;
-                    unk13c = 0;
-                    (*m_opponent)->unk128 = 1;
+                    (*m_opponent)->pattern = kHitAir;
+                    (*m_opponent)->m_koDelay = 0;
+                    m_invulTime = 0;
+                    (*m_opponent)->m_noAirRecovery = 1;
                     if ((*m_opponent)->m_hp == 1) {
                         (*m_opponent)->m_hp = 0;
                     }
-                    (*m_opponent)->unkc0 = -4.0;
-                    (*m_opponent)->unkc8 = -1.0;
+                    (*m_opponent)->m_hitVx = -4.0;
+                    (*m_opponent)->m_hitVy = -1.0;
                     break;
                 }
-                if (unk3150 == 0x47e) {
-                    l50.unk0 = 0;
+                if (m_lv4Time == 0x47e) {
+                    l50.keep = 0;
                     l50.screen = 1;
-                    l50.type = 0x1a2;
+                    l50.type = kObjLv4Scene01;
                     l50.x = 0.0;
                     l50.y = 80.0;
                     l50.facing = 1;
                     l50.scale = 1;
                     l50.layer = 0;
-                    l50.unk30 = 1;
+                    l50.movesInFreeze = 1;
                     SpawnObject(&l50);
                 }
-                if (unk3150 == 0x474) {
-                    l50.unk0 = 0;
+                if (m_lv4Time == 0x474) {
+                    l50.keep = 0;
                     l50.screen = 1;
-                    l50.type = 0x1a3;
+                    l50.type = kObjLv4Scene02;
                     l50.x = 190.0;
                     l50.y = 320.0;
                     l50.facing = 1;
                     l50.scale = 1;
                     l50.layer = 0;
-                    l50.unk30 = 1;
+                    l50.movesInFreeze = 1;
                     SpawnObject(&l50);
                 }
-                if (unk3150 == 0x46a) {
-                    l50.unk0 = 0;
+                if (m_lv4Time == 0x46a) {
+                    l50.keep = 0;
                     l50.screen = 1;
-                    l50.type = 0x1a4;
+                    l50.type = kObjLv4Scene03;
                     l50.x = 320.0;
                     l50.y = 170.0;
                     l50.facing = 1;
                     l50.scale = 1;
                     l50.layer = 0;
-                    l50.unk30 = 1;
+                    l50.movesInFreeze = 1;
                     SpawnObject(&l50);
                 }
-                if (unk3150 == 0x460) {
-                    l50.unk0 = 0;
+                if (m_lv4Time == 0x460) {
+                    l50.keep = 0;
                     l50.screen = 1;
-                    l50.type = 0x1a5;
+                    l50.type = kObjLv4Scene04;
                     l50.x = 0.0;
                     l50.y = 120.0;
                     l50.facing = 1;
                     l50.scale = 1;
                     l50.layer = 0;
-                    l50.unk30 = 1;
+                    l50.movesInFreeze = 1;
                     SpawnObject(&l50);
                 }
-                if (unk3150 == 0x456) {
-                    l50.unk0 = 0;
+                if (m_lv4Time == 0x456) {
+                    l50.keep = 0;
                     l50.screen = 1;
-                    l50.type = 0x1a6;
+                    l50.type = kObjLv4Scene05;
                     l50.x = 60.0;
                     l50.y = -80.0;
                     l50.facing = 1;
                     l50.scale = 1;
                     l50.layer = 0;
-                    l50.unk30 = 1;
+                    l50.movesInFreeze = 1;
                     SpawnObject(&l50);
                 }
-                if (unk3150 == 0x44c) {
-                    l50.unk0 = 0;
+                if (m_lv4Time == 0x44c) {
+                    l50.keep = 0;
                     l50.screen = 1;
-                    l50.type = 0x1a7;
+                    l50.type = kObjLv4Scene06;
                     l50.x = 320.0;
                     l50.y = 40.0;
                     l50.facing = 1;
                     l50.scale = 1;
                     l50.layer = 0;
-                    l50.unk30 = 1;
+                    l50.movesInFreeze = 1;
                     SpawnObject(&l50);
                 }
-                if (unk3150 == 0x438) {
-                    l50.unk0 = 0;
+                if (m_lv4Time == 0x438) {
+                    l50.keep = 0;
                     l50.screen = 1;
-                    l50.type = 0x1a8;
+                    l50.type = kObjLv4Scene07;
                     l50.x = 240.0;
                     l50.y = 320.0;
                     l50.facing = 1;
                     l50.scale = 1;
                     l50.layer = 0;
-                    l50.unk30 = 1;
+                    l50.movesInFreeze = 1;
                     SpawnObject(&l50);
                 }
-                if (unk3150 == 0x424) {
-                    l50.unk0 = 0;
+                if (m_lv4Time == 0x424) {
+                    l50.keep = 0;
                     l50.screen = 1;
-                    l50.type = 0x1a9;
+                    l50.type = kObjLv4Scene08;
                     l50.x = 180.0;
                     l50.y = -80.0;
                     l50.facing = 1;
                     l50.scale = 1;
                     l50.layer = 0;
-                    l50.unk30 = 1;
+                    l50.movesInFreeze = 1;
                     SpawnObject(&l50);
                 }
-                if (unk3150 == 0x410) {
-                    l50.unk0 = 0;
+                if (m_lv4Time == 0x410) {
+                    l50.keep = 0;
                     l50.screen = 1;
-                    l50.type = 0x1aa;
+                    l50.type = kObjLv4Scene09;
                     l50.x = 0.0;
                     l50.y = 80.0;
                     l50.facing = 1;
                     l50.scale = 1;
                     l50.layer = 0;
-                    l50.unk30 = 1;
+                    l50.movesInFreeze = 1;
                     SpawnObject(&l50);
                 }
-                if (unk3150 == 0x3fc) {
-                    l50.unk0 = 0;
+                if (m_lv4Time == 0x3fc) {
+                    l50.keep = 0;
                     l50.screen = 1;
-                    l50.type = 0x1ab;
+                    l50.type = kObjLv4Scene10;
                     l50.x = 180.0;
                     l50.y = -80.0;
                     l50.facing = 1;
                     l50.scale = 1;
                     l50.layer = 0;
-                    l50.unk30 = 1;
+                    l50.movesInFreeze = 1;
                     SpawnObject(&l50);
                 }
-                if (unk3150 == 0x3e8) {
-                    l50.unk0 = 0;
+                if (m_lv4Time == 0x3e8) {
+                    l50.keep = 0;
                     l50.screen = 1;
-                    l50.type = 0x1ac;
+                    l50.type = kObjLv4Scene11;
                     l50.x = 320.0;
                     l50.y = 210.0;
                     l50.facing = 1;
                     l50.scale = 1;
                     l50.layer = 0;
-                    l50.unk30 = 1;
+                    l50.movesInFreeze = 1;
                     SpawnObject(&l50);
                 }
-                if (unk3150 == 0x3d4) {
-                    l50.unk0 = 0;
+                if (m_lv4Time == 0x3d4) {
+                    l50.keep = 0;
                     l50.screen = 1;
-                    l50.type = 0x1ad;
+                    l50.type = kObjLv4Scene12;
                     l50.x = 80.0;
                     l50.y = 320.0;
                     l50.facing = 1;
                     l50.scale = 1;
                     l50.layer = 0;
-                    l50.unk30 = 1;
+                    l50.movesInFreeze = 1;
                     SpawnObject(&l50);
                 }
-                if (unk3150 == 0x3ca) {
-                    l50.unk0 = 0;
+                if (m_lv4Time == 0x3ca) {
+                    l50.keep = 0;
                     l50.screen = 1;
-                    l50.type = 0x1ae;
+                    l50.type = kObjLv4Scene13;
                     l50.x = 240.0;
                     l50.y = 320.0;
                     l50.facing = 1;
                     l50.scale = 1;
                     l50.layer = 0;
-                    l50.unk30 = 1;
+                    l50.movesInFreeze = 1;
                     SpawnObject(&l50);
                 }
-                if (unk3150 == 0x3b6) {
-                    l50.unk0 = 0;
+                if (m_lv4Time == 0x3b6) {
+                    l50.keep = 0;
                     l50.screen = 1;
-                    l50.type = 0x1af;
+                    l50.type = kObjLv4Scene14;
                     l50.x = 0.0;
                     l50.y = 60.0;
                     l50.facing = 1;
                     l50.scale = 1;
                     l50.layer = 0;
-                    l50.unk30 = 1;
+                    l50.movesInFreeze = 1;
                     SpawnObject(&l50);
                 }
-                if (unk3150 == 0x3a2) {
-                    l50.unk0 = 0;
+                if (m_lv4Time == 0x3a2) {
+                    l50.keep = 0;
                     l50.screen = 1;
-                    l50.type = 0x1b0;
+                    l50.type = kObjLv4Scene15;
                     l50.x = 160.0;
                     l50.y = -80.0;
                     l50.facing = 1;
                     l50.scale = 1;
                     l50.layer = 0;
-                    l50.unk30 = 1;
+                    l50.movesInFreeze = 1;
                     SpawnObject(&l50);
                 }
-                if (unk3150 == 0x38e) {
-                    l50.unk0 = 0;
+                if (m_lv4Time == 0x38e) {
+                    l50.keep = 0;
                     l50.screen = 1;
-                    l50.type = 0x1b1;
+                    l50.type = kObjLv4Scene16;
                     l50.x = 320.0;
                     l50.y = 80.0;
                     l50.facing = 1;
                     l50.scale = 1;
                     l50.layer = 0;
-                    l50.unk30 = 1;
+                    l50.movesInFreeze = 1;
                     SpawnObject(&l50);
                 }
-                if (unk3150 == 0x37a) {
-                    l50.unk0 = 0;
+                if (m_lv4Time == 0x37a) {
+                    l50.keep = 0;
                     l50.screen = 1;
-                    l50.type = 0x1b2;
+                    l50.type = kObjLv4Scene17;
                     l50.x = 180.0;
                     l50.y = 320.0;
                     l50.facing = 1;
                     l50.scale = 1;
                     l50.layer = 0;
-                    l50.unk30 = 1;
+                    l50.movesInFreeze = 1;
                     SpawnObject(&l50);
                 }
-                if (unk3150 == 0x366) {
-                    l50.unk0 = 0;
+                if (m_lv4Time == 0x366) {
+                    l50.keep = 0;
                     l50.screen = 1;
-                    l50.type = 0x1b3;
+                    l50.type = kObjLv4Scene18;
                     l50.x = 0.0;
                     l50.y = 160.0;
                     l50.facing = 1;
                     l50.scale = 1;
                     l50.layer = 0;
-                    l50.unk30 = 1;
+                    l50.movesInFreeze = 1;
                     SpawnObject(&l50);
                 }
-                if (unk3150 == 0x352) {
-                    l50.unk0 = 0;
+                if (m_lv4Time == 0x352) {
+                    l50.keep = 0;
                     l50.screen = 1;
-                    l50.type = 0x1b4;
+                    l50.type = kObjLv4Scene19;
                     l50.x = 60.0;
                     l50.y = -80.0;
                     l50.facing = 1;
                     l50.scale = 1;
                     l50.layer = 0;
-                    l50.unk30 = 1;
+                    l50.movesInFreeze = 1;
                     SpawnObject(&l50);
                 }
-                if (unk3150 == 0x33e) {
-                    l50.unk0 = 0;
+                if (m_lv4Time == 0x33e) {
+                    l50.keep = 0;
                     l50.screen = 1;
-                    l50.type = 0x1b5;
+                    l50.type = kObjLv4Scene20;
                     l50.x = 320.0;
                     l50.y = 50.0;
                     l50.facing = 1;
                     l50.scale = 1;
                     l50.layer = 0;
-                    l50.unk30 = 1;
+                    l50.movesInFreeze = 1;
                     SpawnObject(&l50);
                 }
-                if (unk3150 == 0x32a) {
-                    l50.unk0 = 0;
+                if (m_lv4Time == 0x32a) {
+                    l50.keep = 0;
                     l50.screen = 1;
-                    l50.type = 0x1b6;
+                    l50.type = kObjLv4Scene21;
                     l50.x = 0.0;
                     l50.y = 170.0;
                     l50.facing = 1;
                     l50.scale = 1;
                     l50.layer = 0;
-                    l50.unk30 = 1;
+                    l50.movesInFreeze = 1;
                     SpawnObject(&l50);
                 }
-                if (unk3150 == 0x316) {
-                    l50.unk0 = 0;
+                if (m_lv4Time == 0x316) {
+                    l50.keep = 0;
                     l50.screen = 1;
-                    l50.type = 0x1b7;
+                    l50.type = kObjLv4Scene22;
                     l50.x = 320.0;
                     l50.y = 160.0;
                     l50.facing = 1;
                     l50.scale = 1;
                     l50.layer = 0;
-                    l50.unk30 = 1;
+                    l50.movesInFreeze = 1;
                     SpawnObject(&l50);
                 }
-                if (unk3150 == 0x302) {
-                    l50.unk0 = 0;
+                if (m_lv4Time == 0x302) {
+                    l50.keep = 0;
                     l50.screen = 1;
-                    l50.type = 0x1b8;
+                    l50.type = kObjLv4Scene23;
                     l50.x = 160.0;
                     l50.y = 320.0;
                     l50.facing = 1;
                     l50.scale = 1;
                     l50.layer = 0;
-                    l50.unk30 = 1;
+                    l50.movesInFreeze = 1;
                     SpawnObject(&l50);
                 }
-                if (unk3150 == 0x2ee) {
-                    l50.unk0 = 0;
+                if (m_lv4Time == 0x2ee) {
+                    l50.keep = 0;
                     l50.screen = 1;
-                    l50.type = 0x1b9;
+                    l50.type = kObjLv4Scene24;
                     l50.x = 60.0;
                     l50.y = -80.0;
                     l50.facing = 1;
                     l50.scale = 1;
                     l50.layer = 0;
-                    l50.unk30 = 1;
+                    l50.movesInFreeze = 1;
                     SpawnObject(&l50);
                 }
-                if (unk3150 == 0x2da) {
-                    l50.unk0 = 0;
+                if (m_lv4Time == 0x2da) {
+                    l50.keep = 0;
                     l50.screen = 1;
-                    l50.type = 0x1ba;
+                    l50.type = kObjLv4Scene25;
                     l50.x = 0.0;
                     l50.y = 120.0;
                     l50.facing = 1;
                     l50.scale = 1;
                     l50.layer = 0;
-                    l50.unk30 = 1;
+                    l50.movesInFreeze = 1;
                     SpawnObject(&l50);
                 }
-                if (unk3150 == 0x2c6) {
-                    l50.unk0 = 0;
+                if (m_lv4Time == 0x2c6) {
+                    l50.keep = 0;
                     l50.screen = 1;
-                    l50.type = 0x1bb;
+                    l50.type = kObjLv4Scene26;
                     l50.x = 190.0;
                     l50.y = 320.0;
                     l50.facing = 1;
                     l50.scale = 1;
                     l50.layer = 0;
-                    l50.unk30 = 1;
+                    l50.movesInFreeze = 1;
                     SpawnObject(&l50);
                 }
-                if (unk3150 == 0x2b2) {
-                    l50.unk0 = 0;
+                if (m_lv4Time == 0x2b2) {
+                    l50.keep = 0;
                     l50.screen = 1;
-                    l50.type = 0x1bc;
+                    l50.type = kObjLv4Scene27;
                     l50.x = 120.0;
                     l50.y = -80.0;
                     l50.facing = 1;
                     l50.scale = 1;
                     l50.layer = 0;
-                    l50.unk30 = 1;
+                    l50.movesInFreeze = 1;
                     SpawnObject(&l50);
                 }
-                if (unk3150 == 0x21c) {
-                    l50.unk0 = 1;
+                if (m_lv4Time == 0x21c) {
+                    l50.keep = 1;
                     l50.screen = 1;
-                    l50.type = 0x1bd;
+                    l50.type = kObjLv4Scene28;
                     l50.x = 0.0;
                     l50.y = 120.0;
                     l50.facing = 1;
                     l50.scale = 0;
                     l50.layer = 0;
-                    l50.unk30 = 1;
+                    l50.movesInFreeze = 1;
                     SpawnObject(&l50);
                 }
-                if (unk3150 == 0x12c) {
-                    l50.unk0 = 1;
+                if (m_lv4Time == 0x12c) {
+                    l50.keep = 1;
                     l50.screen = 1;
-                    l50.type = 0x1be;
+                    l50.type = kObjLv4Scene29;
                     l50.x = 320.0;
                     l50.y = 160.0;
                     l50.facing = 1;
                     l50.scale = 0;
                     l50.layer = 0;
-                    l50.unk30 = 1;
+                    l50.movesInFreeze = 1;
                     SpawnObject(&l50);
                 }
                 m_objects[v4].timer++;
                 if (m_objects[v4].timer >= v54) {
                     m_objects[v4].timer = 0;
                     m_objects[v4].frame++;
-                    m_objects[v4].unk80 = 0;
+                    m_objects[v4].attackResult = 0;
                     if (m_objects[v4].frame >= v58) {
                         m_objects[v4].frame = 0;
                     }
                 }
                 break;
-            case 0x1a2:
+            case kObjLv4Scene01:
                 m_objects[v4].vx = 10.0;
                 if (m_objects[v4].timer > 0x1c) {
                     m_objects[v4].vx = 0.3;
@@ -3048,13 +3048,13 @@ void CNagamori::UpdateObjects()
                 if (m_objects[v4].timer >= v54) {
                     m_objects[v4].timer = 0;
                     m_objects[v4].frame++;
-                    m_objects[v4].unk80 = 0;
+                    m_objects[v4].attackResult = 0;
                     if (m_objects[v4].frame >= v58) {
                         m_objects[v4].frame = 0;
                     }
                 }
                 break;
-            case 0x1a3:
+            case kObjLv4Scene02:
                 m_objects[v4].vy = -10.0;
                 if (m_objects[v4].timer > 0x1c) {
                     m_objects[v4].vy = -0.3;
@@ -3069,13 +3069,13 @@ void CNagamori::UpdateObjects()
                 if (m_objects[v4].timer >= v54) {
                     m_objects[v4].timer = 0;
                     m_objects[v4].frame++;
-                    m_objects[v4].unk80 = 0;
+                    m_objects[v4].attackResult = 0;
                     if (m_objects[v4].frame >= v58) {
                         m_objects[v4].frame = 0;
                     }
                 }
                 break;
-            case 0x1a4:
+            case kObjLv4Scene03:
                 m_objects[v4].vx = -10.0;
                 if (m_objects[v4].timer > 0x1c) {
                     m_objects[v4].vx = -0.3;
@@ -3090,13 +3090,13 @@ void CNagamori::UpdateObjects()
                 if (m_objects[v4].timer >= v54) {
                     m_objects[v4].timer = 0;
                     m_objects[v4].frame++;
-                    m_objects[v4].unk80 = 0;
+                    m_objects[v4].attackResult = 0;
                     if (m_objects[v4].frame >= v58) {
                         m_objects[v4].frame = 0;
                     }
                 }
                 break;
-            case 0x1a5:
+            case kObjLv4Scene04:
                 m_objects[v4].vx = 10.0;
                 if (m_objects[v4].timer > 0x1c) {
                     m_objects[v4].vx = 0.3;
@@ -3111,13 +3111,13 @@ void CNagamori::UpdateObjects()
                 if (m_objects[v4].timer >= v54) {
                     m_objects[v4].timer = 0;
                     m_objects[v4].frame++;
-                    m_objects[v4].unk80 = 0;
+                    m_objects[v4].attackResult = 0;
                     if (m_objects[v4].frame >= v58) {
                         m_objects[v4].frame = 0;
                     }
                 }
                 break;
-            case 0x1a6:
+            case kObjLv4Scene05:
                 m_objects[v4].vy = 10.0;
                 if (m_objects[v4].timer > 0x1c) {
                     m_objects[v4].vy = 0.3;
@@ -3132,13 +3132,13 @@ void CNagamori::UpdateObjects()
                 if (m_objects[v4].timer >= v54) {
                     m_objects[v4].timer = 0;
                     m_objects[v4].frame++;
-                    m_objects[v4].unk80 = 0;
+                    m_objects[v4].attackResult = 0;
                     if (m_objects[v4].frame >= v58) {
                         m_objects[v4].frame = 0;
                     }
                 }
                 break;
-            case 0x1a7:
+            case kObjLv4Scene06:
                 m_objects[v4].vx = -10.0;
                 if (m_objects[v4].timer > 0x1c) {
                     m_objects[v4].vx = -0.3;
@@ -3153,13 +3153,13 @@ void CNagamori::UpdateObjects()
                 if (m_objects[v4].timer >= v54) {
                     m_objects[v4].timer = 0;
                     m_objects[v4].frame++;
-                    m_objects[v4].unk80 = 0;
+                    m_objects[v4].attackResult = 0;
                     if (m_objects[v4].frame >= v58) {
                         m_objects[v4].frame = 0;
                     }
                 }
                 break;
-            case 0x1a8:
+            case kObjLv4Scene07:
                 m_objects[v4].vy = -10.0;
                 if (m_objects[v4].timer > 0x1c) {
                     m_objects[v4].vy = 0.3;
@@ -3174,13 +3174,13 @@ void CNagamori::UpdateObjects()
                 if (m_objects[v4].timer >= v54) {
                     m_objects[v4].timer = 0;
                     m_objects[v4].frame++;
-                    m_objects[v4].unk80 = 0;
+                    m_objects[v4].attackResult = 0;
                     if (m_objects[v4].frame >= v58) {
                         m_objects[v4].frame = 0;
                     }
                 }
                 break;
-            case 0x1a9:
+            case kObjLv4Scene08:
                 m_objects[v4].vy = 10.0;
                 if (m_objects[v4].timer > 0x1c) {
                     m_objects[v4].vy = 0.3;
@@ -3195,13 +3195,13 @@ void CNagamori::UpdateObjects()
                 if (m_objects[v4].timer >= v54) {
                     m_objects[v4].timer = 0;
                     m_objects[v4].frame++;
-                    m_objects[v4].unk80 = 0;
+                    m_objects[v4].attackResult = 0;
                     if (m_objects[v4].frame >= v58) {
                         m_objects[v4].frame = 0;
                     }
                 }
                 break;
-            case 0x1aa:
+            case kObjLv4Scene09:
                 m_objects[v4].vx = 10.0;
                 if (m_objects[v4].timer > 0x1c) {
                     m_objects[v4].vx = 0.3;
@@ -3216,13 +3216,13 @@ void CNagamori::UpdateObjects()
                 if (m_objects[v4].timer >= v54) {
                     m_objects[v4].timer = 0;
                     m_objects[v4].frame++;
-                    m_objects[v4].unk80 = 0;
+                    m_objects[v4].attackResult = 0;
                     if (m_objects[v4].frame >= v58) {
                         m_objects[v4].frame = 0;
                     }
                 }
                 break;
-            case 0x1ab:
+            case kObjLv4Scene10:
                 m_objects[v4].vy = 10.0;
                 if (m_objects[v4].timer > 0x1c) {
                     m_objects[v4].vy = 0.3;
@@ -3237,13 +3237,13 @@ void CNagamori::UpdateObjects()
                 if (m_objects[v4].timer >= v54) {
                     m_objects[v4].timer = 0;
                     m_objects[v4].frame++;
-                    m_objects[v4].unk80 = 0;
+                    m_objects[v4].attackResult = 0;
                     if (m_objects[v4].frame >= v58) {
                         m_objects[v4].frame = 0;
                     }
                 }
                 break;
-            case 0x1ac:
+            case kObjLv4Scene11:
                 m_objects[v4].vx = -10.0;
                 if (m_objects[v4].timer > 0x1c) {
                     m_objects[v4].vx = -0.3;
@@ -3258,34 +3258,13 @@ void CNagamori::UpdateObjects()
                 if (m_objects[v4].timer >= v54) {
                     m_objects[v4].timer = 0;
                     m_objects[v4].frame++;
-                    m_objects[v4].unk80 = 0;
+                    m_objects[v4].attackResult = 0;
                     if (m_objects[v4].frame >= v58) {
                         m_objects[v4].frame = 0;
                     }
                 }
                 break;
-            case 0x1ad:
-                m_objects[v4].vy = -10.0;
-                if (m_objects[v4].timer > 0x1c) {
-                    m_objects[v4].vy = -0.3;
-                }
-                if (m_objects[v4].timer > 0x5a) {
-                    m_objects[v4].vy = -10.0;
-                }
-                if (m_objects[v4].timer > 0x82) {
-                    RemoveObject(v4);
-                }
-                m_objects[v4].timer++;
-                if (m_objects[v4].timer >= v54) {
-                    m_objects[v4].timer = 0;
-                    m_objects[v4].frame++;
-                    m_objects[v4].unk80 = 0;
-                    if (m_objects[v4].frame >= v58) {
-                        m_objects[v4].frame = 0;
-                    }
-                }
-                break;
-            case 0x1ae:
+            case kObjLv4Scene12:
                 m_objects[v4].vy = -10.0;
                 if (m_objects[v4].timer > 0x1c) {
                     m_objects[v4].vy = -0.3;
@@ -3300,76 +3279,13 @@ void CNagamori::UpdateObjects()
                 if (m_objects[v4].timer >= v54) {
                     m_objects[v4].timer = 0;
                     m_objects[v4].frame++;
-                    m_objects[v4].unk80 = 0;
+                    m_objects[v4].attackResult = 0;
                     if (m_objects[v4].frame >= v58) {
                         m_objects[v4].frame = 0;
                     }
                 }
                 break;
-            case 0x1af:
-                m_objects[v4].vx = 10.0;
-                if (m_objects[v4].timer > 0x1c) {
-                    m_objects[v4].vx = 0.3;
-                }
-                if (m_objects[v4].timer > 0x5a) {
-                    m_objects[v4].vx = 10.0;
-                }
-                if (m_objects[v4].timer > 0x82) {
-                    RemoveObject(v4);
-                }
-                m_objects[v4].timer++;
-                if (m_objects[v4].timer >= v54) {
-                    m_objects[v4].timer = 0;
-                    m_objects[v4].frame++;
-                    m_objects[v4].unk80 = 0;
-                    if (m_objects[v4].frame >= v58) {
-                        m_objects[v4].frame = 0;
-                    }
-                }
-                break;
-            case 0x1b0:
-                m_objects[v4].vy = 10.0;
-                if (m_objects[v4].timer > 0x1c) {
-                    m_objects[v4].vy = 0.3;
-                }
-                if (m_objects[v4].timer > 0x5a) {
-                    m_objects[v4].vy = 10.0;
-                }
-                if (m_objects[v4].timer > 0x82) {
-                    RemoveObject(v4);
-                }
-                m_objects[v4].timer++;
-                if (m_objects[v4].timer >= v54) {
-                    m_objects[v4].timer = 0;
-                    m_objects[v4].frame++;
-                    m_objects[v4].unk80 = 0;
-                    if (m_objects[v4].frame >= v58) {
-                        m_objects[v4].frame = 0;
-                    }
-                }
-                break;
-            case 0x1b1:
-                m_objects[v4].vx = -10.0;
-                if (m_objects[v4].timer > 0x1c) {
-                    m_objects[v4].vx = -0.3;
-                }
-                if (m_objects[v4].timer > 0x5a) {
-                    m_objects[v4].vx = -10.0;
-                }
-                if (m_objects[v4].timer > 0x82) {
-                    RemoveObject(v4);
-                }
-                m_objects[v4].timer++;
-                if (m_objects[v4].timer >= v54) {
-                    m_objects[v4].timer = 0;
-                    m_objects[v4].frame++;
-                    m_objects[v4].unk80 = 0;
-                    if (m_objects[v4].frame >= v58) {
-                        m_objects[v4].frame = 0;
-                    }
-                }
-                break;
-            case 0x1b2:
+            case kObjLv4Scene13:
                 m_objects[v4].vy = -10.0;
                 if (m_objects[v4].timer > 0x1c) {
                     m_objects[v4].vy = -0.3;
@@ -3384,13 +3300,13 @@ void CNagamori::UpdateObjects()
                 if (m_objects[v4].timer >= v54) {
                     m_objects[v4].timer = 0;
                     m_objects[v4].frame++;
-                    m_objects[v4].unk80 = 0;
+                    m_objects[v4].attackResult = 0;
                     if (m_objects[v4].frame >= v58) {
                         m_objects[v4].frame = 0;
                     }
                 }
                 break;
-            case 0x1b3:
+            case kObjLv4Scene14:
                 m_objects[v4].vx = 10.0;
                 if (m_objects[v4].timer > 0x1c) {
                     m_objects[v4].vx = 0.3;
@@ -3405,13 +3321,13 @@ void CNagamori::UpdateObjects()
                 if (m_objects[v4].timer >= v54) {
                     m_objects[v4].timer = 0;
                     m_objects[v4].frame++;
-                    m_objects[v4].unk80 = 0;
+                    m_objects[v4].attackResult = 0;
                     if (m_objects[v4].frame >= v58) {
                         m_objects[v4].frame = 0;
                     }
                 }
                 break;
-            case 0x1b4:
+            case kObjLv4Scene15:
                 m_objects[v4].vy = 10.0;
                 if (m_objects[v4].timer > 0x1c) {
                     m_objects[v4].vy = 0.3;
@@ -3426,13 +3342,13 @@ void CNagamori::UpdateObjects()
                 if (m_objects[v4].timer >= v54) {
                     m_objects[v4].timer = 0;
                     m_objects[v4].frame++;
-                    m_objects[v4].unk80 = 0;
+                    m_objects[v4].attackResult = 0;
                     if (m_objects[v4].frame >= v58) {
                         m_objects[v4].frame = 0;
                     }
                 }
                 break;
-            case 0x1b5:
+            case kObjLv4Scene16:
                 m_objects[v4].vx = -10.0;
                 if (m_objects[v4].timer > 0x1c) {
                     m_objects[v4].vx = -0.3;
@@ -3447,55 +3363,13 @@ void CNagamori::UpdateObjects()
                 if (m_objects[v4].timer >= v54) {
                     m_objects[v4].timer = 0;
                     m_objects[v4].frame++;
-                    m_objects[v4].unk80 = 0;
+                    m_objects[v4].attackResult = 0;
                     if (m_objects[v4].frame >= v58) {
                         m_objects[v4].frame = 0;
                     }
                 }
                 break;
-            case 0x1b6:
-                m_objects[v4].vx = 10.0;
-                if (m_objects[v4].timer > 0x1c) {
-                    m_objects[v4].vx = 0.3;
-                }
-                if (m_objects[v4].timer > 0x5a) {
-                    m_objects[v4].vx = 10.0;
-                }
-                if (m_objects[v4].timer > 0x82) {
-                    RemoveObject(v4);
-                }
-                m_objects[v4].timer++;
-                if (m_objects[v4].timer >= v54) {
-                    m_objects[v4].timer = 0;
-                    m_objects[v4].frame++;
-                    m_objects[v4].unk80 = 0;
-                    if (m_objects[v4].frame >= v58) {
-                        m_objects[v4].frame = 0;
-                    }
-                }
-                break;
-            case 0x1b7:
-                m_objects[v4].vx = -10.0;
-                if (m_objects[v4].timer > 0x1c) {
-                    m_objects[v4].vx = -0.3;
-                }
-                if (m_objects[v4].timer > 0x5a) {
-                    m_objects[v4].vx = -10.0;
-                }
-                if (m_objects[v4].timer > 0x82) {
-                    RemoveObject(v4);
-                }
-                m_objects[v4].timer++;
-                if (m_objects[v4].timer >= v54) {
-                    m_objects[v4].timer = 0;
-                    m_objects[v4].frame++;
-                    m_objects[v4].unk80 = 0;
-                    if (m_objects[v4].frame >= v58) {
-                        m_objects[v4].frame = 0;
-                    }
-                }
-                break;
-            case 0x1b8:
+            case kObjLv4Scene17:
                 m_objects[v4].vy = -10.0;
                 if (m_objects[v4].timer > 0x1c) {
                     m_objects[v4].vy = -0.3;
@@ -3510,34 +3384,13 @@ void CNagamori::UpdateObjects()
                 if (m_objects[v4].timer >= v54) {
                     m_objects[v4].timer = 0;
                     m_objects[v4].frame++;
-                    m_objects[v4].unk80 = 0;
+                    m_objects[v4].attackResult = 0;
                     if (m_objects[v4].frame >= v58) {
                         m_objects[v4].frame = 0;
                     }
                 }
                 break;
-            case 0x1b9:
-                m_objects[v4].vy = 10.0;
-                if (m_objects[v4].timer > 0x1c) {
-                    m_objects[v4].vy = 0.3;
-                }
-                if (m_objects[v4].timer > 0x5a) {
-                    m_objects[v4].vy = 10.0;
-                }
-                if (m_objects[v4].timer > 0x82) {
-                    RemoveObject(v4);
-                }
-                m_objects[v4].timer++;
-                if (m_objects[v4].timer >= v54) {
-                    m_objects[v4].timer = 0;
-                    m_objects[v4].frame++;
-                    m_objects[v4].unk80 = 0;
-                    if (m_objects[v4].frame >= v58) {
-                        m_objects[v4].frame = 0;
-                    }
-                }
-                break;
-            case 0x1ba:
+            case kObjLv4Scene18:
                 m_objects[v4].vx = 10.0;
                 if (m_objects[v4].timer > 0x1c) {
                     m_objects[v4].vx = 0.3;
@@ -3552,13 +3405,160 @@ void CNagamori::UpdateObjects()
                 if (m_objects[v4].timer >= v54) {
                     m_objects[v4].timer = 0;
                     m_objects[v4].frame++;
-                    m_objects[v4].unk80 = 0;
+                    m_objects[v4].attackResult = 0;
                     if (m_objects[v4].frame >= v58) {
                         m_objects[v4].frame = 0;
                     }
                 }
                 break;
-            case 0x1bb:
+            case kObjLv4Scene19:
+                m_objects[v4].vy = 10.0;
+                if (m_objects[v4].timer > 0x1c) {
+                    m_objects[v4].vy = 0.3;
+                }
+                if (m_objects[v4].timer > 0x5a) {
+                    m_objects[v4].vy = 10.0;
+                }
+                if (m_objects[v4].timer > 0x82) {
+                    RemoveObject(v4);
+                }
+                m_objects[v4].timer++;
+                if (m_objects[v4].timer >= v54) {
+                    m_objects[v4].timer = 0;
+                    m_objects[v4].frame++;
+                    m_objects[v4].attackResult = 0;
+                    if (m_objects[v4].frame >= v58) {
+                        m_objects[v4].frame = 0;
+                    }
+                }
+                break;
+            case kObjLv4Scene20:
+                m_objects[v4].vx = -10.0;
+                if (m_objects[v4].timer > 0x1c) {
+                    m_objects[v4].vx = -0.3;
+                }
+                if (m_objects[v4].timer > 0x5a) {
+                    m_objects[v4].vx = -10.0;
+                }
+                if (m_objects[v4].timer > 0x82) {
+                    RemoveObject(v4);
+                }
+                m_objects[v4].timer++;
+                if (m_objects[v4].timer >= v54) {
+                    m_objects[v4].timer = 0;
+                    m_objects[v4].frame++;
+                    m_objects[v4].attackResult = 0;
+                    if (m_objects[v4].frame >= v58) {
+                        m_objects[v4].frame = 0;
+                    }
+                }
+                break;
+            case kObjLv4Scene21:
+                m_objects[v4].vx = 10.0;
+                if (m_objects[v4].timer > 0x1c) {
+                    m_objects[v4].vx = 0.3;
+                }
+                if (m_objects[v4].timer > 0x5a) {
+                    m_objects[v4].vx = 10.0;
+                }
+                if (m_objects[v4].timer > 0x82) {
+                    RemoveObject(v4);
+                }
+                m_objects[v4].timer++;
+                if (m_objects[v4].timer >= v54) {
+                    m_objects[v4].timer = 0;
+                    m_objects[v4].frame++;
+                    m_objects[v4].attackResult = 0;
+                    if (m_objects[v4].frame >= v58) {
+                        m_objects[v4].frame = 0;
+                    }
+                }
+                break;
+            case kObjLv4Scene22:
+                m_objects[v4].vx = -10.0;
+                if (m_objects[v4].timer > 0x1c) {
+                    m_objects[v4].vx = -0.3;
+                }
+                if (m_objects[v4].timer > 0x5a) {
+                    m_objects[v4].vx = -10.0;
+                }
+                if (m_objects[v4].timer > 0x82) {
+                    RemoveObject(v4);
+                }
+                m_objects[v4].timer++;
+                if (m_objects[v4].timer >= v54) {
+                    m_objects[v4].timer = 0;
+                    m_objects[v4].frame++;
+                    m_objects[v4].attackResult = 0;
+                    if (m_objects[v4].frame >= v58) {
+                        m_objects[v4].frame = 0;
+                    }
+                }
+                break;
+            case kObjLv4Scene23:
+                m_objects[v4].vy = -10.0;
+                if (m_objects[v4].timer > 0x1c) {
+                    m_objects[v4].vy = -0.3;
+                }
+                if (m_objects[v4].timer > 0x5a) {
+                    m_objects[v4].vy = -10.0;
+                }
+                if (m_objects[v4].timer > 0x82) {
+                    RemoveObject(v4);
+                }
+                m_objects[v4].timer++;
+                if (m_objects[v4].timer >= v54) {
+                    m_objects[v4].timer = 0;
+                    m_objects[v4].frame++;
+                    m_objects[v4].attackResult = 0;
+                    if (m_objects[v4].frame >= v58) {
+                        m_objects[v4].frame = 0;
+                    }
+                }
+                break;
+            case kObjLv4Scene24:
+                m_objects[v4].vy = 10.0;
+                if (m_objects[v4].timer > 0x1c) {
+                    m_objects[v4].vy = 0.3;
+                }
+                if (m_objects[v4].timer > 0x5a) {
+                    m_objects[v4].vy = 10.0;
+                }
+                if (m_objects[v4].timer > 0x82) {
+                    RemoveObject(v4);
+                }
+                m_objects[v4].timer++;
+                if (m_objects[v4].timer >= v54) {
+                    m_objects[v4].timer = 0;
+                    m_objects[v4].frame++;
+                    m_objects[v4].attackResult = 0;
+                    if (m_objects[v4].frame >= v58) {
+                        m_objects[v4].frame = 0;
+                    }
+                }
+                break;
+            case kObjLv4Scene25:
+                m_objects[v4].vx = 10.0;
+                if (m_objects[v4].timer > 0x1c) {
+                    m_objects[v4].vx = 0.3;
+                }
+                if (m_objects[v4].timer > 0x5a) {
+                    m_objects[v4].vx = 10.0;
+                }
+                if (m_objects[v4].timer > 0x82) {
+                    RemoveObject(v4);
+                }
+                m_objects[v4].timer++;
+                if (m_objects[v4].timer >= v54) {
+                    m_objects[v4].timer = 0;
+                    m_objects[v4].frame++;
+                    m_objects[v4].attackResult = 0;
+                    if (m_objects[v4].frame >= v58) {
+                        m_objects[v4].frame = 0;
+                    }
+                }
+                break;
+            case kObjLv4Scene26:
                 m_objects[v4].vy = -10.0;
                 if (m_objects[v4].timer > 0x1c) {
                     m_objects[v4].vy = -0.3;
@@ -3573,13 +3573,13 @@ void CNagamori::UpdateObjects()
                 if (m_objects[v4].timer >= v54) {
                     m_objects[v4].timer = 0;
                     m_objects[v4].frame++;
-                    m_objects[v4].unk80 = 0;
+                    m_objects[v4].attackResult = 0;
                     if (m_objects[v4].frame >= v58) {
                         m_objects[v4].frame = 0;
                     }
                 }
                 break;
-            case 0x1bc:
+            case kObjLv4Scene27:
                 m_objects[v4].vy = 10.0;
                 if (m_objects[v4].timer > 0x1c) {
                     m_objects[v4].vy = 0.3;
@@ -3594,13 +3594,13 @@ void CNagamori::UpdateObjects()
                 if (m_objects[v4].timer >= v54) {
                     m_objects[v4].timer = 0;
                     m_objects[v4].frame++;
-                    m_objects[v4].unk80 = 0;
+                    m_objects[v4].attackResult = 0;
                     if (m_objects[v4].frame >= v58) {
                         m_objects[v4].frame = 0;
                     }
                 }
                 break;
-            case 0x1bd:
+            case kObjLv4Scene28:
                 m_objects[v4].vx = 10.0;
                 if (m_objects[v4].timer > 0x17) {
                     m_objects[v4].vx = 0.3;
@@ -3615,13 +3615,13 @@ void CNagamori::UpdateObjects()
                 if (m_objects[v4].timer >= v54) {
                     m_objects[v4].timer = 0;
                     m_objects[v4].frame++;
-                    m_objects[v4].unk80 = 0;
+                    m_objects[v4].attackResult = 0;
                     if (m_objects[v4].frame >= v58) {
                         m_objects[v4].frame = 0;
                     }
                 }
                 break;
-            case 0x1be:
+            case kObjLv4Scene29:
                 m_objects[v4].vx = -10.0;
                 if (m_objects[v4].timer > 0x1a) {
                     m_objects[v4].vx = -0.3;
@@ -3636,57 +3636,57 @@ void CNagamori::UpdateObjects()
                 if (m_objects[v4].timer >= v54) {
                     m_objects[v4].timer = 0;
                     m_objects[v4].frame++;
-                    m_objects[v4].unk80 = 0;
+                    m_objects[v4].attackResult = 0;
                     if (m_objects[v4].frame >= v58) {
                         m_objects[v4].frame = 0;
                     }
                 }
                 break;
-            case 0x1bf:
-                if (pattern != 0x138) {
+            case kObjLv4Start:
+                if (pattern != kLv4) {
                     RemoveObject(v4);
                 }
                 if (m_objects[v4].frame == 0x19) {
-                    if (unk3138 == 0) {
+                    if (m_patternVar1 == 0) {
                         m_playVoice = 3;
-                        Unk4ae1d0((int)x, (int)y, 0x140, 0x140);
+                        TriggerObjectsNear((int)x, (int)y, 0x140, 0x140);
                         m_game->FlashWhite(3, 6, 9);
                     }
-                    unk3138 = 1;
+                    m_patternVar1 = 1;
                 }
                 if (m_objects[v4].frame == 0x28) {
-                    if (unk3138 == 1) {
+                    if (m_patternVar1 == 1) {
                         m_playVoice = 4;
                     }
-                    unk3138 = 2;
+                    m_patternVar1 = 2;
                 }
                 m_objects[v4].timer++;
                 if (m_objects[v4].timer >= v54) {
                     m_objects[v4].timer = 0;
                     m_objects[v4].frame++;
-                    m_objects[v4].unk80 = 0;
+                    m_objects[v4].attackResult = 0;
                     if (m_objects[v4].frame >= v58) {
                         m_objects[v4].frame = 0;
-                        m_objects[v4].pattern = 0x1c0;
+                        m_objects[v4].pattern = kObjLv4StartEnd;
                     }
                 }
                 break;
-            case 0x1c0:
-                if (pattern != 0x138) {
+            case kObjLv4StartEnd:
+                if (pattern != kLv4) {
                     RemoveObject(v4);
                 }
                 m_objects[v4].timer++;
                 if (m_objects[v4].timer >= v54) {
                     m_objects[v4].timer = 0;
                     m_objects[v4].frame++;
-                    m_objects[v4].unk80 = 0;
+                    m_objects[v4].attackResult = 0;
                     if (m_objects[v4].frame >= v58) {
                         RemoveObject(v4);
                     }
                 }
                 break;
-            case 0x1c1:
-                if (unk33ac[v4] == 2) {
+            case kObjBombFwd:
+                if (m_objectPhase[v4] == 2) {
                     if (m_objects[v4].ay == 0.0) {
                         m_objects[v4].ay = -0.015;
                     }
@@ -3698,65 +3698,65 @@ void CNagamori::UpdateObjects()
                     }
                     m_objects[v4].vy = m_objects[v4].vy + m_objects[v4].ay;
                 }
-                if (unk33ac[v4] == 0) {
+                if (m_objectPhase[v4] == 0) {
                     m_objects[v4].vx = 1.2;
                     m_objects[v4].vy = 1.2;
-                    unk33ac[v4] = 1;
+                    m_objectPhase[v4] = 1;
                 }
-                if (unk33ac[v4] == 1) {
+                if (m_objectPhase[v4] == 1) {
                     m_objects[v4].vx -= 0.015;
                     m_objects[v4].vy -= 0.015;
                     if (m_objects[v4].y > -10.0) {
                         m_objects[v4].vy = 0.0;
                         m_objects[v4].vx = 0.0;
-                        unk33ac[v4] = 2;
+                        m_objectPhase[v4] = 2;
                     }
                     if (m_objects[v4].vx < 0.0) {
                         m_objects[v4].vx = 0.0;
                         m_objects[v4].vy = 0.0;
-                        unk33ac[v4] = 2;
+                        m_objectPhase[v4] = 2;
                     }
                 }
-                if (unk316c[v4] == 1 && unk32ac[v4] <= 0 && unk33ac[v4] == 2) {
-                    l50.unk0 = 0;
-                    l50.type = 0x195;
+                if (m_objectTriggered[v4] == 1 && m_objectTimer[v4] <= 0 && m_objectPhase[v4] == 2) {
+                    l50.keep = 0;
+                    l50.type = kObjExplosion;
                     l50.x = (double)(int)m_objects[v4].x;
                     l50.y = (double)(int)m_objects[v4].y;
                     l50.facing = m_objects[v4].facing;
                     l50.scale = 2;
                     l50.layer = 1;
                     SpawnObject(&l50);
-                    unk316c[v4] = 0;
-                    unk32ac[v4] = 0x78;
-                    if (unk314c == 0) {
+                    m_objectTriggered[v4] = 0;
+                    m_objectTimer[v4] = 0x78;
+                    if (m_keepBombs == 0) {
                         RemoveObject(v4);
                     }
                     break;
                 }
-                unk316c[v4] = 0;
+                m_objectTriggered[v4] = 0;
                 m_objects[v4].timer++;
-                unk32ac[v4]--;
+                m_objectTimer[v4]--;
                 if (m_objects[v4].timer >= v54) {
                     m_objects[v4].timer = 0;
                     m_objects[v4].frame++;
-                    m_objects[v4].unk80 = 0;
+                    m_objects[v4].attackResult = 0;
                     if (m_objects[v4].frame >= v58) {
-                        if (unk31ac[v4] < 0xa) {
+                        if (m_objectState[v4] < 0xa) {
                             m_objects[v4].frame = 0;
-                            unk31ac[v4]++;
+                            m_objectState[v4]++;
                         } else {
                             RemoveObject(v4);
                         }
                     }
                 }
                 break;
-            case 0x1c2:
+            case kObj6413Lv1Blast:
                 m_objects[v4].x = x;
                 m_objects[v4].y = y - 55.0;
                 if (m_objects[v4].frame == 1 && m_objects[v4].timer == 0) {
-                    m_objects[v4].unk84 = 1;
-                    l50.unk0 = 1;
-                    l50.type = 0x1c5;
+                    m_objects[v4].hitsLeft = 1;
+                    l50.keep = 1;
+                    l50.type = kObj6413Flash;
                     l50.x = (double)(int)m_objects[v4].x;
                     l50.y = (double)(int)m_objects[v4].y;
                     l50.facing = m_objects[v4].facing;
@@ -3768,19 +3768,19 @@ void CNagamori::UpdateObjects()
                 if (m_objects[v4].timer >= v54) {
                     m_objects[v4].timer = 0;
                     m_objects[v4].frame++;
-                    m_objects[v4].unk80 = 0;
+                    m_objects[v4].attackResult = 0;
                     if (m_objects[v4].frame >= v58) {
                         RemoveObject(v4);
                     }
                 }
                 break;
-            case 0x1c3:
+            case kObj6413Lv2Blast:
                 m_objects[v4].x = x;
                 m_objects[v4].y = y - 55.0;
                 if (m_objects[v4].frame == 1 && m_objects[v4].timer == 0) {
-                    m_objects[v4].unk84 = 1;
-                    l50.unk0 = 1;
-                    l50.type = 0x1c5;
+                    m_objects[v4].hitsLeft = 1;
+                    l50.keep = 1;
+                    l50.type = kObj6413Flash;
                     l50.x = (double)(int)m_objects[v4].x;
                     l50.y = (double)(int)m_objects[v4].y;
                     l50.facing = m_objects[v4].facing;
@@ -3792,19 +3792,19 @@ void CNagamori::UpdateObjects()
                 if (m_objects[v4].timer >= v54) {
                     m_objects[v4].timer = 0;
                     m_objects[v4].frame++;
-                    m_objects[v4].unk80 = 0;
+                    m_objects[v4].attackResult = 0;
                     if (m_objects[v4].frame >= v58) {
                         RemoveObject(v4);
                     }
                 }
                 break;
-            case 0x1c4:
+            case kObj6413Lv3Blast:
                 m_objects[v4].x = x;
                 m_objects[v4].y = y - 55.0;
                 if (m_objects[v4].frame == 1 && m_objects[v4].timer == 0) {
-                    m_objects[v4].unk84 = 1;
-                    l50.unk0 = 1;
-                    l50.type = 0x1c5;
+                    m_objects[v4].hitsLeft = 1;
+                    l50.keep = 1;
+                    l50.type = kObj6413Flash;
                     l50.x = (double)(int)m_objects[v4].x;
                     l50.y = (double)(int)m_objects[v4].y;
                     l50.facing = m_objects[v4].facing;
@@ -3816,139 +3816,139 @@ void CNagamori::UpdateObjects()
                 if (m_objects[v4].timer >= v54) {
                     m_objects[v4].timer = 0;
                     m_objects[v4].frame++;
-                    m_objects[v4].unk80 = 0;
+                    m_objects[v4].attackResult = 0;
                     if (m_objects[v4].frame >= v58) {
                         RemoveObject(v4);
                     }
                 }
                 break;
-            case 0x1c5:
+            case kObj6413Flash:
                 m_objects[v4].x = x;
                 m_objects[v4].y = y - 55.0;
                 if (m_objects[v4].frame == 1 && m_objects[v4].timer == 0) {
-                    unk314c = 0;
+                    m_keepBombs = 0;
                 }
                 m_objects[v4].timer++;
                 if (m_objects[v4].timer >= v54) {
                     m_objects[v4].timer = 0;
                     m_objects[v4].frame++;
-                    m_objects[v4].unk80 = 0;
+                    m_objects[v4].attackResult = 0;
                     if (m_objects[v4].frame >= v58) {
                         RemoveObject(v4);
                     }
                 }
                 break;
-            case 0x1c6:
+            case kObjExplosionBig:
                 m_objects[v4].vx = 0.0;
                 m_objects[v4].vy = 0.0;
                 if (m_objects[v4].frame == 5 && m_objects[v4].timer == 0) {
                     m_playVoice = 1;
                 }
                 if (m_objects[v4].frame == 0xd && m_objects[v4].timer == 0) {
-                    m_objects[v4].unk84 = 1;
-                    Unk4ae1d0((int)m_objects[v4].x, (int)m_objects[v4].y, 0x78, 0x78);
-                    unk316c[v4] = 0;
+                    m_objects[v4].hitsLeft = 1;
+                    TriggerObjectsNear((int)m_objects[v4].x, (int)m_objects[v4].y, 0x78, 0x78);
+                    m_objectTriggered[v4] = 0;
                 }
-                if (m_objects[v4].unk80 == 3) {
-                    unk31ac[v4] = (int)AngleTo(m_objects[v4].x - (*m_opponent)->x, m_objects[v4].y - (*m_opponent)->y - 50.0);
-                    (*m_opponent)->SetVelocity((double)unk31ac[v4], 2.2);
+                if (m_objects[v4].attackResult == 3) {
+                    m_objectState[v4] = (int)AngleTo(m_objects[v4].x - (*m_opponent)->x, m_objects[v4].y - (*m_opponent)->y - 50.0);
+                    (*m_opponent)->SetVelocity((double)m_objectState[v4], 2.2);
                     if ((*m_opponent)->facing == 1) {
                         (*m_opponent)->vx *= -1.0;
                     }
-                    m_objects[v4].unk80 = 1;
+                    m_objects[v4].attackResult = 1;
                 }
                 m_objects[v4].timer++;
                 if (m_objects[v4].timer >= v54) {
                     m_objects[v4].timer = 0;
                     m_objects[v4].frame++;
-                    m_objects[v4].unk80 = 0;
+                    m_objects[v4].attackResult = 0;
                     if (m_objects[v4].frame >= v58) {
                         RemoveObject(v4);
                     }
                 }
                 break;
-            case 0x1ef:
+            case kObjFallInDarkness:
                 m_objects[v4].vx = -0.02;
-                m_objects[v4].unk8c = 0x7530;
+                m_objects[v4].drawnWhileHidden = 0x7530;
                 m_objects[v4].timer++;
-                if (pattern != 0x57) {
+                if (pattern != kFallInDarkness) {
                     RemoveObject(v4);
                 }
                 if (m_objects[v4].timer >= v54) {
                     m_objects[v4].timer = 0;
                     m_objects[v4].frame++;
-                    m_objects[v4].unk80 = 0;
+                    m_objects[v4].attackResult = 0;
                     if (m_objects[v4].frame >= v58) {
                         m_objects[v4].frame = 0;
                     }
                 }
                 break;
-            case 0x1f0:
-                if (pattern != 0x53 && pattern != 0x54 && pattern != 0x55 && pattern != 0x56 || pattern == 0x53 && frame > 1 || pattern == 0x54 && frame > 1) {
-                    l50.type = 0x1f1;
+            case kObjEncasedBreak:
+                if (pattern != kEncased && pattern != kEncased2 && pattern != kEncasedAir && pattern != kEncasedSpin || pattern == kEncased && frame > 1 || pattern == kEncased2 && frame > 1) {
+                    l50.type = kObjShardSmall;
                     l50.x = (double)((int)x + facing * 0x17);
                     l50.y = (double)((int)y - 4);
                     l50.scale = 0;
                     l50.layer = 1;
                     l50.facing = facing;
                     SpawnObject(&l50);
-                    l50.type = 0x1f1;
+                    l50.type = kObjShardSmall;
                     l50.x = (double)((int)x - (facing << 2));
                     l50.y = (double)((int)y - 6);
                     l50.scale = 0;
                     l50.layer = 1;
                     l50.facing = facing;
                     SpawnObject(&l50);
-                    l50.type = 0x1f1;
+                    l50.type = kObjShardSmall;
                     l50.x = (double)((int)x - facing * 0xe);
                     l50.y = (double)((int)y - 0x1a);
                     l50.scale = 0;
                     l50.layer = 1;
                     l50.facing = facing;
                     SpawnObject(&l50);
-                    l50.type = 0x1f1;
+                    l50.type = kObjShardSmall;
                     l50.x = (double)(int)x;
                     l50.y = (double)(int)y;
                     l50.scale = 0;
                     l50.layer = 1;
                     l50.facing = facing;
                     SpawnObject(&l50);
-                    l50.type = 0x1f1;
+                    l50.type = kObjShardSmall;
                     l50.x = (double)((int)x + facing * 0x1e);
                     l50.y = (double)((int)y - 0x28);
                     l50.scale = 0;
                     l50.layer = 1;
                     l50.facing = facing;
                     SpawnObject(&l50);
-                    l50.type = 0x1f1;
+                    l50.type = kObjShardSmall;
                     l50.x = (double)((int)x - facing * 0x19);
                     l50.y = (double)((int)y - 0x50);
                     l50.scale = 0;
                     l50.layer = 1;
                     l50.facing = facing;
                     SpawnObject(&l50);
-                    l50.type = 0x1f2;
+                    l50.type = kObjShardLarge;
                     l50.x = (double)((int)x - facing * 0x23);
                     l50.y = (double)((int)y - 0x2a);
                     l50.scale = 0;
                     l50.layer = 1;
                     l50.facing = facing;
                     SpawnObject(&l50);
-                    l50.type = 0x1f2;
+                    l50.type = kObjShardLarge;
                     l50.x = (double)((int)x - facing * 0x12);
                     l50.y = (double)((int)y - 0x14);
                     l50.scale = 0;
                     l50.layer = 1;
                     l50.facing = facing;
                     SpawnObject(&l50);
-                    l50.type = 0x1f2;
+                    l50.type = kObjShardLarge;
                     l50.x = (double)((int)x + facing * 2);
                     l50.y = (double)((int)y - 0x41);
                     l50.scale = 0;
                     l50.layer = 1;
                     l50.facing = facing;
                     SpawnObject(&l50);
-                    l50.type = 0x1f2;
+                    l50.type = kObjShardLarge;
                     l50.x = (double)((int)x + (facing << 4));
                     l50.y = (double)((int)y - 0x50);
                     l50.scale = 0;
@@ -3957,23 +3957,23 @@ void CNagamori::UpdateObjects()
                     SpawnObject(&l50);
                     m_playSound = 0x22;
                     RemoveObject(v4);
-                    unk3144 = 0;
+                    m_encasedBreakOut = 0;
                     break;
                 }
                 m_objects[v4].timer++;
                 if (m_objects[v4].timer >= v54) {
                     m_objects[v4].timer = 0;
                     m_objects[v4].frame++;
-                    m_objects[v4].unk80 = 0;
+                    m_objects[v4].attackResult = 0;
                     if (m_objects[v4].frame >= v58) {
                         m_objects[v4].frame = 0;
                     }
                 }
                 break;
-            case 0x1f1:
-                if (m_objects[v4].frame == 0 && m_objects[v4].timer == 0 && unk31ac[v4] == 0) {
-                    unk32ac[v4] = (rand() > 0x3e80) * 0x28 + 0x50 + (rand() > 0x3e80) * 0x14;
-                    unk31ac[v4]++;
+            case kObjShardSmall:
+                if (m_objects[v4].frame == 0 && m_objects[v4].timer == 0 && m_objectState[v4] == 0) {
+                    m_objectTimer[v4] = (rand() > 0x3e80) * 0x28 + 0x50 + (rand() > 0x3e80) * 0x14;
+                    m_objectState[v4]++;
                     m_objects[v4].vx = (rand() > 0x3e80) * 1.2 + (rand() > 0x3e80) * 0.7 + (rand() > 0x3e80) * 1.7 + -1.8;
                     m_objects[v4].vy = -1.2 - ((rand() > 0x3e80) * 0.6 + (rand() > 0x3e80) * 0.9 + (rand() > 0x3e80) * 1.4);
                 }
@@ -3981,28 +3981,28 @@ void CNagamori::UpdateObjects()
                 if (m_objects[v4].y > 0.0 && m_objects[v4].vy > 0.0) {
                     m_objects[v4].vy = -m_objects[v4].vy;
                 }
-                if (unk32ac[v4] < 0xa) {
+                if (m_objectTimer[v4] < 0xa) {
                     m_objects[v4].scale = 1;
                 }
-                if (unk32ac[v4] < 0) {
+                if (m_objectTimer[v4] < 0) {
                     RemoveObject(v4);
                     break;
                 }
                 m_objects[v4].timer++;
-                unk32ac[v4]--;
+                m_objectTimer[v4]--;
                 if (m_objects[v4].timer >= v54) {
                     m_objects[v4].timer = 0;
                     m_objects[v4].frame++;
-                    m_objects[v4].unk80 = 0;
+                    m_objects[v4].attackResult = 0;
                     if (m_objects[v4].frame >= v58) {
                         m_objects[v4].frame = 0;
                     }
                 }
                 break;
-            case 0x1f2:
-                if (m_objects[v4].frame == 0 && m_objects[v4].timer == 0 && unk31ac[v4] == 0) {
-                    unk32ac[v4] = (rand() > 0x3e80) * 0x3c + 0x78 + (rand() > 0x3e80) * 0x28;
-                    unk31ac[v4]++;
+            case kObjShardLarge:
+                if (m_objects[v4].frame == 0 && m_objects[v4].timer == 0 && m_objectState[v4] == 0) {
+                    m_objectTimer[v4] = (rand() > 0x3e80) * 0x3c + 0x78 + (rand() > 0x3e80) * 0x28;
+                    m_objectState[v4]++;
                     m_objects[v4].vx = (double)(rand() > 0x3e80) + (rand() > 0x3e80) * 0.5 + (rand() > 0x3e80) * 1.5 + -1.5;
                     m_objects[v4].vy = -1.0 - ((rand() > 0x3e80) * 0.5 + (rand() > 0x3e80) * 0.8 + (rand() > 0x3e80) * 1.2);
                 }
@@ -4010,32 +4010,32 @@ void CNagamori::UpdateObjects()
                 if (m_objects[v4].y > 0.0 && m_objects[v4].vy > 0.0) {
                     m_objects[v4].vy = -m_objects[v4].vy;
                 }
-                if (unk32ac[v4] < 0xa) {
+                if (m_objectTimer[v4] < 0xa) {
                     m_objects[v4].scale = 1;
                 }
-                if (unk32ac[v4] < 0) {
+                if (m_objectTimer[v4] < 0) {
                     RemoveObject(v4);
                     break;
                 }
                 m_objects[v4].timer++;
-                unk32ac[v4]--;
+                m_objectTimer[v4]--;
                 if (m_objects[v4].timer >= v54) {
                     m_objects[v4].timer = 0;
                     m_objects[v4].frame++;
-                    m_objects[v4].unk80 = 0;
+                    m_objects[v4].attackResult = 0;
                     if (m_objects[v4].frame >= v58) {
                         m_objects[v4].frame = 0;
                     }
                 }
                 break;
-            case 0x1f3:
+            case kObjBurnFlames:
                 m_objects[v4].x = x;
                 m_objects[v4].y = y;
                 m_objects[v4].timer++;
                 if (m_objects[v4].timer >= v54) {
                     m_objects[v4].timer = 0;
                     m_objects[v4].frame++;
-                    m_objects[v4].unk80 = 0;
+                    m_objects[v4].attackResult = 0;
                     if (m_objects[v4].frame >= v58) {
                         RemoveObject(v4);
                     }

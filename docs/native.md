@@ -189,7 +189,7 @@ each log with the original's (the `compat-reference` tag's build, under wine):
 
 ```sh
 tools/native.sh && tools/compat.py check   # the native game
-tools/compat.py --windows check            # the Windows build, under 64-bit wine
+tools/compat.py check --windows            # the Windows build, under 64-bit wine
 tools/compat.py check --native build/native-x87/efz   # another native build
 ```
 

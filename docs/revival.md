@@ -1042,7 +1042,7 @@ the original's, `make revival-ddraw-check`):
   the window title, makes `0x776053` an unconditional jump and installs the rest:
   - `0x40d131`, the end of `CInput::GetInput` -> `inputHook` (left+right becomes left, then
     the session's `input`);
-  - `0x7656a7` in `CScene3::Vf2` -> the session's `fightUpdate`;
+  - `0x7656a7` in `CScene3::HandleKeys` -> the session's `fightUpdate`;
   - the call at `0x401642` -> `frameHook`: switch sessions if the game's mode changed,
     `keepAwake` (a zero mouse move through `SendInput`), key and button edges to the
     session, then the session's `update`;

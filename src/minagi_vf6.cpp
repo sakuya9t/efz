@@ -11,7 +11,7 @@ void CMinagi::UpdatePattern()
     WORD x8;
     WORD l4;
 
-    if (unk14a > 0 || (*m_opponent)->unk14c > 0) {
+    if (m_hitstop > 0 || (*m_opponent)->m_freezeTime > 0) {
         return;
     }
     EffectDesc l50;
@@ -20,7 +20,7 @@ void CMinagi::UpdatePattern()
     InitEffectDesc((EffectDesc*)&l50);
     switch (pattern) {
     default:
-        unk158 = 0;
+        m_dashMomentum = 0;
         vx = 0.0;
         vy = 0.0;
         timer++;
@@ -32,8 +32,8 @@ void CMinagi::UpdatePattern()
             }
         }
         break;
-    case 1:
-        unk158 = 0;
+    case kWalkForward:
+        m_dashMomentum = 0;
         vx = 0.6;
         vy = 0.0;
         timer++;
@@ -45,8 +45,8 @@ void CMinagi::UpdatePattern()
             }
         }
         break;
-    case 2:
-        unk158 = 0;
+    case kWalkBack:
+        m_dashMomentum = 0;
         vx = -0.6;
         vy = 0.0;
         timer++;
@@ -58,10 +58,10 @@ void CMinagi::UpdatePattern()
             }
         }
         break;
-    case 3:
+    case kCrouch:
         vx = 0.0;
         vy = 0.0;
-        unk158 = 0;
+        m_dashMomentum = 0;
         FaceOpponent();
         timer++;
         if (timer >= l4) {
@@ -72,9 +72,9 @@ void CMinagi::UpdatePattern()
             }
         }
         break;
-    case 4:
+    case kJump:
         if (frame == 0 && timer == 0) {
-            if (unk158 == 0) {
+            if (m_dashMomentum == 0) {
                 FaceOpponent();
             }
             vx = 0.0;
@@ -82,9 +82,9 @@ void CMinagi::UpdatePattern()
         if (frame == 2 && timer == 0) {
             ay = 0.042;
             vy = -2.7;
-            if (unk158 == 1) {
+            if (m_dashMomentum == 1) {
                 vx = 0.4;
-                unk158 = 0;
+                m_dashMomentum = 0;
             }
         }
         if (frame > 2) {
@@ -95,7 +95,7 @@ void CMinagi::UpdatePattern()
             timer = 0;
             frame++;
             if (frame >= x8) {
-                pattern = 9;
+                pattern = kFall;
                 StartPattern();
             }
         }
@@ -103,13 +103,13 @@ void CMinagi::UpdatePattern()
             y = 0.0;
             m_playSound = 9;
             FaceOpponent();
-            pattern = 0xd;
+            pattern = kLand;
             StartPattern();
         }
         break;
-    case 5:
+    case kJumpForward:
         if (frame == 0 && timer == 0) {
-            if (unk158 == 0) {
+            if (m_dashMomentum == 0) {
                 FaceOpponent();
             }
             vx = 0.0;
@@ -118,9 +118,9 @@ void CMinagi::UpdatePattern()
             ay = 0.042;
             vy = -2.7;
             vx = 0.7;
-            if (unk158 == 1) {
+            if (m_dashMomentum == 1) {
                 vx = 1.1;
-                unk158 = 0;
+                m_dashMomentum = 0;
             }
         }
         if (frame > 2) {
@@ -131,7 +131,7 @@ void CMinagi::UpdatePattern()
             timer = 0;
             frame++;
             if (frame >= x8) {
-                pattern = 9;
+                pattern = kFall;
                 StartPattern();
             }
         }
@@ -139,13 +139,13 @@ void CMinagi::UpdatePattern()
             y = 0.0;
             m_playSound = 9;
             FaceOpponent();
-            pattern = 0xd;
+            pattern = kLand;
             StartPattern();
         }
         break;
-    case 6:
+    case kJumpBack:
         if (frame == 0 && timer == 0) {
-            if (unk158 == 0) {
+            if (m_dashMomentum == 0) {
                 FaceOpponent();
             }
             vx = 0.0;
@@ -163,7 +163,7 @@ void CMinagi::UpdatePattern()
             timer = 0;
             frame++;
             if (frame >= x8) {
-                pattern = 9;
+                pattern = kFall;
                 StartPattern();
             }
         }
@@ -171,43 +171,43 @@ void CMinagi::UpdatePattern()
             y = 0.0;
             m_playSound = 9;
             FaceOpponent();
-            pattern = 0xd;
+            pattern = kLand;
             StartPattern();
         }
         break;
-    case 7:
+    case kStandUp:
         vx = 0.0;
         vy = 0.0;
-        unk158 = 0;
+        m_dashMomentum = 0;
         FaceOpponent();
         timer++;
         if (timer >= l4) {
             timer = 0;
             frame++;
             if (frame >= x8) {
-                pattern = 0;
+                pattern = kStand;
                 StartPattern();
             }
         }
         break;
-    case 8:
+    case kCrouchDown:
         vx = 0.0;
         vy = 0.0;
-        unk158 = 0;
+        m_dashMomentum = 0;
         FaceOpponent();
         timer++;
         if (timer >= l4) {
             timer = 0;
             frame++;
             if (frame >= x8) {
-                pattern = 3;
+                pattern = kCrouch;
                 StartPattern();
             }
         }
         break;
-    case 9:
+    case kFall:
         vy = vy + ay;
-        unk158 = 0;
+        m_dashMomentum = 0;
         timer++;
         if (timer >= l4) {
             timer = 0;
@@ -219,29 +219,29 @@ void CMinagi::UpdatePattern()
         if (y + vy >= 0.0) {
             y = 0.0;
             m_playSound = 9;
-            pattern = 0xd;
+            pattern = kLand;
             StartPattern();
         }
         break;
-    case 0xd:
+    case kLand:
         vx = 0.0;
         vy = 0.0;
-        unk158 = 0;
+        m_dashMomentum = 0;
         FaceOpponent();
         timer++;
         if (timer >= l4) {
             timer = 0;
             frame++;
             if (frame >= x8) {
-                pattern = 7;
+                pattern = kStandUp;
                 if (m_inputY == 1) {
-                    pattern = 3;
+                    pattern = kCrouch;
                 }
                 StartPattern();
             }
         }
         break;
-    case 0xe:
+    case kAirJump:
         ay = 0.042;
         if (frame == 0 && timer == 0) {
             vy = -2.7;
@@ -253,7 +253,7 @@ void CMinagi::UpdatePattern()
             timer = 0;
             frame++;
             if (frame >= x8) {
-                pattern = 9;
+                pattern = kFall;
                 StartPattern();
             }
         }
@@ -261,11 +261,11 @@ void CMinagi::UpdatePattern()
             y = 0.0;
             m_playSound = 9;
             FaceOpponent();
-            pattern = 0xd;
+            pattern = kLand;
             StartPattern();
         }
         break;
-    case 0xf:
+    case kAirJumpForward:
         ay = 0.042;
         if (frame == 0 && timer == 0) {
             vy = -2.7;
@@ -277,7 +277,7 @@ void CMinagi::UpdatePattern()
             timer = 0;
             frame++;
             if (frame >= x8) {
-                pattern = 9;
+                pattern = kFall;
                 StartPattern();
             }
         }
@@ -285,11 +285,11 @@ void CMinagi::UpdatePattern()
             y = 0.0;
             m_playSound = 9;
             FaceOpponent();
-            pattern = 0xd;
+            pattern = kLand;
             StartPattern();
         }
         break;
-    case 0x10:
+    case kAirJumpBack:
         ay = 0.042;
         if (frame == 0 && timer == 0) {
             vy = -2.7;
@@ -301,7 +301,7 @@ void CMinagi::UpdatePattern()
             timer = 0;
             frame++;
             if (frame >= x8) {
-                pattern = 9;
+                pattern = kFall;
                 StartPattern();
             }
         }
@@ -309,11 +309,11 @@ void CMinagi::UpdatePattern()
             y = 0.0;
             m_playSound = 9;
             FaceOpponent();
-            pattern = 0xd;
+            pattern = kLand;
             StartPattern();
         }
         break;
-    case 0x2f:
+    case kResultLoserFall:
         if (frame == 0 && timer == 0) {
             vx = 0.0;
             ay = 0.035;
@@ -340,16 +340,16 @@ void CMinagi::UpdatePattern()
             }
         }
         break;
-    case 0x32:
-        if (unk120 != 0) {
-            unk118 -= 0.6;
+    case kHitStandHighLight:
+        if (m_rfBlue != 0) {
+            m_rfGauge -= 0.6;
         }
-        unk158 = 0;
+        m_dashMomentum = 0;
         if (frame == 0 && timer == 0) {
             m_gauge = m_gauge + 0xa;
             vx = (2.0 - (*m_opponent)->m_proration / 10000.0) * -1.1;
-            if (unk120 != 0) {
-                unk118 -= 10.0;
+            if (m_rfBlue != 0) {
+                m_rfGauge -= 10.0;
             }
         }
         vy = 0.0;
@@ -359,33 +359,33 @@ void CMinagi::UpdatePattern()
             vx = 0.0;
         }
         if (x - 20.0 <= 0.0 || x + 20.0 >= 639.0) {
-            unkb8 = (1.0 - (y < 0.0) * 0.2) * vx;
+            m_cornerPushback = (1.0 - (y < 0.0) * 0.2) * vx;
         } else {
-            unkb8 = 0.0;
+            m_cornerPushback = 0.0;
         }
         timer++;
         if (timer >= l4) {
             timer = 0;
             frame++;
             if (frame >= x8) {
-                pattern = 0;
+                pattern = kStand;
                 if (m_inputY == 1) {
-                    pattern = 3;
+                    pattern = kCrouch;
                 }
                 StartPattern();
             }
         }
         break;
-    case 0x33:
-        if (unk120 != 0) {
-            unk118 -= 0.6;
+    case kHitStandHighMedium:
+        if (m_rfBlue != 0) {
+            m_rfGauge -= 0.6;
         }
-        unk158 = 0;
+        m_dashMomentum = 0;
         if (frame == 0 && timer == 0) {
             m_gauge = m_gauge + 0xf;
             vx = (2.0 - (*m_opponent)->m_proration / 10000.0) * -1.5;
-            if (unk120 != 0) {
-                unk118 -= 20.0;
+            if (m_rfBlue != 0) {
+                m_rfGauge -= 20.0;
             }
         }
         vy = 0.0;
@@ -395,33 +395,33 @@ void CMinagi::UpdatePattern()
             vx = 0.0;
         }
         if (x - 20.0 <= 0.0 || x + 20.0 >= 639.0) {
-            unkb8 = (1.0 - (y < 0.0) * 0.2) * vx;
+            m_cornerPushback = (1.0 - (y < 0.0) * 0.2) * vx;
         } else {
-            unkb8 = 0.0;
+            m_cornerPushback = 0.0;
         }
         timer++;
         if (timer >= l4) {
             timer = 0;
             frame++;
             if (frame >= x8) {
-                pattern = 0;
+                pattern = kStand;
                 if (m_inputY == 1) {
-                    pattern = 3;
+                    pattern = kCrouch;
                 }
                 StartPattern();
             }
         }
         break;
-    case 0x34:
-        if (unk120 != 0) {
-            unk118 -= 0.6;
+    case kHitStandHighHeavy:
+        if (m_rfBlue != 0) {
+            m_rfGauge -= 0.6;
         }
-        unk158 = 0;
+        m_dashMomentum = 0;
         if (frame == 0 && timer == 0) {
             m_gauge = m_gauge + 0x14;
             vx = (2.0 - (*m_opponent)->m_proration / 10000.0) * -1.8;
-            if (unk120 != 0) {
-                unk118 -= 30.0;
+            if (m_rfBlue != 0) {
+                m_rfGauge -= 30.0;
             }
         }
         vy = 0.0;
@@ -431,33 +431,33 @@ void CMinagi::UpdatePattern()
             vx = 0.0;
         }
         if (x - 20.0 <= 0.0 || x + 20.0 >= 639.0) {
-            unkb8 = (1.0 - (y < 0.0) * 0.2) * vx;
+            m_cornerPushback = (1.0 - (y < 0.0) * 0.2) * vx;
         } else {
-            unkb8 = 0.0;
+            m_cornerPushback = 0.0;
         }
         timer++;
         if (timer >= l4) {
             timer = 0;
             frame++;
             if (frame >= x8) {
-                pattern = 0;
+                pattern = kStand;
                 if (m_inputY == 1) {
-                    pattern = 3;
+                    pattern = kCrouch;
                 }
                 StartPattern();
             }
         }
         break;
-    case 0x35:
-        if (unk120 != 0) {
-            unk118 -= 0.6;
+    case kHitStandLowLight:
+        if (m_rfBlue != 0) {
+            m_rfGauge -= 0.6;
         }
-        unk158 = 0;
+        m_dashMomentum = 0;
         if (frame == 0 && timer == 0) {
             m_gauge = m_gauge + 0xa;
             vx = (2.0 - (*m_opponent)->m_proration / 10000.0) * -1.1;
-            if (unk120 != 0) {
-                unk118 -= 10.0;
+            if (m_rfBlue != 0) {
+                m_rfGauge -= 10.0;
             }
         }
         vy = 0.0;
@@ -467,33 +467,33 @@ void CMinagi::UpdatePattern()
             vx = 0.0;
         }
         if (x - 20.0 <= 0.0 || x + 20.0 >= 639.0) {
-            unkb8 = (1.0 - (y < 0.0) * 0.2) * vx;
+            m_cornerPushback = (1.0 - (y < 0.0) * 0.2) * vx;
         } else {
-            unkb8 = 0.0;
+            m_cornerPushback = 0.0;
         }
         timer++;
         if (timer >= l4) {
             timer = 0;
             frame++;
             if (frame >= x8) {
-                pattern = 0;
+                pattern = kStand;
                 if (m_inputY == 1) {
-                    pattern = 3;
+                    pattern = kCrouch;
                 }
                 StartPattern();
             }
         }
         break;
-    case 0x36:
-        if (unk120 != 0) {
-            unk118 -= 0.6;
+    case kHitStandLowMedium:
+        if (m_rfBlue != 0) {
+            m_rfGauge -= 0.6;
         }
-        unk158 = 0;
+        m_dashMomentum = 0;
         if (frame == 0 && timer == 0) {
             m_gauge = m_gauge + 0xf;
             vx = (2.0 - (*m_opponent)->m_proration / 10000.0) * -1.5;
-            if (unk120 != 0) {
-                unk118 -= 20.0;
+            if (m_rfBlue != 0) {
+                m_rfGauge -= 20.0;
             }
         }
         vy = 0.0;
@@ -503,33 +503,33 @@ void CMinagi::UpdatePattern()
             vx = 0.0;
         }
         if (x - 20.0 <= 0.0 || x + 20.0 >= 639.0) {
-            unkb8 = (1.0 - (y < 0.0) * 0.2) * vx;
+            m_cornerPushback = (1.0 - (y < 0.0) * 0.2) * vx;
         } else {
-            unkb8 = 0.0;
+            m_cornerPushback = 0.0;
         }
         timer++;
         if (timer >= l4) {
             timer = 0;
             frame++;
             if (frame >= x8) {
-                pattern = 0;
+                pattern = kStand;
                 if (m_inputY == 1) {
-                    pattern = 3;
+                    pattern = kCrouch;
                 }
                 StartPattern();
             }
         }
         break;
-    case 0x37:
-        if (unk120 != 0) {
-            unk118 -= 0.6;
+    case kHitStandLowHeavy:
+        if (m_rfBlue != 0) {
+            m_rfGauge -= 0.6;
         }
-        unk158 = 0;
+        m_dashMomentum = 0;
         if (frame == 0 && timer == 0) {
             m_gauge = m_gauge + 0x14;
             vx = (2.0 - (*m_opponent)->m_proration / 10000.0) * -1.8;
-            if (unk120 != 0) {
-                unk118 -= 30.0;
+            if (m_rfBlue != 0) {
+                m_rfGauge -= 30.0;
             }
         }
         vy = 0.0;
@@ -539,33 +539,33 @@ void CMinagi::UpdatePattern()
             vx = 0.0;
         }
         if (x - 20.0 <= 0.0 || x + 20.0 >= 639.0) {
-            unkb8 = (1.0 - (y < 0.0) * 0.2) * vx;
+            m_cornerPushback = (1.0 - (y < 0.0) * 0.2) * vx;
         } else {
-            unkb8 = 0.0;
+            m_cornerPushback = 0.0;
         }
         timer++;
         if (timer >= l4) {
             timer = 0;
             frame++;
             if (frame >= x8) {
-                pattern = 0;
+                pattern = kStand;
                 if (m_inputY == 1) {
-                    pattern = 3;
+                    pattern = kCrouch;
                 }
                 StartPattern();
             }
         }
         break;
-    case 0x38:
-        if (unk120 != 0) {
-            unk118 -= 0.6;
+    case kHitCrouchLight:
+        if (m_rfBlue != 0) {
+            m_rfGauge -= 0.6;
         }
-        unk158 = 0;
+        m_dashMomentum = 0;
         if (frame == 0 && timer == 0) {
             m_gauge = m_gauge + 0xa;
             vx = (2.0 - (*m_opponent)->m_proration / 10000.0) * -1.1;
-            if (unk120 != 0) {
-                unk118 -= 10.0;
+            if (m_rfBlue != 0) {
+                m_rfGauge -= 10.0;
             }
         }
         vy = 0.0;
@@ -575,30 +575,30 @@ void CMinagi::UpdatePattern()
             vx = 0.0;
         }
         if (x - 20.0 <= 0.0 || x + 20.0 >= 639.0) {
-            unkb8 = (1.0 - (y < 0.0) * 0.2) * vx;
+            m_cornerPushback = (1.0 - (y < 0.0) * 0.2) * vx;
         } else {
-            unkb8 = 0.0;
+            m_cornerPushback = 0.0;
         }
         timer++;
         if (timer >= l4) {
             timer = 0;
             frame++;
             if (frame >= x8) {
-                pattern = 3;
+                pattern = kCrouch;
                 StartPattern();
             }
         }
         break;
-    case 0x39:
-        if (unk120 != 0) {
-            unk118 -= 0.6;
+    case kHitCrouchMedium:
+        if (m_rfBlue != 0) {
+            m_rfGauge -= 0.6;
         }
-        unk158 = 0;
+        m_dashMomentum = 0;
         if (frame == 0 && timer == 0) {
             m_gauge = m_gauge + 0xf;
             vx = (2.0 - (*m_opponent)->m_proration / 10000.0) * -1.5;
-            if (unk120 != 0) {
-                unk118 -= 20.0;
+            if (m_rfBlue != 0) {
+                m_rfGauge -= 20.0;
             }
         }
         vy = 0.0;
@@ -608,30 +608,30 @@ void CMinagi::UpdatePattern()
             vx = 0.0;
         }
         if (x - 20.0 <= 0.0 || x + 20.0 >= 639.0) {
-            unkb8 = (1.0 - (y < 0.0) * 0.2) * vx;
+            m_cornerPushback = (1.0 - (y < 0.0) * 0.2) * vx;
         } else {
-            unkb8 = 0.0;
+            m_cornerPushback = 0.0;
         }
         timer++;
         if (timer >= l4) {
             timer = 0;
             frame++;
             if (frame >= x8) {
-                pattern = 3;
+                pattern = kCrouch;
                 StartPattern();
             }
         }
         break;
-    case 0x3a:
-        if (unk120 != 0) {
-            unk118 -= 0.6;
+    case kHitCrouchHeavy:
+        if (m_rfBlue != 0) {
+            m_rfGauge -= 0.6;
         }
-        unk158 = 0;
+        m_dashMomentum = 0;
         if (frame == 0 && timer == 0) {
             m_gauge = m_gauge + 0x14;
             vx = (2.0 - (*m_opponent)->m_proration / 10000.0) * -1.8;
-            if (unk120 != 0) {
-                unk118 -= 30.0;
+            if (m_rfBlue != 0) {
+                m_rfGauge -= 30.0;
             }
         }
         vy = 0.0;
@@ -641,28 +641,28 @@ void CMinagi::UpdatePattern()
             vx = 0.0;
         }
         if (x - 20.0 <= 0.0 || x + 20.0 >= 639.0) {
-            unkb8 = (1.0 - (y < 0.0) * 0.2) * vx;
+            m_cornerPushback = (1.0 - (y < 0.0) * 0.2) * vx;
         } else {
-            unkb8 = 0.0;
+            m_cornerPushback = 0.0;
         }
         timer++;
         if (timer >= l4) {
             timer = 0;
             frame++;
             if (frame >= x8) {
-                pattern = 3;
+                pattern = kCrouch;
                 StartPattern();
             }
         }
         break;
-    case 0x3b:
-        if (unk120 != 0) {
-            unk118 -= 0.8;
+    case kHitAir:
+        if (m_rfBlue != 0) {
+            m_rfGauge -= 0.8;
         }
         if (frame == 0 && timer == 0) {
             m_gauge = m_gauge + 0x1e;
-            vx = unkc0;
-            vy = vy * 0.75 + unkc8;
+            vx = m_hitVx;
+            vy = vy * 0.75 + m_hitVy;
             if (vy < -2.0) {
                 vy = -2.0;
             } else if (vy > -0.5) {
@@ -689,23 +689,23 @@ void CMinagi::UpdatePattern()
         }
         if (y + vy >= 0.0 && frame > 1) {
             y = 0.0;
-            if (unk12c != 0) {
-                pattern = 0x61;
+            if (m_landHittable != 0) {
+                pattern = kKnockdownHittable;
                 StartPattern();
             } else {
-                pattern = 0x62;
+                pattern = kKnockdown;
                 StartPattern();
             }
         }
         break;
-    case 0x3c:
-        if (unk120 != 0) {
-            unk118 -= 0.8;
+    case kHitAirHigh:
+        if (m_rfBlue != 0) {
+            m_rfGauge -= 0.8;
         }
         if (frame == 0 && timer == 0) {
             m_gauge = m_gauge + 0x1e;
-            vx = unkc0;
-            vy = vy * 0.75 + unkc8;
+            vx = m_hitVx;
+            vy = vy * 0.75 + m_hitVy;
             if (vy < -4.0) {
                 vy = -4.0;
             } else if (vy > -0.5) {
@@ -732,23 +732,23 @@ void CMinagi::UpdatePattern()
         }
         if (y + vy >= 0.0 && frame > 1) {
             y = 0.0;
-            if (unk12c != 0) {
-                pattern = 0x61;
+            if (m_landHittable != 0) {
+                pattern = kKnockdownHittable;
                 StartPattern();
             } else {
-                pattern = 0x62;
+                pattern = kKnockdown;
                 StartPattern();
             }
         }
         break;
-    case 0x3d:
-        if (unk120 != 0) {
-            unk118 -= 0.8;
+    case kHitAirHigher:
+        if (m_rfBlue != 0) {
+            m_rfGauge -= 0.8;
         }
         if (frame == 0 && timer == 0) {
             m_gauge = m_gauge + 0x1e;
-            vx = unkc0;
-            vy = vy * 0.75 + unkc8;
+            vx = m_hitVx;
+            vy = vy * 0.75 + m_hitVy;
             if (vy < -6.0) {
                 vy = -6.0;
             } else if (vy > -0.5) {
@@ -775,23 +775,23 @@ void CMinagi::UpdatePattern()
         }
         if (y + vy >= 0.0 && frame > 1) {
             y = 0.0;
-            if (unk12c != 0) {
-                pattern = 0x61;
+            if (m_landHittable != 0) {
+                pattern = kKnockdownHittable;
                 StartPattern();
             } else {
-                pattern = 0x62;
+                pattern = kKnockdown;
                 StartPattern();
             }
         }
         break;
-    case 0x3e:
-        if (unk120 != 0) {
-            unk118 -= 0.8;
+    case kHitAirCarry:
+        if (m_rfBlue != 0) {
+            m_rfGauge -= 0.8;
         }
         if (frame == 0 && timer == 0) {
             m_gauge = m_gauge + 0x1e;
-            vx = unkc0;
-            vy = vy * 0.75 + unkc8;
+            vx = m_hitVx;
+            vy = vy * 0.75 + m_hitVy;
             ay = 0.032;
         }
         if (vy <= 0.0) {
@@ -813,23 +813,23 @@ void CMinagi::UpdatePattern()
         }
         if (y + vy >= 0.0 && frame > 1) {
             y = 0.0;
-            if (unk12c != 0) {
-                pattern = 0x61;
+            if (m_landHittable != 0) {
+                pattern = kKnockdownHittable;
                 StartPattern();
             } else {
-                pattern = 0x62;
+                pattern = kKnockdown;
                 StartPattern();
             }
         }
         break;
-    case 0x3f:
-        if (unk120 != 0) {
-            unk118 -= 0.8;
+    case kHitAirLaunch:
+        if (m_rfBlue != 0) {
+            m_rfGauge -= 0.8;
         }
         if (frame == 0 && timer == 0) {
             m_gauge = m_gauge + 0x1e;
-            vx = unkc0;
-            vy = unkc8;
+            vx = m_hitVx;
+            vy = m_hitVy;
             ay = 0.032;
         }
         if (vy <= 0.0) {
@@ -851,28 +851,28 @@ void CMinagi::UpdatePattern()
         }
         if (y + vy >= 0.0 && frame > 1) {
             y = 0.0;
-            if (unk12c != 0) {
-                pattern = 0x61;
+            if (m_landHittable != 0) {
+                pattern = kKnockdownHittable;
                 StartPattern();
             } else {
-                pattern = 0x62;
+                pattern = kKnockdown;
                 StartPattern();
             }
         }
         break;
-    case 0x40:
-        if (unk120 != 0) {
-            unk118 -= 0.8;
+    case kHitAirWallBounce:
+        if (m_rfBlue != 0) {
+            m_rfGauge -= 0.8;
         }
-        if (frame > 0 && (char)Unk40ff70() != 0) {
-            pattern = 0x46;
+        if (frame > 0 && (char)AtScreenEdge() != 0) {
+            pattern = kHitWallBounce;
             StartPattern();
             break;
         }
         if (frame == 0 && timer == 0) {
             m_gauge = m_gauge + 0x1e;
-            vx = unkc0;
-            vy = vy * 0.75 + unkc8;
+            vx = m_hitVx;
+            vy = vy * 0.75 + m_hitVy;
             if (vy < -2.0) {
                 vy = -2.0;
             } else if (vy > -0.5) {
@@ -899,28 +899,28 @@ void CMinagi::UpdatePattern()
         }
         if (y + vy >= 0.0 && frame > 1) {
             y = 0.0;
-            if (unk12c != 0) {
-                pattern = 0x61;
+            if (m_landHittable != 0) {
+                pattern = kKnockdownHittable;
                 StartPattern();
             } else {
-                pattern = 0x62;
+                pattern = kKnockdown;
                 StartPattern();
             }
         }
         break;
-    case 0x41:
-        if (unk120 != 0) {
-            unk118 -= 0.8;
+    case kHitAirHighWallBounce:
+        if (m_rfBlue != 0) {
+            m_rfGauge -= 0.8;
         }
-        if (frame > 0 && (char)Unk40ff70() != 0) {
-            pattern = 0x46;
+        if (frame > 0 && (char)AtScreenEdge() != 0) {
+            pattern = kHitWallBounce;
             StartPattern();
             break;
         }
         if (frame == 0 && timer == 0) {
             m_gauge = m_gauge + 0x1e;
-            vx = unkc0;
-            vy = vy * 0.75 + unkc8;
+            vx = m_hitVx;
+            vy = vy * 0.75 + m_hitVy;
             if (vy < -4.0) {
                 vy = -4.0;
             } else if (vy > -0.5) {
@@ -947,28 +947,28 @@ void CMinagi::UpdatePattern()
         }
         if (y + vy >= 0.0 && frame > 1) {
             y = 0.0;
-            if (unk12c != 0) {
-                pattern = 0x61;
+            if (m_landHittable != 0) {
+                pattern = kKnockdownHittable;
                 StartPattern();
             } else {
-                pattern = 0x62;
+                pattern = kKnockdown;
                 StartPattern();
             }
         }
         break;
-    case 0x42:
-        if (unk120 != 0) {
-            unk118 -= 0.8;
+    case kHitAirCarryWallBounce:
+        if (m_rfBlue != 0) {
+            m_rfGauge -= 0.8;
         }
-        if (frame > 0 && (char)Unk40ff70() != 0) {
-            pattern = 0x46;
+        if (frame > 0 && (char)AtScreenEdge() != 0) {
+            pattern = kHitWallBounce;
             StartPattern();
             break;
         }
         if (frame == 0 && timer == 0) {
             m_gauge = m_gauge + 0x1e;
-            vx = unkc0;
-            vy = vy * 0.75 + unkc8;
+            vx = m_hitVx;
+            vy = vy * 0.75 + m_hitVy;
             ay = 0.032;
         }
         if (vy <= 0.0) {
@@ -990,28 +990,28 @@ void CMinagi::UpdatePattern()
         }
         if (y + vy >= 0.0 && frame > 1) {
             y = 0.0;
-            if (unk12c != 0) {
-                pattern = 0x61;
+            if (m_landHittable != 0) {
+                pattern = kKnockdownHittable;
                 StartPattern();
             } else {
-                pattern = 0x62;
+                pattern = kKnockdown;
                 StartPattern();
             }
         }
         break;
-    case 0x43:
-        if (unk120 != 0) {
-            unk118 -= 0.8;
+    case kHitAirLaunchWallBounce:
+        if (m_rfBlue != 0) {
+            m_rfGauge -= 0.8;
         }
-        if (frame > 0 && (char)Unk40ff70() != 0) {
-            pattern = 0x46;
+        if (frame > 0 && (char)AtScreenEdge() != 0) {
+            pattern = kHitWallBounce;
             StartPattern();
             break;
         }
         if (frame == 0 && timer == 0) {
             m_gauge = m_gauge + 0x1e;
-            vx = unkc0;
-            vy = unkc8;
+            vx = m_hitVx;
+            vy = m_hitVy;
             ay = 0.032;
         }
         if (vy <= 0.0) {
@@ -1033,25 +1033,25 @@ void CMinagi::UpdatePattern()
         }
         if (y + vy >= 0.0 && frame > 1) {
             y = 0.0;
-            if (unk12c != 0) {
-                pattern = 0x61;
+            if (m_landHittable != 0) {
+                pattern = kKnockdownHittable;
                 StartPattern();
             } else {
-                pattern = 0x62;
+                pattern = kKnockdown;
                 StartPattern();
             }
         }
         break;
-    case 0x44:
-        if (unk120 != 0) {
-            unk118 -= 1.5;
+    case kHitBlownAwayWallBounce:
+        if (m_rfBlue != 0) {
+            m_rfGauge -= 1.5;
         }
         m_gauge = m_gauge + 3;
-        vx = unkc0;
-        vy = unkc8;
+        vx = m_hitVx;
+        vy = m_hitVy;
         timer++;
-        if ((char)Unk40ff70() != 0) {
-            pattern = 0x46;
+        if ((char)AtScreenEdge() != 0) {
+            pattern = kHitWallBounce;
             StartPattern();
             break;
         }
@@ -1064,22 +1064,22 @@ void CMinagi::UpdatePattern()
         }
         if (y + vy >= 0.0) {
             y = 0.0;
-            if (unk12c != 0) {
-                pattern = 0x61;
+            if (m_landHittable != 0) {
+                pattern = kKnockdownHittable;
                 StartPattern();
             } else {
-                pattern = 0x62;
+                pattern = kKnockdown;
                 StartPattern();
             }
         }
         break;
-    case 0x45:
-        if (unk120 != 0) {
-            unk118 -= 1.5;
+    case kHitBlownAway:
+        if (m_rfBlue != 0) {
+            m_rfGauge -= 1.5;
         }
         m_gauge = m_gauge + 3;
-        vx = unkc0;
-        vy = unkc8;
+        vx = m_hitVx;
+        vy = m_hitVy;
         timer++;
         if (timer >= l4) {
             timer = 0;
@@ -1090,23 +1090,23 @@ void CMinagi::UpdatePattern()
         }
         if (y + vy >= 0.0) {
             y = 0.0;
-            if (unk12c != 0) {
-                pattern = 0x61;
+            if (m_landHittable != 0) {
+                pattern = kKnockdownHittable;
                 StartPattern();
             } else {
-                pattern = 0x62;
+                pattern = kKnockdown;
                 StartPattern();
             }
         }
         break;
-    case 0x46:
-        if (unk120 != 0) {
-            unk118 -= 0.8;
+    case kHitWallBounce:
+        if (m_rfBlue != 0) {
+            m_rfGauge -= 0.8;
         }
-        if (frame == 0 && timer == 0 && unk3138 == 0) {
+        if (frame == 0 && timer == 0 && m_patternVar1 == 0) {
             m_gauge = m_gauge + 0x1e;
-            unk3138++;
-            unk124 = unk124 + 0x78;
+            m_patternVar1++;
+            m_untechTime = m_untechTime + 0x78;
             vx = 0.5;
             vy = -2.5;
             ay = 0.025;
@@ -1129,23 +1129,23 @@ void CMinagi::UpdatePattern()
         }
         if (y + vy >= 0.0 && frame > 1) {
             y = 0.0;
-            if (unk12c != 0) {
-                pattern = 0x61;
+            if (m_landHittable != 0) {
+                pattern = kKnockdownHittable;
                 StartPattern();
             } else {
-                pattern = 0x62;
+                pattern = kKnockdown;
                 StartPattern();
             }
         }
         break;
-    case 0x47:
-        if (unk120 != 0) {
-            unk118 -= 0.8;
+    case kHitAirHeavy:
+        if (m_rfBlue != 0) {
+            m_rfGauge -= 0.8;
         }
         if (frame == 0 && timer == 0) {
             m_gauge = m_gauge + 0x1e;
-            vx = unkc0;
-            vy = unkc8;
+            vx = m_hitVx;
+            vy = m_hitVy;
             ay = 0.072;
         }
         if (vy <= 0.0) {
@@ -1167,96 +1167,96 @@ void CMinagi::UpdatePattern()
         }
         if (y + vy >= 0.0 && frame > 1) {
             y = 0.0;
-            if (unk12c != 0) {
-                pattern = 0x61;
+            if (m_landHittable != 0) {
+                pattern = kKnockdownHittable;
                 StartPattern();
             } else {
-                pattern = 0x62;
+                pattern = kKnockdown;
                 StartPattern();
             }
         }
         break;
-    case 0x48:
-        if (unk120 != 0) {
-            unk118 -= 0.8;
+    case kHitStandHighHold:
+        if (m_rfBlue != 0) {
+            m_rfGauge -= 0.8;
         }
-        unk158 = 0;
+        m_dashMomentum = 0;
         vx = 0.0;
         vy = 0.0;
         if (x - 20.0 <= 0.0 || x + 20.0 >= 639.0) {
-            unkb8 = (1.0 - ((*m_opponent)->y < 0.0) * 0.25) * vx;
+            m_cornerPushback = (1.0 - ((*m_opponent)->y < 0.0) * 0.25) * vx;
         } else {
-            unkb8 = 0.0;
+            m_cornerPushback = 0.0;
         }
         timer++;
         if (timer >= l4) {
             timer = 0;
             frame++;
             if (frame >= x8) {
-                pattern = 7;
+                pattern = kStandUp;
                 if (m_inputY == 1) {
-                    pattern = 3;
+                    pattern = kCrouch;
                 }
                 StartPattern();
             }
         }
         break;
-    case 0x49:
-        if (unk120 != 0) {
-            unk118 -= 0.8;
+    case kHitStandLowHold:
+        if (m_rfBlue != 0) {
+            m_rfGauge -= 0.8;
         }
-        unk158 = 0;
+        m_dashMomentum = 0;
         vx = 0.0;
         vy = 0.0;
         if (x - 20.0 <= 0.0 || x + 20.0 >= 639.0) {
-            unkb8 = (1.0 - ((*m_opponent)->y < 0.0) * 0.25) * vx;
+            m_cornerPushback = (1.0 - ((*m_opponent)->y < 0.0) * 0.25) * vx;
         } else {
-            unkb8 = 0.0;
+            m_cornerPushback = 0.0;
         }
         timer++;
         if (timer >= l4) {
             timer = 0;
             frame++;
             if (frame >= x8) {
-                pattern = 7;
+                pattern = kStandUp;
                 if (m_inputY == 1) {
-                    pattern = 3;
+                    pattern = kCrouch;
                 }
                 StartPattern();
             }
         }
         break;
-    case 0x4a:
-        if (unk120 != 0) {
-            unk118 -= 0.8;
+    case kHitCrouchHold:
+        if (m_rfBlue != 0) {
+            m_rfGauge -= 0.8;
         }
-        unk158 = 0;
+        m_dashMomentum = 0;
         vx = 0.0;
         vy = 0.0;
         if (x - 20.0 <= 0.0 || x + 20.0 >= 639.0) {
-            unkb8 = (1.0 - ((*m_opponent)->y < 0.0) * 0.25) * vx;
+            m_cornerPushback = (1.0 - ((*m_opponent)->y < 0.0) * 0.25) * vx;
         } else {
-            unkb8 = 0.0;
+            m_cornerPushback = 0.0;
         }
         timer++;
         if (timer >= l4) {
             timer = 0;
             frame++;
             if (frame >= x8) {
-                pattern = 3;
+                pattern = kCrouch;
                 StartPattern();
             }
         }
         break;
-    case 0x4b:
-        if (unk120 != 0) {
-            unk118 -= 0.6;
+    case kHitStandHighPull:
+        if (m_rfBlue != 0) {
+            m_rfGauge -= 0.6;
         }
-        unk158 = 0;
+        m_dashMomentum = 0;
         if (frame == 0 && timer == 0) {
             m_gauge = m_gauge + 0x1e;
-            if (unk120 != 0) {
-                unk118 -= 30.0;
+            if (m_rfBlue != 0) {
+                m_rfGauge -= 30.0;
             }
             vx = 2.2;
         }
@@ -1269,32 +1269,32 @@ void CMinagi::UpdatePattern()
             vx = 0.0;
         }
         if (x - 20.0 <= 0.0 || x + 20.0 >= 639.0) {
-            unkb8 = (1.0 - ((*m_opponent)->y < 0.0) * 0.25) * vx;
+            m_cornerPushback = (1.0 - ((*m_opponent)->y < 0.0) * 0.25) * vx;
         } else {
-            unkb8 = 0.0;
+            m_cornerPushback = 0.0;
         }
         timer++;
         if (timer >= l4) {
             timer = 0;
             frame++;
             if (frame >= x8) {
-                pattern = 7;
+                pattern = kStandUp;
                 if (m_inputY == 1) {
-                    pattern = 3;
+                    pattern = kCrouch;
                 }
                 StartPattern();
             }
         }
         break;
-    case 0x4c:
-        if (unk120 != 0) {
-            unk118 -= 0.6;
+    case kHitStandLowPull:
+        if (m_rfBlue != 0) {
+            m_rfGauge -= 0.6;
         }
-        unk158 = 0;
+        m_dashMomentum = 0;
         if (frame == 0 && timer == 0) {
             m_gauge = m_gauge + 0x1e;
-            if (unk120 != 0) {
-                unk118 -= 30.0;
+            if (m_rfBlue != 0) {
+                m_rfGauge -= 30.0;
             }
             vx = 2.2;
         }
@@ -1307,32 +1307,32 @@ void CMinagi::UpdatePattern()
             vx = 0.0;
         }
         if (x - 20.0 <= 0.0 || x + 20.0 >= 639.0) {
-            unkb8 = (1.0 - ((*m_opponent)->y < 0.0) * 0.25) * vx;
+            m_cornerPushback = (1.0 - ((*m_opponent)->y < 0.0) * 0.25) * vx;
         } else {
-            unkb8 = 0.0;
+            m_cornerPushback = 0.0;
         }
         timer++;
         if (timer >= l4) {
             timer = 0;
             frame++;
             if (frame >= x8) {
-                pattern = 7;
+                pattern = kStandUp;
                 if (m_inputY == 1) {
-                    pattern = 3;
+                    pattern = kCrouch;
                 }
                 StartPattern();
             }
         }
         break;
-    case 0x4d:
-        if (unk120 != 0) {
-            unk118 -= 0.6;
+    case kHitCrouchPull:
+        if (m_rfBlue != 0) {
+            m_rfGauge -= 0.6;
         }
-        unk158 = 0;
+        m_dashMomentum = 0;
         if (frame == 0 && timer == 0) {
             m_gauge = m_gauge + 0x1e;
-            if (unk120 != 0) {
-                unk118 -= 30.0;
+            if (m_rfBlue != 0) {
+                m_rfGauge -= 30.0;
             }
             vx = 2.2;
         }
@@ -1345,23 +1345,23 @@ void CMinagi::UpdatePattern()
             vx = 0.0;
         }
         if (x - 20.0 <= 0.0 || x + 20.0 >= 639.0) {
-            unkb8 = (1.0 - ((*m_opponent)->y < 0.0) * 0.25) * vx;
+            m_cornerPushback = (1.0 - ((*m_opponent)->y < 0.0) * 0.25) * vx;
         } else {
-            unkb8 = 0.0;
+            m_cornerPushback = 0.0;
         }
         timer++;
         if (timer >= l4) {
             timer = 0;
             frame++;
             if (frame >= x8) {
-                pattern = 3;
+                pattern = kCrouch;
                 StartPattern();
             }
         }
         break;
-    case 0x51:
-        if (unk120 != 0) {
-            unk118 -= 0.8;
+    case kHitBurn:
+        if (m_rfBlue != 0) {
+            m_rfGauge -= 0.8;
         }
         if (frame == 0 && timer == 0) {
             l50.type = 0x1f3;
@@ -1371,8 +1371,8 @@ void CMinagi::UpdatePattern()
             l50.layer = 1;
             SpawnObject(&l50);
             m_gauge = m_gauge + 0x1e;
-            vx = unkc0;
-            vy = unkc8;
+            vx = m_hitVx;
+            vy = m_hitVy;
             ay = 0.032;
         }
         vx += 0.02;
@@ -1390,29 +1390,29 @@ void CMinagi::UpdatePattern()
         }
         if (y + vy >= 0.0 && frame == 1) {
             y = 0.0;
-            if (unk12c != 0) {
-                pattern = 0x61;
+            if (m_landHittable != 0) {
+                pattern = kKnockdownHittable;
                 StartPattern();
             } else {
-                pattern = 0x62;
+                pattern = kKnockdown;
                 StartPattern();
             }
         }
         break;
-    case 0x52:
-        if (unk120 != 0) {
-            unk118 -= 0.8;
+    case kHitShock:
+        if (m_rfBlue != 0) {
+            m_rfGauge -= 0.8;
         }
-        if (frame == 0 && timer == 0 && unk3138 == 0) {
+        if (frame == 0 && timer == 0 && m_patternVar1 == 0) {
             m_playSound = 0x1e;
             vy = -0.45;
             vx = -0.1;
-            unk3138++;
+            m_patternVar1++;
             m_gauge = m_gauge + 0x1e;
         }
         if (frame == 4 && timer == 0) {
-            vx = unkc0;
-            vy = unkc8;
+            vx = m_hitVx;
+            vy = m_hitVy;
             ay = 0.032;
         }
         if (vy > 0.0 && frame == 4) {
@@ -1426,9 +1426,9 @@ void CMinagi::UpdatePattern()
         if (timer >= l4) {
             timer = 0;
             frame++;
-            if (frame == 4 && unk3138 < 8) {
+            if (frame == 4 && m_patternVar1 < 8) {
                 frame = 0;
-                unk3138++;
+                m_patternVar1++;
             }
             if (frame >= x8) {
                 frame = frame - 2;
@@ -1436,30 +1436,30 @@ void CMinagi::UpdatePattern()
         }
         if (y + vy >= 0.0 && frame > 4) {
             y = 0.0;
-            if (unk12c != 0) {
-                pattern = 0x61;
+            if (m_landHittable != 0) {
+                pattern = kKnockdownHittable;
                 StartPattern();
             } else {
-                pattern = 0x62;
+                pattern = kKnockdown;
                 StartPattern();
             }
         }
         break;
-    case 0x53:
+    case kEncased:
         if (frame == 0 && timer == 0) {
-            if (unk3144 == 0) {
+            if (m_encasedBreakOut == 0) {
                 l50.type = 0x1f0;
                 l50.x = (double)(int)x;
                 l50.y = (double)(int)y;
                 l50.scale = 0;
                 l50.layer = 0;
-                l50.unk0 = 1;
+                l50.keep = 1;
                 l50.facing = facing;
                 SpawnObject(&l50);
-                unk3144 = 1;
+                m_encasedBreakOut = 1;
             }
-            if (unk120 != 0) {
-                unk118 -= 30.0;
+            if (m_rfBlue != 0) {
+                m_rfGauge -= 30.0;
             }
             m_playSound = 0x21;
             vy = -1.5;
@@ -1491,27 +1491,27 @@ void CMinagi::UpdatePattern()
             timer = 0;
             frame++;
             if (frame >= x8) {
-                pattern = 0;
+                pattern = kStand;
                 StartPattern();
                 FaceOpponent();
             }
         }
         break;
-    case 0x54:
+    case kEncased2:
         if (frame == 0 && timer == 0) {
-            if (unk3144 == 0) {
+            if (m_encasedBreakOut == 0) {
                 l50.type = 0x1f0;
                 l50.x = (double)(int)x;
                 l50.y = (double)(int)y;
                 l50.scale = 0;
                 l50.layer = 0;
-                l50.unk0 = 1;
+                l50.keep = 1;
                 l50.facing = facing;
                 SpawnObject(&l50);
-                unk3144 = 1;
+                m_encasedBreakOut = 1;
             }
-            if (unk120 != 0) {
-                unk118 -= 30.0;
+            if (m_rfBlue != 0) {
+                m_rfGauge -= 30.0;
             }
             m_playSound = 0x21;
             vy = -1.5;
@@ -1543,31 +1543,31 @@ void CMinagi::UpdatePattern()
             timer = 0;
             frame++;
             if (frame >= x8) {
-                pattern = 0;
+                pattern = kStand;
                 StartPattern();
                 FaceOpponent();
             }
         }
         break;
-    case 0x55:
+    case kEncasedAir:
         if (frame == 0 && timer == 0) {
-            if (unk3144 == 0) {
+            if (m_encasedBreakOut == 0) {
                 l50.type = 0x1f0;
                 l50.x = (double)(int)x;
                 l50.y = (double)(int)y;
                 l50.scale = 0;
                 l50.layer = 0;
-                l50.unk0 = 1;
+                l50.keep = 1;
                 l50.facing = facing;
                 SpawnObject(&l50);
-                unk3144 = 1;
+                m_encasedBreakOut = 1;
             }
-            if (unk120 != 0) {
-                unk118 -= 30.0;
+            if (m_rfBlue != 0) {
+                m_rfGauge -= 30.0;
             }
             m_playSound = 0x21;
-            vx = unkc0;
-            vy = unkc8;
+            vx = m_hitVx;
+            vy = m_hitVy;
             m_gauge = m_gauge + 0x1e;
         }
         vy += 0.04;
@@ -1576,44 +1576,44 @@ void CMinagi::UpdatePattern()
             timer = 0;
             frame++;
             if (frame >= x8) {
-                pattern = 0;
+                pattern = kStand;
                 StartPattern();
                 FaceOpponent();
             }
         }
         if (y + vy >= 0.0) {
             y = 0.0;
-            if (unk12c != 0) {
-                pattern = 0x61;
+            if (m_landHittable != 0) {
+                pattern = kKnockdownHittable;
                 StartPattern();
             } else {
-                pattern = 0x62;
+                pattern = kKnockdown;
                 StartPattern();
             }
         }
         break;
-    case 0x56:
+    case kEncasedSpin:
         if (frame == 0 && timer == 0) {
-            if (unk3144 == 0) {
+            if (m_encasedBreakOut == 0) {
                 l50.type = 0x1f0;
                 l50.x = (double)(int)x;
                 l50.y = (double)(int)y;
                 l50.scale = 0;
                 l50.layer = 0;
-                l50.unk0 = 1;
+                l50.keep = 1;
                 l50.facing = facing;
                 SpawnObject(&l50);
-                unk3144 = 1;
+                m_encasedBreakOut = 1;
             }
-            if (unk3138 == 0) {
-                if (unk120 != 0) {
-                    unk118 -= 30.0;
+            if (m_patternVar1 == 0) {
+                if (m_rfBlue != 0) {
+                    m_rfGauge -= 30.0;
                 }
                 m_playSound = 0x21;
-                vx = unkc0;
-                vy = unkc8;
+                vx = m_hitVx;
+                vy = m_hitVy;
                 m_gauge = m_gauge + 0x1e;
-                unk3138++;
+                m_patternVar1++;
             }
         }
         vy += 0.06;
@@ -1627,16 +1627,16 @@ void CMinagi::UpdatePattern()
         }
         if (y + vy >= 0.0) {
             y = 0.0;
-            if (unk12c != 0) {
-                pattern = 0x61;
+            if (m_landHittable != 0) {
+                pattern = kKnockdownHittable;
                 StartPattern();
             } else {
-                pattern = 0x62;
+                pattern = kKnockdown;
                 StartPattern();
             }
         }
         break;
-    case 0x57:
+    case kFallInDarkness:
         if (frame == 0 && timer == 0) {
             l50.type = 0x1ef;
             l50.x = 60.0;
@@ -1652,12 +1652,12 @@ void CMinagi::UpdatePattern()
             timer = 0;
             frame++;
             if (frame >= x8) {
-                pattern = 0;
+                pattern = kStand;
                 StartPattern();
             }
         }
         break;
-    case 0x60:
+    case kWakeUp:
         timer++;
         if (timer >= l4) {
             timer = 0;
@@ -1666,15 +1666,15 @@ void CMinagi::UpdatePattern()
                 FaceOpponent();
             }
             if (frame >= x8) {
-                pattern = 7;
+                pattern = kStandUp;
                 if (m_inputY == 1) {
-                    pattern = 3;
+                    pattern = kCrouch;
                 }
                 StartPattern();
             }
         }
         break;
-    case 0x61:
+    case kKnockdownHittable:
         vx = 0.0;
         vy = 0.0;
         if (frame == 0 && timer == 0) {
@@ -1692,12 +1692,12 @@ void CMinagi::UpdatePattern()
             timer = 0;
             frame++;
             if (frame >= x8) {
-                pattern = 0x63;
+                pattern = kLyingDown;
                 StartPattern();
             }
         }
         break;
-    case 0x62:
+    case kKnockdown:
         vx = 0.0;
         vy = 0.0;
         if (frame == 0 && timer == 0) {
@@ -1715,16 +1715,16 @@ void CMinagi::UpdatePattern()
             timer = 0;
             frame++;
             if (frame >= x8) {
-                pattern = 0x63;
+                pattern = kLyingDown;
                 StartPattern();
             }
         }
         break;
-    case 0x63:
+    case kLyingDown:
         if (m_hp > 0 && timer > 0x63 && frame == 0) {
-            pattern = 0x60;
+            pattern = kWakeUp;
             StartPattern();
-            unk158 = 0;
+            m_dashMomentum = 0;
         }
         timer++;
         if (timer >= l4) {
@@ -1734,20 +1734,20 @@ void CMinagi::UpdatePattern()
                 FaceOpponent();
             }
             if (frame >= x8) {
-                pattern = 0x60;
+                pattern = kWakeUp;
                 StartPattern();
             }
         }
         break;
-    case 0x96:
+    case kGuardStandLight:
         if (m_inputY == 1) {
-            pattern = 0x99;
+            pattern = kGuardCrouchLight;
         }
         if (m_inputY != 1) {
-            pattern = 0x96;
+            pattern = kGuardStandLight;
         }
         if (frame == 0 && timer == 0) {
-            unk158 = 0;
+            m_dashMomentum = 0;
             m_gauge = m_gauge + 0xa;
             vx = -1.5;
             vy = 0.0;
@@ -1759,9 +1759,9 @@ void CMinagi::UpdatePattern()
             vx = 0.0;
         }
         if (x - 20.0 <= 0.0 || x + 20.0 >= 639.0) {
-            unkb8 = vx;
+            m_cornerPushback = vx;
         } else {
-            unkb8 = 0.0;
+            m_cornerPushback = 0.0;
         }
         timer++;
         if (timer >= l4) {
@@ -1771,23 +1771,23 @@ void CMinagi::UpdatePattern()
                 FaceOpponent();
             }
             if (frame >= x8) {
-                pattern = 0;
+                pattern = kStand;
                 if (m_inputY == 1) {
-                    pattern = 3;
+                    pattern = kCrouch;
                 }
                 StartPattern();
             }
         }
         break;
-    case 0x97:
+    case kGuardStandMedium:
         if (m_inputY == 1) {
-            pattern = 0x9a;
+            pattern = kGuardCrouchMedium;
         }
         if (m_inputY != 1) {
-            pattern = 0x97;
+            pattern = kGuardStandMedium;
         }
         if (frame == 0 && timer == 0) {
-            unk158 = 0;
+            m_dashMomentum = 0;
             m_gauge = m_gauge + 0xf;
             vx = -1.8;
             vy = 0.0;
@@ -1799,9 +1799,9 @@ void CMinagi::UpdatePattern()
             vx = 0.0;
         }
         if (x - 20.0 <= 0.0 || x + 20.0 >= 639.0) {
-            unkb8 = vx;
+            m_cornerPushback = vx;
         } else {
-            unkb8 = 0.0;
+            m_cornerPushback = 0.0;
         }
         timer++;
         if (timer >= l4) {
@@ -1811,23 +1811,23 @@ void CMinagi::UpdatePattern()
                 FaceOpponent();
             }
             if (frame >= x8) {
-                pattern = 0;
+                pattern = kStand;
                 if (m_inputY == 1) {
-                    pattern = 3;
+                    pattern = kCrouch;
                 }
                 StartPattern();
             }
         }
         break;
-    case 0x98:
+    case kGuardStandHeavy:
         if (m_inputY == 1) {
-            pattern = 0x9b;
+            pattern = kGuardCrouchHeavy;
         }
         if (m_inputY != 1) {
-            pattern = 0x98;
+            pattern = kGuardStandHeavy;
         }
         if (frame == 0 && timer == 0) {
-            unk158 = 0;
+            m_dashMomentum = 0;
             m_gauge = m_gauge + 0x14;
             vx = -2.3;
             vy = 0.0;
@@ -1839,9 +1839,9 @@ void CMinagi::UpdatePattern()
             vx = 0.0;
         }
         if (x - 20.0 <= 0.0 || x + 20.0 >= 639.0) {
-            unkb8 = vx;
+            m_cornerPushback = vx;
         } else {
-            unkb8 = 0.0;
+            m_cornerPushback = 0.0;
         }
         timer++;
         if (timer >= l4) {
@@ -1851,23 +1851,23 @@ void CMinagi::UpdatePattern()
                 FaceOpponent();
             }
             if (frame >= x8) {
-                pattern = 0;
+                pattern = kStand;
                 if (m_inputY == 1) {
-                    pattern = 3;
+                    pattern = kCrouch;
                 }
                 StartPattern();
             }
         }
         break;
-    case 0x99:
+    case kGuardCrouchLight:
         if (m_inputY == 1) {
-            pattern = 0x99;
+            pattern = kGuardCrouchLight;
         }
         if (m_inputY != 1) {
-            pattern = 0x96;
+            pattern = kGuardStandLight;
         }
         if (frame == 0 && timer == 0) {
-            unk158 = 0;
+            m_dashMomentum = 0;
             m_gauge = m_gauge + 0xa;
             vx = -1.5;
             vy = 0.0;
@@ -1879,9 +1879,9 @@ void CMinagi::UpdatePattern()
             vx = 0.0;
         }
         if (x - 20.0 <= 0.0 || x + 20.0 >= 639.0) {
-            unkb8 = vx;
+            m_cornerPushback = vx;
         } else {
-            unkb8 = 0.0;
+            m_cornerPushback = 0.0;
         }
         timer++;
         if (timer >= l4) {
@@ -1891,20 +1891,20 @@ void CMinagi::UpdatePattern()
                 FaceOpponent();
             }
             if (frame >= x8) {
-                pattern = 3;
+                pattern = kCrouch;
                 StartPattern();
             }
         }
         break;
-    case 0x9a:
+    case kGuardCrouchMedium:
         if (m_inputY == 1) {
-            pattern = 0x9a;
+            pattern = kGuardCrouchMedium;
         }
         if (m_inputY != 1) {
-            pattern = 0x97;
+            pattern = kGuardStandMedium;
         }
         if (frame == 0 && timer == 0) {
-            unk158 = 0;
+            m_dashMomentum = 0;
             m_gauge = m_gauge + 0xf;
             vx = -1.8;
             vy = 0.0;
@@ -1916,9 +1916,9 @@ void CMinagi::UpdatePattern()
             vx = 0.0;
         }
         if (x - 20.0 <= 0.0 || x + 20.0 >= 639.0) {
-            unkb8 = vx;
+            m_cornerPushback = vx;
         } else {
-            unkb8 = 0.0;
+            m_cornerPushback = 0.0;
         }
         timer++;
         if (timer >= l4) {
@@ -1928,20 +1928,20 @@ void CMinagi::UpdatePattern()
                 FaceOpponent();
             }
             if (frame >= x8) {
-                pattern = 3;
+                pattern = kCrouch;
                 StartPattern();
             }
         }
         break;
-    case 0x9b:
+    case kGuardCrouchHeavy:
         if (m_inputY == 1) {
-            pattern = 0x9b;
+            pattern = kGuardCrouchHeavy;
         }
         if (m_inputY != 1) {
-            pattern = 0x98;
+            pattern = kGuardStandHeavy;
         }
         if (frame == 0 && timer == 0) {
-            unk158 = 0;
+            m_dashMomentum = 0;
             m_gauge = m_gauge + 0x14;
             vx = -2.3;
             vy = 0.0;
@@ -1953,9 +1953,9 @@ void CMinagi::UpdatePattern()
             vx = 0.0;
         }
         if (x - 20.0 <= 0.0 || x + 20.0 >= 639.0) {
-            unkb8 = vx;
+            m_cornerPushback = vx;
         } else {
-            unkb8 = 0.0;
+            m_cornerPushback = 0.0;
         }
         timer++;
         if (timer >= l4) {
@@ -1965,12 +1965,12 @@ void CMinagi::UpdatePattern()
                 FaceOpponent();
             }
             if (frame >= x8) {
-                pattern = 3;
+                pattern = kCrouch;
                 StartPattern();
             }
         }
         break;
-    case 0x9c:
+    case kGuardAir:
         if (frame == 0 && timer == 0) {
             vy = -2.6;
             m_gauge = m_gauge + 0xf;
@@ -1983,7 +1983,7 @@ void CMinagi::UpdatePattern()
             timer = 0;
             frame++;
             if (frame >= x8) {
-                pattern = 9;
+                pattern = kFall;
                 StartPattern();
             }
         }
@@ -1991,14 +1991,14 @@ void CMinagi::UpdatePattern()
             y = 0.0;
             m_playSound = 9;
             FaceOpponent();
-            pattern = 0xd;
+            pattern = kLand;
             StartPattern();
         }
         break;
-    case 0x9d:
+    case kAirRecoveryForward:
         vx = 1.0;
         ay = 0.045;
-        unk158 = 0;
+        m_dashMomentum = 0;
         if (frame == 0 && timer == 0) {
             vy = -2.3;
             l50.type = 8;
@@ -2015,7 +2015,7 @@ void CMinagi::UpdatePattern()
             timer = 0;
             frame++;
             if (frame >= x8) {
-                pattern = 9;
+                pattern = kFall;
                 StartPattern();
             }
         }
@@ -2023,14 +2023,14 @@ void CMinagi::UpdatePattern()
             y = 0.0;
             m_playSound = 9;
             FaceOpponent();
-            pattern = 0xd;
+            pattern = kLand;
             StartPattern();
         }
         break;
-    case 0x9e:
+    case kAirRecoveryBack:
         vx = -1.0;
         ay = 0.045;
-        unk158 = 0;
+        m_dashMomentum = 0;
         if (frame == 0 && timer == 0) {
             vy = -2.3;
             l50.type = 8;
@@ -2047,7 +2047,7 @@ void CMinagi::UpdatePattern()
             timer = 0;
             frame++;
             if (frame >= x8) {
-                pattern = 9;
+                pattern = kFall;
                 StartPattern();
             }
         }
@@ -2055,7 +2055,7 @@ void CMinagi::UpdatePattern()
             y = 0.0;
             m_playSound = 9;
             FaceOpponent();
-            pattern = 0xd;
+            pattern = kLand;
             StartPattern();
         }
         break;
@@ -2070,20 +2070,20 @@ void CMinagi::UpdatePattern()
             m_game->CreateEffect((EffectDesc*)&l50);
             m_hitsLeft = 1;
             m_playSound = 0x3e;
-            unk3138++;
+            m_patternVar1++;
         }
         timer++;
         if (timer >= l4) {
             timer = 0;
             frame++;
             if (frame >= x8) {
-                pattern = 9;
+                pattern = kFall;
                 StartPattern();
                 ay = 0.035;
             }
         }
         break;
-    case 0xa2:
+    case kWakeUpAttack:
         if (frame == 0 && timer == 0) {
             StopMoving();
         }
@@ -2103,11 +2103,11 @@ void CMinagi::UpdatePattern()
             m_hitsLeft = 1;
             m_playSound = 0x3e;
             m_gauge = m_gauge - 0x3e8;
-            unk3138++;
+            m_patternVar1++;
         }
         vy = vy + ay;
         if (y + vy > 0.0) {
-            pattern = 0xd;
+            pattern = kLand;
             StartPattern();
             StartPattern();
             y = 0.0;
@@ -2125,18 +2125,18 @@ void CMinagi::UpdatePattern()
             }
         }
         break;
-    case 0xa3:
+    case kDashForward:
         if (frame == 0 && timer == 0) {
             StartAfterimages(3);
             StopMoving();
         }
         if (m_inputY == -1 && frame > 0) {
-            pattern = 4;
+            pattern = kJump;
             if (m_inputX == facing) {
-                pattern = 5;
+                pattern = kJumpForward;
             }
             if (m_inputX == -facing) {
-                pattern = 6;
+                pattern = kJumpBack;
             }
             m_attackResult = 0;
             StartPattern();
@@ -2144,12 +2144,12 @@ void CMinagi::UpdatePattern()
         }
         if (frame < 5 && frame > 1) {
             vx = 1.6;
-            if (unk3138 == 0) {
+            if (m_patternVar1 == 0) {
                 m_playSound = 0x11;
             }
         }
-        unk158 = 1;
-        unk3138++;
+        m_dashMomentum = 1;
+        m_patternVar1++;
         timer++;
         if (timer >= l4) {
             timer = 0;
@@ -2158,31 +2158,31 @@ void CMinagi::UpdatePattern()
                 frame = frame - 2;
             }
             if (frame >= x8) {
-                pattern = 0;
+                pattern = kStand;
                 StartPattern();
                 break;
             }
         }
-        if (m_inputX == facing && unk3138 >= 0x78 && frame < 5) {
-            pattern = 0xb2;
+        if (m_inputX == facing && m_patternVar1 >= 0x78 && frame < 5) {
+            pattern = kDashStop;
             StartPattern();
         }
-        if (m_inputX != facing && unk3138 >= 0x3c && frame < 5) {
-            pattern = 0xb2;
+        if (m_inputX != facing && m_patternVar1 >= 0x3c && frame < 5) {
+            pattern = kDashStop;
             StartPattern();
         }
         break;
-    case 0xa4:
+    case kDashBack:
         StartAfterimages(2);
-        unk158 = 0;
+        m_dashMomentum = 0;
         if (frame == 0 && timer == 0) {
             StopMoving();
         }
-        if (frame == 2 && timer == 0 && unk3138 == 0) {
+        if (frame == 2 && timer == 0 && m_patternVar1 == 0) {
             vx = -2.5;
             vy = -1.0;
             ay = 0.0;
-            unk3138 = 1;
+            m_patternVar1 = 1;
         }
         vx += 0.04;
         if (vx > 0.0) {
@@ -2198,7 +2198,7 @@ void CMinagi::UpdatePattern()
         if (vx >= 0.0 && y == 0.0 && frame > 2) {
             vx = 0.0;
             vy = 0.0;
-            pattern = 0xd;
+            pattern = kLand;
             StartPattern();
             break;
         }
@@ -2211,8 +2211,8 @@ void CMinagi::UpdatePattern()
             }
         }
         break;
-    case 0xa5:
-        if (frame == 0 && timer == 0 && unk3138 == 0) {
+    case kAirDashForward:
+        if (frame == 0 && timer == 0 && m_patternVar1 == 0) {
             vx = 1.4;
             StartAfterimages(3);
             vy = 0.0;
@@ -2220,8 +2220,8 @@ void CMinagi::UpdatePattern()
             m_playSound = 0x11;
         }
         timer++;
-        unk3138++;
-        unk313c++;
+        m_patternVar1++;
+        m_patternVar2++;
         if (timer >= l4) {
             timer = 0;
             frame++;
@@ -2229,8 +2229,8 @@ void CMinagi::UpdatePattern()
                 frame = frame - 2;
             }
         }
-        if (m_inputX == facing && unk313c >= 0x78) {
-            pattern = 9;
+        if (m_inputX == facing && m_patternVar2 >= 0x78) {
+            pattern = kFall;
             StartPattern();
             vx = 1.3;
             ay = 0.03;
@@ -2238,8 +2238,8 @@ void CMinagi::UpdatePattern()
                 vx = -vx;
             }
         }
-        if (m_inputX != facing && unk3138 >= 0x30) {
-            pattern = 9;
+        if (m_inputX != facing && m_patternVar1 >= 0x30) {
+            pattern = kFall;
             StartPattern();
             vx = 1.3;
             ay = 0.03;
@@ -2248,8 +2248,8 @@ void CMinagi::UpdatePattern()
             }
         }
         break;
-    case 0xa6:
-        if (frame == 0 && timer == 0 && unk3138 == 0) {
+    case kAirDashBack:
+        if (frame == 0 && timer == 0 && m_patternVar1 == 0) {
             vx = -1.4;
             vy = 0.0;
             ay = 0.0;
@@ -2257,8 +2257,8 @@ void CMinagi::UpdatePattern()
             m_playSound = 0x11;
         }
         timer++;
-        unk3138++;
-        unk313c++;
+        m_patternVar1++;
+        m_patternVar2++;
         if (timer >= l4) {
             timer = 0;
             frame++;
@@ -2266,8 +2266,8 @@ void CMinagi::UpdatePattern()
                 frame = frame - 2;
             }
         }
-        if (m_inputX == -facing && unk313c >= 0x78) {
-            pattern = 9;
+        if (m_inputX == -facing && m_patternVar2 >= 0x78) {
+            pattern = kFall;
             StartPattern();
             vx = -0.9;
             ay = 0.03;
@@ -2275,8 +2275,8 @@ void CMinagi::UpdatePattern()
                 vx = -vx;
             }
         }
-        if (m_inputX != -facing && unk3138 >= 0x30) {
-            pattern = 9;
+        if (m_inputX != -facing && m_patternVar1 >= 0x30) {
+            pattern = kFall;
             StartPattern();
             vx = -0.9;
             ay = 0.03;
@@ -2285,16 +2285,16 @@ void CMinagi::UpdatePattern()
             }
         }
         break;
-    case 0xa7:
+    case kInstantCharge:
         if (frame == 0 && timer == 0) {
-            unk158 = 0;
+            m_dashMomentum = 0;
             vx = 0.0;
             vy = 0.0;
-            if (unk120 == 1) {
-                m_proration = unk118 * 5.0 + m_proration;
+            if (m_rfBlue == 1) {
+                m_proration = m_rfGauge * 5.0 + m_proration;
             }
-            unk118 = 0.0;
-            unk14c = 0x5a;
+            m_rfGauge = 0.0;
+            m_freezeTime = 0x5a;
             FillBackground(0xb0, 3);
         }
         if (frame == 1 && timer == 0) {
@@ -2320,21 +2320,21 @@ void CMinagi::UpdatePattern()
             frame++;
             m_attackResult = 0;
             if (frame >= x8) {
-                pattern = 0;
+                pattern = kStand;
                 FaceOpponent();
                 StartPattern();
             }
         }
         break;
-    case 0xa8:
+    case kRecoilGuardStand:
         if (frame == 0 && timer == 0) {
-            unk158 = 0;
+            m_dashMomentum = 0;
             vx = 0.0;
             vy = 0.0;
             y = 0.0;
             ay = 0.0;
-            unk14e = 0;
-            unkb8 = 0.0;
+            m_recoilGuardWindow = 0;
+            m_cornerPushback = 0.0;
             ax = 0.0;
             l50.type = 8;
             l50.x = (double)(int)x;
@@ -2351,20 +2351,20 @@ void CMinagi::UpdatePattern()
                 FaceOpponent();
             }
             if (frame >= x8) {
-                pattern = 0;
+                pattern = kStand;
                 StartPattern();
             }
         }
         break;
-    case 0xa9:
+    case kRecoilGuardCrouch:
         if (frame == 0 && timer == 0) {
-            unk158 = 0;
+            m_dashMomentum = 0;
             vx = 0.0;
             vy = 0.0;
             y = 0.0;
             ay = 0.0;
-            unk14e = 0;
-            unkb8 = 0.0;
+            m_recoilGuardWindow = 0;
+            m_cornerPushback = 0.0;
             ax = 0.0;
             l50.type = 8;
             l50.x = (double)(int)x;
@@ -2381,36 +2381,36 @@ void CMinagi::UpdatePattern()
                 FaceOpponent();
             }
             if (frame >= x8) {
-                pattern = 3;
+                pattern = kCrouch;
                 StartPattern();
             }
         }
         break;
-    case 0xaa:
+    case kRecoilGuardAir:
         if (frame == 0 && timer == 0) {
-            unk3138 = (int)(vx * 100.0);
-            unk313c = (int)(vy * 100.0);
+            m_patternVar1 = (int)(vx * 100.0);
+            m_patternVar2 = (int)(vy * 100.0);
             vx = 0.0;
             vy = 0.0;
             if (ay == 0.0) {
                 ay = 0.035;
             }
-            unk14e = 0;
-            unkb8 = 0.0;
-            unk14c = 0x3c;
+            m_recoilGuardWindow = 0;
+            m_cornerPushback = 0.0;
+            m_freezeTime = 0x3c;
         }
-        if (unk14c == 0 && unk3140 == 0) {
-            unk3140++;
-            vx = unk3138 * 0.01;
-            vy = unk313c * 0.01;
+        if (m_freezeTime == 0 && m_patternVar3 == 0) {
+            m_patternVar3++;
+            vx = m_patternVar1 * 0.01;
+            vy = m_patternVar2 * 0.01;
         }
-        if (unk14c == 0) {
+        if (m_freezeTime == 0) {
             vy = vy + ay;
         }
         if (vy + y > 0.0) {
             StopMoving();
             y = 0.0;
-            pattern = 0xa9;
+            pattern = kRecoilGuardCrouch;
             break;
         }
         timer++;
@@ -2418,22 +2418,22 @@ void CMinagi::UpdatePattern()
             timer = 0;
             frame++;
             if (frame >= x8) {
-                pattern = 9;
+                pattern = kFall;
                 StartPattern();
             }
         }
         break;
-    case 0xab:
+    case kAirInstantCharge:
         if (frame == 0 && timer == 0) {
-            unk3138 = (int)(vx * 100.0);
-            unk313c = (int)(vy * 100.0);
+            m_patternVar1 = (int)(vx * 100.0);
+            m_patternVar2 = (int)(vy * 100.0);
             vx = 0.0;
             vy = 0.0;
-            if (unk120 == 1) {
-                m_proration = unk118 * 5.0 + m_proration;
+            if (m_rfBlue == 1) {
+                m_proration = m_rfGauge * 5.0 + m_proration;
             }
-            unk118 = 0.0;
-            unk14c = 0x5a;
+            m_rfGauge = 0.0;
+            m_freezeTime = 0x5a;
             FillBackground(0xb0, 3);
         }
         if (frame == 1 && timer == 0) {
@@ -2459,28 +2459,28 @@ void CMinagi::UpdatePattern()
             frame++;
             m_attackResult = 0;
             if (frame >= x8) {
-                pattern = 9;
-                vx = unk3138 * 0.01;
-                vy = unk313c * 0.01;
+                pattern = kFall;
+                vx = m_patternVar1 * 0.01;
+                vy = m_patternVar2 * 0.01;
                 ay = 0.035;
                 StartPattern();
             }
         }
         break;
-    case 0xb2:
+    case kDashStop:
         vx -= 0.03;
         vx = vx;
         if (vx < 0.0) {
             vx = 0.0;
-            unk158 = 0;
+            m_dashMomentum = 0;
         }
         if (m_inputY == -1 && frame > 0) {
-            pattern = 4;
+            pattern = kJump;
             if (m_inputX == facing) {
-                pattern = 5;
+                pattern = kJumpForward;
             }
             if (m_inputX == -facing) {
-                pattern = 6;
+                pattern = kJumpBack;
             }
             m_attackResult = 0;
             StartPattern();
@@ -2491,7 +2491,7 @@ void CMinagi::UpdatePattern()
             timer = 0;
             frame++;
             if (frame >= x8) {
-                pattern = 0;
+                pattern = kStand;
                 StartPattern();
                 break;
             }
@@ -2528,28 +2528,28 @@ void CMinagi::UpdatePattern()
             }
             if (frame >= x8) {
                 StartPattern();
-                pattern = 0;
+                pattern = kStand;
             }
         }
         break;
-    case 0xc8:
-        if (unk158 == 0) {
+    case k5A:
+        if (m_dashMomentum == 0) {
             vx = 0.0;
             vy = 0.0;
         }
-        if (vx > 0.0 && unk158 == 1) {
+        if (vx > 0.0 && m_dashMomentum == 1) {
             vx -= 0.06;
         } else {
             vx = 0.0;
-            unk158 = 0;
+            m_dashMomentum = 0;
         }
-        if (m_inputY == -1 && frame > 0 && unk15c < 3 && m_attackResult >= 2) {
-            pattern = 4;
+        if (m_inputY == -1 && frame > 0 && m_sealLevel < 3 && m_attackResult >= 2) {
+            pattern = kJump;
             if (m_inputX == facing) {
-                pattern = 5;
+                pattern = kJumpForward;
             }
             if (m_inputX == -facing) {
-                pattern = 6;
+                pattern = kJumpBack;
             }
             m_attackResult = 0;
             StartPattern();
@@ -2568,30 +2568,30 @@ void CMinagi::UpdatePattern()
                 m_attackResult = 0;
             }
             if (frame >= x8) {
-                pattern = 0;
+                pattern = kStand;
                 FaceOpponent();
                 StartPattern();
             }
         }
         break;
-    case 0xc9:
-        if (unk158 == 0) {
+    case k5BClose:
+        if (m_dashMomentum == 0) {
             vx = 0.0;
             vy = 0.0;
         }
-        if (vx > 0.0 && unk158 == 1) {
+        if (vx > 0.0 && m_dashMomentum == 1) {
             vx -= 0.03;
         } else {
             vx = 0.0;
-            unk158 = 0;
+            m_dashMomentum = 0;
         }
-        if (m_inputY == -1 && frame > 0 && unk15c < 3 && m_attackResult >= 2) {
-            pattern = 4;
+        if (m_inputY == -1 && frame > 0 && m_sealLevel < 3 && m_attackResult >= 2) {
+            pattern = kJump;
             if (m_inputX == facing) {
-                pattern = 5;
+                pattern = kJumpForward;
             }
             if (m_inputX == -facing) {
-                pattern = 6;
+                pattern = kJumpBack;
             }
             m_attackResult = 0;
             StartPattern();
@@ -2611,22 +2611,22 @@ void CMinagi::UpdatePattern()
                 m_attackResult = 0;
             }
             if (frame >= x8) {
-                pattern = 0;
+                pattern = kStand;
                 FaceOpponent();
                 StartPattern();
             }
         }
         break;
-    case 0xca:
-        if (unk158 == 0) {
+    case k5BFar:
+        if (m_dashMomentum == 0) {
             vx = 0.0;
             vy = 0.0;
         }
-        if (vx > 0.0 && unk158 == 1) {
+        if (vx > 0.0 && m_dashMomentum == 1) {
             vx -= 0.06;
         } else {
             vx = 0.0;
-            unk158 = 0;
+            m_dashMomentum = 0;
         }
         if (frame == 2 && timer == 0) {
             vx = 0.2;
@@ -2642,30 +2642,30 @@ void CMinagi::UpdatePattern()
                 m_attackResult = 0;
             }
             if (frame >= x8) {
-                pattern = 0;
+                pattern = kStand;
                 FaceOpponent();
                 StartPattern();
             }
         }
         break;
-    case 0xcb:
-        if (unk158 == 0) {
+    case k5C:
+        if (m_dashMomentum == 0) {
             vx = 0.0;
             vy = 0.0;
         }
-        if (vx > 0.0 && unk158 == 1) {
+        if (vx > 0.0 && m_dashMomentum == 1) {
             vx -= 0.06;
         } else {
             vx = 0.0;
-            unk158 = 0;
+            m_dashMomentum = 0;
         }
-        if (m_inputY == -1 && frame > 0 && unk15c < 3 && m_attackResult == 3) {
-            pattern = 4;
+        if (m_inputY == -1 && frame > 0 && m_sealLevel < 3 && m_attackResult == 3) {
+            pattern = kJump;
             if (m_inputX == facing) {
-                pattern = 5;
+                pattern = kJumpForward;
             }
             if (m_inputX == -facing) {
-                pattern = 6;
+                pattern = kJumpBack;
             }
             m_attackResult = 0;
             StartPattern();
@@ -2692,30 +2692,30 @@ void CMinagi::UpdatePattern()
                 m_attackResult = 0;
             }
             if (frame >= x8) {
-                pattern = 0;
+                pattern = kStand;
                 FaceOpponent();
                 StartPattern();
             }
         }
         break;
-    case 0xcc:
-        if (unk158 == 0) {
+    case k2A:
+        if (m_dashMomentum == 0) {
             vx = 0.0;
             vy = 0.0;
         }
-        if (vx > 0.0 && unk158 == 1) {
+        if (vx > 0.0 && m_dashMomentum == 1) {
             vx -= 0.03;
         } else {
             vx = 0.0;
-            unk158 = 0;
+            m_dashMomentum = 0;
         }
-        if (m_inputY == -1 && frame > 0 && unk15c < 3 && m_attackResult >= 2) {
-            pattern = 4;
+        if (m_inputY == -1 && frame > 0 && m_sealLevel < 3 && m_attackResult >= 2) {
+            pattern = kJump;
             if (m_inputX == facing) {
-                pattern = 5;
+                pattern = kJumpForward;
             }
             if (m_inputX == -facing) {
-                pattern = 6;
+                pattern = kJumpBack;
             }
             m_attackResult = 0;
             StartPattern();
@@ -2734,33 +2734,33 @@ void CMinagi::UpdatePattern()
                 m_attackResult = 0;
             }
             if (frame >= x8) {
-                pattern = 0;
+                pattern = kStand;
                 if (m_inputY == 1) {
-                    pattern = 3;
+                    pattern = kCrouch;
                 }
                 FaceOpponent();
                 StartPattern();
             }
         }
         break;
-    case 0xcd:
-        if (unk158 == 0) {
+    case k2B:
+        if (m_dashMomentum == 0) {
             vx = 0.0;
             vy = 0.0;
         }
-        if (vx > 0.0 && unk158 == 1) {
+        if (vx > 0.0 && m_dashMomentum == 1) {
             vx -= 0.03;
         } else {
             vx = 0.0;
-            unk158 = 0;
+            m_dashMomentum = 0;
         }
-        if (m_inputY == -1 && frame > 0 && unk15c < 3 && m_attackResult >= 2) {
-            pattern = 4;
+        if (m_inputY == -1 && frame > 0 && m_sealLevel < 3 && m_attackResult >= 2) {
+            pattern = kJump;
             if (m_inputX == facing) {
-                pattern = 5;
+                pattern = kJumpForward;
             }
             if (m_inputX == -facing) {
-                pattern = 6;
+                pattern = kJumpBack;
             }
             m_attackResult = 0;
             StartPattern();
@@ -2779,24 +2779,24 @@ void CMinagi::UpdatePattern()
                 m_attackResult = 0;
             }
             if (frame >= x8) {
-                pattern = 0;
+                pattern = kStand;
                 if (m_inputY == 1) {
-                    pattern = 3;
+                    pattern = kCrouch;
                 }
                 FaceOpponent();
                 StartPattern();
             }
         }
         break;
-    case 0xce:
-        if (unk158 == 0 && frame == 0 && timer == 0) {
+    case k2C:
+        if (m_dashMomentum == 0 && frame == 0 && timer == 0) {
             vx = 0.0;
             vy = 0.0;
         }
-        if (vx > 0.0 && unk158 == 1) {
+        if (vx > 0.0 && m_dashMomentum == 1) {
             vx -= 0.03;
         } else {
-            unk158 = 0;
+            m_dashMomentum = 0;
         }
         if (vx < 0.0) {
             vx = 0.0;
@@ -2804,10 +2804,10 @@ void CMinagi::UpdatePattern()
         if (frame == 1 && timer == 0) {
             m_hitsLeft = 1;
         }
-        if (frame == 3 && timer == 0 && unk3138 == 0) {
+        if (frame == 3 && timer == 0 && m_patternVar1 == 0) {
             m_gauge = m_gauge + 0x19;
             m_playSound = 0x14;
-            unk3138++;
+            m_patternVar1++;
         }
         timer++;
         if (timer >= l4) {
@@ -2817,25 +2817,25 @@ void CMinagi::UpdatePattern()
                 m_attackResult = 0;
             }
             if (frame >= x8) {
-                pattern = 0;
+                pattern = kStand;
                 if (m_inputY == 1) {
-                    pattern = 3;
+                    pattern = kCrouch;
                 }
                 FaceOpponent();
                 StartPattern();
             }
         }
         break;
-    case 0xcf:
+    case kJumpA:
         vy = vy + ay;
-        if (m_inputY == -1 && frame > 0 && unk15c < 3 && m_attackResult >= 2 && unk15a == 0) {
-            unk15a++;
-            pattern = 0xe;
+        if (m_inputY == -1 && frame > 0 && m_sealLevel < 3 && m_attackResult >= 2 && m_airActions == 0) {
+            m_airActions++;
+            pattern = kAirJump;
             if (m_inputX == facing) {
-                pattern = 0xf;
+                pattern = kAirJumpForward;
             }
             if (m_inputX == -facing) {
-                pattern = 0x10;
+                pattern = kAirJumpBack;
             }
             m_attackResult = 0;
             StartPattern();
@@ -2848,7 +2848,7 @@ void CMinagi::UpdatePattern()
         }
         if (y + vy >= 0.0) {
             y = 0.0;
-            pattern = 0xd;
+            pattern = kLand;
             StartPattern();
             break;
         }
@@ -2860,21 +2860,21 @@ void CMinagi::UpdatePattern()
                 m_attackResult = 0;
             }
             if (frame >= x8) {
-                pattern = 9;
+                pattern = kFall;
                 StartPattern();
             }
         }
         break;
-    case 0xd0:
+    case kJumpB:
         vy = vy + ay;
-        if (m_inputY == -1 && frame > 0 && unk15c < 3 && m_attackResult >= 2 && unk15a == 0) {
-            unk15a++;
-            pattern = 0xe;
+        if (m_inputY == -1 && frame > 0 && m_sealLevel < 3 && m_attackResult >= 2 && m_airActions == 0) {
+            m_airActions++;
+            pattern = kAirJump;
             if (m_inputX == facing) {
-                pattern = 0xf;
+                pattern = kAirJumpForward;
             }
             if (m_inputX == -facing) {
-                pattern = 0x10;
+                pattern = kAirJumpBack;
             }
             m_attackResult = 0;
             StartPattern();
@@ -2887,7 +2887,7 @@ void CMinagi::UpdatePattern()
         }
         if (y + vy >= 0.0) {
             y = 0.0;
-            pattern = 0xd;
+            pattern = kLand;
             StartPattern();
             break;
         }
@@ -2899,21 +2899,21 @@ void CMinagi::UpdatePattern()
                 m_attackResult = 0;
             }
             if (frame >= x8) {
-                pattern = 9;
+                pattern = kFall;
                 StartPattern();
             }
         }
         break;
-    case 0xd1:
+    case kJumpC:
         vy = vy + ay;
-        if (m_inputY == -1 && frame > 0 && unk15c < 3 && m_attackResult >= 2 && unk15a == 0) {
-            unk15a++;
-            pattern = 0xe;
+        if (m_inputY == -1 && frame > 0 && m_sealLevel < 3 && m_attackResult >= 2 && m_airActions == 0) {
+            m_airActions++;
+            pattern = kAirJump;
             if (m_inputX == facing) {
-                pattern = 0xf;
+                pattern = kAirJumpForward;
             }
             if (m_inputX == -facing) {
-                pattern = 0x10;
+                pattern = kAirJumpBack;
             }
             m_attackResult = 0;
             StartPattern();
@@ -2926,7 +2926,7 @@ void CMinagi::UpdatePattern()
         }
         if (y + vy >= 0.0) {
             y = 0.0;
-            pattern = 0xd;
+            pattern = kLand;
             StartPattern();
             break;
         }
@@ -2938,12 +2938,12 @@ void CMinagi::UpdatePattern()
                 m_attackResult = 0;
             }
             if (frame >= x8) {
-                pattern = 9;
+                pattern = kFall;
                 StartPattern();
             }
         }
         break;
-    case 0xd2:
+    case kUnusedHopAttack:
         if (frame == 0 && timer == 0) {
             vx = 0.0;
             vy = 0.0;
@@ -2979,20 +2979,20 @@ void CMinagi::UpdatePattern()
                 }
             }
             if (frame >= x8) {
-                pattern = 0;
+                pattern = kStand;
                 FaceOpponent();
                 StartPattern();
             }
         }
         break;
     case 0xd3:
-        if (m_inputY == -1 && frame > 0 && unk15c < 3 && m_attackResult >= 2) {
-            pattern = 4;
+        if (m_inputY == -1 && frame > 0 && m_sealLevel < 3 && m_attackResult >= 2) {
+            pattern = kJump;
             if (m_inputX == facing) {
-                pattern = 5;
+                pattern = kJumpForward;
             }
             if (m_inputX == -facing) {
-                pattern = 6;
+                pattern = kJumpBack;
             }
             m_attackResult = 0;
             StartPattern();
@@ -3013,13 +3013,13 @@ void CMinagi::UpdatePattern()
             frame++;
             m_attackResult = 0;
             if (frame >= x8) {
-                pattern = 0;
+                pattern = kStand;
                 FaceOpponent();
                 StartPattern();
             }
         }
         break;
-    case 0xd4:
+    case kUnusedAirDive:
         vy = vy + ay;
         if (frame == 0 && timer == 0) {
             m_gauge = m_gauge + 0x1e;
@@ -3029,7 +3029,7 @@ void CMinagi::UpdatePattern()
             ay = 0.07;
         }
         if (m_attackResult > 1) {
-            pattern = 0xd5;
+            pattern = kUnusedAirDiveRebound;
             StartPattern();
             StopMoving();
             break;
@@ -3043,9 +3043,9 @@ void CMinagi::UpdatePattern()
             l50.y = (double)(int)y;
             l50.scale = 2;
             l50.layer = 0;
-            l50.unk2c = 7;
+            l50.sound = 7;
             m_game->CreateEffect((EffectDesc*)&l50);
-            pattern = 0xd6;
+            pattern = kUnusedAirDiveLanding;
             StartPattern();
             break;
         }
@@ -3059,7 +3059,7 @@ void CMinagi::UpdatePattern()
             }
         }
         break;
-    case 0xd5:
+    case kUnusedAirDiveRebound:
         ay = 0.042;
         vy = vy + ay;
         if (frame == 0 && timer == 0) {
@@ -3072,12 +3072,12 @@ void CMinagi::UpdatePattern()
             frame++;
             m_attackResult = 0;
             if (frame >= x8) {
-                pattern = 9;
+                pattern = kFall;
                 StartPattern();
             }
         }
         break;
-    case 0xd6:
+    case kUnusedAirDiveLanding:
         vx = 0.0;
         vy = 0.0;
         if (frame == 0 && timer == 0) {
@@ -3087,7 +3087,7 @@ void CMinagi::UpdatePattern()
             l50.y = (double)(int)y;
             l50.scale = 2;
             l50.layer = 0;
-            l50.unk2c = 7;
+            l50.sound = 7;
             m_game->CreateEffect((EffectDesc*)&l50);
         }
         timer++;
@@ -3096,16 +3096,16 @@ void CMinagi::UpdatePattern()
             frame++;
             m_attackResult = 0;
             if (frame >= x8) {
-                pattern = 7;
+                pattern = kStandUp;
                 if (m_inputY == 1) {
-                    pattern = 3;
+                    pattern = kCrouch;
                 }
                 FaceOpponent();
                 StartPattern();
             }
         }
         break;
-    case 0xdc:
+    case kThrow:
         vx = 0.0;
         vy = 0.0;
         if (frame == 1 && timer == 0 && (*m_opponent)->y == 0.0) {
@@ -3120,8 +3120,8 @@ void CMinagi::UpdatePattern()
             StopMoving();
             (*m_opponent)->StopMoving();
             (*m_opponent)->StartPattern();
-            pattern = 0xdd;
-            (*m_opponent)->unk128 = 1;
+            pattern = kThrowHit;
+            (*m_opponent)->m_noAirRecovery = 1;
             break;
         }
         timer++;
@@ -3130,16 +3130,16 @@ void CMinagi::UpdatePattern()
             frame++;
             m_attackResult = 0;
             if (frame >= x8) {
-                pattern = 0;
+                pattern = kStand;
                 if (m_inputY == 1) {
-                    pattern = 3;
+                    pattern = kCrouch;
                 }
                 FaceOpponent();
                 StartPattern();
             }
         }
         break;
-    case 0xdd:
+    case kThrowHit:
         if (frame == 4 && timer == 0) {
             DealDamage(0x4e2, 750.0);
         }
@@ -3152,15 +3152,15 @@ void CMinagi::UpdatePattern()
                 m_hitsLeft = 1;
             }
             if (frame >= x8) {
-                pattern = 0;
+                pattern = kStand;
                 FaceOpponent();
                 StartPattern();
             }
         }
         break;
-    case 0xe6:
+    case kDashA:
         StartAfterimages(3);
-        unk158 = 0;
+        m_dashMomentum = 0;
         vx -= 0.03;
         if (vx < 0.0) {
             vx = 0.0;
@@ -3182,14 +3182,14 @@ void CMinagi::UpdatePattern()
                 m_attackResult = 0;
             }
             if (frame >= x8) {
-                pattern = 0;
+                pattern = kStand;
                 StartPattern();
             }
         }
         break;
-    case 0xe7:
+    case kDashB:
         StartAfterimages(3);
-        unk158 = 0;
+        m_dashMomentum = 0;
         vx -= 0.03;
         if (vx < 0.0) {
             vx = 0.0;
@@ -3211,14 +3211,14 @@ void CMinagi::UpdatePattern()
                 m_attackResult = 0;
             }
             if (frame >= x8) {
-                pattern = 0;
+                pattern = kStand;
                 StartPattern();
             }
         }
         break;
-    case 0xe8:
+    case kDashC:
         StartAfterimages(3);
-        unk158 = 0;
+        m_dashMomentum = 0;
         vx -= 0.03;
         if (vx < 0.0) {
             vx = 0.0;
@@ -3240,15 +3240,15 @@ void CMinagi::UpdatePattern()
                 m_attackResult = 0;
             }
             if (frame >= x8) {
-                pattern = 0;
+                pattern = kStand;
                 StartPattern();
             }
         }
         break;
-    case 0xe9:
+    case kDash2A:
         StartAfterimages(3);
         vx -= 0.03;
-        unk158 = 0;
+        m_dashMomentum = 0;
         if (vx < 0.0) {
             vx = 0.0;
         }
@@ -3269,15 +3269,15 @@ void CMinagi::UpdatePattern()
                 m_attackResult = 0;
             }
             if (frame >= x8) {
-                pattern = 3;
+                pattern = kCrouch;
                 StartPattern();
             }
         }
         break;
-    case 0xea:
+    case kDash2B:
         StartAfterimages(3);
         vx -= 0.03;
-        unk158 = 0;
+        m_dashMomentum = 0;
         if (vx < 0.0) {
             vx = 0.0;
         }
@@ -3298,25 +3298,25 @@ void CMinagi::UpdatePattern()
                 m_attackResult = 0;
             }
             if (frame >= x8) {
-                pattern = 3;
+                pattern = kCrouch;
                 StartPattern();
             }
         }
         break;
-    case 0xeb:
+    case kDash2C:
         StartAfterimages(3);
-        unk158 = 0;
+        m_dashMomentum = 0;
         vx -= 0.03;
         if (vx < 0.0) {
             vx = 0.0;
         }
-        if (m_inputY == -1 && frame > 0 && unk15c < 3 && m_attackResult == 3) {
-            pattern = 4;
+        if (m_inputY == -1 && frame > 0 && m_sealLevel < 3 && m_attackResult == 3) {
+            pattern = kJump;
             if (m_inputX == facing) {
-                pattern = 5;
+                pattern = kJumpForward;
             }
             if (m_inputX == -facing) {
-                pattern = 6;
+                pattern = kJumpBack;
             }
             m_attackResult = 0;
             StartPattern();
@@ -3339,20 +3339,20 @@ void CMinagi::UpdatePattern()
                 m_attackResult = 0;
             }
             if (frame >= x8) {
-                pattern = 0;
+                pattern = kStand;
                 StartPattern();
             }
         }
         break;
-    case 0xf8:
+    case kAirThrow:
         vy = vy + ay;
         if (frame == 1 && m_attackResult == 3) {
             (*m_opponent)->StopMoving();
             (*m_opponent)->StartPattern();
             StartPattern();
             StopMoving();
-            pattern = 0xf9;
-            (*m_opponent)->pattern = 0x64;
+            pattern = kAirThrowHit;
+            (*m_opponent)->pattern = kThrownStandHigh;
             l50.type = 0;
             l50.x = (double)((int)x + (facing << 5));
             l50.y = (double)((int)y - 0x3e);
@@ -3366,24 +3366,24 @@ void CMinagi::UpdatePattern()
         if (timer >= l4) {
             timer = 0;
             frame++;
-            if (frame == 1 && (*m_opponent)->y < 0.0 && ((*m_opponent)->pattern < 0x32 || (*m_opponent)->pattern > 0x95)) {
+            if (frame == 1 && (*m_opponent)->y < 0.0 && ((*m_opponent)->pattern < kFirstHitReaction || (*m_opponent)->pattern > kLastHitReaction)) {
                 m_hitsLeft = 1;
             } else {
                 m_hitsLeft = 0;
             }
             m_attackResult = 0;
             if (frame >= x8) {
-                pattern = 0xd1;
+                pattern = kJumpC;
                 frame = 2;
             }
         }
         break;
-    case 0xf9:
+    case kAirThrowHit:
         if (frame < 8) {
-            Unk410a40(0x32, 3);
+            FocusCameraX(0x32, 3);
         }
         if (frame < 8) {
-            Unk410a80(0x32, 3);
+            FocusCameraY(0x32, 3);
         }
         if (frame == 0 && timer == 1) {
             (*m_opponent)->facing = -facing;
@@ -3393,7 +3393,7 @@ void CMinagi::UpdatePattern()
             StopMoving();
             y = 0.0;
             StartPattern();
-            pattern = 0xd;
+            pattern = kLand;
             break;
         }
         if (frame == 8 && timer == 0) {
@@ -3405,7 +3405,7 @@ void CMinagi::UpdatePattern()
             frame++;
             if (frame == 2) {
                 (*m_opponent)->StartPattern();
-                (*m_opponent)->pattern = 0x79;
+                (*m_opponent)->pattern = kThrownHidden;
             }
             if (frame == 6) {
                 l50.type = 0x1c5;
@@ -3414,7 +3414,7 @@ void CMinagi::UpdatePattern()
                 l50.facing = facing;
                 l50.layer = 1;
                 l50.scale = 0;
-                l50.unk0 = 1;
+                l50.keep = 1;
                 SpawnObject(&l50);
             }
             m_attackResult = 0;
@@ -3423,9 +3423,9 @@ void CMinagi::UpdatePattern()
             }
         }
         break;
-    case 0xfa:
+    case k5D:
         if (frame == 0 && timer == 0) {
-            unk158 = 0;
+            m_dashMomentum = 0;
             vx = 0.0;
             vy = 0.0;
         }
@@ -3435,14 +3435,14 @@ void CMinagi::UpdatePattern()
             frame++;
             m_attackResult = 3;
             if (frame >= x8) {
-                pattern = 0;
+                pattern = kStand;
                 StartPattern();
             }
         }
         break;
-    case 0xfb:
+    case kDRight:
         if (frame == 0 && timer == 0) {
-            unk158 = 0;
+            m_dashMomentum = 0;
             vx = 0.0;
             vy = 0.0;
         }
@@ -3452,14 +3452,14 @@ void CMinagi::UpdatePattern()
             frame++;
             m_attackResult = 3;
             if (frame >= x8) {
-                pattern = 0;
+                pattern = kStand;
                 StartPattern();
             }
         }
         break;
-    case 0xfc:
+    case kDLeft:
         if (frame == 0 && timer == 0) {
-            unk158 = 0;
+            m_dashMomentum = 0;
             vx = 0.0;
             vy = 0.0;
         }
@@ -3469,14 +3469,14 @@ void CMinagi::UpdatePattern()
             frame++;
             m_attackResult = 3;
             if (frame >= x8) {
-                pattern = 0;
+                pattern = kStand;
                 StartPattern();
             }
         }
         break;
-    case 0xfd:
+    case k236A:
         if (frame == 0 && timer == 0) {
-            unk158 = 0;
+            m_dashMomentum = 0;
             vx = 0.0;
             vy = 0.0;
         }
@@ -3486,14 +3486,14 @@ void CMinagi::UpdatePattern()
             frame++;
             m_attackResult = 3;
             if (frame >= x8) {
-                pattern = 0;
+                pattern = kStand;
                 StartPattern();
             }
         }
         break;
-    case 0xfe:
+    case k236B:
         if (frame == 0 && timer == 0) {
-            unk158 = 0;
+            m_dashMomentum = 0;
             vx = 0.0;
             vy = 0.0;
         }
@@ -3503,27 +3503,27 @@ void CMinagi::UpdatePattern()
             frame++;
             m_attackResult = 3;
             if (frame >= x8) {
-                pattern = 0;
+                pattern = kStand;
                 StartPattern();
             }
         }
         break;
-    case 0xff:
+    case k236C:
         if (frame == 0 && timer == 0) {
-            unk158 = 0;
+            m_dashMomentum = 0;
             vx = 0.0;
             vy = 0.0;
             l50.type = 0x21;
-            l50.unk2c = 0xb;
+            l50.sound = 0xb;
             l50.x = (double)((int)x - facing * 0x11);
             l50.y = (double)((int)y - 0x38);
             l50.scale = 2;
             l50.layer = 1;
             m_game->CreateEffect((EffectDesc*)&l50);
-            if (unk120 == 0) {
-                unk118 -= 500.0;
+            if (m_rfBlue == 0) {
+                m_rfGauge -= 500.0;
             } else {
-                unk118 -= 250.0;
+                m_rfGauge -= 250.0;
             }
         }
         timer++;
@@ -3532,14 +3532,14 @@ void CMinagi::UpdatePattern()
             frame++;
             m_attackResult = 3;
             if (frame >= x8) {
-                pattern = 0;
+                pattern = kStand;
                 StartPattern();
             }
         }
         break;
-    case 0x100:
+    case k421A:
         if (frame == 0 && timer == 0) {
-            unk158 = 0;
+            m_dashMomentum = 0;
             vx = 0.0;
             vy = 0.0;
         }
@@ -3549,14 +3549,14 @@ void CMinagi::UpdatePattern()
             frame++;
             m_attackResult = 3;
             if (frame >= x8) {
-                pattern = 0;
+                pattern = kStand;
                 StartPattern();
             }
         }
         break;
-    case 0x101:
+    case k421B:
         if (frame == 0 && timer == 0) {
-            unk158 = 0;
+            m_dashMomentum = 0;
             vx = 0.0;
             vy = 0.0;
         }
@@ -3566,27 +3566,27 @@ void CMinagi::UpdatePattern()
             frame++;
             m_attackResult = 3;
             if (frame >= x8) {
-                pattern = 0;
+                pattern = kStand;
                 StartPattern();
             }
         }
         break;
-    case 0x102:
+    case k421C:
         if (frame == 0 && timer == 0) {
-            unk158 = 0;
+            m_dashMomentum = 0;
             vx = 0.0;
             vy = 0.0;
             l50.type = 0x21;
-            l50.unk2c = 0xb;
+            l50.sound = 0xb;
             l50.x = (double)((int)x - facing * 0x11);
             l50.y = (double)((int)y - 0x38);
             l50.scale = 2;
             l50.layer = 1;
             m_game->CreateEffect((EffectDesc*)&l50);
-            if (unk120 == 0) {
-                unk118 -= 500.0;
+            if (m_rfBlue == 0) {
+                m_rfGauge -= 500.0;
             } else {
-                unk118 -= 250.0;
+                m_rfGauge -= 250.0;
             }
         }
         timer++;
@@ -3595,14 +3595,14 @@ void CMinagi::UpdatePattern()
             frame++;
             m_attackResult = 3;
             if (frame >= x8) {
-                pattern = 0;
+                pattern = kStand;
                 StartPattern();
             }
         }
         break;
-    case 0x103:
+    case k214A:
         if (frame == 0 && timer == 0) {
-            unk158 = 0;
+            m_dashMomentum = 0;
             vx = 0.0;
             vy = 0.0;
         }
@@ -3612,14 +3612,14 @@ void CMinagi::UpdatePattern()
             frame++;
             m_attackResult = 3;
             if (frame >= x8) {
-                pattern = 0;
+                pattern = kStand;
                 StartPattern();
             }
         }
         break;
-    case 0x104:
+    case k214B:
         if (frame == 0 && timer == 0) {
-            unk158 = 0;
+            m_dashMomentum = 0;
             vx = 0.0;
             vy = 0.0;
         }
@@ -3629,27 +3629,27 @@ void CMinagi::UpdatePattern()
             frame++;
             m_attackResult = 3;
             if (frame >= x8) {
-                pattern = 0;
+                pattern = kStand;
                 StartPattern();
             }
         }
         break;
-    case 0x105:
+    case k214C:
         if (frame == 0 && timer == 0) {
-            unk158 = 0;
+            m_dashMomentum = 0;
             vx = 0.0;
             vy = 0.0;
             l50.type = 0x21;
-            l50.unk2c = 0xb;
+            l50.sound = 0xb;
             l50.x = (double)((int)x - facing * 0x11);
             l50.y = (double)((int)y - 0x38);
             l50.scale = 2;
             l50.layer = 1;
             m_game->CreateEffect((EffectDesc*)&l50);
-            if (unk120 == 0) {
-                unk118 -= 500.0;
+            if (m_rfBlue == 0) {
+                m_rfGauge -= 500.0;
             } else {
-                unk118 -= 250.0;
+                m_rfGauge -= 250.0;
             }
         }
         timer++;
@@ -3658,12 +3658,12 @@ void CMinagi::UpdatePattern()
             frame++;
             m_attackResult = 3;
             if (frame >= x8) {
-                pattern = 0;
+                pattern = kStand;
                 StartPattern();
             }
         }
         break;
-    case 0x106:
+    case k41236A:
         if (frame == 0 && timer == 0) {
             StopMoving();
         }
@@ -3679,17 +3679,17 @@ void CMinagi::UpdatePattern()
                 l50.y = y - 54.0;
                 l50.facing = facing;
                 l50.layer = 1;
-                l50.unk0 = 1;
-                unk314c++;
+                l50.keep = 1;
+                m_shotState++;
                 SpawnObject(&l50);
             }
             if (frame >= x8) {
-                pattern = 0;
+                pattern = kStand;
                 StartPattern();
             }
         }
         break;
-    case 0x107:
+    case k41236B:
         if (frame == 0 && timer == 0) {
             StopMoving();
         }
@@ -3705,32 +3705,32 @@ void CMinagi::UpdatePattern()
                 l50.y = y - 54.0;
                 l50.facing = facing;
                 l50.layer = 1;
-                l50.unk0 = 1;
-                unk314c++;
+                l50.keep = 1;
+                m_shotState++;
                 SpawnObject(&l50);
             }
             if (frame >= x8) {
-                pattern = 0;
+                pattern = kStand;
                 StartPattern();
             }
         }
         break;
-    case 0x108:
+    case k41236C:
         if (frame == 0 && timer == 0) {
-            unk158 = 0;
+            m_dashMomentum = 0;
             vx = 0.0;
             vy = 0.0;
             l50.type = 0x21;
-            l50.unk2c = 0xb;
+            l50.sound = 0xb;
             l50.x = (double)((int)x - facing * 0xa);
             l50.y = (double)((int)y - 0x38);
             l50.scale = 2;
             l50.layer = 1;
             m_game->CreateEffect((EffectDesc*)&l50);
-            if (unk120 == 0) {
-                unk118 -= 500.0;
+            if (m_rfBlue == 0) {
+                m_rfGauge -= 500.0;
             } else {
-                unk118 -= 250.0;
+                m_rfGauge -= 250.0;
             }
         }
         timer++;
@@ -3745,21 +3745,21 @@ void CMinagi::UpdatePattern()
                 l50.y = y - 54.0;
                 l50.facing = facing;
                 l50.layer = 1;
-                l50.unk0 = 1;
+                l50.keep = 1;
                 SpawnObject(&l50);
-                unk314c = 1;
-                l50.unk0 = 1;
+                m_shotState = 1;
+                l50.keep = 1;
                 l50.type = 0x1b0;
                 l50.scale = 2;
                 SpawnObject(&l50);
             }
             if (frame >= x8) {
-                pattern = 0;
+                pattern = kStand;
                 StartPattern();
             }
         }
         break;
-    case 0x109:
+    case kAir236A:
         if (frame == 0 && timer == 0) {
             StopMoving();
         }
@@ -3769,15 +3769,15 @@ void CMinagi::UpdatePattern()
             frame++;
             m_attackResult = 3;
             if (frame >= x8) {
-                pattern = 9;
-                unk159 = 1;
-                unk15a++;
+                pattern = kFall;
+                m_airDashes = 1;
+                m_airActions++;
                 ay = 0.035;
                 StartPattern();
             }
         }
         break;
-    case 0x10a:
+    case kAir236B:
         if (frame == 0 && timer == 0) {
             StopMoving();
         }
@@ -3787,28 +3787,28 @@ void CMinagi::UpdatePattern()
             frame++;
             m_attackResult = 3;
             if (frame >= x8) {
-                pattern = 9;
-                unk159 = 1;
-                unk15a++;
+                pattern = kFall;
+                m_airDashes = 1;
+                m_airActions++;
                 ay = 0.035;
                 StartPattern();
             }
         }
         break;
-    case 0x10b:
+    case kAir236C:
         if (frame == 0 && timer == 0) {
             StopMoving();
             l50.type = 0x21;
-            l50.unk2c = 0xb;
+            l50.sound = 0xb;
             l50.x = (double)((int)x - facing * 0xa);
             l50.y = (double)((int)y - 0x38);
             l50.scale = 2;
             l50.layer = 1;
             m_game->CreateEffect((EffectDesc*)&l50);
-            if (unk120 == 0) {
-                unk118 -= 500.0;
+            if (m_rfBlue == 0) {
+                m_rfGauge -= 500.0;
             } else {
-                unk118 -= 250.0;
+                m_rfGauge -= 250.0;
             }
         }
         timer++;
@@ -3817,9 +3817,9 @@ void CMinagi::UpdatePattern()
             frame++;
             m_attackResult = 3;
             if (frame >= x8) {
-                pattern = 9;
-                unk159 = 1;
-                unk15a++;
+                pattern = kFall;
+                m_airDashes = 1;
+                m_airActions++;
                 ay = 0.035;
                 StartPattern();
             }
@@ -3846,12 +3846,12 @@ void CMinagi::UpdatePattern()
                 frame = frame - 2;
             }
             if (frame >= x8) {
-                pattern = 0;
+                pattern = kStand;
                 StartPattern();
             }
         }
         break;
-    case 0x10d:
+    case kAir421A:
         if (frame == 0 && timer == 0) {
             StopMoving();
         }
@@ -3861,15 +3861,15 @@ void CMinagi::UpdatePattern()
             frame++;
             m_attackResult = 3;
             if (frame >= x8) {
-                pattern = 9;
-                unk159 = 1;
-                unk15a++;
+                pattern = kFall;
+                m_airDashes = 1;
+                m_airActions++;
                 ay = 0.035;
                 StartPattern();
             }
         }
         break;
-    case 0x10e:
+    case kAir421B:
         if (frame == 0 && timer == 0) {
             StopMoving();
         }
@@ -3879,28 +3879,28 @@ void CMinagi::UpdatePattern()
             frame++;
             m_attackResult = 3;
             if (frame >= x8) {
-                pattern = 9;
-                unk159 = 1;
-                unk15a++;
+                pattern = kFall;
+                m_airDashes = 1;
+                m_airActions++;
                 ay = 0.035;
                 StartPattern();
             }
         }
         break;
-    case 0x10f:
+    case kAir421C:
         if (frame == 0 && timer == 0) {
             StopMoving();
             l50.type = 0x21;
-            l50.unk2c = 0xb;
+            l50.sound = 0xb;
             l50.x = (double)((int)x - facing * 0xa);
             l50.y = (double)((int)y - 0x38);
             l50.scale = 2;
             l50.layer = 1;
             m_game->CreateEffect((EffectDesc*)&l50);
-            if (unk120 == 0) {
-                unk118 -= 500.0;
+            if (m_rfBlue == 0) {
+                m_rfGauge -= 500.0;
             } else {
-                unk118 -= 250.0;
+                m_rfGauge -= 250.0;
             }
         }
         timer++;
@@ -3909,15 +3909,15 @@ void CMinagi::UpdatePattern()
             frame++;
             m_attackResult = 3;
             if (frame >= x8) {
-                pattern = 9;
-                unk159 = 1;
-                unk15a++;
+                pattern = kFall;
+                m_airDashes = 1;
+                m_airActions++;
                 ay = 0.035;
                 StartPattern();
             }
         }
         break;
-    case 0x110:
+    case kAir214A:
         if (frame == 0 && timer == 0) {
             StopMoving();
         }
@@ -3927,15 +3927,15 @@ void CMinagi::UpdatePattern()
             frame++;
             m_attackResult = 3;
             if (frame >= x8) {
-                pattern = 9;
-                unk159 = 1;
-                unk15a++;
+                pattern = kFall;
+                m_airDashes = 1;
+                m_airActions++;
                 ay = 0.035;
                 StartPattern();
             }
         }
         break;
-    case 0x111:
+    case kAir214B:
         if (frame == 0 && timer == 0) {
             StopMoving();
         }
@@ -3945,28 +3945,28 @@ void CMinagi::UpdatePattern()
             frame++;
             m_attackResult = 3;
             if (frame >= x8) {
-                pattern = 9;
-                unk159 = 1;
-                unk15a++;
+                pattern = kFall;
+                m_airDashes = 1;
+                m_airActions++;
                 ay = 0.035;
                 StartPattern();
             }
         }
         break;
-    case 0x112:
+    case kAir214C:
         if (frame == 0 && timer == 0) {
             StopMoving();
             l50.type = 0x21;
-            l50.unk2c = 0xb;
+            l50.sound = 0xb;
             l50.x = (double)((int)x - facing * 0xa);
             l50.y = (double)((int)y - 0x38);
             l50.scale = 2;
             l50.layer = 1;
             m_game->CreateEffect((EffectDesc*)&l50);
-            if (unk120 == 0) {
-                unk118 -= 500.0;
+            if (m_rfBlue == 0) {
+                m_rfGauge -= 500.0;
             } else {
-                unk118 -= 250.0;
+                m_rfGauge -= 250.0;
             }
         }
         timer++;
@@ -3975,17 +3975,17 @@ void CMinagi::UpdatePattern()
             frame++;
             m_attackResult = 3;
             if (frame >= x8) {
-                pattern = 9;
-                unk159 = 1;
-                unk15a++;
+                pattern = kFall;
+                m_airDashes = 1;
+                m_airActions++;
                 ay = 0.035;
                 StartPattern();
             }
         }
         break;
-    case 0x113:
+    case k623A:
         if (frame == 0 && timer == 0) {
-            unk158 = 0;
+            m_dashMomentum = 0;
             vx = 0.0;
             vy = 0.0;
         }
@@ -3995,14 +3995,14 @@ void CMinagi::UpdatePattern()
             frame++;
             m_attackResult = 3;
             if (frame >= x8) {
-                pattern = 0;
+                pattern = kStand;
                 StartPattern();
             }
         }
         break;
-    case 0x114:
+    case k623B:
         if (frame == 0 && timer == 0) {
-            unk158 = 0;
+            m_dashMomentum = 0;
             vx = 0.0;
             vy = 0.0;
         }
@@ -4012,27 +4012,27 @@ void CMinagi::UpdatePattern()
             frame++;
             m_attackResult = 3;
             if (frame >= x8) {
-                pattern = 0;
+                pattern = kStand;
                 StartPattern();
             }
         }
         break;
-    case 0x115:
+    case k623C:
         if (frame == 0 && timer == 0) {
-            unk158 = 0;
+            m_dashMomentum = 0;
             vx = 0.0;
             vy = 0.0;
             l50.type = 0x21;
-            l50.unk2c = 0xb;
+            l50.sound = 0xb;
             l50.x = (double)((int)x - facing * 0x11);
             l50.y = (double)((int)y - 0x38);
             l50.scale = 2;
             l50.layer = 1;
             m_game->CreateEffect((EffectDesc*)&l50);
-            if (unk120 == 0) {
-                unk118 -= 500.0;
+            if (m_rfBlue == 0) {
+                m_rfGauge -= 500.0;
             } else {
-                unk118 -= 250.0;
+                m_rfGauge -= 250.0;
             }
         }
         timer++;
@@ -4041,26 +4041,26 @@ void CMinagi::UpdatePattern()
             frame++;
             m_attackResult = 3;
             if (frame >= x8) {
-                pattern = 0;
+                pattern = kStand;
                 StartPattern();
             }
         }
         break;
-    case 0x12c:
+    case k236236A:
         if (frame == 0 && timer == 0) {
             StopMoving();
         }
         if (frame == 2 && timer == 3) {
             StopMoving();
-            unk14c = 0x78;
+            m_freezeTime = 0x78;
             m_gauge = m_gauge - 0x3e8;
             FillBackground(0xb0, 3);
             l50.type = 0x44;
-            l50.unk2c = 0x13;
+            l50.sound = 0x13;
             l50.x = (double)(int)x;
             l50.y = (double)((int)y - 0x28);
             l50.scale = 2;
-            l50.unk0 = 1;
+            l50.keep = 1;
             l50.layer = 1;
             m_game->CreateEffect((EffectDesc*)&l50);
         }
@@ -4070,27 +4070,27 @@ void CMinagi::UpdatePattern()
             frame++;
             m_attackResult = 0;
             if (frame >= x8) {
-                pattern = 0;
+                pattern = kStand;
                 FaceOpponent();
                 StartPattern();
             }
         }
         break;
-    case 0x12d:
+    case k236236B:
         if (frame == 0 && timer == 0) {
             StopMoving();
         }
         if (frame == 2 && timer == 3) {
             StopMoving();
-            unk14c = 0x78;
+            m_freezeTime = 0x78;
             m_gauge = m_gauge - 0x7d0;
             FillBackground(0xb0, 3);
             l50.type = 0x45;
-            l50.unk2c = 5;
+            l50.sound = 5;
             l50.x = (double)(int)x;
             l50.y = (double)((int)y - 0x28);
             l50.scale = 2;
-            l50.unk0 = 1;
+            l50.keep = 1;
             l50.layer = 1;
             m_game->CreateEffect((EffectDesc*)&l50);
         }
@@ -4100,27 +4100,27 @@ void CMinagi::UpdatePattern()
             frame++;
             m_attackResult = 0;
             if (frame >= x8) {
-                pattern = 0;
+                pattern = kStand;
                 FaceOpponent();
                 StartPattern();
             }
         }
         break;
-    case 0x12e:
+    case k236236C:
         if (frame == 0 && timer == 0) {
             StopMoving();
         }
         if (frame == 2 && timer == 3) {
             StopMoving();
-            unk14c = 0x78;
+            m_freezeTime = 0x78;
             m_gauge = m_gauge - 0xbb8;
             FillBackground(0xb0, 3);
             l50.type = 0x46;
-            l50.unk2c = 0x40;
+            l50.sound = 0x40;
             l50.x = (double)(int)x;
             l50.y = (double)((int)y - 0x28);
             l50.scale = 2;
-            l50.unk0 = 1;
+            l50.keep = 1;
             l50.layer = 1;
             m_game->CreateEffect((EffectDesc*)&l50);
             m_playSound = 0x25;
@@ -4131,27 +4131,27 @@ void CMinagi::UpdatePattern()
             frame++;
             m_attackResult = 0;
             if (frame >= x8) {
-                pattern = 0;
+                pattern = kStand;
                 FaceOpponent();
                 StartPattern();
             }
         }
         break;
-    case 0x12f:
+    case k214214A:
         if (frame == 0 && timer == 0) {
             StopMoving();
         }
         if (frame == 2 && timer == 0) {
             StopMoving();
-            unk14c = 0x78;
+            m_freezeTime = 0x78;
             m_gauge = m_gauge - 0x3e8;
             FillBackground(0xb0, 3);
             l50.type = 0x44;
-            l50.unk2c = 0x13;
+            l50.sound = 0x13;
             l50.x = (double)(int)x;
             l50.y = (double)((int)y - 0x28);
             l50.scale = 2;
-            l50.unk0 = 1;
+            l50.keep = 1;
             l50.layer = 1;
             m_game->CreateEffect((EffectDesc*)&l50);
         }
@@ -4161,27 +4161,27 @@ void CMinagi::UpdatePattern()
             frame++;
             m_attackResult = 0;
             if (frame >= x8) {
-                pattern = 0;
+                pattern = kStand;
                 FaceOpponent();
                 StartPattern();
             }
         }
         break;
-    case 0x130:
+    case k214214B:
         if (frame == 0 && timer == 0) {
             StopMoving();
         }
         if (frame == 2 && timer == 0) {
             StopMoving();
-            unk14c = 0x78;
+            m_freezeTime = 0x78;
             m_gauge = m_gauge - 0x7d0;
             FillBackground(0xb0, 3);
             l50.type = 0x45;
-            l50.unk2c = 5;
+            l50.sound = 5;
             l50.x = (double)(int)x;
             l50.y = (double)((int)y - 0x28);
             l50.scale = 2;
-            l50.unk0 = 1;
+            l50.keep = 1;
             l50.layer = 1;
             m_game->CreateEffect((EffectDesc*)&l50);
         }
@@ -4191,27 +4191,27 @@ void CMinagi::UpdatePattern()
             frame++;
             m_attackResult = 0;
             if (frame >= x8) {
-                pattern = 0;
+                pattern = kStand;
                 FaceOpponent();
                 StartPattern();
             }
         }
         break;
-    case 0x131:
+    case k214214C:
         if (frame == 0 && timer == 0) {
             StopMoving();
         }
         if (frame == 2 && timer == 0) {
             StopMoving();
-            unk14c = 0x78;
+            m_freezeTime = 0x78;
             m_gauge = m_gauge - 0xbb8;
             FillBackground(0xb0, 3);
             l50.type = 0x46;
-            l50.unk2c = 0x40;
+            l50.sound = 0x40;
             l50.x = (double)(int)x;
             l50.y = (double)((int)y - 0x28);
             l50.scale = 2;
-            l50.unk0 = 1;
+            l50.keep = 1;
             l50.layer = 1;
             m_game->CreateEffect((EffectDesc*)&l50);
             m_playSound = 0x25;
@@ -4222,27 +4222,27 @@ void CMinagi::UpdatePattern()
             frame++;
             m_attackResult = 0;
             if (frame >= x8) {
-                pattern = 0;
+                pattern = kStand;
                 FaceOpponent();
                 StartPattern();
             }
         }
         break;
-    case 0x132:
+    case kAir236236A:
         if (frame == 0 && timer == 0) {
             StopMoving();
         }
         if (frame == 1 && timer == 3) {
             StopMoving();
-            unk14c = 0x78;
+            m_freezeTime = 0x78;
             m_gauge = m_gauge - 0x3e8;
             FillBackground(0xb0, 3);
             l50.type = 0x44;
-            l50.unk2c = 0x13;
+            l50.sound = 0x13;
             l50.x = (double)((int)x - facing * 0x12);
             l50.y = (double)((int)y - 0x57);
             l50.scale = 2;
-            l50.unk0 = 1;
+            l50.keep = 1;
             l50.layer = 1;
             m_game->CreateEffect((EffectDesc*)&l50);
         }
@@ -4252,29 +4252,29 @@ void CMinagi::UpdatePattern()
             frame++;
             m_attackResult = 3;
             if (frame >= x8) {
-                pattern = 9;
-                unk159 = 1;
-                unk15a++;
+                pattern = kFall;
+                m_airDashes = 1;
+                m_airActions++;
                 ay = 0.035;
                 StartPattern();
             }
         }
         break;
-    case 0x133:
+    case kAir236236B:
         if (frame == 0 && timer == 0) {
             StopMoving();
         }
         if (frame == 1 && timer == 3) {
             StopMoving();
-            unk14c = 0x78;
+            m_freezeTime = 0x78;
             m_gauge = m_gauge - 0x7d0;
             FillBackground(0xb0, 3);
             l50.type = 0x45;
-            l50.unk2c = 5;
+            l50.sound = 5;
             l50.x = (double)((int)x - facing * 0x12);
             l50.y = (double)((int)y - 0x57);
             l50.scale = 2;
-            l50.unk0 = 1;
+            l50.keep = 1;
             l50.layer = 1;
             m_game->CreateEffect((EffectDesc*)&l50);
         }
@@ -4284,29 +4284,29 @@ void CMinagi::UpdatePattern()
             frame++;
             m_attackResult = 3;
             if (frame >= x8) {
-                pattern = 9;
-                unk159 = 1;
-                unk15a++;
+                pattern = kFall;
+                m_airDashes = 1;
+                m_airActions++;
                 ay = 0.035;
                 StartPattern();
             }
         }
         break;
-    case 0x134:
+    case kAir236236C:
         if (frame == 0 && timer == 0) {
             StopMoving();
         }
         if (frame == 1 && timer == 3) {
             StopMoving();
-            unk14c = 0x78;
+            m_freezeTime = 0x78;
             m_gauge = m_gauge - 0xbb8;
             FillBackground(0xb0, 3);
             l50.type = 0x46;
-            l50.unk2c = 0x40;
+            l50.sound = 0x40;
             l50.x = (double)((int)x - facing * 0x12);
             l50.y = (double)((int)y - 0x57);
             l50.scale = 2;
-            l50.unk0 = 1;
+            l50.keep = 1;
             l50.layer = 1;
             m_game->CreateEffect((EffectDesc*)&l50);
             m_playSound = 0x25;
@@ -4317,29 +4317,29 @@ void CMinagi::UpdatePattern()
             frame++;
             m_attackResult = 3;
             if (frame >= x8) {
-                pattern = 9;
-                unk159 = 1;
-                unk15a++;
+                pattern = kFall;
+                m_airDashes = 1;
+                m_airActions++;
                 ay = 0.035;
                 StartPattern();
             }
         }
         break;
-    case 0x135:
+    case kAir214214A:
         if (frame == 0 && timer == 0) {
             StopMoving();
         }
         if (frame == 1 && timer == 0) {
             StopMoving();
-            unk14c = 0x78;
+            m_freezeTime = 0x78;
             m_gauge = m_gauge - 0x3e8;
             FillBackground(0xb0, 3);
             l50.type = 0x44;
-            l50.unk2c = 0x13;
+            l50.sound = 0x13;
             l50.x = (double)((int)x - facing * 0x12);
             l50.y = (double)((int)y - 0x57);
             l50.scale = 2;
-            l50.unk0 = 1;
+            l50.keep = 1;
             l50.layer = 1;
             m_game->CreateEffect((EffectDesc*)&l50);
         }
@@ -4349,29 +4349,29 @@ void CMinagi::UpdatePattern()
             frame++;
             m_attackResult = 3;
             if (frame >= x8) {
-                pattern = 9;
-                unk159 = 1;
-                unk15a++;
+                pattern = kFall;
+                m_airDashes = 1;
+                m_airActions++;
                 ay = 0.035;
                 StartPattern();
             }
         }
         break;
-    case 0x136:
+    case kAir214214B:
         if (frame == 0 && timer == 0) {
             StopMoving();
         }
         if (frame == 1 && timer == 0) {
             StopMoving();
-            unk14c = 0x78;
+            m_freezeTime = 0x78;
             m_gauge = m_gauge - 0x7d0;
             FillBackground(0xb0, 3);
             l50.type = 0x45;
-            l50.unk2c = 5;
+            l50.sound = 5;
             l50.x = (double)((int)x - facing * 0x12);
             l50.y = (double)((int)y - 0x57);
             l50.scale = 2;
-            l50.unk0 = 1;
+            l50.keep = 1;
             l50.layer = 1;
             m_game->CreateEffect((EffectDesc*)&l50);
         }
@@ -4381,29 +4381,29 @@ void CMinagi::UpdatePattern()
             frame++;
             m_attackResult = 3;
             if (frame >= x8) {
-                pattern = 9;
-                unk159 = 1;
-                unk15a++;
+                pattern = kFall;
+                m_airDashes = 1;
+                m_airActions++;
                 ay = 0.035;
                 StartPattern();
             }
         }
         break;
-    case 0x137:
+    case kAir214214C:
         if (frame == 0 && timer == 0) {
             StopMoving();
         }
         if (frame == 1 && timer == 0) {
             StopMoving();
-            unk14c = 0x78;
+            m_freezeTime = 0x78;
             m_gauge = m_gauge - 0xbb8;
             FillBackground(0xb0, 3);
             l50.type = 0x46;
-            l50.unk2c = 0x40;
+            l50.sound = 0x40;
             l50.x = (double)((int)x - facing * 0x12);
             l50.y = (double)((int)y - 0x57);
             l50.scale = 2;
-            l50.unk0 = 1;
+            l50.keep = 1;
             l50.layer = 1;
             m_game->CreateEffect((EffectDesc*)&l50);
             m_playSound = 0x25;
@@ -4414,29 +4414,29 @@ void CMinagi::UpdatePattern()
             frame++;
             m_attackResult = 3;
             if (frame >= x8) {
-                pattern = 9;
-                unk159 = 1;
-                unk15a++;
+                pattern = kFall;
+                m_airDashes = 1;
+                m_airActions++;
                 ay = 0.035;
                 StartPattern();
             }
         }
         break;
-    case 0x138:
+    case k21436A:
         if (frame == 0 && timer == 0) {
             StopMoving();
         }
         if (frame == 2 && timer == 3) {
             StopMoving();
-            unk14c = 0x78;
+            m_freezeTime = 0x78;
             m_gauge = m_gauge - 0x3e8;
             FillBackground(0xb0, 3);
             l50.type = 0x44;
-            l50.unk2c = 0x13;
+            l50.sound = 0x13;
             l50.x = (double)(int)x;
             l50.y = (double)((int)y - 0x28);
             l50.scale = 2;
-            l50.unk0 = 1;
+            l50.keep = 1;
             l50.layer = 1;
             m_game->CreateEffect((EffectDesc*)&l50);
         }
@@ -4444,8 +4444,8 @@ void CMinagi::UpdatePattern()
             m_playVoice = 0;
         }
         if (frame > 4 && frame < 9) {
-            unk3138--;
-            if (unk3138 <= 0) {
+            m_patternVar1--;
+            if (m_patternVar1 <= 0) {
                 l50.type = 0x1b8;
                 l50.x = (double)((int)x + facing * 0x1e);
                 l50.y = (double)((int)y - 0x32);
@@ -4453,7 +4453,7 @@ void CMinagi::UpdatePattern()
                 l50.facing = facing;
                 l50.layer = 1;
                 SpawnObject(&l50);
-                unk3138 = 0x1e;
+                m_patternVar1 = 0x1e;
             }
         }
         timer++;
@@ -4461,32 +4461,32 @@ void CMinagi::UpdatePattern()
             timer = 0;
             frame++;
             m_attackResult = 0;
-            if (frame == 9 && unk313c < 3) {
-                unk313c++;
+            if (frame == 9 && m_patternVar2 < 3) {
+                m_patternVar2++;
                 frame = frame - 4;
             }
             if (frame >= x8) {
-                pattern = 0;
+                pattern = kStand;
                 FaceOpponent();
                 StartPattern();
             }
         }
         break;
-    case 0x139:
+    case k21436B:
         if (frame == 0 && timer == 0) {
             StopMoving();
         }
         if (frame == 2 && timer == 3) {
             StopMoving();
-            unk14c = 0x78;
+            m_freezeTime = 0x78;
             m_gauge = m_gauge - 0x7d0;
             FillBackground(0xb0, 3);
             l50.type = 0x45;
-            l50.unk2c = 5;
+            l50.sound = 5;
             l50.x = (double)(int)x;
             l50.y = (double)((int)y - 0x28);
             l50.scale = 2;
-            l50.unk0 = 1;
+            l50.keep = 1;
             l50.layer = 1;
             m_game->CreateEffect((EffectDesc*)&l50);
         }
@@ -4494,8 +4494,8 @@ void CMinagi::UpdatePattern()
             m_playVoice = 0;
         }
         if (frame > 4 && frame < 9) {
-            unk3138--;
-            if (unk3138 <= 0) {
+            m_patternVar1--;
+            if (m_patternVar1 <= 0) {
                 l50.type = 0x1b9;
                 l50.x = (double)((int)x + facing * 0x1e);
                 l50.y = (double)((int)y - 0x32);
@@ -4503,7 +4503,7 @@ void CMinagi::UpdatePattern()
                 l50.facing = facing;
                 l50.layer = 1;
                 SpawnObject(&l50);
-                unk3138 = 0x15;
+                m_patternVar1 = 0x15;
             }
         }
         timer++;
@@ -4511,35 +4511,35 @@ void CMinagi::UpdatePattern()
             timer = 0;
             frame++;
             m_attackResult = 0;
-            if (frame == 9 && unk313c < 5) {
-                unk313c++;
+            if (frame == 9 && m_patternVar2 < 5) {
+                m_patternVar2++;
                 frame = frame - 4;
             }
             if (frame >= x8) {
-                pattern = 0;
+                pattern = kStand;
                 FaceOpponent();
                 StartPattern();
             }
         }
         break;
-    case 0x13a:
+    case k21436C:
         if (frame == 0 && timer == 0) {
             StopMoving();
         }
         if (frame > 2) {
-            m_game->Unk4080c0(0xf);
+            m_game->FlashNegative(0xf);
         }
         if (frame == 2 && timer == 3) {
             StopMoving();
-            unk14c = 0x78;
+            m_freezeTime = 0x78;
             m_gauge = m_gauge - 0xbb8;
             FillBackground(0xb0, 3);
             l50.type = 0x46;
-            l50.unk2c = 0x40;
+            l50.sound = 0x40;
             l50.x = (double)(int)x;
             l50.y = (double)((int)y - 0x28);
             l50.scale = 2;
-            l50.unk0 = 1;
+            l50.keep = 1;
             l50.layer = 1;
             m_game->CreateEffect((EffectDesc*)&l50);
             m_playSound = 0x25;
@@ -4548,8 +4548,8 @@ void CMinagi::UpdatePattern()
             m_playVoice = 0;
         }
         if (frame > 4 && frame < 9) {
-            unk3138--;
-            if (unk3138 <= 0) {
+            m_patternVar1--;
+            if (m_patternVar1 <= 0) {
                 l50.type = 0x1ba;
                 l50.x = (double)((int)x + facing * 0x1e);
                 l50.y = (double)((int)y - 0x32);
@@ -4557,7 +4557,7 @@ void CMinagi::UpdatePattern()
                 l50.facing = facing;
                 l50.layer = 1;
                 SpawnObject(&l50);
-                unk3138 = 0xc;
+                m_patternVar1 = 0xc;
             }
         }
         timer++;
@@ -4565,34 +4565,34 @@ void CMinagi::UpdatePattern()
             timer = 0;
             frame++;
             m_attackResult = 0;
-            if (frame == 9 && unk313c < 7) {
-                unk313c++;
+            if (frame == 9 && m_patternVar2 < 7) {
+                m_patternVar2++;
                 frame = frame - 4;
             }
             if (frame >= x8) {
-                pattern = 0;
+                pattern = kStand;
                 FaceOpponent();
                 StartPattern();
             }
         }
         break;
-    case 0x13b:
-        unk158 = 0;
+    case kLv4:
+        m_dashMomentum = 0;
         if (frame > 3) {
-            m_game->Unk4080c0(0xf);
+            m_game->FlashNegative(0xf);
         }
         if (frame == 3 && timer == 3) {
             StopMoving();
             m_gauge = m_gauge - 0xbb8;
-            Unk410a80(0x32, 0x2d);
-            unk14c = 0x78;
+            FocusCameraY(0x32, 0x2d);
+            m_freezeTime = 0x78;
             FillBackground(0xb0, 3);
             l50.type = 0x46;
-            l50.unk2c = 0x40;
+            l50.sound = 0x40;
             l50.x = (double)((int)x - facing * 0xd);
             l50.y = (double)((int)y - 0x43);
             l50.scale = 2;
-            l50.unk0 = 1;
+            l50.keep = 1;
             l50.layer = 1;
             m_game->CreateEffect((EffectDesc*)&l50);
             l50.type = 0x47;
@@ -4605,33 +4605,33 @@ void CMinagi::UpdatePattern()
             timer = 0;
             frame++;
             m_attackResult = 0;
-            if (frame == 0xb && unk3138 < 2) {
+            if (frame == 0xb && m_patternVar1 < 2) {
                 frame = frame - 4;
-                unk3138++;
+                m_patternVar1++;
                 break;
             }
             if (frame >= x8) {
-                pattern = 0;
+                pattern = kStand;
                 FaceOpponent();
                 StartPattern();
             }
         }
         break;
-    case 0x13c:
+    case kUnused236236A:
         if (frame == 0 && timer == 0) {
             StopMoving();
         }
         if (frame == 2 && timer == 3) {
             StopMoving();
-            unk14c = 0x78;
+            m_freezeTime = 0x78;
             m_gauge = m_gauge - 0x3e8;
             FillBackground(0xb0, 3);
             l50.type = 0x44;
-            l50.unk2c = 0x13;
+            l50.sound = 0x13;
             l50.x = (double)(int)x;
             l50.y = (double)((int)y - 0x28);
             l50.scale = 2;
-            l50.unk0 = 1;
+            l50.keep = 1;
             l50.layer = 1;
             m_game->CreateEffect((EffectDesc*)&l50);
         }
@@ -4641,27 +4641,27 @@ void CMinagi::UpdatePattern()
             frame++;
             m_attackResult = 0;
             if (frame >= x8) {
-                pattern = 0;
+                pattern = kStand;
                 FaceOpponent();
                 StartPattern();
             }
         }
         break;
-    case 0x13d:
+    case kUnused236236B:
         if (frame == 0 && timer == 0) {
             StopMoving();
         }
         if (frame == 2 && timer == 3) {
             StopMoving();
-            unk14c = 0x78;
+            m_freezeTime = 0x78;
             m_gauge = m_gauge - 0x7d0;
             FillBackground(0xb0, 3);
             l50.type = 0x45;
-            l50.unk2c = 5;
+            l50.sound = 5;
             l50.x = (double)(int)x;
             l50.y = (double)((int)y - 0x28);
             l50.scale = 2;
-            l50.unk0 = 1;
+            l50.keep = 1;
             l50.layer = 1;
             m_game->CreateEffect((EffectDesc*)&l50);
         }
@@ -4671,27 +4671,27 @@ void CMinagi::UpdatePattern()
             frame++;
             m_attackResult = 0;
             if (frame >= x8) {
-                pattern = 0;
+                pattern = kStand;
                 FaceOpponent();
                 StartPattern();
             }
         }
         break;
-    case 0x13e:
+    case kUnused236236C:
         if (frame == 0 && timer == 0) {
             StopMoving();
         }
         if (frame == 2 && timer == 3) {
             StopMoving();
-            unk14c = 0x78;
+            m_freezeTime = 0x78;
             m_gauge = m_gauge - 0xbb8;
             FillBackground(0xb0, 3);
             l50.type = 0x46;
-            l50.unk2c = 0x40;
+            l50.sound = 0x40;
             l50.x = (double)(int)x;
             l50.y = (double)((int)y - 0x28);
             l50.scale = 2;
-            l50.unk0 = 1;
+            l50.keep = 1;
             l50.layer = 1;
             m_game->CreateEffect((EffectDesc*)&l50);
             m_playSound = 0x25;
@@ -4702,27 +4702,27 @@ void CMinagi::UpdatePattern()
             frame++;
             m_attackResult = 0;
             if (frame >= x8) {
-                pattern = 0;
+                pattern = kStand;
                 FaceOpponent();
                 StartPattern();
             }
         }
         break;
-    case 0x13f:
+    case kUnusedAir236236A:
         if (frame == 0 && timer == 0) {
             StopMoving();
         }
         if (frame == 1 && timer == 3) {
             StopMoving();
-            unk14c = 0x78;
+            m_freezeTime = 0x78;
             m_gauge = m_gauge - 0x3e8;
             FillBackground(0xb0, 3);
             l50.type = 0x44;
-            l50.unk2c = 0x13;
+            l50.sound = 0x13;
             l50.x = (double)((int)x - facing * 0x12);
             l50.y = (double)((int)y - 0x57);
             l50.scale = 2;
-            l50.unk0 = 1;
+            l50.keep = 1;
             l50.layer = 1;
             m_game->CreateEffect((EffectDesc*)&l50);
         }
@@ -4732,29 +4732,29 @@ void CMinagi::UpdatePattern()
             frame++;
             m_attackResult = 3;
             if (frame >= x8) {
-                pattern = 9;
-                unk159 = 1;
-                unk15a++;
+                pattern = kFall;
+                m_airDashes = 1;
+                m_airActions++;
                 ay = 0.035;
                 StartPattern();
             }
         }
         break;
-    case 0x140:
+    case kUnusedAir236236B:
         if (frame == 0 && timer == 0) {
             StopMoving();
         }
         if (frame == 1 && timer == 3) {
             StopMoving();
-            unk14c = 0x78;
+            m_freezeTime = 0x78;
             m_gauge = m_gauge - 0x7d0;
             FillBackground(0xb0, 3);
             l50.type = 0x45;
-            l50.unk2c = 5;
+            l50.sound = 5;
             l50.x = (double)((int)x - facing * 0x12);
             l50.y = (double)((int)y - 0x57);
             l50.scale = 2;
-            l50.unk0 = 1;
+            l50.keep = 1;
             l50.layer = 1;
             m_game->CreateEffect((EffectDesc*)&l50);
         }
@@ -4764,29 +4764,29 @@ void CMinagi::UpdatePattern()
             frame++;
             m_attackResult = 3;
             if (frame >= x8) {
-                pattern = 9;
-                unk159 = 1;
-                unk15a++;
+                pattern = kFall;
+                m_airDashes = 1;
+                m_airActions++;
                 ay = 0.035;
                 StartPattern();
             }
         }
         break;
-    case 0x141:
+    case kUnusedAir236236C:
         if (frame == 0 && timer == 0) {
             StopMoving();
         }
         if (frame == 1 && timer == 3) {
             StopMoving();
-            unk14c = 0x78;
+            m_freezeTime = 0x78;
             m_gauge = m_gauge - 0xbb8;
             FillBackground(0xb0, 3);
             l50.type = 0x46;
-            l50.unk2c = 0x40;
+            l50.sound = 0x40;
             l50.x = (double)((int)x - facing * 0x12);
             l50.y = (double)((int)y - 0x57);
             l50.scale = 2;
-            l50.unk0 = 1;
+            l50.keep = 1;
             l50.layer = 1;
             m_game->CreateEffect((EffectDesc*)&l50);
             m_playSound = 0x25;
@@ -4797,9 +4797,9 @@ void CMinagi::UpdatePattern()
             frame++;
             m_attackResult = 3;
             if (frame >= x8) {
-                pattern = 9;
-                unk159 = 1;
-                unk15a++;
+                pattern = kFall;
+                m_airDashes = 1;
+                m_airActions++;
                 ay = 0.035;
                 StartPattern();
             }

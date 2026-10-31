@@ -37,7 +37,7 @@ Statements about the game are **observed** (read from the matched source) or **i
 tools/native.sh                      # build/native/efz
 tools/compat.py check                # every case in the native game (about 2 minutes, -j 16)
 tools/compat.py check fuzz5- cpu-03  # some: by name, or a prefix ending in -
-tools/compat.py --windows check      # build/windows/efz.exe, under 64-bit wine
+tools/compat.py check --windows      # build/windows/efz.exe, under 64-bit wine
 tools/compat.py check --exe build/trace/efz.exe   # any 32-bit build with the harness, under wine
 tools/compat.py explain cpu-03       # where and how a failing case parts from the reference
 tools/compat.py coverage             # what the suite runs: lines of src/, actions per character
@@ -84,7 +84,7 @@ things in the reference, and the native game does the same:
 | Memory from `new` | The heap's garbage | Zeroed (the native game's arena always was) | Initialised members are the same; an uninitialised one, `CPlayer::m_hitsLeft`, decided a few hits by the garbage (see "Answered"): zero is one of the original's outcomes |
 | `sin`, `cos`, `atan2` | The CPU's `fsin`, `fcos`, `fpatan`, whose last bits differ between CPUs | Correctly rounded to the x87's 64 bits: `port/x87.cpp`, which MinGW builds into the reference (`tools/x87ref.cpp`) | One of the CPUs' results; the same on every machine |
 | `rand()` | Seeded from the clock | Seeded with the case's seed (replays: 1) | Only effects and the CPU use it (see below) |
-| The rectangle a throw's hit spark is placed at (`CScene3::Unk7679b0`, `Unk767f60`, `Unk7697d0`) | Read from stack memory the code never set | Zeroed | Only the spark's position |
+| The rectangle a throw's hit spark is placed at (`CScene3::WillRecoilCounter`, `ResolvePlayerAttack`, `ResolveObjectAttack`) | Read from stack memory the code never set | Zeroed | Only the spark's position |
 
 While a replay plays, the harness also has the controls read as untouched, so what the
 menus and `CGame`'s polling see is the same everywhere.
@@ -141,7 +141,7 @@ reads the words back strictly in the order it wrote them.
 | Part | Words | Where |
 |---|---|---|
 | Header | P1 character, P2 character, `0x68`, stage, P1 palette, P2 palette | written `src/scene3.cpp:680-686`, read `src/scene2.cpp:126-137` |
-| Each fight frame, not while paused | Two values the F4/F5 keys set; the second is the HP the players are reset to (`src/player.cpp:326`) | `CScene3::Vf2`, `src/scene3.cpp:595-611` |
+| Each fight frame, not while paused | Two values the F4/F5 keys set; the second is the HP the players are reset to (`src/player.cpp:326`) | `CScene3::HandleKeys`, `src/scene3.cpp:595-611` |
 | Each player's input | One word: bits `1` right, `2` left, `4` down, `8` up, `0x10`-`0x80` A-D | `src/player.cpp:1027-1029`, decoded at `:1037-1084` |
 | Each random draw through `CPlayer::Random` (`0x4108a0`) | The `rand()` value when recording; on playback the word replaces it | `src/player.cpp:667-680` |
 
@@ -225,7 +225,7 @@ the state differs, it is game logic.
   hits in some runs misses in others, the rest of the match then parting. The cause is
   `CPlayer::m_hitsLeft` (`+0x16c`), the hits the current attack can still land: each
   attack's code sets it during the attack and each hit takes one off, but nothing sets
-  it before a player's first attack, and the hit test (`CScene3::Unk767f60`,
+  it before a player's first attack, and the hit test (`CScene3::ResolvePlayerAttack`,
   `src/scene3.cpp:1052`) requires it above 0. The frame an attack's box first appears
   is tested once before its code sets the field (Mizuka's state `0xc8` sets it on
   frame 2, at the update after the one that starts that frame; Kaori's `0xcd` on frame
@@ -255,7 +255,7 @@ the state differs, it is game logic.
 ## Open questions
 
 - Feathers share the 64-slot object table with projectiles. When it is full the oldest
-  object stops being updated (`CPlayer::Unk412f10`, `src/playerobj.cpp:53`), so a
+  object stops being updated (`CPlayer::AdvanceObjectHead`, `src/playerobj.cpp`), so a
   random number of feathers could drop a projectile in one playback only. Whether Ayu
   can reach 64 objects depends on feather lifetimes in `ayu.pat`.
 - Which of `key.ini` bytes `0x21`-`0x26` change the fight.

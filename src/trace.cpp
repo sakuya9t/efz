@@ -227,12 +227,12 @@ void TraceStart(CGame* game, CScene** scenes, BYTE* scene)
         srand(playSeed ? (unsigned)atol(playSeed) : 1);
         g_tracePlaying = 1;
         // What the title's replay item and the replay menu set.
-        game->unk1343[0] = 0;
-        game->unk1343[1] = 0;
-        game->unk1364 = 5;
-        game->unk134e = 2;
-        game->unk14281 = (char)(col - 1);
-        game->unk14282 = (char)(row - 1);
+        game->m_isCpu[0] = 0;
+        game->m_isCpu[1] = 0;
+        game->m_gameMode = 5;
+        game->m_roundsToWin = 2;
+        game->m_replaySlot = (char)(col - 1);
+        game->m_replayPage = (char)(row - 1);
         game->m_replayMode = 1;
         *scene = 2;
     } else if (record && (n = sscanf(record, "%d-%d:%d:%d:%d:%d:%d:%u:%d:%d", &row, &col, &c1,
@@ -247,19 +247,19 @@ void TraceStart(CGame* game, CScene** scenes, BYTE* scene)
         g_traceRecording = 1;
         // The replay menu's record item, then what character select leaves; a CPU side
         // as arcade mode marks it.
-        game->unk1343[0] = (BYTE)(cpu1 != 0);
-        game->unk1343[1] = (BYTE)(cpu2 != 0);
-        game->unk1364 = 5;
-        game->unk134e = 2;
-        game->unk14281 = (char)(col - 1);
-        game->unk14282 = (char)(row - 1);
+        game->m_isCpu[0] = (BYTE)(cpu1 != 0);
+        game->m_isCpu[1] = (BYTE)(cpu2 != 0);
+        game->m_gameMode = 5;
+        game->m_roundsToWin = 2;
+        game->m_replaySlot = (char)(col - 1);
+        game->m_replayPage = (char)(row - 1);
         game->m_replayMode = 2;
-        game->unkf32 = (char)stage;
-        game->unk1358 = 1;
-        game->unk135c = 0;
-        game->unk1360 = 0;
-        s2->Unk76da20(s2->m_player1Ref, s2->m_player2Ref, 0, (char)c1);
-        s2->Unk76da20(s2->m_player2Ref, s2->m_player1Ref, 1, (char)c2);
+        game->m_stage = (char)stage;
+        game->m_arcadeMatch = 1;
+        game->m_beatenChars = 0;
+        game->m_playedStages = 0;
+        s2->CreateCharacter(s2->m_player1Ref, s2->m_player2Ref, 0, (char)c1);
+        s2->CreateCharacter(s2->m_player2Ref, s2->m_player1Ref, 1, (char)c2);
         (*s2->m_player1Ref)->m_paletteIndex = (char)pal1;
         (*s2->m_player2Ref)->m_paletteIndex = (char)pal2;
         *scene = 2;
@@ -333,7 +333,7 @@ static void TraceEnd(int block)
     g_traceLength = 0;
 }
 
-// The size of the character class a player is, by its m_charId (CScene2::Unk76da20).
+// The size of the character class a player is, by its m_charId (CScene2::CreateCharacter).
 static unsigned TraceClassSize(CPlayer* p)
 {
     switch (p->m_charId) {
@@ -381,16 +381,16 @@ static void TraceMaskCharacter(CPlayer* p)
 
     switch (p->m_charId) {
     case 0:
-        TraceMaskMember(p, &nanase->unk345c, sizeof(nanase->unk345c));
-        TraceMaskMember(p, &nanase->unk3460, sizeof(nanase->unk3460));
-        TraceMaskMember(p, &nanase->unk3464, sizeof(nanase->unk3464));
-        TraceMaskMember(p, &nanase->unk3468, sizeof(nanase->unk3468));
+        TraceMaskMember(p, &nanase->m_anims2, sizeof(nanase->m_anims2));
+        TraceMaskMember(p, &nanase->m_patterns2, sizeof(nanase->m_patterns2));
+        TraceMaskMember(p, &nanase->m_anims1, sizeof(nanase->m_anims1));
+        TraceMaskMember(p, &nanase->m_patterns1, sizeof(nanase->m_patterns1));
         break;
     case 0xe:
-        TraceMaskMember(p, &ikumi->unk3464, sizeof(ikumi->unk3464));
-        TraceMaskMember(p, &ikumi->unk3468, sizeof(ikumi->unk3468));
-        TraceMaskMember(p, &ikumi->unk346c, sizeof(ikumi->unk346c));
-        TraceMaskMember(p, &ikumi->unk3470, sizeof(ikumi->unk3470));
+        TraceMaskMember(p, &ikumi->m_altAnims, sizeof(ikumi->m_altAnims));
+        TraceMaskMember(p, &ikumi->m_altPatterns, sizeof(ikumi->m_altPatterns));
+        TraceMaskMember(p, &ikumi->m_baseAnims, sizeof(ikumi->m_baseAnims));
+        TraceMaskMember(p, &ikumi->m_basePatterns, sizeof(ikumi->m_basePatterns));
         break;
     }
 }
@@ -429,27 +429,27 @@ static void TraceHashPlayer(CPlayer* p, int block)
 // frames-per-second count (unk434, unk438, unk43c), which follows the clock.
 static void TraceHashScene(CScene3* s)
 {
-    TraceAdd(&s->unk2c, sizeof(s->unk2c));
-    TraceAdd(&s->unk2d, sizeof(s->unk2d));
+    TraceAdd(&s->m_enter, sizeof(s->m_enter));
+    TraceAdd(&s->m_leave, sizeof(s->m_leave));
     TraceAdd(s->m_palette, sizeof(s->m_palette));
     TraceAdd(&s->m_colorKey, sizeof(s->m_colorKey));
-    TraceAdd(&s->unk440, sizeof(s->unk440));
-    TraceAdd(&s->unk444, sizeof(s->unk444));
-    TraceAdd(&s->unk448, sizeof(s->unk448));
-    TraceAdd(&s->unk44c, sizeof(s->unk44c));
-    TraceAdd(&s->unk450, sizeof(s->unk450));
-    TraceAdd(&s->unk454, sizeof(s->unk454));
-    TraceAdd(&s->unk458, sizeof(s->unk458));
-    TraceAdd(&s->unk45c, sizeof(s->unk45c));
-    TraceAdd(&s->unk460, sizeof(s->unk460));
-    TraceAdd(s->unk464, sizeof(s->unk464));
-    TraceAdd(&s->unk574, sizeof(s->unk574));
-    TraceAdd(&s->unk576, sizeof(s->unk576));
-    TraceAdd(&s->unk578, sizeof(s->unk578));
-    TraceAdd(&s->unk580, sizeof(s->unk580));
-    TraceAdd(&s->unk588, sizeof(s->unk588));
-    TraceAdd(&s->unk58c, sizeof(s->unk58c));
-    TraceAdd(&s->unk590, sizeof(s->unk590));
+    TraceAdd(&s->m_focusXDefault, sizeof(s->m_focusXDefault));
+    TraceAdd(&s->m_focusYHigh, sizeof(s->m_focusYHigh));
+    TraceAdd(&s->m_focusX, sizeof(s->m_focusX));
+    TraceAdd(&s->m_focusY, sizeof(s->m_focusY));
+    TraceAdd(&s->m_focusYStep, sizeof(s->m_focusYStep));
+    TraceAdd(&s->m_scrollX, sizeof(s->m_scrollX));
+    TraceAdd(&s->m_scrollY, sizeof(s->m_scrollY));
+    TraceAdd(&s->m_drawX, sizeof(s->m_drawX));
+    TraceAdd(&s->m_drawY, sizeof(s->m_drawY));
+    TraceAdd(s->m_digitFonts, sizeof(s->m_digitFonts));
+    TraceAdd(&s->m_refillMeter, sizeof(s->m_refillMeter));
+    TraceAdd(&s->m_refillHp, sizeof(s->m_refillHp));
+    TraceAdd(&s->m_speed, sizeof(s->m_speed));
+    TraceAdd(&s->m_endFade, sizeof(s->m_endFade));
+    TraceAdd(&s->m_paused, sizeof(s->m_paused));
+    TraceAdd(&s->m_capturing, sizeof(s->m_capturing));
+    TraceAdd(&s->m_captureFrame, sizeof(s->m_captureFrame));
     TraceEnd(TRACE_SCENE);
 }
 
@@ -463,8 +463,8 @@ static void TraceHashGame(CGame* g)
     TraceMask(g, &g->m_input, sizeof(g->m_input));
     TraceMask(g, &g->m_sound, sizeof(g->m_sound));
     TraceMask(g, g->m_surfaces, sizeof(g->m_surfaces));
-    TraceMask(g, &g->unke98, sizeof(g->unke98));
-    TraceMask(g, &g->unke9c, sizeof(g->unke9c));
+    TraceMask(g, &g->m_stageSurface, sizeof(g->m_stageSurface));
+    TraceMask(g, &g->m_stageNegative, sizeof(g->m_stageNegative));
     TraceMask(g, &g->m_objectSurface, sizeof(g->m_objectSurface));
     TraceMask(g, &g->m_background, sizeof(g->m_background));
     TraceMask(g, &g->m_effectAnims, sizeof(g->m_effectAnims));

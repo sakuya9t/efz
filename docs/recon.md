@@ -530,7 +530,7 @@ Each line below is **observed**, read from the matched `WinMain` in `src/main.cp
   for by 71 objects (see *Matched objects*). The others contributed no code, data or
   constants, so nothing shows what they were: empty files, files whose code was
   `#if`'d out, or splits of the 71 along lines the layout can't show (a file without
-  strings of its own leaves no seam in `.rdata`). `UpdatePattern` and `Unk47c130` in
+  strings of its own leaves no seam in `.rdata`). `UpdatePattern` and `UpdatePattern2` in
   `nanase_vf6.cpp` (likewise Ikumi's) may have been two files, for one.
 - **Some compiler flags are unconfirmed.** `/Od /GS` without `/EHsc` is settled by
   `WinMain`. `/Zp`, `/J` and `/GR` still need a function that depends on them.

@@ -8,7 +8,7 @@
 void CPlayer::SpawnObject(EffectDesc* p1)
 {
     m_objectActive[m_objectHead] = 1;
-    unk2d0[m_objectHead] = p1->unk0;
+    m_objectKeep[m_objectHead] = p1->keep;
     m_objects[m_objectHead].pattern = p1->type;
     m_objects[m_objectHead].frame = 0;
     m_objects[m_objectHead].timer = 0;
@@ -21,16 +21,16 @@ void CPlayer::SpawnObject(EffectDesc* p1)
     m_objects[m_objectHead].facing = (char)p1->facing;
     m_objects[m_objectHead].side = p1->side;
     m_objects[m_objectHead].scale = (char)p1->scale;
-    m_objects[m_objectHead].unk6c = (char)p1->unk2c;
+    m_objects[m_objectHead].sound = (char)p1->sound;
     m_objects[m_objectHead].screen = p1->screen;
     m_objects[m_objectHead].layer = (char)p1->layer;
-    m_objects[m_objectHead].unk58 = p1->unk28;
-    m_objects[m_objectHead].unk88 = p1->unk30;
-    m_objects[m_objectHead].unk8c = 0;
+    m_objects[m_objectHead].shadow = p1->shadow;
+    m_objects[m_objectHead].movesInFreeze = p1->movesInFreeze;
+    m_objects[m_objectHead].drawnWhileHidden = 0;
     m_objects[m_objectHead].clip = p1->clip;
-    m_objects[m_objectHead].unk80 = 0;
-    m_objects[m_objectHead].unk84 = 0;
-    m_objects[m_objectHead].unk86 = 0;
+    m_objects[m_objectHead].attackResult = 0;
+    m_objects[m_objectHead].hitsLeft = 0;
+    m_objects[m_objectHead].hitstop = 0;
     m_objects[m_objectHead].unk70 = 0.0;
     m_objects[m_objectHead].unk78 = 0.0;
     AdvanceObjectHead();
@@ -39,7 +39,7 @@ void CPlayer::SpawnObject(EffectDesc* p1)
 void CPlayer::RemoveObject(short p1)
 {
     m_objectActive[p1] = 0;
-    unk2d0[p1] = 0;
+    m_objectKeep[p1] = 0;
     if (p1 == m_objectTail) {
         while (m_objectTail != m_objectHead && m_objectActive[m_objectTail] == 0) {
             m_objectTail++;
@@ -73,7 +73,7 @@ void CPlayer::AdvanceObjectHead()
             }
         }
         v4++;
-    } while (unk2d0[m_objectHead] != 0 && v4 < 0x3f);
+    } while (m_objectKeep[m_objectHead] != 0 && v4 < 0x3f);
 }
 
 void CPlayer::ClearObjects()
@@ -83,18 +83,18 @@ void CPlayer::ClearObjects()
     v4 = 0;
     for (; v4 < 0x40; v4++) {
         m_objectActive[v4] = 0;
-        unk2d0[v4] = 0;
+        m_objectKeep[v4] = 0;
     }
 }
 
 void CPlayer::InitEffectDesc(EffectDesc* p1)
 {
-    p1->unk0 = 0;
+    p1->keep = 0;
     p1->scale = 0;
-    p1->unk2c = -1;
+    p1->sound = -1;
     p1->screen = 0;
-    p1->unk28 = 0;
-    p1->unk30 = 0;
+    p1->shadow = 0;
+    p1->movesInFreeze = 0;
     p1->clip.top = 0;
     p1->clip.bottom = 0;
     p1->clip.left = 0;
@@ -110,7 +110,7 @@ void CPlayer::DrawObjects(int p1, int p2, BYTE p3)
 
     l4 = m_objectTail;
     while (l4 != m_objectHead) {
-        if (m_objectActive[l4] != 0 && p3 == (unsigned char)m_objects[l4].layer && (m_objects[l4].unk8c != 0 || m_game->unk1420e == 0)) {
+        if (m_objectActive[l4] != 0 && p3 == (unsigned char)m_objects[l4].layer && (m_objects[l4].drawnWhileHidden != 0 || m_game->m_hideObjectsTime == 0)) {
             v18 = &anims[m_objects[l4].pattern].frames[m_objects[l4].frame];
             v28 = MakeRect(0, 0, v18->width, v18->height);
             if (m_objects[l4].facing == -1) {
