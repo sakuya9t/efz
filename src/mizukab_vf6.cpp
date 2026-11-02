@@ -11,7 +11,7 @@ void CMizukaB::UpdatePattern()
     WORD x8;
     WORD l4;
 
-    if (unk14a > 0 || (*m_opponent)->unk14c > 0) {
+    if (m_hitstop > 0 || (*m_opponent)->m_freezeTime > 0) {
         return;
     }
     EffectDesc l50;
@@ -22,8 +22,8 @@ void CMizukaB::UpdatePattern()
     default:
         vx = 0.0;
         vy = 0.0;
-        unk58 = 0;
-        unk158 = 0;
+        m_drawMode = 0;
+        m_dashMomentum = 0;
         timer++;
         if (timer >= l4) {
             timer = 0;
@@ -33,9 +33,9 @@ void CMizukaB::UpdatePattern()
             }
         }
         break;
-    case 1:
-        unk158 = 0;
-        unk58 = 0;
+    case kWalkForward:
+        m_dashMomentum = 0;
+        m_drawMode = 0;
         vx = 0.8;
         vy = 0.0;
         timer++;
@@ -47,9 +47,9 @@ void CMizukaB::UpdatePattern()
             }
         }
         break;
-    case 2:
-        unk158 = 0;
-        unk58 = 0;
+    case kWalkBack:
+        m_dashMomentum = 0;
+        m_drawMode = 0;
         vx = -0.8;
         vy = 0.0;
         timer++;
@@ -61,11 +61,11 @@ void CMizukaB::UpdatePattern()
             }
         }
         break;
-    case 3:
+    case kCrouch:
         vx = 0.0;
         vy = 0.0;
-        unk58 = 0;
-        unk158 = 0;
+        m_drawMode = 0;
+        m_dashMomentum = 0;
         FaceOpponent();
         timer++;
         if (timer >= l4) {
@@ -76,10 +76,10 @@ void CMizukaB::UpdatePattern()
             }
         }
         break;
-    case 4:
-        unk58 = 0;
+    case kJump:
+        m_drawMode = 0;
         if (frame == 0 && timer == 0) {
-            if (unk158 == 0) {
+            if (m_dashMomentum == 0) {
                 FaceOpponent();
             }
             vx = 0.0;
@@ -87,9 +87,9 @@ void CMizukaB::UpdatePattern()
         if (frame == 2 && timer == 0) {
             ay = 0.043;
             vy = -3.0;
-            if (unk158 == 1) {
+            if (m_dashMomentum == 1) {
                 vx = 0.4;
-                unk158 = 0;
+                m_dashMomentum = 0;
             }
         }
         if (frame > 2) {
@@ -100,7 +100,7 @@ void CMizukaB::UpdatePattern()
             timer = 0;
             frame++;
             if (frame >= x8) {
-                pattern = 9;
+                pattern = kFall;
                 StartPattern();
             }
         }
@@ -108,14 +108,14 @@ void CMizukaB::UpdatePattern()
             y = 0.0;
             m_playSound = 9;
             FaceOpponent();
-            pattern = 0xd;
+            pattern = kLand;
             StartPattern();
         }
         break;
-    case 5:
-        unk58 = 0;
+    case kJumpForward:
+        m_drawMode = 0;
         if (frame == 0 && timer == 0) {
-            if (unk158 == 0) {
+            if (m_dashMomentum == 0) {
                 FaceOpponent();
             }
             vx = 0.0;
@@ -124,9 +124,9 @@ void CMizukaB::UpdatePattern()
             ay = 0.043;
             vy = -3.0;
             vx = 1.0;
-            if (unk158 == 1) {
+            if (m_dashMomentum == 1) {
                 vx = 1.1;
-                unk158 = 0;
+                m_dashMomentum = 0;
             }
         }
         if (frame > 2) {
@@ -144,14 +144,14 @@ void CMizukaB::UpdatePattern()
             y = 0.0;
             m_playSound = 9;
             FaceOpponent();
-            pattern = 0xd;
+            pattern = kLand;
             StartPattern();
         }
         break;
-    case 6:
-        unk58 = 0;
+    case kJumpBack:
+        m_drawMode = 0;
         if (frame == 0 && timer == 0) {
-            if (unk158 == 0) {
+            if (m_dashMomentum == 0) {
                 FaceOpponent();
             }
             vx = 0.0;
@@ -176,46 +176,46 @@ void CMizukaB::UpdatePattern()
             y = 0.0;
             m_playSound = 9;
             FaceOpponent();
-            pattern = 0xd;
+            pattern = kLand;
             StartPattern();
         }
         break;
-    case 7:
-        unk58 = 0;
+    case kStandUp:
+        m_drawMode = 0;
         vx = 0.0;
         vy = 0.0;
-        unk158 = 0;
+        m_dashMomentum = 0;
         FaceOpponent();
         timer++;
         if (timer >= l4) {
             timer = 0;
             frame++;
             if (frame >= x8) {
-                pattern = 0;
+                pattern = kStand;
                 StartPattern();
             }
         }
         break;
-    case 8:
-        unk58 = 0;
+    case kCrouchDown:
+        m_drawMode = 0;
         vx = 0.0;
         vy = 0.0;
-        unk158 = 0;
+        m_dashMomentum = 0;
         FaceOpponent();
         timer++;
         if (timer >= l4) {
             timer = 0;
             frame++;
             if (frame >= x8) {
-                pattern = 3;
+                pattern = kCrouch;
                 StartPattern();
             }
         }
         break;
-    case 9:
-        unk58 = 0;
+    case kFall:
+        m_drawMode = 0;
         vy = vy + ay;
-        unk158 = 0;
+        m_dashMomentum = 0;
         if (ay == 0.0) {
             ay = 0.035;
         }
@@ -230,36 +230,36 @@ void CMizukaB::UpdatePattern()
         if (y + vy >= 0.0) {
             y = 0.0;
             m_playSound = 9;
-            pattern = 0xd;
+            pattern = kLand;
             StartPattern();
         }
         break;
-    case 0xd:
-        unk58 = 0;
+    case kLand:
+        m_drawMode = 0;
         vx = 0.0;
         vy = 0.0;
-        unk158 = 0;
+        m_dashMomentum = 0;
         FaceOpponent();
         timer++;
         if (timer >= l4) {
             timer = 0;
             frame++;
             if (frame >= x8) {
-                pattern = 7;
+                pattern = kStandUp;
                 if (m_inputY == 1) {
-                    pattern = 3;
+                    pattern = kCrouch;
                 }
                 StartPattern();
             }
         }
         break;
-    case 0xe:
+    case kAirJump:
         ay = 0.043;
-        unk58 = 0;
+        m_drawMode = 0;
         if (frame == 0 && timer == 0) {
             vy = -3.0;
             vx = 0.0;
-            unk158 = 0;
+            m_dashMomentum = 0;
         }
         vy = vy + ay;
         timer++;
@@ -267,7 +267,7 @@ void CMizukaB::UpdatePattern()
             timer = 0;
             frame++;
             if (frame >= x8) {
-                pattern = 9;
+                pattern = kFall;
                 StartPattern();
             }
         }
@@ -275,17 +275,17 @@ void CMizukaB::UpdatePattern()
             y = 0.0;
             m_playSound = 9;
             FaceOpponent();
-            pattern = 0xd;
+            pattern = kLand;
             StartPattern();
         }
         break;
-    case 0xf:
+    case kAirJumpForward:
         ay = 0.043;
-        unk58 = 0;
+        m_drawMode = 0;
         if (frame == 0 && timer == 0) {
             vy = -3.0;
             vx = 1.0;
-            unk158 = 0;
+            m_dashMomentum = 0;
         }
         vy = vy + ay;
         timer++;
@@ -300,17 +300,17 @@ void CMizukaB::UpdatePattern()
             y = 0.0;
             m_playSound = 9;
             FaceOpponent();
-            pattern = 0xd;
+            pattern = kLand;
             StartPattern();
         }
         break;
-    case 0x10:
+    case kAirJumpBack:
         ay = 0.043;
-        unk58 = 0;
+        m_drawMode = 0;
         if (frame == 0 && timer == 0) {
             vy = -3.0;
             vx = -1.0;
-            unk158 = 0;
+            m_dashMomentum = 0;
         }
         vy = vy + ay;
         timer++;
@@ -318,7 +318,7 @@ void CMizukaB::UpdatePattern()
             timer = 0;
             frame++;
             if (frame >= x8) {
-                pattern = 9;
+                pattern = kFall;
                 StartPattern();
             }
         }
@@ -326,14 +326,14 @@ void CMizukaB::UpdatePattern()
             y = 0.0;
             m_playSound = 9;
             FaceOpponent();
-            pattern = 0xd;
+            pattern = kLand;
             StartPattern();
         }
         break;
     case 0x14:
-        unk58 = 0;
+        m_drawMode = 0;
         vy = vy + ay;
-        unk158 = 0;
+        m_dashMomentum = 0;
         if (ay == 0.0) {
             ay = 0.035;
         }
@@ -348,11 +348,11 @@ void CMizukaB::UpdatePattern()
         if (y + vy >= 0.0) {
             y = 0.0;
             m_playSound = 9;
-            pattern = 0xd;
+            pattern = kLand;
             StartPattern();
         }
         break;
-    case 0x2f:
+    case kResultLoserFall:
         if (frame == 0 && timer == 0) {
             vx = 0.6;
             ay = 0.035;
@@ -379,17 +379,17 @@ void CMizukaB::UpdatePattern()
             }
         }
         break;
-    case 0x32:
-        unk58 = 0;
-        if (unk120 != 0) {
-            unk118 -= 0.6;
+    case kHitStandHighLight:
+        m_drawMode = 0;
+        if (m_rfBlue != 0) {
+            m_rfGauge -= 0.6;
         }
-        unk158 = 0;
+        m_dashMomentum = 0;
         if (frame == 0 && timer == 0) {
             m_gauge = m_gauge + 0xa;
             vx = (2.0 - (*m_opponent)->m_proration / 10000.0) * -1.1;
-            if (unk120 != 0) {
-                unk118 -= 10.0;
+            if (m_rfBlue != 0) {
+                m_rfGauge -= 10.0;
             }
         }
         vy = 0.0;
@@ -399,34 +399,34 @@ void CMizukaB::UpdatePattern()
             vx = 0.0;
         }
         if (x - 20.0 <= 0.0 || x + 20.0 >= 639.0) {
-            unkb8 = (1.0 - (y < 0.0) * 0.2) * vx;
+            m_cornerPushback = (1.0 - (y < 0.0) * 0.2) * vx;
         } else {
-            unkb8 = 0.0;
+            m_cornerPushback = 0.0;
         }
         timer++;
         if (timer >= l4) {
             timer = 0;
             frame++;
             if (frame >= x8) {
-                pattern = 0;
+                pattern = kStand;
                 if (m_inputY == 1) {
-                    pattern = 3;
+                    pattern = kCrouch;
                 }
                 StartPattern();
             }
         }
         break;
-    case 0x33:
-        unk58 = 0;
-        if (unk120 != 0) {
-            unk118 -= 0.6;
+    case kHitStandHighMedium:
+        m_drawMode = 0;
+        if (m_rfBlue != 0) {
+            m_rfGauge -= 0.6;
         }
-        unk158 = 0;
+        m_dashMomentum = 0;
         if (frame == 0 && timer == 0) {
             m_gauge = m_gauge + 0xf;
             vx = (2.0 - (*m_opponent)->m_proration / 10000.0) * -1.5;
-            if (unk120 != 0) {
-                unk118 -= 20.0;
+            if (m_rfBlue != 0) {
+                m_rfGauge -= 20.0;
             }
         }
         vy = 0.0;
@@ -436,34 +436,34 @@ void CMizukaB::UpdatePattern()
             vx = 0.0;
         }
         if (x - 20.0 <= 0.0 || x + 20.0 >= 639.0) {
-            unkb8 = (1.0 - (y < 0.0) * 0.2) * vx;
+            m_cornerPushback = (1.0 - (y < 0.0) * 0.2) * vx;
         } else {
-            unkb8 = 0.0;
+            m_cornerPushback = 0.0;
         }
         timer++;
         if (timer >= l4) {
             timer = 0;
             frame++;
             if (frame >= x8) {
-                pattern = 0;
+                pattern = kStand;
                 if (m_inputY == 1) {
-                    pattern = 3;
+                    pattern = kCrouch;
                 }
                 StartPattern();
             }
         }
         break;
-    case 0x34:
-        unk58 = 0;
-        if (unk120 != 0) {
-            unk118 -= 0.6;
+    case kHitStandHighHeavy:
+        m_drawMode = 0;
+        if (m_rfBlue != 0) {
+            m_rfGauge -= 0.6;
         }
-        unk158 = 0;
+        m_dashMomentum = 0;
         if (frame == 0 && timer == 0) {
             m_gauge = m_gauge + 0x14;
             vx = (2.0 - (*m_opponent)->m_proration / 10000.0) * -1.8;
-            if (unk120 != 0) {
-                unk118 -= 30.0;
+            if (m_rfBlue != 0) {
+                m_rfGauge -= 30.0;
             }
         }
         vy = 0.0;
@@ -473,34 +473,34 @@ void CMizukaB::UpdatePattern()
             vx = 0.0;
         }
         if (x - 20.0 <= 0.0 || x + 20.0 >= 639.0) {
-            unkb8 = (1.0 - (y < 0.0) * 0.2) * vx;
+            m_cornerPushback = (1.0 - (y < 0.0) * 0.2) * vx;
         } else {
-            unkb8 = 0.0;
+            m_cornerPushback = 0.0;
         }
         timer++;
         if (timer >= l4) {
             timer = 0;
             frame++;
             if (frame >= x8) {
-                pattern = 0;
+                pattern = kStand;
                 if (m_inputY == 1) {
-                    pattern = 3;
+                    pattern = kCrouch;
                 }
                 StartPattern();
             }
         }
         break;
-    case 0x35:
-        unk58 = 0;
-        if (unk120 != 0) {
-            unk118 -= 0.6;
+    case kHitStandLowLight:
+        m_drawMode = 0;
+        if (m_rfBlue != 0) {
+            m_rfGauge -= 0.6;
         }
-        unk158 = 0;
+        m_dashMomentum = 0;
         if (frame == 0 && timer == 0) {
             m_gauge = m_gauge + 0xa;
             vx = (2.0 - (*m_opponent)->m_proration / 10000.0) * -1.1;
-            if (unk120 != 0) {
-                unk118 -= 10.0;
+            if (m_rfBlue != 0) {
+                m_rfGauge -= 10.0;
             }
         }
         vy = 0.0;
@@ -510,34 +510,34 @@ void CMizukaB::UpdatePattern()
             vx = 0.0;
         }
         if (x - 20.0 <= 0.0 || x + 20.0 >= 639.0) {
-            unkb8 = (1.0 - (y < 0.0) * 0.2) * vx;
+            m_cornerPushback = (1.0 - (y < 0.0) * 0.2) * vx;
         } else {
-            unkb8 = 0.0;
+            m_cornerPushback = 0.0;
         }
         timer++;
         if (timer >= l4) {
             timer = 0;
             frame++;
             if (frame >= x8) {
-                pattern = 0;
+                pattern = kStand;
                 if (m_inputY == 1) {
-                    pattern = 3;
+                    pattern = kCrouch;
                 }
                 StartPattern();
             }
         }
         break;
-    case 0x36:
-        unk58 = 0;
-        if (unk120 != 0) {
-            unk118 -= 0.6;
+    case kHitStandLowMedium:
+        m_drawMode = 0;
+        if (m_rfBlue != 0) {
+            m_rfGauge -= 0.6;
         }
-        unk158 = 0;
+        m_dashMomentum = 0;
         if (frame == 0 && timer == 0) {
             m_gauge = m_gauge + 0xf;
             vx = (2.0 - (*m_opponent)->m_proration / 10000.0) * -1.5;
-            if (unk120 != 0) {
-                unk118 -= 20.0;
+            if (m_rfBlue != 0) {
+                m_rfGauge -= 20.0;
             }
         }
         vy = 0.0;
@@ -547,34 +547,34 @@ void CMizukaB::UpdatePattern()
             vx = 0.0;
         }
         if (x - 20.0 <= 0.0 || x + 20.0 >= 639.0) {
-            unkb8 = (1.0 - (y < 0.0) * 0.2) * vx;
+            m_cornerPushback = (1.0 - (y < 0.0) * 0.2) * vx;
         } else {
-            unkb8 = 0.0;
+            m_cornerPushback = 0.0;
         }
         timer++;
         if (timer >= l4) {
             timer = 0;
             frame++;
             if (frame >= x8) {
-                pattern = 0;
+                pattern = kStand;
                 if (m_inputY == 1) {
-                    pattern = 3;
+                    pattern = kCrouch;
                 }
                 StartPattern();
             }
         }
         break;
-    case 0x37:
-        unk58 = 0;
-        if (unk120 != 0) {
-            unk118 -= 0.6;
+    case kHitStandLowHeavy:
+        m_drawMode = 0;
+        if (m_rfBlue != 0) {
+            m_rfGauge -= 0.6;
         }
-        unk158 = 0;
+        m_dashMomentum = 0;
         if (frame == 0 && timer == 0) {
             m_gauge = m_gauge + 0x14;
             vx = (2.0 - (*m_opponent)->m_proration / 10000.0) * -1.8;
-            if (unk120 != 0) {
-                unk118 -= 30.0;
+            if (m_rfBlue != 0) {
+                m_rfGauge -= 30.0;
             }
         }
         vy = 0.0;
@@ -584,34 +584,34 @@ void CMizukaB::UpdatePattern()
             vx = 0.0;
         }
         if (x - 20.0 <= 0.0 || x + 20.0 >= 639.0) {
-            unkb8 = (1.0 - (y < 0.0) * 0.2) * vx;
+            m_cornerPushback = (1.0 - (y < 0.0) * 0.2) * vx;
         } else {
-            unkb8 = 0.0;
+            m_cornerPushback = 0.0;
         }
         timer++;
         if (timer >= l4) {
             timer = 0;
             frame++;
             if (frame >= x8) {
-                pattern = 0;
+                pattern = kStand;
                 if (m_inputY == 1) {
-                    pattern = 3;
+                    pattern = kCrouch;
                 }
                 StartPattern();
             }
         }
         break;
-    case 0x38:
-        unk58 = 0;
-        if (unk120 != 0) {
-            unk118 -= 0.6;
+    case kHitCrouchLight:
+        m_drawMode = 0;
+        if (m_rfBlue != 0) {
+            m_rfGauge -= 0.6;
         }
-        unk158 = 0;
+        m_dashMomentum = 0;
         if (frame == 0 && timer == 0) {
             m_gauge = m_gauge + 0xa;
             vx = (2.0 - (*m_opponent)->m_proration / 10000.0) * -1.1;
-            if (unk120 != 0) {
-                unk118 -= 10.0;
+            if (m_rfBlue != 0) {
+                m_rfGauge -= 10.0;
             }
         }
         vy = 0.0;
@@ -621,31 +621,31 @@ void CMizukaB::UpdatePattern()
             vx = 0.0;
         }
         if (x - 20.0 <= 0.0 || x + 20.0 >= 639.0) {
-            unkb8 = (1.0 - (y < 0.0) * 0.2) * vx;
+            m_cornerPushback = (1.0 - (y < 0.0) * 0.2) * vx;
         } else {
-            unkb8 = 0.0;
+            m_cornerPushback = 0.0;
         }
         timer++;
         if (timer >= l4) {
             timer = 0;
             frame++;
             if (frame >= x8) {
-                pattern = 3;
+                pattern = kCrouch;
                 StartPattern();
             }
         }
         break;
-    case 0x39:
-        unk58 = 0;
-        if (unk120 != 0) {
-            unk118 -= 0.6;
+    case kHitCrouchMedium:
+        m_drawMode = 0;
+        if (m_rfBlue != 0) {
+            m_rfGauge -= 0.6;
         }
-        unk158 = 0;
+        m_dashMomentum = 0;
         if (frame == 0 && timer == 0) {
             m_gauge = m_gauge + 0xf;
             vx = (2.0 - (*m_opponent)->m_proration / 10000.0) * -1.5;
-            if (unk120 != 0) {
-                unk118 -= 20.0;
+            if (m_rfBlue != 0) {
+                m_rfGauge -= 20.0;
             }
         }
         vy = 0.0;
@@ -655,31 +655,31 @@ void CMizukaB::UpdatePattern()
             vx = 0.0;
         }
         if (x - 20.0 <= 0.0 || x + 20.0 >= 639.0) {
-            unkb8 = (1.0 - (y < 0.0) * 0.2) * vx;
+            m_cornerPushback = (1.0 - (y < 0.0) * 0.2) * vx;
         } else {
-            unkb8 = 0.0;
+            m_cornerPushback = 0.0;
         }
         timer++;
         if (timer >= l4) {
             timer = 0;
             frame++;
             if (frame >= x8) {
-                pattern = 3;
+                pattern = kCrouch;
                 StartPattern();
             }
         }
         break;
-    case 0x3a:
-        unk58 = 0;
-        if (unk120 != 0) {
-            unk118 -= 0.6;
+    case kHitCrouchHeavy:
+        m_drawMode = 0;
+        if (m_rfBlue != 0) {
+            m_rfGauge -= 0.6;
         }
-        unk158 = 0;
+        m_dashMomentum = 0;
         if (frame == 0 && timer == 0) {
             m_gauge = m_gauge + 0x14;
             vx = (2.0 - (*m_opponent)->m_proration / 10000.0) * -1.8;
-            if (unk120 != 0) {
-                unk118 -= 30.0;
+            if (m_rfBlue != 0) {
+                m_rfGauge -= 30.0;
             }
         }
         vy = 0.0;
@@ -689,29 +689,29 @@ void CMizukaB::UpdatePattern()
             vx = 0.0;
         }
         if (x - 20.0 <= 0.0 || x + 20.0 >= 639.0) {
-            unkb8 = (1.0 - (y < 0.0) * 0.2) * vx;
+            m_cornerPushback = (1.0 - (y < 0.0) * 0.2) * vx;
         } else {
-            unkb8 = 0.0;
+            m_cornerPushback = 0.0;
         }
         timer++;
         if (timer >= l4) {
             timer = 0;
             frame++;
             if (frame >= x8) {
-                pattern = 3;
+                pattern = kCrouch;
                 StartPattern();
             }
         }
         break;
-    case 0x3b:
-        unk58 = 0;
-        if (unk120 != 0) {
-            unk118 -= 0.8;
+    case kHitAir:
+        m_drawMode = 0;
+        if (m_rfBlue != 0) {
+            m_rfGauge -= 0.8;
         }
         if (frame == 0 && timer == 0) {
             m_gauge = m_gauge + 0x1e;
-            vx = unkc0;
-            vy = vy * 0.75 + unkc8;
+            vx = m_hitVx;
+            vy = vy * 0.75 + m_hitVy;
             if (vy < -2.0) {
                 vy = -2.0;
             } else if (vy > -0.5) {
@@ -738,24 +738,24 @@ void CMizukaB::UpdatePattern()
         }
         if (y + vy >= 0.0 && frame > 1) {
             y = 0.0;
-            if (unk12c != 0) {
-                pattern = 0x61;
+            if (m_landHittable != 0) {
+                pattern = kKnockdownHittable;
                 StartPattern();
             } else {
-                pattern = 0x62;
+                pattern = kKnockdown;
                 StartPattern();
             }
         }
         break;
-    case 0x3c:
-        unk58 = 0;
-        if (unk120 != 0) {
-            unk118 -= 0.8;
+    case kHitAirHigh:
+        m_drawMode = 0;
+        if (m_rfBlue != 0) {
+            m_rfGauge -= 0.8;
         }
         if (frame == 0 && timer == 0) {
             m_gauge = m_gauge + 0x1e;
-            vx = unkc0;
-            vy = vy * 0.75 + unkc8;
+            vx = m_hitVx;
+            vy = vy * 0.75 + m_hitVy;
             if (vy < -4.0) {
                 vy = -4.0;
             } else if (vy > -0.5) {
@@ -782,24 +782,24 @@ void CMizukaB::UpdatePattern()
         }
         if (y + vy >= 0.0 && frame > 1) {
             y = 0.0;
-            if (unk12c != 0) {
-                pattern = 0x61;
+            if (m_landHittable != 0) {
+                pattern = kKnockdownHittable;
                 StartPattern();
             } else {
-                pattern = 0x62;
+                pattern = kKnockdown;
                 StartPattern();
             }
         }
         break;
-    case 0x3d:
-        unk58 = 0;
-        if (unk120 != 0) {
-            unk118 -= 0.8;
+    case kHitAirHigher:
+        m_drawMode = 0;
+        if (m_rfBlue != 0) {
+            m_rfGauge -= 0.8;
         }
         if (frame == 0 && timer == 0) {
             m_gauge = m_gauge + 0x1e;
-            vx = unkc0;
-            vy = vy * 0.75 + unkc8;
+            vx = m_hitVx;
+            vy = vy * 0.75 + m_hitVy;
             if (vy < -6.0) {
                 vy = -6.0;
             } else if (vy > -0.5) {
@@ -826,24 +826,24 @@ void CMizukaB::UpdatePattern()
         }
         if (y + vy >= 0.0 && frame > 1) {
             y = 0.0;
-            if (unk12c != 0) {
-                pattern = 0x61;
+            if (m_landHittable != 0) {
+                pattern = kKnockdownHittable;
                 StartPattern();
             } else {
-                pattern = 0x62;
+                pattern = kKnockdown;
                 StartPattern();
             }
         }
         break;
-    case 0x3e:
-        unk58 = 0;
-        if (unk120 != 0) {
-            unk118 -= 0.8;
+    case kHitAirCarry:
+        m_drawMode = 0;
+        if (m_rfBlue != 0) {
+            m_rfGauge -= 0.8;
         }
         if (frame == 0 && timer == 0) {
             m_gauge = m_gauge + 0x1e;
-            vx = unkc0;
-            vy = vy * 0.75 + unkc8;
+            vx = m_hitVx;
+            vy = vy * 0.75 + m_hitVy;
             ay = 0.032;
         }
         if (vy <= 0.0) {
@@ -865,24 +865,24 @@ void CMizukaB::UpdatePattern()
         }
         if (y + vy >= 0.0 && frame > 1) {
             y = 0.0;
-            if (unk12c != 0) {
-                pattern = 0x61;
+            if (m_landHittable != 0) {
+                pattern = kKnockdownHittable;
                 StartPattern();
             } else {
-                pattern = 0x62;
+                pattern = kKnockdown;
                 StartPattern();
             }
         }
         break;
-    case 0x3f:
-        unk58 = 0;
-        if (unk120 != 0) {
-            unk118 -= 0.8;
+    case kHitAirLaunch:
+        m_drawMode = 0;
+        if (m_rfBlue != 0) {
+            m_rfGauge -= 0.8;
         }
         if (frame == 0 && timer == 0) {
             m_gauge = m_gauge + 0x1e;
-            vx = unkc0;
-            vy = unkc8;
+            vx = m_hitVx;
+            vy = m_hitVy;
             ay = 0.032;
         }
         if (vy <= 0.0) {
@@ -904,29 +904,29 @@ void CMizukaB::UpdatePattern()
         }
         if (y + vy >= 0.0 && frame > 1) {
             y = 0.0;
-            if (unk12c != 0) {
-                pattern = 0x61;
+            if (m_landHittable != 0) {
+                pattern = kKnockdownHittable;
                 StartPattern();
             } else {
-                pattern = 0x62;
+                pattern = kKnockdown;
                 StartPattern();
             }
         }
         break;
-    case 0x40:
-        unk58 = 0;
-        if (unk120 != 0) {
-            unk118 -= 0.8;
+    case kHitAirWallBounce:
+        m_drawMode = 0;
+        if (m_rfBlue != 0) {
+            m_rfGauge -= 0.8;
         }
-        if (frame > 0 && (char)Unk40ff70() != 0) {
-            pattern = 0x46;
+        if (frame > 0 && (char)AtScreenEdge() != 0) {
+            pattern = kHitWallBounce;
             StartPattern();
             break;
         }
         if (frame == 0 && timer == 0) {
             m_gauge = m_gauge + 0x1e;
-            vx = unkc0;
-            vy = vy * 0.75 + unkc8;
+            vx = m_hitVx;
+            vy = vy * 0.75 + m_hitVy;
             if (vy < -2.0) {
                 vy = -2.0;
             } else if (vy > -0.5) {
@@ -953,29 +953,29 @@ void CMizukaB::UpdatePattern()
         }
         if (y + vy >= 0.0 && frame > 1) {
             y = 0.0;
-            if (unk12c != 0) {
-                pattern = 0x61;
+            if (m_landHittable != 0) {
+                pattern = kKnockdownHittable;
                 StartPattern();
             } else {
-                pattern = 0x62;
+                pattern = kKnockdown;
                 StartPattern();
             }
         }
         break;
-    case 0x41:
-        unk58 = 0;
-        if (unk120 != 0) {
-            unk118 -= 0.8;
+    case kHitAirHighWallBounce:
+        m_drawMode = 0;
+        if (m_rfBlue != 0) {
+            m_rfGauge -= 0.8;
         }
-        if (frame > 0 && (char)Unk40ff70() != 0) {
-            pattern = 0x46;
+        if (frame > 0 && (char)AtScreenEdge() != 0) {
+            pattern = kHitWallBounce;
             StartPattern();
             break;
         }
         if (frame == 0 && timer == 0) {
             m_gauge = m_gauge + 0x1e;
-            vx = unkc0;
-            vy = vy * 0.75 + unkc8;
+            vx = m_hitVx;
+            vy = vy * 0.75 + m_hitVy;
             if (vy < -4.0) {
                 vy = -4.0;
             } else if (vy > -0.5) {
@@ -1002,29 +1002,29 @@ void CMizukaB::UpdatePattern()
         }
         if (y + vy >= 0.0 && frame > 1) {
             y = 0.0;
-            if (unk12c != 0) {
-                pattern = 0x61;
+            if (m_landHittable != 0) {
+                pattern = kKnockdownHittable;
                 StartPattern();
             } else {
-                pattern = 0x62;
+                pattern = kKnockdown;
                 StartPattern();
             }
         }
         break;
-    case 0x42:
-        unk58 = 0;
-        if (unk120 != 0) {
-            unk118 -= 0.8;
+    case kHitAirCarryWallBounce:
+        m_drawMode = 0;
+        if (m_rfBlue != 0) {
+            m_rfGauge -= 0.8;
         }
-        if (frame > 0 && (char)Unk40ff70() != 0) {
-            pattern = 0x46;
+        if (frame > 0 && (char)AtScreenEdge() != 0) {
+            pattern = kHitWallBounce;
             StartPattern();
             break;
         }
         if (frame == 0 && timer == 0) {
             m_gauge = m_gauge + 0x1e;
-            vx = unkc0;
-            vy = vy * 0.75 + unkc8;
+            vx = m_hitVx;
+            vy = vy * 0.75 + m_hitVy;
             ay = 0.032;
         }
         if (vy <= 0.0) {
@@ -1046,29 +1046,29 @@ void CMizukaB::UpdatePattern()
         }
         if (y + vy >= 0.0 && frame > 1) {
             y = 0.0;
-            if (unk12c != 0) {
-                pattern = 0x61;
+            if (m_landHittable != 0) {
+                pattern = kKnockdownHittable;
                 StartPattern();
             } else {
-                pattern = 0x62;
+                pattern = kKnockdown;
                 StartPattern();
             }
         }
         break;
-    case 0x43:
-        unk58 = 0;
-        if (unk120 != 0) {
-            unk118 -= 0.8;
+    case kHitAirLaunchWallBounce:
+        m_drawMode = 0;
+        if (m_rfBlue != 0) {
+            m_rfGauge -= 0.8;
         }
-        if (frame > 0 && (char)Unk40ff70() != 0) {
-            pattern = 0x46;
+        if (frame > 0 && (char)AtScreenEdge() != 0) {
+            pattern = kHitWallBounce;
             StartPattern();
             break;
         }
         if (frame == 0 && timer == 0) {
             m_gauge = m_gauge + 0x1e;
-            vx = unkc0;
-            vy = unkc8;
+            vx = m_hitVx;
+            vy = m_hitVy;
             ay = 0.032;
         }
         if (vy <= 0.0) {
@@ -1090,29 +1090,29 @@ void CMizukaB::UpdatePattern()
         }
         if (y + vy >= 0.0 && frame > 1) {
             y = 0.0;
-            if (unk12c != 0) {
-                pattern = 0x61;
+            if (m_landHittable != 0) {
+                pattern = kKnockdownHittable;
                 StartPattern();
             } else {
-                pattern = 0x62;
+                pattern = kKnockdown;
                 StartPattern();
             }
         }
         break;
-    case 0x44:
-        unk58 = 0;
-        if (unk120 != 0) {
-            unk118 -= 1.5;
+    case kHitBlownAwayWallBounce:
+        m_drawMode = 0;
+        if (m_rfBlue != 0) {
+            m_rfGauge -= 1.5;
         }
         m_gauge = m_gauge + 3;
-        vx = unkc0;
-        vy = unkc8;
+        vx = m_hitVx;
+        vy = m_hitVy;
         if (vx * vx < vy * vy && frame == 0) {
             frame = 1;
         }
         timer++;
-        if ((char)Unk40ff70() != 0) {
-            pattern = 0x46;
+        if ((char)AtScreenEdge() != 0) {
+            pattern = kHitWallBounce;
             StartPattern();
             break;
         }
@@ -1128,23 +1128,23 @@ void CMizukaB::UpdatePattern()
         }
         if (y + vy >= 0.0) {
             y = 0.0;
-            if (unk12c != 0) {
-                pattern = 0x61;
+            if (m_landHittable != 0) {
+                pattern = kKnockdownHittable;
                 StartPattern();
             } else {
-                pattern = 0x62;
+                pattern = kKnockdown;
                 StartPattern();
             }
         }
         break;
-    case 0x45:
-        unk58 = 0;
-        if (unk120 != 0) {
-            unk118 -= 1.5;
+    case kHitBlownAway:
+        m_drawMode = 0;
+        if (m_rfBlue != 0) {
+            m_rfGauge -= 1.5;
         }
         m_gauge = m_gauge + 3;
-        vx = unkc0;
-        vy = unkc8;
+        vx = m_hitVx;
+        vy = m_hitVy;
         if (vx * vx < vy * vy && frame == 0) {
             frame = 1;
         }
@@ -1161,24 +1161,24 @@ void CMizukaB::UpdatePattern()
         }
         if (y + vy >= 0.0) {
             y = 0.0;
-            if (unk12c != 0) {
-                pattern = 0x61;
+            if (m_landHittable != 0) {
+                pattern = kKnockdownHittable;
                 StartPattern();
             } else {
-                pattern = 0x62;
+                pattern = kKnockdown;
                 StartPattern();
             }
         }
         break;
-    case 0x46:
-        unk58 = 0;
-        if (unk120 != 0) {
-            unk118 -= 0.8;
+    case kHitWallBounce:
+        m_drawMode = 0;
+        if (m_rfBlue != 0) {
+            m_rfGauge -= 0.8;
         }
-        if (frame == 0 && timer == 0 && unk3138 == 0) {
+        if (frame == 0 && timer == 0 && m_patternVar1 == 0) {
             m_gauge = m_gauge + 0x1e;
-            unk3138++;
-            unk124 = unk124 + 0x78;
+            m_patternVar1++;
+            m_untechTime = m_untechTime + 0x78;
             vx = 0.5;
             vy = -2.5;
             ay = 0.025;
@@ -1201,24 +1201,24 @@ void CMizukaB::UpdatePattern()
         }
         if (y + vy >= 0.0 && frame > 1) {
             y = 0.0;
-            if (unk12c != 0) {
-                pattern = 0x61;
+            if (m_landHittable != 0) {
+                pattern = kKnockdownHittable;
                 StartPattern();
             } else {
-                pattern = 0x62;
+                pattern = kKnockdown;
                 StartPattern();
             }
         }
         break;
-    case 0x47:
-        unk58 = 0;
-        if (unk120 != 0) {
-            unk118 -= 0.8;
+    case kHitAirHeavy:
+        m_drawMode = 0;
+        if (m_rfBlue != 0) {
+            m_rfGauge -= 0.8;
         }
         if (frame == 0 && timer == 0) {
             m_gauge = m_gauge + 0x1e;
-            vx = unkc0;
-            vy = unkc8;
+            vx = m_hitVx;
+            vy = m_hitVy;
             ay = 0.072;
         }
         if (vy <= 0.0) {
@@ -1240,100 +1240,100 @@ void CMizukaB::UpdatePattern()
         }
         if (y + vy >= 0.0 && frame > 1) {
             y = 0.0;
-            if (unk12c != 0) {
-                pattern = 0x61;
+            if (m_landHittable != 0) {
+                pattern = kKnockdownHittable;
                 StartPattern();
             } else {
-                pattern = 0x62;
+                pattern = kKnockdown;
                 StartPattern();
             }
         }
         break;
-    case 0x48:
-        unk58 = 0;
-        if (unk120 != 0) {
-            unk118 -= 0.8;
+    case kHitStandHighHold:
+        m_drawMode = 0;
+        if (m_rfBlue != 0) {
+            m_rfGauge -= 0.8;
         }
-        unk158 = 0;
+        m_dashMomentum = 0;
         vx = 0.0;
         vy = 0.0;
         if (x - 20.0 <= 0.0 || x + 20.0 >= 639.0) {
-            unkb8 = (1.0 - ((*m_opponent)->y < 0.0) * 0.25) * vx;
+            m_cornerPushback = (1.0 - ((*m_opponent)->y < 0.0) * 0.25) * vx;
         } else {
-            unkb8 = 0.0;
+            m_cornerPushback = 0.0;
         }
         timer++;
         if (timer >= l4) {
             timer = 0;
             frame++;
             if (frame >= x8) {
-                pattern = 7;
+                pattern = kStandUp;
                 if (m_inputY == 1) {
-                    pattern = 3;
+                    pattern = kCrouch;
                 }
                 StartPattern();
             }
         }
         break;
-    case 0x49:
-        unk58 = 0;
-        if (unk120 != 0) {
-            unk118 -= 0.8;
+    case kHitStandLowHold:
+        m_drawMode = 0;
+        if (m_rfBlue != 0) {
+            m_rfGauge -= 0.8;
         }
-        unk158 = 0;
+        m_dashMomentum = 0;
         vx = 0.0;
         vy = 0.0;
         if (x - 20.0 <= 0.0 || x + 20.0 >= 639.0) {
-            unkb8 = (1.0 - ((*m_opponent)->y < 0.0) * 0.25) * vx;
+            m_cornerPushback = (1.0 - ((*m_opponent)->y < 0.0) * 0.25) * vx;
         } else {
-            unkb8 = 0.0;
+            m_cornerPushback = 0.0;
         }
         timer++;
         if (timer >= l4) {
             timer = 0;
             frame++;
             if (frame >= x8) {
-                pattern = 7;
+                pattern = kStandUp;
                 if (m_inputY == 1) {
-                    pattern = 3;
+                    pattern = kCrouch;
                 }
                 StartPattern();
             }
         }
         break;
-    case 0x4a:
-        unk58 = 0;
-        if (unk120 != 0) {
-            unk118 -= 0.8;
+    case kHitCrouchHold:
+        m_drawMode = 0;
+        if (m_rfBlue != 0) {
+            m_rfGauge -= 0.8;
         }
-        unk158 = 0;
+        m_dashMomentum = 0;
         vx = 0.0;
         vy = 0.0;
         if (x - 20.0 <= 0.0 || x + 20.0 >= 639.0) {
-            unkb8 = (1.0 - ((*m_opponent)->y < 0.0) * 0.25) * vx;
+            m_cornerPushback = (1.0 - ((*m_opponent)->y < 0.0) * 0.25) * vx;
         } else {
-            unkb8 = 0.0;
+            m_cornerPushback = 0.0;
         }
         timer++;
         if (timer >= l4) {
             timer = 0;
             frame++;
             if (frame >= x8) {
-                pattern = 3;
+                pattern = kCrouch;
                 StartPattern();
             }
         }
         break;
-    case 0x4b:
-        unk58 = 0;
-        if (unk120 != 0) {
-            unk118 -= 0.6;
+    case kHitStandHighPull:
+        m_drawMode = 0;
+        if (m_rfBlue != 0) {
+            m_rfGauge -= 0.6;
         }
-        unk158 = 0;
+        m_dashMomentum = 0;
         if (frame == 0 && timer == 0) {
             m_gauge = m_gauge + 0x1e;
-            if (unk120 != 0) {
-                unk118 -= 30.0;
+            if (m_rfBlue != 0) {
+                m_rfGauge -= 30.0;
             }
             vx = 2.2;
         }
@@ -1346,33 +1346,33 @@ void CMizukaB::UpdatePattern()
             vx = 0.0;
         }
         if (x - 20.0 <= 0.0 || x + 20.0 >= 639.0) {
-            unkb8 = (1.0 - ((*m_opponent)->y < 0.0) * 0.25) * vx;
+            m_cornerPushback = (1.0 - ((*m_opponent)->y < 0.0) * 0.25) * vx;
         } else {
-            unkb8 = 0.0;
+            m_cornerPushback = 0.0;
         }
         timer++;
         if (timer >= l4) {
             timer = 0;
             frame++;
             if (frame >= x8) {
-                pattern = 7;
+                pattern = kStandUp;
                 if (m_inputY == 1) {
-                    pattern = 3;
+                    pattern = kCrouch;
                 }
                 StartPattern();
             }
         }
         break;
-    case 0x4c:
-        unk58 = 0;
-        if (unk120 != 0) {
-            unk118 -= 0.6;
+    case kHitStandLowPull:
+        m_drawMode = 0;
+        if (m_rfBlue != 0) {
+            m_rfGauge -= 0.6;
         }
-        unk158 = 0;
+        m_dashMomentum = 0;
         if (frame == 0 && timer == 0) {
             m_gauge = m_gauge + 0x1e;
-            if (unk120 != 0) {
-                unk118 -= 30.0;
+            if (m_rfBlue != 0) {
+                m_rfGauge -= 30.0;
             }
             vx = 2.2;
         }
@@ -1385,33 +1385,33 @@ void CMizukaB::UpdatePattern()
             vx = 0.0;
         }
         if (x - 20.0 <= 0.0 || x + 20.0 >= 639.0) {
-            unkb8 = (1.0 - ((*m_opponent)->y < 0.0) * 0.25) * vx;
+            m_cornerPushback = (1.0 - ((*m_opponent)->y < 0.0) * 0.25) * vx;
         } else {
-            unkb8 = 0.0;
+            m_cornerPushback = 0.0;
         }
         timer++;
         if (timer >= l4) {
             timer = 0;
             frame++;
             if (frame >= x8) {
-                pattern = 7;
+                pattern = kStandUp;
                 if (m_inputY == 1) {
-                    pattern = 3;
+                    pattern = kCrouch;
                 }
                 StartPattern();
             }
         }
         break;
-    case 0x4d:
-        unk58 = 0;
-        if (unk120 != 0) {
-            unk118 -= 0.6;
+    case kHitCrouchPull:
+        m_drawMode = 0;
+        if (m_rfBlue != 0) {
+            m_rfGauge -= 0.6;
         }
-        unk158 = 0;
+        m_dashMomentum = 0;
         if (frame == 0 && timer == 0) {
             m_gauge = m_gauge + 0x1e;
-            if (unk120 != 0) {
-                unk118 -= 30.0;
+            if (m_rfBlue != 0) {
+                m_rfGauge -= 30.0;
             }
             vx = 2.2;
         }
@@ -1424,24 +1424,24 @@ void CMizukaB::UpdatePattern()
             vx = 0.0;
         }
         if (x - 20.0 <= 0.0 || x + 20.0 >= 639.0) {
-            unkb8 = (1.0 - ((*m_opponent)->y < 0.0) * 0.25) * vx;
+            m_cornerPushback = (1.0 - ((*m_opponent)->y < 0.0) * 0.25) * vx;
         } else {
-            unkb8 = 0.0;
+            m_cornerPushback = 0.0;
         }
         timer++;
         if (timer >= l4) {
             timer = 0;
             frame++;
             if (frame >= x8) {
-                pattern = 3;
+                pattern = kCrouch;
                 StartPattern();
             }
         }
         break;
-    case 0x51:
-        unk58 = 0;
-        if (unk120 != 0) {
-            unk118 -= 0.8;
+    case kHitBurn:
+        m_drawMode = 0;
+        if (m_rfBlue != 0) {
+            m_rfGauge -= 0.8;
         }
         if (frame == 0 && timer == 0) {
             l50.type = 0x1f3;
@@ -1451,8 +1451,8 @@ void CMizukaB::UpdatePattern()
             l50.layer = 1;
             SpawnObject(&l50);
             m_gauge = m_gauge + 0x1e;
-            vx = unkc0;
-            vy = unkc8;
+            vx = m_hitVx;
+            vy = m_hitVy;
             ay = 0.032;
         }
         vx += 0.02;
@@ -1470,30 +1470,30 @@ void CMizukaB::UpdatePattern()
         }
         if (y + vy >= 0.0 && frame == 1) {
             y = 0.0;
-            if (unk12c != 0) {
-                pattern = 0x61;
+            if (m_landHittable != 0) {
+                pattern = kKnockdownHittable;
                 StartPattern();
             } else {
-                pattern = 0x62;
+                pattern = kKnockdown;
                 StartPattern();
             }
         }
         break;
-    case 0x52:
-        unk58 = 0;
-        if (unk120 != 0) {
-            unk118 -= 0.8;
+    case kHitShock:
+        m_drawMode = 0;
+        if (m_rfBlue != 0) {
+            m_rfGauge -= 0.8;
         }
-        if (frame == 0 && timer == 0 && unk3138 == 0) {
+        if (frame == 0 && timer == 0 && m_patternVar1 == 0) {
             m_playSound = 0x1e;
             vy = -0.45;
             vx = -0.1;
-            unk3138++;
+            m_patternVar1++;
             m_gauge = m_gauge + 0x1e;
         }
         if (frame == 4 && timer == 0) {
-            vx = unkc0;
-            vy = unkc8;
+            vx = m_hitVx;
+            vy = m_hitVy;
             ay = 0.032;
         }
         if (vy > 0.0 && frame == 4) {
@@ -1507,9 +1507,9 @@ void CMizukaB::UpdatePattern()
         if (timer >= l4) {
             timer = 0;
             frame++;
-            if (frame == 4 && unk3138 < 8) {
+            if (frame == 4 && m_patternVar1 < 8) {
                 frame = 0;
-                unk3138++;
+                m_patternVar1++;
             }
             if (frame >= x8) {
                 frame = frame - 2;
@@ -1517,31 +1517,31 @@ void CMizukaB::UpdatePattern()
         }
         if (y + vy >= 0.0 && frame > 4) {
             y = 0.0;
-            if (unk12c != 0) {
-                pattern = 0x61;
+            if (m_landHittable != 0) {
+                pattern = kKnockdownHittable;
                 StartPattern();
             } else {
-                pattern = 0x62;
+                pattern = kKnockdown;
                 StartPattern();
             }
         }
         break;
-    case 0x53:
-        unk58 = 0;
+    case kEncased:
+        m_drawMode = 0;
         if (frame == 0 && timer == 0) {
-            if (unk3144 == 0) {
+            if (m_encasedBreakOut == 0) {
                 l50.type = 0x1f0;
                 l50.x = (double)(int)x;
                 l50.y = (double)(int)y;
                 l50.scale = 0;
                 l50.layer = 0;
-                l50.unk0 = 1;
+                l50.keep = 1;
                 l50.facing = facing;
                 SpawnObject(&l50);
-                unk3144 = 1;
+                m_encasedBreakOut = 1;
             }
-            if (unk120 != 0) {
-                unk118 -= 30.0;
+            if (m_rfBlue != 0) {
+                m_rfGauge -= 30.0;
             }
             m_playSound = 0x21;
             vy = -1.5;
@@ -1573,28 +1573,28 @@ void CMizukaB::UpdatePattern()
             timer = 0;
             frame++;
             if (frame >= x8) {
-                pattern = 0;
+                pattern = kStand;
                 StartPattern();
                 FaceOpponent();
             }
         }
         break;
-    case 0x54:
-        unk58 = 0;
+    case kEncased2:
+        m_drawMode = 0;
         if (frame == 0 && timer == 0) {
-            if (unk3144 == 0) {
+            if (m_encasedBreakOut == 0) {
                 l50.type = 0x1f0;
                 l50.x = (double)(int)x;
                 l50.y = (double)(int)y;
                 l50.scale = 0;
                 l50.layer = 0;
-                l50.unk0 = 1;
+                l50.keep = 1;
                 l50.facing = facing;
                 SpawnObject(&l50);
-                unk3144 = 1;
+                m_encasedBreakOut = 1;
             }
-            if (unk120 != 0) {
-                unk118 -= 30.0;
+            if (m_rfBlue != 0) {
+                m_rfGauge -= 30.0;
             }
             m_playSound = 0x21;
             vy = -1.5;
@@ -1626,32 +1626,32 @@ void CMizukaB::UpdatePattern()
             timer = 0;
             frame++;
             if (frame >= x8) {
-                pattern = 0;
+                pattern = kStand;
                 StartPattern();
                 FaceOpponent();
             }
         }
         break;
-    case 0x55:
-        unk58 = 0;
+    case kEncasedAir:
+        m_drawMode = 0;
         if (frame == 0 && timer == 0) {
-            if (unk3144 == 0) {
+            if (m_encasedBreakOut == 0) {
                 l50.type = 0x1f0;
                 l50.x = (double)(int)x;
                 l50.y = (double)(int)y;
                 l50.scale = 0;
                 l50.layer = 0;
-                l50.unk0 = 1;
+                l50.keep = 1;
                 l50.facing = facing;
                 SpawnObject(&l50);
-                unk3144 = 1;
+                m_encasedBreakOut = 1;
             }
-            if (unk120 != 0) {
-                unk118 -= 30.0;
+            if (m_rfBlue != 0) {
+                m_rfGauge -= 30.0;
             }
             m_playSound = 0x21;
-            vx = unkc0;
-            vy = unkc8;
+            vx = m_hitVx;
+            vy = m_hitVy;
             m_gauge = m_gauge + 0x1e;
         }
         vy += 0.04;
@@ -1660,45 +1660,45 @@ void CMizukaB::UpdatePattern()
             timer = 0;
             frame++;
             if (frame >= x8) {
-                pattern = 0;
+                pattern = kStand;
                 StartPattern();
                 FaceOpponent();
             }
         }
         if (y + vy >= 0.0) {
             y = 0.0;
-            if (unk12c != 0) {
-                pattern = 0x61;
+            if (m_landHittable != 0) {
+                pattern = kKnockdownHittable;
                 StartPattern();
             } else {
-                pattern = 0x62;
+                pattern = kKnockdown;
                 StartPattern();
             }
         }
         break;
-    case 0x56:
-        unk58 = 0;
+    case kEncasedSpin:
+        m_drawMode = 0;
         if (frame == 0 && timer == 0) {
-            if (unk3144 == 0) {
+            if (m_encasedBreakOut == 0) {
                 l50.type = 0x1f0;
                 l50.x = (double)(int)x;
                 l50.y = (double)(int)y;
                 l50.scale = 0;
                 l50.layer = 0;
-                l50.unk0 = 1;
+                l50.keep = 1;
                 l50.facing = facing;
                 SpawnObject(&l50);
-                unk3144 = 1;
+                m_encasedBreakOut = 1;
             }
-            if (unk3138 == 0) {
-                if (unk120 != 0) {
-                    unk118 -= 30.0;
+            if (m_patternVar1 == 0) {
+                if (m_rfBlue != 0) {
+                    m_rfGauge -= 30.0;
                 }
                 m_playSound = 0x21;
-                vx = unkc0;
-                vy = unkc8;
+                vx = m_hitVx;
+                vy = m_hitVy;
                 m_gauge = m_gauge + 0x1e;
-                unk3138++;
+                m_patternVar1++;
             }
         }
         vy += 0.06;
@@ -1712,16 +1712,16 @@ void CMizukaB::UpdatePattern()
         }
         if (y + vy >= 0.0) {
             y = 0.0;
-            if (unk12c != 0) {
-                pattern = 0x61;
+            if (m_landHittable != 0) {
+                pattern = kKnockdownHittable;
                 StartPattern();
             } else {
-                pattern = 0x62;
+                pattern = kKnockdown;
                 StartPattern();
             }
         }
         break;
-    case 0x57:
+    case kFallInDarkness:
         if (frame == 0 && timer == 0) {
             l50.type = 0x1ef;
             l50.x = 60.0;
@@ -1737,12 +1737,12 @@ void CMizukaB::UpdatePattern()
             timer = 0;
             frame++;
             if (frame >= x8) {
-                pattern = 0;
+                pattern = kStand;
                 StartPattern();
             }
         }
         break;
-    case 0x60:
+    case kWakeUp:
         timer++;
         if (timer >= l4) {
             timer = 0;
@@ -1751,19 +1751,19 @@ void CMizukaB::UpdatePattern()
                 FaceOpponent();
             }
             if (frame >= x8) {
-                pattern = 7;
+                pattern = kStandUp;
                 if (m_inputY == 1) {
-                    pattern = 3;
+                    pattern = kCrouch;
                 }
-                if (m_command == 0x35 && m_gauge >= 0x3e8) {
-                    pattern = 0xa2;
+                if (m_command == kCmd22D && m_gauge >= 0x3e8) {
+                    pattern = kWakeUpAttack;
                 }
                 StartPattern();
             }
         }
         break;
-    case 0x61:
-        unk58 = 0;
+    case kKnockdownHittable:
+        m_drawMode = 0;
         vx = 0.0;
         vy = 0.0;
         if (frame == 0 && timer == 0) {
@@ -1781,13 +1781,13 @@ void CMizukaB::UpdatePattern()
             timer = 0;
             frame++;
             if (frame >= x8) {
-                pattern = 0x63;
+                pattern = kLyingDown;
                 StartPattern();
             }
         }
         break;
-    case 0x62:
-        unk58 = 0;
+    case kKnockdown:
+        m_drawMode = 0;
         vx = 0.0;
         vy = 0.0;
         if (frame == 0 && timer == 0) {
@@ -1805,17 +1805,17 @@ void CMizukaB::UpdatePattern()
             timer = 0;
             frame++;
             if (frame >= x8) {
-                pattern = 0x63;
+                pattern = kLyingDown;
                 StartPattern();
             }
         }
         break;
-    case 0x63:
-        unk58 = 0;
+    case kLyingDown:
+        m_drawMode = 0;
         if (m_hp > 0 && timer > 0x63 && frame == 0) {
-            pattern = 0x60;
+            pattern = kWakeUp;
             StartPattern();
-            unk158 = 0;
+            m_dashMomentum = 0;
         }
         timer++;
         if (timer >= l4) {
@@ -1825,20 +1825,20 @@ void CMizukaB::UpdatePattern()
                 FaceOpponent();
             }
             if (frame >= x8) {
-                pattern = 0x60;
+                pattern = kWakeUp;
                 StartPattern();
             }
         }
         break;
-    case 0x96:
+    case kGuardStandLight:
         if (m_inputY == 1) {
-            pattern = 0x99;
+            pattern = kGuardCrouchLight;
         }
         if (m_inputY != 1) {
-            pattern = 0x96;
+            pattern = kGuardStandLight;
         }
         if (frame == 0 && timer == 0) {
-            unk158 = 0;
+            m_dashMomentum = 0;
             m_gauge = m_gauge + 0xa;
             vx = -1.5;
             vy = 0.0;
@@ -1850,9 +1850,9 @@ void CMizukaB::UpdatePattern()
             vx = 0.0;
         }
         if (x - 20.0 <= 0.0 || x + 20.0 >= 639.0) {
-            unkb8 = vx;
+            m_cornerPushback = vx;
         } else {
-            unkb8 = 0.0;
+            m_cornerPushback = 0.0;
         }
         timer++;
         if (timer >= l4) {
@@ -1862,23 +1862,23 @@ void CMizukaB::UpdatePattern()
                 FaceOpponent();
             }
             if (frame >= x8) {
-                pattern = 0;
+                pattern = kStand;
                 if (m_inputY == 1) {
-                    pattern = 3;
+                    pattern = kCrouch;
                 }
                 StartPattern();
             }
         }
         break;
-    case 0x97:
+    case kGuardStandMedium:
         if (m_inputY == 1) {
-            pattern = 0x9a;
+            pattern = kGuardCrouchMedium;
         }
         if (m_inputY != 1) {
-            pattern = 0x97;
+            pattern = kGuardStandMedium;
         }
         if (frame == 0 && timer == 0) {
-            unk158 = 0;
+            m_dashMomentum = 0;
             m_gauge = m_gauge + 0xf;
             vx = -1.8;
             vy = 0.0;
@@ -1890,9 +1890,9 @@ void CMizukaB::UpdatePattern()
             vx = 0.0;
         }
         if (x - 20.0 <= 0.0 || x + 20.0 >= 639.0) {
-            unkb8 = vx;
+            m_cornerPushback = vx;
         } else {
-            unkb8 = 0.0;
+            m_cornerPushback = 0.0;
         }
         timer++;
         if (timer >= l4) {
@@ -1902,23 +1902,23 @@ void CMizukaB::UpdatePattern()
                 FaceOpponent();
             }
             if (frame >= x8) {
-                pattern = 0;
+                pattern = kStand;
                 if (m_inputY == 1) {
-                    pattern = 3;
+                    pattern = kCrouch;
                 }
                 StartPattern();
             }
         }
         break;
-    case 0x98:
+    case kGuardStandHeavy:
         if (m_inputY == 1) {
-            pattern = 0x9b;
+            pattern = kGuardCrouchHeavy;
         }
         if (m_inputY != 1) {
-            pattern = 0x98;
+            pattern = kGuardStandHeavy;
         }
         if (frame == 0 && timer == 0) {
-            unk158 = 0;
+            m_dashMomentum = 0;
             m_gauge = m_gauge + 0x14;
             vx = -2.3;
             vy = 0.0;
@@ -1930,9 +1930,9 @@ void CMizukaB::UpdatePattern()
             vx = 0.0;
         }
         if (x - 20.0 <= 0.0 || x + 20.0 >= 639.0) {
-            unkb8 = vx;
+            m_cornerPushback = vx;
         } else {
-            unkb8 = 0.0;
+            m_cornerPushback = 0.0;
         }
         timer++;
         if (timer >= l4) {
@@ -1942,23 +1942,23 @@ void CMizukaB::UpdatePattern()
                 FaceOpponent();
             }
             if (frame >= x8) {
-                pattern = 0;
+                pattern = kStand;
                 if (m_inputY == 1) {
-                    pattern = 3;
+                    pattern = kCrouch;
                 }
                 StartPattern();
             }
         }
         break;
-    case 0x99:
+    case kGuardCrouchLight:
         if (m_inputY == 1) {
-            pattern = 0x99;
+            pattern = kGuardCrouchLight;
         }
         if (m_inputY != 1) {
-            pattern = 0x96;
+            pattern = kGuardStandLight;
         }
         if (frame == 0 && timer == 0) {
-            unk158 = 0;
+            m_dashMomentum = 0;
             m_gauge = m_gauge + 0xa;
             vx = -1.5;
             vy = 0.0;
@@ -1970,9 +1970,9 @@ void CMizukaB::UpdatePattern()
             vx = 0.0;
         }
         if (x - 20.0 <= 0.0 || x + 20.0 >= 639.0) {
-            unkb8 = vx;
+            m_cornerPushback = vx;
         } else {
-            unkb8 = 0.0;
+            m_cornerPushback = 0.0;
         }
         timer++;
         if (timer >= l4) {
@@ -1982,20 +1982,20 @@ void CMizukaB::UpdatePattern()
                 FaceOpponent();
             }
             if (frame >= x8) {
-                pattern = 3;
+                pattern = kCrouch;
                 StartPattern();
             }
         }
         break;
-    case 0x9a:
+    case kGuardCrouchMedium:
         if (m_inputY == 1) {
-            pattern = 0x9a;
+            pattern = kGuardCrouchMedium;
         }
         if (m_inputY != 1) {
-            pattern = 0x97;
+            pattern = kGuardStandMedium;
         }
         if (frame == 0 && timer == 0) {
-            unk158 = 0;
+            m_dashMomentum = 0;
             m_gauge = m_gauge + 0xf;
             vx = -1.8;
             vy = 0.0;
@@ -2007,9 +2007,9 @@ void CMizukaB::UpdatePattern()
             vx = 0.0;
         }
         if (x - 20.0 <= 0.0 || x + 20.0 >= 639.0) {
-            unkb8 = vx;
+            m_cornerPushback = vx;
         } else {
-            unkb8 = 0.0;
+            m_cornerPushback = 0.0;
         }
         timer++;
         if (timer >= l4) {
@@ -2019,20 +2019,20 @@ void CMizukaB::UpdatePattern()
                 FaceOpponent();
             }
             if (frame >= x8) {
-                pattern = 3;
+                pattern = kCrouch;
                 StartPattern();
             }
         }
         break;
-    case 0x9b:
+    case kGuardCrouchHeavy:
         if (m_inputY == 1) {
-            pattern = 0x9b;
+            pattern = kGuardCrouchHeavy;
         }
         if (m_inputY != 1) {
-            pattern = 0x98;
+            pattern = kGuardStandHeavy;
         }
         if (frame == 0 && timer == 0) {
-            unk158 = 0;
+            m_dashMomentum = 0;
             m_gauge = m_gauge + 0x14;
             vx = -2.3;
             vy = 0.0;
@@ -2044,9 +2044,9 @@ void CMizukaB::UpdatePattern()
             vx = 0.0;
         }
         if (x - 20.0 <= 0.0 || x + 20.0 >= 639.0) {
-            unkb8 = vx;
+            m_cornerPushback = vx;
         } else {
-            unkb8 = 0.0;
+            m_cornerPushback = 0.0;
         }
         timer++;
         if (timer >= l4) {
@@ -2056,12 +2056,12 @@ void CMizukaB::UpdatePattern()
                 FaceOpponent();
             }
             if (frame >= x8) {
-                pattern = 3;
+                pattern = kCrouch;
                 StartPattern();
             }
         }
         break;
-    case 0x9c:
+    case kGuardAir:
         if (frame == 0 && timer == 0) {
             vy = -2.6;
             m_gauge = m_gauge + 0xf;
@@ -2074,7 +2074,7 @@ void CMizukaB::UpdatePattern()
             timer = 0;
             frame++;
             if (frame >= x8) {
-                pattern = 9;
+                pattern = kFall;
                 StartPattern();
             }
         }
@@ -2082,14 +2082,14 @@ void CMizukaB::UpdatePattern()
             y = 0.0;
             m_playSound = 9;
             FaceOpponent();
-            pattern = 0xd;
+            pattern = kLand;
             StartPattern();
         }
         break;
-    case 0x9d:
+    case kAirRecoveryForward:
         vx = 1.0;
         ay = 0.045;
-        unk158 = 0;
+        m_dashMomentum = 0;
         if (frame == 0 && timer == 0) {
             vy = -2.3;
             l50.type = 8;
@@ -2106,7 +2106,7 @@ void CMizukaB::UpdatePattern()
             timer = 0;
             frame++;
             if (frame >= x8) {
-                pattern = 9;
+                pattern = kFall;
                 StartPattern();
             }
         }
@@ -2114,17 +2114,17 @@ void CMizukaB::UpdatePattern()
             y = 0.0;
             m_playSound = 9;
             FaceOpponent();
-            pattern = 0xd;
-            if (unk3458 > 0) {
+            pattern = kLand;
+            if (m_flying > 0) {
                 pattern = 0xb3;
             }
             StartPattern();
         }
         break;
-    case 0x9e:
+    case kAirRecoveryBack:
         vx = -1.0;
         ay = 0.045;
-        unk158 = 0;
+        m_dashMomentum = 0;
         if (frame == 0 && timer == 0) {
             vy = -2.3;
             l50.type = 8;
@@ -2141,7 +2141,7 @@ void CMizukaB::UpdatePattern()
             timer = 0;
             frame++;
             if (frame >= x8) {
-                pattern = 9;
+                pattern = kFall;
                 StartPattern();
             }
         }
@@ -2149,8 +2149,8 @@ void CMizukaB::UpdatePattern()
             y = 0.0;
             m_playSound = 9;
             FaceOpponent();
-            pattern = 0xd;
-            if (unk3458 > 0) {
+            pattern = kLand;
+            if (m_flying > 0) {
                 pattern = 0xb3;
             }
             StartPattern();
@@ -2167,20 +2167,20 @@ void CMizukaB::UpdatePattern()
             m_game->CreateEffect((EffectDesc*)&l50);
             m_hitsLeft = 1;
             m_playSound = 0x3e;
-            unk3138++;
+            m_patternVar1++;
         }
         timer++;
         if (timer >= l4) {
             timer = 0;
             frame++;
             if (frame >= x8) {
-                pattern = 9;
+                pattern = kFall;
                 StartPattern();
                 ay = 0.035;
             }
         }
         break;
-    case 0xa2:
+    case kWakeUpAttack:
         if (frame == 0 && timer == 0) {
             StopMoving();
         }
@@ -2200,11 +2200,11 @@ void CMizukaB::UpdatePattern()
             m_hitsLeft = 1;
             m_playSound = 0x3e;
             m_gauge = m_gauge - 0x3e8;
-            unk3138++;
+            m_patternVar1++;
         }
         vy = vy + ay;
         if (y + vy > 0.0) {
-            pattern = 0xd;
+            pattern = kLand;
             StartPattern();
             StartPattern();
             y = 0.0;
@@ -2222,23 +2222,23 @@ void CMizukaB::UpdatePattern()
             }
         }
         break;
-    case 0xa3:
+    case kDashForward:
         if (frame == 0 && timer == 0) {
             StopMoving();
         }
         if (frame > 9) {
-            unk313c++;
+            m_patternVar2++;
         }
         if (frame == 2 && timer == 0) {
             vx = 1.5;
         }
         if (frame == 5 && timer == 0) {
-            unk58 = 1;
+            m_drawMode = 1;
         }
         if (frame == 6 && timer == 0) {
-            unk58 = 3;
+            m_drawMode = 3;
         }
-        unk158 = 1;
+        m_dashMomentum = 1;
         timer++;
         if (timer >= l4) {
             timer = 0;
@@ -2248,23 +2248,23 @@ void CMizukaB::UpdatePattern()
                 break;
             }
         }
-        if (m_inputX == facing && unk313c >= 0x2a) {
-            pattern = 0xb2;
-            unk58 = 1;
+        if (m_inputX == facing && m_patternVar2 >= 0x2a) {
+            pattern = kDashStop;
+            m_drawMode = 1;
             StartPattern();
         }
-        if (m_inputX != facing && unk313c >= 0x18) {
-            pattern = 0xb2;
-            unk58 = 1;
+        if (m_inputX != facing && m_patternVar2 >= 0x18) {
+            pattern = kDashStop;
+            m_drawMode = 1;
             StartPattern();
         }
         break;
-    case 0xa4:
+    case kDashBack:
         if (frame == 0 && timer == 0) {
             StopMoving();
         }
-        unk158 = 0;
-        if (frame == 3 && timer == 0 && unk3138 == 0) {
+        m_dashMomentum = 0;
+        if (frame == 3 && timer == 0 && m_patternVar1 == 0) {
             vx = -2.5;
             vy = -1.3;
         }
@@ -2282,28 +2282,28 @@ void CMizukaB::UpdatePattern()
             timer = 0;
             frame++;
             if (frame == 4) {
-                unk58 = 1;
+                m_drawMode = 1;
             }
             if (frame == 5) {
-                unk58 = 3;
+                m_drawMode = 3;
             }
             if (frame == 7) {
-                unk58 = 1;
+                m_drawMode = 1;
             }
             if (frame == 8) {
-                unk58 = 0;
+                m_drawMode = 0;
             }
             if (frame == 0xc) {
                 frame = frame - 2;
             }
             if (frame >= x8) {
                 StartPattern();
-                pattern = 7;
+                pattern = kStandUp;
             }
         }
         break;
-    case 0xa5:
-        if (frame == 0 && timer == 0 && unk3138 == 0) {
+    case kAirDashForward:
+        if (frame == 0 && timer == 0 && m_patternVar1 == 0) {
             vx = 2.0;
             StartAfterimages(3);
             vy = 0.0;
@@ -2311,8 +2311,8 @@ void CMizukaB::UpdatePattern()
             m_playSound = 0x11;
         }
         timer++;
-        unk3138++;
-        unk313c++;
+        m_patternVar1++;
+        m_patternVar2++;
         if (timer >= l4) {
             timer = 0;
             frame++;
@@ -2320,8 +2320,8 @@ void CMizukaB::UpdatePattern()
                 frame = frame - 2;
             }
         }
-        if (m_inputX == facing && unk313c >= 0x78) {
-            pattern = 9;
+        if (m_inputX == facing && m_patternVar2 >= 0x78) {
+            pattern = kFall;
             StartPattern();
             vx = 1.3;
             ay = 0.03;
@@ -2329,12 +2329,12 @@ void CMizukaB::UpdatePattern()
                 vx = -vx;
             }
         }
-        if (m_inputX != facing && unk3138 >= 0x30) {
-            pattern = 9;
+        if (m_inputX != facing && m_patternVar1 >= 0x30) {
+            pattern = kFall;
             StartPattern();
             vx = 1.3;
             ay = 0.03;
-            if (unk3458 > 0) {
+            if (m_flying > 0) {
                 pattern = 0xb3;
                 frame = 7;
             }
@@ -2343,8 +2343,8 @@ void CMizukaB::UpdatePattern()
             }
         }
         break;
-    case 0xa6:
-        if (frame == 0 && timer == 0 && unk3138 == 0) {
+    case kAirDashBack:
+        if (frame == 0 && timer == 0 && m_patternVar1 == 0) {
             vx = -2.0;
             vy = 0.0;
             ay = 0.0;
@@ -2352,8 +2352,8 @@ void CMizukaB::UpdatePattern()
             m_playSound = 0x11;
         }
         timer++;
-        unk3138++;
-        unk313c++;
+        m_patternVar1++;
+        m_patternVar2++;
         if (timer >= l4) {
             timer = 0;
             frame++;
@@ -2361,8 +2361,8 @@ void CMizukaB::UpdatePattern()
                 frame = frame - 2;
             }
         }
-        if (m_inputX == -facing && unk313c >= 0x78) {
-            pattern = 9;
+        if (m_inputX == -facing && m_patternVar2 >= 0x78) {
+            pattern = kFall;
             StartPattern();
             vx = -0.9;
             ay = 0.03;
@@ -2370,12 +2370,12 @@ void CMizukaB::UpdatePattern()
                 vx = -vx;
             }
         }
-        if (m_inputX != -facing && unk3138 >= 0x30) {
-            pattern = 9;
+        if (m_inputX != -facing && m_patternVar1 >= 0x30) {
+            pattern = kFall;
             StartPattern();
             vx = -0.9;
             ay = 0.03;
-            if (unk3458 > 0) {
+            if (m_flying > 0) {
                 pattern = 0xb3;
                 frame = 7;
             }
@@ -2384,16 +2384,16 @@ void CMizukaB::UpdatePattern()
             }
         }
         break;
-    case 0xa7:
-        unk58 = 0;
+    case kInstantCharge:
+        m_drawMode = 0;
         if (frame == 0 && timer == 0) {
             vx = 0.0;
             vy = 0.0;
-            if (unk120 == 1) {
-                m_proration = 5.0 * unk118 + m_proration;
+            if (m_rfBlue == 1) {
+                m_proration = 5.0 * m_rfGauge + m_proration;
             }
-            unk118 = 0.0;
-            unk14c = 0x5a;
+            m_rfGauge = 0.0;
+            m_freezeTime = 0x5a;
             FillBackground(0xb0, 3);
         }
         if (frame == 1 && timer == 0) {
@@ -2419,22 +2419,22 @@ void CMizukaB::UpdatePattern()
             frame++;
             m_attackResult = 0;
             if (frame >= x8) {
-                pattern = 0;
+                pattern = kStand;
                 FaceOpponent();
                 StartPattern();
             }
         }
         break;
-    case 0xa8:
-        unk58 = 0;
+    case kRecoilGuardStand:
+        m_drawMode = 0;
         if (frame == 0 && timer == 0) {
-            unk158 = 0;
+            m_dashMomentum = 0;
             vx = 0.0;
             vy = 0.0;
             y = 0.0;
             ay = 0.0;
-            unk14e = 0;
-            unkb8 = 0.0;
+            m_recoilGuardWindow = 0;
+            m_cornerPushback = 0.0;
             ax = 0.0;
             l50.type = 8;
             l50.x = (double)(int)x;
@@ -2451,21 +2451,21 @@ void CMizukaB::UpdatePattern()
                 FaceOpponent();
             }
             if (frame >= x8) {
-                pattern = 0;
+                pattern = kStand;
                 StartPattern();
             }
         }
         break;
-    case 0xa9:
-        unk58 = 0;
+    case kRecoilGuardCrouch:
+        m_drawMode = 0;
         if (frame == 0 && timer == 0) {
-            unk158 = 0;
+            m_dashMomentum = 0;
             vx = 0.0;
             vy = 0.0;
             y = 0.0;
             ay = 0.0;
-            unk14e = 0;
-            unkb8 = 0.0;
+            m_recoilGuardWindow = 0;
+            m_cornerPushback = 0.0;
             ax = 0.0;
             l50.type = 8;
             l50.x = (double)(int)x;
@@ -2482,38 +2482,38 @@ void CMizukaB::UpdatePattern()
                 FaceOpponent();
             }
             if (frame >= x8) {
-                pattern = 3;
+                pattern = kCrouch;
                 StartPattern();
             }
         }
         break;
-    case 0xaa:
-        unk58 = 0;
+    case kRecoilGuardAir:
+        m_drawMode = 0;
         if (frame == 0 && timer == 0) {
-            unk3138 = (int)(vx * 100.0);
-            unk313c = (int)(vy * 100.0);
+            m_patternVar1 = (int)(vx * 100.0);
+            m_patternVar2 = (int)(vy * 100.0);
             vx = 0.0;
             vy = 0.0;
             if (ay == 0.0) {
                 ay = 0.035;
             }
-            unk14e = 0;
-            unkb8 = 0.0;
-            unk14c = 0x3c;
+            m_recoilGuardWindow = 0;
+            m_cornerPushback = 0.0;
+            m_freezeTime = 0x3c;
         }
-        if (unk14c == 0 && unk3140 == 0) {
-            unk3140++;
-            vx = unk3138 * 0.01;
-            vy = unk313c * 0.01;
+        if (m_freezeTime == 0 && m_patternVar3 == 0) {
+            m_patternVar3++;
+            vx = m_patternVar1 * 0.01;
+            vy = m_patternVar2 * 0.01;
         }
-        if (unk14c == 0) {
+        if (m_freezeTime == 0) {
             vy = vy + ay;
         }
         if (vy + y > 0.0) {
             StopMoving();
             y = 0.0;
-            unk3458 = 0;
-            pattern = 0xa9;
+            m_flying = 0;
+            pattern = kRecoilGuardCrouch;
             break;
         }
         timer++;
@@ -2521,26 +2521,26 @@ void CMizukaB::UpdatePattern()
             timer = 0;
             frame++;
             if (frame >= x8) {
-                pattern = 9;
+                pattern = kFall;
                 StartPattern();
-                if (unk3458 > 0) {
+                if (m_flying > 0) {
                     pattern = 0xb3;
                     frame = 7;
                 }
             }
         }
         break;
-    case 0xab:
+    case kAirInstantCharge:
         if (frame == 0 && timer == 0) {
-            unk3138 = (int)(vx * 100.0);
-            unk313c = (int)(vy * 100.0);
+            m_patternVar1 = (int)(vx * 100.0);
+            m_patternVar2 = (int)(vy * 100.0);
             vx = 0.0;
             vy = 0.0;
-            if (unk120 == 1) {
-                m_proration = 5.0 * unk118 + m_proration;
+            if (m_rfBlue == 1) {
+                m_proration = 5.0 * m_rfGauge + m_proration;
             }
-            unk118 = 0.0;
-            unk14c = 0x5a;
+            m_rfGauge = 0.0;
+            m_freezeTime = 0x5a;
             FillBackground(0xb0, 3);
         }
         if (frame == 1 && timer == 0) {
@@ -2566,31 +2566,31 @@ void CMizukaB::UpdatePattern()
             frame++;
             m_attackResult = 0;
             if (frame >= x8) {
-                pattern = 9;
-                vx = unk3138 * 0.01;
-                vy = unk313c * 0.01;
+                pattern = kFall;
+                vx = m_patternVar1 * 0.01;
+                vy = m_patternVar2 * 0.01;
                 ay = 0.035;
                 StartPattern();
-                if (unk3458 > 0) {
+                if (m_flying > 0) {
                     pattern = 0xb3;
                     frame = 7;
                 }
             }
         }
         break;
-    case 0xb2:
+    case kDashStop:
         vx -= 0.03;
         if (vx < 0.0) {
             vx = 0.0;
-            unk158 = 0;
+            m_dashMomentum = 0;
         }
         if (m_inputY == -1 && frame > 0) {
-            pattern = 4;
+            pattern = kJump;
             if (m_inputX == facing) {
-                pattern = 5;
+                pattern = kJumpForward;
             }
             if (m_inputX == -facing) {
-                pattern = 6;
+                pattern = kJumpBack;
             }
             m_attackResult = 0;
             StartPattern();
@@ -2601,23 +2601,23 @@ void CMizukaB::UpdatePattern()
             timer = 0;
             frame++;
             if (frame == 1) {
-                unk58 = 0;
+                m_drawMode = 0;
             }
             if (frame >= x8) {
-                pattern = 0;
+                pattern = kStand;
                 StartPattern();
                 break;
             }
         }
         break;
     case 0xb3:
-        unk159 = 0;
+        m_airDashes = 0;
         if ((*m_opponent)->m_hp <= 0) {
-            unk3458 = 0;
+            m_flying = 0;
         }
         if (frame == 0 && timer == 0) {
-            unk15a = 1;
-            unk3458 = 1;
+            m_airActions = 1;
+            m_flying = 1;
             vy = -2.0;
             vx = 0.0;
         }
@@ -2632,10 +2632,10 @@ void CMizukaB::UpdatePattern()
         }
         FaceOpponent();
         if (frame > 6) {
-            if (unk3458 <= 0) {
+            if (m_flying <= 0) {
                 ay = 0.035;
                 StartPattern();
-                pattern = 9;
+                pattern = kFall;
                 break;
             }
             vx = 0.0;
@@ -2660,10 +2660,10 @@ void CMizukaB::UpdatePattern()
                 break;
             }
             if (m_pressD == 1) {
-                unk3458 = 0;
+                m_flying = 0;
             }
         }
-        unk58 = 0;
+        m_drawMode = 0;
         timer++;
         if (timer >= l4) {
             timer = 0;
@@ -2674,18 +2674,18 @@ void CMizukaB::UpdatePattern()
         }
         break;
     case 0xb4:
-        unk159 = 0;
+        m_airDashes = 0;
         if ((*m_opponent)->m_hp <= 0) {
-            unk3458 = 0;
+            m_flying = 0;
         }
         if (frame == 0 && timer == 0) {
             vx = 1.5;
         }
-        unk58 = 0;
-        if (unk3458 <= 0) {
+        m_drawMode = 0;
+        if (m_flying <= 0) {
             ay = 0.035;
             StartPattern();
-            pattern = 9;
+            pattern = kFall;
             break;
         }
         if (m_inputY == 0) {
@@ -2712,12 +2712,12 @@ void CMizukaB::UpdatePattern()
             break;
         }
         if (m_pressD == 1) {
-            unk3458 = 0;
+            m_flying = 0;
         }
-        if (unk3458 <= 0) {
+        if (m_flying <= 0) {
             ay = 0.035;
             StartPattern();
-            pattern = 9;
+            pattern = kFall;
             break;
         }
         timer++;
@@ -2730,18 +2730,18 @@ void CMizukaB::UpdatePattern()
         }
         break;
     case 0xb5:
-        unk159 = 0;
+        m_airDashes = 0;
         if ((*m_opponent)->m_hp <= 0) {
-            unk3458 = 0;
+            m_flying = 0;
         }
         if (frame == 0 && timer == 0) {
             vx = -1.5;
         }
-        unk58 = 0;
-        if (unk3458 <= 0) {
+        m_drawMode = 0;
+        if (m_flying <= 0) {
             ay = 0.035;
             StartPattern();
-            pattern = 9;
+            pattern = kFall;
             break;
         }
         if (m_inputY == -1) {
@@ -2768,12 +2768,12 @@ void CMizukaB::UpdatePattern()
             break;
         }
         if (m_pressD == 1) {
-            unk3458 = 0;
+            m_flying = 0;
         }
-        if (unk3458 <= 0) {
+        if (m_flying <= 0) {
             ay = 0.035;
             StartPattern();
-            pattern = 9;
+            pattern = kFall;
             break;
         }
         timer++;
@@ -2816,29 +2816,29 @@ void CMizukaB::UpdatePattern()
             }
             if (frame >= x8) {
                 StartPattern();
-                pattern = 0;
+                pattern = kStand;
             }
         }
         break;
-    case 0xc8:
-        unk58 = 0;
-        if (unk158 == 0) {
+    case k5A:
+        m_drawMode = 0;
+        if (m_dashMomentum == 0) {
             vx = 0.0;
             vy = 0.0;
         }
-        if (vx > 0.0 && unk158 == 1) {
+        if (vx > 0.0 && m_dashMomentum == 1) {
             vx -= 0.06;
         } else {
             vx = 0.0;
-            unk158 = 0;
+            m_dashMomentum = 0;
         }
-        if (m_inputY == -1 && frame > 0 && unk15c < 3 && m_attackResult >= 2) {
-            pattern = 4;
+        if (m_inputY == -1 && frame > 0 && m_sealLevel < 3 && m_attackResult >= 2) {
+            pattern = kJump;
             if (m_inputX == facing) {
-                pattern = 5;
+                pattern = kJumpForward;
             }
             if (m_inputX == -facing) {
-                pattern = 6;
+                pattern = kJumpBack;
             }
             m_attackResult = 0;
             StartPattern();
@@ -2866,31 +2866,31 @@ void CMizukaB::UpdatePattern()
                 SpawnObject(&l50);
             }
             if (frame >= x8) {
-                pattern = 0;
+                pattern = kStand;
                 FaceOpponent();
                 StartPattern();
             }
         }
         break;
-    case 0xc9:
-        unk58 = 0;
-        if (unk158 == 0) {
+    case k5BClose:
+        m_drawMode = 0;
+        if (m_dashMomentum == 0) {
             vx = 0.0;
             vy = 0.0;
         }
-        if (vx > 0.0 && unk158 == 1) {
+        if (vx > 0.0 && m_dashMomentum == 1) {
             vx -= 0.03;
         } else {
             vx = 0.0;
-            unk158 = 0;
+            m_dashMomentum = 0;
         }
-        if (m_inputY == -1 && frame > 0 && unk15c < 3 && m_attackResult >= 2) {
-            pattern = 4;
+        if (m_inputY == -1 && frame > 0 && m_sealLevel < 3 && m_attackResult >= 2) {
+            pattern = kJump;
             if (m_inputX == facing) {
-                pattern = 5;
+                pattern = kJumpForward;
             }
             if (m_inputX == -facing) {
-                pattern = 6;
+                pattern = kJumpBack;
             }
             m_attackResult = 0;
             StartPattern();
@@ -2918,23 +2918,23 @@ void CMizukaB::UpdatePattern()
                 m_attackResult = 0;
             }
             if (frame >= x8) {
-                pattern = 0;
+                pattern = kStand;
                 FaceOpponent();
                 StartPattern();
             }
         }
         break;
-    case 0xca:
-        unk58 = 0;
-        if (unk158 == 0) {
+    case k5BFar:
+        m_drawMode = 0;
+        if (m_dashMomentum == 0) {
             vx = 0.0;
             vy = 0.0;
         }
-        if (vx > 0.0 && unk158 == 1) {
+        if (vx > 0.0 && m_dashMomentum == 1) {
             vx -= 0.06;
         } else {
             vx = 0.0;
-            unk158 = 0;
+            m_dashMomentum = 0;
         }
         if (frame == 2 && timer == 0) {
             m_gauge = m_gauge + 0xf;
@@ -2956,24 +2956,24 @@ void CMizukaB::UpdatePattern()
                 m_attackResult = 0;
             }
             if (frame >= x8) {
-                pattern = 0;
+                pattern = kStand;
                 FaceOpponent();
                 StartPattern();
             }
         }
         break;
-    case 0xcb:
-        unk58 = 0;
+    case k5C:
+        m_drawMode = 0;
         if (frame == 0 && timer == 0) {
             StopMoving();
         }
-        if (m_inputY == -1 && frame > 0 && unk15c < 3 && m_attackResult >= 3) {
-            pattern = 4;
+        if (m_inputY == -1 && frame > 0 && m_sealLevel < 3 && m_attackResult >= 3) {
+            pattern = kJump;
             if (m_inputX == facing) {
-                pattern = 5;
+                pattern = kJumpForward;
             }
             if (m_inputX == -facing) {
-                pattern = 6;
+                pattern = kJumpBack;
             }
             m_attackResult = 0;
             StartPattern();
@@ -3000,31 +3000,31 @@ void CMizukaB::UpdatePattern()
                 m_attackResult = 0;
             }
             if (frame >= x8) {
-                pattern = 0;
+                pattern = kStand;
                 FaceOpponent();
                 StartPattern();
             }
         }
         break;
-    case 0xcc:
-        unk58 = 0;
-        if (unk158 == 0) {
+    case k2A:
+        m_drawMode = 0;
+        if (m_dashMomentum == 0) {
             vx = 0.0;
             vy = 0.0;
         }
-        if (vx > 0.0 && unk158 == 1) {
+        if (vx > 0.0 && m_dashMomentum == 1) {
             vx -= 0.03;
         } else {
             vx = 0.0;
-            unk158 = 0;
+            m_dashMomentum = 0;
         }
-        if (m_inputY == -1 && frame > 0 && unk15c < 3 && m_attackResult >= 2) {
-            pattern = 4;
+        if (m_inputY == -1 && frame > 0 && m_sealLevel < 3 && m_attackResult >= 2) {
+            pattern = kJump;
             if (m_inputX == facing) {
-                pattern = 5;
+                pattern = kJumpForward;
             }
             if (m_inputX == -facing) {
-                pattern = 6;
+                pattern = kJumpBack;
             }
             m_attackResult = 0;
             StartPattern();
@@ -3050,34 +3050,34 @@ void CMizukaB::UpdatePattern()
                 m_attackResult = 0;
             }
             if (frame >= x8) {
-                pattern = 0;
+                pattern = kStand;
                 if (m_inputY == 1) {
-                    pattern = 3;
+                    pattern = kCrouch;
                 }
                 FaceOpponent();
                 StartPattern();
             }
         }
         break;
-    case 0xcd:
-        unk58 = 0;
-        if (unk158 == 0) {
+    case k2B:
+        m_drawMode = 0;
+        if (m_dashMomentum == 0) {
             vx = 0.0;
             vy = 0.0;
         }
-        if (vx > 0.0 && unk158 == 1) {
+        if (vx > 0.0 && m_dashMomentum == 1) {
             vx -= 0.03;
         } else {
             vx = 0.0;
-            unk158 = 0;
+            m_dashMomentum = 0;
         }
-        if (m_inputY == -1 && frame > 0 && unk15c < 3 && m_attackResult >= 2) {
-            pattern = 4;
+        if (m_inputY == -1 && frame > 0 && m_sealLevel < 3 && m_attackResult >= 2) {
+            pattern = kJump;
             if (m_inputX == facing) {
-                pattern = 5;
+                pattern = kJumpForward;
             }
             if (m_inputX == -facing) {
-                pattern = 6;
+                pattern = kJumpBack;
             }
             m_attackResult = 0;
             StartPattern();
@@ -3103,36 +3103,36 @@ void CMizukaB::UpdatePattern()
                 m_attackResult = 0;
             }
             if (frame >= x8) {
-                pattern = 0;
+                pattern = kStand;
                 if (m_inputY == 1) {
-                    pattern = 3;
+                    pattern = kCrouch;
                 }
                 FaceOpponent();
                 StartPattern();
             }
         }
         break;
-    case 0xce:
-        unk58 = 0;
-        if (unk158 == 0 && frame == 0 && timer == 0) {
+    case k2C:
+        m_drawMode = 0;
+        if (m_dashMomentum == 0 && frame == 0 && timer == 0) {
             vx = 0.0;
             vy = 0.0;
         }
-        if (vx > 0.0 && unk158 == 1 && frame < 3) {
+        if (vx > 0.0 && m_dashMomentum == 1 && frame < 3) {
             vx -= 0.03;
         } else {
-            unk158 = 0;
+            m_dashMomentum = 0;
         }
         if (vx < 0.0) {
             vx = 0.0;
         }
-        if (m_inputY == -1 && frame > 0 && unk15c < 3 && m_attackResult >= 3) {
-            pattern = 4;
+        if (m_inputY == -1 && frame > 0 && m_sealLevel < 3 && m_attackResult >= 3) {
+            pattern = kJump;
             if (m_inputX == facing) {
-                pattern = 5;
+                pattern = kJumpForward;
             }
             if (m_inputX == -facing) {
-                pattern = 6;
+                pattern = kJumpBack;
             }
             m_attackResult = 0;
             StartPattern();
@@ -3141,11 +3141,11 @@ void CMizukaB::UpdatePattern()
         if (frame == 1 && timer == 0) {
             m_hitsLeft = 1;
         }
-        if (frame == 3 && timer == 0 && unk3138 == 0) {
+        if (frame == 3 && timer == 0 && m_patternVar1 == 0) {
             m_gauge = m_gauge + 0x19;
             m_playSound = 0x14;
             vx = 2.5;
-            unk3138++;
+            m_patternVar1++;
         }
         if (vx > 0.0) {
             vx -= 0.036;
@@ -3159,21 +3159,21 @@ void CMizukaB::UpdatePattern()
                 frame = 2;
             }
             if (frame >= x8) {
-                pattern = 0;
+                pattern = kStand;
                 if (m_inputY == 1) {
-                    pattern = 3;
+                    pattern = kCrouch;
                 }
                 FaceOpponent();
                 StartPattern();
             }
         }
         break;
-    case 0xcf:
-        unk58 = 0;
-        if (unk3458 == 0) {
+    case kJumpA:
+        m_drawMode = 0;
+        if (m_flying == 0) {
             vy = vy + ay;
         }
-        if (unk3458 > 0) {
+        if (m_flying > 0) {
             if (vx > 0.1) {
                 vx -= 0.025;
             }
@@ -3193,14 +3193,14 @@ void CMizukaB::UpdatePattern()
                 vy = 0.0;
             }
         }
-        if (m_inputY == -1 && frame > 0 && unk15c < 3 && m_attackResult >= 2 && unk15a == 0) {
-            unk15a++;
-            pattern = 0xe;
+        if (m_inputY == -1 && frame > 0 && m_sealLevel < 3 && m_attackResult >= 2 && m_airActions == 0) {
+            m_airActions++;
+            pattern = kAirJump;
             if (m_inputX == facing) {
-                pattern = 0xf;
+                pattern = kAirJumpForward;
             }
             if (m_inputX == -facing) {
-                pattern = 0x10;
+                pattern = kAirJumpBack;
             }
             m_attackResult = 0;
             StartPattern();
@@ -3220,8 +3220,8 @@ void CMizukaB::UpdatePattern()
         }
         if (y + vy >= 0.0) {
             y = 0.0;
-            pattern = 0xd;
-            unk3458 = 0;
+            pattern = kLand;
+            m_flying = 0;
             StartPattern();
             break;
         }
@@ -3233,21 +3233,21 @@ void CMizukaB::UpdatePattern()
                 m_attackResult = 0;
             }
             if (frame >= x8) {
-                pattern = 9;
+                pattern = kFall;
                 StartPattern();
-                if (unk3458 > 0) {
+                if (m_flying > 0) {
                     pattern = 0xb3;
                     frame = 7;
                 }
             }
         }
         break;
-    case 0xd0:
-        unk58 = 0;
-        if (unk3458 == 0) {
+    case kJumpB:
+        m_drawMode = 0;
+        if (m_flying == 0) {
             vy = vy + ay;
         }
-        if (unk3458 > 0) {
+        if (m_flying > 0) {
             if (vx > 0.1) {
                 vx -= 0.025;
             }
@@ -3267,14 +3267,14 @@ void CMizukaB::UpdatePattern()
                 vy = 0.0;
             }
         }
-        if (m_inputY == -1 && frame > 0 && unk15c < 3 && m_attackResult >= 2 && unk15a == 0) {
-            unk15a++;
-            pattern = 0xe;
+        if (m_inputY == -1 && frame > 0 && m_sealLevel < 3 && m_attackResult >= 2 && m_airActions == 0) {
+            m_airActions++;
+            pattern = kAirJump;
             if (m_inputX == facing) {
-                pattern = 0xf;
+                pattern = kAirJumpForward;
             }
             if (m_inputX == -facing) {
-                pattern = 0x10;
+                pattern = kAirJumpBack;
             }
             m_attackResult = 0;
             StartPattern();
@@ -3294,8 +3294,8 @@ void CMizukaB::UpdatePattern()
         }
         if (y + vy >= 0.0) {
             y = 0.0;
-            pattern = 0xd;
-            unk3458 = 0;
+            pattern = kLand;
+            m_flying = 0;
             StartPattern();
             break;
         }
@@ -3307,21 +3307,21 @@ void CMizukaB::UpdatePattern()
                 m_attackResult = 0;
             }
             if (frame >= x8) {
-                pattern = 9;
+                pattern = kFall;
                 StartPattern();
-                if (unk3458 > 0) {
+                if (m_flying > 0) {
                     pattern = 0xb3;
                     frame = 7;
                 }
             }
         }
         break;
-    case 0xd1:
-        unk58 = 0;
-        if (unk3458 == 0) {
+    case kJumpC:
+        m_drawMode = 0;
+        if (m_flying == 0) {
             vy = vy + ay;
         }
-        if (unk3458 > 0) {
+        if (m_flying > 0) {
             if (vx > 0.1) {
                 vx -= 0.025;
             }
@@ -3341,14 +3341,14 @@ void CMizukaB::UpdatePattern()
                 vy = 0.0;
             }
         }
-        if (m_inputY == -1 && frame > 0 && unk15c < 3 && m_attackResult >= 2 && unk15a == 0) {
-            unk15a++;
-            pattern = 0xe;
+        if (m_inputY == -1 && frame > 0 && m_sealLevel < 3 && m_attackResult >= 2 && m_airActions == 0) {
+            m_airActions++;
+            pattern = kAirJump;
             if (m_inputX == facing) {
-                pattern = 0xf;
+                pattern = kAirJumpForward;
             }
             if (m_inputX == -facing) {
-                pattern = 0x10;
+                pattern = kAirJumpBack;
             }
             m_attackResult = 0;
             StartPattern();
@@ -3361,8 +3361,8 @@ void CMizukaB::UpdatePattern()
         }
         if (y + vy >= 0.0) {
             y = 0.0;
-            pattern = 0xd;
-            unk3458 = 0;
+            pattern = kLand;
+            m_flying = 0;
             StartPattern();
             break;
         }
@@ -3382,27 +3382,27 @@ void CMizukaB::UpdatePattern()
                 l50.facing = facing;
                 SpawnObject(&l50);
             }
-            if (frame == 8 && unk3138 < 2) {
+            if (frame == 8 && m_patternVar1 < 2) {
                 frame = frame - 3;
-                unk3138++;
+                m_patternVar1++;
                 m_attackResult = 0;
             }
             if (frame >= x8) {
-                pattern = 9;
+                pattern = kFall;
                 StartPattern();
-                if (unk3458 > 0) {
+                if (m_flying > 0) {
                     pattern = 0xb3;
                     frame = 7;
                 }
             }
         }
         break;
-    case 0xd2:
-        unk58 = 0;
-        if (unk3458 == 0) {
+    case kJump6C:
+        m_drawMode = 0;
+        if (m_flying == 0) {
             vy = vy + ay;
         }
-        if (unk3458 > 0) {
+        if (m_flying > 0) {
             if (vx > 0.1) {
                 vx -= 0.025;
             }
@@ -3422,14 +3422,14 @@ void CMizukaB::UpdatePattern()
                 vy = 0.0;
             }
         }
-        if (m_inputY == -1 && frame > 0 && unk15c < 3 && m_attackResult >= 2 && unk15a == 0) {
-            unk15a++;
-            pattern = 0xe;
+        if (m_inputY == -1 && frame > 0 && m_sealLevel < 3 && m_attackResult >= 2 && m_airActions == 0) {
+            m_airActions++;
+            pattern = kAirJump;
             if (m_inputX == facing) {
-                pattern = 0xf;
+                pattern = kAirJumpForward;
             }
             if (m_inputX == -facing) {
-                pattern = 0x10;
+                pattern = kAirJumpBack;
             }
             m_attackResult = 0;
             StartPattern();
@@ -3442,8 +3442,8 @@ void CMizukaB::UpdatePattern()
         }
         if (y + vy >= 0.0) {
             y = 0.0;
-            pattern = 0xd;
-            unk3458 = 0;
+            pattern = kLand;
+            m_flying = 0;
             StartPattern();
             break;
         }
@@ -3464,23 +3464,23 @@ void CMizukaB::UpdatePattern()
                 SpawnObject(&l50);
             }
             if (frame >= x8) {
-                pattern = 9;
+                pattern = kFall;
                 StartPattern();
-                if (unk3458 > 0) {
+                if (m_flying > 0) {
                     pattern = 0xb3;
                     frame = 7;
                 }
             }
         }
         break;
-    case 0xd3:
+    case kUnusedD3:
         if (m_inputY == -1 && frame > 0 && m_attackResult >= 2) {
-            pattern = 4;
+            pattern = kJump;
             if (m_inputX == facing) {
-                pattern = 5;
+                pattern = kJumpForward;
             }
             if (m_inputX == -facing) {
-                pattern = 6;
+                pattern = kJumpBack;
             }
             m_attackResult = 0;
             StartPattern();
@@ -3501,13 +3501,13 @@ void CMizukaB::UpdatePattern()
             frame++;
             m_attackResult = 0;
             if (frame >= x8) {
-                pattern = 0;
+                pattern = kStand;
                 FaceOpponent();
                 StartPattern();
             }
         }
         break;
-    case 0xd4:
+    case kUnusedAirDive:
         vy = vy + ay;
         if (frame == 0 && timer == 0) {
             m_gauge = m_gauge + 0x1e;
@@ -3517,7 +3517,7 @@ void CMizukaB::UpdatePattern()
             ay = 0.07;
         }
         if (m_attackResult > 1) {
-            pattern = 0xd5;
+            pattern = kUnusedAirDiveRebound;
             StartPattern();
             StopMoving();
             break;
@@ -3531,9 +3531,9 @@ void CMizukaB::UpdatePattern()
             l50.y = (double)(int)y;
             l50.scale = 2;
             l50.layer = 0;
-            l50.unk2c = 7;
+            l50.sound = 7;
             m_game->CreateEffect((EffectDesc*)&l50);
-            pattern = 0xd6;
+            pattern = kUnusedAirDiveLanding;
             StartPattern();
             break;
         }
@@ -3547,7 +3547,7 @@ void CMizukaB::UpdatePattern()
             }
         }
         break;
-    case 0xd5:
+    case kUnusedAirDiveRebound:
         ay = 0.042;
         vy = vy + ay;
         if (frame == 0 && timer == 0) {
@@ -3560,12 +3560,12 @@ void CMizukaB::UpdatePattern()
             frame++;
             m_attackResult = 0;
             if (frame >= x8) {
-                pattern = 9;
+                pattern = kFall;
                 StartPattern();
             }
         }
         break;
-    case 0xd6:
+    case kUnusedAirDiveLanding:
         vx = 0.0;
         vy = 0.0;
         if (frame == 0 && timer == 0) {
@@ -3575,7 +3575,7 @@ void CMizukaB::UpdatePattern()
             l50.y = (double)(int)y;
             l50.scale = 2;
             l50.layer = 0;
-            l50.unk2c = 7;
+            l50.sound = 7;
             m_game->CreateEffect((EffectDesc*)&l50);
         }
         timer++;
@@ -3584,20 +3584,20 @@ void CMizukaB::UpdatePattern()
             frame++;
             m_attackResult = 0;
             if (frame >= x8) {
-                pattern = 7;
+                pattern = kStandUp;
                 if (m_inputY == 1) {
-                    pattern = 3;
+                    pattern = kCrouch;
                 }
                 FaceOpponent();
                 StartPattern();
             }
         }
         break;
-    case 0xdc:
+    case kThrow:
         vx = 0.0;
         vy = 0.0;
-        unk58 = 0;
-        unk158 = 0;
+        m_drawMode = 0;
+        m_dashMomentum = 0;
         if (frame == 1 && timer == 0 && (*m_opponent)->y == 0.0) {
             m_hitsLeft = 1;
         } else {
@@ -3609,7 +3609,7 @@ void CMizukaB::UpdatePattern()
             StartPattern();
             StopMoving();
             (*m_opponent)->StopMoving();
-            pattern = 0xdd;
+            pattern = kThrowHit;
             l50.type = 0;
             l50.x = (double)((int)x + facing * 0x25);
             l50.y = (double)((int)y - 0x2a);
@@ -3624,23 +3624,23 @@ void CMizukaB::UpdatePattern()
             frame++;
             m_attackResult = 0;
             if (frame >= x8) {
-                pattern = 0;
+                pattern = kStand;
                 if (m_inputY == 1) {
-                    pattern = 3;
+                    pattern = kCrouch;
                 }
                 FaceOpponent();
                 StartPattern();
             }
         }
         break;
-    case 0xdd:
+    case kThrowHit:
         if (frame == 0 && timer == 0) {
             (*m_opponent)->frame = 0;
             (*m_opponent)->timer = 0;
             (*m_opponent)->StopMoving();
-            (*m_opponent)->unkc0 = 0.0;
-            (*m_opponent)->unkc8 = -2.5;
-            (*m_opponent)->pattern = 0x3b;
+            (*m_opponent)->m_hitVx = 0.0;
+            (*m_opponent)->m_hitVy = -2.5;
+            (*m_opponent)->pattern = kHitAir;
         }
         if (frame == 1 && timer == 0) {
             l50.type = 0x1c8;
@@ -3648,7 +3648,7 @@ void CMizukaB::UpdatePattern()
             l50.y = 0.0;
             l50.scale = 0;
             l50.layer = 0;
-            l50.unk28 = 1;
+            l50.shadow = 1;
             l50.facing = facing;
             SpawnObject(&l50);
             l50.type = 0x1c9;
@@ -3656,7 +3656,7 @@ void CMizukaB::UpdatePattern()
             l50.y = 0.0;
             l50.scale = 0;
             l50.layer = 0;
-            l50.unk28 = 1;
+            l50.shadow = 1;
             l50.facing = facing;
             SpawnObject(&l50);
             l50.type = 0x1ca;
@@ -3664,14 +3664,14 @@ void CMizukaB::UpdatePattern()
             l50.y = 0.0;
             l50.scale = 0;
             l50.layer = 0;
-            l50.unk28 = 1;
+            l50.shadow = 1;
             l50.facing = facing;
             SpawnObject(&l50);
         }
         if (frame == 3) {
             FaceOpponent();
         }
-        if ((*m_opponent)->pattern == 0x40 && frame == 3) {
+        if ((*m_opponent)->pattern == kHitAirWallBounce && frame == 3) {
             timer = 0;
             frame++;
         }
@@ -3681,19 +3681,19 @@ void CMizukaB::UpdatePattern()
             frame++;
             m_attackResult = 0;
             if (frame >= x8) {
-                pattern = 0;
+                pattern = kStand;
                 FaceOpponent();
                 StartPattern();
             }
         }
         break;
-    case 0xe6:
+    case kDashA:
         StartAfterimages(3);
         vx -= 0.03;
         if (vx < 0.0) {
             vx = 0.0;
         }
-        unk158 = 0;
+        m_dashMomentum = 0;
         if (frame == 0 && timer == 0) {
             vx = 2.0;
             vy = 0.0;
@@ -3703,8 +3703,8 @@ void CMizukaB::UpdatePattern()
             m_playSound = 0x15;
             m_hitsLeft = 1;
         }
-        if (unk58 == 3 || unk58 == 1) {
-            unk13c = 2;
+        if (m_drawMode == 3 || m_drawMode == 1) {
+            m_invulTime = 2;
         }
         timer++;
         if (timer >= l4) {
@@ -3722,29 +3722,29 @@ void CMizukaB::UpdatePattern()
                 l50.facing = facing;
                 SpawnObject(&l50);
             }
-            if (unk58 == 1) {
-                unk58 = 0;
+            if (m_drawMode == 1) {
+                m_drawMode = 0;
             }
-            if (unk58 == 3) {
-                unk58 = 1;
+            if (m_drawMode == 3) {
+                m_drawMode = 1;
             }
             if (frame >= x8) {
-                unk58 = 0;
-                pattern = 0;
+                m_drawMode = 0;
+                pattern = kStand;
                 StartPattern();
             }
         }
         break;
-    case 0xe7:
+    case kDashB:
         StartAfterimages(3);
-        unk158 = 0;
-        if (m_inputY == -1 && frame > 0 && unk15c < 3 && m_attackResult == 3) {
-            pattern = 4;
+        m_dashMomentum = 0;
+        if (m_inputY == -1 && frame > 0 && m_sealLevel < 3 && m_attackResult == 3) {
+            pattern = kJump;
             if (m_inputX == facing) {
-                pattern = 5;
+                pattern = kJumpForward;
             }
             if (m_inputX == -facing) {
-                pattern = 6;
+                pattern = kJumpBack;
             }
             m_attackResult = 0;
             StartPattern();
@@ -3775,8 +3775,8 @@ void CMizukaB::UpdatePattern()
             m_playSound = 0x14;
             m_hitsLeft = 1;
         }
-        if (unk58 == 3 || unk58 == 1) {
-            unk13c = 2;
+        if (m_drawMode == 3 || m_drawMode == 1) {
+            m_invulTime = 2;
         }
         timer++;
         if (timer >= l4) {
@@ -3785,25 +3785,25 @@ void CMizukaB::UpdatePattern()
             if (frame == 1) {
                 m_attackResult = 0;
             }
-            if (unk58 == 1) {
-                unk58 = 0;
+            if (m_drawMode == 1) {
+                m_drawMode = 0;
             }
-            if (unk58 == 3) {
-                unk58 = 1;
+            if (m_drawMode == 3) {
+                m_drawMode = 1;
             }
             if (frame >= x8) {
-                pattern = 0;
+                pattern = kStand;
                 StartPattern();
             }
         }
         break;
-    case 0xe8:
+    case kDashC:
         StartAfterimages(3);
         vx -= 0.03;
         if (vx < 0.0) {
             vx = 0.0;
         }
-        unk158 = 0;
+        m_dashMomentum = 0;
         if (frame == 0 && timer == 0) {
             vx = 2.0;
             vy = 0.0;
@@ -3822,8 +3822,8 @@ void CMizukaB::UpdatePattern()
             m_playSound = 0x14;
             m_hitsLeft = 1;
         }
-        if (unk58 == 3 || unk58 == 1) {
-            unk13c = 2;
+        if (m_drawMode == 3 || m_drawMode == 1) {
+            m_invulTime = 2;
         }
         timer++;
         if (timer >= l4) {
@@ -3832,25 +3832,25 @@ void CMizukaB::UpdatePattern()
             if (frame == 1) {
                 m_attackResult = 0;
             }
-            if (unk58 == 1) {
-                unk58 = 0;
+            if (m_drawMode == 1) {
+                m_drawMode = 0;
             }
-            if (unk58 == 3) {
-                unk58 = 1;
+            if (m_drawMode == 3) {
+                m_drawMode = 1;
             }
             if (frame >= x8) {
-                pattern = 0;
+                pattern = kStand;
                 StartPattern();
             }
         }
         break;
-    case 0xe9:
+    case kDash2A:
         StartAfterimages(3);
         vx -= 0.03;
         if (vx < 0.0) {
             vx = 0.0;
         }
-        unk158 = 0;
+        m_dashMomentum = 0;
         if (frame == 0 && timer == 0) {
             vx = 2.0;
             vy = 0.0;
@@ -3867,8 +3867,8 @@ void CMizukaB::UpdatePattern()
             l50.facing = facing;
             SpawnObject(&l50);
         }
-        if (unk58 == 3 || unk58 == 1) {
-            unk13c = 2;
+        if (m_drawMode == 3 || m_drawMode == 1) {
+            m_invulTime = 2;
         }
         timer++;
         if (timer >= l4) {
@@ -3877,29 +3877,29 @@ void CMizukaB::UpdatePattern()
             if (frame == 1) {
                 m_attackResult = 0;
             }
-            if (unk58 == 1) {
-                unk58 = 0;
+            if (m_drawMode == 1) {
+                m_drawMode = 0;
             }
-            if (unk58 == 3) {
-                unk58 = 1;
+            if (m_drawMode == 3) {
+                m_drawMode = 1;
             }
             if (frame >= x8) {
-                unk58 = 0;
-                pattern = 3;
+                m_drawMode = 0;
+                pattern = kCrouch;
                 StartPattern();
             }
         }
         break;
-    case 0xea:
+    case kDash2B:
         StartAfterimages(3);
-        unk158 = 0;
-        if (m_inputY == -1 && frame > 0 && unk15c < 3 && m_attackResult == 3) {
-            pattern = 4;
+        m_dashMomentum = 0;
+        if (m_inputY == -1 && frame > 0 && m_sealLevel < 3 && m_attackResult == 3) {
+            pattern = kJump;
             if (m_inputX == facing) {
-                pattern = 5;
+                pattern = kJumpForward;
             }
             if (m_inputX == -facing) {
-                pattern = 6;
+                pattern = kJumpBack;
             }
             m_attackResult = 0;
             StartPattern();
@@ -3928,8 +3928,8 @@ void CMizukaB::UpdatePattern()
             l50.facing = facing;
             SpawnObject(&l50);
         }
-        if (unk58 == 3 || unk58 == 1) {
-            unk13c = 2;
+        if (m_drawMode == 3 || m_drawMode == 1) {
+            m_invulTime = 2;
         }
         timer++;
         if (timer >= l4) {
@@ -3938,21 +3938,21 @@ void CMizukaB::UpdatePattern()
             if (frame == 1) {
                 m_attackResult = 0;
             }
-            if (unk58 == 1) {
-                unk58 = 0;
+            if (m_drawMode == 1) {
+                m_drawMode = 0;
             }
-            if (unk58 == 3) {
-                unk58 = 1;
+            if (m_drawMode == 3) {
+                m_drawMode = 1;
             }
             if (frame >= x8) {
-                pattern = 3;
+                pattern = kCrouch;
                 StartPattern();
             }
         }
         break;
-    case 0xeb:
+    case kDash2C:
         StartAfterimages(3);
-        unk158 = 0;
+        m_dashMomentum = 0;
         if (frame == 0 && timer == 0) {
             vx = 1.5;
             vy = 0.0;
@@ -3963,11 +3963,11 @@ void CMizukaB::UpdatePattern()
         if (y + vy > 0.0 && frame > 3) {
             frame = 0;
             timer = 0;
-            pattern = 0xd;
+            pattern = kLand;
             break;
         }
-        if (unk58 == 3 || unk58 == 1) {
-            unk13c = 2;
+        if (m_drawMode == 3 || m_drawMode == 1) {
+            m_invulTime = 2;
         }
         timer++;
         if (timer >= l4) {
@@ -3976,29 +3976,29 @@ void CMizukaB::UpdatePattern()
             if (frame == 1) {
                 m_attackResult = 3;
             }
-            if (unk58 == 1) {
-                unk58 = 0;
+            if (m_drawMode == 1) {
+                m_drawMode = 0;
             }
             if (frame == 2) {
                 vy = -1.3;
                 vx = 1.0;
                 ay = 0.02;
             }
-            if (unk58 == 3) {
-                unk58 = 1;
+            if (m_drawMode == 3) {
+                m_drawMode = 1;
             }
             if (frame >= x8) {
                 frame = frame - 2;
             }
         }
         break;
-    case 0xf8:
+    case kAirThrow:
         vy = vy + ay;
         if (frame == 1 && m_attackResult == 3) {
             (*m_opponent)->StopMoving();
             (*m_opponent)->StartPattern();
             StopMoving();
-            (*m_opponent)->unk128 = 1;
+            (*m_opponent)->m_noAirRecovery = 1;
             l50.type = 0;
             l50.x = (double)((int)x + facing * 0x1e);
             l50.y = (double)((int)y - 0x3c);
@@ -4007,8 +4007,8 @@ void CMizukaB::UpdatePattern()
             m_game->CreateEffect((EffectDesc*)&l50);
             frame = 0;
             timer = 0;
-            pattern = 0xf9;
-            (*m_opponent)->pattern = 0x6e;
+            pattern = kAirThrowHit;
+            (*m_opponent)->pattern = kThrownAirRising;
             (*m_opponent)->y = y;
             (*m_opponent)->x = facing * 0x14 + x;
             break;
@@ -4017,27 +4017,27 @@ void CMizukaB::UpdatePattern()
         if (timer >= l4) {
             timer = 0;
             frame++;
-            if (frame == 1 && (*m_opponent)->y < 0.0 && ((*m_opponent)->pattern < 0x32 || (*m_opponent)->pattern > 0x95)) {
+            if (frame == 1 && (*m_opponent)->y < 0.0 && ((*m_opponent)->pattern < kFirstHitReaction || (*m_opponent)->pattern > kLastHitReaction)) {
                 m_hitsLeft = 1;
             } else {
                 m_hitsLeft = 0;
             }
             m_attackResult = 0;
             if (frame >= x8) {
-                pattern = 0xd2;
+                pattern = kJump6C;
                 frame = 2;
             }
         }
         break;
-    case 0xf9:
-        unk158 = 0;
+    case kAirThrowHit:
+        m_dashMomentum = 0;
         if (frame >= 7) {
             vy += 0.035;
             if (y + vy > 0.0) {
                 StartPattern();
                 StopMoving();
                 y = 0.0;
-                pattern = 0xd;
+                pattern = kLand;
                 break;
             }
         }
@@ -4052,23 +4052,23 @@ void CMizukaB::UpdatePattern()
             }
             if (frame == 4) {
                 (*m_opponent)->StartPattern();
-                (*m_opponent)->pattern = 0x3c;
-                (*m_opponent)->unkc0 = 3.0;
-                (*m_opponent)->unkc8 = -1.0;
+                (*m_opponent)->pattern = kHitAirHigh;
+                (*m_opponent)->m_hitVx = 3.0;
+                (*m_opponent)->m_hitVy = -1.0;
                 (*m_opponent)->ay = 0.035;
                 DealDamage(0x3e8, 500.0);
                 m_comboHits--;
                 m_shownHits--;
-                (*m_opponent)->unk128 = 1;
+                (*m_opponent)->m_noAirRecovery = 1;
             }
             if (frame >= x8) {
                 frame = frame - 2;
             }
         }
         break;
-    case 0xfa:
-        unk58 = 0;
-        unk158 = 0;
+    case k236A:
+        m_drawMode = 0;
+        m_dashMomentum = 0;
         if (frame == 0 && timer == 0) {
             StopMoving();
         }
@@ -4087,7 +4087,7 @@ void CMizukaB::UpdatePattern()
             l50.y = (double)((int)y - 0x26);
             l50.scale = 2;
             l50.layer = 1;
-            l50.unk0 = 1;
+            l50.keep = 1;
             m_playVoice = 0xb;
             l50.facing = facing;
             SpawnObject(&l50);
@@ -4105,20 +4105,20 @@ void CMizukaB::UpdatePattern()
             m_attackResult = 0;
             if (frame == 0x12) {
                 StartPattern();
-                pattern = 0;
+                pattern = kStand;
             }
             if (frame == 0xb) {
                 frame = 0x12;
             }
             if (frame >= x8) {
-                pattern = 0;
+                pattern = kStand;
                 StartPattern();
             }
         }
         break;
-    case 0xfb:
-        unk58 = 0;
-        unk158 = 0;
+    case k236B:
+        m_drawMode = 0;
+        m_dashMomentum = 0;
         if (frame == 0 && timer == 0) {
             StopMoving();
         }
@@ -4137,7 +4137,7 @@ void CMizukaB::UpdatePattern()
             l50.y = (double)((int)y - 0x26);
             l50.scale = 2;
             l50.layer = 1;
-            l50.unk0 = 1;
+            l50.keep = 1;
             m_playVoice = 0xb;
             l50.facing = facing;
             SpawnObject(&l50);
@@ -4155,36 +4155,36 @@ void CMizukaB::UpdatePattern()
             m_attackResult = 0;
             if (frame == 0x12) {
                 StartPattern();
-                pattern = 0;
+                pattern = kStand;
             }
             if (frame == 0xb) {
                 frame = 0x12;
             }
             if (frame >= x8) {
-                pattern = 0;
+                pattern = kStand;
                 StartPattern();
             }
         }
         break;
-    case 0xfc:
-        unk58 = 0;
-        unk158 = 0;
+    case k236C:
+        m_drawMode = 0;
+        m_dashMomentum = 0;
         if (frame == 0 && timer == 0) {
             StartAfterimages(3);
             StopMoving();
-            if (unk120 == 0) {
-                unk118 -= 500.0;
+            if (m_rfBlue == 0) {
+                m_rfGauge -= 500.0;
             } else {
-                unk118 -= 250.0;
+                m_rfGauge -= 250.0;
             }
             l50.type = 0x21;
-            l50.unk2c = 0xb;
+            l50.sound = 0xb;
             l50.x = (double)(int)x;
             l50.y = (double)((int)y - 0x32);
             l50.scale = 2;
             l50.layer = 1;
             m_game->CreateEffect((EffectDesc*)&l50);
-            unk3454 = 0;
+            m_homingOrbHit = 0;
         }
         if (frame == 9 && timer == 0) {
             l50.type = 0x1f;
@@ -4201,7 +4201,7 @@ void CMizukaB::UpdatePattern()
             l50.y = (double)((int)y - 0x26);
             l50.scale = 2;
             l50.layer = 1;
-            l50.unk0 = 1;
+            l50.keep = 1;
             m_playVoice = 0xb;
             l50.facing = facing;
             SpawnObject(&l50);
@@ -4213,14 +4213,14 @@ void CMizukaB::UpdatePattern()
             frame++;
             m_attackResult = 0;
             if (frame >= x8) {
-                pattern = 0;
+                pattern = kStand;
                 StartPattern();
             }
         }
         break;
-    case 0xfd:
-        unk58 = 0;
-        unk158 = 0;
+    case k214A:
+        m_drawMode = 0;
+        m_dashMomentum = 0;
         if (frame == 0 && timer == 0) {
             StopMoving();
         }
@@ -4240,14 +4240,14 @@ void CMizukaB::UpdatePattern()
             frame++;
             m_attackResult = 3;
             if (frame >= x8) {
-                pattern = 0;
+                pattern = kStand;
                 StartPattern();
             }
         }
         break;
-    case 0xfe:
-        unk58 = 0;
-        unk158 = 0;
+    case k214B:
+        m_drawMode = 0;
+        m_dashMomentum = 0;
         if (frame == 0 && timer == 0) {
             StopMoving();
         }
@@ -4267,23 +4267,23 @@ void CMizukaB::UpdatePattern()
             frame++;
             m_attackResult = 3;
             if (frame >= x8) {
-                pattern = 0;
+                pattern = kStand;
                 StartPattern();
             }
         }
         break;
-    case 0xff:
-        unk58 = 0;
-        unk158 = 0;
+    case k214C:
+        m_drawMode = 0;
+        m_dashMomentum = 0;
         if (frame == 0 && timer == 0) {
             StopMoving();
-            if (unk120 == 0) {
-                unk118 -= 500.0;
+            if (m_rfBlue == 0) {
+                m_rfGauge -= 500.0;
             } else {
-                unk118 -= 250.0;
+                m_rfGauge -= 250.0;
             }
             l50.type = 0x21;
-            l50.unk2c = 0xb;
+            l50.sound = 0xb;
             l50.x = (double)(int)x;
             l50.y = (double)((int)y - 0x32);
             l50.scale = 2;
@@ -4306,14 +4306,14 @@ void CMizukaB::UpdatePattern()
             frame++;
             m_attackResult = 3;
             if (frame >= x8) {
-                pattern = 0;
+                pattern = kStand;
                 StartPattern();
             }
         }
         break;
-    case 0x100:
-        unk58 = 0;
-        unk158 = 0;
+    case k41236A:
+        m_drawMode = 0;
+        m_dashMomentum = 0;
         if (frame == 0 && timer == 0) {
             StopMoving();
         }
@@ -4364,15 +4364,15 @@ void CMizukaB::UpdatePattern()
                 m_gauge = m_gauge + 0xf;
             }
             if (frame >= x8) {
-                pattern = 0;
+                pattern = kStand;
                 StartPattern();
                 FaceOpponent();
             }
         }
         break;
-    case 0x101:
-        unk58 = 0;
-        unk158 = 0;
+    case k41236B:
+        m_drawMode = 0;
+        m_dashMomentum = 0;
         if (frame == 0 && timer == 0) {
             StopMoving();
         }
@@ -4423,15 +4423,15 @@ void CMizukaB::UpdatePattern()
                 m_gauge = m_gauge + 0xf;
             }
             if (frame >= x8) {
-                pattern = 0;
+                pattern = kStand;
                 StartPattern();
                 FaceOpponent();
             }
         }
         break;
-    case 0x102:
-        unk58 = 0;
-        unk158 = 0;
+    case k41236C:
+        m_drawMode = 0;
+        m_dashMomentum = 0;
         if (frame == 0 && timer == 0) {
             StopMoving();
         }
@@ -4482,15 +4482,15 @@ void CMizukaB::UpdatePattern()
                 m_gauge = m_gauge + 0xf;
             }
             if (frame >= x8) {
-                pattern = 0;
+                pattern = kStand;
                 StartPattern();
                 FaceOpponent();
             }
         }
         break;
-    case 0x103:
-        unk58 = 0;
-        unk158 = 0;
+    case k623A:
+        m_drawMode = 0;
+        m_dashMomentum = 0;
         if (frame == 0 && timer == 0) {
             StopMoving();
             m_hitsLeft = 1;
@@ -4512,22 +4512,22 @@ void CMizukaB::UpdatePattern()
                 SpawnObject(&l50);
                 m_gauge = m_gauge + 0x2d;
             }
-            if (frame == 7 && unk3138 < 6) {
+            if (frame == 7 && m_patternVar1 < 6) {
                 frame = frame - 3;
-                unk3138++;
-                if (unk3138 > 1) {
+                m_patternVar1++;
+                if (m_patternVar1 > 1) {
                     m_hitsLeft = 0;
                 }
             }
             if (frame >= x8) {
-                pattern = 0;
+                pattern = kStand;
                 StartPattern();
             }
         }
         break;
-    case 0x104:
-        unk58 = 0;
-        unk158 = 0;
+    case k623B:
+        m_drawMode = 0;
+        m_dashMomentum = 0;
         if (frame == 0 && timer == 0) {
             StopMoving();
             m_hitsLeft = 1;
@@ -4549,32 +4549,32 @@ void CMizukaB::UpdatePattern()
                 SpawnObject(&l50);
                 m_gauge = m_gauge + 0x2d;
             }
-            if (frame == 7 && unk3138 < 6) {
+            if (frame == 7 && m_patternVar1 < 6) {
                 frame = frame - 3;
-                unk3138++;
-                if (unk3138 > 1) {
+                m_patternVar1++;
+                if (m_patternVar1 > 1) {
                     m_hitsLeft = 0;
                 }
             }
             if (frame >= x8) {
-                pattern = 0;
+                pattern = kStand;
                 StartPattern();
             }
         }
         break;
-    case 0x105:
-        unk58 = 0;
-        unk158 = 0;
+    case k623C:
+        m_drawMode = 0;
+        m_dashMomentum = 0;
         if (frame == 0 && timer == 0) {
             StopMoving();
             m_hitsLeft = 1;
-            if (unk120 == 0) {
-                unk118 -= 500.0;
+            if (m_rfBlue == 0) {
+                m_rfGauge -= 500.0;
             } else {
-                unk118 -= 250.0;
+                m_rfGauge -= 250.0;
             }
             l50.type = 0x21;
-            l50.unk2c = 0xb;
+            l50.sound = 0xb;
             l50.x = (double)(int)x;
             l50.y = (double)((int)y - 0x32);
             l50.scale = 2;
@@ -4585,7 +4585,7 @@ void CMizukaB::UpdatePattern()
             StopMoving();
             m_hitsLeft = 3;
         }
-        if (frame == 5 && timer == 0 && unk3138 < 2) {
+        if (frame == 5 && timer == 0 && m_patternVar1 < 2) {
             l50.type = 0x1b5;
             l50.x = (double)((int)x + -0x23 + (WORD)Random(0, 0x46));
             l50.y = 0.0;
@@ -4599,21 +4599,21 @@ void CMizukaB::UpdatePattern()
         if (timer >= l4) {
             timer = 0;
             frame++;
-            if (frame == 7 && unk3138 < 6) {
+            if (frame == 7 && m_patternVar1 < 6) {
                 frame = frame - 3;
-                unk3138++;
+                m_patternVar1++;
             }
-            if (frame == 4 && unk3138 < 2) {
+            if (frame == 4 && m_patternVar1 < 2) {
                 m_attackResult = 0;
             }
             if (frame >= x8) {
-                pattern = 0;
+                pattern = kStand;
                 StartPattern();
             }
         }
         break;
-    case 0x106:
-        unk58 = 0;
+    case kAir236A:
+        m_drawMode = 0;
         if (frame == 0 && timer == 0) {
             vx = 0.0;
             vy = 0.0;
@@ -4624,7 +4624,7 @@ void CMizukaB::UpdatePattern()
             l50.y = (double)((int)y - 0x26);
             l50.scale = 2;
             l50.layer = 1;
-            l50.unk0 = 1;
+            l50.keep = 1;
             m_playVoice = 0xb;
             l50.facing = facing;
             SpawnObject(&l50);
@@ -4648,15 +4648,15 @@ void CMizukaB::UpdatePattern()
             if (frame >= x8) {
                 pattern = 0x14;
                 StartPattern();
-                if (unk3458 > 0) {
+                if (m_flying > 0) {
                     frame = 7;
                     pattern = 0xb3;
                 }
             }
         }
         break;
-    case 0x107:
-        unk58 = 0;
+    case kAir236B:
+        m_drawMode = 0;
         if (frame == 0 && timer == 0) {
             vx = 0.0;
             vy = 0.0;
@@ -4667,7 +4667,7 @@ void CMizukaB::UpdatePattern()
             l50.y = (double)((int)y - 0x26);
             l50.scale = 2;
             l50.layer = 1;
-            l50.unk0 = 1;
+            l50.keep = 1;
             m_playVoice = 0xb;
             l50.facing = facing;
             SpawnObject(&l50);
@@ -4691,26 +4691,26 @@ void CMizukaB::UpdatePattern()
             if (frame >= x8) {
                 pattern = 0x14;
                 StartPattern();
-                if (unk3458 > 0) {
+                if (m_flying > 0) {
                     frame = 7;
                     pattern = 0xb3;
                 }
             }
         }
         break;
-    case 0x108:
-        unk58 = 0;
+    case kAir236C:
+        m_drawMode = 0;
         if (frame == 0 && timer == 0) {
             StartAfterimages(3);
             vx = 0.0;
             vy = 0.0;
-            if (unk120 == 0) {
-                unk118 -= 500.0;
+            if (m_rfBlue == 0) {
+                m_rfGauge -= 500.0;
             } else {
-                unk118 -= 250.0;
+                m_rfGauge -= 250.0;
             }
             l50.type = 0x21;
-            l50.unk2c = 0xb;
+            l50.sound = 0xb;
             l50.x = (double)(int)x;
             l50.y = (double)((int)y - 0x32);
             l50.scale = 2;
@@ -4737,15 +4737,15 @@ void CMizukaB::UpdatePattern()
                 pattern = 0x14;
                 ay = 0.035;
                 StartPattern();
-                if (unk3458 > 0) {
+                if (m_flying > 0) {
                     frame = 7;
                     pattern = 0xb3;
                 }
             }
         }
         break;
-    case 0x109:
-        unk58 = 0;
+    case kUnusedAir214:
+        m_drawMode = 0;
         if (frame == 0 && timer == 0) {
             vx = 0.0;
             vy = 0.0;
@@ -4756,7 +4756,7 @@ void CMizukaB::UpdatePattern()
             l50.y = (double)((int)y - 0x37);
             l50.scale = 2;
             l50.layer = 1;
-            l50.unk0 = 1;
+            l50.keep = 1;
             m_playVoice = 0xb;
             l50.facing = facing;
             SpawnObject(&l50);
@@ -4768,23 +4768,23 @@ void CMizukaB::UpdatePattern()
             frame++;
             m_attackResult = 0;
             if (frame >= x8) {
-                pattern = 9;
+                pattern = kFall;
                 StartPattern();
-                if (unk3458 > 0) {
+                if (m_flying > 0) {
                     frame = 7;
                     pattern = 0xb3;
                 }
             }
         }
         break;
-    case 0x10a:
-        unk58 = 0;
-        unk158 = 0;
+    case k421A:
+        m_drawMode = 0;
+        m_dashMomentum = 0;
         if (frame == 0 && timer == 0) {
             StopMoving();
         }
         if (frame == 8 && timer == 0) {
-            unk58 = 2;
+            m_drawMode = 2;
         }
         if (frame == 9 && timer == 0) {
             m_playVoice = 0xe;
@@ -4796,7 +4796,7 @@ void CMizukaB::UpdatePattern()
             vx = 0.0;
         }
         if (frame == 0x17 && timer == 0) {
-            unk58 = 0;
+            m_drawMode = 0;
         }
         timer++;
         if (timer >= l4) {
@@ -4804,19 +4804,19 @@ void CMizukaB::UpdatePattern()
             frame++;
             m_attackResult = 3;
             if (frame >= x8) {
-                pattern = 0;
+                pattern = kStand;
                 StartPattern();
             }
         }
         break;
-    case 0x10b:
-        unk58 = 0;
-        unk158 = 0;
+    case k421B:
+        m_drawMode = 0;
+        m_dashMomentum = 0;
         if (frame == 0 && timer == 0) {
             StopMoving();
         }
         if (frame == 8 && timer == 0) {
-            unk58 = 2;
+            m_drawMode = 2;
         }
         if (frame == 9 && timer == 0) {
             m_playVoice = 0xe;
@@ -4828,7 +4828,7 @@ void CMizukaB::UpdatePattern()
             vx = 0.0;
         }
         if (frame == 0x17 && timer == 0) {
-            unk58 = 0;
+            m_drawMode = 0;
         }
         timer++;
         if (timer >= l4) {
@@ -4836,19 +4836,19 @@ void CMizukaB::UpdatePattern()
             frame++;
             m_attackResult = 3;
             if (frame >= x8) {
-                pattern = 0;
+                pattern = kStand;
                 StartPattern();
             }
         }
         break;
-    case 0x10c:
-        unk58 = 0;
-        unk158 = 0;
+    case k421C:
+        m_drawMode = 0;
+        m_dashMomentum = 0;
         if (frame == 0 && timer == 0) {
             StopMoving();
         }
         if (frame == 8 && timer == 0) {
-            unk58 = 2;
+            m_drawMode = 2;
         }
         if (frame == 9 && timer == 0) {
             m_playVoice = 0xe;
@@ -4857,7 +4857,7 @@ void CMizukaB::UpdatePattern()
             vx = 0.0;
         }
         if (frame == 0x17 && timer == 0) {
-            unk58 = 0;
+            m_drawMode = 0;
         }
         timer++;
         if (timer >= l4) {
@@ -4869,22 +4869,22 @@ void CMizukaB::UpdatePattern()
                 y = -130.0;
             }
             if (frame >= x8) {
-                pattern = 9;
+                pattern = kFall;
                 ay = 0.035;
                 StartPattern();
             }
         }
         break;
-    case 0x10d:
-        unk58 = 0;
-        unk159 = 1;
-        unk15a = 1;
+    case kAir421A:
+        m_drawMode = 0;
+        m_airDashes = 1;
+        m_airActions = 1;
         if (frame == 0 && timer == 0) {
             vx = 0.0;
             vy = 0.0;
         }
         if (frame == 8 && timer == 0) {
-            unk58 = 2;
+            m_drawMode = 2;
         }
         if (frame == 9 && timer == 0) {
             m_playVoice = 0xe;
@@ -4896,32 +4896,32 @@ void CMizukaB::UpdatePattern()
             vx = 0.0;
         }
         if (frame == 0x17 && timer == 0) {
-            unk58 = 0;
+            m_drawMode = 0;
         }
         timer++;
         if (timer >= l4) {
             timer = 0;
             frame++;
             if (frame >= x8) {
-                pattern = 9;
+                pattern = kFall;
                 StartPattern();
-                if (unk3458 > 0) {
+                if (m_flying > 0) {
                     frame = 7;
                     pattern = 0xb3;
                 }
             }
         }
         break;
-    case 0x10e:
-        unk58 = 0;
-        unk159 = 1;
-        unk15a = 1;
+    case kAir421B:
+        m_drawMode = 0;
+        m_airDashes = 1;
+        m_airActions = 1;
         if (frame == 0 && timer == 0) {
             vx = 0.0;
             vy = 0.0;
         }
         if (frame == 8 && timer == 0) {
-            unk58 = 2;
+            m_drawMode = 2;
         }
         if (frame == 9 && timer == 0) {
             m_playVoice = 0xe;
@@ -4933,42 +4933,42 @@ void CMizukaB::UpdatePattern()
             vx = 0.0;
         }
         if (frame == 0x17 && timer == 0) {
-            unk58 = 0;
+            m_drawMode = 0;
         }
         timer++;
         if (timer >= l4) {
             timer = 0;
             frame++;
             if (frame >= x8) {
-                pattern = 9;
+                pattern = kFall;
                 StartPattern();
-                if (unk3458 > 0) {
+                if (m_flying > 0) {
                     frame = 7;
                     pattern = 0xb3;
                 }
             }
         }
         break;
-    case 0x10f:
-        unk58 = 0;
-        unk159 = 1;
-        unk15a = 1;
+    case kAir421C:
+        m_drawMode = 0;
+        m_airDashes = 1;
+        m_airActions = 1;
         if (frame == 0 && timer == 0) {
             vx = 0.0;
             vy = 0.0;
         }
         if (frame == 8 && timer == 0) {
-            unk58 = 2;
+            m_drawMode = 2;
         }
         if (frame == 9 && timer == 0) {
             m_playVoice = 0xe;
         }
         if (frame == 0x10 && timer == 0) {
             vx = 0.0;
-            unk3458 = 0;
+            m_flying = 0;
         }
         if (frame == 0x17 && timer == 0) {
-            unk58 = 0;
+            m_drawMode = 0;
         }
         timer++;
         if (timer >= l4) {
@@ -4980,24 +4980,24 @@ void CMizukaB::UpdatePattern()
                 y = 0.0;
             }
             if (frame >= x8) {
-                pattern = 0;
+                pattern = kStand;
                 StartPattern();
             }
         }
         break;
-    case 0x12c:
-        unk58 = 0;
-        unk158 = 0;
+    case k236236A:
+        m_drawMode = 0;
+        m_dashMomentum = 0;
         if (frame == 0 && timer == 0) {
             StopMoving();
         }
         if (frame == 3 && timer == 0) {
             StopMoving();
-            unk14c = 0x78;
+            m_freezeTime = 0x78;
             m_gauge = m_gauge - 0x3e8;
             FillBackground(0xb0, 3);
             l50.type = 0x44;
-            l50.unk2c = 0x13;
+            l50.sound = 0x13;
             l50.x = (double)((int)x - facing * 0xe);
             l50.y = (double)((int)y - 0x32);
             l50.scale = 2;
@@ -5005,14 +5005,14 @@ void CMizukaB::UpdatePattern()
             m_game->CreateEffect((EffectDesc*)&l50);
         }
         if (frame > 2) {
-            Unk410a80(0x32, 3);
+            FocusCameraY(0x32, 3);
         }
-        if (frame == 5 && timer == 0 && unk313c == 0) {
-            l50.unk0 = 1;
+        if (frame == 5 && timer == 0 && m_patternVar2 == 0) {
+            l50.keep = 1;
             l50.type = 0x1cd;
             l50.x = 0.0;
             l50.y = 0.0;
-            l50.unk0 = 1;
+            l50.keep = 1;
             l50.facing = facing;
             l50.scale = 0;
             l50.layer = 1;
@@ -5024,30 +5024,30 @@ void CMizukaB::UpdatePattern()
             timer = 0;
             frame++;
             m_attackResult = 0;
-            if (frame == 7 && unk313c < 0xa) {
+            if (frame == 7 && m_patternVar2 < 0xa) {
                 frame = frame - 2;
-                unk313c++;
+                m_patternVar2++;
             }
             if (frame >= x8) {
-                pattern = 0;
+                pattern = kStand;
                 FaceOpponent();
                 StartPattern();
             }
         }
         break;
-    case 0x12d:
-        unk58 = 0;
-        unk158 = 0;
+    case k236236B:
+        m_drawMode = 0;
+        m_dashMomentum = 0;
         if (frame == 0 && timer == 0) {
             StopMoving();
         }
         if (frame == 3 && timer == 0) {
             StopMoving();
-            unk14c = 0x78;
+            m_freezeTime = 0x78;
             m_gauge = m_gauge - 0x3e8;
             FillBackground(0xb0, 3);
             l50.type = 0x44;
-            l50.unk2c = 0x13;
+            l50.sound = 0x13;
             l50.x = (double)((int)x - facing * 0xe);
             l50.y = (double)((int)y - 0x32);
             l50.scale = 2;
@@ -5055,14 +5055,14 @@ void CMizukaB::UpdatePattern()
             m_game->CreateEffect((EffectDesc*)&l50);
         }
         if (frame > 2) {
-            Unk410a80(0x32, 3);
+            FocusCameraY(0x32, 3);
         }
-        if (frame == 5 && timer == 0 && unk313c == 0) {
-            l50.unk0 = 1;
+        if (frame == 5 && timer == 0 && m_patternVar2 == 0) {
+            l50.keep = 1;
             l50.type = 0x1ce;
             l50.x = 0.0;
             l50.y = 0.0;
-            l50.unk0 = 1;
+            l50.keep = 1;
             l50.facing = facing;
             l50.scale = 0;
             l50.layer = 1;
@@ -5074,30 +5074,30 @@ void CMizukaB::UpdatePattern()
             timer = 0;
             frame++;
             m_attackResult = 0;
-            if (frame == 7 && unk313c < 0xa) {
+            if (frame == 7 && m_patternVar2 < 0xa) {
                 frame = frame - 2;
-                unk313c++;
+                m_patternVar2++;
             }
             if (frame >= x8) {
-                pattern = 0;
+                pattern = kStand;
                 FaceOpponent();
                 StartPattern();
             }
         }
         break;
-    case 0x12e:
-        unk58 = 0;
-        unk158 = 0;
+    case kUnused12e:
+        m_drawMode = 0;
+        m_dashMomentum = 0;
         if (frame == 0 && timer == 0) {
             StopMoving();
         }
         if (frame == 3 && timer == 0) {
             StopMoving();
-            unk14c = 0x78;
+            m_freezeTime = 0x78;
             m_gauge = m_gauge - 0x3e8;
             FillBackground(0xb0, 3);
             l50.type = 0x44;
-            l50.unk2c = 0x13;
+            l50.sound = 0x13;
             l50.x = (double)((int)x - facing * 0xe);
             l50.y = (double)((int)y - 0x32);
             l50.scale = 2;
@@ -5106,14 +5106,14 @@ void CMizukaB::UpdatePattern()
             m_playSound = 0x25;
         }
         if (frame > 2) {
-            Unk410a80(0x32, 3);
+            FocusCameraY(0x32, 3);
         }
-        if (frame == 5 && timer == 0 && unk313c == 0) {
-            l50.unk0 = 1;
+        if (frame == 5 && timer == 0 && m_patternVar2 == 0) {
+            l50.keep = 1;
             l50.type = 0x1cf;
             l50.x = 0.0;
             l50.y = 0.0;
-            l50.unk0 = 1;
+            l50.keep = 1;
             l50.facing = facing;
             l50.scale = 0;
             l50.layer = 1;
@@ -5125,42 +5125,42 @@ void CMizukaB::UpdatePattern()
             timer = 0;
             frame++;
             m_attackResult = 0;
-            if (frame == 7 && unk313c < 0xa) {
+            if (frame == 7 && m_patternVar2 < 0xa) {
                 frame = frame - 2;
-                unk313c++;
+                m_patternVar2++;
             }
             if (frame >= x8) {
-                pattern = 0;
+                pattern = kStand;
                 FaceOpponent();
                 StartPattern();
             }
         }
         break;
-    case 0x12f:
-        unk58 = 0;
-        unk158 = 0;
+    case k463214A:
+        m_drawMode = 0;
+        m_dashMomentum = 0;
         if (frame == 0 && timer == 0) {
             vx = 0.0;
             vy = 0.0;
             ay = 0.0;
         }
         if (frame == 7 && timer == 0) {
-            unk14c = 0x78;
+            m_freezeTime = 0x78;
             m_gauge = m_gauge - 0x3e8;
             FillBackground(0xb0, 3);
             l50.type = 0x44;
-            l50.unk2c = 0x13;
+            l50.sound = 0x13;
             l50.x = (double)(int)x;
             l50.y = (double)((int)y - 0x28);
             l50.scale = 2;
-            l50.unk0 = 1;
+            l50.keep = 1;
             l50.layer = 1;
             m_game->CreateEffect((EffectDesc*)&l50);
-            Unk410a80(0x32, 0x2d);
+            FocusCameraY(0x32, 0x2d);
         }
         if (frame == 8 && timer == 0) {
             l50.type = 0x1b8;
-            l50.unk28 = 1;
+            l50.shadow = 1;
             l50.x = (double)(int)(*m_opponent)->x;
             l50.y = -480.0;
             l50.facing = facing;
@@ -5168,10 +5168,10 @@ void CMizukaB::UpdatePattern()
             l50.layer = 1;
             SpawnObject(&l50);
         }
-        if (frame > 7 && unk3448 == 1) {
+        if (frame > 7 && m_catchState == 1) {
             m_game->FlashWhite(9, 0x50, 9);
             StartPattern();
-            pattern = 0x132;
+            pattern = k463214AHit;
             break;
         }
         timer++;
@@ -5180,37 +5180,37 @@ void CMizukaB::UpdatePattern()
             frame++;
             m_attackResult = 0;
             if (frame >= x8) {
-                pattern = 0;
+                pattern = kStand;
                 FaceOpponent();
                 StartPattern();
             }
         }
         break;
-    case 0x130:
-        unk58 = 0;
-        unk158 = 0;
+    case k463214B:
+        m_drawMode = 0;
+        m_dashMomentum = 0;
         if (frame == 0 && timer == 0) {
             vx = 0.0;
             vy = 0.0;
             ay = 0.0;
         }
         if (frame == 7 && timer == 0) {
-            unk14c = 0x78;
+            m_freezeTime = 0x78;
             m_gauge = m_gauge - 0x7d0;
             FillBackground(0xb0, 3);
             l50.type = 0x45;
-            l50.unk2c = 5;
+            l50.sound = 5;
             l50.x = (double)(int)x;
             l50.y = (double)((int)y - 0x28);
             l50.scale = 2;
-            l50.unk0 = 1;
+            l50.keep = 1;
             l50.layer = 1;
             m_game->CreateEffect((EffectDesc*)&l50);
-            Unk410a80(0x32, 0x2d);
+            FocusCameraY(0x32, 0x2d);
         }
         if (frame == 8 && timer == 0) {
             l50.type = 0x1b8;
-            l50.unk28 = 1;
+            l50.shadow = 1;
             l50.x = (double)(int)(*m_opponent)->x;
             l50.y = -480.0;
             l50.facing = facing;
@@ -5218,10 +5218,10 @@ void CMizukaB::UpdatePattern()
             l50.layer = 1;
             SpawnObject(&l50);
         }
-        if (frame > 7 && unk3448 == 1) {
+        if (frame > 7 && m_catchState == 1) {
             m_game->FlashWhite(9, 0x50, 9);
             StartPattern();
-            pattern = 0x133;
+            pattern = k463214BHit;
             break;
         }
         timer++;
@@ -5230,41 +5230,41 @@ void CMizukaB::UpdatePattern()
             frame++;
             m_attackResult = 0;
             if (frame >= x8) {
-                pattern = 0;
+                pattern = kStand;
                 FaceOpponent();
                 StartPattern();
             }
         }
         break;
-    case 0x131:
-        unk58 = 0;
-        unk158 = 0;
+    case k463214C:
+        m_drawMode = 0;
+        m_dashMomentum = 0;
         if (frame == 0 && timer == 0) {
             vx = 0.0;
             vy = 0.0;
             ay = 0.0;
         }
         if (frame == 7 && timer == 0) {
-            unk14c = 0x78;
+            m_freezeTime = 0x78;
             m_gauge = m_gauge - 0xbb8;
             FillBackground(0xb0, 3);
             l50.type = 0x46;
-            l50.unk2c = 0x40;
+            l50.sound = 0x40;
             l50.x = (double)(int)x;
             l50.y = (double)((int)y - 0x28);
             l50.scale = 2;
-            l50.unk0 = 1;
+            l50.keep = 1;
             l50.layer = 1;
             m_game->CreateEffect((EffectDesc*)&l50);
-            Unk410a80(0x32, 0x2d);
+            FocusCameraY(0x32, 0x2d);
             m_playSound = 0x25;
         }
         if (frame > 6) {
-            m_game->Unk4080c0(0xf);
+            m_game->FlashNegative(0xf);
         }
         if (frame == 8 && timer == 0) {
             l50.type = 0x1b8;
-            l50.unk28 = 1;
+            l50.shadow = 1;
             l50.x = (double)(int)(*m_opponent)->x;
             l50.y = -480.0;
             l50.facing = facing;
@@ -5272,10 +5272,10 @@ void CMizukaB::UpdatePattern()
             l50.layer = 1;
             SpawnObject(&l50);
         }
-        if (frame > 7 && unk3448 == 1) {
+        if (frame > 7 && m_catchState == 1) {
             m_game->FlashWhite(9, 0x50, 9);
             StartPattern();
-            pattern = 0x134;
+            pattern = k463214CHit;
             break;
         }
         timer++;
@@ -5284,19 +5284,19 @@ void CMizukaB::UpdatePattern()
             frame++;
             m_attackResult = 0;
             if (frame >= x8) {
-                pattern = 0;
+                pattern = kStand;
                 FaceOpponent();
                 StartPattern();
             }
         }
         break;
-    case 0x132:
-        Unk410a80(0x32, 0xf);
+    case k463214AHit:
+        FocusCameraY(0x32, 0xf);
         if (frame == 1 && timer == 0) {
-            unk3448 = 2;
+            m_catchState = 2;
             x = 230.0;
             facing = 1;
-            (*m_opponent)->pattern = 0x7a;
+            (*m_opponent)->pattern = kHeadOnly;
             (*m_opponent)->facing = 1;
             (*m_opponent)->StartPattern();
             (*m_opponent)->StopMoving();
@@ -5312,7 +5312,7 @@ void CMizukaB::UpdatePattern()
             l50.scale = 0;
             l50.x = x + 20.0;
             l50.y = -50.0;
-            l50.unk0 = 1;
+            l50.keep = 1;
             l50.layer = 0;
             l50.facing = facing;
             SpawnObject(&l50);
@@ -5322,28 +5322,28 @@ void CMizukaB::UpdatePattern()
             timer = 0;
             frame++;
             m_attackResult = 0;
-            if (frame == 0x11 && (unk3448 == 2 || unk3448 == 4 || unk313c > 0)) {
+            if (frame == 0x11 && (m_catchState == 2 || m_catchState == 4 || m_patternVar2 > 0)) {
                 frame = frame - 3;
-                unk313c--;
+                m_patternVar2--;
             }
-            if (frame == 0x11 && unk3448 == 5) {
+            if (frame == 0x11 && m_catchState == 5) {
                 frame = 0x15;
             }
             if (frame >= x8) {
-                pattern = 0;
-                unk3448 = 0;
+                pattern = kStand;
+                m_catchState = 0;
                 FaceOpponent();
                 StartPattern();
             }
         }
         break;
-    case 0x133:
-        Unk410a80(0x32, 0xf);
+    case k463214BHit:
+        FocusCameraY(0x32, 0xf);
         if (frame == 1 && timer == 0) {
-            unk3448 = 2;
+            m_catchState = 2;
             x = 230.0;
             facing = 1;
-            (*m_opponent)->pattern = 0x7a;
+            (*m_opponent)->pattern = kHeadOnly;
             (*m_opponent)->facing = 1;
             (*m_opponent)->StartPattern();
             (*m_opponent)->StopMoving();
@@ -5355,8 +5355,8 @@ void CMizukaB::UpdatePattern()
             l50.x = (double)((int)x + (facing << 4));
             l50.y = 0.0;
             l50.scale = 0;
-            l50.unk0 = 1;
-            l50.unk28 = 1;
+            l50.keep = 1;
+            l50.shadow = 1;
             l50.layer = 0;
             l50.facing = facing;
             SpawnObject(&l50);
@@ -5367,16 +5367,16 @@ void CMizukaB::UpdatePattern()
         if (frame == 0x10 && timer == 0) {
             m_playVoice = 3;
             l50.type = 0x1c6;
-            if (unk3138 == 1) {
+            if (m_patternVar1 == 1) {
                 l50.type = 0x1c7;
             }
-            if (unk3138 == 2) {
+            if (m_patternVar1 == 2) {
                 l50.type = 0x1c5;
             }
             l50.scale = 0;
             l50.x = x + 20.0;
             l50.y = -50.0;
-            l50.unk0 = 1;
+            l50.keep = 1;
             l50.layer = 0;
             l50.facing = facing;
             SpawnObject(&l50);
@@ -5393,44 +5393,44 @@ void CMizukaB::UpdatePattern()
                 frame = 0x10;
             }
             if (frame == 7) {
-                if (unk3138 == 1) {
+                if (m_patternVar1 == 1) {
                     frame = 0xa;
                 }
-                if (unk3138 == 2) {
+                if (m_patternVar1 == 2) {
                     frame = 0xd;
                 }
             }
-            if (frame == 0x17 && (unk3448 == 2 || unk3448 == 4 || unk313c > 0)) {
+            if (frame == 0x17 && (m_catchState == 2 || m_catchState == 4 || m_patternVar2 > 0)) {
                 frame = frame - 3;
-                unk313c--;
+                m_patternVar2--;
             }
             if (frame == 0x1e) {
                 frame = 2;
-                unk3448 = 2;
-                unk3138++;
+                m_catchState = 2;
+                m_patternVar1++;
             }
-            if (frame == 0x1b && unk3138 == 1) {
+            if (frame == 0x1b && m_patternVar1 == 1) {
                 frame = 0x1e;
             }
-            if (frame == 0x17 && unk3448 == 5) {
+            if (frame == 0x17 && m_catchState == 5) {
                 frame = 0x1e;
             }
             if (frame >= x8) {
-                pattern = 0;
-                unk3448 = 0;
+                pattern = kStand;
+                m_catchState = 0;
                 FaceOpponent();
                 StartPattern();
             }
         }
         break;
-    case 0x134:
-        Unk410a80(0x32, 0xf);
-        m_game->Unk4080c0(0xf);
+    case k463214CHit:
+        FocusCameraY(0x32, 0xf);
+        m_game->FlashNegative(0xf);
         if (frame == 1 && timer == 0) {
-            unk3448 = 2;
+            m_catchState = 2;
             x = 230.0;
             facing = 1;
-            (*m_opponent)->pattern = 0x7a;
+            (*m_opponent)->pattern = kHeadOnly;
             (*m_opponent)->facing = 1;
             (*m_opponent)->StartPattern();
             (*m_opponent)->StopMoving();
@@ -5442,8 +5442,8 @@ void CMizukaB::UpdatePattern()
             l50.x = (double)((int)x + (facing << 4));
             l50.y = 0.0;
             l50.scale = 0;
-            l50.unk0 = 1;
-            l50.unk28 = 1;
+            l50.keep = 1;
+            l50.shadow = 1;
             l50.layer = 0;
             l50.facing = facing;
             SpawnObject(&l50);
@@ -5454,16 +5454,16 @@ void CMizukaB::UpdatePattern()
         if (frame == 0x10 && timer == 0) {
             m_playVoice = 3;
             l50.type = 0x1c6;
-            if (unk3138 == 1) {
+            if (m_patternVar1 == 1) {
                 l50.type = 0x1c7;
             }
-            if (unk3138 == 2) {
+            if (m_patternVar1 == 2) {
                 l50.type = 0x1c5;
             }
             l50.scale = 0;
             l50.x = x + 20.0;
             l50.y = -50.0;
-            l50.unk0 = 1;
+            l50.keep = 1;
             l50.layer = 0;
             l50.facing = facing;
             SpawnObject(&l50);
@@ -5480,42 +5480,42 @@ void CMizukaB::UpdatePattern()
                 frame = 0x10;
             }
             if (frame == 7) {
-                if (unk3138 == 1) {
+                if (m_patternVar1 == 1) {
                     frame = 0xa;
                 }
-                if (unk3138 == 2) {
+                if (m_patternVar1 == 2) {
                     frame = 0xd;
                 }
             }
-            if (frame == 0x17 && (unk3448 == 2 || unk3448 == 4 || unk313c > 0)) {
+            if (frame == 0x17 && (m_catchState == 2 || m_catchState == 4 || m_patternVar2 > 0)) {
                 frame = frame - 3;
-                unk313c--;
+                m_patternVar2--;
             }
             if (frame == 0x1e) {
                 frame = 2;
-                unk3448 = 2;
-                unk3138++;
+                m_catchState = 2;
+                m_patternVar1++;
             }
-            if (frame == 0x1b && unk3138 == 2) {
+            if (frame == 0x1b && m_patternVar1 == 2) {
                 frame = 0x1e;
             }
-            if (frame == 0x17 && unk3448 == 5) {
+            if (frame == 0x17 && m_catchState == 5) {
                 frame = 0x1e;
             }
             if (frame >= x8) {
-                pattern = 0;
-                unk3448 = 0;
+                pattern = kStand;
+                m_catchState = 0;
                 FaceOpponent();
                 StartPattern();
             }
         }
         break;
-    case 0x135:
+    case kUnused135:
         StartAfterimages(2);
         if (frame < 6) {
-            Unk410a80(0x32, 3);
+            FocusCameraY(0x32, 3);
         }
-        if (frame < 0xe && (*m_opponent)->pattern == 0x63) {
+        if (frame < 0xe && (*m_opponent)->pattern == kLyingDown) {
             (*m_opponent)->StartPattern();
         }
         if (frame > 8) {
@@ -5528,7 +5528,7 @@ void CMizukaB::UpdatePattern()
                 m_playSound = 0x16;
                 DealDamage(0x320, 900.0);
                 (*m_opponent)->StartPattern();
-                (*m_opponent)->pattern = 0x62;
+                (*m_opponent)->pattern = kKnockdown;
                 l50.type = 0x190;
                 l50.x = (double)(int)x;
                 l50.y = (double)(int)y;
@@ -5538,7 +5538,7 @@ void CMizukaB::UpdatePattern()
                 SpawnObject(&l50);
                 l50.type = 0;
                 m_game->CreateEffect((EffectDesc*)&l50);
-                (*m_opponent)->unk14a = 0xb4;
+                (*m_opponent)->m_hitstop = 0xb4;
                 break;
             }
             vy = vy + ay;
@@ -5549,14 +5549,14 @@ void CMizukaB::UpdatePattern()
             frame++;
             if (frame == 1) {
                 (*m_opponent)->StartPattern();
-                (*m_opponent)->pattern = 0x67;
+                (*m_opponent)->pattern = kThrownDoubledOver;
                 (*m_opponent)->y = -98.0;
                 (*m_opponent)->x = facing * 0x23 + x;
             }
             if (frame == 2) {
                 (*m_opponent)->y = -98.0;
                 (*m_opponent)->x = facing * 0x21 + x;
-                if (unk3138 > 0) {
+                if (m_patternVar1 > 0) {
                     timer = 0x96;
                 }
             }
@@ -5565,15 +5565,15 @@ void CMizukaB::UpdatePattern()
                 (*m_opponent)->x = facing * 0x21 + x;
                 (*m_opponent)->facing = -facing;
                 (*m_opponent)->StartPattern();
-                (*m_opponent)->pattern = 0x61;
-                (*m_opponent)->unk12c = 1;
+                (*m_opponent)->pattern = kKnockdownHittable;
+                (*m_opponent)->m_landHittable = 1;
                 DealDamage(0x12c, 980.0);
                 if ((*m_opponent)->m_hp <= 0) {
                     (*m_opponent)->m_hp = 1;
                 }
             }
-            if (frame == 6 && unk3138 < 3) {
-                unk3138++;
+            if (frame == 6 && m_patternVar1 < 3) {
+                m_patternVar1++;
                 frame = 0;
             }
             if (frame == 9) {
@@ -5583,37 +5583,37 @@ void CMizukaB::UpdatePattern()
             }
             m_attackResult = 0;
             if (frame >= x8) {
-                pattern = 0;
+                pattern = kStand;
                 FaceOpponent();
                 StartPattern();
             }
         }
         break;
-    case 0x136:
+    case kUnused136:
         if (frame == 0 && timer == 0) {
             (*m_opponent)->StartPattern();
         }
         if (frame == 1 && timer == 0) {
             StopMoving();
-            unk14c = 0x78;
+            m_freezeTime = 0x78;
             m_gauge = m_gauge - 0xbb8;
             FillBackground(0xb0, 3);
             l50.type = 9;
-            l50.unk2c = 5;
+            l50.sound = 5;
             l50.x = (double)((int)x + facing * 0x17);
             l50.y = (double)((int)y - 0x1e);
             l50.scale = 2;
-            l50.unk0 = 1;
+            l50.keep = 1;
             l50.layer = 1;
             m_game->CreateEffect((EffectDesc*)&l50);
-            Unk410a80(0x32, 0x2d);
+            FocusCameraY(0x32, 0x2d);
         }
         if (frame < 7) {
-            Unk410a80(0x32, 0x2d);
-            (*m_opponent)->unk14a = 3;
+            FocusCameraY(0x32, 0x2d);
+            (*m_opponent)->m_hitstop = 3;
         }
         if (frame == 7) {
-            Unk410a80(0, 0);
+            FocusCameraY(0, 0);
         }
         timer++;
         if (timer >= l4) {
@@ -5622,16 +5622,16 @@ void CMizukaB::UpdatePattern()
             m_attackResult = 0;
             if (frame == 3 || frame == 6) {
                 l50.type = 0;
-                l50.unk2c = 2;
+                l50.sound = 2;
                 l50.x = (double)((int)x + facing * 0x1d);
                 l50.y = (double)((int)y - 0x53);
                 l50.scale = 2;
-                l50.unk0 = 1;
+                l50.keep = 1;
                 l50.layer = 1;
                 m_game->CreateEffect((EffectDesc*)&l50);
             }
             if (frame == 1) {
-                (*m_opponent)->pattern = 0x67;
+                (*m_opponent)->pattern = kThrownDoubledOver;
                 (*m_opponent)->StartPattern();
                 (*m_opponent)->y = -101.0;
                 (*m_opponent)->x = facing * 0x15 + x;
@@ -5644,60 +5644,60 @@ void CMizukaB::UpdatePattern()
                 l50.x = (double)(int)x;
                 l50.y = (double)((int)y - 0xfa);
                 l50.scale = 2;
-                l50.unk0 = 1;
+                l50.keep = 1;
                 l50.facing = facing;
                 l50.layer = 1;
                 SpawnObject(&l50);
             }
             if (frame == 3) {
-                (*m_opponent)->pattern = 0x64;
+                (*m_opponent)->pattern = kThrownStandHigh;
                 (*m_opponent)->y = -99.0;
                 (*m_opponent)->x = facing * 0xf + x;
             }
             if (frame == 4) {
-                (*m_opponent)->pattern = 0x67;
+                (*m_opponent)->pattern = kThrownDoubledOver;
                 (*m_opponent)->y = -99.0;
                 (*m_opponent)->x = facing * 0xf + x;
             }
             if (frame == 5) {
-                (*m_opponent)->pattern = 0x64;
+                (*m_opponent)->pattern = kThrownStandHigh;
                 (*m_opponent)->y = -99.0;
                 (*m_opponent)->x = facing * 0xf + x;
             }
             if (frame == 6) {
-                (*m_opponent)->pattern = 0x67;
+                (*m_opponent)->pattern = kThrownDoubledOver;
                 (*m_opponent)->y = -99.0;
                 (*m_opponent)->x = facing * 0xf + x;
             }
-            if (frame == 7 && unk3138 > 0xa) {
-                (*m_opponent)->pattern = 0x3e;
-                (*m_opponent)->unkc0 = 0.0;
-                (*m_opponent)->unkc8 = -5.0;
+            if (frame == 7 && m_patternVar1 > 0xa) {
+                (*m_opponent)->pattern = kHitAirCarry;
+                (*m_opponent)->m_hitVx = 0.0;
+                (*m_opponent)->m_hitVy = -5.0;
                 (*m_opponent)->ay = 0.035;
                 DealDamage(0xdac, 700.0);
-                (*m_opponent)->unk124 = 0xb4;
+                (*m_opponent)->m_untechTime = 0xb4;
             }
-            if (frame == 7 && unk3138 < 0xb) {
-                unk3138++;
+            if (frame == 7 && m_patternVar1 < 0xb) {
+                m_patternVar1++;
                 frame = 2;
             }
             if (frame >= x8) {
-                pattern = 0;
+                pattern = kStand;
                 StartPattern();
                 FaceOpponent();
             }
         }
         break;
-    case 0x137:
+    case kUnused137:
         if (frame == 0 && timer == 0) {
             (*m_opponent)->StartPattern();
         }
         if (frame < 7) {
-            Unk410a80(0x32, 0x2d);
-            (*m_opponent)->unk14a = 3;
+            FocusCameraY(0x32, 0x2d);
+            (*m_opponent)->m_hitstop = 3;
         }
         if (frame == 7) {
-            Unk410a80(0, 0);
+            FocusCameraY(0, 0);
         }
         timer++;
         if (timer >= l4) {
@@ -5706,16 +5706,16 @@ void CMizukaB::UpdatePattern()
             m_attackResult = 0;
             if (frame == 3 || frame == 6) {
                 l50.type = 0;
-                l50.unk2c = 2;
+                l50.sound = 2;
                 l50.x = (double)((int)x + facing * 0x1d);
                 l50.y = (double)((int)y - 0x53);
                 l50.scale = 2;
-                l50.unk0 = 1;
+                l50.keep = 1;
                 l50.layer = 1;
                 m_game->CreateEffect((EffectDesc*)&l50);
             }
             if (frame == 1) {
-                (*m_opponent)->pattern = 0x67;
+                (*m_opponent)->pattern = kThrownDoubledOver;
                 (*m_opponent)->StartPattern();
                 (*m_opponent)->y = -101.0;
                 (*m_opponent)->x = facing * 0x15 + x;
@@ -5728,41 +5728,41 @@ void CMizukaB::UpdatePattern()
                 l50.x = (double)(int)x;
                 l50.y = (double)((int)y - 0xfa);
                 l50.scale = 2;
-                l50.unk0 = 1;
+                l50.keep = 1;
                 l50.facing = facing;
                 l50.layer = 1;
                 SpawnObject(&l50);
             }
             if (frame == 3) {
-                (*m_opponent)->pattern = 0x64;
+                (*m_opponent)->pattern = kThrownStandHigh;
                 (*m_opponent)->y = -99.0;
                 (*m_opponent)->x = facing * 0xf + x;
             }
             if (frame == 4) {
-                (*m_opponent)->pattern = 0x67;
+                (*m_opponent)->pattern = kThrownDoubledOver;
                 (*m_opponent)->y = -99.0;
                 (*m_opponent)->x = facing * 0xf + x;
             }
             if (frame == 5) {
-                (*m_opponent)->pattern = 0x64;
+                (*m_opponent)->pattern = kThrownStandHigh;
                 (*m_opponent)->y = -99.0;
                 (*m_opponent)->x = facing * 0xf + x;
             }
             if (frame == 6) {
-                (*m_opponent)->pattern = 0x67;
+                (*m_opponent)->pattern = kThrownDoubledOver;
                 (*m_opponent)->y = -99.0;
                 (*m_opponent)->x = facing * 0xf + x;
             }
-            if (frame == 7 && unk3138 > 8) {
+            if (frame == 7 && m_patternVar1 > 8) {
                 (*m_opponent)->StartPattern();
-                (*m_opponent)->pattern = 0x3f;
-                (*m_opponent)->unkc0 = 0.2;
-                (*m_opponent)->unkc8 = -1.9;
+                (*m_opponent)->pattern = kHitAirLaunch;
+                (*m_opponent)->m_hitVx = 0.2;
+                (*m_opponent)->m_hitVy = -1.9;
                 DealDamage(0x3e8, 1000.0);
                 m_hitsLeft = 1;
             }
-            if (frame == 7 && unk3138 < 9) {
-                unk3138++;
+            if (frame == 7 && m_patternVar1 < 9) {
+                m_patternVar1++;
                 frame = 2;
             }
             if (frame == 0x10) {
@@ -5770,7 +5770,7 @@ void CMizukaB::UpdatePattern()
                 l50.x = (double)(int)x;
                 l50.y = (double)((int)y + 4);
                 l50.scale = 0;
-                l50.unk0 = 1;
+                l50.keep = 1;
                 l50.facing = facing;
                 l50.layer = 1;
                 m_game->CreateEffect((EffectDesc*)&l50);
@@ -5779,19 +5779,19 @@ void CMizukaB::UpdatePattern()
                 l50.y = (double)(int)y;
                 l50.scale = 2;
                 l50.facing = facing;
-                l50.unk0 = 1;
+                l50.keep = 1;
                 l50.layer = 1;
                 SpawnObject(&l50);
                 ShakeScreen(0xa, 0x3c);
             }
             if (frame >= x8) {
-                pattern = 0;
+                pattern = kStand;
                 StartPattern();
                 FaceOpponent();
             }
         }
         break;
-    case 0x138:
+    case kUnused138:
         if (frame == 0 && timer == 0) {
             vx = 0.0;
             vy = 0.0;
@@ -5799,15 +5799,15 @@ void CMizukaB::UpdatePattern()
             m_hitsLeft = 2;
         }
         if (frame == 6 && timer == 0) {
-            Unk410a80(0x32, 0x2d);
-            unk14c = 0x78;
+            FocusCameraY(0x32, 0x2d);
+            m_freezeTime = 0x78;
             FillBackground(0xb0, 3);
             l50.type = 9;
-            l50.unk2c = 5;
+            l50.sound = 5;
             l50.x = (double)((int)x + facing * 0x17);
             l50.y = (double)((int)y - 0x1e);
             l50.scale = 2;
-            l50.unk0 = 1;
+            l50.keep = 1;
             l50.layer = 1;
             m_game->CreateEffect((EffectDesc*)&l50);
         }
@@ -5816,7 +5816,7 @@ void CMizukaB::UpdatePattern()
             l50.x = (double)(int)x;
             l50.y = (double)((int)y + 4);
             l50.scale = 0;
-            l50.unk0 = 1;
+            l50.keep = 1;
             l50.facing = facing;
             l50.layer = 1;
             m_game->CreateEffect((EffectDesc*)&l50);
@@ -5825,7 +5825,7 @@ void CMizukaB::UpdatePattern()
             l50.y = (double)(int)y;
             l50.scale = 2;
             l50.facing = facing;
-            l50.unk0 = 1;
+            l50.keep = 1;
             l50.layer = 1;
             SpawnObject(&l50);
         }
@@ -5834,7 +5834,7 @@ void CMizukaB::UpdatePattern()
             l50.x = (double)(int)x;
             l50.y = (double)((int)y + 4);
             l50.scale = 0;
-            l50.unk0 = 1;
+            l50.keep = 1;
             l50.facing = facing;
             l50.layer = 1;
             m_game->CreateEffect((EffectDesc*)&l50);
@@ -5843,13 +5843,13 @@ void CMizukaB::UpdatePattern()
             l50.y = (double)(int)y;
             l50.scale = 2;
             l50.facing = facing;
-            l50.unk0 = 1;
+            l50.keep = 1;
             l50.layer = 1;
             SpawnObject(&l50);
         }
         if (frame == 2 && m_attackResult == 3) {
             ShakeScreen(6, 0x3c);
-            (*m_opponent)->unk14a = 0x1f4;
+            (*m_opponent)->m_hitstop = 0x1f4;
         }
         if (frame == 0xa && timer == 0) {
             ShakeScreen(0xa, 0x3c);
@@ -5865,25 +5865,25 @@ void CMizukaB::UpdatePattern()
                 m_attackResult = 0;
             }
             if (frame >= x8) {
-                pattern = 0;
+                pattern = kStand;
                 StartPattern();
             }
         }
         break;
-    case 0x139:
-        unk58 = 0;
-        unk158 = 0;
+    case kUnused139:
+        m_drawMode = 0;
+        m_dashMomentum = 0;
         if (frame == 0 && timer == 0) {
             StopMoving();
         }
         if (frame == 4 && timer == 0) {
             m_hitsLeft = 1;
             StopMoving();
-            unk14c = 0x78;
+            m_freezeTime = 0x78;
             m_gauge = m_gauge - 0xbb8;
             FillBackground(0xb0, 3);
             l50.type = 9;
-            l50.unk2c = 5;
+            l50.sound = 5;
             l50.x = (double)(int)x;
             l50.y = (double)((int)y - 0xa);
             l50.scale = 2;
@@ -5892,10 +5892,10 @@ void CMizukaB::UpdatePattern()
             m_playSound = 0x25;
         }
         if (frame > 3) {
-            m_game->Unk4080c0(0xf);
+            m_game->FlashNegative(0xf);
         }
         if (frame > 3) {
-            Unk410a80(0x32, 3);
+            FocusCameraY(0x32, 3);
         }
         if (frame > 0x15 && frame < 0x19) {
             m_hp += 0xa;
@@ -5922,19 +5922,19 @@ void CMizukaB::UpdatePattern()
             }
         }
         break;
-    case 0x13a:
-        unk58 = 0;
-        unk158 = 0;
+    case kLv4:
+        m_drawMode = 0;
+        m_dashMomentum = 0;
         if (frame == 0 && timer == 0) {
             StopMoving();
         }
         if (frame == 1 && timer == 0) {
             StopMoving();
-            unk14c = 0x78;
+            m_freezeTime = 0x78;
             m_gauge = m_gauge - 0xbb8;
             FillBackground(0xb0, 3);
             l50.type = 0x46;
-            l50.unk2c = 0x40;
+            l50.sound = 0x40;
             l50.x = (double)((int)x + facing * 0x18);
             l50.y = (double)((int)y - 0x32);
             l50.scale = 2;
@@ -5943,15 +5943,15 @@ void CMizukaB::UpdatePattern()
             m_game->CreateEffect((EffectDesc*)&l50);
             l50.type = 0x47;
             m_game->CreateEffect((EffectDesc*)&l50);
-            unk3138++;
+            m_patternVar1++;
             m_playSound = 0x25;
             m_hitsLeft = 1;
         }
         if (frame > 0) {
-            m_game->Unk4080c0(0xf);
+            m_game->FlashNegative(0xf);
         }
         if (frame > 0) {
-            Unk410a80(0x32, 3);
+            FocusCameraY(0x32, 3);
         }
         if (frame > 2 && frame < 8) {
             vy = vy + ay;
@@ -5968,11 +5968,11 @@ void CMizukaB::UpdatePattern()
         }
         if (frame == 0xd && timer == 0 && m_attackResult == 3) {
             StartPattern();
-            pattern = 0x13b;
+            pattern = kLv4Hit;
             break;
         }
         if (frame > 0xb && m_attackResult == 3) {
-            (*m_opponent)->unk128 = 1;
+            (*m_opponent)->m_noAirRecovery = 1;
         }
         timer++;
         if (timer >= l4) {
@@ -5987,28 +5987,28 @@ void CMizukaB::UpdatePattern()
                 ay = 0.08;
             }
             if (frame >= x8) {
-                pattern = 0;
+                pattern = kStand;
                 FaceOpponent();
                 StartPattern();
             }
         }
         break;
-    case 0x13b:
-        unk13e = 3;
+    case kLv4Hit:
+        m_hideOffscreenMarker = 3;
         if (frame > 0xb && m_attackResult == 3) {
-            (*m_opponent)->unk128 = 1;
+            (*m_opponent)->m_noAirRecovery = 1;
         }
-        if ((*m_opponent)->pattern == 0x63) {
+        if ((*m_opponent)->pattern == kLyingDown) {
             (*m_opponent)->timer = 0;
         }
         if (frame < 2) {
             FillBackground(0xb0, 3);
         }
         if (frame < 2) {
-            Unk410a80(0x32, 3);
+            FocusCameraY(0x32, 3);
         }
         if (frame < 2) {
-            Unk410a40(0x32, 3);
+            FocusCameraX(0x32, 3);
         }
         if (frame == 0 && timer == 0) {
             x = 320.0;
@@ -6033,11 +6033,11 @@ void CMizukaB::UpdatePattern()
             (*m_opponent)->y = -160.0;
             (*m_opponent)->StartPattern();
             (*m_opponent)->StopMoving();
-            (*m_opponent)->pattern = 0x3b;
+            (*m_opponent)->pattern = kHitAir;
         }
         if (frame == 0) {
-            unk3138++;
-            if (unk3138 == 0x50) {
+            m_patternVar1++;
+            if (m_patternVar1 == 0x50) {
                 l50.type = 0x1a6;
                 l50.x = 320.0;
                 l50.y = 200.0;
@@ -6046,7 +6046,7 @@ void CMizukaB::UpdatePattern()
                 l50.facing = facing;
                 SpawnObject(&l50);
             }
-            if (unk3138 == 0xa0) {
+            if (m_patternVar1 == 0xa0) {
                 l50.type = 0x1a7;
                 l50.x = 320.0;
                 l50.y = 200.0;
@@ -6055,7 +6055,7 @@ void CMizukaB::UpdatePattern()
                 l50.facing = facing;
                 SpawnObject(&l50);
             }
-            if (unk3138 == 0xf0) {
+            if (m_patternVar1 == 0xf0) {
                 l50.type = 0x1a8;
                 l50.x = 320.0;
                 l50.y = 200.0;
@@ -6064,7 +6064,7 @@ void CMizukaB::UpdatePattern()
                 l50.facing = facing;
                 SpawnObject(&l50);
             }
-            if (unk3138 == 0x140) {
+            if (m_patternVar1 == 0x140) {
                 l50.type = 0x1a9;
                 l50.x = 320.0;
                 l50.y = 200.0;
@@ -6073,7 +6073,7 @@ void CMizukaB::UpdatePattern()
                 l50.facing = facing;
                 SpawnObject(&l50);
             }
-            if (unk3138 == 0x190) {
+            if (m_patternVar1 == 0x190) {
                 l50.type = 0x1aa;
                 l50.x = 320.0;
                 l50.y = 200.0;
@@ -6085,25 +6085,25 @@ void CMizukaB::UpdatePattern()
         }
         if (frame == 0 && timer == l4 - 0x1e) {
             m_game->FlashBlack(9, 0x1e, 9);
-            unk3138 = 0;
+            m_patternVar1 = 0;
             (*m_opponent)->x = 320.0;
             (*m_opponent)->y = 0.0;
-            (*m_opponent)->pattern = 0x79;
+            (*m_opponent)->pattern = kThrownHidden;
             (*m_opponent)->StartPattern();
             (*m_opponent)->StopMoving();
         }
         if (frame == 1) {
-            unk3138++;
-            if (unk313c > 0) {
+            m_patternVar1++;
+            if (m_patternVar2 > 0) {
                 frame = 2;
                 timer = 0;
                 facing = -(*m_opponent)->facing;
-                x = unk313c;
-                y = unk3140;
+                x = m_patternVar2;
+                y = m_patternVar3;
                 vx = -0.9;
                 vy = -1.5;
             }
-            if (unk3138 == 0x96) {
+            if (m_patternVar1 == 0x96) {
                 l50.type = 0x1b6;
                 l50.x = x - facing * 0xf0;
                 l50.y = -20.0;
@@ -6112,7 +6112,7 @@ void CMizukaB::UpdatePattern()
                 l50.facing = facing;
                 SpawnObject(&l50);
             }
-            if (unk3138 == 0xae) {
+            if (m_patternVar1 == 0xae) {
                 l50.type = 0x1ac;
                 l50.x = x - facing * 0xf0;
                 l50.y = -20.0;
@@ -6121,7 +6121,7 @@ void CMizukaB::UpdatePattern()
                 l50.facing = facing;
                 SpawnObject(&l50);
             }
-            if (unk3138 == 0xc6) {
+            if (m_patternVar1 == 0xc6) {
                 l50.type = 0x1ad;
                 l50.x = x - facing * 0xf0;
                 l50.y = -20.0;
@@ -6130,7 +6130,7 @@ void CMizukaB::UpdatePattern()
                 l50.facing = facing;
                 SpawnObject(&l50);
             }
-            if (unk3138 == 0xde) {
+            if (m_patternVar1 == 0xde) {
                 l50.type = 0x1ae;
                 l50.x = x - facing * 0xf0;
                 l50.y = -20.0;
@@ -6139,7 +6139,7 @@ void CMizukaB::UpdatePattern()
                 l50.facing = facing;
                 SpawnObject(&l50);
             }
-            if (unk3138 == 0xf6) {
+            if (m_patternVar1 == 0xf6) {
                 l50.type = 0x1af;
                 l50.x = x - facing * 0xf0;
                 l50.y = -20.0;
@@ -6148,7 +6148,7 @@ void CMizukaB::UpdatePattern()
                 l50.facing = facing;
                 SpawnObject(&l50);
             }
-            if (unk3138 == 0x10e) {
+            if (m_patternVar1 == 0x10e) {
                 l50.type = 0x1b0;
                 l50.x = x - facing * 0xf0;
                 l50.y = -20.0;
@@ -6163,7 +6163,7 @@ void CMizukaB::UpdatePattern()
             if (vy + y > 0.0) {
                 StartPattern();
                 StopMoving();
-                pattern = 0xd;
+                pattern = kLand;
                 y = 0.0;
                 break;
             }
@@ -6178,34 +6178,34 @@ void CMizukaB::UpdatePattern()
             }
         }
         break;
-    case 0x13c:
-        unk58 = 0;
-        unk158 = 0;
+    case kUnused13c:
+        m_drawMode = 0;
+        m_dashMomentum = 0;
         if (frame == 0 && timer == 0) {
             StopMoving();
         }
-        if (frame == 4 && timer == 0 && unk3138 == 0) {
+        if (frame == 4 && timer == 0 && m_patternVar1 == 0) {
             StopMoving();
-            unk14c = 0x78;
+            m_freezeTime = 0x78;
             m_gauge = m_gauge - 0xbb8;
             FillBackground(0xb0, 3);
             l50.type = 9;
-            l50.unk2c = 5;
+            l50.sound = 5;
             l50.x = (double)((int)x - facing * 0xe);
             l50.y = (double)((int)y - 0x32);
             l50.scale = 2;
             l50.layer = 1;
             l50.facing = facing;
             m_game->CreateEffect((EffectDesc*)&l50);
-            unk3138++;
+            m_patternVar1++;
             m_playSound = 0x25;
         }
         if (frame > 3) {
-            m_game->Unk4080c0(0xf);
+            m_game->FlashNegative(0xf);
         }
-        Unk410a80(0x32, 3);
+        FocusCameraY(0x32, 3);
         if (frame == 9 && timer == 0) {
-            l50.unk0 = 1;
+            l50.keep = 1;
             l50.type = 0x1c4;
             l50.x = (double)((int)x + facing * 0x50);
             l50.y = 15.0;
@@ -6219,27 +6219,27 @@ void CMizukaB::UpdatePattern()
             timer = 0;
             frame++;
             m_attackResult = 0;
-            if (frame == 7 && unk3138 < 6) {
+            if (frame == 7 && m_patternVar1 < 6) {
                 frame = frame - 3;
-                unk3138++;
+                m_patternVar1++;
             }
             if (frame >= x8) {
-                pattern = 0;
+                pattern = kStand;
                 FaceOpponent();
                 StartPattern();
             }
         }
         break;
-    case 0x13d:
-        unk58 = 0;
-        unk158 = 0;
+    case kAir236236A:
+        m_drawMode = 0;
+        m_dashMomentum = 0;
         if (frame > 0x13) {
             vy += 0.035;
             if (y + vy > 0.0) {
                 y = 0.0;
                 StartPattern();
                 StopMoving();
-                pattern = 0xd;
+                pattern = kLand;
                 break;
             }
         }
@@ -6248,11 +6248,11 @@ void CMizukaB::UpdatePattern()
         }
         if (frame == 5 && timer == 0) {
             StopMoving();
-            unk14c = 0x78;
+            m_freezeTime = 0x78;
             m_gauge = m_gauge - 0x3e8;
             FillBackground(0xb0, 3);
             l50.type = 0x44;
-            l50.unk2c = 0x13;
+            l50.sound = 0x13;
             l50.x = (double)((int)x - facing * 0xe);
             l50.y = (double)((int)y - 0x32);
             l50.scale = 2;
@@ -6260,15 +6260,15 @@ void CMizukaB::UpdatePattern()
             m_game->CreateEffect((EffectDesc*)&l50);
         }
         if (frame > 4 && frame < 6) {
-            Unk410a80(0x32, 3);
+            FocusCameraY(0x32, 3);
         }
         if (frame == 6 && timer == 0) {
-            l50.unk0 = 1;
+            l50.keep = 1;
             l50.type = 0x1d0;
-            l50.unk30 = 1;
+            l50.movesInFreeze = 1;
             l50.x = (facing << 1) + x;
             l50.y = y - 29.0;
-            l50.unk0 = 1;
+            l50.keep = 1;
             l50.facing = facing;
             l50.scale = 2;
             l50.layer = 1;
@@ -6281,7 +6281,7 @@ void CMizukaB::UpdatePattern()
             m_attackResult = 0;
             if (frame == 0x18) {
                 StartPattern();
-                pattern = 9;
+                pattern = kFall;
                 ay = 0.035;
             }
             if (frame >= x8) {
@@ -6289,16 +6289,16 @@ void CMizukaB::UpdatePattern()
             }
         }
         break;
-    case 0x13e:
-        unk58 = 0;
-        unk158 = 0;
+    case kAir236236B:
+        m_drawMode = 0;
+        m_dashMomentum = 0;
         if (frame > 0x13) {
             vy += 0.035;
             if (y + vy > 0.0) {
                 y = 0.0;
                 StartPattern();
                 StopMoving();
-                pattern = 0xd;
+                pattern = kLand;
                 break;
             }
         }
@@ -6307,11 +6307,11 @@ void CMizukaB::UpdatePattern()
         }
         if (frame == 5 && timer == 0) {
             StopMoving();
-            unk14c = 0x78;
+            m_freezeTime = 0x78;
             m_gauge = m_gauge - 0x7d0;
             FillBackground(0xb0, 3);
             l50.type = 0x45;
-            l50.unk2c = 5;
+            l50.sound = 5;
             l50.x = (double)((int)x - facing * 0xe);
             l50.y = (double)((int)y - 0x32);
             l50.scale = 2;
@@ -6319,15 +6319,15 @@ void CMizukaB::UpdatePattern()
             m_game->CreateEffect((EffectDesc*)&l50);
         }
         if (frame > 4 && frame < 6) {
-            Unk410a80(0x32, 3);
+            FocusCameraY(0x32, 3);
         }
         if (frame == 6 && timer == 0) {
-            l50.unk0 = 1;
+            l50.keep = 1;
             l50.type = 0x1d2;
-            l50.unk30 = 1;
+            l50.movesInFreeze = 1;
             l50.x = (facing << 1) + x;
             l50.y = y - 29.0;
-            l50.unk0 = 1;
+            l50.keep = 1;
             l50.facing = facing;
             l50.scale = 2;
             l50.layer = 1;
@@ -6340,7 +6340,7 @@ void CMizukaB::UpdatePattern()
             m_attackResult = 0;
             if (frame == 0x18) {
                 StartPattern();
-                pattern = 9;
+                pattern = kFall;
                 ay = 0.035;
             }
             if (frame >= x8) {
@@ -6348,19 +6348,19 @@ void CMizukaB::UpdatePattern()
             }
         }
         break;
-    case 0x13f:
+    case kAir236236C:
         if (frame > 4) {
-            m_game->Unk4080c0(0xf);
+            m_game->FlashNegative(0xf);
         }
-        unk58 = 0;
-        unk158 = 0;
+        m_drawMode = 0;
+        m_dashMomentum = 0;
         if (frame > 0x13) {
             vy += 0.035;
             if (y + vy > 0.0) {
                 y = 0.0;
                 StartPattern();
                 StopMoving();
-                pattern = 0xd;
+                pattern = kLand;
                 break;
             }
         }
@@ -6369,11 +6369,11 @@ void CMizukaB::UpdatePattern()
         }
         if (frame == 5 && timer == 0) {
             StopMoving();
-            unk14c = 0x78;
+            m_freezeTime = 0x78;
             m_gauge = m_gauge - 0xbb8;
             FillBackground(0xb0, 3);
             l50.type = 0x46;
-            l50.unk2c = 0x40;
+            l50.sound = 0x40;
             l50.x = (double)((int)x - facing * 0xe);
             l50.y = (double)((int)y - 0x32);
             l50.scale = 2;
@@ -6382,15 +6382,15 @@ void CMizukaB::UpdatePattern()
             m_playSound = 0x25;
         }
         if (frame > 4 && frame < 6) {
-            Unk410a80(0x32, 3);
+            FocusCameraY(0x32, 3);
         }
         if (frame == 6 && timer == 0) {
-            l50.unk0 = 1;
+            l50.keep = 1;
             l50.type = 0x1d5;
-            l50.unk30 = 1;
+            l50.movesInFreeze = 1;
             l50.x = (facing << 1) + x;
             l50.y = y - 29.0;
-            l50.unk0 = 1;
+            l50.keep = 1;
             l50.facing = facing;
             l50.scale = 2;
             l50.layer = 1;
@@ -6403,7 +6403,7 @@ void CMizukaB::UpdatePattern()
             m_attackResult = 0;
             if (frame == 0x18) {
                 StartPattern();
-                pattern = 9;
+                pattern = kFall;
                 ay = 0.035;
             }
             if (frame >= x8) {

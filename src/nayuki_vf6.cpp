@@ -11,7 +11,7 @@ void CNayuki::UpdatePattern()
     WORD x8;
     WORD l4;
 
-    if (unk14a > 0 || (*m_opponent)->unk14c > 0) {
+    if (m_hitstop > 0 || (*m_opponent)->m_freezeTime > 0) {
         return;
     }
     EffectDesc l50;
@@ -31,9 +31,9 @@ void CNayuki::UpdatePattern()
             }
         }
         break;
-    case 1:
-        unk158 = 0;
-        vx = unk3148 * 0.02 + 0.6;
+    case kWalkForward:
+        m_dashMomentum = 0;
+        vx = m_warmUp * 0.02 + 0.6;
         vy = 0.0;
         timer++;
         if (timer >= l4) {
@@ -44,9 +44,9 @@ void CNayuki::UpdatePattern()
             }
         }
         break;
-    case 2:
-        unk158 = 0;
-        vx = -0.6 - unk3148 * 0.02;
+    case kWalkBack:
+        m_dashMomentum = 0;
+        vx = -0.6 - m_warmUp * 0.02;
         vy = 0.0;
         timer++;
         if (timer >= l4) {
@@ -57,7 +57,7 @@ void CNayuki::UpdatePattern()
             }
         }
         break;
-    case 3:
+    case kCrouch:
         vx = 0.0;
         vy = 0.0;
         FaceOpponent();
@@ -70,7 +70,7 @@ void CNayuki::UpdatePattern()
             }
         }
         break;
-    case 4:
+    case kJump:
         if (frame == 0 && timer == 0) {
             FaceOpponent();
             vx = 0.0;
@@ -78,9 +78,9 @@ void CNayuki::UpdatePattern()
         if (frame == 3 && timer == 0) {
             ay = 0.024;
             vy = -2.0;
-            if (unk158 == 1) {
+            if (m_dashMomentum == 1) {
                 vx = 0.4;
-                unk158 = 0;
+                m_dashMomentum = 0;
             }
         }
         if (frame > 3) {
@@ -91,7 +91,7 @@ void CNayuki::UpdatePattern()
             timer = 0;
             frame++;
             if (frame >= x8) {
-                pattern = 9;
+                pattern = kFall;
                 StartPattern();
             }
         }
@@ -99,11 +99,11 @@ void CNayuki::UpdatePattern()
             y = 0.0;
             m_playSound = 9;
             FaceOpponent();
-            pattern = 0xd;
+            pattern = kLand;
             StartPattern();
         }
         break;
-    case 5:
+    case kJumpForward:
         if (frame == 0 && timer == 0) {
             FaceOpponent();
             vx = 0.0;
@@ -112,9 +112,9 @@ void CNayuki::UpdatePattern()
             ay = 0.024;
             vy = -2.0;
             vx = 0.5;
-            if (unk158 == 1) {
+            if (m_dashMomentum == 1) {
                 vx = 0.7;
-                unk158 = 0;
+                m_dashMomentum = 0;
             }
         }
         if (frame > 3) {
@@ -125,7 +125,7 @@ void CNayuki::UpdatePattern()
             timer = 0;
             frame++;
             if (frame >= x8) {
-                pattern = 9;
+                pattern = kFall;
                 StartPattern();
             }
         }
@@ -133,11 +133,11 @@ void CNayuki::UpdatePattern()
             y = 0.0;
             m_playSound = 9;
             FaceOpponent();
-            pattern = 0xd;
+            pattern = kLand;
             StartPattern();
         }
         break;
-    case 6:
+    case kJumpBack:
         if (frame == 0 && timer == 0) {
             FaceOpponent();
             vx = 0.0;
@@ -155,7 +155,7 @@ void CNayuki::UpdatePattern()
             timer = 0;
             frame++;
             if (frame >= x8) {
-                pattern = 9;
+                pattern = kFall;
                 StartPattern();
             }
         }
@@ -163,11 +163,11 @@ void CNayuki::UpdatePattern()
             y = 0.0;
             m_playSound = 9;
             FaceOpponent();
-            pattern = 0xd;
+            pattern = kLand;
             StartPattern();
         }
         break;
-    case 7:
+    case kStandUp:
         vx = 0.0;
         vy = 0.0;
         FaceOpponent();
@@ -176,12 +176,12 @@ void CNayuki::UpdatePattern()
             timer = 0;
             frame++;
             if (frame >= x8) {
-                pattern = 0;
+                pattern = kStand;
                 StartPattern();
             }
         }
         break;
-    case 8:
+    case kCrouchDown:
         vx = 0.0;
         vy = 0.0;
         FaceOpponent();
@@ -190,12 +190,12 @@ void CNayuki::UpdatePattern()
             timer = 0;
             frame++;
             if (frame >= x8) {
-                pattern = 3;
+                pattern = kCrouch;
                 StartPattern();
             }
         }
         break;
-    case 9:
+    case kFall:
         vy = vy + ay;
         timer++;
         if (timer >= l4) {
@@ -208,11 +208,11 @@ void CNayuki::UpdatePattern()
         if (y + vy >= 0.0) {
             y = 0.0;
             m_playSound = 9;
-            pattern = 0xd;
+            pattern = kLand;
             StartPattern();
         }
         break;
-    case 0xd:
+    case kLand:
         vx = 0.0;
         vy = 0.0;
         FaceOpponent();
@@ -221,22 +221,22 @@ void CNayuki::UpdatePattern()
             timer = 0;
             frame++;
             if (frame >= x8) {
-                pattern = 7;
+                pattern = kStandUp;
                 if (m_inputY == 1) {
-                    pattern = 3;
+                    pattern = kCrouch;
                 }
                 StartPattern();
             }
         }
         break;
-    case 0xe:
+    case kAirJump:
         ay = 0.024;
         if (frame == 0 && timer == 0) {
             vy = -2.0;
             vx = 0.0;
-            if (unk158 == 1) {
+            if (m_dashMomentum == 1) {
                 vx = 0.4;
-                unk158 = 0;
+                m_dashMomentum = 0;
             }
         }
         vy = vy + ay;
@@ -245,7 +245,7 @@ void CNayuki::UpdatePattern()
             timer = 0;
             frame++;
             if (frame >= x8) {
-                pattern = 9;
+                pattern = kFall;
                 StartPattern();
             }
         }
@@ -253,18 +253,18 @@ void CNayuki::UpdatePattern()
             y = 0.0;
             m_playSound = 9;
             FaceOpponent();
-            pattern = 0xd;
+            pattern = kLand;
             StartPattern();
         }
         break;
-    case 0xf:
+    case kAirJumpForward:
         ay = 0.024;
         if (frame == 0 && timer == 0) {
             vy = -2.0;
             vx = 0.7;
-            if (unk158 == 1) {
+            if (m_dashMomentum == 1) {
                 vx = 1.1;
-                unk158 = 0;
+                m_dashMomentum = 0;
             }
         }
         vy = vy + ay;
@@ -273,7 +273,7 @@ void CNayuki::UpdatePattern()
             timer = 0;
             frame++;
             if (frame >= x8) {
-                pattern = 9;
+                pattern = kFall;
                 StartPattern();
             }
         }
@@ -281,17 +281,17 @@ void CNayuki::UpdatePattern()
             y = 0.0;
             m_playSound = 9;
             FaceOpponent();
-            pattern = 0xd;
+            pattern = kLand;
             StartPattern();
         }
         break;
-    case 0x10:
+    case kAirJumpBack:
         ay = 0.024;
         if (frame == 0 && timer == 0) {
             vy = -2.0;
             vx = -0.7;
-            if (unk158 == 1) {
-                unk158 = 0;
+            if (m_dashMomentum == 1) {
+                m_dashMomentum = 0;
             }
         }
         vy = vy + ay;
@@ -300,7 +300,7 @@ void CNayuki::UpdatePattern()
             timer = 0;
             frame++;
             if (frame >= x8) {
-                pattern = 9;
+                pattern = kFall;
                 StartPattern();
             }
         }
@@ -308,11 +308,11 @@ void CNayuki::UpdatePattern()
             y = 0.0;
             m_playSound = 9;
             FaceOpponent();
-            pattern = 0xd;
+            pattern = kLand;
             StartPattern();
         }
         break;
-    case 0x2f:
+    case kResultLoserFall:
         if (frame == 0 && timer == 0) {
             vx = 0.6;
             ay = 0.035;
@@ -339,15 +339,15 @@ void CNayuki::UpdatePattern()
             }
         }
         break;
-    case 0x32:
-        if (unk120 != 0) {
-            unk118 -= 0.6;
+    case kHitStandHighLight:
+        if (m_rfBlue != 0) {
+            m_rfGauge -= 0.6;
         }
         if (frame == 0 && timer == 0) {
             m_gauge = m_gauge + 0xa;
             vx = (2.0 - (*m_opponent)->m_proration / 10000.0) * -1.1;
-            if (unk120 != 0) {
-                unk118 -= 10.0;
+            if (m_rfBlue != 0) {
+                m_rfGauge -= 10.0;
             }
         }
         vy = 0.0;
@@ -357,32 +357,32 @@ void CNayuki::UpdatePattern()
             vx = 0.0;
         }
         if (x - 20.0 <= 0.0 || x + 20.0 >= 639.0) {
-            unkb8 = (1.0 - (y < 0.0) * 0.2) * vx;
+            m_cornerPushback = (1.0 - (y < 0.0) * 0.2) * vx;
         } else {
-            unkb8 = 0.0;
+            m_cornerPushback = 0.0;
         }
         timer++;
         if (timer >= l4) {
             timer = 0;
             frame++;
             if (frame >= x8) {
-                pattern = 0;
+                pattern = kStand;
                 if (m_inputY == 1) {
-                    pattern = 3;
+                    pattern = kCrouch;
                 }
                 StartPattern();
             }
         }
         break;
-    case 0x33:
-        if (unk120 != 0) {
-            unk118 -= 0.6;
+    case kHitStandHighMedium:
+        if (m_rfBlue != 0) {
+            m_rfGauge -= 0.6;
         }
         if (frame == 0 && timer == 0) {
             m_gauge = m_gauge + 0xf;
             vx = (2.0 - (*m_opponent)->m_proration / 10000.0) * -1.5;
-            if (unk120 != 0) {
-                unk118 -= 20.0;
+            if (m_rfBlue != 0) {
+                m_rfGauge -= 20.0;
             }
         }
         vy = 0.0;
@@ -392,32 +392,32 @@ void CNayuki::UpdatePattern()
             vx = 0.0;
         }
         if (x - 20.0 <= 0.0 || x + 20.0 >= 639.0) {
-            unkb8 = (1.0 - (y < 0.0) * 0.2) * vx;
+            m_cornerPushback = (1.0 - (y < 0.0) * 0.2) * vx;
         } else {
-            unkb8 = 0.0;
+            m_cornerPushback = 0.0;
         }
         timer++;
         if (timer >= l4) {
             timer = 0;
             frame++;
             if (frame >= x8) {
-                pattern = 0;
+                pattern = kStand;
                 if (m_inputY == 1) {
-                    pattern = 3;
+                    pattern = kCrouch;
                 }
                 StartPattern();
             }
         }
         break;
-    case 0x34:
-        if (unk120 != 0) {
-            unk118 -= 0.6;
+    case kHitStandHighHeavy:
+        if (m_rfBlue != 0) {
+            m_rfGauge -= 0.6;
         }
         if (frame == 0 && timer == 0) {
             m_gauge = m_gauge + 0x14;
             vx = (2.0 - (*m_opponent)->m_proration / 10000.0) * -1.8;
-            if (unk120 != 0) {
-                unk118 -= 30.0;
+            if (m_rfBlue != 0) {
+                m_rfGauge -= 30.0;
             }
         }
         vy = 0.0;
@@ -427,32 +427,32 @@ void CNayuki::UpdatePattern()
             vx = 0.0;
         }
         if (x - 20.0 <= 0.0 || x + 20.0 >= 639.0) {
-            unkb8 = (1.0 - (y < 0.0) * 0.2) * vx;
+            m_cornerPushback = (1.0 - (y < 0.0) * 0.2) * vx;
         } else {
-            unkb8 = 0.0;
+            m_cornerPushback = 0.0;
         }
         timer++;
         if (timer >= l4) {
             timer = 0;
             frame++;
             if (frame >= x8) {
-                pattern = 0;
+                pattern = kStand;
                 if (m_inputY == 1) {
-                    pattern = 3;
+                    pattern = kCrouch;
                 }
                 StartPattern();
             }
         }
         break;
-    case 0x35:
-        if (unk120 != 0) {
-            unk118 -= 0.6;
+    case kHitStandLowLight:
+        if (m_rfBlue != 0) {
+            m_rfGauge -= 0.6;
         }
         if (frame == 0 && timer == 0) {
             m_gauge = m_gauge + 0xa;
             vx = (2.0 - (*m_opponent)->m_proration / 10000.0) * -1.1;
-            if (unk120 != 0) {
-                unk118 -= 10.0;
+            if (m_rfBlue != 0) {
+                m_rfGauge -= 10.0;
             }
         }
         vy = 0.0;
@@ -462,32 +462,32 @@ void CNayuki::UpdatePattern()
             vx = 0.0;
         }
         if (x - 20.0 <= 0.0 || x + 20.0 >= 639.0) {
-            unkb8 = (1.0 - (y < 0.0) * 0.2) * vx;
+            m_cornerPushback = (1.0 - (y < 0.0) * 0.2) * vx;
         } else {
-            unkb8 = 0.0;
+            m_cornerPushback = 0.0;
         }
         timer++;
         if (timer >= l4) {
             timer = 0;
             frame++;
             if (frame >= x8) {
-                pattern = 0;
+                pattern = kStand;
                 if (m_inputY == 1) {
-                    pattern = 3;
+                    pattern = kCrouch;
                 }
                 StartPattern();
             }
         }
         break;
-    case 0x36:
-        if (unk120 != 0) {
-            unk118 -= 0.6;
+    case kHitStandLowMedium:
+        if (m_rfBlue != 0) {
+            m_rfGauge -= 0.6;
         }
         if (frame == 0 && timer == 0) {
             m_gauge = m_gauge + 0xf;
             vx = (2.0 - (*m_opponent)->m_proration / 10000.0) * -1.5;
-            if (unk120 != 0) {
-                unk118 -= 20.0;
+            if (m_rfBlue != 0) {
+                m_rfGauge -= 20.0;
             }
         }
         vy = 0.0;
@@ -497,32 +497,32 @@ void CNayuki::UpdatePattern()
             vx = 0.0;
         }
         if (x - 20.0 <= 0.0 || x + 20.0 >= 639.0) {
-            unkb8 = (1.0 - (y < 0.0) * 0.2) * vx;
+            m_cornerPushback = (1.0 - (y < 0.0) * 0.2) * vx;
         } else {
-            unkb8 = 0.0;
+            m_cornerPushback = 0.0;
         }
         timer++;
         if (timer >= l4) {
             timer = 0;
             frame++;
             if (frame >= x8) {
-                pattern = 0;
+                pattern = kStand;
                 if (m_inputY == 1) {
-                    pattern = 3;
+                    pattern = kCrouch;
                 }
                 StartPattern();
             }
         }
         break;
-    case 0x37:
-        if (unk120 != 0) {
-            unk118 -= 0.6;
+    case kHitStandLowHeavy:
+        if (m_rfBlue != 0) {
+            m_rfGauge -= 0.6;
         }
         if (frame == 0 && timer == 0) {
             m_gauge = m_gauge + 0x14;
             vx = (2.0 - (*m_opponent)->m_proration / 10000.0) * -1.8;
-            if (unk120 != 0) {
-                unk118 -= 30.0;
+            if (m_rfBlue != 0) {
+                m_rfGauge -= 30.0;
             }
         }
         vy = 0.0;
@@ -532,32 +532,32 @@ void CNayuki::UpdatePattern()
             vx = 0.0;
         }
         if (x - 20.0 <= 0.0 || x + 20.0 >= 639.0) {
-            unkb8 = (1.0 - (y < 0.0) * 0.2) * vx;
+            m_cornerPushback = (1.0 - (y < 0.0) * 0.2) * vx;
         } else {
-            unkb8 = 0.0;
+            m_cornerPushback = 0.0;
         }
         timer++;
         if (timer >= l4) {
             timer = 0;
             frame++;
             if (frame >= x8) {
-                pattern = 0;
+                pattern = kStand;
                 if (m_inputY == 1) {
-                    pattern = 3;
+                    pattern = kCrouch;
                 }
                 StartPattern();
             }
         }
         break;
-    case 0x38:
-        if (unk120 != 0) {
-            unk118 -= 0.6;
+    case kHitCrouchLight:
+        if (m_rfBlue != 0) {
+            m_rfGauge -= 0.6;
         }
         if (frame == 0 && timer == 0) {
             m_gauge = m_gauge + 0xa;
             vx = (2.0 - (*m_opponent)->m_proration / 10000.0) * -1.1;
-            if (unk120 != 0) {
-                unk118 -= 10.0;
+            if (m_rfBlue != 0) {
+                m_rfGauge -= 10.0;
             }
         }
         vy = 0.0;
@@ -567,29 +567,29 @@ void CNayuki::UpdatePattern()
             vx = 0.0;
         }
         if (x - 20.0 <= 0.0 || x + 20.0 >= 639.0) {
-            unkb8 = (1.0 - (y < 0.0) * 0.2) * vx;
+            m_cornerPushback = (1.0 - (y < 0.0) * 0.2) * vx;
         } else {
-            unkb8 = 0.0;
+            m_cornerPushback = 0.0;
         }
         timer++;
         if (timer >= l4) {
             timer = 0;
             frame++;
             if (frame >= x8) {
-                pattern = 3;
+                pattern = kCrouch;
                 StartPattern();
             }
         }
         break;
-    case 0x39:
-        if (unk120 != 0) {
-            unk118 -= 0.6;
+    case kHitCrouchMedium:
+        if (m_rfBlue != 0) {
+            m_rfGauge -= 0.6;
         }
         if (frame == 0 && timer == 0) {
             m_gauge = m_gauge + 0xf;
             vx = (2.0 - (*m_opponent)->m_proration / 10000.0) * -1.5;
-            if (unk120 != 0) {
-                unk118 -= 20.0;
+            if (m_rfBlue != 0) {
+                m_rfGauge -= 20.0;
             }
         }
         vy = 0.0;
@@ -599,29 +599,29 @@ void CNayuki::UpdatePattern()
             vx = 0.0;
         }
         if (x - 20.0 <= 0.0 || x + 20.0 >= 639.0) {
-            unkb8 = (1.0 - (y < 0.0) * 0.2) * vx;
+            m_cornerPushback = (1.0 - (y < 0.0) * 0.2) * vx;
         } else {
-            unkb8 = 0.0;
+            m_cornerPushback = 0.0;
         }
         timer++;
         if (timer >= l4) {
             timer = 0;
             frame++;
             if (frame >= x8) {
-                pattern = 3;
+                pattern = kCrouch;
                 StartPattern();
             }
         }
         break;
-    case 0x3a:
-        if (unk120 != 0) {
-            unk118 -= 0.6;
+    case kHitCrouchHeavy:
+        if (m_rfBlue != 0) {
+            m_rfGauge -= 0.6;
         }
         if (frame == 0 && timer == 0) {
             m_gauge = m_gauge + 0x14;
             vx = (2.0 - (*m_opponent)->m_proration / 10000.0) * -1.8;
-            if (unk120 != 0) {
-                unk118 -= 30.0;
+            if (m_rfBlue != 0) {
+                m_rfGauge -= 30.0;
             }
         }
         vy = 0.0;
@@ -631,28 +631,28 @@ void CNayuki::UpdatePattern()
             vx = 0.0;
         }
         if (x - 20.0 <= 0.0 || x + 20.0 >= 639.0) {
-            unkb8 = (1.0 - (y < 0.0) * 0.2) * vx;
+            m_cornerPushback = (1.0 - (y < 0.0) * 0.2) * vx;
         } else {
-            unkb8 = 0.0;
+            m_cornerPushback = 0.0;
         }
         timer++;
         if (timer >= l4) {
             timer = 0;
             frame++;
             if (frame >= x8) {
-                pattern = 3;
+                pattern = kCrouch;
                 StartPattern();
             }
         }
         break;
-    case 0x3b:
-        if (unk120 != 0) {
-            unk118 -= 0.8;
+    case kHitAir:
+        if (m_rfBlue != 0) {
+            m_rfGauge -= 0.8;
         }
         if (frame == 0 && timer == 0) {
             m_gauge = m_gauge + 0x1e;
-            vx = unkc0;
-            vy = vy * 0.75 + unkc8;
+            vx = m_hitVx;
+            vy = vy * 0.75 + m_hitVy;
             if (vy < -2.0) {
                 vy = -2.0;
             } else if (vy > -0.5) {
@@ -679,23 +679,23 @@ void CNayuki::UpdatePattern()
         }
         if (y + vy >= 0.0 && frame > 1) {
             y = 0.0;
-            if (unk12c != 0) {
-                pattern = 0x61;
+            if (m_landHittable != 0) {
+                pattern = kKnockdownHittable;
                 StartPattern();
             } else {
-                pattern = 0x62;
+                pattern = kKnockdown;
                 StartPattern();
             }
         }
         break;
-    case 0x3c:
-        if (unk120 != 0) {
-            unk118 -= 0.8;
+    case kHitAirHigh:
+        if (m_rfBlue != 0) {
+            m_rfGauge -= 0.8;
         }
         if (frame == 0 && timer == 0) {
             m_gauge = m_gauge + 0x1e;
-            vx = unkc0;
-            vy = vy * 0.75 + unkc8;
+            vx = m_hitVx;
+            vy = vy * 0.75 + m_hitVy;
             if (vy < -4.0) {
                 vy = -4.0;
             } else if (vy > -0.5) {
@@ -722,23 +722,23 @@ void CNayuki::UpdatePattern()
         }
         if (y + vy >= 0.0 && frame > 1) {
             y = 0.0;
-            if (unk12c != 0) {
-                pattern = 0x61;
+            if (m_landHittable != 0) {
+                pattern = kKnockdownHittable;
                 StartPattern();
             } else {
-                pattern = 0x62;
+                pattern = kKnockdown;
                 StartPattern();
             }
         }
         break;
-    case 0x3d:
-        if (unk120 != 0) {
-            unk118 -= 0.8;
+    case kHitAirHigher:
+        if (m_rfBlue != 0) {
+            m_rfGauge -= 0.8;
         }
         if (frame == 0 && timer == 0) {
             m_gauge = m_gauge + 0x1e;
-            vx = unkc0;
-            vy = vy * 0.75 + unkc8;
+            vx = m_hitVx;
+            vy = vy * 0.75 + m_hitVy;
             if (vy < -6.0) {
                 vy = -6.0;
             } else if (vy > -0.5) {
@@ -765,23 +765,23 @@ void CNayuki::UpdatePattern()
         }
         if (y + vy >= 0.0 && frame > 1) {
             y = 0.0;
-            if (unk12c != 0) {
-                pattern = 0x61;
+            if (m_landHittable != 0) {
+                pattern = kKnockdownHittable;
                 StartPattern();
             } else {
-                pattern = 0x62;
+                pattern = kKnockdown;
                 StartPattern();
             }
         }
         break;
-    case 0x3e:
-        if (unk120 != 0) {
-            unk118 -= 0.8;
+    case kHitAirCarry:
+        if (m_rfBlue != 0) {
+            m_rfGauge -= 0.8;
         }
         if (frame == 0 && timer == 0) {
             m_gauge = m_gauge + 0x1e;
-            vx = unkc0;
-            vy = vy * 0.75 + unkc8;
+            vx = m_hitVx;
+            vy = vy * 0.75 + m_hitVy;
             ay = 0.032;
         }
         if (vy <= 0.0) {
@@ -803,23 +803,23 @@ void CNayuki::UpdatePattern()
         }
         if (y + vy >= 0.0 && frame > 1) {
             y = 0.0;
-            if (unk12c != 0) {
-                pattern = 0x61;
+            if (m_landHittable != 0) {
+                pattern = kKnockdownHittable;
                 StartPattern();
             } else {
-                pattern = 0x62;
+                pattern = kKnockdown;
                 StartPattern();
             }
         }
         break;
-    case 0x3f:
-        if (unk120 != 0) {
-            unk118 -= 0.8;
+    case kHitAirLaunch:
+        if (m_rfBlue != 0) {
+            m_rfGauge -= 0.8;
         }
         if (frame == 0 && timer == 0) {
             m_gauge = m_gauge + 0x1e;
-            vx = unkc0;
-            vy = unkc8;
+            vx = m_hitVx;
+            vy = m_hitVy;
             ay = 0.032;
         }
         if (vy <= 0.0) {
@@ -841,28 +841,28 @@ void CNayuki::UpdatePattern()
         }
         if (y + vy >= 0.0 && frame > 1) {
             y = 0.0;
-            if (unk12c != 0) {
-                pattern = 0x61;
+            if (m_landHittable != 0) {
+                pattern = kKnockdownHittable;
                 StartPattern();
             } else {
-                pattern = 0x62;
+                pattern = kKnockdown;
                 StartPattern();
             }
         }
         break;
-    case 0x40:
-        if (unk120 != 0) {
-            unk118 -= 0.8;
+    case kHitAirWallBounce:
+        if (m_rfBlue != 0) {
+            m_rfGauge -= 0.8;
         }
-        if (frame > 0 && (char)Unk40ff70() != 0) {
-            pattern = 0x46;
+        if (frame > 0 && (char)AtScreenEdge() != 0) {
+            pattern = kHitWallBounce;
             StartPattern();
             break;
         }
         if (frame == 0 && timer == 0) {
             m_gauge = m_gauge + 0x1e;
-            vx = unkc0;
-            vy = vy * 0.75 + unkc8;
+            vx = m_hitVx;
+            vy = vy * 0.75 + m_hitVy;
             if (vy < -2.0) {
                 vy = -2.0;
             } else if (vy > -0.5) {
@@ -889,28 +889,28 @@ void CNayuki::UpdatePattern()
         }
         if (y + vy >= 0.0 && frame > 1) {
             y = 0.0;
-            if (unk12c != 0) {
-                pattern = 0x61;
+            if (m_landHittable != 0) {
+                pattern = kKnockdownHittable;
                 StartPattern();
             } else {
-                pattern = 0x62;
+                pattern = kKnockdown;
                 StartPattern();
             }
         }
         break;
-    case 0x41:
-        if (unk120 != 0) {
-            unk118 -= 0.8;
+    case kHitAirHighWallBounce:
+        if (m_rfBlue != 0) {
+            m_rfGauge -= 0.8;
         }
-        if (frame > 0 && (char)Unk40ff70() != 0) {
-            pattern = 0x46;
+        if (frame > 0 && (char)AtScreenEdge() != 0) {
+            pattern = kHitWallBounce;
             StartPattern();
             break;
         }
         if (frame == 0 && timer == 0) {
             m_gauge = m_gauge + 0x1e;
-            vx = unkc0;
-            vy = vy * 0.75 + unkc8;
+            vx = m_hitVx;
+            vy = vy * 0.75 + m_hitVy;
             if (vy < -4.0) {
                 vy = -4.0;
             } else if (vy > -0.5) {
@@ -937,28 +937,28 @@ void CNayuki::UpdatePattern()
         }
         if (y + vy >= 0.0 && frame > 1) {
             y = 0.0;
-            if (unk12c != 0) {
-                pattern = 0x61;
+            if (m_landHittable != 0) {
+                pattern = kKnockdownHittable;
                 StartPattern();
             } else {
-                pattern = 0x62;
+                pattern = kKnockdown;
                 StartPattern();
             }
         }
         break;
-    case 0x42:
-        if (unk120 != 0) {
-            unk118 -= 0.8;
+    case kHitAirCarryWallBounce:
+        if (m_rfBlue != 0) {
+            m_rfGauge -= 0.8;
         }
-        if (frame > 0 && (char)Unk40ff70() != 0) {
-            pattern = 0x46;
+        if (frame > 0 && (char)AtScreenEdge() != 0) {
+            pattern = kHitWallBounce;
             StartPattern();
             break;
         }
         if (frame == 0 && timer == 0) {
             m_gauge = m_gauge + 0x1e;
-            vx = unkc0;
-            vy = vy * 0.75 + unkc8;
+            vx = m_hitVx;
+            vy = vy * 0.75 + m_hitVy;
             ay = 0.032;
         }
         if (vy <= 0.0) {
@@ -980,28 +980,28 @@ void CNayuki::UpdatePattern()
         }
         if (y + vy >= 0.0 && frame > 1) {
             y = 0.0;
-            if (unk12c != 0) {
-                pattern = 0x61;
+            if (m_landHittable != 0) {
+                pattern = kKnockdownHittable;
                 StartPattern();
             } else {
-                pattern = 0x62;
+                pattern = kKnockdown;
                 StartPattern();
             }
         }
         break;
-    case 0x43:
-        if (unk120 != 0) {
-            unk118 -= 0.8;
+    case kHitAirLaunchWallBounce:
+        if (m_rfBlue != 0) {
+            m_rfGauge -= 0.8;
         }
-        if (frame > 0 && (char)Unk40ff70() != 0) {
-            pattern = 0x46;
+        if (frame > 0 && (char)AtScreenEdge() != 0) {
+            pattern = kHitWallBounce;
             StartPattern();
             break;
         }
         if (frame == 0 && timer == 0) {
             m_gauge = m_gauge + 0x1e;
-            vx = unkc0;
-            vy = unkc8;
+            vx = m_hitVx;
+            vy = m_hitVy;
             ay = 0.032;
         }
         if (vy <= 0.0) {
@@ -1023,25 +1023,25 @@ void CNayuki::UpdatePattern()
         }
         if (y + vy >= 0.0 && frame > 1) {
             y = 0.0;
-            if (unk12c != 0) {
-                pattern = 0x61;
+            if (m_landHittable != 0) {
+                pattern = kKnockdownHittable;
                 StartPattern();
             } else {
-                pattern = 0x62;
+                pattern = kKnockdown;
                 StartPattern();
             }
         }
         break;
-    case 0x44:
-        if (unk120 != 0) {
-            unk118 -= 1.5;
+    case kHitBlownAwayWallBounce:
+        if (m_rfBlue != 0) {
+            m_rfGauge -= 1.5;
         }
         m_gauge = m_gauge + 3;
-        vx = unkc0;
-        vy = unkc8;
+        vx = m_hitVx;
+        vy = m_hitVy;
         timer++;
-        if ((char)Unk40ff70() != 0) {
-            pattern = 0x46;
+        if ((char)AtScreenEdge() != 0) {
+            pattern = kHitWallBounce;
             StartPattern();
             break;
         }
@@ -1054,22 +1054,22 @@ void CNayuki::UpdatePattern()
         }
         if (y + vy >= 0.0) {
             y = 0.0;
-            if (unk12c != 0) {
-                pattern = 0x61;
+            if (m_landHittable != 0) {
+                pattern = kKnockdownHittable;
                 StartPattern();
             } else {
-                pattern = 0x62;
+                pattern = kKnockdown;
                 StartPattern();
             }
         }
         break;
-    case 0x45:
-        if (unk120 != 0) {
-            unk118 -= 1.5;
+    case kHitBlownAway:
+        if (m_rfBlue != 0) {
+            m_rfGauge -= 1.5;
         }
         m_gauge = m_gauge + 3;
-        vx = unkc0;
-        vy = unkc8;
+        vx = m_hitVx;
+        vy = m_hitVy;
         timer++;
         if (timer >= l4) {
             timer = 0;
@@ -1080,23 +1080,23 @@ void CNayuki::UpdatePattern()
         }
         if (y + vy >= 0.0) {
             y = 0.0;
-            if (unk12c != 0) {
-                pattern = 0x61;
+            if (m_landHittable != 0) {
+                pattern = kKnockdownHittable;
                 StartPattern();
             } else {
-                pattern = 0x62;
+                pattern = kKnockdown;
                 StartPattern();
             }
         }
         break;
-    case 0x46:
-        if (unk120 != 0) {
-            unk118 -= 0.8;
+    case kHitWallBounce:
+        if (m_rfBlue != 0) {
+            m_rfGauge -= 0.8;
         }
-        if (frame == 0 && timer == 0 && unk3138 == 0) {
+        if (frame == 0 && timer == 0 && m_patternVar1 == 0) {
             m_gauge = m_gauge + 0x1e;
-            unk3138++;
-            unk124 = unk124 + 0x78;
+            m_patternVar1++;
+            m_untechTime = m_untechTime + 0x78;
             vx = 0.5;
             vy = -2.5;
             ay = 0.025;
@@ -1119,23 +1119,23 @@ void CNayuki::UpdatePattern()
         }
         if (y + vy >= 0.0 && frame > 1) {
             y = 0.0;
-            if (unk12c != 0) {
-                pattern = 0x61;
+            if (m_landHittable != 0) {
+                pattern = kKnockdownHittable;
                 StartPattern();
             } else {
-                pattern = 0x62;
+                pattern = kKnockdown;
                 StartPattern();
             }
         }
         break;
-    case 0x47:
-        if (unk120 != 0) {
-            unk118 -= 0.8;
+    case kHitAirHeavy:
+        if (m_rfBlue != 0) {
+            m_rfGauge -= 0.8;
         }
         if (frame == 0 && timer == 0) {
             m_gauge = m_gauge + 0x1e;
-            vx = unkc0;
-            vy = unkc8;
+            vx = m_hitVx;
+            vy = m_hitVy;
             ay = 0.072;
         }
         if (vy <= 0.0) {
@@ -1157,92 +1157,92 @@ void CNayuki::UpdatePattern()
         }
         if (y + vy >= 0.0 && frame > 1) {
             y = 0.0;
-            if (unk12c != 0) {
-                pattern = 0x61;
+            if (m_landHittable != 0) {
+                pattern = kKnockdownHittable;
                 StartPattern();
             } else {
-                pattern = 0x62;
+                pattern = kKnockdown;
                 StartPattern();
             }
         }
         break;
-    case 0x48:
-        if (unk120 != 0) {
-            unk118 -= 0.8;
+    case kHitStandHighHold:
+        if (m_rfBlue != 0) {
+            m_rfGauge -= 0.8;
         }
         vx = 0.0;
         vy = 0.0;
         if (x - 20.0 <= 0.0 || x + 20.0 >= 639.0) {
-            unkb8 = (1.0 - ((*m_opponent)->y < 0.0) * 0.25) * vx;
+            m_cornerPushback = (1.0 - ((*m_opponent)->y < 0.0) * 0.25) * vx;
         } else {
-            unkb8 = 0.0;
+            m_cornerPushback = 0.0;
         }
         timer++;
         if (timer >= l4) {
             timer = 0;
             frame++;
             if (frame >= x8) {
-                pattern = 7;
+                pattern = kStandUp;
                 if (m_inputY == 1) {
-                    pattern = 3;
+                    pattern = kCrouch;
                 }
                 StartPattern();
             }
         }
         break;
-    case 0x49:
-        if (unk120 != 0) {
-            unk118 -= 0.8;
+    case kHitStandLowHold:
+        if (m_rfBlue != 0) {
+            m_rfGauge -= 0.8;
         }
         vx = 0.0;
         vy = 0.0;
         if (x - 20.0 <= 0.0 || x + 20.0 >= 639.0) {
-            unkb8 = (1.0 - ((*m_opponent)->y < 0.0) * 0.25) * vx;
+            m_cornerPushback = (1.0 - ((*m_opponent)->y < 0.0) * 0.25) * vx;
         } else {
-            unkb8 = 0.0;
+            m_cornerPushback = 0.0;
         }
         timer++;
         if (timer >= l4) {
             timer = 0;
             frame++;
             if (frame >= x8) {
-                pattern = 7;
+                pattern = kStandUp;
                 if (m_inputY == 1) {
-                    pattern = 3;
+                    pattern = kCrouch;
                 }
                 StartPattern();
             }
         }
         break;
-    case 0x4a:
-        if (unk120 != 0) {
-            unk118 -= 0.8;
+    case kHitCrouchHold:
+        if (m_rfBlue != 0) {
+            m_rfGauge -= 0.8;
         }
         vx = 0.0;
         vy = 0.0;
         if (x - 20.0 <= 0.0 || x + 20.0 >= 639.0) {
-            unkb8 = (1.0 - ((*m_opponent)->y < 0.0) * 0.25) * vx;
+            m_cornerPushback = (1.0 - ((*m_opponent)->y < 0.0) * 0.25) * vx;
         } else {
-            unkb8 = 0.0;
+            m_cornerPushback = 0.0;
         }
         timer++;
         if (timer >= l4) {
             timer = 0;
             frame++;
             if (frame >= x8) {
-                pattern = 3;
+                pattern = kCrouch;
                 StartPattern();
             }
         }
         break;
-    case 0x4b:
-        if (unk120 != 0) {
-            unk118 -= 0.6;
+    case kHitStandHighPull:
+        if (m_rfBlue != 0) {
+            m_rfGauge -= 0.6;
         }
         if (frame == 0 && timer == 0) {
             m_gauge = m_gauge + 0x1e;
-            if (unk120 != 0) {
-                unk118 -= 30.0;
+            if (m_rfBlue != 0) {
+                m_rfGauge -= 30.0;
             }
             vx = 2.2;
         }
@@ -1255,31 +1255,31 @@ void CNayuki::UpdatePattern()
             vx = 0.0;
         }
         if (x - 20.0 <= 0.0 || x + 20.0 >= 639.0) {
-            unkb8 = (1.0 - ((*m_opponent)->y < 0.0) * 0.25) * vx;
+            m_cornerPushback = (1.0 - ((*m_opponent)->y < 0.0) * 0.25) * vx;
         } else {
-            unkb8 = 0.0;
+            m_cornerPushback = 0.0;
         }
         timer++;
         if (timer >= l4) {
             timer = 0;
             frame++;
             if (frame >= x8) {
-                pattern = 7;
+                pattern = kStandUp;
                 if (m_inputY == 1) {
-                    pattern = 3;
+                    pattern = kCrouch;
                 }
                 StartPattern();
             }
         }
         break;
-    case 0x4c:
-        if (unk120 != 0) {
-            unk118 -= 0.6;
+    case kHitStandLowPull:
+        if (m_rfBlue != 0) {
+            m_rfGauge -= 0.6;
         }
         if (frame == 0 && timer == 0) {
             m_gauge = m_gauge + 0x1e;
-            if (unk120 != 0) {
-                unk118 -= 30.0;
+            if (m_rfBlue != 0) {
+                m_rfGauge -= 30.0;
             }
             vx = 2.2;
         }
@@ -1292,31 +1292,31 @@ void CNayuki::UpdatePattern()
             vx = 0.0;
         }
         if (x - 20.0 <= 0.0 || x + 20.0 >= 639.0) {
-            unkb8 = (1.0 - ((*m_opponent)->y < 0.0) * 0.25) * vx;
+            m_cornerPushback = (1.0 - ((*m_opponent)->y < 0.0) * 0.25) * vx;
         } else {
-            unkb8 = 0.0;
+            m_cornerPushback = 0.0;
         }
         timer++;
         if (timer >= l4) {
             timer = 0;
             frame++;
             if (frame >= x8) {
-                pattern = 7;
+                pattern = kStandUp;
                 if (m_inputY == 1) {
-                    pattern = 3;
+                    pattern = kCrouch;
                 }
                 StartPattern();
             }
         }
         break;
-    case 0x4d:
-        if (unk120 != 0) {
-            unk118 -= 0.6;
+    case kHitCrouchPull:
+        if (m_rfBlue != 0) {
+            m_rfGauge -= 0.6;
         }
         if (frame == 0 && timer == 0) {
             m_gauge = m_gauge + 0x1e;
-            if (unk120 != 0) {
-                unk118 -= 30.0;
+            if (m_rfBlue != 0) {
+                m_rfGauge -= 30.0;
             }
             vx = 2.2;
         }
@@ -1329,23 +1329,23 @@ void CNayuki::UpdatePattern()
             vx = 0.0;
         }
         if (x - 20.0 <= 0.0 || x + 20.0 >= 639.0) {
-            unkb8 = (1.0 - ((*m_opponent)->y < 0.0) * 0.25) * vx;
+            m_cornerPushback = (1.0 - ((*m_opponent)->y < 0.0) * 0.25) * vx;
         } else {
-            unkb8 = 0.0;
+            m_cornerPushback = 0.0;
         }
         timer++;
         if (timer >= l4) {
             timer = 0;
             frame++;
             if (frame >= x8) {
-                pattern = 3;
+                pattern = kCrouch;
                 StartPattern();
             }
         }
         break;
-    case 0x51:
-        if (unk120 != 0) {
-            unk118 -= 0.8;
+    case kHitBurn:
+        if (m_rfBlue != 0) {
+            m_rfGauge -= 0.8;
         }
         if (frame == 0 && timer == 0) {
             l50.type = 0x1f3;
@@ -1355,8 +1355,8 @@ void CNayuki::UpdatePattern()
             l50.layer = 1;
             SpawnObject(&l50);
             m_gauge = m_gauge + 0x1e;
-            vx = unkc0;
-            vy = unkc8;
+            vx = m_hitVx;
+            vy = m_hitVy;
             ay = 0.032;
         }
         vx += 0.02;
@@ -1374,29 +1374,29 @@ void CNayuki::UpdatePattern()
         }
         if (y + vy >= 0.0 && frame == 1) {
             y = 0.0;
-            if (unk12c != 0) {
-                pattern = 0x61;
+            if (m_landHittable != 0) {
+                pattern = kKnockdownHittable;
                 StartPattern();
             } else {
-                pattern = 0x62;
+                pattern = kKnockdown;
                 StartPattern();
             }
         }
         break;
-    case 0x52:
-        if (unk120 != 0) {
-            unk118 -= 0.8;
+    case kHitShock:
+        if (m_rfBlue != 0) {
+            m_rfGauge -= 0.8;
         }
-        if (frame == 0 && timer == 0 && unk3138 == 0) {
+        if (frame == 0 && timer == 0 && m_patternVar1 == 0) {
             m_playSound = 0x1e;
             vy = -0.45;
             vx = -0.1;
-            unk3138++;
+            m_patternVar1++;
             m_gauge = m_gauge + 0x1e;
         }
         if (frame == 4 && timer == 0) {
-            vx = unkc0;
-            vy = unkc8;
+            vx = m_hitVx;
+            vy = m_hitVy;
             ay = 0.032;
         }
         if (vy > 0.0 && frame == 4) {
@@ -1410,9 +1410,9 @@ void CNayuki::UpdatePattern()
         if (timer >= l4) {
             timer = 0;
             frame++;
-            if (frame == 4 && unk3138 < 8) {
+            if (frame == 4 && m_patternVar1 < 8) {
                 frame = 0;
-                unk3138++;
+                m_patternVar1++;
             }
             if (frame >= x8) {
                 frame = frame - 2;
@@ -1420,30 +1420,30 @@ void CNayuki::UpdatePattern()
         }
         if (y + vy >= 0.0 && frame > 4) {
             y = 0.0;
-            if (unk12c != 0) {
-                pattern = 0x61;
+            if (m_landHittable != 0) {
+                pattern = kKnockdownHittable;
                 StartPattern();
             } else {
-                pattern = 0x62;
+                pattern = kKnockdown;
                 StartPattern();
             }
         }
         break;
-    case 0x53:
+    case kEncased:
         if (frame == 0 && timer == 0) {
-            if (unk3144 == 0) {
+            if (m_encasedBreakOut == 0) {
                 l50.type = 0x1f0;
                 l50.x = (double)(int)x;
                 l50.y = (double)(int)y;
                 l50.scale = 0;
                 l50.layer = 0;
-                l50.unk0 = 1;
+                l50.keep = 1;
                 l50.facing = facing;
                 SpawnObject(&l50);
-                unk3144 = 1;
+                m_encasedBreakOut = 1;
             }
-            if (unk120 != 0) {
-                unk118 -= 30.0;
+            if (m_rfBlue != 0) {
+                m_rfGauge -= 30.0;
             }
             m_playSound = 0x21;
             vy = -1.5;
@@ -1475,27 +1475,27 @@ void CNayuki::UpdatePattern()
             timer = 0;
             frame++;
             if (frame >= x8) {
-                pattern = 0;
+                pattern = kStand;
                 StartPattern();
                 FaceOpponent();
             }
         }
         break;
-    case 0x54:
+    case kEncased2:
         if (frame == 0 && timer == 0) {
-            if (unk3144 == 0) {
+            if (m_encasedBreakOut == 0) {
                 l50.type = 0x1f0;
                 l50.x = (double)(int)x;
                 l50.y = (double)(int)y;
                 l50.scale = 0;
                 l50.layer = 0;
-                l50.unk0 = 1;
+                l50.keep = 1;
                 l50.facing = facing;
                 SpawnObject(&l50);
-                unk3144 = 1;
+                m_encasedBreakOut = 1;
             }
-            if (unk120 != 0) {
-                unk118 -= 30.0;
+            if (m_rfBlue != 0) {
+                m_rfGauge -= 30.0;
             }
             m_playSound = 0x21;
             vy = -1.5;
@@ -1527,31 +1527,31 @@ void CNayuki::UpdatePattern()
             timer = 0;
             frame++;
             if (frame >= x8) {
-                pattern = 0;
+                pattern = kStand;
                 StartPattern();
                 FaceOpponent();
             }
         }
         break;
-    case 0x55:
+    case kEncasedAir:
         if (frame == 0 && timer == 0) {
-            if (unk3144 == 0) {
+            if (m_encasedBreakOut == 0) {
                 l50.type = 0x1f0;
                 l50.x = (double)(int)x;
                 l50.y = (double)(int)y;
                 l50.scale = 0;
                 l50.layer = 0;
-                l50.unk0 = 1;
+                l50.keep = 1;
                 l50.facing = facing;
                 SpawnObject(&l50);
-                unk3144 = 1;
+                m_encasedBreakOut = 1;
             }
-            if (unk120 != 0) {
-                unk118 -= 30.0;
+            if (m_rfBlue != 0) {
+                m_rfGauge -= 30.0;
             }
             m_playSound = 0x21;
-            vx = unkc0;
-            vy = unkc8;
+            vx = m_hitVx;
+            vy = m_hitVy;
             m_gauge = m_gauge + 0x1e;
         }
         vy += 0.04;
@@ -1560,44 +1560,44 @@ void CNayuki::UpdatePattern()
             timer = 0;
             frame++;
             if (frame >= x8) {
-                pattern = 0;
+                pattern = kStand;
                 StartPattern();
                 FaceOpponent();
             }
         }
         if (y + vy >= 0.0) {
             y = 0.0;
-            if (unk12c != 0) {
-                pattern = 0x61;
+            if (m_landHittable != 0) {
+                pattern = kKnockdownHittable;
                 StartPattern();
             } else {
-                pattern = 0x62;
+                pattern = kKnockdown;
                 StartPattern();
             }
         }
         break;
-    case 0x56:
+    case kEncasedSpin:
         if (frame == 0 && timer == 0) {
-            if (unk3144 == 0) {
+            if (m_encasedBreakOut == 0) {
                 l50.type = 0x1f0;
                 l50.x = (double)(int)x;
                 l50.y = (double)(int)y;
                 l50.scale = 0;
                 l50.layer = 0;
-                l50.unk0 = 1;
+                l50.keep = 1;
                 l50.facing = facing;
                 SpawnObject(&l50);
-                unk3144 = 1;
+                m_encasedBreakOut = 1;
             }
-            if (unk3138 == 0) {
-                if (unk120 != 0) {
-                    unk118 -= 30.0;
+            if (m_patternVar1 == 0) {
+                if (m_rfBlue != 0) {
+                    m_rfGauge -= 30.0;
                 }
                 m_playSound = 0x21;
-                vx = unkc0;
-                vy = unkc8;
+                vx = m_hitVx;
+                vy = m_hitVy;
                 m_gauge = m_gauge + 0x1e;
-                unk3138++;
+                m_patternVar1++;
             }
         }
         vy += 0.06;
@@ -1611,16 +1611,16 @@ void CNayuki::UpdatePattern()
         }
         if (y + vy >= 0.0) {
             y = 0.0;
-            if (unk12c != 0) {
-                pattern = 0x61;
+            if (m_landHittable != 0) {
+                pattern = kKnockdownHittable;
                 StartPattern();
             } else {
-                pattern = 0x62;
+                pattern = kKnockdown;
                 StartPattern();
             }
         }
         break;
-    case 0x57:
+    case kFallInDarkness:
         if (frame == 0 && timer == 0) {
             l50.type = 0x1ef;
             l50.x = 60.0;
@@ -1636,14 +1636,14 @@ void CNayuki::UpdatePattern()
             timer = 0;
             frame++;
             if (frame >= x8) {
-                pattern = 0;
+                pattern = kStand;
                 StartPattern();
             }
         }
         break;
-    case 0x60:
-        if (frame == 1 && timer == 0 && unk3148 > 0) {
-            unk3148--;
+    case kWakeUp:
+        if (frame == 1 && timer == 0 && m_warmUp > 0) {
+            m_warmUp--;
         }
         timer++;
         if (timer >= l4) {
@@ -1653,15 +1653,15 @@ void CNayuki::UpdatePattern()
                 FaceOpponent();
             }
             if (frame >= x8) {
-                pattern = 7;
+                pattern = kStandUp;
                 if (m_inputY == 1) {
-                    pattern = 3;
+                    pattern = kCrouch;
                 }
                 StartPattern();
             }
         }
         break;
-    case 0x61:
+    case kKnockdownHittable:
         vx = 0.0;
         vy = 0.0;
         if (frame == 0 && timer == 0) {
@@ -1679,12 +1679,12 @@ void CNayuki::UpdatePattern()
             timer = 0;
             frame++;
             if (frame >= x8) {
-                pattern = 0x63;
+                pattern = kLyingDown;
                 StartPattern();
             }
         }
         break;
-    case 0x62:
+    case kKnockdown:
         vx = 0.0;
         vy = 0.0;
         if (frame == 0 && timer == 0) {
@@ -1702,14 +1702,14 @@ void CNayuki::UpdatePattern()
             timer = 0;
             frame++;
             if (frame >= x8) {
-                pattern = 0x63;
+                pattern = kLyingDown;
                 StartPattern();
             }
         }
         break;
-    case 0x63:
+    case kLyingDown:
         if (m_hp > 0 && timer > 0x63) {
-            pattern = 0x60;
+            pattern = kWakeUp;
             StartPattern();
         }
         timer++;
@@ -1720,12 +1720,12 @@ void CNayuki::UpdatePattern()
                 FaceOpponent();
             }
             if (frame >= x8) {
-                pattern = 0x60;
+                pattern = kWakeUp;
                 StartPattern();
             }
         }
         break;
-    case 0x7b:
+    case kEatingJam:
         vx = 0.0;
         vy = 0.0;
         timer++;
@@ -1733,12 +1733,12 @@ void CNayuki::UpdatePattern()
             timer = 0;
             frame++;
             if (frame >= x8) {
-                pattern = 0x63;
+                pattern = kLyingDown;
                 StartPattern();
             }
         }
         break;
-    case 0x96:
+    case kGuardStandLight:
         if (frame == 0 && timer == 0) {
             m_gauge = m_gauge + 0xa;
             vx = -1.5;
@@ -1751,9 +1751,9 @@ void CNayuki::UpdatePattern()
             vx = 0.0;
         }
         if (x - 20.0 <= 0.0 || x + 20.0 >= 639.0) {
-            unkb8 = vx;
+            m_cornerPushback = vx;
         } else {
-            unkb8 = 0.0;
+            m_cornerPushback = 0.0;
         }
         timer++;
         if (timer >= l4) {
@@ -1763,15 +1763,15 @@ void CNayuki::UpdatePattern()
                 FaceOpponent();
             }
             if (frame >= x8) {
-                pattern = 0;
+                pattern = kStand;
                 if (m_inputY == 1) {
-                    pattern = 3;
+                    pattern = kCrouch;
                 }
                 StartPattern();
             }
         }
         break;
-    case 0x97:
+    case kGuardStandMedium:
         if (frame == 0 && timer == 0) {
             m_gauge = m_gauge + 0xf;
             vx = -1.8;
@@ -1784,9 +1784,9 @@ void CNayuki::UpdatePattern()
             vx = 0.0;
         }
         if (x - 20.0 <= 0.0 || x + 20.0 >= 639.0) {
-            unkb8 = vx;
+            m_cornerPushback = vx;
         } else {
-            unkb8 = 0.0;
+            m_cornerPushback = 0.0;
         }
         timer++;
         if (timer >= l4) {
@@ -1796,15 +1796,15 @@ void CNayuki::UpdatePattern()
                 FaceOpponent();
             }
             if (frame >= x8) {
-                pattern = 0;
+                pattern = kStand;
                 if (m_inputY == 1) {
-                    pattern = 3;
+                    pattern = kCrouch;
                 }
                 StartPattern();
             }
         }
         break;
-    case 0x98:
+    case kGuardStandHeavy:
         if (frame == 0 && timer == 0) {
             m_gauge = m_gauge + 0x14;
             vx = -2.3;
@@ -1817,9 +1817,9 @@ void CNayuki::UpdatePattern()
             vx = 0.0;
         }
         if (x - 20.0 <= 0.0 || x + 20.0 >= 639.0) {
-            unkb8 = vx;
+            m_cornerPushback = vx;
         } else {
-            unkb8 = 0.0;
+            m_cornerPushback = 0.0;
         }
         timer++;
         if (timer >= l4) {
@@ -1829,15 +1829,15 @@ void CNayuki::UpdatePattern()
                 FaceOpponent();
             }
             if (frame >= x8) {
-                pattern = 0;
+                pattern = kStand;
                 if (m_inputY == 1) {
-                    pattern = 3;
+                    pattern = kCrouch;
                 }
                 StartPattern();
             }
         }
         break;
-    case 0x99:
+    case kGuardCrouchLight:
         if (frame == 0 && timer == 0) {
             m_gauge = m_gauge + 0xa;
             vx = -1.5;
@@ -1850,9 +1850,9 @@ void CNayuki::UpdatePattern()
             vx = 0.0;
         }
         if (x - 20.0 <= 0.0 || x + 20.0 >= 639.0) {
-            unkb8 = vx;
+            m_cornerPushback = vx;
         } else {
-            unkb8 = 0.0;
+            m_cornerPushback = 0.0;
         }
         timer++;
         if (timer >= l4) {
@@ -1862,12 +1862,12 @@ void CNayuki::UpdatePattern()
                 FaceOpponent();
             }
             if (frame >= x8) {
-                pattern = 3;
+                pattern = kCrouch;
                 StartPattern();
             }
         }
         break;
-    case 0x9a:
+    case kGuardCrouchMedium:
         if (frame == 0 && timer == 0) {
             m_gauge = m_gauge + 0xf;
             vx = -1.8;
@@ -1880,9 +1880,9 @@ void CNayuki::UpdatePattern()
             vx = 0.0;
         }
         if (x - 20.0 <= 0.0 || x + 20.0 >= 639.0) {
-            unkb8 = vx;
+            m_cornerPushback = vx;
         } else {
-            unkb8 = 0.0;
+            m_cornerPushback = 0.0;
         }
         timer++;
         if (timer >= l4) {
@@ -1892,12 +1892,12 @@ void CNayuki::UpdatePattern()
                 FaceOpponent();
             }
             if (frame >= x8) {
-                pattern = 3;
+                pattern = kCrouch;
                 StartPattern();
             }
         }
         break;
-    case 0x9b:
+    case kGuardCrouchHeavy:
         if (frame == 0 && timer == 0) {
             m_gauge = m_gauge + 0x14;
             vx = -2.3;
@@ -1910,9 +1910,9 @@ void CNayuki::UpdatePattern()
             vx = 0.0;
         }
         if (x - 20.0 <= 0.0 || x + 20.0 >= 639.0) {
-            unkb8 = vx;
+            m_cornerPushback = vx;
         } else {
-            unkb8 = 0.0;
+            m_cornerPushback = 0.0;
         }
         timer++;
         if (timer >= l4) {
@@ -1922,12 +1922,12 @@ void CNayuki::UpdatePattern()
                 FaceOpponent();
             }
             if (frame >= x8) {
-                pattern = 3;
+                pattern = kCrouch;
                 StartPattern();
             }
         }
         break;
-    case 0x9c:
+    case kGuardAir:
         if (frame == 0 && timer == 0) {
             vy = -2.6;
             m_gauge = m_gauge + 0xf;
@@ -1940,7 +1940,7 @@ void CNayuki::UpdatePattern()
             timer = 0;
             frame++;
             if (frame >= x8) {
-                pattern = 9;
+                pattern = kFall;
                 StartPattern();
             }
         }
@@ -1948,11 +1948,11 @@ void CNayuki::UpdatePattern()
             y = 0.0;
             m_playSound = 9;
             FaceOpponent();
-            pattern = 0xd;
+            pattern = kLand;
             StartPattern();
         }
         break;
-    case 0x9d:
+    case kAirRecoveryForward:
         vx = 1.0;
         ay = 0.045;
         if (frame == 0 && timer == 0) {
@@ -1971,7 +1971,7 @@ void CNayuki::UpdatePattern()
             timer = 0;
             frame++;
             if (frame >= x8) {
-                pattern = 9;
+                pattern = kFall;
                 StartPattern();
             }
         }
@@ -1979,11 +1979,11 @@ void CNayuki::UpdatePattern()
             y = 0.0;
             m_playSound = 9;
             FaceOpponent();
-            pattern = 0xd;
+            pattern = kLand;
             StartPattern();
         }
         break;
-    case 0x9e:
+    case kAirRecoveryBack:
         vx = -1.0;
         ay = 0.045;
         if (frame == 0 && timer == 0) {
@@ -2002,7 +2002,7 @@ void CNayuki::UpdatePattern()
             timer = 0;
             frame++;
             if (frame >= x8) {
-                pattern = 9;
+                pattern = kFall;
                 StartPattern();
             }
         }
@@ -2010,7 +2010,7 @@ void CNayuki::UpdatePattern()
             y = 0.0;
             m_playSound = 9;
             FaceOpponent();
-            pattern = 0xd;
+            pattern = kLand;
             StartPattern();
         }
         break;
@@ -2025,20 +2025,20 @@ void CNayuki::UpdatePattern()
             m_game->CreateEffect((EffectDesc*)&l50);
             m_hitsLeft = 1;
             m_playSound = 0x3e;
-            unk3138++;
+            m_patternVar1++;
         }
         timer++;
         if (timer >= l4) {
             timer = 0;
             frame++;
             if (frame >= x8) {
-                pattern = 9;
+                pattern = kFall;
                 StartPattern();
                 ay = 0.035;
             }
         }
         break;
-    case 0xa2:
+    case kWakeUpAttack:
         if (frame == 0 && timer == 0) {
             StopMoving();
         }
@@ -2058,11 +2058,11 @@ void CNayuki::UpdatePattern()
             m_hitsLeft = 1;
             m_playSound = 0x3e;
             m_gauge = m_gauge - 0x3e8;
-            unk3138++;
+            m_patternVar1++;
         }
         vy = vy + ay;
         if (y + vy > 0.0) {
-            pattern = 0xd;
+            pattern = kLand;
             StartPattern();
             StartPattern();
             y = 0.0;
@@ -2080,7 +2080,7 @@ void CNayuki::UpdatePattern()
             }
         }
         break;
-    case 0xa3:
+    case kDashForward:
         if (frame == 0 && timer == 0) {
             StartAfterimages(1);
             StopMoving();
@@ -2108,13 +2108,13 @@ void CNayuki::UpdatePattern()
                 frame = frame - 4;
             }
             if (frame >= x8) {
-                pattern = 3;
+                pattern = kCrouch;
                 StartPattern();
                 break;
             }
         }
         break;
-    case 0xa4:
+    case kDashBack:
         StartAfterimages(2);
         if (frame == 0 && timer == 0) {
             StopMoving();
@@ -2138,7 +2138,7 @@ void CNayuki::UpdatePattern()
             timer = 0;
             frame++;
             if (frame == 4) {
-                vx = -2.0 - unk3148 * 0.1;
+                vx = -2.0 - m_warmUp * 0.1;
                 vy = -1.2;
             }
             if (frame == 0xb) {
@@ -2146,13 +2146,13 @@ void CNayuki::UpdatePattern()
             }
             if (frame >= x8) {
                 StartPattern();
-                pattern = 3;
+                pattern = kCrouch;
             }
         }
         break;
-    case 0xa5:
+    case kAirDashForward:
         if (frame == 0 && timer == 0) {
-            if (unk3148 > 7) {
+            if (m_warmUp > 7) {
                 m_hitsLeft = 1;
             } else {
                 m_hitsLeft = 0;
@@ -2166,7 +2166,7 @@ void CNayuki::UpdatePattern()
             l50.scale = 0;
             SpawnObject(&l50);
         }
-        if (unk3138 == 1 && frame == 0) {
+        if (m_patternVar1 == 1 && frame == 0) {
             vx = 1.9;
             vy = -0.2;
             ay = 0.035;
@@ -2193,10 +2193,10 @@ void CNayuki::UpdatePattern()
             }
         }
         break;
-    case 0xa6:
+    case kAirDashBack:
         if (frame == 0 && timer == 0) {
             StopMoving();
-            if (unk3148 > 4) {
+            if (m_warmUp > 4) {
                 m_hitsLeft = 1;
             } else {
                 m_hitsLeft = 0;
@@ -2209,7 +2209,7 @@ void CNayuki::UpdatePattern()
             l50.scale = 0;
             SpawnObject(&l50);
         }
-        if (unk3138 == 1 && frame == 0) {
+        if (m_patternVar1 == 1 && frame == 0) {
             vx = -1.9;
             vy = -0.2;
             ay = 0.035;
@@ -2236,15 +2236,15 @@ void CNayuki::UpdatePattern()
             }
         }
         break;
-    case 0xa7:
+    case kInstantCharge:
         if (frame == 0 && timer == 0) {
             vx = 0.0;
             vy = 0.0;
-            if (unk120 == 1) {
-                m_proration = unk118 * 5.0 + m_proration;
+            if (m_rfBlue == 1) {
+                m_proration = m_rfGauge * 5.0 + m_proration;
             }
-            unk118 = 0.0;
-            unk14c = 0x5a;
+            m_rfGauge = 0.0;
+            m_freezeTime = 0x5a;
             FillBackground(0xb0, 3);
         }
         if (frame == 1 && timer == 0) {
@@ -2270,20 +2270,20 @@ void CNayuki::UpdatePattern()
             frame++;
             m_attackResult = 0;
             if (frame >= x8) {
-                pattern = 0;
+                pattern = kStand;
                 FaceOpponent();
                 StartPattern();
             }
         }
         break;
-    case 0xa8:
+    case kRecoilGuardStand:
         if (frame == 0 && timer == 0) {
             vx = 0.0;
             vy = 0.0;
             y = 0.0;
             ay = 0.0;
-            unk14e = 0;
-            unkb8 = 0.0;
+            m_recoilGuardWindow = 0;
+            m_cornerPushback = 0.0;
             ax = 0.0;
             l50.type = 8;
             l50.x = (double)(int)x;
@@ -2300,19 +2300,19 @@ void CNayuki::UpdatePattern()
                 FaceOpponent();
             }
             if (frame >= x8) {
-                pattern = 0;
+                pattern = kStand;
                 StartPattern();
             }
         }
         break;
-    case 0xa9:
+    case kRecoilGuardCrouch:
         if (frame == 0 && timer == 0) {
             vx = 0.0;
             vy = 0.0;
             y = 0.0;
             ay = 0.0;
-            unk14e = 0;
-            unkb8 = 0.0;
+            m_recoilGuardWindow = 0;
+            m_cornerPushback = 0.0;
             ax = 0.0;
             l50.type = 8;
             l50.x = (double)(int)x;
@@ -2329,36 +2329,36 @@ void CNayuki::UpdatePattern()
                 FaceOpponent();
             }
             if (frame >= x8) {
-                pattern = 3;
+                pattern = kCrouch;
                 StartPattern();
             }
         }
         break;
-    case 0xaa:
+    case kRecoilGuardAir:
         if (frame == 0 && timer == 0) {
-            unk3138 = (int)(vx * 100.0);
-            unk313c = (int)(vy * 100.0);
+            m_patternVar1 = (int)(vx * 100.0);
+            m_patternVar2 = (int)(vy * 100.0);
             vx = 0.0;
             vy = 0.0;
             if (ay == 0.0) {
                 ay = 0.035;
             }
-            unk14e = 0;
-            unkb8 = 0.0;
-            unk14c = 0x3c;
+            m_recoilGuardWindow = 0;
+            m_cornerPushback = 0.0;
+            m_freezeTime = 0x3c;
         }
-        if (unk14c == 0 && unk3140 == 0) {
-            unk3140++;
-            vx = unk3138 * 0.01;
-            vy = unk313c * 0.01;
+        if (m_freezeTime == 0 && m_patternVar3 == 0) {
+            m_patternVar3++;
+            vx = m_patternVar1 * 0.01;
+            vy = m_patternVar2 * 0.01;
         }
-        if (unk14c == 0) {
+        if (m_freezeTime == 0) {
             vy = vy + ay;
         }
         if (vy + y > 0.0) {
             StopMoving();
             y = 0.0;
-            pattern = 0xa9;
+            pattern = kRecoilGuardCrouch;
             break;
         }
         timer++;
@@ -2366,22 +2366,22 @@ void CNayuki::UpdatePattern()
             timer = 0;
             frame++;
             if (frame >= x8) {
-                pattern = 9;
+                pattern = kFall;
                 StartPattern();
             }
         }
         break;
-    case 0xab:
+    case kAirInstantCharge:
         if (frame == 0 && timer == 0) {
-            unk3138 = (int)(vx * 100.0);
-            unk313c = (int)(vy * 100.0);
+            m_patternVar1 = (int)(vx * 100.0);
+            m_patternVar2 = (int)(vy * 100.0);
             vx = 0.0;
             vy = 0.0;
-            if (unk120 == 1) {
-                m_proration = unk118 * 5.0 + m_proration;
+            if (m_rfBlue == 1) {
+                m_proration = m_rfGauge * 5.0 + m_proration;
             }
-            unk118 = 0.0;
-            unk14c = 0x5a;
+            m_rfGauge = 0.0;
+            m_freezeTime = 0x5a;
             FillBackground(0xb0, 3);
         }
         if (frame == 1 && timer == 0) {
@@ -2407,28 +2407,28 @@ void CNayuki::UpdatePattern()
             frame++;
             m_attackResult = 0;
             if (frame >= x8) {
-                pattern = 9;
+                pattern = kFall;
                 FaceOpponent();
-                vx = unk3138 * 0.01;
-                vy = unk313c * 0.01;
+                vx = m_patternVar1 * 0.01;
+                vy = m_patternVar2 * 0.01;
                 ay = 0.035;
                 StartPattern();
             }
         }
         break;
-    case 0xb2:
+    case kDashStop:
         vx -= 0.03;
         vx = vx;
         if (vx < 0.0) {
             vx = 0.0;
         }
         if (m_inputY == -1 && frame > 0) {
-            pattern = 4;
+            pattern = kJump;
             if (m_inputX == facing) {
-                pattern = 5;
+                pattern = kJumpForward;
             }
             if (m_inputX == -facing) {
-                pattern = 6;
+                pattern = kJumpBack;
             }
             m_attackResult = 0;
             StartPattern();
@@ -2439,7 +2439,7 @@ void CNayuki::UpdatePattern()
             timer = 0;
             frame++;
             if (frame >= x8) {
-                pattern = 0;
+                pattern = kStand;
                 StartPattern();
                 break;
             }
@@ -2466,9 +2466,9 @@ void CNayuki::UpdatePattern()
                 FaceOpponent();
             }
             if (frame >= x8) {
-                pattern = 7;
+                pattern = kStandUp;
                 if (m_inputY == 1) {
-                    pattern = 3;
+                    pattern = kCrouch;
                 }
                 StartPattern();
             }
@@ -2505,28 +2505,28 @@ void CNayuki::UpdatePattern()
             }
             if (frame >= x8) {
                 StartPattern();
-                pattern = 0;
+                pattern = kStand;
             }
         }
         break;
-    case 0xc8:
-        if (unk158 == 0) {
+    case k5A:
+        if (m_dashMomentum == 0) {
             vx = 0.0;
             vy = 0.0;
         }
-        if (vx > 0.0 && unk158 == 1) {
+        if (vx > 0.0 && m_dashMomentum == 1) {
             vx -= 0.03;
         } else {
             vx = 0.0;
-            unk158 = 0;
+            m_dashMomentum = 0;
         }
-        if (m_inputY == -1 && frame > 0 && unk15c < 3 && m_attackResult >= 2) {
-            pattern = 4;
+        if (m_inputY == -1 && frame > 0 && m_sealLevel < 3 && m_attackResult >= 2) {
+            pattern = kJump;
             if (m_inputX == facing) {
-                pattern = 5;
+                pattern = kJumpForward;
             }
             if (m_inputX == -facing) {
-                pattern = 6;
+                pattern = kJumpBack;
             }
             m_attackResult = 0;
             StartPattern();
@@ -2545,30 +2545,30 @@ void CNayuki::UpdatePattern()
                 m_attackResult = 0;
             }
             if (frame >= x8) {
-                pattern = 0;
+                pattern = kStand;
                 FaceOpponent();
                 StartPattern();
             }
         }
         break;
-    case 0xc9:
-        if (unk158 == 0) {
+    case k5BClose:
+        if (m_dashMomentum == 0) {
             vx = 0.0;
             vy = 0.0;
         }
-        if (vx > 0.0 && unk158 == 1) {
+        if (vx > 0.0 && m_dashMomentum == 1) {
             vx -= 0.03;
         } else {
             vx = 0.0;
-            unk158 = 0;
+            m_dashMomentum = 0;
         }
-        if (m_inputY == -1 && frame > 0 && unk15c < 3 && m_attackResult >= 2) {
-            pattern = 4;
+        if (m_inputY == -1 && frame > 0 && m_sealLevel < 3 && m_attackResult >= 2) {
+            pattern = kJump;
             if (m_inputX == facing) {
-                pattern = 5;
+                pattern = kJumpForward;
             }
             if (m_inputX == -facing) {
-                pattern = 6;
+                pattern = kJumpBack;
             }
             m_attackResult = 0;
             StartPattern();
@@ -2580,26 +2580,26 @@ void CNayuki::UpdatePattern()
             m_hitsLeft = 1;
         }
         timer++;
-        if (timer >= l4 || timer >= l4 - 3 && frame == 2 && unk3148 > 4) {
+        if (timer >= l4 || timer >= l4 - 3 && frame == 2 && m_warmUp > 4) {
             timer = 0;
             frame++;
             if (frame == 3) {
                 frame = 4;
             }
-            if (frame == 2 && unk3148 > 3) {
+            if (frame == 2 && m_warmUp > 3) {
                 frame = 3;
             }
             if (frame < 2) {
                 m_attackResult = 0;
             }
             if (frame >= x8) {
-                pattern = 0;
+                pattern = kStand;
                 FaceOpponent();
                 StartPattern();
             }
         }
         break;
-    case 0xca:
+    case k5BFar:
         if (frame == 0 && timer == 0) {
             StopMoving();
         }
@@ -2609,7 +2609,7 @@ void CNayuki::UpdatePattern()
         if (frame == 4 && timer == 0) {
             m_gauge = m_gauge + 0xf;
             m_playSound = 0x14;
-            if (unk3148 > 5) {
+            if (m_warmUp > 5) {
                 m_hitsLeft = 1;
             }
         }
@@ -2647,14 +2647,14 @@ void CNayuki::UpdatePattern()
             frame++;
             if (frame == 5) {
                 vy = -1.5;
-                vx = unk3148 * 0.05 + 1.0;
+                vx = m_warmUp * 0.05 + 1.0;
                 ay = 0.06;
             }
             if (frame == 0xa) {
                 frame = frame - 4;
             }
             if (frame == 0xb) {
-                if (unk3148 > 4) {
+                if (m_warmUp > 4) {
                     m_hitsLeft = 1;
                 } else {
                     m_hitsLeft = 0;
@@ -2664,24 +2664,24 @@ void CNayuki::UpdatePattern()
                 m_attackResult = 0;
             }
             if (frame >= x8) {
-                pattern = 0;
+                pattern = kStand;
                 FaceOpponent();
                 StartPattern();
             }
         }
         break;
-    case 0xcb:
+    case k5C:
         if (frame == 0 && timer == 0) {
             StopMoving();
             m_hitsLeft = 0;
         }
-        if (m_inputY == -1 && frame > 0 && unk3148 > 4 && y == 0.0 && unk15c < 3 && m_attackResult >= 2 && unk3148 > 6) {
-            pattern = 4;
+        if (m_inputY == -1 && frame > 0 && m_warmUp > 4 && y == 0.0 && m_sealLevel < 3 && m_attackResult >= 2 && m_warmUp > 6) {
+            pattern = kJump;
             if (m_inputX == facing) {
-                pattern = 5;
+                pattern = kJumpForward;
             }
             if (m_inputX == -facing) {
-                pattern = 6;
+                pattern = kJumpBack;
             }
             m_attackResult = 0;
             StartPattern();
@@ -2690,7 +2690,7 @@ void CNayuki::UpdatePattern()
         if (frame == 8 && timer == 0) {
             m_gauge = m_gauge + 0x23;
             m_playSound = 0x14;
-            if (unk3148 > 5) {
+            if (m_warmUp > 5) {
                 m_hitsLeft = 1;
             }
         }
@@ -2702,7 +2702,7 @@ void CNayuki::UpdatePattern()
         }
         if (frame > 0xd && vy + y > 0.0) {
             StartPattern();
-            pattern = 0xd;
+            pattern = kLand;
             break;
         }
         timer++;
@@ -2728,24 +2728,24 @@ void CNayuki::UpdatePattern()
             }
         }
         break;
-    case 0xcc:
-        if (unk158 == 0) {
+    case k2A:
+        if (m_dashMomentum == 0) {
             vx = 0.0;
             vy = 0.0;
         }
-        if (vx > 0.0 && unk158 == 1) {
+        if (vx > 0.0 && m_dashMomentum == 1) {
             vx -= 0.03;
         } else {
             vx = 0.0;
-            unk158 = 0;
+            m_dashMomentum = 0;
         }
-        if (m_inputY == -1 && frame > 0 && unk15c < 3 && m_attackResult >= 2) {
-            pattern = 4;
+        if (m_inputY == -1 && frame > 0 && m_sealLevel < 3 && m_attackResult >= 2) {
+            pattern = kJump;
             if (m_inputX == facing) {
-                pattern = 5;
+                pattern = kJumpForward;
             }
             if (m_inputX == -facing) {
-                pattern = 6;
+                pattern = kJumpBack;
             }
             m_attackResult = 0;
             StartPattern();
@@ -2763,40 +2763,40 @@ void CNayuki::UpdatePattern()
             if (frame == 3) {
                 frame = 4;
             }
-            if (frame == 2 && unk3148 > 4) {
+            if (frame == 2 && m_warmUp > 4) {
                 frame = 3;
             }
             if (frame < 2) {
                 m_attackResult = 0;
             }
             if (frame >= x8) {
-                pattern = 0;
+                pattern = kStand;
                 if (m_inputY == 1) {
-                    pattern = 3;
+                    pattern = kCrouch;
                 }
                 FaceOpponent();
                 StartPattern();
             }
         }
         break;
-    case 0xcd:
-        if (unk158 == 0) {
+    case k2B:
+        if (m_dashMomentum == 0) {
             vx = 0.0;
             vy = 0.0;
         }
-        if (vx > 0.0 && unk158 == 1) {
+        if (vx > 0.0 && m_dashMomentum == 1) {
             vx -= 0.03;
         } else {
             vx = 0.0;
-            unk158 = 0;
+            m_dashMomentum = 0;
         }
-        if (m_inputY == -1 && frame > 0 && unk15c < 3 && m_attackResult >= 2) {
-            pattern = 4;
+        if (m_inputY == -1 && frame > 0 && m_sealLevel < 3 && m_attackResult >= 2) {
+            pattern = kJump;
             if (m_inputX == facing) {
-                pattern = 5;
+                pattern = kJumpForward;
             }
             if (m_inputX == -facing) {
-                pattern = 6;
+                pattern = kJumpBack;
             }
             m_attackResult = 0;
             StartPattern();
@@ -2808,7 +2808,7 @@ void CNayuki::UpdatePattern()
             m_hitsLeft = 1;
         }
         timer++;
-        if (timer >= l4 || timer >= 3 && (frame == 1 && unk3148 > 0 || frame == 2 && unk3148 > 1 || frame == 3 && unk3148 > 3 || frame == 4 && unk3148 > 5)) {
+        if (timer >= l4 || timer >= 3 && (frame == 1 && m_warmUp > 0 || frame == 2 && m_warmUp > 1 || frame == 3 && m_warmUp > 3 || frame == 4 && m_warmUp > 5)) {
             timer = 0;
             frame++;
             m_attackResult = 0;
@@ -2819,30 +2819,30 @@ void CNayuki::UpdatePattern()
                 x = facing * 0xf + x;
             }
             if (frame >= x8) {
-                pattern = 3;
+                pattern = kCrouch;
                 FaceOpponent();
                 StartPattern();
             }
         }
         break;
-    case 0xce:
-        if (unk158 == 0) {
+    case k2C:
+        if (m_dashMomentum == 0) {
             vx = 0.0;
             vy = 0.0;
         }
-        if (vx > 0.0 && unk158 == 1) {
+        if (vx > 0.0 && m_dashMomentum == 1) {
             vx -= 0.03;
         } else {
             vx = 0.0;
-            unk158 = 0;
+            m_dashMomentum = 0;
         }
-        if (m_inputY == -1 && frame > 0 && unk15c < 3 && m_attackResult >= 2) {
-            pattern = 4;
+        if (m_inputY == -1 && frame > 0 && m_sealLevel < 3 && m_attackResult >= 2) {
+            pattern = kJump;
             if (m_inputX == facing) {
-                pattern = 5;
+                pattern = kJumpForward;
             }
             if (m_inputX == -facing) {
-                pattern = 6;
+                pattern = kJumpBack;
             }
             m_attackResult = 0;
             StartPattern();
@@ -2854,32 +2854,32 @@ void CNayuki::UpdatePattern()
             m_hitsLeft = 1;
         }
         timer++;
-        if (timer >= l4 || timer >= l4 - 3 && frame < unk3148 - 4 && frame < 4) {
+        if (timer >= l4 || timer >= l4 - 3 && frame < m_warmUp - 4 && frame < 4) {
             timer = 0;
             frame++;
             if (frame < 2) {
                 m_attackResult = 0;
             }
             if (frame >= x8) {
-                pattern = 0;
+                pattern = kStand;
                 if (m_inputY == 1) {
-                    pattern = 3;
+                    pattern = kCrouch;
                 }
                 FaceOpponent();
                 StartPattern();
             }
         }
         break;
-    case 0xcf:
+    case kJumpA:
         vy = vy + ay;
-        if (m_inputY == -1 && frame > 0 && unk15c < 3 && m_attackResult >= 2 && unk15a == 0) {
-            unk15a++;
-            pattern = 0xe;
+        if (m_inputY == -1 && frame > 0 && m_sealLevel < 3 && m_attackResult >= 2 && m_airActions == 0) {
+            m_airActions++;
+            pattern = kAirJump;
             if (m_inputX == facing) {
-                pattern = 0xf;
+                pattern = kAirJumpForward;
             }
             if (m_inputX == -facing) {
-                pattern = 0x10;
+                pattern = kAirJumpBack;
             }
             m_attackResult = 0;
             StartPattern();
@@ -2892,7 +2892,7 @@ void CNayuki::UpdatePattern()
         }
         if (y + vy >= 0.0) {
             y = 0.0;
-            pattern = 0xd;
+            pattern = kLand;
             StartPattern();
             break;
         }
@@ -2904,21 +2904,21 @@ void CNayuki::UpdatePattern()
                 m_attackResult = 0;
             }
             if (frame >= x8) {
-                pattern = 9;
+                pattern = kFall;
                 StartPattern();
             }
         }
         break;
-    case 0xd0:
+    case kJumpB:
         vy = vy + ay;
-        if (m_inputY == -1 && frame > 0 && unk15c < 3 && m_attackResult >= 2 && unk15a == 0) {
-            unk15a++;
-            pattern = 0xe;
+        if (m_inputY == -1 && frame > 0 && m_sealLevel < 3 && m_attackResult >= 2 && m_airActions == 0) {
+            m_airActions++;
+            pattern = kAirJump;
             if (m_inputX == facing) {
-                pattern = 0xf;
+                pattern = kAirJumpForward;
             }
             if (m_inputX == -facing) {
-                pattern = 0x10;
+                pattern = kAirJumpBack;
             }
             m_attackResult = 0;
             StartPattern();
@@ -2927,11 +2927,11 @@ void CNayuki::UpdatePattern()
         if (frame == 1 && timer == 0) {
             m_gauge = m_gauge + 0xd;
             m_playSound = 0x14;
-            m_hitsLeft = unk3148 / 2 + 2;
+            m_hitsLeft = m_warmUp / 2 + 2;
         }
         if (y + vy >= 0.0) {
             y = 0.0;
-            pattern = 0xd;
+            pattern = kLand;
             StartPattern();
             break;
         }
@@ -2943,21 +2943,21 @@ void CNayuki::UpdatePattern()
                 m_attackResult = 0;
             }
             if (frame >= x8) {
-                pattern = 9;
+                pattern = kFall;
                 StartPattern();
             }
         }
         break;
-    case 0xd1:
+    case kJumpC:
         vy = vy + ay;
-        if (m_inputY == -1 && frame > 0 && unk15c < 3 && m_attackResult >= 2 && unk15a == 0) {
-            unk15a++;
-            pattern = 0xe;
+        if (m_inputY == -1 && frame > 0 && m_sealLevel < 3 && m_attackResult >= 2 && m_airActions == 0) {
+            m_airActions++;
+            pattern = kAirJump;
             if (m_inputX == facing) {
-                pattern = 0xf;
+                pattern = kAirJumpForward;
             }
             if (m_inputX == -facing) {
-                pattern = 0x10;
+                pattern = kAirJumpBack;
             }
             m_attackResult = 0;
             StartPattern();
@@ -2970,24 +2970,24 @@ void CNayuki::UpdatePattern()
         }
         if (y + vy >= 0.0) {
             y = 0.0;
-            pattern = 0xd;
+            pattern = kLand;
             StartPattern();
             break;
         }
         timer++;
-        if (timer >= l4 || timer >= l4 - 3 && frame < unk3148 - 3 && frame < 4) {
+        if (timer >= l4 || timer >= l4 - 3 && frame < m_warmUp - 3 && frame < 4) {
             timer = 0;
             frame++;
             if (frame < 2) {
                 m_attackResult = 0;
             }
             if (frame >= x8) {
-                pattern = 9;
+                pattern = kFall;
                 StartPattern();
             }
         }
         break;
-    case 0xd2:
+    case k6B:
         if (frame == 0 && timer == 0) {
             StopMoving();
         }
@@ -3009,7 +3009,7 @@ void CNayuki::UpdatePattern()
             frame++;
             if (frame >= x8) {
                 StartPattern();
-                pattern = 3;
+                pattern = kCrouch;
                 FaceOpponent();
                 break;
             }
@@ -3022,14 +3022,14 @@ void CNayuki::UpdatePattern()
             StopMoving();
         }
         break;
-    case 0xd3:
-        if (m_inputY == -1 && frame > 0 && unk15c < 3 && m_attackResult >= 2) {
-            pattern = 4;
+    case kUnusedD3:
+        if (m_inputY == -1 && frame > 0 && m_sealLevel < 3 && m_attackResult >= 2) {
+            pattern = kJump;
             if (m_inputX == facing) {
-                pattern = 5;
+                pattern = kJumpForward;
             }
             if (m_inputX == -facing) {
-                pattern = 6;
+                pattern = kJumpBack;
             }
             m_attackResult = 0;
             StartPattern();
@@ -3050,13 +3050,13 @@ void CNayuki::UpdatePattern()
             frame++;
             m_attackResult = 0;
             if (frame >= x8) {
-                pattern = 0;
+                pattern = kStand;
                 FaceOpponent();
                 StartPattern();
             }
         }
         break;
-    case 0xd4:
+    case kUnusedAirDive:
         if (frame == 2 && timer == 0) {
             m_gauge = m_gauge + 0xf;
             m_playSound = 0x14;
@@ -3068,7 +3068,7 @@ void CNayuki::UpdatePattern()
         if (m_attackResult > 1) {
             timer = 0;
             frame = 0;
-            pattern = 0x101;
+            pattern = kRebound;
             vx = -vx;
             vy = -2.5;
             ay = 0.025;
@@ -3099,13 +3099,13 @@ void CNayuki::UpdatePattern()
             }
             m_attackResult = 0;
             if (frame >= x8) {
-                pattern = 7;
+                pattern = kStandUp;
                 FaceOpponent();
                 StartPattern();
             }
         }
         break;
-    case 0xd5:
+    case kUnusedD5:
         ay = 0.04;
         vx = 0.0;
         vy = vy + ay;
@@ -3116,7 +3116,7 @@ void CNayuki::UpdatePattern()
         }
         if (y + vy >= 0.0) {
             y = 0.0;
-            pattern = 0x61;
+            pattern = kKnockdownHittable;
             StopMoving();
             StartPattern();
             break;
@@ -3131,7 +3131,7 @@ void CNayuki::UpdatePattern()
             }
         }
         break;
-    case 0xd6:
+    case k5BFarC:
         vy = vy + ay;
         if (frame == 2 && timer == 0) {
             m_gauge = m_gauge + 0x1e;
@@ -3151,12 +3151,12 @@ void CNayuki::UpdatePattern()
             frame++;
             m_attackResult = 0;
             if (frame >= x8) {
-                pattern = 7;
+                pattern = kStandUp;
                 StartPattern();
             }
         }
         break;
-    case 0xdc:
+    case kThrow:
         vx = 0.0;
         vy = 0.0;
         if (frame == 1 && timer == 0 && (*m_opponent)->y == 0.0) {
@@ -3173,12 +3173,12 @@ void CNayuki::UpdatePattern()
             }
             vx = 0.0;
             vy = 0.0;
-            unkb8 = 0.0;
+            m_cornerPushback = 0.0;
             StartPattern();
             (*m_opponent)->StartPattern();
             (*m_opponent)->StopMoving();
-            pattern = 0xdd;
-            (*m_opponent)->pattern = 0x6b;
+            pattern = kThrowHit;
+            (*m_opponent)->pattern = kThrownStandHigh2;
             (*m_opponent)->x = facing * 0xf + x;
             l50.type = 0;
             l50.x = (double)((int)x + facing * 0x25);
@@ -3194,20 +3194,20 @@ void CNayuki::UpdatePattern()
             frame++;
             m_attackResult = 0;
             if (frame >= x8) {
-                pattern = 0;
+                pattern = kStand;
                 FaceOpponent();
                 StartPattern();
             }
         }
         break;
-    case 0xdd:
+    case kThrowHit:
         if (frame == 4 && timer == 0) {
             DealDamage(0x3e8, 750.0);
-            (*m_opponent)->pattern = 0x3f;
+            (*m_opponent)->pattern = kHitAirLaunch;
             (*m_opponent)->StartPattern();
             (*m_opponent)->StopMoving();
-            (*m_opponent)->unkc0 = 1.0;
-            (*m_opponent)->unkc8 = -2.5;
+            (*m_opponent)->m_hitVx = 1.0;
+            (*m_opponent)->m_hitVy = -2.5;
             (*m_opponent)->y = -50.0;
             (*m_opponent)->x = x;
         }
@@ -3226,22 +3226,22 @@ void CNayuki::UpdatePattern()
                 (*m_opponent)->x = (*m_opponent)->x - facing;
             }
             if (frame >= x8) {
-                pattern = 0;
+                pattern = kStand;
                 StartPattern();
                 FaceOpponent();
             }
         }
         break;
-    case 0xe6:
+    case kDashJumpA:
         vy = vy + ay;
-        if (m_inputY == -1 && frame > 0 && m_attackResult >= 2 && unk15a == 0) {
-            unk15a++;
-            pattern = 0xe;
+        if (m_inputY == -1 && frame > 0 && m_attackResult >= 2 && m_airActions == 0) {
+            m_airActions++;
+            pattern = kAirJump;
             if (m_inputX == facing) {
-                pattern = 0xf;
+                pattern = kAirJumpForward;
             }
             if (m_inputX == -facing) {
-                pattern = 0x10;
+                pattern = kAirJumpBack;
             }
             m_attackResult = 0;
             StartPattern();
@@ -3254,7 +3254,7 @@ void CNayuki::UpdatePattern()
         }
         if (y + vy >= 0.0) {
             y = 0.0;
-            pattern = 0xd;
+            pattern = kLand;
             StartPattern();
             break;
         }
@@ -3266,21 +3266,21 @@ void CNayuki::UpdatePattern()
                 m_attackResult = 0;
             }
             if (frame >= x8) {
-                pattern = 9;
+                pattern = kFall;
                 StartPattern();
             }
         }
         break;
-    case 0xe7:
+    case kDashJumpB:
         vy = vy + ay;
-        if (m_inputY == -1 && frame > 0 && m_attackResult >= 2 && unk15a == 0) {
-            unk15a++;
-            pattern = 0xe;
+        if (m_inputY == -1 && frame > 0 && m_attackResult >= 2 && m_airActions == 0) {
+            m_airActions++;
+            pattern = kAirJump;
             if (m_inputX == facing) {
-                pattern = 0xf;
+                pattern = kAirJumpForward;
             }
             if (m_inputX == -facing) {
-                pattern = 0x10;
+                pattern = kAirJumpBack;
             }
             m_attackResult = 0;
             StartPattern();
@@ -3289,11 +3289,11 @@ void CNayuki::UpdatePattern()
         if (frame == 1 && timer == 0) {
             m_gauge = m_gauge + 0xd;
             m_playSound = 0x14;
-            m_hitsLeft = unk3148 / 2 + 2;
+            m_hitsLeft = m_warmUp / 2 + 2;
         }
         if (y + vy >= 0.0) {
             y = 0.0;
-            pattern = 0xd;
+            pattern = kLand;
             StartPattern();
             break;
         }
@@ -3305,21 +3305,21 @@ void CNayuki::UpdatePattern()
                 m_attackResult = 0;
             }
             if (frame >= x8) {
-                pattern = 9;
+                pattern = kFall;
                 StartPattern();
             }
         }
         break;
-    case 0xe8:
+    case kDashJumpC:
         vy = vy + ay;
-        if (m_inputY == -1 && frame > 0 && m_attackResult >= 2 && unk15a == 0) {
-            unk15a++;
-            pattern = 0xe;
+        if (m_inputY == -1 && frame > 0 && m_attackResult >= 2 && m_airActions == 0) {
+            m_airActions++;
+            pattern = kAirJump;
             if (m_inputX == facing) {
-                pattern = 0xf;
+                pattern = kAirJumpForward;
             }
             if (m_inputX == -facing) {
-                pattern = 0x10;
+                pattern = kAirJumpBack;
             }
             m_attackResult = 0;
             StartPattern();
@@ -3332,32 +3332,32 @@ void CNayuki::UpdatePattern()
         }
         if (y + vy >= 0.0) {
             y = 0.0;
-            pattern = 0xd;
+            pattern = kLand;
             StartPattern();
             break;
         }
         timer++;
-        if (timer >= l4 || timer >= l4 - 3 && frame < unk3148 - 3 && frame < 4) {
+        if (timer >= l4 || timer >= l4 - 3 && frame < m_warmUp - 3 && frame < 4) {
             timer = 0;
             frame++;
             if (frame < 2) {
                 m_attackResult = 0;
             }
             if (frame >= x8) {
-                pattern = 9;
+                pattern = kFall;
                 StartPattern();
             }
         }
         break;
-    case 0xf8:
+    case kAirThrow:
         vy = vy + ay;
         if (frame == 1 && m_attackResult == 3) {
             (*m_opponent)->StopMoving();
             (*m_opponent)->StartPattern();
             StartPattern();
             StopMoving();
-            pattern = 0xf9;
-            (*m_opponent)->pattern = 0x64;
+            pattern = kAirThrowHit;
+            (*m_opponent)->pattern = kThrownStandHigh;
             l50.type = 0;
             l50.x = (double)((int)x + facing * 0x21);
             l50.y = (double)((int)y - 0x33);
@@ -3371,24 +3371,24 @@ void CNayuki::UpdatePattern()
         if (timer >= l4) {
             timer = 0;
             frame++;
-            if (frame == 1 && (*m_opponent)->y < 0.0 && ((*m_opponent)->pattern < 0x32 || (*m_opponent)->pattern > 0x95)) {
+            if (frame == 1 && (*m_opponent)->y < 0.0 && ((*m_opponent)->pattern < kFirstHitReaction || (*m_opponent)->pattern > kLastHitReaction)) {
                 m_hitsLeft = 1;
             } else {
                 m_hitsLeft = 0;
             }
             m_attackResult = 0;
             if (frame >= x8) {
-                pattern = 0xd1;
+                pattern = kJumpC;
                 frame = 2;
             }
         }
         break;
-    case 0xf9:
+    case kAirThrowHit:
         if (frame < 7) {
-            Unk410a40(0x32, 3);
+            FocusCameraX(0x32, 3);
         }
         if (frame < 7) {
-            Unk410a80(0x32, 3);
+            FocusCameraY(0x32, 3);
         }
         if (frame == 0 && timer == 1) {
             (*m_opponent)->facing = -facing;
@@ -3398,7 +3398,7 @@ void CNayuki::UpdatePattern()
             StopMoving();
             y = 0.0;
             StartPattern();
-            pattern = 0xd;
+            pattern = kLand;
             break;
         }
         if (frame == 1) {
@@ -3429,11 +3429,11 @@ void CNayuki::UpdatePattern()
             (*m_opponent)->facing = facing;
             (*m_opponent)->y = y - 60.0;
             (*m_opponent)->x = x - facing * 0x25;
-            (*m_opponent)->pattern = 0x3f;
+            (*m_opponent)->pattern = kHitAirLaunch;
             DealDamage(0x514, 500.0);
             (*m_opponent)->StartPattern();
-            (*m_opponent)->unkc0 = -2.0;
-            (*m_opponent)->unkc8 = -1.0;
+            (*m_opponent)->m_hitVx = -2.0;
+            (*m_opponent)->m_hitVy = -1.0;
         }
         if (frame == 0xb && timer == 0) {
             ay = 0.035;
@@ -3451,7 +3451,7 @@ void CNayuki::UpdatePattern()
             }
         }
         break;
-    case 0xfa:
+    case k236A:
         if (frame == 0 && timer == 0) {
             StopMoving();
         }
@@ -3460,7 +3460,7 @@ void CNayuki::UpdatePattern()
             l50.x = (double)((int)x + facing * 0xe);
             l50.y = (double)((int)y - 0x29);
             l50.scale = 0;
-            l50.unk28 = 1;
+            l50.shadow = 1;
             l50.layer = 0;
             l50.facing = facing;
             SpawnObject(&l50);
@@ -3468,17 +3468,17 @@ void CNayuki::UpdatePattern()
             m_gauge = m_gauge + 0x2d;
         }
         timer++;
-        if (timer >= l4 - (frame == 4) * unk3148 * 3) {
+        if (timer >= l4 - (frame == 4) * m_warmUp * 3) {
             timer = 0;
             frame++;
             m_attackResult = 3;
             if (frame >= x8) {
-                pattern = 0;
+                pattern = kStand;
                 StartPattern();
             }
         }
         break;
-    case 0xfb:
+    case k236B:
         if (frame == 0 && timer == 0) {
             StopMoving();
         }
@@ -3487,7 +3487,7 @@ void CNayuki::UpdatePattern()
             l50.x = (double)((int)x + facing * 0xe);
             l50.y = (double)((int)y - 0x29);
             l50.scale = 0;
-            l50.unk28 = 1;
+            l50.shadow = 1;
             l50.layer = 0;
             l50.facing = facing;
             SpawnObject(&l50);
@@ -3495,25 +3495,25 @@ void CNayuki::UpdatePattern()
             m_gauge = m_gauge + 0x2d;
         }
         timer++;
-        if (timer >= l4 - (frame == 4) * unk3148 * 3) {
+        if (timer >= l4 - (frame == 4) * m_warmUp * 3) {
             timer = 0;
             frame++;
             m_attackResult = 3;
             if (frame >= x8) {
-                pattern = 0;
+                pattern = kStand;
                 StartPattern();
             }
         }
         break;
-    case 0xfc:
+    case k236C:
         if (frame == 0 && timer == 0) {
-            if (unk120 == 0) {
-                unk118 -= 500.0;
+            if (m_rfBlue == 0) {
+                m_rfGauge -= 500.0;
             } else {
-                unk118 -= 250.0;
+                m_rfGauge -= 250.0;
             }
             l50.type = 0x21;
-            l50.unk2c = 0xb;
+            l50.sound = 0xb;
             l50.x = (double)(int)x;
             l50.y = (double)((int)y - 0x32);
             l50.scale = 2;
@@ -3527,7 +3527,7 @@ void CNayuki::UpdatePattern()
             l50.type = 0x193;
             l50.x = (double)((int)x + facing * 0xe);
             l50.y = (double)((int)y - 0x29);
-            l50.unk28 = 1;
+            l50.shadow = 1;
             l50.scale = 0;
             l50.layer = 0;
             l50.facing = facing;
@@ -3536,17 +3536,17 @@ void CNayuki::UpdatePattern()
             m_gauge = m_gauge + 0x2d;
         }
         timer++;
-        if (timer >= l4 - (frame == 4) * unk3148 * 3) {
+        if (timer >= l4 - (frame == 4) * m_warmUp * 3) {
             timer = 0;
             frame++;
             m_attackResult = 3;
             if (frame >= x8) {
-                pattern = 0;
+                pattern = kStand;
                 StartPattern();
             }
         }
         break;
-    case 0xfd:
+    case kUnusedFd:
         if (frame == 0 && timer == 0) {
             vx = 0.0;
             vy = 0.0;
@@ -3573,15 +3573,15 @@ void CNayuki::UpdatePattern()
                 ay = 0.03;
             }
             if (frame >= x8) {
-                pattern = 0x100;
+                pattern = kUnused100;
                 if (m_inputY == 1) {
-                    pattern = 0x102;
+                    pattern = kUnused102;
                 }
                 StartPattern();
             }
         }
         break;
-    case 0xfe:
+    case kUnusedFe:
         if (frame == 0 && timer == 0) {
             vx = 0.0;
             vy = 0.0;
@@ -3607,22 +3607,22 @@ void CNayuki::UpdatePattern()
                 SpawnObject(&l50);
             }
             if (frame >= x8) {
-                pattern = 0x102;
+                pattern = kUnused102;
                 StartPattern();
             }
         }
         break;
-    case 0x100:
+    case kUnused100:
         if (frame == 0 && timer == 0) {
             vx = 2.4;
             m_hitsLeft = 1;
             vy = 0.0;
         }
-        if ((char)Unk40ff70() != 0 && unk313c == 0) {
+        if ((char)AtScreenEdge() != 0 && m_patternVar2 == 0) {
             vx = -0.7;
             vy = -2.0;
             ay = 0.035;
-            pattern = 0x101;
+            pattern = kRebound;
             m_playSound = 0x1f;
             l50.type = 0;
             l50.x = (double)(int)x;
@@ -3630,14 +3630,14 @@ void CNayuki::UpdatePattern()
             l50.scale = 2;
             l50.layer = 1;
             m_game->CreateEffect((EffectDesc*)&l50);
-            unk313c++;
+            m_patternVar2++;
             break;
         }
         if (m_hitsLeft == 0) {
             vx = -0.7;
             vy = -2.0;
             ay = 0.035;
-            pattern = 0x101;
+            pattern = kRebound;
             break;
         }
         timer++;
@@ -3653,7 +3653,7 @@ void CNayuki::UpdatePattern()
             }
         }
         break;
-    case 0x101:
+    case kRebound:
         vy = vy + ay;
         ClearBufferedPress();
         timer++;
@@ -3663,11 +3663,11 @@ void CNayuki::UpdatePattern()
             m_attackResult = 3;
             if (frame >= x8) {
                 StartPattern();
-                pattern = 9;
+                pattern = kFall;
             }
         }
         break;
-    case 0x102:
+    case kUnused102:
         ay = 0.04;
         vy = vy + ay;
         if (frame == 0 && timer == 0) {
@@ -3678,7 +3678,7 @@ void CNayuki::UpdatePattern()
         }
         if (y + vy >= 0.0) {
             y = 0.0;
-            pattern = 0x61;
+            pattern = kKnockdownHittable;
             StopMoving();
             StartPattern();
             break;
@@ -3693,19 +3693,19 @@ void CNayuki::UpdatePattern()
             }
         }
         break;
-    case 0x103:
+    case k5D:
         StopMoving();
         if (frame == 0 && timer == 0) {
             m_playVoice = 4;
         }
         if (frame == 0xa && timer == 0) {
-            unk3148++;
+            m_warmUp++;
         }
         if (frame == 0xa && timer == 0) {
             m_playVoice = 5;
         }
-        if (unk3148 > 9) {
-            unk3148 = 9;
+        if (m_warmUp > 9) {
+            m_warmUp = 9;
         }
         timer++;
         if (timer >= l4) {
@@ -3714,11 +3714,11 @@ void CNayuki::UpdatePattern()
             m_attackResult = 3;
             if (frame >= x8) {
                 StartPattern();
-                pattern = 7;
+                pattern = kStandUp;
             }
         }
         break;
-    case 0x104:
+    case k623A:
         if (frame == 0 && timer == 0) {
             vx = 0.0;
             vy = 0.0;
@@ -3742,33 +3742,33 @@ void CNayuki::UpdatePattern()
         if (timer >= l4) {
             timer = 0;
             frame++;
-            unk313c++;
+            m_patternVar2++;
             m_attackResult = 0;
             if (frame == 4) {
                 m_gauge = m_gauge + 0x2d;
                 vx = 1.8;
                 vy = -1.9;
-                if (unk3148 > 2) {
+                if (m_warmUp > 2) {
                     vx = 2.1;
                     vy = -2.0;
                 }
-                if (unk3148 > 5) {
+                if (m_warmUp > 5) {
                     vx = 2.4;
                     vy = -2.1;
                 }
-                if (unk3148 > 8) {
+                if (m_warmUp > 8) {
                     vx = 3.0;
                     vy = -2.2;
                 }
             }
             if (frame == 5) {
-                if (unk3148 > 2) {
+                if (m_warmUp > 2) {
                     frame = 6;
                 }
-                if (unk3148 > 5) {
+                if (m_warmUp > 5) {
                     frame = 7;
                 }
-                if (unk3148 > 8) {
+                if (m_warmUp > 8) {
                     frame = 8;
                 }
                 break;
@@ -3781,14 +3781,14 @@ void CNayuki::UpdatePattern()
                 vx *= 0.3;
             }
             if (frame >= x8) {
-                pattern = 7;
+                pattern = kStandUp;
                 StopMoving();
                 StartPattern();
                 break;
             }
         }
         break;
-    case 0x105:
+    case k623B:
         if (frame == 0 && timer == 0) {
             vx = 0.0;
             vy = 0.0;
@@ -3808,7 +3808,7 @@ void CNayuki::UpdatePattern()
         if (timer >= l4) {
             timer = 0;
             frame++;
-            unk313c++;
+            m_patternVar2++;
             if (frame == 5 || frame == 9 || frame == 0xd) {
                 m_attackResult = 0;
             }
@@ -3817,11 +3817,11 @@ void CNayuki::UpdatePattern()
                 vx = 1.2;
                 vy = -1.2;
                 ay = 0.03;
-                if (unk3148 > 6) {
+                if (m_warmUp > 6) {
                     vy = -2.2;
                 }
             }
-            if (frame == 8 && unk3148 < 5 || frame == 0xb && unk3148 < 7) {
+            if (frame == 8 && m_warmUp < 5 || frame == 0xb && m_warmUp < 7) {
                 frame = 0xf;
             }
             if (frame == 0xf) {
@@ -3831,22 +3831,22 @@ void CNayuki::UpdatePattern()
                 vx *= 0.5;
             }
             if (frame >= x8) {
-                pattern = 7;
+                pattern = kStandUp;
                 StopMoving();
                 StartPattern();
                 break;
             }
         }
         break;
-    case 0x106:
+    case k623C:
         if (frame == 0 && timer == 0) {
-            if (unk120 == 0) {
-                unk118 -= 500.0;
+            if (m_rfBlue == 0) {
+                m_rfGauge -= 500.0;
             } else {
-                unk118 -= 250.0;
+                m_rfGauge -= 250.0;
             }
             l50.type = 0x21;
-            l50.unk2c = 0xb;
+            l50.sound = 0xb;
             l50.x = (double)(int)x;
             l50.y = (double)((int)y - 0x32);
             l50.scale = 2;
@@ -3855,7 +3855,7 @@ void CNayuki::UpdatePattern()
             vx = 0.0;
             vy = 0.0;
             ax = 0.0;
-            m_hitsLeft = unk3148 + 1;
+            m_hitsLeft = m_warmUp + 1;
         }
         if (frame == 0 && timer == 0) {
             vx = 0.0;
@@ -3874,7 +3874,7 @@ void CNayuki::UpdatePattern()
         if (timer >= l4) {
             timer = 0;
             frame++;
-            unk313c++;
+            m_patternVar2++;
             if (frame == 5 || frame == 9 || frame == 0xd) {
                 m_attackResult = 0;
             }
@@ -3883,7 +3883,7 @@ void CNayuki::UpdatePattern()
                 vx = 0.8;
                 vy = -1.5;
                 ay = 0.035;
-                unk13c = unk3148 * 0xc + 0x1e;
+                m_invulTime = m_warmUp * 0xc + 0x1e;
             }
             if (frame == 7 || frame == 0xb) {
                 vy = -1.4;
@@ -3891,29 +3891,29 @@ void CNayuki::UpdatePattern()
             if (frame == 0xc) {
                 frame = 4;
             }
-            if ((frame == 0xb || frame == 8) && unk3138 > unk3148) {
+            if ((frame == 0xb || frame == 8) && m_patternVar1 > m_warmUp) {
                 frame = 0xc;
             }
             if (frame == 0xb || frame == 8) {
-                unk3138++;
+                m_patternVar1++;
             }
             if (frame == 0xf && vy < 0.0) {
                 vy *= 0.5;
             }
             if (frame >= x8) {
-                pattern = 7;
+                pattern = kStandUp;
                 StopMoving();
                 StartPattern();
                 break;
             }
         }
         break;
-    case 0x107:
+    case kUnused107:
         if (frame == 0 && timer == 0) {
             vx = 0.0;
             vy = 0.0;
             ax = 0.0;
-            m_hitsLeft = unk3148 + 6;
+            m_hitsLeft = m_warmUp + 6;
         }
         if (y < 0.0) {
             vy = vy + ay;
@@ -3938,17 +3938,17 @@ void CNayuki::UpdatePattern()
         if (timer >= l4) {
             timer = 0;
             frame++;
-            unk313c++;
-            if (unk313c > 2) {
+            m_patternVar2++;
+            if (m_patternVar2 > 2) {
                 m_attackResult = 0;
-                unk313c = 0;
+                m_patternVar2 = 0;
             }
             if (frame == 5) {
                 m_gauge = m_gauge + 0x2d;
                 vx = 1.8;
                 vy = -1.7;
                 ay = 0.035;
-                if (unk3138 == 1) {
+                if (m_patternVar1 == 1) {
                     vx = 0.6;
                     vy = -3.2;
                     ay = 0.024;
@@ -3958,13 +3958,13 @@ void CNayuki::UpdatePattern()
                 frame = 5;
             }
             if (frame >= x8) {
-                pattern = 7;
+                pattern = kStandUp;
                 StopMoving();
                 StartPattern();
             }
         }
         break;
-    case 0x108:
+    case k41236A:
         if (frame == 0 && timer == 0) {
             vx = 0.0;
             vy = 0.0;
@@ -3981,12 +3981,12 @@ void CNayuki::UpdatePattern()
             m_playSound = 0x15;
         }
         timer++;
-        if (timer >= 0x18 && unk3148 > 3 && frame == 0xb) {
+        if (timer >= 0x18 && m_warmUp > 3 && frame == 0xb) {
             frame++;
             timer = 0;
             m_attackResult = 0;
         }
-        if (timer >= l4 || timer >= l4 - unk3148 * 3 && frame == 0xb || timer >= l4 - 3 && frame == 1 && unk3148 > 2 || timer >= l4 - 3 && frame == 2 && unk3148 > 4) {
+        if (timer >= l4 || timer >= l4 - m_warmUp * 3 && frame == 0xb || timer >= l4 - 3 && frame == 1 && m_warmUp > 2 || timer >= l4 - 3 && frame == 2 && m_warmUp > 4) {
             timer = 0;
             frame++;
             if (frame < 0xb) {
@@ -3995,27 +3995,27 @@ void CNayuki::UpdatePattern()
             if (frame == 4) {
                 m_gauge = m_gauge + 0x2d;
                 vx = 2.2;
-                if (unk3138 == 1) {
+                if (m_patternVar1 == 1) {
                     vx = 3.4;
                 }
             }
-            if (frame == 7 && unk313c < 2) {
+            if (frame == 7 && m_patternVar2 < 2) {
                 frame = 4;
-                unk313c++;
+                m_patternVar2++;
             }
-            if (frame == 7 && unk3138 == 1 && unk313c < 4) {
+            if (frame == 7 && m_patternVar1 == 1 && m_patternVar2 < 4) {
                 frame = 4;
-                unk313c++;
+                m_patternVar2++;
             }
             if (frame >= x8) {
-                pattern = 7;
+                pattern = kStandUp;
                 StopMoving();
                 StartPattern();
                 break;
             }
         }
         break;
-    case 0x109:
+    case k41236B:
         if (frame == 0 && timer == 0) {
             vx = 0.0;
             vy = 0.0;
@@ -4032,12 +4032,12 @@ void CNayuki::UpdatePattern()
             m_playSound = 0x15;
         }
         timer++;
-        if (timer >= 0x18 && unk3148 > 3 && frame == 0xb) {
+        if (timer >= 0x18 && m_warmUp > 3 && frame == 0xb) {
             frame++;
             timer = 0;
             m_attackResult = 0;
         }
-        if (timer >= l4 || timer >= l4 - unk3148 * 3 && frame == 0xb || timer >= l4 - 3 && frame == 1 && unk3148 > 2 || timer >= l4 - 3 && frame == 2 && unk3148 > 4) {
+        if (timer >= l4 || timer >= l4 - m_warmUp * 3 && frame == 0xb || timer >= l4 - 3 && frame == 1 && m_warmUp > 2 || timer >= l4 - 3 && frame == 2 && m_warmUp > 4) {
             timer = 0;
             frame++;
             if (frame < 0xb) {
@@ -4047,31 +4047,31 @@ void CNayuki::UpdatePattern()
                 m_gauge = m_gauge + 0x2d;
                 vx = -2.2;
             }
-            if (frame == 7 && unk313c < 2) {
+            if (frame == 7 && m_patternVar2 < 2) {
                 frame = 4;
-                unk313c++;
+                m_patternVar2++;
             }
-            if (frame == 7 && unk3138 == 1 && unk313c < 4) {
+            if (frame == 7 && m_patternVar1 == 1 && m_patternVar2 < 4) {
                 frame = 4;
-                unk313c++;
+                m_patternVar2++;
             }
             if (frame >= x8) {
-                pattern = 7;
+                pattern = kStandUp;
                 StopMoving();
                 StartPattern();
                 break;
             }
         }
         break;
-    case 0x10a:
+    case k41236C:
         if (frame == 0 && timer == 0) {
-            if (unk120 == 0) {
-                unk118 -= 500.0;
+            if (m_rfBlue == 0) {
+                m_rfGauge -= 500.0;
             } else {
-                unk118 -= 250.0;
+                m_rfGauge -= 250.0;
             }
             l50.type = 0x21;
-            l50.unk2c = 0xb;
+            l50.sound = 0xb;
             l50.x = (double)(int)x;
             l50.y = (double)((int)y - 0x32);
             l50.scale = 2;
@@ -4080,7 +4080,7 @@ void CNayuki::UpdatePattern()
             vx = 0.0;
             vy = 0.0;
             ax = 0.0;
-            m_hitsLeft = unk3148 + 1;
+            m_hitsLeft = m_warmUp + 1;
         }
         if (frame > 9) {
             vx -= 0.3;
@@ -4093,7 +4093,7 @@ void CNayuki::UpdatePattern()
             m_playSound = 0x15;
         }
         timer++;
-        if (timer >= l4 || timer >= l4 - unk3148 * 3 && frame == 0xb || timer >= l4 - 3 && frame == 1 && unk3148 > 2 || timer >= l4 - 3 && frame == 2 && unk3148 > 4) {
+        if (timer >= l4 || timer >= l4 - m_warmUp * 3 && frame == 0xb || timer >= l4 - 3 && frame == 1 && m_warmUp > 2 || timer >= l4 - 3 && frame == 2 && m_warmUp > 4) {
             timer = 0;
             frame++;
             if (frame < 0xb) {
@@ -4103,31 +4103,31 @@ void CNayuki::UpdatePattern()
                 m_gauge = m_gauge + 0x2d;
                 vx = 2.5;
             }
-            if (frame == 7 && unk313c < 2) {
+            if (frame == 7 && m_patternVar2 < 2) {
                 frame = 4;
-                unk313c++;
+                m_patternVar2++;
             }
-            if (frame == 7 && unk3138 == 1 && unk313c < 4) {
+            if (frame == 7 && m_patternVar1 == 1 && m_patternVar2 < 4) {
                 frame = 4;
-                unk313c++;
+                m_patternVar2++;
             }
             if (frame >= x8) {
-                pattern = 7;
+                pattern = kStandUp;
                 StopMoving();
                 StartPattern();
                 break;
             }
         }
         break;
-    case 0x10b:
+    case kUnused10b:
         if (frame == 0 && timer == 0) {
-            if (unk120 == 0) {
-                unk118 -= 500.0;
+            if (m_rfBlue == 0) {
+                m_rfGauge -= 500.0;
             } else {
-                unk118 -= 250.0;
+                m_rfGauge -= 250.0;
             }
             l50.type = 0x21;
-            l50.unk2c = 0xb;
+            l50.sound = 0xb;
             l50.x = (double)(int)x;
             l50.y = (double)((int)y - 0x32);
             l50.scale = 2;
@@ -4158,84 +4158,84 @@ void CNayuki::UpdatePattern()
                 m_gauge = m_gauge + 0x2d;
                 vx = 2.8;
             }
-            if (frame == 7 && unk313c < 2) {
+            if (frame == 7 && m_patternVar2 < 2) {
                 frame = 4;
-                unk313c++;
+                m_patternVar2++;
             }
-            if (frame == 7 && unk3138 == 1 && unk313c < 4) {
+            if (frame == 7 && m_patternVar1 == 1 && m_patternVar2 < 4) {
                 frame = 4;
-                unk313c++;
+                m_patternVar2++;
             }
             if (frame >= x8) {
-                pattern = 7;
+                pattern = kStandUp;
                 StopMoving();
                 StartPattern();
                 break;
             }
         }
         break;
-    case 0x10c:
+    case k214Stance:
         if (frame == 0 && timer == 0) {
             StopMoving();
         }
         if (frame == 7) {
-            if (m_command == 1) {
+            if (m_command == kCmdDashRight) {
                 StartPattern();
                 ClearBufferedPress();
-                pattern = 0xa3;
+                pattern = kDashForward;
                 if (facing == -1) {
-                    pattern = 0xa4;
+                    pattern = kDashBack;
                 }
                 break;
             }
-            if (m_command == 0) {
+            if (m_command == kCmdDashLeft) {
                 StartPattern();
                 ClearBufferedPress();
-                pattern = 0xa4;
+                pattern = kDashBack;
                 if (facing == -1) {
-                    pattern = 0xa3;
+                    pattern = kDashForward;
                 }
                 break;
             }
-            if (m_command == 0xa && unk3148 > 0) {
+            if (m_command == kCmd236A && m_warmUp > 0) {
                 StartPattern();
                 ClearBufferedPress();
-                pattern = 0xfa;
+                pattern = k236A;
                 break;
             }
-            if (m_command == 0xb && unk3148 > 0) {
+            if (m_command == kCmd236B && m_warmUp > 0) {
                 StartPattern();
                 ClearBufferedPress();
-                pattern = 0xfb;
+                pattern = k236B;
                 break;
             }
-            if (m_command == 0x14 && unk3148 > 0) {
+            if (m_command == kCmd623A && m_warmUp > 0) {
                 StartPattern();
                 ClearBufferedPress();
-                pattern = 0x104;
+                pattern = k623A;
                 break;
             }
             if (m_pressA == 1) {
                 StartPattern();
                 ClearBufferedPress();
-                pattern = 0x113;
-                if (unk3148 > 4) {
-                    pattern = 0x10d;
+                pattern = kStanceA;
+                if (m_warmUp > 4) {
+                    pattern = kStanceAWarm;
                 }
                 break;
             }
             if (m_pressB == 1) {
                 StartPattern();
                 ClearBufferedPress();
-                pattern = 0x112;
+                pattern = kStanceB;
                 break;
             }
             if (m_pressC == 1) {
                 StartPattern();
                 ClearBufferedPress();
-                pattern = 0x114;
+                pattern = kStanceC;
                 if (m_inputY == 1) {
-                    pattern = 0x119;
+                    pattern = kStance2C;
                 }
                 break;
             }
@@ -4243,29 +4243,29 @@ void CNayuki::UpdatePattern()
                 if (m_inputX == facing) {
                     StartPattern();
                     ClearBufferedPress();
-                    pattern = 0x115;
-                    if (unk3148 > 4) {
-                        pattern = 0x115;
+                    pattern = kStance6D;
+                    if (m_warmUp > 4) {
+                        pattern = kStance6D;
                     }
                     break;
                 }
                 if (m_inputX == -facing) {
                     StartPattern();
                     ClearBufferedPress();
-                    pattern = 0x116;
-                    if (unk3148 > 4) {
-                        pattern = 0x116;
+                    pattern = kStance4D;
+                    if (m_warmUp > 4) {
+                        pattern = kStance4D;
                     }
                     break;
                 }
                 StartPattern();
                 ClearBufferedPress();
-                pattern = 0x10f;
+                pattern = kStanceD;
                 if (m_inputY == 1) {
-                    pattern = 0x118;
+                    pattern = k2D;
                 }
-                if (unk3148 == 9) {
-                    pattern = 0x10c;
+                if (m_warmUp == 9) {
+                    pattern = k214Stance;
                     frame = 8;
                 }
                 break;
@@ -4275,16 +4275,16 @@ void CNayuki::UpdatePattern()
         if (timer >= l4) {
             timer = 0;
             frame++;
-            unk313c++;
+            m_patternVar2++;
             if (frame >= x8) {
-                pattern = 0;
+                pattern = kStand;
                 StopMoving();
                 StartPattern();
                 break;
             }
         }
         break;
-    case 0x10d:
+    case kStanceAWarm:
         if (frame == 0 && timer == 0) {
             StopMoving();
             m_hitsLeft = 1;
@@ -4321,14 +4321,14 @@ void CNayuki::UpdatePattern()
                 frame--;
             }
             if (frame >= x8) {
-                pattern = 0;
+                pattern = kStand;
                 FaceOpponent();
                 StopMoving();
                 StartPattern();
             }
         }
         break;
-    case 0x10e:
+    case kUnused10e:
         if (frame == 0 && timer == 0) {
             StopMoving();
             m_hitsLeft = 0;
@@ -4342,7 +4342,7 @@ void CNayuki::UpdatePattern()
         }
         if (frame > 8 && vy + y > 0.0) {
             StartPattern();
-            pattern = 0xd;
+            pattern = kLand;
             break;
         }
         timer++;
@@ -4369,16 +4369,16 @@ void CNayuki::UpdatePattern()
             }
         }
         break;
-    case 0x10f:
+    case kStanceD:
         StopMoving();
         if (frame == 5 && timer == 0) {
             m_playVoice = 5;
         }
         if (frame == 5 && timer == 0) {
-            unk3148++;
+            m_warmUp++;
         }
-        if (unk3148 > 9) {
-            unk3148 = 9;
+        if (m_warmUp > 9) {
+            m_warmUp = 9;
         }
         timer++;
         if (timer >= l4) {
@@ -4387,11 +4387,11 @@ void CNayuki::UpdatePattern()
             m_attackResult = 3;
             if (frame >= x8) {
                 StartPattern();
-                pattern = 7;
+                pattern = kStandUp;
             }
         }
         break;
-    case 0x110:
+    case kUnused110:
         if (frame == 0 && timer == 0) {
             vx = 1.4;
             vy = 0.0;
@@ -4410,36 +4410,36 @@ void CNayuki::UpdatePattern()
             if (m_pressA == 1) {
                 StartPattern();
                 ClearBufferedPress();
-                pattern = 0x113;
-                if (unk3148 > 4) {
-                    pattern = 0x10d;
+                pattern = kStanceA;
+                if (m_warmUp > 4) {
+                    pattern = kStanceAWarm;
                 }
                 break;
             }
             if (m_pressB == 1) {
                 StartPattern();
                 ClearBufferedPress();
-                pattern = 0x112;
+                pattern = kStanceB;
                 break;
             }
             if (m_pressC == 1) {
                 StartPattern();
                 ClearBufferedPress();
-                pattern = 0x114;
+                pattern = kStanceC;
                 if (m_inputY == 1) {
-                    pattern = 0x119;
+                    pattern = kStance2C;
                 }
                 break;
             }
             if (m_pressD == 1) {
                 StartPattern();
                 ClearBufferedPress();
-                pattern = 0x10f;
+                pattern = kStanceD;
                 if (m_inputY == 1) {
-                    pattern = 0x118;
+                    pattern = k2D;
                 }
-                if (unk3148 == 9) {
-                    pattern = 0x10c;
+                if (m_warmUp == 9) {
+                    pattern = k214Stance;
                     frame = 8;
                 }
                 break;
@@ -4450,12 +4450,12 @@ void CNayuki::UpdatePattern()
             timer = 0;
             frame++;
             m_attackResult = 3;
-            if (frame == 4 && unk313c < 3) {
+            if (frame == 4 && m_patternVar2 < 3) {
                 frame = frame - 4;
-                unk313c++;
+                m_patternVar2++;
             }
             if (frame >= x8) {
-                pattern = 0x10c;
+                pattern = k214Stance;
                 StopMoving();
                 StartPattern();
                 frame = 8;
@@ -4463,7 +4463,7 @@ void CNayuki::UpdatePattern()
             }
         }
         break;
-    case 0x111:
+    case kUnused111:
         if (frame == 0 && timer == 0) {
             vx = -1.4;
             vy = 0.0;
@@ -4482,36 +4482,36 @@ void CNayuki::UpdatePattern()
             if (m_pressA == 1) {
                 StartPattern();
                 ClearBufferedPress();
-                pattern = 0x113;
-                if (unk3148 > 4) {
-                    pattern = 0x10d;
+                pattern = kStanceA;
+                if (m_warmUp > 4) {
+                    pattern = kStanceAWarm;
                 }
                 break;
             }
             if (m_pressB == 1) {
                 StartPattern();
                 ClearBufferedPress();
-                pattern = 0x112;
+                pattern = kStanceB;
                 break;
             }
             if (m_pressC == 1) {
                 StartPattern();
                 ClearBufferedPress();
-                pattern = 0x114;
+                pattern = kStanceC;
                 if (m_inputY == 1) {
-                    pattern = 0x119;
+                    pattern = kStance2C;
                 }
                 break;
             }
             if (m_pressD == 1) {
                 StartPattern();
                 ClearBufferedPress();
-                pattern = 0x10f;
+                pattern = kStanceD;
                 if (m_inputY == 1) {
-                    pattern = 0x118;
+                    pattern = k2D;
                 }
-                if (unk3148 == 9) {
-                    pattern = 0x10c;
+                if (m_warmUp == 9) {
+                    pattern = k214Stance;
                     frame = 8;
                 }
                 break;
@@ -4522,12 +4522,12 @@ void CNayuki::UpdatePattern()
             timer = 0;
             frame++;
             m_attackResult = 3;
-            if (frame == 4 && unk313c < 3) {
+            if (frame == 4 && m_patternVar2 < 3) {
                 frame = frame - 4;
-                unk313c++;
+                m_patternVar2++;
             }
             if (frame >= x8) {
-                pattern = 0x10c;
+                pattern = k214Stance;
                 StopMoving();
                 StartPattern();
                 frame = 8;
@@ -4535,12 +4535,12 @@ void CNayuki::UpdatePattern()
             }
         }
         break;
-    case 0x112:
+    case kStanceB:
         if (frame == 0 && timer == 0) {
             StopMoving();
         }
         timer++;
-        if (timer >= l4 - (frame == 9) * unk3148 * 3) {
+        if (timer >= l4 - (frame == 9) * m_warmUp * 3) {
             timer = 0;
             frame++;
             m_attackResult = 0;
@@ -4555,7 +4555,7 @@ void CNayuki::UpdatePattern()
                 l50.x = (double)((int)x + facing * 0x1e);
                 l50.y = (double)((int)y - 0x32);
                 l50.scale = 0;
-                l50.unk28 = 1;
+                l50.shadow = 1;
                 l50.layer = 0;
                 l50.facing = facing;
                 SpawnObject(&l50);
@@ -4563,12 +4563,12 @@ void CNayuki::UpdatePattern()
                 m_gauge = m_gauge + 0x2d;
             }
             if (frame >= x8) {
-                pattern = 0;
+                pattern = kStand;
                 StartPattern();
             }
         }
         break;
-    case 0x113:
+    case kStanceA:
         if (frame == 0 && timer == 0) {
             StopMoving();
             m_hitsLeft = 1;
@@ -4605,14 +4605,14 @@ void CNayuki::UpdatePattern()
                 frame--;
             }
             if (frame >= x8) {
-                pattern = 0;
+                pattern = kStand;
                 FaceOpponent();
                 StopMoving();
                 StartPattern();
             }
         }
         break;
-    case 0x114:
+    case kStanceC:
         if (frame == 0 && timer == 0) {
             StopMoving();
             m_hitsLeft = 0;
@@ -4626,11 +4626,11 @@ void CNayuki::UpdatePattern()
         }
         if (frame > 8 && vy + y > 0.0) {
             StartPattern();
-            pattern = 0xd;
+            pattern = kLand;
             break;
         }
         timer++;
-        if (timer >= l4 || frame == 1 && timer == 0x27 - unk3148 * 3) {
+        if (timer >= l4 || frame == 1 && timer == 0x27 - m_warmUp * 3) {
             timer = 0;
             frame++;
             if (frame == 5) {
@@ -4653,7 +4653,7 @@ void CNayuki::UpdatePattern()
             }
         }
         break;
-    case 0x115:
+    case kStance6D:
         if (frame == 0 && timer == 0) {
             vx = 1.4;
             vy = 0.0;
@@ -4672,36 +4672,36 @@ void CNayuki::UpdatePattern()
             if (m_pressA == 1) {
                 StartPattern();
                 ClearBufferedPress();
-                pattern = 0x113;
-                if (unk3148 > 4) {
-                    pattern = 0x10d;
+                pattern = kStanceA;
+                if (m_warmUp > 4) {
+                    pattern = kStanceAWarm;
                 }
                 break;
             }
             if (m_pressB == 1) {
                 StartPattern();
                 ClearBufferedPress();
-                pattern = 0x112;
+                pattern = kStanceB;
                 break;
             }
             if (m_pressC == 1) {
                 StartPattern();
                 ClearBufferedPress();
-                pattern = 0x114;
+                pattern = kStanceC;
                 if (m_inputY == 1) {
-                    pattern = 0x119;
+                    pattern = kStance2C;
                 }
                 break;
             }
             if (m_pressD == 1) {
                 StartPattern();
                 ClearBufferedPress();
-                pattern = 0x10f;
+                pattern = kStanceD;
                 if (m_inputY == 1) {
-                    pattern = 0x118;
+                    pattern = k2D;
                 }
-                if (unk3148 == 9) {
-                    pattern = 0x10c;
+                if (m_warmUp == 9) {
+                    pattern = k214Stance;
                     frame = 8;
                 }
                 break;
@@ -4712,12 +4712,12 @@ void CNayuki::UpdatePattern()
             timer = 0;
             frame++;
             m_attackResult = 3;
-            if (frame == 4 && unk313c < 3) {
+            if (frame == 4 && m_patternVar2 < 3) {
                 frame = frame - 4;
-                unk313c++;
+                m_patternVar2++;
             }
             if (frame >= x8) {
-                pattern = 0x10c;
+                pattern = k214Stance;
                 StopMoving();
                 StartPattern();
                 frame = 8;
@@ -4725,7 +4725,7 @@ void CNayuki::UpdatePattern()
             }
         }
         break;
-    case 0x116:
+    case kStance4D:
         if (frame == 0 && timer == 0) {
             vx = -1.4;
             vy = 0.0;
@@ -4744,36 +4744,36 @@ void CNayuki::UpdatePattern()
             if (m_pressA == 1) {
                 StartPattern();
                 ClearBufferedPress();
-                pattern = 0x113;
-                if (unk3148 > 4) {
-                    pattern = 0x10d;
+                pattern = kStanceA;
+                if (m_warmUp > 4) {
+                    pattern = kStanceAWarm;
                 }
                 break;
             }
             if (m_pressB == 1) {
                 StartPattern();
                 ClearBufferedPress();
-                pattern = 0x112;
+                pattern = kStanceB;
                 break;
             }
             if (m_pressC == 1) {
                 StartPattern();
                 ClearBufferedPress();
-                pattern = 0x114;
+                pattern = kStanceC;
                 if (m_inputY == 1) {
-                    pattern = 0x119;
+                    pattern = kStance2C;
                 }
                 break;
             }
             if (m_pressD == 1) {
                 StartPattern();
                 ClearBufferedPress();
-                pattern = 0x10f;
+                pattern = kStanceD;
                 if (m_inputY == 1) {
-                    pattern = 0x118;
+                    pattern = k2D;
                 }
-                if (unk3148 == 9) {
-                    pattern = 0x10c;
+                if (m_warmUp == 9) {
+                    pattern = k214Stance;
                     frame = 8;
                 }
                 break;
@@ -4784,12 +4784,12 @@ void CNayuki::UpdatePattern()
             timer = 0;
             frame++;
             m_attackResult = 3;
-            if (frame == 4 && unk313c < 3) {
+            if (frame == 4 && m_patternVar2 < 3) {
                 frame = frame - 4;
-                unk313c++;
+                m_patternVar2++;
             }
             if (frame >= x8) {
-                pattern = 0x10c;
+                pattern = k214Stance;
                 StopMoving();
                 StartPattern();
                 frame = 8;
@@ -4797,25 +4797,25 @@ void CNayuki::UpdatePattern()
             }
         }
         break;
-    case 0x12c:
+    case k236236A:
         if (frame == 0 && timer == 0) {
             vx = 0.0;
             vy = 0.0;
             ay = 0.0;
         }
         if (frame < 3) {
-            Unk410a80(0x32, 3);
+            FocusCameraY(0x32, 3);
         }
         if (frame == 2 && timer == 0) {
-            unk14c = 0x78;
+            m_freezeTime = 0x78;
             m_gauge = m_gauge - 0x3e8;
             FillBackground(0xb0, 3);
             l50.type = 0x44;
-            l50.unk2c = 0x13;
+            l50.sound = 0x13;
             l50.x = (double)(int)x;
             l50.y = (double)((int)y - 0x28);
             l50.scale = 2;
-            l50.unk0 = 1;
+            l50.keep = 1;
             l50.layer = 1;
             m_game->CreateEffect((EffectDesc*)&l50);
         }
@@ -4823,29 +4823,29 @@ void CNayuki::UpdatePattern()
             unkf2 = 0xa;
         }
         if (frame == 4 && timer == 0) {
-            l50.unk0 = 1;
+            l50.keep = 1;
             l50.type = 0x196;
             l50.x = (double)((int)x + facing * 0xe);
             l50.y = (double)((int)y - 0x29);
             l50.scale = 0;
             l50.layer = 0;
-            l50.unk28 = 1;
+            l50.shadow = 1;
             l50.facing = facing;
             SpawnObject(&l50);
             m_playVoice = 0;
         }
         timer++;
-        if (timer >= l4 || frame == 5 && timer == l4 - unk3148 * 6) {
+        if (timer >= l4 || frame == 5 && timer == l4 - m_warmUp * 6) {
             timer = 0;
             frame++;
             m_attackResult = 0;
             if (frame >= x8) {
-                pattern = 0;
+                pattern = kStand;
                 StartPattern();
             }
         }
         break;
-    case 0x117:
+    case k236D:
         if (frame == 0 && timer == 0) {
             StopMoving();
         }
@@ -4854,7 +4854,7 @@ void CNayuki::UpdatePattern()
             l50.x = (double)((int)x + facing * 0xe);
             l50.y = (double)((int)y - 0x29);
             l50.scale = 0;
-            l50.unk28 = 1;
+            l50.shadow = 1;
             l50.layer = 0;
             l50.facing = facing;
             SpawnObject(&l50);
@@ -4862,17 +4862,17 @@ void CNayuki::UpdatePattern()
             m_gauge = m_gauge + 0x2d;
         }
         timer++;
-        if (timer >= l4 - (frame == 4) * unk3148 * 3) {
+        if (timer >= l4 - (frame == 4) * m_warmUp * 3) {
             timer = 0;
             frame++;
             m_attackResult = 3;
             if (frame >= x8) {
-                pattern = 0;
+                pattern = kStand;
                 StartPattern();
             }
         }
         break;
-    case 0x118:
+    case k2D:
         StopMoving();
         if (frame == 0 && timer == 0) {
             m_playVoice = 4;
@@ -4884,20 +4884,20 @@ void CNayuki::UpdatePattern()
             m_attackResult = 3;
             if (frame >= x8) {
                 StartPattern();
-                pattern = 0;
+                pattern = kStand;
             }
         }
         break;
-    case 0x119:
-        if (unk158 == 0) {
+    case kStance2C:
+        if (m_dashMomentum == 0) {
             vx = 0.0;
             vy = 0.0;
         }
-        if (vx > 0.0 && unk158 == 1) {
+        if (vx > 0.0 && m_dashMomentum == 1) {
             vx -= 0.03;
         } else {
             vx = 0.0;
-            unk158 = 0;
+            m_dashMomentum = 0;
         }
         if (frame == 3 && timer == 0) {
             m_gauge = m_gauge + 0x19;
@@ -4912,34 +4912,34 @@ void CNayuki::UpdatePattern()
                 m_attackResult = 0;
             }
             if (frame >= x8) {
-                pattern = 0;
+                pattern = kStand;
                 if (m_inputY == 1) {
-                    pattern = 3;
+                    pattern = kCrouch;
                 }
                 FaceOpponent();
                 StartPattern();
             }
         }
         break;
-    case 0x12d:
+    case k236236B:
         if (frame == 0 && timer == 0) {
             vx = 0.0;
             vy = 0.0;
             ay = 0.0;
         }
         if (frame < 3) {
-            Unk410a80(0x32, 3);
+            FocusCameraY(0x32, 3);
         }
         if (frame == 2 && timer == 0) {
-            unk14c = 0x78;
+            m_freezeTime = 0x78;
             m_gauge = m_gauge - 0x7d0;
             FillBackground(0xb0, 3);
             l50.type = 0x45;
-            l50.unk2c = 5;
+            l50.sound = 5;
             l50.x = (double)(int)x;
             l50.y = (double)((int)y - 0x28);
             l50.scale = 2;
-            l50.unk0 = 1;
+            l50.keep = 1;
             l50.layer = 1;
             m_game->CreateEffect((EffectDesc*)&l50);
         }
@@ -4947,91 +4947,91 @@ void CNayuki::UpdatePattern()
             unkf2 = 0xa;
         }
         if (frame == 4 && timer == 0) {
-            l50.unk0 = 1;
+            l50.keep = 1;
             l50.type = 0x197;
             l50.x = (double)((int)x + facing * 0xe);
             l50.y = (double)((int)y - 0x29);
             l50.scale = 0;
             l50.layer = 0;
-            l50.unk28 = 1;
+            l50.shadow = 1;
             l50.facing = facing;
             SpawnObject(&l50);
             m_playVoice = 0;
         }
         timer++;
-        if (timer >= l4 || frame == 5 && timer == l4 - unk3148 * 6) {
+        if (timer >= l4 || frame == 5 && timer == l4 - m_warmUp * 6) {
             timer = 0;
             frame++;
             m_attackResult = 0;
             if (frame >= x8) {
-                pattern = 0;
+                pattern = kStand;
                 StartPattern();
             }
         }
         break;
-    case 0x12e:
+    case k236236C:
         if (frame == 0 && timer == 0) {
             vx = 0.0;
             vy = 0.0;
             ay = 0.0;
         }
         if (frame < 3) {
-            Unk410a80(0x32, 3);
+            FocusCameraY(0x32, 3);
         }
         if (frame == 2 && timer == 0) {
-            unk14c = 0x78;
+            m_freezeTime = 0x78;
             m_gauge = m_gauge - 0xbb8;
             FillBackground(0xb0, 3);
             l50.type = 0x46;
-            l50.unk2c = 0x40;
+            l50.sound = 0x40;
             l50.x = (double)(int)x;
             l50.y = (double)((int)y - 0x28);
             l50.scale = 2;
-            l50.unk0 = 1;
+            l50.keep = 1;
             l50.layer = 1;
             m_game->CreateEffect((EffectDesc*)&l50);
             m_playSound = 0x25;
         }
         if (frame > 2) {
-            m_game->Unk4080c0(0xf);
+            m_game->FlashNegative(0xf);
         }
         if (frame == 4 && timer == 0) {
-            l50.unk0 = 1;
+            l50.keep = 1;
             l50.type = 0x198;
             l50.x = (double)((int)x + facing * 0xe);
             l50.y = (double)((int)y - 0x29);
             l50.scale = 0;
             l50.layer = 0;
-            l50.unk28 = 1;
+            l50.shadow = 1;
             l50.facing = facing;
             SpawnObject(&l50);
             m_playVoice = 0;
         }
         timer++;
-        if (timer >= l4 || frame == 5 && timer == l4 - unk3148 * 6) {
+        if (timer >= l4 || frame == 5 && timer == l4 - m_warmUp * 6) {
             timer = 0;
             frame++;
             m_attackResult = 0;
             if (frame >= x8) {
-                pattern = 0;
+                pattern = kStand;
                 StartPattern();
             }
         }
         break;
-    case 0x12f:
+    case k214214A:
         if (frame == 0 && timer == 0) {
             StopMoving();
         }
         if (frame == 3 && timer == 0) {
-            unk14c = 0x78;
+            m_freezeTime = 0x78;
             m_gauge = m_gauge - 0x3e8;
             FillBackground(0xb0, 3);
             l50.type = 0x44;
-            l50.unk2c = 0x13;
+            l50.sound = 0x13;
             l50.x = (double)(int)x;
             l50.y = (double)((int)y - 0x28);
             l50.scale = 2;
-            l50.unk0 = 1;
+            l50.keep = 1;
             l50.layer = 1;
             m_game->CreateEffect((EffectDesc*)&l50);
         }
@@ -5067,7 +5067,7 @@ void CNayuki::UpdatePattern()
             frame++;
             m_attackResult = 0;
             if (frame == 6) {
-                l50.unk0 = 1;
+                l50.keep = 1;
                 l50.type = 0x19d;
                 l50.x = (double)(int)x;
                 l50.y = (double)((int)y - 0x50);
@@ -5080,9 +5080,9 @@ void CNayuki::UpdatePattern()
                 SpawnObject(&l50);
             }
             if (frame == 8) {
-                if (unk3138 < 0xe) {
+                if (m_patternVar1 < 0xe) {
                     frame = frame - 2;
-                    unk3138++;
+                    m_patternVar1++;
                 } else {
                     ay = 0.015;
                 }
@@ -5091,26 +5091,26 @@ void CNayuki::UpdatePattern()
                 frame = frame - 2;
             }
             if (frame >= x8) {
-                pattern = 7;
+                pattern = kStandUp;
                 FaceOpponent();
                 StartPattern();
             }
         }
         break;
-    case 0x130:
+    case k214214B:
         if (frame == 0 && timer == 0) {
             StopMoving();
         }
         if (frame == 3 && timer == 0) {
-            unk14c = 0x78;
+            m_freezeTime = 0x78;
             m_gauge = m_gauge - 0x7d0;
             FillBackground(0xb0, 3);
             l50.type = 0x45;
-            l50.unk2c = 5;
+            l50.sound = 5;
             l50.x = (double)(int)x;
             l50.y = (double)((int)y - 0x28);
             l50.scale = 2;
-            l50.unk0 = 1;
+            l50.keep = 1;
             l50.layer = 1;
             m_game->CreateEffect((EffectDesc*)&l50);
         }
@@ -5146,7 +5146,7 @@ void CNayuki::UpdatePattern()
             frame++;
             m_attackResult = 0;
             if (frame == 6) {
-                l50.unk0 = 1;
+                l50.keep = 1;
                 l50.type = 0x19d;
                 l50.x = (double)(int)x;
                 l50.y = (double)((int)y - 0x50);
@@ -5159,9 +5159,9 @@ void CNayuki::UpdatePattern()
                 SpawnObject(&l50);
             }
             if (frame == 8) {
-                if (unk3138 < 0x14) {
+                if (m_patternVar1 < 0x14) {
                     frame = frame - 2;
-                    unk3138++;
+                    m_patternVar1++;
                 } else {
                     ay = 0.015;
                 }
@@ -5170,32 +5170,32 @@ void CNayuki::UpdatePattern()
                 frame = frame - 2;
             }
             if (frame >= x8) {
-                pattern = 7;
+                pattern = kStandUp;
                 FaceOpponent();
                 StartPattern();
             }
         }
         break;
-    case 0x131:
+    case k214214C:
         if (frame == 0 && timer == 0) {
             StopMoving();
         }
         if (frame == 3 && timer == 0) {
-            unk14c = 0x78;
+            m_freezeTime = 0x78;
             m_gauge = m_gauge - 0xbb8;
             FillBackground(0xb0, 3);
             l50.type = 0x46;
-            l50.unk2c = 0x40;
+            l50.sound = 0x40;
             l50.x = (double)(int)x;
             l50.y = (double)((int)y - 0x28);
             l50.scale = 2;
-            l50.unk0 = 1;
+            l50.keep = 1;
             l50.layer = 1;
             m_game->CreateEffect((EffectDesc*)&l50);
             m_playSound = 0x25;
         }
         if (frame > 3) {
-            m_game->Unk4080c0(0xf);
+            m_game->FlashNegative(0xf);
         }
         if (frame == 6 || frame == 7) {
             vx = 0.0;
@@ -5229,7 +5229,7 @@ void CNayuki::UpdatePattern()
             frame++;
             m_attackResult = 0;
             if (frame == 6) {
-                l50.unk0 = 1;
+                l50.keep = 1;
                 l50.type = 0x19d;
                 l50.x = (double)(int)x;
                 l50.y = (double)((int)y - 0x50);
@@ -5242,9 +5242,9 @@ void CNayuki::UpdatePattern()
                 SpawnObject(&l50);
             }
             if (frame == 8) {
-                if (unk3138 < 0x14) {
+                if (m_patternVar1 < 0x14) {
                     frame = frame - 2;
-                    unk3138++;
+                    m_patternVar1++;
                 } else {
                     ay = 0.015;
                 }
@@ -5253,13 +5253,13 @@ void CNayuki::UpdatePattern()
                 frame = frame - 2;
             }
             if (frame >= x8) {
-                pattern = 7;
+                pattern = kStandUp;
                 FaceOpponent();
                 StartPattern();
             }
         }
         break;
-    case 0x132:
+    case kLv4:
         if (frame == 0 && timer == 0) {
             vx = 0.0;
             vy = 0.0;
@@ -5269,17 +5269,17 @@ void CNayuki::UpdatePattern()
         if (frame > 0xe) {
             vx += 0.035;
         }
-        Unk410a80(0x32, 3);
+        FocusCameraY(0x32, 3);
         if (frame == 0 && timer == 0) {
-            unk14c = 0x78;
+            m_freezeTime = 0x78;
             m_gauge = m_gauge - 0xbb8;
             FillBackground(0xb0, 3);
             l50.type = 0x46;
-            l50.unk2c = 0x40;
+            l50.sound = 0x40;
             l50.x = (double)(int)x;
             l50.y = (double)((int)y - 0x28);
             l50.scale = 2;
-            l50.unk0 = 1;
+            l50.keep = 1;
             l50.layer = 1;
             m_game->CreateEffect((EffectDesc*)&l50);
             m_playSound = 0x25;
@@ -5287,16 +5287,16 @@ void CNayuki::UpdatePattern()
             m_game->CreateEffect((EffectDesc*)&l50);
         }
         if (frame > 2) {
-            m_game->Unk4080c0(0xf);
+            m_game->FlashNegative(0xf);
         }
         if (frame > 0xa && frame < 0xf) {
             ShakeScreen(3, 0xa);
         }
-        if ((char)Unk40ff70() != 0 && frame > 0xe && vx > 4.0) {
+        if ((char)AtScreenEdge() != 0 && frame > 0xe && vx > 4.0) {
             vx = -2.7;
             vy = -3.5;
             ay = 0.035;
-            pattern = 0x101;
+            pattern = kRebound;
             StartPattern();
             m_playSound = 0x1f;
             l50.type = 0;
@@ -5345,26 +5345,26 @@ void CNayuki::UpdatePattern()
             frame++;
             m_attackResult = 0;
             if (frame == 0xf) {
-                if (unk3138 < 0xa) {
+                if (m_patternVar1 < 0xa) {
                     frame = frame - 4;
-                    unk3138++;
+                    m_patternVar1++;
                 } else {
                     l50.type = 0x34;
                     l50.x = (double)(int)x;
                     l50.y = (double)((int)y - 0x19);
                     l50.scale = 2;
                     l50.layer = 1;
-                    l50.unk2c = 0x16;
+                    l50.sound = 0x16;
                     m_game->CreateEffect((EffectDesc*)&l50);
                     vx = 0.5;
                     ShakeScreen(0xf, 0xa);
-                    l50.unk0 = 1;
+                    l50.keep = 1;
                     l50.type = 0x1a1;
                     l50.x = (double)(int)x;
                     l50.y = (double)(int)y;
                     l50.scale = 0;
                     l50.layer = 0;
-                    l50.unk28 = 1;
+                    l50.shadow = 1;
                     l50.facing = facing;
                     SpawnObject(&l50);
                 }

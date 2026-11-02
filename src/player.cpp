@@ -41,70 +41,70 @@ int CPlayer::FaceX(double p1)
     return 0;
 }
 
-void CPlayer::Unk40e740()
+void CPlayer::MoveOnGround()
 {
     if (y == 0.0) {
-        unk159 = 0;
-        unk15a = 0;
+        m_airDashes = 0;
+        m_airActions = 0;
     }
-    if (y >= 0.0 && pattern != 4 && pattern != 5 && pattern != 6 && pattern != 0xa && pattern != 0xb && pattern != 0xc) {
-        if (unk15c < 3 && m_inputY == -1) {
+    if (y >= 0.0 && pattern != kJump && pattern != kJumpForward && pattern != kJumpBack && pattern != kSuperJump && pattern != kSuperJumpForward && pattern != kSuperJumpBack) {
+        if (m_sealLevel < 3 && m_inputY == -1) {
             FaceOpponent();
             if (m_command >= 3 && m_command <= 5) {
                 if (m_command == 3) {
-                    if (pattern != 0xa) {
+                    if (pattern != kSuperJump) {
                         StartPattern();
                     }
-                    pattern = 0xa;
+                    pattern = kSuperJump;
                     return;
                 }
                 if (m_command == 4) {
-                    if (pattern != 0xb) {
+                    if (pattern != kSuperJumpForward) {
                         StartPattern();
                     }
-                    pattern = 0xb;
+                    pattern = kSuperJumpForward;
                     return;
                 }
                 if (m_command == 5) {
-                    if (pattern != 0xc) {
+                    if (pattern != kSuperJumpBack) {
                         StartPattern();
                     }
-                    pattern = 0xc;
+                    pattern = kSuperJumpBack;
                     return;
                 }
             } else {
                 if (m_inputX == 0) {
-                    if (pattern != 4) {
+                    if (pattern != kJump) {
                         StartPattern();
                     }
-                    pattern = 4;
+                    pattern = kJump;
                     return;
                 }
                 if (m_inputX == facing) {
-                    if (pattern != 5) {
+                    if (pattern != kJumpForward) {
                         StartPattern();
                     }
-                    pattern = 5;
+                    pattern = kJumpForward;
                     return;
                 }
                 if (m_inputX == -facing) {
-                    if (pattern != 6) {
+                    if (pattern != kJumpBack) {
                         StartPattern();
                     }
-                    pattern = 6;
+                    pattern = kJumpBack;
                     return;
                 }
             }
         }
         if (m_inputY == 1) {
-            if (pattern != 8 && pattern != 3) {
-                pattern = 8;
+            if (pattern != kCrouchDown && pattern != kCrouch) {
+                pattern = kCrouchDown;
                 StartPattern();
                 FaceOpponent();
                 return;
             }
-            if (pattern != 8) {
-                pattern = 3;
+            if (pattern != kCrouchDown) {
+                pattern = kCrouch;
                 FaceOpponent();
                 return;
             }
@@ -113,32 +113,32 @@ void CPlayer::Unk40e740()
         if (m_inputX != 0) {
             FaceOpponent();
             if (m_inputX == facing) {
-                if (pattern != 1) {
+                if (pattern != kWalkForward) {
                     StartPattern();
                 }
-                pattern = 1;
+                pattern = kWalkForward;
                 return;
             }
-            if (pattern != 2) {
+            if (pattern != kWalkBack) {
                 StartPattern();
             }
-            pattern = 2;
+            pattern = kWalkBack;
             return;
         }
-        if (pattern == 3 || pattern == 8) {
-            pattern = 7;
+        if (pattern == kCrouch || pattern == kCrouchDown) {
+            pattern = kStandUp;
             FaceOpponent();
             StartPattern();
             return;
         }
-        if (pattern == 7 || pattern == 0xd) {
+        if (pattern == kStandUp || pattern == kLand) {
             FaceOpponent();
             return;
         }
-        if (pattern != 0) {
+        if (pattern != kStand) {
             StartPattern();
         }
-        pattern = 0;
+        pattern = kStand;
         FaceOpponent();
     }
 }
@@ -171,7 +171,7 @@ CPlayer::CPlayer(PTR32(CPlayer)* p1, CGame* p2, CGraphics* p3, CInput* p4, CSoun
     m_hitsLanded = 0;
     m_maxHits = 0;
     m_maxDamage = 0;
-    unk30e8 = 0;
+    m_loaded = 0;
 }
 
 CPlayer::~CPlayer()
@@ -206,46 +206,46 @@ void CPlayer::Reset()
     y = 0.0;
     facing = 1 - (m_side << 1);
     StopMoving();
-    unkb0 = 0.0;
-    unkd0 = 0;
-    pattern = 0;
+    m_pushVx = 0.0;
+    m_hitByBody = 0;
+    pattern = kStand;
     frame = 0;
     timer = 0;
     m_tintTime = 0;
     m_fillTime = 0;
     m_hp = 0x270f;
     m_comboStartHp = 0x270f;
-    unk110 = 0x270f;
+    m_shownHp = 0x270f;
     m_gauge = 0;
-    unk118 = 0.0;
-    unk120 = 0;
-    unk14c = 0;
-    unk159 = 0;
-    unk158 = 0;
-    unk15a = 0;
-    unk14e = 0;
-    unk150 = 0;
-    unkac = 0;
-    unk138 = 0;
-    unk13a = 0;
-    unk13c = 0;
-    unk13e = 0;
-    unk140 = 0;
-    unk15c = 0;
-    unk160 = 0;
+    m_rfGauge = 0.0;
+    m_rfBlue = 0;
+    m_freezeTime = 0;
+    m_airDashes = 0;
+    m_dashMomentum = 0;
+    m_airActions = 0;
+    m_recoilGuardWindow = 0;
+    m_heldDirection = 0;
+    m_roundsWon = 0;
+    m_armorTime = 0;
+    m_noGuardTime = 0;
+    m_invulTime = 0;
+    m_hideOffscreenMarker = 0;
+    m_koDelay = 0;
+    m_sealLevel = 0;
+    m_timerSuper = 0;
     m_attackResult = 0;
-    unk14a = 0;
-    *(int*)&unk134 = 0;
+    m_hitstop = 0;
+    *(int*)&m_guardGauge = 0;
     m_comboHits = 0;
     m_shownHits = 0;
     m_comboTimer = 0;
     m_proration = 10000.0;
     m_shownProration = 10000.0;
-    unk170 = 0;
+    m_canRecoilCounter = 0;
     m_defense = 1.0;
     m_bufferedPress = 0;
     m_dashBufferedPress = 0;
-    m_command = 0x63;
+    m_command = kCmdNone;
     m_inputPos = 0;
     v4 = 0;
     for (; v4 < 0xb4; v4++) {
@@ -257,13 +257,13 @@ void CPlayer::Reset()
     m_objectTail = 0;
     ClearObjects();
     m_afterimages.pos = 0;
-    m_afterimages.unk0 = 0;
-    m_afterimages.unk2 = 0;
-    unk30f0 = 0;
-    unk30ec = 0;
-    unk58 = 0;
-    unk60 = 1;
-    unk30dc = 0;
+    m_afterimages.spacing = 0;
+    m_afterimages.fadeLength = 0;
+    m_blinkTimer = 0;
+    m_refillMeter = 0;
+    m_drawMode = 0;
+    m_drawShadow = 1;
+    m_wonHpTotal = 0;
     m_maxHits = 0;
     m_maxDamage = 0;
 }
@@ -272,10 +272,10 @@ void CPlayer::StartPattern()
 {
     frame = 0;
     timer = 0;
-    unkb8 = 0.0;
+    m_cornerPushback = 0.0;
     m_attackResult = 0;
-    unk170 = 0;
-    m_afterimages.Unk412910();
+    m_canRecoilCounter = 0;
+    m_afterimages.Stop();
 }
 
 void CPlayer::ClearBufferedPress()
@@ -292,7 +292,7 @@ void CPlayer::ClearInput()
     for (; v4 < 0xb4; v4++) {
         m_inputHistory[v4] = 0;
     }
-    m_command = 0x63;
+    m_command = kCmdNone;
 }
 
 void CPlayer::StopMoving()
@@ -301,15 +301,15 @@ void CPlayer::StopMoving()
     vy = 0.0;
     ax = 0.0;
     ay = 0.0;
-    unkb8 = 0.0;
+    m_cornerPushback = 0.0;
 }
 
-void CPlayer::Unk40f230()
+void CPlayer::ProcessInput()
 {
-    if (unk14a == 0 && (*m_opponent)->unk14c == 0) {
-        if (pattern < 0x32 || pattern > 0x96 || pattern == 0x60) {
-            unk124 = 0;
-            unk12c = 0;
+    if (m_hitstop == 0 && (*m_opponent)->m_freezeTime == 0) {
+        if (pattern < kFirstHitReaction || pattern > kFirstGuard || pattern == kWakeUp) {
+            m_untechTime = 0;
+            m_landHittable = 0;
             (*m_opponent)->m_comboHits = 0;
             if ((*m_opponent)->m_proration > 10000.0) {
                 (*m_opponent)->m_proration -= 20.0;
@@ -317,67 +317,67 @@ void CPlayer::Unk40f230()
                 (*m_opponent)->m_proration = 10000.0;
             }
         }
-        if (pattern < 0x32) {
+        if (pattern < kFirstHitReaction) {
             Move();
-            unkb8 = 0.0;
-            (*m_opponent)->unkb8 = 0.0;
-            if (unk30ec != 0 && (*m_opponent)->pattern < 0x32) {
+            m_cornerPushback = 0.0;
+            (*m_opponent)->m_cornerPushback = 0.0;
+            if (m_refillMeter != 0 && (*m_opponent)->pattern < kFirstHitReaction) {
                 m_gauge = 0xbb8;
-                m_hp = unk30ee;
-                if (unk30ec > 0) {
-                    if (unk30ec < 0x3e8) {
-                        unk118 = unk30ec;
-                        unk120 = 0;
+                m_hp = m_refillHp;
+                if (m_refillMeter > 0) {
+                    if (m_refillMeter < 0x3e8) {
+                        m_rfGauge = m_refillMeter;
+                        m_rfBlue = 0;
                     } else {
-                        unk118 = 0x7d0 - unk30ec;
-                        unk120 = 1;
+                        m_rfGauge = 0x7d0 - m_refillMeter;
+                        m_rfBlue = 1;
                     }
                 }
             }
         }
-        if (pattern >= 0x32 && pattern < 0x96 && unk134 <= 0.0f && (m_patterns[pattern].frames[frame].flagsAA & 0x400) == 0) {
-            Unk40f470();
+        if (pattern >= kFirstHitReaction && pattern < kFirstGuard && m_guardGauge <= 0.0f && (m_patterns[pattern].frames[frame].flagsAA & kAttackNoAirRecovery) == 0) {
+            TryAirRecovery();
         }
         StartCommand();
     }
 }
 
-void CPlayer::Unk40f470()
+void CPlayer::TryAirRecovery()
 {
-    if (unk124 > 0) {
-        unk124--;
+    if (m_untechTime > 0) {
+        m_untechTime--;
         return;
     }
-    if (y < 0.0 && unk128 == 0 && (m_pressA != 0 || m_pressB != 0 || m_pressC != 0 || m_pressD != 0)) {
+    if (y < 0.0 && m_noAirRecovery == 0 && (m_pressA != 0 || m_pressB != 0 || m_pressC != 0 || m_pressD != 0)) {
         if (m_inputX == facing) {
-            if (pattern != 0x9d) {
+            if (pattern != kAirRecoveryForward) {
                 StartPattern();
             }
-            pattern = 0x9d;
+            pattern = kAirRecoveryForward;
             return;
         }
         if (m_inputX == -facing) {
-            if (pattern != 0x9e) {
+            if (pattern != kAirRecoveryBack) {
                 StartPattern();
             }
-            pattern = 0x9e;
+            pattern = kAirRecoveryBack;
         }
     }
 }
 
-void CPlayer::Unk40f580()
+void CPlayer::ApplyVelocity()
 {
     int v4;
 
     v4 = m_objectTail;
-    if (unk14a == 0 && (*m_opponent)->unk14c == 0) {
-        if ((char)Unk40ff70() * facing * (vx + unkb0 + (*m_opponent)->unkb8 * ((*m_opponent)->unkd0 != 0 && unk14c == 0)) >= 0.0) {
-            x = (vx + unkb0 + (*m_opponent)->unkb8 * ((*m_opponent)->unkd0 != 0 && unk14c == 0)) * facing + x;
+    if (m_hitstop == 0 && (*m_opponent)->m_freezeTime == 0) {
+        if ((char)AtScreenEdge() * facing * (vx + m_pushVx + (*m_opponent)->m_cornerPushback * ((*m_opponent)->m_hitByBody != 0 && m_freezeTime == 0)) >= 0.0) {
+            x = (vx + m_pushVx + (*m_opponent)->m_cornerPushback * ((*m_opponent)->m_hitByBody != 0 && m_freezeTime == 0)) * facing + x;
         }
-        if (((char)(*m_opponent)->Unk40ff70() == 1 && (*m_opponent)->x <= 20.0) + 0x14 > x) {
-            x = ((char)(*m_opponent)->Unk40ff70() == 1 && (*m_opponent)->x <= 20.0) + 0x14;
-        } else if (0x26b - ((char)(*m_opponent)->Unk40ff70() == -1 && (*m_opponent)->x >= 619.0) < x) {
-            x = 0x26b - ((char)(*m_opponent)->Unk40ff70() == -1 && (*m_opponent)->x >= 619.0);
+        if (((char)(*m_opponent)->AtScreenEdge() == 1 && (*m_opponent)->x <= 20.0) + 0x14 > x) {
+            x = ((char)(*m_opponent)->AtScreenEdge() == 1 && (*m_opponent)->x <= 20.0) + 0x14;
+        } else if (0x26b - ((char)(*m_opponent)->AtScreenEdge() == -1 && (*m_opponent)->x >= 619.0) < x) {
+            x = 0x26b - ((char)(*m_opponent)->AtScreenEdge() == -1 && (*m_opponent)->x >= 619.0);
         }
         y = y + vy;
         if (y > 0.0) {
@@ -385,7 +385,7 @@ void CPlayer::Unk40f580()
         }
     }
     while (v4 != m_objectHead) {
-        if (m_objectActive[v4] != 0 && (unk14c <= 0 || m_objects[v4].unk88 != 0) && m_objects[v4].unk86 == 0 && (*m_opponent)->unk14c == 0) {
+        if (m_objectActive[v4] != 0 && (m_freezeTime <= 0 || m_objects[v4].movesInFreeze != 0) && m_objects[v4].hitstop == 0 && (*m_opponent)->m_freezeTime == 0) {
             m_objects[v4].x += (m_objects[v4].vx + 0.0 * m_objects[v4].unk70) * m_objects[v4].facing;
             m_objects[v4].y = m_objects[v4].y + m_objects[v4].vy;
         }
@@ -396,75 +396,75 @@ void CPlayer::Unk40f580()
     }
 }
 
-void CPlayer::Unk40f980()
+void CPlayer::UpdateGaugesAndTimers()
 {
     int v4;
 
-    if ((*m_opponent)->unk14c > 0) {
+    if ((*m_opponent)->m_freezeTime > 0) {
     } else {
-        if (unk14a > 0) {
-            unk14a--;
+        if (m_hitstop > 0) {
+            m_hitstop--;
         } else {
-            unk14a = 0;
+            m_hitstop = 0;
         }
-        if (Unk410340() == 0) {
-            if (Unk4103a0() != 0) {
-                unk134 = unk134 - F32CAST(1.0 / ((y == 0.0) * 4 + 1));
+        if (IsGuarding() == 0) {
+            if (IsInHitstun() != 0) {
+                m_guardGauge = m_guardGauge - F32CAST(1.0 / ((y == 0.0) * 4 + 1));
             } else {
-                unk134 -= 0.075f;
+                m_guardGauge -= 0.075f;
             }
-            if (unk134 < 0.0f) {
-                *(int*)&unk134 = 0;
+            if (m_guardGauge < 0.0f) {
+                *(int*)&m_guardGauge = 0;
             }
         }
-        if (unk130 > 0) {
-            unk130--;
+        if (m_throwProtect > 0) {
+            m_throwProtect--;
         } else {
-            unk130 = 0;
+            m_throwProtect = 0;
         }
-        if ((m_patterns[pattern].frames[frame].flagsB0 & 0x40) > 0) {
-            unk130 = 0x1b;
+        if ((m_patterns[pattern].frames[frame].flagsB0 & kStateThrowProtect) > 0) {
+            m_throwProtect = 0x1b;
         }
-        if (unk138 > 0) {
-            unk138--;
+        if (m_armorTime > 0) {
+            m_armorTime--;
         } else {
-            unk138 = 0;
+            m_armorTime = 0;
         }
-        if (unk13a > 0) {
-            unk13a--;
+        if (m_noGuardTime > 0) {
+            m_noGuardTime--;
         } else {
-            unk13a = 0;
+            m_noGuardTime = 0;
         }
-        if (unk13c > 0) {
-            unk13c--;
+        if (m_invulTime > 0) {
+            m_invulTime--;
         } else {
-            unk13c = 0;
+            m_invulTime = 0;
         }
-        if (unk13e > 0) {
-            unk13e--;
+        if (m_hideOffscreenMarker > 0) {
+            m_hideOffscreenMarker--;
         } else {
-            unk13e = 0;
+            m_hideOffscreenMarker = 0;
         }
-        if (unk140 > 0) {
-            unk140--;
+        if (m_koDelay > 0) {
+            m_koDelay--;
         } else {
-            unk140 = 0;
+            m_koDelay = 0;
         }
-        unk118 = (Unk410340() + 1) * (Unk4103a0() == 0 && unk120 == 0) * ((unk118 < 500.0) * 2 + 1) / 10.0 + unk118;
-        if (unk118 >= 1000.0 && unk120 == 0) {
-            unk120 = 1;
-            unk118 = 1000.0;
-        } else if (unk118 <= 0.0) {
-            unk120 = 0;
-            unk118 = 0.0;
+        m_rfGauge = (IsGuarding() + 1) * (IsInHitstun() == 0 && m_rfBlue == 0) * ((m_rfGauge < 500.0) * 2 + 1) / 10.0 + m_rfGauge;
+        if (m_rfGauge >= 1000.0 && m_rfBlue == 0) {
+            m_rfBlue = 1;
+            m_rfGauge = 1000.0;
+        } else if (m_rfGauge <= 0.0) {
+            m_rfBlue = 0;
+            m_rfGauge = 0.0;
         }
         v4 = m_objectTail;
         while (v4 != m_objectHead) {
             if (m_objectActive[v4] != 0) {
-                if (m_objects[v4].unk86 > 0) {
-                    m_objects[v4].unk86--;
+                if (m_objects[v4].hitstop > 0) {
+                    m_objects[v4].hitstop--;
                 } else {
-                    m_objects[v4].unk86 = 0;
+                    m_objects[v4].hitstop = 0;
                 }
             }
             v4++;
@@ -472,21 +472,21 @@ void CPlayer::Unk40f980()
                 v4 = 0;
             }
         }
-        if ((*m_opponent)->Unk4103a0() != 0) {
-            unk30e4 = 0x384;
-            unk30e0 = 0xc;
+        if ((*m_opponent)->IsInHitstun() != 0) {
+            m_hitsDecayTimer = 0x384;
+            m_hitsDecayStep = 0xc;
         }
-        if (((*m_opponent)->pattern < 0x32 || (*m_opponent)->pattern >= 0xc8) && m_game->unk1350 == 0 && m_game->unk1354 == 0) {
-            if ((unsigned long)unk30e4 > 0) {
-                unk30e4--;
+        if (((*m_opponent)->pattern < kFirstHitReaction || (*m_opponent)->pattern >= kFirstCharacterAction) && m_game->m_intro == 0 && m_game->m_roundOver == 0) {
+            if ((unsigned long)m_hitsDecayTimer > 0) {
+                m_hitsDecayTimer--;
             } else {
-                if ((unsigned long)unk30e0 > 1) {
-                    unk30e0--;
+                if ((unsigned long)m_hitsDecayStep > 1) {
+                    m_hitsDecayStep--;
                 }
                 if ((unsigned long)m_hitsLanded > 0) {
                     m_hitsLanded--;
                 }
-                unk30e4 = unk30e0 * 5 * 3;
+                m_hitsDecayTimer = m_hitsDecayStep * 5 * 3;
             }
         }
     }
@@ -495,21 +495,21 @@ void CPlayer::Unk40f980()
     } else if (m_gauge > 0xbb8) {
         m_gauge = 0xbb8;
     }
-    if (unk118 < 0.0) {
-        unk118 = 0.0;
-    } else if (unk118 > 1000.0) {
-        unk118 = 1000.0;
+    if (m_rfGauge < 0.0) {
+        m_rfGauge = 0.0;
+    } else if (m_rfGauge > 1000.0) {
+        m_rfGauge = 1000.0;
     }
-    unk30f0--;
-    if (unk30f0 <= 0) {
-        unk30f0 = 0x3138;
+    m_blinkTimer--;
+    if (m_blinkTimer <= 0) {
+        m_blinkTimer = 0x3138;
     }
     if (m_comboTimer > 0 && m_comboHits == 0) {
         m_comboTimer--;
     }
 }
 
-char CPlayer::Unk40ff70()
+char CPlayer::AtScreenEdge()
 {
     if (x - 20.0 <= ((*m_opponent)->x <= 20.0) || (*m_opponent)->x - x > 280.0) {
         return 1;
@@ -520,89 +520,89 @@ char CPlayer::Unk40ff70()
     return 0;
 }
 
-int CPlayer::Unk410050(PatternFrame* p1, PatternFrame* p2)
+int CPlayer::CanGuard(PatternFrame* p1, PatternFrame* p2)
 {
-    if (unk13a > 0) {
+    if (m_noGuardTime > 0) {
         return 0;
     }
-    if ((p1->flagsAA & 0x80) > 0) {
+    if ((p1->flagsAA & kAttackUnblockable) > 0) {
         return 0;
     }
-    if ((p2->flagsB0 & 0x10) == 0) {
+    if ((p2->flagsB0 & kStateCanGuard) == 0) {
         return 0;
     }
-    if ((p1->flagsAA & 4) == 0 && y < 0.0 && unk14e < 0x1e) {
+    if ((p1->flagsAA & kAttackGuardAir) == 0 && y < 0.0 && m_recoilGuardWindow < 0x1e) {
         return 0;
     }
-    if (Unk4100f0(p1) == 0) {
+    if (HoldsGuard(p1) == 0) {
         return 0;
     }
     return 1;
 }
 
-int CPlayer::Unk4100f0(PatternFrame* p1)
+int CPlayer::HoldsGuard(PatternFrame* p1)
 {
     if (m_cpu != 0) {
-        if (m_game->unk1364 == 1) {
-            if (m_game->unk1348 == 0) {
+        if (m_game->m_gameMode == 1) {
+            if (m_game->m_dummyGuard == 0) {
                 return 0;
             }
         } else {
-            if (rand() > unka8 * 1e+04f) {
+            if (rand() > m_cpuSkill * 1e+04f) {
                 return 0;
             }
-            if ((p1->flagsAA & 1) == 0) {
+            if ((p1->flagsAA & kAttackGuardStand) == 0) {
                 m_inputY = 1;
-            } else if ((p1->flagsAA & 2) == 0) {
+            } else if ((p1->flagsAA & kAttackGuardCrouch) == 0) {
                 m_inputY = 0;
             }
         }
-        if ((p1->flagsAA & 2) == 0 && m_inputY == 1 && y == 0.0 || (p1->flagsAA & 1) == 0 && m_inputY != 1 && y == 0.0) {
+        if ((p1->flagsAA & kAttackGuardCrouch) == 0 && m_inputY == 1 && y == 0.0 || (p1->flagsAA & kAttackGuardStand) == 0 && m_inputY != 1 && y == 0.0) {
             return 0;
         }
     } else {
-        if (m_inputX != 1 - (((*m_opponent)->x - x > 0.0) << 1) && (Unk410340() == 0 || m_inputX == 0)) {
+        if (m_inputX != 1 - (((*m_opponent)->x - x > 0.0) << 1) && (IsGuarding() == 0 || m_inputX == 0)) {
             return 0;
         }
-        if ((p1->flagsAA & 2) == 0 && m_inputY == 1 && y == 0.0 || (p1->flagsAA & 1) == 0 && m_inputY != 1 && y == 0.0) {
+        if ((p1->flagsAA & kAttackGuardCrouch) == 0 && m_inputY == 1 && y == 0.0 || (p1->flagsAA & kAttackGuardStand) == 0 && m_inputY != 1 && y == 0.0) {
             return 0;
         }
     }
     return 1;
 }
 
-int CPlayer::Unk4102e0()
+int CPlayer::CanAirRecover()
 {
-    return unk124 <= 0 && y < 0.0 && unk128 == 0 && Unk4103a0() != 0;
+    return m_untechTime <= 0 && y < 0.0 && m_noAirRecovery == 0 && IsInHitstun() != 0;
 }
 
-int CPlayer::Unk410340()
+int CPlayer::IsGuarding()
 {
-    return pattern >= 0x96 && pattern <= 0x9c || pattern >= 0xa8 && pattern <= 0xab;
+    return pattern >= kFirstGuard && pattern <= kGuardAir || pattern >= kRecoilGuardStand && pattern <= kAirInstantCharge;
 }
 
-int CPlayer::Unk4103a0()
+int CPlayer::IsInHitstun()
 {
-    return pattern >= 0x32 && pattern < 0x96 && (*m_opponent)->pattern != 0x61 && (*m_opponent)->pattern != 0x62 && (*m_opponent)->pattern != 0x63 && (*m_opponent)->pattern != 0x60;
+    return pattern >= kFirstHitReaction && pattern < kFirstGuard && (*m_opponent)->pattern != kKnockdownHittable && (*m_opponent)->pattern != kKnockdown && (*m_opponent)->pattern != kLyingDown && (*m_opponent)->pattern != kWakeUp;
 }
 
-int CPlayer::Unk410420()
+int CPlayer::IsDashing()
 {
-    return pattern == 0xa3 || pattern == 0xa4 || pattern == 0xa5 || pattern == 0xa6;
+    return pattern == kDashForward || pattern == kDashBack || pattern == kAirDashForward || pattern == kAirDashBack;
 }
 
 double CPlayer::AttackFactor()
 {
-    if (m_game->unk1364 == 2) {
-        return unk118 / 10000.0 + 1.0;
+    if (m_game->m_gameMode == 2) {
+        return m_rfGauge / 10000.0 + 1.0;
     }
-    if (m_game->unk1370 == 1) {
-        return (unk118 / 10000.0 + 1.0) / 2.0;
+    if (m_game->m_damageLevel == 1) {
+        return (m_rfGauge / 10000.0 + 1.0) / 2.0;
     }
-    if (m_game->unk1370 == 2) {
-        return unk118 / 10000.0 + 1.0;
+    if (m_game->m_damageLevel == 2) {
+        return m_rfGauge / 10000.0 + 1.0;
     }
-    return (unk118 / 10000.0 + 1.0) * 2;
+    return (m_rfGauge / 10000.0 + 1.0) * 2;
 }
 
 double CPlayer::DefenseFactor()
@@ -643,7 +643,7 @@ void CPlayer::DealDamage(int p1, double p2)
     AddScore(p1 / 0x64 * m_hitsLanded * m_maxHits * m_comboHits);
 }
 
-void CPlayer::Unk410790(PatternFrame* p1)
+void CPlayer::ScoreHit(PatternFrame* p1)
 {
     if ((DWORD)m_comboHits > m_maxHits) {
         m_maxHits = m_comboHits;
@@ -652,7 +652,7 @@ void CPlayer::Unk410790(PatternFrame* p1)
         m_maxDamage = m_comboDamage;
     }
     m_hitsLanded++;
-    AddScore(p1->unka0 / 0x64 * m_hitsLanded * m_maxHits * m_comboHits);
+    AddScore(p1->damage / 0x64 * m_hitsLanded * m_maxHits * m_comboHits);
 }
 
 void CPlayer::AddScore(int p1)
@@ -679,23 +679,23 @@ short CPlayer::Random(short p1, short p2)
     return v4;
 }
 
-void CPlayer::Unk410940()
+void CPlayer::UpdateAfterimages()
 {
-    if ((*m_opponent)->unk14c == 0) {
-        if (m_afterimages.unk0 > 0) {
-            m_afterimages.Unk412930((ObjBase*)this);
-            m_afterimages.unk2 = 0;
+    if ((*m_opponent)->m_freezeTime == 0) {
+        if (m_afterimages.spacing > 0) {
+            m_afterimages.Record((ObjBase*)this);
+            m_afterimages.fadeLength = 0;
             return;
         }
-        if (m_afterimages.unk2 > 0) {
-            m_afterimages.unk2--;
+        if (m_afterimages.fadeLength > 0) {
+            m_afterimages.fadeLength--;
         }
     }
 }
 
 void CPlayer::StartAfterimages(BYTE p1)
 {
-    m_afterimages.Unk412a10((ObjBase*)this, p1);
+    m_afterimages.Start((ObjBase*)this, p1);
 }
 
 void CPlayer::ShakeScreen(int p1, int p2)
@@ -704,23 +704,23 @@ void CPlayer::ShakeScreen(int p1, int p2)
     m_game->m_shakeHold = p2;
 }
 
-void CPlayer::Unk410a40(int p1, int p2)
+void CPlayer::FocusCameraX(int p1, int p2)
 {
-    m_game->unk14238 = (1 - (m_side << 1)) * p1;
-    m_game->unk14240 = p2;
+    m_game->m_cameraFocusX = (1 - (m_side << 1)) * p1;
+    m_game->m_cameraFocusXTime = p2;
 }
 
-void CPlayer::Unk410a80(int p1, int p2)
+void CPlayer::FocusCameraY(int p1, int p2)
 {
-    m_game->unk1423c = (1 - (m_side << 1)) * p1;
-    m_game->unk14244 = p2;
+    m_game->m_cameraFocusY = (1 - (m_side << 1)) * p1;
+    m_game->m_cameraFocusYTime = p2;
 }
 
 void CPlayer::Tint(BYTE p1, int p2)
 {
     m_tintColor = p1;
     m_tintTime = p2;
-    if (m_game->unk136c == 0) {
+    if (m_game->m_drawEveryFrame == 0) {
         m_tintTime = m_tintTime / 2;
     }
 }
@@ -729,7 +729,7 @@ void CPlayer::FillBackground(BYTE p1, int p2)
 {
     m_fillColor = p1;
     m_fillTime = p2;
-    if (m_game->unk136c == 0) {
+    if (m_game->m_drawEveryFrame == 0) {
         m_fillTime = m_fillTime / 2;
     }
     m_game->m_fillSide = m_side;
@@ -740,13 +740,13 @@ void CPlayer::Load()
     char v2c[32];
     char vc[8];
 
-    if (unk30e8 == 0) {
+    if (m_loaded == 0) {
         LoadSprites();
         LoadPatterns();
         LoadVoices();
-        unk30e8 = 1;
+        m_loaded = 1;
     } else if (1) {
-        if (m_game->unk1338[m_side] != 0) {
+        if (m_game->m_editColor[m_side] != 0) {
             strcpy(v2c, m_name);
             strcat(v2c, "\\");
             strcat(v2c, m_name);
@@ -767,7 +767,7 @@ void CPlayer::Load()
             strcat(v2c, ".dat");
             m_graphics->LoadPaletteDat(m_game->m_palette, (const char*)v2c, m_paletteIndex * 0x28, m_side * 0x28 + 0x5f, 0x28);
         }
-    } else if (m_game->unk1338[m_side] != 0) {
+    } else if (m_game->m_editColor[m_side] != 0) {
         strcpy(v2c, m_name);
         strcat(v2c, "\\");
         strcat(v2c, m_name);
@@ -786,16 +786,16 @@ void CPlayer::Load()
     }
     Reset();
     if (m_cpu == 0) {
-        if ((m_game->unk1364 == 0 || m_game->unk1364 == 2) && m_game->unk1358 == 1) {
-            ((CharRecord*)&unk3118)->Load(m_name);
-            unk3118++;
-            ((CharRecord*)&unk3118)->Save(m_name);
+        if ((m_game->m_gameMode == 0 || m_game->m_gameMode == 2) && m_game->m_arcadeMatch == 1) {
+            ((CharRecord*)&m_recordUses)->Load(m_name);
+            m_recordUses++;
+            ((CharRecord*)&m_recordUses)->Save(m_name);
             return;
         }
-        if (m_game->unk1364 == 1 || m_game->unk1364 == 3 || m_game->unk1364 == 4) {
-            ((CharRecord*)&unk3118)->Load(m_name);
-            unk3118++;
-            ((CharRecord*)&unk3118)->Save(m_name);
+        if (m_game->m_gameMode == 1 || m_game->m_gameMode == 3 || m_game->m_gameMode == 4) {
+            ((CharRecord*)&m_recordUses)->Load(m_name);
+            m_recordUses++;
+            ((CharRecord*)&m_recordUses)->Save(m_name);
         }
     }
 }
@@ -842,7 +842,7 @@ void CPlayer::LoadSprites()
         }
         CloseHandle((HANDLE)d30);
         delete (char*)x44;
-        if (m_game->unk1338[m_side] != 0) {
+        if (m_game->m_editColor[m_side] != 0) {
             strcpy(x2c, m_name);
             strcat(x2c, "\\");
             strcat(x2c, m_name);
@@ -877,7 +877,7 @@ void CPlayer::LoadSprites()
                 m_graphics->LoadBmpHigh(&surfaces[a6c], (const char*)x2c, m_side * 0x28 + 0x5f);
             }
         }
-        if (m_game->unk1338[m_side] != 0) {
+        if (m_game->m_editColor[m_side] != 0) {
             strcpy(x2c, m_name);
             strcat(x2c, "\\");
             strcat(x2c, m_name);
@@ -915,8 +915,8 @@ void CPlayer::LoadPatterns()
     v40 = 0;
     for (; v40 < l4; v40++) {
         x38 = k10.ReadInt();
-        m_patterns[x38].unk0 = k10.ReadInt();
-        m_patterns[x38].unk2 = k10.ReadInt();
+        m_patterns[x38].level = k10.ReadInt();
+        m_patterns[x38].cancelLevel = k10.ReadInt();
         anims[x38].frameCount = k10.ReadInt();
         f3c = anims[x38].frameCount;
         m_patterns[x38].Alloc(f3c);
@@ -931,25 +931,25 @@ void CPlayer::LoadPatterns()
             l48->height = k10.ReadInt();
             l48->x = k10.ReadInt();
             l48->y = k10.ReadInt();
-            l4c->unka0 = k10.ReadInt();
+            l4c->damage = k10.ReadInt();
             l4c->flagsAA = k10.ReadInt();
-            l4c->unkac = k10.ReadInt();
+            l4c->airHitPattern = k10.ReadInt();
             l4c->flagsB0 = k10.ReadInt();
-            l4c->unkb2 = k10.ReadInt();
-            l4c->unka8 = k10.ReadInt();
-            l4c->unkb4 = k10.ReadInt();
-            l4c->unkb6 = k10.ReadInt();
-            l4c->unkbc = (short)k10.ReadShort();
-            l4c->unkbc = l4c->unkbc / 1e+02f;
-            l4c->unkb8 = (short)k10.ReadShort();
-            l4c->unkb8 = l4c->unkb8 / -1e+02f;
-            l4c->unkc1 = k10.ReadShort();
-            l4c->unkc0 = k10.ReadShort();
-            l4c->unkc2 = k10.ReadInt();
-            l4c->unkc4 = k10.ReadInt();
-            l4c->unka4 = k10.ReadInt();
-            l4c->unkae = k10.ReadInt();
-            k10.Read((void*)&l4c->box90.left, 0x10);
+            l4c->untechTime = k10.ReadInt();
+            l4c->chipDamage = k10.ReadInt();
+            l4c->gaugeOnHit = k10.ReadInt();
+            l4c->gaugeOnGuard = k10.ReadInt();
+            l4c->hitVy = (short)k10.ReadShort();
+            l4c->hitVy = l4c->hitVy / 1e+02f;
+            l4c->hitVx = (short)k10.ReadShort();
+            l4c->hitVx = l4c->hitVx / -1e+02f;
+            l4c->hitSound = k10.ReadShort();
+            l4c->hitEffect = k10.ReadShort();
+            l4c->attackerHitstop = k10.ReadInt();
+            l4c->defenderHitstop = k10.ReadInt();
+            l4c->proration = k10.ReadInt();
+            l4c->groundHitPattern = k10.ReadInt();
+            k10.Read((void*)&l4c->pushBox.left, 0x10);
             c50 = 0;
             for (; c50 < 2; c50++) {
                 k10.Read((void*)((c50 << 4) + (char*)l4c), 0x10);
@@ -997,15 +997,15 @@ void CPlayer::ReadInput()
     BYTE v1;
 
     if (m_cpu != 0) {
-        if (m_game->unk1364 == 1) {
+        if (m_game->m_gameMode == 1) {
             m_pressA = 0;
             m_pressB = 0;
             m_pressC = 0;
             m_pressD = 0;
             m_inputX = 0;
-            if ((char)m_game->unk1346 == 1) {
+            if ((char)m_game->m_dummyStance == 1) {
                 m_inputY = -1;
-            } else if ((char)m_game->unk1346 == 2) {
+            } else if ((char)m_game->m_dummyStance == 2) {
                 m_inputY = 1;
             } else {
                 m_inputY = 0;
@@ -1013,12 +1013,12 @@ void CPlayer::ReadInput()
             return;
         }
         CpuInput();
-        if (m_game->unk1350 != 0 || m_game->unk1354 != 0) {
+        if (m_game->m_intro != 0 || m_game->m_roundOver != 0) {
             m_pressA = 0;
             m_pressB = 0;
             m_pressC = 0;
             m_pressD = 0;
-            m_command = 0x63;
+            m_command = kCmdNone;
         }
         return;
     }
@@ -1074,19 +1074,19 @@ void CPlayer::ReadInput()
     } else {
         m_holdD = 0;
     }
-    if (m_game->unk1350 != 0 || m_game->unk1354 != 0) {
+    if (m_game->m_intro != 0 || m_game->m_roundOver != 0) {
         m_pressA = 0;
         m_pressB = 0;
         m_pressC = 0;
         m_pressD = 0;
-        m_command = 0x63;
+        m_command = kCmdNone;
     }
     m_inputHistory[m_inputPos] = (m_inputX == 1) + (m_inputX == -1) * 2 + (m_inputY == 1) * 4 + (m_inputY == -1) * 8 + (m_pressA << 4) + (m_pressB << 5) + (m_pressC << 6) + (m_pressD << 7);
     if ((unsigned char)m_inputHistory[m_inputPos] >= 0x10) {
-        if (pattern >= 0xc8) {
+        if (pattern >= kFirstCharacterAction) {
             m_bufferedPress = m_inputHistory[m_inputPos];
         }
-        if (pattern >= 0xa3 && pattern <= 0xa6) {
+        if (pattern >= kDashForward && pattern <= kAirDashBack) {
             m_dashBufferedPress = m_inputHistory[m_inputPos];
             m_dashBufferTime = 0xf;
         }
@@ -1095,21 +1095,21 @@ void CPlayer::ReadInput()
     if (m_inputPos >= 0xb4) {
         m_inputPos = 0;
     }
-    if (m_inputX == 1 - (((*m_opponent)->x - x > 0.0) << 1) && unk14e == 0 && unk150 == 0) {
-        unk14e = 0x3c;
+    if (m_inputX == 1 - (((*m_opponent)->x - x > 0.0) << 1) && m_recoilGuardWindow == 0 && m_heldDirection == 0) {
+        m_recoilGuardWindow = 0x3c;
     }
-    if ((*m_opponent)->unk14a == 0 && unk14e > 0) {
-        unk14e--;
+    if ((*m_opponent)->m_hitstop == 0 && m_recoilGuardWindow > 0) {
+        m_recoilGuardWindow--;
     }
     if (m_inputX == 0) {
-        unk150 = 0;
+        m_heldDirection = 0;
     } else {
-        unk150 = 1;
+        m_heldDirection = 1;
     }
     ReadCommand();
 }
 
-void CPlayer::Unk4121a0(int p1, int p2)
+void CPlayer::DrawSprite(int p1, int p2)
 {
     int v34;
     RECT v30;
@@ -1117,10 +1117,10 @@ void CPlayer::Unk4121a0(int p1, int p2)
     RECT v14;
     int l4;
 
-    if (m_afterimages.unk0 > 0 || m_afterimages.unk2 > 0) {
-        v34 = m_afterimages.pos - (m_afterimages.unk0 * 3 + m_afterimages.unk2);
+    if (m_afterimages.spacing > 0 || m_afterimages.fadeLength > 0) {
+        v34 = m_afterimages.pos - (m_afterimages.spacing * 3 + m_afterimages.fadeLength);
         l4 = 0;
-        for (; l4 < m_afterimages.unk2 + m_afterimages.unk0 * 3; l4 = m_afterimages.unk1 + l4) {
+        for (; l4 < m_afterimages.fadeLength + m_afterimages.spacing * 3; l4 = m_afterimages.step + l4) {
             if (v34 >= 0x3c) {
                 v34 -= 0x3c;
             }
@@ -1137,7 +1137,7 @@ void CPlayer::Unk4121a0(int p1, int p2)
             v14.right = v20.width + v14.left;
             v14.bottom = v20.height + v14.top;
             m_graphics->BlitEx(v14, surfaces[v20.surface], v30, colorKey, m_afterimages.facing[v34] == -1, 0);
-            v34 = m_afterimages.unk1 + v34;
+            v34 = m_afterimages.step + v34;
         }
     }
     v20 = anims[pattern].frames[frame];
@@ -1151,10 +1151,10 @@ void CPlayer::Unk4121a0(int p1, int p2)
     v14.bottom = v20.height + v14.top;
     if (v14.top < 0xf0) {
         if (m_tintTime == 0) {
-            if (unk58 == 3) {
+            if (m_drawMode == 3) {
                 m_graphics->BlitSmear(v14, surfaces[v20.surface], v30, colorKey, facing == -1);
-            } else if (unk58 > 0) {
-                m_graphics->BlitEx(v14, surfaces[v20.surface], v30, colorKey, facing == -1, unk58 - 1);
+            } else if (m_drawMode > 0) {
+                m_graphics->BlitEx(v14, surfaces[v20.surface], v30, colorKey, facing == -1, m_drawMode - 1);
             } else {
                 m_graphics->Blit(v14, surfaces[v20.surface], v30, colorKey, facing == -1);
             }
@@ -1164,8 +1164,8 @@ void CPlayer::Unk4121a0(int p1, int p2)
         }
         return;
     }
-    if (unk13e == 0) {
-        v20 = *anims[0x31].frames;
+    if (m_hideOffscreenMarker == 0) {
+        v20 = *anims[kOffscreenMarker].frames;
         v30.left = 0;
         v30.top = 0;
         v30.right = v20.width;

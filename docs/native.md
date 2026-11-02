@@ -176,44 +176,55 @@ multiply-add (`-ffp-contract=off`, `/fp:contract-`), no fast math.
 | `main.cpp`, `sdlmain.cpp` | What `WinMain` did, in the same order, then the scenes at 64 frames a second |
 | `layout.cpp` | The structure checks |
 
-## The replay test
+## The compatibility test
 
 `src/trace.cpp` is a harness built into both games: `make trace` builds
 `build/trace/efz.exe`, efz.exe's code with the harness's hooks (in `CScene3::Update`,
 `CInput::GetInput` and the main loop; every other function is the original's), and the
 native game always has it. Environment variables make it record a replay with scripted
-random input, or play one without going through the menus, and log both players'
-status after every tick of the fight. `tools/compat.py` runs the original under wine
-on a virtual display and the native game without one, and prints the first tick whose
-status differs:
+random input, play one without going through the menus, or play a fight of the game's
+CPU from a seed, and log the whole game state, hashed, after every tick of the fight.
+`tools/compat.py` plays the suite of [compat.md](compat.md) in a build and compares
+each log with the original's (the `compat-reference` tag's build, under wine):
 
 ```sh
-make trace && tools/native.sh
-tools/compat.py fuzz 20                    # record 20 random matches, play each in both
-tools/compat.py --windows check            # the Windows build, under 64-bit wine
-EFZ_NATIVE=build/native-x87/efz tools/compat.py check   # another native build
+tools/native.sh && tools/compat.py check   # the native game
+tools/compat.py check --windows            # the Windows build, under 64-bit wine
+tools/compat.py check --native build/native-x87/efz   # another native build
 ```
 
-Results (October 2026, on the source as it is now):
+Results (31 October 2026; the suite compares every byte of the state since then):
+
+| The native game | Cases | Ticks | Play as the original does |
+|---|---|---|---|
+| Linux x64, GCC (the default: emulated `sin`, `cos`, `atan2`) | 254 | 1,223,436 | all |
+
+Before 31 October the test compared only the players' status (action, frame, position,
+velocity, HP, combo, gauge) on 154 replays:
 
 | The native game | Replays | Ticks | Play as the original does |
 |---|---|---|---|
-| Linux x64, GCC (the default: emulated `sin`, `cos`, `atan2`) | 154 | 816,930 | all |
+| Linux x64, GCC | 154 | 816,930 | all |
 | Linux x64, `-DEFZ_HOST_X87=ON` | 154 | 816,930 | all |
 | Windows x64, MinGW-w64, under wine64 | 154 | 816,930 | all |
 
 The replays are matches of random characters, stages and input, about three and a half
-hours of fighting: 94 the original recorded (`tools/compat.py fuzz`, seeds 7 and 100,
-5000 and 6000 ticks; two by hand), 20 more it recorded after the port moved to the
-readable source (seed 500, 3000 ticks), and 40 the native game recorded
-(`--native-records`, seeds 300 and 600), which the original plays back.
+hours of fighting: 94 the original recorded (seeds 7 and 100, 5000 and 6000 ticks; two
+by hand), 20 more it recorded after the port moved to the readable source (seed 500,
+3000 ticks), and 40 the native game recorded (seeds 300 and 600), which the original
+plays back. Comparing the whole state found two differences the status had hidden, both
+in effects: `fabs` of a float rounds its argument (effect `0x2f`; the native game now
+does too, `FABSF`), and a throw's hit spark is placed from stack memory the original
+never set (zeroed in both now, [compat.md](compat.md)).
 
 "As the original does" needs a qualification: on 5 of the 154 the original itself
 plays differently from run to run, an attack connecting in some runs and not in others
 (uninitialised memory, below). On those 5 the native game plays exactly as one of the
 original's runs, tick for tick, every time. On the other 149 every run of the original,
 its recording and the native game agree on every tick. The three builds write the same
-trace for every replay, byte for byte (the Windows build's lines end in CR LF).
+trace for every replay, byte for byte (the Windows build's lines end in CR LF). Since
+31 October the reference zeroes memory from `new` as the native game does, so each case
+has one outcome, and every build writes its log with `\n` line ends.
 
 Before the source was readable, the port was made on the lifter's raw offsets, and
 measured the same way (92 of the replays). Two steps of that work show what the
@@ -227,9 +238,8 @@ replay test catches:
 ## Known differences
 
 - **Trig on other CPUs**, above.
-- **Effects only.** `fabs(float)` in two effects rounds its argument to float in the
-  original; the native build doesn't. The replay test leaves effects out
-  ([compat.md](compat.md)).
+- **Throws' hit sparks** are placed from stack memory the original never set; the
+  native game zeroes it ([compat.md](compat.md)).
 - **Palette fades** show on the next frame drawn; DirectDraw changed the screen's
   palette at once.
 - **No display mode changes.** The game picture is scaled into the window instead.

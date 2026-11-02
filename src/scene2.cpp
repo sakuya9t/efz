@@ -9,14 +9,14 @@
 CScene2::CScene2(HWND p1, PTR32(CPlayer)* p2, PTR32(CPlayer)* p3, CGame* p4, CGraphics* p5, CInput* p6, CSound* p7)
     : CScene(p1, p2, p3, p4, p5, p6, p7)
 {
-    unk434 = 0;
+    m_loadingSurface = 0;
 }
 
 CScene2::~CScene2()
 {
-    if (unk434 != 0) {
-        (TOPTR(IUnknown*, unk434))->Release();
-        unk434 = 0;
+    if (m_loadingSurface != 0) {
+        (TOPTR(IUnknown*, m_loadingSurface))->Release();
+        m_loadingSurface = 0;
     }
 }
 
@@ -43,38 +43,38 @@ BYTE CScene2::Update()
     strcat(v2c, (const char*)v34);
     if (1) {
         strcat(v2c, ".dat");
-        m_game->LoadDat((PTR32(IDirectDrawSurface)*)&unk434, (const char*)v2c, 0, 1);
+        m_game->LoadDat((PTR32(IDirectDrawSurface)*)&m_loadingSurface, (const char*)v2c, 0, 1);
         m_graphics->LoadPaletteDat(m_palette, (const char*)v2c, 0, 1, 0xfe);
     } else {
         strcat(v2c, ".bmp");
-        m_graphics->LoadBmp((PTR32(IDirectDrawSurface)*)&unk434, (const char*)v2c, 1);
+        m_graphics->LoadBmp((PTR32(IDirectDrawSurface)*)&m_loadingSurface, (const char*)v2c, 1);
         m_graphics->LoadPaletteBmp(m_palette, (const char*)v2c, 0, 1, 0xfe);
     }
     Draw();
-    CScene::Unk759e20(m_palette, 0);
-    Unk76ca50();
-    CScene::Unk759c90(m_palette, 0, -0x1f4, 0xc8);
-    if (unk434 != 0) {
-        (TOPTR(IUnknown*, unk434))->Release();
-        unk434 = 0;
+    CScene::FadeIn(m_palette, 0);
+    SetupMatch();
+    CScene::FadeOut(m_palette, 0, -0x1f4, 0xc8);
+    if (m_loadingSurface != 0) {
+        (TOPTR(IUnknown*, m_loadingSurface))->Release();
+        m_loadingSurface = 0;
     }
-    m_game->PlayMusic(m_game->unkf32 + 0xa);
+    m_game->PlayMusic(m_game->m_stage + 0xa);
     return 3;
 }
 
 void CScene2::Draw()
 {
-    m_graphics->Blit(MakeRect(0, 0, 0x140, 0xf0), TOPTR(IDirectDrawSurface*, unk434), MakeRect(0, 0, 0x140, 0xf0), 0, 0);
+    m_graphics->Blit(MakeRect(0, 0, 0x140, 0xf0), TOPTR(IDirectDrawSurface*, m_loadingSurface), MakeRect(0, 0, 0x140, 0xf0), 0, 0);
     m_graphics->Flip();
 }
 
-void CScene2::Unk76ca50()
+void CScene2::SetupMatch()
 {
     char v38[40];
     int l10;
     char vc[8];
 
-    if (m_game->unk1364 == 6) {
+    if (m_game->m_gameMode == 6) {
         l10 = 0x16;
         while (l10 == 0x13 || l10 == 0x16) {
             l10 = rand() % 0x18;
@@ -85,7 +85,7 @@ void CScene2::Unk76ca50()
                 l10 = 0x16;
             }
         }
-        Unk76da20(m_player1Ref, m_player2Ref, 0, l10);
+        CreateCharacter(m_player1Ref, m_player2Ref, 0, l10);
         l10 = 0x16;
         while (l10 == 0x13 || l10 == 0x16) {
             l10 = rand() % 0x18;
@@ -96,7 +96,7 @@ void CScene2::Unk76ca50()
                 l10 = 0x16;
             }
         }
-        Unk76da20(m_player2Ref, m_player1Ref, 1, l10);
+        CreateCharacter(m_player2Ref, m_player1Ref, 1, l10);
         (*m_player1Ref)->m_paletteIndex = 0;
         (*m_player2Ref)->m_paletteIndex = (*m_player2Ref)->m_charId == (*m_player1Ref)->m_charId;
         (*m_player1Ref)->m_cpu = 1;
@@ -111,27 +111,27 @@ void CScene2::Unk76ca50()
                 l10 = 0x17;
             }
         }
-        m_game->unkf32 = l10;
-        m_game->unk1338[0] = 0;
-        m_game->unk1338[1] = 0;
-    } else if (m_game->unk1364 == 5) {
+        m_game->m_stage = l10;
+        m_game->m_editColor[0] = 0;
+        m_game->m_editColor[1] = 0;
+    } else if (m_game->m_gameMode == 5) {
         strcpy(v38, "replay\\data");
-        _itoa(m_game->unk14282 + 1, vc, 0xa);
+        _itoa(m_game->m_replayPage + 1, vc, 0xa);
         strcat(v38, (const char*)vc);
         strcat(v38, "-");
-        _itoa(m_game->unk14281 + 1, vc, 0xa);
+        _itoa(m_game->m_replaySlot + 1, vc, 0xa);
         strcat(v38, (const char*)vc);
         strcat(v38, ".rep");
         if (m_game->m_replayMode == 1) {
             m_game->m_replay.OpenRead((const char*)v38);
-            Unk76da20(m_player1Ref, m_player2Ref, 0, m_game->m_replay.Read());
-            Unk76da20(m_player2Ref, m_player1Ref, 1, m_game->m_replay.Read());
-            m_game->unkf32 = m_game->m_replay.Read();
-            if (m_game->unkf32 > 0x64) {
-                m_game->unk1340 = m_game->unkf32;
-                m_game->unkf32 = m_game->m_replay.Read();
+            CreateCharacter(m_player1Ref, m_player2Ref, 0, m_game->m_replay.Read());
+            CreateCharacter(m_player2Ref, m_player1Ref, 1, m_game->m_replay.Read());
+            m_game->m_stage = m_game->m_replay.Read();
+            if (m_game->m_stage > 0x64) {
+                m_game->m_replayVersion = m_game->m_stage;
+                m_game->m_stage = m_game->m_replay.Read();
             } else {
-                m_game->unk1340 = 0;
+                m_game->m_replayVersion = 0;
             }
             (*m_player1Ref)->m_paletteIndex = m_game->m_replay.Read();
             (*m_player2Ref)->m_paletteIndex = m_game->m_replay.Read();
@@ -140,13 +140,13 @@ void CScene2::Unk76ca50()
             m_game->m_replay.Write((*m_player1Ref)->m_charId);
             m_game->m_replay.Write((*m_player2Ref)->m_charId);
             m_game->m_replay.Write(0x68);
-            m_game->m_replay.Write(m_game->unkf32);
+            m_game->m_replay.Write(m_game->m_stage);
             m_game->m_replay.Write((*m_player1Ref)->m_paletteIndex);
             m_game->m_replay.Write((*m_player2Ref)->m_paletteIndex);
         }
-    } else if (m_game->unk1364 == 0 && (unsigned char)m_game->unk1378 == 0 || m_game->unk1364 == 2) {
+    } else if (m_game->m_gameMode == 0 && (unsigned char)m_game->m_continued == 0 || m_game->m_gameMode == 2) {
         l10 = 0x16;
-        while ((1 << l10 & m_game->unk135c) != 0 || l10 == 0x12 || l10 == 0x13 || l10 == 0x16) {
+        while ((1 << l10 & m_game->m_beatenChars) != 0 || l10 == 0x12 || l10 == 0x13 || l10 == 0x16) {
             l10 = rand() % 0x18;
             if (m_game->m_extraChars == 0 && (l10 == 0x14 || l10 == 0x15 || l10 == 0x17)) {
                 l10 = 0x16;
@@ -155,9 +155,9 @@ void CScene2::Unk76ca50()
                 l10 = 0x16;
             }
         }
-        if (m_game->unk1364 == 0) {
-            if (m_game->unk1358 == 8) {
-                if ((unsigned char)m_game->unk1379 == 0 || (unsigned char)m_game->unk1379 == 8) {
+        if (m_game->m_gameMode == 0) {
+            if (m_game->m_arcadeMatch == 8) {
+                if ((unsigned char)m_game->m_continuedAt == 0 || (unsigned char)m_game->m_continuedAt == 8) {
                     l10 = 0x13;
                 } else {
                     l10 = 0x18;
@@ -167,25 +167,25 @@ void CScene2::Unk76ca50()
                 }
             }
         } else if (m_game->m_extraChars == 0) {
-            if (m_game->unk1358 == 8) {
+            if (m_game->m_arcadeMatch == 8) {
                 l10 = 0x18;
             }
         } else {
-            if (m_game->unk1358 == 8) {
+            if (m_game->m_arcadeMatch == 8) {
                 l10 = 0x13;
             }
-            if (m_game->unk1358 == 7) {
+            if (m_game->m_arcadeMatch == 7) {
                 l10 = 0x18;
             }
         }
-        if (m_game->unk1343[0] == 1) {
-            Unk76da20(m_player1Ref, m_player2Ref, 0, l10);
+        if (m_game->m_isCpu[0] == 1) {
+            CreateCharacter(m_player1Ref, m_player2Ref, 0, l10);
             (*m_player1Ref)->m_paletteIndex = 0;
             if ((*m_player1Ref)->m_charId == (*m_player2Ref)->m_charId && (*m_player2Ref)->m_paletteIndex == 0) {
                 (*m_player1Ref)->m_paletteIndex = 1;
             }
         } else {
-            Unk76da20(m_player2Ref, m_player1Ref, 1, l10);
+            CreateCharacter(m_player2Ref, m_player1Ref, 1, l10);
             (*m_player2Ref)->m_paletteIndex = 0;
             if ((*m_player2Ref)->m_charId == (*m_player1Ref)->m_charId && (*m_player1Ref)->m_paletteIndex == 0) {
                 (*m_player2Ref)->m_paletteIndex = 1;
@@ -193,80 +193,80 @@ void CScene2::Unk76ca50()
         }
         switch (l10) {
         case 0:
-            m_game->unkf32 = 4;
+            m_game->m_stage = 4;
             break;
         case 1:
-            m_game->unkf32 = 7;
+            m_game->m_stage = 7;
             break;
         case 2:
-            m_game->unkf32 = 0;
+            m_game->m_stage = 0;
             break;
         case 3:
-            m_game->unkf32 = 6;
+            m_game->m_stage = 6;
             break;
         case 4:
-            m_game->unkf32 = 0xa;
+            m_game->m_stage = 0xa;
             break;
         case 5:
-            m_game->unkf32 = 0xb;
+            m_game->m_stage = 0xb;
             break;
         case 6:
-            m_game->unkf32 = 3;
+            m_game->m_stage = 3;
             break;
         case 7:
-            m_game->unkf32 = 5;
+            m_game->m_stage = 5;
             break;
         case 8:
-            m_game->unkf32 = 0x16;
+            m_game->m_stage = 0x16;
             break;
         case 9:
-            m_game->unkf32 = 2;
+            m_game->m_stage = 2;
             break;
         case 0xa:
-            m_game->unkf32 = 8;
+            m_game->m_stage = 8;
             break;
         case 0xb:
-            m_game->unkf32 = 9;
+            m_game->m_stage = 9;
             break;
         case 0xc:
-            m_game->unkf32 = 4;
+            m_game->m_stage = 4;
             break;
         case 0xd:
-            m_game->unkf32 = 1;
+            m_game->m_stage = 1;
             break;
         case 0xe:
-            m_game->unkf32 = 0x13;
+            m_game->m_stage = 0x13;
             break;
         case 0xf:
-            m_game->unkf32 = 0x14;
+            m_game->m_stage = 0x14;
             break;
         case 0x10:
-            m_game->unkf32 = 0x11;
+            m_game->m_stage = 0x11;
             break;
         case 0x11:
-            m_game->unkf32 = 8;
+            m_game->m_stage = 8;
             break;
         case 0x12:
-            m_game->unkf32 = 0xc;
+            m_game->m_stage = 0xc;
             break;
         case 0x13:
-            m_game->unkf32 = 0x10;
+            m_game->m_stage = 0x10;
             break;
         case 0x14:
-            m_game->unkf32 = 0xe;
+            m_game->m_stage = 0xe;
             break;
         case 0x15:
-            m_game->unkf32 = 0xd;
+            m_game->m_stage = 0xd;
             break;
         case 0x17:
-            m_game->unkf32 = 0xf;
+            m_game->m_stage = 0xf;
             break;
         case 0x18:
-            m_game->unkf32 = 0xc;
+            m_game->m_stage = 0xc;
         }
     }
-    _itoa(m_game->unkf32, vc, 0xa);
-    if (m_game->unkf32 < 0xa) {
+    _itoa(m_game->m_stage, vc, 0xa);
+    if (m_game->m_stage < 0xa) {
         strcpy(v38, "system\\bg\\bg0");
     } else {
         strcpy(v38, "system\\bg\\bg");
@@ -274,48 +274,48 @@ void CScene2::Unk76ca50()
     strcat(v38, (const char*)vc);
     if (1) {
         strcat(v38, ".dat");
-        if ((int)m_game->unke98 != 0) {
-            m_game->unke98->Release();
-            m_game->unke98 = (IDirectDrawSurface*)0;
+        if ((int)m_game->m_stageSurface != 0) {
+            m_game->m_stageSurface->Release();
+            m_game->m_stageSurface = (IDirectDrawSurface*)0;
         }
-        m_game->LoadDat(&m_game->unke98, (const char*)v38, 0, 1);
+        m_game->LoadDat(&m_game->m_stageSurface, (const char*)v38, 0, 1);
         m_graphics->LoadPaletteDat(m_game->m_palette, (const char*)v38, 0, 1, 0x5e);
-        _itoa(m_game->unkf32, vc, 0xa);
-        if (m_game->unkf32 < 0xa) {
+        _itoa(m_game->m_stage, vc, 0xa);
+        if (m_game->m_stage < 0xa) {
             strcpy(v38, "system\\bg\\bg0");
         } else {
             strcpy(v38, "system\\bg\\bg");
         }
         strcat(v38, (const char*)vc);
         strcat(v38, "b.dat");
-        if ((int)m_game->unke9c != 0) {
-            m_game->unke9c->Release();
-            m_game->unke9c = (IDirectDrawSurface*)0;
+        if ((int)m_game->m_stageNegative != 0) {
+            m_game->m_stageNegative->Release();
+            m_game->m_stageNegative = (IDirectDrawSurface*)0;
         }
-        m_game->LoadDat(&m_game->unke9c, (const char*)v38, 0, 0xaf);
+        m_game->LoadDat(&m_game->m_stageNegative, (const char*)v38, 0, 0xaf);
     } else {
         strcat(v38, ".bmp");
-        if ((int)m_game->unke98 != 0) {
-            m_game->unke98->Release();
-            m_game->unke98 = (IDirectDrawSurface*)0;
+        if ((int)m_game->m_stageSurface != 0) {
+            m_game->m_stageSurface->Release();
+            m_game->m_stageSurface = (IDirectDrawSurface*)0;
         }
-        m_graphics->LoadBmp(&m_game->unke98, (const char*)v38, 1);
+        m_graphics->LoadBmp(&m_game->m_stageSurface, (const char*)v38, 1);
         m_graphics->LoadPaletteBmp(m_game->m_palette, (const char*)v38, 0, 1, 0x5e);
-        _itoa(m_game->unkf32, vc, 0xa);
-        if (m_game->unkf32 < 0xa) {
+        _itoa(m_game->m_stage, vc, 0xa);
+        if (m_game->m_stage < 0xa) {
             strcpy(v38, "system\\bg\\bg0");
         } else {
             strcpy(v38, "system\\bg\\bg");
         }
         strcat(v38, (const char*)vc);
         strcat(v38, "b.bmp");
-        if ((int)m_game->unke9c != 0) {
-            m_game->unke9c->Release();
-            m_game->unke9c = (IDirectDrawSurface*)0;
+        if ((int)m_game->m_stageNegative != 0) {
+            m_game->m_stageNegative->Release();
+            m_game->m_stageNegative = (IDirectDrawSurface*)0;
         }
-        m_graphics->LoadBmp(&m_game->unke9c, (const char*)v38, 0xaf);
+        m_graphics->LoadBmp(&m_game->m_stageNegative, (const char*)v38, 0xaf);
     }
-    switch (m_game->unkf32) {
+    switch (m_game->m_stage) {
     case 1:
         if (0) {}
         if (0) {}
@@ -330,29 +330,29 @@ void CScene2::Unk76ca50()
     case 0x10:
         m_game->m_background = new CBg16(m_graphics);
     }
-    if (m_game->unkf32 == 0x10) {
-        m_game->unk14258 = 0.125;
+    if (m_game->m_stage == 0x10) {
+        m_game->m_bgParallax = 0.125;
     } else {
-        m_game->unk14258 = 1.0;
+        m_game->m_bgParallax = 1.0;
     }
     (*m_player1Ref)->Load();
     (*m_player2Ref)->Load();
-    if (m_game->unk1364 == 2) {
-        (*m_player1Ref)->unka8 = m_game->unk1358 / 1.5f;
-        (*m_player2Ref)->unka8 = m_game->unk1358 / 1.5f;
+    if (m_game->m_gameMode == 2) {
+        (*m_player1Ref)->m_cpuSkill = m_game->m_arcadeMatch / 1.5f;
+        (*m_player2Ref)->m_cpuSkill = m_game->m_arcadeMatch / 1.5f;
     } else {
-        (*m_player1Ref)->unka8 = m_game->unk1365;
-        (*m_player2Ref)->unka8 = m_game->unk1365;
+        (*m_player1Ref)->m_cpuSkill = m_game->m_cpuLevel;
+        (*m_player2Ref)->m_cpuSkill = m_game->m_cpuLevel;
     }
     m_game->Reset();
     m_graphics->BuildBlendTables(m_game->m_palette);
 }
 
-void CScene2::Vf2()
+void CScene2::HandleKeys()
 {
 }
 
-void CScene2::Unk76da20(PTR32(CPlayer)* p1, PTR32(CPlayer)* p2, char p3, char p4)
+void CScene2::CreateCharacter(PTR32(CPlayer)* p1, PTR32(CPlayer)* p2, char p3, char p4)
 {
     switch (p4) {
     case 0:
@@ -432,5 +432,5 @@ void CScene2::Unk76da20(PTR32(CPlayer)* p1, PTR32(CPlayer)* p2, char p3, char p4
     }
     (*p1)->m_charId = p4;
     m_players[p3] = *p1;
-    (*p1)->m_cpu = m_game->unk1343[p3];
+    (*p1)->m_cpu = m_game->m_isCpu[p3];
 }

@@ -11,7 +11,7 @@ void CMayu::UpdatePattern()
     WORD x8;
     WORD l4;
 
-    if (unk14a > 0 || (*m_opponent)->unk14c > 0) {
+    if (m_hitstop > 0 || (*m_opponent)->m_freezeTime > 0) {
         return;
     }
     EffectDesc l50;
@@ -31,7 +31,7 @@ void CMayu::UpdatePattern()
             }
         }
         break;
-    case 1:
+    case kWalkForward:
         vx = 0.9;
         vy = 0.0;
         timer++;
@@ -43,7 +43,7 @@ void CMayu::UpdatePattern()
             }
         }
         break;
-    case 2:
+    case kWalkBack:
         vx = -0.9;
         vy = 0.0;
         timer++;
@@ -55,7 +55,7 @@ void CMayu::UpdatePattern()
             }
         }
         break;
-    case 3:
+    case kCrouch:
         vx = 0.0;
         vy = 0.0;
         FaceOpponent();
@@ -68,7 +68,7 @@ void CMayu::UpdatePattern()
             }
         }
         break;
-    case 4:
+    case kJump:
         if (frame == 0 && timer == 0) {
             FaceOpponent();
             vx = 0.0;
@@ -93,11 +93,11 @@ void CMayu::UpdatePattern()
             y = 0.0;
             m_playSound = 9;
             FaceOpponent();
-            pattern = 0xd;
+            pattern = kLand;
             StartPattern();
         }
         break;
-    case 5:
+    case kJumpForward:
         if (frame == 0 && timer == 0) {
             FaceOpponent();
             vx = 0.0;
@@ -123,11 +123,11 @@ void CMayu::UpdatePattern()
             y = 0.0;
             m_playSound = 9;
             FaceOpponent();
-            pattern = 0xd;
+            pattern = kLand;
             StartPattern();
         }
         break;
-    case 6:
+    case kJumpBack:
         if (frame == 0 && timer == 0) {
             FaceOpponent();
             vx = 0.0;
@@ -153,11 +153,11 @@ void CMayu::UpdatePattern()
             y = 0.0;
             m_playSound = 9;
             FaceOpponent();
-            pattern = 0xd;
+            pattern = kLand;
             StartPattern();
         }
         break;
-    case 7:
+    case kStandUp:
         vx = 0.0;
         vy = 0.0;
         FaceOpponent();
@@ -166,12 +166,12 @@ void CMayu::UpdatePattern()
             timer = 0;
             frame++;
             if (frame >= x8) {
-                pattern = 0;
+                pattern = kStand;
                 StartPattern();
             }
         }
         break;
-    case 8:
+    case kCrouchDown:
         vx = 0.0;
         vy = 0.0;
         FaceOpponent();
@@ -180,12 +180,12 @@ void CMayu::UpdatePattern()
             timer = 0;
             frame++;
             if (frame >= x8) {
-                pattern = 3;
+                pattern = kCrouch;
                 StartPattern();
             }
         }
         break;
-    case 9:
+    case kFall:
         vy = vy + ay;
         timer++;
         if (timer >= l4) {
@@ -198,11 +198,11 @@ void CMayu::UpdatePattern()
         if (y + vy >= 0.0) {
             y = 0.0;
             m_playSound = 9;
-            pattern = 0xd;
+            pattern = kLand;
             StartPattern();
         }
         break;
-    case 0xa:
+    case kSuperJump:
         vy = vy + ay;
         timer++;
         if (timer >= l4) {
@@ -215,11 +215,11 @@ void CMayu::UpdatePattern()
         if (y + vy >= 0.0) {
             y = 0.0;
             m_playSound = 9;
-            pattern = 0xd;
+            pattern = kLand;
             StartPattern();
         }
         break;
-    case 0xd:
+    case kLand:
         vx = 0.0;
         vy = 0.0;
         FaceOpponent();
@@ -228,15 +228,15 @@ void CMayu::UpdatePattern()
             timer = 0;
             frame++;
             if (frame >= x8) {
-                pattern = 7;
+                pattern = kStandUp;
                 if (m_inputY == 1) {
-                    pattern = 3;
+                    pattern = kCrouch;
                 }
                 StartPattern();
             }
         }
         break;
-    case 0xe:
+    case kAirJump:
         ay = 0.055;
         if (frame == 0 && timer == 0) {
             vy = -3.2;
@@ -255,11 +255,11 @@ void CMayu::UpdatePattern()
             y = 0.0;
             m_playSound = 9;
             FaceOpponent();
-            pattern = 0xd;
+            pattern = kLand;
             StartPattern();
         }
         break;
-    case 0xf:
+    case kAirJumpForward:
         ay = 0.055;
         if (frame == 0 && timer == 0) {
             vy = -3.2;
@@ -278,11 +278,11 @@ void CMayu::UpdatePattern()
             y = 0.0;
             m_playSound = 9;
             FaceOpponent();
-            pattern = 0xd;
+            pattern = kLand;
             StartPattern();
         }
         break;
-    case 0x10:
+    case kAirJumpBack:
         ay = 0.055;
         if (frame == 0 && timer == 0) {
             vy = -3.2;
@@ -301,11 +301,11 @@ void CMayu::UpdatePattern()
             y = 0.0;
             m_playSound = 9;
             FaceOpponent();
-            pattern = 0xd;
+            pattern = kLand;
             StartPattern();
         }
         break;
-    case 0x2f:
+    case kResultLoserFall:
         if (frame == 0 && timer == 0) {
             vx = 0.0;
             ay = 0.035;
@@ -332,15 +332,15 @@ void CMayu::UpdatePattern()
             }
         }
         break;
-    case 0x32:
-        if (unk120 != 0) {
-            unk118 -= 0.6;
+    case kHitStandHighLight:
+        if (m_rfBlue != 0) {
+            m_rfGauge -= 0.6;
         }
         if (frame == 0 && timer == 0) {
             m_gauge = m_gauge + 0xa;
             vx = (2.0 - (*m_opponent)->m_proration / 10000.0) * -1.1;
-            if (unk120 != 0) {
-                unk118 -= 10.0;
+            if (m_rfBlue != 0) {
+                m_rfGauge -= 10.0;
             }
         }
         vy = 0.0;
@@ -350,32 +350,32 @@ void CMayu::UpdatePattern()
             vx = 0.0;
         }
         if (x - 20.0 <= 0.0 || x + 20.0 >= 639.0) {
-            unkb8 = (1.0 - (y < 0.0) * 0.2) * vx;
+            m_cornerPushback = (1.0 - (y < 0.0) * 0.2) * vx;
         } else {
-            unkb8 = 0.0;
+            m_cornerPushback = 0.0;
         }
         timer++;
         if (timer >= l4) {
             timer = 0;
             frame++;
             if (frame >= x8) {
-                pattern = 0;
+                pattern = kStand;
                 if (m_inputY == 1) {
-                    pattern = 3;
+                    pattern = kCrouch;
                 }
                 StartPattern();
             }
         }
         break;
-    case 0x33:
-        if (unk120 != 0) {
-            unk118 -= 0.6;
+    case kHitStandHighMedium:
+        if (m_rfBlue != 0) {
+            m_rfGauge -= 0.6;
         }
         if (frame == 0 && timer == 0) {
             m_gauge = m_gauge + 0xf;
             vx = (2.0 - (*m_opponent)->m_proration / 10000.0) * -1.5;
-            if (unk120 != 0) {
-                unk118 -= 20.0;
+            if (m_rfBlue != 0) {
+                m_rfGauge -= 20.0;
             }
         }
         vy = 0.0;
@@ -385,32 +385,32 @@ void CMayu::UpdatePattern()
             vx = 0.0;
         }
         if (x - 20.0 <= 0.0 || x + 20.0 >= 639.0) {
-            unkb8 = (1.0 - (y < 0.0) * 0.2) * vx;
+            m_cornerPushback = (1.0 - (y < 0.0) * 0.2) * vx;
         } else {
-            unkb8 = 0.0;
+            m_cornerPushback = 0.0;
         }
         timer++;
         if (timer >= l4) {
             timer = 0;
             frame++;
             if (frame >= x8) {
-                pattern = 0;
+                pattern = kStand;
                 if (m_inputY == 1) {
-                    pattern = 3;
+                    pattern = kCrouch;
                 }
                 StartPattern();
             }
         }
         break;
-    case 0x34:
-        if (unk120 != 0) {
-            unk118 -= 0.6;
+    case kHitStandHighHeavy:
+        if (m_rfBlue != 0) {
+            m_rfGauge -= 0.6;
         }
         if (frame == 0 && timer == 0) {
             m_gauge = m_gauge + 0x14;
             vx = (2.0 - (*m_opponent)->m_proration / 10000.0) * -1.8;
-            if (unk120 != 0) {
-                unk118 -= 30.0;
+            if (m_rfBlue != 0) {
+                m_rfGauge -= 30.0;
             }
         }
         vy = 0.0;
@@ -420,32 +420,32 @@ void CMayu::UpdatePattern()
             vx = 0.0;
         }
         if (x - 20.0 <= 0.0 || x + 20.0 >= 639.0) {
-            unkb8 = (1.0 - (y < 0.0) * 0.2) * vx;
+            m_cornerPushback = (1.0 - (y < 0.0) * 0.2) * vx;
         } else {
-            unkb8 = 0.0;
+            m_cornerPushback = 0.0;
         }
         timer++;
         if (timer >= l4) {
             timer = 0;
             frame++;
             if (frame >= x8) {
-                pattern = 0;
+                pattern = kStand;
                 if (m_inputY == 1) {
-                    pattern = 3;
+                    pattern = kCrouch;
                 }
                 StartPattern();
             }
         }
         break;
-    case 0x35:
-        if (unk120 != 0) {
-            unk118 -= 0.6;
+    case kHitStandLowLight:
+        if (m_rfBlue != 0) {
+            m_rfGauge -= 0.6;
         }
         if (frame == 0 && timer == 0) {
             m_gauge = m_gauge + 0xa;
             vx = (2.0 - (*m_opponent)->m_proration / 10000.0) * -1.1;
-            if (unk120 != 0) {
-                unk118 -= 10.0;
+            if (m_rfBlue != 0) {
+                m_rfGauge -= 10.0;
             }
         }
         vy = 0.0;
@@ -455,32 +455,32 @@ void CMayu::UpdatePattern()
             vx = 0.0;
         }
         if (x - 20.0 <= 0.0 || x + 20.0 >= 639.0) {
-            unkb8 = (1.0 - (y < 0.0) * 0.2) * vx;
+            m_cornerPushback = (1.0 - (y < 0.0) * 0.2) * vx;
         } else {
-            unkb8 = 0.0;
+            m_cornerPushback = 0.0;
         }
         timer++;
         if (timer >= l4) {
             timer = 0;
             frame++;
             if (frame >= x8) {
-                pattern = 0;
+                pattern = kStand;
                 if (m_inputY == 1) {
-                    pattern = 3;
+                    pattern = kCrouch;
                 }
                 StartPattern();
             }
         }
         break;
-    case 0x36:
-        if (unk120 != 0) {
-            unk118 -= 0.6;
+    case kHitStandLowMedium:
+        if (m_rfBlue != 0) {
+            m_rfGauge -= 0.6;
         }
         if (frame == 0 && timer == 0) {
             m_gauge = m_gauge + 0xf;
             vx = (2.0 - (*m_opponent)->m_proration / 10000.0) * -1.5;
-            if (unk120 != 0) {
-                unk118 -= 20.0;
+            if (m_rfBlue != 0) {
+                m_rfGauge -= 20.0;
             }
         }
         vy = 0.0;
@@ -490,32 +490,32 @@ void CMayu::UpdatePattern()
             vx = 0.0;
         }
         if (x - 20.0 <= 0.0 || x + 20.0 >= 639.0) {
-            unkb8 = (1.0 - (y < 0.0) * 0.2) * vx;
+            m_cornerPushback = (1.0 - (y < 0.0) * 0.2) * vx;
         } else {
-            unkb8 = 0.0;
+            m_cornerPushback = 0.0;
         }
         timer++;
         if (timer >= l4) {
             timer = 0;
             frame++;
             if (frame >= x8) {
-                pattern = 0;
+                pattern = kStand;
                 if (m_inputY == 1) {
-                    pattern = 3;
+                    pattern = kCrouch;
                 }
                 StartPattern();
             }
         }
         break;
-    case 0x37:
-        if (unk120 != 0) {
-            unk118 -= 0.6;
+    case kHitStandLowHeavy:
+        if (m_rfBlue != 0) {
+            m_rfGauge -= 0.6;
         }
         if (frame == 0 && timer == 0) {
             m_gauge = m_gauge + 0x14;
             vx = (2.0 - (*m_opponent)->m_proration / 10000.0) * -1.8;
-            if (unk120 != 0) {
-                unk118 -= 30.0;
+            if (m_rfBlue != 0) {
+                m_rfGauge -= 30.0;
             }
         }
         vy = 0.0;
@@ -525,32 +525,32 @@ void CMayu::UpdatePattern()
             vx = 0.0;
         }
         if (x - 20.0 <= 0.0 || x + 20.0 >= 639.0) {
-            unkb8 = (1.0 - (y < 0.0) * 0.2) * vx;
+            m_cornerPushback = (1.0 - (y < 0.0) * 0.2) * vx;
         } else {
-            unkb8 = 0.0;
+            m_cornerPushback = 0.0;
         }
         timer++;
         if (timer >= l4) {
             timer = 0;
             frame++;
             if (frame >= x8) {
-                pattern = 0;
+                pattern = kStand;
                 if (m_inputY == 1) {
-                    pattern = 3;
+                    pattern = kCrouch;
                 }
                 StartPattern();
             }
         }
         break;
-    case 0x38:
-        if (unk120 != 0) {
-            unk118 -= 0.6;
+    case kHitCrouchLight:
+        if (m_rfBlue != 0) {
+            m_rfGauge -= 0.6;
         }
         if (frame == 0 && timer == 0) {
             m_gauge = m_gauge + 0xa;
             vx = (2.0 - (*m_opponent)->m_proration / 10000.0) * -1.1;
-            if (unk120 != 0) {
-                unk118 -= 10.0;
+            if (m_rfBlue != 0) {
+                m_rfGauge -= 10.0;
             }
         }
         vy = 0.0;
@@ -560,29 +560,29 @@ void CMayu::UpdatePattern()
             vx = 0.0;
         }
         if (x - 20.0 <= 0.0 || x + 20.0 >= 639.0) {
-            unkb8 = (1.0 - (y < 0.0) * 0.2) * vx;
+            m_cornerPushback = (1.0 - (y < 0.0) * 0.2) * vx;
         } else {
-            unkb8 = 0.0;
+            m_cornerPushback = 0.0;
         }
         timer++;
         if (timer >= l4) {
             timer = 0;
             frame++;
             if (frame >= x8) {
-                pattern = 3;
+                pattern = kCrouch;
                 StartPattern();
             }
         }
         break;
-    case 0x39:
-        if (unk120 != 0) {
-            unk118 -= 0.6;
+    case kHitCrouchMedium:
+        if (m_rfBlue != 0) {
+            m_rfGauge -= 0.6;
         }
         if (frame == 0 && timer == 0) {
             m_gauge = m_gauge + 0xf;
             vx = (2.0 - (*m_opponent)->m_proration / 10000.0) * -1.5;
-            if (unk120 != 0) {
-                unk118 -= 20.0;
+            if (m_rfBlue != 0) {
+                m_rfGauge -= 20.0;
             }
         }
         vy = 0.0;
@@ -592,29 +592,29 @@ void CMayu::UpdatePattern()
             vx = 0.0;
         }
         if (x - 20.0 <= 0.0 || x + 20.0 >= 639.0) {
-            unkb8 = (1.0 - (y < 0.0) * 0.2) * vx;
+            m_cornerPushback = (1.0 - (y < 0.0) * 0.2) * vx;
         } else {
-            unkb8 = 0.0;
+            m_cornerPushback = 0.0;
         }
         timer++;
         if (timer >= l4) {
             timer = 0;
             frame++;
             if (frame >= x8) {
-                pattern = 3;
+                pattern = kCrouch;
                 StartPattern();
             }
         }
         break;
-    case 0x3a:
-        if (unk120 != 0) {
-            unk118 -= 0.6;
+    case kHitCrouchHeavy:
+        if (m_rfBlue != 0) {
+            m_rfGauge -= 0.6;
         }
         if (frame == 0 && timer == 0) {
             m_gauge = m_gauge + 0x14;
             vx = (2.0 - (*m_opponent)->m_proration / 10000.0) * -1.8;
-            if (unk120 != 0) {
-                unk118 -= 30.0;
+            if (m_rfBlue != 0) {
+                m_rfGauge -= 30.0;
             }
         }
         vy = 0.0;
@@ -624,28 +624,28 @@ void CMayu::UpdatePattern()
             vx = 0.0;
         }
         if (x - 20.0 <= 0.0 || x + 20.0 >= 639.0) {
-            unkb8 = (1.0 - (y < 0.0) * 0.2) * vx;
+            m_cornerPushback = (1.0 - (y < 0.0) * 0.2) * vx;
         } else {
-            unkb8 = 0.0;
+            m_cornerPushback = 0.0;
         }
         timer++;
         if (timer >= l4) {
             timer = 0;
             frame++;
             if (frame >= x8) {
-                pattern = 3;
+                pattern = kCrouch;
                 StartPattern();
             }
         }
         break;
-    case 0x3b:
-        if (unk120 != 0) {
-            unk118 -= 0.8;
+    case kHitAir:
+        if (m_rfBlue != 0) {
+            m_rfGauge -= 0.8;
         }
         if (frame == 0 && timer == 0) {
             m_gauge = m_gauge + 0x1e;
-            vx = unkc0;
-            vy = vy * 0.75 + unkc8;
+            vx = m_hitVx;
+            vy = vy * 0.75 + m_hitVy;
             if (vy < -2.0) {
                 vy = -2.0;
             } else if (vy > -0.5) {
@@ -672,23 +672,23 @@ void CMayu::UpdatePattern()
         }
         if (y + vy >= 0.0 && frame > 1) {
             y = 0.0;
-            if (unk12c != 0) {
-                pattern = 0x61;
+            if (m_landHittable != 0) {
+                pattern = kKnockdownHittable;
                 StartPattern();
             } else {
-                pattern = 0x62;
+                pattern = kKnockdown;
                 StartPattern();
             }
         }
         break;
-    case 0x3c:
-        if (unk120 != 0) {
-            unk118 -= 0.8;
+    case kHitAirHigh:
+        if (m_rfBlue != 0) {
+            m_rfGauge -= 0.8;
         }
         if (frame == 0 && timer == 0) {
             m_gauge = m_gauge + 0x1e;
-            vx = unkc0;
-            vy = vy * 0.75 + unkc8;
+            vx = m_hitVx;
+            vy = vy * 0.75 + m_hitVy;
             if (vy < -4.0) {
                 vy = -4.0;
             } else if (vy > -0.5) {
@@ -715,23 +715,23 @@ void CMayu::UpdatePattern()
         }
         if (y + vy >= 0.0 && frame > 1) {
             y = 0.0;
-            if (unk12c != 0) {
-                pattern = 0x61;
+            if (m_landHittable != 0) {
+                pattern = kKnockdownHittable;
                 StartPattern();
             } else {
-                pattern = 0x62;
+                pattern = kKnockdown;
                 StartPattern();
             }
         }
         break;
-    case 0x3d:
-        if (unk120 != 0) {
-            unk118 -= 0.8;
+    case kHitAirHigher:
+        if (m_rfBlue != 0) {
+            m_rfGauge -= 0.8;
         }
         if (frame == 0 && timer == 0) {
             m_gauge = m_gauge + 0x1e;
-            vx = unkc0;
-            vy = vy * 0.75 + unkc8;
+            vx = m_hitVx;
+            vy = vy * 0.75 + m_hitVy;
             if (vy < -6.0) {
                 vy = -6.0;
             } else if (vy > -0.5) {
@@ -758,23 +758,23 @@ void CMayu::UpdatePattern()
         }
         if (y + vy >= 0.0 && frame > 1) {
             y = 0.0;
-            if (unk12c != 0) {
-                pattern = 0x61;
+            if (m_landHittable != 0) {
+                pattern = kKnockdownHittable;
                 StartPattern();
             } else {
-                pattern = 0x62;
+                pattern = kKnockdown;
                 StartPattern();
             }
         }
         break;
-    case 0x3e:
-        if (unk120 != 0) {
-            unk118 -= 0.8;
+    case kHitAirCarry:
+        if (m_rfBlue != 0) {
+            m_rfGauge -= 0.8;
         }
         if (frame == 0 && timer == 0) {
             m_gauge = m_gauge + 0x1e;
-            vx = unkc0;
-            vy = vy * 0.75 + unkc8;
+            vx = m_hitVx;
+            vy = vy * 0.75 + m_hitVy;
             ay = 0.032;
         }
         if (vy <= 0.0) {
@@ -796,23 +796,23 @@ void CMayu::UpdatePattern()
         }
         if (y + vy >= 0.0 && frame > 1) {
             y = 0.0;
-            if (unk12c != 0) {
-                pattern = 0x61;
+            if (m_landHittable != 0) {
+                pattern = kKnockdownHittable;
                 StartPattern();
             } else {
-                pattern = 0x62;
+                pattern = kKnockdown;
                 StartPattern();
             }
         }
         break;
-    case 0x3f:
-        if (unk120 != 0) {
-            unk118 -= 0.8;
+    case kHitAirLaunch:
+        if (m_rfBlue != 0) {
+            m_rfGauge -= 0.8;
         }
         if (frame == 0 && timer == 0) {
             m_gauge = m_gauge + 0x1e;
-            vx = unkc0;
-            vy = unkc8;
+            vx = m_hitVx;
+            vy = m_hitVy;
             ay = 0.032;
         }
         if (vy <= 0.0) {
@@ -834,28 +834,28 @@ void CMayu::UpdatePattern()
         }
         if (y + vy >= 0.0 && frame > 1) {
             y = 0.0;
-            if (unk12c != 0) {
-                pattern = 0x61;
+            if (m_landHittable != 0) {
+                pattern = kKnockdownHittable;
                 StartPattern();
             } else {
-                pattern = 0x62;
+                pattern = kKnockdown;
                 StartPattern();
             }
         }
         break;
-    case 0x40:
-        if (unk120 != 0) {
-            unk118 -= 0.8;
+    case kHitAirWallBounce:
+        if (m_rfBlue != 0) {
+            m_rfGauge -= 0.8;
         }
-        if (frame > 0 && (char)Unk40ff70() != 0) {
-            pattern = 0x46;
+        if (frame > 0 && (char)AtScreenEdge() != 0) {
+            pattern = kHitWallBounce;
             StartPattern();
             break;
         }
         if (frame == 0 && timer == 0) {
             m_gauge = m_gauge + 0x1e;
-            vx = unkc0;
-            vy = vy * 0.75 + unkc8;
+            vx = m_hitVx;
+            vy = vy * 0.75 + m_hitVy;
             if (vy < -2.0) {
                 vy = -2.0;
             } else if (vy > -0.5) {
@@ -882,28 +882,28 @@ void CMayu::UpdatePattern()
         }
         if (y + vy >= 0.0 && frame > 1) {
             y = 0.0;
-            if (unk12c != 0) {
-                pattern = 0x61;
+            if (m_landHittable != 0) {
+                pattern = kKnockdownHittable;
                 StartPattern();
             } else {
-                pattern = 0x62;
+                pattern = kKnockdown;
                 StartPattern();
             }
         }
         break;
-    case 0x41:
-        if (unk120 != 0) {
-            unk118 -= 0.8;
+    case kHitAirHighWallBounce:
+        if (m_rfBlue != 0) {
+            m_rfGauge -= 0.8;
         }
-        if (frame > 0 && (char)Unk40ff70() != 0) {
-            pattern = 0x46;
+        if (frame > 0 && (char)AtScreenEdge() != 0) {
+            pattern = kHitWallBounce;
             StartPattern();
             break;
         }
         if (frame == 0 && timer == 0) {
             m_gauge = m_gauge + 0x1e;
-            vx = unkc0;
-            vy = vy * 0.75 + unkc8;
+            vx = m_hitVx;
+            vy = vy * 0.75 + m_hitVy;
             if (vy < -4.0) {
                 vy = -4.0;
             } else if (vy > -0.5) {
@@ -930,28 +930,28 @@ void CMayu::UpdatePattern()
         }
         if (y + vy >= 0.0 && frame > 1) {
             y = 0.0;
-            if (unk12c != 0) {
-                pattern = 0x61;
+            if (m_landHittable != 0) {
+                pattern = kKnockdownHittable;
                 StartPattern();
             } else {
-                pattern = 0x62;
+                pattern = kKnockdown;
                 StartPattern();
             }
         }
         break;
-    case 0x42:
-        if (unk120 != 0) {
-            unk118 -= 0.8;
+    case kHitAirCarryWallBounce:
+        if (m_rfBlue != 0) {
+            m_rfGauge -= 0.8;
         }
-        if (frame > 0 && (char)Unk40ff70() != 0) {
-            pattern = 0x46;
+        if (frame > 0 && (char)AtScreenEdge() != 0) {
+            pattern = kHitWallBounce;
             StartPattern();
             break;
         }
         if (frame == 0 && timer == 0) {
             m_gauge = m_gauge + 0x1e;
-            vx = unkc0;
-            vy = vy * 0.75 + unkc8;
+            vx = m_hitVx;
+            vy = vy * 0.75 + m_hitVy;
             ay = 0.032;
         }
         if (vy <= 0.0) {
@@ -973,28 +973,28 @@ void CMayu::UpdatePattern()
         }
         if (y + vy >= 0.0 && frame > 1) {
             y = 0.0;
-            if (unk12c != 0) {
-                pattern = 0x61;
+            if (m_landHittable != 0) {
+                pattern = kKnockdownHittable;
                 StartPattern();
             } else {
-                pattern = 0x62;
+                pattern = kKnockdown;
                 StartPattern();
             }
         }
         break;
-    case 0x43:
-        if (unk120 != 0) {
-            unk118 -= 0.8;
+    case kHitAirLaunchWallBounce:
+        if (m_rfBlue != 0) {
+            m_rfGauge -= 0.8;
         }
-        if (frame > 0 && (char)Unk40ff70() != 0) {
-            pattern = 0x46;
+        if (frame > 0 && (char)AtScreenEdge() != 0) {
+            pattern = kHitWallBounce;
             StartPattern();
             break;
         }
         if (frame == 0 && timer == 0) {
             m_gauge = m_gauge + 0x1e;
-            vx = unkc0;
-            vy = unkc8;
+            vx = m_hitVx;
+            vy = m_hitVy;
             ay = 0.032;
         }
         if (vy <= 0.0) {
@@ -1016,25 +1016,25 @@ void CMayu::UpdatePattern()
         }
         if (y + vy >= 0.0 && frame > 1) {
             y = 0.0;
-            if (unk12c != 0) {
-                pattern = 0x61;
+            if (m_landHittable != 0) {
+                pattern = kKnockdownHittable;
                 StartPattern();
             } else {
-                pattern = 0x62;
+                pattern = kKnockdown;
                 StartPattern();
             }
         }
         break;
-    case 0x44:
-        if (unk120 != 0) {
-            unk118 -= 1.5;
+    case kHitBlownAwayWallBounce:
+        if (m_rfBlue != 0) {
+            m_rfGauge -= 1.5;
         }
         m_gauge = m_gauge + 3;
-        vx = unkc0;
-        vy = unkc8;
+        vx = m_hitVx;
+        vy = m_hitVy;
         timer++;
-        if ((char)Unk40ff70() != 0) {
-            pattern = 0x46;
+        if ((char)AtScreenEdge() != 0) {
+            pattern = kHitWallBounce;
             StartPattern();
             break;
         }
@@ -1047,22 +1047,22 @@ void CMayu::UpdatePattern()
         }
         if (y + vy >= 0.0) {
             y = 0.0;
-            if (unk12c != 0) {
-                pattern = 0x61;
+            if (m_landHittable != 0) {
+                pattern = kKnockdownHittable;
                 StartPattern();
             } else {
-                pattern = 0x62;
+                pattern = kKnockdown;
                 StartPattern();
             }
         }
         break;
-    case 0x45:
-        if (unk120 != 0) {
-            unk118 -= 1.5;
+    case kHitBlownAway:
+        if (m_rfBlue != 0) {
+            m_rfGauge -= 1.5;
         }
         m_gauge = m_gauge + 3;
-        vx = unkc0;
-        vy = unkc8;
+        vx = m_hitVx;
+        vy = m_hitVy;
         timer++;
         if (timer >= l4) {
             timer = 0;
@@ -1073,23 +1073,23 @@ void CMayu::UpdatePattern()
         }
         if (y + vy >= 0.0) {
             y = 0.0;
-            if (unk12c != 0) {
-                pattern = 0x61;
+            if (m_landHittable != 0) {
+                pattern = kKnockdownHittable;
                 StartPattern();
             } else {
-                pattern = 0x62;
+                pattern = kKnockdown;
                 StartPattern();
             }
         }
         break;
-    case 0x46:
-        if (unk120 != 0) {
-            unk118 -= 0.8;
+    case kHitWallBounce:
+        if (m_rfBlue != 0) {
+            m_rfGauge -= 0.8;
         }
-        if (frame == 0 && timer == 0 && unk3138 == 0) {
+        if (frame == 0 && timer == 0 && m_patternVar1 == 0) {
             m_gauge = m_gauge + 0x1e;
-            unk3138++;
-            unk124 = unk124 + 0x78;
+            m_patternVar1++;
+            m_untechTime = m_untechTime + 0x78;
             vx = 0.5;
             vy = -2.5;
             ay = 0.025;
@@ -1112,23 +1112,23 @@ void CMayu::UpdatePattern()
         }
         if (y + vy >= 0.0 && frame > 1) {
             y = 0.0;
-            if (unk12c != 0) {
-                pattern = 0x61;
+            if (m_landHittable != 0) {
+                pattern = kKnockdownHittable;
                 StartPattern();
             } else {
-                pattern = 0x62;
+                pattern = kKnockdown;
                 StartPattern();
             }
         }
         break;
-    case 0x47:
-        if (unk120 != 0) {
-            unk118 -= 0.8;
+    case kHitAirHeavy:
+        if (m_rfBlue != 0) {
+            m_rfGauge -= 0.8;
         }
         if (frame == 0 && timer == 0) {
             m_gauge = m_gauge + 0x1e;
-            vx = unkc0;
-            vy = unkc8;
+            vx = m_hitVx;
+            vy = m_hitVy;
             ay = 0.072;
         }
         if (vy <= 0.0) {
@@ -1150,92 +1150,92 @@ void CMayu::UpdatePattern()
         }
         if (y + vy >= 0.0 && frame > 1) {
             y = 0.0;
-            if (unk12c != 0) {
-                pattern = 0x61;
+            if (m_landHittable != 0) {
+                pattern = kKnockdownHittable;
                 StartPattern();
             } else {
-                pattern = 0x62;
+                pattern = kKnockdown;
                 StartPattern();
             }
         }
         break;
-    case 0x48:
-        if (unk120 != 0) {
-            unk118 -= 0.8;
+    case kHitStandHighHold:
+        if (m_rfBlue != 0) {
+            m_rfGauge -= 0.8;
         }
         vx = 0.0;
         vy = 0.0;
         if (x - 20.0 <= 0.0 || x + 20.0 >= 639.0) {
-            unkb8 = (1.0 - ((*m_opponent)->y < 0.0) * 0.25) * vx;
+            m_cornerPushback = (1.0 - ((*m_opponent)->y < 0.0) * 0.25) * vx;
         } else {
-            unkb8 = 0.0;
+            m_cornerPushback = 0.0;
         }
         timer++;
         if (timer >= l4) {
             timer = 0;
             frame++;
             if (frame >= x8) {
-                pattern = 7;
+                pattern = kStandUp;
                 if (m_inputY == 1) {
-                    pattern = 3;
+                    pattern = kCrouch;
                 }
                 StartPattern();
             }
         }
         break;
-    case 0x49:
-        if (unk120 != 0) {
-            unk118 -= 0.8;
+    case kHitStandLowHold:
+        if (m_rfBlue != 0) {
+            m_rfGauge -= 0.8;
         }
         vx = 0.0;
         vy = 0.0;
         if (x - 20.0 <= 0.0 || x + 20.0 >= 639.0) {
-            unkb8 = (1.0 - ((*m_opponent)->y < 0.0) * 0.25) * vx;
+            m_cornerPushback = (1.0 - ((*m_opponent)->y < 0.0) * 0.25) * vx;
         } else {
-            unkb8 = 0.0;
+            m_cornerPushback = 0.0;
         }
         timer++;
         if (timer >= l4) {
             timer = 0;
             frame++;
             if (frame >= x8) {
-                pattern = 7;
+                pattern = kStandUp;
                 if (m_inputY == 1) {
-                    pattern = 3;
+                    pattern = kCrouch;
                 }
                 StartPattern();
             }
         }
         break;
-    case 0x4a:
-        if (unk120 != 0) {
-            unk118 -= 0.8;
+    case kHitCrouchHold:
+        if (m_rfBlue != 0) {
+            m_rfGauge -= 0.8;
         }
         vx = 0.0;
         vy = 0.0;
         if (x - 20.0 <= 0.0 || x + 20.0 >= 639.0) {
-            unkb8 = (1.0 - ((*m_opponent)->y < 0.0) * 0.25) * vx;
+            m_cornerPushback = (1.0 - ((*m_opponent)->y < 0.0) * 0.25) * vx;
         } else {
-            unkb8 = 0.0;
+            m_cornerPushback = 0.0;
         }
         timer++;
         if (timer >= l4) {
             timer = 0;
             frame++;
             if (frame >= x8) {
-                pattern = 3;
+                pattern = kCrouch;
                 StartPattern();
             }
         }
         break;
-    case 0x4b:
-        if (unk120 != 0) {
-            unk118 -= 0.6;
+    case kHitStandHighPull:
+        if (m_rfBlue != 0) {
+            m_rfGauge -= 0.6;
         }
         if (frame == 0 && timer == 0) {
             m_gauge = m_gauge + 0x1e;
-            if (unk120 != 0) {
-                unk118 -= 30.0;
+            if (m_rfBlue != 0) {
+                m_rfGauge -= 30.0;
             }
             vx = 2.2;
         }
@@ -1248,31 +1248,31 @@ void CMayu::UpdatePattern()
             vx = 0.0;
         }
         if (x - 20.0 <= 0.0 || x + 20.0 >= 639.0) {
-            unkb8 = (1.0 - ((*m_opponent)->y < 0.0) * 0.25) * vx;
+            m_cornerPushback = (1.0 - ((*m_opponent)->y < 0.0) * 0.25) * vx;
         } else {
-            unkb8 = 0.0;
+            m_cornerPushback = 0.0;
         }
         timer++;
         if (timer >= l4) {
             timer = 0;
             frame++;
             if (frame >= x8) {
-                pattern = 7;
+                pattern = kStandUp;
                 if (m_inputY == 1) {
-                    pattern = 3;
+                    pattern = kCrouch;
                 }
                 StartPattern();
             }
         }
         break;
-    case 0x4c:
-        if (unk120 != 0) {
-            unk118 -= 0.6;
+    case kHitStandLowPull:
+        if (m_rfBlue != 0) {
+            m_rfGauge -= 0.6;
         }
         if (frame == 0 && timer == 0) {
             m_gauge = m_gauge + 0x1e;
-            if (unk120 != 0) {
-                unk118 -= 30.0;
+            if (m_rfBlue != 0) {
+                m_rfGauge -= 30.0;
             }
             vx = 2.2;
         }
@@ -1285,31 +1285,31 @@ void CMayu::UpdatePattern()
             vx = 0.0;
         }
         if (x - 20.0 <= 0.0 || x + 20.0 >= 639.0) {
-            unkb8 = (1.0 - ((*m_opponent)->y < 0.0) * 0.25) * vx;
+            m_cornerPushback = (1.0 - ((*m_opponent)->y < 0.0) * 0.25) * vx;
         } else {
-            unkb8 = 0.0;
+            m_cornerPushback = 0.0;
         }
         timer++;
         if (timer >= l4) {
             timer = 0;
             frame++;
             if (frame >= x8) {
-                pattern = 7;
+                pattern = kStandUp;
                 if (m_inputY == 1) {
-                    pattern = 3;
+                    pattern = kCrouch;
                 }
                 StartPattern();
             }
         }
         break;
-    case 0x4d:
-        if (unk120 != 0) {
-            unk118 -= 0.6;
+    case kHitCrouchPull:
+        if (m_rfBlue != 0) {
+            m_rfGauge -= 0.6;
         }
         if (frame == 0 && timer == 0) {
             m_gauge = m_gauge + 0x1e;
-            if (unk120 != 0) {
-                unk118 -= 30.0;
+            if (m_rfBlue != 0) {
+                m_rfGauge -= 30.0;
             }
             vx = 2.2;
         }
@@ -1322,23 +1322,23 @@ void CMayu::UpdatePattern()
             vx = 0.0;
         }
         if (x - 20.0 <= 0.0 || x + 20.0 >= 639.0) {
-            unkb8 = (1.0 - ((*m_opponent)->y < 0.0) * 0.25) * vx;
+            m_cornerPushback = (1.0 - ((*m_opponent)->y < 0.0) * 0.25) * vx;
         } else {
-            unkb8 = 0.0;
+            m_cornerPushback = 0.0;
         }
         timer++;
         if (timer >= l4) {
             timer = 0;
             frame++;
             if (frame >= x8) {
-                pattern = 3;
+                pattern = kCrouch;
                 StartPattern();
             }
         }
         break;
-    case 0x51:
-        if (unk120 != 0) {
-            unk118 -= 0.8;
+    case kHitBurn:
+        if (m_rfBlue != 0) {
+            m_rfGauge -= 0.8;
         }
         if (frame == 0 && timer == 0) {
             l50.type = 0x1f3;
@@ -1348,8 +1348,8 @@ void CMayu::UpdatePattern()
             l50.layer = 1;
             SpawnObject(&l50);
             m_gauge = m_gauge + 0x1e;
-            vx = unkc0;
-            vy = unkc8;
+            vx = m_hitVx;
+            vy = m_hitVy;
             ay = 0.032;
         }
         vx += 0.02;
@@ -1367,29 +1367,29 @@ void CMayu::UpdatePattern()
         }
         if (y + vy >= 0.0 && frame == 1) {
             y = 0.0;
-            if (unk12c != 0) {
-                pattern = 0x61;
+            if (m_landHittable != 0) {
+                pattern = kKnockdownHittable;
                 StartPattern();
             } else {
-                pattern = 0x62;
+                pattern = kKnockdown;
                 StartPattern();
             }
         }
         break;
-    case 0x52:
-        if (unk120 != 0) {
-            unk118 -= 0.8;
+    case kHitShock:
+        if (m_rfBlue != 0) {
+            m_rfGauge -= 0.8;
         }
-        if (frame == 0 && timer == 0 && unk3138 == 0) {
+        if (frame == 0 && timer == 0 && m_patternVar1 == 0) {
             m_playSound = 0x1e;
             vy = -0.45;
             vx = -0.1;
-            unk3138++;
+            m_patternVar1++;
             m_gauge = m_gauge + 0x1e;
         }
         if (frame == 4 && timer == 0) {
-            vx = unkc0;
-            vy = unkc8;
+            vx = m_hitVx;
+            vy = m_hitVy;
             ay = 0.032;
         }
         if (vy > 0.0 && frame == 4) {
@@ -1403,9 +1403,9 @@ void CMayu::UpdatePattern()
         if (timer >= l4) {
             timer = 0;
             frame++;
-            if (frame == 4 && unk3138 < 8) {
+            if (frame == 4 && m_patternVar1 < 8) {
                 frame = 0;
-                unk3138++;
+                m_patternVar1++;
             }
             if (frame >= x8) {
                 frame = frame - 2;
@@ -1413,30 +1413,30 @@ void CMayu::UpdatePattern()
         }
         if (y + vy >= 0.0 && frame > 4) {
             y = 0.0;
-            if (unk12c != 0) {
-                pattern = 0x61;
+            if (m_landHittable != 0) {
+                pattern = kKnockdownHittable;
                 StartPattern();
             } else {
-                pattern = 0x62;
+                pattern = kKnockdown;
                 StartPattern();
             }
         }
         break;
-    case 0x53:
+    case kEncased:
         if (frame == 0 && timer == 0) {
-            if (unk3144 == 0) {
+            if (m_bounceDebrisOut == 0) {
                 l50.type = 0x1f0;
                 l50.x = (double)(int)x;
                 l50.y = (double)(int)y;
                 l50.scale = 0;
                 l50.layer = 0;
-                l50.unk0 = 1;
+                l50.keep = 1;
                 l50.facing = facing;
                 SpawnObject(&l50);
-                unk3144 = 1;
+                m_bounceDebrisOut = 1;
             }
-            if (unk120 != 0) {
-                unk118 -= 30.0;
+            if (m_rfBlue != 0) {
+                m_rfGauge -= 30.0;
             }
             m_playSound = 0x21;
             vy = -1.5;
@@ -1468,27 +1468,27 @@ void CMayu::UpdatePattern()
             timer = 0;
             frame++;
             if (frame >= x8) {
-                pattern = 0;
+                pattern = kStand;
                 StartPattern();
                 FaceOpponent();
             }
         }
         break;
-    case 0x54:
+    case kEncased2:
         if (frame == 0 && timer == 0) {
-            if (unk3144 == 0) {
+            if (m_bounceDebrisOut == 0) {
                 l50.type = 0x1f0;
                 l50.x = (double)(int)x;
                 l50.y = (double)(int)y;
                 l50.scale = 0;
                 l50.layer = 0;
-                l50.unk0 = 1;
+                l50.keep = 1;
                 l50.facing = facing;
                 SpawnObject(&l50);
-                unk3144 = 1;
+                m_bounceDebrisOut = 1;
             }
-            if (unk120 != 0) {
-                unk118 -= 30.0;
+            if (m_rfBlue != 0) {
+                m_rfGauge -= 30.0;
             }
             m_playSound = 0x21;
             vy = -1.5;
@@ -1520,31 +1520,31 @@ void CMayu::UpdatePattern()
             timer = 0;
             frame++;
             if (frame >= x8) {
-                pattern = 0;
+                pattern = kStand;
                 StartPattern();
                 FaceOpponent();
             }
         }
         break;
-    case 0x55:
+    case kEncasedAir:
         if (frame == 0 && timer == 0) {
-            if (unk3144 == 0) {
+            if (m_bounceDebrisOut == 0) {
                 l50.type = 0x1f0;
                 l50.x = (double)(int)x;
                 l50.y = (double)(int)y;
                 l50.scale = 0;
                 l50.layer = 0;
-                l50.unk0 = 1;
+                l50.keep = 1;
                 l50.facing = facing;
                 SpawnObject(&l50);
-                unk3144 = 1;
+                m_bounceDebrisOut = 1;
             }
-            if (unk120 != 0) {
-                unk118 -= 30.0;
+            if (m_rfBlue != 0) {
+                m_rfGauge -= 30.0;
             }
             m_playSound = 0x21;
-            vx = unkc0;
-            vy = unkc8;
+            vx = m_hitVx;
+            vy = m_hitVy;
             m_gauge = m_gauge + 0x1e;
         }
         vy += 0.04;
@@ -1553,44 +1553,44 @@ void CMayu::UpdatePattern()
             timer = 0;
             frame++;
             if (frame >= x8) {
-                pattern = 0;
+                pattern = kStand;
                 StartPattern();
                 FaceOpponent();
             }
         }
         if (y + vy >= 0.0) {
             y = 0.0;
-            if (unk12c != 0) {
-                pattern = 0x61;
+            if (m_landHittable != 0) {
+                pattern = kKnockdownHittable;
                 StartPattern();
             } else {
-                pattern = 0x62;
+                pattern = kKnockdown;
                 StartPattern();
             }
         }
         break;
-    case 0x56:
+    case kEncasedSpin:
         if (frame == 0 && timer == 0) {
-            if (unk3144 == 0) {
+            if (m_bounceDebrisOut == 0) {
                 l50.type = 0x1f0;
                 l50.x = (double)(int)x;
                 l50.y = (double)(int)y;
                 l50.scale = 0;
                 l50.layer = 0;
-                l50.unk0 = 1;
+                l50.keep = 1;
                 l50.facing = facing;
                 SpawnObject(&l50);
-                unk3144 = 1;
+                m_bounceDebrisOut = 1;
             }
-            if (unk3138 == 0) {
-                if (unk120 != 0) {
-                    unk118 -= 30.0;
+            if (m_patternVar1 == 0) {
+                if (m_rfBlue != 0) {
+                    m_rfGauge -= 30.0;
                 }
                 m_playSound = 0x21;
-                vx = unkc0;
-                vy = unkc8;
+                vx = m_hitVx;
+                vy = m_hitVy;
                 m_gauge = m_gauge + 0x1e;
-                unk3138++;
+                m_patternVar1++;
             }
         }
         vy += 0.06;
@@ -1604,16 +1604,16 @@ void CMayu::UpdatePattern()
         }
         if (y + vy >= 0.0) {
             y = 0.0;
-            if (unk12c != 0) {
-                pattern = 0x61;
+            if (m_landHittable != 0) {
+                pattern = kKnockdownHittable;
                 StartPattern();
             } else {
-                pattern = 0x62;
+                pattern = kKnockdown;
                 StartPattern();
             }
         }
         break;
-    case 0x57:
+    case kFallInDarkness:
         if (frame == 0 && timer == 0) {
             l50.type = 0x1ef;
             l50.x = 60.0;
@@ -1629,12 +1629,12 @@ void CMayu::UpdatePattern()
             timer = 0;
             frame++;
             if (frame >= x8) {
-                pattern = 0;
+                pattern = kStand;
                 StartPattern();
             }
         }
         break;
-    case 0x60:
+    case kWakeUp:
         if (frame < 9) {
             vy = vy + ay;
         }
@@ -1658,15 +1658,15 @@ void CMayu::UpdatePattern()
                 FaceOpponent();
             }
             if (frame >= x8) {
-                pattern = 7;
+                pattern = kStandUp;
                 if (m_inputY == 1) {
-                    pattern = 3;
+                    pattern = kCrouch;
                 }
                 StartPattern();
             }
         }
         break;
-    case 0x61:
+    case kKnockdownHittable:
         vx = 0.0;
         vy = 0.0;
         if (frame == 0 && timer == 0) {
@@ -1684,12 +1684,12 @@ void CMayu::UpdatePattern()
             timer = 0;
             frame++;
             if (frame >= x8) {
-                pattern = 0x63;
+                pattern = kLyingDown;
                 StartPattern();
             }
         }
         break;
-    case 0x62:
+    case kKnockdown:
         vx = 0.0;
         vy = 0.0;
         if (frame == 0 && timer == 0) {
@@ -1707,15 +1707,15 @@ void CMayu::UpdatePattern()
             timer = 0;
             frame++;
             if (frame >= x8) {
-                pattern = 0x63;
+                pattern = kLyingDown;
                 StartPattern();
             }
         }
         break;
-    case 0x63:
+    case kLyingDown:
         timer++;
         if (m_hp > 0 && timer > 0x45 && frame == 0) {
-            pattern = 0x60;
+            pattern = kWakeUp;
             StartPattern();
         }
         if (timer >= l4) {
@@ -1725,17 +1725,17 @@ void CMayu::UpdatePattern()
                 FaceOpponent();
             }
             if (frame >= x8) {
-                pattern = 0x60;
+                pattern = kWakeUp;
                 StartPattern();
             }
         }
         break;
-    case 0x96:
+    case kGuardStandLight:
         if (m_inputY == 1) {
-            pattern = 0x99;
+            pattern = kGuardCrouchLight;
         }
         if (m_inputY != 1) {
-            pattern = 0x96;
+            pattern = kGuardStandLight;
         }
         if (frame == 0 && timer == 0) {
             m_gauge = m_gauge + 0xa;
@@ -1749,9 +1749,9 @@ void CMayu::UpdatePattern()
             vx = 0.0;
         }
         if (x - 20.0 <= 0.0 || x + 20.0 >= 639.0) {
-            unkb8 = vx;
+            m_cornerPushback = vx;
         } else {
-            unkb8 = 0.0;
+            m_cornerPushback = 0.0;
         }
         timer++;
         if (timer >= l4) {
@@ -1761,20 +1761,20 @@ void CMayu::UpdatePattern()
                 FaceOpponent();
             }
             if (frame >= x8) {
-                pattern = 0;
+                pattern = kStand;
                 if (m_inputY == 1) {
-                    pattern = 3;
+                    pattern = kCrouch;
                 }
                 StartPattern();
             }
         }
         break;
-    case 0x97:
+    case kGuardStandMedium:
         if (m_inputY == 1) {
-            pattern = 0x9a;
+            pattern = kGuardCrouchMedium;
         }
         if (m_inputY != 1) {
-            pattern = 0x97;
+            pattern = kGuardStandMedium;
         }
         if (frame == 0 && timer == 0) {
             m_gauge = m_gauge + 0xf;
@@ -1788,9 +1788,9 @@ void CMayu::UpdatePattern()
             vx = 0.0;
         }
         if (x - 20.0 <= 0.0 || x + 20.0 >= 639.0) {
-            unkb8 = vx;
+            m_cornerPushback = vx;
         } else {
-            unkb8 = 0.0;
+            m_cornerPushback = 0.0;
         }
         timer++;
         if (timer >= l4) {
@@ -1800,20 +1800,20 @@ void CMayu::UpdatePattern()
                 FaceOpponent();
             }
             if (frame >= x8) {
-                pattern = 0;
+                pattern = kStand;
                 if (m_inputY == 1) {
-                    pattern = 3;
+                    pattern = kCrouch;
                 }
                 StartPattern();
             }
         }
         break;
-    case 0x98:
+    case kGuardStandHeavy:
         if (m_inputY == 1) {
-            pattern = 0x9b;
+            pattern = kGuardCrouchHeavy;
         }
         if (m_inputY != 1) {
-            pattern = 0x98;
+            pattern = kGuardStandHeavy;
         }
         if (frame == 0 && timer == 0) {
             m_gauge = m_gauge + 0x14;
@@ -1827,9 +1827,9 @@ void CMayu::UpdatePattern()
             vx = 0.0;
         }
         if (x - 20.0 <= 0.0 || x + 20.0 >= 639.0) {
-            unkb8 = vx;
+            m_cornerPushback = vx;
         } else {
-            unkb8 = 0.0;
+            m_cornerPushback = 0.0;
         }
         timer++;
         if (timer >= l4) {
@@ -1839,20 +1839,20 @@ void CMayu::UpdatePattern()
                 FaceOpponent();
             }
             if (frame >= x8) {
-                pattern = 0;
+                pattern = kStand;
                 if (m_inputY == 1) {
-                    pattern = 3;
+                    pattern = kCrouch;
                 }
                 StartPattern();
             }
         }
         break;
-    case 0x99:
+    case kGuardCrouchLight:
         if (m_inputY == 1) {
-            pattern = 0x99;
+            pattern = kGuardCrouchLight;
         }
         if (m_inputY != 1) {
-            pattern = 0x96;
+            pattern = kGuardStandLight;
         }
         if (frame == 0 && timer == 0) {
             m_gauge = m_gauge + 0xa;
@@ -1866,9 +1866,9 @@ void CMayu::UpdatePattern()
             vx = 0.0;
         }
         if (x - 20.0 <= 0.0 || x + 20.0 >= 639.0) {
-            unkb8 = vx;
+            m_cornerPushback = vx;
         } else {
-            unkb8 = 0.0;
+            m_cornerPushback = 0.0;
         }
         timer++;
         if (timer >= l4) {
@@ -1878,17 +1878,17 @@ void CMayu::UpdatePattern()
                 FaceOpponent();
             }
             if (frame >= x8) {
-                pattern = 3;
+                pattern = kCrouch;
                 StartPattern();
             }
         }
         break;
-    case 0x9a:
+    case kGuardCrouchMedium:
         if (m_inputY == 1) {
-            pattern = 0x9a;
+            pattern = kGuardCrouchMedium;
         }
         if (m_inputY != 1) {
-            pattern = 0x97;
+            pattern = kGuardStandMedium;
         }
         if (frame == 0 && timer == 0) {
             m_gauge = m_gauge + 0xf;
@@ -1902,9 +1902,9 @@ void CMayu::UpdatePattern()
             vx = 0.0;
         }
         if (x - 20.0 <= 0.0 || x + 20.0 >= 639.0) {
-            unkb8 = vx;
+            m_cornerPushback = vx;
         } else {
-            unkb8 = 0.0;
+            m_cornerPushback = 0.0;
         }
         timer++;
         if (timer >= l4) {
@@ -1914,17 +1914,17 @@ void CMayu::UpdatePattern()
                 FaceOpponent();
             }
             if (frame >= x8) {
-                pattern = 3;
+                pattern = kCrouch;
                 StartPattern();
             }
         }
         break;
-    case 0x9b:
+    case kGuardCrouchHeavy:
         if (m_inputY == 1) {
-            pattern = 0x9b;
+            pattern = kGuardCrouchHeavy;
         }
         if (m_inputY != 1) {
-            pattern = 0x98;
+            pattern = kGuardStandHeavy;
         }
         if (frame == 0 && timer == 0) {
             m_gauge = m_gauge + 0x14;
@@ -1938,9 +1938,9 @@ void CMayu::UpdatePattern()
             vx = 0.0;
         }
         if (x - 20.0 <= 0.0 || x + 20.0 >= 639.0) {
-            unkb8 = vx;
+            m_cornerPushback = vx;
         } else {
-            unkb8 = 0.0;
+            m_cornerPushback = 0.0;
         }
         timer++;
         if (timer >= l4) {
@@ -1950,12 +1950,12 @@ void CMayu::UpdatePattern()
                 FaceOpponent();
             }
             if (frame >= x8) {
-                pattern = 3;
+                pattern = kCrouch;
                 StartPattern();
             }
         }
         break;
-    case 0x9c:
+    case kGuardAir:
         if (frame == 0 && timer == 0) {
             vy = -2.6;
             m_gauge = m_gauge + 0xf;
@@ -1968,7 +1968,7 @@ void CMayu::UpdatePattern()
             timer = 0;
             frame++;
             if (frame >= x8) {
-                pattern = 9;
+                pattern = kFall;
                 StartPattern();
             }
         }
@@ -1976,11 +1976,11 @@ void CMayu::UpdatePattern()
             y = 0.0;
             m_playSound = 9;
             FaceOpponent();
-            pattern = 0xd;
+            pattern = kLand;
             StartPattern();
         }
         break;
-    case 0x9d:
+    case kAirRecoveryForward:
         vx = 1.0;
         ay = 0.045;
         if (frame == 0 && timer == 0) {
@@ -1999,7 +1999,7 @@ void CMayu::UpdatePattern()
             timer = 0;
             frame++;
             if (frame >= x8) {
-                pattern = 9;
+                pattern = kFall;
                 StartPattern();
             }
         }
@@ -2007,11 +2007,11 @@ void CMayu::UpdatePattern()
             y = 0.0;
             m_playSound = 9;
             FaceOpponent();
-            pattern = 0xd;
+            pattern = kLand;
             StartPattern();
         }
         break;
-    case 0x9e:
+    case kAirRecoveryBack:
         vx = -1.0;
         ay = 0.045;
         if (frame == 0 && timer == 0) {
@@ -2030,7 +2030,7 @@ void CMayu::UpdatePattern()
             timer = 0;
             frame++;
             if (frame >= x8) {
-                pattern = 9;
+                pattern = kFall;
                 StartPattern();
             }
         }
@@ -2038,7 +2038,7 @@ void CMayu::UpdatePattern()
             y = 0.0;
             m_playSound = 9;
             FaceOpponent();
-            pattern = 0xd;
+            pattern = kLand;
             StartPattern();
         }
         break;
@@ -2053,20 +2053,20 @@ void CMayu::UpdatePattern()
             m_game->CreateEffect((EffectDesc*)&l50);
             m_hitsLeft = 1;
             m_playSound = 0x3e;
-            unk3138++;
+            m_patternVar1++;
         }
         timer++;
         if (timer >= l4) {
             timer = 0;
             frame++;
             if (frame >= x8) {
-                pattern = 9;
+                pattern = kFall;
                 StartPattern();
                 ay = 0.035;
             }
         }
         break;
-    case 0xa2:
+    case kWakeUpAttack:
         if (frame == 0 && timer == 0) {
             StopMoving();
         }
@@ -2086,11 +2086,11 @@ void CMayu::UpdatePattern()
             m_hitsLeft = 1;
             m_playSound = 0x3e;
             m_gauge = m_gauge - 0x3e8;
-            unk3138++;
+            m_patternVar1++;
         }
         vy = vy + ay;
         if (y + vy > 0.0) {
-            pattern = 0xd;
+            pattern = kLand;
             StartPattern();
             StartPattern();
             y = 0.0;
@@ -2108,7 +2108,7 @@ void CMayu::UpdatePattern()
             }
         }
         break;
-    case 0xa3:
+    case kDashForward:
         if (frame == 0 && timer == 0) {
             vy = 0.0;
             ay = 0.0;
@@ -2129,7 +2129,7 @@ void CMayu::UpdatePattern()
             ay = 0.08;
         }
         if (y + vy > 0.0) {
-            pattern = 0xb2;
+            pattern = kDashStop;
             StartPattern();
             break;
         }
@@ -2142,15 +2142,15 @@ void CMayu::UpdatePattern()
                     ay = 0.08;
                     break;
                 }
-                unk3138++;
-                if (unk3138 < 7) {
+                m_patternVar1++;
+                if (m_patternVar1 < 7) {
                     frame = frame - 2;
-                    unk3138++;
+                    m_patternVar1++;
                 }
             }
         }
         break;
-    case 0xa4:
+    case kDashBack:
         if (frame == 0 && timer == 0) {
             StartAfterimages(2);
             vx = 0.0;
@@ -2166,7 +2166,7 @@ void CMayu::UpdatePattern()
             StopMoving();
             y = 0.0;
             StartPattern();
-            pattern = 0xd;
+            pattern = kLand;
             break;
         }
         vy = vy + ay;
@@ -2184,19 +2184,19 @@ void CMayu::UpdatePattern()
             }
         }
         break;
-    case 0xa5:
+    case kAirDashForward:
         if (frame == 0 && timer == 0) {
             vx = 1.8;
             StartAfterimages(3);
             vy = 0.0;
             ay = 0.0;
-            if (unk3138 == 0) {
+            if (m_patternVar1 == 0) {
                 m_playSound = 0x11;
             }
         }
         timer++;
-        unk3138++;
-        unk313c++;
+        m_patternVar1++;
+        m_patternVar2++;
         if (timer >= l4) {
             timer = 0;
             frame++;
@@ -2204,8 +2204,8 @@ void CMayu::UpdatePattern()
                 frame = frame - 2;
             }
         }
-        if (m_inputX == facing && unk313c >= 0x78) {
-            pattern = 9;
+        if (m_inputX == facing && m_patternVar2 >= 0x78) {
+            pattern = kFall;
             StartPattern();
             vx = 1.3;
             ay = 0.03;
@@ -2213,8 +2213,8 @@ void CMayu::UpdatePattern()
                 vx = -vx;
             }
         }
-        if (m_inputX != facing && unk3138 >= 0x30) {
-            pattern = 9;
+        if (m_inputX != facing && m_patternVar1 >= 0x30) {
+            pattern = kFall;
             StartPattern();
             vx = 1.3;
             ay = 0.03;
@@ -2223,19 +2223,19 @@ void CMayu::UpdatePattern()
             }
         }
         break;
-    case 0xa6:
+    case kAirDashBack:
         if (frame == 0 && timer == 0) {
             vx = -1.8;
             vy = 0.0;
             ay = 0.0;
             StartAfterimages(3);
-            if (unk3138 == 0) {
+            if (m_patternVar1 == 0) {
                 m_playSound = 0x11;
             }
         }
         timer++;
-        unk3138++;
-        unk313c++;
+        m_patternVar1++;
+        m_patternVar2++;
         if (timer >= l4) {
             timer = 0;
             frame++;
@@ -2243,8 +2243,8 @@ void CMayu::UpdatePattern()
                 frame = frame - 2;
             }
         }
-        if (m_inputX == -facing && unk313c >= 0x78) {
-            pattern = 9;
+        if (m_inputX == -facing && m_patternVar2 >= 0x78) {
+            pattern = kFall;
             StartPattern();
             vx = -0.9;
             ay = 0.03;
@@ -2252,8 +2252,8 @@ void CMayu::UpdatePattern()
                 vx = -vx;
             }
         }
-        if (m_inputX != -facing && unk3138 >= 0x30) {
-            pattern = 9;
+        if (m_inputX != -facing && m_patternVar1 >= 0x30) {
+            pattern = kFall;
             StartPattern();
             vx = -0.9;
             ay = 0.03;
@@ -2262,15 +2262,15 @@ void CMayu::UpdatePattern()
             }
         }
         break;
-    case 0xa7:
+    case kInstantCharge:
         if (frame == 0 && timer == 0) {
             vx = 0.0;
             vy = 0.0;
-            if (unk120 == 1) {
-                m_proration = unk118 * 5.0 + m_proration;
+            if (m_rfBlue == 1) {
+                m_proration = m_rfGauge * 5.0 + m_proration;
             }
-            unk118 = 0.0;
-            unk14c = 0x5a;
+            m_rfGauge = 0.0;
+            m_freezeTime = 0x5a;
             FillBackground(0xb0, 3);
         }
         if (frame == 1 && timer == 0) {
@@ -2296,20 +2296,20 @@ void CMayu::UpdatePattern()
             frame++;
             m_attackResult = 0;
             if (frame >= x8) {
-                pattern = 0;
+                pattern = kStand;
                 FaceOpponent();
                 StartPattern();
             }
         }
         break;
-    case 0xa8:
+    case kRecoilGuardStand:
         if (frame == 0 && timer == 0) {
             vx = 0.0;
             vy = 0.0;
             y = 0.0;
             ay = 0.0;
-            unk14e = 0;
-            unkb8 = 0.0;
+            m_recoilGuardWindow = 0;
+            m_cornerPushback = 0.0;
             ax = 0.0;
             l50.type = 8;
             l50.x = (double)(int)x;
@@ -2326,19 +2326,19 @@ void CMayu::UpdatePattern()
                 FaceOpponent();
             }
             if (frame >= x8) {
-                pattern = 0;
+                pattern = kStand;
                 StartPattern();
             }
         }
         break;
-    case 0xa9:
+    case kRecoilGuardCrouch:
         if (frame == 0 && timer == 0) {
             vx = 0.0;
             vy = 0.0;
             y = 0.0;
             ay = 0.0;
-            unk14e = 0;
-            unkb8 = 0.0;
+            m_recoilGuardWindow = 0;
+            m_cornerPushback = 0.0;
             ax = 0.0;
             l50.type = 8;
             l50.x = (double)(int)x;
@@ -2355,33 +2355,33 @@ void CMayu::UpdatePattern()
                 FaceOpponent();
             }
             if (frame >= x8) {
-                pattern = 3;
+                pattern = kCrouch;
                 StartPattern();
             }
         }
         break;
-    case 0xaa:
+    case kRecoilGuardAir:
         if (frame == 0 && timer == 0) {
-            unk3138 = (int)(vx * 100.0);
-            unk313c = (int)(vy * 100.0);
+            m_patternVar1 = (int)(vx * 100.0);
+            m_patternVar2 = (int)(vy * 100.0);
             vx = 0.0;
             vy = 0.0;
-            unk14e = 0;
-            unkb8 = 0.0;
-            unk14c = 0x3c;
+            m_recoilGuardWindow = 0;
+            m_cornerPushback = 0.0;
+            m_freezeTime = 0x3c;
         }
-        if (unk14c == 0 && unk3140 == 0) {
-            unk3140++;
-            vx = unk3138 * 0.01;
-            vy = unk313c * 0.01;
+        if (m_freezeTime == 0 && m_patternVar3 == 0) {
+            m_patternVar3++;
+            vx = m_patternVar1 * 0.01;
+            vy = m_patternVar2 * 0.01;
         }
-        if (unk14c == 0) {
+        if (m_freezeTime == 0) {
             vy = vy + ay;
         }
         if (vy + y > 0.0) {
             StopMoving();
             y = 0.0;
-            pattern = 0xa9;
+            pattern = kRecoilGuardCrouch;
             break;
         }
         timer++;
@@ -2389,25 +2389,25 @@ void CMayu::UpdatePattern()
             timer = 0;
             frame++;
             if (frame >= x8) {
-                pattern = 9;
+                pattern = kFall;
                 StartPattern();
             }
         }
         break;
-    case 0xab:
+    case kAirInstantCharge:
         if (frame == 0 && timer == 0) {
-            unk3138 = (int)(vx * 100.0);
-            unk313c = (int)(vy * 100.0);
+            m_patternVar1 = (int)(vx * 100.0);
+            m_patternVar2 = (int)(vy * 100.0);
             vx = 0.0;
             vy = 0.0;
             if (ay == 0.0) {
                 ay = 0.035;
             }
-            if (unk120 == 1) {
-                m_proration = unk118 * 5.0 + m_proration;
+            if (m_rfBlue == 1) {
+                m_proration = m_rfGauge * 5.0 + m_proration;
             }
-            unk118 = 0.0;
-            unk14c = 0x5a;
+            m_rfGauge = 0.0;
+            m_freezeTime = 0x5a;
             FillBackground(0xb0, 3);
         }
         if (frame == 0 && timer == 0) {
@@ -2425,9 +2425,9 @@ void CMayu::UpdatePattern()
             frame++;
             m_attackResult = 0;
             if (frame >= x8) {
-                pattern = 9;
-                vx = unk3138 * 0.01;
-                vy = unk313c * 0.01;
+                pattern = kFall;
+                vx = m_patternVar1 * 0.01;
+                vy = m_patternVar2 * 0.01;
                 if (ay == 0.0) {
                     ay = 0.035;
                 }
@@ -2435,7 +2435,7 @@ void CMayu::UpdatePattern()
             }
         }
         break;
-    case 0xb2:
+    case kDashStop:
         vx -= 0.08;
         if (vx < 0.0) {
             vx = 0.0;
@@ -2445,9 +2445,9 @@ void CMayu::UpdatePattern()
             timer = 0;
             frame++;
             if (frame >= x8) {
-                pattern = 7;
+                pattern = kStandUp;
                 if (m_inputY == 1) {
-                    pattern = 3;
+                    pattern = kCrouch;
                 }
                 StartPattern();
                 break;
@@ -2485,20 +2485,20 @@ void CMayu::UpdatePattern()
             }
             if (frame >= x8) {
                 StartPattern();
-                pattern = 0;
+                pattern = kStand;
             }
         }
         break;
-    case 0xc8:
+    case k5A:
         vx = 0.0;
         vy = 0.0;
-        if (m_inputY == -1 && frame > 0 && unk15c < 3 && m_attackResult >= 2) {
-            pattern = 4;
+        if (m_inputY == -1 && frame > 0 && m_sealLevel < 3 && m_attackResult >= 2) {
+            pattern = kJump;
             if (m_inputX == facing) {
-                pattern = 5;
+                pattern = kJumpForward;
             }
             if (m_inputX == -facing) {
-                pattern = 6;
+                pattern = kJumpBack;
             }
             m_attackResult = 0;
             StartPattern();
@@ -2517,20 +2517,20 @@ void CMayu::UpdatePattern()
                 m_attackResult = 0;
             }
             if (frame >= x8) {
-                pattern = 0;
+                pattern = kStand;
                 FaceOpponent();
                 StartPattern();
             }
         }
         break;
-    case 0xc9:
-        if (m_inputY == -1 && frame > 0 && unk15c < 3 && m_attackResult >= 2) {
-            pattern = 4;
+    case k5BClose:
+        if (m_inputY == -1 && frame > 0 && m_sealLevel < 3 && m_attackResult >= 2) {
+            pattern = kJump;
             if (m_inputX == facing) {
-                pattern = 5;
+                pattern = kJumpForward;
             }
             if (m_inputX == -facing) {
-                pattern = 6;
+                pattern = kJumpBack;
             }
             m_attackResult = 0;
             StartPattern();
@@ -2553,13 +2553,13 @@ void CMayu::UpdatePattern()
                 m_attackResult = 0;
             }
             if (frame >= x8) {
-                pattern = 0;
+                pattern = kStand;
                 FaceOpponent();
                 StartPattern();
             }
         }
         break;
-    case 0xca:
+    case k5BFar:
         vx -= 0.02;
         if (vx <= 0.0) {
             vx = 0.0;
@@ -2582,13 +2582,13 @@ void CMayu::UpdatePattern()
                 m_attackResult = 0;
             }
             if (frame >= x8) {
-                pattern = 0;
+                pattern = kStand;
                 FaceOpponent();
                 StartPattern();
             }
         }
         break;
-    case 0xcb:
+    case k5C:
         if (frame == 0 && timer == 0) {
             vx = 0.0;
             vy = 0.0;
@@ -2606,22 +2606,22 @@ void CMayu::UpdatePattern()
                 m_attackResult = 0;
             }
             if (frame >= x8) {
-                pattern = 0;
+                pattern = kStand;
                 FaceOpponent();
                 StartPattern();
             }
         }
         break;
-    case 0xcc:
+    case k2A:
         vx = 0.0;
         vy = 0.0;
-        if (m_inputY == -1 && frame > 0 && unk15c < 3 && m_attackResult >= 2) {
-            pattern = 4;
+        if (m_inputY == -1 && frame > 0 && m_sealLevel < 3 && m_attackResult >= 2) {
+            pattern = kJump;
             if (m_inputX == facing) {
-                pattern = 5;
+                pattern = kJumpForward;
             }
             if (m_inputX == -facing) {
-                pattern = 6;
+                pattern = kJumpBack;
             }
             m_attackResult = 0;
             StartPattern();
@@ -2640,26 +2640,26 @@ void CMayu::UpdatePattern()
                 m_attackResult = 0;
             }
             if (frame >= x8) {
-                pattern = 0;
+                pattern = kStand;
                 if (m_inputY == 1) {
-                    pattern = 3;
+                    pattern = kCrouch;
                 }
                 FaceOpponent();
                 StartPattern();
             }
         }
         break;
-    case 0xcd:
+    case k2B:
         if (frame == 0 && timer == 0) {
             StopMoving();
         }
-        if (m_inputY == -1 && frame > 0 && unk15c < 3 && m_attackResult >= 2) {
-            pattern = 4;
+        if (m_inputY == -1 && frame > 0 && m_sealLevel < 3 && m_attackResult >= 2) {
+            pattern = kJump;
             if (m_inputX == facing) {
-                pattern = 5;
+                pattern = kJumpForward;
             }
             if (m_inputX == -facing) {
-                pattern = 6;
+                pattern = kJumpBack;
             }
             m_attackResult = 0;
             StartPattern();
@@ -2683,24 +2683,24 @@ void CMayu::UpdatePattern()
             if (frame == 3) {
                 vx = 1.5;
             }
-            if (frame == 6 && unk3138 < 1) {
+            if (frame == 6 && m_patternVar1 < 1) {
                 frame = frame - 2;
-                unk3138++;
+                m_patternVar1++;
             }
             if (frame < 2) {
                 m_attackResult = 0;
             }
             if (frame >= x8) {
-                pattern = 0;
+                pattern = kStand;
                 if (m_inputY == 1) {
-                    pattern = 3;
+                    pattern = kCrouch;
                 }
                 FaceOpponent();
                 StartPattern();
             }
         }
         break;
-    case 0xce:
+    case k2C:
         if (frame == 0 && timer == 0) {
             StopMoving();
         }
@@ -2727,25 +2727,25 @@ void CMayu::UpdatePattern()
                 m_hitsLeft = 1;
             }
             if (frame >= x8) {
-                pattern = 0;
+                pattern = kStand;
                 if (m_inputY == 1) {
-                    pattern = 3;
+                    pattern = kCrouch;
                 }
                 FaceOpponent();
                 StartPattern();
             }
         }
         break;
-    case 0xcf:
+    case kJumpA:
         vy = vy + ay;
-        if (m_inputY == -1 && frame > 0 && unk15c < 3 && m_attackResult >= 2 && unk15a < 1) {
-            pattern = 0xe;
-            unk15a++;
+        if (m_inputY == -1 && frame > 0 && m_sealLevel < 3 && m_attackResult >= 2 && m_airActions < 1) {
+            pattern = kAirJump;
+            m_airActions++;
             if (m_inputX == facing) {
-                pattern = 0xf;
+                pattern = kAirJumpForward;
             }
             if (m_inputX == -facing) {
-                pattern = 0x10;
+                pattern = kAirJumpBack;
             }
             m_attackResult = 0;
             StartPattern();
@@ -2758,7 +2758,7 @@ void CMayu::UpdatePattern()
         }
         if (y + vy >= 0.0) {
             y = 0.0;
-            pattern = 0xd;
+            pattern = kLand;
             StartPattern();
             break;
         }
@@ -2771,20 +2771,20 @@ void CMayu::UpdatePattern()
             }
             if (frame >= x8) {
                 StartPattern();
-                pattern = 9;
+                pattern = kFall;
             }
         }
         break;
-    case 0xd0:
+    case kJumpB:
         vy = vy + ay;
-        if (m_inputY == -1 && frame > 0 && unk15c < 3 && m_attackResult >= 2 && unk15a < 1) {
-            unk15a++;
-            pattern = 0xe;
+        if (m_inputY == -1 && frame > 0 && m_sealLevel < 3 && m_attackResult >= 2 && m_airActions < 1) {
+            m_airActions++;
+            pattern = kAirJump;
             if (m_inputX == facing) {
-                pattern = 0xf;
+                pattern = kAirJumpForward;
             }
             if (m_inputX == -facing) {
-                pattern = 0x10;
+                pattern = kAirJumpBack;
             }
             m_attackResult = 0;
             StartPattern();
@@ -2797,7 +2797,7 @@ void CMayu::UpdatePattern()
         }
         if (y + vy >= 0.0) {
             y = 0.0;
-            pattern = 0xd;
+            pattern = kLand;
             StartPattern();
             break;
         }
@@ -2809,21 +2809,21 @@ void CMayu::UpdatePattern()
                 m_attackResult = 0;
             }
             if (frame >= x8) {
-                pattern = 9;
+                pattern = kFall;
                 StartPattern();
             }
         }
         break;
-    case 0xd1:
+    case kJumpC:
         vy = vy + ay;
-        if (m_inputY == -1 && frame > 0 && unk15c < 3 && m_attackResult >= 2 && unk15a < 1) {
-            unk15a++;
-            pattern = 0xe;
+        if (m_inputY == -1 && frame > 0 && m_sealLevel < 3 && m_attackResult >= 2 && m_airActions < 1) {
+            m_airActions++;
+            pattern = kAirJump;
             if (m_inputX == facing) {
-                pattern = 0xf;
+                pattern = kAirJumpForward;
             }
             if (m_inputX == -facing) {
-                pattern = 0x10;
+                pattern = kAirJumpBack;
             }
             m_attackResult = 0;
             StartPattern();
@@ -2836,7 +2836,7 @@ void CMayu::UpdatePattern()
         }
         if (y + vy >= 0.0) {
             y = 0.0;
-            pattern = 0xd;
+            pattern = kLand;
             StartPattern();
             break;
         }
@@ -2848,12 +2848,12 @@ void CMayu::UpdatePattern()
                 m_attackResult = 0;
             }
             if (frame >= x8) {
-                pattern = 9;
+                pattern = kFall;
                 StartPattern();
             }
         }
         break;
-    case 0xd2:
+    case k6B:
         if (vx <= 0.0) {
             vx = 0.0;
         }
@@ -2895,23 +2895,23 @@ void CMayu::UpdatePattern()
                 m_attackResult = 0;
             }
             if (frame >= x8) {
-                pattern = 0;
+                pattern = kStand;
                 FaceOpponent();
                 StartPattern();
             }
         }
         break;
-    case 0xd3:
+    case k1B:
         if (frame == 0 && timer == 0) {
             StopMoving();
         }
-        if (m_inputY == -1 && frame > 0 && unk15c < 3 && m_attackResult >= 2) {
-            pattern = 4;
+        if (m_inputY == -1 && frame > 0 && m_sealLevel < 3 && m_attackResult >= 2) {
+            pattern = kJump;
             if (m_inputX == facing) {
-                pattern = 5;
+                pattern = kJumpForward;
             }
             if (m_inputX == -facing) {
-                pattern = 6;
+                pattern = kJumpBack;
             }
             m_attackResult = 0;
             StartPattern();
@@ -2930,16 +2930,16 @@ void CMayu::UpdatePattern()
                 m_attackResult = 0;
             }
             if (frame >= x8) {
-                pattern = 0;
+                pattern = kStand;
                 if (m_inputY == 1) {
-                    pattern = 3;
+                    pattern = kCrouch;
                 }
                 FaceOpponent();
                 StartPattern();
             }
         }
         break;
-    case 0xdc:
+    case kThrow:
         vx = 0.0;
         vy = 0.0;
         if (frame == 1 && m_attackResult == 3) {
@@ -2947,8 +2947,8 @@ void CMayu::UpdatePattern()
             StartPattern();
             (*m_opponent)->StopMoving();
             (*m_opponent)->StartPattern();
-            pattern = 0xdd;
-            (*m_opponent)->pattern = 0x6b;
+            pattern = kThrowHold;
+            (*m_opponent)->pattern = kThrownStandHigh2;
             l50.type = 0;
             l50.x = (double)((int)x + facing * 0x25);
             l50.y = (double)((int)y - 0x30);
@@ -2968,28 +2968,28 @@ void CMayu::UpdatePattern()
                 m_hitsLeft = 0;
             }
             if (frame >= x8) {
-                pattern = 0;
+                pattern = kStand;
                 FaceOpponent();
                 StartPattern();
             }
         }
         break;
-    case 0xdd:
+    case kThrowHold:
         if (frame == 0 && timer == 0) {
             x = (*m_opponent)->x - (*m_opponent)->m_pointX[0] * facing;
             y = (*m_opponent)->m_pointY[0] + 0x1e;
         }
         if (frame == 3 && timer == 0) {
-            (*m_opponent)->pattern = 0x3b;
+            (*m_opponent)->pattern = kHitAir;
             (*m_opponent)->StartPattern();
-            (*m_opponent)->unkc0 = -2.5;
-            (*m_opponent)->unkc8 = -1.0;
+            (*m_opponent)->m_hitVx = -2.5;
+            (*m_opponent)->m_hitVy = -1.0;
             (*m_opponent)->ay = 0.035;
             vx = -1.8;
             vy = -1.9;
             ay = 0.04;
             l50.type = 0;
-            l50.unk2c = 2;
+            l50.sound = 2;
             l50.x = (double)(int)x;
             l50.y = (double)((int)y - 0x2d);
             l50.scale = 2;
@@ -3006,23 +3006,23 @@ void CMayu::UpdatePattern()
             frame++;
             m_attackResult = 0;
             if (frame >= x8) {
-                pattern = 9;
+                pattern = kFall;
                 FaceOpponent();
                 StartPattern();
             }
         }
         break;
-    case 0xe6:
+    case kDashHopA:
         vy = vy + ay;
         StartAfterimages(3);
-        if (m_inputY == -1 && frame > 0 && unk15c < 3 && m_attackResult >= 2 && unk15a < 1) {
-            unk15a++;
-            pattern = 0xe;
+        if (m_inputY == -1 && frame > 0 && m_sealLevel < 3 && m_attackResult >= 2 && m_airActions < 1) {
+            m_airActions++;
+            pattern = kAirJump;
             if (m_inputX == facing) {
-                pattern = 0xf;
+                pattern = kAirJumpForward;
             }
             if (m_inputX == -facing) {
-                pattern = 0x10;
+                pattern = kAirJumpBack;
             }
             m_attackResult = 0;
             StartPattern();
@@ -3038,7 +3038,7 @@ void CMayu::UpdatePattern()
         }
         if (y + vy >= 0.0) {
             y = 0.0;
-            pattern = 0xe9;
+            pattern = kDashHopLanding;
             StartPattern();
             frame = 2;
             break;
@@ -3051,22 +3051,22 @@ void CMayu::UpdatePattern()
                 m_attackResult = 0;
             }
             if (frame >= x8) {
-                pattern = 0xa;
+                pattern = kSuperJump;
                 StartPattern();
             }
         }
         break;
-    case 0xe7:
+    case kDashHopB:
         vy = vy + ay;
         StartAfterimages(3);
-        if (m_inputY == -1 && frame > 0 && unk15c < 3 && m_attackResult >= 2 && unk15a < 1) {
-            unk15a++;
-            pattern = 0xe;
+        if (m_inputY == -1 && frame > 0 && m_sealLevel < 3 && m_attackResult >= 2 && m_airActions < 1) {
+            m_airActions++;
+            pattern = kAirJump;
             if (m_inputX == facing) {
-                pattern = 0xf;
+                pattern = kAirJumpForward;
             }
             if (m_inputX == -facing) {
-                pattern = 0x10;
+                pattern = kAirJumpBack;
             }
             m_attackResult = 0;
             StartPattern();
@@ -3082,7 +3082,7 @@ void CMayu::UpdatePattern()
         }
         if (y + vy >= 0.0) {
             y = 0.0;
-            pattern = 0xe9;
+            pattern = kDashHopLanding;
             StartPattern();
             frame = 1;
             break;
@@ -3095,22 +3095,22 @@ void CMayu::UpdatePattern()
                 m_attackResult = 0;
             }
             if (frame >= x8) {
-                pattern = 0xa;
+                pattern = kSuperJump;
                 StartPattern();
             }
         }
         break;
-    case 0xe8:
+    case kDashHopC:
         vy = vy + ay;
         StartAfterimages(3);
-        if (m_inputY == -1 && frame > 0 && unk15c < 3 && m_attackResult >= 2 && unk15a < 1) {
-            unk15a++;
-            pattern = 0xe;
+        if (m_inputY == -1 && frame > 0 && m_sealLevel < 3 && m_attackResult >= 2 && m_airActions < 1) {
+            m_airActions++;
+            pattern = kAirJump;
             if (m_inputX == facing) {
-                pattern = 0xf;
+                pattern = kAirJumpForward;
             }
             if (m_inputX == -facing) {
-                pattern = 0x10;
+                pattern = kAirJumpBack;
             }
             m_attackResult = 0;
             StartPattern();
@@ -3126,7 +3126,7 @@ void CMayu::UpdatePattern()
         }
         if (y + vy >= 0.0) {
             y = 0.0;
-            pattern = 0xe9;
+            pattern = kDashHopLanding;
             StartPattern();
             frame = 1;
             break;
@@ -3139,12 +3139,12 @@ void CMayu::UpdatePattern()
                 m_attackResult = 0;
             }
             if (frame >= x8) {
-                pattern = 0xa;
+                pattern = kSuperJump;
                 StartPattern();
             }
         }
         break;
-    case 0xe9:
+    case kDashHopLanding:
         vx = 0.0;
         vy = 0.0;
         FaceOpponent();
@@ -3154,20 +3154,20 @@ void CMayu::UpdatePattern()
             m_attackResult = 3;
             frame++;
             if (frame >= x8) {
-                pattern = 7;
+                pattern = kStandUp;
                 if (m_inputY == 1) {
-                    pattern = 3;
+                    pattern = kCrouch;
                 }
                 StartPattern();
             }
         }
         break;
-    case 0xf8:
+    case kAirThrow:
         vy = vy + ay;
         if (frame == 2 && m_attackResult == 3) {
             (*m_opponent)->StopMoving();
             (*m_opponent)->StartPattern();
-            (*m_opponent)->unk128 = 1;
+            (*m_opponent)->m_noAirRecovery = 1;
             l50.type = 0;
             l50.x = (double)((int)x + facing * 0x16);
             l50.y = (double)((int)y - 0x36);
@@ -3176,8 +3176,8 @@ void CMayu::UpdatePattern()
             m_game->CreateEffect((EffectDesc*)&l50);
             frame = 0;
             timer = 0;
-            pattern = 0xf9;
-            (*m_opponent)->pattern = 0x67;
+            pattern = kAirThrowHold;
+            (*m_opponent)->pattern = kThrownDoubledOver;
             (*m_opponent)->x = facing * 0x16 + x;
             (*m_opponent)->y = y - 52.0;
             break;
@@ -3186,20 +3186,20 @@ void CMayu::UpdatePattern()
         if (timer >= l4) {
             timer = 0;
             frame++;
-            if (frame == 2 && (*m_opponent)->y < 0.0 && ((*m_opponent)->pattern < 0x32 || (*m_opponent)->pattern > 0x95)) {
+            if (frame == 2 && (*m_opponent)->y < 0.0 && ((*m_opponent)->pattern < kFirstHitReaction || (*m_opponent)->pattern > kLastHitReaction)) {
                 m_hitsLeft = 1;
             } else {
                 m_hitsLeft = 0;
             }
             m_attackResult = 0;
             if (frame >= x8) {
-                pattern = 0xd1;
+                pattern = kJumpC;
                 frame = 2;
             }
         }
         break;
-    case 0xf9:
-        unk13e = 2;
+    case kAirThrowHold:
+        m_hideOffscreenMarker = 2;
         if (frame < 0xb) {
             if (x > 6100.0 && facing == 1) {
                 x = 6100.0;
@@ -3209,8 +3209,8 @@ void CMayu::UpdatePattern()
                 x = 30.0;
                 vx = 0.0;
             }
-            Unk410a40(0x32, 3);
-            Unk410a80(0x32, 3);
+            FocusCameraX(0x32, 3);
+            FocusCameraY(0x32, 3);
         }
         if (frame < 0xa || frame > 0xb && frame < 0xf) {
             vy = vy + ay;
@@ -3219,7 +3219,7 @@ void CMayu::UpdatePattern()
                     y = 0.0;
                     StopMoving();
                     (*m_opponent)->StartPattern();
-                    (*m_opponent)->pattern = 0x62;
+                    (*m_opponent)->pattern = kKnockdown;
                     (*m_opponent)->y = 0.0;
                     (*m_opponent)->x = facing + x;
                     (*m_opponent)->facing = -facing;
@@ -3246,59 +3246,59 @@ void CMayu::UpdatePattern()
             }
         }
         if (frame < 1) {
-            (*m_opponent)->pattern = 0x67;
+            (*m_opponent)->pattern = kThrownDoubledOver;
             (*m_opponent)->x = facing * 0x16 + x;
             (*m_opponent)->y = y - 52.0;
         }
         if (frame == 1) {
-            (*m_opponent)->pattern = 0x67;
+            (*m_opponent)->pattern = kThrownDoubledOver;
             (*m_opponent)->x = (15.0 + vx) * facing + x;
             (*m_opponent)->y = -70.0 + vy + y;
         }
         if (frame == 2) {
-            (*m_opponent)->pattern = 0x76;
+            (*m_opponent)->pattern = kThrownAirborneInverted;
             (*m_opponent)->x = (-25.0 + vx) * facing + x;
             (*m_opponent)->y = -65.0 + vy + y;
             (*m_opponent)->facing = facing;
         }
         if (frame == 3) {
-            (*m_opponent)->pattern = 0x75;
+            (*m_opponent)->pattern = kThrownDoubledOverInverted;
             (*m_opponent)->x = (-28.0 + vx) * facing + x;
             (*m_opponent)->y = -43.0 + vy + y;
             (*m_opponent)->facing = facing;
         }
         if (frame == 4) {
-            (*m_opponent)->pattern = 0x75;
+            (*m_opponent)->pattern = kThrownDoubledOverInverted;
             (*m_opponent)->x = (-12.0 + vx) * facing + x;
             (*m_opponent)->y = -29.0 + vy + y;
             (*m_opponent)->facing = facing;
         }
         if (frame == 5) {
-            (*m_opponent)->pattern = 0x68;
+            (*m_opponent)->pattern = kThrownAirborne;
             (*m_opponent)->x = (12.0 + vx) * facing + x;
             (*m_opponent)->y = -23.0 + vy + y;
             (*m_opponent)->facing = -facing;
         }
         if (frame == 6) {
-            (*m_opponent)->pattern = 0x68;
+            (*m_opponent)->pattern = kThrownAirborne;
             (*m_opponent)->x = (23.0 + vx) * facing + x;
             (*m_opponent)->y = -36.0 + vy + y;
             (*m_opponent)->facing = -facing;
         }
         if (frame == 7) {
-            (*m_opponent)->pattern = 0x67;
+            (*m_opponent)->pattern = kThrownDoubledOver;
             (*m_opponent)->x = (28.0 + vx) * facing + x;
             (*m_opponent)->y = -58.0 + vy + y;
             (*m_opponent)->facing = -facing;
         }
         if (frame == 8) {
-            (*m_opponent)->pattern = 0x67;
+            (*m_opponent)->pattern = kThrownDoubledOver;
             (*m_opponent)->x = (14.0 + vx) * facing + x;
             (*m_opponent)->y = -73.0 + vy + y;
             (*m_opponent)->facing = -facing;
         }
         if (frame == 9) {
-            (*m_opponent)->pattern = 0x76;
+            (*m_opponent)->pattern = kThrownAirborneInverted;
             (*m_opponent)->x = (-12.0 + vx) * facing + x;
             (*m_opponent)->y = -78.0 + vy + y;
             (*m_opponent)->facing = facing;
@@ -3319,11 +3319,11 @@ void CMayu::UpdatePattern()
             if (frame >= x8) {
                 StartPattern();
                 FaceOpponent();
-                pattern = 3;
+                pattern = kCrouch;
             }
         }
         break;
-    case 0xfa:
+    case k41236A:
         if (frame == 0 && timer == 0) {
             StopMoving();
             m_hitsLeft = 0;
@@ -3331,9 +3331,9 @@ void CMayu::UpdatePattern()
         if (frame > 2 && frame < 8 && m_attackResult == 3) {
             (*m_opponent)->StartPattern();
             (*m_opponent)->StopMoving();
-            (*m_opponent)->pattern = 0x6b;
+            (*m_opponent)->pattern = kThrownStandHigh2;
             StartPattern();
-            pattern = 0xfd;
+            pattern = k41236Throw;
             y = m_pointY[0] + 0x32;
             x = (*m_opponent)->x + (-m_pointX[0] - 0x14) * facing;
             l50.type = 0;
@@ -3352,7 +3352,7 @@ void CMayu::UpdatePattern()
             }
         }
         if (frame == 6) {
-            unk3140 = 1;
+            m_patternVar3 = 1;
         }
         if (frame > 7) {
             vx -= 0.035;
@@ -3373,19 +3373,19 @@ void CMayu::UpdatePattern()
             }
             if (frame == 8) {
                 frame = 3;
-                unk3138++;
+                m_patternVar1++;
             }
-            if (frame == 6 && unk3138 > 1) {
+            if (frame == 6 && m_patternVar1 > 1) {
                 frame = 8;
             }
             if (frame >= x8) {
                 StartPattern();
-                pattern = 3;
+                pattern = kCrouch;
                 FaceOpponent();
             }
         }
         break;
-    case 0xfb:
+    case k41236B:
         if (frame == 0 && timer == 0) {
             StopMoving();
             m_hitsLeft = 0;
@@ -3393,9 +3393,9 @@ void CMayu::UpdatePattern()
         if (frame > 2 && frame < 8 && m_attackResult == 3) {
             (*m_opponent)->StartPattern();
             (*m_opponent)->StopMoving();
-            (*m_opponent)->pattern = 0x6b;
+            (*m_opponent)->pattern = kThrownStandHigh2;
             StartPattern();
-            pattern = 0xfd;
+            pattern = k41236Throw;
             y = m_pointY[0] + 0x32;
             x = (*m_opponent)->x + (-m_pointX[0] - 0x14) * facing;
             l50.type = 0;
@@ -3406,7 +3406,7 @@ void CMayu::UpdatePattern()
             m_game->CreateEffect((EffectDesc*)&l50);
             break;
         }
-        if (frame > 2 && frame < 8 && unk3140 > 0) {
+        if (frame > 2 && frame < 8 && m_patternVar3 > 0) {
             if ((*m_opponent)->y == 0.0) {
                 m_hitsLeft = 1;
             } else {
@@ -3414,7 +3414,7 @@ void CMayu::UpdatePattern()
             }
         }
         if (frame == 6) {
-            unk3140 = 1;
+            m_patternVar3 = 1;
         }
         if (frame > 7) {
             vx -= 0.035;
@@ -3435,29 +3435,29 @@ void CMayu::UpdatePattern()
             }
             if (frame == 8) {
                 frame = 3;
-                unk3138++;
+                m_patternVar1++;
             }
-            if (frame == 6 && unk3138 > 2) {
+            if (frame == 6 && m_patternVar1 > 2) {
                 frame = 8;
             }
             if (frame >= x8) {
                 StartPattern();
-                pattern = 3;
+                pattern = kCrouch;
                 FaceOpponent();
             }
         }
         break;
-    case 0xfc:
+    case k41236C:
         if (frame == 0 && timer == 0) {
             m_hitsLeft = 0;
             StopMoving();
-            if (unk120 == 0) {
-                unk118 -= 500.0;
+            if (m_rfBlue == 0) {
+                m_rfGauge -= 500.0;
             } else {
-                unk118 -= 250.0;
+                m_rfGauge -= 250.0;
             }
             l50.type = 0x21;
-            l50.unk2c = 0xb;
+            l50.sound = 0xb;
             l50.x = (double)((int)x + facing * 0x14);
             l50.y = (double)((int)y - 0x32);
             l50.scale = 2;
@@ -3467,10 +3467,10 @@ void CMayu::UpdatePattern()
         if (frame > 2 && frame < 8 && m_attackResult == 3) {
             (*m_opponent)->StartPattern();
             (*m_opponent)->StopMoving();
-            (*m_opponent)->pattern = 0x6b;
+            (*m_opponent)->pattern = kThrownStandHigh2;
             StartPattern();
             StopMoving();
-            pattern = 0xfe;
+            pattern = k41236CThrow;
             y = m_pointY[0] + 0x32;
             x = (*m_opponent)->x + (-m_pointX[0] - 0x14) * facing;
             l50.type = 0;
@@ -3489,7 +3489,7 @@ void CMayu::UpdatePattern()
             }
         }
         if (frame == 6) {
-            unk3140 = 1;
+            m_patternVar3 = 1;
         }
         if (frame > 7) {
             vx -= 0.035;
@@ -3510,34 +3510,34 @@ void CMayu::UpdatePattern()
             }
             if (frame == 8) {
                 frame = 3;
-                unk3138++;
+                m_patternVar1++;
             }
-            if (frame == 6 && unk3138 > 1) {
+            if (frame == 6 && m_patternVar1 > 1) {
                 frame = 8;
             }
             if (frame >= x8) {
                 StartPattern();
-                pattern = 3;
+                pattern = kCrouch;
                 FaceOpponent();
             }
         }
         break;
-    case 0xfd:
+    case k41236Throw:
         if (frame < 3) {
             vx -= 0.035;
             if (vx < 0.0) {
                 vx = 0.0;
             }
-            if ((char)(*m_opponent)->Unk40ff70() != 0) {
+            if ((char)(*m_opponent)->AtScreenEdge() != 0) {
                 StopMoving();
                 (*m_opponent)->StopMoving();
             }
-            if ((char)(*m_opponent)->Unk40ff70() == 0) {
+            if ((char)(*m_opponent)->AtScreenEdge() == 0) {
                 (*m_opponent)->x = (m_pointX[0] + 0x14) * facing + x;
             }
         }
         if (frame == 3) {
-            (*m_opponent)->pattern = 0x76;
+            (*m_opponent)->pattern = kThrownAirborneInverted;
             (*m_opponent)->x = (15.0 + vx) * facing + x;
             (*m_opponent)->y = -69.0 + vy + y;
         }
@@ -3547,24 +3547,24 @@ void CMayu::UpdatePattern()
         if (frame > 3 && vy + y > 0.0) {
             StartPattern();
             StopMoving();
-            pattern = 3;
+            pattern = kCrouch;
             y = 0.0;
             break;
         }
         if (frame == 4 && timer == 0) {
             (*m_opponent)->StartPattern();
-            (*m_opponent)->pattern = 0x3f;
+            (*m_opponent)->pattern = kHitAirLaunch;
             (*m_opponent)->x = (-31.0 + vx) * facing + x;
             (*m_opponent)->y = -33.0 + vy + y;
             DealDamage(0x1f4, 750.0);
             m_comboHits--;
             m_shownHits--;
-            (*m_opponent)->unkc0 = 0.8;
-            (*m_opponent)->unkc8 = -3.2;
+            (*m_opponent)->m_hitVx = 0.8;
+            (*m_opponent)->m_hitVy = -3.2;
         }
         if (frame < 4) {
-            Unk410a40(0x32, 3);
-            Unk410a80(0x32, 3);
+            FocusCameraX(0x32, 3);
+            FocusCameraY(0x32, 3);
         }
         timer++;
         if (timer >= l4) {
@@ -3577,27 +3577,27 @@ void CMayu::UpdatePattern()
                 ay = 0.03;
             }
             if (frame >= x8) {
-                pattern = 0;
+                pattern = kStand;
                 StartPattern();
             }
         }
         break;
-    case 0xfe:
+    case k41236CThrow:
         if (frame < 3) {
             vx -= 0.035;
             if (vx < 0.0) {
                 vx = 0.0;
             }
-            if ((char)(*m_opponent)->Unk40ff70() != 0) {
+            if ((char)(*m_opponent)->AtScreenEdge() != 0) {
                 StopMoving();
                 (*m_opponent)->StopMoving();
             }
-            if ((char)(*m_opponent)->Unk40ff70() == 0) {
+            if ((char)(*m_opponent)->AtScreenEdge() == 0) {
                 (*m_opponent)->x = (m_pointX[0] + 0x14) * facing + x;
             }
         }
         if (frame == 3) {
-            (*m_opponent)->pattern = 0x76;
+            (*m_opponent)->pattern = kThrownAirborneInverted;
             (*m_opponent)->x = (15.0 + vx) * facing + x;
             (*m_opponent)->y = -69.0 + vy + y;
         }
@@ -3607,25 +3607,25 @@ void CMayu::UpdatePattern()
         if (frame > 3 && vy + y > 0.0) {
             StartPattern();
             StopMoving();
-            pattern = 3;
+            pattern = kCrouch;
             y = 0.0;
             break;
         }
         if (frame == 4 && timer == 0) {
             (*m_opponent)->StartPattern();
-            (*m_opponent)->pattern = 0x43;
+            (*m_opponent)->pattern = kHitAirLaunchWallBounce;
             (*m_opponent)->x = (-41.0 + vx) * facing + x;
             (*m_opponent)->y = -43.0 + vy + y;
             DealDamage(0x3e8, 800.0);
             m_comboHits--;
             m_shownHits--;
             (*m_opponent)->facing = facing;
-            (*m_opponent)->unkc0 = -4.0;
-            (*m_opponent)->unkc8 = -0.8;
+            (*m_opponent)->m_hitVx = -4.0;
+            (*m_opponent)->m_hitVy = -0.8;
         }
         if (frame < 4) {
-            Unk410a40(0x32, 3);
-            Unk410a80(0x32, 3);
+            FocusCameraX(0x32, 3);
+            FocusCameraY(0x32, 3);
         }
         timer++;
         if (timer >= l4) {
@@ -3638,12 +3638,12 @@ void CMayu::UpdatePattern()
                 ay = 0.025;
             }
             if (frame >= x8) {
-                pattern = 0;
+                pattern = kStand;
                 StartPattern();
             }
         }
         break;
-    case 0xff:
+    case kUnusedAirSpin:
         if (frame == 0 && timer == 0) {
             vx *= 0.3;
             vy *= 0.5;
@@ -3659,7 +3659,7 @@ void CMayu::UpdatePattern()
         if (y + vy > 0.0) {
             StartPattern();
             StopMoving();
-            pattern = 0x102;
+            pattern = k236JumpLanding;
             y = 0.0;
             break;
         }
@@ -3668,8 +3668,8 @@ void CMayu::UpdatePattern()
             timer = 0;
             frame++;
             m_attackResult = 0;
-            if (frame == 5 && unk3138 < 3) {
-                unk3138++;
+            if (frame == 5 && m_patternVar1 < 3) {
+                m_patternVar1++;
                 frame = 0;
             }
         }
@@ -3677,7 +3677,7 @@ void CMayu::UpdatePattern()
             frame = frame - 4;
         }
         break;
-    case 0x100:
+    case k236Dive:
         if (frame == 0 && timer == 0) {
             FaceOpponent();
             StopMoving();
@@ -3694,7 +3694,7 @@ void CMayu::UpdatePattern()
             frame = 0;
             y = 0.0;
             StopMoving();
-            pattern = 0x101;
+            pattern = k236DiveLanding;
             break;
         }
         timer++;
@@ -3709,7 +3709,7 @@ void CMayu::UpdatePattern()
             }
         }
         break;
-    case 0x101:
+    case k236DiveLanding:
         vx -= 0.04;
         if (vx < 0.0) {
             vx = 0.0;
@@ -3719,12 +3719,12 @@ void CMayu::UpdatePattern()
             timer = 0;
             frame++;
             if (frame >= x8) {
-                pattern = 3;
+                pattern = kCrouch;
                 StartPattern();
             }
         }
         break;
-    case 0x102:
+    case k236JumpLanding:
         vx -= 0.04;
         if (vx < 0.0) {
             vx = 0.0;
@@ -3734,20 +3734,20 @@ void CMayu::UpdatePattern()
             timer = 0;
             frame++;
             if (frame >= x8) {
-                pattern = 3;
+                pattern = kCrouch;
                 StartPattern();
             }
         }
         break;
-    case 0x103:
+    case k236A:
         if (frame > 8 && frame < 0xf && m_holdA > 0) {
             StartPattern();
-            pattern = 0x106;
+            pattern = kRisingStrike;
             break;
         }
         if (frame > 8 && frame < 0xf && m_holdB > 0) {
             StartPattern();
-            pattern = 0x107;
+            pattern = k236AJump;
             break;
         }
         if (frame == 0 && timer == 0) {
@@ -3770,18 +3770,18 @@ void CMayu::UpdatePattern()
             if (m_hitsLeft > 0) {
                 m_attackResult = 0;
             }
-            if (frame == 0xc && unk3138 < 3) {
+            if (frame == 0xc && m_patternVar1 < 3) {
                 frame = frame - 4;
-                unk3138++;
+                m_patternVar1++;
             }
             if (frame >= x8) {
-                pattern = 3;
+                pattern = kCrouch;
                 StartPattern();
                 FaceOpponent();
             }
         }
         break;
-    case 0x104:
+    case k236B:
         if (frame == 0 && timer == 0) {
             StopMoving();
         }
@@ -3792,15 +3792,15 @@ void CMayu::UpdatePattern()
                 vx = 0.0;
             }
         }
-        if (m_command == 0xa && frame > 0xd) {
+        if (m_command == kCmd236A && frame > 0xd) {
             StartPattern();
-            pattern = 0x122;
+            pattern = kRisingStrike236B;
             break;
         }
         if (y < 0.0 && vy > 0.0 && m_pressA == 1) {
             StartPattern();
             StopMoving();
-            pattern = 0x100;
+            pattern = k236Dive;
             break;
         }
         if (vy + y > 0.0 && frame > 5 && frame < 0xa) {
@@ -3839,22 +3839,22 @@ void CMayu::UpdatePattern()
                 frame = frame - 4;
             }
             if (frame >= x8) {
-                pattern = 3;
+                pattern = kCrouch;
                 StartPattern();
                 FaceOpponent();
             }
         }
         break;
-    case 0x105:
+    case k236C:
         if (frame == 0 && timer == 0) {
             StopMoving();
-            if (unk120 == 0) {
-                unk118 -= 500.0;
+            if (m_rfBlue == 0) {
+                m_rfGauge -= 500.0;
             } else {
-                unk118 -= 250.0;
+                m_rfGauge -= 250.0;
             }
             l50.type = 0x21;
-            l50.unk2c = 0xb;
+            l50.sound = 0xb;
             l50.x = (double)((int)x + facing * 0x14);
             l50.y = (double)((int)y - 0x32);
             l50.scale = 2;
@@ -3895,9 +3895,9 @@ void CMayu::UpdatePattern()
                 m_attackResult = 0;
             }
             if (frame == 6) {
-                if (unk3138 < 4) {
+                if (m_patternVar1 < 4) {
                     frame = frame - 4;
-                    unk3138++;
+                    m_patternVar1++;
                 } else {
                     frame = 0xa;
                     y = 0.0;
@@ -3908,13 +3908,13 @@ void CMayu::UpdatePattern()
                 frame = frame - 4;
             }
             if (frame >= x8) {
-                pattern = 3;
+                pattern = kCrouch;
                 StartPattern();
                 FaceOpponent();
             }
         }
         break;
-    case 0x106:
+    case kRisingStrike:
         vx -= 0.035;
         if (vx < 0.0) {
             vx = 0.0;
@@ -3946,11 +3946,11 @@ void CMayu::UpdatePattern()
             }
             if (frame >= x8) {
                 StartPattern();
-                pattern = 3;
+                pattern = kCrouch;
             }
         }
         break;
-    case 0x107:
+    case k236AJump:
         if (frame == 0 && timer == 0) {
             StopMoving();
         }
@@ -3964,14 +3964,14 @@ void CMayu::UpdatePattern()
         if (y < 0.0 && vy > 0.0 && m_pressA == 1) {
             StartPattern();
             StopMoving();
-            pattern = 0x100;
+            pattern = k236Dive;
             break;
         }
         if (vy + y > 0.0 && frame > 2 && frame < 0xa) {
             StartPattern();
             StopMoving();
             y = 0.0;
-            pattern = 0x102;
+            pattern = k236JumpLanding;
             break;
         }
         timer++;
@@ -3992,7 +3992,7 @@ void CMayu::UpdatePattern()
             }
         }
         break;
-    case 0x108:
+    case kWallJumpDiveLanding:
         vx -= 0.05;
         if (vx < 0.0) {
             vx = 0.0;
@@ -4004,12 +4004,12 @@ void CMayu::UpdatePattern()
             m_attackResult = 0;
             if (frame >= x8) {
                 StartPattern();
-                pattern = 3;
+                pattern = kCrouch;
                 StopMoving();
             }
         }
         break;
-    case 0x109:
+    case k214BDiveLanding:
         vx -= 0.05;
         if (vx < 0.0) {
             vx = 0.0;
@@ -4021,12 +4021,12 @@ void CMayu::UpdatePattern()
             m_attackResult = 0;
             if (frame >= x8) {
                 StartPattern();
-                pattern = 3;
+                pattern = kCrouch;
                 StopMoving();
             }
         }
         break;
-    case 0x10a:
+    case k623A:
         if (frame == 0 && timer == 0) {
             vx = 0.0;
             vy = 0.0;
@@ -4060,18 +4060,18 @@ void CMayu::UpdatePattern()
                 vy = -3.0;
                 vx = 3.0;
             }
-            if (frame == 6 && unk3138 < 1) {
+            if (frame == 6 && m_patternVar1 < 1) {
                 frame = frame - 2;
-                unk3138++;
+                m_patternVar1++;
             }
             if (frame >= x8) {
-                pattern = 0;
+                pattern = kStand;
                 FaceOpponent();
                 StartPattern();
             }
         }
         break;
-    case 0x10b:
+    case k623B:
         if (frame == 0 && timer == 0) {
             vx = 0.0;
             vy = 0.0;
@@ -4105,29 +4105,29 @@ void CMayu::UpdatePattern()
                 vy = -4.5;
                 vx = 4.0;
             }
-            if (frame == 6 && unk3138 < 1) {
+            if (frame == 6 && m_patternVar1 < 1) {
                 frame = frame - 2;
-                unk3138++;
+                m_patternVar1++;
             }
             if (frame >= x8) {
-                pattern = 0;
+                pattern = kStand;
                 FaceOpponent();
                 StartPattern();
             }
         }
         break;
-    case 0x10c:
+    case k623C:
         if (frame == 0 && timer == 0) {
             vx = 0.0;
             vy = 0.0;
             m_hitsLeft = 1;
-            if (unk120 == 0) {
-                unk118 -= 500.0;
+            if (m_rfBlue == 0) {
+                m_rfGauge -= 500.0;
             } else {
-                unk118 -= 250.0;
+                m_rfGauge -= 250.0;
             }
             l50.type = 0x21;
-            l50.unk2c = 0xb;
+            l50.sound = 0xb;
             l50.x = (double)((int)x + facing * 0x14);
             l50.y = (double)((int)y - 0x32);
             l50.scale = 2;
@@ -4164,20 +4164,20 @@ void CMayu::UpdatePattern()
                 vy = -4.0;
                 vx = 2.0;
             }
-            if (frame == 6 && unk3138 < 1) {
+            if (frame == 6 && m_patternVar1 < 1) {
                 frame = frame - 2;
-                unk3138++;
+                m_patternVar1++;
             }
             if (frame == 0xd) {
                 frame = frame - 4;
             }
             if (frame >= x8) {
                 StartPattern();
-                pattern = 0;
+                pattern = kStand;
             }
         }
         break;
-    case 0x10d:
+    case kWallJumpA:
         if (frame == 0 && timer == 0) {
             StopMoving();
         }
@@ -4193,7 +4193,7 @@ void CMayu::UpdatePattern()
             frame = 0;
             y = 0.0;
             StopMoving();
-            pattern = 0x108;
+            pattern = kWallJumpDiveLanding;
             break;
         }
         timer++;
@@ -4208,7 +4208,7 @@ void CMayu::UpdatePattern()
             }
         }
         break;
-    case 0x10e:
+    case kWallJumpB:
         if (frame == 0 && timer == 0) {
             StopMoving();
         }
@@ -4224,7 +4224,7 @@ void CMayu::UpdatePattern()
             frame = 0;
             y = 0.0;
             StopMoving();
-            pattern = 0x108;
+            pattern = kWallJumpDiveLanding;
             break;
         }
         timer++;
@@ -4239,7 +4239,7 @@ void CMayu::UpdatePattern()
             }
         }
         break;
-    case 0x10f:
+    case kWallJumpC:
         if (frame == 0 && timer == 0) {
             m_gauge = m_gauge + 0x28;
             m_hitsLeft = 4;
@@ -4260,7 +4260,7 @@ void CMayu::UpdatePattern()
                 y = 0.0;
                 vy = 0.0;
                 StartPattern();
-                unk3138 = (int)(vx * 100.0);
+                m_patternVar1 = (int)(vx * 100.0);
                 vx = 0.0;
                 frame = 7;
                 break;
@@ -4273,25 +4273,25 @@ void CMayu::UpdatePattern()
             m_attackResult = 0;
             if (frame == 7 || frame == 0xe) {
                 frame = frame - 4;
-                unk3138++;
+                m_patternVar1++;
             }
             if (frame == 9) {
-                vx = unk3138 * 0.005;
+                vx = m_patternVar1 * 0.005;
                 vy = -0.8;
             }
             if (frame >= x8) {
-                pattern = 3;
+                pattern = kCrouch;
                 StartPattern();
             }
         }
         break;
-    case 0x110:
+    case k214A:
         if (frame == 0 && timer == 0) {
             StopMoving();
         }
-        if (frame > 0x13 && m_command == 0xa) {
+        if (frame > 0x13 && m_command == kCmd236A) {
             StartPattern();
-            pattern = 0x106;
+            pattern = kRisingStrike;
             break;
         }
         if (frame == 4 && timer == 0) {
@@ -4313,7 +4313,7 @@ void CMayu::UpdatePattern()
             }
             if (m_pressA == 1) {
                 StartPattern();
-                pattern = 0x10d;
+                pattern = kWallJumpA;
                 if (m_inputX == -facing) {
                     facing = -facing;
                 }
@@ -4321,7 +4321,7 @@ void CMayu::UpdatePattern()
             }
             if (m_pressB == 1) {
                 StartPattern();
-                pattern = 0x10e;
+                pattern = kWallJumpB;
                 if (m_inputX == -facing) {
                     facing = -facing;
                 }
@@ -4329,7 +4329,7 @@ void CMayu::UpdatePattern()
             }
             if (m_pressC == 1) {
                 StartPattern();
-                pattern = 0x10f;
+                pattern = kWallJumpC;
                 if (m_inputX == -facing) {
                     facing = -facing;
                 }
@@ -4354,7 +4354,7 @@ void CMayu::UpdatePattern()
             timer = 0;
             break;
         }
-        if ((char)Unk40ff70() != 0 && frame > 4 && frame < 0xc) {
+        if ((char)AtScreenEdge() != 0 && frame > 4 && frame < 0xc) {
             vx = 0.0;
             vy = 0.0;
             frame = 0xc;
@@ -4378,13 +4378,13 @@ void CMayu::UpdatePattern()
                 frame = frame - 4;
             }
             if (frame >= x8) {
-                pattern = 3;
+                pattern = kCrouch;
                 StartPattern();
                 FaceOpponent();
             }
         }
         break;
-    case 0x111:
+    case k214D:
         if (frame == 0 && timer == 0) {
             StopMoving();
         }
@@ -4401,10 +4401,10 @@ void CMayu::UpdatePattern()
         if (frame == 0x12 && m_attackResult == 3) {
             (*m_opponent)->StartPattern();
             (*m_opponent)->StopMoving();
-            (*m_opponent)->pattern = 0x6b;
+            (*m_opponent)->pattern = kThrownStandHigh2;
             StartPattern();
             StopMoving();
-            pattern = 0x113;
+            pattern = k214DThrow;
             y = m_pointY[0] + 0x32;
             x = (*m_opponent)->x + (-m_pointX[0] - 0x14) * facing;
             l50.type = 0;
@@ -4433,7 +4433,7 @@ void CMayu::UpdatePattern()
             timer = 0;
             break;
         }
-        if ((char)Unk40ff70() != 0 && frame > 4 && frame < 0xc) {
+        if ((char)AtScreenEdge() != 0 && frame > 4 && frame < 0xc) {
             vx = 0.0;
             vy = 0.0;
             frame = 0xc;
@@ -4457,19 +4457,19 @@ void CMayu::UpdatePattern()
                 frame--;
             }
             if (frame >= x8) {
-                pattern = 3;
+                pattern = kCrouch;
                 StartPattern();
                 FaceOpponent();
             }
         }
         break;
-    case 0x112:
+    case k214C:
         if (frame == 0 && timer == 0) {
             StopMoving();
         }
-        if (frame > 0x13 && m_command == 0xa) {
+        if (frame > 0x13 && m_command == kCmd236A) {
             StartPattern();
-            pattern = 0x106;
+            pattern = kRisingStrike;
             break;
         }
         if (frame == 4 && timer == 0) {
@@ -4491,7 +4491,7 @@ void CMayu::UpdatePattern()
             }
             if (m_pressA == 1) {
                 StartPattern();
-                pattern = 0x10d;
+                pattern = kWallJumpA;
                 if (m_inputX == -facing) {
                     facing = -facing;
                 }
@@ -4499,7 +4499,7 @@ void CMayu::UpdatePattern()
             }
             if (m_pressB == 1) {
                 StartPattern();
-                pattern = 0x10e;
+                pattern = kWallJumpB;
                 if (m_inputX == -facing) {
                     facing = -facing;
                 }
@@ -4507,7 +4507,7 @@ void CMayu::UpdatePattern()
             }
             if (m_pressC == 1) {
                 StartPattern();
-                pattern = 0x10f;
+                pattern = kWallJumpC;
                 if (m_inputX == -facing) {
                     facing = -facing;
                 }
@@ -4532,7 +4532,7 @@ void CMayu::UpdatePattern()
             timer = 0;
             break;
         }
-        if ((char)Unk40ff70() != 0 && frame > 4 && frame < 0xc) {
+        if ((char)AtScreenEdge() != 0 && frame > 4 && frame < 0xc) {
             vx = 0.0;
             vy = 0.0;
             facing = -facing;
@@ -4557,45 +4557,45 @@ void CMayu::UpdatePattern()
                 frame = frame - 4;
             }
             if (frame >= x8) {
-                pattern = 3;
+                pattern = kCrouch;
                 StartPattern();
                 FaceOpponent();
             }
         }
         break;
-    case 0x113:
-        Unk410a40(0x32, 3);
-        Unk410a80(0x32, 3);
+    case k214DThrow:
+        FocusCameraX(0x32, 3);
+        FocusCameraY(0x32, 3);
         if (frame == 4) {
-            (*m_opponent)->pattern = 0x67;
+            (*m_opponent)->pattern = kThrownDoubledOver;
             (*m_opponent)->x = (23.0 + vx) * facing + x;
             (*m_opponent)->y = -54.0 + vy + y;
         }
         if (frame == 5) {
-            (*m_opponent)->pattern = 0x67;
+            (*m_opponent)->pattern = kThrownDoubledOver;
             (*m_opponent)->x = (15.0 + vx) * facing + x;
             (*m_opponent)->y = -70.0 + vy + y;
         }
         if (frame == 6) {
-            (*m_opponent)->pattern = 0x76;
+            (*m_opponent)->pattern = kThrownAirborneInverted;
             (*m_opponent)->x = (-31.0 + vx) * facing + x;
             (*m_opponent)->y = -62.0 + vy + y;
             (*m_opponent)->facing = facing;
         }
         if (frame == 7) {
-            (*m_opponent)->pattern = 0x75;
+            (*m_opponent)->pattern = kThrownDoubledOverInverted;
             (*m_opponent)->x = (-34.0 + vx) * facing + x;
             (*m_opponent)->y = -34.0 + vy + y;
             (*m_opponent)->facing = facing;
         }
         if (frame == 8) {
-            (*m_opponent)->pattern = 0x68;
+            (*m_opponent)->pattern = kThrownAirborne;
             (*m_opponent)->x = (-6.0 + vx) * facing + x;
             (*m_opponent)->y = -3.0 + vy + y;
             (*m_opponent)->facing = -facing;
         }
         if (frame == 9) {
-            (*m_opponent)->pattern = 0x68;
+            (*m_opponent)->pattern = kThrownAirborne;
             (*m_opponent)->x = (-4.0 + vx) * facing + x;
             (*m_opponent)->y = -2.0 + vy + y;
             (*m_opponent)->facing = -facing;
@@ -4603,14 +4603,14 @@ void CMayu::UpdatePattern()
         if (frame == 0xa && timer == 0) {
             (*m_opponent)->StopMoving();
             (*m_opponent)->StartPattern();
-            (*m_opponent)->pattern = 0x62;
+            (*m_opponent)->pattern = kKnockdown;
             (*m_opponent)->y = 0.0;
             (*m_opponent)->x = x;
             DealDamage(0x4b0, 960.0);
             l50.type = 0;
             l50.x = (double)(int)x;
             l50.y = (double)(int)y;
-            l50.unk2c = 2;
+            l50.sound = 2;
             l50.scale = 2;
             l50.layer = 1;
             m_game->CreateEffect((EffectDesc*)&l50);
@@ -4619,13 +4619,13 @@ void CMayu::UpdatePattern()
             StartPattern();
             StopMoving();
             y = 0.0;
-            pattern = 0xd;
+            pattern = kLand;
             break;
         }
         if (frame > 0xf) {
             vy = vy + ay;
         }
-        if (frame > 0xd && (*m_opponent)->pattern == 0x63) {
+        if (frame > 0xd && (*m_opponent)->pattern == kLyingDown) {
             (*m_opponent)->timer = 0;
         }
         timer++;
@@ -4643,7 +4643,7 @@ void CMayu::UpdatePattern()
             }
         }
         break;
-    case 0x118:
+    case kAir236A:
         if (frame == 0 && timer == 0) {
             FaceOpponent();
             StopMoving();
@@ -4660,7 +4660,7 @@ void CMayu::UpdatePattern()
             vx *= 0.15;
             vy *= 0.15;
             StartPattern();
-            pattern = 0x123;
+            pattern = kAir236Hit;
             break;
         }
         timer++;
@@ -4681,11 +4681,11 @@ void CMayu::UpdatePattern()
             if (frame >= x8) {
                 StartPattern();
                 FaceOpponent();
-                pattern = 3;
+                pattern = kCrouch;
             }
         }
         break;
-    case 0x119:
+    case kAir236B:
         if (frame == 0 && timer == 0) {
             FaceOpponent();
             StopMoving();
@@ -4702,7 +4702,7 @@ void CMayu::UpdatePattern()
             vx *= 0.15;
             vy *= 0.15;
             StartPattern();
-            pattern = 0x123;
+            pattern = kAir236Hit;
             break;
         }
         timer++;
@@ -4723,27 +4723,27 @@ void CMayu::UpdatePattern()
             if (frame >= x8) {
                 StartPattern();
                 FaceOpponent();
-                pattern = 3;
+                pattern = kCrouch;
             }
         }
         break;
-    case 0x11a:
+    case kAir236C:
         if (frame == 0 && timer == 0) {
             FaceOpponent();
             StopMoving();
-            if (unk120 == 0) {
-                unk118 -= 500.0;
+            if (m_rfBlue == 0) {
+                m_rfGauge -= 500.0;
             } else {
-                unk118 -= 250.0;
+                m_rfGauge -= 250.0;
             }
             l50.type = 0x21;
-            l50.unk2c = 0xb;
+            l50.sound = 0xb;
             l50.x = (double)((int)x + facing * 0x14);
             l50.y = (double)((int)y - 0x32);
             l50.scale = 2;
             l50.layer = 1;
             m_game->CreateEffect((EffectDesc*)&l50);
-            unk3138++;
+            m_patternVar1++;
         }
         if (frame == 0 && timer == 0) {
             StopMoving();
@@ -4780,11 +4780,11 @@ void CMayu::UpdatePattern()
             if (frame >= x8) {
                 StartPattern();
                 FaceOpponent();
-                pattern = 3;
+                pattern = kCrouch;
             }
         }
         break;
-    case 0x11b:
+    case k41236D:
         vx = 0.0;
         vy = 0.0;
         if (frame == 2 && m_attackResult == 3) {
@@ -4792,8 +4792,8 @@ void CMayu::UpdatePattern()
             StartPattern();
             (*m_opponent)->StopMoving();
             (*m_opponent)->StartPattern();
-            pattern = 0x11c;
-            (*m_opponent)->pattern = 0x6b;
+            pattern = k41236DRide;
+            (*m_opponent)->pattern = kThrownStandHigh2;
             break;
         }
         timer++;
@@ -4801,7 +4801,7 @@ void CMayu::UpdatePattern()
             timer = 0;
             frame++;
             m_attackResult = 0;
-            if (frame == 2 && timer == 0 && (*m_opponent)->y == 0.0 && ((*m_opponent)->pattern < 0x32 || (*m_opponent)->pattern > 0x95)) {
+            if (frame == 2 && timer == 0 && (*m_opponent)->y == 0.0 && ((*m_opponent)->pattern < kFirstHitReaction || (*m_opponent)->pattern > kLastHitReaction)) {
                 m_hitsLeft = 1;
             } else {
                 m_hitsLeft = 0;
@@ -4810,15 +4810,15 @@ void CMayu::UpdatePattern()
                 m_gauge = m_gauge + 0x19;
             }
             if (frame >= x8) {
-                pattern = 0;
+                pattern = kStand;
                 FaceOpponent();
                 StartPattern();
             }
         }
         break;
-    case 0x11c:
-        Unk410a80(-0x32, 3);
-        (*m_opponent)->unk14a = 3;
+    case k41236DRide:
+        FocusCameraY(-0x32, 3);
+        (*m_opponent)->m_hitstop = 3;
         timer++;
         if (frame > 3) {
             vx = 1.0;
@@ -4829,8 +4829,8 @@ void CMayu::UpdatePattern()
             y = 0.0;
             StartPattern();
             (*m_opponent)->StartPattern();
-            pattern = 0xd;
-            (*m_opponent)->pattern = 0x48;
+            pattern = kLand;
+            (*m_opponent)->pattern = kHitStandHighHold;
             break;
         }
         if (timer >= l4) {
@@ -4846,7 +4846,7 @@ void CMayu::UpdatePattern()
             }
         }
         break;
-    case 0x11d:
+    case k214BDiveNear:
         if (frame == 0 && timer == 0) {
             StopMoving();
         }
@@ -4860,7 +4860,7 @@ void CMayu::UpdatePattern()
         if (m_attackResult > 0) {
             StartPattern();
             StopMoving();
-            pattern = 0x120;
+            pattern = k214BDiveRebound;
             break;
         }
         if (y + vy > 0.0 && frame > 2) {
@@ -4868,7 +4868,7 @@ void CMayu::UpdatePattern()
             frame = 0;
             y = 0.0;
             StopMoving();
-            pattern = 0x109;
+            pattern = k214BDiveLanding;
             break;
         }
         timer++;
@@ -4883,7 +4883,7 @@ void CMayu::UpdatePattern()
             }
         }
         break;
-    case 0x11e:
+    case k214BDiveMid:
         if (frame == 0 && timer == 0) {
             StopMoving();
         }
@@ -4897,7 +4897,7 @@ void CMayu::UpdatePattern()
         if (m_attackResult > 0) {
             StartPattern();
             StopMoving();
-            pattern = 0x120;
+            pattern = k214BDiveRebound;
             break;
         }
         if (y + vy > 0.0 && frame > 2) {
@@ -4905,7 +4905,7 @@ void CMayu::UpdatePattern()
             frame = 0;
             y = 0.0;
             StopMoving();
-            pattern = 0x109;
+            pattern = k214BDiveLanding;
             break;
         }
         timer++;
@@ -4920,7 +4920,7 @@ void CMayu::UpdatePattern()
             }
         }
         break;
-    case 0x11f:
+    case k214BDiveFar:
         if (frame == 0 && timer == 0) {
             StopMoving();
         }
@@ -4934,7 +4934,7 @@ void CMayu::UpdatePattern()
         if (m_attackResult > 0) {
             StartPattern();
             StopMoving();
-            pattern = 0x120;
+            pattern = k214BDiveRebound;
             break;
         }
         if (y + vy > 0.0 && frame > 2) {
@@ -4942,7 +4942,7 @@ void CMayu::UpdatePattern()
             frame = 0;
             y = 0.0;
             StopMoving();
-            pattern = 0x109;
+            pattern = k214BDiveLanding;
             break;
         }
         timer++;
@@ -4957,7 +4957,7 @@ void CMayu::UpdatePattern()
             }
         }
         break;
-    case 0x120:
+    case k214BDiveRebound:
         if (frame == 0 && timer == 0) {
             vx = -0.4;
             vy = -0.9;
@@ -4984,11 +4984,11 @@ void CMayu::UpdatePattern()
             if (frame >= x8) {
                 StartPattern();
                 FaceOpponent();
-                pattern = 3;
+                pattern = kCrouch;
             }
         }
         break;
-    case 0x121:
+    case k214B:
         if (frame == 0 && timer == 0) {
             StopMoving();
         }
@@ -5020,7 +5020,7 @@ void CMayu::UpdatePattern()
             timer = 0;
             break;
         }
-        if ((char)Unk40ff70() != 0 && frame > 4 && frame < 0xc) {
+        if ((char)AtScreenEdge() != 0 && frame > 4 && frame < 0xc) {
             vx = 0.0;
             vy = 0.0;
             frame = 0xc;
@@ -5038,12 +5038,12 @@ void CMayu::UpdatePattern()
             if (frame == 0x10) {
                 StartPattern();
                 StopMoving();
-                pattern = 0x11f;
+                pattern = k214BDiveFar;
                 if (x - (*m_opponent)->x < 140.0 && x - (*m_opponent)->x > -140.0) {
-                    pattern = 0x11e;
+                    pattern = k214BDiveMid;
                 }
                 if (x - (*m_opponent)->x < 70.0 && x - (*m_opponent)->x > -70.0) {
-                    pattern = 0x11d;
+                    pattern = k214BDiveNear;
                 }
                 break;
             }
@@ -5051,13 +5051,13 @@ void CMayu::UpdatePattern()
                 frame--;
             }
             if (frame >= x8) {
-                pattern = 3;
+                pattern = kCrouch;
                 StartPattern();
                 FaceOpponent();
             }
         }
         break;
-    case 0x122:
+    case kRisingStrike236B:
         vx -= 0.035;
         if (vx < 0.0) {
             vx = 0.0;
@@ -5089,11 +5089,11 @@ void CMayu::UpdatePattern()
             }
             if (frame >= x8) {
                 StartPattern();
-                pattern = 3;
+                pattern = kCrouch;
             }
         }
         break;
-    case 0x123:
+    case kAir236Hit:
         if (frame == 0 && timer == 0) {
             FaceOpponent();
             StopMoving();
@@ -5125,30 +5125,30 @@ void CMayu::UpdatePattern()
             if (frame >= x8) {
                 StartPattern();
                 FaceOpponent();
-                pattern = 3;
+                pattern = kCrouch;
             }
         }
         break;
-    case 0x12c:
+    case kUnusedSuperLv1:
         if (frame == 0 && timer == 0) {
             vx = 0.0;
             vy = 0.0;
             ay = 0.0;
         }
         if (frame == 1 && timer == 0) {
-            unk14c = 0x78;
+            m_freezeTime = 0x78;
             m_gauge = m_gauge - 0x3e8;
             FillBackground(0xb0, 3);
             l50.type = 0x44;
-            l50.unk2c = 0x13;
+            l50.sound = 0x13;
             l50.x = (double)(int)x;
             l50.y = (double)((int)y - 0x28);
             l50.scale = 2;
-            l50.unk0 = 1;
+            l50.keep = 1;
             l50.layer = 1;
             m_game->CreateEffect((EffectDesc*)&l50);
-            unk13c = 0x7e;
-            Unk410a80(0x32, 0x78);
+            m_invulTime = 0x7e;
+            FocusCameraY(0x32, 0x78);
         }
         if (frame >= 1) {
             unkf2 = 0xa;
@@ -5169,7 +5169,7 @@ void CMayu::UpdatePattern()
                 m_attackResult = 0;
             }
             if (frame == 2) {
-                unk13c = 9;
+                m_invulTime = 9;
             }
             if (frame == 6) {
                 x = facing * 0xf + x;
@@ -5181,42 +5181,42 @@ void CMayu::UpdatePattern()
                 x = facing * 0xf + x;
             }
             if (frame == 0xa) {
-                if (unk3138 > 1) {
+                if (m_patternVar1 > 1) {
                     frame = 0xc;
                     break;
                 }
                 x = facing * 0xf + x;
             }
-            if (frame == 0xc && unk3138 < 1) {
+            if (frame == 0xc && m_patternVar1 < 1) {
                 frame = 2;
-                unk3138++;
+                m_patternVar1++;
             }
             if (frame >= x8) {
-                pattern = 3;
+                pattern = kCrouch;
                 StartPattern();
             }
         }
         break;
-    case 0x12d:
+    case kUnusedSuperLv2:
         if (frame == 0 && timer == 0) {
             vx = 0.0;
             vy = 0.0;
             ay = 0.0;
         }
         if (frame == 1 && timer == 0) {
-            unk14c = 0x78;
+            m_freezeTime = 0x78;
             m_gauge = m_gauge - 0x7d0;
             FillBackground(0xb0, 3);
             l50.type = 0x45;
-            l50.unk2c = 5;
+            l50.sound = 5;
             l50.x = (double)(int)x;
             l50.y = (double)((int)y - 0x28);
             l50.scale = 2;
-            l50.unk0 = 1;
+            l50.keep = 1;
             l50.layer = 1;
             m_game->CreateEffect((EffectDesc*)&l50);
-            unk13c = 0x84;
-            Unk410a80(0x32, 0x78);
+            m_invulTime = 0x84;
+            FocusCameraY(0x32, 0x78);
         }
         if (frame >= 1) {
             unkf2 = 0xa;
@@ -5255,7 +5255,7 @@ void CMayu::UpdatePattern()
                 m_attackResult = 0;
             }
             if (frame == 2) {
-                unk13c = 0x1e;
+                m_invulTime = 0x1e;
             }
             if (frame == 6) {
                 x = facing * 0xf + x;
@@ -5267,15 +5267,15 @@ void CMayu::UpdatePattern()
                 x = facing * 0xf + x;
             }
             if (frame == 0xa) {
-                if (unk3138 > 2) {
+                if (m_patternVar1 > 2) {
                     frame = 0xc;
                     break;
                 }
                 x = facing * 0xf + x;
             }
-            if (frame == 0xc && unk3138 < 2) {
+            if (frame == 0xc && m_patternVar1 < 2) {
                 frame = 2;
-                unk3138++;
+                m_patternVar1++;
             }
             if (frame == 0x14) {
                 ay = 0.06;
@@ -5286,35 +5286,35 @@ void CMayu::UpdatePattern()
                 frame = frame - 4;
             }
             if (frame >= x8) {
-                pattern = 0xa;
+                pattern = kSuperJump;
                 StartPattern();
             }
         }
         break;
-    case 0x12e:
+    case kUnusedSuperLv3:
         if (frame == 0 && timer == 0) {
             vx = 0.0;
             vy = 0.0;
             ay = 0.0;
         }
         if (frame == 1 && timer == 0) {
-            unk14c = 0x78;
+            m_freezeTime = 0x78;
             m_gauge = m_gauge - 0xbb8;
             FillBackground(0xb0, 3);
             l50.type = 0x46;
-            l50.unk2c = 0x40;
+            l50.sound = 0x40;
             l50.x = (double)(int)x;
             l50.y = (double)((int)y - 0x28);
             l50.scale = 2;
-            l50.unk0 = 1;
+            l50.keep = 1;
             l50.layer = 1;
             m_game->CreateEffect((EffectDesc*)&l50);
-            unk13c = 0x84;
-            Unk410a80(0x32, 0x78);
+            m_invulTime = 0x84;
+            FocusCameraY(0x32, 0x78);
             m_playSound = 0x25;
         }
         if (frame > 1) {
-            m_game->Unk4080c0(0xf);
+            m_game->FlashNegative(0xf);
         }
         if ((frame == 2 || frame == 7) && timer == 0) {
             m_playSound = 0x15;
@@ -5358,7 +5358,7 @@ void CMayu::UpdatePattern()
                 m_attackResult = 0;
             }
             if (frame == 2) {
-                unk13c = 0x3c;
+                m_invulTime = 0x3c;
             }
             if (frame == 6) {
                 x = facing * 0xf + x;
@@ -5370,38 +5370,38 @@ void CMayu::UpdatePattern()
                 x = facing * 0xf + x;
             }
             if (frame == 0xa) {
-                if (unk3138 > 3) {
+                if (m_patternVar1 > 3) {
                     frame = 0xc;
                     break;
                 }
                 x = facing * 0xf + x;
             }
-            if (frame == 0xc && unk3138 < 3) {
+            if (frame == 0xc && m_patternVar1 < 3) {
                 frame = 2;
-                unk3138++;
+                m_patternVar1++;
             }
-            if (frame == 0x1c && unk3138 < 8) {
+            if (frame == 0x1c && m_patternVar1 < 8) {
                 frame = frame - 4;
-                unk3138++;
+                m_patternVar1++;
             }
             if (frame >= x8) {
-                pattern = 3;
+                pattern = kCrouch;
                 StartPattern();
             }
         }
         break;
-    case 0x12f:
+    case kLv4Grab:
         if (frame == 0 && timer == 0) {
             StopMoving();
-            unk14c = 0x78;
+            m_freezeTime = 0x78;
             m_gauge = m_gauge - 0xbb8;
             FillBackground(0xb0, 3);
             l50.type = 0x46;
-            l50.unk2c = 0x40;
+            l50.sound = 0x40;
             l50.x = (double)(int)x;
             l50.y = (double)((int)y - 0x28);
             l50.scale = 2;
-            l50.unk0 = 1;
+            l50.keep = 1;
             l50.layer = 1;
             m_game->CreateEffect((EffectDesc*)&l50);
             m_playSound = 0x25;
@@ -5409,18 +5409,18 @@ void CMayu::UpdatePattern()
             m_game->CreateEffect((EffectDesc*)&l50);
         }
         if (frame > 1) {
-            m_game->Unk4080c0(0xf);
+            m_game->FlashNegative(0xf);
         }
         if (frame >= 0 && frame < 3) {
-            Unk410a80(0x32, 3);
+            FocusCameraY(0x32, 3);
         }
         if (frame == 6 && m_attackResult == 3) {
             (*m_opponent)->StartPattern();
             (*m_opponent)->StopMoving();
-            (*m_opponent)->pattern = 0x6b;
+            (*m_opponent)->pattern = kThrownStandHigh2;
             StartPattern();
             StopMoving();
-            pattern = 0x131;
+            pattern = kLv4Slam;
             y = m_pointY[0] + 0x32;
             x = (*m_opponent)->x + (-m_pointX[0] - 0x14) * facing;
             l50.type = 0;
@@ -5457,42 +5457,42 @@ void CMayu::UpdatePattern()
                 ay = 0.045;
             }
             if (frame >= x8) {
-                pattern = 0;
+                pattern = kStand;
                 FaceOpponent();
                 StartPattern();
             }
         }
         break;
-    case 0x130:
+    case kLv4GrabClose:
         if (frame == 0 && timer == 0) {
             StopMoving();
-            unk14c = 0x78;
+            m_freezeTime = 0x78;
             m_gauge = m_gauge - 0xbb8;
             FillBackground(0xb0, 3);
             l50.type = 0x46;
-            l50.unk2c = 0x40;
+            l50.sound = 0x40;
             l50.x = (double)(int)x;
             l50.y = (double)((int)y - 0x28);
             l50.scale = 2;
-            l50.unk0 = 1;
+            l50.keep = 1;
             l50.layer = 1;
             m_game->CreateEffect((EffectDesc*)&l50);
             m_playSound = 0x25;
             l50.type = 0x47;
             m_game->CreateEffect((EffectDesc*)&l50);
         }
-        m_game->Unk4080c0(0xf);
+        m_game->FlashNegative(0xf);
         if (frame >= 0 && frame < 3) {
-            Unk410a80(0x32, 3);
+            FocusCameraY(0x32, 3);
         }
         if (frame == 4 && m_attackResult == 3) {
             (*m_opponent)->StartPattern();
             (*m_opponent)->StopMoving();
-            (*m_opponent)->pattern = 0x6b;
+            (*m_opponent)->pattern = kThrownStandHigh2;
             StartPattern();
             StopMoving();
-            pattern = 0x132;
-            (*m_opponent)->unk14a = 0x78;
+            pattern = kLv4GrabCloseHold;
+            (*m_opponent)->m_hitstop = 0x78;
             (*m_opponent)->x = facing * 0x1e + x;
             l50.type = 0;
             l50.x = (double)((int)x + facing * 0x2c);
@@ -5513,50 +5513,50 @@ void CMayu::UpdatePattern()
                 m_hitsLeft = 0;
             }
             if (frame >= x8) {
-                pattern = 0;
+                pattern = kStand;
                 FaceOpponent();
                 StartPattern();
             }
         }
         break;
-    case 0x131:
-        Unk410a40(0x32, 3);
-        Unk410a80(0x32, 3);
-        m_game->Unk4080c0(0xf);
+    case kLv4Slam:
+        FocusCameraX(0x32, 3);
+        FocusCameraY(0x32, 3);
+        m_game->FlashNegative(0xf);
         if (frame > 3) {
             vy = vy + ay;
         }
         if (frame == 4) {
-            (*m_opponent)->unk140 = 0x7530;
-            (*m_opponent)->pattern = 0x67;
+            (*m_opponent)->m_koDelay = 0x7530;
+            (*m_opponent)->pattern = kThrownDoubledOver;
             (*m_opponent)->x = (23.0 + vx) * facing + x;
             (*m_opponent)->y = -52.0 + vy + y;
         }
         if (frame == 5) {
-            (*m_opponent)->pattern = 0x67;
+            (*m_opponent)->pattern = kThrownDoubledOver;
             (*m_opponent)->x = (15.0 + vx) * facing + x;
             (*m_opponent)->y = -70.0 + vy + y;
         }
         if (frame == 6) {
-            (*m_opponent)->pattern = 0x76;
+            (*m_opponent)->pattern = kThrownAirborneInverted;
             (*m_opponent)->x = (-31.0 + vx) * facing + x;
             (*m_opponent)->y = -65.0 + vy + y;
             (*m_opponent)->facing = facing;
         }
         if (frame == 7) {
-            (*m_opponent)->pattern = 0x75;
+            (*m_opponent)->pattern = kThrownDoubledOverInverted;
             (*m_opponent)->x = (-36.0 + vx) * facing + x;
             (*m_opponent)->y = -32.0 + vy + y;
             (*m_opponent)->facing = facing;
         }
         if (frame == 8) {
-            (*m_opponent)->pattern = 0x68;
+            (*m_opponent)->pattern = kThrownAirborne;
             (*m_opponent)->x = (-7.0 + vx) * facing + x;
             (*m_opponent)->y = -8.0 + vy + y;
             (*m_opponent)->facing = -facing;
         }
         if (frame == 9 || frame == 0xa) {
-            (*m_opponent)->pattern = 0x68;
+            (*m_opponent)->pattern = kThrownAirborne;
             (*m_opponent)->x = (-4.0 + vx) * facing + x;
             (*m_opponent)->y = -6.0 + vy + y;
             (*m_opponent)->facing = -facing;
@@ -5566,16 +5566,16 @@ void CMayu::UpdatePattern()
             StartPattern();
             (*m_opponent)->StopMoving();
             (*m_opponent)->StartPattern();
-            (*m_opponent)->pattern = 0x62;
+            (*m_opponent)->pattern = kKnockdown;
             (*m_opponent)->y = 0.0;
             (*m_opponent)->x = x;
             y = 0.0;
-            pattern = 0x133;
+            pattern = kLv4Stomps;
             DealDamage(0x3e8, 960.0);
             l50.type = 0;
             l50.x = (double)(int)x;
             l50.y = (double)(int)y;
-            l50.unk2c = 2;
+            l50.sound = 2;
             l50.scale = 2;
             l50.layer = 1;
             m_game->CreateEffect((EffectDesc*)&l50);
@@ -5596,10 +5596,10 @@ void CMayu::UpdatePattern()
             }
         }
         break;
-    case 0x132:
-        Unk410a40(0x32, 3);
-        Unk410a80(0x32, 3);
-        m_game->Unk4080c0(0xf);
+    case kLv4GrabCloseHold:
+        FocusCameraX(0x32, 3);
+        FocusCameraY(0x32, 3);
+        m_game->FlashNegative(0xf);
         timer++;
         if (timer >= l4) {
             timer = 0;
@@ -5607,23 +5607,23 @@ void CMayu::UpdatePattern()
             m_attackResult = 0;
             if (frame >= x8) {
                 StartPattern();
-                pattern = 0x131;
+                pattern = kLv4Slam;
                 frame = 4;
-                (*m_opponent)->unk14a = 0;
+                (*m_opponent)->m_hitstop = 0;
                 vx = (1 - ((x > 320.0) << 1)) * 0.6 * facing;
                 vy = -5.0;
                 ay = 0.06;
             }
         }
         break;
-    case 0x133:
-        (*m_opponent)->Unk410a80(0x32, 3);
-        m_game->Unk4080c0(0xf);
-        unk13e = 2;
-        if ((*m_opponent)->pattern == 0x63) {
+    case kLv4Stomps:
+        (*m_opponent)->FocusCameraY(0x32, 3);
+        m_game->FlashNegative(0xf);
+        m_hideOffscreenMarker = 2;
+        if ((*m_opponent)->pattern == kLyingDown) {
             (*m_opponent)->timer = 0;
         }
-        if (unk3138 > 0x78 && unk3138 < 0x2d0 && frame > 5 && frame < 0xc && (WORD)Random(0, 0x64) < 5) {
+        if (m_patternVar1 > 0x78 && m_patternVar1 < 0x2d0 && frame > 5 && frame < 0xc && (WORD)Random(0, 0x64) < 5) {
             l50.type = 0x195;
             l50.x = x + 80.0 - (WORD)Random(0, 0xa0);
             l50.y = (double)-(WORD)Random(0, 0x32);
@@ -5636,28 +5636,28 @@ void CMayu::UpdatePattern()
             vy = vy + ay;
         }
         if (frame > 5) {
-            unk3138++;
+            m_patternVar1++;
         }
-        if (unk3138 == 0x50) {
+        if (m_patternVar1 == 0x50) {
             l50.type = 0x191;
             l50.x = (double)((int)x + facing * 0x1e);
             l50.y = -320.0;
             l50.scale = 0;
             l50.layer = 1;
-            l50.unk0 = 1;
-            l50.unk28 = 1;
+            l50.keep = 1;
+            l50.shadow = 1;
             l50.facing = facing;
             SpawnObject(&l50);
         }
-        if (unk3138 == 0x78) {
+        if (m_patternVar1 == 0x78) {
             l50.type = 0x192;
             l50.x = (double)((int)x - facing * 0x14);
             l50.y = -320.0;
             l50.scale = 0;
             l50.layer = 1;
-            l50.unk28 = 1;
+            l50.shadow = 1;
             l50.facing = facing;
-            l50.unk0 = 1;
+            l50.keep = 1;
             SpawnObject(&l50);
         }
         if (frame == 9 && vy + y > 0.0) {
@@ -5666,14 +5666,14 @@ void CMayu::UpdatePattern()
             frame = 0xa;
             (*m_opponent)->StopMoving();
             (*m_opponent)->StartPattern();
-            (*m_opponent)->pattern = 0x62;
+            (*m_opponent)->pattern = kKnockdown;
             y = 0.0;
-            (*m_opponent)->unk140 = 0x7530;
+            (*m_opponent)->m_koDelay = 0x7530;
             DealDamage(0x12c, 960.0);
             l50.type = 0;
             l50.x = (double)(int)x;
             l50.y = (double)(int)y;
-            l50.unk2c = 2;
+            l50.sound = 2;
             l50.scale = 2;
             l50.layer = 1;
             m_game->CreateEffect((EffectDesc*)&l50);
@@ -5685,16 +5685,16 @@ void CMayu::UpdatePattern()
             frame = 0x10;
             (*m_opponent)->StopMoving();
             (*m_opponent)->StartPattern();
-            (*m_opponent)->pattern = 0x62;
+            (*m_opponent)->pattern = kKnockdown;
             y = 0.0;
             DealDamage(0x578, 960.0);
-            (*m_opponent)->unk140 = 0;
+            (*m_opponent)->m_koDelay = 0;
             ShakeScreen(0xa, 0xa);
-            (*m_opponent)->unk14a = 0x78;
+            (*m_opponent)->m_hitstop = 0x78;
             l50.type = 0;
             l50.x = (double)(int)x;
             l50.y = (double)(int)y;
-            l50.unk2c = 0x16;
+            l50.sound = 0x16;
             l50.scale = 2;
             l50.layer = 1;
             m_game->CreateEffect((EffectDesc*)&l50);
@@ -5709,7 +5709,7 @@ void CMayu::UpdatePattern()
             y = 0.0;
             break;
         }
-        if (frame == 0xb && unk3138 > 0x334) {
+        if (frame == 0xb && m_patternVar1 > 0x334) {
             frame = 0xc;
             timer = 0;
             vy = -5.0;
@@ -5727,7 +5727,7 @@ void CMayu::UpdatePattern()
                 ay = 0.08;
             }
             if (frame == 0xc) {
-                if (unk3138 <= 0x2da) {
+                if (m_patternVar1 <= 0x2da) {
                     frame = 6;
                     vx = 0.0;
                     vy = -3.9;
@@ -5741,34 +5741,34 @@ void CMayu::UpdatePattern()
                 vy = -1.5;
                 ay = 0.038;
             }
-            if (frame == 0x1f && unk313c < 4) {
+            if (frame == 0x1f && m_patternVar2 < 4) {
                 frame = frame - 2;
-                unk313c++;
+                m_patternVar2++;
             }
             if (frame >= x8) {
                 StartPattern();
-                pattern = 0;
+                pattern = kStand;
                 FaceOpponent();
             }
         }
         break;
-    case 0x134:
+    case k641236Lv1:
         if (frame == 0 && timer == 0) {
             StopMoving();
-            unk14c = 0x78;
+            m_freezeTime = 0x78;
             m_gauge = m_gauge - 0x3e8;
             FillBackground(0xb0, 3);
             l50.type = 0x44;
-            l50.unk2c = 0x13;
+            l50.sound = 0x13;
             l50.x = (double)(int)x;
             l50.y = (double)((int)y - 0x28);
             l50.scale = 2;
-            l50.unk0 = 1;
+            l50.keep = 1;
             l50.layer = 1;
             m_game->CreateEffect((EffectDesc*)&l50);
         }
         if (frame >= 0 && frame < 3) {
-            Unk410a80(0x32, 3);
+            FocusCameraY(0x32, 3);
         }
         if ((frame == 3 || frame == 4) && m_attackResult == 3) {
             if (x > 580.0) {
@@ -5781,12 +5781,12 @@ void CMayu::UpdatePattern()
             }
             (*m_opponent)->StartPattern();
             (*m_opponent)->StopMoving();
-            (*m_opponent)->pattern = 0x67;
+            (*m_opponent)->pattern = kThrownDoubledOver;
             (*m_opponent)->x = facing * 0x16 + x;
             (*m_opponent)->y = y - 52.0;
             StartPattern();
             ay = 0.025;
-            pattern = 0x137;
+            pattern = k641236Lv1Throw;
             l50.type = 0;
             l50.x = (double)((int)x + facing * 0x2c);
             l50.y = (double)((int)y - 0x2c);
@@ -5825,11 +5825,11 @@ void CMayu::UpdatePattern()
                 vx = 2.0;
                 vy = -3.2;
                 ay = 0.035;
-                unk13c = 6;
+                m_invulTime = 6;
             }
-            if (frame == 5 && unk3138 < 1) {
+            if (frame == 5 && m_patternVar1 < 1) {
                 frame = frame - 2;
-                unk3138++;
+                m_patternVar1++;
             }
             if (frame == 6) {
                 vy *= 0.5;
@@ -5838,29 +5838,29 @@ void CMayu::UpdatePattern()
                 frame = frame - 4;
             }
             if (frame >= x8) {
-                pattern = 3;
+                pattern = kCrouch;
                 FaceOpponent();
                 StartPattern();
             }
         }
         break;
-    case 0x135:
+    case k641236Lv2:
         if (frame == 0 && timer == 0) {
             StopMoving();
-            unk14c = 0x78;
+            m_freezeTime = 0x78;
             m_gauge = m_gauge - 0x7d0;
             FillBackground(0xb0, 3);
             l50.type = 0x45;
-            l50.unk2c = 5;
+            l50.sound = 5;
             l50.x = (double)(int)x;
             l50.y = (double)((int)y - 0x28);
             l50.scale = 2;
-            l50.unk0 = 1;
+            l50.keep = 1;
             l50.layer = 1;
             m_game->CreateEffect((EffectDesc*)&l50);
         }
         if (frame >= 0 && frame < 3) {
-            Unk410a80(0x32, 3);
+            FocusCameraY(0x32, 3);
         }
         if ((frame == 3 || frame == 4) && m_attackResult == 3) {
             if (x > 580.0) {
@@ -5873,12 +5873,12 @@ void CMayu::UpdatePattern()
             }
             (*m_opponent)->StartPattern();
             (*m_opponent)->StopMoving();
-            (*m_opponent)->pattern = 0x67;
+            (*m_opponent)->pattern = kThrownDoubledOver;
             (*m_opponent)->x = facing * 0x16 + x;
             (*m_opponent)->y = y - 52.0;
             StartPattern();
             ay = 0.025;
-            pattern = 0x138;
+            pattern = k641236Lv2Throw;
             l50.type = 0;
             l50.x = (double)((int)x + facing * 0x2c);
             l50.y = (double)((int)y - 0x2c);
@@ -5917,11 +5917,11 @@ void CMayu::UpdatePattern()
                 vx = 2.0;
                 vy = -3.2;
                 ay = 0.035;
-                unk13c = 0xc;
+                m_invulTime = 0xc;
             }
-            if (frame == 5 && unk3138 < 3) {
+            if (frame == 5 && m_patternVar1 < 3) {
                 frame = frame - 2;
-                unk3138++;
+                m_patternVar1++;
             }
             if (frame == 6) {
                 vy *= 0.5;
@@ -5930,31 +5930,31 @@ void CMayu::UpdatePattern()
                 frame = frame - 4;
             }
             if (frame >= x8) {
-                pattern = 3;
+                pattern = kCrouch;
                 FaceOpponent();
                 StartPattern();
             }
         }
         break;
-    case 0x136:
+    case k641236Lv3:
         if (frame == 0 && timer == 0) {
             StopMoving();
-            unk14c = 0x78;
+            m_freezeTime = 0x78;
             m_gauge = m_gauge - 0xbb8;
             FillBackground(0xb0, 3);
             l50.type = 0x46;
-            l50.unk2c = 0x40;
+            l50.sound = 0x40;
             l50.x = (double)(int)x;
             l50.y = (double)((int)y - 0x28);
             l50.scale = 2;
-            l50.unk0 = 1;
+            l50.keep = 1;
             l50.layer = 1;
             m_game->CreateEffect((EffectDesc*)&l50);
             m_playSound = 0x25;
         }
-        m_game->Unk4080c0(0xf);
+        m_game->FlashNegative(0xf);
         if (frame >= 0 && frame < 3) {
-            Unk410a80(0x32, 3);
+            FocusCameraY(0x32, 3);
         }
         if ((frame == 3 || frame == 4) && m_attackResult == 3) {
             if (x > 580.0) {
@@ -5967,12 +5967,12 @@ void CMayu::UpdatePattern()
             }
             (*m_opponent)->StartPattern();
             (*m_opponent)->StopMoving();
-            (*m_opponent)->pattern = 0x67;
+            (*m_opponent)->pattern = kThrownDoubledOver;
             (*m_opponent)->x = facing * 0x16 + x;
             (*m_opponent)->y = y - 52.0;
             StartPattern();
             ay = 0.025;
-            pattern = 0x139;
+            pattern = k641236Lv3Throw;
             l50.type = 0;
             l50.x = (double)((int)x + facing * 0x2c);
             l50.y = (double)((int)y - 0x2c);
@@ -6011,11 +6011,11 @@ void CMayu::UpdatePattern()
                 vx = 2.0;
                 vy = -3.2;
                 ay = 0.035;
-                unk13c = 0x12;
+                m_invulTime = 0x12;
             }
-            if (frame == 5 && unk3138 < 5) {
+            if (frame == 5 && m_patternVar1 < 5) {
                 frame = frame - 2;
-                unk3138++;
+                m_patternVar1++;
             }
             if (frame == 6) {
                 vy *= 0.5;
@@ -6024,14 +6024,14 @@ void CMayu::UpdatePattern()
                 frame = frame - 4;
             }
             if (frame >= x8) {
-                pattern = 3;
+                pattern = kCrouch;
                 FaceOpponent();
                 StartPattern();
             }
         }
         break;
-    case 0x137:
-        unk13e = 2;
+    case k641236Lv1Throw:
+        m_hideOffscreenMarker = 2;
         if (frame < 0xe) {
             if (x > 580.0) {
                 x = 580.0;
@@ -6041,8 +6041,8 @@ void CMayu::UpdatePattern()
                 x = 60.0;
                 vx = 0.0;
             }
-            Unk410a40(0x32, 3);
-            Unk410a80(0x32, 3);
+            FocusCameraX(0x32, 3);
+            FocusCameraY(0x32, 3);
         }
         if (frame < 0xd || frame > 0xe && frame < 0x12) {
             vy = vy + ay;
@@ -6051,12 +6051,12 @@ void CMayu::UpdatePattern()
                     y = 0.0;
                     StopMoving();
                     (*m_opponent)->StartPattern();
-                    (*m_opponent)->pattern = 0x62;
+                    (*m_opponent)->pattern = kKnockdown;
                     (*m_opponent)->y = 0.0;
                     (*m_opponent)->x = facing + x;
                     (*m_opponent)->facing = -facing;
                     (*m_opponent)->StopMoving();
-                    (*m_opponent)->unk14a = 0x7e;
+                    (*m_opponent)->m_hitstop = 0x7e;
                     DealDamage(0x92e, 750.0);
                     ShakeScreen(0xa, 0);
                     timer = 0;
@@ -6080,59 +6080,59 @@ void CMayu::UpdatePattern()
             }
         }
         if (frame < 4) {
-            (*m_opponent)->pattern = 0x67;
+            (*m_opponent)->pattern = kThrownDoubledOver;
             (*m_opponent)->x = facing * 0x16 + x;
             (*m_opponent)->y = y - 52.0;
         }
         if (frame == 4) {
-            (*m_opponent)->pattern = 0x67;
+            (*m_opponent)->pattern = kThrownDoubledOver;
             (*m_opponent)->x = (15.0 + vx) * facing + x;
             (*m_opponent)->y = -70.0 + vy + y;
         }
         if (frame == 5) {
-            (*m_opponent)->pattern = 0x76;
+            (*m_opponent)->pattern = kThrownAirborneInverted;
             (*m_opponent)->x = (-25.0 + vx) * facing + x;
             (*m_opponent)->y = -65.0 + vy + y;
             (*m_opponent)->facing = facing;
         }
         if (frame == 6) {
-            (*m_opponent)->pattern = 0x75;
+            (*m_opponent)->pattern = kThrownDoubledOverInverted;
             (*m_opponent)->x = (-28.0 + vx) * facing + x;
             (*m_opponent)->y = -43.0 + vy + y;
             (*m_opponent)->facing = facing;
         }
         if (frame == 7) {
-            (*m_opponent)->pattern = 0x75;
+            (*m_opponent)->pattern = kThrownDoubledOverInverted;
             (*m_opponent)->x = (-12.0 + vx) * facing + x;
             (*m_opponent)->y = -29.0 + vy + y;
             (*m_opponent)->facing = facing;
         }
         if (frame == 8) {
-            (*m_opponent)->pattern = 0x68;
+            (*m_opponent)->pattern = kThrownAirborne;
             (*m_opponent)->x = (12.0 + vx) * facing + x;
             (*m_opponent)->y = -23.0 + vy + y;
             (*m_opponent)->facing = -facing;
         }
         if (frame == 9) {
-            (*m_opponent)->pattern = 0x68;
+            (*m_opponent)->pattern = kThrownAirborne;
             (*m_opponent)->x = (23.0 + vx) * facing + x;
             (*m_opponent)->y = -36.0 + vy + y;
             (*m_opponent)->facing = -facing;
         }
         if (frame == 0xa) {
-            (*m_opponent)->pattern = 0x67;
+            (*m_opponent)->pattern = kThrownDoubledOver;
             (*m_opponent)->x = (28.0 + vx) * facing + x;
             (*m_opponent)->y = -58.0 + vy + y;
             (*m_opponent)->facing = -facing;
         }
         if (frame == 0xb) {
-            (*m_opponent)->pattern = 0x67;
+            (*m_opponent)->pattern = kThrownDoubledOver;
             (*m_opponent)->x = (14.0 + vx) * facing + x;
             (*m_opponent)->y = -73.0 + vy + y;
             (*m_opponent)->facing = -facing;
         }
         if (frame == 0xc) {
-            (*m_opponent)->pattern = 0x76;
+            (*m_opponent)->pattern = kThrownAirborneInverted;
             (*m_opponent)->x = (-12.0 + vx) * facing + x;
             (*m_opponent)->y = -78.0 + vy + y;
             (*m_opponent)->facing = facing;
@@ -6146,26 +6146,26 @@ void CMayu::UpdatePattern()
                 frame = frame - 8;
             }
             if (frame == 0xf) {
-                (*m_opponent)->unk14a = 3;
+                (*m_opponent)->m_hitstop = 3;
                 vx = -1.2;
                 vy = -2.0;
                 ay = 0.035;
                 (*m_opponent)->y = -1.0;
                 (*m_opponent)->StartPattern();
                 (*m_opponent)->StopMoving();
-                (*m_opponent)->unkc0 = -1.2;
-                (*m_opponent)->unkc8 = -2.0;
-                (*m_opponent)->pattern = 0x3b;
+                (*m_opponent)->m_hitVx = -1.2;
+                (*m_opponent)->m_hitVy = -2.0;
+                (*m_opponent)->pattern = kHitAir;
             }
             if (frame >= x8) {
                 StartPattern();
                 FaceOpponent();
-                pattern = 3;
+                pattern = kCrouch;
             }
         }
         break;
-    case 0x138:
-        unk13e = 2;
+    case k641236Lv2Throw:
+        m_hideOffscreenMarker = 2;
         if (frame < 0x19) {
             if (x > 580.0) {
                 x = 580.0;
@@ -6175,8 +6175,8 @@ void CMayu::UpdatePattern()
                 x = 60.0;
                 vx = 0.0;
             }
-            Unk410a40(0x32, 3);
-            Unk410a80(0x32, 3);
+            FocusCameraX(0x32, 3);
+            FocusCameraY(0x32, 3);
         }
         if (frame < 0xd || frame > 0xe && frame < 0x19 || frame > 0x1a && frame < 0x1e) {
             vy = vy + ay;
@@ -6185,15 +6185,15 @@ void CMayu::UpdatePattern()
                     y = 0.0;
                     StopMoving();
                     (*m_opponent)->StartPattern();
-                    (*m_opponent)->pattern = 0x62;
+                    (*m_opponent)->pattern = kKnockdown;
                     (*m_opponent)->y = 0.0;
                     (*m_opponent)->StopMoving();
-                    (*m_opponent)->unk14a = 0x96;
+                    (*m_opponent)->m_hitstop = 0x96;
                     (*m_opponent)->x = facing + x;
                     (*m_opponent)->facing = -facing;
                     DealDamage(0x3e8, 980.0);
                     ShakeScreen(0xa, 0);
-                    (*m_opponent)->unk140 = 0x7530;
+                    (*m_opponent)->m_koDelay = 0x7530;
                     timer = 0;
                     frame = 0xd;
                     m_playSound = 0x16;
@@ -6203,15 +6203,15 @@ void CMayu::UpdatePattern()
                     y = 0.0;
                     StopMoving();
                     (*m_opponent)->StartPattern();
-                    (*m_opponent)->pattern = 0x62;
+                    (*m_opponent)->pattern = kKnockdown;
                     (*m_opponent)->y = 0.0;
                     (*m_opponent)->x = facing + x;
                     (*m_opponent)->facing = -facing;
                     (*m_opponent)->StopMoving();
-                    (*m_opponent)->unk14a = 0x7e;
+                    (*m_opponent)->m_hitstop = 0x7e;
                     ShakeScreen(0xf, 0);
                     DealDamage(0x834, 980.0);
-                    (*m_opponent)->unk140 = 0;
+                    (*m_opponent)->m_koDelay = 0;
                     timer = 0;
                     frame = 0x19;
                     m_playSound = 0x16;
@@ -6239,59 +6239,59 @@ void CMayu::UpdatePattern()
             }
         }
         if (frame < 4) {
-            (*m_opponent)->pattern = 0x67;
+            (*m_opponent)->pattern = kThrownDoubledOver;
             (*m_opponent)->x = facing * 0x16 + x;
             (*m_opponent)->y = y - 52.0;
         }
         if (frame == 4 || frame == 0xf || frame == 0x10) {
-            (*m_opponent)->pattern = 0x67;
+            (*m_opponent)->pattern = kThrownDoubledOver;
             (*m_opponent)->x = (15.0 + vx) * facing + x;
             (*m_opponent)->y = -70.0 + vy + y;
         }
         if (frame == 5 || frame == 0x11) {
-            (*m_opponent)->pattern = 0x76;
+            (*m_opponent)->pattern = kThrownAirborneInverted;
             (*m_opponent)->x = (-25.0 + vx) * facing + x;
             (*m_opponent)->y = -65.0 + vy + y;
             (*m_opponent)->facing = facing;
         }
         if (frame == 6 || frame == 0x12) {
-            (*m_opponent)->pattern = 0x75;
+            (*m_opponent)->pattern = kThrownDoubledOverInverted;
             (*m_opponent)->x = (-28.0 + vx) * facing + x;
             (*m_opponent)->y = -43.0 + vy + y;
             (*m_opponent)->facing = facing;
         }
         if (frame == 7 || frame == 0x13) {
-            (*m_opponent)->pattern = 0x75;
+            (*m_opponent)->pattern = kThrownDoubledOverInverted;
             (*m_opponent)->x = (-12.0 + vx) * facing + x;
             (*m_opponent)->y = -29.0 + vy + y;
             (*m_opponent)->facing = facing;
         }
         if (frame == 8 || frame == 0x14) {
-            (*m_opponent)->pattern = 0x68;
+            (*m_opponent)->pattern = kThrownAirborne;
             (*m_opponent)->x = (12.0 + vx) * facing + x;
             (*m_opponent)->y = -23.0 + vy + y;
             (*m_opponent)->facing = -facing;
         }
         if (frame == 9 || frame == 0x15) {
-            (*m_opponent)->pattern = 0x68;
+            (*m_opponent)->pattern = kThrownAirborne;
             (*m_opponent)->x = (23.0 + vx) * facing + x;
             (*m_opponent)->y = -36.0 + vy + y;
             (*m_opponent)->facing = -facing;
         }
         if (frame == 0xa || frame == 0x16) {
-            (*m_opponent)->pattern = 0x67;
+            (*m_opponent)->pattern = kThrownDoubledOver;
             (*m_opponent)->x = (28.0 + vx) * facing + x;
             (*m_opponent)->y = -58.0 + vy + y;
             (*m_opponent)->facing = -facing;
         }
         if (frame == 0xb || frame == 0x17) {
-            (*m_opponent)->pattern = 0x67;
+            (*m_opponent)->pattern = kThrownDoubledOver;
             (*m_opponent)->x = (14.0 + vx) * facing + x;
             (*m_opponent)->y = -73.0 + vy + y;
             (*m_opponent)->facing = -facing;
         }
         if (frame == 0xc || frame == 0x18) {
-            (*m_opponent)->pattern = 0x76;
+            (*m_opponent)->pattern = kThrownAirborneInverted;
             (*m_opponent)->x = (-12.0 + vx) * facing + x;
             (*m_opponent)->y = -78.0 + vy + y;
             (*m_opponent)->facing = facing;
@@ -6308,7 +6308,7 @@ void CMayu::UpdatePattern()
                 vx = -4.0;
                 vy = -4.0;
                 ay = 0.025;
-                (*m_opponent)->unk14a = 3;
+                (*m_opponent)->m_hitstop = 3;
             }
             if (frame == 0x1b) {
                 vx = -1.8;
@@ -6316,20 +6316,20 @@ void CMayu::UpdatePattern()
                 ay = 0.035;
                 (*m_opponent)->StartPattern();
                 (*m_opponent)->StopMoving();
-                (*m_opponent)->unkc0 = -1.8;
-                (*m_opponent)->unkc8 = -2.3;
-                (*m_opponent)->pattern = 0x3b;
+                (*m_opponent)->m_hitVx = -1.8;
+                (*m_opponent)->m_hitVy = -2.3;
+                (*m_opponent)->pattern = kHitAir;
             }
             if (frame >= x8) {
                 StartPattern();
                 FaceOpponent();
-                pattern = 3;
+                pattern = kCrouch;
             }
         }
         break;
-    case 0x139:
-        unk13e = 2;
-        m_game->Unk4080c0(0xf);
+    case k641236Lv3Throw:
+        m_hideOffscreenMarker = 2;
+        m_game->FlashNegative(0xf);
         if (frame < 0x19) {
             if (x > 580.0) {
                 x = 580.0;
@@ -6339,8 +6339,8 @@ void CMayu::UpdatePattern()
                 x = 60.0;
                 vx = 0.0;
             }
-            Unk410a40(0x32, 3);
-            Unk410a80(0x32, 3);
+            FocusCameraX(0x32, 3);
+            FocusCameraY(0x32, 3);
         }
         if (frame < 0xd || frame > 0xe && frame < 0x19 || frame > 0x1a && frame < 0x1e) {
             vy = vy + ay;
@@ -6349,15 +6349,15 @@ void CMayu::UpdatePattern()
                     y = 0.0;
                     StopMoving();
                     (*m_opponent)->StartPattern();
-                    (*m_opponent)->pattern = 0x62;
+                    (*m_opponent)->pattern = kKnockdown;
                     (*m_opponent)->y = 0.0;
                     (*m_opponent)->StopMoving();
-                    (*m_opponent)->unk14a = 0x96;
+                    (*m_opponent)->m_hitstop = 0x96;
                     (*m_opponent)->x = facing + x;
                     (*m_opponent)->facing = -facing;
                     DealDamage(0x3e8, 980.0);
                     ShakeScreen(0xa, 0);
-                    (*m_opponent)->unk140 = 0x7530;
+                    (*m_opponent)->m_koDelay = 0x7530;
                     timer = 0;
                     frame = 0xd;
                     m_playSound = 0x16;
@@ -6367,14 +6367,14 @@ void CMayu::UpdatePattern()
                     y = 0.0;
                     StopMoving();
                     (*m_opponent)->StartPattern();
-                    (*m_opponent)->pattern = 0x62;
+                    (*m_opponent)->pattern = kKnockdown;
                     (*m_opponent)->y = 0.0;
                     (*m_opponent)->x = facing + x;
                     (*m_opponent)->facing = -facing;
                     (*m_opponent)->StopMoving();
-                    (*m_opponent)->unk14a = 0xba;
+                    (*m_opponent)->m_hitstop = 0xba;
                     DealDamage(0xed8, 980.0);
-                    (*m_opponent)->unk140 = 0;
+                    (*m_opponent)->m_koDelay = 0;
                     ShakeScreen(0x14, 0x1e);
                     timer = 0;
                     frame = 0x19;
@@ -6403,59 +6403,59 @@ void CMayu::UpdatePattern()
             }
         }
         if (frame < 4) {
-            (*m_opponent)->pattern = 0x67;
+            (*m_opponent)->pattern = kThrownDoubledOver;
             (*m_opponent)->x = facing * 0x16 + x;
             (*m_opponent)->y = y - 52.0;
         }
         if (frame == 4 || frame == 0xf || frame == 0x10) {
-            (*m_opponent)->pattern = 0x67;
+            (*m_opponent)->pattern = kThrownDoubledOver;
             (*m_opponent)->x = (15.0 + vx) * facing + x;
             (*m_opponent)->y = -70.0 + vy + y;
         }
         if (frame == 5 || frame == 0x11) {
-            (*m_opponent)->pattern = 0x76;
+            (*m_opponent)->pattern = kThrownAirborneInverted;
             (*m_opponent)->x = (-25.0 + vx) * facing + x;
             (*m_opponent)->y = -65.0 + vy + y;
             (*m_opponent)->facing = facing;
         }
         if (frame == 6 || frame == 0x12) {
-            (*m_opponent)->pattern = 0x75;
+            (*m_opponent)->pattern = kThrownDoubledOverInverted;
             (*m_opponent)->x = (-28.0 + vx) * facing + x;
             (*m_opponent)->y = -43.0 + vy + y;
             (*m_opponent)->facing = facing;
         }
         if (frame == 7 || frame == 0x13) {
-            (*m_opponent)->pattern = 0x75;
+            (*m_opponent)->pattern = kThrownDoubledOverInverted;
             (*m_opponent)->x = (-12.0 + vx) * facing + x;
             (*m_opponent)->y = -29.0 + vy + y;
             (*m_opponent)->facing = facing;
         }
         if (frame == 8 || frame == 0x14) {
-            (*m_opponent)->pattern = 0x68;
+            (*m_opponent)->pattern = kThrownAirborne;
             (*m_opponent)->x = (12.0 + vx) * facing + x;
             (*m_opponent)->y = -23.0 + vy + y;
             (*m_opponent)->facing = -facing;
         }
         if (frame == 9 || frame == 0x15) {
-            (*m_opponent)->pattern = 0x68;
+            (*m_opponent)->pattern = kThrownAirborne;
             (*m_opponent)->x = (23.0 + vx) * facing + x;
             (*m_opponent)->y = -36.0 + vy + y;
             (*m_opponent)->facing = -facing;
         }
         if (frame == 0xa || frame == 0x16) {
-            (*m_opponent)->pattern = 0x67;
+            (*m_opponent)->pattern = kThrownDoubledOver;
             (*m_opponent)->x = (28.0 + vx) * facing + x;
             (*m_opponent)->y = -58.0 + vy + y;
             (*m_opponent)->facing = -facing;
         }
         if (frame == 0xb || frame == 0x17) {
-            (*m_opponent)->pattern = 0x67;
+            (*m_opponent)->pattern = kThrownDoubledOver;
             (*m_opponent)->x = (14.0 + vx) * facing + x;
             (*m_opponent)->y = -73.0 + vy + y;
             (*m_opponent)->facing = -facing;
         }
         if (frame == 0xc || frame == 0x18) {
-            (*m_opponent)->pattern = 0x76;
+            (*m_opponent)->pattern = kThrownAirborneInverted;
             (*m_opponent)->x = (-12.0 + vx) * facing + x;
             (*m_opponent)->y = -78.0 + vy + y;
             (*m_opponent)->facing = facing;
@@ -6472,7 +6472,7 @@ void CMayu::UpdatePattern()
                 vx = -4.0;
                 vy = -7.0;
                 ay = 0.025;
-                (*m_opponent)->unk14a = 3;
+                (*m_opponent)->m_hitstop = 3;
             }
             if (frame == 0x1b) {
                 vx = -1.8;
@@ -6480,36 +6480,36 @@ void CMayu::UpdatePattern()
                 ay = 0.035;
                 (*m_opponent)->StartPattern();
                 (*m_opponent)->StopMoving();
-                (*m_opponent)->unkc0 = -1.8;
-                (*m_opponent)->unkc8 = -2.3;
-                (*m_opponent)->pattern = 0x3b;
+                (*m_opponent)->m_hitVx = -1.8;
+                (*m_opponent)->m_hitVy = -2.3;
+                (*m_opponent)->pattern = kHitAir;
             }
             if (frame >= x8) {
                 StartPattern();
                 FaceOpponent();
-                pattern = 3;
+                pattern = kCrouch;
             }
         }
         break;
-    case 0x13a:
+    case k214214Lv1:
         if (frame == 0 && timer == 0) {
             vx = 0.0;
             vy = 0.0;
             ay = 0.0;
         }
         if (frame == 1 && timer == 0) {
-            unk14c = 0x78;
+            m_freezeTime = 0x78;
             m_gauge = m_gauge - 0x3e8;
             FillBackground(0xb0, 3);
             l50.type = 0x44;
-            l50.unk2c = 0x13;
+            l50.sound = 0x13;
             l50.x = (double)((int)x + facing * 0xf);
             l50.y = (double)((int)y - 0x22);
             l50.scale = 2;
-            l50.unk0 = 1;
+            l50.keep = 1;
             l50.layer = 1;
             m_game->CreateEffect((EffectDesc*)&l50);
-            Unk410a80(0x32, 0x78);
+            FocusCameraY(0x32, 0x78);
             m_hitsLeft = 0xc;
         }
         if (timer == 0 && (frame == 9 || frame == 0xb || frame == 0xd || frame == 0xf)) {
@@ -6546,38 +6546,38 @@ void CMayu::UpdatePattern()
         if (timer >= l4) {
             timer = 0;
             frame++;
-            if (frame == 0x10 && unk3138 < 3) {
+            if (frame == 0x10 && m_patternVar1 < 3) {
                 frame = frame - 4;
-                unk3138++;
+                m_patternVar1++;
             }
             if (frame == 1 || frame == 9 || frame == 0xb || frame == 0xd || frame == 0xf || frame == 0x10) {
                 m_attackResult = 0;
             }
             if (frame >= x8) {
-                pattern = 0;
+                pattern = kStand;
                 StartPattern();
             }
         }
         break;
-    case 0x13b:
+    case k214214Lv2:
         if (frame == 0 && timer == 0) {
             vx = 0.0;
             vy = 0.0;
             ay = 0.0;
         }
         if (frame == 1 && timer == 0) {
-            unk14c = 0x78;
+            m_freezeTime = 0x78;
             m_gauge = m_gauge - 0x7d0;
             FillBackground(0xb0, 3);
             l50.type = 0x45;
-            l50.unk2c = 5;
+            l50.sound = 5;
             l50.x = (double)((int)x + facing * 0xf);
             l50.y = (double)((int)y - 0x22);
             l50.scale = 2;
-            l50.unk0 = 1;
+            l50.keep = 1;
             l50.layer = 1;
             m_game->CreateEffect((EffectDesc*)&l50);
-            Unk410a80(0x32, 0x78);
+            FocusCameraY(0x32, 0x78);
             m_hitsLeft = 0x63;
         }
         if (timer == 0 && (frame == 9 || frame == 0xb || frame == 0xd || frame == 0xf)) {
@@ -6614,41 +6614,41 @@ void CMayu::UpdatePattern()
         if (timer >= l4) {
             timer = 0;
             frame++;
-            if (frame == 0x10 && unk3138 < 5) {
+            if (frame == 0x10 && m_patternVar1 < 5) {
                 frame = frame - 4;
-                unk3138++;
+                m_patternVar1++;
             }
             if (frame == 1 || frame == 9 || frame == 0xb || frame == 0xd || frame == 0xf || frame == 0x10) {
                 m_attackResult = 0;
             }
             if (frame >= x8) {
-                pattern = 0;
+                pattern = kStand;
                 StartPattern();
             }
         }
         break;
-    case 0x13c:
+    case k214214Lv3:
         if (frame == 0 && timer == 0) {
             vx = 0.0;
             vy = 0.0;
             ay = 0.0;
         }
         if (frame > 0) {
-            m_game->Unk4080c0(0xf);
+            m_game->FlashNegative(0xf);
         }
         if (frame == 1 && timer == 0) {
-            unk14c = 0x78;
+            m_freezeTime = 0x78;
             m_gauge = m_gauge - 0xbb8;
             FillBackground(0xb0, 3);
             l50.type = 0x46;
-            l50.unk2c = 0x40;
+            l50.sound = 0x40;
             l50.x = (double)((int)x + facing * 0xf);
             l50.y = (double)((int)y - 0x22);
             l50.scale = 2;
-            l50.unk0 = 1;
+            l50.keep = 1;
             l50.layer = 1;
             m_game->CreateEffect((EffectDesc*)&l50);
-            Unk410a80(0x32, 0x78);
+            FocusCameraY(0x32, 0x78);
             m_hitsLeft = 0x63;
             m_playSound = 0x25;
         }
@@ -6686,49 +6686,49 @@ void CMayu::UpdatePattern()
         if (timer >= l4) {
             timer = 0;
             frame++;
-            if (frame == 0x10 && unk3138 < 0xa) {
+            if (frame == 0x10 && m_patternVar1 < 0xa) {
                 frame = frame - 4;
-                unk3138++;
+                m_patternVar1++;
             }
             if (frame == 1 || frame == 9 || frame == 0xb || frame == 0xd || frame == 0xf || frame == 0x10) {
                 m_attackResult = 0;
             }
             if (frame >= x8) {
-                pattern = 0;
+                pattern = kStand;
                 StartPattern();
             }
         }
         break;
-    case 0x13d:
+    case k21436Lv1:
         if (frame == 0 && timer == 0) {
             vx = 0.0;
             vy = 0.0;
             ay = 0.0;
         }
         if (frame == 0 && timer == 0) {
-            unk14c = 0x78;
+            m_freezeTime = 0x78;
             m_gauge = m_gauge - 0x3e8;
             FillBackground(0xb0, 3);
             l50.type = 0x44;
-            l50.unk2c = 0x13;
+            l50.sound = 0x13;
             l50.x = (double)(int)x;
             l50.y = (double)((int)y - 0x28);
             l50.scale = 2;
-            l50.unk0 = 1;
+            l50.keep = 1;
             l50.layer = 1;
             m_game->CreateEffect((EffectDesc*)&l50);
             m_hitsLeft = 1;
-            Unk410a80(0x32, 0x78);
+            FocusCameraY(0x32, 0x78);
         }
         if (frame > 0xd && frame < 0x12 && m_attackResult == 3) {
             StartPattern();
             StopMoving();
             (*m_opponent)->StopMoving();
-            (*m_opponent)->unk14a = 0xb4;
+            (*m_opponent)->m_hitstop = 0xb4;
             (*m_opponent)->y = 0.0;
-            (*m_opponent)->pattern = 0x49;
+            (*m_opponent)->pattern = kHitStandLowHold;
             (*m_opponent)->x = facing * 0x1e + x;
-            pattern = 0x13e;
+            pattern = k21436Lv1Hit;
             (*m_opponent)->facing = -facing;
             break;
         }
@@ -6750,17 +6750,17 @@ void CMayu::UpdatePattern()
             if (frame == 0xe) {
                 vx = 3.2;
             }
-            if (frame == 0x12 && unk3138 < 2) {
-                unk3138++;
+            if (frame == 0x12 && m_patternVar1 < 2) {
+                m_patternVar1++;
                 frame = frame - 4;
             }
             if (frame >= x8) {
-                pattern = 3;
+                pattern = kCrouch;
                 StartPattern();
             }
         }
         break;
-    case 0x13e:
+    case k21436Lv1Hit:
         if (frame == 0 && timer == 0) {
             m_hitsLeft = 0x63;
         }
@@ -6799,15 +6799,15 @@ void CMayu::UpdatePattern()
                 x = facing * 0xf + x;
             }
             if (frame == 0xd) {
-                if (unk3138 > 1) {
+                if (m_patternVar1 > 1) {
                     frame = 0xf;
                     break;
                 }
                 x = facing * 0xf + x;
             }
-            if (frame == 0xf && unk3138 < 1) {
+            if (frame == 0xf && m_patternVar1 < 1) {
                 frame = 5;
-                unk3138++;
+                m_patternVar1++;
             }
             if (frame == 0x13) {
                 vy = -3.3;
@@ -6818,41 +6818,41 @@ void CMayu::UpdatePattern()
                 frame = frame - 4;
             }
             if (frame >= x8) {
-                pattern = 3;
+                pattern = kCrouch;
                 StartPattern();
             }
         }
         break;
-    case 0x13f:
+    case k21436Lv2:
         if (frame == 0 && timer == 0) {
             vx = 0.0;
             vy = 0.0;
             ay = 0.0;
         }
         if (frame == 0 && timer == 0) {
-            unk14c = 0x78;
+            m_freezeTime = 0x78;
             m_gauge = m_gauge - 0x7d0;
             FillBackground(0xb0, 3);
             l50.type = 0x45;
-            l50.unk2c = 5;
+            l50.sound = 5;
             l50.x = (double)(int)x;
             l50.y = (double)((int)y - 0x28);
             l50.scale = 2;
-            l50.unk0 = 1;
+            l50.keep = 1;
             l50.layer = 1;
             m_game->CreateEffect((EffectDesc*)&l50);
             m_hitsLeft = 1;
-            Unk410a80(0x32, 0x78);
+            FocusCameraY(0x32, 0x78);
         }
         if (frame > 0xd && frame < 0x12 && m_attackResult == 3) {
             StartPattern();
             StopMoving();
             (*m_opponent)->StopMoving();
-            (*m_opponent)->unk14a = 0xb4;
+            (*m_opponent)->m_hitstop = 0xb4;
             (*m_opponent)->y = 0.0;
-            (*m_opponent)->pattern = 0x49;
+            (*m_opponent)->pattern = kHitStandLowHold;
             (*m_opponent)->x = facing * 0x1e + x;
-            pattern = 0x140;
+            pattern = k21436Lv2Hit;
             (*m_opponent)->facing = -facing;
             break;
         }
@@ -6874,17 +6874,17 @@ void CMayu::UpdatePattern()
             if (frame == 0xe) {
                 vx = 4.0;
             }
-            if (frame == 0x12 && unk3138 < 3) {
-                unk3138++;
+            if (frame == 0x12 && m_patternVar1 < 3) {
+                m_patternVar1++;
                 frame = frame - 4;
             }
             if (frame >= x8) {
-                pattern = 3;
+                pattern = kCrouch;
                 StartPattern();
             }
         }
         break;
-    case 0x140:
+    case k21436Lv2Hit:
         if (frame == 0 && timer == 0) {
             m_hitsLeft = 0x63;
         }
@@ -6923,15 +6923,15 @@ void CMayu::UpdatePattern()
                 x = facing * 0xf + x;
             }
             if (frame == 0xd) {
-                if (unk3138 > 1) {
+                if (m_patternVar1 > 1) {
                     frame = 0xf;
                     break;
                 }
                 x = facing * 0xf + x;
             }
-            if (frame == 0xf && unk3138 < 2) {
+            if (frame == 0xf && m_patternVar1 < 2) {
                 frame = 5;
-                unk3138++;
+                m_patternVar1++;
             }
             if (frame == 0x19) {
                 vy = -4.0;
@@ -6942,43 +6942,43 @@ void CMayu::UpdatePattern()
                 frame = frame - 4;
             }
             if (frame >= x8) {
-                pattern = 3;
+                pattern = kCrouch;
                 StartPattern();
             }
         }
         break;
-    case 0x141:
+    case k21436Lv3:
         if (frame == 0 && timer == 0) {
             vx = 0.0;
             vy = 0.0;
             ay = 0.0;
         }
-        m_game->Unk4080c0(0xf);
+        m_game->FlashNegative(0xf);
         if (frame == 0 && timer == 0) {
-            unk14c = 0x78;
+            m_freezeTime = 0x78;
             m_gauge = m_gauge - 0xbb8;
             FillBackground(0xb0, 3);
             l50.type = 0x46;
-            l50.unk2c = 0x40;
+            l50.sound = 0x40;
             l50.x = (double)(int)x;
             l50.y = (double)((int)y - 0x28);
             l50.scale = 2;
-            l50.unk0 = 1;
+            l50.keep = 1;
             l50.layer = 1;
             m_game->CreateEffect((EffectDesc*)&l50);
             m_hitsLeft = 1;
-            Unk410a80(0x32, 0x78);
+            FocusCameraY(0x32, 0x78);
             m_playSound = 0x25;
         }
         if (frame > 0xd && frame < 0x12 && m_attackResult == 3) {
             StartPattern();
             StopMoving();
             (*m_opponent)->StopMoving();
-            (*m_opponent)->unk14a = 0xb4;
+            (*m_opponent)->m_hitstop = 0xb4;
             (*m_opponent)->y = 0.0;
-            (*m_opponent)->pattern = 0x49;
+            (*m_opponent)->pattern = kHitStandLowHold;
             (*m_opponent)->x = facing * 0x1e + x;
-            pattern = 0x142;
+            pattern = k21436Lv3Hit;
             (*m_opponent)->facing = -facing;
             break;
         }
@@ -7000,17 +7000,17 @@ void CMayu::UpdatePattern()
             if (frame == 0xe) {
                 vx = 4.5;
             }
-            if (frame == 0x12 && unk3138 < 3) {
-                unk3138++;
+            if (frame == 0x12 && m_patternVar1 < 3) {
+                m_patternVar1++;
                 frame = frame - 4;
             }
             if (frame >= x8) {
-                pattern = 3;
+                pattern = kCrouch;
                 StartPattern();
             }
         }
         break;
-    case 0x142:
+    case k21436Lv3Hit:
         if (frame == 0 && timer == 0) {
             m_hitsLeft = 0x63;
         }
@@ -7065,8 +7065,8 @@ void CMayu::UpdatePattern()
             if (frame == 0xd) {
                 x = facing * 0xf + x;
             }
-            if (frame == 0xf && unk3138 < 0xa) {
-                unk3138++;
+            if (frame == 0xf && m_patternVar1 < 0xa) {
+                m_patternVar1++;
                 frame = 5;
             }
             if (frame == 0x13) {
@@ -7078,9 +7078,9 @@ void CMayu::UpdatePattern()
             if (frame == 0x16) {
                 x = facing * 0xf + x;
             }
-            if (frame == 0xf && unk3138 < 8) {
+            if (frame == 0xf && m_patternVar1 < 8) {
                 frame = 5;
-                unk3138++;
+                m_patternVar1++;
             }
             if (frame == 0x1c) {
                 vy = -1.8;
@@ -7101,7 +7101,7 @@ void CMayu::UpdatePattern()
                 frame = frame - 4;
             }
             if (frame >= x8) {
-                pattern = 3;
+                pattern = kCrouch;
                 StartPattern();
             }
         }

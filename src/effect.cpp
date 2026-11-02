@@ -111,13 +111,13 @@ void CGame::UpdateEffect(short index)
     int i;
     double ty;
 
-    d.unk0 = 0;
+    d.keep = 0;
     d.screen = 0;
-    d.unk2c = 0xff;
+    d.sound = 0xff;
 
     switch (m_effects[index].type) {
     case 0:
-        if (FIRST_FRAME && unk1366) {
+        if (FIRST_FRAME && m_fullEffects) {
             SPAWN_PAIRS(3, 0xa)
             SPAWN_PAIRS(3, 0x23)
             SPAWN_PAIRS(8, 0x24)
@@ -125,7 +125,7 @@ void CGame::UpdateEffect(short index)
         }
         break;
     case 2:
-        if (FIRST_FRAME && unk1366) {
+        if (FIRST_FRAME && m_fullEffects) {
             SPAWN_PAIRS(8, 0x27)
         }
         break;
@@ -135,15 +135,15 @@ void CGame::UpdateEffect(short index)
             m_effects[index].timer = 0;
             m_effects[index].frame++;
             if (m_effects[index].frame == 10) {
-                d.unk0 = 0;
+                d.keep = 0;
                 d.x = 160;
                 d.y = 120;
                 d.side = 0;
                 d.scale = 0;
                 d.layer = 2;
                 d.screen = 1;
-                d.type = 0x15;
-                d.unk2c = 0xff;
+                d.type = kEffectRoundText;
+                d.sound = 0xff;
                 CreateEffect(&d);
                 d.x = 160;
                 d.y = 120;
@@ -151,20 +151,20 @@ void CGame::UpdateEffect(short index)
                 d.scale = 0;
                 d.layer = 2;
                 d.screen = 1;
-                d.type = unk134d + 0x38;
-                d.unk2c = 0xff;
+                d.type = m_round + 0x38;
+                d.sound = 0xff;
                 CreateEffect(&d);
             }
             if (m_effects[index].frame == 15) {
-                d.unk0 = 0;
+                d.keep = 0;
                 d.x = 160;
                 d.y = 120;
                 d.side = 0;
                 d.scale = 2;
                 d.layer = 1;
                 d.screen = 1;
-                d.type = 0x1a;
-                d.unk2c = 0xff;
+                d.type = kEffectRoundSwoosh;
+                d.sound = 0xff;
                 CreateEffect(&d);
             }
             if (LAST_FRAME_PASSED)
@@ -182,33 +182,33 @@ void CGame::UpdateEffect(short index)
         m_effects[index].y += m_effects[index].vy;
         break;
     case 0xb:
-        if (FIRST_FRAME && unk1366) {
+        if (FIRST_FRAME && m_fullEffects) {
             SPAWN_PAIRS(5, 0x22)
         }
         break;
     case 0xc:
-        if (FIRST_FRAME && unk1366) {
+        if (FIRST_FRAME && m_fullEffects) {
             SPAWN_PAIRS(8, 0x22)
         }
         break;
     case 0xd:
-        if (FIRST_FRAME && unk1366) {
+        if (FIRST_FRAME && m_fullEffects) {
             SPAWN_PAIRS(8, 0x25)
             SPAWN_PAIRS(5, 0x22)
         }
         break;
     case 0xe:
-        if (FIRST_FRAME && unk1366) {
+        if (FIRST_FRAME && m_fullEffects) {
             SPAWN_PAIRS(16, 0x2a)
         }
         break;
     case 0xf:
-        if (FIRST_FRAME && unk1366) {
+        if (FIRST_FRAME && m_fullEffects) {
             SPAWN_PAIRS(8, 0x2c)
         }
         break;
     case 0x10:
-        if (FIRST_FRAME && unk1366) {
+        if (FIRST_FRAME && m_fullEffects) {
             SPAWN_PAIRS(8, 0x2b)
         }
         break;
@@ -219,25 +219,25 @@ void CGame::UpdateEffect(short index)
             m_effects[index].frame++;
             if (LAST_FRAME_PASSED) {
                 RemoveEffect(index);
-                d.unk0 = 0;
+                d.keep = 0;
                 d.x = 160;
                 d.y = 120;
                 d.side = 0;
                 d.scale = 2;
                 d.layer = 3;
                 d.screen = 1;
-                d.type = 6;
-                d.unk2c = 0xff;
+                d.type = kEffectGetReadyZoom;
+                d.sound = 0xff;
                 CreateEffect(&d);
-                d.unk0 = 0;
+                d.keep = 0;
                 d.x = 160;
                 d.y = 120;
                 d.side = 0;
                 d.scale = 0;
                 d.layer = 2;
                 d.screen = 1;
-                d.type = 0x16;
-                d.unk2c = 0x17;
+                d.type = kEffectGetReadyIn;
+                d.sound = 0x17;
                 CreateEffect(&d);
             }
         }
@@ -249,15 +249,15 @@ void CGame::UpdateEffect(short index)
             m_effects[index].frame++;
             if (LAST_FRAME_PASSED) {
                 RemoveEffect(index);
-                d.unk0 = 0;
+                d.keep = 0;
                 d.x = 160;
                 d.y = 120;
                 d.side = 0;
                 d.scale = 0;
                 d.layer = 2;
                 d.screen = 1;
-                d.type = 0x17;
-                d.unk2c = 0xff;
+                d.type = kEffectGetReadyOut;
+                d.sound = 0xff;
                 CreateEffect(&d);
             }
         }
@@ -269,25 +269,25 @@ void CGame::UpdateEffect(short index)
             m_effects[index].frame++;
             if (LAST_FRAME_PASSED) {
                 RemoveEffect(index);
-                d.unk0 = 0;
+                d.keep = 0;
                 d.x = 160;
                 d.y = 120;
                 d.side = 0;
                 d.scale = 2;
                 d.layer = 2;
                 d.screen = 1;
-                d.type = 7;
-                d.unk2c = 0xff;
+                d.type = kEffectAttackZoom;
+                d.sound = 0xff;
                 CreateEffect(&d);
-                d.unk0 = 0;
+                d.keep = 0;
                 d.x = 160;
                 d.y = 120;
                 d.side = 0;
                 d.scale = 0;
                 d.layer = 2;
                 d.screen = 1;
-                d.type = 0x18;
-                d.unk2c = 0x18;
+                d.type = kEffectAttackIn;
+                d.sound = 0x18;
                 CreateEffect(&d);
             }
         }
@@ -299,15 +299,15 @@ void CGame::UpdateEffect(short index)
             m_effects[index].frame++;
             if (LAST_FRAME_PASSED) {
                 RemoveEffect(index);
-                d.unk0 = 0;
+                d.keep = 0;
                 d.x = 160;
                 d.y = 120;
                 d.side = 0;
                 d.scale = 0;
                 d.layer = 2;
                 d.screen = 1;
-                d.type = 0x19;
-                d.unk2c = 0xff;
+                d.type = kEffectAttackOut;
+                d.sound = 0xff;
                 CreateEffect(&d);
             }
         }
@@ -319,23 +319,23 @@ void CGame::UpdateEffect(short index)
             m_effects[index].frame++;
             if (LAST_FRAME_PASSED) {
                 RemoveEffect(index);
-                d.unk0 = 0;
+                d.keep = 0;
                 d.x = 160;
                 d.y = 120;
                 d.side = 0;
                 d.scale = 2;
                 d.layer = 2;
                 d.screen = 1;
-                d.type = 0x12;
-                d.unk2c = 0xff;
+                d.type = kEffectAttackWipe;
+                d.sound = 0xff;
                 CreateEffect(&d);
-                unk1350 = 0;
+                m_intro = 0;
             }
         }
         return;
     case 0x1a:
-        unk142a0 = m_effects[index].frame;
-        unk142a4 = m_effects[index].timer;
+        m_swooshFrame = m_effects[index].frame;
+        m_swooshTimer = m_effects[index].timer;
         break;
     case 0x1b:
         m_effects[index].timer++;
@@ -343,15 +343,15 @@ void CGame::UpdateEffect(short index)
             m_effects[index].timer = 0;
             m_effects[index].frame++;
             if (m_effects[index].frame == 0x1a) {
-                d.unk0 = 0;
+                d.keep = 0;
                 d.x = 160;
                 d.y = 120;
                 d.side = 0;
                 d.scale = 2;
                 d.layer = 2;
                 d.screen = 1;
-                d.type = 5;
-                d.unk2c = unk134d + 0xb;
+                d.type = kEffectRoundFlash;
+                d.sound = m_round + 0xb;
                 CreateEffect(&d);
             }
             if (LAST_FRAME_PASSED)
@@ -360,7 +360,7 @@ void CGame::UpdateEffect(short index)
         return;
     case 0x21:
         if (FIRST_FRAME) {
-            unk14294 = 0;
+            m_ellipseIndex = 0;
             SPAWN_EACH(40, 0x26)
         }
         break;
@@ -407,14 +407,14 @@ void CGame::UpdateEffect(short index)
     case 0x26:
         // Points on a flattened ellipse, rotated by -25 degrees.
         if (FIRST_FRAME) {
-            double theta = unk14294 * 9 * PI / 180.0;
+            double theta = m_ellipseIndex * 9 * PI / 180.0;
             double r = 3.0;
             tx = cos(theta) * r;
             ty = sin(theta) * r / 3.0;
             m_effects[index].vx = cos(-25 * PI / 180) * tx - sin(-25 * PI / 180) * ty;
             m_effects[index].vy = (m_effects[index].side * 2 - 1) *
                                   (cos(-25 * PI / 180) * ty + sin(-25 * PI / 180) * tx);
-            unk14294++;
+            m_ellipseIndex++;
         }
         m_effects[index].x += m_effects[index].vx;
         m_effects[index].y += m_effects[index].vy;
@@ -485,7 +485,7 @@ void CGame::UpdateEffect(short index)
         break;
     case 0x2f:
         if (FIRST_FRAME) {
-            m_effects[index].vx = (m_effects[index].side * 2 - 1) * -fabs(sin((float)rand()) * 4.0f);
+            m_effects[index].vx = (m_effects[index].side * 2 - 1) * -FABSF(sin((float)rand()) * 4.0f);
             m_effects[index].vy = -(double)rand() / 7000.0 - 2.0;
         }
         m_effects[index].vy += 0.2;
@@ -497,25 +497,25 @@ void CGame::UpdateEffect(short index)
         m_effects[index].y += m_effects[index].vy;
         break;
     case 0x34:
-        if (FIRST_FRAME && unk1366) {
+        if (FIRST_FRAME && m_fullEffects) {
             SPAWN_PAIRS(16, 0x2e)
-            unk14294 = 0;
-            unk14298 = (short)(rand() / 91.02);
-            unk1429c = unk14298 + 30 + (short)(rand() / 273.07);
+            m_ellipseIndex = 0;
+            m_ellipseAngle = (short)(rand() / 91.02);
+            m_ellipseAngle2 = m_ellipseAngle + 30 + (short)(rand() / 273.07);
             SPAWN_EACH(40, 0x35)
             SPAWN_EACH(40, 0x36)
         }
         break;
     case 0x35:
         if (FIRST_FRAME) {
-            double theta = unk14294 * 9 * PI / 180.0;
+            double theta = m_ellipseIndex * 9 * PI / 180.0;
             double r = 3.0;
             tx = cos(theta) * r * 5.0;
             ty = sin(theta) * r / 3.0 * 5.0;
-            m_effects[index].vx = cos(unk14298 * PI / 180.0) * tx - sin(unk14298 * PI / 180.0) * ty;
+            m_effects[index].vx = cos(m_ellipseAngle * PI / 180.0) * tx - sin(m_ellipseAngle * PI / 180.0) * ty;
             m_effects[index].vy = (m_effects[index].side * 2 - 1) *
-                                  (cos(unk14298 * PI / 180.0) * ty + sin(unk14298 * PI / 180.0) * tx);
-            unk14294++;
+                                  (cos(m_ellipseAngle * PI / 180.0) * ty + sin(m_ellipseAngle * PI / 180.0) * tx);
+            m_ellipseIndex++;
         }
         m_effects[index].vx *= 0.94;
         m_effects[index].vy *= 0.94;
@@ -524,14 +524,14 @@ void CGame::UpdateEffect(short index)
         break;
     case 0x36:
         if (FIRST_FRAME) {
-            double theta = unk14294 * 9 * PI / 180.0;
+            double theta = m_ellipseIndex * 9 * PI / 180.0;
             double r = 3.0;
             tx = cos(theta) * r * 5.0;
             ty = sin(theta) * r / 3.0 * 5.0;
-            m_effects[index].vx = cos(unk1429c * PI / 180.0) * tx - sin(unk1429c * PI / 180.0) * ty;
+            m_effects[index].vx = cos(m_ellipseAngle2 * PI / 180.0) * tx - sin(m_ellipseAngle2 * PI / 180.0) * ty;
             m_effects[index].vy = (m_effects[index].side * 2 - 1) *
-                                  (cos(unk1429c * PI / 180.0) * ty + sin(unk1429c * PI / 180.0) * tx);
-            unk14294++;
+                                  (cos(m_ellipseAngle2 * PI / 180.0) * ty + sin(m_ellipseAngle2 * PI / 180.0) * tx);
+            m_ellipseIndex++;
         }
         m_effects[index].vx *= 0.94;
         m_effects[index].vy *= 0.94;

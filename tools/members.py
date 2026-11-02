@@ -23,6 +23,10 @@ Usage:
     tools/members.py rewrite [files...]             rewrite src/*.cpp (and efz.h) in place
     tools/members.py check [files...]               what rewrite would change, as a diff
     tools/members.py layout                         check efz.h's offsets and sizes
+    tools/members.py fields                         every class's members as JSON:
+                                                    {class: [[offset, size, name]]},
+                                                    class names in lower case, bases'
+                                                    members flattened in (tools/compat.py)
     tools/members.py rename RENAMES                 rename members and methods: lines
                                                     "Class::member name"
 
@@ -120,7 +124,8 @@ def clang_args():
     args = ['-x', 'c++', '--target=i686-pc-windows-msvc', '-fms-extensions',
             '-fms-compatibility', '-fms-compatibility-version=13.10', '-fasm-blocks',
             '-std=c++03', '-nostdinc', '-nostdinc++', '-Wno-everything',
-            '-DWIN32', '-DNDEBUG', '-D_WINDOWS', '-D_MBCS', '-D_MT']
+            '-DWIN32', '-DNDEBUG', '-D_WINDOWS', '-D_MBCS', '-D_MT',
+            '-DEFZ_TRACE']  # the harness's code too: renames reach src/trace.cpp
     for d in INCLUDE_DIRS:
         args += ['-isystem', os.path.join(FARM, d.replace('/', '_'))]
     return args
@@ -1083,6 +1088,35 @@ def check_layout():
     return errors
 
 
+def dump_fields():
+    """{class: [[offset, size, name]]}: each class's members, with its bases' at their
+    offsets, arrays as one member."""
+    header = os.path.join(SRC, 'efz.h')
+    tu = parse(os.path.join(SRC, 'main.cpp'), ci.Index.create())
+    layouts = Layouts(tu)
+    out = {}
+
+    def flatten(t, base):
+        rows = []
+        for fl in layouts.fields(t):
+            if fl.base:
+                rows += flatten(fl.type, base + fl.off)
+            else:
+                rows.append([base + fl.off, max(canon(fl.type).get_size(), 0), fl.name])
+        return rows
+
+    def visit(c):
+        for x in c.get_children():
+            f = x.location.file
+            if f is None or os.path.abspath(f.name) != header:
+                continue
+            if x.kind in (CK.CLASS_DECL, CK.STRUCT_DECL) and x.is_definition():
+                out.setdefault(x.spelling.lower(), sorted(flatten(x.type, 0)))
+                visit(x)
+    visit(tu.cursor)
+    json.dump(out, sys.stdout)
+
+
 # --- renaming ----------------------------------------------------------------------
 
 def read_renames(path):
@@ -1097,6 +1131,22 @@ def read_renames(path):
             cls, member = qual.rsplit('::', 1)
             out[(cls, member)] = new
     return out
+
+
+lib.clang_getSpellingLocation.argtypes = [ci.SourceLocation, ctypes.POINTER(ctypes.c_void_p),
+                                          ctypes.POINTER(ctypes.c_uint),
+                                          ctypes.POINTER(ctypes.c_uint),
+                                          ctypes.POINTER(ctypes.c_uint)]
+
+
+def spelling_offset(loc, path):
+    """The offset where the token at `loc` is spelled (in a macro's argument, the
+    argument's place in the source rather than the macro's)."""
+    f = ctypes.c_void_p()
+    line, col, off = ctypes.c_uint(), ctypes.c_uint(), ctypes.c_uint()
+    lib.clang_getSpellingLocation(loc, ctypes.byref(f), ctypes.byref(line), ctypes.byref(col),
+                                  ctypes.byref(off))
+    return off.value if f.value else None
 
 
 def rename_work(job):
@@ -1136,6 +1186,12 @@ def rename_work(job):
                 old = x.spelling if x.kind in (CK.FIELD_DECL, CK.CXX_METHOD) else \
                     x.referenced.spelling
                 if data[off:off + len(old)].decode('utf-8', 'replace') != old:
+                    # In a macro's argument the location is the macro's; the name is
+                    # where it is spelled.
+                    off = spelling_offset(x.location, path)
+                if off is None or data[off:off + len(old)].decode('utf-8', 'replace') != old or \
+                        re.match(rb'\w', data[off + len(old):off + len(old) + 1]) or \
+                        (off > 0 and re.match(rb'\w', data[off - 1:off])):
                     problems.append(f'{os.path.relpath(path, REPO)}:{x.location.line}: '
                                     f'{old} not at its location (macro?)')
                 else:
@@ -1181,6 +1237,10 @@ def main():
     if args and args[0] == 'rename':
         renames = read_renames(args[1])
         sys.exit(1 if rename([os.path.abspath(a) for a in args[2:]], renames) else 0)
+    if args and args[0] == 'fields':
+        include_farm()
+        dump_fields()
+        return
     if not args or args[0] not in ('scan', 'rewrite', 'check', 'layout'):
         print(__doc__)
         sys.exit(2)

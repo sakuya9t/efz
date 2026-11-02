@@ -59,6 +59,14 @@ if(EFZ_HOST_X87)
   target_compile_definitions(efz PRIVATE EFZ_HOST_X87)
 endif()
 
+# Line coverage (gcov) of the game, for `tools/compat.py coverage`: what the
+# compatibility test's cases run. GCC or Clang.
+option(EFZ_COVERAGE "Instrument the game for gcov" OFF)
+if(EFZ_COVERAGE)
+  target_compile_options(efz PRIVATE --coverage)
+  target_link_options(efz PRIVATE --coverage)
+endif()
+
 # The recovered code reads every structure through casts of other types, so the
 # compiler may not assume the types keep apart; signed arithmetic wraps and char is
 # signed, as with the original's compiler; and no multiply-add is fused, so that the

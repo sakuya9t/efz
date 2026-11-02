@@ -135,7 +135,7 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
             if (TraceQuit(g_scene))
                 break;
 #endif
-            g_game->unk1368 = !g_game->unk1368;
+            g_game->m_oddFrame = !g_game->m_oddFrame;
             if (g_scenes[g_scene] != NULL) {
                 g_sound.UpdateLoop(g_game->m_music);
                 g_scene = g_scenes[g_scene]->Update();

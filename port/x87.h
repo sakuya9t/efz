@@ -103,6 +103,8 @@ void Srand(unsigned seed);
 
 #define F32 ::efz::Float32
 #define F32CAST(x) ((double)(x))
+// fabs(float): the argument is passed as a float, rounded once from double.
+#define FABSF(x) fabs((double)(float)(double)(x))
 #define sin(x) ::efz::Sin(x)
 #define cos(x) ::efz::Cos(x)
 #define atan2(y, x) ::efz::Atan2(y, x)

@@ -75,8 +75,9 @@ native:
 native-windows:
 	tools/native.sh windows
 
-# The replay test's harness (src/trace.cpp, docs/compat.md): efz.exe's objects, but
-# main, scene3 and input compiled again with its hooks (EFZ_TRACE), and trace.obj.
+# The compatibility test's harness (src/trace.cpp, docs/compat.md): efz.exe's objects,
+# but main, scene3 and input compiled again with its hooks (EFZ_TRACE), and trace.obj,
+# which also replaces `new` (zeroed memory) and sin, cos and atan2 (correctly rounded).
 # Every other function is the original's code, byte for byte.
 TRACE_HOOKED = main scene3 input
 trace: build/trace/efz.exe
@@ -87,10 +88,16 @@ build/trace/%.obj: build/src/%.cpp $(HDRS:src/%=build/src/%) Makefile | build/tr
 build/trace:
 	mkdir -p $@
 
-build/trace/efz.exe: $(OBJS) $(TRACE_HOOKED:%=build/trace/%.obj) build/trace/trace.obj build/efz.res
+# sin, cos and atan2 for the harness: port/x87.cpp's, which MinGW builds (tools/x87ref.cpp).
+build/trace/x87ref.obj: tools/x87ref.cpp port/x87.cpp port/x87.h | build/trace
+	docker run --rm -u "$$(id -u):$$(id -g)" -v "$$PWD:/work" -w /work efz-native \
+		i686-w64-mingw32-g++ -std=c++17 -O2 -msse2 -mfpmath=sse -mstackrealign \
+		-ffp-contract=off -fno-exceptions -fno-asynchronous-unwind-tables -c $< -o $@
+
+build/trace/efz.exe: $(OBJS) $(TRACE_HOOKED:%=build/trace/%.obj) build/trace/trace.obj build/trace/x87ref.obj build/efz.res
 	tools/msvc link /nologo /subsystem:windows /incremental:no /out:$@ \
 		$(foreach o,$(LINK_ORDER),$(if $(filter $(o),$(TRACE_HOOKED)),build/trace,build)/$(o).obj) \
-		build/trace/trace.obj build/efz.res $(LIBS)
+		build/trace/trace.obj build/trace/x87ref.obj build/efz.res $(LIBS)
 
 # The icon, efz.exe's only resource, comes from the original.
 build/efz.ico: | build

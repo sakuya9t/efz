@@ -21,6 +21,93 @@ and `make check` still builds a byte-identical `efz.exe`. This document records 
 that was done, which readability changes keep the bytes and which don't (all measured
 with this compiler), and what is left.
 
+**Since 31 October 2026 the bytes no longer bind the source.** The tag
+`compat-reference` keeps the last source that builds the identical exe; the
+compatibility suite ([compat.md](compat.md)) checks every later change against it,
+comparing the whole game state tick by tick. The second round of names below was made
+that way. "What keeps the bytes" and "What changes them" now describe the tag.
+
+## Names, 31 October 2026
+
+Eight analyses read every use of what was still unknown (their notes:
+[naming/](naming/README.md)), and the names went in with `tools/members.py rename` and
+`tools/constants.py`:
+
+| | Before | After |
+|---|---|---|
+| `unk<offset>` member references | 30,752 | 413 (members only ever zeroed, never read, or padding) |
+| `Unk<address>` method references | 1,055 | 2 (an empty method nothing calls) |
+| Action numbers compared with or assigned to a `pattern` | 11,073 | 449 (mostly another character's action, or a range of a character's own) |
+| Action numbers indexing `m_patterns`/`anims`, and `case`s of the action switches | 4,439 | 137 |
+| Command numbers compared with or assigned to `m_command` | 1,950 | 55 (commands no ReadCommand produces) |
+| Flag masks on `flagsAA`/`flagsB0` | 1,128 | 2 |
+
+So Akane's StartCommand went from
+
+```cpp
+if (m_command == 0x34 && (unk118 >= 500.0 && m_attackResult > 1 && m_attackResult != 6 || unk120 > 0 && m_attackResult > 1) && (m_patterns[pattern].frames[frame].flagsB0 & 8) > 0 && m_patterns[pattern].unk2 <= m_patterns[0xa7].unk0) {
+    StartPattern();
+    ClearBufferedPress();
+    pattern = 0xa7;
+    if (y < 0.0) {
+        pattern = 0xab;
+```
+
+to
+
+```cpp
+if (m_command == kCmd22C && (m_rfGauge >= 500.0 && m_attackResult > 1 && m_attackResult != 6 || m_rfBlue > 0 && m_attackResult > 1) && (m_patterns[pattern].frames[frame].flagsB0 & kStateCancellable) > 0 && m_patterns[pattern].cancelLevel <= m_patterns[kInstantCharge].level) {
+    StartPattern();
+    ClearBufferedPress();
+    pattern = kInstantCharge;
+    if (y < 0.0) {
+        pattern = kAirInstantCharge;
+```
+
+- **Members and methods**: 651 renames, 31,782 references: CPlayer's (`m_rfGauge`,
+  `m_guardGauge`, `m_recoilGuardWindow`, `m_hitstop`, `m_freezeTime`...), the frame data
+  (`PatternFrame::damage`, `chipDamage`, `proration`, `attackerHitstop`, `pushBox`...),
+  every character's own (`m_helperState`, `m_poisonLevel`, `m_warmUp`...), the game's
+  and the scenes' (`m_gameMode`, `m_roundsToWin`...), the effects', and the virtual slots
+  left (`PreUpdate`, `HandleKeys`). `efz.h` comments each with what the code does with it.
+- **Constants** (`tools/constants.txt`, declared in `efz.h` by `tools/constants.py
+  declare`; 21,374 numbers in the code are now one of them):
+  - 109 shared actions (`kStand`, `kHitAirLaunch`, `kGuardCrouchHeavy`, `kRecoilGuardAir`,
+    `kInstantCharge`, the five objects every character has) and range bounds
+    (`kFirstHitReaction`, `kFirstGuard`, `kFirstCharacterAction`), at namespace scope;
+  - 2,405 characters' own actions, in each class, named in numpad notation where the
+    move has an input (`k5A`, `kJump2C`, `k236B`, `kAir214C`, `k641236C`, `kLv4`), by
+    what it is otherwise (`kThrowHit`, `kObjCrow`), `kUnused...` where no code can
+    reach it (143);
+  - the commands (`m_command`), decoded from each class's ReadCommand: shared where every
+    character reads a number the same way (`kCmd236A`, `kCmd22C`, `kCmdDashLeft`),
+    the class's own where not (`kCmd214214A` is 0x64 for Sayuri, 0x6e for the others;
+    LV4 inputs such as `kCmdA5A6BC`);
+  - the bits of `PatternFrame::flagsAA` (`kAttackGuardCrouch`, `kAttackThrow`,
+    `kAttackUnblockable`...) and `flagsB0` (`kStateCancellable`, `kStateInvulnerable`,
+    `kStateGuardPoint`...), and the 74 effect types (`kEffectGuardSpark`, `kEffectHitBurst`...).
+
+The suite passed on every step, in the native build and in the original compiler's
+build of the same source under wine (`tools/compat.py check --exe`).
+
+### Naming now
+
+Find what the code does with the thing, then:
+
+```sh
+# a member or method: lines "Class::old new"; virtual slots need every override
+tools/members.py rename renames.txt
+# a number: add a line to tools/constants.txt ("action CAyu 0x13e kLv4  # comment")
+tools/constants.py declare tools/constants.txt   # efz.h's enums
+tools/constants.py apply tools/constants.txt     # the numbers in src/*.cpp
+tools/native.sh && tools/compat.py check         # the game is unchanged
+```
+
+`rename` follows clang's references, macro arguments included, and the harness's code
+(`src/trace.cpp`); `port/` isn't parsed with the game's flags, so its few references
+(`port/layout.cpp`'s offset checks) are edited by hand. `constants.py` replaces a
+number only where clang shows what it is (see its docstring).
+
 ## What was done
 
 - **Members for every offset.** `efz.h` declares a member at each offset the code
@@ -34,7 +121,7 @@ with this compiler), and what is left.
   pointer members, pointer arithmetic on ints) and replaced about 186,000 accesses. No
   `*(T*)((char*)p + offset)` is left.
 - **Pointers typed.** Parameters and locals that held pointers as `int` or `char*` are
-  typed (`CPlayer::Unk410050(PatternFrame* p1, PatternFrame* p2)`, the character
+  typed (`CPlayer::CanGuard(PatternFrame* p1, PatternFrame* p2)`, the character
   constructors' `CPlayer**`, `CGame*`..., `EffectFrame* v18`), so their accesses resolve
   too, and their callers lost their `(int)` casts.
 - **Names.** `tools/members.py rename` renamed 54,000 references: CPlayer's members
@@ -122,16 +209,21 @@ The lifter still writes raw offsets. Lifting a function again (`tools/lift.py`,
 `tools/objcheck.sh`) overwrites its readable source; run `tools/members.py rewrite`
 on the file afterwards. `tools/lifttest.py` (relift every matched function and compare)
 gives 503 matches, the same 44 failures in the hand-written platform files as at
-v1.0.0 (and the same 9 functions it can't lift), and four new failures: CScene3's collision functions `Unk7679b0`, `Unk767f60`,
-`Unk7697d0` and `Unk76bd40`, whose frames the lifter no longer recovers now that their
+v1.0.0 (and the same 9 functions it can't lift), and four new failures: CScene3's collision functions `WillRecoilCounter`, `ResolvePlayerAttack`,
+`ResolveObjectAttack` and `ResolvePlayerHitsObject`, whose frames the lifter no longer recovers now that their
 parameters and callees are typed. Their source matches; only relifting them fails.
 
 ## What is left
 
+- **Locals** keep the lifter's names (`l4`, `x8`, `v2c`: where the slot was and its
+  offset). Renaming them changed the original's code; since the reference tag it no
+  longer matters, but it is per function, and still to do.
 - About 60 casts of a member's address remain where the code really reads it as
-  another type (`*(RECT*)&unk46e[8] = MakeRect(...)` in a char array of Scene8,
-  `*(int*)&unk134 = 0` on a float), and a few `(i << 4) + (char*)p` where the index is
-  computed first: `&p->boxes[i]` would load `p` first.
-- Most members are still `unk<offset>`, most methods `Unk<address>`, and the pattern
-  numbers (`pattern = 0xd`) are bare: naming them is reverse engineering, one at a
-  time.
+  another type (`*(RECT*)&...[8] = MakeRect(...)` in a char array of Scene8,
+  `*(int*)&m_guardGauge = 0` on a float), and a few `(i << 4) + (char*)p` where the
+  index is computed first. These can now become plain code.
+- Some members are still `unk<offset>`: those the code only zeroes or never reads, and
+  padding. Some actions too: another character's (the opponent's pattern compared with
+  a number) and a few in the data no code enters.
+- Arrays the original declared as runs of single members (`CScene1`'s hidden-stage
+  flags, `CScene8::unk46e`, three arrays in one) can be declared as what they are.

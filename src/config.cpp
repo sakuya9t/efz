@@ -65,14 +65,14 @@ void CharRecord::Save(const char* name)
     strcat(path, ".rec");
     hFile = CreateFile(path, GENERIC_WRITE, 0, NULL, CREATE_ALWAYS, FILE_ATTRIBUTE_NORMAL, NULL);
     if (hFile != INVALID_HANDLE_VALUE) {
-        buffer[0] = unk0;
-        buffer[1] = unk4;
-        buffer[2] = unk8;
-        buffer[3] = unkc;
-        buffer[4] = unk10;
+        buffer[0] = uses;
+        buffer[1] = vsWins;
+        buffer[2] = vsLosses;
+        buffer[3] = bestScore;
+        buffer[4] = bestScoreHigh;
         buffer[5] = unk14;
-        buffer[6] = unk18;
-        buffer[7] = unk1c;
+        buffer[6] = maxCombo;
+        buffer[7] = maxDamage;
         buffer[8] = 0;
         WriteFile(hFile, buffer, sizeof(buffer), &dwWrite, NULL);
     }
@@ -93,26 +93,26 @@ void CharRecord::Load(const char* name)
     strcat(path, "\\");
     strcat(path, name);
     strcat(path, ".rec");
-    unk0 = 0;
-    unk4 = 0;
-    unk8 = 0;
-    unkc = 0;
-    unk10 = 0;
+    uses = 0;
+    vsWins = 0;
+    vsLosses = 0;
+    bestScore = 0;
+    bestScoreHigh = 0;
     unk14 = 0;
-    unk18 = 0;
-    unk1c = 0;
+    maxCombo = 0;
+    maxDamage = 0;
     hFile = CreateFile(path, GENERIC_READ, 0, NULL, OPEN_EXISTING, FILE_ATTRIBUTE_NORMAL, NULL);
     if (hFile != INVALID_HANDLE_VALUE) {
         size = GetFileSize(hFile, NULL);
         ReadFile(hFile, buffer, size, &dwRead, NULL);
-        unk0 = buffer[0];
-        unk4 = buffer[1];
-        unk8 = buffer[2];
-        unkc = buffer[3];
-        unk10 = buffer[4];
+        uses = buffer[0];
+        vsWins = buffer[1];
+        vsLosses = buffer[2];
+        bestScore = buffer[3];
+        bestScoreHigh = buffer[4];
         unk14 = buffer[5];
-        unk18 = buffer[6];
-        unk1c = buffer[7];
+        maxCombo = buffer[6];
+        maxDamage = buffer[7];
     }
     CloseHandle(hFile);
 }

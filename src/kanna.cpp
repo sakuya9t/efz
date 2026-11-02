@@ -14,11 +14,11 @@ CKanna::CKanna(PTR32(CPlayer)* p1, CGame* p2, CGraphics* p3, CInput* p4, CSound*
 
     strcpy(m_name, "kanna");
     lastSurface = 0x4db;
-    unk3138 = 0;
-    unk313c = 0;
-    unk3140 = 0;
-    unk3144 = 0;
-    unk3148 = 0x3c;
+    m_patternVar1 = 0;
+    m_patternVar2 = 0;
+    m_patternVar3 = 0;
+    m_encasedBreakOut = 0;
+    m_airMoveDelay = 0x3c;
     m_pointX[0] = -4;
     m_pointY[0] = -0x3b;
     m_pointX[1] = 0x1b;
@@ -36,9 +36,9 @@ CKanna::CKanna(PTR32(CPlayer)* p1, CGame* p2, CGraphics* p3, CInput* p4, CSound*
     m_rivals[3] = 0x10;
     v4 = 0;
     for (; v4 < 0x40; v4++) {
-        unk3154[v4] = 0;
-        unk3254[v4] = 0;
-        unk3354[v4] = 0;
+        m_objectVar1[v4] = 0;
+        m_objectVar2[v4] = 0;
+        m_objectVar3[v4] = 0;
     }
 }
 
@@ -46,11 +46,11 @@ void CKanna::Reset()
 {
     int v4;
 
-    unk3138 = 0;
-    unk313c = 0;
-    unk3140 = 0;
-    unk3144 = 0;
-    unk3148 = 0x3c;
+    m_patternVar1 = 0;
+    m_patternVar2 = 0;
+    m_patternVar3 = 0;
+    m_encasedBreakOut = 0;
+    m_airMoveDelay = 0x3c;
     m_pointX[0] = -0xd;
     m_pointY[0] = -0x3c;
     m_pointX[1] = 0xe;
@@ -63,93 +63,93 @@ void CKanna::Reset()
     m_pointY[4] = -0x19;
     v4 = 0;
     for (; v4 < 0x40; v4++) {
-        unk3154[v4] = 0;
-        unk3254[v4] = 0;
-        unk3354[v4] = 0;
+        m_objectVar1[v4] = 0;
+        m_objectVar2[v4] = 0;
+        m_objectVar3[v4] = 0;
     }
     CPlayer::Reset();
 }
 
 void CKanna::StartPattern()
 {
-    unk3138 = 0;
-    unk313c = 0;
-    unk3140 = 0;
+    m_patternVar1 = 0;
+    m_patternVar2 = 0;
+    m_patternVar3 = 0;
     CPlayer::StartPattern();
 }
 
 void CKanna::RemoveObject(short p1)
 {
-    unk3154[p1] = 0;
-    unk3254[p1] = 0;
-    unk3354[p1] = 0;
+    m_objectVar1[p1] = 0;
+    m_objectVar2[p1] = 0;
+    m_objectVar3[p1] = 0;
     CPlayer::RemoveObject(p1);
 }
 
 void CKanna::Move()
 {
     if (y == 0.0) {
-        unk159 = 0;
-        unk15a = 0;
+        m_airDashes = 0;
+        m_airActions = 0;
     }
-    if (y >= 0.0 && pattern != 4 && pattern != 5 && pattern != 6 && pattern != 0xa && pattern != 0xb && pattern != 0xc) {
-        if (unk15c < 3 && m_inputY == -1) {
+    if (y >= 0.0 && pattern != kJump && pattern != kJumpForward && pattern != kJumpBack && pattern != kSuperJump && pattern != kSuperJumpForward && pattern != kSuperJumpBack) {
+        if (m_sealLevel < 3 && m_inputY == -1) {
             FaceOpponent();
             if (m_command >= 3 && m_command <= 5) {
                 if (m_command == 3) {
-                    if (pattern != 0xa) {
+                    if (pattern != kSuperJump) {
                         StartPattern();
                     }
-                    pattern = 0xa;
+                    pattern = kSuperJump;
                     return;
                 }
                 if (m_command == 4) {
-                    if (pattern != 0xb) {
+                    if (pattern != kSuperJumpForward) {
                         StartPattern();
                     }
-                    pattern = 0xb;
+                    pattern = kSuperJumpForward;
                     return;
                 }
                 if (m_command == 5) {
-                    if (pattern != 0xc) {
+                    if (pattern != kSuperJumpBack) {
                         StartPattern();
                     }
-                    pattern = 0xc;
+                    pattern = kSuperJumpBack;
                     return;
                 }
             } else {
                 if (m_inputX == 0) {
-                    if (pattern != 4) {
+                    if (pattern != kJump) {
                         StartPattern();
                     }
-                    pattern = 4;
+                    pattern = kJump;
                     return;
                 }
                 if (m_inputX == facing) {
-                    if (pattern != 5) {
+                    if (pattern != kJumpForward) {
                         StartPattern();
                     }
-                    pattern = 5;
+                    pattern = kJumpForward;
                     return;
                 }
                 if (m_inputX == -facing) {
-                    if (pattern != 6) {
+                    if (pattern != kJumpBack) {
                         StartPattern();
                     }
-                    pattern = 6;
+                    pattern = kJumpBack;
                     return;
                 }
             }
         }
         if (m_inputY == 1) {
-            if (pattern != 8 && pattern != 3) {
-                pattern = 8;
+            if (pattern != kCrouchDown && pattern != kCrouch) {
+                pattern = kCrouchDown;
                 StartPattern();
                 FaceOpponent();
                 return;
             }
-            if (pattern != 8) {
-                pattern = 3;
+            if (pattern != kCrouchDown) {
+                pattern = kCrouch;
                 FaceOpponent();
                 return;
             }
@@ -158,39 +158,39 @@ void CKanna::Move()
         if (m_inputX != 0) {
             FaceOpponent();
             if (m_inputX == facing) {
-                if (pattern != 0 && pattern != 1 && pattern != 2) {
+                if (pattern != kStand && pattern != kWalkForward && pattern != kWalkBack) {
                     StartPattern();
                 }
-                pattern = 1;
+                pattern = kWalkForward;
                 return;
             }
-            if (pattern != 0 && pattern != 1 && pattern != 2) {
+            if (pattern != kStand && pattern != kWalkForward && pattern != kWalkBack) {
                 StartPattern();
             }
-            pattern = 2;
+            pattern = kWalkBack;
             return;
         }
-        if (pattern == 3 || pattern == 8) {
-            pattern = 7;
+        if (pattern == kCrouch || pattern == kCrouchDown) {
+            pattern = kStandUp;
             FaceOpponent();
             StartPattern();
             return;
         }
-        if (pattern == 7 || pattern == 0xd) {
+        if (pattern == kStandUp || pattern == kLand) {
             FaceOpponent();
             return;
         }
-        if (pattern != 0 && pattern != 1 && pattern != 2) {
+        if (pattern != kStand && pattern != kWalkForward && pattern != kWalkBack) {
             StartPattern();
         }
-        pattern = 0;
+        pattern = kStand;
         FaceOpponent();
     }
 }
 
 void CKanna::StartCommand()
 {
-    if (pattern < 0xc8) {
+    if (pattern < kFirstCharacterAction) {
         m_bufferedPress = 0;
     }
     if (m_dashBufferTime <= 0) {
@@ -201,197 +201,197 @@ void CKanna::StartCommand()
     if (m_dashBufferedPress == 0) {
         m_dashBufferTime = 0;
     }
-    if (m_command == 0x34 && (unk118 >= 500.0 || unk120 > 0) && m_attackResult > 1 && m_attackResult != 6 && (m_patterns[pattern].frames[frame].flagsB0 & 8) > 0 && m_patterns[pattern].unk2 <= m_patterns[0xa7].unk0) {
+    if (m_command == kCmd22C && (m_rfGauge >= 500.0 || m_rfBlue > 0) && m_attackResult > 1 && m_attackResult != 6 && (m_patterns[pattern].frames[frame].flagsB0 & kStateCancellable) > 0 && m_patterns[pattern].cancelLevel <= m_patterns[kInstantCharge].level) {
         StartPattern();
         ClearBufferedPress();
-        pattern = 0xa7;
+        pattern = kInstantCharge;
         if (y < 0.0) {
-            pattern = 0xab;
+            pattern = kAirInstantCharge;
         }
         return;
     }
-    if (unk15c < 2) {
-        if (m_command == 0x66 && m_gauge >= 0xbb8 && m_hp < 0xd05 && (m_patterns[pattern].frames[frame].flagsB0 & 8) > 0 && y == 0.0 && (pattern >= 0xc8 && m_attackResult >= 2 && m_attackResult != 6 || pattern < 0xc8) && m_patterns[pattern].unk2 <= m_patterns[0x135].unk0) {
+    if (m_sealLevel < 2) {
+        if (m_command == kCmd236236C && m_gauge >= 0xbb8 && m_hp < 0xd05 && (m_patterns[pattern].frames[frame].flagsB0 & kStateCancellable) > 0 && y == 0.0 && (pattern >= kFirstCharacterAction && m_attackResult >= 2 && m_attackResult != 6 || pattern < kFirstCharacterAction) && m_patterns[pattern].cancelLevel <= m_patterns[kLv4].level) {
             StartPattern();
             ClearBufferedPress();
-            pattern = 0x135;
+            pattern = kLv4;
             return;
         }
-        if (m_command == 0x65 && m_gauge >= 0xbb8 && y < 0.0 && (m_patterns[pattern].frames[frame].flagsB0 & 8) > 0 && (pattern >= 0xc8 && m_attackResult >= 2 && m_attackResult != 6 || pattern < 0xc8) && m_patterns[pattern].unk2 <= m_patterns[0x132].unk0) {
+        if (m_command == kCmd236236B && m_gauge >= 0xbb8 && y < 0.0 && (m_patterns[pattern].frames[frame].flagsB0 & kStateCancellable) > 0 && (pattern >= kFirstCharacterAction && m_attackResult >= 2 && m_attackResult != 6 || pattern < kFirstCharacterAction) && m_patterns[pattern].cancelLevel <= m_patterns[kAir236236B].level) {
             StartPattern();
             ClearBufferedPress();
-            pattern = 0x132;
+            pattern = kAir236236B;
             return;
         }
-        if (m_command == 0x64 && m_gauge >= 0xbb8 && (m_patterns[pattern].frames[frame].flagsB0 & 8) > 0 && (pattern >= 0xc8 && m_attackResult >= 2 && m_attackResult != 6 || pattern < 0xc8) && m_patterns[pattern].unk2 <= m_patterns[0x12c].unk0) {
+        if (m_command == kCmd236236A && m_gauge >= 0xbb8 && (m_patterns[pattern].frames[frame].flagsB0 & kStateCancellable) > 0 && (pattern >= kFirstCharacterAction && m_attackResult >= 2 && m_attackResult != 6 || pattern < kFirstCharacterAction) && m_patterns[pattern].cancelLevel <= m_patterns[k236236A].level) {
             StartPattern();
             ClearBufferedPress();
-            pattern = 0x12c;
+            pattern = k236236A;
             return;
         }
-        if (m_command == 0x65 && m_gauge >= 0xbb8 && y == 0.0 && (m_patterns[pattern].frames[frame].flagsB0 & 8) > 0 && (pattern >= 0xc8 && m_attackResult >= 2 && m_attackResult != 6 || pattern < 0xc8) && m_patterns[pattern].unk2 <= m_patterns[0x12f].unk0) {
+        if (m_command == kCmd236236B && m_gauge >= 0xbb8 && y == 0.0 && (m_patterns[pattern].frames[frame].flagsB0 & kStateCancellable) > 0 && (pattern >= kFirstCharacterAction && m_attackResult >= 2 && m_attackResult != 6 || pattern < kFirstCharacterAction) && m_patterns[pattern].cancelLevel <= m_patterns[k236236B].level) {
             StartPattern();
             ClearBufferedPress();
-            pattern = 0x12f;
+            pattern = k236236B;
             return;
         }
-        if (m_command == 0x48 && (unk118 >= 500.0 || unk120 > 0) && (m_patterns[pattern].frames[frame].flagsB0 & 8) > 0 && y == 0.0 && (pattern >= 0xc8 && m_attackResult >= 2 && m_attackResult != 6 || pattern < 0xc8) && m_patterns[pattern].unk2 <= m_patterns[0x10b].unk0) {
+        if (m_command == kCmd41236C && (m_rfGauge >= 500.0 || m_rfBlue > 0) && (m_patterns[pattern].frames[frame].flagsB0 & kStateCancellable) > 0 && y == 0.0 && (pattern >= kFirstCharacterAction && m_attackResult >= 2 && m_attackResult != 6 || pattern < kFirstCharacterAction) && m_patterns[pattern].cancelLevel <= m_patterns[k41236C].level) {
             StartPattern();
             ClearBufferedPress();
-            pattern = 0x10b;
+            pattern = k41236C;
             return;
         }
-        if ((m_command == 0x47 || m_command == 0x48) && (m_patterns[pattern].frames[frame].flagsB0 & 8) > 0 && y == 0.0 && (pattern >= 0xc8 && m_attackResult >= 2 && m_attackResult != 6 || pattern < 0xc8) && m_patterns[pattern].unk2 <= m_patterns[0x10a].unk0) {
+        if ((m_command == kCmd41236B || m_command == kCmd41236C) && (m_patterns[pattern].frames[frame].flagsB0 & kStateCancellable) > 0 && y == 0.0 && (pattern >= kFirstCharacterAction && m_attackResult >= 2 && m_attackResult != 6 || pattern < kFirstCharacterAction) && m_patterns[pattern].cancelLevel <= m_patterns[k41236].level) {
             StartPattern();
             ClearBufferedPress();
-            pattern = 0x10a;
+            pattern = k41236;
             return;
         }
-        if (m_command == 0x46 && (m_patterns[pattern].frames[frame].flagsB0 & 8) > 0 && y == 0.0 && (pattern >= 0xc8 && m_attackResult >= 2 && m_attackResult != 6 || pattern < 0xc8) && m_patterns[pattern].unk2 <= m_patterns[0x10a].unk0) {
+        if (m_command == kCmd41236A && (m_patterns[pattern].frames[frame].flagsB0 & kStateCancellable) > 0 && y == 0.0 && (pattern >= kFirstCharacterAction && m_attackResult >= 2 && m_attackResult != 6 || pattern < kFirstCharacterAction) && m_patterns[pattern].cancelLevel <= m_patterns[k41236].level) {
             StartPattern();
             ClearBufferedPress();
-            pattern = 0x10a;
+            pattern = k41236;
             return;
         }
-        if (m_command == 0x16 && (unk118 >= 500.0 || unk120 > 0) && (m_patterns[pattern].frames[frame].flagsB0 & 8) > 0 && y == 0.0 && (pattern >= 0xc8 && m_attackResult >= 2 && m_attackResult != 6 || pattern < 0xc8) && m_patterns[pattern].unk2 <= m_patterns[0x101].unk0) {
+        if (m_command == kCmd623C && (m_rfGauge >= 500.0 || m_rfBlue > 0) && (m_patterns[pattern].frames[frame].flagsB0 & kStateCancellable) > 0 && y == 0.0 && (pattern >= kFirstCharacterAction && m_attackResult >= 2 && m_attackResult != 6 || pattern < kFirstCharacterAction) && m_patterns[pattern].cancelLevel <= m_patterns[k623C].level) {
             StartPattern();
             ClearBufferedPress();
-            pattern = 0x101;
+            pattern = k623C;
             return;
         }
-        if ((m_command == 0x14 || m_command == 0x15 || m_command == 0x16) && (m_patterns[pattern].frames[frame].flagsB0 & 8) > 0 && y == 0.0 && (pattern >= 0xc8 && m_attackResult >= 2 && m_attackResult != 6 || pattern < 0xc8) && m_patterns[pattern].unk2 <= m_patterns[0x100].unk0) {
+        if ((m_command == kCmd623A || m_command == kCmd623B || m_command == kCmd623C) && (m_patterns[pattern].frames[frame].flagsB0 & kStateCancellable) > 0 && y == 0.0 && (pattern >= kFirstCharacterAction && m_attackResult >= 2 && m_attackResult != 6 || pattern < kFirstCharacterAction) && m_patterns[pattern].cancelLevel <= m_patterns[k623].level) {
             StartPattern();
             ClearBufferedPress();
-            pattern = 0x100;
+            pattern = k623;
             return;
         }
-        if (m_command == 0x20 && y == 0.0 && (m_patterns[pattern].frames[frame].flagsB0 & 8) > 0 && (pattern >= 0xc8 && m_attackResult >= 2 && m_attackResult != 6 || pattern < 0xc8) && m_patterns[pattern].unk2 <= m_patterns[0x109].unk0) {
+        if (m_command == kCmd214C && y == 0.0 && (m_patterns[pattern].frames[frame].flagsB0 & kStateCancellable) > 0 && (pattern >= kFirstCharacterAction && m_attackResult >= 2 && m_attackResult != 6 || pattern < kFirstCharacterAction) && m_patterns[pattern].cancelLevel <= m_patterns[k214C].level) {
             StartPattern();
             ClearBufferedPress();
-            pattern = 0x109;
+            pattern = k214C;
             return;
         }
-        if (m_command == 0x1f && y == 0.0 && (m_patterns[pattern].frames[frame].flagsB0 & 8) > 0 && (pattern >= 0xc8 && m_attackResult >= 2 && m_attackResult != 6 || pattern < 0xc8) && m_patterns[pattern].unk2 <= m_patterns[0x108].unk0) {
+        if (m_command == kCmd214B && y == 0.0 && (m_patterns[pattern].frames[frame].flagsB0 & kStateCancellable) > 0 && (pattern >= kFirstCharacterAction && m_attackResult >= 2 && m_attackResult != 6 || pattern < kFirstCharacterAction) && m_patterns[pattern].cancelLevel <= m_patterns[k214B].level) {
             StartPattern();
             ClearBufferedPress();
-            pattern = 0x108;
+            pattern = k214B;
             return;
         }
-        if (m_command == 0x1e && y == 0.0 && (m_patterns[pattern].frames[frame].flagsB0 & 8) > 0 && (pattern >= 0xc8 && m_attackResult >= 2 && m_attackResult != 6 || pattern < 0xc8) && m_patterns[pattern].unk2 <= m_patterns[0x107].unk0) {
+        if (m_command == kCmd214A && y == 0.0 && (m_patterns[pattern].frames[frame].flagsB0 & kStateCancellable) > 0 && (pattern >= kFirstCharacterAction && m_attackResult >= 2 && m_attackResult != 6 || pattern < kFirstCharacterAction) && m_patterns[pattern].cancelLevel <= m_patterns[k214A].level) {
             StartPattern();
             ClearBufferedPress();
-            pattern = 0x107;
+            pattern = k214A;
             return;
         }
-        if (m_command == 0xc && (unk118 >= 500.0 || unk120 > 0) && (m_patterns[pattern].frames[frame].flagsB0 & 8) > 0 && y == 0.0 && (pattern >= 0xc8 && m_attackResult >= 2 && m_attackResult != 6 || pattern < 0xc8) && m_patterns[pattern].unk2 <= m_patterns[0xfb].unk0) {
+        if (m_command == kCmd236C && (m_rfGauge >= 500.0 || m_rfBlue > 0) && (m_patterns[pattern].frames[frame].flagsB0 & kStateCancellable) > 0 && y == 0.0 && (pattern >= kFirstCharacterAction && m_attackResult >= 2 && m_attackResult != 6 || pattern < kFirstCharacterAction) && m_patterns[pattern].cancelLevel <= m_patterns[k236C].level) {
             StartPattern();
             ClearBufferedPress();
-            pattern = 0xfb;
+            pattern = k236C;
             return;
         }
-        if ((m_command == 0xa || m_command == 0xb || m_command == 0xc) && (m_patterns[pattern].frames[frame].flagsB0 & 8) > 0 && (pattern >= 0xc8 && m_attackResult >= 2 && m_attackResult != 6 || pattern < 0xc8) && m_patterns[pattern].unk2 <= m_patterns[0xfa].unk0) {
+        if ((m_command == kCmd236A || m_command == kCmd236B || m_command == kCmd236C) && (m_patterns[pattern].frames[frame].flagsB0 & kStateCancellable) > 0 && (pattern >= kFirstCharacterAction && m_attackResult >= 2 && m_attackResult != 6 || pattern < kFirstCharacterAction) && m_patterns[pattern].cancelLevel <= m_patterns[k236].level) {
             StartPattern();
             ClearBufferedPress();
-            pattern = 0xfa;
+            pattern = k236;
             if (y < 0.0) {
-                pattern = 0xfd;
+                pattern = kAir236;
             }
             return;
         }
     }
-    if (unk15c < 1 && (m_command == 0 || m_command == 1) && y == 0.0 && (m_patterns[pattern].frames[frame].flagsB0 & 8) > 0) {
-        if ((((*m_opponent)->x - x) * (1 - (m_command << 1)) < 0.0 || 0.0 == (*m_opponent)->x - x && facing == (1 - (m_command << 1)) * -1) && m_patterns[pattern].unk2 <= m_patterns[0xa3].unk0 && (pattern >= 0xc8 && m_attackResult >= 2 && m_attackResult != 6 || pattern < 0xc8)) {
-            if (pattern != 0xa3) {
+    if (m_sealLevel < 1 && (m_command == kCmdDashLeft || m_command == kCmdDashRight) && y == 0.0 && (m_patterns[pattern].frames[frame].flagsB0 & kStateCancellable) > 0) {
+        if ((((*m_opponent)->x - x) * (1 - (m_command << 1)) < 0.0 || 0.0 == (*m_opponent)->x - x && facing == (1 - (m_command << 1)) * -1) && m_patterns[pattern].cancelLevel <= m_patterns[kDashForward].level && (pattern >= kFirstCharacterAction && m_attackResult >= 2 && m_attackResult != 6 || pattern < kFirstCharacterAction)) {
+            if (pattern != kDashForward) {
                 StartPattern();
             }
-            pattern = 0xa3;
+            pattern = kDashForward;
             FaceOpponent();
-            unk158++;
+            m_dashMomentum++;
             m_bufferedPress = 0;
             return;
         }
-        if ((((*m_opponent)->x - x) * (1 - (m_command << 1)) > 0.0 || 0.0 == (*m_opponent)->x - x && facing == 1 - (m_command << 1)) && m_patterns[pattern].unk2 <= m_patterns[0xa4].unk0 && (pattern >= 0xc8 && m_attackResult >= 2 && m_attackResult != 6 || pattern < 0xc8)) {
-            if (pattern != 0xa4) {
+        if ((((*m_opponent)->x - x) * (1 - (m_command << 1)) > 0.0 || 0.0 == (*m_opponent)->x - x && facing == 1 - (m_command << 1)) && m_patterns[pattern].cancelLevel <= m_patterns[kDashBack].level && (pattern >= kFirstCharacterAction && m_attackResult >= 2 && m_attackResult != 6 || pattern < kFirstCharacterAction)) {
+            if (pattern != kDashBack) {
                 StartPattern();
             }
-            pattern = 0xa4;
+            pattern = kDashBack;
             FaceOpponent();
-            unk158++;
+            m_dashMomentum++;
             m_bufferedPress = 0;
             return;
         }
     }
     if (m_pressA == 1 || (m_bufferedPress & 0x10) != 0 || (m_dashBufferedPress & 0x10) != 0) {
         if (y < 0.0) {
-            if (m_patterns[pattern].unk2 <= m_patterns[0xcf].unk0 && (m_patterns[pattern].frames[frame].flagsB0 & 8) > 0 && (pattern >= 0xc8 && m_attackResult >= 2 && m_attackResult != 6 || pattern < 0xc8)) {
+            if (m_patterns[pattern].cancelLevel <= m_patterns[kJumpA].level && (m_patterns[pattern].frames[frame].flagsB0 & kStateCancellable) > 0 && (pattern >= kFirstCharacterAction && m_attackResult >= 2 && m_attackResult != 6 || pattern < kFirstCharacterAction)) {
                 StartPattern();
                 ClearBufferedPress();
-                pattern = 0xcf;
+                pattern = kJumpA;
             }
             return;
         }
-        if ((m_inputY == 1 || (m_bufferedPress & 4) != 0 || (m_dashBufferedPress & 4) != 0) && m_patterns[pattern].unk2 <= m_patterns[0xcc].unk0 && (m_patterns[pattern].frames[frame].flagsB0 & 8) > 0 && (pattern >= 0xc8 && m_attackResult >= 2 && m_attackResult != 6 || pattern < 0xc8)) {
+        if ((m_inputY == 1 || (m_bufferedPress & 4) != 0 || (m_dashBufferedPress & 4) != 0) && m_patterns[pattern].cancelLevel <= m_patterns[k2A].level && (m_patterns[pattern].frames[frame].flagsB0 & kStateCancellable) > 0 && (pattern >= kFirstCharacterAction && m_attackResult >= 2 && m_attackResult != 6 || pattern < kFirstCharacterAction)) {
             StartPattern();
             ClearBufferedPress();
-            pattern = 0xcc;
+            pattern = k2A;
             return;
         }
-        if ((m_inputY == 0 || (m_bufferedPress & 4) == 0 || (m_dashBufferedPress & 4) == 0) && m_patterns[pattern].unk2 <= m_patterns[0xc8].unk0 && (m_patterns[pattern].frames[frame].flagsB0 & 8) > 0 && (pattern >= 0xc8 && m_attackResult >= 2 && m_attackResult != 6 || pattern < 0xc8)) {
+        if ((m_inputY == 0 || (m_bufferedPress & 4) == 0 || (m_dashBufferedPress & 4) == 0) && m_patterns[pattern].cancelLevel <= m_patterns[k5A].level && (m_patterns[pattern].frames[frame].flagsB0 & kStateCancellable) > 0 && (pattern >= kFirstCharacterAction && m_attackResult >= 2 && m_attackResult != 6 || pattern < kFirstCharacterAction)) {
             StartPattern();
             ClearBufferedPress();
-            pattern = 0xc8;
+            pattern = k5A;
             return;
         }
     }
     if (m_pressB == 1 || (m_bufferedPress & 0x20) != 0 || (m_dashBufferedPress & 0x20) != 0) {
         if (y < 0.0) {
-            if (m_patterns[pattern].unk2 <= m_patterns[0xd0].unk0 && (m_patterns[pattern].frames[frame].flagsB0 & 8) > 0 && (pattern >= 0xc8 && m_attackResult >= 2 && m_attackResult != 6 || pattern < 0xc8)) {
+            if (m_patterns[pattern].cancelLevel <= m_patterns[kJumpB].level && (m_patterns[pattern].frames[frame].flagsB0 & kStateCancellable) > 0 && (pattern >= kFirstCharacterAction && m_attackResult >= 2 && m_attackResult != 6 || pattern < kFirstCharacterAction)) {
                 StartPattern();
                 ClearBufferedPress();
-                pattern = 0xd0;
+                pattern = kJumpB;
             }
             return;
         }
-        if ((m_inputY == 1 || (m_bufferedPress & 4) != 0 || (m_dashBufferedPress & 4) != 0) && m_patterns[pattern].unk2 <= m_patterns[0xcd].unk0 && (m_patterns[pattern].frames[frame].flagsB0 & 8) > 0 && (pattern >= 0xc8 && m_attackResult >= 2 && m_attackResult != 6 || pattern < 0xc8)) {
+        if ((m_inputY == 1 || (m_bufferedPress & 4) != 0 || (m_dashBufferedPress & 4) != 0) && m_patterns[pattern].cancelLevel <= m_patterns[k2B].level && (m_patterns[pattern].frames[frame].flagsB0 & kStateCancellable) > 0 && (pattern >= kFirstCharacterAction && m_attackResult >= 2 && m_attackResult != 6 || pattern < kFirstCharacterAction)) {
             StartPattern();
             ClearBufferedPress();
-            pattern = 0xcd;
+            pattern = k2B;
             return;
         }
         if (m_inputY == 0 || (m_bufferedPress & 4) == 0 || (m_dashBufferedPress & 4) == 0) {
-            if (m_patterns[pattern].unk2 <= m_patterns[0xc9].unk0 && (m_patterns[pattern].frames[frame].flagsB0 & 8) > 0 && x - (*m_opponent)->x > -110.0 && x - (*m_opponent)->x < 110.0 && (pattern >= 0xc8 && m_attackResult >= 2 && m_attackResult != 6 || pattern < 0xc8)) {
+            if (m_patterns[pattern].cancelLevel <= m_patterns[k5BClose].level && (m_patterns[pattern].frames[frame].flagsB0 & kStateCancellable) > 0 && x - (*m_opponent)->x > -110.0 && x - (*m_opponent)->x < 110.0 && (pattern >= kFirstCharacterAction && m_attackResult >= 2 && m_attackResult != 6 || pattern < kFirstCharacterAction)) {
                 StartPattern();
                 ClearBufferedPress();
-                pattern = 0xc9;
+                pattern = k5BClose;
                 return;
             }
-            if (m_patterns[pattern].unk2 <= m_patterns[0xca].unk0 && (m_patterns[pattern].frames[frame].flagsB0 & 8) > 0 && (pattern >= 0xc8 && m_attackResult >= 2 && m_attackResult != 6 || pattern < 0xc8)) {
+            if (m_patterns[pattern].cancelLevel <= m_patterns[k5BFar].level && (m_patterns[pattern].frames[frame].flagsB0 & kStateCancellable) > 0 && (pattern >= kFirstCharacterAction && m_attackResult >= 2 && m_attackResult != 6 || pattern < kFirstCharacterAction)) {
                 StartPattern();
                 ClearBufferedPress();
-                pattern = 0xca;
+                pattern = k5BFar;
                 return;
             }
         }
     }
     if (m_pressC == 1 || (m_bufferedPress & 0x40) != 0 || (m_dashBufferedPress & 0x40) != 0) {
         if (y < 0.0) {
-            if (m_patterns[pattern].unk2 <= m_patterns[0xd1].unk0 && (m_patterns[pattern].frames[frame].flagsB0 & 8) > 0 && (pattern >= 0xc8 && m_attackResult >= 2 && m_attackResult != 6 || pattern < 0xc8)) {
+            if (m_patterns[pattern].cancelLevel <= m_patterns[kJumpC].level && (m_patterns[pattern].frames[frame].flagsB0 & kStateCancellable) > 0 && (pattern >= kFirstCharacterAction && m_attackResult >= 2 && m_attackResult != 6 || pattern < kFirstCharacterAction)) {
                 StartPattern();
                 ClearBufferedPress();
-                pattern = 0xd1;
+                pattern = kJumpC;
             }
             return;
         }
-        if ((m_inputY == 1 || (m_bufferedPress & 4) != 0 || (m_dashBufferedPress & 4) != 0) && m_patterns[pattern].unk2 <= m_patterns[0xce].unk0 && (m_patterns[pattern].frames[frame].flagsB0 & 8) > 0 && (pattern >= 0xc8 && m_attackResult >= 2 && m_attackResult != 6 || pattern < 0xc8)) {
+        if ((m_inputY == 1 || (m_bufferedPress & 4) != 0 || (m_dashBufferedPress & 4) != 0) && m_patterns[pattern].cancelLevel <= m_patterns[k2C].level && (m_patterns[pattern].frames[frame].flagsB0 & kStateCancellable) > 0 && (pattern >= kFirstCharacterAction && m_attackResult >= 2 && m_attackResult != 6 || pattern < kFirstCharacterAction)) {
             StartPattern();
             ClearBufferedPress();
-            pattern = 0xce;
+            pattern = k2C;
             return;
         }
-        if ((m_inputY == 0 || (m_bufferedPress & 4) == 0 || (m_dashBufferedPress & 4) == 0) && m_patterns[pattern].unk2 <= m_patterns[0xcb].unk0 && (m_patterns[pattern].frames[frame].flagsB0 & 8) > 0 && (pattern >= 0xc8 && m_attackResult >= 2 && m_attackResult != 6 || pattern < 0xc8)) {
+        if ((m_inputY == 0 || (m_bufferedPress & 4) == 0 || (m_dashBufferedPress & 4) == 0) && m_patterns[pattern].cancelLevel <= m_patterns[k5C].level && (m_patterns[pattern].frames[frame].flagsB0 & kStateCancellable) > 0 && (pattern >= kFirstCharacterAction && m_attackResult >= 2 && m_attackResult != 6 || pattern < kFirstCharacterAction)) {
             StartPattern();
             ClearBufferedPress();
-            pattern = 0xcb;
+            pattern = k5C;
         }
     }
 }
@@ -400,7 +400,7 @@ void CKanna::DrawGauge()
 {
 }
 
-void CKanna::Vf8()
+void CKanna::PreUpdate()
 {
 }
 
@@ -416,18 +416,18 @@ void CKanna::ReadCommand()
     BYTE v5;
     int v4;
 
-    m_command = 0x63;
+    m_command = kCmdNone;
     x6 = 0;
     v4 = m_inputPos + 0x6e;
     for (; v4 < m_inputPos + 0xb4; v4++) {
         v5 = m_inputHistory[(v4 - (v4 >= 0xb4) * 0xb4)];
         if ((v5 & 0xf0) != 0 && x6 == 6) {
-            m_command = ((v5 & 0xe0) > 0) + 0x64 + ((v5 & 0xc0) > 0) + ((v5 & 0x80) > 0);
+            m_command = ((v5 & 0xe0) > 0) + kCmd236236A + ((v5 & 0xc0) > 0) + ((v5 & 0x80) > 0);
             return;
         }
         if ((v5 & 0xf) == (facing == -1) + 1 && x6 == 5) {
             if ((v5 & 0xf0) != 0) {
-                m_command = ((v5 & 0xe0) > 0) + 0x64 + ((v5 & 0xc0) > 0) + ((v5 & 0x80) > 0);
+                m_command = ((v5 & 0xe0) > 0) + kCmd236236A + ((v5 & 0xc0) > 0) + ((v5 & 0x80) > 0);
                 return;
             }
             x6 = 6;
@@ -453,12 +453,12 @@ void CKanna::ReadCommand()
     for (; v4 < m_inputPos + 0xb4; v4++) {
         v5 = m_inputHistory[(v4 - (v4 >= 0xb4) * 0xb4)];
         if ((v5 & 0xf0) != 0 && x6 == 3) {
-            m_command = ((v5 & 0xe0) > 0) + 0x46 + ((v5 & 0xc0) > 0) + ((v5 & 0x80) > 0);
+            m_command = ((v5 & 0xe0) > 0) + kCmd41236A + ((v5 & 0xc0) > 0) + ((v5 & 0x80) > 0);
             return;
         }
         if ((v5 & 0xf) == (facing == -1) + 5 && x6 == 2) {
             if ((v5 & 0xf0) != 0) {
-                m_command = ((v5 & 0xe0) > 0) + 0x46 + ((v5 & 0xc0) > 0) + ((v5 & 0x80) > 0);
+                m_command = ((v5 & 0xe0) > 0) + kCmd41236A + ((v5 & 0xc0) > 0) + ((v5 & 0x80) > 0);
                 return;
             }
             x6 = 3;
@@ -475,12 +475,12 @@ void CKanna::ReadCommand()
     for (; v4 < m_inputPos + 0xb4; v4++) {
         v5 = m_inputHistory[(v4 - (v4 >= 0xb4) * 0xb4)];
         if ((v5 & 0xf0) != 0 && x6 == 3) {
-            m_command = ((v5 & 0xe0) > 0) + 0x14 + ((v5 & 0xc0) > 0) + ((v5 & 0x80) > 0);
+            m_command = ((v5 & 0xe0) > 0) + kCmd623A + ((v5 & 0xc0) > 0) + ((v5 & 0x80) > 0);
             return;
         }
         if ((v5 & 0xf) == (facing == -1) + 5 && x6 == 2) {
             if ((v5 & 0xf0) != 0) {
-                m_command = ((v5 & 0xe0) > 0) + 0x14 + ((v5 & 0xc0) > 0) + ((v5 & 0x80) > 0);
+                m_command = ((v5 & 0xe0) > 0) + kCmd623A + ((v5 & 0xc0) > 0) + ((v5 & 0x80) > 0);
                 return;
             }
             x6 = 3;
@@ -497,12 +497,12 @@ void CKanna::ReadCommand()
     for (; v4 < m_inputPos + 0xb4; v4++) {
         v5 = m_inputHistory[(v4 - (v4 >= 0xb4) * 0xb4)];
         if ((v5 & 0xf0) != 0 && x6 == 3) {
-            m_command = ((v5 & 0xe0) > 0) + 0xa + ((v5 & 0xc0) > 0) + ((v5 & 0x80) > 0);
+            m_command = ((v5 & 0xe0) > 0) + kCmd236A + ((v5 & 0xc0) > 0) + ((v5 & 0x80) > 0);
             return;
         }
         if ((v5 & 0xf) == (facing == -1) + 1 && x6 == 2) {
             if ((v5 & 0xf0) != 0) {
-                m_command = ((v5 & 0xe0) > 0) + 0xa + ((v5 & 0xc0) > 0) + ((v5 & 0x80) > 0);
+                m_command = ((v5 & 0xe0) > 0) + kCmd236A + ((v5 & 0xc0) > 0) + ((v5 & 0x80) > 0);
                 return;
             }
             x6 = 3;
@@ -519,12 +519,12 @@ void CKanna::ReadCommand()
     for (; v4 < m_inputPos + 0xb4; v4++) {
         v5 = m_inputHistory[(v4 - (v4 >= 0xb4) * 0xb4)];
         if ((v5 & 0xf0) != 0 && x6 == 3) {
-            m_command = ((v5 & 0xe0) > 0) + 0x1e + ((v5 & 0xc0) > 0) + ((v5 & 0x80) > 0);
+            m_command = ((v5 & 0xe0) > 0) + kCmd214A + ((v5 & 0xc0) > 0) + ((v5 & 0x80) > 0);
             return;
         }
         if ((v5 & 0xf) == 2 - (facing == -1) && x6 == 2) {
             if ((v5 & 0xf0) != 0) {
-                m_command = ((v5 & 0xe0) > 0) + 0x1e + ((v5 & 0xc0) > 0) + ((v5 & 0x80) > 0);
+                m_command = ((v5 & 0xe0) > 0) + kCmd214A + ((v5 & 0xc0) > 0) + ((v5 & 0x80) > 0);
                 return;
             }
             x6 = 3;
@@ -541,7 +541,7 @@ void CKanna::ReadCommand()
     for (; v4 < m_inputPos + 0xb4; v4++) {
         v5 = m_inputHistory[(v4 - (v4 >= 0xb4) * 0xb4)];
         if ((v5 & 8) != 0 && x6 == 1) {
-            m_command = 6;
+            m_command = kCmdUp;
             return;
         }
         if ((v5 & 8) == 0 && x6 == 0) {
@@ -553,7 +553,7 @@ void CKanna::ReadCommand()
     for (; v4 < m_inputPos + 0xb4; v4++) {
         v5 = m_inputHistory[(v4 - (v4 >= 0xb4) * 0xb4)];
         if ((v5 & 0x80) != 0 && x6 == 4) {
-            m_command = 0x35;
+            m_command = kCmd22D;
             return;
         }
         if ((v5 & 0xf) == 4 && x6 == 3) {
@@ -574,7 +574,7 @@ void CKanna::ReadCommand()
     for (; v4 < m_inputPos + 0xb4; v4++) {
         v5 = m_inputHistory[(v4 - (v4 >= 0xb4) * 0xb4)];
         if ((v5 & 0x40) != 0 && x6 == 4) {
-            m_command = 0x34;
+            m_command = kCmd22C;
             return;
         }
         if ((v5 & 0xf) == 4 && x6 == 3) {
@@ -595,7 +595,7 @@ void CKanna::ReadCommand()
     for (; v4 < m_inputPos + 0xb4; v4++) {
         v5 = m_inputHistory[(v4 - (v4 >= 0xb4) * 0xb4)];
         if ((v5 & 0x20) != 0 && x6 == 4) {
-            m_command = 0x33;
+            m_command = kCmd22B;
             return;
         }
         if ((v5 & 0xf) == 4 && x6 == 3) {
@@ -616,7 +616,7 @@ void CKanna::ReadCommand()
     for (; v4 < m_inputPos + 0xb4; v4++) {
         v5 = m_inputHistory[(v4 - (v4 >= 0xb4) * 0xb4)];
         if ((v5 & 0x10) != 0 && x6 == 4) {
-            m_command = 0x32;
+            m_command = kCmd22A;
             return;
         }
         if ((v5 & 0xf) == 4 && x6 == 3) {
@@ -637,7 +637,7 @@ void CKanna::ReadCommand()
     for (; v4 < m_inputPos + 0xb4; v4++) {
         v5 = m_inputHistory[(v4 - (v4 >= 0xb4) * 0xb4)];
         if ((v5 & 0xf) == 1 && x6 == 3) {
-            m_command = 1;
+            m_command = kCmdDashRight;
             return;
         }
         if ((v5 & 0xf) == 0 && x6 == 2) {
@@ -655,7 +655,7 @@ void CKanna::ReadCommand()
     for (; v4 < m_inputPos + 0xb4; v4++) {
         v5 = m_inputHistory[(v4 - (v4 >= 0xb4) * 0xb4)];
         if ((v5 & 0xf) == 2 && x6 == 3) {
-            m_command = 0;
+            m_command = kCmdDashLeft;
             break;
         }
         if ((v5 & 0xf) == 0 && x6 == 2) {
@@ -675,12 +675,12 @@ void CKanna::CpuInput()
     double v10;
     double x8;
 
-    m_command = 0x63;
-    if (unk1a0 > 0) {
-        unk1a0--;
+    m_command = kCmdNone;
+    if (m_cpuWalkRight > 0) {
+        m_cpuWalkRight--;
     }
-    if (unk1a4 > 0) {
-        unk1a4--;
+    if (m_cpuWalkLeft > 0) {
+        m_cpuWalkLeft--;
     }
     m_inputX = 0;
     m_inputY = 0;
@@ -688,38 +688,38 @@ void CKanna::CpuInput()
     m_pressB = 0;
     m_pressC = 0;
     m_pressD = 0;
-    unk14e = 0;
-    unk314c--;
-    unk3150--;
-    if (unk314c < 0) {
-        unk314c = 0;
+    m_recoilGuardWindow = 0;
+    m_cpuHitCooldown--;
+    m_cpuAirPause--;
+    if (m_cpuHitCooldown < 0) {
+        m_cpuHitCooldown = 0;
     }
-    if (pattern > 0x31 && pattern < 0xa1) {
-        unk314c = 0xb4;
+    if (pattern > kLastFreeAction && pattern < 0xa1) {
+        m_cpuHitCooldown = 0xb4;
     }
-    if (unk3150 < 0) {
-        unk3150 = 0;
+    if (m_cpuAirPause < 0) {
+        m_cpuAirPause = 0;
     }
-    if ((WORD)Random(0, 0x3e8) < 25.0f * unka8 + (y < 0.0) * 0x1e * unka8 + (m_cpuAction == 3) * 0x190 + (pattern == 0xaa) * 0x12c) {
-        unk14e = 0x3c;
+    if ((WORD)Random(0, 0x3e8) < 25.0f * m_cpuSkill + (y < 0.0) * 0x1e * m_cpuSkill + (m_cpuAction == 3) * 0x190 + (pattern == kRecoilGuardAir) * 0x12c) {
+        m_recoilGuardWindow = 0x3c;
     }
-    if ((WORD)Random(0, 0x7d0) < ((unk130 > 0) * 4.0 + 1.0) * 8.0 * unka8 * ((pattern > 0x95 && pattern < 0x9d) * 2 + 1)) {
-        unk14e = 0x3c;
+    if ((WORD)Random(0, 0x7d0) < ((m_throwProtect > 0) * 4.0 + 1.0) * 8.0 * m_cpuSkill * ((pattern > kLastHitReaction && pattern < kAirRecoveryForward) * 2 + 1)) {
+        m_recoilGuardWindow = 0x3c;
     }
-    if ((WORD)Random(0, 0x3e8) < 4e+01f * unka8 && pattern > 0xc7) {
-        unk14e = 0x3c;
+    if ((WORD)Random(0, 0x3e8) < 4e+01f * m_cpuSkill && pattern > kLastSharedAction) {
+        m_recoilGuardWindow = 0x3c;
     }
-    if (unk170 == 1 && m_cpuAction == 2) {
-        unk14e = 0x1e;
-        if (pattern < 0xc8) {
+    if (m_canRecoilCounter == 1 && m_cpuAction == 2) {
+        m_recoilGuardWindow = 0x1e;
+        if (pattern < kFirstCharacterAction) {
             m_cpuAction = 0;
         }
         return;
     }
     v10 = ((*m_opponent)->x - x) * facing;
     x8 = fabs(y - (*m_opponent)->y);
-    if (pattern >= 0x32 && pattern <= 0x96 && timer == 0) {
-        if ((WORD)Random(0, 0x64) < 8.0f * unka8) {
+    if (pattern >= kFirstHitReaction && pattern <= kFirstGuard && timer == 0) {
+        if ((WORD)Random(0, 0x64) < 8.0f * m_cpuSkill) {
             m_cpuAction = 3;
         } else {
             m_cpuAction = 0;
@@ -727,125 +727,125 @@ void CKanna::CpuInput()
         m_inputX = 1 - (((WORD)Random(0, 0x64) < 0x32) << 1);
         m_pressD = (WORD)Random(0, 0xf0) < x8;
         m_pressD = (WORD)Random(0, 0x140) < v10;
-        if ((*m_opponent)->pattern > 0xc7 && (*m_opponent)->pattern < 0xfa && (*m_opponent)->frame < 3 && x8 < 100.0 && v10 < 150.0) {
+        if ((*m_opponent)->pattern > kLastSharedAction && (*m_opponent)->pattern < 0xfa && (*m_opponent)->frame < 3 && x8 < 100.0 && v10 < 150.0) {
             m_pressD = 0;
         }
         return;
     }
-    if (pattern == 0xa8 && timer < 6) {
+    if (pattern == kRecoilGuardStand && timer < 6) {
         if ((*m_opponent)->pattern != 0xc8 && (*m_opponent)->pattern != 0xcc && (*m_opponent)->pattern < 0xfa && (*m_opponent)->y == 0.0 && (*m_opponent)->m_hitsLeft == 0) {
-            if (v10 < 45.0 && (WORD)Random(0, 0x64) < unka8 * 2) {
+            if (v10 < 45.0 && (WORD)Random(0, 0x64) < m_cpuSkill * 2) {
                 m_pressA = 1;
                 m_inputY = 1;
                 return;
             }
-            if (v10 < 60.0 && (WORD)Random(0, 0x64) < unka8 * 1.0f) {
+            if (v10 < 60.0 && (WORD)Random(0, 0x64) < m_cpuSkill * 1.0f) {
                 m_pressA = 1;
                 m_inputY = 0;
                 return;
             }
         }
-        if (((*m_opponent)->pattern == 0xc9 || (*m_opponent)->pattern == 0xca || (*m_opponent)->pattern == 0xcd) && (*m_opponent)->pattern < 0xfa && (*m_opponent)->y == 0.0 && (*m_opponent)->m_hitsLeft == 0 && v10 > 60.0 && v10 < 80.0 && (WORD)Random(0, 0x64) < unka8 * 1.0f) {
+        if (((*m_opponent)->pattern == 0xc9 || (*m_opponent)->pattern == 0xca || (*m_opponent)->pattern == 0xcd) && (*m_opponent)->pattern < 0xfa && (*m_opponent)->y == 0.0 && (*m_opponent)->m_hitsLeft == 0 && v10 > 60.0 && v10 < 80.0 && (WORD)Random(0, 0x64) < m_cpuSkill * 1.0f) {
             m_pressB = 1;
             m_inputY = 1;
             m_inputX = 0;
             return;
         }
     }
-    if (pattern == 0xa8 || pattern == 0xa9) {
-        if ((WORD)Random(0, 0x1f40) < unka8 * unka8 * 4.0f && unk118 > 500.0) {
-            m_command = 0xc;
+    if (pattern == kRecoilGuardStand || pattern == kRecoilGuardCrouch) {
+        if ((WORD)Random(0, 0x1f40) < m_cpuSkill * m_cpuSkill * 4.0f && m_rfGauge > 500.0) {
+            m_command = kCmd236C;
             return;
         }
         if (v10 < 20.0) {
-            if ((WORD)Random(0, 0x708) < unka8 * 4.0f && unk118 > 500.0) {
-                m_command = 0x14;
+            if ((WORD)Random(0, 0x708) < m_cpuSkill * 4.0f && m_rfGauge > 500.0) {
+                m_command = kCmd623A;
                 return;
             }
-            if (v10 < 60.0 && (WORD)Random(0, 0x64) < unka8 * 1.0f) {
+            if (v10 < 60.0 && (WORD)Random(0, 0x64) < m_cpuSkill * 1.0f) {
                 m_pressA = 1;
                 m_inputY = 0;
                 return;
             }
-            if ((WORD)Random(0, 0x64) < unka8 * 1.0f && m_gauge == 0xbb8) {
+            if ((WORD)Random(0, 0x64) < m_cpuSkill * 1.0f && m_gauge == 0xbb8) {
                 m_command = 0x5c;
                 return;
             }
-            if ((WORD)Random(0, 0x64) < unka8 * 3.0f && v10 < 120.0 && m_gauge >= 0x7d0) {
-                m_command = 0x65;
+            if ((WORD)Random(0, 0x64) < m_cpuSkill * 3.0f && v10 < 120.0 && m_gauge >= 0x7d0) {
+                m_command = kCmd236236B;
                 return;
             }
         }
         if (v10 < 150.0 && v10 > 100.0) {
-            if ((WORD)Random(0, 0x64) < unka8 * 3.0f && unk118 > 500.0) {
-                m_command = 0xc;
+            if ((WORD)Random(0, 0x64) < m_cpuSkill * 3.0f && m_rfGauge > 500.0) {
+                m_command = kCmd236C;
                 return;
             }
-            if (v10 < 120.0 && (WORD)Random(0, 0x64) < unka8 * 1.0f) {
+            if (v10 < 120.0 && (WORD)Random(0, 0x64) < m_cpuSkill * 1.0f) {
                 m_pressA = 2;
                 m_inputY = 0;
                 return;
             }
-            if ((WORD)Random(0, 0x64) < unka8 * 1.0f) {
+            if ((WORD)Random(0, 0x64) < m_cpuSkill * 1.0f) {
                 m_pressC = 1;
                 m_inputY = 1;
                 return;
             }
-            if ((WORD)Random(0, 0x64) < unka8 * 1.0f && m_gauge == 0xbb8 && (*m_opponent)->pattern < 0xdc) {
-                m_command = 0x64;
+            if ((WORD)Random(0, 0x64) < m_cpuSkill * 1.0f && m_gauge == 0xbb8 && (*m_opponent)->pattern < 0xdc) {
+                m_command = kCmd236236A;
                 return;
             }
         }
         if (v10 > 150.0) {
-            if ((WORD)Random(0, 0x64) < unka8 * 1.0f && unk118 > 500.0) {
-                m_command = 0xc;
+            if ((WORD)Random(0, 0x64) < m_cpuSkill * 1.0f && m_rfGauge > 500.0) {
+                m_command = kCmd236C;
                 return;
             }
-            if ((WORD)Random(0, 0x64) < unka8 * 1.0f) {
-                m_command = 0x64;
+            if ((WORD)Random(0, 0x64) < m_cpuSkill * 1.0f) {
+                m_command = kCmd236236A;
                 return;
             }
         }
     }
-    if (pattern == 0xaa && frame == 1 && timer == 0) {
-        if ((WORD)Random(0, 0x64) < unka8 * 5.0f) {
+    if (pattern == kRecoilGuardAir && frame == 1 && timer == 0) {
+        if ((WORD)Random(0, 0x64) < m_cpuSkill * 5.0f) {
             m_cpuAction = 3;
             return;
         }
-        if (y - (*m_opponent)->y < 0.0 && y - (*m_opponent)->y > -40.0 && v10 < 80.0 && (WORD)Random(0, 0x64) < unka8 * 5.0f) {
+        if (y - (*m_opponent)->y < 0.0 && y - (*m_opponent)->y > -40.0 && v10 < 80.0 && (WORD)Random(0, 0x64) < m_cpuSkill * 5.0f) {
             m_pressA = 1;
             return;
         }
-        if (y - (*m_opponent)->y > -100.0 && y - (*m_opponent)->y < -50.0 && v10 < 80.0 && (WORD)Random(0, 0x64) < unka8 * 5.0f) {
+        if (y - (*m_opponent)->y > -100.0 && y - (*m_opponent)->y < -50.0 && v10 < 80.0 && (WORD)Random(0, 0x64) < m_cpuSkill * 5.0f) {
             m_pressB = 1;
             return;
         }
-        if (y - (*m_opponent)->y > -50.0 && y - (*m_opponent)->y < -50.0 && v10 < 120.0 && (WORD)Random(0, 0x64) < unka8 * 5.0f) {
+        if (y - (*m_opponent)->y > -50.0 && y - (*m_opponent)->y < -50.0 && v10 < 120.0 && (WORD)Random(0, 0x64) < m_cpuSkill * 5.0f) {
             m_pressB = 1;
             m_inputY = 0;
             return;
         }
-        if (x8 < 50.0 && v10 < 100.0 && (WORD)Random(0, 0x64) < unka8 * 2) {
-            m_command = (WORD)Random(0, 2) + 0xa;
+        if (x8 < 50.0 && v10 < 100.0 && (WORD)Random(0, 0x64) < m_cpuSkill * 2) {
+            m_command = (WORD)Random(0, 2) + kCmd236A;
             return;
         }
-        if ((WORD)Random(0, 0x3e8) < unka8 * 2) {
-            m_command = 0x64;
+        if ((WORD)Random(0, 0x3e8) < m_cpuSkill * 2) {
+            m_command = kCmd236236A;
             return;
         }
     }
-    if (((*m_opponent)->pattern == 0xa8 || (*m_opponent)->pattern == 0xa9 || (*m_opponent)->pattern == 0xaa) && y == 0.0 && (WORD)Random(0, 0x64) < 15.0f * unka8 && m_cpuAction != 2 && (*m_opponent)->unk14c == 0) {
+    if (((*m_opponent)->pattern == kRecoilGuardStand || (*m_opponent)->pattern == kRecoilGuardCrouch || (*m_opponent)->pattern == kRecoilGuardAir) && y == 0.0 && (WORD)Random(0, 0x64) < 15.0f * m_cpuSkill && m_cpuAction != 2 && (*m_opponent)->m_freezeTime == 0) {
         m_cpuRoll = (WORD)Random(0, 0x64);
-        if (m_cpuRoll < 3 && unk118 > 500.0) {
-            m_command = 0x16;
+        if (m_cpuRoll < 3 && m_rfGauge > 500.0) {
+            m_command = kCmd623C;
             return;
         }
         if (m_cpuRoll < 0x11 && m_cpuRoll > 0xc && m_gauge >= 0xbb8) {
-            m_command = 0x64;
+            m_command = kCmd236236A;
             return;
         }
         if (m_cpuRoll < 0x12 && m_cpuRoll > 0x14 && m_gauge == 0xbb8) {
-            m_command = 0x65;
+            m_command = kCmd236236B;
             return;
         }
         if (m_cpuRoll > 0x41) {
@@ -853,14 +853,14 @@ void CKanna::CpuInput()
             return;
         }
     }
-    if (((*m_opponent)->pattern == 0xa8 || (*m_opponent)->pattern == 0xa9 || (*m_opponent)->pattern == 0xaa) && y < 0.0 && (WORD)Random(0, 0x64) < 15.0f * unka8 && m_cpuAction != 2 && (*m_opponent)->unk14c == 0) {
+    if (((*m_opponent)->pattern == kRecoilGuardStand || (*m_opponent)->pattern == kRecoilGuardCrouch || (*m_opponent)->pattern == kRecoilGuardAir) && y < 0.0 && (WORD)Random(0, 0x64) < 15.0f * m_cpuSkill && m_cpuAction != 2 && (*m_opponent)->m_freezeTime == 0) {
         m_cpuRoll = (WORD)Random(0, 0x3e8);
         if (m_cpuRoll < 2 && m_gauge >= 0xbb8) {
-            m_command = 0x64;
+            m_command = kCmd236236A;
             return;
         }
         if (m_cpuRoll < 4 && m_gauge >= 0xbb8) {
-            m_command = 0x65;
+            m_command = kCmd236236B;
             return;
         }
         if (m_cpuRoll > 0x3a) {
@@ -868,49 +868,49 @@ void CKanna::CpuInput()
             return;
         }
     }
-    if ((unk118 > 500.0 || unk120 > 0) && (WORD)Random(0, 0x64) < 8.0f * unka8 && (*m_opponent)->pattern > 0x95 && (*m_opponent)->pattern < 0x9d && (pattern == 0x100 || pattern == 0xe8 && (WORD)Random(0, 0xa) == 0 || pattern == 0xeb && (WORD)Random(0, 7) == 0)) {
-        m_command = 0x34;
+    if ((m_rfGauge > 500.0 || m_rfBlue > 0) && (WORD)Random(0, 0x64) < 8.0f * m_cpuSkill && (*m_opponent)->pattern > kLastHitReaction && (*m_opponent)->pattern < kAirRecoveryForward && (pattern == k623 || pattern == kUnusedDashC && (WORD)Random(0, 0xa) == 0 || pattern == kUnusedDash2C && (WORD)Random(0, 7) == 0)) {
+        m_command = kCmd22C;
         return;
     }
-    if (y == 0.0 && pattern < 4 && (*m_opponent)->pattern > 0x31 && (*m_opponent)->pattern < 0x96 && m_cpuAction == 0) {
-        if ((*m_opponent)->y < 0.0 && x8 < 100.0 && v10 < 130.0 && ((*m_opponent)->unk124 > 0x18 || (*m_opponent)->unk128 == 1 || (*m_opponent)->pattern == 0x52 && (*m_opponent)->frame < 4)) {
+    if (y == 0.0 && pattern < kJump && (*m_opponent)->pattern > kLastFreeAction && (*m_opponent)->pattern < kFirstGuard && m_cpuAction == 0) {
+        if ((*m_opponent)->y < 0.0 && x8 < 100.0 && v10 < 130.0 && ((*m_opponent)->m_untechTime > 0x18 || (*m_opponent)->m_noAirRecovery == 1 || (*m_opponent)->pattern == kHitShock && (*m_opponent)->frame < 4)) {
             m_cpuAction = 0x1f;
             return;
         }
-        if ((*m_opponent)->y < 0.0 && x8 < 50.0 && v10 < 70.0 && ((*m_opponent)->unk124 > 0x12 || (*m_opponent)->unk128 == 1 || (*m_opponent)->pattern == 0x52 && (*m_opponent)->frame < 4)) {
+        if ((*m_opponent)->y < 0.0 && x8 < 50.0 && v10 < 70.0 && ((*m_opponent)->m_untechTime > 0x12 || (*m_opponent)->m_noAirRecovery == 1 || (*m_opponent)->pattern == kHitShock && (*m_opponent)->frame < 4)) {
             m_cpuAction = 0x1e;
             return;
         }
-        if ((*m_opponent)->pattern == 0x46 && m_gauge >= 0xbb8 && (WORD)Random(0, 0) != 0) {
+        if ((*m_opponent)->pattern == kHitWallBounce && m_gauge >= 0xbb8 && (WORD)Random(0, 0) != 0) {
             if (v10 < 150.0) {
-                m_command = 0x65;
+                m_command = kCmd236236B;
                 return;
             }
             if (v10 > 150.0) {
-                m_command = 0x64;
+                m_command = kCmd236236A;
                 return;
             }
         }
     }
-    if (m_cpuAction > 0 && pattern > 0x31 && pattern < 0x9e) {
+    if (m_cpuAction > 0 && pattern > kLastFreeAction && pattern < kAirRecoveryBack) {
         m_cpuAction = 0;
     }
-    if (m_cpuAction == 1 && pattern < 0xc8) {
+    if (m_cpuAction == 1 && pattern < kFirstCharacterAction) {
         m_cpuAction = 0;
     }
-    if (m_cpuAction == 2 && unk170 != 1) {
+    if (m_cpuAction == 2 && m_canRecoilCounter != 1) {
         m_cpuAction = 0;
         return;
     }
-    if (m_cpuAction == 3 && pattern == 0xd) {
+    if (m_cpuAction == 3 && pattern == kLand) {
         m_cpuAction = 0;
     }
     if (m_cpuAction == 4) {
         m_inputY = -1;
         m_inputX = (WORD)Random(0, 2) - 1;
-        if (pattern == 4 || pattern == 5 || pattern == 6) {
+        if (pattern == kJump || pattern == kJumpForward || pattern == kJumpBack) {
             m_command = facing == 1;
-            if (pattern == 0xa5) {
+            if (pattern == kAirDashForward) {
                 m_cpuAction = 0;
             }
             m_inputY = 0;
@@ -918,30 +918,30 @@ void CKanna::CpuInput()
             return;
         }
     }
-    if (m_cpuAction == 5 && pattern < 0x32) {
+    if (m_cpuAction == 5 && pattern < kFirstHitReaction) {
         m_command = facing == 1;
-        if (pattern == 0xa3) {
+        if (pattern == kDashForward) {
             m_cpuAction = 0;
         }
         return;
     }
-    if (m_cpuAction == 6 && pattern < 0x32) {
+    if (m_cpuAction == 6 && pattern < kFirstHitReaction) {
         m_inputX = 0;
         m_inputY = -1;
-        if (pattern == 4) {
+        if (pattern == kJump) {
             m_cpuAction = 8;
         }
         return;
     }
-    if (m_cpuAction == 7 && pattern < 0x32) {
+    if (m_cpuAction == 7 && pattern < kFirstHitReaction) {
         m_inputX = facing;
         m_inputY = -1;
-        if (pattern == 5) {
+        if (pattern == kJumpForward) {
             m_cpuAction = 8;
         }
         return;
     }
-    if (m_cpuAction == 8 && pattern < 0x32) {
+    if (m_cpuAction == 8 && pattern < kFirstHitReaction) {
         m_inputX = facing;
         m_inputY = 1;
         if (pattern == 0x12) {
@@ -949,39 +949,39 @@ void CKanna::CpuInput()
         }
         return;
     }
-    if (m_cpuAction == 9 && pattern < 0x32) {
+    if (m_cpuAction == 9 && pattern < kFirstHitReaction) {
         m_inputX = facing;
         m_inputY = -1;
-        if (pattern == 5) {
+        if (pattern == kJumpForward) {
             m_cpuAction = 0xa;
         }
         return;
     }
-    if (m_cpuAction == 0xa && pattern < 0x32) {
+    if (m_cpuAction == 0xa && pattern < kFirstHitReaction) {
         m_pressB = 1;
-        if (pattern == 0xd0 || y == 0.0) {
+        if (pattern == kJumpB || y == 0.0) {
             m_cpuAction = 0;
         }
         return;
     }
-    if (m_cpuAction == 0xb && pattern < 0x32) {
+    if (m_cpuAction == 0xb && pattern < kFirstHitReaction) {
         m_inputX = 0;
         m_inputY = -1;
-        if (pattern == 4) {
+        if (pattern == kJump) {
             m_cpuAction = 0xc;
         }
         return;
     }
-    if (m_cpuAction == 0xc && pattern < 0x32) {
+    if (m_cpuAction == 0xc && pattern < kFirstHitReaction) {
         m_pressA = 1;
-        if (pattern == 0xcf || y == 0.0) {
+        if (pattern == kJumpA || y == 0.0) {
             m_cpuAction = 0;
         }
         return;
     }
-    if (m_cpuAction == 0xd && pattern < 0x32) {
+    if (m_cpuAction == 0xd && pattern < kFirstHitReaction) {
         m_pressA = 1;
-        if (pattern == 0xd0 || y == 0.0) {
+        if (pattern == kJumpB || y == 0.0) {
             m_cpuAction = 0;
         }
         return;
@@ -989,28 +989,28 @@ void CKanna::CpuInput()
     if (m_cpuAction == 0xe) {
         m_inputY = -1;
         m_inputX = facing;
-        if (pattern == 5) {
+        if (pattern == kJumpForward) {
             m_cpuAction = 0xf;
         }
         return;
     }
     if (m_cpuAction == 0xf) {
-        if ((*m_opponent)->unk124 <= 0) {
+        if ((*m_opponent)->m_untechTime <= 0) {
             m_cpuAction = 0;
         }
         if (x8 < 80.0 && (*m_opponent)->y < y) {
             m_pressA = 1;
-            if (pattern == 0xcf) {
+            if (pattern == kJumpA) {
                 m_cpuAction = 0x10;
                 return;
             }
         }
         if (x8 < 100.0) {
             m_pressB = 1;
-            if ((*m_opponent)->unk124 < 0x18) {
+            if ((*m_opponent)->m_untechTime < 0x18) {
                 m_pressA = 1;
             }
-            if (pattern == 0xd0 || pattern == 0xcf) {
+            if (pattern == kJumpB || pattern == kJumpA) {
                 m_cpuAction = 0x10;
                 return;
             }
@@ -1018,62 +1018,62 @@ void CKanna::CpuInput()
         return;
     }
     if (m_cpuAction == 0x10) {
-        if ((*m_opponent)->unk124 <= 0) {
+        if ((*m_opponent)->m_untechTime <= 0) {
             m_cpuAction = 0;
         }
-        if (pattern == 0xcf && m_attackResult == 3) {
+        if (pattern == kJumpA && m_attackResult == 3) {
             m_pressB = 1;
             return;
         }
-        if (pattern == 0xd0) {
+        if (pattern == kJumpB) {
             m_cpuAction = 0x11;
             return;
         }
         return;
     }
     if (m_cpuAction == 0x11) {
-        if ((*m_opponent)->unk124 <= 0 || y == 0.0) {
+        if ((*m_opponent)->m_untechTime <= 0 || y == 0.0) {
             m_cpuAction = 0;
         }
         if ((WORD)Random(0, 0xc8) == 1 && m_gauge == 0xbb8) {
-            m_command = 0x65;
+            m_command = kCmd236236B;
             return;
         }
-        if (pattern == 0xd1) {
+        if (pattern == kJumpC) {
             m_cpuAction = 0;
             return;
         }
-        if (pattern == 0xfd) {
+        if (pattern == kAir236) {
             m_cpuAction = 0;
             return;
         }
-        if (pattern == 0xa5) {
+        if (pattern == kAirDashForward) {
             m_cpuAction = 0x14;
             return;
         }
-        if (pattern == 0xf) {
+        if (pattern == kAirJumpForward) {
             m_cpuAction = 0x14;
             return;
         }
-        if (pattern == 0xd0 && m_attackResult == 3 && frame > 5) {
+        if (pattern == kJumpB && m_attackResult == 3 && frame > 5) {
             if (v10 > 80.0 && vx < 0.0 && (*m_opponent)->y - y > -40.0) {
-                m_command = 0xa;
+                m_command = kCmd236A;
                 return;
             }
-            if ((*m_opponent)->unk124 < 0x2d && unk15a > 0 && x8 < 40.0 && (*m_opponent)->y - y < 0.0) {
-                m_command = 0xa;
+            if ((*m_opponent)->m_untechTime < 0x2d && m_airActions > 0 && x8 < 40.0 && (*m_opponent)->y - y < 0.0) {
+                m_command = kCmd236A;
                 return;
             }
-            if ((*m_opponent)->unk124 < 0x2d && vx >= 0.0) {
+            if ((*m_opponent)->m_untechTime < 0x2d && vx >= 0.0) {
                 m_pressC = 1;
                 return;
             }
-            if ((x8 < 20.0 && (*m_opponent)->y > y || (*m_opponent)->y < y) && (*m_opponent)->unk124 > 0x54 && unk15a < 2) {
+            if ((x8 < 20.0 && (*m_opponent)->y > y || (*m_opponent)->y < y) && (*m_opponent)->m_untechTime > 0x54 && m_airActions < 2) {
                 m_inputX = facing;
                 m_inputY = 0;
                 return;
             }
-            if (x8 > 90.0 && (*m_opponent)->y < y && (*m_opponent)->unk124 > 0x2d && unk15a < 2) {
+            if (x8 > 90.0 && (*m_opponent)->y < y && (*m_opponent)->m_untechTime > 0x2d && m_airActions < 2) {
                 m_inputX = facing;
                 m_inputY = -1;
                 return;
@@ -1082,10 +1082,10 @@ void CKanna::CpuInput()
         return;
     }
     if (m_cpuAction == 0x14) {
-        if ((*m_opponent)->unk124 <= 0 || y == 0.0) {
+        if ((*m_opponent)->m_untechTime <= 0 || y == 0.0) {
             m_cpuAction = 0;
         }
-        if (pattern == 0xd0) {
+        if (pattern == kJumpB) {
             m_cpuAction = 0x11;
             return;
         }
@@ -1096,10 +1096,10 @@ void CKanna::CpuInput()
         return;
     }
     if (m_cpuAction == 0x15) {
-        if ((*m_opponent)->unk124 <= 0 || y == 0.0) {
+        if ((*m_opponent)->m_untechTime <= 0 || y == 0.0) {
             m_cpuAction = 0;
         }
-        if (pattern == 0xd0) {
+        if (pattern == kJumpB) {
             m_cpuAction = 0x16;
             return;
         }
@@ -1110,10 +1110,10 @@ void CKanna::CpuInput()
         return;
     }
     if (m_cpuAction == 0x16) {
-        if ((*m_opponent)->unk124 <= 0 || y == 0.0) {
+        if ((*m_opponent)->m_untechTime <= 0 || y == 0.0) {
             m_cpuAction = 0;
         }
-        if (pattern == 0xd1) {
+        if (pattern == kJumpC) {
             m_cpuAction = 0;
             return;
         }
@@ -1124,10 +1124,10 @@ void CKanna::CpuInput()
         return;
     }
     if (m_cpuAction == 0x1e) {
-        if ((*m_opponent)->unk124 <= 0 || (*m_opponent)->y == 0.0) {
+        if ((*m_opponent)->m_untechTime <= 0 || (*m_opponent)->y == 0.0) {
             m_cpuAction = 0;
         }
-        if (pattern == 0xc8) {
+        if (pattern == k5A) {
             m_cpuAction = 0x1f;
             return;
         }
@@ -1138,10 +1138,10 @@ void CKanna::CpuInput()
         return;
     }
     if (m_cpuAction == 0x1f) {
-        if ((*m_opponent)->unk124 <= 0 || (*m_opponent)->y == 0.0) {
+        if ((*m_opponent)->m_untechTime <= 0 || (*m_opponent)->y == 0.0) {
             m_cpuAction = 0;
         }
-        if (pattern == 0xc9 || pattern == 0xca) {
+        if (pattern == k5BClose || pattern == k5BFar) {
             m_cpuAction = 0x20;
             return;
         }
@@ -1149,14 +1149,14 @@ void CKanna::CpuInput()
         return;
     }
     if (m_cpuAction == 0x20) {
-        if ((*m_opponent)->unk124 <= 0 || (*m_opponent)->y == 0.0) {
+        if ((*m_opponent)->m_untechTime <= 0 || (*m_opponent)->y == 0.0) {
             m_cpuAction = 0;
         }
-        if (pattern == 0xcb) {
+        if (pattern == k5C) {
             m_cpuAction = 0x21;
             return;
         }
-        if ((*m_opponent)->unk124 < 0x3c) {
+        if ((*m_opponent)->m_untechTime < 0x3c) {
             m_pressC = 1;
             return;
         }
@@ -1164,28 +1164,28 @@ void CKanna::CpuInput()
         return;
     }
     if (m_cpuAction == 0x21) {
-        if ((*m_opponent)->unk124 <= 0 || (*m_opponent)->y == 0.0) {
+        if ((*m_opponent)->m_untechTime <= 0 || (*m_opponent)->y == 0.0) {
             m_cpuAction = 0;
         }
-        if (pattern == 0xfa || pattern == 0xfb || pattern == 0x12f) {
+        if (pattern == k236 || pattern == k236C || pattern == k236236B) {
             m_cpuAction = 0;
             return;
         }
         if ((WORD)Random(0, 0x64) < 2 && m_gauge >= 0xbb8) {
-            m_command = 0x65;
+            m_command = kCmd236236B;
             return;
         }
-        if ((WORD)Random(0, 0x64) < 4 && (unk118 > 500.0 || unk120 > 0)) {
-            m_command = 0xc;
+        if ((WORD)Random(0, 0x64) < 4 && (m_rfGauge > 500.0 || m_rfBlue > 0)) {
+            m_command = kCmd236C;
             return;
         }
         if ((WORD)Random(0, 0x64) < 0xa) {
-            m_command = 0xa;
+            m_command = kCmd236A;
             return;
         }
     }
     if (m_cpuAction == 0x22) {
-        if (pattern > 4) {
+        if (pattern > kJump) {
             m_cpuAction = 0;
         }
         if (v10 < 50.0) {
@@ -1200,30 +1200,30 @@ void CKanna::CpuInput()
         }
     }
     if (m_cpuAction == 0x24) {
-        if (pattern < 4) {
+        if (pattern < kJump) {
             m_cpuAction = 0;
         }
-        if (pattern == 0xab || pattern == 0xa7) {
+        if (pattern == kAirInstantCharge || pattern == kInstantCharge) {
             m_cpuAction = 0x25;
             return;
         }
-        m_command = 0x34;
+        m_command = kCmd22C;
         return;
     }
     if (m_cpuAction == 0x25) {
         if (y == 0.0) {
             m_cpuAction = 0;
         }
-        if (pattern == 0xd0) {
+        if (pattern == kJumpB) {
             m_cpuAction = 0;
             return;
         }
         m_pressB = 1;
         return;
     }
-    if (m_attackResult > 1 && unk14a == 0 && (WORD)Random(0, 0x64) < unka8 * 25.0f && m_cpuAction != 1 && m_cpuAction != 2) {
+    if (m_attackResult > 1 && m_hitstop == 0 && (WORD)Random(0, 0x64) < m_cpuSkill * 25.0f && m_cpuAction != 1 && m_cpuAction != 2) {
         m_cpuRoll = (WORD)Random(0, 0x3e8);
-        if (pattern == 0xc8) {
+        if (pattern == k5A) {
             if ((*m_opponent)->y < 0.0 && m_cpuRoll < 0x12c) {
                 m_pressB = 1;
                 m_inputY = 0;
@@ -1240,12 +1240,12 @@ void CKanna::CpuInput()
                 return;
             }
         }
-        if (pattern == 0xc9) {
-            if ((*m_opponent)->y < 0.0 && m_cpuRoll < 0x12c && m_attackResult == 3 && (*m_opponent)->unk124 > 0x3c) {
+        if (pattern == k5BClose) {
+            if ((*m_opponent)->y < 0.0 && m_cpuRoll < 0x12c && m_attackResult == 3 && (*m_opponent)->m_untechTime > 0x3c) {
                 m_cpuAction = 0xe;
                 return;
             }
-            if ((*m_opponent)->y < 0.0 && m_cpuRoll < 0x12c && m_attackResult == 3 && (*m_opponent)->unk124 <= 0x3c) {
+            if ((*m_opponent)->y < 0.0 && m_cpuRoll < 0x12c && m_attackResult == 3 && (*m_opponent)->m_untechTime <= 0x3c) {
                 m_cpuAction = 0x1e;
                 return;
             }
@@ -1273,13 +1273,13 @@ void CKanna::CpuInput()
                 return;
             }
         }
-        if (pattern == 0xca) {
+        if (pattern == k5BFar) {
             if (m_cpuRoll > 0 && m_cpuRoll < 0xa) {
-                m_command = (WORD)Random(1, 3) + 0x46;
+                m_command = (WORD)Random(1, 3) + kCmd41236A;
                 return;
             }
             if ((*m_opponent)->y < 0.0 && m_cpuRoll > 0xfa && m_cpuRoll < 0xff && m_gauge >= 0xbb8 && m_attackResult == 3) {
-                m_command = 0x65;
+                m_command = kCmd236236B;
                 return;
             }
             if (m_cpuRoll > 0x12c && m_cpuRoll < 0x258 && v10 < 140.0) {
@@ -1288,19 +1288,19 @@ void CKanna::CpuInput()
                 return;
             }
         }
-        if (pattern == 0xcb) {
+        if (pattern == k5C) {
             if ((*m_opponent)->y < 0.0 && m_cpuRoll < 0x12c && m_attackResult == 3) {
-                m_command = (WORD)Random(0, 3) + 0xa;
+                m_command = (WORD)Random(0, 3) + kCmd236A;
                 return;
             }
             if (m_cpuRoll > 0x12c && m_cpuRoll < 0x258) {
-                m_command = (WORD)Random(0, 5) + 0x46;
+                m_command = (WORD)Random(0, 5) + kCmd41236A;
                 return;
             }
             if (m_cpuRoll > 0x15e && m_cpuRoll < 0x258 && m_attackResult == 2) {
-                m_command = 0x1f;
+                m_command = kCmd214B;
                 if (v10 < 120.0) {
-                    m_command = 0x1e;
+                    m_command = kCmd214A;
                 }
                 return;
             }
@@ -1309,7 +1309,7 @@ void CKanna::CpuInput()
                 return;
             }
         }
-        if (pattern == 0xcc) {
+        if (pattern == k2A) {
             if ((*m_opponent)->y < 0.0 && m_cpuRoll < 0x12c) {
                 m_pressB = 1;
                 m_inputY = 0;
@@ -1326,7 +1326,7 @@ void CKanna::CpuInput()
                 return;
             }
         }
-        if (pattern == 0xcd) {
+        if (pattern == k2B) {
             if ((*m_opponent)->y < 0.0 && m_cpuRoll > 0 && m_cpuRoll < 0x1f4) {
                 m_pressC = 1;
                 m_inputY = 0;
@@ -1347,17 +1347,17 @@ void CKanna::CpuInput()
                 return;
             }
             if (m_cpuRoll > 0x226 && m_cpuRoll < 0x276) {
-                m_command = (WORD)Random(0, 5) + 0x46;
+                m_command = (WORD)Random(0, 5) + kCmd41236A;
                 return;
             }
         }
-        if (pattern == 0xce) {
+        if (pattern == k2C) {
             if (m_cpuRoll > 0 && m_cpuRoll < 0x32) {
-                m_command = (WORD)Random(0, 3) + 0x46;
+                m_command = (WORD)Random(0, 3) + kCmd41236A;
                 return;
             }
-            if (m_cpuRoll > 0x12c && m_cpuRoll < 0x320 && m_attackResult == 3 && (unk118 > 500.0 || unk120 == 1)) {
-                m_command = 0x16;
+            if (m_cpuRoll > 0x12c && m_cpuRoll < 0x320 && m_attackResult == 3 && (m_rfGauge > 500.0 || m_rfBlue == 1)) {
+                m_command = kCmd623C;
                 return;
             }
             if (m_cpuRoll > 0x384) {
@@ -1365,7 +1365,7 @@ void CKanna::CpuInput()
                 return;
             }
         }
-        if (pattern == 0xcf) {
+        if (pattern == kJumpA) {
             if (m_attackResult == 3 && (*m_opponent)->y < 0.0) {
                 m_cpuAction = 0x10;
                 return;
@@ -1391,13 +1391,13 @@ void CKanna::CpuInput()
                 return;
             }
         }
-        if (pattern == 0xd0) {
+        if (pattern == kJumpB) {
             if (m_attackResult == 3 && (*m_opponent)->y < 0.0) {
                 m_cpuAction = 0x11;
                 return;
             }
             if (m_cpuRoll > 0x14 && m_cpuRoll < 0x3c && m_attackResult == 3 && (*m_opponent)->y < 0.0) {
-                m_command = 0xa;
+                m_command = kCmd236A;
                 return;
             }
             if (m_cpuRoll > 0x50 && m_cpuRoll < 0x12c) {
@@ -1417,16 +1417,16 @@ void CKanna::CpuInput()
                 return;
             }
         }
-        if (pattern == 0xd1) {
+        if (pattern == kJumpC) {
             if (m_cpuRoll < 0xc8 && m_attackResult == 3) {
-                m_command = (WORD)Random(0, 2) + 0x1f;
+                m_command = (WORD)Random(0, 2) + kCmd214B;
                 return;
             }
             if (m_cpuRoll > 0x384 && m_attackResult != 3) {
                 m_inputX = facing;
                 return;
             }
-            if ((*m_opponent)->y == 0.0 && m_cpuRoll < 0x15e && (unk118 > 500.0 || unk120 > 0) && m_attackResult == 3 && timer < 3 && frame == 4) {
+            if ((*m_opponent)->y == 0.0 && m_cpuRoll < 0x15e && (m_rfGauge > 500.0 || m_rfBlue > 0) && m_attackResult == 3 && timer < 3 && frame == 4) {
                 m_cpuAction = 0x24;
                 return;
             }
@@ -1439,8 +1439,8 @@ void CKanna::CpuInput()
                 return;
             }
         }
-        if (pattern == 0xfa && v10 < 120.0 && unk118 > 500.0 && frame == 5 && m_cpuRoll < 0x64) {
-            m_command = 0x34;
+        if (pattern == k236 && v10 < 120.0 && m_rfGauge > 500.0 && frame == 5 && m_cpuRoll < 0x64) {
+            m_command = kCmd22C;
             return;
         }
         if (pattern > 0x106 && pattern < 0x10b && (WORD)Random(0, 0x64) < 0x28) {
@@ -1448,92 +1448,92 @@ void CKanna::CpuInput()
             return;
         }
     }
-    if ((WORD)Random(0, 0x100) < unka8 * unka8 * unka8 * unka8) {
+    if ((WORD)Random(0, 0x100) < m_cpuSkill * m_cpuSkill * m_cpuSkill * m_cpuSkill) {
         m_cpuRoll = (WORD)Random(0, 0x3e8);
-        if (v10 < 40.0 && x8 < 90.0 && (*m_opponent)->pattern > 0xc7 && (WORD)Random(0, 0x9c4) < 0xa) {
-            m_command = 0x14;
+        if (v10 < 40.0 && x8 < 90.0 && (*m_opponent)->pattern > kLastSharedAction && (WORD)Random(0, 0x9c4) < 0xa) {
+            m_command = kCmd623A;
             return;
         }
-        if (x8 < 90.0 && (*m_opponent)->pattern > 0xc7 && (WORD)Random(0, 0x2710) < 0xa && (unk118 > 500.0 || unk120 == 1)) {
-            m_command = 0xc;
+        if (x8 < 90.0 && (*m_opponent)->pattern > kLastSharedAction && (WORD)Random(0, 0x2710) < 0xa && (m_rfGauge > 500.0 || m_rfBlue == 1)) {
+            m_command = kCmd236C;
             return;
         }
         if (y == 0.0) {
-            if ((*m_opponent)->y == 0.0 && (*m_opponent)->pattern != 0x63) {
+            if ((*m_opponent)->y == 0.0 && (*m_opponent)->pattern != kLyingDown) {
                 if (v10 < 80.0) {
-                    if (m_cpuRoll < ((*m_opponent)->pattern > 0x31 && (*m_opponent)->pattern < 0x9c) * 0xf + 0xf && unk314c == 0) {
+                    if (m_cpuRoll < ((*m_opponent)->pattern > kLastFreeAction && (*m_opponent)->pattern < kGuardAir) * 0xf + 0xf && m_cpuHitCooldown == 0) {
                         m_pressA = 1;
                         m_inputY = 1;
                         return;
                     }
                 }
                 if (v10 < 75.0) {
-                    if (m_cpuRoll < ((*m_opponent)->pattern > 0x31 && (*m_opponent)->pattern < 0x9c) * 0xf + 0x14 && unk314c == 0) {
+                    if (m_cpuRoll < ((*m_opponent)->pattern > kLastFreeAction && (*m_opponent)->pattern < kGuardAir) * 0xf + 0x14 && m_cpuHitCooldown == 0) {
                         m_pressA = 1;
                         m_inputY = 0;
                         return;
                     }
                 }
                 if (v10 > 40.0 && v10 < 140.0) {
-                    if (m_cpuRoll < ((*m_opponent)->pattern > 0x31 && (*m_opponent)->pattern < 0x9c) * 0xf + 0x2d && m_cpuRoll > 0x1e && unk314c == 0) {
+                    if (m_cpuRoll < ((*m_opponent)->pattern > kLastFreeAction && (*m_opponent)->pattern < kGuardAir) * 0xf + 0x2d && m_cpuRoll > 0x1e && m_cpuHitCooldown == 0) {
                         m_pressB = 1;
                         m_inputY = 1;
                         return;
                     }
                 }
-                if (v10 < 140.0 && v10 > 60.0 && m_cpuRoll < 0x82 && m_cpuRoll > 0x50 && unk314c == 0) {
+                if (v10 < 140.0 && v10 > 60.0 && m_cpuRoll < 0x82 && m_cpuRoll > 0x50 && m_cpuHitCooldown == 0) {
                     m_pressB = 1;
                     m_inputY = (WORD)Random(0, 0xa) < 5 ? 1 : 0;
                     return;
                 }
-                if (v10 < 70.0 && m_cpuRoll < 0x87 && m_cpuRoll > 0x82 && unk314c == 0) {
+                if (v10 < 70.0 && m_cpuRoll < 0x87 && m_cpuRoll > 0x82 && m_cpuHitCooldown == 0) {
                     m_cpuAction = 9;
                     return;
                 }
-                if (v10 < 120.0 && m_cpuRoll < 0x96 && m_cpuRoll > 0x91 && unk314c == 0) {
+                if (v10 < 120.0 && m_cpuRoll < 0x96 && m_cpuRoll > 0x91 && m_cpuHitCooldown == 0) {
                     m_cpuAction = 0xb;
                     return;
                 }
-                if (v10 > 50.0 && v10 < 180.0 && x8 < 50.0 && m_cpuRoll < 0x12c && m_cpuRoll > 0xfa && unk314c == 0) {
-                    m_command = 0xa;
+                if (v10 > 50.0 && v10 < 180.0 && x8 < 50.0 && m_cpuRoll < 0x12c && m_cpuRoll > 0xfa && m_cpuHitCooldown == 0) {
+                    m_command = kCmd236A;
                     return;
                 }
-                if (x8 < 90.0 && m_cpuRoll < ((*m_opponent)->pattern > 0xc7) * 0xf + 0x131 && m_cpuRoll > 0x12c && unk314c == 0 && unk118 > 500.0) {
-                    m_command = 0xc;
+                if (x8 < 90.0 && m_cpuRoll < ((*m_opponent)->pattern > kLastSharedAction) * 0xf + 0x131 && m_cpuRoll > 0x12c && m_cpuHitCooldown == 0 && m_rfGauge > 500.0) {
+                    m_command = kCmd236C;
                     return;
                 }
-                if (v10 > 130.0 && m_cpuRoll < 0x145 && m_cpuRoll > 0x136 && unk314c == 0) {
-                    m_command = 0x46;
+                if (v10 > 130.0 && m_cpuRoll < 0x145 && m_cpuRoll > 0x136 && m_cpuHitCooldown == 0) {
+                    m_command = kCmd41236A;
                     return;
                 }
-                if (v10 > 130.0 && m_cpuRoll < 0x14a && m_cpuRoll > 0x145 && unk314c == 0) {
-                    m_command = 0x48;
+                if (v10 > 130.0 && m_cpuRoll < 0x14a && m_cpuRoll > 0x145 && m_cpuHitCooldown == 0) {
+                    m_command = kCmd41236C;
                     return;
                 }
-                if (v10 < 130.0 && m_cpuRoll < 0x159 && m_cpuRoll > 0x154 && unk314c == 0 && unk118 > 500.0) {
-                    m_command = 0x48;
+                if (v10 < 130.0 && m_cpuRoll < 0x159 && m_cpuRoll > 0x154 && m_cpuHitCooldown == 0 && m_rfGauge > 500.0) {
+                    m_command = kCmd41236C;
                     return;
                 }
-                if (v10 > 200.0 && v10 < 240.0 && m_cpuRoll < 0x172 && m_cpuRoll > 0x16d && unk314c == 0) {
-                    m_command = 0x1e;
+                if (v10 > 200.0 && v10 < 240.0 && m_cpuRoll < 0x172 && m_cpuRoll > 0x16d && m_cpuHitCooldown == 0) {
+                    m_command = kCmd214A;
                     return;
                 }
-                if (v10 > 180.0 && v10 < 320.0 && m_cpuRoll < 0x17c && m_cpuRoll > 0x172 && unk314c == 0) {
-                    m_command = 0x1f;
+                if (v10 > 180.0 && v10 < 320.0 && m_cpuRoll < 0x17c && m_cpuRoll > 0x172 && m_cpuHitCooldown == 0) {
+                    m_command = kCmd214B;
                     return;
                 }
-                if (v10 > 240.0 && v10 < 320.0 && m_cpuRoll < 0x190 && m_cpuRoll > 0x17c && unk314c == 0) {
-                    m_command = 0x20;
+                if (v10 > 240.0 && v10 < 320.0 && m_cpuRoll < 0x190 && m_cpuRoll > 0x17c && m_cpuHitCooldown == 0) {
+                    m_command = kCmd214C;
                     return;
                 }
-                if (v10 < 120.0 && m_cpuRoll < 0x195 && m_cpuRoll > 0x190 && unk314c == 0 && m_gauge >= 0xbb8 && (*m_opponent)->unkac != 0) {
+                if (v10 < 120.0 && m_cpuRoll < 0x195 && m_cpuRoll > 0x190 && m_cpuHitCooldown == 0 && m_gauge >= 0xbb8 && (*m_opponent)->m_roundsWon != 0) {
                     m_command = 0x5c;
                     return;
                 }
             }
             if ((*m_opponent)->y < 0.0) {
-                if (v10 < 80.0 && unk118 > 500.0 && m_cpuRoll < 2) {
-                    m_command = 0x16;
+                if (v10 < 80.0 && m_rfGauge > 500.0 && m_cpuRoll < 2) {
+                    m_command = kCmd623C;
                     return;
                 }
                 if ((*m_opponent)->vy < 0.0) {
@@ -1549,8 +1549,8 @@ void CKanna::CpuInput()
                     }
                 }
                 if ((*m_opponent)->vy > 0.0) {
-                    if (v10 < 90.0 && x8 < 140.0 && m_cpuRoll < ((*m_opponent)->pattern > 0xc7) * 0x2d + 0xf && (unk118 > 500.0 || unk120 > 0)) {
-                        m_command = 0x14;
+                    if (v10 < 90.0 && x8 < 140.0 && m_cpuRoll < ((*m_opponent)->pattern > kLastSharedAction) * 0x2d + 0xf && (m_rfGauge > 500.0 || m_rfBlue > 0)) {
+                        m_command = kCmd623A;
                         return;
                     }
                     if (v10 < 100.0 && x8 < 170.0 && x8 > 80.0 && m_cpuRoll < 0x6e && m_cpuRoll > 0x3c) {
@@ -1567,8 +1567,8 @@ void CKanna::CpuInput()
             }
         }
         if (y < 0.0 && m_cpuAction != 3) {
-            if (v10 < 180.0 && x8 < 180.0 && (*m_opponent)->pattern > 0xc8 && m_cpuRoll < 5 && m_gauge >= 0xbb8) {
-                m_command = 0x65;
+            if (v10 < 180.0 && x8 < 180.0 && (*m_opponent)->pattern > kFirstCharacterAction && m_cpuRoll < 5 && m_gauge >= 0xbb8) {
+                m_command = kCmd236236B;
                 return;
             }
             if ((*m_opponent)->y == 0.0) {
@@ -1593,29 +1593,29 @@ void CKanna::CpuInput()
             }
         }
     }
-    if (pattern < 0x32 && ((*m_opponent)->pattern > 0x95 && (*m_opponent)->pattern < 0x9c || (*m_opponent)->pattern > 0x31 && (*m_opponent)->pattern < 0x3b) && y == 0.0 && (WORD)Random(0, 0x1388) < 4.0f * unka8 * unka8 * unka8 && unk314c == 0) {
+    if (pattern < kFirstHitReaction && ((*m_opponent)->pattern > kLastHitReaction && (*m_opponent)->pattern < kGuardAir || (*m_opponent)->pattern > kLastFreeAction && (*m_opponent)->pattern < kHitAir) && y == 0.0 && (WORD)Random(0, 0x1388) < 4.0f * m_cpuSkill * m_cpuSkill * m_cpuSkill && m_cpuHitCooldown == 0) {
         m_command = facing == 1;
         return;
     }
-    if (pattern < 0x32 && (*m_opponent)->pattern < 0x32 && v10 > 80.0 && v10 < 120.0 && (WORD)Random(0, 0x2710) < unka8 * unka8 * unka8 && x > 150.0 && x < 490.0) {
+    if (pattern < kFirstHitReaction && (*m_opponent)->pattern < kFirstHitReaction && v10 > 80.0 && v10 < 120.0 && (WORD)Random(0, 0x2710) < m_cpuSkill * m_cpuSkill * m_cpuSkill && x > 150.0 && x < 490.0) {
         m_command = -((facing == 1) - 1);
         return;
     }
-    if (pattern == 9 || pattern == 0xa || pattern > 0xd && pattern < 0x15) {
+    if (pattern == kFall || pattern == kSuperJump || pattern > kLand && pattern < 0x15) {
         if (v10 > 100.0) {
-            if ((WORD)Random(0, 0x44c) < 2 && unk3150 == 0) {
-                unk3150 = 0xb4;
+            if ((WORD)Random(0, 0x44c) < 2 && m_cpuAirPause == 0) {
+                m_cpuAirPause = 0xb4;
             }
-            if ((WORD)Random(0, 0x64) < 2 && y > -180.0 && unk3150 == 0) {
+            if ((WORD)Random(0, 0x64) < 2 && y > -180.0 && m_cpuAirPause == 0) {
                 m_inputY = -1;
                 m_inputX = (WORD)Random(0, 2) - 1;
                 return;
             }
-            if ((WORD)Random(0, 0x64) < 4 && unk3150 == 0) {
+            if ((WORD)Random(0, 0x64) < 4 && m_cpuAirPause == 0) {
                 m_inputX = facing;
                 return;
             }
-            if ((WORD)Random(0, 0x64) < 2 && unk3150 == 0) {
+            if ((WORD)Random(0, 0x64) < 2 && m_cpuAirPause == 0) {
                 m_inputX = facing;
                 m_inputY = 1;
                 return;
@@ -1632,15 +1632,15 @@ void CKanna::CpuInput()
                 m_inputX = (WORD)Random(0, 2) - 1;
                 return;
             }
-            if ((WORD)Random(0, 0x1f4) < 2 && unk3150 == 0) {
+            if ((WORD)Random(0, 0x1f4) < 2 && m_cpuAirPause == 0) {
                 m_inputX = -facing;
                 return;
             }
-            if ((WORD)Random(0, 0x64) < 2 && unk3150 == 0) {
+            if ((WORD)Random(0, 0x64) < 2 && m_cpuAirPause == 0) {
                 m_inputX = facing;
                 return;
             }
-            if ((WORD)Random(0, 0x64) < 4 && unk3150 == 0) {
+            if ((WORD)Random(0, 0x64) < 4 && m_cpuAirPause == 0) {
                 m_inputX = facing;
                 m_inputY = 1;
                 return;
@@ -1673,33 +1673,33 @@ void CKanna::CpuInput()
         }
     }
     if (y == 0.0) {
-        if (unk1a0 > 0) {
-            if ((char)Unk40ff70() != 0 && unk1a0 > 0xf) {
-                unk1a0 = 0xf;
+        if (m_cpuWalkRight > 0) {
+            if ((char)AtScreenEdge() != 0 && m_cpuWalkRight > 0xf) {
+                m_cpuWalkRight = 0xf;
             }
             m_inputX = 1;
             return;
         }
-        if (unk1a4 > 0) {
-            if ((char)Unk40ff70() != 0 && unk1a4 > 0xf) {
-                unk1a4 = 0xf;
+        if (m_cpuWalkLeft > 0) {
+            if ((char)AtScreenEdge() != 0 && m_cpuWalkLeft > 0xf) {
+                m_cpuWalkLeft = 0xf;
             }
             m_inputX = -1;
             return;
         }
         if ((WORD)Random(0, 0x3e8) < 2) {
             if (facing == 1) {
-                unk1a4 = (WORD)Random(0, 0xc8) + 0x3c;
+                m_cpuWalkLeft = (WORD)Random(0, 0xc8) + 0x3c;
             } else {
-                unk1a0 = (WORD)Random(0, 0xc8) + 0x3c;
+                m_cpuWalkRight = (WORD)Random(0, 0xc8) + 0x3c;
             }
         }
         if ((WORD)Random(0, 0x64) < 2) {
             if (facing == 1) {
-                unk1a0 = (WORD)Random(0, 0x190) + 0x3c;
+                m_cpuWalkRight = (WORD)Random(0, 0x190) + 0x3c;
                 return;
             }
-            unk1a4 = (WORD)Random(0, 0x190) + 0x3c;
+            m_cpuWalkLeft = (WORD)Random(0, 0x190) + 0x3c;
         }
     }
 }
@@ -1710,20 +1710,20 @@ void CKanna::UpdateObjects()
     WORD v54;
     int v4;
 
-    if ((*m_opponent)->unk14c > 0) {
+    if ((*m_opponent)->m_freezeTime > 0) {
         return;
     }
     v4 = m_objectTail;
     EffectDesc l50;
     while (v4 != m_objectHead) {
-        if (m_objectActive[v4] != 0 && m_objects[v4].unk86 == 0 && (unk14c == 0 || unk14c > 0 && m_objects[v4].unk88 != 0)) {
+        if (m_objectActive[v4] != 0 && m_objects[v4].hitstop == 0 && (m_freezeTime == 0 || m_freezeTime > 0 && m_objects[v4].movesInFreeze != 0)) {
             v54 = (short)anims[m_objects[v4].pattern].frames[m_objects[v4].frame].duration;
             v58 = anims[m_objects[v4].pattern].frameCount;
             InitEffectDesc((EffectDesc*)&l50);
             switch (m_objects[v4].pattern) {
-            case 0x190:
-                if (unk3154[v4] == 0) {
-                    unk3154[v4]++;
+            case kObj214A:
+                if (m_objectVar1[v4] == 0) {
+                    m_objectVar1[v4]++;
                     m_objects[v4].vy = -3.0;
                 }
                 if (m_objects[v4].vy < 0.0 && m_objects[v4].frame < 8) {
@@ -1732,7 +1732,7 @@ void CKanna::UpdateObjects()
                         m_objects[v4].vy = 0.0;
                     }
                 }
-                if (m_objects[v4].frame < 8 && pattern > 0x31 && pattern < 0x9d) {
+                if (m_objects[v4].frame < 8 && pattern > kLastFreeAction && pattern < kAirRecoveryForward) {
                     RemoveObject(v4);
                     break;
                 }
@@ -1743,12 +1743,12 @@ void CKanna::UpdateObjects()
                         m_objects[v4].vy = 0.0;
                         m_objects[v4].timer = 0;
                         m_objects[v4].frame = 9;
-                        l50.type = 0x193;
+                        l50.type = kObj214Impact;
                         l50.x = (double)((int)m_objects[v4].x + facing * 0x32);
                         l50.y = 0.0;
                         l50.scale = 0;
-                        l50.unk28 = 1;
-                        l50.unk0 = 1;
+                        l50.shadow = 1;
+                        l50.keep = 1;
                         l50.layer = 1;
                         l50.facing = facing;
                         SpawnObject(&l50);
@@ -1759,10 +1759,10 @@ void CKanna::UpdateObjects()
                 if (m_objects[v4].timer >= v54) {
                     m_objects[v4].timer = 0;
                     m_objects[v4].frame++;
-                    m_objects[v4].unk80 = 0;
-                    if (m_objects[v4].frame == 8 && unk3254[v4] < 1) {
+                    m_objects[v4].attackResult = 0;
+                    if (m_objects[v4].frame == 8 && m_objectVar2[v4] < 1) {
                         m_objects[v4].frame = 0;
-                        unk3254[v4]++;
+                        m_objectVar2[v4]++;
                     }
                     if (m_objects[v4].frame == 8) {
                         m_objects[v4].vy = 7.0;
@@ -1772,9 +1772,9 @@ void CKanna::UpdateObjects()
                     }
                 }
                 break;
-            case 0x191:
-                if (unk3154[v4] == 0) {
-                    unk3154[v4]++;
+            case kObj214B:
+                if (m_objectVar1[v4] == 0) {
+                    m_objectVar1[v4]++;
                     m_objects[v4].vy = -3.0;
                 }
                 if (m_objects[v4].vy < 0.0 && m_objects[v4].frame < 8) {
@@ -1783,7 +1783,7 @@ void CKanna::UpdateObjects()
                         m_objects[v4].vy = 0.0;
                     }
                 }
-                if (m_objects[v4].frame < 8 && pattern > 0x31 && pattern < 0x9d) {
+                if (m_objects[v4].frame < 8 && pattern > kLastFreeAction && pattern < kAirRecoveryForward) {
                     RemoveObject(v4);
                     break;
                 }
@@ -1794,12 +1794,12 @@ void CKanna::UpdateObjects()
                         m_objects[v4].vy = 0.0;
                         m_objects[v4].timer = 0;
                         m_objects[v4].frame = 9;
-                        l50.type = 0x193;
+                        l50.type = kObj214Impact;
                         l50.x = (double)((int)m_objects[v4].x + facing * 0x7d);
                         l50.y = 0.0;
                         l50.scale = 0;
-                        l50.unk28 = 1;
-                        l50.unk0 = 1;
+                        l50.shadow = 1;
+                        l50.keep = 1;
                         l50.layer = 1;
                         l50.facing = facing;
                         SpawnObject(&l50);
@@ -1810,10 +1810,10 @@ void CKanna::UpdateObjects()
                 if (m_objects[v4].timer >= v54) {
                     m_objects[v4].timer = 0;
                     m_objects[v4].frame++;
-                    m_objects[v4].unk80 = 0;
-                    if (m_objects[v4].frame == 8 && unk3254[v4] < 1) {
+                    m_objects[v4].attackResult = 0;
+                    if (m_objects[v4].frame == 8 && m_objectVar2[v4] < 1) {
                         m_objects[v4].frame = 0;
-                        unk3254[v4]++;
+                        m_objectVar2[v4]++;
                     }
                     if (m_objects[v4].frame == 8) {
                         m_objects[v4].vy = 7.0;
@@ -1823,9 +1823,9 @@ void CKanna::UpdateObjects()
                     }
                 }
                 break;
-            case 0x192:
-                if (unk3154[v4] == 0) {
-                    unk3154[v4]++;
+            case kObj214C:
+                if (m_objectVar1[v4] == 0) {
+                    m_objectVar1[v4]++;
                     m_objects[v4].vy = -3.0;
                 }
                 if (m_objects[v4].vy < 0.0 && m_objects[v4].frame < 8) {
@@ -1834,7 +1834,7 @@ void CKanna::UpdateObjects()
                         m_objects[v4].vy = 0.0;
                     }
                 }
-                if (m_objects[v4].frame < 8 && pattern > 0x31 && pattern < 0x9d) {
+                if (m_objects[v4].frame < 8 && pattern > kLastFreeAction && pattern < kAirRecoveryForward) {
                     RemoveObject(v4);
                     break;
                 }
@@ -1845,12 +1845,12 @@ void CKanna::UpdateObjects()
                         m_objects[v4].vy = 0.0;
                         m_objects[v4].timer = 0;
                         m_objects[v4].frame = 9;
-                        l50.type = 0x193;
+                        l50.type = kObj214Impact;
                         l50.x = (double)((int)m_objects[v4].x + facing * 0xc8);
                         l50.y = 0.0;
                         l50.scale = 0;
-                        l50.unk28 = 1;
-                        l50.unk0 = 1;
+                        l50.shadow = 1;
+                        l50.keep = 1;
                         l50.layer = 1;
                         l50.facing = facing;
                         SpawnObject(&l50);
@@ -1861,10 +1861,10 @@ void CKanna::UpdateObjects()
                 if (m_objects[v4].timer >= v54) {
                     m_objects[v4].timer = 0;
                     m_objects[v4].frame++;
-                    m_objects[v4].unk80 = 0;
-                    if (m_objects[v4].frame == 8 && unk3254[v4] < 1) {
+                    m_objects[v4].attackResult = 0;
+                    if (m_objects[v4].frame == 8 && m_objectVar2[v4] < 1) {
                         m_objects[v4].frame = 0;
-                        unk3254[v4]++;
+                        m_objectVar2[v4]++;
                     }
                     if (m_objects[v4].frame == 8) {
                         m_objects[v4].vy = 7.0;
@@ -1874,9 +1874,9 @@ void CKanna::UpdateObjects()
                     }
                 }
                 break;
-            case 0x193:
+            case kObj214Impact:
                 if (m_objects[v4].frame == 0 && m_objects[v4].timer == 0) {
-                    m_objects[v4].unk84 = 1;
+                    m_objects[v4].hitsLeft = 1;
                     ShakeScreen(5, 0);
                     m_playVoice = 3;
                 }
@@ -1884,44 +1884,44 @@ void CKanna::UpdateObjects()
                 if (m_objects[v4].timer >= v54) {
                     m_objects[v4].timer = 0;
                     m_objects[v4].frame++;
-                    m_objects[v4].unk80 = 0;
+                    m_objects[v4].attackResult = 0;
                     if (m_objects[v4].frame >= v58) {
                         RemoveObject(v4);
                     }
                 }
                 break;
-            case 0x194:
+            case kObj236Effect:
                 m_objects[v4].timer++;
                 if (m_objects[v4].timer >= v54) {
                     m_objects[v4].timer = 0;
                     m_objects[v4].frame++;
-                    m_objects[v4].unk80 = 0;
+                    m_objects[v4].attackResult = 0;
                     if (m_objects[v4].frame >= v58) {
                         RemoveObject(v4);
                     }
                 }
                 break;
-            case 0x195:
+            case kObj41236Flash:
                 m_objects[v4].timer++;
                 if (m_objects[v4].timer >= v54) {
                     m_objects[v4].timer = 0;
                     m_objects[v4].frame++;
-                    m_objects[v4].unk80 = 0;
+                    m_objects[v4].attackResult = 0;
                     if (m_objects[v4].frame >= v58) {
                         RemoveObject(v4);
                     }
                 }
                 break;
-            case 0x196:
-                if (m_objects[v4].frame == 0 && m_objects[v4].timer == 0 && unk3154[v4] == 0) {
-                    m_objects[v4].unk84 = 0x63;
+            case kObj41236Shot:
+                if (m_objects[v4].frame == 0 && m_objects[v4].timer == 0 && m_objectVar1[v4] == 0) {
+                    m_objects[v4].hitsLeft = 0x63;
                     m_objects[v4].vx = 3.0;
                     m_objects[v4].vy = 0.0;
-                    unk3154[v4]++;
+                    m_objectVar1[v4]++;
                 }
-                if (m_objects[v4].unk80 >= 2) {
-                    m_objects[v4].pattern = 0x199;
-                    m_objects[v4].unk84 = 0;
+                if (m_objects[v4].attackResult >= 2) {
+                    m_objects[v4].pattern = kObj41236ShotEnd;
+                    m_objects[v4].hitsLeft = 0;
                     m_objects[v4].frame = 0;
                     m_objects[v4].timer = 0;
                     break;
@@ -1942,15 +1942,15 @@ void CKanna::UpdateObjects()
                     }
                 }
                 break;
-            case 0x197:
-                if (m_objects[v4].frame == 0 && m_objects[v4].timer == 0 && unk3154[v4] == 0) {
-                    m_objects[v4].unk84 = 1;
+            case kObjUnused197:
+                if (m_objects[v4].frame == 0 && m_objects[v4].timer == 0 && m_objectVar1[v4] == 0) {
+                    m_objects[v4].hitsLeft = 1;
                     m_objects[v4].vx = 3.0;
                     m_objects[v4].vy = 0.0;
                 }
-                if (m_objects[v4].unk80 >= 2 || pattern > 0x31 && pattern < 0x96) {
-                    m_objects[v4].pattern = 0x19a;
-                    m_objects[v4].unk84 = 0;
+                if (m_objects[v4].attackResult >= 2 || pattern > kLastFreeAction && pattern < kFirstGuard) {
+                    m_objects[v4].pattern = kObjUnused19a;
+                    m_objects[v4].hitsLeft = 0;
                     break;
                 }
                 m_objects[v4].vx -= 0.015;
@@ -1966,9 +1966,9 @@ void CKanna::UpdateObjects()
                     }
                 }
                 break;
-            case 0x198:
+            case kObjUnused198:
                 if (m_objects[v4].frame == 0 && m_objects[v4].timer == 0) {
-                    m_objects[v4].unk84 = 1;
+                    m_objects[v4].hitsLeft = 1;
                 }
                 m_objects[v4].timer++;
                 if (m_objects[v4].timer >= v54) {
@@ -1979,31 +1979,31 @@ void CKanna::UpdateObjects()
                     }
                 }
                 break;
-            case 0x199:
+            case kObj41236ShotEnd:
                 m_objects[v4].timer++;
                 if (m_objects[v4].timer >= v54) {
                     m_objects[v4].timer = 0;
                     m_objects[v4].frame++;
-                    m_objects[v4].unk80 = 0;
+                    m_objects[v4].attackResult = 0;
                     if (m_objects[v4].frame >= v58) {
                         RemoveObject(v4);
                     }
                 }
                 break;
-            case 0x19a:
+            case kObjUnused19a:
                 m_objects[v4].timer++;
                 if (m_objects[v4].timer >= v54) {
                     m_objects[v4].timer = 0;
                     m_objects[v4].frame++;
-                    m_objects[v4].unk80 = 0;
+                    m_objects[v4].attackResult = 0;
                     if (m_objects[v4].frame >= v58) {
                         RemoveObject(v4);
                     }
                 }
                 break;
-            case 0x19b:
+            case kObjUnused19b:
                 if (m_objects[v4].frame == 0 && m_objects[v4].timer == 0) {
-                    m_objects[v4].unk84 = 1;
+                    m_objects[v4].hitsLeft = 1;
                     m_objects[v4].vx = (WORD)Random(0, 0xa) * 0.1 + 2.5;
                     m_objects[v4].vy = -1.2 - (WORD)Random(0, 0x14) * 0.1;
                 }
@@ -2012,11 +2012,11 @@ void CKanna::UpdateObjects()
                     RemoveObject(v4);
                     break;
                 }
-                if ((m_objects[v4].y >= 0.0 || m_objects[v4].unk80 > 1) && m_objects[v4].frame == 0) {
+                if ((m_objects[v4].y >= 0.0 || m_objects[v4].attackResult > 1) && m_objects[v4].frame == 0) {
                     m_objects[v4].y--;
                     m_objects[v4].frame = 1;
                     m_objects[v4].vy = -1.5;
-                    l50.type = 0x19c;
+                    l50.type = kObjUnused19c;
                     l50.x = (double)(int)m_objects[v4].x;
                     l50.y = (double)(int)m_objects[v4].y;
                     l50.scale = 0;
@@ -2029,13 +2029,13 @@ void CKanna::UpdateObjects()
                 if (m_objects[v4].timer >= v54) {
                     m_objects[v4].timer = 0;
                     m_objects[v4].frame++;
-                    m_objects[v4].unk80 = 0;
+                    m_objects[v4].attackResult = 0;
                     if (m_objects[v4].frame >= v58) {
                         RemoveObject(v4);
                     }
                 }
                 break;
-            case 0x19c:
+            case kObjUnused19c:
                 if (m_objects[v4].frame == 0 && m_objects[v4].timer == 0) {
                     m_objects[v4].vx = (WORD)Random(0, 0xa) * 0.1 + 1.5;
                     m_objects[v4].vy = -1.5;
@@ -2049,15 +2049,15 @@ void CKanna::UpdateObjects()
                 if (m_objects[v4].timer >= v54) {
                     m_objects[v4].timer = 0;
                     m_objects[v4].frame++;
-                    m_objects[v4].unk80 = 0;
+                    m_objects[v4].attackResult = 0;
                     if (m_objects[v4].frame >= v58) {
                         RemoveObject(v4);
                     }
                 }
                 break;
-            case 0x19d:
+            case kObjUnused19d:
                 if (m_objects[v4].frame == 0 && m_objects[v4].timer == 0) {
-                    m_objects[v4].unk84 = 1;
+                    m_objects[v4].hitsLeft = 1;
                     m_objects[v4].vx = (WORD)Random(0, 0x14) * 0.1 + 1.7;
                     m_objects[v4].vy = -0.5 - (WORD)Random(0, 0xa) * 0.1;
                 }
@@ -2066,11 +2066,11 @@ void CKanna::UpdateObjects()
                     RemoveObject(v4);
                     break;
                 }
-                if ((m_objects[v4].y >= 0.0 || m_objects[v4].unk80 > 1) && m_objects[v4].frame == 0) {
+                if ((m_objects[v4].y >= 0.0 || m_objects[v4].attackResult > 1) && m_objects[v4].frame == 0) {
                     m_objects[v4].y--;
                     m_objects[v4].frame = 1;
                     m_objects[v4].vy = -1.5;
-                    l50.type = 0x19e;
+                    l50.type = kObjUnused19e;
                     l50.x = (double)(int)m_objects[v4].x;
                     l50.y = (double)(int)m_objects[v4].y;
                     l50.scale = 0;
@@ -2083,13 +2083,13 @@ void CKanna::UpdateObjects()
                 if (m_objects[v4].timer >= v54) {
                     m_objects[v4].timer = 0;
                     m_objects[v4].frame++;
-                    m_objects[v4].unk80 = 0;
+                    m_objects[v4].attackResult = 0;
                     if (m_objects[v4].frame >= v58) {
                         RemoveObject(v4);
                     }
                 }
                 break;
-            case 0x19e:
+            case kObjUnused19e:
                 if (m_objects[v4].frame == 0 && m_objects[v4].timer == 0) {
                     m_objects[v4].vx = (WORD)Random(0, 0xa) * 0.1 + 1.5;
                     m_objects[v4].vy = -1.5;
@@ -2103,16 +2103,16 @@ void CKanna::UpdateObjects()
                 if (m_objects[v4].timer >= v54) {
                     m_objects[v4].timer = 0;
                     m_objects[v4].frame++;
-                    m_objects[v4].unk80 = 0;
+                    m_objects[v4].attackResult = 0;
                     if (m_objects[v4].frame >= v58) {
                         RemoveObject(v4);
                     }
                 }
                 break;
-            case 0x19f:
-                if (unk3154[v4] == 0) {
-                    m_objects[v4].unk84 = 1;
-                    unk3154[v4]++;
+            case kObj236236ALead:
+                if (m_objectVar1[v4] == 0) {
+                    m_objects[v4].hitsLeft = 1;
+                    m_objectVar1[v4]++;
                     m_objects[v4].vx = -3.0;
                     m_objects[v4].vy = 0.5;
                 }
@@ -2125,16 +2125,16 @@ void CKanna::UpdateObjects()
                 if (m_objects[v4].timer >= v54) {
                     m_objects[v4].timer = 0;
                     m_objects[v4].frame++;
-                    m_objects[v4].unk80 = 0;
+                    m_objects[v4].attackResult = 0;
                     if (m_objects[v4].frame >= v58) {
                         m_objects[v4].frame = 0;
                     }
                 }
                 break;
-            case 0x1a0:
-                if (unk3154[v4] == 0) {
-                    m_objects[v4].unk84 = 1;
-                    unk3154[v4]++;
+            case kObjFeatherSlow:
+                if (m_objectVar1[v4] == 0) {
+                    m_objects[v4].hitsLeft = 1;
+                    m_objectVar1[v4]++;
                     m_objects[v4].vx = (WORD)Random(0, 0x64) * 0.01 + 1.0;
                     m_objects[v4].ay = (WORD)Random(0, 0x64) * 0.0002;
                     m_objects[v4].vy = 0.5;
@@ -2149,16 +2149,16 @@ void CKanna::UpdateObjects()
                 if (m_objects[v4].timer >= v54) {
                     m_objects[v4].timer = 0;
                     m_objects[v4].frame++;
-                    m_objects[v4].unk80 = 0;
+                    m_objects[v4].attackResult = 0;
                     if (m_objects[v4].frame >= v58) {
                         m_objects[v4].frame = 0;
                     }
                 }
                 break;
-            case 0x1a1:
-                if (unk3154[v4] == 0) {
-                    m_objects[v4].unk84 = 1;
-                    unk3154[v4]++;
+            case kObjFeatherFast:
+                if (m_objectVar1[v4] == 0) {
+                    m_objects[v4].hitsLeft = 1;
+                    m_objectVar1[v4]++;
                     m_objects[v4].vx = (WORD)Random(0, 0x64) * 0.01 + 3.5;
                     m_objects[v4].ay = (WORD)Random(0, 0x64) * 0.00015;
                     m_objects[v4].vy = 0.5;
@@ -2173,22 +2173,22 @@ void CKanna::UpdateObjects()
                 if (m_objects[v4].timer >= v54) {
                     m_objects[v4].timer = 0;
                     m_objects[v4].frame++;
-                    m_objects[v4].unk80 = 0;
+                    m_objects[v4].attackResult = 0;
                     if (m_objects[v4].frame >= v58) {
                         m_objects[v4].frame = 0;
                     }
                 }
                 break;
-            case 0x1a2:
-                if (pattern == 0x12f) {
+            case kObj236236BBurst:
+                if (pattern == k236236B) {
                     m_objects[v4].x = m_objects[v4].facing * 0xa + x + 0.0;
                 }
                 m_objects[v4].timer++;
                 if (m_objects[v4].timer >= v54) {
                     m_objects[v4].timer = 0;
                     m_objects[v4].frame++;
-                    m_objects[v4].unk80 = 0;
-                    if (m_objects[v4].frame == 9 && frame < 0xd && pattern == 0x12f) {
+                    m_objects[v4].attackResult = 0;
+                    if (m_objects[v4].frame == 9 && frame < 0xd && pattern == k236236B) {
                         m_objects[v4].frame = m_objects[v4].frame - 2;
                     }
                     if (m_objects[v4].frame >= v58) {
@@ -2196,157 +2196,157 @@ void CKanna::UpdateObjects()
                     }
                 }
                 break;
-            case 0x1a3:
+            case kObjUnused1a3:
                 m_objects[v4].timer++;
-                if (pattern == 0x100 && unk14a > 0) {
+                if (pattern == k623 && m_hitstop > 0) {
                     m_objects[v4].timer--;
                 }
                 if (m_objects[v4].timer >= v54) {
                     m_objects[v4].timer = 0;
                     m_objects[v4].frame++;
-                    m_objects[v4].unk80 = 0;
+                    m_objects[v4].attackResult = 0;
                     if (m_objects[v4].frame >= v58) {
                         RemoveObject(v4);
                     }
                 }
                 break;
-            case 0x1a4:
-                if (pattern != 0xc9) {
+            case kObj5BCloseEffect:
+                if (pattern != k5BClose) {
                     RemoveObject(v4);
                 }
                 m_objects[v4].x = x;
                 m_objects[v4].y = y;
                 m_objects[v4].timer++;
-                if (pattern == 0xc9 && unk14a > 0) {
+                if (pattern == k5BClose && m_hitstop > 0) {
                     m_objects[v4].timer--;
                 }
                 if (m_objects[v4].timer >= v54) {
                     m_objects[v4].timer = 0;
                     m_objects[v4].frame++;
-                    m_objects[v4].unk80 = 0;
+                    m_objects[v4].attackResult = 0;
                     if (m_objects[v4].frame >= v58) {
                         RemoveObject(v4);
                     }
                 }
                 break;
-            case 0x1a5:
-                if (pattern != 0xca) {
+            case kObj5BFarEffect:
+                if (pattern != k5BFar) {
                     RemoveObject(v4);
                 }
                 m_objects[v4].x = x;
                 m_objects[v4].y = y;
                 m_objects[v4].timer++;
-                if (pattern == 0xca && unk14a > 0) {
+                if (pattern == k5BFar && m_hitstop > 0) {
                     m_objects[v4].timer--;
                 }
                 if (m_objects[v4].timer >= v54) {
                     m_objects[v4].timer = 0;
                     m_objects[v4].frame++;
-                    m_objects[v4].unk80 = 0;
+                    m_objects[v4].attackResult = 0;
                     if (m_objects[v4].frame >= v58) {
                         RemoveObject(v4);
                     }
                 }
                 break;
-            case 0x1a6:
-                if (pattern != 0xcd) {
+            case kObj2BEffect:
+                if (pattern != k2B) {
                     RemoveObject(v4);
                 }
                 m_objects[v4].x = x;
                 m_objects[v4].y = y;
                 m_objects[v4].timer++;
-                if (pattern == 0xcd && unk14a > 0) {
+                if (pattern == k2B && m_hitstop > 0) {
                     m_objects[v4].timer--;
                 }
                 if (m_objects[v4].timer >= v54) {
                     m_objects[v4].timer = 0;
                     m_objects[v4].frame++;
-                    m_objects[v4].unk80 = 0;
+                    m_objects[v4].attackResult = 0;
                     if (m_objects[v4].frame >= v58) {
                         RemoveObject(v4);
                     }
                 }
                 break;
-            case 0x1a7:
-                if (pattern != 0xd0) {
+            case kObjJumpBEffect:
+                if (pattern != kJumpB) {
                     RemoveObject(v4);
                 }
                 m_objects[v4].x = x;
                 m_objects[v4].y = y;
                 m_objects[v4].timer++;
-                if (pattern == 0xd0 && unk14a > 0) {
+                if (pattern == kJumpB && m_hitstop > 0) {
                     m_objects[v4].timer--;
                 }
                 if (m_objects[v4].timer >= v54) {
                     m_objects[v4].timer = 0;
                     m_objects[v4].frame++;
-                    m_objects[v4].unk80 = 0;
+                    m_objects[v4].attackResult = 0;
                     if (m_objects[v4].frame >= v58) {
                         RemoveObject(v4);
                     }
                 }
                 break;
-            case 0x1a8:
-                if (pattern != 0xcb) {
+            case kObj5CEffect:
+                if (pattern != k5C) {
                     RemoveObject(v4);
                 }
                 m_objects[v4].x = x;
                 m_objects[v4].y = y;
                 m_objects[v4].timer++;
-                if (pattern == 0xcb && unk14a > 0) {
+                if (pattern == k5C && m_hitstop > 0) {
                     m_objects[v4].timer--;
                 }
                 if (m_objects[v4].timer >= v54) {
                     m_objects[v4].timer = 0;
                     m_objects[v4].frame++;
-                    m_objects[v4].unk80 = 0;
+                    m_objects[v4].attackResult = 0;
                     if (m_objects[v4].frame >= v58) {
                         RemoveObject(v4);
                     }
                 }
                 break;
-            case 0x1a9:
-                if (pattern != 0xd1) {
+            case kObjJumpCEffect:
+                if (pattern != kJumpC) {
                     RemoveObject(v4);
                 }
                 m_objects[v4].x = x;
                 m_objects[v4].y = y;
                 m_objects[v4].timer++;
-                if (pattern == 0xd1 && unk14a > 0) {
+                if (pattern == kJumpC && m_hitstop > 0) {
                     m_objects[v4].timer--;
                 }
                 if (m_objects[v4].timer >= v54) {
                     m_objects[v4].timer = 0;
                     m_objects[v4].frame++;
-                    m_objects[v4].unk80 = 0;
+                    m_objects[v4].attackResult = 0;
                     if (m_objects[v4].frame >= v58) {
                         RemoveObject(v4);
                     }
                 }
                 break;
-            case 0x1aa:
+            case kObjAir236236B:
                 m_objects[v4].x = x;
                 m_objects[v4].y = y;
                 if (m_objects[v4].frame == 0) {
-                    m_objects[v4].unk84 = 1;
+                    m_objects[v4].hitsLeft = 1;
                 }
                 m_objects[v4].timer++;
                 if (m_objects[v4].timer >= v54) {
                     m_objects[v4].timer = 0;
                     m_objects[v4].frame++;
-                    m_objects[v4].unk80 = 0;
+                    m_objects[v4].attackResult = 0;
                     if (m_objects[v4].frame >= v58) {
                         RemoveObject(v4);
                     }
                 }
                 break;
-            case 0x1ab:
+            case kObj236CFlash:
                 m_objects[v4].timer++;
                 if (m_objects[v4].timer >= v54) {
                     m_objects[v4].timer = 0;
                     m_objects[v4].frame++;
                     if (m_objects[v4].frame == 4) {
-                        l50.type = 0x1ac;
+                        l50.type = kObj236CBeam;
                         l50.x = (double)m_game->m_view.left;
                         l50.y = (double)((int)m_objects[v4].y - 0x3c);
                         l50.scale = 2;
@@ -2354,37 +2354,37 @@ void CKanna::UpdateObjects()
                         l50.facing = 1;
                         SpawnObject(&l50);
                     }
-                    m_objects[v4].unk80 = 0;
+                    m_objects[v4].attackResult = 0;
                     if (m_objects[v4].frame >= v58) {
                         RemoveObject(v4);
                     }
                 }
                 break;
-            case 0x1ac:
+            case kObj236CBeam:
                 m_objects[v4].x = m_game->m_view.left;
                 m_objects[v4].timer++;
                 if (m_objects[v4].timer >= v54) {
                     m_objects[v4].timer = 0;
                     m_objects[v4].frame++;
-                    m_objects[v4].unk80 = 0;
+                    m_objects[v4].attackResult = 0;
                     if (m_objects[v4].frame >= v58) {
                         RemoveObject(v4);
                     }
                 }
                 break;
-            case 0x1ad:
+            case kObj41236CEmitter:
                 m_objects[v4].timer++;
                 if (m_objects[v4].timer >= v54) {
                     m_objects[v4].timer = 0;
                     m_objects[v4].frame++;
                     if (m_objects[v4].frame == 4) {
-                        l50.type = 0x1ae;
+                        l50.type = kObj41236CHoming;
                         l50.x = (double)(int)m_objects[v4].x;
                         l50.y = (double)(int)m_objects[v4].y;
                         l50.scale = 2;
                         l50.layer = 1;
                         l50.facing = m_objects[v4].facing;
-                        l50.unk0 = 1;
+                        l50.keep = 1;
                         SpawnObject(&l50);
                         SpawnObject(&l50);
                         SpawnObject(&l50);
@@ -2392,37 +2392,37 @@ void CKanna::UpdateObjects()
                         SpawnObject(&l50);
                         SpawnObject(&l50);
                     }
-                    m_objects[v4].unk80 = 0;
+                    m_objects[v4].attackResult = 0;
                     if (m_objects[v4].frame >= v58) {
                         RemoveObject(v4);
                     }
                 }
                 break;
-            case 0x1ae:
-                if (unk3154[v4] == 0) {
-                    unk3154[v4]++;
-                    m_objects[v4].unk84 = 1;
-                    if (unk3138 == 0) {
+            case kObj41236CHoming:
+                if (m_objectVar1[v4] == 0) {
+                    m_objectVar1[v4]++;
+                    m_objects[v4].hitsLeft = 1;
+                    if (m_patternVar1 == 0) {
                         m_objects[v4].SetVelocity(-140.0, 3.0);
                     }
-                    if (unk3138 == 1) {
+                    if (m_patternVar1 == 1) {
                         m_objects[v4].SetVelocity(-165.0, 3.0);
                     }
-                    if (unk3138 == 2) {
+                    if (m_patternVar1 == 2) {
                         m_objects[v4].SetVelocity(-170.0, 3.0);
                     }
-                    if (unk3138 == 3) {
+                    if (m_patternVar1 == 3) {
                         m_objects[v4].SetVelocity(140.0, 3.0);
                     }
-                    if (unk3138 == 4) {
+                    if (m_patternVar1 == 4) {
                         m_objects[v4].SetVelocity(165.0, 3.0);
                     }
-                    if (unk3138 == 5) {
+                    if (m_patternVar1 == 5) {
                         m_objects[v4].SetVelocity(170.0, 3.0);
                     }
-                    unk3138++;
-                    if (unk3138 == 6) {
-                        unk3138 = 0;
+                    m_patternVar1++;
+                    if (m_patternVar1 == 6) {
+                        m_patternVar1 = 0;
                     }
                 }
                 m_objects[v4].vx += 0.025;
@@ -2433,7 +2433,7 @@ void CKanna::UpdateObjects()
                     m_objects[v4].vy += 0.015;
                 }
                 if (m_objects[v4].timer == 0) {
-                    l50.type = 0x1af;
+                    l50.type = kObj41236CTrail;
                     l50.x = (double)(int)m_objects[v4].x;
                     l50.y = (double)(int)m_objects[v4].y;
                     l50.scale = 2;
@@ -2441,8 +2441,8 @@ void CKanna::UpdateObjects()
                     l50.facing = m_objects[v4].facing;
                     SpawnObject(&l50);
                 }
-                if (m_objects[v4].x > 900.0 || m_objects[v4].x < -360.0 || m_objects[v4].unk80 > 0) {
-                    m_objects[v4].pattern = 0x1af;
+                if (m_objects[v4].x > 900.0 || m_objects[v4].x < -360.0 || m_objects[v4].attackResult > 0) {
+                    m_objects[v4].pattern = kObj41236CTrail;
                     m_objects[v4].frame = 0;
                     m_objects[v4].timer = 0;
                     break;
@@ -2451,49 +2451,49 @@ void CKanna::UpdateObjects()
                 if (m_objects[v4].timer >= v54) {
                     m_objects[v4].timer = 0;
                     m_objects[v4].frame++;
-                    m_objects[v4].unk80 = 0;
+                    m_objects[v4].attackResult = 0;
                     if (m_objects[v4].frame >= v58) {
                         m_objects[v4].frame = 0;
                     }
                 }
                 break;
-            case 0x1af:
+            case kObj41236CTrail:
                 m_objects[v4].vx = 0.0;
                 m_objects[v4].vy = 0.0;
                 m_objects[v4].timer++;
                 if (m_objects[v4].timer >= v54) {
                     m_objects[v4].timer = 0;
                     m_objects[v4].frame++;
-                    m_objects[v4].unk80 = 0;
+                    m_objects[v4].attackResult = 0;
                     if (m_objects[v4].frame >= v58) {
                         RemoveObject(v4);
                     }
                 }
                 break;
-            case 0x1b0:
-                if (pattern != 0x135) {
+            case kObjLv4Attached3:
+                if (pattern != kLv4) {
                     RemoveObject(v4);
                 }
                 m_objects[v4].x = x;
                 m_objects[v4].y = y;
                 m_objects[v4].timer++;
-                if (pattern == 0x135 && unk14a > 0) {
+                if (pattern == kLv4 && m_hitstop > 0) {
                     m_objects[v4].timer--;
                 }
                 if (m_objects[v4].timer >= v54) {
                     m_objects[v4].timer = 0;
                     m_objects[v4].frame++;
-                    m_objects[v4].unk80 = 0;
+                    m_objects[v4].attackResult = 0;
                     if (m_objects[v4].frame >= v58) {
                         RemoveObject(v4);
                     }
                 }
                 break;
-            case 0x1b1:
-                if (pattern != 0x135) {
+            case kObjLv4Attached4:
+                if (pattern != kLv4) {
                     RemoveObject(v4);
                 }
-                m_objects[v4].unk8c = 0x7530;
+                m_objects[v4].drawnWhileHidden = 0x7530;
                 m_objects[v4].x = x;
                 m_objects[v4].y = y;
                 m_objects[v4].timer++;
@@ -2509,7 +2509,7 @@ void CKanna::UpdateObjects()
                 if (m_objects[v4].timer >= v54) {
                     m_objects[v4].timer = 0;
                     m_objects[v4].frame++;
-                    m_objects[v4].unk80 = 0;
+                    m_objects[v4].attackResult = 0;
                     if (m_objects[v4].frame == 0x50 && frame < 0x37) {
                         m_objects[v4].frame = 0x38;
                     }
@@ -2518,369 +2518,369 @@ void CKanna::UpdateObjects()
                     }
                 }
                 break;
-            case 0x1b2:
-                if (pattern != 0x135) {
+            case kObjLv4Attached1:
+                if (pattern != kLv4) {
                     RemoveObject(v4);
                 }
                 m_objects[v4].x = x;
                 m_objects[v4].y = y;
                 m_objects[v4].timer++;
-                if (pattern == 0x135 && unk14a > 0) {
+                if (pattern == kLv4 && m_hitstop > 0) {
                     m_objects[v4].timer--;
                 }
                 if (m_objects[v4].timer >= v54) {
                     m_objects[v4].timer = 0;
                     m_objects[v4].frame++;
-                    m_objects[v4].unk80 = 0;
+                    m_objects[v4].attackResult = 0;
                     if (m_objects[v4].frame >= v58) {
                         RemoveObject(v4);
                     }
                 }
                 break;
-            case 0x1b3:
-                if (pattern != 0x135) {
+            case kObjLv4Attached2:
+                if (pattern != kLv4) {
                     RemoveObject(v4);
                 }
                 m_objects[v4].x = x;
                 m_objects[v4].y = y;
                 m_objects[v4].timer++;
-                if (pattern == 0x135 && unk14a > 0) {
+                if (pattern == kLv4 && m_hitstop > 0) {
                     m_objects[v4].timer--;
                 }
                 if (m_objects[v4].timer >= v54) {
                     m_objects[v4].timer = 0;
                     m_objects[v4].frame++;
-                    m_objects[v4].unk80 = 0;
+                    m_objects[v4].attackResult = 0;
                     if (m_objects[v4].frame >= v58) {
                         RemoveObject(v4);
                     }
                 }
                 break;
-            case 0x1b4:
-                m_objects[v4].unk8c = 0x7530;
-                if (pattern != 0x135 || frame > 0x35) {
+            case kObjLv4Screen1:
+                m_objects[v4].drawnWhileHidden = 0x7530;
+                if (pattern != kLv4 || frame > 0x35) {
                     RemoveObject(v4);
                 }
                 m_objects[v4].timer++;
                 if (m_objects[v4].timer >= v54) {
                     m_objects[v4].timer = 0;
                     m_objects[v4].frame++;
-                    m_objects[v4].unk80 = 0;
+                    m_objects[v4].attackResult = 0;
                     if (m_objects[v4].frame >= v58) {
                         m_objects[v4].frame = 0;
                     }
                 }
                 break;
-            case 0x1b5:
-                m_objects[v4].unk8c = 0x7530;
-                if (pattern != 0x135 || frame > 0x35) {
+            case kObjLv4Screen2:
+                m_objects[v4].drawnWhileHidden = 0x7530;
+                if (pattern != kLv4 || frame > 0x35) {
                     RemoveObject(v4);
                 }
                 m_objects[v4].timer++;
                 if (m_objects[v4].timer >= v54) {
                     m_objects[v4].timer = 0;
                     m_objects[v4].frame++;
-                    m_objects[v4].unk80 = 0;
+                    m_objects[v4].attackResult = 0;
                     if (m_objects[v4].frame >= v58) {
                         m_objects[v4].frame = 0;
                     }
                 }
                 break;
-            case 0x1b6:
-                m_objects[v4].unk8c = 0x7530;
-                if (pattern != 0x135 || frame > 0x35) {
+            case kObjLv4Screen3:
+                m_objects[v4].drawnWhileHidden = 0x7530;
+                if (pattern != kLv4 || frame > 0x35) {
                     RemoveObject(v4);
                 }
                 m_objects[v4].timer++;
                 if (m_objects[v4].timer >= v54) {
                     m_objects[v4].timer = 0;
                     m_objects[v4].frame++;
-                    m_objects[v4].unk80 = 0;
+                    m_objects[v4].attackResult = 0;
                     if (m_objects[v4].frame >= v58) {
                         m_objects[v4].frame = 0;
                     }
                 }
                 break;
-            case 0x1b7:
-                if (pattern != 0x135 || frame > 0x36) {
+            case kObjLv4Sky:
+                if (pattern != kLv4 || frame > 0x36) {
                     RemoveObject(v4);
                 }
-                unk3154[v4]++;
-                if (unk3154[v4] == 0x96) {
-                    l50.type = 0x1ba;
+                m_objectVar1[v4]++;
+                if (m_objectVar1[v4] == 0x96) {
+                    l50.type = kObjLv4Sky1;
                     l50.x = m_objects[v4].x;
                     l50.y = m_objects[v4].y;
                     l50.scale = 2;
                     l50.layer = 1;
-                    l50.unk0 = 1;
+                    l50.keep = 1;
                     l50.facing = 1;
-                    l50.unk30 = 1;
+                    l50.movesInFreeze = 1;
                     SpawnObject(&l50);
                 }
-                if (unk3154[v4] == 0xd2) {
-                    l50.type = 0x1bb;
+                if (m_objectVar1[v4] == 0xd2) {
+                    l50.type = kObjLv4Sky2;
                     l50.x = m_objects[v4].x;
                     l50.y = m_objects[v4].y;
                     l50.scale = 2;
                     l50.layer = 1;
-                    l50.unk0 = 1;
+                    l50.keep = 1;
                     l50.facing = 1;
-                    l50.unk30 = 1;
+                    l50.movesInFreeze = 1;
                     SpawnObject(&l50);
                 }
-                if (unk3154[v4] == 0x10e) {
-                    l50.type = 0x1bc;
+                if (m_objectVar1[v4] == 0x10e) {
+                    l50.type = kObjLv4Sky3;
                     l50.x = m_objects[v4].x;
                     l50.y = m_objects[v4].y;
                     l50.scale = 2;
                     l50.layer = 1;
-                    l50.unk0 = 1;
+                    l50.keep = 1;
                     l50.facing = 1;
-                    l50.unk30 = 1;
+                    l50.movesInFreeze = 1;
                     SpawnObject(&l50);
                 }
-                if (unk3154[v4] == 0x12c) {
-                    l50.type = 0x1bd;
+                if (m_objectVar1[v4] == 0x12c) {
+                    l50.type = kObjLv4Sky4;
                     l50.x = m_objects[v4].x;
                     l50.y = m_objects[v4].y;
                     l50.scale = 2;
                     l50.layer = 1;
-                    l50.unk0 = 1;
+                    l50.keep = 1;
                     l50.facing = 1;
-                    l50.unk30 = 1;
+                    l50.movesInFreeze = 1;
                     SpawnObject(&l50);
                 }
-                if (unk3154[v4] == 0x14a) {
-                    l50.type = 0x1be;
+                if (m_objectVar1[v4] == 0x14a) {
+                    l50.type = kObjLv4Sky5;
                     l50.x = m_objects[v4].x;
                     l50.y = m_objects[v4].y;
                     l50.scale = 2;
                     l50.layer = 1;
-                    l50.unk0 = 1;
+                    l50.keep = 1;
                     l50.facing = 1;
-                    l50.unk30 = 1;
+                    l50.movesInFreeze = 1;
                     SpawnObject(&l50);
                 }
-                if (unk3154[v4] == 0x153) {
-                    l50.type = 0x1bf;
+                if (m_objectVar1[v4] == 0x153) {
+                    l50.type = kObjLv4Sky6;
                     l50.x = m_objects[v4].x;
                     l50.y = m_objects[v4].y;
                     l50.scale = 2;
                     l50.layer = 1;
-                    l50.unk0 = 1;
+                    l50.keep = 1;
                     l50.facing = 1;
-                    l50.unk30 = 1;
+                    l50.movesInFreeze = 1;
                     SpawnObject(&l50);
                 }
                 m_objects[v4].timer++;
                 if (m_objects[v4].timer >= v54) {
                     m_objects[v4].timer = 0;
                     m_objects[v4].frame++;
-                    m_objects[v4].unk80 = 0;
+                    m_objects[v4].attackResult = 0;
                     if (m_objects[v4].frame >= v58) {
                         m_objects[v4].frame = 0;
                     }
                 }
                 break;
-            case 0x1b8:
+            case kObjLv4Rise:
                 m_objects[v4].timer++;
                 if (m_objects[v4].timer >= v54) {
                     m_objects[v4].timer = 0;
                     m_objects[v4].frame++;
-                    m_objects[v4].unk80 = 0;
+                    m_objects[v4].attackResult = 0;
                     if (m_objects[v4].frame >= v58) {
                         RemoveObject(v4);
                     }
                 }
                 break;
-            case 0x1b9:
+            case kObj623Effect:
                 m_objects[v4].timer++;
                 if (m_objects[v4].timer >= v54) {
                     m_objects[v4].timer = 0;
                     m_objects[v4].frame++;
-                    m_objects[v4].unk80 = 0;
+                    m_objects[v4].attackResult = 0;
                     if (m_objects[v4].frame >= v58) {
                         RemoveObject(v4);
                     }
                 }
                 break;
-            case 0x1ba:
-                if (pattern != 0x135 || frame > 0x36) {
+            case kObjLv4Sky1:
+                if (pattern != kLv4 || frame > 0x36) {
                     RemoveObject(v4);
                 }
                 m_objects[v4].timer++;
                 if (m_objects[v4].timer >= v54) {
                     m_objects[v4].timer = 0;
                     m_objects[v4].frame++;
-                    m_objects[v4].unk80 = 0;
+                    m_objects[v4].attackResult = 0;
                     if (m_objects[v4].frame >= v58) {
                         m_objects[v4].frame = m_objects[v4].frame - 2;
                     }
                 }
                 break;
-            case 0x1bb:
-                if (pattern != 0x135 || frame > 0x36) {
+            case kObjLv4Sky2:
+                if (pattern != kLv4 || frame > 0x36) {
                     RemoveObject(v4);
                 }
                 m_objects[v4].timer++;
                 if (m_objects[v4].timer >= v54) {
                     m_objects[v4].timer = 0;
                     m_objects[v4].frame++;
-                    m_objects[v4].unk80 = 0;
+                    m_objects[v4].attackResult = 0;
                     if (m_objects[v4].frame >= v58) {
                         m_objects[v4].frame = m_objects[v4].frame - 2;
                     }
                 }
                 break;
-            case 0x1bc:
-                if (pattern != 0x135 || frame > 0x36) {
+            case kObjLv4Sky3:
+                if (pattern != kLv4 || frame > 0x36) {
                     RemoveObject(v4);
                 }
                 m_objects[v4].timer++;
                 if (m_objects[v4].timer >= v54) {
                     m_objects[v4].timer = 0;
                     m_objects[v4].frame++;
-                    m_objects[v4].unk80 = 0;
+                    m_objects[v4].attackResult = 0;
                     if (m_objects[v4].frame >= v58) {
                         m_objects[v4].frame = m_objects[v4].frame - 2;
                     }
                 }
                 break;
-            case 0x1bd:
-                if (pattern != 0x135 || frame > 0x36) {
+            case kObjLv4Sky4:
+                if (pattern != kLv4 || frame > 0x36) {
                     RemoveObject(v4);
                 }
                 m_objects[v4].timer++;
                 if (m_objects[v4].timer >= v54) {
                     m_objects[v4].timer = 0;
                     m_objects[v4].frame++;
-                    m_objects[v4].unk80 = 0;
+                    m_objects[v4].attackResult = 0;
                     if (m_objects[v4].frame >= v58) {
                         m_objects[v4].frame = m_objects[v4].frame - 2;
                     }
                 }
                 break;
-            case 0x1be:
-                if (pattern != 0x135 || frame > 0x36) {
+            case kObjLv4Sky5:
+                if (pattern != kLv4 || frame > 0x36) {
                     RemoveObject(v4);
                 }
                 m_objects[v4].timer++;
                 if (m_objects[v4].timer >= v54) {
                     m_objects[v4].timer = 0;
                     m_objects[v4].frame++;
-                    m_objects[v4].unk80 = 0;
+                    m_objects[v4].attackResult = 0;
                     if (m_objects[v4].frame >= v58) {
                         m_objects[v4].frame = m_objects[v4].frame - 2;
                     }
                 }
                 break;
-            case 0x1bf:
-                if (pattern != 0x135 || frame > 0x36) {
+            case kObjLv4Sky6:
+                if (pattern != kLv4 || frame > 0x36) {
                     RemoveObject(v4);
                 }
                 m_objects[v4].timer++;
                 if (m_objects[v4].timer >= v54) {
                     m_objects[v4].timer = 0;
                     m_objects[v4].frame++;
-                    m_objects[v4].unk80 = 0;
+                    m_objects[v4].attackResult = 0;
                     if (m_objects[v4].frame >= v58) {
                         m_objects[v4].frame = m_objects[v4].frame - 2;
                     }
                 }
                 break;
-            case 0x1c0:
+            case kObjLv4RiseSide:
                 m_objects[v4].timer++;
                 if (m_objects[v4].timer >= v54) {
                     m_objects[v4].timer = 0;
                     m_objects[v4].frame++;
-                    m_objects[v4].unk80 = 0;
+                    m_objects[v4].attackResult = 0;
                     if (m_objects[v4].frame >= v58) {
                         RemoveObject(v4);
                     }
                 }
                 break;
-            case 0x1ef:
+            case kObjFallInDarkness:
                 m_objects[v4].vx = -0.02;
-                m_objects[v4].unk8c = 0x7530;
+                m_objects[v4].drawnWhileHidden = 0x7530;
                 m_objects[v4].timer++;
-                if (pattern != 0x57) {
+                if (pattern != kFallInDarkness) {
                     RemoveObject(v4);
                 }
                 if (m_objects[v4].timer >= v54) {
                     m_objects[v4].timer = 0;
                     m_objects[v4].frame++;
-                    m_objects[v4].unk80 = 0;
+                    m_objects[v4].attackResult = 0;
                     if (m_objects[v4].frame >= v58) {
                         m_objects[v4].frame = 0;
                     }
                 }
                 break;
-            case 0x1f0:
-                if (pattern != 0x53 && pattern != 0x54 && pattern != 0x55 && pattern != 0x56 || pattern == 0x53 && frame > 1 || pattern == 0x54 && frame > 1) {
-                    l50.type = 0x1f1;
+            case kObjEncasedBreak:
+                if (pattern != kEncased && pattern != kEncased2 && pattern != kEncasedAir && pattern != kEncasedSpin || pattern == kEncased && frame > 1 || pattern == kEncased2 && frame > 1) {
+                    l50.type = kObjShardSmall;
                     l50.x = (double)((int)x + facing * 0x17);
                     l50.y = (double)((int)y - 4);
                     l50.scale = 0;
                     l50.layer = 1;
                     l50.facing = facing;
                     SpawnObject(&l50);
-                    l50.type = 0x1f1;
+                    l50.type = kObjShardSmall;
                     l50.x = (double)((int)x - (facing << 2));
                     l50.y = (double)((int)y - 6);
                     l50.scale = 0;
                     l50.layer = 1;
                     l50.facing = facing;
                     SpawnObject(&l50);
-                    l50.type = 0x1f1;
+                    l50.type = kObjShardSmall;
                     l50.x = (double)((int)x - facing * 0xe);
                     l50.y = (double)((int)y - 0x1a);
                     l50.scale = 0;
                     l50.layer = 1;
                     l50.facing = facing;
                     SpawnObject(&l50);
-                    l50.type = 0x1f1;
+                    l50.type = kObjShardSmall;
                     l50.x = (double)(int)x;
                     l50.y = (double)(int)y;
                     l50.scale = 0;
                     l50.layer = 1;
                     l50.facing = facing;
                     SpawnObject(&l50);
-                    l50.type = 0x1f1;
+                    l50.type = kObjShardSmall;
                     l50.x = (double)((int)x + facing * 0x1e);
                     l50.y = (double)((int)y - 0x28);
                     l50.scale = 0;
                     l50.layer = 1;
                     l50.facing = facing;
                     SpawnObject(&l50);
-                    l50.type = 0x1f1;
+                    l50.type = kObjShardSmall;
                     l50.x = (double)((int)x - facing * 0x19);
                     l50.y = (double)((int)y - 0x50);
                     l50.scale = 0;
                     l50.layer = 1;
                     l50.facing = facing;
                     SpawnObject(&l50);
-                    l50.type = 0x1f2;
+                    l50.type = kObjShardLarge;
                     l50.x = (double)((int)x - facing * 0x23);
                     l50.y = (double)((int)y - 0x2a);
                     l50.scale = 0;
                     l50.layer = 1;
                     l50.facing = facing;
                     SpawnObject(&l50);
-                    l50.type = 0x1f2;
+                    l50.type = kObjShardLarge;
                     l50.x = (double)((int)x - facing * 0x12);
                     l50.y = (double)((int)y - 0x14);
                     l50.scale = 0;
                     l50.layer = 1;
                     l50.facing = facing;
                     SpawnObject(&l50);
-                    l50.type = 0x1f2;
+                    l50.type = kObjShardLarge;
                     l50.x = (double)((int)x + facing * 2);
                     l50.y = (double)((int)y - 0x41);
                     l50.scale = 0;
                     l50.layer = 1;
                     l50.facing = facing;
                     SpawnObject(&l50);
-                    l50.type = 0x1f2;
+                    l50.type = kObjShardLarge;
                     l50.x = (double)((int)x + (facing << 4));
                     l50.y = (double)((int)y - 0x50);
                     l50.scale = 0;
@@ -2889,23 +2889,23 @@ void CKanna::UpdateObjects()
                     SpawnObject(&l50);
                     m_playSound = 0x22;
                     RemoveObject(v4);
-                    unk3144 = 0;
+                    m_encasedBreakOut = 0;
                     break;
                 }
                 m_objects[v4].timer++;
                 if (m_objects[v4].timer >= v54) {
                     m_objects[v4].timer = 0;
                     m_objects[v4].frame++;
-                    m_objects[v4].unk80 = 0;
+                    m_objects[v4].attackResult = 0;
                     if (m_objects[v4].frame >= v58) {
                         m_objects[v4].frame = 0;
                     }
                 }
                 break;
-            case 0x1f1:
-                if (m_objects[v4].frame == 0 && m_objects[v4].timer == 0 && unk3154[v4] == 0) {
-                    unk3254[v4] = (rand() > 0x3e80) * 0x28 + 0x50 + (rand() > 0x3e80) * 0x14;
-                    unk3154[v4]++;
+            case kObjShardSmall:
+                if (m_objects[v4].frame == 0 && m_objects[v4].timer == 0 && m_objectVar1[v4] == 0) {
+                    m_objectVar2[v4] = (rand() > 0x3e80) * 0x28 + 0x50 + (rand() > 0x3e80) * 0x14;
+                    m_objectVar1[v4]++;
                     m_objects[v4].vx = (rand() > 0x3e80) * 1.2 + (rand() > 0x3e80) * 0.7 + (rand() > 0x3e80) * 1.7 + -1.8;
                     m_objects[v4].vy = -1.2 - ((rand() > 0x3e80) * 0.6 + (rand() > 0x3e80) * 0.9 + (rand() > 0x3e80) * 1.4);
                 }
@@ -2913,28 +2913,28 @@ void CKanna::UpdateObjects()
                 if (m_objects[v4].y > 0.0 && m_objects[v4].vy > 0.0) {
                     m_objects[v4].vy = -m_objects[v4].vy;
                 }
-                if (unk3254[v4] < 0xa) {
+                if (m_objectVar2[v4] < 0xa) {
                     m_objects[v4].scale = 1;
                 }
-                if (unk3254[v4] < 0) {
+                if (m_objectVar2[v4] < 0) {
                     RemoveObject(v4);
                     break;
                 }
                 m_objects[v4].timer++;
-                unk3254[v4]--;
+                m_objectVar2[v4]--;
                 if (m_objects[v4].timer >= v54) {
                     m_objects[v4].timer = 0;
                     m_objects[v4].frame++;
-                    m_objects[v4].unk80 = 0;
+                    m_objects[v4].attackResult = 0;
                     if (m_objects[v4].frame >= v58) {
                         m_objects[v4].frame = 0;
                     }
                 }
                 break;
-            case 0x1f2:
-                if (m_objects[v4].frame == 0 && m_objects[v4].timer == 0 && unk3154[v4] == 0) {
-                    unk3254[v4] = (rand() > 0x3e80) * 0x3c + 0x78 + (rand() > 0x3e80) * 0x28;
-                    unk3154[v4]++;
+            case kObjShardLarge:
+                if (m_objects[v4].frame == 0 && m_objects[v4].timer == 0 && m_objectVar1[v4] == 0) {
+                    m_objectVar2[v4] = (rand() > 0x3e80) * 0x3c + 0x78 + (rand() > 0x3e80) * 0x28;
+                    m_objectVar1[v4]++;
                     m_objects[v4].vx = (double)(rand() > 0x3e80) + (rand() > 0x3e80) * 0.5 + (rand() > 0x3e80) * 1.5 + -1.5;
                     m_objects[v4].vy = -1.0 - ((rand() > 0x3e80) * 0.5 + (rand() > 0x3e80) * 0.8 + (rand() > 0x3e80) * 1.2);
                 }
@@ -2942,32 +2942,32 @@ void CKanna::UpdateObjects()
                 if (m_objects[v4].y > 0.0 && m_objects[v4].vy > 0.0) {
                     m_objects[v4].vy = -m_objects[v4].vy;
                 }
-                if (unk3254[v4] < 0xa) {
+                if (m_objectVar2[v4] < 0xa) {
                     m_objects[v4].scale = 1;
                 }
-                if (unk3254[v4] < 0) {
+                if (m_objectVar2[v4] < 0) {
                     RemoveObject(v4);
                     break;
                 }
                 m_objects[v4].timer++;
-                unk3254[v4]--;
+                m_objectVar2[v4]--;
                 if (m_objects[v4].timer >= v54) {
                     m_objects[v4].timer = 0;
                     m_objects[v4].frame++;
-                    m_objects[v4].unk80 = 0;
+                    m_objects[v4].attackResult = 0;
                     if (m_objects[v4].frame >= v58) {
                         m_objects[v4].frame = 0;
                     }
                 }
                 break;
-            case 0x1f3:
+            case kObjBurnFlames:
                 m_objects[v4].x = x;
                 m_objects[v4].y = y;
                 m_objects[v4].timer++;
                 if (m_objects[v4].timer >= v54) {
                     m_objects[v4].timer = 0;
                     m_objects[v4].frame++;
-                    m_objects[v4].unk80 = 0;
+                    m_objects[v4].attackResult = 0;
                     if (m_objects[v4].frame >= v58) {
                         RemoveObject(v4);
                     }

@@ -21,33 +21,33 @@ CGame::CGame(CGraphics* graphics, CInput* input, CSound* sound)
     m_graphics = graphics;
     m_input = input;
     m_sound = sound;
-    unkf32 = 0;
+    m_stage = 0;
     m_effectTail = 0;
     m_effectHead = 0;
     for (i = 0; i < 0x41; i++)
         m_sounds[i] = 0x96;
     m_music = 0x96;
     m_objectSurface = NULL;
-    unke98 = NULL;
-    unke9c = NULL;
+    m_stageSurface = NULL;
+    m_stageNegative = NULL;
     for (i = 0; i < 0x398; i++)
         m_surfaces[i] = NULL;
     m_background = NULL;
     m_effectAnims = NULL;
-    unk1374 = ReadConfigByte(0x21) > 0;
-    if (unk1374) {
-        unk1365 = ReadConfigByte(0x21);
-        unk136c = ReadConfigByte(0x22) - 1;
-        unk1366 = ReadConfigByte(0x23) - 1;
-        unk1370 = ReadConfigByte(0x24);
-        unk134f = ReadConfigByte(0x26);
+    m_hasConfig = ReadConfigByte(0x21) > 0;
+    if (m_hasConfig) {
+        m_cpuLevel = ReadConfigByte(0x21);
+        m_drawEveryFrame = ReadConfigByte(0x22) - 1;
+        m_fullEffects = ReadConfigByte(0x23) - 1;
+        m_damageLevel = ReadConfigByte(0x24);
+        m_roundsSetting = ReadConfigByte(0x26);
         unk1345 = 0;
     } else {
-        unk1365 = 2;
-        unk136c = 1;
-        unk1366 = 1;
-        unk1370 = 2;
-        unk134f = 2;
+        m_cpuLevel = 2;
+        m_drawEveryFrame = 1;
+        m_fullEffects = 1;
+        m_damageLevel = 2;
+        m_roundsSetting = 2;
         unk1345 = 0;
     }
     CheckExtraChars();
@@ -64,13 +64,13 @@ CGame::~CGame()
             m_surfaces[i] = NULL;
         }
     }
-    if (unke98) {
-        unke98->Release();
-        unke98 = NULL;
+    if (m_stageSurface) {
+        m_stageSurface->Release();
+        m_stageSurface = NULL;
     }
-    if (unke9c) {
-        unke9c->Release();
-        unke9c = NULL;
+    if (m_stageNegative) {
+        m_stageNegative->Release();
+        m_stageNegative = NULL;
     }
     if (m_objectSurface) {
         m_objectSurface->Release();
@@ -101,22 +101,22 @@ void CGame::Reset()
     m_shakeY = 0;
     m_shakeAngleX = 0.0;
     m_shakeAngleY = 0.0;
-    unk1427c = 0;
-    unk1346 = 0;
-    unk1348 = 0;
+    m_speedRequested = 0;
+    m_dummyStance = 0;
+    m_dummyGuard = 0;
     m_fade = 0.0;
     m_fadeHold = 0;
     m_fadeIn = 0;
     m_fadeOut = 0;
     m_fadeDir = 0;
-    unk14278 = 0;
-    unk1420e = 0;
-    unk1420c = 0;
+    m_negativeTime = 0;
+    m_hideObjectsTime = 0;
+    m_hideHudTime = 0;
     m_musicStep = 0;
     m_musicVolume = 0;
-    unk134d = 1;
-    unk1350 = 1;
-    unk1354 = 0;
+    m_round = 1;
+    m_intro = 1;
+    m_roundOver = 0;
 }
 
 void CGame::UpdateInput()
@@ -349,17 +349,17 @@ void CGame::LoadEffectAnims()
 void CGame::CreateEffect(EffectDesc* desc)
 {
     m_effectActive[m_effectHead] = 1;
-    m_effectUnk1d84[m_effectHead] = desc->unk0;
+    m_effectKeep[m_effectHead] = desc->keep;
     m_effectUnk2784[m_effectHead] = 0;
     m_effects[m_effectHead].type = desc->type;
     m_effects[m_effectHead].frame = 0;
     m_effects[m_effectHead].timer = 0;
     m_effects[m_effectHead].x = desc->x;
     m_effects[m_effectHead].y = desc->y;
-    m_effects[m_effectHead].unk48 = desc->facing;
+    m_effects[m_effectHead].facing = desc->facing;
     m_effects[m_effectHead].side = desc->side;
     m_effects[m_effectHead].scale = desc->scale;
-    m_effects[m_effectHead].unk6c = desc->unk2c;
+    m_effects[m_effectHead].sound = desc->sound;
     m_effects[m_effectHead].screen = desc->screen;
     m_effects[m_effectHead].layer = desc->layer;
     AdvanceEffectHead();
@@ -368,10 +368,10 @@ void CGame::CreateEffect(EffectDesc* desc)
 void CGame::RemoveEffect(short index)
 {
     m_effectActive[index] = 0;
-    m_effectUnk1d84[index] = 0;
+    m_effectKeep[index] = 0;
     if (index == m_effectTail) {
         while (m_effectTail != m_effectHead && !m_effectActive[m_effectTail]) {
-            m_effectUnk1d84[m_effectTail] = 0;
+            m_effectKeep[m_effectTail] = 0;
             m_effectTail++;
             if (m_effectTail >= 0x280)
                 m_effectTail = 0;
@@ -393,14 +393,14 @@ void CGame::AdvanceEffectHead()
             if (m_effectTail >= 0x280)
                 m_effectTail = 0;
             while (m_effectTail != m_effectHead && !m_effectActive[m_effectTail]) {
-                m_effectUnk1d84[m_effectTail] = 0;
+                m_effectKeep[m_effectTail] = 0;
                 m_effectTail++;
                 if (m_effectTail >= 0x280)
                     m_effectTail = 0;
             }
         }
         n++;
-    } while (m_effectUnk1d84[m_effectHead] && n < 0x280);
+    } while (m_effectKeep[m_effectHead] && n < 0x280);
 }
 
 void CGame::RemoveEffectsOfType(int type)
@@ -423,7 +423,7 @@ void CGame::ClearEffects()
 
     for (i = 0; i < 0x280; i++) {
         m_effectActive[i] = 0;
-        m_effectUnk1d84[i] = 0;
+        m_effectKeep[i] = 0;
     }
 }
 
@@ -482,14 +482,14 @@ void CGame::DrawEffects(int x, int y, BYTE layer)
 
 void CGame::UpdateTimers()
 {
-    if (unk1420e > 0)
-        unk1420e--;
-    if (unk1420e < 0)
-        unk1420e = 0;
-    if (unk1420c > 0)
-        unk1420c--;
-    if (unk1420c < 0)
-        unk1420c = 0;
+    if (m_hideObjectsTime > 0)
+        m_hideObjectsTime--;
+    if (m_hideObjectsTime < 0)
+        m_hideObjectsTime = 0;
+    if (m_hideHudTime > 0)
+        m_hideHudTime--;
+    if (m_hideHudTime < 0)
+        m_hideHudTime = 0;
     if (m_musicStep > 0) {
         if (m_musicTarget > m_musicVolume) {
             m_musicVolume += m_musicStep;
@@ -531,10 +531,10 @@ void CGame::UpdateShake()
     }
 }
 
-void CGame::Unk407ce0(BYTE value)
+void CGame::SetGameSpeed(BYTE value)
 {
-    unk1427c = 1;
-    unk14280 = value;
+    m_speedRequested = 1;
+    m_requestedSpeed = value;
 }
 
 void CGame::UpdateFade()
@@ -594,11 +594,11 @@ void CGame::FlashBlack(int in, int hold, int out)
     m_fadeOut = out;
 }
 
-void CGame::Unk4080c0(int value)
+void CGame::FlashNegative(int value)
 {
-    unk14278 = value;
-    if (unk136c == 0)
-        unk14278 = unk14278 / 2;
+    m_negativeTime = value;
+    if (m_drawEveryFrame == 0)
+        m_negativeTime = m_negativeTime / 2;
 }
 
 void CGame::CheckExtraChars()

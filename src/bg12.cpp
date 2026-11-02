@@ -21,7 +21,7 @@ CBg12::CBg12(CGraphics* p1)
     m_objects = TOPTR(BgObject*, xc);
     m_anims = new EffectAnim[2];
     CAnimBg::Load();
-    CAnimBg::Unk751030();
+    CAnimBg::LoadAnims();
     v4 = 0;
     for (; v4 < 2; v4++) {
         m_objects[v4].pattern = v4;
@@ -51,7 +51,7 @@ CBg12::~CBg12()
     delete m_anims;
 }
 
-void CBg12::Vf0()
+void CBg12::Update()
 {
     short xc;
     short v8;
@@ -62,12 +62,12 @@ void CBg12::Vf0()
         v8 = (short)m_anims[m_objects[v4].pattern].frames[m_objects[v4].frame].duration;
         xc = m_anims[m_objects[v4].pattern].frameCount;
         switch (m_objects[v4].pattern) {
-        case 0:
+        case kStand:
             m_objects[v4].x += 0.5;
             if (m_objects[v4].x >= 640.0) {
                 m_objects[v4].x = 0.0;
             }
-        case 1:
+        case kWalkForward:
             m_objects[v4].x += 0.25;
             if (m_objects[v4].x >= 640.0) {
                 m_objects[v4].x = 0.0;
@@ -76,7 +76,7 @@ void CBg12::Vf0()
     }
 }
 
-void CBg12::Vf1(int p1, int p2, char p3)
+void CBg12::Draw(int p1, int p2, char p3)
 {
     int l40;
     RECT v3c;

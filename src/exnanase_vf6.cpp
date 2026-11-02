@@ -11,7 +11,7 @@ void CEXNanase::UpdatePattern()
     WORD x8;
     WORD l4;
 
-    if (unk14a > 0 || (*m_opponent)->unk14c > 0) {
+    if (m_hitstop > 0 || (*m_opponent)->m_freezeTime > 0) {
         return;
     }
     EffectDesc l50;
@@ -22,9 +22,9 @@ void CEXNanase::UpdatePattern()
     default:
         vx = 0.0;
         vy = 0.0;
-        unk158 = 0;
+        m_dashMomentum = 0;
         timer++;
-        if (timer >= l4 - ((unk3454 == 1) << 1)) {
+        if (timer >= l4 - ((m_awakened == 1) << 1)) {
             timer = 0;
             frame++;
             if (frame >= x8) {
@@ -32,12 +32,12 @@ void CEXNanase::UpdatePattern()
             }
         }
         break;
-    case 1:
-        unk158 = 0;
-        vx = (unk3454 == 1) * 0.15 + 0.9;
+    case kWalkForward:
+        m_dashMomentum = 0;
+        vx = (m_awakened == 1) * 0.15 + 0.9;
         vy = 0.0;
         timer++;
-        if (timer >= l4 - ((unk3454 == 1) << 1)) {
+        if (timer >= l4 - ((m_awakened == 1) << 1)) {
             timer = 0;
             frame++;
             if (frame >= x8) {
@@ -45,12 +45,12 @@ void CEXNanase::UpdatePattern()
             }
         }
         break;
-    case 2:
-        unk158 = 0;
-        vx = -0.9 - (unk3454 == 1) * 0.15;
+    case kWalkBack:
+        m_dashMomentum = 0;
+        vx = -0.9 - (m_awakened == 1) * 0.15;
         vy = 0.0;
         timer++;
-        if (timer >= l4 - ((unk3454 == 1) << 1)) {
+        if (timer >= l4 - ((m_awakened == 1) << 1)) {
             timer = 0;
             frame++;
             if (frame >= x8) {
@@ -58,13 +58,13 @@ void CEXNanase::UpdatePattern()
             }
         }
         break;
-    case 3:
+    case kCrouch:
         vx = 0.0;
         vy = 0.0;
-        unk158 = 0;
+        m_dashMomentum = 0;
         FaceOpponent();
         timer++;
-        if (timer >= l4 - ((unk3454 == 1) << 1)) {
+        if (timer >= l4 - ((m_awakened == 1) << 1)) {
             timer = 0;
             frame++;
             if (frame >= x8) {
@@ -72,30 +72,30 @@ void CEXNanase::UpdatePattern()
             }
         }
         break;
-    case 4:
+    case kJump:
         if (frame == 0 && timer == 0) {
-            if (unk158 == 0) {
+            if (m_dashMomentum == 0) {
                 FaceOpponent();
             }
             vx = 0.0;
         }
         if (frame == 2 && timer == 0) {
-            ay = (unk3454 == 1) * 0.015 + 0.045;
-            vy = -2.7 - (unk3454 == 1) * 0.6;
-            if (unk158 == 1) {
+            ay = (m_awakened == 1) * 0.015 + 0.045;
+            vy = -2.7 - (m_awakened == 1) * 0.6;
+            if (m_dashMomentum == 1) {
                 vx = 0.4;
-                unk158 = 0;
+                m_dashMomentum = 0;
             }
         }
         if (frame > 2) {
             vy = vy + ay;
         }
         timer++;
-        if (timer >= l4 - ((unk3454 == 1) << 1)) {
+        if (timer >= l4 - ((m_awakened == 1) << 1)) {
             timer = 0;
             frame++;
             if (frame >= x8) {
-                pattern = 9;
+                pattern = kFall;
                 StartPattern();
             }
         }
@@ -103,35 +103,35 @@ void CEXNanase::UpdatePattern()
             y = 0.0;
             m_playSound = 9;
             FaceOpponent();
-            pattern = 0xd;
+            pattern = kLand;
             StartPattern();
         }
         break;
-    case 5:
+    case kJumpForward:
         if (frame == 0 && timer == 0) {
-            if (unk158 == 0) {
+            if (m_dashMomentum == 0) {
                 FaceOpponent();
             }
             vx = 0.0;
         }
         if (frame == 2 && timer == 0) {
-            ay = (unk3454 == 1) * 0.015 + 0.045;
-            vy = -2.7 - (unk3454 == 1) * 0.6;
-            vx = (unk3454 == 1) * 0.1 + 0.8;
-            if (unk158 == 1) {
+            ay = (m_awakened == 1) * 0.015 + 0.045;
+            vy = -2.7 - (m_awakened == 1) * 0.6;
+            vx = (m_awakened == 1) * 0.1 + 0.8;
+            if (m_dashMomentum == 1) {
                 vx = 1.2;
-                unk158 = 0;
+                m_dashMomentum = 0;
             }
         }
         if (frame > 2) {
             vy = vy + ay;
         }
         timer++;
-        if (timer >= l4 - ((unk3454 == 1) << 1)) {
+        if (timer >= l4 - ((m_awakened == 1) << 1)) {
             timer = 0;
             frame++;
             if (frame >= x8) {
-                pattern = 9;
+                pattern = kFall;
                 StartPattern();
             }
         }
@@ -139,31 +139,31 @@ void CEXNanase::UpdatePattern()
             y = 0.0;
             m_playSound = 9;
             FaceOpponent();
-            pattern = 0xd;
+            pattern = kLand;
             StartPattern();
         }
         break;
-    case 6:
+    case kJumpBack:
         if (frame == 0 && timer == 0) {
-            if (unk158 == 0) {
+            if (m_dashMomentum == 0) {
                 FaceOpponent();
             }
             vx = 0.0;
         }
         if (frame == 2 && timer == 0) {
-            ay = (unk3454 == 1) * 0.015 + 0.045;
-            vy = -2.7 - (unk3454 == 1) * 0.6;
-            vx = -0.8 - (unk3454 == 1) * 0.1;
+            ay = (m_awakened == 1) * 0.015 + 0.045;
+            vy = -2.7 - (m_awakened == 1) * 0.6;
+            vx = -0.8 - (m_awakened == 1) * 0.1;
         }
         if (frame > 2) {
             vy = vy + ay;
         }
         timer++;
-        if (timer >= l4 - ((unk3454 == 1) << 1)) {
+        if (timer >= l4 - ((m_awakened == 1) << 1)) {
             timer = 0;
             frame++;
             if (frame >= x8) {
-                pattern = 9;
+                pattern = kFall;
                 StartPattern();
             }
         }
@@ -171,43 +171,43 @@ void CEXNanase::UpdatePattern()
             y = 0.0;
             m_playSound = 9;
             FaceOpponent();
-            pattern = 0xd;
+            pattern = kLand;
             StartPattern();
         }
         break;
-    case 7:
+    case kStandUp:
         vx = 0.0;
         vy = 0.0;
-        unk158 = 0;
+        m_dashMomentum = 0;
         FaceOpponent();
         timer++;
         if (timer >= l4) {
             timer = 0;
             frame++;
             if (frame >= x8) {
-                pattern = 0;
+                pattern = kStand;
                 StartPattern();
             }
         }
         break;
-    case 8:
+    case kCrouchDown:
         vx = 0.0;
         vy = 0.0;
-        unk158 = 0;
+        m_dashMomentum = 0;
         FaceOpponent();
         timer++;
         if (timer >= l4) {
             timer = 0;
             frame++;
             if (frame >= x8) {
-                pattern = 3;
+                pattern = kCrouch;
                 StartPattern();
             }
         }
         break;
-    case 9:
+    case kFall:
         vy = vy + ay;
-        unk158 = 0;
+        m_dashMomentum = 0;
         timer++;
         if (timer >= l4) {
             timer = 0;
@@ -219,42 +219,42 @@ void CEXNanase::UpdatePattern()
         if (y + vy >= 0.0) {
             y = 0.0;
             m_playSound = 9;
-            pattern = 0xd;
+            pattern = kLand;
             StartPattern();
         }
         break;
-    case 0xd:
+    case kLand:
         vx = 0.0;
         vy = 0.0;
-        unk158 = 0;
+        m_dashMomentum = 0;
         FaceOpponent();
         timer++;
         if (timer >= l4) {
             timer = 0;
             frame++;
             if (frame >= x8) {
-                pattern = 0;
+                pattern = kStand;
                 if (m_inputY == 1) {
-                    pattern = 3;
+                    pattern = kCrouch;
                 }
                 StartPattern();
             }
         }
         break;
-    case 0xe:
-        ay = (unk3454 == 1) * 0.015 + 0.045;
+    case kAirJump:
+        ay = (m_awakened == 1) * 0.015 + 0.045;
         if (frame == 0 && timer == 0) {
-            vy = -2.7 - (unk3454 == 1) * 0.6;
+            vy = -2.7 - (m_awakened == 1) * 0.6;
             vx = 0.0;
-            unk158 = 0;
+            m_dashMomentum = 0;
         }
         vy = vy + ay;
         timer++;
-        if (timer >= l4 - ((unk3454 == 1) << 1)) {
+        if (timer >= l4 - ((m_awakened == 1) << 1)) {
             timer = 0;
             frame++;
             if (frame >= x8) {
-                pattern = 9;
+                pattern = kFall;
                 StartPattern();
             }
         }
@@ -262,24 +262,24 @@ void CEXNanase::UpdatePattern()
             y = 0.0;
             m_playSound = 9;
             FaceOpponent();
-            pattern = 0xd;
+            pattern = kLand;
             StartPattern();
         }
         break;
-    case 0xf:
-        ay = (unk3454 == 1) * 0.015 + 0.045;
+    case kAirJumpForward:
+        ay = (m_awakened == 1) * 0.015 + 0.045;
         if (frame == 0 && timer == 0) {
-            vy = -2.7 - (unk3454 == 1) * 0.6;
-            vx = (unk3454 == 1) * 0.1 + 0.8;
-            unk158 = 0;
+            vy = -2.7 - (m_awakened == 1) * 0.6;
+            vx = (m_awakened == 1) * 0.1 + 0.8;
+            m_dashMomentum = 0;
         }
         vy = vy + ay;
         timer++;
-        if (timer >= l4 - ((unk3454 == 1) << 1)) {
+        if (timer >= l4 - ((m_awakened == 1) << 1)) {
             timer = 0;
             frame++;
             if (frame >= x8) {
-                pattern = 9;
+                pattern = kFall;
                 StartPattern();
             }
         }
@@ -287,24 +287,24 @@ void CEXNanase::UpdatePattern()
             y = 0.0;
             m_playSound = 9;
             FaceOpponent();
-            pattern = 0xd;
+            pattern = kLand;
             StartPattern();
         }
         break;
-    case 0x10:
-        ay = (unk3454 == 1) * 0.015 + 0.045;
+    case kAirJumpBack:
+        ay = (m_awakened == 1) * 0.015 + 0.045;
         if (frame == 0 && timer == 0) {
-            vy = -2.7 - (unk3454 == 1) * 0.6;
-            vx = -0.8 - (unk3454 == 1) * 0.1;
-            unk158 = 0;
+            vy = -2.7 - (m_awakened == 1) * 0.6;
+            vx = -0.8 - (m_awakened == 1) * 0.1;
+            m_dashMomentum = 0;
         }
         vy = vy + ay;
         timer++;
-        if (timer >= l4 - ((unk3454 == 1) << 1)) {
+        if (timer >= l4 - ((m_awakened == 1) << 1)) {
             timer = 0;
             frame++;
             if (frame >= x8) {
-                pattern = 9;
+                pattern = kFall;
                 StartPattern();
             }
         }
@@ -312,11 +312,11 @@ void CEXNanase::UpdatePattern()
             y = 0.0;
             m_playSound = 9;
             FaceOpponent();
-            pattern = 0xd;
+            pattern = kLand;
             StartPattern();
         }
         break;
-    case 0x2f:
+    case kResultLoserFall:
         if (frame == 0 && timer == 0) {
             vx = 0.6;
             ay = 0.035;
@@ -343,16 +343,16 @@ void CEXNanase::UpdatePattern()
             }
         }
         break;
-    case 0x32:
-        if (unk120 != 0) {
-            unk118 -= 0.6;
+    case kHitStandHighLight:
+        if (m_rfBlue != 0) {
+            m_rfGauge -= 0.6;
         }
-        unk158 = 0;
+        m_dashMomentum = 0;
         if (frame == 0 && timer == 0) {
             m_gauge = m_gauge + 0xa;
             vx = (2.0 - (*m_opponent)->m_proration / 10000.0) * -1.1;
-            if (unk120 != 0) {
-                unk118 -= 10.0;
+            if (m_rfBlue != 0) {
+                m_rfGauge -= 10.0;
             }
         }
         vy = 0.0;
@@ -362,33 +362,33 @@ void CEXNanase::UpdatePattern()
             vx = 0.0;
         }
         if (x - 20.0 <= 0.0 || x + 20.0 >= 639.0) {
-            unkb8 = (1.0 - (y < 0.0) * 0.2) * vx;
+            m_cornerPushback = (1.0 - (y < 0.0) * 0.2) * vx;
         } else {
-            unkb8 = 0.0;
+            m_cornerPushback = 0.0;
         }
         timer++;
         if (timer >= l4) {
             timer = 0;
             frame++;
             if (frame >= x8) {
-                pattern = 0;
+                pattern = kStand;
                 if (m_inputY == 1) {
-                    pattern = 3;
+                    pattern = kCrouch;
                 }
                 StartPattern();
             }
         }
         break;
-    case 0x33:
-        if (unk120 != 0) {
-            unk118 -= 0.6;
+    case kHitStandHighMedium:
+        if (m_rfBlue != 0) {
+            m_rfGauge -= 0.6;
         }
-        unk158 = 0;
+        m_dashMomentum = 0;
         if (frame == 0 && timer == 0) {
             m_gauge = m_gauge + 0xf;
             vx = (2.0 - (*m_opponent)->m_proration / 10000.0) * -1.5;
-            if (unk120 != 0) {
-                unk118 -= 20.0;
+            if (m_rfBlue != 0) {
+                m_rfGauge -= 20.0;
             }
         }
         vy = 0.0;
@@ -398,33 +398,33 @@ void CEXNanase::UpdatePattern()
             vx = 0.0;
         }
         if (x - 20.0 <= 0.0 || x + 20.0 >= 639.0) {
-            unkb8 = (1.0 - (y < 0.0) * 0.2) * vx;
+            m_cornerPushback = (1.0 - (y < 0.0) * 0.2) * vx;
         } else {
-            unkb8 = 0.0;
+            m_cornerPushback = 0.0;
         }
         timer++;
         if (timer >= l4) {
             timer = 0;
             frame++;
             if (frame >= x8) {
-                pattern = 0;
+                pattern = kStand;
                 if (m_inputY == 1) {
-                    pattern = 3;
+                    pattern = kCrouch;
                 }
                 StartPattern();
             }
         }
         break;
-    case 0x34:
-        if (unk120 != 0) {
-            unk118 -= 0.6;
+    case kHitStandHighHeavy:
+        if (m_rfBlue != 0) {
+            m_rfGauge -= 0.6;
         }
-        unk158 = 0;
+        m_dashMomentum = 0;
         if (frame == 0 && timer == 0) {
             m_gauge = m_gauge + 0x14;
             vx = (2.0 - (*m_opponent)->m_proration / 10000.0) * -1.8;
-            if (unk120 != 0) {
-                unk118 -= 30.0;
+            if (m_rfBlue != 0) {
+                m_rfGauge -= 30.0;
             }
         }
         vy = 0.0;
@@ -434,33 +434,33 @@ void CEXNanase::UpdatePattern()
             vx = 0.0;
         }
         if (x - 20.0 <= 0.0 || x + 20.0 >= 639.0) {
-            unkb8 = (1.0 - (y < 0.0) * 0.2) * vx;
+            m_cornerPushback = (1.0 - (y < 0.0) * 0.2) * vx;
         } else {
-            unkb8 = 0.0;
+            m_cornerPushback = 0.0;
         }
         timer++;
         if (timer >= l4) {
             timer = 0;
             frame++;
             if (frame >= x8) {
-                pattern = 0;
+                pattern = kStand;
                 if (m_inputY == 1) {
-                    pattern = 3;
+                    pattern = kCrouch;
                 }
                 StartPattern();
             }
         }
         break;
-    case 0x35:
-        if (unk120 != 0) {
-            unk118 -= 0.6;
+    case kHitStandLowLight:
+        if (m_rfBlue != 0) {
+            m_rfGauge -= 0.6;
         }
-        unk158 = 0;
+        m_dashMomentum = 0;
         if (frame == 0 && timer == 0) {
             m_gauge = m_gauge + 0xa;
             vx = (2.0 - (*m_opponent)->m_proration / 10000.0) * -1.1;
-            if (unk120 != 0) {
-                unk118 -= 10.0;
+            if (m_rfBlue != 0) {
+                m_rfGauge -= 10.0;
             }
         }
         vy = 0.0;
@@ -470,33 +470,33 @@ void CEXNanase::UpdatePattern()
             vx = 0.0;
         }
         if (x - 20.0 <= 0.0 || x + 20.0 >= 639.0) {
-            unkb8 = (1.0 - (y < 0.0) * 0.2) * vx;
+            m_cornerPushback = (1.0 - (y < 0.0) * 0.2) * vx;
         } else {
-            unkb8 = 0.0;
+            m_cornerPushback = 0.0;
         }
         timer++;
         if (timer >= l4) {
             timer = 0;
             frame++;
             if (frame >= x8) {
-                pattern = 0;
+                pattern = kStand;
                 if (m_inputY == 1) {
-                    pattern = 3;
+                    pattern = kCrouch;
                 }
                 StartPattern();
             }
         }
         break;
-    case 0x36:
-        if (unk120 != 0) {
-            unk118 -= 0.6;
+    case kHitStandLowMedium:
+        if (m_rfBlue != 0) {
+            m_rfGauge -= 0.6;
         }
-        unk158 = 0;
+        m_dashMomentum = 0;
         if (frame == 0 && timer == 0) {
             m_gauge = m_gauge + 0xf;
             vx = (2.0 - (*m_opponent)->m_proration / 10000.0) * -1.5;
-            if (unk120 != 0) {
-                unk118 -= 20.0;
+            if (m_rfBlue != 0) {
+                m_rfGauge -= 20.0;
             }
         }
         vy = 0.0;
@@ -506,33 +506,33 @@ void CEXNanase::UpdatePattern()
             vx = 0.0;
         }
         if (x - 20.0 <= 0.0 || x + 20.0 >= 639.0) {
-            unkb8 = (1.0 - (y < 0.0) * 0.2) * vx;
+            m_cornerPushback = (1.0 - (y < 0.0) * 0.2) * vx;
         } else {
-            unkb8 = 0.0;
+            m_cornerPushback = 0.0;
         }
         timer++;
         if (timer >= l4) {
             timer = 0;
             frame++;
             if (frame >= x8) {
-                pattern = 0;
+                pattern = kStand;
                 if (m_inputY == 1) {
-                    pattern = 3;
+                    pattern = kCrouch;
                 }
                 StartPattern();
             }
         }
         break;
-    case 0x37:
-        if (unk120 != 0) {
-            unk118 -= 0.6;
+    case kHitStandLowHeavy:
+        if (m_rfBlue != 0) {
+            m_rfGauge -= 0.6;
         }
-        unk158 = 0;
+        m_dashMomentum = 0;
         if (frame == 0 && timer == 0) {
             m_gauge = m_gauge + 0x14;
             vx = (2.0 - (*m_opponent)->m_proration / 10000.0) * -1.8;
-            if (unk120 != 0) {
-                unk118 -= 30.0;
+            if (m_rfBlue != 0) {
+                m_rfGauge -= 30.0;
             }
         }
         vy = 0.0;
@@ -542,33 +542,33 @@ void CEXNanase::UpdatePattern()
             vx = 0.0;
         }
         if (x - 20.0 <= 0.0 || x + 20.0 >= 639.0) {
-            unkb8 = (1.0 - (y < 0.0) * 0.2) * vx;
+            m_cornerPushback = (1.0 - (y < 0.0) * 0.2) * vx;
         } else {
-            unkb8 = 0.0;
+            m_cornerPushback = 0.0;
         }
         timer++;
         if (timer >= l4) {
             timer = 0;
             frame++;
             if (frame >= x8) {
-                pattern = 0;
+                pattern = kStand;
                 if (m_inputY == 1) {
-                    pattern = 3;
+                    pattern = kCrouch;
                 }
                 StartPattern();
             }
         }
         break;
-    case 0x38:
-        if (unk120 != 0) {
-            unk118 -= 0.6;
+    case kHitCrouchLight:
+        if (m_rfBlue != 0) {
+            m_rfGauge -= 0.6;
         }
-        unk158 = 0;
+        m_dashMomentum = 0;
         if (frame == 0 && timer == 0) {
             m_gauge = m_gauge + 0xa;
             vx = (2.0 - (*m_opponent)->m_proration / 10000.0) * -1.1;
-            if (unk120 != 0) {
-                unk118 -= 10.0;
+            if (m_rfBlue != 0) {
+                m_rfGauge -= 10.0;
             }
         }
         vy = 0.0;
@@ -578,30 +578,30 @@ void CEXNanase::UpdatePattern()
             vx = 0.0;
         }
         if (x - 20.0 <= 0.0 || x + 20.0 >= 639.0) {
-            unkb8 = (1.0 - (y < 0.0) * 0.2) * vx;
+            m_cornerPushback = (1.0 - (y < 0.0) * 0.2) * vx;
         } else {
-            unkb8 = 0.0;
+            m_cornerPushback = 0.0;
         }
         timer++;
         if (timer >= l4) {
             timer = 0;
             frame++;
             if (frame >= x8) {
-                pattern = 3;
+                pattern = kCrouch;
                 StartPattern();
             }
         }
         break;
-    case 0x39:
-        if (unk120 != 0) {
-            unk118 -= 0.6;
+    case kHitCrouchMedium:
+        if (m_rfBlue != 0) {
+            m_rfGauge -= 0.6;
         }
-        unk158 = 0;
+        m_dashMomentum = 0;
         if (frame == 0 && timer == 0) {
             m_gauge = m_gauge + 0xf;
             vx = (2.0 - (*m_opponent)->m_proration / 10000.0) * -1.5;
-            if (unk120 != 0) {
-                unk118 -= 20.0;
+            if (m_rfBlue != 0) {
+                m_rfGauge -= 20.0;
             }
         }
         vy = 0.0;
@@ -611,30 +611,30 @@ void CEXNanase::UpdatePattern()
             vx = 0.0;
         }
         if (x - 20.0 <= 0.0 || x + 20.0 >= 639.0) {
-            unkb8 = (1.0 - (y < 0.0) * 0.2) * vx;
+            m_cornerPushback = (1.0 - (y < 0.0) * 0.2) * vx;
         } else {
-            unkb8 = 0.0;
+            m_cornerPushback = 0.0;
         }
         timer++;
         if (timer >= l4) {
             timer = 0;
             frame++;
             if (frame >= x8) {
-                pattern = 3;
+                pattern = kCrouch;
                 StartPattern();
             }
         }
         break;
-    case 0x3a:
-        if (unk120 != 0) {
-            unk118 -= 0.6;
+    case kHitCrouchHeavy:
+        if (m_rfBlue != 0) {
+            m_rfGauge -= 0.6;
         }
-        unk158 = 0;
+        m_dashMomentum = 0;
         if (frame == 0 && timer == 0) {
             m_gauge = m_gauge + 0x14;
             vx = (2.0 - (*m_opponent)->m_proration / 10000.0) * -1.8;
-            if (unk120 != 0) {
-                unk118 -= 30.0;
+            if (m_rfBlue != 0) {
+                m_rfGauge -= 30.0;
             }
         }
         vy = 0.0;
@@ -644,28 +644,28 @@ void CEXNanase::UpdatePattern()
             vx = 0.0;
         }
         if (x - 20.0 <= 0.0 || x + 20.0 >= 639.0) {
-            unkb8 = (1.0 - (y < 0.0) * 0.2) * vx;
+            m_cornerPushback = (1.0 - (y < 0.0) * 0.2) * vx;
         } else {
-            unkb8 = 0.0;
+            m_cornerPushback = 0.0;
         }
         timer++;
         if (timer >= l4) {
             timer = 0;
             frame++;
             if (frame >= x8) {
-                pattern = 3;
+                pattern = kCrouch;
                 StartPattern();
             }
         }
         break;
-    case 0x3b:
-        if (unk120 != 0) {
-            unk118 -= 0.8;
+    case kHitAir:
+        if (m_rfBlue != 0) {
+            m_rfGauge -= 0.8;
         }
         if (frame == 0 && timer == 0) {
             m_gauge = m_gauge + 0x1e;
-            vx = unkc0;
-            vy = vy * 0.75 + unkc8;
+            vx = m_hitVx;
+            vy = vy * 0.75 + m_hitVy;
             if (vy < -2.0) {
                 vy = -2.0;
             } else if (vy > -0.5) {
@@ -692,23 +692,23 @@ void CEXNanase::UpdatePattern()
         }
         if (y + vy >= 0.0 && frame > 1) {
             y = 0.0;
-            if (unk12c != 0) {
-                pattern = 0x61;
+            if (m_landHittable != 0) {
+                pattern = kKnockdownHittable;
                 StartPattern();
             } else {
-                pattern = 0x62;
+                pattern = kKnockdown;
                 StartPattern();
             }
         }
         break;
-    case 0x3c:
-        if (unk120 != 0) {
-            unk118 -= 0.8;
+    case kHitAirHigh:
+        if (m_rfBlue != 0) {
+            m_rfGauge -= 0.8;
         }
         if (frame == 0 && timer == 0) {
             m_gauge = m_gauge + 0x1e;
-            vx = unkc0;
-            vy = vy * 0.75 + unkc8;
+            vx = m_hitVx;
+            vy = vy * 0.75 + m_hitVy;
             if (vy < -4.0) {
                 vy = -4.0;
             } else if (vy > -0.5) {
@@ -735,23 +735,23 @@ void CEXNanase::UpdatePattern()
         }
         if (y + vy >= 0.0 && frame > 1) {
             y = 0.0;
-            if (unk12c != 0) {
-                pattern = 0x61;
+            if (m_landHittable != 0) {
+                pattern = kKnockdownHittable;
                 StartPattern();
             } else {
-                pattern = 0x62;
+                pattern = kKnockdown;
                 StartPattern();
             }
         }
         break;
-    case 0x3d:
-        if (unk120 != 0) {
-            unk118 -= 0.8;
+    case kHitAirHigher:
+        if (m_rfBlue != 0) {
+            m_rfGauge -= 0.8;
         }
         if (frame == 0 && timer == 0) {
             m_gauge = m_gauge + 0x1e;
-            vx = unkc0;
-            vy = vy * 0.75 + unkc8;
+            vx = m_hitVx;
+            vy = vy * 0.75 + m_hitVy;
             if (vy < -6.0) {
                 vy = -6.0;
             } else if (vy > -0.5) {
@@ -778,23 +778,23 @@ void CEXNanase::UpdatePattern()
         }
         if (y + vy >= 0.0 && frame > 1) {
             y = 0.0;
-            if (unk12c != 0) {
-                pattern = 0x61;
+            if (m_landHittable != 0) {
+                pattern = kKnockdownHittable;
                 StartPattern();
             } else {
-                pattern = 0x62;
+                pattern = kKnockdown;
                 StartPattern();
             }
         }
         break;
-    case 0x3e:
-        if (unk120 != 0) {
-            unk118 -= 0.8;
+    case kHitAirCarry:
+        if (m_rfBlue != 0) {
+            m_rfGauge -= 0.8;
         }
         if (frame == 0 && timer == 0) {
             m_gauge = m_gauge + 0x1e;
-            vx = unkc0;
-            vy = vy * 0.75 + unkc8;
+            vx = m_hitVx;
+            vy = vy * 0.75 + m_hitVy;
             ay = 0.032;
         }
         if (vy <= 0.0) {
@@ -816,23 +816,23 @@ void CEXNanase::UpdatePattern()
         }
         if (y + vy >= 0.0 && frame > 1) {
             y = 0.0;
-            if (unk12c != 0) {
-                pattern = 0x61;
+            if (m_landHittable != 0) {
+                pattern = kKnockdownHittable;
                 StartPattern();
             } else {
-                pattern = 0x62;
+                pattern = kKnockdown;
                 StartPattern();
             }
         }
         break;
-    case 0x3f:
-        if (unk120 != 0) {
-            unk118 -= 0.8;
+    case kHitAirLaunch:
+        if (m_rfBlue != 0) {
+            m_rfGauge -= 0.8;
         }
         if (frame == 0 && timer == 0) {
             m_gauge = m_gauge + 0x1e;
-            vx = unkc0;
-            vy = unkc8;
+            vx = m_hitVx;
+            vy = m_hitVy;
             ay = 0.032;
         }
         if (vy <= 0.0) {
@@ -854,28 +854,28 @@ void CEXNanase::UpdatePattern()
         }
         if (y + vy >= 0.0 && frame > 1) {
             y = 0.0;
-            if (unk12c != 0) {
-                pattern = 0x61;
+            if (m_landHittable != 0) {
+                pattern = kKnockdownHittable;
                 StartPattern();
             } else {
-                pattern = 0x62;
+                pattern = kKnockdown;
                 StartPattern();
             }
         }
         break;
-    case 0x40:
-        if (unk120 != 0) {
-            unk118 -= 0.8;
+    case kHitAirWallBounce:
+        if (m_rfBlue != 0) {
+            m_rfGauge -= 0.8;
         }
-        if (frame > 0 && (char)Unk40ff70() != 0) {
-            pattern = 0x46;
+        if (frame > 0 && (char)AtScreenEdge() != 0) {
+            pattern = kHitWallBounce;
             StartPattern();
             break;
         }
         if (frame == 0 && timer == 0) {
             m_gauge = m_gauge + 0x1e;
-            vx = unkc0;
-            vy = vy * 0.75 + unkc8;
+            vx = m_hitVx;
+            vy = vy * 0.75 + m_hitVy;
             if (vy < -2.0) {
                 vy = -2.0;
             } else if (vy > -0.5) {
@@ -902,28 +902,28 @@ void CEXNanase::UpdatePattern()
         }
         if (y + vy >= 0.0 && frame > 1) {
             y = 0.0;
-            if (unk12c != 0) {
-                pattern = 0x61;
+            if (m_landHittable != 0) {
+                pattern = kKnockdownHittable;
                 StartPattern();
             } else {
-                pattern = 0x62;
+                pattern = kKnockdown;
                 StartPattern();
             }
         }
         break;
-    case 0x41:
-        if (unk120 != 0) {
-            unk118 -= 0.8;
+    case kHitAirHighWallBounce:
+        if (m_rfBlue != 0) {
+            m_rfGauge -= 0.8;
         }
-        if (frame > 0 && (char)Unk40ff70() != 0) {
-            pattern = 0x46;
+        if (frame > 0 && (char)AtScreenEdge() != 0) {
+            pattern = kHitWallBounce;
             StartPattern();
             break;
         }
         if (frame == 0 && timer == 0) {
             m_gauge = m_gauge + 0x1e;
-            vx = unkc0;
-            vy = vy * 0.75 + unkc8;
+            vx = m_hitVx;
+            vy = vy * 0.75 + m_hitVy;
             if (vy < -4.0) {
                 vy = -4.0;
             } else if (vy > -0.5) {
@@ -950,28 +950,28 @@ void CEXNanase::UpdatePattern()
         }
         if (y + vy >= 0.0 && frame > 1) {
             y = 0.0;
-            if (unk12c != 0) {
-                pattern = 0x61;
+            if (m_landHittable != 0) {
+                pattern = kKnockdownHittable;
                 StartPattern();
             } else {
-                pattern = 0x62;
+                pattern = kKnockdown;
                 StartPattern();
             }
         }
         break;
-    case 0x42:
-        if (unk120 != 0) {
-            unk118 -= 0.8;
+    case kHitAirCarryWallBounce:
+        if (m_rfBlue != 0) {
+            m_rfGauge -= 0.8;
         }
-        if (frame > 0 && (char)Unk40ff70() != 0) {
-            pattern = 0x46;
+        if (frame > 0 && (char)AtScreenEdge() != 0) {
+            pattern = kHitWallBounce;
             StartPattern();
             break;
         }
         if (frame == 0 && timer == 0) {
             m_gauge = m_gauge + 0x1e;
-            vx = unkc0;
-            vy = vy * 0.75 + unkc8;
+            vx = m_hitVx;
+            vy = vy * 0.75 + m_hitVy;
             ay = 0.032;
         }
         if (vy <= 0.0) {
@@ -993,28 +993,28 @@ void CEXNanase::UpdatePattern()
         }
         if (y + vy >= 0.0 && frame > 1) {
             y = 0.0;
-            if (unk12c != 0) {
-                pattern = 0x61;
+            if (m_landHittable != 0) {
+                pattern = kKnockdownHittable;
                 StartPattern();
             } else {
-                pattern = 0x62;
+                pattern = kKnockdown;
                 StartPattern();
             }
         }
         break;
-    case 0x43:
-        if (unk120 != 0) {
-            unk118 -= 0.8;
+    case kHitAirLaunchWallBounce:
+        if (m_rfBlue != 0) {
+            m_rfGauge -= 0.8;
         }
-        if (frame > 0 && (char)Unk40ff70() != 0) {
-            pattern = 0x46;
+        if (frame > 0 && (char)AtScreenEdge() != 0) {
+            pattern = kHitWallBounce;
             StartPattern();
             break;
         }
         if (frame == 0 && timer == 0) {
             m_gauge = m_gauge + 0x1e;
-            vx = unkc0;
-            vy = unkc8;
+            vx = m_hitVx;
+            vy = m_hitVy;
             ay = 0.032;
         }
         if (vy <= 0.0) {
@@ -1036,25 +1036,25 @@ void CEXNanase::UpdatePattern()
         }
         if (y + vy >= 0.0 && frame > 1) {
             y = 0.0;
-            if (unk12c != 0) {
-                pattern = 0x61;
+            if (m_landHittable != 0) {
+                pattern = kKnockdownHittable;
                 StartPattern();
             } else {
-                pattern = 0x62;
+                pattern = kKnockdown;
                 StartPattern();
             }
         }
         break;
-    case 0x44:
-        if (unk120 != 0) {
-            unk118 -= 1.5;
+    case kHitBlownAwayWallBounce:
+        if (m_rfBlue != 0) {
+            m_rfGauge -= 1.5;
         }
         m_gauge = m_gauge + 3;
-        vx = unkc0;
-        vy = unkc8;
+        vx = m_hitVx;
+        vy = m_hitVy;
         timer++;
-        if ((char)Unk40ff70() != 0) {
-            pattern = 0x46;
+        if ((char)AtScreenEdge() != 0) {
+            pattern = kHitWallBounce;
             StartPattern();
             break;
         }
@@ -1067,22 +1067,22 @@ void CEXNanase::UpdatePattern()
         }
         if (y + vy >= 0.0) {
             y = 0.0;
-            if (unk12c != 0) {
-                pattern = 0x61;
+            if (m_landHittable != 0) {
+                pattern = kKnockdownHittable;
                 StartPattern();
             } else {
-                pattern = 0x62;
+                pattern = kKnockdown;
                 StartPattern();
             }
         }
         break;
-    case 0x45:
-        if (unk120 != 0) {
-            unk118 -= 1.5;
+    case kHitBlownAway:
+        if (m_rfBlue != 0) {
+            m_rfGauge -= 1.5;
         }
         m_gauge = m_gauge + 3;
-        vx = unkc0;
-        vy = unkc8;
+        vx = m_hitVx;
+        vy = m_hitVy;
         timer++;
         if (timer >= l4) {
             timer = 0;
@@ -1093,23 +1093,23 @@ void CEXNanase::UpdatePattern()
         }
         if (y + vy >= 0.0) {
             y = 0.0;
-            if (unk12c != 0) {
-                pattern = 0x61;
+            if (m_landHittable != 0) {
+                pattern = kKnockdownHittable;
                 StartPattern();
             } else {
-                pattern = 0x62;
+                pattern = kKnockdown;
                 StartPattern();
             }
         }
         break;
-    case 0x46:
-        if (unk120 != 0) {
-            unk118 -= 0.8;
+    case kHitWallBounce:
+        if (m_rfBlue != 0) {
+            m_rfGauge -= 0.8;
         }
-        if (frame == 0 && timer == 0 && unk3138 == 0) {
+        if (frame == 0 && timer == 0 && m_patternVar1 == 0) {
             m_gauge = m_gauge + 0x1e;
-            unk3138++;
-            unk124 = unk124 + 0x78;
+            m_patternVar1++;
+            m_untechTime = m_untechTime + 0x78;
             vx = 0.5;
             vy = -2.5;
             ay = 0.025;
@@ -1132,23 +1132,23 @@ void CEXNanase::UpdatePattern()
         }
         if (y + vy >= 0.0 && frame > 1) {
             y = 0.0;
-            if (unk12c != 0) {
-                pattern = 0x61;
+            if (m_landHittable != 0) {
+                pattern = kKnockdownHittable;
                 StartPattern();
             } else {
-                pattern = 0x62;
+                pattern = kKnockdown;
                 StartPattern();
             }
         }
         break;
-    case 0x47:
-        if (unk120 != 0) {
-            unk118 -= 0.8;
+    case kHitAirHeavy:
+        if (m_rfBlue != 0) {
+            m_rfGauge -= 0.8;
         }
         if (frame == 0 && timer == 0) {
             m_gauge = m_gauge + 0x1e;
-            vx = unkc0;
-            vy = unkc8;
+            vx = m_hitVx;
+            vy = m_hitVy;
             ay = 0.072;
         }
         if (vy <= 0.0) {
@@ -1170,96 +1170,96 @@ void CEXNanase::UpdatePattern()
         }
         if (y + vy >= 0.0 && frame > 1) {
             y = 0.0;
-            if (unk12c != 0) {
-                pattern = 0x61;
+            if (m_landHittable != 0) {
+                pattern = kKnockdownHittable;
                 StartPattern();
             } else {
-                pattern = 0x62;
+                pattern = kKnockdown;
                 StartPattern();
             }
         }
         break;
-    case 0x48:
-        if (unk120 != 0) {
-            unk118 -= 0.8;
+    case kHitStandHighHold:
+        if (m_rfBlue != 0) {
+            m_rfGauge -= 0.8;
         }
-        unk158 = 0;
+        m_dashMomentum = 0;
         vx = 0.0;
         vy = 0.0;
         if (x - 20.0 <= 0.0 || x + 20.0 >= 639.0) {
-            unkb8 = (1.0 - ((*m_opponent)->y < 0.0) * 0.25) * vx;
+            m_cornerPushback = (1.0 - ((*m_opponent)->y < 0.0) * 0.25) * vx;
         } else {
-            unkb8 = 0.0;
+            m_cornerPushback = 0.0;
         }
         timer++;
         if (timer >= l4) {
             timer = 0;
             frame++;
             if (frame >= x8) {
-                pattern = 7;
+                pattern = kStandUp;
                 if (m_inputY == 1) {
-                    pattern = 3;
+                    pattern = kCrouch;
                 }
                 StartPattern();
             }
         }
         break;
-    case 0x49:
-        if (unk120 != 0) {
-            unk118 -= 0.8;
+    case kHitStandLowHold:
+        if (m_rfBlue != 0) {
+            m_rfGauge -= 0.8;
         }
-        unk158 = 0;
+        m_dashMomentum = 0;
         vx = 0.0;
         vy = 0.0;
         if (x - 20.0 <= 0.0 || x + 20.0 >= 639.0) {
-            unkb8 = (1.0 - ((*m_opponent)->y < 0.0) * 0.25) * vx;
+            m_cornerPushback = (1.0 - ((*m_opponent)->y < 0.0) * 0.25) * vx;
         } else {
-            unkb8 = 0.0;
+            m_cornerPushback = 0.0;
         }
         timer++;
         if (timer >= l4) {
             timer = 0;
             frame++;
             if (frame >= x8) {
-                pattern = 7;
+                pattern = kStandUp;
                 if (m_inputY == 1) {
-                    pattern = 3;
+                    pattern = kCrouch;
                 }
                 StartPattern();
             }
         }
         break;
-    case 0x4a:
-        if (unk120 != 0) {
-            unk118 -= 0.8;
+    case kHitCrouchHold:
+        if (m_rfBlue != 0) {
+            m_rfGauge -= 0.8;
         }
-        unk158 = 0;
+        m_dashMomentum = 0;
         vx = 0.0;
         vy = 0.0;
         if (x - 20.0 <= 0.0 || x + 20.0 >= 639.0) {
-            unkb8 = (1.0 - ((*m_opponent)->y < 0.0) * 0.25) * vx;
+            m_cornerPushback = (1.0 - ((*m_opponent)->y < 0.0) * 0.25) * vx;
         } else {
-            unkb8 = 0.0;
+            m_cornerPushback = 0.0;
         }
         timer++;
         if (timer >= l4) {
             timer = 0;
             frame++;
             if (frame >= x8) {
-                pattern = 3;
+                pattern = kCrouch;
                 StartPattern();
             }
         }
         break;
-    case 0x4b:
-        if (unk120 != 0) {
-            unk118 -= 0.6;
+    case kHitStandHighPull:
+        if (m_rfBlue != 0) {
+            m_rfGauge -= 0.6;
         }
-        unk158 = 0;
+        m_dashMomentum = 0;
         if (frame == 0 && timer == 0) {
             m_gauge = m_gauge + 0x1e;
-            if (unk120 != 0) {
-                unk118 -= 30.0;
+            if (m_rfBlue != 0) {
+                m_rfGauge -= 30.0;
             }
             vx = 2.2;
         }
@@ -1272,32 +1272,32 @@ void CEXNanase::UpdatePattern()
             vx = 0.0;
         }
         if (x - 20.0 <= 0.0 || x + 20.0 >= 639.0) {
-            unkb8 = (1.0 - ((*m_opponent)->y < 0.0) * 0.25) * vx;
+            m_cornerPushback = (1.0 - ((*m_opponent)->y < 0.0) * 0.25) * vx;
         } else {
-            unkb8 = 0.0;
+            m_cornerPushback = 0.0;
         }
         timer++;
         if (timer >= l4) {
             timer = 0;
             frame++;
             if (frame >= x8) {
-                pattern = 7;
+                pattern = kStandUp;
                 if (m_inputY == 1) {
-                    pattern = 3;
+                    pattern = kCrouch;
                 }
                 StartPattern();
             }
         }
         break;
-    case 0x4c:
-        if (unk120 != 0) {
-            unk118 -= 0.6;
+    case kHitStandLowPull:
+        if (m_rfBlue != 0) {
+            m_rfGauge -= 0.6;
         }
-        unk158 = 0;
+        m_dashMomentum = 0;
         if (frame == 0 && timer == 0) {
             m_gauge = m_gauge + 0x1e;
-            if (unk120 != 0) {
-                unk118 -= 30.0;
+            if (m_rfBlue != 0) {
+                m_rfGauge -= 30.0;
             }
             vx = 2.2;
         }
@@ -1310,32 +1310,32 @@ void CEXNanase::UpdatePattern()
             vx = 0.0;
         }
         if (x - 20.0 <= 0.0 || x + 20.0 >= 639.0) {
-            unkb8 = (1.0 - ((*m_opponent)->y < 0.0) * 0.25) * vx;
+            m_cornerPushback = (1.0 - ((*m_opponent)->y < 0.0) * 0.25) * vx;
         } else {
-            unkb8 = 0.0;
+            m_cornerPushback = 0.0;
         }
         timer++;
         if (timer >= l4) {
             timer = 0;
             frame++;
             if (frame >= x8) {
-                pattern = 7;
+                pattern = kStandUp;
                 if (m_inputY == 1) {
-                    pattern = 3;
+                    pattern = kCrouch;
                 }
                 StartPattern();
             }
         }
         break;
-    case 0x4d:
-        if (unk120 != 0) {
-            unk118 -= 0.6;
+    case kHitCrouchPull:
+        if (m_rfBlue != 0) {
+            m_rfGauge -= 0.6;
         }
-        unk158 = 0;
+        m_dashMomentum = 0;
         if (frame == 0 && timer == 0) {
             m_gauge = m_gauge + 0x1e;
-            if (unk120 != 0) {
-                unk118 -= 30.0;
+            if (m_rfBlue != 0) {
+                m_rfGauge -= 30.0;
             }
             vx = 2.2;
         }
@@ -1348,23 +1348,23 @@ void CEXNanase::UpdatePattern()
             vx = 0.0;
         }
         if (x - 20.0 <= 0.0 || x + 20.0 >= 639.0) {
-            unkb8 = (1.0 - ((*m_opponent)->y < 0.0) * 0.25) * vx;
+            m_cornerPushback = (1.0 - ((*m_opponent)->y < 0.0) * 0.25) * vx;
         } else {
-            unkb8 = 0.0;
+            m_cornerPushback = 0.0;
         }
         timer++;
         if (timer >= l4) {
             timer = 0;
             frame++;
             if (frame >= x8) {
-                pattern = 3;
+                pattern = kCrouch;
                 StartPattern();
             }
         }
         break;
-    case 0x51:
-        if (unk120 != 0) {
-            unk118 -= 0.8;
+    case kHitBurn:
+        if (m_rfBlue != 0) {
+            m_rfGauge -= 0.8;
         }
         if (frame == 0 && timer == 0) {
             l50.type = 0x1f3;
@@ -1374,8 +1374,8 @@ void CEXNanase::UpdatePattern()
             l50.layer = 1;
             SpawnObject(&l50);
             m_gauge = m_gauge + 0x1e;
-            vx = unkc0;
-            vy = unkc8;
+            vx = m_hitVx;
+            vy = m_hitVy;
             ay = 0.032;
         }
         vx += 0.02;
@@ -1393,29 +1393,29 @@ void CEXNanase::UpdatePattern()
         }
         if (y + vy >= 0.0 && frame == 1) {
             y = 0.0;
-            if (unk12c != 0) {
-                pattern = 0x61;
+            if (m_landHittable != 0) {
+                pattern = kKnockdownHittable;
                 StartPattern();
             } else {
-                pattern = 0x62;
+                pattern = kKnockdown;
                 StartPattern();
             }
         }
         break;
-    case 0x52:
-        if (unk120 != 0) {
-            unk118 -= 0.8;
+    case kHitShock:
+        if (m_rfBlue != 0) {
+            m_rfGauge -= 0.8;
         }
-        if (frame == 0 && timer == 0 && unk3138 == 0) {
+        if (frame == 0 && timer == 0 && m_patternVar1 == 0) {
             m_playSound = 0x1e;
             vy = -0.45;
             vx = -0.1;
-            unk3138++;
+            m_patternVar1++;
             m_gauge = m_gauge + 0x1e;
         }
         if (frame == 4 && timer == 0) {
-            vx = unkc0;
-            vy = unkc8;
+            vx = m_hitVx;
+            vy = m_hitVy;
             ay = 0.032;
         }
         if (vy > 0.0 && frame == 4) {
@@ -1429,9 +1429,9 @@ void CEXNanase::UpdatePattern()
         if (timer >= l4) {
             timer = 0;
             frame++;
-            if (frame == 4 && unk3138 < 8) {
+            if (frame == 4 && m_patternVar1 < 8) {
                 frame = 0;
-                unk3138++;
+                m_patternVar1++;
             }
             if (frame >= x8) {
                 frame = frame - 2;
@@ -1439,30 +1439,30 @@ void CEXNanase::UpdatePattern()
         }
         if (y + vy >= 0.0 && frame > 4) {
             y = 0.0;
-            if (unk12c != 0) {
-                pattern = 0x61;
+            if (m_landHittable != 0) {
+                pattern = kKnockdownHittable;
                 StartPattern();
             } else {
-                pattern = 0x62;
+                pattern = kKnockdown;
                 StartPattern();
             }
         }
         break;
-    case 0x53:
+    case kEncased:
         if (frame == 0 && timer == 0) {
-            if (unk3144 == 0) {
+            if (m_encasedBreakOut == 0) {
                 l50.type = 0x1f0;
                 l50.x = (double)(int)x;
                 l50.y = (double)(int)y;
                 l50.scale = 0;
                 l50.layer = 0;
-                l50.unk0 = 1;
+                l50.keep = 1;
                 l50.facing = facing;
                 SpawnObject(&l50);
-                unk3144 = 1;
+                m_encasedBreakOut = 1;
             }
-            if (unk120 != 0) {
-                unk118 -= 30.0;
+            if (m_rfBlue != 0) {
+                m_rfGauge -= 30.0;
             }
             m_playSound = 0x21;
             vy = -1.5;
@@ -1494,27 +1494,27 @@ void CEXNanase::UpdatePattern()
             timer = 0;
             frame++;
             if (frame >= x8) {
-                pattern = 0;
+                pattern = kStand;
                 StartPattern();
                 FaceOpponent();
             }
         }
         break;
-    case 0x54:
+    case kEncased2:
         if (frame == 0 && timer == 0) {
-            if (unk3144 == 0) {
+            if (m_encasedBreakOut == 0) {
                 l50.type = 0x1f0;
                 l50.x = (double)(int)x;
                 l50.y = (double)(int)y;
                 l50.scale = 0;
                 l50.layer = 0;
-                l50.unk0 = 1;
+                l50.keep = 1;
                 l50.facing = facing;
                 SpawnObject(&l50);
-                unk3144 = 1;
+                m_encasedBreakOut = 1;
             }
-            if (unk120 != 0) {
-                unk118 -= 30.0;
+            if (m_rfBlue != 0) {
+                m_rfGauge -= 30.0;
             }
             m_playSound = 0x21;
             vy = -1.5;
@@ -1546,31 +1546,31 @@ void CEXNanase::UpdatePattern()
             timer = 0;
             frame++;
             if (frame >= x8) {
-                pattern = 0;
+                pattern = kStand;
                 StartPattern();
                 FaceOpponent();
             }
         }
         break;
-    case 0x55:
+    case kEncasedAir:
         if (frame == 0 && timer == 0) {
-            if (unk3144 == 0) {
+            if (m_encasedBreakOut == 0) {
                 l50.type = 0x1f0;
                 l50.x = (double)(int)x;
                 l50.y = (double)(int)y;
                 l50.scale = 0;
                 l50.layer = 0;
-                l50.unk0 = 1;
+                l50.keep = 1;
                 l50.facing = facing;
                 SpawnObject(&l50);
-                unk3144 = 1;
+                m_encasedBreakOut = 1;
             }
-            if (unk120 != 0) {
-                unk118 -= 30.0;
+            if (m_rfBlue != 0) {
+                m_rfGauge -= 30.0;
             }
             m_playSound = 0x21;
-            vx = unkc0;
-            vy = unkc8;
+            vx = m_hitVx;
+            vy = m_hitVy;
             m_gauge = m_gauge + 0x1e;
         }
         vy += 0.04;
@@ -1579,44 +1579,44 @@ void CEXNanase::UpdatePattern()
             timer = 0;
             frame++;
             if (frame >= x8) {
-                pattern = 0;
+                pattern = kStand;
                 StartPattern();
                 FaceOpponent();
             }
         }
         if (y + vy >= 0.0) {
             y = 0.0;
-            if (unk12c != 0) {
-                pattern = 0x61;
+            if (m_landHittable != 0) {
+                pattern = kKnockdownHittable;
                 StartPattern();
             } else {
-                pattern = 0x62;
+                pattern = kKnockdown;
                 StartPattern();
             }
         }
         break;
-    case 0x56:
+    case kEncasedSpin:
         if (frame == 0 && timer == 0) {
-            if (unk3144 == 0) {
+            if (m_encasedBreakOut == 0) {
                 l50.type = 0x1f0;
                 l50.x = (double)(int)x;
                 l50.y = (double)(int)y;
                 l50.scale = 0;
                 l50.layer = 0;
-                l50.unk0 = 1;
+                l50.keep = 1;
                 l50.facing = facing;
                 SpawnObject(&l50);
-                unk3144 = 1;
+                m_encasedBreakOut = 1;
             }
-            if (unk3138 == 0) {
-                if (unk120 != 0) {
-                    unk118 -= 30.0;
+            if (m_patternVar1 == 0) {
+                if (m_rfBlue != 0) {
+                    m_rfGauge -= 30.0;
                 }
                 m_playSound = 0x21;
-                vx = unkc0;
-                vy = unkc8;
+                vx = m_hitVx;
+                vy = m_hitVy;
                 m_gauge = m_gauge + 0x1e;
-                unk3138++;
+                m_patternVar1++;
             }
         }
         vy += 0.06;
@@ -1630,16 +1630,16 @@ void CEXNanase::UpdatePattern()
         }
         if (y + vy >= 0.0) {
             y = 0.0;
-            if (unk12c != 0) {
-                pattern = 0x61;
+            if (m_landHittable != 0) {
+                pattern = kKnockdownHittable;
                 StartPattern();
             } else {
-                pattern = 0x62;
+                pattern = kKnockdown;
                 StartPattern();
             }
         }
         break;
-    case 0x57:
+    case kFallInDarkness:
         if (frame == 0 && timer == 0) {
             l50.type = 0x1ef;
             l50.x = 60.0;
@@ -1655,12 +1655,12 @@ void CEXNanase::UpdatePattern()
             timer = 0;
             frame++;
             if (frame >= x8) {
-                pattern = 0;
+                pattern = kStand;
                 StartPattern();
             }
         }
         break;
-    case 0x60:
+    case kWakeUp:
         timer++;
         if (timer >= l4) {
             timer = 0;
@@ -1669,15 +1669,15 @@ void CEXNanase::UpdatePattern()
                 FaceOpponent();
             }
             if (frame >= x8) {
-                pattern = 7;
+                pattern = kStandUp;
                 if (m_inputY == 1) {
-                    pattern = 3;
+                    pattern = kCrouch;
                 }
                 StartPattern();
             }
         }
         break;
-    case 0x61:
+    case kKnockdownHittable:
         vx = 0.0;
         vy = 0.0;
         if (frame == 0 && timer == 0) {
@@ -1695,12 +1695,12 @@ void CEXNanase::UpdatePattern()
             timer = 0;
             frame++;
             if (frame >= x8) {
-                pattern = 0x63;
+                pattern = kLyingDown;
                 StartPattern();
             }
         }
         break;
-    case 0x62:
+    case kKnockdown:
         vx = 0.0;
         vy = 0.0;
         if (frame == 0 && timer == 0) {
@@ -1718,16 +1718,16 @@ void CEXNanase::UpdatePattern()
             timer = 0;
             frame++;
             if (frame >= x8) {
-                pattern = 0x63;
+                pattern = kLyingDown;
                 StartPattern();
             }
         }
         break;
-    case 0x63:
+    case kLyingDown:
         if (m_hp > 0 && timer > 0x63 && frame == 0) {
-            pattern = 0x60;
+            pattern = kWakeUp;
             StartPattern();
-            unk158 = 0;
+            m_dashMomentum = 0;
             break;
         }
         timer++;
@@ -1738,20 +1738,20 @@ void CEXNanase::UpdatePattern()
                 FaceOpponent();
             }
             if (frame >= x8) {
-                pattern = 0x60;
+                pattern = kWakeUp;
                 StartPattern();
             }
         }
         break;
-    case 0x96:
+    case kGuardStandLight:
         if (m_inputY == 1) {
-            pattern = 0x99;
+            pattern = kGuardCrouchLight;
         }
         if (m_inputY != 1) {
-            pattern = 0x96;
+            pattern = kGuardStandLight;
         }
         if (frame == 0 && timer == 0) {
-            unk158 = 0;
+            m_dashMomentum = 0;
             m_gauge = m_gauge + 0xa;
             vx = -1.5;
             vy = 0.0;
@@ -1763,9 +1763,9 @@ void CEXNanase::UpdatePattern()
             vx = 0.0;
         }
         if (x - 20.0 <= 0.0 || x + 20.0 >= 639.0) {
-            unkb8 = vx;
+            m_cornerPushback = vx;
         } else {
-            unkb8 = 0.0;
+            m_cornerPushback = 0.0;
         }
         timer++;
         if (timer >= l4) {
@@ -1775,23 +1775,23 @@ void CEXNanase::UpdatePattern()
                 FaceOpponent();
             }
             if (frame >= x8) {
-                pattern = 0;
+                pattern = kStand;
                 if (m_inputY == 1) {
-                    pattern = 3;
+                    pattern = kCrouch;
                 }
                 StartPattern();
             }
         }
         break;
-    case 0x97:
+    case kGuardStandMedium:
         if (m_inputY == 1) {
-            pattern = 0x9a;
+            pattern = kGuardCrouchMedium;
         }
         if (m_inputY != 1) {
-            pattern = 0x97;
+            pattern = kGuardStandMedium;
         }
         if (frame == 0 && timer == 0) {
-            unk158 = 0;
+            m_dashMomentum = 0;
             m_gauge = m_gauge + 0xf;
             vx = -1.8;
             vy = 0.0;
@@ -1803,9 +1803,9 @@ void CEXNanase::UpdatePattern()
             vx = 0.0;
         }
         if (x - 20.0 <= 0.0 || x + 20.0 >= 639.0) {
-            unkb8 = vx;
+            m_cornerPushback = vx;
         } else {
-            unkb8 = 0.0;
+            m_cornerPushback = 0.0;
         }
         timer++;
         if (timer >= l4) {
@@ -1815,23 +1815,23 @@ void CEXNanase::UpdatePattern()
                 FaceOpponent();
             }
             if (frame >= x8) {
-                pattern = 0;
+                pattern = kStand;
                 if (m_inputY == 1) {
-                    pattern = 3;
+                    pattern = kCrouch;
                 }
                 StartPattern();
             }
         }
         break;
-    case 0x98:
+    case kGuardStandHeavy:
         if (m_inputY == 1) {
-            pattern = 0x9b;
+            pattern = kGuardCrouchHeavy;
         }
         if (m_inputY != 1) {
-            pattern = 0x98;
+            pattern = kGuardStandHeavy;
         }
         if (frame == 0 && timer == 0) {
-            unk158 = 0;
+            m_dashMomentum = 0;
             m_gauge = m_gauge + 0x14;
             vx = -2.3;
             vy = 0.0;
@@ -1843,9 +1843,9 @@ void CEXNanase::UpdatePattern()
             vx = 0.0;
         }
         if (x - 20.0 <= 0.0 || x + 20.0 >= 639.0) {
-            unkb8 = vx;
+            m_cornerPushback = vx;
         } else {
-            unkb8 = 0.0;
+            m_cornerPushback = 0.0;
         }
         timer++;
         if (timer >= l4) {
@@ -1855,23 +1855,23 @@ void CEXNanase::UpdatePattern()
                 FaceOpponent();
             }
             if (frame >= x8) {
-                pattern = 0;
+                pattern = kStand;
                 if (m_inputY == 1) {
-                    pattern = 3;
+                    pattern = kCrouch;
                 }
                 StartPattern();
             }
         }
         break;
-    case 0x99:
+    case kGuardCrouchLight:
         if (m_inputY == 1) {
-            pattern = 0x99;
+            pattern = kGuardCrouchLight;
         }
         if (m_inputY != 1) {
-            pattern = 0x96;
+            pattern = kGuardStandLight;
         }
         if (frame == 0 && timer == 0) {
-            unk158 = 0;
+            m_dashMomentum = 0;
             m_gauge = m_gauge + 0xa;
             vx = -1.5;
             vy = 0.0;
@@ -1883,9 +1883,9 @@ void CEXNanase::UpdatePattern()
             vx = 0.0;
         }
         if (x - 20.0 <= 0.0 || x + 20.0 >= 639.0) {
-            unkb8 = vx;
+            m_cornerPushback = vx;
         } else {
-            unkb8 = 0.0;
+            m_cornerPushback = 0.0;
         }
         timer++;
         if (timer >= l4) {
@@ -1895,20 +1895,20 @@ void CEXNanase::UpdatePattern()
                 FaceOpponent();
             }
             if (frame >= x8) {
-                pattern = 3;
+                pattern = kCrouch;
                 StartPattern();
             }
         }
         break;
-    case 0x9a:
+    case kGuardCrouchMedium:
         if (m_inputY == 1) {
-            pattern = 0x9a;
+            pattern = kGuardCrouchMedium;
         }
         if (m_inputY != 1) {
-            pattern = 0x97;
+            pattern = kGuardStandMedium;
         }
         if (frame == 0 && timer == 0) {
-            unk158 = 0;
+            m_dashMomentum = 0;
             m_gauge = m_gauge + 0xf;
             vx = -1.8;
             vy = 0.0;
@@ -1920,9 +1920,9 @@ void CEXNanase::UpdatePattern()
             vx = 0.0;
         }
         if (x - 20.0 <= 0.0 || x + 20.0 >= 639.0) {
-            unkb8 = vx;
+            m_cornerPushback = vx;
         } else {
-            unkb8 = 0.0;
+            m_cornerPushback = 0.0;
         }
         timer++;
         if (timer >= l4) {
@@ -1932,20 +1932,20 @@ void CEXNanase::UpdatePattern()
                 FaceOpponent();
             }
             if (frame >= x8) {
-                pattern = 3;
+                pattern = kCrouch;
                 StartPattern();
             }
         }
         break;
-    case 0x9b:
+    case kGuardCrouchHeavy:
         if (m_inputY == 1) {
-            pattern = 0x9b;
+            pattern = kGuardCrouchHeavy;
         }
         if (m_inputY != 1) {
-            pattern = 0x98;
+            pattern = kGuardStandHeavy;
         }
         if (frame == 0 && timer == 0) {
-            unk158 = 0;
+            m_dashMomentum = 0;
             m_gauge = m_gauge + 0x14;
             vx = -2.3;
             vy = 0.0;
@@ -1957,9 +1957,9 @@ void CEXNanase::UpdatePattern()
             vx = 0.0;
         }
         if (x - 20.0 <= 0.0 || x + 20.0 >= 639.0) {
-            unkb8 = vx;
+            m_cornerPushback = vx;
         } else {
-            unkb8 = 0.0;
+            m_cornerPushback = 0.0;
         }
         timer++;
         if (timer >= l4) {
@@ -1969,12 +1969,12 @@ void CEXNanase::UpdatePattern()
                 FaceOpponent();
             }
             if (frame >= x8) {
-                pattern = 3;
+                pattern = kCrouch;
                 StartPattern();
             }
         }
         break;
-    case 0x9c:
+    case kGuardAir:
         if (frame == 0 && timer == 0) {
             vy = -2.6;
             m_gauge = m_gauge + 0xf;
@@ -1987,7 +1987,7 @@ void CEXNanase::UpdatePattern()
             timer = 0;
             frame++;
             if (frame >= x8) {
-                pattern = 9;
+                pattern = kFall;
                 StartPattern();
             }
         }
@@ -1995,11 +1995,11 @@ void CEXNanase::UpdatePattern()
             y = 0.0;
             m_playSound = 9;
             FaceOpponent();
-            pattern = 0xd;
+            pattern = kLand;
             StartPattern();
         }
         break;
-    case 0x9d:
+    case kAirRecoveryForward:
         vx = 1.0;
         ay = 0.045;
         if (frame == 0 && timer == 0) {
@@ -2018,7 +2018,7 @@ void CEXNanase::UpdatePattern()
             timer = 0;
             frame++;
             if (frame >= x8) {
-                pattern = 9;
+                pattern = kFall;
                 StartPattern();
             }
         }
@@ -2026,11 +2026,11 @@ void CEXNanase::UpdatePattern()
             y = 0.0;
             m_playSound = 9;
             FaceOpponent();
-            pattern = 0xd;
+            pattern = kLand;
             StartPattern();
         }
         break;
-    case 0x9e:
+    case kAirRecoveryBack:
         vx = -1.0;
         ay = 0.045;
         if (frame == 0 && timer == 0) {
@@ -2049,7 +2049,7 @@ void CEXNanase::UpdatePattern()
             timer = 0;
             frame++;
             if (frame >= x8) {
-                pattern = 9;
+                pattern = kFall;
                 StartPattern();
             }
         }
@@ -2057,21 +2057,21 @@ void CEXNanase::UpdatePattern()
             y = 0.0;
             m_playSound = 9;
             FaceOpponent();
-            pattern = 0xd;
+            pattern = kLand;
             StartPattern();
         }
         break;
-    case 0xa3:
+    case kDashForward:
         if (frame == 0 && timer == 0) {
             StartAfterimages(3);
         }
         if (m_inputY == -1 && frame > 0) {
-            pattern = 4;
+            pattern = kJump;
             if (m_inputX == facing) {
-                pattern = 5;
+                pattern = kJumpForward;
             }
             if (m_inputX == -facing) {
-                pattern = 6;
+                pattern = kJumpBack;
             }
             m_attackResult = 0;
             StartPattern();
@@ -2081,12 +2081,12 @@ void CEXNanase::UpdatePattern()
             vy = 0.0;
             ay = 0.0;
         }
-        vx = (unk3454 == 1) * 0.2 + 1.7;
-        unk158 = 1;
+        vx = (m_awakened == 1) * 0.2 + 1.7;
+        m_dashMomentum = 1;
         timer++;
-        unk3138++;
-        unk313c++;
-        if (timer >= l4 - ((unk3454 == 1) << 1)) {
+        m_patternVar1++;
+        m_patternVar2++;
+        if (timer >= l4 - ((m_awakened == 1) << 1)) {
             timer = 0;
             frame++;
             if (frame >= x8) {
@@ -2094,24 +2094,24 @@ void CEXNanase::UpdatePattern()
                 break;
             }
         }
-        if (m_inputX == facing && unk313c >= 0x78) {
-            pattern = 0xb2;
+        if (m_inputX == facing && m_patternVar2 >= 0x78) {
+            pattern = kDashStop;
             StartPattern();
         }
-        if (m_inputX != facing && unk3138 >= 0x3c) {
-            pattern = 0xb2;
+        if (m_inputX != facing && m_patternVar1 >= 0x3c) {
+            pattern = kDashStop;
             StartPattern();
         }
         break;
-    case 0xa4:
+    case kDashBack:
         StartAfterimages(2);
-        unk158 = 0;
+        m_dashMomentum = 0;
         if (frame == 0 && timer == 0) {
             vx = 0.0;
             vy = 0.0;
         }
         if (frame == 2 && timer == 0) {
-            vx = -1.6 - (unk3454 == 1) * 0.2;
+            vx = -1.6 - (m_awakened == 1) * 0.2;
             vy = -1.0;
             ay = 0.04;
         }
@@ -2127,40 +2127,40 @@ void CEXNanase::UpdatePattern()
             break;
         }
         timer++;
-        if (timer >= l4 - ((unk3454 == 1) << 1)) {
+        if (timer >= l4 - ((m_awakened == 1) << 1)) {
             timer = 0;
             frame++;
             if (frame == 9) {
                 frame = frame - 2;
             }
             if (frame >= x8) {
-                pattern = 0;
+                pattern = kStand;
                 StartPattern();
             }
         }
         break;
-    case 0xa5:
+    case kAirDashForward:
         if (frame == 0 && timer == 0) {
             m_playSound = 0x15;
-            if (unk3138 == 0) {
-                vx = (unk3454 == 1) * 0.2 + 1.5;
+            if (m_patternVar1 == 0) {
+                vx = (m_awakened == 1) * 0.2 + 1.5;
                 StartAfterimages(3);
                 vy = 0.0;
                 ay = 0.0;
             }
         }
         timer++;
-        unk3138++;
-        unk313c++;
-        if (timer >= l4 - ((unk3454 == 1) << 1)) {
+        m_patternVar1++;
+        m_patternVar2++;
+        if (timer >= l4 - ((m_awakened == 1) << 1)) {
             timer = 0;
             frame++;
             if (frame >= x8) {
                 frame = frame - 2;
             }
         }
-        if (m_inputX == facing && unk313c >= 0x64) {
-            pattern = 9;
+        if (m_inputX == facing && m_patternVar2 >= 0x64) {
+            pattern = kFall;
             StartPattern();
             vx = 1.3;
             ay = 0.03;
@@ -2168,8 +2168,8 @@ void CEXNanase::UpdatePattern()
                 vx = -vx;
             }
         }
-        if (m_inputX != facing && unk3138 >= 0x30) {
-            pattern = 9;
+        if (m_inputX != facing && m_patternVar1 >= 0x30) {
+            pattern = kFall;
             StartPattern();
             vx = 1.3;
             ay = 0.03;
@@ -2178,28 +2178,28 @@ void CEXNanase::UpdatePattern()
             }
         }
         break;
-    case 0xa6:
+    case kAirDashBack:
         if (frame == 0 && timer == 0) {
             m_playSound = 0x15;
-            if (unk3138 == 0) {
-                vx = -1.5 - (unk3454 == 1) * 0.2;
+            if (m_patternVar1 == 0) {
+                vx = -1.5 - (m_awakened == 1) * 0.2;
                 vy = 0.0;
                 ay = 0.0;
                 StartAfterimages(3);
             }
         }
         timer++;
-        unk3138++;
-        unk313c++;
-        if (timer >= l4 - ((unk3454 == 1) << 1)) {
+        m_patternVar1++;
+        m_patternVar2++;
+        if (timer >= l4 - ((m_awakened == 1) << 1)) {
             timer = 0;
             frame++;
             if (frame >= x8) {
                 frame = frame - 2;
             }
         }
-        if (m_inputX == -facing && unk313c >= 0x78) {
-            pattern = 9;
+        if (m_inputX == -facing && m_patternVar2 >= 0x78) {
+            pattern = kFall;
             StartPattern();
             vx = -0.9;
             ay = 0.03;
@@ -2207,8 +2207,8 @@ void CEXNanase::UpdatePattern()
                 vx = -vx;
             }
         }
-        if (m_inputX != -facing && unk3138 >= 0x28) {
-            pattern = 9;
+        if (m_inputX != -facing && m_patternVar1 >= 0x28) {
+            pattern = kFall;
             StartPattern();
             vx = -0.9;
             ay = 0.03;
@@ -2217,16 +2217,16 @@ void CEXNanase::UpdatePattern()
             }
         }
         break;
-    case 0xa7:
+    case kInstantCharge:
         if (frame == 0 && timer == 0) {
             vx = 0.0;
             vy = 0.0;
-            unk158 = 0;
-            if (unk120 == 1) {
-                m_proration = unk118 * 5.0 + m_proration;
+            m_dashMomentum = 0;
+            if (m_rfBlue == 1) {
+                m_proration = m_rfGauge * 5.0 + m_proration;
             }
-            unk118 = 0.0;
-            unk14c = 0x5a;
+            m_rfGauge = 0.0;
+            m_freezeTime = 0x5a;
             FillBackground(0xb0, 3);
         }
         if (frame == 1 && timer == 0) {
@@ -2252,21 +2252,21 @@ void CEXNanase::UpdatePattern()
             frame++;
             m_attackResult = 0;
             if (frame >= x8) {
-                pattern = 0;
+                pattern = kStand;
                 FaceOpponent();
                 StartPattern();
             }
         }
         break;
-    case 0xa8:
+    case kRecoilGuardStand:
         if (frame == 0 && timer == 0) {
-            unk158 = 0;
+            m_dashMomentum = 0;
             vx = 0.0;
             vy = 0.0;
             y = 0.0;
             ay = 0.0;
-            unk14e = 0;
-            unkb8 = 0.0;
+            m_recoilGuardWindow = 0;
+            m_cornerPushback = 0.0;
             ax = 0.0;
             l50.type = 8;
             l50.x = (double)(int)x;
@@ -2283,20 +2283,20 @@ void CEXNanase::UpdatePattern()
                 FaceOpponent();
             }
             if (frame >= x8) {
-                pattern = 0;
+                pattern = kStand;
                 StartPattern();
             }
         }
         break;
-    case 0xa9:
+    case kRecoilGuardCrouch:
         if (frame == 0 && timer == 0) {
-            unk158 = 0;
+            m_dashMomentum = 0;
             vx = 0.0;
             vy = 0.0;
             y = 0.0;
             ay = 0.0;
-            unk14e = 0;
-            unkb8 = 0.0;
+            m_recoilGuardWindow = 0;
+            m_cornerPushback = 0.0;
             ax = 0.0;
             l50.type = 8;
             l50.x = (double)(int)x;
@@ -2313,36 +2313,36 @@ void CEXNanase::UpdatePattern()
                 FaceOpponent();
             }
             if (frame >= x8) {
-                pattern = 3;
+                pattern = kCrouch;
                 StartPattern();
             }
         }
         break;
-    case 0xaa:
+    case kRecoilGuardAir:
         if (frame == 0 && timer == 0) {
-            unk3138 = (int)(vx * 100.0);
-            unk313c = (int)(vy * 100.0);
+            m_patternVar1 = (int)(vx * 100.0);
+            m_patternVar2 = (int)(vy * 100.0);
             vx = 0.0;
             vy = 0.0;
             if (ay == 0.0) {
                 ay = 0.035;
             }
-            unk14e = 0;
-            unkb8 = 0.0;
-            unk14c = 0x3c;
+            m_recoilGuardWindow = 0;
+            m_cornerPushback = 0.0;
+            m_freezeTime = 0x3c;
         }
-        if (unk14c == 0 && unk3140 == 0) {
-            unk3140++;
-            vx = unk3138 * 0.01;
-            vy = unk313c * 0.01;
+        if (m_freezeTime == 0 && m_patternVar3 == 0) {
+            m_patternVar3++;
+            vx = m_patternVar1 * 0.01;
+            vy = m_patternVar2 * 0.01;
         }
-        if (unk14c == 0) {
+        if (m_freezeTime == 0) {
             vy = vy + ay;
         }
         if (vy + y > 0.0) {
             StopMoving();
             y = 0.0;
-            pattern = 0xa9;
+            pattern = kRecoilGuardCrouch;
             break;
         }
         timer++;
@@ -2350,22 +2350,22 @@ void CEXNanase::UpdatePattern()
             timer = 0;
             frame++;
             if (frame >= x8) {
-                pattern = 9;
+                pattern = kFall;
                 StartPattern();
             }
         }
         break;
-    case 0xab:
+    case kAirInstantCharge:
         if (frame == 0 && timer == 0) {
-            unk3138 = (int)(vx * 100.0);
-            unk313c = (int)(vy * 100.0);
+            m_patternVar1 = (int)(vx * 100.0);
+            m_patternVar2 = (int)(vy * 100.0);
             vx = 0.0;
             vy = 0.0;
-            if (unk120 == 1) {
-                m_proration = unk118 * 5.0 + m_proration;
+            if (m_rfBlue == 1) {
+                m_proration = m_rfGauge * 5.0 + m_proration;
             }
-            unk118 = 0.0;
-            unk14c = 0x5a;
+            m_rfGauge = 0.0;
+            m_freezeTime = 0x5a;
             FillBackground(0xb0, 3);
         }
         if (frame == 0 && timer == 0) {
@@ -2383,28 +2383,28 @@ void CEXNanase::UpdatePattern()
             frame++;
             m_attackResult = 0;
             if (frame >= x8) {
-                pattern = 9;
-                vx = unk3138 * 0.01;
-                vy = unk313c * 0.01;
+                pattern = kFall;
+                vx = m_patternVar1 * 0.01;
+                vy = m_patternVar2 * 0.01;
                 ay = 0.035;
                 StartPattern();
             }
         }
         break;
-    case 0xb2:
+    case kDashStop:
         vx -= 0.03;
         vx = vx;
         if (vx < 0.0) {
             vx = 0.0;
-            unk158 = 0;
+            m_dashMomentum = 0;
         }
         if (m_inputY == -1 && frame > 0) {
-            pattern = 4;
+            pattern = kJump;
             if (m_inputX == facing) {
-                pattern = 5;
+                pattern = kJumpForward;
             }
             if (m_inputX == -facing) {
-                pattern = 6;
+                pattern = kJumpBack;
             }
             m_attackResult = 0;
             StartPattern();
@@ -2415,7 +2415,7 @@ void CEXNanase::UpdatePattern()
             timer = 0;
             frame++;
             if (frame >= x8) {
-                pattern = 0;
+                pattern = kStand;
                 StartPattern();
                 break;
             }
@@ -2452,28 +2452,28 @@ void CEXNanase::UpdatePattern()
             }
             if (frame >= x8) {
                 StartPattern();
-                pattern = 0;
+                pattern = kStand;
             }
         }
         break;
-    case 0xc8:
-        if (unk158 == 0) {
+    case k5A:
+        if (m_dashMomentum == 0) {
             vx = 0.0;
             vy = 0.0;
         }
-        if (vx > 0.0 && unk158 == 1) {
+        if (vx > 0.0 && m_dashMomentum == 1) {
             vx -= 0.03;
         } else {
             vx = 0.0;
-            unk158 = 0;
+            m_dashMomentum = 0;
         }
-        if (m_inputY == -1 && frame > 0 && unk15c < 3 && m_attackResult >= 2) {
-            pattern = 4;
+        if (m_inputY == -1 && frame > 0 && m_sealLevel < 3 && m_attackResult >= 2) {
+            pattern = kJump;
             if (m_inputX == facing) {
-                pattern = 5;
+                pattern = kJumpForward;
             }
             if (m_inputX == -facing) {
-                pattern = 6;
+                pattern = kJumpBack;
             }
             m_attackResult = 0;
             StartPattern();
@@ -2487,37 +2487,37 @@ void CEXNanase::UpdatePattern()
             m_playSound = 0x15;
         }
         timer++;
-        if (timer >= l4 - ((unk3454 == 1) << 1)) {
+        if (timer >= l4 - ((m_awakened == 1) << 1)) {
             timer = 0;
             frame++;
             if (frame < 2) {
                 m_attackResult = 0;
             }
             if (frame >= x8) {
-                pattern = 0;
+                pattern = kStand;
                 FaceOpponent();
                 StartPattern();
             }
         }
         break;
-    case 0xc9:
-        if (unk158 == 0) {
+    case k5BClose:
+        if (m_dashMomentum == 0) {
             vx = 0.0;
             vy = 0.0;
         }
-        if (vx > 0.0 && unk158 == 1) {
+        if (vx > 0.0 && m_dashMomentum == 1) {
             vx -= 0.03;
         } else {
             vx = 0.0;
-            unk158 = 0;
+            m_dashMomentum = 0;
         }
-        if (m_inputY == -1 && frame > 0 && unk15c < 3 && m_attackResult >= 2) {
-            pattern = 4;
+        if (m_inputY == -1 && frame > 0 && m_sealLevel < 3 && m_attackResult >= 2) {
+            pattern = kJump;
             if (m_inputX == facing) {
-                pattern = 5;
+                pattern = kJumpForward;
             }
             if (m_inputX == -facing) {
-                pattern = 6;
+                pattern = kJumpBack;
             }
             m_attackResult = 0;
             StartPattern();
@@ -2529,37 +2529,37 @@ void CEXNanase::UpdatePattern()
             m_hitsLeft = 1;
         }
         timer++;
-        if (timer >= l4 - ((unk3454 == 1) << 1)) {
+        if (timer >= l4 - ((m_awakened == 1) << 1)) {
             timer = 0;
             frame++;
             if (frame < 2) {
                 m_attackResult = 0;
             }
             if (frame >= x8) {
-                pattern = 0;
+                pattern = kStand;
                 FaceOpponent();
                 StartPattern();
             }
         }
         break;
-    case 0xca:
-        if (unk158 == 0) {
+    case k5BFar:
+        if (m_dashMomentum == 0) {
             vx = 0.0;
             vy = 0.0;
         }
-        if (vx > 0.0 && unk158 == 1) {
+        if (vx > 0.0 && m_dashMomentum == 1) {
             vx -= 0.03;
         } else {
             vx = 0.0;
-            unk158 = 0;
+            m_dashMomentum = 0;
         }
-        if (m_inputY == -1 && frame > 0 && unk15c < 3 && m_attackResult == 3) {
-            pattern = 4;
+        if (m_inputY == -1 && frame > 0 && m_sealLevel < 3 && m_attackResult == 3) {
+            pattern = kJump;
             if (m_inputX == facing) {
-                pattern = 5;
+                pattern = kJumpForward;
             }
             if (m_inputX == -facing) {
-                pattern = 6;
+                pattern = kJumpBack;
             }
             m_attackResult = 0;
             StartPattern();
@@ -2571,7 +2571,7 @@ void CEXNanase::UpdatePattern()
             m_hitsLeft = 1;
         }
         timer++;
-        if (timer >= l4 - ((unk3454 == 1) << 1)) {
+        if (timer >= l4 - ((m_awakened == 1) << 1)) {
             timer = 0;
             frame++;
             if (frame < 2) {
@@ -2581,21 +2581,21 @@ void CEXNanase::UpdatePattern()
                 x = facing * 0xa + x;
             }
             if (frame >= x8) {
-                pattern = 0;
+                pattern = kStand;
                 FaceOpponent();
                 StartPattern();
             }
         }
         break;
-    case 0xcb:
-        if (unk158 == 0 && frame < 2) {
+    case k5C:
+        if (m_dashMomentum == 0 && frame < 2) {
             vx = 0.0;
             vy = 0.0;
         }
-        if (vx > 0.0 && unk158 == 1 && frame < 2) {
+        if (vx > 0.0 && m_dashMomentum == 1 && frame < 2) {
             vx -= 0.06;
         } else {
-            unk158 = 0;
+            m_dashMomentum = 0;
         }
         if (frame == 2 && timer == 0) {
             m_gauge = m_gauge + 0x23;
@@ -2610,35 +2610,35 @@ void CEXNanase::UpdatePattern()
             }
         }
         timer++;
-        if (timer >= l4 - ((unk3454 == 1) << 1)) {
+        if (timer >= l4 - ((m_awakened == 1) << 1)) {
             timer = 0;
             frame++;
             m_attackResult = 0;
             if (frame >= x8) {
-                pattern = 0;
+                pattern = kStand;
                 FaceOpponent();
                 StartPattern();
             }
         }
         break;
-    case 0xcc:
-        if (unk158 == 0) {
+    case k2A:
+        if (m_dashMomentum == 0) {
             vx = 0.0;
             vy = 0.0;
         }
-        if (vx > 0.0 && unk158 == 1) {
+        if (vx > 0.0 && m_dashMomentum == 1) {
             vx -= 0.03;
         } else {
             vx = 0.0;
-            unk158 = 0;
+            m_dashMomentum = 0;
         }
-        if (m_inputY == -1 && frame > 0 && unk15c < 3 && m_attackResult >= 2) {
-            pattern = 4;
+        if (m_inputY == -1 && frame > 0 && m_sealLevel < 3 && m_attackResult >= 2) {
+            pattern = kJump;
             if (m_inputX == facing) {
-                pattern = 5;
+                pattern = kJumpForward;
             }
             if (m_inputX == -facing) {
-                pattern = 6;
+                pattern = kJumpBack;
             }
             m_attackResult = 0;
             StartPattern();
@@ -2650,40 +2650,40 @@ void CEXNanase::UpdatePattern()
             m_hitsLeft = 1;
         }
         timer++;
-        if (timer >= l4 - ((unk3454 == 1) << 1)) {
+        if (timer >= l4 - ((m_awakened == 1) << 1)) {
             timer = 0;
             frame++;
             if (frame < 2) {
                 m_attackResult = 0;
             }
             if (frame >= x8) {
-                pattern = 0;
+                pattern = kStand;
                 if (m_inputY == 1) {
-                    pattern = 3;
+                    pattern = kCrouch;
                 }
                 FaceOpponent();
                 StartPattern();
             }
         }
         break;
-    case 0xcd:
-        if (unk158 == 0) {
+    case k2B:
+        if (m_dashMomentum == 0) {
             vx = 0.0;
             vy = 0.0;
         }
-        if (vx > 0.0 && unk158 == 1) {
+        if (vx > 0.0 && m_dashMomentum == 1) {
             vx -= 0.03;
         } else {
             vx = 0.0;
-            unk158 = 0;
+            m_dashMomentum = 0;
         }
-        if (m_inputY == -1 && frame > 0 && unk15c < 3 && m_attackResult >= 2) {
-            pattern = 4;
+        if (m_inputY == -1 && frame > 0 && m_sealLevel < 3 && m_attackResult >= 2) {
+            pattern = kJump;
             if (m_inputX == facing) {
-                pattern = 5;
+                pattern = kJumpForward;
             }
             if (m_inputX == -facing) {
-                pattern = 6;
+                pattern = kJumpBack;
             }
             m_attackResult = 0;
             StartPattern();
@@ -2695,40 +2695,40 @@ void CEXNanase::UpdatePattern()
             m_hitsLeft = 1;
         }
         timer++;
-        if (timer >= l4 - ((unk3454 == 1) << 1)) {
+        if (timer >= l4 - ((m_awakened == 1) << 1)) {
             timer = 0;
             frame++;
             if (frame < 2) {
                 m_attackResult = 0;
             }
             if (frame >= x8) {
-                pattern = 0;
+                pattern = kStand;
                 if (m_inputY == 1) {
-                    pattern = 3;
+                    pattern = kCrouch;
                 }
                 FaceOpponent();
                 StartPattern();
             }
         }
         break;
-    case 0xce:
-        if (unk158 == 0) {
+    case k2C:
+        if (m_dashMomentum == 0) {
             vx = 0.0;
             vy = 0.0;
         }
-        if (vx > 0.0 && unk158 == 1) {
+        if (vx > 0.0 && m_dashMomentum == 1) {
             vx -= 0.03;
         } else {
             vx = 0.0;
-            unk158 = 0;
+            m_dashMomentum = 0;
         }
-        if (m_inputY == -1 && frame > 0 && unk15c < 3 && m_attackResult == 3) {
-            pattern = 4;
+        if (m_inputY == -1 && frame > 0 && m_sealLevel < 3 && m_attackResult == 3) {
+            pattern = kJump;
             if (m_inputX == facing) {
-                pattern = 5;
+                pattern = kJumpForward;
             }
             if (m_inputX == -facing) {
-                pattern = 6;
+                pattern = kJumpBack;
             }
             m_attackResult = 0;
             StartPattern();
@@ -2740,30 +2740,30 @@ void CEXNanase::UpdatePattern()
             m_hitsLeft = 2;
         }
         timer++;
-        if (timer >= l4 - ((unk3454 == 1) << 1)) {
+        if (timer >= l4 - ((m_awakened == 1) << 1)) {
             timer = 0;
             frame++;
             if (frame < 6) {
                 m_attackResult = 0;
             }
             if (frame >= x8) {
-                pattern = 3;
+                pattern = kCrouch;
                 FaceOpponent();
                 StartPattern();
             }
         }
         break;
-    case 0xcf:
+    case kJumpA:
         vy = vy + ay;
-        if (m_inputY == -1 && frame > 0 && unk15c < 3 && m_attackResult >= 2 && unk15a == 0) {
+        if (m_inputY == -1 && frame > 0 && m_sealLevel < 3 && m_attackResult >= 2 && m_airActions == 0) {
             FaceOpponent();
-            unk15a++;
-            pattern = 0xe;
+            m_airActions++;
+            pattern = kAirJump;
             if (m_inputX == facing) {
-                pattern = 0xf;
+                pattern = kAirJumpForward;
             }
             if (m_inputX == -facing) {
-                pattern = 0x10;
+                pattern = kAirJumpBack;
             }
             m_attackResult = 0;
             StartPattern();
@@ -2776,34 +2776,34 @@ void CEXNanase::UpdatePattern()
         }
         if (y + vy >= 0.0) {
             y = 0.0;
-            pattern = 0xd;
+            pattern = kLand;
             StartPattern();
             break;
         }
         timer++;
-        if (timer >= l4 - ((unk3454 == 1) << 1)) {
+        if (timer >= l4 - ((m_awakened == 1) << 1)) {
             timer = 0;
             frame++;
             if (frame < 2) {
                 m_attackResult = 0;
             }
             if (frame >= x8) {
-                pattern = 9;
+                pattern = kFall;
                 StartPattern();
             }
         }
         break;
-    case 0xd0:
+    case kJumpB:
         vy = vy + ay;
-        if (m_inputY == -1 && frame > 0 && unk15c < 3 && m_attackResult >= 2 && unk15a == 0) {
+        if (m_inputY == -1 && frame > 0 && m_sealLevel < 3 && m_attackResult >= 2 && m_airActions == 0) {
             FaceOpponent();
-            unk15a++;
-            pattern = 0xe;
+            m_airActions++;
+            pattern = kAirJump;
             if (m_inputX == facing) {
-                pattern = 0xf;
+                pattern = kAirJumpForward;
             }
             if (m_inputX == -facing) {
-                pattern = 0x10;
+                pattern = kAirJumpBack;
             }
             m_attackResult = 0;
             StartPattern();
@@ -2816,35 +2816,35 @@ void CEXNanase::UpdatePattern()
         }
         if (y + vy >= 0.0) {
             y = 0.0;
-            pattern = 0xd;
+            pattern = kLand;
             StartPattern();
             break;
         }
         timer++;
-        if (timer >= l4 - ((unk3454 == 1) << 1)) {
+        if (timer >= l4 - ((m_awakened == 1) << 1)) {
             timer = 0;
             frame++;
             if (frame < 2) {
                 m_attackResult = 0;
             }
             if (frame >= x8) {
-                pattern = 4;
+                pattern = kJump;
                 StartPattern();
                 frame = 7;
             }
         }
         break;
-    case 0xd1:
+    case kJumpC:
         vy = vy + ay;
-        if (m_inputY == -1 && frame > 0 && unk15c < 3 && m_attackResult >= 2 && unk15a == 0) {
+        if (m_inputY == -1 && frame > 0 && m_sealLevel < 3 && m_attackResult >= 2 && m_airActions == 0) {
             FaceOpponent();
-            unk15a++;
-            pattern = 0xe;
+            m_airActions++;
+            pattern = kAirJump;
             if (m_inputX == facing) {
-                pattern = 0xf;
+                pattern = kAirJumpForward;
             }
             if (m_inputX == -facing) {
-                pattern = 0x10;
+                pattern = kAirJumpBack;
             }
             m_attackResult = 0;
             StartPattern();
@@ -2857,25 +2857,25 @@ void CEXNanase::UpdatePattern()
         }
         if (y + vy >= 0.0) {
             y = 0.0;
-            pattern = 0xd;
+            pattern = kLand;
             StartPattern();
             break;
         }
         timer++;
-        if (timer >= l4 - ((unk3454 == 1) << 1)) {
+        if (timer >= l4 - ((m_awakened == 1) << 1)) {
             timer = 0;
             frame++;
             if (frame < 2) {
                 m_attackResult = 0;
             }
             if (frame >= x8) {
-                pattern = 4;
+                pattern = kJump;
                 StartPattern();
                 frame = 7;
             }
         }
         break;
-    case 0xd2:
+    case k6C:
         if (frame == 0 && timer == 0) {
             vx = 0.0;
             vy = 0.0;
@@ -2893,25 +2893,25 @@ void CEXNanase::UpdatePattern()
             m_hitsLeft = 1;
         }
         timer++;
-        if (timer >= l4 - ((unk3454 == 1) << 1)) {
+        if (timer >= l4 - ((m_awakened == 1) << 1)) {
             timer = 0;
             frame++;
             m_attackResult = 0;
             if (frame >= x8) {
-                pattern = 0;
+                pattern = kStand;
                 FaceOpponent();
                 StartPattern();
             }
         }
         break;
-    case 0xd3:
-        if (m_inputY == -1 && frame > 0 && unk15c < 3 && m_attackResult >= 2) {
-            pattern = 4;
+    case kUnusedD3:
+        if (m_inputY == -1 && frame > 0 && m_sealLevel < 3 && m_attackResult >= 2) {
+            pattern = kJump;
             if (m_inputX == facing) {
-                pattern = 5;
+                pattern = kJumpForward;
             }
             if (m_inputX == -facing) {
-                pattern = 6;
+                pattern = kJumpBack;
             }
             m_attackResult = 0;
             StartPattern();
@@ -2927,18 +2927,18 @@ void CEXNanase::UpdatePattern()
             m_hitsLeft = 1;
         }
         timer++;
-        if (timer >= l4 - ((unk3454 == 1) << 1)) {
+        if (timer >= l4 - ((m_awakened == 1) << 1)) {
             timer = 0;
             frame++;
             m_attackResult = 0;
             if (frame >= x8) {
-                pattern = 0;
+                pattern = kStand;
                 FaceOpponent();
                 StartPattern();
             }
         }
         break;
-    case 0xd4:
+    case kAirDiveUnused:
         vy = vy + ay;
         if (frame == 0 && timer == 0) {
             m_gauge = m_gauge + 0x1e;
@@ -2948,7 +2948,7 @@ void CEXNanase::UpdatePattern()
             ay = 0.07;
         }
         if (m_attackResult > 1) {
-            pattern = 0xd5;
+            pattern = kAirDiveRebound;
             StartPattern();
             StopMoving();
             break;
@@ -2962,15 +2962,15 @@ void CEXNanase::UpdatePattern()
             l50.y = (double)(int)y;
             l50.scale = 2;
             l50.layer = 0;
-            l50.unk2c = 7;
+            l50.sound = 7;
             m_game->CreateEffect((EffectDesc*)&l50);
             m_playSound = 7;
-            pattern = 0xd6;
+            pattern = kAirDiveLanding;
             StartPattern();
             break;
         }
         timer++;
-        if (timer >= l4 - ((unk3454 == 1) << 1)) {
+        if (timer >= l4 - ((m_awakened == 1) << 1)) {
             timer = 0;
             frame++;
             m_attackResult = 0;
@@ -2979,7 +2979,7 @@ void CEXNanase::UpdatePattern()
             }
         }
         break;
-    case 0xd5:
+    case kAirDiveRebound:
         ay = 0.042;
         vy = vy + ay;
         if (frame == 0 && timer == 0) {
@@ -2987,17 +2987,17 @@ void CEXNanase::UpdatePattern()
             vy = -2.4;
         }
         timer++;
-        if (timer >= l4 - ((unk3454 == 1) << 1)) {
+        if (timer >= l4 - ((m_awakened == 1) << 1)) {
             timer = 0;
             frame++;
             m_attackResult = 0;
             if (frame >= x8) {
-                pattern = 9;
+                pattern = kFall;
                 StartPattern();
             }
         }
         break;
-    case 0xd6:
+    case kAirDiveLanding:
         vx = 0.0;
         vy = 0.0;
         if (frame == 0 && timer == 0) {
@@ -3007,28 +3007,28 @@ void CEXNanase::UpdatePattern()
             l50.y = (double)(int)y;
             l50.scale = 2;
             l50.layer = 0;
-            l50.unk2c = 7;
+            l50.sound = 7;
             m_game->CreateEffect((EffectDesc*)&l50);
         }
         timer++;
-        if (timer >= l4 - ((unk3454 == 1) << 1)) {
+        if (timer >= l4 - ((m_awakened == 1) << 1)) {
             timer = 0;
             frame++;
             m_attackResult = 0;
             if (frame >= x8) {
-                pattern = 7;
+                pattern = kStandUp;
                 if (m_inputY == 1) {
-                    pattern = 3;
+                    pattern = kCrouch;
                 }
                 FaceOpponent();
                 StartPattern();
             }
         }
         break;
-    case 0xdc:
+    case kThrow:
         vx = 0.0;
         vy = 0.0;
-        unk158 = 0;
+        m_dashMomentum = 0;
         if (frame == 1 && timer == 0 && (*m_opponent)->y == 0.0) {
             m_hitsLeft = 1;
         } else {
@@ -3045,8 +3045,8 @@ void CEXNanase::UpdatePattern()
             StartPattern();
             (*m_opponent)->StopMoving();
             (*m_opponent)->StartPattern();
-            pattern = 0xdd;
-            (*m_opponent)->pattern = 0x6b;
+            pattern = kThrowHit;
+            (*m_opponent)->pattern = kThrownStandHigh2;
             (*m_opponent)->x = facing * 0x28 + x;
             l50.type = 0;
             l50.x = (double)((int)x + facing * 0x25);
@@ -3062,14 +3062,14 @@ void CEXNanase::UpdatePattern()
             frame++;
             m_attackResult = 0;
             if (frame >= x8) {
-                pattern = 0;
+                pattern = kStand;
                 FaceOpponent();
                 StartPattern();
             }
         }
         break;
-    case 0xdd:
-        Unk410a80(0x32, 3);
+    case kThrowHit:
+        FocusCameraY(0x32, 3);
         if (frame == 0 && timer == 0) {
             StopMoving();
         }
@@ -3095,25 +3095,25 @@ void CEXNanase::UpdatePattern()
         if (frame == 2) {
             (*m_opponent)->x = facing * 0x1e + x;
             (*m_opponent)->y = y - 68.0;
-            (*m_opponent)->pattern = 0x65;
+            (*m_opponent)->pattern = kThrownStandLow;
             (*m_opponent)->StartPattern();
         }
         if (frame == 3) {
             (*m_opponent)->x = facing * 0x19 + x;
             (*m_opponent)->y = y - 80.0;
-            (*m_opponent)->pattern = 0x65;
+            (*m_opponent)->pattern = kThrownStandLow;
             (*m_opponent)->StartPattern();
         }
         if (frame == 4) {
             (*m_opponent)->x = facing * 0xa + x;
             (*m_opponent)->y = y - 90.0;
-            (*m_opponent)->pattern = 0x76;
+            (*m_opponent)->pattern = kThrownAirborneInverted;
             (*m_opponent)->StartPattern();
         }
         if (frame == 5) {
             (*m_opponent)->x = facing * 0x1e + x;
             (*m_opponent)->y = y - 60.0;
-            (*m_opponent)->pattern = 0x69;
+            (*m_opponent)->pattern = kThrownUpsideDown;
             (*m_opponent)->StartPattern();
         }
         timer++;
@@ -3124,24 +3124,24 @@ void CEXNanase::UpdatePattern()
             if (frame == 6) {
                 (*m_opponent)->x = facing * 0x28 + x;
                 (*m_opponent)->y = 0.0;
-                (*m_opponent)->pattern = 0x62;
+                (*m_opponent)->pattern = kKnockdown;
                 (*m_opponent)->StartPattern();
                 DealDamage(0x4b0, 750.0);
             }
             if (frame >= x8) {
-                pattern = 0;
+                pattern = kStand;
                 StartPattern();
                 FaceOpponent();
             }
         }
         break;
-    case 0xe6:
+    case kDashA:
         StartAfterimages(3);
-        unk158 = 0;
+        m_dashMomentum = 0;
         if (vx > 0.0) {
             vx -= 0.03;
         } else {
-            unk158 = 0;
+            m_dashMomentum = 0;
         }
         if (frame == 1 && timer == 0) {
             m_hitsLeft = 1;
@@ -3152,25 +3152,25 @@ void CEXNanase::UpdatePattern()
             vx = 0.0;
         }
         timer++;
-        if (timer >= l4 - ((unk3454 == 1) << 1)) {
+        if (timer >= l4 - ((m_awakened == 1) << 1)) {
             timer = 0;
             frame++;
             if (frame < 2) {
                 m_attackResult = 0;
             }
             if (frame >= x8) {
-                pattern = 0;
+                pattern = kStand;
                 StartPattern();
             }
         }
         break;
-    case 0xe7:
+    case kDashB:
         StartAfterimages(3);
-        unk158 = 0;
+        m_dashMomentum = 0;
         if (vx > 0.0) {
             vx -= 0.03;
         } else {
-            unk158 = 0;
+            m_dashMomentum = 0;
         }
         if (frame == 3 && timer == 0) {
             m_hitsLeft = 1;
@@ -3181,25 +3181,25 @@ void CEXNanase::UpdatePattern()
             vx = 0.0;
         }
         timer++;
-        if (timer >= l4 - ((unk3454 == 1) << 1)) {
+        if (timer >= l4 - ((m_awakened == 1) << 1)) {
             timer = 0;
             frame++;
             if (frame < 2) {
                 m_attackResult = 0;
             }
             if (frame >= x8) {
-                pattern = 0;
+                pattern = kStand;
                 StartPattern();
             }
         }
         break;
-    case 0xe8:
-        unk158 = 0;
+    case kDashC:
+        m_dashMomentum = 0;
         StartAfterimages(3);
         if (vx > 0.0 && frame > 3) {
             vx -= 0.035;
         } else {
-            unk158 = 0;
+            m_dashMomentum = 0;
         }
         if (vx < 0.0) {
             vx = 0.0;
@@ -3210,25 +3210,25 @@ void CEXNanase::UpdatePattern()
             m_hitsLeft = 1;
         }
         timer++;
-        if (timer >= l4 - ((unk3454 == 1) << 1)) {
+        if (timer >= l4 - ((m_awakened == 1) << 1)) {
             timer = 0;
             frame++;
             if (frame < 2) {
                 m_attackResult = 0;
             }
             if (frame >= x8) {
-                pattern = 0;
+                pattern = kStand;
                 StartPattern();
             }
         }
         break;
-    case 0xe9:
+    case kDash2A:
         StartAfterimages(3);
-        unk158 = 0;
+        m_dashMomentum = 0;
         if (vx > 0.0) {
             vx -= 0.03;
         } else {
-            unk158 = 0;
+            m_dashMomentum = 0;
         }
         if (frame == 1 && timer == 0) {
             m_hitsLeft = 1;
@@ -3239,25 +3239,25 @@ void CEXNanase::UpdatePattern()
             vx = 0.0;
         }
         timer++;
-        if (timer >= l4 - ((unk3454 == 1) << 1)) {
+        if (timer >= l4 - ((m_awakened == 1) << 1)) {
             timer = 0;
             frame++;
             if (frame < 2) {
                 m_attackResult = 0;
             }
             if (frame >= x8) {
-                pattern = 3;
+                pattern = kCrouch;
                 StartPattern();
             }
         }
         break;
-    case 0xea:
+    case kDash2B:
         StartAfterimages(3);
-        unk158 = 0;
+        m_dashMomentum = 0;
         if (vx > 0.0) {
             vx -= 0.03;
         } else {
-            unk158 = 0;
+            m_dashMomentum = 0;
         }
         if (frame == 1 && timer == 0) {
             m_hitsLeft = 1;
@@ -3268,28 +3268,28 @@ void CEXNanase::UpdatePattern()
             vx = 0.0;
         }
         timer++;
-        if (timer >= l4 - ((unk3454 == 1) << 1)) {
+        if (timer >= l4 - ((m_awakened == 1) << 1)) {
             timer = 0;
             frame++;
             if (frame < 2) {
                 m_attackResult = 0;
             }
             if (frame >= x8) {
-                pattern = 3;
+                pattern = kCrouch;
                 StartPattern();
             }
         }
         break;
-    case 0xeb:
+    case kDash2C:
         StartAfterimages(3);
-        unk158 = 0;
-        if (m_inputY == -1 && frame > 0 && unk15c < 3 && m_attackResult >= 2) {
-            pattern = 4;
+        m_dashMomentum = 0;
+        if (m_inputY == -1 && frame > 0 && m_sealLevel < 3 && m_attackResult >= 2) {
+            pattern = kJump;
             if (m_inputX == facing) {
-                pattern = 5;
+                pattern = kJumpForward;
             }
             if (m_inputX == -facing) {
-                pattern = 6;
+                pattern = kJumpBack;
             }
             m_attackResult = 0;
             StartPattern();
@@ -3298,7 +3298,7 @@ void CEXNanase::UpdatePattern()
         if (vx > 0.0) {
             vx -= 0.03;
         } else {
-            unk158 = 0;
+            m_dashMomentum = 0;
         }
         if (frame == 1 && timer == 0) {
             m_hitsLeft = 1;
@@ -3309,25 +3309,25 @@ void CEXNanase::UpdatePattern()
             vx = 0.0;
         }
         timer++;
-        if (timer >= l4 - ((unk3454 == 1) << 1)) {
+        if (timer >= l4 - ((m_awakened == 1) << 1)) {
             timer = 0;
             frame++;
             if (frame < 2) {
                 m_attackResult = 0;
             }
             if (frame >= x8) {
-                pattern = 0;
+                pattern = kStand;
                 StartPattern();
             }
         }
         break;
-    case 0xf8:
+    case kAirThrow:
         vy = vy + ay;
         if (frame == 1 && m_attackResult == 3) {
             (*m_opponent)->StopMoving();
             (*m_opponent)->StartPattern();
             StopMoving();
-            (*m_opponent)->unk128 = 1;
+            (*m_opponent)->m_noAirRecovery = 1;
             l50.type = 0;
             l50.x = (double)((int)x + facing * 0x25);
             l50.y = (double)((int)y - 0x2a);
@@ -3336,10 +3336,10 @@ void CEXNanase::UpdatePattern()
             m_game->CreateEffect((EffectDesc*)&l50);
             frame = 0;
             timer = 0;
-            pattern = 0xf9;
+            pattern = kAirThrowHit;
             (*m_opponent)->x = facing * 0x19 + x;
             (*m_opponent)->y = y - 80.0;
-            (*m_opponent)->pattern = 0x65;
+            (*m_opponent)->pattern = kThrownStandLow;
             (*m_opponent)->StartPattern();
             break;
         }
@@ -3347,22 +3347,22 @@ void CEXNanase::UpdatePattern()
         if (timer >= l4) {
             timer = 0;
             frame++;
-            if (frame == 1 && (*m_opponent)->y < 0.0 && ((*m_opponent)->pattern < 0x32 || (*m_opponent)->pattern > 0x95)) {
+            if (frame == 1 && (*m_opponent)->y < 0.0 && ((*m_opponent)->pattern < kFirstHitReaction || (*m_opponent)->pattern > kLastHitReaction)) {
                 m_hitsLeft = 1;
             } else {
                 m_hitsLeft = 0;
             }
             m_attackResult = 0;
             if (frame >= x8) {
-                pattern = 0xd1;
+                pattern = kJumpC;
                 frame = 2;
             }
         }
         break;
-    case 0xf9:
-        unk13e = 0x1e;
-        (*m_opponent)->unk13e = 0x1e;
-        Unk410a80(0x32, 3);
+    case kAirThrowHit:
+        m_hideOffscreenMarker = 0x1e;
+        (*m_opponent)->m_hideOffscreenMarker = 0x1e;
+        FocusCameraY(0x32, 3);
         if (frame == 0 && timer == 0) {
             StopMoving();
         }
@@ -3385,19 +3385,19 @@ void CEXNanase::UpdatePattern()
         if (frame == 0) {
             (*m_opponent)->x = facing * 0x19 + x;
             (*m_opponent)->y = y - 80.0;
-            (*m_opponent)->pattern = 0x65;
+            (*m_opponent)->pattern = kThrownStandLow;
             (*m_opponent)->StartPattern();
         }
         if (frame == 1) {
             (*m_opponent)->x = facing * 0xa + x;
             (*m_opponent)->y = y - 90.0;
-            (*m_opponent)->pattern = 0x76;
+            (*m_opponent)->pattern = kThrownAirborneInverted;
             (*m_opponent)->StartPattern();
         }
         if (frame == 2) {
             (*m_opponent)->x = facing * 0x1e + x;
             (*m_opponent)->y = y - 60.0;
-            (*m_opponent)->pattern = 0x69;
+            (*m_opponent)->pattern = kThrownUpsideDown;
             (*m_opponent)->StartPattern();
         }
         timer++;
@@ -3408,31 +3408,31 @@ void CEXNanase::UpdatePattern()
             if (frame == 3) {
                 (*m_opponent)->x = facing * 0x28 + x;
                 (*m_opponent)->y = 0.0;
-                (*m_opponent)->pattern = 0x62;
+                (*m_opponent)->pattern = kKnockdown;
                 (*m_opponent)->StartPattern();
                 DealDamage(0x578, 500.0);
             }
             if (frame >= x8) {
-                pattern = 0;
+                pattern = kStand;
                 StartPattern();
                 FaceOpponent();
             }
         }
         break;
-    case 0xfa:
+    case k41236C:
         vx = 0.0;
         vy = 0.0;
-        unk158 = 0;
+        m_dashMomentum = 0;
         if (frame == 2 && m_attackResult == 3) {
             vx = 0.0;
             vy = 0.0;
-            unkb8 = 0.0;
+            m_cornerPushback = 0.0;
             StartPattern();
             (*m_opponent)->StartPattern();
-            (*m_opponent)->pattern = 0x6b;
-            (*m_opponent)->unk14a = 0x5a;
+            (*m_opponent)->pattern = kThrownStandHigh2;
+            (*m_opponent)->m_hitstop = 0x5a;
             (*m_opponent)->x = facing * 0x28 + x;
-            (*m_opponent)->unk128 = 1;
+            (*m_opponent)->m_noAirRecovery = 1;
             (*m_opponent)->StopMoving();
             timer = 0;
             frame = 3;
@@ -3449,34 +3449,34 @@ void CEXNanase::UpdatePattern()
             timer = 0;
             frame++;
             m_attackResult = 0;
-            if (frame == 2 && (*m_opponent)->y == 0.0 && ((*m_opponent)->pattern < 0x32 || (*m_opponent)->pattern > 0x96)) {
+            if (frame == 2 && (*m_opponent)->y == 0.0 && ((*m_opponent)->pattern < kFirstHitReaction || (*m_opponent)->pattern > kFirstGuard)) {
                 m_hitsLeft = 1;
             } else {
                 m_hitsLeft = 0;
             }
             if (frame == 4) {
                 frame = 0;
-                pattern = 0xfe;
+                pattern = kGrabHold;
                 frame = 1;
                 (*m_opponent)->x = facing * 0x28 + x;
                 (*m_opponent)->y = -81.0;
-                (*m_opponent)->pattern = 0x67;
+                (*m_opponent)->pattern = kThrownDoubledOver;
                 break;
             }
             if (frame == 3) {
                 frame = 4;
             }
             if (frame >= x8) {
-                pattern = 0;
+                pattern = kStand;
                 if (m_inputY == 1) {
-                    pattern = 8;
+                    pattern = kCrouchDown;
                 }
                 FaceOpponent();
                 StartPattern();
             }
         }
         break;
-    case 0xfb:
+    case kGrabFollowB:
         StopMoving();
         timer++;
         if (timer >= l4) {
@@ -3486,56 +3486,56 @@ void CEXNanase::UpdatePattern()
             if (frame == 1) {
                 (*m_opponent)->x = facing * 0xb + x;
                 (*m_opponent)->y = -62.0;
-                (*m_opponent)->pattern = 0x64;
+                (*m_opponent)->pattern = kThrownStandHigh;
                 (*m_opponent)->StartPattern();
             }
             if (frame == 2) {
                 (*m_opponent)->x = x - facing * 0xb;
                 (*m_opponent)->y = -57.0;
-                (*m_opponent)->pattern = 0x64;
+                (*m_opponent)->pattern = kThrownStandHigh;
                 (*m_opponent)->StartPattern();
             }
             if (frame == 3) {
                 (*m_opponent)->x = x - facing * 0xb;
                 (*m_opponent)->y = -52.0;
-                (*m_opponent)->pattern = 0x68;
+                (*m_opponent)->pattern = kThrownAirborne;
                 (*m_opponent)->StartPattern();
             }
             if (frame == 4) {
                 (*m_opponent)->x = x - facing * 0x19;
                 (*m_opponent)->y = -55.0;
-                (*m_opponent)->pattern = 0x68;
+                (*m_opponent)->pattern = kThrownAirborne;
                 (*m_opponent)->StartPattern();
             }
             if (frame == 5) {
                 (*m_opponent)->x = x - facing * 0x25;
                 (*m_opponent)->y = -54.0;
-                (*m_opponent)->pattern = 0x3f;
+                (*m_opponent)->pattern = kHitAirLaunch;
                 (*m_opponent)->StartPattern();
-                (*m_opponent)->unkc0 = 0.5;
-                (*m_opponent)->unkc8 = -2.6;
+                (*m_opponent)->m_hitVx = 0.5;
+                (*m_opponent)->m_hitVy = -2.6;
             }
             if (frame >= x8) {
-                pattern = 0;
+                pattern = kStand;
                 StartPattern();
             }
         }
         break;
-    case 0xfc:
+    case k41236A:
         if (frame == 0 && timer == 0) {
             StopMoving();
         }
         if (m_attackResult == 3) {
-            Unk410a80(0x32, 3);
+            FocusCameraY(0x32, 3);
             m_attackResult = 0;
             (*m_opponent)->x = facing * 0x32 + x;
             (*m_opponent)->y = 0.0;
-            (*m_opponent)->pattern = 0x6b;
+            (*m_opponent)->pattern = kThrownStandHigh2;
             (*m_opponent)->StartPattern();
             (*m_opponent)->StopMoving();
-            (*m_opponent)->unk128 = 1;
+            (*m_opponent)->m_noAirRecovery = 1;
             StartPattern();
-            pattern = 0xfe;
+            pattern = kGrabHold;
             break;
         }
         timer++;
@@ -3552,28 +3552,28 @@ void CEXNanase::UpdatePattern()
                 m_hitsLeft = 0;
             }
             if (frame >= x8) {
-                pattern = 0;
+                pattern = kStand;
                 FaceOpponent();
                 StartPattern();
             }
         }
         break;
-    case 0xfd:
+    case k41236B:
         if (frame == 0 && timer == 0) {
             StopMoving();
         }
         if (m_attackResult == 3) {
-            Unk410a80(0x32, 3);
+            FocusCameraY(0x32, 3);
             m_attackResult = 0;
             (*m_opponent)->x = facing * 0x28 + x;
             (*m_opponent)->y = -80.0;
-            (*m_opponent)->pattern = 0x67;
+            (*m_opponent)->pattern = kThrownDoubledOver;
             (*m_opponent)->StartPattern();
             (*m_opponent)->StopMoving();
             StartPattern();
-            pattern = 0xfe;
+            pattern = kGrabHold;
             frame = 2;
-            (*m_opponent)->unk128 = 1;
+            (*m_opponent)->m_noAirRecovery = 1;
             break;
         }
         timer++;
@@ -3587,23 +3587,23 @@ void CEXNanase::UpdatePattern()
                 m_hitsLeft = 0;
             }
             if (frame >= x8) {
-                pattern = 0;
+                pattern = kStand;
                 FaceOpponent();
                 StartPattern();
             }
         }
         break;
-    case 0xfe:
-        Unk410a80(0x32, 3);
-        if (unk3138 == 0 && frame == 2) {
+    case kGrabHold:
+        FocusCameraY(0x32, 3);
+        if (m_patternVar1 == 0 && frame == 2) {
             if ((*m_opponent)->m_pressA == 1) {
-                unk3138 = 1;
+                m_patternVar1 = 1;
             }
             if ((*m_opponent)->m_pressB == 1) {
-                unk3138 = 2;
+                m_patternVar1 = 2;
             }
             if ((*m_opponent)->m_pressC == 1) {
-                unk3138 = 3;
+                m_patternVar1 = 3;
             }
         }
         timer++;
@@ -3614,58 +3614,58 @@ void CEXNanase::UpdatePattern()
             if (frame == 1) {
                 (*m_opponent)->x = facing * 0x28 + x;
                 (*m_opponent)->y = -81.0;
-                (*m_opponent)->pattern = 0x67;
+                (*m_opponent)->pattern = kThrownDoubledOver;
                 (*m_opponent)->StartPattern();
                 (*m_opponent)->StopMoving();
-                (*m_opponent)->unk128 = 1;
+                (*m_opponent)->m_noAirRecovery = 1;
             }
             if (frame == 2) {
                 (*m_opponent)->x = facing * 0x28 + x;
                 (*m_opponent)->y = -80.0;
-                (*m_opponent)->pattern = 0x67;
+                (*m_opponent)->pattern = kThrownDoubledOver;
                 (*m_opponent)->StartPattern();
                 (*m_opponent)->StopMoving();
-                (*m_opponent)->unk128 = 1;
+                (*m_opponent)->m_noAirRecovery = 1;
             }
             if (frame >= x8) {
-                pattern = 0x101;
-                (*m_opponent)->pattern = 0x3f;
+                pattern = kGrabRelease;
+                (*m_opponent)->pattern = kHitAirLaunch;
                 (*m_opponent)->StartPattern();
                 (*m_opponent)->StopMoving();
-                (*m_opponent)->unk128 = 1;
-                if (m_command == 0xa || m_command == 0x1e) {
-                    pattern = 0xff;
+                (*m_opponent)->m_noAirRecovery = 1;
+                if (m_command == kCmd236A || m_command == kCmd214A) {
+                    pattern = kGrabFollowA;
                     frame = 0;
                     timer = 0;
-                    (*m_opponent)->pattern = 0x67;
-                    if (unk3138 == 3) {
+                    (*m_opponent)->pattern = kThrownDoubledOver;
+                    if (m_patternVar1 == 3) {
                         StartPattern();
-                        pattern = 0x102;
+                        pattern = kGrabEscaped;
                         m_playSound = 0x1a;
-                        (*m_opponent)->pattern = 0x9e;
+                        (*m_opponent)->pattern = kAirRecoveryBack;
                         (*m_opponent)->StartPattern();
                         (*m_opponent)->StopMoving();
                         break;
                     }
                     break;
                 }
-                if (m_command == 0xb || m_command == 0x1f) {
-                    if (unk3138 == 2) {
+                if (m_command == kCmd236B || m_command == kCmd214B) {
+                    if (m_patternVar1 == 2) {
                         StartPattern();
-                        pattern = 0x102;
+                        pattern = kGrabEscaped;
                         m_playSound = 0x1a;
-                        (*m_opponent)->pattern = 0x9e;
+                        (*m_opponent)->pattern = kAirRecoveryBack;
                         (*m_opponent)->StartPattern();
                         (*m_opponent)->StopMoving();
                         break;
                     }
-                    pattern = 0xfb;
-                    (*m_opponent)->pattern = 0x67;
+                    pattern = kGrabFollowB;
+                    (*m_opponent)->pattern = kThrownDoubledOver;
                     frame = 1;
                     timer = 0;
                     (*m_opponent)->x = facing * 0xb + x;
                     (*m_opponent)->y = -62.0;
-                    (*m_opponent)->pattern = 0x64;
+                    (*m_opponent)->pattern = kThrownStandHigh;
                     break;
                 }
                 (*m_opponent)->y = -40.0;
@@ -3674,10 +3674,10 @@ void CEXNanase::UpdatePattern()
             }
         }
         break;
-    case 0xff:
-        Unk410a80(0x32, 3);
+    case kGrabFollowA:
+        FocusCameraY(0x32, 3);
         if (frame == 1 && timer == 0) {
-            unk3138 = 0;
+            m_patternVar1 = 0;
         }
         StopMoving();
         if (frame == 6 && timer == 0) {
@@ -3690,46 +3690,46 @@ void CEXNanase::UpdatePattern()
             l50.layer = 1;
             m_game->CreateEffect((EffectDesc*)&l50);
         }
-        if (frame < 0xa && unk3138 == 0) {
+        if (frame < 0xa && m_patternVar1 == 0) {
             if ((*m_opponent)->m_pressA == 1) {
-                unk3138 = 1;
+                m_patternVar1 = 1;
             }
             if ((*m_opponent)->m_pressB == 1) {
-                unk3138 = 2;
+                m_patternVar1 = 2;
             }
             if ((*m_opponent)->m_pressC == 1) {
-                unk3138 = 3;
+                m_patternVar1 = 3;
             }
         }
         if (frame == 0xa && timer == 0) {
-            if ((m_command == 0xa || m_command == 0x1e) && m_gauge >= 0x3e8) {
-                if (unk3138 == 3) {
+            if ((m_command == kCmd236A || m_command == kCmd214A) && m_gauge >= 0x3e8) {
+                if (m_patternVar1 == 3) {
                     StartPattern();
-                    pattern = 0x102;
+                    pattern = kGrabEscaped;
                     m_playSound = 0x1a;
-                    (*m_opponent)->pattern = 0x9e;
+                    (*m_opponent)->pattern = kAirRecoveryBack;
                     (*m_opponent)->StartPattern();
                     (*m_opponent)->StopMoving();
                     break;
                 }
                 frame = 0;
                 timer = 0;
-                pattern = 0x12c;
+                pattern = kGrabFollowAA;
                 break;
             }
-            if ((m_command == 0xb || m_command == 0x1f) && m_gauge >= 0x3e8) {
-                if (unk3138 == 2) {
+            if ((m_command == kCmd236B || m_command == kCmd214B) && m_gauge >= 0x3e8) {
+                if (m_patternVar1 == 2) {
                     StartPattern();
-                    pattern = 0x102;
+                    pattern = kGrabEscaped;
                     m_playSound = 0x1a;
-                    (*m_opponent)->pattern = 0x9e;
+                    (*m_opponent)->pattern = kAirRecoveryBack;
                     (*m_opponent)->StartPattern();
                     (*m_opponent)->StopMoving();
                     break;
                 }
                 frame = 0;
                 timer = 0;
-                pattern = 0x132;
+                pattern = kGrabFollowAB;
                 facing = -facing;
                 break;
             }
@@ -3742,64 +3742,64 @@ void CEXNanase::UpdatePattern()
             if (frame == 1) {
                 (*m_opponent)->x = facing * 0x24 + x;
                 (*m_opponent)->y = -78.0;
-                (*m_opponent)->pattern = 0x67;
+                (*m_opponent)->pattern = kThrownDoubledOver;
                 (*m_opponent)->StartPattern();
             }
             if (frame == 2) {
                 (*m_opponent)->x = facing * 0x2b + x;
                 (*m_opponent)->y = -75.0;
-                (*m_opponent)->pattern = 0x67;
+                (*m_opponent)->pattern = kThrownDoubledOver;
                 (*m_opponent)->StartPattern();
             }
             if (frame == 3) {
                 (*m_opponent)->x = facing * 0x2d + x;
                 (*m_opponent)->y = -69.0;
-                (*m_opponent)->pattern = 0x67;
+                (*m_opponent)->pattern = kThrownDoubledOver;
                 (*m_opponent)->StartPattern();
             }
             if (frame == 4) {
                 (*m_opponent)->x = facing * 0x17 + x;
                 (*m_opponent)->y = -66.0;
-                (*m_opponent)->pattern = 0x68;
+                (*m_opponent)->pattern = kThrownAirborne;
                 (*m_opponent)->StartPattern();
                 (*m_opponent)->facing = facing;
             }
             if (frame == 5) {
                 (*m_opponent)->x = x - facing * 0xa;
                 (*m_opponent)->y = -62.0;
-                (*m_opponent)->pattern = 0x69;
+                (*m_opponent)->pattern = kThrownUpsideDown;
                 (*m_opponent)->StartPattern();
             }
             if (frame == 6) {
                 (*m_opponent)->x = x - 0.0;
                 (*m_opponent)->y = 0.0;
-                (*m_opponent)->pattern = 0x62;
+                (*m_opponent)->pattern = kKnockdown;
                 (*m_opponent)->StartPattern();
                 (*m_opponent)->StopMoving();
             }
             if (frame >= x8) {
-                pattern = 0;
+                pattern = kStand;
                 StartPattern();
             }
         }
         break;
-    case 0x100:
-        if (frame == 0 && timer == 0 && unk3138 == 1) {
+    case kGrabFollowUnused:
+        if (frame == 0 && timer == 0 && m_patternVar1 == 1) {
             StartPattern();
-            pattern = 0x102;
+            pattern = kGrabEscaped;
             m_playSound = 0x1a;
-            (*m_opponent)->pattern = 0x9e;
+            (*m_opponent)->pattern = kAirRecoveryBack;
             (*m_opponent)->StartPattern();
             (*m_opponent)->StopMoving();
             break;
         }
         if (frame == 1 && timer == 0) {
-            (*m_opponent)->pattern = 0x3f;
+            (*m_opponent)->pattern = kHitAirLaunch;
             (*m_opponent)->frame = 0;
             (*m_opponent)->timer = 0;
             (*m_opponent)->StopMoving();
-            (*m_opponent)->unkc0 = -3.0;
-            (*m_opponent)->unkc8 = -2.0;
+            (*m_opponent)->m_hitVx = -3.0;
+            (*m_opponent)->m_hitVy = -2.0;
             (*m_opponent)->x = facing * 0x1e + x;
             (*m_opponent)->y = -40.0;
             ShakeScreen(0xa, 0xa);
@@ -3811,7 +3811,7 @@ void CEXNanase::UpdatePattern()
             l50.y = (double)((int)y - 0x50);
             l50.scale = 2;
             l50.facing = facing;
-            l50.unk0 = 1;
+            l50.keep = 1;
             l50.layer = 1;
             SpawnObject(&l50);
         }
@@ -3821,13 +3821,13 @@ void CEXNanase::UpdatePattern()
             frame++;
             m_attackResult = 3;
             if (frame >= x8) {
-                pattern = 0;
+                pattern = kStand;
                 StartPattern();
             }
         }
         break;
-    case 0x101:
-        Unk410a80(0x32, 3);
+    case kGrabRelease:
+        FocusCameraY(0x32, 3);
         if (frame == 2 && timer == 0) {
             m_gauge = m_gauge + 0x1e;
             m_playSound = 0x14;
@@ -3841,48 +3841,48 @@ void CEXNanase::UpdatePattern()
                 m_attackResult = 0;
             }
             if (frame >= x8) {
-                pattern = 0;
+                pattern = kStand;
                 FaceOpponent();
                 StartPattern();
             }
         }
         break;
-    case 0x102:
+    case kGrabEscaped:
         vx = 0.0;
         vy = 0.0;
-        unk158 = 0;
+        m_dashMomentum = 0;
         timer++;
         if (timer >= l4) {
             timer = 0;
             frame++;
             m_attackResult = 0;
             if (frame >= x8) {
-                pattern = 0;
+                pattern = kStand;
                 FaceOpponent();
                 StartPattern();
             }
         }
         break;
-    case 0x103:
+    case kGrabExUnused:
         if (frame == 0 && timer == 0) {
             StopMoving();
             m_hitsLeft = 1;
         }
         if (frame == 0 && timer == 0) {
-            unk158 = 0;
+            m_dashMomentum = 0;
             vx = 0.0;
             vy = 0.0;
             l50.type = 0x21;
-            l50.unk2c = 0xb;
+            l50.sound = 0xb;
             l50.x = (double)((int)x - facing * 0xa);
             l50.y = (double)((int)y - 0x38);
             l50.scale = 2;
             l50.layer = 1;
             m_game->CreateEffect((EffectDesc*)&l50);
-            if (unk120 == 0) {
-                unk118 -= 500.0;
+            if (m_rfBlue == 0) {
+                m_rfGauge -= 500.0;
             } else {
-                unk118 -= 250.0;
+                m_rfGauge -= 250.0;
             }
         }
         if (frame > 5) {
@@ -3893,16 +3893,16 @@ void CEXNanase::UpdatePattern()
         }
         if (m_attackResult == 3 && frame == 6) {
             StopMoving();
-            Unk410a80(0x32, 3);
+            FocusCameraY(0x32, 3);
             m_attackResult = 0;
             (*m_opponent)->x = facing * 0x32 + x;
             (*m_opponent)->y = 0.0;
-            (*m_opponent)->pattern = 0x6b;
+            (*m_opponent)->pattern = kThrownStandHigh2;
             (*m_opponent)->StartPattern();
             (*m_opponent)->StopMoving();
-            (*m_opponent)->unk128 = 1;
+            (*m_opponent)->m_noAirRecovery = 1;
             StartPattern();
-            pattern = 0xfe;
+            pattern = kGrabHold;
             l50.type = 0;
             l50.x = (double)((int)x + facing * 0x45);
             l50.y = (double)((int)y - 0x23);
@@ -3920,21 +3920,21 @@ void CEXNanase::UpdatePattern()
                 vx = 1.3;
             }
             if (frame >= x8) {
-                pattern = 0;
+                pattern = kStand;
                 FaceOpponent();
                 StartPattern();
             }
         }
         break;
-    case 0x10f:
+    case k214A:
         if (frame == 0 && timer == 0) {
             vx = 0.0;
             vy = 0.0;
-            unk158 = 0;
+            m_dashMomentum = 0;
             m_attackResult = 0;
         }
         timer++;
-        if (timer >= l4 - ((unk3454 == 1) << 1)) {
+        if (timer >= l4 - ((m_awakened == 1) << 1)) {
             timer = 0;
             frame++;
             if (frame == 8) {
@@ -3948,27 +3948,27 @@ void CEXNanase::UpdatePattern()
                 SpawnObject(&l50);
                 m_gauge = m_gauge + 0x1e;
             }
-            if (frame == 0xa && unk3138 < 3) {
-                unk3138++;
+            if (frame == 0xa && m_patternVar1 < 3) {
+                m_patternVar1++;
                 frame = frame - 2;
-                if (unk3138 == 2) {
+                if (m_patternVar1 == 2) {
                     m_attackResult = 3;
                 }
             }
             if (frame >= x8) {
-                pattern = 0;
+                pattern = kStand;
                 if (m_inputY == 1) {
-                    pattern = 8;
+                    pattern = kCrouchDown;
                 }
                 FaceOpponent();
                 StartPattern();
             }
         }
         break;
-    case 0x110:
+    case k214B:
         vx = 0.0;
         vy = 0.0;
-        unk158 = 0;
+        m_dashMomentum = 0;
         if (frame == 8 && timer == 0) {
             m_playVoice = 1;
             l50.type = 0x192;
@@ -3980,48 +3980,48 @@ void CEXNanase::UpdatePattern()
             SpawnObject(&l50);
         }
         timer++;
-        if (timer >= l4 - ((unk3454 == 1) << 1)) {
+        if (timer >= l4 - ((m_awakened == 1) << 1)) {
             timer = 0;
             frame++;
             m_attackResult = 3;
             if (frame == 8) {
                 m_gauge = m_gauge + 0x1e;
             }
-            if (frame == 0xa && unk3138 < 2) {
-                unk3138++;
+            if (frame == 0xa && m_patternVar1 < 2) {
+                m_patternVar1++;
                 frame = frame - 2;
             }
             if (frame >= x8) {
-                pattern = 0;
+                pattern = kStand;
                 if (m_inputY == 1) {
-                    pattern = 8;
+                    pattern = kCrouchDown;
                 }
                 FaceOpponent();
                 StartPattern();
             }
         }
         break;
-    case 0x111:
+    case k214C:
         if (frame == 0 && timer == 0) {
-            unk158 = 0;
+            m_dashMomentum = 0;
             vx = 0.0;
             vy = 0.0;
             l50.type = 0x21;
-            l50.unk2c = 0xb;
+            l50.sound = 0xb;
             l50.x = (double)((int)x - facing * 0xa);
             l50.y = (double)((int)y - 0x38);
             l50.scale = 2;
             l50.layer = 1;
             m_game->CreateEffect((EffectDesc*)&l50);
-            if (unk120 == 0) {
-                unk118 -= 500.0;
+            if (m_rfBlue == 0) {
+                m_rfGauge -= 500.0;
             } else {
-                unk118 -= 250.0;
+                m_rfGauge -= 250.0;
             }
         }
         vx = 0.0;
         vy = 0.0;
-        unk158 = 0;
+        m_dashMomentum = 0;
         if (frame == 8 && timer == 0) {
             m_playVoice = 1;
             l50.type = 0x193;
@@ -4033,30 +4033,30 @@ void CEXNanase::UpdatePattern()
             SpawnObject(&l50);
         }
         timer++;
-        if (timer >= l4 - ((unk3454 == 1) << 1)) {
+        if (timer >= l4 - ((m_awakened == 1) << 1)) {
             timer = 0;
             frame++;
             m_attackResult = 3;
             if (frame == 8) {
                 m_gauge = m_gauge + 0x1e;
             }
-            if (frame == 0xa && unk3138 < 3) {
-                unk3138++;
+            if (frame == 0xa && m_patternVar1 < 3) {
+                m_patternVar1++;
                 frame = frame - 2;
             }
             if (frame >= x8) {
-                pattern = 0;
+                pattern = kStand;
                 if (m_inputY == 1) {
-                    pattern = 8;
+                    pattern = kCrouchDown;
                 }
                 FaceOpponent();
                 StartPattern();
             }
         }
         break;
-    case 0x112:
+    case k623A:
         if (frame == 0 && timer == 0) {
-            unk158 = 0;
+            m_dashMomentum = 0;
             StopMoving();
         }
         if (frame > 3) {
@@ -4066,20 +4066,20 @@ void CEXNanase::UpdatePattern()
             }
         }
         if (frame > 3) {
-            if (m_attackResult > 0 && unk313c == 0) {
-                unk3140 = 0x2d;
-                unk313c = 1;
+            if (m_attackResult > 0 && m_patternVar2 == 0) {
+                m_patternVar3 = 0x2d;
+                m_patternVar2 = 1;
             }
-            if (m_attackResult > 0 && unk3140 > 0) {
-                unk3140--;
+            if (m_attackResult > 0 && m_patternVar3 > 0) {
+                m_patternVar3--;
             }
-            if (m_attackResult > 0 && unk3140 <= 0 && unk313c > 0) {
+            if (m_attackResult > 0 && m_patternVar3 <= 0 && m_patternVar2 > 0) {
                 m_attackResult = 0;
-                unk313c = 0;
+                m_patternVar2 = 0;
             }
         }
         timer++;
-        if (timer >= l4 - ((unk3454 == 1) << 1)) {
+        if (timer >= l4 - ((m_awakened == 1) << 1)) {
             timer = 0;
             frame++;
             if (frame == 4) {
@@ -4097,23 +4097,23 @@ void CEXNanase::UpdatePattern()
                 m_hitsLeft = 3;
                 m_attackResult = 0;
             }
-            if (frame == 8 && unk3138 < 4) {
-                unk3138++;
+            if (frame == 8 && m_patternVar1 < 4) {
+                m_patternVar1++;
                 frame = frame - 4;
             }
             if (frame >= x8) {
-                pattern = 0;
+                pattern = kStand;
                 if (m_inputY == 1) {
-                    pattern = 8;
+                    pattern = kCrouchDown;
                 }
                 FaceOpponent();
                 StartPattern();
             }
         }
         break;
-    case 0x113:
+    case k623B:
         if (frame == 0 && timer == 0) {
-            unk158 = 0;
+            m_dashMomentum = 0;
             StopMoving();
         }
         if (frame > 3) {
@@ -4123,20 +4123,20 @@ void CEXNanase::UpdatePattern()
             }
         }
         if (frame > 3) {
-            if (m_attackResult > 0 && unk313c == 0) {
-                unk3140 = 0x2d;
-                unk313c = 1;
+            if (m_attackResult > 0 && m_patternVar2 == 0) {
+                m_patternVar3 = 0x2d;
+                m_patternVar2 = 1;
             }
-            if (m_attackResult > 0 && unk3140 > 0) {
-                unk3140--;
+            if (m_attackResult > 0 && m_patternVar3 > 0) {
+                m_patternVar3--;
             }
-            if (m_attackResult > 0 && unk3140 <= 0 && unk313c > 0) {
+            if (m_attackResult > 0 && m_patternVar3 <= 0 && m_patternVar2 > 0) {
                 m_attackResult = 0;
-                unk313c = 0;
+                m_patternVar2 = 0;
             }
         }
         timer++;
-        if (timer >= l4 - ((unk3454 == 1) << 1)) {
+        if (timer >= l4 - ((m_awakened == 1) << 1)) {
             timer = 0;
             frame++;
             if (frame == 4) {
@@ -4154,40 +4154,40 @@ void CEXNanase::UpdatePattern()
                 m_hitsLeft = 3;
                 m_attackResult = 0;
             }
-            if (frame == 8 && unk3138 < 7) {
-                unk3138++;
+            if (frame == 8 && m_patternVar1 < 7) {
+                m_patternVar1++;
                 frame = frame - 4;
             }
             if (frame >= x8) {
-                pattern = 0;
+                pattern = kStand;
                 if (m_inputY == 1) {
-                    pattern = 8;
+                    pattern = kCrouchDown;
                 }
                 FaceOpponent();
                 StartPattern();
             }
         }
         break;
-    case 0x114:
+    case k623C:
         if (frame == 0 && timer == 0) {
-            unk158 = 0;
+            m_dashMomentum = 0;
             StopMoving();
         }
         if (frame == 0 && timer == 0) {
-            unk158 = 0;
+            m_dashMomentum = 0;
             vx = 0.0;
             vy = 0.0;
             l50.type = 0x21;
-            l50.unk2c = 0xb;
+            l50.sound = 0xb;
             l50.x = (double)((int)x - facing * 0xa);
             l50.y = (double)((int)y - 0x38);
             l50.scale = 2;
             l50.layer = 1;
             m_game->CreateEffect((EffectDesc*)&l50);
-            if (unk120 == 0) {
-                unk118 -= 500.0;
+            if (m_rfBlue == 0) {
+                m_rfGauge -= 500.0;
             } else {
-                unk118 -= 250.0;
+                m_rfGauge -= 250.0;
             }
         }
         if (frame > 7) {
@@ -4197,12 +4197,12 @@ void CEXNanase::UpdatePattern()
             }
         }
         timer++;
-        if (timer >= l4 - ((unk3454 == 1) << 1)) {
+        if (timer >= l4 - ((m_awakened == 1) << 1)) {
             timer = 0;
             frame++;
             m_attackResult = 0;
             if (frame == 4) {
-                unk13c = 0x3c;
+                m_invulTime = 0x3c;
                 l50.type = 0x196;
                 l50.x = (double)(int)x;
                 l50.y = (double)(int)y;
@@ -4215,59 +4215,59 @@ void CEXNanase::UpdatePattern()
             if (frame == 4) {
                 m_hitsLeft = 0xf;
             }
-            if (frame == 8 && unk3138 < 5) {
-                unk3138++;
+            if (frame == 8 && m_patternVar1 < 5) {
+                m_patternVar1++;
                 frame = frame - 4;
                 m_attackResult = 0;
             }
             if (frame >= x8) {
-                pattern = 0;
+                pattern = kStand;
                 if (m_inputY == 1) {
-                    pattern = 8;
+                    pattern = kCrouchDown;
                 }
                 FaceOpponent();
                 StartPattern();
             }
         }
         break;
-    case 0x12c:
+    case kGrabFollowAA:
         if (frame == 0 && timer == 0) {
             vx = 0.0;
             vy = 0.0;
             ay = 0.0;
             m_hitsLeft = 1;
-            unk3138 = 0;
+            m_patternVar1 = 0;
         }
-        if ((*m_opponent)->pattern == 0x63) {
+        if ((*m_opponent)->pattern == kLyingDown) {
             (*m_opponent)->timer = 0;
         }
-        if (frame < 0xa && unk3138 == 0) {
+        if (frame < 0xa && m_patternVar1 == 0) {
             if ((*m_opponent)->m_pressA == 1) {
-                unk3138 = 1;
+                m_patternVar1 = 1;
             }
             if ((*m_opponent)->m_pressB == 1) {
-                unk3138 = 2;
+                m_patternVar1 = 2;
             }
             if ((*m_opponent)->m_pressC == 1) {
-                unk3138 = 3;
+                m_patternVar1 = 3;
             }
         }
-        Unk410a80(0x32, 3);
+        FocusCameraY(0x32, 3);
         if (frame == 1 && timer == 0) {
-            unk14c = 0x78;
+            m_freezeTime = 0x78;
             m_gauge = m_gauge - 0x3e8;
             FillBackground(0xb0, 3);
             l50.type = 0x44;
-            l50.unk2c = 0x13;
+            l50.sound = 0x13;
             l50.x = (double)((int)x + facing * 0xf);
             l50.y = (double)((int)y - 0x38);
             l50.scale = 2;
-            l50.unk0 = 1;
+            l50.keep = 1;
             l50.layer = 1;
             m_game->CreateEffect((EffectDesc*)&l50);
         }
         if (frame < 0xe) {
-            unk140 = 3;
+            m_koDelay = 3;
         }
         if ((frame == 2 || frame == 5 || frame == 8 || frame == 0xb || frame == 0xe) && timer == 0) {
             m_playSound = 2;
@@ -4284,35 +4284,35 @@ void CEXNanase::UpdatePattern()
             if (frame == 0xe) {
                 DealDamage(0x1f4, 1000.0);
                 ShakeScreen(0xa, 0xa);
-                unk140 = 0;
+                m_koDelay = 0;
             }
         }
-        if (frame > 1 && frame < 8 && (m_command == 0x64 || m_command == 0x6e) && m_gauge >= 0x3e8) {
-            if (unk3138 == 3) {
+        if (frame > 1 && frame < 8 && (m_command == kCmd236236A || m_command == kCmd214214A) && m_gauge >= 0x3e8) {
+            if (m_patternVar1 == 3) {
                 StartPattern();
-                pattern = 0x102;
+                pattern = kGrabEscaped;
                 m_playSound = 0x1a;
-                (*m_opponent)->pattern = 0x9e;
+                (*m_opponent)->pattern = kAirRecoveryBack;
                 (*m_opponent)->StartPattern();
                 (*m_opponent)->StopMoving();
                 break;
             }
             StartPattern();
-            pattern = 0x12e;
+            pattern = kGrabFollowAAA;
             break;
         }
-        if (frame > 1 && frame < 8 && (m_command == 0x65 || m_command == 0x6f) && m_gauge >= 0x3e8) {
-            if (unk3138 == 2) {
+        if (frame > 1 && frame < 8 && (m_command == kCmd236236B || m_command == kCmd214214B) && m_gauge >= 0x3e8) {
+            if (m_patternVar1 == 2) {
                 StartPattern();
-                pattern = 0x102;
+                pattern = kGrabEscaped;
                 m_playSound = 0x1a;
-                (*m_opponent)->pattern = 0x9e;
+                (*m_opponent)->pattern = kAirRecoveryBack;
                 (*m_opponent)->StartPattern();
                 (*m_opponent)->StopMoving();
                 break;
             }
             StartPattern();
-            pattern = 0x133;
+            pattern = kGrabFollowAAB;
             facing = -facing;
             break;
         }
@@ -4321,23 +4321,23 @@ void CEXNanase::UpdatePattern()
             timer = 0;
             frame++;
             m_attackResult = 0;
-            if (frame == 8 && unk313c < 0xa) {
-                unk313c++;
+            if (frame == 8 && m_patternVar2 < 0xa) {
+                m_patternVar2++;
                 frame = 2;
             }
             if (frame >= x8) {
-                pattern = 0;
+                pattern = kStand;
                 StartPattern();
             }
         }
         break;
-    case 0x12d:
+    case kGrabFollowUnused2:
         if (frame == 0 && timer == 0) {
-            if (unk3138 == 1) {
+            if (m_patternVar1 == 1) {
                 StartPattern();
-                pattern = 0x102;
+                pattern = kGrabEscaped;
                 m_playSound = 0x1a;
-                (*m_opponent)->pattern = 0x9e;
+                (*m_opponent)->pattern = kAirRecoveryBack;
                 (*m_opponent)->StartPattern();
                 (*m_opponent)->StopMoving();
                 break;
@@ -4347,31 +4347,31 @@ void CEXNanase::UpdatePattern()
             ay = 0.0;
             m_hitsLeft = 1;
         }
-        if ((*m_opponent)->pattern == 0x63) {
+        if ((*m_opponent)->pattern == kLyingDown) {
             (*m_opponent)->timer = 0;
         }
-        Unk410a80(0x32, 3);
+        FocusCameraY(0x32, 3);
         if (frame == 2 && timer == 0) {
-            unk14c = 0x78;
+            m_freezeTime = 0x78;
             m_gauge = m_gauge - 0x7d0;
             FillBackground(0xb0, 3);
             l50.type = 9;
-            l50.unk2c = 5;
+            l50.sound = 5;
             l50.x = (double)((int)x - facing * 6);
             l50.y = (double)((int)y - 0x24);
             l50.scale = 2;
-            l50.unk0 = 1;
+            l50.keep = 1;
             l50.layer = 1;
             m_game->CreateEffect((EffectDesc*)&l50);
         }
         if (frame == 5 && timer == 0) {
             DealDamage(0x960, 600.0);
             ShakeScreen(5, 5);
-            (*m_opponent)->pattern = 0x3f;
+            (*m_opponent)->pattern = kHitAirLaunch;
             (*m_opponent)->StartPattern();
             (*m_opponent)->StopMoving();
-            (*m_opponent)->unkc0 = -3.0;
-            (*m_opponent)->unkc8 = -8.0;
+            (*m_opponent)->m_hitVx = -3.0;
+            (*m_opponent)->m_hitVy = -8.0;
             m_playVoice = 2;
         }
         timer++;
@@ -4380,31 +4380,31 @@ void CEXNanase::UpdatePattern()
             frame++;
             m_attackResult = 0;
             if (frame >= x8) {
-                pattern = 0;
+                pattern = kStand;
                 StartPattern();
             }
         }
         break;
-    case 0x12e:
+    case kGrabFollowAAA:
         if (frame < 7) {
-            unk140 = 3;
+            m_koDelay = 3;
         }
         if (frame == 0 && timer == 0) {
             vx = 0.0;
             vy = 0.0;
             ay = 0.0;
         }
-        Unk410a80(0x32, 3);
+        FocusCameraY(0x32, 3);
         if (frame == 6 && timer == 0x3c) {
-            unk14c = 0x78;
+            m_freezeTime = 0x78;
             m_gauge = m_gauge - 0x3e8;
             FillBackground(0xb0, 0x708);
             l50.type = 0x46;
-            l50.unk2c = 0x40;
+            l50.sound = 0x40;
             l50.x = (double)((int)x + facing * 0x25);
             l50.y = (double)((int)y - 0x57);
             l50.scale = 2;
-            l50.unk0 = 1;
+            l50.keep = 1;
             l50.layer = 1;
             m_game->CreateEffect((EffectDesc*)&l50);
         }
@@ -4413,7 +4413,7 @@ void CEXNanase::UpdatePattern()
             l50.x = (double)((int)x + facing * 0x25);
             l50.y = (double)((int)y - 0x57);
             l50.scale = 2;
-            l50.unk0 = 1;
+            l50.keep = 1;
             l50.layer = 1;
             l50.facing = 1;
             SpawnObject(&l50);
@@ -4424,7 +4424,7 @@ void CEXNanase::UpdatePattern()
             l50.x = (double)((int)x + ((WORD)Random(0, 0x50) + 7) * facing);
             l50.y = (double)((int)y - 0x39 - (WORD)Random(0, 0x50));
             l50.scale = 2;
-            l50.unk0 = 1;
+            l50.keep = 1;
             l50.layer = 1;
             l50.facing = 1;
             SpawnObject(&l50);
@@ -4439,25 +4439,25 @@ void CEXNanase::UpdatePattern()
                 (*m_opponent)->facing = -facing;
                 (*m_opponent)->x = facing * 0x2e + x;
                 (*m_opponent)->y = -38.0;
-                (*m_opponent)->pattern = 0x67;
+                (*m_opponent)->pattern = kThrownDoubledOver;
                 (*m_opponent)->StartPattern();
             }
             if (frame == 4) {
                 (*m_opponent)->x = facing * 0x31 + x;
                 (*m_opponent)->y = -56.0;
-                (*m_opponent)->pattern = 0x67;
+                (*m_opponent)->pattern = kThrownDoubledOver;
                 (*m_opponent)->StartPattern();
             }
             if (frame == 5) {
                 (*m_opponent)->x = facing * 0x28 + x;
                 (*m_opponent)->y = -93.0;
-                (*m_opponent)->pattern = 0x65;
+                (*m_opponent)->pattern = kThrownStandLow;
                 (*m_opponent)->StartPattern();
             }
             if (frame == 6) {
                 (*m_opponent)->x = facing * 0x25 + x;
                 (*m_opponent)->y = -87.0;
-                (*m_opponent)->pattern = 0x65;
+                (*m_opponent)->pattern = kThrownStandLow;
                 (*m_opponent)->StartPattern();
             }
             if (frame == 7) {
@@ -4465,46 +4465,46 @@ void CEXNanase::UpdatePattern()
                 l50.x = (double)((int)x + facing * 0x25);
                 l50.y = (double)((int)y - 0x57);
                 l50.scale = 2;
-                l50.unk0 = 1;
+                l50.keep = 1;
                 l50.layer = 1;
                 l50.facing = facing;
                 SpawnObject(&l50);
-                (*m_opponent)->pattern = 0x3f;
+                (*m_opponent)->pattern = kHitAirLaunch;
                 (*m_opponent)->StartPattern();
                 (*m_opponent)->StopMoving();
-                (*m_opponent)->unkc0 = -6.0;
-                (*m_opponent)->unkc8 = -2.0;
+                (*m_opponent)->m_hitVx = -6.0;
+                (*m_opponent)->m_hitVy = -2.0;
                 (*m_opponent)->x = facing * 0x1e + x;
                 (*m_opponent)->y = -40.0;
                 ShakeScreen(0x14, 0xa);
                 DealDamage(0x1068, 850.0);
                 m_playVoice = 2;
-                unk140 = 0;
+                m_koDelay = 0;
                 FillBackground(0xb0, 0);
             }
             if (frame >= x8) {
-                pattern = 0;
+                pattern = kStand;
                 StartPattern();
             }
         }
         break;
-    case 0x12f:
-        unk158 = 0;
+    case k236236Lv1Unused:
+        m_dashMomentum = 0;
         if (frame == 0 && timer == 0) {
             StopMoving();
             m_hitsLeft = 1;
         }
         if (frame == 4 && timer == 0) {
-            Unk410a80(0x32, 0x78);
-            unk14c = 0x78;
+            FocusCameraY(0x32, 0x78);
+            m_freezeTime = 0x78;
             m_gauge = m_gauge - 0x3e8;
             FillBackground(0xb0, 3);
             l50.type = 9;
-            l50.unk2c = 5;
+            l50.sound = 5;
             l50.x = (double)((int)x + facing * 0x13);
             l50.y = (double)((int)y - 0x22);
             l50.scale = 2;
-            l50.unk0 = 1;
+            l50.keep = 1;
             l50.layer = 1;
             m_game->CreateEffect((EffectDesc*)&l50);
         }
@@ -4529,28 +4529,28 @@ void CEXNanase::UpdatePattern()
             frame++;
             m_attackResult = 0;
             if (frame >= x8) {
-                pattern = 0;
+                pattern = kStand;
                 StartPattern();
             }
         }
         break;
-    case 0x130:
-        unk158 = 0;
+    case k236236Lv2Unused:
+        m_dashMomentum = 0;
         if (frame == 0 && timer == 0) {
             StopMoving();
             m_hitsLeft = 1;
         }
         if (frame == 4 && timer == 0) {
-            Unk410a80(0x32, 0x78);
-            unk14c = 0x78;
+            FocusCameraY(0x32, 0x78);
+            m_freezeTime = 0x78;
             m_gauge = m_gauge - 0x7d0;
             FillBackground(0xb0, 3);
             l50.type = 9;
-            l50.unk2c = 5;
+            l50.sound = 5;
             l50.x = (double)((int)x + facing * 0x13);
             l50.y = (double)((int)y - 0x22);
             l50.scale = 2;
-            l50.unk0 = 1;
+            l50.keep = 1;
             l50.layer = 1;
             m_game->CreateEffect((EffectDesc*)&l50);
         }
@@ -4575,34 +4575,34 @@ void CEXNanase::UpdatePattern()
             frame++;
             m_attackResult = 0;
             if (frame >= x8) {
-                pattern = 0;
+                pattern = kStand;
                 StartPattern();
             }
         }
         break;
-    case 0x131:
-        unk158 = 0;
+    case k236236Lv3Unused:
+        m_dashMomentum = 0;
         if (frame == 0 && timer == 0) {
             StopMoving();
             m_hitsLeft = 1;
         }
         if (frame == 4 && timer == 0) {
-            Unk410a80(0x32, 0x78);
-            unk14c = 0x78;
+            FocusCameraY(0x32, 0x78);
+            m_freezeTime = 0x78;
             m_gauge = m_gauge - 0xbb8;
             FillBackground(0xb0, 3);
             l50.type = 9;
-            l50.unk2c = 5;
+            l50.sound = 5;
             l50.x = (double)((int)x + facing * 0x13);
             l50.y = (double)((int)y - 0x22);
             l50.scale = 2;
-            l50.unk0 = 1;
+            l50.keep = 1;
             l50.layer = 1;
             m_game->CreateEffect((EffectDesc*)&l50);
             m_playSound = 0x25;
         }
         if (frame >= 4) {
-            m_game->Unk4080c0(0xf);
+            m_game->FlashNegative(0xf);
         }
         if (frame == 5 && timer == 0) {
             vx = 6.0;
@@ -4622,89 +4622,89 @@ void CEXNanase::UpdatePattern()
             frame++;
             m_attackResult = 0;
             if (frame >= x8) {
-                pattern = 0;
+                pattern = kStand;
                 StartPattern();
             }
         }
         break;
-    case 0x132:
+    case kGrabFollowAB:
         if (frame == 0 && timer == 0) {
             vx = 0.0;
             vy = 0.0;
             ay = 0.0;
             m_hitsLeft = 1;
-            unk3138 = 0;
+            m_patternVar1 = 0;
         }
-        if (frame < 0xa && unk3138 == 0) {
+        if (frame < 0xa && m_patternVar1 == 0) {
             if ((*m_opponent)->m_pressA == 1) {
-                unk3138 = 1;
+                m_patternVar1 = 1;
             }
             if ((*m_opponent)->m_pressB == 1) {
-                unk3138 = 2;
+                m_patternVar1 = 2;
             }
             if ((*m_opponent)->m_pressC == 1) {
-                unk3138 = 3;
+                m_patternVar1 = 3;
             }
         }
-        if ((*m_opponent)->pattern == 0x63 && frame < 9) {
+        if ((*m_opponent)->pattern == kLyingDown && frame < 9) {
             (*m_opponent)->timer = 0;
         }
-        Unk410a80(0x32, 3);
+        FocusCameraY(0x32, 3);
         if (frame == 1 && timer == 0) {
-            unk14c = 0x78;
+            m_freezeTime = 0x78;
             m_gauge = m_gauge - 0x3e8;
             FillBackground(0xb0, 3);
             l50.type = 0x44;
-            l50.unk2c = 0x13;
+            l50.sound = 0x13;
             l50.x = (double)((int)x + facing * 0xf);
             l50.y = (double)((int)y - 0x38);
             l50.scale = 2;
-            l50.unk0 = 1;
+            l50.keep = 1;
             l50.layer = 1;
             m_game->CreateEffect((EffectDesc*)&l50);
         }
         if (frame == 4 && timer == 0) {
             DealDamage(0x708, 1000.0);
             ShakeScreen(0xa, 0xa);
-            (*m_opponent)->unk14a = 0xb4;
+            (*m_opponent)->m_hitstop = 0xb4;
             m_playSound = 0x16;
             l50.type = 0x197;
             l50.x = (double)((int)x + facing * 0xf);
             l50.y = (double)((int)y + 8);
             l50.scale = 2;
-            l50.unk0 = 1;
+            l50.keep = 1;
             l50.layer = 1;
             l50.facing = facing;
             SpawnObject(&l50);
         }
-        if (frame == 8 && (m_command == 0x64 || m_command == 0x6e) && m_gauge >= 0x3e8) {
-            if (unk3138 == 3) {
+        if (frame == 8 && (m_command == kCmd236236A || m_command == kCmd214214A) && m_gauge >= 0x3e8) {
+            if (m_patternVar1 == 3) {
                 StartPattern();
-                pattern = 0x102;
+                pattern = kGrabEscaped;
                 m_playSound = 0x1a;
-                (*m_opponent)->pattern = 0x9e;
-                (*m_opponent)->unk14a = 0;
+                (*m_opponent)->pattern = kAirRecoveryBack;
+                (*m_opponent)->m_hitstop = 0;
                 (*m_opponent)->StartPattern();
                 (*m_opponent)->StopMoving();
                 break;
             }
             StartPattern();
-            pattern = 0x13e;
+            pattern = kGrabFollowABA;
             break;
         }
-        if (frame == 8 && (m_command == 0x65 || m_command == 0x6f) && m_gauge >= 0x3e8) {
-            if (unk3138 == 2) {
+        if (frame == 8 && (m_command == kCmd236236B || m_command == kCmd214214B) && m_gauge >= 0x3e8) {
+            if (m_patternVar1 == 2) {
                 StartPattern();
-                pattern = 0x102;
+                pattern = kGrabEscaped;
                 m_playSound = 0x1a;
-                (*m_opponent)->pattern = 0x9e;
-                (*m_opponent)->unk14a = 0;
+                (*m_opponent)->pattern = kAirRecoveryBack;
+                (*m_opponent)->m_hitstop = 0;
                 (*m_opponent)->StartPattern();
                 (*m_opponent)->StopMoving();
                 break;
             }
             StartPattern();
-            pattern = 0x13f;
+            pattern = kGrabFollowABB;
             FaceOpponent();
             break;
         }
@@ -4714,38 +4714,38 @@ void CEXNanase::UpdatePattern()
             frame++;
             m_attackResult = 0;
             if (frame >= x8) {
-                pattern = 0;
+                pattern = kStand;
                 StartPattern();
             }
         }
         break;
-    case 0x133:
-        if ((*m_opponent)->pattern == 0x63 && frame < 9) {
+    case kGrabFollowAAB:
+        if ((*m_opponent)->pattern == kLyingDown && frame < 9) {
             (*m_opponent)->timer = 0;
         }
         if (frame < 4 && vy > 0.0) {
             timer = 0;
             frame = 4;
         }
-        if (y < 0.0 && unk14c == 0) {
+        if (y < 0.0 && m_freezeTime == 0) {
             vy = vy + ay;
         }
-        if (frame == 4 && unk14c == 0 && unk3138 == 1) {
+        if (frame == 4 && m_freezeTime == 0 && m_patternVar1 == 1) {
             vy = 10.0;
-            unk3138++;
+            m_patternVar1++;
         }
-        if (frame == 4 && vy > 0.0 && y > -90.0 && unk3138 == 0) {
-            unk3138++;
+        if (frame == 4 && vy > 0.0 && y > -90.0 && m_patternVar1 == 0) {
+            m_patternVar1++;
             vy = 0.0;
-            unk14c = 0x78;
+            m_freezeTime = 0x78;
             m_gauge = m_gauge - 0x3e8;
             FillBackground(0xb0, 0x708);
             l50.type = 0x46;
-            l50.unk2c = 0x40;
+            l50.sound = 0x40;
             l50.x = (double)((int)x - facing * 0x19);
             l50.y = (double)((int)y - 0x3c);
             l50.scale = 2;
-            l50.unk0 = 1;
+            l50.keep = 1;
             l50.layer = 1;
             m_game->CreateEffect((EffectDesc*)&l50);
         }
@@ -4756,18 +4756,18 @@ void CEXNanase::UpdatePattern()
             y = 0.0;
             DealDamage(0x1194, 1000.0);
             ShakeScreen(0xa, 0xa);
-            (*m_opponent)->unk14a = 0x12c;
+            (*m_opponent)->m_hitstop = 0x12c;
             m_playSound = 0x16;
             l50.type = 0x19b;
             l50.x = (double)((int)x + facing * 0x11);
             l50.y = (double)((int)y + 0xb);
             l50.scale = 2;
-            l50.unk0 = 1;
+            l50.keep = 1;
             l50.layer = 1;
             l50.facing = facing;
             SpawnObject(&l50);
         }
-        Unk410a80(-0x32, 3);
+        FocusCameraY(-0x32, 3);
         timer++;
         if (timer >= l4) {
             timer = 0;
@@ -4778,28 +4778,28 @@ void CEXNanase::UpdatePattern()
             }
             m_attackResult = 0;
             if (frame >= x8) {
-                pattern = 0;
+                pattern = kStand;
                 StartPattern();
                 FillBackground(0xb0, 0);
             }
         }
         break;
-    case 0x135:
+    case k236236Lv1:
         if (frame == 0 && timer == 0) {
             StopMoving();
             m_hitsLeft = 1;
-            unk158 = 0;
+            m_dashMomentum = 0;
         }
         if (frame == 0 && timer == 0) {
-            unk14c = 0x78;
+            m_freezeTime = 0x78;
             m_gauge = m_gauge - 0x3e8;
             FillBackground(0xb0, 3);
             l50.type = 0x44;
-            l50.unk2c = 0x13;
+            l50.sound = 0x13;
             l50.x = (double)(int)x;
             l50.y = (double)((int)y - 0x55);
             l50.scale = 2;
-            l50.unk0 = 1;
+            l50.keep = 1;
             l50.layer = 1;
             m_game->CreateEffect((EffectDesc*)&l50);
         }
@@ -4815,19 +4815,19 @@ void CEXNanase::UpdatePattern()
             break;
         }
         if (m_attackResult == 3 && frame == 0xc) {
-            (*m_opponent)->unk14a = (*m_opponent)->unk14a + 0x708;
+            (*m_opponent)->m_hitstop = (*m_opponent)->m_hitstop + 0x708;
             StopMoving();
-            Unk410a80(0x32, 3);
+            FocusCameraY(0x32, 3);
             m_attackResult = 0;
             (*m_opponent)->facing = -facing;
             (*m_opponent)->x = facing * 0x18 + x;
             (*m_opponent)->y = -40.0;
-            (*m_opponent)->pattern = 0x67;
+            (*m_opponent)->pattern = kThrownDoubledOver;
             (*m_opponent)->StartPattern();
             (*m_opponent)->StopMoving();
-            (*m_opponent)->unk128 = 1;
+            (*m_opponent)->m_noAirRecovery = 1;
             StartPattern();
-            pattern = 0x136;
+            pattern = k236236Lv1Hit;
             l50.type = 0;
             l50.x = (double)((int)x + facing * 0x45);
             l50.y = (double)((int)y - 0x23);
@@ -4844,24 +4844,24 @@ void CEXNanase::UpdatePattern()
             if (frame == 6) {
                 vx = 1.3;
             }
-            if (frame == 0xa && unk3138 < 2) {
+            if (frame == 0xa && m_patternVar1 < 2) {
                 frame = frame - 2;
-                unk3138++;
+                m_patternVar1++;
             }
             if (frame >= x8) {
-                pattern = 0;
+                pattern = kStand;
                 FaceOpponent();
                 StartPattern();
             }
         }
         break;
-    case 0x136:
+    case k236236Lv1Hit:
         if (frame == 0 && timer == 0) {
             vx = 0.0;
             vy = 0.0;
             ay = 0.0;
         }
-        Unk410a80(0x32, 3);
+        FocusCameraY(0x32, 3);
         timer++;
         if (timer >= l4) {
             timer = 0;
@@ -4870,63 +4870,63 @@ void CEXNanase::UpdatePattern()
             if (frame == 1) {
                 (*m_opponent)->x = facing * 0x1c + x;
                 (*m_opponent)->y = -56.0;
-                (*m_opponent)->pattern = 0x67;
+                (*m_opponent)->pattern = kThrownDoubledOver;
             }
             if (frame == 2) {
                 (*m_opponent)->x = facing * 0x28 + x;
                 (*m_opponent)->y = -93.0;
-                (*m_opponent)->pattern = 0x65;
+                (*m_opponent)->pattern = kThrownStandLow;
             }
             if (frame == 3) {
                 (*m_opponent)->x = (facing << 4) + x;
                 (*m_opponent)->y = -92.0;
-                (*m_opponent)->pattern = 0x65;
+                (*m_opponent)->pattern = kThrownStandLow;
             }
             if (frame == 4) {
                 l50.type = 0x190;
                 l50.x = (double)((int)x + facing * 0xc);
                 l50.y = (double)((int)y - 0x57);
                 l50.scale = 2;
-                l50.unk0 = 1;
+                l50.keep = 1;
                 l50.layer = 1;
                 l50.facing = facing;
                 SpawnObject(&l50);
-                (*m_opponent)->pattern = 0x3f;
+                (*m_opponent)->pattern = kHitAirLaunch;
                 (*m_opponent)->StartPattern();
                 (*m_opponent)->StopMoving();
-                (*m_opponent)->unkc0 = -4.0;
-                (*m_opponent)->unkc8 = -2.0;
+                (*m_opponent)->m_hitVx = -4.0;
+                (*m_opponent)->m_hitVy = -2.0;
                 (*m_opponent)->x = facing * 0x1e + x;
                 (*m_opponent)->y = -40.0;
                 ShakeScreen(0xa, 5);
                 DealDamage(0x8fc, 850.0);
                 m_playVoice = 2;
-                unk140 = 0;
-                (*m_opponent)->unk14a = 0;
+                m_koDelay = 0;
+                (*m_opponent)->m_hitstop = 0;
                 FillBackground(0xb0, 0);
             }
             if (frame >= x8) {
-                pattern = 0;
+                pattern = kStand;
                 StartPattern();
             }
         }
         break;
-    case 0x137:
+    case k236236Lv2:
         if (frame == 0 && timer == 0) {
             StopMoving();
             m_hitsLeft = 1;
-            unk158 = 0;
+            m_dashMomentum = 0;
         }
         if (frame == 0 && timer == 0) {
-            unk14c = 0x78;
+            m_freezeTime = 0x78;
             m_gauge = m_gauge - 0x7d0;
             FillBackground(0xb0, 3);
             l50.type = 0x45;
-            l50.unk2c = 5;
+            l50.sound = 5;
             l50.x = (double)(int)x;
             l50.y = (double)((int)y - 0x55);
             l50.scale = 2;
-            l50.unk0 = 1;
+            l50.keep = 1;
             l50.layer = 1;
             m_game->CreateEffect((EffectDesc*)&l50);
         }
@@ -4942,19 +4942,19 @@ void CEXNanase::UpdatePattern()
             break;
         }
         if (m_attackResult == 3 && frame == 0xc) {
-            (*m_opponent)->unk14a = (*m_opponent)->unk14a + 0x708;
+            (*m_opponent)->m_hitstop = (*m_opponent)->m_hitstop + 0x708;
             StopMoving();
-            Unk410a80(0x32, 3);
+            FocusCameraY(0x32, 3);
             m_attackResult = 0;
             (*m_opponent)->facing = -facing;
             (*m_opponent)->x = facing * 0x18 + x;
             (*m_opponent)->y = -40.0;
-            (*m_opponent)->pattern = 0x67;
+            (*m_opponent)->pattern = kThrownDoubledOver;
             (*m_opponent)->StartPattern();
             (*m_opponent)->StopMoving();
-            (*m_opponent)->unk128 = 1;
+            (*m_opponent)->m_noAirRecovery = 1;
             StartPattern();
-            pattern = 0x138;
+            pattern = k236236Lv2Hit;
             l50.type = 0;
             l50.x = (double)((int)x + facing * 0x45);
             l50.y = (double)((int)y - 0x23);
@@ -4971,24 +4971,24 @@ void CEXNanase::UpdatePattern()
             if (frame == 6) {
                 vx = 1.7;
             }
-            if (frame == 0xa && unk3138 < 4) {
+            if (frame == 0xa && m_patternVar1 < 4) {
                 frame = frame - 2;
-                unk3138++;
+                m_patternVar1++;
             }
             if (frame >= x8) {
-                pattern = 0;
+                pattern = kStand;
                 FaceOpponent();
                 StartPattern();
             }
         }
         break;
-    case 0x138:
+    case k236236Lv2Hit:
         if (frame == 0 && timer == 0) {
             vx = 0.0;
             vy = 0.0;
             ay = 0.0;
         }
-        Unk410a80(0x32, 3);
+        FocusCameraY(0x32, 3);
         timer++;
         if (timer >= l4) {
             timer = 0;
@@ -4997,63 +4997,63 @@ void CEXNanase::UpdatePattern()
             if (frame == 1) {
                 (*m_opponent)->x = facing * 0x1c + x;
                 (*m_opponent)->y = -56.0;
-                (*m_opponent)->pattern = 0x67;
+                (*m_opponent)->pattern = kThrownDoubledOver;
             }
             if (frame == 2) {
                 (*m_opponent)->x = facing * 0x28 + x;
                 (*m_opponent)->y = -93.0;
-                (*m_opponent)->pattern = 0x65;
+                (*m_opponent)->pattern = kThrownStandLow;
             }
             if (frame == 3) {
                 (*m_opponent)->x = (facing << 4) + x;
                 (*m_opponent)->y = -92.0;
-                (*m_opponent)->pattern = 0x65;
+                (*m_opponent)->pattern = kThrownStandLow;
             }
             if (frame == 4) {
                 l50.type = 0x198;
                 l50.x = (double)((int)x + facing * 0xc);
                 l50.y = (double)((int)y - 0x57);
                 l50.scale = 2;
-                l50.unk0 = 1;
+                l50.keep = 1;
                 l50.layer = 1;
                 l50.facing = facing;
                 SpawnObject(&l50);
-                (*m_opponent)->pattern = 0x3f;
+                (*m_opponent)->pattern = kHitAirLaunch;
                 (*m_opponent)->StartPattern();
                 (*m_opponent)->StopMoving();
-                (*m_opponent)->unkc0 = -4.0;
-                (*m_opponent)->unkc8 = -2.0;
+                (*m_opponent)->m_hitVx = -4.0;
+                (*m_opponent)->m_hitVy = -2.0;
                 (*m_opponent)->x = facing * 0x1e + x;
                 (*m_opponent)->y = -40.0;
                 ShakeScreen(0xf, 0xa);
                 DealDamage(0xce4, 850.0);
                 m_playVoice = 2;
-                unk140 = 0;
-                (*m_opponent)->unk14a = 0;
+                m_koDelay = 0;
+                (*m_opponent)->m_hitstop = 0;
                 FillBackground(0xb0, 0);
             }
             if (frame >= x8) {
-                pattern = 0;
+                pattern = kStand;
                 StartPattern();
             }
         }
         break;
-    case 0x139:
+    case k236236Lv3:
         if (frame == 0 && timer == 0) {
             StopMoving();
             m_hitsLeft = 1;
-            unk158 = 0;
+            m_dashMomentum = 0;
         }
         if (frame == 0 && timer == 0) {
-            unk14c = 0x78;
+            m_freezeTime = 0x78;
             m_gauge = m_gauge - 0xbb8;
             FillBackground(0xb0, 3);
             l50.type = 0x46;
-            l50.unk2c = 0x40;
+            l50.sound = 0x40;
             l50.x = (double)(int)x;
             l50.y = (double)((int)y - 0x55);
             l50.scale = 2;
-            l50.unk0 = 1;
+            l50.keep = 1;
             l50.layer = 1;
             m_game->CreateEffect((EffectDesc*)&l50);
             m_playSound = 0x25;
@@ -5070,19 +5070,19 @@ void CEXNanase::UpdatePattern()
             break;
         }
         if (m_attackResult == 3 && frame == 0xc) {
-            (*m_opponent)->unk14a = (*m_opponent)->unk14a + 0x708;
+            (*m_opponent)->m_hitstop = (*m_opponent)->m_hitstop + 0x708;
             StopMoving();
-            Unk410a80(0x32, 3);
+            FocusCameraY(0x32, 3);
             m_attackResult = 0;
             (*m_opponent)->facing = -facing;
             (*m_opponent)->x = facing * 0x18 + x;
             (*m_opponent)->y = -40.0;
-            (*m_opponent)->pattern = 0x67;
+            (*m_opponent)->pattern = kThrownDoubledOver;
             (*m_opponent)->StartPattern();
             (*m_opponent)->StopMoving();
-            (*m_opponent)->unk128 = 1;
+            (*m_opponent)->m_noAirRecovery = 1;
             StartPattern();
-            pattern = 0x13a;
+            pattern = k236236Lv3Hit;
             l50.type = 0;
             l50.x = (double)((int)x + facing * 0x45);
             l50.y = (double)((int)y - 0x23);
@@ -5091,7 +5091,7 @@ void CEXNanase::UpdatePattern()
             m_game->CreateEffect((EffectDesc*)&l50);
             break;
         }
-        m_game->Unk4080c0(0xf);
+        m_game->FlashNegative(0xf);
         timer++;
         if (timer >= l4) {
             timer = 0;
@@ -5100,18 +5100,18 @@ void CEXNanase::UpdatePattern()
             if (frame == 6) {
                 vx = 2.1;
             }
-            if (frame == 0xa && unk3138 < 6) {
+            if (frame == 0xa && m_patternVar1 < 6) {
                 frame = frame - 2;
-                unk3138++;
+                m_patternVar1++;
             }
             if (frame >= x8) {
-                pattern = 0;
+                pattern = kStand;
                 FaceOpponent();
                 StartPattern();
             }
         }
         break;
-    case 0x13a:
+    case k236236Lv3Hit:
         if (frame == 0 && timer == 0) {
             vx = 0.0;
             vy = 0.0;
@@ -5125,7 +5125,7 @@ void CEXNanase::UpdatePattern()
             l50.x = (double)((int)x + facing * 0x25);
             l50.y = (double)((int)y - 0x57);
             l50.scale = 2;
-            l50.unk0 = 1;
+            l50.keep = 1;
             l50.layer = 1;
             l50.facing = 1;
             SpawnObject(&l50);
@@ -5136,13 +5136,13 @@ void CEXNanase::UpdatePattern()
             l50.x = (double)((int)x + ((WORD)Random(0, 0x50) + 7) * facing);
             l50.y = (double)((int)y - 0x39 - (WORD)Random(0, 0x50));
             l50.scale = 2;
-            l50.unk0 = 1;
+            l50.keep = 1;
             l50.layer = 1;
             l50.facing = 1;
             SpawnObject(&l50);
             m_playVoice = 3;
         }
-        Unk410a80(0x32, 3);
+        FocusCameraY(0x32, 3);
         timer++;
         if (timer >= l4) {
             timer = 0;
@@ -5151,64 +5151,64 @@ void CEXNanase::UpdatePattern()
             if (frame == 1) {
                 (*m_opponent)->x = facing * 0x1c + x;
                 (*m_opponent)->y = -56.0;
-                (*m_opponent)->pattern = 0x67;
+                (*m_opponent)->pattern = kThrownDoubledOver;
             }
             if (frame == 2) {
                 (*m_opponent)->x = facing * 0x28 + x;
                 (*m_opponent)->y = -93.0;
-                (*m_opponent)->pattern = 0x65;
+                (*m_opponent)->pattern = kThrownStandLow;
             }
             if (frame == 3) {
                 (*m_opponent)->x = (facing << 4) + x;
                 (*m_opponent)->y = -92.0;
-                (*m_opponent)->pattern = 0x65;
+                (*m_opponent)->pattern = kThrownStandLow;
             }
             if (frame == 4) {
                 l50.type = 0x198;
                 l50.x = (double)((int)x + facing * 0xc);
                 l50.y = (double)((int)y - 0x57);
                 l50.scale = 2;
-                l50.unk0 = 1;
+                l50.keep = 1;
                 l50.layer = 1;
                 l50.facing = facing;
                 SpawnObject(&l50);
-                (*m_opponent)->pattern = 0x3f;
+                (*m_opponent)->pattern = kHitAirLaunch;
                 (*m_opponent)->StartPattern();
                 (*m_opponent)->StopMoving();
-                (*m_opponent)->unkc0 = -4.0;
-                (*m_opponent)->unkc8 = -2.0;
+                (*m_opponent)->m_hitVx = -4.0;
+                (*m_opponent)->m_hitVy = -2.0;
                 (*m_opponent)->x = facing * 0x1e + x;
                 (*m_opponent)->y = -40.0;
                 ShakeScreen(0x14, 0xa);
                 DealDamage(0x1324, 850.0);
                 m_playVoice = 2;
-                unk140 = 0;
-                (*m_opponent)->unk14a = 0;
+                m_koDelay = 0;
+                (*m_opponent)->m_hitstop = 0;
                 FillBackground(0xb0, 0);
             }
             if (frame >= x8) {
-                pattern = 0;
+                pattern = kStand;
                 StartPattern();
             }
         }
         break;
-    case 0x13b:
+    case k214214Lv1:
         if (frame == 0 && timer == 0) {
             vx = 0.0;
             vy = 0.0;
             ay = 0.0;
         }
-        Unk410a80(0x32, 3);
+        FocusCameraY(0x32, 3);
         if (frame == 1 && timer == 0) {
-            unk14c = 0x78;
+            m_freezeTime = 0x78;
             m_gauge = m_gauge - 0x3e8;
             FillBackground(0xb0, 3);
             l50.type = 0x44;
-            l50.unk2c = 0x13;
+            l50.sound = 0x13;
             l50.x = (double)((int)x - facing * 6);
             l50.y = (double)((int)y - 0x2d);
             l50.scale = 2;
-            l50.unk0 = 1;
+            l50.keep = 1;
             l50.layer = 1;
             m_game->CreateEffect((EffectDesc*)&l50);
         }
@@ -5225,12 +5225,12 @@ void CEXNanase::UpdatePattern()
             }
             l50.y = (double)(int)y;
             l50.scale = 2;
-            l50.unk0 = 1;
+            l50.keep = 1;
             l50.layer = 1;
             l50.facing = facing;
             SpawnObject(&l50);
             l50.type = 0x19f;
-            l50.unk0 = 1;
+            l50.keep = 1;
             l50.layer = 0;
             l50.facing = facing;
             SpawnObject(&l50);
@@ -5241,28 +5241,28 @@ void CEXNanase::UpdatePattern()
             frame++;
             m_attackResult = 0;
             if (frame >= x8) {
-                pattern = 0;
+                pattern = kStand;
                 StartPattern();
             }
         }
         break;
-    case 0x13c:
+    case k214214Lv2:
         if (frame == 0 && timer == 0) {
             vx = 0.0;
             vy = 0.0;
             ay = 0.0;
         }
-        Unk410a80(0x32, 3);
+        FocusCameraY(0x32, 3);
         if (frame == 1 && timer == 0) {
-            unk14c = 0x78;
+            m_freezeTime = 0x78;
             m_gauge = m_gauge - 0x7d0;
             FillBackground(0xb0, 3);
             l50.type = 0x45;
-            l50.unk2c = 5;
+            l50.sound = 5;
             l50.x = (double)((int)x - facing * 6);
             l50.y = (double)((int)y - 0x2d);
             l50.scale = 2;
-            l50.unk0 = 1;
+            l50.keep = 1;
             l50.layer = 1;
             m_game->CreateEffect((EffectDesc*)&l50);
         }
@@ -5279,12 +5279,12 @@ void CEXNanase::UpdatePattern()
             }
             l50.y = (double)(int)y;
             l50.scale = 2;
-            l50.unk0 = 1;
+            l50.keep = 1;
             l50.layer = 1;
             l50.facing = facing;
             SpawnObject(&l50);
             l50.type = 0x19f;
-            l50.unk0 = 1;
+            l50.keep = 1;
             l50.layer = 0;
             l50.facing = facing;
             SpawnObject(&l50);
@@ -5295,33 +5295,33 @@ void CEXNanase::UpdatePattern()
             frame++;
             m_attackResult = 0;
             if (frame >= x8) {
-                pattern = 0;
+                pattern = kStand;
                 StartPattern();
             }
         }
         break;
-    case 0x13d:
+    case k214214Lv3:
         if (frame == 0 && timer == 0) {
             vx = 0.0;
             vy = 0.0;
             ay = 0.0;
         }
-        Unk410a80(0x32, 3);
+        FocusCameraY(0x32, 3);
         if (frame == 1 && timer == 0) {
-            unk14c = 0x78;
+            m_freezeTime = 0x78;
             m_gauge = m_gauge - 0xbb8;
             FillBackground(0xb0, 3);
             l50.type = 0x46;
-            l50.unk2c = 0x40;
+            l50.sound = 0x40;
             l50.x = (double)((int)x - facing * 6);
             l50.y = (double)((int)y - 0x2d);
             l50.scale = 2;
-            l50.unk0 = 1;
+            l50.keep = 1;
             l50.layer = 1;
             m_game->CreateEffect((EffectDesc*)&l50);
         }
         if (frame > 0) {
-            m_game->Unk4080c0(0xf);
+            m_game->FlashNegative(0xf);
         }
         if (frame == 5 && (timer == 0 || timer == 0x3c || timer == 0x78)) {
             ShakeScreen(5, 0);
@@ -5336,12 +5336,12 @@ void CEXNanase::UpdatePattern()
             }
             l50.y = (double)(int)y;
             l50.scale = 2;
-            l50.unk0 = 1;
+            l50.keep = 1;
             l50.layer = 1;
             l50.facing = facing;
             SpawnObject(&l50);
             l50.type = 0x19f;
-            l50.unk0 = 1;
+            l50.keep = 1;
             l50.layer = 0;
             l50.facing = facing;
             SpawnObject(&l50);
@@ -5352,46 +5352,46 @@ void CEXNanase::UpdatePattern()
             frame++;
             m_attackResult = 0;
             if (frame >= x8) {
-                pattern = 0;
+                pattern = kStand;
                 StartPattern();
             }
         }
         break;
-    case 0x13e:
+    case kGrabFollowABA:
         if (frame == 0 && timer == 0) {
             vx = 0.0;
             vy = 0.0;
             ay = 0.0;
         }
-        Unk410a80(0x32, 3);
+        FocusCameraY(0x32, 3);
         if (frame == 3 && timer == 0) {
-            unk14c = 0x78;
+            m_freezeTime = 0x78;
             m_gauge = m_gauge - 0x3e8;
             FillBackground(0xb0, 3);
             l50.type = 0x46;
-            l50.unk2c = 0x40;
+            l50.sound = 0x40;
             l50.x = (double)((int)x - facing * 0x17);
             l50.y = (double)((int)y - 0x39);
             l50.scale = 2;
-            l50.unk0 = 1;
+            l50.keep = 1;
             l50.layer = 1;
             m_game->CreateEffect((EffectDesc*)&l50);
         }
         if (frame > 2) {
-            m_game->Unk4080c0(0xf);
+            m_game->FlashNegative(0xf);
         }
         if (frame > 4 && frame < 0xb) {
-            (*m_opponent)->pattern = 0x63;
+            (*m_opponent)->pattern = kLyingDown;
             (*m_opponent)->frame = 0;
             (*m_opponent)->timer = 0;
             (*m_opponent)->y = 0.0;
             (*m_opponent)->x = facing * 0x28 + x;
             if (x > 610.0 || x < 30.0) {
-                (*m_opponent)->pattern = 0x3f;
+                (*m_opponent)->pattern = kHitAirLaunch;
                 (*m_opponent)->StartPattern();
                 (*m_opponent)->StopMoving();
-                (*m_opponent)->unkc0 = -6.0;
-                (*m_opponent)->unkc8 = -3.5;
+                (*m_opponent)->m_hitVx = -6.0;
+                (*m_opponent)->m_hitVy = -3.5;
                 (*m_opponent)->y = -5.0;
                 ShakeScreen(0x14, 0xa);
                 DealDamage(0xbb8, 1000.0);
@@ -5404,7 +5404,7 @@ void CEXNanase::UpdatePattern()
                 l50.x = (double)((int)x + facing * 0x28);
                 l50.y = (double)((int)y - 0xb);
                 l50.scale = 2;
-                l50.unk0 = 1;
+                l50.keep = 1;
                 l50.layer = 1;
                 l50.facing = facing;
                 SpawnObject(&l50);
@@ -5416,7 +5416,7 @@ void CEXNanase::UpdatePattern()
             l50.y = (double)(int)y;
             l50.scale = 2;
             l50.layer = 1;
-            l50.unk2c = 2;
+            l50.sound = 2;
             m_game->CreateEffect((EffectDesc*)&l50);
             DealDamage(0x50, 1000.0);
         }
@@ -5426,7 +5426,7 @@ void CEXNanase::UpdatePattern()
                 y = 0.0;
                 StopMoving();
                 StartPattern();
-                pattern = 0x62;
+                pattern = kKnockdown;
                 break;
             }
         }
@@ -5441,7 +5441,7 @@ void CEXNanase::UpdatePattern()
                 l50.x = (double)((int)x + facing * 0x50);
                 l50.y = (double)(int)y;
                 l50.scale = 2;
-                l50.unk0 = 1;
+                l50.keep = 1;
                 l50.layer = 1;
                 l50.facing = facing;
                 SpawnObject(&l50);
@@ -5452,7 +5452,7 @@ void CEXNanase::UpdatePattern()
                 l50.x = (double)((int)x + facing * 0x28);
                 l50.y = (double)(int)y;
                 l50.scale = 2;
-                l50.unk0 = 1;
+                l50.keep = 1;
                 l50.layer = 1;
                 l50.facing = facing;
                 SpawnObject(&l50);
@@ -5462,28 +5462,28 @@ void CEXNanase::UpdatePattern()
             }
         }
         break;
-    case 0x13f:
+    case kGrabFollowABB:
         if (frame == 0 && timer == 0) {
             vx = 0.0;
             vy = 0.0;
             ay = 0.0;
         }
-        Unk410a80(0x32, 3);
+        FocusCameraY(0x32, 3);
         if (frame == 1 && timer == 0) {
-            unk14c = 0x78;
+            m_freezeTime = 0x78;
             m_gauge = m_gauge - 0x3e8;
             FillBackground(0xb0, 3);
             l50.type = 0x46;
-            l50.unk2c = 0x40;
+            l50.sound = 0x40;
             l50.x = (double)((int)x - facing * 6);
             l50.y = (double)((int)y - 0x2d);
             l50.scale = 2;
-            l50.unk0 = 1;
+            l50.keep = 1;
             l50.layer = 1;
             m_game->CreateEffect((EffectDesc*)&l50);
         }
         if (frame > 0) {
-            m_game->Unk4080c0(0xf);
+            m_game->FlashNegative(0xf);
         }
         if (frame == 5 && (timer == 0 || timer == 0x3c || timer == 0x78)) {
             ShakeScreen(5, 0);
@@ -5498,22 +5498,22 @@ void CEXNanase::UpdatePattern()
             }
             l50.y = (double)(int)y;
             l50.scale = 2;
-            l50.unk0 = 1;
+            l50.keep = 1;
             l50.layer = 1;
             l50.facing = facing;
             SpawnObject(&l50);
             l50.type = 0x19f;
-            l50.unk0 = 1;
+            l50.keep = 1;
             l50.layer = 0;
             l50.facing = facing;
             SpawnObject(&l50);
         }
         if (frame == 5 && timer == 0xf) {
-            (*m_opponent)->pattern = 0x3f;
+            (*m_opponent)->pattern = kHitAirLaunch;
             (*m_opponent)->frame = 0;
             (*m_opponent)->timer = 0;
             (*m_opponent)->y = -2.0;
-            (*m_opponent)->unkc8 = -1.0;
+            (*m_opponent)->m_hitVy = -1.0;
         }
         timer++;
         if (timer >= l4) {
@@ -5521,31 +5521,31 @@ void CEXNanase::UpdatePattern()
             frame++;
             m_attackResult = 0;
             if (frame >= x8) {
-                pattern = 0;
+                pattern = kStand;
                 StartPattern();
             }
         }
         break;
-    case 0x140:
-        unk158 = 0;
+    case kAwaken:
+        m_dashMomentum = 0;
         if (frame == 0 && timer == 0) {
             StopMoving();
         }
         if (frame < 4) {
-            unk3138--;
+            m_patternVar1--;
         }
         if (frame == 0 && timer == 0) {
-            unk3454 = 1;
-            unk3138 = 0x42;
-            Unk410a80(0x32, 0x78);
-            unk14c = 0xb4;
+            m_awakened = 1;
+            m_patternVar1 = 0x42;
+            FocusCameraY(0x32, 0x78);
+            m_freezeTime = 0xb4;
             FillBackground(0xb0, 3);
             l50.type = 0x46;
-            l50.unk2c = 0x40;
+            l50.sound = 0x40;
             l50.x = (double)((int)x + facing * 7);
             l50.y = (double)((int)y - 0x35);
             l50.scale = 2;
-            l50.unk0 = 1;
+            l50.keep = 1;
             l50.layer = 1;
             m_game->CreateEffect((EffectDesc*)&l50);
             m_playSound = 0x25;
@@ -5556,7 +5556,7 @@ void CEXNanase::UpdatePattern()
             frame++;
             m_attackResult = 0;
             if (frame >= x8) {
-                pattern = 0;
+                pattern = kStand;
                 StartPattern();
             }
         }
