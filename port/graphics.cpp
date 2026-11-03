@@ -94,6 +94,20 @@ struct Lock {
     bool Inside(const BYTE* p) const { return p >= base && p < end; }
 };
 
+// "Rev build" in the bottom-left corner, telling this build from the original. It is
+// drawn on the window over the frame, not into it: the game's screenshots and --dump
+// keep the original's frames.
+void DrawWatermark()
+{
+    const char* text = "Rev build";
+    const float x = 4;
+    const float y = 480 - SDL_DEBUG_TEXT_FONT_CHARACTER_SIZE - 4;
+    SDL_SetRenderDrawColor(g_renderer, 0, 0, 0, 160);
+    SDL_RenderDebugText(g_renderer, x + 1, y + 1, text);
+    SDL_SetRenderDrawColor(g_renderer, 255, 255, 255, 192);
+    SDL_RenderDebugText(g_renderer, x, y, text);
+}
+
 void Present(IDirectDrawSurface* back, IDirectDrawPalette* pal)
 {
     if (!g_renderer || !back)
@@ -115,6 +129,7 @@ void Present(IDirectDrawSurface* back, IDirectDrawPalette* pal)
     SDL_SetRenderDrawColor(g_renderer, 0, 0, 0, 255);
     SDL_RenderClear(g_renderer);
     SDL_RenderTexture(g_renderer, g_texture, nullptr, nullptr);
+    DrawWatermark();
     SDL_RenderPresent(g_renderer);
 }
 
