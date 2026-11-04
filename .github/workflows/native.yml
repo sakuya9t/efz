@@ -102,13 +102,66 @@ jobs:
             build/run/efz.app
           if-no-files-found: ignore
 
-  # The compatibility suite (docs/compat.md) in both the game and the headless runner.
-  # It needs the original game's data, which GitHub's runners can't have, so it runs on
-  # a self-hosted runner of the repository's owner, labelled efz-data, with EFZ_DIR set
-  # to an EFZ 4.02 install and Python 3 on its PATH, and only once the repository
-  # variable EFZ_COMPAT is true; EFZ_COMPAT_ARGS adds options (-j N, --no-reference on
-  # a machine whose builds don't give the reference's logs). Never for pull requests:
-  # their code, a fork's included, mustn't run on that machine.
+  # The compatibility suite (docs/compat.md) in both the game and the headless runner,
+  # on GitHub's runners: Linux and GCC, whose builds give the reference's logs. The
+  # game's data comes from the compatibility pack in the repository, encrypted
+  # (tests/compat/pack.tar.gz.enc, made by tools/compatpack.py encrypt): the secret
+  # EFZ_COMPAT_PACK_KEY opens it. Without the secret (a fork, a pull request from one)
+  # the job says so and stops. Only the two steps that need the key see it. The
+  # repository variable EFZ_COMPAT_ARGS adds options to the check.
+  compat-pack:
+    runs-on: ubuntu-24.04
+    steps:
+      - name: The key
+        id: key
+        env:
+          EFZ_COMPAT_PACK_KEY: ${{ secrets.EFZ_COMPAT_PACK_KEY }}
+        run: |
+          if [ -n "$EFZ_COMPAT_PACK_KEY" ]; then
+            echo "run=true" >> "$GITHUB_OUTPUT"
+          else
+            echo "::notice::no EFZ_COMPAT_PACK_KEY secret: the compatibility suite doesn't run"
+          fi
+      - uses: actions/checkout@v4
+        if: steps.key.outputs.run == 'true'
+      - name: Linux packages
+        if: steps.key.outputs.run == 'true'
+        run: |
+          sudo apt-get update
+          # As the build job's.
+          sudo apt-get install -y ninja-build \
+            libx11-dev libxext-dev libxrandr-dev libxcursor-dev libxi-dev libxss-dev \
+            libxfixes-dev libxtst-dev libxkbcommon-dev libwayland-dev wayland-protocols \
+            libdecor-0-dev libegl-dev libgl-dev libgles-dev libdrm-dev libgbm-dev \
+            libasound2-dev libpulse-dev libpipewire-0.3-dev libudev-dev libdbus-1-dev \
+            libibus-1.0-dev
+      - uses: actions/setup-python@v5
+        if: steps.key.outputs.run == 'true'
+        with:
+          python-version: '3.x'
+      - name: Build
+        if: steps.key.outputs.run == 'true'
+        env:
+          EFZ_BUILD: host
+        run: |
+          tools/run.sh --build-only
+          cmake --build build/run --config RelWithDebInfo --parallel 4 --target efz-headless
+      # Outside the checkout, so nothing later can pick it up; never uploaded.
+      - name: The compatibility pack
+        if: steps.key.outputs.run == 'true'
+        env:
+          EFZ_COMPAT_PACK_KEY: ${{ secrets.EFZ_COMPAT_PACK_KEY }}
+        run: python tools/compatpack.py unpack "$RUNNER_TEMP/efz"
+      - name: Compatibility suite, the game and the headless runner
+        if: steps.key.outputs.run == 'true'
+        run: |
+          EFZ_DIR="$RUNNER_TEMP/efz" EFZ_COMPAT="$RUNNER_TEMP/compat" \
+            python tools/compat.py -j 4 check --native build/run/efz ${{ vars.EFZ_COMPAT_ARGS }}
+
+  # The same on a self-hosted runner of the repository's owner that has the game's
+  # data: labelled efz-data, with EFZ_DIR set to an EFZ 4.02 install (or a pack) and
+  # Python 3 on its PATH; on once the repository variable EFZ_COMPAT is true. Never for
+  # pull requests: their code, a fork's included, mustn't run on that machine.
   compat:
     if: vars.EFZ_COMPAT == 'true' && github.event_name != 'pull_request'
     runs-on: [self-hosted, efz-data]

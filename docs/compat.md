@@ -69,14 +69,84 @@ is found); `explain` also runs the reference (below), so it needs the toolchain'
 images. When the game and the headless runner part, `check` prints where; their logs
 are in `$EFZ_COMPAT/logs/game` and `logs/headless`, for `tools/compat.py diff`.
 
-**In CI.** GitHub's runners can't have the game's data, so CI (`.github/workflows/
-native.yml`) runs what needs none: it builds both on every platform and runs the
-headless library's own tests (`ctest -L headless`: the arena's copies, the sprite
-loader without drawing, the C and Python API). The suite itself runs in its `compat`
-job on a self-hosted runner of the owner's that has the data: label it `efz-data`, set
-`EFZ_DIR` in its environment, and set the repository variable `EFZ_COMPAT` to `true`
-(`EFZ_COMPAT_ARGS` for options). The job never runs for pull requests, whose code
-mustn't run on that machine.
+**In CI.** On every push CI (`.github/workflows/native.yml`) builds both on every
+platform and runs what needs none of the game's data: the headless library's own tests
+(`ctest -L headless`: the arena's copies, the sprite loader without drawing, the C and
+Python API). The suite itself needs the data, which the repository mustn't hold, but
+not much of it: the frame data (`.pat`), the palettes, each picture's size and first
+pixel, the sound files' headers and `key.ini` are all the game's state depends on.
+`tools/compatpack.py` makes a **compatibility pack** of just that from an install
+(1.3 MB as a `.tar.gz`, a 750 MB install's worth of pictures and sounds left out)
+that `EFZ_DIR` can name:
+
+```sh
+tools/compatpack.py build efz-pack --efz "$EFZ_DIR"
+EFZ_DIR=efz-pack tools/compat.py check
+```
+
+**The encrypted pack** (decided 4 November 2026). The pack is still the game's data
+(its moves and palettes), so the repository holds it only encrypted:
+`tests/compat/pack.tar.gz.enc` (openssl's AES-256, the key derived by PBKDF2), with
+the SHA-256 of what it holds in `tests/compat/pack.sha256`. The key is in no file of
+the repository: its owner keeps it, and gives it to CI as the secret
+`EFZ_COMPAT_PACK_KEY`.
+
+```sh
+EFZ_COMPAT_PACK_KEY=... tools/compatpack.py encrypt --efz "$EFZ_DIR"   # or --key-file
+EFZ_COMPAT_PACK_KEY=... tools/compatpack.py unpack efz-pack
+```
+
+`encrypt` remakes the pack, and rewrites the encrypted file only when it doesn't
+already hold that pack under that key (the archive is the same bytes for the same
+files); `unpack` checks the digest, so a wrong key is told as one.
+
+**Keeping the key.** It lives in two places, and in no file of the repository
+(`.gitignore` refuses `*.key`):
+
+- the owner's: a file outside the checkout (`--key-file`), and a copy in a password
+  manager. GitHub never shows a secret again, so that copy is the only way back to it.
+- CI's: the repository secret `EFZ_COMPAT_PACK_KEY` (Settings, Secrets and variables,
+  Actions; or `gh secret set EFZ_COMPAT_PACK_KEY < compat-pack.key`).
+
+Nobody else needs it: anyone with the game checks with their own install
+(`EFZ_DIR`), and the pack only stands in for it where there is none. A maintainer who
+remakes the pack gets the key from the password manager, not over chat or e-mail. The
+secret reaches every workflow run of the repository's own branches, so whoever can
+push a branch could read it: write access to the repository is access to the key.
+
+**Changing it**, when it may have got out or someone who had it no longer should:
+
+```sh
+openssl rand -base64 48 > new.key        # outside the checkout
+tools/compatpack.py encrypt --efz "$EFZ_DIR" --key-file new.key   # re-encrypts: the key changed
+tools/compatpack.py unpack /tmp/pack-check --key-file new.key      # opens with it
+```
+
+then set the secret to the new key and push the new `pack.tar.gz.enc` together (until
+both have changed, CI can't open the pack), and replace the copy in the password
+manager. The old key still opens the old file in the history, which stays public: a
+new key protects the pack from then on, not what was already out.
+
+**Remaking the pack** (a change to what `compatpack.py` keeps, or a new install):
+`tools/compatpack.py encrypt` with the current key, and commit the two files.
+
+Two jobs run the suite from a pack:
+
+- `compat-pack`, on GitHub's Linux runners (whose GCC builds give the reference's
+  logs): it unpacks `tests/compat/pack.tar.gz.enc` with `EFZ_COMPAT_PACK_KEY`, outside
+  the checkout, and runs `tools/compat.py check`. Without the secret (a fork, a pull
+  request from one) it says so and stops; only its two steps that need the key see it.
+- `compat`, on a self-hosted runner of the owner's that has the data (or a pack):
+  label it `efz-data`, set `EFZ_DIR` in its environment, and set the repository
+  variable `EFZ_COMPAT` to `true`. It never runs for pull requests, whose code mustn't
+  run on that machine.
+
+The repository variable `EFZ_COMPAT_ARGS` adds options to either (`--no-reference` on
+a machine whose builds don't give the reference's logs).
+
+**Measured** (4 November 2026, Windows 11, MSVC): a pack made from a 753 MB install
+(1.3 MB as a `.tar.gz`) gives the install's logs, byte for byte, in all 254 cases, in
+the game and in the headless runner. The encrypted one unpacks into the same files.
 
 **Measured** (4 November 2026; Windows 11, MSVC 17.14, an EFZ 4.02 install with its own
 `key.ini`; `-j 10`, 7 minutes): the game and the headless runner write the same log in

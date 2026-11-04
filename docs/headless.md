@@ -37,6 +37,12 @@ pip install -e python                       # or put python/ on PYTHONPATH
 The Python package finds the library at `$EFZ_ENV_LIBRARY`, next to the package, or in
 the checkout's `build/*/` folders. It needs numpy; `efz_env.gym` needs gymnasium.
 
+Without drawing, the library needs only what the game's state depends on: a
+compatibility pack (`tools/compatpack.py`, [compat.md](compat.md)) does as `data_dir`,
+about 1 MB to copy to each training machine instead of the install. **Measured:** the
+same observations and rewards from the pack as from the install (8 environments, 800
+steps). Drawn frames from a pack are flat colours: draw with the install.
+
 ## The same game
 
 The headless platform (`port/headless/platform.cpp`) stands in for SDL3's

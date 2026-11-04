@@ -71,6 +71,11 @@ This repository contains no original game files: no executables, sprites, sounds
 EFZ's readme prohibits redistributing its data and decompiling it. Everything here works
 against a legitimately obtained EFZ 4.02 install, which `EFZ_DIR` points at.
 
+One file is made from the game's data: `tests/compat/pack.tar.gz.enc`, encrypted. It
+holds what the compatibility test reads (the frame data, palettes and the pictures'
+sizes; no pictures or sounds), so that CI can run the test, and the repository holds no
+key to it: CI gets that from a secret ([docs/compat.md](docs/compat.md), "In CI").
+
 ## Setup
 
 You need Docker, Python 3 with `pefile`, GNU `objdump`, `iconv`, `curl` and `sha1sum`.
@@ -274,6 +279,7 @@ actions, rewards, save states, the GPU and the measurements.
 | `tools/portify.py` | Marks the pointer casts of lifted code for the native build's 32-bit handles |
 | `tools/constants.py` | Names bare action, command, flag and effect numbers: declares `tools/constants.txt`'s constants in `src/efz.h` and puts them in the code where clang shows what a number is |
 | `tools/compat.py` | The compatibility test: plays the suite (`tests/compat/`) in a build and compares its state, tick by tick, with the original's (the `compat-reference` tag, under wine) |
+| `tools/compatpack.py` | A compatibility pack: what the suite reads of the game's data (frame data, palettes, picture sizes, sound headers; 1.3 MB), for running it where the install can't be; `encrypt` and `unpack` its encrypted copy in `tests/compat/` for CI |
 | `tools/efzlog.py` | The native game's logs and fight records: sessions, warnings and crashes, fights, export of a fight's ticks as a table, where two records part ([docs/logging.md](docs/logging.md)) |
 | `tools/buildinfo.cmake` | Writes the revision the native game's log names, at each build |
 | `tools/msvc11` | Run Visual C++ 2012 tools (EfzRevival's toolchain) in the container |

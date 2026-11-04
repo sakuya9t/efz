@@ -195,9 +195,12 @@ def digest(path):
 # --- Running a build.
 
 def efz_dir():
+    """The game's data: an EFZ 4.02 install, or a pack of tools/compatpack.py (which
+    has no efz.exe; only make check, for the reference, needs that)."""
     efz = os.environ.get('EFZ_DIR')
-    if not efz or not os.path.isfile(os.path.join(efz, 'efz.exe')):
-        die('set EFZ_DIR to the folder containing the original efz.exe')
+    if not efz or not os.path.isfile(os.path.join(efz, 'system', 'effect', 'effect.pat')):
+        die('set EFZ_DIR to the folder of an EFZ 4.02 install, or a pack of '
+            'tools/compatpack.py')
     return os.path.abspath(efz)
 
 
@@ -558,6 +561,7 @@ def cmd_check(args):
 
     failed = {b.name: [] for b in builds}
     apart = []
+    same = 0
     outs = {}
     # Results come in the jobs' order, so a case's builds come together: each case is
     # reported once all of its are in.
@@ -595,8 +599,10 @@ def cmd_check(args):
                 apart.append(case.name)
                 print(f'{case.name}: FAILED, the game and the headless runner part')
                 compare(game, headless, 'game', 'headless')
-            elif args.verbose and args.no_reference:
-                print(f'{case.name}: the same in the game and the headless runner')
+            else:
+                same += 1
+                if args.verbose and args.no_reference:
+                    print(f'{case.name}: the same in the game and the headless runner')
         outs = {}
     for b in builds:
         if not args.no_reference:
@@ -604,8 +610,9 @@ def cmd_check(args):
                   f'reference in the {LABELS.get(b.name, b.name)}' +
                   (f' ({b.path})' if b.kind != 'exe' else ''))
     if len(builds) == 2:
-        print(f'{len(cases) - len(apart)} of {len(cases)} cases are the same in the game '
-              'and the headless runner')
+        # Only cases with both logs count: a case neither could play isn't "the same".
+        print(f'{same} of {len(cases)} cases are the same in the game and the headless '
+              'runner')
     bad = sorted(set(apart).union(*failed.values()))
     if bad:
         print('failed: ' + ' '.join(bad))
