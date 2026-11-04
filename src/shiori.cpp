@@ -1,6 +1,6 @@
 // CShiori (0x422d70-0x43405f), the first of the character classes (its constructor
 // copies "shiori" into the name CPlayer's loaders use). Its other methods override
-// CPlayer's virtual ones: the per-state update (UpdatePattern, in shiori_vf6.cpp), its
+// CPlayer's virtual ones: the per-state update (UpdatePattern, in shiori_states.cpp), its
 // objects' (UpdateObjects), its gauge (DrawGauge), command recognition from the
 // 180-entry input history (ReadCommand) and the CPU player's input (CpuInput).
 #include <stdlib.h>

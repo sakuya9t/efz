@@ -236,53 +236,53 @@ Consequences for a byte-identical rebuild:
   | `sound.cpp` | `0x40d810`–`0x40e62f` | 15 | `CSound`: DirectSound, `.wav` loading, music loop points |
   | `player.cpp` | `0x40e630`–`0x412b0f` | 49 | `CPlayer`, the base of the character classes; inline `PatternData` and `Afterimages` methods |
   | `playerobj.cpp` | `0x412b10`–`0x4136cf` | 6 | `CPlayer`'s table of 64 spawned objects and drawing them |
-  | `shiori_vf6.cpp` | `0x4136d0`–`0x422d6f` | all | `UpdatePattern`, the per-state update |
+  | `shiori_states.cpp` | `0x4136d0`–`0x422d6f` | all | `UpdatePattern`, the per-state update |
   | `shiori.cpp` | `0x422d70`–`0x43405f` | all | `CShiori` and the inline `ObjBase::SetVelocity` |
-  | `sayuri_vf6.cpp` | `0x434060`–`0x4463df` | all | `UpdatePattern`, the per-state update |
+  | `sayuri_states.cpp` | `0x434060`–`0x4463df` | all | `UpdatePattern`, the per-state update |
   | `sayuri.cpp` | `0x4463e0`–`0x45184f` | all | `CSayuri` |
-  | `nayuki_vf6.cpp` | `0x451850`–`0x46108f` | all | `UpdatePattern`, the per-state update |
+  | `nayuki_states.cpp` | `0x451850`–`0x46108f` | all | `UpdatePattern`, the per-state update |
   | `nayuki.cpp` | `0x461090`–`0x46d96f` | all | `CNayuki` |
-  | `nanase_vf6.cpp` | `0x46d970`–`0x48a71f` | all | `UpdatePattern`, the per-state update (and the second one it hands over to) |
+  | `nanase_states.cpp` | `0x46d970`–`0x48a71f` | all | `UpdatePattern`, the per-state update (and the second one it hands over to) |
   | `nanase.cpp` | `0x48a720`–`0x49d60f` | all | `CNanase`; an unused destructor |
-  | `nagamori_vf6.cpp` | `0x49d610`–`0x4add8f` | all | `UpdatePattern`, the per-state update |
+  | `nagamori_states.cpp` | `0x49d610`–`0x4add8f` | all | `UpdatePattern`, the per-state update |
   | `nagamori.cpp` | `0x4add90`–`0x4c04af` | all | `CNagamori` and the inline `ObjBase::AngleTo` |
-  | `mizukab_vf6.cpp` | `0x4c04b0`–`0x4d284f` | all | `UpdatePattern`, the per-state update |
+  | `mizukab_states.cpp` | `0x4c04b0`–`0x4d284f` | all | `UpdatePattern`, the per-state update |
   | `mizukab.cpp` | `0x4d2850`–`0x4e7ebf` | all | `CMizukaB` |
-  | `mizuka_vf6.cpp` | `0x4e7ec0`–`0x4f82ff` | all | `UpdatePattern`, the per-state update |
+  | `mizuka_states.cpp` | `0x4e7ec0`–`0x4f82ff` | all | `UpdatePattern`, the per-state update |
   | `mizuka.cpp` | `0x4f8300`–`0x50c4af` | all | `CMizuka` |
-  | `misuzu_vf6.cpp` | `0x50c4b0`–`0x519dff` | all | `UpdatePattern`, the per-state update |
+  | `misuzu_states.cpp` | `0x50c4b0`–`0x519dff` | all | `UpdatePattern`, the per-state update |
   | `misuzu.cpp` | `0x519e00`–`0x530bbf` | all | `CMisuzu` |
-  | `mishio_vf6.cpp` | `0x530bc0`–`0x54647f` | all | `UpdatePattern`, the per-state update |
+  | `mishio_states.cpp` | `0x530bc0`–`0x54647f` | all | `UpdatePattern`, the per-state update |
   | `mishio.cpp` | `0x546480`–`0x5571ef` | all | `CMishio` |
-  | `misaki_vf6.cpp` | `0x5571f0`–`0x5678ff` | all | `UpdatePattern`, the per-state update |
+  | `misaki_states.cpp` | `0x5571f0`–`0x5678ff` | all | `UpdatePattern`, the per-state update |
   | `misaki.cpp` | `0x567900`–`0x5736cf` | all | `CMisaki` |
-  | `mio_vf6.cpp` | `0x5736d0`–`0x58830f` | all | `UpdatePattern`, the per-state update |
+  | `mio_states.cpp` | `0x5736d0`–`0x58830f` | all | `UpdatePattern`, the per-state update |
   | `mio.cpp` | `0x588310`–`0x59c49f` | all | `CMio` |
-  | `minagi_vf6.cpp` | `0x59c4a0`–`0x5a9f9f` | all | `UpdatePattern`, the per-state update |
+  | `minagi_states.cpp` | `0x59c4a0`–`0x5a9f9f` | all | `UpdatePattern`, the per-state update |
   | `minagi.cpp` | `0x5a9fa0`–`0x5c857f` | all | `CMinagi` |
-  | `mayu_vf6.cpp` | `0x5c8580`–`0x5dddef` | all | `UpdatePattern`, the per-state update |
+  | `mayu_states.cpp` | `0x5c8580`–`0x5dddef` | all | `UpdatePattern`, the per-state update |
   | `mayu.cpp` | `0x5dddf0`–`0x5e85ef` | all | `CMayu` |
-  | `makoto_vf6.cpp` | `0x5e85f0`–`0x5f6d8f` | all | `UpdatePattern`, the per-state update |
+  | `makoto_states.cpp` | `0x5e85f0`–`0x5f6d8f` | all | `UpdatePattern`, the per-state update |
   | `makoto.cpp` | `0x5f6d90`–`0x60792f` | all | `CMakoto` |
-  | `mai_vf6.cpp` | `0x607930`–`0x6163af` | all | `UpdatePattern`, the per-state update |
+  | `mai_states.cpp` | `0x607930`–`0x6163af` | all | `UpdatePattern`, the per-state update |
   | `mai.cpp` | `0x6163b0`–`0x62a5df` | all | `CMai` |
-  | `kaori_vf6.cpp` | `0x62a5e0`–`0x638d8f` | all | `UpdatePattern`, the per-state update |
+  | `kaori_states.cpp` | `0x62a5e0`–`0x638d8f` | all | `UpdatePattern`, the per-state update |
   | `kaori.cpp` | `0x638d90`–`0x6429bf` | all | `CKaori` |
-  | `kano_vf6.cpp` | `0x6429c0`–`0x653a1f` | all | `UpdatePattern`, the per-state update |
+  | `kano_states.cpp` | `0x6429c0`–`0x653a1f` | all | `UpdatePattern`, the per-state update |
   | `kano.cpp` | `0x653a20`–`0x66756f` | all | `CKano` |
-  | `kanna_vf6.cpp` | `0x667570`–`0x675c7f` | all | `UpdatePattern`, the per-state update |
+  | `kanna_states.cpp` | `0x667570`–`0x675c7f` | all | `UpdatePattern`, the per-state update |
   | `kanna.cpp` | `0x675c80`–`0x68354f` | all | `CKanna` |
-  | `ikumi_vf6.cpp` | `0x683550`–`0x6a59bf` | all | `UpdatePattern`, the per-state update (and the second one it hands over to) |
+  | `ikumi_states.cpp` | `0x683550`–`0x6a59bf` | all | `UpdatePattern`, the per-state update (and the second one it hands over to) |
   | `ikumi.cpp` | `0x6a59c0`–`0x6be9bf` | all | `CIkumi`; an unused destructor |
-  | `exnanase_vf6.cpp` | `0x6be9c0`–`0x6cfbaf` | all | `UpdatePattern`, the per-state update |
+  | `exnanase_states.cpp` | `0x6be9c0`–`0x6cfbaf` | all | `UpdatePattern`, the per-state update |
   | `exnanase.cpp` | `0x6cfbb0`–`0x6d93ef` | all | `CEXNanase` |
-  | `ayu_vf6.cpp` | `0x6d93f0`–`0x6e812f` | all | `UpdatePattern`, the per-state update |
+  | `ayu_states.cpp` | `0x6d93f0`–`0x6e812f` | all | `UpdatePattern`, the per-state update |
   | `ayu.cpp` | `0x6e8130`–`0x6f2f1f` | all | `CAyu` |
-  | `akane_vf6.cpp` | `0x6f2f20`–`0x7039cf` | all | `UpdatePattern`, the per-state update |
+  | `akane_states.cpp` | `0x6f2f20`–`0x7039cf` | all | `UpdatePattern`, the per-state update |
   | `akane.cpp` | `0x7039d0`–`0x7124ff` | all | `CAkane` |
-  | `akiko_vf6.cpp` | `0x712500`–`0x72199f` | all | `UpdatePattern`, the per-state update |
+  | `akiko_states.cpp` | `0x712500`–`0x72199f` | all | `UpdatePattern`, the per-state update |
   | `akiko.cpp` | `0x7219a0`–`0x73070f` | all | `CAkiko` |
-  | `nayukib_vf6.cpp` | `0x730710`–`0x73e78f` | all | `UpdatePattern`, the per-state update |
+  | `nayukib_states.cpp` | `0x730710`–`0x73e78f` | all | `UpdatePattern`, the per-state update |
   | `nayukib.cpp` | `0x73e790`–`0x750d2f` | all | `CNayukiB` |
   | `bg01.cpp` | `0x750d30`–`0x751a3f` | all | `CAnimBg`, the animated backgrounds' base (frames and `.pat` animations), and `CBg01`; inline `CAnimBg` constructor |
   | `bg10.cpp`, `bg12.cpp`, `bg16.cpp` | `0x751a40`–`0x75325f` | all | `CBg10`, `CBg12`, `CBg16` |
@@ -531,7 +531,7 @@ Each line below is **observed**, read from the matched `WinMain` in `src/main.cp
   constants, so nothing shows what they were: empty files, files whose code was
   `#if`'d out, or splits of the 71 along lines the layout can't show (a file without
   strings of its own leaves no seam in `.rdata`). `UpdatePattern` and `UpdatePattern2` in
-  `nanase_vf6.cpp` (likewise Ikumi's) may have been two files, for one.
+  `nanase_states.cpp` (likewise Ikumi's) may have been two files, for one.
 - **Some compiler flags are unconfirmed.** `/Od /GS` without `/EHsc` is settled by
   `WinMain`. `/Zp`, `/J` and `/GR` still need a function that depends on them.
 - **The character `.pat` record layout** is decoded only as far as the frame boxes.

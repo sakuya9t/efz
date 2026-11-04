@@ -133,7 +133,7 @@ Collected from the four; details in each character's section.
   and Shiori's 0x2b/0x2c. These pattern numbers are gauge graphics, not actions.
 
 
-# CKano (src/kano.cpp, src/kano_vf6.cpp)
+# CKano (src/kano.cpp, src/kano_states.cpp)
 
 Named: 16 members (all but unk3148 and unk314c, which are only zeroed in the constructor
 and Reset), 118 action numbers (61 of her own actions 0xc8-0x13c, 57 objects
@@ -357,7 +357,7 @@ Shiori's routine, byte for byte; see shiori/notes.md. For Kano:
 
 # CIkumi notes
 
-Sources: src/ikumi.cpp, src/ikumi_vf6.cpp. Frame/box facts from the game's own
+Sources: src/ikumi.cpp, src/ikumi_states.cpp. Frame/box facts from the game's own
 ikumi.pat / ikumi2.pat (parsed with work/patinfo.py; data in
 /home/sakuya/.local/share/asm/worktrees/7673b13e-.../efz-unpacked/tasogare/EFZ/ikumi).
 
@@ -508,7 +508,7 @@ stock versions follow from her stocks, and it can still reach the mode by collec
   collectible sprites (7x8, 26x25, 26x40).
 - 0x1a9 has attack boxes in ikumi.pat but its code sets unk84 = 0, so it never hits.
 
-# CMishio (src/mishio.cpp, src/mishio_vf6.cpp)
+# CMishio (src/mishio.cpp, src/mishio_states.cpp)
 
 ## The power-up (m_powerUp, unk3158)
 
@@ -516,11 +516,11 @@ Mishio's specials are locked behind a two-bit power-up:
 
 - **0**: none. 623 + A/B/C (0xfa-0xfc) is her only special. If it connects (hit or
   guard, `m_attackResult > 0`), at its end she gets power-up 1 or 2, 50/50 through
-  `Random(0, 1000) < 500` (vf6:3536), so it is recorded in replays.
+  `Random(0, 1000) < 500` (mishio_states.cpp:3536), so it is recorded in replays.
 - **1** (bit 0): opens 236, 214 (and its follow-ups), 6C, 623's power-1 version, ground
   236236 and 214214.
 - **2** (bit 1): opens 412, 22A/22B, 6B, 623's power-2 version, 641236 and air 236236.
-- **3** (both): set by the LV4 for `m_powerUpTime` = 4500 frames (vf6:7317); Vf8 counts
+- **3** (both): set by the LV4 for `m_powerUpTime` = 4500 frames (mishio_states.cpp:7317); Vf8 counts
   it down (not during the LV4 itself) and drops to 0 at the end. Moves don't use it up.
 
 Most moves of a set put the power-up back to 0 at their end (`if (m_powerUp == 1)
@@ -644,7 +644,7 @@ nothing unless the 623 has granted the matching power. It never writes 236236,
 - 0x11a vs 0x11b: identical code, different animations; which looks like what isn't
   visible from the code (named k214Recovery / k214Recovery2).
 
-# CShiori (src/shiori.cpp, src/shiori_vf6.cpp)
+# CShiori (src/shiori.cpp, src/shiori_states.cpp)
 
 Named: 11 members (all of 0x3138-0x3358), 110 action numbers (63 player actions >= 0xc8,
 47 objects). Left: object 0x19b (dead copy, below), the shared objects 0x1ef/0x1f0-0x1f3
@@ -756,7 +756,7 @@ CPlayer::Random, which is harmless only because a recorded fight has no CPU.
 
 - unk118 / unk120: the EX resource; C specials and 22C need unk118 >= 500 or
   unk120 > 0 and take 500 (250 with unk120) off unk118; shared 0x53 takes 30 when
-  unk120 != 0 (shiori_vf6.cpp:1475).
+  unk120 != 0 (shiori_states.cpp:1475).
 - unk14c: set to 0x78 at every super's flash; the opponent's UpdatePattern and
   UpdateObjects stop while it is > 0 (super freeze).
 - unk15c: specials need < 2 (D too), jump-cancels < 3, dashes == 0.
@@ -780,7 +780,7 @@ CPlayer::Random, which is harmless only because a recorded fight has no CPU.
 
 - Constructor: `m_rivals[1] = 7;` then `m_rivals[1] = 0xb;` (shiori.cpp:38-39); the 7
   is lost, probably meant for another slot.
-- 0x108 (air 236C) adds 0x2d gauge twice on its first frame (shiori_vf6.cpp:3900, 3905).
+- 0x108 (air 236C) adds 0x2d gauge twice on its first frame (shiori_states.cpp:3900, 3905).
 - Debris 0x19c-0x1a0 and 0x1f1/0x1f2 take lifetimes and speeds from plain rand();
   they only matter through the 64-slot object table.
 - 0x1b3's speed is Random(0x1e, 0x19) * 0.1, p1 > p2: 3.0 down to 2.6.

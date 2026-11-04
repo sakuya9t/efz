@@ -7,66 +7,66 @@ bound 0x96 kFirstGuard  # the first guard reaction (0x96-0x9c)
 bound 0xc7 kLastSharedAction  # the last action every character shares
 bound 0xc8 kFirstCharacterAction  # the first of the character's own actions: normals, specials, supers, objects
 action CPlayer 0x0 kStand  # player.cpp MoveOnGround with no input; the default case loops the animation
-action CPlayer 0x1 kWalkForward  # player.cpp left/right toward facing; akane_vf6.cpp vx 0.7
-action CPlayer 0x2 kWalkBack  # player.cpp; akane_vf6.cpp vx -0.7
+action CPlayer 0x1 kWalkForward  # player.cpp left/right toward facing; akane_states.cpp vx 0.7
+action CPlayer 0x2 kWalkBack  # player.cpp; akane_states.cpp vx -0.7
 action CPlayer 0x3 kCrouch  # player.cpp down held, after 0x8
-action CPlayer 0x4 kJump  # player.cpp up, no direction; akane_vf6.cpp takes off at frame 3 (vy -3.3, gravity 0.054), lands in 0xd; a run's momentum (m_dashMomentum) adds vx
-action CPlayer 0x5 kJumpForward  # player.cpp; akane_vf6.cpp vx 0.7 (1.1 from a run)
-action CPlayer 0x6 kJumpBack  # player.cpp; akane_vf6.cpp vx -0.7
-action CPlayer 0x7 kStandUp  # player.cpp down released while crouching; akane_vf6.cpp -> 0; also the end of standing no-push hits 0x48/0x49
-action CPlayer 0x8 kCrouchDown  # player.cpp down pressed while standing; akane_vf6.cpp -> 0x3
-action CPlayer 0x9 kFall  # akane_vf6.cpp falling after a jump's animation, an air dash, air 22C, recoil guard in the air; lands in 0xd
+action CPlayer 0x4 kJump  # player.cpp up, no direction; akane_states.cpp takes off at frame 3 (vy -3.3, gravity 0.054), lands in 0xd; a run's momentum (m_dashMomentum) adds vx
+action CPlayer 0x5 kJumpForward  # player.cpp; akane_states.cpp vx 0.7 (1.1 from a run)
+action CPlayer 0x6 kJumpBack  # player.cpp; akane_states.cpp vx -0.7
+action CPlayer 0x7 kStandUp  # player.cpp down released while crouching; akane_states.cpp -> 0; also the end of standing no-push hits 0x48/0x49
+action CPlayer 0x8 kCrouchDown  # player.cpp down pressed while standing; akane_states.cpp -> 0x3
+action CPlayer 0x9 kFall  # akane_states.cpp falling after a jump's animation, an air dash, air 22C, recoil guard in the air; lands in 0xd
 action CPlayer 0xa kSuperJump  # player.cpp up with m_command 3, which no ReadCommand produces: unreachable; Kanna and Mayu reuse 0xa for a state of their own
 action CPlayer 0xb kSuperJumpForward  # player.cpp m_command 4, unreachable; data like 0x5 with a 19998-tick frame
 action CPlayer 0xc kSuperJumpBack  # player.cpp m_command 5, unreachable
-action CPlayer 0xd kLand  # akane_vf6.cpp landing from any jump or fall (sound 9) -> 0x7, or 0x3 holding down
-action CPlayer 0xe kAirJump  # akane.cpp command 6 in the air with m_airActions left; akane_vf6.cpp vy -3.2
+action CPlayer 0xd kLand  # akane_states.cpp landing from any jump or fall (sound 9) -> 0x7, or 0x3 holding down
+action CPlayer 0xe kAirJump  # akane.cpp command 6 in the air with m_airActions left; akane_states.cpp vy -3.2
 action CPlayer 0xf kAirJumpForward  # akane.cpp the same holding forward; vx 0.7
 action CPlayer 0x10 kAirJumpBack  # akane.cpp holding back; vx -0.9
 action CPlayer 0x2d kHudName  # scene3_draw.cpp the name plate under the life bar (Akane's reads "AKANE SATOMURA"); 0x2e holds the same sprite and is never drawn
-action CPlayer 0x2f kResultLoserFall  # scene5.cpp the loser drops in from (480, -240) on the result screen; akane_vf6.cpp falls, lands at frame 2 (sound 7) and lies
+action CPlayer 0x2f kResultLoserFall  # scene5.cpp the loser drops in from (480, -240) on the result screen; akane_states.cpp falls, lands at frame 2 (sound 7) and lies
 action CPlayer 0x30 kHudPortrait  # scene3_draw.cpp the face beside the life bar
 action CPlayer 0x31 kOffscreenMarker  # player.cpp a speech-bubble face drawn at the screen's bottom edge when the player is below the screen (unless m_hideOffscreenMarker)
-action CPlayer 0x32 kHitStandHighLight  # scene3.cpp a standing defender, light attack; sprite: head snapped back; akane_vf6.cpp pushed back (vx -1.1 * (2 - proration)), gauge +10
-action CPlayer 0x33 kHitStandHighMedium  # flagsAA 0x10; akane_vf6.cpp vx -1.5, gauge +15
-action CPlayer 0x34 kHitStandHighHeavy  # flagsAA 0x20; akane_vf6.cpp vx -1.8, gauge +20
-action CPlayer 0x35 kHitStandLowLight  # flagsAA 8 (2A, 2B...): sprite doubled over; akane_vf6.cpp as 0x32
+action CPlayer 0x32 kHitStandHighLight  # scene3.cpp a standing defender, light attack; sprite: head snapped back; akane_states.cpp pushed back (vx -1.1 * (2 - proration)), gauge +10
+action CPlayer 0x33 kHitStandHighMedium  # flagsAA 0x10; akane_states.cpp vx -1.5, gauge +15
+action CPlayer 0x34 kHitStandHighHeavy  # flagsAA 0x20; akane_states.cpp vx -1.8, gauge +20
+action CPlayer 0x35 kHitStandLowLight  # flagsAA 8 (2A, 2B...): sprite doubled over; akane_states.cpp as 0x32
 action CPlayer 0x36 kHitStandLowMedium  #
 action CPlayer 0x37 kHitStandLowHeavy  #
-action CPlayer 0x38 kHitCrouchLight  # scene3.cpp a crouching defender (flagsB0 2); akane_vf6.cpp -> 0x3 at the end
+action CPlayer 0x38 kHitCrouchLight  # scene3.cpp a crouching defender (flagsB0 2); akane_states.cpp -> 0x3 at the end
 action CPlayer 0x39 kHitCrouchMedium  #
 action CPlayer 0x3a kHitCrouchHeavy  #
-action CPlayer 0x3b kHitAir  # scene3.cpp the default air reaction (also both players on a double KO,); akane_vf6.cpp vx m_hitVx, vy = vy*0.75 + m_hitVy kept within -2..-0.5, gravity 0.032; lands in 0x61/0x62
-action CPlayer 0x3c kHitAirHigh  # akane_vf6.cpp as 0x3b, rising speed capped at 4
-action CPlayer 0x3d kHitAirHigher  # akane_vf6.cpp capped at 6
-action CPlayer 0x3e kHitAirCarry  # akane_vf6.cpp vy*0.75 + m_hitVy, no cap
-action CPlayer 0x3f kHitAirLaunch  # akane_vf6.cpp vy = m_hitVy outright (the usual launcher/sweep reaction, 440 attack frames)
-action CPlayer 0x40 kHitAirWallBounce  # akane_vf6.cpp 0x3b that turns into 0x46 at a screen edge
-action CPlayer 0x41 kHitAirHighWallBounce  # akane_vf6.cpp 0x3c with the wall bounce
-action CPlayer 0x42 kHitAirCarryWallBounce  # akane_vf6.cpp 0x3e with the wall bounce
-action CPlayer 0x43 kHitAirLaunchWallBounce  # akane_vf6.cpp 0x3f with the wall bounce
-action CPlayer 0x44 kHitBlownAwayWallBounce  # akane_vf6.cpp flies in a straight line at (m_hitVx, m_hitVy) every tick, no gravity, -> 0x46 at an edge; its frame has flagsAA 0x400 (no recovery)
-action CPlayer 0x45 kHitBlownAway  # akane_vf6.cpp the same without the bounce (supers' finishers, 35 attackers)
-action CPlayer 0x46 kHitWallBounce  # akane_vf6.cpp bounces off the wall (vx 0.5, vy -2.5, sound 0x1f, effect 0), +120 untech time once
-action CPlayer 0x47 kHitAirHeavy  # akane_vf6.cpp vy = m_hitVy with gravity 0.072 instead of 0.032: slammed down
-action CPlayer 0x48 kHitStandHighHold  # akane_vf6.cpp no movement, 72 ticks, -> 0x7; head-hit pose; used by multi-hit supers (Kaori 0x12c-0x13a) to hold the opponent in place
-action CPlayer 0x49 kHitStandLowHold  # akane_vf6.cpp the same, doubled-over pose
-action CPlayer 0x4a kHitCrouchHold  # akane_vf6.cpp the same crouching, -> 0x3
-action CPlayer 0x4b kHitStandHighPull  # akane_vf6.cpp slides toward the attacker (vx +2.2 slowing by 0.06), head-hit pose; Minagi's, Mio's, Mishio's pulling attacks
-action CPlayer 0x4c kHitStandLowPull  # akane_vf6.cpp doubled-over pose
-action CPlayer 0x4d kHitCrouchPull  # akane_vf6.cpp crouching, -> 0x3
-action CPlayer 0x51 kHitBurn  # akane_vf6.cpp spawns 0x1f3 (blue flames over the player), drifts down and lands in a knockdown; hands-to-face pose; its frame has flagsAA 0x400
-action CPlayer 0x52 kHitShock  # akane_vf6.cpp frames 0-3 alternate the sprite with a black silhouette in a lightning outline (8 loops, sound 0x1e), then launched by m_hitVx/m_hitVy; flagsAA 0x400
-action CPlayer 0x53 kEncased  # akane_vf6.cpp the sprite becomes a jagged cream-coloured block (shared palette, sprite 422); spawns 0x1f0 once, hops back (sound 0x21) and breaks free (frames 63-61) to 0; Kano's 421 shots, Shiori's 236
-action CPlayer 0x54 kEncased2  # akane_vf6.cpp identical code and data to 0x53; other attackers (Kano 0x1a7/0x1ac, Nayuki, Shiori)
-action CPlayer 0x55 kEncasedAir  # akane_vf6.cpp the block lying (sprite 423) launched by m_hitVx/m_hitVy, gravity 0.04, knockdown on landing
-action CPlayer 0x56 kEncasedSpin  # akane_vf6.cpp the block tumbling (sprites 423-429), gravity 0.06, knockdown on landing
-action CPlayer 0x57 kFallInDarkness  # akane_vf6.cpp the player's sprite is blank and its screen-space object 0x1ef shows it falling; entered only from Kaori's LV4, which darkens the screen (CGame::unk1420e)
-action CPlayer 0x60 kWakeUp  # akane_vf6.cpp getting up after 0x63 (invulnerable, throw-protected), -> 0x0/0x3; 22D during it (command 0x35) starts 0xa2 only for Mizuka B
-action CPlayer 0x61 kKnockdownHittable  # akane_vf6.cpp hitting the ground (shake, effect 3, sound 7) after an attack with flagsAA 0x800 (m_landHittable): its frames have no flagsB0 0x20, so it can be hit; -> 0x63
-action CPlayer 0x62 kKnockdown  # akane_vf6.cpp the usual ground hit after an air reaction, invulnerable (flagsB0 0x63); -> 0x63
-action CPlayer 0x63 kLyingDown  # akane_vf6.cpp lies 100 ticks then 0x60, or for good when KO'd; supers drop opponents straight into it
-action CPlayer 0x64 kThrownStandHigh  # throw pose set on the opponent and moved around by throws (akane_vf6.cpp etc.); sprite of 0x32's first frame; hittable
+action CPlayer 0x3b kHitAir  # scene3.cpp the default air reaction (also both players on a double KO,); akane_states.cpp vx m_hitVx, vy = vy*0.75 + m_hitVy kept within -2..-0.5, gravity 0.032; lands in 0x61/0x62
+action CPlayer 0x3c kHitAirHigh  # akane_states.cpp as 0x3b, rising speed capped at 4
+action CPlayer 0x3d kHitAirHigher  # akane_states.cpp capped at 6
+action CPlayer 0x3e kHitAirCarry  # akane_states.cpp vy*0.75 + m_hitVy, no cap
+action CPlayer 0x3f kHitAirLaunch  # akane_states.cpp vy = m_hitVy outright (the usual launcher/sweep reaction, 440 attack frames)
+action CPlayer 0x40 kHitAirWallBounce  # akane_states.cpp 0x3b that turns into 0x46 at a screen edge
+action CPlayer 0x41 kHitAirHighWallBounce  # akane_states.cpp 0x3c with the wall bounce
+action CPlayer 0x42 kHitAirCarryWallBounce  # akane_states.cpp 0x3e with the wall bounce
+action CPlayer 0x43 kHitAirLaunchWallBounce  # akane_states.cpp 0x3f with the wall bounce
+action CPlayer 0x44 kHitBlownAwayWallBounce  # akane_states.cpp flies in a straight line at (m_hitVx, m_hitVy) every tick, no gravity, -> 0x46 at an edge; its frame has flagsAA 0x400 (no recovery)
+action CPlayer 0x45 kHitBlownAway  # akane_states.cpp the same without the bounce (supers' finishers, 35 attackers)
+action CPlayer 0x46 kHitWallBounce  # akane_states.cpp bounces off the wall (vx 0.5, vy -2.5, sound 0x1f, effect 0), +120 untech time once
+action CPlayer 0x47 kHitAirHeavy  # akane_states.cpp vy = m_hitVy with gravity 0.072 instead of 0.032: slammed down
+action CPlayer 0x48 kHitStandHighHold  # akane_states.cpp no movement, 72 ticks, -> 0x7; head-hit pose; used by multi-hit supers (Kaori 0x12c-0x13a) to hold the opponent in place
+action CPlayer 0x49 kHitStandLowHold  # akane_states.cpp the same, doubled-over pose
+action CPlayer 0x4a kHitCrouchHold  # akane_states.cpp the same crouching, -> 0x3
+action CPlayer 0x4b kHitStandHighPull  # akane_states.cpp slides toward the attacker (vx +2.2 slowing by 0.06), head-hit pose; Minagi's, Mio's, Mishio's pulling attacks
+action CPlayer 0x4c kHitStandLowPull  # akane_states.cpp doubled-over pose
+action CPlayer 0x4d kHitCrouchPull  # akane_states.cpp crouching, -> 0x3
+action CPlayer 0x51 kHitBurn  # akane_states.cpp spawns 0x1f3 (blue flames over the player), drifts down and lands in a knockdown; hands-to-face pose; its frame has flagsAA 0x400
+action CPlayer 0x52 kHitShock  # akane_states.cpp frames 0-3 alternate the sprite with a black silhouette in a lightning outline (8 loops, sound 0x1e), then launched by m_hitVx/m_hitVy; flagsAA 0x400
+action CPlayer 0x53 kEncased  # akane_states.cpp the sprite becomes a jagged cream-coloured block (shared palette, sprite 422); spawns 0x1f0 once, hops back (sound 0x21) and breaks free (frames 63-61) to 0; Kano's 421 shots, Shiori's 236
+action CPlayer 0x54 kEncased2  # akane_states.cpp identical code and data to 0x53; other attackers (Kano 0x1a7/0x1ac, Nayuki, Shiori)
+action CPlayer 0x55 kEncasedAir  # akane_states.cpp the block lying (sprite 423) launched by m_hitVx/m_hitVy, gravity 0.04, knockdown on landing
+action CPlayer 0x56 kEncasedSpin  # akane_states.cpp the block tumbling (sprites 423-429), gravity 0.06, knockdown on landing
+action CPlayer 0x57 kFallInDarkness  # akane_states.cpp the player's sprite is blank and its screen-space object 0x1ef shows it falling; entered only from Kaori's LV4, which darkens the screen (CGame::unk1420e)
+action CPlayer 0x60 kWakeUp  # akane_states.cpp getting up after 0x63 (invulnerable, throw-protected), -> 0x0/0x3; 22D during it (command 0x35) starts 0xa2 only for Mizuka B
+action CPlayer 0x61 kKnockdownHittable  # akane_states.cpp hitting the ground (shake, effect 3, sound 7) after an attack with flagsAA 0x800 (m_landHittable): its frames have no flagsB0 0x20, so it can be hit; -> 0x63
+action CPlayer 0x62 kKnockdown  # akane_states.cpp the usual ground hit after an air reaction, invulnerable (flagsB0 0x63); -> 0x63
+action CPlayer 0x63 kLyingDown  # akane_states.cpp lies 100 ticks then 0x60, or for good when KO'd; supers drop opponents straight into it
+action CPlayer 0x64 kThrownStandHigh  # throw pose set on the opponent and moved around by throws (akane_states.cpp etc.); sprite of 0x32's first frame; hittable
 action CPlayer 0x65 kThrownStandLow  # throw pose: 0x35's first frame
 action CPlayer 0x66 kThrownCrouch  # throw pose: 0x38's first frame
 action CPlayer 0x67 kThrownDoubledOver  # throw pose: 0x35's deepest frame; the only one of 0x64-0x6a with flagsB0 0x20 (invulnerable)
@@ -87,29 +87,29 @@ action CPlayer 0x75 kThrownDoubledOverInverted  #
 action CPlayer 0x76 kThrownAirborneInverted  # 
 action CPlayer 0x77 kThrownUpsideDownInverted  # i.e. upright
 action CPlayer 0x78 kThrownLyingInverted  # 
-action CPlayer 0x79 kThrownHidden  # a blank sprite: the thrower's own sprite shows both (29 sites, e.g. akiko_vf6.cpp)
+action CPlayer 0x79 kThrownHidden  # a blank sprite: the thrower's own sprite shows both (29 sites, e.g. akiko_states.cpp)
 action CPlayer 0x7a kHeadOnly  # only the character's head, five expressions (frames); Akiko's throw and Mizuka's 0x132
 action CPlayer 0x7b kEatingJam  # eating from Akiko's jar (head and arms with a jar); Akiko's jam super
-action CPlayer 0x96 kGuardStandLight  # scene3.cpp a standing guard against a light attack (blockstun 30 ticks); akane_vf6.cpp switches with 0x99 as down is held, pushed back 1.5
+action CPlayer 0x96 kGuardStandLight  # scene3.cpp a standing guard against a light attack (blockstun 30 ticks); akane_states.cpp switches with 0x99 as down is held, pushed back 1.5
 action CPlayer 0x97 kGuardStandMedium  # flagsAA 0x10 (45 ticks)
 action CPlayer 0x98 kGuardStandHeavy  # flagsAA 0x20 (66 ticks)
 action CPlayer 0x99 kGuardCrouchLight  # + 3 when holding down (or a CPU, by the attack's height)
 action CPlayer 0x9a kGuardCrouchMedium  # 
 action CPlayer 0x9b kGuardCrouchHeavy  # 
-action CPlayer 0x9c kGuardAir  # scene3.cpp any guard in the air; akane_vf6.cpp hop (vy -2.6, vx -1.2), falls
-action CPlayer 0x9d kAirRecoveryForward  # player.cpp a button in air hitstun once m_untechTime is 0, holding forward; akane_vf6.cpp vx 1.0 vy -2.3, effect 8
+action CPlayer 0x9c kGuardAir  # scene3.cpp any guard in the air; akane_states.cpp hop (vy -2.6, vx -1.2), falls
+action CPlayer 0x9d kAirRecoveryForward  # player.cpp a button in air hitstun once m_untechTime is 0, holding forward; akane_states.cpp vx 1.0 vy -2.3, effect 8
 action CPlayer 0x9e kAirRecoveryBack  # player.cpp holding back; vx -1.0
-action CPlayer 0xa2 kWakeUpAttack  # akane_vf6.cpp rises and attacks (effect 9, sound 0x3e) for 1000 gauge, invulnerable; started only by Mizuka B's 0x60 on 22D; dead in the other classes
-action CPlayer 0xa3 kDashForward  # akane.cpp double tap toward the opponent on the ground; akane_vf6.cpp runs at 1.65 (level 0, cancelLevel 41), jump-cancellable, -> 0xb2 after 120 ticks (60 without forward held)
-action CPlayer 0xa4 kDashBack  # akane.cpp double tap away; akane_vf6.cpp hop back (vx -2, vy -1.5), afterimages, lands -> 0x3
-action CPlayer 0xa5 kAirDashForward  # akane.cpp in the air above y -30, toward the opponent; akane_vf6.cpp vx 2.0 level flight, afterimages, -> 0x9
-action CPlayer 0xa6 kAirDashBack  # akane.cpp; akane_vf6.cpp vx -2.0
-action CPlayer 0xa7 kInstantCharge  # akane.cpp 22C after an attack connected, m_rfGauge >= 500 or blue (level 500: cancels anything); akane_vf6.cpp empties the RF gauge (blue: + gauge*5 proration), freezes the opponent 0x5a, flash, -> 0
+action CPlayer 0xa2 kWakeUpAttack  # akane_states.cpp rises and attacks (effect 9, sound 0x3e) for 1000 gauge, invulnerable; started only by Mizuka B's 0x60 on 22D; dead in the other classes
+action CPlayer 0xa3 kDashForward  # akane.cpp double tap toward the opponent on the ground; akane_states.cpp runs at 1.65 (level 0, cancelLevel 41), jump-cancellable, -> 0xb2 after 120 ticks (60 without forward held)
+action CPlayer 0xa4 kDashBack  # akane.cpp double tap away; akane_states.cpp hop back (vx -2, vy -1.5), afterimages, lands -> 0x3
+action CPlayer 0xa5 kAirDashForward  # akane.cpp in the air above y -30, toward the opponent; akane_states.cpp vx 2.0 level flight, afterimages, -> 0x9
+action CPlayer 0xa6 kAirDashBack  # akane.cpp; akane_states.cpp vx -2.0
+action CPlayer 0xa7 kInstantCharge  # akane.cpp 22C after an attack connected, m_rfGauge >= 500 or blue (level 500: cancels anything); akane_states.cpp empties the RF gauge (blue: + gauge*5 proration), freezes the opponent 0x5a, flash, -> 0
 action CPlayer 0xa8 kRecoilGuardStand  # scene3.cpp guard within 30 ticks of pressing back (m_recoilGuardWindow); freezes the attacker 0x3c, no chip or pushback, cancellable from frame 1 (flagsB0 0x59)
-action CPlayer 0xa9 kRecoilGuardCrouch  # the same holding down; akane_vf6.cpp -> 0x3
-action CPlayer 0xaa kRecoilGuardAir  # scene3.cpp; akane_vf6.cpp holds its velocity through the freeze, then falls (-> 0xa9 on landing)
-action CPlayer 0xab kAirInstantCharge  # akane.cpp 22C in the air; akane_vf6.cpp as 0xa7, then falls keeping the velocity it had
-action CPlayer 0xb2 kDashStop  # akane_vf6.cpp the run's skid (vx -0.03 a tick), jump-cancellable, -> 0
+action CPlayer 0xa9 kRecoilGuardCrouch  # the same holding down; akane_states.cpp -> 0x3
+action CPlayer 0xaa kRecoilGuardAir  # scene3.cpp; akane_states.cpp holds its velocity through the freeze, then falls (-> 0xa9 on landing)
+action CPlayer 0xab kAirInstantCharge  # akane.cpp 22C in the air; akane_states.cpp as 0xa7, then falls keeping the velocity it had
+action CPlayer 0xb2 kDashStop  # akane_states.cpp the run's skid (vx -0.03 a tick), jump-cancellable, -> 0
 action CPlayer 0x1ef kObjFallInDarkness  # object every class has: akane.cpp screen-space, the player falling upside down, removed when its owner leaves 0x57; kept visible in the darkness (unk8c)
 action CPlayer 0x1f0 kObjEncasedBreak  # object every class has: akane.cpp spawned once on entering 0x53-0x56 (blank sprite); when the player leaves them (or 0x53/0x54 pass frame 1) it bursts into 6 x 0x1f1 and 4 x 0x1f2 (sound 0x22)
 action CPlayer 0x1f1 kObjShardSmall  # akane.cpp a small cream-coloured shard: rand speed (not replayed), gravity 0.05, bounces, lives 80-140 ticks
@@ -449,8 +449,8 @@ action CEXNanase 0x19f kObj214214Back  # one-shot on layer 0 with 0x19c-0x19e an
 action CEXNanase 0x1a0 kObjGrabFollowABAPush  # glued 80 px ahead of her while 0x13e is at frame <= 10
 action CEXNanase 0x1a1 kObjGrabFollowABAFx  # one-shot each time 0x13e loops
 action CEXNanase 0x1a2 kObjGrabFollowABBHit  # 0x13f's ground hit, hits at frame 1
-action CIkumi 0xc8 k5A  # A standing; ikumi.cpp StartCommand, ikumi_vf6.cpp; jump-cancel on contact, +5 gauge
-action CIkumi 0xc9 k5BClose  # B standing within 70 px of the opponent; ikumi.cpp StartCommand B branch, ikumi_vf6.cpp; drops 3 orbs on hit (Vf8 ikumi.cpp)
+action CIkumi 0xc8 k5A  # A standing; ikumi.cpp StartCommand, ikumi_states.cpp; jump-cancel on contact, +5 gauge
+action CIkumi 0xc9 k5BClose  # B standing within 70 px of the opponent; ikumi.cpp StartCommand B branch, ikumi_states.cpp; drops 3 orbs on hit (Vf8 ikumi.cpp)
 action CIkumi 0xca k5BFar  # B standing otherwise; drops 3 orbs on hit
 action CIkumi 0xcb k5C  # C standing; attack frames 3-4 in ikumi.pat
 action CIkumi 0xcc k2A  # A crouching
@@ -459,15 +459,15 @@ action CIkumi 0xce k2C  # C crouching; frames 3-4 replayed twice (frame 5 -> 3, 
 action CIkumi 0xcf kJumpA  # A in the air
 action CIkumi 0xd0 kJumpB  # B in the air; drops 3 orbs on hit
 action CIkumi 0xd1 kJumpC  # C in the air; m_hitsLeft 3
-action CIkumi 0xdc kThrow  # C + a direction within 30 px of a grounded opponent; ikumi_vf6.cpp connects on frame 2 -> 0xdd, opponent -> 0x67
+action CIkumi 0xdc kThrow  # C + a direction within 30 px of a grounded opponent; ikumi_states.cpp connects on frame 2 -> 0xdd, opponent -> 0x67
 action CIkumi 0xdd kThrowConnected  # the throw landing: DealDamage(900, 750), opponent -> 0x3f
-action CIkumi 0xe6 kDashA  # A during the forward dash 0xa3; ikumi_vf6.cpp, afterimages
+action CIkumi 0xe6 kDashA  # A during the forward dash 0xa3; ikumi_states.cpp, afterimages
 action CIkumi 0xe7 kDashB  # B during the dash; drops 5 orbs on hit (0x1de)
 action CIkumi 0xe8 kDashC  # C during the dash
 action CIkumi 0xe9 kDash2A  # 2A during the dash
 action CIkumi 0xea kDash2B  # 2B during the dash; drops 5 orbs on hit
 action CIkumi 0xeb kDash2C  # 2C during the dash: a hop (vy -1.2, vx 1.0) that lands on frame 0xb
-action CIkumi 0xf8 kAirThrow  # forward + C in the air near an airborne opponent; ikumi_vf6.cpp connects on frame 1 -> 0xf9 (whiff -> 0xd1 frame 1)
+action CIkumi 0xf8 kAirThrow  # forward + C in the air near an airborne opponent; ikumi_states.cpp connects on frame 1 -> 0xf9 (whiff -> 0xd1 frame 1)
 action CIkumi 0xf9 kAirThrowConnected  # air throw: frame 5 repeats 5 times, DealDamage(1200, 500) (1400 in the mode), object 0x199
 action CIkumi 0xfa k214A  # 214A: at frame 5 a pillar 0x193 rises from the ground 60 px ahead
 action CIkumi 0xfb k214B  # 214B: the pillar 120 px ahead
@@ -481,15 +481,15 @@ action CIkumi 0x102 k623C  # 623C (stocks 0-2) with unk118 >= 500 or unk120, spe
 action CIkumi 0x103 k623Landing  # landing of 0x100-0x102
 action CIkumi 0x107 k41236C  # 41236C command grab, grounded opponent only, connects on frame 2 -> 0x108 (opponent 0x6b)
 action CIkumi 0x108 k41236CHold  # holds the opponent (unk14a 0x5dc), DealDamage(250, 1000), orbs 0x1d6, then DealDamage(250, 600) (500/700 in the mode) with two 0x1dd bursts
-action CIkumi 0x10a k236BStock3  # 236B with 3-5 stocks (takes one): 2 hits; ikumi.cpp StartCommand, ikumi_vf6.cpp; drops 9 orbs
+action CIkumi 0x10a k236BStock3  # 236B with 3-5 stocks (takes one): 2 hits; ikumi.cpp StartCommand, ikumi_states.cpp; drops 9 orbs
 action CIkumi 0x10b k236CStock3  # 236C with 3-5 stocks (takes one) and unk118; drops 9 orbs
 action CIkumi 0x10d k236BStock6  # 236B with 6-8 stocks (takes one) or in the mode (free): 3 hits; drops 10 orbs
 action CIkumi 0x10e k236CStock6  # 236C with 6-8 stocks or in the mode; drops 10 orbs
-action CIkumi 0x110 k623BStock3  # 623B with 3-5 stocks (takes one); vx 1.6; ikumi_vf6.cpp -> 0x112; drops 9 orbs
-action CIkumi 0x111 k623CStock3  # 623C with 3-5 stocks and unk118; ikumi_vf6.cpp -> 0x112; drops 9 orbs
+action CIkumi 0x110 k623BStock3  # 623B with 3-5 stocks (takes one); vx 1.6; ikumi_states.cpp -> 0x112; drops 9 orbs
+action CIkumi 0x111 k623CStock3  # 623C with 3-5 stocks and unk118; ikumi_states.cpp -> 0x112; drops 9 orbs
 action CIkumi 0x112 k623Stock3Landing  # landing of 0x110/0x111
-action CIkumi 0x114 k623BStock6  # 623B with 6-8 stocks or in the mode; ikumi_vf6.cpp -> 0x116; drops 10 orbs
-action CIkumi 0x115 k623CStock6  # 623C with 6-8 stocks or in the mode, and unk118; ikumi_vf6.cpp -> 0x116; drops 10 orbs
+action CIkumi 0x114 k623BStock6  # 623B with 6-8 stocks or in the mode; ikumi_states.cpp -> 0x116; drops 10 orbs
+action CIkumi 0x115 k623CStock6  # 623C with 6-8 stocks or in the mode, and unk118; ikumi_states.cpp -> 0x116; drops 10 orbs
 action CIkumi 0x116 k623Stock6Landing  # landing of 0x114/0x115
 action CIkumi 0x117 k214AStock3  # 214A with 3-5 stocks: pillar 0x19a (2 cycles) 60 px ahead
 action CIkumi 0x118 k214BStock3  # 214B with 3-5 stocks: 120 px
@@ -840,70 +840,70 @@ action CKaori 0x198 kObjLv4Backdrop  # screen-space at (0,0), layer 0, looping, 
 action CKaori 0x199 kObjLv4BackdropFront  # screen-space at (0,0), layer 1, drifts vx 0.08, removed with 0x198
 action CKaori 0x19a kObj623A  # object of 0x100 at x+40: 15 hits (unk84), re-hits on 9 frames, skips to 0x3e when she leaves 0x100
 action CKaori 0x19b kObj623C  # object of 0x102: follows x+40, loops frames to 0x1e
-action CMai 0xc8 k5A  # 5A; started mai.cpp, case mai_vf6.cpp
-action CMai 0xc9 k5BClose  # 5B within 70 px of the opponent; started mai.cpp, case mai_vf6.cpp
-action CMai 0xca k5BFar  # 5B otherwise; started mai.cpp, case mai_vf6.cpp
-action CMai 0xcb k5C  # 5C; started mai.cpp, case mai_vf6.cpp
-action CMai 0xcc k2A  # 2A; started mai.cpp, case mai_vf6.cpp
-action CMai 0xcd k2B  # 2B; started mai.cpp, case mai_vf6.cpp
-action CMai 0xce k2C  # 2C; started mai.cpp, case mai_vf6.cpp
-action CMai 0xcf kJumpA  # j.A; started mai.cpp, case mai_vf6.cpp
-action CMai 0xd0 kJumpB  # j.B; started mai.cpp, case mai_vf6.cpp
-action CMai 0xd1 kJumpC  # j.C; started mai.cpp, case mai_vf6.cpp
-action CMai 0xd2 k6A  # 6A: spawns 0x19f behind/above her; not from 6C; started mai.cpp, case mai_vf6.cpp
-action CMai 0xd3 k6B  # 6B: spawns 0x1a0; started mai.cpp, case mai_vf6.cpp
-action CMai 0xd4 k6C  # 6C: spawns 0x1a1; ground specials may cancel it whatever their priority (StartCommand "|| pattern == 0xd4"); started mai.cpp, case mai_vf6.cpp
-action CMai 0xd5 k6AAwakened  # 6A while m_familiarState == 4 (awakened): costs 1000 of m_familiarGauge, also jump-cancels on guard; started mai.cpp, case mai_vf6.cpp
-action CMai 0xd6 k6BAwakened  # 6B while awakened, costs 1000 of m_familiarGauge; started mai.cpp, case mai_vf6.cpp
-action CMai 0xd7 k6CAwakened  # 6C while awakened, costs 1000 of m_familiarGauge; started mai.cpp, case mai_vf6.cpp
-action CMai 0xd8 k4C  # 4C (also 3C when 2C cannot start): sliding kick, vx 3.0 at frame 3 then slows; started mai.cpp, case mai_vf6.cpp
-action CMai 0xdc kThrow  # C + direction within 30 px of a grounded opponent; on hit goes to 0xdd; started mai.cpp, case mai_vf6.cpp
-action CMai 0xdd kThrowHold  # the ground throw: carries the opponent over her, 1200 damage at frame 4; from mai_vf6.cpp, case mai_vf6.cpp
-action CMai 0xe6 kDashHopA  # unreached: no StartCommand path (A during the dash hop starts j.A); vx 0.5, ay 0.03; case mai_vf6.cpp
-action CMai 0xe7 kDashHopB  # unreached, as 0xe6; case mai_vf6.cpp
-action CMai 0xe8 kDashHopC  # C while airborne (y < -10) in her forward dash hop 0xa3; started mai.cpp, case mai_vf6.cpp
-action CMai 0xf0 kAirThrow  # air 6C within 100 px of an airborne opponent; on hit goes to 0xf1; started mai.cpp, case mai_vf6.cpp
-action CMai 0xf1 kAirThrowHold  # the air throw: 1300 damage at frame 3, lands into 0xd; from mai_vf6.cpp, case mai_vf6.cpp
-action CMai 0xfa kAir623A  # air 623A: halves the momentum and falls (ay 0.025), shorter frames in the air; landing goes to 0xfd; started mai.cpp, case mai_vf6.cpp
-action CMai 0xfb kAir623B  # air 623B, ay 0.035; its landing recovery is shorter (m_patternVar2 = 1); started mai.cpp, case mai_vf6.cpp
-action CMai 0xfc kAir623C  # air 623C: costs 500 of unk118 (250 with unk120) or 1000 of m_familiarGauge when awakened; 2 hits, spawns 0x1a2 at frame 7; started mai.cpp, case mai_vf6.cpp
-action CMai 0xfd kAir623Landing  # landing recovery of 0xfa-0xfc; from mai_vf6.cpp, case mai_vf6.cpp
-action CMai 0xfe k412A  # 412A (4,1,2 + button): sinks and reappears 60 px in front of the opponent; A held over 30 frames goes to 0x105 at frame 6 instead; started mai.cpp, case mai_vf6.cpp
-action CMai 0xff k412B  # 412B: reappears 180 px in front of the opponent; B held over 30 frames goes to 0x106 (from 100 px above); started mai.cpp, case mai_vf6.cpp
-action CMai 0x100 k412C  # 412C: costs 500 of unk118 (or 1000 of m_familiarGauge when awakened); underground dash, vx 8 at frame 5; started mai.cpp, case mai_vf6.cpp
-action CMai 0x101 k214A  # 214A: summons the familiar to strike 40 px ahead (object 0x19c), or when awakened a burst 0x1a8 80 px ahead for 1000 of m_familiarGauge; started mai.cpp, case mai_vf6.cpp
-action CMai 0x102 k214B  # 214B: 0x19c 120 px ahead, or 0x1a8 160 px ahead when awakened; started mai.cpp, case mai_vf6.cpp
-action CMai 0x103 k214C  # 214C: 0x19c 200 px ahead, or 0x1a8 240 px ahead when awakened; started mai.cpp, case mai_vf6.cpp
-action CMai 0x104 kSummonFamiliar  # D (not 2D) on the ground with no familiar: summons object 0x191 at her (6D: 60 px ahead, 4D: 60 px behind) with m_familiarGauge 10000; started mai.cpp, case mai_vf6.cpp
-action CMai 0x105 k412AHeld  # 412A with A held over 30 frames: a forward strike, vx 2.0; from mai_vf6.cpp, case mai_vf6.cpp
-action CMai 0x106 k412BHeld  # 412B with B held over 30 frames: drops from 100 px above, 100 px in front of the opponent; from mai_vf6.cpp, case mai_vf6.cpp
-action CMai 0x107 k236A  # 236A with no familiar: summons object 0x1ac (familiar dash, 4 hits, then recharges); started mai.cpp, case mai_vf6.cpp
-action CMai 0x108 k236B  # 236B: object 0x1ad (dash; the familiar stays out afterwards); started mai.cpp, case mai_vf6.cpp
-action CMai 0x109 k236C  # 236C (needs unk118 >= 500 or unk120): object 0x1ae (16 hits; stays out); costs as 0xfc; started mai.cpp, case mai_vf6.cpp
-action CMai 0x10a k623A  # 623A with no familiar: object 0x1b0 80 px ahead (its attack 0x1c5, then it stays out); started mai.cpp, case mai_vf6.cpp
-action CMai 0x10b k623B  # 623B: 0x1b0 160 px ahead; started mai.cpp, case mai_vf6.cpp
-action CMai 0x10c k623C  # 623C: 0x1b0 240 px ahead; started mai.cpp, case mai_vf6.cpp
-action CMai 0x10d kRecallFamiliar  # D with the familiar out (m_familiarState 1): the familiar leaves (0x194) and recharges fast; started mai.cpp, case mai_vf6.cpp
-action CMai 0x12f k236236Lv1  # 236236 with 1 level: dash slash (vx 5); on hit goes to 0x132; started mai.cpp, case mai_vf6.cpp
-action CMai 0x130 k236236Lv2  # 236236B/C with 2 levels: vx 7; on hit 0x133; started mai.cpp, case mai_vf6.cpp
-action CMai 0x131 k236236Lv3  # 236236C with 3 levels: vx 10; on hit 0x134 and the overlays 0x1a3/0x1a4; started mai.cpp, case mai_vf6.cpp
-action CMai 0x132 k236236Lv1Flurry  # the level 1 follow-up: the frozen opponent takes 2400 at the end; from mai_vf6.cpp, case mai_vf6.cpp
-action CMai 0x133 k236236Lv2Flurry  # level 2 follow-up, 3200; from mai_vf6.cpp, case mai_vf6.cpp
-action CMai 0x134 k236236Lv3Flurry  # level 3 follow-up, 4500; from mai_vf6.cpp, case mai_vf6.cpp
-action CMai 0x135 kLv4Awaken  # 236236D with 3 levels, HP < 3333 and no familiar: spawns 0x1ab, which puts her in the awakened mode (m_familiarState 4); started mai.cpp, case mai_vf6.cpp
-action CMai 0x138 kUnusedFlurry  # unreached: a fourth flurry like 0x134 (4200 damage, launches higher); case mai_vf6.cpp
-action CMai 0x13b kUnusedSuperLv1  # unreached: stands while an old familiar super (object 0x199, 1000 gauge) runs; loops while the familiar is out; case mai_vf6.cpp
-action CMai 0x13c kUnusedSuperLv2  # unreached, as 0x13b (2000 gauge); case mai_vf6.cpp
-action CMai 0x13d kUnusedSuperLv3  # unreached, as 0x13b (3000 gauge); case mai_vf6.cpp
-action CMai 0x13e k214214Lv1  # 214214 with 1 level and no familiar: summons 0x1b6, which fires one 5-hit shot 0x1b8; started mai.cpp, case mai_vf6.cpp
-action CMai 0x13f k214214Lv1Familiar  # 214214 with 1 level and the familiar out: the familiar (0x191 -> 0x1b7) fires 2 shots 0x1b9 and pays the gauge itself; started mai.cpp, case mai_vf6.cpp
-action CMai 0x140 k214214Lv2  # 2 levels, no familiar: 0x1ba fires a 7-hit shot 0x1bc; started mai.cpp, case mai_vf6.cpp
-action CMai 0x141 k214214Lv2Familiar  # 2 levels with the familiar out: 0x1bb fires 4 shots 0x1b9 at two heights; started mai.cpp, case mai_vf6.cpp
-action CMai 0x142 k214214Lv3  # 3 levels, no familiar: 0x1be fires a 10-hit shot 0x1c0; started mai.cpp, case mai_vf6.cpp
-action CMai 0x143 k214214Lv3Familiar  # 3 levels with the familiar out: 0x1bf fires 6 shots 0x1b9 at random heights (CPlayer::Random); started mai.cpp, case mai_vf6.cpp
-action CMai 0x144 kAwakened236236D  # 236236D while awakened with HP < 3333 (no gauge check: the mode holds m_gauge at 0); on hit goes to 0x145; started mai.cpp, case mai_vf6.cpp
-action CMai 0x145 kAwakened236236DHit  # the finisher: 3500 + 0.15 * m_familiarGauge damage, spawns screen object 0x1c2, ends the mode; from mai_vf6.cpp, case mai_vf6.cpp
-action CMai 0x191 kObjFamiliar  # object: the familiar out and idle: sets m_familiarState 1, faces the opponent, takes the D commands (236D 0x1af, 214D 0x1c3, 412D 0x1b4, 22D 0x19e) and the 214214 supers; to 0x192 when Mai is hit or it is struck; spawned mai_vf6.cpp, case mai.cpp
+action CMai 0xc8 k5A  # 5A; started mai.cpp, case mai_states.cpp
+action CMai 0xc9 k5BClose  # 5B within 70 px of the opponent; started mai.cpp, case mai_states.cpp
+action CMai 0xca k5BFar  # 5B otherwise; started mai.cpp, case mai_states.cpp
+action CMai 0xcb k5C  # 5C; started mai.cpp, case mai_states.cpp
+action CMai 0xcc k2A  # 2A; started mai.cpp, case mai_states.cpp
+action CMai 0xcd k2B  # 2B; started mai.cpp, case mai_states.cpp
+action CMai 0xce k2C  # 2C; started mai.cpp, case mai_states.cpp
+action CMai 0xcf kJumpA  # j.A; started mai.cpp, case mai_states.cpp
+action CMai 0xd0 kJumpB  # j.B; started mai.cpp, case mai_states.cpp
+action CMai 0xd1 kJumpC  # j.C; started mai.cpp, case mai_states.cpp
+action CMai 0xd2 k6A  # 6A: spawns 0x19f behind/above her; not from 6C; started mai.cpp, case mai_states.cpp
+action CMai 0xd3 k6B  # 6B: spawns 0x1a0; started mai.cpp, case mai_states.cpp
+action CMai 0xd4 k6C  # 6C: spawns 0x1a1; ground specials may cancel it whatever their priority (StartCommand "|| pattern == 0xd4"); started mai.cpp, case mai_states.cpp
+action CMai 0xd5 k6AAwakened  # 6A while m_familiarState == 4 (awakened): costs 1000 of m_familiarGauge, also jump-cancels on guard; started mai.cpp, case mai_states.cpp
+action CMai 0xd6 k6BAwakened  # 6B while awakened, costs 1000 of m_familiarGauge; started mai.cpp, case mai_states.cpp
+action CMai 0xd7 k6CAwakened  # 6C while awakened, costs 1000 of m_familiarGauge; started mai.cpp, case mai_states.cpp
+action CMai 0xd8 k4C  # 4C (also 3C when 2C cannot start): sliding kick, vx 3.0 at frame 3 then slows; started mai.cpp, case mai_states.cpp
+action CMai 0xdc kThrow  # C + direction within 30 px of a grounded opponent; on hit goes to 0xdd; started mai.cpp, case mai_states.cpp
+action CMai 0xdd kThrowHold  # the ground throw: carries the opponent over her, 1200 damage at frame 4; from mai_states.cpp, case mai_states.cpp
+action CMai 0xe6 kDashHopA  # unreached: no StartCommand path (A during the dash hop starts j.A); vx 0.5, ay 0.03; case mai_states.cpp
+action CMai 0xe7 kDashHopB  # unreached, as 0xe6; case mai_states.cpp
+action CMai 0xe8 kDashHopC  # C while airborne (y < -10) in her forward dash hop 0xa3; started mai.cpp, case mai_states.cpp
+action CMai 0xf0 kAirThrow  # air 6C within 100 px of an airborne opponent; on hit goes to 0xf1; started mai.cpp, case mai_states.cpp
+action CMai 0xf1 kAirThrowHold  # the air throw: 1300 damage at frame 3, lands into 0xd; from mai_states.cpp, case mai_states.cpp
+action CMai 0xfa kAir623A  # air 623A: halves the momentum and falls (ay 0.025), shorter frames in the air; landing goes to 0xfd; started mai.cpp, case mai_states.cpp
+action CMai 0xfb kAir623B  # air 623B, ay 0.035; its landing recovery is shorter (m_patternVar2 = 1); started mai.cpp, case mai_states.cpp
+action CMai 0xfc kAir623C  # air 623C: costs 500 of unk118 (250 with unk120) or 1000 of m_familiarGauge when awakened; 2 hits, spawns 0x1a2 at frame 7; started mai.cpp, case mai_states.cpp
+action CMai 0xfd kAir623Landing  # landing recovery of 0xfa-0xfc; from mai_states.cpp, case mai_states.cpp
+action CMai 0xfe k412A  # 412A (4,1,2 + button): sinks and reappears 60 px in front of the opponent; A held over 30 frames goes to 0x105 at frame 6 instead; started mai.cpp, case mai_states.cpp
+action CMai 0xff k412B  # 412B: reappears 180 px in front of the opponent; B held over 30 frames goes to 0x106 (from 100 px above); started mai.cpp, case mai_states.cpp
+action CMai 0x100 k412C  # 412C: costs 500 of unk118 (or 1000 of m_familiarGauge when awakened); underground dash, vx 8 at frame 5; started mai.cpp, case mai_states.cpp
+action CMai 0x101 k214A  # 214A: summons the familiar to strike 40 px ahead (object 0x19c), or when awakened a burst 0x1a8 80 px ahead for 1000 of m_familiarGauge; started mai.cpp, case mai_states.cpp
+action CMai 0x102 k214B  # 214B: 0x19c 120 px ahead, or 0x1a8 160 px ahead when awakened; started mai.cpp, case mai_states.cpp
+action CMai 0x103 k214C  # 214C: 0x19c 200 px ahead, or 0x1a8 240 px ahead when awakened; started mai.cpp, case mai_states.cpp
+action CMai 0x104 kSummonFamiliar  # D (not 2D) on the ground with no familiar: summons object 0x191 at her (6D: 60 px ahead, 4D: 60 px behind) with m_familiarGauge 10000; started mai.cpp, case mai_states.cpp
+action CMai 0x105 k412AHeld  # 412A with A held over 30 frames: a forward strike, vx 2.0; from mai_states.cpp, case mai_states.cpp
+action CMai 0x106 k412BHeld  # 412B with B held over 30 frames: drops from 100 px above, 100 px in front of the opponent; from mai_states.cpp, case mai_states.cpp
+action CMai 0x107 k236A  # 236A with no familiar: summons object 0x1ac (familiar dash, 4 hits, then recharges); started mai.cpp, case mai_states.cpp
+action CMai 0x108 k236B  # 236B: object 0x1ad (dash; the familiar stays out afterwards); started mai.cpp, case mai_states.cpp
+action CMai 0x109 k236C  # 236C (needs unk118 >= 500 or unk120): object 0x1ae (16 hits; stays out); costs as 0xfc; started mai.cpp, case mai_states.cpp
+action CMai 0x10a k623A  # 623A with no familiar: object 0x1b0 80 px ahead (its attack 0x1c5, then it stays out); started mai.cpp, case mai_states.cpp
+action CMai 0x10b k623B  # 623B: 0x1b0 160 px ahead; started mai.cpp, case mai_states.cpp
+action CMai 0x10c k623C  # 623C: 0x1b0 240 px ahead; started mai.cpp, case mai_states.cpp
+action CMai 0x10d kRecallFamiliar  # D with the familiar out (m_familiarState 1): the familiar leaves (0x194) and recharges fast; started mai.cpp, case mai_states.cpp
+action CMai 0x12f k236236Lv1  # 236236 with 1 level: dash slash (vx 5); on hit goes to 0x132; started mai.cpp, case mai_states.cpp
+action CMai 0x130 k236236Lv2  # 236236B/C with 2 levels: vx 7; on hit 0x133; started mai.cpp, case mai_states.cpp
+action CMai 0x131 k236236Lv3  # 236236C with 3 levels: vx 10; on hit 0x134 and the overlays 0x1a3/0x1a4; started mai.cpp, case mai_states.cpp
+action CMai 0x132 k236236Lv1Flurry  # the level 1 follow-up: the frozen opponent takes 2400 at the end; from mai_states.cpp, case mai_states.cpp
+action CMai 0x133 k236236Lv2Flurry  # level 2 follow-up, 3200; from mai_states.cpp, case mai_states.cpp
+action CMai 0x134 k236236Lv3Flurry  # level 3 follow-up, 4500; from mai_states.cpp, case mai_states.cpp
+action CMai 0x135 kLv4Awaken  # 236236D with 3 levels, HP < 3333 and no familiar: spawns 0x1ab, which puts her in the awakened mode (m_familiarState 4); started mai.cpp, case mai_states.cpp
+action CMai 0x138 kUnusedFlurry  # unreached: a fourth flurry like 0x134 (4200 damage, launches higher); case mai_states.cpp
+action CMai 0x13b kUnusedSuperLv1  # unreached: stands while an old familiar super (object 0x199, 1000 gauge) runs; loops while the familiar is out; case mai_states.cpp
+action CMai 0x13c kUnusedSuperLv2  # unreached, as 0x13b (2000 gauge); case mai_states.cpp
+action CMai 0x13d kUnusedSuperLv3  # unreached, as 0x13b (3000 gauge); case mai_states.cpp
+action CMai 0x13e k214214Lv1  # 214214 with 1 level and no familiar: summons 0x1b6, which fires one 5-hit shot 0x1b8; started mai.cpp, case mai_states.cpp
+action CMai 0x13f k214214Lv1Familiar  # 214214 with 1 level and the familiar out: the familiar (0x191 -> 0x1b7) fires 2 shots 0x1b9 and pays the gauge itself; started mai.cpp, case mai_states.cpp
+action CMai 0x140 k214214Lv2  # 2 levels, no familiar: 0x1ba fires a 7-hit shot 0x1bc; started mai.cpp, case mai_states.cpp
+action CMai 0x141 k214214Lv2Familiar  # 2 levels with the familiar out: 0x1bb fires 4 shots 0x1b9 at two heights; started mai.cpp, case mai_states.cpp
+action CMai 0x142 k214214Lv3  # 3 levels, no familiar: 0x1be fires a 10-hit shot 0x1c0; started mai.cpp, case mai_states.cpp
+action CMai 0x143 k214214Lv3Familiar  # 3 levels with the familiar out: 0x1bf fires 6 shots 0x1b9 at random heights (CPlayer::Random); started mai.cpp, case mai_states.cpp
+action CMai 0x144 kAwakened236236D  # 236236D while awakened with HP < 3333 (no gauge check: the mode holds m_gauge at 0); on hit goes to 0x145; started mai.cpp, case mai_states.cpp
+action CMai 0x145 kAwakened236236DHit  # the finisher: 3500 + 0.15 * m_familiarGauge damage, spawns screen object 0x1c2, ends the mode; from mai_states.cpp, case mai_states.cpp
+action CMai 0x191 kObjFamiliar  # object: the familiar out and idle: sets m_familiarState 1, faces the opponent, takes the D commands (236D 0x1af, 214D 0x1c3, 412D 0x1b4, 22D 0x19e) and the 214214 supers; to 0x192 when Mai is hit or it is struck; spawned mai_states.cpp, case mai.cpp
 action CMai 0x192 kObjFamiliarKnockedOut  # object: struck (unk80 4/5) or Mai hit: flies off, then recharge 1200; spawned mai.cpp, case mai.cpp
 action CMai 0x193 kObjFamiliarExpire  # object: m_familiarGauge ran out: recharge 1200 at the normal rate; spawned mai.cpp, case mai.cpp
 action CMai 0x194 kObjFamiliarRecall  # object: dismissed by 0x10d: recharge 1200 at the fast rate; spawned mai.cpp, case mai.cpp
@@ -913,207 +913,207 @@ action CMai 0x198 kObjUnusedHomingShot  # object: only from 0x197: re-aims at th
 action CMai 0x199 kObjFamiliarUnusedSuper  # object: never spawned: the old super of 0x13b-0x13d, freezes the screen and drops 3/5/10 objects 0x19a/0x1a7/0x1a9; case mai.cpp
 action CMai 0x19a kObjUnusedDropLv1  # object: only from 0x199: falls, bursts on the ground as 0x19b; spawned mai.cpp, case mai.cpp
 action CMai 0x19b kObjUnusedBurstLv1  # object: only from 0x19a; spawned mai.cpp, case mai.cpp
-action CMai 0x19c kObjFamiliar214  # object: the familiar of 214A/B/C: rises forward at -60 degrees, 6 hits, then recharge (fast); spawned mai_vf6.cpp, case mai.cpp
+action CMai 0x19c kObjFamiliar214  # object: the familiar of 214A/B/C: rises forward at -60 degrees, 6 hits, then recharge (fast); spawned mai_states.cpp, case mai.cpp
 action CMai 0x19d kObjFamiliarUnusedWalk  # object: never spawned: walks forward, then becomes 0x19e; case mai.cpp
 action CMai 0x19e kObjFamiliar22D  # object: 22D with the familiar out: flies forward at -30 degrees, 6 hits, then recharge; spawned mai.cpp, case mai.cpp
-action CMai 0x19f kObj6A  # object: the strike 6A spawns, played once; spawned mai_vf6.cpp, case mai.cpp
-action CMai 0x1a0 kObj6B  # object: the strike 6B spawns; spawned mai_vf6.cpp, case mai.cpp
-action CMai 0x1a1 kObj6C  # object: the strike 6C spawns; spawned mai_vf6.cpp, case mai.cpp
-action CMai 0x1a2 kObjAir623C  # object: the strike air 623C spawns at frame 7; spawned mai_vf6.cpp, case mai.cpp
-action CMai 0x1a3 kObjFlurryOverlay1  # object: screen object (0, 20) while 0x134 runs, then shrinks away; spawned mai_vf6.cpp, case mai.cpp
-action CMai 0x1a4 kObjFlurryOverlay2  # object: screen object (0, 38), as 0x1a3; spawned mai_vf6.cpp, case mai.cpp
+action CMai 0x19f kObj6A  # object: the strike 6A spawns, played once; spawned mai_states.cpp, case mai.cpp
+action CMai 0x1a0 kObj6B  # object: the strike 6B spawns; spawned mai_states.cpp, case mai.cpp
+action CMai 0x1a1 kObj6C  # object: the strike 6C spawns; spawned mai_states.cpp, case mai.cpp
+action CMai 0x1a2 kObjAir623C  # object: the strike air 623C spawns at frame 7; spawned mai_states.cpp, case mai.cpp
+action CMai 0x1a3 kObjFlurryOverlay1  # object: screen object (0, 20) while 0x134 runs, then shrinks away; spawned mai_states.cpp, case mai.cpp
+action CMai 0x1a4 kObjFlurryOverlay2  # object: screen object (0, 38), as 0x1a3; spawned mai_states.cpp, case mai.cpp
 action CMai 0x1a5 kObjUnusedArc1  # object: never spawned: thrown in an arc (vx 1.1, vy -1); on a hit or landing becomes 0x192; case mai.cpp
 action CMai 0x1a6 kObjUnusedArc2  # object: never spawned: thrown in an arc (vx 0.8, vy -0.5), removed off screen; case mai.cpp
 action CMai 0x1a7 kObjUnusedDropLv2  # object: only from 0x199: falls, becomes 0x1a8 on the ground; spawned mai.cpp, case mai.cpp
-action CMai 0x1a8 kObjGroundBurst  # object: a 1-hit burst on the ground: 214A/B/C while awakened, and the landing of 0x1a7; spawned mai_vf6.cpp, case mai.cpp
+action CMai 0x1a8 kObjGroundBurst  # object: a 1-hit burst on the ground: 214A/B/C while awakened, and the landing of 0x1a7; spawned mai_states.cpp, case mai.cpp
 action CMai 0x1a9 kObjUnusedDropLv3  # object: only from 0x199: falls, becomes 0x1aa; spawned mai.cpp, case mai.cpp
 action CMai 0x1aa kObjUnusedBurstLv3  # object: only from 0x1a9; spawned mai.cpp, case mai.cpp
-action CMai 0x1ab kObjAwakening  # object: spawned by the LV4 0x135: freezes the opponent, then sets m_familiarState 4 and m_familiarGauge 10000; spawned mai_vf6.cpp, case mai.cpp
-action CMai 0x1ac kObjFamiliar236A  # object: 236A: dashes (vx 1.7), 4 hits, then recharge (fast); spawned mai_vf6.cpp, case mai.cpp
-action CMai 0x1ad kObjFamiliar236B  # object: 236B: dashes, 4 hits, then stays out as 0x191; spawned mai_vf6.cpp, case mai.cpp
-action CMai 0x1ae kObjFamiliar236C  # object: 236C: dashes (vx 2.0), 16 hits, then stays out; spawned mai_vf6.cpp, case mai.cpp
+action CMai 0x1ab kObjAwakening  # object: spawned by the LV4 0x135: freezes the opponent, then sets m_familiarState 4 and m_familiarGauge 10000; spawned mai_states.cpp, case mai.cpp
+action CMai 0x1ac kObjFamiliar236A  # object: 236A: dashes (vx 1.7), 4 hits, then recharge (fast); spawned mai_states.cpp, case mai.cpp
+action CMai 0x1ad kObjFamiliar236B  # object: 236B: dashes, 4 hits, then stays out as 0x191; spawned mai_states.cpp, case mai.cpp
+action CMai 0x1ae kObjFamiliar236C  # object: 236C: dashes (vx 2.0), 16 hits, then stays out; spawned mai_states.cpp, case mai.cpp
 action CMai 0x1af kObjFamiliar236D  # object: 236D with the familiar out: dashes (vx 1.3), 8 hits, then recharge; spawned mai.cpp, case mai.cpp
-action CMai 0x1b0 kObjFamiliar623  # object: 623A/B/C: appears 80/160/240 px ahead, spawns 0x1c5 at frame 2, then stays out as 0x191; spawned mai_vf6.cpp, case mai.cpp
+action CMai 0x1b0 kObjFamiliar623  # object: 623A/B/C: appears 80/160/240 px ahead, spawns 0x1c5 at frame 2, then stays out as 0x191; spawned mai_states.cpp, case mai.cpp
 action CMai 0x1b3 kObjFamiliarUnusedRush  # object: never spawned: like 0x1c3 with vx 5.25; case mai.cpp
 action CMai 0x1b4 kObjFamiliar412D  # object: 412D with the familiar out: spawns its strike 0x1c6 at frame 4, then recharge (fast); spawned mai.cpp, case mai.cpp
 action CMai 0x1b5 kObjUnusedShot1  # object: never spawned: slow shot (vx 0.7, 3 hits); case mai.cpp
-action CMai 0x1b6 kObjFamiliar214214Lv1  # object: summoned by 0x13e: fires 0x1b8 at frame 7, then recharge; spawned mai_vf6.cpp, case mai.cpp
+action CMai 0x1b6 kObjFamiliar214214Lv1  # object: summoned by 0x13e: fires 0x1b8 at frame 7, then recharge; spawned mai_states.cpp, case mai.cpp
 action CMai 0x1b7 kObjFamiliarOut214214Lv1  # object: the familiar out, from 0x191 at 0x13f frame 3: takes 1000 gauge, fires 2 shots 0x1b9; spawned mai.cpp, case mai.cpp
 action CMai 0x1b8 kObj214214ShotLv1  # object: vx 2.8, 5 hits; spawned mai.cpp, case mai.cpp
 action CMai 0x1b9 kObj214214ShotFamiliar  # object: the shots of 0x1b7/0x1bb/0x1bf: vx 4.0 slowing to 1.0, 1 hit; spawned mai.cpp, case mai.cpp
-action CMai 0x1ba kObjFamiliar214214Lv2  # object: summoned by 0x140: fires 0x1bc; spawned mai_vf6.cpp, case mai.cpp
+action CMai 0x1ba kObjFamiliar214214Lv2  # object: summoned by 0x140: fires 0x1bc; spawned mai_states.cpp, case mai.cpp
 action CMai 0x1bb kObjFamiliarOut214214Lv2  # object: from 0x191 at 0x141: takes 2000 gauge, 4 shots 0x1b9 at y-27/y-87; spawned mai.cpp, case mai.cpp
 action CMai 0x1bc kObj214214ShotLv2  # object: vx 3.5, 7 hits; spawned mai.cpp, case mai.cpp
 action CMai 0x1bd kObjUnusedShot2  # object: never spawned: shot vx 1.3, 2 hits; case mai.cpp
-action CMai 0x1be kObjFamiliar214214Lv3  # object: summoned by 0x142: fires 0x1c0; spawned mai_vf6.cpp, case mai.cpp
+action CMai 0x1be kObjFamiliar214214Lv3  # object: summoned by 0x142: fires 0x1c0; spawned mai_states.cpp, case mai.cpp
 action CMai 0x1bf kObjFamiliarOut214214Lv3  # object: from 0x191 at 0x143: takes 3000 gauge, 6 shots 0x1b9 at random heights; spawned mai.cpp, case mai.cpp
 action CMai 0x1c0 kObj214214ShotLv3  # object: vx 4.2, 10 hits; spawned mai.cpp, case mai.cpp
 action CMai 0x1c1 kObjUnusedShot3  # object: never spawned: shot vx 1.9, 3 hits; case mai.cpp
-action CMai 0x1c2 kObjAwakenedFinisherScreen  # object: screen object at 0x145 frame 1; spawned mai_vf6.cpp, case mai.cpp
+action CMai 0x1c2 kObjAwakenedFinisherScreen  # object: screen object at 0x145 frame 1; spawned mai_states.cpp, case mai.cpp
 action CMai 0x1c3 kObjFamiliar214D  # object: 214D with the familiar out: dashes (vx 4.0) until 120 px from the opponent, 1 hit, then recharge (rate 4); spawned mai.cpp, case mai.cpp
 action CMai 0x1c5 kObjFamiliar623Hit  # object: the attack of 0x1b0, 2 hits; cut short when Mai is hit or the familiar recharges; spawned mai.cpp, case mai.cpp
 action CMai 0x1c6 kObjFamiliar412DHit  # object: the attack of 0x1b4, 1 hit; spawned mai.cpp, case mai.cpp
-action CMakoto 0xc8 k5A  # 5A; normals keep sliding with the run speed while unk158 == 1; started makoto.cpp, case makoto_vf6.cpp
-action CMakoto 0xc9 k5BClose  # 5B within 70 px; started makoto.cpp, case makoto_vf6.cpp
-action CMakoto 0xca k5BFar  # 5B otherwise: spawns 0x19d at frame 4; started makoto.cpp, case makoto_vf6.cpp
-action CMakoto 0xcb k5C  # 5C: spawns 0x190 at frame 6; C again at frame 10 repeats it up to twice; started makoto.cpp, case makoto_vf6.cpp
-action CMakoto 0xcc k2A  # 2A; started makoto.cpp, case makoto_vf6.cpp
-action CMakoto 0xcd k2B  # 2B; started makoto.cpp, case makoto_vf6.cpp
-action CMakoto 0xce k2C  # 2C: slides (vx 1.9), up to 4 loops, the last ones without hits; started makoto.cpp, case makoto_vf6.cpp
-action CMakoto 0xcf kJumpA  # j.A; started makoto.cpp, case makoto_vf6.cpp
-action CMakoto 0xd0 kJumpB  # j.B; started makoto.cpp, case makoto_vf6.cpp
-action CMakoto 0xd1 kJump2C  # j.2C: spawns 0x191; C again repeats it up to twice; started makoto.cpp, case makoto_vf6.cpp
-action CMakoto 0xd2 k6B  # 6B: hop (vx 0.6, vy -1.4), hits on the way down; started makoto.cpp, case makoto_vf6.cpp
-action CMakoto 0xd3 kJumpC  # j.C: spawns 0x190 at frame 5; started makoto.cpp, case makoto_vf6.cpp
-action CMakoto 0xd4 kUnusedDive  # unreached (no StartCommand path): air dive, ay 0.07; to 0xd5 on contact, 0xd6 on landing; case makoto_vf6.cpp
-action CMakoto 0xd5 kUnusedDiveRebound  # only from 0xd4: bounces back (vx -1, vy -2.4); from makoto_vf6.cpp, case makoto_vf6.cpp
-action CMakoto 0xd6 kUnusedDiveLanding  # only from 0xd4: landing with a screen shake; from makoto_vf6.cpp, case makoto_vf6.cpp
-action CMakoto 0xdc kThrow  # ground throw; on hit 0xdd; started makoto.cpp, case makoto_vf6.cpp
-action CMakoto 0xdd kThrowHold  # the ground throw: hop and slam; from makoto_vf6.cpp, case makoto_vf6.cpp
-action CMakoto 0xe6 kDashA  # A during the forward run 0xa3 (not holding back); started makoto.cpp, case makoto_vf6.cpp
-action CMakoto 0xe7 kDashB  # B during the run; started makoto.cpp, case makoto_vf6.cpp
-action CMakoto 0xe8 kDashC  # C during the run: hop (vx 1.8, vy -1.5); started makoto.cpp, case makoto_vf6.cpp
-action CMakoto 0xe9 kDash2A  # 2A during the run; started makoto.cpp, case makoto_vf6.cpp
-action CMakoto 0xea kDash2B  # 2B during the run; started makoto.cpp, case makoto_vf6.cpp
-action CMakoto 0xeb kDash2C  # 2C during the run: slide, up to 4 loops; started makoto.cpp, case makoto_vf6.cpp
-action CMakoto 0xf8 kAirThrow  # air 6C near an airborne opponent; on hit 0xf9; started makoto.cpp, case makoto_vf6.cpp
-action CMakoto 0xf9 kAirThrowHold  # the air throw: carries the opponent down, 1100 damage at frame 8; from makoto_vf6.cpp, case makoto_vf6.cpp
-action CMakoto 0xfa k236A  # 236A: spawns hopper 0x193 at frame 3; started makoto.cpp, case makoto_vf6.cpp
-action CMakoto 0xfb k236B  # 236B: hopper 0x194; started makoto.cpp, case makoto_vf6.cpp
-action CMakoto 0xfc k236C  # 236C (needs unk118 >= 500 or unk120; costs 500/250 of unk118): hopper 0x195, one per tick of frame 3 plus one at the frame change (the first check has no timer == 0); started makoto.cpp, case makoto_vf6.cpp
-action CMakoto 0xfd k214A  # 214A: tosses firecracker 0x196 at frame 4; any 214 detonates the ones already out; started makoto.cpp, case makoto_vf6.cpp
-action CMakoto 0xfe k214B  # 214B: firecracker 0x197; started makoto.cpp, case makoto_vf6.cpp
-action CMakoto 0xff k214C  # 214C (costs as 0xfc): firecracker 0x198; started makoto.cpp, case makoto_vf6.cpp
-action CMakoto 0x100 k623A  # 623A: leaping attack (vx 1.5, vy -1.5); started makoto.cpp, case makoto_vf6.cpp
-action CMakoto 0x101 k623B  # 623B: higher leap (vy -1.8); started makoto.cpp, case makoto_vf6.cpp
-action CMakoto 0x102 k623C  # 623C (costs as 0xfc): two leaps, the second at frame 12; started makoto.cpp, case makoto_vf6.cpp
-action CMakoto 0x103 k412A  # 412A (4,1,2 + button) with no bouncer out: bouncer 0x19a and flash 0x192, sets m_bouncerOut; started makoto.cpp, case makoto_vf6.cpp
-action CMakoto 0x104 k412B  # 412B: bouncer 0x19b; started makoto.cpp, case makoto_vf6.cpp
-action CMakoto 0x105 k412C  # 412C (costs as 0xfc): bouncer 0x19c; started makoto.cpp, case makoto_vf6.cpp
-action CMakoto 0x106 kAir214A  # unreached: StartCommand picks it for y < 0 inside a branch that needs y == 0; would toss 0x196 in the air; started makoto.cpp, case makoto_vf6.cpp
-action CMakoto 0x12c k236236A  # 236236A (1 level): spawns 0x1a2, a slow 5-hit object that rises then sinks; started makoto.cpp, case makoto_vf6.cpp
-action CMakoto 0x12d k236236B  # 236236B (1 level): 0x1a3, hovers bobbing; started makoto.cpp, case makoto_vf6.cpp
-action CMakoto 0x12e k236236C  # 236236C (1 level): 0x1a4, drifts forward; started makoto.cpp, case makoto_vf6.cpp
-action CMakoto 0x12f k214214Lv1  # 214214 with 1 level: jumps (vy -2.4) and floats down over the ground hit 0x19f, throwing 0x191 strikes and 0x1a5 debris; started makoto.cpp, case makoto_vf6.cpp
-action CMakoto 0x130 k214214Lv2  # 2 levels: as 0x12f with 0x1a0, more loops; started makoto.cpp, case makoto_vf6.cpp
-action CMakoto 0x131 k214214Lv3  # 3 levels: 0x1a1, more loops; started makoto.cpp, case makoto_vf6.cpp
-action CMakoto 0x132 k641236Lv1  # 641236 (6,4,1,3 + A-C) with 1 level: charging rush (vx 1.9) with 0x1a7 in front, 5 hits; started makoto.cpp, case makoto_vf6.cpp
-action CMakoto 0x133 k641236Lv2  # 2 levels: vx 2.3, 12 hits, 0x1a7 also scatters 0x1a8; started makoto.cpp, case makoto_vf6.cpp
-action CMakoto 0x134 k641236Lv3  # 3 levels: vx 2.5, 19 hits; started makoto.cpp, case makoto_vf6.cpp
-action CMakoto 0x135 kLv4Heal  # 2,6,3 + D with exactly 3000 gauge and HP < 3333: throws 0x1a6 up; catching it heals 20 HP a tick for frames 9-12, capped at 10000 (above the 9999 full HP); started makoto.cpp, case makoto_vf6.cpp
-action CMakoto 0x136 kLv4HealFailed  # from 0x135 when 0x1a6 was struck (m_patternVar2 = 2): a loop with no effect; from makoto_vf6.cpp, case makoto_vf6.cpp
-action CMakoto 0x190 kObjCStrike  # object: the strike of 5C and j.C, played once; spawned makoto_vf6.cpp, case makoto.cpp
-action CMakoto 0x191 kObjJump2CStrike  # object: the strike of j.2C; also thrown out by the 214214 supers; spawned makoto_vf6.cpp, case makoto.cpp
-action CMakoto 0x192 kObjBouncerLaunch  # object: flash where a 412 bouncer appears; spawned makoto_vf6.cpp, case makoto.cpp
-action CMakoto 0x193 kObjHopper236A  # object: 236A: hops out (vx 0.5, vy -2.7), paces back and forth leaving 0x22 effects, attacks within 25 px of a grounded opponent or when 236 is pressed again; 6 loops; spawned makoto_vf6.cpp, case makoto.cpp
-action CMakoto 0x194 kObjHopper236B  # object: 236B hopper: vx 1.1, vy -2.2, 8 loops; spawned makoto_vf6.cpp, case makoto.cpp
-action CMakoto 0x195 kObjHopper236C  # object: 236C hopper: random launch (CPlayer::Random), 30 loops; spawned makoto_vf6.cpp, case makoto.cpp
-action CMakoto 0x196 kObjFirecracker214A  # object: 214A: tossed, lands, sputters 0x199 every 15 frames, bursts into four 0x199 after 3 loops; struck or another 214 knocks it to its burst frames; spawned makoto_vf6.cpp, case makoto.cpp
-action CMakoto 0x197 kObjFirecracker214B  # object: 214B: as 0x196, sparks on a 21 count decremented twice a tick (about every 11 frames), no final burst; spawned makoto_vf6.cpp, case makoto.cpp
-action CMakoto 0x198 kObjFirecracker214C  # object: 214C: as 0x196, 6 loops then four 0x199; spawned makoto_vf6.cpp, case makoto.cpp
+action CMakoto 0xc8 k5A  # 5A; normals keep sliding with the run speed while unk158 == 1; started makoto.cpp, case makoto_states.cpp
+action CMakoto 0xc9 k5BClose  # 5B within 70 px; started makoto.cpp, case makoto_states.cpp
+action CMakoto 0xca k5BFar  # 5B otherwise: spawns 0x19d at frame 4; started makoto.cpp, case makoto_states.cpp
+action CMakoto 0xcb k5C  # 5C: spawns 0x190 at frame 6; C again at frame 10 repeats it up to twice; started makoto.cpp, case makoto_states.cpp
+action CMakoto 0xcc k2A  # 2A; started makoto.cpp, case makoto_states.cpp
+action CMakoto 0xcd k2B  # 2B; started makoto.cpp, case makoto_states.cpp
+action CMakoto 0xce k2C  # 2C: slides (vx 1.9), up to 4 loops, the last ones without hits; started makoto.cpp, case makoto_states.cpp
+action CMakoto 0xcf kJumpA  # j.A; started makoto.cpp, case makoto_states.cpp
+action CMakoto 0xd0 kJumpB  # j.B; started makoto.cpp, case makoto_states.cpp
+action CMakoto 0xd1 kJump2C  # j.2C: spawns 0x191; C again repeats it up to twice; started makoto.cpp, case makoto_states.cpp
+action CMakoto 0xd2 k6B  # 6B: hop (vx 0.6, vy -1.4), hits on the way down; started makoto.cpp, case makoto_states.cpp
+action CMakoto 0xd3 kJumpC  # j.C: spawns 0x190 at frame 5; started makoto.cpp, case makoto_states.cpp
+action CMakoto 0xd4 kUnusedDive  # unreached (no StartCommand path): air dive, ay 0.07; to 0xd5 on contact, 0xd6 on landing; case makoto_states.cpp
+action CMakoto 0xd5 kUnusedDiveRebound  # only from 0xd4: bounces back (vx -1, vy -2.4); from makoto_states.cpp, case makoto_states.cpp
+action CMakoto 0xd6 kUnusedDiveLanding  # only from 0xd4: landing with a screen shake; from makoto_states.cpp, case makoto_states.cpp
+action CMakoto 0xdc kThrow  # ground throw; on hit 0xdd; started makoto.cpp, case makoto_states.cpp
+action CMakoto 0xdd kThrowHold  # the ground throw: hop and slam; from makoto_states.cpp, case makoto_states.cpp
+action CMakoto 0xe6 kDashA  # A during the forward run 0xa3 (not holding back); started makoto.cpp, case makoto_states.cpp
+action CMakoto 0xe7 kDashB  # B during the run; started makoto.cpp, case makoto_states.cpp
+action CMakoto 0xe8 kDashC  # C during the run: hop (vx 1.8, vy -1.5); started makoto.cpp, case makoto_states.cpp
+action CMakoto 0xe9 kDash2A  # 2A during the run; started makoto.cpp, case makoto_states.cpp
+action CMakoto 0xea kDash2B  # 2B during the run; started makoto.cpp, case makoto_states.cpp
+action CMakoto 0xeb kDash2C  # 2C during the run: slide, up to 4 loops; started makoto.cpp, case makoto_states.cpp
+action CMakoto 0xf8 kAirThrow  # air 6C near an airborne opponent; on hit 0xf9; started makoto.cpp, case makoto_states.cpp
+action CMakoto 0xf9 kAirThrowHold  # the air throw: carries the opponent down, 1100 damage at frame 8; from makoto_states.cpp, case makoto_states.cpp
+action CMakoto 0xfa k236A  # 236A: spawns hopper 0x193 at frame 3; started makoto.cpp, case makoto_states.cpp
+action CMakoto 0xfb k236B  # 236B: hopper 0x194; started makoto.cpp, case makoto_states.cpp
+action CMakoto 0xfc k236C  # 236C (needs unk118 >= 500 or unk120; costs 500/250 of unk118): hopper 0x195, one per tick of frame 3 plus one at the frame change (the first check has no timer == 0); started makoto.cpp, case makoto_states.cpp
+action CMakoto 0xfd k214A  # 214A: tosses firecracker 0x196 at frame 4; any 214 detonates the ones already out; started makoto.cpp, case makoto_states.cpp
+action CMakoto 0xfe k214B  # 214B: firecracker 0x197; started makoto.cpp, case makoto_states.cpp
+action CMakoto 0xff k214C  # 214C (costs as 0xfc): firecracker 0x198; started makoto.cpp, case makoto_states.cpp
+action CMakoto 0x100 k623A  # 623A: leaping attack (vx 1.5, vy -1.5); started makoto.cpp, case makoto_states.cpp
+action CMakoto 0x101 k623B  # 623B: higher leap (vy -1.8); started makoto.cpp, case makoto_states.cpp
+action CMakoto 0x102 k623C  # 623C (costs as 0xfc): two leaps, the second at frame 12; started makoto.cpp, case makoto_states.cpp
+action CMakoto 0x103 k412A  # 412A (4,1,2 + button) with no bouncer out: bouncer 0x19a and flash 0x192, sets m_bouncerOut; started makoto.cpp, case makoto_states.cpp
+action CMakoto 0x104 k412B  # 412B: bouncer 0x19b; started makoto.cpp, case makoto_states.cpp
+action CMakoto 0x105 k412C  # 412C (costs as 0xfc): bouncer 0x19c; started makoto.cpp, case makoto_states.cpp
+action CMakoto 0x106 kAir214A  # unreached: StartCommand picks it for y < 0 inside a branch that needs y == 0; would toss 0x196 in the air; started makoto.cpp, case makoto_states.cpp
+action CMakoto 0x12c k236236A  # 236236A (1 level): spawns 0x1a2, a slow 5-hit object that rises then sinks; started makoto.cpp, case makoto_states.cpp
+action CMakoto 0x12d k236236B  # 236236B (1 level): 0x1a3, hovers bobbing; started makoto.cpp, case makoto_states.cpp
+action CMakoto 0x12e k236236C  # 236236C (1 level): 0x1a4, drifts forward; started makoto.cpp, case makoto_states.cpp
+action CMakoto 0x12f k214214Lv1  # 214214 with 1 level: jumps (vy -2.4) and floats down over the ground hit 0x19f, throwing 0x191 strikes and 0x1a5 debris; started makoto.cpp, case makoto_states.cpp
+action CMakoto 0x130 k214214Lv2  # 2 levels: as 0x12f with 0x1a0, more loops; started makoto.cpp, case makoto_states.cpp
+action CMakoto 0x131 k214214Lv3  # 3 levels: 0x1a1, more loops; started makoto.cpp, case makoto_states.cpp
+action CMakoto 0x132 k641236Lv1  # 641236 (6,4,1,3 + A-C) with 1 level: charging rush (vx 1.9) with 0x1a7 in front, 5 hits; started makoto.cpp, case makoto_states.cpp
+action CMakoto 0x133 k641236Lv2  # 2 levels: vx 2.3, 12 hits, 0x1a7 also scatters 0x1a8; started makoto.cpp, case makoto_states.cpp
+action CMakoto 0x134 k641236Lv3  # 3 levels: vx 2.5, 19 hits; started makoto.cpp, case makoto_states.cpp
+action CMakoto 0x135 kLv4Heal  # 2,6,3 + D with exactly 3000 gauge and HP < 3333: throws 0x1a6 up; catching it heals 20 HP a tick for frames 9-12, capped at 10000 (above the 9999 full HP); started makoto.cpp, case makoto_states.cpp
+action CMakoto 0x136 kLv4HealFailed  # from 0x135 when 0x1a6 was struck (m_patternVar2 = 2): a loop with no effect; from makoto_states.cpp, case makoto_states.cpp
+action CMakoto 0x190 kObjCStrike  # object: the strike of 5C and j.C, played once; spawned makoto_states.cpp, case makoto.cpp
+action CMakoto 0x191 kObjJump2CStrike  # object: the strike of j.2C; also thrown out by the 214214 supers; spawned makoto_states.cpp, case makoto.cpp
+action CMakoto 0x192 kObjBouncerLaunch  # object: flash where a 412 bouncer appears; spawned makoto_states.cpp, case makoto.cpp
+action CMakoto 0x193 kObjHopper236A  # object: 236A: hops out (vx 0.5, vy -2.7), paces back and forth leaving 0x22 effects, attacks within 25 px of a grounded opponent or when 236 is pressed again; 6 loops; spawned makoto_states.cpp, case makoto.cpp
+action CMakoto 0x194 kObjHopper236B  # object: 236B hopper: vx 1.1, vy -2.2, 8 loops; spawned makoto_states.cpp, case makoto.cpp
+action CMakoto 0x195 kObjHopper236C  # object: 236C hopper: random launch (CPlayer::Random), 30 loops; spawned makoto_states.cpp, case makoto.cpp
+action CMakoto 0x196 kObjFirecracker214A  # object: 214A: tossed, lands, sputters 0x199 every 15 frames, bursts into four 0x199 after 3 loops; struck or another 214 knocks it to its burst frames; spawned makoto_states.cpp, case makoto.cpp
+action CMakoto 0x197 kObjFirecracker214B  # object: 214B: as 0x196, sparks on a 21 count decremented twice a tick (about every 11 frames), no final burst; spawned makoto_states.cpp, case makoto.cpp
+action CMakoto 0x198 kObjFirecracker214C  # object: 214C: as 0x196, 6 loops then four 0x199; spawned makoto_states.cpp, case makoto.cpp
 action CMakoto 0x199 kObjFirecrackerSpark  # object: rises (vy -1.5), 1 hit; spawned makoto.cpp, case makoto.cpp
-action CMakoto 0x19a kObjBouncer412A  # object: 412A: flies diagonally at 1.5 px/frame, bouncing off the screen edges up to 3 times, 1 hit; clears m_bouncerOut when gone; spawned makoto_vf6.cpp, case makoto.cpp
-action CMakoto 0x19b kObjBouncer412B  # object: 412B bouncer: starts at frame 6 (another direction); spawned makoto_vf6.cpp, case makoto.cpp
-action CMakoto 0x19c kObjBouncer412C  # object: 412C bouncer: 3 px/frame, its hit re-armed at each bounce; spawned makoto_vf6.cpp, case makoto.cpp
-action CMakoto 0x19d kObj5BFar  # object: spawned by far 5B; at its end spawns 0x19e 60 px ahead on the ground; spawned makoto_vf6.cpp, case makoto.cpp
+action CMakoto 0x19a kObjBouncer412A  # object: 412A: flies diagonally at 1.5 px/frame, bouncing off the screen edges up to 3 times, 1 hit; clears m_bouncerOut when gone; spawned makoto_states.cpp, case makoto.cpp
+action CMakoto 0x19b kObjBouncer412B  # object: 412B bouncer: starts at frame 6 (another direction); spawned makoto_states.cpp, case makoto.cpp
+action CMakoto 0x19c kObjBouncer412C  # object: 412C bouncer: 3 px/frame, its hit re-armed at each bounce; spawned makoto_states.cpp, case makoto.cpp
+action CMakoto 0x19d kObj5BFar  # object: spawned by far 5B; at its end spawns 0x19e 60 px ahead on the ground; spawned makoto_states.cpp, case makoto.cpp
 action CMakoto 0x19e kObj5BFarGround  # object: the ground part of 0x19d; spawned makoto.cpp, case makoto.cpp
-action CMakoto 0x19f kObj214214HitLv1  # object: unlimited-hit object on the ground under her while 0x12f runs (until frame 0x13); spawned makoto_vf6.cpp, case makoto.cpp
-action CMakoto 0x1a0 kObj214214HitLv2  # object: as 0x19f for 0x130; spawned makoto_vf6.cpp, case makoto.cpp
-action CMakoto 0x1a1 kObj214214HitLv3  # object: as 0x19f for 0x131; spawned makoto_vf6.cpp, case makoto.cpp
-action CMakoto 0x1a2 kObj236236A  # object: 5 hits, rises (vy -0.45) then sinks, one hit per 90 frames, removed on the ground; spawned makoto_vf6.cpp, case makoto.cpp
-action CMakoto 0x1a3 kObj236236B  # object: 5 hits, hovers bobbing (vy +-0.3), 12 loops; spawned makoto_vf6.cpp, case makoto.cpp
-action CMakoto 0x1a4 kObj236236C  # object: 5 hits, drifts forward (vx 0.3); spawned makoto_vf6.cpp, case makoto.cpp
-action CMakoto 0x1a5 kObj214214Debris  # object: thrown backwards with random speed (CPlayer::Random), bounces on the ground; spawned makoto_vf6.cpp, case makoto.cpp
-action CMakoto 0x1a6 kObjLv4Thrown  # object: thrown up by 0x135: falling back below y -70 means caught (m_patternVar2 = 1); struck (unk80 5) flies off (m_patternVar2 = 2); spawned makoto_vf6.cpp, case makoto.cpp
-action CMakoto 0x1a7 kObj641236Aura  # object: kept 12 px in front of her during 0x132-0x134, leaves 0x22 effects; at levels 2-3 scatters 0x1a8 (CPlayer::Random); spawned makoto_vf6.cpp, case makoto.cpp
+action CMakoto 0x19f kObj214214HitLv1  # object: unlimited-hit object on the ground under her while 0x12f runs (until frame 0x13); spawned makoto_states.cpp, case makoto.cpp
+action CMakoto 0x1a0 kObj214214HitLv2  # object: as 0x19f for 0x130; spawned makoto_states.cpp, case makoto.cpp
+action CMakoto 0x1a1 kObj214214HitLv3  # object: as 0x19f for 0x131; spawned makoto_states.cpp, case makoto.cpp
+action CMakoto 0x1a2 kObj236236A  # object: 5 hits, rises (vy -0.45) then sinks, one hit per 90 frames, removed on the ground; spawned makoto_states.cpp, case makoto.cpp
+action CMakoto 0x1a3 kObj236236B  # object: 5 hits, hovers bobbing (vy +-0.3), 12 loops; spawned makoto_states.cpp, case makoto.cpp
+action CMakoto 0x1a4 kObj236236C  # object: 5 hits, drifts forward (vx 0.3); spawned makoto_states.cpp, case makoto.cpp
+action CMakoto 0x1a5 kObj214214Debris  # object: thrown backwards with random speed (CPlayer::Random), bounces on the ground; spawned makoto_states.cpp, case makoto.cpp
+action CMakoto 0x1a6 kObjLv4Thrown  # object: thrown up by 0x135: falling back below y -70 means caught (m_patternVar2 = 1); struck (unk80 5) flies off (m_patternVar2 = 2); spawned makoto_states.cpp, case makoto.cpp
+action CMakoto 0x1a7 kObj641236Aura  # object: kept 12 px in front of her during 0x132-0x134, leaves 0x22 effects; at levels 2-3 scatters 0x1a8 (CPlayer::Random); spawned makoto_states.cpp, case makoto.cpp
 action CMakoto 0x1a8 kObj641236Spark  # object: from 0x1a7, played once; spawned makoto.cpp, case makoto.cpp
-action CMayu 0xc8 k5A  # 5A; started mayu.cpp, case mayu_vf6.cpp
-action CMayu 0xc9 k5BClose  # 5B within 70 px; started mayu.cpp, case mayu_vf6.cpp
-action CMayu 0xca k5BFar  # 5B otherwise: steps in (vx 1.2); started mayu.cpp, case mayu_vf6.cpp
-action CMayu 0xcb k5C  # 5C, 2 hits; started mayu.cpp, case mayu_vf6.cpp
-action CMayu 0xcc k2A  # 2A; started mayu.cpp, case mayu_vf6.cpp
-action CMayu 0xcd k2B  # 2B: slides (vx 1.5), one extra loop; started mayu.cpp, case mayu_vf6.cpp
-action CMayu 0xce k2C  # 2C: long slide (vx 3.0); started mayu.cpp, case mayu_vf6.cpp
-action CMayu 0xcf kJumpA  # j.A; started mayu.cpp, case mayu_vf6.cpp
-action CMayu 0xd0 kJumpB  # j.B; started mayu.cpp, case mayu_vf6.cpp
-action CMayu 0xd1 kJumpC  # j.C; started mayu.cpp, case mayu_vf6.cpp
-action CMayu 0xd2 k6B  # 6B: hop (vx 1.0, vy -2.6); started mayu.cpp, case mayu_vf6.cpp
-action CMayu 0xd3 k1B  # 1B (down-back + B), checked before 2B; started mayu.cpp, case mayu_vf6.cpp
-action CMayu 0xdc kThrow  # ground throw; on hit 0xdd; started mayu.cpp, case mayu_vf6.cpp
-action CMayu 0xdd kThrowHold  # the ground throw: 1000 damage at frame 3; from mayu_vf6.cpp, case mayu_vf6.cpp
-action CMayu 0xe6 kDashHopA  # A in the air of her forward dash hop (0xa3 after frame 5); lands into 0xe9; started mayu.cpp, case mayu_vf6.cpp
-action CMayu 0xe7 kDashHopB  # B in the dash hop, 2 hits; started mayu.cpp, case mayu_vf6.cpp
-action CMayu 0xe8 kDashHopC  # C in the dash hop; started mayu.cpp, case mayu_vf6.cpp
-action CMayu 0xe9 kDashHopLanding  # landing of 0xe6-0xe8; from mayu_vf6.cpp, case mayu_vf6.cpp
-action CMayu 0xf8 kAirThrow  # air 6C near an airborne opponent; on hit 0xf9; started mayu.cpp, case mayu_vf6.cpp
-action CMayu 0xf9 kAirThrowHold  # the air throw: spins and slams, 1000 damage; its right-wall clamp tests x > 6100.0 (610 meant, so it never applies); from mayu_vf6.cpp, case mayu_vf6.cpp
-action CMayu 0xfa k41236A  # 41236A (parsed as 4,1,3 + button): running grab (vx 1.8, one extra loop); a hit in frames 3-7 goes to 0xfd; started mayu.cpp, case mayu_vf6.cpp
-action CMayu 0xfb k41236B  # 41236B: vx 2.4, two extra loops; can only grab after the first loop (m_patternVar3); started mayu.cpp, case mayu_vf6.cpp
-action CMayu 0xfc k41236C  # 41236C (costs 500/250 of unk118): as 0xfa, on hit the stronger throw 0xfe; started mayu.cpp, case mayu_vf6.cpp
-action CMayu 0xfd k41236Throw  # the A/B grab: 500 damage (combo count not raised); from mayu_vf6.cpp, case mayu_vf6.cpp
-action CMayu 0xfe k41236CThrow  # the C grab: 1000 damage; from mayu_vf6.cpp, case mayu_vf6.cpp
-action CMayu 0xff kUnusedAirSpin  # unreached: keeps 30% of vx, 9 hits, lands into 0x102; case mayu_vf6.cpp
-action CMayu 0x100 k236Dive  # A while falling in 0x104/0x107: dives (vx 0.5, vy 3.0) into 0x101; from mayu_vf6.cpp, case mayu_vf6.cpp
-action CMayu 0x101 k236DiveLanding  # landing of 0x100; from mayu_vf6.cpp, case mayu_vf6.cpp
-action CMayu 0x102 k236JumpLanding  # landing of 0x107 (and of the unused 0xff); from mayu_vf6.cpp, case mayu_vf6.cpp
-action CMayu 0x103 k236A  # 236A on the ground: dash (vx 3.0), 3 extra loops; holding A in frames 9-14 goes to 0x106, holding B to 0x107; started mayu.cpp, case mayu_vf6.cpp
-action CMayu 0x104 k236B  # 236B: jumps (vx 1.2, vy -3.3); A while falling dives (0x100), 236 again after frame 13 goes to 0x122; started mayu.cpp, case mayu_vf6.cpp
-action CMayu 0x105 k236C  # 236C (costs as 0xfc): flying tackle (vx 3.0), rebounds on contact, 4 extra loops; started mayu.cpp, case mayu_vf6.cpp
-action CMayu 0x106 kRisingStrike  # from 0x103 holding A, or 236 after frame 19 of 0x110/0x112: rises (vy -3.3), 3 hits; from mayu_vf6.cpp, case mayu_vf6.cpp
-action CMayu 0x107 k236AJump  # from 0x103 holding B: jumps (vx 0.8, vy -3.1); A while falling dives, landing 0x102; from mayu_vf6.cpp, case mayu_vf6.cpp
-action CMayu 0x108 kWallJumpDiveLanding  # landing of 0x10d/0x10e; from mayu_vf6.cpp, case mayu_vf6.cpp
-action CMayu 0x109 k214BDiveLanding  # landing of 0x11d-0x11f; from mayu_vf6.cpp, case mayu_vf6.cpp
-action CMayu 0x10a k623A  # 623A: leaping attack (vx 3, vy -3); started mayu.cpp, case mayu_vf6.cpp
-action CMayu 0x10b k623B  # 623B: higher (vx 4, vy -4.5); started mayu.cpp, case mayu_vf6.cpp
-action CMayu 0x10c k623C  # 623C (costs as 0xfc): vx 2, vy -4; started mayu.cpp, case mayu_vf6.cpp
-action CMayu 0x10d kWallJumpA  # A after a wall jump (0x110/0x112, frames 16-19): dives (vx 0.5, vy 3.0), turning if holding back; from mayu_vf6.cpp, case mayu_vf6.cpp
-action CMayu 0x10e kWallJumpB  # B after a wall jump: diagonal dive (vx 2.2, vy 2.2); from mayu_vf6.cpp, case mayu_vf6.cpp
-action CMayu 0x10f kWallJumpC  # C after a wall jump: 4 hits, bounces on landing; from mayu_vf6.cpp, case mayu_vf6.cpp
-action CMayu 0x110 k214A  # 214A: leaps backwards (vx -3), clings to the screen edge (Unk40ff70) for frames 12-15, jumps off (vx 1.5, vy -2.5); A/B/C then 0x10d/0x10e/0x10f, 236 0x106; started mayu.cpp, case mayu_vf6.cpp
-action CMayu 0x111 k214D  # 214D: leaps back to the wall, jumps off low (vx 2.2) and grabs a grounded opponent at frame 18: 0x113; started mayu.cpp, case mayu_vf6.cpp
-action CMayu 0x112 k214C  # 214C: as 0x110 but leaps forwards, turning round at the wall; started mayu.cpp, case mayu_vf6.cpp
-action CMayu 0x113 k214DThrow  # the wall-jump grab: 1200 damage at frame 10; from mayu_vf6.cpp, case mayu_vf6.cpp
-action CMayu 0x118 kAir236A  # air 236A: dives (vx 0.7, vy 2.0); a hit at frame 5 goes to 0x123; started mayu.cpp, case mayu_vf6.cpp
-action CMayu 0x119 kAir236B  # air 236B: dives (vx 2.0, vy 2.0); hit 0x123; started mayu.cpp, case mayu_vf6.cpp
-action CMayu 0x11a kAir236C  # air 236C (costs as 0xfc): dive, a hit makes it unlimited-hit; started mayu.cpp, case mayu_vf6.cpp
-action CMayu 0x11b k41236D  # 41236D: grab; a hit at frame 2 goes to 0x11c; started mayu.cpp, case mayu_vf6.cpp
-action CMayu 0x11c k41236DRide  # stands on the opponent (at their m_pointX/Y[0]) then drops off; opponent to 0x48; from mayu_vf6.cpp, case mayu_vf6.cpp
-action CMayu 0x11d k214BDiveNear  # 214B dive when the opponent is within 70 px: vx 0.5, vy 3.0; from mayu_vf6.cpp, case mayu_vf6.cpp
-action CMayu 0x11e k214BDiveMid  # within 140 px: vx 2.2, vy 2.2; from mayu_vf6.cpp, case mayu_vf6.cpp
-action CMayu 0x11f k214BDiveFar  # farther: vx 4.0, vy 1.5; from mayu_vf6.cpp, case mayu_vf6.cpp
-action CMayu 0x120 k214BDiveRebound  # any contact during 0x11d-0x11f: bounces back (vx -0.4, vy -0.9); from mayu_vf6.cpp, case mayu_vf6.cpp
-action CMayu 0x121 k214B  # 214B: leaps back to the wall, then dives by distance (0x11d/0x11e/0x11f); started mayu.cpp, case mayu_vf6.cpp
-action CMayu 0x122 kRisingStrike236B  # from 0x104 with 236 again: same code as 0x106; from mayu_vf6.cpp, case mayu_vf6.cpp
-action CMayu 0x123 kAir236Hit  # follow-up of a hitting air 236A/B: 5 hits; from mayu_vf6.cpp, case mayu_vf6.cpp
-action CMayu 0x12c kUnusedSuperLv1  # unreached (no command): 1000 gauge, stepping multi-hit rush; case mayu_vf6.cpp
-action CMayu 0x12d kUnusedSuperLv2  # unreached: 2000 gauge, ends in a jump (pattern 0xa); case mayu_vf6.cpp
-action CMayu 0x12e kUnusedSuperLv3  # unreached: 3000 gauge; case mayu_vf6.cpp
-action CMayu 0x12f kLv4Grab  # 2,3,6,9,3 + D with exactly 3000 gauge on the ground and HP < 3333: leaping grab (vx 1.5, vy -2.0); a hit at frame 6 goes to 0x131; started mayu.cpp, case mayu_vf6.cpp
-action CMayu 0x130 kLv4GrabClose  # the LV4 within 60 px: standing grab at frame 4, to 0x132; started mayu.cpp, case mayu_vf6.cpp
-action CMayu 0x131 kLv4Slam  # jumps with the opponent (vy -5) and slams, 1000 damage, into 0x133; from mayu_vf6.cpp, case mayu_vf6.cpp
-action CMayu 0x132 kLv4GrabCloseHold  # holds the opponent, then 0x131; from mayu_vf6.cpp, case mayu_vf6.cpp
-action CMayu 0x133 kLv4Stomps  # bounces on the opponent for about 830 frames (m_patternVar1), helpers 0x191/0x192 drop in at 80/120 and stomp too, random 0x195 (CPlayer::Random); her stomps 300 + 1400 damage, 300 per helper stomp; from mayu_vf6.cpp, case mayu_vf6.cpp
-action CMayu 0x134 k641236Lv1  # 641236 (6,4,1,3 + A-C) with 1 level: rising grab (vx 2, vy -3.2) that only takes an airborne opponent; to 0x137; started mayu.cpp, case mayu_vf6.cpp
-action CMayu 0x135 k641236Lv2  # 2 levels: to 0x138; started mayu.cpp, case mayu_vf6.cpp
-action CMayu 0x136 k641236Lv3  # 3 levels: to 0x139; started mayu.cpp, case mayu_vf6.cpp
-action CMayu 0x137 k641236Lv1Throw  # the air throw of 0x134: 2350 damage; from mayu_vf6.cpp, case mayu_vf6.cpp
-action CMayu 0x138 k641236Lv2Throw  # the throw of 0x135; from mayu_vf6.cpp, case mayu_vf6.cpp
-action CMayu 0x139 k641236Lv3Throw  # the throw of 0x136; from mayu_vf6.cpp, case mayu_vf6.cpp
-action CMayu 0x13a k214214Lv1  # 214214 with 1 level: steerable spin (vx up to 1.2 with 4/6), 12 hits; started mayu.cpp, case mayu_vf6.cpp
-action CMayu 0x13b k214214Lv2  # 2 levels: vx up to 1.3, unlimited hits, more loops; started mayu.cpp, case mayu_vf6.cpp
-action CMayu 0x13c k214214Lv3  # 3 levels: vx up to 1.4, more loops; started mayu.cpp, case mayu_vf6.cpp
-action CMayu 0x13d k21436Lv1  # 21436 with 1 level: dash strike (vx 3.2); a hit in frames 14-17 goes to 0x13e; started mayu.cpp, case mayu_vf6.cpp
-action CMayu 0x13e k21436Lv1Hit  # the rush of 0x13d, ends with a rising hit; from mayu_vf6.cpp, case mayu_vf6.cpp
-action CMayu 0x13f k21436Lv2  # 2 levels: vx 4.0, to 0x140; started mayu.cpp, case mayu_vf6.cpp
-action CMayu 0x140 k21436Lv2Hit  # the rush of 0x13f; from mayu_vf6.cpp, case mayu_vf6.cpp
-action CMayu 0x141 k21436Lv3  # 3 levels: vx 4.5, to 0x142; started mayu.cpp, case mayu_vf6.cpp
-action CMayu 0x142 k21436Lv3Hit  # the rush of 0x141: three rising hits; from mayu_vf6.cpp, case mayu_vf6.cpp
+action CMayu 0xc8 k5A  # 5A; started mayu.cpp, case mayu_states.cpp
+action CMayu 0xc9 k5BClose  # 5B within 70 px; started mayu.cpp, case mayu_states.cpp
+action CMayu 0xca k5BFar  # 5B otherwise: steps in (vx 1.2); started mayu.cpp, case mayu_states.cpp
+action CMayu 0xcb k5C  # 5C, 2 hits; started mayu.cpp, case mayu_states.cpp
+action CMayu 0xcc k2A  # 2A; started mayu.cpp, case mayu_states.cpp
+action CMayu 0xcd k2B  # 2B: slides (vx 1.5), one extra loop; started mayu.cpp, case mayu_states.cpp
+action CMayu 0xce k2C  # 2C: long slide (vx 3.0); started mayu.cpp, case mayu_states.cpp
+action CMayu 0xcf kJumpA  # j.A; started mayu.cpp, case mayu_states.cpp
+action CMayu 0xd0 kJumpB  # j.B; started mayu.cpp, case mayu_states.cpp
+action CMayu 0xd1 kJumpC  # j.C; started mayu.cpp, case mayu_states.cpp
+action CMayu 0xd2 k6B  # 6B: hop (vx 1.0, vy -2.6); started mayu.cpp, case mayu_states.cpp
+action CMayu 0xd3 k1B  # 1B (down-back + B), checked before 2B; started mayu.cpp, case mayu_states.cpp
+action CMayu 0xdc kThrow  # ground throw; on hit 0xdd; started mayu.cpp, case mayu_states.cpp
+action CMayu 0xdd kThrowHold  # the ground throw: 1000 damage at frame 3; from mayu_states.cpp, case mayu_states.cpp
+action CMayu 0xe6 kDashHopA  # A in the air of her forward dash hop (0xa3 after frame 5); lands into 0xe9; started mayu.cpp, case mayu_states.cpp
+action CMayu 0xe7 kDashHopB  # B in the dash hop, 2 hits; started mayu.cpp, case mayu_states.cpp
+action CMayu 0xe8 kDashHopC  # C in the dash hop; started mayu.cpp, case mayu_states.cpp
+action CMayu 0xe9 kDashHopLanding  # landing of 0xe6-0xe8; from mayu_states.cpp, case mayu_states.cpp
+action CMayu 0xf8 kAirThrow  # air 6C near an airborne opponent; on hit 0xf9; started mayu.cpp, case mayu_states.cpp
+action CMayu 0xf9 kAirThrowHold  # the air throw: spins and slams, 1000 damage; its right-wall clamp tests x > 6100.0 (610 meant, so it never applies); from mayu_states.cpp, case mayu_states.cpp
+action CMayu 0xfa k41236A  # 41236A (parsed as 4,1,3 + button): running grab (vx 1.8, one extra loop); a hit in frames 3-7 goes to 0xfd; started mayu.cpp, case mayu_states.cpp
+action CMayu 0xfb k41236B  # 41236B: vx 2.4, two extra loops; can only grab after the first loop (m_patternVar3); started mayu.cpp, case mayu_states.cpp
+action CMayu 0xfc k41236C  # 41236C (costs 500/250 of unk118): as 0xfa, on hit the stronger throw 0xfe; started mayu.cpp, case mayu_states.cpp
+action CMayu 0xfd k41236Throw  # the A/B grab: 500 damage (combo count not raised); from mayu_states.cpp, case mayu_states.cpp
+action CMayu 0xfe k41236CThrow  # the C grab: 1000 damage; from mayu_states.cpp, case mayu_states.cpp
+action CMayu 0xff kUnusedAirSpin  # unreached: keeps 30% of vx, 9 hits, lands into 0x102; case mayu_states.cpp
+action CMayu 0x100 k236Dive  # A while falling in 0x104/0x107: dives (vx 0.5, vy 3.0) into 0x101; from mayu_states.cpp, case mayu_states.cpp
+action CMayu 0x101 k236DiveLanding  # landing of 0x100; from mayu_states.cpp, case mayu_states.cpp
+action CMayu 0x102 k236JumpLanding  # landing of 0x107 (and of the unused 0xff); from mayu_states.cpp, case mayu_states.cpp
+action CMayu 0x103 k236A  # 236A on the ground: dash (vx 3.0), 3 extra loops; holding A in frames 9-14 goes to 0x106, holding B to 0x107; started mayu.cpp, case mayu_states.cpp
+action CMayu 0x104 k236B  # 236B: jumps (vx 1.2, vy -3.3); A while falling dives (0x100), 236 again after frame 13 goes to 0x122; started mayu.cpp, case mayu_states.cpp
+action CMayu 0x105 k236C  # 236C (costs as 0xfc): flying tackle (vx 3.0), rebounds on contact, 4 extra loops; started mayu.cpp, case mayu_states.cpp
+action CMayu 0x106 kRisingStrike  # from 0x103 holding A, or 236 after frame 19 of 0x110/0x112: rises (vy -3.3), 3 hits; from mayu_states.cpp, case mayu_states.cpp
+action CMayu 0x107 k236AJump  # from 0x103 holding B: jumps (vx 0.8, vy -3.1); A while falling dives, landing 0x102; from mayu_states.cpp, case mayu_states.cpp
+action CMayu 0x108 kWallJumpDiveLanding  # landing of 0x10d/0x10e; from mayu_states.cpp, case mayu_states.cpp
+action CMayu 0x109 k214BDiveLanding  # landing of 0x11d-0x11f; from mayu_states.cpp, case mayu_states.cpp
+action CMayu 0x10a k623A  # 623A: leaping attack (vx 3, vy -3); started mayu.cpp, case mayu_states.cpp
+action CMayu 0x10b k623B  # 623B: higher (vx 4, vy -4.5); started mayu.cpp, case mayu_states.cpp
+action CMayu 0x10c k623C  # 623C (costs as 0xfc): vx 2, vy -4; started mayu.cpp, case mayu_states.cpp
+action CMayu 0x10d kWallJumpA  # A after a wall jump (0x110/0x112, frames 16-19): dives (vx 0.5, vy 3.0), turning if holding back; from mayu_states.cpp, case mayu_states.cpp
+action CMayu 0x10e kWallJumpB  # B after a wall jump: diagonal dive (vx 2.2, vy 2.2); from mayu_states.cpp, case mayu_states.cpp
+action CMayu 0x10f kWallJumpC  # C after a wall jump: 4 hits, bounces on landing; from mayu_states.cpp, case mayu_states.cpp
+action CMayu 0x110 k214A  # 214A: leaps backwards (vx -3), clings to the screen edge (Unk40ff70) for frames 12-15, jumps off (vx 1.5, vy -2.5); A/B/C then 0x10d/0x10e/0x10f, 236 0x106; started mayu.cpp, case mayu_states.cpp
+action CMayu 0x111 k214D  # 214D: leaps back to the wall, jumps off low (vx 2.2) and grabs a grounded opponent at frame 18: 0x113; started mayu.cpp, case mayu_states.cpp
+action CMayu 0x112 k214C  # 214C: as 0x110 but leaps forwards, turning round at the wall; started mayu.cpp, case mayu_states.cpp
+action CMayu 0x113 k214DThrow  # the wall-jump grab: 1200 damage at frame 10; from mayu_states.cpp, case mayu_states.cpp
+action CMayu 0x118 kAir236A  # air 236A: dives (vx 0.7, vy 2.0); a hit at frame 5 goes to 0x123; started mayu.cpp, case mayu_states.cpp
+action CMayu 0x119 kAir236B  # air 236B: dives (vx 2.0, vy 2.0); hit 0x123; started mayu.cpp, case mayu_states.cpp
+action CMayu 0x11a kAir236C  # air 236C (costs as 0xfc): dive, a hit makes it unlimited-hit; started mayu.cpp, case mayu_states.cpp
+action CMayu 0x11b k41236D  # 41236D: grab; a hit at frame 2 goes to 0x11c; started mayu.cpp, case mayu_states.cpp
+action CMayu 0x11c k41236DRide  # stands on the opponent (at their m_pointX/Y[0]) then drops off; opponent to 0x48; from mayu_states.cpp, case mayu_states.cpp
+action CMayu 0x11d k214BDiveNear  # 214B dive when the opponent is within 70 px: vx 0.5, vy 3.0; from mayu_states.cpp, case mayu_states.cpp
+action CMayu 0x11e k214BDiveMid  # within 140 px: vx 2.2, vy 2.2; from mayu_states.cpp, case mayu_states.cpp
+action CMayu 0x11f k214BDiveFar  # farther: vx 4.0, vy 1.5; from mayu_states.cpp, case mayu_states.cpp
+action CMayu 0x120 k214BDiveRebound  # any contact during 0x11d-0x11f: bounces back (vx -0.4, vy -0.9); from mayu_states.cpp, case mayu_states.cpp
+action CMayu 0x121 k214B  # 214B: leaps back to the wall, then dives by distance (0x11d/0x11e/0x11f); started mayu.cpp, case mayu_states.cpp
+action CMayu 0x122 kRisingStrike236B  # from 0x104 with 236 again: same code as 0x106; from mayu_states.cpp, case mayu_states.cpp
+action CMayu 0x123 kAir236Hit  # follow-up of a hitting air 236A/B: 5 hits; from mayu_states.cpp, case mayu_states.cpp
+action CMayu 0x12c kUnusedSuperLv1  # unreached (no command): 1000 gauge, stepping multi-hit rush; case mayu_states.cpp
+action CMayu 0x12d kUnusedSuperLv2  # unreached: 2000 gauge, ends in a jump (pattern 0xa); case mayu_states.cpp
+action CMayu 0x12e kUnusedSuperLv3  # unreached: 3000 gauge; case mayu_states.cpp
+action CMayu 0x12f kLv4Grab  # 2,3,6,9,3 + D with exactly 3000 gauge on the ground and HP < 3333: leaping grab (vx 1.5, vy -2.0); a hit at frame 6 goes to 0x131; started mayu.cpp, case mayu_states.cpp
+action CMayu 0x130 kLv4GrabClose  # the LV4 within 60 px: standing grab at frame 4, to 0x132; started mayu.cpp, case mayu_states.cpp
+action CMayu 0x131 kLv4Slam  # jumps with the opponent (vy -5) and slams, 1000 damage, into 0x133; from mayu_states.cpp, case mayu_states.cpp
+action CMayu 0x132 kLv4GrabCloseHold  # holds the opponent, then 0x131; from mayu_states.cpp, case mayu_states.cpp
+action CMayu 0x133 kLv4Stomps  # bounces on the opponent for about 830 frames (m_patternVar1), helpers 0x191/0x192 drop in at 80/120 and stomp too, random 0x195 (CPlayer::Random); her stomps 300 + 1400 damage, 300 per helper stomp; from mayu_states.cpp, case mayu_states.cpp
+action CMayu 0x134 k641236Lv1  # 641236 (6,4,1,3 + A-C) with 1 level: rising grab (vx 2, vy -3.2) that only takes an airborne opponent; to 0x137; started mayu.cpp, case mayu_states.cpp
+action CMayu 0x135 k641236Lv2  # 2 levels: to 0x138; started mayu.cpp, case mayu_states.cpp
+action CMayu 0x136 k641236Lv3  # 3 levels: to 0x139; started mayu.cpp, case mayu_states.cpp
+action CMayu 0x137 k641236Lv1Throw  # the air throw of 0x134: 2350 damage; from mayu_states.cpp, case mayu_states.cpp
+action CMayu 0x138 k641236Lv2Throw  # the throw of 0x135; from mayu_states.cpp, case mayu_states.cpp
+action CMayu 0x139 k641236Lv3Throw  # the throw of 0x136; from mayu_states.cpp, case mayu_states.cpp
+action CMayu 0x13a k214214Lv1  # 214214 with 1 level: steerable spin (vx up to 1.2 with 4/6), 12 hits; started mayu.cpp, case mayu_states.cpp
+action CMayu 0x13b k214214Lv2  # 2 levels: vx up to 1.3, unlimited hits, more loops; started mayu.cpp, case mayu_states.cpp
+action CMayu 0x13c k214214Lv3  # 3 levels: vx up to 1.4, more loops; started mayu.cpp, case mayu_states.cpp
+action CMayu 0x13d k21436Lv1  # 21436 with 1 level: dash strike (vx 3.2); a hit in frames 14-17 goes to 0x13e; started mayu.cpp, case mayu_states.cpp
+action CMayu 0x13e k21436Lv1Hit  # the rush of 0x13d, ends with a rising hit; from mayu_states.cpp, case mayu_states.cpp
+action CMayu 0x13f k21436Lv2  # 2 levels: vx 4.0, to 0x140; started mayu.cpp, case mayu_states.cpp
+action CMayu 0x140 k21436Lv2Hit  # the rush of 0x13f; from mayu_states.cpp, case mayu_states.cpp
+action CMayu 0x141 k21436Lv3  # 3 levels: vx 4.5, to 0x142; started mayu.cpp, case mayu_states.cpp
+action CMayu 0x142 k21436Lv3Hit  # the rush of 0x141: three rising hits; from mayu_states.cpp, case mayu_states.cpp
 action CMayu 0x190 kObjUnusedShot  # object: never spawned: shot, vx 2.0 slowing; case mayu.cpp
-action CMayu 0x191 kObjLv4Helper1  # object: spawned at y -320 by 0x133 when m_patternVar1 reaches 80: drops on the opponent, 300 damage (never below 1 HP), keeps hopping with her until m_patternVar1 > 730, then 0x193; spawned mayu_vf6.cpp, case mayu.cpp
-action CMayu 0x192 kObjLv4Helper2  # object: as 0x191, spawned at 120, leaves as 0x194; spawned mayu_vf6.cpp, case mayu.cpp
+action CMayu 0x191 kObjLv4Helper1  # object: spawned at y -320 by 0x133 when m_patternVar1 reaches 80: drops on the opponent, 300 damage (never below 1 HP), keeps hopping with her until m_patternVar1 > 730, then 0x193; spawned mayu_states.cpp, case mayu.cpp
+action CMayu 0x192 kObjLv4Helper2  # object: as 0x191, spawned at 120, leaves as 0x194; spawned mayu_states.cpp, case mayu.cpp
 action CMayu 0x193 kObjLv4Helper1Leave  # object: walks off screen once m_patternVar3 is 1; spawned mayu.cpp, case mayu.cpp
 action CMayu 0x194 kObjLv4Helper2Leave  # object: hops away, then sets m_patternVar3 = 1; spawned mayu.cpp, case mayu.cpp
-action CMayu 0x195 kObjLv4Puff  # object: random one-shot animation around her during 0x133; spawned mayu_vf6.cpp, case mayu.cpp
+action CMayu 0x195 kObjLv4Puff  # object: random one-shot animation around her during 0x133; spawned mayu_states.cpp, case mayu.cpp
 action CMayu 0x196 kObjUnusedLv4CloseA  # object: never spawned: follows her x while 0x132 runs; case mayu.cpp
 action CMayu 0x197 kObjUnusedLv4CloseB  # object: never spawned: as 0x196; case mayu.cpp
 action CMayu 0x198 kObjUnusedSkyDropRise  # object: never spawned: rises (vx 2, vy -4) to y -680, then 0x199 over the opponent; case mayu.cpp
@@ -1248,11 +1248,11 @@ action CMinagi 0x1d1 kObj236236Spray3  # vx 3.0
 action CMinagi 0x1d2 kObjMichiru623A  # at frame 0xb rises vx 0.5 vy -2.0 with 99 hits, lands at frame 0x10
 action CMinagi 0x1d3 kObjMichiru623B  # longer fall (ay 0.025)
 action CMinagi 0x1d4 kObjMichiru623C  # as B, frame 0xb held 3 more times
-action CMinagi 0x1d5 kObjMichiruHeld  # while Minagi is in shared action 0x7b (the hold Akiko's 0x13f puts the opponent in, akiko_vf6.cpp) Michiru stops and is placed 60 px in front of her
-action CMio 0xc8 k5A  # stance 0 A; mio.cpp, mio_vf6.cpp hit at frame 2, +5 gauge, jump-cancel on contact
+action CMinagi 0x1d5 kObjMichiruHeld  # while Minagi is in shared action 0x7b (the hold Akiko's 0x13f puts the opponent in, akiko_states.cpp) Michiru stops and is placed 60 px in front of her
+action CMio 0xc8 k5A  # stance 0 A; mio.cpp, mio_states.cpp hit at frame 2, +5 gauge, jump-cancel on contact
 action CMio 0xc9 k5BClose  # stance 0 B within 70 px
-action CMio 0xca k5BFar  # stance 0 B otherwise; mio.cpp, mio_vf6.cpp jump-cancel only on hit
-action CMio 0xcb k5C  # stance 0 C; mio.cpp, mio_vf6.cpp hit at frame 3, +35 gauge
+action CMio 0xca k5BFar  # stance 0 B otherwise; mio.cpp, mio_states.cpp jump-cancel only on hit
+action CMio 0xcb k5C  # stance 0 C; mio.cpp, mio_states.cpp hit at frame 3, +35 gauge
 action CMio 0xcc k2A  # stance 0 2A
 action CMio 0xcd k2B  # stance 0 2B, multi-hit: frames 3-5 repeat 3 times
 action CMio 0xce k2C  # stance 0 2C, slides forward (vx += 1.7)
@@ -1260,8 +1260,8 @@ action CMio 0xcf kJumpA  # stance 0 air A
 action CMio 0xd0 kJumpB  # stance 0 air B
 action CMio 0xd1 kJumpC  # stance 0 air C, 3 hits, frames repeat once; air throw whiff ends here
 action CMio 0xd2 kFloat5A  # stance 1 A
-action CMio 0xd3 kFloat5BClose  # stance 1 B; mio.cpp (within 70 px) and  (otherwise: a bug, see notes), mio_vf6.cpp
-action CMio 0xd4 kFloat5BFar  # stance 1 far B, unreachable: StartCommand's far branch starts 0xd3 instead; mio_vf6.cpp same body as 0xca; CpuInput has a branch for it
+action CMio 0xd3 kFloat5BClose  # stance 1 B; mio.cpp (within 70 px) and  (otherwise: a bug, see notes), mio_states.cpp
+action CMio 0xd4 kFloat5BFar  # stance 1 far B, unreachable: StartCommand's far branch starts 0xd3 instead; mio_states.cpp same body as 0xca; CpuInput has a branch for it
 action CMio 0xd5 kFloat5C  # stance 1 C
 action CMio 0xd6 kFloat2A  # stance 1 2A
 action CMio 0xd7 kFloat2B  # stance 1 2B
@@ -1269,13 +1269,13 @@ action CMio 0xd8 kFloat2C  # stance 1 2C, 7 hits, frames repeat once
 action CMio 0xd9 kFloatJumpA  # stance 1 air A
 action CMio 0xda kFloatJumpB  # stance 1 air B
 action CMio 0xdb kFloatJumpC  # stance 1 air C; float air throw whiff ends here
-action CMio 0xdc kThrow  # either stance: C + direction within 30 px of a grounded opponent not in hit/guard states; mio.cpp/:718, mio_vf6.cpp -> 0xdd on connect
-action CMio 0xdd kThrowHold  # mio_vf6.cpp sits on the opponent (pattern 0x6b), loops frames 3-4: 100 damage per loop (frame 4, at least every 70 frames), released after 600 frames or KO with 400 damage (opponent 0x62); spawns 0x1c6
-action CMio 0xdf kJump2C  # stance 0 air 2C, dives forward-down (vx = vy = 1, accelerating); mio.cpp, mio_vf6.cpp -> 0xe0 on landing
-action CMio 0xe0 kJump2CLanding  # mio_vf6.cpp slides to a stop, no more hits (m_attackResult forced 3); D can't start from it
+action CMio 0xdc kThrow  # either stance: C + direction within 30 px of a grounded opponent not in hit/guard states; mio.cpp/:718, mio_states.cpp -> 0xdd on connect
+action CMio 0xdd kThrowHold  # mio_states.cpp sits on the opponent (pattern 0x6b), loops frames 3-4: 100 damage per loop (frame 4, at least every 70 frames), released after 600 frames or KO with 400 damage (opponent 0x62); spawns 0x1c6
+action CMio 0xdf kJump2C  # stance 0 air 2C, dives forward-down (vx = vy = 1, accelerating); mio.cpp, mio_states.cpp -> 0xe0 on landing
+action CMio 0xe0 kJump2CLanding  # mio_states.cpp slides to a stop, no more hits (m_attackResult forced 3); D can't start from it
 action CMio 0xe1 k6C  # stance 0 6C, lunges (vx 2.0 at frame 3)
 action CMio 0xe3 kFloatJump2B  # stance 1 air 2B
-action CMio 0xe4 kFloat4B  # stance 1 4B; mio.cpp, mio_vf6.cpp hit at frame 4
+action CMio 0xe4 kFloat4B  # stance 1 4B; mio.cpp, mio_states.cpp hit at frame 4
 action CMio 0xe5 kFloatJump2C  # stance 1 air 2C
 action CMio 0xe6 kDashA  # stance 0 A during the forward dash (0xa3)
 action CMio 0xe7 kDashB  #
@@ -1291,8 +1291,8 @@ action CMio 0xf0 kFloatDash2B  #
 action CMio 0xf1 kFloatDash2C  # 7 hits, frames repeat 3 times
 action CMio 0xf2 kFloat5AClose  # stance 1 A within 60 px
 action CMio 0xf3 kFloat2AClose  # stance 1 2A within 60 px
-action CMio 0xf7 kFloatAirThrow  # stance 1 air 6C near an airborne opponent; mio.cpp (tests 0xf8's priority), mio_vf6.cpp -> 0xf9, whiff -> 0xdb
-action CMio 0xf8 kAirThrow  # stance 0 air 6C near an airborne opponent; mio.cpp, mio_vf6.cpp -> 0xf9, whiff -> 0xd1
+action CMio 0xf7 kFloatAirThrow  # stance 1 air 6C near an airborne opponent; mio.cpp (tests 0xf8's priority), mio_states.cpp -> 0xf9, whiff -> 0xdb
+action CMio 0xf8 kAirThrow  # stance 0 air 6C near an airborne opponent; mio.cpp, mio_states.cpp -> 0xf9, whiff -> 0xd1
 action CMio 0xf9 kAirThrowSlam  # both air throws: carries the opponent (0x64), at frame 3 1000 damage and launch (0x3f), spawns 0x1c2-0x1c4
 action CMio 0xfa k623A  # stance 0: spinning rise (vy -1.8) then fall, 8 hits
 action CMio 0xfb k623B  # vy -2.8, 12 hits
@@ -1315,7 +1315,7 @@ action CMio 0x10d kFloat214C  # the same 0xbc px ahead, no unk118 cost
 action CMio 0x10e kStanceChange  # D on the ground, either stance: toggles m_stance at frame 4
 action CMio 0x10f k236B  # stance 0 one hit; follow-ups as 0xfe (236A -> 0x110, 236B -> 0x111)
 action CMio 0x110 k236BFollowupA  # 4 x 0x197 then 0x198, 5 hits + 1
-action CMio 0x111 k236FollowupB  # spawns 0x1c8 (re-hitting shot); from 0xfe or 0x10f; mio_vf6.cpp/:5360, :5442
+action CMio 0x111 k236FollowupB  # spawns 0x1c8 (re-hitting shot); from 0xfe or 0x10f; mio_states.cpp/:5360, :5442
 action CMio 0x12c kUnusedSuperToFloat  # nothing starts it: 1-level super flash, sets m_stance = 1
 action CMio 0x12d kUnusedSuperToGround  # nothing starts it: 1-level super flash, sets m_stance = 0
 action CMio 0x12f k236236A  # stance 0 ground, 1 level: on hit at frame 3 freezes the opponent 120 frames, objects 0x19b/0x19c/0x19d drop from y -480 around her for 100 frames
@@ -1399,14 +1399,14 @@ action CMio 0x1c5 kObjFloat214Marker  # float 214's ground marker; spawns three 
 action CMio 0x1c6 kObjThrowHold  # the throw hold's object: frame 1 while Mio's frame is 4 (the hit), gone when 0xdd passes frame 4
 action CMio 0x1c7 kObj236FollowupBSpark  # random spot around 0x1c8 at each of its re-hits
 action CMio 0x1c8 kObj236FollowupBShot  # vx 1.5, re-arms its hitbox up to 6 times
-action CMisaki 0xc8 k5A  # A standing; misaki.cpp, misaki_vf6.cpp jump-cancellable on hit/guard
+action CMisaki 0xc8 k5A  # A standing; misaki.cpp, misaki_states.cpp jump-cancellable on hit/guard
 action CMisaki 0xc9 k5BClose  # B standing within 70 px of the opponent
 action CMisaki 0xca k5BFar  # B standing farther than 70 px
-action CMisaki 0xcb k5C  # C standing; misaki_vf6.cpp spawns object 0x190 at frame 4, repeats frames 5-7 twice, jump-cancel on hit only
+action CMisaki 0xcb k5C  # C standing; misaki_states.cpp spawns object 0x190 at frame 4, repeats frames 5-7 twice, jump-cancel on hit only
 action CMisaki 0xcc k2A  # A crouching
 action CMisaki 0xcd k2B  # B crouching
 action CMisaki 0xce k2C  # C crouching: a slide, vx 4.5 at frame 3 decelerating by 0.08
-action CMisaki 0xcf kJumpA  # A in the air; misaki.cpp, misaki_vf6.cpp air-jump cancel on hit/guard
+action CMisaki 0xcf kJumpA  # A in the air; misaki.cpp, misaki_states.cpp air-jump cancel on hit/guard
 action CMisaki 0xd0 kJumpB  # B in the air
 action CMisaki 0xd1 kJumpC  # C in the air; also where a missed air throw (0xf8) continues, at frame 2
 action CMisaki 0xd2 kUnusedHopAttack  # never started (no assignment anywhere): hop vx 1.4 vy -1.5, hit at frame 2, lands
@@ -1416,10 +1416,10 @@ action CMisaki 0xd5 kUnusedDiveRebound  # only from 0xd4 on hit: bounces back vx
 action CMisaki 0xd6 kUnusedDiveLanding  # only from 0xd4 on landing: shake + dust effect 3, then stand
 action CMisaki 0xdc kThrow  # C + forward or back within 30 px of a grounded, not hit/guarding opponent; on hit at frame 1 -> 0xdd
 action CMisaki 0xdd kThrowHit  # lifts the opponent over her head and slams them down (opponent 0x67 then 0x61), DealDamage 1250
-action CMisaki 0xe6 kDashA  # A during forward dash 0xa3 (not holding back); misaki.cpp, misaki_vf6.cpp vx 2.0 sliding
+action CMisaki 0xe6 kDashA  # A during forward dash 0xa3 (not holding back); misaki.cpp, misaki_states.cpp vx 2.0 sliding
 action CMisaki 0xe7 kDashB  # B during forward dash
 action CMisaki 0xe8 kDashC  # C during forward dash: lunge vx 3.0 at frame 3
-action CMisaki 0xe9 kDash2A  # down + A during forward dash; misaki.cpp, misaki_vf6.cpp ends crouching
+action CMisaki 0xe9 kDash2A  # down + A during forward dash; misaki.cpp, misaki_states.cpp ends crouching
 action CMisaki 0xea kDash2B  # down + B during forward dash
 action CMisaki 0xeb kDash2C  # down + C during forward dash: hop vx 1.5 vy -1.5, hits at frame 7, lands at frame 15
 action CMisaki 0xec kUnusedDash2C  # never started: a copy of 0xeb's code
@@ -1480,7 +1480,7 @@ action CMisaki 0x1a6 kObjColumnABlast  # the hitting part: frame 0 repeated 9 ti
 action CMisaki 0x1a7 kObjColumnC  # level-3 column segment (0x12e), as 0x193, plays 3 times, ground end 0x1a9
 action CMisaki 0x1a9 kObjColumnCGround  # 0x1a7's ground end, no hits: spawns 0x1aa, plays 4 times
 action CMisaki 0x1aa kObjColumnCBlast  # the hitting part: frame 0 repeated 29 times, re-armed each time
-action CMishio 0xc8 k5A  # A standing; mishio.cpp StartCommand, mishio_vf6.cpp
+action CMishio 0xc8 k5A  # A standing; mishio.cpp StartCommand, mishio_states.cpp
 action CMishio 0xc9 k5BClose  # B standing within 90 px of the opponent
 action CMishio 0xca k5BFar  # B standing otherwise
 action CMishio 0xcb k5C  # C standing
@@ -1604,7 +1604,7 @@ action CMishio 0x1ba kObjSlowOrb  # 623B power-2's orb: vx 0.5, 5 hits, loops 5 
 action CMishio 0x1bb kObjSlowOrbBig  # as 0x1ba with 10 hits and 10 loops; never spawned
 action CMishio 0x1bc kObjArcPower1Reverse  # 623C power-1's first arc, swept the other way
 action CMishio 0x1bd kObjArcPower2Reverse  # 623C power-2's first arc, swept the other way
-action CMisuzu 0xc8 k5A  # A standing; StartCommand misuzu.cpp, misuzu_vf6.cpp
+action CMisuzu 0xc8 k5A  # A standing; StartCommand misuzu.cpp, misuzu_states.cpp
 action CMisuzu 0xc9 k5BClose  # B standing within 70 px of the opponent; misuzu.cpp, UpdatePattern (steps in vx 0.5)
 action CMisuzu 0xca k5BFar  # B standing otherwise
 action CMisuzu 0xcb k5C  # C standing
@@ -2334,82 +2334,82 @@ action CNayukiB 0x1b2 kObjLv4Popup2  #
 action CNayukiB 0x1b3 kObjLv4Popup3  #
 action CNayukiB 0x1b4 kObjLv4Popup4  #
 action CNayukiB 0x1b5 kObjLv4Popup5  #
-action CSayuri 0xc8 k5A  # 5A; started sayuri.cpp, case sayuri_vf6.cpp
-action CSayuri 0xc9 k5BClose  # 5B within 70 px; started sayuri.cpp, case sayuri_vf6.cpp
-action CSayuri 0xca k5BFar  # 5B otherwise; started sayuri.cpp, case sayuri_vf6.cpp
-action CSayuri 0xcb k5C  # 5C, 2 hits; started sayuri.cpp, case sayuri_vf6.cpp
-action CSayuri 0xcc k2A  # 2A; started sayuri.cpp, case sayuri_vf6.cpp
-action CSayuri 0xcd k2B  # 2B; started sayuri.cpp, case sayuri_vf6.cpp
-action CSayuri 0xce k2C  # 2C (jump-cancels on hit only); started sayuri.cpp, case sayuri_vf6.cpp
-action CSayuri 0xcf kJumpA  # j.A; started sayuri.cpp, case sayuri_vf6.cpp
-action CSayuri 0xd0 kJumpB  # j.B; started sayuri.cpp, case sayuri_vf6.cpp
-action CSayuri 0xd1 kJumpC  # j.C; started sayuri.cpp, case sayuri_vf6.cpp
-action CSayuri 0xd2 kUnusedDive  # unreached: air dive (vx 1, vy 1), 3 hits; case sayuri_vf6.cpp
-action CSayuri 0xd5 kUnusedDiveRebound  # unreached: bounce back (vx -1, vy -2.4), as Makoto's 0xd5; case sayuri_vf6.cpp
-action CSayuri 0xd6 kUnusedDiveLanding  # unreached: landing with a screen shake; case sayuri_vf6.cpp
-action CSayuri 0xdc kThrow  # ground throw; on hit 0xdd; started sayuri.cpp, case sayuri_vf6.cpp
-action CSayuri 0xdd kThrowHold  # the ground throw: 1150 damage at frame 3; from sayuri_vf6.cpp, case sayuri_vf6.cpp
-action CSayuri 0xe6 kUnusedDashA  # unreached: no StartCommand path; case sayuri_vf6.cpp
-action CSayuri 0xe7 kUnusedDashB  # unreached; case sayuri_vf6.cpp
-action CSayuri 0xe8 kUnusedDashC  # unreached: hop (vx 1.1, vy -2.5); its landing sets pattern 0x10d, which has no case; case sayuri_vf6.cpp
-action CSayuri 0xf8 kAirThrow  # air 6C near an airborne opponent; on hit 0xf9; started sayuri.cpp, case sayuri_vf6.cpp
-action CSayuri 0xf9 kAirThrowHold  # the air throw: spins (m_patternVar1 loops, 0x1a6 at the second), 1200 damage; from sayuri_vf6.cpp, case sayuri_vf6.cpp
-action CSayuri 0xfa k236A  # 236A on the ground with no shot out (m_shotsOut 0): shot 0x191 at frame 4; started sayuri.cpp, case sayuri_vf6.cpp
-action CSayuri 0xfb k236B  # 236B: shot 0x191; started sayuri.cpp, case sayuri_vf6.cpp
-action CSayuri 0xfc k236C  # 236C (costs 500/250 of unk118): two shots 0x191, at frames 4 and 8; started sayuri.cpp, case sayuri_vf6.cpp
-action CSayuri 0xfd k41236A  # 41236A (parsed as 4,1,3 + button): running grab (vx 1.8); on hit carries the opponent to the screen edge and slams, 950 damage; started sayuri.cpp, case sayuri_vf6.cpp
-action CSayuri 0xfe k41236B  # 41236B: as 0xfd, one more loop; started sayuri.cpp, case sayuri_vf6.cpp
-action CSayuri 0xff k41236C  # 41236C (costs as 0xfc): vx 2.9, 1350 damage; started sayuri.cpp, case sayuri_vf6.cpp
-action CSayuri 0x100 k214Parry  # 214A/B/C: a parry stance; a clash (m_attackResult 6) before frame 6 records the opponent's pattern in m_parriedPattern and goes to 0x12b; started sayuri.cpp, case sayuri_vf6.cpp
-action CSayuri 0x101 kUnusedGuardCounter  # unreached: same as 0x102 one frame later, without its 0x1a5; case sayuri_vf6.cpp
-action CSayuri 0x102 kGuardCounter  # A/B/C while guarding the attack last parried (m_patternVar1 1, set when the guard starts): rising counter (vx 2, vy -3), 3 hits, object 0x1a5; from sayuri_vf6.cpp, case sayuri_vf6.cpp
-action CSayuri 0x103 kAir412A  # air 412A (4,1,2 + button, only in the air): dives (vx 1.3, vy 1.3) with 0x193/0x194; started sayuri.cpp, case sayuri_vf6.cpp
-action CSayuri 0x104 kAir412B  # air 412B: vx 1.5, 2 hits; guarded goes to 0x10c; started sayuri.cpp, case sayuri_vf6.cpp
-action CSayuri 0x105 kAir412C  # air 412C (costs as 0xfc): vx 1.7, 2 hits, 5 extra loops; started sayuri.cpp, case sayuri_vf6.cpp
-action CSayuri 0x106 k623A  # 623A: dash (vx 4.0); started sayuri.cpp, case sayuri_vf6.cpp
-action CSayuri 0x107 k623B  # 623B: hop (vx 1.0, vy -1.5), hits at frames 4 and 8; started sayuri.cpp, case sayuri_vf6.cpp
-action CSayuri 0x108 k623C  # 623C (costs as 0xfc): 0x107 followed by 0x106's dash; started sayuri.cpp, case sayuri_vf6.cpp
-action CSayuri 0x109 kAir236A  # air 236A: shot 0x192 and a hop back (vx -0.5, vy -1.4); started sayuri.cpp, case sayuri_vf6.cpp
-action CSayuri 0x10a kAir236B  # air 236B: shot 0x1a3; started sayuri.cpp, case sayuri_vf6.cpp
-action CSayuri 0x10b kAir236C  # air 236C: shot 0x1a4; costs nothing (StartCommand lets it start in the air without unk118); started sayuri.cpp, case sayuri_vf6.cpp
-action CSayuri 0x10c kAir412BRebound  # air 412B guarded: bounces back (vx -0.6, vy -1.4); from sayuri_vf6.cpp, case sayuri_vf6.cpp
-action CSayuri 0x12b k214ParryCounter  # the parry's counter: freezes the screen 160 frames, 600 damage; from sayuri_vf6.cpp, case sayuri_vf6.cpp
-action CSayuri 0x12c k21436Lv1  # 21436 with 1 level: the 41236 carry as a super (vx 2.5), 2250 damage at the wall, object 0x195; started sayuri.cpp, case sayuri_vf6.cpp
-action CSayuri 0x12d k21436Lv2  # 2 levels: vx 3.0; after the slam runs back once for a second carry; started sayuri.cpp, case sayuri_vf6.cpp
-action CSayuri 0x12e k21436Lv3  # 3 levels: vx 3.5; two extra carries; started sayuri.cpp, case sayuri_vf6.cpp
-action CSayuri 0x132 k236236Lv1  # 236236 with 1 level: summons shooters 0x198, 0x19b that fire 0x197; hit object 0x196 every loop; started sayuri.cpp, case sayuri_vf6.cpp
-action CSayuri 0x133 k236236Lv2  # 2 levels: adds shooters 0x199, 0x19c; started sayuri.cpp, case sayuri_vf6.cpp
-action CSayuri 0x134 k236236Lv3  # 3 levels: adds shooters 0x19a, 0x19d; started sayuri.cpp, case sayuri_vf6.cpp
-action CSayuri 0x135 k6321463214Lv1  # 63214 63214 (parsed 6,3,1,4,6,3,1,4 + button, 135-frame window) with 1 level: grab of a grounded opponent at frame 5, sky strikes 0x1a0 around; on hit 0x136; started sayuri.cpp, case sayuri_vf6.cpp
-action CSayuri 0x136 k6321463214Lv1Hold  # holds the opponent overhead while 0x1a0 strikes fall (random x, CPlayer::Random), 1350 damage; from sayuri_vf6.cpp, case sayuri_vf6.cpp
-action CSayuri 0x137 k6321463214Lv2  # 2 levels: to 0x138; started sayuri.cpp, case sayuri_vf6.cpp
-action CSayuri 0x138 k6321463214Lv2Hold  # more strikes, 2450 damage; from sayuri_vf6.cpp, case sayuri_vf6.cpp
-action CSayuri 0x139 k6321463214Lv3  # 3 levels: to 0x13a; started sayuri.cpp, case sayuri_vf6.cpp
-action CSayuri 0x13a k6321463214Lv3Hold  # more strikes, 3450 damage; from sayuri_vf6.cpp, case sayuri_vf6.cpp
-action CSayuri 0x13b kLv4Drop  # 2, A, 2, D (neutral between; B/C/D after the A cancels it) with exactly 3000 gauge on the ground and HP < 3333: appears 100 px above the opponent (0x19e) and drops; a hit goes to 0x13c; started sayuri.cpp, case sayuri_vf6.cpp
-action CSayuri 0x13c kLv4DropHit  # sits on the opponent: many 100-damage stomps at proration 998, objects 0x19f; from sayuri_vf6.cpp, case sayuri_vf6.cpp
-action CSayuri 0x190 kObjGuardEffect  # object: spawned once by her guard states (0x96-0x9b, 0xa8, 0xa9, m_guardEffectOut); kept 28 px in front of her at the stand/crouch/air guard height, removed when she stops guarding; spawned sayuri_vf6.cpp, case sayuri.cpp
-action CSayuri 0x191 kObj236Shot  # object: ground 236 shot: accelerates to 2 px/frame; when its hit is used it pops back and falls; out of the view or below y 60 it is removed and m_shotsOut drops; spawned sayuri_vf6.cpp, case sayuri.cpp
-action CSayuri 0x192 kObjAir236AShot  # object: air 236A shot, as 0x191; spawned sayuri_vf6.cpp, case sayuri.cpp
-action CSayuri 0x193 kObjAir412Start  # object: follows her during the first frames of 0x103-0x105; spawned sayuri_vf6.cpp, case sayuri.cpp
-action CSayuri 0x194 kObjAir412Trail  # object: follows her during the dive of 0x103-0x105 until she lands; spawned sayuri_vf6.cpp, case sayuri.cpp
-action CSayuri 0x195 kObj21436Slam  # object: played once at the wall slam of 0x12c-0x12e; spawned sayuri_vf6.cpp, case sayuri.cpp
-action CSayuri 0x196 kObj236236Hit  # object: 1-hit object 114 px ahead at frame 17 of each 0x132-0x134 loop; spawned sayuri_vf6.cpp, case sayuri.cpp
+action CSayuri 0xc8 k5A  # 5A; started sayuri.cpp, case sayuri_states.cpp
+action CSayuri 0xc9 k5BClose  # 5B within 70 px; started sayuri.cpp, case sayuri_states.cpp
+action CSayuri 0xca k5BFar  # 5B otherwise; started sayuri.cpp, case sayuri_states.cpp
+action CSayuri 0xcb k5C  # 5C, 2 hits; started sayuri.cpp, case sayuri_states.cpp
+action CSayuri 0xcc k2A  # 2A; started sayuri.cpp, case sayuri_states.cpp
+action CSayuri 0xcd k2B  # 2B; started sayuri.cpp, case sayuri_states.cpp
+action CSayuri 0xce k2C  # 2C (jump-cancels on hit only); started sayuri.cpp, case sayuri_states.cpp
+action CSayuri 0xcf kJumpA  # j.A; started sayuri.cpp, case sayuri_states.cpp
+action CSayuri 0xd0 kJumpB  # j.B; started sayuri.cpp, case sayuri_states.cpp
+action CSayuri 0xd1 kJumpC  # j.C; started sayuri.cpp, case sayuri_states.cpp
+action CSayuri 0xd2 kUnusedDive  # unreached: air dive (vx 1, vy 1), 3 hits; case sayuri_states.cpp
+action CSayuri 0xd5 kUnusedDiveRebound  # unreached: bounce back (vx -1, vy -2.4), as Makoto's 0xd5; case sayuri_states.cpp
+action CSayuri 0xd6 kUnusedDiveLanding  # unreached: landing with a screen shake; case sayuri_states.cpp
+action CSayuri 0xdc kThrow  # ground throw; on hit 0xdd; started sayuri.cpp, case sayuri_states.cpp
+action CSayuri 0xdd kThrowHold  # the ground throw: 1150 damage at frame 3; from sayuri_states.cpp, case sayuri_states.cpp
+action CSayuri 0xe6 kUnusedDashA  # unreached: no StartCommand path; case sayuri_states.cpp
+action CSayuri 0xe7 kUnusedDashB  # unreached; case sayuri_states.cpp
+action CSayuri 0xe8 kUnusedDashC  # unreached: hop (vx 1.1, vy -2.5); its landing sets pattern 0x10d, which has no case; case sayuri_states.cpp
+action CSayuri 0xf8 kAirThrow  # air 6C near an airborne opponent; on hit 0xf9; started sayuri.cpp, case sayuri_states.cpp
+action CSayuri 0xf9 kAirThrowHold  # the air throw: spins (m_patternVar1 loops, 0x1a6 at the second), 1200 damage; from sayuri_states.cpp, case sayuri_states.cpp
+action CSayuri 0xfa k236A  # 236A on the ground with no shot out (m_shotsOut 0): shot 0x191 at frame 4; started sayuri.cpp, case sayuri_states.cpp
+action CSayuri 0xfb k236B  # 236B: shot 0x191; started sayuri.cpp, case sayuri_states.cpp
+action CSayuri 0xfc k236C  # 236C (costs 500/250 of unk118): two shots 0x191, at frames 4 and 8; started sayuri.cpp, case sayuri_states.cpp
+action CSayuri 0xfd k41236A  # 41236A (parsed as 4,1,3 + button): running grab (vx 1.8); on hit carries the opponent to the screen edge and slams, 950 damage; started sayuri.cpp, case sayuri_states.cpp
+action CSayuri 0xfe k41236B  # 41236B: as 0xfd, one more loop; started sayuri.cpp, case sayuri_states.cpp
+action CSayuri 0xff k41236C  # 41236C (costs as 0xfc): vx 2.9, 1350 damage; started sayuri.cpp, case sayuri_states.cpp
+action CSayuri 0x100 k214Parry  # 214A/B/C: a parry stance; a clash (m_attackResult 6) before frame 6 records the opponent's pattern in m_parriedPattern and goes to 0x12b; started sayuri.cpp, case sayuri_states.cpp
+action CSayuri 0x101 kUnusedGuardCounter  # unreached: same as 0x102 one frame later, without its 0x1a5; case sayuri_states.cpp
+action CSayuri 0x102 kGuardCounter  # A/B/C while guarding the attack last parried (m_patternVar1 1, set when the guard starts): rising counter (vx 2, vy -3), 3 hits, object 0x1a5; from sayuri_states.cpp, case sayuri_states.cpp
+action CSayuri 0x103 kAir412A  # air 412A (4,1,2 + button, only in the air): dives (vx 1.3, vy 1.3) with 0x193/0x194; started sayuri.cpp, case sayuri_states.cpp
+action CSayuri 0x104 kAir412B  # air 412B: vx 1.5, 2 hits; guarded goes to 0x10c; started sayuri.cpp, case sayuri_states.cpp
+action CSayuri 0x105 kAir412C  # air 412C (costs as 0xfc): vx 1.7, 2 hits, 5 extra loops; started sayuri.cpp, case sayuri_states.cpp
+action CSayuri 0x106 k623A  # 623A: dash (vx 4.0); started sayuri.cpp, case sayuri_states.cpp
+action CSayuri 0x107 k623B  # 623B: hop (vx 1.0, vy -1.5), hits at frames 4 and 8; started sayuri.cpp, case sayuri_states.cpp
+action CSayuri 0x108 k623C  # 623C (costs as 0xfc): 0x107 followed by 0x106's dash; started sayuri.cpp, case sayuri_states.cpp
+action CSayuri 0x109 kAir236A  # air 236A: shot 0x192 and a hop back (vx -0.5, vy -1.4); started sayuri.cpp, case sayuri_states.cpp
+action CSayuri 0x10a kAir236B  # air 236B: shot 0x1a3; started sayuri.cpp, case sayuri_states.cpp
+action CSayuri 0x10b kAir236C  # air 236C: shot 0x1a4; costs nothing (StartCommand lets it start in the air without unk118); started sayuri.cpp, case sayuri_states.cpp
+action CSayuri 0x10c kAir412BRebound  # air 412B guarded: bounces back (vx -0.6, vy -1.4); from sayuri_states.cpp, case sayuri_states.cpp
+action CSayuri 0x12b k214ParryCounter  # the parry's counter: freezes the screen 160 frames, 600 damage; from sayuri_states.cpp, case sayuri_states.cpp
+action CSayuri 0x12c k21436Lv1  # 21436 with 1 level: the 41236 carry as a super (vx 2.5), 2250 damage at the wall, object 0x195; started sayuri.cpp, case sayuri_states.cpp
+action CSayuri 0x12d k21436Lv2  # 2 levels: vx 3.0; after the slam runs back once for a second carry; started sayuri.cpp, case sayuri_states.cpp
+action CSayuri 0x12e k21436Lv3  # 3 levels: vx 3.5; two extra carries; started sayuri.cpp, case sayuri_states.cpp
+action CSayuri 0x132 k236236Lv1  # 236236 with 1 level: summons shooters 0x198, 0x19b that fire 0x197; hit object 0x196 every loop; started sayuri.cpp, case sayuri_states.cpp
+action CSayuri 0x133 k236236Lv2  # 2 levels: adds shooters 0x199, 0x19c; started sayuri.cpp, case sayuri_states.cpp
+action CSayuri 0x134 k236236Lv3  # 3 levels: adds shooters 0x19a, 0x19d; started sayuri.cpp, case sayuri_states.cpp
+action CSayuri 0x135 k6321463214Lv1  # 63214 63214 (parsed 6,3,1,4,6,3,1,4 + button, 135-frame window) with 1 level: grab of a grounded opponent at frame 5, sky strikes 0x1a0 around; on hit 0x136; started sayuri.cpp, case sayuri_states.cpp
+action CSayuri 0x136 k6321463214Lv1Hold  # holds the opponent overhead while 0x1a0 strikes fall (random x, CPlayer::Random), 1350 damage; from sayuri_states.cpp, case sayuri_states.cpp
+action CSayuri 0x137 k6321463214Lv2  # 2 levels: to 0x138; started sayuri.cpp, case sayuri_states.cpp
+action CSayuri 0x138 k6321463214Lv2Hold  # more strikes, 2450 damage; from sayuri_states.cpp, case sayuri_states.cpp
+action CSayuri 0x139 k6321463214Lv3  # 3 levels: to 0x13a; started sayuri.cpp, case sayuri_states.cpp
+action CSayuri 0x13a k6321463214Lv3Hold  # more strikes, 3450 damage; from sayuri_states.cpp, case sayuri_states.cpp
+action CSayuri 0x13b kLv4Drop  # 2, A, 2, D (neutral between; B/C/D after the A cancels it) with exactly 3000 gauge on the ground and HP < 3333: appears 100 px above the opponent (0x19e) and drops; a hit goes to 0x13c; started sayuri.cpp, case sayuri_states.cpp
+action CSayuri 0x13c kLv4DropHit  # sits on the opponent: many 100-damage stomps at proration 998, objects 0x19f; from sayuri_states.cpp, case sayuri_states.cpp
+action CSayuri 0x190 kObjGuardEffect  # object: spawned once by her guard states (0x96-0x9b, 0xa8, 0xa9, m_guardEffectOut); kept 28 px in front of her at the stand/crouch/air guard height, removed when she stops guarding; spawned sayuri_states.cpp, case sayuri.cpp
+action CSayuri 0x191 kObj236Shot  # object: ground 236 shot: accelerates to 2 px/frame; when its hit is used it pops back and falls; out of the view or below y 60 it is removed and m_shotsOut drops; spawned sayuri_states.cpp, case sayuri.cpp
+action CSayuri 0x192 kObjAir236AShot  # object: air 236A shot, as 0x191; spawned sayuri_states.cpp, case sayuri.cpp
+action CSayuri 0x193 kObjAir412Start  # object: follows her during the first frames of 0x103-0x105; spawned sayuri_states.cpp, case sayuri.cpp
+action CSayuri 0x194 kObjAir412Trail  # object: follows her during the dive of 0x103-0x105 until she lands; spawned sayuri_states.cpp, case sayuri.cpp
+action CSayuri 0x195 kObj21436Slam  # object: played once at the wall slam of 0x12c-0x12e; spawned sayuri_states.cpp, case sayuri.cpp
+action CSayuri 0x196 kObj236236Hit  # object: 1-hit object 114 px ahead at frame 17 of each 0x132-0x134 loop; spawned sayuri_states.cpp, case sayuri.cpp
 action CSayuri 0x197 kObjShooterShot  # object: the shot the shooters 0x198-0x19d fire; spawned sayuri.cpp, case sayuri.cpp
-action CSayuri 0x198 kObjShooterLv1A  # object: shooter 80 px ahead (236236 any level): fires 0x197 until the super ends; spawned sayuri_vf6.cpp, case sayuri.cpp
-action CSayuri 0x199 kObjShooterLv2A  # object: shooter 10 px behind (level 2 and 3); spawned sayuri_vf6.cpp, case sayuri.cpp
-action CSayuri 0x19a kObjShooterLv3A  # object: shooter 55 px ahead (level 3); spawned sayuri_vf6.cpp, case sayuri.cpp
-action CSayuri 0x19b kObjShooterLv1B  # object: shooter 100 px ahead (any level); spawned sayuri_vf6.cpp, case sayuri.cpp
-action CSayuri 0x19c kObjShooterLv2B  # object: shooter 40 px behind (level 2 and 3); spawned sayuri_vf6.cpp, case sayuri.cpp
-action CSayuri 0x19d kObjShooterLv3B  # object: shooter 70 px behind (level 3); spawned sayuri_vf6.cpp, case sayuri.cpp
-action CSayuri 0x19e kObjLv4Appear  # object: where she appears above the opponent at 0x13b frame 10; spawned sayuri_vf6.cpp, case sayuri.cpp
-action CSayuri 0x19f kObjLv4Stomp  # object: the stomps of 0x13c; spawned sayuri_vf6.cpp, case sayuri.cpp
-action CSayuri 0x1a0 kObjSkyStrike  # object: spawned 240 px up by 0x135-0x13a: 1 hit, at frame 3 spawns its lower part 0x1a1 160 px below; spawned sayuri_vf6.cpp, case sayuri.cpp
+action CSayuri 0x198 kObjShooterLv1A  # object: shooter 80 px ahead (236236 any level): fires 0x197 until the super ends; spawned sayuri_states.cpp, case sayuri.cpp
+action CSayuri 0x199 kObjShooterLv2A  # object: shooter 10 px behind (level 2 and 3); spawned sayuri_states.cpp, case sayuri.cpp
+action CSayuri 0x19a kObjShooterLv3A  # object: shooter 55 px ahead (level 3); spawned sayuri_states.cpp, case sayuri.cpp
+action CSayuri 0x19b kObjShooterLv1B  # object: shooter 100 px ahead (any level); spawned sayuri_states.cpp, case sayuri.cpp
+action CSayuri 0x19c kObjShooterLv2B  # object: shooter 40 px behind (level 2 and 3); spawned sayuri_states.cpp, case sayuri.cpp
+action CSayuri 0x19d kObjShooterLv3B  # object: shooter 70 px behind (level 3); spawned sayuri_states.cpp, case sayuri.cpp
+action CSayuri 0x19e kObjLv4Appear  # object: where she appears above the opponent at 0x13b frame 10; spawned sayuri_states.cpp, case sayuri.cpp
+action CSayuri 0x19f kObjLv4Stomp  # object: the stomps of 0x13c; spawned sayuri_states.cpp, case sayuri.cpp
+action CSayuri 0x1a0 kObjSkyStrike  # object: spawned 240 px up by 0x135-0x13a: 1 hit, at frame 3 spawns its lower part 0x1a1 160 px below; spawned sayuri_states.cpp, case sayuri.cpp
 action CSayuri 0x1a1 kObjSkyStrikeLow  # object: the lower part of 0x1a0; spawned sayuri.cpp, case sayuri.cpp
-action CSayuri 0x1a3 kObjAir236BShot  # object: air 236B shot: as 0x191, curving down; spawned sayuri_vf6.cpp, case sayuri.cpp
-action CSayuri 0x1a4 kObjAir236CShot  # object: air 236C shot: curving down more; spawned sayuri_vf6.cpp, case sayuri.cpp
-action CSayuri 0x1a5 kObjGuardCounterEffect  # object: kept at her feet while 0x102 runs; spawned sayuri_vf6.cpp, case sayuri.cpp
-action CSayuri 0x1a6 kObjAirThrowEffect  # object: from 0xf9, removed once she passes frame 1; spawned sayuri_vf6.cpp, case sayuri.cpp
+action CSayuri 0x1a3 kObjAir236BShot  # object: air 236B shot: as 0x191, curving down; spawned sayuri_states.cpp, case sayuri.cpp
+action CSayuri 0x1a4 kObjAir236CShot  # object: air 236C shot: curving down more; spawned sayuri_states.cpp, case sayuri.cpp
+action CSayuri 0x1a5 kObjGuardCounterEffect  # object: kept at her feet while 0x102 runs; spawned sayuri_states.cpp, case sayuri.cpp
+action CSayuri 0x1a6 kObjAirThrowEffect  # object: from 0xf9, removed once she passes frame 1; spawned sayuri_states.cpp, case sayuri.cpp
 action CShiori 0xc8 k5A  # A standing; jump-cancelable on hit or guard
 action CShiori 0xc9 k5BClose  # B standing within 70 px of the opponent
 action CShiori 0xca k5BFar  # B standing otherwise
@@ -3021,21 +3021,21 @@ flag PatternFrame::flagsB0 0x400 kStateReflect  # an object's attack on this fra
 flag PatternFrame::flagsB0 0x800 kStateParryLow  # parries attacks that can be guarded crouching (flagsAA 2) without 0x100: both m_attackResult = 6, the attacker loses the hit; the counter moves of Kaori, Misaki, Misuzu, Sayuri check for 6
 flag PatternFrame::flagsB0 0x1000 kStateParryHigh  # the same for attacks that can be guarded standing (flagsAA 1)
 flag PatternFrame::flagsB0 0x2000 kStateCounterHittable  # the startup and active frames of attacks: a hit with flagsAA 0x2000 is a counter hit. On an object's frame: a hit on the object hits its owner
-effect 0x0 kEffectHitBurst  # big blue-white star burst. The usual hit spark in frame data (4377 attack frames, mostly with sound 2); the wall bounce (CPlayer action 0x46, ayu_vf6.cpp) and throws connecting (0xdc, 0xf0). Full effects: 3 pairs of 0x0a and 0x23, 8 pairs of 0x24, 2 pairs of debris 0x2f
-effect 0x1 kEffectEnergySphere  # blue energy sphere that bursts into a ring; actions 0xa7 (ground) / 0xab (air), with 0x04 (akane_vf6.cpp; started by command 0x34 when CPlayer::unk118 >= 500, ayu.cpp)
+effect 0x0 kEffectHitBurst  # big blue-white star burst. The usual hit spark in frame data (4377 attack frames, mostly with sound 2); the wall bounce (CPlayer action 0x46, ayu_states.cpp) and throws connecting (0xdc, 0xf0). Full effects: 3 pairs of 0x0a and 0x23, 8 pairs of 0x24, 2 pairs of debris 0x2f
+effect 0x1 kEffectEnergySphere  # blue energy sphere that bursts into a ring; actions 0xa7 (ground) / 0xab (air), with 0x04 (akane_states.cpp; started by command 0x34 when CPlayer::unk118 >= 500, ayu.cpp)
 effect 0x2 kEffectGuardSpark  # blue ripple of rings: a guarded hit (scene3.cpp, sound 3); a hit effect in 2 frames. Full effects: 8 pairs of 0x27
-effect 0x3 kEffectGroundBurst  # fiery burst with a flat ring on the ground: a knocked-down player hitting the ground (actions 0x61/0x62, with a screen shake, ayu_vf6.cpp) and attacks that slam the ground (0xd4/0xd6, sound 7)
+effect 0x3 kEffectGroundBurst  # fiery burst with a flat ring on the ground: a knocked-down player hitting the ground (actions 0x61/0x62, with a screen shake, ayu_states.cpp) and attacks that slam the ground (0xd4/0xd6, sound 7)
 effect 0x4 kEffectBlueFlames  # blue flames rising on both sides; with 0x01 at actions 0xa7/0xab
 effect 0x5 kEffectRoundFlash  # streaks and a flash of light: a round's call, sound 0xb + round. At frame 10 starts 0x15 "ROUND" and the round's digit 0x38 + round, at frame 15 the swoosh 0x1a
 effect 0x6 kEffectGetReadyZoom  # "GET READY?" zooming at the screen, blended; after 0x15
 effect 0x7 kEffectAttackZoom  # "ATTACK" zooming in a burst of streaks; after 0x17
 effect 0x8 kEffectGroundRing  # flat blue ellipse ring: air recovery (actions 0x9d/0x9e, started by a button in the air, player.cpp), recoil guard (0xa8/0xa9), some supers (Akane 0x12f-0x131)
-effect 0x9 kEffectFlashVortex  # white circle that grows and turns into a blue vortex: actions 0xa1/0xa2 (y - 60, sound 0x3e, ayu_vf6.cpp) and some supers (Akane 0x137/0x138/0x13b, EXNanase 0x12d-0x131, Kanna 0x135, a Mai object; sound 5)
+effect 0x9 kEffectFlashVortex  # white circle that grows and turns into a blue vortex: actions 0xa1/0xa2 (y - 60, sound 0x3e, ayu_states.cpp) and some supers (Akane 0x137/0x138/0x13b, EXNanase 0x12d-0x131, Kanna 0x135, a Mai object; sound 5)
 effect 0xa kEffectBlueSpark  # small blue spark flying off at a random angle and speed up to 16; 0x00's particles
 effect 0xb kEffectHitLight  # small orange hit spark; frame data (light attacks: Akane 0xc8, 0xcc...). Full effects: 5 pairs of 0x22
 effect 0xc kEffectHitMedium  # medium orange hit spark; frame data (sound 1/2). Full effects: 8 pairs of 0x22
 effect 0xd kEffectHitHeavy  # large orange hit spark with a ring; frame data (sound 2). Full effects: 8 pairs of 0x25, 5 pairs of 0x22
-effect 0xe kEffectSlashLight  # blue slash flash; frame data of slashing hits (sound 4); Ikumi's specials and supers (ikumi_vf6.cpp...). Full effects: 16 pairs of 0x2a
+effect 0xe kEffectSlashLight  # blue slash flash; frame data of slashing hits (sound 4); Ikumi's specials and supers (ikumi_states.cpp...). Full effects: 16 pairs of 0x2a
 effect 0xf kEffectSlashMedium  # bigger blue slash flash; frame data (sound 4). Full effects: 8 pairs of 0x2c
 effect 0x10 kEffectSlashHeavy  # blue slash flash set forward of its point; frame data (Mai, Mio, Misuzu, Mizuka). Full effects: 8 pairs of 0x2b
 effect 0x11 kEffectRecoilGuard  # swirl of blue shields: a recoil guard, the defender having pressed back within 30 ticks (CPlayer::unk14e >= 0x1e) and entering 0xa8/0xa9/0xaa, sound 0xa
@@ -3052,7 +3052,7 @@ effect 0x1b kEffectMotto  # "the true eternal does exists here." fading in and o
 effect 0x1c kEffectAttackTextUnused  # "Attack!!" in blue block letters, one frame; never created
 effect 0x1d kEffectShatterUnused  # a curve, then glass-like shards; never created
 effect 0x1e kEffectDoubleKoUnused  # "DOUBLE K.O" text; never created
-effect 0x1f kEffectDashDust  # cloud of dust kicked up: dashes (actions 0xa3/0xa4, akiko_vf6.cpp) and moves that rush forward
+effect 0x1f kEffectDashDust  # cloud of dust kicked up: dashes (actions 0xa3/0xa4, akiko_states.cpp) and moves that rush forward
 effect 0x20 kEffectSkidDust  # low trail of dust along the ground; Mai's 0xfe-0x100
 effect 0x21 kEffectPowerBurst  # orange explosion with a ring of 40 sparks 0x26 on a tilted ellipse, sound 0xb: the C version of specials, which costs 500 of CPlayer::unk118
 effect 0x22 kEffectSpark  # tiny spark drifting from its point at a random angle, speed up to 1.6; also spawned by some objects (Nanase, Makoto, Sayuri)
@@ -3061,7 +3061,7 @@ effect 0x24 kEffectDot  # tiny dot flying at a random angle, speed up to 2.5; 0x
 effect 0x25 kEffectEmber  # orange ember flying at a random angle; 0x0d's
 effect 0x26 kEffectRingSpark  # tiny spark moving out along a flattened ellipse tilted by -25 degrees (CGame::unk14294 numbers them); 0x21's 40
 effect 0x27 kEffectGuardParticle  # tiny dot thrown toward one side (side * 2 - 1); 0x02's
-effect 0x28 kEffectBlueFlash  # blue-white flash with a slash: action 0xf9 of Akane, Akiko, Ayu, Kanna, Mai and Mizuka (sound 0x13, akane_vf6.cpp); frame data
+effect 0x28 kEffectBlueFlash  # blue-white flash with a slash: action 0xf9 of Akane, Akiko, Ayu, Kanna, Mai and Mizuka (sound 0x13, akane_states.cpp); frame data
 effect 0x29 kEffectBlueFlashLarge  # larger version of 0x28; frame data only (sound 4)
 effect 0x2a kEffectParticleDiagonal  # dot thrown 35-55 degrees up or down-back; 0x0e's
 effect 0x2b kEffectSliverDiagonal  # sliver thrown 25-65 degrees; 0x10's
@@ -3091,7 +3091,7 @@ effect 0x42 kEffectDigit0  # "0"; never created
 effect 0x43 kEffectSideBlast  # orange blast through a ring of fire, shooting forward; frame data (Ayu 0x106, Kaori, Mai, Mayu, Nayuki)
 effect 0x44 kEffectSuperFlash1  # blue ring expanding from a burst: a level 1 super starting (0x12c, 0x12f, 0x132..., sound 0x13)
 effect 0x45 kEffectSuperFlash2  # blue crossed ellipses: a level 2 super starting (0x12d, 0x130, 0x133..., sound 5)
-effect 0x46 kEffectSuperFlash3  # big blue burst opening into a ring: a level 3 super starting (0x12e, 0x131, 0x134..., sound 0x40), created as kept (EffectDesc::unk0 = 1, ayu_vf6.cpp)
-effect 0x47 kEffectSuperSparkle  # cloud of blue sparkles spreading; with 0x46 for the LV4 / desperation supers (Ayu 0x13e, ayu_vf6.cpp)
+effect 0x46 kEffectSuperFlash3  # big blue burst opening into a ring: a level 3 super starting (0x12e, 0x131, 0x134..., sound 0x40), created as kept (EffectDesc::unk0 = 1, ayu_states.cpp)
+effect 0x47 kEffectSuperSparkle  # cloud of blue sparkles spreading; with 0x46 for the LV4 / desperation supers (Ayu 0x13e, ayu_states.cpp)
 effect 0x48 kEffectFirePillar  # orange explosion on the ground with a pillar of fire: Akiko's 0x108/0x10a/0x10c; frame data (Ayu/Akiko 0xd3, Kaori, Kanna, Minagi, Nayuki)
 effect 0x49 kEffectEmpty  # no frames

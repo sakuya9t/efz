@@ -100,8 +100,8 @@ and while awakened forces `m_gauge` to 0 every frame.
 | 2,6,3+D, gauge exactly 3000, HP < 3333 | 0x135 | LV4: throws 0x1a6 up, catches it and heals; if struck, 0x136 |
 
 - Oddities: 236C spawns its hopper on every tick of frame 3 plus once more (missing
-  `timer == 0`, makoto_vf6.cpp:3606); the LV4 heal caps HP at 10000, one more than full
-  (makoto_vf6.cpp:4917); firecracker B decrements its spark timer twice a tick
+  `timer == 0`, makoto_states.cpp:3606); the LV4 heal caps HP at 10000, one more than full
+  (makoto_states.cpp:4917); firecracker B decrements its spark timer twice a tick
   (makoto.cpp:2165, 2190); `kAir214A` 0x106 is unreachable (makoto.cpp:237: `y < 0.0`
   inside a `y == 0.0` branch); 6B tests `m_inputY == 0 || (m_bufferedPress & 4) != 0`
   (a buffered down still allows it, makoto.cpp:370).
@@ -136,7 +136,7 @@ any).
 | 21436 Lv1-3 | 0x13d/0x13f/0x141 -> 0x13e/0x140/0x142 | dash strike into a rush |
 | 2,3,6,9,3+D, gauge exactly 3000, HP < 3333 | 0x12f (0x130 within 60 px) | LV4: grab, slam, then ~830 frames of stomps with two helpers 0x191/0x192 (never below 1 HP from them) |
 
-- Bug: the air throw 0xf9 clamps the right wall at `x > 6100.0` (mayu_vf6.cpp:3204),
+- Bug: the air throw 0xf9 clamps the right wall at `x > 6100.0` (mayu_states.cpp:3204),
   surely 610.0; the left one is 30.0.
 - 0xfd/0xfe take a hit back off the combo count (`m_comboHits--`, `m_shownHits--`).
 - Unreached: 0xff, 0x12c-0x12e (three supers no command maps to); objects 0x190,
@@ -188,7 +188,7 @@ any).
 - Objects 0x1ef and 0x1f3, in all four: 0x1f3 is spawned by the shared state 0x51 and
   follows the player until its animation ends; 0x1ef by the shared 0x57, a screen
   object at (60, 40) removed when 0x57 ends. 0x51 and 0x57 are set only by Kaori's code
-  (kaori_vf6.cpp:3134, 4934), so these are each character's "struck by Kaori's X"
+  (kaori_states.cpp:3134, 4934), so these are each character's "struck by Kaori's X"
   graphics. Left for whoever names 0x51/0x57.
 - CSayuri 0x10d: no case (see above).
 

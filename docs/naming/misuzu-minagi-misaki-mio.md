@@ -47,7 +47,7 @@ hold the same files for each class.
 ## CMisuzu
 
 Files: src/misuzu.cpp (StartCommand :136, DrawGauge :493, Vf8 :551, ReadCommand :583,
-CpuInput :954, UpdateObjects :1949), src/misuzu_vf6.cpp (UpdatePattern).
+CpuInput :954, UpdateObjects :1949), src/misuzu_states.cpp (UpdatePattern).
 
 Two mechanics run through most of her moves:
 
@@ -189,7 +189,7 @@ dash 2A-2C actions 0xe9-0xeb (misuzu.cpp:1146), which Misuzu has no case for.
   (`m_crowX - 0x32 < x && m_crowX + 0x32 > x` for facing 1 and -1, misuzu.cpp:228, 237,
   246).
 - **The 623 actions use vx where vy was meant.** They apply gravity only
-  `if (y + vx < 0.0)` (vf6:3542, :3589, :3652, :3691, :3730, :3785). So on the ground
+  `if (y + vx < 0.0)` (misuzu_states.cpp:3542, :3589, :3652, :3691, :3730, :3785). So on the ground
   versions gravity starts a frame late, once she is higher than vx px. Misaki has the same slip in her air supers.
 - **0x1bb can start early.** The stocked crow 0x1bb starts its attack early when
   Misuzu's own `m_patternVar1 > 0` (misuzu.cpp:3494). 0x139 never sets it, so this only
@@ -214,8 +214,8 @@ dash 2A-2C actions 0xe9-0xeb (misuzu.cpp:1146), which Misuzu has no case for.
   - Each C special takes 500 (250 with unk120).
   - Hit states take 30 or 0.8 per frame while unk120 is set.
   - 0xab moves `unk118 * 5` into `m_proration` when unk120 == 1, then zeroes unk118
-    (vf6:2391-2394).
-- **unk14a:** a freeze of that player. UpdatePattern returns while it is > 0 (vf6:13).
+    (misuzu_states.cpp:2391-2394).
+- **unk14a:** a freeze of that player. UpdatePattern returns while it is > 0 (misuzu_states.cpp:13).
   Misuzu's air traps set the opponent's to 60/90.
 - **unk14c:** the super freeze. Supers set 0x78, a counter 0x9f, a stock crow 0xb4, LV4 2
   per frame. While ours is > 0, the opponent's UpdatePattern and UpdateObjects return;
@@ -269,7 +269,7 @@ regenerates gauge, Nagamori's counts a timer down.
 
 Minagi fights through Michiru, a partner object (0x190) spawned by `Reset` 40 px behind her
 (minagi.cpp:81-92) that never dies. Minagi's own special "attacks" are only poses
-(minagi_vf6.cpp:3426-4048: they stop her, set `m_attackResult = 3` every frame so they stay
+(minagi_states.cpp:3426-4048: they stop her, set `m_attackResult = 3` every frame so they stay
 cancelable, and end); Michiru's object sees Minagi's pattern reach a trigger frame (2 on the
 ground, 3 in the air, 1 for air supers) and turns into the attack object (minagi.cpp:1951-2111).
 `m_michiruState` (unk3148) is Michiru reporting back; every Michiru special needs it != 4.
@@ -300,7 +300,7 @@ Directions in numpad notation, facing right. A/B/C variants are at consecutive n
 | gauge 3000: 5, 2, 5, 2, 5, 2, D; HP < 3333 | 0x5c | 0x13b | LV4: Michiru 0x1be rains 0x1bf from the sky (trails 0x1c0-0x1c4) |
 
 C versions of the specials need `unk118 >= 500 || unk120 > 0` and take 500 off unk118 (250
-with unk120) at their first frame (e.g. minagi_vf6.cpp:3511-3528). The supers' level check is
+with unk120) at their first frame (e.g. minagi_states.cpp:3511-3528). The supers' level check is
 the usual one: C needs 3000, B or C 2000, any 1000 (minagi.cpp:143-209).
 
 ### Michiru's states (m_michiruState, written by her object)
@@ -328,8 +328,8 @@ the usual one: C needs 3000, B or C 2000, any 1000 (minagi.cpp:143-209).
   0x12e/0x134), 99 hits at frame 0xa, then a jump vx 0.5 vy -2.2, `(*m_opponent)->Unk410a80`
   while frame < 0x14: an older 236236 Michiru, left unnamed.
 - Not determined (left out): 0xd3 (a ground C-like attack, one hit at frame 3, jump-cancelable on
-  hit or guard: minagi_vf6.cpp:2988; Misuzu's 0xd3 differs), 0x10c (an air pose that falls to
-  the ground and loops, minagi_vf6.cpp:3828). Both unreachable.
+  hit or guard: minagi_states.cpp:2988; Misuzu's 0xd3 differs), 0x10c (an air pose that falls to
+  the ground and loops, minagi_states.cpp:3828). Both unreachable.
 - `DrawGauge` and `Vf8` are empty for Minagi (minagi.cpp:530-536).
 - Effect types passed to `m_game->CreateEffect` (0, 1, 3, 4, 8, 9, 0x1f, 0x21, 0x44-0x47) are
   CGame effects, not object patterns.
@@ -355,15 +355,15 @@ can never be true.
   `unk84` the hits it can still land (like m_hitsLeft; 0x63 = unlimited); `unk86` frames the
   object is frozen (UpdateObjects skips it, minagi.cpp:1922); `unk88` 1 = keeps updating during
   the super freeze (`unk14c`), minagi.cpp:1922, set by Michiru's super objects.
-- `unk14a`: freeze timer, UpdatePattern returns while > 0 (minagi_vf6.cpp:13); Michiru's 214214
-  sets the opponent's. `unk14c`: 0x78 at every super flash (minagi_vf6.cpp:4054).
+- `unk14a`: freeze timer, UpdatePattern returns while > 0 (minagi_states.cpp:13); Michiru's 214214
+  sets the opponent's. `unk14c`: 0x78 at every super flash (minagi_states.cpp:4054).
 - Shared objects every character has: 0x1ef (lives only during action 0x57, vx -0.02,
   minagi.cpp:5879), 0x1f0 (spawned in 0x53-0x56 once per `m_burstObjectAlive`; when Minagi
   leaves those actions it bursts into six 0x1f1 and four 0x1f2 and plays sound 0x22,
   minagi.cpp:5895-5970), 0x1f1/0x1f2 (the pieces, minagi.cpp:5982/6011), 0x1f3 (spawned in 0x51,
-  minagi_vf6.cpp:1362; plays once). 0x1f0-0x1f2 are named kObjBurst/kObjBurstPiece/kObjBurstPiece2
+  minagi_states.cpp:1362; plays once). 0x1f0-0x1f2 are named kObjBurst/kObjBurstPiece/kObjBurstPiece2
   (the agreed names); 0x1ef and 0x1f3 are left for the core agent.
-- Shared action 0x7b is the hold Akiko's 0x13f puts the opponent in (akiko_vf6.cpp:5129).
+- Shared action 0x7b is the hold Akiko's 0x13f puts the opponent in (akiko_states.cpp:5129).
 - The per-action scratch triple (unk3138/313c/3140, cleared by StartPattern) and the per-object
   triple of arrays (cleared by RemoveObject) exist in most characters at similar offsets; the
   agreed names are m_patternVar1-3 and m_objectVar1-3.
@@ -374,7 +374,7 @@ Counts: 10 of 10 members named (no Unk methods); 133 action numbers named; left 
 ## CMisaki
 
 Files: src/misaki.cpp (StartCommand 92, ReadCommand 439, CpuInput 741, UpdateObjects 1736),
-src/misaki_vf6.cpp (UpdatePattern). DrawGauge and Vf8 are empty: she has no gauge or
+src/misaki_states.cpp (UpdatePattern). DrawGauge and Vf8 are empty: she has no gauge or
 per-frame status of her own. Only 4 int members plus the three per-object arrays.
 
 "C condition" below = `unk118 >= 500.0 || unk120 > 0`; the move then takes 500 from
@@ -469,7 +469,7 @@ inside `pattern == 0xa3`, so they never reset m_cpuAction themselves.
 
 ### Oddities
 
-- 0x12c-0x12e end on `vx + y >= 0.0` (misaki_vf6.cpp:4459, 4520, 4585), vy meant; vx is 0, so it is
+- 0x12c-0x12e end on `vx + y >= 0.0` (misaki_states.cpp:4459, 4520, 4585), vy meant; vx is 0, so it is
   `y >= 0`.
 - 0x139: `if (frame == 1 && timer == 0)` nested in `frame == 0 && timer == 0` (dead).
 - 0x132-0x134 store 0xf in m_patternVar3 (unk3140) at frame 1 and never read it.
@@ -510,10 +510,10 @@ Mio has two stances in `m_stance` (unk3150), toggled by D on the ground (0x10e, 
 frame 4), reset to 0 each round, shown by the gauge icon (anims 0x2b/0x2c, DrawGauge).
 Each stance has its own normals, specials, supers and LV4 (StartCommand mio.cpp:116 and
 :405). Stance 1 is called "Float" in the names because of what it does: walk 0.5 instead
-of 0.7 (mio_vf6.cpp:38), jumps at vy -2 / gravity 0.02 instead of -3 / 0.045 (same height,
+of 0.7 (mio_states.cpp:38), jumps at vy -2 / gravity 0.02 instead of -3 / 0.045 (same height,
 slower; :95, :267), two air dashes instead of one (mio.cpp:524), and air D (y < -30) is a
 hover, shared action 0x11, which cuts the velocity to a quarter, drops gravity and drains
-unk118 by 1 a frame (mio_vf6.cpp:346). What the stances are on screen is not known.
+unk118 by 1 a frame (mio_states.cpp:346). What the stances are on screen is not known.
 
 ### Move list (motion -> command -> action)
 
@@ -565,10 +565,10 @@ Stance 1 (Float):
 - 0xd4 (stance 1 far 5B): StartCommand's two B branches (mio.cpp:665-674) both start
   0xd3; the second was surely meant to be 0xd4 (stance 0's pair is 0xc9/0xca, and 0xd4's
   body matches 0xca's). CpuInput even has a branch for `pattern == 0xd4` (mio.cpp:2015).
-- 0xfd and 0x101: cases in UpdatePattern (mio_vf6.cpp:4529, :4723) that nothing enters.
+- 0xfd and 0x101: cases in UpdatePattern (mio_states.cpp:4529, :4723) that nothing enters.
   0xfd falls (vy += 0.025) and lands into a recovery; 0x101 spawns 0x198 and has one hit
   (the tail of 0x110). Left unnamed.
-- 0x12c/0x12d: one-level super flashes that set the stance to 1 / 0 (mio_vf6.cpp:5481,
+- 0x12c/0x12d: one-level super flashes that set the stance to 1 / 0 (mio_states.cpp:5481,
   :5510); nothing starts them. Named kUnusedSuperToFloat/kUnusedSuperToGround.
 - Objects nothing spawns: 0x190 (with its pieces 0x191-0x193, plain rand()), 0x1a4,
   0x1a5, 0x1a7 (straight shots). Named kObjUnused...
@@ -600,19 +600,19 @@ other stance doesn't even produce its command.
 ### Observations on shared members and actions
 
 - unk118 is the meter C specials need (>= 500 or unk120 > 0) and pay (500, or 250 with
-  unk120 set; e.g. mio_vf6.cpp:4463); hovering in 0x11 drains it by 1 a frame, 0x51 by
+  unk120 set; e.g. mio_states.cpp:4463); hovering in 0x11 drains it by 1 a frame, 0x51 by
   0.8 a frame and 0x53 by 30 while unk120 is set. 0xab (22C, command 0x34) zeroes it and,
   with unk120 == 1, adds unk118 * 5 to m_proration.
-- unk14a > 0 freezes a player (UpdatePattern returns at once, mio_vf6.cpp:14); Mio's
+- unk14a > 0 freezes a player (UpdatePattern returns at once, mio_states.cpp:14); Mio's
   moves add to the opponent's (0x3c for 0x195, 0x78 for supers, 0x1e per throw-hold hit).
   unk14c (0x78 in every super) is the super-flash freeze of the other player.
 - 0xa3 (forward dash) runs into 0xb2 after 100 frames held forward or 60 not held
-  (mio_vf6.cpp:2235-2242), counted in m_patternVar1/m_patternVar2.
+  (mio_states.cpp:2235-2242), counted in m_patternVar1/m_patternVar2.
 - PlayerObject::unk84 looks like the object's hits left (1 for most, 7 for the float
   236236 shots, 2 for 0x1ba, set 0 when 0x19c/0x19d land); unk80 its attack result
   (3 hit, > 1 hit or guarded: 0x195 stops on 3, bounces on 2; cleared to re-hit).
 - In stance 1 the air throw tests 0xf8's priority but starts 0xf7 (mio.cpp:690-693).
-- 0x1ef (spawned in 0x57 at screen 60,40, mio_vf6.cpp:1702) and 0x1f3 (follows the
+- 0x1ef (spawned in 0x57 at screen 60,40, mio_states.cpp:1702) and 0x1f3 (follows the
   player during 0x51, :1422) are shared objects every character has; left for the core
   agent with 0x51/0x57.
 

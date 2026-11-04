@@ -49,7 +49,7 @@ Oddities:
   leftover. Left unnamed.
 - `unk334c[]` is only ever zeroed. Left unnamed.
 - 236236 (0x12d): if the opponent is at x < 40 it is pushed 40 to the right first
-  (`kaori_vf6.cpp:4094-4097`).
+  (`kaori_states.cpp:4094-4097`).
 
 ## Nanase (CNanase)
 
@@ -184,9 +184,9 @@ Oddities:
   them, or 0x53/0x54 pass frame 1, it bursts into many 0x1f1/0x1f2 around her body, sound
   0x22. 0x1f1/0x1f2 use plain `rand()` (docs/compat.md lists them as visual).
 - 0x1f3: one animation glued to her as 0x51 starts (0x51: launched with velocity
-  `unkc0`/`unkc8` that the attacker set, e.g. Kaori's throw `kaori_vf6.cpp:3136-3137`).
+  `unkc0`/`unkc8` that the attacker set, e.g. Kaori's throw `kaori_states.cpp:3136-3137`).
 - 0x1ef: screen-space at (60, 40), spawned as she enters 0x57 (what LV4s put the victim
-  in, `kaori_vf6.cpp:4934`), removed when she leaves it.
+  in, `kaori_states.cpp:4934`), removed when she leaves it.
 
 ## CPlayer members and shared actions seen (not named here)
 
@@ -198,12 +198,12 @@ Oddities:
   `UpdatePattern` returns while `(*m_opponent)->unk14c > 0`, and UpdateObjects runs only
   objects with unk88 set. `unk14a`: a player's own freeze (hitstop); supers set the
   opponent's to 0xb4.
-- `m_attackResult`: 7 appears beside 2 as "guarded" (`nanase_vf6.cpp:3627`); Kaori's LV4
-  connects on 6 (`kaori_vf6.cpp:4892`), so 6 is not only "clashed".
+- `m_attackResult`: 7 appears beside 2 as "guarded" (`nanase_states.cpp:3627`); Kaori's LV4
+  connects on 6 (`kaori_states.cpp:4892`), so 6 is not only "clashed".
 - `unkf2` = 10 during Nanase's 214214 Lv1/Lv2 and unarmed 236236 Lv1/Lv2
-  (`nanase_vf6.cpp:4436, 4476, 9231, 9277`); `unk138`/`unk13a` = 2 during Nanase's LV4;
+  (`nanase_states.cpp:4436, 4476, 9231, 9277`); `unk138`/`unk13a` = 2 during Nanase's LV4;
   Nagamori's LV4 sets unk13c and the opponent's unk13a/unk140; EXNanase's 0x12c/0x12e set
-  `unk140` = 3 (`exnanase_vf6.cpp:4270, 4390`).
+  `unk140` = 3 (`exnanase_states.cpp:4270, 4390`).
 - `unk128` = 1 is set on the opponent by every grab.
 - DrawGauge uses `anims[0x2b]` (frame) and `anims[0x2c]` (bar) of the character's own
   animation table (Nanase, Nagamori).

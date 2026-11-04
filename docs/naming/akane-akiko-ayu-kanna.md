@@ -26,7 +26,7 @@ send the defender into which hit reaction (`unkac` air / `unkae` ground). Used b
   pattern subtracts it (`m_gauge - 0x3e8...`). Akane's 214214 A/B/C cost 1000 each; Kanna
   has only 3-level supers.
 - **C specials** need `unk118 >= 500 || unk120 > 0` and subtract 500 (250 when `unk120`) of
-  unk118, with effect 0x21 (e.g. akane_vf6.cpp:3606).
+  unk118, with effect 0x21 (e.g. akane_states.cpp:3606).
 - Normals: most can jump-cancel on hit or guard (`m_inputY == -1`, pattern 4/5/6, or
   0xe/0xf/0x10 in the air); some only on hit (Akane's 5B far and 2C, Akiko's 5B far and 2B).
 - The three ints `unk3138/313c/3140` (StartPattern zeroes them) and the three per-object
@@ -173,9 +173,9 @@ started by the CPU. `Random` there doesn't matter to replays (both players are h
 - Akiko StartCommand: 641236B tests `m_patterns[0x137].unk0` instead of 0x136's
   (akiko.cpp:144); harmless, both are 50 in akiko.pat.
 - Ayu StartCommand: a second `m_command == 0x78 && m_gauge >= 0xbb8 -> 0x132`
-  (ayu.cpp:190) can never be reached. Ayu's LV4 subtracts 4000 gauge (ayu_vf6.cpp:4974); the clamp at
+  (ayu.cpp:190) can never be reached. Ayu's LV4 subtracts 4000 gauge (ayu_states.cpp:4974); the clamp at
   player.cpp:493 makes it 0.
-- Ayu 0x107 ends with `m_inputY = 1; if (1) pattern = 3;` (ayu_vf6.cpp:4179): it writes the
+- Ayu 0x107 ends with `m_inputY = 1; if (1) pattern = 3;` (ayu_states.cpp:4179): it writes the
   input.
 - Ayu 0x134 is placed before 0x133 in the switch (no effect).
 - Kanna 236236C at HP >= 3333 matches no branch: nothing happens.
@@ -188,8 +188,8 @@ started by the CPU. `Random` there doesn't matter to replays (both players are h
   specials and 22C need >= 500 and spend 500 (250 when `unk120`); Ayu's glide burns it;
   Akiko's 214 fields drain the opponent's. `unk120`: "meter full" mode, C specials half
   price; while it is on, the hit reactions drain unk118 (0.8 a tick, or 30 on entering
-  some, e.g. akane_vf6.cpp:1367).
-- `unk15c`: **seal level**, set only by Akiko's 214214 hits (akiko_vf6.cpp:4736, :4813,
+  some, e.g. akane_states.cpp:1367).
+- `unk15c`: **seal level**, set only by Akiko's 214214 hits (akiko_states.cpp:4736, :4813,
   :4897) and cleared by her Vf8: >= 1 no dashes, >= 2 no specials/supers, >= 3 no jumps,
   air jumps or jump cancels (also player.cpp:51).
 - `unk160`: Akiko's slow-down level (1-3, 4 while ending); only Akiko and CPlayer::Reset

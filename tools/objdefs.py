@@ -37,7 +37,7 @@ SHARED = {
 # Character classes: (object, class, first address, end address, vtable, constructor,
 # size from the scene code's `new`). Each derives from CPlayer and overrides its virtual
 # slots (named as PLAYER_SLOTS below). Each is two objects, as in the original:
-# <object>_vf6 holds UpdatePattern (the per-state update), which comes first, up to the
+# <object>_states holds UpdatePattern (the per-state update), which comes first, up to the
 # constructor, and <object> the rest of the class. The split shows in .rdata, where
 # UpdatePattern's floating-point constants precede the string section the constructor's
 # folder name is in.
@@ -100,7 +100,7 @@ for _obj, _cls, _lo, _hi, _vt, _ctor, _size in CHARACTERS:
     for _k, _a in enumerate(_vtable(_vt)):
         if _a != CPLAYER_SLOT11:
             _names[_a] = f'{_cls}::{PLAYER_SLOTS[_k]}'
-    OBJECTS[_obj + '_vf6'] = (_lo, _ctor, _cls, _names)
+    OBJECTS[_obj + '_states'] = (_lo, _ctor, _cls, _names)
     OBJECTS[_obj] = (_ctor, _hi, _cls, _names)
 
 # Classes other than characters: (object, class, base, first address, end address,

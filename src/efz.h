@@ -722,13 +722,13 @@ enum {
     kJumpBack = 0x6,                   // player.cpp
     kStandUp = 0x7,                    // player.cpp down released while crouching
     kCrouchDown = 0x8,                 // player.cpp down pressed while standing
-    kFall = 0x9,                       // akane_vf6.cpp falling after a jump's animation, an
+    kFall = 0x9,                       // akane_states.cpp falling after a jump's animation, an
                                        // air dash, air 22C, recoil guard in the air
     kSuperJump = 0xa,                  // player.cpp up with m_command 3, which no
                                        // ReadCommand produces: unreachable
     kSuperJumpForward = 0xb,           // player.cpp m_command 4, unreachable
     kSuperJumpBack = 0xc,              // player.cpp m_command 5, unreachable
-    kLand = 0xd,                       // akane_vf6.cpp landing from any jump or fall (sound
+    kLand = 0xd,                       // akane_states.cpp landing from any jump or fall (sound
                                        // 9) -> 0x7, or 0x3 holding down
     kAirJump = 0xe,                    // akane.cpp command 6 in the air with m_airActions
                                        // left
@@ -753,60 +753,60 @@ enum {
     kHitCrouchHeavy = 0x3a,
     kHitAir = 0x3b,                    // scene3.cpp the default air reaction (also both
                                        // players on a double KO,)
-    kHitAirHigh = 0x3c,                // akane_vf6.cpp as 0x3b, rising speed capped at 4
-    kHitAirHigher = 0x3d,              // akane_vf6.cpp capped at 6
-    kHitAirCarry = 0x3e,               // akane_vf6.cpp vy*0.75 + m_hitVy, no cap
-    kHitAirLaunch = 0x3f,              // akane_vf6.cpp vy = m_hitVy outright (the usual
+    kHitAirHigh = 0x3c,                // akane_states.cpp as 0x3b, rising speed capped at 4
+    kHitAirHigher = 0x3d,              // akane_states.cpp capped at 6
+    kHitAirCarry = 0x3e,               // akane_states.cpp vy*0.75 + m_hitVy, no cap
+    kHitAirLaunch = 0x3f,              // akane_states.cpp vy = m_hitVy outright (the usual
                                        // launcher/sweep reaction, 440 attack frames)
-    kHitAirWallBounce = 0x40,          // akane_vf6.cpp 0x3b that turns into 0x46 at a
+    kHitAirWallBounce = 0x40,          // akane_states.cpp 0x3b that turns into 0x46 at a
                                        // screen edge
-    kHitAirHighWallBounce = 0x41,      // akane_vf6.cpp 0x3c with the wall bounce
-    kHitAirCarryWallBounce = 0x42,     // akane_vf6.cpp 0x3e with the wall bounce
-    kHitAirLaunchWallBounce = 0x43,    // akane_vf6.cpp 0x3f with the wall bounce
-    kHitBlownAwayWallBounce = 0x44,    // akane_vf6.cpp flies in a straight line at
+    kHitAirHighWallBounce = 0x41,      // akane_states.cpp 0x3c with the wall bounce
+    kHitAirCarryWallBounce = 0x42,     // akane_states.cpp 0x3e with the wall bounce
+    kHitAirLaunchWallBounce = 0x43,    // akane_states.cpp 0x3f with the wall bounce
+    kHitBlownAwayWallBounce = 0x44,    // akane_states.cpp flies in a straight line at
                                        // (m_hitVx, m_hitVy) every tick, no gravity, -> 0x46
                                        // at an edge
-    kHitBlownAway = 0x45,              // akane_vf6.cpp the same without the bounce (supers'
+    kHitBlownAway = 0x45,              // akane_states.cpp the same without the bounce (supers'
                                        // finishers, 35 attackers)
-    kHitWallBounce = 0x46,             // akane_vf6.cpp bounces off the wall (vx 0.5, vy
+    kHitWallBounce = 0x46,             // akane_states.cpp bounces off the wall (vx 0.5, vy
                                        // -2.5, sound 0x1f, effect 0), +120 untech time once
-    kHitAirHeavy = 0x47,               // akane_vf6.cpp vy = m_hitVy with gravity 0.072
+    kHitAirHeavy = 0x47,               // akane_states.cpp vy = m_hitVy with gravity 0.072
                                        // instead of 0.032: slammed down
-    kHitStandHighHold = 0x48,          // akane_vf6.cpp no movement, 72 ticks, -> 0x7
-    kHitStandLowHold = 0x49,           // akane_vf6.cpp the same, doubled-over pose
-    kHitCrouchHold = 0x4a,             // akane_vf6.cpp the same crouching, -> 0x3
-    kHitStandHighPull = 0x4b,          // akane_vf6.cpp slides toward the attacker (vx +2.2
+    kHitStandHighHold = 0x48,          // akane_states.cpp no movement, 72 ticks, -> 0x7
+    kHitStandLowHold = 0x49,           // akane_states.cpp the same, doubled-over pose
+    kHitCrouchHold = 0x4a,             // akane_states.cpp the same crouching, -> 0x3
+    kHitStandHighPull = 0x4b,          // akane_states.cpp slides toward the attacker (vx +2.2
                                        // slowing by 0.06), head-hit pose
-    kHitStandLowPull = 0x4c,           // akane_vf6.cpp doubled-over pose
-    kHitCrouchPull = 0x4d,             // akane_vf6.cpp crouching, -> 0x3
-    kHitBurn = 0x51,                   // akane_vf6.cpp spawns 0x1f3 (blue flames over the
+    kHitStandLowPull = 0x4c,           // akane_states.cpp doubled-over pose
+    kHitCrouchPull = 0x4d,             // akane_states.cpp crouching, -> 0x3
+    kHitBurn = 0x51,                   // akane_states.cpp spawns 0x1f3 (blue flames over the
                                        // player), drifts down and lands in a knockdown
-    kHitShock = 0x52,                  // akane_vf6.cpp frames 0-3 alternate the sprite with
+    kHitShock = 0x52,                  // akane_states.cpp frames 0-3 alternate the sprite with
                                        // a black silhouette in a lightning outline (8
                                        // loops, sound 0x1e), then launched by
                                        // m_hitVx/m_hitVy
-    kEncased = 0x53,                   // akane_vf6.cpp the sprite becomes a jagged cream-
+    kEncased = 0x53,                   // akane_states.cpp the sprite becomes a jagged cream-
                                        // coloured block (shared palette, sprite 422)
-    kEncased2 = 0x54,                  // akane_vf6.cpp identical code and data to 0x53
-    kEncasedAir = 0x55,                // akane_vf6.cpp the block lying (sprite 423)
+    kEncased2 = 0x54,                  // akane_states.cpp identical code and data to 0x53
+    kEncasedAir = 0x55,                // akane_states.cpp the block lying (sprite 423)
                                        // launched by m_hitVx/m_hitVy, gravity 0.04,
                                        // knockdown on landing
-    kEncasedSpin = 0x56,               // akane_vf6.cpp the block tumbling (sprites
+    kEncasedSpin = 0x56,               // akane_states.cpp the block tumbling (sprites
                                        // 423-429), gravity 0.06, knockdown on landing
-    kFallInDarkness = 0x57,            // akane_vf6.cpp the player's sprite is blank and its
+    kFallInDarkness = 0x57,            // akane_states.cpp the player's sprite is blank and its
                                        // screen-space object 0x1ef shows it falling
-    kWakeUp = 0x60,                    // akane_vf6.cpp getting up after 0x63 (invulnerable,
+    kWakeUp = 0x60,                    // akane_states.cpp getting up after 0x63 (invulnerable,
                                        // throw-protected), -> 0x0/0x3
-    kKnockdownHittable = 0x61,         // akane_vf6.cpp hitting the ground (shake, effect 3,
+    kKnockdownHittable = 0x61,         // akane_states.cpp hitting the ground (shake, effect 3,
                                        // sound 7) after an attack with flagsAA 0x800
                                        // (m_landHittable): its frames have no flagsB0 0x20,
                                        // so it can be hit
-    kKnockdown = 0x62,                 // akane_vf6.cpp the usual ground hit after an air
+    kKnockdown = 0x62,                 // akane_states.cpp the usual ground hit after an air
                                        // reaction, invulnerable (flagsB0 0x63)
-    kLyingDown = 0x63,                 // akane_vf6.cpp lies 100 ticks then 0x60, or for
+    kLyingDown = 0x63,                 // akane_states.cpp lies 100 ticks then 0x60, or for
                                        // good when KO'd
     kThrownStandHigh = 0x64,           // throw pose set on the opponent and moved around by
-                                       // throws (akane_vf6.cpp etc.)
+                                       // throws (akane_states.cpp etc.)
     kThrownStandLow = 0x65,            // throw pose: 0x35's first frame
     kThrownCrouch = 0x66,              // throw pose: 0x38's first frame
     kThrownDoubledOver = 0x67,         // throw pose: 0x35's deepest frame
@@ -831,7 +831,7 @@ enum {
     kThrownUpsideDownInverted = 0x77,  // i.e. upright
     kThrownLyingInverted = 0x78,
     kThrownHidden = 0x79,              // a blank sprite: the thrower's own sprite shows
-                                       // both (29 sites, e.g. akiko_vf6.cpp)
+                                       // both (29 sites, e.g. akiko_states.cpp)
     kHeadOnly = 0x7a,                  // only the character's head, five expressions
                                        // (frames)
     kEatingJam = 0x7b,                 // eating from Akiko's jar (head and arms with a jar)
@@ -847,7 +847,7 @@ enum {
     kAirRecoveryForward = 0x9d,        // player.cpp a button in air hitstun once
                                        // m_untechTime is 0, holding forward
     kAirRecoveryBack = 0x9e,           // player.cpp holding back
-    kWakeUpAttack = 0xa2,              // akane_vf6.cpp rises and attacks (effect 9, sound
+    kWakeUpAttack = 0xa2,              // akane_states.cpp rises and attacks (effect 9, sound
                                        // 0x3e) for 1000 gauge, invulnerable
     kDashForward = 0xa3,               // akane.cpp double tap toward the opponent on the
                                        // ground
@@ -862,7 +862,7 @@ enum {
     kRecoilGuardCrouch = 0xa9,         // the same holding down
     kRecoilGuardAir = 0xaa,            // scene3.cpp
     kAirInstantCharge = 0xab,          // akane.cpp 22C in the air
-    kDashStop = 0xb2,                  // akane_vf6.cpp the run's skid (vx -0.03 a tick),
+    kDashStop = 0xb2,                  // akane_states.cpp the run's skid (vx -0.03 a tick),
                                        // jump-cancellable, -> 0
     kObjFallInDarkness = 0x1ef,        // object every class has: akane.cpp screen-space,
                                        // the player falling upside down, removed when its
@@ -1297,7 +1297,7 @@ enum {
                                        // sound 3)
     kEffectGroundBurst = 0x3,          // fiery burst with a flat ring on the ground: a
                                        // knocked-down player hitting the ground (actions
-                                       // 0x61/0x62, with a screen shake, ayu_vf6.cpp) and
+                                       // 0x61/0x62, with a screen shake, ayu_states.cpp) and
                                        // attacks that slam the ground (0xd4/0xd6, sound 7)
     kEffectBlueFlames = 0x4,           // blue flames rising on both sides
     kEffectRoundFlash = 0x5,           // streaks and a flash of light: a round's call,
@@ -1312,7 +1312,7 @@ enum {
                                        // (Akane 0x12f-0x131)
     kEffectFlashVortex = 0x9,          // white circle that grows and turns into a blue
                                        // vortex: actions 0xa1/0xa2 (y - 60, sound 0x3e,
-                                       // ayu_vf6.cpp) and some supers (Akane
+                                       // ayu_states.cpp) and some supers (Akane
                                        // 0x137/0x138/0x13b, EXNanase 0x12d-0x131, Kanna
                                        // 0x135, a Mai object
     kEffectBlueSpark = 0xa,            // small blue spark flying off at a random angle and
@@ -1347,7 +1347,7 @@ enum {
     kEffectShatterUnused = 0x1d,       // a curve, then glass-like shards
     kEffectDoubleKoUnused = 0x1e,      // "DOUBLE K.O" text
     kEffectDashDust = 0x1f,            // cloud of dust kicked up: dashes (actions
-                                       // 0xa3/0xa4, akiko_vf6.cpp) and moves that rush
+                                       // 0xa3/0xa4, akiko_states.cpp) and moves that rush
                                        // forward
     kEffectSkidDust = 0x20,            // low trail of dust along the ground
     kEffectPowerBurst = 0x21,          // orange explosion with a ring of 40 sparks 0x26 on
@@ -1364,7 +1364,7 @@ enum {
     kEffectGuardParticle = 0x27,       // tiny dot thrown toward one side (side * 2 - 1)
     kEffectBlueFlash = 0x28,           // blue-white flash with a slash: action 0xf9 of
                                        // Akane, Akiko, Ayu, Kanna, Mai and Mizuka (sound
-                                       // 0x13, akane_vf6.cpp)
+                                       // 0x13, akane_states.cpp)
     kEffectBlueFlashLarge = 0x29,      // larger version of 0x28
     kEffectParticleDiagonal = 0x2a,    // dot thrown 35-55 degrees up or down-back
     kEffectSliverDiagonal = 0x2b,      // sliver thrown 25-65 degrees
@@ -1411,7 +1411,7 @@ enum {
     kEffectSuperFlash3 = 0x46,         // big blue burst opening into a ring: a level 3
                                        // super starting (0x12e, 0x131, 0x134..., sound
                                        // 0x40), created as kept (EffectDesc::unk0 = 1,
-                                       // ayu_vf6.cpp)
+                                       // ayu_states.cpp)
     kEffectSuperSparkle = 0x47,        // cloud of blue sparkles spreading
     kEffectFirePillar = 0x48,          // orange explosion on the ground with a pillar of
                                        // fire: Akiko's 0x108/0x10a/0x10c
@@ -4281,13 +4281,13 @@ public:
         kFloatJumpC = 0xdb,              // stance 1 air C
         kThrow = 0xdc,                   // either stance: C + direction within 30 px of a
                                          // grounded opponent not in hit/guard states
-        kThrowHold = 0xdd,               // mio_vf6.cpp sits on the opponent (pattern 0x6b),
+        kThrowHold = 0xdd,               // mio_states.cpp sits on the opponent (pattern 0x6b),
                                          // loops frames 3-4: 100 damage per loop (frame 4,
                                          // at least every 70 frames), released after 600
                                          // frames or KO with 400 damage (opponent 0x62)
         kJump2C = 0xdf,                  // stance 0 air 2C, dives forward-down (vx = vy =
                                          // 1, accelerating)
-        kJump2CLanding = 0xe0,           // mio_vf6.cpp slides to a stop, no more hits
+        kJump2CLanding = 0xe0,           // mio_states.cpp slides to a stop, no more hits
                                          // (m_attackResult forced 3)
         k6C = 0xe1,                      // stance 0 6C, lunges (vx 2.0 at frame 3)
         kFloatJump2B = 0xe3,             // stance 1 air 2B
@@ -4733,7 +4733,7 @@ public:
         kObjMichiru623C = 0x1d4,          // as B, frame 0xb held 3 more times
         kObjMichiruHeld = 0x1d5,          // while Minagi is in shared action 0x7b (the hold
                                           // Akiko's 0x13f puts the opponent in,
-                                          // akiko_vf6.cpp) Michiru stops and is placed 60
+                                          // akiko_states.cpp) Michiru stops and is placed 60
                                           // px in front of her
     };
     // END constants

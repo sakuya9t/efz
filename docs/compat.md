@@ -156,7 +156,7 @@ earlier versions.
   state `0x13e`, `src/ayu.cpp:124` and `:449-479`) is the clearest case. During the
   move, whether each attacking feather spawns, its type (fast `0x1a0` or slow `0x1a1`),
   its height, speed, rise and starting animation frame are all drawn through the helper
-  (`src/ayu_vf6.cpp:5021-5033`, `src/ayu.cpp:1868-1915`).
+  (`src/ayu_states.cpp:5021-5033`, `src/ayu.cpp:1868-1915`).
 - **Guarding.** A human player's guard comes from input: holding away from the opponent,
   standing or crouching, against the attack's high/low flags (`src/player.cpp:563-570`).
 
@@ -164,7 +164,7 @@ earlier versions.
 
 | What | Why | How the test handles it |
 |---|---|---|
-| Ayu's dash feathers (`0x191`, `0x192`) on 66, 44 and their air versions (states `0xa3`-`0xa6`) | Plain `rand()` (`src/ayu_vf6.cpp:2157-2373`, `src/ayu.cpp:1562-1605`) | Visual only; compared, with `rand()` seeded the same in both games |
+| Ayu's dash feathers (`0x191`, `0x192`) on 66, 44 and their air versions (states `0xa3`-`0xa6`) | Plain `rand()` (`src/ayu_states.cpp:2157-2373`, `src/ayu.cpp:1562-1605`) | Visual only; compared, with `rand()` seeded the same in both games |
 | The burst of objects `0x1f1`/`0x1f2` every character spawns from its object `0x1f0` (e.g. `src/kano.cpp:3784`) | Plain `rand()` for their lifetimes and speeds (e.g. `src/nayuki.cpp:2425-2460`) | **Inferred** visual; compared, as above |
 | The game's effects | Plain `rand()` (`src/effect.cpp`) | Visual; compared, as above |
 | The CPU (`CpuInput`, and its random guard, `src/player.cpp:551`) | Plain `rand()` and `CPlayer::Random`, which records nothing a CPU's input could be replayed from | Never runs in a recorded fight: replays are recorded from the title menu's replay item, which makes both players human (`src/scene0.cpp:132-133`). The suite's `cpu` cases play it from a seed instead |

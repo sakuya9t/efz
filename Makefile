@@ -40,7 +40,7 @@ build build/src:
 CHARACTERS = shiori sayuri nayuki nanase nagamori mizukab mizuka misuzu mishio misaki mio \
 	minagi mayu makoto mai kaori kano kanna ikumi exnanase ayu akane akiko nayukib
 LINK_ORDER = main effect file config game graphics input sound player playerobj \
-	$(foreach c,$(CHARACTERS),$(c)_vf6 $(c)) \
+	$(foreach c,$(CHARACTERS),$(c)_states $(c)) \
 	bg01 bg10 bg12 bg16 scene1 scene6 scene3_draw scene3 scene2 scene8 scene5 scene7 scene0
 # winmm.lib first: the import directory lists the DLLs in the order of their libraries.
 LIBS = winmm.lib kernel32.lib user32.lib gdi32.lib ddraw.lib dinput.lib dsound.lib dxguid.lib

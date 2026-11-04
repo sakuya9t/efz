@@ -64,7 +64,7 @@ frame, at about 64 drawn frames a second; .pat durations are multiplied by 3 at 
 
 ## Left unnamed (not determined, or unused)
 
-- CPlayer::unkdc, unkde (akane_vf6.cpp:3457-3458 and 5 more characters set 4 and -0x14
+- CPlayer::unkdc, unkde (akane_states.cpp:3457-3458 and 5 more characters set 4 and -0x14
   in the same move), unke8 (akane.cpp:2111 sets 1.5), unkf2 (set 0xa or 3 in 14 moves):
   written, never read anywhere.
 - CPlayer::unk15b, unk25f: no uses (padding bytes).

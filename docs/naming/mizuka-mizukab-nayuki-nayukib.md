@@ -42,7 +42,7 @@ with unk120) of unk118. Levels = gauge 1000/2000/3000.
 - Never entered: 0xd3-0xd6, 0xf9, 0x104, 0x135-0x139 (0x135-0x137 are hold-and-hit
   sequences with frames in mizuka.pat; 0x139 is a counter-like stance whose 3000 cost is in
   a dead branch: `if (frame == 1 && timer == 0)` inside `if (frame == 0 && timer == 0)`,
-  mizuka_vf6.cpp:5275-5277).
+  mizuka_states.cpp:5275-5277).
 
 ### CMizukaB (mizukab\): the same code base with a reworked move list
 - Same normals/throw plus dash 2A/2B/2C 0xe9-0xeb and an air throw 0xf8 -> 0xf9 (6C near
@@ -139,7 +139,7 @@ Scans run oldest to newest (m_inputPos is the next slot to write).
 - CMizukaB 0x1d0/0x1d2/0x1d5: `if (frame > 0x31 && frame < 0x96)` tests the player's frame
   where pattern was meant, and the landing test adds the player's vy to the object's y
   (mizukab.cpp:3662, :3742; also :3786/:3866, :3921/:4001).
-- CNayuki 0x107/0x10d/0x113 test `y + vx > 0.0` where vy was meant (nayuki_vf6.cpp:3930,
+- CNayuki 0x107/0x10d/0x113 test `y + vx > 0.0` where vy was meant (nayuki_states.cpp:3930,
   :4295, :4579).
 - CNayuki CpuInput: `m_command = (WORD)Random(0, 2) * 0x6e` (nayuki.cpp:927: 0 = a dash, or
   214214A, never B/C), and two impossible ranges (`m_cpuRoll < 0x10 && m_cpuRoll > 0x12`
