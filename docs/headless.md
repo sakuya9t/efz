@@ -6,6 +6,8 @@ process, stepped in parallel on every core: `efz_env`, a library with a C API
 the same game as the original's, tick for tick, only run as fast as the CPU allows.
 What it is for: reinforcement learning (self-play, or an agent against the game's own
 CPU), search over save states, and any other program that plays the game.
+[training.md](training.md) has what it takes to use it from the mainstream training
+frameworks, and what other fighting games' AIs and EFZ's own CPU teach.
 
 ```python
 from efz_env import EfzVecEnv, ActionTable

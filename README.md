@@ -213,7 +213,10 @@ It is the same game: `tools/compat.py check` plays every case of the compatibili
 suite both in the SDL3 game and headless, and the logs must agree with the reference
 and with each other; CI runs the headless library's tests that need no game data
 (`ctest -L headless`). [docs/headless.md](docs/headless.md) has the observations,
-actions, rewards, save states, the GPU and the measurements.
+actions, rewards, save states, the GPU and the measurements;
+[docs/training.md](docs/training.md) the training frameworks it can be used from (and
+the gaps to close first), how Touhou 12.3's AIs and EFZ's own CPU are built, and what
+follows for training.
 
 ## Matching workflow
 
