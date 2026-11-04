@@ -10,6 +10,8 @@
 
 #include "efz.h"
 #include "platform.h"
+#include "log.h"
+#include "record.h"
 
 namespace {
 
@@ -115,7 +117,9 @@ struct Keyboard : IDirectInputDevice7 {
     }
     HRESULT GetDeviceState(DWORD size, LPVOID data)
     {
-        memcpy(data, g_keys, size < sizeof(g_keys) ? size : sizeof(g_keys));
+        DWORD n = size < sizeof(g_keys) ? size : sizeof(g_keys);
+        memcpy(data, g_keys, n);
+        efz::FilterKeyboard((unsigned char*)data, n); // recorded, or a replay's
         return DI_OK;
     }
     HRESULT Acquire() { return DI_OK; }
@@ -192,6 +196,7 @@ void UpdateJoysticks()
     for (int i = 0; i < 2; i++) {
         Joystick* j = (Joystick*)(IDirectInputDevice7*)g_input->m_joysticks[i];
         if (j && !SDL_GamepadConnected(j->pad)) {
+            efz::LogInfo("input", "controller %d unplugged", i + 1);
             j->Release();
             g_input->m_joysticks[i] = NULL;
         }
@@ -208,8 +213,12 @@ void UpdateJoysticks()
             if (g_input->m_joysticks[i])
                 continue;
             SDL_Gamepad* pad = SDL_OpenGamepad(ids[k]);
-            if (!pad)
+            if (!pad) {
+                efz::LogWarn("input", "cannot open a controller: %s", SDL_GetError());
                 break;
+            }
+            const char* name = SDL_GetGamepadName(pad);
+            efz::LogInfo("input", "controller %d: %s", i + 1, name ? name : "(no name)");
             Joystick* j = new Joystick;
             j->pad = pad;
             j->id = ids[k];
@@ -340,6 +349,7 @@ BYTE CInput::GetInput(BYTE player)
         }
         binding++;
     }
+    efz::NoteInput(player, result);
     return result;
 }
 

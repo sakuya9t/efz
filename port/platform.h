@@ -8,6 +8,7 @@
 #ifndef EFZ_PLATFORM_H
 #define EFZ_PLATFORM_H
 
+#include <stdint.h>
 #include <stdio.h>
 
 struct SDL_Window;
@@ -54,6 +55,10 @@ void UpdateJoysticks();
 void SetDataDir(const char* data, const char* save);
 FILE* OpenGameFile(const char* name, const char* mode);
 FILE* OpenForUpdate(const char* name, bool create);
+// A file opened elsewhere as a handle of the game's (CreateFile's), which CloseHandle
+// closes: a replayed fight's replay file (port/record.cpp). INVALID_HANDLE_VALUE's
+// number when the table is full.
+uint32_t AdoptFile(FILE* f);
 
 } // namespace efz
 

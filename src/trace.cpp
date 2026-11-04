@@ -31,6 +31,10 @@
 //   fx             the effects' ring buffer
 // Pointers are left out (zeroed in the block): their values differ between builds.
 //
+// The native game's recorder (port/record.cpp, docs/logging.md) uses the same blocks: it
+// hooks each tick (g_traceHooks), logs their hashes, and saves and loads their bytes
+// (TraceSaveState, TraceLoadState) to replay a fight from its first tick.
+//
 // What makes two builds comparable on every byte: memory from `new` starts zeroed in both
 // (the native game's arena always does; the original's heap holds garbage, which decides
 // a few hits, docs/compat.md), sin, cos and atan2 are correctly rounded in both (the
@@ -53,6 +57,7 @@ static CPlayer* g_tracePlayers[2];
 static FILE* g_traceDump;
 static long g_traceDumpFrom;
 static long g_traceDumpTo;
+TraceHooks g_traceHooks;
 
 #ifndef EFZ_NATIVE
 // The original's build: zeroed memory from `new`, as the native game's arena gives.
@@ -290,17 +295,40 @@ int TraceQuit(BYTE scene)
 }
 
 // --- The state's blocks: each is gathered into g_traceBlock, its pointers zeroed, then
-// hashed and, while dumping, written out.
+// hashed and, while dumping, written out; or handed to TraceSaveState's function; or, for
+// TraceLoadState, overwritten with saved bytes and copied back to where it came from,
+// the pointers excepted.
 
-enum { TRACE_P1, TRACE_P1OBJ, TRACE_P1CHAR, TRACE_P2, TRACE_P2OBJ, TRACE_P2CHAR, TRACE_SCENE,
-       TRACE_GAME, TRACE_FX, TRACE_BLOCKS };
+enum { TRACE_HASH, TRACE_SAVE, TRACE_CHECK, TRACE_LOAD };
+
+// Where a part of the block came from (TraceAdd), or a part that was zeroed (TraceMask).
+struct TraceSpan {
+    char* at;
+    unsigned offset;
+    unsigned size;
+};
 
 static BYTE g_traceBlock[0x14400];
 static unsigned g_traceLength;
 static unsigned g_traceHashes[TRACE_BLOCKS];
+static TraceSpan g_traceSpans[32];
+static int g_traceSpanCount;
+static TraceSpan g_traceMasks[160];
+static int g_traceMaskCount;
+static int g_traceMode;
+static TraceBlockFn g_traceSaveFn;
+static void* g_traceSaveContext;
+static const void* const* g_traceLoadData;
+static const unsigned* g_traceLoadSizes;
+static int g_traceLoadError;
 
 static void TraceAdd(const void* p, unsigned size)
 {
+    TraceSpan* s = &g_traceSpans[g_traceSpanCount++];
+
+    s->at = (char*)p;
+    s->offset = g_traceLength;
+    s->size = size;
     memcpy(g_traceBlock + g_traceLength, p, size);
     g_traceLength += size;
 }
@@ -308,7 +336,37 @@ static void TraceAdd(const void* p, unsigned size)
 // Zeroes `size` bytes at `field`, a member of the object `base` that starts the block.
 static void TraceMask(const void* base, const void* field, unsigned size)
 {
-    memset(g_traceBlock + ((const char*)field - (const char*)base), 0, size);
+    TraceSpan* m = &g_traceMasks[g_traceMaskCount++];
+
+    m->at = NULL;
+    m->offset = (unsigned)((const char*)field - (const char*)base);
+    m->size = size;
+    memset(g_traceBlock + m->offset, 0, size);
+}
+
+// TraceLoadState: the saved bytes, with the masked parts (pointers) as they are now,
+// back to where the block came from.
+static void TraceScatter(const void* saved)
+{
+    int i, j;
+    TraceSpan* m;
+    TraceSpan* s;
+
+    memcpy(g_traceBlock, saved, g_traceLength);
+    for (i = 0; i < g_traceMaskCount; i++) {
+        m = &g_traceMasks[i];
+        for (j = 0; j < g_traceSpanCount; j++) {
+            s = &g_traceSpans[j];
+            if (m->offset >= s->offset && m->offset + m->size <= s->offset + s->size) {
+                memcpy(g_traceBlock + m->offset, s->at + (m->offset - s->offset), m->size);
+                break;
+            }
+        }
+    }
+    for (j = 0; j < g_traceSpanCount; j++) {
+        s = &g_traceSpans[j];
+        memcpy(s->at, g_traceBlock + s->offset, s->size);
+    }
 }
 
 static void TraceEnd(int block)
@@ -317,13 +375,27 @@ static void TraceEnd(int block)
     unsigned i;
     unsigned header[3];
 
+    if (g_traceMode == TRACE_CHECK || g_traceMode == TRACE_LOAD) {
+        if (g_traceLoadSizes[block] != g_traceLength) {
+            if (g_traceLoadError < 0)
+                g_traceLoadError = block;
+        } else if (g_traceMode == TRACE_LOAD) {
+            TraceScatter(g_traceLoadData[block]);
+        }
+        g_traceLength = 0;
+        g_traceSpanCount = 0;
+        g_traceMaskCount = 0;
+        return;
+    }
     for (i = 0; i < g_traceLength; i++) {
         h ^= g_traceBlock[i];
         h *= 16777619u;
     }
     g_traceHashes[block] = h;
-    if (g_traceDump && g_traceTicks >= g_traceDumpFrom &&
-        (g_traceDumpTo < 0 || g_traceTicks <= g_traceDumpTo)) {
+    if (g_traceMode == TRACE_SAVE)
+        g_traceSaveFn(g_traceSaveContext, block, g_traceBlock, g_traceLength);
+    else if (g_traceDump && g_traceTicks >= g_traceDumpFrom &&
+             (g_traceDumpTo < 0 || g_traceTicks <= g_traceDumpTo)) {
         header[0] = (unsigned)g_traceTicks;
         header[1] = (unsigned)block;
         header[2] = g_traceLength;
@@ -331,6 +403,8 @@ static void TraceEnd(int block)
         fwrite(g_traceBlock, 1, g_traceLength, g_traceDump);
     }
     g_traceLength = 0;
+    g_traceSpanCount = 0;
+    g_traceMaskCount = 0;
 }
 
 // The size of the character class a player is, by its m_charId (CScene2::CreateCharacter).
@@ -495,34 +569,97 @@ static void TracePlayer(CPlayer* p)
             p->m_comboHits, p->m_gauge, p->facing);
 }
 
-void TraceTick(CScene3* scene)
+// Every block, in order, through TraceEnd's g_traceMode.
+static void TraceGather(CScene3* scene)
 {
-    int i;
-
-    // Untouched when nothing is traced: the headless library runs many games at once
-    // with the harness built in (docs/headless.md).
-    if (!g_traceFile)
-        return;
-    for (i = 0; i < 2; i++)
-        g_tracePlayers[i] = scene->m_players[i];
     TraceHashPlayer(scene->m_players[0], TRACE_P1);
     TraceHashPlayer(scene->m_players[1], TRACE_P2);
     TraceHashScene(scene);
     TraceHashGame(scene->m_game);
-    fprintf(g_traceFile, "%ld %lu", g_traceTicks, (unsigned long)scene->m_game->m_replay.m_read);
-    TracePlayer(scene->m_players[0]);
-    TracePlayer(scene->m_players[1]);
-    fprintf(g_traceFile, " #");
-    for (i = 0; i < TRACE_BLOCKS; i++)
-        fprintf(g_traceFile, " %08x", g_traceHashes[i]);
-    fprintf(g_traceFile, "\n");
-    g_traceTicks++;
 }
 
-// The controls: the bots' while recording, untouched while playing (the replay supplies
-// the players' input; this keeps what the menus' and CGame's polling see the same).
+const char* TraceBlockName(int block)
+{
+    static const char* names[TRACE_BLOCKS] = {"p1", "p1obj", "p1char", "p2", "p2obj",
+                                              "p2char", "scene", "game", "fx"};
+
+    return block >= 0 && block < TRACE_BLOCKS ? names[block] : "?";
+}
+
+void TraceSaveState(CScene3* scene, TraceBlockFn fn, void* context)
+{
+    g_traceMode = TRACE_SAVE;
+    g_traceSaveFn = fn;
+    g_traceSaveContext = context;
+    TraceGather(scene);
+    g_traceMode = TRACE_HASH;
+}
+
+int TraceLoadState(CScene3* scene, const void* const* data, const unsigned* sizes)
+{
+    g_traceLoadData = data;
+    g_traceLoadSizes = sizes;
+    g_traceLoadError = -1;
+    // Every size first: the character blocks' follow the players' classes.
+    g_traceMode = TRACE_CHECK;
+    TraceGather(scene);
+    if (g_traceLoadError < 0) {
+        g_traceMode = TRACE_LOAD;
+        TraceGather(scene);
+    }
+    g_traceMode = TRACE_HASH;
+    return g_traceLoadError;
+}
+
+void TraceTickStart(CScene3* scene)
+{
+    if (g_traceHooks.tickStart)
+        g_traceHooks.tickStart(scene);
+}
+
+void TraceInputsRead(CScene3* scene)
+{
+    if (g_traceHooks.inputsRead)
+        g_traceHooks.inputsRead(scene);
+}
+
+void TraceTick(CScene3* scene)
+{
+    int i;
+    int hashed;
+
+    // Nothing here is touched unless the harness traces or the recorder hooks the tick:
+    // the headless library runs many games at once with the harness built in
+    // (docs/headless.md).
+    if (!g_traceFile && !g_traceHooks.tick)
+        return;
+    for (i = 0; i < 2; i++)
+        g_tracePlayers[i] = scene->m_players[i];
+    hashed = g_traceFile || g_traceHooks.hashes;
+    if (hashed)
+        TraceGather(scene);
+    if (g_traceFile) {
+        fprintf(g_traceFile, "%ld %lu", g_traceTicks,
+                (unsigned long)scene->m_game->m_replay.m_read);
+        TracePlayer(scene->m_players[0]);
+        TracePlayer(scene->m_players[1]);
+        fprintf(g_traceFile, " #");
+        for (i = 0; i < TRACE_BLOCKS; i++)
+            fprintf(g_traceFile, " %08x", g_traceHashes[i]);
+        fprintf(g_traceFile, "\n");
+        g_traceTicks++;
+    }
+    if (g_traceHooks.tick)
+        g_traceHooks.tick(scene, hashed ? g_traceHashes : NULL);
+}
+
+// The controls: the recorder's when it supplies them (replaying a fight), the bots' while
+// recording, untouched while playing (the replay supplies the players' input; this keeps
+// what the menus' and CGame's polling see the same).
 int TraceInput(BYTE player, BYTE* input)
 {
+    if (g_traceHooks.input && g_traceHooks.input(player, input))
+        return 1;
     if (g_tracePlaying) {
         *input = 0;
         return 1;

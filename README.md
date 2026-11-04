@@ -61,7 +61,7 @@ states and rewards. See [The headless game](#the-headless-game) and
 | `src/scene3_draw.cpp` | The drawing helpers of scene 3, the fight |
 | `src/efz.rc` | The icon resource (the icon itself is taken from the original at build time) |
 | `src/trace.cpp` | The compatibility test's harness (`make trace` and the native game), not part of efz.exe |
-| `port/` | The native game's platform layer on SDL3, in place of `main.cpp`, `graphics.cpp`, `input.cpp` and `sound.cpp`; 32-bit handles for the game's pointers; the original's floating point |
+| `port/` | The native game's platform layer on SDL3, in place of `main.cpp`, `graphics.cpp`, `input.cpp` and `sound.cpp`; 32-bit handles for the game's pointers; the original's floating point; the log, crash reports and fight records |
 | `port/headless/` | The headless platform and the training library `efz_env` (C API: `efz_env.h`), `efz-headless`, `efz-bench` |
 | `python/efz_env/` | The Python package over `efz_env`: `EfzVecEnv`, action tables, a Gymnasium adapter |
 
@@ -173,6 +173,17 @@ tools/compat.py explain cpu-03      # where a failing case parts from the origin
 tools/compat.py coverage            # which lines of src/ the suite runs
 ```
 
+Each run of the native game keeps a log folder (`logs/` in the save folder):
+`efz.log`, a report with a stack trace when it crashes or hangs, checks of the game's
+state on every tick of a fight, and a record of every fight, which replays it tick for
+tick and is data to learn from ([docs/logging.md](docs/logging.md)):
+
+```sh
+efz --data DIR --replay-fight logs/<session>/fight-003.jsonl --fast   # replay a fight, check every tick
+tools/efzlog.py show logs/<session>  # what happened: warnings, errors, crash, fights
+tools/efzlog.py export logs/<session>/fight-003.jsonl fight.npz       # a row a tick
+```
+
 ## The headless game
 
 For reinforcement learning and other programs that play: the game without a window,
@@ -261,6 +272,8 @@ actions, rewards, save states, the GPU and the measurements.
 | `tools/portify.py` | Marks the pointer casts of lifted code for the native build's 32-bit handles |
 | `tools/constants.py` | Names bare action, command, flag and effect numbers: declares `tools/constants.txt`'s constants in `src/efz.h` and puts them in the code where clang shows what a number is |
 | `tools/compat.py` | The compatibility test: plays the suite (`tests/compat/`) in a build and compares its state, tick by tick, with the original's (the `compat-reference` tag, under wine) |
+| `tools/efzlog.py` | The native game's logs and fight records: sessions, warnings and crashes, fights, export of a fight's ticks as a table, where two records part ([docs/logging.md](docs/logging.md)) |
+| `tools/buildinfo.cmake` | Writes the revision the native game's log names, at each build |
 | `tools/msvc11` | Run Visual C++ 2012 tools (EfzRevival's toolchain) in the container |
 | `tools/libmatch.py` | Finds the functions of prebuilt `.lib`/`.obj` files in a binary, relocations masked |
 | `tools/rtti.py` | Lists an MSVC binary's vtables, with their classes, through its RTTI |

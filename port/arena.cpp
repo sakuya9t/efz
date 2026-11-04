@@ -26,6 +26,7 @@
 #endif
 
 #include "guest.h"
+#include "log.h"
 
 namespace efz {
 
@@ -118,11 +119,10 @@ void Unlink(Block* b)
         At(b->next)->prev = b->prev;
 }
 
+// Both through the log, which allocates nothing, to the crash report.
 [[noreturn]] void OutOfMemory(uintptr_t size)
 {
-    fprintf(stderr, "efz: the arena has no room for %llu more bytes\n",
-            (unsigned long long)size);
-    abort();
+    Fatal("arena", "the arena has no room for %llu more bytes", (unsigned long long)size);
 }
 
 // Makes [0, end) of `arena` usable, end rounded up; `committed` is how far it is.
@@ -154,10 +154,9 @@ char* Reserve()
                    MAP_PRIVATE | MAP_ANONYMOUS | MAP_NORESERVE, -1, 0);
     arena = p == MAP_FAILED ? nullptr : (char*)p;
 #endif
-    if (!arena) {
-        fprintf(stderr, "efz: cannot reserve the arena\n");
-        abort();
-    }
+    if (!arena)
+        Fatal("arena", "cannot reserve an arena's %llu bytes of address space",
+              (unsigned long long)kReserve);
     g_arenaSize = kReserve;
     uintptr_t committed = 0;
     if (!Commit(arena, committed, kArenaStart))
@@ -296,9 +295,8 @@ void SetStack(void* local)
 
 uint32_t BadHandle(const void* p)
 {
-    fprintf(stderr, "efz: a pointer outside the arena and the stack (%p) was stored in the "
-                    "game's memory\n", p);
-    abort();
+    Fatal("arena", "a pointer outside the arena and the stack (%p) was stored in the game's "
+                   "memory", p);
 }
 
 #ifdef EFZ_MULTI_INSTANCE

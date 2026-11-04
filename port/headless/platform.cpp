@@ -9,20 +9,45 @@
 //   Globals::input; the keyboard is never pressed and there are no joysticks.
 // - Sound: the sound slots are taken and given back as on SDL3, so the game's sound
 //   IDs are the same, but nothing is loaded beyond the .wav header and nothing plays.
+// - The log (port/log.h): warnings and worse go to stderr; there is no session folder,
+//   fight record or crash report, which are the SDL3 game's (docs/logging.md).
+#include <stdarg.h>
 #include <stdio.h>
+#include <stdlib.h>
 #include <string.h>
 
 #include "efz.h"
 #include "headless.h"
+#include "log.h"
 #include "platform.h"
 
 namespace {
 
 bool g_messages = true;
 
+void Line(const char* level, const char* category, const char* format, va_list args)
+{
+    char text[1024];
+    vsnprintf(text, sizeof(text), format, args);
+    fprintf(stderr, "efz: %s %s: %s\n", level, category, text);
+}
+
 } // namespace
 
 namespace efz {
+
+void LogV(LogLevel level, const char* category, const char* format, va_list args)
+{
+    static const char* const names[] = {"DEBUG", "INFO", "WARN", "ERROR", "FATAL"};
+    if (level >= kLogWarn)
+        Line(names[level], category, format, args);
+}
+
+void FatalV(const char* category, const char* format, va_list args)
+{
+    Line("FATAL", category, format, args);
+    abort();
+}
 
 void RequestQuit()
 {

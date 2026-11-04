@@ -22,6 +22,7 @@
 
 #include "efz.h"
 #include "platform.h"
+#include "log.h"
 
 namespace efz {
 
@@ -156,6 +157,19 @@ FILE* efz::OpenForUpdate(const char* name, bool create)
     return f;
 }
 
+uint32_t efz::AdoptFile(FILE* f)
+{
+    std::lock_guard<std::mutex> lock(g_filesLock);
+    for (size_t i = 0; i < kFiles; i++) {
+        if (!g_files[i]) {
+            g_files[i] = f;
+            return (uint32_t)(i + 1);
+        }
+    }
+    fclose(f);
+    return INVALID_HANDLE_VALUE;
+}
+
 HANDLE CreateFileA(LPCSTR name, DWORD access, DWORD, SECURITY_ATTRIBUTES*, DWORD disposition,
                    DWORD, HANDLE)
 {
@@ -179,17 +193,13 @@ HANDLE CreateFileA(LPCSTR name, DWORD access, DWORD, SECURITY_ATTRIBUTES*, DWORD
         }
         break;
     }
-    if (!f)
+    if (!f) {
+        // Often expected (key.ini, records and replays not made yet), so at debug level:
+        // it shows in a crash report's last lines all the same.
+        efz::LogDebug("file", "cannot open %s for %s", name, write ? "writing" : "reading");
         return INVALID_HANDLE_VALUE;
-    std::lock_guard<std::mutex> lock(g_filesLock);
-    for (size_t i = 0; i < kFiles; i++) {
-        if (!g_files[i]) {
-            g_files[i] = f;
-            return (HANDLE)(i + 1);
-        }
     }
-    fclose(f);
-    return INVALID_HANDLE_VALUE;
+    return AdoptFile(f);
 }
 
 BOOL ReadFile(HANDLE h, LPVOID buffer, DWORD size, LPDWORD read, void*)

@@ -142,8 +142,14 @@ BYTE CScene3::Update()
     }
     tick = 0;
     for (; tick < m_speed; tick++) {
+#ifdef EFZ_TRACE
+        TraceTickStart(this);
+#endif
         m_players[0]->ReadInput();
         m_players[1]->ReadInput();
+#ifdef EFZ_TRACE
+        TraceInputsRead(this);
+#endif
         StartIntro();
         m_players[0]->ProcessInput();
         m_players[1]->ProcessInput();

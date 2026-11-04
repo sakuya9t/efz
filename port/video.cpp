@@ -5,6 +5,7 @@
 
 #include "efz.h"
 #include "platform.h"
+#include "log.h"
 
 namespace {
 
@@ -42,17 +43,21 @@ bool OpenScreen(int w, int h)
     if (!g_renderer) {
         g_renderer = SDL_CreateRenderer(Window(), nullptr);
         if (!g_renderer) {
-            SDL_Log("efz: %s", SDL_GetError());
+            LogError("video", "cannot create a renderer: %s", SDL_GetError());
             return false;
         }
         SDL_SetRenderVSync(g_renderer, 0);
+        const char* name = SDL_GetRendererName(g_renderer);
+        LogInfo("video", "renderer %s", name ? name : "?");
+        SetSessionString("renderer", name ? name : "?");
     }
     if (g_texture)
         SDL_DestroyTexture(g_texture);
     g_texture = SDL_CreateTexture(g_renderer, SDL_PIXELFORMAT_XRGB8888,
                                   SDL_TEXTUREACCESS_STREAMING, w, h);
     if (!g_texture) {
-        SDL_Log("efz: %s", SDL_GetError());
+        LogError("video", "cannot create the screen's %dx%d texture: %s", w, h,
+                 SDL_GetError());
         return false;
     }
     SDL_SetTextureScaleMode(g_texture, SDL_SCALEMODE_NEAREST);

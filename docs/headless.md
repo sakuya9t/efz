@@ -196,6 +196,10 @@ with an embedding of them than with the numbers themselves.
 - One data folder per process (`SetDataDir` is the process's).
 - Save states hold the addresses of the game's C++ class tables: they load only into
   the process that saved them.
+- No logs, crash reports or fight records: those are the SDL3 game's
+  ([logging.md](logging.md)); the game's own errors go to stderr. A fight record's state
+  file, unlike a save state, holds no addresses and loads in any process, build or
+  system (`TraceLoadState`), but efz_env doesn't load one yet.
 - Each environment reserves 2 GB of address space (committing what it uses); 64-bit
   address spaces have room for tens of thousands.
 - Linux and macOS: the library builds there in CI (`.github/workflows/native.yml`), and

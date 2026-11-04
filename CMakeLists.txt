@@ -58,7 +58,8 @@ option(EFZ_HOST_X87 "Take sin, cos and atan2 from this CPU's x87" OFF)
 option(EFZ_COVERAGE "Instrument the game for gcov" OFF)
 
 # The game's own sources, less the four the platform layer replaces; the platform
-# layer's parts every build shares; and SDL3's.
+# layer's parts every build shares; and SDL3's, with the game's log, crash reports and
+# fight records (docs/logging.md).
 file(GLOB EFZ_GAME_SOURCES CONFIGURE_DEPENDS ${CMAKE_SOURCE_DIR}/src/*.cpp)
 foreach(f main graphics input sound)
   list(REMOVE_ITEM EFZ_GAME_SOURCES ${CMAKE_SOURCE_DIR}/src/${f}.cpp)
@@ -68,7 +69,7 @@ foreach(f arena graphics layout win32 x87)
   list(APPEND EFZ_PORT_SOURCES ${CMAKE_SOURCE_DIR}/port/${f}.cpp)
 endforeach()
 set(EFZ_SDL_SOURCES)
-foreach(f main sdlmain input sound video)
+foreach(f main sdlmain input sound video log crash record)
   list(APPEND EFZ_SDL_SOURCES ${CMAKE_SOURCE_DIR}/port/${f}.cpp)
 endforeach()
 
@@ -108,6 +109,21 @@ if(EFZ_GAME)
   if(MINGW)
     target_link_options(efz PRIVATE -static)
   endif()
+  # The crash report's stack traces and minidumps (port/crash.cpp).
+  if(WIN32)
+    target_link_libraries(efz PRIVATE dbghelp)
+  else()
+    target_link_libraries(efz PRIVATE ${CMAKE_DL_LIBS})
+  endif()
+  # The revision and configuration the log names (port/log.cpp), from git at each build.
+  add_custom_target(efz-buildinfo
+    COMMAND ${CMAKE_COMMAND} -DSOURCE=${CMAKE_SOURCE_DIR} -DOUT=${CMAKE_BINARY_DIR}/efz_build.h
+            -P ${CMAKE_SOURCE_DIR}/tools/buildinfo.cmake
+    BYPRODUCTS ${CMAKE_BINARY_DIR}/efz_build.h
+    VERBATIM)
+  add_dependencies(efz efz-buildinfo)
+  target_include_directories(efz PRIVATE ${CMAKE_BINARY_DIR})
+  target_compile_definitions(efz PRIVATE EFZ_BUILD_CONFIG="$<CONFIG>")
 endif()
 
 # The headless library: the game compiled once more, each game in an arena of its own
@@ -183,3 +199,14 @@ target_include_directories(efz-x87-test PRIVATE port)
 target_compile_options(efz-x87-test PRIVATE
                        $<IF:$<CXX_COMPILER_ID:MSVC>,/fp:precise /fp:contract-,-ffp-contract=off>)
 add_test(NAME x87 COMMAND efz-x87-test)
+
+# A crash or a hang must leave a report (port/crash.cpp, docs/logging.md): the game
+# crashes or hangs on purpose, which needs no game data.
+if(EFZ_GAME)
+  foreach(kind segv abort fatal hang)
+    add_test(NAME crash-${kind}
+             COMMAND ${CMAKE_COMMAND} -DEFZ=$<TARGET_FILE:efz> -DKIND=${kind}
+                     -DDIR=${CMAKE_BINARY_DIR}/crash-test-${kind}
+                     -P ${CMAKE_SOURCE_DIR}/tests/crash_test.cmake)
+  endforeach()
+endif()

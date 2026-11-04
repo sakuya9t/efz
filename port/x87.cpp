@@ -596,4 +596,9 @@ void Srand(unsigned seed)
     g_holdrand = seed;
 }
 
+uint32_t RandState()
+{
+    return g_holdrand;
+}
+
 } // namespace efz

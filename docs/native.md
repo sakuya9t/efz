@@ -65,6 +65,10 @@ macOS (arm64, x64).
 - **Sound.** Mixed in software on SDL's audio thread. The music loops at its loop
   points exactly, where the original checked once per frame.
 
+- **Logs.** Each run keeps a folder in `logs/` under the save folder: `efz.log`, a
+  report when the game crashes or hangs, and a record of each fight, which
+  `--replay-fight` replays tick for tick ([logging.md](logging.md)).
+
 For tests the game runs without a display (`SDL_VIDEO_DRIVER=offscreen
 SDL_AUDIO_DRIVER=dummy`) and takes `--frames N`, `--fast`, `--keys SCRIPT` and
 `--dump DIR` (see `port/main.cpp`).
@@ -180,6 +184,7 @@ lists what a platform provides).
 | `input.cpp` | `CInput`: the keyboard state by DirectInput code, controllers as joysticks; `GetInput` and the `key.ini` loaders as the original |
 | `sound.cpp` | `CSound`: the 150 sound slots, a mixer on SDL's audio thread, `.wav` parsing, the music's loop points |
 | `main.cpp`, `sdlmain.cpp` | What `WinMain` did, in the same order, then the scenes at 64 frames a second; `MessageBox`, `PostMessage`, `timeGetTime` |
+| `log.cpp`, `crash.cpp`, `record.cpp` | The log and its session folder, crash and hang reports, and the fight records, checks and replays ([logging.md](logging.md)) |
 
 ## The compatibility test
 
