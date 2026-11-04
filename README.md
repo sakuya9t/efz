@@ -332,11 +332,15 @@ copy of the 1.02h files (default `~/.local/share/efz-decomp/revival/1.02h`).
 
 ```sh
 toolchain/setup-vs2012.sh          # ~3.5 GB download, once; after toolchain/setup.sh
+toolchain/setup-vs2012-windows.sh  # the same on Windows, in Git Bash: no container, no admin
 ```
 
 lays out Visual C++ 2012 with Update 5's compiler, the Windows SDK 7.1A, the DirectX SDK
 (June 2010), boost 1.56, protobuf 2.6.1 and zlib 1.2.8, which is what the binaries'
-Rich headers and code show; `tools/msvc11` runs it.
+Rich headers and code show; `tools/msvc11` runs it. On Windows it runs the tools as they
+are, with a `subst` drive `Z:` and junctions (`C:\Git`, `C:\Programming`) for the
+container's paths, and the setup also puts GNU make and a `python3` with pefile in the
+toolchain's `bin`; add it to `PATH` and the targets below run the same way.
 
 ```sh
 make revival-diff                  # compare the launcher's functions with $REVIVAL_DIR's

@@ -1,12 +1,12 @@
 #!/bin/bash
-# Run a Visual C++ 2012 tool (cl, link, lib, ...) under wine in the efz-msvc71 container,
-# with the include and library paths of a v110_xp build: VS2012's own, Windows SDK 7.1A,
-# the DirectX SDK (June 2010) and boost 1.56.  EfzRevival 1.02h was built with this
-# toolchain.
+# Run a Visual C++ 2012 tool (cl, link, lib, ...) under wine in the efz-msvc71 container
+# (on Windows natively, see below), with the include and library paths of a v110_xp
+# build: VS2012's own, Windows SDK 7.1A, the DirectX SDK (June 2010) and boost 1.56.
+# EfzRevival 1.02h was built with this toolchain.
 #   tools/msvc11 cl /c revival/EfzRevival/init.cpp
 # The repo is mounted at /work and the current directory is preserved inside it.
 # EFZ_TOOLCHAIN (default ~/tools/efz-toolchain) holds vs2012/, sdk71a/, dxsdk2010/ and
-# boost156/, laid out by toolchain/setup-vs2012.sh.
+# boost156/, laid out by toolchain/setup-vs2012.sh (setup-vs2012-windows.sh on Windows).
 # C:\Git is build/revival/c/Git, so a link can write its PDB where the originals' were,
 # C:\Git\efz_2022\Release\, a path the binaries record. C:\Programming is the toolchain
 # directory: the launcher was built against C:\Programming\protobuf-2.6.1\src, and the
@@ -39,6 +39,52 @@ if [ -n "$MSVC11_QUIET" ]; then
         -e '/^[A-Za-z0-9_.]*\.\(c\|cc\|cpp\)\r\?$/d'
     exit "${PIPESTATUS[0]}"
 fi
+# On Windows (Git Bash or MSYS2) the tools run as they are, in the container's paths made
+# real: Z: is a subst drive of $EFZ_TOOLCHAIN/zroot, whose opt\tc is a junction to the
+# toolchain and work one to this repo, and C:\Git and C:\Programming are junctions as in
+# the container. The work junction follows the repo the script is in, so builds of two
+# checkouts see the same paths (one at a time).
+case $(uname -s) in
+MINGW* | MSYS*)
+    export MSYS2_ARG_CONV_EXCL='*'
+    win() { cygpath -w "$1"; }
+    # junction LINK TARGET: LINK made a junction to TARGET, unless it already is one (a
+    # marker file beside the toolchain records each junction's target).
+    junction() {
+        local marker="$toolchain/zroot/.junction-$(echo "$1" | tr -c 'A-Za-z0-9\n' _)"
+        [ -e "$1" ] && [ "$(cat "$marker" 2>/dev/null)" = "$2" ] && return
+        if [ -e "$1" ]; then
+            [ -f "$marker" ] || { echo "tools/msvc11: $(win "$1") is in the way" >&2; exit 1; }
+            cmd /c rmdir "$(win "$1")"
+        fi
+        cmd /c mklink /J "$(win "$1")" "$(win "$2")" > /dev/null
+        echo "$2" > "$marker"
+    }
+    mkdir -p "$toolchain/zroot/opt" "$repo/build/revival/c/Git"
+    # One at a time: make -j starts many of these at once.
+    lock="$toolchain/zroot/.lock"
+    until mkdir "$lock" 2> /dev/null; do sleep 0.1; done
+    trap 'rmdir "$lock"' EXIT
+    junction "$toolchain/zroot/opt/tc" "$toolchain"
+    junction "$toolchain/zroot/work" "$repo"
+    junction /c/Git "$repo/build/revival/c/Git"
+    junction /c/Programming "$toolchain"
+    zroot=$(win "$toolchain/zroot")
+    mapped=$(subst | sed -n 's/^Z:\\: => //p' | tr -d '\r')
+    if [ -z "$mapped" ]; then
+        subst Z: "$zroot"
+    elif [ "$mapped" != "$zroot" ]; then
+        echo "tools/msvc11: Z: is $mapped, not $zroot" >&2; exit 1
+    fi
+    rmdir "$lock"; trap - EXIT
+    export INCLUDE='Z:\opt\tc\vs2012\include;Z:\opt\tc\sdk71a\Include;Z:\opt\tc\dxsdk2010\Include;Z:\opt\tc\boost156'
+    export LIB='Z:\opt\tc\vs2012\lib;Z:\opt\tc\sdk71a\Lib;Z:\opt\tc\dxsdk2010\Lib;Z:\opt\tc\boost156\lib'
+    export PATH="/z/opt/tc/vs2012/bin:/z/opt/tc/sdk71a/Bin:$PATH"
+    case $toolpath in /work/* | /opt/*) toolpath=/z$toolpath ;; esac
+    cd "/z${MSVC11_DIR:-/work$sub}"
+    exec "$toolpath" "$@"
+    ;;
+esac
 exec docker run --rm -i --network none \
     -v "$repo:/work" -v "$toolchain:/opt/tc:ro" -w "${MSVC11_DIR:-/work$sub}" \
     -e 'INCLUDE=Z:\opt\tc\vs2012\include;Z:\opt\tc\sdk71a\Include;Z:\opt\tc\dxsdk2010\Include;Z:\opt\tc\boost156' \
