@@ -1,12 +1,15 @@
-// CGraphics on SDL3, in place of src/graphics.cpp's DirectDraw.
+// CGraphics, in place of src/graphics.cpp's DirectDraw.
 //
 // The screen is what it was: an 8-bit back buffer of 320x240 (640x480 in mode 1, which
-// Upscale fills from the top-left quarter) and a 256-colour palette. Flip converts it
-// through the palette into a texture that SDL scales to the window. Sprites are 8-bit
-// surfaces in the arena. The loaders and the blitters follow src/graphics.cpp step for
-// step, the inline-assembly loops included, so the frames are the original's.
-#include <SDL3/SDL.h>
-
+// Upscale fills from the top-left quarter) and a 256-colour palette. Flip shows it
+// through the platform (efz::Present: on SDL3 a texture scaled to the window, see
+// video.cpp). Sprites are 8-bit surfaces in the arena. The loaders and the blitters
+// follow src/graphics.cpp step for step, the inline-assembly loops included, so the
+// frames are the original's.
+//
+// A game that isn't drawn (efz::Drawing, the headless library's choice) loads no
+// pictures: its sprites keep their sizes and first pixel (the colour key the game
+// reads), the blend tables aren't built, and the blitters do nothing.
 #include "efz.h"
 #include "platform.h"
 
@@ -36,17 +39,17 @@ struct IDirectDrawPalette : IUnknown {
     }
 };
 
-IDirectDrawSurface::IDirectDrawSurface(int w, int h)
+IDirectDrawSurface::IDirectDrawSurface(int w, int h, bool allPixels)
 {
     width = w;
     height = h;
     pitch = (w + 3) & ~3;
-    pixels = new BYTE[pitch * h + 4];
+    pixels = new BYTE[allPixels ? pitch * h + 4 : 4];
 }
 
 IDirectDrawSurface::~IDirectDrawSurface()
 {
-    delete[] pixels;
+    delete[] (BYTE*)pixels;
 }
 
 ULONG IDirectDrawSurface::Release()
@@ -57,14 +60,9 @@ ULONG IDirectDrawSurface::Release()
 
 namespace {
 
-SDL_Renderer* g_renderer;
-SDL_Texture* g_texture;
-uint32_t g_rgb[640 * 480]; // the frame in the texture's format
-int g_rgbWidth;
-int g_rgbHeight;
-
 // A locked rectangle, as DirectDraw's Lock gives it: the address of its top-left pixel
-// and the surface's pitch. Like Lock, it fails for a rectangle outside the surface.
+// and the surface's pitch. Like Lock, it fails for a rectangle outside the surface, and
+// in a game that isn't drawn it always fails, so that every blitter does nothing.
 struct Lock {
     BYTE* bits;
     int pitch;
@@ -75,7 +73,7 @@ struct Lock {
 
     bool Take(IDirectDrawSurface* s, const RECT* r)
     {
-        if (!s)
+        if (!s || !efz::Drawing())
             return false;
         int left = 0, top = 0;
         if (r) {
@@ -87,74 +85,27 @@ struct Lock {
         }
         pitch = s->pitch;
         base = s->pixels;
-        end = s->pixels + s->pitch * s->height;
+        end = base + s->pitch * s->height;
         bits = base + top * pitch + left;
         return true;
     }
     bool Inside(const BYTE* p) const { return p >= base && p < end; }
 };
 
-// "Rev build" in the bottom-left corner, telling this build from the original. It is
-// drawn on the window over the frame, not into it: the game's screenshots and --dump
-// keep the original's frames.
-void DrawWatermark()
-{
-    const char* text = "Rev build";
-    const float x = 4;
-    const float y = 480 - SDL_DEBUG_TEXT_FONT_CHARACTER_SIZE - 4;
-    SDL_SetRenderDrawColor(g_renderer, 0, 0, 0, 160);
-    SDL_RenderDebugText(g_renderer, x + 1, y + 1, text);
-    SDL_SetRenderDrawColor(g_renderer, 255, 255, 255, 192);
-    SDL_RenderDebugText(g_renderer, x, y, text);
-}
-
-void Present(IDirectDrawSurface* back, IDirectDrawPalette* pal)
-{
-    if (!g_renderer || !back)
-        return;
-    uint32_t colors[0x100];
-    for (int i = 0; i < 0x100; i++) {
-        const PALETTEENTRY& e = pal ? pal->entries[i] : PALETTEENTRY();
-        colors[i] = 0xff000000u | (e.peRed << 16) | (e.peGreen << 8) | e.peBlue;
-    }
-    for (int y = 0; y < back->height; y++) {
-        const BYTE* row = back->pixels + y * back->pitch;
-        uint32_t* out = g_rgb + y * back->width;
-        for (int x = 0; x < back->width; x++)
-            out[x] = colors[row[x]];
-    }
-    g_rgbWidth = back->width;
-    g_rgbHeight = back->height;
-    SDL_UpdateTexture(g_texture, nullptr, g_rgb, back->width * 4);
-    SDL_SetRenderDrawColor(g_renderer, 0, 0, 0, 255);
-    SDL_RenderClear(g_renderer);
-    SDL_RenderTexture(g_renderer, g_texture, nullptr, nullptr);
-    DrawWatermark();
-    SDL_RenderPresent(g_renderer);
-}
-
-// Creates the screen surfaces and the texture for mode 0 (320x240) or 1 (640x480).
+// Creates the screen surfaces for mode 0 (320x240) or 1 (640x480), and what shows them.
 bool CreateScreen(CGraphics* g)
 {
     int w = g->m_mode * 320 + 320;
     int h = g->m_mode * 240 + 240;
     g->m_primary = new IDirectDrawSurface(w, h);
     g->m_back = new IDirectDrawSurface(w, h);
-    if (!g_renderer) {
-        g_renderer = SDL_CreateRenderer(efz::Window(), nullptr);
-        if (!g_renderer)
-            return false;
-        SDL_SetRenderVSync(g_renderer, 0);
-    }
-    if (g_texture)
-        SDL_DestroyTexture(g_texture);
-    g_texture = SDL_CreateTexture(g_renderer, SDL_PIXELFORMAT_XRGB8888,
-                                  SDL_TEXTUREACCESS_STREAMING, w, h);
-    if (!g_texture)
-        return false;
-    SDL_SetTextureScaleMode(g_texture, SDL_SCALEMODE_NEAREST);
-    SDL_SetRenderLogicalPresentation(g_renderer, 640, 480, SDL_LOGICAL_PRESENTATION_LETTERBOX);
-    return true;
+    return efz::OpenScreen(w, h);
+}
+
+// A sprite's surface: without its pixels in a game that isn't drawn.
+IDirectDrawSurface* NewSprite(int width, int height)
+{
+    return new IDirectDrawSurface(width, height, efz::Drawing());
 }
 
 // Copies the sprite rows through `pixel`, as the blitters' loops do: from the last
@@ -177,24 +128,13 @@ void Blit8(const Lock& s, const Lock& d, int width, int height, BOOL flip, F pix
 
 } // namespace
 
-bool efz::SaveFrame(const char* path)
-{
-    SDL_Surface* s = SDL_CreateSurfaceFrom(g_rgbWidth, g_rgbHeight, SDL_PIXELFORMAT_XRGB8888,
-                                           g_rgb, g_rgbWidth * 4);
-    if (!s)
-        return false;
-    bool ok = SDL_SaveBMP(s, path);
-    SDL_DestroySurface(s);
-    return ok;
-}
-
 BOOL CGraphics::Init(HWND hWnd, BYTE mode)
 {
     m_mode = mode;
     m_hwnd = hWnd;
     m_dd = new IDirectDraw;
     if (!CreateScreen(this)) {
-        MessageBox(0, SDL_GetError(), "ERROR", MB_OK);
+        MessageBox(0, "画面を作成できません", "ERROR", MB_OK);
         return Close();
     }
     m_ddpal = new IDirectDrawPalette;
@@ -228,12 +168,7 @@ void CGraphics::Shutdown()
         m_dd->Release();
         m_dd = NULL;
     }
-    if (g_texture)
-        SDL_DestroyTexture(g_texture);
-    if (g_renderer)
-        SDL_DestroyRenderer(g_renderer);
-    g_texture = nullptr;
-    g_renderer = nullptr;
+    efz::CloseScreen();
 }
 
 CGraphics::~CGraphics()
@@ -265,7 +200,9 @@ BOOL CGraphics::RestoreSurface(PTR32(IDirectDrawSurface)*)
     return TRUE;
 }
 
-RECT CGraphics::LoadBmp(PTR32(IDirectDrawSurface)* surface, const char* name, BYTE base)
+// LoadBmp and LoadBmpHigh: `high` maps colours 40 and up to 175 and up.
+static RECT LoadBmpImage(PTR32(IDirectDrawSurface)* surface, const char* name, BYTE base,
+                         bool high)
 {
     DWORD dw;
     HANDLE h = CreateFile(name, GENERIC_READ, 0, NULL, OPEN_EXISTING, FILE_ATTRIBUTE_NORMAL, NULL);
@@ -279,41 +216,19 @@ RECT CGraphics::LoadBmp(PTR32(IDirectDrawSurface)* surface, const char* name, BY
     int width = data[0x12] + (data[0x13] << 8);
     width = (4 - width % 4) * (width % 4 > 0) + width;
     int height = data[0x16] + (data[0x17] << 8);
-    *surface = new IDirectDrawSurface(width, height);
+    *surface = NewSprite(width, height);
     int off = data[0xa] + (data[0xb] << 8);
     BYTE* dst = (*surface)->pixels;
     int pitch = (*surface)->pitch;
-    for (int y = 0; y < height; y++) {
-        for (int x = 0; x < width; x++)
-            dst[(height - 1 - y) * pitch + x] = data[y * width + x + off] + base;
-    }
-    CloseHandle(h);
-    delete[] data;
-    return MakeRect(0, 0, width, height);
-}
-
-RECT CGraphics::LoadBmpHigh(PTR32(IDirectDrawSurface)* surface, const char* name, BYTE base)
-{
-    DWORD dw;
-    HANDLE h = CreateFile(name, GENERIC_READ, 0, NULL, OPEN_EXISTING, FILE_ATTRIBUTE_NORMAL, NULL);
-    DWORD fileSize = GetFileSize(h, NULL);
-    if (h == INVALID_HANDLE_VALUE) {
-        MessageBox(0, "オフスクリーンサーフェイスの生成に失敗", name, MB_OK);
-        return MakeRect(0, 0, 0, 0);
-    }
-    BYTE* data = new BYTE[fileSize];
-    ReadFile(h, data, fileSize, &dw, NULL);
-    int width = data[0x12] + (data[0x13] << 8);
-    width = (4 - width % 4) * (width % 4 > 0) + width;
-    int height = data[0x16] + (data[0x17] << 8);
-    *surface = new IDirectDrawSurface(width, height);
-    int off = data[0xa] + (data[0xb] << 8);
-    BYTE* dst = (*surface)->pixels;
-    int pitch = (*surface)->pitch;
-    for (int y = 0; y < height; y++) {
-        for (int x = 0; x < width; x++) {
-            BYTE pix = data[y * width + x + off];
-            dst[(height - 1 - y) * pitch + x] = pix >= 0x28 ? pix + 0x87 : pix + base;
+    auto map = [&](BYTE pix) -> BYTE { return high && pix >= 0x28 ? pix + 0x87 : pix + base; };
+    if (!efz::Drawing()) {
+        // The first pixel only: the bottom row's first in the file.
+        if (width > 0 && height > 0)
+            dst[0] = map(data[(height - 1) * width + off]);
+    } else {
+        for (int y = 0; y < height; y++) {
+            for (int x = 0; x < width; x++)
+                dst[(height - 1 - y) * pitch + x] = map(data[y * width + x + off]);
         }
     }
     CloseHandle(h);
@@ -321,7 +236,18 @@ RECT CGraphics::LoadBmpHigh(PTR32(IDirectDrawSurface)* surface, const char* name
     return MakeRect(0, 0, width, height);
 }
 
-// LoadSurface and LoadSurfaceHigh: `high` maps colours 40 and up to 175 and up.
+RECT CGraphics::LoadBmp(PTR32(IDirectDrawSurface)* surface, const char* name, BYTE base)
+{
+    return LoadBmpImage(surface, name, base, false);
+}
+
+RECT CGraphics::LoadBmpHigh(PTR32(IDirectDrawSurface)* surface, const char* name, BYTE base)
+{
+    return LoadBmpImage(surface, name, base, true);
+}
+
+// LoadSurface and LoadSurfaceHigh: `high` maps colours 40 and up to 175 and up. Returns
+// the bytes the image took in `data`.
 static int LoadDatImage(PTR32(IDirectDrawSurface)* surface, BYTE* data, BYTE rle, BYTE base,
                         bool high)
 {
@@ -331,10 +257,32 @@ static int LoadDatImage(PTR32(IDirectDrawSurface)* surface, BYTE* data, BYTE rle
     int width = data[offset] + (data[offset + 1] << 8);
     int height = data[offset + 2] + (data[offset + 3] << 8);
     offset += 4;
-    *surface = new IDirectDrawSurface(width, height);
+    *surface = NewSprite(width, height);
     BYTE* bits = (*surface)->pixels;
     int pitch = (*surface)->pitch;
     auto map = [&](BYTE pix) -> BYTE { return high && pix >= 0x28 ? pix + 0x87 : pix + base; };
+    if (!efz::Drawing()) {
+        // Only the length and the first pixel. Raw, the bottom row comes first; run-length
+        // coded, a byte up to `rle` is a pixel and a higher one repeats the last pixel
+        // for its pixel and (byte - rle - 1) more.
+        long total = (long)width * height;
+        if (rle == 0) {
+            if (total > 0)
+                bits[0] = map(data[(height - 1) * width + 4]);
+            return offset + (int)total;
+        }
+        for (long pos = 0; pos < total;) {
+            BYTE b = data[offset++];
+            if (b <= rle) {
+                if (pos == 0)
+                    bits[0] = map(b);
+                pos++;
+            } else {
+                pos += b - rle;
+            }
+        }
+        return offset;
+    }
     if (rle == 0) {
         for (int y = 0; y < height; y++) {
             for (int x = 0; x < width; x++) {
@@ -660,7 +608,7 @@ BOOL CGraphics::Flip()
 {
     if (m_mode)
         Upscale();
-    Present(m_back, m_ddpal);
+    efz::Present(m_back, m_ddpal ? m_ddpal->entries : NULL);
     efz::PumpEvents();
     return TRUE;
 }
@@ -712,6 +660,8 @@ BOOL CGraphics::LoadPaletteDat(PALETTEENTRY* palette, const char* name, int from
 // quarter-squares table, and ties keep the lowest colour, as in the original.
 void CGraphics::BuildBlendTables(PALETTEENTRY* palette)
 {
+    if (!efz::Drawing())
+        return; // only the blitters read them
     const WORD* sq = &m_quarterSquares[0x100];
     for (int a = 0; a < 0x100; a++) {
         int end = a + 1;

@@ -10,16 +10,27 @@ run under wine. tests/compat/reference.txt holds the digest of its log for every
 so a check needs no logs of the original: only the game data and the build to test.
 
     tools/compat.py check [CASES]           every case (or those named, or matching a
-                                            prefix such as fuzz1-) in the native game;
-                                            each log must be the reference's, byte for byte
-        --windows                           the native game's Windows build, under 64-bit
-                                            wine (build/windows/efz.exe)
+                                            prefix such as fuzz1-) in both the native game
+                                            and the headless runner (efz-headless, docs/
+                                            headless.md, its game moved to a copy on a new
+                                            thread every HOP frames, as the training
+                                            library does): each log must be the reference's,
+                                            byte for byte, and the two the same
+        --mode game|headless                one of the two only
+        --no-reference                      only that the two write the same logs: for a
+                                            build that doesn't give the reference's (on a
+                                            machine where the untouched source doesn't)
+        --windows                           the native game's Windows builds, under 64-bit
+                                            wine (build/windows/efz.exe, efz-headless.exe)
         --exe PATH                          a 32-bit Windows build of efz.exe with the
-                                            harness (make trace), under wine
+                                            harness (make trace), under wine; that only
         --native PATH                       another native build (default build/native/efz)
+        --headless PATH                     its headless runner (default efz-headless next
+                                            to the game)
     tools/compat.py explain CASE            where and how a build parts from the reference:
                                             the first tick, the status, the blocks of state
-                                            and the members (needs libclang to name them)
+                                            and the members (needs libclang to name them);
+                                            --mode headless: the headless runner's
     tools/compat.py reference [CASES]       the reference plays the cases: its logs are
                                             cached, and each digest must be the recorded
                                             one (--update records new or changed ones)
@@ -38,6 +49,9 @@ so a check needs no logs of the original: only the game data and the build to te
 
 EFZ_DIR is the folder of the original game (its data). Work folders, the wine prefixes
 and the reference's cached logs are in $EFZ_COMPAT (default ~/.local/share/efz-decomp/compat2).
+Checking native builds needs neither docker nor wine, and works on Windows too (builds
+in Visual Studio's configuration folders, build/native/RelWithDebInfo/efz.exe, are
+found).
 """
 import argparse
 import concurrent.futures
@@ -60,7 +74,14 @@ REPLAYS = os.path.join(TESTS, 'replays')
 TAG = 'compat-reference'
 REFERENCE_EXE = os.path.join(REPO, 'build', 'reference', 'efz.exe')
 NATIVE = os.path.join(REPO, 'build', 'native', 'efz')
+HEADLESS_NAME = 'efz-headless'
 WINDOWS = os.path.join(REPO, 'build', 'windows', 'efz.exe')
+# The headless runner moves its game into a copy on a new thread every HOP frames
+# (efz-headless --hop): a prime, so that the moves fall on every phase of the game's
+# frame-parity logic.
+HOP = 97
+# How reports name the builds under test.
+LABELS = {'game': 'game', 'headless': 'headless runner'}
 COVERAGE_DIR = os.path.join(REPO, 'build', 'coverage')
 HOME = os.environ.get('EFZ_COMPAT', os.path.expanduser('~/.local/share/efz-decomp/compat2'))
 CACHE = os.path.join(HOME, 'reference')
@@ -174,22 +195,39 @@ def digest(path):
 # --- Running a build.
 
 def efz_dir():
+    """The game's data: an EFZ 4.02 install, or a pack of tools/compatpack.py (which
+    has no efz.exe; only make check, for the reference, needs that)."""
     efz = os.environ.get('EFZ_DIR')
-    if not efz or not os.path.isfile(os.path.join(efz, 'efz.exe')):
-        die('set EFZ_DIR to the folder containing the original efz.exe')
+    if not efz or not os.path.isfile(os.path.join(efz, 'system', 'effect', 'effect.pat')):
+        die('set EFZ_DIR to the folder of an EFZ 4.02 install, or a pack of '
+            'tools/compatpack.py')
     return os.path.abspath(efz)
 
 
 _setup_lock = threading.Lock()
 
 
-def game_dir(worker):
-    """A game folder of the worker's own: links to EFZ_DIR's files, a fixed key.ini (the
-    data folder's, written over each time) and an empty replay folder."""
+def binary(path):
+    """`path`, or where a build put it under another name: with .exe, or in a Visual
+    Studio configuration folder next to it."""
+    folder, name = os.path.split(path)
+    configs = ('RelWithDebInfo', 'Release', 'Debug')
+    for d in (folder, *(os.path.join(folder, c) for c in configs)):
+        for n in (name, name + '.exe'):
+            if os.path.isfile(os.path.join(d, n)):
+                return os.path.join(d, n)
+    return path
+
+
+def game_dir(worker, links):
+    """A game folder of the worker's own: a fixed key.ini (the data folder's, written
+    over each time), an empty replay folder, and with `links` links to EFZ_DIR's files
+    (for efz.exe, which reads its data from its folder; the native builds take
+    --data)."""
     efz = efz_dir()
     game = os.path.join(HOME, 'work', f'game{worker}')
     os.makedirs(os.path.join(game, 'replay'), exist_ok=True)
-    for name in os.listdir(efz):
+    for name in os.listdir(efz) if links else ():
         if name.lower() in ('efz.exe', 'key.ini', 'replay'):
             continue
         link = os.path.join(game, name)
@@ -254,36 +292,47 @@ wineserver -w
                    *envs, '-w', '/run/game', IMAGE, 'bash', '-c', script], timeout)
 
 
-def run_windows(game, env, worker, timeout):
-    """The native game's 64-bit Windows build under wine."""
+def run_windows(exe, args, game, env, worker, timeout):
+    """One of the native game's 64-bit Windows builds (efz.exe, efz-headless.exe) under
+    wine."""
     prefix = wine_prefix(f'wine64-{worker}', IMAGE64, (['-e', 'WINEARCH=win64'],
                                                        '/usr/lib/wine/wine64 wineboot -i'))
     envs = [x for k, v in env.items() for x in ('-e', f'{k}={v}')]
-    script = r'''
-/usr/lib/wine/wine64 /bin64/efz.exe --data 'Z:\efz' --save 'Z:\run\game'
-'''
+    script = (f'/usr/lib/wine/wine64 /bin64/{os.path.basename(exe)} '
+              r"--data 'Z:\efz' --save 'Z:\run\game' " + ' '.join(args))
     run_container(['--rm', '--init', '--network', 'none',
                    '-v', f'{efz_dir()}:/efz:ro', '-v', f'{game}:/run/game',
-                   '-v', f'{prefix}:/wine', '-v', f'{os.path.dirname(WINDOWS)}:/bin64:ro',
+                   '-v', f'{prefix}:/wine', '-v', f'{os.path.dirname(exe)}:/bin64:ro',
                    '-e', 'WINEPREFIX=/wine', '-e', 'WINEARCH=win64', '-e', 'WINEDEBUG=-all',
                    *envs, '-w', '/run/game', IMAGE64, 'bash', '-c', script], timeout)
 
 
 class Build:
-    """What runs a case: 'native' (a host binary), 'windows', or 'exe' (efz.exe under
-    wine; the reference is one)."""
+    """What runs a case: 'native' (a host binary: the game or the headless runner),
+    'windows' (one of those built for Windows, under wine), or 'exe' (efz.exe under
+    wine; the reference is one). `name` is what reports call it, `args` what it runs
+    with besides --data and --save."""
 
-    def __init__(self, kind, path=None, env=None):
+    def __init__(self, kind, path=None, env=None, name='game', args=()):
         self.kind, self.path, self.env = kind, path, env or {}
+        self.name, self.args = name, list(args)
+        if kind in ('native', 'windows'):
+            self.path = path = binary(path or WINDOWS)
         if kind in ('native', 'exe') and not os.path.isfile(path):
-            die(f'no {path}' + (': run tools/native.sh' if kind == 'native' else ''))
-        if kind == 'windows' and not os.path.isfile(WINDOWS):
-            die(f'no {WINDOWS}: run tools/native.sh windows')
+            hint = ''
+            if kind == 'native' and name == 'headless':
+                hint = (': build it (cmake --build ... --target efz-headless), or check the '
+                        'game alone with --mode game')
+            elif kind == 'native':
+                hint = ': run tools/native.sh'
+            die(f'no {path}{hint}')
+        if kind == 'windows' and not os.path.isfile(path):
+            die(f'no {path}: run tools/native.sh windows')
 
     def run(self, case, worker, out, extra=None, timeout=1200, record_to=None):
         """Runs `case`; its log goes to `out`. A recording's replay is copied to
         `record_to`. Returns True if a log was written."""
-        game = game_dir(worker)
+        game = game_dir(worker, links=self.kind == 'exe')
         env = {'EFZ_TRACE': 'trace.txt', 'EFZ_TRACE_FAST': '1'}
         if case.kind == 'replay' and record_to is None:
             shutil.copyfile(os.path.join(REPLAYS, f'{case.name}.rep'),
@@ -300,11 +349,11 @@ class Build:
         if self.kind in ('native', 'windows'):  # SDL3, without a display or sound
             env.update(SDL_VIDEO_DRIVER='offscreen', SDL_AUDIO_DRIVER='dummy')
         if self.kind == 'native':
-            subprocess.run([self.path, '--data', efz_dir(), '--save', game],
+            subprocess.run([self.path, '--data', efz_dir(), '--save', game, *self.args],
                            env=dict(os.environ, **self.env, **env), cwd=game, timeout=timeout,
                            stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL, check=False)
         elif self.kind == 'windows':
-            run_windows(game, env, worker, timeout)
+            run_windows(self.path, self.args, game, env, worker, timeout)
         else:
             run_wine(self.path, game, env, worker, timeout)
         if not os.path.isfile(trace):
@@ -469,53 +518,105 @@ def cmd_reference(args):
     return 1 if bad else 0
 
 
-def test_build(args):
+def test_builds(args, modes=('game', 'headless')):
+    """The builds under test: the game and its headless runner (efz-headless next to it,
+    moving its game every HOP frames), or those of `modes`; with --exe that build only."""
     if args.exe:
-        return Build('exe', os.path.abspath(args.exe))
+        return [Build('exe', os.path.abspath(args.exe), name='efz.exe')]
+    hop = ['--hop', str(HOP)]
     if args.windows:
-        return Build('windows')
-    return Build('native', os.path.abspath(args.native or NATIVE))
+        game = WINDOWS
+        headless = os.path.join(os.path.dirname(WINDOWS), HEADLESS_NAME + '.exe')
+        kind = 'windows'
+    else:
+        game = os.path.abspath(args.native or NATIVE)
+        headless = os.path.abspath(getattr(args, 'headless', None) or
+                                   os.path.join(os.path.dirname(game), HEADLESS_NAME))
+        kind = 'native'
+    builds = []
+    if 'game' in modes:
+        builds.append(Build(kind, game, name='game'))
+    if 'headless' in modes:
+        builds.append(Build(kind, headless, name='headless', args=hop))
+    return builds
 
 
 def cmd_check(args):
-    build = test_build(args)
+    modes = ('game', 'headless') if args.mode == 'both' else (args.mode,)
+    builds = test_builds(args, modes)
+    if args.no_reference and len(builds) < 2:
+        die('--no-reference compares the game with the headless runner: it needs both')
     cases = select(read_suite(), args.cases)
     digests = read_digests()
-    out_dir = os.path.join(HOME, 'logs')
-    os.makedirs(out_dir, exist_ok=True)
-    failed = []
+    for b in builds:
+        os.makedirs(os.path.join(HOME, 'logs', b.name), exist_ok=True)
 
-    def one(case, worker):
-        out = os.path.join(out_dir, f'{case.name}.txt')
+    def one(job, worker):
+        case, b = job
+        out = os.path.join(HOME, 'logs', b.name, f'{case.name}.txt')
         if os.path.exists(out):
             os.remove(out)
-        ok = build.run(case, worker, out)
-        return case, out if ok else None
+        ok = b.run(case, worker, out)
+        return case, b, out if ok else None
 
-    for case, out in parallel(args.jobs, cases, one):
-        if case.name not in digests:
-            print(f'{case.name}: no reference digest; run tools/compat.py reference --update')
-            failed.append(case.name)
+    failed = {b.name: [] for b in builds}
+    apart = []
+    same = 0
+    outs = {}
+    # Results come in the jobs' order, so a case's builds come together: each case is
+    # reported once all of its are in.
+    for case, b, out in parallel(args.jobs, [(c, b) for c in cases for b in builds], one):
+        outs[b.name] = out
+        if len(outs) < len(builds):
             continue
-        if out is None:
-            print(f'{case.name}: FAILED, no log (the game crashed or never reached the fight)')
-            failed.append(case.name)
-            continue
-        if digest(out) == digests[case.name]:
-            if args.verbose:
-                print(f'{case.name}: ok, {digests[case.name][0]} ticks')
-            continue
-        failed.append(case.name)
-        print(f'{case.name}: FAILED')
-        if os.path.isfile(cached(case)) and digest(cached(case)) == digests[case.name]:
-            compare(cached(case), out)
-        else:
-            print(f'  (no cached reference log: tools/compat.py reference {case.name}, '
-                  f'then tools/compat.py explain {case.name})')
-    print(f'{len(cases) - len(failed)} of {len(cases)} cases agree with the reference')
-    if failed:
-        print('failed: ' + ' '.join(failed))
-    return 1 if failed else 0
+        for name, out in outs.items():
+            label = LABELS.get(name, name)
+            if out is None:
+                print(f'{case.name}: FAILED in the {label}, no log (it crashed or never '
+                      'reached the fight)')
+                failed[name].append(case.name)
+                continue
+            if args.no_reference:
+                continue
+            if case.name not in digests:
+                print(f'{case.name}: no reference digest; run tools/compat.py reference --update')
+                failed[name].append(case.name)
+                continue
+            if digest(out) == digests[case.name]:
+                if args.verbose:
+                    print(f'{case.name}: ok in the {label}, {digests[case.name][0]} ticks')
+                continue
+            failed[name].append(case.name)
+            print(f'{case.name}: FAILED in the {label}')
+            if os.path.isfile(cached(case)) and digest(cached(case)) == digests[case.name]:
+                compare(cached(case), out)
+            else:
+                print(f'  (no cached reference log: tools/compat.py reference {case.name}, '
+                      f'then tools/compat.py explain {case.name} --mode {name})')
+        if len(outs) == 2 and None not in outs.values():
+            game, headless = outs['game'], outs['headless']
+            if digest(game) != digest(headless):
+                apart.append(case.name)
+                print(f'{case.name}: FAILED, the game and the headless runner part')
+                compare(game, headless, 'game', 'headless')
+            else:
+                same += 1
+                if args.verbose and args.no_reference:
+                    print(f'{case.name}: the same in the game and the headless runner')
+        outs = {}
+    for b in builds:
+        if not args.no_reference:
+            print(f'{len(cases) - len(failed[b.name])} of {len(cases)} cases agree with the '
+                  f'reference in the {LABELS.get(b.name, b.name)}' +
+                  (f' ({b.path})' if b.kind != 'exe' else ''))
+    if len(builds) == 2:
+        # Only cases with both logs count: a case neither could play isn't "the same".
+        print(f'{same} of {len(cases)} cases are the same in the game and the headless '
+              'runner')
+    bad = sorted(set(apart).union(*failed.values()))
+    if bad:
+        print('failed: ' + ' '.join(bad))
+    return 1 if bad else 0
 
 
 def read_dump(path):
@@ -570,7 +671,7 @@ def describe_effect(block, i):
 
 def cmd_explain(args):
     case = select(read_suite(), [args.case])[0]
-    build = test_build(args)
+    build = test_builds(args, (args.mode,))[0]
     ref = ensure_reference()
     out_dir = os.path.join(HOME, 'explain')
     os.makedirs(out_dir, exist_ok=True)
@@ -742,13 +843,17 @@ def main():
         p.add_argument('--windows', action='store_true')
         p.add_argument('--exe')
         p.add_argument('--native')
+        p.add_argument('--headless')
 
     c = sub.add_parser('check')
     c.add_argument('cases', nargs='*')
     c.add_argument('-v', '--verbose', action='store_true')
+    c.add_argument('--mode', choices=['both', 'game', 'headless'], default='both')
+    c.add_argument('--no-reference', action='store_true')
     build_args(c)
     e = sub.add_parser('explain')
     e.add_argument('case')
+    e.add_argument('--mode', choices=['game', 'headless'], default='game')
     build_args(e)
     r = sub.add_parser('reference')
     r.add_argument('cases', nargs='*')

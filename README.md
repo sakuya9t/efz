@@ -35,6 +35,12 @@ original's.
 byte of the game state on every tick ([docs/compat.md](docs/compat.md)).
 See [The native game](#the-native-game) and [docs/native.md](docs/native.md).
 
+**And headless, for training agents:** `efz_env`, a library (C API, and a Python
+package) that runs batches of matches without a window or sound on every core, 3,000
+to 4,700 times real time on an 8-core laptop, with the game's CPU as an opponent, save
+states and rewards. See [The headless game](#the-headless-game) and
+[docs/headless.md](docs/headless.md).
+
 | Source | What it is |
 |---|---|
 | `src/main.cpp` | `WinMain`, the window procedure, the 64 FPS frame timer |
@@ -55,13 +61,20 @@ See [The native game](#the-native-game) and [docs/native.md](docs/native.md).
 | `src/scene3_draw.cpp` | The drawing helpers of scene 3, the fight |
 | `src/efz.rc` | The icon resource (the icon itself is taken from the original at build time) |
 | `src/trace.cpp` | The compatibility test's harness (`make trace` and the native game), not part of efz.exe |
-| `port/` | The native game's platform layer on SDL3, in place of `main.cpp`, `graphics.cpp`, `input.cpp` and `sound.cpp`; 32-bit handles for the game's pointers; the original's floating point |
+| `port/` | The native game's platform layer on SDL3, in place of `main.cpp`, `graphics.cpp`, `input.cpp` and `sound.cpp`; 32-bit handles for the game's pointers; the original's floating point; the log, crash reports and fight records |
+| `port/headless/` | The headless platform and the training library `efz_env` (C API: `efz_env.h`), `efz-headless`, `efz-bench` |
+| `python/efz_env/` | The Python package over `efz_env`: `EfzVecEnv`, action tables, a Gymnasium adapter |
 
 ## Game files
 
 This repository contains no original game files: no executables, sprites, sounds or music.
 EFZ's readme prohibits redistributing its data and decompiling it. Everything here works
 against a legitimately obtained EFZ 4.02 install, which `EFZ_DIR` points at.
+
+One file is made from the game's data: `tests/compat/pack.tar.gz.enc`, encrypted. It
+holds what the compatibility test reads (the frame data, palettes and the pictures'
+sizes; no pictures or sounds), so that CI can run the test, and the repository holds no
+key to it: CI gets that from a secret ([docs/compat.md](docs/compat.md), "In CI").
 
 ## Setup
 
@@ -160,10 +173,47 @@ layout (32-bit handles in place of pointers) and floating point (the x87's, on e
 CPU); [docs/compat.md](docs/compat.md) the suite that checks it:
 
 ```sh
-tools/compat.py check               # the native game plays the 254 cases (about 2 minutes)
+tools/compat.py check               # the 254 cases in the native game and headless (about 4 minutes)
 tools/compat.py explain cpu-03      # where a failing case parts from the original, by member
 tools/compat.py coverage            # which lines of src/ the suite runs
 ```
+
+Each run of the native game keeps a log folder (`logs/` in the save folder):
+`efz.log`, a report with a stack trace when it crashes or hangs, checks of the game's
+state on every tick of a fight, and a record of every fight, which replays it tick for
+tick and is data to learn from ([docs/logging.md](docs/logging.md)):
+
+```sh
+efz --data DIR --replay-fight logs/<session>/fight-003.jsonl --fast   # replay a fight, check every tick
+tools/efzlog.py show logs/<session>  # what happened: warnings, errors, crash, fights
+tools/efzlog.py export logs/<session>/fight-003.jsonl fight.npz       # a row a tick
+```
+
+## The headless game
+
+For reinforcement learning and other programs that play: the game without a window,
+sound or keyboard, many matches to a process, stepped in parallel in C++ and handed to
+Python as numpy arrays (or straight into pinned memory for a GPU).
+
+```sh
+cmake -B build/headless -DEFZ_GAME=OFF && cmake --build build/headless --config Release
+build/headless/efz-bench --data "$EFZ_DIR"          # speed; --check: determinism
+python python/examples/bench.py --data "$EFZ_DIR"   # the same from Python
+```
+
+```python
+from efz_env import EfzVecEnv, ActionTable
+env = EfzVecEnv(efz_dir, num_envs=256)              # both sides yours: self-play
+env.set_matches(cpu=(False, True))                  # or player 2 the game's CPU
+obs = env.reset()                                   # (256, 2, 168)
+obs, reward, terminated, truncated, info = env.step(ActionTable().to_bytes(actions))
+```
+
+It is the same game: `tools/compat.py check` plays every case of the compatibility
+suite both in the SDL3 game and headless, and the logs must agree with the reference
+and with each other; CI runs the headless library's tests that need no game data
+(`ctest -L headless`). [docs/headless.md](docs/headless.md) has the observations,
+actions, rewards, save states, the GPU and the measurements.
 
 ## Matching workflow
 
@@ -229,6 +279,9 @@ tools/compat.py coverage            # which lines of src/ the suite runs
 | `tools/portify.py` | Marks the pointer casts of lifted code for the native build's 32-bit handles |
 | `tools/constants.py` | Names bare action, command, flag and effect numbers: declares `tools/constants.txt`'s constants in `src/efz.h` and puts them in the code where clang shows what a number is |
 | `tools/compat.py` | The compatibility test: plays the suite (`tests/compat/`) in a build and compares its state, tick by tick, with the original's (the `compat-reference` tag, under wine) |
+| `tools/compatpack.py` | A compatibility pack: what the suite reads of the game's data (frame data, palettes, picture sizes, sound headers; 1.3 MB), for running it where the install can't be; `encrypt` and `unpack` its encrypted copy in `tests/compat/` for CI |
+| `tools/efzlog.py` | The native game's logs and fight records: sessions, warnings and crashes, fights, export of a fight's ticks as a table, where two records part ([docs/logging.md](docs/logging.md)) |
+| `tools/buildinfo.cmake` | Writes the revision the native game's log names, at each build |
 | `tools/msvc11` | Run Visual C++ 2012 tools (EfzRevival's toolchain) in the container |
 | `tools/libmatch.py` | Finds the functions of prebuilt `.lib`/`.obj` files in a binary, relocations masked |
 | `tools/rtti.py` | Lists an MSVC binary's vtables, with their classes, through its RTTI |
@@ -320,8 +373,12 @@ See [docs/recon.md](docs/recon.md). In short:
    - run natively on Windows, macOS and Linux, 64-bit. *Done:* the native game
      ([docs/native.md](docs/native.md)), checked against the original by replays.
    - replace DirectDraw, DirectInput and DirectSound with SDL3. *Done* (`port/`).
-   - separate the deterministic 64 FPS simulation from the platform layer
-   - reach parity with EfzRevival: rollback netplay, spectating, replays, training tools
+   - separate the deterministic 64 FPS simulation from the platform layer. *Begun:* the
+     headless platform runs it without a window, many games to a process
+     ([docs/headless.md](docs/headless.md))
+   - reach parity with EfzRevival: rollback netplay, spectating, replays, training tools.
+     Netplay is tested against the original game running EfzRevival 1.02h, over the network
+     ([docs/compat.md](docs/compat.md), "The network layer")
    - add widescreen and HD output, in-game input binding and controller hot-plug
    - add mod support for characters, stages and palettes
 7. **UE5.** Host the simulation core as a UE5 C++ module and render it with new assets.

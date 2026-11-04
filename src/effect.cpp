@@ -429,9 +429,16 @@ void CGame::UpdateEffect(short index)
         m_effects[index].x += m_effects[index].vx;
         m_effects[index].y += m_effects[index].vy;
         break;
+    // 0x2a-0x2d: the angle takes two draws, its spread and then whether it turns half
+    // way round. The original's compiler drew them in that order, left to right as
+    // written; they are statements of their own because C++ leaves the order of an
+    // expression's operands to the compiler, and Visual C++ 2022 draws the second
+    // first (docs/compat.md, "Rules for changes in the fork").
     case 0x2a:
         if (FIRST_FRAME) {
-            double angle = (rand() * 20 / 32768 + (rand() < 16384) * 180 + 35) * (PI / 180);
+            int spread = rand();
+            int flip = rand();
+            double angle = (spread * 20 / 32768 + (flip < 16384) * 180 + 35) * (PI / 180);
             double speed = rand() / 13000.0;
             m_effects[index].vx = (m_effects[index].side * 2 - 1) * cos(angle) * speed;
             m_effects[index].vy = sin(angle) * speed;
@@ -441,7 +448,9 @@ void CGame::UpdateEffect(short index)
         break;
     case 0x2b:
         if (FIRST_FRAME) {
-            double angle = (rand() * 40 / 32768 + (rand() < 16384) * 180 + 25) * (PI / 180);
+            int spread = rand();
+            int flip = rand();
+            double angle = (spread * 40 / 32768 + (flip < 16384) * 180 + 25) * (PI / 180);
             double speed = rand() / 13000.0;
             m_effects[index].vx = (m_effects[index].side * 2 - 1) * cos(angle) * speed;
             m_effects[index].vy = sin(angle) * speed;
@@ -451,7 +460,9 @@ void CGame::UpdateEffect(short index)
         break;
     case 0x2c:
         if (FIRST_FRAME) {
-            double angle = (rand() * 20 / 32768 + (rand() < 16384) * 180 - 10) * (PI / 180);
+            int spread = rand();
+            int flip = rand();
+            double angle = (spread * 20 / 32768 + (flip < 16384) * 180 - 10) * (PI / 180);
             double speed = rand() / 13000.0;
             m_effects[index].vx = (m_effects[index].side * 2 - 1) * cos(angle) * speed;
             m_effects[index].vy = sin(angle) * speed;
@@ -461,7 +472,9 @@ void CGame::UpdateEffect(short index)
         break;
     case 0x2d:
         if (FIRST_FRAME) {
-            double angle = (rand() * 40 / 32768 + (rand() < 16384) * 180 - 20) * (PI / 180);
+            int spread = rand();
+            int flip = rand();
+            double angle = (spread * 40 / 32768 + (flip < 16384) * 180 - 20) * (PI / 180);
             double speed = rand() / 13000.0;
             m_effects[index].vx = (m_effects[index].side * 2 - 1) * cos(angle) * speed;
             m_effects[index].vy = sin(angle) * speed;

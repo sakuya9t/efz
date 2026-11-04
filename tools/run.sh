@@ -126,7 +126,10 @@ $hint"
         ! command -v ninja >/dev/null || gen=(-G Ninja)
         "$cmake" -S "$repo" -B "$build" ${gen[@]+"${gen[@]}"} -Wno-dev
     fi
-    "$cmake" --build "$build" --config RelWithDebInfo --parallel "$(getconf _NPROCESSORS_ONLN 2>/dev/null || echo 4)"
+    # The game and its test; the headless library and tools have a build of their own
+    # (docs/headless.md).
+    "$cmake" --build "$build" --config RelWithDebInfo --target efz efz-x87-test \
+        --parallel "$(getconf _NPROCESSORS_ONLN 2>/dev/null || echo 4)"
     exe=$build/efz
     [ ! -x "$build/efz.app/Contents/MacOS/efz" ] || exe=$build/efz.app/Contents/MacOS/efz
 fi

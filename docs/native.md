@@ -65,6 +65,10 @@ macOS (arm64, x64).
 - **Sound.** Mixed in software on SDL's audio thread. The music loops at its loop
   points exactly, where the original checked once per frame.
 
+- **Logs.** Each run keeps a folder in `logs/` under the save folder: `efz.log`, a
+  report when the game crashes or hangs, and a record of each fight, which
+  `--replay-fight` replays tick for tick ([logging.md](logging.md)).
+
 For tests the game runs without a display (`SDL_VIDEO_DRIVER=offscreen
 SDL_AUDIO_DRIVER=dummy`) and takes `--frames N`, `--fast`, `--keys SCRIPT` and
 `--dump DIR` (see `port/main.cpp`).
@@ -146,8 +150,16 @@ multiply-add (`-ffp-contract=off`, `/fp:contract-`), no fast math.
 - **Evaluation order.** The original evaluates a call's arguments right to left. Two
   calls take two random draws as arguments (`ObjBase::SetVelocity` in `CShiori` and
   `CNayukiB`); `#ifdef EFZ_NATIVE` there draws them in the original's
-  order. No other call or operator has two arguments whose order matters (checked by
-  scanning for calls with side effects in two arguments).
+  order. An operator's operands it evaluates left to right, which C++ leaves to the
+  compiler as well. GCC happens to do the same; Visual C++ 2022 doesn't always: it
+  draws the second `rand()` of `rand() * 20 / 32768 + (rand() < 16384) * 180` first.
+  That expression, four times in `src/effect.cpp` (the hit sparks' particles, `0x2a`-
+  `0x2d`), parted 108 of the suite's cases between the MSVC build and the original
+  until the two draws became statements of their own (4 November 2026). Other
+  statements draw more than once among an operator's operands (the burst of objects
+  `0x1f1`/`0x1f2`, for one) in shapes Visual C++ 2022 evaluates left to right; the
+  suite checks the ones it runs, on every push and in both compilers (`compat` in
+  `.github/workflows/native.yml`).
 - **`rand`.** The static CRT's (`port/x87.cpp`): the same sequence from the same seed.
 - **Integers and characters.** Signed overflow wraps (`-fwrapv`) and `char` is signed
   (`-fsigned-char`), as with the original's compiler. The code still reads some
@@ -164,17 +176,23 @@ multiply-add (`-ffp-contract=off`, `/fp:contract-`), no fast math.
 
 ## The platform layer (`port/`)
 
+The first six are every build's; the rest are SDL3's, which the headless library
+(`port/headless/`, [headless.md](headless.md)) replaces with its own (`platform.h`
+lists what a platform provides).
+
 | File | What it does |
 |---|---|
 | `efz_native.h` | What `efz.h` includes instead of `<windows.h>` and DirectX: Win32 types at their Win32 sizes (handles are 32-bit numbers), the few Win32 functions the game code calls, the DirectX interfaces it touches |
-| `guest.h`, `arena.cpp` | Handles, the arena, `operator new` |
+| `guest.h`, `arena.cpp` | Handles, the arena, `operator new`. The allocator's state is in the arena's first 64 KB and its links are offsets, so an arena's bytes are its whole heap |
 | `x87.h`, `x87.cpp` | `F32`, `X87Value`, the emulated `sin`, `cos`, `atan2`, `rand` |
-| `graphics.cpp` | `CGraphics`: 8-bit surfaces, the loaders and blitters of `src/graphics.cpp` (its assembly loops as C++, DirectDraw's checks on lock rectangles kept), the palette, presenting through an SDL texture |
+| `graphics.cpp` | `CGraphics`: 8-bit surfaces, the loaders and blitters of `src/graphics.cpp` (its assembly loops as C++, DirectDraw's checks on lock rectangles kept), the palette; `Flip` hands the back buffer to the platform |
+| `win32.cpp` | `CreateFile` and the rest over the C library (case-insensitive names, the save folder) |
+| `layout.cpp` | The structure checks |
+| `video.cpp` | Presenting the back buffer through an SDL texture, `--dump`'s frames |
 | `input.cpp` | `CInput`: the keyboard state by DirectInput code, controllers as joysticks; `GetInput` and the `key.ini` loaders as the original |
 | `sound.cpp` | `CSound`: the 150 sound slots, a mixer on SDL's audio thread, `.wav` parsing, the music's loop points |
-| `win32.cpp` | `CreateFile` and the rest over the C library (case-insensitive names, the save folder), `MessageBox`, `timeGetTime` |
-| `main.cpp`, `sdlmain.cpp` | What `WinMain` did, in the same order, then the scenes at 64 frames a second |
-| `layout.cpp` | The structure checks |
+| `main.cpp`, `sdlmain.cpp` | What `WinMain` did, in the same order, then the scenes at 64 frames a second; `MessageBox`, `PostMessage`, `timeGetTime` |
+| `log.cpp`, `crash.cpp`, `record.cpp` | The log and its session folder, crash and hang reports, and the fight records, checks and replays ([logging.md](logging.md)) |
 
 ## The compatibility test
 
@@ -188,9 +206,9 @@ CPU from a seed, and log the whole game state, hashed, after every tick of the f
 each log with the original's (the `compat-reference` tag's build, under wine):
 
 ```sh
-tools/native.sh && tools/compat.py check   # the native game
-tools/compat.py check --windows            # the Windows build, under 64-bit wine
-tools/compat.py check --native build/native-x87/efz   # another native build
+tools/native.sh && tools/compat.py check   # the native game, and headless
+tools/compat.py check --windows            # the Windows builds, under 64-bit wine
+tools/compat.py check --native build/native-x87/efz   # another native build (and its efz-headless)
 ```
 
 Results (31 October 2026; the suite compares every byte of the state since then):
@@ -198,6 +216,8 @@ Results (31 October 2026; the suite compares every byte of the state since then)
 | The native game | Cases | Ticks | Play as the original does |
 |---|---|---|---|
 | Linux x64, GCC (the default: emulated `sin`, `cos`, `atan2`) | 254 | 1,223,436 | all |
+| Windows x64, MSVC 17.14 (Visual C++ 2022), the game and `efz-headless` (4 November) | 254 | 1,223,436 | all, since `src/effect.cpp`'s draws are in the original's order (146 before) |
+| Windows x64, MinGW-w64 GCC 16.2, `efz-headless` (4 November) | 254 | 1,223,436 | all |
 
 Before 31 October the test compared only the players' status (action, frame, position,
 velocity, HP, combo, gauge) on 154 replays:

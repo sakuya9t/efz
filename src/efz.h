@@ -7704,8 +7704,35 @@ public:
 void TraceStart(CGame* game, CScene** scenes, BYTE* scene);
 int TraceFast();
 int TraceQuit(BYTE scene);
+// CScene3::Update's ticks: TraceTickStart before the players read their input,
+// TraceInputsRead once both have, TraceTick at the end of the tick.
+void TraceTickStart(CScene3* scene);
+void TraceInputsRead(CScene3* scene);
 void TraceTick(CScene3* scene);
 int TraceInput(BYTE player, BYTE* input);
+
+// The blocks of the game's state the harness hashes (docs/compat.md), pointers left out.
+// TraceSaveState passes each block's bytes to `fn`; TraceLoadState writes saved bytes
+// back, the pointers kept as they are, and returns -1, or the first block whose size
+// differs from the saved one (nothing is written then).
+enum { TRACE_P1, TRACE_P1OBJ, TRACE_P1CHAR, TRACE_P2, TRACE_P2OBJ, TRACE_P2CHAR, TRACE_SCENE,
+       TRACE_GAME, TRACE_FX, TRACE_BLOCKS };
+const char* TraceBlockName(int block);
+typedef void (*TraceBlockFn)(void* context, int block, const void* data, unsigned size);
+void TraceSaveState(CScene3* scene, TraceBlockFn fn, void* context);
+int TraceLoadState(CScene3* scene, const void* const* data, const unsigned* sizes);
+
+// What the native game's recorder (port/record.cpp) adds to the hooks; unset in make
+// trace. `hashes` nonzero: TraceTick hashes the state for `tick` (else it gets NULL).
+// `input` returning nonzero supplies a player's controls, as TraceInput does.
+struct TraceHooks {
+    void (*tickStart)(CScene3* scene);
+    void (*inputsRead)(CScene3* scene);
+    void (*tick)(CScene3* scene, const unsigned* hashes);
+    int (*input)(BYTE player, BYTE* input);
+    int hashes;
+};
+extern TraceHooks g_traceHooks;
 #endif
 
 #endif

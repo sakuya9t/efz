@@ -7,12 +7,18 @@
 *.rep
 # but not the compatibility suite's: fights recorded by the test, no game data
 !tests/compat/replays/*.rep
+# The compatibility pack's key never goes in (docs/compat.md, "In CI"), nor the pack
+# unencrypted
+*.key
+efz-pack/
 efz-unpacked/
 uploads/
 
 # Generated analysis output
 inventory.json
 __pycache__/
+# pip install -e python
+*.egg-info/
 
 # Build output
 build/

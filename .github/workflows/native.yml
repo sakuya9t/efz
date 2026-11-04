@@ -1,13 +1,15 @@
 # Builds the native game (CMakeLists.txt) on each platform it targets, with the script
 # that builds and starts it there (tools/run.sh, tools/run.cmd), and checks that the
 # emulation of the original's floating point gives the same bits there
-# (tests/x87_test.cpp). The replay test itself needs the game's data, so it runs
-# locally (tools/compat.py).
+# (tests/x87_test.cpp); builds the headless library and tools and runs their tests that
+# need no game data. The compat job runs the compatibility test (tools/compat.py), in
+# the game and headless, on the compatibility pack the repository holds encrypted.
 name: native
 
 on:
   push:
   pull_request:
+  workflow_dispatch:
 
 jobs:
   build:
@@ -49,8 +51,9 @@ jobs:
       - name: Build
         if: runner.os == 'Windows'
         run: tools\run.cmd --build-only
+      # The game's tests; the headless ones (label headless) in the Headless step.
       - name: Test
-        run: ctest --test-dir build/run --build-config RelWithDebInfo --output-on-failure
+        run: ctest --test-dir build/run --build-config RelWithDebInfo --output-on-failure --label-exclude headless
       # The script starts the game it built, which finds no game data here: it says so
       # and exits with 1, and the script passes both on.
       - name: Start
@@ -73,6 +76,22 @@ jobs:
           type start.txt
           if not "%status%"=="1" exit /b 1
           findstr /c:"no game data" start.txt
+      # The headless library and tools (docs/headless.md), in a step of their own so that
+      # a failure there is told apart from the game's: what they rely on, checked without
+      # the game's data (tests/headless_test.cpp; python/tests against the library). The
+      # games themselves are the compatibility suite's (the compat job below).
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.x'
+      - name: Headless
+        shell: bash
+        run: |
+          cmake --build build/run --config RelWithDebInfo --parallel 4 \
+            --target efz_env efz-headless efz-bench efz-headless-test
+          ctest --test-dir build/run --build-config RelWithDebInfo --output-on-failure \
+            --tests-regex '^headless$'
+          python -m pip install --quiet numpy
+          python -m unittest discover -s python/tests -t python -v
       - uses: actions/upload-artifact@v4
         with:
           name: efz-${{ matrix.name }}
@@ -82,3 +101,73 @@ jobs:
             build/run/RelWithDebInfo/efz.exe
             build/run/efz.app
           if-no-files-found: ignore
+
+  # The compatibility suite (docs/compat.md) in both the game and the headless runner,
+  # on GitHub's runners: Linux with GCC and Windows with MSVC, each build against the
+  # reference's logs, so that a compiler that computes another game (an operand order
+  # it is free to choose, say) shows here, not in a match between two players. The
+  # game's data comes from the compatibility pack in the repository, encrypted
+  # (tests/compat/pack.tar.gz.enc, made by tools/compatpack.py encrypt): the secret
+  # EFZ_COMPAT_PACK_KEY opens it. Without the secret (a fork, a pull request from one)
+  # the job says so and stops. Only the two steps that need the key see it. The
+  # repository variable EFZ_COMPAT_ARGS adds options to the check.
+  compat:
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - name: linux-gcc
+            os: ubuntu-24.04
+          - name: windows-msvc
+            os: windows-2022
+    name: compat (${{ matrix.name }})
+    runs-on: ${{ matrix.os }}
+    defaults:
+      run:
+        shell: bash
+    steps:
+      - name: The key
+        id: key
+        env:
+          EFZ_COMPAT_PACK_KEY: ${{ secrets.EFZ_COMPAT_PACK_KEY }}
+        run: |
+          if [ -n "$EFZ_COMPAT_PACK_KEY" ]; then
+            echo "run=true" >> "$GITHUB_OUTPUT"
+          else
+            echo "::notice::no EFZ_COMPAT_PACK_KEY secret: the compatibility suite doesn't run"
+          fi
+      - uses: actions/checkout@v4
+        if: steps.key.outputs.run == 'true'
+      - name: Linux packages
+        if: steps.key.outputs.run == 'true' && runner.os == 'Linux'
+        run: |
+          sudo apt-get update
+          # As the build job's.
+          sudo apt-get install -y ninja-build \
+            libx11-dev libxext-dev libxrandr-dev libxcursor-dev libxi-dev libxss-dev \
+            libxfixes-dev libxtst-dev libxkbcommon-dev libwayland-dev wayland-protocols \
+            libdecor-0-dev libegl-dev libgl-dev libgles-dev libdrm-dev libgbm-dev \
+            libasound2-dev libpulse-dev libpipewire-0.3-dev libudev-dev libdbus-1-dev \
+            libibus-1.0-dev
+      - uses: actions/setup-python@v5
+        if: steps.key.outputs.run == 'true'
+        with:
+          python-version: '3.x'
+      # The game and the headless runner, of the build type the test checks.
+      - name: Build
+        if: steps.key.outputs.run == 'true'
+        run: |
+          cmake -S . -B build/compat -DCMAKE_BUILD_TYPE=RelWithDebInfo -Wno-dev
+          cmake --build build/compat --config RelWithDebInfo --parallel 4 \
+            --target efz efz-headless
+      # Outside the checkout, so nothing later can pick it up; never uploaded.
+      - name: The compatibility pack
+        if: steps.key.outputs.run == 'true'
+        env:
+          EFZ_COMPAT_PACK_KEY: ${{ secrets.EFZ_COMPAT_PACK_KEY }}
+        run: python tools/compatpack.py unpack "$RUNNER_TEMP/efz"
+      - name: Compatibility suite, the game and the headless runner
+        if: steps.key.outputs.run == 'true'
+        run: |
+          EFZ_DIR="$RUNNER_TEMP/efz" EFZ_COMPAT="$RUNNER_TEMP/compat" \
+            python tools/compat.py -j 4 check --native build/compat/efz ${{ vars.EFZ_COMPAT_ARGS }}

@@ -1,9 +1,12 @@
 # Backward compatibility
 
 The modern fork has to play the same game as the original 4.02 `efz.exe`. This document
-records how that is tested (decided 28 October 2026; the whole game state and a fixed
-reference since 31 October 2026), what the original's replays can and cannot reproduce,
-and the rules a change has to follow so the test keeps working.
+records how that is tested, in two layers: replays and CPU fights against a fixed
+reference (decided 28 October 2026; the whole game state and a fixed reference since
+31 October 2026), and, once the fork has netplay of its own, a netplay match against the
+original game with EfzRevival (decided 3 November 2026). It also records what the
+original's replays can and cannot reproduce, and the rules a change has to follow so the
+tests keep working.
 
 Statements about the game are **observed** (read from the matched source) or **inferred**.
 
@@ -20,6 +23,20 @@ Statements about the game are **observed** (read from the matched source) or **i
   the test's harness and run under wine; `tests/compat/reference.txt` holds the digest
   of its log for every case. A change passes when every case's log is the reference's,
   byte for byte.
+- **Both ways the fork runs the game: with a window and headless** (decided 4 November
+  2026). Every case runs in the native game and in the headless runner `efz-headless`
+  ([headless.md](headless.md)), which moves its game every 97 frames into a copy on a
+  new thread, as the training library's restarts and workers do. Each log must be the
+  reference's, and the two must be the same: on a machine where a build doesn't give
+  the reference's logs, that the two agree still holds (`--no-reference`).
+- **Three layers: replays, the old version's trails, and the network.** The suite (the
+  replay layer) checks the fork's simulation against the reference. The recorded layer
+  ("The recorded layer" below, decided 4 November 2026) checks it against the old
+  version as players have it (`efz.exe` 4.02 with EfzRevival 1.02h), from matches that
+  version played and recorded on the owner's machine, in CI. A version with built-in
+  netplay must also pass the network layer ("The network layer" below): a match over
+  the network against that old version itself, where the state recorded on both ends
+  must be the same. No layer replaces another.
 - **Compare the whole game state.** After every tick the harness hashes both players
   (all of CPlayer and the character class, the 64 objects of each), the fight scene, the
   game object and the effects, pointers left out. Visual effects are compared too: they
@@ -34,19 +51,107 @@ Statements about the game are **observed** (read from the matched source) or **i
 ## Running it
 
 ```sh
-tools/native.sh                      # build/native/efz
-tools/compat.py check                # every case in the native game (about 2 minutes, -j 16)
+tools/native.sh                      # build/native/efz and efz-headless
+tools/compat.py check                # every case in the native game and headless (about 4 minutes, -j 16)
 tools/compat.py check fuzz5- cpu-03  # some: by name, or a prefix ending in -
-tools/compat.py check --windows      # build/windows/efz.exe, under 64-bit wine
+tools/compat.py check --mode game    # one of the two only (game or headless)
+tools/compat.py check --no-reference # only that the two agree with each other
+tools/compat.py check --windows      # build/windows/efz.exe and efz-headless.exe, under 64-bit wine
 tools/compat.py check --exe build/trace/efz.exe   # any 32-bit build with the harness, under wine
 tools/compat.py explain cpu-03       # where and how a failing case parts from the reference
+tools/compat.py explain cpu-03 --mode headless    # the same for the headless runner
 tools/compat.py coverage             # what the suite runs: lines of src/, actions per character
 ```
 
 `EFZ_DIR` names the original game's folder (its data; the suite has none of it). Work
 folders, wine prefixes and the reference's logs are in `$EFZ_COMPAT` (default
-`~/.local/share/efz-decomp/compat2`). A check needs only the data and the build to test;
-`explain` also runs the reference (below), so it needs the toolchain's docker images.
+`~/.local/share/efz-decomp/compat2`). A check needs only the data and the builds to
+test, and runs on Windows as well (Visual Studio's `build/native/RelWithDebInfo/efz.exe`
+is found); `explain` also runs the reference (below), so it needs the toolchain's docker
+images. When the game and the headless runner part, `check` prints where; their logs
+are in `$EFZ_COMPAT/logs/game` and `logs/headless`, for `tools/compat.py diff`.
+
+**In CI.** On every push CI (`.github/workflows/native.yml`) builds both on every
+platform and runs what needs none of the game's data: the headless library's own tests
+(`ctest -L headless`: the arena's copies, the sprite loader without drawing, the C and
+Python API). The suite itself needs the data, which the repository mustn't hold, but
+not much of it: the frame data (`.pat`), the palettes, each picture's size and first
+pixel, the sound files' headers and `key.ini` are all the game's state depends on.
+`tools/compatpack.py` makes a **compatibility pack** of just that from an install
+(1.3 MB as a `.tar.gz`, a 750 MB install's worth of pictures and sounds left out)
+that `EFZ_DIR` can name:
+
+```sh
+tools/compatpack.py build efz-pack --efz "$EFZ_DIR"
+EFZ_DIR=efz-pack tools/compat.py check
+```
+
+**The encrypted pack** (decided 4 November 2026). The pack is still the game's data
+(its moves and palettes), so the repository holds it only encrypted:
+`tests/compat/pack.tar.gz.enc` (openssl's AES-256, the key derived by PBKDF2), with
+the SHA-256 of what it holds in `tests/compat/pack.sha256`. The key is in no file of
+the repository: its owner keeps it, and gives it to CI as the secret
+`EFZ_COMPAT_PACK_KEY`.
+
+```sh
+EFZ_COMPAT_PACK_KEY=... tools/compatpack.py encrypt --efz "$EFZ_DIR"   # or --key-file
+EFZ_COMPAT_PACK_KEY=... tools/compatpack.py unpack efz-pack
+```
+
+`encrypt` remakes the pack, and rewrites the encrypted file only when it doesn't
+already hold that pack under that key (the archive is the same bytes for the same
+files); `unpack` checks the digest, so a wrong key is told as one.
+
+**Keeping the key.** It lives in two places, and in no file of the repository
+(`.gitignore` refuses `*.key`):
+
+- the owner's: a file outside the checkout (`--key-file`), and a copy in a password
+  manager. GitHub never shows a secret again, so that copy is the only way back to it.
+- CI's: the repository secret `EFZ_COMPAT_PACK_KEY` (Settings, Secrets and variables,
+  Actions; or `gh secret set EFZ_COMPAT_PACK_KEY < compat-pack.key`).
+
+Nobody else needs it: anyone with the game checks with their own install
+(`EFZ_DIR`), and the pack only stands in for it where there is none. A maintainer who
+remakes the pack gets the key from the password manager, not over chat or e-mail. The
+secret reaches every workflow run of the repository's own branches, so whoever can
+push a branch could read it: write access to the repository is access to the key.
+
+**Changing it**, when it may have got out or someone who had it no longer should:
+
+```sh
+openssl rand -base64 48 > new.key        # outside the checkout
+tools/compatpack.py encrypt --efz "$EFZ_DIR" --key-file new.key   # re-encrypts: the key changed
+tools/compatpack.py unpack /tmp/pack-check --key-file new.key      # opens with it
+```
+
+then set the secret to the new key and push the new `pack.tar.gz.enc` together (until
+both have changed, CI can't open the pack), and replace the copy in the password
+manager. The old key still opens the old file in the history, which stays public: a
+new key protects the pack from then on, not what was already out.
+
+**Remaking the pack** (a change to what `compatpack.py` keeps, or a new install):
+`tools/compatpack.py encrypt` with the current key, and commit the two files.
+
+The `compat` job runs the suite on every push, on GitHub's Linux runners (whose GCC
+builds give the reference's logs): it unpacks `tests/compat/pack.tar.gz.enc` with
+`EFZ_COMPAT_PACK_KEY`, outside the checkout, builds the game and `efz-headless`, and
+runs `tools/compat.py check`. Without the secret (a fork, a pull request from one) it
+says so and stops; only its two steps that need the key see it. The repository
+variable `EFZ_COMPAT_ARGS` adds options to the check (`--no-reference` on runners whose
+builds don't give the reference's logs).
+
+**Measured** (4 November 2026, Windows 11, MSVC): a pack made from a 753 MB install
+(1.3 MB as a `.tar.gz`) gives the install's logs, byte for byte, in all 254 cases, in
+the game and in the headless runner. The encrypted one unpacks into the same files.
+
+**Measured** (4 November 2026; Windows 11, MSVC 17.14, an EFZ 4.02 install with its own
+`key.ini`; `-j 10`, 7 minutes): the game and the headless runner write the same log in
+all 254 cases, and each gives the reference's in all 254. Before the order of
+`src/effect.cpp`'s draws was fixed that day ([native.md](native.md), "Evaluation
+order") both gave it in 146: the other 108 parted at the first hit spark whose
+particles Visual C++ drew the other way round. GCC on the same machine (MinGW-w64
+16.2) gives it in all 254, before the fix and after. On GitHub's runners, Linux with
+GCC gives it in all 254 too, with the same `key.ini` (from the compatibility pack).
 
 ## The suite
 
@@ -132,6 +237,147 @@ lines the suite runs and how many of its functions it never runs, then the actio
 character reached. `build/coverage/gcov/*.gcov` has each line with its count. A change
 to code the suite never runs is not tested by it: add a case that runs it.
 
+## The network layer
+
+**Decided 3 November 2026. Not runnable yet: the fork has no netplay of its own.** From
+the first version with netplay built in, every version also has to pass this test. The
+two ends of the match:
+
+| End | What runs |
+|---|---|
+| (a) | The version under test, with its own netplay |
+| (b) | The original game, as players have it: `$EFZ_DIR/efz.exe` 4.02 (SHA-256 `3a1616d6…6dd66481`) and EfzRevival 1.02h's `EfzRevival.exe`, `EfzRevival.dll` and `DDRAW.dll` from `$REVIVAL_DIR`, all unchanged. Not the reference and not the rebuilt Revival: this layer is there to check the fork against what people actually play on |
+
+The test:
+
+1. The two ends connect over the local network (one machine, or two on one LAN): one
+   hosts and the other joins, through EfzRevival's protocol ([revival.md](revival.md),
+   "The launcher's protocol").
+2. They play a match, both players human (no CPU). A player is either a person or, for
+   an unattended run, scripted input. On end (b) the scripted input arrives as key
+   presses, so the game reads its keyboard as it always does.
+3. Both ends record both players' inputs and the game's state for every confirmed frame
+   (a frame whose inputs both ends have).
+4. When the match is over, the two records must be the same, frame for frame.
+
+The test runs each way round: (a) hosts and (b) joins, then the reverse. That way each
+end has played P1 and P2, and each end's seed has been used. It also runs with latency
+added to the link (50-100 ms each way). On a local network the remote input nearly
+always arrives before a frame needs it, so the rollback would hardly run.
+
+**What is recorded.** End (b) can't be rebuilt with the harness, so its state is read
+without changing anything the game or Revival computes:
+
+- **Revival's sync records.** Each record holds the frame, the scene, the FPU control
+  word, both players' actions, inputs and positions, and Revival's random state.
+  **Observed:** EfzRevival.dll makes one for every confirmed frame, just before the
+  frame runs (`OnlineSession::runFrame`, DLL `0x10070e70`). With `Debug=1` in
+  `EfzRevival.ini`, the 1.02h launcher asks the other end for its records, compares
+  them with its own, and logs `Checked <frame>` or `ERROR:` with both records to
+  `logNet.txt` (`ProtocolStatePlay::handleResendTimer`, `ProtocolContext::checkSync`).
+  End (a) therefore has to make and answer these records exactly as Revival does
+  (`MessageSync`), and end (b)'s log must show no `ERROR:`.
+- **The whole state.** These are the blocks of "What is compared", hashed at that same
+  point of every confirmed frame. On end (b) a reader loaded into the game beside
+  Revival does the hashing, hooked where Revival makes the sync record. The reader only
+  reads. On end (a) the harness does the same.
+
+**What end (b) computes differently from the reference.** **Observed** in Revival's
+source, and what each difference means for the comparison and for end (a):
+
+| What | On end (b) | So |
+|---|---|---|
+| `rand()` | Revival replaces the CRT's (`0x777d61`) with `std::uniform_int_distribution<int>(0, 0x7fff)` over a `std::minstd_rand` seeded with the host's seed (MessageInit field 6), saved and restored with each save state | In netplay, end (a) draws its random numbers the same way, including Visual C++ 2012's distribution |
+| `sin`, `cos`, `atan2` | The CPU's `fsin`, `fcos`, `fpatan` | End (a) takes them from the CPU too (`EFZ_HOST_X87`, [native.md](native.md)). Both ends run on one machine, or on CPUs that agree: two copies of the original game on different CPUs part as well ("Answered") |
+| Memory from `new` | The heap's garbage | Bytes the original reads before ever setting them are left out of the comparison: the bytes on which two runs of the original game disagree when playing the same replay, such as `m_comboDamage` before the first combo. Where the garbage decides a hit (`m_hitsLeft`, "Answered"), the match parts for real. The original parts from itself the same way, so such a run is reported as that and played again, not counted as a failure of the fork |
+| The rectangle a throw's hit spark is placed at | Stack garbage | The spark's position is left out of `fx` |
+| x87 precision | 53 bits, as in the original: Revival's `DDRAW.dll` creates its Direct3D 9 device with `D3DCREATE_FPU_PRESERVE` | Nothing to change |
+
+Pointers are left out as in the first layer. Anything else that is left out has to be
+named here with its reason.
+
+**When the records differ,** the first frame on which they part is where to look. If
+the two ends disagree on that frame's inputs, the fault is in the netplay. If the inputs
+agree and the state differs, the fault is in the simulation. End (a) also writes the
+match as a replay: added to the suite, it shows whether the fork parts from the
+reference on those inputs alone, or only in netplay.
+
+**Where it runs** (decided 4 November 2026). Not on GitHub's runners: end (b) is the
+original program and EfzRevival's, which the repository can't hold in any form (the
+compatibility pack is data only, and EfzRevival has a licence of its own); Revival
+draws through Direct3D 9, which a runner without a desktop may not give it; and two
+programs exchanging packets with real timing and added latency make a slow and
+flaky check for every push. It runs on a self-hosted Windows runner of the owner's
+that has the game and Revival, nightly or by hand, never for pull requests (their
+code mustn't run on that machine). Every push gets the recorded layer instead, which
+checks the same old version's game without its programs.
+
+## The recorded layer: the old version's trails
+
+**Decided 4 November 2026. Not runnable yet:** it needs the fork's Revival rules and a
+reader of Revival's replays (below), and the recorder. It checks the fork against the
+game people play, `efz.exe` 4.02 with EfzRevival 1.02h unchanged, where the replay
+layer checks it against the reference (the rebuilt `efz.exe`, with the four changes of
+"The reference", without Revival). What it doesn't check is the network: the protocol,
+live timing and rollback under latency stay the network layer's. The old version plays
+on the owner's machine once; CI checks the fork against what it recorded, on every
+push.
+
+**A case** is a file in `tests/compat/revival/`, all computed values and no game data,
+so the repository holds it as it is (player names left out):
+
+| What | From |
+|---|---|
+| The match: both characters, the stage, the palettes, Revival's random seed | Revival's replay |
+| Both players' inputs, every confirmed frame | Revival's replay |
+| The trail: for every confirmed frame, Revival's sync record (frame, scene, FPU control word, both players' actions and inputs, the random state, both positions, the doubles bit for bit) | Revival's `logNet.txt` |
+
+**Recording**, on the owner's machine, once per case:
+
+1. Two copies of the old version, unchanged, with `Debug=1` in `EfzRevival.ini`: one
+   hosts, the other joins it at `127.0.0.1`. Netplay is only what makes Revival write
+   its records here; nothing about the network is under test.
+2. Scripted input drives both players for a whole match, as key presses into each
+   window: held directions, button taps and motions (specials, supers, dashes), as the
+   harness's scripted input does.
+3. Revival saves the match's replay, and each end logs the sync records of both ends
+   (`Checked <frame>`, or `ERROR:` with both records).
+4. A match with any `ERROR:` is thrown away: the old version disagreed with itself
+   (uninitialised memory deciding a hit, "Answered"). Otherwise the replay and the
+   records become the case.
+
+**Checking**, in CI on every push, in the game and headless, with the compatibility
+pack for data:
+
+1. The fork starts the case's match under Revival's rules: `rand()` as Revival's
+   (`std::uniform_int_distribution<int>(0, 0x7fff)` over a `std::minstd_rand`, as
+   "The network layer" describes), seeded with the case's seed, the fight starting
+   where Revival's replays start it.
+2. It reads the recorded inputs, frame by frame, as a replay plays back.
+3. Just before each confirmed frame runs, where Revival makes its sync record, the fork
+   makes the same record from its own state.
+4. The two trails must be the same, frame by frame and field by field.
+
+**When they differ,** the first frame on which they do, and the field, say where:
+
+| What differs | Where the fault is |
+|---|---|
+| The inputs | Reading Revival's replay |
+| Not the inputs, but the random state | Drawing random numbers: Revival's generator, or one call more or fewer than the original makes |
+| Neither, but an action or a position | The simulation |
+
+Two kinds of difference are reported as what they are, not as failures: a position
+one unit in its last place apart right after a move that sets a velocity from an angle
+(the old version takes `sin`, `cos` and `atan2` from the recording machine's CPU,
+"Answered"); and a hit that the old version's uninitialised memory decided (recorded
+again).
+
+**What the fork needs first**, which netplay and playing Revival's replays need
+anyway: the Revival rules (its `rand()`, and where it starts and saves a fight), and a
+reader of Revival's replay format. Then the recorder: starting two copies of the old
+version with their settings, key presses into each window, and turning the replays and
+logs into cases.
+
 ## The replay format
 
 **Observed.** `replay\dataN-M.rep` (N, M = 1-9, 81 slots, `src/scene8.cpp`) is a stream
@@ -189,11 +435,20 @@ earlier versions.
   ([native.md](native.md)).
 - **Keep the order of side effects.** The original evaluates a call's arguments right
   to left; a call with two random draws as arguments needs them drawn in that order
-  natively (two do, `#ifdef EFZ_NATIVE`).
+  natively (two do, `#ifdef EFZ_NATIVE`). An operator's operands it evaluates left to
+  right, where C++ lets each compiler choose: two draws in one expression are drawn in
+  statements of their own, in the original's order (as `src/effect.cpp`'s particles
+  are: Visual C++ 2022 drew them the other way round, [native.md](native.md)). New
+  code doesn't draw twice in one expression.
 - **A change that isn't meant to change the game passes the suite unchanged**
-  (`tools/compat.py check`). This covers renames and other readability work, SDL3,
-  widescreen, input rebinding and the like. Code the suite doesn't run (`coverage`)
-  isn't tested by it: add a case that does before changing it.
+  (`tools/compat.py check`), in the game and headless alike. This covers renames and
+  other readability work, SDL3, the headless platform and library, widescreen, input
+  rebinding and the like. Code the suite doesn't run (`coverage`) isn't tested by it:
+  add a case that does before changing it.
+- **Netplay keeps EfzRevival 1.02h's protocol and its rules.** Against a 1.02h peer, the
+  fork speaks that peer's protocol (version `0x66`, the messages of `EfzPackets.proto`).
+  It also computes what the original game with Revival computes (the table in "The
+  network layer"). A version with netplay passes both layers.
 
 ## The status line
 

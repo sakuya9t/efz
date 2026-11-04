@@ -1,0 +1,52 @@
+# The crash and hang reports (port/crash.cpp, docs/logging.md): the game crashes or hangs
+# on purpose, which needs no game data, and must leave a session folder with a report
+# that says what happened, with a stack trace, and for a crash a session.json that says
+# it crashed.
+#   cmake -DEFZ=<the game> -DDIR=<a scratch folder> -DKIND=segv|abort|fatal|hang
+#         -P tests/crash_test.cmake
+file(REMOVE_RECURSE "${DIR}")
+file(MAKE_DIRECTORY "${DIR}")
+execute_process(COMMAND "${EFZ}" --crash-test "${KIND}" --log-dir "${DIR}"
+                RESULT_VARIABLE status OUTPUT_VARIABLE out ERROR_VARIABLE err)
+if(KIND STREQUAL "hang")
+  set(file hang.txt)
+  set(title "efz hang report")
+  set(expected 5)
+else()
+  set(file crash.txt)
+  set(title "efz crash report")
+endif()
+if(DEFINED expected AND NOT status EQUAL expected)
+  message(FATAL_ERROR "the game exited with ${status}, not ${expected}:\n${out}${err}")
+elseif(status EQUAL 0)
+  message(FATAL_ERROR "the game didn't crash:\n${out}${err}")
+endif()
+file(GLOB reports "${DIR}/*/${file}")
+list(LENGTH reports count)
+if(NOT count EQUAL 1)
+  message(FATAL_ERROR "no ${file} in ${DIR} (status ${status}):\n${out}${err}")
+endif()
+file(READ "${reports}" report)
+foreach(want "${title}" "what:" "stack, innermost first:" "log, the last lines")
+  string(FIND "${report}" "${want}" at)
+  if(at EQUAL -1)
+    message(FATAL_ERROR "${file} has no \"${want}\":\n${report}")
+  endif()
+endforeach()
+# A frame of the game's own code: the stack trace found it. A hang's stack is the main
+# thread's, which only Windows can take from the watchdog's thread.
+if(NOT KIND STREQUAL "hang" OR CMAKE_HOST_WIN32)
+  string(REGEX MATCH "efz(\\.exe)?[!+]" frame "${report}")
+  if(NOT frame)
+    message(FATAL_ERROR "${file}'s stack has no frame of the game:\n${report}")
+  endif()
+endif()
+if(NOT KIND STREQUAL "hang")
+  get_filename_component(session "${reports}" DIRECTORY)
+  file(READ "${session}/session.json" json)
+  string(FIND "${json}" "\"status\": \"crashed\"" at)
+  if(at EQUAL -1)
+    message(FATAL_ERROR "session.json doesn't say it crashed:\n${json}")
+  endif()
+endif()
+message(STATUS "${KIND} (status ${status}): ${reports}")

@@ -98,6 +98,9 @@ inline double operator*(Float32 a, X87Value b) { return Mul(b, a); }
 // effects follow.
 int Rand();
 void Srand(unsigned seed);
+// rand()'s whole state, which Srand(state) restores; the recorder logs it
+// (port/record.cpp).
+uint32_t RandState();
 
 } // namespace efz
 
