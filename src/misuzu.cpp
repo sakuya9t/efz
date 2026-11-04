@@ -13,7 +13,7 @@ CMisuzu::CMisuzu(PTR32(CPlayer)* opponent, CGame* game, CGraphics* graphics, CIn
     int i;
 
     strcpy(m_name, "misuzu");
-    lastSurface = 0x368;
+    lastSurface = 872;
     m_patternVar1 = 0;
     m_patternVar2 = 0;
     m_patternVar3 = 0;
@@ -34,25 +34,25 @@ CMisuzu::CMisuzu(PTR32(CPlayer)* opponent, CGame* game, CGraphics* graphics, CIn
     m_groundTrapB = 0;
     m_groundTrapC = 0;
     m_pointX[0] = -2;
-    m_pointY[0] = -0x3e;
+    m_pointY[0] = -62;
     m_pointX[1] = 1;
-    m_pointY[1] = -0xa;
-    m_pointX[2] = 0x18;
-    m_pointY[2] = -0x12;
-    m_pointX[3] = -0xb;
-    m_pointY[3] = -0x17;
-    m_pointX[4] = 0x15;
-    m_pointY[4] = -0x16;
+    m_pointY[1] = -10;
+    m_pointX[2] = 24;
+    m_pointY[2] = -18;
+    m_pointX[3] = -11;
+    m_pointY[3] = -23;
+    m_pointX[4] = 21;
+    m_pointY[4] = -22;
     m_resultPictures = 5;
     m_rivals[0] = 1;
-    m_rivals[1] = 0x13;
+    m_rivals[1] = 19;
     m_rivals[2] = 2;
     m_rivals[3] = 0;
     m_rivals[4] = 1;
     m_rivals[5] = 6;
-    m_rivals[0xa] = 0x17;
+    m_rivals[10] = 23;
     i = 0;
-    for (; i < 0x40; i++) {
+    for (; i < 64; i++) {
         m_objectVar1[i] = 0;
         m_objectVar2[i] = 0;
         m_objectVar3[i] = 0;
@@ -82,18 +82,18 @@ void CMisuzu::Reset()
     m_groundTrapA = 0;
     m_groundTrapB = 0;
     m_groundTrapC = 0;
-    m_pointX[0] = -0xd;
-    m_pointY[0] = -0x3c;
-    m_pointX[1] = 0xe;
+    m_pointX[0] = -13;
+    m_pointY[0] = -60;
+    m_pointX[1] = 14;
     m_pointY[1] = 0;
-    m_pointX[2] = 0x11;
+    m_pointX[2] = 17;
     m_pointY[2] = -6;
     m_pointX[3] = 7;
-    m_pointY[3] = -0x19;
-    m_pointX[4] = 0x1b;
-    m_pointY[4] = -0x19;
+    m_pointY[3] = -25;
+    m_pointX[4] = 27;
+    m_pointY[4] = -25;
     i = 0;
-    for (; i < 0x40; i++) {
+    for (; i < 64; i++) {
         m_objectVar1[i] = 0;
         m_objectVar2[i] = 0;
         m_objectVar3[i] = 0;
@@ -156,13 +156,13 @@ void CMisuzu::StartCommand()
         return;
     }
     if (m_sealLevel < 2) {
-        if (m_hp < 0xd05 && m_command == kCmdA5A2BC && m_gauge >= 0xbb8 && y == 0.0 && m_attackResult != 6 && (m_patterns[pattern].frames[frame].flagsB0 & kStateCancellable) > 0 && m_patterns[pattern].cancelLevel <= m_patterns[kLv4].level) {
+        if (m_hp < 3333 && m_command == kCmdA5A2BC && m_gauge >= 3000 && y == 0.0 && m_attackResult != 6 && (m_patterns[pattern].frames[frame].flagsB0 & kStateCancellable) > 0 && m_patterns[pattern].cancelLevel <= m_patterns[kLv4].level) {
             StartPattern();
             ClearBufferedPress();
             pattern = kLv4;
             return;
         }
-        if (m_command == kCmd214214C && y == 0.0 && m_gauge >= 0xbb8 && (m_patterns[pattern].frames[frame].flagsB0 & kStateCancellable) > 0 && (pattern >= kFirstCharacterAction && m_attackResult >= 2 && m_attackResult != 6 || pattern < kFirstCharacterAction) && m_patterns[pattern].cancelLevel <= m_patterns[k214214Lv3].level) {
+        if (m_command == kCmd214214C && y == 0.0 && m_gauge >= 3000 && (m_patterns[pattern].frames[frame].flagsB0 & kStateCancellable) > 0 && (pattern >= kFirstCharacterAction && m_attackResult >= 2 && m_attackResult != 6 || pattern < kFirstCharacterAction) && m_patterns[pattern].cancelLevel <= m_patterns[k214214Lv3].level) {
             StartPattern();
             ClearBufferedPress();
             pattern = k214214Lv3;
@@ -171,7 +171,7 @@ void CMisuzu::StartCommand()
             }
             return;
         }
-        if ((m_command == kCmd214214B || m_command == kCmd214214C) && y == 0.0 && m_gauge >= 0x7d0 && (m_patterns[pattern].frames[frame].flagsB0 & kStateCancellable) > 0 && (pattern >= kFirstCharacterAction && m_attackResult >= 2 && m_attackResult != 6 || pattern < kFirstCharacterAction) && m_patterns[pattern].cancelLevel <= m_patterns[k214214Lv2].level) {
+        if ((m_command == kCmd214214B || m_command == kCmd214214C) && y == 0.0 && m_gauge >= 2000 && (m_patterns[pattern].frames[frame].flagsB0 & kStateCancellable) > 0 && (pattern >= kFirstCharacterAction && m_attackResult >= 2 && m_attackResult != 6 || pattern < kFirstCharacterAction) && m_patterns[pattern].cancelLevel <= m_patterns[k214214Lv2].level) {
             StartPattern();
             ClearBufferedPress();
             pattern = k214214Lv2;
@@ -180,7 +180,7 @@ void CMisuzu::StartCommand()
             }
             return;
         }
-        if ((m_command == kCmd214214A || m_command == kCmd214214B || m_command == kCmd214214C) && y == 0.0 && m_gauge >= 0x3e8 && (m_patterns[pattern].frames[frame].flagsB0 & kStateCancellable) > 0 && (pattern >= kFirstCharacterAction && m_attackResult >= 2 && m_attackResult != 6 || pattern < kFirstCharacterAction) && m_patterns[pattern].cancelLevel <= m_patterns[k214214Lv1].level) {
+        if ((m_command == kCmd214214A || m_command == kCmd214214B || m_command == kCmd214214C) && y == 0.0 && m_gauge >= 1000 && (m_patterns[pattern].frames[frame].flagsB0 & kStateCancellable) > 0 && (pattern >= kFirstCharacterAction && m_attackResult >= 2 && m_attackResult != 6 || pattern < kFirstCharacterAction) && m_patterns[pattern].cancelLevel <= m_patterns[k214214Lv1].level) {
             StartPattern();
             ClearBufferedPress();
             pattern = k214214Lv1;
@@ -189,43 +189,43 @@ void CMisuzu::StartCommand()
             }
             return;
         }
-        if (m_command == kCmd4631C && m_gauge >= 0x3e8 && y == 0.0 && (m_patterns[pattern].frames[frame].flagsB0 & kStateCancellable) > 0 && (pattern >= kFirstCharacterAction && m_attackResult >= 2 && m_attackResult != 6 || pattern < kFirstCharacterAction) && m_patterns[pattern].cancelLevel <= m_patterns[k46321].level) {
+        if (m_command == kCmd4631C && m_gauge >= 1000 && y == 0.0 && (m_patterns[pattern].frames[frame].flagsB0 & kStateCancellable) > 0 && (pattern >= kFirstCharacterAction && m_attackResult >= 2 && m_attackResult != 6 || pattern < kFirstCharacterAction) && m_patterns[pattern].cancelLevel <= m_patterns[k46321].level) {
             StartPattern();
             ClearBufferedPress();
             pattern = k46321;
             return;
         }
-        if ((m_command == kCmd4631B || m_command == kCmd4631C) && m_gauge >= 0x3e8 && y == 0.0 && (m_patterns[pattern].frames[frame].flagsB0 & kStateCancellable) > 0 && (pattern >= kFirstCharacterAction && m_attackResult >= 2 && m_attackResult != 6 || pattern < kFirstCharacterAction) && m_patterns[pattern].cancelLevel <= m_patterns[k46321].level) {
+        if ((m_command == kCmd4631B || m_command == kCmd4631C) && m_gauge >= 1000 && y == 0.0 && (m_patterns[pattern].frames[frame].flagsB0 & kStateCancellable) > 0 && (pattern >= kFirstCharacterAction && m_attackResult >= 2 && m_attackResult != 6 || pattern < kFirstCharacterAction) && m_patterns[pattern].cancelLevel <= m_patterns[k46321].level) {
             StartPattern();
             ClearBufferedPress();
             pattern = k46321;
             return;
         }
-        if ((m_command == kCmd4631A || m_command == kCmd4631B || m_command == kCmd4631C) && m_gauge >= 0x3e8 && y == 0.0 && (m_patterns[pattern].frames[frame].flagsB0 & kStateCancellable) > 0 && (pattern >= kFirstCharacterAction && m_attackResult >= 2 && m_attackResult != 6 || pattern < kFirstCharacterAction) && m_patterns[pattern].cancelLevel <= m_patterns[k46321].level) {
+        if ((m_command == kCmd4631A || m_command == kCmd4631B || m_command == kCmd4631C) && m_gauge >= 1000 && y == 0.0 && (m_patterns[pattern].frames[frame].flagsB0 & kStateCancellable) > 0 && (pattern >= kFirstCharacterAction && m_attackResult >= 2 && m_attackResult != 6 || pattern < kFirstCharacterAction) && m_patterns[pattern].cancelLevel <= m_patterns[k46321].level) {
             StartPattern();
             ClearBufferedPress();
             pattern = k46321;
             return;
         }
-        if (m_command == kCmd236236C && y == 0.0 && m_gauge >= 0xbb8 && (m_patterns[pattern].frames[frame].flagsB0 & kStateCancellable) > 0 && (pattern >= kFirstCharacterAction && m_attackResult >= 2 && m_attackResult != 6 || pattern < kFirstCharacterAction) && m_patterns[pattern].cancelLevel <= m_patterns[k236236Lv3].level) {
+        if (m_command == kCmd236236C && y == 0.0 && m_gauge >= 3000 && (m_patterns[pattern].frames[frame].flagsB0 & kStateCancellable) > 0 && (pattern >= kFirstCharacterAction && m_attackResult >= 2 && m_attackResult != 6 || pattern < kFirstCharacterAction) && m_patterns[pattern].cancelLevel <= m_patterns[k236236Lv3].level) {
             StartPattern();
             ClearBufferedPress();
             pattern = k236236Lv3;
             return;
         }
-        if ((m_command == kCmd236236B || m_command == kCmd236236C) && y == 0.0 && m_gauge >= 0x7d0 && (m_patterns[pattern].frames[frame].flagsB0 & kStateCancellable) > 0 && (pattern >= kFirstCharacterAction && m_attackResult >= 2 && m_attackResult != 6 || pattern < kFirstCharacterAction) && m_patterns[pattern].cancelLevel <= m_patterns[k236236Lv2].level) {
+        if ((m_command == kCmd236236B || m_command == kCmd236236C) && y == 0.0 && m_gauge >= 2000 && (m_patterns[pattern].frames[frame].flagsB0 & kStateCancellable) > 0 && (pattern >= kFirstCharacterAction && m_attackResult >= 2 && m_attackResult != 6 || pattern < kFirstCharacterAction) && m_patterns[pattern].cancelLevel <= m_patterns[k236236Lv2].level) {
             StartPattern();
             ClearBufferedPress();
             pattern = k236236Lv2;
             return;
         }
-        if ((m_command == kCmd236236A || m_command == kCmd236236B || m_command == kCmd236236C) && y == 0.0 && m_gauge >= 0x3e8 && (m_patterns[pattern].frames[frame].flagsB0 & kStateCancellable) > 0 && (pattern >= kFirstCharacterAction && m_attackResult >= 2 && m_attackResult != 6 || pattern < kFirstCharacterAction) && m_patterns[pattern].cancelLevel <= m_patterns[k236236Lv1].level) {
+        if ((m_command == kCmd236236A || m_command == kCmd236236B || m_command == kCmd236236C) && y == 0.0 && m_gauge >= 1000 && (m_patterns[pattern].frames[frame].flagsB0 & kStateCancellable) > 0 && (pattern >= kFirstCharacterAction && m_attackResult >= 2 && m_attackResult != 6 || pattern < kFirstCharacterAction) && m_patterns[pattern].cancelLevel <= m_patterns[k236236Lv1].level) {
             StartPattern();
             ClearBufferedPress();
             pattern = k236236Lv1;
             return;
         }
-        if (m_crowBusy == 0 && m_command == kCmd41236C && (m_rfGauge >= 500.0 || m_rfBlue > 0 || m_crowStock > 0) && (m_patterns[pattern].frames[frame].flagsB0 & kStateCancellable) > 0 && y == 0.0 && (pattern >= kFirstCharacterAction && m_attackResult >= 2 && m_attackResult != 6 || pattern < kFirstCharacterAction) && m_patterns[pattern].cancelLevel <= m_patterns[k41236C].level && (m_crowX - 0x32 < x && m_crowX + 0x32 > x && facing == 1 || m_crowX + 0x32 > x && m_crowX - 0x32 < x && facing == -1)) {
+        if (m_crowBusy == 0 && m_command == kCmd41236C && (m_rfGauge >= 500.0 || m_rfBlue > 0 || m_crowStock > 0) && (m_patterns[pattern].frames[frame].flagsB0 & kStateCancellable) > 0 && y == 0.0 && (pattern >= kFirstCharacterAction && m_attackResult >= 2 && m_attackResult != 6 || pattern < kFirstCharacterAction) && m_patterns[pattern].cancelLevel <= m_patterns[k41236C].level && (m_crowX - 50 < x && m_crowX + 50 > x && facing == 1 || m_crowX + 50 > x && m_crowX - 50 < x && facing == -1)) {
             StartPattern();
             ClearBufferedPress();
             pattern = k41236C;
@@ -234,7 +234,7 @@ void CMisuzu::StartCommand()
             }
             return;
         }
-        if (m_crowBusy == 0 && (m_command == kCmd41236B || m_command == kCmd41236C) && (m_patterns[pattern].frames[frame].flagsB0 & kStateCancellable) > 0 && y == 0.0 && (pattern >= kFirstCharacterAction && m_attackResult >= 2 && m_attackResult != 6 || pattern < kFirstCharacterAction) && m_patterns[pattern].cancelLevel <= m_patterns[k41236B].level && (m_crowX - 0x32 < x && m_crowX + 0x32 > x && facing == 1 || m_crowX + 0x32 > x && m_crowX - 0x32 < x && facing == -1)) {
+        if (m_crowBusy == 0 && (m_command == kCmd41236B || m_command == kCmd41236C) && (m_patterns[pattern].frames[frame].flagsB0 & kStateCancellable) > 0 && y == 0.0 && (pattern >= kFirstCharacterAction && m_attackResult >= 2 && m_attackResult != 6 || pattern < kFirstCharacterAction) && m_patterns[pattern].cancelLevel <= m_patterns[k41236B].level && (m_crowX - 50 < x && m_crowX + 50 > x && facing == 1 || m_crowX + 50 > x && m_crowX - 50 < x && facing == -1)) {
             StartPattern();
             ClearBufferedPress();
             pattern = k41236B;
@@ -243,7 +243,7 @@ void CMisuzu::StartCommand()
             }
             return;
         }
-        if (m_crowBusy == 0 && m_command == kCmd41236A && (m_patterns[pattern].frames[frame].flagsB0 & kStateCancellable) > 0 && y == 0.0 && (pattern >= kFirstCharacterAction && m_attackResult >= 2 && m_attackResult != 6 || pattern < kFirstCharacterAction) && m_patterns[pattern].cancelLevel <= m_patterns[k41236A].level && (m_crowX - 0x32 < x && m_crowX + 0x32 > x && facing == 1 || m_crowX + 0x32 > x && m_crowX - 0x32 < x && facing == -1)) {
+        if (m_crowBusy == 0 && m_command == kCmd41236A && (m_patterns[pattern].frames[frame].flagsB0 & kStateCancellable) > 0 && y == 0.0 && (pattern >= kFirstCharacterAction && m_attackResult >= 2 && m_attackResult != 6 || pattern < kFirstCharacterAction) && m_patterns[pattern].cancelLevel <= m_patterns[k41236A].level && (m_crowX - 50 < x && m_crowX + 50 > x && facing == 1 || m_crowX + 50 > x && m_crowX - 50 < x && facing == -1)) {
             StartPattern();
             ClearBufferedPress();
             pattern = k41236A;
@@ -500,9 +500,9 @@ void CMisuzu::DrawGauge()
         sprite = *anims[0x2a].frames;
         src = MakeRect(0, 0, sprite.width, sprite.height);
         if (m_side == 0) {
-            dst = MakeRect(0x20 - sprite.x, 0xda - sprite.y, sprite.width, sprite.height);
+            dst = MakeRect(32 - sprite.x, 218 - sprite.y, sprite.width, sprite.height);
         } else {
-            dst = MakeRect(sprite.x + 0x115 - sprite.width, 0xda - sprite.y, sprite.width, sprite.height);
+            dst = MakeRect(sprite.x + 277 - sprite.width, 218 - sprite.y, sprite.width, sprite.height);
         }
         m_graphics->Blit(dst, surfaces[sprite.surface], src, colorKey, 0);
     }
@@ -510,9 +510,9 @@ void CMisuzu::DrawGauge()
         sprite = *anims[0x2a].frames;
         src = MakeRect(0, 0, sprite.width, sprite.height);
         if (m_side == 0) {
-            dst = MakeRect(0x2a - sprite.x, 0xda - sprite.y, sprite.width, sprite.height);
+            dst = MakeRect(42 - sprite.x, 218 - sprite.y, sprite.width, sprite.height);
         } else {
-            dst = MakeRect(sprite.x + 0x10b - sprite.width, 0xda - sprite.y, sprite.width, sprite.height);
+            dst = MakeRect(sprite.x + 267 - sprite.width, 218 - sprite.y, sprite.width, sprite.height);
         }
         m_graphics->Blit(dst, surfaces[sprite.surface], src, colorKey, 0);
     }
@@ -520,9 +520,9 @@ void CMisuzu::DrawGauge()
         sprite = *anims[0x2a].frames;
         src = MakeRect(0, 0, sprite.width, sprite.height);
         if (m_side == 0) {
-            dst = MakeRect(0x34 - sprite.x, 0xda - sprite.y, sprite.width, sprite.height);
+            dst = MakeRect(52 - sprite.x, 218 - sprite.y, sprite.width, sprite.height);
         } else {
-            dst = MakeRect(sprite.x + 0x101 - sprite.width, 0xda - sprite.y, sprite.width, sprite.height);
+            dst = MakeRect(sprite.x + 257 - sprite.width, 218 - sprite.y, sprite.width, sprite.height);
         }
         m_graphics->Blit(dst, surfaces[sprite.surface], src, colorKey, 0);
     }
@@ -530,19 +530,19 @@ void CMisuzu::DrawGauge()
         sprite = *anims[0x2b].frames;
         src = MakeRect(0, 0, sprite.width, sprite.height);
         if (m_side == 0) {
-            dst = MakeRect(0x31 - sprite.x, 0x1f - sprite.y, sprite.width, sprite.height);
+            dst = MakeRect(49 - sprite.x, 31 - sprite.y, sprite.width, sprite.height);
         } else {
-            dst = MakeRect(sprite.x + 0x10f - sprite.width, 0x1f - sprite.y, sprite.width, sprite.height);
+            dst = MakeRect(sprite.x + 271 - sprite.width, 31 - sprite.y, sprite.width, sprite.height);
         }
         m_graphics->Blit(dst, surfaces[sprite.surface], src, colorKey, 0);
     }
     if (m_poisonLevel > 0) {
         sprite = *anims[0x2c].frames;
-        src = MakeRect(0, 0, m_poisonTime * sprite.width / 0xbb8, sprite.height);
+        src = MakeRect(0, 0, m_poisonTime * sprite.width / 3000, sprite.height);
         if (m_side == 0) {
-            dst = MakeRect(0x31 - sprite.x, 0x1f - sprite.y, m_poisonTime * sprite.width / 0xbb8, sprite.height);
+            dst = MakeRect(49 - sprite.x, 31 - sprite.y, m_poisonTime * sprite.width / 3000, sprite.height);
         } else {
-            dst = MakeRect(sprite.x + 0x10f - m_poisonTime * sprite.width / 0xbb8, 0x1f - sprite.y, m_poisonTime * sprite.width / 0xbb8, sprite.height);
+            dst = MakeRect(sprite.x + 271 - m_poisonTime * sprite.width / 3000, 31 - sprite.y, m_poisonTime * sprite.width / 3000, sprite.height);
         }
         m_graphics->Blit(dst, surfaces[sprite.surface], src, colorKey, 0);
     }
@@ -554,10 +554,10 @@ void CMisuzu::PreUpdate()
         m_poisonTime--;
     }
     if (m_poisonLevel > 0) {
-        (*m_opponent)->Tint(0xcb, 3);
+        (*m_opponent)->Tint(203, 3);
         m_poisonTick++;
-        if (m_poisonTick > 0x2d - m_poisonLevel * 7) {
-            (*m_opponent)->m_hp -= 0xa;
+        if (m_poisonTick > 45 - m_poisonLevel * 7) {
+            (*m_opponent)->m_hp -= 10;
             if ((*m_opponent)->m_hp <= 0) {
                 (*m_opponent)->m_hp = 1;
             }
@@ -616,7 +616,7 @@ void CMisuzu::ReadCommand()
         if ((input & (kInputB | kInputC | kInputD)) != 0 && step == 1) {
             break;
         }
-        if ((input & kInputA) != 0 && step == 0 && m_gauge == 0xbb8) {
+        if ((input & kInputA) != 0 && step == 0 && m_gauge == 3000) {
             step = 1;
         }
     }
@@ -672,7 +672,7 @@ void CMisuzu::ReadCommand()
         if ((input & kInputDirections) == 6 - (facing == -1) && step == 1) {
             step = 2;
         }
-        if ((input & kInputDirections) == kInputDown && step == 0 && m_gauge >= 0x3e8) {
+        if ((input & kInputDirections) == kInputDown && step == 0 && m_gauge >= 1000) {
             step = 1;
         }
     }
@@ -703,7 +703,7 @@ void CMisuzu::ReadCommand()
         if ((input & kInputDirections) == (facing == -1) + 5 && step == 1) {
             step = 2;
         }
-        if ((input & kInputDirections) == kInputDown && step == 0 && m_gauge >= 0x3e8) {
+        if ((input & kInputDirections) == kInputDown && step == 0 && m_gauge >= 1000) {
             step = 1;
         }
     }
@@ -970,17 +970,17 @@ void CMisuzu::CpuInput()
     m_pressC = 0;
     m_pressD = 0;
     m_recoilGuardWindow = 0;
-    if ((WORD)Random(0, 0x3e8) < 25.0f * m_cpuSkill + (y < 0.0) * 0x1e * m_cpuSkill + (m_cpuAction == 3) * 0x190 + (pattern == kRecoilGuardAir) * 0x12c) {
-        m_recoilGuardWindow = 0x3c;
+    if ((WORD)Random(0, 1000) < 25.0f * m_cpuSkill + (y < 0.0) * 30 * m_cpuSkill + (m_cpuAction == 3) * 400 + (pattern == kRecoilGuardAir) * 300) {
+        m_recoilGuardWindow = 60;
     }
-    if ((WORD)Random(0, 0x7d0) < ((m_throwProtect > 0) * 4.0 + 1.0) * 8.0 * m_cpuSkill * ((pattern > kLastHitReaction && pattern < kAirRecoveryForward) * 2 + 1)) {
-        m_recoilGuardWindow = 0x3c;
+    if ((WORD)Random(0, 2000) < ((m_throwProtect > 0) * 4.0 + 1.0) * 8.0 * m_cpuSkill * ((pattern > kLastHitReaction && pattern < kAirRecoveryForward) * 2 + 1)) {
+        m_recoilGuardWindow = 60;
     }
-    if ((WORD)Random(0, 0x3e8) < 4e+01f * m_cpuSkill && pattern > kLastSharedAction) {
-        m_recoilGuardWindow = 0x3c;
+    if ((WORD)Random(0, 1000) < 4e+01f * m_cpuSkill && pattern > kLastSharedAction) {
+        m_recoilGuardWindow = 60;
     }
     if (m_canRecoilCounter == 1 && m_cpuAction == 2) {
-        m_recoilGuardWindow = 0x1e;
+        m_recoilGuardWindow = 30;
         if (pattern < kFirstCharacterAction) {
             m_cpuAction = 0;
         }
@@ -992,14 +992,14 @@ void CMisuzu::CpuInput()
     dx = ((*m_opponent)->x - x) * facing;
     dy = fabs(y - (*m_opponent)->y);
     if (pattern >= kFirstHitReaction && pattern <= kFirstGuard && timer == 0) {
-        if ((WORD)Random(0, 0x64) < 8.0f * m_cpuSkill) {
+        if ((WORD)Random(0, 100) < 8.0f * m_cpuSkill) {
             m_cpuAction = 3;
         } else {
             m_cpuAction = 0;
         }
-        m_inputX = 1 - (((WORD)Random(0, 0x64) < 0x32) << 1);
-        m_pressD = (WORD)Random(0, 0xf0) < dy;
-        m_pressD = (WORD)Random(0, 0x140) < dx;
+        m_inputX = 1 - (((WORD)Random(0, 100) < 0x32) << 1);
+        m_pressD = (WORD)Random(0, 240) < dy;
+        m_pressD = (WORD)Random(0, 320) < dx;
         if ((*m_opponent)->pattern > kLastSharedAction && (*m_opponent)->pattern < 0xfa && (*m_opponent)->frame < 3 && dy < 100.0 && dx < 150.0) {
             m_pressD = 0;
         }
@@ -1013,18 +1013,18 @@ void CMisuzu::CpuInput()
     }
     if (pattern == kRecoilGuardStand && timer < 6) {
         if ((*m_opponent)->pattern != 0xc8 && (*m_opponent)->pattern != 0xcc && (*m_opponent)->pattern < 0xfa && (*m_opponent)->y == 0.0 && (*m_opponent)->m_hitsLeft == 0) {
-            if (dx < 45.0 && (WORD)Random(0, 0x64) < m_cpuSkill * 2) {
+            if (dx < 45.0 && (WORD)Random(0, 100) < m_cpuSkill * 2) {
                 m_pressA = 1;
                 m_inputY = 1;
                 return;
             }
-            if (dx < 60.0 && (WORD)Random(0, 0x64) < m_cpuSkill * 1.0f) {
+            if (dx < 60.0 && (WORD)Random(0, 100) < m_cpuSkill * 1.0f) {
                 m_pressA = 1;
                 m_inputY = 0;
                 return;
             }
         }
-        if (((*m_opponent)->pattern == 0xc9 || (*m_opponent)->pattern == 0xca || (*m_opponent)->pattern == 0xcd) && (*m_opponent)->pattern < 0xfa && (*m_opponent)->y == 0.0 && (*m_opponent)->m_hitsLeft == 0 && dx > 60.0 && dx < 80.0 && (WORD)Random(0, 0x64) < m_cpuSkill * 1.0f) {
+        if (((*m_opponent)->pattern == 0xc9 || (*m_opponent)->pattern == 0xca || (*m_opponent)->pattern == 0xcd) && (*m_opponent)->pattern < 0xfa && (*m_opponent)->y == 0.0 && (*m_opponent)->m_hitsLeft == 0 && dx > 60.0 && dx < 80.0 && (WORD)Random(0, 100) < m_cpuSkill * 1.0f) {
             m_pressB = 1;
             m_inputY = 1;
             m_inputX = 0;
@@ -1033,84 +1033,84 @@ void CMisuzu::CpuInput()
     }
     if (pattern == kRecoilGuardStand || pattern == kRecoilGuardCrouch) {
         if (dx < 100.0) {
-            if ((WORD)Random(0, 0x64) < m_cpuSkill * 4.0f && m_rfGauge > 500.0) {
+            if ((WORD)Random(0, 100) < m_cpuSkill * 4.0f && m_rfGauge > 500.0) {
                 m_command = kCmd214C;
                 return;
             }
-            if ((WORD)Random(0, 0x64) < m_cpuSkill * 2 && m_rfGauge > 500.0) {
+            if ((WORD)Random(0, 100) < m_cpuSkill * 2 && m_rfGauge > 500.0) {
                 m_command = kCmd236C;
                 return;
             }
-            if (dx < 60.0 && (WORD)Random(0, 0x64) < m_cpuSkill * 1.0f) {
+            if (dx < 60.0 && (WORD)Random(0, 100) < m_cpuSkill * 1.0f) {
                 m_pressA = 1;
                 m_inputY = 0;
                 return;
             }
-            if ((WORD)Random(0, 0x64) < m_cpuSkill * 1.0f && m_gauge == 0xbb8) {
+            if ((WORD)Random(0, 100) < m_cpuSkill * 1.0f && m_gauge == 3000) {
                 m_command = 0x5c;
                 return;
             }
-            if ((WORD)Random(0, 0x64) < m_cpuSkill * 3.0f && dx < 80.0 && m_gauge >= 0x7d0) {
+            if ((WORD)Random(0, 100) < m_cpuSkill * 3.0f && dx < 80.0 && m_gauge >= 2000) {
                 m_command = (WORD)Random(0, 2) + kCmd236236B;
                 return;
             }
         }
         if (dx < 150.0 && dx > 100.0) {
-            if ((WORD)Random(0, 0x64) < m_cpuSkill * 3.0f && m_rfGauge > 500.0) {
+            if ((WORD)Random(0, 100) < m_cpuSkill * 3.0f && m_rfGauge > 500.0) {
                 m_command = kCmd236C;
                 return;
             }
-            if (dx < 120.0 && (WORD)Random(0, 0x64) < m_cpuSkill * 1.0f) {
+            if (dx < 120.0 && (WORD)Random(0, 100) < m_cpuSkill * 1.0f) {
                 m_pressA = 2;
                 m_inputY = 0;
                 return;
             }
-            if ((WORD)Random(0, 0x64) < m_cpuSkill * 1.0f) {
+            if ((WORD)Random(0, 100) < m_cpuSkill * 1.0f) {
                 m_pressC = 1;
                 m_inputY = 1;
                 return;
             }
-            if ((WORD)Random(0, 0x64) < m_cpuSkill * 1.0f && m_gauge == 0xbb8 && (*m_opponent)->pattern < 0xdc) {
+            if ((WORD)Random(0, 100) < m_cpuSkill * 1.0f && m_gauge == 3000 && (*m_opponent)->pattern < 0xdc) {
                 m_command = 0x5c;
                 return;
             }
         }
         if (dx > 150.0) {
-            if ((WORD)Random(0, 0x64) < m_cpuSkill * 1.0f && m_rfGauge > 500.0) {
+            if ((WORD)Random(0, 100) < m_cpuSkill * 1.0f && m_rfGauge > 500.0) {
                 m_command = (WORD)Random(0, 2) + kCmd214A;
                 return;
             }
-            if ((WORD)Random(0, 0x64) < m_cpuSkill * 1.0f) {
+            if ((WORD)Random(0, 100) < m_cpuSkill * 1.0f) {
                 m_command = (WORD)Random(0, 2) + kCmd236B;
                 return;
             }
         }
     }
     if (pattern == kRecoilGuardAir && frame == 1 && timer == 0) {
-        if ((WORD)Random(0, 0x64) < m_cpuSkill * 5.0f) {
+        if ((WORD)Random(0, 100) < m_cpuSkill * 5.0f) {
             m_cpuAction = 3;
             return;
         }
-        if (y - (*m_opponent)->y < 0.0 && y - (*m_opponent)->y > -40.0 && dx < 80.0 && (WORD)Random(0, 0x64) < m_cpuSkill * 5.0f) {
+        if (y - (*m_opponent)->y < 0.0 && y - (*m_opponent)->y > -40.0 && dx < 80.0 && (WORD)Random(0, 100) < m_cpuSkill * 5.0f) {
             m_pressA = 1;
             return;
         }
-        if (y - (*m_opponent)->y > -100.0 && y - (*m_opponent)->y < -50.0 && dx < 80.0 && (WORD)Random(0, 0x64) < m_cpuSkill * 5.0f) {
+        if (y - (*m_opponent)->y > -100.0 && y - (*m_opponent)->y < -50.0 && dx < 80.0 && (WORD)Random(0, 100) < m_cpuSkill * 5.0f) {
             m_pressB = 1;
             return;
         }
-        if (y - (*m_opponent)->y > -50.0 && y - (*m_opponent)->y < -50.0 && dx < 120.0 && (WORD)Random(0, 0x64) < m_cpuSkill * 5.0f) {
+        if (y - (*m_opponent)->y > -50.0 && y - (*m_opponent)->y < -50.0 && dx < 120.0 && (WORD)Random(0, 100) < m_cpuSkill * 5.0f) {
             m_pressC = 1;
             m_inputY = 0;
             return;
         }
-        if (dy < 50.0 && dx < 100.0 && (WORD)Random(0, 0x64) < m_cpuSkill * 2) {
+        if (dy < 50.0 && dx < 100.0 && (WORD)Random(0, 100) < m_cpuSkill * 2) {
             m_command = (WORD)Random(0, 2) + kCmd214B;
             return;
         }
     }
-    if (((*m_opponent)->pattern == kRecoilGuardStand || (*m_opponent)->pattern == kRecoilGuardCrouch || (*m_opponent)->pattern == kRecoilGuardAir) && y == 0.0 && (WORD)Random(0, 0x64) < 15.0f * m_cpuSkill && m_cpuAction != 2 && (*m_opponent)->m_freezeTime == 0) {
-        m_cpuRoll = (WORD)Random(0, 0x64);
+    if (((*m_opponent)->pattern == kRecoilGuardStand || (*m_opponent)->pattern == kRecoilGuardCrouch || (*m_opponent)->pattern == kRecoilGuardAir) && y == 0.0 && (WORD)Random(0, 100) < 15.0f * m_cpuSkill && m_cpuAction != 2 && (*m_opponent)->m_freezeTime == 0) {
+        m_cpuRoll = (WORD)Random(0, 100);
         if (m_cpuRoll < 3 && m_rfGauge > 500.0) {
             m_command = kCmd214C;
             return;
@@ -1119,31 +1119,31 @@ void CMisuzu::CpuInput()
             m_command = kCmd236C;
             return;
         }
-        if (m_cpuRoll < 0x11 && m_cpuRoll > 0xc && m_gauge >= 0x3e8) {
+        if (m_cpuRoll < 17 && m_cpuRoll > 12 && m_gauge >= 1000) {
             m_command = (WORD)Random(0, 3) + kCmd236236A;
             return;
         }
-        if (m_cpuRoll < 0x12 && m_cpuRoll > 0x14 && m_gauge == 0xbb8) {
+        if (m_cpuRoll < 18 && m_cpuRoll > 20 && m_gauge == 3000) {
             m_command = 0x5c;
             return;
         }
-        if (m_cpuRoll > 0x41) {
+        if (m_cpuRoll > 65) {
             m_cpuAction = 2;
             return;
         }
     }
-    if (((*m_opponent)->pattern == kRecoilGuardStand || (*m_opponent)->pattern == kRecoilGuardCrouch || (*m_opponent)->pattern == kRecoilGuardAir) && y < 0.0 && (WORD)Random(0, 0x64) < 15.0f * m_cpuSkill && m_cpuAction != 2 && (*m_opponent)->m_freezeTime == 0) {
-        m_cpuRoll = (WORD)Random(0, 0x64);
+    if (((*m_opponent)->pattern == kRecoilGuardStand || (*m_opponent)->pattern == kRecoilGuardCrouch || (*m_opponent)->pattern == kRecoilGuardAir) && y < 0.0 && (WORD)Random(0, 100) < 15.0f * m_cpuSkill && m_cpuAction != 2 && (*m_opponent)->m_freezeTime == 0) {
+        m_cpuRoll = (WORD)Random(0, 100);
         if (m_cpuRoll < 2 && m_rfGauge > 500.0) {
             m_command = kCmd214C;
             return;
         }
-        if (m_cpuRoll > 0x3a) {
+        if (m_cpuRoll > 58) {
             m_cpuAction = 2;
             return;
         }
     }
-    if ((m_rfGauge > 500.0 || m_rfBlue > 0) && (WORD)Random(0, 0x64) < 8.0f * m_cpuSkill && (*m_opponent)->pattern > kLastHitReaction && (*m_opponent)->pattern < kAirRecoveryForward && (pattern == k214B || pattern == kDashC && (WORD)Random(0, 0xa) == 0 || pattern == k214A && (WORD)Random(0, 0x64) < 2 || pattern == kDash2C && (WORD)Random(0, 7) == 0)) {
+    if ((m_rfGauge > 500.0 || m_rfBlue > 0) && (WORD)Random(0, 100) < 8.0f * m_cpuSkill && (*m_opponent)->pattern > kLastHitReaction && (*m_opponent)->pattern < kAirRecoveryForward && (pattern == k214B || pattern == kDashC && (WORD)Random(0, 10) == 0 || pattern == k214A && (WORD)Random(0, 100) < 2 || pattern == kDash2C && (WORD)Random(0, 7) == 0)) {
         m_command = kCmd22C;
         return;
     }
@@ -1272,35 +1272,35 @@ void CMisuzu::CpuInput()
         }
         return;
     }
-    if (m_attackResult > 1 && m_hitstop == 0 && (WORD)Random(0, 0x64) < m_cpuSkill * 25.0f && m_cpuAction != 1 && m_cpuAction != 2) {
-        m_cpuRoll = (WORD)Random(0, 0x3e8);
+    if (m_attackResult > 1 && m_hitstop == 0 && (WORD)Random(0, 100) < m_cpuSkill * 25.0f && m_cpuAction != 1 && m_cpuAction != 2) {
+        m_cpuRoll = (WORD)Random(0, 1000);
         if (pattern == k5A) {
-            if ((*m_opponent)->y < 0.0 && m_cpuRoll < 0x12c) {
+            if ((*m_opponent)->y < 0.0 && m_cpuRoll < 300) {
                 m_pressB = 1;
                 m_inputY = 0;
                 return;
             }
-            if ((*m_opponent)->y < 0.0 && dx < 90.0 && m_cpuRoll < 0x258 && m_cpuRoll > 0x12c) {
+            if ((*m_opponent)->y < 0.0 && dx < 90.0 && m_cpuRoll < 600 && m_cpuRoll > 300) {
                 m_cpuAction = 6;
                 return;
             }
-            if (dx < 80.0 && m_cpuRoll > 0 && m_cpuRoll < 0x12c) {
+            if (dx < 80.0 && m_cpuRoll > 0 && m_cpuRoll < 300) {
                 m_pressB = 1;
                 m_inputY = 1;
                 return;
             }
-            if (dx < 70.0 && m_cpuRoll > 0x12c && m_cpuRoll < 0x258) {
+            if (dx < 70.0 && m_cpuRoll > 300 && m_cpuRoll < 600) {
                 m_pressB = 1;
                 m_inputY = 0;
                 return;
             }
-            if (m_cpuRoll > 0x3ca) {
+            if (m_cpuRoll > 970) {
                 m_cpuAction = 4;
                 m_inputY = -1;
                 m_inputX = (WORD)Random(0, 2) - 1;
                 return;
             }
-            if (m_cpuRoll > 0x258) {
+            if (m_cpuRoll > 600) {
                 m_cpuAction = 1;
                 if ((WORD)Random(0, 3) == 0) {
                     m_cpuAction = 6;
@@ -1321,44 +1321,44 @@ void CMisuzu::CpuInput()
             }
         }
         if (pattern == k5BClose) {
-            if ((*m_opponent)->y < 0.0 && m_cpuRoll < 0x12c && m_attackResult == 3) {
+            if ((*m_opponent)->y < 0.0 && m_cpuRoll < 300 && m_attackResult == 3) {
                 m_command = (WORD)Random(0, 2) + kCmd623A;
                 return;
             }
-            if ((*m_opponent)->y < 0.0 && m_cpuRoll > 0x12c && m_cpuRoll < 0x226) {
+            if ((*m_opponent)->y < 0.0 && m_cpuRoll > 300 && m_cpuRoll < 550) {
                 m_command = kCmd214B;
                 return;
             }
-            if ((*m_opponent)->y < 0.0 && m_cpuRoll > 0x226 && m_cpuRoll < 0x258 && m_gauge >= 0x3e8) {
+            if ((*m_opponent)->y < 0.0 && m_cpuRoll > 550 && m_cpuRoll < 600 && m_gauge >= 1000) {
                 m_command = (WORD)Random(0, 3) + kCmd236236A;
                 return;
             }
-            if ((*m_opponent)->y < 0.0 && m_cpuRoll > 0x258 && m_cpuRoll < 0x2ee) {
+            if ((*m_opponent)->y < 0.0 && m_cpuRoll > 600 && m_cpuRoll < 750) {
                 m_inputX = facing;
                 m_inputY = -1;
                 return;
             }
-            if (m_cpuRoll < 0x64) {
+            if (m_cpuRoll < 100) {
                 m_pressC = 1;
                 m_inputY = 1;
                 return;
             }
-            if (m_cpuRoll > 0x64 && m_cpuRoll < 0x15e && dx < 110.0) {
+            if (m_cpuRoll > 100 && m_cpuRoll < 350 && dx < 110.0) {
                 m_pressB = 1;
                 m_inputY = 0;
                 return;
             }
-            if ((*m_opponent)->y < 0.0 && m_cpuRoll > 0x1c2 && m_cpuRoll < 0x258 && dx < 80.0) {
+            if ((*m_opponent)->y < 0.0 && m_cpuRoll > 450 && m_cpuRoll < 600 && dx < 80.0) {
                 m_pressC = 1;
                 return;
             }
-            if (m_cpuRoll > 0x3b6) {
+            if (m_cpuRoll > 950) {
                 m_cpuAction = 4;
                 m_inputY = -1;
                 m_inputX = (WORD)Random(0, 2) - 1;
                 return;
             }
-            if (m_cpuRoll > 0x258) {
+            if (m_cpuRoll > 600) {
                 m_cpuAction = 1;
                 if ((WORD)Random(0, 2) == 0) {
                     m_cpuAction = 6;
@@ -1379,20 +1379,20 @@ void CMisuzu::CpuInput()
             }
         }
         if (pattern == k5BFar) {
-            if ((*m_opponent)->y < 0.0 && m_cpuRoll > 0 && m_cpuRoll < 0x96) {
+            if ((*m_opponent)->y < 0.0 && m_cpuRoll > 0 && m_cpuRoll < 150) {
                 m_command = kCmd214B;
                 return;
             }
-            if ((*m_opponent)->y < 0.0 && m_cpuRoll > 0x96 && m_cpuRoll < 0xc8 && m_gauge >= 0x3e8) {
+            if ((*m_opponent)->y < 0.0 && m_cpuRoll > 150 && m_cpuRoll < 200 && m_gauge >= 1000) {
                 m_command = (WORD)Random(0, 3) + kCmd236236A;
                 return;
             }
-            if (m_cpuRoll > 0xc8 && m_cpuRoll < 0x190) {
+            if (m_cpuRoll > 200 && m_cpuRoll < 400) {
                 m_pressC = 1;
                 m_inputY = 1;
                 return;
             }
-            if (m_cpuRoll > 0x1f4) {
+            if (m_cpuRoll > 500) {
                 m_cpuAction = 1;
                 if ((WORD)Random(0, 2) == 0) {
                     m_cpuAction = 6;
@@ -1410,58 +1410,58 @@ void CMisuzu::CpuInput()
             }
         }
         if (pattern == k5C) {
-            if ((*m_opponent)->y < 0.0 && m_cpuRoll < 0x12c && m_attackResult == 3) {
+            if ((*m_opponent)->y < 0.0 && m_cpuRoll < 300 && m_attackResult == 3) {
                 m_command = (WORD)Random(0, 3) + kCmd214A;
                 return;
             }
-            if (m_cpuRoll > 0 && m_cpuRoll < 0x12c) {
+            if (m_cpuRoll > 0 && m_cpuRoll < 300) {
                 m_command = kCmd236A;
                 return;
             }
-            if (m_cpuRoll > 0x15e && m_cpuRoll < 0x12c && m_rfGauge > 350.0) {
+            if (m_cpuRoll > 350 && m_cpuRoll < 300 && m_rfGauge > 350.0) {
                 m_command = kCmd22C;
                 return;
             }
-            if (m_cpuRoll > 0x15e && m_cpuRoll < 0x258) {
+            if (m_cpuRoll > 350 && m_cpuRoll < 600) {
                 m_command = kCmd214A;
                 return;
             }
-            if (m_cpuRoll > 0x258 && m_cpuRoll < 0x28a && m_rfGauge > 500.0) {
+            if (m_cpuRoll > 600 && m_cpuRoll < 650 && m_rfGauge > 500.0) {
                 m_command = kCmd214B;
                 return;
             }
-            if (m_cpuRoll > 0x384) {
+            if (m_cpuRoll > 900) {
                 m_cpuAction = 1;
                 return;
             }
         }
         if (pattern == k2A) {
-            if ((*m_opponent)->y < 0.0 && m_cpuRoll < 0x12c) {
+            if ((*m_opponent)->y < 0.0 && m_cpuRoll < 300) {
                 m_pressB = 1;
                 m_inputY = 0;
                 return;
             }
-            if ((*m_opponent)->y < 0.0 && dx < 90.0 && m_cpuRoll < 0x258 && m_cpuRoll > 0x12c) {
+            if ((*m_opponent)->y < 0.0 && dx < 90.0 && m_cpuRoll < 600 && m_cpuRoll > 300) {
                 m_cpuAction = 6;
                 return;
             }
-            if (dx < 70.0 && m_cpuRoll > 0 && m_cpuRoll < 0xc8) {
+            if (dx < 70.0 && m_cpuRoll > 0 && m_cpuRoll < 200) {
                 m_pressB = 1;
                 m_inputY = 0;
                 return;
             }
-            if (dx < 80.0 && m_cpuRoll > 0xc8 && m_cpuRoll < 0x258) {
+            if (dx < 80.0 && m_cpuRoll > 200 && m_cpuRoll < 600) {
                 m_pressB = 1;
                 m_inputY = 1;
                 return;
             }
-            if (m_cpuRoll > 0x3ca) {
+            if (m_cpuRoll > 970) {
                 m_cpuAction = 4;
                 m_inputY = -1;
                 m_inputX = (WORD)Random(0, 2) - 1;
                 return;
             }
-            if (m_cpuRoll > 0x320) {
+            if (m_cpuRoll > 800) {
                 m_cpuAction = 1;
                 if ((WORD)Random(0, 2) == 0) {
                     m_cpuAction = 6;
@@ -1482,39 +1482,39 @@ void CMisuzu::CpuInput()
             }
         }
         if (pattern == k2B) {
-            if ((*m_opponent)->y < 0.0 && m_cpuRoll > 0x12c && m_cpuRoll < 0x226) {
+            if ((*m_opponent)->y < 0.0 && m_cpuRoll > 300 && m_cpuRoll < 550) {
                 m_command = kCmd214B;
                 return;
             }
-            if ((*m_opponent)->y < 0.0 && m_cpuRoll > 0x226 && m_cpuRoll < 0x258 && m_gauge >= 0x3e8) {
+            if ((*m_opponent)->y < 0.0 && m_cpuRoll > 550 && m_cpuRoll < 600 && m_gauge >= 1000) {
                 m_command = (WORD)Random(0, 3) + kCmd236236A;
                 return;
             }
-            if (m_cpuRoll < 0x64) {
+            if (m_cpuRoll < 100) {
                 m_pressC = 1;
                 m_inputY = 1;
                 return;
             }
-            if (m_cpuRoll > 0x64 && m_cpuRoll < 0x15e && dx < 110.0) {
+            if (m_cpuRoll > 100 && m_cpuRoll < 350 && dx < 110.0) {
                 m_pressB = 1;
                 m_inputY = 0;
                 return;
             }
-            if ((*m_opponent)->y < 0.0 && m_cpuRoll > 0x15e && m_cpuRoll < 0x226 && dx < 90.0) {
+            if ((*m_opponent)->y < 0.0 && m_cpuRoll > 350 && m_cpuRoll < 550 && dx < 90.0) {
                 m_pressC = 1;
                 return;
             }
-            if (m_cpuRoll > 0x226 && m_cpuRoll < 0x276 && m_attackResult == 2) {
+            if (m_cpuRoll > 550 && m_cpuRoll < 630 && m_attackResult == 2) {
                 m_command = kCmd214A;
                 return;
             }
-            if (m_cpuRoll > 0x3b6) {
+            if (m_cpuRoll > 950) {
                 m_cpuAction = 4;
                 m_inputY = -1;
                 m_inputX = (WORD)Random(0, 2) - 1;
                 return;
             }
-            if (m_cpuRoll > 0x1f4) {
+            if (m_cpuRoll > 500) {
                 m_cpuAction = 1;
                 if ((WORD)Random(0, 2) == 0) {
                     m_cpuAction = 6;
@@ -1535,42 +1535,42 @@ void CMisuzu::CpuInput()
             }
         }
         if (pattern == k2C) {
-            if (m_cpuRoll > 0 && m_cpuRoll < 0x258) {
+            if (m_cpuRoll > 0 && m_cpuRoll < 600) {
                 m_command = kCmd236A;
                 return;
             }
-            if (m_cpuRoll > 0x28a && m_cpuRoll < 0x258 && m_rfGauge > 350.0) {
+            if (m_cpuRoll > 650 && m_cpuRoll < 600 && m_rfGauge > 350.0) {
                 m_command = kCmd22C;
                 return;
             }
-            if (m_cpuRoll > 0x28a && m_cpuRoll < 0x320) {
+            if (m_cpuRoll > 650 && m_cpuRoll < 800) {
                 m_command = kCmd214A;
                 return;
             }
-            if (m_cpuRoll > 0x320 && m_cpuRoll < 0x352 && m_rfGauge > 500.0) {
+            if (m_cpuRoll > 800 && m_cpuRoll < 850 && m_rfGauge > 500.0) {
                 m_command = kCmd214B;
                 return;
             }
-            if (m_cpuRoll > 0x384) {
+            if (m_cpuRoll > 900) {
                 m_cpuAction = 1;
                 return;
             }
         }
         if (pattern == kJumpA) {
-            if ((*m_opponent)->y < 0.0 && m_cpuRoll < 0x12c) {
+            if ((*m_opponent)->y < 0.0 && m_cpuRoll < 300) {
                 m_pressB = 1;
                 return;
             }
-            if (dx < 60.0 && m_cpuRoll < 0x190) {
+            if (dx < 60.0 && m_cpuRoll < 400) {
                 m_pressA = 1;
                 return;
             }
-            if (dx < 125.0 && m_cpuRoll > 0x18f && m_cpuRoll < 0x2bc) {
+            if (dx < 125.0 && m_cpuRoll > 399 && m_cpuRoll < 700) {
                 m_pressC = 1;
                 m_inputY = 0;
                 return;
             }
-            if (m_cpuRoll > 0x2bb) {
+            if (m_cpuRoll > 699) {
                 m_cpuAction = 1;
                 if ((WORD)Random(0, 4) == 0) {
                     m_cpuAction = 3;
@@ -1579,55 +1579,55 @@ void CMisuzu::CpuInput()
             }
         }
         if (pattern == kJumpB) {
-            if (m_cpuRoll > 0x14 && m_cpuRoll < 0x3c && m_attackResult == 3 && (*m_opponent)->y < 0.0) {
+            if (m_cpuRoll > 20 && m_cpuRoll < 60 && m_attackResult == 3 && (*m_opponent)->y < 0.0) {
                 m_command = kCmd236A;
                 return;
             }
-            if (m_cpuRoll > 0x50 && m_cpuRoll < 0x12c) {
+            if (m_cpuRoll > 80 && m_cpuRoll < 300) {
                 m_pressC = 1;
                 return;
             }
-            if (m_cpuRoll > 0x3b6) {
+            if (m_cpuRoll > 950) {
                 m_inputX = (WORD)Random(0, 2) - 1;
                 return;
             }
-            if (m_cpuRoll > 0x289) {
+            if (m_cpuRoll > 649) {
                 m_cpuAction = 3;
                 return;
             }
         }
         if (pattern == kJumpC) {
-            if (m_cpuRoll < 0xc8 && m_attackResult == 3) {
+            if (m_cpuRoll < 200 && m_attackResult == 3) {
                 m_command = (WORD)Random(0, 2) + kCmd214B;
                 return;
             }
-            if (m_cpuRoll > 0x3b6) {
+            if (m_cpuRoll > 950) {
                 m_inputX = (WORD)Random(0, 2) - 1;
                 return;
             }
-            if (m_cpuRoll > 0x289) {
+            if (m_cpuRoll > 649) {
                 m_cpuAction = 3;
                 return;
             }
         }
         if (pattern == kDashB) {
-            if (m_cpuRoll > 0 && m_cpuRoll < 0x190) {
+            if (m_cpuRoll > 0 && m_cpuRoll < 400) {
                 m_command = kCmd236A;
                 return;
             }
-            if (m_cpuRoll > 0x1c2 && m_cpuRoll < 0x190 && m_rfGauge > 350.0) {
+            if (m_cpuRoll > 450 && m_cpuRoll < 400 && m_rfGauge > 350.0) {
                 m_command = kCmd22C;
                 return;
             }
-            if (m_cpuRoll > 0x1c2 && m_cpuRoll < 0x258) {
+            if (m_cpuRoll > 450 && m_cpuRoll < 600) {
                 m_command = kCmd214A;
                 return;
             }
-            if (m_cpuRoll > 0x258 && m_cpuRoll < 0x28a && m_rfGauge > 500.0) {
+            if (m_cpuRoll > 600 && m_cpuRoll < 650 && m_rfGauge > 500.0) {
                 m_command = kCmd214B;
                 return;
             }
-            if (m_cpuRoll > 0x2bb) {
+            if (m_cpuRoll > 699) {
                 m_cpuAction = 1;
                 if ((WORD)Random(0, 2) == 0) {
                     m_cpuAction = 6;
@@ -1647,14 +1647,14 @@ void CMisuzu::CpuInput()
                 return;
             }
         }
-        if (pattern == k214A && m_cpuRoll > 0x258 && y == 0.0) {
+        if (pattern == k214A && m_cpuRoll > 600 && y == 0.0) {
             m_cpuAction = 1;
             if (dx < 50.0) {
                 m_cpuAction = 0x14;
             }
             return;
         }
-        if (pattern == kDash2A && m_cpuRoll > 0x1f4) {
+        if (pattern == kDash2A && m_cpuRoll > 500) {
             m_cpuAction = 1;
             if (dx < 50.0) {
                 m_cpuAction = 0x14;
@@ -1662,27 +1662,27 @@ void CMisuzu::CpuInput()
             return;
         }
         if (pattern == kDash2B) {
-            if (m_cpuRoll > 0 && m_cpuRoll < 0x190 && m_attackResult == 3) {
+            if (m_cpuRoll > 0 && m_cpuRoll < 400 && m_attackResult == 3) {
                 m_command = kCmd623A;
                 return;
             }
-            if (m_cpuRoll > 0 && m_cpuRoll < 0x190) {
+            if (m_cpuRoll > 0 && m_cpuRoll < 400) {
                 m_command = kCmd236A;
                 return;
             }
-            if (m_cpuRoll > 0x1c2 && m_cpuRoll < 0x190 && m_rfGauge > 350.0) {
+            if (m_cpuRoll > 450 && m_cpuRoll < 400 && m_rfGauge > 350.0) {
                 m_command = kCmd22C;
                 return;
             }
-            if (m_cpuRoll > 0x1c2 && m_cpuRoll < 0x258) {
+            if (m_cpuRoll > 450 && m_cpuRoll < 600) {
                 m_command = kCmd214A;
                 return;
             }
-            if (m_cpuRoll > 0x258 && m_cpuRoll < 0x28a && m_rfGauge > 500.0) {
+            if (m_cpuRoll > 600 && m_cpuRoll < 650 && m_rfGauge > 500.0) {
                 m_command = kCmd214B;
                 return;
             }
-            if (m_cpuRoll > 0x2bc) {
+            if (m_cpuRoll > 700) {
                 m_cpuAction = 1;
                 if ((WORD)Random(0, 2) == 0) {
                     m_cpuAction = 6;
@@ -1702,13 +1702,13 @@ void CMisuzu::CpuInput()
                 return;
             }
         }
-        if (pattern == kDash2C && m_cpuRoll > 0x1c2 && m_cpuRoll < 0x258) {
+        if (pattern == kDash2C && m_cpuRoll > 450 && m_cpuRoll < 600) {
             m_command = kCmd214A;
             return;
         }
     }
-    if ((WORD)Random(0, 0x64) < 25.0f * m_cpuSkill) {
-        m_cpuRoll = (WORD)Random(0, 0x3e8);
+    if ((WORD)Random(0, 100) < 25.0f * m_cpuSkill) {
+        m_cpuRoll = (WORD)Random(0, 1000);
         if (y == 0.0) {
             if ((*m_opponent)->y == 0.0 && (*m_opponent)->pattern != kLyingDown) {
                 if (dx < 40.0 && (*m_opponent)->y == 0.0 && m_cpuRoll < 5) {
@@ -1718,99 +1718,99 @@ void CMisuzu::CpuInput()
                     return;
                 }
                 if (dx < 50.0) {
-                    if (m_cpuRoll < ((*m_opponent)->pattern > kLastFreeAction && (*m_opponent)->pattern < kGuardAir) * 0xf + 0xf) {
+                    if (m_cpuRoll < ((*m_opponent)->pattern > kLastFreeAction && (*m_opponent)->pattern < kGuardAir) * 15 + 15) {
                         m_pressA = 1;
                         m_inputY = 1;
                         return;
                     }
                 }
                 if (dx < 65.0) {
-                    if (m_cpuRoll < ((*m_opponent)->pattern > kLastFreeAction && (*m_opponent)->pattern < kGuardAir) * 0xf + 0x14) {
+                    if (m_cpuRoll < ((*m_opponent)->pattern > kLastFreeAction && (*m_opponent)->pattern < kGuardAir) * 15 + 20) {
                         m_pressA = 1;
                         m_inputY = 0;
                         return;
                     }
                 }
                 if (dx > 60.0 && dx < 90.0) {
-                    if (m_cpuRoll < ((*m_opponent)->pattern > kLastFreeAction && (*m_opponent)->pattern < kGuardAir) * 0xf + 0x23 && m_cpuRoll > 0x1e) {
+                    if (m_cpuRoll < ((*m_opponent)->pattern > kLastFreeAction && (*m_opponent)->pattern < kGuardAir) * 15 + 35 && m_cpuRoll > 30) {
                         m_pressB = 1;
                         m_inputY = 1;
                         return;
                     }
                 }
-                if (0x46 - ((*m_opponent)->pattern > kLastFreeAction && (*m_opponent)->pattern < kGuardAir) * 0x46 < dx && dx < 100.0) {
-                    if (m_cpuRoll < ((*m_opponent)->pattern > kLastFreeAction && (*m_opponent)->pattern < kGuardAir) * 2 + 0x54 && m_cpuRoll > 0x50) {
+                if (70 - ((*m_opponent)->pattern > kLastFreeAction && (*m_opponent)->pattern < kGuardAir) * 70 < dx && dx < 100.0) {
+                    if (m_cpuRoll < ((*m_opponent)->pattern > kLastFreeAction && (*m_opponent)->pattern < kGuardAir) * 2 + 84 && m_cpuRoll > 80) {
                         m_cpuAction = 0xc;
                         return;
                     }
                 }
-                if (0x46 - ((*m_opponent)->pattern > kLastFreeAction && (*m_opponent)->pattern < kGuardAir) * 0x46 < dx && dx < 120.0) {
-                    if (m_cpuRoll < ((*m_opponent)->pattern > kLastFreeAction && (*m_opponent)->pattern < kGuardAir) * 0xf + 0x80 && m_cpuRoll > 0x78) {
+                if (70 - ((*m_opponent)->pattern > kLastFreeAction && (*m_opponent)->pattern < kGuardAir) * 70 < dx && dx < 120.0) {
+                    if (m_cpuRoll < ((*m_opponent)->pattern > kLastFreeAction && (*m_opponent)->pattern < kGuardAir) * 15 + 128 && m_cpuRoll > 120) {
                         m_cpuAction = 8;
                         return;
                     }
                 }
-                if (dx < 150.0 && dx > 120.0 && m_cpuRoll < 0x7e && m_cpuRoll > 0x78) {
+                if (dx < 150.0 && dx > 120.0 && m_cpuRoll < 126 && m_cpuRoll > 120) {
                     m_pressC = 1;
                     m_inputY = 1;
                     return;
                 }
-                if (dx < 120.0 && dx > 70.0 && m_cpuRoll < 0x91 && m_cpuRoll > 0x82) {
+                if (dx < 120.0 && dx > 70.0 && m_cpuRoll < 145 && m_cpuRoll > 130) {
                     m_pressC = 1;
                     m_inputY = 0;
                     return;
                 }
-                if (0x50 - ((*m_opponent)->pattern > kLastFreeAction && (*m_opponent)->pattern < kGuardAir) * 0x50 < dx && dx < 130.0) {
-                    if (m_cpuRoll < ((*m_opponent)->pattern > kLastFreeAction && (*m_opponent)->pattern < kGuardAir) * 0xf + 0x9b && m_cpuRoll > 0x91) {
+                if (80 - ((*m_opponent)->pattern > kLastFreeAction && (*m_opponent)->pattern < kGuardAir) * 80 < dx && dx < 130.0) {
+                    if (m_cpuRoll < ((*m_opponent)->pattern > kLastFreeAction && (*m_opponent)->pattern < kGuardAir) * 15 + 155 && m_cpuRoll > 145) {
                         m_cpuAction = 0xe;
                         return;
                     }
                 }
-                if (0x5a - ((*m_opponent)->pattern > kLastFreeAction && (*m_opponent)->pattern < kGuardAir) * 0x5a < dx && dx < 140.0) {
-                    if (m_cpuRoll < ((*m_opponent)->pattern > kLastFreeAction && (*m_opponent)->pattern < kGuardAir) * 0xf + 0xb4 && m_cpuRoll > 0xa5) {
+                if (90 - ((*m_opponent)->pattern > kLastFreeAction && (*m_opponent)->pattern < kGuardAir) * 90 < dx && dx < 140.0) {
+                    if (m_cpuRoll < ((*m_opponent)->pattern > kLastFreeAction && (*m_opponent)->pattern < kGuardAir) * 15 + 180 && m_cpuRoll > 165) {
                         m_cpuAction = 0xa;
                         return;
                     }
                 }
-                if (dx > 110.0 && dx < 160.0 && m_cpuRoll < 0xcd && m_cpuRoll > 0xc8) {
+                if (dx > 110.0 && dx < 160.0 && m_cpuRoll < 205 && m_cpuRoll > 200) {
                     m_cpuAction = 0xa;
                     return;
                 }
-                if (dx < 80.0 && m_cpuRoll < 0xeb && m_cpuRoll > 0xdc && m_rfGauge > 500.0 && (*m_opponent)->pattern > kLastSharedAction) {
+                if (dx < 80.0 && m_cpuRoll < 235 && m_cpuRoll > 220 && m_rfGauge > 500.0 && (*m_opponent)->pattern > kLastSharedAction) {
                     m_command = kCmd214C;
                     return;
                 }
-                if (dx < 80.0 && m_cpuRoll < 0xf0 && m_cpuRoll > 0xeb && m_gauge >= 0x7d0 && (*m_opponent)->pattern > kLastSharedAction) {
+                if (dx < 80.0 && m_cpuRoll < 240 && m_cpuRoll > 235 && m_gauge >= 2000 && (*m_opponent)->pattern > kLastSharedAction) {
                     m_command = (WORD)Random(0, 3) + kCmd236236B;
                     return;
                 }
-                if (dx < 100.0 && m_cpuRoll < 0xf2 && m_cpuRoll > 0xf0 && m_gauge == 0xbb8 && (*m_opponent)->pattern > kLastSharedAction) {
+                if (dx < 100.0 && m_cpuRoll < 242 && m_cpuRoll > 240 && m_gauge == 3000 && (*m_opponent)->pattern > kLastSharedAction) {
                     m_command = 0x5c;
                     return;
                 }
-                if (dx > 100.0 && dx < 130.0 && m_cpuRoll < 0x136 && m_cpuRoll > 0x12c) {
+                if (dx > 100.0 && dx < 130.0 && m_cpuRoll < 310 && m_cpuRoll > 300) {
                     m_command = kCmd236A;
                     return;
                 }
-                if (dx > 130.0 && dx < 180.0 && m_cpuRoll < 0x13b && m_cpuRoll > 0x136) {
+                if (dx > 130.0 && dx < 180.0 && m_cpuRoll < 315 && m_cpuRoll > 310) {
                     m_command = kCmd236B;
                     return;
                 }
-                if (dx > 90.0 && dx < 140.0 && m_cpuRoll < 0x14a && m_cpuRoll > 0x140) {
+                if (dx > 90.0 && dx < 140.0 && m_cpuRoll < 330 && m_cpuRoll > 320) {
                     m_command = kCmd214A;
                     return;
                 }
-                if (dx > 90.0 && dx < 140.0 && m_cpuRoll < 0x154 && m_cpuRoll > 0x14a && m_rfGauge > 500.0) {
+                if (dx > 90.0 && dx < 140.0 && m_cpuRoll < 340 && m_cpuRoll > 330 && m_rfGauge > 500.0) {
                     m_command = kCmd214B;
                     return;
                 }
-                if (m_cpuRoll < 0x2ee && m_cpuRoll > 0x2bc && (*m_opponent)->pattern > kLastFreeAction && (*m_opponent)->pattern < kGuardAir && dx > 100.0) {
+                if (m_cpuRoll < 750 && m_cpuRoll > 700 && (*m_opponent)->pattern > kLastFreeAction && (*m_opponent)->pattern < kGuardAir && dx > 100.0) {
                     m_cpuAction = 5;
                     return;
                 }
             }
             if ((*m_opponent)->y < 0.0) {
-                if ((*m_opponent)->vy < 0.0 && dx < 80.0 && dy < 120.0 && m_cpuRoll < 0xa) {
+                if ((*m_opponent)->vy < 0.0 && dx < 80.0 && dy < 120.0 && m_cpuRoll < 10) {
                     m_inputY = -1;
                     m_inputX = -facing;
                     return;
@@ -1820,26 +1820,26 @@ void CMisuzu::CpuInput()
                         m_command = kCmd623C;
                         return;
                     }
-                    if (dx < 80.0 && dy < 140.0 && dy > 100.0 && m_cpuRoll < 0x2d && m_cpuRoll > 0xa) {
+                    if (dx < 80.0 && dy < 140.0 && dy > 100.0 && m_cpuRoll < 45 && m_cpuRoll > 10) {
                         m_pressB = 1;
                         m_inputY = 0;
                         return;
                     }
-                    if (dx < 90.0 && dy < 170.0 && dy > 150.0 && m_cpuRoll < 0x50 && m_cpuRoll > 0x2d) {
+                    if (dx < 90.0 && dy < 170.0 && dy > 150.0 && m_cpuRoll < 80 && m_cpuRoll > 45) {
                         m_pressC = 1;
                         m_inputY = 0;
                         return;
                     }
-                    if (dx > 120.0 && dx < 140.0 && dy < 150.0 && dy > 120.0 && m_cpuRoll < 0x6e && m_cpuRoll > 0x50) {
+                    if (dx > 120.0 && dx < 140.0 && dy < 150.0 && dy > 120.0 && m_cpuRoll < 110 && m_cpuRoll > 80) {
                         m_pressB = 1;
                         m_inputY = 0;
                         return;
                     }
-                    if (dx < 70.0 && m_cpuRoll < 0xd2 && m_cpuRoll > 0xc8 && (*m_opponent)->y < -50.0 && dy < 90.0 && m_gauge >= 0x7d0) {
+                    if (dx < 70.0 && m_cpuRoll < 210 && m_cpuRoll > 200 && (*m_opponent)->y < -50.0 && dy < 90.0 && m_gauge >= 2000) {
                         m_command = (WORD)Random(0, 2) + kCmd236236B;
                         return;
                     }
-                    if (dx < 100.0 && m_cpuRoll < 0x12e && m_cpuRoll > 0x12c && (*m_opponent)->y < -50.0 && dy < 100.0 && m_gauge == 0xbb8) {
+                    if (dx < 100.0 && m_cpuRoll < 302 && m_cpuRoll > 300 && (*m_opponent)->y < -50.0 && dy < 100.0 && m_gauge == 3000) {
                         m_command = 0x5c;
                         return;
                     }
@@ -1848,58 +1848,58 @@ void CMisuzu::CpuInput()
         }
         if (y < 0.0 && m_cpuAction != 3) {
             if ((*m_opponent)->y == 0.0) {
-                if (dx < 80.0 && dy < 100.0 && m_cpuRoll < 0x64) {
+                if (dx < 80.0 && dy < 100.0 && m_cpuRoll < 100) {
                     m_pressA = 1;
                     return;
                 }
-                if (dx < 80.0 && dy > 90.0 && dy < 120.0 && (*m_opponent)->y < y && m_cpuRoll > 0x64 && m_cpuRoll < 0xb4) {
+                if (dx < 80.0 && dy > 90.0 && dy < 120.0 && (*m_opponent)->y < y && m_cpuRoll > 100 && m_cpuRoll < 180) {
                     m_pressB = 1;
                     return;
                 }
-                if (dx > 80.0 && dx < 110.0 && dy > 0.0 && dy < 70.0 && m_cpuRoll > 0xb4 && m_cpuRoll < 0xf0) {
+                if (dx > 80.0 && dx < 110.0 && dy > 0.0 && dy < 70.0 && m_cpuRoll > 180 && m_cpuRoll < 240) {
                     m_pressC = 1;
                     return;
                 }
-                if (dx < 80.0 && m_cpuRoll > 0xf0 && m_cpuRoll < 0xf2 && dy > 80.0) {
+                if (dx < 80.0 && m_cpuRoll > 240 && m_cpuRoll < 242 && dy > 80.0) {
                     m_command = (WORD)Random(0, 3) + kCmd214214A;
                     return;
                 }
             }
             if ((*m_opponent)->y < 0.0) {
-                if (dx < 80.0 && dy < 100.0 && m_cpuRoll < 0x14) {
+                if (dx < 80.0 && dy < 100.0 && m_cpuRoll < 20) {
                     m_pressA = 1;
                     return;
                 }
-                if (dx > 20.0 && dx < 90.0 && dy > 90.0 && dy < 120.0 && (*m_opponent)->y < y && m_cpuRoll > 0x14 && m_cpuRoll < 0x28) {
+                if (dx > 20.0 && dx < 90.0 && dy > 90.0 && dy < 120.0 && (*m_opponent)->y < y && m_cpuRoll > 20 && m_cpuRoll < 40) {
                     m_pressB = 1;
                     return;
                 }
-                if (dx > 80.0 && dx < 110.0 && dy > 0.0 && dy < 50.0 && m_cpuRoll > 0x28 && m_cpuRoll < 0x32) {
+                if (dx > 80.0 && dx < 110.0 && dy > 0.0 && dy < 50.0 && m_cpuRoll > 40 && m_cpuRoll < 50) {
                     m_pressC = 1;
                     return;
                 }
             }
         }
     }
-    if (pattern < kFirstHitReaction && ((*m_opponent)->pattern > kLastHitReaction && (*m_opponent)->pattern < kGuardAir || (*m_opponent)->pattern > kLastFreeAction && (*m_opponent)->pattern < kHitAir) && y == 0.0 && (WORD)Random(0, 0x64) < 4.0f * m_cpuSkill && dx > 120.0) {
+    if (pattern < kFirstHitReaction && ((*m_opponent)->pattern > kLastHitReaction && (*m_opponent)->pattern < kGuardAir || (*m_opponent)->pattern > kLastFreeAction && (*m_opponent)->pattern < kHitAir) && y == 0.0 && (WORD)Random(0, 100) < 4.0f * m_cpuSkill && dx > 120.0) {
         m_command = facing == 1;
         return;
     }
-    if (pattern < kFirstHitReaction && (*m_opponent)->pattern < kFirstHitReaction && dx > 800.0 && dx < 120.0 && (WORD)Random(0, 0x64) < 2.0f * m_cpuSkill && x > 150.0 && x < 490.0) {
+    if (pattern < kFirstHitReaction && (*m_opponent)->pattern < kFirstHitReaction && dx > 800.0 && dx < 120.0 && (WORD)Random(0, 100) < 2.0f * m_cpuSkill && x > 150.0 && x < 490.0) {
         m_command = -((facing == 1) - 1);
         return;
     }
-    if ((WORD)Random(0, 0x3e8) < 2) {
+    if ((WORD)Random(0, 1000) < 2) {
         m_cpuAction = 4;
         return;
     }
-    if ((WORD)Random(0, 0x64) < 2) {
-        if ((WORD)Random(0, 0x64) < 8.0f * m_cpuSkill) {
+    if ((WORD)Random(0, 100) < 2) {
+        if ((WORD)Random(0, 100) < 8.0f * m_cpuSkill) {
             m_cpuAction = 3;
         } else {
             m_cpuAction = 0;
         }
-        if (dx > 180.0 && y == 0.0 && (WORD)Random(0, 0x64) < 2) {
+        if (dx > 180.0 && y == 0.0 && (WORD)Random(0, 100) < 2) {
             m_inputX = 0;
             m_inputY = -1;
             return;
@@ -1911,39 +1911,39 @@ void CMisuzu::CpuInput()
         }
     }
     if (m_cpuWalkRight > 0) {
-        if ((char)AtScreenEdge() != 0 && m_cpuWalkRight > 0xf) {
-            m_cpuWalkRight = 0xf;
+        if ((char)AtScreenEdge() != 0 && m_cpuWalkRight > 15) {
+            m_cpuWalkRight = 15;
         }
         m_inputX = 1;
         return;
     }
     if (m_cpuWalkLeft > 0) {
-        if ((char)AtScreenEdge() != 0 && m_cpuWalkLeft > 0xf) {
-            m_cpuWalkLeft = 0xf;
+        if ((char)AtScreenEdge() != 0 && m_cpuWalkLeft > 15) {
+            m_cpuWalkLeft = 15;
         }
         m_inputX = -1;
         return;
     }
-    if ((WORD)Random(0, 0x64) < 0x32 && dx < 120.0) {
+    if ((WORD)Random(0, 100) < 50 && dx < 120.0) {
         if (facing == 1) {
-            m_cpuWalkLeft = (WORD)Random(0, 0xc8) + 0x3c;
+            m_cpuWalkLeft = (WORD)Random(0, 200) + 60;
         } else {
-            m_cpuWalkRight = (WORD)Random(0, 0xc8) + 0x3c;
+            m_cpuWalkRight = (WORD)Random(0, 200) + 60;
         }
     }
-    if ((WORD)Random(0, 0x64) < 0x32) {
+    if ((WORD)Random(0, 100) < 50) {
         if (facing == 1) {
-            m_cpuWalkRight = (WORD)Random(0, 0xc8) + 0x3c;
+            m_cpuWalkRight = (WORD)Random(0, 200) + 60;
         } else {
-            m_cpuWalkLeft = (WORD)Random(0, 0xc8) + 0x3c;
+            m_cpuWalkLeft = (WORD)Random(0, 200) + 60;
         }
         return;
     }
     if (facing == -1) {
-        m_cpuWalkRight = (WORD)Random(0, 0xc8) + 0x3c;
+        m_cpuWalkRight = (WORD)Random(0, 200) + 60;
         return;
     }
-    m_cpuWalkLeft = (WORD)Random(0, 0xc8) + 0x3c;
+    m_cpuWalkLeft = (WORD)Random(0, 200) + 60;
 }
 
 void CMisuzu::UpdateObjects()
@@ -2006,7 +2006,7 @@ void CMisuzu::UpdateObjects()
                     m_objects[slot].movesInFreeze = 1;
                     break;
                 }
-                m_objects[slot].vx = (x - facing * 0x2d - m_objects[slot].x) / 640.0 * 12.0 * m_objects[slot].facing;
+                m_objects[slot].vx = (x - facing * 45 - m_objects[slot].x) / 640.0 * 12.0 * m_objects[slot].facing;
                 if (m_objects[slot].vx < 0.02 && m_objects[slot].vx > -0.02) {
                     m_objects[slot].vx = 0.0;
                 }
@@ -2077,8 +2077,8 @@ void CMisuzu::UpdateObjects()
                     }
                 }
                 if (m_objects[slot].attackResult == 3 && m_objectVar1[slot] == 0) {
-                    (*m_opponent)->m_hitstop = 0x3c;
-                    m_objects[slot].hitstop = 0x3c;
+                    (*m_opponent)->m_hitstop = 60;
+                    m_objects[slot].hitstop = 60;
                     m_objectVar1[slot]++;
                 }
                 m_objects[slot].timer++;
@@ -2116,8 +2116,8 @@ void CMisuzu::UpdateObjects()
                     }
                 }
                 if (m_objects[slot].attackResult == 3 && m_objectVar1[slot] == 0) {
-                    (*m_opponent)->m_hitstop = 0x3c;
-                    m_objects[slot].hitstop = 0x3c;
+                    (*m_opponent)->m_hitstop = 60;
+                    m_objects[slot].hitstop = 60;
                     m_objectVar1[slot]++;
                 }
                 m_objects[slot].timer++;
@@ -2153,8 +2153,8 @@ void CMisuzu::UpdateObjects()
                     }
                 }
                 if (m_objects[slot].attackResult == 3 && m_objectVar1[slot] == 0) {
-                    (*m_opponent)->m_hitstop = 0x5a;
-                    m_objects[slot].hitstop = 0x5a;
+                    (*m_opponent)->m_hitstop = 90;
+                    m_objects[slot].hitstop = 90;
                     m_objectVar1[slot]++;
                 }
                 m_objects[slot].timer++;
@@ -2179,7 +2179,7 @@ void CMisuzu::UpdateObjects()
                     m_objects[slot].hitsLeft = 1;
                     m_objectVar2[slot]++;
                 }
-                if (m_objects[slot].frame == 0 && m_objects[slot].timer > 0x14) {
+                if (m_objects[slot].frame == 0 && m_objects[slot].timer > 20) {
                     if ((*m_opponent)->x < m_objects[slot].x + 50.0 && (*m_opponent)->x > m_objects[slot].x - 50.0) {
                         m_objects[slot].frame = 1;
                         m_objects[slot].timer = 0;
@@ -2208,7 +2208,7 @@ void CMisuzu::UpdateObjects()
                         RemoveObject(slot);
                         m_groundTrapA = 0;
                     }
-                    if (m_objects[slot].frame == 0xc && m_objectVar2[slot] < 3) {
+                    if (m_objects[slot].frame == 12 && m_objectVar2[slot] < 3) {
                         m_objects[slot].frame = m_objects[slot].frame - 2;
                         m_objectVar2[slot]++;
                     }
@@ -2224,7 +2224,7 @@ void CMisuzu::UpdateObjects()
                     m_objects[slot].hitsLeft = 1;
                     m_objectVar2[slot]++;
                 }
-                if (m_objects[slot].frame == 0 && m_objects[slot].timer > 0x14) {
+                if (m_objects[slot].frame == 0 && m_objects[slot].timer > 20) {
                     if ((*m_opponent)->x < m_objects[slot].x + 50.0 && (*m_opponent)->x > m_objects[slot].x - 50.0) {
                         m_objects[slot].frame = 1;
                         m_objects[slot].timer = 0;
@@ -2253,7 +2253,7 @@ void CMisuzu::UpdateObjects()
                         RemoveObject(slot);
                         m_groundTrapB = 0;
                     }
-                    if (m_objects[slot].frame == 0xc && m_objectVar2[slot] < 3) {
+                    if (m_objects[slot].frame == 12 && m_objectVar2[slot] < 3) {
                         m_objects[slot].frame = m_objects[slot].frame - 2;
                         m_objectVar2[slot]++;
                     }
@@ -2269,7 +2269,7 @@ void CMisuzu::UpdateObjects()
                     m_objects[slot].hitsLeft = 1;
                     m_objectVar2[slot]++;
                 }
-                if (m_objects[slot].frame == 0 && m_objects[slot].timer > 0x14) {
+                if (m_objects[slot].frame == 0 && m_objects[slot].timer > 20) {
                     if ((*m_opponent)->x < m_objects[slot].x + 70.0 && (*m_opponent)->x > m_objects[slot].x - 70.0) {
                         m_objects[slot].frame = 1;
                         m_objects[slot].timer = 0;
@@ -2436,7 +2436,7 @@ void CMisuzu::UpdateObjects()
             case kObj421HoldA:
                 m_objects[slot].x = x;
                 m_objects[slot].y = y;
-                if (frame > 0x18 || pattern > kLastFreeAction && pattern < kFirstGuard || pattern != k421A) {
+                if (frame > 24 || pattern > kLastFreeAction && pattern < kFirstGuard || pattern != k421A) {
                     RemoveObject(slot);
                     break;
                 }
@@ -2445,7 +2445,7 @@ void CMisuzu::UpdateObjects()
                     m_objects[slot].timer = 0;
                     m_objects[slot].frame++;
                     m_objects[slot].attackResult = 0;
-                    if (m_objects[slot].frame == 0xb) {
+                    if (m_objects[slot].frame == 11) {
                         effect.type = 0x19e;
                         effect.x = m_objects[slot].x;
                         effect.y = m_objects[slot].y - 55.0;
@@ -2472,7 +2472,7 @@ void CMisuzu::UpdateObjects()
                     m_objects[slot].timer = 0;
                     m_objects[slot].frame++;
                     m_objects[slot].attackResult = 0;
-                    if (m_objects[slot].frame == 0xa && m_objectVar1[slot] != 1) {
+                    if (m_objects[slot].frame == 10 && m_objectVar1[slot] != 1) {
                         effect.type = 0x1c8;
                         effect.x = m_objects[slot].x;
                         effect.y = m_objects[slot].y;
@@ -2494,7 +2494,7 @@ void CMisuzu::UpdateObjects()
                     m_objects[slot].hitsLeft = 1;
                 }
                 m_objectVar2[slot]++;
-                if (pattern > kLastFreeAction && pattern < kFirstGuard || m_objectVar3[slot] > 0x14 || m_objects[slot].attackResult > 0 || m_objectVar2[slot] > 0x4b0 || pattern > 0x108 && pattern < 0x10c && frame == 0 || m_objects[slot].x > 760.0 || m_objects[slot].x < -120.0) {
+                if (pattern > kLastFreeAction && pattern < kFirstGuard || m_objectVar3[slot] > 20 || m_objects[slot].attackResult > 0 || m_objectVar2[slot] > 1200 || pattern > 0x108 && pattern < 0x10c && frame == 0 || m_objects[slot].x > 760.0 || m_objects[slot].x < -120.0) {
                     m_objects[slot].timer = 0;
                     m_objects[slot].frame = 0;
                     m_objects[slot].pattern = kObjFloaterPop;
@@ -2503,11 +2503,11 @@ void CMisuzu::UpdateObjects()
                     if (m_objects[slot].attackResult == 3) {
                         m_poisonLevel++;
                         if (m_poisonTime == 0) {
-                            m_poisonTime = 0xbb8;
+                            m_poisonTime = 3000;
                         } else {
-                            m_poisonTime += 0x3e8;
-                            if (m_poisonTime > 0xbb8) {
-                                m_poisonTime = 0xbb8;
+                            m_poisonTime += 1000;
+                            if (m_poisonTime > 3000) {
+                                m_poisonTime = 3000;
                             }
                         }
                     }
@@ -2546,7 +2546,7 @@ void CMisuzu::UpdateObjects()
             case kObj421HoldB:
                 m_objects[slot].x = x;
                 m_objects[slot].y = y;
-                if (frame > 0x18 || pattern > kLastFreeAction && pattern < kFirstGuard || pattern != k421B) {
+                if (frame > 24 || pattern > kLastFreeAction && pattern < kFirstGuard || pattern != k421B) {
                     RemoveObject(slot);
                     break;
                 }
@@ -2555,7 +2555,7 @@ void CMisuzu::UpdateObjects()
                     m_objects[slot].timer = 0;
                     m_objects[slot].frame++;
                     m_objects[slot].attackResult = 0;
-                    if (m_objects[slot].frame == 0xb) {
+                    if (m_objects[slot].frame == 11) {
                         effect.type = 0x1a1;
                         effect.x = m_objects[slot].x;
                         effect.y = m_objects[slot].y - 55.0;
@@ -2582,7 +2582,7 @@ void CMisuzu::UpdateObjects()
                     m_objects[slot].timer = 0;
                     m_objects[slot].frame++;
                     m_objects[slot].attackResult = 0;
-                    if (m_objects[slot].frame == 0xa && m_objectVar1[slot] != 1) {
+                    if (m_objects[slot].frame == 10 && m_objectVar1[slot] != 1) {
                         effect.type = 0x1c9;
                         effect.x = m_objects[slot].x;
                         effect.y = m_objects[slot].y;
@@ -2604,7 +2604,7 @@ void CMisuzu::UpdateObjects()
                     m_objects[slot].hitsLeft = 1;
                 }
                 m_objectVar2[slot]++;
-                if (pattern > kLastFreeAction && pattern < kFirstGuard || m_objectVar3[slot] > 6 || m_objects[slot].attackResult > 0 || m_objectVar2[slot] > 0x4b0 || pattern > 0x108 && pattern < 0x10c && frame == 0 || m_objects[slot].x > 760.0 || m_objects[slot].x < -120.0) {
+                if (pattern > kLastFreeAction && pattern < kFirstGuard || m_objectVar3[slot] > 6 || m_objects[slot].attackResult > 0 || m_objectVar2[slot] > 1200 || pattern > 0x108 && pattern < 0x10c && frame == 0 || m_objects[slot].x > 760.0 || m_objects[slot].x < -120.0) {
                     m_objects[slot].timer = 0;
                     m_objects[slot].frame = 0;
                     m_objects[slot].pattern = kObjFloaterPop;
@@ -2613,11 +2613,11 @@ void CMisuzu::UpdateObjects()
                     if (m_objects[slot].attackResult == 3) {
                         m_poisonLevel++;
                         if (m_poisonTime == 0) {
-                            m_poisonTime = 0xbb8;
+                            m_poisonTime = 3000;
                         } else {
-                            m_poisonTime += 0x3e8;
-                            if (m_poisonTime > 0xbb8) {
-                                m_poisonTime = 0xbb8;
+                            m_poisonTime += 1000;
+                            if (m_poisonTime > 3000) {
+                                m_poisonTime = 3000;
                             }
                         }
                     }
@@ -2656,7 +2656,7 @@ void CMisuzu::UpdateObjects()
             case kObj421HoldC:
                 m_objects[slot].x = x;
                 m_objects[slot].y = y;
-                if (frame > 0x18 || pattern > kLastFreeAction && pattern < kFirstGuard || pattern != k421C) {
+                if (frame > 24 || pattern > kLastFreeAction && pattern < kFirstGuard || pattern != k421C) {
                     RemoveObject(slot);
                     break;
                 }
@@ -2665,7 +2665,7 @@ void CMisuzu::UpdateObjects()
                     m_objects[slot].timer = 0;
                     m_objects[slot].frame++;
                     m_objects[slot].attackResult = 0;
-                    if (m_objects[slot].frame == 0xb) {
+                    if (m_objects[slot].frame == 11) {
                         effect.type = 0x1a4;
                         effect.x = m_objects[slot].x;
                         effect.y = m_objects[slot].y - 55.0;
@@ -2692,7 +2692,7 @@ void CMisuzu::UpdateObjects()
                     m_objects[slot].timer = 0;
                     m_objects[slot].frame++;
                     m_objects[slot].attackResult = 0;
-                    if (m_objects[slot].frame == 0xa && m_objectVar1[slot] != 1) {
+                    if (m_objects[slot].frame == 10 && m_objectVar1[slot] != 1) {
                         effect.type = 0x1ca;
                         effect.x = m_objects[slot].x;
                         effect.y = m_objects[slot].y;
@@ -2714,7 +2714,7 @@ void CMisuzu::UpdateObjects()
                     m_objects[slot].hitsLeft = 1;
                 }
                 m_objectVar2[slot]++;
-                if (pattern > kLastFreeAction && pattern < kFirstGuard || m_objectVar3[slot] > 0x12 || m_objects[slot].attackResult > 0 || m_objectVar2[slot] > 0x4b0 || pattern > 0x108 && pattern < 0x10c && frame == 0 || m_objects[slot].x > 760.0 || m_objects[slot].x < -120.0) {
+                if (pattern > kLastFreeAction && pattern < kFirstGuard || m_objectVar3[slot] > 18 || m_objects[slot].attackResult > 0 || m_objectVar2[slot] > 1200 || pattern > 0x108 && pattern < 0x10c && frame == 0 || m_objects[slot].x > 760.0 || m_objects[slot].x < -120.0) {
                     m_objects[slot].timer = 0;
                     m_objects[slot].frame = 0;
                     m_objects[slot].pattern = kObjFloaterPop;
@@ -2723,11 +2723,11 @@ void CMisuzu::UpdateObjects()
                     if (m_objects[slot].attackResult == 3) {
                         m_poisonLevel++;
                         if (m_poisonTime == 0) {
-                            m_poisonTime = 0xbb8;
+                            m_poisonTime = 3000;
                         } else {
-                            m_poisonTime += 0x3e8;
-                            if (m_poisonTime > 0xbb8) {
-                                m_poisonTime = 0xbb8;
+                            m_poisonTime += 1000;
+                            if (m_poisonTime > 3000) {
+                                m_poisonTime = 3000;
                             }
                         }
                     }
@@ -2771,7 +2771,7 @@ void CMisuzu::UpdateObjects()
                     m_objects[slot].hitsLeft = 1;
                 }
                 m_objectVar2[slot]++;
-                if (pattern > kLastFreeAction && pattern < kFirstGuard || m_objectVar3[slot] > 0x12 || m_objects[slot].attackResult > 0 || m_objectVar2[slot] > 0x4b0 || pattern > 0x108 && pattern < 0x10c && frame == 0 || m_objects[slot].x > 760.0 || m_objects[slot].x < -120.0) {
+                if (pattern > kLastFreeAction && pattern < kFirstGuard || m_objectVar3[slot] > 18 || m_objects[slot].attackResult > 0 || m_objectVar2[slot] > 1200 || pattern > 0x108 && pattern < 0x10c && frame == 0 || m_objects[slot].x > 760.0 || m_objects[slot].x < -120.0) {
                     m_objects[slot].timer = 0;
                     m_objects[slot].frame = 0;
                     m_objects[slot].pattern = kObjFloaterPop;
@@ -2780,11 +2780,11 @@ void CMisuzu::UpdateObjects()
                     if (m_objects[slot].attackResult == 3) {
                         m_poisonLevel++;
                         if (m_poisonTime == 0) {
-                            m_poisonTime = 0xbb8;
+                            m_poisonTime = 3000;
                         } else {
-                            m_poisonTime += 0x3e8;
-                            if (m_poisonTime > 0xbb8) {
-                                m_poisonTime = 0xbb8;
+                            m_poisonTime += 1000;
+                            if (m_poisonTime > 3000) {
+                                m_poisonTime = 3000;
                             }
                         }
                     }
@@ -2828,7 +2828,7 @@ void CMisuzu::UpdateObjects()
                     m_objects[slot].hitsLeft = 1;
                 }
                 m_objectVar2[slot]++;
-                if (pattern > kLastFreeAction && pattern < kFirstGuard || m_objectVar3[slot] > 0x12 || m_objects[slot].attackResult > 0 || m_objectVar2[slot] > 0x4b0 || pattern > 0x108 && pattern < 0x10c && frame == 0 || m_objects[slot].x > 760.0 || m_objects[slot].x < -120.0) {
+                if (pattern > kLastFreeAction && pattern < kFirstGuard || m_objectVar3[slot] > 18 || m_objects[slot].attackResult > 0 || m_objectVar2[slot] > 1200 || pattern > 0x108 && pattern < 0x10c && frame == 0 || m_objects[slot].x > 760.0 || m_objects[slot].x < -120.0) {
                     m_objects[slot].timer = 0;
                     m_objects[slot].frame = 0;
                     m_objects[slot].pattern = kObjFloaterPop;
@@ -2836,7 +2836,7 @@ void CMisuzu::UpdateObjects()
                     m_objects[slot].vy = 0.0;
                     if (m_objects[slot].attackResult == 3) {
                         m_poisonLevel++;
-                        m_poisonTime = 0xbb8;
+                        m_poisonTime = 3000;
                     }
                     if (m_poisonLevel > 5) {
                         m_poisonLevel = 5;
@@ -2890,39 +2890,39 @@ void CMisuzu::UpdateObjects()
                 m_objects[slot].vy += 0.035;
                 if (m_objects[slot].attackResult == 3) {
                     m_poisonLevel++;
-                    m_poisonTime = 0xbb8;
+                    m_poisonTime = 3000;
                     if (m_poisonLevel > 5) {
                         m_poisonLevel = 5;
                     }
                     m_objects[slot].attackResult = 0;
                 }
                 if (m_objects[slot].timer == 0 && m_objects[slot].frame == 1) {
-                    effect.type = (WORD)Random(0, 3) + 0x1ac;
-                    effect.x = m_objects[slot].x - 50.0 + (WORD)Random(0, 0x64);
-                    effect.y = m_objects[slot].y - 50.0 + (WORD)Random(0, 0x64);
+                    effect.type = (WORD)Random(0, 3) + 428;
+                    effect.x = m_objects[slot].x - 50.0 + (WORD)Random(0, 100);
+                    effect.y = m_objects[slot].y - 50.0 + (WORD)Random(0, 100);
                     effect.facing = facing;
                     effect.scale = 0;
                     effect.layer = 1;
                     SpawnObject(&effect);
-                    effect.type = (WORD)Random(0, 3) + 0x1ac;
-                    effect.x = m_objects[slot].x - 50.0 + (WORD)Random(0, 0x64);
-                    effect.y = m_objects[slot].y - 50.0 + (WORD)Random(0, 0x64);
+                    effect.type = (WORD)Random(0, 3) + 428;
+                    effect.x = m_objects[slot].x - 50.0 + (WORD)Random(0, 100);
+                    effect.y = m_objects[slot].y - 50.0 + (WORD)Random(0, 100);
                     SpawnObject(&effect);
-                    effect.type = (WORD)Random(0, 3) + 0x1ac;
-                    effect.x = m_objects[slot].x - 50.0 + (WORD)Random(0, 0x64);
-                    effect.y = m_objects[slot].y - 50.0 + (WORD)Random(0, 0x64);
+                    effect.type = (WORD)Random(0, 3) + 428;
+                    effect.x = m_objects[slot].x - 50.0 + (WORD)Random(0, 100);
+                    effect.y = m_objects[slot].y - 50.0 + (WORD)Random(0, 100);
                     SpawnObject(&effect);
-                    effect.type = (WORD)Random(0, 3) + 0x1ac;
-                    effect.x = m_objects[slot].x - 50.0 + (WORD)Random(0, 0x64);
-                    effect.y = m_objects[slot].y - 50.0 + (WORD)Random(0, 0x64);
+                    effect.type = (WORD)Random(0, 3) + 428;
+                    effect.x = m_objects[slot].x - 50.0 + (WORD)Random(0, 100);
+                    effect.y = m_objects[slot].y - 50.0 + (WORD)Random(0, 100);
                     SpawnObject(&effect);
-                    effect.type = (WORD)Random(0, 3) + 0x1ac;
-                    effect.x = m_objects[slot].x - 50.0 + (WORD)Random(0, 0x64);
-                    effect.y = m_objects[slot].y - 50.0 + (WORD)Random(0, 0x64);
+                    effect.type = (WORD)Random(0, 3) + 428;
+                    effect.x = m_objects[slot].x - 50.0 + (WORD)Random(0, 100);
+                    effect.y = m_objects[slot].y - 50.0 + (WORD)Random(0, 100);
                     SpawnObject(&effect);
-                    effect.type = (WORD)Random(0, 3) + 0x1ac;
-                    effect.x = m_objects[slot].x - 50.0 + (WORD)Random(0, 0x64);
-                    effect.y = m_objects[slot].y - 50.0 + (WORD)Random(0, 0x64);
+                    effect.type = (WORD)Random(0, 3) + 428;
+                    effect.x = m_objects[slot].x - 50.0 + (WORD)Random(0, 100);
+                    effect.y = m_objects[slot].y - 50.0 + (WORD)Random(0, 100);
                     SpawnObject(&effect);
                 }
                 m_objects[slot].timer++;
@@ -2944,39 +2944,39 @@ void CMisuzu::UpdateObjects()
                 m_objects[slot].vy += 0.035;
                 if (m_objects[slot].attackResult == 3) {
                     m_poisonLevel += 3;
-                    m_poisonTime = 0xbb8;
+                    m_poisonTime = 3000;
                     if (m_poisonLevel > 5) {
                         m_poisonLevel = 5;
                     }
                     m_objects[slot].attackResult = 0;
                 }
                 if (m_objects[slot].timer == 0 && m_objects[slot].frame == 1) {
-                    effect.type = (WORD)Random(0, 3) + 0x1ac;
-                    effect.x = m_objects[slot].x - 50.0 + (WORD)Random(0, 0x64);
-                    effect.y = m_objects[slot].y - 50.0 + (WORD)Random(0, 0x64);
+                    effect.type = (WORD)Random(0, 3) + 428;
+                    effect.x = m_objects[slot].x - 50.0 + (WORD)Random(0, 100);
+                    effect.y = m_objects[slot].y - 50.0 + (WORD)Random(0, 100);
                     effect.facing = facing;
                     effect.scale = 0;
                     effect.layer = 1;
                     SpawnObject(&effect);
-                    effect.type = (WORD)Random(0, 3) + 0x1ac;
-                    effect.x = m_objects[slot].x - 50.0 + (WORD)Random(0, 0x64);
-                    effect.y = m_objects[slot].y - 50.0 + (WORD)Random(0, 0x64);
+                    effect.type = (WORD)Random(0, 3) + 428;
+                    effect.x = m_objects[slot].x - 50.0 + (WORD)Random(0, 100);
+                    effect.y = m_objects[slot].y - 50.0 + (WORD)Random(0, 100);
                     SpawnObject(&effect);
-                    effect.type = (WORD)Random(0, 3) + 0x1ac;
-                    effect.x = m_objects[slot].x - 50.0 + (WORD)Random(0, 0x64);
-                    effect.y = m_objects[slot].y - 50.0 + (WORD)Random(0, 0x64);
+                    effect.type = (WORD)Random(0, 3) + 428;
+                    effect.x = m_objects[slot].x - 50.0 + (WORD)Random(0, 100);
+                    effect.y = m_objects[slot].y - 50.0 + (WORD)Random(0, 100);
                     SpawnObject(&effect);
-                    effect.type = (WORD)Random(0, 3) + 0x1ac;
-                    effect.x = m_objects[slot].x - 50.0 + (WORD)Random(0, 0x64);
-                    effect.y = m_objects[slot].y - 50.0 + (WORD)Random(0, 0x64);
+                    effect.type = (WORD)Random(0, 3) + 428;
+                    effect.x = m_objects[slot].x - 50.0 + (WORD)Random(0, 100);
+                    effect.y = m_objects[slot].y - 50.0 + (WORD)Random(0, 100);
                     SpawnObject(&effect);
-                    effect.type = (WORD)Random(0, 3) + 0x1ac;
-                    effect.x = m_objects[slot].x - 50.0 + (WORD)Random(0, 0x64);
-                    effect.y = m_objects[slot].y - 50.0 + (WORD)Random(0, 0x64);
+                    effect.type = (WORD)Random(0, 3) + 428;
+                    effect.x = m_objects[slot].x - 50.0 + (WORD)Random(0, 100);
+                    effect.y = m_objects[slot].y - 50.0 + (WORD)Random(0, 100);
                     SpawnObject(&effect);
-                    effect.type = (WORD)Random(0, 3) + 0x1ac;
-                    effect.x = m_objects[slot].x - 50.0 + (WORD)Random(0, 0x64);
-                    effect.y = m_objects[slot].y - 50.0 + (WORD)Random(0, 0x64);
+                    effect.type = (WORD)Random(0, 3) + 428;
+                    effect.x = m_objects[slot].x - 50.0 + (WORD)Random(0, 100);
+                    effect.y = m_objects[slot].y - 50.0 + (WORD)Random(0, 100);
                     SpawnObject(&effect);
                 }
                 m_objects[slot].timer++;
@@ -2998,39 +2998,39 @@ void CMisuzu::UpdateObjects()
                 m_objects[slot].vy += 0.035;
                 if (m_objects[slot].attackResult == 3) {
                     m_poisonLevel += 5;
-                    m_poisonTime = 0xbb8;
+                    m_poisonTime = 3000;
                     if (m_poisonLevel > 5) {
                         m_poisonLevel = 5;
                     }
                     m_objects[slot].attackResult = 0;
                 }
                 if (m_objects[slot].timer == 0 && m_objects[slot].frame == 1) {
-                    effect.type = (WORD)Random(0, 3) + 0x1ac;
-                    effect.x = m_objects[slot].x - 50.0 + (WORD)Random(0, 0x64);
-                    effect.y = m_objects[slot].y - 50.0 + (WORD)Random(0, 0x64);
+                    effect.type = (WORD)Random(0, 3) + 428;
+                    effect.x = m_objects[slot].x - 50.0 + (WORD)Random(0, 100);
+                    effect.y = m_objects[slot].y - 50.0 + (WORD)Random(0, 100);
                     effect.facing = facing;
                     effect.scale = 0;
                     effect.layer = 1;
                     SpawnObject(&effect);
-                    effect.type = (WORD)Random(0, 3) + 0x1ac;
-                    effect.x = m_objects[slot].x - 50.0 + (WORD)Random(0, 0x64);
-                    effect.y = m_objects[slot].y - 50.0 + (WORD)Random(0, 0x64);
+                    effect.type = (WORD)Random(0, 3) + 428;
+                    effect.x = m_objects[slot].x - 50.0 + (WORD)Random(0, 100);
+                    effect.y = m_objects[slot].y - 50.0 + (WORD)Random(0, 100);
                     SpawnObject(&effect);
-                    effect.type = (WORD)Random(0, 3) + 0x1ac;
-                    effect.x = m_objects[slot].x - 50.0 + (WORD)Random(0, 0x64);
-                    effect.y = m_objects[slot].y - 50.0 + (WORD)Random(0, 0x64);
+                    effect.type = (WORD)Random(0, 3) + 428;
+                    effect.x = m_objects[slot].x - 50.0 + (WORD)Random(0, 100);
+                    effect.y = m_objects[slot].y - 50.0 + (WORD)Random(0, 100);
                     SpawnObject(&effect);
-                    effect.type = (WORD)Random(0, 3) + 0x1ac;
-                    effect.x = m_objects[slot].x - 50.0 + (WORD)Random(0, 0x64);
-                    effect.y = m_objects[slot].y - 50.0 + (WORD)Random(0, 0x64);
+                    effect.type = (WORD)Random(0, 3) + 428;
+                    effect.x = m_objects[slot].x - 50.0 + (WORD)Random(0, 100);
+                    effect.y = m_objects[slot].y - 50.0 + (WORD)Random(0, 100);
                     SpawnObject(&effect);
-                    effect.type = (WORD)Random(0, 3) + 0x1ac;
-                    effect.x = m_objects[slot].x - 50.0 + (WORD)Random(0, 0x64);
-                    effect.y = m_objects[slot].y - 50.0 + (WORD)Random(0, 0x64);
+                    effect.type = (WORD)Random(0, 3) + 428;
+                    effect.x = m_objects[slot].x - 50.0 + (WORD)Random(0, 100);
+                    effect.y = m_objects[slot].y - 50.0 + (WORD)Random(0, 100);
                     SpawnObject(&effect);
-                    effect.type = (WORD)Random(0, 3) + 0x1ac;
-                    effect.x = m_objects[slot].x - 50.0 + (WORD)Random(0, 0x64);
-                    effect.y = m_objects[slot].y - 50.0 + (WORD)Random(0, 0x64);
+                    effect.type = (WORD)Random(0, 3) + 428;
+                    effect.x = m_objects[slot].x - 50.0 + (WORD)Random(0, 100);
+                    effect.y = m_objects[slot].y - 50.0 + (WORD)Random(0, 100);
                     SpawnObject(&effect);
                 }
                 m_objects[slot].timer++;
@@ -3046,33 +3046,33 @@ void CMisuzu::UpdateObjects()
             case kObjCounterDropA:
                 if (m_objectVar1[slot] == 0) {
                     m_objectVar1[slot]++;
-                    m_objects[slot].vx = (WORD)Random(0, 0x28) * 0.1 + -2.0;
-                    m_objects[slot].vy = -0.8 - (WORD)Random(0, 0x28) * 0.1;
+                    m_objects[slot].vx = (WORD)Random(0, 40) * 0.1 + -2.0;
+                    m_objects[slot].vy = -0.8 - (WORD)Random(0, 40) * 0.1;
                 }
                 if (m_objects[slot].y < 0.0) {
                     m_objects[slot].vy += 0.04;
                 }
                 if (m_objects[slot].vy + m_objects[slot].y > 0.0) {
-                    effect.type = (WORD)Random(0, 4) + 0x1af;
-                    effect.x = m_objects[slot].x - 10.0 + (WORD)Random(0, 0x14);
-                    effect.y = m_objects[slot].y - 10.0 + (WORD)Random(0, 0x14);
+                    effect.type = (WORD)Random(0, 4) + 431;
+                    effect.x = m_objects[slot].x - 10.0 + (WORD)Random(0, 20);
+                    effect.y = m_objects[slot].y - 10.0 + (WORD)Random(0, 20);
                     effect.facing = facing;
                     effect.scale = 0;
                     effect.layer = 1;
                     SpawnObject(&effect);
-                    effect.type = (WORD)Random(0, 4) + 0x1af;
-                    effect.x = m_objects[slot].x - 10.0 + (WORD)Random(0, 0x14);
-                    effect.y = m_objects[slot].y - 10.0 + (WORD)Random(0, 0x14);
+                    effect.type = (WORD)Random(0, 4) + 431;
+                    effect.x = m_objects[slot].x - 10.0 + (WORD)Random(0, 20);
+                    effect.y = m_objects[slot].y - 10.0 + (WORD)Random(0, 20);
                     SpawnObject(&effect);
-                    effect.type = (WORD)Random(0, 4) + 0x1af;
-                    effect.x = m_objects[slot].x - 10.0 + (WORD)Random(0, 0x14);
-                    effect.y = m_objects[slot].y - 10.0 + (WORD)Random(0, 0x14);
+                    effect.type = (WORD)Random(0, 4) + 431;
+                    effect.x = m_objects[slot].x - 10.0 + (WORD)Random(0, 20);
+                    effect.y = m_objects[slot].y - 10.0 + (WORD)Random(0, 20);
                     SpawnObject(&effect);
-                    effect.type = (WORD)Random(0, 4) + 0x1af;
-                    effect.x = m_objects[slot].x - 10.0 + (WORD)Random(0, 0x14);
-                    effect.y = m_objects[slot].y - 10.0 + (WORD)Random(0, 0x14);
+                    effect.type = (WORD)Random(0, 4) + 431;
+                    effect.x = m_objects[slot].x - 10.0 + (WORD)Random(0, 20);
+                    effect.y = m_objects[slot].y - 10.0 + (WORD)Random(0, 20);
                     SpawnObject(&effect);
-                    m_playVoice = 0xb;
+                    m_playVoice = 11;
                     RemoveObject(slot);
                     break;
                 }
@@ -3089,33 +3089,33 @@ void CMisuzu::UpdateObjects()
             case kObjCounterDropB:
                 if (m_objectVar1[slot] == 0) {
                     m_objectVar1[slot]++;
-                    m_objects[slot].vx = (WORD)Random(0, 0x28) * 0.1 + -2.0;
-                    m_objects[slot].vy = -0.8 - (WORD)Random(0, 0x28) * 0.1;
+                    m_objects[slot].vx = (WORD)Random(0, 40) * 0.1 + -2.0;
+                    m_objects[slot].vy = -0.8 - (WORD)Random(0, 40) * 0.1;
                 }
                 if (m_objects[slot].y < 0.0) {
                     m_objects[slot].vy += 0.04;
                 }
                 if (m_objects[slot].vy + m_objects[slot].y > 0.0) {
-                    effect.type = (WORD)Random(0, 4) + 0x1af;
-                    effect.x = m_objects[slot].x - 10.0 + (WORD)Random(0, 0x14);
-                    effect.y = m_objects[slot].y - 10.0 + (WORD)Random(0, 0x14);
+                    effect.type = (WORD)Random(0, 4) + 431;
+                    effect.x = m_objects[slot].x - 10.0 + (WORD)Random(0, 20);
+                    effect.y = m_objects[slot].y - 10.0 + (WORD)Random(0, 20);
                     effect.facing = facing;
                     effect.scale = 0;
                     effect.layer = 1;
                     SpawnObject(&effect);
-                    effect.type = (WORD)Random(0, 4) + 0x1af;
-                    effect.x = m_objects[slot].x - 10.0 + (WORD)Random(0, 0x14);
-                    effect.y = m_objects[slot].y - 10.0 + (WORD)Random(0, 0x14);
+                    effect.type = (WORD)Random(0, 4) + 431;
+                    effect.x = m_objects[slot].x - 10.0 + (WORD)Random(0, 20);
+                    effect.y = m_objects[slot].y - 10.0 + (WORD)Random(0, 20);
                     SpawnObject(&effect);
-                    effect.type = (WORD)Random(0, 4) + 0x1af;
-                    effect.x = m_objects[slot].x - 10.0 + (WORD)Random(0, 0x14);
-                    effect.y = m_objects[slot].y - 10.0 + (WORD)Random(0, 0x14);
+                    effect.type = (WORD)Random(0, 4) + 431;
+                    effect.x = m_objects[slot].x - 10.0 + (WORD)Random(0, 20);
+                    effect.y = m_objects[slot].y - 10.0 + (WORD)Random(0, 20);
                     SpawnObject(&effect);
-                    effect.type = (WORD)Random(0, 4) + 0x1af;
-                    effect.x = m_objects[slot].x - 10.0 + (WORD)Random(0, 0x14);
-                    effect.y = m_objects[slot].y - 10.0 + (WORD)Random(0, 0x14);
+                    effect.type = (WORD)Random(0, 4) + 431;
+                    effect.x = m_objects[slot].x - 10.0 + (WORD)Random(0, 20);
+                    effect.y = m_objects[slot].y - 10.0 + (WORD)Random(0, 20);
                     SpawnObject(&effect);
-                    m_playVoice = 0xb;
+                    m_playVoice = 11;
                     RemoveObject(slot);
                     break;
                 }
@@ -3132,33 +3132,33 @@ void CMisuzu::UpdateObjects()
             case kObjCounterDropC:
                 if (m_objectVar1[slot] == 0) {
                     m_objectVar1[slot]++;
-                    m_objects[slot].vx = (WORD)Random(0, 0x28) * 0.1 + -2.0;
-                    m_objects[slot].vy = -0.8 - (WORD)Random(0, 0x28) * 0.1;
+                    m_objects[slot].vx = (WORD)Random(0, 40) * 0.1 + -2.0;
+                    m_objects[slot].vy = -0.8 - (WORD)Random(0, 40) * 0.1;
                 }
                 if (m_objects[slot].y < 0.0) {
                     m_objects[slot].vy += 0.04;
                 }
                 if (m_objects[slot].vy + m_objects[slot].y > 0.0) {
-                    effect.type = (WORD)Random(0, 4) + 0x1af;
-                    effect.x = m_objects[slot].x - 10.0 + (WORD)Random(0, 0x14);
-                    effect.y = m_objects[slot].y - 10.0 + (WORD)Random(0, 0x14);
+                    effect.type = (WORD)Random(0, 4) + 431;
+                    effect.x = m_objects[slot].x - 10.0 + (WORD)Random(0, 20);
+                    effect.y = m_objects[slot].y - 10.0 + (WORD)Random(0, 20);
                     effect.facing = facing;
                     effect.scale = 0;
                     effect.layer = 1;
                     SpawnObject(&effect);
-                    effect.type = (WORD)Random(0, 4) + 0x1af;
-                    effect.x = m_objects[slot].x - 10.0 + (WORD)Random(0, 0x14);
-                    effect.y = m_objects[slot].y - 10.0 + (WORD)Random(0, 0x14);
+                    effect.type = (WORD)Random(0, 4) + 431;
+                    effect.x = m_objects[slot].x - 10.0 + (WORD)Random(0, 20);
+                    effect.y = m_objects[slot].y - 10.0 + (WORD)Random(0, 20);
                     SpawnObject(&effect);
-                    effect.type = (WORD)Random(0, 4) + 0x1af;
-                    effect.x = m_objects[slot].x - 10.0 + (WORD)Random(0, 0x14);
-                    effect.y = m_objects[slot].y - 10.0 + (WORD)Random(0, 0x14);
+                    effect.type = (WORD)Random(0, 4) + 431;
+                    effect.x = m_objects[slot].x - 10.0 + (WORD)Random(0, 20);
+                    effect.y = m_objects[slot].y - 10.0 + (WORD)Random(0, 20);
                     SpawnObject(&effect);
-                    effect.type = (WORD)Random(0, 4) + 0x1af;
-                    effect.x = m_objects[slot].x - 10.0 + (WORD)Random(0, 0x14);
-                    effect.y = m_objects[slot].y - 10.0 + (WORD)Random(0, 0x14);
+                    effect.type = (WORD)Random(0, 4) + 431;
+                    effect.x = m_objects[slot].x - 10.0 + (WORD)Random(0, 20);
+                    effect.y = m_objects[slot].y - 10.0 + (WORD)Random(0, 20);
                     SpawnObject(&effect);
-                    m_playVoice = 0xb;
+                    m_playVoice = 11;
                     RemoveObject(slot);
                     break;
                 }
@@ -3175,8 +3175,8 @@ void CMisuzu::UpdateObjects()
             case kObjCounterSplashA:
                 if (m_objectVar1[slot] == 0) {
                     m_objectVar1[slot]++;
-                    m_objects[slot].vx = (WORD)Random(0, 0x14) * 0.1 + -1.0;
-                    m_objects[slot].vy = -0.8 - (WORD)Random(0, 0xa) * 0.1;
+                    m_objects[slot].vx = (WORD)Random(0, 20) * 0.1 + -1.0;
+                    m_objects[slot].vy = -0.8 - (WORD)Random(0, 10) * 0.1;
                 }
                 if (m_objects[slot].y < 0.0) {
                     m_objects[slot].vy += 0.035;
@@ -3194,8 +3194,8 @@ void CMisuzu::UpdateObjects()
             case kObjCounterSplashB:
                 if (m_objectVar1[slot] == 0) {
                     m_objectVar1[slot]++;
-                    m_objects[slot].vx = (WORD)Random(0, 0x14) * 0.1 + -1.0;
-                    m_objects[slot].vy = -0.8 - (WORD)Random(0, 0xa) * 0.1;
+                    m_objects[slot].vx = (WORD)Random(0, 20) * 0.1 + -1.0;
+                    m_objects[slot].vy = -0.8 - (WORD)Random(0, 10) * 0.1;
                 }
                 if (m_objects[slot].y < 0.0) {
                     m_objects[slot].vy += 0.035;
@@ -3213,8 +3213,8 @@ void CMisuzu::UpdateObjects()
             case kObjCounterSplashC:
                 if (m_objectVar1[slot] == 0) {
                     m_objectVar1[slot]++;
-                    m_objects[slot].vx = (WORD)Random(0, 0x14) * 0.1 + -1.0;
-                    m_objects[slot].vy = -0.8 - (WORD)Random(0, 0xa) * 0.1;
+                    m_objects[slot].vx = (WORD)Random(0, 20) * 0.1 + -1.0;
+                    m_objects[slot].vy = -0.8 - (WORD)Random(0, 10) * 0.1;
                 }
                 if (m_objects[slot].y < 0.0) {
                     m_objects[slot].vy += 0.035;
@@ -3232,8 +3232,8 @@ void CMisuzu::UpdateObjects()
             case kObjCounterSplashD:
                 if (m_objectVar1[slot] == 0) {
                     m_objectVar1[slot]++;
-                    m_objects[slot].vx = (WORD)Random(0, 0x14) * 0.1 + -1.0;
-                    m_objects[slot].vy = -0.8 - (WORD)Random(0, 0xa) * 0.1;
+                    m_objects[slot].vx = (WORD)Random(0, 20) * 0.1 + -1.0;
+                    m_objects[slot].vy = -0.8 - (WORD)Random(0, 10) * 0.1;
                 }
                 if (m_objects[slot].y < 0.0) {
                     m_objects[slot].vy += 0.035;
@@ -3249,7 +3249,7 @@ void CMisuzu::UpdateObjects()
                 }
                 break;
             case kObjCounterJump:
-                if (m_objects[slot].timer == 0 && m_objects[slot].frame == 0xa) {
+                if (m_objects[slot].timer == 0 && m_objects[slot].frame == 10) {
                     effect.type = 0x1c0;
                     effect.x = m_objects[slot].x;
                     effect.y = m_objects[slot].y - 120.0;
@@ -3279,7 +3279,7 @@ void CMisuzu::UpdateObjects()
                 }
                 if (m_objects[slot].frame == 7 && m_objects[slot].timer == 0) {
                     effect.type = 0x1b5;
-                    effect.x = m_objects[slot].x + m_objects[slot].facing * 0x23;
+                    effect.x = m_objects[slot].x + m_objects[slot].facing * 35;
                     effect.y = m_objects[slot].y - 6.0;
                     effect.facing = facing;
                     effect.scale = 2;
@@ -3291,7 +3291,7 @@ void CMisuzu::UpdateObjects()
                     m_objects[slot].timer = 0;
                     m_objects[slot].frame++;
                     m_objects[slot].attackResult = 0;
-                    if (m_objects[slot].frame == 8 && m_objectVar1[slot] < 0x14) {
+                    if (m_objects[slot].frame == 8 && m_objectVar1[slot] < 20) {
                         m_objectVar1[slot]++;
                         m_objects[slot].frame--;
                     }
@@ -3307,7 +3307,7 @@ void CMisuzu::UpdateObjects()
             case kObjSummonLv1Shot:
                 if (m_objectVar1[slot] == 0) {
                     m_objectVar1[slot]++;
-                    m_objects[slot].vx = (WORD)Random(0, 0xa) * 0.1 + 1.0;
+                    m_objects[slot].vx = (WORD)Random(0, 10) * 0.1 + 1.0;
                     m_objects[slot].vy = -(WORD)Random(0, 5) * 0.1;
                     m_objects[slot].hitsLeft = 1;
                 }
@@ -3333,7 +3333,7 @@ void CMisuzu::UpdateObjects()
                 }
                 if (m_objects[slot].frame == 8 && m_objects[slot].timer == 0) {
                     effect.type = 0x1b7;
-                    effect.x = m_objects[slot].x + m_objects[slot].facing * 0x14;
+                    effect.x = m_objects[slot].x + m_objects[slot].facing * 20;
                     effect.y = m_objects[slot].y - 30.0;
                     effect.facing = facing;
                     effect.scale = 2;
@@ -3345,7 +3345,7 @@ void CMisuzu::UpdateObjects()
                     m_objects[slot].timer = 0;
                     m_objects[slot].frame++;
                     m_objects[slot].attackResult = 0;
-                    if (m_objects[slot].frame == 9 && m_objectVar1[slot] < 0x14) {
+                    if (m_objects[slot].frame == 9 && m_objectVar1[slot] < 20) {
                         m_objectVar1[slot]++;
                         m_objects[slot].frame--;
                     }
@@ -3361,8 +3361,8 @@ void CMisuzu::UpdateObjects()
             case kObjSummonLv2Shot:
                 if (m_objectVar1[slot] == 0) {
                     m_objectVar1[slot]++;
-                    m_objects[slot].vx = (WORD)Random(0, 0xa) * 0.1 + 1.5;
-                    m_objects[slot].vy = (WORD)Random(0, 0xa) * 0.1;
+                    m_objects[slot].vx = (WORD)Random(0, 10) * 0.1 + 1.5;
+                    m_objects[slot].vy = (WORD)Random(0, 10) * 0.1;
                     m_objects[slot].hitsLeft = 1;
                 }
                 m_objects[slot].vy -= 0.01;
@@ -3398,7 +3398,7 @@ void CMisuzu::UpdateObjects()
                 }
                 if ((m_objects[slot].frame == 1 || m_objects[slot].frame == 2) && m_objects[slot].timer == 0) {
                     effect.type = 0x1b9;
-                    effect.x = m_objects[slot].x + m_objects[slot].facing * 0x14;
+                    effect.x = m_objects[slot].x + m_objects[slot].facing * 20;
                     effect.y = m_objects[slot].y + 55.0;
                     effect.facing = facing;
                     effect.scale = 2;
@@ -3411,7 +3411,7 @@ void CMisuzu::UpdateObjects()
                     m_objects[slot].timer = 0;
                     m_objects[slot].frame++;
                     m_objects[slot].attackResult = 0;
-                    if (m_objects[slot].frame == 3 && m_objectVar1[slot] < 0xf) {
+                    if (m_objects[slot].frame == 3 && m_objectVar1[slot] < 15) {
                         m_objectVar1[slot]++;
                         m_objects[slot].frame = m_objects[slot].frame - 2;
                     }
@@ -3424,9 +3424,9 @@ void CMisuzu::UpdateObjects()
             case kObjSummonLv3Shot:
                 if (m_objectVar1[slot] == 0) {
                     m_objectVar1[slot]++;
-                    m_objects[slot].SetVelocity((double)(0x2d - (m_summonShots << 1)), 4.0);
-                    m_objects[slot].vx += (WORD)Random(0, 0xa) * 0.1;
-                    m_objects[slot].vy += (WORD)Random(0, 0xa) * 0.1;
+                    m_objects[slot].SetVelocity((double)(45 - (m_summonShots << 1)), 4.0);
+                    m_objects[slot].vx += (WORD)Random(0, 10) * 0.1;
+                    m_objects[slot].vy += (WORD)Random(0, 10) * 0.1;
                     m_objects[slot].hitsLeft = 1;
                 }
                 m_objects[slot].vy -= 0.03;
@@ -3464,7 +3464,7 @@ void CMisuzu::UpdateObjects()
                     m_objects[slot].vx = 0.0;
                     m_objects[slot].vy = 0.0;
                     m_objects[slot].ay = 0.05;
-                    m_objects[slot].hitsLeft = 0x63;
+                    m_objects[slot].hitsLeft = 99;
                     effect.type = 0x1bf;
                     effect.x = m_objects[slot].x;
                     effect.y = m_objects[slot].y;
@@ -3486,9 +3486,9 @@ void CMisuzu::UpdateObjects()
                         break;
                     }
                 }
-                if (m_objects[slot].frame == 0xe && m_freezeTime == 0 && m_objects[slot].timer >= 0x1e) {
+                if (m_objects[slot].frame == 14 && m_freezeTime == 0 && m_objects[slot].timer >= 30) {
                     m_objects[slot].timer = 0;
-                    m_objects[slot].frame = 0xf;
+                    m_objects[slot].frame = 15;
                     m_objects[slot].movesInFreeze = 0;
                 }
                 if (m_patternVar1 > 0 && m_objects[slot].frame == 0) {
@@ -3498,7 +3498,7 @@ void CMisuzu::UpdateObjects()
                     m_objects[slot].vy = 0.0;
                     m_objects[slot].vx = 4.0;
                 }
-                if (m_objects[slot].frame == 0x1b && m_objects[slot].timer == 0) {
+                if (m_objects[slot].frame == 27 && m_objects[slot].timer == 0) {
                     effect.type = 0x1bf;
                     effect.x = m_objects[slot].x;
                     effect.y = m_objects[slot].y - 40.0;
@@ -3511,10 +3511,10 @@ void CMisuzu::UpdateObjects()
                 if (m_objects[slot].timer >= duration) {
                     m_objects[slot].timer = 0;
                     m_objects[slot].frame++;
-                    if (m_objects[slot].frame == 0x15) {
+                    if (m_objects[slot].frame == 21) {
                         m_objects[slot].attackResult = 0;
                     }
-                    if (m_objects[slot].frame == 0x16 && m_objectVar1[slot] < 0xa) {
+                    if (m_objects[slot].frame == 22 && m_objectVar1[slot] < 10) {
                         m_objects[slot].frame = m_objects[slot].frame - 4;
                         m_objectVar1[slot]++;
                     }
@@ -3536,7 +3536,7 @@ void CMisuzu::UpdateObjects()
                     m_objects[slot].vx = 0.0;
                     m_objects[slot].vy = 0.0;
                     m_objects[slot].ay = 0.035;
-                    m_objects[slot].hitsLeft = 0x63;
+                    m_objects[slot].hitsLeft = 99;
                     effect.type = 0x1bf;
                     effect.x = m_objects[slot].x;
                     effect.y = m_objects[slot].y;
@@ -3565,17 +3565,17 @@ void CMisuzu::UpdateObjects()
                 }
                 if (m_objects[slot].frame == 9 && m_objects[slot].timer == 0) {
                     effect.type = 0x1be;
-                    effect.x = m_objects[slot].x + m_objects[slot].facing * 0x24;
+                    effect.x = m_objects[slot].x + m_objects[slot].facing * 36;
                     effect.y = m_objects[slot].y - 56.0;
                     effect.facing = m_objects[slot].facing;
                     effect.scale = 0;
                     effect.layer = 1;
                     SpawnObject(&effect);
                 }
-                if (m_objects[slot].frame == 0xe && m_objects[slot].timer == 0) {
+                if (m_objects[slot].frame == 14 && m_objects[slot].timer == 0) {
                     m_crowShotRelease = 1;
                 }
-                if (m_objects[slot].frame == 0x12 && m_objects[slot].timer == 0) {
+                if (m_objects[slot].frame == 18 && m_objects[slot].timer == 0) {
                     effect.type = 0x1bf;
                     effect.x = m_objects[slot].x;
                     effect.y = m_objects[slot].y - 40.0;
@@ -3607,7 +3607,7 @@ void CMisuzu::UpdateObjects()
                     m_objects[slot].vx = 0.0;
                     m_objects[slot].vy = 0.0;
                     m_objects[slot].ay = 0.035;
-                    m_objects[slot].hitsLeft = 0xa;
+                    m_objects[slot].hitsLeft = 10;
                     effect.type = 0x1bf;
                     effect.x = m_objects[slot].x;
                     effect.y = m_objects[slot].y;
@@ -3639,7 +3639,7 @@ void CMisuzu::UpdateObjects()
                     m_objects[slot].vy = -3.5;
                     m_objects[slot].ay = 0.052;
                 }
-                if (m_objects[slot].frame > 7 && m_objects[slot].frame < 0xb) {
+                if (m_objects[slot].frame > 7 && m_objects[slot].frame < 11) {
                     m_objects[slot].vy = m_objects[slot].vy + m_objects[slot].ay;
                     m_objects[slot].vx -= 0.015;
                     if (m_objects[slot].vx < 0.0) {
@@ -3650,10 +3650,10 @@ void CMisuzu::UpdateObjects()
                         m_objects[slot].vx = 0.0;
                         m_objects[slot].vy = 0.0;
                         m_objects[slot].timer = 0;
-                        m_objects[slot].frame = 0xb;
+                        m_objects[slot].frame = 11;
                     }
                 }
-                if (m_objects[slot].frame == 0xe && m_objects[slot].timer == 0) {
+                if (m_objects[slot].frame == 14 && m_objects[slot].timer == 0) {
                     effect.type = 0x1bf;
                     effect.x = m_objects[slot].x;
                     effect.y = m_objects[slot].y - 40.0;
@@ -3671,7 +3671,7 @@ void CMisuzu::UpdateObjects()
                         m_objects[slot].frame--;
                         m_objectVar2[slot]++;
                     }
-                    if (m_objects[slot].frame == 0xb) {
+                    if (m_objects[slot].frame == 11) {
                         m_objects[slot].frame = m_objects[slot].frame - 2;
                     }
                     if (m_objects[slot].frame >= frameCount) {
@@ -3697,7 +3697,7 @@ void CMisuzu::UpdateObjects()
                 if (m_crowShotRelease == 1 && m_objects[slot].frame == 0) {
                     m_objects[slot].frame = 1;
                     m_objects[slot].timer = 0;
-                    m_objects[slot].hitsLeft = 0x63;
+                    m_objects[slot].hitsLeft = 99;
                     m_objects[slot].vy = 0.0;
                     m_objects[slot].vx = 3.5;
                     effect.type = 0;
@@ -3749,10 +3749,10 @@ void CMisuzu::UpdateObjects()
                 }
                 break;
             case kObjLv4Finisher:
-                m_objects[slot].drawnWhileHidden = 0x7530;
-                if (m_objects[slot].frame == 0x10 && m_objects[slot].timer == 0) {
-                    (*m_opponent)->m_hp -= 0x1388;
-                    (*m_opponent)->m_koDelay = 0x7530;
+                m_objects[slot].drawnWhileHidden = 30000;
+                if (m_objects[slot].frame == 16 && m_objects[slot].timer == 0) {
+                    (*m_opponent)->m_hp -= 5000;
+                    (*m_opponent)->m_koDelay = 30000;
                     if (m_roundsWon + 1 < m_game->m_roundsToWin || (*m_opponent)->m_hp > 0) {
                         (*m_opponent)->pattern = kLyingDown;
                         (*m_opponent)->timer = 0;
@@ -3764,16 +3764,16 @@ void CMisuzu::UpdateObjects()
                     }
                 }
                 m_freezeTime = 2;
-                if (m_objects[slot].frame == 0x10 && m_objects[slot].timer == 0x1c2) {
-                    m_game->FlashWhite(0x32, 0x64, 0x64);
+                if (m_objects[slot].frame == 16 && m_objects[slot].timer == 450) {
+                    m_game->FlashWhite(50, 100, 100);
                     if ((*m_opponent)->m_hp <= 0 && m_roundsWon + 1 == m_game->m_roundsToWin) {
-                        m_game->FlashWhite(0x32, 0x64, 0x50);
+                        m_game->FlashWhite(50, 100, 80);
                     }
                 }
-                if (m_objects[slot].frame == 0x11 && m_objects[slot].timer == 0x258) {
-                    m_game->FlashWhite(0x32, 0x64, 0x50);
+                if (m_objects[slot].frame == 17 && m_objects[slot].timer == 600) {
+                    m_game->FlashWhite(50, 100, 80);
                 }
-                if (m_objects[slot].frame == 0x12 && m_objects[slot].timer == 0x384) {
+                if (m_objects[slot].frame == 18 && m_objects[slot].timer == 900) {
                     (*m_opponent)->m_koDelay = 0;
                     (*m_opponent)->m_hitstop = 0;
                     m_freezeTime = 0;
@@ -3784,12 +3784,12 @@ void CMisuzu::UpdateObjects()
                     m_objects[slot].timer = 0;
                     m_objects[slot].frame++;
                     m_objects[slot].attackResult = 0;
-                    if (m_objects[slot].frame == 1 && (*m_opponent)->m_hp <= 0x1388 && m_roundsWon + 1 == m_game->m_roundsToWin) {
-                        m_playVoice = 0xd;
+                    if (m_objects[slot].frame == 1 && (*m_opponent)->m_hp <= 5000 && m_roundsWon + 1 == m_game->m_roundsToWin) {
+                        m_playVoice = 13;
                     }
-                    if (m_objects[slot].frame == 0x11) {
+                    if (m_objects[slot].frame == 17) {
                         if ((*m_opponent)->m_hp <= 0 && m_roundsWon + 1 == m_game->m_roundsToWin) {
-                            m_objects[slot].frame = 0x11;
+                            m_objects[slot].frame = 17;
                         } else {
                             RemoveObject(slot);
                             m_game->m_hideObjectsTime = 0;
@@ -3820,7 +3820,7 @@ void CMisuzu::UpdateObjects()
                 m_objects[slot].x = facing * 7 + x;
                 m_objects[slot].y = y - 42.0;
                 if (m_objects[slot].frame == 1 && m_objects[slot].timer == 0) {
-                    m_playVoice = 0xc;
+                    m_playVoice = 12;
                     effect.type = 0x1c4;
                     effect.x = facing * 9 + x;
                     effect.y = y - 53.0;
@@ -3861,7 +3861,7 @@ void CMisuzu::UpdateObjects()
                     m_objects[slot].hitsLeft = 1;
                 }
                 m_objectVar2[slot]++;
-                if (m_objects[slot].vy + m_objects[slot].y >= -75.0 || pattern > kLastFreeAction && pattern < kFirstGuard || m_objectVar3[slot] > 0x14 || m_objects[slot].attackResult > 0 || m_objectVar2[slot] > 0x4b0 || pattern > 0x108 && pattern < 0x10c && frame == 0 || m_objects[slot].x > 760.0 || m_objects[slot].x < -120.0) {
+                if (m_objects[slot].vy + m_objects[slot].y >= -75.0 || pattern > kLastFreeAction && pattern < kFirstGuard || m_objectVar3[slot] > 20 || m_objects[slot].attackResult > 0 || m_objectVar2[slot] > 1200 || pattern > 0x108 && pattern < 0x10c && frame == 0 || m_objects[slot].x > 760.0 || m_objects[slot].x < -120.0) {
                     m_objects[slot].timer = 0;
                     m_objects[slot].frame = 0;
                     m_objects[slot].pattern = kObjFloaterPop;
@@ -3870,11 +3870,11 @@ void CMisuzu::UpdateObjects()
                     if (m_objects[slot].attackResult == 3) {
                         m_poisonLevel++;
                         if (m_poisonTime == 0) {
-                            m_poisonTime = 0xbb8;
+                            m_poisonTime = 3000;
                         } else {
-                            m_poisonTime += 0x3e8;
-                            if (m_poisonTime > 0xbb8) {
-                                m_poisonTime = 0xbb8;
+                            m_poisonTime += 1000;
+                            if (m_poisonTime > 3000) {
+                                m_poisonTime = 3000;
                             }
                         }
                     }
@@ -3918,7 +3918,7 @@ void CMisuzu::UpdateObjects()
                     m_objects[slot].hitsLeft = 1;
                 }
                 m_objectVar2[slot]++;
-                if (pattern > kLastFreeAction && pattern < kFirstGuard || m_objectVar3[slot] > 6 || m_objects[slot].attackResult > 0 || m_objectVar2[slot] > 0x4b0 || pattern > 0x108 && pattern < 0x10c && frame == 0 || m_objects[slot].x > 760.0 || m_objects[slot].x < -120.0) {
+                if (pattern > kLastFreeAction && pattern < kFirstGuard || m_objectVar3[slot] > 6 || m_objects[slot].attackResult > 0 || m_objectVar2[slot] > 1200 || pattern > 0x108 && pattern < 0x10c && frame == 0 || m_objects[slot].x > 760.0 || m_objects[slot].x < -120.0) {
                     m_objects[slot].timer = 0;
                     m_objects[slot].frame = 0;
                     m_objects[slot].pattern = kObjFloaterPop;
@@ -3927,11 +3927,11 @@ void CMisuzu::UpdateObjects()
                     if (m_objects[slot].attackResult == 3) {
                         m_poisonLevel++;
                         if (m_poisonTime == 0) {
-                            m_poisonTime = 0xbb8;
+                            m_poisonTime = 3000;
                         } else {
-                            m_poisonTime += 0x3e8;
-                            if (m_poisonTime > 0xbb8) {
-                                m_poisonTime = 0xbb8;
+                            m_poisonTime += 1000;
+                            if (m_poisonTime > 3000) {
+                                m_poisonTime = 3000;
                             }
                         }
                     }
@@ -3969,8 +3969,8 @@ void CMisuzu::UpdateObjects()
                 break;
             case kObjPoisonFloaterC:
                 if (m_objectVar1[slot] == 0) {
-                    m_objects[slot].vy = (WORD)Random(0, 0x14) * 0.01 + 0.05;
-                    m_objects[slot].vx = (WORD)Random(0, 0xc8) * 0.01 - 1.0;
+                    m_objects[slot].vy = (WORD)Random(0, 20) * 0.01 + 0.05;
+                    m_objects[slot].vx = (WORD)Random(0, 200) * 0.01 - 1.0;
                     m_objectVar1[slot]++;
                     m_objects[slot].hitsLeft = 1;
                     if (m_objects[slot].vx > 0.0) {
@@ -3980,7 +3980,7 @@ void CMisuzu::UpdateObjects()
                     }
                 }
                 m_objectVar2[slot]++;
-                if (m_objects[slot].vy + m_objects[slot].y >= -75.0 || pattern > kLastFreeAction && pattern < kFirstGuard || m_objectVar3[slot] > 0x14 || m_objects[slot].attackResult > 0 || m_objectVar2[slot] > 0x4b0 || pattern > 0x108 && pattern < 0x10c && frame == 0 || m_objects[slot].x > 760.0 || m_objects[slot].x < -120.0) {
+                if (m_objects[slot].vy + m_objects[slot].y >= -75.0 || pattern > kLastFreeAction && pattern < kFirstGuard || m_objectVar3[slot] > 20 || m_objects[slot].attackResult > 0 || m_objectVar2[slot] > 1200 || pattern > 0x108 && pattern < 0x10c && frame == 0 || m_objects[slot].x > 760.0 || m_objects[slot].x < -120.0) {
                     m_objects[slot].timer = 0;
                     m_objects[slot].frame = 0;
                     m_objects[slot].pattern = kObjFloaterPop;
@@ -3989,11 +3989,11 @@ void CMisuzu::UpdateObjects()
                     if (m_objects[slot].attackResult == 3) {
                         m_poisonLevel++;
                         if (m_poisonTime == 0) {
-                            m_poisonTime = 0xbb8;
+                            m_poisonTime = 3000;
                         } else {
-                            m_poisonTime += 0x3e8;
-                            if (m_poisonTime > 0xbb8) {
-                                m_poisonTime = 0xbb8;
+                            m_poisonTime += 1000;
+                            if (m_poisonTime > 3000) {
+                                m_poisonTime = 3000;
                             }
                         }
                     }
@@ -4150,7 +4150,7 @@ void CMisuzu::UpdateObjects()
                     m_objects[slot].timer = 0;
                     m_objects[slot].frame++;
                     m_objects[slot].attackResult = 0;
-                    if (m_objects[slot].frame == 0xa && m_objectVar1[slot] != 1) {
+                    if (m_objects[slot].frame == 10 && m_objectVar1[slot] != 1) {
                         effect.type = 0x1c5;
                         effect.x = m_objects[slot].x;
                         effect.y = m_objects[slot].y;
@@ -4176,7 +4176,7 @@ void CMisuzu::UpdateObjects()
                     m_objects[slot].timer = 0;
                     m_objects[slot].frame++;
                     m_objects[slot].attackResult = 0;
-                    if (m_objects[slot].frame == 0xa && m_objectVar1[slot] != 1) {
+                    if (m_objects[slot].frame == 10 && m_objectVar1[slot] != 1) {
                         effect.type = 0x1c6;
                         effect.x = m_objects[slot].x;
                         effect.y = m_objects[slot].y;
@@ -4202,7 +4202,7 @@ void CMisuzu::UpdateObjects()
                     m_objects[slot].timer = 0;
                     m_objects[slot].frame++;
                     m_objects[slot].attackResult = 0;
-                    if (m_objects[slot].frame == 0xa && m_objectVar1[slot] != 1) {
+                    if (m_objects[slot].frame == 10 && m_objectVar1[slot] != 1) {
                         effect.type = 0x1c7;
                         effect.x = m_objects[slot].x;
                         effect.y = m_objects[slot].y;
@@ -4219,7 +4219,7 @@ void CMisuzu::UpdateObjects()
                 break;
             case kObjFallInDarkness:
                 m_objects[slot].vx = -0.02;
-                m_objects[slot].drawnWhileHidden = 0x7530;
+                m_objects[slot].drawnWhileHidden = 30000;
                 m_objects[slot].timer++;
                 if (pattern != kFallInDarkness) {
                     RemoveObject(slot);
@@ -4236,7 +4236,7 @@ void CMisuzu::UpdateObjects()
             case kObjEncasedBreak:
                 if (pattern != kEncased && pattern != kEncased2 && pattern != kEncasedAir && pattern != kEncasedSpin || pattern == kEncased && frame > 1 || pattern == kEncased2 && frame > 1) {
                     effect.type = 0x1f1;
-                    effect.x = (double)((int)x + facing * 0x17);
+                    effect.x = (double)((int)x + facing * 23);
                     effect.y = (double)((int)y - 4);
                     effect.scale = 0;
                     effect.layer = 1;
@@ -4250,8 +4250,8 @@ void CMisuzu::UpdateObjects()
                     effect.facing = facing;
                     SpawnObject(&effect);
                     effect.type = 0x1f1;
-                    effect.x = (double)((int)x - facing * 0xe);
-                    effect.y = (double)((int)y - 0x1a);
+                    effect.x = (double)((int)x - facing * 14);
+                    effect.y = (double)((int)y - 26);
                     effect.scale = 0;
                     effect.layer = 1;
                     effect.facing = facing;
@@ -4264,48 +4264,48 @@ void CMisuzu::UpdateObjects()
                     effect.facing = facing;
                     SpawnObject(&effect);
                     effect.type = 0x1f1;
-                    effect.x = (double)((int)x + facing * 0x1e);
-                    effect.y = (double)((int)y - 0x28);
+                    effect.x = (double)((int)x + facing * 30);
+                    effect.y = (double)((int)y - 40);
                     effect.scale = 0;
                     effect.layer = 1;
                     effect.facing = facing;
                     SpawnObject(&effect);
                     effect.type = 0x1f1;
-                    effect.x = (double)((int)x - facing * 0x19);
-                    effect.y = (double)((int)y - 0x50);
+                    effect.x = (double)((int)x - facing * 25);
+                    effect.y = (double)((int)y - 80);
                     effect.scale = 0;
                     effect.layer = 1;
                     effect.facing = facing;
                     SpawnObject(&effect);
                     effect.type = 0x1f2;
-                    effect.x = (double)((int)x - facing * 0x23);
-                    effect.y = (double)((int)y - 0x2a);
+                    effect.x = (double)((int)x - facing * 35);
+                    effect.y = (double)((int)y - 42);
                     effect.scale = 0;
                     effect.layer = 1;
                     effect.facing = facing;
                     SpawnObject(&effect);
                     effect.type = 0x1f2;
-                    effect.x = (double)((int)x - facing * 0x12);
-                    effect.y = (double)((int)y - 0x14);
+                    effect.x = (double)((int)x - facing * 18);
+                    effect.y = (double)((int)y - 20);
                     effect.scale = 0;
                     effect.layer = 1;
                     effect.facing = facing;
                     SpawnObject(&effect);
                     effect.type = 0x1f2;
                     effect.x = (double)((int)x + facing * 2);
-                    effect.y = (double)((int)y - 0x41);
+                    effect.y = (double)((int)y - 65);
                     effect.scale = 0;
                     effect.layer = 1;
                     effect.facing = facing;
                     SpawnObject(&effect);
                     effect.type = 0x1f2;
                     effect.x = (double)((int)x + (facing << 4));
-                    effect.y = (double)((int)y - 0x50);
+                    effect.y = (double)((int)y - 80);
                     effect.scale = 0;
                     effect.layer = 1;
                     effect.facing = facing;
                     SpawnObject(&effect);
-                    m_playSound = 0x22;
+                    m_playSound = 34;
                     RemoveObject(slot);
                     m_encasedBreakOut = 0;
                     break;
@@ -4322,16 +4322,16 @@ void CMisuzu::UpdateObjects()
                 break;
             case kObjShardSmall:
                 if (m_objects[slot].frame == 0 && m_objects[slot].timer == 0 && m_objectVar1[slot] == 0) {
-                    m_objectVar2[slot] = (rand() > 0x3e80) * 0x28 + 0x50 + (rand() > 0x3e80) * 0x14;
+                    m_objectVar2[slot] = (rand() > 16000) * 40 + 80 + (rand() > 16000) * 20;
                     m_objectVar1[slot]++;
-                    m_objects[slot].vx = (rand() > 0x3e80) * 1.2 + (rand() > 0x3e80) * 0.7 + (rand() > 0x3e80) * 1.7 + -1.8;
-                    m_objects[slot].vy = -1.2 - ((rand() > 0x3e80) * 0.6 + (rand() > 0x3e80) * 0.9 + (rand() > 0x3e80) * 1.4);
+                    m_objects[slot].vx = (rand() > 16000) * 1.2 + (rand() > 16000) * 0.7 + (rand() > 16000) * 1.7 + -1.8;
+                    m_objects[slot].vy = -1.2 - ((rand() > 16000) * 0.6 + (rand() > 16000) * 0.9 + (rand() > 16000) * 1.4);
                 }
                 m_objects[slot].vy += 0.05;
                 if (m_objects[slot].y > 0.0 && m_objects[slot].vy > 0.0) {
                     m_objects[slot].vy = -m_objects[slot].vy;
                 }
-                if (m_objectVar2[slot] < 0xa) {
+                if (m_objectVar2[slot] < 10) {
                     m_objects[slot].scale = 1;
                 }
                 if (m_objectVar2[slot] < 0) {
@@ -4351,16 +4351,16 @@ void CMisuzu::UpdateObjects()
                 break;
             case kObjShardLarge:
                 if (m_objects[slot].frame == 0 && m_objects[slot].timer == 0 && m_objectVar1[slot] == 0) {
-                    m_objectVar2[slot] = (rand() > 0x3e80) * 0x3c + 0x78 + (rand() > 0x3e80) * 0x28;
+                    m_objectVar2[slot] = (rand() > 16000) * 60 + 120 + (rand() > 16000) * 40;
                     m_objectVar1[slot]++;
-                    m_objects[slot].vx = (double)(rand() > 0x3e80) + (rand() > 0x3e80) * 0.5 + (rand() > 0x3e80) * 1.5 + -1.5;
-                    m_objects[slot].vy = -1.0 - ((rand() > 0x3e80) * 0.5 + (rand() > 0x3e80) * 0.8 + (rand() > 0x3e80) * 1.2);
+                    m_objects[slot].vx = (double)(rand() > 16000) + (rand() > 16000) * 0.5 + (rand() > 16000) * 1.5 + -1.5;
+                    m_objects[slot].vy = -1.0 - ((rand() > 16000) * 0.5 + (rand() > 16000) * 0.8 + (rand() > 16000) * 1.2);
                 }
                 m_objects[slot].vy += 0.03;
                 if (m_objects[slot].y > 0.0 && m_objects[slot].vy > 0.0) {
                     m_objects[slot].vy = -m_objects[slot].vy;
                 }
-                if (m_objectVar2[slot] < 0xa) {
+                if (m_objectVar2[slot] < 10) {
                     m_objects[slot].scale = 1;
                 }
                 if (m_objectVar2[slot] < 0) {
@@ -4393,7 +4393,7 @@ void CMisuzu::UpdateObjects()
             }
         }
         slot++;
-        if (slot >= 0x40) {
+        if (slot >= 64) {
             slot = 0;
         }
     }

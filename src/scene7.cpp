@@ -10,10 +10,10 @@ CScene7::CScene7(HWND hwnd, PTR32(CPlayer)* player1Ref, PTR32(CPlayer)* player2R
 {
     if (1) {
         m_game->LoadDat((PTR32(IDirectDrawSurface)*)&m_staffSurface, "system\\stfr.dat", 0, 1);
-        m_graphics->LoadPaletteDat(m_palette, "system\\stfr.dat", 0, 1, 0xfe);
+        m_graphics->LoadPaletteDat(m_palette, "system\\stfr.dat", 0, 1, 254);
     } else {
         m_graphics->LoadBmp((PTR32(IDirectDrawSurface)*)&m_staffSurface, "system\\stfr.bmp", 1);
-        m_graphics->LoadPaletteBmp(m_palette, "system\\stfr.bmp", 0, 1, 0xfe);
+        m_graphics->LoadPaletteBmp(m_palette, "system\\stfr.bmp", 0, 1, 254);
     }
     m_scroll = 0.0;
     m_skip = 0;
@@ -37,7 +37,7 @@ BYTE CScene7::Update()
         return 7;
     }
     if (m_scroll > 2800.0 || m_skip != 0) {
-        CScene::FadeOut(m_palette, 0, -0x1f4, 0xc8);
+        CScene::FadeOut(m_palette, 0, -500, 200);
         m_game->StopMusic();
         m_scroll = 0.0;
         m_skip = 0;
@@ -57,9 +57,9 @@ BYTE CScene7::Update()
 void CScene7::Draw()
 {
     if (m_scroll > 2280.0) {
-        m_graphics->Blit(MakeRect(0, 0, 0x140, 0xf0), TOPTR(IDirectDrawSurface*, m_staffSurface), MakeRect(0, 0x8e8, 0x140, 0xf0), 0, 0);
+        m_graphics->Blit(MakeRect(0, 0, 320, 240), TOPTR(IDirectDrawSurface*, m_staffSurface), MakeRect(0, 2280, 320, 240), 0, 0);
     } else {
-        m_graphics->Blit(MakeRect(0, 0, 0x140, 0xf0), TOPTR(IDirectDrawSurface*, m_staffSurface), MakeRect(0, (int)m_scroll, 0x140, 0xf0), 0, 0);
+        m_graphics->Blit(MakeRect(0, 0, 320, 240), TOPTR(IDirectDrawSurface*, m_staffSurface), MakeRect(0, (int)m_scroll, 320, 240), 0, 0);
     }
     m_graphics->Flip();
 }

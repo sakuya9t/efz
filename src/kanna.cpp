@@ -13,29 +13,29 @@ CKanna::CKanna(PTR32(CPlayer)* opponent, CGame* game, CGraphics* graphics, CInpu
     int i;
 
     strcpy(m_name, "kanna");
-    lastSurface = 0x4db;
+    lastSurface = 1243;
     m_patternVar1 = 0;
     m_patternVar2 = 0;
     m_patternVar3 = 0;
     m_encasedBreakOut = 0;
-    m_airMoveDelay = 0x3c;
+    m_airMoveDelay = 60;
     m_pointX[0] = -4;
-    m_pointY[0] = -0x3b;
-    m_pointX[1] = 0x1b;
+    m_pointY[0] = -59;
+    m_pointX[1] = 27;
     m_pointY[1] = 0;
-    m_pointX[2] = 0xb;
-    m_pointY[2] = -0x12;
-    m_pointX[3] = 0xb;
-    m_pointY[3] = -0xd;
-    m_pointX[4] = 0x21;
-    m_pointY[4] = -0x23;
+    m_pointX[2] = 11;
+    m_pointY[2] = -18;
+    m_pointX[3] = 11;
+    m_pointY[3] = -13;
+    m_pointX[4] = 33;
+    m_pointY[4] = -35;
     m_resultPictures = 4;
     m_rivals[0] = 1;
     m_rivals[1] = 6;
-    m_rivals[2] = 0x17;
-    m_rivals[3] = 0x10;
+    m_rivals[2] = 23;
+    m_rivals[3] = 16;
     i = 0;
-    for (; i < 0x40; i++) {
+    for (; i < 64; i++) {
         m_objectVar1[i] = 0;
         m_objectVar2[i] = 0;
         m_objectVar3[i] = 0;
@@ -50,19 +50,19 @@ void CKanna::Reset()
     m_patternVar2 = 0;
     m_patternVar3 = 0;
     m_encasedBreakOut = 0;
-    m_airMoveDelay = 0x3c;
-    m_pointX[0] = -0xd;
-    m_pointY[0] = -0x3c;
-    m_pointX[1] = 0xe;
+    m_airMoveDelay = 60;
+    m_pointX[0] = -13;
+    m_pointY[0] = -60;
+    m_pointX[1] = 14;
     m_pointY[1] = 0;
-    m_pointX[2] = 0x11;
+    m_pointX[2] = 17;
     m_pointY[2] = -6;
     m_pointX[3] = 7;
-    m_pointY[3] = -0x19;
-    m_pointX[4] = 0x1b;
-    m_pointY[4] = -0x19;
+    m_pointY[3] = -25;
+    m_pointX[4] = 27;
+    m_pointY[4] = -25;
     i = 0;
-    for (; i < 0x40; i++) {
+    for (; i < 64; i++) {
         m_objectVar1[i] = 0;
         m_objectVar2[i] = 0;
         m_objectVar3[i] = 0;
@@ -211,25 +211,25 @@ void CKanna::StartCommand()
         return;
     }
     if (m_sealLevel < 2) {
-        if (m_command == kCmd236236C && m_gauge >= 0xbb8 && m_hp < 0xd05 && (m_patterns[pattern].frames[frame].flagsB0 & kStateCancellable) > 0 && y == 0.0 && (pattern >= kFirstCharacterAction && m_attackResult >= 2 && m_attackResult != 6 || pattern < kFirstCharacterAction) && m_patterns[pattern].cancelLevel <= m_patterns[kLv4].level) {
+        if (m_command == kCmd236236C && m_gauge >= 3000 && m_hp < 3333 && (m_patterns[pattern].frames[frame].flagsB0 & kStateCancellable) > 0 && y == 0.0 && (pattern >= kFirstCharacterAction && m_attackResult >= 2 && m_attackResult != 6 || pattern < kFirstCharacterAction) && m_patterns[pattern].cancelLevel <= m_patterns[kLv4].level) {
             StartPattern();
             ClearBufferedPress();
             pattern = kLv4;
             return;
         }
-        if (m_command == kCmd236236B && m_gauge >= 0xbb8 && y < 0.0 && (m_patterns[pattern].frames[frame].flagsB0 & kStateCancellable) > 0 && (pattern >= kFirstCharacterAction && m_attackResult >= 2 && m_attackResult != 6 || pattern < kFirstCharacterAction) && m_patterns[pattern].cancelLevel <= m_patterns[kAir236236B].level) {
+        if (m_command == kCmd236236B && m_gauge >= 3000 && y < 0.0 && (m_patterns[pattern].frames[frame].flagsB0 & kStateCancellable) > 0 && (pattern >= kFirstCharacterAction && m_attackResult >= 2 && m_attackResult != 6 || pattern < kFirstCharacterAction) && m_patterns[pattern].cancelLevel <= m_patterns[kAir236236B].level) {
             StartPattern();
             ClearBufferedPress();
             pattern = kAir236236B;
             return;
         }
-        if (m_command == kCmd236236A && m_gauge >= 0xbb8 && (m_patterns[pattern].frames[frame].flagsB0 & kStateCancellable) > 0 && (pattern >= kFirstCharacterAction && m_attackResult >= 2 && m_attackResult != 6 || pattern < kFirstCharacterAction) && m_patterns[pattern].cancelLevel <= m_patterns[k236236A].level) {
+        if (m_command == kCmd236236A && m_gauge >= 3000 && (m_patterns[pattern].frames[frame].flagsB0 & kStateCancellable) > 0 && (pattern >= kFirstCharacterAction && m_attackResult >= 2 && m_attackResult != 6 || pattern < kFirstCharacterAction) && m_patterns[pattern].cancelLevel <= m_patterns[k236236A].level) {
             StartPattern();
             ClearBufferedPress();
             pattern = k236236A;
             return;
         }
-        if (m_command == kCmd236236B && m_gauge >= 0xbb8 && y == 0.0 && (m_patterns[pattern].frames[frame].flagsB0 & kStateCancellable) > 0 && (pattern >= kFirstCharacterAction && m_attackResult >= 2 && m_attackResult != 6 || pattern < kFirstCharacterAction) && m_patterns[pattern].cancelLevel <= m_patterns[k236236B].level) {
+        if (m_command == kCmd236236B && m_gauge >= 3000 && y == 0.0 && (m_patterns[pattern].frames[frame].flagsB0 & kStateCancellable) > 0 && (pattern >= kFirstCharacterAction && m_attackResult >= 2 && m_attackResult != 6 || pattern < kFirstCharacterAction) && m_patterns[pattern].cancelLevel <= m_patterns[k236236B].level) {
             StartPattern();
             ClearBufferedPress();
             pattern = k236236B;
@@ -444,7 +444,7 @@ void CKanna::ReadCommand()
         if ((input & kInputDirections) == (facing == -1) + 5 && step == 1) {
             step = 2;
         }
-        if ((input & kInputDirections) == kInputDown && step == 0 && m_gauge >= 0x3e8) {
+        if ((input & kInputDirections) == kInputDown && step == 0 && m_gauge >= 1000) {
             step = 1;
         }
     }
@@ -695,22 +695,22 @@ void CKanna::CpuInput()
         m_cpuHitCooldown = 0;
     }
     if (pattern > kLastFreeAction && pattern < 0xa1) {
-        m_cpuHitCooldown = 0xb4;
+        m_cpuHitCooldown = 180;
     }
     if (m_cpuAirPause < 0) {
         m_cpuAirPause = 0;
     }
-    if ((WORD)Random(0, 0x3e8) < 25.0f * m_cpuSkill + (y < 0.0) * 0x1e * m_cpuSkill + (m_cpuAction == 3) * 0x190 + (pattern == kRecoilGuardAir) * 0x12c) {
-        m_recoilGuardWindow = 0x3c;
+    if ((WORD)Random(0, 1000) < 25.0f * m_cpuSkill + (y < 0.0) * 30 * m_cpuSkill + (m_cpuAction == 3) * 400 + (pattern == kRecoilGuardAir) * 300) {
+        m_recoilGuardWindow = 60;
     }
-    if ((WORD)Random(0, 0x7d0) < ((m_throwProtect > 0) * 4.0 + 1.0) * 8.0 * m_cpuSkill * ((pattern > kLastHitReaction && pattern < kAirRecoveryForward) * 2 + 1)) {
-        m_recoilGuardWindow = 0x3c;
+    if ((WORD)Random(0, 2000) < ((m_throwProtect > 0) * 4.0 + 1.0) * 8.0 * m_cpuSkill * ((pattern > kLastHitReaction && pattern < kAirRecoveryForward) * 2 + 1)) {
+        m_recoilGuardWindow = 60;
     }
-    if ((WORD)Random(0, 0x3e8) < 4e+01f * m_cpuSkill && pattern > kLastSharedAction) {
-        m_recoilGuardWindow = 0x3c;
+    if ((WORD)Random(0, 1000) < 4e+01f * m_cpuSkill && pattern > kLastSharedAction) {
+        m_recoilGuardWindow = 60;
     }
     if (m_canRecoilCounter == 1 && m_cpuAction == 2) {
-        m_recoilGuardWindow = 0x1e;
+        m_recoilGuardWindow = 30;
         if (pattern < kFirstCharacterAction) {
             m_cpuAction = 0;
         }
@@ -719,14 +719,14 @@ void CKanna::CpuInput()
     dx = ((*m_opponent)->x - x) * facing;
     dy = fabs(y - (*m_opponent)->y);
     if (pattern >= kFirstHitReaction && pattern <= kFirstGuard && timer == 0) {
-        if ((WORD)Random(0, 0x64) < 8.0f * m_cpuSkill) {
+        if ((WORD)Random(0, 100) < 8.0f * m_cpuSkill) {
             m_cpuAction = 3;
         } else {
             m_cpuAction = 0;
         }
-        m_inputX = 1 - (((WORD)Random(0, 0x64) < 0x32) << 1);
-        m_pressD = (WORD)Random(0, 0xf0) < dy;
-        m_pressD = (WORD)Random(0, 0x140) < dx;
+        m_inputX = 1 - (((WORD)Random(0, 100) < 0x32) << 1);
+        m_pressD = (WORD)Random(0, 240) < dy;
+        m_pressD = (WORD)Random(0, 320) < dx;
         if ((*m_opponent)->pattern > kLastSharedAction && (*m_opponent)->pattern < 0xfa && (*m_opponent)->frame < 3 && dy < 100.0 && dx < 150.0) {
             m_pressD = 0;
         }
@@ -734,18 +734,18 @@ void CKanna::CpuInput()
     }
     if (pattern == kRecoilGuardStand && timer < 6) {
         if ((*m_opponent)->pattern != 0xc8 && (*m_opponent)->pattern != 0xcc && (*m_opponent)->pattern < 0xfa && (*m_opponent)->y == 0.0 && (*m_opponent)->m_hitsLeft == 0) {
-            if (dx < 45.0 && (WORD)Random(0, 0x64) < m_cpuSkill * 2) {
+            if (dx < 45.0 && (WORD)Random(0, 100) < m_cpuSkill * 2) {
                 m_pressA = 1;
                 m_inputY = 1;
                 return;
             }
-            if (dx < 60.0 && (WORD)Random(0, 0x64) < m_cpuSkill * 1.0f) {
+            if (dx < 60.0 && (WORD)Random(0, 100) < m_cpuSkill * 1.0f) {
                 m_pressA = 1;
                 m_inputY = 0;
                 return;
             }
         }
-        if (((*m_opponent)->pattern == 0xc9 || (*m_opponent)->pattern == 0xca || (*m_opponent)->pattern == 0xcd) && (*m_opponent)->pattern < 0xfa && (*m_opponent)->y == 0.0 && (*m_opponent)->m_hitsLeft == 0 && dx > 60.0 && dx < 80.0 && (WORD)Random(0, 0x64) < m_cpuSkill * 1.0f) {
+        if (((*m_opponent)->pattern == 0xc9 || (*m_opponent)->pattern == 0xca || (*m_opponent)->pattern == 0xcd) && (*m_opponent)->pattern < 0xfa && (*m_opponent)->y == 0.0 && (*m_opponent)->m_hitsLeft == 0 && dx > 60.0 && dx < 80.0 && (WORD)Random(0, 100) < m_cpuSkill * 1.0f) {
             m_pressB = 1;
             m_inputY = 1;
             m_inputX = 0;
@@ -753,135 +753,135 @@ void CKanna::CpuInput()
         }
     }
     if (pattern == kRecoilGuardStand || pattern == kRecoilGuardCrouch) {
-        if ((WORD)Random(0, 0x1f40) < m_cpuSkill * m_cpuSkill * 4.0f && m_rfGauge > 500.0) {
+        if ((WORD)Random(0, 8000) < m_cpuSkill * m_cpuSkill * 4.0f && m_rfGauge > 500.0) {
             m_command = kCmd236C;
             return;
         }
         if (dx < 20.0) {
-            if ((WORD)Random(0, 0x708) < m_cpuSkill * 4.0f && m_rfGauge > 500.0) {
+            if ((WORD)Random(0, 1800) < m_cpuSkill * 4.0f && m_rfGauge > 500.0) {
                 m_command = kCmd623A;
                 return;
             }
-            if (dx < 60.0 && (WORD)Random(0, 0x64) < m_cpuSkill * 1.0f) {
+            if (dx < 60.0 && (WORD)Random(0, 100) < m_cpuSkill * 1.0f) {
                 m_pressA = 1;
                 m_inputY = 0;
                 return;
             }
-            if ((WORD)Random(0, 0x64) < m_cpuSkill * 1.0f && m_gauge == 0xbb8) {
+            if ((WORD)Random(0, 100) < m_cpuSkill * 1.0f && m_gauge == 3000) {
                 m_command = 0x5c;
                 return;
             }
-            if ((WORD)Random(0, 0x64) < m_cpuSkill * 3.0f && dx < 120.0 && m_gauge >= 0x7d0) {
+            if ((WORD)Random(0, 100) < m_cpuSkill * 3.0f && dx < 120.0 && m_gauge >= 2000) {
                 m_command = kCmd236236B;
                 return;
             }
         }
         if (dx < 150.0 && dx > 100.0) {
-            if ((WORD)Random(0, 0x64) < m_cpuSkill * 3.0f && m_rfGauge > 500.0) {
+            if ((WORD)Random(0, 100) < m_cpuSkill * 3.0f && m_rfGauge > 500.0) {
                 m_command = kCmd236C;
                 return;
             }
-            if (dx < 120.0 && (WORD)Random(0, 0x64) < m_cpuSkill * 1.0f) {
+            if (dx < 120.0 && (WORD)Random(0, 100) < m_cpuSkill * 1.0f) {
                 m_pressA = 2;
                 m_inputY = 0;
                 return;
             }
-            if ((WORD)Random(0, 0x64) < m_cpuSkill * 1.0f) {
+            if ((WORD)Random(0, 100) < m_cpuSkill * 1.0f) {
                 m_pressC = 1;
                 m_inputY = 1;
                 return;
             }
-            if ((WORD)Random(0, 0x64) < m_cpuSkill * 1.0f && m_gauge == 0xbb8 && (*m_opponent)->pattern < 0xdc) {
+            if ((WORD)Random(0, 100) < m_cpuSkill * 1.0f && m_gauge == 3000 && (*m_opponent)->pattern < 0xdc) {
                 m_command = kCmd236236A;
                 return;
             }
         }
         if (dx > 150.0) {
-            if ((WORD)Random(0, 0x64) < m_cpuSkill * 1.0f && m_rfGauge > 500.0) {
+            if ((WORD)Random(0, 100) < m_cpuSkill * 1.0f && m_rfGauge > 500.0) {
                 m_command = kCmd236C;
                 return;
             }
-            if ((WORD)Random(0, 0x64) < m_cpuSkill * 1.0f) {
+            if ((WORD)Random(0, 100) < m_cpuSkill * 1.0f) {
                 m_command = kCmd236236A;
                 return;
             }
         }
     }
     if (pattern == kRecoilGuardAir && frame == 1 && timer == 0) {
-        if ((WORD)Random(0, 0x64) < m_cpuSkill * 5.0f) {
+        if ((WORD)Random(0, 100) < m_cpuSkill * 5.0f) {
             m_cpuAction = 3;
             return;
         }
-        if (y - (*m_opponent)->y < 0.0 && y - (*m_opponent)->y > -40.0 && dx < 80.0 && (WORD)Random(0, 0x64) < m_cpuSkill * 5.0f) {
+        if (y - (*m_opponent)->y < 0.0 && y - (*m_opponent)->y > -40.0 && dx < 80.0 && (WORD)Random(0, 100) < m_cpuSkill * 5.0f) {
             m_pressA = 1;
             return;
         }
-        if (y - (*m_opponent)->y > -100.0 && y - (*m_opponent)->y < -50.0 && dx < 80.0 && (WORD)Random(0, 0x64) < m_cpuSkill * 5.0f) {
+        if (y - (*m_opponent)->y > -100.0 && y - (*m_opponent)->y < -50.0 && dx < 80.0 && (WORD)Random(0, 100) < m_cpuSkill * 5.0f) {
             m_pressB = 1;
             return;
         }
-        if (y - (*m_opponent)->y > -50.0 && y - (*m_opponent)->y < -50.0 && dx < 120.0 && (WORD)Random(0, 0x64) < m_cpuSkill * 5.0f) {
+        if (y - (*m_opponent)->y > -50.0 && y - (*m_opponent)->y < -50.0 && dx < 120.0 && (WORD)Random(0, 100) < m_cpuSkill * 5.0f) {
             m_pressB = 1;
             m_inputY = 0;
             return;
         }
-        if (dy < 50.0 && dx < 100.0 && (WORD)Random(0, 0x64) < m_cpuSkill * 2) {
+        if (dy < 50.0 && dx < 100.0 && (WORD)Random(0, 100) < m_cpuSkill * 2) {
             m_command = (WORD)Random(0, 2) + kCmd236A;
             return;
         }
-        if ((WORD)Random(0, 0x3e8) < m_cpuSkill * 2) {
+        if ((WORD)Random(0, 1000) < m_cpuSkill * 2) {
             m_command = kCmd236236A;
             return;
         }
     }
-    if (((*m_opponent)->pattern == kRecoilGuardStand || (*m_opponent)->pattern == kRecoilGuardCrouch || (*m_opponent)->pattern == kRecoilGuardAir) && y == 0.0 && (WORD)Random(0, 0x64) < 15.0f * m_cpuSkill && m_cpuAction != 2 && (*m_opponent)->m_freezeTime == 0) {
-        m_cpuRoll = (WORD)Random(0, 0x64);
+    if (((*m_opponent)->pattern == kRecoilGuardStand || (*m_opponent)->pattern == kRecoilGuardCrouch || (*m_opponent)->pattern == kRecoilGuardAir) && y == 0.0 && (WORD)Random(0, 100) < 15.0f * m_cpuSkill && m_cpuAction != 2 && (*m_opponent)->m_freezeTime == 0) {
+        m_cpuRoll = (WORD)Random(0, 100);
         if (m_cpuRoll < 3 && m_rfGauge > 500.0) {
             m_command = kCmd623C;
             return;
         }
-        if (m_cpuRoll < 0x11 && m_cpuRoll > 0xc && m_gauge >= 0xbb8) {
+        if (m_cpuRoll < 17 && m_cpuRoll > 12 && m_gauge >= 3000) {
             m_command = kCmd236236A;
             return;
         }
-        if (m_cpuRoll < 0x12 && m_cpuRoll > 0x14 && m_gauge == 0xbb8) {
+        if (m_cpuRoll < 18 && m_cpuRoll > 20 && m_gauge == 3000) {
             m_command = kCmd236236B;
             return;
         }
-        if (m_cpuRoll > 0x41) {
+        if (m_cpuRoll > 65) {
             m_cpuAction = 2;
             return;
         }
     }
-    if (((*m_opponent)->pattern == kRecoilGuardStand || (*m_opponent)->pattern == kRecoilGuardCrouch || (*m_opponent)->pattern == kRecoilGuardAir) && y < 0.0 && (WORD)Random(0, 0x64) < 15.0f * m_cpuSkill && m_cpuAction != 2 && (*m_opponent)->m_freezeTime == 0) {
-        m_cpuRoll = (WORD)Random(0, 0x3e8);
-        if (m_cpuRoll < 2 && m_gauge >= 0xbb8) {
+    if (((*m_opponent)->pattern == kRecoilGuardStand || (*m_opponent)->pattern == kRecoilGuardCrouch || (*m_opponent)->pattern == kRecoilGuardAir) && y < 0.0 && (WORD)Random(0, 100) < 15.0f * m_cpuSkill && m_cpuAction != 2 && (*m_opponent)->m_freezeTime == 0) {
+        m_cpuRoll = (WORD)Random(0, 1000);
+        if (m_cpuRoll < 2 && m_gauge >= 3000) {
             m_command = kCmd236236A;
             return;
         }
-        if (m_cpuRoll < 4 && m_gauge >= 0xbb8) {
+        if (m_cpuRoll < 4 && m_gauge >= 3000) {
             m_command = kCmd236236B;
             return;
         }
-        if (m_cpuRoll > 0x3a) {
+        if (m_cpuRoll > 58) {
             m_cpuAction = 2;
             return;
         }
     }
-    if ((m_rfGauge > 500.0 || m_rfBlue > 0) && (WORD)Random(0, 0x64) < 8.0f * m_cpuSkill && (*m_opponent)->pattern > kLastHitReaction && (*m_opponent)->pattern < kAirRecoveryForward && (pattern == k623 || pattern == kUnusedDashC && (WORD)Random(0, 0xa) == 0 || pattern == kUnusedDash2C && (WORD)Random(0, 7) == 0)) {
+    if ((m_rfGauge > 500.0 || m_rfBlue > 0) && (WORD)Random(0, 100) < 8.0f * m_cpuSkill && (*m_opponent)->pattern > kLastHitReaction && (*m_opponent)->pattern < kAirRecoveryForward && (pattern == k623 || pattern == kUnusedDashC && (WORD)Random(0, 10) == 0 || pattern == kUnusedDash2C && (WORD)Random(0, 7) == 0)) {
         m_command = kCmd22C;
         return;
     }
     if (y == 0.0 && pattern < kJump && (*m_opponent)->pattern > kLastFreeAction && (*m_opponent)->pattern < kFirstGuard && m_cpuAction == 0) {
-        if ((*m_opponent)->y < 0.0 && dy < 100.0 && dx < 130.0 && ((*m_opponent)->m_untechTime > 0x18 || (*m_opponent)->m_noAirRecovery == 1 || (*m_opponent)->pattern == kHitShock && (*m_opponent)->frame < 4)) {
+        if ((*m_opponent)->y < 0.0 && dy < 100.0 && dx < 130.0 && ((*m_opponent)->m_untechTime > 24 || (*m_opponent)->m_noAirRecovery == 1 || (*m_opponent)->pattern == kHitShock && (*m_opponent)->frame < 4)) {
             m_cpuAction = 0x1f;
             return;
         }
-        if ((*m_opponent)->y < 0.0 && dy < 50.0 && dx < 70.0 && ((*m_opponent)->m_untechTime > 0x12 || (*m_opponent)->m_noAirRecovery == 1 || (*m_opponent)->pattern == kHitShock && (*m_opponent)->frame < 4)) {
+        if ((*m_opponent)->y < 0.0 && dy < 50.0 && dx < 70.0 && ((*m_opponent)->m_untechTime > 18 || (*m_opponent)->m_noAirRecovery == 1 || (*m_opponent)->pattern == kHitShock && (*m_opponent)->frame < 4)) {
             m_cpuAction = 0x1e;
             return;
         }
-        if ((*m_opponent)->pattern == kHitWallBounce && m_gauge >= 0xbb8 && (WORD)Random(0, 0) != 0) {
+        if ((*m_opponent)->pattern == kHitWallBounce && m_gauge >= 3000 && (WORD)Random(0, 0) != 0) {
             if (dx < 150.0) {
                 m_command = kCmd236236B;
                 return;
@@ -1007,7 +1007,7 @@ void CKanna::CpuInput()
         }
         if (dy < 100.0) {
             m_pressB = 1;
-            if ((*m_opponent)->m_untechTime < 0x18) {
+            if ((*m_opponent)->m_untechTime < 24) {
                 m_pressA = 1;
             }
             if (pattern == kJumpB || pattern == kJumpA) {
@@ -1035,7 +1035,7 @@ void CKanna::CpuInput()
         if ((*m_opponent)->m_untechTime <= 0 || y == 0.0) {
             m_cpuAction = 0;
         }
-        if ((WORD)Random(0, 0xc8) == 1 && m_gauge == 0xbb8) {
+        if ((WORD)Random(0, 200) == 1 && m_gauge == 3000) {
             m_command = kCmd236236B;
             return;
         }
@@ -1060,20 +1060,20 @@ void CKanna::CpuInput()
                 m_command = kCmd236A;
                 return;
             }
-            if ((*m_opponent)->m_untechTime < 0x2d && m_airActions > 0 && dy < 40.0 && (*m_opponent)->y - y < 0.0) {
+            if ((*m_opponent)->m_untechTime < 45 && m_airActions > 0 && dy < 40.0 && (*m_opponent)->y - y < 0.0) {
                 m_command = kCmd236A;
                 return;
             }
-            if ((*m_opponent)->m_untechTime < 0x2d && vx >= 0.0) {
+            if ((*m_opponent)->m_untechTime < 45 && vx >= 0.0) {
                 m_pressC = 1;
                 return;
             }
-            if ((dy < 20.0 && (*m_opponent)->y > y || (*m_opponent)->y < y) && (*m_opponent)->m_untechTime > 0x54 && m_airActions < 2) {
+            if ((dy < 20.0 && (*m_opponent)->y > y || (*m_opponent)->y < y) && (*m_opponent)->m_untechTime > 84 && m_airActions < 2) {
                 m_inputX = facing;
                 m_inputY = 0;
                 return;
             }
-            if (dy > 90.0 && (*m_opponent)->y < y && (*m_opponent)->m_untechTime > 0x2d && m_airActions < 2) {
+            if (dy > 90.0 && (*m_opponent)->y < y && (*m_opponent)->m_untechTime > 45 && m_airActions < 2) {
                 m_inputX = facing;
                 m_inputY = -1;
                 return;
@@ -1156,7 +1156,7 @@ void CKanna::CpuInput()
             m_cpuAction = 0x21;
             return;
         }
-        if ((*m_opponent)->m_untechTime < 0x3c) {
+        if ((*m_opponent)->m_untechTime < 60) {
             m_pressC = 1;
             return;
         }
@@ -1171,15 +1171,15 @@ void CKanna::CpuInput()
             m_cpuAction = 0;
             return;
         }
-        if ((WORD)Random(0, 0x64) < 2 && m_gauge >= 0xbb8) {
+        if ((WORD)Random(0, 100) < 2 && m_gauge >= 3000) {
             m_command = kCmd236236B;
             return;
         }
-        if ((WORD)Random(0, 0x64) < 4 && (m_rfGauge > 500.0 || m_rfBlue > 0)) {
+        if ((WORD)Random(0, 100) < 4 && (m_rfGauge > 500.0 || m_rfBlue > 0)) {
             m_command = kCmd236C;
             return;
         }
-        if ((WORD)Random(0, 0x64) < 0xa) {
+        if ((WORD)Random(0, 100) < 10) {
             m_command = kCmd236A;
             return;
         }
@@ -1221,146 +1221,146 @@ void CKanna::CpuInput()
         m_pressB = 1;
         return;
     }
-    if (m_attackResult > 1 && m_hitstop == 0 && (WORD)Random(0, 0x64) < m_cpuSkill * 25.0f && m_cpuAction != 1 && m_cpuAction != 2) {
-        m_cpuRoll = (WORD)Random(0, 0x3e8);
+    if (m_attackResult > 1 && m_hitstop == 0 && (WORD)Random(0, 100) < m_cpuSkill * 25.0f && m_cpuAction != 1 && m_cpuAction != 2) {
+        m_cpuRoll = (WORD)Random(0, 1000);
         if (pattern == k5A) {
-            if ((*m_opponent)->y < 0.0 && m_cpuRoll < 0x12c) {
+            if ((*m_opponent)->y < 0.0 && m_cpuRoll < 300) {
                 m_pressB = 1;
                 m_inputY = 0;
                 return;
             }
-            if (dx < 130.0 && m_cpuRoll > 0 && m_cpuRoll < 0x12c) {
+            if (dx < 130.0 && m_cpuRoll > 0 && m_cpuRoll < 300) {
                 m_pressB = 1;
                 m_inputY = 1;
                 return;
             }
-            if (dx < 100.0 && m_cpuRoll > 0x12c && m_cpuRoll < 0x258) {
+            if (dx < 100.0 && m_cpuRoll > 300 && m_cpuRoll < 600) {
                 m_pressB = 1;
                 m_inputY = 0;
                 return;
             }
         }
         if (pattern == k5BClose) {
-            if ((*m_opponent)->y < 0.0 && m_cpuRoll < 0x12c && m_attackResult == 3 && (*m_opponent)->m_untechTime > 0x3c) {
+            if ((*m_opponent)->y < 0.0 && m_cpuRoll < 300 && m_attackResult == 3 && (*m_opponent)->m_untechTime > 60) {
                 m_cpuAction = 0xe;
                 return;
             }
-            if ((*m_opponent)->y < 0.0 && m_cpuRoll < 0x12c && m_attackResult == 3 && (*m_opponent)->m_untechTime <= 0x3c) {
+            if ((*m_opponent)->y < 0.0 && m_cpuRoll < 300 && m_attackResult == 3 && (*m_opponent)->m_untechTime <= 60) {
                 m_cpuAction = 0x1e;
                 return;
             }
-            if ((*m_opponent)->y < 0.0 && m_cpuRoll > 0x258 && m_cpuRoll < 0x2ee) {
+            if ((*m_opponent)->y < 0.0 && m_cpuRoll > 600 && m_cpuRoll < 750) {
                 m_inputX = facing;
                 m_inputY = -1;
                 m_cpuAction = 0xd;
                 return;
             }
-            if (m_cpuRoll > 0x64 && m_cpuRoll < 0x15e && dx < 110.0) {
+            if (m_cpuRoll > 100 && m_cpuRoll < 350 && dx < 110.0) {
                 m_pressB = 1;
                 m_inputY = 0;
                 return;
             }
-            if (m_attackResult == 2 && m_cpuRoll > 0x15e && m_cpuRoll < 0x163) {
+            if (m_attackResult == 2 && m_cpuRoll > 350 && m_cpuRoll < 355) {
                 m_inputX = facing;
                 m_inputY = -1;
-                if ((WORD)Random(0, 0x64) < 0x32) {
+                if ((WORD)Random(0, 100) < 50) {
                     m_cpuAction = 6;
                 }
                 return;
             }
-            if ((*m_opponent)->y < 0.0 && m_cpuRoll > 0x1c2 && m_cpuRoll < 0x2bc && dx < 150.0) {
+            if ((*m_opponent)->y < 0.0 && m_cpuRoll > 450 && m_cpuRoll < 700 && dx < 150.0) {
                 m_pressC = 1;
                 return;
             }
         }
         if (pattern == k5BFar) {
-            if (m_cpuRoll > 0 && m_cpuRoll < 0xa) {
+            if (m_cpuRoll > 0 && m_cpuRoll < 10) {
                 m_command = (WORD)Random(1, 3) + kCmd41236A;
                 return;
             }
-            if ((*m_opponent)->y < 0.0 && m_cpuRoll > 0xfa && m_cpuRoll < 0xff && m_gauge >= 0xbb8 && m_attackResult == 3) {
+            if ((*m_opponent)->y < 0.0 && m_cpuRoll > 250 && m_cpuRoll < 255 && m_gauge >= 3000 && m_attackResult == 3) {
                 m_command = kCmd236236B;
                 return;
             }
-            if (m_cpuRoll > 0x12c && m_cpuRoll < 0x258 && dx < 140.0) {
+            if (m_cpuRoll > 300 && m_cpuRoll < 600 && dx < 140.0) {
                 m_pressC = 1;
                 m_inputY = 0;
                 return;
             }
         }
         if (pattern == k5C) {
-            if ((*m_opponent)->y < 0.0 && m_cpuRoll < 0x12c && m_attackResult == 3) {
+            if ((*m_opponent)->y < 0.0 && m_cpuRoll < 300 && m_attackResult == 3) {
                 m_command = (WORD)Random(0, 3) + kCmd236A;
                 return;
             }
-            if (m_cpuRoll > 0x12c && m_cpuRoll < 0x258) {
+            if (m_cpuRoll > 300 && m_cpuRoll < 600) {
                 m_command = (WORD)Random(0, 5) + kCmd41236A;
                 return;
             }
-            if (m_cpuRoll > 0x15e && m_cpuRoll < 0x258 && m_attackResult == 2) {
+            if (m_cpuRoll > 350 && m_cpuRoll < 600 && m_attackResult == 2) {
                 m_command = kCmd214B;
                 if (dx < 120.0) {
                     m_command = kCmd214A;
                 }
                 return;
             }
-            if (m_cpuRoll > 0x384) {
+            if (m_cpuRoll > 900) {
                 m_cpuAction = 1;
                 return;
             }
         }
         if (pattern == k2A) {
-            if ((*m_opponent)->y < 0.0 && m_cpuRoll < 0x12c) {
+            if ((*m_opponent)->y < 0.0 && m_cpuRoll < 300) {
                 m_pressB = 1;
                 m_inputY = 0;
                 return;
             }
-            if (dx < 70.0 && m_cpuRoll > 0 && m_cpuRoll < 0xc8) {
+            if (dx < 70.0 && m_cpuRoll > 0 && m_cpuRoll < 200) {
                 m_pressB = 1;
                 m_inputY = 0;
                 return;
             }
-            if (dx < 130.0 && m_cpuRoll > 0xc8 && m_cpuRoll < 0x258) {
+            if (dx < 130.0 && m_cpuRoll > 200 && m_cpuRoll < 600) {
                 m_pressB = 1;
                 m_inputY = 1;
                 return;
             }
         }
         if (pattern == k2B) {
-            if ((*m_opponent)->y < 0.0 && m_cpuRoll > 0 && m_cpuRoll < 0x1f4) {
+            if ((*m_opponent)->y < 0.0 && m_cpuRoll > 0 && m_cpuRoll < 500) {
                 m_pressC = 1;
                 m_inputY = 0;
                 return;
             }
-            if (m_cpuRoll < 0x12c) {
+            if (m_cpuRoll < 300) {
                 m_pressC = 1;
                 m_inputY = 0;
                 return;
             }
-            if (m_cpuRoll > 0x12c && m_cpuRoll < 0x1c2 && dx < 120.0) {
+            if (m_cpuRoll > 300 && m_cpuRoll < 450 && dx < 120.0) {
                 m_pressB = 1;
                 m_inputY = 0;
                 return;
             }
-            if (m_cpuRoll > 0x1c2 && m_cpuRoll < 0x28a) {
+            if (m_cpuRoll > 450 && m_cpuRoll < 650) {
                 m_pressC = 1;
                 return;
             }
-            if (m_cpuRoll > 0x226 && m_cpuRoll < 0x276) {
+            if (m_cpuRoll > 550 && m_cpuRoll < 630) {
                 m_command = (WORD)Random(0, 5) + kCmd41236A;
                 return;
             }
         }
         if (pattern == k2C) {
-            if (m_cpuRoll > 0 && m_cpuRoll < 0x32) {
+            if (m_cpuRoll > 0 && m_cpuRoll < 50) {
                 m_command = (WORD)Random(0, 3) + kCmd41236A;
                 return;
             }
-            if (m_cpuRoll > 0x12c && m_cpuRoll < 0x320 && m_attackResult == 3 && (m_rfGauge > 500.0 || m_rfBlue == 1)) {
+            if (m_cpuRoll > 300 && m_cpuRoll < 800 && m_attackResult == 3 && (m_rfGauge > 500.0 || m_rfBlue == 1)) {
                 m_command = kCmd623C;
                 return;
             }
-            if (m_cpuRoll > 0x384) {
+            if (m_cpuRoll > 900) {
                 m_cpuAction = 1;
                 return;
             }
@@ -1370,20 +1370,20 @@ void CKanna::CpuInput()
                 m_cpuAction = 0x10;
                 return;
             }
-            if ((*m_opponent)->y < 0.0 && m_cpuRoll < 0x12c) {
+            if ((*m_opponent)->y < 0.0 && m_cpuRoll < 300) {
                 m_pressB = 1;
                 return;
             }
-            if (dx < 60.0 && m_cpuRoll < 0x190) {
+            if (dx < 60.0 && m_cpuRoll < 400) {
                 m_pressA = 1;
                 return;
             }
-            if (dx < 125.0 && m_cpuRoll > 0x18f && m_cpuRoll < 0x2bc) {
+            if (dx < 125.0 && m_cpuRoll > 399 && m_cpuRoll < 700) {
                 m_pressC = 1;
                 m_inputY = 0;
                 return;
             }
-            if (m_cpuRoll > 0x2bb) {
+            if (m_cpuRoll > 699) {
                 m_cpuAction = 1;
                 if ((WORD)Random(0, 4) == 0) {
                     m_cpuAction = 3;
@@ -1396,137 +1396,137 @@ void CKanna::CpuInput()
                 m_cpuAction = 0x11;
                 return;
             }
-            if (m_cpuRoll > 0x14 && m_cpuRoll < 0x3c && m_attackResult == 3 && (*m_opponent)->y < 0.0) {
+            if (m_cpuRoll > 20 && m_cpuRoll < 60 && m_attackResult == 3 && (*m_opponent)->y < 0.0) {
                 m_command = kCmd236A;
                 return;
             }
-            if (m_cpuRoll > 0x50 && m_cpuRoll < 0x12c) {
+            if (m_cpuRoll > 80 && m_cpuRoll < 300) {
                 m_pressC = 1;
                 return;
             }
-            if (m_cpuRoll > 0x3b6 && m_attackResult != 3) {
+            if (m_cpuRoll > 950 && m_attackResult != 3) {
                 m_inputX = (WORD)Random(0, 2) - 1;
                 return;
             }
-            if ((*m_opponent)->y == 0.0 && m_cpuRoll > 0x15e && m_cpuRoll < 0x28a && y > -40.0 && m_attackResult == 3) {
+            if ((*m_opponent)->y == 0.0 && m_cpuRoll > 350 && m_cpuRoll < 650 && y > -40.0 && m_attackResult == 3) {
                 m_cpuAction = 0x22;
                 return;
             }
-            if (m_cpuRoll > 0x289) {
+            if (m_cpuRoll > 649) {
                 m_cpuAction = 3;
                 return;
             }
         }
         if (pattern == kJumpC) {
-            if (m_cpuRoll < 0xc8 && m_attackResult == 3) {
+            if (m_cpuRoll < 200 && m_attackResult == 3) {
                 m_command = (WORD)Random(0, 2) + kCmd214B;
                 return;
             }
-            if (m_cpuRoll > 0x384 && m_attackResult != 3) {
+            if (m_cpuRoll > 900 && m_attackResult != 3) {
                 m_inputX = facing;
                 return;
             }
-            if ((*m_opponent)->y == 0.0 && m_cpuRoll < 0x15e && (m_rfGauge > 500.0 || m_rfBlue > 0) && m_attackResult == 3 && timer < 3 && frame == 4) {
+            if ((*m_opponent)->y == 0.0 && m_cpuRoll < 350 && (m_rfGauge > 500.0 || m_rfBlue > 0) && m_attackResult == 3 && timer < 3 && frame == 4) {
                 m_cpuAction = 0x24;
                 return;
             }
-            if ((*m_opponent)->y == 0.0 && m_cpuRoll > 0x96 && m_cpuRoll < 0x28a && y > -70.0 && m_attackResult == 3) {
+            if ((*m_opponent)->y == 0.0 && m_cpuRoll > 150 && m_cpuRoll < 650 && y > -70.0 && m_attackResult == 3) {
                 m_cpuAction = 0x22;
                 return;
             }
-            if (m_cpuRoll > 0x289) {
+            if (m_cpuRoll > 649) {
                 m_cpuAction = 3;
                 return;
             }
         }
-        if (pattern == k236 && dx < 120.0 && m_rfGauge > 500.0 && frame == 5 && m_cpuRoll < 0x64) {
+        if (pattern == k236 && dx < 120.0 && m_rfGauge > 500.0 && frame == 5 && m_cpuRoll < 100) {
             m_command = kCmd22C;
             return;
         }
-        if (pattern > 0x106 && pattern < 0x10b && (WORD)Random(0, 0x64) < 0x28) {
+        if (pattern > 0x106 && pattern < 0x10b && (WORD)Random(0, 100) < 40) {
             m_cpuAction = 5;
             return;
         }
     }
-    if ((WORD)Random(0, 0x100) < m_cpuSkill * m_cpuSkill * m_cpuSkill * m_cpuSkill) {
-        m_cpuRoll = (WORD)Random(0, 0x3e8);
-        if (dx < 40.0 && dy < 90.0 && (*m_opponent)->pattern > kLastSharedAction && (WORD)Random(0, 0x9c4) < 0xa) {
+    if ((WORD)Random(0, 256) < m_cpuSkill * m_cpuSkill * m_cpuSkill * m_cpuSkill) {
+        m_cpuRoll = (WORD)Random(0, 1000);
+        if (dx < 40.0 && dy < 90.0 && (*m_opponent)->pattern > kLastSharedAction && (WORD)Random(0, 2500) < 10) {
             m_command = kCmd623A;
             return;
         }
-        if (dy < 90.0 && (*m_opponent)->pattern > kLastSharedAction && (WORD)Random(0, 0x2710) < 0xa && (m_rfGauge > 500.0 || m_rfBlue == 1)) {
+        if (dy < 90.0 && (*m_opponent)->pattern > kLastSharedAction && (WORD)Random(0, 10000) < 10 && (m_rfGauge > 500.0 || m_rfBlue == 1)) {
             m_command = kCmd236C;
             return;
         }
         if (y == 0.0) {
             if ((*m_opponent)->y == 0.0 && (*m_opponent)->pattern != kLyingDown) {
                 if (dx < 80.0) {
-                    if (m_cpuRoll < ((*m_opponent)->pattern > kLastFreeAction && (*m_opponent)->pattern < kGuardAir) * 0xf + 0xf && m_cpuHitCooldown == 0) {
+                    if (m_cpuRoll < ((*m_opponent)->pattern > kLastFreeAction && (*m_opponent)->pattern < kGuardAir) * 15 + 15 && m_cpuHitCooldown == 0) {
                         m_pressA = 1;
                         m_inputY = 1;
                         return;
                     }
                 }
                 if (dx < 75.0) {
-                    if (m_cpuRoll < ((*m_opponent)->pattern > kLastFreeAction && (*m_opponent)->pattern < kGuardAir) * 0xf + 0x14 && m_cpuHitCooldown == 0) {
+                    if (m_cpuRoll < ((*m_opponent)->pattern > kLastFreeAction && (*m_opponent)->pattern < kGuardAir) * 15 + 20 && m_cpuHitCooldown == 0) {
                         m_pressA = 1;
                         m_inputY = 0;
                         return;
                     }
                 }
                 if (dx > 40.0 && dx < 140.0) {
-                    if (m_cpuRoll < ((*m_opponent)->pattern > kLastFreeAction && (*m_opponent)->pattern < kGuardAir) * 0xf + 0x2d && m_cpuRoll > 0x1e && m_cpuHitCooldown == 0) {
+                    if (m_cpuRoll < ((*m_opponent)->pattern > kLastFreeAction && (*m_opponent)->pattern < kGuardAir) * 15 + 45 && m_cpuRoll > 30 && m_cpuHitCooldown == 0) {
                         m_pressB = 1;
                         m_inputY = 1;
                         return;
                     }
                 }
-                if (dx < 140.0 && dx > 60.0 && m_cpuRoll < 0x82 && m_cpuRoll > 0x50 && m_cpuHitCooldown == 0) {
+                if (dx < 140.0 && dx > 60.0 && m_cpuRoll < 130 && m_cpuRoll > 80 && m_cpuHitCooldown == 0) {
                     m_pressB = 1;
-                    m_inputY = (WORD)Random(0, 0xa) < 5 ? 1 : 0;
+                    m_inputY = (WORD)Random(0, 10) < 5 ? 1 : 0;
                     return;
                 }
-                if (dx < 70.0 && m_cpuRoll < 0x87 && m_cpuRoll > 0x82 && m_cpuHitCooldown == 0) {
+                if (dx < 70.0 && m_cpuRoll < 135 && m_cpuRoll > 130 && m_cpuHitCooldown == 0) {
                     m_cpuAction = 9;
                     return;
                 }
-                if (dx < 120.0 && m_cpuRoll < 0x96 && m_cpuRoll > 0x91 && m_cpuHitCooldown == 0) {
+                if (dx < 120.0 && m_cpuRoll < 150 && m_cpuRoll > 145 && m_cpuHitCooldown == 0) {
                     m_cpuAction = 0xb;
                     return;
                 }
-                if (dx > 50.0 && dx < 180.0 && dy < 50.0 && m_cpuRoll < 0x12c && m_cpuRoll > 0xfa && m_cpuHitCooldown == 0) {
+                if (dx > 50.0 && dx < 180.0 && dy < 50.0 && m_cpuRoll < 300 && m_cpuRoll > 250 && m_cpuHitCooldown == 0) {
                     m_command = kCmd236A;
                     return;
                 }
-                if (dy < 90.0 && m_cpuRoll < ((*m_opponent)->pattern > kLastSharedAction) * 0xf + 0x131 && m_cpuRoll > 0x12c && m_cpuHitCooldown == 0 && m_rfGauge > 500.0) {
+                if (dy < 90.0 && m_cpuRoll < ((*m_opponent)->pattern > kLastSharedAction) * 15 + 305 && m_cpuRoll > 300 && m_cpuHitCooldown == 0 && m_rfGauge > 500.0) {
                     m_command = kCmd236C;
                     return;
                 }
-                if (dx > 130.0 && m_cpuRoll < 0x145 && m_cpuRoll > 0x136 && m_cpuHitCooldown == 0) {
+                if (dx > 130.0 && m_cpuRoll < 325 && m_cpuRoll > 310 && m_cpuHitCooldown == 0) {
                     m_command = kCmd41236A;
                     return;
                 }
-                if (dx > 130.0 && m_cpuRoll < 0x14a && m_cpuRoll > 0x145 && m_cpuHitCooldown == 0) {
+                if (dx > 130.0 && m_cpuRoll < 330 && m_cpuRoll > 325 && m_cpuHitCooldown == 0) {
                     m_command = kCmd41236C;
                     return;
                 }
-                if (dx < 130.0 && m_cpuRoll < 0x159 && m_cpuRoll > 0x154 && m_cpuHitCooldown == 0 && m_rfGauge > 500.0) {
+                if (dx < 130.0 && m_cpuRoll < 345 && m_cpuRoll > 340 && m_cpuHitCooldown == 0 && m_rfGauge > 500.0) {
                     m_command = kCmd41236C;
                     return;
                 }
-                if (dx > 200.0 && dx < 240.0 && m_cpuRoll < 0x172 && m_cpuRoll > 0x16d && m_cpuHitCooldown == 0) {
+                if (dx > 200.0 && dx < 240.0 && m_cpuRoll < 370 && m_cpuRoll > 365 && m_cpuHitCooldown == 0) {
                     m_command = kCmd214A;
                     return;
                 }
-                if (dx > 180.0 && dx < 320.0 && m_cpuRoll < 0x17c && m_cpuRoll > 0x172 && m_cpuHitCooldown == 0) {
+                if (dx > 180.0 && dx < 320.0 && m_cpuRoll < 380 && m_cpuRoll > 370 && m_cpuHitCooldown == 0) {
                     m_command = kCmd214B;
                     return;
                 }
-                if (dx > 240.0 && dx < 320.0 && m_cpuRoll < 0x190 && m_cpuRoll > 0x17c && m_cpuHitCooldown == 0) {
+                if (dx > 240.0 && dx < 320.0 && m_cpuRoll < 400 && m_cpuRoll > 380 && m_cpuHitCooldown == 0) {
                     m_command = kCmd214C;
                     return;
                 }
-                if (dx < 120.0 && m_cpuRoll < 0x195 && m_cpuRoll > 0x190 && m_cpuHitCooldown == 0 && m_gauge >= 0xbb8 && (*m_opponent)->m_roundsWon != 0) {
+                if (dx < 120.0 && m_cpuRoll < 405 && m_cpuRoll > 400 && m_cpuHitCooldown == 0 && m_gauge >= 3000 && (*m_opponent)->m_roundsWon != 0) {
                     m_command = 0x5c;
                     return;
                 }
@@ -1537,28 +1537,28 @@ void CKanna::CpuInput()
                     return;
                 }
                 if ((*m_opponent)->vy < 0.0) {
-                    if (dx < 80.0 && dy < 120.0 && m_cpuRoll < 0xa) {
+                    if (dx < 80.0 && dy < 120.0 && m_cpuRoll < 10) {
                         m_inputY = -1;
                         m_inputX = -facing;
                         return;
                     }
-                    if (dx < 40.0 && dy < 120.0 && m_cpuRoll < 0x1e) {
+                    if (dx < 40.0 && dy < 120.0 && m_cpuRoll < 30) {
                         m_inputY = 0;
                         m_pressB = 1;
                         return;
                     }
                 }
                 if ((*m_opponent)->vy > 0.0) {
-                    if (dx < 90.0 && dy < 140.0 && m_cpuRoll < ((*m_opponent)->pattern > kLastSharedAction) * 0x2d + 0xf && (m_rfGauge > 500.0 || m_rfBlue > 0)) {
+                    if (dx < 90.0 && dy < 140.0 && m_cpuRoll < ((*m_opponent)->pattern > kLastSharedAction) * 45 + 15 && (m_rfGauge > 500.0 || m_rfBlue > 0)) {
                         m_command = kCmd623A;
                         return;
                     }
-                    if (dx < 100.0 && dy < 170.0 && dy > 80.0 && m_cpuRoll < 0x6e && m_cpuRoll > 0x3c) {
+                    if (dx < 100.0 && dy < 170.0 && dy > 80.0 && m_cpuRoll < 110 && m_cpuRoll > 60) {
                         m_pressB = 1;
                         m_inputY = 0;
                         return;
                     }
-                    if (dx < 60.0 && dy < 210.0 && dy > 120.0 && m_cpuRoll < 0xb4 && m_cpuRoll > 0x64) {
+                    if (dx < 60.0 && dy < 210.0 && dy > 120.0 && m_cpuRoll < 180 && m_cpuRoll > 100) {
                         m_pressC = 1;
                         m_inputY = 1;
                         return;
@@ -1567,55 +1567,55 @@ void CKanna::CpuInput()
             }
         }
         if (y < 0.0 && m_cpuAction != 3) {
-            if (dx < 180.0 && dy < 180.0 && (*m_opponent)->pattern > kFirstCharacterAction && m_cpuRoll < 5 && m_gauge >= 0xbb8) {
+            if (dx < 180.0 && dy < 180.0 && (*m_opponent)->pattern > kFirstCharacterAction && m_cpuRoll < 5 && m_gauge >= 3000) {
                 m_command = kCmd236236B;
                 return;
             }
             if ((*m_opponent)->y == 0.0) {
-                if (dx < 100.0 && dy < 100.0 && m_cpuRoll > 0 && m_cpuRoll < 0x258) {
+                if (dx < 100.0 && dy < 100.0 && m_cpuRoll > 0 && m_cpuRoll < 600) {
                     m_pressB = 1;
                     return;
                 }
-                if (dx < 110.0 && dy < 180.0 && m_cpuRoll > 0x258 && m_cpuRoll < 0x28a) {
+                if (dx < 110.0 && dy < 180.0 && m_cpuRoll > 600 && m_cpuRoll < 650) {
                     m_pressC = 1;
                     return;
                 }
             }
             if ((*m_opponent)->y < 0.0) {
-                if (dx < 80.0 && dy < 100.0 && m_cpuRoll < 0xc8 && (*m_opponent)->y < y) {
+                if (dx < 80.0 && dy < 100.0 && m_cpuRoll < 200 && (*m_opponent)->y < y) {
                     m_pressA = 1;
                     return;
                 }
-                if (dx > 20.0 && dx < 140.0 && dy > 60.0 && dy < 140.0 && (*m_opponent)->y > y && m_cpuRoll > 0xc8 && m_cpuRoll < 0xfa) {
+                if (dx > 20.0 && dx < 140.0 && dy > 60.0 && dy < 140.0 && (*m_opponent)->y > y && m_cpuRoll > 200 && m_cpuRoll < 250) {
                     m_pressB = 1;
                     return;
                 }
             }
         }
     }
-    if (pattern < kFirstHitReaction && ((*m_opponent)->pattern > kLastHitReaction && (*m_opponent)->pattern < kGuardAir || (*m_opponent)->pattern > kLastFreeAction && (*m_opponent)->pattern < kHitAir) && y == 0.0 && (WORD)Random(0, 0x1388) < 4.0f * m_cpuSkill * m_cpuSkill * m_cpuSkill && m_cpuHitCooldown == 0) {
+    if (pattern < kFirstHitReaction && ((*m_opponent)->pattern > kLastHitReaction && (*m_opponent)->pattern < kGuardAir || (*m_opponent)->pattern > kLastFreeAction && (*m_opponent)->pattern < kHitAir) && y == 0.0 && (WORD)Random(0, 5000) < 4.0f * m_cpuSkill * m_cpuSkill * m_cpuSkill && m_cpuHitCooldown == 0) {
         m_command = facing == 1;
         return;
     }
-    if (pattern < kFirstHitReaction && (*m_opponent)->pattern < kFirstHitReaction && dx > 80.0 && dx < 120.0 && (WORD)Random(0, 0x2710) < m_cpuSkill * m_cpuSkill * m_cpuSkill && x > 150.0 && x < 490.0) {
+    if (pattern < kFirstHitReaction && (*m_opponent)->pattern < kFirstHitReaction && dx > 80.0 && dx < 120.0 && (WORD)Random(0, 10000) < m_cpuSkill * m_cpuSkill * m_cpuSkill && x > 150.0 && x < 490.0) {
         m_command = -((facing == 1) - 1);
         return;
     }
     if (pattern == kFall || pattern == kSuperJump || pattern > kLand && pattern < 0x15) {
         if (dx > 100.0) {
-            if ((WORD)Random(0, 0x44c) < 2 && m_cpuAirPause == 0) {
-                m_cpuAirPause = 0xb4;
+            if ((WORD)Random(0, 1100) < 2 && m_cpuAirPause == 0) {
+                m_cpuAirPause = 180;
             }
-            if ((WORD)Random(0, 0x64) < 2 && y > -180.0 && m_cpuAirPause == 0) {
+            if ((WORD)Random(0, 100) < 2 && y > -180.0 && m_cpuAirPause == 0) {
                 m_inputY = -1;
                 m_inputX = (WORD)Random(0, 2) - 1;
                 return;
             }
-            if ((WORD)Random(0, 0x64) < 4 && m_cpuAirPause == 0) {
+            if ((WORD)Random(0, 100) < 4 && m_cpuAirPause == 0) {
                 m_inputX = facing;
                 return;
             }
-            if ((WORD)Random(0, 0x64) < 2 && m_cpuAirPause == 0) {
+            if ((WORD)Random(0, 100) < 2 && m_cpuAirPause == 0) {
                 m_inputX = facing;
                 m_inputY = 1;
                 return;
@@ -1627,46 +1627,46 @@ void CKanna::CpuInput()
             }
         }
         if (dx < 100.0) {
-            if ((WORD)Random(0, 0x3e8) < 2) {
+            if ((WORD)Random(0, 1000) < 2) {
                 m_inputY = 1;
                 m_inputX = (WORD)Random(0, 2) - 1;
                 return;
             }
-            if ((WORD)Random(0, 0x1f4) < 2 && m_cpuAirPause == 0) {
+            if ((WORD)Random(0, 500) < 2 && m_cpuAirPause == 0) {
                 m_inputX = -facing;
                 return;
             }
-            if ((WORD)Random(0, 0x64) < 2 && m_cpuAirPause == 0) {
+            if ((WORD)Random(0, 100) < 2 && m_cpuAirPause == 0) {
                 m_inputX = facing;
                 return;
             }
-            if ((WORD)Random(0, 0x64) < 4 && m_cpuAirPause == 0) {
+            if ((WORD)Random(0, 100) < 4 && m_cpuAirPause == 0) {
                 m_inputX = facing;
                 m_inputY = 1;
                 return;
             }
         }
     }
-    if ((WORD)Random(0, 0x1f4) < 0xa && y == 0.0) {
-        if ((WORD)Random(0, 0x64) < 4) {
+    if ((WORD)Random(0, 500) < 10 && y == 0.0) {
+        if ((WORD)Random(0, 100) < 4) {
             m_inputX = 0;
             m_inputY = -1;
             return;
         }
-        if (dx > 40.0 && dx < 150.0 && (WORD)Random(0, 0x1f4) < 2) {
+        if (dx > 40.0 && dx < 150.0 && (WORD)Random(0, 500) < 2) {
             m_cpuAction = 6;
             return;
         }
-        if (dx > 150.0 && (WORD)Random(0, 0x1f4) < 2) {
+        if (dx > 150.0 && (WORD)Random(0, 500) < 2) {
             m_cpuAction = 7;
             return;
         }
-        if (dx > 200.0 && (WORD)Random(0, 0x1f4) < 2) {
+        if (dx > 200.0 && (WORD)Random(0, 500) < 2) {
             m_inputX = facing;
             m_inputY = -1;
             return;
         }
-        if (dx < 100.0 && (WORD)Random(0, 0x1f4) < 2) {
+        if (dx < 100.0 && (WORD)Random(0, 500) < 2) {
             m_inputX = -facing;
             m_inputY = -1;
             return;
@@ -1674,32 +1674,32 @@ void CKanna::CpuInput()
     }
     if (y == 0.0) {
         if (m_cpuWalkRight > 0) {
-            if ((char)AtScreenEdge() != 0 && m_cpuWalkRight > 0xf) {
-                m_cpuWalkRight = 0xf;
+            if ((char)AtScreenEdge() != 0 && m_cpuWalkRight > 15) {
+                m_cpuWalkRight = 15;
             }
             m_inputX = 1;
             return;
         }
         if (m_cpuWalkLeft > 0) {
-            if ((char)AtScreenEdge() != 0 && m_cpuWalkLeft > 0xf) {
-                m_cpuWalkLeft = 0xf;
+            if ((char)AtScreenEdge() != 0 && m_cpuWalkLeft > 15) {
+                m_cpuWalkLeft = 15;
             }
             m_inputX = -1;
             return;
         }
-        if ((WORD)Random(0, 0x3e8) < 2) {
+        if ((WORD)Random(0, 1000) < 2) {
             if (facing == 1) {
-                m_cpuWalkLeft = (WORD)Random(0, 0xc8) + 0x3c;
+                m_cpuWalkLeft = (WORD)Random(0, 200) + 60;
             } else {
-                m_cpuWalkRight = (WORD)Random(0, 0xc8) + 0x3c;
+                m_cpuWalkRight = (WORD)Random(0, 200) + 60;
             }
         }
-        if ((WORD)Random(0, 0x64) < 2) {
+        if ((WORD)Random(0, 100) < 2) {
             if (facing == 1) {
-                m_cpuWalkRight = (WORD)Random(0, 0x190) + 0x3c;
+                m_cpuWalkRight = (WORD)Random(0, 400) + 60;
                 return;
             }
-            m_cpuWalkLeft = (WORD)Random(0, 0x190) + 0x3c;
+            m_cpuWalkLeft = (WORD)Random(0, 400) + 60;
         }
     }
 }
@@ -1744,7 +1744,7 @@ void CKanna::UpdateObjects()
                         m_objects[slot].timer = 0;
                         m_objects[slot].frame = 9;
                         effect.type = kObj214Impact;
-                        effect.x = (double)((int)m_objects[slot].x + facing * 0x32);
+                        effect.x = (double)((int)m_objects[slot].x + facing * 50);
                         effect.y = 0.0;
                         effect.scale = 0;
                         effect.shadow = 1;
@@ -1795,7 +1795,7 @@ void CKanna::UpdateObjects()
                         m_objects[slot].timer = 0;
                         m_objects[slot].frame = 9;
                         effect.type = kObj214Impact;
-                        effect.x = (double)((int)m_objects[slot].x + facing * 0x7d);
+                        effect.x = (double)((int)m_objects[slot].x + facing * 125);
                         effect.y = 0.0;
                         effect.scale = 0;
                         effect.shadow = 1;
@@ -1846,7 +1846,7 @@ void CKanna::UpdateObjects()
                         m_objects[slot].timer = 0;
                         m_objects[slot].frame = 9;
                         effect.type = kObj214Impact;
-                        effect.x = (double)((int)m_objects[slot].x + facing * 0xc8);
+                        effect.x = (double)((int)m_objects[slot].x + facing * 200);
                         effect.y = 0.0;
                         effect.scale = 0;
                         effect.shadow = 1;
@@ -1914,7 +1914,7 @@ void CKanna::UpdateObjects()
                 break;
             case kObj41236Shot:
                 if (m_objects[slot].frame == 0 && m_objects[slot].timer == 0 && m_objectVar1[slot] == 0) {
-                    m_objects[slot].hitsLeft = 0x63;
+                    m_objects[slot].hitsLeft = 99;
                     m_objects[slot].vx = 3.0;
                     m_objects[slot].vy = 0.0;
                     m_objectVar1[slot]++;
@@ -1926,7 +1926,7 @@ void CKanna::UpdateObjects()
                     m_objects[slot].timer = 0;
                     break;
                 }
-                if (m_objects[slot].x < -100.0 || m_objects[slot].frame > 0x2e4) {
+                if (m_objects[slot].x < -100.0 || m_objects[slot].frame > 740) {
                     RemoveObject(slot);
                 }
                 m_objects[slot].vx -= 0.025;
@@ -2004,8 +2004,8 @@ void CKanna::UpdateObjects()
             case kObjUnused19b:
                 if (m_objects[slot].frame == 0 && m_objects[slot].timer == 0) {
                     m_objects[slot].hitsLeft = 1;
-                    m_objects[slot].vx = (WORD)Random(0, 0xa) * 0.1 + 2.5;
-                    m_objects[slot].vy = -1.2 - (WORD)Random(0, 0x14) * 0.1;
+                    m_objects[slot].vx = (WORD)Random(0, 10) * 0.1 + 2.5;
+                    m_objects[slot].vy = -1.2 - (WORD)Random(0, 20) * 0.1;
                 }
                 m_objects[slot].vy += 0.05;
                 if (m_objects[slot].y >= 0.0 && m_objects[slot].vy > 0.0 && m_objects[slot].frame == 1) {
@@ -2037,7 +2037,7 @@ void CKanna::UpdateObjects()
                 break;
             case kObjUnused19c:
                 if (m_objects[slot].frame == 0 && m_objects[slot].timer == 0) {
-                    m_objects[slot].vx = (WORD)Random(0, 0xa) * 0.1 + 1.5;
+                    m_objects[slot].vx = (WORD)Random(0, 10) * 0.1 + 1.5;
                     m_objects[slot].vy = -1.5;
                 }
                 m_objects[slot].vy += 0.05;
@@ -2058,8 +2058,8 @@ void CKanna::UpdateObjects()
             case kObjUnused19d:
                 if (m_objects[slot].frame == 0 && m_objects[slot].timer == 0) {
                     m_objects[slot].hitsLeft = 1;
-                    m_objects[slot].vx = (WORD)Random(0, 0x14) * 0.1 + 1.7;
-                    m_objects[slot].vy = -0.5 - (WORD)Random(0, 0xa) * 0.1;
+                    m_objects[slot].vx = (WORD)Random(0, 20) * 0.1 + 1.7;
+                    m_objects[slot].vy = -0.5 - (WORD)Random(0, 10) * 0.1;
                 }
                 m_objects[slot].vy += 0.05;
                 if (m_objects[slot].y >= 0.0 && m_objects[slot].vy > 0.0 && m_objects[slot].frame == 1) {
@@ -2091,7 +2091,7 @@ void CKanna::UpdateObjects()
                 break;
             case kObjUnused19e:
                 if (m_objects[slot].frame == 0 && m_objects[slot].timer == 0) {
-                    m_objects[slot].vx = (WORD)Random(0, 0xa) * 0.1 + 1.5;
+                    m_objects[slot].vx = (WORD)Random(0, 10) * 0.1 + 1.5;
                     m_objects[slot].vy = -1.5;
                 }
                 m_objects[slot].vy += 0.05;
@@ -2135,10 +2135,10 @@ void CKanna::UpdateObjects()
                 if (m_objectVar1[slot] == 0) {
                     m_objects[slot].hitsLeft = 1;
                     m_objectVar1[slot]++;
-                    m_objects[slot].vx = (WORD)Random(0, 0x64) * 0.01 + 1.0;
-                    m_objects[slot].ay = (WORD)Random(0, 0x64) * 0.0002;
+                    m_objects[slot].vx = (WORD)Random(0, 100) * 0.01 + 1.0;
+                    m_objects[slot].ay = (WORD)Random(0, 100) * 0.0002;
                     m_objects[slot].vy = 0.5;
-                    m_objects[slot].frame = Random(0, 0xf);
+                    m_objects[slot].frame = Random(0, 15);
                 }
                 m_objects[slot].vy = m_objects[slot].vy - m_objects[slot].ay;
                 m_objects[slot].timer++;
@@ -2159,10 +2159,10 @@ void CKanna::UpdateObjects()
                 if (m_objectVar1[slot] == 0) {
                     m_objects[slot].hitsLeft = 1;
                     m_objectVar1[slot]++;
-                    m_objects[slot].vx = (WORD)Random(0, 0x64) * 0.01 + 3.5;
-                    m_objects[slot].ay = (WORD)Random(0, 0x64) * 0.00015;
+                    m_objects[slot].vx = (WORD)Random(0, 100) * 0.01 + 3.5;
+                    m_objects[slot].ay = (WORD)Random(0, 100) * 0.00015;
                     m_objects[slot].vy = 0.5;
-                    m_objects[slot].frame = Random(0, 0xf);
+                    m_objects[slot].frame = Random(0, 15);
                 }
                 m_objects[slot].vy = m_objects[slot].vy - m_objects[slot].ay;
                 m_objects[slot].timer++;
@@ -2181,14 +2181,14 @@ void CKanna::UpdateObjects()
                 break;
             case kObj236236BBurst:
                 if (pattern == k236236B) {
-                    m_objects[slot].x = m_objects[slot].facing * 0xa + x + 0.0;
+                    m_objects[slot].x = m_objects[slot].facing * 10 + x + 0.0;
                 }
                 m_objects[slot].timer++;
                 if (m_objects[slot].timer >= duration) {
                     m_objects[slot].timer = 0;
                     m_objects[slot].frame++;
                     m_objects[slot].attackResult = 0;
-                    if (m_objects[slot].frame == 9 && frame < 0xd && pattern == k236236B) {
+                    if (m_objects[slot].frame == 9 && frame < 13 && pattern == k236236B) {
                         m_objects[slot].frame = m_objects[slot].frame - 2;
                     }
                     if (m_objects[slot].frame >= frameCount) {
@@ -2348,7 +2348,7 @@ void CKanna::UpdateObjects()
                     if (m_objects[slot].frame == 4) {
                         effect.type = kObj236CBeam;
                         effect.x = (double)m_game->m_view.left;
-                        effect.y = (double)((int)m_objects[slot].y - 0x3c);
+                        effect.y = (double)((int)m_objects[slot].y - 60);
                         effect.scale = 2;
                         effect.layer = 1;
                         effect.facing = 1;
@@ -2493,16 +2493,16 @@ void CKanna::UpdateObjects()
                 if (pattern != kLv4) {
                     RemoveObject(slot);
                 }
-                m_objects[slot].drawnWhileHidden = 0x7530;
+                m_objects[slot].drawnWhileHidden = 30000;
                 m_objects[slot].x = x;
                 m_objects[slot].y = y;
                 m_objects[slot].timer++;
-                if (frame == 0x37 && m_objects[slot].frame < 0x50) {
+                if (frame == 55 && m_objects[slot].frame < 80) {
                     m_objects[slot].timer = 0;
-                    m_objects[slot].frame = 0x50;
+                    m_objects[slot].frame = 80;
                     break;
                 }
-                if (frame > 0x37) {
+                if (frame > 55) {
                     RemoveObject(slot);
                     break;
                 }
@@ -2510,11 +2510,11 @@ void CKanna::UpdateObjects()
                     m_objects[slot].timer = 0;
                     m_objects[slot].frame++;
                     m_objects[slot].attackResult = 0;
-                    if (m_objects[slot].frame == 0x50 && frame < 0x37) {
-                        m_objects[slot].frame = 0x38;
+                    if (m_objects[slot].frame == 80 && frame < 55) {
+                        m_objects[slot].frame = 56;
                     }
                     if (m_objects[slot].frame >= frameCount) {
-                        m_objects[slot].frame = 0x6c;
+                        m_objects[slot].frame = 108;
                     }
                 }
                 break;
@@ -2557,8 +2557,8 @@ void CKanna::UpdateObjects()
                 }
                 break;
             case kObjLv4Screen1:
-                m_objects[slot].drawnWhileHidden = 0x7530;
-                if (pattern != kLv4 || frame > 0x35) {
+                m_objects[slot].drawnWhileHidden = 30000;
+                if (pattern != kLv4 || frame > 53) {
                     RemoveObject(slot);
                 }
                 m_objects[slot].timer++;
@@ -2572,8 +2572,8 @@ void CKanna::UpdateObjects()
                 }
                 break;
             case kObjLv4Screen2:
-                m_objects[slot].drawnWhileHidden = 0x7530;
-                if (pattern != kLv4 || frame > 0x35) {
+                m_objects[slot].drawnWhileHidden = 30000;
+                if (pattern != kLv4 || frame > 53) {
                     RemoveObject(slot);
                 }
                 m_objects[slot].timer++;
@@ -2587,8 +2587,8 @@ void CKanna::UpdateObjects()
                 }
                 break;
             case kObjLv4Screen3:
-                m_objects[slot].drawnWhileHidden = 0x7530;
-                if (pattern != kLv4 || frame > 0x35) {
+                m_objects[slot].drawnWhileHidden = 30000;
+                if (pattern != kLv4 || frame > 53) {
                     RemoveObject(slot);
                 }
                 m_objects[slot].timer++;
@@ -2602,11 +2602,11 @@ void CKanna::UpdateObjects()
                 }
                 break;
             case kObjLv4Sky:
-                if (pattern != kLv4 || frame > 0x36) {
+                if (pattern != kLv4 || frame > 54) {
                     RemoveObject(slot);
                 }
                 m_objectVar1[slot]++;
-                if (m_objectVar1[slot] == 0x96) {
+                if (m_objectVar1[slot] == 150) {
                     effect.type = kObjLv4Sky1;
                     effect.x = m_objects[slot].x;
                     effect.y = m_objects[slot].y;
@@ -2617,7 +2617,7 @@ void CKanna::UpdateObjects()
                     effect.movesInFreeze = 1;
                     SpawnObject(&effect);
                 }
-                if (m_objectVar1[slot] == 0xd2) {
+                if (m_objectVar1[slot] == 210) {
                     effect.type = kObjLv4Sky2;
                     effect.x = m_objects[slot].x;
                     effect.y = m_objects[slot].y;
@@ -2628,7 +2628,7 @@ void CKanna::UpdateObjects()
                     effect.movesInFreeze = 1;
                     SpawnObject(&effect);
                 }
-                if (m_objectVar1[slot] == 0x10e) {
+                if (m_objectVar1[slot] == 270) {
                     effect.type = kObjLv4Sky3;
                     effect.x = m_objects[slot].x;
                     effect.y = m_objects[slot].y;
@@ -2639,7 +2639,7 @@ void CKanna::UpdateObjects()
                     effect.movesInFreeze = 1;
                     SpawnObject(&effect);
                 }
-                if (m_objectVar1[slot] == 0x12c) {
+                if (m_objectVar1[slot] == 300) {
                     effect.type = kObjLv4Sky4;
                     effect.x = m_objects[slot].x;
                     effect.y = m_objects[slot].y;
@@ -2650,7 +2650,7 @@ void CKanna::UpdateObjects()
                     effect.movesInFreeze = 1;
                     SpawnObject(&effect);
                 }
-                if (m_objectVar1[slot] == 0x14a) {
+                if (m_objectVar1[slot] == 330) {
                     effect.type = kObjLv4Sky5;
                     effect.x = m_objects[slot].x;
                     effect.y = m_objects[slot].y;
@@ -2661,7 +2661,7 @@ void CKanna::UpdateObjects()
                     effect.movesInFreeze = 1;
                     SpawnObject(&effect);
                 }
-                if (m_objectVar1[slot] == 0x153) {
+                if (m_objectVar1[slot] == 339) {
                     effect.type = kObjLv4Sky6;
                     effect.x = m_objects[slot].x;
                     effect.y = m_objects[slot].y;
@@ -2705,7 +2705,7 @@ void CKanna::UpdateObjects()
                 }
                 break;
             case kObjLv4Sky1:
-                if (pattern != kLv4 || frame > 0x36) {
+                if (pattern != kLv4 || frame > 54) {
                     RemoveObject(slot);
                 }
                 m_objects[slot].timer++;
@@ -2719,7 +2719,7 @@ void CKanna::UpdateObjects()
                 }
                 break;
             case kObjLv4Sky2:
-                if (pattern != kLv4 || frame > 0x36) {
+                if (pattern != kLv4 || frame > 54) {
                     RemoveObject(slot);
                 }
                 m_objects[slot].timer++;
@@ -2733,7 +2733,7 @@ void CKanna::UpdateObjects()
                 }
                 break;
             case kObjLv4Sky3:
-                if (pattern != kLv4 || frame > 0x36) {
+                if (pattern != kLv4 || frame > 54) {
                     RemoveObject(slot);
                 }
                 m_objects[slot].timer++;
@@ -2747,7 +2747,7 @@ void CKanna::UpdateObjects()
                 }
                 break;
             case kObjLv4Sky4:
-                if (pattern != kLv4 || frame > 0x36) {
+                if (pattern != kLv4 || frame > 54) {
                     RemoveObject(slot);
                 }
                 m_objects[slot].timer++;
@@ -2761,7 +2761,7 @@ void CKanna::UpdateObjects()
                 }
                 break;
             case kObjLv4Sky5:
-                if (pattern != kLv4 || frame > 0x36) {
+                if (pattern != kLv4 || frame > 54) {
                     RemoveObject(slot);
                 }
                 m_objects[slot].timer++;
@@ -2775,7 +2775,7 @@ void CKanna::UpdateObjects()
                 }
                 break;
             case kObjLv4Sky6:
-                if (pattern != kLv4 || frame > 0x36) {
+                if (pattern != kLv4 || frame > 54) {
                     RemoveObject(slot);
                 }
                 m_objects[slot].timer++;
@@ -2801,7 +2801,7 @@ void CKanna::UpdateObjects()
                 break;
             case kObjFallInDarkness:
                 m_objects[slot].vx = -0.02;
-                m_objects[slot].drawnWhileHidden = 0x7530;
+                m_objects[slot].drawnWhileHidden = 30000;
                 m_objects[slot].timer++;
                 if (pattern != kFallInDarkness) {
                     RemoveObject(slot);
@@ -2818,7 +2818,7 @@ void CKanna::UpdateObjects()
             case kObjEncasedBreak:
                 if (pattern != kEncased && pattern != kEncased2 && pattern != kEncasedAir && pattern != kEncasedSpin || pattern == kEncased && frame > 1 || pattern == kEncased2 && frame > 1) {
                     effect.type = kObjShardSmall;
-                    effect.x = (double)((int)x + facing * 0x17);
+                    effect.x = (double)((int)x + facing * 23);
                     effect.y = (double)((int)y - 4);
                     effect.scale = 0;
                     effect.layer = 1;
@@ -2832,8 +2832,8 @@ void CKanna::UpdateObjects()
                     effect.facing = facing;
                     SpawnObject(&effect);
                     effect.type = kObjShardSmall;
-                    effect.x = (double)((int)x - facing * 0xe);
-                    effect.y = (double)((int)y - 0x1a);
+                    effect.x = (double)((int)x - facing * 14);
+                    effect.y = (double)((int)y - 26);
                     effect.scale = 0;
                     effect.layer = 1;
                     effect.facing = facing;
@@ -2846,48 +2846,48 @@ void CKanna::UpdateObjects()
                     effect.facing = facing;
                     SpawnObject(&effect);
                     effect.type = kObjShardSmall;
-                    effect.x = (double)((int)x + facing * 0x1e);
-                    effect.y = (double)((int)y - 0x28);
+                    effect.x = (double)((int)x + facing * 30);
+                    effect.y = (double)((int)y - 40);
                     effect.scale = 0;
                     effect.layer = 1;
                     effect.facing = facing;
                     SpawnObject(&effect);
                     effect.type = kObjShardSmall;
-                    effect.x = (double)((int)x - facing * 0x19);
-                    effect.y = (double)((int)y - 0x50);
+                    effect.x = (double)((int)x - facing * 25);
+                    effect.y = (double)((int)y - 80);
                     effect.scale = 0;
                     effect.layer = 1;
                     effect.facing = facing;
                     SpawnObject(&effect);
                     effect.type = kObjShardLarge;
-                    effect.x = (double)((int)x - facing * 0x23);
-                    effect.y = (double)((int)y - 0x2a);
+                    effect.x = (double)((int)x - facing * 35);
+                    effect.y = (double)((int)y - 42);
                     effect.scale = 0;
                     effect.layer = 1;
                     effect.facing = facing;
                     SpawnObject(&effect);
                     effect.type = kObjShardLarge;
-                    effect.x = (double)((int)x - facing * 0x12);
-                    effect.y = (double)((int)y - 0x14);
+                    effect.x = (double)((int)x - facing * 18);
+                    effect.y = (double)((int)y - 20);
                     effect.scale = 0;
                     effect.layer = 1;
                     effect.facing = facing;
                     SpawnObject(&effect);
                     effect.type = kObjShardLarge;
                     effect.x = (double)((int)x + facing * 2);
-                    effect.y = (double)((int)y - 0x41);
+                    effect.y = (double)((int)y - 65);
                     effect.scale = 0;
                     effect.layer = 1;
                     effect.facing = facing;
                     SpawnObject(&effect);
                     effect.type = kObjShardLarge;
                     effect.x = (double)((int)x + (facing << 4));
-                    effect.y = (double)((int)y - 0x50);
+                    effect.y = (double)((int)y - 80);
                     effect.scale = 0;
                     effect.layer = 1;
                     effect.facing = facing;
                     SpawnObject(&effect);
-                    m_playSound = 0x22;
+                    m_playSound = 34;
                     RemoveObject(slot);
                     m_encasedBreakOut = 0;
                     break;
@@ -2904,16 +2904,16 @@ void CKanna::UpdateObjects()
                 break;
             case kObjShardSmall:
                 if (m_objects[slot].frame == 0 && m_objects[slot].timer == 0 && m_objectVar1[slot] == 0) {
-                    m_objectVar2[slot] = (rand() > 0x3e80) * 0x28 + 0x50 + (rand() > 0x3e80) * 0x14;
+                    m_objectVar2[slot] = (rand() > 16000) * 40 + 80 + (rand() > 16000) * 20;
                     m_objectVar1[slot]++;
-                    m_objects[slot].vx = (rand() > 0x3e80) * 1.2 + (rand() > 0x3e80) * 0.7 + (rand() > 0x3e80) * 1.7 + -1.8;
-                    m_objects[slot].vy = -1.2 - ((rand() > 0x3e80) * 0.6 + (rand() > 0x3e80) * 0.9 + (rand() > 0x3e80) * 1.4);
+                    m_objects[slot].vx = (rand() > 16000) * 1.2 + (rand() > 16000) * 0.7 + (rand() > 16000) * 1.7 + -1.8;
+                    m_objects[slot].vy = -1.2 - ((rand() > 16000) * 0.6 + (rand() > 16000) * 0.9 + (rand() > 16000) * 1.4);
                 }
                 m_objects[slot].vy += 0.05;
                 if (m_objects[slot].y > 0.0 && m_objects[slot].vy > 0.0) {
                     m_objects[slot].vy = -m_objects[slot].vy;
                 }
-                if (m_objectVar2[slot] < 0xa) {
+                if (m_objectVar2[slot] < 10) {
                     m_objects[slot].scale = 1;
                 }
                 if (m_objectVar2[slot] < 0) {
@@ -2933,16 +2933,16 @@ void CKanna::UpdateObjects()
                 break;
             case kObjShardLarge:
                 if (m_objects[slot].frame == 0 && m_objects[slot].timer == 0 && m_objectVar1[slot] == 0) {
-                    m_objectVar2[slot] = (rand() > 0x3e80) * 0x3c + 0x78 + (rand() > 0x3e80) * 0x28;
+                    m_objectVar2[slot] = (rand() > 16000) * 60 + 120 + (rand() > 16000) * 40;
                     m_objectVar1[slot]++;
-                    m_objects[slot].vx = (double)(rand() > 0x3e80) + (rand() > 0x3e80) * 0.5 + (rand() > 0x3e80) * 1.5 + -1.5;
-                    m_objects[slot].vy = -1.0 - ((rand() > 0x3e80) * 0.5 + (rand() > 0x3e80) * 0.8 + (rand() > 0x3e80) * 1.2);
+                    m_objects[slot].vx = (double)(rand() > 16000) + (rand() > 16000) * 0.5 + (rand() > 16000) * 1.5 + -1.5;
+                    m_objects[slot].vy = -1.0 - ((rand() > 16000) * 0.5 + (rand() > 16000) * 0.8 + (rand() > 16000) * 1.2);
                 }
                 m_objects[slot].vy += 0.03;
                 if (m_objects[slot].y > 0.0 && m_objects[slot].vy > 0.0) {
                     m_objects[slot].vy = -m_objects[slot].vy;
                 }
-                if (m_objectVar2[slot] < 0xa) {
+                if (m_objectVar2[slot] < 10) {
                     m_objects[slot].scale = 1;
                 }
                 if (m_objectVar2[slot] < 0) {
@@ -2975,7 +2975,7 @@ void CKanna::UpdateObjects()
             }
         }
         slot++;
-        if (slot >= 0x40) {
+        if (slot >= 64) {
             slot = 0;
         }
     }

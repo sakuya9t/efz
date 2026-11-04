@@ -13,7 +13,7 @@ CMinagi::CMinagi(PTR32(CPlayer)* opponent, CGame* game, CGraphics* graphics, CIn
     int i;
 
     strcpy(m_name, "minagi");
-    lastSurface = 0x2b4;
+    lastSurface = 692;
     m_patternVar1 = 0;
     m_patternVar2 = 0;
     m_patternVar3 = 0;
@@ -22,26 +22,26 @@ CMinagi::CMinagi(PTR32(CPlayer)* opponent, CGame* game, CGraphics* graphics, CIn
     m_shotState = 0;
     m_shotX = 0;
     m_pointX[0] = -8;
-    m_pointY[0] = -0x42;
-    m_pointX[1] = -0x13;
+    m_pointY[0] = -66;
+    m_pointX[1] = -19;
     m_pointY[1] = 0;
     m_pointX[2] = 3;
     m_pointY[2] = -7;
     m_pointX[3] = 9;
     m_pointY[3] = -2;
-    m_pointX[4] = 0x23;
-    m_pointY[4] = -0x25;
+    m_pointX[4] = 35;
+    m_pointY[4] = -37;
     m_resultPictures = 8;
     m_rivals[0] = 1;
     m_rivals[1] = 0;
-    m_rivals[2] = 0xb;
-    m_rivals[3] = 0x18;
+    m_rivals[2] = 11;
+    m_rivals[3] = 24;
     m_rivals[4] = 2;
-    m_rivals[5] = 0x13;
-    m_rivals[6] = 0x17;
-    m_rivals[0xa] = 7;
+    m_rivals[5] = 19;
+    m_rivals[6] = 23;
+    m_rivals[10] = 7;
     i = 0;
-    for (; i < 0x40; i++) {
+    for (; i < 64; i++) {
         m_objectVar1[i] = 0;
         m_objectVar2[i] = 0;
         m_objectVar3[i] = 0;
@@ -59,18 +59,18 @@ void CMinagi::Reset()
     m_michiruState = 0;
     m_shotState = 0;
     m_shotX = 0;
-    m_pointX[0] = -0xd;
-    m_pointY[0] = -0x3c;
-    m_pointX[1] = 0xe;
+    m_pointX[0] = -13;
+    m_pointY[0] = -60;
+    m_pointX[1] = 14;
     m_pointY[1] = 0;
-    m_pointX[2] = 0x11;
+    m_pointX[2] = 17;
     m_pointY[2] = -6;
     m_pointX[3] = 7;
-    m_pointY[3] = -0x19;
-    m_pointX[4] = 0x1b;
-    m_pointY[4] = -0x19;
+    m_pointY[3] = -25;
+    m_pointX[4] = 27;
+    m_pointY[4] = -25;
     i = 0;
-    for (; i < 0x40; i++) {
+    for (; i < 64; i++) {
         m_objectVar1[i] = 0;
         m_objectVar2[i] = 0;
         m_objectVar3[i] = 0;
@@ -79,7 +79,7 @@ void CMinagi::Reset()
     EffectDesc effect;
     InitEffectDesc((EffectDesc*)&effect);
     effect.type = kObjMichiru;
-    effect.x = (double)((int)x - facing * 0x28);
+    effect.x = (double)((int)x - facing * 40);
     effect.y = (double)(int)y;
     effect.scale = 0;
     effect.screen = 0;
@@ -134,31 +134,31 @@ void CMinagi::StartCommand()
         return;
     }
     if (m_sealLevel < 2) {
-        if (m_hp < 0xd05 && m_michiruState != 4 && m_command == kCmd222D && m_gauge >= 0xbb8 && (m_patterns[pattern].frames[frame].flagsB0 & kStateCancellable) > 0 && y == 0.0 && (pattern >= kFirstCharacterAction && m_attackResult >= 2 && m_attackResult != 6 || pattern < kFirstCharacterAction) && m_patterns[pattern].cancelLevel <= m_patterns[k21436B].level) {
+        if (m_hp < 3333 && m_michiruState != 4 && m_command == kCmd222D && m_gauge >= 3000 && (m_patterns[pattern].frames[frame].flagsB0 & kStateCancellable) > 0 && y == 0.0 && (pattern >= kFirstCharacterAction && m_attackResult >= 2 && m_attackResult != 6 || pattern < kFirstCharacterAction) && m_patterns[pattern].cancelLevel <= m_patterns[k21436B].level) {
             StartPattern();
             ClearBufferedPress();
             pattern = kLv4;
             return;
         }
-        if (m_command == kCmd21436C && y == 0.0 && m_gauge >= 0xbb8 && (m_patterns[pattern].frames[frame].flagsB0 & kStateCancellable) > 0 && (pattern >= kFirstCharacterAction && m_attackResult >= 2 && m_attackResult != 6 || pattern < kFirstCharacterAction) && m_patterns[pattern].cancelLevel <= m_patterns[k21436C].level) {
+        if (m_command == kCmd21436C && y == 0.0 && m_gauge >= 3000 && (m_patterns[pattern].frames[frame].flagsB0 & kStateCancellable) > 0 && (pattern >= kFirstCharacterAction && m_attackResult >= 2 && m_attackResult != 6 || pattern < kFirstCharacterAction) && m_patterns[pattern].cancelLevel <= m_patterns[k21436C].level) {
             StartPattern();
             ClearBufferedPress();
             pattern = k21436C;
             return;
         }
-        if (y == 0.0 && (m_command == kCmd21436B || m_command == kCmd21436C) && m_gauge >= 0x7d0 && (m_patterns[pattern].frames[frame].flagsB0 & kStateCancellable) > 0 && (pattern >= kFirstCharacterAction && m_attackResult >= 2 && m_attackResult != 6 || pattern < kFirstCharacterAction) && m_patterns[pattern].cancelLevel <= m_patterns[k21436B].level) {
+        if (y == 0.0 && (m_command == kCmd21436B || m_command == kCmd21436C) && m_gauge >= 2000 && (m_patterns[pattern].frames[frame].flagsB0 & kStateCancellable) > 0 && (pattern >= kFirstCharacterAction && m_attackResult >= 2 && m_attackResult != 6 || pattern < kFirstCharacterAction) && m_patterns[pattern].cancelLevel <= m_patterns[k21436B].level) {
             StartPattern();
             ClearBufferedPress();
             pattern = k21436B;
             return;
         }
-        if (y == 0.0 && (m_command == kCmd21436A || m_command == kCmd21436B || m_command == kCmd21436C) && m_gauge >= 0x3e8 && (m_patterns[pattern].frames[frame].flagsB0 & kStateCancellable) > 0 && (pattern >= kFirstCharacterAction && m_attackResult >= 2 && m_attackResult != 6 || pattern < kFirstCharacterAction) && m_patterns[pattern].cancelLevel <= m_patterns[k21436A].level) {
+        if (y == 0.0 && (m_command == kCmd21436A || m_command == kCmd21436B || m_command == kCmd21436C) && m_gauge >= 1000 && (m_patterns[pattern].frames[frame].flagsB0 & kStateCancellable) > 0 && (pattern >= kFirstCharacterAction && m_attackResult >= 2 && m_attackResult != 6 || pattern < kFirstCharacterAction) && m_patterns[pattern].cancelLevel <= m_patterns[k21436A].level) {
             StartPattern();
             ClearBufferedPress();
             pattern = k21436A;
             return;
         }
-        if (m_michiruState != 4 && m_command == kCmd214214C && m_gauge >= 0xbb8 && (m_patterns[pattern].frames[frame].flagsB0 & kStateCancellable) > 0 && (pattern >= kFirstCharacterAction && m_attackResult >= 2 && m_attackResult != 6 || pattern < kFirstCharacterAction) && m_patterns[pattern].cancelLevel <= m_patterns[k214214C].level) {
+        if (m_michiruState != 4 && m_command == kCmd214214C && m_gauge >= 3000 && (m_patterns[pattern].frames[frame].flagsB0 & kStateCancellable) > 0 && (pattern >= kFirstCharacterAction && m_attackResult >= 2 && m_attackResult != 6 || pattern < kFirstCharacterAction) && m_patterns[pattern].cancelLevel <= m_patterns[k214214C].level) {
             StartPattern();
             ClearBufferedPress();
             pattern = k214214C;
@@ -167,7 +167,7 @@ void CMinagi::StartCommand()
             }
             return;
         }
-        if (m_michiruState != 4 && (m_command == kCmd214214B || m_command == kCmd214214C) && m_gauge >= 0x7d0 && (m_patterns[pattern].frames[frame].flagsB0 & kStateCancellable) > 0 && (pattern >= kFirstCharacterAction && m_attackResult >= 2 && m_attackResult != 6 || pattern < kFirstCharacterAction) && m_patterns[pattern].cancelLevel <= m_patterns[k214214B].level) {
+        if (m_michiruState != 4 && (m_command == kCmd214214B || m_command == kCmd214214C) && m_gauge >= 2000 && (m_patterns[pattern].frames[frame].flagsB0 & kStateCancellable) > 0 && (pattern >= kFirstCharacterAction && m_attackResult >= 2 && m_attackResult != 6 || pattern < kFirstCharacterAction) && m_patterns[pattern].cancelLevel <= m_patterns[k214214B].level) {
             StartPattern();
             ClearBufferedPress();
             pattern = k214214B;
@@ -176,7 +176,7 @@ void CMinagi::StartCommand()
             }
             return;
         }
-        if (m_michiruState != 4 && (m_command == kCmd214214A || m_command == kCmd214214B || m_command == kCmd214214C) && m_gauge >= 0x3e8 && (m_patterns[pattern].frames[frame].flagsB0 & kStateCancellable) > 0 && (pattern >= kFirstCharacterAction && m_attackResult >= 2 && m_attackResult != 6 || pattern < kFirstCharacterAction) && m_patterns[pattern].cancelLevel <= m_patterns[k214214A].level) {
+        if (m_michiruState != 4 && (m_command == kCmd214214A || m_command == kCmd214214B || m_command == kCmd214214C) && m_gauge >= 1000 && (m_patterns[pattern].frames[frame].flagsB0 & kStateCancellable) > 0 && (pattern >= kFirstCharacterAction && m_attackResult >= 2 && m_attackResult != 6 || pattern < kFirstCharacterAction) && m_patterns[pattern].cancelLevel <= m_patterns[k214214A].level) {
             StartPattern();
             ClearBufferedPress();
             pattern = k214214A;
@@ -185,7 +185,7 @@ void CMinagi::StartCommand()
             }
             return;
         }
-        if (m_michiruState != 4 && m_command == kCmd236236C && m_gauge >= 0xbb8 && (m_patterns[pattern].frames[frame].flagsB0 & kStateCancellable) > 0 && (pattern >= kFirstCharacterAction && m_attackResult >= 2 && m_attackResult != 6 || pattern < kFirstCharacterAction) && m_patterns[pattern].cancelLevel <= m_patterns[k236236C].level) {
+        if (m_michiruState != 4 && m_command == kCmd236236C && m_gauge >= 3000 && (m_patterns[pattern].frames[frame].flagsB0 & kStateCancellable) > 0 && (pattern >= kFirstCharacterAction && m_attackResult >= 2 && m_attackResult != 6 || pattern < kFirstCharacterAction) && m_patterns[pattern].cancelLevel <= m_patterns[k236236C].level) {
             StartPattern();
             ClearBufferedPress();
             pattern = k236236C;
@@ -194,7 +194,7 @@ void CMinagi::StartCommand()
             }
             return;
         }
-        if (m_michiruState != 4 && (m_command == kCmd236236B || m_command == kCmd236236C) && m_gauge >= 0x7d0 && (m_patterns[pattern].frames[frame].flagsB0 & kStateCancellable) > 0 && (pattern >= kFirstCharacterAction && m_attackResult >= 2 && m_attackResult != 6 || pattern < kFirstCharacterAction) && m_patterns[pattern].cancelLevel <= m_patterns[k236236B].level) {
+        if (m_michiruState != 4 && (m_command == kCmd236236B || m_command == kCmd236236C) && m_gauge >= 2000 && (m_patterns[pattern].frames[frame].flagsB0 & kStateCancellable) > 0 && (pattern >= kFirstCharacterAction && m_attackResult >= 2 && m_attackResult != 6 || pattern < kFirstCharacterAction) && m_patterns[pattern].cancelLevel <= m_patterns[k236236B].level) {
             StartPattern();
             ClearBufferedPress();
             pattern = k236236B;
@@ -203,7 +203,7 @@ void CMinagi::StartCommand()
             }
             return;
         }
-        if (m_michiruState != 4 && (m_command == kCmd236236A || m_command == kCmd236236B || m_command == kCmd236236C) && m_gauge >= 0x3e8 && (m_patterns[pattern].frames[frame].flagsB0 & kStateCancellable) > 0 && (pattern >= kFirstCharacterAction && m_attackResult >= 2 && m_attackResult != 6 || pattern < kFirstCharacterAction) && m_patterns[pattern].cancelLevel <= m_patterns[k236236A].level) {
+        if (m_michiruState != 4 && (m_command == kCmd236236A || m_command == kCmd236236B || m_command == kCmd236236C) && m_gauge >= 1000 && (m_patterns[pattern].frames[frame].flagsB0 & kStateCancellable) > 0 && (pattern >= kFirstCharacterAction && m_attackResult >= 2 && m_attackResult != 6 || pattern < kFirstCharacterAction) && m_patterns[pattern].cancelLevel <= m_patterns[k236236A].level) {
             StartPattern();
             ClearBufferedPress();
             pattern = k236236A;
@@ -571,7 +571,7 @@ void CMinagi::ReadCommand()
         if ((input & kInputDirections) == kInputDown && step == 1) {
             step = 2;
         }
-        if ((input & kInputDirections) == 0 && step == 0 && m_gauge == 0xbb8) {
+        if ((input & kInputDirections) == 0 && step == 0 && m_gauge == 3000) {
             step = 1;
         }
     }
@@ -585,7 +585,7 @@ void CMinagi::ReadCommand()
         }
         if ((input & kInputDirections) == (facing == -1) + 1 && step == 4) {
             if ((input & kInputButtons) != 0) {
-                m_command = ((input & (kInputB | kInputC | kInputD)) > 0) + 0xa0 + ((input & (kInputC | kInputD)) > 0) + ((input & kInputD) > 0);
+                m_command = ((input & (kInputB | kInputC | kInputD)) > 0) + 160 + ((input & (kInputC | kInputD)) > 0) + ((input & kInputD) > 0);
                 return;
             }
             step = 5;
@@ -630,7 +630,7 @@ void CMinagi::ReadCommand()
         if ((input & kInputDirections) == 6 - (facing == -1) && step == 1) {
             step = 2;
         }
-        if ((input & kInputDirections) == kInputDown && step == 0 && m_gauge >= 0x3e8) {
+        if ((input & kInputDirections) == kInputDown && step == 0 && m_gauge >= 1000) {
             step = 1;
         }
     }
@@ -661,7 +661,7 @@ void CMinagi::ReadCommand()
         if ((input & kInputDirections) == (facing == -1) + 5 && step == 1) {
             step = 2;
         }
-        if ((input & kInputDirections) == kInputDown && step == 0 && m_gauge >= 0x3e8) {
+        if ((input & kInputDirections) == kInputDown && step == 0 && m_gauge >= 1000) {
             step = 1;
         }
     }
@@ -931,17 +931,17 @@ void CMinagi::CpuInput()
     m_pressC = 0;
     m_pressD = 0;
     m_recoilGuardWindow = 0;
-    if ((WORD)Random(0, 0x3e8) < 25.0f * m_cpuSkill + (y < 0.0) * 0x1e * m_cpuSkill + (m_cpuAction == 3) * 0x190 + (pattern == kRecoilGuardAir) * 0x12c) {
-        m_recoilGuardWindow = 0x3c;
+    if ((WORD)Random(0, 1000) < 25.0f * m_cpuSkill + (y < 0.0) * 30 * m_cpuSkill + (m_cpuAction == 3) * 400 + (pattern == kRecoilGuardAir) * 300) {
+        m_recoilGuardWindow = 60;
     }
-    if ((WORD)Random(0, 0x7d0) < ((m_throwProtect > 0) * 4.0 + 1.0) * 8.0 * m_cpuSkill * ((pattern > kLastHitReaction && pattern < kAirRecoveryForward) * 2 + 1)) {
-        m_recoilGuardWindow = 0x3c;
+    if ((WORD)Random(0, 2000) < ((m_throwProtect > 0) * 4.0 + 1.0) * 8.0 * m_cpuSkill * ((pattern > kLastHitReaction && pattern < kAirRecoveryForward) * 2 + 1)) {
+        m_recoilGuardWindow = 60;
     }
-    if ((WORD)Random(0, 0x3e8) < 4e+01f * m_cpuSkill && pattern > kLastSharedAction) {
-        m_recoilGuardWindow = 0x3c;
+    if ((WORD)Random(0, 1000) < 4e+01f * m_cpuSkill && pattern > kLastSharedAction) {
+        m_recoilGuardWindow = 60;
     }
     if (m_canRecoilCounter == 1 && m_cpuAction == 2) {
-        m_recoilGuardWindow = 0x1e;
+        m_recoilGuardWindow = 30;
         if (pattern < kFirstCharacterAction) {
             m_cpuAction = 0;
         }
@@ -953,14 +953,14 @@ void CMinagi::CpuInput()
     dx = ((*m_opponent)->x - x) * facing;
     dy = fabs(y - (*m_opponent)->y);
     if (pattern >= kFirstHitReaction && pattern <= kFirstGuard && timer == 0) {
-        if ((WORD)Random(0, 0x64) < 8.0f * m_cpuSkill) {
+        if ((WORD)Random(0, 100) < 8.0f * m_cpuSkill) {
             m_cpuAction = 3;
         } else {
             m_cpuAction = 0;
         }
-        m_inputX = 1 - (((WORD)Random(0, 0x64) < 0x32) << 1);
-        m_pressD = (WORD)Random(0, 0xf0) < dy;
-        m_pressD = (WORD)Random(0, 0x140) < dx;
+        m_inputX = 1 - (((WORD)Random(0, 100) < 0x32) << 1);
+        m_pressD = (WORD)Random(0, 240) < dy;
+        m_pressD = (WORD)Random(0, 320) < dx;
         if ((*m_opponent)->pattern > kLastSharedAction && (*m_opponent)->pattern < 0xfa && (*m_opponent)->frame < 3 && dy < 100.0 && dx < 150.0) {
             m_pressD = 0;
         }
@@ -974,18 +974,18 @@ void CMinagi::CpuInput()
     }
     if (pattern == kRecoilGuardStand && timer < 6) {
         if ((*m_opponent)->pattern != 0xc8 && (*m_opponent)->pattern != 0xcc && (*m_opponent)->pattern < 0xfa && (*m_opponent)->y == 0.0 && (*m_opponent)->m_hitsLeft == 0) {
-            if (dx < 45.0 && (WORD)Random(0, 0x64) < m_cpuSkill * 2) {
+            if (dx < 45.0 && (WORD)Random(0, 100) < m_cpuSkill * 2) {
                 m_pressA = 1;
                 m_inputY = 1;
                 return;
             }
-            if (dx < 60.0 && (WORD)Random(0, 0x64) < m_cpuSkill * 1.0f) {
+            if (dx < 60.0 && (WORD)Random(0, 100) < m_cpuSkill * 1.0f) {
                 m_pressA = 1;
                 m_inputY = 0;
                 return;
             }
         }
-        if (((*m_opponent)->pattern == 0xc9 || (*m_opponent)->pattern == 0xca || (*m_opponent)->pattern == 0xcd) && (*m_opponent)->pattern < 0xfa && (*m_opponent)->y == 0.0 && (*m_opponent)->m_hitsLeft == 0 && dx > 60.0 && dx < 80.0 && (WORD)Random(0, 0x64) < m_cpuSkill * 1.0f) {
+        if (((*m_opponent)->pattern == 0xc9 || (*m_opponent)->pattern == 0xca || (*m_opponent)->pattern == 0xcd) && (*m_opponent)->pattern < 0xfa && (*m_opponent)->y == 0.0 && (*m_opponent)->m_hitsLeft == 0 && dx > 60.0 && dx < 80.0 && (WORD)Random(0, 100) < m_cpuSkill * 1.0f) {
             m_pressB = 1;
             m_inputY = 1;
             m_inputX = 0;
@@ -994,84 +994,84 @@ void CMinagi::CpuInput()
     }
     if (pattern == kRecoilGuardStand || pattern == kRecoilGuardCrouch) {
         if (dx < 100.0) {
-            if ((WORD)Random(0, 0x64) < m_cpuSkill * 4.0f && m_rfGauge > 500.0) {
+            if ((WORD)Random(0, 100) < m_cpuSkill * 4.0f && m_rfGauge > 500.0) {
                 m_command = kCmd214C;
                 return;
             }
-            if ((WORD)Random(0, 0x64) < m_cpuSkill * 2 && m_rfGauge > 500.0) {
+            if ((WORD)Random(0, 100) < m_cpuSkill * 2 && m_rfGauge > 500.0) {
                 m_command = kCmd236C;
                 return;
             }
-            if (dx < 60.0 && (WORD)Random(0, 0x64) < m_cpuSkill * 1.0f) {
+            if (dx < 60.0 && (WORD)Random(0, 100) < m_cpuSkill * 1.0f) {
                 m_pressA = 1;
                 m_inputY = 0;
                 return;
             }
-            if ((WORD)Random(0, 0x64) < m_cpuSkill * 1.0f && m_gauge == 0xbb8) {
+            if ((WORD)Random(0, 100) < m_cpuSkill * 1.0f && m_gauge == 3000) {
                 m_command = kCmd222D;
                 return;
             }
-            if ((WORD)Random(0, 0x64) < m_cpuSkill * 3.0f && dx < 80.0 && m_gauge >= 0x7d0) {
+            if ((WORD)Random(0, 100) < m_cpuSkill * 3.0f && dx < 80.0 && m_gauge >= 2000) {
                 m_command = (WORD)Random(0, 2) + kCmd236236B;
                 return;
             }
         }
         if (dx < 150.0 && dx > 100.0) {
-            if ((WORD)Random(0, 0x64) < m_cpuSkill * 3.0f && m_rfGauge > 500.0) {
+            if ((WORD)Random(0, 100) < m_cpuSkill * 3.0f && m_rfGauge > 500.0) {
                 m_command = kCmd236C;
                 return;
             }
-            if (dx < 120.0 && (WORD)Random(0, 0x64) < m_cpuSkill * 1.0f) {
+            if (dx < 120.0 && (WORD)Random(0, 100) < m_cpuSkill * 1.0f) {
                 m_pressA = 2;
                 m_inputY = 0;
                 return;
             }
-            if ((WORD)Random(0, 0x64) < m_cpuSkill * 1.0f) {
+            if ((WORD)Random(0, 100) < m_cpuSkill * 1.0f) {
                 m_pressC = 1;
                 m_inputY = 1;
                 return;
             }
-            if ((WORD)Random(0, 0x64) < m_cpuSkill * 1.0f && m_gauge == 0xbb8 && (*m_opponent)->pattern < 0xdc) {
+            if ((WORD)Random(0, 100) < m_cpuSkill * 1.0f && m_gauge == 3000 && (*m_opponent)->pattern < 0xdc) {
                 m_command = kCmd222D;
                 return;
             }
         }
         if (dx > 150.0) {
-            if ((WORD)Random(0, 0x64) < m_cpuSkill * 1.0f && m_rfGauge > 500.0) {
+            if ((WORD)Random(0, 100) < m_cpuSkill * 1.0f && m_rfGauge > 500.0) {
                 m_command = (WORD)Random(0, 2) + kCmd214A;
                 return;
             }
-            if ((WORD)Random(0, 0x64) < m_cpuSkill * 1.0f) {
+            if ((WORD)Random(0, 100) < m_cpuSkill * 1.0f) {
                 m_command = (WORD)Random(0, 2) + kCmd236B;
                 return;
             }
         }
     }
     if (pattern == kRecoilGuardAir && frame == 1 && timer == 0) {
-        if ((WORD)Random(0, 0x64) < m_cpuSkill * 5.0f) {
+        if ((WORD)Random(0, 100) < m_cpuSkill * 5.0f) {
             m_cpuAction = 3;
             return;
         }
-        if (y - (*m_opponent)->y < 0.0 && y - (*m_opponent)->y > -40.0 && dx < 80.0 && (WORD)Random(0, 0x64) < m_cpuSkill * 5.0f) {
+        if (y - (*m_opponent)->y < 0.0 && y - (*m_opponent)->y > -40.0 && dx < 80.0 && (WORD)Random(0, 100) < m_cpuSkill * 5.0f) {
             m_pressA = 1;
             return;
         }
-        if (y - (*m_opponent)->y > -100.0 && y - (*m_opponent)->y < -50.0 && dx < 80.0 && (WORD)Random(0, 0x64) < m_cpuSkill * 5.0f) {
+        if (y - (*m_opponent)->y > -100.0 && y - (*m_opponent)->y < -50.0 && dx < 80.0 && (WORD)Random(0, 100) < m_cpuSkill * 5.0f) {
             m_pressB = 1;
             return;
         }
-        if (y - (*m_opponent)->y > -50.0 && y - (*m_opponent)->y < -50.0 && dx < 120.0 && (WORD)Random(0, 0x64) < m_cpuSkill * 5.0f) {
+        if (y - (*m_opponent)->y > -50.0 && y - (*m_opponent)->y < -50.0 && dx < 120.0 && (WORD)Random(0, 100) < m_cpuSkill * 5.0f) {
             m_pressC = 1;
             m_inputY = 0;
             return;
         }
-        if (dy < 50.0 && dx < 100.0 && (WORD)Random(0, 0x64) < m_cpuSkill * 2) {
+        if (dy < 50.0 && dx < 100.0 && (WORD)Random(0, 100) < m_cpuSkill * 2) {
             m_command = (WORD)Random(0, 2) + kCmd214B;
             return;
         }
     }
-    if (((*m_opponent)->pattern == kRecoilGuardStand || (*m_opponent)->pattern == kRecoilGuardCrouch || (*m_opponent)->pattern == kRecoilGuardAir) && y == 0.0 && (WORD)Random(0, 0x64) < 15.0f * m_cpuSkill && m_cpuAction != 2 && (*m_opponent)->m_freezeTime == 0) {
-        m_cpuRoll = (WORD)Random(0, 0x64);
+    if (((*m_opponent)->pattern == kRecoilGuardStand || (*m_opponent)->pattern == kRecoilGuardCrouch || (*m_opponent)->pattern == kRecoilGuardAir) && y == 0.0 && (WORD)Random(0, 100) < 15.0f * m_cpuSkill && m_cpuAction != 2 && (*m_opponent)->m_freezeTime == 0) {
+        m_cpuRoll = (WORD)Random(0, 100);
         if (m_cpuRoll < 3 && m_rfGauge > 500.0) {
             m_command = kCmd214C;
             return;
@@ -1080,31 +1080,31 @@ void CMinagi::CpuInput()
             m_command = kCmd236C;
             return;
         }
-        if (m_cpuRoll < 0x11 && m_cpuRoll > 0xc && m_gauge >= 0x3e8) {
+        if (m_cpuRoll < 17 && m_cpuRoll > 12 && m_gauge >= 1000) {
             m_command = (WORD)Random(0, 3) + kCmd236236A;
             return;
         }
-        if (m_cpuRoll < 0x12 && m_cpuRoll > 0x14 && m_gauge == 0xbb8) {
+        if (m_cpuRoll < 18 && m_cpuRoll > 20 && m_gauge == 3000) {
             m_command = kCmd222D;
             return;
         }
-        if (m_cpuRoll > 0x41) {
+        if (m_cpuRoll > 65) {
             m_cpuAction = 2;
             return;
         }
     }
-    if (((*m_opponent)->pattern == kRecoilGuardStand || (*m_opponent)->pattern == kRecoilGuardCrouch || (*m_opponent)->pattern == kRecoilGuardAir) && y < 0.0 && (WORD)Random(0, 0x64) < 15.0f * m_cpuSkill && m_cpuAction != 2 && (*m_opponent)->m_freezeTime == 0) {
-        m_cpuRoll = (WORD)Random(0, 0x64);
+    if (((*m_opponent)->pattern == kRecoilGuardStand || (*m_opponent)->pattern == kRecoilGuardCrouch || (*m_opponent)->pattern == kRecoilGuardAir) && y < 0.0 && (WORD)Random(0, 100) < 15.0f * m_cpuSkill && m_cpuAction != 2 && (*m_opponent)->m_freezeTime == 0) {
+        m_cpuRoll = (WORD)Random(0, 100);
         if (m_cpuRoll < 2 && m_rfGauge > 500.0) {
             m_command = kCmd214C;
             return;
         }
-        if (m_cpuRoll > 0x3a) {
+        if (m_cpuRoll > 58) {
             m_cpuAction = 2;
             return;
         }
     }
-    if ((m_rfGauge > 500.0 || m_rfBlue > 0) && (WORD)Random(0, 0x64) < 8.0f * m_cpuSkill && (*m_opponent)->pattern > kLastHitReaction && (*m_opponent)->pattern < kAirRecoveryForward && (pattern == kDRight || pattern == kDashC && (WORD)Random(0, 0xa) == 0 || pattern == k5D && (WORD)Random(0, 0x64) < 2 || pattern == kDash2C && (WORD)Random(0, 7) == 0)) {
+    if ((m_rfGauge > 500.0 || m_rfBlue > 0) && (WORD)Random(0, 100) < 8.0f * m_cpuSkill && (*m_opponent)->pattern > kLastHitReaction && (*m_opponent)->pattern < kAirRecoveryForward && (pattern == kDRight || pattern == kDashC && (WORD)Random(0, 10) == 0 || pattern == k5D && (WORD)Random(0, 100) < 2 || pattern == kDash2C && (WORD)Random(0, 7) == 0)) {
         m_command = kCmd22C;
         return;
     }
@@ -1233,35 +1233,35 @@ void CMinagi::CpuInput()
         }
         return;
     }
-    if (m_attackResult > 1 && m_hitstop == 0 && (WORD)Random(0, 0x64) < m_cpuSkill * 25.0f && m_cpuAction != 1 && m_cpuAction != 2) {
-        m_cpuRoll = (WORD)Random(0, 0x3e8);
+    if (m_attackResult > 1 && m_hitstop == 0 && (WORD)Random(0, 100) < m_cpuSkill * 25.0f && m_cpuAction != 1 && m_cpuAction != 2) {
+        m_cpuRoll = (WORD)Random(0, 1000);
         if (pattern == k5A) {
-            if ((*m_opponent)->y < 0.0 && m_cpuRoll < 0x12c) {
+            if ((*m_opponent)->y < 0.0 && m_cpuRoll < 300) {
                 m_pressB = 1;
                 m_inputY = 0;
                 return;
             }
-            if ((*m_opponent)->y < 0.0 && dx < 90.0 && m_cpuRoll < 0x258 && m_cpuRoll > 0x12c) {
+            if ((*m_opponent)->y < 0.0 && dx < 90.0 && m_cpuRoll < 600 && m_cpuRoll > 300) {
                 m_cpuAction = 6;
                 return;
             }
-            if (dx < 80.0 && m_cpuRoll > 0 && m_cpuRoll < 0x12c) {
+            if (dx < 80.0 && m_cpuRoll > 0 && m_cpuRoll < 300) {
                 m_pressB = 1;
                 m_inputY = 1;
                 return;
             }
-            if (dx < 70.0 && m_cpuRoll > 0x12c && m_cpuRoll < 0x258) {
+            if (dx < 70.0 && m_cpuRoll > 300 && m_cpuRoll < 600) {
                 m_pressB = 1;
                 m_inputY = 0;
                 return;
             }
-            if (m_cpuRoll > 0x3ca) {
+            if (m_cpuRoll > 970) {
                 m_cpuAction = 4;
                 m_inputY = -1;
                 m_inputX = (WORD)Random(0, 2) - 1;
                 return;
             }
-            if (m_cpuRoll > 0x258) {
+            if (m_cpuRoll > 600) {
                 m_cpuAction = 1;
                 if ((WORD)Random(0, 3) == 0) {
                     m_cpuAction = 6;
@@ -1282,44 +1282,44 @@ void CMinagi::CpuInput()
             }
         }
         if (pattern == k5BClose) {
-            if ((*m_opponent)->y < 0.0 && m_cpuRoll < 0x12c && m_attackResult == 3) {
+            if ((*m_opponent)->y < 0.0 && m_cpuRoll < 300 && m_attackResult == 3) {
                 m_command = (WORD)Random(0, 2) + kCmd623A;
                 return;
             }
-            if ((*m_opponent)->y < 0.0 && m_cpuRoll > 0x12c && m_cpuRoll < 0x226) {
+            if ((*m_opponent)->y < 0.0 && m_cpuRoll > 300 && m_cpuRoll < 550) {
                 m_command = kCmd214B;
                 return;
             }
-            if ((*m_opponent)->y < 0.0 && m_cpuRoll > 0x226 && m_cpuRoll < 0x258 && m_gauge >= 0x3e8) {
+            if ((*m_opponent)->y < 0.0 && m_cpuRoll > 550 && m_cpuRoll < 600 && m_gauge >= 1000) {
                 m_command = (WORD)Random(0, 3) + kCmd236236A;
                 return;
             }
-            if ((*m_opponent)->y < 0.0 && m_cpuRoll > 0x258 && m_cpuRoll < 0x2ee) {
+            if ((*m_opponent)->y < 0.0 && m_cpuRoll > 600 && m_cpuRoll < 750) {
                 m_inputX = facing;
                 m_inputY = -1;
                 return;
             }
-            if (m_cpuRoll < 0x64) {
+            if (m_cpuRoll < 100) {
                 m_pressC = 1;
                 m_inputY = 1;
                 return;
             }
-            if (m_cpuRoll > 0x64 && m_cpuRoll < 0x15e && dx < 110.0) {
+            if (m_cpuRoll > 100 && m_cpuRoll < 350 && dx < 110.0) {
                 m_pressB = 1;
                 m_inputY = 0;
                 return;
             }
-            if ((*m_opponent)->y < 0.0 && m_cpuRoll > 0x1c2 && m_cpuRoll < 0x258 && dx < 80.0) {
+            if ((*m_opponent)->y < 0.0 && m_cpuRoll > 450 && m_cpuRoll < 600 && dx < 80.0) {
                 m_pressC = 1;
                 return;
             }
-            if (m_cpuRoll > 0x3b6) {
+            if (m_cpuRoll > 950) {
                 m_cpuAction = 4;
                 m_inputY = -1;
                 m_inputX = (WORD)Random(0, 2) - 1;
                 return;
             }
-            if (m_cpuRoll > 0x258) {
+            if (m_cpuRoll > 600) {
                 m_cpuAction = 1;
                 if ((WORD)Random(0, 2) == 0) {
                     m_cpuAction = 6;
@@ -1340,20 +1340,20 @@ void CMinagi::CpuInput()
             }
         }
         if (pattern == k5BFar) {
-            if ((*m_opponent)->y < 0.0 && m_cpuRoll > 0 && m_cpuRoll < 0x96) {
+            if ((*m_opponent)->y < 0.0 && m_cpuRoll > 0 && m_cpuRoll < 150) {
                 m_command = kCmd214B;
                 return;
             }
-            if ((*m_opponent)->y < 0.0 && m_cpuRoll > 0x96 && m_cpuRoll < 0xc8 && m_gauge >= 0x3e8) {
+            if ((*m_opponent)->y < 0.0 && m_cpuRoll > 150 && m_cpuRoll < 200 && m_gauge >= 1000) {
                 m_command = (WORD)Random(0, 3) + kCmd236236A;
                 return;
             }
-            if (m_cpuRoll > 0xc8 && m_cpuRoll < 0x190) {
+            if (m_cpuRoll > 200 && m_cpuRoll < 400) {
                 m_pressC = 1;
                 m_inputY = 1;
                 return;
             }
-            if (m_cpuRoll > 0x1f4) {
+            if (m_cpuRoll > 500) {
                 m_cpuAction = 1;
                 if ((WORD)Random(0, 2) == 0) {
                     m_cpuAction = 6;
@@ -1371,58 +1371,58 @@ void CMinagi::CpuInput()
             }
         }
         if (pattern == k5C) {
-            if ((*m_opponent)->y < 0.0 && m_cpuRoll < 0x12c && m_attackResult == 3) {
+            if ((*m_opponent)->y < 0.0 && m_cpuRoll < 300 && m_attackResult == 3) {
                 m_command = (WORD)Random(0, 3) + kCmd214A;
                 return;
             }
-            if (m_cpuRoll > 0 && m_cpuRoll < 0x12c) {
+            if (m_cpuRoll > 0 && m_cpuRoll < 300) {
                 m_command = kCmd236A;
                 return;
             }
-            if (m_cpuRoll > 0x15e && m_cpuRoll < 0x12c && m_rfGauge > 350.0) {
+            if (m_cpuRoll > 350 && m_cpuRoll < 300 && m_rfGauge > 350.0) {
                 m_command = kCmd22C;
                 return;
             }
-            if (m_cpuRoll > 0x15e && m_cpuRoll < 0x258) {
+            if (m_cpuRoll > 350 && m_cpuRoll < 600) {
                 m_command = kCmd214A;
                 return;
             }
-            if (m_cpuRoll > 0x258 && m_cpuRoll < 0x28a && m_rfGauge > 500.0) {
+            if (m_cpuRoll > 600 && m_cpuRoll < 650 && m_rfGauge > 500.0) {
                 m_command = kCmd214B;
                 return;
             }
-            if (m_cpuRoll > 0x384) {
+            if (m_cpuRoll > 900) {
                 m_cpuAction = 1;
                 return;
             }
         }
         if (pattern == k2A) {
-            if ((*m_opponent)->y < 0.0 && m_cpuRoll < 0x12c) {
+            if ((*m_opponent)->y < 0.0 && m_cpuRoll < 300) {
                 m_pressB = 1;
                 m_inputY = 0;
                 return;
             }
-            if ((*m_opponent)->y < 0.0 && dx < 90.0 && m_cpuRoll < 0x258 && m_cpuRoll > 0x12c) {
+            if ((*m_opponent)->y < 0.0 && dx < 90.0 && m_cpuRoll < 600 && m_cpuRoll > 300) {
                 m_cpuAction = 6;
                 return;
             }
-            if (dx < 70.0 && m_cpuRoll > 0 && m_cpuRoll < 0xc8) {
+            if (dx < 70.0 && m_cpuRoll > 0 && m_cpuRoll < 200) {
                 m_pressB = 1;
                 m_inputY = 0;
                 return;
             }
-            if (dx < 80.0 && m_cpuRoll > 0xc8 && m_cpuRoll < 0x258) {
+            if (dx < 80.0 && m_cpuRoll > 200 && m_cpuRoll < 600) {
                 m_pressB = 1;
                 m_inputY = 1;
                 return;
             }
-            if (m_cpuRoll > 0x3ca) {
+            if (m_cpuRoll > 970) {
                 m_cpuAction = 4;
                 m_inputY = -1;
                 m_inputX = (WORD)Random(0, 2) - 1;
                 return;
             }
-            if (m_cpuRoll > 0x320) {
+            if (m_cpuRoll > 800) {
                 m_cpuAction = 1;
                 if ((WORD)Random(0, 2) == 0) {
                     m_cpuAction = 6;
@@ -1443,39 +1443,39 @@ void CMinagi::CpuInput()
             }
         }
         if (pattern == k2B) {
-            if ((*m_opponent)->y < 0.0 && m_cpuRoll > 0x12c && m_cpuRoll < 0x226) {
+            if ((*m_opponent)->y < 0.0 && m_cpuRoll > 300 && m_cpuRoll < 550) {
                 m_command = kCmd214B;
                 return;
             }
-            if ((*m_opponent)->y < 0.0 && m_cpuRoll > 0x226 && m_cpuRoll < 0x258 && m_gauge >= 0x3e8) {
+            if ((*m_opponent)->y < 0.0 && m_cpuRoll > 550 && m_cpuRoll < 600 && m_gauge >= 1000) {
                 m_command = (WORD)Random(0, 3) + kCmd236236A;
                 return;
             }
-            if (m_cpuRoll < 0x64) {
+            if (m_cpuRoll < 100) {
                 m_pressC = 1;
                 m_inputY = 1;
                 return;
             }
-            if (m_cpuRoll > 0x64 && m_cpuRoll < 0x15e && dx < 110.0) {
+            if (m_cpuRoll > 100 && m_cpuRoll < 350 && dx < 110.0) {
                 m_pressB = 1;
                 m_inputY = 0;
                 return;
             }
-            if ((*m_opponent)->y < 0.0 && m_cpuRoll > 0x15e && m_cpuRoll < 0x226 && dx < 90.0) {
+            if ((*m_opponent)->y < 0.0 && m_cpuRoll > 350 && m_cpuRoll < 550 && dx < 90.0) {
                 m_pressC = 1;
                 return;
             }
-            if (m_cpuRoll > 0x226 && m_cpuRoll < 0x276 && m_attackResult == 2) {
+            if (m_cpuRoll > 550 && m_cpuRoll < 630 && m_attackResult == 2) {
                 m_command = kCmd214A;
                 return;
             }
-            if (m_cpuRoll > 0x3b6) {
+            if (m_cpuRoll > 950) {
                 m_cpuAction = 4;
                 m_inputY = -1;
                 m_inputX = (WORD)Random(0, 2) - 1;
                 return;
             }
-            if (m_cpuRoll > 0x1f4) {
+            if (m_cpuRoll > 500) {
                 m_cpuAction = 1;
                 if ((WORD)Random(0, 2) == 0) {
                     m_cpuAction = 6;
@@ -1496,42 +1496,42 @@ void CMinagi::CpuInput()
             }
         }
         if (pattern == k2C) {
-            if (m_cpuRoll > 0 && m_cpuRoll < 0x258) {
+            if (m_cpuRoll > 0 && m_cpuRoll < 600) {
                 m_command = kCmd236A;
                 return;
             }
-            if (m_cpuRoll > 0x28a && m_cpuRoll < 0x258 && m_rfGauge > 350.0) {
+            if (m_cpuRoll > 650 && m_cpuRoll < 600 && m_rfGauge > 350.0) {
                 m_command = kCmd22C;
                 return;
             }
-            if (m_cpuRoll > 0x28a && m_cpuRoll < 0x320) {
+            if (m_cpuRoll > 650 && m_cpuRoll < 800) {
                 m_command = kCmd214A;
                 return;
             }
-            if (m_cpuRoll > 0x320 && m_cpuRoll < 0x352 && m_rfGauge > 500.0) {
+            if (m_cpuRoll > 800 && m_cpuRoll < 850 && m_rfGauge > 500.0) {
                 m_command = kCmd214B;
                 return;
             }
-            if (m_cpuRoll > 0x384) {
+            if (m_cpuRoll > 900) {
                 m_cpuAction = 1;
                 return;
             }
         }
         if (pattern == kJumpA) {
-            if ((*m_opponent)->y < 0.0 && m_cpuRoll < 0x12c) {
+            if ((*m_opponent)->y < 0.0 && m_cpuRoll < 300) {
                 m_pressB = 1;
                 return;
             }
-            if (dx < 60.0 && m_cpuRoll < 0x190) {
+            if (dx < 60.0 && m_cpuRoll < 400) {
                 m_pressA = 1;
                 return;
             }
-            if (dx < 125.0 && m_cpuRoll > 0x18f && m_cpuRoll < 0x2bc) {
+            if (dx < 125.0 && m_cpuRoll > 399 && m_cpuRoll < 700) {
                 m_pressC = 1;
                 m_inputY = 0;
                 return;
             }
-            if (m_cpuRoll > 0x2bb) {
+            if (m_cpuRoll > 699) {
                 m_cpuAction = 1;
                 if ((WORD)Random(0, 4) == 0) {
                     m_cpuAction = 3;
@@ -1540,55 +1540,55 @@ void CMinagi::CpuInput()
             }
         }
         if (pattern == kJumpB) {
-            if (m_cpuRoll > 0x14 && m_cpuRoll < 0x3c && m_attackResult == 3 && (*m_opponent)->y < 0.0) {
+            if (m_cpuRoll > 20 && m_cpuRoll < 60 && m_attackResult == 3 && (*m_opponent)->y < 0.0) {
                 m_command = kCmd236A;
                 return;
             }
-            if (m_cpuRoll > 0x50 && m_cpuRoll < 0x12c) {
+            if (m_cpuRoll > 80 && m_cpuRoll < 300) {
                 m_pressC = 1;
                 return;
             }
-            if (m_cpuRoll > 0x3b6) {
+            if (m_cpuRoll > 950) {
                 m_inputX = (WORD)Random(0, 2) - 1;
                 return;
             }
-            if (m_cpuRoll > 0x289) {
+            if (m_cpuRoll > 649) {
                 m_cpuAction = 3;
                 return;
             }
         }
         if (pattern == kJumpC) {
-            if (m_cpuRoll < 0xc8 && m_attackResult == 3) {
+            if (m_cpuRoll < 200 && m_attackResult == 3) {
                 m_command = (WORD)Random(0, 2) + kCmd214B;
                 return;
             }
-            if (m_cpuRoll > 0x3b6) {
+            if (m_cpuRoll > 950) {
                 m_inputX = (WORD)Random(0, 2) - 1;
                 return;
             }
-            if (m_cpuRoll > 0x289) {
+            if (m_cpuRoll > 649) {
                 m_cpuAction = 3;
                 return;
             }
         }
         if (pattern == kDashB) {
-            if (m_cpuRoll > 0 && m_cpuRoll < 0x190) {
+            if (m_cpuRoll > 0 && m_cpuRoll < 400) {
                 m_command = kCmd236A;
                 return;
             }
-            if (m_cpuRoll > 0x1c2 && m_cpuRoll < 0x190 && m_rfGauge > 350.0) {
+            if (m_cpuRoll > 450 && m_cpuRoll < 400 && m_rfGauge > 350.0) {
                 m_command = kCmd22C;
                 return;
             }
-            if (m_cpuRoll > 0x1c2 && m_cpuRoll < 0x258) {
+            if (m_cpuRoll > 450 && m_cpuRoll < 600) {
                 m_command = kCmd214A;
                 return;
             }
-            if (m_cpuRoll > 0x258 && m_cpuRoll < 0x28a && m_rfGauge > 500.0) {
+            if (m_cpuRoll > 600 && m_cpuRoll < 650 && m_rfGauge > 500.0) {
                 m_command = kCmd214B;
                 return;
             }
-            if (m_cpuRoll > 0x2bb) {
+            if (m_cpuRoll > 699) {
                 m_cpuAction = 1;
                 if ((WORD)Random(0, 2) == 0) {
                     m_cpuAction = 6;
@@ -1608,14 +1608,14 @@ void CMinagi::CpuInput()
                 return;
             }
         }
-        if (pattern == k5D && m_cpuRoll > 0x258 && y == 0.0) {
+        if (pattern == k5D && m_cpuRoll > 600 && y == 0.0) {
             m_cpuAction = 1;
             if (dx < 50.0) {
                 m_cpuAction = 0x14;
             }
             return;
         }
-        if (pattern == kDash2A && m_cpuRoll > 0x1f4) {
+        if (pattern == kDash2A && m_cpuRoll > 500) {
             m_cpuAction = 1;
             if (dx < 50.0) {
                 m_cpuAction = 0x14;
@@ -1623,27 +1623,27 @@ void CMinagi::CpuInput()
             return;
         }
         if (pattern == kDash2B) {
-            if (m_cpuRoll > 0 && m_cpuRoll < 0x190 && m_attackResult == 3) {
+            if (m_cpuRoll > 0 && m_cpuRoll < 400 && m_attackResult == 3) {
                 m_command = kCmd623A;
                 return;
             }
-            if (m_cpuRoll > 0 && m_cpuRoll < 0x190) {
+            if (m_cpuRoll > 0 && m_cpuRoll < 400) {
                 m_command = kCmd236A;
                 return;
             }
-            if (m_cpuRoll > 0x1c2 && m_cpuRoll < 0x190 && m_rfGauge > 350.0) {
+            if (m_cpuRoll > 450 && m_cpuRoll < 400 && m_rfGauge > 350.0) {
                 m_command = kCmd22C;
                 return;
             }
-            if (m_cpuRoll > 0x1c2 && m_cpuRoll < 0x258) {
+            if (m_cpuRoll > 450 && m_cpuRoll < 600) {
                 m_command = kCmd214A;
                 return;
             }
-            if (m_cpuRoll > 0x258 && m_cpuRoll < 0x28a && m_rfGauge > 500.0) {
+            if (m_cpuRoll > 600 && m_cpuRoll < 650 && m_rfGauge > 500.0) {
                 m_command = kCmd214B;
                 return;
             }
-            if (m_cpuRoll > 0x2bc) {
+            if (m_cpuRoll > 700) {
                 m_cpuAction = 1;
                 if ((WORD)Random(0, 2) == 0) {
                     m_cpuAction = 6;
@@ -1663,13 +1663,13 @@ void CMinagi::CpuInput()
                 return;
             }
         }
-        if (pattern == kDash2C && m_cpuRoll > 0x1c2 && m_cpuRoll < 0x258) {
+        if (pattern == kDash2C && m_cpuRoll > 450 && m_cpuRoll < 600) {
             m_command = kCmd214A;
             return;
         }
     }
-    if ((WORD)Random(0, 0x64) < 25.0f * m_cpuSkill) {
-        m_cpuRoll = (WORD)Random(0, 0x3e8);
+    if ((WORD)Random(0, 100) < 25.0f * m_cpuSkill) {
+        m_cpuRoll = (WORD)Random(0, 1000);
         if (y == 0.0) {
             if ((*m_opponent)->y == 0.0 && (*m_opponent)->pattern != kLyingDown) {
                 if (dx < 40.0 && (*m_opponent)->y == 0.0 && m_cpuRoll < 5) {
@@ -1679,99 +1679,99 @@ void CMinagi::CpuInput()
                     return;
                 }
                 if (dx < 50.0) {
-                    if (m_cpuRoll < ((*m_opponent)->pattern > kLastFreeAction && (*m_opponent)->pattern < kGuardAir) * 0xf + 0xf) {
+                    if (m_cpuRoll < ((*m_opponent)->pattern > kLastFreeAction && (*m_opponent)->pattern < kGuardAir) * 15 + 15) {
                         m_pressA = 1;
                         m_inputY = 1;
                         return;
                     }
                 }
                 if (dx < 65.0) {
-                    if (m_cpuRoll < ((*m_opponent)->pattern > kLastFreeAction && (*m_opponent)->pattern < kGuardAir) * 0xf + 0x14) {
+                    if (m_cpuRoll < ((*m_opponent)->pattern > kLastFreeAction && (*m_opponent)->pattern < kGuardAir) * 15 + 20) {
                         m_pressA = 1;
                         m_inputY = 0;
                         return;
                     }
                 }
                 if (dx > 60.0 && dx < 90.0) {
-                    if (m_cpuRoll < ((*m_opponent)->pattern > kLastFreeAction && (*m_opponent)->pattern < kGuardAir) * 0xf + 0x23 && m_cpuRoll > 0x1e) {
+                    if (m_cpuRoll < ((*m_opponent)->pattern > kLastFreeAction && (*m_opponent)->pattern < kGuardAir) * 15 + 35 && m_cpuRoll > 30) {
                         m_pressB = 1;
                         m_inputY = 1;
                         return;
                     }
                 }
-                if (0x46 - ((*m_opponent)->pattern > kLastFreeAction && (*m_opponent)->pattern < kGuardAir) * 0x46 < dx && dx < 100.0) {
-                    if (m_cpuRoll < ((*m_opponent)->pattern > kLastFreeAction && (*m_opponent)->pattern < kGuardAir) * 2 + 0x54 && m_cpuRoll > 0x50) {
+                if (70 - ((*m_opponent)->pattern > kLastFreeAction && (*m_opponent)->pattern < kGuardAir) * 70 < dx && dx < 100.0) {
+                    if (m_cpuRoll < ((*m_opponent)->pattern > kLastFreeAction && (*m_opponent)->pattern < kGuardAir) * 2 + 84 && m_cpuRoll > 80) {
                         m_cpuAction = 0xc;
                         return;
                     }
                 }
-                if (0x46 - ((*m_opponent)->pattern > kLastFreeAction && (*m_opponent)->pattern < kGuardAir) * 0x46 < dx && dx < 120.0) {
-                    if (m_cpuRoll < ((*m_opponent)->pattern > kLastFreeAction && (*m_opponent)->pattern < kGuardAir) * 0xf + 0x80 && m_cpuRoll > 0x78) {
+                if (70 - ((*m_opponent)->pattern > kLastFreeAction && (*m_opponent)->pattern < kGuardAir) * 70 < dx && dx < 120.0) {
+                    if (m_cpuRoll < ((*m_opponent)->pattern > kLastFreeAction && (*m_opponent)->pattern < kGuardAir) * 15 + 128 && m_cpuRoll > 120) {
                         m_cpuAction = 8;
                         return;
                     }
                 }
-                if (dx < 150.0 && dx > 120.0 && m_cpuRoll < 0x7e && m_cpuRoll > 0x78) {
+                if (dx < 150.0 && dx > 120.0 && m_cpuRoll < 126 && m_cpuRoll > 120) {
                     m_pressC = 1;
                     m_inputY = 1;
                     return;
                 }
-                if (dx < 120.0 && dx > 70.0 && m_cpuRoll < 0x91 && m_cpuRoll > 0x82) {
+                if (dx < 120.0 && dx > 70.0 && m_cpuRoll < 145 && m_cpuRoll > 130) {
                     m_pressC = 1;
                     m_inputY = 0;
                     return;
                 }
-                if (0x50 - ((*m_opponent)->pattern > kLastFreeAction && (*m_opponent)->pattern < kGuardAir) * 0x50 < dx && dx < 130.0) {
-                    if (m_cpuRoll < ((*m_opponent)->pattern > kLastFreeAction && (*m_opponent)->pattern < kGuardAir) * 0xf + 0x9b && m_cpuRoll > 0x91) {
+                if (80 - ((*m_opponent)->pattern > kLastFreeAction && (*m_opponent)->pattern < kGuardAir) * 80 < dx && dx < 130.0) {
+                    if (m_cpuRoll < ((*m_opponent)->pattern > kLastFreeAction && (*m_opponent)->pattern < kGuardAir) * 15 + 155 && m_cpuRoll > 145) {
                         m_cpuAction = 0xe;
                         return;
                     }
                 }
-                if (0x5a - ((*m_opponent)->pattern > kLastFreeAction && (*m_opponent)->pattern < kGuardAir) * 0x5a < dx && dx < 140.0) {
-                    if (m_cpuRoll < ((*m_opponent)->pattern > kLastFreeAction && (*m_opponent)->pattern < kGuardAir) * 0xf + 0xb4 && m_cpuRoll > 0xa5) {
+                if (90 - ((*m_opponent)->pattern > kLastFreeAction && (*m_opponent)->pattern < kGuardAir) * 90 < dx && dx < 140.0) {
+                    if (m_cpuRoll < ((*m_opponent)->pattern > kLastFreeAction && (*m_opponent)->pattern < kGuardAir) * 15 + 180 && m_cpuRoll > 165) {
                         m_cpuAction = 0xa;
                         return;
                     }
                 }
-                if (dx > 110.0 && dx < 160.0 && m_cpuRoll < 0xcd && m_cpuRoll > 0xc8) {
+                if (dx > 110.0 && dx < 160.0 && m_cpuRoll < 205 && m_cpuRoll > 200) {
                     m_cpuAction = 0xa;
                     return;
                 }
-                if (dx < 80.0 && m_cpuRoll < 0xeb && m_cpuRoll > 0xdc && m_rfGauge > 500.0 && (*m_opponent)->pattern > kLastSharedAction) {
+                if (dx < 80.0 && m_cpuRoll < 235 && m_cpuRoll > 220 && m_rfGauge > 500.0 && (*m_opponent)->pattern > kLastSharedAction) {
                     m_command = kCmd214C;
                     return;
                 }
-                if (dx < 80.0 && m_cpuRoll < 0xf0 && m_cpuRoll > 0xeb && m_gauge >= 0x7d0 && (*m_opponent)->pattern > kLastSharedAction) {
+                if (dx < 80.0 && m_cpuRoll < 240 && m_cpuRoll > 235 && m_gauge >= 2000 && (*m_opponent)->pattern > kLastSharedAction) {
                     m_command = (WORD)Random(0, 3) + kCmd236236B;
                     return;
                 }
-                if (dx < 100.0 && m_cpuRoll < 0xf2 && m_cpuRoll > 0xf0 && m_gauge == 0xbb8 && (*m_opponent)->pattern > kLastSharedAction) {
+                if (dx < 100.0 && m_cpuRoll < 242 && m_cpuRoll > 240 && m_gauge == 3000 && (*m_opponent)->pattern > kLastSharedAction) {
                     m_command = kCmd222D;
                     return;
                 }
-                if (dx > 100.0 && dx < 130.0 && m_cpuRoll < 0x136 && m_cpuRoll > 0x12c) {
+                if (dx > 100.0 && dx < 130.0 && m_cpuRoll < 310 && m_cpuRoll > 300) {
                     m_command = kCmd236A;
                     return;
                 }
-                if (dx > 130.0 && dx < 180.0 && m_cpuRoll < 0x13b && m_cpuRoll > 0x136) {
+                if (dx > 130.0 && dx < 180.0 && m_cpuRoll < 315 && m_cpuRoll > 310) {
                     m_command = kCmd236B;
                     return;
                 }
-                if (dx > 90.0 && dx < 140.0 && m_cpuRoll < 0x14a && m_cpuRoll > 0x140) {
+                if (dx > 90.0 && dx < 140.0 && m_cpuRoll < 330 && m_cpuRoll > 320) {
                     m_command = kCmd214A;
                     return;
                 }
-                if (dx > 90.0 && dx < 140.0 && m_cpuRoll < 0x154 && m_cpuRoll > 0x14a && m_rfGauge > 500.0) {
+                if (dx > 90.0 && dx < 140.0 && m_cpuRoll < 340 && m_cpuRoll > 330 && m_rfGauge > 500.0) {
                     m_command = kCmd214B;
                     return;
                 }
-                if (m_cpuRoll < 0x2ee && m_cpuRoll > 0x2bc && (*m_opponent)->pattern > kLastFreeAction && (*m_opponent)->pattern < kGuardAir && dx > 100.0) {
+                if (m_cpuRoll < 750 && m_cpuRoll > 700 && (*m_opponent)->pattern > kLastFreeAction && (*m_opponent)->pattern < kGuardAir && dx > 100.0) {
                     m_cpuAction = 5;
                     return;
                 }
             }
             if ((*m_opponent)->y < 0.0) {
-                if ((*m_opponent)->vy < 0.0 && dx < 80.0 && dy < 120.0 && m_cpuRoll < 0xa) {
+                if ((*m_opponent)->vy < 0.0 && dx < 80.0 && dy < 120.0 && m_cpuRoll < 10) {
                     m_inputY = -1;
                     m_inputX = -facing;
                     return;
@@ -1781,26 +1781,26 @@ void CMinagi::CpuInput()
                         m_command = kCmd623C;
                         return;
                     }
-                    if (dx < 80.0 && dy < 140.0 && dy > 100.0 && m_cpuRoll < 0x2d && m_cpuRoll > 0xa) {
+                    if (dx < 80.0 && dy < 140.0 && dy > 100.0 && m_cpuRoll < 45 && m_cpuRoll > 10) {
                         m_pressB = 1;
                         m_inputY = 0;
                         return;
                     }
-                    if (dx < 90.0 && dy < 170.0 && dy > 150.0 && m_cpuRoll < 0x50 && m_cpuRoll > 0x2d) {
+                    if (dx < 90.0 && dy < 170.0 && dy > 150.0 && m_cpuRoll < 80 && m_cpuRoll > 45) {
                         m_pressC = 1;
                         m_inputY = 0;
                         return;
                     }
-                    if (dx > 120.0 && dx < 140.0 && dy < 150.0 && dy > 120.0 && m_cpuRoll < 0x6e && m_cpuRoll > 0x50) {
+                    if (dx > 120.0 && dx < 140.0 && dy < 150.0 && dy > 120.0 && m_cpuRoll < 110 && m_cpuRoll > 80) {
                         m_pressB = 1;
                         m_inputY = 0;
                         return;
                     }
-                    if (dx < 70.0 && m_cpuRoll < 0xd2 && m_cpuRoll > 0xc8 && (*m_opponent)->y < -50.0 && dy < 90.0 && m_gauge >= 0x7d0) {
+                    if (dx < 70.0 && m_cpuRoll < 210 && m_cpuRoll > 200 && (*m_opponent)->y < -50.0 && dy < 90.0 && m_gauge >= 2000) {
                         m_command = (WORD)Random(0, 2) + kCmd236236B;
                         return;
                     }
-                    if (dx < 100.0 && m_cpuRoll < 0x12e && m_cpuRoll > 0x12c && (*m_opponent)->y < -50.0 && dy < 100.0 && m_gauge == 0xbb8) {
+                    if (dx < 100.0 && m_cpuRoll < 302 && m_cpuRoll > 300 && (*m_opponent)->y < -50.0 && dy < 100.0 && m_gauge == 3000) {
                         m_command = kCmd222D;
                         return;
                     }
@@ -1809,58 +1809,58 @@ void CMinagi::CpuInput()
         }
         if (y < 0.0 && m_cpuAction != 3) {
             if ((*m_opponent)->y == 0.0) {
-                if (dx < 80.0 && dy < 100.0 && m_cpuRoll < 0x64) {
+                if (dx < 80.0 && dy < 100.0 && m_cpuRoll < 100) {
                     m_pressA = 1;
                     return;
                 }
-                if (dx < 80.0 && dy > 90.0 && dy < 120.0 && (*m_opponent)->y < y && m_cpuRoll > 0x64 && m_cpuRoll < 0xb4) {
+                if (dx < 80.0 && dy > 90.0 && dy < 120.0 && (*m_opponent)->y < y && m_cpuRoll > 100 && m_cpuRoll < 180) {
                     m_pressB = 1;
                     return;
                 }
-                if (dx > 80.0 && dx < 110.0 && dy > 0.0 && dy < 70.0 && m_cpuRoll > 0xb4 && m_cpuRoll < 0xf0) {
+                if (dx > 80.0 && dx < 110.0 && dy > 0.0 && dy < 70.0 && m_cpuRoll > 180 && m_cpuRoll < 240) {
                     m_pressC = 1;
                     return;
                 }
-                if (dx < 80.0 && m_cpuRoll > 0xf0 && m_cpuRoll < 0xf2 && dy > 80.0) {
+                if (dx < 80.0 && m_cpuRoll > 240 && m_cpuRoll < 242 && dy > 80.0) {
                     m_command = (WORD)Random(0, 3) + kCmd214214A;
                     return;
                 }
             }
             if ((*m_opponent)->y < 0.0) {
-                if (dx < 80.0 && dy < 100.0 && m_cpuRoll < 0x14) {
+                if (dx < 80.0 && dy < 100.0 && m_cpuRoll < 20) {
                     m_pressA = 1;
                     return;
                 }
-                if (dx > 20.0 && dx < 90.0 && dy > 90.0 && dy < 120.0 && (*m_opponent)->y < y && m_cpuRoll > 0x14 && m_cpuRoll < 0x28) {
+                if (dx > 20.0 && dx < 90.0 && dy > 90.0 && dy < 120.0 && (*m_opponent)->y < y && m_cpuRoll > 20 && m_cpuRoll < 40) {
                     m_pressB = 1;
                     return;
                 }
-                if (dx > 80.0 && dx < 110.0 && dy > 0.0 && dy < 50.0 && m_cpuRoll > 0x28 && m_cpuRoll < 0x32) {
+                if (dx > 80.0 && dx < 110.0 && dy > 0.0 && dy < 50.0 && m_cpuRoll > 40 && m_cpuRoll < 50) {
                     m_pressC = 1;
                     return;
                 }
             }
         }
     }
-    if (pattern < kFirstHitReaction && ((*m_opponent)->pattern > kLastHitReaction && (*m_opponent)->pattern < kGuardAir || (*m_opponent)->pattern > kLastFreeAction && (*m_opponent)->pattern < kHitAir) && y == 0.0 && (WORD)Random(0, 0x64) < 4.0f * m_cpuSkill && dx > 120.0) {
+    if (pattern < kFirstHitReaction && ((*m_opponent)->pattern > kLastHitReaction && (*m_opponent)->pattern < kGuardAir || (*m_opponent)->pattern > kLastFreeAction && (*m_opponent)->pattern < kHitAir) && y == 0.0 && (WORD)Random(0, 100) < 4.0f * m_cpuSkill && dx > 120.0) {
         m_command = facing == 1;
         return;
     }
-    if (pattern < kFirstHitReaction && (*m_opponent)->pattern < kFirstHitReaction && dx > 800.0 && dx < 120.0 && (WORD)Random(0, 0x64) < 2.0f * m_cpuSkill && x > 150.0 && x < 490.0) {
+    if (pattern < kFirstHitReaction && (*m_opponent)->pattern < kFirstHitReaction && dx > 800.0 && dx < 120.0 && (WORD)Random(0, 100) < 2.0f * m_cpuSkill && x > 150.0 && x < 490.0) {
         m_command = -((facing == 1) - 1);
         return;
     }
-    if ((WORD)Random(0, 0x3e8) < 2) {
+    if ((WORD)Random(0, 1000) < 2) {
         m_cpuAction = 4;
         return;
     }
-    if ((WORD)Random(0, 0x64) < 2) {
-        if ((WORD)Random(0, 0x64) < 8.0f * m_cpuSkill) {
+    if ((WORD)Random(0, 100) < 2) {
+        if ((WORD)Random(0, 100) < 8.0f * m_cpuSkill) {
             m_cpuAction = 3;
         } else {
             m_cpuAction = 0;
         }
-        if (dx > 180.0 && y == 0.0 && (WORD)Random(0, 0x64) < 2) {
+        if (dx > 180.0 && y == 0.0 && (WORD)Random(0, 100) < 2) {
             m_inputX = 0;
             m_inputY = -1;
             return;
@@ -1872,39 +1872,39 @@ void CMinagi::CpuInput()
         }
     }
     if (m_cpuWalkRight > 0) {
-        if ((char)AtScreenEdge() != 0 && m_cpuWalkRight > 0xf) {
-            m_cpuWalkRight = 0xf;
+        if ((char)AtScreenEdge() != 0 && m_cpuWalkRight > 15) {
+            m_cpuWalkRight = 15;
         }
         m_inputX = 1;
         return;
     }
     if (m_cpuWalkLeft > 0) {
-        if ((char)AtScreenEdge() != 0 && m_cpuWalkLeft > 0xf) {
-            m_cpuWalkLeft = 0xf;
+        if ((char)AtScreenEdge() != 0 && m_cpuWalkLeft > 15) {
+            m_cpuWalkLeft = 15;
         }
         m_inputX = -1;
         return;
     }
-    if ((WORD)Random(0, 0x64) < 0x32 && dx < 120.0) {
+    if ((WORD)Random(0, 100) < 50 && dx < 120.0) {
         if (facing == 1) {
-            m_cpuWalkLeft = (WORD)Random(0, 0xc8) + 0x3c;
+            m_cpuWalkLeft = (WORD)Random(0, 200) + 60;
         } else {
-            m_cpuWalkRight = (WORD)Random(0, 0xc8) + 0x3c;
+            m_cpuWalkRight = (WORD)Random(0, 200) + 60;
         }
     }
-    if ((WORD)Random(0, 0x64) < 0x32) {
+    if ((WORD)Random(0, 100) < 50) {
         if (facing == 1) {
-            m_cpuWalkRight = (WORD)Random(0, 0xc8) + 0x3c;
+            m_cpuWalkRight = (WORD)Random(0, 200) + 60;
         } else {
-            m_cpuWalkLeft = (WORD)Random(0, 0xc8) + 0x3c;
+            m_cpuWalkLeft = (WORD)Random(0, 200) + 60;
         }
         return;
     }
     if (facing == -1) {
-        m_cpuWalkRight = (WORD)Random(0, 0xc8) + 0x3c;
+        m_cpuWalkRight = (WORD)Random(0, 200) + 60;
         return;
     }
-    m_cpuWalkLeft = (WORD)Random(0, 0xc8) + 0x3c;
+    m_cpuWalkLeft = (WORD)Random(0, 200) + 60;
 }
 
 void CMinagi::UpdateObjects()
@@ -2117,7 +2117,7 @@ void CMinagi::UpdateObjects()
                     m_objects[slot].vy = 0.0;
                     m_objects[slot].ay = 0.0;
                     m_objects[slot].pattern = kObjMichiruHeld;
-                    m_objects[slot].frame = 0xb;
+                    m_objects[slot].frame = 11;
                     m_objects[slot].timer = 0;
                     break;
                 }
@@ -2156,11 +2156,11 @@ void CMinagi::UpdateObjects()
                 m_objects[slot].vx = 0.0;
                 m_objects[slot].vy = 0.0;
                 m_michiruState = 1;
-                if (m_objects[slot].frame >= 8 && m_objects[slot].frame < 0x11) {
+                if (m_objects[slot].frame >= 8 && m_objects[slot].frame < 17) {
                     m_michiruState = 3;
                     if (pattern == k5D && frame == 0) {
                         m_objects[slot].timer = 0;
-                        m_objects[slot].frame = 0x11;
+                        m_objects[slot].frame = 17;
                         break;
                     }
                     if (pattern == k236A && frame == 2 || pattern == kAir236A && frame == 3) {
@@ -2331,7 +2331,7 @@ void CMinagi::UpdateObjects()
                         m_objects[slot].vy = 0.0;
                         m_objects[slot].ay = 0.0;
                         m_objects[slot].pattern = kObjMichiruHeld;
-                        m_objects[slot].frame = 0xb;
+                        m_objects[slot].frame = 11;
                         m_objects[slot].timer = 0;
                         break;
                     }
@@ -2348,7 +2348,7 @@ void CMinagi::UpdateObjects()
                     m_objects[slot].timer = 0;
                     m_objects[slot].frame++;
                     m_objects[slot].attackResult = 0;
-                    if (m_objects[slot].frame == 0x11) {
+                    if (m_objects[slot].frame == 17) {
                         m_objects[slot].frame = 8;
                     }
                     if (m_objects[slot].frame >= frameCount) {
@@ -2361,11 +2361,11 @@ void CMinagi::UpdateObjects()
             case kObjMichiruWalk:
                 m_michiruState = 2;
                 m_objects[slot].hitsLeft = 0;
-                if (m_objects[slot].frame < 0xb) {
+                if (m_objects[slot].frame < 11) {
                     m_objects[slot].vx = 1.5;
                     m_objects[slot].vy = 0.0;
                 }
-                if (m_objects[slot].frame > 0xa) {
+                if (m_objects[slot].frame > 10) {
                     if (m_objects[slot].vx > 0.0) {
                         m_objects[slot].vx -= 0.035;
                     }
@@ -2687,7 +2687,7 @@ void CMinagi::UpdateObjects()
                     m_objects[slot].vy = 0.0;
                     m_objects[slot].ay = 0.0;
                     m_objects[slot].pattern = kObjMichiruHeld;
-                    m_objects[slot].frame = 0xb;
+                    m_objects[slot].frame = 11;
                     m_objects[slot].timer = 0;
                     break;
                 }
@@ -2713,7 +2713,7 @@ void CMinagi::UpdateObjects()
                     m_objects[slot].timer = 0;
                     m_objects[slot].frame++;
                     m_objects[slot].attackResult = 0;
-                    if (m_objects[slot].frame == 0xb && m_objectVar1[slot] < 0) {
+                    if (m_objects[slot].frame == 11 && m_objectVar1[slot] < 0) {
                         m_objects[slot].frame = 0;
                         m_objectVar1[slot]++;
                     }
@@ -2738,7 +2738,7 @@ void CMinagi::UpdateObjects()
                     m_objects[slot].vy = 0.0;
                     m_objects[slot].ay = 0.0;
                     m_objects[slot].pattern = kObjMichiruHeld;
-                    m_objects[slot].frame = 0xb;
+                    m_objects[slot].frame = 11;
                     m_objects[slot].timer = 0;
                     break;
                 }
@@ -2806,14 +2806,14 @@ void CMinagi::UpdateObjects()
                     m_objects[slot].ay = 0.025;
                     m_objects[slot].hitsLeft = 1;
                 }
-                if (m_objects[slot].y < 0.0 && m_objects[slot].frame < 0xc) {
+                if (m_objects[slot].y < 0.0 && m_objects[slot].frame < 12) {
                     m_objects[slot].vy = m_objects[slot].vy + m_objects[slot].ay;
                     if (m_objects[slot].y + m_objects[slot].vy > 0.0) {
                         m_objects[slot].y = 0.0;
                         m_objects[slot].vy = 0.0;
                         m_objects[slot].vx = 0.0;
                         m_objects[slot].timer = 0;
-                        m_objects[slot].frame = 0xc;
+                        m_objects[slot].frame = 12;
                         break;
                     }
                 }
@@ -2836,7 +2836,7 @@ void CMinagi::UpdateObjects()
                     m_objects[slot].timer = 0;
                     m_objects[slot].frame++;
                     m_objects[slot].attackResult = 0;
-                    if (m_objects[slot].frame == 0xc) {
+                    if (m_objects[slot].frame == 12) {
                         m_objects[slot].frame = m_objects[slot].frame - 2;
                     }
                     if (m_objects[slot].frame >= frameCount) {
@@ -2864,14 +2864,14 @@ void CMinagi::UpdateObjects()
                     m_objects[slot].ay = 0.025;
                     m_objects[slot].hitsLeft = 1;
                 }
-                if (m_objects[slot].y < 0.0 && m_objects[slot].frame < 0xc) {
+                if (m_objects[slot].y < 0.0 && m_objects[slot].frame < 12) {
                     m_objects[slot].vy = m_objects[slot].vy + m_objects[slot].ay;
                     if (m_objects[slot].y + m_objects[slot].vy > 0.0) {
                         m_objects[slot].y = 0.0;
                         m_objects[slot].vy = 0.0;
                         m_objects[slot].vx = 0.0;
                         m_objects[slot].timer = 0;
-                        m_objects[slot].frame = 0xc;
+                        m_objects[slot].frame = 12;
                         break;
                     }
                 }
@@ -2894,7 +2894,7 @@ void CMinagi::UpdateObjects()
                     m_objects[slot].timer = 0;
                     m_objects[slot].frame++;
                     m_objects[slot].attackResult = 0;
-                    if (m_objects[slot].frame == 0xc) {
+                    if (m_objects[slot].frame == 12) {
                         m_objects[slot].frame = m_objects[slot].frame - 2;
                     }
                     if (m_objects[slot].frame >= frameCount) {
@@ -2922,14 +2922,14 @@ void CMinagi::UpdateObjects()
                     m_objects[slot].ay = 0.025;
                     m_objects[slot].hitsLeft = 5;
                 }
-                if (m_objects[slot].y < 0.0 && m_objects[slot].frame < 0xc) {
+                if (m_objects[slot].y < 0.0 && m_objects[slot].frame < 12) {
                     m_objects[slot].vy = m_objects[slot].vy + m_objects[slot].ay;
                     if (m_objects[slot].y + m_objects[slot].vy > 0.0) {
                         m_objects[slot].y = 0.0;
                         m_objects[slot].vy = 0.0;
                         m_objects[slot].vx = 0.0;
                         m_objects[slot].timer = 0;
-                        m_objects[slot].frame = 0xc;
+                        m_objects[slot].frame = 12;
                         break;
                     }
                 }
@@ -2952,7 +2952,7 @@ void CMinagi::UpdateObjects()
                     m_objects[slot].timer = 0;
                     m_objects[slot].frame++;
                     m_objects[slot].attackResult = 0;
-                    if (m_objects[slot].frame == 0xc) {
+                    if (m_objects[slot].frame == 12) {
                         m_objects[slot].frame = m_objects[slot].frame - 2;
                     }
                     if (m_objects[slot].frame >= frameCount) {
@@ -2987,33 +2987,33 @@ void CMinagi::UpdateObjects()
                         m_objects[slot].hitsLeft = 0;
                     }
                 }
-                if (m_objects[slot].frame == 0xa && m_objects[slot].timer == 0) {
+                if (m_objects[slot].frame == 10 && m_objects[slot].timer == 0) {
                     m_objects[slot].hitsLeft = 1;
                 }
-                if (m_objects[slot].y < 0.0 && m_objects[slot].frame < 0xf) {
+                if (m_objects[slot].y < 0.0 && m_objects[slot].frame < 15) {
                     m_objects[slot].vy = m_objects[slot].vy + m_objects[slot].ay;
                     if (m_objects[slot].y + m_objects[slot].vy > 0.0) {
                         m_objects[slot].y = 0.0;
                         m_objects[slot].vy = 0.0;
                         m_objects[slot].vx = 0.0;
                         m_objects[slot].timer = 0;
-                        m_objects[slot].frame = 0xf;
+                        m_objects[slot].frame = 15;
                     }
                 }
-                if (m_objects[slot].frame == 0x12 && m_objects[slot].timer == 0) {
+                if (m_objects[slot].frame == 18 && m_objects[slot].timer == 0) {
                     m_objects[slot].vx = -0.8;
                     m_objects[slot].vy = -1.0;
                     m_objects[slot].ay = 0.035;
                     m_objects[slot].hitsLeft = 1;
                 }
-                if (m_objects[slot].y < 0.0 && m_objects[slot].frame < 0x17 && m_objects[slot].frame > 0x12) {
+                if (m_objects[slot].y < 0.0 && m_objects[slot].frame < 23 && m_objects[slot].frame > 18) {
                     m_objects[slot].vy = m_objects[slot].vy + m_objects[slot].ay;
                     if (m_objects[slot].y + m_objects[slot].vy > 0.0) {
                         m_objects[slot].y = 0.0;
                         m_objects[slot].vy = 0.0;
                         m_objects[slot].vx = 0.0;
                         m_objects[slot].timer = 0;
-                        m_objects[slot].frame = 0x17;
+                        m_objects[slot].frame = 23;
                     }
                 }
                 if (m_objects[slot].x > 620.0) {
@@ -3029,10 +3029,10 @@ void CMinagi::UpdateObjects()
                     m_objects[slot].timer = 0;
                     m_objects[slot].frame++;
                     m_objects[slot].attackResult = 0;
-                    if (m_objects[slot].frame == 0xf) {
+                    if (m_objects[slot].frame == 15) {
                         m_objects[slot].frame = m_objects[slot].frame - 1;
                     }
-                    if (m_objects[slot].frame == 0x17) {
+                    if (m_objects[slot].frame == 23) {
                         m_objects[slot].frame = m_objects[slot].frame - 1;
                     }
                     if (m_objects[slot].frame >= frameCount) {
@@ -3067,33 +3067,33 @@ void CMinagi::UpdateObjects()
                         m_objects[slot].hitsLeft = 0;
                     }
                 }
-                if (m_objects[slot].frame == 0xa && m_objects[slot].timer == 0) {
+                if (m_objects[slot].frame == 10 && m_objects[slot].timer == 0) {
                     m_objects[slot].hitsLeft = 1;
                 }
-                if (m_objects[slot].y < 0.0 && m_objects[slot].frame < 0xf) {
+                if (m_objects[slot].y < 0.0 && m_objects[slot].frame < 15) {
                     m_objects[slot].vy = m_objects[slot].vy + m_objects[slot].ay;
                     if (m_objects[slot].y + m_objects[slot].vy > 0.0) {
                         m_objects[slot].y = 0.0;
                         m_objects[slot].vy = 0.0;
                         m_objects[slot].vx = 0.0;
                         m_objects[slot].timer = 0;
-                        m_objects[slot].frame = 0xf;
+                        m_objects[slot].frame = 15;
                     }
                 }
-                if (m_objects[slot].frame == 0x12 && m_objects[slot].timer == 0) {
+                if (m_objects[slot].frame == 18 && m_objects[slot].timer == 0) {
                     m_objects[slot].vx = -0.8;
                     m_objects[slot].vy = -1.0;
                     m_objects[slot].ay = 0.035;
                     m_objects[slot].hitsLeft = 1;
                 }
-                if (m_objects[slot].y < 0.0 && m_objects[slot].frame < 0x17 && m_objects[slot].frame > 0x12) {
+                if (m_objects[slot].y < 0.0 && m_objects[slot].frame < 23 && m_objects[slot].frame > 18) {
                     m_objects[slot].vy = m_objects[slot].vy + m_objects[slot].ay;
                     if (m_objects[slot].y + m_objects[slot].vy > 0.0) {
                         m_objects[slot].y = 0.0;
                         m_objects[slot].vy = 0.0;
                         m_objects[slot].vx = 0.0;
                         m_objects[slot].timer = 0;
-                        m_objects[slot].frame = 0x17;
+                        m_objects[slot].frame = 23;
                     }
                 }
                 if (m_objects[slot].x > 620.0) {
@@ -3109,10 +3109,10 @@ void CMinagi::UpdateObjects()
                     m_objects[slot].timer = 0;
                     m_objects[slot].frame++;
                     m_objects[slot].attackResult = 0;
-                    if (m_objects[slot].frame == 0xf) {
+                    if (m_objects[slot].frame == 15) {
                         m_objects[slot].frame = m_objects[slot].frame - 1;
                     }
-                    if (m_objects[slot].frame == 0x17) {
+                    if (m_objects[slot].frame == 23) {
                         m_objects[slot].frame = m_objects[slot].frame - 1;
                     }
                     if (m_objects[slot].frame >= frameCount) {
@@ -3147,40 +3147,40 @@ void CMinagi::UpdateObjects()
                         m_objects[slot].hitsLeft = 0;
                     }
                 }
-                if (m_objects[slot].frame == 0xa && m_objects[slot].timer == 0) {
+                if (m_objects[slot].frame == 10 && m_objects[slot].timer == 0) {
                     m_objects[slot].hitsLeft = 1;
                 }
-                if (m_objects[slot].y < 0.0 && m_objects[slot].vx > 0.0 && m_objects[slot].x - (*m_opponent)->x < 50.0 && m_objects[slot].x - (*m_opponent)->x > -50.0 && m_objects[slot].frame < 0x11) {
+                if (m_objects[slot].y < 0.0 && m_objects[slot].vx > 0.0 && m_objects[slot].x - (*m_opponent)->x < 50.0 && m_objects[slot].x - (*m_opponent)->x > -50.0 && m_objects[slot].frame < 17) {
                     m_objects[slot].vx -= 0.02;
                     if (m_objects[slot].vx < 0.0) {
                         m_objects[slot].vx = 0.0;
                     }
                 }
-                if (m_objects[slot].y < 0.0 && m_objects[slot].frame < 0xf) {
+                if (m_objects[slot].y < 0.0 && m_objects[slot].frame < 15) {
                     m_objects[slot].vy = m_objects[slot].vy + m_objects[slot].ay;
                     if (m_objects[slot].y + m_objects[slot].vy > 0.0) {
                         m_objects[slot].y = 0.0;
                         m_objects[slot].vy = 0.0;
                         m_objects[slot].vx = 0.0;
                         m_objects[slot].timer = 0;
-                        m_objects[slot].frame = 0xf;
+                        m_objects[slot].frame = 15;
                         m_objects[slot].attackResult = 0;
                     }
                 }
-                if (m_objects[slot].frame == 0x12 && m_objects[slot].timer == 0) {
+                if (m_objects[slot].frame == 18 && m_objects[slot].timer == 0) {
                     m_objects[slot].vx = -1.0;
                     m_objects[slot].vy = -1.0;
                     m_objects[slot].ay = 0.035;
                     m_objects[slot].hitsLeft = 1;
                 }
-                if (m_objects[slot].y < 0.0 && m_objects[slot].frame < 0x17 && m_objects[slot].frame > 0x12) {
+                if (m_objects[slot].y < 0.0 && m_objects[slot].frame < 23 && m_objects[slot].frame > 18) {
                     m_objects[slot].vy = m_objects[slot].vy + m_objects[slot].ay;
                     if (m_objects[slot].y + m_objects[slot].vy > 0.0) {
                         m_objects[slot].y = 0.0;
                         m_objects[slot].vy = 0.0;
                         m_objects[slot].vx = 0.0;
                         m_objects[slot].timer = 0;
-                        m_objects[slot].frame = 0x17;
+                        m_objects[slot].frame = 23;
                         m_objects[slot].attackResult = 0;
                     }
                 }
@@ -3197,10 +3197,10 @@ void CMinagi::UpdateObjects()
                     m_objects[slot].timer = 0;
                     m_objects[slot].frame++;
                     m_objects[slot].attackResult = 0;
-                    if (m_objects[slot].frame == 0xf) {
+                    if (m_objects[slot].frame == 15) {
                         m_objects[slot].frame = m_objects[slot].frame - 1;
                     }
-                    if (m_objects[slot].frame == 0x17) {
+                    if (m_objects[slot].frame == 23) {
                         m_objects[slot].frame = m_objects[slot].frame - 1;
                     }
                     if (m_objects[slot].frame >= frameCount) {
@@ -3226,14 +3226,14 @@ void CMinagi::UpdateObjects()
                     m_objectVar1[slot] = 0;
                     m_objectVar2[slot] = 0;
                 }
-                if (m_objects[slot].frame == 0xb && m_objects[slot].timer == 0 && m_objectVar1[slot] == 0) {
+                if (m_objects[slot].frame == 11 && m_objects[slot].timer == 0 && m_objectVar1[slot] == 0) {
                     m_objects[slot].vx = 0.0;
                     m_objects[slot].vy = -1.8;
                     m_objects[slot].ay = 0.055;
                     m_objects[slot].hitsLeft = 4;
                     m_objectVar1[slot]++;
                 }
-                if (m_objects[slot].y < 0.0 && m_objects[slot].frame < 0xf) {
+                if (m_objects[slot].y < 0.0 && m_objects[slot].frame < 15) {
                     m_objects[slot].vy = m_objects[slot].vy + m_objects[slot].ay;
                     if (m_objects[slot].vy > 0.3) {
                         m_objects[slot].vy = 0.3;
@@ -3242,7 +3242,7 @@ void CMinagi::UpdateObjects()
                         m_objects[slot].y = 0.0;
                         m_objects[slot].vy = 0.0;
                         m_objects[slot].timer = 0;
-                        m_objects[slot].frame = 0xf;
+                        m_objects[slot].frame = 15;
                         break;
                     }
                 }
@@ -3259,7 +3259,7 @@ void CMinagi::UpdateObjects()
                     m_objects[slot].timer = 0;
                     m_objects[slot].frame++;
                     m_objects[slot].attackResult = 0;
-                    if (m_objects[slot].frame == 0xf) {
+                    if (m_objects[slot].frame == 15) {
                         m_objects[slot].frame = m_objects[slot].frame - 4;
                     }
                     if (m_objects[slot].frame >= frameCount) {
@@ -3285,14 +3285,14 @@ void CMinagi::UpdateObjects()
                     m_objectVar1[slot] = 0;
                     m_objectVar2[slot] = 0;
                 }
-                if (m_objects[slot].frame == 0xb && m_objects[slot].timer == 0 && m_objectVar1[slot] == 0) {
+                if (m_objects[slot].frame == 11 && m_objects[slot].timer == 0 && m_objectVar1[slot] == 0) {
                     m_objects[slot].vx = 0.0;
                     m_objects[slot].vy = -2.8;
                     m_objects[slot].ay = 0.055;
                     m_objects[slot].hitsLeft = 6;
                     m_objectVar1[slot]++;
                 }
-                if (m_objects[slot].y < 0.0 && m_objects[slot].frame < 0xf) {
+                if (m_objects[slot].y < 0.0 && m_objects[slot].frame < 15) {
                     m_objects[slot].vy = m_objects[slot].vy + m_objects[slot].ay;
                     if (m_objects[slot].vy > 0.3) {
                         m_objects[slot].vy = 0.3;
@@ -3301,7 +3301,7 @@ void CMinagi::UpdateObjects()
                         m_objects[slot].y = 0.0;
                         m_objects[slot].vy = 0.0;
                         m_objects[slot].timer = 0;
-                        m_objects[slot].frame = 0xf;
+                        m_objects[slot].frame = 15;
                         break;
                     }
                 }
@@ -3318,7 +3318,7 @@ void CMinagi::UpdateObjects()
                     m_objects[slot].timer = 0;
                     m_objects[slot].frame++;
                     m_objects[slot].attackResult = 0;
-                    if (m_objects[slot].frame == 0xf) {
+                    if (m_objects[slot].frame == 15) {
                         m_objects[slot].frame = m_objects[slot].frame - 4;
                     }
                     if (m_objects[slot].frame >= frameCount) {
@@ -3344,14 +3344,14 @@ void CMinagi::UpdateObjects()
                     m_objectVar1[slot] = 0;
                     m_objectVar2[slot] = 0;
                 }
-                if (m_objects[slot].frame == 0xb && m_objects[slot].timer == 0 && m_objectVar1[slot] == 0) {
+                if (m_objects[slot].frame == 11 && m_objects[slot].timer == 0 && m_objectVar1[slot] == 0) {
                     m_objects[slot].vx = 0.0;
                     m_objects[slot].vy = -1.8;
                     m_objects[slot].ay = 0.055;
-                    m_objects[slot].hitsLeft = 0xc;
+                    m_objects[slot].hitsLeft = 12;
                     m_objectVar1[slot]++;
                 }
-                if (m_objects[slot].y < 0.0 && m_objects[slot].frame < 0xf) {
+                if (m_objects[slot].y < 0.0 && m_objects[slot].frame < 15) {
                     m_objects[slot].vy = m_objects[slot].vy + m_objects[slot].ay;
                     if (m_objects[slot].vy > 0.15) {
                         m_objects[slot].vy = 0.15;
@@ -3360,7 +3360,7 @@ void CMinagi::UpdateObjects()
                         m_objects[slot].y = 0.0;
                         m_objects[slot].vy = 0.0;
                         m_objects[slot].timer = 0;
-                        m_objects[slot].frame = 0xf;
+                        m_objects[slot].frame = 15;
                         break;
                     }
                 }
@@ -3377,7 +3377,7 @@ void CMinagi::UpdateObjects()
                     m_objects[slot].timer = 0;
                     m_objects[slot].frame++;
                     m_objects[slot].attackResult = 0;
-                    if (m_objects[slot].frame == 0xf) {
+                    if (m_objects[slot].frame == 15) {
                         m_objects[slot].frame = m_objects[slot].frame - 4;
                     }
                     if (m_objects[slot].frame >= frameCount) {
@@ -3389,8 +3389,8 @@ void CMinagi::UpdateObjects()
                 break;
             case 0x19d:
                 m_michiruState = 4;
-                if (m_objects[slot].frame < 0x10) {
-                    (*m_opponent)->FocusCameraY(0x32, 0x1e);
+                if (m_objects[slot].frame < 16) {
+                    (*m_opponent)->FocusCameraY(50, 30);
                 }
                 if (m_objects[slot].attackResult == 4 || m_objects[slot].attackResult == 5) {
                     m_objects[slot].pattern = kObjMichiruKnockedBack;
@@ -3406,14 +3406,14 @@ void CMinagi::UpdateObjects()
                 if (pattern != k236236A && pattern != kAir236236A) {
                     m_objects[slot].movesInFreeze = 0;
                 }
-                if (m_objects[slot].y < 0.0 && m_objects[slot].frame > 0x10) {
+                if (m_objects[slot].y < 0.0 && m_objects[slot].frame > 16) {
                     m_objects[slot].vy += 0.035;
                     if (m_objects[slot].vy + m_objects[slot].y > 0.0) {
                         m_objects[slot].y = 0.0;
                         m_objects[slot].vy = 0.0;
                         m_objects[slot].vx = 0.0;
                         m_objects[slot].timer = 0;
-                        m_objects[slot].frame = 0x14;
+                        m_objects[slot].frame = 20;
                         break;
                     }
                 }
@@ -3430,26 +3430,26 @@ void CMinagi::UpdateObjects()
                     m_objects[slot].timer = 0;
                     m_objects[slot].frame++;
                     m_objects[slot].attackResult = 0;
-                    if (m_objects[slot].frame == 0xa) {
-                        m_objects[slot].hitsLeft = 0x63;
+                    if (m_objects[slot].frame == 10) {
+                        m_objects[slot].hitsLeft = 99;
                         m_objectVar2[slot] = 0;
                         m_objectVar1[slot] = 0;
                         m_objects[slot].frame = m_objects[slot].frame + 4;
                         break;
                     }
-                    if (m_objects[slot].frame == 0xe && m_objectVar2[slot] < 2) {
+                    if (m_objects[slot].frame == 14 && m_objectVar2[slot] < 2) {
                         m_objects[slot].frame = m_objects[slot].frame - 4;
                         m_objectVar2[slot]++;
                     }
-                    if (m_objects[slot].frame == 0xf) {
+                    if (m_objects[slot].frame == 15) {
                         m_objects[slot].vx = 0.5;
                         m_objects[slot].vy = -2.2;
                     }
-                    if (m_objects[slot].frame == 0x10 && m_objectVar1[slot] < 2) {
+                    if (m_objects[slot].frame == 16 && m_objectVar1[slot] < 2) {
                         m_objectVar1[slot]++;
                         m_objects[slot].frame--;
                     }
-                    if (m_objects[slot].frame == 0x14) {
+                    if (m_objects[slot].frame == 20) {
                         m_objects[slot].frame = m_objects[slot].frame - 2;
                     }
                     if (m_objects[slot].frame >= frameCount) {
@@ -3461,8 +3461,8 @@ void CMinagi::UpdateObjects()
                 break;
             case 0x19e:
                 m_michiruState = 4;
-                if (m_objects[slot].frame < 0x14) {
-                    (*m_opponent)->FocusCameraY(0x32, 0x1e);
+                if (m_objects[slot].frame < 20) {
+                    (*m_opponent)->FocusCameraY(50, 30);
                 }
                 if (m_objects[slot].attackResult == 4 || m_objects[slot].attackResult == 5) {
                     m_objects[slot].pattern = kObjMichiruKnockedBack;
@@ -3478,14 +3478,14 @@ void CMinagi::UpdateObjects()
                 if (pattern != k236236B && pattern != kAir236236B) {
                     m_objects[slot].movesInFreeze = 0;
                 }
-                if (m_objects[slot].y < 0.0 && m_objects[slot].frame > 0x10) {
+                if (m_objects[slot].y < 0.0 && m_objects[slot].frame > 16) {
                     m_objects[slot].vy += 0.035;
                     if (m_objects[slot].vy + m_objects[slot].y > 0.0) {
                         m_objects[slot].y = 0.0;
                         m_objects[slot].vy = 0.0;
                         m_objects[slot].vx = 0.0;
                         m_objects[slot].timer = 0;
-                        m_objects[slot].frame = 0x17;
+                        m_objects[slot].frame = 23;
                         break;
                     }
                 }
@@ -3502,26 +3502,26 @@ void CMinagi::UpdateObjects()
                     m_objects[slot].timer = 0;
                     m_objects[slot].frame++;
                     m_objects[slot].attackResult = 0;
-                    if (m_objects[slot].frame == 0xa) {
-                        m_objects[slot].hitsLeft = 0x63;
+                    if (m_objects[slot].frame == 10) {
+                        m_objects[slot].hitsLeft = 99;
                         m_objectVar2[slot] = 0;
                         m_objectVar1[slot] = 0;
                         m_objects[slot].frame = m_objects[slot].frame + 4;
                         break;
                     }
-                    if (m_objects[slot].frame == 0xe && m_objectVar2[slot] < 3) {
+                    if (m_objects[slot].frame == 14 && m_objectVar2[slot] < 3) {
                         m_objects[slot].frame = m_objects[slot].frame - 4;
                         m_objectVar2[slot]++;
                     }
-                    if (m_objects[slot].frame == 0xf) {
+                    if (m_objects[slot].frame == 15) {
                         m_objects[slot].vx = 0.5;
                         m_objects[slot].vy = -2.6;
                     }
-                    if (m_objects[slot].frame == 0x10 && m_objectVar1[slot] < 3) {
+                    if (m_objects[slot].frame == 16 && m_objectVar1[slot] < 3) {
                         m_objectVar1[slot]++;
                         m_objects[slot].frame--;
                     }
-                    if (m_objects[slot].frame == 0x17) {
+                    if (m_objects[slot].frame == 23) {
                         m_objects[slot].frame = m_objects[slot].frame - 2;
                     }
                     if (m_objects[slot].frame >= frameCount) {
@@ -3533,9 +3533,9 @@ void CMinagi::UpdateObjects()
                 break;
             case 0x19f:
                 m_michiruState = 4;
-                if (m_objects[slot].frame < 0x17) {
-                    (*m_opponent)->FocusCameraY(0x32, 0x1e);
-                    m_game->FlashNegative(0xf);
+                if (m_objects[slot].frame < 23) {
+                    (*m_opponent)->FocusCameraY(50, 30);
+                    m_game->FlashNegative(15);
                 }
                 if (m_objects[slot].attackResult == 4 || m_objects[slot].attackResult == 5) {
                     m_objects[slot].pattern = kObjMichiruKnockedBack;
@@ -3551,14 +3551,14 @@ void CMinagi::UpdateObjects()
                 if (pattern != k236236C && pattern != kAir236236C) {
                     m_objects[slot].movesInFreeze = 0;
                 }
-                if (m_objects[slot].y < 0.0 && m_objects[slot].frame > 0x10) {
+                if (m_objects[slot].y < 0.0 && m_objects[slot].frame > 16) {
                     m_objects[slot].vy += 0.035;
                     if (m_objects[slot].vy + m_objects[slot].y > 0.0) {
                         m_objects[slot].y = 0.0;
                         m_objects[slot].vy = 0.0;
                         m_objects[slot].vx = 0.0;
                         m_objects[slot].timer = 0;
-                        m_objects[slot].frame = 0x1a;
+                        m_objects[slot].frame = 26;
                         break;
                     }
                 }
@@ -3575,26 +3575,26 @@ void CMinagi::UpdateObjects()
                     m_objects[slot].timer = 0;
                     m_objects[slot].frame++;
                     m_objects[slot].attackResult = 0;
-                    if (m_objects[slot].frame == 0xa) {
-                        m_objects[slot].hitsLeft = 0x63;
+                    if (m_objects[slot].frame == 10) {
+                        m_objects[slot].hitsLeft = 99;
                         m_objectVar2[slot] = 0;
                         m_objectVar1[slot] = 0;
                         m_objects[slot].frame = m_objects[slot].frame + 4;
                         break;
                     }
-                    if (m_objects[slot].frame == 0xe && m_objectVar2[slot] < 3) {
+                    if (m_objects[slot].frame == 14 && m_objectVar2[slot] < 3) {
                         m_objects[slot].frame = m_objects[slot].frame - 4;
                         m_objectVar2[slot]++;
                     }
-                    if (m_objects[slot].frame == 0xf) {
+                    if (m_objects[slot].frame == 15) {
                         m_objects[slot].vx = 0.5;
                         m_objects[slot].vy = -2.6;
                     }
-                    if (m_objects[slot].frame == 0x10 && m_objectVar1[slot] < 4) {
+                    if (m_objects[slot].frame == 16 && m_objectVar1[slot] < 4) {
                         m_objectVar1[slot]++;
                         m_objects[slot].frame--;
                     }
-                    if (m_objects[slot].frame == 0x1a) {
+                    if (m_objects[slot].frame == 26) {
                         m_objects[slot].frame = m_objects[slot].frame - 2;
                     }
                     if (m_objects[slot].frame >= frameCount) {
@@ -3628,8 +3628,8 @@ void CMinagi::UpdateObjects()
                     m_objects[slot].hitsLeft = 1;
                 }
                 if (m_objects[slot].frame == 5 && m_objects[slot].attackResult == 3 && m_objectVar1[slot] == 0) {
-                    (*m_opponent)->m_hitstop = 0x2d;
-                    m_objects[slot].hitstop = 0x2d;
+                    (*m_opponent)->m_hitstop = 45;
+                    m_objects[slot].hitstop = 45;
                     m_objectVar1[slot] = 1;
                 }
                 if (m_objects[slot].x > 620.0) {
@@ -3679,7 +3679,7 @@ void CMinagi::UpdateObjects()
                     m_objects[slot].vy = 0.0;
                     m_objectVar1[slot] = 0;
                 }
-                if (m_objects[slot].frame == 0xa && m_objects[slot].timer == 0) {
+                if (m_objects[slot].frame == 10 && m_objects[slot].timer == 0) {
                     effect.type = 0x1f;
                     effect.x = (double)(int)m_objects[slot].x;
                     effect.y = (double)(int)m_objects[slot].y;
@@ -3689,9 +3689,9 @@ void CMinagi::UpdateObjects()
                     m_game->CreateEffect((EffectDesc*)&effect);
                     m_objects[slot].hitsLeft = 1;
                 }
-                if (m_objects[slot].frame == 0xb && m_objects[slot].attackResult == 3 && m_objectVar1[slot] == 0) {
-                    (*m_opponent)->m_hitstop = 0x5a;
-                    m_objects[slot].hitstop = 0x5a;
+                if (m_objects[slot].frame == 11 && m_objects[slot].attackResult == 3 && m_objectVar1[slot] == 0) {
+                    (*m_opponent)->m_hitstop = 90;
+                    m_objects[slot].hitstop = 90;
                     m_objectVar1[slot] = 1;
                 }
                 if (m_objects[slot].x > 620.0) {
@@ -3722,8 +3722,8 @@ void CMinagi::UpdateObjects()
                 break;
             case kObjMichiru214214B:
                 m_michiruState = 4;
-                if (m_objects[slot].frame < 0x10) {
-                    (*m_opponent)->FocusCameraY(0x32, 0x1e);
+                if (m_objects[slot].frame < 16) {
+                    (*m_opponent)->FocusCameraY(50, 30);
                 }
                 if (m_objects[slot].attackResult == 4 || m_objects[slot].attackResult == 5) {
                     m_objects[slot].pattern = kObjMichiruKnockedBack;
@@ -3747,8 +3747,8 @@ void CMinagi::UpdateObjects()
                     m_objects[slot].hitsLeft = 1;
                 }
                 if (m_objects[slot].frame == 5 && m_objects[slot].attackResult == 3 && m_objectVar1[slot] == 0) {
-                    (*m_opponent)->m_hitstop = 0x4b;
-                    m_objects[slot].hitstop = 0x4b;
+                    (*m_opponent)->m_hitstop = 75;
+                    m_objects[slot].hitstop = 75;
                     m_objectVar1[slot] = 1;
                 }
                 if (m_objects[slot].x > 620.0) {
@@ -3798,7 +3798,7 @@ void CMinagi::UpdateObjects()
                     m_objects[slot].vy = 0.0;
                     m_objectVar1[slot] = 0;
                 }
-                if (m_objects[slot].frame == 0xa && m_objects[slot].timer == 0) {
+                if (m_objects[slot].frame == 10 && m_objects[slot].timer == 0) {
                     effect.type = 0x1f;
                     effect.x = (double)(int)m_objects[slot].x;
                     effect.y = (double)(int)m_objects[slot].y;
@@ -3808,9 +3808,9 @@ void CMinagi::UpdateObjects()
                     m_game->CreateEffect((EffectDesc*)&effect);
                     m_objects[slot].hitsLeft = 1;
                 }
-                if (m_objects[slot].frame == 0xb && m_objects[slot].attackResult == 3 && m_objectVar1[slot] == 0) {
-                    (*m_opponent)->m_hitstop = 0x96;
-                    m_objects[slot].hitstop = 0x96;
+                if (m_objects[slot].frame == 11 && m_objects[slot].attackResult == 3 && m_objectVar1[slot] == 0) {
+                    (*m_opponent)->m_hitstop = 150;
+                    m_objects[slot].hitstop = 150;
                     m_objectVar1[slot] = 1;
                 }
                 if (m_objects[slot].x > 620.0) {
@@ -3841,10 +3841,10 @@ void CMinagi::UpdateObjects()
                 break;
             case kObjMichiru214214C:
                 m_michiruState = 4;
-                if (m_objects[slot].frame < 0x10) {
-                    (*m_opponent)->FocusCameraY(0x32, 0x1e);
+                if (m_objects[slot].frame < 16) {
+                    (*m_opponent)->FocusCameraY(50, 30);
                 }
-                m_game->FlashNegative(0xf);
+                m_game->FlashNegative(15);
                 if (m_objects[slot].attackResult == 4 || m_objects[slot].attackResult == 5) {
                     m_objects[slot].pattern = kObjMichiruKnockedBack;
                     m_objects[slot].frame = 0;
@@ -3867,8 +3867,8 @@ void CMinagi::UpdateObjects()
                     m_objects[slot].hitsLeft = 1;
                 }
                 if (m_objects[slot].frame == 5 && m_objects[slot].attackResult == 3 && m_objectVar1[slot] == 0) {
-                    (*m_opponent)->m_hitstop = 0x64;
-                    m_objects[slot].hitstop = 0x64;
+                    (*m_opponent)->m_hitstop = 100;
+                    m_objects[slot].hitstop = 100;
                     m_objectVar1[slot] = 1;
                 }
                 if (m_objects[slot].x > 620.0) {
@@ -3918,7 +3918,7 @@ void CMinagi::UpdateObjects()
                     m_objects[slot].vy = 0.0;
                     m_objectVar1[slot] = 0;
                 }
-                if (m_objects[slot].frame == 0xa && m_objects[slot].timer == 0) {
+                if (m_objects[slot].frame == 10 && m_objects[slot].timer == 0) {
                     effect.type = 0x1f;
                     effect.x = (double)(int)m_objects[slot].x;
                     effect.y = (double)(int)m_objects[slot].y;
@@ -3928,9 +3928,9 @@ void CMinagi::UpdateObjects()
                     m_game->CreateEffect((EffectDesc*)&effect);
                     m_objects[slot].hitsLeft = 1;
                 }
-                if (m_objects[slot].frame == 0xb && m_objects[slot].attackResult == 3 && m_objectVar1[slot] == 0) {
-                    (*m_opponent)->m_hitstop = 0xc8;
-                    m_objects[slot].hitstop = 0xc8;
+                if (m_objects[slot].frame == 11 && m_objects[slot].attackResult == 3 && m_objectVar1[slot] == 0) {
+                    (*m_opponent)->m_hitstop = 200;
+                    m_objects[slot].hitstop = 200;
                     m_objectVar1[slot] = 1;
                 }
                 if (m_objects[slot].x > 620.0) {
@@ -3977,14 +3977,14 @@ void CMinagi::UpdateObjects()
                     m_objects[slot].ay = 0.025;
                     m_objects[slot].hitsLeft = 1;
                 }
-                if (m_objects[slot].y < 0.0 && m_objects[slot].frame < 0xc) {
+                if (m_objects[slot].y < 0.0 && m_objects[slot].frame < 12) {
                     m_objects[slot].vy = m_objects[slot].vy + m_objects[slot].ay;
                     if (m_objects[slot].y + m_objects[slot].vy > 0.0) {
                         m_objects[slot].y = 0.0;
                         m_objects[slot].vy = 0.0;
                         m_objects[slot].vx = 0.0;
                         m_objects[slot].timer = 0;
-                        m_objects[slot].frame = 0xc;
+                        m_objects[slot].frame = 12;
                         break;
                     }
                 }
@@ -4001,7 +4001,7 @@ void CMinagi::UpdateObjects()
                     m_objects[slot].timer = 0;
                     m_objects[slot].frame++;
                     m_objects[slot].attackResult = 0;
-                    if (m_objects[slot].frame == 0xc) {
+                    if (m_objects[slot].frame == 12) {
                         m_objects[slot].frame = m_objects[slot].frame - 2;
                     }
                     if (m_objects[slot].frame >= frameCount) {
@@ -4029,14 +4029,14 @@ void CMinagi::UpdateObjects()
                     m_objects[slot].ay = 0.025;
                     m_objects[slot].hitsLeft = 1;
                 }
-                if (m_objects[slot].y < 0.0 && m_objects[slot].frame < 0xc) {
+                if (m_objects[slot].y < 0.0 && m_objects[slot].frame < 12) {
                     m_objects[slot].vy = m_objects[slot].vy + m_objects[slot].ay;
                     if (m_objects[slot].y + m_objects[slot].vy > 0.0) {
                         m_objects[slot].y = 0.0;
                         m_objects[slot].vy = 0.0;
                         m_objects[slot].vx = 0.0;
                         m_objects[slot].timer = 0;
-                        m_objects[slot].frame = 0xc;
+                        m_objects[slot].frame = 12;
                         break;
                     }
                 }
@@ -4053,7 +4053,7 @@ void CMinagi::UpdateObjects()
                     m_objects[slot].timer = 0;
                     m_objects[slot].frame++;
                     m_objects[slot].attackResult = 0;
-                    if (m_objects[slot].frame == 0xc) {
+                    if (m_objects[slot].frame == 12) {
                         m_objects[slot].frame = m_objects[slot].frame - 2;
                     }
                     if (m_objects[slot].frame >= frameCount) {
@@ -4081,14 +4081,14 @@ void CMinagi::UpdateObjects()
                     m_objects[slot].ay = 0.025;
                     m_objects[slot].hitsLeft = 5;
                 }
-                if (m_objects[slot].y < 0.0 && m_objects[slot].frame < 0xc) {
+                if (m_objects[slot].y < 0.0 && m_objects[slot].frame < 12) {
                     m_objects[slot].vy = m_objects[slot].vy + m_objects[slot].ay;
                     if (m_objects[slot].y + m_objects[slot].vy > 0.0) {
                         m_objects[slot].y = 0.0;
                         m_objects[slot].vy = 0.0;
                         m_objects[slot].vx = 0.0;
                         m_objects[slot].timer = 0;
-                        m_objects[slot].frame = 0xc;
+                        m_objects[slot].frame = 12;
                         break;
                     }
                 }
@@ -4105,7 +4105,7 @@ void CMinagi::UpdateObjects()
                     m_objects[slot].timer = 0;
                     m_objects[slot].frame++;
                     m_objects[slot].attackResult = 0;
-                    if (m_objects[slot].frame == 0xc) {
+                    if (m_objects[slot].frame == 12) {
                         m_objects[slot].frame = m_objects[slot].frame - 2;
                     }
                     if (m_objects[slot].frame >= frameCount) {
@@ -4180,14 +4180,14 @@ void CMinagi::UpdateObjects()
                         m_objects[slot].vx = m_objects[slot].facing * -0.5;
                     }
                 }
-                if (m_objects[slot].frame == 0xb && m_objects[slot].timer == 0 && m_objectVar1[slot] == 0) {
+                if (m_objects[slot].frame == 11 && m_objects[slot].timer == 0 && m_objectVar1[slot] == 0) {
                     m_objects[slot].vx = 0.0;
                     m_objects[slot].vy = -1.8;
                     m_objects[slot].ay = 0.055;
                     m_objects[slot].hitsLeft = 4;
                     m_objectVar1[slot]++;
                 }
-                if (m_objects[slot].y < 0.0 && m_objects[slot].frame < 0xf) {
+                if (m_objects[slot].y < 0.0 && m_objects[slot].frame < 15) {
                     m_objects[slot].vy = m_objects[slot].vy + m_objects[slot].ay;
                     if (m_objects[slot].vy > 0.3) {
                         m_objects[slot].vy = 0.3;
@@ -4197,7 +4197,7 @@ void CMinagi::UpdateObjects()
                         m_objects[slot].vy = 0.0;
                         m_objects[slot].vx = 0.0;
                         m_objects[slot].timer = 0;
-                        m_objects[slot].frame = 0xf;
+                        m_objects[slot].frame = 15;
                         break;
                     }
                 }
@@ -4214,7 +4214,7 @@ void CMinagi::UpdateObjects()
                     m_objects[slot].timer = 0;
                     m_objects[slot].frame++;
                     m_objects[slot].attackResult = 0;
-                    if (m_objects[slot].frame == 0xf) {
+                    if (m_objects[slot].frame == 15) {
                         m_objects[slot].frame = m_objects[slot].frame - 4;
                     }
                     if (m_objects[slot].frame >= frameCount) {
@@ -4247,14 +4247,14 @@ void CMinagi::UpdateObjects()
                         m_objects[slot].vx = m_objects[slot].facing * -0.5;
                     }
                 }
-                if (m_objects[slot].frame == 0xb && m_objects[slot].timer == 0 && m_objectVar1[slot] == 0) {
+                if (m_objects[slot].frame == 11 && m_objects[slot].timer == 0 && m_objectVar1[slot] == 0) {
                     m_objects[slot].vx = 0.0;
                     m_objects[slot].vy = -2.8;
                     m_objects[slot].ay = 0.055;
                     m_objects[slot].hitsLeft = 6;
                     m_objectVar1[slot]++;
                 }
-                if (m_objects[slot].y < 0.0 && m_objects[slot].frame < 0xf) {
+                if (m_objects[slot].y < 0.0 && m_objects[slot].frame < 15) {
                     m_objects[slot].vy = m_objects[slot].vy + m_objects[slot].ay;
                     if (m_objects[slot].vy > 0.3) {
                         m_objects[slot].vy = 0.3;
@@ -4264,7 +4264,7 @@ void CMinagi::UpdateObjects()
                         m_objects[slot].vy = 0.0;
                         m_objects[slot].vx = 0.0;
                         m_objects[slot].timer = 0;
-                        m_objects[slot].frame = 0xf;
+                        m_objects[slot].frame = 15;
                         break;
                     }
                 }
@@ -4281,7 +4281,7 @@ void CMinagi::UpdateObjects()
                     m_objects[slot].timer = 0;
                     m_objects[slot].frame++;
                     m_objects[slot].attackResult = 0;
-                    if (m_objects[slot].frame == 0xf) {
+                    if (m_objects[slot].frame == 15) {
                         m_objects[slot].frame = m_objects[slot].frame - 4;
                     }
                     if (m_objects[slot].frame >= frameCount) {
@@ -4314,14 +4314,14 @@ void CMinagi::UpdateObjects()
                         m_objects[slot].vx = m_objects[slot].facing * -0.5;
                     }
                 }
-                if (m_objects[slot].frame == 0xb && m_objects[slot].timer == 0 && m_objectVar1[slot] == 0) {
+                if (m_objects[slot].frame == 11 && m_objects[slot].timer == 0 && m_objectVar1[slot] == 0) {
                     m_objects[slot].vx = 0.0;
                     m_objects[slot].vy = -1.8;
                     m_objects[slot].ay = 0.055;
-                    m_objects[slot].hitsLeft = 0xc;
+                    m_objects[slot].hitsLeft = 12;
                     m_objectVar1[slot]++;
                 }
-                if (m_objects[slot].y < 0.0 && m_objects[slot].frame < 0xf) {
+                if (m_objects[slot].y < 0.0 && m_objects[slot].frame < 15) {
                     m_objects[slot].vy = m_objects[slot].vy + m_objects[slot].ay;
                     if (m_objects[slot].vy > 0.15) {
                         m_objects[slot].vy = 0.15;
@@ -4331,7 +4331,7 @@ void CMinagi::UpdateObjects()
                         m_objects[slot].vy = 0.0;
                         m_objects[slot].vx = 0.0;
                         m_objects[slot].timer = 0;
-                        m_objects[slot].frame = 0xf;
+                        m_objects[slot].frame = 15;
                         break;
                     }
                 }
@@ -4348,7 +4348,7 @@ void CMinagi::UpdateObjects()
                     m_objects[slot].timer = 0;
                     m_objects[slot].frame++;
                     m_objects[slot].attackResult = 0;
-                    if (m_objects[slot].frame == 0xf) {
+                    if (m_objects[slot].frame == 15) {
                         m_objects[slot].frame = m_objects[slot].frame - 4;
                     }
                     if (m_objects[slot].frame >= frameCount) {
@@ -4372,7 +4372,7 @@ void CMinagi::UpdateObjects()
                 }
                 if (m_objects[slot].attackResult > 0 && m_objectVar1[slot] == 0 && m_objects[slot].scale == 0) {
                     m_objects[slot].scale = 1;
-                    m_objectVar1[slot] = 0x1e;
+                    m_objectVar1[slot] = 30;
                 }
                 if (m_objects[slot].scale == 1) {
                     m_objectVar1[slot]--;
@@ -4412,7 +4412,7 @@ void CMinagi::UpdateObjects()
                 }
                 if (m_objects[slot].attackResult > 0 && m_objectVar1[slot] == 0 && m_objects[slot].scale == 0) {
                     m_objects[slot].scale = 1;
-                    m_objectVar1[slot] = 0x1e;
+                    m_objectVar1[slot] = 30;
                 }
                 if (m_objects[slot].scale == 1) {
                     m_objectVar1[slot]--;
@@ -4454,7 +4454,7 @@ void CMinagi::UpdateObjects()
                 if (m_objects[slot].hitsLeft == 0 && m_objectVar1[slot] == 0 && m_objects[slot].scale == 0) {
                     m_shotState = 2;
                     m_objects[slot].scale = 1;
-                    m_objectVar1[slot] = 0x1e;
+                    m_objectVar1[slot] = 30;
                 }
                 if (m_objects[slot].scale == 1) {
                     m_objectVar1[slot]--;
@@ -4468,7 +4468,7 @@ void CMinagi::UpdateObjects()
                 if (m_objects[slot].timer >= duration) {
                     m_objects[slot].timer = 0;
                     m_objects[slot].frame++;
-                    if (m_objects[slot].frame == 6 || m_objects[slot].frame == 0xc) {
+                    if (m_objects[slot].frame == 6 || m_objects[slot].frame == 12) {
                         m_objects[slot].attackResult = 0;
                     }
                     if (m_objects[slot].frame >= frameCount) {
@@ -4484,8 +4484,8 @@ void CMinagi::UpdateObjects()
                 break;
             case kObjShot41236CFollower:
                 m_objects[slot].x = m_shotX;
-                if ((m_shotState == 2 || m_shotState == 0) && m_objects[slot].frame < 0x18) {
-                    m_objects[slot].frame = 0x18;
+                if ((m_shotState == 2 || m_shotState == 0) && m_objects[slot].frame < 24) {
+                    m_objects[slot].frame = 24;
                     m_objects[slot].timer = 0;
                     break;
                 }
@@ -4494,7 +4494,7 @@ void CMinagi::UpdateObjects()
                     m_objects[slot].timer = 0;
                     m_objects[slot].frame++;
                     m_objects[slot].attackResult = 0;
-                    if (m_objects[slot].frame == 0x18) {
+                    if (m_objects[slot].frame == 24) {
                         m_objects[slot].frame = 0;
                     }
                     if (m_objects[slot].frame >= frameCount) {
@@ -4505,7 +4505,7 @@ void CMinagi::UpdateObjects()
             case kObjMichiruWalkBack:
                 m_michiruState = 2;
                 m_objects[slot].hitsLeft = 0;
-                if (m_objects[slot].frame < 0xa) {
+                if (m_objects[slot].frame < 10) {
                     m_objects[slot].vx = 1.5;
                 }
                 m_objects[slot].vy = 0.0;
@@ -4691,7 +4691,7 @@ void CMinagi::UpdateObjects()
                     m_objects[slot].timer = 0;
                     m_objects[slot].frame++;
                     m_objects[slot].attackResult = 0;
-                    if (m_objects[slot].frame == 0xa && (m_objects[slot].x < x && m_objects[slot].x - x < -200.0 || m_objects[slot].x > x && m_objects[slot].x - x > 200.0)) {
+                    if (m_objects[slot].frame == 10 && (m_objects[slot].x < x && m_objects[slot].x - x < -200.0 || m_objects[slot].x > x && m_objects[slot].x - x > 200.0)) {
                         m_objects[slot].frame = 0;
                     }
                     if (m_objects[slot].frame >= frameCount) {
@@ -4730,13 +4730,13 @@ void CMinagi::UpdateObjects()
                     m_objectVar3[slot]--;
                     if (m_objectVar3[slot] <= 0) {
                         effect.type = 0x1bb;
-                        effect.x = (double)((int)m_objects[slot].x + m_objects[slot].facing * 0x17);
-                        effect.y = (double)((int)m_objects[slot].y - 0x21);
+                        effect.x = (double)((int)m_objects[slot].x + m_objects[slot].facing * 23);
+                        effect.y = (double)((int)m_objects[slot].y - 33);
                         effect.scale = 2;
                         effect.facing = m_objects[slot].facing;
                         effect.layer = 1;
                         SpawnObject(&effect);
-                        m_objectVar3[slot] = 0x15;
+                        m_objectVar3[slot] = 21;
                     }
                 }
                 m_objects[slot].timer++;
@@ -4762,8 +4762,8 @@ void CMinagi::UpdateObjects()
                 if (m_objects[slot].frame == 0 && m_objects[slot].timer == 0 && m_objectVar2[slot] == 0) {
                     m_objects[slot].hitsLeft = 1;
                     m_objectVar2[slot]++;
-                    m_objects[slot].vx = (WORD)Random(0, 0xa) * 0.1 + 1.2;
-                    m_objects[slot].vy = (WORD)Random(0, 0xa) * 0.1 + 0.0;
+                    m_objects[slot].vx = (WORD)Random(0, 10) * 0.1 + 1.2;
+                    m_objects[slot].vy = (WORD)Random(0, 10) * 0.1 + 0.0;
                 }
                 if (m_objects[slot].vx > 0.8) {
                     m_objects[slot].vx -= 0.015;
@@ -4772,9 +4772,9 @@ void CMinagi::UpdateObjects()
                     }
                 }
                 m_objects[slot].vy -= 0.015;
-                if (m_objects[slot].attackResult > 0 && m_objects[slot].frame < 0x18) {
+                if (m_objects[slot].attackResult > 0 && m_objects[slot].frame < 24) {
                     m_objects[slot].timer = 0;
-                    m_objects[slot].frame = 0x18;
+                    m_objects[slot].frame = 24;
                 }
                 m_objects[slot].timer++;
                 if (m_objects[slot].timer >= duration) {
@@ -4790,8 +4790,8 @@ void CMinagi::UpdateObjects()
                 if (m_objects[slot].frame == 0 && m_objects[slot].timer == 0 && m_objectVar2[slot] == 0) {
                     m_objects[slot].hitsLeft = 1;
                     m_objectVar2[slot]++;
-                    m_objects[slot].vx = (WORD)Random(0, 0xa) * 0.1 + 1.6;
-                    m_objects[slot].vy = (WORD)Random(0, 0xa) * 0.1 + 0.0;
+                    m_objects[slot].vx = (WORD)Random(0, 10) * 0.1 + 1.6;
+                    m_objects[slot].vy = (WORD)Random(0, 10) * 0.1 + 0.0;
                 }
                 if (m_objects[slot].vx > 0.8) {
                     m_objects[slot].vx -= 0.015;
@@ -4800,9 +4800,9 @@ void CMinagi::UpdateObjects()
                     }
                 }
                 m_objects[slot].vy -= 0.015;
-                if (m_objects[slot].attackResult > 0 && m_objects[slot].frame < 0x18) {
+                if (m_objects[slot].attackResult > 0 && m_objects[slot].frame < 24) {
                     m_objects[slot].timer = 0;
-                    m_objects[slot].frame = 0x18;
+                    m_objects[slot].frame = 24;
                 }
                 m_objects[slot].timer++;
                 if (m_objects[slot].timer >= duration) {
@@ -4818,8 +4818,8 @@ void CMinagi::UpdateObjects()
                 if (m_objects[slot].frame == 0 && m_objects[slot].timer == 0 && m_objectVar2[slot] == 0) {
                     m_objects[slot].hitsLeft = 1;
                     m_objectVar2[slot]++;
-                    m_objects[slot].vx = (WORD)Random(0, 0xa) * 0.1 + 2.0;
-                    m_objects[slot].vy = (WORD)Random(0, 0xa) * 0.1 + 0.0;
+                    m_objects[slot].vx = (WORD)Random(0, 10) * 0.1 + 2.0;
+                    m_objects[slot].vy = (WORD)Random(0, 10) * 0.1 + 0.0;
                 }
                 if (m_objects[slot].vx > 0.8) {
                     m_objects[slot].vx -= 0.015;
@@ -4828,9 +4828,9 @@ void CMinagi::UpdateObjects()
                     }
                 }
                 m_objects[slot].vy -= 0.015;
-                if (m_objects[slot].attackResult > 0 && m_objects[slot].frame < 0x18) {
+                if (m_objects[slot].attackResult > 0 && m_objects[slot].frame < 24) {
                     m_objects[slot].timer = 0;
-                    m_objects[slot].frame = 0x18;
+                    m_objects[slot].frame = 24;
                 }
                 m_objects[slot].timer++;
                 if (m_objects[slot].timer >= duration) {
@@ -4846,8 +4846,8 @@ void CMinagi::UpdateObjects()
                 if (m_objects[slot].frame == 0 && m_objects[slot].timer == 0 && m_objectVar2[slot] == 0) {
                     m_objects[slot].hitsLeft = 1;
                     m_objectVar2[slot]++;
-                    m_objects[slot].vx = (WORD)Random(0, 0xa) * 0.1 + 0.5;
-                    m_objects[slot].vy = (WORD)Random(0, 0xa) * 0.1 + 0.0;
+                    m_objects[slot].vx = (WORD)Random(0, 10) * 0.1 + 0.5;
+                    m_objects[slot].vy = (WORD)Random(0, 10) * 0.1 + 0.0;
                 }
                 if (m_objects[slot].vx > 0.8) {
                     m_objects[slot].vx -= 0.015;
@@ -4856,9 +4856,9 @@ void CMinagi::UpdateObjects()
                     }
                 }
                 m_objects[slot].vy -= 0.015;
-                if (m_objects[slot].attackResult > 0 && m_objects[slot].frame < 0x18) {
+                if (m_objects[slot].attackResult > 0 && m_objects[slot].frame < 24) {
                     m_objects[slot].timer = 0;
-                    m_objects[slot].frame = 0x18;
+                    m_objects[slot].frame = 24;
                 }
                 m_objects[slot].timer++;
                 if (m_objects[slot].timer >= duration) {
@@ -4896,18 +4896,18 @@ void CMinagi::UpdateObjects()
                     m_objects[slot].vx = 0.0;
                     m_objects[slot].x = 20.0;
                 }
-                if (m_objects[slot].frame > 9 && m_objects[slot].frame < 0x16) {
+                if (m_objects[slot].frame > 9 && m_objects[slot].frame < 22) {
                     m_objectVar3[slot]--;
                     if (m_objectVar3[slot] <= 0) {
                         effect.type = 0x1bf;
                         effect.keep = 1;
-                        effect.x = x - (WORD)Random(0, 0x1e0) + 240.0 - m_objects[slot].facing * 0x78;
+                        effect.x = x - (WORD)Random(0, 480) + 240.0 - m_objects[slot].facing * 120;
                         effect.y = -480.0;
                         effect.scale = 2;
                         effect.facing = m_objects[slot].facing;
                         effect.layer = 1;
                         SpawnObject(&effect);
-                        m_objectVar3[slot] = 0x12;
+                        m_objectVar3[slot] = 18;
                     }
                 }
                 m_objects[slot].timer++;
@@ -4915,7 +4915,7 @@ void CMinagi::UpdateObjects()
                     m_objects[slot].timer = 0;
                     m_objects[slot].frame++;
                     m_objects[slot].attackResult = 0;
-                    if (m_objects[slot].frame == 0x16 && m_objectVar2[slot] < 0x11) {
+                    if (m_objects[slot].frame == 22 && m_objectVar2[slot] < 17) {
                         m_objects[slot].frame = m_objects[slot].frame - 6;
                         m_objectVar2[slot]++;
                     }
@@ -4938,7 +4938,7 @@ void CMinagi::UpdateObjects()
                 }
                 m_objectVar3[slot]--;
                 if (m_objectVar3[slot] <= 0) {
-                    effect.type = m_objectVar2[slot] + 0x1c0;
+                    effect.type = m_objectVar2[slot] + 448;
                     effect.x = m_objects[slot].x;
                     effect.y = m_objects[slot].y;
                     effect.scale = 2;
@@ -5033,7 +5033,7 @@ void CMinagi::UpdateObjects()
                     (*m_opponent)->pattern = kKnockdown;
                     (*m_opponent)->y = 0.0;
                     (*m_opponent)->x = m_objects[slot].x;
-                    DealDamage(0x4b0, 500.0);
+                    DealDamage(1200, 500.0);
                     m_objects[slot].vy = 0.0;
                 }
                 m_objects[slot].timer++;
@@ -5091,8 +5091,8 @@ void CMinagi::UpdateObjects()
                     m_objects[slot].frame++;
                     if (m_objects[slot].frame > 3 && m_objects[slot].frame < 9) {
                         effect.type = 0x1cf;
-                        effect.x = m_objects[slot].x + (WORD)Random(0, 0x1e) * m_objects[slot].facing;
-                        effect.y = m_objects[slot].y - (WORD)Random(0, 0x50) + 40.0 - 30.0;
+                        effect.x = m_objects[slot].x + (WORD)Random(0, 30) * m_objects[slot].facing;
+                        effect.y = m_objects[slot].y - (WORD)Random(0, 80) + 40.0 - 30.0;
                         effect.facing = m_objects[slot].facing;
                         effect.layer = 1;
                         effect.scale = 2;
@@ -5102,7 +5102,7 @@ void CMinagi::UpdateObjects()
                         m_objects[slot].attackResult = 0;
                     }
                     if (m_objects[slot].frame == 4) {
-                        m_objects[slot].hitsLeft = 0x63;
+                        m_objects[slot].hitsLeft = 99;
                         m_objects[slot].vx = 0.5;
                         m_objects[slot].vy = -0.5;
                         break;
@@ -5160,9 +5160,9 @@ void CMinagi::UpdateObjects()
                     m_objects[slot].timer = 0;
                     m_objects[slot].frame++;
                     if (m_objects[slot].frame > 3 && m_objects[slot].frame < 9) {
-                        effect.type = ((WORD)Random(0, 0x64) > 0x32) + 0x1cf;
-                        effect.x = m_objects[slot].x + (WORD)Random(0, 0x28) * m_objects[slot].facing;
-                        effect.y = m_objects[slot].y - (WORD)Random(0, 0x78) + 60.0 - 30.0;
+                        effect.type = ((WORD)Random(0, 100) > 50) + 463;
+                        effect.x = m_objects[slot].x + (WORD)Random(0, 40) * m_objects[slot].facing;
+                        effect.y = m_objects[slot].y - (WORD)Random(0, 120) + 60.0 - 30.0;
                         effect.facing = m_objects[slot].facing;
                         effect.layer = 1;
                         effect.scale = 2;
@@ -5172,7 +5172,7 @@ void CMinagi::UpdateObjects()
                         m_objects[slot].attackResult = 0;
                     }
                     if (m_objects[slot].frame == 4) {
-                        m_objects[slot].hitsLeft = 0x63;
+                        m_objects[slot].hitsLeft = 99;
                         m_objects[slot].vx = 0.65;
                         m_objects[slot].vy = -0.52;
                         break;
@@ -5230,9 +5230,9 @@ void CMinagi::UpdateObjects()
                     m_objects[slot].timer = 0;
                     m_objects[slot].frame++;
                     if (m_objects[slot].frame > 3 && m_objects[slot].frame < 9) {
-                        effect.type = ((WORD)Random(0, 0x64) > 0x46) + 0x1cf + ((WORD)Random(0, 0x64) > 0x1e);
-                        effect.x = m_objects[slot].x + (WORD)Random(0, 0x28) * m_objects[slot].facing;
-                        effect.y = m_objects[slot].y - (WORD)Random(0, 0x8c) + 70.0 - 30.0;
+                        effect.type = ((WORD)Random(0, 100) > 70) + 463 + ((WORD)Random(0, 100) > 30);
+                        effect.x = m_objects[slot].x + (WORD)Random(0, 40) * m_objects[slot].facing;
+                        effect.y = m_objects[slot].y - (WORD)Random(0, 140) + 70.0 - 30.0;
                         effect.facing = m_objects[slot].facing;
                         effect.layer = 1;
                         effect.scale = 2;
@@ -5242,7 +5242,7 @@ void CMinagi::UpdateObjects()
                         m_objects[slot].attackResult = 0;
                     }
                     if (m_objects[slot].frame == 4) {
-                        m_objects[slot].hitsLeft = 0x63;
+                        m_objects[slot].hitsLeft = 99;
                         m_objects[slot].vx = 0.85;
                         m_objects[slot].vy = -0.55;
                         break;
@@ -5379,7 +5379,7 @@ void CMinagi::UpdateObjects()
                 break;
             case kObjMichiruUnused236236C:
                 m_michiruState = 4;
-                m_game->FlashNegative(0xf);
+                m_game->FlashNegative(15);
                 if (m_objects[slot].attackResult == 4 || m_objects[slot].attackResult == 5) {
                     m_objects[slot].pattern = kObjMichiruKnockedBack;
                     m_objects[slot].frame = 0;
@@ -5422,7 +5422,7 @@ void CMinagi::UpdateObjects()
                         m_objects[slot].attackResult = 0;
                     }
                     if (m_objects[slot].frame == 4) {
-                        m_objects[slot].hitsLeft = 0xc;
+                        m_objects[slot].hitsLeft = 12;
                         m_objects[slot].vx = 2.1;
                         m_objects[slot].vy = -1.4;
                         break;
@@ -5439,8 +5439,8 @@ void CMinagi::UpdateObjects()
                 break;
             case 0x1cc:
                 m_michiruState = 4;
-                if (m_objects[slot].frame < 0x10) {
-                    (*m_opponent)->FocusCameraY(0x32, 0x1e);
+                if (m_objects[slot].frame < 16) {
+                    (*m_opponent)->FocusCameraY(50, 30);
                 }
                 if (m_objects[slot].attackResult == 4 || m_objects[slot].attackResult == 5) {
                     m_objects[slot].pattern = kObjMichiruKnockedBack;
@@ -5456,14 +5456,14 @@ void CMinagi::UpdateObjects()
                 if (pattern != k236236A && pattern != kAir236236A) {
                     m_objects[slot].movesInFreeze = 0;
                 }
-                if (m_objects[slot].y < 0.0 && m_objects[slot].frame > 0x10) {
+                if (m_objects[slot].y < 0.0 && m_objects[slot].frame > 16) {
                     m_objects[slot].vy += 0.035;
                     if (m_objects[slot].vy + m_objects[slot].y > 0.0) {
                         m_objects[slot].y = 0.0;
                         m_objects[slot].vy = 0.0;
                         m_objects[slot].vx = 0.0;
                         m_objects[slot].timer = 0;
-                        m_objects[slot].frame = 0x14;
+                        m_objects[slot].frame = 20;
                         break;
                     }
                 }
@@ -5480,26 +5480,26 @@ void CMinagi::UpdateObjects()
                     m_objects[slot].timer = 0;
                     m_objects[slot].frame++;
                     m_objects[slot].attackResult = 0;
-                    if (m_objects[slot].frame == 0xa) {
-                        m_objects[slot].hitsLeft = 0x63;
+                    if (m_objects[slot].frame == 10) {
+                        m_objects[slot].hitsLeft = 99;
                         m_objectVar2[slot] = 0;
                         m_objectVar1[slot] = 0;
                         m_objects[slot].frame = m_objects[slot].frame + 4;
                         break;
                     }
-                    if (m_objects[slot].frame == 0xe && m_objectVar2[slot] < 2) {
+                    if (m_objects[slot].frame == 14 && m_objectVar2[slot] < 2) {
                         m_objects[slot].frame = m_objects[slot].frame - 4;
                         m_objectVar2[slot]++;
                     }
-                    if (m_objects[slot].frame == 0xf) {
+                    if (m_objects[slot].frame == 15) {
                         m_objects[slot].vx = 0.5;
                         m_objects[slot].vy = -2.2;
                     }
-                    if (m_objects[slot].frame == 0x10 && m_objectVar1[slot] < 2) {
+                    if (m_objects[slot].frame == 16 && m_objectVar1[slot] < 2) {
                         m_objectVar1[slot]++;
                         m_objects[slot].frame--;
                     }
-                    if (m_objects[slot].frame == 0x14) {
+                    if (m_objects[slot].frame == 20) {
                         m_objects[slot].frame = m_objects[slot].frame - 2;
                     }
                     if (m_objects[slot].frame >= frameCount) {
@@ -5511,8 +5511,8 @@ void CMinagi::UpdateObjects()
                 break;
             case 0x1cd:
                 m_michiruState = 4;
-                if (m_objects[slot].frame < 0x14) {
-                    (*m_opponent)->FocusCameraY(0x32, 0x1e);
+                if (m_objects[slot].frame < 20) {
+                    (*m_opponent)->FocusCameraY(50, 30);
                 }
                 if (m_objects[slot].attackResult == 4 || m_objects[slot].attackResult == 5) {
                     m_objects[slot].pattern = kObjMichiruKnockedBack;
@@ -5528,14 +5528,14 @@ void CMinagi::UpdateObjects()
                 if (pattern != k236236B && pattern != kAir236236B) {
                     m_objects[slot].movesInFreeze = 0;
                 }
-                if (m_objects[slot].y < 0.0 && m_objects[slot].frame > 0x10) {
+                if (m_objects[slot].y < 0.0 && m_objects[slot].frame > 16) {
                     m_objects[slot].vy += 0.035;
                     if (m_objects[slot].vy + m_objects[slot].y > 0.0) {
                         m_objects[slot].y = 0.0;
                         m_objects[slot].vy = 0.0;
                         m_objects[slot].vx = 0.0;
                         m_objects[slot].timer = 0;
-                        m_objects[slot].frame = 0x17;
+                        m_objects[slot].frame = 23;
                         break;
                     }
                 }
@@ -5552,26 +5552,26 @@ void CMinagi::UpdateObjects()
                     m_objects[slot].timer = 0;
                     m_objects[slot].frame++;
                     m_objects[slot].attackResult = 0;
-                    if (m_objects[slot].frame == 0xa) {
-                        m_objects[slot].hitsLeft = 0x63;
+                    if (m_objects[slot].frame == 10) {
+                        m_objects[slot].hitsLeft = 99;
                         m_objectVar2[slot] = 0;
                         m_objectVar1[slot] = 0;
                         m_objects[slot].frame = m_objects[slot].frame + 4;
                         break;
                     }
-                    if (m_objects[slot].frame == 0xe && m_objectVar2[slot] < 3) {
+                    if (m_objects[slot].frame == 14 && m_objectVar2[slot] < 3) {
                         m_objects[slot].frame = m_objects[slot].frame - 4;
                         m_objectVar2[slot]++;
                     }
-                    if (m_objects[slot].frame == 0xf) {
+                    if (m_objects[slot].frame == 15) {
                         m_objects[slot].vx = 0.5;
                         m_objects[slot].vy = -2.6;
                     }
-                    if (m_objects[slot].frame == 0x10 && m_objectVar1[slot] < 3) {
+                    if (m_objects[slot].frame == 16 && m_objectVar1[slot] < 3) {
                         m_objectVar1[slot]++;
                         m_objects[slot].frame--;
                     }
-                    if (m_objects[slot].frame == 0x17) {
+                    if (m_objects[slot].frame == 23) {
                         m_objects[slot].frame = m_objects[slot].frame - 2;
                     }
                     if (m_objects[slot].frame >= frameCount) {
@@ -5583,9 +5583,9 @@ void CMinagi::UpdateObjects()
                 break;
             case 0x1ce:
                 m_michiruState = 4;
-                if (m_objects[slot].frame < 0x17) {
-                    (*m_opponent)->FocusCameraY(0x32, 0x1e);
-                    m_game->FlashNegative(0xf);
+                if (m_objects[slot].frame < 23) {
+                    (*m_opponent)->FocusCameraY(50, 30);
+                    m_game->FlashNegative(15);
                 }
                 if (m_objects[slot].attackResult == 4 || m_objects[slot].attackResult == 5) {
                     m_objects[slot].pattern = kObjMichiruKnockedBack;
@@ -5601,14 +5601,14 @@ void CMinagi::UpdateObjects()
                 if (pattern != k236236C && pattern != kAir236236C) {
                     m_objects[slot].movesInFreeze = 0;
                 }
-                if (m_objects[slot].y < 0.0 && m_objects[slot].frame > 0x10) {
+                if (m_objects[slot].y < 0.0 && m_objects[slot].frame > 16) {
                     m_objects[slot].vy += 0.035;
                     if (m_objects[slot].vy + m_objects[slot].y > 0.0) {
                         m_objects[slot].y = 0.0;
                         m_objects[slot].vy = 0.0;
                         m_objects[slot].vx = 0.0;
                         m_objects[slot].timer = 0;
-                        m_objects[slot].frame = 0x1a;
+                        m_objects[slot].frame = 26;
                         break;
                     }
                 }
@@ -5625,26 +5625,26 @@ void CMinagi::UpdateObjects()
                     m_objects[slot].timer = 0;
                     m_objects[slot].frame++;
                     m_objects[slot].attackResult = 0;
-                    if (m_objects[slot].frame == 0xa) {
-                        m_objects[slot].hitsLeft = 0x63;
+                    if (m_objects[slot].frame == 10) {
+                        m_objects[slot].hitsLeft = 99;
                         m_objectVar2[slot] = 0;
                         m_objectVar1[slot] = 0;
                         m_objects[slot].frame = m_objects[slot].frame + 4;
                         break;
                     }
-                    if (m_objects[slot].frame == 0xe && m_objectVar2[slot] < 3) {
+                    if (m_objects[slot].frame == 14 && m_objectVar2[slot] < 3) {
                         m_objects[slot].frame = m_objects[slot].frame - 4;
                         m_objectVar2[slot]++;
                     }
-                    if (m_objects[slot].frame == 0xf) {
+                    if (m_objects[slot].frame == 15) {
                         m_objects[slot].vx = 0.5;
                         m_objects[slot].vy = -2.6;
                     }
-                    if (m_objects[slot].frame == 0x10 && m_objectVar1[slot] < 4) {
+                    if (m_objects[slot].frame == 16 && m_objectVar1[slot] < 4) {
                         m_objectVar1[slot]++;
                         m_objects[slot].frame--;
                     }
-                    if (m_objects[slot].frame == 0x1a) {
+                    if (m_objects[slot].frame == 26) {
                         m_objects[slot].frame = m_objects[slot].frame - 2;
                     }
                     if (m_objects[slot].frame >= frameCount) {
@@ -5702,14 +5702,14 @@ void CMinagi::UpdateObjects()
                     m_objects[slot].vx = 0.0;
                     m_objects[slot].vy = 0.0;
                 }
-                if (m_objects[slot].y < 0.0 && m_objects[slot].frame > 0xb) {
+                if (m_objects[slot].y < 0.0 && m_objects[slot].frame > 11) {
                     m_objects[slot].vy += 0.035;
-                    if (m_objects[slot].vy + m_objects[slot].y > 0.0 && m_objects[slot].frame < 0x10) {
+                    if (m_objects[slot].vy + m_objects[slot].y > 0.0 && m_objects[slot].frame < 16) {
                         m_objects[slot].y = 0.0;
                         m_objects[slot].vy = 0.0;
                         m_objects[slot].vx = 0.0;
                         m_objects[slot].timer = 0;
-                        m_objects[slot].frame = 0x10;
+                        m_objects[slot].frame = 16;
                         break;
                     }
                 }
@@ -5726,12 +5726,12 @@ void CMinagi::UpdateObjects()
                     m_objects[slot].timer = 0;
                     m_objects[slot].frame++;
                     m_objects[slot].attackResult = 0;
-                    if (m_objects[slot].frame == 0xb) {
-                        m_objects[slot].hitsLeft = 0x63;
+                    if (m_objects[slot].frame == 11) {
+                        m_objects[slot].hitsLeft = 99;
                         m_objects[slot].vx = 0.5;
                         m_objects[slot].vy = -2.0;
                     }
-                    if (m_objects[slot].frame == 0x10) {
+                    if (m_objects[slot].frame == 16) {
                         m_objects[slot].frame = m_objects[slot].frame - 2;
                     }
                     if (m_objects[slot].frame >= frameCount) {
@@ -5753,14 +5753,14 @@ void CMinagi::UpdateObjects()
                     m_objects[slot].vx = 0.0;
                     m_objects[slot].vy = 0.0;
                 }
-                if (m_objects[slot].y < 0.0 && m_objects[slot].frame > 0xb) {
+                if (m_objects[slot].y < 0.0 && m_objects[slot].frame > 11) {
                     m_objects[slot].vy += 0.035;
-                    if (m_objects[slot].vy + m_objects[slot].y > 0.0 && m_objects[slot].frame < 0x10) {
+                    if (m_objects[slot].vy + m_objects[slot].y > 0.0 && m_objects[slot].frame < 16) {
                         m_objects[slot].y = 0.0;
                         m_objects[slot].vy = 0.0;
                         m_objects[slot].vx = 0.0;
                         m_objects[slot].timer = 0;
-                        m_objects[slot].frame = 0x10;
+                        m_objects[slot].frame = 16;
                         break;
                     }
                 }
@@ -5777,12 +5777,12 @@ void CMinagi::UpdateObjects()
                     m_objects[slot].timer = 0;
                     m_objects[slot].frame++;
                     m_objects[slot].attackResult = 0;
-                    if (m_objects[slot].frame == 0xb) {
-                        m_objects[slot].hitsLeft = 0x63;
+                    if (m_objects[slot].frame == 11) {
+                        m_objects[slot].hitsLeft = 99;
                         m_objects[slot].vx = 0.5;
                         m_objects[slot].vy = -2.0;
                     }
-                    if (m_objects[slot].frame == 0x10) {
+                    if (m_objects[slot].frame == 16) {
                         m_objects[slot].frame = m_objects[slot].frame - 2;
                     }
                     if (m_objects[slot].frame >= frameCount) {
@@ -5804,14 +5804,14 @@ void CMinagi::UpdateObjects()
                     m_objects[slot].vx = 0.0;
                     m_objects[slot].vy = 0.0;
                 }
-                if (m_objects[slot].y < 0.0 && m_objects[slot].frame > 0xb) {
+                if (m_objects[slot].y < 0.0 && m_objects[slot].frame > 11) {
                     m_objects[slot].vy += 0.025;
-                    if (m_objects[slot].vy + m_objects[slot].y > 0.0 && m_objects[slot].frame < 0x16) {
+                    if (m_objects[slot].vy + m_objects[slot].y > 0.0 && m_objects[slot].frame < 22) {
                         m_objects[slot].y = 0.0;
                         m_objects[slot].vy = 0.0;
                         m_objects[slot].vx = 0.0;
                         m_objects[slot].timer = 0;
-                        m_objects[slot].frame = 0x16;
+                        m_objects[slot].frame = 22;
                         break;
                     }
                 }
@@ -5828,16 +5828,16 @@ void CMinagi::UpdateObjects()
                     m_objects[slot].timer = 0;
                     m_objects[slot].frame++;
                     m_objects[slot].attackResult = 0;
-                    if (m_objects[slot].frame == 0xb) {
-                        m_objects[slot].hitsLeft = 0x63;
+                    if (m_objects[slot].frame == 11) {
+                        m_objects[slot].hitsLeft = 99;
                         m_objects[slot].vx = 0.5;
                         m_objects[slot].vy = -2.0;
                     }
-                    if (m_objects[slot].frame == 0xc && m_objectVar1[slot] < 3) {
+                    if (m_objects[slot].frame == 12 && m_objectVar1[slot] < 3) {
                         m_objects[slot].frame--;
                         m_objectVar1[slot]++;
                     }
-                    if (m_objects[slot].frame == 0x16) {
+                    if (m_objects[slot].frame == 22) {
                         m_objects[slot].frame = m_objects[slot].frame - 2;
                     }
                     if (m_objects[slot].frame >= frameCount) {
@@ -5853,8 +5853,8 @@ void CMinagi::UpdateObjects()
                 m_objectVar1[slot] = 0;
                 m_objectVar2[slot] = 0;
                 m_objectVar3[slot] = 0;
-                if (m_objects[slot].frame == 0xb && m_objects[slot].timer == 0) {
-                    m_objects[slot].x = facing * 0x3c + x;
+                if (m_objects[slot].frame == 11 && m_objects[slot].timer == 0) {
+                    m_objects[slot].x = facing * 60 + x;
                 }
                 if (m_objects[slot].x > 620.0) {
                     m_objects[slot].vx = 0.0;
@@ -5878,7 +5878,7 @@ void CMinagi::UpdateObjects()
                 break;
             case kObjFallInDarkness:
                 m_objects[slot].vx = -0.02;
-                m_objects[slot].drawnWhileHidden = 0x7530;
+                m_objects[slot].drawnWhileHidden = 30000;
                 m_objects[slot].timer++;
                 if (pattern != kFallInDarkness) {
                     RemoveObject(slot);
@@ -5895,7 +5895,7 @@ void CMinagi::UpdateObjects()
             case kObjEncasedBreak:
                 if (pattern != kEncased && pattern != kEncased2 && pattern != kEncasedAir && pattern != kEncasedSpin || pattern == kEncased && frame > 1 || pattern == kEncased2 && frame > 1) {
                     effect.type = 0x1f1;
-                    effect.x = (double)((int)x + facing * 0x17);
+                    effect.x = (double)((int)x + facing * 23);
                     effect.y = (double)((int)y - 4);
                     effect.scale = 0;
                     effect.layer = 1;
@@ -5909,8 +5909,8 @@ void CMinagi::UpdateObjects()
                     effect.facing = facing;
                     SpawnObject(&effect);
                     effect.type = 0x1f1;
-                    effect.x = (double)((int)x - facing * 0xe);
-                    effect.y = (double)((int)y - 0x1a);
+                    effect.x = (double)((int)x - facing * 14);
+                    effect.y = (double)((int)y - 26);
                     effect.scale = 0;
                     effect.layer = 1;
                     effect.facing = facing;
@@ -5923,48 +5923,48 @@ void CMinagi::UpdateObjects()
                     effect.facing = facing;
                     SpawnObject(&effect);
                     effect.type = 0x1f1;
-                    effect.x = (double)((int)x + facing * 0x1e);
-                    effect.y = (double)((int)y - 0x28);
+                    effect.x = (double)((int)x + facing * 30);
+                    effect.y = (double)((int)y - 40);
                     effect.scale = 0;
                     effect.layer = 1;
                     effect.facing = facing;
                     SpawnObject(&effect);
                     effect.type = 0x1f1;
-                    effect.x = (double)((int)x - facing * 0x19);
-                    effect.y = (double)((int)y - 0x50);
+                    effect.x = (double)((int)x - facing * 25);
+                    effect.y = (double)((int)y - 80);
                     effect.scale = 0;
                     effect.layer = 1;
                     effect.facing = facing;
                     SpawnObject(&effect);
                     effect.type = 0x1f2;
-                    effect.x = (double)((int)x - facing * 0x23);
-                    effect.y = (double)((int)y - 0x2a);
+                    effect.x = (double)((int)x - facing * 35);
+                    effect.y = (double)((int)y - 42);
                     effect.scale = 0;
                     effect.layer = 1;
                     effect.facing = facing;
                     SpawnObject(&effect);
                     effect.type = 0x1f2;
-                    effect.x = (double)((int)x - facing * 0x12);
-                    effect.y = (double)((int)y - 0x14);
+                    effect.x = (double)((int)x - facing * 18);
+                    effect.y = (double)((int)y - 20);
                     effect.scale = 0;
                     effect.layer = 1;
                     effect.facing = facing;
                     SpawnObject(&effect);
                     effect.type = 0x1f2;
                     effect.x = (double)((int)x + facing * 2);
-                    effect.y = (double)((int)y - 0x41);
+                    effect.y = (double)((int)y - 65);
                     effect.scale = 0;
                     effect.layer = 1;
                     effect.facing = facing;
                     SpawnObject(&effect);
                     effect.type = 0x1f2;
                     effect.x = (double)((int)x + (facing << 4));
-                    effect.y = (double)((int)y - 0x50);
+                    effect.y = (double)((int)y - 80);
                     effect.scale = 0;
                     effect.layer = 1;
                     effect.facing = facing;
                     SpawnObject(&effect);
-                    m_playSound = 0x22;
+                    m_playSound = 34;
                     RemoveObject(slot);
                     m_encasedBreakOut = 0;
                     break;
@@ -5981,16 +5981,16 @@ void CMinagi::UpdateObjects()
                 break;
             case kObjShardSmall:
                 if (m_objects[slot].frame == 0 && m_objects[slot].timer == 0 && m_objectVar1[slot] == 0) {
-                    m_objectVar2[slot] = (rand() > 0x3e80) * 0x28 + 0x50 + (rand() > 0x3e80) * 0x14;
+                    m_objectVar2[slot] = (rand() > 16000) * 40 + 80 + (rand() > 16000) * 20;
                     m_objectVar1[slot]++;
-                    m_objects[slot].vx = (rand() > 0x3e80) * 1.2 + (rand() > 0x3e80) * 0.7 + (rand() > 0x3e80) * 1.7 + -1.8;
-                    m_objects[slot].vy = -1.2 - ((rand() > 0x3e80) * 0.6 + (rand() > 0x3e80) * 0.9 + (rand() > 0x3e80) * 1.4);
+                    m_objects[slot].vx = (rand() > 16000) * 1.2 + (rand() > 16000) * 0.7 + (rand() > 16000) * 1.7 + -1.8;
+                    m_objects[slot].vy = -1.2 - ((rand() > 16000) * 0.6 + (rand() > 16000) * 0.9 + (rand() > 16000) * 1.4);
                 }
                 m_objects[slot].vy += 0.05;
                 if (m_objects[slot].y > 0.0 && m_objects[slot].vy > 0.0) {
                     m_objects[slot].vy = -m_objects[slot].vy;
                 }
-                if (m_objectVar2[slot] < 0xa) {
+                if (m_objectVar2[slot] < 10) {
                     m_objects[slot].scale = 1;
                 }
                 if (m_objectVar2[slot] < 0) {
@@ -6010,16 +6010,16 @@ void CMinagi::UpdateObjects()
                 break;
             case kObjShardLarge:
                 if (m_objects[slot].frame == 0 && m_objects[slot].timer == 0 && m_objectVar1[slot] == 0) {
-                    m_objectVar2[slot] = (rand() > 0x3e80) * 0x3c + 0x78 + (rand() > 0x3e80) * 0x28;
+                    m_objectVar2[slot] = (rand() > 16000) * 60 + 120 + (rand() > 16000) * 40;
                     m_objectVar1[slot]++;
-                    m_objects[slot].vx = (double)(rand() > 0x3e80) + (rand() > 0x3e80) * 0.5 + (rand() > 0x3e80) * 1.5 + -1.5;
-                    m_objects[slot].vy = -1.0 - ((rand() > 0x3e80) * 0.5 + (rand() > 0x3e80) * 0.8 + (rand() > 0x3e80) * 1.2);
+                    m_objects[slot].vx = (double)(rand() > 16000) + (rand() > 16000) * 0.5 + (rand() > 16000) * 1.5 + -1.5;
+                    m_objects[slot].vy = -1.0 - ((rand() > 16000) * 0.5 + (rand() > 16000) * 0.8 + (rand() > 16000) * 1.2);
                 }
                 m_objects[slot].vy += 0.03;
                 if (m_objects[slot].y > 0.0 && m_objects[slot].vy > 0.0) {
                     m_objects[slot].vy = -m_objects[slot].vy;
                 }
-                if (m_objectVar2[slot] < 0xa) {
+                if (m_objectVar2[slot] < 10) {
                     m_objects[slot].scale = 1;
                 }
                 if (m_objectVar2[slot] < 0) {
@@ -6052,7 +6052,7 @@ void CMinagi::UpdateObjects()
             }
         }
         slot++;
-        if (slot >= 0x40) {
+        if (slot >= 64) {
             slot = 0;
         }
     }

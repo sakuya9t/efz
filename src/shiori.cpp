@@ -14,7 +14,7 @@ CShiori::CShiori(PTR32(CPlayer)* opponent, CGame* game, CGraphics* graphics, CIn
     int i;
 
     strcpy(m_name, "shiori");
-    lastSurface = 0x30e;
+    lastSurface = 782;
     m_patternVar1 = 0;
     m_patternVar2 = 0;
     m_patternVar3 = 0;
@@ -24,24 +24,24 @@ CShiori::CShiori(PTR32(CPlayer)* opponent, CGame* game, CGraphics* graphics, CIn
     m_lv4HoldX = 0;
     m_lv4HoldY = 0;
     m_pointX[0] = -4;
-    m_pointY[0] = -0x39;
-    m_pointX[1] = 0x12;
+    m_pointY[0] = -57;
+    m_pointX[1] = 18;
     m_pointY[1] = 0;
-    m_pointX[2] = 0x15;
-    m_pointY[2] = -0xc;
-    m_pointX[3] = 0x12;
-    m_pointY[3] = -0xf;
-    m_pointX[4] = 0x26;
-    m_pointY[4] = -0x27;
+    m_pointX[2] = 21;
+    m_pointY[2] = -12;
+    m_pointX[3] = 18;
+    m_pointY[3] = -15;
+    m_pointX[4] = 38;
+    m_pointY[4] = -39;
     m_resultPictures = 5;
     m_rivals[0] = 1;
     m_rivals[1] = 7;
-    m_rivals[1] = 0xb;
+    m_rivals[1] = 11;
     m_rivals[2] = 0;
-    m_rivals[3] = 0xd;
-    m_rivals[0xa] = 8;
+    m_rivals[3] = 13;
+    m_rivals[10] = 8;
     i = 0;
-    for (; i < 0x40; i++) {
+    for (; i < 64; i++) {
         m_objectVar1[i] = 0;
         m_objectVar2[i] = 0;
         m_objectVar3[i] = 0;
@@ -61,17 +61,17 @@ void CShiori::Reset()
     m_lv4HoldX = 0;
     m_lv4HoldY = 0;
     m_pointX[0] = -4;
-    m_pointY[0] = -0x39;
-    m_pointX[1] = 0x12;
+    m_pointY[0] = -57;
+    m_pointX[1] = 18;
     m_pointY[1] = 0;
-    m_pointX[2] = 0x15;
-    m_pointY[2] = -0xc;
-    m_pointX[3] = 0x12;
-    m_pointY[3] = -0xf;
-    m_pointX[4] = 0x26;
-    m_pointY[4] = -0x27;
+    m_pointX[2] = 21;
+    m_pointY[2] = -12;
+    m_pointX[3] = 18;
+    m_pointY[3] = -15;
+    m_pointX[4] = 38;
+    m_pointY[4] = -39;
     i = 0;
-    for (; i < 0x40; i++) {
+    for (; i < 64; i++) {
         m_objectVar1[i] = 0;
         m_objectVar2[i] = 0;
         m_objectVar3[i] = 0;
@@ -123,13 +123,13 @@ void CShiori::StartCommand()
         return;
     }
     if (m_sealLevel < 2) {
-        if (m_hp < 0xd05 && m_command == kCmd236236C && m_gauge >= 0xbb8 && (m_patterns[pattern].frames[frame].flagsB0 & kStateCancellable) > 0 && y == 0.0 && m_attackResult != 6 && m_patterns[pattern].cancelLevel <= m_patterns[kLv4].level) {
+        if (m_hp < 3333 && m_command == kCmd236236C && m_gauge >= 3000 && (m_patterns[pattern].frames[frame].flagsB0 & kStateCancellable) > 0 && y == 0.0 && m_attackResult != 6 && m_patterns[pattern].cancelLevel <= m_patterns[kLv4].level) {
             StartPattern();
             ClearBufferedPress();
             pattern = kLv4;
             return;
         }
-        if (m_command == kCmd21436C && m_gauge >= 0xbb8 && (m_patterns[pattern].frames[frame].flagsB0 & kStateCancellable) > 0 && (pattern >= kFirstCharacterAction && m_attackResult >= 2 && m_attackResult != 6 || pattern < kFirstCharacterAction) && m_patterns[pattern].cancelLevel <= m_patterns[k21436C].level) {
+        if (m_command == kCmd21436C && m_gauge >= 3000 && (m_patterns[pattern].frames[frame].flagsB0 & kStateCancellable) > 0 && (pattern >= kFirstCharacterAction && m_attackResult >= 2 && m_attackResult != 6 || pattern < kFirstCharacterAction) && m_patterns[pattern].cancelLevel <= m_patterns[k21436C].level) {
             StartPattern();
             ClearBufferedPress();
             pattern = k21436C;
@@ -138,7 +138,7 @@ void CShiori::StartCommand()
             }
             return;
         }
-        if ((m_command == kCmd21436B || m_command == kCmd21436C) && m_gauge >= 0x7d0 && (m_patterns[pattern].frames[frame].flagsB0 & kStateCancellable) > 0 && (pattern >= kFirstCharacterAction && m_attackResult >= 2 && m_attackResult != 6 || pattern < kFirstCharacterAction) && m_patterns[pattern].cancelLevel <= m_patterns[k21436B].level) {
+        if ((m_command == kCmd21436B || m_command == kCmd21436C) && m_gauge >= 2000 && (m_patterns[pattern].frames[frame].flagsB0 & kStateCancellable) > 0 && (pattern >= kFirstCharacterAction && m_attackResult >= 2 && m_attackResult != 6 || pattern < kFirstCharacterAction) && m_patterns[pattern].cancelLevel <= m_patterns[k21436B].level) {
             StartPattern();
             ClearBufferedPress();
             pattern = k21436B;
@@ -147,7 +147,7 @@ void CShiori::StartCommand()
             }
             return;
         }
-        if ((m_command == kCmd21436A || m_command == kCmd21436B || m_command == kCmd21436C) && m_gauge >= 0x3e8 && (m_patterns[pattern].frames[frame].flagsB0 & kStateCancellable) > 0 && (pattern >= kFirstCharacterAction && m_attackResult >= 2 && m_attackResult != 6 || pattern < kFirstCharacterAction) && m_patterns[pattern].cancelLevel <= m_patterns[k21436A].level) {
+        if ((m_command == kCmd21436A || m_command == kCmd21436B || m_command == kCmd21436C) && m_gauge >= 1000 && (m_patterns[pattern].frames[frame].flagsB0 & kStateCancellable) > 0 && (pattern >= kFirstCharacterAction && m_attackResult >= 2 && m_attackResult != 6 || pattern < kFirstCharacterAction) && m_patterns[pattern].cancelLevel <= m_patterns[k21436A].level) {
             StartPattern();
             ClearBufferedPress();
             pattern = k21436A;
@@ -156,37 +156,37 @@ void CShiori::StartCommand()
             }
             return;
         }
-        if (m_command == kCmd641236C && m_gauge >= 0xbb8 && y == 0.0 && (m_patterns[pattern].frames[frame].flagsB0 & kStateCancellable) > 0 && (pattern >= kFirstCharacterAction && m_attackResult >= 2 && m_attackResult != 6 || pattern < kFirstCharacterAction) && m_patterns[pattern].cancelLevel <= m_patterns[k641236C].level) {
+        if (m_command == kCmd641236C && m_gauge >= 3000 && y == 0.0 && (m_patterns[pattern].frames[frame].flagsB0 & kStateCancellable) > 0 && (pattern >= kFirstCharacterAction && m_attackResult >= 2 && m_attackResult != 6 || pattern < kFirstCharacterAction) && m_patterns[pattern].cancelLevel <= m_patterns[k641236C].level) {
             StartPattern();
             ClearBufferedPress();
             pattern = k641236C;
             return;
         }
-        if ((m_command == kCmd641236C || m_command == kCmd641236B) && m_gauge >= 0x7d0 && y == 0.0 && (m_patterns[pattern].frames[frame].flagsB0 & kStateCancellable) > 0 && (pattern >= kFirstCharacterAction && m_attackResult >= 2 && m_attackResult != 6 || pattern < kFirstCharacterAction) && m_patterns[pattern].cancelLevel <= m_patterns[k641236B].level) {
+        if ((m_command == kCmd641236C || m_command == kCmd641236B) && m_gauge >= 2000 && y == 0.0 && (m_patterns[pattern].frames[frame].flagsB0 & kStateCancellable) > 0 && (pattern >= kFirstCharacterAction && m_attackResult >= 2 && m_attackResult != 6 || pattern < kFirstCharacterAction) && m_patterns[pattern].cancelLevel <= m_patterns[k641236B].level) {
             StartPattern();
             ClearBufferedPress();
             pattern = k641236B;
             return;
         }
-        if ((m_command == kCmd641236A || m_command == kCmd641236B || m_command == kCmd641236C) && m_gauge >= 0x3e8 && y == 0.0 && (m_patterns[pattern].frames[frame].flagsB0 & kStateCancellable) > 0 && (pattern >= kFirstCharacterAction && m_attackResult >= 2 && m_attackResult != 6 || pattern < kFirstCharacterAction) && m_patterns[pattern].cancelLevel <= m_patterns[k641236A].level) {
+        if ((m_command == kCmd641236A || m_command == kCmd641236B || m_command == kCmd641236C) && m_gauge >= 1000 && y == 0.0 && (m_patterns[pattern].frames[frame].flagsB0 & kStateCancellable) > 0 && (pattern >= kFirstCharacterAction && m_attackResult >= 2 && m_attackResult != 6 || pattern < kFirstCharacterAction) && m_patterns[pattern].cancelLevel <= m_patterns[k641236A].level) {
             StartPattern();
             ClearBufferedPress();
             pattern = k641236A;
             return;
         }
-        if (m_command == kCmd214214C && m_gauge >= 0xbb8 && y == 0.0 && (m_patterns[pattern].frames[frame].flagsB0 & kStateCancellable) > 0 && (pattern >= kFirstCharacterAction && m_attackResult >= 2 && m_attackResult != 6 || pattern < kFirstCharacterAction) && m_patterns[pattern].cancelLevel <= m_patterns[k214214C].level) {
+        if (m_command == kCmd214214C && m_gauge >= 3000 && y == 0.0 && (m_patterns[pattern].frames[frame].flagsB0 & kStateCancellable) > 0 && (pattern >= kFirstCharacterAction && m_attackResult >= 2 && m_attackResult != 6 || pattern < kFirstCharacterAction) && m_patterns[pattern].cancelLevel <= m_patterns[k214214C].level) {
             StartPattern();
             ClearBufferedPress();
             pattern = k214214C;
             return;
         }
-        if ((m_command == kCmd214214C || m_command == kCmd214214B) && m_gauge >= 0x7d0 && y == 0.0 && (m_patterns[pattern].frames[frame].flagsB0 & kStateCancellable) > 0 && (pattern >= kFirstCharacterAction && m_attackResult >= 2 && m_attackResult != 6 || pattern < kFirstCharacterAction) && m_patterns[pattern].cancelLevel <= m_patterns[k214214B].level) {
+        if ((m_command == kCmd214214C || m_command == kCmd214214B) && m_gauge >= 2000 && y == 0.0 && (m_patterns[pattern].frames[frame].flagsB0 & kStateCancellable) > 0 && (pattern >= kFirstCharacterAction && m_attackResult >= 2 && m_attackResult != 6 || pattern < kFirstCharacterAction) && m_patterns[pattern].cancelLevel <= m_patterns[k214214B].level) {
             StartPattern();
             ClearBufferedPress();
             pattern = k214214B;
             return;
         }
-        if ((m_command == kCmd214214A || m_command == kCmd214214B || m_command == kCmd214214C) && m_gauge >= 0x3e8 && y == 0.0 && (m_patterns[pattern].frames[frame].flagsB0 & kStateCancellable) > 0 && (pattern >= kFirstCharacterAction && m_attackResult >= 2 && m_attackResult != 6 || pattern < kFirstCharacterAction) && m_patterns[pattern].cancelLevel <= m_patterns[k214214A].level) {
+        if ((m_command == kCmd214214A || m_command == kCmd214214B || m_command == kCmd214214C) && m_gauge >= 1000 && y == 0.0 && (m_patterns[pattern].frames[frame].flagsB0 & kStateCancellable) > 0 && (pattern >= kFirstCharacterAction && m_attackResult >= 2 && m_attackResult != 6 || pattern < kFirstCharacterAction) && m_patterns[pattern].cancelLevel <= m_patterns[k214214A].level) {
             StartPattern();
             ClearBufferedPress();
             pattern = k214214A;
@@ -484,19 +484,19 @@ void CShiori::DrawGauge()
         sprite = *anims[0x2b].frames;
         src = MakeRect(0, 0, sprite.width, sprite.height);
         if (m_side == 0) {
-            dst = MakeRect(0x31 - sprite.x, 0x1f - sprite.y, sprite.width, sprite.height);
+            dst = MakeRect(49 - sprite.x, 31 - sprite.y, sprite.width, sprite.height);
         } else {
-            dst = MakeRect(sprite.x + 0x10f - sprite.width, 0x1f - sprite.y, sprite.width, sprite.height);
+            dst = MakeRect(sprite.x + 271 - sprite.width, 31 - sprite.y, sprite.width, sprite.height);
         }
         m_graphics->Blit(dst, surfaces[sprite.surface], src, colorKey, 0);
     }
     if (m_dObjectTime > 0) {
         sprite = *anims[0x2c].frames;
-        src = MakeRect(0, 0, m_dObjectTime * sprite.width / 0xe10, sprite.height);
+        src = MakeRect(0, 0, m_dObjectTime * sprite.width / 3600, sprite.height);
         if (m_side == 0) {
-            dst = MakeRect(0x31 - sprite.x, 0x1f - sprite.y, m_dObjectTime * sprite.width / 0xe10, sprite.height);
+            dst = MakeRect(49 - sprite.x, 31 - sprite.y, m_dObjectTime * sprite.width / 3600, sprite.height);
         } else {
-            dst = MakeRect(sprite.x + 0x10f - m_dObjectTime * sprite.width / 0xe10, 0x1f - sprite.y, m_dObjectTime * sprite.width / 0xe10, sprite.height);
+            dst = MakeRect(sprite.x + 271 - m_dObjectTime * sprite.width / 3600, 31 - sprite.y, m_dObjectTime * sprite.width / 3600, sprite.height);
         }
         m_graphics->Blit(dst, surfaces[sprite.surface], src, colorKey, 0);
     }
@@ -549,7 +549,7 @@ void CShiori::ReadCommand()
         if ((input & kInputDirections) == (facing == -1) + 5 && step == 1) {
             step = 2;
         }
-        if ((input & kInputDirections) == kInputDown && step == 0 && m_gauge == 0xbb8) {
+        if ((input & kInputDirections) == kInputDown && step == 0 && m_gauge == 3000) {
             step = 1;
         }
     }
@@ -563,7 +563,7 @@ void CShiori::ReadCommand()
         }
         if ((input & kInputDirections) == (facing == -1) + 1 && step == 4) {
             if ((input & kInputButtons) != 0) {
-                m_command = ((input & (kInputB | kInputC | kInputD)) > 0) + 0xa0 + ((input & (kInputC | kInputD)) > 0) + ((input & kInputD) > 0);
+                m_command = ((input & (kInputB | kInputC | kInputD)) > 0) + 160 + ((input & (kInputC | kInputD)) > 0) + ((input & kInputD) > 0);
                 return;
             }
             step = 5;
@@ -577,7 +577,7 @@ void CShiori::ReadCommand()
         if ((input & kInputDirections) == 6 - (facing == -1) && step == 1) {
             step = 2;
         }
-        if ((input & kInputDirections) == kInputDown && step == 0 && m_gauge >= 0x3e8) {
+        if ((input & kInputDirections) == kInputDown && step == 0 && m_gauge >= 1000) {
             step = 1;
         }
     }
@@ -602,7 +602,7 @@ void CShiori::ReadCommand()
         if ((input & kInputDirections) == kInputLeft - (facing == -1) && step == 1) {
             step = 2;
         }
-        if ((input & kInputDirections) == (facing == -1) + 1 && step == 0 && m_gauge >= 0x3e8) {
+        if ((input & kInputDirections) == (facing == -1) + 1 && step == 0 && m_gauge >= 1000) {
             step = 1;
         }
     }
@@ -633,7 +633,7 @@ void CShiori::ReadCommand()
         if ((input & kInputDirections) == (facing == -1) + 5 && step == 1) {
             step = 2;
         }
-        if ((input & kInputDirections) == kInputDown && step == 0 && m_gauge == 0xbb8) {
+        if ((input & kInputDirections) == kInputDown && step == 0 && m_gauge == 3000) {
             step = 1;
         }
     }
@@ -664,7 +664,7 @@ void CShiori::ReadCommand()
         if ((input & kInputDirections) == 6 - (facing == -1) && step == 1) {
             step = 2;
         }
-        if ((input & kInputDirections) == kInputDown && step == 0 && m_gauge >= 0x3e8) {
+        if ((input & kInputDirections) == kInputDown && step == 0 && m_gauge >= 1000) {
             step = 1;
         }
     }
@@ -909,17 +909,17 @@ void CShiori::CpuInput()
     m_pressC = 0;
     m_pressD = 0;
     m_recoilGuardWindow = 0;
-    if ((WORD)Random(0, 0x3e8) < 25.0f * m_cpuSkill + (y < 0.0) * 0x1e * m_cpuSkill + (m_cpuAction == 3) * 0x190 + (pattern == kRecoilGuardAir) * 0x12c) {
-        m_recoilGuardWindow = 0x3c;
+    if ((WORD)Random(0, 1000) < 25.0f * m_cpuSkill + (y < 0.0) * 30 * m_cpuSkill + (m_cpuAction == 3) * 400 + (pattern == kRecoilGuardAir) * 300) {
+        m_recoilGuardWindow = 60;
     }
-    if ((WORD)Random(0, 0x7d0) < ((m_throwProtect > 0) * 4.0 + 1.0) * 8.0 * m_cpuSkill * ((pattern > kLastHitReaction && pattern < kAirRecoveryForward) * 2 + 1)) {
-        m_recoilGuardWindow = 0x3c;
+    if ((WORD)Random(0, 2000) < ((m_throwProtect > 0) * 4.0 + 1.0) * 8.0 * m_cpuSkill * ((pattern > kLastHitReaction && pattern < kAirRecoveryForward) * 2 + 1)) {
+        m_recoilGuardWindow = 60;
     }
-    if ((WORD)Random(0, 0x3e8) < 4e+01f * m_cpuSkill && pattern > kLastSharedAction) {
-        m_recoilGuardWindow = 0x3c;
+    if ((WORD)Random(0, 1000) < 4e+01f * m_cpuSkill && pattern > kLastSharedAction) {
+        m_recoilGuardWindow = 60;
     }
     if (m_canRecoilCounter == 1 && m_cpuAction == 2) {
-        m_recoilGuardWindow = 0x1e;
+        m_recoilGuardWindow = 30;
         if (pattern < kFirstCharacterAction) {
             m_cpuAction = 0;
         }
@@ -931,14 +931,14 @@ void CShiori::CpuInput()
     dx = ((*m_opponent)->x - x) * facing;
     dy = fabs(y - (*m_opponent)->y);
     if (pattern >= kFirstHitReaction && pattern <= kFirstGuard && timer == 0) {
-        if ((WORD)Random(0, 0x64) < 8.0f * m_cpuSkill) {
+        if ((WORD)Random(0, 100) < 8.0f * m_cpuSkill) {
             m_cpuAction = 3;
         } else {
             m_cpuAction = 0;
         }
-        m_inputX = 1 - (((WORD)Random(0, 0x64) < 0x32) << 1);
-        m_pressD = (WORD)Random(0, 0xf0) < dy;
-        m_pressD = (WORD)Random(0, 0x140) < dx;
+        m_inputX = 1 - (((WORD)Random(0, 100) < 0x32) << 1);
+        m_pressD = (WORD)Random(0, 240) < dy;
+        m_pressD = (WORD)Random(0, 320) < dx;
         if ((*m_opponent)->pattern > kLastSharedAction && (*m_opponent)->pattern < 0xfa && (*m_opponent)->frame < 3 && dy < 100.0 && dx < 150.0) {
             m_pressD = 0;
         }
@@ -952,25 +952,25 @@ void CShiori::CpuInput()
     }
     if (pattern == kRecoilGuardStand && timer < 6) {
         if ((*m_opponent)->pattern != 0xc8 && (*m_opponent)->pattern != 0xcc && (*m_opponent)->pattern < 0xfa && (*m_opponent)->y == 0.0 && (*m_opponent)->m_hitsLeft == 0) {
-            if (dx < 40.0 && (WORD)Random(0, 0x64) < m_cpuSkill * 3.0f) {
+            if (dx < 40.0 && (WORD)Random(0, 100) < m_cpuSkill * 3.0f) {
                 m_pressA = 1;
                 m_inputY = 1;
                 return;
             }
-            if (dx < 60.0 && (WORD)Random(0, 0x64) < m_cpuSkill * 2) {
+            if (dx < 60.0 && (WORD)Random(0, 100) < m_cpuSkill * 2) {
                 m_pressA = 1;
                 m_inputY = 0;
                 return;
             }
         }
         if (((*m_opponent)->pattern == 0xc9 || (*m_opponent)->pattern == 0xca || (*m_opponent)->pattern == 0xcd) && (*m_opponent)->pattern < 0xfa && (*m_opponent)->y == 0.0 && (*m_opponent)->m_hitsLeft == 0) {
-            if (dx > 20.0 && dx < 60.0 && (WORD)Random(0, 0x64) < m_cpuSkill * 2) {
+            if (dx > 20.0 && dx < 60.0 && (WORD)Random(0, 100) < m_cpuSkill * 2) {
                 m_pressB = 1;
                 m_inputY = 1;
                 m_inputX = 0;
                 return;
             }
-            if (dx > 60.0 && dx < 80.0 && (WORD)Random(0, 0x64) < m_cpuSkill * 2) {
+            if (dx > 60.0 && dx < 80.0 && (WORD)Random(0, 100) < m_cpuSkill * 2) {
                 m_pressA = 3;
                 m_inputY = 1;
                 return;
@@ -979,69 +979,69 @@ void CShiori::CpuInput()
     }
     if (pattern == kRecoilGuardStand || pattern == kRecoilGuardCrouch) {
         if (dx < 100.0) {
-            if ((WORD)Random(0, 0x64) < m_cpuSkill * 3.0f && m_rfGauge > 500.0) {
+            if ((WORD)Random(0, 100) < m_cpuSkill * 3.0f && m_rfGauge > 500.0) {
                 m_command = kCmd623C;
                 return;
             }
-            if ((WORD)Random(0, 0x64) < m_cpuSkill * 1.0f && m_rfGauge > 500.0) {
+            if ((WORD)Random(0, 100) < m_cpuSkill * 1.0f && m_rfGauge > 500.0) {
                 m_command = kCmd236C;
                 return;
             }
-            if ((WORD)Random(0, 0x64) < m_cpuSkill * 2 && dx < 80.0 && m_gauge >= 0x3e8) {
+            if ((WORD)Random(0, 100) < m_cpuSkill * 2 && dx < 80.0 && m_gauge >= 1000) {
                 m_command = (WORD)Random(0, 3) + kCmd641236A;
                 return;
             }
-            if ((WORD)Random(0, 0x64) < m_cpuSkill * 1.0f && dx < 150.0 && m_gauge == 0xbb8) {
+            if ((WORD)Random(0, 100) < m_cpuSkill * 1.0f && dx < 150.0 && m_gauge == 3000) {
                 m_command = kCmd236236C;
                 return;
             }
         }
         if (dx < 220.0) {
-            if ((WORD)Random(0, 0x64) < m_cpuSkill * 3.0f && m_rfGauge > 500.0) {
+            if ((WORD)Random(0, 100) < m_cpuSkill * 3.0f && m_rfGauge > 500.0) {
                 m_command = kCmd236C;
                 return;
             }
-            if ((WORD)Random(0, 0x64) < m_cpuSkill * 1.0f && m_gauge == 0xbb8) {
+            if ((WORD)Random(0, 100) < m_cpuSkill * 1.0f && m_gauge == 3000) {
                 m_command = kCmd236236C;
                 return;
             }
         }
         if (dx > 220.0) {
-            if ((WORD)Random(0, 0x64) < m_cpuSkill * 1.0f && m_rfGauge > 500.0) {
+            if ((WORD)Random(0, 100) < m_cpuSkill * 1.0f && m_rfGauge > 500.0) {
                 m_command = (WORD)Random(0, 3) + kCmd236A;
                 return;
             }
-            if ((WORD)Random(0, 0x64) < m_cpuSkill * 1.0f && m_gauge == 0xbb8) {
+            if ((WORD)Random(0, 100) < m_cpuSkill * 1.0f && m_gauge == 3000) {
                 m_command = kCmd236236C;
                 return;
             }
         }
     }
     if (pattern == kRecoilGuardAir && frame == 1 && timer == 0) {
-        if ((WORD)Random(0, 0x64) < m_cpuSkill * 5.0f) {
+        if ((WORD)Random(0, 100) < m_cpuSkill * 5.0f) {
             m_cpuAction = 3;
             return;
         }
-        if (y - (*m_opponent)->y < 0.0 && y - (*m_opponent)->y > -40.0 && dx < 80.0 && (WORD)Random(0, 0x64) < m_cpuSkill * 5.0f) {
+        if (y - (*m_opponent)->y < 0.0 && y - (*m_opponent)->y > -40.0 && dx < 80.0 && (WORD)Random(0, 100) < m_cpuSkill * 5.0f) {
             m_pressA = 1;
             return;
         }
-        if (y - (*m_opponent)->y > -100.0 && y - (*m_opponent)->y < -50.0 && dx < 100.0 && (WORD)Random(0, 0x64) < m_cpuSkill * 5.0f) {
+        if (y - (*m_opponent)->y > -100.0 && y - (*m_opponent)->y < -50.0 && dx < 100.0 && (WORD)Random(0, 100) < m_cpuSkill * 5.0f) {
             m_pressB = 1;
             return;
         }
-        if (y - (*m_opponent)->y > -100.0 && y - (*m_opponent)->y < -50.0 && dx < 120.0 && (WORD)Random(0, 0x64) < m_cpuSkill * 5.0f) {
+        if (y - (*m_opponent)->y > -100.0 && y - (*m_opponent)->y < -50.0 && dx < 120.0 && (WORD)Random(0, 100) < m_cpuSkill * 5.0f) {
             m_pressC = 1;
             m_inputY = 0;
             return;
         }
-        if (dy < 50.0 && dx < 100.0 && (WORD)Random(0, 0x64) < m_cpuSkill * 2) {
+        if (dy < 50.0 && dx < 100.0 && (WORD)Random(0, 100) < m_cpuSkill * 2) {
             m_command = kCmd623C;
             return;
         }
     }
-    if (((*m_opponent)->pattern == kRecoilGuardStand || (*m_opponent)->pattern == kRecoilGuardCrouch || (*m_opponent)->pattern == kRecoilGuardAir) && y == 0.0 && (WORD)Random(0, 0x64) < 15.0f * m_cpuSkill && m_cpuAction != 2 && (*m_opponent)->m_freezeTime == 0) {
-        m_cpuRoll = (WORD)Random(0, 0x64);
+    if (((*m_opponent)->pattern == kRecoilGuardStand || (*m_opponent)->pattern == kRecoilGuardCrouch || (*m_opponent)->pattern == kRecoilGuardAir) && y == 0.0 && (WORD)Random(0, 100) < 15.0f * m_cpuSkill && m_cpuAction != 2 && (*m_opponent)->m_freezeTime == 0) {
+        m_cpuRoll = (WORD)Random(0, 100);
         if (m_cpuRoll < 3 && m_rfGauge > 500.0) {
             m_command = kCmd623C;
             return;
@@ -1050,31 +1050,31 @@ void CShiori::CpuInput()
             m_command = kCmd236C;
             return;
         }
-        if (m_cpuRoll < 0x11 && m_cpuRoll > 0xc && m_gauge >= 0x3e8) {
+        if (m_cpuRoll < 17 && m_cpuRoll > 12 && m_gauge >= 1000) {
             m_command = (WORD)Random(0, 3) + kCmd641236A;
             return;
         }
-        if (m_cpuRoll > 0x55) {
+        if (m_cpuRoll > 85) {
             m_cpuAction = 2;
             return;
         }
     }
-    if (((*m_opponent)->pattern == kRecoilGuardStand || (*m_opponent)->pattern == kRecoilGuardCrouch || (*m_opponent)->pattern == kRecoilGuardAir) && y < 0.0 && (WORD)Random(0, 0x64) < 15.0f * m_cpuSkill && m_cpuAction != 2 && (*m_opponent)->m_freezeTime == 0) {
-        m_cpuRoll = (WORD)Random(0, 0x64);
+    if (((*m_opponent)->pattern == kRecoilGuardStand || (*m_opponent)->pattern == kRecoilGuardCrouch || (*m_opponent)->pattern == kRecoilGuardAir) && y < 0.0 && (WORD)Random(0, 100) < 15.0f * m_cpuSkill && m_cpuAction != 2 && (*m_opponent)->m_freezeTime == 0) {
+        m_cpuRoll = (WORD)Random(0, 100);
         if (m_cpuRoll < 3 && m_rfGauge > 500.0) {
             m_command = kCmd623C;
             return;
         }
-        if (m_cpuRoll < 0x11 && m_cpuRoll > 0xc && m_gauge >= 0x3e8) {
+        if (m_cpuRoll < 17 && m_cpuRoll > 12 && m_gauge >= 1000) {
             m_command = (WORD)Random(0, 3) + kCmd641236A;
             return;
         }
-        if (m_cpuRoll > 0x55) {
+        if (m_cpuRoll > 85) {
             m_cpuAction = 2;
             return;
         }
     }
-    if ((m_rfGauge > 500.0 || m_rfBlue > 0) && (WORD)Random(0, 0x64) < 8.0f * m_cpuSkill && (*m_opponent)->pattern > kLastHitReaction && (*m_opponent)->pattern < kAirRecoveryForward && (pattern == k236A || pattern == k236B || pattern == k236C || pattern == kAir214C || pattern == 0x10f || pattern == 0x110)) {
+    if ((m_rfGauge > 500.0 || m_rfBlue > 0) && (WORD)Random(0, 100) < 8.0f * m_cpuSkill && (*m_opponent)->pattern > kLastHitReaction && (*m_opponent)->pattern < kAirRecoveryForward && (pattern == k236A || pattern == k236B || pattern == k236C || pattern == kAir214C || pattern == 0x10f || pattern == 0x110)) {
         m_command = kCmd22C;
         return;
     }
@@ -1158,35 +1158,35 @@ void CShiori::CpuInput()
         }
         return;
     }
-    if (m_attackResult > 1 && m_hitstop == 0 && (WORD)Random(0, 0x64) < m_cpuSkill * 25.0f && m_cpuAction != 1 && m_cpuAction != 2) {
-        m_cpuRoll = (WORD)Random(0, 0x3e8);
+    if (m_attackResult > 1 && m_hitstop == 0 && (WORD)Random(0, 100) < m_cpuSkill * 25.0f && m_cpuAction != 1 && m_cpuAction != 2) {
+        m_cpuRoll = (WORD)Random(0, 1000);
         if (pattern == k5A) {
-            if ((*m_opponent)->y < 0.0 && m_cpuRoll < 0x12c) {
+            if ((*m_opponent)->y < 0.0 && m_cpuRoll < 300) {
                 m_pressB = 1;
                 m_inputY = 0;
                 return;
             }
-            if (dx < 50.0 && m_cpuRoll < 0x190) {
+            if (dx < 50.0 && m_cpuRoll < 400) {
                 m_pressA = 1;
                 m_inputY = 0;
-                if (m_attackResult == 2 && (WORD)Random(0, 0x64) < 0x1e) {
+                if (m_attackResult == 2 && (WORD)Random(0, 100) < 30) {
                     m_pressC = 1;
                     m_inputY = 1;
                 }
                 return;
             }
-            if (dx < 125.0 && m_cpuRoll > 0x18f && m_cpuRoll < 0x2bc) {
+            if (dx < 125.0 && m_cpuRoll > 399 && m_cpuRoll < 700) {
                 m_pressB = 1;
                 m_inputY = 0;
                 return;
             }
-            if (m_cpuRoll > 0x3ca) {
+            if (m_cpuRoll > 970) {
                 m_cpuAction = 4;
                 m_inputY = -1;
                 m_inputX = (WORD)Random(0, 2) - 1;
                 return;
             }
-            if (m_cpuRoll > 0x2bb) {
+            if (m_cpuRoll > 699) {
                 m_cpuAction = 1;
                 if ((WORD)Random(0, 2) == 0) {
                     m_cpuAction = 6;
@@ -1198,40 +1198,40 @@ void CShiori::CpuInput()
             }
         }
         if (pattern == k5BClose) {
-            if ((*m_opponent)->y < 0.0 && m_cpuRoll < 0x12c && m_attackResult == 3) {
+            if ((*m_opponent)->y < 0.0 && m_cpuRoll < 300 && m_attackResult == 3) {
                 m_command = (WORD)Random(0, 2) + kCmd623A;
                 return;
             }
-            if ((*m_opponent)->y < 0.0 && m_cpuRoll > 0x12b && m_cpuRoll < 0x140 && m_gauge >= 0x3e8) {
+            if ((*m_opponent)->y < 0.0 && m_cpuRoll > 299 && m_cpuRoll < 320 && m_gauge >= 1000) {
                 m_command = (WORD)Random(0, 3) + kCmd641236A;
                 return;
             }
-            if ((*m_opponent)->y < 0.0 && m_cpuRoll > 0x140 && m_cpuRoll < 0x258 && m_attackResult == 3) {
+            if ((*m_opponent)->y < 0.0 && m_cpuRoll > 320 && m_cpuRoll < 600 && m_attackResult == 3) {
                 m_inputX = facing;
                 m_inputY = -1;
                 return;
             }
-            if (m_cpuRoll < 0xc8) {
+            if (m_cpuRoll < 200) {
                 m_pressC = 1;
                 m_inputY = 1;
                 return;
             }
-            if (m_cpuRoll > 0xc8 && m_cpuRoll < 0x1c2 && dx < 90.0) {
+            if (m_cpuRoll > 200 && m_cpuRoll < 450 && dx < 90.0) {
                 m_pressB = 1;
                 m_inputY = 0;
                 return;
             }
-            if ((*m_opponent)->y < 0.0 && m_cpuRoll > 0x1c2 && m_cpuRoll < 0x2bc) {
+            if ((*m_opponent)->y < 0.0 && m_cpuRoll > 450 && m_cpuRoll < 700) {
                 m_pressC = 1;
                 return;
             }
-            if (m_cpuRoll > 0x384) {
+            if (m_cpuRoll > 900) {
                 m_cpuAction = 4;
                 m_inputY = -1;
                 m_inputX = (WORD)Random(0, 2) - 1;
                 return;
             }
-            if (m_cpuRoll > 0x2bc) {
+            if (m_cpuRoll > 700) {
                 m_cpuAction = 1;
                 if ((WORD)Random(0, 1) == 0) {
                     m_cpuAction = 6;
@@ -1243,20 +1243,20 @@ void CShiori::CpuInput()
             }
         }
         if (pattern == k5BFar) {
-            if ((*m_opponent)->y < 0.0 && m_cpuRoll > 0x12b && m_cpuRoll < 0x140) {
+            if ((*m_opponent)->y < 0.0 && m_cpuRoll > 299 && m_cpuRoll < 320) {
                 m_command = kCmd236A;
                 return;
             }
-            if ((*m_opponent)->y < 0.0 && m_cpuRoll > 0x140 && m_cpuRoll < 0x258 && dx < 100.0) {
+            if ((*m_opponent)->y < 0.0 && m_cpuRoll > 320 && m_cpuRoll < 600 && dx < 100.0) {
                 m_pressC = 1;
                 return;
             }
-            if (m_cpuRoll < 0x1f4 && m_attackResult == 3 && dx < 80.0) {
+            if (m_cpuRoll < 500 && m_attackResult == 3 && dx < 80.0) {
                 m_pressC = 1;
                 m_inputY = 0;
                 return;
             }
-            if (m_cpuRoll > 0x2bc) {
+            if (m_cpuRoll > 700) {
                 m_cpuAction = 1;
                 if ((WORD)Random(0, 1) == 0) {
                     m_cpuAction = 6;
@@ -1268,75 +1268,75 @@ void CShiori::CpuInput()
             }
         }
         if (pattern == k5C) {
-            if ((*m_opponent)->y < 0.0 && m_cpuRoll < 0x12c && m_attackResult == 3) {
+            if ((*m_opponent)->y < 0.0 && m_cpuRoll < 300 && m_attackResult == 3) {
                 m_command = kCmd236A;
                 return;
             }
-            if ((*m_opponent)->y < 0.0 && m_cpuRoll > 0x12b && m_cpuRoll < 0x140 && m_gauge >= 0x3e8 && dx < 90.0) {
+            if ((*m_opponent)->y < 0.0 && m_cpuRoll > 299 && m_cpuRoll < 320 && m_gauge >= 1000 && dx < 90.0) {
                 m_command = (WORD)Random(0, 3) + kCmd641236A;
                 return;
             }
-            if (m_cpuRoll > 0 && m_cpuRoll < 0xc8 && m_attackResult == 3) {
+            if (m_cpuRoll > 0 && m_cpuRoll < 200 && m_attackResult == 3) {
                 m_command = kCmd236A;
                 return;
             }
-            if (m_cpuRoll > 0xc8 && m_cpuRoll < 0xfa) {
+            if (m_cpuRoll > 200 && m_cpuRoll < 250) {
                 m_command = (WORD)Random(0, 3) + kCmd214A;
                 return;
             }
-            if (m_cpuRoll > 0x15e && m_cpuRoll < 0x190 && m_rfGauge > 500.0) {
+            if (m_cpuRoll > 350 && m_cpuRoll < 400 && m_rfGauge > 500.0) {
                 m_command = kCmd22C;
                 return;
             }
-            if (m_cpuRoll > 0x190 && m_cpuRoll < 0x1ae && m_attackResult == 3 && m_gauge == 0xbb8) {
+            if (m_cpuRoll > 400 && m_cpuRoll < 430 && m_attackResult == 3 && m_gauge == 3000) {
                 m_command = kCmd236236C;
                 return;
             }
-            if (m_cpuRoll > 0x1ae && m_cpuRoll < 0x21c && m_attackResult != 3) {
+            if (m_cpuRoll > 430 && m_cpuRoll < 540 && m_attackResult != 3) {
                 m_command = kCmd412A;
                 if (dx > 120.0) {
                     m_command = kCmd412B;
                 }
                 return;
             }
-            if (m_cpuRoll > 0x38e && m_attackResult == 3) {
+            if (m_cpuRoll > 910 && m_attackResult == 3) {
                 m_cpuAction = 4;
                 m_inputY = -1;
                 m_inputX = (WORD)Random(0, 2) - 1;
                 return;
             }
-            if (m_cpuRoll > 0x289) {
+            if (m_cpuRoll > 649) {
                 m_cpuAction = 1;
                 return;
             }
         }
         if (pattern == k2A) {
-            if ((*m_opponent)->y < 0.0 && m_cpuRoll < 0x12c) {
+            if ((*m_opponent)->y < 0.0 && m_cpuRoll < 300) {
                 m_pressB = 1;
                 m_inputY = 1;
                 return;
             }
-            if (dx < 50.0 && m_cpuRoll < 0x190) {
+            if (dx < 50.0 && m_cpuRoll < 400) {
                 m_pressA = 1;
                 m_inputY = 0;
-                if (m_attackResult == 2 && (WORD)Random(0, 0x64) < 0x14) {
+                if (m_attackResult == 2 && (WORD)Random(0, 100) < 20) {
                     m_pressC = 1;
                     m_inputY = 1;
                 }
                 return;
             }
-            if (dx < 135.0 && m_cpuRoll < 0x258) {
+            if (dx < 135.0 && m_cpuRoll < 600) {
                 m_pressB = 1;
                 m_inputY = 0;
                 return;
             }
-            if (m_cpuRoll > 0x3b6) {
+            if (m_cpuRoll > 950) {
                 m_cpuAction = 4;
                 m_inputY = -1;
                 m_inputX = (WORD)Random(0, 2) - 1;
                 return;
             }
-            if (m_cpuRoll > 0x2bb) {
+            if (m_cpuRoll > 699) {
                 m_cpuAction = 1;
                 if ((WORD)Random(0, 1) == 0) {
                     m_cpuAction = 6;
@@ -1349,31 +1349,31 @@ void CShiori::CpuInput()
             }
         }
         if (pattern == k2B) {
-            if ((*m_opponent)->y < 0.0 && m_cpuRoll > 0x140 && m_cpuRoll < 0x258 && dx < 100.0) {
+            if ((*m_opponent)->y < 0.0 && m_cpuRoll > 320 && m_cpuRoll < 600 && dx < 100.0) {
                 m_pressC = 1;
                 return;
             }
-            if (m_cpuRoll < 0x64) {
+            if (m_cpuRoll < 100) {
                 m_pressC = 1;
                 m_inputY = 1;
                 return;
             }
-            if (m_cpuRoll > 0x64 && m_cpuRoll < 0x12c && dx < 100.0) {
+            if (m_cpuRoll > 100 && m_cpuRoll < 300 && dx < 100.0) {
                 m_pressB = 1;
                 m_inputY = 0;
                 return;
             }
-            if ((*m_opponent)->y < 0.0 && m_cpuRoll > 0x12c && m_cpuRoll < 0x258) {
+            if ((*m_opponent)->y < 0.0 && m_cpuRoll > 300 && m_cpuRoll < 600) {
                 m_pressC = 1;
                 return;
             }
-            if (m_cpuRoll > 0x384) {
+            if (m_cpuRoll > 900) {
                 m_cpuAction = 4;
                 m_inputY = -1;
                 m_inputX = (WORD)Random(0, 2) - 1;
                 return;
             }
-            if (m_cpuRoll > 0x2bc) {
+            if (m_cpuRoll > 700) {
                 m_cpuAction = 1;
                 if ((WORD)Random(0, 1) == 0) {
                     m_cpuAction = 6;
@@ -1385,53 +1385,53 @@ void CShiori::CpuInput()
             }
         }
         if (pattern == k2C) {
-            if ((*m_opponent)->y < 0.0 && m_cpuRoll < 0x12c && m_attackResult == 3) {
+            if ((*m_opponent)->y < 0.0 && m_cpuRoll < 300 && m_attackResult == 3) {
                 m_command = kCmd236A;
                 return;
             }
-            if ((*m_opponent)->y < 0.0 && m_cpuRoll > 0x12b && m_cpuRoll < 0x140 && m_gauge >= 0x3e8 && dx < 90.0) {
+            if ((*m_opponent)->y < 0.0 && m_cpuRoll > 299 && m_cpuRoll < 320 && m_gauge >= 1000 && dx < 90.0) {
                 m_command = (WORD)Random(0, 3) + kCmd641236A;
                 return;
             }
-            if (m_cpuRoll > 0 && m_cpuRoll < 0xc8 && m_attackResult == 3) {
+            if (m_cpuRoll > 0 && m_cpuRoll < 200 && m_attackResult == 3) {
                 m_command = kCmd236A;
                 return;
             }
-            if (m_cpuRoll > 0xc8 && m_cpuRoll < 0xfa) {
+            if (m_cpuRoll > 200 && m_cpuRoll < 250) {
                 m_command = (WORD)Random(0, 3) + kCmd214A;
                 return;
             }
-            if (m_cpuRoll > 0x15e && m_cpuRoll < 0x190 && m_rfGauge > 500.0) {
+            if (m_cpuRoll > 350 && m_cpuRoll < 400 && m_rfGauge > 500.0) {
                 m_command = kCmd22C;
                 return;
             }
-            if (m_cpuRoll > 0x1ae && m_cpuRoll < 0x21c && m_attackResult != 3) {
+            if (m_cpuRoll > 430 && m_cpuRoll < 540 && m_attackResult != 3) {
                 m_command = kCmd412A;
                 if (dx > 120.0) {
                     m_command = kCmd412B;
                 }
                 return;
             }
-            if (m_cpuRoll > 0x289) {
+            if (m_cpuRoll > 649) {
                 m_cpuAction = 1;
                 return;
             }
         }
         if (pattern == kJumpA) {
-            if ((*m_opponent)->y < 0.0 && m_cpuRoll < 0x12c) {
+            if ((*m_opponent)->y < 0.0 && m_cpuRoll < 300) {
                 m_pressB = 1;
                 return;
             }
-            if (dx < 60.0 && m_cpuRoll < 0x190) {
+            if (dx < 60.0 && m_cpuRoll < 400) {
                 m_pressA = 1;
                 return;
             }
-            if (dx < 125.0 && m_cpuRoll > 0x18f && m_cpuRoll < 0x2bc) {
+            if (dx < 125.0 && m_cpuRoll > 399 && m_cpuRoll < 700) {
                 m_pressC = 1;
                 m_inputY = 0;
                 return;
             }
-            if (m_cpuRoll > 0x2bb) {
+            if (m_cpuRoll > 699) {
                 m_cpuAction = 1;
                 if ((WORD)Random(0, 4) == 0) {
                     m_cpuAction = 3;
@@ -1440,47 +1440,47 @@ void CShiori::CpuInput()
             }
         }
         if (pattern == kJumpB) {
-            if (m_cpuRoll > 0x14 && m_cpuRoll < 0x3c && m_attackResult == 3 && (*m_opponent)->y < 0.0) {
+            if (m_cpuRoll > 20 && m_cpuRoll < 60 && m_attackResult == 3 && (*m_opponent)->y < 0.0) {
                 m_command = kCmd236A;
                 return;
             }
-            if (m_cpuRoll > 0x50 && m_cpuRoll < 0x12c) {
+            if (m_cpuRoll > 80 && m_cpuRoll < 300) {
                 m_pressC = 1;
                 return;
             }
-            if (m_cpuRoll > 0x3b6) {
+            if (m_cpuRoll > 950) {
                 m_inputX = (WORD)Random(0, 2) - 1;
                 return;
             }
-            if (m_cpuRoll > 0x289) {
+            if (m_cpuRoll > 649) {
                 m_cpuAction = 3;
                 return;
             }
         }
         if (pattern == kJumpC) {
-            if (m_cpuRoll > 0x3b6) {
+            if (m_cpuRoll > 950) {
                 m_inputX = (WORD)Random(0, 2) - 1;
                 return;
             }
-            if (m_cpuRoll > 0x289) {
+            if (m_cpuRoll > 649) {
                 m_cpuAction = 3;
                 return;
             }
         }
         if (pattern == kDashB) {
-            if ((*m_opponent)->y < 0.0 && m_cpuRoll < 0x12c && m_attackResult == 3) {
+            if ((*m_opponent)->y < 0.0 && m_cpuRoll < 300 && m_attackResult == 3) {
                 m_command = (WORD)Random(0, 2) + kCmd623A;
                 return;
             }
-            if (m_cpuRoll > 0xc8 && m_cpuRoll < 0xdc && dx < 90.0 && m_attackResult == 3 && m_gauge >= 0x3e8) {
+            if (m_cpuRoll > 200 && m_cpuRoll < 220 && dx < 90.0 && m_attackResult == 3 && m_gauge >= 1000) {
                 m_command = (WORD)Random(0, 3) + kCmd641236A;
                 return;
             }
-            if (m_cpuRoll > 0x15e && m_cpuRoll < 0x190 && m_rfGauge > 500.0) {
+            if (m_cpuRoll > 350 && m_cpuRoll < 400 && m_rfGauge > 500.0) {
                 m_command = kCmd22C;
                 return;
             }
-            if (m_cpuRoll > 0x289 && (WORD)Random(0, 2) == 0) {
+            if (m_cpuRoll > 649 && (WORD)Random(0, 2) == 0) {
                 m_cpuAction = 0xc;
                 if (dx > 110.0) {
                     m_cpuAction = 8;
@@ -1488,51 +1488,51 @@ void CShiori::CpuInput()
             }
         }
         if (pattern == kDashC) {
-            if ((*m_opponent)->y < 0.0 && m_cpuRoll < 0x12c && m_attackResult == 3) {
+            if ((*m_opponent)->y < 0.0 && m_cpuRoll < 300 && m_attackResult == 3) {
                 m_command = kCmd236A;
                 return;
             }
-            if ((*m_opponent)->y < 0.0 && m_cpuRoll > 0x12b && m_cpuRoll < 0x140 && m_gauge >= 0x3e8 && dx < 90.0) {
+            if ((*m_opponent)->y < 0.0 && m_cpuRoll > 299 && m_cpuRoll < 320 && m_gauge >= 1000 && dx < 90.0) {
                 m_command = (WORD)Random(0, 3) + kCmd641236A;
                 return;
             }
-            if (m_cpuRoll > 0 && m_cpuRoll < 0xc8 && m_attackResult == 3) {
+            if (m_cpuRoll > 0 && m_cpuRoll < 200 && m_attackResult == 3) {
                 m_command = kCmd236A;
                 return;
             }
-            if (m_cpuRoll > 0xc8 && m_cpuRoll < 0xfa) {
+            if (m_cpuRoll > 200 && m_cpuRoll < 250) {
                 m_command = (WORD)Random(0, 3) + kCmd214A;
                 return;
             }
-            if (m_cpuRoll > 0x15e && m_cpuRoll < 0x190 && m_rfGauge > 500.0) {
+            if (m_cpuRoll > 350 && m_cpuRoll < 400 && m_rfGauge > 500.0) {
                 m_command = kCmd22C;
                 return;
             }
-            if (m_cpuRoll > 0x190 && m_cpuRoll < 0x1ae && m_attackResult == 3 && m_gauge == 0xbb8) {
+            if (m_cpuRoll > 400 && m_cpuRoll < 430 && m_attackResult == 3 && m_gauge == 3000) {
                 m_command = kCmd236236C;
                 return;
             }
-            if (m_cpuRoll > 0x1ae && m_cpuRoll < 0x21c && m_attackResult != 3) {
+            if (m_cpuRoll > 430 && m_cpuRoll < 540 && m_attackResult != 3) {
                 m_command = kCmd412A;
                 if (dx > 120.0) {
                     m_command = kCmd412B;
                 }
                 return;
             }
-            if (m_cpuRoll > 0x38e && m_attackResult == 3) {
+            if (m_cpuRoll > 910 && m_attackResult == 3) {
                 m_cpuAction = 4;
                 m_inputY = -1;
                 m_inputX = (WORD)Random(0, 2) - 1;
                 return;
             }
-            if (m_cpuRoll > 0x289) {
+            if (m_cpuRoll > 649) {
                 m_cpuAction = 1;
                 return;
             }
         }
     }
-    if ((WORD)Random(0, 0x64) < 25.0f * m_cpuSkill) {
-        m_cpuRoll = (WORD)Random(0, 0x3e8);
+    if ((WORD)Random(0, 100) < 25.0f * m_cpuSkill) {
+        m_cpuRoll = (WORD)Random(0, 1000);
         if (y == 0.0) {
             if ((*m_opponent)->y == 0.0 && (*m_opponent)->pattern != kLyingDown) {
                 if (dx < 40.0 && (*m_opponent)->y == 0.0 && m_cpuRoll < 5) {
@@ -1541,85 +1541,85 @@ void CShiori::CpuInput()
                     m_inputY = 0;
                     return;
                 }
-                if (dx < 50.0 && m_cpuRoll < 0x17) {
+                if (dx < 50.0 && m_cpuRoll < 23) {
                     m_pressA = 1;
                     m_inputY = 1;
                     return;
                 }
-                if (dx < 75.0 && m_cpuRoll < 0x1e) {
+                if (dx < 75.0 && m_cpuRoll < 30) {
                     m_pressA = 1;
                     m_inputY = 0;
                     return;
                 }
-                if (dx < 80.0 && m_cpuRoll < 0x28 && m_cpuRoll > 0x1e) {
+                if (dx < 80.0 && m_cpuRoll < 40 && m_cpuRoll > 30) {
                     m_pressB = 1;
                     m_inputY = 1;
                     return;
                 }
-                if (dx < 80.0 && m_cpuRoll < 0x34 && m_cpuRoll > 0x28 || dx > 80.0 && dx < 130.0 && m_cpuRoll < 0x50 && m_cpuRoll > 0x34) {
+                if (dx < 80.0 && m_cpuRoll < 52 && m_cpuRoll > 40 || dx > 80.0 && dx < 130.0 && m_cpuRoll < 80 && m_cpuRoll > 52) {
                     m_pressB = 1;
                     m_inputY = 0;
                     return;
                 }
-                if (dx > 80.0 && dx < 140.0 && m_cpuRoll < 0x64 && m_cpuRoll > 0x50) {
+                if (dx > 80.0 && dx < 140.0 && m_cpuRoll < 100 && m_cpuRoll > 80) {
                     m_cpuAction = 8;
                     return;
                 }
-                if (dx > 70.0 && dx < 120.0 && m_cpuRoll < 0x78 && m_cpuRoll > 0x64) {
+                if (dx > 70.0 && dx < 120.0 && m_cpuRoll < 120 && m_cpuRoll > 100) {
                     m_cpuAction = 8;
                     return;
                 }
-                if (dx < 90.0 && dx > 70.0 && m_cpuRoll < 0x82 && m_cpuRoll > 0x78) {
+                if (dx < 90.0 && dx > 70.0 && m_cpuRoll < 130 && m_cpuRoll > 120) {
                     m_pressC = 1;
                     m_inputY = 1;
                     return;
                 }
-                if (dx < 120.0 && dx > 70.0 && m_cpuRoll < 0x91 && m_cpuRoll > 0x82) {
+                if (dx < 120.0 && dx > 70.0 && m_cpuRoll < 145 && m_cpuRoll > 130) {
                     m_pressC = 1;
                     m_inputY = 0;
                     return;
                 }
-                if (dx > 100.0 && dx < 140.0 && m_cpuRoll < 0x98 && m_cpuRoll > 0x91) {
+                if (dx > 100.0 && dx < 140.0 && m_cpuRoll < 152 && m_cpuRoll > 145) {
                     m_cpuAction = 0xa;
                     return;
                 }
-                if (dx < 80.0 && m_cpuRoll < 0xa5 && m_cpuRoll > 0x91 && m_rfGauge > 500.0 && (*m_opponent)->pattern > kLastSharedAction) {
+                if (dx < 80.0 && m_cpuRoll < 165 && m_cpuRoll > 145 && m_rfGauge > 500.0 && (*m_opponent)->pattern > kLastSharedAction) {
                     m_command = kCmd623C;
                     return;
                 }
-                if (dx < 80.0 && m_cpuRoll < 0xaa && m_cpuRoll > 0xa5 && m_gauge >= 0x3e8 && (*m_opponent)->pattern > kLastSharedAction) {
+                if (dx < 80.0 && m_cpuRoll < 170 && m_cpuRoll > 165 && m_gauge >= 1000 && (*m_opponent)->pattern > kLastSharedAction) {
                     m_command = (WORD)Random(0, 3) + kCmd641236A;
                     return;
                 }
-                if (dx > 200.0 && m_cpuRoll < 0xaa && m_cpuRoll > 0xa5 && m_gauge >= 0x3e8 && (*m_opponent)->pattern > kLastSharedAction) {
-                    m_command = (WORD)Random(0, 3) + 0x82;
+                if (dx > 200.0 && m_cpuRoll < 170 && m_cpuRoll > 165 && m_gauge >= 1000 && (*m_opponent)->pattern > kLastSharedAction) {
+                    m_command = (WORD)Random(0, 3) + 130;
                     return;
                 }
-                if (dx > 200.0 && m_cpuRoll < 0xbe && m_cpuRoll > 0xaa) {
+                if (dx > 200.0 && m_cpuRoll < 190 && m_cpuRoll > 170) {
                     m_command = (WORD)Random(0, 3) + kCmd236A;
                     return;
                 }
-                if (dx > 80.0 && dx < 120.0 && m_cpuRoll < 0xd2 && m_cpuRoll > 0xbe) {
+                if (dx > 80.0 && dx < 120.0 && m_cpuRoll < 210 && m_cpuRoll > 190) {
                     m_command = kCmd412A;
                     return;
                 }
-                if (dx > 140.0 && dx < 180.0 && m_cpuRoll < 0xd2 && m_cpuRoll > 0xbe) {
+                if (dx > 140.0 && dx < 180.0 && m_cpuRoll < 210 && m_cpuRoll > 190) {
                     m_command = kCmd412B;
                     return;
                 }
-                if (dx > 200.0 && dx < 240.0 && m_cpuRoll < 0xd2 && m_cpuRoll > 0xbe) {
+                if (dx > 200.0 && dx < 240.0 && m_cpuRoll < 210 && m_cpuRoll > 190) {
                     m_command = kCmd412C;
                     return;
                 }
             }
             if ((*m_opponent)->y < 0.0) {
                 if ((*m_opponent)->vy < 0.0) {
-                    if (dx < 80.0 && dy < 120.0 && m_cpuRoll < 0xa) {
+                    if (dx < 80.0 && dy < 120.0 && m_cpuRoll < 10) {
                         m_inputY = -1;
                         m_inputX = -facing;
                         return;
                     }
-                    if (dx < 80.0 && m_cpuRoll < 0xf && m_gauge >= 0x3e8) {
+                    if (dx < 80.0 && m_cpuRoll < 15 && m_gauge >= 1000) {
                         m_command = (WORD)Random(0, 3) + kCmd641236A;
                         return;
                     }
@@ -1629,22 +1629,22 @@ void CShiori::CpuInput()
                         m_command = kCmd623C;
                         return;
                     }
-                    if (dx < 90.0 && dy < 140.0 && dy > 100.0 && m_cpuRoll < 0x23 && m_cpuRoll > 0xa) {
+                    if (dx < 90.0 && dy < 140.0 && dy > 100.0 && m_cpuRoll < 35 && m_cpuRoll > 10) {
                         m_pressB = 1;
                         m_inputY = 0;
                         return;
                     }
-                    if (dx > 100.0 && dx < 140.0 && dy < 180.0 && dy > 140.0 && m_cpuRoll < 0x3c && m_cpuRoll > 0x23) {
+                    if (dx > 100.0 && dx < 140.0 && dy < 180.0 && dy > 140.0 && m_cpuRoll < 60 && m_cpuRoll > 35) {
                         m_pressC = 1;
                         m_inputY = 0;
                         return;
                     }
-                    if (dx > 100.0 && dx < 140.0 && dy < 140.0 && dy > 100.0 && m_cpuRoll < 0x50 && m_cpuRoll > 0x3c) {
+                    if (dx > 100.0 && dx < 140.0 && dy < 140.0 && dy > 100.0 && m_cpuRoll < 80 && m_cpuRoll > 60) {
                         m_pressB = 1;
                         m_inputY = 0;
                         return;
                     }
-                    if (dx < 80.0 && m_cpuRoll < 0x6e && m_cpuRoll > 0x50 && (*m_opponent)->y < -50.0 && m_gauge >= 0x3e8) {
+                    if (dx < 80.0 && m_cpuRoll < 110 && m_cpuRoll > 80 && (*m_opponent)->y < -50.0 && m_gauge >= 1000) {
                         m_command = (WORD)Random(0, 3) + kCmd641236A;
                         return;
                     }
@@ -1653,66 +1653,66 @@ void CShiori::CpuInput()
         }
         if (y < 0.0 && m_cpuAction != 3) {
             if ((*m_opponent)->y == 0.0) {
-                if (dx < 80.0 && dy < 100.0 && m_cpuRoll < 0x32) {
+                if (dx < 80.0 && dy < 100.0 && m_cpuRoll < 50) {
                     m_pressA = 1;
                     return;
                 }
-                if (dx > 60.0 && dx < 120.0 && dy > 90.0 && dy < 120.0 && (*m_opponent)->y < y && m_cpuRoll > 0x32 && m_cpuRoll < 0x78) {
+                if (dx > 60.0 && dx < 120.0 && dy > 90.0 && dy < 120.0 && (*m_opponent)->y < y && m_cpuRoll > 50 && m_cpuRoll < 120) {
                     m_pressB = 1;
                     return;
                 }
-                if (dx > 80.0 && dx < 140.0 && dy > 100.0 && dy < 180.0 && m_cpuRoll > 0x78 && m_cpuRoll < 0xaa) {
+                if (dx > 80.0 && dx < 140.0 && dy > 100.0 && dy < 180.0 && m_cpuRoll > 120 && m_cpuRoll < 170) {
                     m_pressC = 1;
                     return;
                 }
-                if ((WORD)Random(0, 0x140) < dx - 100.0 && dy < 90.0 && m_cpuRoll > 0xaa && m_cpuRoll < 0xdc) {
+                if ((WORD)Random(0, 320) < dx - 100.0 && dy < 90.0 && m_cpuRoll > 170 && m_cpuRoll < 220) {
                     m_command = (WORD)Random(0, 3) + kCmd236A;
                     return;
                 }
-                if (dx > 100.0 && m_cpuRoll > 0xf0 && m_cpuRoll < 0x14a && dy + 40.0 > dx && dy - 40.0 < dx) {
+                if (dx > 100.0 && m_cpuRoll > 240 && m_cpuRoll < 330 && dy + 40.0 > dx && dy - 40.0 < dx) {
                     m_command = (WORD)Random(0, 3) + kCmd412A;
                     return;
                 }
             }
             if ((*m_opponent)->y < 0.0) {
-                if (dx < 80.0 && dy < 100.0 && m_cpuRoll < 0x14) {
+                if (dx < 80.0 && dy < 100.0 && m_cpuRoll < 20) {
                     m_pressA = 1;
                     return;
                 }
-                if (dx > 60.0 && dx < 120.0 && dy > 90.0 && dy < 120.0 && (*m_opponent)->y < y && m_cpuRoll > 0x14 && m_cpuRoll < 0x28) {
+                if (dx > 60.0 && dx < 120.0 && dy > 90.0 && dy < 120.0 && (*m_opponent)->y < y && m_cpuRoll > 20 && m_cpuRoll < 40) {
                     m_pressB = 1;
                     return;
                 }
-                if (dx > 80.0 && dx < 140.0 && dy > 100.0 && dy < 180.0 && m_cpuRoll > 0x28 && m_cpuRoll < 0x32) {
+                if (dx > 80.0 && dx < 140.0 && dy > 100.0 && dy < 180.0 && m_cpuRoll > 40 && m_cpuRoll < 50) {
                     m_pressC = 1;
                     return;
                 }
-                if ((WORD)Random(0, 0x140) < dx - 100.0 && dy < 180.0 && m_cpuRoll > 0xaa && m_cpuRoll < 0xf0) {
+                if ((WORD)Random(0, 320) < dx - 100.0 && dy < 180.0 && m_cpuRoll > 170 && m_cpuRoll < 240) {
                     m_command = (WORD)Random(0, 3) + kCmd236A;
                     return;
                 }
             }
         }
     }
-    if (pattern < kFirstHitReaction && ((*m_opponent)->pattern > kLastHitReaction && (*m_opponent)->pattern < kGuardAir || (*m_opponent)->pattern > kLastFreeAction && (*m_opponent)->pattern < kHitAir) && y == 0.0 && (WORD)Random(0, 0x64) < 3.0f * m_cpuSkill) {
+    if (pattern < kFirstHitReaction && ((*m_opponent)->pattern > kLastHitReaction && (*m_opponent)->pattern < kGuardAir || (*m_opponent)->pattern > kLastFreeAction && (*m_opponent)->pattern < kHitAir) && y == 0.0 && (WORD)Random(0, 100) < 3.0f * m_cpuSkill) {
         m_command = facing == 1;
         return;
     }
-    if (pattern < kFirstHitReaction && (*m_opponent)->pattern < kFirstHitReaction && dx > 60.0 && dx < 140.0 && (WORD)Random(0, 0x64) < 2.0f * m_cpuSkill && x > 120.0 && x < 520.0) {
+    if (pattern < kFirstHitReaction && (*m_opponent)->pattern < kFirstHitReaction && dx > 60.0 && dx < 140.0 && (WORD)Random(0, 100) < 2.0f * m_cpuSkill && x > 120.0 && x < 520.0) {
         m_command = -((facing == 1) - 1);
         return;
     }
-    if ((WORD)Random(0, 0x3e8) < 2) {
+    if ((WORD)Random(0, 1000) < 2) {
         m_cpuAction = 4;
         return;
     }
-    if ((WORD)Random(0, 0x64) < 2) {
-        if ((WORD)Random(0, 0x64) < 8.0f * m_cpuSkill) {
+    if ((WORD)Random(0, 100) < 2) {
+        if ((WORD)Random(0, 100) < 8.0f * m_cpuSkill) {
             m_cpuAction = 3;
         } else {
             m_cpuAction = 0;
         }
-        if (dx > 180.0 && y == 0.0 && (WORD)Random(0, 0x64) < 2) {
+        if (dx > 180.0 && y == 0.0 && (WORD)Random(0, 100) < 2) {
             m_inputX = 0;
             m_inputY = -1;
             return;
@@ -1724,39 +1724,39 @@ void CShiori::CpuInput()
         }
     }
     if (m_cpuWalkRight > 0) {
-        if ((char)AtScreenEdge() != 0 && m_cpuWalkRight > 0xf) {
-            m_cpuWalkRight = 0xf;
+        if ((char)AtScreenEdge() != 0 && m_cpuWalkRight > 15) {
+            m_cpuWalkRight = 15;
         }
         m_inputX = 1;
         return;
     }
     if (m_cpuWalkLeft > 0) {
-        if ((char)AtScreenEdge() != 0 && m_cpuWalkLeft > 0xf) {
-            m_cpuWalkLeft = 0xf;
+        if ((char)AtScreenEdge() != 0 && m_cpuWalkLeft > 15) {
+            m_cpuWalkLeft = 15;
         }
         m_inputX = -1;
         return;
     }
-    if ((WORD)Random(0, 0x64) < 0x32 && dx < 120.0) {
+    if ((WORD)Random(0, 100) < 50 && dx < 120.0) {
         if (facing == 1) {
-            m_cpuWalkLeft = (WORD)Random(0, 0xc8) + 0x2d;
+            m_cpuWalkLeft = (WORD)Random(0, 200) + 45;
         } else {
-            m_cpuWalkRight = (WORD)Random(0, 0xc8) + 0x2d;
+            m_cpuWalkRight = (WORD)Random(0, 200) + 45;
         }
     }
-    if ((WORD)Random(0, 0x64) < 0x1e) {
+    if ((WORD)Random(0, 100) < 30) {
         if (facing == 1) {
-            m_cpuWalkRight = (WORD)Random(0, 0xc8) + 0x1e;
+            m_cpuWalkRight = (WORD)Random(0, 200) + 30;
         } else {
-            m_cpuWalkLeft = (WORD)Random(0, 0xc8) + 0x1e;
+            m_cpuWalkLeft = (WORD)Random(0, 200) + 30;
         }
         return;
     }
     if (facing == -1) {
-        m_cpuWalkRight = (WORD)Random(0, 0xc8) + 0x1e;
+        m_cpuWalkRight = (WORD)Random(0, 200) + 30;
         return;
     }
-    m_cpuWalkLeft = (WORD)Random(0, 0xc8) + 0x1e;
+    m_cpuWalkLeft = (WORD)Random(0, 200) + 30;
 }
 
 void CShiori::UpdateObjects()
@@ -1807,7 +1807,7 @@ void CShiori::UpdateObjects()
                     m_objects[slot].vy = 2.0;
                     m_objects[slot].hitsLeft = 1;
                 }
-                if (m_objects[slot].frame == 1 && m_objects[slot].timer == 0x5f) {
+                if (m_objects[slot].frame == 1 && m_objects[slot].timer == 95) {
                     m_objects[slot].scale = 1;
                 }
                 if (m_objects[slot].y > 0.0 && m_objects[slot].frame == 0) {
@@ -1834,7 +1834,7 @@ void CShiori::UpdateObjects()
                     m_objects[slot].hitsLeft = 4;
                     m_objectVar1[slot]++;
                 }
-                if (m_objects[slot].frame == 1 && m_objects[slot].timer == 0x5f) {
+                if (m_objects[slot].frame == 1 && m_objects[slot].timer == 95) {
                     m_objects[slot].scale = 1;
                 }
                 if (m_objects[slot].y > 0.0 && m_objects[slot].frame == 0) {
@@ -1864,7 +1864,7 @@ void CShiori::UpdateObjects()
                     m_summonOut = 0;
                     break;
                 }
-                if (m_objectVar1[slot] >= 0x208) {
+                if (m_objectVar1[slot] >= 520) {
                     m_objects[slot].pattern = kObj214BAttack;
                     m_objects[slot].timer = 0;
                     m_objects[slot].frame = 0;
@@ -1938,7 +1938,7 @@ void CShiori::UpdateObjects()
                 break;
             case kObjAir236AB:
                 if (pattern == kAir236A || pattern == kAir236B || pattern == kAir236C) {
-                    m_objects[slot].x = facing * 0x24 + x;
+                    m_objects[slot].x = facing * 36 + x;
                     m_objects[slot].y = y - 48.0;
                 }
                 if (m_objects[slot].frame == 0) {
@@ -1991,7 +1991,7 @@ void CShiori::UpdateObjects()
                 break;
             case 0x19b:
                 if (m_objects[slot].frame == 0 && m_objects[slot].timer == 0 && m_objectVar1[slot] == 0) {
-                    m_objectVar2[slot] = 0xa0;
+                    m_objectVar2[slot] = 160;
                     m_objectVar1[slot]++;
                     m_objects[slot].vx = -0.8;
                     m_objects[slot].vy = -2.5;
@@ -2000,13 +2000,13 @@ void CShiori::UpdateObjects()
                 if (m_objects[slot].y > 0.0 && m_objects[slot].vy > 0.0) {
                     m_objects[slot].vy = -m_objects[slot].vy * 0.5;
                 }
-                if (m_objectVar2[slot] < 0x3c) {
+                if (m_objectVar2[slot] < 60) {
                     m_game->SetGameSpeed(2);
                 }
-                if (m_objectVar2[slot] < 0x37) {
+                if (m_objectVar2[slot] < 55) {
                     m_game->SetGameSpeed(3);
                 }
-                if (m_objectVar2[slot] < 0xa) {
+                if (m_objectVar2[slot] < 10) {
                     m_objects[slot].scale = 1;
                 }
                 if (m_objectVar2[slot] < 0) {
@@ -2026,16 +2026,16 @@ void CShiori::UpdateObjects()
                 break;
             case kObjSummonDebris1:
                 if (m_objects[slot].frame == 0 && m_objects[slot].timer == 0 && m_objectVar1[slot] == 0) {
-                    m_objectVar2[slot] = (rand() > 0x3e80) * 0x28 + 0x50 + (rand() > 0x3e80) * 0x14;
+                    m_objectVar2[slot] = (rand() > 16000) * 40 + 80 + (rand() > 16000) * 20;
                     m_objectVar1[slot]++;
-                    m_objects[slot].vx = -0.5 - ((rand() > 0x3e80) * 1.2 - (rand() > 0x3e80) * 0.7 - (rand() > 0x3e80) * 1.7);
-                    m_objects[slot].vy = -1.2 - ((rand() > 0x3e80) * 0.6 - (rand() > 0x3e80) * 0.5 - (rand() > 0x3e80) * 0.8);
+                    m_objects[slot].vx = -0.5 - ((rand() > 16000) * 1.2 - (rand() > 16000) * 0.7 - (rand() > 16000) * 1.7);
+                    m_objects[slot].vy = -1.2 - ((rand() > 16000) * 0.6 - (rand() > 16000) * 0.5 - (rand() > 16000) * 0.8);
                 }
                 m_objects[slot].vy += 0.05;
                 if (m_objects[slot].y > 0.0 && m_objects[slot].vy > 0.0) {
                     m_objects[slot].vy = -m_objects[slot].vy;
                 }
-                if (m_objectVar2[slot] < 0xa) {
+                if (m_objectVar2[slot] < 10) {
                     m_objects[slot].scale = 1;
                 }
                 if (m_objectVar2[slot] < 0) {
@@ -2055,16 +2055,16 @@ void CShiori::UpdateObjects()
                 break;
             case kObjSummonDebris2:
                 if (m_objects[slot].frame == 0 && m_objects[slot].timer == 0 && m_objectVar1[slot] == 0) {
-                    m_objectVar2[slot] = (rand() > 0x3e80) * 0x28 + 0x50 + (rand() > 0x3e80) * 0x14;
+                    m_objectVar2[slot] = (rand() > 16000) * 40 + 80 + (rand() > 16000) * 20;
                     m_objectVar1[slot]++;
-                    m_objects[slot].vx = -0.5 - ((rand() > 0x3e80) * 1.2 - (rand() > 0x3e80) * 0.7 - (rand() > 0x3e80) * 1.7);
-                    m_objects[slot].vy = -1.2 - ((rand() > 0x3e80) * 0.6 - (rand() > 0x3e80) * 0.5 - (rand() > 0x3e80) * 0.8);
+                    m_objects[slot].vx = -0.5 - ((rand() > 16000) * 1.2 - (rand() > 16000) * 0.7 - (rand() > 16000) * 1.7);
+                    m_objects[slot].vy = -1.2 - ((rand() > 16000) * 0.6 - (rand() > 16000) * 0.5 - (rand() > 16000) * 0.8);
                 }
                 m_objects[slot].vy += 0.05;
                 if (m_objects[slot].y > 0.0 && m_objects[slot].vy > 0.0) {
                     m_objects[slot].vy = -m_objects[slot].vy;
                 }
-                if (m_objectVar2[slot] < 0xa) {
+                if (m_objectVar2[slot] < 10) {
                     m_objects[slot].scale = 1;
                 }
                 if (m_objectVar2[slot] < 0) {
@@ -2084,16 +2084,16 @@ void CShiori::UpdateObjects()
                 break;
             case kObjSummonDebris3:
                 if (m_objects[slot].frame == 0 && m_objects[slot].timer == 0 && m_objectVar1[slot] == 0) {
-                    m_objectVar2[slot] = (rand() > 0x3e80) * 0x28 + 0x50 + (rand() > 0x3e80) * 0x14;
+                    m_objectVar2[slot] = (rand() > 16000) * 40 + 80 + (rand() > 16000) * 20;
                     m_objectVar1[slot]++;
-                    m_objects[slot].vx = -0.5 - ((rand() > 0x3e80) * 1.2 - (rand() > 0x3e80) * 0.7 - (rand() > 0x3e80) * 1.7);
-                    m_objects[slot].vy = -1.2 - ((rand() > 0x3e80) * 0.6 - (rand() > 0x3e80) * 0.5 - (rand() > 0x3e80) * 0.8);
+                    m_objects[slot].vx = -0.5 - ((rand() > 16000) * 1.2 - (rand() > 16000) * 0.7 - (rand() > 16000) * 1.7);
+                    m_objects[slot].vy = -1.2 - ((rand() > 16000) * 0.6 - (rand() > 16000) * 0.5 - (rand() > 16000) * 0.8);
                 }
                 m_objects[slot].vy += 0.05;
                 if (m_objects[slot].y > 0.0 && m_objects[slot].vy > 0.0) {
                     m_objects[slot].vy = -m_objects[slot].vy;
                 }
-                if (m_objectVar2[slot] < 0xa) {
+                if (m_objectVar2[slot] < 10) {
                     m_objects[slot].scale = 1;
                 }
                 if (m_objectVar2[slot] < 0) {
@@ -2113,16 +2113,16 @@ void CShiori::UpdateObjects()
                 break;
             case kObjSummonDebris4:
                 if (m_objects[slot].frame == 0 && m_objects[slot].timer == 0 && m_objectVar1[slot] == 0) {
-                    m_objectVar2[slot] = (rand() > 0x3e80) * 0x28 + 0x50 + (rand() > 0x3e80) * 0x14;
+                    m_objectVar2[slot] = (rand() > 16000) * 40 + 80 + (rand() > 16000) * 20;
                     m_objectVar1[slot]++;
-                    m_objects[slot].vx = -0.5 - ((rand() > 0x3e80) * 1.2 - (rand() > 0x3e80) * 0.7 - (rand() > 0x3e80) * 1.7);
-                    m_objects[slot].vy = -1.2 - ((rand() > 0x3e80) * 0.6 - (rand() > 0x3e80) * 0.5 - (rand() > 0x3e80) * 0.8);
+                    m_objects[slot].vx = -0.5 - ((rand() > 16000) * 1.2 - (rand() > 16000) * 0.7 - (rand() > 16000) * 1.7);
+                    m_objects[slot].vy = -1.2 - ((rand() > 16000) * 0.6 - (rand() > 16000) * 0.5 - (rand() > 16000) * 0.8);
                 }
                 m_objects[slot].vy += 0.05;
                 if (m_objects[slot].y > 0.0 && m_objects[slot].vy > 0.0) {
                     m_objects[slot].vy = -m_objects[slot].vy;
                 }
-                if (m_objectVar2[slot] < 0xa) {
+                if (m_objectVar2[slot] < 10) {
                     m_objects[slot].scale = 1;
                 }
                 if (m_objectVar2[slot] < 0) {
@@ -2142,16 +2142,16 @@ void CShiori::UpdateObjects()
                 break;
             case kObjSummonDebris5:
                 if (m_objects[slot].frame == 0 && m_objects[slot].timer == 0 && m_objectVar1[slot] == 0) {
-                    m_objectVar2[slot] = (rand() > 0x3e80) * 0x28 + 0x50 + (rand() > 0x3e80) * 0x14;
+                    m_objectVar2[slot] = (rand() > 16000) * 40 + 80 + (rand() > 16000) * 20;
                     m_objectVar1[slot]++;
-                    m_objects[slot].vx = -0.5 - ((rand() > 0x3e80) * 1.2 - (rand() > 0x3e80) * 0.7 - (rand() > 0x3e80) * 1.7);
-                    m_objects[slot].vy = -1.2 - ((rand() > 0x3e80) * 0.6 - (rand() > 0x3e80) * 0.5 - (rand() > 0x3e80) * 0.8);
+                    m_objects[slot].vx = -0.5 - ((rand() > 16000) * 1.2 - (rand() > 16000) * 0.7 - (rand() > 16000) * 1.7);
+                    m_objects[slot].vy = -1.2 - ((rand() > 16000) * 0.6 - (rand() > 16000) * 0.5 - (rand() > 16000) * 0.8);
                 }
                 m_objects[slot].vy += 0.05;
                 if (m_objects[slot].y > 0.0 && m_objects[slot].vy > 0.0) {
                     m_objects[slot].vy = -m_objects[slot].vy;
                 }
-                if (m_objectVar2[slot] < 0xa) {
+                if (m_objectVar2[slot] < 10) {
                     m_objects[slot].scale = 1;
                 }
                 if (m_objectVar2[slot] < 0) {
@@ -2171,7 +2171,7 @@ void CShiori::UpdateObjects()
                 break;
             case kObj623CEffect:
                 if (pattern == k623C) {
-                    m_objects[slot].x = facing * 0x17 + x;
+                    m_objects[slot].x = facing * 23 + x;
                     m_objects[slot].y = y - 48.0;
                 }
                 if (pattern != k623C) {
@@ -2181,7 +2181,7 @@ void CShiori::UpdateObjects()
                 if (m_objects[slot].timer >= duration) {
                     m_objects[slot].timer = 0;
                     m_objects[slot].frame++;
-                    if (m_objects[slot].frame == 0x18 && frame < 7) {
+                    if (m_objects[slot].frame == 24 && frame < 7) {
                         m_objects[slot].frame = 0;
                     }
                     m_objects[slot].attackResult = 0;
@@ -2203,7 +2203,7 @@ void CShiori::UpdateObjects()
                         m_objects[slot].frame = 1;
                         ShakeScreen(3, 0);
                         m_objects[slot].timer = 0;
-                        m_playSound = 0x22;
+                        m_playSound = 34;
                         m_objects[slot].vy = 0.0;
                     }
                 }
@@ -2223,10 +2223,10 @@ void CShiori::UpdateObjects()
                     m_objectVar1[slot]++;
                 }
                 m_objects[slot].vy += 0.005;
-                if (m_objectVar1[slot] > 0xa) {
+                if (m_objectVar1[slot] > 10) {
                     m_objects[slot].scale = 1;
                 }
-                if (m_objectVar1[slot] > 0xf) {
+                if (m_objectVar1[slot] > 15) {
                     RemoveObject(slot);
                 }
                 m_objects[slot].timer++;
@@ -2244,7 +2244,7 @@ void CShiori::UpdateObjects()
                 if (m_objects[slot].frame == 0) {
                     m_objects[slot].hitsLeft = 1;
                 }
-                if (m_objects[slot].frame == 0xe && m_objects[slot].timer == 0) {
+                if (m_objects[slot].frame == 14 && m_objects[slot].timer == 0) {
                     m_playVoice = 7;
                 }
                 m_objects[slot].timer++;
@@ -2262,7 +2262,7 @@ void CShiori::UpdateObjects()
                 if (m_objects[slot].frame == 0) {
                     m_objects[slot].hitsLeft = 1;
                 }
-                if (m_objects[slot].frame == 0xe && m_objects[slot].timer == 0) {
+                if (m_objects[slot].frame == 14 && m_objects[slot].timer == 0) {
                     m_playVoice = 7;
                 }
                 m_objects[slot].timer++;
@@ -2280,7 +2280,7 @@ void CShiori::UpdateObjects()
                 if (m_objects[slot].frame == 0) {
                     m_objects[slot].hitsLeft = 1;
                 }
-                if (m_objects[slot].frame == 0xe && m_objects[slot].timer == 0) {
+                if (m_objects[slot].frame == 14 && m_objects[slot].timer == 0) {
                     m_playVoice = 7;
                 }
                 m_objects[slot].timer++;
@@ -2298,8 +2298,8 @@ void CShiori::UpdateObjects()
                 m_objects[slot].x = x;
                 m_objects[slot].y = y - 50.0;
                 m_objects[slot].hitsLeft = 1;
-                if (m_dObjectTime < 0 && m_objects[slot].frame < 0x1c) {
-                    m_objects[slot].frame = 0x1c;
+                if (m_dObjectTime < 0 && m_objects[slot].frame < 28) {
+                    m_objects[slot].frame = 28;
                     m_objects[slot].timer = 0;
                     m_dObjectTime = 0;
                     break;
@@ -2311,7 +2311,7 @@ void CShiori::UpdateObjects()
                 if (m_objects[slot].timer >= duration) {
                     m_objects[slot].timer = 0;
                     m_objects[slot].frame++;
-                    if (m_objects[slot].frame == 0x1c) {
+                    if (m_objects[slot].frame == 28) {
                         m_objects[slot].frame = 8;
                     }
                     if (m_objects[slot].frame >= frameCount) {
@@ -2325,8 +2325,8 @@ void CShiori::UpdateObjects()
                 m_objects[slot].x = x;
                 m_objects[slot].y = y - 50.0;
                 m_objects[slot].hitsLeft = 1;
-                if (m_dObjectTime < 0 && m_objects[slot].frame < 0x1c) {
-                    m_objects[slot].frame = 0x1c;
+                if (m_dObjectTime < 0 && m_objects[slot].frame < 28) {
+                    m_objects[slot].frame = 28;
                     m_objects[slot].timer = 0;
                     m_dObjectTime = 0;
                     break;
@@ -2338,7 +2338,7 @@ void CShiori::UpdateObjects()
                 if (m_objects[slot].timer >= duration) {
                     m_objects[slot].timer = 0;
                     m_objects[slot].frame++;
-                    if (m_objects[slot].frame == 0x1c) {
+                    if (m_objects[slot].frame == 28) {
                         m_objects[slot].frame = 8;
                     }
                     if (m_objects[slot].frame >= frameCount) {
@@ -2352,8 +2352,8 @@ void CShiori::UpdateObjects()
                 m_objects[slot].x = x;
                 m_objects[slot].y = y - 50.0;
                 m_objects[slot].hitsLeft = 1;
-                if (m_dObjectTime < 0 && m_objects[slot].frame < 0x1c) {
-                    m_objects[slot].frame = 0x1c;
+                if (m_dObjectTime < 0 && m_objects[slot].frame < 28) {
+                    m_objects[slot].frame = 28;
                     m_objects[slot].timer = 0;
                     m_dObjectTime = 0;
                     break;
@@ -2365,7 +2365,7 @@ void CShiori::UpdateObjects()
                 if (m_objects[slot].timer >= duration) {
                     m_objects[slot].timer = 0;
                     m_objects[slot].frame++;
-                    if (m_objects[slot].frame == 0x1c) {
+                    if (m_objects[slot].frame == 28) {
                         m_objects[slot].frame = 8;
                     }
                     if (m_objects[slot].frame >= frameCount) {
@@ -2392,16 +2392,16 @@ void CShiori::UpdateObjects()
             case kObjAir236C:
                 if (m_objects[slot].frame == 0 && m_objects[slot].timer == 0) {
                     if (m_patternVar3 == 0) {
-                        m_objectVar1[slot] = 0x1d;
-                        m_objectVar2[slot] = -0x34;
+                        m_objectVar1[slot] = 29;
+                        m_objectVar2[slot] = -52;
                     }
                     if (m_patternVar3 == 1) {
-                        m_objectVar1[slot] = 0x24;
-                        m_objectVar2[slot] = -0x26;
+                        m_objectVar1[slot] = 36;
+                        m_objectVar2[slot] = -38;
                     }
                     if (m_patternVar3 == 2) {
-                        m_objectVar1[slot] = 0x24;
-                        m_objectVar2[slot] = -0x48;
+                        m_objectVar1[slot] = 36;
+                        m_objectVar2[slot] = -72;
                     }
                 }
                 if (pattern == kAir236A || pattern == kAir236B || pattern == kAir236C) {
@@ -2422,10 +2422,10 @@ void CShiori::UpdateObjects()
                 }
                 break;
             case kObj641236Column:
-                if (m_objects[slot].frame == 0x1c && m_objects[slot].timer == 0 && frame < 0x10 && pattern > kFirstCharacterAction) {
+                if (m_objects[slot].frame == 28 && m_objects[slot].timer == 0 && frame < 16 && pattern > kFirstCharacterAction) {
                     effect.keep = 1;
                     effect.type = 0x1ad;
-                    effect.x = (double)((int)x - facing * 0xf);
+                    effect.x = (double)((int)x - facing * 15);
                     effect.y = m_objects[slot].y;
                     effect.facing = facing;
                     effect.scale = 2;
@@ -2443,10 +2443,10 @@ void CShiori::UpdateObjects()
                 }
                 break;
             case kObj641236Foot:
-                if (m_objects[slot].frame == 8 && m_objects[slot].timer == 0 && frame < 0x10 && pattern > kFirstCharacterAction) {
+                if (m_objects[slot].frame == 8 && m_objects[slot].timer == 0 && frame < 16 && pattern > kFirstCharacterAction) {
                     effect.keep = 1;
                     effect.type = 0x1ae;
-                    effect.x = (double)((int)x - facing * 0xf);
+                    effect.x = (double)((int)x - facing * 15);
                     effect.y = (double)(int)m_objects[slot].y;
                     effect.facing = facing;
                     effect.scale = 2;
@@ -2464,10 +2464,10 @@ void CShiori::UpdateObjects()
                 }
                 break;
             case kObj641236CFoot:
-                if (m_objects[slot].frame == 8 && m_objects[slot].timer == 0 && frame < 0x10 && pattern > kFirstCharacterAction) {
+                if (m_objects[slot].frame == 8 && m_objects[slot].timer == 0 && frame < 16 && pattern > kFirstCharacterAction) {
                     effect.keep = 1;
                     effect.type = 0x1af;
-                    effect.x = (double)((int)x - facing * 0xf);
+                    effect.x = (double)((int)x - facing * 15);
                     effect.y = (double)(int)m_objects[slot].y;
                     effect.facing = facing;
                     effect.scale = 2;
@@ -2567,7 +2567,7 @@ void CShiori::UpdateObjects()
                         m_objects[slot].hitsLeft = 1;
                         m_objects[slot].vx = 4.0;
                         m_objects[slot].vy = 0.0;
-                        m_playSound = 0x14;
+                        m_playSound = 20;
                         return;
                     }
                     if (m_objects[slot].frame == 7 && m_objectVar1[slot] < 3) {
@@ -2657,7 +2657,7 @@ void CShiori::UpdateObjects()
                         m_objects[slot].vx = 0.0;
                         m_objects[slot].vy = 0.0;
                         effect.type = 0x199;
-                        effect.x = (double)((int)m_objects[slot].x + m_objects[slot].facing * 0x13);
+                        effect.x = (double)((int)m_objects[slot].x + m_objects[slot].facing * 19);
                         effect.y = (double)((int)m_objects[slot].y + 2);
                         effect.scale = 2;
                         effect.layer = 1;
@@ -2681,11 +2681,11 @@ void CShiori::UpdateObjects()
 #ifdef EFZ_NATIVE
                     // The original computes the arguments right to left, so the speed draws first.
                     {
-                        double speed = (WORD)Random(0x1e, 0x19) * 0.1;
-                        m_objects[slot].SetVelocity((double)((WORD)Random(0, 0x5a) - 0x2d), speed);
+                        double speed = (WORD)Random(30, 25) * 0.1;
+                        m_objects[slot].SetVelocity((double)((WORD)Random(0, 90) - 45), speed);
                     }
 #else
-                    m_objects[slot].SetVelocity((double)((WORD)Random(0, 0x5a) - 0x2d), (WORD)Random(0x1e, 0x19) * 0.1);
+                    m_objects[slot].SetVelocity((double)((WORD)Random(0, 90) - 45), (WORD)Random(30, 25) * 0.1);
 #endif
                 }
                 if (m_objects[slot].x > 660.0 || m_objects[slot].x < -20.0) {
@@ -2795,7 +2795,7 @@ void CShiori::UpdateObjects()
                     m_objects[slot].frame++;
                     m_objects[slot].attackResult = 0;
                     if (m_objects[slot].frame >= frameCount) {
-                        if (m_objectVar1[slot] < 0xe) {
+                        if (m_objectVar1[slot] < 14) {
                             m_objectVar1[slot]++;
                             m_objects[slot].frame = 0;
                             m_objects[slot].vx += 0.4;
@@ -2811,11 +2811,11 @@ void CShiori::UpdateObjects()
                 }
                 break;
             case kObjLv4:
-                FocusCameraY(0x32, 3);
-                m_objects[slot].x = facing * 0x14 + x;
+                FocusCameraY(50, 3);
+                m_objects[slot].x = facing * 20 + x;
                 m_objects[slot].y = y - 52.0;
                 if (m_objects[slot].frame == 0 && m_objects[slot].timer == 0) {
-                    m_objects[slot].hitsLeft = 0x63;
+                    m_objects[slot].hitsLeft = 99;
                 }
                 m_objects[slot].timer++;
                 if (m_objects[slot].timer >= duration) {
@@ -2829,10 +2829,10 @@ void CShiori::UpdateObjects()
                 }
                 break;
             case kObjLv4Wait:
-                m_objects[slot].x = facing * 0x14 + x;
+                m_objects[slot].x = facing * 20 + x;
                 m_objects[slot].y = y - 52.0;
-                FocusCameraY(0x32, 3);
-                FillBackground(0xb0, 3);
+                FocusCameraY(50, 3);
+                FillBackground(176, 3);
                 if (pattern != kLv4) {
                     m_objects[slot].frame = 0;
                     m_objects[slot].timer = 0;
@@ -2848,7 +2848,7 @@ void CShiori::UpdateObjects()
                     break;
                 }
                 if (m_objects[slot].frame == 0 && m_objects[slot].timer == 0) {
-                    m_objects[slot].hitsLeft = 0x63;
+                    m_objects[slot].hitsLeft = 99;
                 }
                 m_objects[slot].timer++;
                 if (m_objects[slot].timer >= duration) {
@@ -2867,7 +2867,7 @@ void CShiori::UpdateObjects()
                 }
                 break;
             case kObjLv4End:
-                m_objects[slot].x = facing * 0x14 + x;
+                m_objects[slot].x = facing * 20 + x;
                 m_objects[slot].y = y - 52.0;
                 m_objects[slot].timer++;
                 if (m_objects[slot].timer >= duration) {
@@ -2882,13 +2882,13 @@ void CShiori::UpdateObjects()
             case kObjLv4Toss:
                 m_hideOffscreenMarker = 3;
                 if (m_objects[slot].frame > 6) {
-                    (*m_opponent)->FocusCameraY(0x32, 3);
+                    (*m_opponent)->FocusCameraY(50, 3);
                 }
                 if (m_objects[slot].frame < 7) {
                     (*m_opponent)->StopMoving();
                 }
-                FillBackground(0xb0, 3);
-                if (m_objects[slot].frame > 0xb) {
+                FillBackground(176, 3);
+                if (m_objects[slot].frame > 11) {
                     m_objects[slot].vy += 0.055;
                     if (m_objects[slot].vy > 0.0) {
                         m_objects[slot].vy = 0.0;
@@ -2900,8 +2900,8 @@ void CShiori::UpdateObjects()
                     m_objects[slot].frame++;
                     m_objects[slot].attackResult = 0;
                     if (m_objects[slot].frame < 7) {
-                        (*m_opponent)->x = m_lv4HoldX + (WORD)Random(0, 0x50) + -0x28;
-                        (*m_opponent)->y = m_lv4HoldY - (WORD)Random(0xa, 0x3c);
+                        (*m_opponent)->x = m_lv4HoldX + (WORD)Random(0, 80) + -40;
+                        (*m_opponent)->y = m_lv4HoldY - (WORD)Random(10, 60);
                         if ((*m_opponent)->x > 620.0) {
                             (*m_opponent)->x = 620.0;
                         }
@@ -2918,19 +2918,19 @@ void CShiori::UpdateObjects()
                         (*m_opponent)->vx = 0.5;
                     }
                     if (m_objects[slot].frame == 9) {
-                        (*m_opponent)->x = m_objects[slot].x + m_objects[slot].facing * 0xdd;
+                        (*m_opponent)->x = m_objects[slot].x + m_objects[slot].facing * 221;
                         (*m_opponent)->y = m_objects[slot].y - 44.0;
                     }
-                    if (m_objects[slot].frame == 0xa) {
-                        (*m_opponent)->x = m_objects[slot].x + m_objects[slot].facing * 0xe6;
+                    if (m_objects[slot].frame == 10) {
+                        (*m_opponent)->x = m_objects[slot].x + m_objects[slot].facing * 230;
                         (*m_opponent)->y = m_objects[slot].y - 62.0;
                     }
-                    if (m_objects[slot].frame == 0xb) {
-                        (*m_opponent)->x = m_objects[slot].x + m_objects[slot].facing * 0xa3;
+                    if (m_objects[slot].frame == 11) {
+                        (*m_opponent)->x = m_objects[slot].x + m_objects[slot].facing * 163;
                         (*m_opponent)->y = m_objects[slot].y - 119.0;
                     }
-                    if (m_objects[slot].frame == 0xc) {
-                        (*m_opponent)->x = m_objects[slot].x + m_objects[slot].facing * 0x8b;
+                    if (m_objects[slot].frame == 12) {
+                        (*m_opponent)->x = m_objects[slot].x + m_objects[slot].facing * 139;
                         (*m_opponent)->y = m_objects[slot].y - 160.0;
                         m_objects[slot].vy = -3.0;
                     }
@@ -2941,22 +2941,22 @@ void CShiori::UpdateObjects()
                             break;
                         }
                         RemoveObject(slot);
-                        timer = 0x23a;
+                        timer = 570;
                     }
                 }
                 break;
             case kObjLv4Hold:
-                FocusCameraY(0x32, 3);
+                FocusCameraY(50, 3);
                 (*m_opponent)->StopMoving();
-                FillBackground(0xb0, 3);
-                (*m_opponent)->m_invulTime = 0x1e;
+                FillBackground(176, 3);
+                (*m_opponent)->m_invulTime = 30;
                 m_objects[slot].timer++;
                 if (m_objects[slot].timer >= duration) {
                     m_objects[slot].timer = 0;
                     m_objects[slot].frame++;
                     m_objects[slot].attackResult = 0;
-                    (*m_opponent)->x = m_lv4HoldX + (WORD)Random(0, 0x50) + -0x28;
-                    (*m_opponent)->y = m_lv4HoldY - (WORD)Random(0xa, 0x3c);
+                    (*m_opponent)->x = m_lv4HoldX + (WORD)Random(0, 80) + -40;
+                    (*m_opponent)->y = m_lv4HoldY - (WORD)Random(10, 60);
                     if ((*m_opponent)->x > 620.0) {
                         (*m_opponent)->x = 620.0;
                     }
@@ -2982,7 +2982,7 @@ void CShiori::UpdateObjects()
                 m_objects[slot].x = (*m_opponent)->x;
                 if (pattern == kLv4Connected && frame == 3) {
                     (*m_opponent)->facing = -facing;
-                    DealDamage(0x1388, 700.0);
+                    DealDamage(5000, 700.0);
                     ShakeScreen(8, 5);
                     m_game->SetGameSpeed(1);
                     (*m_opponent)->m_hitstop = 0;
@@ -2994,10 +2994,10 @@ void CShiori::UpdateObjects()
                     (*m_opponent)->m_noAirRecovery = 1;
                     effect.type = 0x34;
                     effect.x = (double)(int)m_objects[slot].x;
-                    effect.y = (double)((int)m_objects[slot].y - 0x28);
+                    effect.y = (double)((int)m_objects[slot].y - 40);
                     effect.scale = 2;
                     effect.layer = 1;
-                    effect.sound = 0x16;
+                    effect.sound = 22;
                     m_game->CreateEffect((EffectDesc*)&effect);
                     effect.type = 0x1be;
                     effect.x = (double)(int)m_objects[slot].x;
@@ -3201,7 +3201,7 @@ void CShiori::UpdateObjects()
                         m_objects[slot].vx = 0.0;
                         m_objects[slot].vy = 0.0;
                         effect.type = 0x199;
-                        effect.x = (double)((int)m_objects[slot].x + m_objects[slot].facing * 0x13);
+                        effect.x = (double)((int)m_objects[slot].x + m_objects[slot].facing * 19);
                         effect.y = (double)((int)m_objects[slot].y + 2);
                         effect.scale = 2;
                         effect.layer = 1;
@@ -3246,10 +3246,10 @@ void CShiori::UpdateObjects()
                 if (m_objects[slot].timer >= duration) {
                     m_objects[slot].timer = 0;
                     m_objects[slot].frame++;
-                    if (m_objects[slot].frame == 0xc || m_objects[slot].frame == 0x18) {
+                    if (m_objects[slot].frame == 12 || m_objects[slot].frame == 24) {
                         m_objects[slot].attackResult = 0;
                     }
-                    if (m_objects[slot].frame == 0x18 && m_objectVar1[slot] < 3) {
+                    if (m_objects[slot].frame == 24 && m_objectVar1[slot] < 3) {
                         m_objects[slot].frame = 0;
                         m_objectVar1[slot]++;
                         break;
@@ -3316,7 +3316,7 @@ void CShiori::UpdateObjects()
                 break;
             case kObjFallInDarkness:
                 m_objects[slot].vx = -0.02;
-                m_objects[slot].drawnWhileHidden = 0x7530;
+                m_objects[slot].drawnWhileHidden = 30000;
                 m_objects[slot].timer++;
                 if (pattern != kFallInDarkness) {
                     RemoveObject(slot);
@@ -3333,7 +3333,7 @@ void CShiori::UpdateObjects()
             case kObjEncasedBreak:
                 if (pattern != kEncased && pattern != kEncased2 && pattern != kEncasedAir && pattern != kEncasedSpin || pattern == kEncased && frame > 1 || pattern == kEncased2 && frame > 1) {
                     effect.type = 0x1f1;
-                    effect.x = (double)((int)x + facing * 0x17);
+                    effect.x = (double)((int)x + facing * 23);
                     effect.y = (double)((int)y - 4);
                     effect.scale = 0;
                     effect.layer = 1;
@@ -3347,8 +3347,8 @@ void CShiori::UpdateObjects()
                     effect.facing = facing;
                     SpawnObject(&effect);
                     effect.type = 0x1f1;
-                    effect.x = (double)((int)x - facing * 0xe);
-                    effect.y = (double)((int)y - 0x1a);
+                    effect.x = (double)((int)x - facing * 14);
+                    effect.y = (double)((int)y - 26);
                     effect.scale = 0;
                     effect.layer = 1;
                     effect.facing = facing;
@@ -3361,48 +3361,48 @@ void CShiori::UpdateObjects()
                     effect.facing = facing;
                     SpawnObject(&effect);
                     effect.type = 0x1f1;
-                    effect.x = (double)((int)x + facing * 0x1e);
-                    effect.y = (double)((int)y - 0x28);
+                    effect.x = (double)((int)x + facing * 30);
+                    effect.y = (double)((int)y - 40);
                     effect.scale = 0;
                     effect.layer = 1;
                     effect.facing = facing;
                     SpawnObject(&effect);
                     effect.type = 0x1f1;
-                    effect.x = (double)((int)x - facing * 0x19);
-                    effect.y = (double)((int)y - 0x50);
+                    effect.x = (double)((int)x - facing * 25);
+                    effect.y = (double)((int)y - 80);
                     effect.scale = 0;
                     effect.layer = 1;
                     effect.facing = facing;
                     SpawnObject(&effect);
                     effect.type = 0x1f2;
-                    effect.x = (double)((int)x - facing * 0x23);
-                    effect.y = (double)((int)y - 0x2a);
+                    effect.x = (double)((int)x - facing * 35);
+                    effect.y = (double)((int)y - 42);
                     effect.scale = 0;
                     effect.layer = 1;
                     effect.facing = facing;
                     SpawnObject(&effect);
                     effect.type = 0x1f2;
-                    effect.x = (double)((int)x - facing * 0x12);
-                    effect.y = (double)((int)y - 0x14);
+                    effect.x = (double)((int)x - facing * 18);
+                    effect.y = (double)((int)y - 20);
                     effect.scale = 0;
                     effect.layer = 1;
                     effect.facing = facing;
                     SpawnObject(&effect);
                     effect.type = 0x1f2;
                     effect.x = (double)((int)x + facing * 2);
-                    effect.y = (double)((int)y - 0x41);
+                    effect.y = (double)((int)y - 65);
                     effect.scale = 0;
                     effect.layer = 1;
                     effect.facing = facing;
                     SpawnObject(&effect);
                     effect.type = 0x1f2;
                     effect.x = (double)((int)x + (facing << 4));
-                    effect.y = (double)((int)y - 0x50);
+                    effect.y = (double)((int)y - 80);
                     effect.scale = 0;
                     effect.layer = 1;
                     effect.facing = facing;
                     SpawnObject(&effect);
-                    m_playSound = 0x22;
+                    m_playSound = 34;
                     RemoveObject(slot);
                     m_encasedBreakOut = 0;
                     break;
@@ -3419,16 +3419,16 @@ void CShiori::UpdateObjects()
                 break;
             case kObjShardSmall:
                 if (m_objects[slot].frame == 0 && m_objects[slot].timer == 0 && m_objectVar1[slot] == 0) {
-                    m_objectVar2[slot] = (rand() > 0x3e80) * 0x28 + 0x50 + (rand() > 0x3e80) * 0x14;
+                    m_objectVar2[slot] = (rand() > 16000) * 40 + 80 + (rand() > 16000) * 20;
                     m_objectVar1[slot]++;
-                    m_objects[slot].vx = (rand() > 0x3e80) * 1.2 + (rand() > 0x3e80) * 0.7 + (rand() > 0x3e80) * 1.7 + -1.8;
-                    m_objects[slot].vy = -1.2 - ((rand() > 0x3e80) * 0.6 + (rand() > 0x3e80) * 0.9 + (rand() > 0x3e80) * 1.4);
+                    m_objects[slot].vx = (rand() > 16000) * 1.2 + (rand() > 16000) * 0.7 + (rand() > 16000) * 1.7 + -1.8;
+                    m_objects[slot].vy = -1.2 - ((rand() > 16000) * 0.6 + (rand() > 16000) * 0.9 + (rand() > 16000) * 1.4);
                 }
                 m_objects[slot].vy += 0.05;
                 if (m_objects[slot].y > 0.0 && m_objects[slot].vy > 0.0) {
                     m_objects[slot].vy = -m_objects[slot].vy;
                 }
-                if (m_objectVar2[slot] < 0xa) {
+                if (m_objectVar2[slot] < 10) {
                     m_objects[slot].scale = 1;
                 }
                 if (m_objectVar2[slot] < 0) {
@@ -3448,16 +3448,16 @@ void CShiori::UpdateObjects()
                 break;
             case kObjShardLarge:
                 if (m_objects[slot].frame == 0 && m_objects[slot].timer == 0 && m_objectVar1[slot] == 0) {
-                    m_objectVar2[slot] = (rand() > 0x3e80) * 0x3c + 0x78 + (rand() > 0x3e80) * 0x28;
+                    m_objectVar2[slot] = (rand() > 16000) * 60 + 120 + (rand() > 16000) * 40;
                     m_objectVar1[slot]++;
-                    m_objects[slot].vx = (double)(rand() > 0x3e80) + (rand() > 0x3e80) * 0.5 + (rand() > 0x3e80) * 1.5 + -1.5;
-                    m_objects[slot].vy = -1.0 - ((rand() > 0x3e80) * 0.5 + (rand() > 0x3e80) * 0.8 + (rand() > 0x3e80) * 1.2);
+                    m_objects[slot].vx = (double)(rand() > 16000) + (rand() > 16000) * 0.5 + (rand() > 16000) * 1.5 + -1.5;
+                    m_objects[slot].vy = -1.0 - ((rand() > 16000) * 0.5 + (rand() > 16000) * 0.8 + (rand() > 16000) * 1.2);
                 }
                 m_objects[slot].vy += 0.03;
                 if (m_objects[slot].y > 0.0 && m_objects[slot].vy > 0.0) {
                     m_objects[slot].vy = -m_objects[slot].vy;
                 }
-                if (m_objectVar2[slot] < 0xa) {
+                if (m_objectVar2[slot] < 10) {
                     m_objects[slot].scale = 1;
                 }
                 if (m_objectVar2[slot] < 0) {
@@ -3490,7 +3490,7 @@ void CShiori::UpdateObjects()
             }
         }
         slot++;
-        if (slot >= 0x40) {
+        if (slot >= 64) {
             slot = 0;
         }
     }

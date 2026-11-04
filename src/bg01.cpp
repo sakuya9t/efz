@@ -24,24 +24,24 @@ void CAnimBg::Load()
     if (1) {
         frame = 0;
         for (; frame <= m_lastFrame; frame++) {
-            if (m_number >= 0xa) {
+            if (m_number >= 10) {
                 strcpy(path, "system\\bg\\bg");
             } else {
                 strcpy(path, "system\\bg\\bg0");
             }
-            _itoa(m_number, num, 0xa);
+            _itoa(m_number, num, 10);
             strcat(path, (const char*)num);
-            if (frame >= 0x64) {
+            if (frame >= 100) {
                 strcat(path, "\\");
-            } else if (frame >= 0xa) {
+            } else if (frame >= 10) {
                 strcat(path, "\\0");
             } else {
                 strcat(path, "\\00");
             }
-            _itoa(frame, num, 0xa);
+            _itoa(frame, num, 10);
             strcat(path, (const char*)num);
             strcat(path, ".dat");
-            file = (int)CreateFileA((LPCSTR)path, 0x80000000, 0, 0, 3, 0x80, 0);
+            file = (int)CreateFileA((LPCSTR)path, 0x80000000, 0, 0, 3, 128, 0);
             size = GetFileSize((HANDLE)file, 0);
             buffer = TOINT(int, operator new(size));
             data = TOPTR(char*, buffer);
@@ -53,21 +53,21 @@ void CAnimBg::Load()
     } else {
         bmpFrame = 0;
         for (; bmpFrame <= m_lastFrame; bmpFrame++) {
-            if (m_number >= 0xa) {
+            if (m_number >= 10) {
                 strcpy(path, "system\\bg\\bg");
             } else {
                 strcpy(path, "system\\bg\\bg0");
             }
-            _itoa(m_number, num, 0xa);
+            _itoa(m_number, num, 10);
             strcat(path, (const char*)num);
-            if (bmpFrame >= 0x64) {
+            if (bmpFrame >= 100) {
                 strcat(path, "\\");
-            } else if (bmpFrame >= 0xa) {
+            } else if (bmpFrame >= 10) {
                 strcat(path, "\\0");
             } else {
                 strcat(path, "\\00");
             }
-            _itoa(bmpFrame, num, 0xa);
+            _itoa(bmpFrame, num, 10);
             strcat(path, (const char*)num);
             strcat(path, ".bmp");
             m_graphics->LoadBmp(&m_surfaces[bmpFrame], (const char*)path, 1);
@@ -88,14 +88,14 @@ void CAnimBg::LoadAnims()
     char num[8];
     int skip[4]; // where each box is read and thrown away
 
-    if (m_number >= 0xa) {
+    if (m_number >= 10) {
         strcpy(path, "system\\bg\\bg");
     } else {
         strcpy(path, "system\\bg\\bg0");
     }
-    _itoa(m_number, num, 0xa);
+    _itoa(m_number, num, 10);
     strcat(path, (const char*)num);
-    if (m_number >= 0xa) {
+    if (m_number >= 10) {
         strcat(path, "\\bg");
     } else {
         strcat(path, "\\bg0");
@@ -136,8 +136,8 @@ void CAnimBg::LoadAnims()
             file.ReadInt();
             file.ReadInt();
             box = 0;
-            for (; box < 0xa; box++) {
-                file.Read((void*)skip, 0x10);
+            for (; box < 10; box++) {
+                file.Read((void*)skip, 16);
             }
         }
     }
@@ -152,7 +152,7 @@ CBg01::CBg01(CGraphics* graphics)
 
     m_graphics = graphics;
     m_number = 1;
-    m_lastFrame = 0x39;
+    m_lastFrame = 57;
     surfaces = TOINT(int, operator new(0xe8));
     m_surfaces = TOPTR(PTR32(IDirectDrawSurface)*, surfaces);
     objects = TOINT(int, operator new(0xe0));
@@ -178,7 +178,7 @@ CBg01::~CBg01()
     int i;
 
     i = 0;
-    for (; i < 0x3a; i++) {
+    for (; i < 58; i++) {
         if ((int)m_surfaces[i] != 0) {
             m_surfaces[i]->Release();
             m_surfaces[i] = (IDirectDrawSurface*)0;
@@ -230,12 +230,12 @@ void CBg01::Draw(int x, int y, char layer)
         src = MakeRect(0, 0, sprite.width, sprite.height);
         if (m_objects[i].facing == -1) {
             dst.left = (int)m_objects[i].x + x - (sprite.width - sprite.x);
-            dst.top = y + (int)m_objects[i].y + 0xd2 - sprite.y;
+            dst.top = y + (int)m_objects[i].y + 210 - sprite.y;
             dst.right = sprite.width + dst.left;
             dst.bottom = sprite.height + dst.top;
         } else {
             dst.left = (int)m_objects[i].x + x - sprite.x;
-            dst.top = y + (int)m_objects[i].y + 0xd2 - sprite.y;
+            dst.top = y + (int)m_objects[i].y + 210 - sprite.y;
             dst.right = sprite.width + dst.left;
             dst.bottom = sprite.height + dst.top;
         }

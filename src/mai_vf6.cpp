@@ -334,7 +334,7 @@ void CMai::UpdatePattern()
             m_rfGauge -= 0.6;
         }
         if (frame == 0 && timer == 0) {
-            m_gauge = m_gauge + 0xa;
+            m_gauge = m_gauge + 10;
             vx = (2.0 - (*m_opponent)->m_proration / 10000.0) * -1.1;
             if (m_rfBlue != 0) {
                 m_rfGauge -= 10.0;
@@ -369,7 +369,7 @@ void CMai::UpdatePattern()
             m_rfGauge -= 0.6;
         }
         if (frame == 0 && timer == 0) {
-            m_gauge = m_gauge + 0xf;
+            m_gauge = m_gauge + 15;
             vx = (2.0 - (*m_opponent)->m_proration / 10000.0) * -1.5;
             if (m_rfBlue != 0) {
                 m_rfGauge -= 20.0;
@@ -404,7 +404,7 @@ void CMai::UpdatePattern()
             m_rfGauge -= 0.6;
         }
         if (frame == 0 && timer == 0) {
-            m_gauge = m_gauge + 0x14;
+            m_gauge = m_gauge + 20;
             vx = (2.0 - (*m_opponent)->m_proration / 10000.0) * -1.8;
             if (m_rfBlue != 0) {
                 m_rfGauge -= 30.0;
@@ -439,7 +439,7 @@ void CMai::UpdatePattern()
             m_rfGauge -= 0.6;
         }
         if (frame == 0 && timer == 0) {
-            m_gauge = m_gauge + 0xa;
+            m_gauge = m_gauge + 10;
             vx = (2.0 - (*m_opponent)->m_proration / 10000.0) * -1.1;
             if (m_rfBlue != 0) {
                 m_rfGauge -= 10.0;
@@ -474,7 +474,7 @@ void CMai::UpdatePattern()
             m_rfGauge -= 0.6;
         }
         if (frame == 0 && timer == 0) {
-            m_gauge = m_gauge + 0xf;
+            m_gauge = m_gauge + 15;
             vx = (2.0 - (*m_opponent)->m_proration / 10000.0) * -1.5;
             if (m_rfBlue != 0) {
                 m_rfGauge -= 20.0;
@@ -509,7 +509,7 @@ void CMai::UpdatePattern()
             m_rfGauge -= 0.6;
         }
         if (frame == 0 && timer == 0) {
-            m_gauge = m_gauge + 0x14;
+            m_gauge = m_gauge + 20;
             vx = (2.0 - (*m_opponent)->m_proration / 10000.0) * -1.8;
             if (m_rfBlue != 0) {
                 m_rfGauge -= 30.0;
@@ -544,7 +544,7 @@ void CMai::UpdatePattern()
             m_rfGauge -= 0.6;
         }
         if (frame == 0 && timer == 0) {
-            m_gauge = m_gauge + 0xa;
+            m_gauge = m_gauge + 10;
             vx = (2.0 - (*m_opponent)->m_proration / 10000.0) * -1.1;
             if (m_rfBlue != 0) {
                 m_rfGauge -= 10.0;
@@ -576,7 +576,7 @@ void CMai::UpdatePattern()
             m_rfGauge -= 0.6;
         }
         if (frame == 0 && timer == 0) {
-            m_gauge = m_gauge + 0xf;
+            m_gauge = m_gauge + 15;
             vx = (2.0 - (*m_opponent)->m_proration / 10000.0) * -1.5;
             if (m_rfBlue != 0) {
                 m_rfGauge -= 20.0;
@@ -608,7 +608,7 @@ void CMai::UpdatePattern()
             m_rfGauge -= 0.6;
         }
         if (frame == 0 && timer == 0) {
-            m_gauge = m_gauge + 0x14;
+            m_gauge = m_gauge + 20;
             vx = (2.0 - (*m_opponent)->m_proration / 10000.0) * -1.8;
             if (m_rfBlue != 0) {
                 m_rfGauge -= 30.0;
@@ -640,7 +640,7 @@ void CMai::UpdatePattern()
             m_rfGauge -= 0.8;
         }
         if (frame == 0 && timer == 0) {
-            m_gauge = m_gauge + 0x1e;
+            m_gauge = m_gauge + 30;
             vx = m_hitVx;
             vy = vy * 0.75 + m_hitVy;
             if (vy < -2.0) {
@@ -683,7 +683,7 @@ void CMai::UpdatePattern()
             m_rfGauge -= 0.8;
         }
         if (frame == 0 && timer == 0) {
-            m_gauge = m_gauge + 0x1e;
+            m_gauge = m_gauge + 30;
             vx = m_hitVx;
             vy = vy * 0.75 + m_hitVy;
             if (vy < -4.0) {
@@ -726,7 +726,7 @@ void CMai::UpdatePattern()
             m_rfGauge -= 0.8;
         }
         if (frame == 0 && timer == 0) {
-            m_gauge = m_gauge + 0x1e;
+            m_gauge = m_gauge + 30;
             vx = m_hitVx;
             vy = vy * 0.75 + m_hitVy;
             if (vy < -6.0) {
@@ -769,7 +769,7 @@ void CMai::UpdatePattern()
             m_rfGauge -= 0.8;
         }
         if (frame == 0 && timer == 0) {
-            m_gauge = m_gauge + 0x1e;
+            m_gauge = m_gauge + 30;
             vx = m_hitVx;
             vy = vy * 0.75 + m_hitVy;
             ay = 0.032;
@@ -807,7 +807,7 @@ void CMai::UpdatePattern()
             m_rfGauge -= 0.8;
         }
         if (frame == 0 && timer == 0) {
-            m_gauge = m_gauge + 0x1e;
+            m_gauge = m_gauge + 30;
             vx = m_hitVx;
             vy = m_hitVy;
             ay = 0.032;
@@ -850,7 +850,7 @@ void CMai::UpdatePattern()
             break;
         }
         if (frame == 0 && timer == 0) {
-            m_gauge = m_gauge + 0x1e;
+            m_gauge = m_gauge + 30;
             vx = m_hitVx;
             vy = vy * 0.75 + m_hitVy;
             if (vy < -2.0) {
@@ -898,7 +898,7 @@ void CMai::UpdatePattern()
             break;
         }
         if (frame == 0 && timer == 0) {
-            m_gauge = m_gauge + 0x1e;
+            m_gauge = m_gauge + 30;
             vx = m_hitVx;
             vy = vy * 0.75 + m_hitVy;
             if (vy < -4.0) {
@@ -946,7 +946,7 @@ void CMai::UpdatePattern()
             break;
         }
         if (frame == 0 && timer == 0) {
-            m_gauge = m_gauge + 0x1e;
+            m_gauge = m_gauge + 30;
             vx = m_hitVx;
             vy = vy * 0.75 + m_hitVy;
             ay = 0.032;
@@ -989,7 +989,7 @@ void CMai::UpdatePattern()
             break;
         }
         if (frame == 0 && timer == 0) {
-            m_gauge = m_gauge + 0x1e;
+            m_gauge = m_gauge + 30;
             vx = m_hitVx;
             vy = m_hitVy;
             ay = 0.032;
@@ -1084,13 +1084,13 @@ void CMai::UpdatePattern()
             m_rfGauge -= 0.8;
         }
         if (frame == 0 && timer == 0 && m_patternVar1 == 0) {
-            m_gauge = m_gauge + 0x1e;
+            m_gauge = m_gauge + 30;
             m_patternVar1++;
-            m_untechTime = m_untechTime + 0x78;
+            m_untechTime = m_untechTime + 120;
             vx = 0.5;
             vy = -2.5;
             ay = 0.025;
-            m_playSound = 0x1f;
+            m_playSound = 31;
             effect.type = 0;
             effect.x = (double)(int)x;
             effect.y = (double)(int)y;
@@ -1123,7 +1123,7 @@ void CMai::UpdatePattern()
             m_rfGauge -= 0.8;
         }
         if (frame == 0 && timer == 0) {
-            m_gauge = m_gauge + 0x1e;
+            m_gauge = m_gauge + 30;
             vx = m_hitVx;
             vy = m_hitVy;
             ay = 0.072;
@@ -1230,7 +1230,7 @@ void CMai::UpdatePattern()
             m_rfGauge -= 0.6;
         }
         if (frame == 0 && timer == 0) {
-            m_gauge = m_gauge + 0x1e;
+            m_gauge = m_gauge + 30;
             if (m_rfBlue != 0) {
                 m_rfGauge -= 30.0;
             }
@@ -1267,7 +1267,7 @@ void CMai::UpdatePattern()
             m_rfGauge -= 0.6;
         }
         if (frame == 0 && timer == 0) {
-            m_gauge = m_gauge + 0x1e;
+            m_gauge = m_gauge + 30;
             if (m_rfBlue != 0) {
                 m_rfGauge -= 30.0;
             }
@@ -1304,7 +1304,7 @@ void CMai::UpdatePattern()
             m_rfGauge -= 0.6;
         }
         if (frame == 0 && timer == 0) {
-            m_gauge = m_gauge + 0x1e;
+            m_gauge = m_gauge + 30;
             if (m_rfBlue != 0) {
                 m_rfGauge -= 30.0;
             }
@@ -1344,7 +1344,7 @@ void CMai::UpdatePattern()
             effect.facing = facing;
             effect.layer = 1;
             SpawnObject(&effect);
-            m_gauge = m_gauge + 0x1e;
+            m_gauge = m_gauge + 30;
             vx = m_hitVx;
             vy = m_hitVy;
             ay = 0.032;
@@ -1378,11 +1378,11 @@ void CMai::UpdatePattern()
             m_rfGauge -= 0.8;
         }
         if (frame == 0 && timer == 0 && m_patternVar1 == 0) {
-            m_playSound = 0x1e;
+            m_playSound = 30;
             vy = -0.45;
             vx = -0.1;
             m_patternVar1++;
-            m_gauge = m_gauge + 0x1e;
+            m_gauge = m_gauge + 30;
         }
         if (frame == 4 && timer == 0) {
             vx = m_hitVx;
@@ -1435,10 +1435,10 @@ void CMai::UpdatePattern()
             if (m_rfBlue != 0) {
                 m_rfGauge -= 30.0;
             }
-            m_playSound = 0x21;
+            m_playSound = 33;
             vy = -1.5;
             vx = -0.8;
-            m_gauge = m_gauge + 0x1e;
+            m_gauge = m_gauge + 30;
         }
         vy += 0.04;
         if (frame == 0 && vy + y > 0.0) {
@@ -1487,10 +1487,10 @@ void CMai::UpdatePattern()
             if (m_rfBlue != 0) {
                 m_rfGauge -= 30.0;
             }
-            m_playSound = 0x21;
+            m_playSound = 33;
             vy = -1.5;
             vx = -0.8;
-            m_gauge = m_gauge + 0x1e;
+            m_gauge = m_gauge + 30;
         }
         vy += 0.04;
         if (frame == 0 && vy + y > 0.0) {
@@ -1539,10 +1539,10 @@ void CMai::UpdatePattern()
             if (m_rfBlue != 0) {
                 m_rfGauge -= 30.0;
             }
-            m_playSound = 0x21;
+            m_playSound = 33;
             vx = m_hitVx;
             vy = m_hitVy;
-            m_gauge = m_gauge + 0x1e;
+            m_gauge = m_gauge + 30;
         }
         vy += 0.04;
         timer++;
@@ -1583,10 +1583,10 @@ void CMai::UpdatePattern()
                 if (m_rfBlue != 0) {
                     m_rfGauge -= 30.0;
                 }
-                m_playSound = 0x21;
+                m_playSound = 33;
                 vx = m_hitVx;
                 vy = m_hitVy;
-                m_gauge = m_gauge + 0x1e;
+                m_gauge = m_gauge + 30;
                 m_patternVar1++;
             }
         }
@@ -1695,7 +1695,7 @@ void CMai::UpdatePattern()
         }
         break;
     case kLyingDown:
-        if (m_hp > 0 && timer > 0x63 && frame == 0) {
+        if (m_hp > 0 && timer > 99 && frame == 0) {
             pattern = kWakeUp;
             StartPattern();
             break;
@@ -1721,7 +1721,7 @@ void CMai::UpdatePattern()
             pattern = kGuardStandLight;
         }
         if (frame == 0 && timer == 0) {
-            m_gauge = m_gauge + 0xa;
+            m_gauge = m_gauge + 10;
             vx = -1.5;
             vy = 0.0;
             y = 0.0;
@@ -1760,7 +1760,7 @@ void CMai::UpdatePattern()
             pattern = kGuardStandMedium;
         }
         if (frame == 0 && timer == 0) {
-            m_gauge = m_gauge + 0xf;
+            m_gauge = m_gauge + 15;
             vx = -1.8;
             vy = 0.0;
             y = 0.0;
@@ -1799,7 +1799,7 @@ void CMai::UpdatePattern()
             pattern = kGuardStandHeavy;
         }
         if (frame == 0 && timer == 0) {
-            m_gauge = m_gauge + 0x14;
+            m_gauge = m_gauge + 20;
             vx = -2.3;
             vy = 0.0;
             y = 0.0;
@@ -1838,7 +1838,7 @@ void CMai::UpdatePattern()
             pattern = kGuardStandLight;
         }
         if (frame == 0 && timer == 0) {
-            m_gauge = m_gauge + 0xa;
+            m_gauge = m_gauge + 10;
             vx = -1.5;
             vy = 0.0;
             y = 0.0;
@@ -1874,7 +1874,7 @@ void CMai::UpdatePattern()
             pattern = kGuardStandMedium;
         }
         if (frame == 0 && timer == 0) {
-            m_gauge = m_gauge + 0xf;
+            m_gauge = m_gauge + 15;
             vx = -1.8;
             vy = 0.0;
             y = 0.0;
@@ -1910,7 +1910,7 @@ void CMai::UpdatePattern()
             pattern = kGuardStandHeavy;
         }
         if (frame == 0 && timer == 0) {
-            m_gauge = m_gauge + 0x14;
+            m_gauge = m_gauge + 20;
             vx = -2.3;
             vy = 0.0;
             y = 0.0;
@@ -1941,7 +1941,7 @@ void CMai::UpdatePattern()
     case kGuardAir:
         if (frame == 0 && timer == 0) {
             vy = -2.6;
-            m_gauge = m_gauge + 0xf;
+            m_gauge = m_gauge + 15;
             ay = 0.06;
         }
         vx = -1.2;
@@ -2030,12 +2030,12 @@ void CMai::UpdatePattern()
             StopMoving();
             effect.type = 9;
             effect.x = (double)(int)x;
-            effect.y = (double)((int)y - 0x46);
+            effect.y = (double)((int)y - 70);
             effect.scale = 2;
             effect.layer = 1;
             m_game->CreateEffect((EffectDesc*)&effect);
             m_hitsLeft = 1;
-            m_playSound = 0x3e;
+            m_playSound = 62;
             m_patternVar1++;
         }
         timer++;
@@ -2062,13 +2062,13 @@ void CMai::UpdatePattern()
             StopMoving();
             effect.type = 9;
             effect.x = (double)(int)x;
-            effect.y = (double)((int)y - 0x46);
+            effect.y = (double)((int)y - 70);
             effect.scale = 2;
             effect.layer = 1;
             m_game->CreateEffect((EffectDesc*)&effect);
             m_hitsLeft = 1;
-            m_playSound = 0x3e;
-            m_gauge = m_gauge - 0x3e8;
+            m_playSound = 62;
+            m_gauge = m_gauge - 1000;
             m_patternVar1++;
         }
         vy = vy + ay;
@@ -2083,7 +2083,7 @@ void CMai::UpdatePattern()
         if (timer >= duration) {
             timer = 0;
             frame++;
-            if (frame == 0xc) {
+            if (frame == 12) {
                 ay = 0.035;
             }
             if (frame >= frameCount) {
@@ -2166,7 +2166,7 @@ void CMai::UpdatePattern()
             StartAfterimages(3);
             vy = 0.0;
             ay = 0.0;
-            m_playSound = 0x11;
+            m_playSound = 17;
         }
         timer++;
         m_patternVar1++;
@@ -2178,7 +2178,7 @@ void CMai::UpdatePattern()
                 frame = frame - 2;
             }
         }
-        if (m_inputX == facing && m_patternVar2 >= 0x78) {
+        if (m_inputX == facing && m_patternVar2 >= 120) {
             pattern = kFall;
             StartPattern();
             vx = 1.1;
@@ -2187,7 +2187,7 @@ void CMai::UpdatePattern()
                 vx = -vx;
             }
         }
-        if (m_inputX != facing && m_patternVar1 >= 0x30) {
+        if (m_inputX != facing && m_patternVar1 >= 48) {
             pattern = kFall;
             StartPattern();
             vx = 1.1;
@@ -2203,7 +2203,7 @@ void CMai::UpdatePattern()
             vy = 0.0;
             ay = 0.0;
             StartAfterimages(3);
-            m_playSound = 0x11;
+            m_playSound = 17;
         }
         timer++;
         m_patternVar1++;
@@ -2215,7 +2215,7 @@ void CMai::UpdatePattern()
                 frame = frame - 2;
             }
         }
-        if (m_inputX == -facing && m_patternVar2 >= 0x78) {
+        if (m_inputX == -facing && m_patternVar2 >= 120) {
             pattern = kFall;
             StartPattern();
             vx = -0.9;
@@ -2224,7 +2224,7 @@ void CMai::UpdatePattern()
                 vx = -vx;
             }
         }
-        if (m_inputX != -facing && m_patternVar1 >= 0x30) {
+        if (m_inputX != -facing && m_patternVar1 >= 48) {
             pattern = kFall;
             StartPattern();
             vx = -0.9;
@@ -2238,16 +2238,16 @@ void CMai::UpdatePattern()
         if (frame == 0 && timer == 0) {
             vx = 0.0;
             vy = 0.0;
-            StartAfterimages(0xa);
+            StartAfterimages(10);
             if (m_rfBlue == 1) {
                 m_proration = m_rfGauge * 5.0 + m_proration;
             }
             m_rfGauge = 0.0;
-            m_freezeTime = 0x5a;
-            FillBackground(0xb0, 3);
+            m_freezeTime = 90;
+            FillBackground(176, 3);
         }
         if (frame == 1 && timer == 0) {
-            m_playSound = 0x12;
+            m_playSound = 18;
             effect.type = 1;
             effect.x = (double)(int)x;
             effect.y = (double)(int)y;
@@ -2344,7 +2344,7 @@ void CMai::UpdatePattern()
             }
             m_recoilGuardWindow = 0;
             m_cornerPushback = 0.0;
-            m_freezeTime = 0x3c;
+            m_freezeTime = 60;
         }
         if (m_freezeTime == 0 && m_patternVar3 == 0) {
             m_patternVar3++;
@@ -2376,16 +2376,16 @@ void CMai::UpdatePattern()
             m_patternVar2 = (int)(vy * 100.0);
             vx = 0.0;
             vy = 0.0;
-            StartAfterimages(0xa);
+            StartAfterimages(10);
             if (m_rfBlue == 1) {
                 m_proration = m_rfGauge * 5.0 + m_proration;
             }
             m_rfGauge = 0.0;
-            m_freezeTime = 0x5a;
-            FillBackground(0xb0, 3);
+            m_freezeTime = 90;
+            FillBackground(176, 3);
         }
         if (frame == 1 && timer == 0) {
-            m_playSound = 0x12;
+            m_playSound = 18;
             effect.type = 1;
             effect.x = (double)(int)x;
             effect.y = (double)(int)y;
@@ -2464,7 +2464,7 @@ void CMai::UpdatePattern()
         }
         if (frame == 1 && timer == 0) {
             m_gauge = m_gauge + 5;
-            m_playSound = 0x15;
+            m_playSound = 21;
             m_hitsLeft = 1;
         }
         timer++;
@@ -2499,8 +2499,8 @@ void CMai::UpdatePattern()
             vy = 0.0;
         }
         if (frame == 1 && timer == 0) {
-            m_gauge = m_gauge + 0xf;
-            m_playSound = 0x14;
+            m_gauge = m_gauge + 15;
+            m_playSound = 20;
             m_hitsLeft = 1;
         }
         timer++;
@@ -2535,8 +2535,8 @@ void CMai::UpdatePattern()
             vy = 0.0;
         }
         if (frame == 2 && timer == 0) {
-            m_gauge = m_gauge + 0xf;
-            m_playSound = 0x14;
+            m_gauge = m_gauge + 15;
+            m_playSound = 20;
             m_hitsLeft = 1;
         }
         if (frame == 9 && timer == 0) {
@@ -2562,11 +2562,11 @@ void CMai::UpdatePattern()
             vy = 0.0;
         }
         if (frame == 2 && timer == 0) {
-            m_gauge = m_gauge + 0x23;
-            m_playSound = 0x14;
+            m_gauge = m_gauge + 35;
+            m_playSound = 20;
             m_hitsLeft = 1;
         }
-        if (frame == 0xa && timer == 0) {
+        if (frame == 10 && timer == 0) {
             m_playVoice = 2;
         }
         timer++;
@@ -2600,7 +2600,7 @@ void CMai::UpdatePattern()
         }
         if (frame == 1 && timer == 0) {
             m_gauge = m_gauge + 5;
-            m_playSound = 0x15;
+            m_playSound = 21;
             m_hitsLeft = 1;
         }
         timer++;
@@ -2636,8 +2636,8 @@ void CMai::UpdatePattern()
             break;
         }
         if (frame == 1 && timer == 0) {
-            m_gauge = m_gauge + 0xd;
-            m_playSound = 0x14;
+            m_gauge = m_gauge + 13;
+            m_playSound = 20;
             m_hitsLeft = 1;
         }
         timer++;
@@ -2673,11 +2673,11 @@ void CMai::UpdatePattern()
             break;
         }
         if (frame == 3 && timer == 0) {
-            m_gauge = m_gauge + 0x19;
-            m_playSound = 0x14;
+            m_gauge = m_gauge + 25;
+            m_playSound = 20;
             m_hitsLeft = 1;
         }
-        if (frame == 0xa && timer == 0) {
+        if (frame == 10 && timer == 0) {
             m_playVoice = 2;
         }
         timer++;
@@ -2714,7 +2714,7 @@ void CMai::UpdatePattern()
         }
         if (frame == 1 && timer == 0) {
             m_gauge = m_gauge + 5;
-            m_playSound = 0x15;
+            m_playSound = 21;
             m_hitsLeft = 1;
         }
         if (y + vy >= 0.0) {
@@ -2768,8 +2768,8 @@ void CMai::UpdatePattern()
                 m_attackResult = 0;
             }
             if (frame == 1) {
-                m_gauge = m_gauge + 0xd;
-                m_playSound = 0x14;
+                m_gauge = m_gauge + 13;
+                m_playSound = 20;
                 m_hitsLeft = 1;
             }
             if (frame >= frameCount) {
@@ -2794,8 +2794,8 @@ void CMai::UpdatePattern()
             break;
         }
         if (frame == 1 && timer == 0) {
-            m_gauge = m_gauge + 0x1e;
-            m_playSound = 0x14;
+            m_gauge = m_gauge + 30;
+            m_playSound = 20;
             m_hitsLeft = 1;
         }
         if (frame == 4 && timer == 0) {
@@ -2840,10 +2840,10 @@ void CMai::UpdatePattern()
         }
         if (frame == 2 && timer == 0) {
             m_playVoice = 1;
-            m_gauge = m_gauge + 0x19;
+            m_gauge = m_gauge + 25;
             effect.type = 0x19f;
-            effect.x = (double)((int)x - facing * 0x1c);
-            effect.y = (double)((int)y - 0x2c);
+            effect.x = (double)((int)x - facing * 28);
+            effect.y = (double)((int)y - 44);
             effect.scale = 2;
             effect.layer = 1;
             effect.facing = facing;
@@ -2874,10 +2874,10 @@ void CMai::UpdatePattern()
         }
         if (frame == 2 && timer == 0) {
             m_playVoice = 1;
-            m_gauge = m_gauge + 0x19;
+            m_gauge = m_gauge + 25;
             effect.type = 0x1a0;
-            effect.x = (double)((int)x - facing * 0x15);
-            effect.y = (double)((int)y - 0x3f);
+            effect.x = (double)((int)x - facing * 21);
+            effect.y = (double)((int)y - 63);
             effect.scale = 2;
             effect.layer = 1;
             effect.facing = facing;
@@ -2908,10 +2908,10 @@ void CMai::UpdatePattern()
         }
         if (frame == 2 && timer == 0) {
             m_playVoice = 1;
-            m_gauge = m_gauge + 0x19;
+            m_gauge = m_gauge + 25;
             effect.type = 0x1a1;
             effect.x = (double)((int)x - facing * 5);
-            effect.y = (double)((int)y - 0x3d);
+            effect.y = (double)((int)y - 61);
             effect.scale = 2;
             effect.layer = 1;
             effect.facing = facing;
@@ -2951,14 +2951,14 @@ void CMai::UpdatePattern()
             vx = 0.0;
             vy = 0.0;
             m_hitsLeft = 1;
-            m_familiarGauge -= 0x3e8;
+            m_familiarGauge -= 1000;
         }
         if (frame == 2 && timer == 0) {
             m_playVoice = 1;
-            m_gauge = m_gauge + 0x19;
+            m_gauge = m_gauge + 25;
             effect.type = 0x19f;
-            effect.x = (double)((int)x - facing * 0x1c);
-            effect.y = (double)((int)y - 0x2c);
+            effect.x = (double)((int)x - facing * 28);
+            effect.y = (double)((int)y - 44);
             effect.scale = 2;
             effect.layer = 1;
             effect.facing = facing;
@@ -2996,14 +2996,14 @@ void CMai::UpdatePattern()
             vx = 0.0;
             vy = 0.0;
             m_hitsLeft = 1;
-            m_familiarGauge -= 0x3e8;
+            m_familiarGauge -= 1000;
         }
         if (frame == 2 && timer == 0) {
             m_playVoice = 1;
-            m_gauge = m_gauge + 0x19;
+            m_gauge = m_gauge + 25;
             effect.type = 0x1a0;
-            effect.x = (double)((int)x - facing * 0x15);
-            effect.y = (double)((int)y - 0x3f);
+            effect.x = (double)((int)x - facing * 21);
+            effect.y = (double)((int)y - 63);
             effect.scale = 2;
             effect.layer = 1;
             effect.facing = facing;
@@ -3041,14 +3041,14 @@ void CMai::UpdatePattern()
             vx = 0.0;
             vy = 0.0;
             m_hitsLeft = 1;
-            m_familiarGauge -= 0x3e8;
+            m_familiarGauge -= 1000;
         }
         if (frame == 2 && timer == 0) {
             m_playVoice = 1;
-            m_gauge = m_gauge + 0x19;
+            m_gauge = m_gauge + 25;
             effect.type = 0x1a1;
             effect.x = (double)((int)x - facing * 5);
-            effect.y = (double)((int)y - 0x3d);
+            effect.y = (double)((int)y - 61);
             effect.scale = 2;
             effect.layer = 1;
             effect.facing = facing;
@@ -3088,8 +3088,8 @@ void CMai::UpdatePattern()
                 m_attackResult = 0;
             }
             if (frame == 3) {
-                m_playSound = 0x15;
-                m_gauge = m_gauge + 0x19;
+                m_playSound = 21;
+                m_gauge = m_gauge + 25;
                 vx = 3.0;
             }
             if (frame >= frameCount) {
@@ -3112,8 +3112,8 @@ void CMai::UpdatePattern()
             (*m_opponent)->pattern = kThrownStandLow2;
             pattern = kThrowHold;
             effect.type = 0;
-            effect.x = (double)((int)x + facing * 0x31);
-            effect.y = (double)((int)y - 0x2b);
+            effect.x = (double)((int)x + facing * 49);
+            effect.y = (double)((int)y - 43);
             effect.scale = 2;
             effect.layer = 1;
             m_game->CreateEffect((EffectDesc*)&effect);
@@ -3140,7 +3140,7 @@ void CMai::UpdatePattern()
         }
         break;
     case kThrowHold:
-        FocusCameraY(0x32, 3);
+        FocusCameraY(50, 3);
         timer++;
         if (timer >= duration) {
             timer = 0;
@@ -3155,22 +3155,22 @@ void CMai::UpdatePattern()
                 }
                 (*m_opponent)->pattern = kThrownDoubledOver;
                 (*m_opponent)->y = -150.0;
-                (*m_opponent)->x = facing * 0x29 + x;
+                (*m_opponent)->x = facing * 41 + x;
             }
             if (frame == 2) {
                 (*m_opponent)->y = -100.0;
-                (*m_opponent)->x = facing * 0x2f + x;
+                (*m_opponent)->x = facing * 47 + x;
             }
             if (frame == 3) {
                 (*m_opponent)->y = -81.0;
-                (*m_opponent)->x = x - facing * 0x5c;
+                (*m_opponent)->x = x - facing * 92;
                 (*m_opponent)->facing = -facing;
                 (*m_opponent)->pattern = kThrownDoubledOverInverted;
             }
             if (frame == 4) {
                 (*m_opponent)->y = 0.0;
-                (*m_opponent)->x = x - facing * 0x61;
-                DealDamage(0x4b0, 750.0);
+                (*m_opponent)->x = x - facing * 97;
+                DealDamage(1200, 750.0);
                 (*m_opponent)->pattern = kKnockdownHittable;
                 (*m_opponent)->m_landHittable = 1;
                 m_attackResult = 3;
@@ -3192,7 +3192,7 @@ void CMai::UpdatePattern()
         }
         if (frame == 1 && timer == 0) {
             m_gauge = m_gauge + 5;
-            m_playSound = 0x15;
+            m_playSound = 21;
             m_hitsLeft = 1;
         }
         if (y + vy >= 0.0) {
@@ -3219,8 +3219,8 @@ void CMai::UpdatePattern()
             ay = 0.03;
         }
         if (frame == 2 && timer == 0) {
-            m_gauge = m_gauge + 0xa;
-            m_playSound = 0x15;
+            m_gauge = m_gauge + 10;
+            m_playSound = 21;
             m_hitsLeft = 1;
         }
         if (y + vy >= 0.0) {
@@ -3247,8 +3247,8 @@ void CMai::UpdatePattern()
             ay = 0.03;
         }
         if (frame == 1 && timer == 0) {
-            m_gauge = m_gauge + 0xa;
-            m_playSound = 0x14;
+            m_gauge = m_gauge + 10;
+            m_playSound = 20;
             m_hitsLeft = 1;
         }
         if (y + vy >= 0.0) {
@@ -3278,12 +3278,12 @@ void CMai::UpdatePattern()
             pattern = kAirThrowHold;
             (*m_opponent)->pattern = kThrownStandHigh;
             effect.type = 0;
-            effect.x = (double)((int)x + facing * 0x1f);
-            effect.y = (double)((int)y - 0x52);
+            effect.x = (double)((int)x + facing * 31);
+            effect.y = (double)((int)y - 82);
             effect.scale = 2;
             effect.layer = 1;
             m_game->CreateEffect((EffectDesc*)&effect);
-            (*m_opponent)->x = facing * 0x1f + x;
+            (*m_opponent)->x = facing * 31 + x;
             (*m_opponent)->y = y - 82.0;
         }
         timer++;
@@ -3304,10 +3304,10 @@ void CMai::UpdatePattern()
         break;
     case kAirThrowHold:
         if (frame < 4) {
-            FocusCameraX(0x32, 3);
+            FocusCameraX(50, 3);
         }
         if (frame < 4) {
-            FocusCameraY(0x32, 3);
+            FocusCameraY(50, 3);
         }
         if (frame == 0 && timer == 1) {
             (*m_opponent)->facing = -facing;
@@ -3322,20 +3322,20 @@ void CMai::UpdatePattern()
         }
         if (frame == 1) {
             (*m_opponent)->y = y - 80.0;
-            (*m_opponent)->x = facing * 0x1d + x;
+            (*m_opponent)->x = facing * 29 + x;
             (*m_opponent)->pattern = kThrownDoubledOver;
         }
         if (frame == 2) {
             (*m_opponent)->y = y - 71.0;
-            (*m_opponent)->x = facing * 0xb + x;
+            (*m_opponent)->x = facing * 11 + x;
             (*m_opponent)->pattern = kThrownAirborne;
             (*m_opponent)->facing = facing;
         }
         if (frame == 3 && timer == 0) {
             (*m_opponent)->y = y - 60.0;
-            (*m_opponent)->x = x - facing * 0x25;
+            (*m_opponent)->x = x - facing * 37;
             (*m_opponent)->pattern = kHitBlownAway;
-            DealDamage(0x514, 500.0);
+            DealDamage(1300, 500.0);
             (*m_opponent)->StartPattern();
             (*m_opponent)->m_hitVx = -3.0;
             (*m_opponent)->m_hitVy = 3.0;
@@ -3356,17 +3356,17 @@ void CMai::UpdatePattern()
     case 0xf9:
         if (frame == 0 && timer == 0) {
             unkdc = 4;
-            unkde = -0x14;
+            unkde = -20;
             vx = 0.0;
             m_hitsLeft = 1;
             m_recoilGuardWindow = 0;
-            m_freezeTime = 0x3c;
+            m_freezeTime = 60;
             effect.type = 0x28;
-            effect.x = (double)((int)x + facing * 0xa);
-            effect.y = (double)((int)y - 0x28);
+            effect.x = (double)((int)x + facing * 10);
+            effect.y = (double)((int)y - 40);
             effect.scale = 2;
             effect.layer = 1;
-            effect.sound = 0x13;
+            effect.sound = 19;
             m_game->CreateEffect((EffectDesc*)&effect);
         }
         timer++;
@@ -3393,7 +3393,7 @@ void CMai::UpdatePattern()
             ay = 0.0;
         }
         if (frame == 1 && timer == 0) {
-            m_gauge = m_gauge + 0x19;
+            m_gauge = m_gauge + 25;
             m_hitsLeft = 1;
             vx *= 0.5;
             vy *= 0.5;
@@ -3412,7 +3412,7 @@ void CMai::UpdatePattern()
             frame++;
             m_attackResult = 0;
             if (frame >= frameCount) {
-                frame = 0xb;
+                frame = 11;
             }
         }
         break;
@@ -3428,7 +3428,7 @@ void CMai::UpdatePattern()
             ay = 0.0;
         }
         if (frame == 1 && timer == 0) {
-            m_gauge = m_gauge + 0x19;
+            m_gauge = m_gauge + 25;
             m_hitsLeft = 1;
             vx *= 0.5;
             vy *= 0.5;
@@ -3465,15 +3465,15 @@ void CMai::UpdatePattern()
                 ay = 0.0;
             }
             effect.type = 0x21;
-            effect.sound = 0xb;
+            effect.sound = 11;
             effect.x = (double)(int)x;
-            effect.y = (double)((int)y - 0x14);
+            effect.y = (double)((int)y - 20);
             effect.scale = 2;
             effect.layer = 1;
             m_game->CreateEffect((EffectDesc*)&effect);
             StartAfterimages(3);
             if (m_familiarState == 4) {
-                m_familiarGauge -= 0x3e8;
+                m_familiarGauge -= 1000;
                 if (m_familiarGauge < 0) {
                     m_familiarGauge = 0;
                 }
@@ -3484,7 +3484,7 @@ void CMai::UpdatePattern()
             }
         }
         if (frame == 1 && timer == 0) {
-            m_gauge = m_gauge + 0x19;
+            m_gauge = m_gauge + 25;
             m_hitsLeft = 2;
             vx *= 0.5;
             vy *= 0.5;
@@ -3492,8 +3492,8 @@ void CMai::UpdatePattern()
         }
         if (frame == 7 && timer == 0) {
             effect.type = 0x1a2;
-            effect.x = (double)((int)x + facing * 0x25);
-            effect.y = (double)((int)y - 0x28);
+            effect.x = (double)((int)x + facing * 37);
+            effect.y = (double)((int)y - 40);
             effect.scale = 2;
             effect.facing = facing;
             effect.layer = 1;
@@ -3521,7 +3521,7 @@ void CMai::UpdatePattern()
         vy = 0.0;
         FaceOpponent();
         timer++;
-        if (timer >= duration || frame == 2 && m_patternVar2 == 1 && timer == 0x15) {
+        if (timer >= duration || frame == 2 && m_patternVar2 == 1 && timer == 21) {
             timer = 0;
             frame++;
             m_attackResult = 0;
@@ -3542,7 +3542,7 @@ void CMai::UpdatePattern()
         if (frame == 2 && timer == 0) {
             m_playVoice = 0;
             effect.type = 0x20;
-            effect.x = (double)((int)x + facing * 0x3c);
+            effect.x = (double)((int)x + facing * 60);
             effect.y = (double)(int)y;
             effect.scale = 0;
             effect.facing = -facing;
@@ -3551,7 +3551,7 @@ void CMai::UpdatePattern()
         }
         if (frame == 5 && timer == 0) {
             StopMoving();
-            if (m_patternVar2 > 0x1e) {
+            if (m_patternVar2 > 30) {
                 m_patternVar1 = 1;
             }
         }
@@ -3559,7 +3559,7 @@ void CMai::UpdatePattern()
         if (vx < 0.0) {
             vx = 0.0;
         }
-        if (frame == 5 && timer == 0x14 && m_patternVar1 == 0) {
+        if (frame == 5 && timer == 20 && m_patternVar1 == 0) {
             vx = -3.0;
         }
         if (frame == 6 && timer == 0) {
@@ -3577,7 +3577,7 @@ void CMai::UpdatePattern()
                 break;
             }
             if (frame == 6) {
-                x = (*m_opponent)->x - facing * 0x3c;
+                x = (*m_opponent)->x - facing * 60;
             }
             m_attackResult = 0;
             if (frame >= frameCount) {
@@ -3595,7 +3595,7 @@ void CMai::UpdatePattern()
         if (frame == 2 && timer == 0) {
             m_playVoice = 0;
             effect.type = 0x20;
-            effect.x = (double)((int)x + facing * 0x3c);
+            effect.x = (double)((int)x + facing * 60);
             effect.y = (double)(int)y;
             effect.scale = 0;
             effect.facing = -facing;
@@ -3604,7 +3604,7 @@ void CMai::UpdatePattern()
         }
         if (frame == 5 && timer == 0) {
             StopMoving();
-            if (m_patternVar2 > 0x1e) {
+            if (m_patternVar2 > 30) {
                 m_patternVar1 = 1;
             }
         }
@@ -3612,8 +3612,8 @@ void CMai::UpdatePattern()
         if (vx < 0.0) {
             vx = 0.0;
         }
-        if (frame == 5 && timer == 0x14 && m_patternVar1 == 0) {
-            x = (*m_opponent)->x - facing * 0xb4;
+        if (frame == 5 && timer == 20 && m_patternVar1 == 0) {
+            x = (*m_opponent)->x - facing * 180;
         }
         if (frame == 6 && timer == 0) {
             vx = 1.5;
@@ -3629,7 +3629,7 @@ void CMai::UpdatePattern()
                 frame = 0;
                 timer = 0;
                 pattern = k412BHeld;
-                x = (*m_opponent)->x - facing * 0x64;
+                x = (*m_opponent)->x - facing * 100;
                 if (x > 540.0 && facing == 1) {
                     x = 540.0;
                 }
@@ -3650,15 +3650,15 @@ void CMai::UpdatePattern()
     case k412C:
         if (frame == 0 && timer == 0) {
             effect.type = 0x21;
-            effect.sound = 0xb;
+            effect.sound = 11;
             effect.x = (double)(int)x;
-            effect.y = (double)((int)y - 0x14);
+            effect.y = (double)((int)y - 20);
             effect.scale = 2;
             effect.layer = 1;
             m_game->CreateEffect((EffectDesc*)&effect);
             StartAfterimages(3);
             if (m_familiarState == 4) {
-                m_familiarGauge -= 0x3e8;
+                m_familiarGauge -= 1000;
                 if (m_familiarGauge < 0) {
                     m_familiarGauge = 0;
                 }
@@ -3672,7 +3672,7 @@ void CMai::UpdatePattern()
         if (frame == 2 && timer == 0) {
             m_playVoice = 0;
             effect.type = 0x20;
-            effect.x = (double)((int)x + facing * 0x3c);
+            effect.x = (double)((int)x + facing * 60);
             effect.y = (double)(int)y;
             effect.scale = 0;
             effect.facing = -facing;
@@ -3691,7 +3691,7 @@ void CMai::UpdatePattern()
         if (vx < 0.0) {
             vx = 0.0;
         }
-        if (frame == 5 && timer == 0x14) {
+        if (frame == 5 && timer == 20) {
             vx = 8.0;
         }
         if (frame == 6 && timer == 0) {
@@ -3721,7 +3721,7 @@ void CMai::UpdatePattern()
             if (m_familiarState != 4) {
                 m_familiarState = 2;
                 effect.type = 0x19c;
-                effect.x = (double)((int)x + facing * 0x28);
+                effect.x = (double)((int)x + facing * 40);
                 effect.y = (double)(int)y;
                 effect.keep = 1;
                 effect.scale = 2;
@@ -3729,12 +3729,12 @@ void CMai::UpdatePattern()
                 effect.layer = 1;
                 SpawnObject(&effect);
             } else {
-                m_familiarGauge -= 0x3e8;
+                m_familiarGauge -= 1000;
                 if (m_familiarGauge < 0) {
                     m_familiarGauge = 0;
                 }
                 effect.type = 0x1a8;
-                effect.x = (double)((int)x + facing * 0x50);
+                effect.x = (double)((int)x + facing * 80);
                 effect.y = (double)(int)y;
                 effect.keep = 1;
                 effect.scale = 2;
@@ -3764,7 +3764,7 @@ void CMai::UpdatePattern()
             if (m_familiarState != 4) {
                 m_familiarState = 2;
                 effect.type = 0x19c;
-                effect.x = (double)((int)x + facing * 0x78);
+                effect.x = (double)((int)x + facing * 120);
                 effect.y = (double)(int)y;
                 effect.keep = 1;
                 effect.scale = 2;
@@ -3773,11 +3773,11 @@ void CMai::UpdatePattern()
                 SpawnObject(&effect);
             } else {
                 effect.type = 0x1a8;
-                m_familiarGauge -= 0x3e8;
+                m_familiarGauge -= 1000;
                 if (m_familiarGauge < 0) {
                     m_familiarGauge = 0;
                 }
-                effect.x = (double)((int)x + facing * 0xa0);
+                effect.x = (double)((int)x + facing * 160);
                 effect.y = (double)(int)y;
                 effect.keep = 1;
                 effect.scale = 2;
@@ -3807,7 +3807,7 @@ void CMai::UpdatePattern()
             if (m_familiarState != 4) {
                 m_familiarState = 2;
                 effect.type = 0x19c;
-                effect.x = (double)((int)x + facing * 0xc8);
+                effect.x = (double)((int)x + facing * 200);
                 effect.y = (double)(int)y;
                 effect.keep = 1;
                 effect.scale = 2;
@@ -3816,11 +3816,11 @@ void CMai::UpdatePattern()
                 SpawnObject(&effect);
             } else {
                 effect.type = 0x1a8;
-                m_familiarGauge -= 0x3e8;
+                m_familiarGauge -= 1000;
                 if (m_familiarGauge < 0) {
                     m_familiarGauge = 0;
                 }
-                effect.x = (double)((int)x + facing * 0xf0);
+                effect.x = (double)((int)x + facing * 240);
                 effect.y = (double)(int)y;
                 effect.keep = 1;
                 effect.scale = 2;
@@ -3846,7 +3846,7 @@ void CMai::UpdatePattern()
             vx = 0.0;
             vy = 0.0;
             m_playVoice = 5;
-            m_familiarGauge = 0x2710;
+            m_familiarGauge = 10000;
             m_familiarSummoned = 1;
             m_familiarRate = 1;
             effect.type = 0x1f;
@@ -3859,24 +3859,24 @@ void CMai::UpdatePattern()
             effect.type = 0x191;
             effect.x = (double)(int)x;
             if (m_patternVar3 == 1) {
-                effect.x = (double)((int)x + facing * 0x3c);
-                if ((int)x + facing * 0x3c > 0x258) {
+                effect.x = (double)((int)x + facing * 60);
+                if ((int)x + facing * 60 > 600) {
                     effect.x = 600.0;
                 }
-                if ((int)x + facing * 0x3c < 0x28) {
+                if ((int)x + facing * 60 < 40) {
                     effect.x = 40.0;
                 }
             }
             if (m_patternVar3 == 2) {
-                effect.x = (double)((int)x - facing * 0x3c);
-                if ((int)x - facing * 0x3c > 0x258) {
+                effect.x = (double)((int)x - facing * 60);
+                if ((int)x - facing * 60 > 600) {
                     effect.x = 600.0;
                 }
-                if ((int)x - facing * 0x3c < 0x28) {
+                if ((int)x - facing * 60 < 40) {
                     effect.x = 40.0;
                 }
             }
-            effect.y = (double)((int)y - 0x11);
+            effect.y = (double)((int)y - 17);
             effect.facing = facing;
             effect.scale = 2;
             effect.layer = 1;
@@ -3930,8 +3930,8 @@ void CMai::UpdatePattern()
         if (frame > 2) {
             vy += 0.035;
         }
-        if (y + vy > 0.0 && frame < 0xc) {
-            frame = 0xc;
+        if (y + vy > 0.0 && frame < 12) {
+            frame = 12;
             timer = 0;
             y = 0.0;
             StopMoving();
@@ -3965,7 +3965,7 @@ void CMai::UpdatePattern()
             m_game->CreateEffect((EffectDesc*)&effect);
             effect.type = 0x1ac;
             effect.x = (double)(int)x;
-            effect.y = (double)((int)y - 0x14);
+            effect.y = (double)((int)y - 20);
             effect.facing = facing;
             effect.scale = 2;
             effect.layer = 1;
@@ -4000,7 +4000,7 @@ void CMai::UpdatePattern()
             m_game->CreateEffect((EffectDesc*)&effect);
             effect.type = 0x1ad;
             effect.x = (double)(int)x;
-            effect.y = (double)((int)y - 0x14);
+            effect.y = (double)((int)y - 20);
             effect.facing = facing;
             effect.scale = 2;
             effect.layer = 1;
@@ -4025,15 +4025,15 @@ void CMai::UpdatePattern()
         }
         if (frame == 0 && timer == 0) {
             effect.type = 0x21;
-            effect.sound = 0xb;
+            effect.sound = 11;
             effect.x = (double)(int)x;
-            effect.y = (double)((int)y - 0x28);
+            effect.y = (double)((int)y - 40);
             effect.scale = 2;
             effect.layer = 1;
             m_game->CreateEffect((EffectDesc*)&effect);
             StartAfterimages(3);
             if (m_familiarState == 4) {
-                m_familiarGauge -= 0x3e8;
+                m_familiarGauge -= 1000;
                 if (m_familiarGauge < 0) {
                     m_familiarGauge = 0;
                 }
@@ -4055,7 +4055,7 @@ void CMai::UpdatePattern()
             m_game->CreateEffect((EffectDesc*)&effect);
             effect.type = 0x1ae;
             effect.x = (double)(int)x;
-            effect.y = (double)((int)y - 0x14);
+            effect.y = (double)((int)y - 20);
             effect.facing = facing;
             effect.scale = 2;
             effect.layer = 1;
@@ -4082,8 +4082,8 @@ void CMai::UpdatePattern()
         if (frame == 3 && timer == 0) {
             m_familiarState = 2;
             effect.type = 0x1b0;
-            effect.x = (double)((int)x + facing * 0x50);
-            effect.y = (double)((int)y - 0x14);
+            effect.x = (double)((int)x + facing * 80);
+            effect.y = (double)((int)y - 20);
             effect.keep = 1;
             effect.scale = 2;
             effect.facing = facing;
@@ -4110,8 +4110,8 @@ void CMai::UpdatePattern()
         if (frame == 3 && timer == 0) {
             m_familiarState = 2;
             effect.type = 0x1b0;
-            effect.x = (double)((int)x + facing * 0xa0);
-            effect.y = (double)((int)y - 0x14);
+            effect.x = (double)((int)x + facing * 160);
+            effect.y = (double)((int)y - 20);
             effect.keep = 1;
             effect.scale = 2;
             effect.facing = facing;
@@ -4138,8 +4138,8 @@ void CMai::UpdatePattern()
         if (frame == 3 && timer == 0) {
             m_familiarState = 2;
             effect.type = 0x1b0;
-            effect.x = (double)((int)x + facing * 0xf0);
-            effect.y = (double)((int)y - 0x14);
+            effect.x = (double)((int)x + facing * 240);
+            effect.y = (double)((int)y - 20);
             effect.keep = 1;
             effect.scale = 2;
             effect.facing = facing;
@@ -4183,17 +4183,17 @@ void CMai::UpdatePattern()
             ay = 0.0;
         }
         if (frame == 2) {
-            FocusCameraY(0x32, 3);
+            FocusCameraY(50, 3);
         }
         if (frame == 2 && timer == 0) {
             m_hitsLeft = 1;
-            m_freezeTime = 0x78;
-            m_gauge = m_gauge - 0x3e8;
-            FillBackground(0xb0, 3);
+            m_freezeTime = 120;
+            m_gauge = m_gauge - 1000;
+            FillBackground(176, 3);
             effect.type = 0x44;
-            effect.sound = 0x13;
+            effect.sound = 19;
             effect.x = (double)(int)x;
-            effect.y = (double)((int)y - 0x28);
+            effect.y = (double)((int)y - 40);
             effect.scale = 2;
             effect.keep = 1;
             effect.layer = 1;
@@ -4222,7 +4222,7 @@ void CMai::UpdatePattern()
                 break;
             }
             if (m_attackResult == 3) {
-                (*m_opponent)->m_hitstop = 0x270f;
+                (*m_opponent)->m_hitstop = 9999;
                 StartPattern();
                 (*m_opponent)->StartPattern();
                 (*m_opponent)->y = 0.0;
@@ -4231,8 +4231,8 @@ void CMai::UpdatePattern()
                 break;
             }
         }
-        if (frame > 0 && frame < 0x12) {
-            FocusCameraY(0x32, 3);
+        if (frame > 0 && frame < 18) {
+            FocusCameraY(50, 3);
         }
         timer++;
         if (timer >= duration) {
@@ -4252,17 +4252,17 @@ void CMai::UpdatePattern()
             ay = 0.0;
         }
         if (frame == 2) {
-            FocusCameraY(0x32, 3);
+            FocusCameraY(50, 3);
         }
         if (frame == 2 && timer == 0) {
             m_hitsLeft = 1;
-            m_freezeTime = 0x78;
-            m_gauge = m_gauge - 0x7d0;
-            FillBackground(0xb0, 3);
+            m_freezeTime = 120;
+            m_gauge = m_gauge - 2000;
+            FillBackground(176, 3);
             effect.type = 0x45;
             effect.sound = 5;
             effect.x = (double)(int)x;
-            effect.y = (double)((int)y - 0x28);
+            effect.y = (double)((int)y - 40);
             effect.scale = 2;
             effect.keep = 1;
             effect.layer = 1;
@@ -4291,7 +4291,7 @@ void CMai::UpdatePattern()
                 break;
             }
             if (m_attackResult == 3) {
-                (*m_opponent)->m_hitstop = 0x270f;
+                (*m_opponent)->m_hitstop = 9999;
                 StartPattern();
                 (*m_opponent)->StartPattern();
                 (*m_opponent)->y = 0.0;
@@ -4300,8 +4300,8 @@ void CMai::UpdatePattern()
                 break;
             }
         }
-        if (frame > 0 && frame < 0x12) {
-            FocusCameraY(0x32, 3);
+        if (frame > 0 && frame < 18) {
+            FocusCameraY(50, 3);
         }
         timer++;
         if (timer >= duration) {
@@ -4323,24 +4323,24 @@ void CMai::UpdatePattern()
             vy = 0.0;
             ay = 0.0;
             m_hitsLeft = 1;
-            m_freezeTime = 0x78;
-            m_gauge = m_gauge - 0xbb8;
-            FillBackground(0xb0, 3);
+            m_freezeTime = 120;
+            m_gauge = m_gauge - 3000;
+            FillBackground(176, 3);
             effect.type = 0x46;
-            effect.sound = 0x40;
+            effect.sound = 64;
             effect.x = (double)(int)x;
-            effect.y = (double)((int)y - 0x28);
+            effect.y = (double)((int)y - 40);
             effect.scale = 2;
             effect.keep = 1;
             effect.layer = 1;
             m_game->CreateEffect((EffectDesc*)&effect);
-            m_playSound = 0x25;
+            m_playSound = 37;
         }
         if (frame > 1) {
-            m_game->FlashNegative(0xf);
+            m_game->FlashNegative(15);
         }
         if (frame <= 2) {
-            FocusCameraY(0x32, 3);
+            FocusCameraY(50, 3);
         }
         if (frame == 4 && timer == 0) {
             m_playVoice = 0;
@@ -4365,7 +4365,7 @@ void CMai::UpdatePattern()
                 break;
             }
             if (m_attackResult == 3) {
-                (*m_opponent)->m_hitstop = 0x270f;
+                (*m_opponent)->m_hitstop = 9999;
                 StartPattern();
                 (*m_opponent)->StartPattern();
                 (*m_opponent)->y = 0.0;
@@ -4392,8 +4392,8 @@ void CMai::UpdatePattern()
                 break;
             }
         }
-        if (frame > 0 && frame < 0x12) {
-            FocusCameraY(0x32, 3);
+        if (frame > 0 && frame < 18) {
+            FocusCameraY(50, 3);
         }
         timer++;
         if (timer >= duration) {
@@ -4409,36 +4409,36 @@ void CMai::UpdatePattern()
     case k236236Lv1Flurry:
         if (frame == 0 && timer == 0) {
             vx = 0.3;
-            x = (*m_opponent)->x + facing * 0x1e;
+            x = (*m_opponent)->x + facing * 30;
             m_attackResult = 0;
         }
         if (frame == 9 && timer == 0) {
             x += 0.0;
             vx = 0.0;
         }
-        if (frame == 0xb && timer == 0) {
-            m_playSound = 0x14;
+        if (frame == 11 && timer == 0) {
+            m_playSound = 20;
         }
-        if (frame == 0xf && timer == 0) {
+        if (frame == 15 && timer == 0) {
             m_playVoice = 2;
         }
-        if (frame == 0xf && timer == 0x5a) {
+        if (frame == 15 && timer == 90) {
             (*m_opponent)->pattern = kHitAirHeavy;
             (*m_opponent)->m_hitstop = 0;
             (*m_opponent)->m_hitVx = 0.0;
             (*m_opponent)->m_hitVy = -4.0;
             m_attackResult = 2;
-            DealDamage(0x960, 400.0);
+            DealDamage(2400, 400.0);
             effect.type = 0x34;
             effect.x = (*m_opponent)->x;
-            effect.sound = 0x16;
+            effect.sound = 22;
             effect.y = (*m_opponent)->y - 40.0;
             effect.scale = 2;
             effect.layer = 1;
             m_game->CreateEffect((EffectDesc*)&effect);
         }
-        if (frame > 0 && frame < 0xf) {
-            FocusCameraY(0x32, 0xa);
+        if (frame > 0 && frame < 15) {
+            FocusCameraY(50, 10);
         }
         timer++;
         if (timer >= duration) {
@@ -4450,10 +4450,10 @@ void CMai::UpdatePattern()
                 m_patternVar1++;
             }
             if (frame == 9) {
-                x = facing * 0x50 + x;
+                x = facing * 80 + x;
                 m_patternVar1 = 0;
             }
-            if (frame == 0xd && m_patternVar1 < 0xc) {
+            if (frame == 13 && m_patternVar1 < 12) {
                 frame = frame - 2;
                 m_patternVar1++;
             }
@@ -4468,36 +4468,36 @@ void CMai::UpdatePattern()
         if (frame == 0 && timer == 0) {
             m_patternVar1 = 0;
             vx = 0.3;
-            x = (*m_opponent)->x + facing * 0x1e;
+            x = (*m_opponent)->x + facing * 30;
             m_attackResult = 0;
         }
         if (frame == 9 && timer == 0) {
             x += 0.0;
             vx = 0.0;
         }
-        if (frame == 0xb && timer == 0) {
-            m_playSound = 0x14;
+        if (frame == 11 && timer == 0) {
+            m_playSound = 20;
         }
-        if (frame == 0xe && timer == 0) {
+        if (frame == 14 && timer == 0) {
             m_playVoice = 2;
         }
-        if (frame == 0xf && timer == 0 && m_patternVar1 == 7) {
+        if (frame == 15 && timer == 0 && m_patternVar1 == 7) {
             (*m_opponent)->pattern = kHitAirHeavy;
             (*m_opponent)->m_hitstop = 0;
             (*m_opponent)->m_hitVx = 0.0;
             (*m_opponent)->m_hitVy = -4.0;
             m_attackResult = 2;
-            DealDamage(0xc80, 400.0);
+            DealDamage(3200, 400.0);
             effect.type = 0x34;
             effect.x = (*m_opponent)->x;
-            effect.sound = 0x16;
+            effect.sound = 22;
             effect.y = (*m_opponent)->y - 40.0;
             effect.scale = 2;
             effect.layer = 1;
             m_game->CreateEffect((EffectDesc*)&effect);
         }
-        if (frame > 0 && frame < 0xf) {
-            FocusCameraY(0x32, 0xa);
+        if (frame > 0 && frame < 15) {
+            FocusCameraY(50, 10);
         }
         timer++;
         if (timer >= duration) {
@@ -4509,15 +4509,15 @@ void CMai::UpdatePattern()
                 m_patternVar1++;
             }
             if (frame == 9) {
-                x = facing * 0x50 + x;
+                x = facing * 80 + x;
                 m_patternVar1 = 0;
             }
-            if (frame == 0xd && m_patternVar1 < 0xc) {
-                frame = 0xb;
+            if (frame == 13 && m_patternVar1 < 12) {
+                frame = 11;
                 m_patternVar1++;
             }
-            if (frame == 0xe) {
-                m_patternVar1 = 0xc;
+            if (frame == 14) {
+                m_patternVar1 = 12;
             }
         }
         if (frame >= frameCount) {
@@ -4534,37 +4534,37 @@ void CMai::UpdatePattern()
         if (frame == 0 && timer == 0) {
             m_patternVar1 = 0;
             vx = 0.3;
-            x = (*m_opponent)->x + facing * 0x1e;
+            x = (*m_opponent)->x + facing * 30;
             m_attackResult = 0;
         }
         if (frame == 9 && timer == 0) {
             x += 0.0;
             vx = 0.0;
         }
-        if (frame == 0xb && timer == 0) {
-            m_playSound = 0x14;
+        if (frame == 11 && timer == 0) {
+            m_playSound = 20;
         }
-        if (frame == 0xe && timer == 0) {
+        if (frame == 14 && timer == 0) {
             m_playVoice = 2;
         }
-        if (frame == 0xf && timer == 0 && m_patternVar1 == 7) {
+        if (frame == 15 && timer == 0 && m_patternVar1 == 7) {
             (*m_opponent)->pattern = kHitAirHeavy;
             (*m_opponent)->m_hitstop = 0;
             (*m_opponent)->m_hitVx = 0.0;
             (*m_opponent)->m_hitVy = -4.0;
             m_attackResult = 2;
-            DealDamage(0x1194, 400.0);
+            DealDamage(4500, 400.0);
             (*m_opponent)->m_untechTime = (int)(200.0 * m_proration / 10000.0);
             effect.type = 0x34;
             effect.x = (*m_opponent)->x;
-            effect.sound = 0x16;
+            effect.sound = 22;
             effect.y = (*m_opponent)->y - 40.0;
             effect.scale = 2;
             effect.layer = 1;
             m_game->CreateEffect((EffectDesc*)&effect);
         }
-        if (frame > 0 && frame < 0xf) {
-            FocusCameraY(0x32, 0xa);
+        if (frame > 0 && frame < 15) {
+            FocusCameraY(50, 10);
         }
         timer++;
         if (timer >= duration) {
@@ -4576,15 +4576,15 @@ void CMai::UpdatePattern()
                 m_patternVar1++;
             }
             if (frame == 9) {
-                x = facing * 0x50 + x;
+                x = facing * 80 + x;
                 m_patternVar1 = 0;
             }
-            if (frame == 0xd && m_patternVar1 < 0xc) {
-                frame = 0xb;
+            if (frame == 13 && m_patternVar1 < 12) {
+                frame = 11;
                 m_patternVar1++;
             }
-            if (frame == 0xe) {
-                m_patternVar1 = 0xc;
+            if (frame == 14) {
+                m_patternVar1 = 12;
             }
         }
         if (frame >= frameCount) {
@@ -4598,26 +4598,26 @@ void CMai::UpdatePattern()
         }
         break;
     case kLv4Awaken:
-        FocusCameraY(0x32, 3);
+        FocusCameraY(50, 3);
         if (frame == 0 && timer == 0) {
             m_playVoice = 3;
             StopMoving();
-            m_freezeTime = 0x78;
-            m_gauge = m_gauge - 0xbb8;
-            FillBackground(0xb0, 3);
+            m_freezeTime = 120;
+            m_gauge = m_gauge - 3000;
+            FillBackground(176, 3);
             effect.type = 0x46;
-            effect.sound = 0x40;
+            effect.sound = 64;
             effect.x = (double)(int)x;
-            effect.y = (double)((int)y - 0x28);
+            effect.y = (double)((int)y - 40);
             effect.scale = 2;
             effect.keep = 1;
             effect.layer = 1;
             m_game->CreateEffect((EffectDesc*)&effect);
             effect.type = 0x47;
             m_game->CreateEffect((EffectDesc*)&effect);
-            m_playSound = 0x25;
+            m_playSound = 37;
             effect.type = 0x1ab;
-            effect.x = (double)((int)x + facing * 0x14);
+            effect.x = (double)((int)x + facing * 20);
             effect.y = 0.0;
             effect.movesInFreeze = 1;
             effect.facing = facing;
@@ -4645,35 +4645,35 @@ void CMai::UpdatePattern()
         if (frame == 0 && timer == 0) {
             m_patternVar1 = 0;
             vx = 0.3;
-            x = (*m_opponent)->x + facing * 0x1e;
+            x = (*m_opponent)->x + facing * 30;
         }
         if (frame == 9 && timer == 0) {
             x += 0.0;
             vx = 0.0;
         }
-        if (frame == 0xb && timer == 0) {
-            m_playSound = 0x14;
+        if (frame == 11 && timer == 0) {
+            m_playSound = 20;
         }
-        if (frame == 0xe && timer == 0) {
+        if (frame == 14 && timer == 0) {
             m_playVoice = 2;
         }
-        if (frame == 0xf && timer == 0 && m_patternVar1 == 7) {
+        if (frame == 15 && timer == 0 && m_patternVar1 == 7) {
             (*m_opponent)->pattern = kHitAirHeavy;
             (*m_opponent)->m_hitstop = 0;
             (*m_opponent)->m_hitVx = 0.0;
             (*m_opponent)->m_hitVy = -8.0;
-            DealDamage(0x1068, 750.0);
+            DealDamage(4200, 750.0);
             (*m_opponent)->m_untechTime = (int)(200.0 * m_proration / 10000.0);
             effect.type = 0x34;
             effect.x = (*m_opponent)->x;
-            effect.sound = 0x16;
+            effect.sound = 22;
             effect.y = (*m_opponent)->y - 40.0;
             effect.scale = 2;
             effect.layer = 1;
             m_game->CreateEffect((EffectDesc*)&effect);
         }
-        if (frame > 0 && frame < 0xf) {
-            FocusCameraY(0x32, 0xa);
+        if (frame > 0 && frame < 15) {
+            FocusCameraY(50, 10);
         }
         timer++;
         if (timer >= duration) {
@@ -4685,15 +4685,15 @@ void CMai::UpdatePattern()
                 m_patternVar1++;
             }
             if (frame == 9) {
-                x = facing * 0x50 + x;
+                x = facing * 80 + x;
                 m_patternVar1 = 0;
             }
-            if (frame == 0xd && m_patternVar1 < 0xc) {
-                frame = 0xb;
+            if (frame == 13 && m_patternVar1 < 12) {
+                frame = 11;
                 m_patternVar1++;
             }
-            if (frame == 0xe) {
-                m_patternVar1 = 0xc;
+            if (frame == 14) {
+                m_patternVar1 = 12;
             }
         }
         if (frame >= frameCount) {
@@ -4781,25 +4781,25 @@ void CMai::UpdatePattern()
             vy = 0.0;
         }
         if (frame == 3 && timer == 0) {
-            m_freezeTime = 0x78;
-            m_gauge = m_gauge - 0x3e8;
-            FillBackground(0xb0, 3);
+            m_freezeTime = 120;
+            m_gauge = m_gauge - 1000;
+            FillBackground(176, 3);
             effect.type = 0x44;
-            effect.sound = 0x13;
-            effect.x = (double)((int)x - facing * 0xd);
-            effect.y = (double)((int)y - 0x33);
+            effect.sound = 19;
+            effect.x = (double)((int)x - facing * 13);
+            effect.y = (double)((int)y - 51);
             effect.scale = 2;
             effect.keep = 1;
             effect.layer = 1;
             m_game->CreateEffect((EffectDesc*)&effect);
             effect.type = 0x1b6;
             effect.x = (double)(int)x;
-            effect.y = (double)((int)y - 0xf);
+            effect.y = (double)((int)y - 15);
             effect.scale = 2;
             effect.keep = 1;
             effect.layer = 0;
             effect.facing = facing;
-            effect.movesInFreeze = 0x12c;
+            effect.movesInFreeze = 300;
             SpawnObject(&effect);
             m_familiarState = 2;
         }
@@ -4836,25 +4836,25 @@ void CMai::UpdatePattern()
             vy = 0.0;
         }
         if (frame == 3 && timer == 0) {
-            m_freezeTime = 0x78;
-            m_gauge = m_gauge - 0x7d0;
-            FillBackground(0xb0, 3);
+            m_freezeTime = 120;
+            m_gauge = m_gauge - 2000;
+            FillBackground(176, 3);
             effect.type = 0x45;
             effect.sound = 5;
-            effect.x = (double)((int)x - facing * 0xd);
-            effect.y = (double)((int)y - 0x33);
+            effect.x = (double)((int)x - facing * 13);
+            effect.y = (double)((int)y - 51);
             effect.scale = 2;
             effect.keep = 1;
             effect.layer = 1;
             m_game->CreateEffect((EffectDesc*)&effect);
             effect.type = 0x1ba;
             effect.x = (double)(int)x;
-            effect.y = (double)((int)y - 0xf);
+            effect.y = (double)((int)y - 15);
             effect.scale = 2;
             effect.keep = 1;
             effect.layer = 0;
             effect.facing = facing;
-            effect.movesInFreeze = 0x12c;
+            effect.movesInFreeze = 300;
             SpawnObject(&effect);
             m_familiarState = 2;
         }
@@ -4891,25 +4891,25 @@ void CMai::UpdatePattern()
             vy = 0.0;
         }
         if (frame == 3 && timer == 0) {
-            m_freezeTime = 0x78;
-            m_gauge = m_gauge - 0xbb8;
-            FillBackground(0xb0, 3);
+            m_freezeTime = 120;
+            m_gauge = m_gauge - 3000;
+            FillBackground(176, 3);
             effect.type = 0x46;
-            effect.sound = 0x40;
-            effect.x = (double)((int)x - facing * 0xd);
-            effect.y = (double)((int)y - 0x33);
+            effect.sound = 64;
+            effect.x = (double)((int)x - facing * 13);
+            effect.y = (double)((int)y - 51);
             effect.scale = 2;
             effect.keep = 1;
             effect.layer = 1;
             m_game->CreateEffect((EffectDesc*)&effect);
             effect.type = 0x1be;
             effect.x = (double)(int)x;
-            effect.y = (double)((int)y - 0xf);
+            effect.y = (double)((int)y - 15);
             effect.scale = 2;
             effect.keep = 1;
             effect.layer = 0;
             effect.facing = facing;
-            effect.movesInFreeze = 0x12c;
+            effect.movesInFreeze = 300;
             SpawnObject(&effect);
             m_familiarState = 2;
         }
@@ -4942,24 +4942,24 @@ void CMai::UpdatePattern()
         break;
     case kAwakened236236D:
         if (frame < 5) {
-            FocusCameraY(0x32, 3);
+            FocusCameraY(50, 3);
         }
         if (frame == 0 && timer == 0) {
             StopMoving();
-            m_freezeTime = 0x78;
-            m_gauge = m_gauge - 0xbb8;
-            FillBackground(0xb0, 3);
+            m_freezeTime = 120;
+            m_gauge = m_gauge - 3000;
+            FillBackground(176, 3);
             effect.type = 0x46;
-            effect.sound = 0x40;
-            effect.x = (double)((int)x - facing * 0x13);
-            effect.y = (double)((int)y - 0x32);
+            effect.sound = 64;
+            effect.x = (double)((int)x - facing * 19);
+            effect.y = (double)((int)y - 50);
             effect.scale = 2;
             effect.keep = 1;
             effect.layer = 1;
             m_game->CreateEffect((EffectDesc*)&effect);
             effect.type = 0x47;
             m_game->CreateEffect((EffectDesc*)&effect);
-            m_playSound = 0x25;
+            m_playSound = 37;
             m_hitsLeft = 0;
         }
         if (frame == 4 && m_attackResult == 3) {
@@ -4971,7 +4971,7 @@ void CMai::UpdatePattern()
             (*m_opponent)->StartPattern();
             pattern = kAwakened236236DHit;
             (*m_opponent)->pattern = kThrownHidden;
-            FillBackground(0xb0, 3);
+            FillBackground(176, 3);
         }
         if (frame == 5 && timer == 0) {
             m_familiarGauge = 0;
@@ -4996,13 +4996,13 @@ void CMai::UpdatePattern()
         }
         break;
     case kAwakened236236DHit:
-        FocusCameraY(0x32, 3);
+        FocusCameraY(50, 3);
         if (frame < 2) {
-            FillBackground(0xb0, 3);
+            FillBackground(176, 3);
         }
-        if (frame > 1 && frame < 0xa) {
-            FillBackground(0xb1, 3);
-            (*m_opponent)->Tint(0xb0, 3);
+        if (frame > 1 && frame < 10) {
+            FillBackground(177, 3);
+            (*m_opponent)->Tint(176, 3);
         }
         if (frame == 1 && timer == 0) {
             m_playVoice = 3;
@@ -5019,10 +5019,10 @@ void CMai::UpdatePattern()
         if (frame == 2 && timer == 0) {
             (*m_opponent)->pattern = kThrownStandHigh2;
         }
-        if (frame == 0xb && timer == 0) {
+        if (frame == 11 && timer == 0) {
             m_playVoice = 2;
         }
-        if (frame == 0xc && timer == 0) {
+        if (frame == 12 && timer == 0) {
             (*m_opponent)->pattern = kHitAirHeavy;
             (*m_opponent)->m_hitVx = 0.0;
             (*m_opponent)->m_hitVy = -5.0;
@@ -5030,12 +5030,12 @@ void CMai::UpdatePattern()
             (*m_opponent)->timer = 0;
             (*m_opponent)->m_noAirRecovery = 1;
             DealDamage((int)(m_familiarGauge * 0.15 + 3500.0), 500.0);
-            m_playSound = 0x16;
+            m_playSound = 22;
             (*m_opponent)->facing = -facing;
             (*m_opponent)->m_hitstop = 0;
             effect.type = 0x34;
             effect.x = (double)(int)(*m_opponent)->x;
-            effect.y = (double)((int)(*m_opponent)->y - 0x28);
+            effect.y = (double)((int)(*m_opponent)->y - 40);
             effect.scale = 2;
             effect.layer = 1;
             m_game->CreateEffect((EffectDesc*)&effect);

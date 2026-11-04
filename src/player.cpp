@@ -156,11 +156,11 @@ CPlayer::CPlayer(PTR32(CPlayer)* opponent, CGame* game, CGraphics* graphics, CIn
     m_charId = 0;
     m_paletteIndex = 0;
     i = 0;
-    for (; i < 0x32; i++) {
-        m_voices[i] = 0x96;
+    for (; i < 50; i++) {
+        m_voices[i] = 150;
     }
     i = 0;
-    for (; i < 0x14; i++) {
+    for (; i < 20; i++) {
         m_rivals[i] = -1;
     }
     surfaces = (PTR32(IDirectDrawSurface)*)0;
@@ -189,8 +189,8 @@ CPlayer::~CPlayer()
         delete (char*)surfaces;
     }
     i = 0;
-    for (; i < 0x32; i++) {
-        if ((unsigned short)m_voices[i] != 0x96) {
+    for (; i < 50; i++) {
+        if ((unsigned short)m_voices[i] != 150) {
             m_sound->Release(m_voices[i]);
         }
     }
@@ -202,7 +202,7 @@ void CPlayer::Reset()
 {
     int i;
 
-    x = m_side * 0xa0 + 0xf0;
+    x = m_side * 160 + 240;
     y = 0.0;
     facing = 1 - (m_side << 1);
     StopMoving();
@@ -213,9 +213,9 @@ void CPlayer::Reset()
     timer = 0;
     m_tintTime = 0;
     m_fillTime = 0;
-    m_hp = 0x270f;
-    m_comboStartHp = 0x270f;
-    m_shownHp = 0x270f;
+    m_hp = 9999;
+    m_comboStartHp = 9999;
+    m_shownHp = 9999;
     m_gauge = 0;
     m_rfGauge = 0.0;
     m_rfBlue = 0;
@@ -322,14 +322,14 @@ void CPlayer::ProcessInput()
             m_cornerPushback = 0.0;
             (*m_opponent)->m_cornerPushback = 0.0;
             if (m_refillMeter != 0 && (*m_opponent)->pattern < kFirstHitReaction) {
-                m_gauge = 0xbb8;
+                m_gauge = 3000;
                 m_hp = m_refillHp;
                 if (m_refillMeter > 0) {
-                    if (m_refillMeter < 0x3e8) {
+                    if (m_refillMeter < 1000) {
                         m_rfGauge = m_refillMeter;
                         m_rfBlue = 0;
                     } else {
-                        m_rfGauge = 0x7d0 - m_refillMeter;
+                        m_rfGauge = 2000 - m_refillMeter;
                         m_rfBlue = 1;
                     }
                 }
@@ -374,10 +374,10 @@ void CPlayer::ApplyVelocity()
         if ((char)AtScreenEdge() * facing * (vx + m_pushVx + (*m_opponent)->m_cornerPushback * ((*m_opponent)->m_hitByBody != 0 && m_freezeTime == 0)) >= 0.0) {
             x = (vx + m_pushVx + (*m_opponent)->m_cornerPushback * ((*m_opponent)->m_hitByBody != 0 && m_freezeTime == 0)) * facing + x;
         }
-        if (((char)(*m_opponent)->AtScreenEdge() == 1 && (*m_opponent)->x <= 20.0) + 0x14 > x) {
-            x = ((char)(*m_opponent)->AtScreenEdge() == 1 && (*m_opponent)->x <= 20.0) + 0x14;
-        } else if (0x26b - ((char)(*m_opponent)->AtScreenEdge() == -1 && (*m_opponent)->x >= 619.0) < x) {
-            x = 0x26b - ((char)(*m_opponent)->AtScreenEdge() == -1 && (*m_opponent)->x >= 619.0);
+        if (((char)(*m_opponent)->AtScreenEdge() == 1 && (*m_opponent)->x <= 20.0) + 20 > x) {
+            x = ((char)(*m_opponent)->AtScreenEdge() == 1 && (*m_opponent)->x <= 20.0) + 20;
+        } else if (619 - ((char)(*m_opponent)->AtScreenEdge() == -1 && (*m_opponent)->x >= 619.0) < x) {
+            x = 619 - ((char)(*m_opponent)->AtScreenEdge() == -1 && (*m_opponent)->x >= 619.0);
         }
         y = y + vy;
         if (y > 0.0) {
@@ -390,7 +390,7 @@ void CPlayer::ApplyVelocity()
             m_objects[slot].y = m_objects[slot].y + m_objects[slot].vy;
         }
         slot++;
-        if (slot >= 0x40) {
+        if (slot >= 64) {
             slot = 0;
         }
     }
@@ -423,7 +423,7 @@ void CPlayer::UpdateGaugesAndTimers()
             m_throwProtect = 0;
         }
         if ((m_patterns[pattern].frames[frame].flagsB0 & kStateThrowProtect) > 0) {
-            m_throwProtect = 0x1b;
+            m_throwProtect = 27;
         }
         if (m_armorTime > 0) {
             m_armorTime--;
@@ -468,13 +468,13 @@ void CPlayer::UpdateGaugesAndTimers()
                 }
             }
             slot++;
-            if (slot >= 0x40) {
+            if (slot >= 64) {
                 slot = 0;
             }
         }
         if ((*m_opponent)->IsInHitstun() != 0) {
-            m_hitsDecayTimer = 0x384;
-            m_hitsDecayStep = 0xc;
+            m_hitsDecayTimer = 900;
+            m_hitsDecayStep = 12;
         }
         if (((*m_opponent)->pattern < kFirstHitReaction || (*m_opponent)->pattern >= kFirstCharacterAction) && m_game->m_intro == 0 && m_game->m_roundOver == 0) {
             if ((unsigned long)m_hitsDecayTimer > 0) {
@@ -492,8 +492,8 @@ void CPlayer::UpdateGaugesAndTimers()
     }
     if (m_gauge < 0) {
         m_gauge = 0;
-    } else if (m_gauge > 0xbb8) {
-        m_gauge = 0xbb8;
+    } else if (m_gauge > 3000) {
+        m_gauge = 3000;
     }
     if (m_rfGauge < 0.0) {
         m_rfGauge = 0.0;
@@ -502,7 +502,7 @@ void CPlayer::UpdateGaugesAndTimers()
     }
     m_blinkTimer--;
     if (m_blinkTimer <= 0) {
-        m_blinkTimer = 0x3138;
+        m_blinkTimer = 12600;
     }
     if (m_comboTimer > 0 && m_comboHits == 0) {
         m_comboTimer--;
@@ -514,7 +514,7 @@ char CPlayer::AtScreenEdge()
     if (x - 20.0 <= ((*m_opponent)->x <= 20.0) || (*m_opponent)->x - x > 280.0) {
         return 1;
     }
-    if (x + 20.0 >= 0x27f - ((*m_opponent)->x >= 619.0) || x - (*m_opponent)->x > 280.0) {
+    if (x + 20.0 >= 639 - ((*m_opponent)->x >= 619.0) || x - (*m_opponent)->x > 280.0) {
         return -1;
     }
     return 0;
@@ -531,7 +531,7 @@ int CPlayer::CanGuard(PatternFrame* attack, PatternFrame* state)
     if ((state->flagsB0 & kStateCanGuard) == 0) {
         return 0;
     }
-    if ((attack->flagsAA & kAttackGuardAir) == 0 && y < 0.0 && m_recoilGuardWindow < 0x1e) {
+    if ((attack->flagsAA & kAttackGuardAir) == 0 && y < 0.0 && m_recoilGuardWindow < 30) {
         return 0;
     }
     if (HoldsGuard(attack) == 0) {
@@ -631,7 +631,7 @@ void CPlayer::DealDamage(int damage, double proration)
     }
     m_comboHits++;
     m_shownHits = m_comboHits;
-    m_comboTimer = 0xb4;
+    m_comboTimer = 180;
     m_comboDamage = (*m_opponent)->m_comboStartHp - (*m_opponent)->m_hp;
     if ((DWORD)m_comboHits > m_maxHits) {
         m_maxHits = m_comboHits;
@@ -640,7 +640,7 @@ void CPlayer::DealDamage(int damage, double proration)
         m_maxDamage = m_comboDamage;
     }
     m_hitsLanded++;
-    AddScore(damage / 0x64 * m_hitsLanded * m_maxHits * m_comboHits);
+    AddScore(damage / 100 * m_hitsLanded * m_maxHits * m_comboHits);
 }
 
 void CPlayer::ScoreHit(PatternFrame* attack)
@@ -652,7 +652,7 @@ void CPlayer::ScoreHit(PatternFrame* attack)
         m_maxDamage = m_comboDamage;
     }
     m_hitsLanded++;
-    AddScore(attack->damage / 0x64 * m_hitsLanded * m_maxHits * m_comboHits);
+    AddScore(attack->damage / 100 * m_hitsLanded * m_maxHits * m_comboHits);
 }
 
 void CPlayer::AddScore(int points)
@@ -675,7 +675,7 @@ short CPlayer::Random(short low, short high)
     } else if (m_game->m_replayMode == 2) {
         m_game->m_replay.Write(roll);
     }
-    result = low + (high - low) * roll / 0x8000;
+    result = low + (high - low) * roll / 32768;
     return result;
 }
 
@@ -750,39 +750,39 @@ void CPlayer::Load()
             strcpy(path, m_name);
             strcat(path, "\\");
             strcat(path, m_name);
-            _itoa(m_paletteIndex + 1, number, 0xa);
+            _itoa(m_paletteIndex + 1, number, 10);
             strcat(path, (const char*)number);
             strcat(path, ".pal");
-            if (m_graphics->LoadPaletteDat(m_game->m_palette, (const char*)path, 0, m_side * 0x28 + 0x5f, 0x28) == 0) {
+            if (m_graphics->LoadPaletteDat(m_game->m_palette, (const char*)path, 0, m_side * 40 + 95, 40) == 0) {
                 strcpy(path, m_name);
                 strcat(path, "\\");
                 strcat(path, m_name);
                 strcat(path, ".dat");
-                m_graphics->LoadPaletteDat(m_game->m_palette, (const char*)path, m_paletteIndex * 0x28, m_side * 0x28 + 0x5f, 0x28);
+                m_graphics->LoadPaletteDat(m_game->m_palette, (const char*)path, m_paletteIndex * 40, m_side * 40 + 95, 40);
             }
         } else {
             strcpy(path, m_name);
             strcat(path, "\\");
             strcat(path, m_name);
             strcat(path, ".dat");
-            m_graphics->LoadPaletteDat(m_game->m_palette, (const char*)path, m_paletteIndex * 0x28, m_side * 0x28 + 0x5f, 0x28);
+            m_graphics->LoadPaletteDat(m_game->m_palette, (const char*)path, m_paletteIndex * 40, m_side * 40 + 95, 40);
         }
     } else if (m_game->m_editColor[m_side] != 0) {
         strcpy(path, m_name);
         strcat(path, "\\");
         strcat(path, m_name);
-        _itoa(m_paletteIndex + 1, number, 0xa);
+        _itoa(m_paletteIndex + 1, number, 10);
         strcat(path, (const char*)number);
         strcat(path, ".pal");
-        if (m_graphics->LoadPaletteDat(m_game->m_palette, (const char*)path, 0, m_side * 0x28 + 0x5f, 0x28) == 0) {
+        if (m_graphics->LoadPaletteDat(m_game->m_palette, (const char*)path, 0, m_side * 40 + 95, 40) == 0) {
             strcpy(path, m_name);
             strcat(path, "\\000.bmp");
-            m_graphics->LoadPaletteBmp(m_game->m_palette, (const char*)path, m_paletteIndex * 0x28, m_side * 0x28 + 0x5f, 0x28);
+            m_graphics->LoadPaletteBmp(m_game->m_palette, (const char*)path, m_paletteIndex * 40, m_side * 40 + 95, 40);
         }
     } else {
         strcpy(path, m_name);
         strcat(path, "\\000.bmp");
-        m_graphics->LoadPaletteBmp(m_game->m_palette, (const char*)path, m_paletteIndex * 0x28, m_side * 0x28 + 0x5f, 0x28);
+        m_graphics->LoadPaletteBmp(m_game->m_palette, (const char*)path, m_paletteIndex * 40, m_side * 40 + 95, 40);
     }
     Reset();
     if (m_cpu == 0) {
@@ -824,7 +824,7 @@ void CPlayer::LoadSprites()
         strcat(path, "\\");
         strcat(path, m_name);
         strcat(path, ".dat");
-        file = (int)CreateFileA((LPCSTR)path, 0x80000000, 0, 0, 3, 0x80, 0);
+        file = (int)CreateFileA((LPCSTR)path, 0x80000000, 0, 0, 3, 128, 0);
         size = GetFileSize((HANDLE)file, 0);
         buffer = TOINT(int, operator new(size));
         data = TOPTR(char*, buffer);
@@ -832,9 +832,9 @@ void CPlayer::LoadSprites()
         offset = *(BYTE*)data * 3 + 1;
         i = 0;
         for (; i <= lastSurface; i++) {
-            spriteSize = m_graphics->LoadSurfaceHigh(&surfaces[i], (BYTE*)(data + offset), 0x80, m_side * 0x28 + 0x5f);
+            spriteSize = m_graphics->LoadSurfaceHigh(&surfaces[i], (BYTE*)(data + offset), 128, m_side * 40 + 95);
             if (spriteSize == 0) {
-                _itoa(i, message, 0xa);
+                _itoa(i, message, 10);
                 MessageBoxA(0, (LPCSTR)message, 0, 0);
             } else {
                 offset += spriteSize;
@@ -846,49 +846,49 @@ void CPlayer::LoadSprites()
             strcpy(path, m_name);
             strcat(path, "\\");
             strcat(path, m_name);
-            _itoa(m_paletteIndex + 1, number, 0xa);
+            _itoa(m_paletteIndex + 1, number, 10);
             strcat(path, (const char*)number);
             strcat(path, ".pal");
-            m_graphics->LoadPaletteDat(m_game->m_palette, (const char*)path, 0, m_side * 0x28 + 0x5f, 0x28);
+            m_graphics->LoadPaletteDat(m_game->m_palette, (const char*)path, 0, m_side * 40 + 95, 40);
         } else {
-            m_graphics->LoadPaletteDat(m_game->m_palette, (const char*)path, m_paletteIndex * 0x28, m_side * 0x28 + 0x5f, 0x28);
+            m_graphics->LoadPaletteDat(m_game->m_palette, (const char*)path, m_paletteIndex * 40, m_side * 40 + 95, 40);
         }
     } else {
         bmp = 0;
         for (; bmp <= lastSurface; bmp++) {
             strcpy(path, m_name);
             strcat(path, "\\");
-            if (bmp >= 0x3e8) {
+            if (bmp >= 1000) {
                 strcat(path, "A");
-                _itoa(bmp, number, 0xa);
+                _itoa(bmp, number, 10);
                 strcat(path, (const char*)number);
                 strcat(path, ".bmp");
-                m_graphics->LoadBmpHigh(&surfaces[bmp], (const char*)path, m_side * 0x28 + 0x5f);
+                m_graphics->LoadBmpHigh(&surfaces[bmp], (const char*)path, m_side * 40 + 95);
             } else {
-                if (bmp < 0x64) {
+                if (bmp < 100) {
                     strcat(path, "0");
                 }
-                if (bmp < 0xa) {
+                if (bmp < 10) {
                     strcat(path, "0");
                 }
-                _itoa(bmp, number, 0xa);
+                _itoa(bmp, number, 10);
                 strcat(path, (const char*)number);
                 strcat(path, ".bmp");
-                m_graphics->LoadBmpHigh(&surfaces[bmp], (const char*)path, m_side * 0x28 + 0x5f);
+                m_graphics->LoadBmpHigh(&surfaces[bmp], (const char*)path, m_side * 40 + 95);
             }
         }
         if (m_game->m_editColor[m_side] != 0) {
             strcpy(path, m_name);
             strcat(path, "\\");
             strcat(path, m_name);
-            _itoa(m_paletteIndex + 1, number, 0xa);
+            _itoa(m_paletteIndex + 1, number, 10);
             strcat(path, (const char*)number);
             strcat(path, ".pal");
-            m_graphics->LoadPaletteDat(m_game->m_palette, (const char*)path, 0, m_side * 0x28 + 0x5f, 0x28);
+            m_graphics->LoadPaletteDat(m_game->m_palette, (const char*)path, 0, m_side * 40 + 95, 40);
         } else {
             strcpy(path, m_name);
             strcat(path, "\\000.bmp");
-            m_graphics->LoadPaletteBmp(m_game->m_palette, (const char*)path, m_paletteIndex * 0x28, m_side * 0x28 + 0x5f, 0x28);
+            m_graphics->LoadPaletteBmp(m_game->m_palette, (const char*)path, m_paletteIndex * 40, m_side * 40 + 95, 40);
         }
     }
     colorKey = m_graphics->GetColorKey(*surfaces);
@@ -949,24 +949,24 @@ void CPlayer::LoadPatterns()
             frameData->defenderHitstop = file.ReadInt();
             frameData->proration = file.ReadInt();
             frameData->groundHitPattern = file.ReadInt();
-            file.Read((void*)&frameData->pushBox.left, 0x10);
+            file.Read((void*)&frameData->pushBox.left, 16);
             box = 0;
             for (; box < 2; box++) {
-                file.Read((void*)((box << 4) + (char*)frameData), 0x10);
+                file.Read((void*)((box << 4) + (char*)frameData), 16);
             }
-            file.Read((void*)&frameData->attackBoxes[0].left, 0x10);
+            file.Read((void*)&frameData->attackBoxes[0].left, 16);
             box = 2;
             for (; box < 5; box++) {
-                file.Read((void*)((box << 4) + (char*)frameData), 0x10);
+                file.Read((void*)((box << 4) + (char*)frameData), 16);
             }
             box = 1;
             for (; box < 4; box++) {
-                file.Read((void*)&frameData->attackBoxes[box].left, 0x10);
+                file.Read((void*)&frameData->attackBoxes[box].left, 16);
             }
         }
     }
     i = 0;
-    for (; i < 0x40; i++) {
+    for (; i < 64; i++) {
         m_objects[i].anims = anims;
     }
 }
@@ -978,17 +978,17 @@ void CPlayer::LoadVoices()
     char number[8]; // the voice's number, as text
 
     i = 0;
-    for (; i < 0x32; i++) {
+    for (; i < 50; i++) {
         strcpy(path, m_name);
         strcat(path, "\\wave\\");
-        if (i < 0xa) {
+        if (i < 10) {
             strcat(path, "0");
         }
-        _itoa(i, number, 0xa);
+        _itoa(i, number, 10);
         strcat(path, (const char*)number);
         strcat(path, ".wav");
         m_voices[i] = m_sound->Load((const char*)path);
-        m_sound->SetVolume(m_voices[i], -0x1f4);
+        m_sound->SetVolume(m_voices[i], -500);
     }
 }
 
@@ -1088,7 +1088,7 @@ void CPlayer::ReadInput()
         }
         if (pattern >= kDashForward && pattern <= kAirDashBack) {
             m_dashBufferedPress = m_inputHistory[m_inputPos];
-            m_dashBufferTime = 0xf;
+            m_dashBufferTime = 15;
         }
     }
     m_inputPos++;
@@ -1096,7 +1096,7 @@ void CPlayer::ReadInput()
         m_inputPos = 0;
     }
     if (m_inputX == 1 - (((*m_opponent)->x - x > 0.0) << 1) && m_recoilGuardWindow == 0 && m_heldDirection == 0) {
-        m_recoilGuardWindow = 0x3c;
+        m_recoilGuardWindow = 60;
     }
     if ((*m_opponent)->m_hitstop == 0 && m_recoilGuardWindow > 0) {
         m_recoilGuardWindow--;
@@ -1121,11 +1121,11 @@ void CPlayer::DrawSprite(int drawX, int drawY)
         pos = m_afterimages.pos - (m_afterimages.spacing * 3 + m_afterimages.fadeLength);
         i = 0;
         for (; i < m_afterimages.fadeLength + m_afterimages.spacing * 3; i = m_afterimages.step + i) {
-            if (pos >= 0x3c) {
-                pos -= 0x3c;
+            if (pos >= 60) {
+                pos -= 60;
             }
             if (pos < 0) {
-                pos += 0x3c;
+                pos += 60;
             }
             sprite = anims[m_afterimages.pattern[pos]].frames[m_afterimages.frame[pos]];
             src.left = 0;
@@ -1133,7 +1133,7 @@ void CPlayer::DrawSprite(int drawX, int drawY)
             src.right = sprite.width;
             src.bottom = sprite.height;
             dst.left = (int)m_afterimages.x[pos] + drawX - sprite.x * (m_afterimages.facing[pos] == 1) - (sprite.width - sprite.x) * (m_afterimages.facing[pos] == -1);
-            dst.top = (int)m_afterimages.y[pos] + 0xd2 - (m_afterimages.y[pos] < 0.0) - sprite.y + drawY;
+            dst.top = (int)m_afterimages.y[pos] + 210 - (m_afterimages.y[pos] < 0.0) - sprite.y + drawY;
             dst.right = sprite.width + dst.left;
             dst.bottom = sprite.height + dst.top;
             m_graphics->BlitEx(dst, surfaces[sprite.surface], src, colorKey, m_afterimages.facing[pos] == -1, 0);
@@ -1146,10 +1146,10 @@ void CPlayer::DrawSprite(int drawX, int drawY)
     src.right = sprite.width;
     src.bottom = sprite.height;
     dst.left = (int)x + drawX - sprite.x * (facing == 1) - (sprite.width - sprite.x) * (facing == -1);
-    dst.top = (int)y + 0xd2 - (y < 0.0) - sprite.y + drawY;
+    dst.top = (int)y + 210 - (y < 0.0) - sprite.y + drawY;
     dst.right = sprite.width + dst.left;
     dst.bottom = sprite.height + dst.top;
-    if (dst.top < 0xf0) {
+    if (dst.top < 240) {
         if (m_tintTime == 0) {
             if (m_drawMode == 3) {
                 m_graphics->BlitSmear(dst, surfaces[sprite.surface], src, colorKey, facing == -1);
@@ -1171,7 +1171,7 @@ void CPlayer::DrawSprite(int drawX, int drawY)
         src.right = sprite.width;
         src.bottom = sprite.height;
         dst.left = (int)x + drawX - sprite.x * (facing == 1) - (sprite.width - sprite.x) * (facing == -1);
-        dst.top = 0xef - sprite.y;
+        dst.top = 239 - sprite.y;
         dst.right = sprite.width + dst.left;
         dst.bottom = sprite.height + dst.top;
         m_graphics->Blit(dst, surfaces[sprite.surface], src, colorKey, facing == -1);

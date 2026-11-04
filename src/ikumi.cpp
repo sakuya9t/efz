@@ -14,7 +14,7 @@ CIkumi::CIkumi(PTR32(CPlayer)* opponent, CGame* game, CGraphics* graphics, CInpu
     UseAltPatterns(0);
     m_altPatternsIn = 0;
     strcpy(m_name, "ikumi");
-    lastSurface = 0x47c;
+    lastSurface = 1148;
     m_patternVar1 = 0;
     m_patternVar2 = 0;
     m_patternVar3 = 0;
@@ -25,22 +25,22 @@ CIkumi::CIkumi(PTR32(CPlayer)* opponent, CGame* game, CGraphics* graphics, CInpu
     m_orbBurstSpawned = 0;
     m_modeTintTimer = 0;
     m_storedSuperLevel = 0;
-    m_pointX[0] = -0x16;
-    m_pointY[0] = -0x32;
-    m_pointX[1] = -0x19;
+    m_pointX[0] = -22;
+    m_pointY[0] = -50;
+    m_pointX[1] = -25;
     m_pointY[1] = 0;
-    m_pointX[2] = -0x19;
-    m_pointY[2] = -0xa;
+    m_pointX[2] = -25;
+    m_pointY[2] = -10;
     m_pointX[3] = 5;
     m_pointY[3] = -9;
-    m_pointX[4] = 0x20;
-    m_pointY[4] = -0x1b;
+    m_pointX[4] = 32;
+    m_pointY[4] = -27;
     m_resultPictures = 7;
     m_rivals[0] = 8;
-    m_rivals[1] = 0xd;
-    m_rivals[0xa] = 0xe;
+    m_rivals[1] = 13;
+    m_rivals[10] = 14;
     i = 0;
-    for (; i < 0x40; i++) {
+    for (; i < 64; i++) {
         m_objectVar1[i] = 0;
         m_objectVar2[i] = 0;
         m_objectVar3[i] = 0;
@@ -64,17 +64,17 @@ void CIkumi::Reset()
     m_modeTintTimer = 0;
     m_storedSuperLevel = 0;
     m_pointX[0] = -4;
-    m_pointY[0] = -0x39;
-    m_pointX[1] = -0x19;
+    m_pointY[0] = -57;
+    m_pointX[1] = -25;
     m_pointY[1] = 0;
-    m_pointX[2] = 0x15;
-    m_pointY[2] = -0xc;
-    m_pointX[3] = 0x12;
-    m_pointY[3] = -0xf;
-    m_pointX[4] = 0x26;
-    m_pointY[4] = -0x27;
+    m_pointX[2] = 21;
+    m_pointY[2] = -12;
+    m_pointX[3] = 18;
+    m_pointY[3] = -15;
+    m_pointX[4] = 38;
+    m_pointY[4] = -39;
     i = 0;
-    for (; i < 0x40; i++) {
+    for (; i < 64; i++) {
         m_objectVar1[i] = 0;
         m_objectVar2[i] = 0;
         m_objectVar3[i] = 0;
@@ -149,19 +149,19 @@ void CIkumi::LoadAltPatterns()
             frameData->defenderHitstop = file.ReadInt();
             frameData->proration = file.ReadInt();
             frameData->groundHitPattern = file.ReadInt();
-            file.Read((void*)&frameData->pushBox.left, 0x10);
+            file.Read((void*)&frameData->pushBox.left, 16);
             box = 0;
             for (; box < 2; box++) {
-                file.Read((void*)((box << 4) + (char*)frameData), 0x10);
+                file.Read((void*)((box << 4) + (char*)frameData), 16);
             }
-            file.Read((void*)&frameData->attackBoxes[0].left, 0x10);
+            file.Read((void*)&frameData->attackBoxes[0].left, 16);
             box = 2;
             for (; box < 5; box++) {
-                file.Read((void*)((box << 4) + (char*)frameData), 0x10);
+                file.Read((void*)((box << 4) + (char*)frameData), 16);
             }
             box = 1;
             for (; box < 4; box++) {
-                file.Read((void*)&frameData->attackBoxes[box].left, 0x10);
+                file.Read((void*)&frameData->attackBoxes[box].left, 16);
             }
         }
     }
@@ -212,43 +212,43 @@ void CIkumi::StartCommand()
         return;
     }
     if (m_sealLevel < 2) {
-        if (m_command == kCmd236236236C && m_gauge >= 0xbb8 && m_hp < 0xd05 && (m_patterns[pattern].frames[frame].flagsB0 & kStateCancellable) > 0 && y == 0.0 && m_attackResult != 6 && m_modeTimer == 0 && m_patterns[pattern].cancelLevel <= m_patterns[kLv4].level) {
+        if (m_command == kCmd236236236C && m_gauge >= 3000 && m_hp < 3333 && (m_patterns[pattern].frames[frame].flagsB0 & kStateCancellable) > 0 && y == 0.0 && m_attackResult != 6 && m_modeTimer == 0 && m_patterns[pattern].cancelLevel <= m_patterns[kLv4].level) {
             StartPattern();
             ClearBufferedPress();
             pattern = kLv4;
             return;
         }
-        if (m_modeTimer == 0 && m_command == kCmd214214C && m_gauge >= 0x3e8 && y == 0.0 && (m_patterns[pattern].frames[frame].flagsB0 & kStateCancellable) > 0 && (pattern >= kFirstCharacterAction && m_attackResult >= 2 && m_attackResult != 6 || pattern < kFirstCharacterAction) && m_patterns[pattern].cancelLevel <= m_patterns[k214214C].level) {
+        if (m_modeTimer == 0 && m_command == kCmd214214C && m_gauge >= 1000 && y == 0.0 && (m_patterns[pattern].frames[frame].flagsB0 & kStateCancellable) > 0 && (pattern >= kFirstCharacterAction && m_attackResult >= 2 && m_attackResult != 6 || pattern < kFirstCharacterAction) && m_patterns[pattern].cancelLevel <= m_patterns[k214214C].level) {
             StartPattern();
             ClearBufferedPress();
             pattern = k214214C;
             return;
         }
-        if (m_modeTimer == 0 && m_command == kCmd214214B && y == 0.0 && m_gauge >= 0x3e8 && (m_patterns[pattern].frames[frame].flagsB0 & kStateCancellable) > 0 && (pattern >= kFirstCharacterAction && m_attackResult >= 2 && m_attackResult != 6 || pattern < kFirstCharacterAction) && m_patterns[pattern].cancelLevel <= m_patterns[k214214B].level) {
+        if (m_modeTimer == 0 && m_command == kCmd214214B && y == 0.0 && m_gauge >= 1000 && (m_patterns[pattern].frames[frame].flagsB0 & kStateCancellable) > 0 && (pattern >= kFirstCharacterAction && m_attackResult >= 2 && m_attackResult != 6 || pattern < kFirstCharacterAction) && m_patterns[pattern].cancelLevel <= m_patterns[k214214B].level) {
             StartPattern();
             ClearBufferedPress();
             pattern = k214214B;
             return;
         }
-        if (m_modeTimer == 0 && m_command == kCmd214214A && y == 0.0 && m_gauge >= 0x3e8 && (m_patterns[pattern].frames[frame].flagsB0 & kStateCancellable) > 0 && (pattern >= kFirstCharacterAction && m_attackResult >= 2 && m_attackResult != 6 || pattern < kFirstCharacterAction) && m_patterns[pattern].cancelLevel <= m_patterns[k214214A].level) {
+        if (m_modeTimer == 0 && m_command == kCmd214214A && y == 0.0 && m_gauge >= 1000 && (m_patterns[pattern].frames[frame].flagsB0 & kStateCancellable) > 0 && (pattern >= kFirstCharacterAction && m_attackResult >= 2 && m_attackResult != 6 || pattern < kFirstCharacterAction) && m_patterns[pattern].cancelLevel <= m_patterns[k214214A].level) {
             StartPattern();
             ClearBufferedPress();
             pattern = k214214A;
             return;
         }
-        if (m_modeTimer > 0 && m_command == kCmd21436C && m_gauge >= 0xbb8 && y == 0.0 && (m_patterns[pattern].frames[frame].flagsB0 & kStateCancellable) > 0 && (pattern >= kFirstCharacterAction && m_attackResult >= 2 && m_attackResult != 6 || pattern < kFirstCharacterAction) && m_patterns[pattern].cancelLevel <= m_patterns[k21436CMode].level) {
+        if (m_modeTimer > 0 && m_command == kCmd21436C && m_gauge >= 3000 && y == 0.0 && (m_patterns[pattern].frames[frame].flagsB0 & kStateCancellable) > 0 && (pattern >= kFirstCharacterAction && m_attackResult >= 2 && m_attackResult != 6 || pattern < kFirstCharacterAction) && m_patterns[pattern].cancelLevel <= m_patterns[k21436CMode].level) {
             StartPattern();
             ClearBufferedPress();
             pattern = k21436CMode;
             return;
         }
-        if (m_modeTimer > 0 && (m_command == kCmd21436B || m_command == kCmd21436C) && m_gauge >= 0x7d0 && y == 0.0 && (m_patterns[pattern].frames[frame].flagsB0 & kStateCancellable) > 0 && (pattern >= kFirstCharacterAction && m_attackResult >= 2 && m_attackResult != 6 || pattern < kFirstCharacterAction) && m_patterns[pattern].cancelLevel <= m_patterns[k21436BMode].level) {
+        if (m_modeTimer > 0 && (m_command == kCmd21436B || m_command == kCmd21436C) && m_gauge >= 2000 && y == 0.0 && (m_patterns[pattern].frames[frame].flagsB0 & kStateCancellable) > 0 && (pattern >= kFirstCharacterAction && m_attackResult >= 2 && m_attackResult != 6 || pattern < kFirstCharacterAction) && m_patterns[pattern].cancelLevel <= m_patterns[k21436BMode].level) {
             StartPattern();
             ClearBufferedPress();
             pattern = k21436BMode;
             return;
         }
-        if (m_modeTimer > 0 && (m_command == kCmd21436A || m_command == kCmd21436B || m_command == kCmd21436C) && m_gauge >= 0x3e8 && y == 0.0 && (m_patterns[pattern].frames[frame].flagsB0 & kStateCancellable) > 0 && (pattern >= kFirstCharacterAction && m_attackResult >= 2 && m_attackResult != 6 || pattern < kFirstCharacterAction) && m_patterns[pattern].cancelLevel <= m_patterns[k21436AMode].level) {
+        if (m_modeTimer > 0 && (m_command == kCmd21436A || m_command == kCmd21436B || m_command == kCmd21436C) && m_gauge >= 1000 && y == 0.0 && (m_patterns[pattern].frames[frame].flagsB0 & kStateCancellable) > 0 && (pattern >= kFirstCharacterAction && m_attackResult >= 2 && m_attackResult != 6 || pattern < kFirstCharacterAction) && m_patterns[pattern].cancelLevel <= m_patterns[k21436AMode].level) {
             StartPattern();
             ClearBufferedPress();
             pattern = k21436AMode;
@@ -266,37 +266,37 @@ void CIkumi::StartCommand()
             }
             return;
         }
-        if (m_command == kCmd21436C && m_gauge >= 0xbb8 && y == 0.0 && (m_patterns[pattern].frames[frame].flagsB0 & kStateCancellable) > 0 && (pattern >= kFirstCharacterAction && m_attackResult >= 2 && m_attackResult != 6 || pattern < kFirstCharacterAction) && m_patterns[pattern].cancelLevel <= m_patterns[k21436C].level) {
+        if (m_command == kCmd21436C && m_gauge >= 3000 && y == 0.0 && (m_patterns[pattern].frames[frame].flagsB0 & kStateCancellable) > 0 && (pattern >= kFirstCharacterAction && m_attackResult >= 2 && m_attackResult != 6 || pattern < kFirstCharacterAction) && m_patterns[pattern].cancelLevel <= m_patterns[k21436C].level) {
             StartPattern();
             ClearBufferedPress();
             pattern = k21436C;
             return;
         }
-        if ((m_command == kCmd21436B || m_command == kCmd21436C) && m_gauge >= 0x7d0 && y == 0.0 && (m_patterns[pattern].frames[frame].flagsB0 & kStateCancellable) > 0 && (pattern >= kFirstCharacterAction && m_attackResult >= 2 && m_attackResult != 6 || pattern < kFirstCharacterAction) && m_patterns[pattern].cancelLevel <= m_patterns[k21436B].level) {
+        if ((m_command == kCmd21436B || m_command == kCmd21436C) && m_gauge >= 2000 && y == 0.0 && (m_patterns[pattern].frames[frame].flagsB0 & kStateCancellable) > 0 && (pattern >= kFirstCharacterAction && m_attackResult >= 2 && m_attackResult != 6 || pattern < kFirstCharacterAction) && m_patterns[pattern].cancelLevel <= m_patterns[k21436B].level) {
             StartPattern();
             ClearBufferedPress();
             pattern = k21436B;
             return;
         }
-        if ((m_command == kCmd21436A || m_command == kCmd21436B || m_command == kCmd21436C) && m_gauge >= 0x3e8 && y == 0.0 && (m_patterns[pattern].frames[frame].flagsB0 & kStateCancellable) > 0 && (pattern >= kFirstCharacterAction && m_attackResult >= 2 && m_attackResult != 6 || pattern < kFirstCharacterAction) && m_patterns[pattern].cancelLevel <= m_patterns[k21436A].level) {
+        if ((m_command == kCmd21436A || m_command == kCmd21436B || m_command == kCmd21436C) && m_gauge >= 1000 && y == 0.0 && (m_patterns[pattern].frames[frame].flagsB0 & kStateCancellable) > 0 && (pattern >= kFirstCharacterAction && m_attackResult >= 2 && m_attackResult != 6 || pattern < kFirstCharacterAction) && m_patterns[pattern].cancelLevel <= m_patterns[k21436A].level) {
             StartPattern();
             ClearBufferedPress();
             pattern = k21436A;
             return;
         }
-        if (m_command == kCmd4123641236C && m_gauge >= 0xbb8 && y == 0.0 && (m_patterns[pattern].frames[frame].flagsB0 & kStateCancellable) > 0 && (pattern >= kFirstCharacterAction && m_attackResult >= 2 && m_attackResult != 6 || pattern < kFirstCharacterAction) && m_patterns[pattern].cancelLevel <= m_patterns[k4123641236C].level) {
+        if (m_command == kCmd4123641236C && m_gauge >= 3000 && y == 0.0 && (m_patterns[pattern].frames[frame].flagsB0 & kStateCancellable) > 0 && (pattern >= kFirstCharacterAction && m_attackResult >= 2 && m_attackResult != 6 || pattern < kFirstCharacterAction) && m_patterns[pattern].cancelLevel <= m_patterns[k4123641236C].level) {
             StartPattern();
             ClearBufferedPress();
             pattern = k4123641236C;
             return;
         }
-        if ((m_command == kCmd4123641236C || m_command == kCmd4123641236B) && m_gauge >= 0x7d0 && y == 0.0 && (m_patterns[pattern].frames[frame].flagsB0 & kStateCancellable) > 0 && (pattern >= kFirstCharacterAction && m_attackResult >= 2 && m_attackResult != 6 || pattern < kFirstCharacterAction) && m_patterns[pattern].cancelLevel <= m_patterns[k4123641236B].level) {
+        if ((m_command == kCmd4123641236C || m_command == kCmd4123641236B) && m_gauge >= 2000 && y == 0.0 && (m_patterns[pattern].frames[frame].flagsB0 & kStateCancellable) > 0 && (pattern >= kFirstCharacterAction && m_attackResult >= 2 && m_attackResult != 6 || pattern < kFirstCharacterAction) && m_patterns[pattern].cancelLevel <= m_patterns[k4123641236B].level) {
             StartPattern();
             ClearBufferedPress();
             pattern = k4123641236B;
             return;
         }
-        if ((m_command == kCmd4123641236A || m_command == kCmd4123641236B || m_command == kCmd4123641236C) && m_gauge >= 0x3e8 && y == 0.0 && (m_patterns[pattern].frames[frame].flagsB0 & kStateCancellable) > 0 && (pattern >= kFirstCharacterAction && m_attackResult >= 2 && m_attackResult != 6 || pattern < kFirstCharacterAction) && m_patterns[pattern].cancelLevel <= m_patterns[k4123641236A].level) {
+        if ((m_command == kCmd4123641236A || m_command == kCmd4123641236B || m_command == kCmd4123641236C) && m_gauge >= 1000 && y == 0.0 && (m_patterns[pattern].frames[frame].flagsB0 & kStateCancellable) > 0 && (pattern >= kFirstCharacterAction && m_attackResult >= 2 && m_attackResult != 6 || pattern < kFirstCharacterAction) && m_patterns[pattern].cancelLevel <= m_patterns[k4123641236A].level) {
             StartPattern();
             ClearBufferedPress();
             pattern = k4123641236A;
@@ -647,9 +647,9 @@ void CIkumi::DrawGauge()
         sprite = *anims[0x2b].frames;
         src = MakeRect(0, 0, sprite.width, sprite.height);
         if (m_side == 0) {
-            dst = MakeRect(0x31 - sprite.x, 0x1f - sprite.y, sprite.width, sprite.height);
+            dst = MakeRect(49 - sprite.x, 31 - sprite.y, sprite.width, sprite.height);
         } else {
-            dst = MakeRect(sprite.x + 0x10f - sprite.width, 0x1f - sprite.y, sprite.width, sprite.height);
+            dst = MakeRect(sprite.x + 271 - sprite.width, 31 - sprite.y, sprite.width, sprite.height);
         }
         m_graphics->Blit(dst, surfaces[sprite.surface], src, colorKey, 0);
     }
@@ -657,29 +657,29 @@ void CIkumi::DrawGauge()
         sprite = *anims[0x2c].frames;
         src = MakeRect(0, 0, sprite.width, sprite.height);
         if (m_side == 0) {
-            dst = MakeRect(0x31 - sprite.x, 0x1f - sprite.y, sprite.width, sprite.height);
+            dst = MakeRect(49 - sprite.x, 31 - sprite.y, sprite.width, sprite.height);
         } else {
-            dst = MakeRect(sprite.x + 0x10f - sprite.width, 0x1f - sprite.y, sprite.width, sprite.height);
+            dst = MakeRect(sprite.x + 271 - sprite.width, 31 - sprite.y, sprite.width, sprite.height);
         }
         m_graphics->Blit(dst, surfaces[sprite.surface], src, colorKey, 0);
     }
     if (m_modeTimer > 0) {
         sprite = *anims[0x2a].frames;
-        src = MakeRect(0, 0, m_modeTimer * sprite.width / 0x4ec, sprite.height);
+        src = MakeRect(0, 0, m_modeTimer * sprite.width / 1260, sprite.height);
         if (m_side == 0) {
-            dst = MakeRect(0x31 - sprite.x, 0x1f - sprite.y, m_modeTimer * sprite.width / 0x4ec, sprite.height);
+            dst = MakeRect(49 - sprite.x, 31 - sprite.y, m_modeTimer * sprite.width / 1260, sprite.height);
         } else {
-            dst = MakeRect(sprite.x + 0x10f - m_modeTimer * sprite.width / 0x4ec, 0x1f - sprite.y, m_modeTimer * sprite.width / 0x4ec, sprite.height);
+            dst = MakeRect(sprite.x + 271 - m_modeTimer * sprite.width / 1260, 31 - sprite.y, m_modeTimer * sprite.width / 1260, sprite.height);
         }
         m_graphics->Blit(dst, surfaces[sprite.surface], src, colorKey, 0);
     }
     if (m_modeTimer == 0) {
         sprite = *anims[0x26].frames;
-        src = MakeRect(0, 0, m_stockCharge * sprite.width / 0x64, sprite.height);
+        src = MakeRect(0, 0, m_stockCharge * sprite.width / 100, sprite.height);
         if (m_side == 0) {
-            dst = MakeRect(m_stocks * 8 + 0x32 - sprite.x, 0x1f - sprite.y, m_stockCharge * sprite.width / 0x64, sprite.height);
+            dst = MakeRect(m_stocks * 8 + 50 - sprite.x, 31 - sprite.y, m_stockCharge * sprite.width / 100, sprite.height);
         } else {
-            dst = MakeRect(0x10e - (m_stocks << 3) + sprite.x - sprite.width * m_stockCharge / 0x64, 0x1f - sprite.y, m_stockCharge * sprite.width / 0x64, sprite.height);
+            dst = MakeRect(270 - (m_stocks << 3) + sprite.x - sprite.width * m_stockCharge / 100, 31 - sprite.y, m_stockCharge * sprite.width / 100, sprite.height);
         }
         m_graphics->Blit(dst, surfaces[sprite.surface], src, colorKey, 0);
         if (m_stocks > 0) {
@@ -695,9 +695,9 @@ void CIkumi::DrawGauge()
                 }
                 src = MakeRect(0, 0, sprite.width, sprite.height);
                 if (m_side == 0) {
-                    dst = MakeRect(0x32 - sprite.x, 0x1f - sprite.y, sprite.width, sprite.height);
+                    dst = MakeRect(50 - sprite.x, 31 - sprite.y, sprite.width, sprite.height);
                 } else {
-                    dst = MakeRect(sprite.x + 0x10e - sprite.width, 0x1f - sprite.y, sprite.width, sprite.height);
+                    dst = MakeRect(sprite.x + 270 - sprite.width, 31 - sprite.y, sprite.width, sprite.height);
                 }
                 m_graphics->Blit(dst, surfaces[sprite.surface], src, colorKey, 0);
             }
@@ -713,9 +713,9 @@ void CIkumi::DrawGauge()
                 }
                 src = MakeRect(0, 0, sprite.width, sprite.height);
                 if (m_side == 0) {
-                    dst = MakeRect(0x3a - sprite.x, 0x1f - sprite.y, sprite.width, sprite.height);
+                    dst = MakeRect(58 - sprite.x, 31 - sprite.y, sprite.width, sprite.height);
                 } else {
-                    dst = MakeRect(sprite.x + 0x106 - sprite.width, 0x1f - sprite.y, sprite.width, sprite.height);
+                    dst = MakeRect(sprite.x + 262 - sprite.width, 31 - sprite.y, sprite.width, sprite.height);
                 }
                 m_graphics->Blit(dst, surfaces[sprite.surface], src, colorKey, 0);
             }
@@ -731,9 +731,9 @@ void CIkumi::DrawGauge()
                 }
                 src = MakeRect(0, 0, sprite.width, sprite.height);
                 if (m_side == 0) {
-                    dst = MakeRect(0x42 - sprite.x, 0x1f - sprite.y, sprite.width, sprite.height);
+                    dst = MakeRect(66 - sprite.x, 31 - sprite.y, sprite.width, sprite.height);
                 } else {
-                    dst = MakeRect(sprite.x + 0xfe - sprite.width, 0x1f - sprite.y, sprite.width, sprite.height);
+                    dst = MakeRect(sprite.x + 254 - sprite.width, 31 - sprite.y, sprite.width, sprite.height);
                 }
                 m_graphics->Blit(dst, surfaces[sprite.surface], src, colorKey, 0);
             }
@@ -749,9 +749,9 @@ void CIkumi::DrawGauge()
                 }
                 src = MakeRect(0, 0, sprite.width, sprite.height);
                 if (m_side == 0) {
-                    dst = MakeRect(0x4a - sprite.x, 0x1f - sprite.y, sprite.width, sprite.height);
+                    dst = MakeRect(74 - sprite.x, 31 - sprite.y, sprite.width, sprite.height);
                 } else {
-                    dst = MakeRect(sprite.x + 0xf6 - sprite.width, 0x1f - sprite.y, sprite.width, sprite.height);
+                    dst = MakeRect(sprite.x + 246 - sprite.width, 31 - sprite.y, sprite.width, sprite.height);
                 }
                 m_graphics->Blit(dst, surfaces[sprite.surface], src, colorKey, 0);
             }
@@ -767,9 +767,9 @@ void CIkumi::DrawGauge()
                 }
                 src = MakeRect(0, 0, sprite.width, sprite.height);
                 if (m_side == 0) {
-                    dst = MakeRect(0x52 - sprite.x, 0x1f - sprite.y, sprite.width, sprite.height);
+                    dst = MakeRect(82 - sprite.x, 31 - sprite.y, sprite.width, sprite.height);
                 } else {
-                    dst = MakeRect(sprite.x + 0xee - sprite.width, 0x1f - sprite.y, sprite.width, sprite.height);
+                    dst = MakeRect(sprite.x + 238 - sprite.width, 31 - sprite.y, sprite.width, sprite.height);
                 }
                 m_graphics->Blit(dst, surfaces[sprite.surface], src, colorKey, 0);
             }
@@ -785,9 +785,9 @@ void CIkumi::DrawGauge()
                 }
                 src = MakeRect(0, 0, sprite.width, sprite.height);
                 if (m_side == 0) {
-                    dst = MakeRect(0x5a - sprite.x, 0x1f - sprite.y, sprite.width, sprite.height);
+                    dst = MakeRect(90 - sprite.x, 31 - sprite.y, sprite.width, sprite.height);
                 } else {
-                    dst = MakeRect(sprite.x + 0xe6 - sprite.width, 0x1f - sprite.y, sprite.width, sprite.height);
+                    dst = MakeRect(sprite.x + 230 - sprite.width, 31 - sprite.y, sprite.width, sprite.height);
                 }
                 m_graphics->Blit(dst, surfaces[sprite.surface], src, colorKey, 0);
             }
@@ -803,9 +803,9 @@ void CIkumi::DrawGauge()
                 }
                 src = MakeRect(0, 0, sprite.width, sprite.height);
                 if (m_side == 0) {
-                    dst = MakeRect(0x62 - sprite.x, 0x1f - sprite.y, sprite.width, sprite.height);
+                    dst = MakeRect(98 - sprite.x, 31 - sprite.y, sprite.width, sprite.height);
                 } else {
-                    dst = MakeRect(sprite.x + 0xde - sprite.width, 0x1f - sprite.y, sprite.width, sprite.height);
+                    dst = MakeRect(sprite.x + 222 - sprite.width, 31 - sprite.y, sprite.width, sprite.height);
                 }
                 m_graphics->Blit(dst, surfaces[sprite.surface], src, colorKey, 0);
             }
@@ -821,9 +821,9 @@ void CIkumi::DrawGauge()
                 }
                 src = MakeRect(0, 0, sprite.width, sprite.height);
                 if (m_side == 0) {
-                    dst = MakeRect(0x6a - sprite.x, 0x1f - sprite.y, sprite.width, sprite.height);
+                    dst = MakeRect(106 - sprite.x, 31 - sprite.y, sprite.width, sprite.height);
                 } else {
-                    dst = MakeRect(sprite.x + 0xd6 - sprite.width, 0x1f - sprite.y, sprite.width, sprite.height);
+                    dst = MakeRect(sprite.x + 214 - sprite.width, 31 - sprite.y, sprite.width, sprite.height);
                 }
                 m_graphics->Blit(dst, surfaces[sprite.surface], src, colorKey, 0);
             }
@@ -840,9 +840,9 @@ void CIkumi::PreUpdate()
         StopMoving();
         pattern = kModeStart;
     }
-    if (m_stocks == 0xa) {
+    if (m_stocks == 10) {
         m_modeTintTimer++;
-        if (m_modeTintTimer > 0xb9) {
+        if (m_modeTintTimer > 185) {
             m_modeTintTimer = 0;
         }
         m_modeTimer--;
@@ -850,55 +850,55 @@ void CIkumi::PreUpdate()
         m_noGuardTime = 2;
         StartAfterimages(2);
         if (m_modeTintTimer == 6) {
-            Tint(0xd5, 9);
+            Tint(213, 9);
         }
-        if (m_modeTintTimer == 0xc) {
-            Tint(0xd6, 9);
+        if (m_modeTintTimer == 12) {
+            Tint(214, 9);
         }
-        if (m_modeTintTimer == 0x12) {
-            Tint(0xea, 9);
+        if (m_modeTintTimer == 18) {
+            Tint(234, 9);
         }
-        if (m_modeTintTimer == 0x18) {
-            Tint(0xe9, 9);
+        if (m_modeTintTimer == 24) {
+            Tint(233, 9);
         }
-        if (m_modeTintTimer == 0x1e) {
-            Tint(0xe8, 9);
+        if (m_modeTintTimer == 30) {
+            Tint(232, 9);
         }
-        if (m_modeTintTimer == 0x24) {
-            Tint(0xe7, 9);
+        if (m_modeTintTimer == 36) {
+            Tint(231, 9);
         }
-        if (m_modeTintTimer == 0x2a) {
-            Tint(0xe6, 9);
+        if (m_modeTintTimer == 42) {
+            Tint(230, 9);
         }
-        if (m_modeTintTimer == 0x30) {
-            Tint(0xe5, 9);
+        if (m_modeTintTimer == 48) {
+            Tint(229, 9);
         }
-        if (m_modeTintTimer == 0x36) {
-            Tint(0xe4, 9);
+        if (m_modeTintTimer == 54) {
+            Tint(228, 9);
         }
-        if (m_modeTintTimer == 0x3c) {
-            Tint(0xe5, 9);
+        if (m_modeTintTimer == 60) {
+            Tint(229, 9);
         }
-        if (m_modeTintTimer == 0x42) {
-            Tint(0xe6, 9);
+        if (m_modeTintTimer == 66) {
+            Tint(230, 9);
         }
-        if (m_modeTintTimer == 0x48) {
-            Tint(0xe7, 9);
+        if (m_modeTintTimer == 72) {
+            Tint(231, 9);
         }
-        if (m_modeTintTimer == 0x4e) {
-            Tint(0xe8, 9);
+        if (m_modeTintTimer == 78) {
+            Tint(232, 9);
         }
-        if (m_modeTintTimer == 0x54) {
-            Tint(0xe9, 9);
+        if (m_modeTintTimer == 84) {
+            Tint(233, 9);
         }
-        if (m_modeTintTimer == 0x5a) {
-            Tint(0xea, 9);
+        if (m_modeTintTimer == 90) {
+            Tint(234, 9);
         }
-        if (m_modeTintTimer == 0x60) {
-            Tint(0xd6, 9);
+        if (m_modeTintTimer == 96) {
+            Tint(214, 9);
         }
-        if (m_modeTintTimer == 0x66) {
-            Tint(0xd5, 9);
+        if (m_modeTintTimer == 102) {
+            Tint(213, 9);
         }
         if (m_modeTimer <= 0) {
             m_stocks = 0;
@@ -968,7 +968,7 @@ void CIkumi::UseAltPatterns(char on)
     if (on == 1 && m_altPatternsIn == 0) {
         anims = TOPTR(EffectAnim*, (int)m_altAnims);
         i = 0;
-        for (; i < 0x40; i++) {
+        for (; i < 64; i++) {
             m_objects[i].anims = TOPTR(EffectAnim*, (int)m_altAnims);
         }
         m_patterns = TOPTR(PatternData*, (int)m_altPatterns);
@@ -978,7 +978,7 @@ void CIkumi::UseAltPatterns(char on)
     if (on == 0 && m_altPatternsIn == 1) {
         anims = TOPTR(EffectAnim*, m_baseAnims);
         j = 0;
-        for (; j < 0x40; j++) {
+        for (; j < 64; j++) {
             m_objects[j].anims = TOPTR(EffectAnim*, m_baseAnims);
         }
         m_patterns = TOPTR(PatternData*, m_basePatterns);
@@ -1086,7 +1086,7 @@ void CIkumi::ReadCommand()
         }
         if ((input & kInputDirections) == (facing == -1) + 1 && step == 4) {
             if ((input & kInputButtons) != 0) {
-                m_command = ((input & (kInputB | kInputC | kInputD)) > 0) + 0xa0 + ((input & (kInputC | kInputD)) > 0) + ((input & kInputD) > 0);
+                m_command = ((input & (kInputB | kInputC | kInputD)) > 0) + 160 + ((input & (kInputC | kInputD)) > 0) + ((input & kInputD) > 0);
                 return;
             }
             step = 5;
@@ -1100,7 +1100,7 @@ void CIkumi::ReadCommand()
         if ((input & kInputDirections) == 6 - (facing == -1) && step == 1) {
             step = 2;
         }
-        if ((input & kInputDirections) == kInputDown && step == 0 && (m_gauge >= 0x3e8 || m_storedSuperLevel > 0)) {
+        if ((input & kInputDirections) == kInputDown && step == 0 && (m_gauge >= 1000 || m_storedSuperLevel > 0)) {
             step = 1;
         }
     }
@@ -1131,7 +1131,7 @@ void CIkumi::ReadCommand()
         if ((input & kInputDirections) == 6 - (facing == -1) && step == 1) {
             step = 2;
         }
-        if ((input & kInputDirections) == kInputDown && step == 0 && m_gauge >= 0x3e8) {
+        if ((input & kInputDirections) == kInputDown && step == 0 && m_gauge >= 1000) {
             step = 1;
         }
     }
@@ -1376,17 +1376,17 @@ void CIkumi::CpuInput()
     m_pressC = 0;
     m_pressD = 0;
     m_recoilGuardWindow = 0;
-    if ((WORD)Random(0, 0x3e8) < 25.0f * m_cpuSkill + (y < 0.0) * 0x1e * m_cpuSkill + (m_cpuAction == 3) * 0x190 + (pattern == kRecoilGuardAir) * 0x12c) {
-        m_recoilGuardWindow = 0x3c;
+    if ((WORD)Random(0, 1000) < 25.0f * m_cpuSkill + (y < 0.0) * 30 * m_cpuSkill + (m_cpuAction == 3) * 400 + (pattern == kRecoilGuardAir) * 300) {
+        m_recoilGuardWindow = 60;
     }
-    if ((WORD)Random(0, 0x7d0) < ((m_throwProtect > 0) * 4.0 + 1.0) * 8.0 * m_cpuSkill * ((pattern > kLastHitReaction && pattern < kAirRecoveryForward) * 2 + 1)) {
-        m_recoilGuardWindow = 0x3c;
+    if ((WORD)Random(0, 2000) < ((m_throwProtect > 0) * 4.0 + 1.0) * 8.0 * m_cpuSkill * ((pattern > kLastHitReaction && pattern < kAirRecoveryForward) * 2 + 1)) {
+        m_recoilGuardWindow = 60;
     }
-    if ((WORD)Random(0, 0x3e8) < 4e+01f * m_cpuSkill && pattern > kLastSharedAction) {
-        m_recoilGuardWindow = 0x3c;
+    if ((WORD)Random(0, 1000) < 4e+01f * m_cpuSkill && pattern > kLastSharedAction) {
+        m_recoilGuardWindow = 60;
     }
     if (m_canRecoilCounter == 1 && m_cpuAction == 2) {
-        m_recoilGuardWindow = 0x1e;
+        m_recoilGuardWindow = 30;
         if (pattern < kFirstCharacterAction) {
             m_cpuAction = 0;
         }
@@ -1398,14 +1398,14 @@ void CIkumi::CpuInput()
     dx = ((*m_opponent)->x - x) * facing;
     dy = fabs(y - (*m_opponent)->y);
     if (pattern >= kFirstHitReaction && pattern <= kFirstGuard && timer == 0) {
-        if ((WORD)Random(0, 0x64) < 8.0f * m_cpuSkill) {
+        if ((WORD)Random(0, 100) < 8.0f * m_cpuSkill) {
             m_cpuAction = 3;
         } else {
             m_cpuAction = 0;
         }
-        m_inputX = 1 - (((WORD)Random(0, 0x64) < 0x32) << 1);
-        m_pressD = (WORD)Random(0, 0xf0) < dy;
-        m_pressD = (WORD)Random(0, 0x140) < dx;
+        m_inputX = 1 - (((WORD)Random(0, 100) < 0x32) << 1);
+        m_pressD = (WORD)Random(0, 240) < dy;
+        m_pressD = (WORD)Random(0, 320) < dx;
         if ((*m_opponent)->pattern > kLastSharedAction && (*m_opponent)->pattern < 0xfa && (*m_opponent)->frame < 3 && dy < 100.0 && dx < 150.0) {
             m_pressD = 0;
         }
@@ -1419,25 +1419,25 @@ void CIkumi::CpuInput()
     }
     if (pattern == kRecoilGuardStand && timer < 6) {
         if ((*m_opponent)->pattern != 0xc8 && (*m_opponent)->pattern != 0xcc && (*m_opponent)->pattern < 0xfa && (*m_opponent)->y == 0.0 && (*m_opponent)->m_hitsLeft == 0) {
-            if (dx < 40.0 && (WORD)Random(0, 0x64) < m_cpuSkill * 3.0f) {
+            if (dx < 40.0 && (WORD)Random(0, 100) < m_cpuSkill * 3.0f) {
                 m_pressA = 1;
                 m_inputY = 1;
                 return;
             }
-            if (dx < 60.0 && (WORD)Random(0, 0x64) < m_cpuSkill * 2) {
+            if (dx < 60.0 && (WORD)Random(0, 100) < m_cpuSkill * 2) {
                 m_pressA = 1;
                 m_inputY = 0;
                 return;
             }
         }
         if (((*m_opponent)->pattern == 0xc9 || (*m_opponent)->pattern == 0xca || (*m_opponent)->pattern == 0xcd) && (*m_opponent)->pattern < 0xfa && (*m_opponent)->y == 0.0 && (*m_opponent)->m_hitsLeft == 0) {
-            if (dx > 20.0 && dx < 60.0 && (WORD)Random(0, 0x64) < m_cpuSkill * 2) {
+            if (dx > 20.0 && dx < 60.0 && (WORD)Random(0, 100) < m_cpuSkill * 2) {
                 m_pressB = 1;
                 m_inputY = 1;
                 m_inputX = 0;
                 return;
             }
-            if (dx > 60.0 && dx < 80.0 && (WORD)Random(0, 0x64) < m_cpuSkill * 2) {
+            if (dx > 60.0 && dx < 80.0 && (WORD)Random(0, 100) < m_cpuSkill * 2) {
                 m_pressA = 3;
                 m_inputY = 1;
                 return;
@@ -1446,69 +1446,69 @@ void CIkumi::CpuInput()
     }
     if (pattern == kRecoilGuardStand || pattern == kRecoilGuardCrouch) {
         if (dx < 100.0) {
-            if ((WORD)Random(0, 0x64) < m_cpuSkill * 3.0f && m_rfGauge > 500.0) {
+            if ((WORD)Random(0, 100) < m_cpuSkill * 3.0f && m_rfGauge > 500.0) {
                 m_command = kCmd623C;
                 return;
             }
-            if ((WORD)Random(0, 0x64) < m_cpuSkill * 1.0f && m_rfGauge > 500.0) {
+            if ((WORD)Random(0, 100) < m_cpuSkill * 1.0f && m_rfGauge > 500.0) {
                 m_command = kCmd236C;
                 return;
             }
-            if ((WORD)Random(0, 0x64) < m_cpuSkill * 2 && dx < 80.0 && m_gauge >= 0x3e8) {
-                m_command = (WORD)Random(0, 3) + 0x78;
+            if ((WORD)Random(0, 100) < m_cpuSkill * 2 && dx < 80.0 && m_gauge >= 1000) {
+                m_command = (WORD)Random(0, 3) + 120;
                 return;
             }
-            if ((WORD)Random(0, 0x64) < m_cpuSkill * 1.0f && dx < 150.0 && m_gauge == 0xbb8) {
+            if ((WORD)Random(0, 100) < m_cpuSkill * 1.0f && dx < 150.0 && m_gauge == 3000) {
                 m_command = 0x5f;
                 return;
             }
         }
         if (dx < 220.0) {
-            if ((WORD)Random(0, 0x64) < m_cpuSkill * 3.0f && m_rfGauge > 500.0) {
+            if ((WORD)Random(0, 100) < m_cpuSkill * 3.0f && m_rfGauge > 500.0) {
                 m_command = kCmd236C;
                 return;
             }
-            if ((WORD)Random(0, 0x64) < m_cpuSkill * 1.0f && m_gauge == 0xbb8) {
+            if ((WORD)Random(0, 100) < m_cpuSkill * 1.0f && m_gauge == 3000) {
                 m_command = 0x5f;
                 return;
             }
         }
         if (dx > 220.0) {
-            if ((WORD)Random(0, 0x64) < m_cpuSkill * 1.0f && m_rfGauge > 500.0) {
+            if ((WORD)Random(0, 100) < m_cpuSkill * 1.0f && m_rfGauge > 500.0) {
                 m_command = (WORD)Random(0, 3) + kCmd236A;
                 return;
             }
-            if ((WORD)Random(0, 0x64) < m_cpuSkill * 1.0f && m_gauge == 0xbb8) {
+            if ((WORD)Random(0, 100) < m_cpuSkill * 1.0f && m_gauge == 3000) {
                 m_command = 0x5f;
                 return;
             }
         }
     }
     if (pattern == kRecoilGuardAir && frame == 1 && timer == 0) {
-        if ((WORD)Random(0, 0x64) < m_cpuSkill * 5.0f) {
+        if ((WORD)Random(0, 100) < m_cpuSkill * 5.0f) {
             m_cpuAction = 3;
             return;
         }
-        if (y - (*m_opponent)->y < 0.0 && y - (*m_opponent)->y > -40.0 && dx < 80.0 && (WORD)Random(0, 0x64) < m_cpuSkill * 5.0f) {
+        if (y - (*m_opponent)->y < 0.0 && y - (*m_opponent)->y > -40.0 && dx < 80.0 && (WORD)Random(0, 100) < m_cpuSkill * 5.0f) {
             m_pressA = 1;
             return;
         }
-        if (y - (*m_opponent)->y > -100.0 && y - (*m_opponent)->y < -50.0 && dx < 100.0 && (WORD)Random(0, 0x64) < m_cpuSkill * 5.0f) {
+        if (y - (*m_opponent)->y > -100.0 && y - (*m_opponent)->y < -50.0 && dx < 100.0 && (WORD)Random(0, 100) < m_cpuSkill * 5.0f) {
             m_pressB = 1;
             return;
         }
-        if (y - (*m_opponent)->y > -100.0 && y - (*m_opponent)->y < -50.0 && dx < 120.0 && (WORD)Random(0, 0x64) < m_cpuSkill * 5.0f) {
+        if (y - (*m_opponent)->y > -100.0 && y - (*m_opponent)->y < -50.0 && dx < 120.0 && (WORD)Random(0, 100) < m_cpuSkill * 5.0f) {
             m_pressC = 1;
             m_inputY = 0;
             return;
         }
-        if (dy < 50.0 && dx < 100.0 && (WORD)Random(0, 0x64) < m_cpuSkill * 2) {
+        if (dy < 50.0 && dx < 100.0 && (WORD)Random(0, 100) < m_cpuSkill * 2) {
             m_command = kCmd623C;
             return;
         }
     }
-    if (((*m_opponent)->pattern == kRecoilGuardStand || (*m_opponent)->pattern == kRecoilGuardCrouch || (*m_opponent)->pattern == kRecoilGuardAir) && y == 0.0 && (WORD)Random(0, 0x64) < 15.0f * m_cpuSkill && m_cpuAction != 2 && (*m_opponent)->m_freezeTime == 0) {
-        m_cpuRoll = (WORD)Random(0, 0x64);
+    if (((*m_opponent)->pattern == kRecoilGuardStand || (*m_opponent)->pattern == kRecoilGuardCrouch || (*m_opponent)->pattern == kRecoilGuardAir) && y == 0.0 && (WORD)Random(0, 100) < 15.0f * m_cpuSkill && m_cpuAction != 2 && (*m_opponent)->m_freezeTime == 0) {
+        m_cpuRoll = (WORD)Random(0, 100);
         if (m_cpuRoll < 3 && m_rfGauge > 500.0) {
             m_command = kCmd623C;
             return;
@@ -1517,31 +1517,31 @@ void CIkumi::CpuInput()
             m_command = kCmd236C;
             return;
         }
-        if (m_cpuRoll < 0x11 && m_cpuRoll > 0xc && m_gauge >= 0x3e8) {
-            m_command = (WORD)Random(0, 3) + 0x78;
+        if (m_cpuRoll < 17 && m_cpuRoll > 12 && m_gauge >= 1000) {
+            m_command = (WORD)Random(0, 3) + 120;
             return;
         }
-        if (m_cpuRoll > 0x55) {
+        if (m_cpuRoll > 85) {
             m_cpuAction = 2;
             return;
         }
     }
-    if (((*m_opponent)->pattern == kRecoilGuardStand || (*m_opponent)->pattern == kRecoilGuardCrouch || (*m_opponent)->pattern == kRecoilGuardAir) && y < 0.0 && (WORD)Random(0, 0x64) < 15.0f * m_cpuSkill && m_cpuAction != 2 && (*m_opponent)->m_freezeTime == 0) {
-        m_cpuRoll = (WORD)Random(0, 0x64);
+    if (((*m_opponent)->pattern == kRecoilGuardStand || (*m_opponent)->pattern == kRecoilGuardCrouch || (*m_opponent)->pattern == kRecoilGuardAir) && y < 0.0 && (WORD)Random(0, 100) < 15.0f * m_cpuSkill && m_cpuAction != 2 && (*m_opponent)->m_freezeTime == 0) {
+        m_cpuRoll = (WORD)Random(0, 100);
         if (m_cpuRoll < 3 && m_rfGauge > 500.0) {
             m_command = kCmd623C;
             return;
         }
-        if (m_cpuRoll < 0x11 && m_cpuRoll > 0xc && m_gauge >= 0x3e8) {
-            m_command = (WORD)Random(0, 3) + 0x78;
+        if (m_cpuRoll < 17 && m_cpuRoll > 12 && m_gauge >= 1000) {
+            m_command = (WORD)Random(0, 3) + 120;
             return;
         }
-        if (m_cpuRoll > 0x55) {
+        if (m_cpuRoll > 85) {
             m_cpuAction = 2;
             return;
         }
     }
-    if ((m_rfGauge > 500.0 || m_rfBlue > 0) && (WORD)Random(0, 0x64) < 8.0f * m_cpuSkill && (*m_opponent)->pattern > kLastHitReaction && (*m_opponent)->pattern < kAirRecoveryForward && (pattern == k214A || pattern == k214B || pattern == k214C || pattern == k236CStock6 || pattern == 0x10f || pattern == k623BStock3)) {
+    if ((m_rfGauge > 500.0 || m_rfBlue > 0) && (WORD)Random(0, 100) < 8.0f * m_cpuSkill && (*m_opponent)->pattern > kLastHitReaction && (*m_opponent)->pattern < kAirRecoveryForward && (pattern == k214A || pattern == k214B || pattern == k214C || pattern == k236CStock6 || pattern == 0x10f || pattern == k623BStock3)) {
         m_command = kCmd22C;
         return;
     }
@@ -1625,35 +1625,35 @@ void CIkumi::CpuInput()
         }
         return;
     }
-    if (m_attackResult > 1 && m_hitstop == 0 && (WORD)Random(0, 0x64) < m_cpuSkill * 25.0f && m_cpuAction != 1 && m_cpuAction != 2) {
-        m_cpuRoll = (WORD)Random(0, 0x3e8);
+    if (m_attackResult > 1 && m_hitstop == 0 && (WORD)Random(0, 100) < m_cpuSkill * 25.0f && m_cpuAction != 1 && m_cpuAction != 2) {
+        m_cpuRoll = (WORD)Random(0, 1000);
         if (pattern == k5A) {
-            if ((*m_opponent)->y < 0.0 && m_cpuRoll < 0x12c) {
+            if ((*m_opponent)->y < 0.0 && m_cpuRoll < 300) {
                 m_pressB = 1;
                 m_inputY = 0;
                 return;
             }
-            if (dx < 50.0 && m_cpuRoll < 0x190) {
+            if (dx < 50.0 && m_cpuRoll < 400) {
                 m_pressA = 1;
                 m_inputY = 0;
-                if (m_attackResult == 2 && (WORD)Random(0, 0x64) < 0x1e) {
+                if (m_attackResult == 2 && (WORD)Random(0, 100) < 30) {
                     m_pressC = 1;
                     m_inputY = 1;
                 }
                 return;
             }
-            if (dx < 125.0 && m_cpuRoll > 0x18f && m_cpuRoll < 0x2bc) {
+            if (dx < 125.0 && m_cpuRoll > 399 && m_cpuRoll < 700) {
                 m_pressB = 1;
                 m_inputY = 0;
                 return;
             }
-            if (m_cpuRoll > 0x3ca) {
+            if (m_cpuRoll > 970) {
                 m_cpuAction = 4;
                 m_inputY = -1;
                 m_inputX = (WORD)Random(0, 2) - 1;
                 return;
             }
-            if (m_cpuRoll > 0x2bb) {
+            if (m_cpuRoll > 699) {
                 m_cpuAction = 1;
                 if ((WORD)Random(0, 2) == 0) {
                     m_cpuAction = 6;
@@ -1665,40 +1665,40 @@ void CIkumi::CpuInput()
             }
         }
         if (pattern == k5BClose) {
-            if ((*m_opponent)->y < 0.0 && m_cpuRoll < 0x12c && m_attackResult == 3) {
+            if ((*m_opponent)->y < 0.0 && m_cpuRoll < 300 && m_attackResult == 3) {
                 m_command = (WORD)Random(0, 2) + kCmd623A;
                 return;
             }
-            if ((*m_opponent)->y < 0.0 && m_cpuRoll > 0x12b && m_cpuRoll < 0x140 && m_gauge >= 0x3e8) {
-                m_command = (WORD)Random(0, 3) + 0x78;
+            if ((*m_opponent)->y < 0.0 && m_cpuRoll > 299 && m_cpuRoll < 320 && m_gauge >= 1000) {
+                m_command = (WORD)Random(0, 3) + 120;
                 return;
             }
-            if ((*m_opponent)->y < 0.0 && m_cpuRoll > 0x140 && m_cpuRoll < 0x258 && m_attackResult == 3) {
+            if ((*m_opponent)->y < 0.0 && m_cpuRoll > 320 && m_cpuRoll < 600 && m_attackResult == 3) {
                 m_inputX = facing;
                 m_inputY = -1;
                 return;
             }
-            if (m_cpuRoll < 0xc8) {
+            if (m_cpuRoll < 200) {
                 m_pressC = 1;
                 m_inputY = 1;
                 return;
             }
-            if (m_cpuRoll > 0xc8 && m_cpuRoll < 0x1c2 && dx < 90.0) {
+            if (m_cpuRoll > 200 && m_cpuRoll < 450 && dx < 90.0) {
                 m_pressB = 1;
                 m_inputY = 0;
                 return;
             }
-            if ((*m_opponent)->y < 0.0 && m_cpuRoll > 0x1c2 && m_cpuRoll < 0x2bc) {
+            if ((*m_opponent)->y < 0.0 && m_cpuRoll > 450 && m_cpuRoll < 700) {
                 m_pressC = 1;
                 return;
             }
-            if (m_cpuRoll > 0x384) {
+            if (m_cpuRoll > 900) {
                 m_cpuAction = 4;
                 m_inputY = -1;
                 m_inputX = (WORD)Random(0, 2) - 1;
                 return;
             }
-            if (m_cpuRoll > 0x2bc) {
+            if (m_cpuRoll > 700) {
                 m_cpuAction = 1;
                 if ((WORD)Random(0, 1) == 0) {
                     m_cpuAction = 6;
@@ -1710,20 +1710,20 @@ void CIkumi::CpuInput()
             }
         }
         if (pattern == k5BFar) {
-            if ((*m_opponent)->y < 0.0 && m_cpuRoll > 0x12b && m_cpuRoll < 0x140) {
+            if ((*m_opponent)->y < 0.0 && m_cpuRoll > 299 && m_cpuRoll < 320) {
                 m_command = kCmd236A;
                 return;
             }
-            if ((*m_opponent)->y < 0.0 && m_cpuRoll > 0x140 && m_cpuRoll < 0x258 && dx < 100.0) {
+            if ((*m_opponent)->y < 0.0 && m_cpuRoll > 320 && m_cpuRoll < 600 && dx < 100.0) {
                 m_pressC = 1;
                 return;
             }
-            if (m_cpuRoll < 0x1f4 && m_attackResult == 3 && dx < 80.0) {
+            if (m_cpuRoll < 500 && m_attackResult == 3 && dx < 80.0) {
                 m_pressC = 1;
                 m_inputY = 0;
                 return;
             }
-            if (m_cpuRoll > 0x2bc) {
+            if (m_cpuRoll > 700) {
                 m_cpuAction = 1;
                 if ((WORD)Random(0, 1) == 0) {
                     m_cpuAction = 6;
@@ -1735,75 +1735,75 @@ void CIkumi::CpuInput()
             }
         }
         if (pattern == k5C) {
-            if ((*m_opponent)->y < 0.0 && m_cpuRoll < 0x12c && m_attackResult == 3) {
+            if ((*m_opponent)->y < 0.0 && m_cpuRoll < 300 && m_attackResult == 3) {
                 m_command = kCmd236A;
                 return;
             }
-            if ((*m_opponent)->y < 0.0 && m_cpuRoll > 0x12b && m_cpuRoll < 0x140 && m_gauge >= 0x3e8 && dx < 90.0) {
-                m_command = (WORD)Random(0, 3) + 0x78;
+            if ((*m_opponent)->y < 0.0 && m_cpuRoll > 299 && m_cpuRoll < 320 && m_gauge >= 1000 && dx < 90.0) {
+                m_command = (WORD)Random(0, 3) + 120;
                 return;
             }
-            if (m_cpuRoll > 0 && m_cpuRoll < 0xc8 && m_attackResult == 3) {
+            if (m_cpuRoll > 0 && m_cpuRoll < 200 && m_attackResult == 3) {
                 m_command = kCmd236A;
                 return;
             }
-            if (m_cpuRoll > 0xc8 && m_cpuRoll < 0xfa) {
+            if (m_cpuRoll > 200 && m_cpuRoll < 250) {
                 m_command = (WORD)Random(0, 3) + kCmd214A;
                 return;
             }
-            if (m_cpuRoll > 0x15e && m_cpuRoll < 0x190 && m_rfGauge > 500.0) {
+            if (m_cpuRoll > 350 && m_cpuRoll < 400 && m_rfGauge > 500.0) {
                 m_command = kCmd22C;
                 return;
             }
-            if (m_cpuRoll > 0x190 && m_cpuRoll < 0x1ae && m_attackResult == 3 && m_gauge == 0xbb8) {
+            if (m_cpuRoll > 400 && m_cpuRoll < 430 && m_attackResult == 3 && m_gauge == 3000) {
                 m_command = 0x5f;
                 return;
             }
-            if (m_cpuRoll > 0x1ae && m_cpuRoll < 0x21c && m_attackResult != 3) {
+            if (m_cpuRoll > 430 && m_cpuRoll < 540 && m_attackResult != 3) {
                 m_command = 0x28;
                 if (dx > 120.0) {
                     m_command = 0x29;
                 }
                 return;
             }
-            if (m_cpuRoll > 0x38e && m_attackResult == 3) {
+            if (m_cpuRoll > 910 && m_attackResult == 3) {
                 m_cpuAction = 4;
                 m_inputY = -1;
                 m_inputX = (WORD)Random(0, 2) - 1;
                 return;
             }
-            if (m_cpuRoll > 0x289) {
+            if (m_cpuRoll > 649) {
                 m_cpuAction = 1;
                 return;
             }
         }
         if (pattern == k2A) {
-            if ((*m_opponent)->y < 0.0 && m_cpuRoll < 0x12c) {
+            if ((*m_opponent)->y < 0.0 && m_cpuRoll < 300) {
                 m_pressB = 1;
                 m_inputY = 1;
                 return;
             }
-            if (dx < 50.0 && m_cpuRoll < 0x190) {
+            if (dx < 50.0 && m_cpuRoll < 400) {
                 m_pressA = 1;
                 m_inputY = 0;
-                if (m_attackResult == 2 && (WORD)Random(0, 0x64) < 0x14) {
+                if (m_attackResult == 2 && (WORD)Random(0, 100) < 20) {
                     m_pressC = 1;
                     m_inputY = 1;
                 }
                 return;
             }
-            if (dx < 135.0 && m_cpuRoll < 0x258) {
+            if (dx < 135.0 && m_cpuRoll < 600) {
                 m_pressB = 1;
                 m_inputY = 0;
                 return;
             }
-            if (m_cpuRoll > 0x3b6) {
+            if (m_cpuRoll > 950) {
                 m_cpuAction = 4;
                 m_inputY = -1;
                 m_inputX = (WORD)Random(0, 2) - 1;
                 return;
             }
-            if (m_cpuRoll > 0x2bb) {
+            if (m_cpuRoll > 699) {
                 m_cpuAction = 1;
                 if ((WORD)Random(0, 1) == 0) {
                     m_cpuAction = 6;
@@ -1816,31 +1816,31 @@ void CIkumi::CpuInput()
             }
         }
         if (pattern == k2B) {
-            if ((*m_opponent)->y < 0.0 && m_cpuRoll > 0x140 && m_cpuRoll < 0x258 && dx < 100.0) {
+            if ((*m_opponent)->y < 0.0 && m_cpuRoll > 320 && m_cpuRoll < 600 && dx < 100.0) {
                 m_pressC = 1;
                 return;
             }
-            if (m_cpuRoll < 0x64) {
+            if (m_cpuRoll < 100) {
                 m_pressC = 1;
                 m_inputY = 1;
                 return;
             }
-            if (m_cpuRoll > 0x64 && m_cpuRoll < 0x12c && dx < 100.0) {
+            if (m_cpuRoll > 100 && m_cpuRoll < 300 && dx < 100.0) {
                 m_pressB = 1;
                 m_inputY = 0;
                 return;
             }
-            if ((*m_opponent)->y < 0.0 && m_cpuRoll > 0x12c && m_cpuRoll < 0x258) {
+            if ((*m_opponent)->y < 0.0 && m_cpuRoll > 300 && m_cpuRoll < 600) {
                 m_pressC = 1;
                 return;
             }
-            if (m_cpuRoll > 0x384) {
+            if (m_cpuRoll > 900) {
                 m_cpuAction = 4;
                 m_inputY = -1;
                 m_inputX = (WORD)Random(0, 2) - 1;
                 return;
             }
-            if (m_cpuRoll > 0x2bc) {
+            if (m_cpuRoll > 700) {
                 m_cpuAction = 1;
                 if ((WORD)Random(0, 1) == 0) {
                     m_cpuAction = 6;
@@ -1852,53 +1852,53 @@ void CIkumi::CpuInput()
             }
         }
         if (pattern == k2C) {
-            if ((*m_opponent)->y < 0.0 && m_cpuRoll < 0x12c && m_attackResult == 3) {
+            if ((*m_opponent)->y < 0.0 && m_cpuRoll < 300 && m_attackResult == 3) {
                 m_command = kCmd236A;
                 return;
             }
-            if ((*m_opponent)->y < 0.0 && m_cpuRoll > 0x12b && m_cpuRoll < 0x140 && m_gauge >= 0x3e8 && dx < 90.0) {
-                m_command = (WORD)Random(0, 3) + 0x78;
+            if ((*m_opponent)->y < 0.0 && m_cpuRoll > 299 && m_cpuRoll < 320 && m_gauge >= 1000 && dx < 90.0) {
+                m_command = (WORD)Random(0, 3) + 120;
                 return;
             }
-            if (m_cpuRoll > 0 && m_cpuRoll < 0xc8 && m_attackResult == 3) {
+            if (m_cpuRoll > 0 && m_cpuRoll < 200 && m_attackResult == 3) {
                 m_command = kCmd236A;
                 return;
             }
-            if (m_cpuRoll > 0xc8 && m_cpuRoll < 0xfa) {
+            if (m_cpuRoll > 200 && m_cpuRoll < 250) {
                 m_command = (WORD)Random(0, 3) + kCmd214A;
                 return;
             }
-            if (m_cpuRoll > 0x15e && m_cpuRoll < 0x190 && m_rfGauge > 500.0) {
+            if (m_cpuRoll > 350 && m_cpuRoll < 400 && m_rfGauge > 500.0) {
                 m_command = kCmd22C;
                 return;
             }
-            if (m_cpuRoll > 0x1ae && m_cpuRoll < 0x21c && m_attackResult != 3) {
+            if (m_cpuRoll > 430 && m_cpuRoll < 540 && m_attackResult != 3) {
                 m_command = 0x28;
                 if (dx > 120.0) {
                     m_command = 0x29;
                 }
                 return;
             }
-            if (m_cpuRoll > 0x289) {
+            if (m_cpuRoll > 649) {
                 m_cpuAction = 1;
                 return;
             }
         }
         if (pattern == kJumpA) {
-            if ((*m_opponent)->y < 0.0 && m_cpuRoll < 0x12c) {
+            if ((*m_opponent)->y < 0.0 && m_cpuRoll < 300) {
                 m_pressB = 1;
                 return;
             }
-            if (dx < 60.0 && m_cpuRoll < 0x190) {
+            if (dx < 60.0 && m_cpuRoll < 400) {
                 m_pressA = 1;
                 return;
             }
-            if (dx < 125.0 && m_cpuRoll > 0x18f && m_cpuRoll < 0x2bc) {
+            if (dx < 125.0 && m_cpuRoll > 399 && m_cpuRoll < 700) {
                 m_pressC = 1;
                 m_inputY = 0;
                 return;
             }
-            if (m_cpuRoll > 0x2bb) {
+            if (m_cpuRoll > 699) {
                 m_cpuAction = 1;
                 if ((WORD)Random(0, 4) == 0) {
                     m_cpuAction = 3;
@@ -1907,47 +1907,47 @@ void CIkumi::CpuInput()
             }
         }
         if (pattern == kJumpB) {
-            if (m_cpuRoll > 0x14 && m_cpuRoll < 0x3c && m_attackResult == 3 && (*m_opponent)->y < 0.0) {
+            if (m_cpuRoll > 20 && m_cpuRoll < 60 && m_attackResult == 3 && (*m_opponent)->y < 0.0) {
                 m_command = kCmd236A;
                 return;
             }
-            if (m_cpuRoll > 0x50 && m_cpuRoll < 0x12c) {
+            if (m_cpuRoll > 80 && m_cpuRoll < 300) {
                 m_pressC = 1;
                 return;
             }
-            if (m_cpuRoll > 0x3b6) {
+            if (m_cpuRoll > 950) {
                 m_inputX = (WORD)Random(0, 2) - 1;
                 return;
             }
-            if (m_cpuRoll > 0x289) {
+            if (m_cpuRoll > 649) {
                 m_cpuAction = 3;
                 return;
             }
         }
         if (pattern == kJumpC) {
-            if (m_cpuRoll > 0x3b6) {
+            if (m_cpuRoll > 950) {
                 m_inputX = (WORD)Random(0, 2) - 1;
                 return;
             }
-            if (m_cpuRoll > 0x289) {
+            if (m_cpuRoll > 649) {
                 m_cpuAction = 3;
                 return;
             }
         }
         if (pattern == kDashB) {
-            if ((*m_opponent)->y < 0.0 && m_cpuRoll < 0x12c && m_attackResult == 3) {
+            if ((*m_opponent)->y < 0.0 && m_cpuRoll < 300 && m_attackResult == 3) {
                 m_command = (WORD)Random(0, 2) + kCmd623A;
                 return;
             }
-            if (m_cpuRoll > 0xc8 && m_cpuRoll < 0xdc && dx < 90.0 && m_attackResult == 3 && m_gauge >= 0x3e8) {
-                m_command = (WORD)Random(0, 3) + 0x78;
+            if (m_cpuRoll > 200 && m_cpuRoll < 220 && dx < 90.0 && m_attackResult == 3 && m_gauge >= 1000) {
+                m_command = (WORD)Random(0, 3) + 120;
                 return;
             }
-            if (m_cpuRoll > 0x15e && m_cpuRoll < 0x190 && m_rfGauge > 500.0) {
+            if (m_cpuRoll > 350 && m_cpuRoll < 400 && m_rfGauge > 500.0) {
                 m_command = kCmd22C;
                 return;
             }
-            if (m_cpuRoll > 0x289 && (WORD)Random(0, 2) == 0) {
+            if (m_cpuRoll > 649 && (WORD)Random(0, 2) == 0) {
                 m_cpuAction = 0xc;
                 if (dx > 110.0) {
                     m_cpuAction = 8;
@@ -1955,51 +1955,51 @@ void CIkumi::CpuInput()
             }
         }
         if (pattern == kDashC) {
-            if ((*m_opponent)->y < 0.0 && m_cpuRoll < 0x12c && m_attackResult == 3) {
+            if ((*m_opponent)->y < 0.0 && m_cpuRoll < 300 && m_attackResult == 3) {
                 m_command = kCmd236A;
                 return;
             }
-            if ((*m_opponent)->y < 0.0 && m_cpuRoll > 0x12b && m_cpuRoll < 0x140 && m_gauge >= 0x3e8 && dx < 90.0) {
-                m_command = (WORD)Random(0, 3) + 0x78;
+            if ((*m_opponent)->y < 0.0 && m_cpuRoll > 299 && m_cpuRoll < 320 && m_gauge >= 1000 && dx < 90.0) {
+                m_command = (WORD)Random(0, 3) + 120;
                 return;
             }
-            if (m_cpuRoll > 0 && m_cpuRoll < 0xc8 && m_attackResult == 3) {
+            if (m_cpuRoll > 0 && m_cpuRoll < 200 && m_attackResult == 3) {
                 m_command = kCmd236A;
                 return;
             }
-            if (m_cpuRoll > 0xc8 && m_cpuRoll < 0xfa) {
+            if (m_cpuRoll > 200 && m_cpuRoll < 250) {
                 m_command = (WORD)Random(0, 3) + kCmd214A;
                 return;
             }
-            if (m_cpuRoll > 0x15e && m_cpuRoll < 0x190 && m_rfGauge > 500.0) {
+            if (m_cpuRoll > 350 && m_cpuRoll < 400 && m_rfGauge > 500.0) {
                 m_command = kCmd22C;
                 return;
             }
-            if (m_cpuRoll > 0x190 && m_cpuRoll < 0x1ae && m_attackResult == 3 && m_gauge == 0xbb8) {
+            if (m_cpuRoll > 400 && m_cpuRoll < 430 && m_attackResult == 3 && m_gauge == 3000) {
                 m_command = 0x5f;
                 return;
             }
-            if (m_cpuRoll > 0x1ae && m_cpuRoll < 0x21c && m_attackResult != 3) {
+            if (m_cpuRoll > 430 && m_cpuRoll < 540 && m_attackResult != 3) {
                 m_command = 0x28;
                 if (dx > 120.0) {
                     m_command = 0x29;
                 }
                 return;
             }
-            if (m_cpuRoll > 0x38e && m_attackResult == 3) {
+            if (m_cpuRoll > 910 && m_attackResult == 3) {
                 m_cpuAction = 4;
                 m_inputY = -1;
                 m_inputX = (WORD)Random(0, 2) - 1;
                 return;
             }
-            if (m_cpuRoll > 0x289) {
+            if (m_cpuRoll > 649) {
                 m_cpuAction = 1;
                 return;
             }
         }
     }
-    if ((WORD)Random(0, 0x64) < 25.0f * m_cpuSkill) {
-        m_cpuRoll = (WORD)Random(0, 0x3e8);
+    if ((WORD)Random(0, 100) < 25.0f * m_cpuSkill) {
+        m_cpuRoll = (WORD)Random(0, 1000);
         if (y == 0.0) {
             if ((*m_opponent)->y == 0.0 && (*m_opponent)->pattern != kLyingDown) {
                 if (dx < 40.0 && (*m_opponent)->y == 0.0 && m_cpuRoll < 5) {
@@ -2008,86 +2008,86 @@ void CIkumi::CpuInput()
                     m_inputY = 0;
                     return;
                 }
-                if (dx < 50.0 && m_cpuRoll < 0x17) {
+                if (dx < 50.0 && m_cpuRoll < 23) {
                     m_pressA = 1;
                     m_inputY = 1;
                     return;
                 }
-                if (dx < 75.0 && m_cpuRoll < 0x1e) {
+                if (dx < 75.0 && m_cpuRoll < 30) {
                     m_pressA = 1;
                     m_inputY = 0;
                     return;
                 }
-                if (dx < 80.0 && m_cpuRoll < 0x28 && m_cpuRoll > 0x1e) {
+                if (dx < 80.0 && m_cpuRoll < 40 && m_cpuRoll > 30) {
                     m_pressB = 1;
                     m_inputY = 1;
                     return;
                 }
-                if (dx < 80.0 && m_cpuRoll < 0x34 && m_cpuRoll > 0x28 || dx > 80.0 && dx < 130.0 && m_cpuRoll < 0x50 && m_cpuRoll > 0x34) {
+                if (dx < 80.0 && m_cpuRoll < 52 && m_cpuRoll > 40 || dx > 80.0 && dx < 130.0 && m_cpuRoll < 80 && m_cpuRoll > 52) {
                     m_pressB = 1;
                     m_inputY = 0;
                     return;
                 }
-                if (dx > 80.0 && dx < 140.0 && m_cpuRoll < 0x64 && m_cpuRoll > 0x50) {
+                if (dx > 80.0 && dx < 140.0 && m_cpuRoll < 100 && m_cpuRoll > 80) {
                     m_cpuAction = 8;
                     return;
                 }
-                if (dx > 70.0 && dx < 120.0 && m_cpuRoll < 0x78 && m_cpuRoll > 0x64) {
+                if (dx > 70.0 && dx < 120.0 && m_cpuRoll < 120 && m_cpuRoll > 100) {
                     m_cpuAction = 8;
                     return;
                 }
-                if (dx < 90.0 && dx > 70.0 && m_cpuRoll < 0x82 && m_cpuRoll > 0x78) {
+                if (dx < 90.0 && dx > 70.0 && m_cpuRoll < 130 && m_cpuRoll > 120) {
                     m_pressC = 1;
                     m_inputY = 1;
                     return;
                 }
-                if (dx < 120.0 && dx > 70.0 && m_cpuRoll < 0x91 && m_cpuRoll > 0x82) {
+                if (dx < 120.0 && dx > 70.0 && m_cpuRoll < 145 && m_cpuRoll > 130) {
                     m_pressC = 1;
                     m_inputY = 0;
                     return;
                 }
-                if (dx > 100.0 && dx < 140.0 && m_cpuRoll < 0x98 && m_cpuRoll > 0x91) {
+                if (dx > 100.0 && dx < 140.0 && m_cpuRoll < 152 && m_cpuRoll > 145) {
                     m_cpuAction = 0xa;
                     return;
                 }
-                if (dx < 80.0 && m_cpuRoll < 0xa5 && m_cpuRoll > 0x91 && m_rfGauge > 500.0 && (*m_opponent)->pattern > kLastSharedAction) {
+                if (dx < 80.0 && m_cpuRoll < 165 && m_cpuRoll > 145 && m_rfGauge > 500.0 && (*m_opponent)->pattern > kLastSharedAction) {
                     m_command = kCmd623C;
                     return;
                 }
-                if (dx < 80.0 && m_cpuRoll < 0xaa && m_cpuRoll > 0xa5 && m_gauge >= 0x3e8 && (*m_opponent)->pattern > kLastSharedAction) {
-                    m_command = (WORD)Random(0, 3) + 0x78;
+                if (dx < 80.0 && m_cpuRoll < 170 && m_cpuRoll > 165 && m_gauge >= 1000 && (*m_opponent)->pattern > kLastSharedAction) {
+                    m_command = (WORD)Random(0, 3) + 120;
                     return;
                 }
-                if (dx > 200.0 && m_cpuRoll < 0xaa && m_cpuRoll > 0xa5 && m_gauge >= 0x3e8 && (*m_opponent)->pattern > kLastSharedAction) {
-                    m_command = (WORD)Random(0, 3) + 0x82;
+                if (dx > 200.0 && m_cpuRoll < 170 && m_cpuRoll > 165 && m_gauge >= 1000 && (*m_opponent)->pattern > kLastSharedAction) {
+                    m_command = (WORD)Random(0, 3) + 130;
                     return;
                 }
-                if (dx > 200.0 && m_cpuRoll < 0xbe && m_cpuRoll > 0xaa) {
+                if (dx > 200.0 && m_cpuRoll < 190 && m_cpuRoll > 170) {
                     m_command = (WORD)Random(0, 3) + kCmd236A;
                     return;
                 }
-                if (dx > 80.0 && dx < 120.0 && m_cpuRoll < 0xd2 && m_cpuRoll > 0xbe) {
+                if (dx > 80.0 && dx < 120.0 && m_cpuRoll < 210 && m_cpuRoll > 190) {
                     m_command = 0x28;
                     return;
                 }
-                if (dx > 140.0 && dx < 180.0 && m_cpuRoll < 0xd2 && m_cpuRoll > 0xbe) {
+                if (dx > 140.0 && dx < 180.0 && m_cpuRoll < 210 && m_cpuRoll > 190) {
                     m_command = 0x29;
                     return;
                 }
-                if (dx > 200.0 && dx < 240.0 && m_cpuRoll < 0xd2 && m_cpuRoll > 0xbe) {
+                if (dx > 200.0 && dx < 240.0 && m_cpuRoll < 210 && m_cpuRoll > 190) {
                     m_command = 0x2a;
                     return;
                 }
             }
             if ((*m_opponent)->y < 0.0) {
                 if ((*m_opponent)->vy < 0.0) {
-                    if (dx < 80.0 && dy < 120.0 && m_cpuRoll < 0xa) {
+                    if (dx < 80.0 && dy < 120.0 && m_cpuRoll < 10) {
                         m_inputY = -1;
                         m_inputX = -facing;
                         return;
                     }
-                    if (dx < 80.0 && m_cpuRoll < 0xf && m_gauge >= 0x3e8) {
-                        m_command = (WORD)Random(0, 3) + 0x78;
+                    if (dx < 80.0 && m_cpuRoll < 15 && m_gauge >= 1000) {
+                        m_command = (WORD)Random(0, 3) + 120;
                         return;
                     }
                 }
@@ -2096,23 +2096,23 @@ void CIkumi::CpuInput()
                         m_command = kCmd623C;
                         return;
                     }
-                    if (dx < 90.0 && dy < 140.0 && dy > 100.0 && m_cpuRoll < 0x23 && m_cpuRoll > 0xa) {
+                    if (dx < 90.0 && dy < 140.0 && dy > 100.0 && m_cpuRoll < 35 && m_cpuRoll > 10) {
                         m_pressB = 1;
                         m_inputY = 0;
                         return;
                     }
-                    if (dx > 100.0 && dx < 140.0 && dy < 180.0 && dy > 140.0 && m_cpuRoll < 0x3c && m_cpuRoll > 0x23) {
+                    if (dx > 100.0 && dx < 140.0 && dy < 180.0 && dy > 140.0 && m_cpuRoll < 60 && m_cpuRoll > 35) {
                         m_pressC = 1;
                         m_inputY = 0;
                         return;
                     }
-                    if (dx > 100.0 && dx < 140.0 && dy < 140.0 && dy > 100.0 && m_cpuRoll < 0x50 && m_cpuRoll > 0x3c) {
+                    if (dx > 100.0 && dx < 140.0 && dy < 140.0 && dy > 100.0 && m_cpuRoll < 80 && m_cpuRoll > 60) {
                         m_pressB = 1;
                         m_inputY = 0;
                         return;
                     }
-                    if (dx < 80.0 && m_cpuRoll < 0x6e && m_cpuRoll > 0x50 && (*m_opponent)->y < -50.0 && m_gauge >= 0x3e8) {
-                        m_command = (WORD)Random(0, 3) + 0x78;
+                    if (dx < 80.0 && m_cpuRoll < 110 && m_cpuRoll > 80 && (*m_opponent)->y < -50.0 && m_gauge >= 1000) {
+                        m_command = (WORD)Random(0, 3) + 120;
                         return;
                     }
                 }
@@ -2120,66 +2120,66 @@ void CIkumi::CpuInput()
         }
         if (y < 0.0 && m_cpuAction != 3) {
             if ((*m_opponent)->y == 0.0) {
-                if (dx < 80.0 && dy < 100.0 && m_cpuRoll < 0x32) {
+                if (dx < 80.0 && dy < 100.0 && m_cpuRoll < 50) {
                     m_pressA = 1;
                     return;
                 }
-                if (dx > 60.0 && dx < 120.0 && dy > 90.0 && dy < 120.0 && (*m_opponent)->y < y && m_cpuRoll > 0x32 && m_cpuRoll < 0x78) {
+                if (dx > 60.0 && dx < 120.0 && dy > 90.0 && dy < 120.0 && (*m_opponent)->y < y && m_cpuRoll > 50 && m_cpuRoll < 120) {
                     m_pressB = 1;
                     return;
                 }
-                if (dx > 80.0 && dx < 140.0 && dy > 100.0 && dy < 180.0 && m_cpuRoll > 0x78 && m_cpuRoll < 0xaa) {
+                if (dx > 80.0 && dx < 140.0 && dy > 100.0 && dy < 180.0 && m_cpuRoll > 120 && m_cpuRoll < 170) {
                     m_pressC = 1;
                     return;
                 }
-                if ((WORD)Random(0, 0x140) < dx - 100.0 && dy < 90.0 && m_cpuRoll > 0xaa && m_cpuRoll < 0xdc) {
+                if ((WORD)Random(0, 320) < dx - 100.0 && dy < 90.0 && m_cpuRoll > 170 && m_cpuRoll < 220) {
                     m_command = (WORD)Random(0, 3) + kCmd236A;
                     return;
                 }
-                if (dx > 100.0 && m_cpuRoll > 0xf0 && m_cpuRoll < 0x14a && dy + 40.0 > dx && dy - 40.0 < dx) {
-                    m_command = (WORD)Random(0, 3) + 0x28;
+                if (dx > 100.0 && m_cpuRoll > 240 && m_cpuRoll < 330 && dy + 40.0 > dx && dy - 40.0 < dx) {
+                    m_command = (WORD)Random(0, 3) + 40;
                     return;
                 }
             }
             if ((*m_opponent)->y < 0.0) {
-                if (dx < 80.0 && dy < 100.0 && m_cpuRoll < 0x14) {
+                if (dx < 80.0 && dy < 100.0 && m_cpuRoll < 20) {
                     m_pressA = 1;
                     return;
                 }
-                if (dx > 60.0 && dx < 120.0 && dy > 90.0 && dy < 120.0 && (*m_opponent)->y < y && m_cpuRoll > 0x14 && m_cpuRoll < 0x28) {
+                if (dx > 60.0 && dx < 120.0 && dy > 90.0 && dy < 120.0 && (*m_opponent)->y < y && m_cpuRoll > 20 && m_cpuRoll < 40) {
                     m_pressB = 1;
                     return;
                 }
-                if (dx > 80.0 && dx < 140.0 && dy > 100.0 && dy < 180.0 && m_cpuRoll > 0x28 && m_cpuRoll < 0x32) {
+                if (dx > 80.0 && dx < 140.0 && dy > 100.0 && dy < 180.0 && m_cpuRoll > 40 && m_cpuRoll < 50) {
                     m_pressC = 1;
                     return;
                 }
-                if ((WORD)Random(0, 0x140) < dx - 100.0 && dy < 180.0 && m_cpuRoll > 0xaa && m_cpuRoll < 0xf0) {
+                if ((WORD)Random(0, 320) < dx - 100.0 && dy < 180.0 && m_cpuRoll > 170 && m_cpuRoll < 240) {
                     m_command = (WORD)Random(0, 3) + kCmd236A;
                     return;
                 }
             }
         }
     }
-    if (pattern < kFirstHitReaction && ((*m_opponent)->pattern > kLastHitReaction && (*m_opponent)->pattern < kGuardAir || (*m_opponent)->pattern > kLastFreeAction && (*m_opponent)->pattern < kHitAir) && y == 0.0 && (WORD)Random(0, 0x64) < 3.0f * m_cpuSkill) {
+    if (pattern < kFirstHitReaction && ((*m_opponent)->pattern > kLastHitReaction && (*m_opponent)->pattern < kGuardAir || (*m_opponent)->pattern > kLastFreeAction && (*m_opponent)->pattern < kHitAir) && y == 0.0 && (WORD)Random(0, 100) < 3.0f * m_cpuSkill) {
         m_command = facing == 1;
         return;
     }
-    if (pattern < kFirstHitReaction && (*m_opponent)->pattern < kFirstHitReaction && dx > 60.0 && dx < 140.0 && (WORD)Random(0, 0x64) < 2.0f * m_cpuSkill && x > 120.0 && x < 520.0) {
+    if (pattern < kFirstHitReaction && (*m_opponent)->pattern < kFirstHitReaction && dx > 60.0 && dx < 140.0 && (WORD)Random(0, 100) < 2.0f * m_cpuSkill && x > 120.0 && x < 520.0) {
         m_command = -((facing == 1) - 1);
         return;
     }
-    if ((WORD)Random(0, 0x3e8) < 2) {
+    if ((WORD)Random(0, 1000) < 2) {
         m_cpuAction = 4;
         return;
     }
-    if ((WORD)Random(0, 0x64) < 2) {
-        if ((WORD)Random(0, 0x64) < 8.0f * m_cpuSkill) {
+    if ((WORD)Random(0, 100) < 2) {
+        if ((WORD)Random(0, 100) < 8.0f * m_cpuSkill) {
             m_cpuAction = 3;
         } else {
             m_cpuAction = 0;
         }
-        if (dx > 180.0 && y == 0.0 && (WORD)Random(0, 0x64) < 2) {
+        if (dx > 180.0 && y == 0.0 && (WORD)Random(0, 100) < 2) {
             m_inputX = 0;
             m_inputY = -1;
             return;
@@ -2191,39 +2191,39 @@ void CIkumi::CpuInput()
         }
     }
     if (m_cpuWalkRight > 0) {
-        if ((char)AtScreenEdge() != 0 && m_cpuWalkRight > 0xf) {
-            m_cpuWalkRight = 0xf;
+        if ((char)AtScreenEdge() != 0 && m_cpuWalkRight > 15) {
+            m_cpuWalkRight = 15;
         }
         m_inputX = 1;
         return;
     }
     if (m_cpuWalkLeft > 0) {
-        if ((char)AtScreenEdge() != 0 && m_cpuWalkLeft > 0xf) {
-            m_cpuWalkLeft = 0xf;
+        if ((char)AtScreenEdge() != 0 && m_cpuWalkLeft > 15) {
+            m_cpuWalkLeft = 15;
         }
         m_inputX = -1;
         return;
     }
-    if ((WORD)Random(0, 0x64) < 0x32 && dx < 120.0) {
+    if ((WORD)Random(0, 100) < 50 && dx < 120.0) {
         if (facing == 1) {
-            m_cpuWalkLeft = (WORD)Random(0, 0xc8) + 0x2d;
+            m_cpuWalkLeft = (WORD)Random(0, 200) + 45;
         } else {
-            m_cpuWalkRight = (WORD)Random(0, 0xc8) + 0x2d;
+            m_cpuWalkRight = (WORD)Random(0, 200) + 45;
         }
     }
-    if ((WORD)Random(0, 0x64) < 0x1e) {
+    if ((WORD)Random(0, 100) < 30) {
         if (facing == 1) {
-            m_cpuWalkRight = (WORD)Random(0, 0xc8) + 0x1e;
+            m_cpuWalkRight = (WORD)Random(0, 200) + 30;
         } else {
-            m_cpuWalkLeft = (WORD)Random(0, 0xc8) + 0x1e;
+            m_cpuWalkLeft = (WORD)Random(0, 200) + 30;
         }
         return;
     }
     if (facing == -1) {
-        m_cpuWalkRight = (WORD)Random(0, 0xc8) + 0x1e;
+        m_cpuWalkRight = (WORD)Random(0, 200) + 30;
         return;
     }
-    m_cpuWalkLeft = (WORD)Random(0, 0xc8) + 0x1e;
+    m_cpuWalkLeft = (WORD)Random(0, 200) + 30;
 }
 
 void CIkumi::UpdateObjects()
@@ -2322,9 +2322,9 @@ void CIkumi::UpdateObjects()
                     effect.facing = facing;
                     SpawnObject(&effect);
                 }
-                if (m_objects[slot].hitsLeft == 0 && m_objects[slot].frame < 0x2f) {
+                if (m_objects[slot].hitsLeft == 0 && m_objects[slot].frame < 47) {
                     m_objects[slot].timer = 0;
-                    m_objects[slot].frame = 0x2f;
+                    m_objects[slot].frame = 47;
                     break;
                 }
                 m_objects[slot].timer++;
@@ -2388,9 +2388,9 @@ void CIkumi::UpdateObjects()
                     effect.facing = facing;
                     SpawnObject(&effect);
                 }
-                if (m_objects[slot].hitsLeft == 0 && m_objects[slot].frame < 0x2f) {
+                if (m_objects[slot].hitsLeft == 0 && m_objects[slot].frame < 47) {
                     m_objects[slot].timer = 0;
-                    m_objects[slot].frame = 0x2f;
+                    m_objects[slot].frame = 47;
                     break;
                 }
                 m_objects[slot].timer++;
@@ -2398,9 +2398,9 @@ void CIkumi::UpdateObjects()
                     m_objects[slot].timer = 0;
                     m_objects[slot].frame++;
                     m_objects[slot].attackResult = 0;
-                    if (m_objects[slot].frame == 0x2f && m_objectVar1[slot] == 0) {
+                    if (m_objects[slot].frame == 47 && m_objectVar1[slot] == 0) {
                         m_objectVar1[slot]++;
-                        m_objects[slot].frame = 0x20;
+                        m_objects[slot].frame = 32;
                     }
                     if (m_objects[slot].frame >= frameCount) {
                         RemoveObject(slot);
@@ -2438,9 +2438,9 @@ void CIkumi::UpdateObjects()
                     m_objectVar1[slot] = 0;
                     m_objectVar2[slot] = 0;
                 }
-                if (m_objects[slot].hitsLeft == 0 && m_objects[slot].frame < 0x2f) {
+                if (m_objects[slot].hitsLeft == 0 && m_objects[slot].frame < 47) {
                     m_objects[slot].timer = 0;
-                    m_objects[slot].frame = 0x2f;
+                    m_objects[slot].frame = 47;
                     break;
                 }
                 if (m_objects[slot].attackResult == 3 && m_objectVar2[slot] == 0) {
@@ -2457,9 +2457,9 @@ void CIkumi::UpdateObjects()
                 if (m_objects[slot].timer >= duration) {
                     m_objects[slot].timer = 0;
                     m_objects[slot].frame++;
-                    if (m_objects[slot].frame == 0x2f && m_objectVar1[slot] < 3) {
+                    if (m_objects[slot].frame == 47 && m_objectVar1[slot] < 3) {
                         m_objectVar1[slot]++;
-                        m_objects[slot].frame = 0x20;
+                        m_objects[slot].frame = 32;
                         m_objects[slot].attackResult = 0;
                         m_objectVar2[slot] = 0;
                     }
@@ -2484,7 +2484,7 @@ void CIkumi::UpdateObjects()
                 if (m_objects[slot].timer >= duration) {
                     m_objects[slot].timer = 0;
                     m_objects[slot].frame++;
-                    if (m_objects[slot].frame == 0x28 && frame < 7) {
+                    if (m_objects[slot].frame == 40 && frame < 7) {
                         m_objects[slot].frame = 0;
                     }
                     if (m_objects[slot].frame >= frameCount) {
@@ -2497,7 +2497,7 @@ void CIkumi::UpdateObjects()
                 if (m_objects[slot].timer >= duration) {
                     m_objects[slot].timer = 0;
                     m_objects[slot].frame++;
-                    if (m_objects[slot].frame == 0x28 && frame < 7) {
+                    if (m_objects[slot].frame == 40 && frame < 7) {
                         m_objects[slot].frame = 0;
                     }
                     if (m_objects[slot].frame >= frameCount) {
@@ -2506,15 +2506,15 @@ void CIkumi::UpdateObjects()
                 }
                 break;
             case kObjGrabSuperEffect3:
-                if (m_objects[slot].timer == 0 && (m_objects[slot].frame == 0 || m_objects[slot].frame == 0xa || m_objects[slot].frame == 0x14 || m_objects[slot].frame == 0x1e)) {
+                if (m_objects[slot].timer == 0 && (m_objects[slot].frame == 0 || m_objects[slot].frame == 10 || m_objects[slot].frame == 20 || m_objects[slot].frame == 30)) {
                     effect.type = kObjGrabSuperSpark;
-                    if ((WORD)Random(0, 0x64) < 0x32) {
+                    if ((WORD)Random(0, 100) < 50) {
                         effect.type = kObjGrabSuperSparkTall;
                     }
-                    effect.x = (double)((int)m_objects[slot].x + -0x3c + (WORD)Random(0, 0x78));
-                    effect.y = (double)((int)m_objects[slot].y - (WORD)Random(0, 0xa0));
+                    effect.x = (double)((int)m_objects[slot].x + -60 + (WORD)Random(0, 120));
+                    effect.y = (double)((int)m_objects[slot].y - (WORD)Random(0, 160));
                     effect.facing = m_objects[slot].facing;
-                    if ((WORD)Random(0, 0x64) < 0x32) {
+                    if ((WORD)Random(0, 100) < 50) {
                         effect.facing = -m_objects[slot].facing;
                     }
                     effect.layer = 1;
@@ -2525,7 +2525,7 @@ void CIkumi::UpdateObjects()
                 if (m_objects[slot].timer >= duration) {
                     m_objects[slot].timer = 0;
                     m_objects[slot].frame++;
-                    if (m_objects[slot].frame == 0x28 && frame < 7) {
+                    if (m_objects[slot].frame == 40 && frame < 7) {
                         m_objects[slot].frame = 0;
                     }
                     if (m_objects[slot].frame >= frameCount) {
@@ -2562,16 +2562,16 @@ void CIkumi::UpdateObjects()
                     m_objects[slot].pattern = kObjDoubleVanish;
                     break;
                 }
-                if (m_objects[slot].frame == 0x1b && m_objects[slot].timer == 0) {
+                if (m_objects[slot].frame == 27 && m_objects[slot].timer == 0) {
                     m_objects[slot].vy = 0.0;
                     m_objects[slot].vx = 2.5;
                     m_objects[slot].hitsLeft = 3;
                 }
-                if (m_objects[slot].frame == 0x1b && m_objects[slot].timer == 0) {
+                if (m_objects[slot].frame == 27 && m_objects[slot].timer == 0) {
                     m_objectVar2[slot] = 1;
                 }
-                if (m_objects[slot].frame == 0x25 && m_objects[slot].timer == 0) {
-                    m_playSound = 0x14;
+                if (m_objects[slot].frame == 37 && m_objects[slot].timer == 0) {
+                    m_playSound = 20;
                     effect.type = kObj236Effect;
                     effect.x = (double)(int)m_objects[slot].x;
                     effect.y = m_objects[slot].y;
@@ -2582,15 +2582,15 @@ void CIkumi::UpdateObjects()
                     SpawnObject(&effect);
                     m_playVoice = 2;
                 }
-                if (m_objects[slot].frame > 0x26) {
+                if (m_objects[slot].frame > 38) {
                     m_objects[slot].vx -= 0.07;
                     if (m_objects[slot].vx < 0.0) {
                         m_objects[slot].vx = 0.0;
                     }
                 }
-                if ((m_objects[slot].x - (*m_opponent)->x < 150.0 && m_objects[slot].facing == -1 || (*m_opponent)->x - m_objects[slot].x < 150.0 && m_objects[slot].facing == 1) && m_objectVar2[slot] != 0 && m_objects[slot].frame < 0x23) {
+                if ((m_objects[slot].x - (*m_opponent)->x < 150.0 && m_objects[slot].facing == -1 || (*m_opponent)->x - m_objects[slot].x < 150.0 && m_objects[slot].facing == 1) && m_objectVar2[slot] != 0 && m_objects[slot].frame < 35) {
                     m_objects[slot].timer = 0;
-                    m_objects[slot].frame = 0x23;
+                    m_objects[slot].frame = 35;
                     break;
                 }
                 m_objects[slot].timer++;
@@ -2602,14 +2602,14 @@ void CIkumi::UpdateObjects()
                         m_objectVar1[slot]++;
                         m_objects[slot].frame = m_objects[slot].frame - 2;
                     }
-                    if (m_objects[slot].frame == 0xc) {
-                        m_objects[slot].frame = 0x1b;
+                    if (m_objects[slot].frame == 12) {
+                        m_objects[slot].frame = 27;
                     }
-                    if (m_objects[slot].frame == 0x1b && m_objectVar1[slot] < 0) {
+                    if (m_objects[slot].frame == 27 && m_objectVar1[slot] < 0) {
                         m_objectVar1[slot]++;
                         m_objects[slot].frame = 5;
                     }
-                    if (m_objects[slot].frame == 0x23 && m_objectVar3[slot] < 1) {
+                    if (m_objects[slot].frame == 35 && m_objectVar3[slot] < 1) {
                         m_objects[slot].frame = m_objects[slot].frame - 8;
                         m_objectVar3[slot]++;
                     }
@@ -2631,20 +2631,20 @@ void CIkumi::UpdateObjects()
                     m_objects[slot].pattern = kObjDoubleVanish;
                     break;
                 }
-                if (m_objects[slot].frame > 4 && m_objects[slot].frame < 0x1b && (m_objects[slot].x - (*m_opponent)->x < 50.0 && m_objects[slot].facing == -1 || (*m_opponent)->x - m_objects[slot].x < 50.0 && m_objects[slot].facing == 1)) {
+                if (m_objects[slot].frame > 4 && m_objects[slot].frame < 27 && (m_objects[slot].x - (*m_opponent)->x < 50.0 && m_objects[slot].facing == -1 || (*m_opponent)->x - m_objects[slot].x < 50.0 && m_objects[slot].facing == 1)) {
                     m_objects[slot].timer = 0;
-                    m_objects[slot].frame = 0x1b;
+                    m_objects[slot].frame = 27;
                     break;
                 }
-                if ((m_objects[slot].frame == 0x1e || m_objects[slot].frame == 0x26 || m_objects[slot].frame == 0x2f) && m_objects[slot].timer == 0) {
-                    m_playSound = 0x15;
+                if ((m_objects[slot].frame == 30 || m_objects[slot].frame == 38 || m_objects[slot].frame == 47) && m_objects[slot].timer == 0) {
+                    m_playSound = 21;
                     m_objects[slot].hitsLeft = 1;
                 }
                 if (m_objects[slot].y < 0.0) {
                     m_objects[slot].vy += 0.035;
-                    if (m_objects[slot].y + m_objects[slot].vy > 0.0 && m_objects[slot].frame < 0x37) {
+                    if (m_objects[slot].y + m_objects[slot].vy > 0.0 && m_objects[slot].frame < 55) {
                         m_objects[slot].timer = 0;
-                        m_objects[slot].frame = 0x37;
+                        m_objects[slot].frame = 55;
                         m_objects[slot].y = 0.0;
                         m_objects[slot].vy = 0.0;
                         m_objects[slot].vx = 0.0;
@@ -2660,15 +2660,15 @@ void CIkumi::UpdateObjects()
                         m_objectVar1[slot]++;
                         m_objects[slot].frame = m_objects[slot].frame - 2;
                     }
-                    if (m_objects[slot].frame == 0x1b && m_objectVar1[slot] < 0xd) {
+                    if (m_objects[slot].frame == 27 && m_objectVar1[slot] < 13) {
                         m_objectVar1[slot]++;
                         m_objects[slot].frame = 5;
                     }
-                    if (m_objects[slot].frame == 0x2d) {
+                    if (m_objects[slot].frame == 45) {
                         m_objects[slot].vx = 1.0;
                         m_objects[slot].vy = -1.5;
                     }
-                    if (m_objects[slot].frame == 0x37) {
+                    if (m_objects[slot].frame == 55) {
                         m_objects[slot].frame = m_objects[slot].frame - 2;
                     }
                     if (m_objects[slot].frame >= frameCount) {
@@ -2692,9 +2692,9 @@ void CIkumi::UpdateObjects()
                 if (m_objects[slot].frame == 6) {
                     m_objects[slot].vx = 0.6;
                 }
-                if ((m_objects[slot].x - (*m_opponent)->x < 50.0 && m_objects[slot].facing == -1 || (*m_opponent)->x - m_objects[slot].x < 50.0 && m_objects[slot].facing == 1) && m_objects[slot].frame > 5 && m_objects[slot].frame < 0xe) {
+                if ((m_objects[slot].x - (*m_opponent)->x < 50.0 && m_objects[slot].facing == -1 || (*m_opponent)->x - m_objects[slot].x < 50.0 && m_objects[slot].facing == 1) && m_objects[slot].frame > 5 && m_objects[slot].frame < 14) {
                     m_objects[slot].timer = 0;
-                    m_objects[slot].frame = 0xe;
+                    m_objects[slot].frame = 14;
                     m_objects[slot].vx = 0.0;
                     break;
                 }
@@ -2707,17 +2707,17 @@ void CIkumi::UpdateObjects()
                         m_objectVar1[slot]++;
                         m_objects[slot].frame = m_objects[slot].frame - 2;
                     }
-                    if (m_objects[slot].frame == 0xe && m_objectVar2[slot] < 5) {
+                    if (m_objects[slot].frame == 14 && m_objectVar2[slot] < 5) {
                         m_objectVar2[slot]++;
                         m_objects[slot].frame = 6;
                         break;
                     }
-                    if (m_objects[slot].frame == 0xe) {
+                    if (m_objects[slot].frame == 14) {
                         m_objects[slot].vx = 0.0;
                     }
-                    if (m_objects[slot].frame == 0x15) {
+                    if (m_objects[slot].frame == 21) {
                         effect.type = kObjDoubleEruption;
-                        effect.x = (double)((int)m_objects[slot].x + m_objects[slot].facing * 0x32);
+                        effect.x = (double)((int)m_objects[slot].x + m_objects[slot].facing * 50);
                         effect.y = 0.0;
                         effect.scale = 2;
                         effect.layer = 1;
@@ -2828,18 +2828,18 @@ void CIkumi::UpdateObjects()
                 if (m_objects[slot].frame == 0) {
                     m_objects[slot].hitsLeft = 4;
                 }
-                if (m_objects[slot].hitsLeft == 0 && m_objects[slot].frame < 0x2f) {
+                if (m_objects[slot].hitsLeft == 0 && m_objects[slot].frame < 47) {
                     m_objects[slot].timer = 0;
-                    m_objects[slot].frame = 0x2f;
+                    m_objects[slot].frame = 47;
                     break;
                 }
                 m_objects[slot].timer++;
                 if (m_objects[slot].timer >= duration) {
                     m_objects[slot].timer = 0;
                     m_objects[slot].frame++;
-                    if (m_objects[slot].frame == 0x2f && m_objectVar1[slot] < 3) {
+                    if (m_objects[slot].frame == 47 && m_objectVar1[slot] < 3) {
                         m_objectVar1[slot]++;
-                        m_objects[slot].frame = 0x20;
+                        m_objects[slot].frame = 32;
                         m_objects[slot].attackResult = 0;
                     }
                     if (m_objects[slot].frame >= frameCount) {
@@ -2930,7 +2930,7 @@ void CIkumi::UpdateObjects()
                     m_objects[slot].timer = 0;
                     m_patternVar1 = 1;
                 }
-                if (frame == 0x18 && m_objects[slot].frame == 1) {
+                if (frame == 24 && m_objects[slot].frame == 1) {
                     m_objects[slot].frame = 2;
                     m_objects[slot].timer = 0;
                     break;
@@ -2960,7 +2960,7 @@ void CIkumi::UpdateObjects()
                     m_objects[slot].frame = 1;
                     m_objects[slot].timer = 0;
                 }
-                if (frame == 0x18 && m_objects[slot].frame == 1) {
+                if (frame == 24 && m_objects[slot].frame == 1) {
                     m_objects[slot].frame = 2;
                     m_objects[slot].timer = 0;
                     break;
@@ -2991,7 +2991,7 @@ void CIkumi::UpdateObjects()
                     m_objects[slot].timer = 0;
                     m_patternVar1 = 1;
                 }
-                if (frame == 0x18 && m_objects[slot].frame == 1) {
+                if (frame == 24 && m_objects[slot].frame == 1) {
                     m_objects[slot].frame = 2;
                     m_objects[slot].timer = 0;
                     break;
@@ -3021,7 +3021,7 @@ void CIkumi::UpdateObjects()
                     m_objects[slot].frame = 1;
                     m_objects[slot].timer = 0;
                 }
-                if (frame == 0x18 && m_objects[slot].frame == 1) {
+                if (frame == 24 && m_objects[slot].frame == 1) {
                     m_objects[slot].frame = 2;
                     m_objects[slot].timer = 0;
                     break;
@@ -3112,7 +3112,7 @@ void CIkumi::UpdateObjects()
                 m_objects[slot].vy += 0.035;
                 if (m_objectVar1[slot] == 0) {
                     m_objectVar1[slot]++;
-                    m_objectVar2[slot] = (WORD)Random(0x5a, 0x61);
+                    m_objectVar2[slot] = (WORD)Random(90, 97);
                     m_objects[slot].SetVelocity((double)-m_objectVar2[slot], (WORD)Random(0, 5) * 0.1 + 3.2);
                 }
                 if (m_objects[slot].vy > 0.0 && m_objects[slot].frame == 0) {
@@ -3127,9 +3127,9 @@ void CIkumi::UpdateObjects()
                     m_objects[slot].timer = 0;
                     m_objects[slot].pattern = kObjOrbCaught;
                     if (m_stocks < 8) {
-                        m_stockCharge += 0xa;
+                        m_stockCharge += 10;
                     }
-                    if (m_stockCharge >= 0x64) {
+                    if (m_stockCharge >= 100) {
                         m_stockCharge = 0;
                         m_stocks++;
                         if (m_stocks > 8) {
@@ -3164,7 +3164,7 @@ void CIkumi::UpdateObjects()
                 m_objects[slot].vy += 0.035;
                 if (m_objectVar1[slot] == 0) {
                     m_objectVar1[slot]++;
-                    m_objectVar2[slot] = (WORD)Random(0x5a, 0x64);
+                    m_objectVar2[slot] = (WORD)Random(90, 100);
                     m_objects[slot].SetVelocity((double)-m_objectVar2[slot], (WORD)Random(0, 5) * 0.1 + 2.2);
                 }
                 if (m_objects[slot].vy > 0.0 && m_objects[slot].frame == 0) {
@@ -3179,9 +3179,9 @@ void CIkumi::UpdateObjects()
                     m_objects[slot].timer = 0;
                     m_objects[slot].pattern = kObjOrbCaught;
                     if (m_stocks < 8) {
-                        m_stockCharge += 0x1e;
+                        m_stockCharge += 30;
                     }
-                    if (m_stockCharge >= 0x64) {
+                    if (m_stockCharge >= 100) {
                         m_stockCharge = 0;
                         m_stocks++;
                         if (m_stocks > 8) {
@@ -3213,7 +3213,7 @@ void CIkumi::UpdateObjects()
                 m_objects[slot].vy += 0.035;
                 if (m_objectVar1[slot] == 0) {
                     m_objectVar1[slot]++;
-                    m_objectVar2[slot] = (WORD)Random(0x5a, 0x64);
+                    m_objectVar2[slot] = (WORD)Random(90, 100);
                     m_objects[slot].SetVelocity((double)-m_objectVar2[slot], (WORD)Random(0, 5) * 0.1 + 2.8);
                 }
                 if (m_objects[slot].vy > 0.0 && m_objects[slot].frame == 0) {
@@ -3228,9 +3228,9 @@ void CIkumi::UpdateObjects()
                     m_objects[slot].timer = 0;
                     m_objects[slot].pattern = kObjOrbCaught;
                     if (m_stocks < 8) {
-                        m_stockCharge += 0x32;
+                        m_stockCharge += 50;
                     }
-                    if (m_stockCharge >= 0x64) {
+                    if (m_stockCharge >= 100) {
                         m_stockCharge = 0;
                         m_stocks++;
                         if (m_stocks > 8) {
@@ -3274,7 +3274,7 @@ void CIkumi::UpdateObjects()
                     if (m_stocks < 8) {
                         m_stockCharge += 8;
                     }
-                    if (m_stockCharge >= 0x64) {
+                    if (m_stockCharge >= 100) {
                         m_stockCharge = 0;
                         m_stocks++;
                         if (m_stocks > 8) {
@@ -3453,7 +3453,7 @@ void CIkumi::UpdateObjects()
                 break;
             case kObjFallInDarkness:
                 m_objects[slot].vx = -0.02;
-                m_objects[slot].drawnWhileHidden = 0x7530;
+                m_objects[slot].drawnWhileHidden = 30000;
                 m_objects[slot].timer++;
                 if (pattern != kFallInDarkness) {
                     RemoveObject(slot);
@@ -3470,7 +3470,7 @@ void CIkumi::UpdateObjects()
             case kObjEncasedBreak:
                 if (pattern != kEncased && pattern != kEncased2 && pattern != kEncasedAir && pattern != kEncasedSpin || pattern == kEncased && frame > 1 || pattern == kEncased2 && frame > 1) {
                     effect.type = kObjShardSmall;
-                    effect.x = (double)((int)x + facing * 0x17);
+                    effect.x = (double)((int)x + facing * 23);
                     effect.y = (double)((int)y - 4);
                     effect.scale = 0;
                     effect.layer = 1;
@@ -3484,8 +3484,8 @@ void CIkumi::UpdateObjects()
                     effect.facing = facing;
                     SpawnObject(&effect);
                     effect.type = kObjShardSmall;
-                    effect.x = (double)((int)x - facing * 0xe);
-                    effect.y = (double)((int)y - 0x1a);
+                    effect.x = (double)((int)x - facing * 14);
+                    effect.y = (double)((int)y - 26);
                     effect.scale = 0;
                     effect.layer = 1;
                     effect.facing = facing;
@@ -3498,48 +3498,48 @@ void CIkumi::UpdateObjects()
                     effect.facing = facing;
                     SpawnObject(&effect);
                     effect.type = kObjShardSmall;
-                    effect.x = (double)((int)x + facing * 0x1e);
-                    effect.y = (double)((int)y - 0x28);
+                    effect.x = (double)((int)x + facing * 30);
+                    effect.y = (double)((int)y - 40);
                     effect.scale = 0;
                     effect.layer = 1;
                     effect.facing = facing;
                     SpawnObject(&effect);
                     effect.type = kObjShardSmall;
-                    effect.x = (double)((int)x - facing * 0x19);
-                    effect.y = (double)((int)y - 0x50);
+                    effect.x = (double)((int)x - facing * 25);
+                    effect.y = (double)((int)y - 80);
                     effect.scale = 0;
                     effect.layer = 1;
                     effect.facing = facing;
                     SpawnObject(&effect);
                     effect.type = kObjShardLarge;
-                    effect.x = (double)((int)x - facing * 0x23);
-                    effect.y = (double)((int)y - 0x2a);
+                    effect.x = (double)((int)x - facing * 35);
+                    effect.y = (double)((int)y - 42);
                     effect.scale = 0;
                     effect.layer = 1;
                     effect.facing = facing;
                     SpawnObject(&effect);
                     effect.type = kObjShardLarge;
-                    effect.x = (double)((int)x - facing * 0x12);
-                    effect.y = (double)((int)y - 0x14);
+                    effect.x = (double)((int)x - facing * 18);
+                    effect.y = (double)((int)y - 20);
                     effect.scale = 0;
                     effect.layer = 1;
                     effect.facing = facing;
                     SpawnObject(&effect);
                     effect.type = kObjShardLarge;
                     effect.x = (double)((int)x + facing * 2);
-                    effect.y = (double)((int)y - 0x41);
+                    effect.y = (double)((int)y - 65);
                     effect.scale = 0;
                     effect.layer = 1;
                     effect.facing = facing;
                     SpawnObject(&effect);
                     effect.type = kObjShardLarge;
                     effect.x = (double)((int)x + (facing << 4));
-                    effect.y = (double)((int)y - 0x50);
+                    effect.y = (double)((int)y - 80);
                     effect.scale = 0;
                     effect.layer = 1;
                     effect.facing = facing;
                     SpawnObject(&effect);
-                    m_playSound = 0x22;
+                    m_playSound = 34;
                     RemoveObject(slot);
                     m_encasedBreakOut = 0;
                     break;
@@ -3556,16 +3556,16 @@ void CIkumi::UpdateObjects()
                 break;
             case kObjShardSmall:
                 if (m_objects[slot].frame == 0 && m_objects[slot].timer == 0 && m_objectVar1[slot] == 0) {
-                    m_objectVar2[slot] = (rand() > 0x3e80) * 0x28 + 0x50 + (rand() > 0x3e80) * 0x14;
+                    m_objectVar2[slot] = (rand() > 16000) * 40 + 80 + (rand() > 16000) * 20;
                     m_objectVar1[slot]++;
-                    m_objects[slot].vx = (rand() > 0x3e80) * 1.2 + (rand() > 0x3e80) * 0.7 + (rand() > 0x3e80) * 1.7 + -1.8;
-                    m_objects[slot].vy = -1.2 - ((rand() > 0x3e80) * 0.6 + (rand() > 0x3e80) * 0.9 + (rand() > 0x3e80) * 1.4);
+                    m_objects[slot].vx = (rand() > 16000) * 1.2 + (rand() > 16000) * 0.7 + (rand() > 16000) * 1.7 + -1.8;
+                    m_objects[slot].vy = -1.2 - ((rand() > 16000) * 0.6 + (rand() > 16000) * 0.9 + (rand() > 16000) * 1.4);
                 }
                 m_objects[slot].vy += 0.05;
                 if (m_objects[slot].y > 0.0 && m_objects[slot].vy > 0.0) {
                     m_objects[slot].vy = -m_objects[slot].vy;
                 }
-                if (m_objectVar2[slot] < 0xa) {
+                if (m_objectVar2[slot] < 10) {
                     m_objects[slot].scale = 1;
                 }
                 if (m_objectVar2[slot] < 0) {
@@ -3585,16 +3585,16 @@ void CIkumi::UpdateObjects()
                 break;
             case kObjShardLarge:
                 if (m_objects[slot].frame == 0 && m_objects[slot].timer == 0 && m_objectVar1[slot] == 0) {
-                    m_objectVar2[slot] = (rand() > 0x3e80) * 0x3c + 0x78 + (rand() > 0x3e80) * 0x28;
+                    m_objectVar2[slot] = (rand() > 16000) * 60 + 120 + (rand() > 16000) * 40;
                     m_objectVar1[slot]++;
-                    m_objects[slot].vx = (double)(rand() > 0x3e80) + (rand() > 0x3e80) * 0.5 + (rand() > 0x3e80) * 1.5 + -1.5;
-                    m_objects[slot].vy = -1.0 - ((rand() > 0x3e80) * 0.5 + (rand() > 0x3e80) * 0.8 + (rand() > 0x3e80) * 1.2);
+                    m_objects[slot].vx = (double)(rand() > 16000) + (rand() > 16000) * 0.5 + (rand() > 16000) * 1.5 + -1.5;
+                    m_objects[slot].vy = -1.0 - ((rand() > 16000) * 0.5 + (rand() > 16000) * 0.8 + (rand() > 16000) * 1.2);
                 }
                 m_objects[slot].vy += 0.03;
                 if (m_objects[slot].y > 0.0 && m_objects[slot].vy > 0.0) {
                     m_objects[slot].vy = -m_objects[slot].vy;
                 }
-                if (m_objectVar2[slot] < 0xa) {
+                if (m_objectVar2[slot] < 10) {
                     m_objects[slot].scale = 1;
                 }
                 if (m_objectVar2[slot] < 0) {
@@ -3627,7 +3627,7 @@ void CIkumi::UpdateObjects()
             }
         }
         slot++;
-        if (slot >= 0x40) {
+        if (slot >= 64) {
             slot = 0;
         }
     }
@@ -3725,9 +3725,9 @@ void CIkumi::UpdateObjectsAlt()
                     effect.facing = facing;
                     SpawnObject(&effect);
                 }
-                if (m_objects[slot].hitsLeft == 0 && m_objects[slot].frame < 0x2f) {
+                if (m_objects[slot].hitsLeft == 0 && m_objects[slot].frame < 47) {
                     m_objects[slot].timer = 0;
-                    m_objects[slot].frame = 0x2f;
+                    m_objects[slot].frame = 47;
                     break;
                 }
                 m_objects[slot].timer++;
@@ -3791,9 +3791,9 @@ void CIkumi::UpdateObjectsAlt()
                     effect.facing = facing;
                     SpawnObject(&effect);
                 }
-                if (m_objects[slot].hitsLeft == 0 && m_objects[slot].frame < 0x2f) {
+                if (m_objects[slot].hitsLeft == 0 && m_objects[slot].frame < 47) {
                     m_objects[slot].timer = 0;
-                    m_objects[slot].frame = 0x2f;
+                    m_objects[slot].frame = 47;
                     break;
                 }
                 m_objects[slot].timer++;
@@ -3801,9 +3801,9 @@ void CIkumi::UpdateObjectsAlt()
                     m_objects[slot].timer = 0;
                     m_objects[slot].frame++;
                     m_objects[slot].attackResult = 0;
-                    if (m_objects[slot].frame == 0x2f && m_objectVar1[slot] == 0) {
+                    if (m_objects[slot].frame == 47 && m_objectVar1[slot] == 0) {
                         m_objectVar1[slot]++;
-                        m_objects[slot].frame = 0x20;
+                        m_objects[slot].frame = 32;
                     }
                     if (m_objects[slot].frame >= frameCount) {
                         RemoveObject(slot);
@@ -3841,9 +3841,9 @@ void CIkumi::UpdateObjectsAlt()
                     m_objectVar1[slot] = 0;
                     m_objectVar2[slot] = 0;
                 }
-                if (m_objects[slot].hitsLeft == 0 && m_objects[slot].frame < 0x2f) {
+                if (m_objects[slot].hitsLeft == 0 && m_objects[slot].frame < 47) {
                     m_objects[slot].timer = 0;
-                    m_objects[slot].frame = 0x2f;
+                    m_objects[slot].frame = 47;
                     break;
                 }
                 if (m_objects[slot].attackResult == 3 && m_objectVar2[slot] == 0) {
@@ -3860,9 +3860,9 @@ void CIkumi::UpdateObjectsAlt()
                 if (m_objects[slot].timer >= duration) {
                     m_objects[slot].timer = 0;
                     m_objects[slot].frame++;
-                    if (m_objects[slot].frame == 0x2f && m_objectVar1[slot] < 3) {
+                    if (m_objects[slot].frame == 47 && m_objectVar1[slot] < 3) {
                         m_objectVar1[slot]++;
-                        m_objects[slot].frame = 0x20;
+                        m_objects[slot].frame = 32;
                         m_objects[slot].attackResult = 0;
                         m_objectVar2[slot] = 0;
                     }
@@ -3887,7 +3887,7 @@ void CIkumi::UpdateObjectsAlt()
                 if (m_objects[slot].timer >= duration) {
                     m_objects[slot].timer = 0;
                     m_objects[slot].frame++;
-                    if (m_objects[slot].frame == 0x28 && frame < 7) {
+                    if (m_objects[slot].frame == 40 && frame < 7) {
                         m_objects[slot].frame = 0;
                     }
                     if (m_objects[slot].frame >= frameCount) {
@@ -3900,7 +3900,7 @@ void CIkumi::UpdateObjectsAlt()
                 if (m_objects[slot].timer >= duration) {
                     m_objects[slot].timer = 0;
                     m_objects[slot].frame++;
-                    if (m_objects[slot].frame == 0x28 && frame < 7) {
+                    if (m_objects[slot].frame == 40 && frame < 7) {
                         m_objects[slot].frame = 0;
                     }
                     if (m_objects[slot].frame >= frameCount) {
@@ -3909,15 +3909,15 @@ void CIkumi::UpdateObjectsAlt()
                 }
                 break;
             case kObjGrabSuperEffect3:
-                if (m_objects[slot].timer == 0 && (m_objects[slot].frame == 0 || m_objects[slot].frame == 0xa || m_objects[slot].frame == 0x14 || m_objects[slot].frame == 0x1e)) {
+                if (m_objects[slot].timer == 0 && (m_objects[slot].frame == 0 || m_objects[slot].frame == 10 || m_objects[slot].frame == 20 || m_objects[slot].frame == 30)) {
                     effect.type = kObjGrabSuperSpark;
-                    if ((WORD)Random(0, 0x64) < 0x32) {
+                    if ((WORD)Random(0, 100) < 50) {
                         effect.type = kObjGrabSuperSparkTall;
                     }
-                    effect.x = (double)((int)m_objects[slot].x + -0x3c + (WORD)Random(0, 0x78));
-                    effect.y = (double)((int)m_objects[slot].y - (WORD)Random(0, 0xa0));
+                    effect.x = (double)((int)m_objects[slot].x + -60 + (WORD)Random(0, 120));
+                    effect.y = (double)((int)m_objects[slot].y - (WORD)Random(0, 160));
                     effect.facing = m_objects[slot].facing;
-                    if ((WORD)Random(0, 0x64) < 0x32) {
+                    if ((WORD)Random(0, 100) < 50) {
                         effect.facing = -m_objects[slot].facing;
                     }
                     effect.layer = 1;
@@ -3928,7 +3928,7 @@ void CIkumi::UpdateObjectsAlt()
                 if (m_objects[slot].timer >= duration) {
                     m_objects[slot].timer = 0;
                     m_objects[slot].frame++;
-                    if (m_objects[slot].frame == 0x28 && frame < 7) {
+                    if (m_objects[slot].frame == 40 && frame < 7) {
                         m_objects[slot].frame = 0;
                     }
                     if (m_objects[slot].frame >= frameCount) {
@@ -3965,16 +3965,16 @@ void CIkumi::UpdateObjectsAlt()
                     m_objects[slot].pattern = kObjDoubleVanish;
                     break;
                 }
-                if (m_objects[slot].frame == 0x1b && m_objects[slot].timer == 0) {
+                if (m_objects[slot].frame == 27 && m_objects[slot].timer == 0) {
                     m_objects[slot].vy = 0.0;
                     m_objects[slot].vx = 2.5;
                     m_objects[slot].hitsLeft = 3;
                 }
-                if (m_objects[slot].frame == 0x1f && m_objects[slot].timer == 0) {
+                if (m_objects[slot].frame == 31 && m_objects[slot].timer == 0) {
                     m_objectVar2[slot] = 1;
                 }
-                if (m_objects[slot].frame == 0x25 && m_objects[slot].timer == 0) {
-                    m_playSound = 0x14;
+                if (m_objects[slot].frame == 37 && m_objects[slot].timer == 0) {
+                    m_playSound = 20;
                     effect.type = kObj236Effect;
                     effect.x = (double)(int)m_objects[slot].x;
                     effect.y = m_objects[slot].y;
@@ -3985,15 +3985,15 @@ void CIkumi::UpdateObjectsAlt()
                     SpawnObject(&effect);
                     m_playVoice = 2;
                 }
-                if (m_objects[slot].frame > 0x26) {
+                if (m_objects[slot].frame > 38) {
                     m_objects[slot].vx -= 0.045;
                     if (m_objects[slot].vx < 0.0) {
                         m_objects[slot].vx = 0.0;
                     }
                 }
-                if ((m_objects[slot].x - (*m_opponent)->x < 150.0 && m_objects[slot].facing == -1 || (*m_opponent)->x - m_objects[slot].x < 150.0 && m_objects[slot].facing == 1) && m_objectVar2[slot] != 0 && m_objects[slot].frame < 0x23) {
+                if ((m_objects[slot].x - (*m_opponent)->x < 150.0 && m_objects[slot].facing == -1 || (*m_opponent)->x - m_objects[slot].x < 150.0 && m_objects[slot].facing == 1) && m_objectVar2[slot] != 0 && m_objects[slot].frame < 35) {
                     m_objects[slot].timer = 0;
-                    m_objects[slot].frame = 0x23;
+                    m_objects[slot].frame = 35;
                     break;
                 }
                 m_objects[slot].timer++;
@@ -4005,11 +4005,11 @@ void CIkumi::UpdateObjectsAlt()
                         m_objectVar1[slot]++;
                         m_objects[slot].frame = m_objects[slot].frame - 2;
                     }
-                    if (m_objects[slot].frame == 0x1b && m_objectVar1[slot] < 1) {
+                    if (m_objects[slot].frame == 27 && m_objectVar1[slot] < 1) {
                         m_objectVar1[slot]++;
                         m_objects[slot].frame = 5;
                     }
-                    if (m_objects[slot].frame == 0x23 && m_objectVar3[slot] < 1) {
+                    if (m_objects[slot].frame == 35 && m_objectVar3[slot] < 1) {
                         m_objects[slot].frame = m_objects[slot].frame - 8;
                         m_objectVar3[slot]++;
                     }
@@ -4031,20 +4031,20 @@ void CIkumi::UpdateObjectsAlt()
                     m_objects[slot].pattern = kObjDoubleVanish;
                     break;
                 }
-                if (m_objects[slot].frame > 4 && m_objects[slot].frame < 0x1b && (m_objects[slot].x - (*m_opponent)->x < 50.0 && m_objects[slot].facing == -1 || (*m_opponent)->x - m_objects[slot].x < 50.0 && m_objects[slot].facing == 1)) {
+                if (m_objects[slot].frame > 4 && m_objects[slot].frame < 27 && (m_objects[slot].x - (*m_opponent)->x < 50.0 && m_objects[slot].facing == -1 || (*m_opponent)->x - m_objects[slot].x < 50.0 && m_objects[slot].facing == 1)) {
                     m_objects[slot].timer = 0;
-                    m_objects[slot].frame = 0x1b;
+                    m_objects[slot].frame = 27;
                     break;
                 }
-                if ((m_objects[slot].frame == 0x1e || m_objects[slot].frame == 0x26 || m_objects[slot].frame == 0x2f) && m_objects[slot].timer == 0) {
-                    m_playSound = 0x15;
+                if ((m_objects[slot].frame == 30 || m_objects[slot].frame == 38 || m_objects[slot].frame == 47) && m_objects[slot].timer == 0) {
+                    m_playSound = 21;
                     m_objects[slot].hitsLeft = 1;
                 }
                 if (m_objects[slot].y < 0.0) {
                     m_objects[slot].vy += 0.035;
-                    if (m_objects[slot].y + m_objects[slot].vy > 0.0 && m_objects[slot].frame < 0x37) {
+                    if (m_objects[slot].y + m_objects[slot].vy > 0.0 && m_objects[slot].frame < 55) {
                         m_objects[slot].timer = 0;
-                        m_objects[slot].frame = 0x37;
+                        m_objects[slot].frame = 55;
                         m_objects[slot].y = 0.0;
                         m_objects[slot].vy = 0.0;
                         m_objects[slot].vx = 0.0;
@@ -4060,15 +4060,15 @@ void CIkumi::UpdateObjectsAlt()
                         m_objectVar1[slot]++;
                         m_objects[slot].frame = m_objects[slot].frame - 2;
                     }
-                    if (m_objects[slot].frame == 0x1b && m_objectVar1[slot] < 0xd) {
+                    if (m_objects[slot].frame == 27 && m_objectVar1[slot] < 13) {
                         m_objectVar1[slot]++;
                         m_objects[slot].frame = 5;
                     }
-                    if (m_objects[slot].frame == 0x2d) {
+                    if (m_objects[slot].frame == 45) {
                         m_objects[slot].vx = 1.0;
                         m_objects[slot].vy = -1.5;
                     }
-                    if (m_objects[slot].frame == 0x37) {
+                    if (m_objects[slot].frame == 55) {
                         m_objects[slot].frame = m_objects[slot].frame - 2;
                     }
                     if (m_objects[slot].frame >= frameCount) {
@@ -4092,9 +4092,9 @@ void CIkumi::UpdateObjectsAlt()
                 if (m_objects[slot].frame == 6) {
                     m_objects[slot].vx = 0.6;
                 }
-                if ((m_objects[slot].x - (*m_opponent)->x < 50.0 && m_objects[slot].facing == -1 || (*m_opponent)->x - m_objects[slot].x < 50.0 && m_objects[slot].facing == 1) && m_objects[slot].frame > 5 && m_objects[slot].frame < 0xe) {
+                if ((m_objects[slot].x - (*m_opponent)->x < 50.0 && m_objects[slot].facing == -1 || (*m_opponent)->x - m_objects[slot].x < 50.0 && m_objects[slot].facing == 1) && m_objects[slot].frame > 5 && m_objects[slot].frame < 14) {
                     m_objects[slot].timer = 0;
-                    m_objects[slot].frame = 0xe;
+                    m_objects[slot].frame = 14;
                     m_objects[slot].vx = 0.0;
                     break;
                 }
@@ -4107,17 +4107,17 @@ void CIkumi::UpdateObjectsAlt()
                         m_objectVar1[slot]++;
                         m_objects[slot].frame = m_objects[slot].frame - 2;
                     }
-                    if (m_objects[slot].frame == 0xe && m_objectVar2[slot] < 5) {
+                    if (m_objects[slot].frame == 14 && m_objectVar2[slot] < 5) {
                         m_objectVar2[slot]++;
                         m_objects[slot].frame = 6;
                         break;
                     }
-                    if (m_objects[slot].frame == 0xe) {
+                    if (m_objects[slot].frame == 14) {
                         m_objects[slot].vx = 0.0;
                     }
-                    if (m_objects[slot].frame == 0x15) {
+                    if (m_objects[slot].frame == 21) {
                         effect.type = kObjDoubleEruption;
-                        effect.x = (double)((int)m_objects[slot].x + m_objects[slot].facing * 0x32);
+                        effect.x = (double)((int)m_objects[slot].x + m_objects[slot].facing * 50);
                         effect.y = 0.0;
                         effect.scale = 2;
                         effect.layer = 1;
@@ -4228,18 +4228,18 @@ void CIkumi::UpdateObjectsAlt()
                 if (m_objects[slot].frame == 0) {
                     m_objects[slot].hitsLeft = 2;
                 }
-                if (m_objects[slot].hitsLeft == 0 && m_objects[slot].frame < 0x2f) {
+                if (m_objects[slot].hitsLeft == 0 && m_objects[slot].frame < 47) {
                     m_objects[slot].timer = 0;
-                    m_objects[slot].frame = 0x2f;
+                    m_objects[slot].frame = 47;
                     break;
                 }
                 m_objects[slot].timer++;
                 if (m_objects[slot].timer >= duration) {
                     m_objects[slot].timer = 0;
                     m_objects[slot].frame++;
-                    if (m_objects[slot].frame == 0x2f && m_objectVar1[slot] < 3) {
+                    if (m_objects[slot].frame == 47 && m_objectVar1[slot] < 3) {
                         m_objectVar1[slot]++;
-                        m_objects[slot].frame = 0x20;
+                        m_objects[slot].frame = 32;
                         m_objects[slot].attackResult = 0;
                     }
                     if (m_objects[slot].frame >= frameCount) {
@@ -4330,7 +4330,7 @@ void CIkumi::UpdateObjectsAlt()
                     m_objects[slot].timer = 0;
                     m_patternVar1 = 1;
                 }
-                if (frame == 0x18 && m_objects[slot].frame == 1) {
+                if (frame == 24 && m_objects[slot].frame == 1) {
                     m_objects[slot].frame = 2;
                     m_objects[slot].timer = 0;
                     break;
@@ -4360,7 +4360,7 @@ void CIkumi::UpdateObjectsAlt()
                     m_objects[slot].frame = 1;
                     m_objects[slot].timer = 0;
                 }
-                if (frame == 0x18 && m_objects[slot].frame == 1) {
+                if (frame == 24 && m_objects[slot].frame == 1) {
                     m_objects[slot].frame = 2;
                     m_objects[slot].timer = 0;
                     break;
@@ -4391,7 +4391,7 @@ void CIkumi::UpdateObjectsAlt()
                     m_objects[slot].timer = 0;
                     m_patternVar1 = 1;
                 }
-                if (frame == 0x18 && m_objects[slot].frame == 1) {
+                if (frame == 24 && m_objects[slot].frame == 1) {
                     m_objects[slot].frame = 2;
                     m_objects[slot].timer = 0;
                     break;
@@ -4421,7 +4421,7 @@ void CIkumi::UpdateObjectsAlt()
                     m_objects[slot].frame = 1;
                     m_objects[slot].timer = 0;
                 }
-                if (frame == 0x18 && m_objects[slot].frame == 1) {
+                if (frame == 24 && m_objects[slot].frame == 1) {
                     m_objects[slot].frame = 2;
                     m_objects[slot].timer = 0;
                     break;
@@ -4509,7 +4509,7 @@ void CIkumi::UpdateObjectsAlt()
                 m_objects[slot].vy += 0.035;
                 if (m_objectVar1[slot] == 0) {
                     m_objectVar1[slot]++;
-                    m_objectVar2[slot] = (WORD)Random(0x5a, 0x61);
+                    m_objectVar2[slot] = (WORD)Random(90, 97);
                     m_objects[slot].SetVelocity((double)-m_objectVar2[slot], (WORD)Random(0, 5) * 0.1 + 3.2);
                 }
                 if (m_objects[slot].vy > 0.0 && m_objects[slot].frame == 0) {
@@ -4523,9 +4523,9 @@ void CIkumi::UpdateObjectsAlt()
                     m_objects[slot].frame = 0;
                     m_objects[slot].timer = 0;
                     m_objects[slot].pattern = kObjOrbCaught;
-                    m_modeTimer += 0xa;
-                    if (m_modeTimer > 0x4ec) {
-                        m_modeTimer = 0x4ec;
+                    m_modeTimer += 10;
+                    if (m_modeTimer > 1260) {
+                        m_modeTimer = 1260;
                     }
                     break;
                 }
@@ -4555,7 +4555,7 @@ void CIkumi::UpdateObjectsAlt()
                 m_objects[slot].vy += 0.035;
                 if (m_objectVar1[slot] == 0) {
                     m_objectVar1[slot]++;
-                    m_objectVar2[slot] = (WORD)Random(0x5a, 0x64);
+                    m_objectVar2[slot] = (WORD)Random(90, 100);
                     m_objects[slot].SetVelocity((double)-m_objectVar2[slot], (WORD)Random(0, 5) * 0.1 + 2.2);
                 }
                 if (m_objects[slot].vy > 0.0 && m_objects[slot].frame == 0) {
@@ -4569,9 +4569,9 @@ void CIkumi::UpdateObjectsAlt()
                     m_objects[slot].frame = 0;
                     m_objects[slot].timer = 0;
                     m_objects[slot].pattern = kObjOrbCaught;
-                    m_modeTimer += 0x1e;
-                    if (m_modeTimer > 0x4ec) {
-                        m_modeTimer = 0x4ec;
+                    m_modeTimer += 30;
+                    if (m_modeTimer > 1260) {
+                        m_modeTimer = 1260;
                     }
                     break;
                 }
@@ -4598,7 +4598,7 @@ void CIkumi::UpdateObjectsAlt()
                 m_objects[slot].vy += 0.035;
                 if (m_objectVar1[slot] == 0) {
                     m_objectVar1[slot]++;
-                    m_objectVar2[slot] = (WORD)Random(0x5a, 0x64);
+                    m_objectVar2[slot] = (WORD)Random(90, 100);
                     m_objects[slot].SetVelocity((double)-m_objectVar2[slot], (WORD)Random(0, 5) * 0.1 + 2.8);
                 }
                 if (m_objects[slot].vy > 0.0 && m_objects[slot].frame == 0) {
@@ -4612,9 +4612,9 @@ void CIkumi::UpdateObjectsAlt()
                     m_objects[slot].frame = 0;
                     m_objects[slot].timer = 0;
                     m_objects[slot].pattern = kObjOrbCaught;
-                    m_modeTimer += 0x32;
-                    if (m_modeTimer > 0x4ec) {
-                        m_modeTimer = 0x4ec;
+                    m_modeTimer += 50;
+                    if (m_modeTimer > 1260) {
+                        m_modeTimer = 1260;
                     }
                     break;
                 }
@@ -4651,8 +4651,8 @@ void CIkumi::UpdateObjectsAlt()
             case kObjOrbOnGround:
                 if (m_objects[slot].frame == 4 && m_objects[slot].x - x > -15.0 && m_objects[slot].x - x < 15.0 && y == 0.0) {
                     m_modeTimer += 5;
-                    if (m_modeTimer > 0x4ec) {
-                        m_modeTimer = 0x4ec;
+                    if (m_modeTimer > 1260) {
+                        m_modeTimer = 1260;
                     }
                     m_objects[slot].timer = 0;
                     m_objects[slot].frame = 7;
@@ -4826,7 +4826,7 @@ void CIkumi::UpdateObjectsAlt()
                 break;
             case kObjFallInDarkness:
                 m_objects[slot].vx = -0.02;
-                m_objects[slot].drawnWhileHidden = 0x7530;
+                m_objects[slot].drawnWhileHidden = 30000;
                 m_objects[slot].timer++;
                 if (pattern != kFallInDarkness) {
                     RemoveObject(slot);
@@ -4843,7 +4843,7 @@ void CIkumi::UpdateObjectsAlt()
             case kObjEncasedBreak:
                 if (pattern != kEncased && pattern != kEncased2 && pattern != kEncasedAir && pattern != kEncasedSpin || pattern == kEncased && frame > 1 || pattern == kEncased2 && frame > 1) {
                     effect.type = kObjShardSmall;
-                    effect.x = (double)((int)x + facing * 0x17);
+                    effect.x = (double)((int)x + facing * 23);
                     effect.y = (double)((int)y - 4);
                     effect.scale = 0;
                     effect.layer = 1;
@@ -4857,8 +4857,8 @@ void CIkumi::UpdateObjectsAlt()
                     effect.facing = facing;
                     SpawnObject(&effect);
                     effect.type = kObjShardSmall;
-                    effect.x = (double)((int)x - facing * 0xe);
-                    effect.y = (double)((int)y - 0x1a);
+                    effect.x = (double)((int)x - facing * 14);
+                    effect.y = (double)((int)y - 26);
                     effect.scale = 0;
                     effect.layer = 1;
                     effect.facing = facing;
@@ -4871,48 +4871,48 @@ void CIkumi::UpdateObjectsAlt()
                     effect.facing = facing;
                     SpawnObject(&effect);
                     effect.type = kObjShardSmall;
-                    effect.x = (double)((int)x + facing * 0x1e);
-                    effect.y = (double)((int)y - 0x28);
+                    effect.x = (double)((int)x + facing * 30);
+                    effect.y = (double)((int)y - 40);
                     effect.scale = 0;
                     effect.layer = 1;
                     effect.facing = facing;
                     SpawnObject(&effect);
                     effect.type = kObjShardSmall;
-                    effect.x = (double)((int)x - facing * 0x19);
-                    effect.y = (double)((int)y - 0x50);
+                    effect.x = (double)((int)x - facing * 25);
+                    effect.y = (double)((int)y - 80);
                     effect.scale = 0;
                     effect.layer = 1;
                     effect.facing = facing;
                     SpawnObject(&effect);
                     effect.type = kObjShardLarge;
-                    effect.x = (double)((int)x - facing * 0x23);
-                    effect.y = (double)((int)y - 0x2a);
+                    effect.x = (double)((int)x - facing * 35);
+                    effect.y = (double)((int)y - 42);
                     effect.scale = 0;
                     effect.layer = 1;
                     effect.facing = facing;
                     SpawnObject(&effect);
                     effect.type = kObjShardLarge;
-                    effect.x = (double)((int)x - facing * 0x12);
-                    effect.y = (double)((int)y - 0x14);
+                    effect.x = (double)((int)x - facing * 18);
+                    effect.y = (double)((int)y - 20);
                     effect.scale = 0;
                     effect.layer = 1;
                     effect.facing = facing;
                     SpawnObject(&effect);
                     effect.type = kObjShardLarge;
                     effect.x = (double)((int)x + facing * 2);
-                    effect.y = (double)((int)y - 0x41);
+                    effect.y = (double)((int)y - 65);
                     effect.scale = 0;
                     effect.layer = 1;
                     effect.facing = facing;
                     SpawnObject(&effect);
                     effect.type = kObjShardLarge;
                     effect.x = (double)((int)x + (facing << 4));
-                    effect.y = (double)((int)y - 0x50);
+                    effect.y = (double)((int)y - 80);
                     effect.scale = 0;
                     effect.layer = 1;
                     effect.facing = facing;
                     SpawnObject(&effect);
-                    m_playSound = 0x22;
+                    m_playSound = 34;
                     RemoveObject(slot);
                     m_encasedBreakOut = 0;
                     break;
@@ -4929,16 +4929,16 @@ void CIkumi::UpdateObjectsAlt()
                 break;
             case kObjShardSmall:
                 if (m_objects[slot].frame == 0 && m_objects[slot].timer == 0 && m_objectVar1[slot] == 0) {
-                    m_objectVar2[slot] = (rand() > 0x3e80) * 0x28 + 0x50 + (rand() > 0x3e80) * 0x14;
+                    m_objectVar2[slot] = (rand() > 16000) * 40 + 80 + (rand() > 16000) * 20;
                     m_objectVar1[slot]++;
-                    m_objects[slot].vx = (rand() > 0x3e80) * 1.2 + (rand() > 0x3e80) * 0.7 + (rand() > 0x3e80) * 1.7 + -1.8;
-                    m_objects[slot].vy = -1.2 - ((rand() > 0x3e80) * 0.6 + (rand() > 0x3e80) * 0.9 + (rand() > 0x3e80) * 1.4);
+                    m_objects[slot].vx = (rand() > 16000) * 1.2 + (rand() > 16000) * 0.7 + (rand() > 16000) * 1.7 + -1.8;
+                    m_objects[slot].vy = -1.2 - ((rand() > 16000) * 0.6 + (rand() > 16000) * 0.9 + (rand() > 16000) * 1.4);
                 }
                 m_objects[slot].vy += 0.05;
                 if (m_objects[slot].y > 0.0 && m_objects[slot].vy > 0.0) {
                     m_objects[slot].vy = -m_objects[slot].vy;
                 }
-                if (m_objectVar2[slot] < 0xa) {
+                if (m_objectVar2[slot] < 10) {
                     m_objects[slot].scale = 1;
                 }
                 if (m_objectVar2[slot] < 0) {
@@ -4958,16 +4958,16 @@ void CIkumi::UpdateObjectsAlt()
                 break;
             case kObjShardLarge:
                 if (m_objects[slot].frame == 0 && m_objects[slot].timer == 0 && m_objectVar1[slot] == 0) {
-                    m_objectVar2[slot] = (rand() > 0x3e80) * 0x3c + 0x78 + (rand() > 0x3e80) * 0x28;
+                    m_objectVar2[slot] = (rand() > 16000) * 60 + 120 + (rand() > 16000) * 40;
                     m_objectVar1[slot]++;
-                    m_objects[slot].vx = (double)(rand() > 0x3e80) + (rand() > 0x3e80) * 0.5 + (rand() > 0x3e80) * 1.5 + -1.5;
-                    m_objects[slot].vy = -1.0 - ((rand() > 0x3e80) * 0.5 + (rand() > 0x3e80) * 0.8 + (rand() > 0x3e80) * 1.2);
+                    m_objects[slot].vx = (double)(rand() > 16000) + (rand() > 16000) * 0.5 + (rand() > 16000) * 1.5 + -1.5;
+                    m_objects[slot].vy = -1.0 - ((rand() > 16000) * 0.5 + (rand() > 16000) * 0.8 + (rand() > 16000) * 1.2);
                 }
                 m_objects[slot].vy += 0.03;
                 if (m_objects[slot].y > 0.0 && m_objects[slot].vy > 0.0) {
                     m_objects[slot].vy = -m_objects[slot].vy;
                 }
-                if (m_objectVar2[slot] < 0xa) {
+                if (m_objectVar2[slot] < 10) {
                     m_objects[slot].scale = 1;
                 }
                 if (m_objectVar2[slot] < 0) {
@@ -5000,7 +5000,7 @@ void CIkumi::UpdateObjectsAlt()
             }
         }
         slot++;
-        if (slot >= 0x40) {
+        if (slot >= 64) {
             slot = 0;
         }
     }

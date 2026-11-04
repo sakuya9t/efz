@@ -314,7 +314,7 @@ void CAyu::UpdatePattern()
         }
         m_rfGauge--;
         if (frame == 2 && timer == 0) {
-            m_playSound = 0x11;
+            m_playSound = 17;
         }
         vy += 0.03;
         vx = m_inputX * 0.045 * facing + vx;
@@ -382,7 +382,7 @@ void CAyu::UpdatePattern()
             m_rfGauge -= 0.6;
         }
         if (frame == 0 && timer == 0) {
-            m_gauge = m_gauge + 0xa;
+            m_gauge = m_gauge + 10;
             vx = (2.0 - (*m_opponent)->m_proration / 10000.0) * -1.1;
             if (m_rfBlue != 0) {
                 m_rfGauge -= 10.0;
@@ -417,7 +417,7 @@ void CAyu::UpdatePattern()
             m_rfGauge -= 0.6;
         }
         if (frame == 0 && timer == 0) {
-            m_gauge = m_gauge + 0xf;
+            m_gauge = m_gauge + 15;
             vx = (2.0 - (*m_opponent)->m_proration / 10000.0) * -1.5;
             if (m_rfBlue != 0) {
                 m_rfGauge -= 20.0;
@@ -452,7 +452,7 @@ void CAyu::UpdatePattern()
             m_rfGauge -= 0.6;
         }
         if (frame == 0 && timer == 0) {
-            m_gauge = m_gauge + 0x14;
+            m_gauge = m_gauge + 20;
             vx = (2.0 - (*m_opponent)->m_proration / 10000.0) * -1.8;
             if (m_rfBlue != 0) {
                 m_rfGauge -= 30.0;
@@ -487,7 +487,7 @@ void CAyu::UpdatePattern()
             m_rfGauge -= 0.6;
         }
         if (frame == 0 && timer == 0) {
-            m_gauge = m_gauge + 0xa;
+            m_gauge = m_gauge + 10;
             vx = (2.0 - (*m_opponent)->m_proration / 10000.0) * -1.1;
             if (m_rfBlue != 0) {
                 m_rfGauge -= 10.0;
@@ -522,7 +522,7 @@ void CAyu::UpdatePattern()
             m_rfGauge -= 0.6;
         }
         if (frame == 0 && timer == 0) {
-            m_gauge = m_gauge + 0xf;
+            m_gauge = m_gauge + 15;
             vx = (2.0 - (*m_opponent)->m_proration / 10000.0) * -1.5;
             if (m_rfBlue != 0) {
                 m_rfGauge -= 20.0;
@@ -557,7 +557,7 @@ void CAyu::UpdatePattern()
             m_rfGauge -= 0.6;
         }
         if (frame == 0 && timer == 0) {
-            m_gauge = m_gauge + 0x14;
+            m_gauge = m_gauge + 20;
             vx = (2.0 - (*m_opponent)->m_proration / 10000.0) * -1.8;
             if (m_rfBlue != 0) {
                 m_rfGauge -= 30.0;
@@ -592,7 +592,7 @@ void CAyu::UpdatePattern()
             m_rfGauge -= 0.6;
         }
         if (frame == 0 && timer == 0) {
-            m_gauge = m_gauge + 0xa;
+            m_gauge = m_gauge + 10;
             vx = (2.0 - (*m_opponent)->m_proration / 10000.0) * -1.1;
             if (m_rfBlue != 0) {
                 m_rfGauge -= 10.0;
@@ -624,7 +624,7 @@ void CAyu::UpdatePattern()
             m_rfGauge -= 0.6;
         }
         if (frame == 0 && timer == 0) {
-            m_gauge = m_gauge + 0xf;
+            m_gauge = m_gauge + 15;
             vx = (2.0 - (*m_opponent)->m_proration / 10000.0) * -1.5;
             if (m_rfBlue != 0) {
                 m_rfGauge -= 20.0;
@@ -656,7 +656,7 @@ void CAyu::UpdatePattern()
             m_rfGauge -= 0.6;
         }
         if (frame == 0 && timer == 0) {
-            m_gauge = m_gauge + 0x14;
+            m_gauge = m_gauge + 20;
             vx = (2.0 - (*m_opponent)->m_proration / 10000.0) * -1.8;
             if (m_rfBlue != 0) {
                 m_rfGauge -= 30.0;
@@ -688,7 +688,7 @@ void CAyu::UpdatePattern()
             m_rfGauge -= 0.8;
         }
         if (frame == 0 && timer == 0) {
-            m_gauge = m_gauge + 0x1e;
+            m_gauge = m_gauge + 30;
             vx = m_hitVx;
             vy = vy * 0.75 + m_hitVy;
             if (vy < -2.0) {
@@ -731,7 +731,7 @@ void CAyu::UpdatePattern()
             m_rfGauge -= 0.8;
         }
         if (frame == 0 && timer == 0) {
-            m_gauge = m_gauge + 0x1e;
+            m_gauge = m_gauge + 30;
             vx = m_hitVx;
             vy = vy * 0.75 + m_hitVy;
             if (vy < -4.0) {
@@ -774,7 +774,7 @@ void CAyu::UpdatePattern()
             m_rfGauge -= 0.8;
         }
         if (frame == 0 && timer == 0) {
-            m_gauge = m_gauge + 0x1e;
+            m_gauge = m_gauge + 30;
             vx = m_hitVx;
             vy = vy * 0.75 + m_hitVy;
             if (vy < -6.0) {
@@ -817,7 +817,7 @@ void CAyu::UpdatePattern()
             m_rfGauge -= 0.8;
         }
         if (frame == 0 && timer == 0) {
-            m_gauge = m_gauge + 0x1e;
+            m_gauge = m_gauge + 30;
             vx = m_hitVx;
             vy = vy * 0.75 + m_hitVy;
             ay = 0.032;
@@ -855,7 +855,7 @@ void CAyu::UpdatePattern()
             m_rfGauge -= 0.8;
         }
         if (frame == 0 && timer == 0) {
-            m_gauge = m_gauge + 0x1e;
+            m_gauge = m_gauge + 30;
             vx = m_hitVx;
             vy = m_hitVy;
             ay = 0.032;
@@ -898,7 +898,7 @@ void CAyu::UpdatePattern()
             break;
         }
         if (frame == 0 && timer == 0) {
-            m_gauge = m_gauge + 0x1e;
+            m_gauge = m_gauge + 30;
             vx = m_hitVx;
             vy = vy * 0.75 + m_hitVy;
             if (vy < -2.0) {
@@ -946,7 +946,7 @@ void CAyu::UpdatePattern()
             break;
         }
         if (frame == 0 && timer == 0) {
-            m_gauge = m_gauge + 0x1e;
+            m_gauge = m_gauge + 30;
             vx = m_hitVx;
             vy = vy * 0.75 + m_hitVy;
             if (vy < -4.0) {
@@ -994,7 +994,7 @@ void CAyu::UpdatePattern()
             break;
         }
         if (frame == 0 && timer == 0) {
-            m_gauge = m_gauge + 0x1e;
+            m_gauge = m_gauge + 30;
             vx = m_hitVx;
             vy = vy * 0.75 + m_hitVy;
             ay = 0.032;
@@ -1037,7 +1037,7 @@ void CAyu::UpdatePattern()
             break;
         }
         if (frame == 0 && timer == 0) {
-            m_gauge = m_gauge + 0x1e;
+            m_gauge = m_gauge + 30;
             vx = m_hitVx;
             vy = m_hitVy;
             ay = 0.032;
@@ -1132,13 +1132,13 @@ void CAyu::UpdatePattern()
             m_rfGauge -= 0.8;
         }
         if (frame == 0 && timer == 0 && m_patternVar1 == 0) {
-            m_gauge = m_gauge + 0x1e;
+            m_gauge = m_gauge + 30;
             m_patternVar1++;
-            m_untechTime = m_untechTime + 0x78;
+            m_untechTime = m_untechTime + 120;
             vx = 0.5;
             vy = -2.5;
             ay = 0.025;
-            m_playSound = 0x1f;
+            m_playSound = 31;
             effect.type = 0;
             effect.x = (double)(int)x;
             effect.y = (double)(int)y;
@@ -1171,7 +1171,7 @@ void CAyu::UpdatePattern()
             m_rfGauge -= 0.8;
         }
         if (frame == 0 && timer == 0) {
-            m_gauge = m_gauge + 0x1e;
+            m_gauge = m_gauge + 30;
             vx = m_hitVx;
             vy = m_hitVy;
             ay = 0.072;
@@ -1278,7 +1278,7 @@ void CAyu::UpdatePattern()
             m_rfGauge -= 0.6;
         }
         if (frame == 0 && timer == 0) {
-            m_gauge = m_gauge + 0x1e;
+            m_gauge = m_gauge + 30;
             if (m_rfBlue != 0) {
                 m_rfGauge -= 30.0;
             }
@@ -1315,7 +1315,7 @@ void CAyu::UpdatePattern()
             m_rfGauge -= 0.6;
         }
         if (frame == 0 && timer == 0) {
-            m_gauge = m_gauge + 0x1e;
+            m_gauge = m_gauge + 30;
             if (m_rfBlue != 0) {
                 m_rfGauge -= 30.0;
             }
@@ -1352,7 +1352,7 @@ void CAyu::UpdatePattern()
             m_rfGauge -= 0.6;
         }
         if (frame == 0 && timer == 0) {
-            m_gauge = m_gauge + 0x1e;
+            m_gauge = m_gauge + 30;
             if (m_rfBlue != 0) {
                 m_rfGauge -= 30.0;
             }
@@ -1392,7 +1392,7 @@ void CAyu::UpdatePattern()
             effect.facing = facing;
             effect.layer = 1;
             SpawnObject(&effect);
-            m_gauge = m_gauge + 0x1e;
+            m_gauge = m_gauge + 30;
             vx = m_hitVx;
             vy = m_hitVy;
             ay = 0.032;
@@ -1426,11 +1426,11 @@ void CAyu::UpdatePattern()
             m_rfGauge -= 0.8;
         }
         if (frame == 0 && timer == 0 && m_patternVar1 == 0) {
-            m_playSound = 0x1e;
+            m_playSound = 30;
             vy = -0.45;
             vx = -0.1;
             m_patternVar1++;
-            m_gauge = m_gauge + 0x1e;
+            m_gauge = m_gauge + 30;
         }
         if (frame == 4 && timer == 0) {
             vx = m_hitVx;
@@ -1483,10 +1483,10 @@ void CAyu::UpdatePattern()
             if (m_rfBlue != 0) {
                 m_rfGauge -= 30.0;
             }
-            m_playSound = 0x21;
+            m_playSound = 33;
             vy = -1.5;
             vx = -0.8;
-            m_gauge = m_gauge + 0x1e;
+            m_gauge = m_gauge + 30;
         }
         vy += 0.04;
         if (frame == 0 && vy + y > 0.0) {
@@ -1535,10 +1535,10 @@ void CAyu::UpdatePattern()
             if (m_rfBlue != 0) {
                 m_rfGauge -= 30.0;
             }
-            m_playSound = 0x21;
+            m_playSound = 33;
             vy = -1.5;
             vx = -0.8;
-            m_gauge = m_gauge + 0x1e;
+            m_gauge = m_gauge + 30;
         }
         vy += 0.04;
         if (frame == 0 && vy + y > 0.0) {
@@ -1587,10 +1587,10 @@ void CAyu::UpdatePattern()
             if (m_rfBlue != 0) {
                 m_rfGauge -= 30.0;
             }
-            m_playSound = 0x21;
+            m_playSound = 33;
             vx = m_hitVx;
             vy = m_hitVy;
-            m_gauge = m_gauge + 0x1e;
+            m_gauge = m_gauge + 30;
         }
         vy += 0.04;
         timer++;
@@ -1631,10 +1631,10 @@ void CAyu::UpdatePattern()
                 if (m_rfBlue != 0) {
                     m_rfGauge -= 30.0;
                 }
-                m_playSound = 0x21;
+                m_playSound = 33;
                 vx = m_hitVx;
                 vy = m_hitVy;
-                m_gauge = m_gauge + 0x1e;
+                m_gauge = m_gauge + 30;
                 m_patternVar1++;
             }
         }
@@ -1744,7 +1744,7 @@ void CAyu::UpdatePattern()
         break;
     case kLyingDown:
         timer++;
-        if (m_hp > 0 && timer > 0x63 && frame == 0) {
+        if (m_hp > 0 && timer > 99 && frame == 0) {
             pattern = kWakeUp;
             StartPattern();
         }
@@ -1774,7 +1774,7 @@ void CAyu::UpdatePattern()
             pattern = kGuardStandLight;
         }
         if (frame == 0 && timer == 0) {
-            m_gauge = m_gauge + 0xa;
+            m_gauge = m_gauge + 10;
             vx = -1.5;
             vy = 0.0;
             y = 0.0;
@@ -1813,7 +1813,7 @@ void CAyu::UpdatePattern()
             pattern = kGuardStandMedium;
         }
         if (frame == 0 && timer == 0) {
-            m_gauge = m_gauge + 0xf;
+            m_gauge = m_gauge + 15;
             vx = -1.8;
             vy = 0.0;
             y = 0.0;
@@ -1852,7 +1852,7 @@ void CAyu::UpdatePattern()
             pattern = kGuardStandHeavy;
         }
         if (frame == 0 && timer == 0) {
-            m_gauge = m_gauge + 0x14;
+            m_gauge = m_gauge + 20;
             vx = -2.3;
             vy = 0.0;
             y = 0.0;
@@ -1891,7 +1891,7 @@ void CAyu::UpdatePattern()
             pattern = kGuardStandLight;
         }
         if (frame == 0 && timer == 0) {
-            m_gauge = m_gauge + 0xa;
+            m_gauge = m_gauge + 10;
             vx = -1.5;
             vy = 0.0;
             y = 0.0;
@@ -1927,7 +1927,7 @@ void CAyu::UpdatePattern()
             pattern = kGuardStandMedium;
         }
         if (frame == 0 && timer == 0) {
-            m_gauge = m_gauge + 0xf;
+            m_gauge = m_gauge + 15;
             vx = -1.8;
             vy = 0.0;
             y = 0.0;
@@ -1963,7 +1963,7 @@ void CAyu::UpdatePattern()
             pattern = kGuardStandHeavy;
         }
         if (frame == 0 && timer == 0) {
-            m_gauge = m_gauge + 0x14;
+            m_gauge = m_gauge + 20;
             vx = -2.3;
             vy = 0.0;
             y = 0.0;
@@ -1994,7 +1994,7 @@ void CAyu::UpdatePattern()
     case kGuardAir:
         if (frame == 0 && timer == 0) {
             vy = -2.6;
-            m_gauge = m_gauge + 0xf;
+            m_gauge = m_gauge + 15;
             ay = 0.06;
         }
         vx = -1.2;
@@ -2083,12 +2083,12 @@ void CAyu::UpdatePattern()
             StopMoving();
             effect.type = 9;
             effect.x = (double)(int)x;
-            effect.y = (double)((int)y - 0x3c);
+            effect.y = (double)((int)y - 60);
             effect.scale = 2;
             effect.layer = 1;
             m_game->CreateEffect((EffectDesc*)&effect);
             m_hitsLeft = 1;
-            m_playSound = 0x3e;
+            m_playSound = 62;
             m_patternVar1++;
         }
         timer++;
@@ -2115,13 +2115,13 @@ void CAyu::UpdatePattern()
             StopMoving();
             effect.type = 9;
             effect.x = (double)(int)x;
-            effect.y = (double)((int)y - 0x3c);
+            effect.y = (double)((int)y - 60);
             effect.scale = 2;
             effect.layer = 1;
             m_game->CreateEffect((EffectDesc*)&effect);
             m_hitsLeft = 1;
-            m_playSound = 0x3e;
-            m_gauge = m_gauge - 0x3e8;
+            m_playSound = 62;
+            m_gauge = m_gauge - 1000;
             m_patternVar1++;
         }
         vy = vy + ay;
@@ -2136,7 +2136,7 @@ void CAyu::UpdatePattern()
         if (timer >= duration) {
             timer = 0;
             frame++;
-            if (frame == 0xc) {
+            if (frame == 12) {
                 ay = 0.035;
             }
             if (frame >= frameCount) {
@@ -2154,26 +2154,26 @@ void CAyu::UpdatePattern()
             ay = 0.0;
         }
         if (frame > 0 && timer == 0) {
-            if (rand() > 0x2710) {
+            if (rand() > 10000) {
                 effect.type = 0x191;
-                effect.x = (double)((int)x - facing * 0xb);
-                effect.y = (double)((int)y - 0x32);
+                effect.x = (double)((int)x - facing * 11);
+                effect.y = (double)((int)y - 50);
                 effect.facing = facing;
                 effect.layer = 0;
                 SpawnObject(&effect);
             }
-            if (rand() > 0x4e20) {
+            if (rand() > 20000) {
                 effect.type = 0x192;
-                effect.x = (double)((int)x - facing * 0x19);
-                effect.y = (double)((int)y - 0x46);
+                effect.x = (double)((int)x - facing * 25);
+                effect.y = (double)((int)y - 70);
                 effect.facing = facing;
                 effect.layer = 0;
                 SpawnObject(&effect);
             }
-            if (rand() > 0x3a98) {
+            if (rand() > 15000) {
                 effect.type = 0x191;
                 effect.x = (double)((int)x + facing * 6);
-                effect.y = (double)((int)y - 0x50);
+                effect.y = (double)((int)y - 80);
                 effect.facing = facing;
                 effect.layer = 0;
                 SpawnObject(&effect);
@@ -2197,19 +2197,19 @@ void CAyu::UpdatePattern()
                 vx = 1.8;
                 vy = -1.3;
                 ay = 0.01;
-                m_playSound = 0x11;
+                m_playSound = 17;
             }
             if (frame >= frameCount) {
                 frame = frame - 2;
             }
         }
-        if (m_inputX == facing && m_patternVar2 >= 0x78) {
+        if (m_inputX == facing && m_patternVar2 >= 120) {
             pattern = kFall;
             StartPattern();
             vx = 0.5;
             ay = 0.03;
         }
-        if (m_inputX != facing && m_patternVar1 >= 0x27) {
+        if (m_inputX != facing && m_patternVar1 >= 39) {
             pattern = kFall;
             StartPattern();
             vx = 0.5;
@@ -2224,26 +2224,26 @@ void CAyu::UpdatePattern()
             StartAfterimages(2);
         }
         if (frame > 0 && timer == 0) {
-            if (rand() > 0x2710) {
+            if (rand() > 10000) {
                 effect.type = 0x191;
-                effect.x = (double)((int)x - facing * 0x46);
-                effect.y = (double)((int)y - 0x25);
+                effect.x = (double)((int)x - facing * 70);
+                effect.y = (double)((int)y - 37);
                 effect.facing = facing;
                 effect.layer = 0;
                 SpawnObject(&effect);
             }
-            if (rand() > 0x3a98) {
+            if (rand() > 15000) {
                 effect.type = 0x192;
-                effect.x = (double)((int)x - facing * 0x22);
-                effect.y = (double)((int)y - 0x3a);
+                effect.x = (double)((int)x - facing * 34);
+                effect.y = (double)((int)y - 58);
                 effect.facing = facing;
                 effect.layer = 0;
                 SpawnObject(&effect);
             }
-            if (rand() > 0x4e20) {
+            if (rand() > 20000) {
                 effect.type = 0x191;
-                effect.x = (double)((int)x + facing * 0x18);
-                effect.y = (double)((int)y - 0x2e);
+                effect.x = (double)((int)x + facing * 24);
+                effect.y = (double)((int)y - 46);
                 effect.facing = facing;
                 effect.layer = 0;
                 SpawnObject(&effect);
@@ -2260,7 +2260,7 @@ void CAyu::UpdatePattern()
                 vx = -1.8;
                 vy = -1.3;
                 ay = 0.01;
-                m_playSound = 0x11;
+                m_playSound = 17;
                 effect.type = 0x1f;
                 effect.x = (double)(int)x;
                 effect.y = (double)(int)y;
@@ -2276,7 +2276,7 @@ void CAyu::UpdatePattern()
         if (m_inputX != -facing) {
             m_patternVar1 = 0;
         }
-        if (m_patternVar2 > 0x27 && m_inputX != -facing || m_patternVar2 >= 0x78) {
+        if (m_patternVar2 > 39 && m_inputX != -facing || m_patternVar2 >= 120) {
             pattern = kFall;
             StartPattern();
             vx = -0.5;
@@ -2287,30 +2287,30 @@ void CAyu::UpdatePattern()
         if (frame == 0 && timer == 0 && m_patternVar3 == 0) {
             vx = 1.8;
             vy = -0.3;
-            m_playSound = 0x11;
+            m_playSound = 17;
             m_patternVar3++;
         }
         if (timer == 0) {
-            if (rand() > 0x2710) {
+            if (rand() > 10000) {
                 effect.type = 0x191;
-                effect.x = (double)((int)x - facing * 0xb);
-                effect.y = (double)((int)y - 0x32);
+                effect.x = (double)((int)x - facing * 11);
+                effect.y = (double)((int)y - 50);
                 effect.facing = facing;
                 effect.layer = 0;
                 SpawnObject(&effect);
             }
-            if (rand() > 0x4e20) {
+            if (rand() > 20000) {
                 effect.type = 0x192;
-                effect.x = (double)((int)x - facing * 0x19);
-                effect.y = (double)((int)y - 0x46);
+                effect.x = (double)((int)x - facing * 25);
+                effect.y = (double)((int)y - 70);
                 effect.facing = facing;
                 effect.layer = 0;
                 SpawnObject(&effect);
             }
-            if (rand() > 0x3a98) {
+            if (rand() > 15000) {
                 effect.type = 0x191;
                 effect.x = (double)((int)x + facing * 6);
-                effect.y = (double)((int)y - 0x50);
+                effect.y = (double)((int)y - 80);
                 effect.facing = facing;
                 effect.layer = 0;
                 SpawnObject(&effect);
@@ -2327,7 +2327,7 @@ void CAyu::UpdatePattern()
                 frame = frame - 2;
             }
         }
-        if (m_inputX == facing && m_patternVar2 >= 0x78) {
+        if (m_inputX == facing && m_patternVar2 >= 120) {
             pattern = kFall;
             StartPattern();
             vx = 1.3;
@@ -2336,7 +2336,7 @@ void CAyu::UpdatePattern()
                 vx = -vx;
             }
         }
-        if (m_inputX != facing && m_patternVar1 >= 0x30) {
+        if (m_inputX != facing && m_patternVar1 >= 48) {
             pattern = kFall;
             StartPattern();
             vx = 1.3;
@@ -2350,30 +2350,30 @@ void CAyu::UpdatePattern()
         if (frame == 0 && timer == 0 && m_patternVar3 == 0) {
             vx = -1.8;
             vy = -0.3;
-            m_playSound = 0x11;
+            m_playSound = 17;
             m_patternVar3++;
         }
         if (timer == 0) {
-            if (rand() > 0x2710) {
+            if (rand() > 10000) {
                 effect.type = 0x191;
-                effect.x = (double)((int)x - facing * 0x46);
-                effect.y = (double)((int)y - 0x25);
+                effect.x = (double)((int)x - facing * 70);
+                effect.y = (double)((int)y - 37);
                 effect.facing = facing;
                 effect.layer = 0;
                 SpawnObject(&effect);
             }
-            if (rand() > 0x3a98) {
+            if (rand() > 15000) {
                 effect.type = 0x192;
-                effect.x = (double)((int)x - facing * 0x22);
-                effect.y = (double)((int)y - 0x3a);
+                effect.x = (double)((int)x - facing * 34);
+                effect.y = (double)((int)y - 58);
                 effect.facing = facing;
                 effect.layer = 0;
                 SpawnObject(&effect);
             }
-            if (rand() > 0x4e20) {
+            if (rand() > 20000) {
                 effect.type = 0x191;
-                effect.x = (double)((int)x + facing * 0x18);
-                effect.y = (double)((int)y - 0x2e);
+                effect.x = (double)((int)x + facing * 24);
+                effect.y = (double)((int)y - 46);
                 effect.facing = facing;
                 effect.layer = 0;
                 SpawnObject(&effect);
@@ -2390,7 +2390,7 @@ void CAyu::UpdatePattern()
                 frame = frame - 2;
             }
         }
-        if (m_inputX == -facing && m_patternVar2 >= 0x78) {
+        if (m_inputX == -facing && m_patternVar2 >= 120) {
             pattern = kFall;
             StartPattern();
             vx = -0.9;
@@ -2399,7 +2399,7 @@ void CAyu::UpdatePattern()
                 vx = -vx;
             }
         }
-        if (m_inputX != -facing && m_patternVar1 >= 0x2a) {
+        if (m_inputX != -facing && m_patternVar1 >= 42) {
             pattern = kFall;
             StartPattern();
             vx = -0.9;
@@ -2417,11 +2417,11 @@ void CAyu::UpdatePattern()
                 m_proration = m_rfGauge * 5.0 + m_proration;
             }
             m_rfGauge = 0.0;
-            m_freezeTime = 0x5a;
-            FillBackground(0xb0, 3);
+            m_freezeTime = 90;
+            FillBackground(176, 3);
         }
         if (frame == 1 && timer == 0) {
-            m_playSound = 0x12;
+            m_playSound = 18;
             effect.type = 1;
             effect.x = (double)(int)x;
             effect.y = (double)(int)y;
@@ -2518,7 +2518,7 @@ void CAyu::UpdatePattern()
             }
             m_recoilGuardWindow = 0;
             m_cornerPushback = 0.0;
-            m_freezeTime = 0x3c;
+            m_freezeTime = 60;
         }
         if (m_freezeTime == 0 && m_patternVar3 == 0) {
             m_patternVar3++;
@@ -2554,11 +2554,11 @@ void CAyu::UpdatePattern()
                 m_proration = m_rfGauge * 5.0 + m_proration;
             }
             m_rfGauge = 0.0;
-            m_freezeTime = 0x5a;
-            FillBackground(0xb0, 3);
+            m_freezeTime = 90;
+            FillBackground(176, 3);
         }
         if (frame == 0 && timer == 0) {
-            m_playSound = 0x12;
+            m_playSound = 18;
             effect.type = 1;
             effect.x = (double)(int)x;
             effect.y = (double)(int)y;
@@ -2634,7 +2634,7 @@ void CAyu::UpdatePattern()
         }
         if (frame == 1 && timer == 0) {
             m_gauge = m_gauge + 5;
-            m_playSound = 0x15;
+            m_playSound = 21;
             m_hitsLeft = 1;
         }
         timer++;
@@ -2672,8 +2672,8 @@ void CAyu::UpdatePattern()
             vx = 0.5;
         }
         if (frame == 2 && timer == 0) {
-            m_gauge = m_gauge + 0xf;
-            m_playSound = 0x14;
+            m_gauge = m_gauge + 15;
+            m_playSound = 20;
             m_hitsLeft = 1;
         }
         if (frame > 1) {
@@ -2714,8 +2714,8 @@ void CAyu::UpdatePattern()
             vy = 0.0;
         }
         if (frame == 1 && timer == 0) {
-            m_gauge = m_gauge + 0xf;
-            m_playSound = 0x14;
+            m_gauge = m_gauge + 15;
+            m_playSound = 20;
             m_hitsLeft = 1;
         }
         timer++;
@@ -2738,13 +2738,13 @@ void CAyu::UpdatePattern()
             vy = 0.0;
         }
         if (frame == 1 && timer == 0) {
-            m_gauge = m_gauge + 0x23;
-            m_playSound = 0x14;
+            m_gauge = m_gauge + 35;
+            m_playSound = 20;
             m_hitsLeft = 1;
         }
         if (frame == 3 && timer == 0) {
             effect.type = 3;
-            effect.x = (double)((int)x + facing * 0x37);
+            effect.x = (double)((int)x + facing * 55);
             effect.y = (double)(int)y;
             effect.scale = 2;
             effect.layer = 1;
@@ -2782,7 +2782,7 @@ void CAyu::UpdatePattern()
         }
         if (frame == 1 && timer == 0) {
             m_gauge = m_gauge + 5;
-            m_playSound = 0x15;
+            m_playSound = 21;
             m_hitsLeft = 1;
         }
         timer++;
@@ -2818,8 +2818,8 @@ void CAyu::UpdatePattern()
             break;
         }
         if (frame == 2 && timer == 0) {
-            m_gauge = m_gauge + 0xd;
-            m_playSound = 0x14;
+            m_gauge = m_gauge + 13;
+            m_playSound = 20;
             m_hitsLeft = 1;
         }
         timer++;
@@ -2843,14 +2843,14 @@ void CAyu::UpdatePattern()
         vx = 0.0;
         vy = 0.0;
         if (frame == 3 && timer == 0) {
-            m_gauge = m_gauge + 0x19;
-            m_playSound = 0x14;
+            m_gauge = m_gauge + 25;
+            m_playSound = 20;
             m_hitsLeft = 1;
         }
         if (frame == 4 && timer == 0) {
             effect.type = 0;
-            effect.x = (double)((int)x + facing * 0x46);
-            effect.y = (double)((int)y - 0xa);
+            effect.x = (double)((int)x + facing * 70);
+            effect.y = (double)((int)y - 10);
             effect.scale = 2;
             effect.sound = 1;
             effect.layer = 1;
@@ -2890,7 +2890,7 @@ void CAyu::UpdatePattern()
         }
         if (frame == 1 && timer == 0) {
             m_gauge = m_gauge + 5;
-            m_playSound = 0x15;
+            m_playSound = 21;
             m_hitsLeft = 1;
         }
         if (y + vy >= 0.0) {
@@ -2928,8 +2928,8 @@ void CAyu::UpdatePattern()
             break;
         }
         if (frame == 2 && timer == 0) {
-            m_gauge = m_gauge + 0xd;
-            m_playSound = 0x14;
+            m_gauge = m_gauge + 13;
+            m_playSound = 20;
             m_hitsLeft = 1;
         }
         if (y + vy >= 0.0) {
@@ -2967,8 +2967,8 @@ void CAyu::UpdatePattern()
             break;
         }
         if (frame == 3 && timer == 0) {
-            m_gauge = m_gauge + 0x1e;
-            m_playSound = 0x14;
+            m_gauge = m_gauge + 30;
+            m_playSound = 20;
             m_hitsLeft = 1;
         }
         if (y + vy >= 0.0) {
@@ -3001,8 +3001,8 @@ void CAyu::UpdatePattern()
             ay = 0.08;
         }
         if (frame == 2 && timer == 0) {
-            m_gauge = m_gauge + 0xf;
-            m_playSound = 0x14;
+            m_gauge = m_gauge + 15;
+            m_playSound = 20;
             m_hitsLeft = 1;
         }
         if (frame == 5 && timer == 0) {
@@ -3052,8 +3052,8 @@ void CAyu::UpdatePattern()
             break;
         }
         if (frame == 3 && timer == 0) {
-            m_gauge = m_gauge + 0x1e;
-            m_playSound = 0x14;
+            m_gauge = m_gauge + 30;
+            m_playSound = 20;
             m_hitsLeft = 1;
         }
         timer++;
@@ -3073,8 +3073,8 @@ void CAyu::UpdatePattern()
     case kJump2C:
         vy = vy + ay;
         if (frame == 0 && timer == 0) {
-            m_gauge = m_gauge + 0x1e;
-            m_playSound = 0x14;
+            m_gauge = m_gauge + 30;
+            m_playSound = 20;
             m_hitsLeft = 1;
             vx = vx / 2.0;
             ay = 0.07;
@@ -3177,8 +3177,8 @@ void CAyu::UpdatePattern()
             (*m_opponent)->pattern = kThrownAirRising;
             (*m_opponent)->m_noAirRecovery = 1;
             effect.type = 0;
-            effect.x = (double)((int)x + facing * 0x29);
-            effect.y = (double)((int)y - 0x2c);
+            effect.x = (double)((int)x + facing * 41);
+            effect.y = (double)((int)y - 44);
             effect.scale = 2;
             effect.layer = 1;
             m_game->CreateEffect((EffectDesc*)&effect);
@@ -3215,7 +3215,7 @@ void CAyu::UpdatePattern()
             (*m_opponent)->pattern = kThrownStandHigh;
             (*m_opponent)->StopMoving();
             (*m_opponent)->y = 0.0;
-            (*m_opponent)->x = facing * 0x2a + x;
+            (*m_opponent)->x = facing * 42 + x;
             (*m_opponent)->StartPattern();
         }
         if (frame == 4 && timer == 0) {
@@ -3225,9 +3225,9 @@ void CAyu::UpdatePattern()
             (*m_opponent)->m_hitVy = -2.0;
             (*m_opponent)->ay = 0.035;
             (*m_opponent)->y = -59.0;
-            (*m_opponent)->x = facing * 0xf + x;
+            (*m_opponent)->x = facing * 15 + x;
             (*m_opponent)->m_noAirRecovery = 1;
-            DealDamage(0x4b0, 750.0);
+            DealDamage(1200, 750.0);
             m_comboHits--;
             m_shownHits--;
         }
@@ -3239,23 +3239,23 @@ void CAyu::UpdatePattern()
             if (frame == 1) {
                 (*m_opponent)->pattern = kThrownStandHigh;
                 (*m_opponent)->y = -33.0;
-                (*m_opponent)->x = facing * 0x1e + x;
+                (*m_opponent)->x = facing * 30 + x;
             }
             if (frame == 2) {
                 (*m_opponent)->pattern = kThrownAirborne;
                 (*m_opponent)->y = -27.0;
-                (*m_opponent)->x = facing * 0x22 + x;
+                (*m_opponent)->x = facing * 34 + x;
             }
             if (frame == 3) {
                 (*m_opponent)->y = -54.0;
-                (*m_opponent)->x = facing * 0xe + x;
+                (*m_opponent)->x = facing * 14 + x;
             }
             if (frame >= frameCount) {
                 pattern = kKnockdown;
                 FaceOpponent();
                 StartPattern();
                 frame = 2;
-                x = x - facing * 0x14;
+                x = x - facing * 20;
             }
         }
         break;
@@ -3267,7 +3267,7 @@ void CAyu::UpdatePattern()
         }
         if (frame == 1 && timer == 0) {
             m_gauge = m_gauge + 5;
-            m_playSound = 0x15;
+            m_playSound = 21;
             m_hitsLeft = 1;
         }
         if (y + vy >= 0.0) {
@@ -3294,8 +3294,8 @@ void CAyu::UpdatePattern()
             ay = 0.03;
         }
         if (frame == 2 && timer == 0) {
-            m_gauge = m_gauge + 0xa;
-            m_playSound = 0x15;
+            m_gauge = m_gauge + 10;
+            m_playSound = 21;
             m_hitsLeft = 1;
         }
         if (y + vy >= 0.0) {
@@ -3322,8 +3322,8 @@ void CAyu::UpdatePattern()
             ay = 0.03;
         }
         if (frame == 1 && timer == 0) {
-            m_gauge = m_gauge + 0xa;
-            m_playSound = 0x14;
+            m_gauge = m_gauge + 10;
+            m_playSound = 20;
             m_hitsLeft = 1;
         }
         if (y + vy >= 0.0) {
@@ -3353,12 +3353,12 @@ void CAyu::UpdatePattern()
             pattern = kAirThrowHit;
             (*m_opponent)->pattern = kThrownStandHigh;
             effect.type = 0;
-            effect.x = (double)((int)x + facing * 0x13);
-            effect.y = (double)((int)y - 0x32);
+            effect.x = (double)((int)x + facing * 19);
+            effect.y = (double)((int)y - 50);
             effect.scale = 2;
             effect.layer = 1;
             m_game->CreateEffect((EffectDesc*)&effect);
-            (*m_opponent)->x = facing * 0x13 + x;
+            (*m_opponent)->x = facing * 19 + x;
             (*m_opponent)->y = y - 50.0;
         }
         timer++;
@@ -3379,10 +3379,10 @@ void CAyu::UpdatePattern()
         break;
     case kAirThrowHit:
         if (frame < 6) {
-            FocusCameraX(0x32, 3);
+            FocusCameraX(50, 3);
         }
         if (frame < 6) {
-            FocusCameraY(0x32, 3);
+            FocusCameraY(50, 3);
         }
         if (frame == 0 && timer == 1) {
             (*m_opponent)->facing = -facing;
@@ -3402,7 +3402,7 @@ void CAyu::UpdatePattern()
             (*m_opponent)->x = x;
             (*m_opponent)->y = 0.0;
             (*m_opponent)->pattern = kKnockdown;
-            DealDamage(0x44c, 500.0);
+            DealDamage(1100, 500.0);
             (*m_opponent)->StartPattern();
         }
         if (vy + y > 0.0 && frame > 8) {
@@ -3414,22 +3414,22 @@ void CAyu::UpdatePattern()
         }
         if (frame == 1) {
             (*m_opponent)->y = y - 86.0;
-            (*m_opponent)->x = facing * 0x26 + x;
+            (*m_opponent)->x = facing * 38 + x;
             (*m_opponent)->pattern = kThrownDoubledOver;
         }
         if (frame == 2) {
             (*m_opponent)->y = y - 15.0;
-            (*m_opponent)->x = facing * 0x19 + x;
+            (*m_opponent)->x = facing * 25 + x;
             (*m_opponent)->pattern = kThrownDoubledOverInverted;
         }
         if (frame == 3) {
             (*m_opponent)->y = y;
-            (*m_opponent)->x = facing * 0xf + x;
+            (*m_opponent)->x = facing * 15 + x;
             (*m_opponent)->pattern = kThrownDoubledOverInverted;
         }
         if (frame == 4) {
             (*m_opponent)->y = y + 1.0;
-            (*m_opponent)->x = facing * 0xd + x;
+            (*m_opponent)->x = facing * 13 + x;
             (*m_opponent)->pattern = kThrownDoubledOverInverted;
         }
         timer++;
@@ -3457,17 +3457,17 @@ void CAyu::UpdatePattern()
     case kUnusedF9:
         if (frame == 0 && timer == 0) {
             unkdc = 4;
-            unkde = -0x14;
+            unkde = -20;
             vx = 0.0;
             m_hitsLeft = 1;
             m_recoilGuardWindow = 0;
-            m_freezeTime = 0x3c;
+            m_freezeTime = 60;
             effect.type = 0x28;
-            effect.x = (double)((int)x + facing * 0xa);
-            effect.y = (double)((int)y - 0x28);
+            effect.x = (double)((int)x + facing * 10);
+            effect.y = (double)((int)y - 40);
             effect.scale = 2;
             effect.layer = 1;
-            effect.sound = 0x13;
+            effect.sound = 19;
             m_game->CreateEffect((EffectDesc*)&effect);
         }
         timer++;
@@ -3503,9 +3503,9 @@ void CAyu::UpdatePattern()
             vy = -2.5;
             ay = 0.03428571428571429;
             m_playVoice = 4;
-            m_gauge = m_gauge + 0x1e;
+            m_gauge = m_gauge + 30;
             effect.type = 0x190;
-            effect.x = facing * 0x28 + x;
+            effect.x = facing * 40 + x;
             effect.y = y + -54.0;
             effect.facing = facing;
             effect.layer = 1;
@@ -3545,9 +3545,9 @@ void CAyu::UpdatePattern()
                 m_rfGauge -= 250.0;
             }
             effect.type = 0x21;
-            effect.sound = 0xb;
-            effect.x = (double)((int)x + facing * 0x14);
-            effect.y = (double)((int)y - 0x32);
+            effect.sound = 11;
+            effect.x = (double)((int)x + facing * 20);
+            effect.y = (double)((int)y - 50);
             effect.scale = 2;
             effect.layer = 1;
             m_game->CreateEffect((EffectDesc*)&effect);
@@ -3567,11 +3567,11 @@ void CAyu::UpdatePattern()
             vy = -2.5;
             ay = 0.03428571428571429;
             m_playVoice = 4;
-            m_gauge = m_gauge + 0x1e;
+            m_gauge = m_gauge + 30;
             effect.keep = 0;
             effect.type = 0x198;
-            effect.x = (double)((int)x + facing * 0x28);
-            effect.y = (double)((int)y - 0x36);
+            effect.x = (double)((int)x + facing * 40);
+            effect.y = (double)((int)y - 54);
             effect.facing = facing;
             effect.layer = 1;
             SpawnObject(&effect);
@@ -3620,9 +3620,9 @@ void CAyu::UpdatePattern()
             vy = -2.5;
             ay = 0.03428571428571429;
             m_playVoice = 4;
-            m_gauge = m_gauge + 0x1e;
+            m_gauge = m_gauge + 30;
             effect.type = 0x190;
-            effect.x = facing * 0x28 + x;
+            effect.x = facing * 40 + x;
             effect.y = y + -54.0;
             effect.facing = facing;
             effect.layer = 1;
@@ -3677,7 +3677,7 @@ void CAyu::UpdatePattern()
         if (frame == 6 && timer == 0) {
             vx = 2.5;
             ax = -0.03;
-            m_gauge = m_gauge + 0x2d;
+            m_gauge = m_gauge + 45;
         }
         timer++;
         if (timer >= duration) {
@@ -3701,9 +3701,9 @@ void CAyu::UpdatePattern()
         }
         if (frame == 0 && timer == 0) {
             effect.type = 0x21;
-            effect.sound = 0xb;
-            effect.x = (double)((int)x - facing * 0x14);
-            effect.y = (double)((int)y - 0x32);
+            effect.sound = 11;
+            effect.x = (double)((int)x - facing * 20);
+            effect.y = (double)((int)y - 50);
             effect.scale = 2;
             effect.layer = 1;
             m_game->CreateEffect((EffectDesc*)&effect);
@@ -3728,7 +3728,7 @@ void CAyu::UpdatePattern()
         if (frame == 6 && timer == 0) {
             vx = 2.5;
             ax = -0.03;
-            m_gauge = m_gauge + 0x2d;
+            m_gauge = m_gauge + 45;
         }
         timer++;
         if (timer >= duration) {
@@ -3818,7 +3818,7 @@ void CAyu::UpdatePattern()
                 m_attackResult = 0;
             }
             if (frame == 3) {
-                m_gauge = m_gauge + 0x23;
+                m_gauge = m_gauge + 35;
                 vx = 1.5;
                 vy = -3.0;
                 ay = 0.065;
@@ -3887,7 +3887,7 @@ void CAyu::UpdatePattern()
                 m_attackResult = 0;
             }
             if (frame == 3) {
-                m_gauge = m_gauge + 0x23;
+                m_gauge = m_gauge + 35;
                 vx = 1.5;
                 vy = -4.0;
                 ay = 0.065;
@@ -3902,9 +3902,9 @@ void CAyu::UpdatePattern()
     case k214C:
         if (frame == 0 && timer == 0) {
             effect.type = 0x21;
-            effect.sound = 0xb;
+            effect.sound = 11;
             effect.x = (double)(int)x;
-            effect.y = (double)((int)y - 0x32);
+            effect.y = (double)((int)y - 50);
             effect.scale = 2;
             effect.layer = 1;
             m_game->CreateEffect((EffectDesc*)&effect);
@@ -3916,7 +3916,7 @@ void CAyu::UpdatePattern()
             }
             vy = 0.0;
             ay = 0.0;
-            m_hitsLeft = 0x63;
+            m_hitsLeft = 99;
             if (y < 0.0) {
                 frame = 2;
             }
@@ -3926,7 +3926,7 @@ void CAyu::UpdatePattern()
                 vx = 0.0;
                 vy = 0.0;
             }
-            m_hitsLeft = 0x63;
+            m_hitsLeft = 99;
             if (y < 0.0) {
                 frame = 2;
                 m_patternVar2 = 1;
@@ -3969,7 +3969,7 @@ void CAyu::UpdatePattern()
             frame++;
             m_attackResult = 0;
             if (frame == 3) {
-                m_gauge = m_gauge + 0x23;
+                m_gauge = m_gauge + 35;
                 vx = 1.5;
                 vy = -4.0;
                 ay = 0.065;
@@ -4099,9 +4099,9 @@ void CAyu::UpdatePattern()
     case k236C:
         if (frame == 0 && timer == 0) {
             effect.type = 0x21;
-            effect.sound = 0xb;
+            effect.sound = 11;
             effect.x = (double)(int)x;
-            effect.y = (double)((int)y - 0x32);
+            effect.y = (double)((int)y - 50);
             effect.scale = 2;
             effect.layer = 1;
             m_game->CreateEffect((EffectDesc*)&effect);
@@ -4141,7 +4141,7 @@ void CAyu::UpdatePattern()
             frame++;
             m_attackResult = 0;
             if (frame == 3) {
-                m_invulTime = 0x1b;
+                m_invulTime = 27;
             }
             if (frame >= frameCount) {
                 frame = frame - 8;
@@ -4195,9 +4195,9 @@ void CAyu::UpdatePattern()
                 m_rfGauge -= 250.0;
             }
             effect.type = 0x21;
-            effect.sound = 0xb;
+            effect.sound = 11;
             effect.x = (double)(int)x;
-            effect.y = (double)((int)y - 0x32);
+            effect.y = (double)((int)y - 50);
             effect.scale = 2;
             effect.layer = 1;
             m_game->CreateEffect((EffectDesc*)&effect);
@@ -4223,11 +4223,11 @@ void CAyu::UpdatePattern()
                 vy = -2.5;
                 ay = 0.03428571428571429;
                 m_playVoice = 4;
-                m_gauge = m_gauge + 0x1e;
+                m_gauge = m_gauge + 30;
                 effect.keep = 0;
                 effect.type = 0x199;
-                effect.x = (double)((int)x + facing * 0x14);
-                effect.y = (double)((int)y + 0x1e);
+                effect.x = (double)((int)x + facing * 20);
+                effect.y = (double)((int)y + 30);
                 effect.facing = facing;
                 effect.layer = 1;
                 SpawnObject(&effect);
@@ -4249,16 +4249,16 @@ void CAyu::UpdatePattern()
             ay = 0.0;
         }
         if (frame < 3) {
-            FocusCameraY(0x32, 3);
+            FocusCameraY(50, 3);
         }
         if (frame == 1 && timer == 0) {
-            m_freezeTime = 0x78;
-            m_gauge = m_gauge - 0x3e8;
-            FillBackground(0xb0, 3);
+            m_freezeTime = 120;
+            m_gauge = m_gauge - 1000;
+            FillBackground(176, 3);
             effect.type = 0x44;
-            effect.sound = 0x13;
+            effect.sound = 19;
             effect.x = (double)(int)x;
-            effect.y = (double)((int)y - 0x28);
+            effect.y = (double)((int)y - 40);
             effect.scale = 2;
             effect.keep = 1;
             effect.layer = 1;
@@ -4267,8 +4267,8 @@ void CAyu::UpdatePattern()
         if (frame == 4 && timer == 0) {
             effect.keep = 1;
             effect.type = 0x195;
-            effect.x = (double)((int)x + facing * 0xf);
-            effect.y = (double)((int)y - 0x2a);
+            effect.x = (double)((int)x + facing * 15);
+            effect.y = (double)((int)y - 42);
             effect.facing = facing;
             effect.scale = 2;
             effect.layer = 1;
@@ -4292,16 +4292,16 @@ void CAyu::UpdatePattern()
             ay = 0.0;
         }
         if (frame < 3) {
-            FocusCameraY(0x32, 3);
+            FocusCameraY(50, 3);
         }
         if (frame == 1 && timer == 0) {
-            m_freezeTime = 0x78;
-            m_gauge = m_gauge - 0x7d0;
-            FillBackground(0xb0, 3);
+            m_freezeTime = 120;
+            m_gauge = m_gauge - 2000;
+            FillBackground(176, 3);
             effect.type = 0x45;
             effect.sound = 5;
             effect.x = (double)(int)x;
-            effect.y = (double)((int)y - 0x28);
+            effect.y = (double)((int)y - 40);
             effect.scale = 2;
             effect.keep = 1;
             effect.layer = 1;
@@ -4310,8 +4310,8 @@ void CAyu::UpdatePattern()
         if (frame == 4 && timer == 0) {
             effect.keep = 1;
             effect.type = 0x1a3;
-            effect.x = (double)((int)x + facing * 0xf);
-            effect.y = (double)((int)y - 0x2a);
+            effect.x = (double)((int)x + facing * 15);
+            effect.y = (double)((int)y - 42);
             effect.facing = facing;
             effect.scale = 2;
             effect.layer = 1;
@@ -4335,53 +4335,53 @@ void CAyu::UpdatePattern()
             ay = 0.0;
         }
         if (frame < 3) {
-            FocusCameraY(0x32, 3);
+            FocusCameraY(50, 3);
         }
         if (frame == 1 && timer == 0) {
-            m_freezeTime = 0x78;
-            m_gauge = m_gauge - 0xbb8;
-            FillBackground(0xb0, 3);
+            m_freezeTime = 120;
+            m_gauge = m_gauge - 3000;
+            FillBackground(176, 3);
             effect.type = 0x46;
-            effect.sound = 0x40;
+            effect.sound = 64;
             effect.x = (double)(int)x;
-            effect.y = (double)((int)y - 0x28);
+            effect.y = (double)((int)y - 40);
             effect.scale = 2;
             effect.keep = 1;
             effect.layer = 1;
             m_game->CreateEffect((EffectDesc*)&effect);
-            m_playSound = 0x25;
+            m_playSound = 37;
         }
         if (frame > 1) {
-            m_game->FlashNegative(0xf);
+            m_game->FlashNegative(15);
         }
         if (frame == 4 && timer == 0) {
-            m_shotSpeed = 0x2d;
+            m_shotSpeed = 45;
             effect.keep = 1;
             effect.type = 0x1a4;
-            effect.x = (double)((int)x + facing * 0xf);
-            effect.y = (double)((int)y - 0x16);
+            effect.x = (double)((int)x + facing * 15);
+            effect.y = (double)((int)y - 22);
             effect.facing = facing;
             effect.scale = 2;
             effect.layer = 1;
             SpawnObject(&effect);
         }
-        if (frame == 0xd && timer == 0) {
-            m_shotSpeed = 0x1e;
+        if (frame == 13 && timer == 0) {
+            m_shotSpeed = 30;
             effect.keep = 1;
             effect.type = 0x1a4;
-            effect.x = (double)((int)x + facing * 0xf);
-            effect.y = (double)((int)y - 0x3e);
+            effect.x = (double)((int)x + facing * 15);
+            effect.y = (double)((int)y - 62);
             effect.facing = facing;
             effect.scale = 2;
             effect.layer = 1;
             SpawnObject(&effect);
         }
-        if (frame == 0x16 && timer == 0) {
-            m_shotSpeed = 0xf;
+        if (frame == 22 && timer == 0) {
+            m_shotSpeed = 15;
             effect.keep = 1;
             effect.type = 0x1a4;
-            effect.x = (double)((int)x + facing * 0xf);
-            effect.y = (double)((int)y - 0x2a);
+            effect.x = (double)((int)x + facing * 15);
+            effect.y = (double)((int)y - 42);
             effect.facing = facing;
             effect.scale = 2;
             effect.layer = 1;
@@ -4405,16 +4405,16 @@ void CAyu::UpdatePattern()
             m_hitsLeft = 1;
         }
         if (frame < 3) {
-            FocusCameraY(0x19, 0xa);
+            FocusCameraY(25, 10);
         }
         if (frame == 1 && timer == 0) {
-            m_freezeTime = 0x78;
-            m_gauge = m_gauge - 0x3e8;
-            FillBackground(0xb0, 3);
+            m_freezeTime = 120;
+            m_gauge = m_gauge - 1000;
+            FillBackground(176, 3);
             effect.type = 0x44;
-            effect.sound = 0x13;
+            effect.sound = 19;
             effect.x = (double)(int)x;
-            effect.y = (double)((int)y - 0x28);
+            effect.y = (double)((int)y - 40);
             effect.scale = 2;
             effect.keep = 1;
             effect.layer = 1;
@@ -4425,8 +4425,8 @@ void CAyu::UpdatePattern()
             vy = -1.5;
             effect.keep = 1;
             effect.type = 0x195;
-            effect.x = (double)((int)x + facing * 0xf);
-            effect.y = (double)((int)y - 0x2a);
+            effect.x = (double)((int)x + facing * 15);
+            effect.y = (double)((int)y - 42);
             effect.facing = facing;
             effect.scale = 2;
             effect.layer = 1;
@@ -4457,16 +4457,16 @@ void CAyu::UpdatePattern()
             m_hitsLeft = 1;
         }
         if (frame < 3) {
-            FocusCameraY(0x19, 0xa);
+            FocusCameraY(25, 10);
         }
         if (frame == 1 && timer == 0) {
-            m_freezeTime = 0x78;
-            m_gauge = m_gauge - 0x7d0;
-            FillBackground(0xb0, 3);
+            m_freezeTime = 120;
+            m_gauge = m_gauge - 2000;
+            FillBackground(176, 3);
             effect.type = 0x45;
             effect.sound = 5;
             effect.x = (double)(int)x;
-            effect.y = (double)((int)y - 0x28);
+            effect.y = (double)((int)y - 40);
             effect.scale = 2;
             effect.keep = 1;
             effect.layer = 1;
@@ -4477,8 +4477,8 @@ void CAyu::UpdatePattern()
             vy = -1.5;
             effect.keep = 1;
             effect.type = 0x1a3;
-            effect.x = (double)((int)x + facing * 0xf);
-            effect.y = (double)((int)y - 0x2a);
+            effect.x = (double)((int)x + facing * 15);
+            effect.y = (double)((int)y - 42);
             effect.facing = facing;
             effect.scale = 2;
             effect.layer = 1;
@@ -4509,59 +4509,59 @@ void CAyu::UpdatePattern()
             m_hitsLeft = 1;
         }
         if (frame < 3) {
-            FocusCameraY(0x19, 0xa);
+            FocusCameraY(25, 10);
         }
         if (frame == 1 && timer == 0) {
-            m_freezeTime = 0x78;
-            m_gauge = m_gauge - 0xbb8;
-            FillBackground(0xb0, 3);
+            m_freezeTime = 120;
+            m_gauge = m_gauge - 3000;
+            FillBackground(176, 3);
             effect.type = 0x46;
             effect.sound = 5;
             effect.x = (double)(int)x;
-            effect.y = (double)((int)y - 0x28);
+            effect.y = (double)((int)y - 40);
             effect.scale = 2;
             effect.keep = 1;
             effect.layer = 1;
             m_game->CreateEffect((EffectDesc*)&effect);
-            m_playSound = 0x25;
+            m_playSound = 37;
         }
         if (frame > 1) {
-            m_game->FlashNegative(0xf);
+            m_game->FlashNegative(15);
         }
         if (frame == 4 && timer == 0) {
             vx = -1.2;
             vy = -1.0;
-            m_shotSpeed = 0x32;
+            m_shotSpeed = 50;
             effect.keep = 1;
             effect.type = 0x1a4;
-            effect.x = (double)((int)x + facing * 0xf);
-            effect.y = (double)((int)y - 0x16);
+            effect.x = (double)((int)x + facing * 15);
+            effect.y = (double)((int)y - 22);
             effect.facing = facing;
             effect.scale = 2;
             effect.layer = 1;
             SpawnObject(&effect);
         }
-        if (frame == 0xd && timer == 0) {
+        if (frame == 13 && timer == 0) {
             vx = -1.2;
             vy = -1.0;
-            m_shotSpeed = 0x23;
+            m_shotSpeed = 35;
             effect.keep = 1;
             effect.type = 0x1a4;
-            effect.x = (double)((int)x + facing * 0xf);
-            effect.y = (double)((int)y - 0x3e);
+            effect.x = (double)((int)x + facing * 15);
+            effect.y = (double)((int)y - 62);
             effect.facing = facing;
             effect.scale = 2;
             effect.layer = 1;
             SpawnObject(&effect);
         }
-        if (frame == 0x16 && timer == 0) {
+        if (frame == 22 && timer == 0) {
             vx = -1.9;
             vy = -2.3;
-            m_shotSpeed = 0x14;
+            m_shotSpeed = 20;
             effect.keep = 1;
             effect.type = 0x1a4;
-            effect.x = (double)((int)x + facing * 0xf);
-            effect.y = (double)((int)y - 0x2a);
+            effect.x = (double)((int)x + facing * 15);
+            effect.y = (double)((int)y - 42);
             effect.facing = facing;
             effect.scale = 2;
             effect.layer = 1;
@@ -4595,35 +4595,35 @@ void CAyu::UpdatePattern()
             m_patternVar1 = 4;
         }
         if (frame == 0 && timer == 0) {
-            m_freezeTime = 0x78;
-            m_gauge = m_gauge - 0x3e8;
-            FillBackground(0xb0, 3);
+            m_freezeTime = 120;
+            m_gauge = m_gauge - 1000;
+            FillBackground(176, 3);
             effect.type = 0x44;
-            effect.sound = 0x13;
+            effect.sound = 19;
             effect.x = (double)(int)x;
-            effect.y = (double)((int)y - 0x28);
+            effect.y = (double)((int)y - 40);
             effect.scale = 2;
             effect.keep = 1;
             effect.layer = 1;
             m_game->CreateEffect((EffectDesc*)&effect);
             m_hitsLeft = 1;
         }
-        if (frame > 6 && frame < 0xc) {
-            FocusCameraY(0x32, 3);
+        if (frame > 6 && frame < 12) {
+            FocusCameraY(50, 3);
         }
         if (frame == 8 && timer == 0) {
-            ShakeScreen(3, 0x14);
+            ShakeScreen(3, 20);
             effect.type = 0x1a5;
-            effect.x = facing * 0x28 + x - 30.0;
+            effect.x = facing * 40 + x - 30.0;
             effect.y = y;
             effect.facing = facing;
             effect.scale = 2;
             effect.layer = 1;
             SpawnObject(&effect);
-            effect.x = x - facing * 0x28 - 30.0;
+            effect.x = x - facing * 40 - 30.0;
             effect.facing = -facing;
             SpawnObject(&effect);
-            m_playSound = 0x12;
+            m_playSound = 18;
         }
         timer++;
         if (timer >= duration) {
@@ -4645,77 +4645,77 @@ void CAyu::UpdatePattern()
             vy = 0.0;
             ay = 0.0;
             m_patternVar1 = 8;
-            m_freezeTime = 0x78;
-            m_gauge = m_gauge - 0xbb8;
-            FillBackground(0xb0, 3);
+            m_freezeTime = 120;
+            m_gauge = m_gauge - 3000;
+            FillBackground(176, 3);
             effect.type = 0x46;
-            effect.sound = 0x40;
+            effect.sound = 64;
             effect.x = (double)(int)x;
-            effect.y = (double)((int)y - 0x28);
+            effect.y = (double)((int)y - 40);
             effect.scale = 2;
             effect.keep = 1;
             effect.layer = 1;
             m_game->CreateEffect((EffectDesc*)&effect);
-            m_hitsLeft = 0x63;
-            m_playSound = 0x25;
+            m_hitsLeft = 99;
+            m_playSound = 37;
         }
         if (frame > 0) {
-            m_game->FlashNegative(0xf);
+            m_game->FlashNegative(15);
         }
-        if (frame > 0 && frame < 0xc) {
-            FocusCameraY(0x32, 3);
+        if (frame > 0 && frame < 12) {
+            FocusCameraY(50, 3);
         }
         if (frame == 8 && timer == 0) {
             m_hitsLeft = 1;
-            ShakeScreen(3, 0xa);
+            ShakeScreen(3, 10);
             effect.type = 0x1a5;
-            effect.x = facing * 0xa + x;
+            effect.x = facing * 10 + x;
             effect.y = y;
             effect.facing = facing;
             effect.scale = 2;
             effect.layer = 1;
             SpawnObject(&effect);
-            effect.x = x - facing * 0xa;
+            effect.x = x - facing * 10;
             effect.facing = -facing;
             SpawnObject(&effect);
-            m_playSound = 0x12;
+            m_playSound = 18;
         }
-        if (frame == 0x18 && timer == 0) {
+        if (frame == 24 && timer == 0) {
             m_hitsLeft = 1;
-            ShakeScreen(5, 0x14);
+            ShakeScreen(5, 20);
             effect.type = 0x196;
-            effect.x = facing * 0xa + x;
+            effect.x = facing * 10 + x;
             effect.y = y;
             effect.facing = facing;
             effect.scale = 2;
             effect.layer = 1;
             SpawnObject(&effect);
-            effect.x = x - facing * 0xa;
+            effect.x = x - facing * 10;
             effect.facing = -facing;
             SpawnObject(&effect);
-            m_playSound = 0x12;
+            m_playSound = 18;
         }
-        if (frame == 0x28 && timer == 0) {
-            m_hitsLeft = 0x63;
-            ShakeScreen(6, 0x3c);
+        if (frame == 40 && timer == 0) {
+            m_hitsLeft = 99;
+            ShakeScreen(6, 60);
             effect.type = 0x197;
-            effect.x = facing * 0xa + x;
+            effect.x = facing * 10 + x;
             effect.y = y;
             effect.facing = facing;
             effect.scale = 2;
             effect.layer = 1;
             SpawnObject(&effect);
-            effect.x = x - facing * 0xa;
+            effect.x = x - facing * 10;
             effect.facing = -facing;
             SpawnObject(&effect);
-            m_playSound = 0x12;
+            m_playSound = 18;
         }
         timer++;
         if (timer >= duration) {
             timer = 0;
             frame++;
             m_attackResult = 0;
-            if (frame == 0x2c && m_patternVar1 != 0) {
+            if (frame == 44 && m_patternVar1 != 0) {
                 m_patternVar1--;
                 frame = frame - 2;
             }
@@ -4734,45 +4734,45 @@ void CAyu::UpdatePattern()
             vy = 0.0;
             ay = 0.0;
             m_patternVar1 = 8;
-            m_freezeTime = 0x78;
-            m_gauge = m_gauge - 0x7d0;
-            FillBackground(0xb0, 3);
+            m_freezeTime = 120;
+            m_gauge = m_gauge - 2000;
+            FillBackground(176, 3);
             effect.type = 0x45;
             effect.sound = 5;
             effect.x = (double)(int)x;
-            effect.y = (double)((int)y - 0x28);
+            effect.y = (double)((int)y - 40);
             effect.scale = 2;
             effect.keep = 1;
             effect.layer = 1;
             m_game->CreateEffect((EffectDesc*)&effect);
-            m_hitsLeft = 0x63;
+            m_hitsLeft = 99;
         }
-        if (frame > 0 && frame < 0xc) {
-            FocusCameraY(0x32, 3);
+        if (frame > 0 && frame < 12) {
+            FocusCameraY(50, 3);
         }
         if (frame == 8 && timer == 0) {
-            ShakeScreen(6, 0x3c);
+            ShakeScreen(6, 60);
             effect.type = 0x196;
-            effect.x = facing * 0xa + x;
+            effect.x = facing * 10 + x;
             effect.y = y;
             effect.facing = facing;
             effect.scale = 2;
             effect.layer = 1;
             SpawnObject(&effect);
-            effect.x = x - facing * 0xa;
+            effect.x = x - facing * 10;
             effect.facing = -facing;
             SpawnObject(&effect);
-            m_playSound = 0x12;
+            m_playSound = 18;
         }
         timer++;
         if (timer >= duration) {
             timer = 0;
             frame++;
             m_attackResult = 0;
-            if (frame == 0xa) {
-                m_invulTime = 0x2d;
+            if (frame == 10) {
+                m_invulTime = 45;
             }
-            if (frame == 0xc && m_patternVar1 != 0) {
+            if (frame == 12 && m_patternVar1 != 0) {
                 m_patternVar1--;
                 frame = frame - 2;
             }
@@ -4797,13 +4797,13 @@ void CAyu::UpdatePattern()
             ax = 0.0;
         }
         if (frame == 2 && timer == 0 && m_patternVar1 == 0) {
-            m_freezeTime = 0x78;
-            m_gauge = m_gauge - 0x3e8;
-            FillBackground(0xb0, 3);
+            m_freezeTime = 120;
+            m_gauge = m_gauge - 1000;
+            FillBackground(176, 3);
             effect.type = 0x44;
-            effect.sound = 0x13;
+            effect.sound = 19;
             effect.x = (double)(int)x;
-            effect.y = (double)((int)y - 0x28);
+            effect.y = (double)((int)y - 40);
             effect.scale = 2;
             effect.keep = 1;
             effect.layer = 1;
@@ -4813,7 +4813,7 @@ void CAyu::UpdatePattern()
         }
         if (frame == 6 && timer == 0) {
             effect.type = 0x1a2;
-            effect.x = facing * 0x44 + x;
+            effect.x = facing * 68 + x;
             effect.y = y - 63.0;
             effect.facing = facing;
             effect.scale = 2;
@@ -4854,23 +4854,23 @@ void CAyu::UpdatePattern()
             ax = 0.0;
         }
         if (frame == 2 && timer == 0 && m_patternVar1 == 0) {
-            m_freezeTime = 0x78;
-            m_gauge = m_gauge - 0x7d0;
-            FillBackground(0xb0, 3);
+            m_freezeTime = 120;
+            m_gauge = m_gauge - 2000;
+            FillBackground(176, 3);
             effect.type = 0x45;
             effect.sound = 5;
             effect.x = (double)(int)x;
-            effect.y = (double)((int)y - 0x28);
+            effect.y = (double)((int)y - 40);
             effect.scale = 2;
             effect.keep = 1;
             effect.layer = 1;
             m_game->CreateEffect((EffectDesc*)&effect);
-            m_hitsLeft = 0x63;
+            m_hitsLeft = 99;
             m_patternVar1++;
         }
         if (frame == 6 && timer == 0) {
             effect.type = 0x1a2;
-            effect.x = facing * 0x44 + x;
+            effect.x = facing * 68 + x;
             effect.y = y - 63.0;
             effect.facing = facing;
             effect.scale = 2;
@@ -4911,27 +4911,27 @@ void CAyu::UpdatePattern()
             ax = 0.0;
         }
         if (frame == 1 && timer == 0 && m_patternVar1 == 0) {
-            m_freezeTime = 0x78;
-            m_gauge = m_gauge - 0xbb8;
-            FillBackground(0xb0, 3);
+            m_freezeTime = 120;
+            m_gauge = m_gauge - 3000;
+            FillBackground(176, 3);
             effect.type = 0x46;
-            effect.sound = 0x40;
+            effect.sound = 64;
             effect.x = (double)(int)x;
-            effect.y = (double)((int)y - 0x28);
+            effect.y = (double)((int)y - 40);
             effect.scale = 2;
             effect.keep = 1;
             effect.layer = 1;
             m_game->CreateEffect((EffectDesc*)&effect);
-            m_hitsLeft = 0x63;
+            m_hitsLeft = 99;
             m_patternVar1++;
-            m_playSound = 0x25;
+            m_playSound = 37;
         }
         if (frame > 1) {
-            m_game->FlashNegative(0xf);
+            m_game->FlashNegative(15);
         }
         if (frame == 6 && timer == 0) {
             effect.type = 0x1a2;
-            effect.x = facing * 0x44 + x;
+            effect.x = facing * 68 + x;
             effect.y = y - 63.0;
             effect.facing = facing;
             effect.scale = 2;
@@ -4953,7 +4953,7 @@ void CAyu::UpdatePattern()
                 frame = frame - 2;
                 m_patternVar3++;
             }
-            if (frame == 0xe && m_patternVar2 < 1) {
+            if (frame == 14 && m_patternVar2 < 1) {
                 frame = frame - 2;
                 m_patternVar2++;
             }
@@ -4970,26 +4970,26 @@ void CAyu::UpdatePattern()
             ay = 0.0;
         }
         if (frame == 2 && timer == 6) {
-            m_freezeTime = 0x78;
-            m_gauge = m_gauge - 0xfa0;
-            FillBackground(0xb0, 3);
+            m_freezeTime = 120;
+            m_gauge = m_gauge - 4000;
+            FillBackground(176, 3);
             effect.type = 0x46;
-            effect.sound = 0x40;
-            effect.x = (double)((int)x + facing * 0x1d);
-            effect.y = (double)((int)y - 0x3f);
+            effect.sound = 64;
+            effect.x = (double)((int)x + facing * 29);
+            effect.y = (double)((int)y - 63);
             effect.scale = 2;
             effect.keep = 1;
             effect.layer = 1;
             m_game->CreateEffect((EffectDesc*)&effect);
-            m_hitsLeft = 0x63;
-            m_playSound = 0x25;
+            m_hitsLeft = 99;
+            m_playSound = 37;
             effect.type = 0x47;
             m_game->CreateEffect((EffectDesc*)&effect);
         }
         if (frame > 2) {
-            m_game->FlashNegative(0xf);
+            m_game->FlashNegative(15);
         }
-        if (frame == 2 && timer == 0x5c) {
+        if (frame == 2 && timer == 92) {
             effect.type = 0x19e;
             effect.x = x - (facing << 2);
             effect.y = y - 45.0;
@@ -5016,17 +5016,17 @@ void CAyu::UpdatePattern()
             SpawnObject(&effect);
         }
         if (frame > 3) {
-            FocusCameraY(0x32, 3);
+            FocusCameraY(50, 3);
         }
-        if ((frame == 0xf || frame == 0x10) && (WORD)Random(0, 0x64) > m_patternVar1 * 7.3 + 20.0) {
+        if ((frame == 15 || frame == 16) && (WORD)Random(0, 100) > m_patternVar1 * 7.3 + 20.0) {
             effect.type = 0x1a0;
             effect.layer = 1;
-            if ((WORD)Random(0, 0x64) > 0x32) {
+            if ((WORD)Random(0, 100) > 50) {
                 effect.type = 0x1a1;
                 effect.layer = 0;
             }
-            effect.x = x - facing * 0x12c;
-            effect.y = (double)((WORD)Random(0, 0x140) - 0x140);
+            effect.x = x - facing * 300;
+            effect.y = (double)((WORD)Random(0, 320) - 320);
             effect.facing = facing;
             effect.scale = 2;
             SpawnObject(&effect);
@@ -5037,7 +5037,7 @@ void CAyu::UpdatePattern()
             frame++;
             m_attackResult = 0;
             if (frame >= frameCount) {
-                if (m_patternVar1 < 0xd) {
+                if (m_patternVar1 < 13) {
                     frame = frame - 5;
                     m_patternVar1++;
                     break;

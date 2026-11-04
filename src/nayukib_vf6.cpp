@@ -27,11 +27,11 @@ void CNayukiB::UpdatePattern()
         if (timer >= duration) {
             timer = 0;
             frame++;
-            if (frame == 6 && m_patternVar1 < 0xf) {
+            if (frame == 6 && m_patternVar1 < 15) {
                 m_patternVar1++;
                 frame = 0;
             }
-            if (frame == 0x14 && m_patternVar1 > 0) {
+            if (frame == 20 && m_patternVar1 > 0) {
                 m_patternVar1 -= 5;
                 if (m_patternVar1 < 0) {
                     m_patternVar1 = 0;
@@ -356,7 +356,7 @@ void CNayukiB::UpdatePattern()
         }
         m_dashMomentum = 0;
         if (frame == 0 && timer == 0) {
-            m_gauge = m_gauge + 0xa;
+            m_gauge = m_gauge + 10;
             vx = (2.0 - (*m_opponent)->m_proration / 10000.0) * -1.1;
             if (m_rfBlue != 0) {
                 m_rfGauge -= 10.0;
@@ -392,7 +392,7 @@ void CNayukiB::UpdatePattern()
         }
         m_dashMomentum = 0;
         if (frame == 0 && timer == 0) {
-            m_gauge = m_gauge + 0xf;
+            m_gauge = m_gauge + 15;
             vx = (2.0 - (*m_opponent)->m_proration / 10000.0) * -1.5;
             if (m_rfBlue != 0) {
                 m_rfGauge -= 20.0;
@@ -428,7 +428,7 @@ void CNayukiB::UpdatePattern()
         }
         m_dashMomentum = 0;
         if (frame == 0 && timer == 0) {
-            m_gauge = m_gauge + 0x14;
+            m_gauge = m_gauge + 20;
             vx = (2.0 - (*m_opponent)->m_proration / 10000.0) * -1.8;
             if (m_rfBlue != 0) {
                 m_rfGauge -= 30.0;
@@ -464,7 +464,7 @@ void CNayukiB::UpdatePattern()
         }
         m_dashMomentum = 0;
         if (frame == 0 && timer == 0) {
-            m_gauge = m_gauge + 0xa;
+            m_gauge = m_gauge + 10;
             vx = (2.0 - (*m_opponent)->m_proration / 10000.0) * -1.1;
             if (m_rfBlue != 0) {
                 m_rfGauge -= 10.0;
@@ -500,7 +500,7 @@ void CNayukiB::UpdatePattern()
         }
         m_dashMomentum = 0;
         if (frame == 0 && timer == 0) {
-            m_gauge = m_gauge + 0xf;
+            m_gauge = m_gauge + 15;
             vx = (2.0 - (*m_opponent)->m_proration / 10000.0) * -1.5;
             if (m_rfBlue != 0) {
                 m_rfGauge -= 20.0;
@@ -536,7 +536,7 @@ void CNayukiB::UpdatePattern()
         }
         m_dashMomentum = 0;
         if (frame == 0 && timer == 0) {
-            m_gauge = m_gauge + 0x14;
+            m_gauge = m_gauge + 20;
             vx = (2.0 - (*m_opponent)->m_proration / 10000.0) * -1.8;
             if (m_rfBlue != 0) {
                 m_rfGauge -= 30.0;
@@ -572,7 +572,7 @@ void CNayukiB::UpdatePattern()
         }
         m_dashMomentum = 0;
         if (frame == 0 && timer == 0) {
-            m_gauge = m_gauge + 0xa;
+            m_gauge = m_gauge + 10;
             vx = (2.0 - (*m_opponent)->m_proration / 10000.0) * -1.1;
             if (m_rfBlue != 0) {
                 m_rfGauge -= 10.0;
@@ -605,7 +605,7 @@ void CNayukiB::UpdatePattern()
         }
         m_dashMomentum = 0;
         if (frame == 0 && timer == 0) {
-            m_gauge = m_gauge + 0xf;
+            m_gauge = m_gauge + 15;
             vx = (2.0 - (*m_opponent)->m_proration / 10000.0) * -1.5;
             if (m_rfBlue != 0) {
                 m_rfGauge -= 20.0;
@@ -638,7 +638,7 @@ void CNayukiB::UpdatePattern()
         }
         m_dashMomentum = 0;
         if (frame == 0 && timer == 0) {
-            m_gauge = m_gauge + 0x14;
+            m_gauge = m_gauge + 20;
             vx = (2.0 - (*m_opponent)->m_proration / 10000.0) * -1.8;
             if (m_rfBlue != 0) {
                 m_rfGauge -= 30.0;
@@ -670,7 +670,7 @@ void CNayukiB::UpdatePattern()
             m_rfGauge -= 0.8;
         }
         if (frame == 0 && timer == 0) {
-            m_gauge = m_gauge + 0x1e;
+            m_gauge = m_gauge + 30;
             vx = m_hitVx;
             vy = vy * 0.75 + m_hitVy;
             if (vy < -2.0) {
@@ -713,7 +713,7 @@ void CNayukiB::UpdatePattern()
             m_rfGauge -= 0.8;
         }
         if (frame == 0 && timer == 0) {
-            m_gauge = m_gauge + 0x1e;
+            m_gauge = m_gauge + 30;
             vx = m_hitVx;
             vy = vy * 0.75 + m_hitVy;
             if (vy < -4.0) {
@@ -756,7 +756,7 @@ void CNayukiB::UpdatePattern()
             m_rfGauge -= 0.8;
         }
         if (frame == 0 && timer == 0) {
-            m_gauge = m_gauge + 0x1e;
+            m_gauge = m_gauge + 30;
             vx = m_hitVx;
             vy = vy * 0.75 + m_hitVy;
             if (vy < -6.0) {
@@ -799,7 +799,7 @@ void CNayukiB::UpdatePattern()
             m_rfGauge -= 0.8;
         }
         if (frame == 0 && timer == 0) {
-            m_gauge = m_gauge + 0x1e;
+            m_gauge = m_gauge + 30;
             vx = m_hitVx;
             vy = vy * 0.75 + m_hitVy;
             ay = 0.032;
@@ -837,7 +837,7 @@ void CNayukiB::UpdatePattern()
             m_rfGauge -= 0.8;
         }
         if (frame == 0 && timer == 0) {
-            m_gauge = m_gauge + 0x1e;
+            m_gauge = m_gauge + 30;
             vx = m_hitVx;
             vy = m_hitVy;
             ay = 0.032;
@@ -880,7 +880,7 @@ void CNayukiB::UpdatePattern()
             break;
         }
         if (frame == 0 && timer == 0) {
-            m_gauge = m_gauge + 0x1e;
+            m_gauge = m_gauge + 30;
             vx = m_hitVx;
             vy = vy * 0.75 + m_hitVy;
             if (vy < -2.0) {
@@ -928,7 +928,7 @@ void CNayukiB::UpdatePattern()
             break;
         }
         if (frame == 0 && timer == 0) {
-            m_gauge = m_gauge + 0x1e;
+            m_gauge = m_gauge + 30;
             vx = m_hitVx;
             vy = vy * 0.75 + m_hitVy;
             if (vy < -4.0) {
@@ -976,7 +976,7 @@ void CNayukiB::UpdatePattern()
             break;
         }
         if (frame == 0 && timer == 0) {
-            m_gauge = m_gauge + 0x1e;
+            m_gauge = m_gauge + 30;
             vx = m_hitVx;
             vy = vy * 0.75 + m_hitVy;
             ay = 0.032;
@@ -1019,7 +1019,7 @@ void CNayukiB::UpdatePattern()
             break;
         }
         if (frame == 0 && timer == 0) {
-            m_gauge = m_gauge + 0x1e;
+            m_gauge = m_gauge + 30;
             vx = m_hitVx;
             vy = m_hitVy;
             ay = 0.032;
@@ -1114,13 +1114,13 @@ void CNayukiB::UpdatePattern()
             m_rfGauge -= 0.8;
         }
         if (frame == 0 && timer == 0 && m_patternVar1 == 0) {
-            m_gauge = m_gauge + 0x1e;
+            m_gauge = m_gauge + 30;
             m_patternVar1++;
-            m_untechTime = m_untechTime + 0x78;
+            m_untechTime = m_untechTime + 120;
             vx = 0.5;
             vy = -2.5;
             ay = 0.025;
-            m_playSound = 0x1f;
+            m_playSound = 31;
             effect.type = 0;
             effect.x = (double)(int)x;
             effect.y = (double)(int)y;
@@ -1153,7 +1153,7 @@ void CNayukiB::UpdatePattern()
             m_rfGauge -= 0.8;
         }
         if (frame == 0 && timer == 0) {
-            m_gauge = m_gauge + 0x1e;
+            m_gauge = m_gauge + 30;
             vx = m_hitVx;
             vy = m_hitVy;
             ay = 0.072;
@@ -1264,7 +1264,7 @@ void CNayukiB::UpdatePattern()
         }
         m_dashMomentum = 0;
         if (frame == 0 && timer == 0) {
-            m_gauge = m_gauge + 0x1e;
+            m_gauge = m_gauge + 30;
             if (m_rfBlue != 0) {
                 m_rfGauge -= 30.0;
             }
@@ -1302,7 +1302,7 @@ void CNayukiB::UpdatePattern()
         }
         m_dashMomentum = 0;
         if (frame == 0 && timer == 0) {
-            m_gauge = m_gauge + 0x1e;
+            m_gauge = m_gauge + 30;
             if (m_rfBlue != 0) {
                 m_rfGauge -= 30.0;
             }
@@ -1340,7 +1340,7 @@ void CNayukiB::UpdatePattern()
         }
         m_dashMomentum = 0;
         if (frame == 0 && timer == 0) {
-            m_gauge = m_gauge + 0x1e;
+            m_gauge = m_gauge + 30;
             if (m_rfBlue != 0) {
                 m_rfGauge -= 30.0;
             }
@@ -1380,7 +1380,7 @@ void CNayukiB::UpdatePattern()
             effect.facing = facing;
             effect.layer = 1;
             SpawnObject(&effect);
-            m_gauge = m_gauge + 0x1e;
+            m_gauge = m_gauge + 30;
             vx = m_hitVx;
             vy = m_hitVy;
             ay = 0.032;
@@ -1414,11 +1414,11 @@ void CNayukiB::UpdatePattern()
             m_rfGauge -= 0.8;
         }
         if (frame == 0 && timer == 0 && m_patternVar1 == 0) {
-            m_playSound = 0x1e;
+            m_playSound = 30;
             vy = -0.45;
             vx = -0.1;
             m_patternVar1++;
-            m_gauge = m_gauge + 0x1e;
+            m_gauge = m_gauge + 30;
         }
         if (frame == 4 && timer == 0) {
             vx = m_hitVx;
@@ -1471,10 +1471,10 @@ void CNayukiB::UpdatePattern()
             if (m_rfBlue != 0) {
                 m_rfGauge -= 30.0;
             }
-            m_playSound = 0x21;
+            m_playSound = 33;
             vy = -1.5;
             vx = -0.8;
-            m_gauge = m_gauge + 0x1e;
+            m_gauge = m_gauge + 30;
         }
         vy += 0.04;
         if (frame == 0 && vy + y > 0.0) {
@@ -1523,10 +1523,10 @@ void CNayukiB::UpdatePattern()
             if (m_rfBlue != 0) {
                 m_rfGauge -= 30.0;
             }
-            m_playSound = 0x21;
+            m_playSound = 33;
             vy = -1.5;
             vx = -0.8;
-            m_gauge = m_gauge + 0x1e;
+            m_gauge = m_gauge + 30;
         }
         vy += 0.04;
         if (frame == 0 && vy + y > 0.0) {
@@ -1575,10 +1575,10 @@ void CNayukiB::UpdatePattern()
             if (m_rfBlue != 0) {
                 m_rfGauge -= 30.0;
             }
-            m_playSound = 0x21;
+            m_playSound = 33;
             vx = m_hitVx;
             vy = m_hitVy;
-            m_gauge = m_gauge + 0x1e;
+            m_gauge = m_gauge + 30;
         }
         vy += 0.04;
         timer++;
@@ -1619,10 +1619,10 @@ void CNayukiB::UpdatePattern()
                 if (m_rfBlue != 0) {
                     m_rfGauge -= 30.0;
                 }
-                m_playSound = 0x21;
+                m_playSound = 33;
                 vx = m_hitVx;
                 vy = m_hitVy;
-                m_gauge = m_gauge + 0x1e;
+                m_gauge = m_gauge + 30;
                 m_patternVar1++;
             }
         }
@@ -1732,7 +1732,7 @@ void CNayukiB::UpdatePattern()
         break;
     case kLyingDown:
         m_dashMomentum = 0;
-        if (m_hp > 0 && timer > 0x63) {
+        if (m_hp > 0 && timer > 99) {
             pattern = kWakeUp;
             StartPattern();
         }
@@ -1754,7 +1754,7 @@ void CNayukiB::UpdatePattern()
         if (timer >= duration) {
             timer = 0;
             frame++;
-            if (frame == 2 && timer == 0 && m_patternVar1 < 0x41) {
+            if (frame == 2 && timer == 0 && m_patternVar1 < 65) {
                 m_patternVar1++;
                 frame = 0;
             }
@@ -1769,7 +1769,7 @@ void CNayukiB::UpdatePattern()
         }
         if (frame == 0 && timer == 0) {
             m_dashMomentum = 0;
-            m_gauge = m_gauge + 0xa;
+            m_gauge = m_gauge + 10;
             vx = -1.5;
             vy = 0.0;
             y = 0.0;
@@ -1809,7 +1809,7 @@ void CNayukiB::UpdatePattern()
         }
         if (frame == 0 && timer == 0) {
             m_dashMomentum = 0;
-            m_gauge = m_gauge + 0xf;
+            m_gauge = m_gauge + 15;
             vx = -1.8;
             vy = 0.0;
             y = 0.0;
@@ -1849,7 +1849,7 @@ void CNayukiB::UpdatePattern()
         }
         if (frame == 0 && timer == 0) {
             m_dashMomentum = 0;
-            m_gauge = m_gauge + 0x14;
+            m_gauge = m_gauge + 20;
             vx = -2.3;
             vy = 0.0;
             y = 0.0;
@@ -1889,7 +1889,7 @@ void CNayukiB::UpdatePattern()
         }
         if (frame == 0 && timer == 0) {
             m_dashMomentum = 0;
-            m_gauge = m_gauge + 0xa;
+            m_gauge = m_gauge + 10;
             vx = -1.5;
             vy = 0.0;
             y = 0.0;
@@ -1926,7 +1926,7 @@ void CNayukiB::UpdatePattern()
         }
         if (frame == 0 && timer == 0) {
             m_dashMomentum = 0;
-            m_gauge = m_gauge + 0xf;
+            m_gauge = m_gauge + 15;
             vx = -1.8;
             vy = 0.0;
             y = 0.0;
@@ -1963,7 +1963,7 @@ void CNayukiB::UpdatePattern()
         }
         if (frame == 0 && timer == 0) {
             m_dashMomentum = 0;
-            m_gauge = m_gauge + 0x14;
+            m_gauge = m_gauge + 20;
             vx = -2.3;
             vy = 0.0;
             y = 0.0;
@@ -1994,7 +1994,7 @@ void CNayukiB::UpdatePattern()
     case kGuardAir:
         if (frame == 0 && timer == 0) {
             vy = -2.6;
-            m_gauge = m_gauge + 0xf;
+            m_gauge = m_gauge + 15;
             ay = 0.06;
         }
         vx = -1.2;
@@ -2083,12 +2083,12 @@ void CNayukiB::UpdatePattern()
             StopMoving();
             effect.type = 9;
             effect.x = (double)(int)x;
-            effect.y = (double)((int)y - 0x3c);
+            effect.y = (double)((int)y - 60);
             effect.scale = 2;
             effect.layer = 1;
             m_game->CreateEffect((EffectDesc*)&effect);
             m_hitsLeft = 1;
-            m_playSound = 0x3e;
+            m_playSound = 62;
             m_patternVar1++;
         }
         timer++;
@@ -2115,13 +2115,13 @@ void CNayukiB::UpdatePattern()
             StopMoving();
             effect.type = 9;
             effect.x = (double)(int)x;
-            effect.y = (double)((int)y - 0x3c);
+            effect.y = (double)((int)y - 60);
             effect.scale = 2;
             effect.layer = 1;
             m_game->CreateEffect((EffectDesc*)&effect);
             m_hitsLeft = 1;
-            m_playSound = 0x3e;
-            m_gauge = m_gauge - 0x3e8;
+            m_playSound = 62;
+            m_gauge = m_gauge - 1000;
             m_patternVar1++;
         }
         vy = vy + ay;
@@ -2136,7 +2136,7 @@ void CNayukiB::UpdatePattern()
         if (timer >= duration) {
             timer = 0;
             frame++;
-            if (frame == 0x12) {
+            if (frame == 18) {
                 ay = 0.035;
             }
             if (frame >= frameCount) {
@@ -2177,11 +2177,11 @@ void CNayukiB::UpdatePattern()
                 break;
             }
         }
-        if (m_inputX == facing && m_patternVar2 >= 0x50 && frame < 4) {
+        if (m_inputX == facing && m_patternVar2 >= 80 && frame < 4) {
             pattern = kDashStop;
             StartPattern();
         }
-        if (m_inputX != facing && m_patternVar1 >= 0x3c && frame < 4) {
+        if (m_inputX != facing && m_patternVar1 >= 60 && frame < 4) {
             pattern = kDashStop;
             StartPattern();
         }
@@ -2230,7 +2230,7 @@ void CNayukiB::UpdatePattern()
             StartAfterimages(3);
             vy = 0.0;
             ay = 0.0;
-            m_playSound = 0x11;
+            m_playSound = 17;
         }
         timer++;
         m_patternVar1++;
@@ -2242,7 +2242,7 @@ void CNayukiB::UpdatePattern()
                 frame = frame - 2;
             }
         }
-        if (m_inputX == facing && m_patternVar2 >= 0x78) {
+        if (m_inputX == facing && m_patternVar2 >= 120) {
             pattern = kFall;
             StartPattern();
             vx = 1.6;
@@ -2251,7 +2251,7 @@ void CNayukiB::UpdatePattern()
                 vx = -vx;
             }
         }
-        if (m_inputX != facing && m_patternVar1 >= 0x28) {
+        if (m_inputX != facing && m_patternVar1 >= 40) {
             pattern = kFall;
             StartPattern();
             vx = 1.3;
@@ -2267,7 +2267,7 @@ void CNayukiB::UpdatePattern()
             vy = 0.0;
             ay = 0.0;
             StartAfterimages(3);
-            m_playSound = 0x11;
+            m_playSound = 17;
         }
         timer++;
         m_patternVar1++;
@@ -2279,7 +2279,7 @@ void CNayukiB::UpdatePattern()
                 frame = frame - 2;
             }
         }
-        if (m_inputX == -facing && m_patternVar2 >= 0x78) {
+        if (m_inputX == -facing && m_patternVar2 >= 120) {
             pattern = kFall;
             StartPattern();
             vx = -0.9;
@@ -2288,7 +2288,7 @@ void CNayukiB::UpdatePattern()
                 vx = -vx;
             }
         }
-        if (m_inputX != -facing && m_patternVar1 >= 0x28) {
+        if (m_inputX != -facing && m_patternVar1 >= 40) {
             pattern = kFall;
             StartPattern();
             vx = -0.9;
@@ -2307,11 +2307,11 @@ void CNayukiB::UpdatePattern()
                 m_proration = m_rfGauge * 5.0 + m_proration;
             }
             m_rfGauge = 0.0;
-            m_freezeTime = 0x5a;
-            FillBackground(0xb0, 3);
+            m_freezeTime = 90;
+            FillBackground(176, 3);
         }
         if (frame == 1 && timer == 0) {
-            m_playSound = 0x12;
+            m_playSound = 18;
             effect.type = 1;
             effect.x = (double)(int)x;
             effect.y = (double)(int)y;
@@ -2410,7 +2410,7 @@ void CNayukiB::UpdatePattern()
             }
             m_recoilGuardWindow = 0;
             m_cornerPushback = 0.0;
-            m_freezeTime = 0x3c;
+            m_freezeTime = 60;
         }
         if (m_freezeTime == 0 && m_patternVar3 == 0) {
             m_patternVar3++;
@@ -2446,11 +2446,11 @@ void CNayukiB::UpdatePattern()
                 m_proration = m_rfGauge * 5.0 + m_proration;
             }
             m_rfGauge = 0.0;
-            m_freezeTime = 0x5a;
-            FillBackground(0xb0, 3);
+            m_freezeTime = 90;
+            FillBackground(176, 3);
         }
         if (frame == 0 && timer == 0) {
-            m_playSound = 0x12;
+            m_playSound = 18;
             effect.type = 1;
             effect.x = (double)(int)x;
             effect.y = (double)(int)y;
@@ -2511,11 +2511,11 @@ void CNayukiB::UpdatePattern()
         if (y < 0.0) {
             vy = vy + ay;
         }
-        if (y + vy > 0.0 && frame < 0xa) {
+        if (y + vy > 0.0 && frame < 10) {
             StopMoving();
             y = 0.0;
             timer = 0;
-            frame = 0xa;
+            frame = 10;
             m_playSound = 9;
         }
         timer++;
@@ -2527,7 +2527,7 @@ void CNayukiB::UpdatePattern()
                 vy = -1.0;
                 ay = 0.028;
             }
-            if (frame == 0xa) {
+            if (frame == 10) {
                 frame = frame - 2;
             }
             if (frame >= frameCount) {
@@ -2561,7 +2561,7 @@ void CNayukiB::UpdatePattern()
         }
         if (frame == 2 && timer == 0) {
             m_gauge = m_gauge + 5;
-            m_playSound = 0x15;
+            m_playSound = 21;
             m_hitsLeft = 1;
         }
         timer++;
@@ -2602,8 +2602,8 @@ void CNayukiB::UpdatePattern()
             break;
         }
         if (frame == 1 && timer == 0) {
-            m_gauge = m_gauge + 0xf;
-            m_playSound = 0x14;
+            m_gauge = m_gauge + 15;
+            m_playSound = 20;
             m_hitsLeft = 1;
         }
         timer++;
@@ -2632,8 +2632,8 @@ void CNayukiB::UpdatePattern()
             m_dashMomentum = 0;
         }
         if (frame == 3 && timer == 0) {
-            m_gauge = m_gauge + 0xf;
-            m_playSound = 0x14;
+            m_gauge = m_gauge + 15;
+            m_playSound = 20;
             m_hitsLeft = 1;
             vx = 1.75;
         }
@@ -2683,8 +2683,8 @@ void CNayukiB::UpdatePattern()
             frame++;
             if (frame == 2) {
                 m_hitsLeft = 1;
-                m_playSound = 0x14;
-                m_gauge = m_gauge + 0x23;
+                m_playSound = 20;
+                m_gauge = m_gauge + 35;
             }
             if (frame >= frameCount) {
                 pattern = kStand;
@@ -2718,7 +2718,7 @@ void CNayukiB::UpdatePattern()
         }
         if (frame == 1 && timer == 0) {
             m_gauge = m_gauge + 5;
-            m_playSound = 0x15;
+            m_playSound = 21;
             m_hitsLeft = 1;
         }
         timer++;
@@ -2762,8 +2762,8 @@ void CNayukiB::UpdatePattern()
             break;
         }
         if (frame == 2 && timer == 0) {
-            m_gauge = m_gauge + 0xd;
-            m_playSound = 0x14;
+            m_gauge = m_gauge + 13;
+            m_playSound = 20;
             m_hitsLeft = 1;
         }
         timer++;
@@ -2796,8 +2796,8 @@ void CNayukiB::UpdatePattern()
             m_dashMomentum = 0;
         }
         if (frame == 2 && timer == 0) {
-            m_gauge = m_gauge + 0x19;
-            m_playSound = 0x14;
+            m_gauge = m_gauge + 25;
+            m_playSound = 20;
         }
         timer++;
         if (timer >= duration) {
@@ -2838,7 +2838,7 @@ void CNayukiB::UpdatePattern()
         }
         if (frame == 2 && timer == 0) {
             m_gauge = m_gauge + 5;
-            m_playSound = 0x15;
+            m_playSound = 21;
             m_hitsLeft = 1;
         }
         if (y + vy >= 0.0) {
@@ -2876,8 +2876,8 @@ void CNayukiB::UpdatePattern()
             break;
         }
         if (frame == 1 && timer == 0) {
-            m_gauge = m_gauge + 0xd;
-            m_playSound = 0x14;
+            m_gauge = m_gauge + 13;
+            m_playSound = 20;
             m_hitsLeft = 1;
         }
         if (y + vy >= 0.0) {
@@ -2925,8 +2925,8 @@ void CNayukiB::UpdatePattern()
             timer = 0;
             frame++;
             if (frame == 3) {
-                m_gauge = m_gauge + 0x1e;
-                m_playSound = 0x14;
+                m_gauge = m_gauge + 30;
+                m_playSound = 20;
                 m_hitsLeft = 1;
             }
             if (frame < 2) {
@@ -2949,8 +2949,8 @@ void CNayukiB::UpdatePattern()
             ay = 0.036;
         }
         if (frame == 6 && timer == 0) {
-            m_gauge = m_gauge + 0x14;
-            m_playSound = 0x14;
+            m_gauge = m_gauge + 20;
+            m_playSound = 20;
             m_hitsLeft = 1;
         }
         if (frame > 2) {
@@ -2995,8 +2995,8 @@ void CNayukiB::UpdatePattern()
             vy = 0.0;
         }
         if (frame == 3 && timer == 0) {
-            m_gauge = m_gauge + 0x1e;
-            m_playSound = 0x14;
+            m_gauge = m_gauge + 30;
+            m_playSound = 20;
             m_hitsLeft = 1;
         }
         timer++;
@@ -3014,8 +3014,8 @@ void CNayukiB::UpdatePattern()
     case kUnusedAirDive:
         vy = vy + ay;
         if (frame == 0 && timer == 0) {
-            m_gauge = m_gauge + 0x1e;
-            m_playSound = 0x14;
+            m_gauge = m_gauge + 30;
+            m_playSound = 20;
             m_hitsLeft = 1;
             vx = vx / 2.0;
             ay = 0.07;
@@ -3117,8 +3117,8 @@ void CNayukiB::UpdatePattern()
             pattern = kThrowHit;
             (*m_opponent)->pattern = kThrownStandHigh2;
             effect.type = 0;
-            effect.x = (double)((int)x + facing * 0x19);
-            effect.y = (double)((int)y - 0x33);
+            effect.x = (double)((int)x + facing * 25);
+            effect.y = (double)((int)y - 51);
             effect.scale = 2;
             effect.layer = 1;
             m_game->CreateEffect((EffectDesc*)&effect);
@@ -3155,7 +3155,7 @@ void CNayukiB::UpdatePattern()
                 (*m_opponent)->StartPattern();
                 (*m_opponent)->StopMoving();
                 (*m_opponent)->pattern = kThrownDoubledOver;
-                (*m_opponent)->x = facing * 0x17 + x;
+                (*m_opponent)->x = facing * 23 + x;
                 (*m_opponent)->y = y - 65.0;
             }
             if (frame == 2) {
@@ -3167,7 +3167,7 @@ void CNayukiB::UpdatePattern()
                 (*m_opponent)->m_hitVx = 1.8;
                 (*m_opponent)->m_hitVy = -1.45;
                 (*m_opponent)->ay = 0.035;
-                DealDamage(0x3e8, 500.0);
+                DealDamage(1000, 500.0);
                 m_comboHits--;
                 m_shownHits--;
                 (*m_opponent)->m_noAirRecovery = 1;
@@ -3195,7 +3195,7 @@ void CNayukiB::UpdatePattern()
         }
         if (frame == 1 && timer == 0) {
             m_gauge = m_gauge + 5;
-            m_playSound = 0x15;
+            m_playSound = 21;
             m_hitsLeft = 1;
         }
         timer++;
@@ -3239,8 +3239,8 @@ void CNayukiB::UpdatePattern()
             vy = 0.0;
         }
         if (frame == 2 && timer == 0) {
-            m_gauge = m_gauge + 0xa;
-            m_playSound = 0x14;
+            m_gauge = m_gauge + 10;
+            m_playSound = 20;
             m_hitsLeft = 1;
         }
         timer++;
@@ -3277,8 +3277,8 @@ void CNayukiB::UpdatePattern()
             frame++;
             m_attackResult = 0;
             if (frame == 2) {
-                m_gauge = m_gauge + 0x14;
-                m_playSound = 0x14;
+                m_gauge = m_gauge + 20;
+                m_playSound = 20;
                 m_hitsLeft = 1;
             }
             if (frame >= frameCount) {
@@ -3304,7 +3304,7 @@ void CNayukiB::UpdatePattern()
         }
         if (frame == 1 && timer == 0) {
             m_gauge = m_gauge + 5;
-            m_playSound = 0x15;
+            m_playSound = 21;
             m_hitsLeft = 1;
         }
         timer++;
@@ -3328,8 +3328,8 @@ void CNayukiB::UpdatePattern()
             m_hitsLeft = 1;
         }
         if (frame == 2 && timer == 0) {
-            m_gauge = m_gauge + 0x19;
-            m_playSound = 0x14;
+            m_gauge = m_gauge + 25;
+            m_playSound = 20;
         }
         if (frame > 3 && frame < 7) {
             vy = vy + ay;
@@ -3381,8 +3381,8 @@ void CNayukiB::UpdatePattern()
             }
         }
         if (frame == 4 && timer == 0) {
-            m_gauge = m_gauge + 0x19;
-            m_playSound = 0x14;
+            m_gauge = m_gauge + 25;
+            m_playSound = 20;
             m_hitsLeft = 1;
         }
         timer++;
@@ -3417,7 +3417,7 @@ void CNayukiB::UpdatePattern()
             (*m_opponent)->StartPattern();
             (*m_opponent)->StopMoving();
             (*m_opponent)->pattern = kThrownDoubledOver;
-            (*m_opponent)->x = facing * 0x17 + x;
+            (*m_opponent)->x = facing * 23 + x;
             (*m_opponent)->y = y - 65.0;
             break;
         }
@@ -3438,8 +3438,8 @@ void CNayukiB::UpdatePattern()
         }
         break;
     case kAirThrowHit:
-        m_hideOffscreenMarker = 0x1e;
-        (*m_opponent)->m_hideOffscreenMarker = 0x1e;
+        m_hideOffscreenMarker = 30;
+        (*m_opponent)->m_hideOffscreenMarker = 30;
         m_dashMomentum = 0;
         if (frame < 9 && frame > 2) {
             vy = vy + ay;
@@ -3465,7 +3465,7 @@ void CNayukiB::UpdatePattern()
                 (*m_opponent)->m_hitVx = 2.5;
                 (*m_opponent)->m_hitVy = -0.8;
                 (*m_opponent)->ay = 0.035;
-                DealDamage(0x3e8, 500.0);
+                DealDamage(1000, 500.0);
                 m_comboHits--;
                 m_shownHits--;
                 (*m_opponent)->m_noAirRecovery = 1;
@@ -3485,13 +3485,13 @@ void CNayukiB::UpdatePattern()
             StopMoving();
             m_hitsLeft = 1;
         }
-        if (frame < 0xb && frame > 0) {
+        if (frame < 11 && frame > 0) {
             vy = vy + ay;
             if (vy + y >= 0.0) {
                 y = 0.0;
                 StopMoving();
                 StartPattern();
-                frame = 0xb;
+                frame = 11;
                 break;
             }
         }
@@ -3500,7 +3500,7 @@ void CNayukiB::UpdatePattern()
             timer = 0;
             frame++;
             if (frame == 1) {
-                m_gauge = m_gauge + 0x2d;
+                m_gauge = m_gauge + 45;
                 m_attackResult = 0;
                 effect.type = 0x1f;
                 effect.x = (double)(int)x;
@@ -3514,7 +3514,7 @@ void CNayukiB::UpdatePattern()
                 ay = 0.035;
                 m_playVoice = 0;
             }
-            if (frame == 0xb) {
+            if (frame == 11) {
                 frame = 9;
             }
             if (frame >= frameCount) {
@@ -3529,13 +3529,13 @@ void CNayukiB::UpdatePattern()
             StopMoving();
             m_hitsLeft = 1;
         }
-        if (frame < 0xb && frame > 0) {
+        if (frame < 11 && frame > 0) {
             vy = vy + ay;
             if (vy + y >= 0.0) {
                 y = 0.0;
                 StopMoving();
                 StartPattern();
-                frame = 0xb;
+                frame = 11;
                 break;
             }
         }
@@ -3544,7 +3544,7 @@ void CNayukiB::UpdatePattern()
             timer = 0;
             frame++;
             if (frame == 1) {
-                m_gauge = m_gauge + 0x2d;
+                m_gauge = m_gauge + 45;
                 m_attackResult = 0;
                 effect.type = 0x1f;
                 effect.x = (double)(int)x;
@@ -3558,7 +3558,7 @@ void CNayukiB::UpdatePattern()
                 ay = 0.045;
                 m_playVoice = 0;
             }
-            if (frame == 0xb) {
+            if (frame == 11) {
                 frame = 9;
             }
             if (frame >= frameCount) {
@@ -3577,20 +3577,20 @@ void CNayukiB::UpdatePattern()
                 m_rfGauge -= 250.0;
             }
             effect.type = 0x21;
-            effect.sound = 0xb;
+            effect.sound = 11;
             effect.x = (double)(int)x;
-            effect.y = (double)((int)y - 0x32);
+            effect.y = (double)((int)y - 50);
             effect.scale = 2;
             effect.layer = 1;
             m_game->CreateEffect((EffectDesc*)&effect);
         }
-        if (frame < 0x13 && frame > 0) {
+        if (frame < 19 && frame > 0) {
             vy = vy + ay;
             if (vy + y >= 0.0) {
                 y = 0.0;
                 StopMoving();
                 StartPattern();
-                frame = 0x13;
+                frame = 19;
                 break;
             }
         }
@@ -3599,7 +3599,7 @@ void CNayukiB::UpdatePattern()
             timer = 0;
             frame++;
             if (frame == 1) {
-                m_gauge = m_gauge + 0x2d;
+                m_gauge = m_gauge + 45;
                 m_attackResult = 0;
                 effect.type = 0x1f;
                 effect.x = (double)(int)x;
@@ -3614,13 +3614,13 @@ void CNayukiB::UpdatePattern()
                 m_hitsLeft = 1;
                 m_playVoice = 0;
             }
-            if (frame == 0xa) {
+            if (frame == 10) {
                 m_attackResult = 0;
                 m_hitsLeft = 1;
                 m_playVoice = 0;
             }
-            if (frame == 0x13) {
-                frame = 0x11;
+            if (frame == 19) {
+                frame = 17;
             }
             if (frame >= frameCount) {
                 pattern = kStand;
@@ -3639,7 +3639,7 @@ void CNayukiB::UpdatePattern()
             timer = 0;
             frame++;
             if (frame == 3) {
-                m_gauge = m_gauge + 0x2d;
+                m_gauge = m_gauge + 45;
                 m_attackResult = 0;
                 m_playVoice = 2;
             }
@@ -3664,7 +3664,7 @@ void CNayukiB::UpdatePattern()
             timer = 0;
             frame++;
             if (frame == 3) {
-                m_gauge = m_gauge + 0x2d;
+                m_gauge = m_gauge + 45;
                 m_attackResult = 0;
                 m_playVoice = 2;
             }
@@ -3689,7 +3689,7 @@ void CNayukiB::UpdatePattern()
             timer = 0;
             frame++;
             if (frame == 3) {
-                m_gauge = m_gauge + 0x2d;
+                m_gauge = m_gauge + 45;
                 m_attackResult = 0;
                 m_playVoice = 2;
             }
@@ -3726,7 +3726,7 @@ void CNayukiB::UpdatePattern()
             vy = vy + ay;
         }
         if ((frame == 8 || frame == 9) && vy + y > 0.0) {
-            frame = 0xa;
+            frame = 10;
             timer = 0;
             y = 0.0;
             StopMoving();
@@ -3745,12 +3745,12 @@ void CNayukiB::UpdatePattern()
             if (frame == 8) {
                 vx = 2.0;
                 vy = 1.0;
-                m_playSound = 0x15;
+                m_playSound = 21;
                 m_hitsLeft = 1;
-                m_gauge = m_gauge + 0x1e;
+                m_gauge = m_gauge + 30;
                 m_playVoice = 1;
             }
-            if (frame == 0xa) {
+            if (frame == 10) {
                 frame = 8;
             }
             if (frame >= frameCount) {
@@ -3781,8 +3781,8 @@ void CNayukiB::UpdatePattern()
         if (frame > 1) {
             vy = vy + ay;
         }
-        if (frame > 8 && frame < 0x10 && vy + y > 0.0) {
-            frame = 0x10;
+        if (frame > 8 && frame < 16 && vy + y > 0.0) {
+            frame = 16;
             timer = 0;
             y = 0.0;
             StopMoving();
@@ -3798,13 +3798,13 @@ void CNayukiB::UpdatePattern()
             if (0) {}
             if (0) {}
             if (frame == 8) {
-                m_playSound = 0x15;
+                m_playSound = 21;
                 m_hitsLeft = 1;
-                m_gauge = m_gauge + 0x1e;
+                m_gauge = m_gauge + 30;
                 m_playVoice = 1;
             }
-            if (frame == 0x10) {
-                frame = 0xe;
+            if (frame == 16) {
+                frame = 14;
             }
             if (frame >= frameCount) {
                 pattern = kStand;
@@ -3824,9 +3824,9 @@ void CNayukiB::UpdatePattern()
                 m_rfGauge -= 250.0;
             }
             effect.type = 0x21;
-            effect.sound = 0xb;
+            effect.sound = 11;
             effect.x = (double)(int)x;
-            effect.y = (double)((int)y - 0x32);
+            effect.y = (double)((int)y - 50);
             effect.scale = 2;
             effect.layer = 1;
             m_game->CreateEffect((EffectDesc*)&effect);
@@ -3839,9 +3839,9 @@ void CNayukiB::UpdatePattern()
                     m_rfGauge -= 250.0;
                 }
                 effect.type = 0x21;
-                effect.sound = 0xb;
+                effect.sound = 11;
                 effect.x = (double)(int)x;
-                effect.y = (double)((int)y - 0x32);
+                effect.y = (double)((int)y - 50);
                 effect.scale = 2;
                 effect.layer = 1;
                 m_game->CreateEffect((EffectDesc*)&effect);
@@ -3860,11 +3860,11 @@ void CNayukiB::UpdatePattern()
             vy = -1.0;
             ay = 0.015;
         }
-        if (frame > 1 && frame < 0x10) {
+        if (frame > 1 && frame < 16) {
             vy = vy + ay;
         }
-        if (frame < 0x10 && frame > 2 && vy + y > 0.0) {
-            frame = 0x10;
+        if (frame < 16 && frame > 2 && vy + y > 0.0) {
+            frame = 16;
             timer = 0;
             y = 0.0;
             StopMoving();
@@ -3877,27 +3877,27 @@ void CNayukiB::UpdatePattern()
             if (0) {}
             if (0) {}
             if (frame == 3) {
-                m_playSound = 0x15;
+                m_playSound = 21;
                 m_hitsLeft = 1;
                 m_attackResult = 0;
                 m_playVoice = 1;
             }
             if (frame == 6) {
-                m_playSound = 0x15;
+                m_playSound = 21;
                 m_hitsLeft = 1;
                 m_attackResult = 0;
                 m_playVoice = 1;
             }
             if (frame == 9) {
-                m_playSound = 0x15;
+                m_playSound = 21;
                 m_hitsLeft = 1;
                 m_attackResult = 0;
                 m_playVoice = 1;
             }
-            if (frame == 0xd) {
+            if (frame == 13) {
                 ay = 0.035;
             }
-            if (frame == 0x10) {
+            if (frame == 16) {
                 frame = frame - 2;
             }
             if (frame >= frameCount) {
@@ -3937,7 +3937,7 @@ void CNayukiB::UpdatePattern()
                 effect.layer = 0;
                 effect.side = -((facing == 1) - 1);
                 m_game->CreateEffect((EffectDesc*)&effect);
-                m_gauge = m_gauge + 0x2d;
+                m_gauge = m_gauge + 45;
             }
             if (frame == 5) {
                 m_playVoice = 4;
@@ -3987,7 +3987,7 @@ void CNayukiB::UpdatePattern()
                 effect.layer = 0;
                 effect.side = -((facing == 1) - 1);
                 m_game->CreateEffect((EffectDesc*)&effect);
-                m_gauge = m_gauge + 0x2d;
+                m_gauge = m_gauge + 45;
             }
             if (frame == 5) {
                 m_playVoice = 4;
@@ -4017,9 +4017,9 @@ void CNayukiB::UpdatePattern()
                 m_rfGauge -= 250.0;
             }
             effect.type = 0x21;
-            effect.sound = 0xb;
+            effect.sound = 11;
             effect.x = (double)(int)x;
-            effect.y = (double)((int)y - 0x32);
+            effect.y = (double)((int)y - 50);
             effect.scale = 2;
             effect.layer = 1;
             m_game->CreateEffect((EffectDesc*)&effect);
@@ -4049,7 +4049,7 @@ void CNayukiB::UpdatePattern()
                 effect.layer = 0;
                 effect.side = -((facing == 1) - 1);
                 m_game->CreateEffect((EffectDesc*)&effect);
-                m_gauge = m_gauge + 0x2d;
+                m_gauge = m_gauge + 45;
             }
             if (frame == 5) {
                 m_playVoice = 4;
@@ -4093,7 +4093,7 @@ void CNayukiB::UpdatePattern()
                     vy = -2.0;
                 }
                 ay = 0.03;
-                m_gauge = m_gauge + 0x2d;
+                m_gauge = m_gauge + 45;
             }
             if (frame == 3) {
                 m_playVoice = 4;
@@ -4140,7 +4140,7 @@ void CNayukiB::UpdatePattern()
                     vy = -2.0;
                 }
                 ay = 0.03;
-                m_gauge = m_gauge + 0x2d;
+                m_gauge = m_gauge + 45;
             }
             if (frame == 3) {
                 m_playVoice = 4;
@@ -4171,9 +4171,9 @@ void CNayukiB::UpdatePattern()
                 m_rfGauge -= 250.0;
             }
             effect.type = 0x21;
-            effect.sound = 0xb;
+            effect.sound = 11;
             effect.x = (double)(int)x;
-            effect.y = (double)((int)y - 0x32);
+            effect.y = (double)((int)y - 50);
             effect.scale = 2;
             effect.layer = 1;
             m_game->CreateEffect((EffectDesc*)&effect);
@@ -4199,7 +4199,7 @@ void CNayukiB::UpdatePattern()
                     vy = -2.0;
                 }
                 ay = 0.02;
-                m_gauge = m_gauge + 0x2d;
+                m_gauge = m_gauge + 45;
             }
             if (frame == 3) {
                 m_playVoice = 4;
@@ -4228,32 +4228,32 @@ void CNayukiB::UpdatePattern()
             vy = 0.0;
             ay = 0.0;
             m_hitsLeft = 3;
-            m_freezeTime = 0x78;
-            m_gauge = m_gauge - 0x3e8;
-            FillBackground(0xb0, 3);
+            m_freezeTime = 120;
+            m_gauge = m_gauge - 1000;
+            FillBackground(176, 3);
             effect.type = 0x44;
-            effect.sound = 0x13;
+            effect.sound = 19;
             effect.x = (double)(int)x;
-            effect.y = (double)((int)y - 0x37);
+            effect.y = (double)((int)y - 55);
             effect.scale = 2;
             effect.keep = 1;
             effect.layer = 1;
             m_game->CreateEffect((EffectDesc*)&effect);
         }
         if (frame < 5) {
-            FocusCameraY(0x32, 3);
+            FocusCameraY(50, 3);
         }
         if ((frame == 6 || frame == 7) && m_hitsLeft == 1) {
             frame = frame + 2;
         }
-        if (frame > 9 && frame < 0x13) {
+        if (frame > 9 && frame < 19) {
             vy = vy + ay;
         }
-        if (frame < 0x13 && y + vy >= 0.0) {
+        if (frame < 19 && y + vy >= 0.0) {
             StopMoving();
             y = 0.0;
             timer = 0;
-            frame = 0x13;
+            frame = 19;
         }
         timer++;
         if (timer >= duration) {
@@ -4268,10 +4268,10 @@ void CNayukiB::UpdatePattern()
             if (frame == 8 && m_hitsLeft > 1) {
                 frame = frame - 2;
             }
-            if (frame == 0xa) {
+            if (frame == 10) {
                 frame = frame - 2;
             }
-            if (frame == 0x13) {
+            if (frame == 19) {
                 frame = frame - 2;
             }
             if (frame >= frameCount) {
@@ -4287,32 +4287,32 @@ void CNayukiB::UpdatePattern()
             vy = 0.0;
             ay = 0.0;
             m_hitsLeft = 6;
-            m_freezeTime = 0x78;
-            m_gauge = m_gauge - 0x7d0;
-            FillBackground(0xb0, 3);
+            m_freezeTime = 120;
+            m_gauge = m_gauge - 2000;
+            FillBackground(176, 3);
             effect.type = 0x45;
             effect.sound = 5;
             effect.x = (double)(int)x;
-            effect.y = (double)((int)y - 0x37);
+            effect.y = (double)((int)y - 55);
             effect.scale = 2;
             effect.keep = 1;
             effect.layer = 1;
             m_game->CreateEffect((EffectDesc*)&effect);
         }
         if (frame < 5) {
-            FocusCameraY(0x32, 3);
+            FocusCameraY(50, 3);
         }
         if ((frame == 6 || frame == 7) && m_hitsLeft == 1) {
             frame = frame + 2;
         }
-        if (frame > 9 && frame < 0x13) {
+        if (frame > 9 && frame < 19) {
             vy = vy + ay;
         }
-        if (frame < 0x13 && y + vy >= 0.0) {
+        if (frame < 19 && y + vy >= 0.0) {
             StopMoving();
             y = 0.0;
             timer = 0;
-            frame = 0x13;
+            frame = 19;
         }
         timer++;
         if (timer >= duration) {
@@ -4328,10 +4328,10 @@ void CNayukiB::UpdatePattern()
             if (frame == 8 && m_hitsLeft > 1) {
                 frame = frame - 2;
             }
-            if (frame == 0xa) {
+            if (frame == 10) {
                 frame = frame - 2;
             }
-            if (frame == 0x13) {
+            if (frame == 19) {
                 frame = frame - 2;
             }
             if (frame >= frameCount) {
@@ -4346,37 +4346,37 @@ void CNayukiB::UpdatePattern()
             vx = 0.0;
             vy = 0.0;
             ay = 0.0;
-            m_hitsLeft = 0xa;
-            m_freezeTime = 0x78;
-            m_gauge = m_gauge - 0xbb8;
-            FillBackground(0xb0, 3);
+            m_hitsLeft = 10;
+            m_freezeTime = 120;
+            m_gauge = m_gauge - 3000;
+            FillBackground(176, 3);
             effect.type = 0x46;
-            effect.sound = 0x40;
+            effect.sound = 64;
             effect.x = (double)(int)x;
-            effect.y = (double)((int)y - 0x37);
+            effect.y = (double)((int)y - 55);
             effect.scale = 2;
             effect.keep = 1;
             effect.layer = 1;
             m_game->CreateEffect((EffectDesc*)&effect);
-            m_playSound = 0x25;
+            m_playSound = 37;
         }
-        if (frame < 0xa) {
-            m_game->FlashNegative(0xf);
+        if (frame < 10) {
+            m_game->FlashNegative(15);
         }
         if (frame < 5) {
-            FocusCameraY(0x32, 3);
+            FocusCameraY(50, 3);
         }
         if ((frame == 6 || frame == 7) && m_hitsLeft == 1) {
             frame = frame + 2;
         }
-        if (frame > 9 && frame < 0x13) {
+        if (frame > 9 && frame < 19) {
             vy = vy + ay;
         }
-        if (frame < 0x13 && y + vy >= 0.0) {
+        if (frame < 19 && y + vy >= 0.0) {
             StopMoving();
             y = 0.0;
             timer = 0;
-            frame = 0x13;
+            frame = 19;
         }
         timer++;
         if (timer >= duration) {
@@ -4387,15 +4387,15 @@ void CNayukiB::UpdatePattern()
                 vx = 4.0;
                 vy = 2.0;
                 m_playVoice = 6;
-                m_invulTime = 0xf;
+                m_invulTime = 15;
             }
             if (frame == 8 && m_hitsLeft > 1) {
                 frame = frame - 2;
             }
-            if (frame == 0xa) {
+            if (frame == 10) {
                 frame = frame - 2;
             }
-            if (frame == 0x13) {
+            if (frame == 19) {
                 frame = frame - 2;
             }
             if (frame >= frameCount) {
@@ -4412,20 +4412,20 @@ void CNayukiB::UpdatePattern()
             ay = 0.0;
             m_hitsLeft = 0;
             m_patternVar1 = 0;
-            m_freezeTime = 0x78;
-            m_gauge = m_gauge - 0x3e8;
-            FillBackground(0xb0, 3);
+            m_freezeTime = 120;
+            m_gauge = m_gauge - 1000;
+            FillBackground(176, 3);
             effect.type = 0x44;
-            effect.sound = 0x13;
+            effect.sound = 19;
             effect.x = (double)(int)x;
-            effect.y = (double)((int)y - 0x37);
+            effect.y = (double)((int)y - 55);
             effect.scale = 2;
             effect.keep = 1;
             effect.layer = 1;
             m_game->CreateEffect((EffectDesc*)&effect);
         }
         if (frame < 4) {
-            FocusCameraY(0x32, 3);
+            FocusCameraY(50, 3);
         }
         timer++;
         if (timer >= duration) {
@@ -4434,8 +4434,8 @@ void CNayukiB::UpdatePattern()
             m_attackResult = 0;
             if (frame == 5 && timer == 0) {
                 effect.type = 0x190;
-                effect.x = (double)((int)x + facing * 0x2c);
-                effect.y = (double)((int)y - 0x28);
+                effect.x = (double)((int)x + facing * 44);
+                effect.y = (double)((int)y - 40);
                 effect.scale = 2;
                 effect.keep = 1;
                 effect.layer = 1;
@@ -4454,7 +4454,7 @@ void CNayukiB::UpdatePattern()
                 frame = frame - 2;
                 m_patternVar1++;
             }
-            if (frame == 0xa && m_patternVar1 < 3) {
+            if (frame == 10 && m_patternVar1 < 3) {
                 frame = frame - 2;
                 m_patternVar1++;
             }
@@ -4472,20 +4472,20 @@ void CNayukiB::UpdatePattern()
             ay = 0.0;
             m_hitsLeft = 0;
             m_patternVar1 = 0;
-            m_freezeTime = 0x78;
-            m_gauge = m_gauge - 0x7d0;
-            FillBackground(0xb0, 3);
+            m_freezeTime = 120;
+            m_gauge = m_gauge - 2000;
+            FillBackground(176, 3);
             effect.type = 0x45;
             effect.sound = 5;
             effect.x = (double)(int)x;
-            effect.y = (double)((int)y - 0x37);
+            effect.y = (double)((int)y - 55);
             effect.scale = 2;
             effect.keep = 1;
             effect.layer = 1;
             m_game->CreateEffect((EffectDesc*)&effect);
         }
         if (frame < 4) {
-            FocusCameraY(0x32, 3);
+            FocusCameraY(50, 3);
         }
         timer++;
         if (timer >= duration) {
@@ -4494,8 +4494,8 @@ void CNayukiB::UpdatePattern()
             m_attackResult = 0;
             if (frame == 5 && timer == 0) {
                 effect.type = 0x191;
-                effect.x = (double)((int)x + facing * 0x2c);
-                effect.y = (double)((int)y - 0x28);
+                effect.x = (double)((int)x + facing * 44);
+                effect.y = (double)((int)y - 40);
                 effect.scale = 2;
                 effect.keep = 1;
                 effect.layer = 1;
@@ -4514,7 +4514,7 @@ void CNayukiB::UpdatePattern()
                 frame = frame - 2;
                 m_patternVar1++;
             }
-            if (frame == 0xa && m_patternVar1 < 3) {
+            if (frame == 10 && m_patternVar1 < 3) {
                 frame = frame - 2;
                 m_patternVar1++;
             }
@@ -4532,24 +4532,24 @@ void CNayukiB::UpdatePattern()
             ay = 0.0;
             m_hitsLeft = 0;
             m_patternVar1 = 0;
-            m_freezeTime = 0x78;
-            m_gauge = m_gauge - 0xbb8;
-            FillBackground(0xb0, 3);
+            m_freezeTime = 120;
+            m_gauge = m_gauge - 3000;
+            FillBackground(176, 3);
             effect.type = 0x46;
-            effect.sound = 0x40;
+            effect.sound = 64;
             effect.x = (double)(int)x;
-            effect.y = (double)((int)y - 0x37);
+            effect.y = (double)((int)y - 55);
             effect.scale = 2;
             effect.keep = 1;
             effect.layer = 1;
             m_game->CreateEffect((EffectDesc*)&effect);
-            m_playSound = 0x25;
+            m_playSound = 37;
         }
         if (frame < 4) {
-            FocusCameraY(0x32, 3);
+            FocusCameraY(50, 3);
         }
-        if (frame < 0xa) {
-            m_game->FlashNegative(0xf);
+        if (frame < 10) {
+            m_game->FlashNegative(15);
         }
         timer++;
         if (timer >= duration) {
@@ -4558,8 +4558,8 @@ void CNayukiB::UpdatePattern()
             m_attackResult = 0;
             if (frame == 5 && timer == 0) {
                 effect.type = 0x192;
-                effect.x = (double)((int)x + facing * 0x2c);
-                effect.y = (double)((int)y - 0x28);
+                effect.x = (double)((int)x + facing * 44);
+                effect.y = (double)((int)y - 40);
                 effect.scale = 2;
                 effect.keep = 1;
                 effect.layer = 1;
@@ -4578,7 +4578,7 @@ void CNayukiB::UpdatePattern()
                 frame = frame - 2;
                 m_patternVar1++;
             }
-            if (frame == 0xa && m_patternVar1 < 3) {
+            if (frame == 10 && m_patternVar1 < 3) {
                 frame = frame - 2;
                 m_patternVar1++;
             }
@@ -4594,7 +4594,7 @@ void CNayukiB::UpdatePattern()
             StopMoving();
         }
         if (frame > 2 && frame < 5) {
-            FocusCameraY(0x32, 3);
+            FocusCameraY(50, 3);
         }
         timer++;
         if (timer >= duration) {
@@ -4602,13 +4602,13 @@ void CNayukiB::UpdatePattern()
             frame++;
             m_attackResult = 0;
             if (frame == 4) {
-                m_freezeTime = 0x78;
-                m_gauge = m_gauge - 0x3e8;
-                FillBackground(0xb0, 3);
+                m_freezeTime = 120;
+                m_gauge = m_gauge - 1000;
+                FillBackground(176, 3);
                 effect.type = 0x44;
-                effect.sound = 0x13;
+                effect.sound = 19;
                 effect.x = (double)((int)x + facing * 5);
-                effect.y = (double)((int)y - 0x2b);
+                effect.y = (double)((int)y - 43);
                 effect.scale = 2;
                 effect.keep = 1;
                 effect.layer = 1;
@@ -4616,16 +4616,16 @@ void CNayukiB::UpdatePattern()
             }
             if (frame == 6) {
                 effect.type = 0x198;
-                effect.x = (double)((int)x + facing * 0x32);
-                effect.y = (double)((int)y - 0x3c);
+                effect.x = (double)((int)x + facing * 50);
+                effect.y = (double)((int)y - 60);
                 effect.scale = 2;
                 effect.keep = 1;
                 effect.layer = 1;
                 effect.facing = facing;
                 SpawnObject(&effect);
                 effect.type = 0x199;
-                effect.x = (double)((int)x - facing * 0x32);
-                effect.y = (double)((int)y - 0x3c);
+                effect.x = (double)((int)x - facing * 50);
+                effect.y = (double)((int)y - 60);
                 effect.scale = 2;
                 effect.keep = 1;
                 effect.layer = 1;
@@ -4633,7 +4633,7 @@ void CNayukiB::UpdatePattern()
                 SpawnObject(&effect);
                 m_orbitDirection = facing;
                 m_orbitLevel = 1;
-                m_orbitTime = 0xbb8;
+                m_orbitTime = 3000;
                 m_playVoice = 7;
             }
             if (frame == 8 && m_patternVar1 < 4) {
@@ -4652,7 +4652,7 @@ void CNayukiB::UpdatePattern()
             StopMoving();
         }
         if (frame > 2 && frame < 5) {
-            FocusCameraY(0x32, 3);
+            FocusCameraY(50, 3);
         }
         timer++;
         if (timer >= duration) {
@@ -4660,13 +4660,13 @@ void CNayukiB::UpdatePattern()
             frame++;
             m_attackResult = 0;
             if (frame == 4) {
-                m_freezeTime = 0x78;
-                m_gauge = m_gauge - 0x7d0;
-                FillBackground(0xb0, 3);
+                m_freezeTime = 120;
+                m_gauge = m_gauge - 2000;
+                FillBackground(176, 3);
                 effect.type = 0x45;
                 effect.sound = 5;
                 effect.x = (double)((int)x + facing * 5);
-                effect.y = (double)((int)y - 0x2b);
+                effect.y = (double)((int)y - 43);
                 effect.scale = 2;
                 effect.keep = 1;
                 effect.layer = 1;
@@ -4674,16 +4674,16 @@ void CNayukiB::UpdatePattern()
             }
             if (frame == 6) {
                 effect.type = 0x198;
-                effect.x = (double)((int)x + facing * 0x32);
-                effect.y = (double)((int)y - 0x3c);
+                effect.x = (double)((int)x + facing * 50);
+                effect.y = (double)((int)y - 60);
                 effect.scale = 2;
                 effect.keep = 1;
                 effect.layer = 1;
                 effect.facing = facing;
                 SpawnObject(&effect);
                 effect.type = 0x199;
-                effect.x = (double)((int)x - facing * 0x32);
-                effect.y = (double)((int)y - 0x3c);
+                effect.x = (double)((int)x - facing * 50);
+                effect.y = (double)((int)y - 60);
                 effect.scale = 2;
                 effect.keep = 1;
                 effect.layer = 1;
@@ -4691,7 +4691,7 @@ void CNayukiB::UpdatePattern()
                 SpawnObject(&effect);
                 m_orbitDirection = facing;
                 m_orbitLevel = 2;
-                m_orbitTime = 0xbb8;
+                m_orbitTime = 3000;
                 m_playVoice = 7;
             }
             if (frame == 8 && m_patternVar1 < 4) {
@@ -4707,13 +4707,13 @@ void CNayukiB::UpdatePattern()
     case k641236C:
         m_dashMomentum = 0;
         if (frame > 2 && frame < 8) {
-            m_game->FlashNegative(0xf);
+            m_game->FlashNegative(15);
         }
         if (frame == 0 && timer == 0) {
             StopMoving();
         }
         if (frame > 2 && frame < 5) {
-            FocusCameraY(0x32, 3);
+            FocusCameraY(50, 3);
         }
         timer++;
         if (timer >= duration) {
@@ -4721,31 +4721,31 @@ void CNayukiB::UpdatePattern()
             frame++;
             m_attackResult = 0;
             if (frame == 4) {
-                m_freezeTime = 0x78;
-                m_gauge = m_gauge - 0xbb8;
-                FillBackground(0xb0, 3);
+                m_freezeTime = 120;
+                m_gauge = m_gauge - 3000;
+                FillBackground(176, 3);
                 effect.type = 0x46;
-                effect.sound = 0x40;
+                effect.sound = 64;
                 effect.x = (double)((int)x + facing * 5);
-                effect.y = (double)((int)y - 0x2b);
+                effect.y = (double)((int)y - 43);
                 effect.scale = 2;
                 effect.keep = 1;
                 effect.layer = 1;
                 m_game->CreateEffect((EffectDesc*)&effect);
-                m_playSound = 0x25;
+                m_playSound = 37;
             }
             if (frame == 6) {
                 effect.type = 0x198;
-                effect.x = (double)((int)x + facing * 0x32);
-                effect.y = (double)((int)y - 0x3c);
+                effect.x = (double)((int)x + facing * 50);
+                effect.y = (double)((int)y - 60);
                 effect.scale = 2;
                 effect.keep = 1;
                 effect.layer = 1;
                 effect.facing = facing;
                 SpawnObject(&effect);
                 effect.type = 0x199;
-                effect.x = (double)((int)x - facing * 0x32);
-                effect.y = (double)((int)y - 0x3c);
+                effect.x = (double)((int)x - facing * 50);
+                effect.y = (double)((int)y - 60);
                 effect.scale = 2;
                 effect.keep = 1;
                 effect.layer = 1;
@@ -4753,7 +4753,7 @@ void CNayukiB::UpdatePattern()
                 SpawnObject(&effect);
                 m_orbitDirection = facing;
                 m_orbitLevel = 3;
-                m_orbitTime = 0xbb8;
+                m_orbitTime = 3000;
                 m_playVoice = 7;
             }
             if (frame == 8 && m_patternVar1 < 4) {
@@ -4771,12 +4771,12 @@ void CNayukiB::UpdatePattern()
             m_dashMomentum = 0;
             StopMoving();
         }
-        if (frame < 0x10 && frame > 0xa) {
-            m_game->FlashNegative(0xf);
+        if (frame < 16 && frame > 10) {
+            m_game->FlashNegative(15);
         }
         if (frame > 1) {
             vy = vy + ay;
-            if (y + vy >= 0.0 && frame > 0xe) {
+            if (y + vy >= 0.0 && frame > 14) {
                 y = 0.0;
                 StopMoving();
                 StartPattern();
@@ -4793,76 +4793,76 @@ void CNayukiB::UpdatePattern()
                 vy = -1.7;
                 ay = 0.015;
             }
-            if (frame == 0xa && timer == 0) {
+            if (frame == 10 && timer == 0) {
                 m_patternVar1 = (int)(vy * 100.0);
                 m_patternVar2 = (int)(vx * 100.0);
                 StopMoving();
-                m_playSound = 0x25;
-                m_freezeTime = 0x78;
-                m_gauge = m_gauge - 0xbb8;
-                FillBackground(0xb0, 3);
+                m_playSound = 37;
+                m_freezeTime = 120;
+                m_gauge = m_gauge - 3000;
+                FillBackground(176, 3);
                 effect.type = 0x46;
-                effect.sound = 0x40;
+                effect.sound = 64;
                 effect.x = (double)((int)x + facing * 5);
-                effect.y = (double)((int)y - 0x38);
+                effect.y = (double)((int)y - 56);
                 effect.scale = 2;
                 effect.keep = 1;
                 effect.layer = 1;
                 m_game->CreateEffect((EffectDesc*)&effect);
-                m_hitsLeft = 0x13;
+                m_hitsLeft = 19;
                 effect.type = 0x47;
                 m_game->CreateEffect((EffectDesc*)&effect);
             }
-            if (frame == 0xc && timer == 0) {
+            if (frame == 12 && timer == 0) {
                 vx = m_patternVar2 * 0.01;
                 vy = m_patternVar1 * 0.01;
                 ay = 0.015;
             }
-            if (frame == 0xe) {
+            if (frame == 14) {
                 effect.shadow = 1;
                 effect.type = 0x19c;
-                effect.x = (double)((int)x + facing * 0x3c);
-                effect.y = (double)((int)y - 0x50);
+                effect.x = (double)((int)x + facing * 60);
+                effect.y = (double)((int)y - 80);
                 effect.scale = 0;
                 effect.keep = 1;
                 effect.layer = 1;
                 effect.facing = facing;
                 SpawnObject(&effect);
                 effect.type = 0x19d;
-                effect.x = (double)((int)x + facing * 0x3c);
-                effect.y = (double)((int)y - 0x50);
+                effect.x = (double)((int)x + facing * 60);
+                effect.y = (double)((int)y - 80);
                 effect.scale = 0;
                 effect.keep = 1;
                 effect.layer = 1;
                 effect.facing = facing;
                 SpawnObject(&effect);
                 effect.type = 0x19e;
-                effect.x = (double)((int)x + facing * 0x3c);
-                effect.y = (double)((int)y - 0x50);
+                effect.x = (double)((int)x + facing * 60);
+                effect.y = (double)((int)y - 80);
                 effect.scale = 0;
                 effect.keep = 1;
                 effect.layer = 1;
                 effect.facing = facing;
                 SpawnObject(&effect);
                 effect.type = 0x19f;
-                effect.x = (double)((int)x + facing * 0x3c);
-                effect.y = (double)((int)y - 0x50);
+                effect.x = (double)((int)x + facing * 60);
+                effect.y = (double)((int)y - 80);
                 effect.scale = 0;
                 effect.keep = 1;
                 effect.layer = 1;
                 effect.facing = facing;
                 SpawnObject(&effect);
                 effect.type = 0x1a1;
-                effect.x = (double)((int)x + facing * 0x3c);
-                effect.y = (double)((int)y - 0x50);
+                effect.x = (double)((int)x + facing * 60);
+                effect.y = (double)((int)y - 80);
                 effect.scale = 0;
                 effect.keep = 1;
                 effect.layer = 1;
                 effect.facing = facing;
                 SpawnObject(&effect);
                 effect.type = 0x1a2;
-                effect.x = (double)((int)x + facing * 0x3c);
-                effect.y = (double)((int)y - 0x50);
+                effect.x = (double)((int)x + facing * 60);
+                effect.y = (double)((int)y - 80);
                 effect.scale = 0;
                 effect.keep = 1;
                 effect.layer = 1;
@@ -4872,32 +4872,32 @@ void CNayukiB::UpdatePattern()
                 if (facing == -1) {
                     effect.type = 0x1a4;
                 }
-                effect.x = (double)((int)x + facing * 0x3c);
-                effect.y = (double)((int)y - 0x50);
+                effect.x = (double)((int)x + facing * 60);
+                effect.y = (double)((int)y - 80);
                 effect.scale = 0;
                 effect.keep = 1;
                 effect.layer = 1;
                 effect.facing = 1;
                 SpawnObject(&effect);
                 effect.type = 0x1a5;
-                effect.x = (double)((int)x + facing * 0x3c);
-                effect.y = (double)((int)y - 0x50);
+                effect.x = (double)((int)x + facing * 60);
+                effect.y = (double)((int)y - 80);
                 effect.scale = 0;
                 effect.keep = 1;
                 effect.layer = 1;
                 effect.facing = 1;
                 SpawnObject(&effect);
                 effect.type = 0x1a7;
-                effect.x = (double)((int)x + facing * 0x3c);
-                effect.y = (double)((int)y - 0x50);
+                effect.x = (double)((int)x + facing * 60);
+                effect.y = (double)((int)y - 80);
                 effect.scale = 0;
                 effect.keep = 1;
                 effect.layer = 1;
                 effect.facing = facing;
                 SpawnObject(&effect);
                 effect.type = 0x1a9;
-                effect.x = (double)((int)x + facing * 0x3c);
-                effect.y = (double)((int)y - 0x50);
+                effect.x = (double)((int)x + facing * 60);
+                effect.y = (double)((int)y - 80);
                 effect.scale = 0;
                 effect.keep = 1;
                 effect.layer = 1;

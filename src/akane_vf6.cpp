@@ -349,7 +349,7 @@ void CAkane::UpdatePattern()
         }
         m_dashMomentum = 0;
         if (frame == 0 && timer == 0) {
-            m_gauge = m_gauge + 0xa;
+            m_gauge = m_gauge + 10;
             vx = (2.0 - (*m_opponent)->m_proration / 10000.0) * -1.1;
             if (m_rfBlue != 0) {
                 m_rfGauge -= 10.0;
@@ -385,7 +385,7 @@ void CAkane::UpdatePattern()
         }
         m_dashMomentum = 0;
         if (frame == 0 && timer == 0) {
-            m_gauge = m_gauge + 0xf;
+            m_gauge = m_gauge + 15;
             vx = (2.0 - (*m_opponent)->m_proration / 10000.0) * -1.5;
             if (m_rfBlue != 0) {
                 m_rfGauge -= 20.0;
@@ -421,7 +421,7 @@ void CAkane::UpdatePattern()
         }
         m_dashMomentum = 0;
         if (frame == 0 && timer == 0) {
-            m_gauge = m_gauge + 0x14;
+            m_gauge = m_gauge + 20;
             vx = (2.0 - (*m_opponent)->m_proration / 10000.0) * -1.8;
             if (m_rfBlue != 0) {
                 m_rfGauge -= 30.0;
@@ -457,7 +457,7 @@ void CAkane::UpdatePattern()
         }
         m_dashMomentum = 0;
         if (frame == 0 && timer == 0) {
-            m_gauge = m_gauge + 0xa;
+            m_gauge = m_gauge + 10;
             vx = (2.0 - (*m_opponent)->m_proration / 10000.0) * -1.1;
             if (m_rfBlue != 0) {
                 m_rfGauge -= 10.0;
@@ -493,7 +493,7 @@ void CAkane::UpdatePattern()
         }
         m_dashMomentum = 0;
         if (frame == 0 && timer == 0) {
-            m_gauge = m_gauge + 0xf;
+            m_gauge = m_gauge + 15;
             vx = (2.0 - (*m_opponent)->m_proration / 10000.0) * -1.5;
             if (m_rfBlue != 0) {
                 m_rfGauge -= 20.0;
@@ -529,7 +529,7 @@ void CAkane::UpdatePattern()
         }
         m_dashMomentum = 0;
         if (frame == 0 && timer == 0) {
-            m_gauge = m_gauge + 0x14;
+            m_gauge = m_gauge + 20;
             vx = (2.0 - (*m_opponent)->m_proration / 10000.0) * -1.8;
             if (m_rfBlue != 0) {
                 m_rfGauge -= 30.0;
@@ -565,7 +565,7 @@ void CAkane::UpdatePattern()
         }
         m_dashMomentum = 0;
         if (frame == 0 && timer == 0) {
-            m_gauge = m_gauge + 0xa;
+            m_gauge = m_gauge + 10;
             vx = (2.0 - (*m_opponent)->m_proration / 10000.0) * -1.1;
             if (m_rfBlue != 0) {
                 m_rfGauge -= 10.0;
@@ -598,7 +598,7 @@ void CAkane::UpdatePattern()
         }
         m_dashMomentum = 0;
         if (frame == 0 && timer == 0) {
-            m_gauge = m_gauge + 0xf;
+            m_gauge = m_gauge + 15;
             vx = (2.0 - (*m_opponent)->m_proration / 10000.0) * -1.5;
             if (m_rfBlue != 0) {
                 m_rfGauge -= 20.0;
@@ -631,7 +631,7 @@ void CAkane::UpdatePattern()
         }
         m_dashMomentum = 0;
         if (frame == 0 && timer == 0) {
-            m_gauge = m_gauge + 0x14;
+            m_gauge = m_gauge + 20;
             vx = (2.0 - (*m_opponent)->m_proration / 10000.0) * -1.8;
             if (m_rfBlue != 0) {
                 m_rfGauge -= 30.0;
@@ -663,7 +663,7 @@ void CAkane::UpdatePattern()
             m_rfGauge -= 0.8;
         }
         if (frame == 0 && timer == 0) {
-            m_gauge = m_gauge + 0x1e;
+            m_gauge = m_gauge + 30;
             vx = m_hitVx;
             vy = vy * 0.75 + m_hitVy;
             if (vy < -2.0) {
@@ -706,7 +706,7 @@ void CAkane::UpdatePattern()
             m_rfGauge -= 0.8;
         }
         if (frame == 0 && timer == 0) {
-            m_gauge = m_gauge + 0x1e;
+            m_gauge = m_gauge + 30;
             vx = m_hitVx;
             vy = vy * 0.75 + m_hitVy;
             if (vy < -4.0) {
@@ -749,7 +749,7 @@ void CAkane::UpdatePattern()
             m_rfGauge -= 0.8;
         }
         if (frame == 0 && timer == 0) {
-            m_gauge = m_gauge + 0x1e;
+            m_gauge = m_gauge + 30;
             vx = m_hitVx;
             vy = vy * 0.75 + m_hitVy;
             if (vy < -6.0) {
@@ -792,7 +792,7 @@ void CAkane::UpdatePattern()
             m_rfGauge -= 0.8;
         }
         if (frame == 0 && timer == 0) {
-            m_gauge = m_gauge + 0x1e;
+            m_gauge = m_gauge + 30;
             vx = m_hitVx;
             vy = vy * 0.75 + m_hitVy;
             ay = 0.032;
@@ -830,7 +830,7 @@ void CAkane::UpdatePattern()
             m_rfGauge -= 0.8;
         }
         if (frame == 0 && timer == 0) {
-            m_gauge = m_gauge + 0x1e;
+            m_gauge = m_gauge + 30;
             vx = m_hitVx;
             vy = m_hitVy;
             ay = 0.032;
@@ -873,7 +873,7 @@ void CAkane::UpdatePattern()
             break;
         }
         if (frame == 0 && timer == 0) {
-            m_gauge = m_gauge + 0x1e;
+            m_gauge = m_gauge + 30;
             vx = m_hitVx;
             vy = vy * 0.75 + m_hitVy;
             if (vy < -2.0) {
@@ -921,7 +921,7 @@ void CAkane::UpdatePattern()
             break;
         }
         if (frame == 0 && timer == 0) {
-            m_gauge = m_gauge + 0x1e;
+            m_gauge = m_gauge + 30;
             vx = m_hitVx;
             vy = vy * 0.75 + m_hitVy;
             if (vy < -4.0) {
@@ -969,7 +969,7 @@ void CAkane::UpdatePattern()
             break;
         }
         if (frame == 0 && timer == 0) {
-            m_gauge = m_gauge + 0x1e;
+            m_gauge = m_gauge + 30;
             vx = m_hitVx;
             vy = vy * 0.75 + m_hitVy;
             ay = 0.032;
@@ -1012,7 +1012,7 @@ void CAkane::UpdatePattern()
             break;
         }
         if (frame == 0 && timer == 0) {
-            m_gauge = m_gauge + 0x1e;
+            m_gauge = m_gauge + 30;
             vx = m_hitVx;
             vy = m_hitVy;
             ay = 0.032;
@@ -1107,13 +1107,13 @@ void CAkane::UpdatePattern()
             m_rfGauge -= 0.8;
         }
         if (frame == 0 && timer == 0 && m_patternVar1 == 0) {
-            m_gauge = m_gauge + 0x1e;
+            m_gauge = m_gauge + 30;
             m_patternVar1++;
-            m_untechTime = m_untechTime + 0x78;
+            m_untechTime = m_untechTime + 120;
             vx = 0.5;
             vy = -2.5;
             ay = 0.025;
-            m_playSound = 0x1f;
+            m_playSound = 31;
             effect.type = 0;
             effect.x = (double)(int)x;
             effect.y = (double)(int)y;
@@ -1146,7 +1146,7 @@ void CAkane::UpdatePattern()
             m_rfGauge -= 0.8;
         }
         if (frame == 0 && timer == 0) {
-            m_gauge = m_gauge + 0x1e;
+            m_gauge = m_gauge + 30;
             vx = m_hitVx;
             vy = m_hitVy;
             ay = 0.072;
@@ -1257,7 +1257,7 @@ void CAkane::UpdatePattern()
         }
         m_dashMomentum = 0;
         if (frame == 0 && timer == 0) {
-            m_gauge = m_gauge + 0x1e;
+            m_gauge = m_gauge + 30;
             if (m_rfBlue != 0) {
                 m_rfGauge -= 30.0;
             }
@@ -1295,7 +1295,7 @@ void CAkane::UpdatePattern()
         }
         m_dashMomentum = 0;
         if (frame == 0 && timer == 0) {
-            m_gauge = m_gauge + 0x1e;
+            m_gauge = m_gauge + 30;
             if (m_rfBlue != 0) {
                 m_rfGauge -= 30.0;
             }
@@ -1333,7 +1333,7 @@ void CAkane::UpdatePattern()
         }
         m_dashMomentum = 0;
         if (frame == 0 && timer == 0) {
-            m_gauge = m_gauge + 0x1e;
+            m_gauge = m_gauge + 30;
             if (m_rfBlue != 0) {
                 m_rfGauge -= 30.0;
             }
@@ -1373,7 +1373,7 @@ void CAkane::UpdatePattern()
             effect.facing = facing;
             effect.layer = 1;
             SpawnObject(&effect);
-            m_gauge = m_gauge + 0x1e;
+            m_gauge = m_gauge + 30;
             vx = m_hitVx;
             vy = m_hitVy;
             ay = 0.032;
@@ -1407,11 +1407,11 @@ void CAkane::UpdatePattern()
             m_rfGauge -= 0.8;
         }
         if (frame == 0 && timer == 0 && m_patternVar1 == 0) {
-            m_playSound = 0x1e;
+            m_playSound = 30;
             vy = -0.45;
             vx = -0.1;
             m_patternVar1++;
-            m_gauge = m_gauge + 0x1e;
+            m_gauge = m_gauge + 30;
         }
         if (frame == 4 && timer == 0) {
             vx = m_hitVx;
@@ -1464,10 +1464,10 @@ void CAkane::UpdatePattern()
             if (m_rfBlue != 0) {
                 m_rfGauge -= 30.0;
             }
-            m_playSound = 0x21;
+            m_playSound = 33;
             vy = -1.5;
             vx = -0.8;
-            m_gauge = m_gauge + 0x1e;
+            m_gauge = m_gauge + 30;
         }
         vy += 0.04;
         if (frame == 0 && vy + y > 0.0) {
@@ -1516,10 +1516,10 @@ void CAkane::UpdatePattern()
             if (m_rfBlue != 0) {
                 m_rfGauge -= 30.0;
             }
-            m_playSound = 0x21;
+            m_playSound = 33;
             vy = -1.5;
             vx = -0.8;
-            m_gauge = m_gauge + 0x1e;
+            m_gauge = m_gauge + 30;
         }
         vy += 0.04;
         if (frame == 0 && vy + y > 0.0) {
@@ -1568,10 +1568,10 @@ void CAkane::UpdatePattern()
             if (m_rfBlue != 0) {
                 m_rfGauge -= 30.0;
             }
-            m_playSound = 0x21;
+            m_playSound = 33;
             vx = m_hitVx;
             vy = m_hitVy;
-            m_gauge = m_gauge + 0x1e;
+            m_gauge = m_gauge + 30;
         }
         vy += 0.04;
         timer++;
@@ -1612,10 +1612,10 @@ void CAkane::UpdatePattern()
                 if (m_rfBlue != 0) {
                     m_rfGauge -= 30.0;
                 }
-                m_playSound = 0x21;
+                m_playSound = 33;
                 vx = m_hitVx;
                 vy = m_hitVy;
-                m_gauge = m_gauge + 0x1e;
+                m_gauge = m_gauge + 30;
                 m_patternVar1++;
             }
         }
@@ -1725,7 +1725,7 @@ void CAkane::UpdatePattern()
         break;
     case kLyingDown:
         m_dashMomentum = 0;
-        if (m_hp > 0 && timer > 0x63) {
+        if (m_hp > 0 && timer > 99) {
             pattern = kWakeUp;
             StartPattern();
         }
@@ -1751,7 +1751,7 @@ void CAkane::UpdatePattern()
         }
         if (frame == 0 && timer == 0) {
             m_dashMomentum = 0;
-            m_gauge = m_gauge + 0xa;
+            m_gauge = m_gauge + 10;
             vx = -1.5;
             vy = 0.0;
             y = 0.0;
@@ -1791,7 +1791,7 @@ void CAkane::UpdatePattern()
         }
         if (frame == 0 && timer == 0) {
             m_dashMomentum = 0;
-            m_gauge = m_gauge + 0xf;
+            m_gauge = m_gauge + 15;
             vx = -1.8;
             vy = 0.0;
             y = 0.0;
@@ -1831,7 +1831,7 @@ void CAkane::UpdatePattern()
         }
         if (frame == 0 && timer == 0) {
             m_dashMomentum = 0;
-            m_gauge = m_gauge + 0x14;
+            m_gauge = m_gauge + 20;
             vx = -2.3;
             vy = 0.0;
             y = 0.0;
@@ -1871,7 +1871,7 @@ void CAkane::UpdatePattern()
         }
         if (frame == 0 && timer == 0) {
             m_dashMomentum = 0;
-            m_gauge = m_gauge + 0xa;
+            m_gauge = m_gauge + 10;
             vx = -1.5;
             vy = 0.0;
             y = 0.0;
@@ -1908,7 +1908,7 @@ void CAkane::UpdatePattern()
         }
         if (frame == 0 && timer == 0) {
             m_dashMomentum = 0;
-            m_gauge = m_gauge + 0xf;
+            m_gauge = m_gauge + 15;
             vx = -1.8;
             vy = 0.0;
             y = 0.0;
@@ -1945,7 +1945,7 @@ void CAkane::UpdatePattern()
         }
         if (frame == 0 && timer == 0) {
             m_dashMomentum = 0;
-            m_gauge = m_gauge + 0x14;
+            m_gauge = m_gauge + 20;
             vx = -2.3;
             vy = 0.0;
             y = 0.0;
@@ -1976,7 +1976,7 @@ void CAkane::UpdatePattern()
     case kGuardAir:
         if (frame == 0 && timer == 0) {
             vy = -2.6;
-            m_gauge = m_gauge + 0xf;
+            m_gauge = m_gauge + 15;
             ay = 0.06;
         }
         vx = -1.2;
@@ -2067,12 +2067,12 @@ void CAkane::UpdatePattern()
             StopMoving();
             effect.type = 9;
             effect.x = (double)(int)x;
-            effect.y = (double)((int)y - 0x3c);
+            effect.y = (double)((int)y - 60);
             effect.scale = 2;
             effect.layer = 1;
             m_game->CreateEffect((EffectDesc*)&effect);
             m_hitsLeft = 1;
-            m_playSound = 0x3e;
+            m_playSound = 62;
             m_patternVar1++;
         }
         timer++;
@@ -2099,13 +2099,13 @@ void CAkane::UpdatePattern()
             StopMoving();
             effect.type = 9;
             effect.x = (double)(int)x;
-            effect.y = (double)((int)y - 0x3c);
+            effect.y = (double)((int)y - 60);
             effect.scale = 2;
             effect.layer = 1;
             m_game->CreateEffect((EffectDesc*)&effect);
             m_hitsLeft = 1;
-            m_playSound = 0x3e;
-            m_gauge = m_gauge - 0x3e8;
+            m_playSound = 62;
+            m_gauge = m_gauge - 1000;
             m_patternVar1++;
         }
         vy = vy + ay;
@@ -2120,7 +2120,7 @@ void CAkane::UpdatePattern()
         if (timer >= duration) {
             timer = 0;
             frame++;
-            if (frame == 0xc) {
+            if (frame == 12) {
                 ay = 0.035;
             }
             if (frame >= frameCount) {
@@ -2156,11 +2156,11 @@ void CAkane::UpdatePattern()
                 break;
             }
         }
-        if (m_inputX == facing && m_patternVar1 >= 0x78) {
+        if (m_inputX == facing && m_patternVar1 >= 120) {
             pattern = kDashStop;
             StartPattern();
         }
-        if (m_inputX != facing && m_patternVar1 >= 0x3c) {
+        if (m_inputX != facing && m_patternVar1 >= 60) {
             pattern = kDashStop;
             StartPattern();
         }
@@ -2187,7 +2187,7 @@ void CAkane::UpdatePattern()
             y = 0.0;
             m_patternVar1++;
             m_playSound = 9;
-            frame = 0xd;
+            frame = 13;
             timer = 0;
         }
         timer++;
@@ -2207,7 +2207,7 @@ void CAkane::UpdatePattern()
             StartAfterimages(3);
             vy = 0.0;
             ay = 0.0;
-            m_playSound = 0x11;
+            m_playSound = 17;
         }
         timer++;
         m_patternVar1++;
@@ -2218,7 +2218,7 @@ void CAkane::UpdatePattern()
                 frame = frame - 2;
             }
         }
-        if (m_inputX == facing && m_patternVar1 >= 0x78) {
+        if (m_inputX == facing && m_patternVar1 >= 120) {
             pattern = kFall;
             StartPattern();
             vx = 1.3;
@@ -2227,7 +2227,7 @@ void CAkane::UpdatePattern()
                 vx = -vx;
             }
         }
-        if (m_inputX != facing && m_patternVar1 >= 0x30) {
+        if (m_inputX != facing && m_patternVar1 >= 48) {
             pattern = kFall;
             StartPattern();
             vx = 1.3;
@@ -2243,7 +2243,7 @@ void CAkane::UpdatePattern()
             vy = 0.0;
             ay = 0.0;
             StartAfterimages(3);
-            m_playSound = 0x11;
+            m_playSound = 17;
         }
         timer++;
         m_patternVar1++;
@@ -2255,7 +2255,7 @@ void CAkane::UpdatePattern()
                 frame = frame - 2;
             }
         }
-        if (m_inputX == -facing && m_patternVar2 >= 0x78) {
+        if (m_inputX == -facing && m_patternVar2 >= 120) {
             pattern = kFall;
             StartPattern();
             vx = -0.9;
@@ -2264,7 +2264,7 @@ void CAkane::UpdatePattern()
                 vx = -vx;
             }
         }
-        if (m_inputX != -facing && m_patternVar1 >= 0x30) {
+        if (m_inputX != -facing && m_patternVar1 >= 48) {
             pattern = kFall;
             StartPattern();
             vx = -0.9;
@@ -2283,11 +2283,11 @@ void CAkane::UpdatePattern()
                 m_proration = m_rfGauge * 5.0 + m_proration;
             }
             m_rfGauge = 0.0;
-            m_freezeTime = 0x5a;
-            FillBackground(0xb0, 3);
+            m_freezeTime = 90;
+            FillBackground(176, 3);
         }
         if (frame == 1 && timer == 0) {
-            m_playSound = 0x12;
+            m_playSound = 18;
             effect.type = 1;
             effect.x = (double)(int)x;
             effect.y = (double)(int)y;
@@ -2386,7 +2386,7 @@ void CAkane::UpdatePattern()
             if (ay == 0.0) {
                 ay = 0.035;
             }
-            m_freezeTime = 0x3c;
+            m_freezeTime = 60;
         }
         if (m_freezeTime == 0 && m_patternVar3 == 0) {
             m_patternVar3++;
@@ -2422,11 +2422,11 @@ void CAkane::UpdatePattern()
                 m_proration = m_rfGauge * 5.0 + m_proration;
             }
             m_rfGauge = 0.0;
-            m_freezeTime = 0x5a;
-            FillBackground(0xb0, 3);
+            m_freezeTime = 90;
+            FillBackground(176, 3);
         }
         if (frame == 1 && timer == 0) {
-            m_playSound = 0x12;
+            m_playSound = 18;
             effect.type = 1;
             effect.x = (double)(int)x;
             effect.y = (double)(int)y;
@@ -2495,11 +2495,11 @@ void CAkane::UpdatePattern()
         if (y < 0.0) {
             vy = vy + ay;
         }
-        if (y + vy > 0.0 && frame < 0xd) {
+        if (y + vy > 0.0 && frame < 13) {
             StopMoving();
             y = 0.0;
             timer = 0;
-            frame = 0xd;
+            frame = 13;
             m_playSound = 9;
         }
         timer++;
@@ -2511,7 +2511,7 @@ void CAkane::UpdatePattern()
                 vy = -1.0;
                 ay = 0.028;
             }
-            if (frame == 0xd) {
+            if (frame == 13) {
                 frame = frame - 2;
             }
             if (frame >= frameCount) {
@@ -2545,7 +2545,7 @@ void CAkane::UpdatePattern()
         }
         if (frame == 1 && timer == 0) {
             m_gauge = m_gauge + 5;
-            m_playSound = 0x15;
+            m_playSound = 21;
             m_hitsLeft = 1;
         }
         timer++;
@@ -2586,8 +2586,8 @@ void CAkane::UpdatePattern()
             break;
         }
         if (frame == 1 && timer == 0) {
-            m_gauge = m_gauge + 0xf;
-            m_playSound = 0x14;
+            m_gauge = m_gauge + 15;
+            m_playSound = 20;
             m_hitsLeft = 1;
         }
         timer++;
@@ -2628,8 +2628,8 @@ void CAkane::UpdatePattern()
             m_dashMomentum = 0;
         }
         if (frame == 2 && timer == 0) {
-            m_gauge = m_gauge + 0xf;
-            m_playSound = 0x14;
+            m_gauge = m_gauge + 15;
+            m_playSound = 20;
             m_hitsLeft = 1;
         }
         timer++;
@@ -2658,8 +2658,8 @@ void CAkane::UpdatePattern()
             m_dashMomentum = 0;
         }
         if (frame == 5 && timer == 0) {
-            m_gauge = m_gauge + 0x23;
-            m_playSound = 0x14;
+            m_gauge = m_gauge + 35;
+            m_playSound = 20;
             m_hitsLeft = 9;
             m_patternVar1 = 2;
         }
@@ -2667,11 +2667,11 @@ void CAkane::UpdatePattern()
         if (timer >= duration) {
             timer = 0;
             frame++;
-            if (frame == 0xa && m_patternVar1 > 0) {
+            if (frame == 10 && m_patternVar1 > 0) {
                 m_patternVar1--;
                 frame = 7;
             }
-            if (frame < 0xa) {
+            if (frame < 10) {
                 m_attackResult = 0;
             }
             if (frame >= frameCount) {
@@ -2706,7 +2706,7 @@ void CAkane::UpdatePattern()
         }
         if (frame == 1 && timer == 0) {
             m_gauge = m_gauge + 5;
-            m_playSound = 0x15;
+            m_playSound = 21;
             m_hitsLeft = 1;
         }
         timer++;
@@ -2755,8 +2755,8 @@ void CAkane::UpdatePattern()
             break;
         }
         if (frame == 3 && timer == 0) {
-            m_gauge = m_gauge + 0xd;
-            m_playSound = 0x14;
+            m_gauge = m_gauge + 13;
+            m_playSound = 20;
             m_hitsLeft = 1;
             vx += 1.5;
         }
@@ -2805,8 +2805,8 @@ void CAkane::UpdatePattern()
             break;
         }
         if (frame == 3 && timer == 0) {
-            m_gauge = m_gauge + 0x19;
-            m_playSound = 0x14;
+            m_gauge = m_gauge + 25;
+            m_playSound = 20;
             m_hitsLeft = 1;
         }
         timer++;
@@ -2843,7 +2843,7 @@ void CAkane::UpdatePattern()
         }
         if (frame == 1 && timer == 0) {
             m_gauge = m_gauge + 5;
-            m_playSound = 0x15;
+            m_playSound = 21;
             m_hitsLeft = 1;
         }
         if (y + vy >= 0.0) {
@@ -2881,8 +2881,8 @@ void CAkane::UpdatePattern()
             break;
         }
         if (frame == 2 && timer == 0) {
-            m_gauge = m_gauge + 0xd;
-            m_playSound = 0x14;
+            m_gauge = m_gauge + 13;
+            m_playSound = 20;
             m_hitsLeft = 1;
         }
         if (y + vy >= 0.0) {
@@ -2920,8 +2920,8 @@ void CAkane::UpdatePattern()
             break;
         }
         if (frame == 2 && timer == 0) {
-            m_gauge = m_gauge + 0x1e;
-            m_playSound = 0x14;
+            m_gauge = m_gauge + 30;
+            m_playSound = 20;
             m_hitsLeft = 1;
         }
         if (y + vy >= 0.0) {
@@ -2951,8 +2951,8 @@ void CAkane::UpdatePattern()
             StopMoving();
         }
         if (frame == 6 && timer == 0) {
-            m_gauge = m_gauge + 0x1e;
-            m_playSound = 0x14;
+            m_gauge = m_gauge + 30;
+            m_playSound = 20;
             m_hitsLeft = 3;
             vx = 1.0;
             vy = 1.0;
@@ -2969,7 +2969,7 @@ void CAkane::UpdatePattern()
             timer = 0;
             frame++;
             m_attackResult = 0;
-            if (frame == 0xa) {
+            if (frame == 10) {
                 frame = 7;
             }
         }
@@ -2990,8 +2990,8 @@ void CAkane::UpdatePattern()
             break;
         }
         if (frame == 3 && timer == 0) {
-            m_gauge = m_gauge + 0x1e;
-            m_playSound = 0x14;
+            m_gauge = m_gauge + 30;
+            m_playSound = 20;
             m_hitsLeft = 1;
         }
         if (y + vy >= 0.0) {
@@ -3078,8 +3078,8 @@ void CAkane::UpdatePattern()
             pattern = kThrowHit;
             (*m_opponent)->pattern = kThrownStandHigh2;
             effect.type = 0;
-            effect.x = (double)((int)x + facing * 0x11);
-            effect.y = (double)((int)y - 0x36);
+            effect.x = (double)((int)x + facing * 17);
+            effect.y = (double)((int)y - 54);
             effect.scale = 2;
             effect.layer = 1;
             m_game->CreateEffect((EffectDesc*)&effect);
@@ -3136,7 +3136,7 @@ void CAkane::UpdatePattern()
         }
         if (frame == 1 && timer == 0) {
             m_gauge = m_gauge + 5;
-            m_playSound = 0x15;
+            m_playSound = 21;
             m_hitsLeft = 1;
         }
         timer++;
@@ -3162,8 +3162,8 @@ void CAkane::UpdatePattern()
         }
         if (frame == 1 && timer == 0) {
             m_hitsLeft = 3;
-            m_playSound = 0x14;
-            m_gauge = m_gauge + 0x14;
+            m_playSound = 20;
+            m_gauge = m_gauge + 20;
         }
         if (vx < 0.0) {
             vx = 0.0;
@@ -3203,8 +3203,8 @@ void CAkane::UpdatePattern()
         }
         if (frame == 1 && timer == 0) {
             m_hitsLeft = 1;
-            m_playSound = 0x14;
-            m_gauge = m_gauge + 0x14;
+            m_playSound = 20;
+            m_gauge = m_gauge + 20;
         }
         if (vx < 0.0) {
             vx = 0.0;
@@ -3246,7 +3246,7 @@ void CAkane::UpdatePattern()
         }
         if (frame == 1 && timer == 0) {
             m_gauge = m_gauge + 5;
-            m_playSound = 0x15;
+            m_playSound = 21;
             m_hitsLeft = 1;
         }
         timer++;
@@ -3272,8 +3272,8 @@ void CAkane::UpdatePattern()
         }
         if (frame == 2 && timer == 0) {
             m_hitsLeft = 1;
-            m_playSound = 0x14;
-            m_gauge = m_gauge + 0x14;
+            m_playSound = 20;
+            m_gauge = m_gauge + 20;
             vx += 1.2;
         }
         if (vx < 0.0) {
@@ -3300,16 +3300,16 @@ void CAkane::UpdatePattern()
         } else {
             m_dashMomentum = 0;
         }
-        if (frame == 0xd && timer == 0) {
+        if (frame == 13 && timer == 0) {
             m_hitsLeft = 1;
-            m_playSound = 0x14;
-            m_gauge = m_gauge + 0x14;
+            m_playSound = 20;
+            m_gauge = m_gauge + 20;
         }
-        if (frame > 2 && frame < 0x11) {
+        if (frame > 2 && frame < 17) {
             vy = vy + ay;
             if (vy + y > 0.0) {
                 timer = 0;
-                frame = 0x12;
+                frame = 18;
                 y = 0.0;
                 StopMoving();
                 break;
@@ -3347,8 +3347,8 @@ void CAkane::UpdatePattern()
             pattern = kAirThrowHit;
             (*m_opponent)->pattern = kThrownStandHigh2;
             effect.type = 0;
-            effect.x = (double)((int)x + facing * 0x1d);
-            effect.y = (double)((int)y - 0x27);
+            effect.x = (double)((int)x + facing * 29);
+            effect.y = (double)((int)y - 39);
             effect.scale = 2;
             effect.layer = 1;
             m_game->CreateEffect((EffectDesc*)&effect);
@@ -3397,45 +3397,45 @@ void CAkane::UpdatePattern()
         }
         if (frame == 1) {
             (*m_opponent)->y = y - 55.0;
-            (*m_opponent)->x = x - facing * 0x15;
+            (*m_opponent)->x = x - facing * 21;
             (*m_opponent)->pattern = kThrownStandLowInverted;
         }
         if (frame == 2) {
             (*m_opponent)->y = y - 71.0;
-            (*m_opponent)->x = x - facing * 0x14;
+            (*m_opponent)->x = x - facing * 20;
             (*m_opponent)->pattern = kThrownAirborne;
         }
         if (frame == 3) {
             (*m_opponent)->y = y - 76.0;
-            (*m_opponent)->x = x - facing * 0xf;
+            (*m_opponent)->x = x - facing * 15;
             (*m_opponent)->pattern = kThrownAirborne;
         }
         if (frame == 4) {
             (*m_opponent)->y = y - 77.0;
-            (*m_opponent)->x = x - facing * 0xc;
+            (*m_opponent)->x = x - facing * 12;
             (*m_opponent)->pattern = kThrownAirborne;
         }
         if (frame == 5) {
             (*m_opponent)->y = y - 55.0;
-            (*m_opponent)->x = x - facing * 0x13;
+            (*m_opponent)->x = x - facing * 19;
             (*m_opponent)->pattern = kThrownDoubledOverInverted;
         }
         if (frame == 6 && timer == 0) {
             ShakeScreen(4, 0);
             effect.type = 3;
             effect.sound = 7;
-            effect.x = (double)((int)x + facing * 0xf);
+            effect.x = (double)((int)x + facing * 15);
             effect.y = (double)(int)y;
             effect.scale = 2;
             effect.layer = 1;
             m_game->CreateEffect((EffectDesc*)&effect);
-            (*m_opponent)->x = facing * 0xf + x;
+            (*m_opponent)->x = facing * 15 + x;
             (*m_opponent)->pattern = kHitAirLaunch;
             (*m_opponent)->m_hitVx = -2.0;
             (*m_opponent)->m_hitVy = -0.5;
             (*m_opponent)->ay = 0.035;
-            (*m_opponent)->x = facing * 0xf + x;
-            DealDamage(0x4b0, 500.0);
+            (*m_opponent)->x = facing * 15 + x;
+            DealDamage(1200, 500.0);
             (*m_opponent)->m_untechTime = (int)(200.0 * m_proration * 0.0001);
             (*m_opponent)->frame = 0;
             (*m_opponent)->timer = 0;
@@ -3455,17 +3455,17 @@ void CAkane::UpdatePattern()
     case kUnusedF9:
         if (frame == 0 && timer == 0) {
             unkdc = 4;
-            unkde = -0x14;
+            unkde = -20;
             vx = 0.0;
             m_hitsLeft = 1;
             m_recoilGuardWindow = 0;
-            m_freezeTime = 0x3c;
+            m_freezeTime = 60;
             effect.type = 0x28;
-            effect.x = (double)((int)x + facing * 0xa);
-            effect.y = (double)((int)y - 0x28);
+            effect.x = (double)((int)x + facing * 10);
+            effect.y = (double)((int)y - 40);
             effect.scale = 2;
             effect.layer = 1;
-            effect.sound = 0x13;
+            effect.sound = 19;
             m_game->CreateEffect((EffectDesc*)&effect);
         }
         timer++;
@@ -3488,11 +3488,11 @@ void CAkane::UpdatePattern()
         }
         if (frame == 0 && timer == 0 && m_patternVar1 == 0) {
             m_helperState = 1;
-            if ((int)(x + (*m_opponent)->x) / 2 > 0x1e0) {
+            if ((int)(x + (*m_opponent)->x) / 2 > 480) {
                 m_patternVar3++;
                 effect.shadow = 1;
                 effect.type = 0x19e;
-                effect.x = (double)((facing == 1) * 0x118 + (facing == -1) * 0x2a8);
+                effect.x = (double)((facing == 1) * 280 + (facing == -1) * 680);
                 effect.y = -80.0;
                 effect.facing = facing;
                 effect.scale = 0;
@@ -3500,11 +3500,11 @@ void CAkane::UpdatePattern()
                 effect.layer = 1;
                 SpawnObject(&effect);
             }
-            if ((int)(x + (*m_opponent)->x) / 2 < 0xa0) {
+            if ((int)(x + (*m_opponent)->x) / 2 < 160) {
                 m_patternVar3++;
                 effect.shadow = 1;
                 effect.type = 0x19e;
-                effect.x = (double)((facing == 1) * -0x28 + (facing == -1) * 0x168);
+                effect.x = (double)((facing == 1) * -40 + (facing == -1) * 360);
                 effect.y = -80.0;
                 effect.facing = facing;
                 effect.scale = 0;
@@ -3515,7 +3515,7 @@ void CAkane::UpdatePattern()
             if (m_patternVar3 == 0) {
                 effect.type = 0x19e;
                 effect.shadow = 1;
-                effect.x = (x + (*m_opponent)->x) / 2.0 - facing * 0xa0;
+                effect.x = (x + (*m_opponent)->x) / 2.0 - facing * 160;
                 effect.y = -80.0;
                 effect.facing = facing;
                 effect.scale = 0;
@@ -3545,11 +3545,11 @@ void CAkane::UpdatePattern()
         }
         if (frame == 1 && timer == 0 && m_patternVar1 == 0) {
             m_helperState = 1;
-            if ((int)(x + (*m_opponent)->x) / 2 > 0x1e0) {
+            if ((int)(x + (*m_opponent)->x) / 2 > 480) {
                 m_patternVar3++;
                 effect.shadow = 1;
                 effect.type = 0x19f;
-                effect.x = (double)((facing == 1) * 0x118 + (facing == -1) * 0x2a8);
+                effect.x = (double)((facing == 1) * 280 + (facing == -1) * 680);
                 effect.y = 0.0;
                 effect.facing = facing;
                 effect.scale = 0;
@@ -3557,11 +3557,11 @@ void CAkane::UpdatePattern()
                 effect.layer = 1;
                 SpawnObject(&effect);
             }
-            if ((int)(x + (*m_opponent)->x) / 2 < 0xa0) {
+            if ((int)(x + (*m_opponent)->x) / 2 < 160) {
                 m_patternVar3++;
                 effect.shadow = 1;
                 effect.type = 0x19f;
-                effect.x = (double)((facing == 1) * -0x28 + (facing == -1) * 0x168);
+                effect.x = (double)((facing == 1) * -40 + (facing == -1) * 360);
                 effect.y = 0.0;
                 effect.facing = facing;
                 effect.scale = 0;
@@ -3572,7 +3572,7 @@ void CAkane::UpdatePattern()
             if (m_patternVar3 == 0) {
                 effect.shadow = 1;
                 effect.type = 0x19f;
-                effect.x = (x + (*m_opponent)->x) / 2.0 - facing * 0xa0;
+                effect.x = (x + (*m_opponent)->x) / 2.0 - facing * 160;
                 effect.y = 0.0;
                 effect.facing = facing;
                 effect.scale = 0;
@@ -3604,20 +3604,20 @@ void CAkane::UpdatePattern()
                 m_rfGauge -= 250.0;
             }
             effect.type = 0x21;
-            effect.sound = 0xb;
+            effect.sound = 11;
             effect.x = (double)(int)x;
-            effect.y = (double)((int)y - 0x32);
+            effect.y = (double)((int)y - 50);
             effect.scale = 2;
             effect.layer = 1;
             m_game->CreateEffect((EffectDesc*)&effect);
         }
-        if (frame == 0 && timer == 0x1d && m_patternVar1 == 0) {
+        if (frame == 0 && timer == 29 && m_patternVar1 == 0) {
             m_helperState = 1;
-            if ((int)(x + (*m_opponent)->x) / 2 > 0x1e0) {
+            if ((int)(x + (*m_opponent)->x) / 2 > 480) {
                 m_patternVar3++;
                 effect.shadow = 1;
                 effect.type = 0x199;
-                effect.x = (double)((facing == -1) * 0x118 + (facing == 1) * 0x2a8);
+                effect.x = (double)((facing == -1) * 280 + (facing == 1) * 680);
                 effect.y = 0.0;
                 effect.facing = -facing;
                 effect.scale = 0;
@@ -3625,11 +3625,11 @@ void CAkane::UpdatePattern()
                 effect.layer = 1;
                 SpawnObject(&effect);
             }
-            if ((int)(x + (*m_opponent)->x) / 2 < 0xa0) {
+            if ((int)(x + (*m_opponent)->x) / 2 < 160) {
                 m_patternVar3++;
                 effect.shadow = 1;
                 effect.type = 0x199;
-                effect.x = (double)((facing == -1) * -0x28 + (facing == 1) * 0x168);
+                effect.x = (double)((facing == -1) * -40 + (facing == 1) * 360);
                 effect.y = 0.0;
                 effect.facing = -facing;
                 effect.scale = 0;
@@ -3640,7 +3640,7 @@ void CAkane::UpdatePattern()
             if (m_patternVar3 == 0) {
                 effect.shadow = 1;
                 effect.type = 0x199;
-                effect.x = (x + (*m_opponent)->x) / 2.0 + facing * 0xa0;
+                effect.x = (x + (*m_opponent)->x) / 2.0 + facing * 160;
                 effect.y = 0.0;
                 effect.facing = -facing;
                 effect.scale = 0;
@@ -3664,7 +3664,7 @@ void CAkane::UpdatePattern()
     case k623A:
         if (frame == 0 && timer == 0) {
             m_dashMomentum = 0;
-            m_gauge = m_gauge + 0x2d;
+            m_gauge = m_gauge + 45;
             vx = 0.0;
             vy = 0.0;
             ay = 0.0;
@@ -3684,11 +3684,11 @@ void CAkane::UpdatePattern()
         if (frame > 6) {
             vy = vy + ay;
         }
-        if (y + vy > 0.0 && frame > 7 && frame < 0xb) {
+        if (y + vy > 0.0 && frame > 7 && frame < 11) {
             y = 0.0;
             StopMoving();
             StartPattern();
-            frame = 0xb;
+            frame = 11;
             break;
         }
         timer++;
@@ -3700,7 +3700,7 @@ void CAkane::UpdatePattern()
                 frame = 3;
                 m_patternVar1++;
             }
-            if (frame == 0xb) {
+            if (frame == 11) {
                 frame = frame - 2;
             }
             if (frame >= frameCount) {
@@ -3714,7 +3714,7 @@ void CAkane::UpdatePattern()
         if (frame == 0 && timer == 0) {
             m_dashMomentum = 0;
             StopMoving();
-            m_hitsLeft = 0x63;
+            m_hitsLeft = 99;
         }
         if (frame == 2 && timer == 0) {
             vx = 1.8;
@@ -3730,11 +3730,11 @@ void CAkane::UpdatePattern()
         if (frame > 5) {
             vy = vy + ay;
         }
-        if (y + vy > 0.0 && frame > 0xa && frame < 0xe) {
+        if (y + vy > 0.0 && frame > 10 && frame < 14) {
             y = 0.0;
             StartPattern();
             StopMoving();
-            frame = 0xe;
+            frame = 14;
             break;
         }
         timer++;
@@ -3742,20 +3742,20 @@ void CAkane::UpdatePattern()
             timer = 0;
             frame++;
             if (frame == 2) {
-                m_invulTime = 0xc;
+                m_invulTime = 12;
             }
-            if (frame == 1 || frame == 3 || frame == 4 || frame == 7 || frame == 9 || frame == 0xe) {
+            if (frame == 1 || frame == 3 || frame == 4 || frame == 7 || frame == 9 || frame == 14) {
                 m_attackResult = 0;
             }
             if (frame == 4 && m_patternVar2 < 1) {
                 frame = frame - 2;
                 m_patternVar2++;
             }
-            if (frame == 0xa && m_patternVar3 < 1) {
+            if (frame == 10 && m_patternVar3 < 1) {
                 frame = frame - 4;
                 m_patternVar3++;
             }
-            if (frame == 0xe) {
+            if (frame == 14) {
                 frame = frame - 2;
             }
             if (frame >= frameCount) {
@@ -3774,14 +3774,14 @@ void CAkane::UpdatePattern()
                 m_rfGauge -= 250.0;
             }
             effect.type = 0x21;
-            effect.sound = 0xb;
+            effect.sound = 11;
             effect.x = (double)(int)x;
-            effect.y = (double)((int)y - 0x32);
+            effect.y = (double)((int)y - 50);
             effect.scale = 2;
             effect.layer = 1;
             m_game->CreateEffect((EffectDesc*)&effect);
             StopMoving();
-            m_hitsLeft = 0x63;
+            m_hitsLeft = 99;
         }
         if (frame == 2 && timer == 0) {
             vx = 1.8;
@@ -3797,11 +3797,11 @@ void CAkane::UpdatePattern()
         if (frame > 5) {
             vy = vy + ay;
         }
-        if (y + vy > 0.0 && frame > 0xa && frame < 0xe) {
+        if (y + vy > 0.0 && frame > 10 && frame < 14) {
             y = 0.0;
             StartPattern();
             StopMoving();
-            frame = 0xe;
+            frame = 14;
             break;
         }
         timer++;
@@ -3809,20 +3809,20 @@ void CAkane::UpdatePattern()
             timer = 0;
             frame++;
             if (frame == 2) {
-                m_invulTime = 0xc;
+                m_invulTime = 12;
             }
-            if (frame == 1 || frame == 3 || frame == 4 || frame == 7 || frame == 9 || frame == 0xe) {
+            if (frame == 1 || frame == 3 || frame == 4 || frame == 7 || frame == 9 || frame == 14) {
                 m_attackResult = 0;
             }
             if (frame == 4 && m_patternVar2 < 2) {
                 frame = frame - 2;
                 m_patternVar2++;
             }
-            if (frame == 0xa && m_patternVar3 < 2) {
+            if (frame == 10 && m_patternVar3 < 2) {
                 frame = frame - 4;
                 m_patternVar3++;
             }
-            if (frame == 0xe) {
+            if (frame == 14) {
                 frame = frame - 2;
             }
             if (frame >= frameCount) {
@@ -3848,7 +3848,7 @@ void CAkane::UpdatePattern()
             ay = 0.055;
         }
         m_patternVar1++;
-        if (m_patternVar1 > 0x34) {
+        if (m_patternVar1 > 52) {
             if (m_command == kCmd236A) {
                 pattern = kLeap236A;
                 StartPattern();
@@ -3911,7 +3911,7 @@ void CAkane::UpdatePattern()
             ay = 0.037;
         }
         m_patternVar1++;
-        if (m_patternVar1 > 0x34) {
+        if (m_patternVar1 > 52) {
             if (m_command == kCmd236A) {
                 pattern = kLeap236A;
                 StartPattern();
@@ -3974,7 +3974,7 @@ void CAkane::UpdatePattern()
             ay = 0.037;
         }
         m_patternVar1++;
-        if (m_patternVar1 > 0x34) {
+        if (m_patternVar1 > 52) {
             if (m_command == kCmd236A) {
                 pattern = kLeap236A;
                 StartPattern();
@@ -4041,7 +4041,7 @@ void CAkane::UpdatePattern()
             ay = 0.035;
         }
         m_patternVar1++;
-        if (m_patternVar1 > 0x34) {
+        if (m_patternVar1 > 52) {
             if (m_command == kCmd236A) {
                 pattern = kLeap236A;
                 StartPattern();
@@ -4106,7 +4106,7 @@ void CAkane::UpdatePattern()
             ay = 0.035;
         }
         m_patternVar1++;
-        if (m_patternVar1 > 0x34) {
+        if (m_patternVar1 > 52) {
             if (m_command == kCmd236A) {
                 pattern = kLeap236A;
                 StartPattern();
@@ -4171,7 +4171,7 @@ void CAkane::UpdatePattern()
             ay = 0.035;
         }
         m_patternVar1++;
-        if (m_patternVar1 > 0x34) {
+        if (m_patternVar1 > 52) {
             if (m_command == kCmd236A) {
                 pattern = kLeap236A;
                 StartPattern();
@@ -4219,28 +4219,28 @@ void CAkane::UpdatePattern()
     case kLeap236A:
         if (frame == 3 && timer == 0) {
             FaceOpponent();
-            m_gauge = m_gauge + 0x19;
+            m_gauge = m_gauge + 25;
             vx = -0.5;
             vy = -1.0;
             ay = 0.015;
             m_playVoice = 1;
             effect.type = 0x190;
-            effect.x = (double)((int)x + facing * 0x28);
-            effect.y = (double)((int)y - 0x2d);
+            effect.x = (double)((int)x + facing * 40);
+            effect.y = (double)((int)y - 45);
             effect.scale = 0;
             effect.layer = 1;
             effect.facing = facing;
             SpawnObject(&effect);
             effect.type = 0x190;
-            effect.x = (double)((int)x + facing * 0x14);
-            effect.y = (double)((int)y - 0x19);
+            effect.x = (double)((int)x + facing * 20);
+            effect.y = (double)((int)y - 25);
             effect.scale = 0;
             effect.layer = 1;
             effect.facing = facing;
             SpawnObject(&effect);
             effect.type = 0x190;
-            effect.x = (double)((int)x + facing * 0x36);
-            effect.y = (double)((int)y - 0x18);
+            effect.x = (double)((int)x + facing * 54);
+            effect.y = (double)((int)y - 24);
             effect.scale = 0;
             effect.layer = 1;
             effect.facing = facing;
@@ -4271,28 +4271,28 @@ void CAkane::UpdatePattern()
     case kLeap236B:
         if (frame == 3 && timer == 0) {
             FaceOpponent();
-            m_gauge = m_gauge + 0x19;
+            m_gauge = m_gauge + 25;
             vx = -0.5;
             vy = -1.0;
             ay = 0.015;
             m_playVoice = 1;
             effect.type = 0x191;
-            effect.x = (double)((int)x + facing * 0x28);
-            effect.y = (double)((int)y - 0x2d);
+            effect.x = (double)((int)x + facing * 40);
+            effect.y = (double)((int)y - 45);
             effect.scale = 0;
             effect.layer = 1;
             effect.facing = facing;
             SpawnObject(&effect);
             effect.type = 0x191;
-            effect.x = (double)((int)x + facing * 0x14);
-            effect.y = (double)((int)y - 0x19);
+            effect.x = (double)((int)x + facing * 20);
+            effect.y = (double)((int)y - 25);
             effect.scale = 0;
             effect.layer = 1;
             effect.facing = facing;
             SpawnObject(&effect);
             effect.type = 0x191;
-            effect.x = (double)((int)x + facing * 0x36);
-            effect.y = (double)((int)y - 0x18);
+            effect.x = (double)((int)x + facing * 54);
+            effect.y = (double)((int)y - 24);
             effect.scale = 0;
             effect.layer = 1;
             effect.facing = facing;
@@ -4328,37 +4328,37 @@ void CAkane::UpdatePattern()
                 m_rfGauge -= 250.0;
             }
             effect.type = 0x21;
-            effect.sound = 0xb;
+            effect.sound = 11;
             effect.x = (double)(int)x;
-            effect.y = (double)((int)y - 0x32);
+            effect.y = (double)((int)y - 50);
             effect.scale = 2;
             effect.layer = 1;
             m_game->CreateEffect((EffectDesc*)&effect);
         }
         if (frame == 3 && timer == 0) {
             FaceOpponent();
-            m_gauge = m_gauge + 0x19;
+            m_gauge = m_gauge + 25;
             vx = -1.0;
             vy = -1.0;
             ay = 0.02;
             m_playVoice = 1;
             effect.type = 0x192;
-            effect.x = (double)((int)x + facing * 0x28);
-            effect.y = (double)((int)y - 0x2d);
+            effect.x = (double)((int)x + facing * 40);
+            effect.y = (double)((int)y - 45);
             effect.scale = 0;
             effect.layer = 1;
             effect.facing = facing;
             SpawnObject(&effect);
             effect.type = 0x192;
-            effect.x = (double)((int)x + facing * 0x14);
-            effect.y = (double)((int)y - 0x19);
+            effect.x = (double)((int)x + facing * 20);
+            effect.y = (double)((int)y - 25);
             effect.scale = 0;
             effect.layer = 1;
             effect.facing = facing;
             SpawnObject(&effect);
             effect.type = 0x192;
-            effect.x = (double)((int)x + facing * 0x36);
-            effect.y = (double)((int)y - 0x18);
+            effect.x = (double)((int)x + facing * 54);
+            effect.y = (double)((int)y - 24);
             effect.scale = 0;
             effect.layer = 1;
             effect.facing = facing;
@@ -4393,8 +4393,8 @@ void CAkane::UpdatePattern()
             vx = 0.0;
         }
         if (frame == 1 && timer == 0) {
-            m_playSound = 0x15;
-            m_gauge = m_gauge + 0x23;
+            m_playSound = 21;
+            m_gauge = m_gauge + 35;
             m_hitsLeft = 1;
             vx = 1.0;
             vy = 2.0;
@@ -4437,8 +4437,8 @@ void CAkane::UpdatePattern()
             vx = 0.0;
             vy = 2.1;
             ay = 0.0;
-            m_playSound = 0x14;
-            m_patternVar1 = 0x63;
+            m_playSound = 20;
+            m_patternVar1 = 99;
         }
         if (y + vy >= 0.0 && frame < 6) {
             vx = 0.0;
@@ -4476,8 +4476,8 @@ void CAkane::UpdatePattern()
             pattern = kLeap4CHit;
             (*m_opponent)->pattern = kThrownStandHigh2;
             effect.type = 0;
-            effect.x = (double)((int)x + facing * 0x1d);
-            effect.y = (double)((int)y - 0x27);
+            effect.x = (double)((int)x + facing * 29);
+            effect.y = (double)((int)y - 39);
             effect.scale = 2;
             effect.layer = 1;
             m_game->CreateEffect((EffectDesc*)&effect);
@@ -4534,45 +4534,45 @@ void CAkane::UpdatePattern()
         }
         if (frame == 1) {
             (*m_opponent)->y = y - 55.0;
-            (*m_opponent)->x = x - facing * 0x15;
+            (*m_opponent)->x = x - facing * 21;
             (*m_opponent)->pattern = kThrownStandLowInverted;
         }
         if (frame == 2) {
             (*m_opponent)->y = y - 71.0;
-            (*m_opponent)->x = x - facing * 0x14;
+            (*m_opponent)->x = x - facing * 20;
             (*m_opponent)->pattern = kThrownAirborne;
         }
         if (frame == 3) {
             (*m_opponent)->y = y - 76.0;
-            (*m_opponent)->x = x - facing * 0xf;
+            (*m_opponent)->x = x - facing * 15;
             (*m_opponent)->pattern = kThrownAirborne;
         }
         if (frame == 4) {
             (*m_opponent)->y = y - 77.0;
-            (*m_opponent)->x = x - facing * 0xc;
+            (*m_opponent)->x = x - facing * 12;
             (*m_opponent)->pattern = kThrownAirborne;
         }
         if (frame == 5) {
             (*m_opponent)->y = y - 55.0;
-            (*m_opponent)->x = x - facing * 0x13;
+            (*m_opponent)->x = x - facing * 19;
             (*m_opponent)->pattern = kThrownDoubledOverInverted;
         }
         if (frame == 6 && timer == 0) {
             ShakeScreen(4, 0);
             effect.type = 3;
             effect.sound = 7;
-            effect.x = (double)((int)x + facing * 0xf);
+            effect.x = (double)((int)x + facing * 15);
             effect.y = (double)(int)y;
             effect.scale = 2;
             effect.layer = 1;
             m_game->CreateEffect((EffectDesc*)&effect);
-            (*m_opponent)->x = facing * 0xf + x;
+            (*m_opponent)->x = facing * 15 + x;
             (*m_opponent)->pattern = kHitAirLaunch;
             (*m_opponent)->m_hitVx = -1.0;
             (*m_opponent)->m_hitVy = -3.0;
             (*m_opponent)->ay = 0.035;
-            (*m_opponent)->x = facing * 0xf + x;
-            DealDamage(0x3e8, 790.0);
+            (*m_opponent)->x = facing * 15 + x;
+            DealDamage(1000, 790.0);
             (*m_opponent)->m_untechTime = (int)(200.0 * m_proration * 0.0001);
             (*m_opponent)->StartPattern();
         }
@@ -4636,7 +4636,7 @@ void CAkane::UpdatePattern()
         break;
     case kAir236A:
         if (frame == 0 && timer == 0) {
-            m_hitsLeft = 0x63;
+            m_hitsLeft = 99;
             vx = -0.8;
             vy = -1.0;
             StopMoving();
@@ -4645,14 +4645,14 @@ void CAkane::UpdatePattern()
         if (frame > 5) {
             vy = vy + ay;
         }
-        if ((frame == 9 || frame == 0xd) && timer == 0) {
-            m_playSound = 0x14;
+        if ((frame == 9 || frame == 13) && timer == 0) {
+            m_playSound = 20;
         }
-        if (frame > 5 && frame < 0xe && y + vy > 0.0) {
+        if (frame > 5 && frame < 14 && y + vy > 0.0) {
             if (m_patternVar1 > 0) {
                 y = 0.0;
                 StopMoving();
-                frame = 0xe;
+                frame = 14;
                 timer = 0;
                 break;
             }
@@ -4669,14 +4669,14 @@ void CAkane::UpdatePattern()
         if (timer >= duration) {
             timer = 0;
             frame++;
-            if (frame < 6 || frame == 7 || frame == 0xa) {
+            if (frame < 6 || frame == 7 || frame == 10) {
                 m_attackResult = 0;
             }
             if (frame == 6) {
                 vx = 2.5;
                 vy = 2.5;
             }
-            if (frame == 0xe) {
+            if (frame == 14) {
                 frame = frame - 8;
             }
             if (frame >= frameCount) {
@@ -4688,20 +4688,20 @@ void CAkane::UpdatePattern()
         break;
     case kAir236B:
         if (frame == 0 && timer == 0) {
-            m_hitsLeft = 0x63;
+            m_hitsLeft = 99;
             vx = -0.8;
             vy = -1.0;
             ay = 0.025;
         }
         vy = vy + ay;
-        if ((frame == 9 || frame == 0xd) && timer == 0) {
-            m_playSound = 0x14;
+        if ((frame == 9 || frame == 13) && timer == 0) {
+            m_playSound = 20;
         }
-        if (frame > 5 && frame < 0xe && y + vy > 0.0) {
+        if (frame > 5 && frame < 14 && y + vy > 0.0) {
             if (m_patternVar1 > 0) {
                 y = 0.0;
                 StopMoving();
-                frame = 0xe;
+                frame = 14;
                 timer = 0;
                 break;
             }
@@ -4718,14 +4718,14 @@ void CAkane::UpdatePattern()
         if (timer >= duration) {
             timer = 0;
             frame++;
-            if (frame < 6 || frame == 7 || frame == 0xa) {
+            if (frame < 6 || frame == 7 || frame == 10) {
                 m_attackResult = 0;
             }
             if (frame == 6) {
                 vx = 3.2;
                 vy = 2.2;
             }
-            if (frame == 0xe) {
+            if (frame == 14) {
                 frame = frame - 8;
             }
             if (frame >= frameCount) {
@@ -4743,26 +4743,26 @@ void CAkane::UpdatePattern()
                 m_rfGauge -= 250.0;
             }
             effect.type = 0x21;
-            effect.sound = 0xb;
+            effect.sound = 11;
             effect.x = (double)(int)x;
-            effect.y = (double)((int)y - 0x32);
+            effect.y = (double)((int)y - 50);
             effect.scale = 2;
             effect.layer = 1;
             m_game->CreateEffect((EffectDesc*)&effect);
-            m_hitsLeft = 0x63;
+            m_hitsLeft = 99;
             vx = -0.8;
             vy = -1.0;
             ay = 0.025;
         }
         vy = vy + ay;
-        if ((frame == 9 || frame == 0xd) && timer == 0) {
-            m_playSound = 0x14;
+        if ((frame == 9 || frame == 13) && timer == 0) {
+            m_playSound = 20;
         }
-        if (frame > 5 && frame < 0xe && y + vy > 0.0) {
+        if (frame > 5 && frame < 14 && y + vy > 0.0) {
             if (m_patternVar1 > 0) {
                 y = 0.0;
                 StopMoving();
-                frame = 0xe;
+                frame = 14;
                 timer = 0;
                 break;
             }
@@ -4784,7 +4784,7 @@ void CAkane::UpdatePattern()
                 vx = 2.5;
                 vy = 2.5;
             }
-            if (frame == 0xe) {
+            if (frame == 14) {
                 frame = frame - 8;
             }
             if (frame >= frameCount) {
@@ -4805,29 +4805,29 @@ void CAkane::UpdatePattern()
         }
         if (frame == 4 && timer == 0) {
             StopMoving();
-            m_freezeTime = 0x78;
-            m_gauge = m_gauge - 0x3e8;
-            FillBackground(0xb0, 3);
+            m_freezeTime = 120;
+            m_gauge = m_gauge - 1000;
+            FillBackground(176, 3);
             effect.type = 0x44;
-            effect.sound = 0x13;
-            effect.x = (double)((int)x + facing * 0x17);
-            effect.y = (double)((int)y - 0x1e);
+            effect.sound = 19;
+            effect.x = (double)((int)x + facing * 23);
+            effect.y = (double)((int)y - 30);
             effect.scale = 2;
             effect.keep = 1;
             effect.layer = 1;
             m_game->CreateEffect((EffectDesc*)&effect);
         }
         if (frame > 3) {
-            FocusCameraY(0x32, 0xa);
+            FocusCameraY(50, 10);
         }
-        if (frame > 6 && frame < 0x10 && timer == 0 && m_patternVar1 < 2) {
+        if (frame > 6 && frame < 16 && timer == 0 && m_patternVar1 < 2) {
             m_playVoice = 3;
             effect.type = 0x195;
-            effect.x = (double)(int)((WORD)Random(0, 0x50) - 0x28 + x);
-            effect.y = (double)((int)y - 0x8c);
+            effect.x = (double)(int)((WORD)Random(0, 80) - 40 + x);
+            effect.y = (double)((int)y - 140);
             effect.scale = 2;
             effect.layer = 1;
-            if ((WORD)Random(0, 0x64) < 0x32) {
+            if ((WORD)Random(0, 100) < 50) {
                 effect.layer = 0;
             }
             effect.facing = facing;
@@ -4838,7 +4838,7 @@ void CAkane::UpdatePattern()
             timer = 0;
             frame++;
             m_attackResult = 0;
-            if (frame == 0xf && m_patternVar1 < 2) {
+            if (frame == 15 && m_patternVar1 < 2) {
                 m_patternVar1++;
                 frame = 7;
             }
@@ -4860,29 +4860,29 @@ void CAkane::UpdatePattern()
         }
         if (frame == 2 && timer == 0) {
             StopMoving();
-            m_freezeTime = 0x78;
-            m_gauge = m_gauge - 0x7d0;
-            FillBackground(0xb0, 3);
+            m_freezeTime = 120;
+            m_gauge = m_gauge - 2000;
+            FillBackground(176, 3);
             effect.type = 0x45;
             effect.sound = 5;
-            effect.x = (double)((int)x + facing * 0x17);
-            effect.y = (double)((int)y - 0x1e);
+            effect.x = (double)((int)x + facing * 23);
+            effect.y = (double)((int)y - 30);
             effect.scale = 2;
             effect.keep = 1;
             effect.layer = 1;
             m_game->CreateEffect((EffectDesc*)&effect);
         }
         if (frame > 3) {
-            FocusCameraY(0x32, 0xa);
+            FocusCameraY(50, 10);
         }
-        if (frame > 6 && frame < 0x10 && timer == 0 && m_patternVar1 < 3) {
+        if (frame > 6 && frame < 16 && timer == 0 && m_patternVar1 < 3) {
             m_playVoice = 3;
             effect.type = 0x195;
-            effect.x = (double)(int)((WORD)Random(0, 0x50) - 0x28 + x);
-            effect.y = (double)((int)y - 0x8c);
+            effect.x = (double)(int)((WORD)Random(0, 80) - 40 + x);
+            effect.y = (double)((int)y - 140);
             effect.scale = 2;
             effect.layer = 1;
-            if ((WORD)Random(0, 0x64) < 0x32) {
+            if ((WORD)Random(0, 100) < 50) {
                 effect.layer = 0;
             }
             effect.facing = facing;
@@ -4893,7 +4893,7 @@ void CAkane::UpdatePattern()
             timer = 0;
             frame++;
             m_attackResult = 0;
-            if (frame == 0xf && m_patternVar1 < 3) {
+            if (frame == 15 && m_patternVar1 < 3) {
                 m_patternVar1++;
                 frame = 7;
             }
@@ -4915,31 +4915,31 @@ void CAkane::UpdatePattern()
         }
         if (frame == 0 && timer == 0) {
             StopMoving();
-            m_freezeTime = 0x78;
-            m_gauge = m_gauge - 0xbb8;
-            FillBackground(0xb0, 3);
+            m_freezeTime = 120;
+            m_gauge = m_gauge - 3000;
+            FillBackground(176, 3);
             effect.type = 0x46;
-            effect.sound = 0x40;
-            effect.x = (double)((int)x + facing * 0x17);
-            effect.y = (double)((int)y - 0x1e);
+            effect.sound = 64;
+            effect.x = (double)((int)x + facing * 23);
+            effect.y = (double)((int)y - 30);
             effect.scale = 2;
             effect.keep = 1;
             effect.layer = 1;
             m_game->CreateEffect((EffectDesc*)&effect);
-            m_playSound = 0x25;
+            m_playSound = 37;
         }
-        m_game->FlashNegative(0xf);
+        m_game->FlashNegative(15);
         if (frame > 3) {
-            FocusCameraY(0x32, 0xa);
+            FocusCameraY(50, 10);
         }
-        if (frame > 6 && frame < 0x10 && timer == 0 && m_patternVar1 < 4) {
+        if (frame > 6 && frame < 16 && timer == 0 && m_patternVar1 < 4) {
             m_playVoice = 3;
             effect.type = 0x195;
-            effect.x = (double)(int)((WORD)Random(0, 0x50) - 0x28 + x);
-            effect.y = (double)((int)y - 0x8c);
+            effect.x = (double)(int)((WORD)Random(0, 80) - 40 + x);
+            effect.y = (double)((int)y - 140);
             effect.scale = 2;
             effect.layer = 1;
-            if ((WORD)Random(0, 0x64) < 0x32) {
+            if ((WORD)Random(0, 100) < 50) {
                 effect.layer = 0;
             }
             effect.facing = facing;
@@ -4950,7 +4950,7 @@ void CAkane::UpdatePattern()
             timer = 0;
             frame++;
             m_attackResult = 0;
-            if (frame == 0xf && m_patternVar1 < 3) {
+            if (frame == 15 && m_patternVar1 < 3) {
                 m_patternVar1++;
                 frame = 7;
             }
@@ -4967,20 +4967,20 @@ void CAkane::UpdatePattern()
             m_dashMomentum = 0;
         }
         if (frame == 2 && timer == 0) {
-            m_freezeTime = 0x78;
-            m_gauge = m_gauge - 0x3e8;
-            FillBackground(0xb0, 3);
+            m_freezeTime = 120;
+            m_gauge = m_gauge - 1000;
+            FillBackground(176, 3);
             effect.type = 0x44;
-            effect.sound = 0x13;
-            effect.x = (double)((int)x + facing * 0x17);
-            effect.y = (double)((int)y - 0x1e);
+            effect.sound = 19;
+            effect.x = (double)((int)x + facing * 23);
+            effect.y = (double)((int)y - 30);
             effect.scale = 2;
             effect.keep = 1;
             effect.layer = 1;
             m_game->CreateEffect((EffectDesc*)&effect);
         }
         if (frame > 3) {
-            FocusCameraY(0x32, 0xa);
+            FocusCameraY(50, 10);
         }
         timer++;
         if (timer >= duration) {
@@ -4990,7 +4990,7 @@ void CAkane::UpdatePattern()
                 m_playVoice = 2;
                 effect.type = 0x19c;
                 effect.x = (double)(int)x;
-                effect.y = (double)((int)y - 0x32);
+                effect.y = (double)((int)y - 50);
                 effect.scale = 2;
                 effect.facing = facing;
                 effect.keep = 1;
@@ -5029,20 +5029,20 @@ void CAkane::UpdatePattern()
             m_dashMomentum = 0;
         }
         if (frame == 2 && timer == 0) {
-            m_freezeTime = 0x78;
-            m_gauge = m_gauge - 0x3e8;
-            FillBackground(0xb0, 3);
+            m_freezeTime = 120;
+            m_gauge = m_gauge - 1000;
+            FillBackground(176, 3);
             effect.type = 0x44;
-            effect.sound = 0x13;
-            effect.x = (double)((int)x + facing * 0x17);
-            effect.y = (double)((int)y - 0x1e);
+            effect.sound = 19;
+            effect.x = (double)((int)x + facing * 23);
+            effect.y = (double)((int)y - 30);
             effect.scale = 2;
             effect.keep = 1;
             effect.layer = 1;
             m_game->CreateEffect((EffectDesc*)&effect);
         }
         if (frame > 3) {
-            FocusCameraY(0x32, 0xa);
+            FocusCameraY(50, 10);
         }
         timer++;
         if (timer >= duration) {
@@ -5051,8 +5051,8 @@ void CAkane::UpdatePattern()
             if (frame == 5 && m_patternVar1 == 0) {
                 m_playVoice = 2;
                 effect.type = 0x19c;
-                effect.x = (double)((int)x + facing * 0x64);
-                effect.y = (double)((int)y - 0x32);
+                effect.x = (double)((int)x + facing * 100);
+                effect.y = (double)((int)y - 50);
                 effect.scale = 2;
                 effect.facing = facing;
                 effect.keep = 1;
@@ -5091,20 +5091,20 @@ void CAkane::UpdatePattern()
             m_dashMomentum = 0;
         }
         if (frame == 2 && timer == 0) {
-            m_freezeTime = 0x78;
-            m_gauge = m_gauge - 0x3e8;
-            FillBackground(0xb0, 3);
+            m_freezeTime = 120;
+            m_gauge = m_gauge - 1000;
+            FillBackground(176, 3);
             effect.type = 0x44;
-            effect.sound = 0x13;
-            effect.x = (double)((int)x + facing * 0x17);
-            effect.y = (double)((int)y - 0x1e);
+            effect.sound = 19;
+            effect.x = (double)((int)x + facing * 23);
+            effect.y = (double)((int)y - 30);
             effect.scale = 2;
             effect.keep = 1;
             effect.layer = 1;
             m_game->CreateEffect((EffectDesc*)&effect);
         }
         if (frame > 3) {
-            FocusCameraY(0x32, 0xa);
+            FocusCameraY(50, 10);
         }
         timer++;
         if (timer >= duration) {
@@ -5114,7 +5114,7 @@ void CAkane::UpdatePattern()
                 m_playVoice = 2;
                 effect.type = 0x19c;
                 effect.x = (double)(int)x;
-                effect.y = (double)((int)y - 0x96);
+                effect.y = (double)((int)y - 150);
                 effect.scale = 2;
                 effect.facing = facing;
                 effect.keep = 1;
@@ -5158,20 +5158,20 @@ void CAkane::UpdatePattern()
         }
         if (frame == 3 && timer == 0) {
             StopMoving();
-            m_freezeTime = 0x78;
-            m_gauge = m_gauge - 0x3e8;
-            FillBackground(0xb0, 3);
+            m_freezeTime = 120;
+            m_gauge = m_gauge - 1000;
+            FillBackground(176, 3);
             effect.type = 0x44;
-            effect.sound = 0x13;
-            effect.x = (double)((int)x + facing * 0x17);
-            effect.y = (double)((int)y - 0x1e);
+            effect.sound = 19;
+            effect.x = (double)((int)x + facing * 23);
+            effect.y = (double)((int)y - 30);
             effect.scale = 2;
             effect.keep = 1;
             effect.layer = 1;
             m_game->CreateEffect((EffectDesc*)&effect);
             effect.type = 0x1a1;
-            effect.x = (double)(int)(x - facing * 0x140);
-            effect.y = (double)((int)y - 0x140);
+            effect.x = (double)(int)(x - facing * 320);
+            effect.y = (double)((int)y - 320);
             effect.scale = 0;
             effect.layer = 1;
             effect.keep = 1;
@@ -5182,14 +5182,14 @@ void CAkane::UpdatePattern()
             m_helperState = 2;
         }
         if (frame < 4) {
-            FocusCameraY(0x32, 0xa);
+            FocusCameraY(50, 10);
         }
         timer++;
         if (timer >= duration) {
             timer = 0;
             frame++;
             m_attackResult = 3;
-            if (frame == 0xa && m_helperState > 1) {
+            if (frame == 10 && m_helperState > 1) {
                 frame = frame - 4;
             }
             if (frame >= frameCount) {
@@ -5210,20 +5210,20 @@ void CAkane::UpdatePattern()
         }
         if (frame == 3 && timer == 0) {
             StopMoving();
-            m_freezeTime = 0x78;
-            m_gauge = m_gauge - 0x7d0;
-            FillBackground(0xb0, 3);
+            m_freezeTime = 120;
+            m_gauge = m_gauge - 2000;
+            FillBackground(176, 3);
             effect.type = 0x45;
             effect.sound = 5;
-            effect.x = (double)((int)x + facing * 0x17);
-            effect.y = (double)((int)y - 0x1e);
+            effect.x = (double)((int)x + facing * 23);
+            effect.y = (double)((int)y - 30);
             effect.scale = 2;
             effect.keep = 1;
             effect.layer = 1;
             m_game->CreateEffect((EffectDesc*)&effect);
             effect.type = 0x1a2;
-            effect.x = (double)(int)(x - facing * 0x140);
-            effect.y = (double)((int)y - 0x140);
+            effect.x = (double)(int)(x - facing * 320);
+            effect.y = (double)((int)y - 320);
             effect.scale = 0;
             effect.layer = 1;
             effect.keep = 1;
@@ -5234,14 +5234,14 @@ void CAkane::UpdatePattern()
             m_helperState = 2;
         }
         if (frame < 4) {
-            FocusCameraY(0x32, 0xa);
+            FocusCameraY(50, 10);
         }
         timer++;
         if (timer >= duration) {
             timer = 0;
             frame++;
             m_attackResult = 3;
-            if (frame == 0xa && m_helperState > 1) {
+            if (frame == 10 && m_helperState > 1) {
                 frame = frame - 4;
             }
             if (frame >= frameCount) {
@@ -5262,20 +5262,20 @@ void CAkane::UpdatePattern()
         }
         if (frame == 3 && timer == 0) {
             StopMoving();
-            m_freezeTime = 0x78;
-            m_gauge = m_gauge - 0xbb8;
-            FillBackground(0xb0, 3);
+            m_freezeTime = 120;
+            m_gauge = m_gauge - 3000;
+            FillBackground(176, 3);
             effect.type = 0x46;
-            effect.sound = 0x40;
-            effect.x = (double)((int)x + facing * 0x17);
-            effect.y = (double)((int)y - 0x1e);
+            effect.sound = 64;
+            effect.x = (double)((int)x + facing * 23);
+            effect.y = (double)((int)y - 30);
             effect.scale = 2;
             effect.keep = 1;
             effect.layer = 1;
             m_game->CreateEffect((EffectDesc*)&effect);
             effect.type = 0x1a3;
-            effect.x = (double)(int)(x - facing * 0x140);
-            effect.y = (double)((int)y - 0x140);
+            effect.x = (double)(int)(x - facing * 320);
+            effect.y = (double)((int)y - 320);
             effect.scale = 0;
             effect.layer = 1;
             effect.keep = 1;
@@ -5284,10 +5284,10 @@ void CAkane::UpdatePattern()
             effect.movesInFreeze = 1;
             SpawnObject(&effect);
             m_helperState = 2;
-            m_playSound = 0x25;
+            m_playSound = 37;
         }
         if (frame < 4) {
-            FocusCameraY(0x32, 0xa);
+            FocusCameraY(50, 10);
         }
         timer++;
         if (timer >= duration) {
@@ -5306,30 +5306,30 @@ void CAkane::UpdatePattern()
             m_dashMomentum = 0;
             m_hitsLeft = 1;
             StopMoving();
-            m_freezeTime = 0x78;
-            m_gauge = m_gauge - 0xbb8;
-            FillBackground(0xb0, 3);
+            m_freezeTime = 120;
+            m_gauge = m_gauge - 3000;
+            FillBackground(176, 3);
             effect.type = 0x46;
-            effect.sound = 0x40;
-            effect.x = (double)((int)x + facing * 0x17);
-            effect.y = (double)((int)y - 0x1e);
+            effect.sound = 64;
+            effect.x = (double)((int)x + facing * 23);
+            effect.y = (double)((int)y - 30);
             effect.scale = 2;
             effect.keep = 1;
             effect.layer = 1;
             m_game->CreateEffect((EffectDesc*)&effect);
-            m_playSound = 0x25;
+            m_playSound = 37;
             effect.type = 0x47;
             m_game->CreateEffect((EffectDesc*)&effect);
         }
         if (frame < 4) {
-            m_game->FlashNegative(0xf);
+            m_game->FlashNegative(15);
         }
         if (frame == 1) {
             vx = 0.8;
             StartAfterimages(6);
         }
         if (frame >= 0) {
-            FocusCameraY(0x32, 0xa);
+            FocusCameraY(50, 10);
         }
         if (frame > 0 && frame < 3 && m_attackResult == 3) {
             StartAfterimages(0);
@@ -5340,8 +5340,8 @@ void CAkane::UpdatePattern()
             frame = 3;
             (*m_opponent)->pattern = kThrownStandHigh2;
             effect.type = 0;
-            effect.x = (double)((int)x + facing * 0x11);
-            effect.y = (double)((int)y - 0x36);
+            effect.x = (double)((int)x + facing * 17);
+            effect.y = (double)((int)y - 54);
             effect.scale = 2;
             effect.layer = 1;
             m_game->CreateEffect((EffectDesc*)&effect);
@@ -5350,14 +5350,14 @@ void CAkane::UpdatePattern()
         }
         if (frame == 4) {
             (*m_opponent)->pattern = kThrownHidden;
-            FillBackground(0xb0, 3);
+            FillBackground(176, 3);
             if (m_patternVar1 == 0) {
                 m_comboHits++;
                 m_shownHits++;
                 effect.type = 0;
                 effect.sound = 2;
-                effect.x = (double)(int)(x + 50.0 - (WORD)Random(0, 0x64));
-                effect.y = (double)((WORD)Random(0, 0x64) - 0x64);
+                effect.x = (double)(int)(x + 50.0 - (WORD)Random(0, 100));
+                effect.y = (double)((WORD)Random(0, 100) - 100);
                 effect.facing = facing;
                 effect.scale = 2;
                 effect.keep = 1;
@@ -5365,7 +5365,7 @@ void CAkane::UpdatePattern()
                 m_game->CreateEffect((EffectDesc*)&effect);
             }
             m_patternVar1++;
-            if (m_patternVar1 == 0xd) {
+            if (m_patternVar1 == 13) {
                 m_patternVar1 = 0;
             }
         }
@@ -5379,9 +5379,9 @@ void CAkane::UpdatePattern()
             if (frame == 5) {
                 (*m_opponent)->timer = 0;
                 (*m_opponent)->pattern = kLyingDown;
-                DealDamage(0x1194, 1000.0);
+                DealDamage(4500, 1000.0);
                 if (m_roundsWon + 1 != m_game->m_roundsToWin) {
-                    (*m_opponent)->m_koDelay = 0x7530;
+                    (*m_opponent)->m_koDelay = 30000;
                 }
                 if ((*m_opponent)->m_hp <= 0) {
                     effect.type = 0x1ac;
@@ -5408,10 +5408,10 @@ void CAkane::UpdatePattern()
             if (frame == 8) {
                 (*m_opponent)->m_koDelay = 0;
             }
-            if (frame == 3 && m_patternVar2 < 0xf) {
+            if (frame == 3 && m_patternVar2 < 15) {
                 m_patternVar2++;
                 frame = 1;
-                if (m_patternVar2 > 0xe) {
+                if (m_patternVar2 > 14) {
                     pattern = kStand;
                     FaceOpponent();
                     StartPattern();
@@ -5431,20 +5431,20 @@ void CAkane::UpdatePattern()
             m_dashMomentum = 0;
         }
         if (frame == 2 && timer == 0) {
-            m_freezeTime = 0x78;
-            m_gauge = m_gauge - 0xbb8;
-            FillBackground(0xb0, 3);
+            m_freezeTime = 120;
+            m_gauge = m_gauge - 3000;
+            FillBackground(176, 3);
             effect.type = 9;
             effect.sound = 5;
-            effect.x = (double)((int)x + facing * 0x17);
-            effect.y = (double)((int)y - 0x1e);
+            effect.x = (double)((int)x + facing * 23);
+            effect.y = (double)((int)y - 30);
             effect.scale = 2;
             effect.keep = 1;
             effect.layer = 1;
             m_game->CreateEffect((EffectDesc*)&effect);
         }
         if (frame >= 0) {
-            FocusCameraY(0x32, 0xa);
+            FocusCameraY(50, 10);
         }
         if (frame == 5 && m_attackResult == 3) {
             (*m_opponent)->StopMoving();
@@ -5458,7 +5458,7 @@ void CAkane::UpdatePattern()
             if (x < 80.0 && facing == -1) {
                 x = 80.0;
             }
-            (*m_opponent)->x = (m_pointX[2] + 0x47) * facing + x;
+            (*m_opponent)->x = (m_pointX[2] + 71) * facing + x;
             (*m_opponent)->y = 0.0;
             pattern = kUnusedGrabSuperHit;
             break;
@@ -5468,7 +5468,7 @@ void CAkane::UpdatePattern()
             timer = 0;
             frame++;
             if (frame == 5) {
-                m_playVoice = 0x15;
+                m_playVoice = 21;
                 if ((*m_opponent)->y == 0.0) {
                     m_hitsLeft = 1;
                 }
@@ -5483,21 +5483,21 @@ void CAkane::UpdatePattern()
         break;
     case kUnusedGrabSuperHit:
         if (frame == 1) {
-            (*m_opponent)->x = (m_pointX[2] + 0x3c) * facing + x;
+            (*m_opponent)->x = (m_pointX[2] + 60) * facing + x;
             (*m_opponent)->y = y - 13.0 - m_pointY[2];
             (*m_opponent)->pattern = kThrownStandHigh2;
             (*m_opponent)->StartPattern();
             (*m_opponent)->StopMoving();
         }
         if (frame == 2) {
-            (*m_opponent)->x = (m_pointX[3] + 0x2e) * facing + x;
+            (*m_opponent)->x = (m_pointX[3] + 46) * facing + x;
             (*m_opponent)->y = y - 16.0 - m_pointY[3];
             (*m_opponent)->pattern = kThrownAirRising;
             (*m_opponent)->StartPattern();
             (*m_opponent)->StopMoving();
         }
         if (frame == 3) {
-            (*m_opponent)->x = (m_pointX[4] + 0x1a) * facing + x;
+            (*m_opponent)->x = (m_pointX[4] + 26) * facing + x;
             (*m_opponent)->y = y - 41.0 - m_pointY[4];
             (*m_opponent)->pattern = kThrownAirborne2;
             (*m_opponent)->StartPattern();
@@ -5510,25 +5510,25 @@ void CAkane::UpdatePattern()
             (*m_opponent)->m_hitVy = -2.9;
             (*m_opponent)->pattern = kHitAirLaunch;
         }
-        if (frame == 0xb && timer == 0) {
-            m_freezeTime = 0x78;
-            FillBackground(0xb0, 3);
+        if (frame == 11 && timer == 0) {
+            m_freezeTime = 120;
+            FillBackground(176, 3);
             effect.type = 9;
             effect.sound = 5;
-            effect.x = (double)((int)x + facing * 0x17);
-            effect.y = (double)((int)y - 0x1e);
+            effect.x = (double)((int)x + facing * 23);
+            effect.y = (double)((int)y - 30);
             effect.scale = 2;
             effect.keep = 1;
             effect.layer = 1;
             m_game->CreateEffect((EffectDesc*)&effect);
             m_hitsLeft = 1;
         }
-        if (frame > 0x10) {
+        if (frame > 16) {
             m_patternVar1++;
         }
-        if (m_patternVar1 == 0x5a || m_patternVar1 == 0x12c) {
+        if (m_patternVar1 == 90 || m_patternVar1 == 300) {
             effect.type = 0x1a5;
-            effect.x = (double)((int)(*m_opponent)->x + facing * 0x140);
+            effect.x = (double)((int)(*m_opponent)->x + facing * 320);
             effect.y = (double)(int)(*m_opponent)->y;
             effect.scale = 0;
             effect.keep = 1;
@@ -5536,29 +5536,29 @@ void CAkane::UpdatePattern()
             effect.layer = 1;
             SpawnObject(&effect);
         }
-        if (m_patternVar1 == 0x96 || m_patternVar1 == 0x168) {
+        if (m_patternVar1 == 150 || m_patternVar1 == 360) {
             effect.type = 0x1a6;
-            effect.x = (double)((int)(*m_opponent)->x + facing * 0x140);
-            effect.y = (double)((int)(*m_opponent)->y + 0x40);
+            effect.x = (double)((int)(*m_opponent)->x + facing * 320);
+            effect.y = (double)((int)(*m_opponent)->y + 64);
             effect.scale = 0;
             effect.keep = 1;
             effect.facing = facing;
             effect.layer = 1;
             SpawnObject(&effect);
         }
-        if (m_patternVar1 == 0xf0 || m_patternVar1 == 0xc8) {
+        if (m_patternVar1 == 240 || m_patternVar1 == 200) {
             effect.type = 0x1a7;
-            effect.x = (double)((int)(*m_opponent)->x + facing * 0x140);
-            effect.y = (double)((int)(*m_opponent)->y + 0x80);
+            effect.x = (double)((int)(*m_opponent)->x + facing * 320);
+            effect.y = (double)((int)(*m_opponent)->y + 128);
             effect.scale = 0;
             effect.keep = 1;
             effect.facing = facing;
             effect.layer = 1;
             SpawnObject(&effect);
         }
-        if (m_patternVar1 == 0x78 || m_patternVar1 == 0x10e) {
+        if (m_patternVar1 == 120 || m_patternVar1 == 270) {
             effect.type = 0x1a8;
-            effect.x = (double)((int)(*m_opponent)->x - facing * 0x140);
+            effect.x = (double)((int)(*m_opponent)->x - facing * 320);
             effect.y = (double)(int)(*m_opponent)->y;
             effect.scale = 0;
             effect.keep = 1;
@@ -5566,27 +5566,27 @@ void CAkane::UpdatePattern()
             effect.layer = 1;
             SpawnObject(&effect);
         }
-        if (m_patternVar1 == 0xb4 || m_patternVar1 == 0x14a) {
+        if (m_patternVar1 == 180 || m_patternVar1 == 330) {
             effect.type = 0x1a9;
-            effect.x = (double)((int)(*m_opponent)->x - facing * 0x140);
-            effect.y = (double)((int)(*m_opponent)->y + 0x50);
+            effect.x = (double)((int)(*m_opponent)->x - facing * 320);
+            effect.y = (double)((int)(*m_opponent)->y + 80);
             effect.scale = 0;
             effect.keep = 1;
             effect.facing = facing;
             effect.layer = 1;
             SpawnObject(&effect);
         }
-        if (m_patternVar1 == 0xd2 || m_patternVar1 == 0x186) {
+        if (m_patternVar1 == 210 || m_patternVar1 == 390) {
             effect.type = 0x1aa;
-            effect.x = (double)((int)(*m_opponent)->x - facing * 0x140);
-            effect.y = (double)((int)(*m_opponent)->y + 0x7d);
+            effect.x = (double)((int)(*m_opponent)->x - facing * 320);
+            effect.y = (double)((int)(*m_opponent)->y + 125);
             effect.scale = 0;
             effect.keep = 1;
             effect.facing = facing;
             effect.layer = 1;
             SpawnObject(&effect);
         }
-        if (m_patternVar1 == 0x1f4) {
+        if (m_patternVar1 == 500) {
             effect.type = 0x1ab;
             effect.x = (double)(int)(*m_opponent)->x;
             effect.y = 0.0;
@@ -5596,21 +5596,21 @@ void CAkane::UpdatePattern()
             effect.layer = 1;
             SpawnObject(&effect);
         }
-        if (frame < 0x10) {
-            FocusCameraY(0x32, 3);
+        if (frame < 16) {
+            FocusCameraY(50, 3);
         }
-        if (frame >= 0x10) {
-            (*m_opponent)->FocusCameraY(0x32, 3);
+        if (frame >= 16) {
+            (*m_opponent)->FocusCameraY(50, 3);
         }
-        if ((*m_opponent)->pattern == kLyingDown && frame < 0x14) {
+        if ((*m_opponent)->pattern == kLyingDown && frame < 20) {
             timer = 0;
-            frame = 0x14;
+            frame = 20;
         }
         timer++;
         if (timer >= duration) {
             timer = 0;
             frame++;
-            if (frame == 0x14) {
+            if (frame == 20) {
                 frame = frame - 3;
             }
             m_attackResult = 0;
@@ -5624,13 +5624,13 @@ void CAkane::UpdatePattern()
     case kUnusedAirSuper:
         if (frame == 0 && timer == 0) {
             StopMoving();
-            m_freezeTime = 0x78;
-            m_gauge = m_gauge - 0x3e8;
-            FillBackground(0, 0x28);
+            m_freezeTime = 120;
+            m_gauge = m_gauge - 1000;
+            FillBackground(0, 40);
             effect.type = 9;
             effect.sound = 5;
-            effect.x = (double)((int)x + facing * 0x17);
-            effect.y = (double)((int)y - 0x1e);
+            effect.x = (double)((int)x + facing * 23);
+            effect.y = (double)((int)y - 30);
             effect.scale = 2;
             effect.keep = 1;
             effect.layer = 1;
@@ -5648,8 +5648,8 @@ void CAkane::UpdatePattern()
                 ay = 0.025;
                 m_playVoice = 1;
                 effect.type = 0x192;
-                effect.x = (double)((int)x + facing * 0x1e);
-                effect.y = (double)((int)y - 0x1e);
+                effect.x = (double)((int)x + facing * 30);
+                effect.y = (double)((int)y - 30);
                 effect.facing = facing;
                 effect.layer = 1;
                 effect.scale = 2;

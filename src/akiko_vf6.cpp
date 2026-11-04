@@ -302,7 +302,7 @@ void CAkiko::UpdatePattern()
         }
         m_rfGauge--;
         if (frame == 2 && timer == 0) {
-            m_playSound = 0x11;
+            m_playSound = 17;
         }
         vy += 0.03;
         vx = m_inputX * 0.045 * facing + vx;
@@ -370,7 +370,7 @@ void CAkiko::UpdatePattern()
             m_rfGauge -= 0.6;
         }
         if (frame == 0 && timer == 0) {
-            m_gauge = m_gauge + 0xa;
+            m_gauge = m_gauge + 10;
             vx = (2.0 - (*m_opponent)->m_proration / 10000.0) * -1.1;
             if (m_rfBlue != 0) {
                 m_rfGauge -= 10.0;
@@ -405,7 +405,7 @@ void CAkiko::UpdatePattern()
             m_rfGauge -= 0.6;
         }
         if (frame == 0 && timer == 0) {
-            m_gauge = m_gauge + 0xf;
+            m_gauge = m_gauge + 15;
             vx = (2.0 - (*m_opponent)->m_proration / 10000.0) * -1.5;
             if (m_rfBlue != 0) {
                 m_rfGauge -= 20.0;
@@ -440,7 +440,7 @@ void CAkiko::UpdatePattern()
             m_rfGauge -= 0.6;
         }
         if (frame == 0 && timer == 0) {
-            m_gauge = m_gauge + 0x14;
+            m_gauge = m_gauge + 20;
             vx = (2.0 - (*m_opponent)->m_proration / 10000.0) * -1.8;
             if (m_rfBlue != 0) {
                 m_rfGauge -= 30.0;
@@ -475,7 +475,7 @@ void CAkiko::UpdatePattern()
             m_rfGauge -= 0.6;
         }
         if (frame == 0 && timer == 0) {
-            m_gauge = m_gauge + 0xa;
+            m_gauge = m_gauge + 10;
             vx = (2.0 - (*m_opponent)->m_proration / 10000.0) * -1.1;
             if (m_rfBlue != 0) {
                 m_rfGauge -= 10.0;
@@ -510,7 +510,7 @@ void CAkiko::UpdatePattern()
             m_rfGauge -= 0.6;
         }
         if (frame == 0 && timer == 0) {
-            m_gauge = m_gauge + 0xf;
+            m_gauge = m_gauge + 15;
             vx = (2.0 - (*m_opponent)->m_proration / 10000.0) * -1.5;
             if (m_rfBlue != 0) {
                 m_rfGauge -= 20.0;
@@ -545,7 +545,7 @@ void CAkiko::UpdatePattern()
             m_rfGauge -= 0.6;
         }
         if (frame == 0 && timer == 0) {
-            m_gauge = m_gauge + 0x14;
+            m_gauge = m_gauge + 20;
             vx = (2.0 - (*m_opponent)->m_proration / 10000.0) * -1.8;
             if (m_rfBlue != 0) {
                 m_rfGauge -= 30.0;
@@ -580,7 +580,7 @@ void CAkiko::UpdatePattern()
             m_rfGauge -= 0.6;
         }
         if (frame == 0 && timer == 0) {
-            m_gauge = m_gauge + 0xa;
+            m_gauge = m_gauge + 10;
             vx = (2.0 - (*m_opponent)->m_proration / 10000.0) * -1.1;
             if (m_rfBlue != 0) {
                 m_rfGauge -= 10.0;
@@ -612,7 +612,7 @@ void CAkiko::UpdatePattern()
             m_rfGauge -= 0.6;
         }
         if (frame == 0 && timer == 0) {
-            m_gauge = m_gauge + 0xf;
+            m_gauge = m_gauge + 15;
             vx = (2.0 - (*m_opponent)->m_proration / 10000.0) * -1.5;
             if (m_rfBlue != 0) {
                 m_rfGauge -= 20.0;
@@ -644,7 +644,7 @@ void CAkiko::UpdatePattern()
             m_rfGauge -= 0.6;
         }
         if (frame == 0 && timer == 0) {
-            m_gauge = m_gauge + 0x14;
+            m_gauge = m_gauge + 20;
             vx = (2.0 - (*m_opponent)->m_proration / 10000.0) * -1.8;
             if (m_rfBlue != 0) {
                 m_rfGauge -= 30.0;
@@ -676,7 +676,7 @@ void CAkiko::UpdatePattern()
             m_rfGauge -= 0.8;
         }
         if (frame == 0 && timer == 0) {
-            m_gauge = m_gauge + 0x1e;
+            m_gauge = m_gauge + 30;
             vx = m_hitVx;
             vy = vy * 0.75 + m_hitVy;
             if (vy < -2.0) {
@@ -719,7 +719,7 @@ void CAkiko::UpdatePattern()
             m_rfGauge -= 0.8;
         }
         if (frame == 0 && timer == 0) {
-            m_gauge = m_gauge + 0x1e;
+            m_gauge = m_gauge + 30;
             vx = m_hitVx;
             vy = vy * 0.75 + m_hitVy;
             if (vy < -4.0) {
@@ -762,7 +762,7 @@ void CAkiko::UpdatePattern()
             m_rfGauge -= 0.8;
         }
         if (frame == 0 && timer == 0) {
-            m_gauge = m_gauge + 0x1e;
+            m_gauge = m_gauge + 30;
             vx = m_hitVx;
             vy = vy * 0.75 + m_hitVy;
             if (vy < -6.0) {
@@ -805,7 +805,7 @@ void CAkiko::UpdatePattern()
             m_rfGauge -= 0.8;
         }
         if (frame == 0 && timer == 0) {
-            m_gauge = m_gauge + 0x1e;
+            m_gauge = m_gauge + 30;
             vx = m_hitVx;
             vy = vy * 0.75 + m_hitVy;
             ay = 0.032;
@@ -843,7 +843,7 @@ void CAkiko::UpdatePattern()
             m_rfGauge -= 0.8;
         }
         if (frame == 0 && timer == 0) {
-            m_gauge = m_gauge + 0x1e;
+            m_gauge = m_gauge + 30;
             vx = m_hitVx;
             vy = m_hitVy;
             ay = 0.032;
@@ -886,7 +886,7 @@ void CAkiko::UpdatePattern()
             break;
         }
         if (frame == 0 && timer == 0) {
-            m_gauge = m_gauge + 0x1e;
+            m_gauge = m_gauge + 30;
             vx = m_hitVx;
             vy = vy * 0.75 + m_hitVy;
             if (vy < -2.0) {
@@ -934,7 +934,7 @@ void CAkiko::UpdatePattern()
             break;
         }
         if (frame == 0 && timer == 0) {
-            m_gauge = m_gauge + 0x1e;
+            m_gauge = m_gauge + 30;
             vx = m_hitVx;
             vy = vy * 0.75 + m_hitVy;
             if (vy < -4.0) {
@@ -982,7 +982,7 @@ void CAkiko::UpdatePattern()
             break;
         }
         if (frame == 0 && timer == 0) {
-            m_gauge = m_gauge + 0x1e;
+            m_gauge = m_gauge + 30;
             vx = m_hitVx;
             vy = vy * 0.75 + m_hitVy;
             ay = 0.032;
@@ -1025,7 +1025,7 @@ void CAkiko::UpdatePattern()
             break;
         }
         if (frame == 0 && timer == 0) {
-            m_gauge = m_gauge + 0x1e;
+            m_gauge = m_gauge + 30;
             vx = m_hitVx;
             vy = m_hitVy;
             ay = 0.032;
@@ -1120,13 +1120,13 @@ void CAkiko::UpdatePattern()
             m_rfGauge -= 0.8;
         }
         if (frame == 0 && timer == 0 && m_patternVar1 == 0) {
-            m_gauge = m_gauge + 0x1e;
+            m_gauge = m_gauge + 30;
             m_patternVar1++;
-            m_untechTime = m_untechTime + 0x78;
+            m_untechTime = m_untechTime + 120;
             vx = 0.5;
             vy = -2.5;
             ay = 0.025;
-            m_playSound = 0x1f;
+            m_playSound = 31;
             effect.type = 0;
             effect.x = (double)(int)x;
             effect.y = (double)(int)y;
@@ -1159,7 +1159,7 @@ void CAkiko::UpdatePattern()
             m_rfGauge -= 0.8;
         }
         if (frame == 0 && timer == 0) {
-            m_gauge = m_gauge + 0x1e;
+            m_gauge = m_gauge + 30;
             vx = m_hitVx;
             vy = m_hitVy;
             ay = 0.072;
@@ -1266,7 +1266,7 @@ void CAkiko::UpdatePattern()
             m_rfGauge -= 0.6;
         }
         if (frame == 0 && timer == 0) {
-            m_gauge = m_gauge + 0x1e;
+            m_gauge = m_gauge + 30;
             if (m_rfBlue != 0) {
                 m_rfGauge -= 30.0;
             }
@@ -1303,7 +1303,7 @@ void CAkiko::UpdatePattern()
             m_rfGauge -= 0.6;
         }
         if (frame == 0 && timer == 0) {
-            m_gauge = m_gauge + 0x1e;
+            m_gauge = m_gauge + 30;
             if (m_rfBlue != 0) {
                 m_rfGauge -= 30.0;
             }
@@ -1340,7 +1340,7 @@ void CAkiko::UpdatePattern()
             m_rfGauge -= 0.6;
         }
         if (frame == 0 && timer == 0) {
-            m_gauge = m_gauge + 0x1e;
+            m_gauge = m_gauge + 30;
             if (m_rfBlue != 0) {
                 m_rfGauge -= 30.0;
             }
@@ -1380,7 +1380,7 @@ void CAkiko::UpdatePattern()
             effect.facing = facing;
             effect.layer = 1;
             SpawnObject(&effect);
-            m_gauge = m_gauge + 0x1e;
+            m_gauge = m_gauge + 30;
             vx = m_hitVx;
             vy = m_hitVy;
             ay = 0.032;
@@ -1414,11 +1414,11 @@ void CAkiko::UpdatePattern()
             m_rfGauge -= 0.8;
         }
         if (frame == 0 && timer == 0 && m_patternVar1 == 0) {
-            m_playSound = 0x1e;
+            m_playSound = 30;
             vy = -0.45;
             vx = -0.1;
             m_patternVar1++;
-            m_gauge = m_gauge + 0x1e;
+            m_gauge = m_gauge + 30;
         }
         if (frame == 4 && timer == 0) {
             vx = m_hitVx;
@@ -1471,10 +1471,10 @@ void CAkiko::UpdatePattern()
             if (m_rfBlue != 0) {
                 m_rfGauge -= 30.0;
             }
-            m_playSound = 0x21;
+            m_playSound = 33;
             vy = -1.5;
             vx = -0.8;
-            m_gauge = m_gauge + 0x1e;
+            m_gauge = m_gauge + 30;
         }
         vy += 0.04;
         if (frame == 0 && vy + y > 0.0) {
@@ -1523,10 +1523,10 @@ void CAkiko::UpdatePattern()
             if (m_rfBlue != 0) {
                 m_rfGauge -= 30.0;
             }
-            m_playSound = 0x21;
+            m_playSound = 33;
             vy = -1.5;
             vx = -0.8;
-            m_gauge = m_gauge + 0x1e;
+            m_gauge = m_gauge + 30;
         }
         vy += 0.04;
         if (frame == 0 && vy + y > 0.0) {
@@ -1575,10 +1575,10 @@ void CAkiko::UpdatePattern()
             if (m_rfBlue != 0) {
                 m_rfGauge -= 30.0;
             }
-            m_playSound = 0x21;
+            m_playSound = 33;
             vx = m_hitVx;
             vy = m_hitVy;
-            m_gauge = m_gauge + 0x1e;
+            m_gauge = m_gauge + 30;
         }
         vy += 0.04;
         timer++;
@@ -1619,10 +1619,10 @@ void CAkiko::UpdatePattern()
                 if (m_rfBlue != 0) {
                     m_rfGauge -= 30.0;
                 }
-                m_playSound = 0x21;
+                m_playSound = 33;
                 vx = m_hitVx;
                 vy = m_hitVy;
-                m_gauge = m_gauge + 0x1e;
+                m_gauge = m_gauge + 30;
                 m_patternVar1++;
             }
         }
@@ -1732,7 +1732,7 @@ void CAkiko::UpdatePattern()
         break;
     case kLyingDown:
         timer++;
-        if (m_hp > 0 && timer > 0x63 && frame == 0) {
+        if (m_hp > 0 && timer > 99 && frame == 0) {
             pattern = kWakeUp;
             StartPattern();
         }
@@ -1762,7 +1762,7 @@ void CAkiko::UpdatePattern()
             pattern = kGuardStandLight;
         }
         if (frame == 0 && timer == 0) {
-            m_gauge = m_gauge + 0xa;
+            m_gauge = m_gauge + 10;
             vx = -1.5;
             vy = 0.0;
             y = 0.0;
@@ -1801,7 +1801,7 @@ void CAkiko::UpdatePattern()
             pattern = kGuardStandMedium;
         }
         if (frame == 0 && timer == 0) {
-            m_gauge = m_gauge + 0xf;
+            m_gauge = m_gauge + 15;
             vx = -1.8;
             vy = 0.0;
             y = 0.0;
@@ -1840,7 +1840,7 @@ void CAkiko::UpdatePattern()
             pattern = kGuardStandHeavy;
         }
         if (frame == 0 && timer == 0) {
-            m_gauge = m_gauge + 0x14;
+            m_gauge = m_gauge + 20;
             vx = -2.3;
             vy = 0.0;
             y = 0.0;
@@ -1879,7 +1879,7 @@ void CAkiko::UpdatePattern()
             pattern = kGuardStandLight;
         }
         if (frame == 0 && timer == 0) {
-            m_gauge = m_gauge + 0xa;
+            m_gauge = m_gauge + 10;
             vx = -1.5;
             vy = 0.0;
             y = 0.0;
@@ -1915,7 +1915,7 @@ void CAkiko::UpdatePattern()
             pattern = kGuardStandMedium;
         }
         if (frame == 0 && timer == 0) {
-            m_gauge = m_gauge + 0xf;
+            m_gauge = m_gauge + 15;
             vx = -1.8;
             vy = 0.0;
             y = 0.0;
@@ -1951,7 +1951,7 @@ void CAkiko::UpdatePattern()
             pattern = kGuardStandHeavy;
         }
         if (frame == 0 && timer == 0) {
-            m_gauge = m_gauge + 0x14;
+            m_gauge = m_gauge + 20;
             vx = -2.3;
             vy = 0.0;
             y = 0.0;
@@ -1982,7 +1982,7 @@ void CAkiko::UpdatePattern()
     case kGuardAir:
         if (frame == 0 && timer == 0) {
             vy = -2.6;
-            m_gauge = m_gauge + 0xf;
+            m_gauge = m_gauge + 15;
             ay = 0.06;
         }
         vx = -1.2;
@@ -2071,12 +2071,12 @@ void CAkiko::UpdatePattern()
             StopMoving();
             effect.type = 9;
             effect.x = (double)(int)x;
-            effect.y = (double)((int)y - 0x3c);
+            effect.y = (double)((int)y - 60);
             effect.scale = 2;
             effect.layer = 1;
             m_game->CreateEffect((EffectDesc*)&effect);
             m_hitsLeft = 1;
-            m_playSound = 0x3e;
+            m_playSound = 62;
             m_patternVar1++;
         }
         timer++;
@@ -2103,13 +2103,13 @@ void CAkiko::UpdatePattern()
             StopMoving();
             effect.type = 9;
             effect.x = (double)(int)x;
-            effect.y = (double)((int)y - 0x3c);
+            effect.y = (double)((int)y - 60);
             effect.scale = 2;
             effect.layer = 1;
             m_game->CreateEffect((EffectDesc*)&effect);
             m_hitsLeft = 1;
-            m_playSound = 0x3e;
-            m_gauge = m_gauge - 0x3e8;
+            m_playSound = 62;
+            m_gauge = m_gauge - 1000;
             m_patternVar1++;
         }
         vy = vy + ay;
@@ -2124,7 +2124,7 @@ void CAkiko::UpdatePattern()
         if (timer >= duration) {
             timer = 0;
             frame++;
-            if (frame == 0xc) {
+            if (frame == 12) {
                 ay = 0.035;
             }
             if (frame >= frameCount) {
@@ -2159,7 +2159,7 @@ void CAkiko::UpdatePattern()
                 effect.layer = 0;
                 effect.side = facing == -1;
                 m_game->CreateEffect((EffectDesc*)&effect);
-                m_playSound = 0x11;
+                m_playSound = 17;
             }
             if (frame == 4) {
                 vx = 2.0;
@@ -2192,7 +2192,7 @@ void CAkiko::UpdatePattern()
             timer = 0;
             frame++;
             if (frame == 3) {
-                m_playSound = 0x11;
+                m_playSound = 17;
                 effect.type = 0x1f;
                 effect.x = (double)(int)x;
                 effect.y = (double)(int)y;
@@ -2216,7 +2216,7 @@ void CAkiko::UpdatePattern()
         if (frame == 0 && timer == 0 && m_patternVar3 == 0) {
             vx = 1.8;
             vy = 0.0;
-            m_playSound = 0x11;
+            m_playSound = 17;
             m_patternVar3++;
             StartAfterimages(3);
         }
@@ -2230,7 +2230,7 @@ void CAkiko::UpdatePattern()
                 frame = frame - 2;
             }
         }
-        if (m_inputX == facing && m_patternVar2 >= 0x78) {
+        if (m_inputX == facing && m_patternVar2 >= 120) {
             pattern = kFall;
             StartPattern();
             vx = 1.3;
@@ -2239,7 +2239,7 @@ void CAkiko::UpdatePattern()
                 vx = -vx;
             }
         }
-        if (m_inputX != facing && m_patternVar1 >= 0x30) {
+        if (m_inputX != facing && m_patternVar1 >= 48) {
             pattern = kFall;
             StartPattern();
             vx = 1.3;
@@ -2253,7 +2253,7 @@ void CAkiko::UpdatePattern()
         if (frame == 0 && timer == 0 && m_patternVar3 == 0) {
             vx = -1.8;
             vy = 0.0;
-            m_playSound = 0x11;
+            m_playSound = 17;
             m_patternVar3++;
             StartAfterimages(3);
         }
@@ -2267,7 +2267,7 @@ void CAkiko::UpdatePattern()
                 frame = frame - 2;
             }
         }
-        if (m_inputX == -facing && m_patternVar2 >= 0x78) {
+        if (m_inputX == -facing && m_patternVar2 >= 120) {
             pattern = kFall;
             StartPattern();
             vx = -0.9;
@@ -2276,7 +2276,7 @@ void CAkiko::UpdatePattern()
                 vx = -vx;
             }
         }
-        if (m_inputX != -facing && m_patternVar1 >= 0x2a) {
+        if (m_inputX != -facing && m_patternVar1 >= 42) {
             pattern = kFall;
             StartPattern();
             vx = -0.9;
@@ -2294,11 +2294,11 @@ void CAkiko::UpdatePattern()
                 m_proration = m_rfGauge * 5.0 + m_proration;
             }
             m_rfGauge = 0.0;
-            m_freezeTime = 0x5a;
-            FillBackground(0xb0, 3);
+            m_freezeTime = 90;
+            FillBackground(176, 3);
         }
         if (frame == 1 && timer == 0) {
-            m_playSound = 0x12;
+            m_playSound = 18;
             effect.type = 1;
             effect.x = (double)(int)x;
             effect.y = (double)(int)y;
@@ -2395,7 +2395,7 @@ void CAkiko::UpdatePattern()
             }
             m_recoilGuardWindow = 0;
             m_cornerPushback = 0.0;
-            m_freezeTime = 0x3c;
+            m_freezeTime = 60;
         }
         if (m_freezeTime == 0 && m_patternVar3 == 0) {
             m_patternVar3++;
@@ -2431,11 +2431,11 @@ void CAkiko::UpdatePattern()
                 m_proration = m_rfGauge * 5.0 + m_proration;
             }
             m_rfGauge = 0.0;
-            m_freezeTime = 0x5a;
-            FillBackground(0xb0, 3);
+            m_freezeTime = 90;
+            FillBackground(176, 3);
         }
         if (frame == 0 && timer == 0) {
-            m_playSound = 0x12;
+            m_playSound = 18;
             effect.type = 1;
             effect.x = (double)(int)x;
             effect.y = (double)(int)y;
@@ -2506,7 +2506,7 @@ void CAkiko::UpdatePattern()
         }
         if (frame == 1 && timer == 0) {
             m_gauge = m_gauge + 5;
-            m_playSound = 0x15;
+            m_playSound = 21;
             m_hitsLeft = 1;
         }
         timer++;
@@ -2541,8 +2541,8 @@ void CAkiko::UpdatePattern()
             vy = 0.0;
         }
         if (frame == 1 && timer == 0) {
-            m_gauge = m_gauge + 0xf;
-            m_playSound = 0x14;
+            m_gauge = m_gauge + 15;
+            m_playSound = 20;
             m_hitsLeft = 1;
         }
         timer++;
@@ -2577,8 +2577,8 @@ void CAkiko::UpdatePattern()
             vy = 0.0;
         }
         if (frame == 2 && timer == 0) {
-            m_gauge = m_gauge + 0xf;
-            m_playSound = 0x14;
+            m_gauge = m_gauge + 15;
+            m_playSound = 20;
             m_hitsLeft = 1;
         }
         timer++;
@@ -2613,8 +2613,8 @@ void CAkiko::UpdatePattern()
             vy = 0.0;
         }
         if (frame == 4 && timer == 0) {
-            m_gauge = m_gauge + 0x23;
-            m_playSound = 0x14;
+            m_gauge = m_gauge + 35;
+            m_playSound = 20;
             m_hitsLeft = 1;
         }
         timer++;
@@ -2648,7 +2648,7 @@ void CAkiko::UpdatePattern()
         }
         if (frame == 1 && timer == 0) {
             m_gauge = m_gauge + 5;
-            m_playSound = 0x15;
+            m_playSound = 21;
             m_hitsLeft = 1;
         }
         timer++;
@@ -2684,7 +2684,7 @@ void CAkiko::UpdatePattern()
             break;
         }
         if (frame == 2 && timer == 0) {
-            m_gauge = m_gauge + 0xd;
+            m_gauge = m_gauge + 13;
             m_hitsLeft = 3;
         }
         timer++;
@@ -2696,7 +2696,7 @@ void CAkiko::UpdatePattern()
             }
             if (frame == 3) {
                 m_attackResult = 0;
-                m_playSound = 0x14;
+                m_playSound = 20;
             }
             if (frame >= frameCount) {
                 pattern = kStand;
@@ -2713,8 +2713,8 @@ void CAkiko::UpdatePattern()
             StopMoving();
         }
         if (frame == 2 && timer == 0) {
-            m_gauge = m_gauge + 0x19;
-            m_playSound = 0x14;
+            m_gauge = m_gauge + 25;
+            m_playSound = 20;
             m_hitsLeft = 1;
         }
         timer++;
@@ -2754,7 +2754,7 @@ void CAkiko::UpdatePattern()
         }
         if (frame == 1 && timer == 0) {
             m_gauge = m_gauge + 5;
-            m_playSound = 0x15;
+            m_playSound = 21;
             m_hitsLeft = 1;
         }
         if (y + vy >= 0.0) {
@@ -2792,7 +2792,7 @@ void CAkiko::UpdatePattern()
             break;
         }
         if (frame == 1 && timer == 0) {
-            m_gauge = m_gauge + 0xd;
+            m_gauge = m_gauge + 13;
             m_hitsLeft = 5;
         }
         if (y + vy >= 0.0) {
@@ -2809,23 +2809,23 @@ void CAkiko::UpdatePattern()
                 m_attackResult = 0;
             }
             if (frame == 2) {
-                m_playSound = 0x15;
+                m_playSound = 21;
                 m_attackResult = 0;
             }
             if (frame == 3) {
-                m_playSound = 0x15;
+                m_playSound = 21;
                 m_attackResult = 0;
             }
             if (frame == 4) {
-                m_playSound = 0x15;
+                m_playSound = 21;
                 m_attackResult = 0;
             }
             if (frame == 5) {
-                m_playSound = 0x15;
+                m_playSound = 21;
                 m_attackResult = 0;
             }
             if (frame == 7) {
-                m_playSound = 0x14;
+                m_playSound = 20;
                 m_attackResult = 0;
             }
             if (frame >= frameCount) {
@@ -2851,8 +2851,8 @@ void CAkiko::UpdatePattern()
         }
         if (frame == 3 && timer == 0) {
             m_patternVar1 = 0;
-            m_gauge = m_gauge + 0x1e;
-            m_playSound = 0x14;
+            m_gauge = m_gauge + 30;
+            m_playSound = 20;
             m_hitsLeft = 3;
         }
         if (y + vy >= 0.0) {
@@ -2890,8 +2890,8 @@ void CAkiko::UpdatePattern()
             ay = 0.08;
         }
         if (frame == 2 && timer == 0) {
-            m_gauge = m_gauge + 0xf;
-            m_playSound = 0x14;
+            m_gauge = m_gauge + 15;
+            m_playSound = 20;
             m_hitsLeft = 1;
         }
         if (frame == 5 && timer == 0) {
@@ -2941,8 +2941,8 @@ void CAkiko::UpdatePattern()
             break;
         }
         if (frame == 3 && timer == 0) {
-            m_gauge = m_gauge + 0x1e;
-            m_playSound = 0x14;
+            m_gauge = m_gauge + 30;
+            m_playSound = 20;
             m_hitsLeft = 1;
         }
         timer++;
@@ -2962,8 +2962,8 @@ void CAkiko::UpdatePattern()
     case kUnusedJump2C:
         vy = vy + ay;
         if (frame == 0 && timer == 0) {
-            m_gauge = m_gauge + 0x1e;
-            m_playSound = 0x14;
+            m_gauge = m_gauge + 30;
+            m_playSound = 20;
             m_hitsLeft = 1;
             vx = vx / 2.0;
             ay = 0.07;
@@ -3066,8 +3066,8 @@ void CAkiko::UpdatePattern()
             (*m_opponent)->pattern = kThrownAirRising;
             (*m_opponent)->m_noAirRecovery = 1;
             effect.type = 0;
-            effect.x = (double)((int)x + facing * 0x28);
-            effect.y = (double)((int)y - 0x41);
+            effect.x = (double)((int)x + facing * 40);
+            effect.y = (double)((int)y - 65);
             effect.scale = 2;
             effect.layer = 1;
             m_game->CreateEffect((EffectDesc*)&effect);
@@ -3089,7 +3089,7 @@ void CAkiko::UpdatePattern()
             (*m_opponent)->pattern = kThrownStandHigh;
             (*m_opponent)->StopMoving();
             (*m_opponent)->y = 0.0;
-            (*m_opponent)->x = facing * 0x2a + x;
+            (*m_opponent)->x = facing * 42 + x;
             (*m_opponent)->StartPattern();
         }
         timer++;
@@ -3107,10 +3107,10 @@ void CAkiko::UpdatePattern()
                 (*m_opponent)->frame = 2;
                 (*m_opponent)->timer = 0;
                 (*m_opponent)->y = 0.0;
-                (*m_opponent)->x = x - facing * 0x28;
+                (*m_opponent)->x = x - facing * 40;
                 effect.shadow = 1;
                 effect.type = 0x1a7;
-                effect.x = x - facing * 0x28;
+                effect.x = x - facing * 40;
                 effect.y = 0.0;
                 effect.facing = facing;
                 effect.scale = 0;
@@ -3133,7 +3133,7 @@ void CAkiko::UpdatePattern()
         }
         if (frame == 1 && timer == 0) {
             m_gauge = m_gauge + 5;
-            m_playSound = 0x15;
+            m_playSound = 21;
             m_hitsLeft = 1;
         }
         if (y + vy >= 0.0) {
@@ -3160,8 +3160,8 @@ void CAkiko::UpdatePattern()
             ay = 0.03;
         }
         if (frame == 2 && timer == 0) {
-            m_gauge = m_gauge + 0xa;
-            m_playSound = 0x15;
+            m_gauge = m_gauge + 10;
+            m_playSound = 21;
             m_hitsLeft = 1;
         }
         if (y + vy >= 0.0) {
@@ -3188,8 +3188,8 @@ void CAkiko::UpdatePattern()
             ay = 0.03;
         }
         if (frame == 1 && timer == 0) {
-            m_gauge = m_gauge + 0xa;
-            m_playSound = 0x14;
+            m_gauge = m_gauge + 10;
+            m_playSound = 20;
             m_hitsLeft = 1;
         }
         if (y + vy >= 0.0) {
@@ -3219,12 +3219,12 @@ void CAkiko::UpdatePattern()
             pattern = kAirThrowHit;
             (*m_opponent)->pattern = kThrownStandHigh;
             effect.type = 0;
-            effect.x = (double)((int)x + facing * 0x16);
-            effect.y = (double)((int)y - 0x44);
+            effect.x = (double)((int)x + facing * 22);
+            effect.y = (double)((int)y - 68);
             effect.scale = 2;
             effect.layer = 1;
             m_game->CreateEffect((EffectDesc*)&effect);
-            (*m_opponent)->x = facing * 0x16 + x;
+            (*m_opponent)->x = facing * 22 + x;
             (*m_opponent)->y = y - 68.0;
         }
         timer++;
@@ -3245,10 +3245,10 @@ void CAkiko::UpdatePattern()
         break;
     case kAirThrowHit:
         if (frame < 2) {
-            FocusCameraX(0x32, 3);
+            FocusCameraX(50, 3);
         }
         if (frame < 2) {
-            FocusCameraY(0x32, 3);
+            FocusCameraY(50, 3);
         }
         if (frame == 0 && timer == 1) {
             (*m_opponent)->facing = -facing;
@@ -3270,7 +3270,7 @@ void CAkiko::UpdatePattern()
             if (frame == 2) {
                 effect.shadow = 1;
                 effect.type = 0x1a8;
-                effect.x = facing * 0x25 + x;
+                effect.x = facing * 37 + x;
                 effect.y = -56.0;
                 effect.facing = facing;
                 effect.scale = 0;
@@ -3289,17 +3289,17 @@ void CAkiko::UpdatePattern()
     case kUnusedF9:
         if (frame == 0 && timer == 0) {
             unkdc = 4;
-            unkde = -0x14;
+            unkde = -20;
             vx = 0.0;
             m_hitsLeft = 1;
             m_recoilGuardWindow = 0;
-            m_freezeTime = 0x3c;
+            m_freezeTime = 60;
             effect.type = 0x28;
-            effect.x = (double)((int)x + facing * 0xa);
-            effect.y = (double)((int)y - 0x28);
+            effect.x = (double)((int)x + facing * 10);
+            effect.y = (double)((int)y - 40);
             effect.scale = 2;
             effect.layer = 1;
-            effect.sound = 0x13;
+            effect.sound = 19;
             m_game->CreateEffect((EffectDesc*)&effect);
         }
         timer++;
@@ -3325,7 +3325,7 @@ void CAkiko::UpdatePattern()
             m_attackResult = 3;
             if (frame == 4 && timer == 0) {
                 m_playVoice = 0;
-                m_gauge = m_gauge + 0x14;
+                m_gauge = m_gauge + 20;
                 effect.keep = 1;
                 effect.scale = 0;
                 m_patternVar1 = (WORD)Random(0, 9);
@@ -3344,15 +3344,15 @@ void CAkiko::UpdatePattern()
                 }
                 m_patternVar3 = 0;
                 for (; m_patternVar3 < m_patternVar2; m_patternVar3++) {
-                    effect.x = facing * 0x28 + x;
-                    effect.y = y + -57.0 - (WORD)Random(0, 0x14);
+                    effect.x = facing * 40 + x;
+                    effect.y = y + -57.0 - (WORD)Random(0, 20);
                     effect.facing = facing;
                     effect.layer = 1;
                     effect.shadow = 1;
                     SpawnObject(&effect);
                 }
                 effect.type = 0x190;
-                effect.x = facing * 0x1e + x;
+                effect.x = facing * 30 + x;
                 effect.y = y + -65.0;
                 effect.facing = facing;
                 effect.scale = 2;
@@ -3377,23 +3377,23 @@ void CAkiko::UpdatePattern()
             m_attackResult = 3;
             if (frame == 4 && timer == 0) {
                 m_playVoice = 0;
-                m_gauge = m_gauge + 0x14;
+                m_gauge = m_gauge + 20;
                 effect.keep = 1;
                 effect.scale = 0;
                 m_patternVar1 = (WORD)Random(0, 9);
                 if (m_nextShot == 0) {
-                    effect.x = facing * 0x46 + x;
+                    effect.x = facing * 70 + x;
                     effect.type = 0x196;
                     m_nextShot = 1;
                     m_patternVar2 = 1;
                 } else if (m_nextShot == 1) {
                     effect.type = 0x197;
-                    effect.x = facing * 0x28 + x;
+                    effect.x = facing * 40 + x;
                     m_nextShot = 2;
                     m_patternVar2 = 3;
                 } else if (m_nextShot == 2) {
                     effect.type = 0x198;
-                    effect.x = facing * 0x28 + x;
+                    effect.x = facing * 40 + x;
                     m_nextShot = 0;
                     m_patternVar2 = 1;
                 }
@@ -3401,7 +3401,7 @@ void CAkiko::UpdatePattern()
                 for (; m_patternVar3 < m_patternVar2; m_patternVar3++) {
                     effect.y = y + -67.0;
                     if (m_nextShot == 0) {
-                        effect.y = y + -57.0 - (WORD)Random(0, 0x14);
+                        effect.y = y + -57.0 - (WORD)Random(0, 20);
                     }
                     effect.shadow = 1;
                     effect.facing = facing;
@@ -3409,7 +3409,7 @@ void CAkiko::UpdatePattern()
                     SpawnObject(&effect);
                 }
                 effect.type = 0x190;
-                effect.x = facing * 0x1e + x;
+                effect.x = facing * 30 + x;
                 effect.y = y + -65.0;
                 effect.facing = facing;
                 effect.scale = 2;
@@ -3434,9 +3434,9 @@ void CAkiko::UpdatePattern()
                 m_rfGauge -= 250.0;
             }
             effect.type = 0x21;
-            effect.sound = 0xb;
+            effect.sound = 11;
             effect.x = (double)(int)x;
-            effect.y = (double)((int)y - 0x32);
+            effect.y = (double)((int)y - 50);
             effect.scale = 2;
             effect.layer = 1;
             m_game->CreateEffect((EffectDesc*)&effect);
@@ -3452,22 +3452,22 @@ void CAkiko::UpdatePattern()
             m_attackResult = 3;
             if (frame == 4 && timer == 0) {
                 m_playVoice = 0;
-                m_gauge = m_gauge + 0xa;
+                m_gauge = m_gauge + 10;
                 effect.keep = 1;
                 effect.scale = 0;
                 m_patternVar1 = (WORD)Random(0, 9);
                 if (m_patternVar1 < 4) {
-                    effect.x = facing * 0x46 + x;
+                    effect.x = facing * 70 + x;
                     effect.type = 0x196;
                     m_patternVar2 = 1;
                 }
                 if (m_patternVar1 < 8 && m_patternVar1 > 3) {
-                    effect.x = facing * 0x28 + x;
+                    effect.x = facing * 40 + x;
                     effect.type = 0x197;
                     m_patternVar2 = 3;
                 }
                 if (m_patternVar1 > 7) {
-                    effect.x = facing * 0x28 + x;
+                    effect.x = facing * 40 + x;
                     effect.type = 0x198;
                     m_patternVar2 = 1;
                 }
@@ -3475,14 +3475,14 @@ void CAkiko::UpdatePattern()
                 for (; m_patternVar3 < m_patternVar2; m_patternVar3++) {
                     effect.y = y + -67.0;
                     if (m_patternVar1 < 8 && m_patternVar1 > 3) {
-                        effect.y = y + -57.0 - (WORD)Random(0, 0x14);
+                        effect.y = y + -57.0 - (WORD)Random(0, 20);
                     }
                     effect.facing = facing;
                     effect.layer = 1;
                     SpawnObject(&effect);
                 }
                 effect.type = 0x190;
-                effect.x = facing * 0x1e + x;
+                effect.x = facing * 30 + x;
                 effect.y = y + -65.0;
                 effect.facing = facing;
                 effect.scale = 2;
@@ -3492,21 +3492,21 @@ void CAkiko::UpdatePattern()
             }
             if (frame == 8 && timer == 0) {
                 m_playVoice = 0;
-                m_gauge = m_gauge + 0xa;
+                m_gauge = m_gauge + 10;
                 effect.keep = 1;
                 m_patternVar1 = (WORD)Random(0, 9);
                 if (m_patternVar1 < 4) {
-                    effect.x = facing * 0x46 + x;
+                    effect.x = facing * 70 + x;
                     effect.type = 0x196;
                     m_patternVar2 = 1;
                 }
                 if (m_patternVar1 < 8 && m_patternVar1 > 3) {
-                    effect.x = facing * 0x28 + x;
+                    effect.x = facing * 40 + x;
                     effect.type = 0x197;
                     m_patternVar2 = 3;
                 }
                 if (m_patternVar1 > 7) {
-                    effect.x = facing * 0x28 + x;
+                    effect.x = facing * 40 + x;
                     effect.type = 0x198;
                     m_patternVar2 = 1;
                 }
@@ -3514,14 +3514,14 @@ void CAkiko::UpdatePattern()
                 for (; m_patternVar3 < m_patternVar2; m_patternVar3++) {
                     effect.y = y + -67.0;
                     if (m_patternVar1 < 8 && m_patternVar1 > 3) {
-                        effect.y = y + -57.0 - (WORD)Random(0, 0x14);
+                        effect.y = y + -57.0 - (WORD)Random(0, 20);
                     }
                     effect.facing = facing;
                     effect.layer = 1;
                     SpawnObject(&effect);
                 }
                 effect.type = 0x190;
-                effect.x = facing * 0x1e + x;
+                effect.x = facing * 30 + x;
                 effect.y = y + -65.0;
                 effect.facing = facing;
                 effect.scale = 2;
@@ -3543,20 +3543,20 @@ void CAkiko::UpdatePattern()
             vy = 0.0;
             ax = 0.0;
         }
-        if ((frame == 9 || frame == 0xa) && m_attackResult == 3 && (m_command == kCmd623A || m_command == kCmd623B)) {
+        if ((frame == 9 || frame == 10) && m_attackResult == 3 && (m_command == kCmd623A || m_command == kCmd623B)) {
             StartPattern();
             pattern = k623Second;
             facing = -facing;
             break;
         }
-        if (frame < 0x13 && y < 0.0) {
-            if (frame > 0xa) {
+        if (frame < 19 && y < 0.0) {
+            if (frame > 10) {
                 vy = vy + ay;
             }
             if (y + vy >= 0.0) {
                 y = 0.0;
                 StopMoving();
-                frame = 0x13;
+                frame = 19;
                 timer = 0;
                 break;
             }
@@ -3569,7 +3569,7 @@ void CAkiko::UpdatePattern()
                 m_attackResult = 0;
             }
             if (frame == 6) {
-                m_gauge = m_gauge + 0x19;
+                m_gauge = m_gauge + 25;
                 vx = 2.0;
                 vy = -0.85;
                 ay = 0.035;
@@ -3579,12 +3579,12 @@ void CAkiko::UpdatePattern()
                 vx = 0.5;
                 vy = -0.2;
             }
-            if (frame == 0xb && m_patternVar1 < 3) {
+            if (frame == 11 && m_patternVar1 < 3) {
                 frame = 9;
                 m_patternVar1++;
             }
-            if (frame == 0x13) {
-                frame = 0x11;
+            if (frame == 19) {
+                frame = 17;
             }
             if (frame >= frameCount) {
                 pattern = kStand;
@@ -3648,20 +3648,20 @@ void CAkiko::UpdatePattern()
             vy = 0.0;
             ay = 0.0;
         }
-        if ((frame == 9 || frame == 0xa) && m_attackResult == 3 && (m_command == kCmd623A || m_command == kCmd623B)) {
+        if ((frame == 9 || frame == 10) && m_attackResult == 3 && (m_command == kCmd623A || m_command == kCmd623B)) {
             StartPattern();
             pattern = k623Finish;
             facing = -facing;
             break;
         }
-        if (frame < 0x13 && y < 0.0) {
-            if (frame > 0xa) {
+        if (frame < 19 && y < 0.0) {
+            if (frame > 10) {
                 vy = vy + ay;
             }
             if (y + vy >= 0.0) {
                 y = 0.0;
                 StopMoving();
-                frame = 0x13;
+                frame = 19;
                 timer = 0;
                 break;
             }
@@ -3674,7 +3674,7 @@ void CAkiko::UpdatePattern()
                 m_attackResult = 0;
             }
             if (frame == 6) {
-                m_gauge = m_gauge + 0x19;
+                m_gauge = m_gauge + 25;
                 vx = 3.5;
                 vy = -1.4;
                 ay = 0.035;
@@ -3684,12 +3684,12 @@ void CAkiko::UpdatePattern()
                 vx = 0.5;
                 vy = -0.2;
             }
-            if (frame == 0xb && m_patternVar1 < 3) {
+            if (frame == 11 && m_patternVar1 < 3) {
                 frame = 9;
                 m_patternVar1++;
             }
-            if (frame == 0x13) {
-                frame = 0x11;
+            if (frame == 19) {
+                frame = 17;
             }
             if (frame >= frameCount) {
                 pattern = kStand;
@@ -3705,20 +3705,20 @@ void CAkiko::UpdatePattern()
             vy = 0.0;
             ax = 0.0;
         }
-        if ((frame == 9 || frame == 0xa) && m_attackResult == 3 && (m_command == kCmd623A || m_command == kCmd623B)) {
+        if ((frame == 9 || frame == 10) && m_attackResult == 3 && (m_command == kCmd623A || m_command == kCmd623B)) {
             StartPattern();
             pattern = k623Second;
             facing = -facing;
             break;
         }
-        if (frame < 0x13 && y < 0.0) {
-            if (frame > 0xa) {
+        if (frame < 19 && y < 0.0) {
+            if (frame > 10) {
                 vy = vy + ay;
             }
             if (y + vy >= 0.0) {
                 y = 0.0;
                 StopMoving();
-                frame = 0x13;
+                frame = 19;
                 timer = 0;
                 break;
             }
@@ -3731,7 +3731,7 @@ void CAkiko::UpdatePattern()
                 m_attackResult = 0;
             }
             if (frame == 6) {
-                m_gauge = m_gauge + 0x19;
+                m_gauge = m_gauge + 25;
                 vx = 3.0;
                 vy = -1.25;
                 ay = 0.035;
@@ -3741,12 +3741,12 @@ void CAkiko::UpdatePattern()
                 vx = 0.5;
                 vy = -0.2;
             }
-            if (frame == 0xb && m_patternVar1 < 3) {
+            if (frame == 11 && m_patternVar1 < 3) {
                 frame = 9;
                 m_patternVar1++;
             }
-            if (frame == 0x13) {
-                frame = 0x11;
+            if (frame == 19) {
+                frame = 17;
             }
             if (frame >= frameCount) {
                 pattern = kStand;
@@ -3763,9 +3763,9 @@ void CAkiko::UpdatePattern()
             vy = 0.0;
             ax = 0.0;
             effect.type = 0x21;
-            effect.sound = 0xb;
+            effect.sound = 11;
             effect.x = (double)(int)x;
-            effect.y = (double)((int)y - 0x32);
+            effect.y = (double)((int)y - 50);
             effect.scale = 2;
             effect.layer = 1;
             m_game->CreateEffect((EffectDesc*)&effect);
@@ -3776,20 +3776,20 @@ void CAkiko::UpdatePattern()
                 m_rfGauge -= 250.0;
             }
         }
-        if ((frame == 9 || frame == 0xa) && m_attackResult == 3 && m_command == kCmd623C) {
+        if ((frame == 9 || frame == 10) && m_attackResult == 3 && m_command == kCmd623C) {
             StartPattern();
             pattern = k623CRepeat;
             facing = -facing;
             break;
         }
-        if (frame < 0x13 && y < 0.0) {
-            if (frame > 0xa) {
+        if (frame < 19 && y < 0.0) {
+            if (frame > 10) {
                 vy = vy + ay;
             }
             if (y + vy >= 0.0) {
                 y = 0.0;
                 StopMoving();
-                frame = 0x13;
+                frame = 19;
                 timer = 0;
                 break;
             }
@@ -3802,7 +3802,7 @@ void CAkiko::UpdatePattern()
                 m_attackResult = 0;
             }
             if (frame == 6) {
-                m_gauge = m_gauge + 0x19;
+                m_gauge = m_gauge + 25;
                 vx = 9.0;
                 vy = -3.6;
                 ay = 0.035;
@@ -3812,12 +3812,12 @@ void CAkiko::UpdatePattern()
                 vx = 0.5;
                 vy = -0.2;
             }
-            if (frame == 0xb && m_patternVar1 < 3) {
+            if (frame == 11 && m_patternVar1 < 3) {
                 frame = 9;
                 m_patternVar1++;
             }
-            if (frame == 0x13) {
-                frame = 0x11;
+            if (frame == 19) {
+                frame = 17;
             }
             if (frame >= frameCount) {
                 pattern = kStand;
@@ -3832,7 +3832,7 @@ void CAkiko::UpdatePattern()
             vy = 0.0;
             ay = 0.0;
         }
-        if ((frame == 9 || frame == 0xa) && m_attackResult == 3 && m_command == kCmd623C) {
+        if ((frame == 9 || frame == 10) && m_attackResult == 3 && m_command == kCmd623C) {
             if (m_patternVar2 < 3) {
                 facing = -facing;
                 m_patternVar2++;
@@ -3846,14 +3846,14 @@ void CAkiko::UpdatePattern()
             facing = -facing;
             break;
         }
-        if (frame < 0x13 && y < 0.0) {
-            if (frame > 0xa) {
+        if (frame < 19 && y < 0.0) {
+            if (frame > 10) {
                 vy = vy + ay;
             }
             if (y + vy >= 0.0) {
                 y = 0.0;
                 StopMoving();
-                frame = 0x13;
+                frame = 19;
                 timer = 0;
                 break;
             }
@@ -3866,7 +3866,7 @@ void CAkiko::UpdatePattern()
                 m_attackResult = 0;
             }
             if (frame == 6) {
-                m_gauge = m_gauge + 0x19;
+                m_gauge = m_gauge + 25;
                 vx = 9.0;
                 vy = -3.6;
                 ay = 0.035;
@@ -3876,12 +3876,12 @@ void CAkiko::UpdatePattern()
                 vx = 0.5;
                 vy = -0.2;
             }
-            if (frame == 0xb && m_patternVar1 < 3) {
+            if (frame == 11 && m_patternVar1 < 3) {
                 frame = 9;
                 m_patternVar1++;
             }
-            if (frame == 0x13) {
-                frame = 0x11;
+            if (frame == 19) {
+                frame = 17;
             }
             if (frame >= frameCount) {
                 pattern = kStand;
@@ -3944,8 +3944,8 @@ void CAkiko::UpdatePattern()
             m_playVoice = 8;
             effect.type = 0x19f;
             effect.keep = 1;
-            effect.x = (double)((int)x + facing * 0x29);
-            effect.y = (double)((int)y - 0x37);
+            effect.x = (double)((int)x + facing * 41);
+            effect.y = (double)((int)y - 55);
             effect.scale = 2;
             effect.layer = 1;
             effect.facing = facing;
@@ -3972,8 +3972,8 @@ void CAkiko::UpdatePattern()
             m_playVoice = 8;
             effect.type = 0x1a2;
             effect.keep = 1;
-            effect.x = (double)((int)x + facing * 0x29);
-            effect.y = (double)((int)y - 0x37);
+            effect.x = (double)((int)x + facing * 41);
+            effect.y = (double)((int)y - 55);
             effect.scale = 2;
             effect.layer = 1;
             effect.facing = facing;
@@ -3993,9 +3993,9 @@ void CAkiko::UpdatePattern()
     case k214C:
         if (frame == 0 && timer == 0) {
             effect.type = 0x21;
-            effect.sound = 0xb;
+            effect.sound = 11;
             effect.x = (double)(int)x;
-            effect.y = (double)((int)y - 0x32);
+            effect.y = (double)((int)y - 50);
             effect.scale = 2;
             effect.layer = 1;
             m_game->CreateEffect((EffectDesc*)&effect);
@@ -4019,8 +4019,8 @@ void CAkiko::UpdatePattern()
             m_playVoice = 8;
             effect.type = 0x1a4;
             effect.keep = 1;
-            effect.x = (double)((int)x + facing * 0x29);
-            effect.y = (double)((int)y - 0x37);
+            effect.x = (double)((int)x + facing * 41);
+            effect.y = (double)((int)y - 55);
             effect.scale = 2;
             effect.layer = 1;
             effect.facing = facing;
@@ -4049,14 +4049,14 @@ void CAkiko::UpdatePattern()
         }
         if (frame > 4 && frame < 7) {
             m_patternVar1 += 3;
-            if (m_patternVar1 > 0x5b) {
-                m_patternVar1 = 0x5a;
+            if (m_patternVar1 > 91) {
+                m_patternVar1 = 90;
             }
             m_hitByBody = 1;
-            if ((*m_opponent)->x > facing * 0x39 + x && facing == 1) {
+            if ((*m_opponent)->x > facing * 57 + x && facing == 1) {
                 m_cornerPushback = m_patternVar1 * 0.01 * -(*m_opponent)->facing;
             }
-            if ((*m_opponent)->x < facing * 0x39 + x && facing == -1) {
+            if ((*m_opponent)->x < facing * 57 + x && facing == -1) {
                 m_cornerPushback = m_patternVar1 * 0.01 * (*m_opponent)->facing;
             }
         }
@@ -4072,8 +4072,8 @@ void CAkiko::UpdatePattern()
             StartPattern();
             (*m_opponent)->m_noAirRecovery = 1;
             effect.type = 0;
-            effect.x = (double)((int)x + facing * 0x39);
-            effect.y = (double)((int)y - 0x2f);
+            effect.x = (double)((int)x + facing * 57);
+            effect.y = (double)((int)y - 47);
             effect.scale = 2;
             effect.keep = 1;
             effect.layer = 1;
@@ -4081,7 +4081,7 @@ void CAkiko::UpdatePattern()
             pattern = k41236AHit;
             (*m_opponent)->pattern = kThrownHidden;
             (*m_opponent)->y = 0.0;
-            (*m_opponent)->x = facing * 0x39 + x;
+            (*m_opponent)->x = facing * 57 + x;
             (*m_opponent)->facing = facing;
             break;
         }
@@ -4102,7 +4102,7 @@ void CAkiko::UpdatePattern()
             vy = 0.0;
             ax = 0.0;
         }
-        if (frame == 0xb || frame == 0xc) {
+        if (frame == 11 || frame == 12) {
             vy += 0.03;
             if (y + vy >= 0.0) {
                 StopMoving();
@@ -4120,23 +4120,23 @@ void CAkiko::UpdatePattern()
             if (frame == 7 && timer == 0) {
                 m_playVoice = 6;
             }
-            if (frame == 0xb && timer == 0) {
-                ShakeScreen(4, 0xa);
+            if (frame == 11 && timer == 0) {
+                ShakeScreen(4, 10);
                 vx = 1.2;
                 vy = -1.25;
                 (*m_opponent)->y = -50.0;
-                (*m_opponent)->x = x - facing * 0x46;
+                (*m_opponent)->x = x - facing * 70;
                 (*m_opponent)->StartPattern();
                 (*m_opponent)->StopMoving();
                 (*m_opponent)->pattern = kHitAirLaunch;
                 (*m_opponent)->m_hitVx = 0.0;
                 (*m_opponent)->m_hitVy = -2.5;
-                DealDamage(0x5dc, 500.0);
+                DealDamage(1500, 500.0);
                 m_playVoice = 7;
                 (*m_opponent)->m_noAirRecovery = 1;
                 effect.type = 0x48;
-                effect.x = (double)((int)x - facing * 0x46);
-                effect.y = (double)((int)y - 0x3c);
+                effect.x = (double)((int)x - facing * 70);
+                effect.y = (double)((int)y - 60);
                 effect.scale = 2;
                 effect.keep = 1;
                 effect.layer = 1;
@@ -4175,14 +4175,14 @@ void CAkiko::UpdatePattern()
         }
         if (frame > 4 && frame < 7) {
             m_patternVar1 += 4;
-            if (m_patternVar1 > 0x79) {
-                m_patternVar1 = 0x78;
+            if (m_patternVar1 > 121) {
+                m_patternVar1 = 120;
             }
             m_hitByBody = 1;
-            if ((*m_opponent)->x > facing * 0x39 + x && facing == 1) {
+            if ((*m_opponent)->x > facing * 57 + x && facing == 1) {
                 m_cornerPushback = m_patternVar1 * 0.01 * -(*m_opponent)->facing;
             }
-            if ((*m_opponent)->x < facing * 0x39 + x && facing == -1) {
+            if ((*m_opponent)->x < facing * 57 + x && facing == -1) {
                 m_cornerPushback = m_patternVar1 * 0.01 * (*m_opponent)->facing;
             }
         }
@@ -4198,8 +4198,8 @@ void CAkiko::UpdatePattern()
             StartPattern();
             (*m_opponent)->m_noAirRecovery = 1;
             effect.type = 0;
-            effect.x = (double)((int)x + facing * 0x39);
-            effect.y = (double)((int)y - 0x2f);
+            effect.x = (double)((int)x + facing * 57);
+            effect.y = (double)((int)y - 47);
             effect.scale = 2;
             effect.keep = 1;
             effect.layer = 1;
@@ -4207,7 +4207,7 @@ void CAkiko::UpdatePattern()
             pattern = k41236BHit;
             (*m_opponent)->pattern = kThrownHidden;
             (*m_opponent)->y = 0.0;
-            (*m_opponent)->x = facing * 0x39 + x;
+            (*m_opponent)->x = facing * 57 + x;
             (*m_opponent)->facing = facing;
             break;
         }
@@ -4228,7 +4228,7 @@ void CAkiko::UpdatePattern()
             vy = 0.0;
             ax = 0.0;
         }
-        if (frame == 0xb || frame == 0xc) {
+        if (frame == 11 || frame == 12) {
             vy += 0.03;
             if (y + vy >= 0.0) {
                 StopMoving();
@@ -4246,23 +4246,23 @@ void CAkiko::UpdatePattern()
             if (frame == 7 && timer == 0) {
                 m_playVoice = 6;
             }
-            if (frame == 0xb && timer == 0) {
-                ShakeScreen(4, 0xa);
+            if (frame == 11 && timer == 0) {
+                ShakeScreen(4, 10);
                 vx = 1.2;
                 vy = -1.25;
                 (*m_opponent)->y = -50.0;
-                (*m_opponent)->x = x - facing * 0x46;
+                (*m_opponent)->x = x - facing * 70;
                 (*m_opponent)->StartPattern();
                 (*m_opponent)->StopMoving();
                 (*m_opponent)->pattern = kHitAirLaunch;
                 (*m_opponent)->m_hitVx = 0.0;
                 (*m_opponent)->m_hitVy = -2.5;
-                DealDamage(0x5dc, 500.0);
+                DealDamage(1500, 500.0);
                 m_playVoice = 7;
                 (*m_opponent)->m_noAirRecovery = 1;
                 effect.type = 0x48;
-                effect.x = (double)((int)x - facing * 0x46);
-                effect.y = (double)((int)y - 0x3c);
+                effect.x = (double)((int)x - facing * 70);
+                effect.y = (double)((int)y - 60);
                 effect.scale = 2;
                 effect.keep = 1;
                 effect.layer = 1;
@@ -4298,9 +4298,9 @@ void CAkiko::UpdatePattern()
             m_patternVar1 = 0;
             m_patternVar2 = 0;
             effect.type = 0x21;
-            effect.sound = 0xb;
+            effect.sound = 11;
             effect.x = (double)(int)x;
-            effect.y = (double)((int)y - 0x32);
+            effect.y = (double)((int)y - 50);
             effect.scale = 2;
             effect.layer = 1;
             m_game->CreateEffect((EffectDesc*)&effect);
@@ -4316,14 +4316,14 @@ void CAkiko::UpdatePattern()
         }
         if (frame > 4 && frame < 7) {
             m_patternVar1 += 6;
-            if (m_patternVar1 > 0x96) {
-                m_patternVar1 = 0x96;
+            if (m_patternVar1 > 150) {
+                m_patternVar1 = 150;
             }
             m_hitByBody = 1;
-            if ((*m_opponent)->x > facing * 0x39 + x && facing == 1) {
+            if ((*m_opponent)->x > facing * 57 + x && facing == 1) {
                 m_cornerPushback = m_patternVar1 * 0.01 * -(*m_opponent)->facing;
             }
-            if ((*m_opponent)->x < facing * 0x39 + x && facing == -1) {
+            if ((*m_opponent)->x < facing * 57 + x && facing == -1) {
                 m_cornerPushback = m_patternVar1 * 0.01 * (*m_opponent)->facing;
             }
         }
@@ -4339,8 +4339,8 @@ void CAkiko::UpdatePattern()
             StartPattern();
             (*m_opponent)->m_noAirRecovery = 1;
             effect.type = 0;
-            effect.x = (double)((int)x + facing * 0x39);
-            effect.y = (double)((int)y - 0x2f);
+            effect.x = (double)((int)x + facing * 57);
+            effect.y = (double)((int)y - 47);
             effect.scale = 2;
             effect.keep = 1;
             effect.layer = 1;
@@ -4348,7 +4348,7 @@ void CAkiko::UpdatePattern()
             pattern = k41236CHit;
             (*m_opponent)->pattern = kThrownHidden;
             (*m_opponent)->y = 0.0;
-            (*m_opponent)->x = facing * 0x39 + x;
+            (*m_opponent)->x = facing * 57 + x;
             (*m_opponent)->facing = facing;
             break;
         }
@@ -4373,7 +4373,7 @@ void CAkiko::UpdatePattern()
             vy = 0.0;
             ax = 0.0;
         }
-        if (frame == 0xb || frame == 0xc) {
+        if (frame == 11 || frame == 12) {
             vy += 0.03;
             if (y + vy >= 0.0) {
                 StopMoving();
@@ -4391,23 +4391,23 @@ void CAkiko::UpdatePattern()
             if (frame == 7 && timer == 0) {
                 m_playVoice = 6;
             }
-            if (frame == 0xb && timer == 0) {
-                ShakeScreen(4, 0xa);
+            if (frame == 11 && timer == 0) {
+                ShakeScreen(4, 10);
                 vx = 1.2;
                 vy = -1.25;
                 (*m_opponent)->y = -50.0;
-                (*m_opponent)->x = x - facing * 0x46;
+                (*m_opponent)->x = x - facing * 70;
                 (*m_opponent)->StartPattern();
                 (*m_opponent)->StopMoving();
                 (*m_opponent)->pattern = kHitAirLaunch;
                 (*m_opponent)->m_hitVx = 0.0;
                 (*m_opponent)->m_hitVy = -3.5;
-                DealDamage(0x6d6, 500.0);
+                DealDamage(1750, 500.0);
                 m_playVoice = 7;
                 (*m_opponent)->m_noAirRecovery = 1;
                 effect.type = 0x48;
-                effect.x = (double)((int)x - facing * 0x46);
-                effect.y = (double)((int)y - 0x3c);
+                effect.x = (double)((int)x - facing * 70);
+                effect.y = (double)((int)y - 60);
                 effect.scale = 2;
                 effect.keep = 1;
                 effect.layer = 1;
@@ -4441,7 +4441,7 @@ void CAkiko::UpdatePattern()
             m_hitsLeft = 1;
             effect.type = 0x1a6;
             effect.shadow = 1;
-            effect.x = x - facing * 0x168;
+            effect.x = x - facing * 360;
             effect.y = 0.0;
             effect.facing = facing;
             effect.scale = 0;
@@ -4451,17 +4451,17 @@ void CAkiko::UpdatePattern()
             m_playVoice = 9;
         }
         if (frame < 3) {
-            FocusCameraY(0x19, 0xa);
+            FocusCameraY(25, 10);
         }
         if (frame == 4 && timer == 0) {
             m_patternVar1 = 0;
-            m_freezeTime = 0x78;
-            m_gauge = m_gauge - 0x3e8;
-            FillBackground(0xb0, 3);
+            m_freezeTime = 120;
+            m_gauge = m_gauge - 1000;
+            FillBackground(176, 3);
             effect.type = 0x44;
-            effect.sound = 0x13;
+            effect.sound = 19;
             effect.x = (double)(int)x;
-            effect.y = (double)((int)y - 0x42);
+            effect.y = (double)((int)y - 66);
             effect.scale = 2;
             effect.keep = 1;
             effect.layer = 1;
@@ -4473,10 +4473,10 @@ void CAkiko::UpdatePattern()
             frame++;
             m_attackResult = 0;
             if (frame == 7 && timer == 0) {
-                m_playVoice = 0xc;
-                ShakeScreen(7, 0xa);
+                m_playVoice = 12;
+                ShakeScreen(7, 10);
                 effect.type = 0x1ad;
-                effect.x = (double)((int)x + facing * 0x6e);
+                effect.x = (double)((int)x + facing * 110);
                 effect.y = (double)(int)y;
                 effect.scale = 2;
                 effect.keep = 1;
@@ -4496,7 +4496,7 @@ void CAkiko::UpdatePattern()
                 SpawnObject(&effect);
                 SpawnObject(&effect);
             }
-            if (frame == 0xa && timer == 0 && m_patternVar1 < 6) {
+            if (frame == 10 && timer == 0 && m_patternVar1 < 6) {
                 m_patternVar1++;
                 frame = frame - 2;
             }
@@ -4513,7 +4513,7 @@ void CAkiko::UpdatePattern()
             m_hitsLeft = 1;
             effect.type = 0x1ab;
             effect.shadow = 1;
-            effect.x = x - facing * 0x168;
+            effect.x = x - facing * 360;
             effect.y = 0.0;
             effect.facing = facing;
             effect.scale = 0;
@@ -4523,17 +4523,17 @@ void CAkiko::UpdatePattern()
             m_playVoice = 9;
         }
         if (frame < 3) {
-            FocusCameraY(0x19, 0xa);
+            FocusCameraY(25, 10);
         }
         if (frame == 4 && timer == 0) {
             m_patternVar1 = 0;
-            m_freezeTime = 0x78;
-            m_gauge = m_gauge - 0x7d0;
-            FillBackground(0xb0, 3);
+            m_freezeTime = 120;
+            m_gauge = m_gauge - 2000;
+            FillBackground(176, 3);
             effect.type = 0x45;
             effect.sound = 5;
             effect.x = (double)(int)x;
-            effect.y = (double)((int)y - 0x42);
+            effect.y = (double)((int)y - 66);
             effect.scale = 2;
             effect.keep = 1;
             effect.layer = 1;
@@ -4545,10 +4545,10 @@ void CAkiko::UpdatePattern()
             frame++;
             m_attackResult = 0;
             if (frame == 7 && timer == 0) {
-                m_playVoice = 0xc;
-                ShakeScreen(7, 0xa);
+                m_playVoice = 12;
+                ShakeScreen(7, 10);
                 effect.type = 0x1ad;
-                effect.x = (double)((int)x + facing * 0x82);
+                effect.x = (double)((int)x + facing * 130);
                 effect.y = (double)(int)y;
                 effect.scale = 2;
                 effect.keep = 1;
@@ -4572,7 +4572,7 @@ void CAkiko::UpdatePattern()
                 SpawnObject(&effect);
                 SpawnObject(&effect);
             }
-            if (frame == 0xa && timer == 0 && m_patternVar1 < 6) {
+            if (frame == 10 && timer == 0 && m_patternVar1 < 6) {
                 m_patternVar1++;
                 frame = frame - 2;
             }
@@ -4589,7 +4589,7 @@ void CAkiko::UpdatePattern()
             m_hitsLeft = 1;
             effect.type = 0x1ac;
             effect.shadow = 1;
-            effect.x = x - facing * 0x168;
+            effect.x = x - facing * 360;
             effect.y = 0.0;
             effect.facing = facing;
             effect.scale = 0;
@@ -4599,25 +4599,25 @@ void CAkiko::UpdatePattern()
             m_playVoice = 9;
         }
         if (frame < 3) {
-            FocusCameraY(0x19, 0xa);
+            FocusCameraY(25, 10);
         }
         if (frame > 4) {
-            m_game->FlashNegative(0xf);
+            m_game->FlashNegative(15);
         }
         if (frame == 4 && timer == 0) {
             m_patternVar1 = 0;
-            m_freezeTime = 0x78;
-            m_gauge = m_gauge - 0xbb8;
-            FillBackground(0xb0, 3);
+            m_freezeTime = 120;
+            m_gauge = m_gauge - 3000;
+            FillBackground(176, 3);
             effect.type = 0x46;
-            effect.sound = 0x40;
+            effect.sound = 64;
             effect.x = (double)(int)x;
-            effect.y = (double)((int)y - 0x42);
+            effect.y = (double)((int)y - 66);
             effect.scale = 2;
             effect.keep = 1;
             effect.layer = 1;
             m_game->CreateEffect((EffectDesc*)&effect);
-            m_playSound = 0x25;
+            m_playSound = 37;
         }
         timer++;
         if (timer >= duration) {
@@ -4625,10 +4625,10 @@ void CAkiko::UpdatePattern()
             frame++;
             m_attackResult = 0;
             if (frame == 7 && timer == 0) {
-                m_playVoice = 0xc;
-                ShakeScreen(7, 0xa);
+                m_playVoice = 12;
+                ShakeScreen(7, 10);
                 effect.type = 0x1ad;
-                effect.x = (double)((int)x + facing * 0xc8);
+                effect.x = (double)((int)x + facing * 200);
                 effect.y = (double)(int)y;
                 effect.scale = 2;
                 effect.keep = 1;
@@ -4656,7 +4656,7 @@ void CAkiko::UpdatePattern()
                 SpawnObject(&effect);
                 SpawnObject(&effect);
             }
-            if (frame == 0xa && timer == 0 && m_patternVar1 < 6) {
+            if (frame == 10 && timer == 0 && m_patternVar1 < 6) {
                 m_patternVar1++;
                 frame = frame - 2;
             }
@@ -4673,16 +4673,16 @@ void CAkiko::UpdatePattern()
             m_hitsLeft = 1;
         }
         if (frame < 3) {
-            FocusCameraY(0x19, 0xa);
+            FocusCameraY(25, 10);
         }
         if (frame == 0 && timer == 0) {
-            m_freezeTime = 0x78;
-            m_gauge = m_gauge - 0x3e8;
-            FillBackground(0xb0, 3);
+            m_freezeTime = 120;
+            m_gauge = m_gauge - 1000;
+            FillBackground(176, 3);
             effect.type = 0x44;
-            effect.sound = 0x13;
+            effect.sound = 19;
             effect.x = (double)(int)x;
-            effect.y = (double)((int)y - 0x42);
+            effect.y = (double)((int)y - 66);
             effect.scale = 2;
             effect.keep = 1;
             effect.layer = 1;
@@ -4692,7 +4692,7 @@ void CAkiko::UpdatePattern()
             StartPattern();
             StopMoving();
             pattern = k214214AHit;
-            (*m_opponent)->m_hitstop = 0x1c2;
+            (*m_opponent)->m_hitstop = 450;
             break;
         }
         timer++;
@@ -4710,7 +4710,7 @@ void CAkiko::UpdatePattern()
         if (frame == 0 && timer == 0) {
             vx = 0.0;
             vy = 0.0;
-            m_playVoice = 0x13;
+            m_playVoice = 19;
         }
         timer++;
         if (timer >= duration) {
@@ -4723,18 +4723,18 @@ void CAkiko::UpdatePattern()
                 (*m_opponent)->m_hitVx = -3.5;
                 (*m_opponent)->m_hitVy = -1.5;
                 (*m_opponent)->ay = 0.035;
-                DealDamage(0x3e8, 500.0);
+                DealDamage(1000, 500.0);
                 (*m_opponent)->m_noAirRecovery = 1;
                 effect.type = 0x34;
-                m_playSound = 0x16;
-                effect.x = (double)((int)x + facing * 0x28);
-                effect.y = (double)((int)y - 0x46);
+                m_playSound = 22;
+                effect.x = (double)((int)x + facing * 40);
+                effect.y = (double)((int)y - 70);
                 effect.scale = 2;
                 effect.keep = 1;
                 effect.layer = 1;
                 m_game->CreateEffect((EffectDesc*)&effect);
                 (*m_opponent)->m_sealLevel = 1;
-                m_sealTime = 0x3e8;
+                m_sealTime = 1000;
             }
             m_attackResult = 0;
             if (frame >= frameCount) {
@@ -4750,16 +4750,16 @@ void CAkiko::UpdatePattern()
             m_hitsLeft = 1;
         }
         if (frame < 3) {
-            FocusCameraY(0x19, 0xa);
+            FocusCameraY(25, 10);
         }
         if (frame == 0 && timer == 0) {
-            m_freezeTime = 0x78;
-            m_gauge = m_gauge - 0x7d0;
-            FillBackground(0xb0, 3);
+            m_freezeTime = 120;
+            m_gauge = m_gauge - 2000;
+            FillBackground(176, 3);
             effect.type = 0x45;
             effect.sound = 5;
             effect.x = (double)(int)x;
-            effect.y = (double)((int)y - 0x42);
+            effect.y = (double)((int)y - 66);
             effect.scale = 2;
             effect.keep = 1;
             effect.layer = 1;
@@ -4769,7 +4769,7 @@ void CAkiko::UpdatePattern()
             StartPattern();
             StopMoving();
             pattern = k214214BHit;
-            (*m_opponent)->m_hitstop = 0x1c2;
+            (*m_opponent)->m_hitstop = 450;
             break;
         }
         timer++;
@@ -4787,7 +4787,7 @@ void CAkiko::UpdatePattern()
         if (frame == 0 && timer == 0) {
             vx = 0.0;
             vy = 0.0;
-            m_playVoice = 0x13;
+            m_playVoice = 19;
         }
         timer++;
         if (timer >= duration) {
@@ -4800,18 +4800,18 @@ void CAkiko::UpdatePattern()
                 (*m_opponent)->m_hitVx = -3.5;
                 (*m_opponent)->m_hitVy = -1.5;
                 (*m_opponent)->ay = 0.035;
-                DealDamage(0x3e8, 500.0);
+                DealDamage(1000, 500.0);
                 (*m_opponent)->m_noAirRecovery = 1;
                 effect.type = 0x34;
-                m_playSound = 0x16;
-                effect.x = (double)((int)x + facing * 0x28);
-                effect.y = (double)((int)y - 0x46);
+                m_playSound = 22;
+                effect.x = (double)((int)x + facing * 40);
+                effect.y = (double)((int)y - 70);
                 effect.scale = 2;
                 effect.keep = 1;
                 effect.layer = 1;
                 m_game->CreateEffect((EffectDesc*)&effect);
                 (*m_opponent)->m_sealLevel = 2;
-                m_sealTime = 0x3e8;
+                m_sealTime = 1000;
             }
             m_attackResult = 0;
             if (frame >= frameCount) {
@@ -4827,30 +4827,30 @@ void CAkiko::UpdatePattern()
             m_hitsLeft = 1;
         }
         if (frame < 3) {
-            FocusCameraY(0x19, 0xa);
+            FocusCameraY(25, 10);
         }
         if (frame > 1) {
-            m_game->FlashNegative(0xf);
+            m_game->FlashNegative(15);
         }
         if (frame == 0 && timer == 0) {
-            m_freezeTime = 0x78;
-            m_gauge = m_gauge - 0xbb8;
-            FillBackground(0xb0, 3);
+            m_freezeTime = 120;
+            m_gauge = m_gauge - 3000;
+            FillBackground(176, 3);
             effect.type = 0x46;
-            effect.sound = 0x40;
+            effect.sound = 64;
             effect.x = (double)(int)x;
-            effect.y = (double)((int)y - 0x42);
+            effect.y = (double)((int)y - 66);
             effect.scale = 2;
             effect.keep = 1;
             effect.layer = 1;
             m_game->CreateEffect((EffectDesc*)&effect);
-            m_playSound = 0x25;
+            m_playSound = 37;
         }
         if (frame == 5 && m_attackResult == 3) {
             StartPattern();
             StopMoving();
             pattern = k214214CHit;
-            (*m_opponent)->m_hitstop = 0x1c2;
+            (*m_opponent)->m_hitstop = 450;
             break;
         }
         timer++;
@@ -4868,10 +4868,10 @@ void CAkiko::UpdatePattern()
         if (frame == 0 && timer == 0) {
             vx = 0.0;
             vy = 0.0;
-            m_playVoice = 0x13;
+            m_playVoice = 19;
         }
         if (frame < 2) {
-            m_game->FlashNegative(0xf);
+            m_game->FlashNegative(15);
         }
         timer++;
         if (timer >= duration) {
@@ -4884,18 +4884,18 @@ void CAkiko::UpdatePattern()
                 (*m_opponent)->m_hitVx = -3.5;
                 (*m_opponent)->m_hitVy = -1.5;
                 (*m_opponent)->ay = 0.035;
-                DealDamage(0x3e8, 500.0);
+                DealDamage(1000, 500.0);
                 (*m_opponent)->m_noAirRecovery = 1;
                 effect.type = 0x34;
-                m_playSound = 0x16;
-                effect.x = (double)((int)x + facing * 0x28);
-                effect.y = (double)((int)y - 0x46);
+                m_playSound = 22;
+                effect.x = (double)((int)x + facing * 40);
+                effect.y = (double)((int)y - 70);
                 effect.scale = 2;
                 effect.keep = 1;
                 effect.layer = 1;
                 m_game->CreateEffect((EffectDesc*)&effect);
                 (*m_opponent)->m_sealLevel = 3;
-                m_sealTime = 0x3e8;
+                m_sealTime = 1000;
             }
             m_attackResult = 0;
             if (frame >= frameCount) {
@@ -4922,18 +4922,18 @@ void CAkiko::UpdatePattern()
                 m_patternVar1++;
             }
             if (frame == 6) {
-                m_freezeTime = 0x78;
-                m_gauge = m_gauge - 0x3e8;
-                FillBackground(0xb0, 3);
+                m_freezeTime = 120;
+                m_gauge = m_gauge - 1000;
+                FillBackground(176, 3);
                 effect.type = 0x44;
-                effect.sound = 0x13;
+                effect.sound = 19;
                 effect.x = (double)(int)x;
-                effect.y = (double)((int)y - 0x32);
+                effect.y = (double)((int)y - 50);
                 effect.scale = 2;
                 effect.keep = 1;
                 effect.layer = 1;
                 m_game->CreateEffect((EffectDesc*)&effect);
-                m_game->FadeMusic(-0x2710, 0x64);
+                m_game->FadeMusic(-10000, 100);
                 m_patternVar1 = 0;
             }
             if (frame == 8 && m_patternVar1 < 3) {
@@ -4967,18 +4967,18 @@ void CAkiko::UpdatePattern()
                 m_patternVar1++;
             }
             if (frame == 6) {
-                m_freezeTime = 0x78;
-                m_gauge = m_gauge - 0x7d0;
-                FillBackground(0xb0, 3);
+                m_freezeTime = 120;
+                m_gauge = m_gauge - 2000;
+                FillBackground(176, 3);
                 effect.type = 0x45;
                 effect.sound = 5;
                 effect.x = (double)(int)x;
-                effect.y = (double)((int)y - 0x32);
+                effect.y = (double)((int)y - 50);
                 effect.scale = 2;
                 effect.keep = 1;
                 effect.layer = 1;
                 m_game->CreateEffect((EffectDesc*)&effect);
-                m_game->FadeMusic(-0x2710, 0x64);
+                m_game->FadeMusic(-10000, 100);
                 m_patternVar1 = 0;
             }
             if (frame == 8 && m_patternVar1 < 3) {
@@ -5012,20 +5012,20 @@ void CAkiko::UpdatePattern()
                 m_patternVar1++;
             }
             if (frame == 2) {
-                m_freezeTime = 0x78;
-                m_gauge = m_gauge - 0xbb8;
-                FillBackground(0xb0, 3);
+                m_freezeTime = 120;
+                m_gauge = m_gauge - 3000;
+                FillBackground(176, 3);
                 effect.type = 0x46;
-                effect.sound = 0x40;
+                effect.sound = 64;
                 effect.x = (double)(int)x;
-                effect.y = (double)((int)y - 0x32);
+                effect.y = (double)((int)y - 50);
                 effect.scale = 2;
                 effect.keep = 1;
                 effect.layer = 1;
                 m_game->CreateEffect((EffectDesc*)&effect);
                 m_patternVar1 = 0;
-                m_playSound = 0x25;
-                m_game->FadeMusic(-0x2710, 0x64);
+                m_playSound = 37;
+                m_game->FadeMusic(-10000, 100);
             }
             if (frame == 8 && m_patternVar1 < 1) {
                 frame = frame - 2;
@@ -5047,20 +5047,20 @@ void CAkiko::UpdatePattern()
             ay = 0.0;
         }
         if (frame > 6) {
-            m_game->FlashNegative(0xf);
+            m_game->FlashNegative(15);
         }
         if (frame > 5) {
-            FocusCameraY(0x32, 3);
+            FocusCameraY(50, 3);
         }
-        if (frame == 0xa && m_attackResult == 3) {
+        if (frame == 10 && m_attackResult == 3) {
             StartPattern();
             pattern = kLv4Hit;
             (*m_opponent)->StartPattern();
             (*m_opponent)->pattern = kThrownHidden;
-            FillBackground(0xb0, 0x1770);
-            m_game->FadeMusic(-0x2710, 0x3e8);
-            m_game->m_hideObjectsTime = 0x7530;
-            (*m_opponent)->m_game->m_hideObjectsTime = 0x7530;
+            FillBackground(176, 6000);
+            m_game->FadeMusic(-10000, 1000);
+            m_game->m_hideObjectsTime = 30000;
+            (*m_opponent)->m_game->m_hideObjectsTime = 30000;
             break;
         }
         timer++;
@@ -5069,24 +5069,24 @@ void CAkiko::UpdatePattern()
             frame++;
             m_attackResult = 0;
             if (frame == 6) {
-                x = (*m_opponent)->x + facing * 0x28;
+                x = (*m_opponent)->x + facing * 40;
                 facing = -facing;
-                m_freezeTime = 0x96;
-                m_gauge = m_gauge - 0xbb8;
-                FillBackground(0xb0, 0xa);
+                m_freezeTime = 150;
+                m_gauge = m_gauge - 3000;
+                FillBackground(176, 10);
                 effect.type = 0x46;
-                effect.sound = 0x40;
+                effect.sound = 64;
                 effect.x = (double)(int)x;
-                effect.y = (double)((int)y - 0x3f);
+                effect.y = (double)((int)y - 63);
                 effect.scale = 2;
                 effect.keep = 1;
                 effect.layer = 1;
                 m_game->CreateEffect((EffectDesc*)&effect);
-                m_playSound = 0x25;
+                m_playSound = 37;
                 effect.type = 0x47;
                 m_game->CreateEffect((EffectDesc*)&effect);
             }
-            if (frame == 0xa) {
+            if (frame == 10) {
                 if ((*m_opponent)->y == 0.0) {
                     m_hitsLeft = 1;
                 } else {
@@ -5109,7 +5109,7 @@ void CAkiko::UpdatePattern()
             if (x < 190.0 && facing == -1) {
                 x = 190.0;
             }
-            (*m_opponent)->x = facing * 0x3c + x;
+            (*m_opponent)->x = facing * 60 + x;
             vx = 0.0;
             vy = 0.0;
             ay = 0.0;
@@ -5124,24 +5124,24 @@ void CAkiko::UpdatePattern()
             frame++;
             m_attackResult = 0;
             if (frame == 1) {
-                FillBackground(0xb0, 0);
+                FillBackground(176, 0);
                 (*m_opponent)->StartPattern();
                 (*m_opponent)->pattern = kEatingJam;
                 (*m_opponent)->facing = facing;
                 effect.type = 0x1a9;
-                effect.x = (double)((int)x + facing * 0x3c);
+                effect.x = (double)((int)x + facing * 60);
                 effect.y = (double)(int)y;
                 effect.facing = facing;
                 effect.scale = 0;
                 effect.keep = 1;
                 effect.layer = 0;
                 SpawnObject(&effect);
-                m_playVoice = 0x11;
+                m_playVoice = 17;
             }
             if (frame == 2) {
-                m_game->m_hideObjectsTime = 0x7530;
-                (*m_opponent)->m_game->m_hideObjectsTime = 0x7530;
-                m_game->m_hideHudTime = 0x7530;
+                m_game->m_hideObjectsTime = 30000;
+                (*m_opponent)->m_game->m_hideObjectsTime = 30000;
+                m_game->m_hideHudTime = 30000;
                 (*m_opponent)->StartPattern();
                 (*m_opponent)->pattern = kThrownHidden;
                 effect.type = 0x1aa;
@@ -5154,25 +5154,25 @@ void CAkiko::UpdatePattern()
                 effect.facing = 1;
                 effect.screen = 1;
                 SpawnObject(&effect);
-                m_playVoice = 0x10;
+                m_playVoice = 16;
             }
             if (frame == 3) {
                 m_game->m_hideObjectsTime = 0;
                 (*m_opponent)->m_game->m_hideObjectsTime = 0;
                 m_game->m_hideHudTime = 0;
-                m_playVoice = 0xe;
-                DealDamage(0x157c, 1000.0);
+                m_playVoice = 14;
+                DealDamage(5500, 1000.0);
                 (*m_opponent)->StartPattern();
                 (*m_opponent)->pattern = kLyingDown;
             }
-            if (frame == 5 && m_patternVar1 < 0x14) {
+            if (frame == 5 && m_patternVar1 < 20) {
                 m_patternVar1++;
                 frame = 3;
             }
             if (frame == 5) {
                 if ((*m_opponent)->m_hp <= 0 && m_roundsWon == m_game->m_roundsToWin) {
                 } else {
-                    m_game->FadeMusic(0, 0x3e8);
+                    m_game->FadeMusic(0, 1000);
                 }
             }
             if (frame >= frameCount) {

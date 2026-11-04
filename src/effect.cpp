@@ -113,7 +113,7 @@ void CGame::UpdateEffect(short index)
 
     d.keep = 0;
     d.screen = 0;
-    d.sound = 0xff;
+    d.sound = 255;
 
     switch (m_effects[index].type) {
     case 0:
@@ -143,7 +143,7 @@ void CGame::UpdateEffect(short index)
                 d.layer = 2;
                 d.screen = 1;
                 d.type = kEffectRoundText;
-                d.sound = 0xff;
+                d.sound = 255;
                 CreateEffect(&d);
                 d.x = 160;
                 d.y = 120;
@@ -151,8 +151,8 @@ void CGame::UpdateEffect(short index)
                 d.scale = 0;
                 d.layer = 2;
                 d.screen = 1;
-                d.type = m_round + 0x38;
-                d.sound = 0xff;
+                d.type = m_round + 56;
+                d.sound = 255;
                 CreateEffect(&d);
             }
             if (m_effects[index].frame == 15) {
@@ -164,7 +164,7 @@ void CGame::UpdateEffect(short index)
                 d.layer = 1;
                 d.screen = 1;
                 d.type = kEffectRoundSwoosh;
-                d.sound = 0xff;
+                d.sound = 255;
                 CreateEffect(&d);
             }
             if (LAST_FRAME_PASSED)
@@ -227,7 +227,7 @@ void CGame::UpdateEffect(short index)
                 d.layer = 3;
                 d.screen = 1;
                 d.type = kEffectGetReadyZoom;
-                d.sound = 0xff;
+                d.sound = 255;
                 CreateEffect(&d);
                 d.keep = 0;
                 d.x = 160;
@@ -237,7 +237,7 @@ void CGame::UpdateEffect(short index)
                 d.layer = 2;
                 d.screen = 1;
                 d.type = kEffectGetReadyIn;
-                d.sound = 0x17;
+                d.sound = 23;
                 CreateEffect(&d);
             }
         }
@@ -257,7 +257,7 @@ void CGame::UpdateEffect(short index)
                 d.layer = 2;
                 d.screen = 1;
                 d.type = kEffectGetReadyOut;
-                d.sound = 0xff;
+                d.sound = 255;
                 CreateEffect(&d);
             }
         }
@@ -277,7 +277,7 @@ void CGame::UpdateEffect(short index)
                 d.layer = 2;
                 d.screen = 1;
                 d.type = kEffectAttackZoom;
-                d.sound = 0xff;
+                d.sound = 255;
                 CreateEffect(&d);
                 d.keep = 0;
                 d.x = 160;
@@ -287,7 +287,7 @@ void CGame::UpdateEffect(short index)
                 d.layer = 2;
                 d.screen = 1;
                 d.type = kEffectAttackIn;
-                d.sound = 0x18;
+                d.sound = 24;
                 CreateEffect(&d);
             }
         }
@@ -307,7 +307,7 @@ void CGame::UpdateEffect(short index)
                 d.layer = 2;
                 d.screen = 1;
                 d.type = kEffectAttackOut;
-                d.sound = 0xff;
+                d.sound = 255;
                 CreateEffect(&d);
             }
         }
@@ -327,7 +327,7 @@ void CGame::UpdateEffect(short index)
                 d.layer = 2;
                 d.screen = 1;
                 d.type = kEffectAttackWipe;
-                d.sound = 0xff;
+                d.sound = 255;
                 CreateEffect(&d);
                 m_intro = 0;
             }
@@ -342,7 +342,7 @@ void CGame::UpdateEffect(short index)
         if (ANIMATION_DONE) {
             m_effects[index].timer = 0;
             m_effects[index].frame++;
-            if (m_effects[index].frame == 0x1a) {
+            if (m_effects[index].frame == 26) {
                 d.keep = 0;
                 d.x = 160;
                 d.y = 120;
@@ -351,7 +351,7 @@ void CGame::UpdateEffect(short index)
                 d.layer = 2;
                 d.screen = 1;
                 d.type = kEffectRoundFlash;
-                d.sound = m_round + 0xb;
+                d.sound = m_round + 11;
                 CreateEffect(&d);
             }
             if (LAST_FRAME_PASSED)
@@ -431,7 +431,7 @@ void CGame::UpdateEffect(short index)
         break;
     case 0x2a:
         if (FIRST_FRAME) {
-            double angle = (rand() * 20 / 32768 + (rand() < 0x4000) * 180 + 35) * (PI / 180);
+            double angle = (rand() * 20 / 32768 + (rand() < 16384) * 180 + 35) * (PI / 180);
             double speed = rand() / 13000.0;
             m_effects[index].vx = (m_effects[index].side * 2 - 1) * cos(angle) * speed;
             m_effects[index].vy = sin(angle) * speed;
@@ -441,7 +441,7 @@ void CGame::UpdateEffect(short index)
         break;
     case 0x2b:
         if (FIRST_FRAME) {
-            double angle = (rand() * 40 / 32768 + (rand() < 0x4000) * 180 + 25) * (PI / 180);
+            double angle = (rand() * 40 / 32768 + (rand() < 16384) * 180 + 25) * (PI / 180);
             double speed = rand() / 13000.0;
             m_effects[index].vx = (m_effects[index].side * 2 - 1) * cos(angle) * speed;
             m_effects[index].vy = sin(angle) * speed;
@@ -451,7 +451,7 @@ void CGame::UpdateEffect(short index)
         break;
     case 0x2c:
         if (FIRST_FRAME) {
-            double angle = (rand() * 20 / 32768 + (rand() < 0x4000) * 180 - 10) * (PI / 180);
+            double angle = (rand() * 20 / 32768 + (rand() < 16384) * 180 - 10) * (PI / 180);
             double speed = rand() / 13000.0;
             m_effects[index].vx = (m_effects[index].side * 2 - 1) * cos(angle) * speed;
             m_effects[index].vy = sin(angle) * speed;
@@ -461,7 +461,7 @@ void CGame::UpdateEffect(short index)
         break;
     case 0x2d:
         if (FIRST_FRAME) {
-            double angle = (rand() * 40 / 32768 + (rand() < 0x4000) * 180 - 20) * (PI / 180);
+            double angle = (rand() * 40 / 32768 + (rand() < 16384) * 180 - 20) * (PI / 180);
             double speed = rand() / 13000.0;
             m_effects[index].vx = (m_effects[index].side * 2 - 1) * cos(angle) * speed;
             m_effects[index].vy = sin(angle) * speed;
@@ -476,7 +476,7 @@ void CGame::UpdateEffect(short index)
             m_effects[index].vy = -(double)rand() / 4000.0 - 2.0;
         }
         m_effects[index].vy += 0.2;
-        if (rand() < 0x4000)
+        if (rand() < 16384)
             m_effects[index].timer++;
         if (m_effects[index].y + m_effects[index].vy >= 0.0)
             m_effects[index].vy = -m_effects[index].vy * (0.9 - rand() / 32768.0 * 0.3);
@@ -489,7 +489,7 @@ void CGame::UpdateEffect(short index)
             m_effects[index].vy = -(double)rand() / 7000.0 - 2.0;
         }
         m_effects[index].vy += 0.2;
-        if (rand() < 0x4000)
+        if (rand() < 16384)
             m_effects[index].timer++;
         if (m_effects[index].y + m_effects[index].vy >= 0.0)
             m_effects[index].vy = -m_effects[index].vy * (0.9 - rand() / 32768.0 * 0.3);

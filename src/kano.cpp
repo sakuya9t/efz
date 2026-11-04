@@ -10,7 +10,7 @@ CKano::CKano(PTR32(CPlayer)* opponent, CGame* game, CGraphics* graphics, CInput*
     int i;
 
     strcpy(m_name, "kano");
-    lastSurface = 0x434;
+    lastSurface = 1076;
     m_patternVar1 = 0;
     m_patternVar2 = 0;
     m_patternVar3 = 0;
@@ -26,22 +26,22 @@ CKano::CKano(PTR32(CPlayer)* opponent, CGame* game, CGraphics* graphics, CInput*
     m_orbsOut = 0;
     m_shotsOut = 0;
     m_eruptionsOut = 0;
-    m_pointX[0] = -0xd;
-    m_pointY[0] = -0x38;
-    m_pointX[1] = 0x13;
+    m_pointX[0] = -13;
+    m_pointY[0] = -56;
+    m_pointX[1] = 19;
     m_pointY[1] = 0;
-    m_pointX[2] = 0xb;
+    m_pointX[2] = 11;
     m_pointY[2] = -7;
     m_pointX[3] = -3;
-    m_pointY[3] = -0x13;
-    m_pointX[4] = -0x16;
-    m_pointY[4] = -0x26;
+    m_pointY[3] = -19;
+    m_pointX[4] = -22;
+    m_pointY[4] = -38;
     m_resultPictures = 5;
-    m_rivals[0] = 0x17;
-    m_rivals[1] = 0x18;
-    m_rivals[0xa] = 0x14;
+    m_rivals[0] = 23;
+    m_rivals[1] = 24;
+    m_rivals[10] = 20;
     i = 0;
-    for (; i < 0x40; i++) {
+    for (; i < 64; i++) {
         m_objectVar1[i] = 0;
         m_objectVar2[i] = 0;
         m_objectVar3[i] = 0;
@@ -68,17 +68,17 @@ void CKano::Reset()
     m_shotsOut = 0;
     m_eruptionsOut = 0;
     m_pointX[0] = -4;
-    m_pointY[0] = -0x39;
-    m_pointX[1] = 0x12;
+    m_pointY[0] = -57;
+    m_pointX[1] = 18;
     m_pointY[1] = 0;
-    m_pointX[2] = 0x15;
-    m_pointY[2] = -0xc;
-    m_pointX[3] = 0x12;
-    m_pointY[3] = -0xf;
-    m_pointX[4] = 0x26;
-    m_pointY[4] = -0x27;
+    m_pointX[2] = 21;
+    m_pointY[2] = -12;
+    m_pointX[3] = 18;
+    m_pointY[3] = -15;
+    m_pointX[4] = 38;
+    m_pointY[4] = -39;
     i = 0;
-    for (; i < 0x40; i++) {
+    for (; i < 64; i++) {
         m_objectVar1[i] = 0;
         m_objectVar2[i] = 0;
         m_objectVar3[i] = 0;
@@ -130,134 +130,134 @@ void CKano::StartCommand()
         return;
     }
     if (m_sealLevel < 2) {
-        if (m_hp < 0xd05 && (pattern == kRecoilGuardStand || pattern == kRecoilGuardCrouch) && m_command == kCmd21436D && m_gauge >= 0xbb8 && y == 0.0 && (m_patterns[pattern].frames[frame].flagsB0 & kStateCancellable) > 0 && (pattern >= kFirstCharacterAction && m_attackResult >= 2 && m_attackResult != 6 || pattern < kFirstCharacterAction) && m_patterns[pattern].cancelLevel <= m_patterns[kLv4].level) {
+        if (m_hp < 3333 && (pattern == kRecoilGuardStand || pattern == kRecoilGuardCrouch) && m_command == kCmd21436D && m_gauge >= 3000 && y == 0.0 && (m_patterns[pattern].frames[frame].flagsB0 & kStateCancellable) > 0 && (pattern >= kFirstCharacterAction && m_attackResult >= 2 && m_attackResult != 6 || pattern < kFirstCharacterAction) && m_patterns[pattern].cancelLevel <= m_patterns[kLv4].level) {
             StartPattern();
             ClearBufferedPress();
             pattern = kLv4;
             return;
         }
-        if (m_command == kCmd214214C && m_gauge >= 0xbb8 && y == 0.0 && (m_patterns[pattern].frames[frame].flagsB0 & kStateCancellable) > 0 && (pattern >= kFirstCharacterAction && m_attackResult >= 2 && m_attackResult != 6 || pattern < kFirstCharacterAction) && m_patterns[pattern].cancelLevel <= m_patterns[k214214C].level) {
+        if (m_command == kCmd214214C && m_gauge >= 3000 && y == 0.0 && (m_patterns[pattern].frames[frame].flagsB0 & kStateCancellable) > 0 && (pattern >= kFirstCharacterAction && m_attackResult >= 2 && m_attackResult != 6 || pattern < kFirstCharacterAction) && m_patterns[pattern].cancelLevel <= m_patterns[k214214C].level) {
             StartPattern();
             ClearBufferedPress();
             pattern = k214214C;
-            if (m_chargeGauge >= 0x2710) {
+            if (m_chargeGauge >= 10000) {
                 frame = 7;
                 timer = 0;
                 m_chargeGauge = 0;
             }
             return;
         }
-        if (m_command == kCmd214214B && m_gauge >= 0x7d0 && y == 0.0 && (m_patterns[pattern].frames[frame].flagsB0 & kStateCancellable) > 0 && (pattern >= kFirstCharacterAction && m_attackResult >= 2 && m_attackResult != 6 || pattern < kFirstCharacterAction) && m_patterns[pattern].cancelLevel <= m_patterns[k214214B].level) {
+        if (m_command == kCmd214214B && m_gauge >= 2000 && y == 0.0 && (m_patterns[pattern].frames[frame].flagsB0 & kStateCancellable) > 0 && (pattern >= kFirstCharacterAction && m_attackResult >= 2 && m_attackResult != 6 || pattern < kFirstCharacterAction) && m_patterns[pattern].cancelLevel <= m_patterns[k214214B].level) {
             StartPattern();
             ClearBufferedPress();
             pattern = k214214B;
-            if (m_chargeGauge >= 0x2710) {
+            if (m_chargeGauge >= 10000) {
                 frame = 7;
                 timer = 0;
                 m_chargeGauge = 0;
             }
             return;
         }
-        if (m_command == kCmd214214A && m_gauge >= 0x3e8 && y == 0.0 && (m_patterns[pattern].frames[frame].flagsB0 & kStateCancellable) > 0 && (pattern >= kFirstCharacterAction && m_attackResult >= 2 && m_attackResult != 6 || pattern < kFirstCharacterAction) && m_patterns[pattern].cancelLevel <= m_patterns[k214214A].level) {
+        if (m_command == kCmd214214A && m_gauge >= 1000 && y == 0.0 && (m_patterns[pattern].frames[frame].flagsB0 & kStateCancellable) > 0 && (pattern >= kFirstCharacterAction && m_attackResult >= 2 && m_attackResult != 6 || pattern < kFirstCharacterAction) && m_patterns[pattern].cancelLevel <= m_patterns[k214214A].level) {
             StartPattern();
             ClearBufferedPress();
             pattern = k214214A;
-            if (m_chargeGauge >= 0x2710) {
+            if (m_chargeGauge >= 10000) {
                 frame = 7;
                 timer = 0;
                 m_chargeGauge = 0;
             }
             return;
         }
-        if (m_command == kCmd236236C && m_gauge >= 0xbb8 && y == 0.0 && (m_patterns[pattern].frames[frame].flagsB0 & kStateCancellable) > 0 && (pattern >= kFirstCharacterAction && m_attackResult >= 2 && m_attackResult != 6 || pattern < kFirstCharacterAction) && m_patterns[pattern].cancelLevel <= m_patterns[k236236C].level) {
+        if (m_command == kCmd236236C && m_gauge >= 3000 && y == 0.0 && (m_patterns[pattern].frames[frame].flagsB0 & kStateCancellable) > 0 && (pattern >= kFirstCharacterAction && m_attackResult >= 2 && m_attackResult != 6 || pattern < kFirstCharacterAction) && m_patterns[pattern].cancelLevel <= m_patterns[k236236C].level) {
             StartPattern();
             ClearBufferedPress();
             pattern = k236236C;
-            if (m_chargeGauge >= 0x2710) {
+            if (m_chargeGauge >= 10000) {
                 frame = 7;
                 timer = 0;
                 m_chargeGauge = 0;
             }
             return;
         }
-        if (m_command == kCmd236236B && m_gauge >= 0x7d0 && y == 0.0 && (m_patterns[pattern].frames[frame].flagsB0 & kStateCancellable) > 0 && (pattern >= kFirstCharacterAction && m_attackResult >= 2 && m_attackResult != 6 || pattern < kFirstCharacterAction) && m_patterns[pattern].cancelLevel <= m_patterns[k236236B].level) {
+        if (m_command == kCmd236236B && m_gauge >= 2000 && y == 0.0 && (m_patterns[pattern].frames[frame].flagsB0 & kStateCancellable) > 0 && (pattern >= kFirstCharacterAction && m_attackResult >= 2 && m_attackResult != 6 || pattern < kFirstCharacterAction) && m_patterns[pattern].cancelLevel <= m_patterns[k236236B].level) {
             StartPattern();
             ClearBufferedPress();
             pattern = k236236B;
-            if (m_chargeGauge >= 0x2710) {
+            if (m_chargeGauge >= 10000) {
                 frame = 7;
                 timer = 0;
                 m_chargeGauge = 0;
             }
             return;
         }
-        if (m_command == kCmd236236A && m_gauge >= 0x3e8 && y == 0.0 && (m_patterns[pattern].frames[frame].flagsB0 & kStateCancellable) > 0 && (pattern >= kFirstCharacterAction && m_attackResult >= 2 && m_attackResult != 6 || pattern < kFirstCharacterAction) && m_patterns[pattern].cancelLevel <= m_patterns[k236236A].level) {
+        if (m_command == kCmd236236A && m_gauge >= 1000 && y == 0.0 && (m_patterns[pattern].frames[frame].flagsB0 & kStateCancellable) > 0 && (pattern >= kFirstCharacterAction && m_attackResult >= 2 && m_attackResult != 6 || pattern < kFirstCharacterAction) && m_patterns[pattern].cancelLevel <= m_patterns[k236236A].level) {
             StartPattern();
             ClearBufferedPress();
             pattern = k236236A;
-            if (m_chargeGauge >= 0x2710) {
+            if (m_chargeGauge >= 10000) {
                 frame = 7;
                 timer = 0;
                 m_chargeGauge = 0;
             }
             return;
         }
-        if (m_command == kCmd21436C && y == 0.0 && m_gauge >= 0xbb8 && (m_patterns[pattern].frames[frame].flagsB0 & kStateCancellable) > 0 && (pattern >= kFirstCharacterAction && m_attackResult >= 2 && m_attackResult != 6 || pattern < kFirstCharacterAction) && m_patterns[pattern].cancelLevel <= m_patterns[k21436C].level) {
+        if (m_command == kCmd21436C && y == 0.0 && m_gauge >= 3000 && (m_patterns[pattern].frames[frame].flagsB0 & kStateCancellable) > 0 && (pattern >= kFirstCharacterAction && m_attackResult >= 2 && m_attackResult != 6 || pattern < kFirstCharacterAction) && m_patterns[pattern].cancelLevel <= m_patterns[k21436C].level) {
             StartPattern();
             ClearBufferedPress();
             pattern = k21436C;
             return;
         }
-        if ((m_command == kCmd21436B || m_command == kCmd21436C) && y == 0.0 && m_gauge >= 0x7d0 && (m_patterns[pattern].frames[frame].flagsB0 & kStateCancellable) > 0 && (pattern >= kFirstCharacterAction && m_attackResult >= 2 && m_attackResult != 6 || pattern < kFirstCharacterAction) && m_patterns[pattern].cancelLevel <= m_patterns[k21436B].level) {
+        if ((m_command == kCmd21436B || m_command == kCmd21436C) && y == 0.0 && m_gauge >= 2000 && (m_patterns[pattern].frames[frame].flagsB0 & kStateCancellable) > 0 && (pattern >= kFirstCharacterAction && m_attackResult >= 2 && m_attackResult != 6 || pattern < kFirstCharacterAction) && m_patterns[pattern].cancelLevel <= m_patterns[k21436B].level) {
             StartPattern();
             ClearBufferedPress();
             pattern = k21436B;
             return;
         }
-        if ((m_command == kCmd21436A || m_command == kCmd21436B || m_command == kCmd21436C) && y == 0.0 && m_gauge >= 0x3e8 && (m_patterns[pattern].frames[frame].flagsB0 & kStateCancellable) > 0 && (pattern >= kFirstCharacterAction && m_attackResult >= 2 && m_attackResult != 6 || pattern < kFirstCharacterAction) && m_patterns[pattern].cancelLevel <= m_patterns[k21436A].level) {
+        if ((m_command == kCmd21436A || m_command == kCmd21436B || m_command == kCmd21436C) && y == 0.0 && m_gauge >= 1000 && (m_patterns[pattern].frames[frame].flagsB0 & kStateCancellable) > 0 && (pattern >= kFirstCharacterAction && m_attackResult >= 2 && m_attackResult != 6 || pattern < kFirstCharacterAction) && m_patterns[pattern].cancelLevel <= m_patterns[k21436A].level) {
             StartPattern();
             ClearBufferedPress();
             pattern = k21436A;
             return;
         }
-        if (m_command == kCmd22B && m_gauge >= 0x7d0 && y == 0.0 && (m_patterns[pattern].frames[frame].flagsB0 & kStateCancellable) > 0 && (pattern >= kFirstCharacterAction && m_attackResult >= 2 && m_attackResult != 6 || pattern < kFirstCharacterAction) && m_patterns[pattern].cancelLevel <= m_patterns[k22B].level) {
+        if (m_command == kCmd22B && m_gauge >= 2000 && y == 0.0 && (m_patterns[pattern].frames[frame].flagsB0 & kStateCancellable) > 0 && (pattern >= kFirstCharacterAction && m_attackResult >= 2 && m_attackResult != 6 || pattern < kFirstCharacterAction) && m_patterns[pattern].cancelLevel <= m_patterns[k22B].level) {
             StartPattern();
             ClearBufferedPress();
             pattern = k22B;
-            if (m_chargeGauge >= 0x2710) {
+            if (m_chargeGauge >= 10000) {
                 frame = 7;
                 timer = 0;
                 m_chargeGauge = 0;
             }
             return;
         }
-        if (m_command == kCmd641236C && m_gauge >= 0xbb8 && y == 0.0 && (m_patterns[pattern].frames[frame].flagsB0 & kStateCancellable) > 0 && (pattern >= kFirstCharacterAction && m_attackResult >= 2 && m_attackResult != 6 || pattern < kFirstCharacterAction) && m_patterns[pattern].cancelLevel <= m_patterns[k641236C].level) {
+        if (m_command == kCmd641236C && m_gauge >= 3000 && y == 0.0 && (m_patterns[pattern].frames[frame].flagsB0 & kStateCancellable) > 0 && (pattern >= kFirstCharacterAction && m_attackResult >= 2 && m_attackResult != 6 || pattern < kFirstCharacterAction) && m_patterns[pattern].cancelLevel <= m_patterns[k641236C].level) {
             StartPattern();
             ClearBufferedPress();
             pattern = k641236C;
-            if (m_chargeGauge >= 0x2710) {
+            if (m_chargeGauge >= 10000) {
                 frame = 7;
                 timer = 0;
                 m_chargeGauge = 0;
             }
             return;
         }
-        if (m_command == kCmd641236B && m_gauge >= 0x7d0 && y == 0.0 && (m_patterns[pattern].frames[frame].flagsB0 & kStateCancellable) > 0 && (pattern >= kFirstCharacterAction && m_attackResult >= 2 && m_attackResult != 6 || pattern < kFirstCharacterAction) && m_patterns[pattern].cancelLevel <= m_patterns[k641236B].level) {
+        if (m_command == kCmd641236B && m_gauge >= 2000 && y == 0.0 && (m_patterns[pattern].frames[frame].flagsB0 & kStateCancellable) > 0 && (pattern >= kFirstCharacterAction && m_attackResult >= 2 && m_attackResult != 6 || pattern < kFirstCharacterAction) && m_patterns[pattern].cancelLevel <= m_patterns[k641236B].level) {
             StartPattern();
             ClearBufferedPress();
             pattern = k641236B;
-            if (m_chargeGauge >= 0x2710) {
+            if (m_chargeGauge >= 10000) {
                 frame = 7;
                 timer = 0;
                 m_chargeGauge = 0;
             }
             return;
         }
-        if (m_command == kCmd641236A && m_gauge >= 0x3e8 && y == 0.0 && (m_patterns[pattern].frames[frame].flagsB0 & kStateCancellable) > 0 && (pattern >= kFirstCharacterAction && m_attackResult >= 2 && m_attackResult != 6 || pattern < kFirstCharacterAction) && m_patterns[pattern].cancelLevel <= m_patterns[k641236A].level) {
+        if (m_command == kCmd641236A && m_gauge >= 1000 && y == 0.0 && (m_patterns[pattern].frames[frame].flagsB0 & kStateCancellable) > 0 && (pattern >= kFirstCharacterAction && m_attackResult >= 2 && m_attackResult != 6 || pattern < kFirstCharacterAction) && m_patterns[pattern].cancelLevel <= m_patterns[k641236A].level) {
             StartPattern();
             ClearBufferedPress();
             pattern = k641236A;
-            if (m_chargeGauge >= 0x2710) {
+            if (m_chargeGauge >= 10000) {
                 frame = 7;
                 timer = 0;
                 m_chargeGauge = 0;
@@ -268,10 +268,10 @@ void CKano::StartCommand()
             StartPattern();
             ClearBufferedPress();
             pattern = k421C;
-            if (m_chargeGauge >= 0x2710) {
+            if (m_chargeGauge >= 10000) {
                 frame = 7;
                 timer = 0;
-                m_chargeGauge = 0x9c4;
+                m_chargeGauge = 2500;
             }
             return;
         }
@@ -279,10 +279,10 @@ void CKano::StartCommand()
             StartPattern();
             ClearBufferedPress();
             pattern = k421B;
-            if (m_chargeGauge >= 0x2710) {
+            if (m_chargeGauge >= 10000) {
                 frame = 7;
                 timer = 0;
-                m_chargeGauge = 0x1388;
+                m_chargeGauge = 5000;
             }
             return;
         }
@@ -290,10 +290,10 @@ void CKano::StartCommand()
             StartPattern();
             ClearBufferedPress();
             pattern = k421A;
-            if (m_chargeGauge >= 0x2710) {
+            if (m_chargeGauge >= 10000) {
                 frame = 7;
                 timer = 0;
-                m_chargeGauge = 0x1d4c;
+                m_chargeGauge = 7500;
             }
             return;
         }
@@ -301,10 +301,10 @@ void CKano::StartCommand()
             StartPattern();
             ClearBufferedPress();
             pattern = k214C;
-            if (m_chargeGauge >= 0x2710) {
+            if (m_chargeGauge >= 10000) {
                 frame = 7;
                 timer = 0;
-                m_chargeGauge = 0x9c4;
+                m_chargeGauge = 2500;
             }
             return;
         }
@@ -312,10 +312,10 @@ void CKano::StartCommand()
             StartPattern();
             ClearBufferedPress();
             pattern = k214B;
-            if (m_chargeGauge >= 0x2710) {
+            if (m_chargeGauge >= 10000) {
                 frame = 7;
                 timer = 0;
-                m_chargeGauge = 0x1388;
+                m_chargeGauge = 5000;
             }
             return;
         }
@@ -323,10 +323,10 @@ void CKano::StartCommand()
             StartPattern();
             ClearBufferedPress();
             pattern = k214A;
-            if (m_chargeGauge >= 0x2710) {
+            if (m_chargeGauge >= 10000) {
                 frame = 7;
                 timer = 0;
-                m_chargeGauge = 0x1d4c;
+                m_chargeGauge = 7500;
             }
             return;
         }
@@ -334,10 +334,10 @@ void CKano::StartCommand()
             StartPattern();
             ClearBufferedPress();
             pattern = k236C;
-            if (m_chargeGauge >= 0x2710) {
+            if (m_chargeGauge >= 10000) {
                 frame = 7;
                 timer = 0;
-                m_chargeGauge = 0x9c4;
+                m_chargeGauge = 2500;
             }
             return;
         }
@@ -345,10 +345,10 @@ void CKano::StartCommand()
             StartPattern();
             ClearBufferedPress();
             pattern = k236B;
-            if (m_chargeGauge >= 0x2710) {
+            if (m_chargeGauge >= 10000) {
                 frame = 7;
                 timer = 0;
-                m_chargeGauge = 0x1388;
+                m_chargeGauge = 5000;
             }
             return;
         }
@@ -356,14 +356,14 @@ void CKano::StartCommand()
             StartPattern();
             ClearBufferedPress();
             pattern = k236A;
-            if (m_chargeGauge >= 0x2710) {
+            if (m_chargeGauge >= 10000) {
                 frame = 7;
                 timer = 0;
-                m_chargeGauge = 0x1d4c;
+                m_chargeGauge = 7500;
             }
             return;
         }
-        if (m_command == kCmd236D && (m_rfGauge >= 500.0 || m_rfBlue > 0) && (m_patterns[pattern].frames[frame].flagsB0 & kStateCancellable) > 0 && (pattern >= kFirstCharacterAction && m_attackResult >= 2 && m_attackResult != 6 || pattern < kFirstCharacterAction) && m_patterns[pattern].cancelLevel <= m_patterns[k236D].level && y == 0.0 && m_chargeGauge < 0x2710) {
+        if (m_command == kCmd236D && (m_rfGauge >= 500.0 || m_rfBlue > 0) && (m_patterns[pattern].frames[frame].flagsB0 & kStateCancellable) > 0 && (pattern >= kFirstCharacterAction && m_attackResult >= 2 && m_attackResult != 6 || pattern < kFirstCharacterAction) && m_patterns[pattern].cancelLevel <= m_patterns[k236D].level && y == 0.0 && m_chargeGauge < 10000) {
             StartPattern();
             ClearBufferedPress();
             pattern = k236D;
@@ -581,7 +581,7 @@ void CKano::StartCommand()
             }
         }
     }
-    if (m_sealLevel < 2 && (m_pressD == 1 || (m_bufferedPress & kInputD) != 0 || (m_dashBufferedPress & kInputD) != 0) && m_chargeGauge < 0x2710 && m_patterns[pattern].cancelLevel <= m_patterns[k5D].level && (m_patterns[pattern].frames[frame].flagsB0 & kStateCancellable) > 0 && y == 0.0 && (pattern >= kFirstCharacterAction && m_attackResult >= 2 && m_attackResult != 6 || pattern < kFirstCharacterAction)) {
+    if (m_sealLevel < 2 && (m_pressD == 1 || (m_bufferedPress & kInputD) != 0 || (m_dashBufferedPress & kInputD) != 0) && m_chargeGauge < 10000 && m_patterns[pattern].cancelLevel <= m_patterns[k5D].level && (m_patterns[pattern].frames[frame].flagsB0 & kStateCancellable) > 0 && y == 0.0 && (pattern >= kFirstCharacterAction && m_attackResult >= 2 && m_attackResult != 6 || pattern < kFirstCharacterAction)) {
         StartPattern();
         ClearBufferedPress();
         pattern = k5D;
@@ -594,33 +594,33 @@ void CKano::DrawGauge()
     EffectFrame sprite; // the frame drawn
     RECT dst; // where on the screen
 
-    if (m_chargeGauge == 0x2710) {
+    if (m_chargeGauge == 10000) {
         sprite = *anims[0x2a].frames;
         src = MakeRect(0, 0, sprite.width, sprite.height);
         if (m_side == 0) {
-            dst = MakeRect(0x31 - sprite.x, 0x1f - sprite.y, sprite.width, sprite.height);
+            dst = MakeRect(49 - sprite.x, 31 - sprite.y, sprite.width, sprite.height);
         } else {
-            dst = MakeRect(sprite.x + 0x10f - sprite.width, 0x1f - sprite.y, sprite.width, sprite.height);
+            dst = MakeRect(sprite.x + 271 - sprite.width, 31 - sprite.y, sprite.width, sprite.height);
         }
         m_graphics->Blit(dst, surfaces[sprite.surface], src, colorKey, 0);
     }
-    if (m_chargeGauge != 0 && m_chargeGauge < 0x2710) {
+    if (m_chargeGauge != 0 && m_chargeGauge < 10000) {
         sprite = *anims[0x2b].frames;
         src = MakeRect(0, 0, sprite.width, sprite.height);
         if (m_side == 0) {
-            dst = MakeRect(0x31 - sprite.x, 0x1f - sprite.y, sprite.width, sprite.height);
+            dst = MakeRect(49 - sprite.x, 31 - sprite.y, sprite.width, sprite.height);
         } else {
-            dst = MakeRect(sprite.x + 0x10f - sprite.width, 0x1f - sprite.y, sprite.width, sprite.height);
+            dst = MakeRect(sprite.x + 271 - sprite.width, 31 - sprite.y, sprite.width, sprite.height);
         }
         m_graphics->Blit(dst, surfaces[sprite.surface], src, colorKey, 0);
     }
-    if (m_chargeGauge != 0 && m_chargeGauge < 0x2710) {
+    if (m_chargeGauge != 0 && m_chargeGauge < 10000) {
         sprite = *anims[0x2c].frames;
-        src = MakeRect(0, 0, m_chargeGauge * sprite.width / 0x2710, sprite.height);
+        src = MakeRect(0, 0, m_chargeGauge * sprite.width / 10000, sprite.height);
         if (m_side == 0) {
-            dst = MakeRect(0x31 - sprite.x, 0x1f - sprite.y, m_chargeGauge * sprite.width / 0x2710, sprite.height);
+            dst = MakeRect(49 - sprite.x, 31 - sprite.y, m_chargeGauge * sprite.width / 10000, sprite.height);
         } else {
-            dst = MakeRect(sprite.x + 0x10f - m_chargeGauge * sprite.width / 0x2710, 0x1f - sprite.y, m_chargeGauge * sprite.width / 0x2710, sprite.height);
+            dst = MakeRect(sprite.x + 271 - m_chargeGauge * sprite.width / 10000, 31 - sprite.y, m_chargeGauge * sprite.width / 10000, sprite.height);
         }
         m_graphics->Blit(dst, surfaces[sprite.surface], src, colorKey, 0);
     }
@@ -633,11 +633,11 @@ void CKano::PreUpdate()
     if ((*m_opponent)->m_freezeTime == 0 && pattern < 0x12c) {
         m_gaugeRegenTimer++;
     }
-    if (m_gaugeRegenTimer > 0x1e - (0x1c - ((int)(m_gauge * 0.001) << 2))) {
+    if (m_gaugeRegenTimer > 30 - (28 - ((int)(m_gauge * 0.001) << 2))) {
         m_gauge++;
         m_gaugeRegenTimer = 0;
     }
-    if (0.0 != (m_gaugeRegenTimer > 0x1e - (0x1c - ((int)(m_gauge * 0.001) << 2))) * 0.5 && pattern == kCrouch) {
+    if (0.0 != (m_gaugeRegenTimer > 30 - (28 - ((int)(m_gauge * 0.001) << 2))) * 0.5 && pattern == kCrouch) {
         m_gauge++;
         m_gaugeRegenTimer = 0;
     }
@@ -646,8 +646,8 @@ void CKano::PreUpdate()
     } else {
         m_idleTimer = 0;
     }
-    if (m_idleTimer > 0x276) {
-        m_gauge = m_gauge + 0x12c;
+    if (m_idleTimer > 630) {
+        m_gauge = m_gauge + 300;
         m_idleTimer = 0;
         effect.type = kObjIdleBonus;
         effect.x = (double)(int)x;
@@ -660,7 +660,7 @@ void CKano::PreUpdate()
     m_meteorTimer--;
     if (m_meteorsPending > 0 && m_meteorTimer <= 0) {
         effect.type = kObjMeteor;
-        effect.x = (double)((int)x + 0x78 - (WORD)Random(0, 0xf0) - (int)(m_meteorFacing * 192.0));
+        effect.x = (double)((int)x + 120 - (WORD)Random(0, 240) - (int)(m_meteorFacing * 192.0));
         effect.y = -480.0;
         effect.facing = *(char*)&m_meteorFacing;
         effect.scale = 2;
@@ -668,7 +668,7 @@ void CKano::PreUpdate()
         effect.keep = 1;
         SpawnObject(&effect);
         m_meteorsPending--;
-        m_meteorTimer = 0xb4;
+        m_meteorTimer = 180;
     }
 }
 
@@ -695,7 +695,7 @@ void CKano::ReadCommand()
         }
         if ((input & kInputDirections) == (facing == -1) + 1 && step == 4) {
             if ((input & kInputButtons) != 0) {
-                m_command = ((input & (kInputB | kInputC | kInputD)) > 0) + 0xa0 + ((input & (kInputC | kInputD)) > 0) + ((input & kInputD) > 0);
+                m_command = ((input & (kInputB | kInputC | kInputD)) > 0) + 160 + ((input & (kInputC | kInputD)) > 0) + ((input & kInputD) > 0);
                 return;
             }
             step = 5;
@@ -709,7 +709,7 @@ void CKano::ReadCommand()
         if ((input & kInputDirections) == 6 - (facing == -1) && step == 1) {
             step = 2;
         }
-        if ((input & kInputDirections) == kInputDown && step == 0 && m_gauge >= 0x3e8) {
+        if ((input & kInputDirections) == kInputDown && step == 0 && m_gauge >= 1000) {
             step = 1;
         }
     }
@@ -734,7 +734,7 @@ void CKano::ReadCommand()
         if ((input & kInputDirections) == kInputLeft - (facing == -1) && step == 1) {
             step = 2;
         }
-        if ((input & kInputDirections) == (facing == -1) + 1 && step == 0 && m_gauge >= 0x3e8) {
+        if ((input & kInputDirections) == (facing == -1) + 1 && step == 0 && m_gauge >= 1000) {
             step = 1;
         }
     }
@@ -765,7 +765,7 @@ void CKano::ReadCommand()
         if ((input & kInputDirections) == 6 - (facing == -1) && step == 1) {
             step = 2;
         }
-        if ((input & kInputDirections) == kInputDown && step == 0 && m_gauge >= 0x3e8) {
+        if ((input & kInputDirections) == kInputDown && step == 0 && m_gauge >= 1000) {
             step = 1;
         }
     }
@@ -796,7 +796,7 @@ void CKano::ReadCommand()
         if ((input & kInputDirections) == (facing == -1) + 5 && step == 1) {
             step = 2;
         }
-        if ((input & kInputDirections) == kInputDown && step == 0 && m_gauge >= 0x3e8) {
+        if ((input & kInputDirections) == kInputDown && step == 0 && m_gauge >= 1000) {
             step = 1;
         }
     }
@@ -1041,17 +1041,17 @@ void CKano::CpuInput()
     m_pressC = 0;
     m_pressD = 0;
     m_recoilGuardWindow = 0;
-    if ((WORD)Random(0, 0x3e8) < 25.0f * m_cpuSkill + (y < 0.0) * 0x1e * m_cpuSkill + (m_cpuAction == 3) * 0x190 + (pattern == kRecoilGuardAir) * 0x12c) {
-        m_recoilGuardWindow = 0x3c;
+    if ((WORD)Random(0, 1000) < 25.0f * m_cpuSkill + (y < 0.0) * 30 * m_cpuSkill + (m_cpuAction == 3) * 400 + (pattern == kRecoilGuardAir) * 300) {
+        m_recoilGuardWindow = 60;
     }
-    if ((WORD)Random(0, 0x7d0) < ((m_throwProtect > 0) * 4.0 + 1.0) * 8.0 * m_cpuSkill * ((pattern > kLastHitReaction && pattern < kAirRecoveryForward) * 2 + 1)) {
-        m_recoilGuardWindow = 0x3c;
+    if ((WORD)Random(0, 2000) < ((m_throwProtect > 0) * 4.0 + 1.0) * 8.0 * m_cpuSkill * ((pattern > kLastHitReaction && pattern < kAirRecoveryForward) * 2 + 1)) {
+        m_recoilGuardWindow = 60;
     }
-    if ((WORD)Random(0, 0x3e8) < 4e+01f * m_cpuSkill && pattern > kLastSharedAction) {
-        m_recoilGuardWindow = 0x3c;
+    if ((WORD)Random(0, 1000) < 4e+01f * m_cpuSkill && pattern > kLastSharedAction) {
+        m_recoilGuardWindow = 60;
     }
     if (m_canRecoilCounter == 1 && m_cpuAction == 2) {
-        m_recoilGuardWindow = 0x1e;
+        m_recoilGuardWindow = 30;
         if (pattern < kFirstCharacterAction) {
             m_cpuAction = 0;
         }
@@ -1063,14 +1063,14 @@ void CKano::CpuInput()
     dx = ((*m_opponent)->x - x) * facing;
     dy = fabs(y - (*m_opponent)->y);
     if (pattern >= kFirstHitReaction && pattern <= kFirstGuard && timer == 0) {
-        if ((WORD)Random(0, 0x64) < 8.0f * m_cpuSkill) {
+        if ((WORD)Random(0, 100) < 8.0f * m_cpuSkill) {
             m_cpuAction = 3;
         } else {
             m_cpuAction = 0;
         }
-        m_inputX = 1 - (((WORD)Random(0, 0x64) < 0x32) << 1);
-        m_pressD = (WORD)Random(0, 0xf0) < dy;
-        m_pressD = (WORD)Random(0, 0x140) < dx;
+        m_inputX = 1 - (((WORD)Random(0, 100) < 0x32) << 1);
+        m_pressD = (WORD)Random(0, 240) < dy;
+        m_pressD = (WORD)Random(0, 320) < dx;
         if ((*m_opponent)->pattern > kLastSharedAction && (*m_opponent)->pattern < 0xfa && (*m_opponent)->frame < 3 && dy < 100.0 && dx < 150.0) {
             m_pressD = 0;
         }
@@ -1084,25 +1084,25 @@ void CKano::CpuInput()
     }
     if (pattern == kRecoilGuardStand && timer < 6) {
         if ((*m_opponent)->pattern != 0xc8 && (*m_opponent)->pattern != 0xcc && (*m_opponent)->pattern < 0xfa && (*m_opponent)->y == 0.0 && (*m_opponent)->m_hitsLeft == 0) {
-            if (dx < 40.0 && (WORD)Random(0, 0x64) < m_cpuSkill * 3.0f) {
+            if (dx < 40.0 && (WORD)Random(0, 100) < m_cpuSkill * 3.0f) {
                 m_pressA = 1;
                 m_inputY = 1;
                 return;
             }
-            if (dx < 60.0 && (WORD)Random(0, 0x64) < m_cpuSkill * 2) {
+            if (dx < 60.0 && (WORD)Random(0, 100) < m_cpuSkill * 2) {
                 m_pressA = 1;
                 m_inputY = 0;
                 return;
             }
         }
         if (((*m_opponent)->pattern == 0xc9 || (*m_opponent)->pattern == 0xca || (*m_opponent)->pattern == 0xcd) && (*m_opponent)->pattern < 0xfa && (*m_opponent)->y == 0.0 && (*m_opponent)->m_hitsLeft == 0) {
-            if (dx > 20.0 && dx < 60.0 && (WORD)Random(0, 0x64) < m_cpuSkill * 2) {
+            if (dx > 20.0 && dx < 60.0 && (WORD)Random(0, 100) < m_cpuSkill * 2) {
                 m_pressB = 1;
                 m_inputY = 1;
                 m_inputX = 0;
                 return;
             }
-            if (dx > 60.0 && dx < 80.0 && (WORD)Random(0, 0x64) < m_cpuSkill * 2) {
+            if (dx > 60.0 && dx < 80.0 && (WORD)Random(0, 100) < m_cpuSkill * 2) {
                 m_pressA = 3;
                 m_inputY = 1;
                 return;
@@ -1111,69 +1111,69 @@ void CKano::CpuInput()
     }
     if (pattern == kRecoilGuardStand || pattern == kRecoilGuardCrouch) {
         if (dx < 100.0) {
-            if ((WORD)Random(0, 0x64) < m_cpuSkill * 3.0f && m_rfGauge > 500.0) {
+            if ((WORD)Random(0, 100) < m_cpuSkill * 3.0f && m_rfGauge > 500.0) {
                 m_command = kCmd623C;
                 return;
             }
-            if ((WORD)Random(0, 0x64) < m_cpuSkill * 1.0f && m_rfGauge > 500.0) {
+            if ((WORD)Random(0, 100) < m_cpuSkill * 1.0f && m_rfGauge > 500.0) {
                 m_command = kCmd236C;
                 return;
             }
-            if ((WORD)Random(0, 0x64) < m_cpuSkill * 2 && dx < 80.0 && m_gauge >= 0x3e8) {
+            if ((WORD)Random(0, 100) < m_cpuSkill * 2 && dx < 80.0 && m_gauge >= 1000) {
                 m_command = (WORD)Random(0, 3) + kCmd641236A;
                 return;
             }
-            if ((WORD)Random(0, 0x64) < m_cpuSkill * 1.0f && dx < 150.0 && m_gauge == 0xbb8) {
+            if ((WORD)Random(0, 100) < m_cpuSkill * 1.0f && dx < 150.0 && m_gauge == 3000) {
                 m_command = 0x5f;
                 return;
             }
         }
         if (dx < 220.0) {
-            if ((WORD)Random(0, 0x64) < m_cpuSkill * 3.0f && m_rfGauge > 500.0) {
+            if ((WORD)Random(0, 100) < m_cpuSkill * 3.0f && m_rfGauge > 500.0) {
                 m_command = kCmd236C;
                 return;
             }
-            if ((WORD)Random(0, 0x64) < m_cpuSkill * 1.0f && m_gauge == 0xbb8) {
+            if ((WORD)Random(0, 100) < m_cpuSkill * 1.0f && m_gauge == 3000) {
                 m_command = 0x5f;
                 return;
             }
         }
         if (dx > 220.0) {
-            if ((WORD)Random(0, 0x64) < m_cpuSkill * 1.0f && m_rfGauge > 500.0) {
+            if ((WORD)Random(0, 100) < m_cpuSkill * 1.0f && m_rfGauge > 500.0) {
                 m_command = (WORD)Random(0, 3) + kCmd236A;
                 return;
             }
-            if ((WORD)Random(0, 0x64) < m_cpuSkill * 1.0f && m_gauge == 0xbb8) {
+            if ((WORD)Random(0, 100) < m_cpuSkill * 1.0f && m_gauge == 3000) {
                 m_command = 0x5f;
                 return;
             }
         }
     }
     if (pattern == kRecoilGuardAir && frame == 1 && timer == 0) {
-        if ((WORD)Random(0, 0x64) < m_cpuSkill * 5.0f) {
+        if ((WORD)Random(0, 100) < m_cpuSkill * 5.0f) {
             m_cpuAction = 3;
             return;
         }
-        if (y - (*m_opponent)->y < 0.0 && y - (*m_opponent)->y > -40.0 && dx < 80.0 && (WORD)Random(0, 0x64) < m_cpuSkill * 5.0f) {
+        if (y - (*m_opponent)->y < 0.0 && y - (*m_opponent)->y > -40.0 && dx < 80.0 && (WORD)Random(0, 100) < m_cpuSkill * 5.0f) {
             m_pressA = 1;
             return;
         }
-        if (y - (*m_opponent)->y > -100.0 && y - (*m_opponent)->y < -50.0 && dx < 100.0 && (WORD)Random(0, 0x64) < m_cpuSkill * 5.0f) {
+        if (y - (*m_opponent)->y > -100.0 && y - (*m_opponent)->y < -50.0 && dx < 100.0 && (WORD)Random(0, 100) < m_cpuSkill * 5.0f) {
             m_pressB = 1;
             return;
         }
-        if (y - (*m_opponent)->y > -100.0 && y - (*m_opponent)->y < -50.0 && dx < 120.0 && (WORD)Random(0, 0x64) < m_cpuSkill * 5.0f) {
+        if (y - (*m_opponent)->y > -100.0 && y - (*m_opponent)->y < -50.0 && dx < 120.0 && (WORD)Random(0, 100) < m_cpuSkill * 5.0f) {
             m_pressC = 1;
             m_inputY = 0;
             return;
         }
-        if (dy < 50.0 && dx < 100.0 && (WORD)Random(0, 0x64) < m_cpuSkill * 2) {
+        if (dy < 50.0 && dx < 100.0 && (WORD)Random(0, 100) < m_cpuSkill * 2) {
             m_command = kCmd623C;
             return;
         }
     }
-    if (((*m_opponent)->pattern == kRecoilGuardStand || (*m_opponent)->pattern == kRecoilGuardCrouch || (*m_opponent)->pattern == kRecoilGuardAir) && y == 0.0 && (WORD)Random(0, 0x64) < 15.0f * m_cpuSkill && m_cpuAction != 2 && (*m_opponent)->m_freezeTime == 0) {
-        m_cpuRoll = (WORD)Random(0, 0x64);
+    if (((*m_opponent)->pattern == kRecoilGuardStand || (*m_opponent)->pattern == kRecoilGuardCrouch || (*m_opponent)->pattern == kRecoilGuardAir) && y == 0.0 && (WORD)Random(0, 100) < 15.0f * m_cpuSkill && m_cpuAction != 2 && (*m_opponent)->m_freezeTime == 0) {
+        m_cpuRoll = (WORD)Random(0, 100);
         if (m_cpuRoll < 3 && m_rfGauge > 500.0) {
             m_command = kCmd623C;
             return;
@@ -1182,31 +1182,31 @@ void CKano::CpuInput()
             m_command = kCmd236C;
             return;
         }
-        if (m_cpuRoll < 0x11 && m_cpuRoll > 0xc && m_gauge >= 0x3e8) {
+        if (m_cpuRoll < 17 && m_cpuRoll > 12 && m_gauge >= 1000) {
             m_command = (WORD)Random(0, 3) + kCmd641236A;
             return;
         }
-        if (m_cpuRoll > 0x55) {
+        if (m_cpuRoll > 85) {
             m_cpuAction = 2;
             return;
         }
     }
-    if (((*m_opponent)->pattern == kRecoilGuardStand || (*m_opponent)->pattern == kRecoilGuardCrouch || (*m_opponent)->pattern == kRecoilGuardAir) && y < 0.0 && (WORD)Random(0, 0x64) < 15.0f * m_cpuSkill && m_cpuAction != 2 && (*m_opponent)->m_freezeTime == 0) {
-        m_cpuRoll = (WORD)Random(0, 0x64);
+    if (((*m_opponent)->pattern == kRecoilGuardStand || (*m_opponent)->pattern == kRecoilGuardCrouch || (*m_opponent)->pattern == kRecoilGuardAir) && y < 0.0 && (WORD)Random(0, 100) < 15.0f * m_cpuSkill && m_cpuAction != 2 && (*m_opponent)->m_freezeTime == 0) {
+        m_cpuRoll = (WORD)Random(0, 100);
         if (m_cpuRoll < 3 && m_rfGauge > 500.0) {
             m_command = kCmd623C;
             return;
         }
-        if (m_cpuRoll < 0x11 && m_cpuRoll > 0xc && m_gauge >= 0x3e8) {
+        if (m_cpuRoll < 17 && m_cpuRoll > 12 && m_gauge >= 1000) {
             m_command = (WORD)Random(0, 3) + kCmd641236A;
             return;
         }
-        if (m_cpuRoll > 0x55) {
+        if (m_cpuRoll > 85) {
             m_cpuAction = 2;
             return;
         }
     }
-    if ((m_rfGauge > 500.0 || m_rfBlue > 0) && (WORD)Random(0, 0x64) < 8.0f * m_cpuSkill && (*m_opponent)->pattern > kLastHitReaction && (*m_opponent)->pattern < kAirRecoveryForward && (pattern == k5D || pattern == k236D || pattern == 0xfc || pattern == kUnused10e || pattern == 0x10f || pattern == 0x110)) {
+    if ((m_rfGauge > 500.0 || m_rfBlue > 0) && (WORD)Random(0, 100) < 8.0f * m_cpuSkill && (*m_opponent)->pattern > kLastHitReaction && (*m_opponent)->pattern < kAirRecoveryForward && (pattern == k5D || pattern == k236D || pattern == 0xfc || pattern == kUnused10e || pattern == 0x10f || pattern == 0x110)) {
         m_command = kCmd22C;
         return;
     }
@@ -1290,35 +1290,35 @@ void CKano::CpuInput()
         }
         return;
     }
-    if (m_attackResult > 1 && m_hitstop == 0 && (WORD)Random(0, 0x64) < m_cpuSkill * 25.0f && m_cpuAction != 1 && m_cpuAction != 2) {
-        m_cpuRoll = (WORD)Random(0, 0x3e8);
+    if (m_attackResult > 1 && m_hitstop == 0 && (WORD)Random(0, 100) < m_cpuSkill * 25.0f && m_cpuAction != 1 && m_cpuAction != 2) {
+        m_cpuRoll = (WORD)Random(0, 1000);
         if (pattern == k5A) {
-            if ((*m_opponent)->y < 0.0 && m_cpuRoll < 0x12c) {
+            if ((*m_opponent)->y < 0.0 && m_cpuRoll < 300) {
                 m_pressB = 1;
                 m_inputY = 0;
                 return;
             }
-            if (dx < 50.0 && m_cpuRoll < 0x190) {
+            if (dx < 50.0 && m_cpuRoll < 400) {
                 m_pressA = 1;
                 m_inputY = 0;
-                if (m_attackResult == 2 && (WORD)Random(0, 0x64) < 0x1e) {
+                if (m_attackResult == 2 && (WORD)Random(0, 100) < 30) {
                     m_pressC = 1;
                     m_inputY = 1;
                 }
                 return;
             }
-            if (dx < 125.0 && m_cpuRoll > 0x18f && m_cpuRoll < 0x2bc) {
+            if (dx < 125.0 && m_cpuRoll > 399 && m_cpuRoll < 700) {
                 m_pressB = 1;
                 m_inputY = 0;
                 return;
             }
-            if (m_cpuRoll > 0x3ca) {
+            if (m_cpuRoll > 970) {
                 m_cpuAction = 4;
                 m_inputY = -1;
                 m_inputX = (WORD)Random(0, 2) - 1;
                 return;
             }
-            if (m_cpuRoll > 0x2bb) {
+            if (m_cpuRoll > 699) {
                 m_cpuAction = 1;
                 if ((WORD)Random(0, 2) == 0) {
                     m_cpuAction = 6;
@@ -1330,40 +1330,40 @@ void CKano::CpuInput()
             }
         }
         if (pattern == k5BClose) {
-            if ((*m_opponent)->y < 0.0 && m_cpuRoll < 0x12c && m_attackResult == 3) {
+            if ((*m_opponent)->y < 0.0 && m_cpuRoll < 300 && m_attackResult == 3) {
                 m_command = (WORD)Random(0, 2) + kCmd623A;
                 return;
             }
-            if ((*m_opponent)->y < 0.0 && m_cpuRoll > 0x12b && m_cpuRoll < 0x140 && m_gauge >= 0x3e8) {
+            if ((*m_opponent)->y < 0.0 && m_cpuRoll > 299 && m_cpuRoll < 320 && m_gauge >= 1000) {
                 m_command = (WORD)Random(0, 3) + kCmd641236A;
                 return;
             }
-            if ((*m_opponent)->y < 0.0 && m_cpuRoll > 0x140 && m_cpuRoll < 0x258 && m_attackResult == 3) {
+            if ((*m_opponent)->y < 0.0 && m_cpuRoll > 320 && m_cpuRoll < 600 && m_attackResult == 3) {
                 m_inputX = facing;
                 m_inputY = -1;
                 return;
             }
-            if (m_cpuRoll < 0xc8) {
+            if (m_cpuRoll < 200) {
                 m_pressC = 1;
                 m_inputY = 1;
                 return;
             }
-            if (m_cpuRoll > 0xc8 && m_cpuRoll < 0x1c2 && dx < 90.0) {
+            if (m_cpuRoll > 200 && m_cpuRoll < 450 && dx < 90.0) {
                 m_pressB = 1;
                 m_inputY = 0;
                 return;
             }
-            if ((*m_opponent)->y < 0.0 && m_cpuRoll > 0x1c2 && m_cpuRoll < 0x2bc) {
+            if ((*m_opponent)->y < 0.0 && m_cpuRoll > 450 && m_cpuRoll < 700) {
                 m_pressC = 1;
                 return;
             }
-            if (m_cpuRoll > 0x384) {
+            if (m_cpuRoll > 900) {
                 m_cpuAction = 4;
                 m_inputY = -1;
                 m_inputX = (WORD)Random(0, 2) - 1;
                 return;
             }
-            if (m_cpuRoll > 0x2bc) {
+            if (m_cpuRoll > 700) {
                 m_cpuAction = 1;
                 if ((WORD)Random(0, 1) == 0) {
                     m_cpuAction = 6;
@@ -1375,20 +1375,20 @@ void CKano::CpuInput()
             }
         }
         if (pattern == k5BFar) {
-            if ((*m_opponent)->y < 0.0 && m_cpuRoll > 0x12b && m_cpuRoll < 0x140) {
+            if ((*m_opponent)->y < 0.0 && m_cpuRoll > 299 && m_cpuRoll < 320) {
                 m_command = kCmd236A;
                 return;
             }
-            if ((*m_opponent)->y < 0.0 && m_cpuRoll > 0x140 && m_cpuRoll < 0x258 && dx < 100.0) {
+            if ((*m_opponent)->y < 0.0 && m_cpuRoll > 320 && m_cpuRoll < 600 && dx < 100.0) {
                 m_pressC = 1;
                 return;
             }
-            if (m_cpuRoll < 0x1f4 && m_attackResult == 3 && dx < 80.0) {
+            if (m_cpuRoll < 500 && m_attackResult == 3 && dx < 80.0) {
                 m_pressC = 1;
                 m_inputY = 0;
                 return;
             }
-            if (m_cpuRoll > 0x2bc) {
+            if (m_cpuRoll > 700) {
                 m_cpuAction = 1;
                 if ((WORD)Random(0, 1) == 0) {
                     m_cpuAction = 6;
@@ -1400,75 +1400,75 @@ void CKano::CpuInput()
             }
         }
         if (pattern == k5C) {
-            if ((*m_opponent)->y < 0.0 && m_cpuRoll < 0x12c && m_attackResult == 3) {
+            if ((*m_opponent)->y < 0.0 && m_cpuRoll < 300 && m_attackResult == 3) {
                 m_command = kCmd236A;
                 return;
             }
-            if ((*m_opponent)->y < 0.0 && m_cpuRoll > 0x12b && m_cpuRoll < 0x140 && m_gauge >= 0x3e8 && dx < 90.0) {
+            if ((*m_opponent)->y < 0.0 && m_cpuRoll > 299 && m_cpuRoll < 320 && m_gauge >= 1000 && dx < 90.0) {
                 m_command = (WORD)Random(0, 3) + kCmd641236A;
                 return;
             }
-            if (m_cpuRoll > 0 && m_cpuRoll < 0xc8 && m_attackResult == 3) {
+            if (m_cpuRoll > 0 && m_cpuRoll < 200 && m_attackResult == 3) {
                 m_command = kCmd236A;
                 return;
             }
-            if (m_cpuRoll > 0xc8 && m_cpuRoll < 0xfa) {
+            if (m_cpuRoll > 200 && m_cpuRoll < 250) {
                 m_command = (WORD)Random(0, 3) + kCmd214A;
                 return;
             }
-            if (m_cpuRoll > 0x15e && m_cpuRoll < 0x190 && m_rfGauge > 500.0) {
+            if (m_cpuRoll > 350 && m_cpuRoll < 400 && m_rfGauge > 500.0) {
                 m_command = kCmd22C;
                 return;
             }
-            if (m_cpuRoll > 0x190 && m_cpuRoll < 0x1ae && m_attackResult == 3 && m_gauge == 0xbb8) {
+            if (m_cpuRoll > 400 && m_cpuRoll < 430 && m_attackResult == 3 && m_gauge == 3000) {
                 m_command = 0x5f;
                 return;
             }
-            if (m_cpuRoll > 0x1ae && m_cpuRoll < 0x21c && m_attackResult != 3) {
+            if (m_cpuRoll > 430 && m_cpuRoll < 540 && m_attackResult != 3) {
                 m_command = kCmd412A;
                 if (dx > 120.0) {
                     m_command = kCmd412B;
                 }
                 return;
             }
-            if (m_cpuRoll > 0x38e && m_attackResult == 3) {
+            if (m_cpuRoll > 910 && m_attackResult == 3) {
                 m_cpuAction = 4;
                 m_inputY = -1;
                 m_inputX = (WORD)Random(0, 2) - 1;
                 return;
             }
-            if (m_cpuRoll > 0x289) {
+            if (m_cpuRoll > 649) {
                 m_cpuAction = 1;
                 return;
             }
         }
         if (pattern == k2A) {
-            if ((*m_opponent)->y < 0.0 && m_cpuRoll < 0x12c) {
+            if ((*m_opponent)->y < 0.0 && m_cpuRoll < 300) {
                 m_pressB = 1;
                 m_inputY = 1;
                 return;
             }
-            if (dx < 50.0 && m_cpuRoll < 0x190) {
+            if (dx < 50.0 && m_cpuRoll < 400) {
                 m_pressA = 1;
                 m_inputY = 0;
-                if (m_attackResult == 2 && (WORD)Random(0, 0x64) < 0x14) {
+                if (m_attackResult == 2 && (WORD)Random(0, 100) < 20) {
                     m_pressC = 1;
                     m_inputY = 1;
                 }
                 return;
             }
-            if (dx < 135.0 && m_cpuRoll < 0x258) {
+            if (dx < 135.0 && m_cpuRoll < 600) {
                 m_pressB = 1;
                 m_inputY = 0;
                 return;
             }
-            if (m_cpuRoll > 0x3b6) {
+            if (m_cpuRoll > 950) {
                 m_cpuAction = 4;
                 m_inputY = -1;
                 m_inputX = (WORD)Random(0, 2) - 1;
                 return;
             }
-            if (m_cpuRoll > 0x2bb) {
+            if (m_cpuRoll > 699) {
                 m_cpuAction = 1;
                 if ((WORD)Random(0, 1) == 0) {
                     m_cpuAction = 6;
@@ -1481,31 +1481,31 @@ void CKano::CpuInput()
             }
         }
         if (pattern == k2B) {
-            if ((*m_opponent)->y < 0.0 && m_cpuRoll > 0x140 && m_cpuRoll < 0x258 && dx < 100.0) {
+            if ((*m_opponent)->y < 0.0 && m_cpuRoll > 320 && m_cpuRoll < 600 && dx < 100.0) {
                 m_pressC = 1;
                 return;
             }
-            if (m_cpuRoll < 0x64) {
+            if (m_cpuRoll < 100) {
                 m_pressC = 1;
                 m_inputY = 1;
                 return;
             }
-            if (m_cpuRoll > 0x64 && m_cpuRoll < 0x12c && dx < 100.0) {
+            if (m_cpuRoll > 100 && m_cpuRoll < 300 && dx < 100.0) {
                 m_pressB = 1;
                 m_inputY = 0;
                 return;
             }
-            if ((*m_opponent)->y < 0.0 && m_cpuRoll > 0x12c && m_cpuRoll < 0x258) {
+            if ((*m_opponent)->y < 0.0 && m_cpuRoll > 300 && m_cpuRoll < 600) {
                 m_pressC = 1;
                 return;
             }
-            if (m_cpuRoll > 0x384) {
+            if (m_cpuRoll > 900) {
                 m_cpuAction = 4;
                 m_inputY = -1;
                 m_inputX = (WORD)Random(0, 2) - 1;
                 return;
             }
-            if (m_cpuRoll > 0x2bc) {
+            if (m_cpuRoll > 700) {
                 m_cpuAction = 1;
                 if ((WORD)Random(0, 1) == 0) {
                     m_cpuAction = 6;
@@ -1517,53 +1517,53 @@ void CKano::CpuInput()
             }
         }
         if (pattern == k2C) {
-            if ((*m_opponent)->y < 0.0 && m_cpuRoll < 0x12c && m_attackResult == 3) {
+            if ((*m_opponent)->y < 0.0 && m_cpuRoll < 300 && m_attackResult == 3) {
                 m_command = kCmd236A;
                 return;
             }
-            if ((*m_opponent)->y < 0.0 && m_cpuRoll > 0x12b && m_cpuRoll < 0x140 && m_gauge >= 0x3e8 && dx < 90.0) {
+            if ((*m_opponent)->y < 0.0 && m_cpuRoll > 299 && m_cpuRoll < 320 && m_gauge >= 1000 && dx < 90.0) {
                 m_command = (WORD)Random(0, 3) + kCmd641236A;
                 return;
             }
-            if (m_cpuRoll > 0 && m_cpuRoll < 0xc8 && m_attackResult == 3) {
+            if (m_cpuRoll > 0 && m_cpuRoll < 200 && m_attackResult == 3) {
                 m_command = kCmd236A;
                 return;
             }
-            if (m_cpuRoll > 0xc8 && m_cpuRoll < 0xfa) {
+            if (m_cpuRoll > 200 && m_cpuRoll < 250) {
                 m_command = (WORD)Random(0, 3) + kCmd214A;
                 return;
             }
-            if (m_cpuRoll > 0x15e && m_cpuRoll < 0x190 && m_rfGauge > 500.0) {
+            if (m_cpuRoll > 350 && m_cpuRoll < 400 && m_rfGauge > 500.0) {
                 m_command = kCmd22C;
                 return;
             }
-            if (m_cpuRoll > 0x1ae && m_cpuRoll < 0x21c && m_attackResult != 3) {
+            if (m_cpuRoll > 430 && m_cpuRoll < 540 && m_attackResult != 3) {
                 m_command = kCmd412A;
                 if (dx > 120.0) {
                     m_command = kCmd412B;
                 }
                 return;
             }
-            if (m_cpuRoll > 0x289) {
+            if (m_cpuRoll > 649) {
                 m_cpuAction = 1;
                 return;
             }
         }
         if (pattern == kJumpA) {
-            if ((*m_opponent)->y < 0.0 && m_cpuRoll < 0x12c) {
+            if ((*m_opponent)->y < 0.0 && m_cpuRoll < 300) {
                 m_pressB = 1;
                 return;
             }
-            if (dx < 60.0 && m_cpuRoll < 0x190) {
+            if (dx < 60.0 && m_cpuRoll < 400) {
                 m_pressA = 1;
                 return;
             }
-            if (dx < 125.0 && m_cpuRoll > 0x18f && m_cpuRoll < 0x2bc) {
+            if (dx < 125.0 && m_cpuRoll > 399 && m_cpuRoll < 700) {
                 m_pressC = 1;
                 m_inputY = 0;
                 return;
             }
-            if (m_cpuRoll > 0x2bb) {
+            if (m_cpuRoll > 699) {
                 m_cpuAction = 1;
                 if ((WORD)Random(0, 4) == 0) {
                     m_cpuAction = 3;
@@ -1572,47 +1572,47 @@ void CKano::CpuInput()
             }
         }
         if (pattern == kJumpB) {
-            if (m_cpuRoll > 0x14 && m_cpuRoll < 0x3c && m_attackResult == 3 && (*m_opponent)->y < 0.0) {
+            if (m_cpuRoll > 20 && m_cpuRoll < 60 && m_attackResult == 3 && (*m_opponent)->y < 0.0) {
                 m_command = kCmd236A;
                 return;
             }
-            if (m_cpuRoll > 0x50 && m_cpuRoll < 0x12c) {
+            if (m_cpuRoll > 80 && m_cpuRoll < 300) {
                 m_pressC = 1;
                 return;
             }
-            if (m_cpuRoll > 0x3b6) {
+            if (m_cpuRoll > 950) {
                 m_inputX = (WORD)Random(0, 2) - 1;
                 return;
             }
-            if (m_cpuRoll > 0x289) {
+            if (m_cpuRoll > 649) {
                 m_cpuAction = 3;
                 return;
             }
         }
         if (pattern == kJumpC) {
-            if (m_cpuRoll > 0x3b6) {
+            if (m_cpuRoll > 950) {
                 m_inputX = (WORD)Random(0, 2) - 1;
                 return;
             }
-            if (m_cpuRoll > 0x289) {
+            if (m_cpuRoll > 649) {
                 m_cpuAction = 3;
                 return;
             }
         }
         if (pattern == kDashB) {
-            if ((*m_opponent)->y < 0.0 && m_cpuRoll < 0x12c && m_attackResult == 3) {
+            if ((*m_opponent)->y < 0.0 && m_cpuRoll < 300 && m_attackResult == 3) {
                 m_command = (WORD)Random(0, 2) + kCmd623A;
                 return;
             }
-            if (m_cpuRoll > 0xc8 && m_cpuRoll < 0xdc && dx < 90.0 && m_attackResult == 3 && m_gauge >= 0x3e8) {
+            if (m_cpuRoll > 200 && m_cpuRoll < 220 && dx < 90.0 && m_attackResult == 3 && m_gauge >= 1000) {
                 m_command = (WORD)Random(0, 3) + kCmd641236A;
                 return;
             }
-            if (m_cpuRoll > 0x15e && m_cpuRoll < 0x190 && m_rfGauge > 500.0) {
+            if (m_cpuRoll > 350 && m_cpuRoll < 400 && m_rfGauge > 500.0) {
                 m_command = kCmd22C;
                 return;
             }
-            if (m_cpuRoll > 0x289 && (WORD)Random(0, 2) == 0) {
+            if (m_cpuRoll > 649 && (WORD)Random(0, 2) == 0) {
                 m_cpuAction = 0xc;
                 if (dx > 110.0) {
                     m_cpuAction = 8;
@@ -1620,51 +1620,51 @@ void CKano::CpuInput()
             }
         }
         if (pattern == kDashC) {
-            if ((*m_opponent)->y < 0.0 && m_cpuRoll < 0x12c && m_attackResult == 3) {
+            if ((*m_opponent)->y < 0.0 && m_cpuRoll < 300 && m_attackResult == 3) {
                 m_command = kCmd236A;
                 return;
             }
-            if ((*m_opponent)->y < 0.0 && m_cpuRoll > 0x12b && m_cpuRoll < 0x140 && m_gauge >= 0x3e8 && dx < 90.0) {
+            if ((*m_opponent)->y < 0.0 && m_cpuRoll > 299 && m_cpuRoll < 320 && m_gauge >= 1000 && dx < 90.0) {
                 m_command = (WORD)Random(0, 3) + kCmd641236A;
                 return;
             }
-            if (m_cpuRoll > 0 && m_cpuRoll < 0xc8 && m_attackResult == 3) {
+            if (m_cpuRoll > 0 && m_cpuRoll < 200 && m_attackResult == 3) {
                 m_command = kCmd236A;
                 return;
             }
-            if (m_cpuRoll > 0xc8 && m_cpuRoll < 0xfa) {
+            if (m_cpuRoll > 200 && m_cpuRoll < 250) {
                 m_command = (WORD)Random(0, 3) + kCmd214A;
                 return;
             }
-            if (m_cpuRoll > 0x15e && m_cpuRoll < 0x190 && m_rfGauge > 500.0) {
+            if (m_cpuRoll > 350 && m_cpuRoll < 400 && m_rfGauge > 500.0) {
                 m_command = kCmd22C;
                 return;
             }
-            if (m_cpuRoll > 0x190 && m_cpuRoll < 0x1ae && m_attackResult == 3 && m_gauge == 0xbb8) {
+            if (m_cpuRoll > 400 && m_cpuRoll < 430 && m_attackResult == 3 && m_gauge == 3000) {
                 m_command = 0x5f;
                 return;
             }
-            if (m_cpuRoll > 0x1ae && m_cpuRoll < 0x21c && m_attackResult != 3) {
+            if (m_cpuRoll > 430 && m_cpuRoll < 540 && m_attackResult != 3) {
                 m_command = kCmd412A;
                 if (dx > 120.0) {
                     m_command = kCmd412B;
                 }
                 return;
             }
-            if (m_cpuRoll > 0x38e && m_attackResult == 3) {
+            if (m_cpuRoll > 910 && m_attackResult == 3) {
                 m_cpuAction = 4;
                 m_inputY = -1;
                 m_inputX = (WORD)Random(0, 2) - 1;
                 return;
             }
-            if (m_cpuRoll > 0x289) {
+            if (m_cpuRoll > 649) {
                 m_cpuAction = 1;
                 return;
             }
         }
     }
-    if ((WORD)Random(0, 0x64) < 25.0f * m_cpuSkill) {
-        m_cpuRoll = (WORD)Random(0, 0x3e8);
+    if ((WORD)Random(0, 100) < 25.0f * m_cpuSkill) {
+        m_cpuRoll = (WORD)Random(0, 1000);
         if (y == 0.0) {
             if ((*m_opponent)->y == 0.0 && (*m_opponent)->pattern != kLyingDown) {
                 if (dx < 40.0 && (*m_opponent)->y == 0.0 && m_cpuRoll < 5) {
@@ -1673,85 +1673,85 @@ void CKano::CpuInput()
                     m_inputY = 0;
                     return;
                 }
-                if (dx < 50.0 && m_cpuRoll < 0x17) {
+                if (dx < 50.0 && m_cpuRoll < 23) {
                     m_pressA = 1;
                     m_inputY = 1;
                     return;
                 }
-                if (dx < 75.0 && m_cpuRoll < 0x1e) {
+                if (dx < 75.0 && m_cpuRoll < 30) {
                     m_pressA = 1;
                     m_inputY = 0;
                     return;
                 }
-                if (dx < 80.0 && m_cpuRoll < 0x28 && m_cpuRoll > 0x1e) {
+                if (dx < 80.0 && m_cpuRoll < 40 && m_cpuRoll > 30) {
                     m_pressB = 1;
                     m_inputY = 1;
                     return;
                 }
-                if (dx < 80.0 && m_cpuRoll < 0x34 && m_cpuRoll > 0x28 || dx > 80.0 && dx < 130.0 && m_cpuRoll < 0x50 && m_cpuRoll > 0x34) {
+                if (dx < 80.0 && m_cpuRoll < 52 && m_cpuRoll > 40 || dx > 80.0 && dx < 130.0 && m_cpuRoll < 80 && m_cpuRoll > 52) {
                     m_pressB = 1;
                     m_inputY = 0;
                     return;
                 }
-                if (dx > 80.0 && dx < 140.0 && m_cpuRoll < 0x64 && m_cpuRoll > 0x50) {
+                if (dx > 80.0 && dx < 140.0 && m_cpuRoll < 100 && m_cpuRoll > 80) {
                     m_cpuAction = 8;
                     return;
                 }
-                if (dx > 70.0 && dx < 120.0 && m_cpuRoll < 0x78 && m_cpuRoll > 0x64) {
+                if (dx > 70.0 && dx < 120.0 && m_cpuRoll < 120 && m_cpuRoll > 100) {
                     m_cpuAction = 8;
                     return;
                 }
-                if (dx < 90.0 && dx > 70.0 && m_cpuRoll < 0x82 && m_cpuRoll > 0x78) {
+                if (dx < 90.0 && dx > 70.0 && m_cpuRoll < 130 && m_cpuRoll > 120) {
                     m_pressC = 1;
                     m_inputY = 1;
                     return;
                 }
-                if (dx < 120.0 && dx > 70.0 && m_cpuRoll < 0x91 && m_cpuRoll > 0x82) {
+                if (dx < 120.0 && dx > 70.0 && m_cpuRoll < 145 && m_cpuRoll > 130) {
                     m_pressC = 1;
                     m_inputY = 0;
                     return;
                 }
-                if (dx > 100.0 && dx < 140.0 && m_cpuRoll < 0x98 && m_cpuRoll > 0x91) {
+                if (dx > 100.0 && dx < 140.0 && m_cpuRoll < 152 && m_cpuRoll > 145) {
                     m_cpuAction = 0xa;
                     return;
                 }
-                if (dx < 80.0 && m_cpuRoll < 0xa5 && m_cpuRoll > 0x91 && m_rfGauge > 500.0 && (*m_opponent)->pattern > kLastSharedAction) {
+                if (dx < 80.0 && m_cpuRoll < 165 && m_cpuRoll > 145 && m_rfGauge > 500.0 && (*m_opponent)->pattern > kLastSharedAction) {
                     m_command = kCmd623C;
                     return;
                 }
-                if (dx < 80.0 && m_cpuRoll < 0xaa && m_cpuRoll > 0xa5 && m_gauge >= 0x3e8 && (*m_opponent)->pattern > kLastSharedAction) {
+                if (dx < 80.0 && m_cpuRoll < 170 && m_cpuRoll > 165 && m_gauge >= 1000 && (*m_opponent)->pattern > kLastSharedAction) {
                     m_command = (WORD)Random(0, 3) + kCmd641236A;
                     return;
                 }
-                if (dx > 200.0 && m_cpuRoll < 0xaa && m_cpuRoll > 0xa5 && m_gauge >= 0x3e8 && (*m_opponent)->pattern > kLastSharedAction) {
-                    m_command = (WORD)Random(0, 3) + 0x82;
+                if (dx > 200.0 && m_cpuRoll < 170 && m_cpuRoll > 165 && m_gauge >= 1000 && (*m_opponent)->pattern > kLastSharedAction) {
+                    m_command = (WORD)Random(0, 3) + 130;
                     return;
                 }
-                if (dx > 200.0 && m_cpuRoll < 0xbe && m_cpuRoll > 0xaa) {
+                if (dx > 200.0 && m_cpuRoll < 190 && m_cpuRoll > 170) {
                     m_command = (WORD)Random(0, 3) + kCmd236A;
                     return;
                 }
-                if (dx > 80.0 && dx < 120.0 && m_cpuRoll < 0xd2 && m_cpuRoll > 0xbe) {
+                if (dx > 80.0 && dx < 120.0 && m_cpuRoll < 210 && m_cpuRoll > 190) {
                     m_command = kCmd412A;
                     return;
                 }
-                if (dx > 140.0 && dx < 180.0 && m_cpuRoll < 0xd2 && m_cpuRoll > 0xbe) {
+                if (dx > 140.0 && dx < 180.0 && m_cpuRoll < 210 && m_cpuRoll > 190) {
                     m_command = kCmd412B;
                     return;
                 }
-                if (dx > 200.0 && dx < 240.0 && m_cpuRoll < 0xd2 && m_cpuRoll > 0xbe) {
+                if (dx > 200.0 && dx < 240.0 && m_cpuRoll < 210 && m_cpuRoll > 190) {
                     m_command = kCmd412C;
                     return;
                 }
             }
             if ((*m_opponent)->y < 0.0) {
                 if ((*m_opponent)->vy < 0.0) {
-                    if (dx < 80.0 && dy < 120.0 && m_cpuRoll < 0xa) {
+                    if (dx < 80.0 && dy < 120.0 && m_cpuRoll < 10) {
                         m_inputY = -1;
                         m_inputX = -facing;
                         return;
                     }
-                    if (dx < 80.0 && m_cpuRoll < 0xf && m_gauge >= 0x3e8) {
+                    if (dx < 80.0 && m_cpuRoll < 15 && m_gauge >= 1000) {
                         m_command = (WORD)Random(0, 3) + kCmd641236A;
                         return;
                     }
@@ -1761,22 +1761,22 @@ void CKano::CpuInput()
                         m_command = kCmd623C;
                         return;
                     }
-                    if (dx < 90.0 && dy < 140.0 && dy > 100.0 && m_cpuRoll < 0x23 && m_cpuRoll > 0xa) {
+                    if (dx < 90.0 && dy < 140.0 && dy > 100.0 && m_cpuRoll < 35 && m_cpuRoll > 10) {
                         m_pressB = 1;
                         m_inputY = 0;
                         return;
                     }
-                    if (dx > 100.0 && dx < 140.0 && dy < 180.0 && dy > 140.0 && m_cpuRoll < 0x3c && m_cpuRoll > 0x23) {
+                    if (dx > 100.0 && dx < 140.0 && dy < 180.0 && dy > 140.0 && m_cpuRoll < 60 && m_cpuRoll > 35) {
                         m_pressC = 1;
                         m_inputY = 0;
                         return;
                     }
-                    if (dx > 100.0 && dx < 140.0 && dy < 140.0 && dy > 100.0 && m_cpuRoll < 0x50 && m_cpuRoll > 0x3c) {
+                    if (dx > 100.0 && dx < 140.0 && dy < 140.0 && dy > 100.0 && m_cpuRoll < 80 && m_cpuRoll > 60) {
                         m_pressB = 1;
                         m_inputY = 0;
                         return;
                     }
-                    if (dx < 80.0 && m_cpuRoll < 0x6e && m_cpuRoll > 0x50 && (*m_opponent)->y < -50.0 && m_gauge >= 0x3e8) {
+                    if (dx < 80.0 && m_cpuRoll < 110 && m_cpuRoll > 80 && (*m_opponent)->y < -50.0 && m_gauge >= 1000) {
                         m_command = (WORD)Random(0, 3) + kCmd641236A;
                         return;
                     }
@@ -1785,66 +1785,66 @@ void CKano::CpuInput()
         }
         if (y < 0.0 && m_cpuAction != 3) {
             if ((*m_opponent)->y == 0.0) {
-                if (dx < 80.0 && dy < 100.0 && m_cpuRoll < 0x32) {
+                if (dx < 80.0 && dy < 100.0 && m_cpuRoll < 50) {
                     m_pressA = 1;
                     return;
                 }
-                if (dx > 60.0 && dx < 120.0 && dy > 90.0 && dy < 120.0 && (*m_opponent)->y < y && m_cpuRoll > 0x32 && m_cpuRoll < 0x78) {
+                if (dx > 60.0 && dx < 120.0 && dy > 90.0 && dy < 120.0 && (*m_opponent)->y < y && m_cpuRoll > 50 && m_cpuRoll < 120) {
                     m_pressB = 1;
                     return;
                 }
-                if (dx > 80.0 && dx < 140.0 && dy > 100.0 && dy < 180.0 && m_cpuRoll > 0x78 && m_cpuRoll < 0xaa) {
+                if (dx > 80.0 && dx < 140.0 && dy > 100.0 && dy < 180.0 && m_cpuRoll > 120 && m_cpuRoll < 170) {
                     m_pressC = 1;
                     return;
                 }
-                if ((WORD)Random(0, 0x140) < dx - 100.0 && dy < 90.0 && m_cpuRoll > 0xaa && m_cpuRoll < 0xdc) {
+                if ((WORD)Random(0, 320) < dx - 100.0 && dy < 90.0 && m_cpuRoll > 170 && m_cpuRoll < 220) {
                     m_command = (WORD)Random(0, 3) + kCmd236A;
                     return;
                 }
-                if (dx > 100.0 && m_cpuRoll > 0xf0 && m_cpuRoll < 0x14a && dy + 40.0 > dx && dy - 40.0 < dx) {
+                if (dx > 100.0 && m_cpuRoll > 240 && m_cpuRoll < 330 && dy + 40.0 > dx && dy - 40.0 < dx) {
                     m_command = (WORD)Random(0, 3) + kCmd412A;
                     return;
                 }
             }
             if ((*m_opponent)->y < 0.0) {
-                if (dx < 80.0 && dy < 100.0 && m_cpuRoll < 0x14) {
+                if (dx < 80.0 && dy < 100.0 && m_cpuRoll < 20) {
                     m_pressA = 1;
                     return;
                 }
-                if (dx > 60.0 && dx < 120.0 && dy > 90.0 && dy < 120.0 && (*m_opponent)->y < y && m_cpuRoll > 0x14 && m_cpuRoll < 0x28) {
+                if (dx > 60.0 && dx < 120.0 && dy > 90.0 && dy < 120.0 && (*m_opponent)->y < y && m_cpuRoll > 20 && m_cpuRoll < 40) {
                     m_pressB = 1;
                     return;
                 }
-                if (dx > 80.0 && dx < 140.0 && dy > 100.0 && dy < 180.0 && m_cpuRoll > 0x28 && m_cpuRoll < 0x32) {
+                if (dx > 80.0 && dx < 140.0 && dy > 100.0 && dy < 180.0 && m_cpuRoll > 40 && m_cpuRoll < 50) {
                     m_pressC = 1;
                     return;
                 }
-                if ((WORD)Random(0, 0x140) < dx - 100.0 && dy < 180.0 && m_cpuRoll > 0xaa && m_cpuRoll < 0xf0) {
+                if ((WORD)Random(0, 320) < dx - 100.0 && dy < 180.0 && m_cpuRoll > 170 && m_cpuRoll < 240) {
                     m_command = (WORD)Random(0, 3) + kCmd236A;
                     return;
                 }
             }
         }
     }
-    if (pattern < kFirstHitReaction && ((*m_opponent)->pattern > kLastHitReaction && (*m_opponent)->pattern < kGuardAir || (*m_opponent)->pattern > kLastFreeAction && (*m_opponent)->pattern < kHitAir) && y == 0.0 && (WORD)Random(0, 0x64) < 3.0f * m_cpuSkill) {
+    if (pattern < kFirstHitReaction && ((*m_opponent)->pattern > kLastHitReaction && (*m_opponent)->pattern < kGuardAir || (*m_opponent)->pattern > kLastFreeAction && (*m_opponent)->pattern < kHitAir) && y == 0.0 && (WORD)Random(0, 100) < 3.0f * m_cpuSkill) {
         m_command = facing == 1;
         return;
     }
-    if (pattern < kFirstHitReaction && (*m_opponent)->pattern < kFirstHitReaction && dx > 60.0 && dx < 140.0 && (WORD)Random(0, 0x64) < 2.0f * m_cpuSkill && x > 120.0 && x < 520.0) {
+    if (pattern < kFirstHitReaction && (*m_opponent)->pattern < kFirstHitReaction && dx > 60.0 && dx < 140.0 && (WORD)Random(0, 100) < 2.0f * m_cpuSkill && x > 120.0 && x < 520.0) {
         m_command = -((facing == 1) - 1);
         return;
     }
-    if ((WORD)Random(0, 0x3e8) < 2) {
+    if ((WORD)Random(0, 1000) < 2) {
         m_cpuAction = 4;
         return;
     }
-    if ((WORD)Random(0, 0x64) < 2) {
-        if ((WORD)Random(0, 0x64) < 8.0f * m_cpuSkill) {
+    if ((WORD)Random(0, 100) < 2) {
+        if ((WORD)Random(0, 100) < 8.0f * m_cpuSkill) {
             m_cpuAction = 3;
         } else {
             m_cpuAction = 0;
         }
-        if (dx > 180.0 && y == 0.0 && (WORD)Random(0, 0x64) < 2) {
+        if (dx > 180.0 && y == 0.0 && (WORD)Random(0, 100) < 2) {
             m_inputX = 0;
             m_inputY = -1;
             return;
@@ -1856,39 +1856,39 @@ void CKano::CpuInput()
         }
     }
     if (m_cpuWalkRight > 0) {
-        if ((char)AtScreenEdge() != 0 && m_cpuWalkRight > 0xf) {
-            m_cpuWalkRight = 0xf;
+        if ((char)AtScreenEdge() != 0 && m_cpuWalkRight > 15) {
+            m_cpuWalkRight = 15;
         }
         m_inputX = 1;
         return;
     }
     if (m_cpuWalkLeft > 0) {
-        if ((char)AtScreenEdge() != 0 && m_cpuWalkLeft > 0xf) {
-            m_cpuWalkLeft = 0xf;
+        if ((char)AtScreenEdge() != 0 && m_cpuWalkLeft > 15) {
+            m_cpuWalkLeft = 15;
         }
         m_inputX = -1;
         return;
     }
-    if ((WORD)Random(0, 0x64) < 0x32 && dx < 120.0) {
+    if ((WORD)Random(0, 100) < 50 && dx < 120.0) {
         if (facing == 1) {
-            m_cpuWalkLeft = (WORD)Random(0, 0xc8) + 0x2d;
+            m_cpuWalkLeft = (WORD)Random(0, 200) + 45;
         } else {
-            m_cpuWalkRight = (WORD)Random(0, 0xc8) + 0x2d;
+            m_cpuWalkRight = (WORD)Random(0, 200) + 45;
         }
     }
-    if ((WORD)Random(0, 0x64) < 0x1e) {
+    if ((WORD)Random(0, 100) < 30) {
         if (facing == 1) {
-            m_cpuWalkRight = (WORD)Random(0, 0xc8) + 0x1e;
+            m_cpuWalkRight = (WORD)Random(0, 200) + 30;
         } else {
-            m_cpuWalkLeft = (WORD)Random(0, 0xc8) + 0x1e;
+            m_cpuWalkLeft = (WORD)Random(0, 200) + 30;
         }
         return;
     }
     if (facing == -1) {
-        m_cpuWalkRight = (WORD)Random(0, 0xc8) + 0x1e;
+        m_cpuWalkRight = (WORD)Random(0, 200) + 30;
         return;
     }
-    m_cpuWalkLeft = (WORD)Random(0, 0xc8) + 0x1e;
+    m_cpuWalkLeft = (WORD)Random(0, 200) + 30;
 }
 
 void CKano::UpdateObjects()
@@ -1966,7 +1966,7 @@ void CKano::UpdateObjects()
                     m_objects[slot].attackResult = 0;
                     if (m_objects[slot].frame == 1) {
                         effect.type = 0x191;
-                        effect.x = (double)((int)m_objects[slot].x + m_objects[slot].facing * 0x28);
+                        effect.x = (double)((int)m_objects[slot].x + m_objects[slot].facing * 40);
                         effect.y = (double)(int)m_objects[slot].y;
                         effect.scale = 2;
                         effect.layer = 1;
@@ -2021,7 +2021,7 @@ void CKano::UpdateObjects()
                     m_objects[slot].timer = 0;
                     m_objects[slot].frame++;
                     m_objects[slot].attackResult = 0;
-                    if (m_objects[slot].frame == 0x10) {
+                    if (m_objects[slot].frame == 16) {
                         if (m_objectVar1[slot] < 4) {
                             m_objects[slot].frame = 0;
                             m_objectVar1[slot]++;
@@ -2137,7 +2137,7 @@ void CKano::UpdateObjects()
                 if (m_objectVar1[slot] == 0) {
                     m_objects[slot].hitsLeft = 1;
                     m_objectVar1[slot]++;
-                    m_playVoice = 0xa;
+                    m_playVoice = 10;
                     m_objects[slot].vx = 3.5;
                     m_objects[slot].vy = 2.0;
                 }
@@ -2182,8 +2182,8 @@ void CKano::UpdateObjects()
                     }
                     if (m_objectVar1[slot] == 1) {
                         effect.type = 0x1a5;
-                        effect.x = (double)((int)m_objects[slot].x + facing * 0x32);
-                        effect.y = (double)((int)m_objects[slot].y - 0x28);
+                        effect.x = (double)((int)m_objects[slot].x + facing * 50);
+                        effect.y = (double)((int)m_objects[slot].y - 40);
                         effect.scale = 2;
                         effect.layer = 1;
                         effect.facing = facing;
@@ -2191,8 +2191,8 @@ void CKano::UpdateObjects()
                     }
                     if (m_objectVar1[slot] == 2) {
                         effect.type = 0x1a5;
-                        effect.x = (double)((int)m_objects[slot].x - facing * 0x1e);
-                        effect.y = (double)((int)m_objects[slot].y - 0x46);
+                        effect.x = (double)((int)m_objects[slot].x - facing * 30);
+                        effect.y = (double)((int)m_objects[slot].y - 70);
                         effect.scale = 2;
                         effect.layer = 1;
                         effect.facing = facing;
@@ -2200,8 +2200,8 @@ void CKano::UpdateObjects()
                     }
                     if (m_objectVar1[slot] == 3) {
                         effect.type = 0x1a5;
-                        effect.x = (double)((int)m_objects[slot].x + facing * 0x14);
-                        effect.y = (double)((int)m_objects[slot].y + 0xa);
+                        effect.x = (double)((int)m_objects[slot].x + facing * 20);
+                        effect.y = (double)((int)m_objects[slot].y + 10);
                         effect.scale = 2;
                         effect.layer = 1;
                         effect.facing = facing;
@@ -2209,8 +2209,8 @@ void CKano::UpdateObjects()
                     }
                     if (m_objectVar1[slot] == 4) {
                         effect.type = 0x1a5;
-                        effect.x = (double)((int)m_objects[slot].x - facing * 0xa);
-                        effect.y = (double)((int)m_objects[slot].y - 0x14);
+                        effect.x = (double)((int)m_objects[slot].x - facing * 10);
+                        effect.y = (double)((int)m_objects[slot].y - 20);
                         effect.scale = 2;
                         effect.layer = 1;
                         effect.facing = facing;
@@ -2218,7 +2218,7 @@ void CKano::UpdateObjects()
                     }
                     if (m_objectVar1[slot] == 5) {
                         effect.type = 0x1a5;
-                        effect.x = (double)((int)m_objects[slot].x + facing * 0x1e);
+                        effect.x = (double)((int)m_objects[slot].x + facing * 30);
                         effect.y = (double)(int)m_objects[slot].y;
                         effect.scale = 2;
                         effect.layer = 1;
@@ -2227,13 +2227,13 @@ void CKano::UpdateObjects()
                     }
                     m_objectVar2[slot] = (WORD)Random(0, 3);
                     if (m_objectVar2[slot] == 0) {
-                        m_playVoice = 0xb;
+                        m_playVoice = 11;
                     }
                     if (m_objectVar2[slot] == 1) {
-                        m_playVoice = 0xc;
+                        m_playVoice = 12;
                     }
                     if (m_objectVar2[slot] == 2) {
-                        m_playVoice = 0xd;
+                        m_playVoice = 13;
                     }
                 }
                 m_objects[slot].timer++;
@@ -2258,7 +2258,7 @@ void CKano::UpdateObjects()
                     m_objects[slot].vx = -2.5;
                     m_objects[slot].vy = -1.5;
                 }
-                if (m_objects[slot].frame < 0xe) {
+                if (m_objects[slot].frame < 14) {
                     m_objects[slot].vx += 0.025;
                     if (m_objects[slot].y < (*m_opponent)->y - 50.0) {
                         m_objects[slot].vy += 0.035;
@@ -2284,8 +2284,8 @@ void CKano::UpdateObjects()
                         m_objectVar2[slot] = 6;
                     }
                 }
-                if ((m_objects[slot].attackResult > 0 && m_objects[slot].attackResult != 6 || m_objects[slot].y > 0.0) && m_objects[slot].frame < 0xe) {
-                    m_objects[slot].frame = 0xe;
+                if ((m_objects[slot].attackResult > 0 && m_objects[slot].attackResult != 6 || m_objects[slot].y > 0.0) && m_objects[slot].frame < 14) {
+                    m_objects[slot].frame = 14;
                     m_objects[slot].timer = 0;
                     m_objects[slot].vx = 0.0;
                     m_objects[slot].vy = 0.0;
@@ -2299,7 +2299,7 @@ void CKano::UpdateObjects()
                     m_objects[slot].timer = 0;
                     m_objects[slot].frame++;
                     m_objects[slot].attackResult = 0;
-                    if (m_objects[slot].frame == 0xe) {
+                    if (m_objects[slot].frame == 14) {
                         m_objects[slot].frame = 4;
                     }
                     if (m_objects[slot].frame >= frameCount) {
@@ -2314,7 +2314,7 @@ void CKano::UpdateObjects()
                     m_objects[slot].vx = -2.5;
                     m_objects[slot].vy = -1.5;
                 }
-                if (m_objects[slot].frame < 0xe) {
+                if (m_objects[slot].frame < 14) {
                     m_objects[slot].vx += 0.025;
                     if (m_objects[slot].y < (*m_opponent)->y - 50.0) {
                         m_objects[slot].vy += 0.035;
@@ -2340,8 +2340,8 @@ void CKano::UpdateObjects()
                         m_objectVar2[slot] = 6;
                     }
                 }
-                if ((m_objects[slot].attackResult > 0 && m_objects[slot].attackResult != 6 || m_objects[slot].y > 0.0) && m_objects[slot].frame < 0xe) {
-                    m_objects[slot].frame = 0xe;
+                if ((m_objects[slot].attackResult > 0 && m_objects[slot].attackResult != 6 || m_objects[slot].y > 0.0) && m_objects[slot].frame < 14) {
+                    m_objects[slot].frame = 14;
                     m_objects[slot].timer = 0;
                     m_objects[slot].vx = 0.0;
                     m_objects[slot].vy = 0.0;
@@ -2355,7 +2355,7 @@ void CKano::UpdateObjects()
                     m_objects[slot].timer = 0;
                     m_objects[slot].frame++;
                     m_objects[slot].attackResult = 0;
-                    if (m_objects[slot].frame == 0xe) {
+                    if (m_objects[slot].frame == 14) {
                         m_objects[slot].frame = 4;
                     }
                     if (m_objects[slot].frame >= frameCount) {
@@ -2370,7 +2370,7 @@ void CKano::UpdateObjects()
                     m_objects[slot].vx = -2.5;
                     m_objects[slot].vy = -1.5;
                 }
-                if (m_objects[slot].frame < 0xe) {
+                if (m_objects[slot].frame < 14) {
                     m_objects[slot].vx += 0.025;
                     if (m_objects[slot].y < (*m_opponent)->y - 50.0) {
                         m_objects[slot].vy += 0.035;
@@ -2396,8 +2396,8 @@ void CKano::UpdateObjects()
                         m_objectVar2[slot] = 6;
                     }
                 }
-                if ((m_objects[slot].attackResult > 0 && m_objects[slot].attackResult != 6 || m_objects[slot].y > 0.0) && m_objects[slot].frame < 0xe) {
-                    m_objects[slot].frame = 0xe;
+                if ((m_objects[slot].attackResult > 0 && m_objects[slot].attackResult != 6 || m_objects[slot].y > 0.0) && m_objects[slot].frame < 14) {
+                    m_objects[slot].frame = 14;
                     m_objects[slot].timer = 0;
                     m_objects[slot].vx = 0.0;
                     m_objects[slot].vy = 0.0;
@@ -2411,7 +2411,7 @@ void CKano::UpdateObjects()
                     m_objects[slot].timer = 0;
                     m_objects[slot].frame++;
                     m_objects[slot].attackResult = 0;
-                    if (m_objects[slot].frame == 0xe) {
+                    if (m_objects[slot].frame == 14) {
                         m_objects[slot].frame = 4;
                     }
                     if (m_objects[slot].frame >= frameCount) {
@@ -2426,7 +2426,7 @@ void CKano::UpdateObjects()
                     m_objects[slot].vx = -2.5;
                     m_objects[slot].vy = -1.5;
                 }
-                if (m_objects[slot].frame < 0xe) {
+                if (m_objects[slot].frame < 14) {
                     m_objects[slot].vx += 0.025;
                     if (m_objects[slot].y < (*m_opponent)->y - 50.0) {
                         m_objects[slot].vy += 0.035;
@@ -2452,8 +2452,8 @@ void CKano::UpdateObjects()
                         m_objectVar2[slot] = 6;
                     }
                 }
-                if ((m_objects[slot].attackResult > 0 && m_objects[slot].attackResult != 6 || m_objects[slot].y > 0.0) && m_objects[slot].frame < 0xe) {
-                    m_objects[slot].frame = 0xe;
+                if ((m_objects[slot].attackResult > 0 && m_objects[slot].attackResult != 6 || m_objects[slot].y > 0.0) && m_objects[slot].frame < 14) {
+                    m_objects[slot].frame = 14;
                     m_objects[slot].timer = 0;
                     m_objects[slot].vx = 0.0;
                     m_objects[slot].vy = 0.0;
@@ -2467,7 +2467,7 @@ void CKano::UpdateObjects()
                     m_objects[slot].timer = 0;
                     m_objects[slot].frame++;
                     m_objects[slot].attackResult = 0;
-                    if (m_objects[slot].frame == 0xe) {
+                    if (m_objects[slot].frame == 14) {
                         m_objects[slot].frame = 4;
                     }
                     if (m_objects[slot].frame >= frameCount) {
@@ -2482,7 +2482,7 @@ void CKano::UpdateObjects()
                     m_objects[slot].vx = -2.5;
                     m_objects[slot].vy = -1.5;
                 }
-                if (m_objects[slot].frame < 0xe) {
+                if (m_objects[slot].frame < 14) {
                     m_objects[slot].vx += 0.025;
                     if (m_objects[slot].y < (*m_opponent)->y - 50.0) {
                         m_objects[slot].vy += 0.035;
@@ -2508,8 +2508,8 @@ void CKano::UpdateObjects()
                         m_objectVar2[slot] = 6;
                     }
                 }
-                if ((m_objects[slot].attackResult > 0 && m_objects[slot].attackResult != 6 || m_objects[slot].y > 0.0) && m_objects[slot].frame < 0xe) {
-                    m_objects[slot].frame = 0xe;
+                if ((m_objects[slot].attackResult > 0 && m_objects[slot].attackResult != 6 || m_objects[slot].y > 0.0) && m_objects[slot].frame < 14) {
+                    m_objects[slot].frame = 14;
                     m_objects[slot].timer = 0;
                     m_objects[slot].vx = 0.0;
                     m_objects[slot].vy = 0.0;
@@ -2523,7 +2523,7 @@ void CKano::UpdateObjects()
                     m_objects[slot].timer = 0;
                     m_objects[slot].frame++;
                     m_objects[slot].attackResult = 0;
-                    if (m_objects[slot].frame == 0xe) {
+                    if (m_objects[slot].frame == 14) {
                         m_objects[slot].frame = 4;
                     }
                     if (m_objects[slot].frame >= frameCount) {
@@ -2552,7 +2552,7 @@ void CKano::UpdateObjects()
                 break;
             case kObjRush:
                 if (m_objectVar2[slot] == 0) {
-                    m_objects[slot].hitsLeft = 0x63;
+                    m_objects[slot].hitsLeft = 99;
                     m_objectVar2[slot]++;
                     m_objects[slot].vx = 4.0;
                     m_playVoice = 8;
@@ -2616,14 +2616,14 @@ void CKano::UpdateObjects()
                     m_objectVar2[slot]--;
                     if (m_objectVar1[slot] < 8 && m_objectVar2[slot] <= 0) {
                         effect.type = 0x195;
-                        effect.x = (double)((int)m_objects[slot].x + -0x32 + (WORD)Random(0, 0x64));
-                        effect.y = (double)((int)m_objects[slot].y + (WORD)Random(0, 0x14));
+                        effect.x = (double)((int)m_objects[slot].x + -50 + (WORD)Random(0, 100));
+                        effect.y = (double)((int)m_objects[slot].y + (WORD)Random(0, 20));
                         effect.scale = 2;
                         effect.layer = 1;
                         effect.facing = facing;
                         SpawnObject(&effect);
                         m_objectVar1[slot]++;
-                        m_objectVar2[slot] = 0xf;
+                        m_objectVar2[slot] = 15;
                     }
                     if (m_objectVar1[slot] > 7) {
                         RemoveObject(slot);
@@ -2636,9 +2636,9 @@ void CKano::UpdateObjects()
                     if (m_objects[slot].frame >= frameCount) {
                         m_objects[slot].frame = 0;
                         if (m_objects[slot].attackResult == 0) {
-                            effect.type = (WORD)Random(0, 4) + 0x1a8;
-                            effect.x = (double)((int)m_objects[slot].x + (WORD)Random(0, 0xa));
-                            effect.y = (double)((int)m_objects[slot].y + -5 + (WORD)Random(0, 0xa));
+                            effect.type = (WORD)Random(0, 4) + 424;
+                            effect.x = (double)((int)m_objects[slot].x + (WORD)Random(0, 10));
+                            effect.y = (double)((int)m_objects[slot].y + -5 + (WORD)Random(0, 10));
                             effect.scale = 2;
                             effect.layer = 1;
                             effect.facing = facing;
@@ -2717,7 +2717,7 @@ void CKano::UpdateObjects()
                     m_objects[slot].frame = 1;
                     m_objects[slot].timer = 0;
                     m_objects[slot].vx = 0.0;
-                    m_playVoice = 0x10;
+                    m_playVoice = 16;
                 }
                 if (m_objects[slot].x > 680.0 || m_objects[slot].x < -40.0) {
                     RemoveObject(slot);
@@ -2729,8 +2729,8 @@ void CKano::UpdateObjects()
                     m_objects[slot].attackResult = 0;
                     if (m_objectVar3[slot] <= 0) {
                         effect.type = 0x195;
-                        effect.x = (double)((int)m_objects[slot].x + -0x32 + (WORD)Random(0, 0x64));
-                        effect.y = (double)((int)m_objects[slot].y + -0x32 + (WORD)Random(0, 0x64));
+                        effect.x = (double)((int)m_objects[slot].x + -50 + (WORD)Random(0, 100));
+                        effect.y = (double)((int)m_objects[slot].y + -50 + (WORD)Random(0, 100));
                         effect.scale = 2;
                         effect.layer = 1;
                         effect.facing = facing;
@@ -2749,14 +2749,14 @@ void CKano::UpdateObjects()
                     m_objectVar1[slot]++;
                 }
                 m_objectVar2[slot]++;
-                if (m_objects[slot].hitsLeft == 0 || m_objectVar2[slot] > 0x4b0) {
+                if (m_objects[slot].hitsLeft == 0 || m_objectVar2[slot] > 1200) {
                     RemoveObject(slot);
                 }
                 m_objects[slot].timer++;
                 if (m_objects[slot].timer >= duration) {
                     m_objects[slot].timer = 0;
                     m_objects[slot].frame++;
-                    if (m_objects[slot].frame == 8 || m_objects[slot].frame == 0xe || m_objects[slot].frame == 0x14 || m_objects[slot].frame == 0x1a) {
+                    if (m_objects[slot].frame == 8 || m_objects[slot].frame == 14 || m_objects[slot].frame == 20 || m_objects[slot].frame == 26) {
                         m_objects[slot].attackResult = 0;
                     }
                     if (m_objects[slot].frame >= frameCount) {
@@ -2765,7 +2765,7 @@ void CKano::UpdateObjects()
                 }
                 break;
             case kObjTrapSummon:
-                if (m_objects[slot].frame == 0xb && m_objects[slot].timer == 0) {
+                if (m_objects[slot].frame == 11 && m_objects[slot].timer == 0) {
                     effect.type = 0x1af;
                     effect.x = (double)(int)m_objects[slot].x;
                     effect.y = (double)(int)m_objects[slot].y;
@@ -2773,7 +2773,7 @@ void CKano::UpdateObjects()
                     effect.layer = 1;
                     effect.facing = facing;
                     SpawnObject(&effect);
-                    m_playVoice = 0x13;
+                    m_playVoice = 19;
                 }
                 m_objects[slot].timer++;
                 if (m_objects[slot].timer >= duration) {
@@ -2786,29 +2786,29 @@ void CKano::UpdateObjects()
                 }
                 break;
             case kObjFloorTrap:
-                if (m_objects[slot].attackResult > 1 && (m_objects[slot].frame == 0xa || m_objects[slot].frame == 0xb)) {
+                if (m_objects[slot].attackResult > 1 && (m_objects[slot].frame == 10 || m_objects[slot].frame == 11)) {
                     m_objects[slot].timer = 0;
-                    m_objects[slot].frame = 0xc;
+                    m_objects[slot].frame = 12;
                     m_objectVar3[slot] = 2;
                     m_objectVar2[slot]++;
                 }
-                if (m_objects[slot].frame > 9 && m_objects[slot].frame < 0xe) {
+                if (m_objects[slot].frame > 9 && m_objects[slot].frame < 14) {
                     if (y == 0.0 && m_objects[slot].x + 30.0 > x && m_objects[slot].x - 30.0 < x && m_objectVar3[slot] <= 0) {
-                        if (m_objects[slot].frame > 0xb) {
+                        if (m_objects[slot].frame > 11) {
                             m_objects[slot].timer = 0;
-                            m_objects[slot].frame = 0xa;
+                            m_objects[slot].frame = 10;
                             break;
                         }
-                    } else if (m_objects[slot].frame != 0xc && m_objects[slot].frame != 0xd) {
+                    } else if (m_objects[slot].frame != 12 && m_objects[slot].frame != 13) {
                         m_objects[slot].timer = 0;
-                        m_objects[slot].frame = 0xc;
+                        m_objects[slot].frame = 12;
                         break;
                     }
                 }
                 m_objectVar1[slot]++;
-                if ((m_objectVar1[slot] > 0x960 || m_objectVar2[slot] > 9) && m_objects[slot].frame < 0xe) {
+                if ((m_objectVar1[slot] > 2400 || m_objectVar2[slot] > 9) && m_objects[slot].frame < 14) {
                     m_objects[slot].timer = 0;
-                    m_objects[slot].frame = 0xe;
+                    m_objects[slot].frame = 14;
                     break;
                 }
                 m_objects[slot].timer++;
@@ -2816,10 +2816,10 @@ void CKano::UpdateObjects()
                     m_objects[slot].timer = 0;
                     m_objects[slot].frame++;
                     m_objects[slot].attackResult = 0;
-                    if (m_objects[slot].frame == 0xc) {
+                    if (m_objects[slot].frame == 12) {
                         m_objects[slot].frame = m_objects[slot].frame - 2;
                     }
-                    if (m_objects[slot].frame == 0xe) {
+                    if (m_objects[slot].frame == 14) {
                         m_objects[slot].frame = m_objects[slot].frame - 2;
                         m_objectVar3[slot]--;
                     }
@@ -2835,10 +2835,10 @@ void CKano::UpdateObjects()
                     m_objects[slot].timer = 0;
                     m_objects[slot].frame++;
                     m_objects[slot].attackResult = 0;
-                    if (m_objects[slot].frame == 0xe && (WORD)Random(0, 3) < 2) {
+                    if (m_objects[slot].frame == 14 && (WORD)Random(0, 3) < 2) {
                         effect.type = 0x1b1;
                         effect.x = (double)(int)m_objects[slot].x;
-                        effect.y = (double)((int)m_objects[slot].y - (WORD)Random(0, 0x96));
+                        effect.y = (double)((int)m_objects[slot].y - (WORD)Random(0, 150));
                         effect.scale = 2;
                         effect.layer = 1;
                         effect.facing = facing;
@@ -2862,8 +2862,8 @@ void CKano::UpdateObjects()
                 break;
             case kObjSuperShot:
                 if (m_objectVar1[slot] == 0) {
-                    m_playVoice = 0x17;
-                    m_objects[slot].hitsLeft = 0x63;
+                    m_playVoice = 23;
+                    m_objects[slot].hitsLeft = 99;
                     m_objectVar1[slot] = 1;
                     m_objects[slot].vx = 3.0;
                     m_objects[slot].vy = -1.2;
@@ -2885,8 +2885,8 @@ void CKano::UpdateObjects()
                 }
                 if (m_objects[slot].timer == 0) {
                     effect.type = 0x1b0;
-                    effect.x = (double)((int)m_objects[slot].x + (WORD)Random(0, 0x28));
-                    effect.y = (double)((int)m_objects[slot].y + (WORD)Random(0, 0x14));
+                    effect.x = (double)((int)m_objects[slot].x + (WORD)Random(0, 40));
+                    effect.y = (double)((int)m_objects[slot].y + (WORD)Random(0, 20));
                     effect.scale = 2;
                     effect.layer = 1;
                     effect.facing = facing;
@@ -3192,7 +3192,7 @@ void CKano::UpdateObjects()
                     m_orbsOut--;
                     break;
                 }
-                if (m_objectVar1[slot] > 2 && m_objectVar3[slot] > 0xf) {
+                if (m_objectVar1[slot] > 2 && m_objectVar3[slot] > 15) {
                     if (m_objects[slot].facing == 1) {
                         effect.type = 0x1b3;
                         if (m_objects[slot].x > (*m_opponent)->x) {
@@ -3308,7 +3308,7 @@ void CKano::UpdateObjects()
                     m_orbsOut--;
                     break;
                 }
-                if (m_objectVar1[slot] > 2 && m_objectVar3[slot] > 0xf) {
+                if (m_objectVar1[slot] > 2 && m_objectVar3[slot] > 15) {
                     if (m_objects[slot].facing == 1) {
                         effect.type = 0x1b3;
                         if (m_objects[slot].x > (*m_opponent)->x) {
@@ -3433,7 +3433,7 @@ void CKano::UpdateObjects()
             case kObjEruptionC:
                 if (m_objects[slot].timer == 0) {
                     effect.type = 0x190;
-                    effect.x = (double)((int)m_objects[slot].x + (m_objectVar1[slot] * 0x19 - 0x32) * m_objects[slot].facing);
+                    effect.x = (double)((int)m_objects[slot].x + (m_objectVar1[slot] * 25 - 50) * m_objects[slot].facing);
                     effect.y = (double)(int)m_objects[slot].y;
                     effect.scale = 2;
                     effect.layer = 1;
@@ -3464,7 +3464,7 @@ void CKano::UpdateObjects()
             case kObjEruptionB:
                 if (m_objects[slot].timer == 0) {
                     effect.type = 0x190;
-                    effect.x = (double)((int)m_objects[slot].x + (m_objectVar1[slot] - 1) * 0x19 * m_objects[slot].facing);
+                    effect.x = (double)((int)m_objects[slot].x + (m_objectVar1[slot] - 1) * 25 * m_objects[slot].facing);
                     effect.y = (double)(int)m_objects[slot].y;
                     effect.scale = 2;
                     effect.layer = 1;
@@ -3494,24 +3494,24 @@ void CKano::UpdateObjects()
                 break;
             case kObjPillar:
                 if (m_objects[slot].timer == 0 && m_objects[slot].frame == 0) {
-                    ShakeScreen(0xa, 0xa);
-                    m_playVoice = 0x14;
+                    ShakeScreen(10, 10);
+                    m_playVoice = 20;
                     m_objects[slot].hitsLeft = 1;
                 }
-                if (m_objects[slot].frame > 8 && m_objects[slot].frame < 0xb && m_objectVar1[slot] < 6 && m_objectVar2[slot] <= 0) {
+                if (m_objects[slot].frame > 8 && m_objects[slot].frame < 11 && m_objectVar1[slot] < 6 && m_objectVar2[slot] <= 0) {
                     effect.type = 0x1c0;
-                    effect.x = (double)((int)m_objects[slot].x + -0x50 + (WORD)Random(0, 0xa0));
-                    effect.y = (double)((int)m_objects[slot].y + 0xf - (WORD)Random(0, 0x1e));
+                    effect.x = (double)((int)m_objects[slot].x + -80 + (WORD)Random(0, 160));
+                    effect.y = (double)((int)m_objects[slot].y + 15 - (WORD)Random(0, 30));
                     effect.scale = 2;
                     effect.layer = 1;
                     effect.facing = facing;
                     SpawnObject(&effect);
                     effect.type = 0x1bf;
                     SpawnObject(&effect);
-                    m_objectVar2[slot] = 0x2d;
+                    m_objectVar2[slot] = 45;
                     m_objectVar1[slot]++;
                     ShakeScreen(5, 5);
-                    m_playVoice = 0x15;
+                    m_playVoice = 21;
                 }
                 m_objectVar2[slot]--;
                 m_objects[slot].x = x;
@@ -3520,7 +3520,7 @@ void CKano::UpdateObjects()
                     m_objects[slot].timer = 0;
                     m_objects[slot].frame++;
                     m_objects[slot].attackResult = 0;
-                    if (m_objects[slot].frame == 0xb && frame == 0xd) {
+                    if (m_objects[slot].frame == 11 && frame == 13) {
                         m_objects[slot].frame = m_objects[slot].frame - 2;
                     }
                     if (m_objects[slot].frame >= frameCount) {
@@ -3562,9 +3562,9 @@ void CKano::UpdateObjects()
                 break;
             case kObjPillarStart:
                 if (m_objects[slot].timer == 0 && m_objects[slot].frame == 0) {
-                    m_playVoice = 0x16;
+                    m_playVoice = 22;
                 }
-                if (m_objects[slot].frame == 0xe && m_objects[slot].timer == 0) {
+                if (m_objects[slot].frame == 14 && m_objects[slot].timer == 0) {
                     effect.type = 0x1be;
                     effect.x = (double)(int)m_objects[slot].x;
                     effect.y = (double)(int)m_objects[slot].y;
@@ -3574,7 +3574,7 @@ void CKano::UpdateObjects()
                     SpawnObject(&effect);
                     effect.type = 0x1bf;
                     SpawnObject(&effect);
-                    m_objectVar2[slot] = 0x2d;
+                    m_objectVar2[slot] = 45;
                     m_objectVar1[slot]++;
                     ShakeScreen(5, 5);
                 }
@@ -3591,7 +3591,7 @@ void CKano::UpdateObjects()
                 break;
             case kObjMeteorLaunch:
                 if (m_objectVar1[slot] == 0) {
-                    m_playVoice = 0x17;
+                    m_playVoice = 23;
                     m_objects[slot].hitsLeft = 1;
                     m_objectVar1[slot]++;
                     m_objects[slot].vx = 6.0;
@@ -3613,7 +3613,7 @@ void CKano::UpdateObjects()
                 break;
             case kObjMeteor:
                 if (m_objectVar1[slot] == 0) {
-                    m_playVoice = 0x18;
+                    m_playVoice = 24;
                     m_objects[slot].hitsLeft = 1;
                     m_objectVar1[slot]++;
                     m_objects[slot].SetVelocity(60.0, 4.0);
@@ -3661,8 +3661,8 @@ void CKano::UpdateObjects()
             case kObjMeteorBlast:
                 if (m_objects[slot].timer == 0 && m_objects[slot].frame == 0) {
                     m_objects[slot].hitsLeft = 1;
-                    m_playVoice = 0x19;
-                    ShakeScreen(0xa, 0);
+                    m_playVoice = 25;
+                    ShakeScreen(10, 0);
                 }
                 m_objects[slot].timer++;
                 if (m_objects[slot].timer >= duration) {
@@ -3689,36 +3689,36 @@ void CKano::UpdateObjects()
                 }
                 break;
             case kObjControlledCharge:
-                if (m_holdA == 0 && m_objects[slot].frame < 0xf) {
-                    m_objects[slot].frame = 0xf;
+                if (m_holdA == 0 && m_objects[slot].frame < 15) {
+                    m_objects[slot].frame = 15;
                     m_objects[slot].timer = 0;
-                    m_playVoice = 0x1c;
+                    m_playVoice = 28;
                     m_playVoice = 6;
                 }
                 if (pattern > kLastFreeAction && pattern < kFirstGuard) {
                     RemoveObject(slot);
                     break;
                 }
-                if (m_objects[slot].frame < 0xf) {
+                if (m_objects[slot].frame < 15) {
                     m_objects[slot].vx += 0.0025;
                 } else {
                     m_objects[slot].vx = 0.0;
                 }
-                if (m_objects[slot].frame == 0xf && m_objects[slot].timer == 0) {
+                if (m_objects[slot].frame == 15 && m_objects[slot].timer == 0) {
                     effect.type = 0x19a;
                     effect.x = (double)(int)m_objects[slot].x;
                     effect.y = 0.0;
                     if (m_objectVar1[slot] == 1) {
-                        effect.x = m_objects[slot].x - facing * 0x2d;
+                        effect.x = m_objects[slot].x - facing * 45;
                     }
                     if (m_objectVar1[slot] == 2) {
-                        effect.x = m_objects[slot].x + facing * 0x2d;
+                        effect.x = m_objects[slot].x + facing * 45;
                     }
                     if (m_objectVar1[slot] == 3) {
-                        effect.x = m_objects[slot].x - facing * 0x5a;
+                        effect.x = m_objects[slot].x - facing * 90;
                     }
                     if (m_objectVar1[slot] == 4) {
-                        effect.x = m_objects[slot].x + facing * 0x5a;
+                        effect.x = m_objects[slot].x + facing * 90;
                     }
                     effect.scale = 2;
                     effect.layer = 1;
@@ -3730,7 +3730,7 @@ void CKano::UpdateObjects()
                     m_objects[slot].timer = 0;
                     m_objects[slot].frame++;
                     m_objects[slot].attackResult = 0;
-                    if (m_objects[slot].frame == 0xf) {
+                    if (m_objects[slot].frame == 15) {
                         m_objects[slot].frame = 0;
                     }
                     if (m_objects[slot].frame >= frameCount) {
@@ -3753,21 +3753,21 @@ void CKano::UpdateObjects()
                         RemoveObject(slot);
                         effect.type = 0x34;
                         effect.y = -87.0;
-                        effect.x = (double)(int)(facing * 0x1f + x);
+                        effect.x = (double)(int)(facing * 31 + x);
                         effect.scale = 2;
                         effect.layer = 1;
                         m_game->CreateEffect((EffectDesc*)&effect);
                         (*m_opponent)->pattern = kThrownStandLow;
-                        (*m_opponent)->m_hitstop = 0x270f;
-                        m_playVoice = 0x1c;
-                        DealDamage(0x1388, 850.0);
+                        (*m_opponent)->m_hitstop = 9999;
+                        m_playVoice = 28;
+                        DealDamage(5000, 850.0);
                         m_patternVar1 = 1;
                     }
                 }
                 break;
             case kObjFallInDarkness:
                 m_objects[slot].vx = -0.02;
-                m_objects[slot].drawnWhileHidden = 0x7530;
+                m_objects[slot].drawnWhileHidden = 30000;
                 m_objects[slot].timer++;
                 if (pattern != kFallInDarkness) {
                     RemoveObject(slot);
@@ -3784,7 +3784,7 @@ void CKano::UpdateObjects()
             case kObjEncasedBreak:
                 if (pattern != kEncased && pattern != kEncased2 && pattern != kEncasedAir && pattern != kEncasedSpin || pattern == kEncased && frame > 1 || pattern == kEncased2 && frame > 1) {
                     effect.type = 0x1f1;
-                    effect.x = (double)((int)x + facing * 0x17);
+                    effect.x = (double)((int)x + facing * 23);
                     effect.y = (double)((int)y - 4);
                     effect.scale = 0;
                     effect.layer = 1;
@@ -3798,8 +3798,8 @@ void CKano::UpdateObjects()
                     effect.facing = facing;
                     SpawnObject(&effect);
                     effect.type = 0x1f1;
-                    effect.x = (double)((int)x - facing * 0xe);
-                    effect.y = (double)((int)y - 0x1a);
+                    effect.x = (double)((int)x - facing * 14);
+                    effect.y = (double)((int)y - 26);
                     effect.scale = 0;
                     effect.layer = 1;
                     effect.facing = facing;
@@ -3812,48 +3812,48 @@ void CKano::UpdateObjects()
                     effect.facing = facing;
                     SpawnObject(&effect);
                     effect.type = 0x1f1;
-                    effect.x = (double)((int)x + facing * 0x1e);
-                    effect.y = (double)((int)y - 0x28);
+                    effect.x = (double)((int)x + facing * 30);
+                    effect.y = (double)((int)y - 40);
                     effect.scale = 0;
                     effect.layer = 1;
                     effect.facing = facing;
                     SpawnObject(&effect);
                     effect.type = 0x1f1;
-                    effect.x = (double)((int)x - facing * 0x19);
-                    effect.y = (double)((int)y - 0x50);
+                    effect.x = (double)((int)x - facing * 25);
+                    effect.y = (double)((int)y - 80);
                     effect.scale = 0;
                     effect.layer = 1;
                     effect.facing = facing;
                     SpawnObject(&effect);
                     effect.type = 0x1f2;
-                    effect.x = (double)((int)x - facing * 0x23);
-                    effect.y = (double)((int)y - 0x2a);
+                    effect.x = (double)((int)x - facing * 35);
+                    effect.y = (double)((int)y - 42);
                     effect.scale = 0;
                     effect.layer = 1;
                     effect.facing = facing;
                     SpawnObject(&effect);
                     effect.type = 0x1f2;
-                    effect.x = (double)((int)x - facing * 0x12);
-                    effect.y = (double)((int)y - 0x14);
+                    effect.x = (double)((int)x - facing * 18);
+                    effect.y = (double)((int)y - 20);
                     effect.scale = 0;
                     effect.layer = 1;
                     effect.facing = facing;
                     SpawnObject(&effect);
                     effect.type = 0x1f2;
                     effect.x = (double)((int)x + facing * 2);
-                    effect.y = (double)((int)y - 0x41);
+                    effect.y = (double)((int)y - 65);
                     effect.scale = 0;
                     effect.layer = 1;
                     effect.facing = facing;
                     SpawnObject(&effect);
                     effect.type = 0x1f2;
                     effect.x = (double)((int)x + (facing << 4));
-                    effect.y = (double)((int)y - 0x50);
+                    effect.y = (double)((int)y - 80);
                     effect.scale = 0;
                     effect.layer = 1;
                     effect.facing = facing;
                     SpawnObject(&effect);
-                    m_playSound = 0x22;
+                    m_playSound = 34;
                     RemoveObject(slot);
                     m_encasedBreakOut = 0;
                     break;
@@ -3870,16 +3870,16 @@ void CKano::UpdateObjects()
                 break;
             case kObjShardSmall:
                 if (m_objects[slot].frame == 0 && m_objects[slot].timer == 0 && m_objectVar1[slot] == 0) {
-                    m_objectVar2[slot] = (rand() > 0x3e80) * 0x28 + 0x50 + (rand() > 0x3e80) * 0x14;
+                    m_objectVar2[slot] = (rand() > 16000) * 40 + 80 + (rand() > 16000) * 20;
                     m_objectVar1[slot]++;
-                    m_objects[slot].vx = (rand() > 0x3e80) * 1.2 + (rand() > 0x3e80) * 0.7 + (rand() > 0x3e80) * 1.7 + -1.8;
-                    m_objects[slot].vy = -1.2 - ((rand() > 0x3e80) * 0.6 + (rand() > 0x3e80) * 0.9 + (rand() > 0x3e80) * 1.4);
+                    m_objects[slot].vx = (rand() > 16000) * 1.2 + (rand() > 16000) * 0.7 + (rand() > 16000) * 1.7 + -1.8;
+                    m_objects[slot].vy = -1.2 - ((rand() > 16000) * 0.6 + (rand() > 16000) * 0.9 + (rand() > 16000) * 1.4);
                 }
                 m_objects[slot].vy += 0.05;
                 if (m_objects[slot].y > 0.0 && m_objects[slot].vy > 0.0) {
                     m_objects[slot].vy = -m_objects[slot].vy;
                 }
-                if (m_objectVar2[slot] < 0xa) {
+                if (m_objectVar2[slot] < 10) {
                     m_objects[slot].scale = 1;
                 }
                 if (m_objectVar2[slot] < 0) {
@@ -3899,16 +3899,16 @@ void CKano::UpdateObjects()
                 break;
             case kObjShardLarge:
                 if (m_objects[slot].frame == 0 && m_objects[slot].timer == 0 && m_objectVar1[slot] == 0) {
-                    m_objectVar2[slot] = (rand() > 0x3e80) * 0x3c + 0x78 + (rand() > 0x3e80) * 0x28;
+                    m_objectVar2[slot] = (rand() > 16000) * 60 + 120 + (rand() > 16000) * 40;
                     m_objectVar1[slot]++;
-                    m_objects[slot].vx = (double)(rand() > 0x3e80) + (rand() > 0x3e80) * 0.5 + (rand() > 0x3e80) * 1.5 + -1.5;
-                    m_objects[slot].vy = -1.0 - ((rand() > 0x3e80) * 0.5 + (rand() > 0x3e80) * 0.8 + (rand() > 0x3e80) * 1.2);
+                    m_objects[slot].vx = (double)(rand() > 16000) + (rand() > 16000) * 0.5 + (rand() > 16000) * 1.5 + -1.5;
+                    m_objects[slot].vy = -1.0 - ((rand() > 16000) * 0.5 + (rand() > 16000) * 0.8 + (rand() > 16000) * 1.2);
                 }
                 m_objects[slot].vy += 0.03;
                 if (m_objects[slot].y > 0.0 && m_objects[slot].vy > 0.0) {
                     m_objects[slot].vy = -m_objects[slot].vy;
                 }
-                if (m_objectVar2[slot] < 0xa) {
+                if (m_objectVar2[slot] < 10) {
                     m_objects[slot].scale = 1;
                 }
                 if (m_objectVar2[slot] < 0) {
@@ -3941,7 +3941,7 @@ void CKano::UpdateObjects()
             }
         }
         slot++;
-        if (slot >= 0x40) {
+        if (slot >= 64) {
             slot = 0;
         }
     }

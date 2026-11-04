@@ -10,14 +10,14 @@ CScene8::CScene8(HWND hwnd, PTR32(CPlayer)* player1Ref, PTR32(CPlayer)* player2R
 {
     if (1) {
         m_game->LoadDat((PTR32(IDirectDrawSurface)*)&m_bgSurface, "system\\replay_bg.dat", 0, 1);
-        m_game->LoadDat((PTR32(IDirectDrawSurface)*)&m_menuSurface, "system\\replay.dat", 0, 0xc1);
-        m_graphics->LoadPaletteDat(m_palette, "system\\replay_bg.dat", 0, 1, 0xc0);
-        m_graphics->LoadPaletteDat(m_palette, "system\\replay.dat", 0, 0xc1, 0x3e);
+        m_game->LoadDat((PTR32(IDirectDrawSurface)*)&m_menuSurface, "system\\replay.dat", 0, 193);
+        m_graphics->LoadPaletteDat(m_palette, "system\\replay_bg.dat", 0, 1, 192);
+        m_graphics->LoadPaletteDat(m_palette, "system\\replay.dat", 0, 193, 62);
     } else {
         m_graphics->LoadBmp((PTR32(IDirectDrawSurface)*)&m_bgSurface, "system\\replay_bg.bmp", 1);
-        m_graphics->LoadBmp((PTR32(IDirectDrawSurface)*)&m_menuSurface, "system\\replay.bmp", 0xc1);
-        m_graphics->LoadPaletteBmp(m_palette, "system\\replay_bg.bmp", 0, 1, 0xc0);
-        m_graphics->LoadPaletteBmp(m_palette, "system\\replay.bmp", 0, 0xc1, 0x3e);
+        m_graphics->LoadBmp((PTR32(IDirectDrawSurface)*)&m_menuSurface, "system\\replay.bmp", 193);
+        m_graphics->LoadPaletteBmp(m_palette, "system\\replay_bg.bmp", 0, 1, 192);
+        m_graphics->LoadPaletteBmp(m_palette, "system\\replay.bmp", 0, 193, 62);
     }
     m_colorKey = m_graphics->GetColorKey(TOPTR(IDirectDrawSurface*, m_menuSurface));
     unk43c = 0;
@@ -26,10 +26,10 @@ CScene8::CScene8(HWND hwnd, PTR32(CPlayer)* player1Ref, PTR32(CPlayer)* player2R
     m_leave = 0;
     m_held[0] = 0;
     m_held[1] = 0;
-    unk44a = 0x12c;
-    unk44c = 0x12c;
-    unk446 = 0xb4;
-    unk448 = 0xb4;
+    unk44a = 300;
+    unk44c = 300;
+    unk446 = 180;
+    unk448 = 180;
     m_state = 0;
     m_slot = 0;
     m_menuChoice = 0;
@@ -40,25 +40,25 @@ CScene8::CScene8(HWND hwnd, PTR32(CPlayer)* player1Ref, PTR32(CPlayer)* player2R
     m_held[2] = 1;
     m_held[3] = 7;
     m_held[4] = 9;
-    m_held[5] = 0xd;
+    m_held[5] = 13;
     m_held[6] = 4;
     m_held[7] = 2;
     m_held[8] = 0;
     m_held[9] = 3;
-    m_held[0xa] = 0xb;
-    m_held[0xb] = 0xa;
-    m_held[0xc] = 8;
-    m_held[0xd] = 5;
-    m_held[0xe] = 0x14;
-    m_held[0xf] = 0xc;
-    m_held[0x10] = 0x13;
-    m_held[0x11] = 0xe;
-    m_held[0x12] = 0x12;
+    m_held[10] = 11;
+    m_held[11] = 10;
+    m_held[12] = 8;
+    m_held[13] = 5;
+    m_held[14] = 20;
+    m_held[15] = 12;
+    m_held[16] = 19;
+    m_held[17] = 14;
+    m_held[18] = 18;
     unk462 = 6;
-    unk463 = 0x15;
-    unk464 = 0x10;
-    unk465 = 0x11;
-    unk467 = 0xf;
+    unk463 = 21;
+    unk464 = 16;
+    unk465 = 17;
+    unk467 = 15;
     *(tagRECT*)&m_replays[0xf6] = MakeRect(0, 0x2f, 0x5a, 0x18);
     *(tagRECT*)&m_replays[0x106] = MakeRect(0, 0x47, 0x5a, 0x18);
     *(tagRECT*)&m_replays[0x116] = MakeRect(0, 0x5f, 0x5a, 0x18);
@@ -175,7 +175,7 @@ BYTE CScene8::Update()
                     m_game->m_replaySlot = m_slot;
                     m_game->m_replayPage = m_page;
                     m_game->m_replayMode = 1;
-                    CScene::FadeOut(m_palette, 0, 0, 0x32);
+                    CScene::FadeOut(m_palette, 0, 0, 50);
                     m_enter = 2;
                     return 2;
                 }
@@ -244,76 +244,76 @@ void CScene8::Draw()
     RECT dst;
     RECT src;
 
-    src = MakeRect(0, 0, 0x140, 0xf0);
-    dst = MakeRect(0, 0, 0x140, 0xf0);
+    src = MakeRect(0, 0, 320, 240);
+    dst = MakeRect(0, 0, 320, 240);
     m_graphics->Blit(dst, TOPTR(IDirectDrawSurface*, m_bgSurface), src, 0, 0);
-    src = MakeRect(0, 0x19, 0x140, 0x10);
-    dst = MakeRect(0, 4, 0x140, 0x10);
+    src = MakeRect(0, 25, 320, 16);
+    dst = MakeRect(0, 4, 320, 16);
     m_graphics->Blit(dst, TOPTR(IDirectDrawSurface*, m_menuSurface), src, m_colorKey, 0);
     if (m_page == 9) {
-        src = MakeRect((m_page << 4) + 0x50, 6, 0x28, 0xf);
-        dst = MakeRect((m_page << 4) + 0x50, 4, 0x28, 0xf);
+        src = MakeRect((m_page << 4) + 80, 6, 40, 15);
+        dst = MakeRect((m_page << 4) + 80, 4, 40, 15);
     } else {
-        src = MakeRect((m_page << 4) + 0x50, 6, 0x10, 0xf);
-        dst = MakeRect((m_page << 4) + 0x50, 4, 0x10, 0xf);
+        src = MakeRect((m_page << 4) + 80, 6, 16, 15);
+        dst = MakeRect((m_page << 4) + 80, 4, 16, 15);
     }
     m_graphics->Blit(dst, TOPTR(IDirectDrawSurface*, m_menuSurface), src, m_colorKey, 0);
     if (m_state != 4) {
-        menuY = 0x13f - (int)(160.0 - cos(m_menuAngle / 57.29579143313326) * 160.0);
+        menuY = 319 - (int)(160.0 - cos(m_menuAngle / 57.29579143313326) * 160.0);
         if (m_menuChoice == 0) {
-            src = MakeRect(0, 0x354, 0x140, 0x10);
+            src = MakeRect(0, 852, 320, 16);
         } else {
-            src = MakeRect(0, 0x2cc, 0x140, 0x10);
+            src = MakeRect(0, 716, 320, 16);
         }
-        dst = MakeRect(0, menuY + 0x70, 0x140, 0x10);
+        dst = MakeRect(0, menuY + 112, 320, 16);
         m_graphics->Blit(dst, TOPTR(IDirectDrawSurface*, m_menuSurface), src, m_colorKey, 0);
         if (m_menuChoice == 1) {
-            src = MakeRect(0, 0x364, 0x140, 0x10);
+            src = MakeRect(0, 868, 320, 16);
         } else {
-            src = MakeRect(0, 0x2dc, 0x140, 0x10);
+            src = MakeRect(0, 732, 320, 16);
         }
-        dst = MakeRect(0, menuY + 0x80, 0x140, 0x10);
+        dst = MakeRect(0, menuY + 128, 320, 16);
         m_graphics->Blit(dst, TOPTR(IDirectDrawSurface*, m_menuSurface), src, m_colorKey, 0);
         if (m_menuChoice == 2) {
-            src = MakeRect(0, 0x374, 0x140, 0x10);
+            src = MakeRect(0, 884, 320, 16);
         } else {
-            src = MakeRect(0, 0x2ec, 0x140, 0x10);
+            src = MakeRect(0, 748, 320, 16);
         }
-        dst = MakeRect(0, menuY + 0x90, 0x140, 0x10);
+        dst = MakeRect(0, menuY + 144, 320, 16);
         m_graphics->Blit(dst, TOPTR(IDirectDrawSurface*, m_menuSurface), src, m_colorKey, 0);
     } else if (m_state == 4) {
-        src = MakeRect(0, 0x300, 0x140, 0x2c);
-        dst = MakeRect(0, 0x70, 0x140, 0x2c);
+        src = MakeRect(0, 768, 320, 44);
+        dst = MakeRect(0, 112, 320, 44);
         m_graphics->Blit(dst, TOPTR(IDirectDrawSurface*, m_menuSurface), src, m_colorKey, 0);
-        src = MakeRect(0, (m_overwriteChoice << 4) + 0x334, 0x140, 0x10);
-        dst = MakeRect(0, 0xa0, 0x140, 0x10);
+        src = MakeRect(0, (m_overwriteChoice << 4) + 820, 320, 16);
+        dst = MakeRect(0, 160, 320, 16);
         m_graphics->Blit(dst, TOPTR(IDirectDrawSurface*, m_menuSurface), src, m_colorKey, 0);
     }
     slot = 0;
     for (; slot < 9; slot++) {
         if (m_slot == slot && slot < 9) {
-            src = MakeRect(0, (slot << 4) + 0x5c, 0x140, 0x10);
-            dst = MakeRect(0, (slot << 4) + 0x60 - (int)m_listScroll, 0x140, 0x10);
+            src = MakeRect(0, (slot << 4) + 92, 320, 16);
+            dst = MakeRect(0, (slot << 4) + 96 - (int)m_listScroll, 320, 16);
             m_graphics->Blit(dst, TOPTR(IDirectDrawSurface*, m_menuSurface), src, m_colorKey, 0);
             if (m_page < 9 && m_replays[(m_page * 9 + slot)] > 0) {
-                src = MakeRect(((char (*)[18])&m_replays[0x51])[m_page][slot * 2] / 0xa * 0x50 + 0x40, (((char (*)[18])&m_replays[0x51])[m_page][slot * 2] % 0xa << 4) + 0x18c, 0x50, 0x10);
-                dst = MakeRect(0x5a, (slot << 4) + 0x60 - (int)m_listScroll, 0x50, 0x10);
+                src = MakeRect(((char (*)[18])&m_replays[81])[m_page][slot * 2] / 10 * 80 + 64, (((char (*)[18])&m_replays[81])[m_page][slot * 2] % 0xa << 4) + 396, 80, 16);
+                dst = MakeRect(90, (slot << 4) + 96 - (int)m_listScroll, 80, 16);
                 m_graphics->Blit(dst, TOPTR(IDirectDrawSurface*, m_menuSurface), src, m_colorKey, 0);
-                src = MakeRect(((char (*)[18])&m_replays[0x51])[m_page][slot * 2 + 1] / 0xa * 0x50 + 0x40, (((char (*)[18])&m_replays[0x51])[m_page][slot * 2 + 1] % 0xa << 4) + 0x18c, 0x50, 0x10);
-                dst = MakeRect(0xcd, (slot << 4) + 0x60 - (int)m_listScroll, 0x50, 0x10);
+                src = MakeRect(((char (*)[18])&m_replays[81])[m_page][slot * 2 + 1] / 10 * 80 + 64, (((char (*)[18])&m_replays[81])[m_page][slot * 2 + 1] % 0xa << 4) + 396, 80, 16);
+                dst = MakeRect(205, (slot << 4) + 96 - (int)m_listScroll, 80, 16);
                 m_graphics->Blit(dst, TOPTR(IDirectDrawSurface*, m_menuSurface), src, m_colorKey, 0);
             }
         } else {
             slideY = (int)(160.0 - cos(m_menuAngle / 57.29579143313326) * 160.0);
-            src = MakeRect(0, (slot << 4) + 0xfc, 0x140, 0x10);
-            dst = MakeRect(0, (slot << 4) + 0x60 + slideY, 0x140, 0x10);
+            src = MakeRect(0, (slot << 4) + 252, 320, 16);
+            dst = MakeRect(0, (slot << 4) + 96 + slideY, 320, 16);
             m_graphics->Blit(dst, TOPTR(IDirectDrawSurface*, m_menuSurface), src, m_colorKey, 0);
             if (m_page < 9 && m_replays[(m_page * 9 + slot)] > 0) {
-                src = MakeRect(((char (*)[18])&m_replays[0x51])[m_page][slot * 2] / 0xa * 0x50 + 0x40, (((char (*)[18])&m_replays[0x51])[m_page][slot * 2] % 0xa << 4) + 0x22c, 0x50, 0x10);
-                dst = MakeRect(0x5a, (slot << 4) + 0x60 + slideY, 0x50, 0x10);
+                src = MakeRect(((char (*)[18])&m_replays[81])[m_page][slot * 2] / 10 * 80 + 64, (((char (*)[18])&m_replays[81])[m_page][slot * 2] % 0xa << 4) + 556, 80, 16);
+                dst = MakeRect(90, (slot << 4) + 96 + slideY, 80, 16);
                 m_graphics->Blit(dst, TOPTR(IDirectDrawSurface*, m_menuSurface), src, m_colorKey, 0);
-                src = MakeRect(((char (*)[18])&m_replays[0x51])[m_page][slot * 2 + 1] / 0xa * 0x50 + 0x40, (((char (*)[18])&m_replays[0x51])[m_page][slot * 2 + 1] % 0xa << 4) + 0x22c, 0x50, 0x10);
-                dst = MakeRect(0xcd, (slot << 4) + 0x60 + slideY, 0x50, 0x10);
+                src = MakeRect(((char (*)[18])&m_replays[81])[m_page][slot * 2 + 1] / 10 * 80 + 64, (((char (*)[18])&m_replays[81])[m_page][slot * 2 + 1] % 0xa << 4) + 556, 80, 16);
+                dst = MakeRect(205, (slot << 4) + 96 + slideY, 80, 16);
                 m_graphics->Blit(dst, TOPTR(IDirectDrawSurface*, m_menuSurface), src, m_colorKey, 0);
             }
         }
@@ -345,10 +345,10 @@ void CScene8::Enter()
 
     m_held[0] = 0;
     m_held[1] = 0;
-    unk44a = 0x12c;
-    unk44c = 0x12c;
-    unk446 = 0xb4;
-    unk448 = 0xb4;
+    unk44a = 300;
+    unk44c = 300;
+    unk446 = 180;
+    unk448 = 180;
     m_state = 0;
     m_menuChoice = 0;
     m_overwriteChoice = 0;
@@ -360,27 +360,27 @@ void CScene8::Enter()
     m_game->m_editColor[0] = 0;
     m_game->m_editColor[1] = 0;
     if (1) {
-        m_graphics->LoadPaletteDat(m_palette, "system\\replay.dat", 0, 0xc1, 0x3e);
+        m_graphics->LoadPaletteDat(m_palette, "system\\replay.dat", 0, 193, 62);
     } else {
-        m_graphics->LoadPaletteBmp(m_palette, "system\\replay.bmp", 0, 0xc1, 0x3e);
+        m_graphics->LoadPaletteBmp(m_palette, "system\\replay.bmp", 0, 193, 62);
     }
     page = 0;
     for (; page < 9; page++) {
         slot = 0;
         for (; slot < 9; slot++) {
             strcpy(path, "replay\\data");
-            _itoa(page + 1, digits, 0xa);
+            _itoa(page + 1, digits, 10);
             strcat(path, (const char*)digits);
             strcat(path, "-");
-            _itoa(slot + 1, digits, 0xa);
+            _itoa(slot + 1, digits, 10);
             strcat(path, (const char*)digits);
             strcat(path, ".rep");
             size = m_game->m_replay.OpenRead((const char*)path);
             if (size == 0) {
                 m_replays[(page * 9 + slot)] = 0;
             } else {
-                ((char (*)[18])&m_replays[0x51])[page][slot * 2] = m_game->m_replay.Read();
-                ((char (*)[18])&m_replays[0x51])[page][slot * 2 + 1] = m_game->m_replay.Read();
+                ((char (*)[18])&m_replays[81])[page][slot * 2] = m_game->m_replay.Read();
+                ((char (*)[18])&m_replays[81])[page][slot * 2 + 1] = m_game->m_replay.Read();
                 m_replays[(page * 9 + slot)] = 1;
             }
             m_game->m_replay.Close();
@@ -391,9 +391,9 @@ void CScene8::Enter()
         CScene::FadeIn(m_palette, 1);
     } else {
         if (1) {
-            m_graphics->LoadPaletteDat(m_palette, "system\\replay.dat", 0, 0xc1, 0x3e);
+            m_graphics->LoadPaletteDat(m_palette, "system\\replay.dat", 0, 193, 62);
         } else {
-            m_graphics->LoadPaletteBmp(m_palette, "system\\replay.bmp", 0, 0xc1, 0x3e);
+            m_graphics->LoadPaletteBmp(m_palette, "system\\replay.bmp", 0, 193, 62);
         }
         m_graphics->SetPalette(m_palette);
         CScene::FadeIn(m_palette, 1);
@@ -409,12 +409,12 @@ void CScene8::FadeOutDimmed()
 
     frameStart = timeGetTime();
     shortFrame = 0;
-    level = 0x14;
+    level = 20;
     for (; level >= 0; level--) {
         Draw();
         m_graphics->Darken(m_palette, 1, 0xc1, level << 1);
         m_graphics->Darken(m_palette, 0xc2, 0xff, level * 5);
-        while ((DWORD)(timeGetTime() - frameStart) < (BYTE)(0x10 - shortFrame)) {
+        while ((DWORD)(timeGetTime() - frameStart) < (BYTE)(16 - shortFrame)) {
         }
         frameStart = timeGetTime();
         shortFrame = shortFrame == 0;
@@ -430,11 +430,11 @@ void CScene8::FadeInDimmed()
     frameStart = timeGetTime();
     shortFrame = 0;
     level = 0;
-    for (; level <= 0x14; level++) {
+    for (; level <= 20; level++) {
         Draw();
         m_graphics->Darken(m_palette, 1, 0xc1, level << 1);
         m_graphics->Darken(m_palette, 0xc2, 0xff, level * 5);
-        while ((DWORD)(timeGetTime() - frameStart) < (BYTE)(0x10 - shortFrame)) {
+        while ((DWORD)(timeGetTime() - frameStart) < (BYTE)(16 - shortFrame)) {
         }
         frameStart = timeGetTime();
         shortFrame = shortFrame == 0;

@@ -12,7 +12,7 @@ CBg16::CBg16(CGraphics* graphics)
     int i;
 
     m_graphics = graphics;
-    m_number = 0x10;
+    m_number = 16;
     m_lastFrame = 3;
     surfaces = TOINT(int, operator new(0x10));
     m_surfaces = TOPTR(PTR32(IDirectDrawSurface)*, surfaces);
@@ -105,20 +105,20 @@ void CBg16::Draw(int x, int y, char layer)
         src = MakeRect(0, 0, sprite.width, sprite.height);
         if (m_objects[i].facing == -1) {
             dst.left = (int)m_objects[i].x + x - (sprite.width - sprite.x);
-            dst.top = y + (int)m_objects[i].y + 0xd2 - sprite.y;
+            dst.top = y + (int)m_objects[i].y + 210 - sprite.y;
             dst.right = sprite.width + dst.left;
             dst.bottom = sprite.height + dst.top;
             wrapDst.left = (int)m_objects[i].x + x - (sprite.width - sprite.x) - sprite.width;
-            wrapDst.top = y + (int)m_objects[i].y + 0xd2 - sprite.y;
+            wrapDst.top = y + (int)m_objects[i].y + 210 - sprite.y;
             wrapDst.right = sprite.width + wrapDst.left;
             wrapDst.bottom = sprite.height + wrapDst.top;
         } else {
             dst.left = (int)m_objects[i].x + x - sprite.x;
-            dst.top = y + (int)m_objects[i].y + 0xd2 - sprite.y;
+            dst.top = y + (int)m_objects[i].y + 210 - sprite.y;
             dst.right = sprite.width + dst.left;
             dst.bottom = sprite.height + dst.top;
             wrapDst.left = (int)m_objects[i].x + x - sprite.x - sprite.width;
-            wrapDst.top = y + (int)m_objects[i].y + 0xd2 - sprite.y;
+            wrapDst.top = y + (int)m_objects[i].y + 210 - sprite.y;
             wrapDst.right = sprite.width + wrapDst.left;
             wrapDst.bottom = sprite.height + wrapDst.top;
         }

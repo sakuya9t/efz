@@ -17,16 +17,16 @@ CScene3::CScene3(HWND hwnd, PTR32(CPlayer)* player1Ref, PTR32(CPlayer)* player2R
     : CScene(hwnd, player1Ref, player2Ref, game, graphics, input, sound)
 {
     m_focusXDefault = 0;
-    m_focusYHigh = -0x32;
+    m_focusYHigh = -50;
     m_focusX = m_focusXDefault;
     m_focusY = m_focusYHigh;
     m_focusYStep = 5;
-    m_scrollX = -0xa0;
+    m_scrollX = -160;
     m_scrollY = 0;
     m_enter = 1;
     m_leave = 0;
     m_refillMeter = 0;
-    m_refillHp = 0x270f;
+    m_refillHp = 9999;
     m_speed = 3;
     m_paused = 0;
     m_endFade = 0.0;
@@ -37,23 +37,23 @@ CScene3::CScene3(HWND hwnd, PTR32(CPlayer)* player1Ref, PTR32(CPlayer)* player2R
     m_fps = 0;
     m_game->m_roundOver = 0;
     m_game->m_intro = 1;
-    m_digitFonts[0] = MakeRect(0, 0xea, 8, 0xa);
-    m_digitFonts[1] = MakeRect(0, 0xd2, 0x10, 0xf);
-    m_digitFonts[2] = MakeRect(0, 0xe1, 7, 9);
-    m_digitFonts[3] = MakeRect(0, 0x11a, 0xe, 0x16);
-    m_digitFonts[4] = MakeRect(0, 0x160, 8, 0xc);
-    m_digitFonts[5] = MakeRect(0, 0x154, 8, 0xc);
-    m_digitFonts[6] = MakeRect(0, 0x148, 8, 0xc);
-    m_digitFonts[7] = MakeRect(0, 0x13c, 8, 0xc);
-    m_digitFonts[8] = MakeRect(0, 0x130, 8, 0xc);
-    m_digitFonts[9] = MakeRect(0, 0x16c, 7, 0xa);
-    m_digitFonts[0xa] = MakeRect(0, 0x176, 7, 0xa);
-    m_digitFonts[0xb] = MakeRect(0, 0x180, 7, 0xa);
-    m_digitFonts[0xc] = MakeRect(0, 0x18a, 7, 0xa);
-    m_digitFonts[0xd] = MakeRect(0, 0x194, 7, 0xa);
-    m_digitFonts[0xe] = MakeRect(0, 0x19e, 7, 0xa);
-    m_digitFonts[0xf] = MakeRect(0, 0x1a8, 7, 0xa);
-    m_digitFonts[0x10] = MakeRect(0, 0x1b2, 7, 0xa);
+    m_digitFonts[0] = MakeRect(0, 234, 8, 10);
+    m_digitFonts[1] = MakeRect(0, 210, 16, 15);
+    m_digitFonts[2] = MakeRect(0, 225, 7, 9);
+    m_digitFonts[3] = MakeRect(0, 282, 14, 22);
+    m_digitFonts[4] = MakeRect(0, 352, 8, 12);
+    m_digitFonts[5] = MakeRect(0, 340, 8, 12);
+    m_digitFonts[6] = MakeRect(0, 328, 8, 12);
+    m_digitFonts[7] = MakeRect(0, 316, 8, 12);
+    m_digitFonts[8] = MakeRect(0, 304, 8, 12);
+    m_digitFonts[9] = MakeRect(0, 364, 7, 10);
+    m_digitFonts[10] = MakeRect(0, 374, 7, 10);
+    m_digitFonts[11] = MakeRect(0, 384, 7, 10);
+    m_digitFonts[12] = MakeRect(0, 394, 7, 10);
+    m_digitFonts[13] = MakeRect(0, 404, 7, 10);
+    m_digitFonts[14] = MakeRect(0, 414, 7, 10);
+    m_digitFonts[15] = MakeRect(0, 424, 7, 10);
+    m_digitFonts[16] = MakeRect(0, 434, 7, 10);
 }
 
 CScene3::~CScene3()
@@ -64,7 +64,7 @@ BYTE CScene3::Update()
 {
     int tick;
 
-    if ((DWORD)(timeGetTime() - m_secondStart) >= 0x3e8) {
+    if ((DWORD)(timeGetTime() - m_secondStart) >= 1000) {
         m_secondStart = timeGetTime();
         m_fps = m_frameCount;
         m_frameCount = 0;
@@ -75,21 +75,21 @@ BYTE CScene3::Update()
         m_players[0] = *m_player1Ref;
         m_players[1] = *m_player2Ref;
         m_focusXDefault = 0;
-        m_focusYHigh = -0x32;
+        m_focusYHigh = -50;
         m_focusX = m_focusXDefault;
         m_focusY = m_focusYHigh;
         m_focusYStep = 5;
-        m_scrollX = -0xa0;
+        m_scrollX = -160;
         m_scrollY = 0;
         m_speed = 3;
         m_refillMeter = 0;
-        m_refillHp = 0x270f;
+        m_refillHp = 9999;
         UpdateCamera();
         Draw();
         CScene::FadeIn(m_game->m_palette, 0);
         m_enter = 0;
     } else if (m_leave == 1) {
-        CScene::FadeOut(m_game->m_palette, 1, 0, 0x64);
+        CScene::FadeOut(m_game->m_palette, 1, 0, 100);
         delete *m_player1Ref;
         *m_player1Ref = (CPlayer*)0;
         delete *m_player2Ref;
@@ -234,14 +234,14 @@ void CScene3::Draw()
         m_captureFrame++;
     }
     if (0) {
-        DrawNumber(0x50, 0x64, m_players[0]->m_hp, 2, 0, 0);
-        DrawNumber(0x50, 0x6e, m_players[0]->pattern, 2, 0, 0);
-        DrawNumber(0x50, 0x78, m_players[0]->frame, 2, 0, 0);
-        DrawNumber(0x50, 0x82, m_players[0]->timer, 2, 0, 0);
-        DrawNumber(0x118, 0x64, m_players[1]->m_hp, 2, 0, 0);
-        DrawNumber(0x118, 0x6e, m_players[1]->pattern, 2, 0, 0);
-        DrawNumber(0x118, 0x78, m_players[1]->frame, 2, 0, 0);
-        DrawNumber(0x118, 0x82, m_players[1]->timer, 2, 0, 0);
+        DrawNumber(80, 100, m_players[0]->m_hp, 2, 0, 0);
+        DrawNumber(80, 110, m_players[0]->pattern, 2, 0, 0);
+        DrawNumber(80, 120, m_players[0]->frame, 2, 0, 0);
+        DrawNumber(80, 130, m_players[0]->timer, 2, 0, 0);
+        DrawNumber(280, 100, m_players[1]->m_hp, 2, 0, 0);
+        DrawNumber(280, 110, m_players[1]->pattern, 2, 0, 0);
+        DrawNumber(280, 120, m_players[1]->frame, 2, 0, 0);
+        DrawNumber(280, 130, m_players[1]->timer, 2, 0, 0);
     }
     DrawBordersAndFlip();
 }
@@ -258,19 +258,19 @@ void CScene3::UpdateCamera()
             m_game->m_cameraFocusXTime--;
         }
     }
-    targetX = 0xa0 - (int)((m_players[0]->x * (m_focusX + 0x32) + m_players[1]->x * (0x32 - m_focusX)) / 100.0);
-    if (targetX < -0x13f) {
-        targetX = -0x13f;
+    targetX = 160 - (int)((m_players[0]->x * (m_focusX + 50) + m_players[1]->x * (50 - m_focusX)) / 100.0);
+    if (targetX < -319) {
+        targetX = -319;
     } else if (targetX > 0) {
         targetX = 0;
     }
     if (m_scrollX < targetX) {
-        m_scrollX -= (m_scrollX - targetX) / 0xf - 1;
+        m_scrollX -= (m_scrollX - targetX) / 15 - 1;
         if (m_scrollX > targetX) {
             m_scrollX = targetX;
         }
     } else {
-        m_scrollX -= (m_scrollX - targetX) / 0xf + 1;
+        m_scrollX -= (m_scrollX - targetX) / 15 + 1;
         if (m_scrollX < targetX) {
             m_scrollX = targetX;
         }
@@ -289,7 +289,7 @@ void CScene3::UpdateCamera()
     if (m_players[0]->y < -240.0 || m_players[1]->y < -240.0) {
         m_focusY = m_focusYHigh;
     } else {
-        m_focusY = 0x14;
+        m_focusY = 20;
     }
     if (m_game->m_cameraFocusYTime > 0) {
         m_focusY = m_game->m_cameraFocusY * (1 - ((m_players[0]->y < m_players[1]->y) << 1));
@@ -297,24 +297,24 @@ void CScene3::UpdateCamera()
             m_game->m_cameraFocusYTime--;
         }
     }
-    if ((targetY = -(((int)m_players[0]->y - (m_players[0]->y < 0.0) + (int)m_players[1]->y - (m_players[1]->y < 0.0)) / 2) + ((int)m_players[0]->y - (m_players[0]->y < 0.0) - (int)m_players[1]->y + (m_players[1]->y < 0.0)) * m_focusY / 0x64 * ((m_players[0]->y - m_players[1]->y < 0.0) * 2 + -1)) < 0) {
+    if ((targetY = -(((int)m_players[0]->y - (m_players[0]->y < 0.0) + (int)m_players[1]->y - (m_players[1]->y < 0.0)) / 2) + ((int)m_players[0]->y - (m_players[0]->y < 0.0) - (int)m_players[1]->y + (m_players[1]->y < 0.0)) * m_focusY / 100 * ((m_players[0]->y - m_players[1]->y < 0.0) * 2 + -1)) < 0) {
         targetY = 0;
-    } else if (targetY > 0xf0) {
-        targetY = 0xf0;
+    } else if (targetY > 240) {
+        targetY = 240;
     }
     if (m_scrollY < targetY) {
-        m_scrollY -= (m_scrollY - targetY) / 0xa - 1;
+        m_scrollY -= (m_scrollY - targetY) / 10 - 1;
         if (m_scrollY > targetY) {
             m_scrollY = targetY;
         }
     } else {
-        m_scrollY -= (m_scrollY - targetY) / 0xa + 1;
+        m_scrollY -= (m_scrollY - targetY) / 10 + 1;
         if (m_scrollY < targetY) {
             m_scrollY = targetY;
         }
     }
     m_game->UpdateShake();
-    m_game->m_view = MakeRect(-m_scrollX, -m_scrollY - 0xd2, 0x140, 0xf0);
+    m_game->m_view = MakeRect(-m_scrollX, -m_scrollY - 210, 320, 240);
     m_drawX = m_scrollX + m_game->m_shakeX;
     m_drawY = m_scrollY + m_game->m_shakeY;
 }
@@ -334,11 +334,11 @@ void CScene3::PlayPlayerSounds()
     }
     side = 0;
     for (; side < 2; side++) {
-        if (m_players[side]->m_playSound >= 0 && m_players[side]->m_playSound < 0x41) {
+        if (m_players[side]->m_playSound >= 0 && m_players[side]->m_playSound < 65) {
             m_sound->Play((short)m_game->m_sounds[m_players[side]->m_playSound], 0);
             m_players[side]->m_playSound = -1;
         }
-        if (m_players[side]->m_playVoice >= 0 && m_players[side]->m_playVoice < 0x32) {
+        if (m_players[side]->m_playVoice >= 0 && m_players[side]->m_playVoice < 50) {
             m_sound->Play(m_players[side]->m_voices[m_players[side]->m_playVoice], 0);
             m_players[side]->m_playVoice = -1;
         }
@@ -355,7 +355,7 @@ void CScene3::PlayEffectSounds()
         while (i != m_game->m_effectHead) {
             m_game->m_effects[i].sound = -1;
             i++;
-            if (i >= 0x280) {
+            if (i >= 640) {
                 i = 0;
             }
         }
@@ -363,12 +363,12 @@ void CScene3::PlayEffectSounds()
     }
     slot = m_game->m_effectTail;
     while (slot != m_game->m_effectHead) {
-        if ((char)m_game->m_effects[slot].sound >= 0 && (char)m_game->m_effects[slot].sound < 0x41) {
+        if ((char)m_game->m_effects[slot].sound >= 0 && (char)m_game->m_effects[slot].sound < 65) {
             m_sound->Play((short)m_game->m_sounds[(char)m_game->m_effects[slot].sound], 0);
             m_game->m_effects[slot].sound = -1;
         }
         slot++;
-        if (slot >= 0x280) {
+        if (slot >= 640) {
             slot = 0;
         }
     }
@@ -395,8 +395,8 @@ void CScene3::CheckKo()
             return;
         }
         m_game->m_roundOver = 0;
-        m_players[0]->m_hp = 0x270f;
-        m_players[1]->m_hp = 0x270f;
+        m_players[0]->m_hp = 9999;
+        m_players[1]->m_hp = 9999;
         m_game->m_intro = 2;
         return;
     }
@@ -424,8 +424,8 @@ void CScene3::CheckKo()
         m_players[1]->m_wonHpTotal += m_players[1]->m_hp;
         if (m_players[1]->m_roundsWon < m_game->m_roundsToWin - 1) {
             m_players[1]->m_roundsWon++;
-            m_players[0]->m_freezeTime = m_players[0]->m_freezeTime + 0xb4;
-            m_players[1]->m_freezeTime = m_players[1]->m_freezeTime + 0xb4;
+            m_players[0]->m_freezeTime = m_players[0]->m_freezeTime + 180;
+            m_players[1]->m_freezeTime = m_players[1]->m_freezeTime + 180;
             m_players[0]->StartPattern();
             effect.keep = 0;
             effect.x = 80.0;
@@ -435,7 +435,7 @@ void CScene3::CheckKo()
             effect.layer = 2;
             effect.screen = 1;
             effect.type = kEffectDown;
-            effect.sound = 0x1d;
+            effect.sound = 29;
             m_game->CreateEffect((EffectDesc*)&effect);
             m_game->m_roundOver = 1;
             if (m_game->m_round < 9) {
@@ -455,8 +455,8 @@ void CScene3::CheckKo()
         m_players[0]->m_wonHpTotal += m_players[0]->m_hp;
         if (m_players[0]->m_roundsWon < m_game->m_roundsToWin - 1) {
             m_players[0]->m_roundsWon++;
-            m_players[0]->m_freezeTime = m_players[0]->m_freezeTime + 0xb4;
-            m_players[1]->m_freezeTime = m_players[1]->m_freezeTime + 0xb4;
+            m_players[0]->m_freezeTime = m_players[0]->m_freezeTime + 180;
+            m_players[1]->m_freezeTime = m_players[1]->m_freezeTime + 180;
             effect.keep = 0;
             effect.x = 240.0;
             effect.y = 100.0;
@@ -465,7 +465,7 @@ void CScene3::CheckKo()
             effect.layer = 2;
             effect.screen = 1;
             effect.type = kEffectDown;
-            effect.sound = 0x1d;
+            effect.sound = 29;
             m_game->CreateEffect((EffectDesc*)&effect);
             m_players[1]->StartPattern();
             m_game->m_roundOver = 1;
@@ -510,23 +510,23 @@ void CScene3::HandleKeys()
     }
     if ((keyState[62] & 0x80) != 0 && m_game->m_intro == 0 && m_game->m_roundOver == 0 && m_game->m_gameMode != 0 && m_game->m_gameMode != 2 && m_game->m_gameMode != 6) {
         m_refillMeter = m_refillMeter + 5;
-        if (m_refillMeter > 0x7d0) {
+        if (m_refillMeter > 2000) {
             m_refillMeter = 0;
         }
-        m_refillHp = 0x270f;
+        m_refillHp = 9999;
         m_players[0]->m_refillMeter = m_refillMeter;
         m_players[1]->m_refillMeter = m_refillMeter;
         m_players[0]->m_refillHp = m_refillHp;
         m_players[1]->m_refillHp = m_refillHp;
     } else if ((keyState[63] & 0x80) != 0 && g_fkeyHeld == 0 && m_game->m_gameMode != 0 && m_game->m_gameMode != 2 && m_game->m_gameMode != 6) {
-        if (m_refillMeter == 0x3e8) {
-            if (m_refillHp == 0xd04) {
-                m_refillMeter = 0x7d0;
+        if (m_refillMeter == 1000) {
+            if (m_refillHp == 3332) {
+                m_refillMeter = 2000;
             } else {
-                m_refillHp = 0xd04;
+                m_refillHp = 3332;
             }
         } else {
-            m_refillMeter = 0x3e8;
+            m_refillMeter = 1000;
         }
         m_players[0]->m_refillMeter = m_refillMeter;
         m_players[1]->m_refillMeter = m_refillMeter;
@@ -552,15 +552,15 @@ void CScene3::HandleKeys()
         m_paused = m_paused == 0;
         g_fkeyHeld = 1;
     }
-    if (m_refillMeter == 0x7d0) {
+    if (m_refillMeter == 2000) {
         m_refillMeter = 0;
-        m_refillHp = 0x270f;
+        m_refillHp = 9999;
         m_players[0]->m_refillMeter = m_refillMeter;
         m_players[1]->m_refillMeter = m_refillMeter;
         m_players[0]->m_refillHp = m_refillHp;
         m_players[1]->m_refillHp = m_refillHp;
-        m_players[0]->m_hp = 0x270f;
-        m_players[1]->m_hp = 0x270f;
+        m_players[0]->m_hp = 9999;
+        m_players[1]->m_hp = 9999;
     }
     if ((keyState[63] & 0x80) != 0 || (keyState[64] & 0x80) != 0 || (keyState[65] & 0x80) != 0 || (keyState[66] & 0x80) != 0) {
         g_fkeyHeld = 1;
@@ -597,8 +597,8 @@ void CScene3::HandleKeys()
             m_refillMeter = m_game->m_replay.Read();
             m_refillHp = m_game->m_replay.Read();
         } else {
-            m_refillMeter = 0x3e8;
-            m_refillHp = 0x270f;
+            m_refillMeter = 1000;
+            m_refillHp = 9999;
         }
         m_players[0]->m_refillMeter = m_refillMeter;
         m_players[1]->m_refillMeter = m_refillMeter;
@@ -643,8 +643,8 @@ void CScene3::StartIntro()
         effect.type = kEffectMotto;
         effect.sound = -1;
         m_game->CreateEffect((EffectDesc*)&effect);
-        m_game->m_intro = 0x63;
-        m_game->unk1352 = 0x12c;
+        m_game->m_intro = 99;
+        m_game->unk1352 = 300;
         break;
     case 2:
         effect.keep = 0;
@@ -655,10 +655,10 @@ void CScene3::StartIntro()
         effect.layer = 2;
         effect.screen = 1;
         effect.type = kEffectRoundFlash;
-        effect.sound = m_game->m_round + 0xb;
+        effect.sound = m_game->m_round + 11;
         m_game->CreateEffect((EffectDesc*)&effect);
-        m_game->m_intro = 0x63;
-        m_game->unk1352 = 0x10e;
+        m_game->m_intro = 99;
+        m_game->unk1352 = 270;
     }
 }
 
@@ -671,16 +671,16 @@ void CScene3::RestartRecording()
         CScene::FadeOut(m_game->m_palette, 0, 0, 0);
         m_game->m_replay.Close();
         strcpy(path, "replay\\data");
-        _itoa(m_game->m_replayPage + 1, number, 0xa);
+        _itoa(m_game->m_replayPage + 1, number, 10);
         strcat(path, (const char*)number);
         strcat(path, "-");
-        _itoa(m_game->m_replaySlot + 1, number, 0xa);
+        _itoa(m_game->m_replaySlot + 1, number, 10);
         strcat(path, (const char*)number);
         strcat(path, ".rep");
         m_game->m_replay.OpenWrite((const char*)path);
         m_game->m_replay.Write((*m_player1Ref)->m_charId);
         m_game->m_replay.Write((*m_player2Ref)->m_charId);
-        m_game->m_replay.Write(0x68);
+        m_game->m_replay.Write(104);
         m_game->m_replay.Write(m_game->m_stage);
         m_game->m_replay.Write((*m_player1Ref)->m_paletteIndex);
         m_game->m_replay.Write((*m_player2Ref)->m_paletteIndex);
@@ -691,11 +691,11 @@ void CScene3::RestartRecording()
         m_players[1]->m_refillMeter = m_refillMeter;
         m_game->m_intro = 1;
         m_focusXDefault = 0;
-        m_focusYHigh = -0x32;
+        m_focusYHigh = -50;
         m_focusX = m_focusXDefault;
         m_focusY = m_focusYHigh;
         m_focusYStep = 5;
-        m_scrollX = -0xa0;
+        m_scrollX = -160;
         m_scrollY = 0;
         m_speed = 3;
         UpdateCamera();
@@ -735,12 +735,12 @@ void CScene3::CheckHits()
                 ClashObjects(m_players[0], m_players[1], slot, otherSlot);
             }
             otherSlot++;
-            if (otherSlot >= 0x40) {
+            if (otherSlot >= 64) {
                 otherSlot = 0;
             }
         }
         slot++;
-        if (slot >= 0x40) {
+        if (slot >= 64) {
             slot = 0;
         }
     }
@@ -753,12 +753,12 @@ void CScene3::CheckHits()
                 ResolveObjectHitsObject(m_players[1], m_players[0], otherSlot, slot);
             }
             otherSlot++;
-            if (otherSlot >= 0x40) {
+            if (otherSlot >= 64) {
                 otherSlot = 0;
             }
         }
         slot++;
-        if (slot >= 0x40) {
+        if (slot >= 64) {
             slot = 0;
         }
     }
@@ -769,7 +769,7 @@ void CScene3::CheckHits()
             ResolvePlayerHitsObject(m_players[0], m_players[1], (CollisionInfo*)&info1, (CollisionInfo*)&info2, slot);
         }
         slot++;
-        if (slot >= 0x40) {
+        if (slot >= 64) {
             slot = 0;
         }
     }
@@ -780,7 +780,7 @@ void CScene3::CheckHits()
             ResolvePlayerHitsObject(m_players[1], m_players[0], (CollisionInfo*)&info2, (CollisionInfo*)&info1, slot);
         }
         slot++;
-        if (slot >= 0x40) {
+        if (slot >= 64) {
             slot = 0;
         }
     }
@@ -988,7 +988,7 @@ int CScene3::WillRecoilCounter(CPlayer* attacker, CPlayer* defender, CollisionIn
             }
         }
         if (anyOverlap != 0) {
-            contact = MakeRect(-0x2710, -0x2710, 0x4e20, 0x4e20);
+            contact = MakeRect(-10000, -10000, 20000, 20000);
             i = 0;
             for (; i < 4; i++) {
                 j = 0;
@@ -1021,7 +1021,7 @@ int CScene3::WillRecoilCounter(CPlayer* attacker, CPlayer* defender, CollisionIn
                     }
                 }
             }
-            if (defender->m_canRecoilCounter != 0 && defender->m_recoilGuardWindow >= 0x1e && defender->m_noGuardTime == 0 && defender->HoldsGuard(&attackerFrame) != 0 && (attackerFrame.flagsAA & kAttackUnblockable) == 0) {
+            if (defender->m_canRecoilCounter != 0 && defender->m_recoilGuardWindow >= 30 && defender->m_noGuardTime == 0 && defender->HoldsGuard(&attackerFrame) != 0 && (attackerFrame.flagsAA & kAttackUnblockable) == 0) {
                 return 1;
             }
         }
@@ -1079,7 +1079,7 @@ void CScene3::ResolvePlayerAttack(CPlayer* attacker, CPlayer* defender, Collisio
             }
         }
         if (anyOverlap != 0) {
-            contact = MakeRect(-0x2710, -0x2710, 0x4e20, 0x4e20);
+            contact = MakeRect(-10000, -10000, 20000, 20000);
             i = 0;
             for (; i < 4; i++) {
                 j = 0;
@@ -1126,7 +1126,7 @@ void CScene3::ResolvePlayerAttack(CPlayer* attacker, CPlayer* defender, Collisio
                 defender->m_attackResult = 6;
                 return;
             }
-            if (defender->m_canRecoilCounter != 0 && defender->m_recoilGuardWindow >= 0x1e && defender->m_noGuardTime == 0 && defender->HoldsGuard(&attackerFrame) != 0 && (attackerFrame.flagsAA & kAttackUnblockable) == 0) {
+            if (defender->m_canRecoilCounter != 0 && defender->m_recoilGuardWindow >= 30 && defender->m_noGuardTime == 0 && defender->HoldsGuard(&attackerFrame) != 0 && (attackerFrame.flagsAA & kAttackUnblockable) == 0) {
                 attacker->m_attackResult = 2;
                 attacker->m_gauge += attackerFrame.gaugeOnGuard;
                 attacker->m_hitsLeft--;
@@ -1139,23 +1139,23 @@ void CScene3::ResolvePlayerAttack(CPlayer* attacker, CPlayer* defender, Collisio
                 effect.layer = 1;
                 effect.screen = 0;
                 effect.type = kEffectRecoilGuard;
-                effect.sound = 0xa;
+                effect.sound = 10;
                 m_game->CreateEffect((EffectDesc*)&effect);
                 defender->StartPattern();
                 defender->FaceOpponent();
                 if (defender->y == 0.0) {
-                    defender->pattern = (defender->m_inputY == 1) + 0xa8;
+                    defender->pattern = (defender->m_inputY == 1) + 168;
                 } else {
                     defender->pattern = kRecoilGuardAir;
                 }
                 attacker->ClearInput();
                 defender->ClearInput();
-                defender->m_freezeTime = 0x3c;
+                defender->m_freezeTime = 60;
                 defender->m_canRecoilCounter = 0;
                 attacker->m_canRecoilCounter = 1;
                 return;
             }
-            if (defender->m_recoilGuardWindow >= 0x1e && defender->y < 0.0 && defender->CanGuard(&attackerFrame, &defenderFrame) != 0) {
+            if (defender->m_recoilGuardWindow >= 30 && defender->y < 0.0 && defender->CanGuard(&attackerFrame, &defenderFrame) != 0) {
                 attacker->m_attackResult = 2;
                 attacker->m_gauge += attackerFrame.gaugeOnGuard;
                 attacker->m_hitsLeft--;
@@ -1168,18 +1168,18 @@ void CScene3::ResolvePlayerAttack(CPlayer* attacker, CPlayer* defender, Collisio
                 effect.layer = 1;
                 effect.screen = 0;
                 effect.type = kEffectRecoilGuard;
-                effect.sound = 0xa;
+                effect.sound = 10;
                 m_game->CreateEffect((EffectDesc*)&effect);
                 defender->StartPattern();
                 defender->FaceOpponent();
                 defender->pattern = kRecoilGuardAir;
                 attacker->ClearInput();
                 defender->ClearInput();
-                defender->m_freezeTime = 0x3c;
+                defender->m_freezeTime = 60;
                 attacker->m_canRecoilCounter = 1;
                 return;
             }
-            if (defender->CanGuard(&attackerFrame, &defenderFrame) != 0 && defender->m_recoilGuardWindow >= 0x1e && defender->y == 0.0 && defender->pattern != kRecoilGuardStand && defender->pattern != kRecoilGuardCrouch) {
+            if (defender->CanGuard(&attackerFrame, &defenderFrame) != 0 && defender->m_recoilGuardWindow >= 30 && defender->y == 0.0 && defender->pattern != kRecoilGuardStand && defender->pattern != kRecoilGuardCrouch) {
                 attacker->m_attackResult = 2;
                 attacker->m_gauge += attackerFrame.gaugeOnGuard;
                 attacker->m_hitsLeft--;
@@ -1192,14 +1192,14 @@ void CScene3::ResolvePlayerAttack(CPlayer* attacker, CPlayer* defender, Collisio
                 effect.layer = 1;
                 effect.screen = 0;
                 effect.type = kEffectRecoilGuard;
-                effect.sound = 0xa;
+                effect.sound = 10;
                 m_game->CreateEffect((EffectDesc*)&effect);
                 defender->StartPattern();
                 defender->FaceOpponent();
-                defender->pattern = (defender->m_inputY == 1) + 0xa8;
+                defender->pattern = (defender->m_inputY == 1) + 168;
                 attacker->ClearInput();
                 defender->ClearInput();
-                defender->m_freezeTime = 0x3c;
+                defender->m_freezeTime = 60;
                 attacker->m_canRecoilCounter = 1;
                 return;
             }
@@ -1222,7 +1222,7 @@ void CScene3::ResolvePlayerAttack(CPlayer* attacker, CPlayer* defender, Collisio
                 if (defender->m_hp <= 0) {
                     defender->m_hp = 1;
                 }
-                defender->m_guardGauge = attackerFrame.damage / 0x1e + defender->m_guardGauge;
+                defender->m_guardGauge = attackerFrame.damage / 30 + defender->m_guardGauge;
                 if (defender->m_guardGauge > 3.6e+02f) {
                     *(int*)&defender->m_guardGauge = 0x43b40000;
                 }
@@ -1247,7 +1247,7 @@ void CScene3::ResolvePlayerAttack(CPlayer* attacker, CPlayer* defender, Collisio
                 if (defender->m_hp <= 0) {
                     defender->m_hp = 1;
                 }
-                defender->m_guardGauge = attackerFrame.damage / 0x1e + defender->m_guardGauge;
+                defender->m_guardGauge = attackerFrame.damage / 30 + defender->m_guardGauge;
                 if (defender->m_guardGauge > 3.6e+02f) {
                     *(int*)&defender->m_guardGauge = 0x43b40000;
                 }
@@ -1286,7 +1286,7 @@ void CScene3::ResolvePlayerAttack(CPlayer* attacker, CPlayer* defender, Collisio
                 effect.scale = 2;
                 effect.layer = 1;
                 effect.screen = 0;
-                defender->pattern = (attackerFrame.flagsAA & kAttackMedium) / 0x10 + 0x96 + (attackerFrame.flagsAA & kAttackHeavy) / 0x20 * 2 + (defender->m_inputY == 1 || (attackerFrame.flagsAA & defenderFrame.flagsB0 & 5) == 0 && defender->m_cpu != 0) * 3;
+                defender->pattern = (attackerFrame.flagsAA & kAttackMedium) / 16 + 150 + (attackerFrame.flagsAA & kAttackHeavy) / 32 * 2 + (defender->m_inputY == 1 || (attackerFrame.flagsAA & defenderFrame.flagsB0 & 5) == 0 && defender->m_cpu != 0) * 3;
                 if (defender->y < 0.0) {
                     defender->pattern = kGuardAir;
                 }
@@ -1299,13 +1299,13 @@ void CScene3::ResolvePlayerAttack(CPlayer* attacker, CPlayer* defender, Collisio
                     defender->m_hp = 1;
                 }
                 if (attacker->m_guardGauge > 0.0f) {
-                    attacker->m_guardGauge = attacker->m_guardGauge - attackerFrame.damage / 0x1e;
+                    attacker->m_guardGauge = attacker->m_guardGauge - attackerFrame.damage / 30;
                     if (attacker->m_guardGauge < 0.0f) {
                         defender->m_guardGauge = defender->m_guardGauge - attacker->m_guardGauge;
                         *(int*)&attacker->m_guardGauge = 0;
                     }
                 } else {
-                    defender->m_guardGauge = attackerFrame.damage / 0x1e + defender->m_guardGauge;
+                    defender->m_guardGauge = attackerFrame.damage / 30 + defender->m_guardGauge;
                     if (defender->m_guardGauge > 3.6e+02f) {
                         *(int*)&defender->m_guardGauge = 0x43b40000;
                     }
@@ -1323,9 +1323,9 @@ void CScene3::ResolvePlayerAttack(CPlayer* attacker, CPlayer* defender, Collisio
                     } else if ((defenderFrame.flagsB0 & (kStateStanding | kStateCrouching)) == 3) {
                         defender->pattern = kHitAir;
                     } else if ((defenderFrame.flagsB0 & kStateStanding) != 0) {
-                        defender->pattern = ((attackerFrame.flagsAA & kAttackBodyHit) > 0) * 3 + 0x32 + ((attackerFrame.flagsAA & kAttackMedium) > 0) + ((attackerFrame.flagsAA & kAttackHeavy) > 0) * 2;
+                        defender->pattern = ((attackerFrame.flagsAA & kAttackBodyHit) > 0) * 3 + 50 + ((attackerFrame.flagsAA & kAttackMedium) > 0) + ((attackerFrame.flagsAA & kAttackHeavy) > 0) * 2;
                     } else if ((defenderFrame.flagsB0 & kStateCrouching) != 0) {
-                        defender->pattern = ((attackerFrame.flagsAA & kAttackMedium) > 0) + 0x38 + ((attackerFrame.flagsAA & kAttackHeavy) > 0) * 2;
+                        defender->pattern = ((attackerFrame.flagsAA & kAttackMedium) > 0) + 56 + ((attackerFrame.flagsAA & kAttackHeavy) > 0) * 2;
                     }
                 } else if (attackerFrame.airHitPattern > 0) {
                     defender->pattern = attackerFrame.airHitPattern;
@@ -1337,7 +1337,7 @@ void CScene3::ResolvePlayerAttack(CPlayer* attacker, CPlayer* defender, Collisio
                 defender->FaceOpponent();
             } else {
                 attacker->m_comboHits = 0;
-                defender->Tint(0xdf, 3);
+                defender->Tint(223, 3);
                 attacker->m_attackResult = 7;
             }
             if ((defenderFrame.flagsB0 & kStateCanGuard) > 0) {
@@ -1369,7 +1369,7 @@ void CScene3::ResolvePlayerAttack(CPlayer* attacker, CPlayer* defender, Collisio
             }
             attacker->m_comboHits++;
             attacker->m_shownHits = attacker->m_comboHits;
-            attacker->m_comboTimer = 0xb4;
+            attacker->m_comboTimer = 180;
             attacker->m_comboDamage = defender->m_comboStartHp - defender->m_hp;
             attacker->m_gauge += attackerFrame.gaugeOnHit;
             attacker->m_hitstop = attackerFrame.attackerHitstop;
@@ -1447,7 +1447,7 @@ void CScene3::ResolveObjectAttack(CPlayer* attacker, CPlayer* defender, int slot
         }
         if (anyOverlap != 0) {
             EffectDesc effect;
-            contact = MakeRect(-0x2710, -0x2710, 0x4e20, 0x4e20);
+            contact = MakeRect(-10000, -10000, 20000, 20000);
             i = 0;
             for (; i < 4; i++) {
                 j = 0;
@@ -1487,7 +1487,7 @@ void CScene3::ResolveObjectAttack(CPlayer* attacker, CPlayer* defender, int slot
                 defender->m_attackResult = 6;
                 return;
             }
-            if (defender->m_canRecoilCounter != 0 && defender->m_recoilGuardWindow >= 0x1e && defender->m_noGuardTime == 0 && defender->HoldsGuard((PatternFrame*)objectFrame) != 0 && (objectFrame->flagsAA & kAttackUnblockable) == 0) {
+            if (defender->m_canRecoilCounter != 0 && defender->m_recoilGuardWindow >= 30 && defender->m_noGuardTime == 0 && defender->HoldsGuard((PatternFrame*)objectFrame) != 0 && (objectFrame->flagsAA & kAttackUnblockable) == 0) {
                 object->attackResult = 2;
                 attacker->m_gauge += objectFrame->gaugeOnGuard;
                 object->hitsLeft--;
@@ -1500,23 +1500,23 @@ void CScene3::ResolveObjectAttack(CPlayer* attacker, CPlayer* defender, int slot
                 effect.layer = 1;
                 effect.screen = 0;
                 effect.type = kEffectRecoilGuard;
-                effect.sound = 0xa;
+                effect.sound = 10;
                 m_game->CreateEffect((EffectDesc*)&effect);
                 defender->StartPattern();
                 defender->facing = -object->facing;
                 if (defender->y == 0.0) {
-                    defender->pattern = (defender->m_inputY == 1) + 0xa8;
+                    defender->pattern = (defender->m_inputY == 1) + 168;
                 } else {
                     defender->pattern = kRecoilGuardAir;
                 }
                 attacker->ClearInput();
                 defender->ClearInput();
-                defender->m_freezeTime = 0x3c;
+                defender->m_freezeTime = 60;
                 defender->m_canRecoilCounter = 0;
                 attacker->m_canRecoilCounter = 1;
                 return;
             }
-            if (defender->m_recoilGuardWindow >= 0x1e && defender->y < 0.0 && defender->CanGuard((PatternFrame*)objectFrame, (PatternFrame*)info) != 0) {
+            if (defender->m_recoilGuardWindow >= 30 && defender->y < 0.0 && defender->CanGuard((PatternFrame*)objectFrame, (PatternFrame*)info) != 0) {
                 object->attackResult = 2;
                 attacker->m_gauge += objectFrame->gaugeOnGuard;
                 object->hitsLeft--;
@@ -1529,18 +1529,18 @@ void CScene3::ResolveObjectAttack(CPlayer* attacker, CPlayer* defender, int slot
                 effect.layer = 1;
                 effect.screen = 0;
                 effect.type = kEffectRecoilGuard;
-                effect.sound = 0xa;
+                effect.sound = 10;
                 m_game->CreateEffect((EffectDesc*)&effect);
                 defender->StartPattern();
                 defender->facing = -object->facing;
                 defender->pattern = kRecoilGuardAir;
                 attacker->ClearInput();
                 defender->ClearInput();
-                defender->m_freezeTime = 0x3c;
+                defender->m_freezeTime = 60;
                 attacker->m_canRecoilCounter = 1;
                 return;
             }
-            if (defender->CanGuard((PatternFrame*)objectFrame, (PatternFrame*)info) != 0 && defender->m_recoilGuardWindow >= 0x1e && defender->y == 0.0 && defender->pattern != kRecoilGuardStand && defender->pattern != kRecoilGuardCrouch) {
+            if (defender->CanGuard((PatternFrame*)objectFrame, (PatternFrame*)info) != 0 && defender->m_recoilGuardWindow >= 30 && defender->y == 0.0 && defender->pattern != kRecoilGuardStand && defender->pattern != kRecoilGuardCrouch) {
                 object->attackResult = 2;
                 attacker->m_gauge += objectFrame->gaugeOnGuard;
                 object->hitsLeft--;
@@ -1553,14 +1553,14 @@ void CScene3::ResolveObjectAttack(CPlayer* attacker, CPlayer* defender, int slot
                 effect.layer = 1;
                 effect.screen = 0;
                 effect.type = kEffectRecoilGuard;
-                effect.sound = 0xa;
+                effect.sound = 10;
                 m_game->CreateEffect((EffectDesc*)&effect);
                 defender->StartPattern();
                 defender->facing = -object->facing;
-                defender->pattern = (defender->m_inputY == 1) + 0xa8;
+                defender->pattern = (defender->m_inputY == 1) + 168;
                 attacker->ClearInput();
                 defender->ClearInput();
-                defender->m_freezeTime = 0x3c;
+                defender->m_freezeTime = 60;
                 attacker->m_canRecoilCounter = 1;
                 return;
             }
@@ -1583,7 +1583,7 @@ void CScene3::ResolveObjectAttack(CPlayer* attacker, CPlayer* defender, int slot
                 if (defender->m_hp <= 0) {
                     defender->m_hp = 1;
                 }
-                defender->m_guardGauge = objectFrame->damage / 0x1e + defender->m_guardGauge;
+                defender->m_guardGauge = objectFrame->damage / 30 + defender->m_guardGauge;
                 if (defender->m_guardGauge > 3.6e+02f) {
                     *(int*)&defender->m_guardGauge = 0x43b40000;
                 }
@@ -1608,7 +1608,7 @@ void CScene3::ResolveObjectAttack(CPlayer* attacker, CPlayer* defender, int slot
                 if (defender->m_hp <= 0) {
                     defender->m_hp = 1;
                 }
-                defender->m_guardGauge = objectFrame->damage / 0x1e + defender->m_guardGauge;
+                defender->m_guardGauge = objectFrame->damage / 30 + defender->m_guardGauge;
                 if (defender->m_guardGauge > 3.6e+02f) {
                     *(int*)&defender->m_guardGauge = 0x43b40000;
                 }
@@ -1633,14 +1633,14 @@ void CScene3::ResolveObjectAttack(CPlayer* attacker, CPlayer* defender, int slot
                 if (defender->m_hp <= 0) {
                     defender->m_hp = 1;
                 }
-                defender->m_guardGauge = objectFrame->damage / 0x1e + defender->m_guardGauge;
+                defender->m_guardGauge = objectFrame->damage / 30 + defender->m_guardGauge;
                 if (defender->m_guardGauge > 3.6e+02f) {
                     *(int*)&defender->m_guardGauge = 0x43b40000;
                 }
                 return;
             }
             if (defender->CanGuard((PatternFrame*)objectFrame, (PatternFrame*)info) != 0) {
-                defender->pattern = (objectFrame->flagsAA & kAttackMedium) / 0x10 + 0x96 + (objectFrame->flagsAA & kAttackHeavy) / 0x20 * 2 + (defender->m_inputY == 1 || (objectFrame->flagsAA & info->frame.flagsB0 & 5) == 0 && defender->m_cpu != 0) * 3;
+                defender->pattern = (objectFrame->flagsAA & kAttackMedium) / 16 + 150 + (objectFrame->flagsAA & kAttackHeavy) / 32 * 2 + (defender->m_inputY == 1 || (objectFrame->flagsAA & info->frame.flagsB0 & 5) == 0 && defender->m_cpu != 0) * 3;
                 if (defender->y < 0.0) {
                     defender->pattern = kGuardAir;
                 }
@@ -1664,13 +1664,13 @@ void CScene3::ResolveObjectAttack(CPlayer* attacker, CPlayer* defender, int slot
                     defender->m_hp = 1;
                 }
                 if (attacker->m_guardGauge > 0.0f) {
-                    attacker->m_guardGauge = attacker->m_guardGauge - objectFrame->damage / 0x1e;
+                    attacker->m_guardGauge = attacker->m_guardGauge - objectFrame->damage / 30;
                     if (attacker->m_guardGauge < 0.0f) {
                         defender->m_guardGauge = defender->m_guardGauge - attacker->m_guardGauge;
                         *(int*)&attacker->m_guardGauge = 0;
                     }
                 } else {
-                    defender->m_guardGauge = objectFrame->damage / 0x1e + defender->m_guardGauge;
+                    defender->m_guardGauge = objectFrame->damage / 30 + defender->m_guardGauge;
                     if (defender->m_guardGauge > 3.6e+02f) {
                         *(int*)&defender->m_guardGauge = 0x43b40000;
                     }
@@ -1688,9 +1688,9 @@ void CScene3::ResolveObjectAttack(CPlayer* attacker, CPlayer* defender, int slot
                     } else if ((info->frame.flagsB0 & (kStateStanding | kStateCrouching)) == 3) {
                         defender->pattern = kHitAir;
                     } else if ((info->frame.flagsB0 & kStateStanding) != 0) {
-                        defender->pattern = ((objectFrame->flagsAA & kAttackBodyHit) > 0) * 3 + 0x32 + ((objectFrame->flagsAA & kAttackMedium) > 0) + ((objectFrame->flagsAA & kAttackHeavy) > 0) * 2;
+                        defender->pattern = ((objectFrame->flagsAA & kAttackBodyHit) > 0) * 3 + 50 + ((objectFrame->flagsAA & kAttackMedium) > 0) + ((objectFrame->flagsAA & kAttackHeavy) > 0) * 2;
                     } else if ((info->frame.flagsB0 & kStateCrouching) != 0) {
-                        defender->pattern = ((objectFrame->flagsAA & kAttackMedium) > 0) + 0x38 + ((objectFrame->flagsAA & kAttackHeavy) > 0) * 2;
+                        defender->pattern = ((objectFrame->flagsAA & kAttackMedium) > 0) + 56 + ((objectFrame->flagsAA & kAttackHeavy) > 0) * 2;
                     }
                 } else if (objectFrame->airHitPattern > 0) {
                     defender->pattern = objectFrame->airHitPattern;
@@ -1702,7 +1702,7 @@ void CScene3::ResolveObjectAttack(CPlayer* attacker, CPlayer* defender, int slot
                 defender->facing = -object->facing;
             } else {
                 attacker->m_comboHits = 0;
-                defender->Tint(0xe9, 3);
+                defender->Tint(233, 3);
                 object->attackResult = 7;
             }
             if ((info->frame.flagsB0 & kStateCanGuard) > 0) {
@@ -1733,7 +1733,7 @@ void CScene3::ResolveObjectAttack(CPlayer* attacker, CPlayer* defender, int slot
             }
             attacker->m_comboHits++;
             attacker->m_shownHits = attacker->m_comboHits;
-            attacker->m_comboTimer = 0xb4;
+            attacker->m_comboTimer = 180;
             attacker->m_comboDamage = defender->m_comboStartHp - defender->m_hp;
             attacker->m_gauge += objectFrame->gaugeOnHit;
             object->hitstop = objectFrame->attackerHitstop;
@@ -1796,7 +1796,7 @@ void CScene3::ResolveObjectHitsObject(CPlayer* attacker, CPlayer* defender, int 
             }
         }
         if (anyOverlap != 0) {
-            contact = MakeRect(-0x2710, -0x2710, 0x4e20, 0x4e20);
+            contact = MakeRect(-10000, -10000, 20000, 20000);
             i = 0;
             for (; i < 4; i++) {
                 j = 0;
@@ -1843,9 +1843,9 @@ void CScene3::ResolveObjectHitsObject(CPlayer* attacker, CPlayer* defender, int 
                         } else if ((targetFrame->flagsB0 & (kStateStanding | kStateCrouching)) == 3) {
                             defender->pattern = kHitAir;
                         } else if ((targetFrame->flagsB0 & kStateStanding) != 0) {
-                            defender->pattern = ((objectFrame->flagsAA & kAttackBodyHit) > 0) * 3 + 0x32 + ((objectFrame->flagsAA & kAttackMedium) > 0) + ((objectFrame->flagsAA & kAttackHeavy) > 0) * 2;
+                            defender->pattern = ((objectFrame->flagsAA & kAttackBodyHit) > 0) * 3 + 50 + ((objectFrame->flagsAA & kAttackMedium) > 0) + ((objectFrame->flagsAA & kAttackHeavy) > 0) * 2;
                         } else if ((targetFrame->flagsB0 & kStateCrouching) != 0) {
-                            defender->pattern = ((objectFrame->flagsAA & kAttackMedium) > 0) + 0x38 + ((objectFrame->flagsAA & kAttackHeavy) > 0) * 2;
+                            defender->pattern = ((objectFrame->flagsAA & kAttackMedium) > 0) + 56 + ((objectFrame->flagsAA & kAttackHeavy) > 0) * 2;
                         }
                     } else if (objectFrame->airHitPattern > 0) {
                         defender->pattern = objectFrame->airHitPattern;
@@ -1856,7 +1856,7 @@ void CScene3::ResolveObjectHitsObject(CPlayer* attacker, CPlayer* defender, int 
                     defender->FaceOpponent();
                 } else {
                     attacker->m_comboHits = 0;
-                    defender->Tint(0xdf, 2);
+                    defender->Tint(223, 2);
                 }
                 if ((targetFrame->flagsB0 & kStateCanGuard) > 0) {
                     attacker->m_comboHits = 0;
@@ -1886,7 +1886,7 @@ void CScene3::ResolveObjectHitsObject(CPlayer* attacker, CPlayer* defender, int 
                 }
                 attacker->m_comboHits++;
                 attacker->m_shownHits = attacker->m_comboHits;
-                attacker->m_comboTimer = 0xb4;
+                attacker->m_comboTimer = 180;
                 attacker->m_comboDamage = defender->m_comboStartHp - defender->m_hp;
                 attacker->m_gauge += objectFrame->gaugeOnHit;
                 attacker->m_hitstop = objectFrame->attackerHitstop;
@@ -1924,11 +1924,11 @@ void CScene3::ClashObjects(CPlayer* player, CPlayer* other, int slot, int otherS
 
     object = &player->m_objects[slot];
     otherObject = &other->m_objects[otherSlot];
-    objectFrame = (int)player->m_patterns[object->pattern].frames + object->frame * 0xc8;
-    otherFrame = (int)other->m_patterns[otherObject->pattern].frames + otherObject->frame * 0xc8;
+    objectFrame = (int)player->m_patterns[object->pattern].frames + object->frame * 200;
+    otherFrame = (int)other->m_patterns[otherObject->pattern].frames + otherObject->frame * 200;
     if (object->attackResult == 0 && otherObject->attackResult == 0 && object->hitsLeft > 0 && otherObject->hitsLeft > 0 && player->m_patterns[object->pattern].level > 0 && other->m_patterns[otherObject->pattern].level > 0) {
-        pushRect = this->BoxOnStage((ObjBase*)object, TOPTR(RECT*, objectFrame + 0x90));
-        otherPushRect = this->BoxOnStage((ObjBase*)otherObject, TOPTR(RECT*, otherFrame + 0x90));
+        pushRect = this->BoxOnStage((ObjBase*)object, TOPTR(RECT*, objectFrame + 144));
+        otherPushRect = this->BoxOnStage((ObjBase*)otherObject, TOPTR(RECT*, otherFrame + 144));
         if (BoxesOverlap(&pushRect, &otherPushRect) != 0) {
             if (other->m_patterns[otherObject->pattern].level == player->m_patterns[object->pattern].level) {
                 object->attackResult = 4;
@@ -1983,7 +1983,7 @@ void CScene3::ResolvePlayerHitsObject(CPlayer* attacker, CPlayer* defender, Coll
             }
         }
         if (anyOverlap != 0) {
-            contact = MakeRect(-0x2710, -0x2710, 0x4e20, 0x4e20);
+            contact = MakeRect(-10000, -10000, 20000, 20000);
             i = 0;
             for (; i < 4; i++) {
                 j = 0;
@@ -2030,9 +2030,9 @@ void CScene3::ResolvePlayerHitsObject(CPlayer* attacker, CPlayer* defender, Coll
                         } else if ((targetFrame.flagsB0 & (kStateStanding | kStateCrouching)) == 3) {
                             defender->pattern = kHitAir;
                         } else if ((targetFrame.flagsB0 & kStateStanding) != 0) {
-                            defender->pattern = ((info->frame.flagsAA & kAttackBodyHit) > 0) * 3 + 0x32 + ((info->frame.flagsAA & kAttackMedium) > 0) + ((info->frame.flagsAA & kAttackHeavy) > 0) * 2;
+                            defender->pattern = ((info->frame.flagsAA & kAttackBodyHit) > 0) * 3 + 50 + ((info->frame.flagsAA & kAttackMedium) > 0) + ((info->frame.flagsAA & kAttackHeavy) > 0) * 2;
                         } else if ((targetFrame.flagsB0 & kStateCrouching) != 0) {
-                            defender->pattern = ((info->frame.flagsAA & kAttackMedium) > 0) + 0x38 + ((info->frame.flagsAA & kAttackHeavy) > 0) * 2;
+                            defender->pattern = ((info->frame.flagsAA & kAttackMedium) > 0) + 56 + ((info->frame.flagsAA & kAttackHeavy) > 0) * 2;
                         }
                     } else if (info->frame.airHitPattern > 0) {
                         defender->pattern = info->frame.airHitPattern;
@@ -2043,7 +2043,7 @@ void CScene3::ResolvePlayerHitsObject(CPlayer* attacker, CPlayer* defender, Coll
                     defender->FaceOpponent();
                 } else {
                     attacker->m_comboHits = 0;
-                    defender->Tint(0xdf, 2);
+                    defender->Tint(223, 2);
                 }
                 if ((targetFrame.flagsB0 & kStateCanGuard) > 0) {
                     attacker->m_comboHits = 0;
@@ -2073,7 +2073,7 @@ void CScene3::ResolvePlayerHitsObject(CPlayer* attacker, CPlayer* defender, Coll
                 }
                 attacker->m_comboHits++;
                 attacker->m_shownHits = attacker->m_comboHits;
-                attacker->m_comboTimer = 0xb4;
+                attacker->m_comboTimer = 180;
                 attacker->m_comboDamage = defender->m_comboStartHp - defender->m_hp;
                 attacker->m_gauge += info->frame.gaugeOnHit;
                 attacker->m_hitstop = info->frame.attackerHitstop;

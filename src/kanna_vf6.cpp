@@ -1078,7 +1078,7 @@ void CKanna::UpdatePattern()
         }
         m_dashMomentum = 0;
         if (frame == 0 && timer == 0) {
-            m_gauge = m_gauge + 0xa;
+            m_gauge = m_gauge + 10;
             vx = (2.0 - (*m_opponent)->m_proration / 10000.0) * -1.1;
             if (m_rfBlue != 0) {
                 m_rfGauge -= 10.0;
@@ -1114,7 +1114,7 @@ void CKanna::UpdatePattern()
         }
         m_dashMomentum = 0;
         if (frame == 0 && timer == 0) {
-            m_gauge = m_gauge + 0xf;
+            m_gauge = m_gauge + 15;
             vx = (2.0 - (*m_opponent)->m_proration / 10000.0) * -1.5;
             if (m_rfBlue != 0) {
                 m_rfGauge -= 20.0;
@@ -1150,7 +1150,7 @@ void CKanna::UpdatePattern()
         }
         m_dashMomentum = 0;
         if (frame == 0 && timer == 0) {
-            m_gauge = m_gauge + 0x14;
+            m_gauge = m_gauge + 20;
             vx = (2.0 - (*m_opponent)->m_proration / 10000.0) * -1.8;
             if (m_rfBlue != 0) {
                 m_rfGauge -= 30.0;
@@ -1186,7 +1186,7 @@ void CKanna::UpdatePattern()
         }
         m_dashMomentum = 0;
         if (frame == 0 && timer == 0) {
-            m_gauge = m_gauge + 0xa;
+            m_gauge = m_gauge + 10;
             vx = (2.0 - (*m_opponent)->m_proration / 10000.0) * -1.1;
             if (m_rfBlue != 0) {
                 m_rfGauge -= 10.0;
@@ -1222,7 +1222,7 @@ void CKanna::UpdatePattern()
         }
         m_dashMomentum = 0;
         if (frame == 0 && timer == 0) {
-            m_gauge = m_gauge + 0xf;
+            m_gauge = m_gauge + 15;
             vx = (2.0 - (*m_opponent)->m_proration / 10000.0) * -1.5;
             if (m_rfBlue != 0) {
                 m_rfGauge -= 20.0;
@@ -1258,7 +1258,7 @@ void CKanna::UpdatePattern()
         }
         m_dashMomentum = 0;
         if (frame == 0 && timer == 0) {
-            m_gauge = m_gauge + 0x14;
+            m_gauge = m_gauge + 20;
             vx = (2.0 - (*m_opponent)->m_proration / 10000.0) * -1.8;
             if (m_rfBlue != 0) {
                 m_rfGauge -= 30.0;
@@ -1294,7 +1294,7 @@ void CKanna::UpdatePattern()
         }
         m_dashMomentum = 0;
         if (frame == 0 && timer == 0) {
-            m_gauge = m_gauge + 0xa;
+            m_gauge = m_gauge + 10;
             vx = (2.0 - (*m_opponent)->m_proration / 10000.0) * -1.1;
             if (m_rfBlue != 0) {
                 m_rfGauge -= 10.0;
@@ -1327,7 +1327,7 @@ void CKanna::UpdatePattern()
         }
         m_dashMomentum = 0;
         if (frame == 0 && timer == 0) {
-            m_gauge = m_gauge + 0xf;
+            m_gauge = m_gauge + 15;
             vx = (2.0 - (*m_opponent)->m_proration / 10000.0) * -1.5;
             if (m_rfBlue != 0) {
                 m_rfGauge -= 20.0;
@@ -1360,7 +1360,7 @@ void CKanna::UpdatePattern()
         }
         m_dashMomentum = 0;
         if (frame == 0 && timer == 0) {
-            m_gauge = m_gauge + 0x14;
+            m_gauge = m_gauge + 20;
             vx = (2.0 - (*m_opponent)->m_proration / 10000.0) * -1.8;
             if (m_rfBlue != 0) {
                 m_rfGauge -= 30.0;
@@ -1392,7 +1392,7 @@ void CKanna::UpdatePattern()
             m_rfGauge -= 0.8;
         }
         if (frame == 0 && timer == 0) {
-            m_gauge = m_gauge + 0x1e;
+            m_gauge = m_gauge + 30;
             vx = m_hitVx;
             vy = vy * 0.75 + m_hitVy;
             if (vy < -2.0) {
@@ -1435,7 +1435,7 @@ void CKanna::UpdatePattern()
             m_rfGauge -= 0.8;
         }
         if (frame == 0 && timer == 0) {
-            m_gauge = m_gauge + 0x1e;
+            m_gauge = m_gauge + 30;
             vx = m_hitVx;
             vy = vy * 0.75 + m_hitVy;
             if (vy < -4.0) {
@@ -1478,7 +1478,7 @@ void CKanna::UpdatePattern()
             m_rfGauge -= 0.8;
         }
         if (frame == 0 && timer == 0) {
-            m_gauge = m_gauge + 0x1e;
+            m_gauge = m_gauge + 30;
             vx = m_hitVx;
             vy = vy * 0.75 + m_hitVy;
             if (vy < -6.0) {
@@ -1521,7 +1521,7 @@ void CKanna::UpdatePattern()
             m_rfGauge -= 0.8;
         }
         if (frame == 0 && timer == 0) {
-            m_gauge = m_gauge + 0x1e;
+            m_gauge = m_gauge + 30;
             vx = m_hitVx;
             vy = vy * 0.75 + m_hitVy;
             ay = 0.032;
@@ -1559,7 +1559,7 @@ void CKanna::UpdatePattern()
             m_rfGauge -= 0.8;
         }
         if (frame == 0 && timer == 0) {
-            m_gauge = m_gauge + 0x1e;
+            m_gauge = m_gauge + 30;
             vx = m_hitVx;
             vy = m_hitVy;
             ay = 0.032;
@@ -1602,7 +1602,7 @@ void CKanna::UpdatePattern()
             break;
         }
         if (frame == 0 && timer == 0) {
-            m_gauge = m_gauge + 0x1e;
+            m_gauge = m_gauge + 30;
             vx = m_hitVx;
             vy = vy * 0.75 + m_hitVy;
             if (vy < -2.0) {
@@ -1650,7 +1650,7 @@ void CKanna::UpdatePattern()
             break;
         }
         if (frame == 0 && timer == 0) {
-            m_gauge = m_gauge + 0x1e;
+            m_gauge = m_gauge + 30;
             vx = m_hitVx;
             vy = vy * 0.75 + m_hitVy;
             if (vy < -4.0) {
@@ -1698,7 +1698,7 @@ void CKanna::UpdatePattern()
             break;
         }
         if (frame == 0 && timer == 0) {
-            m_gauge = m_gauge + 0x1e;
+            m_gauge = m_gauge + 30;
             vx = m_hitVx;
             vy = vy * 0.75 + m_hitVy;
             ay = 0.032;
@@ -1741,7 +1741,7 @@ void CKanna::UpdatePattern()
             break;
         }
         if (frame == 0 && timer == 0) {
-            m_gauge = m_gauge + 0x1e;
+            m_gauge = m_gauge + 30;
             vx = m_hitVx;
             vy = m_hitVy;
             ay = 0.032;
@@ -1836,13 +1836,13 @@ void CKanna::UpdatePattern()
             m_rfGauge -= 0.8;
         }
         if (frame == 0 && timer == 0 && m_patternVar1 == 0) {
-            m_gauge = m_gauge + 0x1e;
+            m_gauge = m_gauge + 30;
             m_patternVar1++;
-            m_untechTime = m_untechTime + 0x78;
+            m_untechTime = m_untechTime + 120;
             vx = 0.5;
             vy = -2.5;
             ay = 0.025;
-            m_playSound = 0x1f;
+            m_playSound = 31;
             effect.type = 0;
             effect.x = (double)(int)x;
             effect.y = (double)(int)y;
@@ -1875,7 +1875,7 @@ void CKanna::UpdatePattern()
             m_rfGauge -= 0.8;
         }
         if (frame == 0 && timer == 0) {
-            m_gauge = m_gauge + 0x1e;
+            m_gauge = m_gauge + 30;
             vx = m_hitVx;
             vy = m_hitVy;
             ay = 0.072;
@@ -1986,7 +1986,7 @@ void CKanna::UpdatePattern()
         }
         m_dashMomentum = 0;
         if (frame == 0 && timer == 0) {
-            m_gauge = m_gauge + 0x1e;
+            m_gauge = m_gauge + 30;
             if (m_rfBlue != 0) {
                 m_rfGauge -= 30.0;
             }
@@ -2024,7 +2024,7 @@ void CKanna::UpdatePattern()
         }
         m_dashMomentum = 0;
         if (frame == 0 && timer == 0) {
-            m_gauge = m_gauge + 0x1e;
+            m_gauge = m_gauge + 30;
             if (m_rfBlue != 0) {
                 m_rfGauge -= 30.0;
             }
@@ -2062,7 +2062,7 @@ void CKanna::UpdatePattern()
         }
         m_dashMomentum = 0;
         if (frame == 0 && timer == 0) {
-            m_gauge = m_gauge + 0x1e;
+            m_gauge = m_gauge + 30;
             if (m_rfBlue != 0) {
                 m_rfGauge -= 30.0;
             }
@@ -2102,7 +2102,7 @@ void CKanna::UpdatePattern()
             effect.facing = facing;
             effect.layer = 1;
             SpawnObject(&effect);
-            m_gauge = m_gauge + 0x1e;
+            m_gauge = m_gauge + 30;
             vx = m_hitVx;
             vy = m_hitVy;
             ay = 0.032;
@@ -2136,11 +2136,11 @@ void CKanna::UpdatePattern()
             m_rfGauge -= 0.8;
         }
         if (frame == 0 && timer == 0 && m_patternVar1 == 0) {
-            m_playSound = 0x1e;
+            m_playSound = 30;
             vy = -0.45;
             vx = -0.1;
             m_patternVar1++;
-            m_gauge = m_gauge + 0x1e;
+            m_gauge = m_gauge + 30;
         }
         if (frame == 4 && timer == 0) {
             vx = m_hitVx;
@@ -2193,10 +2193,10 @@ void CKanna::UpdatePattern()
             if (m_rfBlue != 0) {
                 m_rfGauge -= 30.0;
             }
-            m_playSound = 0x21;
+            m_playSound = 33;
             vy = -1.5;
             vx = -0.8;
-            m_gauge = m_gauge + 0x1e;
+            m_gauge = m_gauge + 30;
         }
         vy += 0.04;
         if (frame == 0 && vy + y > 0.0) {
@@ -2245,10 +2245,10 @@ void CKanna::UpdatePattern()
             if (m_rfBlue != 0) {
                 m_rfGauge -= 30.0;
             }
-            m_playSound = 0x21;
+            m_playSound = 33;
             vy = -1.5;
             vx = -0.8;
-            m_gauge = m_gauge + 0x1e;
+            m_gauge = m_gauge + 30;
         }
         vy += 0.04;
         if (frame == 0 && vy + y > 0.0) {
@@ -2297,10 +2297,10 @@ void CKanna::UpdatePattern()
             if (m_rfBlue != 0) {
                 m_rfGauge -= 30.0;
             }
-            m_playSound = 0x21;
+            m_playSound = 33;
             vx = m_hitVx;
             vy = m_hitVy;
-            m_gauge = m_gauge + 0x1e;
+            m_gauge = m_gauge + 30;
         }
         vy += 0.04;
         timer++;
@@ -2341,10 +2341,10 @@ void CKanna::UpdatePattern()
                 if (m_rfBlue != 0) {
                     m_rfGauge -= 30.0;
                 }
-                m_playSound = 0x21;
+                m_playSound = 33;
                 vx = m_hitVx;
                 vy = m_hitVy;
-                m_gauge = m_gauge + 0x1e;
+                m_gauge = m_gauge + 30;
                 m_patternVar1++;
             }
         }
@@ -2453,7 +2453,7 @@ void CKanna::UpdatePattern()
         }
         break;
     case kLyingDown:
-        if (m_hp > 0 && timer > 0x3c && frame == 0) {
+        if (m_hp > 0 && timer > 60 && frame == 0) {
             pattern = kWakeUp;
             StartPattern();
             m_dashMomentum = 0;
@@ -2474,7 +2474,7 @@ void CKanna::UpdatePattern()
     case kGuardStandLight:
         if (frame == 0 && timer == 0) {
             m_dashMomentum = 0;
-            m_gauge = m_gauge + 0xa;
+            m_gauge = m_gauge + 10;
             vx = -1.5;
             vy = 0.0;
             y = 0.0;
@@ -2508,7 +2508,7 @@ void CKanna::UpdatePattern()
     case kGuardStandMedium:
         if (frame == 0 && timer == 0) {
             m_dashMomentum = 0;
-            m_gauge = m_gauge + 0xf;
+            m_gauge = m_gauge + 15;
             vx = -1.8;
             vy = 0.0;
             y = 0.0;
@@ -2542,7 +2542,7 @@ void CKanna::UpdatePattern()
     case kGuardStandHeavy:
         if (frame == 0 && timer == 0) {
             m_dashMomentum = 0;
-            m_gauge = m_gauge + 0x14;
+            m_gauge = m_gauge + 20;
             vx = -2.3;
             vy = 0.0;
             y = 0.0;
@@ -2576,7 +2576,7 @@ void CKanna::UpdatePattern()
     case kGuardCrouchLight:
         if (frame == 0 && timer == 0) {
             m_dashMomentum = 0;
-            m_gauge = m_gauge + 0xa;
+            m_gauge = m_gauge + 10;
             vx = -1.5;
             vy = 0.0;
             y = 0.0;
@@ -2607,7 +2607,7 @@ void CKanna::UpdatePattern()
     case kGuardCrouchMedium:
         if (frame == 0 && timer == 0) {
             m_dashMomentum = 0;
-            m_gauge = m_gauge + 0xf;
+            m_gauge = m_gauge + 15;
             vx = -1.8;
             vy = 0.0;
             y = 0.0;
@@ -2638,7 +2638,7 @@ void CKanna::UpdatePattern()
     case kGuardCrouchHeavy:
         if (frame == 0 && timer == 0) {
             m_dashMomentum = 0;
-            m_gauge = m_gauge + 0x14;
+            m_gauge = m_gauge + 20;
             vx = -2.3;
             vy = 0.0;
             y = 0.0;
@@ -2669,7 +2669,7 @@ void CKanna::UpdatePattern()
     case kGuardAir:
         if (frame == 0 && timer == 0) {
             vy = -2.6;
-            m_gauge = m_gauge + 0xf;
+            m_gauge = m_gauge + 15;
             ay = 0.06;
         }
         vx = -1.2;
@@ -2994,11 +2994,11 @@ void CKanna::UpdatePattern()
                 m_proration = m_rfGauge * 5.0 + m_proration;
             }
             m_rfGauge = 0.0;
-            m_freezeTime = 0x5a;
-            FillBackground(0xb0, 3);
+            m_freezeTime = 90;
+            FillBackground(176, 3);
         }
         if (frame == 1 && timer == 0) {
-            m_playSound = 0x12;
+            m_playSound = 18;
             effect.type = 1;
             effect.x = (double)(int)x;
             effect.y = (double)(int)y;
@@ -3097,7 +3097,7 @@ void CKanna::UpdatePattern()
             }
             m_recoilGuardWindow = 0;
             m_cornerPushback = 0.0;
-            m_freezeTime = 0x3c;
+            m_freezeTime = 60;
         }
         if (m_freezeTime == 0 && m_patternVar3 == 0) {
             m_patternVar3++;
@@ -3133,11 +3133,11 @@ void CKanna::UpdatePattern()
                 m_proration = m_rfGauge * 5.0 + m_proration;
             }
             m_rfGauge = 0.0;
-            m_freezeTime = 0x5a;
-            FillBackground(0xb0, 3);
+            m_freezeTime = 90;
+            FillBackground(176, 3);
         }
         if (frame == 1 && timer == 0) {
-            m_playSound = 0x12;
+            m_playSound = 18;
             effect.type = 1;
             effect.x = (double)(int)x;
             effect.y = (double)(int)y;
@@ -3222,7 +3222,7 @@ void CKanna::UpdatePattern()
         }
         if (frame == 2 && timer == 0) {
             m_gauge = m_gauge + 5;
-            m_playSound = 0x15;
+            m_playSound = 21;
             m_hitsLeft = 1;
         }
         timer++;
@@ -3273,8 +3273,8 @@ void CKanna::UpdatePattern()
             break;
         }
         if (frame == 3 && timer == 0) {
-            m_gauge = m_gauge + 0xf;
-            m_playSound = 0x14;
+            m_gauge = m_gauge + 15;
+            m_playSound = 20;
             m_hitsLeft = 1;
         }
         timer++;
@@ -3303,8 +3303,8 @@ void CKanna::UpdatePattern()
             m_dashMomentum = 0;
         }
         if (frame == 4 && timer == 0) {
-            m_gauge = m_gauge + 0xf;
-            m_playSound = 0x14;
+            m_gauge = m_gauge + 15;
+            m_playSound = 20;
             m_hitsLeft = 1;
         }
         if (frame == 3 && timer == 0) {
@@ -3355,8 +3355,8 @@ void CKanna::UpdatePattern()
             break;
         }
         if (frame == 4 && timer == 0) {
-            m_gauge = m_gauge + 0x23;
-            m_playSound = 0x23;
+            m_gauge = m_gauge + 35;
+            m_playSound = 35;
             m_hitsLeft = 1;
         }
         if (frame == 6 && timer == 0) {
@@ -3408,7 +3408,7 @@ void CKanna::UpdatePattern()
         }
         if (frame == 1 && timer == 0) {
             m_gauge = m_gauge + 5;
-            m_playSound = 0x15;
+            m_playSound = 21;
             m_hitsLeft = 1;
         }
         timer++;
@@ -3452,8 +3452,8 @@ void CKanna::UpdatePattern()
             break;
         }
         if (frame == 2 && timer == 0) {
-            m_gauge = m_gauge + 0xd;
-            m_playSound = 0x14;
+            m_gauge = m_gauge + 13;
+            m_playSound = 20;
             m_hitsLeft = 1;
         }
         if (frame == 1 && timer == 0) {
@@ -3500,8 +3500,8 @@ void CKanna::UpdatePattern()
             m_hitsLeft = 1;
         }
         if (frame == 3 && timer == 0 && m_patternVar1 == 0) {
-            m_gauge = m_gauge + 0x19;
-            m_playSound = 0x14;
+            m_gauge = m_gauge + 25;
+            m_playSound = 20;
             m_patternVar1++;
         }
         timer++;
@@ -3548,7 +3548,7 @@ void CKanna::UpdatePattern()
         }
         if (frame == 2 && timer == 0) {
             m_gauge = m_gauge + 5;
-            m_playSound = 0x15;
+            m_playSound = 21;
             m_hitsLeft = 1;
         }
         if (y + vy >= 0.0) {
@@ -3598,8 +3598,8 @@ void CKanna::UpdatePattern()
             break;
         }
         if (frame == 2 && timer == 0) {
-            m_gauge = m_gauge + 0xd;
-            m_playSound = 0x14;
+            m_gauge = m_gauge + 13;
+            m_playSound = 20;
             m_hitsLeft = 1;
         }
         if (frame == 3 && timer == 0) {
@@ -3659,8 +3659,8 @@ void CKanna::UpdatePattern()
             break;
         }
         if (frame == 1 && timer == 0) {
-            m_gauge = m_gauge + 0x1e;
-            m_playSound = 0x14;
+            m_gauge = m_gauge + 30;
+            m_playSound = 20;
             m_hitsLeft = 1;
         }
         if (frame == 1 && timer == 0) {
@@ -3703,8 +3703,8 @@ void CKanna::UpdatePattern()
             ay = 0.08;
         }
         if (frame == 2 && timer == 0) {
-            m_gauge = m_gauge + 0xf;
-            m_playSound = 0x14;
+            m_gauge = m_gauge + 15;
+            m_playSound = 20;
             m_hitsLeft = 1;
         }
         if (frame == 5 && timer == 0) {
@@ -3752,8 +3752,8 @@ void CKanna::UpdatePattern()
             vy = 0.0;
         }
         if (frame == 3 && timer == 0) {
-            m_gauge = m_gauge + 0x1e;
-            m_playSound = 0x14;
+            m_gauge = m_gauge + 30;
+            m_playSound = 20;
             m_hitsLeft = 1;
         }
         timer++;
@@ -3771,8 +3771,8 @@ void CKanna::UpdatePattern()
     case kUnusedJump2C:
         vy = vy + ay;
         if (frame == 0 && timer == 0) {
-            m_gauge = m_gauge + 0x1e;
-            m_playSound = 0x14;
+            m_gauge = m_gauge + 30;
+            m_playSound = 20;
             m_hitsLeft = 1;
             vx = vx / 2.0;
             ay = 0.07;
@@ -3872,8 +3872,8 @@ void CKanna::UpdatePattern()
             pattern = kUnusedThrowHit;
             (*m_opponent)->m_noAirRecovery = 1;
             effect.type = 0;
-            effect.x = (double)((int)x + facing * 0x25);
-            effect.y = (double)((int)y - 0x2a);
+            effect.x = (double)((int)x + facing * 37);
+            effect.y = (double)((int)y - 42);
             effect.scale = 2;
             effect.layer = 1;
             m_game->CreateEffect((EffectDesc*)&effect);
@@ -3896,7 +3896,7 @@ void CKanna::UpdatePattern()
         break;
     case kUnusedThrowHit:
         if (frame == 4 && timer == 0) {
-            DealDamage(0x4e2, 750.0);
+            DealDamage(1250, 750.0);
         }
         timer++;
         if (timer >= duration) {
@@ -3908,20 +3908,20 @@ void CKanna::UpdatePattern()
                 (*m_opponent)->StopMoving();
                 (*m_opponent)->StartPattern();
                 (*m_opponent)->y = -86.0;
-                (*m_opponent)->x = facing * 0x29 + x;
+                (*m_opponent)->x = facing * 41 + x;
             }
             if (frame == 2) {
                 (*m_opponent)->y = -97.0;
-                (*m_opponent)->x = facing * 0x24 + x;
+                (*m_opponent)->x = facing * 36 + x;
             }
             if (frame == 3) {
                 (*m_opponent)->y = -97.0;
-                (*m_opponent)->x = facing * 0x22 + x;
+                (*m_opponent)->x = facing * 34 + x;
                 (*m_opponent)->facing = -facing;
             }
             if (frame == 4) {
                 (*m_opponent)->y = 0.0;
-                (*m_opponent)->x = facing * 0x24 + x;
+                (*m_opponent)->x = facing * 36 + x;
                 (*m_opponent)->facing = -facing;
                 ShakeScreen(3, 0);
                 (*m_opponent)->pattern = kKnockdownHittable;
@@ -3948,7 +3948,7 @@ void CKanna::UpdatePattern()
         }
         if (frame == 2 && timer == 0) {
             m_gauge = m_gauge + 5;
-            m_playSound = 0x15;
+            m_playSound = 21;
             m_hitsLeft = 1;
         }
         timer++;
@@ -3976,8 +3976,8 @@ void CKanna::UpdatePattern()
             vx = 2.0;
         }
         if (frame == 2 && timer == 0) {
-            m_gauge = m_gauge + 0xa;
-            m_playSound = 0x14;
+            m_gauge = m_gauge + 10;
+            m_playSound = 20;
             m_hitsLeft = 1;
         }
         timer++;
@@ -4008,10 +4008,10 @@ void CKanna::UpdatePattern()
             }
         }
         if (frame == 3 && timer == 0) {
-            m_playSound = 0x14;
+            m_playSound = 20;
             vx = 3.0;
             m_hitsLeft = 1;
-            m_gauge = m_gauge + 0x23;
+            m_gauge = m_gauge + 35;
         }
         vx = vx - (vx > 0.0) * 0.07;
         if (vx < 0.0) {
@@ -4043,7 +4043,7 @@ void CKanna::UpdatePattern()
         }
         if (frame == 1 && timer == 0) {
             m_gauge = m_gauge + 5;
-            m_playSound = 0x15;
+            m_playSound = 21;
             m_hitsLeft = 1;
         }
         timer++;
@@ -4071,8 +4071,8 @@ void CKanna::UpdatePattern()
             vx = 2.0;
         }
         if (frame == 2 && timer == 0) {
-            m_gauge = m_gauge + 0xa;
-            m_playSound = 0x14;
+            m_gauge = m_gauge + 10;
+            m_playSound = 20;
             m_hitsLeft = 1;
         }
         timer++;
@@ -4102,19 +4102,19 @@ void CKanna::UpdatePattern()
                 m_dashMomentum = 0;
             }
         }
-        if (frame > 2 && frame < 0xf) {
+        if (frame > 2 && frame < 15) {
             vy = vy + ay;
             if (vy + y > 0.0) {
                 timer = 0;
                 StopMoving();
                 y = 0.0;
-                frame = 0xf;
+                frame = 15;
             }
         }
         if (frame == 7 && timer == 0) {
-            m_playSound = 0x14;
+            m_playSound = 20;
             m_hitsLeft = 1;
-            m_gauge = m_gauge + 0x23;
+            m_gauge = m_gauge + 35;
         }
         timer++;
         if (timer >= duration) {
@@ -4137,17 +4137,17 @@ void CKanna::UpdatePattern()
     case kUnusedF9:
         if (frame == 0 && timer == 0) {
             unkdc = 4;
-            unkde = -0x14;
+            unkde = -20;
             vx = 0.0;
             m_hitsLeft = 1;
             m_recoilGuardWindow = 0;
-            m_freezeTime = 0x3c;
+            m_freezeTime = 60;
             effect.type = 0x28;
-            effect.x = (double)((int)x + facing * 0xa);
-            effect.y = (double)((int)y - 0x28);
+            effect.x = (double)((int)x + facing * 10);
+            effect.y = (double)((int)y - 40);
             effect.scale = 2;
             effect.layer = 1;
-            effect.sound = 0x13;
+            effect.sound = 19;
             m_game->CreateEffect((EffectDesc*)&effect);
         }
         timer++;
@@ -4175,13 +4175,13 @@ void CKanna::UpdatePattern()
             effect.side = -((facing == 1) - 1);
             m_game->CreateEffect((EffectDesc*)&effect);
             m_hitsLeft = 1;
-            m_gauge = m_gauge + 0x2d;
+            m_gauge = m_gauge + 45;
             m_playVoice = 1;
         }
         if (frame == 4 && timer == 0) {
             effect.type = 0x194;
-            effect.x = (double)((int)x - facing * 0x50);
-            effect.y = (double)((int)y - 0x28);
+            effect.x = (double)((int)x - facing * 80);
+            effect.y = (double)((int)y - 40);
             effect.scale = 2;
             effect.layer = 1;
             effect.keep = 1;
@@ -4211,9 +4211,9 @@ void CKanna::UpdatePattern()
                 m_rfGauge -= 250.0;
             }
             effect.type = 0x21;
-            effect.sound = 0xb;
+            effect.sound = 11;
             effect.x = (double)(int)x;
-            effect.y = (double)((int)y - 0x32);
+            effect.y = (double)((int)y - 50);
             effect.scale = 2;
             effect.layer = 1;
             m_game->CreateEffect((EffectDesc*)&effect);
@@ -4235,7 +4235,7 @@ void CKanna::UpdatePattern()
             effect.side = -((facing == 1) - 1);
             m_game->CreateEffect((EffectDesc*)&effect);
             m_hitsLeft = 1;
-            m_gauge = m_gauge + 0x2d;
+            m_gauge = m_gauge + 45;
             m_playVoice = 1;
         }
         if (frame == 2 && timer == 0) {
@@ -4272,13 +4272,13 @@ void CKanna::UpdatePattern()
         }
         if (frame == 4 && timer == 0) {
             m_hitsLeft = 1;
-            m_gauge = m_gauge + 0x2d;
+            m_gauge = m_gauge + 45;
             m_playVoice = 1;
         }
         if (frame == 4 && timer == 0) {
             effect.type = 0x194;
-            effect.x = (double)((int)x - facing * 0x50);
-            effect.y = (double)((int)y - 0x28);
+            effect.x = (double)((int)x - facing * 80);
+            effect.y = (double)((int)y - 40);
             effect.scale = 2;
             effect.layer = 1;
             effect.keep = 1;
@@ -4347,9 +4347,9 @@ void CKanna::UpdatePattern()
                     m_rfGauge -= 250.0;
                 }
                 effect.type = 0x21;
-                effect.sound = 0xb;
+                effect.sound = 11;
                 effect.x = (double)(int)x;
-                effect.y = (double)((int)y - 0x32);
+                effect.y = (double)((int)y - 50);
                 effect.scale = 2;
                 effect.layer = 1;
                 m_game->CreateEffect((EffectDesc*)&effect);
@@ -4419,8 +4419,8 @@ void CKanna::UpdatePattern()
         }
         if (frame == 0 && timer == 0) {
             effect.type = 0x190;
-            effect.x = (double)((int)x + facing * 0x1e);
-            effect.y = (double)((int)y - 0x28);
+            effect.x = (double)((int)x + facing * 30);
+            effect.y = (double)((int)y - 40);
             effect.scale = 0;
             effect.layer = 1;
             effect.side = -((facing == 1) - 1);
@@ -4428,7 +4428,7 @@ void CKanna::UpdatePattern()
             effect.shadow = 1;
             effect.keep = 1;
             SpawnObject(&effect);
-            m_gauge = m_gauge + 0x2d;
+            m_gauge = m_gauge + 45;
             m_playVoice = 2;
         }
         timer++;
@@ -4450,8 +4450,8 @@ void CKanna::UpdatePattern()
         }
         if (frame == 0 && timer == 0) {
             effect.type = 0x191;
-            effect.x = (double)((int)x + facing * 0x1e);
-            effect.y = (double)((int)y - 0x28);
+            effect.x = (double)((int)x + facing * 30);
+            effect.y = (double)((int)y - 40);
             effect.scale = 0;
             effect.layer = 1;
             effect.side = -((facing == 1) - 1);
@@ -4459,7 +4459,7 @@ void CKanna::UpdatePattern()
             effect.shadow = 1;
             effect.keep = 1;
             SpawnObject(&effect);
-            m_gauge = m_gauge + 0x2d;
+            m_gauge = m_gauge + 45;
             m_playVoice = 2;
         }
         timer++;
@@ -4481,8 +4481,8 @@ void CKanna::UpdatePattern()
         }
         if (frame == 0 && timer == 0) {
             effect.type = 0x192;
-            effect.x = (double)((int)x + facing * 0x1e);
-            effect.y = (double)((int)y - 0x28);
+            effect.x = (double)((int)x + facing * 30);
+            effect.y = (double)((int)y - 40);
             effect.scale = 0;
             effect.layer = 1;
             effect.side = -((facing == 1) - 1);
@@ -4490,7 +4490,7 @@ void CKanna::UpdatePattern()
             effect.shadow = 1;
             effect.keep = 1;
             SpawnObject(&effect);
-            m_gauge = m_gauge + 0x2d;
+            m_gauge = m_gauge + 45;
             m_playVoice = 2;
         }
         timer++;
@@ -4512,8 +4512,8 @@ void CKanna::UpdatePattern()
         }
         if (frame == 7 && timer == 0) {
             effect.type = 0x195;
-            effect.x = (double)((int)x + facing * 0x23);
-            effect.y = (double)((int)y - 0x3f);
+            effect.x = (double)((int)x + facing * 35);
+            effect.y = (double)((int)y - 63);
             effect.scale = 2;
             effect.layer = 1;
             effect.side = -((facing == 1) - 1);
@@ -4524,8 +4524,8 @@ void CKanna::UpdatePattern()
         }
         if (frame == 8 && timer == 0) {
             effect.type = 0x196;
-            effect.x = (double)((int)x + facing * 0x50);
-            effect.y = (double)((int)y - 0x3f);
+            effect.x = (double)((int)x + facing * 80);
+            effect.y = (double)((int)y - 63);
             effect.scale = 2;
             effect.layer = 1;
             effect.side = -((facing == 1) - 1);
@@ -4533,7 +4533,7 @@ void CKanna::UpdatePattern()
             effect.shadow = 0;
             effect.keep = 1;
             SpawnObject(&effect);
-            m_gauge = m_gauge + 0x2d;
+            m_gauge = m_gauge + 45;
             m_playVoice = 2;
         }
         timer++;
@@ -4556,17 +4556,17 @@ void CKanna::UpdatePattern()
                 m_rfGauge -= 250.0;
             }
             effect.type = 0x21;
-            effect.sound = 0xb;
+            effect.sound = 11;
             effect.x = (double)(int)x;
-            effect.y = (double)((int)y - 0x32);
+            effect.y = (double)((int)y - 50);
             effect.scale = 2;
             effect.layer = 1;
             m_game->CreateEffect((EffectDesc*)&effect);
         }
         if (frame == 7 && timer == 0) {
             effect.type = 0x1ad;
-            effect.x = (double)((int)x + facing * 0x23);
-            effect.y = (double)((int)y - 0x3f);
+            effect.x = (double)((int)x + facing * 35);
+            effect.y = (double)((int)y - 63);
             effect.scale = 2;
             effect.layer = 1;
             effect.keep = 1;
@@ -4576,7 +4576,7 @@ void CKanna::UpdatePattern()
             SpawnObject(&effect);
         }
         if (frame == 8 && timer == 0) {
-            m_gauge = m_gauge + 0x2d;
+            m_gauge = m_gauge + 45;
             m_playVoice = 2;
         }
         timer++;
@@ -4596,26 +4596,26 @@ void CKanna::UpdatePattern()
             ay = 0.0;
         }
         if (frame == 0 && timer == 0) {
-            m_freezeTime = 0xc6;
-            m_gauge = m_gauge - 0xbb8;
-            FillBackground(0xb0, 3);
+            m_freezeTime = 198;
+            m_gauge = m_gauge - 3000;
+            FillBackground(176, 3);
             effect.type = 0x46;
-            effect.sound = 0x40;
-            effect.x = (double)((int)x + facing * 0x1d);
-            effect.y = (double)((int)y - 0x3f);
+            effect.sound = 64;
+            effect.x = (double)((int)x + facing * 29);
+            effect.y = (double)((int)y - 63);
             effect.scale = 2;
             effect.keep = 1;
             effect.layer = 1;
             m_game->CreateEffect((EffectDesc*)&effect);
-            m_hitsLeft = 0x63;
-            m_playSound = 0x25;
+            m_hitsLeft = 99;
+            m_playSound = 37;
         }
         if (frame > 2) {
-            m_game->FlashNegative(0xf);
+            m_game->FlashNegative(15);
         }
         if (frame == 7 && timer == 0) {
             effect.type = 0x19f;
-            effect.x = x - facing * 0x23;
+            effect.x = x - facing * 35;
             effect.y = y - 67.0;
             effect.facing = facing;
             effect.scale = 2;
@@ -4626,23 +4626,23 @@ void CKanna::UpdatePattern()
             SpawnObject(&effect);
         }
         if (frame > 3) {
-            FocusCameraY(0x32, 3);
+            FocusCameraY(50, 3);
         }
-        if (frame == 0xd && timer == 0) {
+        if (frame == 13 && timer == 0) {
             m_playVoice = 5;
         }
-        if (frame > 0xd && frame < 0x11) {
+        if (frame > 13 && frame < 17) {
             m_patternVar2++;
-            if ((WORD)Random(0, 0x64) > m_patternVar2 * 0.08 + 60.0) {
+            if ((WORD)Random(0, 100) > m_patternVar2 * 0.08 + 60.0) {
                 effect.type = 0x1a1;
                 effect.layer = 1;
                 effect.keep = 1;
-                if ((WORD)Random(0, 0x64) > 0x32) {
+                if ((WORD)Random(0, 100) > 50) {
                     effect.type = 0x1a0;
                     effect.layer = 0;
                 }
-                effect.x = x - facing * 0x12c;
-                effect.y = (double)((WORD)Random(0, 0x140) - 0x140);
+                effect.x = x - facing * 300;
+                effect.y = (double)((WORD)Random(0, 320) - 320);
                 effect.facing = facing;
                 effect.scale = 2;
                 SpawnObject(&effect);
@@ -4653,7 +4653,7 @@ void CKanna::UpdatePattern()
             timer = 0;
             frame++;
             m_attackResult = 0;
-            if (m_patternVar1 < 0xd && frame == 0x11) {
+            if (m_patternVar1 < 13 && frame == 17) {
                 frame = frame - 3;
                 m_patternVar1++;
                 break;
@@ -4676,27 +4676,27 @@ void CKanna::UpdatePattern()
             vx = 0.0;
             vy = 0.0;
             ay = 0.0;
-            m_patternVar1 = 0xa;
+            m_patternVar1 = 10;
         }
         if (frame == 0 && timer == 0) {
-            m_freezeTime = 0x78;
-            m_gauge = m_gauge - 0xbb8;
-            FillBackground(0xb0, 3);
+            m_freezeTime = 120;
+            m_gauge = m_gauge - 3000;
+            FillBackground(176, 3);
             effect.type = 0x46;
-            effect.sound = 0x40;
+            effect.sound = 64;
             effect.x = (double)(int)x;
-            effect.y = (double)((int)y - 0x28);
+            effect.y = (double)((int)y - 40);
             effect.scale = 2;
             effect.keep = 1;
             effect.layer = 1;
             m_game->CreateEffect((EffectDesc*)&effect);
-            m_hitsLeft = 0x63;
+            m_hitsLeft = 99;
         }
-        if (frame > 6 && frame < 0xc) {
-            FocusCameraY(0x32, 3);
+        if (frame > 6 && frame < 12) {
+            FocusCameraY(50, 3);
         }
         if (frame == 8 && timer == 0) {
-            ShakeScreen(3, 0x14);
+            ShakeScreen(3, 20);
             effect.type = 0x1a2;
             effect.x = x + 0.0 - 30.0;
             effect.y = y;
@@ -4705,17 +4705,17 @@ void CKanna::UpdatePattern()
             effect.layer = 1;
             effect.keep = 1;
             SpawnObject(&effect);
-            effect.x = x - facing * 0x28 - 30.0;
+            effect.x = x - facing * 40 - 30.0;
             effect.facing = -facing;
             SpawnObject(&effect);
-            m_playSound = 0x12;
+            m_playSound = 18;
         }
         timer++;
         if (timer >= duration) {
             timer = 0;
             frame++;
             m_attackResult = 0;
-            if (frame == 0xd && m_patternVar1 > 0) {
+            if (frame == 13 && m_patternVar1 > 0) {
                 frame = frame - 2;
                 m_patternVar1--;
             }
@@ -4735,20 +4735,20 @@ void CKanna::UpdatePattern()
             ay = 0.035;
         }
         if (frame == 0 && timer == 0) {
-            m_freezeTime = 0x78;
-            m_gauge = m_gauge - 0xbb8;
-            FillBackground(0xb0, 0x21);
+            m_freezeTime = 120;
+            m_gauge = m_gauge - 3000;
+            FillBackground(176, 33);
             effect.type = 0x46;
-            effect.sound = 0x40;
+            effect.sound = 64;
             effect.x = (double)(int)x;
-            effect.y = (double)((int)y - 0x28);
+            effect.y = (double)((int)y - 40);
             effect.scale = 2;
             effect.keep = 1;
             effect.layer = 1;
             m_game->CreateEffect((EffectDesc*)&effect);
         }
-        if (frame > 6 && frame < 0xc) {
-            FocusCameraY(0x32, 3);
+        if (frame > 6 && frame < 12) {
+            FocusCameraY(50, 3);
         }
         if (frame == 8 && timer == 0) {
             effect.type = 0x1aa;
@@ -4777,20 +4777,20 @@ void CKanna::UpdatePattern()
             StopMoving();
         }
         if (frame == 4 && timer == 0) {
-            m_freezeTime = 0x78;
-            m_gauge = m_gauge - 0xbb8;
-            FillBackground(0xb0, 3);
+            m_freezeTime = 120;
+            m_gauge = m_gauge - 3000;
+            FillBackground(176, 3);
             effect.type = 0x46;
-            effect.sound = 0x40;
+            effect.sound = 64;
             effect.x = (double)(int)x;
-            effect.y = (double)((int)y - 0x28);
+            effect.y = (double)((int)y - 40);
             effect.scale = 2;
             effect.keep = 1;
             effect.layer = 1;
             m_game->CreateEffect((EffectDesc*)&effect);
             effect.type = 0x47;
             m_game->CreateEffect((EffectDesc*)&effect);
-            m_hitsLeft = 0x63;
+            m_hitsLeft = 99;
         }
         if (frame == 5 && timer == 0) {
             effect.type = 0x1b2;
@@ -4802,7 +4802,7 @@ void CKanna::UpdatePattern()
             effect.keep = 1;
             SpawnObject(&effect);
         }
-        if (frame == 0x10 && timer == 0) {
+        if (frame == 16 && timer == 0) {
             effect.type = 0x1b3;
             effect.x = (double)(int)x;
             effect.y = (double)(int)y;
@@ -4812,10 +4812,10 @@ void CKanna::UpdatePattern()
             effect.facing = facing;
             SpawnObject(&effect);
         }
-        if ((frame == 8 || frame == 0x12) && m_attackResult == 3) {
-            (*m_opponent)->m_hitstop = 0x10e;
+        if ((frame == 8 || frame == 18) && m_attackResult == 3) {
+            (*m_opponent)->m_hitstop = 270;
         }
-        if (frame == 0x20 && timer == 0) {
+        if (frame == 32 && timer == 0) {
             effect.type = 0x1b0;
             effect.x = (double)(int)x;
             effect.y = (double)(int)y;
@@ -4824,25 +4824,25 @@ void CKanna::UpdatePattern()
             effect.keep = 1;
             effect.facing = facing;
             SpawnObject(&effect);
-            (*m_opponent)->m_koDelay = 0x7530;
+            (*m_opponent)->m_koDelay = 30000;
         }
-        if (frame == 0x2c && timer == 0) {
-            m_freezeTime = 0x23a;
-            FillBackground(0xb0, 0xbb8);
+        if (frame == 44 && timer == 0) {
+            m_freezeTime = 570;
+            FillBackground(176, 3000);
             effect.type = 9;
             effect.sound = 5;
             effect.x = (double)(int)x;
-            effect.y = (double)((int)y - 0x28);
+            effect.y = (double)((int)y - 40);
             effect.scale = 2;
             effect.keep = 1;
             effect.layer = 1;
             m_game->CreateEffect((EffectDesc*)&effect);
-            m_hitsLeft = 0x63;
+            m_hitsLeft = 99;
             (*m_opponent)->x = x;
-            m_playVoice = 0xa;
-            m_game->m_hideObjectsTime = 0x7530;
+            m_playVoice = 10;
+            m_game->m_hideObjectsTime = 30000;
         }
-        if (frame == 0x33 && timer == 0) {
+        if (frame == 51 && timer == 0) {
             vy = -7.5;
             ay = 0.035;
             effect.type = 0x1b4;
@@ -4875,16 +4875,16 @@ void CKanna::UpdatePattern()
             effect.facing = 1;
             effect.movesInFreeze = 1;
             SpawnObject(&effect);
-            m_playVoice = 0xb;
+            m_playVoice = 11;
         }
-        if (frame == 0x35 && m_attackResult == 3) {
+        if (frame == 53 && m_attackResult == 3) {
             timer = 0;
-            frame = 0x36;
-            (*m_opponent)->m_hitstop = 0xbb8;
+            frame = 54;
+            (*m_opponent)->m_hitstop = 3000;
             vy = -0.05;
             ay = 0.0;
-            FillBackground(0xb0, 3);
-            m_playVoice = 0xc;
+            FillBackground(176, 3);
+            m_playVoice = 12;
             effect.type = 0x1b7;
             effect.x = x;
             effect.y = y - 160.0;
@@ -4896,7 +4896,7 @@ void CKanna::UpdatePattern()
             SpawnObject(&effect);
             (*m_opponent)->m_game->m_hideObjectsTime = 0;
         }
-        if (frame == 0x37 && timer == 0) {
+        if (frame == 55 && timer == 0) {
             vy = -7.0;
             ay = 0.03;
             effect.type = 0x1c0;
@@ -4919,22 +4919,22 @@ void CKanna::UpdatePattern()
             effect.y = y - 150.0;
             SpawnObject(&effect);
         }
-        if (frame == 0x37 && m_attackResult == 3) {
+        if (frame == 55 && m_attackResult == 3) {
             (*m_opponent)->m_koDelay = 0;
         }
-        if (frame > 0 && frame < 0x37) {
-            FocusCameraY(0x32, 3);
+        if (frame > 0 && frame < 55) {
+            FocusCameraY(50, 3);
         }
-        if (frame > 0x25 && frame < 0x37) {
-            FocusCameraX(0x32, 3);
+        if (frame > 37 && frame < 55) {
+            FocusCameraX(50, 3);
         }
         if (y < 0.0) {
             vy = vy + ay;
         }
-        if (frame == 0x35 && vy > 1.0) {
+        if (frame == 53 && vy > 1.0) {
             vy = 1.0;
         }
-        if (frame > 0x37 && y + vy > 0.0) {
+        if (frame > 55 && y + vy > 0.0) {
             StopMoving();
             StartPattern();
             y = 0.0;
@@ -4945,24 +4945,24 @@ void CKanna::UpdatePattern()
         if (timer >= duration) {
             timer = 0;
             frame++;
-            if (frame < 0x12 || frame == 0x23 || frame > 0x32) {
+            if (frame < 18 || frame == 35 || frame > 50) {
                 m_attackResult = 0;
             }
-            if (frame == 0xe && m_patternVar1 > 0) {
+            if (frame == 14 && m_patternVar1 > 0) {
                 frame = frame - 2;
                 m_patternVar1--;
             }
-            if (frame == 0x1b && (m_attackResult != 3 || (*m_opponent)->m_hp <= 0)) {
+            if (frame == 27 && (m_attackResult != 3 || (*m_opponent)->m_hp <= 0)) {
                 StartPattern();
                 FaceOpponent();
                 pattern = kStand;
                 break;
             }
-            if (frame == 0x24 && m_attackResult != 3) {
+            if (frame == 36 && m_attackResult != 3) {
                 StartPattern();
                 pattern = kLv4Miss;
             }
-            if (frame == 0x2b) {
+            if (frame == 43) {
                 effect.type = 0x1b1;
                 effect.x = (double)(int)x;
                 effect.y = (double)(int)y;
@@ -4973,10 +4973,10 @@ void CKanna::UpdatePattern()
                 effect.movesInFreeze = 1;
                 SpawnObject(&effect);
             }
-            if (frame == 0x35) {
+            if (frame == 53) {
                 m_playVoice = 9;
             }
-            if (frame == 0x36) {
+            if (frame == 54) {
                 frame--;
             }
             if (frame >= frameCount) {

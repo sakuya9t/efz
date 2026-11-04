@@ -365,7 +365,7 @@ void CIkumi::UpdatePattern()
         }
         m_dashMomentum = 0;
         if (frame == 0 && timer == 0) {
-            m_gauge = m_gauge + 0xa;
+            m_gauge = m_gauge + 10;
             vx = (2.0 - (*m_opponent)->m_proration / 10000.0) * -1.1;
             if (m_rfBlue != 0) {
                 m_rfGauge -= 10.0;
@@ -401,7 +401,7 @@ void CIkumi::UpdatePattern()
         }
         m_dashMomentum = 0;
         if (frame == 0 && timer == 0) {
-            m_gauge = m_gauge + 0xf;
+            m_gauge = m_gauge + 15;
             vx = (2.0 - (*m_opponent)->m_proration / 10000.0) * -1.5;
             if (m_rfBlue != 0) {
                 m_rfGauge -= 20.0;
@@ -437,7 +437,7 @@ void CIkumi::UpdatePattern()
         }
         m_dashMomentum = 0;
         if (frame == 0 && timer == 0) {
-            m_gauge = m_gauge + 0x14;
+            m_gauge = m_gauge + 20;
             vx = (2.0 - (*m_opponent)->m_proration / 10000.0) * -1.8;
             if (m_rfBlue != 0) {
                 m_rfGauge -= 30.0;
@@ -473,7 +473,7 @@ void CIkumi::UpdatePattern()
         }
         m_dashMomentum = 0;
         if (frame == 0 && timer == 0) {
-            m_gauge = m_gauge + 0xa;
+            m_gauge = m_gauge + 10;
             vx = (2.0 - (*m_opponent)->m_proration / 10000.0) * -1.1;
             if (m_rfBlue != 0) {
                 m_rfGauge -= 10.0;
@@ -509,7 +509,7 @@ void CIkumi::UpdatePattern()
         }
         m_dashMomentum = 0;
         if (frame == 0 && timer == 0) {
-            m_gauge = m_gauge + 0xf;
+            m_gauge = m_gauge + 15;
             vx = (2.0 - (*m_opponent)->m_proration / 10000.0) * -1.5;
             if (m_rfBlue != 0) {
                 m_rfGauge -= 20.0;
@@ -544,7 +544,7 @@ void CIkumi::UpdatePattern()
             m_rfGauge -= 0.6;
         }
         if (frame == 0 && timer == 0) {
-            m_gauge = m_gauge + 0x14;
+            m_gauge = m_gauge + 20;
             vx = (2.0 - (*m_opponent)->m_proration / 10000.0) * -1.8;
             if (m_rfBlue != 0) {
                 m_rfGauge -= 30.0;
@@ -580,7 +580,7 @@ void CIkumi::UpdatePattern()
         }
         m_dashMomentum = 0;
         if (frame == 0 && timer == 0) {
-            m_gauge = m_gauge + 0xa;
+            m_gauge = m_gauge + 10;
             vx = (2.0 - (*m_opponent)->m_proration / 10000.0) * -1.1;
             if (m_rfBlue != 0) {
                 m_rfGauge -= 10.0;
@@ -613,7 +613,7 @@ void CIkumi::UpdatePattern()
         }
         m_dashMomentum = 0;
         if (frame == 0 && timer == 0) {
-            m_gauge = m_gauge + 0xf;
+            m_gauge = m_gauge + 15;
             vx = (2.0 - (*m_opponent)->m_proration / 10000.0) * -1.5;
             if (m_rfBlue != 0) {
                 m_rfGauge -= 20.0;
@@ -646,7 +646,7 @@ void CIkumi::UpdatePattern()
         }
         m_dashMomentum = 0;
         if (frame == 0 && timer == 0) {
-            m_gauge = m_gauge + 0x14;
+            m_gauge = m_gauge + 20;
             vx = (2.0 - (*m_opponent)->m_proration / 10000.0) * -1.8;
             if (m_rfBlue != 0) {
                 m_rfGauge -= 30.0;
@@ -678,7 +678,7 @@ void CIkumi::UpdatePattern()
             m_rfGauge -= 0.8;
         }
         if (frame == 0 && timer == 0) {
-            m_gauge = m_gauge + 0x1e;
+            m_gauge = m_gauge + 30;
             vx = m_hitVx;
             vy = vy * 0.75 + m_hitVy;
             if (vy < -2.0) {
@@ -721,7 +721,7 @@ void CIkumi::UpdatePattern()
             m_rfGauge -= 0.8;
         }
         if (frame == 0 && timer == 0) {
-            m_gauge = m_gauge + 0x1e;
+            m_gauge = m_gauge + 30;
             vx = m_hitVx;
             vy = vy * 0.75 + m_hitVy;
             if (vy < -4.0) {
@@ -764,7 +764,7 @@ void CIkumi::UpdatePattern()
             m_rfGauge -= 0.8;
         }
         if (frame == 0 && timer == 0) {
-            m_gauge = m_gauge + 0x1e;
+            m_gauge = m_gauge + 30;
             vx = m_hitVx;
             vy = vy * 0.75 + m_hitVy;
             if (vy < -6.0) {
@@ -807,7 +807,7 @@ void CIkumi::UpdatePattern()
             m_rfGauge -= 0.8;
         }
         if (frame == 0 && timer == 0) {
-            m_gauge = m_gauge + 0x1e;
+            m_gauge = m_gauge + 30;
             vx = m_hitVx;
             vy = vy * 0.75 + m_hitVy;
             ay = 0.032;
@@ -845,7 +845,7 @@ void CIkumi::UpdatePattern()
             m_rfGauge -= 0.8;
         }
         if (frame == 0 && timer == 0) {
-            m_gauge = m_gauge + 0x1e;
+            m_gauge = m_gauge + 30;
             vx = m_hitVx;
             vy = m_hitVy;
             ay = 0.032;
@@ -888,7 +888,7 @@ void CIkumi::UpdatePattern()
             break;
         }
         if (frame == 0 && timer == 0) {
-            m_gauge = m_gauge + 0x1e;
+            m_gauge = m_gauge + 30;
             vx = m_hitVx;
             vy = vy * 0.75 + m_hitVy;
             if (vy < -2.0) {
@@ -936,7 +936,7 @@ void CIkumi::UpdatePattern()
             break;
         }
         if (frame == 0 && timer == 0) {
-            m_gauge = m_gauge + 0x1e;
+            m_gauge = m_gauge + 30;
             vx = m_hitVx;
             vy = vy * 0.75 + m_hitVy;
             if (vy < -4.0) {
@@ -984,7 +984,7 @@ void CIkumi::UpdatePattern()
             break;
         }
         if (frame == 0 && timer == 0) {
-            m_gauge = m_gauge + 0x1e;
+            m_gauge = m_gauge + 30;
             vx = m_hitVx;
             vy = vy * 0.75 + m_hitVy;
             ay = 0.032;
@@ -1027,7 +1027,7 @@ void CIkumi::UpdatePattern()
             break;
         }
         if (frame == 0 && timer == 0) {
-            m_gauge = m_gauge + 0x1e;
+            m_gauge = m_gauge + 30;
             vx = m_hitVx;
             vy = m_hitVy;
             ay = 0.032;
@@ -1122,13 +1122,13 @@ void CIkumi::UpdatePattern()
             m_rfGauge -= 0.8;
         }
         if (frame == 0 && timer == 0 && m_patternVar1 == 0) {
-            m_gauge = m_gauge + 0x1e;
+            m_gauge = m_gauge + 30;
             m_patternVar1++;
-            m_untechTime = m_untechTime + 0x78;
+            m_untechTime = m_untechTime + 120;
             vx = 0.5;
             vy = -2.5;
             ay = 0.025;
-            m_playSound = 0x1f;
+            m_playSound = 31;
             effect.type = 0;
             effect.x = (double)(int)x;
             effect.y = (double)(int)y;
@@ -1161,7 +1161,7 @@ void CIkumi::UpdatePattern()
             m_rfGauge -= 0.8;
         }
         if (frame == 0 && timer == 0) {
-            m_gauge = m_gauge + 0x1e;
+            m_gauge = m_gauge + 30;
             vx = m_hitVx;
             vy = m_hitVy;
             ay = 0.072;
@@ -1272,7 +1272,7 @@ void CIkumi::UpdatePattern()
         }
         m_dashMomentum = 0;
         if (frame == 0 && timer == 0) {
-            m_gauge = m_gauge + 0x1e;
+            m_gauge = m_gauge + 30;
             if (m_rfBlue != 0) {
                 m_rfGauge -= 30.0;
             }
@@ -1310,7 +1310,7 @@ void CIkumi::UpdatePattern()
         }
         m_dashMomentum = 0;
         if (frame == 0 && timer == 0) {
-            m_gauge = m_gauge + 0x1e;
+            m_gauge = m_gauge + 30;
             if (m_rfBlue != 0) {
                 m_rfGauge -= 30.0;
             }
@@ -1348,7 +1348,7 @@ void CIkumi::UpdatePattern()
         }
         m_dashMomentum = 0;
         if (frame == 0 && timer == 0) {
-            m_gauge = m_gauge + 0x1e;
+            m_gauge = m_gauge + 30;
             if (m_rfBlue != 0) {
                 m_rfGauge -= 30.0;
             }
@@ -1388,7 +1388,7 @@ void CIkumi::UpdatePattern()
             effect.facing = facing;
             effect.layer = 1;
             SpawnObject(&effect);
-            m_gauge = m_gauge + 0x1e;
+            m_gauge = m_gauge + 30;
             vx = m_hitVx;
             vy = m_hitVy;
             ay = 0.032;
@@ -1422,11 +1422,11 @@ void CIkumi::UpdatePattern()
             m_rfGauge -= 0.8;
         }
         if (frame == 0 && timer == 0 && m_patternVar1 == 0) {
-            m_playSound = 0x1e;
+            m_playSound = 30;
             vy = -0.45;
             vx = -0.1;
             m_patternVar1++;
-            m_gauge = m_gauge + 0x1e;
+            m_gauge = m_gauge + 30;
         }
         if (frame == 4 && timer == 0) {
             vx = m_hitVx;
@@ -1479,10 +1479,10 @@ void CIkumi::UpdatePattern()
             if (m_rfBlue != 0) {
                 m_rfGauge -= 30.0;
             }
-            m_playSound = 0x21;
+            m_playSound = 33;
             vy = -1.5;
             vx = -0.8;
-            m_gauge = m_gauge + 0x1e;
+            m_gauge = m_gauge + 30;
         }
         vy += 0.04;
         if (frame == 0 && vy + y > 0.0) {
@@ -1531,10 +1531,10 @@ void CIkumi::UpdatePattern()
             if (m_rfBlue != 0) {
                 m_rfGauge -= 30.0;
             }
-            m_playSound = 0x21;
+            m_playSound = 33;
             vy = -1.5;
             vx = -0.8;
-            m_gauge = m_gauge + 0x1e;
+            m_gauge = m_gauge + 30;
         }
         vy += 0.04;
         if (frame == 0 && vy + y > 0.0) {
@@ -1583,10 +1583,10 @@ void CIkumi::UpdatePattern()
             if (m_rfBlue != 0) {
                 m_rfGauge -= 30.0;
             }
-            m_playSound = 0x21;
+            m_playSound = 33;
             vx = m_hitVx;
             vy = m_hitVy;
-            m_gauge = m_gauge + 0x1e;
+            m_gauge = m_gauge + 30;
         }
         vy += 0.04;
         timer++;
@@ -1627,10 +1627,10 @@ void CIkumi::UpdatePattern()
                 if (m_rfBlue != 0) {
                     m_rfGauge -= 30.0;
                 }
-                m_playSound = 0x21;
+                m_playSound = 33;
                 vx = m_hitVx;
                 vy = m_hitVy;
-                m_gauge = m_gauge + 0x1e;
+                m_gauge = m_gauge + 30;
                 m_patternVar1++;
             }
         }
@@ -1741,7 +1741,7 @@ void CIkumi::UpdatePattern()
     case kLyingDown:
         timer++;
         m_dashMomentum = 0;
-        if (m_hp > 0 && timer > 0x63 && frame == 0) {
+        if (m_hp > 0 && timer > 99 && frame == 0) {
             pattern = kWakeUp;
             StartPattern();
         }
@@ -1766,7 +1766,7 @@ void CIkumi::UpdatePattern()
         }
         if (frame == 0 && timer == 0) {
             m_dashMomentum = 0;
-            m_gauge = m_gauge + 0xa;
+            m_gauge = m_gauge + 10;
             vx = -1.5;
             vy = 0.0;
             y = 0.0;
@@ -1806,7 +1806,7 @@ void CIkumi::UpdatePattern()
         }
         if (frame == 0 && timer == 0) {
             m_dashMomentum = 0;
-            m_gauge = m_gauge + 0xf;
+            m_gauge = m_gauge + 15;
             vx = -1.8;
             vy = 0.0;
             y = 0.0;
@@ -1846,7 +1846,7 @@ void CIkumi::UpdatePattern()
         }
         if (frame == 0 && timer == 0) {
             m_dashMomentum = 0;
-            m_gauge = m_gauge + 0x14;
+            m_gauge = m_gauge + 20;
             vx = -2.3;
             vy = 0.0;
             y = 0.0;
@@ -1886,7 +1886,7 @@ void CIkumi::UpdatePattern()
         }
         if (frame == 0 && timer == 0) {
             m_dashMomentum = 0;
-            m_gauge = m_gauge + 0xa;
+            m_gauge = m_gauge + 10;
             vx = -1.5;
             vy = 0.0;
             y = 0.0;
@@ -1923,7 +1923,7 @@ void CIkumi::UpdatePattern()
         }
         if (frame == 0 && timer == 0) {
             m_dashMomentum = 0;
-            m_gauge = m_gauge + 0xf;
+            m_gauge = m_gauge + 15;
             vx = -1.8;
             vy = 0.0;
             y = 0.0;
@@ -1960,7 +1960,7 @@ void CIkumi::UpdatePattern()
         }
         if (frame == 0 && timer == 0) {
             m_dashMomentum = 0;
-            m_gauge = m_gauge + 0x14;
+            m_gauge = m_gauge + 20;
             vx = -2.3;
             vy = 0.0;
             y = 0.0;
@@ -1991,7 +1991,7 @@ void CIkumi::UpdatePattern()
     case kGuardAir:
         if (frame == 0 && timer == 0) {
             vy = -2.6;
-            m_gauge = m_gauge + 0xf;
+            m_gauge = m_gauge + 15;
             ay = 0.06;
         }
         vx = -1.2;
@@ -2112,11 +2112,11 @@ void CIkumi::UpdatePattern()
                 break;
             }
         }
-        if (m_inputX == facing && m_patternVar2 >= 0x50 && frame < 4) {
+        if (m_inputX == facing && m_patternVar2 >= 80 && frame < 4) {
             pattern = kDashStop;
             StartPattern();
         }
-        if (m_inputX != facing && m_patternVar1 >= 0x3c && frame < 4) {
+        if (m_inputX != facing && m_patternVar1 >= 60 && frame < 4) {
             pattern = kDashStop;
             StartPattern();
         }
@@ -2165,7 +2165,7 @@ void CIkumi::UpdatePattern()
             StartAfterimages(3);
             vy = 0.0;
             ay = 0.0;
-            m_playSound = 0x11;
+            m_playSound = 17;
         }
         timer++;
         m_patternVar1++;
@@ -2177,7 +2177,7 @@ void CIkumi::UpdatePattern()
                 frame = frame - 2;
             }
         }
-        if (m_inputX == facing && m_patternVar2 >= 0x78) {
+        if (m_inputX == facing && m_patternVar2 >= 120) {
             pattern = kFall;
             StartPattern();
             vx = 1.6;
@@ -2186,7 +2186,7 @@ void CIkumi::UpdatePattern()
                 vx = -vx;
             }
         }
-        if (m_inputX != facing && m_patternVar1 >= 0x28) {
+        if (m_inputX != facing && m_patternVar1 >= 40) {
             pattern = kFall;
             StartPattern();
             vx = 1.3;
@@ -2202,7 +2202,7 @@ void CIkumi::UpdatePattern()
             vy = 0.0;
             ay = 0.0;
             StartAfterimages(3);
-            m_playSound = 0x11;
+            m_playSound = 17;
         }
         timer++;
         m_patternVar1++;
@@ -2214,7 +2214,7 @@ void CIkumi::UpdatePattern()
                 frame = frame - 2;
             }
         }
-        if (m_inputX == -facing && m_patternVar2 >= 0x78) {
+        if (m_inputX == -facing && m_patternVar2 >= 120) {
             pattern = kFall;
             StartPattern();
             vx = -0.9;
@@ -2223,7 +2223,7 @@ void CIkumi::UpdatePattern()
                 vx = -vx;
             }
         }
-        if (m_inputX != -facing && m_patternVar1 >= 0x28) {
+        if (m_inputX != -facing && m_patternVar1 >= 40) {
             pattern = kFall;
             StartPattern();
             vx = -0.9;
@@ -2242,11 +2242,11 @@ void CIkumi::UpdatePattern()
                 m_proration = m_rfGauge * 5.0 + m_proration;
             }
             m_rfGauge = 0.0;
-            m_freezeTime = 0x5a;
-            FillBackground(0xb0, 3);
+            m_freezeTime = 90;
+            FillBackground(176, 3);
         }
         if (frame == 1 && timer == 0) {
-            m_playSound = 0x12;
+            m_playSound = 18;
             effect.type = 1;
             effect.x = (double)(int)x;
             effect.y = (double)(int)y;
@@ -2345,7 +2345,7 @@ void CIkumi::UpdatePattern()
             vy = 0.0;
             m_recoilGuardWindow = 0;
             m_cornerPushback = 0.0;
-            m_freezeTime = 0x3c;
+            m_freezeTime = 60;
         }
         if (m_freezeTime == 0 && m_patternVar3 == 0) {
             m_patternVar3++;
@@ -2381,11 +2381,11 @@ void CIkumi::UpdatePattern()
                 m_proration = m_rfGauge * 5.0 + m_proration;
             }
             m_rfGauge = 0.0;
-            m_freezeTime = 0x5a;
-            FillBackground(0xb0, 3);
+            m_freezeTime = 90;
+            FillBackground(176, 3);
         }
         if (frame == 0 && timer == 0) {
-            m_playSound = 0x12;
+            m_playSound = 18;
             effect.type = 1;
             effect.x = (double)(int)x;
             effect.y = (double)(int)y;
@@ -2498,7 +2498,7 @@ void CIkumi::UpdatePattern()
         }
         if (frame == 1 && timer == 0) {
             m_gauge = m_gauge + 5;
-            m_playSound = 0x15;
+            m_playSound = 21;
             m_hitsLeft = 1;
         }
         timer++;
@@ -2539,8 +2539,8 @@ void CIkumi::UpdatePattern()
             break;
         }
         if (frame == 1 && timer == 0) {
-            m_gauge = m_gauge + 0xf;
-            m_playSound = 0x14;
+            m_gauge = m_gauge + 15;
+            m_playSound = 20;
             m_hitsLeft = 1;
         }
         timer++;
@@ -2584,8 +2584,8 @@ void CIkumi::UpdatePattern()
             m_dashMomentum = 0;
         }
         if (frame == 4 && timer == 0) {
-            m_gauge = m_gauge + 0xf;
-            m_playSound = 0x14;
+            m_gauge = m_gauge + 15;
+            m_playSound = 20;
             m_hitsLeft = 1;
         }
         timer++;
@@ -2636,8 +2636,8 @@ void CIkumi::UpdatePattern()
             break;
         }
         if (frame == 2 && timer == 0) {
-            m_gauge = m_gauge + 0x23;
-            m_playSound = 0x14;
+            m_gauge = m_gauge + 35;
+            m_playSound = 20;
             m_hitsLeft = 1;
             vx = 1.0;
         }
@@ -2686,7 +2686,7 @@ void CIkumi::UpdatePattern()
         }
         if (frame == 1 && timer == 0) {
             m_gauge = m_gauge + 5;
-            m_playSound = 0x15;
+            m_playSound = 21;
             m_hitsLeft = 1;
         }
         timer++;
@@ -2730,8 +2730,8 @@ void CIkumi::UpdatePattern()
             break;
         }
         if (frame == 2 && timer == 0) {
-            m_gauge = m_gauge + 0xd;
-            m_playSound = 0x14;
+            m_gauge = m_gauge + 13;
+            m_playSound = 20;
             m_hitsLeft = 1;
         }
         timer++;
@@ -2761,8 +2761,8 @@ void CIkumi::UpdatePattern()
             }
         }
         if (frame == 2 && timer == 0) {
-            m_gauge = m_gauge + 0x19;
-            m_playSound = 0x14;
+            m_gauge = m_gauge + 25;
+            m_playSound = 20;
             m_hitsLeft = 1;
             vx = 1.5;
         }
@@ -2810,7 +2810,7 @@ void CIkumi::UpdatePattern()
         }
         if (frame == 2 && timer == 0) {
             m_gauge = m_gauge + 5;
-            m_playSound = 0x15;
+            m_playSound = 21;
             m_hitsLeft = 1;
         }
         if (y + vy >= 0.0) {
@@ -2849,12 +2849,12 @@ void CIkumi::UpdatePattern()
         }
         if (frame == 1 && timer == 0) {
             m_gauge = m_gauge + 7;
-            m_playSound = 0x14;
+            m_playSound = 20;
             m_hitsLeft = 1;
         }
         if (frame == 5 && timer == 0) {
             m_gauge = m_gauge + 7;
-            m_playSound = 0x14;
+            m_playSound = 20;
             m_hitsLeft = 1;
         }
         if (y + vy >= 0.0) {
@@ -2892,8 +2892,8 @@ void CIkumi::UpdatePattern()
             break;
         }
         if (frame == 2 && timer == 0) {
-            m_gauge = m_gauge + 0x1e;
-            m_playSound = 0x14;
+            m_gauge = m_gauge + 30;
+            m_playSound = 20;
             m_hitsLeft = 3;
         }
         if (y + vy >= 0.0) {
@@ -2933,12 +2933,12 @@ void CIkumi::UpdatePattern()
             (*m_opponent)->StopMoving();
             pattern = kThrowConnected;
             (*m_opponent)->pattern = kThrownDoubledOver;
-            (*m_opponent)->x = facing * 0x19 + x;
+            (*m_opponent)->x = facing * 25 + x;
             (*m_opponent)->y = -68.0;
-            FocusCameraY(0x32, 0x1e);
+            FocusCameraY(50, 30);
             effect.type = 0;
-            effect.x = (double)((int)x + facing * 0x19);
-            effect.y = (double)((int)y - 0x44);
+            effect.x = (double)((int)x + facing * 25);
+            effect.y = (double)((int)y - 68);
             effect.scale = 2;
             effect.layer = 1;
             m_game->CreateEffect((EffectDesc*)&effect);
@@ -2960,17 +2960,17 @@ void CIkumi::UpdatePattern()
         break;
     case kThrowConnected:
         if (frame < 2) {
-            FocusCameraY(0x32, 3);
+            FocusCameraY(50, 3);
         }
         if (frame == 1 && timer == 0) {
-            (*m_opponent)->m_hitstop = 0x3c;
+            (*m_opponent)->m_hitstop = 60;
             effect.type = 0;
-            effect.x = (double)((int)x + facing * 0x19);
-            effect.y = (double)((int)y - 0x44);
+            effect.x = (double)((int)x + facing * 25);
+            effect.y = (double)((int)y - 68);
             effect.scale = 2;
             effect.layer = 1;
             m_game->CreateEffect((EffectDesc*)&effect);
-            DealDamage(0x384, 750.0);
+            DealDamage(900, 750.0);
             m_playVoice = 0;
         }
         if (frame == 2 && timer == 0) {
@@ -3004,7 +3004,7 @@ void CIkumi::UpdatePattern()
         }
         if (frame == 1 && timer == 0) {
             m_gauge = m_gauge + 5;
-            m_playSound = 0x15;
+            m_playSound = 21;
             m_hitsLeft = 1;
         }
         timer++;
@@ -3043,8 +3043,8 @@ void CIkumi::UpdatePattern()
             vy = 0.0;
         }
         if (frame == 2 && timer == 0) {
-            m_gauge = m_gauge + 0xa;
-            m_playSound = 0x14;
+            m_gauge = m_gauge + 10;
+            m_playSound = 20;
             m_hitsLeft = 1;
         }
         timer++;
@@ -3068,8 +3068,8 @@ void CIkumi::UpdatePattern()
             vx = 0.0;
         }
         if (frame == 4 && timer == 0) {
-            m_gauge = m_gauge + 0x19;
-            m_playSound = 0x14;
+            m_gauge = m_gauge + 25;
+            m_playSound = 20;
             m_hitsLeft = 1;
         }
         timer++;
@@ -3097,7 +3097,7 @@ void CIkumi::UpdatePattern()
         }
         if (frame == 1 && timer == 0) {
             m_gauge = m_gauge + 5;
-            m_playSound = 0x15;
+            m_playSound = 21;
             m_hitsLeft = 1;
         }
         timer++;
@@ -3125,7 +3125,7 @@ void CIkumi::UpdatePattern()
         }
         if (frame == 2 && timer == 0) {
             m_gauge = m_gauge + 5;
-            m_playSound = 0x15;
+            m_playSound = 21;
             m_hitsLeft = 1;
         }
         timer++;
@@ -3168,15 +3168,15 @@ void CIkumi::UpdatePattern()
             vx = 1.0;
         }
         if (frame == 3 && timer == 0) {
-            m_gauge = m_gauge + 0xa;
-            m_playSound = 0x15;
+            m_gauge = m_gauge + 10;
+            m_playSound = 21;
             m_hitsLeft = 1;
         }
         if (y < 0.0) {
             vy += 0.025;
             if (y + vy > 0.0) {
                 timer = 0;
-                frame = 0xb;
+                frame = 11;
                 y = 0.0;
                 StopMoving();
                 break;
@@ -3189,7 +3189,7 @@ void CIkumi::UpdatePattern()
             if (frame < 3) {
                 m_attackResult = 0;
             }
-            if (frame == 0xb) {
+            if (frame == 11) {
                 frame = frame - 2;
             }
             if (frame >= frameCount) {
@@ -3208,12 +3208,12 @@ void CIkumi::UpdatePattern()
             pattern = kAirThrowConnected;
             (*m_opponent)->pattern = kThrownDoubledOver;
             effect.type = 0;
-            effect.x = (double)((int)x + facing * 0x27);
-            effect.y = (double)((int)y - 0x4b);
+            effect.x = (double)((int)x + facing * 39);
+            effect.y = (double)((int)y - 75);
             effect.scale = 2;
             effect.layer = 1;
             m_game->CreateEffect((EffectDesc*)&effect);
-            (*m_opponent)->x = facing * 0x27 + x;
+            (*m_opponent)->x = facing * 39 + x;
             (*m_opponent)->y = y - 75.0;
         }
         timer++;
@@ -3234,10 +3234,10 @@ void CIkumi::UpdatePattern()
         break;
     case kAirThrowConnected:
         if (frame < 5) {
-            FocusCameraX(0x32, 3);
+            FocusCameraX(50, 3);
         }
         if (frame < 5) {
-            FocusCameraY(0x32, 3);
+            FocusCameraY(50, 3);
         }
         vy = vy + ay;
         if (vy + y > 0.0 && frame > 4) {
@@ -3254,13 +3254,13 @@ void CIkumi::UpdatePattern()
             m_attackResult = 0;
             if (frame == 2) {
                 (*m_opponent)->y = y - 70.0;
-                (*m_opponent)->x = facing * 0x2a + x;
+                (*m_opponent)->x = facing * 42 + x;
                 (*m_opponent)->pattern = kThrownStandHigh;
-                (*m_opponent)->m_hitstop = 0x3c;
+                (*m_opponent)->m_hitstop = 60;
                 effect.type = 0xe;
                 effect.sound = 4;
-                effect.x = (double)((int)x + facing * 0x2a);
-                effect.y = (double)((int)y - 0x48);
+                effect.x = (double)((int)x + facing * 42);
+                effect.y = (double)((int)y - 72);
                 effect.scale = 2;
                 effect.layer = 1;
                 m_game->CreateEffect((EffectDesc*)&effect);
@@ -3273,9 +3273,9 @@ void CIkumi::UpdatePattern()
             if (frame == 5) {
                 ShakeScreen(4, 0);
                 (*m_opponent)->y = y - 40.0;
-                (*m_opponent)->x = facing * 0x2a + x;
+                (*m_opponent)->x = facing * 42 + x;
                 (*m_opponent)->pattern = kHitAirLaunch;
-                DealDamage(0x4b0, 500.0);
+                DealDamage(1200, 500.0);
                 (*m_opponent)->StartPattern();
                 (*m_opponent)->m_hitVx = -2.0;
                 (*m_opponent)->m_hitVy = 0.0;
@@ -3283,8 +3283,8 @@ void CIkumi::UpdatePattern()
                 vy = -0.5;
                 vx = -2.0;
                 effect.type = 0x199;
-                effect.x = (double)((int)x + facing * 0x2a);
-                effect.y = (double)((int)y - 0x46);
+                effect.x = (double)((int)x + facing * 42);
+                effect.y = (double)((int)y - 70);
                 effect.scale = 2;
                 effect.facing = facing;
                 effect.layer = 1;
@@ -3308,7 +3308,7 @@ void CIkumi::UpdatePattern()
             m_attackResult = 0;
             if (frame == 5) {
                 effect.type = 0x192;
-                effect.x = (double)((int)x + facing * 0x3c);
+                effect.x = (double)((int)x + facing * 60);
                 effect.y = 0.0;
                 effect.scale = 2;
                 effect.layer = 1;
@@ -3341,7 +3341,7 @@ void CIkumi::UpdatePattern()
             m_attackResult = 0;
             if (frame == 5) {
                 effect.type = 0x192;
-                effect.x = (double)((int)x + facing * 0x78);
+                effect.x = (double)((int)x + facing * 120);
                 effect.y = 0.0;
                 effect.scale = 2;
                 effect.layer = 1;
@@ -3374,7 +3374,7 @@ void CIkumi::UpdatePattern()
             m_attackResult = 0;
             if (frame == 5) {
                 effect.type = 0x192;
-                effect.x = (double)((int)x + facing * 0xb4);
+                effect.x = (double)((int)x + facing * 180);
                 effect.y = 0.0;
                 effect.scale = 2;
                 effect.layer = 1;
@@ -3405,9 +3405,9 @@ void CIkumi::UpdatePattern()
         if (frame == 4 && timer == 0) {
             m_patternVar1 = 1;
         }
-        if (frame == 0xa && timer == 0) {
-            m_playSound = 0x14;
-            m_gauge = m_gauge + 0x23;
+        if (frame == 10 && timer == 0) {
+            m_playSound = 20;
+            m_gauge = m_gauge + 35;
             effect.type = 0x191;
             effect.x = (double)(int)x;
             effect.y = y;
@@ -3418,7 +3418,7 @@ void CIkumi::UpdatePattern()
             SpawnObject(&effect);
             m_playVoice = 2;
         }
-        if (frame > 0xb) {
+        if (frame > 11) {
             vx -= 0.045;
             if (vx < 0.0) {
                 vx = 0.0;
@@ -3456,9 +3456,9 @@ void CIkumi::UpdatePattern()
         if (frame == 4 && timer == 0) {
             m_patternVar1 = 1;
         }
-        if (frame == 0xa && timer == 0) {
-            m_playSound = 0x14;
-            m_gauge = m_gauge + 0x23;
+        if (frame == 10 && timer == 0) {
+            m_playSound = 20;
+            m_gauge = m_gauge + 35;
             effect.type = 0x191;
             effect.x = (double)(int)x;
             effect.y = y;
@@ -3469,7 +3469,7 @@ void CIkumi::UpdatePattern()
             SpawnObject(&effect);
             m_playVoice = 2;
         }
-        if (frame > 0xb) {
+        if (frame > 11) {
             vx -= 0.045;
             if (vx < 0.0) {
                 vx = 0.0;
@@ -3509,9 +3509,9 @@ void CIkumi::UpdatePattern()
                 m_rfGauge -= 250.0;
             }
             effect.type = 0x21;
-            effect.sound = 0xb;
+            effect.sound = 11;
             effect.x = (double)(int)x;
-            effect.y = (double)((int)y - 0x32);
+            effect.y = (double)((int)y - 50);
             effect.scale = 2;
             effect.layer = 1;
             m_game->CreateEffect((EffectDesc*)&effect);
@@ -3519,9 +3519,9 @@ void CIkumi::UpdatePattern()
         if (frame == 4 && timer == 0) {
             m_patternVar1 = 1;
         }
-        if (frame == 0xa && timer == 0) {
-            m_playSound = 0x14;
-            m_gauge = m_gauge + 0x23;
+        if (frame == 10 && timer == 0) {
+            m_playSound = 20;
+            m_gauge = m_gauge + 35;
             effect.type = 0x191;
             effect.x = (double)(int)x;
             effect.y = y;
@@ -3532,7 +3532,7 @@ void CIkumi::UpdatePattern()
             SpawnObject(&effect);
             m_playVoice = 2;
         }
-        if (frame > 0xb) {
+        if (frame > 11) {
             vx -= 0.045;
             if (vx < 0.0) {
                 vx = 0.0;
@@ -3582,8 +3582,8 @@ void CIkumi::UpdatePattern()
             }
         }
         if (frame == 9 && timer == 0) {
-            m_playSound = 0x14;
-            m_gauge = m_gauge + 0x23;
+            m_playSound = 20;
+            m_gauge = m_gauge + 35;
             effect.type = 0x190;
             effect.x = (double)(int)x;
             effect.y = y;
@@ -3631,8 +3631,8 @@ void CIkumi::UpdatePattern()
             }
         }
         if (frame == 9 && timer == 0) {
-            m_playSound = 0x14;
-            m_gauge = m_gauge + 0x23;
+            m_playSound = 20;
+            m_gauge = m_gauge + 35;
             effect.type = 0x190;
             effect.x = (double)(int)x;
             effect.y = y;
@@ -3666,9 +3666,9 @@ void CIkumi::UpdatePattern()
                 m_rfGauge -= 250.0;
             }
             effect.type = 0x21;
-            effect.sound = 0xb;
+            effect.sound = 11;
             effect.x = (double)(int)x;
-            effect.y = (double)((int)y - 0x32);
+            effect.y = (double)((int)y - 50);
             effect.scale = 2;
             effect.layer = 1;
             m_game->CreateEffect((EffectDesc*)&effect);
@@ -3689,8 +3689,8 @@ void CIkumi::UpdatePattern()
             }
         }
         if (frame == 9 && timer == 0) {
-            m_playSound = 0x14;
-            m_gauge = m_gauge + 0x23;
+            m_playSound = 20;
+            m_gauge = m_gauge + 35;
             effect.type = 0x190;
             effect.x = (double)(int)x;
             effect.y = y;
@@ -3746,8 +3746,8 @@ void CIkumi::UpdatePattern()
             pattern = k41236CHold;
             (*m_opponent)->pattern = kThrownStandHigh2;
             effect.type = 0;
-            effect.x = (double)((int)x + facing * 0x25);
-            effect.y = (double)((int)y - 0x2a);
+            effect.x = (double)((int)x + facing * 37);
+            effect.y = (double)((int)y - 42);
             effect.scale = 2;
             effect.layer = 1;
             m_game->CreateEffect((EffectDesc*)&effect);
@@ -3766,52 +3766,52 @@ void CIkumi::UpdatePattern()
         break;
     case k41236CHold:
         if (frame == 3 && timer == 0) {
-            (*m_opponent)->m_hitstop = 0x5dc;
+            (*m_opponent)->m_hitstop = 1500;
             effect.type = 0;
-            effect.x = (double)((int)x + facing * 0x2b);
-            effect.y = (double)((int)y - 0x2e);
+            effect.x = (double)((int)x + facing * 43);
+            effect.y = (double)((int)y - 46);
             effect.scale = 2;
             effect.layer = 1;
             m_game->CreateEffect((EffectDesc*)&effect);
-            DealDamage(0xfa, 1000.0);
+            DealDamage(250, 1000.0);
             (*m_opponent)->StartPattern();
             (*m_opponent)->pattern = kThrownStandLow2;
-            (*m_opponent)->x = facing * 0x28 + x;
+            (*m_opponent)->x = facing * 40 + x;
             m_playVoice = 4;
         }
         if (frame == 7 && timer == 0) {
             effect.type = 0x1d6;
-            effect.x = (double)((int)x + facing * 0x2b);
-            effect.y = (double)((int)y - 0x2e);
+            effect.x = (double)((int)x + facing * 43);
+            effect.y = (double)((int)y - 46);
             effect.scale = 0;
             effect.layer = 1;
             effect.facing = facing;
             SpawnObject(&effect);
         }
-        if (frame == 0xc && timer == 0x5a) {
+        if (frame == 12 && timer == 90) {
             (*m_opponent)->m_hitstop = 0;
             effect.type = 0x199;
-            effect.x = (double)((int)x + facing * 0x2b);
-            effect.y = (double)((int)y - 0x2e);
+            effect.x = (double)((int)x + facing * 43);
+            effect.y = (double)((int)y - 46);
             effect.scale = 2;
             effect.facing = facing;
             effect.layer = 1;
             SpawnObject(&effect);
-            DealDamage(0xfa, 600.0);
+            DealDamage(250, 600.0);
             (*m_opponent)->StartPattern();
             (*m_opponent)->pattern = kHitAirLaunch;
             (*m_opponent)->m_hitVx = -0.8;
             (*m_opponent)->m_hitVy = -2.8;
             effect.type = 0x1dd;
-            effect.x = (double)((int)x + facing * 0x2b);
-            effect.y = (double)((int)y - 0x2e);
+            effect.x = (double)((int)x + facing * 43);
+            effect.y = (double)((int)y - 46);
             effect.scale = 0;
             effect.layer = 1;
             effect.facing = facing;
             SpawnObject(&effect);
             effect.type = 0x1dd;
-            effect.x = (double)((int)x + facing * 0x2b);
-            effect.y = (double)((int)y - 0x2e);
+            effect.x = (double)((int)x + facing * 43);
+            effect.y = (double)((int)y - 46);
             effect.scale = 0;
             effect.layer = 1;
             effect.facing = -facing;
@@ -3841,9 +3841,9 @@ void CIkumi::UpdatePattern()
         if (frame == 4 && timer == 0) {
             m_patternVar1 = 1;
         }
-        if (frame == 0xa && timer == 0) {
-            m_playSound = 0x14;
-            m_gauge = m_gauge + 0x23;
+        if (frame == 10 && timer == 0) {
+            m_playSound = 20;
+            m_gauge = m_gauge + 35;
             effect.type = 0x191;
             effect.x = (double)(int)x;
             effect.y = y;
@@ -3854,7 +3854,7 @@ void CIkumi::UpdatePattern()
             SpawnObject(&effect);
             m_playVoice = 2;
         }
-        if (frame > 0xb) {
+        if (frame > 11) {
             vx -= 0.045;
             if (vx < 0.0) {
                 vx = 0.0;
@@ -3869,7 +3869,7 @@ void CIkumi::UpdatePattern()
         if (timer >= duration) {
             timer = 0;
             frame++;
-            if (frame < 0xe) {
+            if (frame < 14) {
                 m_attackResult = 0;
             }
             if (frame == 8 && m_patternVar2 < 1) {
@@ -3894,9 +3894,9 @@ void CIkumi::UpdatePattern()
                 m_rfGauge -= 250.0;
             }
             effect.type = 0x21;
-            effect.sound = 0xb;
+            effect.sound = 11;
             effect.x = (double)(int)x;
-            effect.y = (double)((int)y - 0x32);
+            effect.y = (double)((int)y - 50);
             effect.scale = 2;
             effect.layer = 1;
             m_game->CreateEffect((EffectDesc*)&effect);
@@ -3904,9 +3904,9 @@ void CIkumi::UpdatePattern()
         if (frame == 4 && timer == 0) {
             m_patternVar1 = 1;
         }
-        if (frame == 0xa && timer == 0) {
-            m_playSound = 0x14;
-            m_gauge = m_gauge + 0x23;
+        if (frame == 10 && timer == 0) {
+            m_playSound = 20;
+            m_gauge = m_gauge + 35;
             effect.type = 0x191;
             effect.x = (double)(int)x;
             effect.y = y;
@@ -3917,7 +3917,7 @@ void CIkumi::UpdatePattern()
             SpawnObject(&effect);
             m_playVoice = 2;
         }
-        if (frame > 0xb) {
+        if (frame > 11) {
             vx -= 0.045;
             if (vx < 0.0) {
                 vx = 0.0;
@@ -3955,9 +3955,9 @@ void CIkumi::UpdatePattern()
         if (frame == 4 && timer == 0) {
             m_patternVar1 = 1;
         }
-        if (frame == 0xa && timer == 0) {
-            m_playSound = 0x14;
-            m_gauge = m_gauge + 0x23;
+        if (frame == 10 && timer == 0) {
+            m_playSound = 20;
+            m_gauge = m_gauge + 35;
             effect.type = 0x191;
             effect.x = (double)(int)x;
             effect.y = y;
@@ -3968,7 +3968,7 @@ void CIkumi::UpdatePattern()
             SpawnObject(&effect);
             m_playVoice = 2;
         }
-        if (frame > 0xb) {
+        if (frame > 11) {
             vx -= 0.045;
             if (vx < 0.0) {
                 vx = 0.0;
@@ -3983,7 +3983,7 @@ void CIkumi::UpdatePattern()
         if (timer >= duration) {
             timer = 0;
             frame++;
-            if (frame < 0xe) {
+            if (frame < 14) {
                 m_attackResult = 0;
             }
             if (frame == 8 && m_patternVar2 < 1) {
@@ -4008,9 +4008,9 @@ void CIkumi::UpdatePattern()
                 m_rfGauge -= 250.0;
             }
             effect.type = 0x21;
-            effect.sound = 0xb;
+            effect.sound = 11;
             effect.x = (double)(int)x;
-            effect.y = (double)((int)y - 0x32);
+            effect.y = (double)((int)y - 50);
             effect.scale = 2;
             effect.layer = 1;
             m_game->CreateEffect((EffectDesc*)&effect);
@@ -4018,9 +4018,9 @@ void CIkumi::UpdatePattern()
         if (frame == 4 && timer == 0) {
             m_patternVar1 = 1;
         }
-        if (frame == 0xa && timer == 0) {
-            m_playSound = 0x14;
-            m_gauge = m_gauge + 0x23;
+        if (frame == 10 && timer == 0) {
+            m_playSound = 20;
+            m_gauge = m_gauge + 35;
             effect.type = 0x191;
             effect.x = (double)(int)x;
             effect.y = y;
@@ -4031,7 +4031,7 @@ void CIkumi::UpdatePattern()
             SpawnObject(&effect);
             m_playVoice = 2;
         }
-        if (frame > 0xb) {
+        if (frame > 11) {
             vx -= 0.045;
             if (vx < 0.0) {
                 vx = 0.0;
@@ -4081,8 +4081,8 @@ void CIkumi::UpdatePattern()
             }
         }
         if (frame == 9 && timer == 0) {
-            m_playSound = 0x14;
-            m_gauge = m_gauge + 0x23;
+            m_playSound = 20;
+            m_gauge = m_gauge + 35;
             effect.type = 0x190;
             effect.x = (double)(int)x;
             effect.y = y;
@@ -4116,9 +4116,9 @@ void CIkumi::UpdatePattern()
                 m_rfGauge -= 250.0;
             }
             effect.type = 0x21;
-            effect.sound = 0xb;
+            effect.sound = 11;
             effect.x = (double)(int)x;
-            effect.y = (double)((int)y - 0x32);
+            effect.y = (double)((int)y - 50);
             effect.scale = 2;
             effect.layer = 1;
             m_game->CreateEffect((EffectDesc*)&effect);
@@ -4139,8 +4139,8 @@ void CIkumi::UpdatePattern()
             }
         }
         if (frame == 9 && timer == 0) {
-            m_playSound = 0x14;
-            m_gauge = m_gauge + 0x23;
+            m_playSound = 20;
+            m_gauge = m_gauge + 35;
             effect.type = 0x190;
             effect.x = (double)(int)x;
             effect.y = y;
@@ -4199,8 +4199,8 @@ void CIkumi::UpdatePattern()
             }
         }
         if (frame == 9 && timer == 0) {
-            m_playSound = 0x14;
-            m_gauge = m_gauge + 0x23;
+            m_playSound = 20;
+            m_gauge = m_gauge + 35;
             effect.type = 0x190;
             effect.x = (double)(int)x;
             effect.y = y;
@@ -4234,9 +4234,9 @@ void CIkumi::UpdatePattern()
                 m_rfGauge -= 250.0;
             }
             effect.type = 0x21;
-            effect.sound = 0xb;
+            effect.sound = 11;
             effect.x = (double)(int)x;
-            effect.y = (double)((int)y - 0x32);
+            effect.y = (double)((int)y - 50);
             effect.scale = 2;
             effect.layer = 1;
             m_game->CreateEffect((EffectDesc*)&effect);
@@ -4257,8 +4257,8 @@ void CIkumi::UpdatePattern()
             }
         }
         if (frame == 9 && timer == 0) {
-            m_playSound = 0x14;
-            m_gauge = m_gauge + 0x23;
+            m_playSound = 20;
+            m_gauge = m_gauge + 35;
             effect.type = 0x190;
             effect.x = (double)(int)x;
             effect.y = y;
@@ -4307,7 +4307,7 @@ void CIkumi::UpdatePattern()
             m_attackResult = 0;
             if (frame == 5) {
                 effect.type = 0x192;
-                effect.x = (double)((int)x + facing * 0x3c);
+                effect.x = (double)((int)x + facing * 60);
                 effect.y = 0.0;
                 effect.scale = 2;
                 effect.layer = 1;
@@ -4340,7 +4340,7 @@ void CIkumi::UpdatePattern()
             m_attackResult = 0;
             if (frame == 5) {
                 effect.type = 0x192;
-                effect.x = (double)((int)x + facing * 0x78);
+                effect.x = (double)((int)x + facing * 120);
                 effect.y = 0.0;
                 effect.scale = 2;
                 effect.layer = 1;
@@ -4373,7 +4373,7 @@ void CIkumi::UpdatePattern()
             m_attackResult = 0;
             if (frame == 5) {
                 effect.type = 0x192;
-                effect.x = (double)((int)x + facing * 0xb4);
+                effect.x = (double)((int)x + facing * 180);
                 effect.y = 0.0;
                 effect.scale = 2;
                 effect.layer = 1;
@@ -4406,7 +4406,7 @@ void CIkumi::UpdatePattern()
             m_attackResult = 0;
             if (frame == 5) {
                 effect.type = 0x192;
-                effect.x = (double)((int)x + facing * 0x3c);
+                effect.x = (double)((int)x + facing * 60);
                 effect.y = 0.0;
                 effect.scale = 2;
                 effect.layer = 1;
@@ -4439,7 +4439,7 @@ void CIkumi::UpdatePattern()
             m_attackResult = 0;
             if (frame == 5) {
                 effect.type = 0x192;
-                effect.x = (double)((int)x + facing * 0x78);
+                effect.x = (double)((int)x + facing * 120);
                 effect.y = 0.0;
                 effect.scale = 2;
                 effect.layer = 1;
@@ -4472,7 +4472,7 @@ void CIkumi::UpdatePattern()
             m_attackResult = 0;
             if (frame == 5) {
                 effect.type = 0x192;
-                effect.x = (double)((int)x + facing * 0xb4);
+                effect.x = (double)((int)x + facing * 180);
                 effect.y = 0.0;
                 effect.scale = 2;
                 effect.layer = 1;
@@ -4500,29 +4500,29 @@ void CIkumi::UpdatePattern()
             vy = 0.0;
             ay = 0.0;
             m_hitsLeft = 1;
-            m_freezeTime = 0x78;
-            FillBackground(0xb0, 3);
+            m_freezeTime = 120;
+            FillBackground(176, 3);
             effect.type = 0x46;
-            effect.sound = 0x40;
+            effect.sound = 64;
             effect.x = (double)(int)x;
-            effect.y = (double)((int)y - 0x2b);
+            effect.y = (double)((int)y - 43);
             effect.scale = 2;
             effect.keep = 1;
             effect.layer = 1;
             m_game->CreateEffect((EffectDesc*)&effect);
-            m_playSound = 0x25;
+            m_playSound = 37;
         }
-        FocusCameraY(0x32, 3);
+        FocusCameraY(50, 3);
         if (frame == 4 && timer == 0) {
             effect.type = 0x19e;
             effect.x = (double)((int)x - facing * 5);
-            effect.y = (double)((int)y - 0x36);
+            effect.y = (double)((int)y - 54);
             effect.scale = 2;
             effect.keep = 1;
             effect.layer = 1;
             effect.facing = facing;
             SpawnObject(&effect);
-            ShakeScreen(0xa, 0);
+            ShakeScreen(10, 0);
             m_playVoice = 6;
             m_playVoice = 7;
         }
@@ -4539,8 +4539,8 @@ void CIkumi::UpdatePattern()
                 }
                 pattern = kStand;
                 StartPattern();
-                m_modeTimer = 0x4ec;
-                m_stocks = 0xa;
+                m_modeTimer = 1260;
+                m_stocks = 10;
                 UseAltPatterns(1);
             }
         }
@@ -4551,13 +4551,13 @@ void CIkumi::UpdatePattern()
         }
         if (frame == 1 && timer == 0) {
             m_dashMomentum = 0;
-            m_freezeTime = 0x78;
-            m_gauge = m_gauge - 0x3e8;
-            FillBackground(0xb0, 3);
+            m_freezeTime = 120;
+            m_gauge = m_gauge - 1000;
+            FillBackground(176, 3);
             effect.type = 0x44;
-            effect.sound = 0x13;
-            effect.x = (double)((int)x + facing * 0x1f);
-            effect.y = (double)((int)y - 0x58);
+            effect.sound = 19;
+            effect.x = (double)((int)x + facing * 31);
+            effect.y = (double)((int)y - 88);
             effect.scale = 2;
             effect.keep = 1;
             effect.layer = 1;
@@ -4573,12 +4573,12 @@ void CIkumi::UpdatePattern()
             (*m_opponent)->StopMoving();
             pattern = k4123641236AHold;
             (*m_opponent)->pattern = kThrownDoubledOver;
-            (*m_opponent)->x = facing * 0x19 + x;
+            (*m_opponent)->x = facing * 25 + x;
             (*m_opponent)->y = -84.0;
-            FocusCameraY(0x32, 0x1e);
+            FocusCameraY(50, 30);
             effect.type = 0;
-            effect.x = (double)((int)x + facing * 0xd);
-            effect.y = (double)((int)y - 0x41);
+            effect.x = (double)((int)x + facing * 13);
+            effect.y = (double)((int)y - 65);
             effect.scale = 2;
             effect.layer = 1;
             m_game->CreateEffect((EffectDesc*)&effect);
@@ -4601,24 +4601,24 @@ void CIkumi::UpdatePattern()
         }
         break;
     case k4123641236AHold:
-        if (frame < 0xb) {
-            FocusCameraY(0x32, 3);
+        if (frame < 11) {
+            FocusCameraY(50, 3);
         }
         if ((frame == 4 || frame == 6) && timer == 0) {
             effect.type = 0;
-            (*m_opponent)->m_hitstop = 0x1e;
-            effect.x = (double)((int)x + ((WORD)Random(0, 0x28) + 0xa) * facing);
-            effect.y = (double)((int)y - 0x32 - (WORD)Random(0, 0x14));
+            (*m_opponent)->m_hitstop = 30;
+            effect.x = (double)((int)x + ((WORD)Random(0, 40) + 10) * facing);
+            effect.y = (double)((int)y - 50 - (WORD)Random(0, 20));
             effect.scale = 2;
             effect.layer = 1;
             effect.sound = 2;
             m_game->CreateEffect((EffectDesc*)&effect);
             effect.type = 0x1d6;
-            effect.x = (double)((int)(*m_opponent)->x + -5 + (WORD)Random(0, 0xa));
-            effect.y = (double)((int)y - 0x32 - (WORD)Random(0, 0x14));
+            effect.x = (double)((int)(*m_opponent)->x + -5 + (WORD)Random(0, 10));
+            effect.y = (double)((int)y - 50 - (WORD)Random(0, 20));
             effect.scale = 0;
             effect.layer = 1;
-            if ((WORD)Random(0, 0x64) < 0x32) {
+            if ((WORD)Random(0, 100) < 50) {
                 effect.facing = facing;
             } else {
                 effect.facing = -facing;
@@ -4630,18 +4630,18 @@ void CIkumi::UpdatePattern()
             timer = 0;
             frame++;
             if (frame == 1) {
-                (*m_opponent)->x = facing * 0x1e + x;
+                (*m_opponent)->x = facing * 30 + x;
                 (*m_opponent)->y = y - 87.0;
             }
             if (frame == 2) {
-                (*m_opponent)->x = facing * 0x1f + x;
+                (*m_opponent)->x = facing * 31 + x;
                 (*m_opponent)->y = y - 88.0;
             }
             if (frame == 3) {
                 m_playVoice = 8;
-                ShakeScreen(3, 0x1e);
+                ShakeScreen(3, 30);
                 effect.type = 0x19f;
-                effect.x = (double)((int)x + facing * 0x1e);
+                effect.x = (double)((int)x + facing * 30);
                 effect.y = 0.0;
                 effect.scale = 2;
                 effect.layer = 1;
@@ -4649,7 +4649,7 @@ void CIkumi::UpdatePattern()
                 effect.facing = facing;
                 SpawnObject(&effect);
                 effect.type = 0x19f;
-                effect.x = (double)((int)x + facing * 0x1e);
+                effect.x = (double)((int)x + facing * 30);
                 effect.y = -160.0;
                 effect.scale = 2;
                 effect.layer = 1;
@@ -4660,22 +4660,22 @@ void CIkumi::UpdatePattern()
                 frame = frame - 4;
                 m_patternVar1++;
             }
-            if (frame == 0xb) {
-                (*m_opponent)->x = facing * 0xb + x;
+            if (frame == 11) {
+                (*m_opponent)->x = facing * 11 + x;
                 (*m_opponent)->y = y - 75.0;
             }
-            if (frame == 0xc) {
-                (*m_opponent)->x = facing * 0xa + x;
+            if (frame == 12) {
+                (*m_opponent)->x = facing * 10 + x;
                 (*m_opponent)->y = y - 74.0;
             }
-            if (frame == 0xd) {
+            if (frame == 13) {
                 (*m_opponent)->StartPattern();
                 (*m_opponent)->pattern = kHitAirLaunch;
                 (*m_opponent)->m_hitVx = -1.2;
                 (*m_opponent)->m_hitVy = -0.5;
                 (*m_opponent)->y = -40.0;
-                (*m_opponent)->x = facing * 0x1e + x;
-                DealDamage(0x7d0, 500.0);
+                (*m_opponent)->x = facing * 30 + x;
+                DealDamage(2000, 500.0);
                 (*m_opponent)->m_hitstop = 0;
             }
             if (frame >= frameCount) {
@@ -4691,13 +4691,13 @@ void CIkumi::UpdatePattern()
         }
         if (frame == 1 && timer == 0) {
             m_dashMomentum = 0;
-            m_freezeTime = 0x78;
-            m_gauge = m_gauge - 0x7d0;
-            FillBackground(0xb0, 3);
+            m_freezeTime = 120;
+            m_gauge = m_gauge - 2000;
+            FillBackground(176, 3);
             effect.type = 0x45;
             effect.sound = 5;
-            effect.x = (double)((int)x + facing * 0x1f);
-            effect.y = (double)((int)y - 0x58);
+            effect.x = (double)((int)x + facing * 31);
+            effect.y = (double)((int)y - 88);
             effect.scale = 2;
             effect.keep = 1;
             effect.layer = 1;
@@ -4713,12 +4713,12 @@ void CIkumi::UpdatePattern()
             (*m_opponent)->StopMoving();
             pattern = k4123641236BHold;
             (*m_opponent)->pattern = kThrownDoubledOver;
-            (*m_opponent)->x = facing * 0x19 + x;
+            (*m_opponent)->x = facing * 25 + x;
             (*m_opponent)->y = -84.0;
-            FocusCameraY(0x32, 0x1e);
+            FocusCameraY(50, 30);
             effect.type = 0;
-            effect.x = (double)((int)x + facing * 0xd);
-            effect.y = (double)((int)y - 0x41);
+            effect.x = (double)((int)x + facing * 13);
+            effect.y = (double)((int)y - 65);
             effect.scale = 2;
             effect.layer = 1;
             m_game->CreateEffect((EffectDesc*)&effect);
@@ -4741,24 +4741,24 @@ void CIkumi::UpdatePattern()
         }
         break;
     case k4123641236BHold:
-        if (frame < 0xb) {
-            FocusCameraY(0x32, 3);
+        if (frame < 11) {
+            FocusCameraY(50, 3);
         }
         if ((frame == 4 || frame == 6) && timer == 0) {
             effect.type = 0;
-            (*m_opponent)->m_hitstop = 0x1e;
-            effect.x = (double)((int)x + ((WORD)Random(0, 0x28) + 0xa) * facing);
-            effect.y = (double)((int)y - 0x32 - (WORD)Random(0, 0x14));
+            (*m_opponent)->m_hitstop = 30;
+            effect.x = (double)((int)x + ((WORD)Random(0, 40) + 10) * facing);
+            effect.y = (double)((int)y - 50 - (WORD)Random(0, 20));
             effect.scale = 2;
             effect.layer = 1;
             effect.sound = 2;
             m_game->CreateEffect((EffectDesc*)&effect);
             effect.type = 0x1d6;
-            effect.x = (double)((int)(*m_opponent)->x + -5 + (WORD)Random(0, 0xa));
-            effect.y = (double)((int)y - 0x32 - (WORD)Random(0, 0x14));
+            effect.x = (double)((int)(*m_opponent)->x + -5 + (WORD)Random(0, 10));
+            effect.y = (double)((int)y - 50 - (WORD)Random(0, 20));
             effect.scale = 0;
             effect.layer = 1;
-            if ((WORD)Random(0, 0x64) < 0x32) {
+            if ((WORD)Random(0, 100) < 50) {
                 effect.facing = facing;
             } else {
                 effect.facing = -facing;
@@ -4770,18 +4770,18 @@ void CIkumi::UpdatePattern()
             timer = 0;
             frame++;
             if (frame == 1) {
-                (*m_opponent)->x = facing * 0x1e + x;
+                (*m_opponent)->x = facing * 30 + x;
                 (*m_opponent)->y = y - 87.0;
             }
             if (frame == 2) {
-                (*m_opponent)->x = facing * 0x1f + x;
+                (*m_opponent)->x = facing * 31 + x;
                 (*m_opponent)->y = y - 88.0;
             }
             if (frame == 3) {
                 m_playVoice = 8;
-                ShakeScreen(3, 0x1e);
+                ShakeScreen(3, 30);
                 effect.type = 0x1a0;
-                effect.x = (double)((int)x + facing * 0x1e);
+                effect.x = (double)((int)x + facing * 30);
                 effect.y = 0.0;
                 effect.scale = 2;
                 effect.layer = 1;
@@ -4789,33 +4789,33 @@ void CIkumi::UpdatePattern()
                 effect.facing = facing;
                 SpawnObject(&effect);
                 effect.type = 0x1a0;
-                effect.x = (double)((int)x + facing * 0x1e);
+                effect.x = (double)((int)x + facing * 30);
                 effect.y = -160.0;
                 effect.scale = 2;
                 effect.layer = 1;
                 effect.facing = facing;
                 SpawnObject(&effect);
             }
-            if (m_patternVar1 < 0xc && frame == 7) {
+            if (m_patternVar1 < 12 && frame == 7) {
                 frame = frame - 4;
                 m_patternVar1++;
             }
-            if (frame == 0xb) {
-                (*m_opponent)->x = facing * 0xb + x;
+            if (frame == 11) {
+                (*m_opponent)->x = facing * 11 + x;
                 (*m_opponent)->y = y - 75.0;
             }
-            if (frame == 0xc) {
-                (*m_opponent)->x = facing * 0xa + x;
+            if (frame == 12) {
+                (*m_opponent)->x = facing * 10 + x;
                 (*m_opponent)->y = y - 74.0;
             }
-            if (frame == 0xd) {
+            if (frame == 13) {
                 (*m_opponent)->StartPattern();
                 (*m_opponent)->pattern = kHitAirLaunch;
                 (*m_opponent)->m_hitVx = -1.2;
                 (*m_opponent)->m_hitVy = -0.5;
                 (*m_opponent)->y = -40.0;
-                (*m_opponent)->x = facing * 0x1e + x;
-                DealDamage(0xbb8, 500.0);
+                (*m_opponent)->x = facing * 30 + x;
+                DealDamage(3000, 500.0);
                 (*m_opponent)->m_hitstop = 0;
             }
             if (frame >= frameCount) {
@@ -4830,17 +4830,17 @@ void CIkumi::UpdatePattern()
             StopMoving();
         }
         if (frame > 0) {
-            m_game->FlashNegative(0xf);
+            m_game->FlashNegative(15);
         }
         if (frame == 1 && timer == 0) {
             m_dashMomentum = 0;
-            m_freezeTime = 0x78;
-            m_gauge = m_gauge - 0xbb8;
-            FillBackground(0xb0, 3);
+            m_freezeTime = 120;
+            m_gauge = m_gauge - 3000;
+            FillBackground(176, 3);
             effect.type = 0x46;
-            effect.sound = 0x40;
-            effect.x = (double)((int)x + facing * 0x1f);
-            effect.y = (double)((int)y - 0x58);
+            effect.sound = 64;
+            effect.x = (double)((int)x + facing * 31);
+            effect.y = (double)((int)y - 88);
             effect.scale = 2;
             effect.keep = 1;
             effect.layer = 1;
@@ -4856,12 +4856,12 @@ void CIkumi::UpdatePattern()
             (*m_opponent)->StopMoving();
             pattern = k4123641236CHold;
             (*m_opponent)->pattern = kThrownDoubledOver;
-            (*m_opponent)->x = facing * 0x19 + x;
+            (*m_opponent)->x = facing * 25 + x;
             (*m_opponent)->y = -84.0;
-            FocusCameraY(0x32, 0x1e);
+            FocusCameraY(50, 30);
             effect.type = 0;
-            effect.x = (double)((int)x + facing * 0xd);
-            effect.y = (double)((int)y - 0x41);
+            effect.x = (double)((int)x + facing * 13);
+            effect.y = (double)((int)y - 65);
             effect.scale = 2;
             effect.layer = 1;
             m_game->CreateEffect((EffectDesc*)&effect);
@@ -4884,24 +4884,24 @@ void CIkumi::UpdatePattern()
         }
         break;
     case k4123641236CHold:
-        if (frame < 0xb) {
-            FocusCameraY(0x32, 3);
+        if (frame < 11) {
+            FocusCameraY(50, 3);
         }
-        if (frame < 0xb) {
-            m_game->FlashNegative(0xf);
+        if (frame < 11) {
+            m_game->FlashNegative(15);
         }
         if ((frame == 4 || frame == 6) && timer == 0) {
             effect.type = 0;
-            (*m_opponent)->m_hitstop = 0x1e;
-            effect.x = (double)((int)x + ((WORD)Random(0, 0x28) + 0xa) * facing);
-            effect.y = (double)((int)y - 0x32 - (WORD)Random(0, 0x14));
+            (*m_opponent)->m_hitstop = 30;
+            effect.x = (double)((int)x + ((WORD)Random(0, 40) + 10) * facing);
+            effect.y = (double)((int)y - 50 - (WORD)Random(0, 20));
             effect.scale = 2;
             effect.layer = 1;
             effect.sound = 2;
             m_game->CreateEffect((EffectDesc*)&effect);
             effect.type = 0x1de;
-            effect.x = (double)((int)(*m_opponent)->x + -5 + (WORD)Random(0, 0xa));
-            effect.y = (double)((int)y - 0x32 - (WORD)Random(0, 0x14));
+            effect.x = (double)((int)(*m_opponent)->x + -5 + (WORD)Random(0, 10));
+            effect.y = (double)((int)y - 50 - (WORD)Random(0, 20));
             effect.scale = 0;
             effect.layer = 1;
             effect.facing = facing;
@@ -4912,18 +4912,18 @@ void CIkumi::UpdatePattern()
             timer = 0;
             frame++;
             if (frame == 1) {
-                (*m_opponent)->x = facing * 0x1e + x;
+                (*m_opponent)->x = facing * 30 + x;
                 (*m_opponent)->y = y - 87.0;
             }
             if (frame == 2) {
-                (*m_opponent)->x = facing * 0x1f + x;
+                (*m_opponent)->x = facing * 31 + x;
                 (*m_opponent)->y = y - 88.0;
             }
             if (frame == 3) {
                 m_playVoice = 8;
-                ShakeScreen(4, 0x1e);
+                ShakeScreen(4, 30);
                 effect.type = 0x1a1;
-                effect.x = (double)((int)x + facing * 0x1e);
+                effect.x = (double)((int)x + facing * 30);
                 effect.y = 0.0;
                 effect.scale = 2;
                 effect.layer = 1;
@@ -4931,33 +4931,33 @@ void CIkumi::UpdatePattern()
                 effect.facing = facing;
                 SpawnObject(&effect);
                 effect.type = 0x1a1;
-                effect.x = (double)((int)x + facing * 0x1e);
+                effect.x = (double)((int)x + facing * 30);
                 effect.y = -160.0;
                 effect.scale = 2;
                 effect.layer = 1;
                 effect.facing = facing;
                 SpawnObject(&effect);
             }
-            if (m_patternVar1 < 0xc && frame == 7) {
+            if (m_patternVar1 < 12 && frame == 7) {
                 frame = frame - 4;
                 m_patternVar1++;
             }
-            if (frame == 0xb) {
-                (*m_opponent)->x = facing * 0xb + x;
+            if (frame == 11) {
+                (*m_opponent)->x = facing * 11 + x;
                 (*m_opponent)->y = y - 75.0;
             }
-            if (frame == 0xc) {
-                (*m_opponent)->x = facing * 0xa + x;
+            if (frame == 12) {
+                (*m_opponent)->x = facing * 10 + x;
                 (*m_opponent)->y = y - 74.0;
             }
-            if (frame == 0xd) {
+            if (frame == 13) {
                 (*m_opponent)->StartPattern();
                 (*m_opponent)->pattern = kHitAirLaunch;
                 (*m_opponent)->m_hitVx = -1.2;
                 (*m_opponent)->m_hitVy = -0.5;
                 (*m_opponent)->y = -40.0;
-                (*m_opponent)->x = facing * 0x1e + x;
-                DealDamage(0x1004, 500.0);
+                (*m_opponent)->x = facing * 30 + x;
+                DealDamage(4100, 500.0);
                 (*m_opponent)->m_hitstop = 0;
             }
             if (frame >= frameCount) {
@@ -4970,13 +4970,13 @@ void CIkumi::UpdatePattern()
     case k214214A:
         if (frame == 0 && timer == 0) {
             m_dashMomentum = 0;
-            m_freezeTime = 0x78;
-            m_gauge = m_gauge - 0x3e8;
-            FillBackground(0xb0, 3);
+            m_freezeTime = 120;
+            m_gauge = m_gauge - 1000;
+            FillBackground(176, 3);
             effect.type = 0x44;
-            effect.sound = 0x13;
+            effect.sound = 19;
             effect.x = (double)((int)x + facing * 4);
-            effect.y = (double)((int)y - 0x2f);
+            effect.y = (double)((int)y - 47);
             effect.scale = 2;
             effect.keep = 1;
             effect.layer = 1;
@@ -5012,13 +5012,13 @@ void CIkumi::UpdatePattern()
     case k214214B:
         if (frame == 0 && timer == 0) {
             m_dashMomentum = 0;
-            m_freezeTime = 0x78;
-            m_gauge = m_gauge - 0x3e8;
-            FillBackground(0xb0, 3);
+            m_freezeTime = 120;
+            m_gauge = m_gauge - 1000;
+            FillBackground(176, 3);
             effect.type = 0x44;
-            effect.sound = 0x13;
+            effect.sound = 19;
             effect.x = (double)((int)x + facing * 4);
-            effect.y = (double)((int)y - 0x2f);
+            effect.y = (double)((int)y - 47);
             effect.scale = 2;
             effect.keep = 1;
             effect.layer = 1;
@@ -5054,13 +5054,13 @@ void CIkumi::UpdatePattern()
     case k214214C:
         if (frame == 0 && timer == 0) {
             m_dashMomentum = 0;
-            m_freezeTime = 0x78;
-            m_gauge = m_gauge - 0x3e8;
-            FillBackground(0xb0, 3);
+            m_freezeTime = 120;
+            m_gauge = m_gauge - 1000;
+            FillBackground(176, 3);
             effect.type = 0x44;
-            effect.sound = 0x13;
+            effect.sound = 19;
             effect.x = (double)((int)x + facing * 4);
-            effect.y = (double)((int)y - 0x2f);
+            effect.y = (double)((int)y - 47);
             effect.scale = 2;
             effect.keep = 1;
             effect.layer = 1;
@@ -5099,13 +5099,13 @@ void CIkumi::UpdatePattern()
         }
         if (frame == 1 && timer == 0) {
             m_dashMomentum = 0;
-            m_freezeTime = 0x78;
-            m_gauge = m_gauge - 0x3e8;
-            FillBackground(0xb0, 3);
+            m_freezeTime = 120;
+            m_gauge = m_gauge - 1000;
+            FillBackground(176, 3);
             effect.type = 0x44;
-            effect.sound = 0x13;
+            effect.sound = 19;
             effect.x = (double)(int)x;
-            effect.y = (double)((int)y - 0x32);
+            effect.y = (double)((int)y - 50);
             effect.scale = 2;
             effect.keep = 1;
             effect.layer = 1;
@@ -5115,8 +5115,8 @@ void CIkumi::UpdatePattern()
         if (frame == 3 && timer == 0) {
             effect.type = 0xe;
             effect.sound = 4;
-            effect.x = (double)((int)x + facing * 0x16);
-            effect.y = (double)((int)y - 0x3b);
+            effect.x = (double)((int)x + facing * 22);
+            effect.y = (double)((int)y - 59);
             effect.scale = 2;
             effect.keep = 1;
             effect.layer = 1;
@@ -5127,11 +5127,11 @@ void CIkumi::UpdatePattern()
             timer = 0;
             frame++;
             m_attackResult = 0;
-            if (frame == 0xe) {
+            if (frame == 14) {
                 m_storedSuperLevel = 1;
-                m_playVoice = 0xa;
+                m_playVoice = 10;
                 effect.type = 0x1a7;
-                effect.x = (double)((int)x + facing * 0x29);
+                effect.x = (double)((int)x + facing * 41);
                 effect.y = 0.0;
                 effect.scale = 2;
                 effect.keep = 1;
@@ -5139,7 +5139,7 @@ void CIkumi::UpdatePattern()
                 effect.layer = 0;
                 SpawnObject(&effect);
             }
-            if (frame == 0x10 && m_patternVar1 < 3) {
+            if (frame == 16 && m_patternVar1 < 3) {
                 frame = frame - 2;
                 m_patternVar1++;
                 m_attackResult = 3;
@@ -5157,13 +5157,13 @@ void CIkumi::UpdatePattern()
         }
         if (frame == 1 && timer == 0) {
             m_dashMomentum = 0;
-            m_freezeTime = 0x78;
-            m_gauge = m_gauge - 0x7d0;
-            FillBackground(0xb0, 3);
+            m_freezeTime = 120;
+            m_gauge = m_gauge - 2000;
+            FillBackground(176, 3);
             effect.type = 0x45;
             effect.sound = 5;
             effect.x = (double)(int)x;
-            effect.y = (double)((int)y - 0x32);
+            effect.y = (double)((int)y - 50);
             effect.scale = 2;
             effect.keep = 1;
             effect.layer = 1;
@@ -5173,8 +5173,8 @@ void CIkumi::UpdatePattern()
         if (frame == 3 && timer == 0) {
             effect.type = 0xe;
             effect.sound = 4;
-            effect.x = (double)((int)x + facing * 0x16);
-            effect.y = (double)((int)y - 0x3b);
+            effect.x = (double)((int)x + facing * 22);
+            effect.y = (double)((int)y - 59);
             effect.scale = 2;
             effect.keep = 1;
             effect.layer = 1;
@@ -5185,11 +5185,11 @@ void CIkumi::UpdatePattern()
             timer = 0;
             frame++;
             m_attackResult = 0;
-            if (frame == 0xe) {
+            if (frame == 14) {
                 m_storedSuperLevel = 2;
-                m_playVoice = 0xa;
+                m_playVoice = 10;
                 effect.type = 0x1a7;
-                effect.x = (double)((int)x + facing * 0x29);
+                effect.x = (double)((int)x + facing * 41);
                 effect.y = 0.0;
                 effect.scale = 2;
                 effect.keep = 1;
@@ -5197,7 +5197,7 @@ void CIkumi::UpdatePattern()
                 effect.layer = 0;
                 SpawnObject(&effect);
             }
-            if (frame == 0x10 && m_patternVar1 < 3) {
+            if (frame == 16 && m_patternVar1 < 3) {
                 frame = frame - 2;
                 m_patternVar1++;
                 m_attackResult = 3;
@@ -5214,17 +5214,17 @@ void CIkumi::UpdatePattern()
             StopMoving();
         }
         if (frame > 0) {
-            m_game->FlashNegative(0xf);
+            m_game->FlashNegative(15);
         }
         if (frame == 1 && timer == 0) {
             m_dashMomentum = 0;
-            m_freezeTime = 0x78;
-            m_gauge = m_gauge - 0xbb8;
-            FillBackground(0xb0, 3);
+            m_freezeTime = 120;
+            m_gauge = m_gauge - 3000;
+            FillBackground(176, 3);
             effect.type = 0x46;
-            effect.sound = 0x40;
+            effect.sound = 64;
             effect.x = (double)(int)x;
-            effect.y = (double)((int)y - 0x32);
+            effect.y = (double)((int)y - 50);
             effect.scale = 2;
             effect.keep = 1;
             effect.layer = 1;
@@ -5234,8 +5234,8 @@ void CIkumi::UpdatePattern()
         if (frame == 3 && timer == 0) {
             effect.type = 0xe;
             effect.sound = 4;
-            effect.x = (double)((int)x + facing * 0x16);
-            effect.y = (double)((int)y - 0x3b);
+            effect.x = (double)((int)x + facing * 22);
+            effect.y = (double)((int)y - 59);
             effect.scale = 2;
             effect.keep = 1;
             effect.layer = 1;
@@ -5246,11 +5246,11 @@ void CIkumi::UpdatePattern()
             timer = 0;
             frame++;
             m_attackResult = 0;
-            if (frame == 0xe) {
+            if (frame == 14) {
                 m_storedSuperLevel = 3;
-                m_playVoice = 0xa;
+                m_playVoice = 10;
                 effect.type = 0x1a7;
-                effect.x = (double)((int)x + facing * 0x29);
+                effect.x = (double)((int)x + facing * 41);
                 effect.y = 0.0;
                 effect.scale = 2;
                 effect.keep = 1;
@@ -5258,7 +5258,7 @@ void CIkumi::UpdatePattern()
                 effect.layer = 0;
                 SpawnObject(&effect);
             }
-            if (frame == 0x10 && m_patternVar1 < 3) {
+            if (frame == 16 && m_patternVar1 < 3) {
                 frame = frame - 2;
                 m_patternVar1++;
                 m_attackResult = 3;
@@ -5276,12 +5276,12 @@ void CIkumi::UpdatePattern()
         }
         if (frame == 3 && timer == 0) {
             m_dashMomentum = 0;
-            m_freezeTime = 0x78;
-            FillBackground(0xb0, 3);
+            m_freezeTime = 120;
+            FillBackground(176, 3);
             effect.type = 0x44;
-            effect.sound = 0x13;
-            effect.x = (double)((int)x + facing * 0x1f);
-            effect.y = (double)((int)y - 0x34);
+            effect.sound = 19;
+            effect.x = (double)((int)x + facing * 31);
+            effect.y = (double)((int)y - 52);
             effect.scale = 2;
             effect.keep = 1;
             effect.layer = 1;
@@ -5320,12 +5320,12 @@ void CIkumi::UpdatePattern()
         }
         if (frame == 3 && timer == 0) {
             m_dashMomentum = 0;
-            m_freezeTime = 0x78;
-            FillBackground(0xb0, 3);
+            m_freezeTime = 120;
+            FillBackground(176, 3);
             effect.type = 0x45;
             effect.sound = 5;
-            effect.x = (double)((int)x + facing * 0x1f);
-            effect.y = (double)((int)y - 0x34);
+            effect.x = (double)((int)x + facing * 31);
+            effect.y = (double)((int)y - 52);
             effect.scale = 2;
             effect.keep = 1;
             effect.layer = 1;
@@ -5348,7 +5348,7 @@ void CIkumi::UpdatePattern()
                 effect.layer = 1;
                 SpawnObject(&effect);
                 effect.type = 0x1a9;
-                effect.x = (double)((int)(*m_opponent)->x + 0x19);
+                effect.x = (double)((int)(*m_opponent)->x + 25);
                 effect.y = -10.0;
                 effect.scale = 2;
                 effect.keep = 1;
@@ -5359,7 +5359,7 @@ void CIkumi::UpdatePattern()
                 effect.layer = 0;
                 SpawnObject(&effect);
                 effect.type = 0x1a9;
-                effect.x = (double)((int)(*m_opponent)->x - 0x19);
+                effect.x = (double)((int)(*m_opponent)->x - 25);
                 effect.y = -10.0;
                 effect.scale = 2;
                 effect.keep = 1;
@@ -5370,7 +5370,7 @@ void CIkumi::UpdatePattern()
                 effect.layer = 0;
                 SpawnObject(&effect);
                 effect.type = 0x1a9;
-                effect.x = (double)((int)(*m_opponent)->x + 0x2d);
+                effect.x = (double)((int)(*m_opponent)->x + 45);
                 effect.y = 10.0;
                 effect.scale = 2;
                 effect.keep = 1;
@@ -5381,7 +5381,7 @@ void CIkumi::UpdatePattern()
                 effect.layer = 0;
                 SpawnObject(&effect);
                 effect.type = 0x1a9;
-                effect.x = (double)((int)(*m_opponent)->x - 0x2d);
+                effect.x = (double)((int)(*m_opponent)->x - 45);
                 effect.y = 10.0;
                 effect.scale = 2;
                 effect.keep = 1;
@@ -5404,16 +5404,16 @@ void CIkumi::UpdatePattern()
             StopMoving();
         }
         if (frame > 2) {
-            m_game->FlashNegative(0xf);
+            m_game->FlashNegative(15);
         }
         if (frame == 3 && timer == 0) {
             m_dashMomentum = 0;
-            m_freezeTime = 0x78;
-            FillBackground(0xb0, 3);
+            m_freezeTime = 120;
+            FillBackground(176, 3);
             effect.type = 0x46;
-            effect.sound = 0x40;
-            effect.x = (double)((int)x + facing * 0x1f);
-            effect.y = (double)((int)y - 0x34);
+            effect.sound = 64;
+            effect.x = (double)((int)x + facing * 31);
+            effect.y = (double)((int)y - 52);
             effect.scale = 2;
             effect.keep = 1;
             effect.layer = 1;
@@ -5436,7 +5436,7 @@ void CIkumi::UpdatePattern()
                 effect.layer = 1;
                 SpawnObject(&effect);
                 effect.type = 0x1a9;
-                effect.x = (double)((int)(*m_opponent)->x + 0x23);
+                effect.x = (double)((int)(*m_opponent)->x + 35);
                 effect.y = -10.0;
                 effect.scale = 2;
                 effect.keep = 1;
@@ -5447,7 +5447,7 @@ void CIkumi::UpdatePattern()
                 effect.layer = 0;
                 SpawnObject(&effect);
                 effect.type = 0x1a9;
-                effect.x = (double)((int)(*m_opponent)->x - 0x23);
+                effect.x = (double)((int)(*m_opponent)->x - 35);
                 effect.y = -10.0;
                 effect.scale = 2;
                 effect.keep = 1;
@@ -5458,7 +5458,7 @@ void CIkumi::UpdatePattern()
                 effect.layer = 0;
                 SpawnObject(&effect);
                 effect.type = 0x1a9;
-                effect.x = (double)((int)(*m_opponent)->x + 0x46);
+                effect.x = (double)((int)(*m_opponent)->x + 70);
                 effect.y = 0.0;
                 effect.scale = 2;
                 effect.keep = 1;
@@ -5469,7 +5469,7 @@ void CIkumi::UpdatePattern()
                 effect.layer = 0;
                 SpawnObject(&effect);
                 effect.type = 0x1a9;
-                effect.x = (double)((int)(*m_opponent)->x - 0x46);
+                effect.x = (double)((int)(*m_opponent)->x - 70);
                 effect.y = 0.0;
                 effect.scale = 2;
                 effect.keep = 1;
@@ -5480,7 +5480,7 @@ void CIkumi::UpdatePattern()
                 effect.layer = 0;
                 SpawnObject(&effect);
                 effect.type = 0x1a9;
-                effect.x = (double)((int)(*m_opponent)->x + 0x28);
+                effect.x = (double)((int)(*m_opponent)->x + 40);
                 effect.y = 10.0;
                 effect.scale = 2;
                 effect.keep = 1;
@@ -5491,7 +5491,7 @@ void CIkumi::UpdatePattern()
                 effect.layer = 0;
                 SpawnObject(&effect);
                 effect.type = 0x1a9;
-                effect.x = (double)((int)(*m_opponent)->x - 0x28);
+                effect.x = (double)((int)(*m_opponent)->x - 40);
                 effect.y = 10.0;
                 effect.scale = 2;
                 effect.keep = 1;
@@ -5515,13 +5515,13 @@ void CIkumi::UpdatePattern()
         }
         if (frame == 1 && timer == 0) {
             m_dashMomentum = 0;
-            m_freezeTime = 0x78;
-            m_gauge = m_gauge - 0x3e8;
-            FillBackground(0xb0, 3);
+            m_freezeTime = 120;
+            m_gauge = m_gauge - 1000;
+            FillBackground(176, 3);
             effect.type = 0x44;
-            effect.sound = 0x13;
+            effect.sound = 19;
             effect.x = (double)(int)x;
-            effect.y = (double)((int)y - 0x32);
+            effect.y = (double)((int)y - 50);
             effect.scale = 2;
             effect.keep = 1;
             effect.layer = 1;
@@ -5531,8 +5531,8 @@ void CIkumi::UpdatePattern()
         if (frame == 3 && timer == 0) {
             effect.type = 0xe;
             effect.sound = 4;
-            effect.x = (double)((int)x + facing * 0x16);
-            effect.y = (double)((int)y - 0x3b);
+            effect.x = (double)((int)x + facing * 22);
+            effect.y = (double)((int)y - 59);
             effect.scale = 2;
             effect.keep = 1;
             effect.layer = 1;
@@ -5543,7 +5543,7 @@ void CIkumi::UpdatePattern()
             timer = 0;
             frame++;
             m_attackResult = 0;
-            if (frame == 0xe) {
+            if (frame == 14) {
                 effect.type = 0x1a8;
                 effect.x = (double)(int)(*m_opponent)->x;
                 effect.y = 0.0;
@@ -5556,7 +5556,7 @@ void CIkumi::UpdatePattern()
                 effect.layer = 0;
                 SpawnObject(&effect);
             }
-            if (frame == 0x10 && m_patternVar1 < 6) {
+            if (frame == 16 && m_patternVar1 < 6) {
                 frame = frame - 2;
                 m_patternVar1++;
             }
@@ -5573,13 +5573,13 @@ void CIkumi::UpdatePattern()
         }
         if (frame == 1 && timer == 0) {
             m_dashMomentum = 0;
-            m_freezeTime = 0x78;
-            m_gauge = m_gauge - 0x7d0;
-            FillBackground(0xb0, 3);
+            m_freezeTime = 120;
+            m_gauge = m_gauge - 2000;
+            FillBackground(176, 3);
             effect.type = 0x45;
             effect.sound = 5;
             effect.x = (double)(int)x;
-            effect.y = (double)((int)y - 0x32);
+            effect.y = (double)((int)y - 50);
             effect.scale = 2;
             effect.keep = 1;
             effect.layer = 1;
@@ -5589,8 +5589,8 @@ void CIkumi::UpdatePattern()
         if (frame == 3 && timer == 0) {
             effect.type = 0xe;
             effect.sound = 4;
-            effect.x = (double)((int)x + facing * 0x16);
-            effect.y = (double)((int)y - 0x3b);
+            effect.x = (double)((int)x + facing * 22);
+            effect.y = (double)((int)y - 59);
             effect.scale = 2;
             effect.keep = 1;
             effect.layer = 1;
@@ -5601,7 +5601,7 @@ void CIkumi::UpdatePattern()
             timer = 0;
             frame++;
             m_attackResult = 0;
-            if (frame == 0xe) {
+            if (frame == 14) {
                 effect.type = 0x1aa;
                 effect.x = (double)(int)(*m_opponent)->x;
                 effect.y = 0.0;
@@ -5611,7 +5611,7 @@ void CIkumi::UpdatePattern()
                 effect.layer = 1;
                 SpawnObject(&effect);
                 effect.type = 0x1a9;
-                effect.x = (double)((int)(*m_opponent)->x + 0x19);
+                effect.x = (double)((int)(*m_opponent)->x + 25);
                 effect.y = -10.0;
                 effect.scale = 2;
                 effect.keep = 1;
@@ -5622,7 +5622,7 @@ void CIkumi::UpdatePattern()
                 effect.layer = 0;
                 SpawnObject(&effect);
                 effect.type = 0x1a9;
-                effect.x = (double)((int)(*m_opponent)->x - 0x19);
+                effect.x = (double)((int)(*m_opponent)->x - 25);
                 effect.y = -10.0;
                 effect.scale = 2;
                 effect.keep = 1;
@@ -5633,7 +5633,7 @@ void CIkumi::UpdatePattern()
                 effect.layer = 0;
                 SpawnObject(&effect);
                 effect.type = 0x1a9;
-                effect.x = (double)((int)(*m_opponent)->x + 0x2d);
+                effect.x = (double)((int)(*m_opponent)->x + 45);
                 effect.y = 10.0;
                 effect.scale = 2;
                 effect.keep = 1;
@@ -5644,7 +5644,7 @@ void CIkumi::UpdatePattern()
                 effect.layer = 0;
                 SpawnObject(&effect);
                 effect.type = 0x1a9;
-                effect.x = (double)((int)(*m_opponent)->x - 0x2d);
+                effect.x = (double)((int)(*m_opponent)->x - 45);
                 effect.y = 10.0;
                 effect.scale = 2;
                 effect.keep = 1;
@@ -5655,7 +5655,7 @@ void CIkumi::UpdatePattern()
                 effect.layer = 0;
                 SpawnObject(&effect);
             }
-            if (frame == 0x10 && m_patternVar1 < 6) {
+            if (frame == 16 && m_patternVar1 < 6) {
                 frame = frame - 2;
                 m_patternVar1++;
             }
@@ -5668,20 +5668,20 @@ void CIkumi::UpdatePattern()
         break;
     case k21436CMode:
         if (frame > 0) {
-            m_game->FlashNegative(0xf);
+            m_game->FlashNegative(15);
         }
         if (frame == 0 && timer == 0) {
             StopMoving();
         }
         if (frame == 1 && timer == 0) {
             m_dashMomentum = 0;
-            m_freezeTime = 0x78;
-            m_gauge = m_gauge - 0xbb8;
-            FillBackground(0xb0, 3);
+            m_freezeTime = 120;
+            m_gauge = m_gauge - 3000;
+            FillBackground(176, 3);
             effect.type = 0x46;
-            effect.sound = 0x40;
-            effect.x = (double)((int)x - facing * 0xb);
-            effect.y = (double)((int)y - 0x65);
+            effect.sound = 64;
+            effect.x = (double)((int)x - facing * 11);
+            effect.y = (double)((int)y - 101);
             effect.scale = 2;
             effect.keep = 1;
             effect.layer = 1;
@@ -5691,8 +5691,8 @@ void CIkumi::UpdatePattern()
         if (frame == 3 && timer == 0) {
             effect.type = 0xe;
             effect.sound = 4;
-            effect.x = (double)((int)x + facing * 0x16);
-            effect.y = (double)((int)y - 0x3b);
+            effect.x = (double)((int)x + facing * 22);
+            effect.y = (double)((int)y - 59);
             effect.scale = 2;
             effect.keep = 1;
             effect.layer = 1;
@@ -5703,7 +5703,7 @@ void CIkumi::UpdatePattern()
             timer = 0;
             frame++;
             m_attackResult = 0;
-            if (frame == 0xe) {
+            if (frame == 14) {
                 effect.type = 0x1ab;
                 effect.x = (double)(int)(*m_opponent)->x;
                 effect.y = 0.0;
@@ -5713,7 +5713,7 @@ void CIkumi::UpdatePattern()
                 effect.layer = 1;
                 SpawnObject(&effect);
                 effect.type = 0x1a9;
-                effect.x = (double)((int)(*m_opponent)->x + 0x23);
+                effect.x = (double)((int)(*m_opponent)->x + 35);
                 effect.y = -10.0;
                 effect.scale = 2;
                 effect.keep = 1;
@@ -5724,7 +5724,7 @@ void CIkumi::UpdatePattern()
                 effect.layer = 0;
                 SpawnObject(&effect);
                 effect.type = 0x1a9;
-                effect.x = (double)((int)(*m_opponent)->x - 0x23);
+                effect.x = (double)((int)(*m_opponent)->x - 35);
                 effect.y = -10.0;
                 effect.scale = 2;
                 effect.keep = 1;
@@ -5735,7 +5735,7 @@ void CIkumi::UpdatePattern()
                 effect.layer = 0;
                 SpawnObject(&effect);
                 effect.type = 0x1a9;
-                effect.x = (double)((int)(*m_opponent)->x + 0x46);
+                effect.x = (double)((int)(*m_opponent)->x + 70);
                 effect.y = 0.0;
                 effect.scale = 2;
                 effect.keep = 1;
@@ -5746,7 +5746,7 @@ void CIkumi::UpdatePattern()
                 effect.layer = 0;
                 SpawnObject(&effect);
                 effect.type = 0x1a9;
-                effect.x = (double)((int)(*m_opponent)->x - 0x46);
+                effect.x = (double)((int)(*m_opponent)->x - 70);
                 effect.y = 0.0;
                 effect.scale = 2;
                 effect.keep = 1;
@@ -5757,7 +5757,7 @@ void CIkumi::UpdatePattern()
                 effect.layer = 0;
                 SpawnObject(&effect);
                 effect.type = 0x1a9;
-                effect.x = (double)((int)(*m_opponent)->x + 0x28);
+                effect.x = (double)((int)(*m_opponent)->x + 40);
                 effect.y = 10.0;
                 effect.scale = 2;
                 effect.keep = 1;
@@ -5768,7 +5768,7 @@ void CIkumi::UpdatePattern()
                 effect.layer = 0;
                 SpawnObject(&effect);
                 effect.type = 0x1a9;
-                effect.x = (double)((int)(*m_opponent)->x - 0x28);
+                effect.x = (double)((int)(*m_opponent)->x - 40);
                 effect.y = 10.0;
                 effect.scale = 2;
                 effect.keep = 1;
@@ -5779,7 +5779,7 @@ void CIkumi::UpdatePattern()
                 effect.layer = 0;
                 SpawnObject(&effect);
             }
-            if (frame == 0x10 && m_patternVar1 < 6) {
+            if (frame == 16 && m_patternVar1 < 6) {
                 frame = frame - 2;
                 m_patternVar1++;
             }
@@ -5795,27 +5795,27 @@ void CIkumi::UpdatePattern()
             m_dashMomentum = 0;
             m_hitsLeft = 1;
             StopMoving();
-            m_freezeTime = 0x78;
-            m_gauge = m_gauge - 0xbb8;
-            FillBackground(0xb0, 3);
+            m_freezeTime = 120;
+            m_gauge = m_gauge - 3000;
+            FillBackground(176, 3);
             effect.type = 0x46;
-            effect.sound = 0x40;
-            effect.x = (double)((int)x + facing * 0x12);
-            effect.y = (double)((int)y - 0x19);
+            effect.sound = 64;
+            effect.x = (double)((int)x + facing * 18);
+            effect.y = (double)((int)y - 25);
             effect.scale = 2;
             effect.keep = 1;
             effect.layer = 1;
             m_game->CreateEffect((EffectDesc*)&effect);
-            m_playSound = 0x25;
+            m_playSound = 37;
             effect.type = 0x47;
             m_game->CreateEffect((EffectDesc*)&effect);
             m_hitsLeft = 1;
         }
-        m_game->FlashNegative(0xf);
+        m_game->FlashNegative(15);
         if (frame < 4) {
-            FocusCameraY(0x32, 0xa);
+            FocusCameraY(50, 10);
         }
-        if (frame == 0xd && m_attackResult == 3) {
+        if (frame == 13 && m_attackResult == 3) {
             StartAfterimages(0);
             (*m_opponent)->StopMoving();
             (*m_opponent)->StartPattern();
@@ -5826,16 +5826,16 @@ void CIkumi::UpdatePattern()
             m_koDelay = 3;
             break;
         }
-        if (frame == 0xd && m_attackResult != 3 && m_attackResult > 0) {
+        if (frame == 13 && m_attackResult != 3 && m_attackResult > 0) {
             StartAfterimages(0);
             timer = 0;
-            frame = 0xe;
+            frame = 14;
             break;
         }
-        if (frame == 0xd && timer == 0) {
+        if (frame == 13 && timer == 0) {
             vx = 5.0;
         }
-        if (frame == 0xe && timer == 0) {
+        if (frame == 14 && timer == 0) {
             vx = 1.5;
         }
         if (frame > 3 && vx > 0.0) {
@@ -5867,37 +5867,37 @@ void CIkumi::UpdatePattern()
             (*m_opponent)->timer = 0;
         }
         if (frame < 6) {
-            (*m_opponent)->FocusCameraY(0x32, 5);
-            (*m_opponent)->FocusCameraX(0x32, 5);
+            (*m_opponent)->FocusCameraY(50, 5);
+            (*m_opponent)->FocusCameraX(50, 5);
         }
         if (frame > 5) {
-            FocusCameraY(0x32, 5);
-            FocusCameraX(0x32, 5);
+            FocusCameraY(50, 5);
+            FocusCameraX(50, 5);
         }
         if (frame < 6) {
-            m_game->FlashNegative(0xf);
+            m_game->FlashNegative(15);
         }
         if (frame == 6 && timer == 0) {
             m_dashMomentum = 0;
             StopMoving();
-            m_freezeTime = 0x78;
-            FillBackground(0xb0, 3);
+            m_freezeTime = 120;
+            FillBackground(176, 3);
             effect.type = 0x46;
-            effect.sound = 0x40;
+            effect.sound = 64;
             effect.x = (double)((int)x + facing * 6);
-            effect.y = (double)((int)y - 0x30);
+            effect.y = (double)((int)y - 48);
             effect.scale = 2;
             effect.keep = 1;
             effect.layer = 1;
             m_game->CreateEffect((EffectDesc*)&effect);
-            m_playSound = 0x25;
+            m_playSound = 37;
             effect.type = 0x47;
             m_game->CreateEffect((EffectDesc*)&effect);
         }
         if (frame == 1 && timer == 0) {
             effect.type = 0x1af;
-            effect.x = (double)((int)(*m_opponent)->x - facing * 0x140);
-            effect.y = (double)((int)(*m_opponent)->y + 0xa0);
+            effect.x = (double)((int)(*m_opponent)->x - facing * 320);
+            effect.y = (double)((int)(*m_opponent)->y + 160);
             effect.scale = 0;
             effect.keep = 1;
             effect.facing = facing;
@@ -5906,8 +5906,8 @@ void CIkumi::UpdatePattern()
         }
         if (frame == 2 && timer == 0) {
             effect.type = 0x1b0;
-            effect.x = (double)((int)(*m_opponent)->x + facing * 0x140);
-            effect.y = (double)((int)(*m_opponent)->y + 0x78);
+            effect.x = (double)((int)(*m_opponent)->x + facing * 320);
+            effect.y = (double)((int)(*m_opponent)->y + 120);
             effect.scale = 0;
             effect.keep = 1;
             effect.facing = -facing;
@@ -5916,8 +5916,8 @@ void CIkumi::UpdatePattern()
         }
         if (frame == 3 && timer == 0) {
             effect.type = 0x1b1;
-            effect.x = (double)((int)(*m_opponent)->x - facing * 0xa0);
-            effect.y = (double)((int)(*m_opponent)->y + 0x118);
+            effect.x = (double)((int)(*m_opponent)->x - facing * 160);
+            effect.y = (double)((int)(*m_opponent)->y + 280);
             effect.scale = 0;
             effect.keep = 1;
             effect.facing = facing;
@@ -5926,18 +5926,18 @@ void CIkumi::UpdatePattern()
         }
         if (frame == 4 && timer == 0) {
             effect.type = 0x1b2;
-            effect.x = (double)((int)(*m_opponent)->x + facing * 0xa0);
-            effect.y = (double)((int)(*m_opponent)->y + 0x118);
+            effect.x = (double)((int)(*m_opponent)->x + facing * 160);
+            effect.y = (double)((int)(*m_opponent)->y + 280);
             effect.scale = 0;
             effect.keep = 1;
             effect.facing = -facing;
             effect.layer = 1;
             SpawnObject(&effect);
         }
-        if (frame == 0x15 && timer == 0) {
+        if (frame == 21 && timer == 0) {
             effect.type = 0x1b3;
-            effect.x = (double)((int)x - facing * 0x186);
-            effect.y = (double)((int)y - 0x14a);
+            effect.x = (double)((int)x - facing * 390);
+            effect.y = (double)((int)y - 330);
             effect.scale = 0;
             effect.keep = 1;
             effect.facing = facing;
@@ -5945,8 +5945,8 @@ void CIkumi::UpdatePattern()
             effect.layer = 1;
             SpawnObject(&effect);
             effect.type = 0x1b4;
-            effect.x = (double)((int)x - facing * 0xc3);
-            effect.y = (double)((int)y - 0x1ef);
+            effect.x = (double)((int)x - facing * 195);
+            effect.y = (double)((int)y - 495);
             effect.scale = 0;
             effect.keep = 1;
             effect.facing = facing;
@@ -5954,8 +5954,8 @@ void CIkumi::UpdatePattern()
             effect.layer = 1;
             SpawnObject(&effect);
             effect.type = 0x1b5;
-            effect.x = (double)((int)x + facing * 0x186);
-            effect.y = (double)((int)y - 0x14a);
+            effect.x = (double)((int)x + facing * 390);
+            effect.y = (double)((int)y - 330);
             effect.scale = 0;
             effect.keep = 1;
             effect.facing = -facing;
@@ -5963,8 +5963,8 @@ void CIkumi::UpdatePattern()
             effect.layer = 1;
             SpawnObject(&effect);
             effect.type = 0x1b6;
-            effect.x = (double)((int)x + facing * 0xc3);
-            effect.y = (double)((int)y - 0x1ef);
+            effect.x = (double)((int)x + facing * 195);
+            effect.y = (double)((int)y - 495);
             effect.scale = 0;
             effect.keep = 1;
             effect.facing = -facing;
@@ -5974,7 +5974,7 @@ void CIkumi::UpdatePattern()
         }
         if (frame == 8 && timer == 0) {
             effect.type = 0x1b7;
-            effect.x = (double)((int)x + facing * 0xe);
+            effect.x = (double)((int)x + facing * 14);
             effect.y = (double)((int)y + 8);
             effect.scale = 2;
             effect.keep = 1;
@@ -5982,8 +5982,8 @@ void CIkumi::UpdatePattern()
             effect.layer = 1;
             SpawnObject(&effect);
         }
-        if (frame == 0x16 && m_patternVar1 == 1) {
-            frame = 0x17;
+        if (frame == 22 && m_patternVar1 == 1) {
+            frame = 23;
             timer = 0;
             m_patternVar1 = 2;
         }
@@ -5991,7 +5991,7 @@ void CIkumi::UpdatePattern()
         if (timer >= duration) {
             timer = 0;
             frame++;
-            if (frame == 0xc && m_patternVar1 < 5) {
+            if (frame == 12 && m_patternVar1 < 5) {
                 m_patternVar1++;
                 frame = frame - 2;
             }
@@ -6359,7 +6359,7 @@ void CIkumi::UpdatePatternAlt()
         }
         m_dashMomentum = 0;
         if (frame == 0 && timer == 0) {
-            m_gauge = m_gauge + 0xa;
+            m_gauge = m_gauge + 10;
             vx = (2.0 - (*m_opponent)->m_proration / 10000.0) * -1.1;
             if (m_rfBlue != 0) {
                 m_rfGauge -= 10.0;
@@ -6395,7 +6395,7 @@ void CIkumi::UpdatePatternAlt()
         }
         m_dashMomentum = 0;
         if (frame == 0 && timer == 0) {
-            m_gauge = m_gauge + 0xf;
+            m_gauge = m_gauge + 15;
             vx = (2.0 - (*m_opponent)->m_proration / 10000.0) * -1.5;
             if (m_rfBlue != 0) {
                 m_rfGauge -= 20.0;
@@ -6431,7 +6431,7 @@ void CIkumi::UpdatePatternAlt()
         }
         m_dashMomentum = 0;
         if (frame == 0 && timer == 0) {
-            m_gauge = m_gauge + 0x14;
+            m_gauge = m_gauge + 20;
             vx = (2.0 - (*m_opponent)->m_proration / 10000.0) * -1.8;
             if (m_rfBlue != 0) {
                 m_rfGauge -= 30.0;
@@ -6467,7 +6467,7 @@ void CIkumi::UpdatePatternAlt()
         }
         m_dashMomentum = 0;
         if (frame == 0 && timer == 0) {
-            m_gauge = m_gauge + 0xa;
+            m_gauge = m_gauge + 10;
             vx = (2.0 - (*m_opponent)->m_proration / 10000.0) * -1.1;
             if (m_rfBlue != 0) {
                 m_rfGauge -= 10.0;
@@ -6503,7 +6503,7 @@ void CIkumi::UpdatePatternAlt()
         }
         m_dashMomentum = 0;
         if (frame == 0 && timer == 0) {
-            m_gauge = m_gauge + 0xf;
+            m_gauge = m_gauge + 15;
             vx = (2.0 - (*m_opponent)->m_proration / 10000.0) * -1.5;
             if (m_rfBlue != 0) {
                 m_rfGauge -= 20.0;
@@ -6538,7 +6538,7 @@ void CIkumi::UpdatePatternAlt()
             m_rfGauge -= 0.6;
         }
         if (frame == 0 && timer == 0) {
-            m_gauge = m_gauge + 0x14;
+            m_gauge = m_gauge + 20;
             vx = (2.0 - (*m_opponent)->m_proration / 10000.0) * -1.8;
             if (m_rfBlue != 0) {
                 m_rfGauge -= 30.0;
@@ -6574,7 +6574,7 @@ void CIkumi::UpdatePatternAlt()
         }
         m_dashMomentum = 0;
         if (frame == 0 && timer == 0) {
-            m_gauge = m_gauge + 0xa;
+            m_gauge = m_gauge + 10;
             vx = (2.0 - (*m_opponent)->m_proration / 10000.0) * -1.1;
             if (m_rfBlue != 0) {
                 m_rfGauge -= 10.0;
@@ -6607,7 +6607,7 @@ void CIkumi::UpdatePatternAlt()
         }
         m_dashMomentum = 0;
         if (frame == 0 && timer == 0) {
-            m_gauge = m_gauge + 0xf;
+            m_gauge = m_gauge + 15;
             vx = (2.0 - (*m_opponent)->m_proration / 10000.0) * -1.5;
             if (m_rfBlue != 0) {
                 m_rfGauge -= 20.0;
@@ -6640,7 +6640,7 @@ void CIkumi::UpdatePatternAlt()
         }
         m_dashMomentum = 0;
         if (frame == 0 && timer == 0) {
-            m_gauge = m_gauge + 0x14;
+            m_gauge = m_gauge + 20;
             vx = (2.0 - (*m_opponent)->m_proration / 10000.0) * -1.8;
             if (m_rfBlue != 0) {
                 m_rfGauge -= 30.0;
@@ -6672,7 +6672,7 @@ void CIkumi::UpdatePatternAlt()
             m_rfGauge -= 0.8;
         }
         if (frame == 0 && timer == 0) {
-            m_gauge = m_gauge + 0x1e;
+            m_gauge = m_gauge + 30;
             vx = m_hitVx;
             vy = vy * 0.75 + m_hitVy;
             if (vy < -2.0) {
@@ -6715,7 +6715,7 @@ void CIkumi::UpdatePatternAlt()
             m_rfGauge -= 0.8;
         }
         if (frame == 0 && timer == 0) {
-            m_gauge = m_gauge + 0x1e;
+            m_gauge = m_gauge + 30;
             vx = m_hitVx;
             vy = vy * 0.75 + m_hitVy;
             if (vy < -4.0) {
@@ -6758,7 +6758,7 @@ void CIkumi::UpdatePatternAlt()
             m_rfGauge -= 0.8;
         }
         if (frame == 0 && timer == 0) {
-            m_gauge = m_gauge + 0x1e;
+            m_gauge = m_gauge + 30;
             vx = m_hitVx;
             vy = vy * 0.75 + m_hitVy;
             if (vy < -6.0) {
@@ -6801,7 +6801,7 @@ void CIkumi::UpdatePatternAlt()
             m_rfGauge -= 0.8;
         }
         if (frame == 0 && timer == 0) {
-            m_gauge = m_gauge + 0x1e;
+            m_gauge = m_gauge + 30;
             vx = m_hitVx;
             vy = vy * 0.75 + m_hitVy;
             ay = 0.032;
@@ -6839,7 +6839,7 @@ void CIkumi::UpdatePatternAlt()
             m_rfGauge -= 0.8;
         }
         if (frame == 0 && timer == 0) {
-            m_gauge = m_gauge + 0x1e;
+            m_gauge = m_gauge + 30;
             vx = m_hitVx;
             vy = m_hitVy;
             ay = 0.032;
@@ -6882,7 +6882,7 @@ void CIkumi::UpdatePatternAlt()
             break;
         }
         if (frame == 0 && timer == 0) {
-            m_gauge = m_gauge + 0x1e;
+            m_gauge = m_gauge + 30;
             vx = m_hitVx;
             vy = vy * 0.75 + m_hitVy;
             if (vy < -2.0) {
@@ -6930,7 +6930,7 @@ void CIkumi::UpdatePatternAlt()
             break;
         }
         if (frame == 0 && timer == 0) {
-            m_gauge = m_gauge + 0x1e;
+            m_gauge = m_gauge + 30;
             vx = m_hitVx;
             vy = vy * 0.75 + m_hitVy;
             if (vy < -4.0) {
@@ -6978,7 +6978,7 @@ void CIkumi::UpdatePatternAlt()
             break;
         }
         if (frame == 0 && timer == 0) {
-            m_gauge = m_gauge + 0x1e;
+            m_gauge = m_gauge + 30;
             vx = m_hitVx;
             vy = vy * 0.75 + m_hitVy;
             ay = 0.032;
@@ -7021,7 +7021,7 @@ void CIkumi::UpdatePatternAlt()
             break;
         }
         if (frame == 0 && timer == 0) {
-            m_gauge = m_gauge + 0x1e;
+            m_gauge = m_gauge + 30;
             vx = m_hitVx;
             vy = m_hitVy;
             ay = 0.032;
@@ -7116,13 +7116,13 @@ void CIkumi::UpdatePatternAlt()
             m_rfGauge -= 0.8;
         }
         if (frame == 0 && timer == 0 && m_patternVar1 == 0) {
-            m_gauge = m_gauge + 0x1e;
+            m_gauge = m_gauge + 30;
             m_patternVar1++;
-            m_untechTime = m_untechTime + 0x78;
+            m_untechTime = m_untechTime + 120;
             vx = 0.5;
             vy = -2.5;
             ay = 0.025;
-            m_playSound = 0x1f;
+            m_playSound = 31;
             effect.type = 0;
             effect.x = (double)(int)x;
             effect.y = (double)(int)y;
@@ -7155,7 +7155,7 @@ void CIkumi::UpdatePatternAlt()
             m_rfGauge -= 0.8;
         }
         if (frame == 0 && timer == 0) {
-            m_gauge = m_gauge + 0x1e;
+            m_gauge = m_gauge + 30;
             vx = m_hitVx;
             vy = m_hitVy;
             ay = 0.072;
@@ -7266,7 +7266,7 @@ void CIkumi::UpdatePatternAlt()
         }
         m_dashMomentum = 0;
         if (frame == 0 && timer == 0) {
-            m_gauge = m_gauge + 0x1e;
+            m_gauge = m_gauge + 30;
             if (m_rfBlue != 0) {
                 m_rfGauge -= 30.0;
             }
@@ -7304,7 +7304,7 @@ void CIkumi::UpdatePatternAlt()
         }
         m_dashMomentum = 0;
         if (frame == 0 && timer == 0) {
-            m_gauge = m_gauge + 0x1e;
+            m_gauge = m_gauge + 30;
             if (m_rfBlue != 0) {
                 m_rfGauge -= 30.0;
             }
@@ -7342,7 +7342,7 @@ void CIkumi::UpdatePatternAlt()
         }
         m_dashMomentum = 0;
         if (frame == 0 && timer == 0) {
-            m_gauge = m_gauge + 0x1e;
+            m_gauge = m_gauge + 30;
             if (m_rfBlue != 0) {
                 m_rfGauge -= 30.0;
             }
@@ -7382,7 +7382,7 @@ void CIkumi::UpdatePatternAlt()
             effect.facing = facing;
             effect.layer = 1;
             SpawnObject(&effect);
-            m_gauge = m_gauge + 0x1e;
+            m_gauge = m_gauge + 30;
             vx = m_hitVx;
             vy = m_hitVy;
             ay = 0.032;
@@ -7416,11 +7416,11 @@ void CIkumi::UpdatePatternAlt()
             m_rfGauge -= 0.8;
         }
         if (frame == 0 && timer == 0 && m_patternVar1 == 0) {
-            m_playSound = 0x1e;
+            m_playSound = 30;
             vy = -0.45;
             vx = -0.1;
             m_patternVar1++;
-            m_gauge = m_gauge + 0x1e;
+            m_gauge = m_gauge + 30;
         }
         if (frame == 4 && timer == 0) {
             vx = m_hitVx;
@@ -7473,10 +7473,10 @@ void CIkumi::UpdatePatternAlt()
             if (m_rfBlue != 0) {
                 m_rfGauge -= 30.0;
             }
-            m_playSound = 0x21;
+            m_playSound = 33;
             vy = -1.5;
             vx = -0.8;
-            m_gauge = m_gauge + 0x1e;
+            m_gauge = m_gauge + 30;
         }
         vy += 0.04;
         if (frame == 0 && vy + y > 0.0) {
@@ -7525,10 +7525,10 @@ void CIkumi::UpdatePatternAlt()
             if (m_rfBlue != 0) {
                 m_rfGauge -= 30.0;
             }
-            m_playSound = 0x21;
+            m_playSound = 33;
             vy = -1.5;
             vx = -0.8;
-            m_gauge = m_gauge + 0x1e;
+            m_gauge = m_gauge + 30;
         }
         vy += 0.04;
         if (frame == 0 && vy + y > 0.0) {
@@ -7577,10 +7577,10 @@ void CIkumi::UpdatePatternAlt()
             if (m_rfBlue != 0) {
                 m_rfGauge -= 30.0;
             }
-            m_playSound = 0x21;
+            m_playSound = 33;
             vx = m_hitVx;
             vy = m_hitVy;
-            m_gauge = m_gauge + 0x1e;
+            m_gauge = m_gauge + 30;
         }
         vy += 0.04;
         timer++;
@@ -7621,10 +7621,10 @@ void CIkumi::UpdatePatternAlt()
                 if (m_rfBlue != 0) {
                     m_rfGauge -= 30.0;
                 }
-                m_playSound = 0x21;
+                m_playSound = 33;
                 vx = m_hitVx;
                 vy = m_hitVy;
-                m_gauge = m_gauge + 0x1e;
+                m_gauge = m_gauge + 30;
                 m_patternVar1++;
             }
         }
@@ -7735,7 +7735,7 @@ void CIkumi::UpdatePatternAlt()
     case kLyingDown:
         timer++;
         m_dashMomentum = 0;
-        if (m_hp > 0 && timer > 0x63 && frame == 0) {
+        if (m_hp > 0 && timer > 99 && frame == 0) {
             pattern = kWakeUp;
             StartPattern();
         }
@@ -7760,7 +7760,7 @@ void CIkumi::UpdatePatternAlt()
         }
         if (frame == 0 && timer == 0) {
             m_dashMomentum = 0;
-            m_gauge = m_gauge + 0xa;
+            m_gauge = m_gauge + 10;
             vx = -1.5;
             vy = 0.0;
             y = 0.0;
@@ -7800,7 +7800,7 @@ void CIkumi::UpdatePatternAlt()
         }
         if (frame == 0 && timer == 0) {
             m_dashMomentum = 0;
-            m_gauge = m_gauge + 0xf;
+            m_gauge = m_gauge + 15;
             vx = -1.8;
             vy = 0.0;
             y = 0.0;
@@ -7840,7 +7840,7 @@ void CIkumi::UpdatePatternAlt()
         }
         if (frame == 0 && timer == 0) {
             m_dashMomentum = 0;
-            m_gauge = m_gauge + 0x14;
+            m_gauge = m_gauge + 20;
             vx = -2.3;
             vy = 0.0;
             y = 0.0;
@@ -7880,7 +7880,7 @@ void CIkumi::UpdatePatternAlt()
         }
         if (frame == 0 && timer == 0) {
             m_dashMomentum = 0;
-            m_gauge = m_gauge + 0xa;
+            m_gauge = m_gauge + 10;
             vx = -1.5;
             vy = 0.0;
             y = 0.0;
@@ -7917,7 +7917,7 @@ void CIkumi::UpdatePatternAlt()
         }
         if (frame == 0 && timer == 0) {
             m_dashMomentum = 0;
-            m_gauge = m_gauge + 0xf;
+            m_gauge = m_gauge + 15;
             vx = -1.8;
             vy = 0.0;
             y = 0.0;
@@ -7954,7 +7954,7 @@ void CIkumi::UpdatePatternAlt()
         }
         if (frame == 0 && timer == 0) {
             m_dashMomentum = 0;
-            m_gauge = m_gauge + 0x14;
+            m_gauge = m_gauge + 20;
             vx = -2.3;
             vy = 0.0;
             y = 0.0;
@@ -7985,7 +7985,7 @@ void CIkumi::UpdatePatternAlt()
     case kGuardAir:
         if (frame == 0 && timer == 0) {
             vy = -2.6;
-            m_gauge = m_gauge + 0xf;
+            m_gauge = m_gauge + 15;
             ay = 0.06;
         }
         vx = -1.2;
@@ -8106,11 +8106,11 @@ void CIkumi::UpdatePatternAlt()
                 break;
             }
         }
-        if (m_inputX == facing && m_patternVar2 >= 0x50 && frame < 4) {
+        if (m_inputX == facing && m_patternVar2 >= 80 && frame < 4) {
             pattern = kDashStop;
             StartPattern();
         }
-        if (m_inputX != facing && m_patternVar1 >= 0x3c && frame < 4) {
+        if (m_inputX != facing && m_patternVar1 >= 60 && frame < 4) {
             pattern = kDashStop;
             StartPattern();
         }
@@ -8159,7 +8159,7 @@ void CIkumi::UpdatePatternAlt()
             StartAfterimages(3);
             vy = 0.0;
             ay = 0.0;
-            m_playSound = 0x11;
+            m_playSound = 17;
         }
         timer++;
         m_patternVar1++;
@@ -8171,7 +8171,7 @@ void CIkumi::UpdatePatternAlt()
                 frame = frame - 2;
             }
         }
-        if (m_inputX == facing && m_patternVar2 >= 0x78) {
+        if (m_inputX == facing && m_patternVar2 >= 120) {
             pattern = kFall;
             StartPattern();
             vx = 1.6;
@@ -8180,7 +8180,7 @@ void CIkumi::UpdatePatternAlt()
                 vx = -vx;
             }
         }
-        if (m_inputX != facing && m_patternVar1 >= 0x28) {
+        if (m_inputX != facing && m_patternVar1 >= 40) {
             pattern = kFall;
             StartPattern();
             vx = 1.3;
@@ -8196,7 +8196,7 @@ void CIkumi::UpdatePatternAlt()
             vy = 0.0;
             ay = 0.0;
             StartAfterimages(3);
-            m_playSound = 0x11;
+            m_playSound = 17;
         }
         timer++;
         m_patternVar1++;
@@ -8208,7 +8208,7 @@ void CIkumi::UpdatePatternAlt()
                 frame = frame - 2;
             }
         }
-        if (m_inputX == -facing && m_patternVar2 >= 0x78) {
+        if (m_inputX == -facing && m_patternVar2 >= 120) {
             pattern = kFall;
             StartPattern();
             vx = -0.9;
@@ -8217,7 +8217,7 @@ void CIkumi::UpdatePatternAlt()
                 vx = -vx;
             }
         }
-        if (m_inputX != -facing && m_patternVar1 >= 0x28) {
+        if (m_inputX != -facing && m_patternVar1 >= 40) {
             pattern = kFall;
             StartPattern();
             vx = -0.9;
@@ -8236,11 +8236,11 @@ void CIkumi::UpdatePatternAlt()
                 m_proration = m_rfGauge * 5.0 + m_proration;
             }
             m_rfGauge = 0.0;
-            m_freezeTime = 0x5a;
-            FillBackground(0xb0, 3);
+            m_freezeTime = 90;
+            FillBackground(176, 3);
         }
         if (frame == 1 && timer == 0) {
-            m_playSound = 0x12;
+            m_playSound = 18;
             effect.type = 1;
             effect.x = (double)(int)x;
             effect.y = (double)(int)y;
@@ -8339,7 +8339,7 @@ void CIkumi::UpdatePatternAlt()
             vy = 0.0;
             m_recoilGuardWindow = 0;
             m_cornerPushback = 0.0;
-            m_freezeTime = 0x3c;
+            m_freezeTime = 60;
         }
         if (m_freezeTime == 0 && m_patternVar3 == 0) {
             m_patternVar3++;
@@ -8375,11 +8375,11 @@ void CIkumi::UpdatePatternAlt()
                 m_proration = m_rfGauge * 5.0 + m_proration;
             }
             m_rfGauge = 0.0;
-            m_freezeTime = 0x5a;
-            FillBackground(0xb0, 3);
+            m_freezeTime = 90;
+            FillBackground(176, 3);
         }
         if (frame == 0 && timer == 0) {
-            m_playSound = 0x12;
+            m_playSound = 18;
             effect.type = 1;
             effect.x = (double)(int)x;
             effect.y = (double)(int)y;
@@ -8492,7 +8492,7 @@ void CIkumi::UpdatePatternAlt()
         }
         if (frame == 1 && timer == 0) {
             m_gauge = m_gauge + 5;
-            m_playSound = 0x15;
+            m_playSound = 21;
             m_hitsLeft = 1;
         }
         timer++;
@@ -8533,8 +8533,8 @@ void CIkumi::UpdatePatternAlt()
             break;
         }
         if (frame == 1 && timer == 0) {
-            m_gauge = m_gauge + 0xf;
-            m_playSound = 0x14;
+            m_gauge = m_gauge + 15;
+            m_playSound = 20;
             m_hitsLeft = 1;
         }
         timer++;
@@ -8578,8 +8578,8 @@ void CIkumi::UpdatePatternAlt()
             m_dashMomentum = 0;
         }
         if (frame == 4 && timer == 0) {
-            m_gauge = m_gauge + 0xf;
-            m_playSound = 0x14;
+            m_gauge = m_gauge + 15;
+            m_playSound = 20;
             m_hitsLeft = 1;
         }
         timer++;
@@ -8630,8 +8630,8 @@ void CIkumi::UpdatePatternAlt()
             break;
         }
         if (frame == 2 && timer == 0) {
-            m_gauge = m_gauge + 0x23;
-            m_playSound = 0x14;
+            m_gauge = m_gauge + 35;
+            m_playSound = 20;
             m_hitsLeft = 1;
             vx = 1.0;
         }
@@ -8680,7 +8680,7 @@ void CIkumi::UpdatePatternAlt()
         }
         if (frame == 1 && timer == 0) {
             m_gauge = m_gauge + 5;
-            m_playSound = 0x15;
+            m_playSound = 21;
             m_hitsLeft = 1;
         }
         timer++;
@@ -8724,8 +8724,8 @@ void CIkumi::UpdatePatternAlt()
             break;
         }
         if (frame == 2 && timer == 0) {
-            m_gauge = m_gauge + 0xd;
-            m_playSound = 0x14;
+            m_gauge = m_gauge + 13;
+            m_playSound = 20;
             m_hitsLeft = 1;
         }
         timer++;
@@ -8755,8 +8755,8 @@ void CIkumi::UpdatePatternAlt()
             }
         }
         if (frame == 2 && timer == 0) {
-            m_gauge = m_gauge + 0x19;
-            m_playSound = 0x14;
+            m_gauge = m_gauge + 25;
+            m_playSound = 20;
             m_hitsLeft = 1;
             vx = 1.5;
         }
@@ -8804,7 +8804,7 @@ void CIkumi::UpdatePatternAlt()
         }
         if (frame == 2 && timer == 0) {
             m_gauge = m_gauge + 5;
-            m_playSound = 0x15;
+            m_playSound = 21;
             m_hitsLeft = 1;
         }
         if (y + vy >= 0.0) {
@@ -8843,12 +8843,12 @@ void CIkumi::UpdatePatternAlt()
         }
         if (frame == 1 && timer == 0) {
             m_gauge = m_gauge + 7;
-            m_playSound = 0x14;
+            m_playSound = 20;
             m_hitsLeft = 1;
         }
         if (frame == 5 && timer == 0) {
             m_gauge = m_gauge + 7;
-            m_playSound = 0x14;
+            m_playSound = 20;
             m_hitsLeft = 1;
         }
         if (y + vy >= 0.0) {
@@ -8886,8 +8886,8 @@ void CIkumi::UpdatePatternAlt()
             break;
         }
         if (frame == 2 && timer == 0) {
-            m_gauge = m_gauge + 0x1e;
-            m_playSound = 0x14;
+            m_gauge = m_gauge + 30;
+            m_playSound = 20;
             m_hitsLeft = 3;
         }
         if (y + vy >= 0.0) {
@@ -8927,12 +8927,12 @@ void CIkumi::UpdatePatternAlt()
             (*m_opponent)->StopMoving();
             pattern = kThrowConnected;
             (*m_opponent)->pattern = kThrownDoubledOver;
-            (*m_opponent)->x = facing * 0x19 + x;
+            (*m_opponent)->x = facing * 25 + x;
             (*m_opponent)->y = -68.0;
-            FocusCameraY(0x32, 0x1e);
+            FocusCameraY(50, 30);
             effect.type = 0;
-            effect.x = (double)((int)x + facing * 0x19);
-            effect.y = (double)((int)y - 0x44);
+            effect.x = (double)((int)x + facing * 25);
+            effect.y = (double)((int)y - 68);
             effect.scale = 2;
             effect.layer = 1;
             m_game->CreateEffect((EffectDesc*)&effect);
@@ -8954,17 +8954,17 @@ void CIkumi::UpdatePatternAlt()
         break;
     case kThrowConnected:
         if (frame < 2) {
-            FocusCameraY(0x32, 3);
+            FocusCameraY(50, 3);
         }
         if (frame == 1 && timer == 0) {
-            (*m_opponent)->m_hitstop = 0x3c;
+            (*m_opponent)->m_hitstop = 60;
             effect.type = 0;
-            effect.x = (double)((int)x + facing * 0x19);
-            effect.y = (double)((int)y - 0x44);
+            effect.x = (double)((int)x + facing * 25);
+            effect.y = (double)((int)y - 68);
             effect.scale = 2;
             effect.layer = 1;
             m_game->CreateEffect((EffectDesc*)&effect);
-            DealDamage(0x384, 750.0);
+            DealDamage(900, 750.0);
             m_playVoice = 0;
         }
         if (frame == 2 && timer == 0) {
@@ -8998,7 +8998,7 @@ void CIkumi::UpdatePatternAlt()
         }
         if (frame == 1 && timer == 0) {
             m_gauge = m_gauge + 5;
-            m_playSound = 0x15;
+            m_playSound = 21;
             m_hitsLeft = 1;
         }
         timer++;
@@ -9037,8 +9037,8 @@ void CIkumi::UpdatePatternAlt()
             vy = 0.0;
         }
         if (frame == 2 && timer == 0) {
-            m_gauge = m_gauge + 0xa;
-            m_playSound = 0x14;
+            m_gauge = m_gauge + 10;
+            m_playSound = 20;
             m_hitsLeft = 1;
         }
         timer++;
@@ -9062,8 +9062,8 @@ void CIkumi::UpdatePatternAlt()
             vx = 0.0;
         }
         if (frame == 4 && timer == 0) {
-            m_gauge = m_gauge + 0x19;
-            m_playSound = 0x14;
+            m_gauge = m_gauge + 25;
+            m_playSound = 20;
             m_hitsLeft = 1;
         }
         timer++;
@@ -9091,7 +9091,7 @@ void CIkumi::UpdatePatternAlt()
         }
         if (frame == 1 && timer == 0) {
             m_gauge = m_gauge + 5;
-            m_playSound = 0x15;
+            m_playSound = 21;
             m_hitsLeft = 1;
         }
         timer++;
@@ -9119,7 +9119,7 @@ void CIkumi::UpdatePatternAlt()
         }
         if (frame == 2 && timer == 0) {
             m_gauge = m_gauge + 5;
-            m_playSound = 0x15;
+            m_playSound = 21;
             m_hitsLeft = 1;
         }
         timer++;
@@ -9162,15 +9162,15 @@ void CIkumi::UpdatePatternAlt()
             vx = 1.0;
         }
         if (frame == 3 && timer == 0) {
-            m_gauge = m_gauge + 0xa;
-            m_playSound = 0x15;
+            m_gauge = m_gauge + 10;
+            m_playSound = 21;
             m_hitsLeft = 1;
         }
         if (y < 0.0) {
             vy += 0.025;
             if (y + vy > 0.0) {
                 timer = 0;
-                frame = 0xb;
+                frame = 11;
                 y = 0.0;
                 StopMoving();
                 break;
@@ -9183,7 +9183,7 @@ void CIkumi::UpdatePatternAlt()
             if (frame < 3) {
                 m_attackResult = 0;
             }
-            if (frame == 0xb) {
+            if (frame == 11) {
                 frame = frame - 2;
             }
             if (frame >= frameCount) {
@@ -9202,12 +9202,12 @@ void CIkumi::UpdatePatternAlt()
             pattern = kAirThrowConnected;
             (*m_opponent)->pattern = kThrownDoubledOver;
             effect.type = 0;
-            effect.x = (double)((int)x + facing * 0x27);
-            effect.y = (double)((int)y - 0x4b);
+            effect.x = (double)((int)x + facing * 39);
+            effect.y = (double)((int)y - 75);
             effect.scale = 2;
             effect.layer = 1;
             m_game->CreateEffect((EffectDesc*)&effect);
-            (*m_opponent)->x = facing * 0x27 + x;
+            (*m_opponent)->x = facing * 39 + x;
             (*m_opponent)->y = y - 75.0;
         }
         timer++;
@@ -9228,10 +9228,10 @@ void CIkumi::UpdatePatternAlt()
         break;
     case kAirThrowConnected:
         if (frame < 5) {
-            FocusCameraX(0x32, 3);
+            FocusCameraX(50, 3);
         }
         if (frame < 5) {
-            FocusCameraY(0x32, 3);
+            FocusCameraY(50, 3);
         }
         vy = vy + ay;
         if (vy + y > 0.0 && frame > 4) {
@@ -9248,13 +9248,13 @@ void CIkumi::UpdatePatternAlt()
             m_attackResult = 0;
             if (frame == 2) {
                 (*m_opponent)->y = y - 70.0;
-                (*m_opponent)->x = facing * 0x2a + x;
+                (*m_opponent)->x = facing * 42 + x;
                 (*m_opponent)->pattern = kThrownStandHigh;
-                (*m_opponent)->m_hitstop = 0x3c;
+                (*m_opponent)->m_hitstop = 60;
                 effect.type = 0xe;
                 effect.sound = 4;
-                effect.x = (double)((int)x + facing * 0x2a);
-                effect.y = (double)((int)y - 0x48);
+                effect.x = (double)((int)x + facing * 42);
+                effect.y = (double)((int)y - 72);
                 effect.scale = 2;
                 effect.layer = 1;
                 m_game->CreateEffect((EffectDesc*)&effect);
@@ -9267,9 +9267,9 @@ void CIkumi::UpdatePatternAlt()
             if (frame == 5) {
                 ShakeScreen(4, 0);
                 (*m_opponent)->y = y - 40.0;
-                (*m_opponent)->x = facing * 0x2a + x;
+                (*m_opponent)->x = facing * 42 + x;
                 (*m_opponent)->pattern = kHitAirLaunch;
-                DealDamage(0x578, 500.0);
+                DealDamage(1400, 500.0);
                 (*m_opponent)->StartPattern();
                 (*m_opponent)->m_hitVx = -2.0;
                 (*m_opponent)->m_hitVy = 0.0;
@@ -9277,8 +9277,8 @@ void CIkumi::UpdatePatternAlt()
                 vy = -0.5;
                 vx = -2.0;
                 effect.type = 0x199;
-                effect.x = (double)((int)x + facing * 0x2a);
-                effect.y = (double)((int)y - 0x46);
+                effect.x = (double)((int)x + facing * 42);
+                effect.y = (double)((int)y - 70);
                 effect.scale = 2;
                 effect.facing = facing;
                 effect.layer = 1;
@@ -9302,7 +9302,7 @@ void CIkumi::UpdatePatternAlt()
             m_attackResult = 0;
             if (frame == 5) {
                 effect.type = 0x192;
-                effect.x = (double)((int)x + facing * 0x3c);
+                effect.x = (double)((int)x + facing * 60);
                 effect.y = 0.0;
                 effect.scale = 2;
                 effect.layer = 1;
@@ -9335,7 +9335,7 @@ void CIkumi::UpdatePatternAlt()
             m_attackResult = 0;
             if (frame == 5) {
                 effect.type = 0x192;
-                effect.x = (double)((int)x + facing * 0x78);
+                effect.x = (double)((int)x + facing * 120);
                 effect.y = 0.0;
                 effect.scale = 2;
                 effect.layer = 1;
@@ -9368,7 +9368,7 @@ void CIkumi::UpdatePatternAlt()
             m_attackResult = 0;
             if (frame == 5) {
                 effect.type = 0x192;
-                effect.x = (double)((int)x + facing * 0xb4);
+                effect.x = (double)((int)x + facing * 180);
                 effect.y = 0.0;
                 effect.scale = 2;
                 effect.layer = 1;
@@ -9399,9 +9399,9 @@ void CIkumi::UpdatePatternAlt()
         if (frame == 4 && timer == 0) {
             m_patternVar1 = 1;
         }
-        if (frame == 0xa && timer == 0) {
-            m_playSound = 0x14;
-            m_gauge = m_gauge + 0x23;
+        if (frame == 10 && timer == 0) {
+            m_playSound = 20;
+            m_gauge = m_gauge + 35;
             effect.type = 0x191;
             effect.x = (double)(int)x;
             effect.y = y;
@@ -9412,7 +9412,7 @@ void CIkumi::UpdatePatternAlt()
             SpawnObject(&effect);
             m_playVoice = 2;
         }
-        if (frame > 0xb) {
+        if (frame > 11) {
             vx -= 0.045;
             if (vx < 0.0) {
                 vx = 0.0;
@@ -9450,9 +9450,9 @@ void CIkumi::UpdatePatternAlt()
         if (frame == 4 && timer == 0) {
             m_patternVar1 = 1;
         }
-        if (frame == 0xa && timer == 0) {
-            m_playSound = 0x14;
-            m_gauge = m_gauge + 0x23;
+        if (frame == 10 && timer == 0) {
+            m_playSound = 20;
+            m_gauge = m_gauge + 35;
             effect.type = 0x191;
             effect.x = (double)(int)x;
             effect.y = y;
@@ -9463,7 +9463,7 @@ void CIkumi::UpdatePatternAlt()
             SpawnObject(&effect);
             m_playVoice = 2;
         }
-        if (frame > 0xb) {
+        if (frame > 11) {
             vx -= 0.045;
             if (vx < 0.0) {
                 vx = 0.0;
@@ -9503,9 +9503,9 @@ void CIkumi::UpdatePatternAlt()
                 m_rfGauge -= 250.0;
             }
             effect.type = 0x21;
-            effect.sound = 0xb;
+            effect.sound = 11;
             effect.x = (double)(int)x;
-            effect.y = (double)((int)y - 0x32);
+            effect.y = (double)((int)y - 50);
             effect.scale = 2;
             effect.layer = 1;
             m_game->CreateEffect((EffectDesc*)&effect);
@@ -9513,9 +9513,9 @@ void CIkumi::UpdatePatternAlt()
         if (frame == 4 && timer == 0) {
             m_patternVar1 = 1;
         }
-        if (frame == 0xa && timer == 0) {
-            m_playSound = 0x14;
-            m_gauge = m_gauge + 0x23;
+        if (frame == 10 && timer == 0) {
+            m_playSound = 20;
+            m_gauge = m_gauge + 35;
             effect.type = 0x191;
             effect.x = (double)(int)x;
             effect.y = y;
@@ -9526,7 +9526,7 @@ void CIkumi::UpdatePatternAlt()
             SpawnObject(&effect);
             m_playVoice = 2;
         }
-        if (frame > 0xb) {
+        if (frame > 11) {
             vx -= 0.045;
             if (vx < 0.0) {
                 vx = 0.0;
@@ -9576,8 +9576,8 @@ void CIkumi::UpdatePatternAlt()
             }
         }
         if (frame == 9 && timer == 0) {
-            m_playSound = 0x14;
-            m_gauge = m_gauge + 0x23;
+            m_playSound = 20;
+            m_gauge = m_gauge + 35;
             effect.type = 0x190;
             effect.x = (double)(int)x;
             effect.y = y;
@@ -9622,8 +9622,8 @@ void CIkumi::UpdatePatternAlt()
             }
         }
         if (frame == 9 && timer == 0) {
-            m_playSound = 0x14;
-            m_gauge = m_gauge + 0x23;
+            m_playSound = 20;
+            m_gauge = m_gauge + 35;
             effect.type = 0x190;
             effect.x = (double)(int)x;
             effect.y = y;
@@ -9657,9 +9657,9 @@ void CIkumi::UpdatePatternAlt()
                 m_rfGauge -= 250.0;
             }
             effect.type = 0x21;
-            effect.sound = 0xb;
+            effect.sound = 11;
             effect.x = (double)(int)x;
-            effect.y = (double)((int)y - 0x32);
+            effect.y = (double)((int)y - 50);
             effect.scale = 2;
             effect.layer = 1;
             m_game->CreateEffect((EffectDesc*)&effect);
@@ -9680,8 +9680,8 @@ void CIkumi::UpdatePatternAlt()
             }
         }
         if (frame == 9 && timer == 0) {
-            m_playSound = 0x14;
-            m_gauge = m_gauge + 0x23;
+            m_playSound = 20;
+            m_gauge = m_gauge + 35;
             effect.type = 0x190;
             effect.x = (double)(int)x;
             effect.y = y;
@@ -9737,8 +9737,8 @@ void CIkumi::UpdatePatternAlt()
             pattern = k41236CHold;
             (*m_opponent)->pattern = kThrownStandHigh2;
             effect.type = 0;
-            effect.x = (double)((int)x + facing * 0x25);
-            effect.y = (double)((int)y - 0x2a);
+            effect.x = (double)((int)x + facing * 37);
+            effect.y = (double)((int)y - 42);
             effect.scale = 2;
             effect.layer = 1;
             m_game->CreateEffect((EffectDesc*)&effect);
@@ -9757,52 +9757,52 @@ void CIkumi::UpdatePatternAlt()
         break;
     case k41236CHold:
         if (frame == 3 && timer == 0) {
-            (*m_opponent)->m_hitstop = 0x5dc;
+            (*m_opponent)->m_hitstop = 1500;
             effect.type = 0;
-            effect.x = (double)((int)x + facing * 0x2b);
-            effect.y = (double)((int)y - 0x2e);
+            effect.x = (double)((int)x + facing * 43);
+            effect.y = (double)((int)y - 46);
             effect.scale = 2;
             effect.layer = 1;
             m_game->CreateEffect((EffectDesc*)&effect);
-            DealDamage(0xfa, 1000.0);
+            DealDamage(250, 1000.0);
             (*m_opponent)->StartPattern();
             (*m_opponent)->pattern = kThrownStandLow2;
-            (*m_opponent)->x = facing * 0x28 + x;
+            (*m_opponent)->x = facing * 40 + x;
             m_playVoice = 4;
         }
         if (frame == 7 && timer == 0) {
             effect.type = 0x1d6;
-            effect.x = (double)((int)x + facing * 0x2b);
-            effect.y = (double)((int)y - 0x2e);
+            effect.x = (double)((int)x + facing * 43);
+            effect.y = (double)((int)y - 46);
             effect.scale = 0;
             effect.layer = 1;
             effect.facing = facing;
             SpawnObject(&effect);
         }
-        if (frame == 0xc && timer == 0x5a) {
+        if (frame == 12 && timer == 90) {
             (*m_opponent)->m_hitstop = 0;
             effect.type = 0x199;
-            effect.x = (double)((int)x + facing * 0x2b);
-            effect.y = (double)((int)y - 0x2e);
+            effect.x = (double)((int)x + facing * 43);
+            effect.y = (double)((int)y - 46);
             effect.scale = 2;
             effect.facing = facing;
             effect.layer = 1;
             SpawnObject(&effect);
-            DealDamage(0x1f4, 700.0);
+            DealDamage(500, 700.0);
             (*m_opponent)->StartPattern();
             (*m_opponent)->pattern = kHitAirLaunch;
             (*m_opponent)->m_hitVx = -0.8;
             (*m_opponent)->m_hitVy = -2.8;
             effect.type = 0x1dd;
-            effect.x = (double)((int)x + facing * 0x2b);
-            effect.y = (double)((int)y - 0x2e);
+            effect.x = (double)((int)x + facing * 43);
+            effect.y = (double)((int)y - 46);
             effect.scale = 0;
             effect.layer = 1;
             effect.facing = facing;
             SpawnObject(&effect);
             effect.type = 0x1dd;
-            effect.x = (double)((int)x + facing * 0x2b);
-            effect.y = (double)((int)y - 0x2e);
+            effect.x = (double)((int)x + facing * 43);
+            effect.y = (double)((int)y - 46);
             effect.scale = 0;
             effect.layer = 1;
             effect.facing = -facing;
@@ -9832,9 +9832,9 @@ void CIkumi::UpdatePatternAlt()
         if (frame == 4 && timer == 0) {
             m_patternVar1 = 1;
         }
-        if (frame == 0xa && timer == 0) {
-            m_playSound = 0x14;
-            m_gauge = m_gauge + 0x23;
+        if (frame == 10 && timer == 0) {
+            m_playSound = 20;
+            m_gauge = m_gauge + 35;
             effect.type = 0x191;
             effect.x = (double)(int)x;
             effect.y = y;
@@ -9845,7 +9845,7 @@ void CIkumi::UpdatePatternAlt()
             SpawnObject(&effect);
             m_playVoice = 2;
         }
-        if (frame > 0xb) {
+        if (frame > 11) {
             vx -= 0.045;
             if (vx < 0.0) {
                 vx = 0.0;
@@ -9860,7 +9860,7 @@ void CIkumi::UpdatePatternAlt()
         if (timer >= duration) {
             timer = 0;
             frame++;
-            if (frame < 0xe) {
+            if (frame < 14) {
                 m_attackResult = 0;
             }
             if (frame == 8 && m_patternVar2 < 1) {
@@ -9885,9 +9885,9 @@ void CIkumi::UpdatePatternAlt()
                 m_rfGauge -= 250.0;
             }
             effect.type = 0x21;
-            effect.sound = 0xb;
+            effect.sound = 11;
             effect.x = (double)(int)x;
-            effect.y = (double)((int)y - 0x32);
+            effect.y = (double)((int)y - 50);
             effect.scale = 2;
             effect.layer = 1;
             m_game->CreateEffect((EffectDesc*)&effect);
@@ -9895,9 +9895,9 @@ void CIkumi::UpdatePatternAlt()
         if (frame == 4 && timer == 0) {
             m_patternVar1 = 1;
         }
-        if (frame == 0xa && timer == 0) {
-            m_playSound = 0x14;
-            m_gauge = m_gauge + 0x23;
+        if (frame == 10 && timer == 0) {
+            m_playSound = 20;
+            m_gauge = m_gauge + 35;
             effect.type = 0x191;
             effect.x = (double)(int)x;
             effect.y = y;
@@ -9908,7 +9908,7 @@ void CIkumi::UpdatePatternAlt()
             SpawnObject(&effect);
             m_playVoice = 2;
         }
-        if (frame > 0xb) {
+        if (frame > 11) {
             vx -= 0.045;
             if (vx < 0.0) {
                 vx = 0.0;
@@ -9946,9 +9946,9 @@ void CIkumi::UpdatePatternAlt()
         if (frame == 4 && timer == 0) {
             m_patternVar1 = 1;
         }
-        if (frame == 0xa && timer == 0) {
-            m_playSound = 0x14;
-            m_gauge = m_gauge + 0x23;
+        if (frame == 10 && timer == 0) {
+            m_playSound = 20;
+            m_gauge = m_gauge + 35;
             effect.type = 0x191;
             effect.x = (double)(int)x;
             effect.y = y;
@@ -9959,7 +9959,7 @@ void CIkumi::UpdatePatternAlt()
             SpawnObject(&effect);
             m_playVoice = 2;
         }
-        if (frame > 0xb) {
+        if (frame > 11) {
             vx -= 0.045;
             if (vx < 0.0) {
                 vx = 0.0;
@@ -9974,7 +9974,7 @@ void CIkumi::UpdatePatternAlt()
         if (timer >= duration) {
             timer = 0;
             frame++;
-            if (frame < 0xe) {
+            if (frame < 14) {
                 m_attackResult = 0;
             }
             if (frame == 8 && m_patternVar2 < 1) {
@@ -9999,9 +9999,9 @@ void CIkumi::UpdatePatternAlt()
                 m_rfGauge -= 250.0;
             }
             effect.type = 0x21;
-            effect.sound = 0xb;
+            effect.sound = 11;
             effect.x = (double)(int)x;
-            effect.y = (double)((int)y - 0x32);
+            effect.y = (double)((int)y - 50);
             effect.scale = 2;
             effect.layer = 1;
             m_game->CreateEffect((EffectDesc*)&effect);
@@ -10009,9 +10009,9 @@ void CIkumi::UpdatePatternAlt()
         if (frame == 4 && timer == 0) {
             m_patternVar1 = 1;
         }
-        if (frame == 0xa && timer == 0) {
-            m_playSound = 0x14;
-            m_gauge = m_gauge + 0x23;
+        if (frame == 10 && timer == 0) {
+            m_playSound = 20;
+            m_gauge = m_gauge + 35;
             effect.type = 0x191;
             effect.x = (double)(int)x;
             effect.y = y;
@@ -10022,7 +10022,7 @@ void CIkumi::UpdatePatternAlt()
             SpawnObject(&effect);
             m_playVoice = 2;
         }
-        if (frame > 0xb) {
+        if (frame > 11) {
             vx -= 0.045;
             if (vx < 0.0) {
                 vx = 0.0;
@@ -10072,8 +10072,8 @@ void CIkumi::UpdatePatternAlt()
             }
         }
         if (frame == 9 && timer == 0) {
-            m_playSound = 0x14;
-            m_gauge = m_gauge + 0x23;
+            m_playSound = 20;
+            m_gauge = m_gauge + 35;
             effect.type = 0x190;
             effect.x = (double)(int)x;
             effect.y = y;
@@ -10107,9 +10107,9 @@ void CIkumi::UpdatePatternAlt()
                 m_rfGauge -= 250.0;
             }
             effect.type = 0x21;
-            effect.sound = 0xb;
+            effect.sound = 11;
             effect.x = (double)(int)x;
-            effect.y = (double)((int)y - 0x32);
+            effect.y = (double)((int)y - 50);
             effect.scale = 2;
             effect.layer = 1;
             m_game->CreateEffect((EffectDesc*)&effect);
@@ -10130,8 +10130,8 @@ void CIkumi::UpdatePatternAlt()
             }
         }
         if (frame == 9 && timer == 0) {
-            m_playSound = 0x14;
-            m_gauge = m_gauge + 0x23;
+            m_playSound = 20;
+            m_gauge = m_gauge + 35;
             effect.type = 0x190;
             effect.x = (double)(int)x;
             effect.y = y;
@@ -10190,8 +10190,8 @@ void CIkumi::UpdatePatternAlt()
             }
         }
         if (frame == 9 && timer == 0) {
-            m_playSound = 0x14;
-            m_gauge = m_gauge + 0x23;
+            m_playSound = 20;
+            m_gauge = m_gauge + 35;
             effect.type = 0x190;
             effect.x = (double)(int)x;
             effect.y = y;
@@ -10225,9 +10225,9 @@ void CIkumi::UpdatePatternAlt()
                 m_rfGauge -= 250.0;
             }
             effect.type = 0x21;
-            effect.sound = 0xb;
+            effect.sound = 11;
             effect.x = (double)(int)x;
-            effect.y = (double)((int)y - 0x32);
+            effect.y = (double)((int)y - 50);
             effect.scale = 2;
             effect.layer = 1;
             m_game->CreateEffect((EffectDesc*)&effect);
@@ -10248,8 +10248,8 @@ void CIkumi::UpdatePatternAlt()
             }
         }
         if (frame == 9 && timer == 0) {
-            m_playSound = 0x14;
-            m_gauge = m_gauge + 0x23;
+            m_playSound = 20;
+            m_gauge = m_gauge + 35;
             effect.type = 0x190;
             effect.x = (double)(int)x;
             effect.y = y;
@@ -10298,7 +10298,7 @@ void CIkumi::UpdatePatternAlt()
             m_attackResult = 0;
             if (frame == 5) {
                 effect.type = 0x192;
-                effect.x = (double)((int)x + facing * 0x3c);
+                effect.x = (double)((int)x + facing * 60);
                 effect.y = 0.0;
                 effect.scale = 2;
                 effect.layer = 1;
@@ -10331,7 +10331,7 @@ void CIkumi::UpdatePatternAlt()
             m_attackResult = 0;
             if (frame == 5) {
                 effect.type = 0x192;
-                effect.x = (double)((int)x + facing * 0x78);
+                effect.x = (double)((int)x + facing * 120);
                 effect.y = 0.0;
                 effect.scale = 2;
                 effect.layer = 1;
@@ -10364,7 +10364,7 @@ void CIkumi::UpdatePatternAlt()
             m_attackResult = 0;
             if (frame == 5) {
                 effect.type = 0x192;
-                effect.x = (double)((int)x + facing * 0xb4);
+                effect.x = (double)((int)x + facing * 180);
                 effect.y = 0.0;
                 effect.scale = 2;
                 effect.layer = 1;
@@ -10397,7 +10397,7 @@ void CIkumi::UpdatePatternAlt()
             m_attackResult = 0;
             if (frame == 5) {
                 effect.type = 0x192;
-                effect.x = (double)((int)x + facing * 0x3c);
+                effect.x = (double)((int)x + facing * 60);
                 effect.y = 0.0;
                 effect.scale = 2;
                 effect.layer = 1;
@@ -10430,7 +10430,7 @@ void CIkumi::UpdatePatternAlt()
             m_attackResult = 0;
             if (frame == 5) {
                 effect.type = 0x192;
-                effect.x = (double)((int)x + facing * 0x78);
+                effect.x = (double)((int)x + facing * 120);
                 effect.y = 0.0;
                 effect.scale = 2;
                 effect.layer = 1;
@@ -10463,7 +10463,7 @@ void CIkumi::UpdatePatternAlt()
             m_attackResult = 0;
             if (frame == 5) {
                 effect.type = 0x192;
-                effect.x = (double)((int)x + facing * 0xb4);
+                effect.x = (double)((int)x + facing * 180);
                 effect.y = 0.0;
                 effect.scale = 2;
                 effect.layer = 1;
@@ -10491,29 +10491,29 @@ void CIkumi::UpdatePatternAlt()
             vy = 0.0;
             ay = 0.0;
             m_hitsLeft = 1;
-            m_freezeTime = 0x78;
-            FillBackground(0xb0, 3);
+            m_freezeTime = 120;
+            FillBackground(176, 3);
             effect.type = 0x46;
-            effect.sound = 0x40;
+            effect.sound = 64;
             effect.x = (double)(int)x;
-            effect.y = (double)((int)y - 0x2b);
+            effect.y = (double)((int)y - 43);
             effect.scale = 2;
             effect.keep = 1;
             effect.layer = 1;
             m_game->CreateEffect((EffectDesc*)&effect);
-            m_playSound = 0x25;
+            m_playSound = 37;
         }
-        FocusCameraY(0x32, 3);
+        FocusCameraY(50, 3);
         if (frame == 4 && timer == 0) {
             effect.type = 0x19e;
             effect.x = (double)((int)x - facing * 5);
-            effect.y = (double)((int)y - 0x36);
+            effect.y = (double)((int)y - 54);
             effect.scale = 2;
             effect.keep = 1;
             effect.layer = 1;
             effect.facing = facing;
             SpawnObject(&effect);
-            ShakeScreen(0xa, 0);
+            ShakeScreen(10, 0);
             m_playVoice = 6;
             m_playVoice = 7;
         }
@@ -10530,8 +10530,8 @@ void CIkumi::UpdatePatternAlt()
                 }
                 pattern = kStand;
                 StartPattern();
-                m_modeTimer = 0x4ec;
-                m_stocks = 0xa;
+                m_modeTimer = 1260;
+                m_stocks = 10;
                 UseAltPatterns(1);
             }
         }
@@ -10542,13 +10542,13 @@ void CIkumi::UpdatePatternAlt()
         }
         if (frame == 1 && timer == 0) {
             m_dashMomentum = 0;
-            m_freezeTime = 0x78;
-            m_gauge = m_gauge - 0x3e8;
-            FillBackground(0xb0, 3);
+            m_freezeTime = 120;
+            m_gauge = m_gauge - 1000;
+            FillBackground(176, 3);
             effect.type = 0x44;
-            effect.sound = 0x13;
-            effect.x = (double)((int)x + facing * 0x1f);
-            effect.y = (double)((int)y - 0x58);
+            effect.sound = 19;
+            effect.x = (double)((int)x + facing * 31);
+            effect.y = (double)((int)y - 88);
             effect.scale = 2;
             effect.keep = 1;
             effect.layer = 1;
@@ -10564,12 +10564,12 @@ void CIkumi::UpdatePatternAlt()
             (*m_opponent)->StopMoving();
             pattern = k4123641236AHold;
             (*m_opponent)->pattern = kThrownDoubledOver;
-            (*m_opponent)->x = facing * 0x19 + x;
+            (*m_opponent)->x = facing * 25 + x;
             (*m_opponent)->y = -84.0;
-            FocusCameraY(0x32, 0x1e);
+            FocusCameraY(50, 30);
             effect.type = 0;
-            effect.x = (double)((int)x + facing * 0xd);
-            effect.y = (double)((int)y - 0x41);
+            effect.x = (double)((int)x + facing * 13);
+            effect.y = (double)((int)y - 65);
             effect.scale = 2;
             effect.layer = 1;
             m_game->CreateEffect((EffectDesc*)&effect);
@@ -10592,24 +10592,24 @@ void CIkumi::UpdatePatternAlt()
         }
         break;
     case k4123641236AHold:
-        if (frame < 0xb) {
-            FocusCameraY(0x32, 3);
+        if (frame < 11) {
+            FocusCameraY(50, 3);
         }
         if ((frame == 4 || frame == 6) && timer == 0) {
             effect.type = 0;
-            (*m_opponent)->m_hitstop = 0x1e;
-            effect.x = (double)((int)x + ((WORD)Random(0, 0x28) + 0xa) * facing);
-            effect.y = (double)((int)y - 0x32 - (WORD)Random(0, 0x14));
+            (*m_opponent)->m_hitstop = 30;
+            effect.x = (double)((int)x + ((WORD)Random(0, 40) + 10) * facing);
+            effect.y = (double)((int)y - 50 - (WORD)Random(0, 20));
             effect.scale = 2;
             effect.layer = 1;
             effect.sound = 2;
             m_game->CreateEffect((EffectDesc*)&effect);
             effect.type = 0x1d6;
-            effect.x = (double)((int)(*m_opponent)->x + -5 + (WORD)Random(0, 0xa));
-            effect.y = (double)((int)y - 0x32 - (WORD)Random(0, 0x14));
+            effect.x = (double)((int)(*m_opponent)->x + -5 + (WORD)Random(0, 10));
+            effect.y = (double)((int)y - 50 - (WORD)Random(0, 20));
             effect.scale = 0;
             effect.layer = 1;
-            if ((WORD)Random(0, 0x64) < 0x32) {
+            if ((WORD)Random(0, 100) < 50) {
                 effect.facing = facing;
             } else {
                 effect.facing = -facing;
@@ -10621,18 +10621,18 @@ void CIkumi::UpdatePatternAlt()
             timer = 0;
             frame++;
             if (frame == 1) {
-                (*m_opponent)->x = facing * 0x1e + x;
+                (*m_opponent)->x = facing * 30 + x;
                 (*m_opponent)->y = y - 87.0;
             }
             if (frame == 2) {
-                (*m_opponent)->x = facing * 0x1f + x;
+                (*m_opponent)->x = facing * 31 + x;
                 (*m_opponent)->y = y - 88.0;
             }
             if (frame == 3) {
                 m_playVoice = 8;
-                ShakeScreen(3, 0x1e);
+                ShakeScreen(3, 30);
                 effect.type = 0x19f;
-                effect.x = (double)((int)x + facing * 0x1e);
+                effect.x = (double)((int)x + facing * 30);
                 effect.y = 0.0;
                 effect.scale = 2;
                 effect.layer = 1;
@@ -10640,7 +10640,7 @@ void CIkumi::UpdatePatternAlt()
                 effect.facing = facing;
                 SpawnObject(&effect);
                 effect.type = 0x19f;
-                effect.x = (double)((int)x + facing * 0x1e);
+                effect.x = (double)((int)x + facing * 30);
                 effect.y = -160.0;
                 effect.scale = 2;
                 effect.layer = 1;
@@ -10651,22 +10651,22 @@ void CIkumi::UpdatePatternAlt()
                 frame = frame - 4;
                 m_patternVar1++;
             }
-            if (frame == 0xb) {
-                (*m_opponent)->x = facing * 0xb + x;
+            if (frame == 11) {
+                (*m_opponent)->x = facing * 11 + x;
                 (*m_opponent)->y = y - 75.0;
             }
-            if (frame == 0xc) {
-                (*m_opponent)->x = facing * 0xa + x;
+            if (frame == 12) {
+                (*m_opponent)->x = facing * 10 + x;
                 (*m_opponent)->y = y - 74.0;
             }
-            if (frame == 0xd) {
+            if (frame == 13) {
                 (*m_opponent)->StartPattern();
                 (*m_opponent)->pattern = kHitAirLaunch;
                 (*m_opponent)->m_hitVx = -1.2;
                 (*m_opponent)->m_hitVy = -0.5;
                 (*m_opponent)->y = -40.0;
-                (*m_opponent)->x = facing * 0x1e + x;
-                DealDamage(0xaf0, 500.0);
+                (*m_opponent)->x = facing * 30 + x;
+                DealDamage(2800, 500.0);
                 (*m_opponent)->m_hitstop = 0;
             }
             if (frame >= frameCount) {
@@ -10682,13 +10682,13 @@ void CIkumi::UpdatePatternAlt()
         }
         if (frame == 1 && timer == 0) {
             m_dashMomentum = 0;
-            m_freezeTime = 0x78;
-            m_gauge = m_gauge - 0x7d0;
-            FillBackground(0xb0, 3);
+            m_freezeTime = 120;
+            m_gauge = m_gauge - 2000;
+            FillBackground(176, 3);
             effect.type = 0x45;
             effect.sound = 5;
-            effect.x = (double)((int)x + facing * 0x1f);
-            effect.y = (double)((int)y - 0x58);
+            effect.x = (double)((int)x + facing * 31);
+            effect.y = (double)((int)y - 88);
             effect.scale = 2;
             effect.keep = 1;
             effect.layer = 1;
@@ -10704,12 +10704,12 @@ void CIkumi::UpdatePatternAlt()
             (*m_opponent)->StopMoving();
             pattern = k4123641236BHold;
             (*m_opponent)->pattern = kThrownDoubledOver;
-            (*m_opponent)->x = facing * 0x19 + x;
+            (*m_opponent)->x = facing * 25 + x;
             (*m_opponent)->y = -84.0;
-            FocusCameraY(0x32, 0x1e);
+            FocusCameraY(50, 30);
             effect.type = 0;
-            effect.x = (double)((int)x + facing * 0xd);
-            effect.y = (double)((int)y - 0x41);
+            effect.x = (double)((int)x + facing * 13);
+            effect.y = (double)((int)y - 65);
             effect.scale = 2;
             effect.layer = 1;
             m_game->CreateEffect((EffectDesc*)&effect);
@@ -10732,24 +10732,24 @@ void CIkumi::UpdatePatternAlt()
         }
         break;
     case k4123641236BHold:
-        if (frame < 0xb) {
-            FocusCameraY(0x32, 3);
+        if (frame < 11) {
+            FocusCameraY(50, 3);
         }
         if ((frame == 4 || frame == 6) && timer == 0) {
             effect.type = 0;
-            (*m_opponent)->m_hitstop = 0x1e;
-            effect.x = (double)((int)x + ((WORD)Random(0, 0x28) + 0xa) * facing);
-            effect.y = (double)((int)y - 0x32 - (WORD)Random(0, 0x14));
+            (*m_opponent)->m_hitstop = 30;
+            effect.x = (double)((int)x + ((WORD)Random(0, 40) + 10) * facing);
+            effect.y = (double)((int)y - 50 - (WORD)Random(0, 20));
             effect.scale = 2;
             effect.layer = 1;
             effect.sound = 2;
             m_game->CreateEffect((EffectDesc*)&effect);
             effect.type = 0x1d6;
-            effect.x = (double)((int)(*m_opponent)->x + -5 + (WORD)Random(0, 0xa));
-            effect.y = (double)((int)y - 0x32 - (WORD)Random(0, 0x14));
+            effect.x = (double)((int)(*m_opponent)->x + -5 + (WORD)Random(0, 10));
+            effect.y = (double)((int)y - 50 - (WORD)Random(0, 20));
             effect.scale = 0;
             effect.layer = 1;
-            if ((WORD)Random(0, 0x64) < 0x32) {
+            if ((WORD)Random(0, 100) < 50) {
                 effect.facing = facing;
             } else {
                 effect.facing = -facing;
@@ -10761,18 +10761,18 @@ void CIkumi::UpdatePatternAlt()
             timer = 0;
             frame++;
             if (frame == 1) {
-                (*m_opponent)->x = facing * 0x1e + x;
+                (*m_opponent)->x = facing * 30 + x;
                 (*m_opponent)->y = y - 87.0;
             }
             if (frame == 2) {
-                (*m_opponent)->x = facing * 0x1f + x;
+                (*m_opponent)->x = facing * 31 + x;
                 (*m_opponent)->y = y - 88.0;
             }
             if (frame == 3) {
                 m_playVoice = 8;
-                ShakeScreen(3, 0x1e);
+                ShakeScreen(3, 30);
                 effect.type = 0x1a0;
-                effect.x = (double)((int)x + facing * 0x1e);
+                effect.x = (double)((int)x + facing * 30);
                 effect.y = 0.0;
                 effect.scale = 2;
                 effect.layer = 1;
@@ -10780,33 +10780,33 @@ void CIkumi::UpdatePatternAlt()
                 effect.facing = facing;
                 SpawnObject(&effect);
                 effect.type = 0x1a0;
-                effect.x = (double)((int)x + facing * 0x1e);
+                effect.x = (double)((int)x + facing * 30);
                 effect.y = -160.0;
                 effect.scale = 2;
                 effect.layer = 1;
                 effect.facing = facing;
                 SpawnObject(&effect);
             }
-            if (m_patternVar1 < 0xc && frame == 7) {
+            if (m_patternVar1 < 12 && frame == 7) {
                 frame = frame - 4;
                 m_patternVar1++;
             }
-            if (frame == 0xb) {
-                (*m_opponent)->x = facing * 0xb + x;
+            if (frame == 11) {
+                (*m_opponent)->x = facing * 11 + x;
                 (*m_opponent)->y = y - 75.0;
             }
-            if (frame == 0xc) {
-                (*m_opponent)->x = facing * 0xa + x;
+            if (frame == 12) {
+                (*m_opponent)->x = facing * 10 + x;
                 (*m_opponent)->y = y - 74.0;
             }
-            if (frame == 0xd) {
+            if (frame == 13) {
                 (*m_opponent)->StartPattern();
                 (*m_opponent)->pattern = kHitAirLaunch;
                 (*m_opponent)->m_hitVx = -1.2;
                 (*m_opponent)->m_hitVy = -0.5;
                 (*m_opponent)->y = -40.0;
-                (*m_opponent)->x = facing * 0x1e + x;
-                DealDamage(0xed8, 500.0);
+                (*m_opponent)->x = facing * 30 + x;
+                DealDamage(3800, 500.0);
                 (*m_opponent)->m_hitstop = 0;
             }
             if (frame >= frameCount) {
@@ -10821,17 +10821,17 @@ void CIkumi::UpdatePatternAlt()
             StopMoving();
         }
         if (frame > 0) {
-            m_game->FlashNegative(0xf);
+            m_game->FlashNegative(15);
         }
         if (frame == 1 && timer == 0) {
             m_dashMomentum = 0;
-            m_freezeTime = 0x78;
-            m_gauge = m_gauge - 0xbb8;
-            FillBackground(0xb0, 3);
+            m_freezeTime = 120;
+            m_gauge = m_gauge - 3000;
+            FillBackground(176, 3);
             effect.type = 0x46;
-            effect.sound = 0x40;
-            effect.x = (double)((int)x + facing * 0x1f);
-            effect.y = (double)((int)y - 0x58);
+            effect.sound = 64;
+            effect.x = (double)((int)x + facing * 31);
+            effect.y = (double)((int)y - 88);
             effect.scale = 2;
             effect.keep = 1;
             effect.layer = 1;
@@ -10847,12 +10847,12 @@ void CIkumi::UpdatePatternAlt()
             (*m_opponent)->StopMoving();
             pattern = k4123641236CHold;
             (*m_opponent)->pattern = kThrownDoubledOver;
-            (*m_opponent)->x = facing * 0x19 + x;
+            (*m_opponent)->x = facing * 25 + x;
             (*m_opponent)->y = -84.0;
-            FocusCameraY(0x32, 0x1e);
+            FocusCameraY(50, 30);
             effect.type = 0;
-            effect.x = (double)((int)x + facing * 0xd);
-            effect.y = (double)((int)y - 0x41);
+            effect.x = (double)((int)x + facing * 13);
+            effect.y = (double)((int)y - 65);
             effect.scale = 2;
             effect.layer = 1;
             m_game->CreateEffect((EffectDesc*)&effect);
@@ -10875,27 +10875,27 @@ void CIkumi::UpdatePatternAlt()
         }
         break;
     case k4123641236CHold:
-        if (frame < 0xb) {
-            FocusCameraY(0x32, 3);
+        if (frame < 11) {
+            FocusCameraY(50, 3);
         }
-        if (frame < 0xb) {
-            m_game->FlashNegative(0xf);
+        if (frame < 11) {
+            m_game->FlashNegative(15);
         }
         if ((frame == 4 || frame == 6) && timer == 0) {
             effect.type = 0;
-            (*m_opponent)->m_hitstop = 0x1e;
-            effect.x = (double)((int)x + ((WORD)Random(0, 0x28) + 0xa) * facing);
-            effect.y = (double)((int)y - 0x32 - (WORD)Random(0, 0x14));
+            (*m_opponent)->m_hitstop = 30;
+            effect.x = (double)((int)x + ((WORD)Random(0, 40) + 10) * facing);
+            effect.y = (double)((int)y - 50 - (WORD)Random(0, 20));
             effect.scale = 2;
             effect.layer = 1;
             effect.sound = 2;
             m_game->CreateEffect((EffectDesc*)&effect);
             effect.type = 0x1de;
-            effect.x = (double)((int)(*m_opponent)->x + -5 + (WORD)Random(0, 0xa));
-            effect.y = (double)((int)y - 0x32 - (WORD)Random(0, 0x14));
+            effect.x = (double)((int)(*m_opponent)->x + -5 + (WORD)Random(0, 10));
+            effect.y = (double)((int)y - 50 - (WORD)Random(0, 20));
             effect.scale = 0;
             effect.layer = 1;
-            if ((WORD)Random(0, 0x64) < 0x32) {
+            if ((WORD)Random(0, 100) < 50) {
                 effect.facing = facing;
             } else {
                 effect.facing = -facing;
@@ -10908,18 +10908,18 @@ void CIkumi::UpdatePatternAlt()
             timer = 0;
             frame++;
             if (frame == 1) {
-                (*m_opponent)->x = facing * 0x1e + x;
+                (*m_opponent)->x = facing * 30 + x;
                 (*m_opponent)->y = y - 87.0;
             }
             if (frame == 2) {
-                (*m_opponent)->x = facing * 0x1f + x;
+                (*m_opponent)->x = facing * 31 + x;
                 (*m_opponent)->y = y - 88.0;
             }
             if (frame == 3) {
                 m_playVoice = 8;
-                ShakeScreen(4, 0x1e);
+                ShakeScreen(4, 30);
                 effect.type = 0x1a1;
-                effect.x = (double)((int)x + facing * 0x1e);
+                effect.x = (double)((int)x + facing * 30);
                 effect.y = 0.0;
                 effect.scale = 2;
                 effect.layer = 1;
@@ -10927,33 +10927,33 @@ void CIkumi::UpdatePatternAlt()
                 effect.facing = facing;
                 SpawnObject(&effect);
                 effect.type = 0x1a1;
-                effect.x = (double)((int)x + facing * 0x1e);
+                effect.x = (double)((int)x + facing * 30);
                 effect.y = -160.0;
                 effect.scale = 2;
                 effect.layer = 1;
                 effect.facing = facing;
                 SpawnObject(&effect);
             }
-            if (m_patternVar1 < 0xc && frame == 7) {
+            if (m_patternVar1 < 12 && frame == 7) {
                 frame = frame - 4;
                 m_patternVar1++;
             }
-            if (frame == 0xb) {
-                (*m_opponent)->x = facing * 0xb + x;
+            if (frame == 11) {
+                (*m_opponent)->x = facing * 11 + x;
                 (*m_opponent)->y = y - 75.0;
             }
-            if (frame == 0xc) {
-                (*m_opponent)->x = facing * 0xa + x;
+            if (frame == 12) {
+                (*m_opponent)->x = facing * 10 + x;
                 (*m_opponent)->y = y - 74.0;
             }
-            if (frame == 0xd) {
+            if (frame == 13) {
                 (*m_opponent)->StartPattern();
                 (*m_opponent)->pattern = kHitAirLaunch;
                 (*m_opponent)->m_hitVx = -1.2;
                 (*m_opponent)->m_hitVy = -0.5;
                 (*m_opponent)->y = -40.0;
-                (*m_opponent)->x = facing * 0x1e + x;
-                DealDamage(0x157c, 500.0);
+                (*m_opponent)->x = facing * 30 + x;
+                DealDamage(5500, 500.0);
                 (*m_opponent)->m_hitstop = 0;
             }
             if (frame >= frameCount) {
@@ -10966,13 +10966,13 @@ void CIkumi::UpdatePatternAlt()
     case k214214A:
         if (frame == 0 && timer == 0) {
             m_dashMomentum = 0;
-            m_freezeTime = 0x78;
-            m_gauge = m_gauge - 0x3e8;
-            FillBackground(0xb0, 3);
+            m_freezeTime = 120;
+            m_gauge = m_gauge - 1000;
+            FillBackground(176, 3);
             effect.type = 0x44;
-            effect.sound = 0x13;
+            effect.sound = 19;
             effect.x = (double)((int)x + facing * 4);
-            effect.y = (double)((int)y - 0x2f);
+            effect.y = (double)((int)y - 47);
             effect.scale = 2;
             effect.keep = 1;
             effect.layer = 1;
@@ -11008,13 +11008,13 @@ void CIkumi::UpdatePatternAlt()
     case k214214B:
         if (frame == 0 && timer == 0) {
             m_dashMomentum = 0;
-            m_freezeTime = 0x78;
-            m_gauge = m_gauge - 0x3e8;
-            FillBackground(0xb0, 3);
+            m_freezeTime = 120;
+            m_gauge = m_gauge - 1000;
+            FillBackground(176, 3);
             effect.type = 0x44;
-            effect.sound = 0x13;
+            effect.sound = 19;
             effect.x = (double)((int)x + facing * 4);
-            effect.y = (double)((int)y - 0x2f);
+            effect.y = (double)((int)y - 47);
             effect.scale = 2;
             effect.keep = 1;
             effect.layer = 1;
@@ -11050,13 +11050,13 @@ void CIkumi::UpdatePatternAlt()
     case k214214C:
         if (frame == 0 && timer == 0) {
             m_dashMomentum = 0;
-            m_freezeTime = 0x78;
-            m_gauge = m_gauge - 0x3e8;
-            FillBackground(0xb0, 3);
+            m_freezeTime = 120;
+            m_gauge = m_gauge - 1000;
+            FillBackground(176, 3);
             effect.type = 0x44;
-            effect.sound = 0x13;
+            effect.sound = 19;
             effect.x = (double)((int)x + facing * 4);
-            effect.y = (double)((int)y - 0x2f);
+            effect.y = (double)((int)y - 47);
             effect.scale = 2;
             effect.keep = 1;
             effect.layer = 1;
@@ -11095,13 +11095,13 @@ void CIkumi::UpdatePatternAlt()
         }
         if (frame == 1 && timer == 0) {
             m_dashMomentum = 0;
-            m_freezeTime = 0x78;
-            m_gauge = m_gauge - 0x3e8;
-            FillBackground(0xb0, 3);
+            m_freezeTime = 120;
+            m_gauge = m_gauge - 1000;
+            FillBackground(176, 3);
             effect.type = 0x44;
-            effect.sound = 0x13;
+            effect.sound = 19;
             effect.x = (double)(int)x;
-            effect.y = (double)((int)y - 0x32);
+            effect.y = (double)((int)y - 50);
             effect.scale = 2;
             effect.keep = 1;
             effect.layer = 1;
@@ -11111,8 +11111,8 @@ void CIkumi::UpdatePatternAlt()
         if (frame == 3 && timer == 0) {
             effect.type = 0xe;
             effect.sound = 4;
-            effect.x = (double)((int)x + facing * 0x16);
-            effect.y = (double)((int)y - 0x3b);
+            effect.x = (double)((int)x + facing * 22);
+            effect.y = (double)((int)y - 59);
             effect.scale = 2;
             effect.keep = 1;
             effect.layer = 1;
@@ -11123,11 +11123,11 @@ void CIkumi::UpdatePatternAlt()
             timer = 0;
             frame++;
             m_attackResult = 0;
-            if (frame == 0xe) {
+            if (frame == 14) {
                 m_storedSuperLevel = 1;
-                m_playVoice = 0xa;
+                m_playVoice = 10;
                 effect.type = 0x1a7;
-                effect.x = (double)((int)x + facing * 0x29);
+                effect.x = (double)((int)x + facing * 41);
                 effect.y = 0.0;
                 effect.scale = 2;
                 effect.keep = 1;
@@ -11135,7 +11135,7 @@ void CIkumi::UpdatePatternAlt()
                 effect.layer = 0;
                 SpawnObject(&effect);
             }
-            if (frame == 0x10 && m_patternVar1 < 3) {
+            if (frame == 16 && m_patternVar1 < 3) {
                 frame = frame - 2;
                 m_patternVar1++;
             }
@@ -11152,13 +11152,13 @@ void CIkumi::UpdatePatternAlt()
         }
         if (frame == 1 && timer == 0) {
             m_dashMomentum = 0;
-            m_freezeTime = 0x78;
-            m_gauge = m_gauge - 0x7d0;
-            FillBackground(0xb0, 3);
+            m_freezeTime = 120;
+            m_gauge = m_gauge - 2000;
+            FillBackground(176, 3);
             effect.type = 0x45;
             effect.sound = 5;
             effect.x = (double)(int)x;
-            effect.y = (double)((int)y - 0x32);
+            effect.y = (double)((int)y - 50);
             effect.scale = 2;
             effect.keep = 1;
             effect.layer = 1;
@@ -11168,8 +11168,8 @@ void CIkumi::UpdatePatternAlt()
         if (frame == 3 && timer == 0) {
             effect.type = 0xe;
             effect.sound = 4;
-            effect.x = (double)((int)x + facing * 0x16);
-            effect.y = (double)((int)y - 0x3b);
+            effect.x = (double)((int)x + facing * 22);
+            effect.y = (double)((int)y - 59);
             effect.scale = 2;
             effect.keep = 1;
             effect.layer = 1;
@@ -11180,11 +11180,11 @@ void CIkumi::UpdatePatternAlt()
             timer = 0;
             frame++;
             m_attackResult = 0;
-            if (frame == 0xe) {
+            if (frame == 14) {
                 m_storedSuperLevel = 2;
-                m_playVoice = 0xa;
+                m_playVoice = 10;
                 effect.type = 0x1a7;
-                effect.x = (double)((int)x + facing * 0x29);
+                effect.x = (double)((int)x + facing * 41);
                 effect.y = 0.0;
                 effect.scale = 2;
                 effect.keep = 1;
@@ -11192,7 +11192,7 @@ void CIkumi::UpdatePatternAlt()
                 effect.layer = 0;
                 SpawnObject(&effect);
             }
-            if (frame == 0x10 && m_patternVar1 < 3) {
+            if (frame == 16 && m_patternVar1 < 3) {
                 frame = frame - 2;
                 m_patternVar1++;
             }
@@ -11208,17 +11208,17 @@ void CIkumi::UpdatePatternAlt()
             StopMoving();
         }
         if (frame > 0) {
-            m_game->FlashNegative(0xf);
+            m_game->FlashNegative(15);
         }
         if (frame == 1 && timer == 0) {
             m_dashMomentum = 0;
-            m_freezeTime = 0x78;
-            m_gauge = m_gauge - 0xbb8;
-            FillBackground(0xb0, 3);
+            m_freezeTime = 120;
+            m_gauge = m_gauge - 3000;
+            FillBackground(176, 3);
             effect.type = 0x46;
-            effect.sound = 0x40;
+            effect.sound = 64;
             effect.x = (double)(int)x;
-            effect.y = (double)((int)y - 0x32);
+            effect.y = (double)((int)y - 50);
             effect.scale = 2;
             effect.keep = 1;
             effect.layer = 1;
@@ -11228,8 +11228,8 @@ void CIkumi::UpdatePatternAlt()
         if (frame == 3 && timer == 0) {
             effect.type = 0xe;
             effect.sound = 4;
-            effect.x = (double)((int)x + facing * 0x16);
-            effect.y = (double)((int)y - 0x3b);
+            effect.x = (double)((int)x + facing * 22);
+            effect.y = (double)((int)y - 59);
             effect.scale = 2;
             effect.keep = 1;
             effect.layer = 1;
@@ -11240,11 +11240,11 @@ void CIkumi::UpdatePatternAlt()
             timer = 0;
             frame++;
             m_attackResult = 0;
-            if (frame == 0xe) {
+            if (frame == 14) {
                 m_storedSuperLevel = 3;
-                m_playVoice = 0xa;
+                m_playVoice = 10;
                 effect.type = 0x1a7;
-                effect.x = (double)((int)x + facing * 0x29);
+                effect.x = (double)((int)x + facing * 41);
                 effect.y = 0.0;
                 effect.scale = 2;
                 effect.keep = 1;
@@ -11252,7 +11252,7 @@ void CIkumi::UpdatePatternAlt()
                 effect.layer = 0;
                 SpawnObject(&effect);
             }
-            if (frame == 0x10 && m_patternVar1 < 3) {
+            if (frame == 16 && m_patternVar1 < 3) {
                 frame = frame - 2;
                 m_patternVar1++;
             }
@@ -11269,12 +11269,12 @@ void CIkumi::UpdatePatternAlt()
         }
         if (frame == 3 && timer == 0) {
             m_dashMomentum = 0;
-            m_freezeTime = 0x78;
-            FillBackground(0xb0, 3);
+            m_freezeTime = 120;
+            FillBackground(176, 3);
             effect.type = 0x44;
-            effect.sound = 0x13;
-            effect.x = (double)((int)x + facing * 0x1f);
-            effect.y = (double)((int)y - 0x34);
+            effect.sound = 19;
+            effect.x = (double)((int)x + facing * 31);
+            effect.y = (double)((int)y - 52);
             effect.scale = 2;
             effect.keep = 1;
             effect.layer = 1;
@@ -11313,12 +11313,12 @@ void CIkumi::UpdatePatternAlt()
         }
         if (frame == 3 && timer == 0) {
             m_dashMomentum = 0;
-            m_freezeTime = 0x78;
-            FillBackground(0xb0, 3);
+            m_freezeTime = 120;
+            FillBackground(176, 3);
             effect.type = 0x45;
             effect.sound = 5;
-            effect.x = (double)((int)x + facing * 0x1f);
-            effect.y = (double)((int)y - 0x34);
+            effect.x = (double)((int)x + facing * 31);
+            effect.y = (double)((int)y - 52);
             effect.scale = 2;
             effect.keep = 1;
             effect.layer = 1;
@@ -11341,7 +11341,7 @@ void CIkumi::UpdatePatternAlt()
                 effect.layer = 1;
                 SpawnObject(&effect);
                 effect.type = 0x1a9;
-                effect.x = (double)((int)(*m_opponent)->x + 0x19);
+                effect.x = (double)((int)(*m_opponent)->x + 25);
                 effect.y = -10.0;
                 effect.scale = 2;
                 effect.keep = 1;
@@ -11352,7 +11352,7 @@ void CIkumi::UpdatePatternAlt()
                 effect.layer = 0;
                 SpawnObject(&effect);
                 effect.type = 0x1a9;
-                effect.x = (double)((int)(*m_opponent)->x - 0x19);
+                effect.x = (double)((int)(*m_opponent)->x - 25);
                 effect.y = -10.0;
                 effect.scale = 2;
                 effect.keep = 1;
@@ -11363,7 +11363,7 @@ void CIkumi::UpdatePatternAlt()
                 effect.layer = 0;
                 SpawnObject(&effect);
                 effect.type = 0x1a9;
-                effect.x = (double)((int)(*m_opponent)->x + 0x2d);
+                effect.x = (double)((int)(*m_opponent)->x + 45);
                 effect.y = 10.0;
                 effect.scale = 2;
                 effect.keep = 1;
@@ -11374,7 +11374,7 @@ void CIkumi::UpdatePatternAlt()
                 effect.layer = 0;
                 SpawnObject(&effect);
                 effect.type = 0x1a9;
-                effect.x = (double)((int)(*m_opponent)->x - 0x2d);
+                effect.x = (double)((int)(*m_opponent)->x - 45);
                 effect.y = 10.0;
                 effect.scale = 2;
                 effect.keep = 1;
@@ -11397,16 +11397,16 @@ void CIkumi::UpdatePatternAlt()
             StopMoving();
         }
         if (frame > 2) {
-            m_game->FlashNegative(0xf);
+            m_game->FlashNegative(15);
         }
         if (frame == 3 && timer == 0) {
             m_dashMomentum = 0;
-            m_freezeTime = 0x78;
-            FillBackground(0xb0, 3);
+            m_freezeTime = 120;
+            FillBackground(176, 3);
             effect.type = 0x46;
-            effect.sound = 0x40;
-            effect.x = (double)((int)x + facing * 0x1f);
-            effect.y = (double)((int)y - 0x34);
+            effect.sound = 64;
+            effect.x = (double)((int)x + facing * 31);
+            effect.y = (double)((int)y - 52);
             effect.scale = 2;
             effect.keep = 1;
             effect.layer = 1;
@@ -11429,7 +11429,7 @@ void CIkumi::UpdatePatternAlt()
                 effect.layer = 1;
                 SpawnObject(&effect);
                 effect.type = 0x1a9;
-                effect.x = (double)((int)(*m_opponent)->x + 0x23);
+                effect.x = (double)((int)(*m_opponent)->x + 35);
                 effect.y = -10.0;
                 effect.scale = 2;
                 effect.keep = 1;
@@ -11440,7 +11440,7 @@ void CIkumi::UpdatePatternAlt()
                 effect.layer = 0;
                 SpawnObject(&effect);
                 effect.type = 0x1a9;
-                effect.x = (double)((int)(*m_opponent)->x - 0x23);
+                effect.x = (double)((int)(*m_opponent)->x - 35);
                 effect.y = -10.0;
                 effect.scale = 2;
                 effect.keep = 1;
@@ -11451,7 +11451,7 @@ void CIkumi::UpdatePatternAlt()
                 effect.layer = 0;
                 SpawnObject(&effect);
                 effect.type = 0x1a9;
-                effect.x = (double)((int)(*m_opponent)->x + 0x46);
+                effect.x = (double)((int)(*m_opponent)->x + 70);
                 effect.y = 0.0;
                 effect.scale = 2;
                 effect.keep = 1;
@@ -11462,7 +11462,7 @@ void CIkumi::UpdatePatternAlt()
                 effect.layer = 0;
                 SpawnObject(&effect);
                 effect.type = 0x1a9;
-                effect.x = (double)((int)(*m_opponent)->x - 0x46);
+                effect.x = (double)((int)(*m_opponent)->x - 70);
                 effect.y = 0.0;
                 effect.scale = 2;
                 effect.keep = 1;
@@ -11473,7 +11473,7 @@ void CIkumi::UpdatePatternAlt()
                 effect.layer = 0;
                 SpawnObject(&effect);
                 effect.type = 0x1a9;
-                effect.x = (double)((int)(*m_opponent)->x + 0x28);
+                effect.x = (double)((int)(*m_opponent)->x + 40);
                 effect.y = 10.0;
                 effect.scale = 2;
                 effect.keep = 1;
@@ -11484,7 +11484,7 @@ void CIkumi::UpdatePatternAlt()
                 effect.layer = 0;
                 SpawnObject(&effect);
                 effect.type = 0x1a9;
-                effect.x = (double)((int)(*m_opponent)->x - 0x28);
+                effect.x = (double)((int)(*m_opponent)->x - 40);
                 effect.y = 10.0;
                 effect.scale = 2;
                 effect.keep = 1;
@@ -11508,13 +11508,13 @@ void CIkumi::UpdatePatternAlt()
         }
         if (frame == 1 && timer == 0) {
             m_dashMomentum = 0;
-            m_freezeTime = 0x78;
-            m_gauge = m_gauge - 0x3e8;
-            FillBackground(0xb0, 3);
+            m_freezeTime = 120;
+            m_gauge = m_gauge - 1000;
+            FillBackground(176, 3);
             effect.type = 0x44;
-            effect.sound = 0x13;
+            effect.sound = 19;
             effect.x = (double)(int)x;
-            effect.y = (double)((int)y - 0x32);
+            effect.y = (double)((int)y - 50);
             effect.scale = 2;
             effect.keep = 1;
             effect.layer = 1;
@@ -11524,8 +11524,8 @@ void CIkumi::UpdatePatternAlt()
         if (frame == 3 && timer == 0) {
             effect.type = 0xe;
             effect.sound = 4;
-            effect.x = (double)((int)x + facing * 0x16);
-            effect.y = (double)((int)y - 0x3b);
+            effect.x = (double)((int)x + facing * 22);
+            effect.y = (double)((int)y - 59);
             effect.scale = 2;
             effect.keep = 1;
             effect.layer = 1;
@@ -11536,7 +11536,7 @@ void CIkumi::UpdatePatternAlt()
             timer = 0;
             frame++;
             m_attackResult = 0;
-            if (frame == 0xe) {
+            if (frame == 14) {
                 effect.type = 0x1a8;
                 effect.x = (double)(int)(*m_opponent)->x;
                 effect.y = 0.0;
@@ -11549,7 +11549,7 @@ void CIkumi::UpdatePatternAlt()
                 effect.layer = 0;
                 SpawnObject(&effect);
             }
-            if (frame == 0x10 && m_patternVar1 < 6) {
+            if (frame == 16 && m_patternVar1 < 6) {
                 frame = frame - 2;
                 m_patternVar1++;
             }
@@ -11566,13 +11566,13 @@ void CIkumi::UpdatePatternAlt()
         }
         if (frame == 1 && timer == 0) {
             m_dashMomentum = 0;
-            m_freezeTime = 0x78;
-            m_gauge = m_gauge - 0x7d0;
-            FillBackground(0xb0, 3);
+            m_freezeTime = 120;
+            m_gauge = m_gauge - 2000;
+            FillBackground(176, 3);
             effect.type = 0x45;
             effect.sound = 5;
             effect.x = (double)(int)x;
-            effect.y = (double)((int)y - 0x32);
+            effect.y = (double)((int)y - 50);
             effect.scale = 2;
             effect.keep = 1;
             effect.layer = 1;
@@ -11582,8 +11582,8 @@ void CIkumi::UpdatePatternAlt()
         if (frame == 3 && timer == 0) {
             effect.type = 0xe;
             effect.sound = 4;
-            effect.x = (double)((int)x + facing * 0x16);
-            effect.y = (double)((int)y - 0x3b);
+            effect.x = (double)((int)x + facing * 22);
+            effect.y = (double)((int)y - 59);
             effect.scale = 2;
             effect.keep = 1;
             effect.layer = 1;
@@ -11594,7 +11594,7 @@ void CIkumi::UpdatePatternAlt()
             timer = 0;
             frame++;
             m_attackResult = 0;
-            if (frame == 0xe) {
+            if (frame == 14) {
                 effect.type = 0x1aa;
                 effect.x = (double)(int)(*m_opponent)->x;
                 effect.y = 0.0;
@@ -11604,7 +11604,7 @@ void CIkumi::UpdatePatternAlt()
                 effect.layer = 1;
                 SpawnObject(&effect);
                 effect.type = 0x1a9;
-                effect.x = (double)((int)(*m_opponent)->x + 0x19);
+                effect.x = (double)((int)(*m_opponent)->x + 25);
                 effect.y = -10.0;
                 effect.scale = 2;
                 effect.keep = 1;
@@ -11615,7 +11615,7 @@ void CIkumi::UpdatePatternAlt()
                 effect.layer = 0;
                 SpawnObject(&effect);
                 effect.type = 0x1a9;
-                effect.x = (double)((int)(*m_opponent)->x - 0x19);
+                effect.x = (double)((int)(*m_opponent)->x - 25);
                 effect.y = -10.0;
                 effect.scale = 2;
                 effect.keep = 1;
@@ -11626,7 +11626,7 @@ void CIkumi::UpdatePatternAlt()
                 effect.layer = 0;
                 SpawnObject(&effect);
                 effect.type = 0x1a9;
-                effect.x = (double)((int)(*m_opponent)->x + 0x2d);
+                effect.x = (double)((int)(*m_opponent)->x + 45);
                 effect.y = 10.0;
                 effect.scale = 2;
                 effect.keep = 1;
@@ -11637,7 +11637,7 @@ void CIkumi::UpdatePatternAlt()
                 effect.layer = 0;
                 SpawnObject(&effect);
                 effect.type = 0x1a9;
-                effect.x = (double)((int)(*m_opponent)->x - 0x2d);
+                effect.x = (double)((int)(*m_opponent)->x - 45);
                 effect.y = 10.0;
                 effect.scale = 2;
                 effect.keep = 1;
@@ -11648,7 +11648,7 @@ void CIkumi::UpdatePatternAlt()
                 effect.layer = 0;
                 SpawnObject(&effect);
             }
-            if (frame == 0x10 && m_patternVar1 < 6) {
+            if (frame == 16 && m_patternVar1 < 6) {
                 frame = frame - 2;
                 m_patternVar1++;
             }
@@ -11661,20 +11661,20 @@ void CIkumi::UpdatePatternAlt()
         break;
     case k21436CMode:
         if (frame > 0) {
-            m_game->FlashNegative(0xf);
+            m_game->FlashNegative(15);
         }
         if (frame == 0 && timer == 0) {
             StopMoving();
         }
         if (frame == 1 && timer == 0) {
             m_dashMomentum = 0;
-            m_freezeTime = 0x78;
-            m_gauge = m_gauge - 0xbb8;
-            FillBackground(0xb0, 3);
+            m_freezeTime = 120;
+            m_gauge = m_gauge - 3000;
+            FillBackground(176, 3);
             effect.type = 0x46;
-            effect.sound = 0x40;
-            effect.x = (double)((int)x - facing * 0xb);
-            effect.y = (double)((int)y - 0x65);
+            effect.sound = 64;
+            effect.x = (double)((int)x - facing * 11);
+            effect.y = (double)((int)y - 101);
             effect.scale = 2;
             effect.keep = 1;
             effect.layer = 1;
@@ -11684,8 +11684,8 @@ void CIkumi::UpdatePatternAlt()
         if (frame == 3 && timer == 0) {
             effect.type = 0xe;
             effect.sound = 4;
-            effect.x = (double)((int)x + facing * 0x16);
-            effect.y = (double)((int)y - 0x3b);
+            effect.x = (double)((int)x + facing * 22);
+            effect.y = (double)((int)y - 59);
             effect.scale = 2;
             effect.keep = 1;
             effect.layer = 1;
@@ -11696,7 +11696,7 @@ void CIkumi::UpdatePatternAlt()
             timer = 0;
             frame++;
             m_attackResult = 0;
-            if (frame == 0xe) {
+            if (frame == 14) {
                 effect.type = 0x1ab;
                 effect.x = (double)(int)(*m_opponent)->x;
                 effect.y = 0.0;
@@ -11706,7 +11706,7 @@ void CIkumi::UpdatePatternAlt()
                 effect.layer = 1;
                 SpawnObject(&effect);
                 effect.type = 0x1a9;
-                effect.x = (double)((int)(*m_opponent)->x + 0x23);
+                effect.x = (double)((int)(*m_opponent)->x + 35);
                 effect.y = -10.0;
                 effect.scale = 2;
                 effect.keep = 1;
@@ -11717,7 +11717,7 @@ void CIkumi::UpdatePatternAlt()
                 effect.layer = 0;
                 SpawnObject(&effect);
                 effect.type = 0x1a9;
-                effect.x = (double)((int)(*m_opponent)->x - 0x23);
+                effect.x = (double)((int)(*m_opponent)->x - 35);
                 effect.y = -10.0;
                 effect.scale = 2;
                 effect.keep = 1;
@@ -11728,7 +11728,7 @@ void CIkumi::UpdatePatternAlt()
                 effect.layer = 0;
                 SpawnObject(&effect);
                 effect.type = 0x1a9;
-                effect.x = (double)((int)(*m_opponent)->x + 0x46);
+                effect.x = (double)((int)(*m_opponent)->x + 70);
                 effect.y = 0.0;
                 effect.scale = 2;
                 effect.keep = 1;
@@ -11739,7 +11739,7 @@ void CIkumi::UpdatePatternAlt()
                 effect.layer = 0;
                 SpawnObject(&effect);
                 effect.type = 0x1a9;
-                effect.x = (double)((int)(*m_opponent)->x - 0x46);
+                effect.x = (double)((int)(*m_opponent)->x - 70);
                 effect.y = 0.0;
                 effect.scale = 2;
                 effect.keep = 1;
@@ -11750,7 +11750,7 @@ void CIkumi::UpdatePatternAlt()
                 effect.layer = 0;
                 SpawnObject(&effect);
                 effect.type = 0x1a9;
-                effect.x = (double)((int)(*m_opponent)->x + 0x28);
+                effect.x = (double)((int)(*m_opponent)->x + 40);
                 effect.y = 10.0;
                 effect.scale = 2;
                 effect.keep = 1;
@@ -11761,7 +11761,7 @@ void CIkumi::UpdatePatternAlt()
                 effect.layer = 0;
                 SpawnObject(&effect);
                 effect.type = 0x1a9;
-                effect.x = (double)((int)(*m_opponent)->x - 0x28);
+                effect.x = (double)((int)(*m_opponent)->x - 40);
                 effect.y = 10.0;
                 effect.scale = 2;
                 effect.keep = 1;
@@ -11772,7 +11772,7 @@ void CIkumi::UpdatePatternAlt()
                 effect.layer = 0;
                 SpawnObject(&effect);
             }
-            if (frame == 0x10 && m_patternVar1 < 6) {
+            if (frame == 16 && m_patternVar1 < 6) {
                 frame = frame - 2;
                 m_patternVar1++;
             }

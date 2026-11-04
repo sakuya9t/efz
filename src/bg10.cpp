@@ -13,7 +13,7 @@ CBg10::CBg10(CGraphics* graphics)
     int i;
 
     m_graphics = graphics;
-    m_number = 0xa;
+    m_number = 10;
     m_lastFrame = 4;
     surfaces = TOINT(int, operator new(0x14));
     m_surfaces = TOPTR(PTR32(IDirectDrawSurface)*, surfaces);
@@ -92,12 +92,12 @@ void CBg10::Draw(int x, int y, char layer)
         src = MakeRect(0, 0, sprite.width, sprite.height);
         if (m_objects[i].facing == -1) {
             dst.left = (int)m_objects[i].x + x - (sprite.width - sprite.x);
-            dst.top = y + (int)m_objects[i].y + 0xd2 - sprite.y;
+            dst.top = y + (int)m_objects[i].y + 210 - sprite.y;
             dst.right = sprite.width + dst.left;
             dst.bottom = sprite.height + dst.top;
         } else {
             dst.left = (int)m_objects[i].x + x - sprite.x;
-            dst.top = y + (int)m_objects[i].y + 0xd2 - sprite.y;
+            dst.top = y + (int)m_objects[i].y + 210 - sprite.y;
             dst.right = sprite.width + dst.left;
             dst.bottom = sprite.height + dst.top;
         }

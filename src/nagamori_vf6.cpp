@@ -360,7 +360,7 @@ void CNagamori::UpdatePattern()
         }
         m_dashMomentum = 0;
         if (frame == 0 && timer == 0) {
-            m_gauge = m_gauge + 0xa;
+            m_gauge = m_gauge + 10;
             vx = (2.0 - (*m_opponent)->m_proration / 10000.0) * -1.1;
             if (m_rfBlue != 0) {
                 m_rfGauge -= 10.0;
@@ -396,7 +396,7 @@ void CNagamori::UpdatePattern()
         }
         m_dashMomentum = 0;
         if (frame == 0 && timer == 0) {
-            m_gauge = m_gauge + 0xf;
+            m_gauge = m_gauge + 15;
             vx = (2.0 - (*m_opponent)->m_proration / 10000.0) * -1.5;
             if (m_rfBlue != 0) {
                 m_rfGauge -= 20.0;
@@ -432,7 +432,7 @@ void CNagamori::UpdatePattern()
         }
         m_dashMomentum = 0;
         if (frame == 0 && timer == 0) {
-            m_gauge = m_gauge + 0x14;
+            m_gauge = m_gauge + 20;
             vx = (2.0 - (*m_opponent)->m_proration / 10000.0) * -1.8;
             if (m_rfBlue != 0) {
                 m_rfGauge -= 30.0;
@@ -468,7 +468,7 @@ void CNagamori::UpdatePattern()
         }
         m_dashMomentum = 0;
         if (frame == 0 && timer == 0) {
-            m_gauge = m_gauge + 0xa;
+            m_gauge = m_gauge + 10;
             vx = (2.0 - (*m_opponent)->m_proration / 10000.0) * -1.1;
             if (m_rfBlue != 0) {
                 m_rfGauge -= 10.0;
@@ -504,7 +504,7 @@ void CNagamori::UpdatePattern()
         }
         m_dashMomentum = 0;
         if (frame == 0 && timer == 0) {
-            m_gauge = m_gauge + 0xf;
+            m_gauge = m_gauge + 15;
             vx = (2.0 - (*m_opponent)->m_proration / 10000.0) * -1.5;
             if (m_rfBlue != 0) {
                 m_rfGauge -= 20.0;
@@ -540,7 +540,7 @@ void CNagamori::UpdatePattern()
         }
         m_dashMomentum = 0;
         if (frame == 0 && timer == 0) {
-            m_gauge = m_gauge + 0x14;
+            m_gauge = m_gauge + 20;
             vx = (2.0 - (*m_opponent)->m_proration / 10000.0) * -1.8;
             if (m_rfBlue != 0) {
                 m_rfGauge -= 30.0;
@@ -576,7 +576,7 @@ void CNagamori::UpdatePattern()
         }
         m_dashMomentum = 0;
         if (frame == 0 && timer == 0) {
-            m_gauge = m_gauge + 0xa;
+            m_gauge = m_gauge + 10;
             vx = (2.0 - (*m_opponent)->m_proration / 10000.0) * -1.1;
             if (m_rfBlue != 0) {
                 m_rfGauge -= 10.0;
@@ -609,7 +609,7 @@ void CNagamori::UpdatePattern()
         }
         m_dashMomentum = 0;
         if (frame == 0 && timer == 0) {
-            m_gauge = m_gauge + 0xf;
+            m_gauge = m_gauge + 15;
             vx = (2.0 - (*m_opponent)->m_proration / 10000.0) * -1.5;
             if (m_rfBlue != 0) {
                 m_rfGauge -= 20.0;
@@ -642,7 +642,7 @@ void CNagamori::UpdatePattern()
         }
         m_dashMomentum = 0;
         if (frame == 0 && timer == 0) {
-            m_gauge = m_gauge + 0x14;
+            m_gauge = m_gauge + 20;
             vx = (2.0 - (*m_opponent)->m_proration / 10000.0) * -1.8;
             if (m_rfBlue != 0) {
                 m_rfGauge -= 30.0;
@@ -674,7 +674,7 @@ void CNagamori::UpdatePattern()
             m_rfGauge -= 0.8;
         }
         if (frame == 0 && timer == 0) {
-            m_gauge = m_gauge + 0x1e;
+            m_gauge = m_gauge + 30;
             vx = m_hitVx;
             vy = vy * 0.75 + m_hitVy;
             if (vy < -2.0) {
@@ -717,7 +717,7 @@ void CNagamori::UpdatePattern()
             m_rfGauge -= 0.8;
         }
         if (frame == 0 && timer == 0) {
-            m_gauge = m_gauge + 0x1e;
+            m_gauge = m_gauge + 30;
             vx = m_hitVx;
             vy = vy * 0.75 + m_hitVy;
             if (vy < -4.0) {
@@ -760,7 +760,7 @@ void CNagamori::UpdatePattern()
             m_rfGauge -= 0.8;
         }
         if (frame == 0 && timer == 0) {
-            m_gauge = m_gauge + 0x1e;
+            m_gauge = m_gauge + 30;
             vx = m_hitVx;
             vy = vy * 0.75 + m_hitVy;
             if (vy < -6.0) {
@@ -803,7 +803,7 @@ void CNagamori::UpdatePattern()
             m_rfGauge -= 0.8;
         }
         if (frame == 0 && timer == 0) {
-            m_gauge = m_gauge + 0x1e;
+            m_gauge = m_gauge + 30;
             vx = m_hitVx;
             vy = vy * 0.75 + m_hitVy;
             ay = 0.032;
@@ -841,7 +841,7 @@ void CNagamori::UpdatePattern()
             m_rfGauge -= 0.8;
         }
         if (frame == 0 && timer == 0) {
-            m_gauge = m_gauge + 0x1e;
+            m_gauge = m_gauge + 30;
             vx = m_hitVx;
             vy = m_hitVy;
             ay = 0.032;
@@ -884,7 +884,7 @@ void CNagamori::UpdatePattern()
             break;
         }
         if (frame == 0 && timer == 0) {
-            m_gauge = m_gauge + 0x1e;
+            m_gauge = m_gauge + 30;
             vx = m_hitVx;
             vy = vy * 0.75 + m_hitVy;
             if (vy < -2.0) {
@@ -932,7 +932,7 @@ void CNagamori::UpdatePattern()
             break;
         }
         if (frame == 0 && timer == 0) {
-            m_gauge = m_gauge + 0x1e;
+            m_gauge = m_gauge + 30;
             vx = m_hitVx;
             vy = vy * 0.75 + m_hitVy;
             if (vy < -4.0) {
@@ -980,7 +980,7 @@ void CNagamori::UpdatePattern()
             break;
         }
         if (frame == 0 && timer == 0) {
-            m_gauge = m_gauge + 0x1e;
+            m_gauge = m_gauge + 30;
             vx = m_hitVx;
             vy = vy * 0.75 + m_hitVy;
             ay = 0.032;
@@ -1023,7 +1023,7 @@ void CNagamori::UpdatePattern()
             break;
         }
         if (frame == 0 && timer == 0) {
-            m_gauge = m_gauge + 0x1e;
+            m_gauge = m_gauge + 30;
             vx = m_hitVx;
             vy = m_hitVy;
             ay = 0.032;
@@ -1118,13 +1118,13 @@ void CNagamori::UpdatePattern()
             m_rfGauge -= 0.8;
         }
         if (frame == 0 && timer == 0 && m_patternVar1 == 0) {
-            m_gauge = m_gauge + 0x1e;
+            m_gauge = m_gauge + 30;
             m_patternVar1++;
-            m_untechTime = m_untechTime + 0x78;
+            m_untechTime = m_untechTime + 120;
             vx = 0.5;
             vy = -2.5;
             ay = 0.025;
-            m_playSound = 0x1f;
+            m_playSound = 31;
             effect.type = 0;
             effect.x = (double)(int)x;
             effect.y = (double)(int)y;
@@ -1157,7 +1157,7 @@ void CNagamori::UpdatePattern()
             m_rfGauge -= 0.8;
         }
         if (frame == 0 && timer == 0) {
-            m_gauge = m_gauge + 0x1e;
+            m_gauge = m_gauge + 30;
             vx = m_hitVx;
             vy = m_hitVy;
             ay = 0.072;
@@ -1264,7 +1264,7 @@ void CNagamori::UpdatePattern()
             m_rfGauge -= 0.6;
         }
         if (frame == 0 && timer == 0) {
-            m_gauge = m_gauge + 0x1e;
+            m_gauge = m_gauge + 30;
             if (m_rfBlue != 0) {
                 m_rfGauge -= 30.0;
             }
@@ -1301,7 +1301,7 @@ void CNagamori::UpdatePattern()
             m_rfGauge -= 0.6;
         }
         if (frame == 0 && timer == 0) {
-            m_gauge = m_gauge + 0x1e;
+            m_gauge = m_gauge + 30;
             if (m_rfBlue != 0) {
                 m_rfGauge -= 30.0;
             }
@@ -1338,7 +1338,7 @@ void CNagamori::UpdatePattern()
             m_rfGauge -= 0.6;
         }
         if (frame == 0 && timer == 0) {
-            m_gauge = m_gauge + 0x1e;
+            m_gauge = m_gauge + 30;
             if (m_rfBlue != 0) {
                 m_rfGauge -= 30.0;
             }
@@ -1378,7 +1378,7 @@ void CNagamori::UpdatePattern()
             effect.facing = facing;
             effect.layer = 1;
             SpawnObject(&effect);
-            m_gauge = m_gauge + 0x1e;
+            m_gauge = m_gauge + 30;
             vx = m_hitVx;
             vy = m_hitVy;
             ay = 0.032;
@@ -1412,11 +1412,11 @@ void CNagamori::UpdatePattern()
             m_rfGauge -= 0.8;
         }
         if (frame == 0 && timer == 0 && m_patternVar1 == 0) {
-            m_playSound = 0x1e;
+            m_playSound = 30;
             vy = -0.45;
             vx = -0.1;
             m_patternVar1++;
-            m_gauge = m_gauge + 0x1e;
+            m_gauge = m_gauge + 30;
         }
         if (frame == 4 && timer == 0) {
             vx = m_hitVx;
@@ -1469,10 +1469,10 @@ void CNagamori::UpdatePattern()
             if (m_rfBlue != 0) {
                 m_rfGauge -= 30.0;
             }
-            m_playSound = 0x21;
+            m_playSound = 33;
             vy = -1.5;
             vx = -0.8;
-            m_gauge = m_gauge + 0x1e;
+            m_gauge = m_gauge + 30;
         }
         vy += 0.04;
         if (frame == 0 && vy + y > 0.0) {
@@ -1521,10 +1521,10 @@ void CNagamori::UpdatePattern()
             if (m_rfBlue != 0) {
                 m_rfGauge -= 30.0;
             }
-            m_playSound = 0x21;
+            m_playSound = 33;
             vy = -1.5;
             vx = -0.8;
-            m_gauge = m_gauge + 0x1e;
+            m_gauge = m_gauge + 30;
         }
         vy += 0.04;
         if (frame == 0 && vy + y > 0.0) {
@@ -1573,10 +1573,10 @@ void CNagamori::UpdatePattern()
             if (m_rfBlue != 0) {
                 m_rfGauge -= 30.0;
             }
-            m_playSound = 0x21;
+            m_playSound = 33;
             vx = m_hitVx;
             vy = m_hitVy;
-            m_gauge = m_gauge + 0x1e;
+            m_gauge = m_gauge + 30;
         }
         vy += 0.04;
         timer++;
@@ -1617,10 +1617,10 @@ void CNagamori::UpdatePattern()
                 if (m_rfBlue != 0) {
                     m_rfGauge -= 30.0;
                 }
-                m_playSound = 0x21;
+                m_playSound = 33;
                 vx = m_hitVx;
                 vy = m_hitVy;
-                m_gauge = m_gauge + 0x1e;
+                m_gauge = m_gauge + 30;
                 m_patternVar1++;
             }
         }
@@ -1731,7 +1731,7 @@ void CNagamori::UpdatePattern()
     case kLyingDown:
         timer++;
         m_dashMomentum = 0;
-        if (m_hp > 0 && timer > 0x63 && frame == 0) {
+        if (m_hp > 0 && timer > 99 && frame == 0) {
             pattern = kWakeUp;
             StartPattern();
         }
@@ -1756,7 +1756,7 @@ void CNagamori::UpdatePattern()
         }
         m_dashMomentum = 0;
         if (frame == 0 && timer == 0) {
-            m_gauge = m_gauge + 0xa;
+            m_gauge = m_gauge + 10;
             vx = -1.5;
             vy = 0.0;
             y = 0.0;
@@ -1796,7 +1796,7 @@ void CNagamori::UpdatePattern()
         }
         m_dashMomentum = 0;
         if (frame == 0 && timer == 0) {
-            m_gauge = m_gauge + 0xf;
+            m_gauge = m_gauge + 15;
             vx = -1.8;
             vy = 0.0;
             y = 0.0;
@@ -1836,7 +1836,7 @@ void CNagamori::UpdatePattern()
         }
         m_dashMomentum = 0;
         if (frame == 0 && timer == 0) {
-            m_gauge = m_gauge + 0x14;
+            m_gauge = m_gauge + 20;
             vx = -2.3;
             vy = 0.0;
             y = 0.0;
@@ -1876,7 +1876,7 @@ void CNagamori::UpdatePattern()
         }
         m_dashMomentum = 0;
         if (frame == 0 && timer == 0) {
-            m_gauge = m_gauge + 0xa;
+            m_gauge = m_gauge + 10;
             vx = -1.5;
             vy = 0.0;
             y = 0.0;
@@ -1913,7 +1913,7 @@ void CNagamori::UpdatePattern()
         }
         m_dashMomentum = 0;
         if (frame == 0 && timer == 0) {
-            m_gauge = m_gauge + 0xf;
+            m_gauge = m_gauge + 15;
             vx = -1.8;
             vy = 0.0;
             y = 0.0;
@@ -1950,7 +1950,7 @@ void CNagamori::UpdatePattern()
         }
         m_dashMomentum = 0;
         if (frame == 0 && timer == 0) {
-            m_gauge = m_gauge + 0x14;
+            m_gauge = m_gauge + 20;
             vx = -2.3;
             vy = 0.0;
             y = 0.0;
@@ -1981,7 +1981,7 @@ void CNagamori::UpdatePattern()
     case kGuardAir:
         if (frame == 0 && timer == 0) {
             vy = -2.6;
-            m_gauge = m_gauge + 0xf;
+            m_gauge = m_gauge + 15;
             ay = 0.06;
         }
         vx = -1.2;
@@ -2070,12 +2070,12 @@ void CNagamori::UpdatePattern()
             StopMoving();
             effect.type = 9;
             effect.x = (double)(int)x;
-            effect.y = (double)((int)y - 0x3c);
+            effect.y = (double)((int)y - 60);
             effect.scale = 2;
             effect.layer = 1;
             m_game->CreateEffect((EffectDesc*)&effect);
             m_hitsLeft = 1;
-            m_playSound = 0x3e;
+            m_playSound = 62;
             m_patternVar1++;
         }
         timer++;
@@ -2102,13 +2102,13 @@ void CNagamori::UpdatePattern()
             StopMoving();
             effect.type = 9;
             effect.x = (double)(int)x;
-            effect.y = (double)((int)y - 0x3c);
+            effect.y = (double)((int)y - 60);
             effect.scale = 2;
             effect.layer = 1;
             m_game->CreateEffect((EffectDesc*)&effect);
             m_hitsLeft = 1;
-            m_playSound = 0x3e;
-            m_gauge = m_gauge - 0x3e8;
+            m_playSound = 62;
+            m_gauge = m_gauge - 1000;
             m_patternVar1++;
         }
         vy = vy + ay;
@@ -2123,7 +2123,7 @@ void CNagamori::UpdatePattern()
         if (timer >= duration) {
             timer = 0;
             frame++;
-            if (frame == 0x11) {
+            if (frame == 17) {
                 ay = 0.035;
             }
             if (frame >= frameCount) {
@@ -2163,11 +2163,11 @@ void CNagamori::UpdatePattern()
                 frame = 0;
             }
         }
-        if (m_inputX == facing && m_patternVar2 >= 0x78) {
+        if (m_inputX == facing && m_patternVar2 >= 120) {
             pattern = kDashStop;
             StartPattern();
         }
-        if (m_inputX != facing && m_patternVar1 >= 0x3c) {
+        if (m_inputX != facing && m_patternVar1 >= 60) {
             pattern = kDashStop;
             StartPattern();
         }
@@ -2194,7 +2194,7 @@ void CNagamori::UpdatePattern()
             y = 0.0;
             m_playSound = 9;
             timer = 0;
-            frame = 0xb;
+            frame = 11;
         }
         timer++;
         if (timer >= duration) {
@@ -2214,7 +2214,7 @@ void CNagamori::UpdatePattern()
             vy = 0.0;
             ay = 0.0;
             if (m_patternVar1 == 0) {
-                m_playSound = 0x11;
+                m_playSound = 17;
             }
         }
         timer++;
@@ -2227,7 +2227,7 @@ void CNagamori::UpdatePattern()
                 frame = frame - 2;
             }
         }
-        if (m_inputX == facing && m_patternVar2 >= 0x78) {
+        if (m_inputX == facing && m_patternVar2 >= 120) {
             pattern = kFall;
             StartPattern();
             vx = 1.3;
@@ -2236,7 +2236,7 @@ void CNagamori::UpdatePattern()
                 vx = -vx;
             }
         }
-        if (m_inputX != facing && m_patternVar1 >= 0x30) {
+        if (m_inputX != facing && m_patternVar1 >= 48) {
             pattern = kFall;
             StartPattern();
             vx = 1.3;
@@ -2253,7 +2253,7 @@ void CNagamori::UpdatePattern()
             ay = 0.0;
             StartAfterimages(3);
             if (m_patternVar1 == 0) {
-                m_playSound = 0x11;
+                m_playSound = 17;
             }
         }
         timer++;
@@ -2266,7 +2266,7 @@ void CNagamori::UpdatePattern()
                 frame = frame - 2;
             }
         }
-        if (m_inputX == -facing && m_patternVar2 >= 0x78) {
+        if (m_inputX == -facing && m_patternVar2 >= 120) {
             pattern = kFall;
             StartPattern();
             vx = -0.9;
@@ -2275,7 +2275,7 @@ void CNagamori::UpdatePattern()
                 vx = -vx;
             }
         }
-        if (m_inputX != -facing && m_patternVar1 >= 0x2a) {
+        if (m_inputX != -facing && m_patternVar1 >= 42) {
             pattern = kFall;
             StartPattern();
             vx = -0.9;
@@ -2294,11 +2294,11 @@ void CNagamori::UpdatePattern()
                 m_proration = m_rfGauge * 5.0 + m_proration;
             }
             m_rfGauge = 0.0;
-            m_freezeTime = 0x5a;
-            FillBackground(0xb0, 3);
+            m_freezeTime = 90;
+            FillBackground(176, 3);
         }
         if (frame == 1 && timer == 0) {
-            m_playSound = 0x12;
+            m_playSound = 18;
             effect.type = 1;
             effect.x = (double)(int)x;
             effect.y = (double)(int)y;
@@ -2398,7 +2398,7 @@ void CNagamori::UpdatePattern()
             vy = 0.0;
             m_recoilGuardWindow = 0;
             m_cornerPushback = 0.0;
-            m_freezeTime = 0x3c;
+            m_freezeTime = 60;
         }
         if (m_freezeTime == 0 && m_patternVar3 == 0) {
             m_patternVar3++;
@@ -2434,9 +2434,9 @@ void CNagamori::UpdatePattern()
                 m_proration = m_rfGauge * 5.0 + m_proration;
             }
             m_rfGauge = 0.0;
-            m_freezeTime = 0x5a;
-            FillBackground(0xb0, 3);
-            m_playSound = 0x12;
+            m_freezeTime = 90;
+            FillBackground(176, 3);
+            m_playSound = 18;
             effect.type = 1;
             effect.x = (double)(int)x;
             effect.y = (double)(int)y;
@@ -2508,11 +2508,11 @@ void CNagamori::UpdatePattern()
         if (y < 0.0) {
             vy = vy + ay;
         }
-        if (y + vy > 0.0 && frame < 0xb) {
+        if (y + vy > 0.0 && frame < 11) {
             StopMoving();
             y = 0.0;
             timer = 0;
-            frame = 0xb;
+            frame = 11;
             m_playSound = 9;
         }
         timer++;
@@ -2524,7 +2524,7 @@ void CNagamori::UpdatePattern()
                 vy = -1.0;
                 ay = 0.028;
             }
-            if (frame == 0xb) {
+            if (frame == 11) {
                 frame = frame - 2;
             }
             if (frame >= frameCount) {
@@ -2558,7 +2558,7 @@ void CNagamori::UpdatePattern()
         }
         if (frame == 1 && timer == 0) {
             m_gauge = m_gauge + 5;
-            m_playSound = 0x15;
+            m_playSound = 21;
             m_hitsLeft = 1;
         }
         timer++;
@@ -2599,8 +2599,8 @@ void CNagamori::UpdatePattern()
             break;
         }
         if (frame == 1 && timer == 0) {
-            m_gauge = m_gauge + 0xf;
-            m_playSound = 0x14;
+            m_gauge = m_gauge + 15;
+            m_playSound = 20;
             m_hitsLeft = 1;
         }
         timer++;
@@ -2629,8 +2629,8 @@ void CNagamori::UpdatePattern()
             m_dashMomentum = 0;
         }
         if (frame == 2 && timer == 0) {
-            m_gauge = m_gauge + 0xf;
-            m_playSound = 0x14;
+            m_gauge = m_gauge + 15;
+            m_playSound = 20;
             m_hitsLeft = 1;
         }
         timer++;
@@ -2671,8 +2671,8 @@ void CNagamori::UpdatePattern()
             break;
         }
         if (frame == 2 && timer == 0) {
-            m_gauge = m_gauge + 0x23;
-            m_playSound = 0x14;
+            m_gauge = m_gauge + 35;
+            m_playSound = 20;
             m_hitsLeft = 1;
         }
         timer++;
@@ -2714,7 +2714,7 @@ void CNagamori::UpdatePattern()
         }
         if (frame == 1 && timer == 0) {
             m_gauge = m_gauge + 5;
-            m_playSound = 0x15;
+            m_playSound = 21;
             m_hitsLeft = 1;
         }
         timer++;
@@ -2758,8 +2758,8 @@ void CNagamori::UpdatePattern()
             break;
         }
         if (frame == 3 && timer == 0) {
-            m_gauge = m_gauge + 0xd;
-            m_playSound = 0x14;
+            m_gauge = m_gauge + 13;
+            m_playSound = 20;
             m_hitsLeft = 1;
         }
         timer++;
@@ -2791,18 +2791,18 @@ void CNagamori::UpdatePattern()
             m_dashMomentum = 0;
         }
         if (frame == 1 && timer == 0) {
-            m_gauge = m_gauge + 0x19;
-            m_playSound = 0x14;
+            m_gauge = m_gauge + 25;
+            m_playSound = 20;
             m_hitsLeft = 6;
         }
         if (frame == 1 && timer == 0) {
             effect.type = 0x194;
             effect.x = (double)(int)x;
-            effect.y = (double)((int)y - 0x1e);
+            effect.y = (double)((int)y - 30);
             effect.scale = 2;
             effect.layer = 1;
             SpawnObject(&effect);
-            TriggerObjectsNear((int)x, -0xa, 0x5a, 0x32);
+            TriggerObjectsNear((int)x, -10, 90, 50);
         }
         timer++;
         if (timer >= duration) {
@@ -2838,7 +2838,7 @@ void CNagamori::UpdatePattern()
         }
         if (frame == 1 && timer == 0) {
             m_gauge = m_gauge + 5;
-            m_playSound = 0x15;
+            m_playSound = 21;
             m_hitsLeft = 1;
         }
         if (y + vy >= 0.0) {
@@ -2880,8 +2880,8 @@ void CNagamori::UpdatePattern()
             break;
         }
         if (frame == 2 && timer == 0) {
-            m_gauge = m_gauge + 0xd;
-            m_playSound = 0x14;
+            m_gauge = m_gauge + 13;
+            m_playSound = 20;
             m_hitsLeft = 1;
         }
         if (y + vy >= 0.0) {
@@ -2919,8 +2919,8 @@ void CNagamori::UpdatePattern()
             break;
         }
         if (frame == 2 && timer == 0) {
-            m_gauge = m_gauge + 0x1e;
-            m_playSound = 0x14;
+            m_gauge = m_gauge + 30;
+            m_playSound = 20;
             m_hitsLeft = 1;
         }
         if (y + vy >= 0.0) {
@@ -2953,8 +2953,8 @@ void CNagamori::UpdatePattern()
             ay = 0.08;
         }
         if (frame == 2 && timer == 0) {
-            m_gauge = m_gauge + 0xf;
-            m_playSound = 0x14;
+            m_gauge = m_gauge + 15;
+            m_playSound = 20;
             m_hitsLeft = 1;
         }
         if (frame == 5 && timer == 0) {
@@ -2991,8 +2991,8 @@ void CNagamori::UpdatePattern()
             m_dashMomentum = 0;
         }
         if (frame == 3 && timer == 0) {
-            m_gauge = m_gauge + 0x14;
-            m_playSound = 0x14;
+            m_gauge = m_gauge + 20;
+            m_playSound = 20;
             m_hitsLeft = 1;
             vx = 1.5;
         }
@@ -3019,8 +3019,8 @@ void CNagamori::UpdatePattern()
     case kAirDiveUnused:
         vy = vy + ay;
         if (frame == 0 && timer == 0) {
-            m_gauge = m_gauge + 0x1e;
-            m_playSound = 0x14;
+            m_gauge = m_gauge + 30;
+            m_playSound = 20;
             m_hitsLeft = 1;
             vx = vx / 2.0;
             ay = 0.07;
@@ -3139,8 +3139,8 @@ void CNagamori::UpdatePattern()
             pattern = kThrowHit;
             (*m_opponent)->pattern = kThrownStandHigh2;
             effect.type = 0;
-            effect.x = (double)((int)x + facing * 0x25);
-            effect.y = (double)((int)y - 0x2a);
+            effect.x = (double)((int)x + facing * 37);
+            effect.y = (double)((int)y - 42);
             effect.scale = 2;
             effect.layer = 1;
             m_game->CreateEffect((EffectDesc*)&effect);
@@ -3162,45 +3162,45 @@ void CNagamori::UpdatePattern()
         break;
     case kThrowHit:
         if (frame == 0 && timer == 1) {
-            (*m_opponent)->m_koDelay = 0x2710;
+            (*m_opponent)->m_koDelay = 10000;
             m_hitsLeft = 1;
             (*m_opponent)->pattern = kThrownAirborne;
-            (*m_opponent)->x = facing * 0x23 + x;
+            (*m_opponent)->x = facing * 35 + x;
             (*m_opponent)->y = -35.0;
             m_attackResult = 0;
         }
-        if (frame == 5 && timer == 0x2d) {
+        if (frame == 5 && timer == 45) {
             frame = 6;
             timer = 0;
             break;
         }
         if (frame == 6 && timer == 0) {
-            (*m_opponent)->m_hitstop = 0x1e;
+            (*m_opponent)->m_hitstop = 30;
             m_patternVar2 = 0;
             effect.type = 0;
             effect.x = (double)(int)x;
-            effect.y = (double)((int)y - 0x18);
+            effect.y = (double)((int)y - 24);
             effect.scale = 2;
             effect.sound = 2;
             effect.layer = 1;
             m_game->CreateEffect((EffectDesc*)&effect);
-            DealDamage(0x4b, 1000.0);
+            DealDamage(75, 1000.0);
         }
-        if (frame == 0xa && timer == 0) {
-            (*m_opponent)->m_hitstop = 0x1e;
+        if (frame == 10 && timer == 0) {
+            (*m_opponent)->m_hitstop = 30;
             effect.type = 0;
             effect.x = (double)(int)x;
-            effect.y = (double)((int)y - 0x18);
+            effect.y = (double)((int)y - 24);
             effect.scale = 2;
             effect.sound = 2;
             effect.layer = 1;
             m_game->CreateEffect((EffectDesc*)&effect);
             (*m_opponent)->m_koDelay = 0;
-            DealDamage(0x320, 750.0);
+            DealDamage(800, 750.0);
             (*m_opponent)->pattern = kKnockdownHittable;
             (*m_opponent)->StartPattern();
         }
-        if (frame > 0xe) {
+        if (frame > 14) {
             vy = vy + ay;
             if (y + vy > 0.0) {
                 y = 0.0;
@@ -3227,13 +3227,13 @@ void CNagamori::UpdatePattern()
                 (*m_opponent)->x = x;
             }
             if (frame == 2) {
-                x = (*m_opponent)->x + (-0x11 - (*m_opponent)->m_pointX[1]) * facing;
+                x = (*m_opponent)->x + (-17 - (*m_opponent)->m_pointX[1]) * facing;
             }
             if (frame == 7 && m_patternVar1 < 3) {
                 frame = frame - 2;
                 m_patternVar1++;
             }
-            if (frame == 0xe) {
+            if (frame == 14) {
                 vx = -0.7;
                 vy = -1.7;
                 ay = 0.037;
@@ -3256,7 +3256,7 @@ void CNagamori::UpdatePattern()
         }
         if (frame == 1 && timer == 0) {
             m_gauge = m_gauge + 5;
-            m_playSound = 0x15;
+            m_playSound = 21;
             m_hitsLeft = 1;
         }
         timer++;
@@ -3284,8 +3284,8 @@ void CNagamori::UpdatePattern()
             vy = 0.0;
         }
         if (frame == 2 && timer == 0) {
-            m_gauge = m_gauge + 0xa;
-            m_playSound = 0x14;
+            m_gauge = m_gauge + 10;
+            m_playSound = 20;
             m_hitsLeft = 1;
         }
         timer++;
@@ -3325,8 +3325,8 @@ void CNagamori::UpdatePattern()
             vy = 0.0;
         }
         if (frame == 2 && timer == 0) {
-            m_gauge = m_gauge + 0xa;
-            m_playSound = 0x14;
+            m_gauge = m_gauge + 10;
+            m_playSound = 20;
             m_hitsLeft = 1;
         }
         timer++;
@@ -3355,7 +3355,7 @@ void CNagamori::UpdatePattern()
         }
         if (frame == 1 && timer == 0) {
             m_gauge = m_gauge + 5;
-            m_playSound = 0x15;
+            m_playSound = 21;
             m_hitsLeft = 1;
         }
         timer++;
@@ -3384,8 +3384,8 @@ void CNagamori::UpdatePattern()
             ay = 0.034;
         }
         if (frame == 6 && timer == 0) {
-            m_gauge = m_gauge + 0x19;
-            m_playSound = 0x14;
+            m_gauge = m_gauge + 25;
+            m_playSound = 20;
         }
         vy = vy + ay;
         if (y + vy > 0.0) {
@@ -3471,12 +3471,12 @@ void CNagamori::UpdatePattern()
             pattern = kAirThrowHit;
             (*m_opponent)->pattern = kThrownStandHigh;
             effect.type = 0;
-            effect.x = (double)((int)x + facing * 0x1d);
-            effect.y = (double)((int)y - 0x31);
+            effect.x = (double)((int)x + facing * 29);
+            effect.y = (double)((int)y - 49);
             effect.scale = 2;
             effect.layer = 1;
             m_game->CreateEffect((EffectDesc*)&effect);
-            (*m_opponent)->x = facing * 0x1d + x;
+            (*m_opponent)->x = facing * 29 + x;
             (*m_opponent)->y = y - 49.0;
         }
         timer++;
@@ -3497,10 +3497,10 @@ void CNagamori::UpdatePattern()
         break;
     case kAirThrowHit:
         if (frame < 6) {
-            FocusCameraX(0x32, 3);
+            FocusCameraX(50, 3);
         }
         if (frame < 6) {
-            FocusCameraY(0x32, 3);
+            FocusCameraY(50, 3);
         }
         if (frame == 0 && timer == 1) {
             (*m_opponent)->facing = -facing;
@@ -3515,24 +3515,24 @@ void CNagamori::UpdatePattern()
         }
         if (frame == 2) {
             (*m_opponent)->y = y - 69.0;
-            (*m_opponent)->x = facing * 0x21 + x;
+            (*m_opponent)->x = facing * 33 + x;
             (*m_opponent)->pattern = kThrownStandLow;
         }
         if (frame == 3) {
             (*m_opponent)->y = y - 71.0;
-            (*m_opponent)->x = facing * 0xb + x;
+            (*m_opponent)->x = facing * 11 + x;
             (*m_opponent)->pattern = kThrownStandLow;
             (*m_opponent)->facing = -facing;
         }
         if (frame == 4) {
             (*m_opponent)->y = y - 49.0;
-            (*m_opponent)->x = facing * 0x1a + x;
+            (*m_opponent)->x = facing * 26 + x;
             (*m_opponent)->pattern = kThrownStandLow;
             (*m_opponent)->facing = -facing;
         }
         if (frame == 5) {
             (*m_opponent)->y = y - 46.0;
-            (*m_opponent)->x = facing * 0x19 + x;
+            (*m_opponent)->x = facing * 25 + x;
             (*m_opponent)->pattern = kThrownAirborneInverted;
             (*m_opponent)->facing = facing;
         }
@@ -3544,9 +3544,9 @@ void CNagamori::UpdatePattern()
         }
         if (frame == 7 && timer == 0) {
             (*m_opponent)->y = y - 40.0;
-            (*m_opponent)->x = x - facing * 0x14;
+            (*m_opponent)->x = x - facing * 20;
             (*m_opponent)->pattern = kHitAirLaunch;
-            DealDamage(0x4b0, 500.0);
+            DealDamage(1200, 500.0);
             (*m_opponent)->StartPattern();
             (*m_opponent)->m_hitVx = -2.0;
             (*m_opponent)->m_hitVy = 0.0;
@@ -3577,11 +3577,11 @@ void CNagamori::UpdatePattern()
             }
         }
         if (frame == 2 && timer == 0) {
-            m_gauge = m_gauge + 0x1e;
+            m_gauge = m_gauge + 30;
             vx = 1.1;
             vy = -2.2;
             ay = 0.05;
-            TriggerObjectsNear((int)x + facing * 0x33, (int)y - 0x3f, 0x24, 0x50);
+            TriggerObjectsNear((int)x + facing * 51, (int)y - 63, 36, 80);
         }
         if (frame == 6 && vy + y > 0.0) {
             timer = 0;
@@ -3616,23 +3616,23 @@ void CNagamori::UpdatePattern()
             }
         }
         if (frame == 2 && timer == 0) {
-            m_gauge = m_gauge + 0xf;
+            m_gauge = m_gauge + 15;
             vx = 1.1;
             vy = -2.2;
             ay = 0.05;
-            TriggerObjectsNear((int)x + facing * 0x33, (int)y - 0x3f, 0x24, 0x50);
+            TriggerObjectsNear((int)x + facing * 51, (int)y - 63, 36, 80);
         }
         if (frame == 5 && timer == 0) {
-            m_gauge = m_gauge + 0xf;
+            m_gauge = m_gauge + 15;
             vx = 1.1;
             vy = -2.2;
             ay = 0.05;
-            TriggerObjectsNear((int)x + facing * 0x33, (int)y - 0x3f, 0x24, 0x50);
+            TriggerObjectsNear((int)x + facing * 51, (int)y - 63, 36, 80);
         }
-        if (frame == 0xa && vy + y > 0.0) {
+        if (frame == 10 && vy + y > 0.0) {
             timer = 0;
             y = 0.0;
-            frame = 0xb;
+            frame = 11;
             StopMoving();
             break;
         }
@@ -3661,9 +3661,9 @@ void CNagamori::UpdatePattern()
                 m_rfGauge -= 250.0;
             }
             effect.type = 0x21;
-            effect.sound = 0xb;
-            effect.x = (double)((int)x + facing * 0x14);
-            effect.y = (double)((int)y - 0x32);
+            effect.sound = 11;
+            effect.x = (double)((int)x + facing * 20);
+            effect.y = (double)((int)y - 50);
             effect.scale = 2;
             effect.layer = 1;
             m_game->CreateEffect((EffectDesc*)&effect);
@@ -3674,29 +3674,29 @@ void CNagamori::UpdatePattern()
             }
         }
         if (frame == 2 && timer == 0) {
-            m_gauge = m_gauge + 0xf;
+            m_gauge = m_gauge + 15;
             vx = 1.1;
             vy = -2.2;
             ay = 0.05;
-            TriggerObjectsNear((int)x + facing * 0x33, (int)y - 0x3f, 0x24, 0x50);
+            TriggerObjectsNear((int)x + facing * 51, (int)y - 63, 36, 80);
         }
         if (frame == 5 && timer == 0) {
-            m_gauge = m_gauge + 0xf;
+            m_gauge = m_gauge + 15;
             vx = 1.1;
             vy = -2.2;
             ay = 0.05;
-            TriggerObjectsNear((int)x + facing * 0x33, (int)y - 0x3f, 0x24, 0x50);
+            TriggerObjectsNear((int)x + facing * 51, (int)y - 63, 36, 80);
         }
-        if (frame == 0xb && timer == 0) {
-            m_gauge = m_gauge + 0xf;
+        if (frame == 11 && timer == 0) {
+            m_gauge = m_gauge + 15;
             vx = 1.1;
             vy = -2.8;
             ay = 0.05;
         }
-        if ((frame == 0x15 || frame == 0x14) && vy + y > 0.0) {
+        if ((frame == 21 || frame == 20) && vy + y > 0.0) {
             timer = 0;
             y = 0.0;
-            frame = 0x16;
+            frame = 22;
             StopMoving();
             break;
         }
@@ -3707,10 +3707,10 @@ void CNagamori::UpdatePattern()
         if (timer >= duration) {
             timer = 0;
             frame++;
-            if (frame < 0xe) {
+            if (frame < 14) {
                 m_attackResult = 0;
             }
-            if (frame == 0x16 && y < 0.0) {
+            if (frame == 22 && y < 0.0) {
                 frame = frame - 2;
             }
             if (frame >= frameCount) {
@@ -3725,8 +3725,8 @@ void CNagamori::UpdatePattern()
             vy = -2.1;
             ay = 0.07;
             effect.type = 0x195;
-            effect.x = (double)((int)x + facing * 0xa);
-            effect.y = (double)((int)y - 0x1e);
+            effect.x = (double)((int)x + facing * 10);
+            effect.y = (double)((int)y - 30);
             effect.facing = facing;
             effect.layer = 1;
             effect.scale = 2;
@@ -3759,8 +3759,8 @@ void CNagamori::UpdatePattern()
             ay = 0.05;
             m_playVoice = 1;
             effect.type = 0x190;
-            effect.x = (double)((int)x + facing * 0x1e);
-            effect.y = (double)((int)y - 0x1e);
+            effect.x = (double)((int)x + facing * 30);
+            effect.y = (double)((int)y - 30);
             effect.facing = facing;
             effect.layer = 1;
             effect.scale = 2;
@@ -3792,11 +3792,11 @@ void CNagamori::UpdatePattern()
             StopMoving();
         }
         if (frame == 3 && timer == 0) {
-            m_gauge = m_gauge - 0x32;
+            m_gauge = m_gauge - 50;
             m_bombsPlaced++;
             effect.type = 0x190;
-            effect.x = (double)((int)x + facing * 0x1e);
-            effect.y = (double)((int)y - 0x1e);
+            effect.x = (double)((int)x + facing * 30);
+            effect.y = (double)((int)y - 30);
             effect.facing = facing;
             effect.layer = 1;
             effect.scale = 2;
@@ -3821,10 +3821,10 @@ void CNagamori::UpdatePattern()
             StopMoving();
         }
         if (frame == 3 && timer == 0) {
-            m_gauge = m_gauge - 0x32;
+            m_gauge = m_gauge - 50;
             effect.type = 0x196;
-            effect.x = (double)((int)x + facing * 0x1e);
-            effect.y = (double)((int)y - 0x1e);
+            effect.x = (double)((int)x + facing * 30);
+            effect.y = (double)((int)y - 30);
             effect.facing = facing;
             effect.layer = 1;
             effect.scale = 2;
@@ -3849,10 +3849,10 @@ void CNagamori::UpdatePattern()
             StopMoving();
         }
         if (frame == 3 && timer == 0) {
-            m_gauge = m_gauge - 0x32;
+            m_gauge = m_gauge - 50;
             effect.type = 0x197;
-            effect.x = (double)((int)x + facing * 0x1e);
-            effect.y = (double)((int)y - 0x1e);
+            effect.x = (double)((int)x + facing * 30);
+            effect.y = (double)((int)y - 30);
             effect.facing = facing;
             effect.layer = 1;
             effect.scale = 2;
@@ -3873,11 +3873,11 @@ void CNagamori::UpdatePattern()
         break;
     case kAir236A:
         if (frame == 0 && timer == 0) {
-            m_gauge = m_gauge - 0x32;
+            m_gauge = m_gauge - 50;
             m_playVoice = 1;
             effect.type = 0x190;
-            effect.x = (double)((int)x + facing * 0x1e);
-            effect.y = (double)((int)y - 0x1e);
+            effect.x = (double)((int)x + facing * 30);
+            effect.y = (double)((int)y - 30);
             effect.facing = facing;
             effect.layer = 1;
             effect.scale = 2;
@@ -3914,11 +3914,11 @@ void CNagamori::UpdatePattern()
         break;
     case kAir236B:
         if (frame == 0 && timer == 0) {
-            m_gauge = m_gauge - 0x32;
+            m_gauge = m_gauge - 50;
             m_playVoice = 1;
             effect.type = 0x196;
-            effect.x = (double)((int)x + facing * 0x1e);
-            effect.y = (double)((int)y - 0x1e);
+            effect.x = (double)((int)x + facing * 30);
+            effect.y = (double)((int)y - 30);
             effect.facing = facing;
             effect.layer = 1;
             effect.scale = 2;
@@ -3955,11 +3955,11 @@ void CNagamori::UpdatePattern()
         break;
     case kAir236C:
         if (frame == 0 && timer == 0) {
-            m_gauge = m_gauge - 0x32;
+            m_gauge = m_gauge - 50;
             m_playVoice = 1;
             effect.type = 0x198;
-            effect.x = (double)((int)x + facing * 0x1e);
-            effect.y = (double)((int)y - 0x1e);
+            effect.x = (double)((int)x + facing * 30);
+            effect.y = (double)((int)y - 30);
             effect.facing = facing;
             effect.layer = 1;
             effect.scale = 2;
@@ -4019,8 +4019,8 @@ void CNagamori::UpdatePattern()
         }
         if (frame == 3 && timer == 0) {
             effect.type = 0x195;
-            effect.x = (double)((int)x + facing * 0x1e);
-            effect.y = (double)((int)y - 0x1e);
+            effect.x = (double)((int)x + facing * 30);
+            effect.y = (double)((int)y - 30);
             effect.facing = facing;
             effect.layer = 1;
             effect.scale = 2;
@@ -4051,8 +4051,8 @@ void CNagamori::UpdatePattern()
             ay = 0.04;
             m_playVoice = 1;
             effect.type = 0x195;
-            effect.x = (double)((int)x + facing * 0x1e);
-            effect.y = (double)((int)y - 0x1e);
+            effect.x = (double)((int)x + facing * 30);
+            effect.y = (double)((int)y - 30);
             effect.facing = facing;
             effect.layer = 1;
             effect.scale = 2;
@@ -4085,12 +4085,12 @@ void CNagamori::UpdatePattern()
             m_shotOrder = 0;
         }
         if (frame == 5 && timer == 0 && m_patternVar1 == 0) {
-            m_playSound = 0x20;
+            m_playSound = 32;
             m_shotState = 1;
             effect.keep = 1;
             effect.type = 0x19b;
-            effect.x = (double)((int)x + facing * 0x21);
-            effect.y = (double)((int)y - 0x38);
+            effect.x = (double)((int)x + facing * 33);
+            effect.y = (double)((int)y - 56);
             effect.facing = facing;
             effect.layer = 1;
             SpawnObject(&effect);
@@ -4113,12 +4113,12 @@ void CNagamori::UpdatePattern()
             m_shotOrder = 0;
         }
         if (frame == 4 && timer == 0 && m_patternVar1 == 0) {
-            m_playSound = 0x20;
+            m_playSound = 32;
             m_shotState = 1;
             effect.keep = 1;
             effect.type = 0x19c;
-            effect.x = (double)((int)x + facing * 0x21);
-            effect.y = (double)((int)y - 0x38);
+            effect.x = (double)((int)x + facing * 33);
+            effect.y = (double)((int)y - 56);
             effect.facing = facing;
             effect.layer = 1;
             SpawnObject(&effect);
@@ -4145,20 +4145,20 @@ void CNagamori::UpdatePattern()
                 m_rfGauge -= 250.0;
             }
             effect.type = 0x21;
-            effect.sound = 0xb;
+            effect.sound = 11;
             effect.x = (double)(int)x;
-            effect.y = (double)((int)y - 0x32);
+            effect.y = (double)((int)y - 50);
             effect.scale = 2;
             effect.layer = 1;
             m_game->CreateEffect((EffectDesc*)&effect);
         }
         if (frame == 5 && timer == 0 && m_patternVar1 == 0) {
-            m_playSound = 0x20;
+            m_playSound = 32;
             m_shotState = 1;
             effect.keep = 1;
             effect.type = 0x19d;
-            effect.x = (double)((int)x + facing * 0x21);
-            effect.y = (double)((int)y - 0x38);
+            effect.x = (double)((int)x + facing * 33);
+            effect.y = (double)((int)y - 56);
             effect.facing = facing;
             effect.layer = 1;
             SpawnObject(&effect);
@@ -4192,15 +4192,15 @@ void CNagamori::UpdatePattern()
         if (frame > 3 && frame < 6) {
             vy = vy + ay;
             if (y < 0.0) {
-                TriggerObjectsNear((int)x - facing * 0x22, (int)y - 0x42, 0x27, 0x2a);
+                TriggerObjectsNear((int)x - facing * 34, (int)y - 66, 39, 42);
             }
             if (vy + y > 0.0) {
                 y = 0.0;
                 frame = 6;
                 timer = 0;
                 StopMoving();
-                m_playSound = 0x23;
-                TriggerObjectsNear((int)x + facing * 0x27, (int)y - 0x23, 0x46, 0x4b);
+                m_playSound = 35;
+                TriggerObjectsNear((int)x + facing * 39, (int)y - 35, 70, 75);
             }
         }
         timer++;
@@ -4243,18 +4243,18 @@ void CNagamori::UpdatePattern()
         if (frame > 3 && frame < 6) {
             vy = vy + ay;
             if (y < 0.0) {
-                TriggerObjectsNear((int)x - facing * 0x22, (int)y - 0x42, 0x27, 0x2a);
+                TriggerObjectsNear((int)x - facing * 34, (int)y - 66, 39, 42);
             }
             if (vy + y > 0.0) {
                 y = 0.0;
                 frame = 6;
                 timer = 0;
                 StopMoving();
-                m_playSound = 0x23;
+                m_playSound = 35;
                 m_bombsPlaced++;
                 effect.type = 0x190;
-                effect.x = (double)((int)x + facing * 0x32);
-                effect.y = (double)((int)y - 0x1e);
+                effect.x = (double)((int)x + facing * 50);
+                effect.y = (double)((int)y - 30);
                 effect.facing = facing;
                 effect.layer = 1;
                 effect.scale = 2;
@@ -4298,9 +4298,9 @@ void CNagamori::UpdatePattern()
                 m_rfGauge -= 250.0;
             }
             effect.type = 0x21;
-            effect.sound = 0xb;
+            effect.sound = 11;
             effect.x = (double)(int)x;
-            effect.y = (double)((int)y - 0x32);
+            effect.y = (double)((int)y - 50);
             effect.scale = 2;
             effect.layer = 1;
             m_game->CreateEffect((EffectDesc*)&effect);
@@ -4318,19 +4318,19 @@ void CNagamori::UpdatePattern()
         if (frame > 3 && frame < 6) {
             vy = vy + ay;
             if (y < 0.0) {
-                TriggerObjectsNear((int)x - facing * 0x22, (int)y - 0x42, 0x27, 0x2a);
+                TriggerObjectsNear((int)x - facing * 34, (int)y - 66, 39, 42);
             }
             if (vy + y > 0.0) {
                 y = 0.0;
                 frame = 6;
                 timer = 0;
                 StopMoving();
-                m_playSound = 0x23;
+                m_playSound = 35;
                 m_hitsLeft = 1;
                 m_bombsPlaced++;
                 effect.type = 0x190;
-                effect.x = (double)((int)x + facing * 0x32);
-                effect.y = (double)((int)y - 0x1e);
+                effect.x = (double)((int)x + facing * 50);
+                effect.y = (double)((int)y - 30);
                 effect.facing = facing;
                 effect.layer = 1;
                 effect.scale = 2;
@@ -4362,14 +4362,14 @@ void CNagamori::UpdatePattern()
         break;
     case kAir214A:
         if (frame == 0 && timer == 0) {
-            m_gauge = m_gauge - 0x32;
+            m_gauge = m_gauge - 50;
             vx = -0.9;
             vy = -1.5;
             ay = 0.05;
             m_playVoice = 1;
             effect.type = 0x190;
-            effect.x = (double)((int)x + facing * 0x1e);
-            effect.y = (double)((int)y - 0x1e);
+            effect.x = (double)((int)x + facing * 30);
+            effect.y = (double)((int)y - 30);
             effect.facing = facing;
             effect.layer = 1;
             effect.scale = 2;
@@ -4397,14 +4397,14 @@ void CNagamori::UpdatePattern()
         break;
     case kAir214B:
         if (frame == 0 && timer == 0) {
-            m_gauge = m_gauge - 0x32;
+            m_gauge = m_gauge - 50;
             vx = -0.9;
             vy = -1.5;
             ay = 0.05;
             m_playVoice = 1;
             effect.type = 0x196;
-            effect.x = (double)((int)x + facing * 0x1e);
-            effect.y = (double)((int)y - 0x1e);
+            effect.x = (double)((int)x + facing * 30);
+            effect.y = (double)((int)y - 30);
             effect.facing = facing;
             effect.layer = 1;
             effect.scale = 2;
@@ -4432,14 +4432,14 @@ void CNagamori::UpdatePattern()
         break;
     case kAir214C:
         if (frame == 0 && timer == 0) {
-            m_gauge = m_gauge - 0x32;
+            m_gauge = m_gauge - 50;
             vx = -0.9;
             vy = -1.5;
             ay = 0.05;
             m_playVoice = 1;
             effect.type = 0x198;
-            effect.x = (double)((int)x + facing * 0x1e);
-            effect.y = (double)((int)y - 0x1e);
+            effect.x = (double)((int)x + facing * 30);
+            effect.y = (double)((int)y - 30);
             effect.facing = facing;
             effect.layer = 1;
             effect.scale = 2;
@@ -4529,13 +4529,13 @@ void CNagamori::UpdatePattern()
             m_hitsLeft = 1;
         }
         if (frame == 2 && timer == 0) {
-            m_freezeTime = 0x78;
-            m_gauge = m_gauge - 0x3e8;
-            FillBackground(0xb0, 3);
+            m_freezeTime = 120;
+            m_gauge = m_gauge - 1000;
+            FillBackground(176, 3);
             effect.type = 0x44;
-            effect.sound = 0x13;
+            effect.sound = 19;
             effect.x = (double)(int)x;
-            effect.y = (double)((int)y - 0x28);
+            effect.y = (double)((int)y - 40);
             effect.scale = 2;
             effect.keep = 1;
             effect.layer = 1;
@@ -4548,8 +4548,8 @@ void CNagamori::UpdatePattern()
             pattern = k236236Lv1Hit;
             (*m_opponent)->pattern = kThrownStandHigh2;
             effect.type = 0;
-            effect.x = (double)((int)x + facing * 0x25);
-            effect.y = (double)((int)y - 0x2a);
+            effect.x = (double)((int)x + facing * 37);
+            effect.y = (double)((int)y - 42);
             effect.scale = 2;
             effect.layer = 1;
             m_game->CreateEffect((EffectDesc*)&effect);
@@ -4559,10 +4559,10 @@ void CNagamori::UpdatePattern()
         }
         if (frame > 2 && m_attackResult == 2) {
             timer = 0;
-            frame = 0xb;
+            frame = 11;
             m_attackResult = 0;
         }
-        if (frame == 0xc && timer == 0) {
+        if (frame == 12 && timer == 0) {
             ShakeScreen(3, 0);
             effect.type = 3;
             effect.x = (double)(int)x;
@@ -4572,7 +4572,7 @@ void CNagamori::UpdatePattern()
             m_game->CreateEffect((EffectDesc*)&effect);
             m_playSound = 7;
         }
-        if (frame > 0xa) {
+        if (frame > 10) {
             vx -= 0.06;
             if (vx < 0.0) {
                 vx = 0.0;
@@ -4600,13 +4600,13 @@ void CNagamori::UpdatePattern()
             m_hitsLeft = 1;
         }
         if (frame == 2 && timer == 0) {
-            m_freezeTime = 0x78;
-            m_gauge = m_gauge - 0x7d0;
-            FillBackground(0xb0, 3);
+            m_freezeTime = 120;
+            m_gauge = m_gauge - 2000;
+            FillBackground(176, 3);
             effect.type = 0x45;
             effect.sound = 5;
             effect.x = (double)(int)x;
-            effect.y = (double)((int)y - 0x28);
+            effect.y = (double)((int)y - 40);
             effect.scale = 2;
             effect.keep = 1;
             effect.layer = 1;
@@ -4619,8 +4619,8 @@ void CNagamori::UpdatePattern()
             pattern = k236236Lv2Hit;
             (*m_opponent)->pattern = kThrownStandHigh2;
             effect.type = 0;
-            effect.x = (double)((int)x + facing * 0x25);
-            effect.y = (double)((int)y - 0x2a);
+            effect.x = (double)((int)x + facing * 37);
+            effect.y = (double)((int)y - 42);
             effect.scale = 2;
             effect.layer = 1;
             m_game->CreateEffect((EffectDesc*)&effect);
@@ -4630,10 +4630,10 @@ void CNagamori::UpdatePattern()
         }
         if (frame > 2 && m_attackResult == 2) {
             timer = 0;
-            frame = 0x13;
+            frame = 19;
             m_attackResult = 0;
         }
-        if (frame == 0x14 && timer == 0) {
+        if (frame == 20 && timer == 0) {
             ShakeScreen(3, 0);
             effect.type = 3;
             effect.x = (double)(int)x;
@@ -4643,7 +4643,7 @@ void CNagamori::UpdatePattern()
             m_game->CreateEffect((EffectDesc*)&effect);
             m_playSound = 7;
         }
-        if (frame > 0x12) {
+        if (frame > 18) {
             vx -= 0.06;
             if (vx < 0.0) {
                 vx = 0.0;
@@ -4671,21 +4671,21 @@ void CNagamori::UpdatePattern()
             m_hitsLeft = 1;
         }
         if (frame == 2 && timer == 0) {
-            m_freezeTime = 0x78;
-            m_gauge = m_gauge - 0xbb8;
-            FillBackground(0xb0, 3);
+            m_freezeTime = 120;
+            m_gauge = m_gauge - 3000;
+            FillBackground(176, 3);
             effect.type = 0x46;
-            effect.sound = 0x40;
+            effect.sound = 64;
             effect.x = (double)(int)x;
-            effect.y = (double)((int)y - 0x28);
+            effect.y = (double)((int)y - 40);
             effect.scale = 2;
             effect.keep = 1;
             effect.layer = 1;
             m_game->CreateEffect((EffectDesc*)&effect);
-            m_playSound = 0x25;
+            m_playSound = 37;
         }
         if (frame > 2) {
-            m_game->FlashNegative(0xf);
+            m_game->FlashNegative(15);
         }
         if (frame > 2 && m_attackResult == 3) {
             (*m_opponent)->StopMoving();
@@ -4694,8 +4694,8 @@ void CNagamori::UpdatePattern()
             pattern = k236236Lv3Hit;
             (*m_opponent)->pattern = kThrownStandHigh2;
             effect.type = 0;
-            effect.x = (double)((int)x + facing * 0x25);
-            effect.y = (double)((int)y - 0x2a);
+            effect.x = (double)((int)x + facing * 37);
+            effect.y = (double)((int)y - 42);
             effect.scale = 2;
             effect.layer = 1;
             m_game->CreateEffect((EffectDesc*)&effect);
@@ -4705,10 +4705,10 @@ void CNagamori::UpdatePattern()
         }
         if (frame > 2 && m_attackResult == 2) {
             timer = 0;
-            frame = 0x13;
+            frame = 19;
             m_attackResult = 0;
         }
-        if (frame == 0x14 && timer == 0) {
+        if (frame == 20 && timer == 0) {
             ShakeScreen(3, 0);
             effect.type = 3;
             effect.x = (double)(int)x;
@@ -4718,7 +4718,7 @@ void CNagamori::UpdatePattern()
             m_game->CreateEffect((EffectDesc*)&effect);
             m_playSound = 7;
         }
-        if (frame > 0x12) {
+        if (frame > 18) {
             vx -= 0.06;
             if (vx < 0.0) {
                 vx = 0.0;
@@ -4741,10 +4741,10 @@ void CNagamori::UpdatePattern()
         break;
     case k236236Lv1Hit:
         if (frame == 0) {
-            (*m_opponent)->m_koDelay = 0x7530;
+            (*m_opponent)->m_koDelay = 30000;
             m_hitsLeft = 1;
             (*m_opponent)->pattern = kThrownAirborne;
-            (*m_opponent)->x = facing * 0x23 + x;
+            (*m_opponent)->x = facing * 35 + x;
             (*m_opponent)->y = -35.0;
             m_attackResult = 0;
             m_patternVar1 = 8;
@@ -4770,7 +4770,7 @@ void CNagamori::UpdatePattern()
         }
         unkf2 = 3;
         if (frame == 6 && timer == 0) {
-            (*m_opponent)->m_hitstop = 0x1e;
+            (*m_opponent)->m_hitstop = 30;
             effect.type = 0;
             effect.sound = 2;
             effect.x = (double)(int)x;
@@ -4778,7 +4778,7 @@ void CNagamori::UpdatePattern()
             effect.scale = 2;
             effect.layer = 1;
             m_game->CreateEffect((EffectDesc*)&effect);
-            DealDamage(0x64, 980.0);
+            DealDamage(100, 980.0);
         }
         if (frame == 9 && timer == 0) {
             effect.type = 0;
@@ -4787,21 +4787,21 @@ void CNagamori::UpdatePattern()
             effect.y = (double)(int)y;
             effect.scale = 2;
             effect.layer = 1;
-            effect.sound = 0x16;
-            ShakeScreen(0xa, 0xa);
+            effect.sound = 22;
+            ShakeScreen(10, 10);
             m_game->CreateEffect((EffectDesc*)&effect);
             (*m_opponent)->m_koDelay = 0;
-            DealDamage(0x7d0, 800.0);
+            DealDamage(2000, 800.0);
             (*m_opponent)->pattern = kKnockdown;
             (*m_opponent)->StartPattern();
-            (*m_opponent)->m_hitstop = 0xb4;
+            (*m_opponent)->m_hitstop = 180;
         }
-        if (frame > 0xb) {
+        if (frame > 11) {
             (*m_opponent)->pattern = kLyingDown;
             (*m_opponent)->frame = 0;
             (*m_opponent)->timer = 0;
         }
-        if (frame > 0xe) {
+        if (frame > 14) {
             vy = vy + ay;
             if (y + vy > 0.0) {
                 y = 0.0;
@@ -4827,7 +4827,7 @@ void CNagamori::UpdatePattern()
                 (*m_opponent)->x = x;
             }
             if (frame == 2) {
-                x = (*m_opponent)->x + (-0x11 - (*m_opponent)->m_pointX[1]) * facing;
+                x = (*m_opponent)->x + (-17 - (*m_opponent)->m_pointX[1]) * facing;
             }
             if (frame == 6 && m_patternVar1 == 0) {
                 frame = 7;
@@ -4837,10 +4837,10 @@ void CNagamori::UpdatePattern()
                     frame = frame - 2;
                     m_patternVar1--;
                 } else {
-                    m_patternVar1 = 0x14;
+                    m_patternVar1 = 20;
                 }
             }
-            if (frame == 0xe) {
+            if (frame == 14) {
                 vx = -1.0;
                 vy = -1.7;
                 ay = 0.037;
@@ -4853,10 +4853,10 @@ void CNagamori::UpdatePattern()
         break;
     case k236236Lv2Hit:
         if (frame == 0) {
-            (*m_opponent)->m_koDelay = 0x7530;
+            (*m_opponent)->m_koDelay = 30000;
             m_hitsLeft = 1;
             (*m_opponent)->pattern = kThrownAirborne;
-            (*m_opponent)->x = facing * 0x23 + x;
+            (*m_opponent)->x = facing * 35 + x;
             (*m_opponent)->y = -35.0;
             m_attackResult = 0;
             m_patternVar1 = 8;
@@ -4882,7 +4882,7 @@ void CNagamori::UpdatePattern()
         }
         unkf2 = 3;
         if (frame == 6 && timer == 0) {
-            (*m_opponent)->m_hitstop = 0x1e;
+            (*m_opponent)->m_hitstop = 30;
             effect.type = 0;
             effect.sound = 2;
             effect.x = (double)(int)x;
@@ -4890,10 +4890,10 @@ void CNagamori::UpdatePattern()
             effect.scale = 2;
             effect.layer = 1;
             m_game->CreateEffect((EffectDesc*)&effect);
-            DealDamage(0x64, 990.0);
+            DealDamage(100, 990.0);
         }
-        if (frame == 0xa && timer == 0) {
-            (*m_opponent)->m_hitstop = 0x1e;
+        if (frame == 10 && timer == 0) {
+            (*m_opponent)->m_hitstop = 30;
             effect.type = 0;
             effect.sound = 2;
             effect.x = (double)(int)x;
@@ -4901,30 +4901,30 @@ void CNagamori::UpdatePattern()
             effect.scale = 2;
             effect.layer = 1;
             m_game->CreateEffect((EffectDesc*)&effect);
-            DealDamage(0x64, 990.0);
+            DealDamage(100, 990.0);
         }
-        if (frame == 0xf && timer == 0) {
+        if (frame == 15 && timer == 0) {
             effect.type = 0;
             effect.sound = 2;
             effect.x = (double)(int)x;
             effect.y = (double)(int)y;
             effect.scale = 2;
             effect.layer = 1;
-            effect.sound = 0x16;
-            ShakeScreen(0xa, 0xa);
+            effect.sound = 22;
+            ShakeScreen(10, 10);
             m_game->CreateEffect((EffectDesc*)&effect);
-            DealDamage(0x7d0, 800.0);
+            DealDamage(2000, 800.0);
             (*m_opponent)->m_koDelay = 0;
             (*m_opponent)->pattern = kKnockdown;
             (*m_opponent)->StartPattern();
-            (*m_opponent)->m_hitstop = 0xb4;
+            (*m_opponent)->m_hitstop = 180;
         }
-        if (frame > 0x13) {
+        if (frame > 19) {
             (*m_opponent)->pattern = kLyingDown;
             (*m_opponent)->frame = 0;
             (*m_opponent)->timer = 0;
         }
-        if (frame > 0x13) {
+        if (frame > 19) {
             vy = vy + ay;
             if (y + vy > 0.0) {
                 y = 0.0;
@@ -4950,7 +4950,7 @@ void CNagamori::UpdatePattern()
                 (*m_opponent)->x = x;
             }
             if (frame == 2) {
-                x = (*m_opponent)->x + (-0x11 - (*m_opponent)->m_pointX[1]) * facing;
+                x = (*m_opponent)->x + (-17 - (*m_opponent)->m_pointX[1]) * facing;
             }
             if (frame == 6 && m_patternVar1 == 0) {
                 frame = 7;
@@ -4960,10 +4960,10 @@ void CNagamori::UpdatePattern()
                     frame = frame - 2;
                     m_patternVar1--;
                 } else {
-                    m_patternVar1 = 0x14;
+                    m_patternVar1 = 20;
                 }
             }
-            if (frame == 0xc) {
+            if (frame == 12) {
                 if (m_patternVar1 > 0) {
                     frame = frame - 5;
                     m_patternVar1--;
@@ -4971,7 +4971,7 @@ void CNagamori::UpdatePattern()
                     m_patternVar1 = 3;
                 }
             }
-            if (frame == 0x13) {
+            if (frame == 19) {
                 vx = -1.0;
                 vy = -1.7;
                 ay = 0.037;
@@ -4983,12 +4983,12 @@ void CNagamori::UpdatePattern()
         }
         break;
     case k236236Lv3Hit:
-        m_game->FlashNegative(0xf);
+        m_game->FlashNegative(15);
         if (frame == 0) {
-            (*m_opponent)->m_koDelay = 0x7530;
+            (*m_opponent)->m_koDelay = 30000;
             m_hitsLeft = 1;
             (*m_opponent)->pattern = kThrownAirborne;
-            (*m_opponent)->x = facing * 0x23 + x;
+            (*m_opponent)->x = facing * 35 + x;
             (*m_opponent)->y = -35.0;
             m_attackResult = 0;
             m_patternVar1 = 8;
@@ -5014,7 +5014,7 @@ void CNagamori::UpdatePattern()
         }
         unkf2 = 3;
         if (frame == 6 && timer == 0) {
-            (*m_opponent)->m_hitstop = 0x1e;
+            (*m_opponent)->m_hitstop = 30;
             effect.type = 0;
             effect.sound = 2;
             effect.x = (double)(int)x;
@@ -5022,10 +5022,10 @@ void CNagamori::UpdatePattern()
             effect.scale = 2;
             effect.layer = 1;
             m_game->CreateEffect((EffectDesc*)&effect);
-            DealDamage(0x64, 990.0);
+            DealDamage(100, 990.0);
         }
-        if (frame == 0xa && timer == 0) {
-            (*m_opponent)->m_hitstop = 0x1e;
+        if (frame == 10 && timer == 0) {
+            (*m_opponent)->m_hitstop = 30;
             effect.type = 0;
             effect.sound = 2;
             effect.x = (double)(int)x;
@@ -5033,10 +5033,10 @@ void CNagamori::UpdatePattern()
             effect.scale = 2;
             effect.layer = 1;
             m_game->CreateEffect((EffectDesc*)&effect);
-            DealDamage(0x64, 990.0);
+            DealDamage(100, 990.0);
         }
-        if (frame == 0xf && timer == 0) {
-            (*m_opponent)->m_hitstop = 0x1e;
+        if (frame == 15 && timer == 0) {
+            (*m_opponent)->m_hitstop = 30;
             effect.type = 0;
             effect.sound = 2;
             effect.x = (double)(int)x;
@@ -5044,30 +5044,30 @@ void CNagamori::UpdatePattern()
             effect.scale = 2;
             effect.layer = 1;
             m_game->CreateEffect((EffectDesc*)&effect);
-            DealDamage(0x96, 990.0);
+            DealDamage(150, 990.0);
         }
-        if (frame == 0x14 && timer == 0) {
+        if (frame == 20 && timer == 0) {
             effect.type = 0;
             effect.sound = 2;
             effect.x = (double)(int)x;
             effect.y = (double)(int)y;
             effect.scale = 2;
             effect.layer = 1;
-            effect.sound = 0x16;
-            ShakeScreen(0xa, 0xa);
+            effect.sound = 22;
+            ShakeScreen(10, 10);
             m_game->CreateEffect((EffectDesc*)&effect);
-            DealDamage(0x9c4, 800.0);
+            DealDamage(2500, 800.0);
             (*m_opponent)->m_koDelay = 0;
             (*m_opponent)->pattern = kKnockdown;
             (*m_opponent)->StartPattern();
-            (*m_opponent)->m_hitstop = 0xb4;
+            (*m_opponent)->m_hitstop = 180;
         }
-        if (frame > 0x18) {
+        if (frame > 24) {
             (*m_opponent)->pattern = kLyingDown;
             (*m_opponent)->frame = 0;
             (*m_opponent)->timer = 0;
         }
-        if (frame > 0x18) {
+        if (frame > 24) {
             vy = vy + ay;
             if (y + vy > 0.0) {
                 y = 0.0;
@@ -5093,7 +5093,7 @@ void CNagamori::UpdatePattern()
                 (*m_opponent)->x = x;
             }
             if (frame == 2) {
-                x = (*m_opponent)->x + (-0x11 - (*m_opponent)->m_pointX[1]) * facing;
+                x = (*m_opponent)->x + (-17 - (*m_opponent)->m_pointX[1]) * facing;
             }
             if (frame == 6 && m_patternVar1 == 0) {
                 frame = 7;
@@ -5103,10 +5103,10 @@ void CNagamori::UpdatePattern()
                     frame = frame - 2;
                     m_patternVar1--;
                 } else {
-                    m_patternVar1 = 0x14;
+                    m_patternVar1 = 20;
                 }
             }
-            if (frame == 0xc) {
+            if (frame == 12) {
                 if (m_patternVar1 > 0) {
                     frame = frame - 5;
                     m_patternVar1--;
@@ -5114,11 +5114,11 @@ void CNagamori::UpdatePattern()
                     m_patternVar1 = 3;
                 }
             }
-            if (frame == 0x11 && m_patternVar1 > 0) {
+            if (frame == 17 && m_patternVar1 > 0) {
                 frame = frame - 5;
                 m_patternVar1--;
             }
-            if (frame == 0x18) {
+            if (frame == 24) {
                 vx = -1.0;
                 vy = -1.7;
                 ay = 0.037;
@@ -5135,13 +5135,13 @@ void CNagamori::UpdatePattern()
             StopMoving();
         }
         if (frame == 2 && timer == 0) {
-            m_freezeTime = 0x78;
-            m_gauge = m_gauge - 0x3e8;
-            FillBackground(0xb0, 3);
+            m_freezeTime = 120;
+            m_gauge = m_gauge - 1000;
+            FillBackground(176, 3);
             effect.type = 0x44;
-            effect.sound = 0x13;
+            effect.sound = 19;
             effect.x = (double)(int)x;
-            effect.y = (double)((int)y - 0x28);
+            effect.y = (double)((int)y - 40);
             effect.scale = 2;
             effect.keep = 1;
             effect.layer = 1;
@@ -5151,8 +5151,8 @@ void CNagamori::UpdatePattern()
             m_playVoice = 1;
             effect.keep = 0;
             effect.type = 0x193;
-            effect.x = (double)((int)x + facing * 0x1e);
-            effect.y = (double)((int)y - 0x1e);
+            effect.x = (double)((int)x + facing * 30);
+            effect.y = (double)((int)y - 30);
             effect.facing = facing;
             effect.scale = 2;
             effect.layer = 1;
@@ -5179,13 +5179,13 @@ void CNagamori::UpdatePattern()
             StopMoving();
         }
         if (frame == 2 && timer == 0) {
-            m_freezeTime = 0x78;
-            m_gauge = m_gauge - 0x3e8;
-            FillBackground(0xb0, 3);
+            m_freezeTime = 120;
+            m_gauge = m_gauge - 1000;
+            FillBackground(176, 3);
             effect.type = 0x44;
-            effect.sound = 0x13;
+            effect.sound = 19;
             effect.x = (double)(int)x;
-            effect.y = (double)((int)y - 0x28);
+            effect.y = (double)((int)y - 40);
             effect.scale = 2;
             effect.keep = 1;
             effect.layer = 1;
@@ -5195,8 +5195,8 @@ void CNagamori::UpdatePattern()
             m_playVoice = 1;
             effect.keep = 0;
             effect.type = 0x192;
-            effect.x = (double)((int)x + facing * 0x1e);
-            effect.y = (double)((int)y - 0x1e);
+            effect.x = (double)((int)x + facing * 30);
+            effect.y = (double)((int)y - 30);
             effect.facing = facing;
             effect.scale = 2;
             effect.layer = 1;
@@ -5222,13 +5222,13 @@ void CNagamori::UpdatePattern()
             StopMoving();
         }
         if (frame == 3 && timer == 0) {
-            m_freezeTime = 0x78;
-            m_gauge = m_gauge - 0x3e8;
-            FillBackground(0xb0, 3);
+            m_freezeTime = 120;
+            m_gauge = m_gauge - 1000;
+            FillBackground(176, 3);
             effect.type = 0x44;
-            effect.sound = 0x13;
+            effect.sound = 19;
             effect.x = (double)((int)x - (facing << 5));
-            effect.y = (double)((int)y - 0x4b);
+            effect.y = (double)((int)y - 75);
             effect.scale = 2;
             effect.keep = 1;
             effect.layer = 1;
@@ -5238,8 +5238,8 @@ void CNagamori::UpdatePattern()
             m_playVoice = 1;
             effect.keep = 1;
             effect.type = 0x191;
-            effect.x = (double)((int)x + facing * 0x32);
-            effect.y = (double)((int)y - 0x3c);
+            effect.x = (double)((int)x + facing * 50);
+            effect.y = (double)((int)y - 60);
             effect.facing = facing;
             effect.scale = 2;
             effect.layer = 1;
@@ -5262,13 +5262,13 @@ void CNagamori::UpdatePattern()
     case kAir214214B:
         if (frame == 0 && timer == 0) {
             StopMoving();
-            m_freezeTime = 0x78;
-            m_gauge = m_gauge - 0x3e8;
-            FillBackground(0xb0, 3);
+            m_freezeTime = 120;
+            m_gauge = m_gauge - 1000;
+            FillBackground(176, 3);
             effect.type = 0x44;
-            effect.sound = 0x13;
-            effect.x = (double)((int)x + facing * 0x17);
-            effect.y = (double)((int)y - 0x1e);
+            effect.sound = 19;
+            effect.x = (double)((int)x + facing * 23);
+            effect.y = (double)((int)y - 30);
             effect.scale = 2;
             effect.keep = 1;
             effect.layer = 1;
@@ -5295,8 +5295,8 @@ void CNagamori::UpdatePattern()
                 ay = 0.05;
                 m_playVoice = 1;
                 effect.type = 0x193;
-                effect.x = (double)((int)x + facing * 0x1e);
-                effect.y = (double)((int)y - 0x1e);
+                effect.x = (double)((int)x + facing * 30);
+                effect.y = (double)((int)y - 30);
                 effect.facing = facing;
                 effect.layer = 1;
                 effect.scale = 2;
@@ -5319,13 +5319,13 @@ void CNagamori::UpdatePattern()
     case kAir214214A:
         if (frame == 0 && timer == 0) {
             StopMoving();
-            m_freezeTime = 0x78;
-            m_gauge = m_gauge - 0x3e8;
-            FillBackground(0xb0, 3);
+            m_freezeTime = 120;
+            m_gauge = m_gauge - 1000;
+            FillBackground(176, 3);
             effect.type = 0x44;
-            effect.sound = 0x13;
-            effect.x = (double)((int)x + facing * 0x17);
-            effect.y = (double)((int)y - 0x1e);
+            effect.sound = 19;
+            effect.x = (double)((int)x + facing * 23);
+            effect.y = (double)((int)y - 30);
             effect.scale = 2;
             effect.keep = 1;
             effect.layer = 1;
@@ -5352,8 +5352,8 @@ void CNagamori::UpdatePattern()
                 ay = 0.05;
                 m_playVoice = 1;
                 effect.type = 0x192;
-                effect.x = (double)((int)x + facing * 0x1e);
-                effect.y = (double)((int)y - 0x1e);
+                effect.x = (double)((int)x + facing * 30);
+                effect.y = (double)((int)y - 30);
                 effect.facing = facing;
                 effect.layer = 1;
                 effect.scale = 2;
@@ -5376,13 +5376,13 @@ void CNagamori::UpdatePattern()
     case kAir214214C:
         if (frame == 0 && timer == 0) {
             StopMoving();
-            m_freezeTime = 0x78;
-            m_gauge = m_gauge - 0x3e8;
-            FillBackground(0xb0, 3);
+            m_freezeTime = 120;
+            m_gauge = m_gauge - 1000;
+            FillBackground(176, 3);
             effect.type = 9;
             effect.sound = 5;
-            effect.x = (double)((int)x + facing * 0x17);
-            effect.y = (double)((int)y - 0x1e);
+            effect.x = (double)((int)x + facing * 23);
+            effect.y = (double)((int)y - 30);
             effect.scale = 2;
             effect.keep = 1;
             effect.layer = 1;
@@ -5400,8 +5400,8 @@ void CNagamori::UpdatePattern()
                 ay = 0.05;
                 m_playVoice = 1;
                 effect.type = 0x191;
-                effect.x = (double)((int)x + facing * 0x1e);
-                effect.y = (double)((int)y - 0x1e);
+                effect.x = (double)((int)x + facing * 30);
+                effect.y = (double)((int)y - 30);
                 effect.facing = facing;
                 effect.layer = 1;
                 effect.scale = 2;
@@ -5426,11 +5426,11 @@ void CNagamori::UpdatePattern()
             m_dashMomentum = 0;
             StopMoving();
         }
-        if (m_patternVar2 == 0x2d) {
+        if (m_patternVar2 == 45) {
             effect.keep = 1;
             effect.type = 0x1bf;
             effect.x = (double)(int)x;
-            effect.y = (double)((int)y - 0x32);
+            effect.y = (double)((int)y - 50);
             effect.facing = facing;
             effect.scale = 2;
             effect.layer = 1;
@@ -5439,34 +5439,34 @@ void CNagamori::UpdatePattern()
         }
         m_patternVar2++;
         if (frame == 6 && timer == 0) {
-            m_freezeTime = 0xa0;
-            m_gauge = m_gauge - 0xbb8;
-            FillBackground(0xb0, 3);
+            m_freezeTime = 160;
+            m_gauge = m_gauge - 3000;
+            FillBackground(176, 3);
             effect.type = 0x46;
-            effect.sound = 0x40;
+            effect.sound = 64;
             effect.x = (double)(int)x;
-            effect.y = (double)((int)y - 0x28);
+            effect.y = (double)((int)y - 40);
             effect.scale = 2;
             effect.keep = 1;
             effect.layer = 1;
             m_game->CreateEffect((EffectDesc*)&effect);
-            m_playSound = 0x25;
+            m_playSound = 37;
             effect.type = 0x47;
             m_game->CreateEffect((EffectDesc*)&effect);
         }
         if (frame == 7 && timer == 0) {
             m_playVoice = 0;
-            m_game->FlashWhite(0x14, 0xf, 0xa);
-            m_freezeTime = 0x12c;
+            m_game->FlashWhite(20, 15, 10);
+            m_freezeTime = 300;
         }
         if (frame == 8 && timer == 0) {
             if (m_patternVar3 == 0) {
-                m_freezeTime = 0x4b0;
-                FillBackground(0xb1, 3);
+                m_freezeTime = 1200;
+                FillBackground(177, 3);
                 effect.keep = 1;
                 effect.type = 0x1a1;
-                effect.x = (double)((int)x + facing * 0x1e);
-                effect.y = (double)((int)y - 0x1e);
+                effect.x = (double)((int)x + facing * 30);
+                effect.y = (double)((int)y - 30);
                 effect.facing = facing;
                 effect.scale = 0;
                 effect.layer = 0;
@@ -5492,17 +5492,17 @@ void CNagamori::UpdatePattern()
             if (frame == 4 && m_patternVar1 == 1) {
                 frame = frame - 2;
             }
-            if (frame == 6 && m_patternVar1 < 0xc) {
+            if (frame == 6 && m_patternVar1 < 12) {
                 frame = frame - 2;
                 m_patternVar1++;
             }
-            if (frame == 0xa && m_patternVar1 < 0x18) {
+            if (frame == 10 && m_patternVar1 < 24) {
                 frame = frame - 2;
                 m_patternVar1++;
             }
             if (frame >= frameCount) {
-                m_lv4Time = 0x4b0;
-                FillBackground(0xb1, 3);
+                m_lv4Time = 1200;
+                FillBackground(177, 3);
                 pattern = kStand;
                 FaceOpponent();
                 StartPattern();
@@ -5515,23 +5515,23 @@ void CNagamori::UpdatePattern()
             StopMoving();
         }
         if (frame == 5 && timer == 0) {
-            m_freezeTime = 0x78;
-            m_gauge = m_gauge - 0x3e8;
-            FillBackground(0xb0, 3);
+            m_freezeTime = 120;
+            m_gauge = m_gauge - 1000;
+            FillBackground(176, 3);
             effect.type = 0x44;
-            effect.sound = 0x13;
+            effect.sound = 19;
             effect.x = (double)(int)x;
-            effect.y = (double)((int)y - 0x73);
+            effect.y = (double)((int)y - 115);
             effect.scale = 2;
             effect.keep = 1;
             effect.layer = 1;
             m_game->CreateEffect((EffectDesc*)&effect);
         }
         if (frame == 6 && timer == 0) {
-            ShakeScreen(0xa, 5);
+            ShakeScreen(10, 5);
             effect.type = 0x1c2;
             effect.x = (double)(int)x;
-            effect.y = (double)((int)y - 0x37);
+            effect.y = (double)((int)y - 55);
             effect.scale = 2;
             effect.keep = 1;
             effect.layer = 1;
@@ -5541,7 +5541,7 @@ void CNagamori::UpdatePattern()
             effect.keep = 0;
             SpawnObject(&effect);
             m_keepBombs = 1;
-            TriggerObjectsNear((int)x, (int)y, 0x3e8, 0x3e8);
+            TriggerObjectsNear((int)x, (int)y, 1000, 1000);
             m_playVoice = 1;
         }
         timer++;
@@ -5562,23 +5562,23 @@ void CNagamori::UpdatePattern()
             StopMoving();
         }
         if (frame == 5 && timer == 0) {
-            m_freezeTime = 0x78;
-            m_gauge = m_gauge - 0x7d0;
-            FillBackground(0xb0, 3);
+            m_freezeTime = 120;
+            m_gauge = m_gauge - 2000;
+            FillBackground(176, 3);
             effect.type = 0x45;
             effect.sound = 5;
             effect.x = (double)(int)x;
-            effect.y = (double)((int)y - 0x73);
+            effect.y = (double)((int)y - 115);
             effect.scale = 2;
             effect.keep = 1;
             effect.layer = 1;
             m_game->CreateEffect((EffectDesc*)&effect);
         }
         if (frame == 6 && timer == 0) {
-            ShakeScreen(0xa, 5);
+            ShakeScreen(10, 5);
             effect.type = 0x1c3;
             effect.x = (double)(int)x;
-            effect.y = (double)((int)y - 0x37);
+            effect.y = (double)((int)y - 55);
             effect.scale = 2;
             effect.keep = 1;
             effect.layer = 1;
@@ -5588,7 +5588,7 @@ void CNagamori::UpdatePattern()
             effect.keep = 0;
             SpawnObject(&effect);
             m_keepBombs = 1;
-            TriggerObjectsNear((int)x, (int)y, 0x3e8, 0x3e8);
+            TriggerObjectsNear((int)x, (int)y, 1000, 1000);
             m_playVoice = 1;
         }
         timer++;
@@ -5609,23 +5609,23 @@ void CNagamori::UpdatePattern()
             StopMoving();
         }
         if (frame == 5 && timer == 0) {
-            m_freezeTime = 0x78;
-            m_gauge = m_gauge - 0xbb8;
-            FillBackground(0xb0, 3);
+            m_freezeTime = 120;
+            m_gauge = m_gauge - 3000;
+            FillBackground(176, 3);
             effect.type = 0x46;
-            effect.sound = 0x40;
+            effect.sound = 64;
             effect.x = (double)(int)x;
-            effect.y = (double)((int)y - 0x73);
+            effect.y = (double)((int)y - 115);
             effect.scale = 2;
             effect.keep = 1;
             effect.layer = 1;
             m_game->CreateEffect((EffectDesc*)&effect);
         }
         if (frame == 6 && timer == 0) {
-            ShakeScreen(0xa, 5);
+            ShakeScreen(10, 5);
             effect.type = 0x1c4;
             effect.x = (double)(int)x;
-            effect.y = (double)((int)y - 0x37);
+            effect.y = (double)((int)y - 55);
             effect.scale = 2;
             effect.keep = 1;
             effect.layer = 1;
@@ -5635,7 +5635,7 @@ void CNagamori::UpdatePattern()
             effect.keep = 0;
             SpawnObject(&effect);
             m_keepBombs = 1;
-            TriggerObjectsNear((int)x, (int)y, 0x3e8, 0x3e8);
+            TriggerObjectsNear((int)x, (int)y, 1000, 1000);
             m_playVoice = 1;
         }
         timer++;

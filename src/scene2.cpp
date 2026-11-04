@@ -26,45 +26,45 @@ BYTE CScene2::Update()
     char number[8];
     char path[40];
 
-    picture = rand() % 0xaf;
+    picture = rand() % 175;
     if (0) {
-        picture = 0x70;
+        picture = 112;
     }
     m_players[0] = *m_player1Ref;
     m_players[1] = *m_player2Ref;
     strcpy(path, "system\\nl\\nl");
-    if (picture < 0x64) {
+    if (picture < 100) {
         strcat(path, "0");
     }
-    if (picture < 0xa) {
+    if (picture < 10) {
         strcat(path, "0");
     }
-    _itoa(picture, number, 0xa);
+    _itoa(picture, number, 10);
     strcat(path, (const char*)number);
     if (1) {
         strcat(path, ".dat");
         m_game->LoadDat((PTR32(IDirectDrawSurface)*)&m_loadingSurface, (const char*)path, 0, 1);
-        m_graphics->LoadPaletteDat(m_palette, (const char*)path, 0, 1, 0xfe);
+        m_graphics->LoadPaletteDat(m_palette, (const char*)path, 0, 1, 254);
     } else {
         strcat(path, ".bmp");
         m_graphics->LoadBmp((PTR32(IDirectDrawSurface)*)&m_loadingSurface, (const char*)path, 1);
-        m_graphics->LoadPaletteBmp(m_palette, (const char*)path, 0, 1, 0xfe);
+        m_graphics->LoadPaletteBmp(m_palette, (const char*)path, 0, 1, 254);
     }
     Draw();
     CScene::FadeIn(m_palette, 0);
     SetupMatch();
-    CScene::FadeOut(m_palette, 0, -0x1f4, 0xc8);
+    CScene::FadeOut(m_palette, 0, -500, 200);
     if (m_loadingSurface != 0) {
         (TOPTR(IUnknown*, m_loadingSurface))->Release();
         m_loadingSurface = 0;
     }
-    m_game->PlayMusic(m_game->m_stage + 0xa);
+    m_game->PlayMusic(m_game->m_stage + 10);
     return 3;
 }
 
 void CScene2::Draw()
 {
-    m_graphics->Blit(MakeRect(0, 0, 0x140, 0xf0), TOPTR(IDirectDrawSurface*, m_loadingSurface), MakeRect(0, 0, 0x140, 0xf0), 0, 0);
+    m_graphics->Blit(MakeRect(0, 0, 320, 240), TOPTR(IDirectDrawSurface*, m_loadingSurface), MakeRect(0, 0, 320, 240), 0, 0);
     m_graphics->Flip();
 }
 
@@ -75,25 +75,25 @@ void CScene2::SetupMatch()
     char number[8];
 
     if (m_game->m_gameMode == 6) {
-        pick = 0x16;
-        while (pick == 0x13 || pick == 0x16) {
-            pick = rand() % 0x18;
-            if (m_game->m_extraChars == 0 && (pick == 0x14 || pick == 0x15 || pick == 0x17)) {
-                pick = 0x16;
+        pick = 22;
+        while (pick == 19 || pick == 22) {
+            pick = rand() % 24;
+            if (m_game->m_extraChars == 0 && (pick == 20 || pick == 21 || pick == 23)) {
+                pick = 22;
             }
-            if (m_game->m_extraChars == -1 && (pick == 0xc || pick == 0xd || pick == 0xe || pick == 0xf)) {
-                pick = 0x16;
+            if (m_game->m_extraChars == -1 && (pick == 12 || pick == 13 || pick == 14 || pick == 15)) {
+                pick = 22;
             }
         }
         CreateCharacter(m_player1Ref, m_player2Ref, 0, pick);
-        pick = 0x16;
-        while (pick == 0x13 || pick == 0x16) {
-            pick = rand() % 0x18;
-            if (m_game->m_extraChars == 0 && (pick == 0x14 || pick == 0x15 || pick == 0x17)) {
-                pick = 0x16;
+        pick = 22;
+        while (pick == 19 || pick == 22) {
+            pick = rand() % 24;
+            if (m_game->m_extraChars == 0 && (pick == 20 || pick == 21 || pick == 23)) {
+                pick = 22;
             }
-            if (m_game->m_extraChars == -1 && (pick == 0xc || pick == 0xd || pick == 0xe || pick == 0xf)) {
-                pick = 0x16;
+            if (m_game->m_extraChars == -1 && (pick == 12 || pick == 13 || pick == 14 || pick == 15)) {
+                pick = 22;
             }
         }
         CreateCharacter(m_player2Ref, m_player1Ref, 1, pick);
@@ -101,14 +101,14 @@ void CScene2::SetupMatch()
         (*m_player2Ref)->m_paletteIndex = (*m_player2Ref)->m_charId == (*m_player1Ref)->m_charId;
         (*m_player1Ref)->m_cpu = 1;
         (*m_player2Ref)->m_cpu = 1;
-        pick = 0x17;
-        while (pick == 0x17) {
-            pick = rand() % 0x17;
-            if (m_game->m_extraChars == 0 && pick >= 0xd && pick <= 0x10) {
-                pick = 0x17;
+        pick = 23;
+        while (pick == 23) {
+            pick = rand() % 23;
+            if (m_game->m_extraChars == 0 && pick >= 13 && pick <= 16) {
+                pick = 23;
             }
-            if (m_game->m_extraChars == -1 && pick >= 0x12 && pick <= 0x16) {
-                pick = 0x17;
+            if (m_game->m_extraChars == -1 && pick >= 18 && pick <= 22) {
+                pick = 23;
             }
         }
         m_game->m_stage = pick;
@@ -116,10 +116,10 @@ void CScene2::SetupMatch()
         m_game->m_editColor[1] = 0;
     } else if (m_game->m_gameMode == 5) {
         strcpy(path, "replay\\data");
-        _itoa(m_game->m_replayPage + 1, number, 0xa);
+        _itoa(m_game->m_replayPage + 1, number, 10);
         strcat(path, (const char*)number);
         strcat(path, "-");
-        _itoa(m_game->m_replaySlot + 1, number, 0xa);
+        _itoa(m_game->m_replaySlot + 1, number, 10);
         strcat(path, (const char*)number);
         strcat(path, ".rep");
         if (m_game->m_replayMode == 1) {
@@ -127,7 +127,7 @@ void CScene2::SetupMatch()
             CreateCharacter(m_player1Ref, m_player2Ref, 0, m_game->m_replay.Read());
             CreateCharacter(m_player2Ref, m_player1Ref, 1, m_game->m_replay.Read());
             m_game->m_stage = m_game->m_replay.Read();
-            if (m_game->m_stage > 0x64) {
+            if (m_game->m_stage > 100) {
                 m_game->m_replayVersion = m_game->m_stage;
                 m_game->m_stage = m_game->m_replay.Read();
             } else {
@@ -139,43 +139,43 @@ void CScene2::SetupMatch()
             m_game->m_replay.OpenWrite((const char*)path);
             m_game->m_replay.Write((*m_player1Ref)->m_charId);
             m_game->m_replay.Write((*m_player2Ref)->m_charId);
-            m_game->m_replay.Write(0x68);
+            m_game->m_replay.Write(104);
             m_game->m_replay.Write(m_game->m_stage);
             m_game->m_replay.Write((*m_player1Ref)->m_paletteIndex);
             m_game->m_replay.Write((*m_player2Ref)->m_paletteIndex);
         }
     } else if (m_game->m_gameMode == 0 && (unsigned char)m_game->m_continued == 0 || m_game->m_gameMode == 2) {
-        pick = 0x16;
-        while ((1 << pick & m_game->m_beatenChars) != 0 || pick == 0x12 || pick == 0x13 || pick == 0x16) {
-            pick = rand() % 0x18;
-            if (m_game->m_extraChars == 0 && (pick == 0x14 || pick == 0x15 || pick == 0x17)) {
-                pick = 0x16;
+        pick = 22;
+        while ((1 << pick & m_game->m_beatenChars) != 0 || pick == 18 || pick == 19 || pick == 22) {
+            pick = rand() % 24;
+            if (m_game->m_extraChars == 0 && (pick == 20 || pick == 21 || pick == 23)) {
+                pick = 22;
             }
-            if (m_game->m_extraChars == -1 && (pick == 0xc || pick == 0xd || pick == 0xe || pick == 0xf)) {
-                pick = 0x16;
+            if (m_game->m_extraChars == -1 && (pick == 12 || pick == 13 || pick == 14 || pick == 15)) {
+                pick = 22;
             }
         }
         if (m_game->m_gameMode == 0) {
             if (m_game->m_arcadeMatch == 8) {
                 if ((unsigned char)m_game->m_continuedAt == 0 || (unsigned char)m_game->m_continuedAt == 8) {
-                    pick = 0x13;
+                    pick = 19;
                 } else {
-                    pick = 0x18;
+                    pick = 24;
                 }
                 if (m_game->m_extraChars == 0) {
-                    pick = 0x18;
+                    pick = 24;
                 }
             }
         } else if (m_game->m_extraChars == 0) {
             if (m_game->m_arcadeMatch == 8) {
-                pick = 0x18;
+                pick = 24;
             }
         } else {
             if (m_game->m_arcadeMatch == 8) {
-                pick = 0x13;
+                pick = 19;
             }
             if (m_game->m_arcadeMatch == 7) {
-                pick = 0x18;
+                pick = 24;
             }
         }
         if (m_game->m_isCpu[0] == 1) {
@@ -205,10 +205,10 @@ void CScene2::SetupMatch()
             m_game->m_stage = 6;
             break;
         case 4:
-            m_game->m_stage = 0xa;
+            m_game->m_stage = 10;
             break;
         case 5:
-            m_game->m_stage = 0xb;
+            m_game->m_stage = 11;
             break;
         case 6:
             m_game->m_stage = 3;
@@ -217,7 +217,7 @@ void CScene2::SetupMatch()
             m_game->m_stage = 5;
             break;
         case 8:
-            m_game->m_stage = 0x16;
+            m_game->m_stage = 22;
             break;
         case 9:
             m_game->m_stage = 2;
@@ -235,38 +235,38 @@ void CScene2::SetupMatch()
             m_game->m_stage = 1;
             break;
         case 0xe:
-            m_game->m_stage = 0x13;
+            m_game->m_stage = 19;
             break;
         case 0xf:
-            m_game->m_stage = 0x14;
+            m_game->m_stage = 20;
             break;
         case 0x10:
-            m_game->m_stage = 0x11;
+            m_game->m_stage = 17;
             break;
         case 0x11:
             m_game->m_stage = 8;
             break;
         case 0x12:
-            m_game->m_stage = 0xc;
+            m_game->m_stage = 12;
             break;
         case 0x13:
-            m_game->m_stage = 0x10;
+            m_game->m_stage = 16;
             break;
         case 0x14:
-            m_game->m_stage = 0xe;
+            m_game->m_stage = 14;
             break;
         case 0x15:
-            m_game->m_stage = 0xd;
+            m_game->m_stage = 13;
             break;
         case 0x17:
-            m_game->m_stage = 0xf;
+            m_game->m_stage = 15;
             break;
         case 0x18:
-            m_game->m_stage = 0xc;
+            m_game->m_stage = 12;
         }
     }
-    _itoa(m_game->m_stage, number, 0xa);
-    if (m_game->m_stage < 0xa) {
+    _itoa(m_game->m_stage, number, 10);
+    if (m_game->m_stage < 10) {
         strcpy(path, "system\\bg\\bg0");
     } else {
         strcpy(path, "system\\bg\\bg");
@@ -279,9 +279,9 @@ void CScene2::SetupMatch()
             m_game->m_stageSurface = (IDirectDrawSurface*)0;
         }
         m_game->LoadDat(&m_game->m_stageSurface, (const char*)path, 0, 1);
-        m_graphics->LoadPaletteDat(m_game->m_palette, (const char*)path, 0, 1, 0x5e);
-        _itoa(m_game->m_stage, number, 0xa);
-        if (m_game->m_stage < 0xa) {
+        m_graphics->LoadPaletteDat(m_game->m_palette, (const char*)path, 0, 1, 94);
+        _itoa(m_game->m_stage, number, 10);
+        if (m_game->m_stage < 10) {
             strcpy(path, "system\\bg\\bg0");
         } else {
             strcpy(path, "system\\bg\\bg");
@@ -292,7 +292,7 @@ void CScene2::SetupMatch()
             m_game->m_stageNegative->Release();
             m_game->m_stageNegative = (IDirectDrawSurface*)0;
         }
-        m_game->LoadDat(&m_game->m_stageNegative, (const char*)path, 0, 0xaf);
+        m_game->LoadDat(&m_game->m_stageNegative, (const char*)path, 0, 175);
     } else {
         strcat(path, ".bmp");
         if ((int)m_game->m_stageSurface != 0) {
@@ -300,9 +300,9 @@ void CScene2::SetupMatch()
             m_game->m_stageSurface = (IDirectDrawSurface*)0;
         }
         m_graphics->LoadBmp(&m_game->m_stageSurface, (const char*)path, 1);
-        m_graphics->LoadPaletteBmp(m_game->m_palette, (const char*)path, 0, 1, 0x5e);
-        _itoa(m_game->m_stage, number, 0xa);
-        if (m_game->m_stage < 0xa) {
+        m_graphics->LoadPaletteBmp(m_game->m_palette, (const char*)path, 0, 1, 94);
+        _itoa(m_game->m_stage, number, 10);
+        if (m_game->m_stage < 10) {
             strcpy(path, "system\\bg\\bg0");
         } else {
             strcpy(path, "system\\bg\\bg");
@@ -313,7 +313,7 @@ void CScene2::SetupMatch()
             m_game->m_stageNegative->Release();
             m_game->m_stageNegative = (IDirectDrawSurface*)0;
         }
-        m_graphics->LoadBmp(&m_game->m_stageNegative, (const char*)path, 0xaf);
+        m_graphics->LoadBmp(&m_game->m_stageNegative, (const char*)path, 175);
     }
     switch (m_game->m_stage) {
     case 1:
@@ -330,7 +330,7 @@ void CScene2::SetupMatch()
     case 0x10:
         m_game->m_background = new CBg16(m_graphics);
     }
-    if (m_game->m_stage == 0x10) {
+    if (m_game->m_stage == 16) {
         m_game->m_bgParallax = 0.125;
     } else {
         m_game->m_bgParallax = 1.0;

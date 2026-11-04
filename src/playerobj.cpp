@@ -43,7 +43,7 @@ void CPlayer::RemoveObject(short slot)
     if (slot == m_objectTail) {
         while (m_objectTail != m_objectHead && m_objectActive[m_objectTail] == 0) {
             m_objectTail++;
-            if (m_objectTail >= 0x40) {
+            if (m_objectTail >= 64) {
                 m_objectTail = 0;
             }
         }
@@ -57,23 +57,23 @@ void CPlayer::AdvanceObjectHead()
     tries = 0;
     do {
         m_objectHead++;
-        if (m_objectHead >= 0x40) {
+        if (m_objectHead >= 64) {
             m_objectHead = 0;
         }
         if (m_objectHead == m_objectTail) {
             m_objectTail++;
-            if (m_objectTail >= 0x40) {
+            if (m_objectTail >= 64) {
                 m_objectTail = 0;
             }
             while (m_objectTail != m_objectHead && m_objectActive[m_objectTail] == 0) {
                 m_objectTail++;
-                if (m_objectTail >= 0x40) {
+                if (m_objectTail >= 64) {
                     m_objectTail = 0;
                 }
             }
         }
         tries++;
-    } while (m_objectKeep[m_objectHead] != 0 && tries < 0x3f);
+    } while (m_objectKeep[m_objectHead] != 0 && tries < 63);
 }
 
 void CPlayer::ClearObjects()
@@ -81,7 +81,7 @@ void CPlayer::ClearObjects()
     int i;
 
     i = 0;
-    for (; i < 0x40; i++) {
+    for (; i < 64; i++) {
         m_objectActive[i] = 0;
         m_objectKeep[i] = 0;
     }
@@ -115,12 +115,12 @@ void CPlayer::DrawObjects(int drawX, int drawY, BYTE layer)
             src = MakeRect(0, 0, sprite->width, sprite->height);
             if (m_objects[slot].facing == -1) {
                 dst.left = (int)m_objects[slot].x + (m_objects[slot].screen == 0) * drawX - (sprite->width - sprite->x);
-                dst.top = (drawY + 0xd2) * (m_objects[slot].screen == 0) + (int)m_objects[slot].y - sprite->y;
+                dst.top = (drawY + 210) * (m_objects[slot].screen == 0) + (int)m_objects[slot].y - sprite->y;
                 dst.right = sprite->width + dst.left;
                 dst.bottom = sprite->height + dst.top;
             } else {
                 dst.left = (int)m_objects[slot].x + (m_objects[slot].screen == 0) * drawX - sprite->x;
-                dst.top = (drawY + 0xd2) * (m_objects[slot].screen == 0) + (int)m_objects[slot].y - sprite->y;
+                dst.top = (drawY + 210) * (m_objects[slot].screen == 0) + (int)m_objects[slot].y - sprite->y;
                 dst.right = sprite->width + dst.left;
                 dst.bottom = sprite->height + dst.top;
             }
@@ -151,7 +151,7 @@ void CPlayer::DrawObjects(int drawX, int drawY, BYTE layer)
             }
         }
         slot++;
-        if (slot >= 0x40) {
+        if (slot >= 64) {
             slot = 0;
         }
     }

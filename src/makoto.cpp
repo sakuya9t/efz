@@ -13,28 +13,28 @@ CMakoto::CMakoto(PTR32(CPlayer)* opponent, CGame* game, CGraphics* graphics, CIn
     int i;
 
     strcpy(m_name, "makoto");
-    lastSurface = 0x1cb;
+    lastSurface = 459;
     m_patternVar1 = 0;
     m_patternVar2 = 0;
     m_patternVar3 = 0;
     m_bounceDebrisOut = 0;
     m_bouncerOut = 0;
     m_pointX[0] = -7;
-    m_pointY[0] = -0x33;
+    m_pointY[0] = -51;
     m_pointX[1] = 6;
     m_pointY[1] = 0;
-    m_pointX[2] = 0x11;
-    m_pointY[2] = -0xf;
-    m_pointX[3] = 0x13;
-    m_pointY[3] = -0xb;
-    m_pointX[4] = 0x16;
-    m_pointY[4] = -0x1e;
+    m_pointX[2] = 17;
+    m_pointY[2] = -15;
+    m_pointX[3] = 19;
+    m_pointY[3] = -11;
+    m_pointX[4] = 22;
+    m_pointY[4] = -30;
     m_resultPictures = 5;
     m_rivals[0] = 1;
     m_rivals[1] = 5;
-    m_rivals[0xa] = 3;
+    m_rivals[10] = 3;
     i = 0;
-    for (; i < 0x40; i++) {
+    for (; i < 64; i++) {
         m_objectVar1[i] = 0;
         m_objectVar2[i] = 0;
         m_objectVar3[i] = 0;
@@ -51,17 +51,17 @@ void CMakoto::Reset()
     m_bounceDebrisOut = 0;
     m_bouncerOut = 0;
     m_pointX[0] = -7;
-    m_pointY[0] = -0x33;
+    m_pointY[0] = -51;
     m_pointX[1] = 6;
     m_pointY[1] = 0;
-    m_pointX[2] = 0x11;
-    m_pointY[2] = -0xf;
-    m_pointX[3] = 0x13;
-    m_pointY[3] = -0xb;
-    m_pointX[4] = 0x16;
-    m_pointY[4] = -0x1e;
+    m_pointX[2] = 17;
+    m_pointY[2] = -15;
+    m_pointX[3] = 19;
+    m_pointY[3] = -11;
+    m_pointX[4] = 22;
+    m_pointY[4] = -30;
     i = 0;
-    for (; i < 0x40; i++) {
+    for (; i < 64; i++) {
         m_objectVar1[i] = 0;
         m_objectVar2[i] = 0;
         m_objectVar3[i] = 0;
@@ -113,49 +113,49 @@ void CMakoto::StartCommand()
         return;
     }
     if (m_sealLevel < 2) {
-        if (m_hp < 0xd05 && m_command == kCmd263D && m_gauge >= 0xbb8 && (m_patterns[pattern].frames[frame].flagsB0 & kStateCancellable) > 0 && y == 0.0 && (pattern >= kFirstCharacterAction && m_attackResult >= 2 && m_attackResult != 6 || pattern < kFirstCharacterAction) && m_patterns[pattern].cancelLevel <= m_patterns[kLv4Heal].level) {
+        if (m_hp < 3333 && m_command == kCmd263D && m_gauge >= 3000 && (m_patterns[pattern].frames[frame].flagsB0 & kStateCancellable) > 0 && y == 0.0 && (pattern >= kFirstCharacterAction && m_attackResult >= 2 && m_attackResult != 6 || pattern < kFirstCharacterAction) && m_patterns[pattern].cancelLevel <= m_patterns[kLv4Heal].level) {
             StartPattern();
             ClearBufferedPress();
             pattern = kLv4Heal;
             return;
         }
-        if (m_command == kCmd641236C && m_gauge >= 0xbb8 && (m_patterns[pattern].frames[frame].flagsB0 & kStateCancellable) > 0 && y == 0.0 && (pattern >= kFirstCharacterAction && m_attackResult >= 2 && m_attackResult != 6 || pattern < kFirstCharacterAction) && m_patterns[pattern].cancelLevel <= m_patterns[k641236Lv3].level) {
+        if (m_command == kCmd641236C && m_gauge >= 3000 && (m_patterns[pattern].frames[frame].flagsB0 & kStateCancellable) > 0 && y == 0.0 && (pattern >= kFirstCharacterAction && m_attackResult >= 2 && m_attackResult != 6 || pattern < kFirstCharacterAction) && m_patterns[pattern].cancelLevel <= m_patterns[k641236Lv3].level) {
             StartPattern();
             ClearBufferedPress();
             pattern = k641236Lv3;
             return;
         }
-        if ((m_command == kCmd641236B || m_command == kCmd641236C) && m_gauge >= 0x7d0 && (m_patterns[pattern].frames[frame].flagsB0 & kStateCancellable) > 0 && y == 0.0 && (pattern >= kFirstCharacterAction && m_attackResult >= 2 && m_attackResult != 6 || pattern < kFirstCharacterAction) && m_patterns[pattern].cancelLevel <= m_patterns[k641236Lv2].level) {
+        if ((m_command == kCmd641236B || m_command == kCmd641236C) && m_gauge >= 2000 && (m_patterns[pattern].frames[frame].flagsB0 & kStateCancellable) > 0 && y == 0.0 && (pattern >= kFirstCharacterAction && m_attackResult >= 2 && m_attackResult != 6 || pattern < kFirstCharacterAction) && m_patterns[pattern].cancelLevel <= m_patterns[k641236Lv2].level) {
             StartPattern();
             ClearBufferedPress();
             pattern = k641236Lv2;
             return;
         }
-        if ((m_command == kCmd641236A || m_command == kCmd641236B || m_command == kCmd641236C) && m_gauge >= 0x3e8 && (m_patterns[pattern].frames[frame].flagsB0 & kStateCancellable) > 0 && y == 0.0 && (pattern >= kFirstCharacterAction && m_attackResult >= 2 && m_attackResult != 6 || pattern < kFirstCharacterAction) && m_patterns[pattern].cancelLevel <= m_patterns[k641236Lv1].level) {
+        if ((m_command == kCmd641236A || m_command == kCmd641236B || m_command == kCmd641236C) && m_gauge >= 1000 && (m_patterns[pattern].frames[frame].flagsB0 & kStateCancellable) > 0 && y == 0.0 && (pattern >= kFirstCharacterAction && m_attackResult >= 2 && m_attackResult != 6 || pattern < kFirstCharacterAction) && m_patterns[pattern].cancelLevel <= m_patterns[k641236Lv1].level) {
             StartPattern();
             ClearBufferedPress();
             pattern = k641236Lv1;
             return;
         }
-        if (m_command == kCmd236236C && m_gauge >= 0x3e8 && (m_patterns[pattern].frames[frame].flagsB0 & kStateCancellable) > 0 && y == 0.0 && (pattern >= kFirstCharacterAction && m_attackResult >= 2 && m_attackResult != 6 || pattern < kFirstCharacterAction) && m_patterns[pattern].cancelLevel <= m_patterns[k236236C].level) {
+        if (m_command == kCmd236236C && m_gauge >= 1000 && (m_patterns[pattern].frames[frame].flagsB0 & kStateCancellable) > 0 && y == 0.0 && (pattern >= kFirstCharacterAction && m_attackResult >= 2 && m_attackResult != 6 || pattern < kFirstCharacterAction) && m_patterns[pattern].cancelLevel <= m_patterns[k236236C].level) {
             StartPattern();
             ClearBufferedPress();
             pattern = k236236C;
             return;
         }
-        if (m_command == kCmd236236B && m_gauge >= 0x3e8 && (m_patterns[pattern].frames[frame].flagsB0 & kStateCancellable) > 0 && y == 0.0 && (pattern >= kFirstCharacterAction && m_attackResult >= 2 && m_attackResult != 6 || pattern < kFirstCharacterAction) && m_patterns[pattern].cancelLevel <= m_patterns[k236236B].level) {
+        if (m_command == kCmd236236B && m_gauge >= 1000 && (m_patterns[pattern].frames[frame].flagsB0 & kStateCancellable) > 0 && y == 0.0 && (pattern >= kFirstCharacterAction && m_attackResult >= 2 && m_attackResult != 6 || pattern < kFirstCharacterAction) && m_patterns[pattern].cancelLevel <= m_patterns[k236236B].level) {
             StartPattern();
             ClearBufferedPress();
             pattern = k236236B;
             return;
         }
-        if (m_command == kCmd236236A && m_gauge >= 0x3e8 && (m_patterns[pattern].frames[frame].flagsB0 & kStateCancellable) > 0 && y == 0.0 && (pattern >= kFirstCharacterAction && m_attackResult >= 2 && m_attackResult != 6 || pattern < kFirstCharacterAction) && m_patterns[pattern].cancelLevel <= m_patterns[k236236A].level) {
+        if (m_command == kCmd236236A && m_gauge >= 1000 && (m_patterns[pattern].frames[frame].flagsB0 & kStateCancellable) > 0 && y == 0.0 && (pattern >= kFirstCharacterAction && m_attackResult >= 2 && m_attackResult != 6 || pattern < kFirstCharacterAction) && m_patterns[pattern].cancelLevel <= m_patterns[k236236A].level) {
             StartPattern();
             ClearBufferedPress();
             pattern = k236236A;
             return;
         }
-        if (m_command == kCmd214214C && m_gauge >= 0xbb8 && (m_patterns[pattern].frames[frame].flagsB0 & kStateCancellable) > 0 && (pattern >= kFirstCharacterAction && m_attackResult >= 2 && m_attackResult != 6 || pattern < kFirstCharacterAction) && m_patterns[pattern].cancelLevel <= m_patterns[k214214Lv3].level) {
+        if (m_command == kCmd214214C && m_gauge >= 3000 && (m_patterns[pattern].frames[frame].flagsB0 & kStateCancellable) > 0 && (pattern >= kFirstCharacterAction && m_attackResult >= 2 && m_attackResult != 6 || pattern < kFirstCharacterAction) && m_patterns[pattern].cancelLevel <= m_patterns[k214214Lv3].level) {
             StartPattern();
             ClearBufferedPress();
             pattern = k214214Lv3;
@@ -164,7 +164,7 @@ void CMakoto::StartCommand()
             }
             return;
         }
-        if ((m_command == kCmd214214B || m_command == kCmd214214C) && m_gauge >= 0x7d0 && (m_patterns[pattern].frames[frame].flagsB0 & kStateCancellable) > 0 && (pattern >= kFirstCharacterAction && m_attackResult >= 2 && m_attackResult != 6 || pattern < kFirstCharacterAction) && m_patterns[pattern].cancelLevel <= m_patterns[k214214Lv2].level) {
+        if ((m_command == kCmd214214B || m_command == kCmd214214C) && m_gauge >= 2000 && (m_patterns[pattern].frames[frame].flagsB0 & kStateCancellable) > 0 && (pattern >= kFirstCharacterAction && m_attackResult >= 2 && m_attackResult != 6 || pattern < kFirstCharacterAction) && m_patterns[pattern].cancelLevel <= m_patterns[k214214Lv2].level) {
             StartPattern();
             ClearBufferedPress();
             pattern = k214214Lv2;
@@ -173,7 +173,7 @@ void CMakoto::StartCommand()
             }
             return;
         }
-        if ((m_command == kCmd214214A || m_command == kCmd214214B || m_command == kCmd214214C) && m_gauge >= 0x3e8 && (m_patterns[pattern].frames[frame].flagsB0 & kStateCancellable) > 0 && (pattern >= kFirstCharacterAction && m_attackResult >= 2 && m_attackResult != 6 || pattern < kFirstCharacterAction) && m_patterns[pattern].cancelLevel <= m_patterns[k214214Lv1].level) {
+        if ((m_command == kCmd214214A || m_command == kCmd214214B || m_command == kCmd214214C) && m_gauge >= 1000 && (m_patterns[pattern].frames[frame].flagsB0 & kStateCancellable) > 0 && (pattern >= kFirstCharacterAction && m_attackResult >= 2 && m_attackResult != 6 || pattern < kFirstCharacterAction) && m_patterns[pattern].cancelLevel <= m_patterns[k214214Lv1].level) {
             StartPattern();
             ClearBufferedPress();
             pattern = k214214Lv1;
@@ -485,7 +485,7 @@ void CMakoto::ReadCommand()
         if ((input & kInputDirections) == kInputLeft - (facing == -1) && step == 1) {
             step = 2;
         }
-        if ((input & kInputDirections) == (facing == -1) + 1 && step == 0 && m_gauge >= 0x3e8) {
+        if ((input & kInputDirections) == (facing == -1) + 1 && step == 0 && m_gauge >= 1000) {
             step = 1;
         }
     }
@@ -516,7 +516,7 @@ void CMakoto::ReadCommand()
         if ((input & kInputDirections) == 6 - (facing == -1) && step == 1) {
             step = 2;
         }
-        if ((input & kInputDirections) == kInputDown && step == 0 && m_gauge >= 0x3e8) {
+        if ((input & kInputDirections) == kInputDown && step == 0 && m_gauge >= 1000) {
             step = 1;
         }
     }
@@ -547,7 +547,7 @@ void CMakoto::ReadCommand()
         if ((input & kInputDirections) == (facing == -1) + 5 && step == 1) {
             step = 2;
         }
-        if ((input & kInputDirections) == kInputDown && step == 0 && m_gauge >= 0x3e8) {
+        if ((input & kInputDirections) == kInputDown && step == 0 && m_gauge >= 1000) {
             step = 1;
         }
     }
@@ -657,7 +657,7 @@ void CMakoto::ReadCommand()
         if ((input & kInputDirections) == (facing == -1) + 1 && step == 1) {
             step = 2;
         }
-        if ((input & kInputDirections) == kInputDown && step == 0 && m_gauge == 0xbb8) {
+        if ((input & kInputDirections) == kInputDown && step == 0 && m_gauge == 3000) {
             step = 1;
         }
     }
@@ -814,17 +814,17 @@ void CMakoto::CpuInput()
     m_pressC = 0;
     m_pressD = 0;
     m_recoilGuardWindow = 0;
-    if ((WORD)Random(0, 0x3e8) < 25.0f * m_cpuSkill + (y < 0.0) * 0x1e * m_cpuSkill + (m_cpuAction == 3) * 0x190 + (pattern == kRecoilGuardAir) * 0x12c) {
-        m_recoilGuardWindow = 0x3c;
+    if ((WORD)Random(0, 1000) < 25.0f * m_cpuSkill + (y < 0.0) * 30 * m_cpuSkill + (m_cpuAction == 3) * 400 + (pattern == kRecoilGuardAir) * 300) {
+        m_recoilGuardWindow = 60;
     }
-    if ((WORD)Random(0, 0x7d0) < ((m_throwProtect > 0) * 4.0 + 1.0) * 8.0 * m_cpuSkill * ((pattern > kLastHitReaction && pattern < kAirRecoveryForward) * 2 + 1)) {
-        m_recoilGuardWindow = 0x3c;
+    if ((WORD)Random(0, 2000) < ((m_throwProtect > 0) * 4.0 + 1.0) * 8.0 * m_cpuSkill * ((pattern > kLastHitReaction && pattern < kAirRecoveryForward) * 2 + 1)) {
+        m_recoilGuardWindow = 60;
     }
-    if ((WORD)Random(0, 0x3e8) < 4e+01f * m_cpuSkill && pattern > kLastSharedAction) {
-        m_recoilGuardWindow = 0x3c;
+    if ((WORD)Random(0, 1000) < 4e+01f * m_cpuSkill && pattern > kLastSharedAction) {
+        m_recoilGuardWindow = 60;
     }
     if (m_canRecoilCounter == 1 && m_cpuAction == 2) {
-        m_recoilGuardWindow = 0x1e;
+        m_recoilGuardWindow = 30;
         if (pattern < kFirstCharacterAction) {
             m_cpuAction = 0;
         }
@@ -836,14 +836,14 @@ void CMakoto::CpuInput()
     dx = ((*m_opponent)->x - x) * facing;
     dy = fabs(y - (*m_opponent)->y);
     if (pattern >= kFirstHitReaction && pattern <= kFirstGuard && timer == 0) {
-        if ((WORD)Random(0, 0x64) < 8.0f * m_cpuSkill) {
+        if ((WORD)Random(0, 100) < 8.0f * m_cpuSkill) {
             m_cpuAction = 3;
         } else {
             m_cpuAction = 0;
         }
-        m_inputX = 1 - (((WORD)Random(0, 0x64) < 0x32) << 1);
-        m_pressD = (WORD)Random(0, 0xf0) < dy;
-        m_pressD = (WORD)Random(0, 0x140) < dx;
+        m_inputX = 1 - (((WORD)Random(0, 100) < 0x32) << 1);
+        m_pressD = (WORD)Random(0, 240) < dy;
+        m_pressD = (WORD)Random(0, 320) < dx;
         if ((*m_opponent)->pattern > kLastSharedAction && (*m_opponent)->pattern < 0xfa && (*m_opponent)->frame < 3 && dy < 100.0 && dx < 150.0) {
             m_pressD = 0;
         }
@@ -857,18 +857,18 @@ void CMakoto::CpuInput()
     }
     if (pattern == kRecoilGuardStand && timer < 6) {
         if ((*m_opponent)->pattern != 0xc8 && (*m_opponent)->pattern != 0xcc && (*m_opponent)->pattern < 0xfa && (*m_opponent)->y == 0.0 && (*m_opponent)->m_hitsLeft == 0) {
-            if (dx < 45.0 && (WORD)Random(0, 0x64) < m_cpuSkill * 2) {
+            if (dx < 45.0 && (WORD)Random(0, 100) < m_cpuSkill * 2) {
                 m_pressA = 1;
                 m_inputY = 0;
                 return;
             }
-            if (dx < 60.0 && (WORD)Random(0, 0x64) < m_cpuSkill * 2) {
+            if (dx < 60.0 && (WORD)Random(0, 100) < m_cpuSkill * 2) {
                 m_pressA = 1;
                 m_inputY = 1;
                 return;
             }
         }
-        if (((*m_opponent)->pattern == 0xc9 || (*m_opponent)->pattern == 0xca || (*m_opponent)->pattern == 0xcd) && (*m_opponent)->pattern < 0xfa && (*m_opponent)->y == 0.0 && (*m_opponent)->m_hitsLeft == 0 && dx > 60.0 && dx < 70.0 && (WORD)Random(0, 0x64) < m_cpuSkill * 1.0f) {
+        if (((*m_opponent)->pattern == 0xc9 || (*m_opponent)->pattern == 0xca || (*m_opponent)->pattern == 0xcd) && (*m_opponent)->pattern < 0xfa && (*m_opponent)->y == 0.0 && (*m_opponent)->m_hitsLeft == 0 && dx > 60.0 && dx < 70.0 && (WORD)Random(0, 100) < m_cpuSkill * 1.0f) {
             m_pressB = 1;
             m_inputY = 1;
             m_inputX = 0;
@@ -877,83 +877,83 @@ void CMakoto::CpuInput()
     }
     if (pattern == kRecoilGuardStand || pattern == kRecoilGuardCrouch) {
         if (dx < 100.0) {
-            if ((WORD)Random(0, 0x64) < m_cpuSkill * 5.0f && m_rfGauge > 500.0) {
+            if ((WORD)Random(0, 100) < m_cpuSkill * 5.0f && m_rfGauge > 500.0) {
                 m_command = kCmd623A;
                 return;
             }
-            if ((WORD)Random(0, 0x64) < m_cpuSkill * 3.0f && m_rfGauge > 500.0) {
+            if ((WORD)Random(0, 100) < m_cpuSkill * 3.0f && m_rfGauge > 500.0) {
                 m_command = kCmd623C;
                 return;
             }
-            if ((WORD)Random(0, 0x64) < m_cpuSkill * 2 && m_rfGauge > 500.0) {
+            if ((WORD)Random(0, 100) < m_cpuSkill * 2 && m_rfGauge > 500.0) {
                 m_command = kCmd412C;
                 return;
             }
-            if (dx < 60.0 && (WORD)Random(0, 0x64) < m_cpuSkill * 1.0f) {
+            if (dx < 60.0 && (WORD)Random(0, 100) < m_cpuSkill * 1.0f) {
                 m_pressA = 1;
                 m_inputY = 0;
                 return;
             }
-            if ((WORD)Random(0, 0x64) < m_cpuSkill * 1.0f && m_gauge >= 0x3e8) {
+            if ((WORD)Random(0, 100) < m_cpuSkill * 1.0f && m_gauge >= 1000) {
                 m_command = (WORD)Random(0, 3) + kCmd214214A;
                 return;
             }
-            if ((WORD)Random(0, 0x64) < m_cpuSkill * 3.0f && m_gauge >= 0x7d0) {
+            if ((WORD)Random(0, 100) < m_cpuSkill * 3.0f && m_gauge >= 2000) {
                 m_command = (WORD)Random(0, 2) + kCmd641236B;
                 return;
             }
         }
         if (dx < 150.0 && dx > 100.0) {
-            if ((WORD)Random(0, 0x64) < m_cpuSkill * 3.0f && m_rfGauge > 500.0) {
+            if ((WORD)Random(0, 100) < m_cpuSkill * 3.0f && m_rfGauge > 500.0) {
                 m_command = kCmd412C;
                 return;
             }
-            if (dx < 120.0 && (WORD)Random(0, 0x64) < m_cpuSkill * 1.0f) {
+            if (dx < 120.0 && (WORD)Random(0, 100) < m_cpuSkill * 1.0f) {
                 m_pressA = 2;
                 m_inputY = 0;
                 return;
             }
-            if ((WORD)Random(0, 0x64) < m_cpuSkill * 2 && m_gauge >= 0x7d0) {
+            if ((WORD)Random(0, 100) < m_cpuSkill * 2 && m_gauge >= 2000) {
                 m_command = (WORD)Random(0, 2) + kCmd641236B;
                 return;
             }
         }
         if (dx > 150.0) {
-            if ((WORD)Random(0, 0x64) < m_cpuSkill * 1.0f && m_rfGauge > 500.0) {
+            if ((WORD)Random(0, 100) < m_cpuSkill * 1.0f && m_rfGauge > 500.0) {
                 m_command = (WORD)Random(0, 2) + kCmd412A;
                 return;
             }
-            if ((WORD)Random(0, 0x64) < m_cpuSkill * 1.0f) {
+            if ((WORD)Random(0, 100) < m_cpuSkill * 1.0f) {
                 m_command = (WORD)Random(0, 2) + kCmd236B;
                 return;
             }
         }
     }
     if (pattern == kRecoilGuardAir && frame == 1 && timer == 0) {
-        if ((WORD)Random(0, 0x64) < m_cpuSkill * 5.0f) {
+        if ((WORD)Random(0, 100) < m_cpuSkill * 5.0f) {
             m_cpuAction = 3;
             return;
         }
-        if (y - (*m_opponent)->y < 0.0 && y - (*m_opponent)->y > -40.0 && dx < 80.0 && (WORD)Random(0, 0x64) < m_cpuSkill * 5.0f) {
+        if (y - (*m_opponent)->y < 0.0 && y - (*m_opponent)->y > -40.0 && dx < 80.0 && (WORD)Random(0, 100) < m_cpuSkill * 5.0f) {
             m_pressA = 1;
             return;
         }
-        if (y - (*m_opponent)->y > 0.0 && y - (*m_opponent)->y < 50.0 && dx < 100.0 && (WORD)Random(0, 0x64) < m_cpuSkill * 5.0f) {
+        if (y - (*m_opponent)->y > 0.0 && y - (*m_opponent)->y < 50.0 && dx < 100.0 && (WORD)Random(0, 100) < m_cpuSkill * 5.0f) {
             m_pressB = 1;
             return;
         }
-        if (y - (*m_opponent)->y < -20.0 && y - (*m_opponent)->y > -90.0 && dx < 110.0 && (WORD)Random(0, 0x64) < m_cpuSkill * 5.0f) {
+        if (y - (*m_opponent)->y < -20.0 && y - (*m_opponent)->y > -90.0 && dx < 110.0 && (WORD)Random(0, 100) < m_cpuSkill * 5.0f) {
             m_pressC = 1;
             m_inputY = 0;
             return;
         }
-        if (dy < 100.0 && (WORD)Random(0, 0x64) < m_cpuSkill * 1.0f) {
+        if (dy < 100.0 && (WORD)Random(0, 100) < m_cpuSkill * 1.0f) {
             m_command = (WORD)Random(0, 2) + kCmd214214A;
             return;
         }
     }
-    if (((*m_opponent)->pattern == kRecoilGuardStand || (*m_opponent)->pattern == kRecoilGuardCrouch || (*m_opponent)->pattern == kRecoilGuardAir) && y == 0.0 && (WORD)Random(0, 0x64) < 15.0f * m_cpuSkill && m_cpuAction != 2 && (*m_opponent)->m_freezeTime == 0) {
-        m_cpuRoll = (WORD)Random(0, 0x64);
+    if (((*m_opponent)->pattern == kRecoilGuardStand || (*m_opponent)->pattern == kRecoilGuardCrouch || (*m_opponent)->pattern == kRecoilGuardAir) && y == 0.0 && (WORD)Random(0, 100) < 15.0f * m_cpuSkill && m_cpuAction != 2 && (*m_opponent)->m_freezeTime == 0) {
+        m_cpuRoll = (WORD)Random(0, 100);
         if (m_cpuRoll < 3 && m_rfGauge > 500.0 && dx < 80.0) {
             m_command = kCmd623A;
             return;
@@ -962,35 +962,35 @@ void CMakoto::CpuInput()
             m_command = kCmd623C;
             return;
         }
-        if (m_cpuRoll < 0xa && m_cpuRoll > 5 && m_rfGauge > 500.0 && dx < 150.0) {
+        if (m_cpuRoll < 10 && m_cpuRoll > 5 && m_rfGauge > 500.0 && dx < 150.0) {
             m_command = kCmd412C;
             return;
         }
-        if (m_cpuRoll < 0x11 && m_cpuRoll > 0xc && m_gauge >= 0x3e8 && dx < 100.0) {
+        if (m_cpuRoll < 17 && m_cpuRoll > 12 && m_gauge >= 1000 && dx < 100.0) {
             m_command = (WORD)Random(0, 3) + kCmd641236A;
             return;
         }
-        if (m_cpuRoll < 0x11 && m_cpuRoll > 0xc && m_gauge >= 0x3e8 && dx > 90.0) {
+        if (m_cpuRoll < 17 && m_cpuRoll > 12 && m_gauge >= 1000 && dx > 90.0) {
             m_command = (WORD)Random(0, 3) + kCmd214214A;
             return;
         }
-        if (m_cpuRoll > 0x41) {
+        if (m_cpuRoll > 65) {
             m_cpuAction = 2;
             return;
         }
     }
-    if (((*m_opponent)->pattern == kRecoilGuardStand || (*m_opponent)->pattern == kRecoilGuardCrouch || (*m_opponent)->pattern == kRecoilGuardAir) && y < 0.0 && (WORD)Random(0, 0x64) < 15.0f * m_cpuSkill && m_cpuAction != 2 && (*m_opponent)->m_freezeTime == 0) {
-        m_cpuRoll = (WORD)Random(0, 0x64);
-        if (m_cpuRoll < 0x11 && m_cpuRoll > 0xc && m_gauge >= 0x3e8 && dx > 50.0) {
+    if (((*m_opponent)->pattern == kRecoilGuardStand || (*m_opponent)->pattern == kRecoilGuardCrouch || (*m_opponent)->pattern == kRecoilGuardAir) && y < 0.0 && (WORD)Random(0, 100) < 15.0f * m_cpuSkill && m_cpuAction != 2 && (*m_opponent)->m_freezeTime == 0) {
+        m_cpuRoll = (WORD)Random(0, 100);
+        if (m_cpuRoll < 17 && m_cpuRoll > 12 && m_gauge >= 1000 && dx > 50.0) {
             m_command = (WORD)Random(0, 3) + kCmd214214A;
             return;
         }
-        if (m_cpuRoll > 0x3c) {
+        if (m_cpuRoll > 60) {
             m_cpuAction = 2;
             return;
         }
     }
-    if ((m_rfGauge > 500.0 || m_rfBlue > 0) && (WORD)Random(0, 0x64) < 8.0f * m_cpuSkill && (*m_opponent)->pattern > kLastHitReaction && (*m_opponent)->pattern < kAirRecoveryForward && (pattern == k623A || pattern == kDashC && (WORD)Random(0, 0xa) == 0 || pattern == k623B || pattern == 0xee)) {
+    if ((m_rfGauge > 500.0 || m_rfBlue > 0) && (WORD)Random(0, 100) < 8.0f * m_cpuSkill && (*m_opponent)->pattern > kLastHitReaction && (*m_opponent)->pattern < kAirRecoveryForward && (pattern == k623A || pattern == kDashC && (WORD)Random(0, 10) == 0 || pattern == k623B || pattern == 0xee)) {
         m_command = kCmd22C;
         return;
     }
@@ -1119,36 +1119,36 @@ void CMakoto::CpuInput()
         }
         return;
     }
-    if (m_attackResult > 1 && m_hitstop == 0 && (WORD)Random(0, 0x64) < m_cpuSkill * 25.0f && m_cpuAction != 1 && m_cpuAction != 2) {
-        m_cpuRoll = (WORD)Random(0, 0x3e8);
+    if (m_attackResult > 1 && m_hitstop == 0 && (WORD)Random(0, 100) < m_cpuSkill * 25.0f && m_cpuAction != 1 && m_cpuAction != 2) {
+        m_cpuRoll = (WORD)Random(0, 1000);
         if (pattern == k5A) {
-            if ((*m_opponent)->y < 0.0 && m_cpuRoll < 0x12c) {
+            if ((*m_opponent)->y < 0.0 && m_cpuRoll < 300) {
                 m_pressB = 1;
                 m_inputY = 0;
                 return;
             }
-            if (dx < 45.0 && m_cpuRoll > 0 && m_cpuRoll < 0x12c) {
+            if (dx < 45.0 && m_cpuRoll > 0 && m_cpuRoll < 300) {
                 m_pressA = 1;
                 m_inputY = Random(0, 2);
                 return;
             }
-            if (dx < 80.0 && m_cpuRoll > 0 && m_cpuRoll < 0x12c) {
+            if (dx < 80.0 && m_cpuRoll > 0 && m_cpuRoll < 300) {
                 m_pressB = 1;
                 m_inputY = 1;
                 return;
             }
-            if (dx < 70.0 && m_cpuRoll > 0x12c && m_cpuRoll < 0x258) {
+            if (dx < 70.0 && m_cpuRoll > 300 && m_cpuRoll < 600) {
                 m_pressB = 1;
                 m_inputY = 0;
                 return;
             }
-            if (m_cpuRoll > 0x3ca) {
+            if (m_cpuRoll > 970) {
                 m_cpuAction = 4;
                 m_inputY = -1;
                 m_inputX = (WORD)Random(0, 2) - 1;
                 return;
             }
-            if (m_cpuRoll > 0x258) {
+            if (m_cpuRoll > 600) {
                 m_cpuAction = 1;
                 if ((WORD)Random(0, 3) == 0) {
                     m_cpuAction = 6;
@@ -1169,49 +1169,49 @@ void CMakoto::CpuInput()
             }
         }
         if (pattern == k5BClose) {
-            if ((*m_opponent)->y < 0.0 && m_cpuRoll < 0x12c && m_attackResult == 3) {
+            if ((*m_opponent)->y < 0.0 && m_cpuRoll < 300 && m_attackResult == 3) {
                 m_command = (WORD)Random(0, 2) + kCmd623B;
                 return;
             }
-            if ((*m_opponent)->y < 0.0 && m_cpuRoll > 0x12c && m_cpuRoll < 0x226) {
+            if ((*m_opponent)->y < 0.0 && m_cpuRoll > 300 && m_cpuRoll < 550) {
                 m_command = (WORD)Random(0, 3) + kCmd412A;
                 return;
             }
-            if ((*m_opponent)->y < 0.0 && m_cpuRoll > 0x226 && m_cpuRoll < 0x258 && m_gauge >= 0x3e8) {
+            if ((*m_opponent)->y < 0.0 && m_cpuRoll > 550 && m_cpuRoll < 600 && m_gauge >= 1000) {
                 m_command = (WORD)Random(0, 3) + kCmd641236A;
                 return;
             }
-            if ((*m_opponent)->y < 0.0 && m_cpuRoll > 0x258 && m_cpuRoll < 0x2ee) {
+            if ((*m_opponent)->y < 0.0 && m_cpuRoll > 600 && m_cpuRoll < 750) {
                 m_inputX = facing;
                 m_inputY = -1;
                 return;
             }
-            if (m_cpuRoll < 0x64) {
+            if (m_cpuRoll < 100) {
                 m_pressC = 1;
                 m_inputY = 1;
                 return;
             }
-            if (m_cpuRoll > 0x64 && m_cpuRoll < 0x15e && dx < 130.0) {
+            if (m_cpuRoll > 100 && m_cpuRoll < 350 && dx < 130.0) {
                 m_pressB = 1;
                 m_inputY = 0;
                 return;
             }
-            if ((*m_opponent)->y < 0.0 && m_cpuRoll > 0x1c2 && m_cpuRoll < 0x258 && dx < 70.0) {
+            if ((*m_opponent)->y < 0.0 && m_cpuRoll > 450 && m_cpuRoll < 600 && dx < 70.0) {
                 m_pressC = 1;
                 return;
             }
-            if (m_cpuRoll > 0x258 && m_cpuRoll < 0x2ee) {
+            if (m_cpuRoll > 600 && m_cpuRoll < 750) {
                 m_inputX = facing;
                 m_inputY = -1;
                 return;
             }
-            if (m_cpuRoll > 0x3d4) {
+            if (m_cpuRoll > 980) {
                 m_cpuAction = 4;
                 m_inputY = -1;
                 m_inputX = (WORD)Random(0, 2) - 1;
                 return;
             }
-            if (m_cpuRoll > 0x1f4) {
+            if (m_cpuRoll > 500) {
                 m_cpuAction = 1;
                 if ((WORD)Random(0, 2) == 0) {
                     m_cpuAction = 6;
@@ -1232,21 +1232,21 @@ void CMakoto::CpuInput()
             }
         }
         if (pattern == k5BFar) {
-            if ((*m_opponent)->y < 0.0 && m_cpuRoll > 0x96 && m_cpuRoll < 0xc8 && m_gauge >= 0x3e8 && dx < 120.0) {
+            if ((*m_opponent)->y < 0.0 && m_cpuRoll > 150 && m_cpuRoll < 200 && m_gauge >= 1000 && dx < 120.0) {
                 m_command = (WORD)Random(0, 3) + kCmd641236A;
                 return;
             }
-            if (m_cpuRoll > 0 && m_cpuRoll < 0xc8) {
+            if (m_cpuRoll > 0 && m_cpuRoll < 200) {
                 m_pressC = 1;
                 m_inputY = 0;
                 return;
             }
-            if (m_cpuRoll > 0xc8 && m_cpuRoll < 0x1f4) {
+            if (m_cpuRoll > 200 && m_cpuRoll < 500) {
                 m_pressC = 1;
                 m_inputY = 1;
                 return;
             }
-            if (m_cpuRoll > 0x1f4) {
+            if (m_cpuRoll > 500) {
                 m_cpuAction = 1;
                 if ((WORD)Random(0, 2) == 0) {
                     m_cpuAction = 6;
@@ -1264,11 +1264,11 @@ void CMakoto::CpuInput()
             }
         }
         if (pattern == k5C) {
-            if (m_cpuRoll > 0 && m_cpuRoll < 0x12c) {
+            if (m_cpuRoll > 0 && m_cpuRoll < 300) {
                 m_command = (WORD)Random(0, 2) + kCmd412A;
                 return;
             }
-            if (m_cpuRoll > 0x12c && m_cpuRoll < 0x258) {
+            if (m_cpuRoll > 300 && m_cpuRoll < 600) {
                 m_command = kCmd236A;
                 if (dx > 160.0) {
                     m_command = kCmd236B;
@@ -1278,47 +1278,47 @@ void CMakoto::CpuInput()
                 }
                 return;
             }
-            if (m_cpuRoll > 0x258 && m_cpuRoll < 0x28a) {
+            if (m_cpuRoll > 600 && m_cpuRoll < 650) {
                 m_command = kCmd214A;
                 return;
             }
-            if (m_cpuRoll > 0x28a && m_cpuRoll < 0x29e && m_gauge >= 0x3e8) {
+            if (m_cpuRoll > 650 && m_cpuRoll < 670 && m_gauge >= 1000) {
                 m_command = kCmd236236B;
                 return;
             }
-            if (m_cpuRoll > 0x384) {
+            if (m_cpuRoll > 900) {
                 m_cpuAction = 1;
                 return;
             }
         }
         if (pattern == k2A) {
-            if ((*m_opponent)->y < 0.0 && m_cpuRoll < 0x12c) {
+            if ((*m_opponent)->y < 0.0 && m_cpuRoll < 300) {
                 m_pressB = 1;
                 m_inputY = 0;
                 return;
             }
-            if (dx < 45.0 && m_cpuRoll > 0 && m_cpuRoll < 0x12c) {
+            if (dx < 45.0 && m_cpuRoll > 0 && m_cpuRoll < 300) {
                 m_pressA = 1;
                 m_inputY = Random(0, 2);
                 return;
             }
-            if (dx < 90.0 && m_cpuRoll > 0 && m_cpuRoll < 0x190) {
+            if (dx < 90.0 && m_cpuRoll > 0 && m_cpuRoll < 400) {
                 m_pressB = 1;
                 m_inputY = 1;
                 return;
             }
-            if (dx < 100.0 && m_cpuRoll > 0x12c && m_cpuRoll < 0x258) {
+            if (dx < 100.0 && m_cpuRoll > 300 && m_cpuRoll < 600) {
                 m_pressB = 1;
                 m_inputY = 0;
                 return;
             }
-            if (m_cpuRoll > 0x3ca) {
+            if (m_cpuRoll > 970) {
                 m_cpuAction = 4;
                 m_inputY = -1;
                 m_inputX = (WORD)Random(0, 2) - 1;
                 return;
             }
-            if (m_cpuRoll > 0x258) {
+            if (m_cpuRoll > 600) {
                 m_cpuAction = 1;
                 if ((WORD)Random(0, 3) == 0) {
                     m_cpuAction = 6;
@@ -1339,49 +1339,49 @@ void CMakoto::CpuInput()
             }
         }
         if (pattern == k2B) {
-            if ((*m_opponent)->y < 0.0 && m_cpuRoll < 0x12c && m_attackResult == 3) {
+            if ((*m_opponent)->y < 0.0 && m_cpuRoll < 300 && m_attackResult == 3) {
                 m_command = (WORD)Random(0, 2) + kCmd623B;
                 return;
             }
-            if ((*m_opponent)->y < 0.0 && m_cpuRoll > 0x12c && m_cpuRoll < 0x226) {
+            if ((*m_opponent)->y < 0.0 && m_cpuRoll > 300 && m_cpuRoll < 550) {
                 m_command = (WORD)Random(0, 3) + kCmd412A;
                 return;
             }
-            if ((*m_opponent)->y < 0.0 && m_cpuRoll > 0x226 && m_cpuRoll < 0x258 && m_gauge >= 0x3e8) {
+            if ((*m_opponent)->y < 0.0 && m_cpuRoll > 550 && m_cpuRoll < 600 && m_gauge >= 1000) {
                 m_command = (WORD)Random(0, 3) + kCmd641236A;
                 return;
             }
-            if ((*m_opponent)->y < 0.0 && m_cpuRoll > 0x258 && m_cpuRoll < 0x2ee) {
+            if ((*m_opponent)->y < 0.0 && m_cpuRoll > 600 && m_cpuRoll < 750) {
                 m_inputX = facing;
                 m_inputY = -1;
                 return;
             }
-            if (m_cpuRoll < 0x64) {
+            if (m_cpuRoll < 100) {
                 m_pressC = 1;
                 m_inputY = 1;
                 return;
             }
-            if (m_cpuRoll > 0x64 && m_cpuRoll < 0x15e && dx < 130.0) {
+            if (m_cpuRoll > 100 && m_cpuRoll < 350 && dx < 130.0) {
                 m_pressB = 1;
                 m_inputY = 0;
                 return;
             }
-            if ((*m_opponent)->y < 0.0 && m_cpuRoll > 0x1c2 && m_cpuRoll < 0x258 && dx < 70.0) {
+            if ((*m_opponent)->y < 0.0 && m_cpuRoll > 450 && m_cpuRoll < 600 && dx < 70.0) {
                 m_pressC = 1;
                 return;
             }
-            if (m_cpuRoll > 0x258 && m_cpuRoll < 0x2ee) {
+            if (m_cpuRoll > 600 && m_cpuRoll < 750) {
                 m_inputX = facing;
                 m_inputY = -1;
                 return;
             }
-            if (m_cpuRoll > 0x3d4) {
+            if (m_cpuRoll > 980) {
                 m_cpuAction = 4;
                 m_inputY = -1;
                 m_inputX = (WORD)Random(0, 2) - 1;
                 return;
             }
-            if (m_cpuRoll > 0x1f4) {
+            if (m_cpuRoll > 500) {
                 m_cpuAction = 1;
                 if ((WORD)Random(0, 2) == 0) {
                     m_cpuAction = 6;
@@ -1402,18 +1402,18 @@ void CMakoto::CpuInput()
             }
         }
         if (pattern == k2C) {
-            if (m_cpuRoll > 0x258 - (m_attackResult == 3) * 0x190 && m_cpuRoll < 0x28a) {
+            if (m_cpuRoll > 600 - (m_attackResult == 3) * 400 && m_cpuRoll < 650) {
                 m_command = kCmd214A;
                 return;
             }
-            if (m_cpuRoll > 0 && m_cpuRoll < 0x12c) {
+            if (m_cpuRoll > 0 && m_cpuRoll < 300) {
                 m_command = (WORD)Random(0, 2) + kCmd412A;
                 if ((WORD)Random(0, 2) == 0) {
                     m_cpuAction = 8;
                 }
                 return;
             }
-            if (m_cpuRoll > 0x12c && m_cpuRoll < 0x258) {
+            if (m_cpuRoll > 300 && m_cpuRoll < 600) {
                 m_command = kCmd236A;
                 if ((WORD)Random(0, 2) == 0) {
                     m_cpuAction = 8;
@@ -1426,30 +1426,30 @@ void CMakoto::CpuInput()
                 }
                 return;
             }
-            if (m_cpuRoll > 0x28a && m_cpuRoll < 0x29e && m_gauge >= 0x3e8) {
+            if (m_cpuRoll > 650 && m_cpuRoll < 670 && m_gauge >= 1000) {
                 m_command = kCmd236236B;
                 return;
             }
-            if (m_cpuRoll > 0x384) {
+            if (m_cpuRoll > 900) {
                 m_cpuAction = 1;
                 return;
             }
         }
         if (pattern == kJumpA) {
-            if ((*m_opponent)->y < 0.0 && m_cpuRoll < 0x12c) {
+            if ((*m_opponent)->y < 0.0 && m_cpuRoll < 300) {
                 m_pressB = 1;
                 return;
             }
-            if (dx < 60.0 && m_cpuRoll < 0x190) {
+            if (dx < 60.0 && m_cpuRoll < 400) {
                 m_pressA = 1;
                 return;
             }
-            if (dx < 125.0 && m_cpuRoll > 0x18f && m_cpuRoll < 0x2bc) {
+            if (dx < 125.0 && m_cpuRoll > 399 && m_cpuRoll < 700) {
                 m_pressC = 1;
                 m_inputY = 0;
                 return;
             }
-            if (m_cpuRoll > 0x2bb) {
+            if (m_cpuRoll > 699) {
                 m_cpuAction = 1;
                 if ((WORD)Random(0, 4) == 0) {
                     m_cpuAction = 3;
@@ -1458,51 +1458,51 @@ void CMakoto::CpuInput()
             }
         }
         if (pattern == kJumpB) {
-            if (m_cpuRoll > 0x14 && m_cpuRoll < 0x3c && m_attackResult == 3 && (*m_opponent)->y < 0.0) {
+            if (m_cpuRoll > 20 && m_cpuRoll < 60 && m_attackResult == 3 && (*m_opponent)->y < 0.0) {
                 m_command = kCmd236A;
                 return;
             }
-            if (m_cpuRoll > 0x50 && m_cpuRoll < 0x12c) {
+            if (m_cpuRoll > 80 && m_cpuRoll < 300) {
                 m_pressC = 1;
                 return;
             }
-            if (m_cpuRoll > 0x3b6) {
+            if (m_cpuRoll > 950) {
                 m_inputX = (WORD)Random(0, 2) - 1;
                 return;
             }
-            if (m_cpuRoll > 0x289) {
+            if (m_cpuRoll > 649) {
                 m_cpuAction = 3;
                 return;
             }
         }
         if (pattern == kJump2C) {
-            if (m_cpuRoll > 0x3b6) {
+            if (m_cpuRoll > 950) {
                 m_inputX = (WORD)Random(0, 2) - 1;
                 return;
             }
-            if (m_cpuRoll > 0x289) {
+            if (m_cpuRoll > 649) {
                 m_cpuAction = 3;
                 return;
             }
         }
         if (pattern == kDashB) {
-            if (m_cpuRoll > 0 && m_cpuRoll < 0xc8) {
+            if (m_cpuRoll > 0 && m_cpuRoll < 200) {
                 m_command = kCmd236A;
                 return;
             }
-            if (m_cpuRoll > 0xc8 && m_cpuRoll < 0xd2 && m_rfGauge > 350.0) {
+            if (m_cpuRoll > 200 && m_cpuRoll < 210 && m_rfGauge > 350.0) {
                 m_command = kCmd22C;
                 return;
             }
-            if (m_cpuRoll > 0xdc && m_cpuRoll < 0x12c) {
+            if (m_cpuRoll > 220 && m_cpuRoll < 300) {
                 m_command = kCmd214A;
                 return;
             }
-            if (m_cpuRoll > 0x12c && m_cpuRoll < 0x154) {
+            if (m_cpuRoll > 300 && m_cpuRoll < 340) {
                 m_command = kCmd412B;
                 return;
             }
-            if (m_cpuRoll > 0x190) {
+            if (m_cpuRoll > 400) {
                 m_cpuAction = 1;
                 if ((WORD)Random(0, 2) == 0) {
                     m_cpuAction = 6;
@@ -1523,23 +1523,23 @@ void CMakoto::CpuInput()
             }
         }
         if (pattern == kDash2B) {
-            if (m_cpuRoll > 0 && m_cpuRoll < 0xc8) {
+            if (m_cpuRoll > 0 && m_cpuRoll < 200) {
                 m_command = kCmd236A;
                 return;
             }
-            if (m_cpuRoll > 0xc8 && m_cpuRoll < 0xd2 && m_rfGauge > 350.0) {
+            if (m_cpuRoll > 200 && m_cpuRoll < 210 && m_rfGauge > 350.0) {
                 m_command = kCmd22C;
                 return;
             }
-            if (m_cpuRoll > 0xdc && m_cpuRoll < 0x12c) {
+            if (m_cpuRoll > 220 && m_cpuRoll < 300) {
                 m_command = kCmd214A;
                 return;
             }
-            if (m_cpuRoll > 0x12c && m_cpuRoll < 0x154) {
+            if (m_cpuRoll > 300 && m_cpuRoll < 340) {
                 m_command = kCmd412B;
                 return;
             }
-            if (m_cpuRoll > 0x190) {
+            if (m_cpuRoll > 400) {
                 m_cpuAction = 1;
                 if ((WORD)Random(0, 2) == 0) {
                     m_cpuAction = 6;
@@ -1560,33 +1560,33 @@ void CMakoto::CpuInput()
             }
         }
         if (pattern == kDash2C) {
-            if (m_cpuRoll > 0 && m_cpuRoll < 0xc8) {
+            if (m_cpuRoll > 0 && m_cpuRoll < 200) {
                 m_command = kCmd236A;
                 return;
             }
-            if (m_cpuRoll > 0xc8 && m_cpuRoll < 0xd2 && m_rfGauge > 350.0) {
+            if (m_cpuRoll > 200 && m_cpuRoll < 210 && m_rfGauge > 350.0) {
                 m_command = kCmd22C;
                 return;
             }
-            if (m_cpuRoll > 0xdc && m_cpuRoll < 0x12c) {
+            if (m_cpuRoll > 220 && m_cpuRoll < 300) {
                 m_command = kCmd214A;
                 if ((WORD)Random(0, 2) == 0) {
                     m_cpuAction = 8;
                 }
                 return;
             }
-            if (m_cpuRoll > 0x12c && m_cpuRoll < 0x154) {
+            if (m_cpuRoll > 300 && m_cpuRoll < 340) {
                 m_command = kCmd412B;
                 if ((WORD)Random(0, 2) == 0) {
                     m_cpuAction = 8;
                 }
                 return;
             }
-            if (m_cpuRoll > 0x384) {
+            if (m_cpuRoll > 900) {
                 m_cpuAction = 1;
             }
         }
-        if (pattern == kDash2A && m_cpuRoll > 0x1f4) {
+        if (pattern == kDash2A && m_cpuRoll > 500) {
             m_cpuAction = 1;
             if (dx < 50.0) {
                 m_cpuAction = 0x14;
@@ -1594,8 +1594,8 @@ void CMakoto::CpuInput()
             return;
         }
     }
-    if ((WORD)Random(0, 0x64) < 25.0f * m_cpuSkill) {
-        m_cpuRoll = (WORD)Random(0, 0x3e8);
+    if ((WORD)Random(0, 100) < 25.0f * m_cpuSkill) {
+        m_cpuRoll = (WORD)Random(0, 1000);
         if (y == 0.0) {
             if ((*m_opponent)->y == 0.0 && (*m_opponent)->pattern != kLyingDown) {
                 if (dx < 40.0 && (*m_opponent)->y == 0.0 && m_cpuRoll < 5) {
@@ -1605,103 +1605,103 @@ void CMakoto::CpuInput()
                     return;
                 }
                 if (dx < 60.0) {
-                    if (m_cpuRoll < ((*m_opponent)->pattern > kLastFreeAction && (*m_opponent)->pattern < kGuardAir) * 0xf + 0x14) {
+                    if (m_cpuRoll < ((*m_opponent)->pattern > kLastFreeAction && (*m_opponent)->pattern < kGuardAir) * 15 + 20) {
                         m_pressA = 1;
                         m_inputY = 1;
                         return;
                     }
                 }
                 if (dx < 45.0) {
-                    if (m_cpuRoll < ((*m_opponent)->pattern > kLastFreeAction && (*m_opponent)->pattern < kGuardAir) * 0xf + 0x14) {
+                    if (m_cpuRoll < ((*m_opponent)->pattern > kLastFreeAction && (*m_opponent)->pattern < kGuardAir) * 15 + 20) {
                         m_pressA = 1;
                         m_inputY = 0;
                         return;
                     }
                 }
                 if (dx > 50.0 && dx < 80.0) {
-                    if (m_cpuRoll < ((*m_opponent)->pattern > kLastFreeAction && (*m_opponent)->pattern < kGuardAir) * 0xf + 0x41 && m_cpuRoll > 0x28) {
+                    if (m_cpuRoll < ((*m_opponent)->pattern > kLastFreeAction && (*m_opponent)->pattern < kGuardAir) * 15 + 65 && m_cpuRoll > 40) {
                         m_pressB = 1;
                         m_inputY = 1;
                         return;
                     }
                 }
-                if (0x46 - ((*m_opponent)->pattern > kLastFreeAction && (*m_opponent)->pattern < kGuardAir) * 0x46 < dx && dx < 95.0) {
-                    if (m_cpuRoll < ((*m_opponent)->pattern > kLastFreeAction && (*m_opponent)->pattern < kGuardAir) * 0x14 + 0x50 && m_cpuRoll > 0x46) {
+                if (70 - ((*m_opponent)->pattern > kLastFreeAction && (*m_opponent)->pattern < kGuardAir) * 70 < dx && dx < 95.0) {
+                    if (m_cpuRoll < ((*m_opponent)->pattern > kLastFreeAction && (*m_opponent)->pattern < kGuardAir) * 20 + 80 && m_cpuRoll > 70) {
                         m_cpuAction = 0xc;
                         return;
                     }
                 }
-                if (0x50 - ((*m_opponent)->pattern > kLastFreeAction && (*m_opponent)->pattern < kGuardAir) * 0x46 < dx && dx < 110.0) {
-                    if (m_cpuRoll < ((*m_opponent)->pattern > kLastFreeAction && (*m_opponent)->pattern < kGuardAir) * 0xf + 0x80 && m_cpuRoll > 0x78) {
+                if (80 - ((*m_opponent)->pattern > kLastFreeAction && (*m_opponent)->pattern < kGuardAir) * 70 < dx && dx < 110.0) {
+                    if (m_cpuRoll < ((*m_opponent)->pattern > kLastFreeAction && (*m_opponent)->pattern < kGuardAir) * 15 + 128 && m_cpuRoll > 120) {
                         m_cpuAction = 8;
                         return;
                     }
                 }
-                if (dx < 180.0 && dx > 150.0 && m_cpuRoll < 0xaa && m_cpuRoll > 0x96) {
+                if (dx < 180.0 && dx > 150.0 && m_cpuRoll < 170 && m_cpuRoll > 150) {
                     m_cpuAction = 0x10;
                     return;
                 }
-                if (dx < 130.0 && dx > 100.0 && m_cpuRoll < 0xc3 && m_cpuRoll > 0xaa) {
+                if (dx < 130.0 && dx > 100.0 && m_cpuRoll < 195 && m_cpuRoll > 170) {
                     m_pressB = 1;
                     m_inputY = 0;
                     return;
                 }
-                if (0x50 - ((*m_opponent)->pattern > kLastFreeAction && (*m_opponent)->pattern < kGuardAir) * 0x50 < dx && dx < 120.0) {
-                    if (m_cpuRoll < ((*m_opponent)->pattern > kLastFreeAction && (*m_opponent)->pattern < kGuardAir) * 0x19 + 0xb9 && m_cpuRoll > 0xaa) {
+                if (80 - ((*m_opponent)->pattern > kLastFreeAction && (*m_opponent)->pattern < kGuardAir) * 80 < dx && dx < 120.0) {
+                    if (m_cpuRoll < ((*m_opponent)->pattern > kLastFreeAction && (*m_opponent)->pattern < kGuardAir) * 25 + 185 && m_cpuRoll > 170) {
                         m_cpuAction = 0xe;
                         return;
                     }
                 }
-                if (0x5a - ((*m_opponent)->pattern > kLastFreeAction && (*m_opponent)->pattern < kGuardAir) * 0x5a < dx && dx < 120.0) {
-                    if (m_cpuRoll < ((*m_opponent)->pattern > kLastFreeAction && (*m_opponent)->pattern < kGuardAir) * 0x19 + 0xe1 && m_cpuRoll > 0xd2) {
+                if (90 - ((*m_opponent)->pattern > kLastFreeAction && (*m_opponent)->pattern < kGuardAir) * 90 < dx && dx < 120.0) {
+                    if (m_cpuRoll < ((*m_opponent)->pattern > kLastFreeAction && (*m_opponent)->pattern < kGuardAir) * 25 + 225 && m_cpuRoll > 210) {
                         m_cpuAction = 0xa;
                         return;
                     }
                 }
-                if (dx > 130.0 && dx < 170.0 && m_cpuRoll < 0x104 && m_cpuRoll > 0xfa) {
+                if (dx > 130.0 && dx < 170.0 && m_cpuRoll < 260 && m_cpuRoll > 250) {
                     m_cpuAction = 0xa;
                     return;
                 }
-                if (dx < 80.0 && m_cpuRoll < 0x113 && m_cpuRoll > 0x104 && m_rfGauge > 500.0 && (*m_opponent)->pattern > kLastSharedAction) {
+                if (dx < 80.0 && m_cpuRoll < 275 && m_cpuRoll > 260 && m_rfGauge > 500.0 && (*m_opponent)->pattern > kLastSharedAction) {
                     m_command = kCmd623C;
                     return;
                 }
-                if (dx < 80.0 && m_cpuRoll < 0x118 && m_cpuRoll > 0x113 && m_gauge >= 0x3e8 && (*m_opponent)->pattern > kLastSharedAction) {
+                if (dx < 80.0 && m_cpuRoll < 280 && m_cpuRoll > 275 && m_gauge >= 1000 && (*m_opponent)->pattern > kLastSharedAction) {
                     m_command = (WORD)Random(0, 3) + kCmd236236B;
                     return;
                 }
-                if (dx > 160.0 && m_cpuRoll < 0x136 && m_cpuRoll > 0x12c) {
+                if (dx > 160.0 && m_cpuRoll < 310 && m_cpuRoll > 300) {
                     m_command = kCmd412A;
                     return;
                 }
-                if (dx > 100.0 && dx < 160.0 && m_cpuRoll < 0x140 && m_cpuRoll > 0x136) {
+                if (dx > 100.0 && dx < 160.0 && m_cpuRoll < 320 && m_cpuRoll > 310) {
                     m_command = kCmd412B;
                     return;
                 }
-                if (dx > 100.0 && dx < 160.0 && m_cpuRoll < 0x145 && m_cpuRoll > 0x140) {
+                if (dx > 100.0 && dx < 160.0 && m_cpuRoll < 325 && m_cpuRoll > 320) {
                     m_command = kCmd412C;
                     return;
                 }
-                if (dx > 100.0 && dx < 160.0 && m_cpuRoll < 0x154 && m_cpuRoll > 0x14a) {
+                if (dx > 100.0 && dx < 160.0 && m_cpuRoll < 340 && m_cpuRoll > 330) {
                     m_command = kCmd236A;
                     return;
                 }
-                if (dx > 160.0 && m_cpuRoll < 0x168 && m_cpuRoll > 0x154) {
+                if (dx > 160.0 && m_cpuRoll < 360 && m_cpuRoll > 340) {
                     m_command = kCmd236B;
                     return;
                 }
-                if (dx > 160.0 && m_cpuRoll < 0x168 && m_cpuRoll > 0x154) {
+                if (dx > 160.0 && m_cpuRoll < 360 && m_cpuRoll > 340) {
                     m_command = (WORD)Random(0, 2) + kCmd214A;
                     return;
                 }
-                if (m_cpuRoll < 0x320 && m_cpuRoll > 0x2bc && (*m_opponent)->pattern > kLastFreeAction && (*m_opponent)->pattern < kGuardAir && dx > 100.0) {
+                if (m_cpuRoll < 800 && m_cpuRoll > 700 && (*m_opponent)->pattern > kLastFreeAction && (*m_opponent)->pattern < kGuardAir && dx > 100.0) {
                     m_cpuAction = 5;
                     return;
                 }
             }
             if ((*m_opponent)->y < 0.0) {
                 if ((*m_opponent)->vy < 0.0) {
-                    if (dx < 80.0 && dy < 120.0 && m_cpuRoll < 0xa) {
+                    if (dx < 80.0 && dy < 120.0 && m_cpuRoll < 10) {
                         m_inputY = -1;
                         m_inputX = -facing;
                         return;
@@ -1716,24 +1716,24 @@ void CMakoto::CpuInput()
                         m_command = kCmd623C;
                         return;
                     }
-                    if (dx < 90.0 && dy < 140.0 && dy > 80.0 && m_cpuRoll < 0xf) {
+                    if (dx < 90.0 && dy < 140.0 && dy > 80.0 && m_cpuRoll < 15) {
                         m_command = kCmd623B;
                         return;
                     }
-                    if (dx < 120.0 && dx > 80.0 && dy < 140.0 && dy > 80.0 && m_cpuRoll < 0x19 && m_cpuRoll > 0xf && (m_rfGauge > 500.0 || m_rfBlue > 0)) {
+                    if (dx < 120.0 && dx > 80.0 && dy < 140.0 && dy > 80.0 && m_cpuRoll < 25 && m_cpuRoll > 15 && (m_rfGauge > 500.0 || m_rfBlue > 0)) {
                         m_command = kCmd412C;
                         return;
                     }
-                    if (dx < 160.0 && dx > 120.0 && dy < 300.0 && dy > 160.0 && m_cpuRoll < 0x28 && m_cpuRoll > 0x1e) {
+                    if (dx < 160.0 && dx > 120.0 && dy < 300.0 && dy > 160.0 && m_cpuRoll < 40 && m_cpuRoll > 30) {
                         m_command = kCmd412A;
                         return;
                     }
-                    if (dx > 130.0 && dx < 150.0 && dy < 150.0 && dy > 120.0 && m_cpuRoll < 0x6e && m_cpuRoll > 0x50) {
+                    if (dx > 130.0 && dx < 150.0 && dy < 150.0 && dy > 120.0 && m_cpuRoll < 110 && m_cpuRoll > 80) {
                         m_pressB = 1;
                         m_inputY = 0;
                         return;
                     }
-                    if (dx < 70.0 && m_cpuRoll < 0xdc && m_cpuRoll > 0xc8 && (*m_opponent)->y < -50.0 && dy < 90.0 && m_gauge >= 0x7d0) {
+                    if (dx < 70.0 && m_cpuRoll < 220 && m_cpuRoll > 200 && (*m_opponent)->y < -50.0 && dy < 90.0 && m_gauge >= 2000) {
                         m_command = (WORD)Random(0, 2) + kCmd641236B;
                         return;
                     }
@@ -1742,50 +1742,50 @@ void CMakoto::CpuInput()
         }
         if (y < 0.0 && m_cpuAction != 3) {
             if ((*m_opponent)->y == 0.0) {
-                if (dx < 80.0 && dy < 100.0 && m_cpuRoll < 0x64) {
+                if (dx < 80.0 && dy < 100.0 && m_cpuRoll < 100) {
                     m_pressA = 1;
                     return;
                 }
-                if (dx > 60.0 && dx < 100.0 && dy > 60.0 && dy < 120.0 && m_cpuRoll > 0xb4 && m_cpuRoll < 0xf0) {
+                if (dx > 60.0 && dx < 100.0 && dy > 60.0 && dy < 120.0 && m_cpuRoll > 180 && m_cpuRoll < 240) {
                     m_pressC = 1;
                     return;
                 }
-                if (dx > 150.0 && m_cpuRoll > 0xf0 && m_cpuRoll < 0xf5 && dy > 80.0) {
+                if (dx > 150.0 && m_cpuRoll > 240 && m_cpuRoll < 245 && dy > 80.0) {
                     m_command = (WORD)Random(0, 3) + kCmd214214A;
                     return;
                 }
             }
             if ((*m_opponent)->y < 0.0) {
-                if (dx < 80.0 && dy < 100.0 && m_cpuRoll < 0x14) {
+                if (dx < 80.0 && dy < 100.0 && m_cpuRoll < 20) {
                     m_pressA = 1;
                     return;
                 }
-                if (dx > 20.0 && dx < 100.0 && dy > 0.0 && dy < 90.0 && (*m_opponent)->y < y && m_cpuRoll > 0x14 && m_cpuRoll < 0x3c) {
+                if (dx > 20.0 && dx < 100.0 && dy > 0.0 && dy < 90.0 && (*m_opponent)->y < y && m_cpuRoll > 20 && m_cpuRoll < 60) {
                     m_pressB = 1;
                     return;
                 }
             }
         }
     }
-    if (pattern < kFirstHitReaction && ((*m_opponent)->pattern > kLastHitReaction && (*m_opponent)->pattern < kGuardAir || (*m_opponent)->pattern > kLastFreeAction && (*m_opponent)->pattern < kHitAir) && y == 0.0 && (WORD)Random(0, 0x64) < 5.0f * m_cpuSkill && dx > 120.0) {
+    if (pattern < kFirstHitReaction && ((*m_opponent)->pattern > kLastHitReaction && (*m_opponent)->pattern < kGuardAir || (*m_opponent)->pattern > kLastFreeAction && (*m_opponent)->pattern < kHitAir) && y == 0.0 && (WORD)Random(0, 100) < 5.0f * m_cpuSkill && dx > 120.0) {
         m_command = facing == 1;
         return;
     }
-    if (pattern < kFirstHitReaction && (*m_opponent)->pattern < kFirstHitReaction && dx > 800.0 && dx < 80.0 && (WORD)Random(0, 0x64) < 3.0f * m_cpuSkill && x > 150.0 && x < 490.0) {
+    if (pattern < kFirstHitReaction && (*m_opponent)->pattern < kFirstHitReaction && dx > 800.0 && dx < 80.0 && (WORD)Random(0, 100) < 3.0f * m_cpuSkill && x > 150.0 && x < 490.0) {
         m_command = -((facing == 1) - 1);
         return;
     }
-    if ((WORD)Random(0, 0x3e8) < 2) {
+    if ((WORD)Random(0, 1000) < 2) {
         m_cpuAction = 4;
         return;
     }
-    if ((WORD)Random(0, 0x64) < 2) {
-        if ((WORD)Random(0, 0x64) < 8.0f * m_cpuSkill) {
+    if ((WORD)Random(0, 100) < 2) {
+        if ((WORD)Random(0, 100) < 8.0f * m_cpuSkill) {
             m_cpuAction = 3;
         } else {
             m_cpuAction = 0;
         }
-        if (dx > 180.0 && y == 0.0 && (WORD)Random(0, 0x64) < 2) {
+        if (dx > 180.0 && y == 0.0 && (WORD)Random(0, 100) < 2) {
             m_inputX = 0;
             m_inputY = -1;
             return;
@@ -1797,39 +1797,39 @@ void CMakoto::CpuInput()
         }
     }
     if (m_cpuWalkRight > 0) {
-        if ((char)AtScreenEdge() != 0 && m_cpuWalkRight > 0xf) {
-            m_cpuWalkRight = 0xf;
+        if ((char)AtScreenEdge() != 0 && m_cpuWalkRight > 15) {
+            m_cpuWalkRight = 15;
         }
         m_inputX = 1;
         return;
     }
     if (m_cpuWalkLeft > 0) {
-        if ((char)AtScreenEdge() != 0 && m_cpuWalkLeft > 0xf) {
-            m_cpuWalkLeft = 0xf;
+        if ((char)AtScreenEdge() != 0 && m_cpuWalkLeft > 15) {
+            m_cpuWalkLeft = 15;
         }
         m_inputX = -1;
         return;
     }
-    if ((WORD)Random(0, 0x64) < 0x32 && dx < 120.0) {
+    if ((WORD)Random(0, 100) < 50 && dx < 120.0) {
         if (facing == 1) {
-            m_cpuWalkLeft = (WORD)Random(0, 0xc8) + 0x3c;
+            m_cpuWalkLeft = (WORD)Random(0, 200) + 60;
         } else {
-            m_cpuWalkRight = (WORD)Random(0, 0xc8) + 0x3c;
+            m_cpuWalkRight = (WORD)Random(0, 200) + 60;
         }
     }
-    if ((WORD)Random(0, 0x64) < 0x32) {
+    if ((WORD)Random(0, 100) < 50) {
         if (facing == 1) {
-            m_cpuWalkRight = (WORD)Random(0, 0xc8) + 0x3c;
+            m_cpuWalkRight = (WORD)Random(0, 200) + 60;
         } else {
-            m_cpuWalkLeft = (WORD)Random(0, 0xc8) + 0x3c;
+            m_cpuWalkLeft = (WORD)Random(0, 200) + 60;
         }
         return;
     }
     if (facing == -1) {
-        m_cpuWalkRight = (WORD)Random(0, 0xc8) + 0x3c;
+        m_cpuWalkRight = (WORD)Random(0, 200) + 60;
         return;
     }
-    m_cpuWalkLeft = (WORD)Random(0, 0xc8) + 0x3c;
+    m_cpuWalkLeft = (WORD)Random(0, 200) + 60;
 }
 
 void CMakoto::UpdateObjects()
@@ -2033,8 +2033,8 @@ void CMakoto::UpdateObjects()
                     m_objectVar2[slot] = 3;
                 }
                 if (m_objects[slot].frame == 0 && m_objectVar1[slot] == 0) {
-                    m_objects[slot].vx = (WORD)Random(0, 0xf) * 0.1 + 0.5;
-                    m_objects[slot].vy = -1.5 - (WORD)Random(0, 0xa) * 0.1;
+                    m_objects[slot].vx = (WORD)Random(0, 15) * 0.1 + 0.5;
+                    m_objects[slot].vy = -1.5 - (WORD)Random(0, 10) * 0.1;
                     m_objects[slot].ax = 0.18;
                     m_objectVar1[slot]++;
                 }
@@ -2076,7 +2076,7 @@ void CMakoto::UpdateObjects()
                     if (m_objects[slot].frame == 3) {
                         m_objects[slot].frame = m_objects[slot].frame - 3;
                     }
-                    if (m_objects[slot].frame == 6 && m_objectVar1[slot] < 0x1e) {
+                    if (m_objects[slot].frame == 6 && m_objectVar1[slot] < 30) {
                         m_objects[slot].frame = m_objects[slot].frame - 3;
                         m_objectVar1[slot]++;
                     }
@@ -2115,7 +2115,7 @@ void CMakoto::UpdateObjects()
                     effect.layer = 1;
                     effect.facing = facing;
                     SpawnObject(&effect);
-                    m_objectVar2[slot] = 0xf;
+                    m_objectVar2[slot] = 15;
                 }
                 if (m_objects[slot].y + m_objects[slot].vy > 0.0 && m_objects[slot].frame == 0) {
                     m_objects[slot].y = 0.0;
@@ -2185,7 +2185,7 @@ void CMakoto::UpdateObjects()
                     effect.layer = 1;
                     effect.facing = facing;
                     SpawnObject(&effect);
-                    m_objectVar2[slot] = 0x15;
+                    m_objectVar2[slot] = 21;
                 }
                 m_objectVar2[slot]--;
                 if (m_objects[slot].y + m_objects[slot].vy > 0.0 && m_objects[slot].frame == 0) {
@@ -2233,7 +2233,7 @@ void CMakoto::UpdateObjects()
                     effect.layer = 1;
                     effect.facing = facing;
                     SpawnObject(&effect);
-                    m_objectVar2[slot] = 0xf;
+                    m_objectVar2[slot] = 15;
                 }
                 if (m_objects[slot].y + m_objects[slot].vy > 0.0 && m_objects[slot].frame == 0) {
                     m_objects[slot].y = 0.0;
@@ -2973,7 +2973,7 @@ void CMakoto::UpdateObjects()
                     m_objects[slot].attackResult = 0;
                     if (m_objects[slot].frame >= frameCount) {
                         effect.type = 0x19e;
-                        effect.x = (double)((int)m_objects[slot].x + m_objects[slot].facing * 0x3c);
+                        effect.x = (double)((int)m_objects[slot].x + m_objects[slot].facing * 60);
                         effect.y = 5.0;
                         effect.scale = 2;
                         effect.layer = 1;
@@ -2995,8 +2995,8 @@ void CMakoto::UpdateObjects()
                 }
                 break;
             case kObj214214HitLv1:
-                m_objects[slot].hitsLeft = 0x63;
-                if (pattern != k214214Lv1 || pattern == k214214Lv1 && frame > 0x13) {
+                m_objects[slot].hitsLeft = 99;
+                if (pattern != k214214Lv1 || pattern == k214214Lv1 && frame > 19) {
                     RemoveObject(slot);
                 }
                 m_objects[slot].timer++;
@@ -3010,8 +3010,8 @@ void CMakoto::UpdateObjects()
                 }
                 break;
             case kObj214214HitLv2:
-                m_objects[slot].hitsLeft = 0x63;
-                if (pattern != k214214Lv2 || pattern == k214214Lv2 && frame > 0x13) {
+                m_objects[slot].hitsLeft = 99;
+                if (pattern != k214214Lv2 || pattern == k214214Lv2 && frame > 19) {
                     RemoveObject(slot);
                 }
                 m_objects[slot].timer++;
@@ -3025,8 +3025,8 @@ void CMakoto::UpdateObjects()
                 }
                 break;
             case kObj214214HitLv3:
-                m_objects[slot].hitsLeft = 0x63;
-                if (pattern != k214214Lv3 || pattern == k214214Lv3 && frame > 0x13) {
+                m_objects[slot].hitsLeft = 99;
+                if (pattern != k214214Lv3 || pattern == k214214Lv3 && frame > 19) {
                     RemoveObject(slot);
                 }
                 m_objects[slot].timer++;
@@ -3055,7 +3055,7 @@ void CMakoto::UpdateObjects()
                 if (m_objects[slot].vx < 0.0) {
                     m_objects[slot].vx = 0.0;
                 }
-                if (m_objectVar2[slot] > 0x5a) {
+                if (m_objectVar2[slot] > 90) {
                     m_objects[slot].attackResult = 0;
                     m_objectVar2[slot] = 0;
                 }
@@ -3084,7 +3084,7 @@ void CMakoto::UpdateObjects()
                     RemoveObject(slot);
                     break;
                 }
-                if (m_objectVar2[slot] > 0x5a) {
+                if (m_objectVar2[slot] > 90) {
                     m_objects[slot].attackResult = 0;
                     m_objectVar2[slot] = 0;
                 }
@@ -3101,7 +3101,7 @@ void CMakoto::UpdateObjects()
                     m_objects[slot].timer = 0;
                     m_objects[slot].frame++;
                     if (m_objects[slot].frame >= frameCount) {
-                        if (m_objectVar3[slot] < 0xc) {
+                        if (m_objectVar3[slot] < 12) {
                             m_objects[slot].frame = 0;
                             m_objectVar3[slot]++;
                         } else {
@@ -3122,7 +3122,7 @@ void CMakoto::UpdateObjects()
                     break;
                 }
                 m_objects[slot].vy += 0.0015;
-                if (m_objectVar2[slot] > 0x5a) {
+                if (m_objectVar2[slot] > 90) {
                     m_objects[slot].attackResult = 0;
                     m_objectVar2[slot] = 0;
                 }
@@ -3141,8 +3141,8 @@ void CMakoto::UpdateObjects()
                 break;
             case kObj214214Debris:
                 if (m_objectVar1[slot] == 0) {
-                    m_objects[slot].vy = (WORD)Random(0, 0x14) * 0.01 + -2.6;
-                    m_objects[slot].vx = -1.0 - (WORD)Random(0, 0x14) * 0.01;
+                    m_objects[slot].vy = (WORD)Random(0, 20) * 0.01 + -2.6;
+                    m_objects[slot].vx = -1.0 - (WORD)Random(0, 20) * 0.01;
                 }
                 if (m_objects[slot].y + m_objects[slot].vy > 0.0) {
                     m_playVoice = 2;
@@ -3155,7 +3155,7 @@ void CMakoto::UpdateObjects()
                 }
                 m_objectVar1[slot]++;
                 m_objects[slot].vy += 0.05;
-                if (m_objectVar1[slot] > 0xb4) {
+                if (m_objectVar1[slot] > 180) {
                     RemoveObject(slot);
                     break;
                 }
@@ -3201,23 +3201,23 @@ void CMakoto::UpdateObjects()
                 }
                 break;
             case kObj641236Aura:
-                if (m_objects[slot].frame < 0x1d) {
-                    m_objects[slot].x = facing * 0xc + x;
+                if (m_objects[slot].frame < 29) {
+                    m_objects[slot].x = facing * 12 + x;
                     m_objects[slot].y = y - 50.0;
                 }
-                if (m_objects[slot].frame < 0x1d && m_objectVar2[slot] <= 0) {
+                if (m_objects[slot].frame < 29 && m_objectVar2[slot] <= 0) {
                     effect.type = 0x22;
-                    effect.x = (double)((int)m_objects[slot].x + -m_objects[slot].facing * 0x2f + (WORD)Random(0, 0xa));
-                    effect.y = (double)((int)m_objects[slot].y + 0xc + (WORD)Random(0, 0xa));
+                    effect.x = (double)((int)m_objects[slot].x + -m_objects[slot].facing * 47 + (WORD)Random(0, 10));
+                    effect.y = (double)((int)m_objects[slot].y + 12 + (WORD)Random(0, 10));
                     effect.scale = 2;
                     effect.layer = 1;
                     m_game->CreateEffect((EffectDesc*)&effect);
                     m_objectVar2[slot] = 2;
                 }
-                if (m_objects[slot].frame < 0x1d && (WORD)Random(0, 0x64 - (pattern == k641236Lv3) * 0x32) < 0xa && pattern > 0x132) {
+                if (m_objects[slot].frame < 29 && (WORD)Random(0, 100 - (pattern == k641236Lv3) * 50) < 10 && pattern > 0x132) {
                     effect.type = 0x1a8;
-                    effect.x = (double)((int)m_objects[slot].x + -m_objects[slot].facing * 0x3c + (WORD)Random(0, 0x28));
-                    effect.y = (double)((int)m_objects[slot].y + -0x20 + (WORD)Random(0, 0x3c));
+                    effect.x = (double)((int)m_objects[slot].x + -m_objects[slot].facing * 60 + (WORD)Random(0, 40));
+                    effect.y = (double)((int)m_objects[slot].y + -32 + (WORD)Random(0, 60));
                     effect.scale = 2;
                     effect.facing = facing;
                     effect.layer = 1;
@@ -3226,10 +3226,10 @@ void CMakoto::UpdateObjects()
                 m_objectVar2[slot]--;
                 if (y + vy >= 0.0 && frame > 5 && m_objectVar1[slot] == 0) {
                     m_objects[slot].timer = 0;
-                    m_objects[slot].frame = 0x1d;
+                    m_objects[slot].frame = 29;
                     m_objectVar1[slot]++;
                 }
-                if ((pattern < 0x132 || pattern > 0x134) && m_objects[slot].frame < 0x1d) {
+                if ((pattern < 0x132 || pattern > 0x134) && m_objects[slot].frame < 29) {
                     RemoveObject(slot);
                 }
                 m_objects[slot].timer++;
@@ -3240,7 +3240,7 @@ void CMakoto::UpdateObjects()
                     m_objects[slot].timer = 0;
                     m_objects[slot].frame++;
                     m_objects[slot].attackResult = 0;
-                    if (m_objects[slot].frame == 0x1d) {
+                    if (m_objects[slot].frame == 29) {
                         m_objects[slot].frame = m_objects[slot].frame - 2;
                     }
                     if (m_objects[slot].frame >= frameCount) {
@@ -3264,7 +3264,7 @@ void CMakoto::UpdateObjects()
                 break;
             case kObjFallInDarkness:
                 m_objects[slot].vx = -0.02;
-                m_objects[slot].drawnWhileHidden = 0x7530;
+                m_objects[slot].drawnWhileHidden = 30000;
                 m_objects[slot].timer++;
                 if (pattern != kFallInDarkness) {
                     RemoveObject(slot);
@@ -3281,7 +3281,7 @@ void CMakoto::UpdateObjects()
             case kObjEncasedBreak:
                 if (pattern != kEncased && pattern != kEncased2 && pattern != kEncasedAir && pattern != kEncasedSpin || pattern == kEncased && frame > 1 || pattern == kEncased2 && frame > 1) {
                     effect.type = 0x1f1;
-                    effect.x = (double)((int)x + facing * 0x17);
+                    effect.x = (double)((int)x + facing * 23);
                     effect.y = (double)((int)y - 4);
                     effect.scale = 0;
                     effect.layer = 1;
@@ -3295,8 +3295,8 @@ void CMakoto::UpdateObjects()
                     effect.facing = facing;
                     SpawnObject(&effect);
                     effect.type = 0x1f1;
-                    effect.x = (double)((int)x - facing * 0xe);
-                    effect.y = (double)((int)y - 0x1a);
+                    effect.x = (double)((int)x - facing * 14);
+                    effect.y = (double)((int)y - 26);
                     effect.scale = 0;
                     effect.layer = 1;
                     effect.facing = facing;
@@ -3309,48 +3309,48 @@ void CMakoto::UpdateObjects()
                     effect.facing = facing;
                     SpawnObject(&effect);
                     effect.type = 0x1f1;
-                    effect.x = (double)((int)x + facing * 0x1e);
-                    effect.y = (double)((int)y - 0x28);
+                    effect.x = (double)((int)x + facing * 30);
+                    effect.y = (double)((int)y - 40);
                     effect.scale = 0;
                     effect.layer = 1;
                     effect.facing = facing;
                     SpawnObject(&effect);
                     effect.type = 0x1f1;
-                    effect.x = (double)((int)x - facing * 0x19);
-                    effect.y = (double)((int)y - 0x50);
+                    effect.x = (double)((int)x - facing * 25);
+                    effect.y = (double)((int)y - 80);
                     effect.scale = 0;
                     effect.layer = 1;
                     effect.facing = facing;
                     SpawnObject(&effect);
                     effect.type = 0x1f2;
-                    effect.x = (double)((int)x - facing * 0x23);
-                    effect.y = (double)((int)y - 0x2a);
+                    effect.x = (double)((int)x - facing * 35);
+                    effect.y = (double)((int)y - 42);
                     effect.scale = 0;
                     effect.layer = 1;
                     effect.facing = facing;
                     SpawnObject(&effect);
                     effect.type = 0x1f2;
-                    effect.x = (double)((int)x - facing * 0x12);
-                    effect.y = (double)((int)y - 0x14);
+                    effect.x = (double)((int)x - facing * 18);
+                    effect.y = (double)((int)y - 20);
                     effect.scale = 0;
                     effect.layer = 1;
                     effect.facing = facing;
                     SpawnObject(&effect);
                     effect.type = 0x1f2;
                     effect.x = (double)((int)x + facing * 2);
-                    effect.y = (double)((int)y - 0x41);
+                    effect.y = (double)((int)y - 65);
                     effect.scale = 0;
                     effect.layer = 1;
                     effect.facing = facing;
                     SpawnObject(&effect);
                     effect.type = 0x1f2;
                     effect.x = (double)((int)x + (facing << 4));
-                    effect.y = (double)((int)y - 0x50);
+                    effect.y = (double)((int)y - 80);
                     effect.scale = 0;
                     effect.layer = 1;
                     effect.facing = facing;
                     SpawnObject(&effect);
-                    m_playSound = 0x22;
+                    m_playSound = 34;
                     RemoveObject(slot);
                     m_bounceDebrisOut = 0;
                     break;
@@ -3367,16 +3367,16 @@ void CMakoto::UpdateObjects()
                 break;
             case kObjShardSmall:
                 if (m_objects[slot].frame == 0 && m_objects[slot].timer == 0 && m_objectVar1[slot] == 0) {
-                    m_objectVar2[slot] = (rand() > 0x3e80) * 0x28 + 0x50 + (rand() > 0x3e80) * 0x14;
+                    m_objectVar2[slot] = (rand() > 16000) * 40 + 80 + (rand() > 16000) * 20;
                     m_objectVar1[slot]++;
-                    m_objects[slot].vx = (rand() > 0x3e80) * 1.2 + (rand() > 0x3e80) * 0.7 + (rand() > 0x3e80) * 1.7 + -1.8;
-                    m_objects[slot].vy = -1.2 - ((rand() > 0x3e80) * 0.6 + (rand() > 0x3e80) * 0.9 + (rand() > 0x3e80) * 1.4);
+                    m_objects[slot].vx = (rand() > 16000) * 1.2 + (rand() > 16000) * 0.7 + (rand() > 16000) * 1.7 + -1.8;
+                    m_objects[slot].vy = -1.2 - ((rand() > 16000) * 0.6 + (rand() > 16000) * 0.9 + (rand() > 16000) * 1.4);
                 }
                 m_objects[slot].vy += 0.05;
                 if (m_objects[slot].y > 0.0 && m_objects[slot].vy > 0.0) {
                     m_objects[slot].vy = -m_objects[slot].vy;
                 }
-                if (m_objectVar2[slot] < 0xa) {
+                if (m_objectVar2[slot] < 10) {
                     m_objects[slot].scale = 1;
                 }
                 if (m_objectVar2[slot] < 0) {
@@ -3396,16 +3396,16 @@ void CMakoto::UpdateObjects()
                 break;
             case kObjShardLarge:
                 if (m_objects[slot].frame == 0 && m_objects[slot].timer == 0 && m_objectVar1[slot] == 0) {
-                    m_objectVar2[slot] = (rand() > 0x3e80) * 0x3c + 0x78 + (rand() > 0x3e80) * 0x28;
+                    m_objectVar2[slot] = (rand() > 16000) * 60 + 120 + (rand() > 16000) * 40;
                     m_objectVar1[slot]++;
-                    m_objects[slot].vx = (double)(rand() > 0x3e80) + (rand() > 0x3e80) * 0.5 + (rand() > 0x3e80) * 1.5 + -1.5;
-                    m_objects[slot].vy = -1.0 - ((rand() > 0x3e80) * 0.5 + (rand() > 0x3e80) * 0.8 + (rand() > 0x3e80) * 1.2);
+                    m_objects[slot].vx = (double)(rand() > 16000) + (rand() > 16000) * 0.5 + (rand() > 16000) * 1.5 + -1.5;
+                    m_objects[slot].vy = -1.0 - ((rand() > 16000) * 0.5 + (rand() > 16000) * 0.8 + (rand() > 16000) * 1.2);
                 }
                 m_objects[slot].vy += 0.03;
                 if (m_objects[slot].y > 0.0 && m_objects[slot].vy > 0.0) {
                     m_objects[slot].vy = -m_objects[slot].vy;
                 }
-                if (m_objectVar2[slot] < 0xa) {
+                if (m_objectVar2[slot] < 10) {
                     m_objects[slot].scale = 1;
                 }
                 if (m_objectVar2[slot] < 0) {
@@ -3438,7 +3438,7 @@ void CMakoto::UpdateObjects()
             }
         }
         slot++;
-        if (slot >= 0x40) {
+        if (slot >= 64) {
             slot = 0;
         }
     }

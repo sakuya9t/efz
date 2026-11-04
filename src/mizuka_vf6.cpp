@@ -364,7 +364,7 @@ void CMizuka::UpdatePattern()
         }
         m_dashMomentum = 0;
         if (frame == 0 && timer == 0) {
-            m_gauge = m_gauge + 0xa;
+            m_gauge = m_gauge + 10;
             vx = (2.0 - (*m_opponent)->m_proration / 10000.0) * -1.1;
             if (m_rfBlue != 0) {
                 m_rfGauge -= 10.0;
@@ -401,7 +401,7 @@ void CMizuka::UpdatePattern()
         }
         m_dashMomentum = 0;
         if (frame == 0 && timer == 0) {
-            m_gauge = m_gauge + 0xf;
+            m_gauge = m_gauge + 15;
             vx = (2.0 - (*m_opponent)->m_proration / 10000.0) * -1.5;
             if (m_rfBlue != 0) {
                 m_rfGauge -= 20.0;
@@ -438,7 +438,7 @@ void CMizuka::UpdatePattern()
         }
         m_dashMomentum = 0;
         if (frame == 0 && timer == 0) {
-            m_gauge = m_gauge + 0x14;
+            m_gauge = m_gauge + 20;
             vx = (2.0 - (*m_opponent)->m_proration / 10000.0) * -1.8;
             if (m_rfBlue != 0) {
                 m_rfGauge -= 30.0;
@@ -475,7 +475,7 @@ void CMizuka::UpdatePattern()
         }
         m_dashMomentum = 0;
         if (frame == 0 && timer == 0) {
-            m_gauge = m_gauge + 0xa;
+            m_gauge = m_gauge + 10;
             vx = (2.0 - (*m_opponent)->m_proration / 10000.0) * -1.1;
             if (m_rfBlue != 0) {
                 m_rfGauge -= 10.0;
@@ -512,7 +512,7 @@ void CMizuka::UpdatePattern()
         }
         m_dashMomentum = 0;
         if (frame == 0 && timer == 0) {
-            m_gauge = m_gauge + 0xf;
+            m_gauge = m_gauge + 15;
             vx = (2.0 - (*m_opponent)->m_proration / 10000.0) * -1.5;
             if (m_rfBlue != 0) {
                 m_rfGauge -= 20.0;
@@ -549,7 +549,7 @@ void CMizuka::UpdatePattern()
         }
         m_dashMomentum = 0;
         if (frame == 0 && timer == 0) {
-            m_gauge = m_gauge + 0x14;
+            m_gauge = m_gauge + 20;
             vx = (2.0 - (*m_opponent)->m_proration / 10000.0) * -1.8;
             if (m_rfBlue != 0) {
                 m_rfGauge -= 30.0;
@@ -586,7 +586,7 @@ void CMizuka::UpdatePattern()
         }
         m_dashMomentum = 0;
         if (frame == 0 && timer == 0) {
-            m_gauge = m_gauge + 0xa;
+            m_gauge = m_gauge + 10;
             vx = (2.0 - (*m_opponent)->m_proration / 10000.0) * -1.1;
             if (m_rfBlue != 0) {
                 m_rfGauge -= 10.0;
@@ -620,7 +620,7 @@ void CMizuka::UpdatePattern()
         }
         m_dashMomentum = 0;
         if (frame == 0 && timer == 0) {
-            m_gauge = m_gauge + 0xf;
+            m_gauge = m_gauge + 15;
             vx = (2.0 - (*m_opponent)->m_proration / 10000.0) * -1.5;
             if (m_rfBlue != 0) {
                 m_rfGauge -= 20.0;
@@ -654,7 +654,7 @@ void CMizuka::UpdatePattern()
         }
         m_dashMomentum = 0;
         if (frame == 0 && timer == 0) {
-            m_gauge = m_gauge + 0x14;
+            m_gauge = m_gauge + 20;
             vx = (2.0 - (*m_opponent)->m_proration / 10000.0) * -1.8;
             if (m_rfBlue != 0) {
                 m_rfGauge -= 30.0;
@@ -687,7 +687,7 @@ void CMizuka::UpdatePattern()
             m_rfGauge -= 0.8;
         }
         if (frame == 0 && timer == 0) {
-            m_gauge = m_gauge + 0x1e;
+            m_gauge = m_gauge + 30;
             vx = m_hitVx;
             vy = vy * 0.75 + m_hitVy;
             if (vy < -2.0) {
@@ -731,7 +731,7 @@ void CMizuka::UpdatePattern()
             m_rfGauge -= 0.8;
         }
         if (frame == 0 && timer == 0) {
-            m_gauge = m_gauge + 0x1e;
+            m_gauge = m_gauge + 30;
             vx = m_hitVx;
             vy = vy * 0.75 + m_hitVy;
             if (vy < -4.0) {
@@ -775,7 +775,7 @@ void CMizuka::UpdatePattern()
             m_rfGauge -= 0.8;
         }
         if (frame == 0 && timer == 0) {
-            m_gauge = m_gauge + 0x1e;
+            m_gauge = m_gauge + 30;
             vx = m_hitVx;
             vy = vy * 0.75 + m_hitVy;
             if (vy < -6.0) {
@@ -819,7 +819,7 @@ void CMizuka::UpdatePattern()
             m_rfGauge -= 0.8;
         }
         if (frame == 0 && timer == 0) {
-            m_gauge = m_gauge + 0x1e;
+            m_gauge = m_gauge + 30;
             vx = m_hitVx;
             vy = vy * 0.75 + m_hitVy;
             ay = 0.032;
@@ -858,7 +858,7 @@ void CMizuka::UpdatePattern()
             m_rfGauge -= 0.8;
         }
         if (frame == 0 && timer == 0) {
-            m_gauge = m_gauge + 0x1e;
+            m_gauge = m_gauge + 30;
             vx = m_hitVx;
             vy = m_hitVy;
             ay = 0.032;
@@ -902,7 +902,7 @@ void CMizuka::UpdatePattern()
             break;
         }
         if (frame == 0 && timer == 0) {
-            m_gauge = m_gauge + 0x1e;
+            m_gauge = m_gauge + 30;
             vx = m_hitVx;
             vy = vy * 0.75 + m_hitVy;
             if (vy < -2.0) {
@@ -951,7 +951,7 @@ void CMizuka::UpdatePattern()
             break;
         }
         if (frame == 0 && timer == 0) {
-            m_gauge = m_gauge + 0x1e;
+            m_gauge = m_gauge + 30;
             vx = m_hitVx;
             vy = vy * 0.75 + m_hitVy;
             if (vy < -4.0) {
@@ -1000,7 +1000,7 @@ void CMizuka::UpdatePattern()
             break;
         }
         if (frame == 0 && timer == 0) {
-            m_gauge = m_gauge + 0x1e;
+            m_gauge = m_gauge + 30;
             vx = m_hitVx;
             vy = vy * 0.75 + m_hitVy;
             ay = 0.032;
@@ -1044,7 +1044,7 @@ void CMizuka::UpdatePattern()
             break;
         }
         if (frame == 0 && timer == 0) {
-            m_gauge = m_gauge + 0x1e;
+            m_gauge = m_gauge + 30;
             vx = m_hitVx;
             vy = m_hitVy;
             ay = 0.032;
@@ -1154,13 +1154,13 @@ void CMizuka::UpdatePattern()
             m_rfGauge -= 0.8;
         }
         if (frame == 0 && timer == 0 && m_patternVar1 == 0) {
-            m_gauge = m_gauge + 0x1e;
+            m_gauge = m_gauge + 30;
             m_patternVar1++;
-            m_untechTime = m_untechTime + 0x78;
+            m_untechTime = m_untechTime + 120;
             vx = 0.5;
             vy = -2.5;
             ay = 0.025;
-            m_playSound = 0x1f;
+            m_playSound = 31;
             effect.type = 0;
             effect.x = (double)(int)x;
             effect.y = (double)(int)y;
@@ -1194,7 +1194,7 @@ void CMizuka::UpdatePattern()
             m_rfGauge -= 0.8;
         }
         if (frame == 0 && timer == 0) {
-            m_gauge = m_gauge + 0x1e;
+            m_gauge = m_gauge + 30;
             vx = m_hitVx;
             vy = m_hitVy;
             ay = 0.072;
@@ -1309,7 +1309,7 @@ void CMizuka::UpdatePattern()
         }
         m_dashMomentum = 0;
         if (frame == 0 && timer == 0) {
-            m_gauge = m_gauge + 0x1e;
+            m_gauge = m_gauge + 30;
             if (m_rfBlue != 0) {
                 m_rfGauge -= 30.0;
             }
@@ -1348,7 +1348,7 @@ void CMizuka::UpdatePattern()
         }
         m_dashMomentum = 0;
         if (frame == 0 && timer == 0) {
-            m_gauge = m_gauge + 0x1e;
+            m_gauge = m_gauge + 30;
             if (m_rfBlue != 0) {
                 m_rfGauge -= 30.0;
             }
@@ -1387,7 +1387,7 @@ void CMizuka::UpdatePattern()
         }
         m_dashMomentum = 0;
         if (frame == 0 && timer == 0) {
-            m_gauge = m_gauge + 0x1e;
+            m_gauge = m_gauge + 30;
             if (m_rfBlue != 0) {
                 m_rfGauge -= 30.0;
             }
@@ -1428,7 +1428,7 @@ void CMizuka::UpdatePattern()
             effect.facing = facing;
             effect.layer = 1;
             SpawnObject(&effect);
-            m_gauge = m_gauge + 0x1e;
+            m_gauge = m_gauge + 30;
             vx = m_hitVx;
             vy = m_hitVy;
             ay = 0.032;
@@ -1463,11 +1463,11 @@ void CMizuka::UpdatePattern()
             m_rfGauge -= 0.8;
         }
         if (frame == 0 && timer == 0 && m_patternVar1 == 0) {
-            m_playSound = 0x1e;
+            m_playSound = 30;
             vy = -0.45;
             vx = -0.1;
             m_patternVar1++;
-            m_gauge = m_gauge + 0x1e;
+            m_gauge = m_gauge + 30;
         }
         if (frame == 4 && timer == 0) {
             vx = m_hitVx;
@@ -1521,10 +1521,10 @@ void CMizuka::UpdatePattern()
             if (m_rfBlue != 0) {
                 m_rfGauge -= 30.0;
             }
-            m_playSound = 0x21;
+            m_playSound = 33;
             vy = -1.5;
             vx = -0.8;
-            m_gauge = m_gauge + 0x1e;
+            m_gauge = m_gauge + 30;
         }
         vy += 0.04;
         if (frame == 0 && vy + y > 0.0) {
@@ -1574,10 +1574,10 @@ void CMizuka::UpdatePattern()
             if (m_rfBlue != 0) {
                 m_rfGauge -= 30.0;
             }
-            m_playSound = 0x21;
+            m_playSound = 33;
             vy = -1.5;
             vx = -0.8;
-            m_gauge = m_gauge + 0x1e;
+            m_gauge = m_gauge + 30;
         }
         vy += 0.04;
         if (frame == 0 && vy + y > 0.0) {
@@ -1627,10 +1627,10 @@ void CMizuka::UpdatePattern()
             if (m_rfBlue != 0) {
                 m_rfGauge -= 30.0;
             }
-            m_playSound = 0x21;
+            m_playSound = 33;
             vx = m_hitVx;
             vy = m_hitVy;
-            m_gauge = m_gauge + 0x1e;
+            m_gauge = m_gauge + 30;
         }
         vy += 0.04;
         timer++;
@@ -1672,10 +1672,10 @@ void CMizuka::UpdatePattern()
                 if (m_rfBlue != 0) {
                     m_rfGauge -= 30.0;
                 }
-                m_playSound = 0x21;
+                m_playSound = 33;
                 vx = m_hitVx;
                 vy = m_hitVy;
-                m_gauge = m_gauge + 0x1e;
+                m_gauge = m_gauge + 30;
                 m_patternVar1++;
             }
         }
@@ -1787,7 +1787,7 @@ void CMizuka::UpdatePattern()
         break;
     case kLyingDown:
         m_drawMode = 0;
-        if (m_hp > 0 && timer > 0x63 && frame == 0) {
+        if (m_hp > 0 && timer > 99 && frame == 0) {
             pattern = kWakeUp;
             StartPattern();
             m_dashMomentum = 0;
@@ -1808,7 +1808,7 @@ void CMizuka::UpdatePattern()
     case kGuardStandLight:
         if (frame == 0 && timer == 0) {
             m_dashMomentum = 0;
-            m_gauge = m_gauge + 0xa;
+            m_gauge = m_gauge + 10;
             vx = -1.5;
             vy = 0.0;
             y = 0.0;
@@ -1842,7 +1842,7 @@ void CMizuka::UpdatePattern()
     case kGuardStandMedium:
         if (frame == 0 && timer == 0) {
             m_dashMomentum = 0;
-            m_gauge = m_gauge + 0xf;
+            m_gauge = m_gauge + 15;
             vx = -1.8;
             vy = 0.0;
             y = 0.0;
@@ -1876,7 +1876,7 @@ void CMizuka::UpdatePattern()
     case kGuardStandHeavy:
         if (frame == 0 && timer == 0) {
             m_dashMomentum = 0;
-            m_gauge = m_gauge + 0x14;
+            m_gauge = m_gauge + 20;
             vx = -2.3;
             vy = 0.0;
             y = 0.0;
@@ -1910,7 +1910,7 @@ void CMizuka::UpdatePattern()
     case kGuardCrouchLight:
         if (frame == 0 && timer == 0) {
             m_dashMomentum = 0;
-            m_gauge = m_gauge + 0xa;
+            m_gauge = m_gauge + 10;
             vx = -1.5;
             vy = 0.0;
             y = 0.0;
@@ -1941,7 +1941,7 @@ void CMizuka::UpdatePattern()
     case kGuardCrouchMedium:
         if (frame == 0 && timer == 0) {
             m_dashMomentum = 0;
-            m_gauge = m_gauge + 0xf;
+            m_gauge = m_gauge + 15;
             vx = -1.8;
             vy = 0.0;
             y = 0.0;
@@ -1972,7 +1972,7 @@ void CMizuka::UpdatePattern()
     case kGuardCrouchHeavy:
         if (frame == 0 && timer == 0) {
             m_dashMomentum = 0;
-            m_gauge = m_gauge + 0x14;
+            m_gauge = m_gauge + 20;
             vx = -2.3;
             vy = 0.0;
             y = 0.0;
@@ -2003,7 +2003,7 @@ void CMizuka::UpdatePattern()
     case kGuardAir:
         if (frame == 0 && timer == 0) {
             vy = -2.6;
-            m_gauge = m_gauge + 0xf;
+            m_gauge = m_gauge + 15;
             ay = 0.06;
         }
         vx = -1.2;
@@ -2121,12 +2121,12 @@ void CMizuka::UpdatePattern()
                 break;
             }
         }
-        if (m_inputX == facing && m_patternVar2 >= 0x2a) {
+        if (m_inputX == facing && m_patternVar2 >= 42) {
             pattern = kDashStop;
             m_drawMode = 1;
             StartPattern();
         }
-        if (m_inputX != facing && m_patternVar2 >= 0x18) {
+        if (m_inputX != facing && m_patternVar2 >= 24) {
             pattern = kDashStop;
             m_drawMode = 1;
             StartPattern();
@@ -2142,10 +2142,10 @@ void CMizuka::UpdatePattern()
             vy = -1.3;
         }
         vy += 0.045;
-        if (vy + y > 0.0 && frame < 0xc) {
+        if (vy + y > 0.0 && frame < 12) {
             StopMoving();
             timer = 0;
-            frame = 0xc;
+            frame = 12;
             y = 0.0;
         }
         timer++;
@@ -2164,7 +2164,7 @@ void CMizuka::UpdatePattern()
             if (frame == 8) {
                 m_drawMode = 0;
             }
-            if (frame == 0xc) {
+            if (frame == 12) {
                 frame = frame - 2;
             }
             if (frame >= frameCount) {
@@ -2179,7 +2179,7 @@ void CMizuka::UpdatePattern()
             StartAfterimages(3);
             vy = 0.0;
             ay = 0.0;
-            m_playSound = 0x11;
+            m_playSound = 17;
         }
         if (m_flightTime > 0) {
             m_flightTime--;
@@ -2194,7 +2194,7 @@ void CMizuka::UpdatePattern()
                 frame = frame - 2;
             }
         }
-        if (m_inputX == facing && m_patternVar2 >= 0x78) {
+        if (m_inputX == facing && m_patternVar2 >= 120) {
             pattern = kFall;
             StartPattern();
             vx = 1.3;
@@ -2203,7 +2203,7 @@ void CMizuka::UpdatePattern()
                 vx = -vx;
             }
         }
-        if (m_inputX != facing && m_patternVar1 >= 0x28) {
+        if (m_inputX != facing && m_patternVar1 >= 40) {
             pattern = kFall;
             StartPattern();
             vx = 1.3;
@@ -2223,7 +2223,7 @@ void CMizuka::UpdatePattern()
             vy = 0.0;
             ay = 0.0;
             StartAfterimages(3);
-            m_playSound = 0x11;
+            m_playSound = 17;
         }
         if (m_flightTime > 0) {
             m_flightTime--;
@@ -2238,7 +2238,7 @@ void CMizuka::UpdatePattern()
                 frame = frame - 2;
             }
         }
-        if (m_inputX == -facing && m_patternVar2 >= 0x78) {
+        if (m_inputX == -facing && m_patternVar2 >= 120) {
             pattern = kFall;
             StartPattern();
             vx = -0.9;
@@ -2247,7 +2247,7 @@ void CMizuka::UpdatePattern()
                 vx = -vx;
             }
         }
-        if (m_inputX != -facing && m_patternVar1 >= 0x28) {
+        if (m_inputX != -facing && m_patternVar1 >= 40) {
             pattern = kFall;
             StartPattern();
             vx = -0.9;
@@ -2270,11 +2270,11 @@ void CMizuka::UpdatePattern()
                 m_proration = 5.0 * m_rfGauge + m_proration;
             }
             m_rfGauge = 0.0;
-            m_freezeTime = 0x5a;
-            FillBackground(0xb0, 3);
+            m_freezeTime = 90;
+            FillBackground(176, 3);
         }
         if (frame == 1 && timer == 0) {
-            m_playSound = 0x12;
+            m_playSound = 18;
             effect.type = 1;
             effect.x = (double)(int)x;
             effect.y = (double)(int)y;
@@ -2376,7 +2376,7 @@ void CMizuka::UpdatePattern()
             }
             m_recoilGuardWindow = 0;
             m_cornerPushback = 0.0;
-            m_freezeTime = 0x3c;
+            m_freezeTime = 60;
         }
         if (m_freezeTime == 0 && m_patternVar3 == 0) {
             m_patternVar3++;
@@ -2417,11 +2417,11 @@ void CMizuka::UpdatePattern()
                 m_proration = 5.0 * m_rfGauge + m_proration;
             }
             m_rfGauge = 0.0;
-            m_freezeTime = 0x5a;
-            FillBackground(0xb0, 3);
+            m_freezeTime = 90;
+            FillBackground(176, 3);
         }
         if (frame == 1 && timer == 0) {
-            m_playSound = 0x12;
+            m_playSound = 18;
             effect.type = 1;
             effect.x = (double)(int)x;
             effect.y = (double)(int)y;
@@ -2494,7 +2494,7 @@ void CMizuka::UpdatePattern()
         }
         if (frame == 0 && timer == 0) {
             m_airActions = 1;
-            m_flightTime = 0x3e8;
+            m_flightTime = 1000;
             vy = -2.5;
             vx = 0.0;
         }
@@ -2679,7 +2679,7 @@ void CMizuka::UpdatePattern()
         }
         if (frame == 2 && timer == 0) {
             m_gauge = m_gauge + 5;
-            m_playSound = 0x15;
+            m_playSound = 21;
             m_hitsLeft = 1;
         }
         timer++;
@@ -2689,8 +2689,8 @@ void CMizuka::UpdatePattern()
             m_attackResult = 0;
             if (frame == 1) {
                 effect.type = 0x1b9;
-                effect.x = (double)((int)x - facing * 0x28);
-                effect.y = (double)((int)y - 0x21);
+                effect.x = (double)((int)x - facing * 40);
+                effect.y = (double)((int)y - 33);
                 effect.scale = 2;
                 effect.layer = 1;
                 effect.facing = facing;
@@ -2729,16 +2729,16 @@ void CMizuka::UpdatePattern()
         }
         if (frame == 1 && timer == 0) {
             effect.type = 0x190;
-            effect.x = (double)((int)x - facing * 0x15);
-            effect.y = (double)((int)y - 0x1f);
+            effect.x = (double)((int)x - facing * 21);
+            effect.y = (double)((int)y - 31);
             effect.scale = 2;
             effect.layer = 1;
             effect.facing = facing;
             SpawnObject(&effect);
         }
         if (frame == 2 && timer == 0) {
-            m_gauge = m_gauge + 0xf;
-            m_playSound = 0x14;
+            m_gauge = m_gauge + 15;
+            m_playSound = 20;
             m_hitsLeft = 1;
         }
         timer++;
@@ -2768,12 +2768,12 @@ void CMizuka::UpdatePattern()
             m_dashMomentum = 0;
         }
         if (frame == 2 && timer == 0) {
-            m_gauge = m_gauge + 0xf;
-            m_playSound = 0x14;
+            m_gauge = m_gauge + 15;
+            m_playSound = 20;
             m_hitsLeft = 1;
             effect.type = 0x191;
-            effect.x = (double)((int)x - facing * 0x24);
-            effect.y = (double)((int)y - 0x35);
+            effect.x = (double)((int)x - facing * 36);
+            effect.y = (double)((int)y - 53);
             effect.scale = 2;
             effect.layer = 1;
             effect.facing = facing;
@@ -2800,15 +2800,15 @@ void CMizuka::UpdatePattern()
         }
         if (frame == 5 && timer == 0) {
             effect.type = 3;
-            effect.x = (double)((int)x + facing * 0x37);
+            effect.x = (double)((int)x + facing * 55);
             effect.y = (double)(int)y;
             effect.scale = 2;
             effect.layer = 1;
             m_game->CreateEffect((EffectDesc*)&effect);
-            m_playVoice = 0xa;
+            m_playVoice = 10;
         }
         if (frame == 4 && timer == 0) {
-            m_gauge = m_gauge + 0x23;
+            m_gauge = m_gauge + 35;
             m_hitsLeft = 1;
         }
         timer++;
@@ -2851,11 +2851,11 @@ void CMizuka::UpdatePattern()
         }
         if (frame == 1 && timer == 0) {
             m_gauge = m_gauge + 5;
-            m_playSound = 0x15;
+            m_playSound = 21;
             m_hitsLeft = 1;
             effect.type = 0x1ba;
-            effect.x = (double)((int)x - facing * 0x28);
-            effect.y = (double)((int)y - 0xa);
+            effect.x = (double)((int)x - facing * 40);
+            effect.y = (double)((int)y - 10);
             effect.scale = 2;
             effect.layer = 1;
             effect.facing = facing;
@@ -2903,12 +2903,12 @@ void CMizuka::UpdatePattern()
             break;
         }
         if (frame == 2 && timer == 0) {
-            m_gauge = m_gauge + 0xd;
-            m_playSound = 0x14;
+            m_gauge = m_gauge + 13;
+            m_playSound = 20;
             m_hitsLeft = 1;
             effect.type = 0x192;
-            effect.x = (double)((int)x - facing * 0x1a);
-            effect.y = (double)((int)y - 0x10);
+            effect.x = (double)((int)x - facing * 26);
+            effect.y = (double)((int)y - 16);
             effect.scale = 2;
             effect.layer = 1;
             effect.facing = facing;
@@ -2949,8 +2949,8 @@ void CMizuka::UpdatePattern()
             m_hitsLeft = 1;
         }
         if (frame == 3 && timer == 0 && m_patternVar1 == 0) {
-            m_gauge = m_gauge + 0x19;
-            m_playSound = 0x14;
+            m_gauge = m_gauge + 25;
+            m_playSound = 20;
             vx = 3.5;
             m_patternVar1++;
         }
@@ -3015,11 +3015,11 @@ void CMizuka::UpdatePattern()
         }
         if (frame == 2 && timer == 0) {
             m_gauge = m_gauge + 5;
-            m_playSound = 0x15;
+            m_playSound = 21;
             m_hitsLeft = 1;
             effect.type = 0x1bb;
             effect.x = (double)((int)x - facing * 7);
-            effect.y = (double)((int)y - 0x2f);
+            effect.y = (double)((int)y - 47);
             effect.scale = 2;
             effect.layer = 1;
             effect.facing = facing;
@@ -3088,12 +3088,12 @@ void CMizuka::UpdatePattern()
             break;
         }
         if (frame == 2 && timer == 0) {
-            m_gauge = m_gauge + 0xd;
-            m_playSound = 0x14;
+            m_gauge = m_gauge + 13;
+            m_playSound = 20;
             m_hitsLeft = 2;
             effect.type = 0x194;
-            effect.x = (double)((int)x + facing * 0x25);
-            effect.y = (double)((int)y - 0x48);
+            effect.x = (double)((int)x + facing * 37);
+            effect.y = (double)((int)y - 72);
             effect.scale = 2;
             effect.layer = 1;
             effect.facing = facing;
@@ -3162,8 +3162,8 @@ void CMizuka::UpdatePattern()
             break;
         }
         if (frame == 1 && timer == 0) {
-            m_gauge = m_gauge + 0x1e;
-            m_playSound = 0x14;
+            m_gauge = m_gauge + 30;
+            m_playSound = 20;
             m_hitsLeft = 3;
         }
         if (y + vy >= 0.0) {
@@ -3243,8 +3243,8 @@ void CMizuka::UpdatePattern()
             break;
         }
         if (frame == 1 && timer == 0) {
-            m_gauge = m_gauge + 0x1e;
-            m_playSound = 0x14;
+            m_gauge = m_gauge + 30;
+            m_playSound = 20;
             m_hitsLeft = 1;
         }
         if (y + vy >= 0.0) {
@@ -3263,8 +3263,8 @@ void CMizuka::UpdatePattern()
             }
             if (frame == 5) {
                 effect.type = 0x1cc;
-                effect.x = (double)((int)x + facing * 0x37);
-                effect.y = (double)((int)y - 0x2c);
+                effect.x = (double)((int)x + facing * 55);
+                effect.y = (double)((int)y - 44);
                 effect.scale = 2;
                 effect.layer = 1;
                 effect.facing = facing;
@@ -3298,8 +3298,8 @@ void CMizuka::UpdatePattern()
             vy = 0.0;
         }
         if (frame == 3 && timer == 0) {
-            m_gauge = m_gauge + 0x1e;
-            m_playSound = 0x14;
+            m_gauge = m_gauge + 30;
+            m_playSound = 20;
             m_hitsLeft = 1;
         }
         timer++;
@@ -3317,8 +3317,8 @@ void CMizuka::UpdatePattern()
     case kUnusedAirDive:
         vy = vy + ay;
         if (frame == 0 && timer == 0) {
-            m_gauge = m_gauge + 0x1e;
-            m_playSound = 0x14;
+            m_gauge = m_gauge + 30;
+            m_playSound = 20;
             m_hitsLeft = 1;
             vx = vx / 2.0;
             ay = 0.07;
@@ -3418,8 +3418,8 @@ void CMizuka::UpdatePattern()
             (*m_opponent)->StopMoving();
             pattern = kThrowHit;
             effect.type = 0;
-            effect.x = (double)((int)x + facing * 0x25);
-            effect.y = (double)((int)y - 0x2a);
+            effect.x = (double)((int)x + facing * 37);
+            effect.y = (double)((int)y - 42);
             effect.scale = 2;
             effect.layer = 1;
             m_game->CreateEffect((EffectDesc*)&effect);
@@ -3451,7 +3451,7 @@ void CMizuka::UpdatePattern()
         }
         if (frame == 1 && timer == 0) {
             effect.type = 0x1c8;
-            effect.x = (double)((int)(*m_opponent)->x - facing * 0x50);
+            effect.x = (double)((int)(*m_opponent)->x - facing * 80);
             effect.y = 0.0;
             effect.scale = 0;
             effect.layer = 0;
@@ -3467,7 +3467,7 @@ void CMizuka::UpdatePattern()
             effect.facing = facing;
             SpawnObject(&effect);
             effect.type = 0x1ca;
-            effect.x = (double)((int)(*m_opponent)->x + facing * 0x50);
+            effect.x = (double)((int)(*m_opponent)->x + facing * 80);
             effect.y = 0.0;
             effect.scale = 0;
             effect.layer = 0;
@@ -3506,8 +3506,8 @@ void CMizuka::UpdatePattern()
             vy = 0.0;
         }
         if (frame == 1 && timer == 0) {
-            m_gauge = m_gauge + 0xf;
-            m_playSound = 0x15;
+            m_gauge = m_gauge + 15;
+            m_playSound = 21;
             m_hitsLeft = 1;
         }
         if (m_drawMode == 3 || m_drawMode == 1) {
@@ -3522,8 +3522,8 @@ void CMizuka::UpdatePattern()
             }
             if (frame == 1) {
                 effect.type = 0x1b9;
-                effect.x = (double)((int)x - facing * 0x28);
-                effect.y = (double)((int)y - 0x21);
+                effect.x = (double)((int)x - facing * 40);
+                effect.y = (double)((int)y - 33);
                 effect.scale = 2;
                 effect.layer = 1;
                 effect.facing = facing;
@@ -3570,16 +3570,16 @@ void CMizuka::UpdatePattern()
         }
         if (frame == 1 && timer == 0) {
             effect.type = 0x190;
-            effect.x = (double)((int)x - facing * 0x15);
-            effect.y = (double)((int)y - 0x1f);
+            effect.x = (double)((int)x - facing * 21);
+            effect.y = (double)((int)y - 31);
             effect.scale = 2;
             effect.layer = 1;
             effect.facing = facing;
             SpawnObject(&effect);
         }
         if (frame == 3 && timer == 0) {
-            m_gauge = m_gauge + 0xf;
-            m_playSound = 0x14;
+            m_gauge = m_gauge + 15;
+            m_playSound = 20;
             m_hitsLeft = 1;
         }
         if (m_drawMode == 3 || m_drawMode == 1) {
@@ -3617,16 +3617,16 @@ void CMizuka::UpdatePattern()
         }
         if (frame == 5 && timer == 0) {
             effect.type = 3;
-            effect.x = (double)((int)x + facing * 0x37);
+            effect.x = (double)((int)x + facing * 55);
             effect.y = (double)(int)y;
             effect.scale = 2;
             effect.layer = 1;
             m_game->CreateEffect((EffectDesc*)&effect);
-            m_playVoice = 0xa;
+            m_playVoice = 10;
         }
         if (frame == 4 && timer == 0) {
-            m_gauge = m_gauge + 0x23;
-            m_playSound = 0x14;
+            m_gauge = m_gauge + 35;
+            m_playSound = 20;
             m_hitsLeft = 1;
         }
         if (m_drawMode == 3 || m_drawMode == 1) {
@@ -3654,17 +3654,17 @@ void CMizuka::UpdatePattern()
     case kUnusedF9:
         if (frame == 0 && timer == 0) {
             unkdc = 4;
-            unkde = -0x14;
+            unkde = -20;
             vx = 0.0;
             m_hitsLeft = 1;
             m_recoilGuardWindow = 0;
-            m_freezeTime = 0x3c;
+            m_freezeTime = 60;
             effect.type = 0x28;
-            effect.x = (double)((int)x + facing * 0xa);
-            effect.y = (double)((int)y - 0x28);
+            effect.x = (double)((int)x + facing * 10);
+            effect.y = (double)((int)y - 40);
             effect.scale = 2;
             effect.layer = 1;
-            effect.sound = 0x13;
+            effect.sound = 19;
             m_game->CreateEffect((EffectDesc*)&effect);
         }
         timer++;
@@ -3696,15 +3696,15 @@ void CMizuka::UpdatePattern()
         }
         if (frame == 9 && timer == 0) {
             effect.type = 0x1a1;
-            effect.x = (double)((int)x + facing * 0x19);
-            effect.y = (double)((int)y - 0x26);
+            effect.x = (double)((int)x + facing * 25);
+            effect.y = (double)((int)y - 38);
             effect.scale = 2;
             effect.layer = 1;
             effect.keep = 1;
-            m_playVoice = 0xb;
+            m_playVoice = 11;
             effect.facing = facing;
             SpawnObject(&effect);
-            m_gauge = m_gauge + 0x2d;
+            m_gauge = m_gauge + 45;
         }
         timer++;
         if (timer >= duration) {
@@ -3734,14 +3734,14 @@ void CMizuka::UpdatePattern()
         }
         if (frame == 9 && timer == 0) {
             effect.type = 0x1a2;
-            effect.x = (double)((int)x + facing * 0x19);
-            effect.y = (double)((int)y - 0x21);
+            effect.x = (double)((int)x + facing * 25);
+            effect.y = (double)((int)y - 33);
             effect.scale = 2;
-            m_playVoice = 0xb;
+            m_playVoice = 11;
             effect.facing = facing;
             effect.layer = 1;
             SpawnObject(&effect);
-            m_gauge = m_gauge + 0x2d;
+            m_gauge = m_gauge + 45;
         }
         timer++;
         if (timer >= duration) {
@@ -3766,9 +3766,9 @@ void CMizuka::UpdatePattern()
                 m_rfGauge -= 250.0;
             }
             effect.type = 0x21;
-            effect.sound = 0xb;
+            effect.sound = 11;
             effect.x = (double)(int)x;
-            effect.y = (double)((int)y - 0x32);
+            effect.y = (double)((int)y - 50);
             effect.scale = 2;
             effect.layer = 1;
             m_game->CreateEffect((EffectDesc*)&effect);
@@ -3793,23 +3793,23 @@ void CMizuka::UpdatePattern()
         }
         if (frame == 5 && timer == 0) {
             effect.type = 0x1a3;
-            effect.x = (double)((int)x + facing * 0x3c);
-            effect.y = (double)((int)y - 0x64);
+            effect.x = (double)((int)x + facing * 60);
+            effect.y = (double)((int)y - 100);
             effect.facing = facing;
             effect.scale = 2;
             effect.layer = 1;
             SpawnObject(&effect);
-            effect.x = (double)((int)x - facing * 0x3c);
-            effect.y = (double)((int)y - 0x64);
+            effect.x = (double)((int)x - facing * 60);
+            effect.y = (double)((int)y - 100);
             SpawnObject(&effect);
-            effect.x = (double)((int)x + facing * 0x64);
-            effect.y = (double)((int)y - 0x28);
+            effect.x = (double)((int)x + facing * 100);
+            effect.y = (double)((int)y - 40);
             SpawnObject(&effect);
-            effect.x = (double)((int)x - facing * 0x64);
-            effect.y = (double)((int)y - 0x28);
-            m_playVoice = 0xb;
+            effect.x = (double)((int)x - facing * 100);
+            effect.y = (double)((int)y - 40);
+            m_playVoice = 11;
             SpawnObject(&effect);
-            m_gauge = m_gauge + 0x2d;
+            m_gauge = m_gauge + 45;
         }
         timer++;
         if (timer >= duration) {
@@ -3834,13 +3834,13 @@ void CMizuka::UpdatePattern()
         }
         if (frame == 6 && timer == 0) {
             effect.type = 0x196;
-            effect.x = (double)((int)x + facing * 0x3c);
+            effect.x = (double)((int)x + facing * 60);
             effect.y = 0.0;
             effect.scale = 0;
             effect.facing = facing;
             effect.layer = 1;
             SpawnObject(&effect);
-            m_gauge = m_gauge + 0x2d;
+            m_gauge = m_gauge + 45;
         }
         timer++;
         if (timer >= duration) {
@@ -3861,13 +3861,13 @@ void CMizuka::UpdatePattern()
         }
         if (frame == 6 && timer == 0) {
             effect.type = 0x196;
-            effect.x = (double)((int)x + facing * 0xa0);
+            effect.x = (double)((int)x + facing * 160);
             effect.y = 0.0;
             effect.scale = 0;
             effect.facing = facing;
             effect.layer = 1;
             SpawnObject(&effect);
-            m_gauge = m_gauge + 0x2d;
+            m_gauge = m_gauge + 45;
         }
         timer++;
         if (timer >= duration) {
@@ -3891,22 +3891,22 @@ void CMizuka::UpdatePattern()
                 m_rfGauge -= 250.0;
             }
             effect.type = 0x21;
-            effect.sound = 0xb;
+            effect.sound = 11;
             effect.x = (double)(int)x;
-            effect.y = (double)((int)y - 0x32);
+            effect.y = (double)((int)y - 50);
             effect.scale = 2;
             effect.layer = 1;
             m_game->CreateEffect((EffectDesc*)&effect);
         }
         if (frame == 6 && timer == 0) {
             effect.type = 0x198;
-            effect.x = (double)((int)x + facing * 0x3c);
+            effect.x = (double)((int)x + facing * 60);
             effect.y = 0.0;
             effect.scale = 0;
             effect.layer = 1;
             effect.facing = facing;
             SpawnObject(&effect);
-            m_gauge = m_gauge + 0x2d;
+            m_gauge = m_gauge + 45;
         }
         timer++;
         if (timer >= duration) {
@@ -3930,41 +3930,41 @@ void CMizuka::UpdatePattern()
         }
         if (frame == 9 && timer == 0) {
             effect.type = 0x1bc;
-            effect.x = (double)((int)x + facing * 0x1f);
-            effect.y = (double)((int)y - 0x33);
+            effect.x = (double)((int)x + facing * 31);
+            effect.y = (double)((int)y - 51);
             effect.scale = 0;
             effect.layer = 1;
             effect.facing = facing;
             SpawnObject(&effect);
             effect.type = 0x1bf;
-            effect.x = (double)((int)x + facing * 0x1a);
-            effect.y = (double)((int)y - 0x1f);
+            effect.x = (double)((int)x + facing * 26);
+            effect.y = (double)((int)y - 31);
             SpawnObject(&effect);
             effect.type = 0x1be;
-            effect.x = (double)((int)x + facing * 0x15);
-            effect.y = (double)((int)y - 0xb);
+            effect.x = (double)((int)x + facing * 21);
+            effect.y = (double)((int)y - 11);
             SpawnObject(&effect);
             m_playVoice = 3;
-            m_gauge = m_gauge + 0xf;
+            m_gauge = m_gauge + 15;
         }
-        if (frame == 0xe && timer == 0) {
+        if (frame == 14 && timer == 0) {
             effect.type = 0x1bd;
-            effect.x = (double)((int)x + facing * 0xd);
-            effect.y = (double)((int)y - 0x3a);
+            effect.x = (double)((int)x + facing * 13);
+            effect.y = (double)((int)y - 58);
             effect.scale = 0;
             effect.layer = 1;
             effect.facing = facing;
             SpawnObject(&effect);
             effect.type = 0x1bf;
-            effect.x = (double)((int)x + facing * 0x12);
-            effect.y = (double)((int)y - 0x26);
+            effect.x = (double)((int)x + facing * 18);
+            effect.y = (double)((int)y - 38);
             SpawnObject(&effect);
             effect.type = 0x1be;
-            effect.x = (double)((int)x + facing * 0x15);
-            effect.y = (double)((int)y - 0x12);
+            effect.x = (double)((int)x + facing * 21);
+            effect.y = (double)((int)y - 18);
             SpawnObject(&effect);
             m_playVoice = 3;
-            m_gauge = m_gauge + 0xf;
+            m_gauge = m_gauge + 15;
         }
         timer++;
         if (timer >= duration) {
@@ -3989,41 +3989,41 @@ void CMizuka::UpdatePattern()
         }
         if (frame == 9 && timer == 0) {
             effect.type = 0x1bc;
-            effect.x = (double)((int)x + facing * 0x1f);
-            effect.y = (double)((int)y - 0x33);
+            effect.x = (double)((int)x + facing * 31);
+            effect.y = (double)((int)y - 51);
             effect.scale = 0;
             effect.layer = 1;
             effect.facing = facing;
             SpawnObject(&effect);
             effect.type = 0x1bf;
-            effect.x = (double)((int)x + facing * 0x1a);
-            effect.y = (double)((int)y - 0x1f);
+            effect.x = (double)((int)x + facing * 26);
+            effect.y = (double)((int)y - 31);
             SpawnObject(&effect);
             effect.type = 0x1be;
-            effect.x = (double)((int)x + facing * 0x15);
-            effect.y = (double)((int)y - 0xb);
+            effect.x = (double)((int)x + facing * 21);
+            effect.y = (double)((int)y - 11);
             SpawnObject(&effect);
             m_playVoice = 3;
-            m_gauge = m_gauge + 0xf;
+            m_gauge = m_gauge + 15;
         }
-        if (frame == 0xe && timer == 0) {
+        if (frame == 14 && timer == 0) {
             effect.type = 0x1c3;
             effect.x = (double)((int)x + facing * 6);
-            effect.y = (double)((int)y - 0x47);
+            effect.y = (double)((int)y - 71);
             effect.scale = 0;
             effect.layer = 1;
             effect.facing = facing;
             SpawnObject(&effect);
             effect.type = 0x1c1;
             effect.x = (double)((int)x + (facing << 4));
-            effect.y = (double)((int)y - 0x3d);
+            effect.y = (double)((int)y - 61);
             SpawnObject(&effect);
             effect.type = 0x1c0;
-            effect.x = (double)((int)x + facing * 0x1a);
-            effect.y = (double)((int)y - 0x33);
+            effect.x = (double)((int)x + facing * 26);
+            effect.y = (double)((int)y - 51);
             SpawnObject(&effect);
             m_playVoice = 3;
-            m_gauge = m_gauge + 0xf;
+            m_gauge = m_gauge + 15;
         }
         timer++;
         if (timer >= duration) {
@@ -4049,40 +4049,40 @@ void CMizuka::UpdatePattern()
         if (frame == 9 && timer == 0) {
             effect.type = 0x1c3;
             effect.x = (double)((int)x + facing * 6);
-            effect.y = (double)((int)y - 0x47);
+            effect.y = (double)((int)y - 71);
             effect.scale = 0;
             effect.layer = 1;
             effect.facing = facing;
             SpawnObject(&effect);
             effect.type = 0x1c2;
             effect.x = (double)((int)x + (facing << 4));
-            effect.y = (double)((int)y - 0x3d);
+            effect.y = (double)((int)y - 61);
             SpawnObject(&effect);
             effect.type = 0x1c0;
-            effect.x = (double)((int)x + facing * 0x1a);
-            effect.y = (double)((int)y - 0x33);
+            effect.x = (double)((int)x + facing * 26);
+            effect.y = (double)((int)y - 51);
             SpawnObject(&effect);
             m_playVoice = 3;
-            m_gauge = m_gauge + 0xf;
+            m_gauge = m_gauge + 15;
         }
-        if (frame == 0xe && timer == 0) {
+        if (frame == 14 && timer == 0) {
             effect.type = 0x1c3;
             effect.x = (double)((int)x + facing * 6);
-            effect.y = (double)((int)y - 0x47);
+            effect.y = (double)((int)y - 71);
             effect.scale = 0;
             effect.layer = 1;
             effect.facing = facing;
             SpawnObject(&effect);
             effect.type = 0x1c1;
             effect.x = (double)((int)x + (facing << 4));
-            effect.y = (double)((int)y - 0x3d);
+            effect.y = (double)((int)y - 61);
             SpawnObject(&effect);
             effect.type = 0x1c0;
-            effect.x = (double)((int)x + facing * 0x1a);
-            effect.y = (double)((int)y - 0x33);
+            effect.x = (double)((int)x + facing * 26);
+            effect.y = (double)((int)y - 51);
             SpawnObject(&effect);
             m_playVoice = 3;
-            m_gauge = m_gauge + 0xf;
+            m_gauge = m_gauge + 15;
         }
         timer++;
         if (timer >= duration) {
@@ -4118,7 +4118,7 @@ void CMizuka::UpdatePattern()
                 effect.layer = 1;
                 effect.facing = facing;
                 SpawnObject(&effect);
-                m_gauge = m_gauge + 0x2d;
+                m_gauge = m_gauge + 45;
             }
             if (frame == 7 && m_patternVar1 < 4) {
                 frame = frame - 3;
@@ -4152,7 +4152,7 @@ void CMizuka::UpdatePattern()
                 effect.layer = 1;
                 effect.facing = facing;
                 SpawnObject(&effect);
-                m_gauge = m_gauge + 0x2d;
+                m_gauge = m_gauge + 45;
             }
             if (frame == 7 && m_patternVar1 < 4) {
                 frame = frame - 3;
@@ -4176,9 +4176,9 @@ void CMizuka::UpdatePattern()
                 m_rfGauge -= 250.0;
             }
             effect.type = 0x21;
-            effect.sound = 0xb;
+            effect.sound = 11;
             effect.x = (double)(int)x;
-            effect.y = (double)((int)y - 0x32);
+            effect.y = (double)((int)y - 50);
             effect.scale = 2;
             effect.layer = 1;
             m_game->CreateEffect((EffectDesc*)&effect);
@@ -4189,13 +4189,13 @@ void CMizuka::UpdatePattern()
         }
         if (frame == 5 && timer == 0 && m_patternVar1 < 2) {
             effect.type = 0x1b5;
-            effect.x = (double)((int)x + -0x23 + (WORD)Random(0, 0x46));
+            effect.x = (double)((int)x + -35 + (WORD)Random(0, 70));
             effect.y = 0.0;
             effect.scale = 2;
             effect.layer = 1;
             effect.facing = facing;
             SpawnObject(&effect);
-            m_gauge = m_gauge + 0x14;
+            m_gauge = m_gauge + 20;
         }
         timer++;
         if (timer >= duration) {
@@ -4222,15 +4222,15 @@ void CMizuka::UpdatePattern()
         }
         if (frame == 7 && timer == 0) {
             effect.type = 0x1a1;
-            effect.x = (double)((int)x + facing * 0x19);
-            effect.y = (double)((int)y - 0x26);
+            effect.x = (double)((int)x + facing * 25);
+            effect.y = (double)((int)y - 38);
             effect.scale = 2;
             effect.layer = 1;
             effect.keep = 1;
-            m_playVoice = 0xb;
+            m_playVoice = 11;
             effect.facing = facing;
             SpawnObject(&effect);
-            m_gauge = m_gauge + 0x2d;
+            m_gauge = m_gauge + 45;
         }
         timer++;
         if (timer >= duration) {
@@ -4255,15 +4255,15 @@ void CMizuka::UpdatePattern()
         }
         if (frame == 7 && timer == 0) {
             effect.type = 0x1a4;
-            effect.x = (double)((int)x + facing * 0x19);
-            effect.y = (double)((int)y - 0x26);
+            effect.x = (double)((int)x + facing * 25);
+            effect.y = (double)((int)y - 38);
             effect.scale = 2;
             effect.layer = 1;
             effect.keep = 1;
-            m_playVoice = 0xb;
+            m_playVoice = 11;
             effect.facing = facing;
             SpawnObject(&effect);
-            m_gauge = m_gauge + 0x2d;
+            m_gauge = m_gauge + 45;
         }
         timer++;
         if (timer >= duration) {
@@ -4292,9 +4292,9 @@ void CMizuka::UpdatePattern()
                 m_rfGauge -= 250.0;
             }
             effect.type = 0x21;
-            effect.sound = 0xb;
+            effect.sound = 11;
             effect.x = (double)(int)x;
-            effect.y = (double)((int)y - 0x32);
+            effect.y = (double)((int)y - 50);
             effect.scale = 2;
             effect.layer = 1;
             m_game->CreateEffect((EffectDesc*)&effect);
@@ -4302,30 +4302,30 @@ void CMizuka::UpdatePattern()
         }
         if (frame == 5 && timer == 0) {
             effect.type = 0x1a3;
-            effect.x = (double)((int)x + facing * 0x3c);
-            effect.y = (double)((int)y - 0x64);
+            effect.x = (double)((int)x + facing * 60);
+            effect.y = (double)((int)y - 100);
             effect.facing = facing;
             effect.scale = 2;
             effect.layer = 1;
             SpawnObject(&effect);
-            effect.x = (double)((int)x - facing * 0x3c);
-            effect.y = (double)((int)y - 0x64);
+            effect.x = (double)((int)x - facing * 60);
+            effect.y = (double)((int)y - 100);
             SpawnObject(&effect);
-            effect.x = (double)((int)x + facing * 0x64);
-            effect.y = (double)((int)y - 0x28);
+            effect.x = (double)((int)x + facing * 100);
+            effect.y = (double)((int)y - 40);
             SpawnObject(&effect);
-            effect.x = (double)((int)x - facing * 0x64);
-            effect.y = (double)((int)y - 0x28);
-            m_playVoice = 0xb;
+            effect.x = (double)((int)x - facing * 100);
+            effect.y = (double)((int)y - 40);
+            m_playVoice = 11;
             SpawnObject(&effect);
-            m_gauge = m_gauge + 0x2d;
+            m_gauge = m_gauge + 45;
         }
         timer++;
         if (timer >= duration) {
             timer = 0;
             frame++;
             m_attackResult = 0;
-            if (frame == 0xb && m_patternVar1 < 2) {
+            if (frame == 11 && m_patternVar1 < 2) {
                 frame = frame - 3;
                 m_patternVar1++;
             }
@@ -4347,15 +4347,15 @@ void CMizuka::UpdatePattern()
         }
         if (frame == 7 && timer == 0) {
             effect.type = 0x1cb;
-            effect.x = (double)((int)x + facing * 0x26);
-            effect.y = (double)((int)y - 0x37);
+            effect.x = (double)((int)x + facing * 38);
+            effect.y = (double)((int)y - 55);
             effect.scale = 2;
             effect.layer = 1;
             effect.keep = 1;
-            m_playVoice = 0xb;
+            m_playVoice = 11;
             effect.facing = facing;
             SpawnObject(&effect);
-            m_gauge = m_gauge + 0x2d;
+            m_gauge = m_gauge + 45;
         }
         timer++;
         if (timer >= duration) {
@@ -4380,24 +4380,24 @@ void CMizuka::UpdatePattern()
         }
         if (frame == 3 && timer == 0) {
             StopMoving();
-            m_freezeTime = 0x78;
-            m_gauge = m_gauge - 0x3e8;
-            FillBackground(0xb0, 3);
+            m_freezeTime = 120;
+            m_gauge = m_gauge - 1000;
+            FillBackground(176, 3);
             effect.type = 0x44;
-            effect.sound = 0x13;
-            effect.x = (double)((int)x - facing * 0xe);
-            effect.y = (double)((int)y - 0x32);
+            effect.sound = 19;
+            effect.x = (double)((int)x - facing * 14);
+            effect.y = (double)((int)y - 50);
             effect.scale = 2;
             effect.layer = 1;
             m_game->CreateEffect((EffectDesc*)&effect);
         }
         if (frame > 2) {
-            FocusCameraY(0x32, 3);
+            FocusCameraY(50, 3);
         }
         if (frame == 5 && timer == 0 && m_patternVar2 < 7) {
             effect.keep = 1;
-            effect.type = m_patternVar1 + 0x19b;
-            effect.x = (double)((int)x - ((WORD)Random(0, 0x14) + 0x154 + m_patternVar2 * 8) * facing);
+            effect.type = m_patternVar1 + 411;
+            effect.x = (double)((int)x - ((WORD)Random(0, 20) + 340 + m_patternVar2 * 8) * facing);
             effect.y = (double)(4 - (WORD)Random(0, 4));
             effect.shadow = 1;
             effect.facing = facing;
@@ -4414,7 +4414,7 @@ void CMizuka::UpdatePattern()
             timer = 0;
             frame++;
             m_attackResult = 0;
-            if (frame == 7 && m_patternVar2 < 0xa) {
+            if (frame == 7 && m_patternVar2 < 10) {
                 frame = frame - 2;
                 m_patternVar2++;
             }
@@ -4433,24 +4433,24 @@ void CMizuka::UpdatePattern()
         }
         if (frame == 3 && timer == 0) {
             StopMoving();
-            m_freezeTime = 0x78;
-            m_gauge = m_gauge - 0x7d0;
-            FillBackground(0xb0, 3);
+            m_freezeTime = 120;
+            m_gauge = m_gauge - 2000;
+            FillBackground(176, 3);
             effect.type = 0x45;
             effect.sound = 5;
-            effect.x = (double)((int)x - facing * 0xe);
-            effect.y = (double)((int)y - 0x32);
+            effect.x = (double)((int)x - facing * 14);
+            effect.y = (double)((int)y - 50);
             effect.scale = 2;
             effect.layer = 1;
             m_game->CreateEffect((EffectDesc*)&effect);
         }
         if (frame > 2) {
-            FocusCameraY(0x32, 3);
+            FocusCameraY(50, 3);
         }
-        if (frame == 5 && timer == 0 && m_patternVar2 < 0x11) {
+        if (frame == 5 && timer == 0 && m_patternVar2 < 17) {
             effect.keep = 1;
-            effect.type = m_patternVar1 + 0x19b;
-            effect.x = (double)((int)x - ((WORD)Random(0, 0x14) + 0x154 + m_patternVar2 * 8) * facing);
+            effect.type = m_patternVar1 + 411;
+            effect.x = (double)((int)x - ((WORD)Random(0, 20) + 340 + m_patternVar2 * 8) * facing);
             effect.y = (double)(4 - (WORD)Random(0, 4));
             effect.shadow = 1;
             effect.facing = facing;
@@ -4467,7 +4467,7 @@ void CMizuka::UpdatePattern()
             timer = 0;
             frame++;
             m_attackResult = 0;
-            if (frame == 7 && m_patternVar2 < 0x14) {
+            if (frame == 7 && m_patternVar2 < 20) {
                 frame = frame - 2;
                 m_patternVar2++;
             }
@@ -4486,28 +4486,28 @@ void CMizuka::UpdatePattern()
         }
         if (frame == 3 && timer == 0) {
             StopMoving();
-            m_freezeTime = 0x78;
-            m_gauge = m_gauge - 0xbb8;
-            FillBackground(0xb0, 3);
+            m_freezeTime = 120;
+            m_gauge = m_gauge - 3000;
+            FillBackground(176, 3);
             effect.type = 0x46;
-            effect.sound = 0x40;
-            effect.x = (double)((int)x - facing * 0xe);
-            effect.y = (double)((int)y - 0x32);
+            effect.sound = 64;
+            effect.x = (double)((int)x - facing * 14);
+            effect.y = (double)((int)y - 50);
             effect.scale = 2;
             effect.layer = 1;
             m_game->CreateEffect((EffectDesc*)&effect);
-            m_playSound = 0x25;
+            m_playSound = 37;
         }
         if (frame > 2) {
-            m_game->FlashNegative(0xf);
+            m_game->FlashNegative(15);
         }
         if (frame > 2) {
-            FocusCameraY(0x32, 3);
+            FocusCameraY(50, 3);
         }
-        if (frame == 5 && timer == 0 && m_patternVar2 < 0x23) {
+        if (frame == 5 && timer == 0 && m_patternVar2 < 35) {
             effect.keep = 1;
-            effect.type = m_patternVar1 + 0x19b;
-            effect.x = (double)((int)x - ((WORD)Random(0, 0x14) + 0x154 + m_patternVar2 * 8) * facing);
+            effect.type = m_patternVar1 + 411;
+            effect.x = (double)((int)x - ((WORD)Random(0, 20) + 340 + m_patternVar2 * 8) * facing);
             effect.y = (double)(4 - (WORD)Random(0, 4));
             effect.shadow = 1;
             effect.facing = facing;
@@ -4524,7 +4524,7 @@ void CMizuka::UpdatePattern()
             timer = 0;
             frame++;
             m_attackResult = 0;
-            if (frame == 7 && m_patternVar2 < 0x23) {
+            if (frame == 7 && m_patternVar2 < 35) {
                 frame = frame - 2;
                 m_patternVar2++;
             }
@@ -4544,18 +4544,18 @@ void CMizuka::UpdatePattern()
             ay = 0.0;
         }
         if (frame == 7 && timer == 0) {
-            m_freezeTime = 0x78;
-            m_gauge = m_gauge - 0x3e8;
-            FillBackground(0xb0, 3);
+            m_freezeTime = 120;
+            m_gauge = m_gauge - 1000;
+            FillBackground(176, 3);
             effect.type = 0x44;
-            effect.sound = 0x13;
+            effect.sound = 19;
             effect.x = (double)(int)x;
-            effect.y = (double)((int)y - 0x28);
+            effect.y = (double)((int)y - 40);
             effect.scale = 2;
             effect.keep = 1;
             effect.layer = 1;
             m_game->CreateEffect((EffectDesc*)&effect);
-            FocusCameraY(0x32, 0x2d);
+            FocusCameraY(50, 45);
         }
         if (frame == 8 && timer == 0) {
             effect.type = 0x1b8;
@@ -4568,7 +4568,7 @@ void CMizuka::UpdatePattern()
             SpawnObject(&effect);
         }
         if (frame > 7 && m_catchState == 1) {
-            m_game->FlashWhite(9, 0x50, 9);
+            m_game->FlashWhite(9, 80, 9);
             StartPattern();
             pattern = k641236AHit;
             break;
@@ -4594,18 +4594,18 @@ void CMizuka::UpdatePattern()
             ay = 0.0;
         }
         if (frame == 7 && timer == 0) {
-            m_freezeTime = 0x78;
-            m_gauge = m_gauge - 0x7d0;
-            FillBackground(0xb0, 3);
+            m_freezeTime = 120;
+            m_gauge = m_gauge - 2000;
+            FillBackground(176, 3);
             effect.type = 0x45;
             effect.sound = 5;
             effect.x = (double)(int)x;
-            effect.y = (double)((int)y - 0x28);
+            effect.y = (double)((int)y - 40);
             effect.scale = 2;
             effect.keep = 1;
             effect.layer = 1;
             m_game->CreateEffect((EffectDesc*)&effect);
-            FocusCameraY(0x32, 0x2d);
+            FocusCameraY(50, 45);
         }
         if (frame == 8 && timer == 0) {
             effect.type = 0x1b8;
@@ -4618,7 +4618,7 @@ void CMizuka::UpdatePattern()
             SpawnObject(&effect);
         }
         if (frame > 7 && m_catchState == 1) {
-            m_game->FlashWhite(9, 0x50, 9);
+            m_game->FlashWhite(9, 80, 9);
             StartPattern();
             pattern = k641236BHit;
             break;
@@ -4644,22 +4644,22 @@ void CMizuka::UpdatePattern()
             ay = 0.0;
         }
         if (frame == 7 && timer == 0) {
-            m_freezeTime = 0x78;
-            m_gauge = m_gauge - 0xbb8;
-            FillBackground(0xb0, 3);
+            m_freezeTime = 120;
+            m_gauge = m_gauge - 3000;
+            FillBackground(176, 3);
             effect.type = 0x46;
-            effect.sound = 0x40;
+            effect.sound = 64;
             effect.x = (double)(int)x;
-            effect.y = (double)((int)y - 0x28);
+            effect.y = (double)((int)y - 40);
             effect.scale = 2;
             effect.keep = 1;
             effect.layer = 1;
             m_game->CreateEffect((EffectDesc*)&effect);
-            FocusCameraY(0x32, 0x2d);
-            m_playSound = 0x25;
+            FocusCameraY(50, 45);
+            m_playSound = 37;
         }
         if (frame > 6) {
-            m_game->FlashNegative(0xf);
+            m_game->FlashNegative(15);
         }
         if (frame == 8 && timer == 0) {
             effect.type = 0x1b8;
@@ -4672,7 +4672,7 @@ void CMizuka::UpdatePattern()
             SpawnObject(&effect);
         }
         if (frame > 7 && m_catchState == 1) {
-            m_game->FlashWhite(9, 0x50, 9);
+            m_game->FlashWhite(9, 80, 9);
             StartPattern();
             pattern = k641236CHit;
             break;
@@ -4690,7 +4690,7 @@ void CMizuka::UpdatePattern()
         }
         break;
     case k641236AHit:
-        FocusCameraY(0x32, 0xf);
+        FocusCameraY(50, 15);
         if (frame == 1 && timer == 0) {
             m_catchState = 2;
             x = 230.0;
@@ -4705,7 +4705,7 @@ void CMizuka::UpdatePattern()
         if (frame == 6 && timer == 0) {
             m_playVoice = 2;
         }
-        if (frame == 0xa && timer == 0) {
+        if (frame == 10 && timer == 0) {
             m_playVoice = 3;
             effect.type = 0x1c6;
             effect.scale = 0;
@@ -4721,12 +4721,12 @@ void CMizuka::UpdatePattern()
             timer = 0;
             frame++;
             m_attackResult = 0;
-            if (frame == 0x11 && (m_catchState == 2 || m_catchState == 4 || m_patternVar2 > 0)) {
+            if (frame == 17 && (m_catchState == 2 || m_catchState == 4 || m_patternVar2 > 0)) {
                 frame = frame - 3;
                 m_patternVar2--;
             }
-            if (frame == 0x11 && m_catchState == 5) {
-                frame = 0x15;
+            if (frame == 17 && m_catchState == 5) {
+                frame = 21;
             }
             if (frame >= frameCount) {
                 pattern = kStand;
@@ -4737,7 +4737,7 @@ void CMizuka::UpdatePattern()
         }
         break;
     case k641236BHit:
-        FocusCameraY(0x32, 0xf);
+        FocusCameraY(50, 15);
         if (frame == 1 && timer == 0) {
             m_catchState = 2;
             x = 230.0;
@@ -4763,7 +4763,7 @@ void CMizuka::UpdatePattern()
         if (frame == 6 && timer == 0) {
             m_playVoice = 2;
         }
-        if (frame == 0x10 && timer == 0) {
+        if (frame == 16 && timer == 0) {
             m_playVoice = 3;
             effect.type = 0x1c6;
             if (m_patternVar1 == 1) {
@@ -4785,34 +4785,34 @@ void CMizuka::UpdatePattern()
             timer = 0;
             frame++;
             m_attackResult = 0;
-            if (frame == 0xa) {
-                frame = 0x10;
+            if (frame == 10) {
+                frame = 16;
             }
-            if (frame == 0xd) {
-                frame = 0x10;
+            if (frame == 13) {
+                frame = 16;
             }
             if (frame == 7) {
                 if (m_patternVar1 == 1) {
-                    frame = 0xa;
+                    frame = 10;
                 }
                 if (m_patternVar1 == 2) {
-                    frame = 0xd;
+                    frame = 13;
                 }
             }
-            if (frame == 0x17 && (m_catchState == 2 || m_catchState == 4 || m_patternVar2 > 0)) {
+            if (frame == 23 && (m_catchState == 2 || m_catchState == 4 || m_patternVar2 > 0)) {
                 frame = frame - 3;
                 m_patternVar2--;
             }
-            if (frame == 0x1e) {
+            if (frame == 30) {
                 frame = 2;
                 m_catchState = 2;
                 m_patternVar1++;
             }
-            if (frame == 0x1b && m_patternVar1 == 1) {
-                frame = 0x1e;
+            if (frame == 27 && m_patternVar1 == 1) {
+                frame = 30;
             }
-            if (frame == 0x17 && m_catchState == 5) {
-                frame = 0x1e;
+            if (frame == 23 && m_catchState == 5) {
+                frame = 30;
             }
             if (frame >= frameCount) {
                 pattern = kStand;
@@ -4823,8 +4823,8 @@ void CMizuka::UpdatePattern()
         }
         break;
     case k641236CHit:
-        FocusCameraY(0x32, 0xf);
-        m_game->FlashNegative(0xf);
+        FocusCameraY(50, 15);
+        m_game->FlashNegative(15);
         if (frame == 1 && timer == 0) {
             m_catchState = 2;
             x = 230.0;
@@ -4850,7 +4850,7 @@ void CMizuka::UpdatePattern()
         if (frame == 6 && timer == 0) {
             m_playVoice = 2;
         }
-        if (frame == 0x10 && timer == 0) {
+        if (frame == 16 && timer == 0) {
             m_playVoice = 3;
             effect.type = 0x1c6;
             if (m_patternVar1 == 1) {
@@ -4872,34 +4872,34 @@ void CMizuka::UpdatePattern()
             timer = 0;
             frame++;
             m_attackResult = 0;
-            if (frame == 0xa) {
-                frame = 0x10;
+            if (frame == 10) {
+                frame = 16;
             }
-            if (frame == 0xd) {
-                frame = 0x10;
+            if (frame == 13) {
+                frame = 16;
             }
             if (frame == 7) {
                 if (m_patternVar1 == 1) {
-                    frame = 0xa;
+                    frame = 10;
                 }
                 if (m_patternVar1 == 2) {
-                    frame = 0xd;
+                    frame = 13;
                 }
             }
-            if (frame == 0x17 && (m_catchState == 2 || m_catchState == 4 || m_patternVar2 > 0)) {
+            if (frame == 23 && (m_catchState == 2 || m_catchState == 4 || m_patternVar2 > 0)) {
                 frame = frame - 3;
                 m_patternVar2--;
             }
-            if (frame == 0x1e) {
+            if (frame == 30) {
                 frame = 2;
                 m_catchState = 2;
                 m_patternVar1++;
             }
-            if (frame == 0x1b && m_patternVar1 == 2) {
-                frame = 0x1e;
+            if (frame == 27 && m_patternVar1 == 2) {
+                frame = 30;
             }
-            if (frame == 0x17 && m_catchState == 5) {
-                frame = 0x1e;
+            if (frame == 23 && m_catchState == 5) {
+                frame = 30;
             }
             if (frame >= frameCount) {
                 pattern = kStand;
@@ -4912,20 +4912,20 @@ void CMizuka::UpdatePattern()
     case kUnused135:
         StartAfterimages(2);
         if (frame < 6) {
-            FocusCameraY(0x32, 3);
+            FocusCameraY(50, 3);
         }
-        if (frame < 0xe && (*m_opponent)->pattern == kLyingDown) {
+        if (frame < 14 && (*m_opponent)->pattern == kLyingDown) {
             (*m_opponent)->StartPattern();
         }
         if (frame > 8) {
-            if (vy + y > 0.0 && frame < 0xe) {
+            if (vy + y > 0.0 && frame < 14) {
                 y = 0.0;
-                frame = 0xe;
+                frame = 14;
                 timer = 0;
                 StopMoving();
-                ShakeScreen(0xf, 0xa);
-                m_playSound = 0x16;
-                DealDamage(0x320, 900.0);
+                ShakeScreen(15, 10);
+                m_playSound = 22;
+                DealDamage(800, 900.0);
                 (*m_opponent)->StartPattern();
                 (*m_opponent)->pattern = kKnockdown;
                 effect.type = 0x190;
@@ -4937,7 +4937,7 @@ void CMizuka::UpdatePattern()
                 SpawnObject(&effect);
                 effect.type = 0;
                 m_game->CreateEffect((EffectDesc*)&effect);
-                (*m_opponent)->m_hitstop = 0xb4;
+                (*m_opponent)->m_hitstop = 180;
                 break;
             }
             vy = vy + ay;
@@ -4950,23 +4950,23 @@ void CMizuka::UpdatePattern()
                 (*m_opponent)->StartPattern();
                 (*m_opponent)->pattern = kThrownDoubledOver;
                 (*m_opponent)->y = -98.0;
-                (*m_opponent)->x = facing * 0x23 + x;
+                (*m_opponent)->x = facing * 35 + x;
             }
             if (frame == 2) {
                 (*m_opponent)->y = -98.0;
-                (*m_opponent)->x = facing * 0x21 + x;
+                (*m_opponent)->x = facing * 33 + x;
                 if (m_patternVar1 > 0) {
-                    timer = 0x96;
+                    timer = 150;
                 }
             }
             if (frame == 3) {
                 (*m_opponent)->y = 0.0;
-                (*m_opponent)->x = facing * 0x21 + x;
+                (*m_opponent)->x = facing * 33 + x;
                 (*m_opponent)->facing = -facing;
                 (*m_opponent)->StartPattern();
                 (*m_opponent)->pattern = kKnockdownHittable;
                 (*m_opponent)->m_landHittable = 1;
-                DealDamage(0x12c, 980.0);
+                DealDamage(300, 980.0);
                 if ((*m_opponent)->m_hp <= 0) {
                     (*m_opponent)->m_hp = 1;
                 }
@@ -4994,21 +4994,21 @@ void CMizuka::UpdatePattern()
         }
         if (frame == 1 && timer == 0) {
             StopMoving();
-            m_freezeTime = 0x78;
-            m_gauge = m_gauge - 0xbb8;
-            FillBackground(0xb0, 3);
+            m_freezeTime = 120;
+            m_gauge = m_gauge - 3000;
+            FillBackground(176, 3);
             effect.type = 9;
             effect.sound = 5;
-            effect.x = (double)((int)x + facing * 0x17);
-            effect.y = (double)((int)y - 0x1e);
+            effect.x = (double)((int)x + facing * 23);
+            effect.y = (double)((int)y - 30);
             effect.scale = 2;
             effect.keep = 1;
             effect.layer = 1;
             m_game->CreateEffect((EffectDesc*)&effect);
-            FocusCameraY(0x32, 0x2d);
+            FocusCameraY(50, 45);
         }
         if (frame < 7) {
-            FocusCameraY(0x32, 0x2d);
+            FocusCameraY(50, 45);
             (*m_opponent)->m_hitstop = 3;
         }
         if (frame == 7) {
@@ -5022,8 +5022,8 @@ void CMizuka::UpdatePattern()
             if (frame == 3 || frame == 6) {
                 effect.type = 0;
                 effect.sound = 2;
-                effect.x = (double)((int)x + facing * 0x1d);
-                effect.y = (double)((int)y - 0x53);
+                effect.x = (double)((int)x + facing * 29);
+                effect.y = (double)((int)y - 83);
                 effect.scale = 2;
                 effect.keep = 1;
                 effect.layer = 1;
@@ -5033,15 +5033,15 @@ void CMizuka::UpdatePattern()
                 (*m_opponent)->pattern = kThrownDoubledOver;
                 (*m_opponent)->StartPattern();
                 (*m_opponent)->y = -101.0;
-                (*m_opponent)->x = facing * 0x15 + x;
+                (*m_opponent)->x = facing * 21 + x;
             }
             if (frame == 2) {
                 (*m_opponent)->y = -99.0;
-                (*m_opponent)->x = facing * 0xf + x;
-                m_playSound = 0x16;
+                (*m_opponent)->x = facing * 15 + x;
+                m_playSound = 22;
                 effect.type = 0x193;
                 effect.x = (double)(int)x;
-                effect.y = (double)((int)y - 0xfa);
+                effect.y = (double)((int)y - 250);
                 effect.scale = 2;
                 effect.keep = 1;
                 effect.facing = facing;
@@ -5051,32 +5051,32 @@ void CMizuka::UpdatePattern()
             if (frame == 3) {
                 (*m_opponent)->pattern = kThrownStandHigh;
                 (*m_opponent)->y = -99.0;
-                (*m_opponent)->x = facing * 0xf + x;
+                (*m_opponent)->x = facing * 15 + x;
             }
             if (frame == 4) {
                 (*m_opponent)->pattern = kThrownDoubledOver;
                 (*m_opponent)->y = -99.0;
-                (*m_opponent)->x = facing * 0xf + x;
+                (*m_opponent)->x = facing * 15 + x;
             }
             if (frame == 5) {
                 (*m_opponent)->pattern = kThrownStandHigh;
                 (*m_opponent)->y = -99.0;
-                (*m_opponent)->x = facing * 0xf + x;
+                (*m_opponent)->x = facing * 15 + x;
             }
             if (frame == 6) {
                 (*m_opponent)->pattern = kThrownDoubledOver;
                 (*m_opponent)->y = -99.0;
-                (*m_opponent)->x = facing * 0xf + x;
+                (*m_opponent)->x = facing * 15 + x;
             }
-            if (frame == 7 && m_patternVar1 > 0xa) {
+            if (frame == 7 && m_patternVar1 > 10) {
                 (*m_opponent)->pattern = kHitAirCarry;
                 (*m_opponent)->m_hitVx = 0.0;
                 (*m_opponent)->m_hitVy = -5.0;
                 (*m_opponent)->ay = 0.035;
-                DealDamage(0xdac, 700.0);
-                (*m_opponent)->m_untechTime = 0xb4;
+                DealDamage(3500, 700.0);
+                (*m_opponent)->m_untechTime = 180;
             }
-            if (frame == 7 && m_patternVar1 < 0xb) {
+            if (frame == 7 && m_patternVar1 < 11) {
                 m_patternVar1++;
                 frame = 2;
             }
@@ -5092,7 +5092,7 @@ void CMizuka::UpdatePattern()
             (*m_opponent)->StartPattern();
         }
         if (frame < 7) {
-            FocusCameraY(0x32, 0x2d);
+            FocusCameraY(50, 45);
             (*m_opponent)->m_hitstop = 3;
         }
         if (frame == 7) {
@@ -5106,8 +5106,8 @@ void CMizuka::UpdatePattern()
             if (frame == 3 || frame == 6) {
                 effect.type = 0;
                 effect.sound = 2;
-                effect.x = (double)((int)x + facing * 0x1d);
-                effect.y = (double)((int)y - 0x53);
+                effect.x = (double)((int)x + facing * 29);
+                effect.y = (double)((int)y - 83);
                 effect.scale = 2;
                 effect.keep = 1;
                 effect.layer = 1;
@@ -5117,15 +5117,15 @@ void CMizuka::UpdatePattern()
                 (*m_opponent)->pattern = kThrownDoubledOver;
                 (*m_opponent)->StartPattern();
                 (*m_opponent)->y = -101.0;
-                (*m_opponent)->x = facing * 0x15 + x;
+                (*m_opponent)->x = facing * 21 + x;
             }
             if (frame == 2) {
                 (*m_opponent)->y = -99.0;
-                (*m_opponent)->x = facing * 0xf + x;
-                m_playSound = 0x16;
+                (*m_opponent)->x = facing * 15 + x;
+                m_playSound = 22;
                 effect.type = 0x193;
                 effect.x = (double)(int)x;
-                effect.y = (double)((int)y - 0xfa);
+                effect.y = (double)((int)y - 250);
                 effect.scale = 2;
                 effect.keep = 1;
                 effect.facing = facing;
@@ -5135,36 +5135,36 @@ void CMizuka::UpdatePattern()
             if (frame == 3) {
                 (*m_opponent)->pattern = kThrownStandHigh;
                 (*m_opponent)->y = -99.0;
-                (*m_opponent)->x = facing * 0xf + x;
+                (*m_opponent)->x = facing * 15 + x;
             }
             if (frame == 4) {
                 (*m_opponent)->pattern = kThrownDoubledOver;
                 (*m_opponent)->y = -99.0;
-                (*m_opponent)->x = facing * 0xf + x;
+                (*m_opponent)->x = facing * 15 + x;
             }
             if (frame == 5) {
                 (*m_opponent)->pattern = kThrownStandHigh;
                 (*m_opponent)->y = -99.0;
-                (*m_opponent)->x = facing * 0xf + x;
+                (*m_opponent)->x = facing * 15 + x;
             }
             if (frame == 6) {
                 (*m_opponent)->pattern = kThrownDoubledOver;
                 (*m_opponent)->y = -99.0;
-                (*m_opponent)->x = facing * 0xf + x;
+                (*m_opponent)->x = facing * 15 + x;
             }
             if (frame == 7 && m_patternVar1 > 8) {
                 (*m_opponent)->StartPattern();
                 (*m_opponent)->pattern = kHitAirLaunch;
                 (*m_opponent)->m_hitVx = 0.2;
                 (*m_opponent)->m_hitVy = -1.9;
-                DealDamage(0x3e8, 1000.0);
+                DealDamage(1000, 1000.0);
                 m_hitsLeft = 1;
             }
             if (frame == 7 && m_patternVar1 < 9) {
                 m_patternVar1++;
                 frame = 2;
             }
-            if (frame == 0x10) {
+            if (frame == 16) {
                 effect.type = 0x1f;
                 effect.x = (double)(int)x;
                 effect.y = (double)((int)y + 4);
@@ -5174,14 +5174,14 @@ void CMizuka::UpdatePattern()
                 effect.layer = 1;
                 m_game->CreateEffect((EffectDesc*)&effect);
                 effect.type = 0x191;
-                effect.x = (double)((int)x + facing * 0x28);
+                effect.x = (double)((int)x + facing * 40);
                 effect.y = (double)(int)y;
                 effect.scale = 2;
                 effect.facing = facing;
                 effect.keep = 1;
                 effect.layer = 1;
                 SpawnObject(&effect);
-                ShakeScreen(0xa, 0x3c);
+                ShakeScreen(10, 60);
             }
             if (frame >= frameCount) {
                 pattern = kStand;
@@ -5198,13 +5198,13 @@ void CMizuka::UpdatePattern()
             m_hitsLeft = 2;
         }
         if (frame == 6 && timer == 0) {
-            FocusCameraY(0x32, 0x2d);
-            m_freezeTime = 0x78;
-            FillBackground(0xb0, 3);
+            FocusCameraY(50, 45);
+            m_freezeTime = 120;
+            FillBackground(176, 3);
             effect.type = 9;
             effect.sound = 5;
-            effect.x = (double)((int)x + facing * 0x17);
-            effect.y = (double)((int)y - 0x1e);
+            effect.x = (double)((int)x + facing * 23);
+            effect.y = (double)((int)y - 30);
             effect.scale = 2;
             effect.keep = 1;
             effect.layer = 1;
@@ -5220,7 +5220,7 @@ void CMizuka::UpdatePattern()
             effect.layer = 1;
             m_game->CreateEffect((EffectDesc*)&effect);
             effect.type = 0x192;
-            effect.x = (double)((int)x + facing * 0x2d);
+            effect.x = (double)((int)x + facing * 45);
             effect.y = (double)(int)y;
             effect.scale = 2;
             effect.facing = facing;
@@ -5238,7 +5238,7 @@ void CMizuka::UpdatePattern()
             effect.layer = 1;
             m_game->CreateEffect((EffectDesc*)&effect);
             effect.type = 0x191;
-            effect.x = (double)((int)x + facing * 0x28);
+            effect.x = (double)((int)x + facing * 40);
             effect.y = (double)(int)y;
             effect.scale = 2;
             effect.facing = facing;
@@ -5247,18 +5247,18 @@ void CMizuka::UpdatePattern()
             SpawnObject(&effect);
         }
         if (frame == 2 && m_attackResult == 3) {
-            ShakeScreen(6, 0x3c);
-            (*m_opponent)->m_hitstop = 0x1f4;
+            ShakeScreen(6, 60);
+            (*m_opponent)->m_hitstop = 500;
         }
-        if (frame == 0xa && timer == 0) {
-            ShakeScreen(0xa, 0x3c);
+        if (frame == 10 && timer == 0) {
+            ShakeScreen(10, 60);
         }
         timer++;
         if (timer >= duration) {
             timer = 0;
             frame++;
             if (m_attackResult != 3 && frame == 6) {
-                frame = 0xc;
+                frame = 12;
             }
             if (frame == 9 || frame == 1) {
                 m_attackResult = 0;
@@ -5273,15 +5273,15 @@ void CMizuka::UpdatePattern()
         if (frame == 0 && timer == 0) {
             StopMoving();
             if (frame == 1 && timer == 0) {
-                m_gauge = m_gauge - 0xbb8;
+                m_gauge = m_gauge - 3000;
             }
-            FocusCameraY(0x32, 0x2d);
-            m_freezeTime = 0x78;
-            FillBackground(0xb0, 3);
+            FocusCameraY(50, 45);
+            m_freezeTime = 120;
+            FillBackground(176, 3);
             effect.type = 9;
             effect.sound = 5;
-            effect.x = (double)((int)x + facing * 0x17);
-            effect.y = (double)((int)y - 0x1e);
+            effect.x = (double)((int)x + facing * 23);
+            effect.y = (double)((int)y - 30);
             effect.scale = 2;
             effect.keep = 1;
             effect.layer = 1;
@@ -5291,7 +5291,7 @@ void CMizuka::UpdatePattern()
             StartPattern();
             frame = 2;
             m_attackResult = 0;
-            m_freezeTime = 0x78;
+            m_freezeTime = 120;
             break;
         }
         timer++;
@@ -5323,13 +5323,13 @@ void CMizuka::UpdatePattern()
         }
         if (frame == 1 && timer == 0) {
             StopMoving();
-            m_freezeTime = 0x78;
-            m_gauge = m_gauge - 0xbb8;
-            FillBackground(0xb0, 3);
+            m_freezeTime = 120;
+            m_gauge = m_gauge - 3000;
+            FillBackground(176, 3);
             effect.type = 0x46;
-            effect.sound = 0x40;
-            effect.x = (double)((int)x - facing * 0x17);
-            effect.y = (double)((int)y - 0x33);
+            effect.sound = 64;
+            effect.x = (double)((int)x - facing * 23);
+            effect.y = (double)((int)y - 51);
             effect.scale = 2;
             effect.layer = 1;
             effect.facing = facing;
@@ -5337,14 +5337,14 @@ void CMizuka::UpdatePattern()
             effect.type = 0x47;
             m_game->CreateEffect((EffectDesc*)&effect);
             m_patternVar1++;
-            m_playSound = 0x25;
+            m_playSound = 37;
             m_hitsLeft = 1;
         }
         if (frame > 0) {
-            m_game->FlashNegative(0xf);
+            m_game->FlashNegative(15);
         }
         if (frame > 0) {
-            FocusCameraY(0x32, 3);
+            FocusCameraY(50, 3);
         }
         if (frame > 2 && frame < 8) {
             vy = vy + ay;
@@ -5356,10 +5356,10 @@ void CMizuka::UpdatePattern()
                 break;
             }
         }
-        if (frame == 0xc && timer == 0 && m_attackResult == 3) {
-            m_game->FlashWhite(9, 0xf, 9);
+        if (frame == 12 && timer == 0 && m_attackResult == 3) {
+            m_game->FlashWhite(9, 15, 9);
         }
-        if (frame == 0xd && timer == 0 && m_attackResult == 3) {
+        if (frame == 13 && timer == 0 && m_attackResult == 3) {
             StartPattern();
             pattern = k214214CHit;
             break;
@@ -5389,13 +5389,13 @@ void CMizuka::UpdatePattern()
             (*m_opponent)->timer = 0;
         }
         if (frame < 2) {
-            FillBackground(0xb0, 3);
+            FillBackground(176, 3);
         }
         if (frame < 2) {
-            FocusCameraY(0x32, 3);
+            FocusCameraY(50, 3);
         }
         if (frame < 2) {
-            FocusCameraX(0x32, 3);
+            FocusCameraX(50, 3);
         }
         if (frame == 0 && timer == 0) {
             x = 320.0;
@@ -5424,7 +5424,7 @@ void CMizuka::UpdatePattern()
         }
         if (frame == 0) {
             m_patternVar1++;
-            if (m_patternVar1 == 0x50) {
+            if (m_patternVar1 == 80) {
                 effect.type = 0x1a6;
                 effect.x = 320.0;
                 effect.y = 200.0;
@@ -5433,7 +5433,7 @@ void CMizuka::UpdatePattern()
                 effect.facing = facing;
                 SpawnObject(&effect);
             }
-            if (m_patternVar1 == 0xa0) {
+            if (m_patternVar1 == 160) {
                 effect.type = 0x1a7;
                 effect.x = 320.0;
                 effect.y = 200.0;
@@ -5442,7 +5442,7 @@ void CMizuka::UpdatePattern()
                 effect.facing = facing;
                 SpawnObject(&effect);
             }
-            if (m_patternVar1 == 0xf0) {
+            if (m_patternVar1 == 240) {
                 effect.type = 0x1a8;
                 effect.x = 320.0;
                 effect.y = 200.0;
@@ -5451,7 +5451,7 @@ void CMizuka::UpdatePattern()
                 effect.facing = facing;
                 SpawnObject(&effect);
             }
-            if (m_patternVar1 == 0x140) {
+            if (m_patternVar1 == 320) {
                 effect.type = 0x1a9;
                 effect.x = 320.0;
                 effect.y = 200.0;
@@ -5460,7 +5460,7 @@ void CMizuka::UpdatePattern()
                 effect.facing = facing;
                 SpawnObject(&effect);
             }
-            if (m_patternVar1 == 0x190) {
+            if (m_patternVar1 == 400) {
                 effect.type = 0x1aa;
                 effect.x = 320.0;
                 effect.y = 200.0;
@@ -5470,8 +5470,8 @@ void CMizuka::UpdatePattern()
                 SpawnObject(&effect);
             }
         }
-        if (frame == 0 && timer == duration - 0x1e) {
-            m_game->FlashBlack(9, 0x1e, 9);
+        if (frame == 0 && timer == duration - 30) {
+            m_game->FlashBlack(9, 30, 9);
             m_patternVar1 = 0;
             (*m_opponent)->x = 320.0;
             (*m_opponent)->y = 0.0;
@@ -5490,54 +5490,54 @@ void CMizuka::UpdatePattern()
                 vx = -0.9;
                 vy = -1.5;
             }
-            if (m_patternVar1 == 0x96) {
+            if (m_patternVar1 == 150) {
                 effect.type = 0x1b6;
-                effect.x = x - facing * 0xf0;
+                effect.x = x - facing * 240;
                 effect.y = -20.0;
                 effect.scale = 0;
                 effect.layer = 1;
                 effect.facing = facing;
                 SpawnObject(&effect);
             }
-            if (m_patternVar1 == 0xae) {
+            if (m_patternVar1 == 174) {
                 effect.type = 0x1ac;
-                effect.x = x - facing * 0xf0;
+                effect.x = x - facing * 240;
                 effect.y = -20.0;
                 effect.scale = 0;
                 effect.layer = 1;
                 effect.facing = facing;
                 SpawnObject(&effect);
             }
-            if (m_patternVar1 == 0xc6) {
+            if (m_patternVar1 == 198) {
                 effect.type = 0x1ad;
-                effect.x = x - facing * 0xf0;
+                effect.x = x - facing * 240;
                 effect.y = -20.0;
                 effect.scale = 0;
                 effect.layer = 1;
                 effect.facing = facing;
                 SpawnObject(&effect);
             }
-            if (m_patternVar1 == 0xde) {
+            if (m_patternVar1 == 222) {
                 effect.type = 0x1ae;
-                effect.x = x - facing * 0xf0;
+                effect.x = x - facing * 240;
                 effect.y = -20.0;
                 effect.scale = 0;
                 effect.layer = 1;
                 effect.facing = facing;
                 SpawnObject(&effect);
             }
-            if (m_patternVar1 == 0xf6) {
+            if (m_patternVar1 == 246) {
                 effect.type = 0x1af;
-                effect.x = x - facing * 0xf0;
+                effect.x = x - facing * 240;
                 effect.y = -20.0;
                 effect.scale = 0;
                 effect.layer = 1;
                 effect.facing = facing;
                 SpawnObject(&effect);
             }
-            if (m_patternVar1 == 0x10e) {
+            if (m_patternVar1 == 270) {
                 effect.type = 0x1b0;
-                effect.x = x - facing * 0xf0;
+                effect.x = x - facing * 240;
                 effect.y = -20.0;
                 effect.scale = 0;
                 effect.layer = 1;
@@ -5573,13 +5573,13 @@ void CMizuka::UpdatePattern()
         }
         if (frame == 4 && timer == 0 && m_patternVar1 == 0) {
             StopMoving();
-            m_freezeTime = 0x78;
-            m_gauge = m_gauge - 0xbb8;
-            FillBackground(0xb0, 3);
+            m_freezeTime = 120;
+            m_gauge = m_gauge - 3000;
+            FillBackground(176, 3);
             effect.type = 0x46;
-            effect.sound = 0x40;
-            effect.x = (double)((int)x - facing * 0xe);
-            effect.y = (double)((int)y - 0x32);
+            effect.sound = 64;
+            effect.x = (double)((int)x - facing * 14);
+            effect.y = (double)((int)y - 50);
             effect.scale = 2;
             effect.layer = 1;
             effect.facing = facing;
@@ -5587,16 +5587,16 @@ void CMizuka::UpdatePattern()
             effect.type = 0x47;
             m_game->CreateEffect((EffectDesc*)&effect);
             m_patternVar1++;
-            m_playSound = 0x25;
+            m_playSound = 37;
         }
         if (frame > 3) {
-            m_game->FlashNegative(0xf);
+            m_game->FlashNegative(15);
         }
-        FocusCameraY(0x32, 3);
+        FocusCameraY(50, 3);
         if (frame == 9 && timer == 0) {
             effect.keep = 1;
             effect.type = 0x1c4;
-            effect.x = (double)((int)x + facing * 0x50);
+            effect.x = (double)((int)x + facing * 80);
             effect.y = 15.0;
             effect.facing = facing;
             effect.scale = 2;

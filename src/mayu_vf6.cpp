@@ -337,7 +337,7 @@ void CMayu::UpdatePattern()
             m_rfGauge -= 0.6;
         }
         if (frame == 0 && timer == 0) {
-            m_gauge = m_gauge + 0xa;
+            m_gauge = m_gauge + 10;
             vx = (2.0 - (*m_opponent)->m_proration / 10000.0) * -1.1;
             if (m_rfBlue != 0) {
                 m_rfGauge -= 10.0;
@@ -372,7 +372,7 @@ void CMayu::UpdatePattern()
             m_rfGauge -= 0.6;
         }
         if (frame == 0 && timer == 0) {
-            m_gauge = m_gauge + 0xf;
+            m_gauge = m_gauge + 15;
             vx = (2.0 - (*m_opponent)->m_proration / 10000.0) * -1.5;
             if (m_rfBlue != 0) {
                 m_rfGauge -= 20.0;
@@ -407,7 +407,7 @@ void CMayu::UpdatePattern()
             m_rfGauge -= 0.6;
         }
         if (frame == 0 && timer == 0) {
-            m_gauge = m_gauge + 0x14;
+            m_gauge = m_gauge + 20;
             vx = (2.0 - (*m_opponent)->m_proration / 10000.0) * -1.8;
             if (m_rfBlue != 0) {
                 m_rfGauge -= 30.0;
@@ -442,7 +442,7 @@ void CMayu::UpdatePattern()
             m_rfGauge -= 0.6;
         }
         if (frame == 0 && timer == 0) {
-            m_gauge = m_gauge + 0xa;
+            m_gauge = m_gauge + 10;
             vx = (2.0 - (*m_opponent)->m_proration / 10000.0) * -1.1;
             if (m_rfBlue != 0) {
                 m_rfGauge -= 10.0;
@@ -477,7 +477,7 @@ void CMayu::UpdatePattern()
             m_rfGauge -= 0.6;
         }
         if (frame == 0 && timer == 0) {
-            m_gauge = m_gauge + 0xf;
+            m_gauge = m_gauge + 15;
             vx = (2.0 - (*m_opponent)->m_proration / 10000.0) * -1.5;
             if (m_rfBlue != 0) {
                 m_rfGauge -= 20.0;
@@ -512,7 +512,7 @@ void CMayu::UpdatePattern()
             m_rfGauge -= 0.6;
         }
         if (frame == 0 && timer == 0) {
-            m_gauge = m_gauge + 0x14;
+            m_gauge = m_gauge + 20;
             vx = (2.0 - (*m_opponent)->m_proration / 10000.0) * -1.8;
             if (m_rfBlue != 0) {
                 m_rfGauge -= 30.0;
@@ -547,7 +547,7 @@ void CMayu::UpdatePattern()
             m_rfGauge -= 0.6;
         }
         if (frame == 0 && timer == 0) {
-            m_gauge = m_gauge + 0xa;
+            m_gauge = m_gauge + 10;
             vx = (2.0 - (*m_opponent)->m_proration / 10000.0) * -1.1;
             if (m_rfBlue != 0) {
                 m_rfGauge -= 10.0;
@@ -579,7 +579,7 @@ void CMayu::UpdatePattern()
             m_rfGauge -= 0.6;
         }
         if (frame == 0 && timer == 0) {
-            m_gauge = m_gauge + 0xf;
+            m_gauge = m_gauge + 15;
             vx = (2.0 - (*m_opponent)->m_proration / 10000.0) * -1.5;
             if (m_rfBlue != 0) {
                 m_rfGauge -= 20.0;
@@ -611,7 +611,7 @@ void CMayu::UpdatePattern()
             m_rfGauge -= 0.6;
         }
         if (frame == 0 && timer == 0) {
-            m_gauge = m_gauge + 0x14;
+            m_gauge = m_gauge + 20;
             vx = (2.0 - (*m_opponent)->m_proration / 10000.0) * -1.8;
             if (m_rfBlue != 0) {
                 m_rfGauge -= 30.0;
@@ -643,7 +643,7 @@ void CMayu::UpdatePattern()
             m_rfGauge -= 0.8;
         }
         if (frame == 0 && timer == 0) {
-            m_gauge = m_gauge + 0x1e;
+            m_gauge = m_gauge + 30;
             vx = m_hitVx;
             vy = vy * 0.75 + m_hitVy;
             if (vy < -2.0) {
@@ -686,7 +686,7 @@ void CMayu::UpdatePattern()
             m_rfGauge -= 0.8;
         }
         if (frame == 0 && timer == 0) {
-            m_gauge = m_gauge + 0x1e;
+            m_gauge = m_gauge + 30;
             vx = m_hitVx;
             vy = vy * 0.75 + m_hitVy;
             if (vy < -4.0) {
@@ -729,7 +729,7 @@ void CMayu::UpdatePattern()
             m_rfGauge -= 0.8;
         }
         if (frame == 0 && timer == 0) {
-            m_gauge = m_gauge + 0x1e;
+            m_gauge = m_gauge + 30;
             vx = m_hitVx;
             vy = vy * 0.75 + m_hitVy;
             if (vy < -6.0) {
@@ -772,7 +772,7 @@ void CMayu::UpdatePattern()
             m_rfGauge -= 0.8;
         }
         if (frame == 0 && timer == 0) {
-            m_gauge = m_gauge + 0x1e;
+            m_gauge = m_gauge + 30;
             vx = m_hitVx;
             vy = vy * 0.75 + m_hitVy;
             ay = 0.032;
@@ -810,7 +810,7 @@ void CMayu::UpdatePattern()
             m_rfGauge -= 0.8;
         }
         if (frame == 0 && timer == 0) {
-            m_gauge = m_gauge + 0x1e;
+            m_gauge = m_gauge + 30;
             vx = m_hitVx;
             vy = m_hitVy;
             ay = 0.032;
@@ -853,7 +853,7 @@ void CMayu::UpdatePattern()
             break;
         }
         if (frame == 0 && timer == 0) {
-            m_gauge = m_gauge + 0x1e;
+            m_gauge = m_gauge + 30;
             vx = m_hitVx;
             vy = vy * 0.75 + m_hitVy;
             if (vy < -2.0) {
@@ -901,7 +901,7 @@ void CMayu::UpdatePattern()
             break;
         }
         if (frame == 0 && timer == 0) {
-            m_gauge = m_gauge + 0x1e;
+            m_gauge = m_gauge + 30;
             vx = m_hitVx;
             vy = vy * 0.75 + m_hitVy;
             if (vy < -4.0) {
@@ -949,7 +949,7 @@ void CMayu::UpdatePattern()
             break;
         }
         if (frame == 0 && timer == 0) {
-            m_gauge = m_gauge + 0x1e;
+            m_gauge = m_gauge + 30;
             vx = m_hitVx;
             vy = vy * 0.75 + m_hitVy;
             ay = 0.032;
@@ -992,7 +992,7 @@ void CMayu::UpdatePattern()
             break;
         }
         if (frame == 0 && timer == 0) {
-            m_gauge = m_gauge + 0x1e;
+            m_gauge = m_gauge + 30;
             vx = m_hitVx;
             vy = m_hitVy;
             ay = 0.032;
@@ -1087,13 +1087,13 @@ void CMayu::UpdatePattern()
             m_rfGauge -= 0.8;
         }
         if (frame == 0 && timer == 0 && m_patternVar1 == 0) {
-            m_gauge = m_gauge + 0x1e;
+            m_gauge = m_gauge + 30;
             m_patternVar1++;
-            m_untechTime = m_untechTime + 0x78;
+            m_untechTime = m_untechTime + 120;
             vx = 0.5;
             vy = -2.5;
             ay = 0.025;
-            m_playSound = 0x1f;
+            m_playSound = 31;
             effect.type = 0;
             effect.x = (double)(int)x;
             effect.y = (double)(int)y;
@@ -1126,7 +1126,7 @@ void CMayu::UpdatePattern()
             m_rfGauge -= 0.8;
         }
         if (frame == 0 && timer == 0) {
-            m_gauge = m_gauge + 0x1e;
+            m_gauge = m_gauge + 30;
             vx = m_hitVx;
             vy = m_hitVy;
             ay = 0.072;
@@ -1233,7 +1233,7 @@ void CMayu::UpdatePattern()
             m_rfGauge -= 0.6;
         }
         if (frame == 0 && timer == 0) {
-            m_gauge = m_gauge + 0x1e;
+            m_gauge = m_gauge + 30;
             if (m_rfBlue != 0) {
                 m_rfGauge -= 30.0;
             }
@@ -1270,7 +1270,7 @@ void CMayu::UpdatePattern()
             m_rfGauge -= 0.6;
         }
         if (frame == 0 && timer == 0) {
-            m_gauge = m_gauge + 0x1e;
+            m_gauge = m_gauge + 30;
             if (m_rfBlue != 0) {
                 m_rfGauge -= 30.0;
             }
@@ -1307,7 +1307,7 @@ void CMayu::UpdatePattern()
             m_rfGauge -= 0.6;
         }
         if (frame == 0 && timer == 0) {
-            m_gauge = m_gauge + 0x1e;
+            m_gauge = m_gauge + 30;
             if (m_rfBlue != 0) {
                 m_rfGauge -= 30.0;
             }
@@ -1347,7 +1347,7 @@ void CMayu::UpdatePattern()
             effect.facing = facing;
             effect.layer = 1;
             SpawnObject(&effect);
-            m_gauge = m_gauge + 0x1e;
+            m_gauge = m_gauge + 30;
             vx = m_hitVx;
             vy = m_hitVy;
             ay = 0.032;
@@ -1381,11 +1381,11 @@ void CMayu::UpdatePattern()
             m_rfGauge -= 0.8;
         }
         if (frame == 0 && timer == 0 && m_patternVar1 == 0) {
-            m_playSound = 0x1e;
+            m_playSound = 30;
             vy = -0.45;
             vx = -0.1;
             m_patternVar1++;
-            m_gauge = m_gauge + 0x1e;
+            m_gauge = m_gauge + 30;
         }
         if (frame == 4 && timer == 0) {
             vx = m_hitVx;
@@ -1438,10 +1438,10 @@ void CMayu::UpdatePattern()
             if (m_rfBlue != 0) {
                 m_rfGauge -= 30.0;
             }
-            m_playSound = 0x21;
+            m_playSound = 33;
             vy = -1.5;
             vx = -0.8;
-            m_gauge = m_gauge + 0x1e;
+            m_gauge = m_gauge + 30;
         }
         vy += 0.04;
         if (frame == 0 && vy + y > 0.0) {
@@ -1490,10 +1490,10 @@ void CMayu::UpdatePattern()
             if (m_rfBlue != 0) {
                 m_rfGauge -= 30.0;
             }
-            m_playSound = 0x21;
+            m_playSound = 33;
             vy = -1.5;
             vx = -0.8;
-            m_gauge = m_gauge + 0x1e;
+            m_gauge = m_gauge + 30;
         }
         vy += 0.04;
         if (frame == 0 && vy + y > 0.0) {
@@ -1542,10 +1542,10 @@ void CMayu::UpdatePattern()
             if (m_rfBlue != 0) {
                 m_rfGauge -= 30.0;
             }
-            m_playSound = 0x21;
+            m_playSound = 33;
             vx = m_hitVx;
             vy = m_hitVy;
-            m_gauge = m_gauge + 0x1e;
+            m_gauge = m_gauge + 30;
         }
         vy += 0.04;
         timer++;
@@ -1586,10 +1586,10 @@ void CMayu::UpdatePattern()
                 if (m_rfBlue != 0) {
                     m_rfGauge -= 30.0;
                 }
-                m_playSound = 0x21;
+                m_playSound = 33;
                 vx = m_hitVx;
                 vy = m_hitVy;
-                m_gauge = m_gauge + 0x1e;
+                m_gauge = m_gauge + 30;
                 m_patternVar1++;
             }
         }
@@ -1714,7 +1714,7 @@ void CMayu::UpdatePattern()
         break;
     case kLyingDown:
         timer++;
-        if (m_hp > 0 && timer > 0x45 && frame == 0) {
+        if (m_hp > 0 && timer > 69 && frame == 0) {
             pattern = kWakeUp;
             StartPattern();
         }
@@ -1738,7 +1738,7 @@ void CMayu::UpdatePattern()
             pattern = kGuardStandLight;
         }
         if (frame == 0 && timer == 0) {
-            m_gauge = m_gauge + 0xa;
+            m_gauge = m_gauge + 10;
             vx = -1.5;
             vy = 0.0;
             y = 0.0;
@@ -1777,7 +1777,7 @@ void CMayu::UpdatePattern()
             pattern = kGuardStandMedium;
         }
         if (frame == 0 && timer == 0) {
-            m_gauge = m_gauge + 0xf;
+            m_gauge = m_gauge + 15;
             vx = -1.8;
             vy = 0.0;
             y = 0.0;
@@ -1816,7 +1816,7 @@ void CMayu::UpdatePattern()
             pattern = kGuardStandHeavy;
         }
         if (frame == 0 && timer == 0) {
-            m_gauge = m_gauge + 0x14;
+            m_gauge = m_gauge + 20;
             vx = -2.3;
             vy = 0.0;
             y = 0.0;
@@ -1855,7 +1855,7 @@ void CMayu::UpdatePattern()
             pattern = kGuardStandLight;
         }
         if (frame == 0 && timer == 0) {
-            m_gauge = m_gauge + 0xa;
+            m_gauge = m_gauge + 10;
             vx = -1.5;
             vy = 0.0;
             y = 0.0;
@@ -1891,7 +1891,7 @@ void CMayu::UpdatePattern()
             pattern = kGuardStandMedium;
         }
         if (frame == 0 && timer == 0) {
-            m_gauge = m_gauge + 0xf;
+            m_gauge = m_gauge + 15;
             vx = -1.8;
             vy = 0.0;
             y = 0.0;
@@ -1927,7 +1927,7 @@ void CMayu::UpdatePattern()
             pattern = kGuardStandHeavy;
         }
         if (frame == 0 && timer == 0) {
-            m_gauge = m_gauge + 0x14;
+            m_gauge = m_gauge + 20;
             vx = -2.3;
             vy = 0.0;
             y = 0.0;
@@ -1958,7 +1958,7 @@ void CMayu::UpdatePattern()
     case kGuardAir:
         if (frame == 0 && timer == 0) {
             vy = -2.6;
-            m_gauge = m_gauge + 0xf;
+            m_gauge = m_gauge + 15;
             ay = 0.06;
         }
         vx = -1.2;
@@ -2047,12 +2047,12 @@ void CMayu::UpdatePattern()
             StopMoving();
             effect.type = 9;
             effect.x = (double)(int)x;
-            effect.y = (double)((int)y - 0x3c);
+            effect.y = (double)((int)y - 60);
             effect.scale = 2;
             effect.layer = 1;
             m_game->CreateEffect((EffectDesc*)&effect);
             m_hitsLeft = 1;
-            m_playSound = 0x3e;
+            m_playSound = 62;
             m_patternVar1++;
         }
         timer++;
@@ -2079,13 +2079,13 @@ void CMayu::UpdatePattern()
             StopMoving();
             effect.type = 9;
             effect.x = (double)(int)x;
-            effect.y = (double)((int)y - 0x3c);
+            effect.y = (double)((int)y - 60);
             effect.scale = 2;
             effect.layer = 1;
             m_game->CreateEffect((EffectDesc*)&effect);
             m_hitsLeft = 1;
-            m_playSound = 0x3e;
-            m_gauge = m_gauge - 0x3e8;
+            m_playSound = 62;
+            m_gauge = m_gauge - 1000;
             m_patternVar1++;
         }
         vy = vy + ay;
@@ -2100,7 +2100,7 @@ void CMayu::UpdatePattern()
         if (timer >= duration) {
             timer = 0;
             frame++;
-            if (frame == 0xc) {
+            if (frame == 12) {
                 ay = 0.035;
             }
             if (frame >= frameCount) {
@@ -2191,7 +2191,7 @@ void CMayu::UpdatePattern()
             vy = 0.0;
             ay = 0.0;
             if (m_patternVar1 == 0) {
-                m_playSound = 0x11;
+                m_playSound = 17;
             }
         }
         timer++;
@@ -2204,7 +2204,7 @@ void CMayu::UpdatePattern()
                 frame = frame - 2;
             }
         }
-        if (m_inputX == facing && m_patternVar2 >= 0x78) {
+        if (m_inputX == facing && m_patternVar2 >= 120) {
             pattern = kFall;
             StartPattern();
             vx = 1.3;
@@ -2213,7 +2213,7 @@ void CMayu::UpdatePattern()
                 vx = -vx;
             }
         }
-        if (m_inputX != facing && m_patternVar1 >= 0x30) {
+        if (m_inputX != facing && m_patternVar1 >= 48) {
             pattern = kFall;
             StartPattern();
             vx = 1.3;
@@ -2230,7 +2230,7 @@ void CMayu::UpdatePattern()
             ay = 0.0;
             StartAfterimages(3);
             if (m_patternVar1 == 0) {
-                m_playSound = 0x11;
+                m_playSound = 17;
             }
         }
         timer++;
@@ -2243,7 +2243,7 @@ void CMayu::UpdatePattern()
                 frame = frame - 2;
             }
         }
-        if (m_inputX == -facing && m_patternVar2 >= 0x78) {
+        if (m_inputX == -facing && m_patternVar2 >= 120) {
             pattern = kFall;
             StartPattern();
             vx = -0.9;
@@ -2252,7 +2252,7 @@ void CMayu::UpdatePattern()
                 vx = -vx;
             }
         }
-        if (m_inputX != -facing && m_patternVar1 >= 0x30) {
+        if (m_inputX != -facing && m_patternVar1 >= 48) {
             pattern = kFall;
             StartPattern();
             vx = -0.9;
@@ -2270,11 +2270,11 @@ void CMayu::UpdatePattern()
                 m_proration = m_rfGauge * 5.0 + m_proration;
             }
             m_rfGauge = 0.0;
-            m_freezeTime = 0x5a;
-            FillBackground(0xb0, 3);
+            m_freezeTime = 90;
+            FillBackground(176, 3);
         }
         if (frame == 1 && timer == 0) {
-            m_playSound = 0x12;
+            m_playSound = 18;
             effect.type = 1;
             effect.x = (double)(int)x;
             effect.y = (double)(int)y;
@@ -2368,7 +2368,7 @@ void CMayu::UpdatePattern()
             vy = 0.0;
             m_recoilGuardWindow = 0;
             m_cornerPushback = 0.0;
-            m_freezeTime = 0x3c;
+            m_freezeTime = 60;
         }
         if (m_freezeTime == 0 && m_patternVar3 == 0) {
             m_patternVar3++;
@@ -2407,11 +2407,11 @@ void CMayu::UpdatePattern()
                 m_proration = m_rfGauge * 5.0 + m_proration;
             }
             m_rfGauge = 0.0;
-            m_freezeTime = 0x5a;
-            FillBackground(0xb0, 3);
+            m_freezeTime = 90;
+            FillBackground(176, 3);
         }
         if (frame == 0 && timer == 0) {
-            m_playSound = 0x12;
+            m_playSound = 18;
             effect.type = 1;
             effect.x = (double)(int)x;
             effect.y = (double)(int)y;
@@ -2464,11 +2464,11 @@ void CMayu::UpdatePattern()
         if (y < 0.0) {
             vy = vy + ay;
         }
-        if (y + vy > 0.0 && frame < 0xc) {
+        if (y + vy > 0.0 && frame < 12) {
             StopMoving();
             y = 0.0;
             timer = 0;
-            frame = 0xc;
+            frame = 12;
             m_playSound = 9;
         }
         timer++;
@@ -2480,7 +2480,7 @@ void CMayu::UpdatePattern()
                 vy = -1.0;
                 ay = 0.028;
             }
-            if (frame == 0xc) {
+            if (frame == 12) {
                 frame = frame - 4;
             }
             if (frame >= frameCount) {
@@ -2506,7 +2506,7 @@ void CMayu::UpdatePattern()
         }
         if (frame == 1 && timer == 0) {
             m_gauge = m_gauge + 5;
-            m_playSound = 0x15;
+            m_playSound = 21;
             m_hitsLeft = 1;
         }
         timer++;
@@ -2541,8 +2541,8 @@ void CMayu::UpdatePattern()
             vy = 0.0;
         }
         if (frame == 2 && timer == 0) {
-            m_gauge = m_gauge + 0xf;
-            m_playSound = 0x14;
+            m_gauge = m_gauge + 15;
+            m_playSound = 20;
             m_hitsLeft = 1;
         }
         timer++;
@@ -2569,8 +2569,8 @@ void CMayu::UpdatePattern()
             vy = 0.0;
         }
         if (frame == 2 && timer == 0) {
-            m_gauge = m_gauge + 0xf;
-            m_playSound = 0x14;
+            m_gauge = m_gauge + 15;
+            m_playSound = 20;
             m_hitsLeft = 1;
             vx = 1.2;
         }
@@ -2595,8 +2595,8 @@ void CMayu::UpdatePattern()
             m_hitsLeft = 2;
         }
         if (frame == 1 && timer == 0) {
-            m_gauge = m_gauge + 0x23;
-            m_playSound = 0x14;
+            m_gauge = m_gauge + 35;
+            m_playSound = 20;
         }
         timer++;
         if (timer >= duration) {
@@ -2629,7 +2629,7 @@ void CMayu::UpdatePattern()
         }
         if (frame == 1 && timer == 0) {
             m_gauge = m_gauge + 5;
-            m_playSound = 0x15;
+            m_playSound = 21;
             m_hitsLeft = 1;
         }
         timer++;
@@ -2666,8 +2666,8 @@ void CMayu::UpdatePattern()
             break;
         }
         if (frame == 2 && timer == 0) {
-            m_gauge = m_gauge + 0xd;
-            m_playSound = 0x14;
+            m_gauge = m_gauge + 13;
+            m_playSound = 20;
             m_hitsLeft = 1;
         }
         if (vx > 0.0) {
@@ -2705,7 +2705,7 @@ void CMayu::UpdatePattern()
             StopMoving();
         }
         if (frame == 3 && timer == 0) {
-            m_gauge = m_gauge + 0x19;
+            m_gauge = m_gauge + 25;
             vx = 3.0;
         }
         if (frame > 1) {
@@ -2723,7 +2723,7 @@ void CMayu::UpdatePattern()
             frame++;
             m_attackResult = 0;
             if (frame == 3) {
-                m_playSound = 0x14;
+                m_playSound = 20;
                 m_hitsLeft = 1;
             }
             if (frame >= frameCount) {
@@ -2753,7 +2753,7 @@ void CMayu::UpdatePattern()
         }
         if (frame == 1 && timer == 0) {
             m_gauge = m_gauge + 5;
-            m_playSound = 0x15;
+            m_playSound = 21;
             m_hitsLeft = 1;
         }
         if (y + vy >= 0.0) {
@@ -2791,9 +2791,9 @@ void CMayu::UpdatePattern()
             break;
         }
         if (frame == 3 && timer == 0) {
-            m_gauge = m_gauge + 0xd;
+            m_gauge = m_gauge + 13;
             m_hitsLeft = 1;
-            m_playSound = 0x14;
+            m_playSound = 20;
         }
         if (y + vy >= 0.0) {
             y = 0.0;
@@ -2830,8 +2830,8 @@ void CMayu::UpdatePattern()
             break;
         }
         if (frame == 4 && timer == 0) {
-            m_gauge = m_gauge + 0x1e;
-            m_playSound = 0x14;
+            m_gauge = m_gauge + 30;
+            m_playSound = 20;
             m_hitsLeft = 1;
         }
         if (y + vy >= 0.0) {
@@ -2878,8 +2878,8 @@ void CMayu::UpdatePattern()
             }
         }
         if (frame == 2 && timer == 0) {
-            m_gauge = m_gauge + 0xf;
-            m_playSound = 0x14;
+            m_gauge = m_gauge + 15;
+            m_playSound = 20;
             m_hitsLeft = 1;
         }
         timer++;
@@ -2918,8 +2918,8 @@ void CMayu::UpdatePattern()
             break;
         }
         if (frame == 2 && timer == 0) {
-            m_gauge = m_gauge + 0xd;
-            m_playSound = 0x14;
+            m_gauge = m_gauge + 13;
+            m_playSound = 20;
             m_hitsLeft = 1;
         }
         timer++;
@@ -2950,8 +2950,8 @@ void CMayu::UpdatePattern()
             pattern = kThrowHold;
             (*m_opponent)->pattern = kThrownStandHigh2;
             effect.type = 0;
-            effect.x = (double)((int)x + facing * 0x25);
-            effect.y = (double)((int)y - 0x30);
+            effect.x = (double)((int)x + facing * 37);
+            effect.y = (double)((int)y - 48);
             effect.scale = 2;
             effect.layer = 1;
             m_game->CreateEffect((EffectDesc*)&effect);
@@ -2977,7 +2977,7 @@ void CMayu::UpdatePattern()
     case kThrowHold:
         if (frame == 0 && timer == 0) {
             x = (*m_opponent)->x - (*m_opponent)->m_pointX[0] * facing;
-            y = (*m_opponent)->m_pointY[0] + 0x1e;
+            y = (*m_opponent)->m_pointY[0] + 30;
         }
         if (frame == 3 && timer == 0) {
             (*m_opponent)->pattern = kHitAir;
@@ -2991,11 +2991,11 @@ void CMayu::UpdatePattern()
             effect.type = 0;
             effect.sound = 2;
             effect.x = (double)(int)x;
-            effect.y = (double)((int)y - 0x2d);
+            effect.y = (double)((int)y - 45);
             effect.scale = 2;
             effect.layer = 1;
             m_game->CreateEffect((EffectDesc*)&effect);
-            DealDamage(0x3e8, 750.0);
+            DealDamage(1000, 750.0);
         }
         if (frame > 2) {
             vy = vy + ay;
@@ -3033,7 +3033,7 @@ void CMayu::UpdatePattern()
         }
         if (frame == 1 && timer == 0) {
             m_gauge = m_gauge + 5;
-            m_playSound = 0x15;
+            m_playSound = 21;
             m_hitsLeft = 1;
         }
         if (y + vy >= 0.0) {
@@ -3076,9 +3076,9 @@ void CMayu::UpdatePattern()
             vx = 0.5;
         }
         if (frame == 1 && timer == 0) {
-            m_gauge = m_gauge + 0xd;
+            m_gauge = m_gauge + 13;
             m_hitsLeft = 2;
-            m_playSound = 0x14;
+            m_playSound = 20;
         }
         if (y + vy >= 0.0) {
             y = 0.0;
@@ -3120,8 +3120,8 @@ void CMayu::UpdatePattern()
             vx = 0.5;
         }
         if (frame == 1 && timer == 0) {
-            m_gauge = m_gauge + 0xa;
-            m_playSound = 0x14;
+            m_gauge = m_gauge + 10;
+            m_playSound = 20;
             m_hitsLeft = 1;
         }
         if (y + vy >= 0.0) {
@@ -3169,8 +3169,8 @@ void CMayu::UpdatePattern()
             (*m_opponent)->StartPattern();
             (*m_opponent)->m_noAirRecovery = 1;
             effect.type = 0;
-            effect.x = (double)((int)x + facing * 0x16);
-            effect.y = (double)((int)y - 0x36);
+            effect.x = (double)((int)x + facing * 22);
+            effect.y = (double)((int)y - 54);
             effect.scale = 2;
             effect.layer = 1;
             m_game->CreateEffect((EffectDesc*)&effect);
@@ -3178,7 +3178,7 @@ void CMayu::UpdatePattern()
             timer = 0;
             pattern = kAirThrowHold;
             (*m_opponent)->pattern = kThrownDoubledOver;
-            (*m_opponent)->x = facing * 0x16 + x;
+            (*m_opponent)->x = facing * 22 + x;
             (*m_opponent)->y = y - 52.0;
             break;
         }
@@ -3200,7 +3200,7 @@ void CMayu::UpdatePattern()
         break;
     case kAirThrowHold:
         m_hideOffscreenMarker = 2;
-        if (frame < 0xb) {
+        if (frame < 11) {
             if (x > 6100.0 && facing == 1) {
                 x = 6100.0;
                 vx = 0.0;
@@ -3209,13 +3209,13 @@ void CMayu::UpdatePattern()
                 x = 30.0;
                 vx = 0.0;
             }
-            FocusCameraX(0x32, 3);
-            FocusCameraY(0x32, 3);
+            FocusCameraX(50, 3);
+            FocusCameraY(50, 3);
         }
-        if (frame < 0xa || frame > 0xb && frame < 0xf) {
+        if (frame < 10 || frame > 11 && frame < 15) {
             vy = vy + ay;
             if (vy + y > 0.0) {
-                if (frame < 0xa) {
+                if (frame < 10) {
                     y = 0.0;
                     StopMoving();
                     (*m_opponent)->StartPattern();
@@ -3224,7 +3224,7 @@ void CMayu::UpdatePattern()
                     (*m_opponent)->x = facing + x;
                     (*m_opponent)->facing = -facing;
                     (*m_opponent)->StopMoving();
-                    DealDamage(0x3e8, 500.0);
+                    DealDamage(1000, 500.0);
                     effect.type = 0;
                     effect.x = (double)(int)x;
                     effect.y = (double)(int)y;
@@ -3232,22 +3232,22 @@ void CMayu::UpdatePattern()
                     effect.layer = 1;
                     m_game->CreateEffect((EffectDesc*)&effect);
                     timer = 0;
-                    frame = 0xa;
+                    frame = 10;
                     m_playSound = 2;
                     break;
                 }
-                if (frame == 0xe) {
+                if (frame == 14) {
                     y = 0.0;
                     StopMoving();
                     timer = 0;
-                    frame = 0xf;
+                    frame = 15;
                     break;
                 }
             }
         }
         if (frame < 1) {
             (*m_opponent)->pattern = kThrownDoubledOver;
-            (*m_opponent)->x = facing * 0x16 + x;
+            (*m_opponent)->x = facing * 22 + x;
             (*m_opponent)->y = y - 52.0;
         }
         if (frame == 1) {
@@ -3308,10 +3308,10 @@ void CMayu::UpdatePattern()
             timer = 0;
             frame++;
             m_attackResult = 0;
-            if (frame == 0xa) {
+            if (frame == 10) {
                 frame = frame - 8;
             }
-            if (frame == 0xc) {
+            if (frame == 12) {
                 vx = -0.8;
                 vy = -1.0;
                 ay = 0.035;
@@ -3334,11 +3334,11 @@ void CMayu::UpdatePattern()
             (*m_opponent)->pattern = kThrownStandHigh2;
             StartPattern();
             pattern = k41236Throw;
-            y = m_pointY[0] + 0x32;
-            x = (*m_opponent)->x + (-m_pointX[0] - 0x14) * facing;
+            y = m_pointY[0] + 50;
+            x = (*m_opponent)->x + (-m_pointX[0] - 20) * facing;
             effect.type = 0;
             effect.x = (double)((int)x + facing * 7);
-            effect.y = (double)((int)y - 0x2c);
+            effect.y = (double)((int)y - 44);
             effect.scale = 2;
             effect.layer = 1;
             m_game->CreateEffect((EffectDesc*)&effect);
@@ -3396,11 +3396,11 @@ void CMayu::UpdatePattern()
             (*m_opponent)->pattern = kThrownStandHigh2;
             StartPattern();
             pattern = k41236Throw;
-            y = m_pointY[0] + 0x32;
-            x = (*m_opponent)->x + (-m_pointX[0] - 0x14) * facing;
+            y = m_pointY[0] + 50;
+            x = (*m_opponent)->x + (-m_pointX[0] - 20) * facing;
             effect.type = 0;
             effect.x = (double)((int)x + facing * 7);
-            effect.y = (double)((int)y - 0x2c);
+            effect.y = (double)((int)y - 44);
             effect.scale = 2;
             effect.layer = 1;
             m_game->CreateEffect((EffectDesc*)&effect);
@@ -3457,9 +3457,9 @@ void CMayu::UpdatePattern()
                 m_rfGauge -= 250.0;
             }
             effect.type = 0x21;
-            effect.sound = 0xb;
-            effect.x = (double)((int)x + facing * 0x14);
-            effect.y = (double)((int)y - 0x32);
+            effect.sound = 11;
+            effect.x = (double)((int)x + facing * 20);
+            effect.y = (double)((int)y - 50);
             effect.scale = 2;
             effect.layer = 1;
             m_game->CreateEffect((EffectDesc*)&effect);
@@ -3471,11 +3471,11 @@ void CMayu::UpdatePattern()
             StartPattern();
             StopMoving();
             pattern = k41236CThrow;
-            y = m_pointY[0] + 0x32;
-            x = (*m_opponent)->x + (-m_pointX[0] - 0x14) * facing;
+            y = m_pointY[0] + 50;
+            x = (*m_opponent)->x + (-m_pointX[0] - 20) * facing;
             effect.type = 0;
             effect.x = (double)((int)x + facing * 7);
-            effect.y = (double)((int)y - 0x2c);
+            effect.y = (double)((int)y - 44);
             effect.scale = 2;
             effect.layer = 1;
             m_game->CreateEffect((EffectDesc*)&effect);
@@ -3533,7 +3533,7 @@ void CMayu::UpdatePattern()
                 (*m_opponent)->StopMoving();
             }
             if ((char)(*m_opponent)->AtScreenEdge() == 0) {
-                (*m_opponent)->x = (m_pointX[0] + 0x14) * facing + x;
+                (*m_opponent)->x = (m_pointX[0] + 20) * facing + x;
             }
         }
         if (frame == 3) {
@@ -3556,15 +3556,15 @@ void CMayu::UpdatePattern()
             (*m_opponent)->pattern = kHitAirLaunch;
             (*m_opponent)->x = (-31.0 + vx) * facing + x;
             (*m_opponent)->y = -33.0 + vy + y;
-            DealDamage(0x1f4, 750.0);
+            DealDamage(500, 750.0);
             m_comboHits--;
             m_shownHits--;
             (*m_opponent)->m_hitVx = 0.8;
             (*m_opponent)->m_hitVy = -3.2;
         }
         if (frame < 4) {
-            FocusCameraX(0x32, 3);
-            FocusCameraY(0x32, 3);
+            FocusCameraX(50, 3);
+            FocusCameraY(50, 3);
         }
         timer++;
         if (timer >= duration) {
@@ -3593,7 +3593,7 @@ void CMayu::UpdatePattern()
                 (*m_opponent)->StopMoving();
             }
             if ((char)(*m_opponent)->AtScreenEdge() == 0) {
-                (*m_opponent)->x = (m_pointX[0] + 0x14) * facing + x;
+                (*m_opponent)->x = (m_pointX[0] + 20) * facing + x;
             }
         }
         if (frame == 3) {
@@ -3616,7 +3616,7 @@ void CMayu::UpdatePattern()
             (*m_opponent)->pattern = kHitAirLaunchWallBounce;
             (*m_opponent)->x = (-41.0 + vx) * facing + x;
             (*m_opponent)->y = -43.0 + vy + y;
-            DealDamage(0x3e8, 800.0);
+            DealDamage(1000, 800.0);
             m_comboHits--;
             m_shownHits--;
             (*m_opponent)->facing = facing;
@@ -3624,8 +3624,8 @@ void CMayu::UpdatePattern()
             (*m_opponent)->m_hitVy = -0.8;
         }
         if (frame < 4) {
-            FocusCameraX(0x32, 3);
-            FocusCameraY(0x32, 3);
+            FocusCameraX(50, 3);
+            FocusCameraY(50, 3);
         }
         timer++;
         if (timer >= duration) {
@@ -3651,9 +3651,9 @@ void CMayu::UpdatePattern()
             m_hitsLeft = 9;
         }
         if ((frame == 1 || frame == 3 || frame == 7) && timer == 0) {
-            m_playSound = 0x15;
+            m_playSound = 21;
         }
-        if (frame > 0xa) {
+        if (frame > 10) {
             vy = vy + ay;
         }
         if (y + vy > 0.0) {
@@ -3686,8 +3686,8 @@ void CMayu::UpdatePattern()
             vx = 0.5;
             vy = 3.0;
             m_hitsLeft = 1;
-            m_playSound = 0x23;
-            m_gauge = m_gauge + 0x23;
+            m_playSound = 35;
+            m_gauge = m_gauge + 35;
         }
         if (y + vy > 0.0 && frame > 2) {
             timer = 0;
@@ -3740,12 +3740,12 @@ void CMayu::UpdatePattern()
         }
         break;
     case k236A:
-        if (frame > 8 && frame < 0xf && m_holdA > 0) {
+        if (frame > 8 && frame < 15 && m_holdA > 0) {
             StartPattern();
             pattern = kRisingStrike;
             break;
         }
-        if (frame > 8 && frame < 0xf && m_holdB > 0) {
+        if (frame > 8 && frame < 15 && m_holdB > 0) {
             StartPattern();
             pattern = k236AJump;
             break;
@@ -3770,7 +3770,7 @@ void CMayu::UpdatePattern()
             if (m_hitsLeft > 0) {
                 m_attackResult = 0;
             }
-            if (frame == 0xc && m_patternVar1 < 3) {
+            if (frame == 12 && m_patternVar1 < 3) {
                 frame = frame - 4;
                 m_patternVar1++;
             }
@@ -3786,13 +3786,13 @@ void CMayu::UpdatePattern()
             StopMoving();
         }
         vy = vy + ay;
-        if (frame > 0xd) {
+        if (frame > 13) {
             vx -= 0.03;
             if (vx < 0.0) {
                 vx = 0.0;
             }
         }
-        if (m_command == kCmd236A && frame > 0xd) {
+        if (m_command == kCmd236A && frame > 13) {
             StartPattern();
             pattern = kRisingStrike236B;
             break;
@@ -3803,16 +3803,16 @@ void CMayu::UpdatePattern()
             pattern = k236Dive;
             break;
         }
-        if (vy + y > 0.0 && frame > 5 && frame < 0xa) {
-            frame = 0xe;
+        if (vy + y > 0.0 && frame > 5 && frame < 10) {
+            frame = 14;
             timer = 0;
             y = 0.0;
             vy = 0.0;
             ay = 0.0;
             break;
         }
-        if (vy + y > 0.0 && frame > 9 && frame < 0xe) {
-            frame = 0xe;
+        if (vy + y > 0.0 && frame > 9 && frame < 14) {
+            frame = 14;
             timer = 0;
             y = 0.0;
             vy = 0.0;
@@ -3832,10 +3832,10 @@ void CMayu::UpdatePattern()
                 ay = 0.055;
                 m_hitsLeft = 1;
             }
-            if (frame == 0xa) {
+            if (frame == 10) {
                 frame = frame - 4;
             }
-            if (frame == 0xe) {
+            if (frame == 14) {
                 frame = frame - 4;
             }
             if (frame >= frameCount) {
@@ -3854,9 +3854,9 @@ void CMayu::UpdatePattern()
                 m_rfGauge -= 250.0;
             }
             effect.type = 0x21;
-            effect.sound = 0xb;
-            effect.x = (double)((int)x + facing * 0x14);
-            effect.y = (double)((int)y - 0x32);
+            effect.sound = 11;
+            effect.x = (double)((int)x + facing * 20);
+            effect.y = (double)((int)y - 50);
             effect.scale = 2;
             effect.layer = 1;
             m_game->CreateEffect((EffectDesc*)&effect);
@@ -3879,8 +3879,8 @@ void CMayu::UpdatePattern()
             ay = 0.036;
             break;
         }
-        if (vy + y > 0.0 && frame > 5 && frame < 0xa) {
-            frame = 0xa;
+        if (vy + y > 0.0 && frame > 5 && frame < 10) {
+            frame = 10;
             timer = 0;
             y = 0.0;
             vy = 0.0;
@@ -3899,12 +3899,12 @@ void CMayu::UpdatePattern()
                     frame = frame - 4;
                     m_patternVar1++;
                 } else {
-                    frame = 0xa;
+                    frame = 10;
                     y = 0.0;
                     break;
                 }
             }
-            if (frame == 0xa) {
+            if (frame == 10) {
                 frame = frame - 4;
             }
             if (frame >= frameCount) {
@@ -3923,9 +3923,9 @@ void CMayu::UpdatePattern()
             ay = 0.055;
             vy = vy + ay;
         }
-        if (frame > 4 && frame < 0xf && y + vy > 0.0) {
+        if (frame > 4 && frame < 15 && y + vy > 0.0) {
             timer = 0;
-            frame = 0xf;
+            frame = 15;
             y = 0.0;
             StopMoving();
             break;
@@ -3941,7 +3941,7 @@ void CMayu::UpdatePattern()
                 vy = -3.3;
                 m_hitsLeft = 3;
             }
-            if (frame == 0xf) {
+            if (frame == 15) {
                 frame = frame - 4;
             }
             if (frame >= frameCount) {
@@ -3955,7 +3955,7 @@ void CMayu::UpdatePattern()
             StopMoving();
         }
         vy = vy + ay;
-        if (frame > 0xa) {
+        if (frame > 10) {
             vx -= 0.03;
             if (vx < 0.0) {
                 vx = 0.0;
@@ -3967,7 +3967,7 @@ void CMayu::UpdatePattern()
             pattern = k236Dive;
             break;
         }
-        if (vy + y > 0.0 && frame > 2 && frame < 0xa) {
+        if (vy + y > 0.0 && frame > 2 && frame < 10) {
             StartPattern();
             StopMoving();
             y = 0.0;
@@ -4033,8 +4033,8 @@ void CMayu::UpdatePattern()
             m_hitsLeft = 1;
         }
         if (frame == 2 && timer == 0) {
-            m_playSound = 0x15;
-            m_gauge = m_gauge + 0x23;
+            m_playSound = 21;
+            m_gauge = m_gauge + 35;
             m_hitsLeft = 1;
         }
         if (frame > 1) {
@@ -4078,8 +4078,8 @@ void CMayu::UpdatePattern()
             m_hitsLeft = 1;
         }
         if (frame == 2 && timer == 0) {
-            m_playSound = 0x15;
-            m_gauge = m_gauge + 0x23;
+            m_playSound = 21;
+            m_gauge = m_gauge + 35;
             m_hitsLeft = 1;
         }
         if (frame > 1) {
@@ -4127,16 +4127,16 @@ void CMayu::UpdatePattern()
                 m_rfGauge -= 250.0;
             }
             effect.type = 0x21;
-            effect.sound = 0xb;
-            effect.x = (double)((int)x + facing * 0x14);
-            effect.y = (double)((int)y - 0x32);
+            effect.sound = 11;
+            effect.x = (double)((int)x + facing * 20);
+            effect.y = (double)((int)y - 50);
             effect.scale = 2;
             effect.layer = 1;
             m_game->CreateEffect((EffectDesc*)&effect);
         }
         if (frame == 2 && timer == 0) {
-            m_playSound = 0x15;
-            m_gauge = m_gauge + 0x23;
+            m_playSound = 21;
+            m_gauge = m_gauge + 35;
             m_hitsLeft = 1;
         }
         if (frame > 1) {
@@ -4146,8 +4146,8 @@ void CMayu::UpdatePattern()
                 vx = 0.0;
             }
         }
-        if (y + vy > 0.0 && frame > 8 && frame < 0xd) {
-            frame = 0xd;
+        if (y + vy > 0.0 && frame > 8 && frame < 13) {
+            frame = 13;
             timer = 0;
             y = 0.0;
             StopMoving();
@@ -4168,7 +4168,7 @@ void CMayu::UpdatePattern()
                 frame = frame - 2;
                 m_patternVar1++;
             }
-            if (frame == 0xd) {
+            if (frame == 13) {
                 frame = frame - 4;
             }
             if (frame >= frameCount) {
@@ -4185,8 +4185,8 @@ void CMayu::UpdatePattern()
             vx = 0.5;
             vy = 3.0;
             m_hitsLeft = 1;
-            m_playSound = 0x23;
-            m_gauge = m_gauge + 0x23;
+            m_playSound = 35;
+            m_gauge = m_gauge + 35;
         }
         if (y + vy > 0.0 && frame > 2) {
             timer = 0;
@@ -4216,8 +4216,8 @@ void CMayu::UpdatePattern()
             vx = 2.2;
             vy = 2.2;
             m_hitsLeft = 1;
-            m_playSound = 0x23;
-            m_gauge = m_gauge + 0x23;
+            m_playSound = 35;
+            m_gauge = m_gauge + 35;
         }
         if (y + vy > 0.0 && frame > 2) {
             timer = 0;
@@ -4241,16 +4241,16 @@ void CMayu::UpdatePattern()
         break;
     case kWallJumpC:
         if (frame == 0 && timer == 0) {
-            m_gauge = m_gauge + 0x28;
+            m_gauge = m_gauge + 40;
             m_hitsLeft = 4;
         }
-        if (frame > 9 && frame < 0xe) {
+        if (frame > 9 && frame < 14) {
             vy = vy + ay;
             if (vy + y > 0.0) {
                 y = 0.0;
                 StopMoving();
                 StartPattern();
-                frame = 0xe;
+                frame = 14;
                 break;
             }
         }
@@ -4271,7 +4271,7 @@ void CMayu::UpdatePattern()
             timer = 0;
             frame++;
             m_attackResult = 0;
-            if (frame == 7 || frame == 0xe) {
+            if (frame == 7 || frame == 14) {
                 frame = frame - 4;
                 m_patternVar1++;
             }
@@ -4289,7 +4289,7 @@ void CMayu::UpdatePattern()
         if (frame == 0 && timer == 0) {
             StopMoving();
         }
-        if (frame > 0x13 && m_command == kCmd236A) {
+        if (frame > 19 && m_command == kCmd236A) {
             StartPattern();
             pattern = kRisingStrike;
             break;
@@ -4299,7 +4299,7 @@ void CMayu::UpdatePattern()
             vy = -2.0;
             vx = -3.0;
         }
-        if (frame > 0xf && frame < 0x14) {
+        if (frame > 15 && frame < 20) {
             if (m_inputX == facing) {
                 vx += 0.015;
             }
@@ -4336,45 +4336,45 @@ void CMayu::UpdatePattern()
                 break;
             }
         }
-        if (frame > 4 && frame < 0xc || frame > 0xf && frame < 0x14) {
+        if (frame > 4 && frame < 12 || frame > 15 && frame < 20) {
             vy = vy + ay;
         }
-        if (frame > 0xb && frame < 0x10) {
+        if (frame > 11 && frame < 16) {
             if (facing == 1) {
-                x = m_game->m_view.left + 0xf;
+                x = m_game->m_view.left + 15;
             }
             if (facing == -1) {
-                x = m_game->m_view.right - 0xf;
+                x = m_game->m_view.right - 15;
             }
         }
-        if (y + vy >= 0.0 && frame > 4 && frame < 0x14) {
+        if (y + vy >= 0.0 && frame > 4 && frame < 20) {
             y = 0.0;
             StopMoving();
-            frame = 0x14;
+            frame = 20;
             timer = 0;
             break;
         }
-        if ((char)AtScreenEdge() != 0 && frame > 4 && frame < 0xc) {
+        if ((char)AtScreenEdge() != 0 && frame > 4 && frame < 12) {
             vx = 0.0;
             vy = 0.0;
-            frame = 0xc;
+            frame = 12;
             timer = 0;
-            m_playSound = 0x1a;
+            m_playSound = 26;
             break;
         }
         timer++;
         if (timer >= duration) {
             timer = 0;
             frame++;
-            if (frame == 0xc) {
+            if (frame == 12) {
                 frame = frame - 4;
             }
-            if (frame == 0x10) {
+            if (frame == 16) {
                 vx = 1.5;
                 vy = -2.5;
                 ay = 0.035;
             }
-            if (frame == 0x14) {
+            if (frame == 20) {
                 frame = frame - 4;
             }
             if (frame >= frameCount) {
@@ -4393,67 +4393,67 @@ void CMayu::UpdatePattern()
             vy = -1.5;
             vx = -3.0;
         }
-        if (frame == 0x12 && (*m_opponent)->y == 0.0) {
+        if (frame == 18 && (*m_opponent)->y == 0.0) {
             m_hitsLeft = 1;
         } else {
             m_hitsLeft = 0;
         }
-        if (frame == 0x12 && m_attackResult == 3) {
+        if (frame == 18 && m_attackResult == 3) {
             (*m_opponent)->StartPattern();
             (*m_opponent)->StopMoving();
             (*m_opponent)->pattern = kThrownStandHigh2;
             StartPattern();
             StopMoving();
             pattern = k214DThrow;
-            y = m_pointY[0] + 0x32;
-            x = (*m_opponent)->x + (-m_pointX[0] - 0x14) * facing;
+            y = m_pointY[0] + 50;
+            x = (*m_opponent)->x + (-m_pointX[0] - 20) * facing;
             effect.type = 0;
             effect.x = (double)((int)x + facing * 7);
-            effect.y = (double)((int)y - 0x2c);
+            effect.y = (double)((int)y - 44);
             effect.scale = 2;
             effect.layer = 1;
             m_game->CreateEffect((EffectDesc*)&effect);
             break;
         }
-        if (frame > 4 && frame < 0xc || frame > 0xf && frame < 0x13) {
+        if (frame > 4 && frame < 12 || frame > 15 && frame < 19) {
             vy = vy + ay;
         }
-        if (frame > 0xb && frame < 0x10) {
+        if (frame > 11 && frame < 16) {
             if (facing == 1) {
-                x = m_game->m_view.left + 0xf;
+                x = m_game->m_view.left + 15;
             }
             if (facing == -1) {
-                x = m_game->m_view.right - 0xf;
+                x = m_game->m_view.right - 15;
             }
         }
-        if (y + vy >= 0.0 && frame > 0xf && frame < 0x13) {
+        if (y + vy >= 0.0 && frame > 15 && frame < 19) {
             y = 0.0;
             StopMoving();
-            frame = 0x14;
+            frame = 20;
             timer = 0;
             break;
         }
-        if ((char)AtScreenEdge() != 0 && frame > 4 && frame < 0xc) {
+        if ((char)AtScreenEdge() != 0 && frame > 4 && frame < 12) {
             vx = 0.0;
             vy = 0.0;
-            frame = 0xc;
+            frame = 12;
             timer = 0;
-            m_playSound = 0x1a;
+            m_playSound = 26;
             break;
         }
         timer++;
         if (timer >= duration) {
             timer = 0;
             frame++;
-            if (frame == 0xc) {
+            if (frame == 12) {
                 frame = frame - 4;
             }
-            if (frame == 0x10) {
+            if (frame == 16) {
                 vx = 2.2;
                 vy = -0.5;
                 ay = 0.035;
             }
-            if (frame == 0x13) {
+            if (frame == 19) {
                 frame--;
             }
             if (frame >= frameCount) {
@@ -4467,7 +4467,7 @@ void CMayu::UpdatePattern()
         if (frame == 0 && timer == 0) {
             StopMoving();
         }
-        if (frame > 0x13 && m_command == kCmd236A) {
+        if (frame > 19 && m_command == kCmd236A) {
             StartPattern();
             pattern = kRisingStrike;
             break;
@@ -4477,7 +4477,7 @@ void CMayu::UpdatePattern()
             vy = -2.0;
             vx = 3.0;
         }
-        if (frame > 0xf && frame < 0x14) {
+        if (frame > 15 && frame < 20) {
             if (m_inputX == facing) {
                 vx += 0.015;
             }
@@ -4514,46 +4514,46 @@ void CMayu::UpdatePattern()
                 break;
             }
         }
-        if (frame > 4 && frame < 0xc || frame > 0xf && frame < 0x14) {
+        if (frame > 4 && frame < 12 || frame > 15 && frame < 20) {
             vy = vy + ay;
         }
-        if (frame > 0xb && frame < 0x10) {
+        if (frame > 11 && frame < 16) {
             if (facing == 1) {
-                x = m_game->m_view.left + 0xf;
+                x = m_game->m_view.left + 15;
             }
             if (facing == -1) {
-                x = m_game->m_view.right - 0xf;
+                x = m_game->m_view.right - 15;
             }
         }
-        if (y + vy >= 0.0 && frame > 4 && frame < 0x14) {
+        if (y + vy >= 0.0 && frame > 4 && frame < 20) {
             y = 0.0;
             StopMoving();
-            frame = 0x14;
+            frame = 20;
             timer = 0;
             break;
         }
-        if ((char)AtScreenEdge() != 0 && frame > 4 && frame < 0xc) {
+        if ((char)AtScreenEdge() != 0 && frame > 4 && frame < 12) {
             vx = 0.0;
             vy = 0.0;
             facing = -facing;
-            frame = 0xc;
+            frame = 12;
             timer = 0;
-            m_playSound = 0x1a;
+            m_playSound = 26;
             break;
         }
         timer++;
         if (timer >= duration) {
             timer = 0;
             frame++;
-            if (frame == 0xc) {
+            if (frame == 12) {
                 frame = frame - 4;
             }
-            if (frame == 0x10) {
+            if (frame == 16) {
                 vx = 1.5;
                 vy = -2.5;
                 ay = 0.035;
             }
-            if (frame == 0x14) {
+            if (frame == 20) {
                 frame = frame - 4;
             }
             if (frame >= frameCount) {
@@ -4564,8 +4564,8 @@ void CMayu::UpdatePattern()
         }
         break;
     case k214DThrow:
-        FocusCameraX(0x32, 3);
-        FocusCameraY(0x32, 3);
+        FocusCameraX(50, 3);
+        FocusCameraY(50, 3);
         if (frame == 4) {
             (*m_opponent)->pattern = kThrownDoubledOver;
             (*m_opponent)->x = (23.0 + vx) * facing + x;
@@ -4600,13 +4600,13 @@ void CMayu::UpdatePattern()
             (*m_opponent)->y = -2.0 + vy + y;
             (*m_opponent)->facing = -facing;
         }
-        if (frame == 0xa && timer == 0) {
+        if (frame == 10 && timer == 0) {
             (*m_opponent)->StopMoving();
             (*m_opponent)->StartPattern();
             (*m_opponent)->pattern = kKnockdown;
             (*m_opponent)->y = 0.0;
             (*m_opponent)->x = x;
-            DealDamage(0x4b0, 960.0);
+            DealDamage(1200, 960.0);
             effect.type = 0;
             effect.x = (double)(int)x;
             effect.y = (double)(int)y;
@@ -4615,17 +4615,17 @@ void CMayu::UpdatePattern()
             effect.layer = 1;
             m_game->CreateEffect((EffectDesc*)&effect);
         }
-        if (frame == 0x13 && y + vy > 0.0) {
+        if (frame == 19 && y + vy > 0.0) {
             StartPattern();
             StopMoving();
             y = 0.0;
             pattern = kLand;
             break;
         }
-        if (frame > 0xf) {
+        if (frame > 15) {
             vy = vy + ay;
         }
-        if (frame > 0xd && (*m_opponent)->pattern == kLyingDown) {
+        if (frame > 13 && (*m_opponent)->pattern == kLyingDown) {
             (*m_opponent)->timer = 0;
         }
         timer++;
@@ -4633,7 +4633,7 @@ void CMayu::UpdatePattern()
             timer = 0;
             frame++;
             m_attackResult = 0;
-            if (frame == 0x10) {
+            if (frame == 16) {
                 vx = -0.5;
                 vy = -1.3;
                 ay = 0.05;
@@ -4651,7 +4651,7 @@ void CMayu::UpdatePattern()
         }
         if (y + vy > 0.0 && frame > 4) {
             timer = 0;
-            frame = 0xc;
+            frame = 12;
             y = 0.0;
             StopMoving();
             break;
@@ -4675,7 +4675,7 @@ void CMayu::UpdatePattern()
             if (frame == 6) {
                 frame--;
             }
-            if (frame == 0xc) {
+            if (frame == 12) {
                 frame = frame - 6;
             }
             if (frame >= frameCount) {
@@ -4693,7 +4693,7 @@ void CMayu::UpdatePattern()
         }
         if (y + vy > 0.0 && frame > 4) {
             timer = 0;
-            frame = 0xc;
+            frame = 12;
             y = 0.0;
             StopMoving();
             break;
@@ -4717,7 +4717,7 @@ void CMayu::UpdatePattern()
             if (frame == 6) {
                 frame--;
             }
-            if (frame == 0xc) {
+            if (frame == 12) {
                 frame = frame - 6;
             }
             if (frame >= frameCount) {
@@ -4737,9 +4737,9 @@ void CMayu::UpdatePattern()
                 m_rfGauge -= 250.0;
             }
             effect.type = 0x21;
-            effect.sound = 0xb;
-            effect.x = (double)((int)x + facing * 0x14);
-            effect.y = (double)((int)y - 0x32);
+            effect.sound = 11;
+            effect.x = (double)((int)x + facing * 20);
+            effect.y = (double)((int)y - 50);
             effect.scale = 2;
             effect.layer = 1;
             m_game->CreateEffect((EffectDesc*)&effect);
@@ -4751,7 +4751,7 @@ void CMayu::UpdatePattern()
         }
         if (y + vy > 0.0 && frame > 4) {
             timer = 0;
-            frame = 0xc;
+            frame = 12;
             y = 0.0;
             StopMoving();
             break;
@@ -4759,7 +4759,7 @@ void CMayu::UpdatePattern()
         if (frame == 5 && m_attackResult == 3) {
             timer = 0;
             frame = 8;
-            m_hitsLeft = 0x63;
+            m_hitsLeft = 99;
             break;
         }
         timer++;
@@ -4774,7 +4774,7 @@ void CMayu::UpdatePattern()
             if (frame == 6) {
                 frame--;
             }
-            if (frame == 0xc) {
+            if (frame == 12) {
                 frame = frame - 6;
             }
             if (frame >= frameCount) {
@@ -4807,7 +4807,7 @@ void CMayu::UpdatePattern()
                 m_hitsLeft = 0;
             }
             if (frame == 2) {
-                m_gauge = m_gauge + 0x19;
+                m_gauge = m_gauge + 25;
             }
             if (frame >= frameCount) {
                 pattern = kStand;
@@ -4817,7 +4817,7 @@ void CMayu::UpdatePattern()
         }
         break;
     case k41236DRide:
-        FocusCameraY(-0x32, 3);
+        FocusCameraY(-50, 3);
         (*m_opponent)->m_hitstop = 3;
         timer++;
         if (frame > 3) {
@@ -4854,8 +4854,8 @@ void CMayu::UpdatePattern()
             vx = 0.5;
             vy = 3.0;
             m_hitsLeft = 1;
-            m_playSound = 0x23;
-            m_gauge = m_gauge + 0x23;
+            m_playSound = 35;
+            m_gauge = m_gauge + 35;
         }
         if (m_attackResult > 0) {
             StartPattern();
@@ -4891,8 +4891,8 @@ void CMayu::UpdatePattern()
             vx = 2.2;
             vy = 2.2;
             m_hitsLeft = 1;
-            m_playSound = 0x23;
-            m_gauge = m_gauge + 0x23;
+            m_playSound = 35;
+            m_gauge = m_gauge + 35;
         }
         if (m_attackResult > 0) {
             StartPattern();
@@ -4928,8 +4928,8 @@ void CMayu::UpdatePattern()
             vx = 4.0;
             vy = 1.5;
             m_hitsLeft = 1;
-            m_playSound = 0x23;
-            m_gauge = m_gauge + 0x23;
+            m_playSound = 35;
+            m_gauge = m_gauge + 35;
         }
         if (m_attackResult > 0) {
             StartPattern();
@@ -4997,45 +4997,45 @@ void CMayu::UpdatePattern()
             vy = -1.5;
             vx = -3.0;
         }
-        if (frame == 0x12 && (*m_opponent)->y == 0.0) {
+        if (frame == 18 && (*m_opponent)->y == 0.0) {
             m_hitsLeft = 1;
         } else {
             m_hitsLeft = 0;
         }
-        if (frame > 4 && frame < 0xc || frame > 0xf && frame < 0x13) {
+        if (frame > 4 && frame < 12 || frame > 15 && frame < 19) {
             vy = vy + ay;
         }
-        if (frame > 0xb && frame < 0x10) {
+        if (frame > 11 && frame < 16) {
             if (facing == 1) {
-                x = m_game->m_view.left + 0xf;
+                x = m_game->m_view.left + 15;
             }
             if (facing == -1) {
-                x = m_game->m_view.right - 0xf;
+                x = m_game->m_view.right - 15;
             }
         }
-        if (y + vy >= 0.0 && frame > 0xf && frame < 0x13) {
+        if (y + vy >= 0.0 && frame > 15 && frame < 19) {
             y = 0.0;
             StopMoving();
-            frame = 0x14;
+            frame = 20;
             timer = 0;
             break;
         }
-        if ((char)AtScreenEdge() != 0 && frame > 4 && frame < 0xc) {
+        if ((char)AtScreenEdge() != 0 && frame > 4 && frame < 12) {
             vx = 0.0;
             vy = 0.0;
-            frame = 0xc;
+            frame = 12;
             timer = 0;
-            m_playSound = 0x1a;
+            m_playSound = 26;
             break;
         }
         timer++;
         if (timer >= duration) {
             timer = 0;
             frame++;
-            if (frame == 0xc) {
+            if (frame == 12) {
                 frame = frame - 4;
             }
-            if (frame == 0x10) {
+            if (frame == 16) {
                 StartPattern();
                 StopMoving();
                 pattern = k214BDiveFar;
@@ -5047,7 +5047,7 @@ void CMayu::UpdatePattern()
                 }
                 break;
             }
-            if (frame == 0x13) {
+            if (frame == 19) {
                 frame--;
             }
             if (frame >= frameCount) {
@@ -5066,9 +5066,9 @@ void CMayu::UpdatePattern()
             ay = 0.055;
             vy = vy + ay;
         }
-        if (frame > 4 && frame < 0xf && y + vy > 0.0) {
+        if (frame > 4 && frame < 15 && y + vy > 0.0) {
             timer = 0;
-            frame = 0xf;
+            frame = 15;
             y = 0.0;
             StopMoving();
             break;
@@ -5084,7 +5084,7 @@ void CMayu::UpdatePattern()
                 vy = -3.3;
                 m_hitsLeft = 3;
             }
-            if (frame == 0xf) {
+            if (frame == 15) {
                 frame = frame - 4;
             }
             if (frame >= frameCount) {
@@ -5099,11 +5099,11 @@ void CMayu::UpdatePattern()
             StopMoving();
             m_hitsLeft = 5;
         }
-        if (frame > 0xe) {
+        if (frame > 14) {
             vy = vy + ay;
             if (y + vy > 0.0) {
                 timer = 0;
-                frame = 0x16;
+                frame = 22;
                 y = 0.0;
                 StopMoving();
                 break;
@@ -5114,12 +5114,12 @@ void CMayu::UpdatePattern()
             timer = 0;
             frame++;
             m_attackResult = 0;
-            if (frame == 0xe) {
+            if (frame == 14) {
                 vx = 0.5;
                 vy = 0.0;
                 ay = 0.045;
             }
-            if (frame == 0x16) {
+            if (frame == 22) {
                 frame = frame - 4;
             }
             if (frame >= frameCount) {
@@ -5136,29 +5136,29 @@ void CMayu::UpdatePattern()
             ay = 0.0;
         }
         if (frame == 1 && timer == 0) {
-            m_freezeTime = 0x78;
-            m_gauge = m_gauge - 0x3e8;
-            FillBackground(0xb0, 3);
+            m_freezeTime = 120;
+            m_gauge = m_gauge - 1000;
+            FillBackground(176, 3);
             effect.type = 0x44;
-            effect.sound = 0x13;
+            effect.sound = 19;
             effect.x = (double)(int)x;
-            effect.y = (double)((int)y - 0x28);
+            effect.y = (double)((int)y - 40);
             effect.scale = 2;
             effect.keep = 1;
             effect.layer = 1;
             m_game->CreateEffect((EffectDesc*)&effect);
-            m_invulTime = 0x7e;
-            FocusCameraY(0x32, 0x78);
+            m_invulTime = 126;
+            FocusCameraY(50, 120);
         }
         if (frame >= 1) {
-            unkf2 = 0xa;
+            unkf2 = 10;
         }
         if ((frame == 2 || frame == 7) && timer == 0) {
-            m_playSound = 0x15;
+            m_playSound = 21;
             m_hitsLeft = 1;
         }
-        if (frame == 0x10 && timer == 0) {
-            m_playSound = 0x14;
+        if (frame == 16 && timer == 0) {
+            m_playSound = 20;
             m_hitsLeft = 1;
         }
         timer++;
@@ -5172,22 +5172,22 @@ void CMayu::UpdatePattern()
                 m_invulTime = 9;
             }
             if (frame == 6) {
-                x = facing * 0xf + x;
+                x = facing * 15 + x;
             }
             if (frame == 7) {
-                x = facing * 0xf + x;
+                x = facing * 15 + x;
             }
             if (frame == 9) {
-                x = facing * 0xf + x;
+                x = facing * 15 + x;
             }
-            if (frame == 0xa) {
+            if (frame == 10) {
                 if (m_patternVar1 > 1) {
-                    frame = 0xc;
+                    frame = 12;
                     break;
                 }
-                x = facing * 0xf + x;
+                x = facing * 15 + x;
             }
-            if (frame == 0xc && m_patternVar1 < 1) {
+            if (frame == 12 && m_patternVar1 < 1) {
                 frame = 2;
                 m_patternVar1++;
             }
@@ -5204,44 +5204,44 @@ void CMayu::UpdatePattern()
             ay = 0.0;
         }
         if (frame == 1 && timer == 0) {
-            m_freezeTime = 0x78;
-            m_gauge = m_gauge - 0x7d0;
-            FillBackground(0xb0, 3);
+            m_freezeTime = 120;
+            m_gauge = m_gauge - 2000;
+            FillBackground(176, 3);
             effect.type = 0x45;
             effect.sound = 5;
             effect.x = (double)(int)x;
-            effect.y = (double)((int)y - 0x28);
+            effect.y = (double)((int)y - 40);
             effect.scale = 2;
             effect.keep = 1;
             effect.layer = 1;
             m_game->CreateEffect((EffectDesc*)&effect);
-            m_invulTime = 0x84;
-            FocusCameraY(0x32, 0x78);
+            m_invulTime = 132;
+            FocusCameraY(50, 120);
         }
         if (frame >= 1) {
-            unkf2 = 0xa;
+            unkf2 = 10;
         }
         if ((frame == 2 || frame == 7) && timer == 0) {
-            m_playSound = 0x15;
+            m_playSound = 21;
             m_hitsLeft = 1;
         }
-        if (frame == 0xe && timer == 0) {
-            m_playSound = 0x14;
+        if (frame == 14 && timer == 0) {
+            m_playSound = 20;
             m_hitsLeft = 1;
         }
-        if (frame == 0x15 && timer == 0) {
-            m_playSound = 0x15;
+        if (frame == 21 && timer == 0) {
+            m_playSound = 21;
             m_hitsLeft = 1;
         }
-        if (frame > 0x14 && frame < 0x1c) {
+        if (frame > 20 && frame < 28) {
             vy = vy + ay;
             vx -= 0.04;
             if (vx < 0.0) {
                 vx = 0.0;
             }
         }
-        if (frame > 0x14 && frame < 0x1c && y + vy > 0.0) {
-            frame = 0x1c;
+        if (frame > 20 && frame < 28 && y + vy > 0.0) {
+            frame = 28;
             timer = 0;
             y = 0.0;
             StopMoving();
@@ -5255,34 +5255,34 @@ void CMayu::UpdatePattern()
                 m_attackResult = 0;
             }
             if (frame == 2) {
-                m_invulTime = 0x1e;
+                m_invulTime = 30;
             }
             if (frame == 6) {
-                x = facing * 0xf + x;
+                x = facing * 15 + x;
             }
             if (frame == 7) {
-                x = facing * 0xf + x;
+                x = facing * 15 + x;
             }
             if (frame == 9) {
-                x = facing * 0xf + x;
+                x = facing * 15 + x;
             }
-            if (frame == 0xa) {
+            if (frame == 10) {
                 if (m_patternVar1 > 2) {
-                    frame = 0xc;
+                    frame = 12;
                     break;
                 }
-                x = facing * 0xf + x;
+                x = facing * 15 + x;
             }
-            if (frame == 0xc && m_patternVar1 < 2) {
+            if (frame == 12 && m_patternVar1 < 2) {
                 frame = 2;
                 m_patternVar1++;
             }
-            if (frame == 0x14) {
+            if (frame == 20) {
                 ay = 0.06;
                 vy = -3.0;
                 vx = 2.0;
             }
-            if (frame == 0x1c) {
+            if (frame == 28) {
                 frame = frame - 4;
             }
             if (frame >= frameCount) {
@@ -5298,89 +5298,89 @@ void CMayu::UpdatePattern()
             ay = 0.0;
         }
         if (frame == 1 && timer == 0) {
-            m_freezeTime = 0x78;
-            m_gauge = m_gauge - 0xbb8;
-            FillBackground(0xb0, 3);
+            m_freezeTime = 120;
+            m_gauge = m_gauge - 3000;
+            FillBackground(176, 3);
             effect.type = 0x46;
-            effect.sound = 0x40;
+            effect.sound = 64;
             effect.x = (double)(int)x;
-            effect.y = (double)((int)y - 0x28);
+            effect.y = (double)((int)y - 40);
             effect.scale = 2;
             effect.keep = 1;
             effect.layer = 1;
             m_game->CreateEffect((EffectDesc*)&effect);
-            m_invulTime = 0x84;
-            FocusCameraY(0x32, 0x78);
-            m_playSound = 0x25;
+            m_invulTime = 132;
+            FocusCameraY(50, 120);
+            m_playSound = 37;
         }
         if (frame > 1) {
-            m_game->FlashNegative(0xf);
+            m_game->FlashNegative(15);
         }
         if ((frame == 2 || frame == 7) && timer == 0) {
-            m_playSound = 0x15;
+            m_playSound = 21;
             m_hitsLeft = 1;
         }
-        if (frame == 0xe && timer == 0) {
-            m_playSound = 0x14;
+        if (frame == 14 && timer == 0) {
+            m_playSound = 20;
             m_hitsLeft = 1;
         }
-        if (frame == 0x12 && timer == 0) {
-            m_playSound = 0x15;
+        if (frame == 18 && timer == 0) {
+            m_playSound = 21;
             m_hitsLeft = 1;
             vx = 3.0;
         }
-        if (frame > 0x12 && frame < 0x17) {
+        if (frame > 18 && frame < 23) {
             vx -= 0.04;
             if (vx < 0.0) {
                 vx = 0.0;
             }
         }
-        if (frame > 0x14 && frame < 0x17 || frame > 0x1c) {
+        if (frame > 20 && frame < 23 || frame > 28) {
             vy = vy + ay;
             vx -= 0.04;
             if (vx < 0.0) {
                 vx = 0.0;
             }
         }
-        if (frame == 0x18 && timer == 0) {
+        if (frame == 24 && timer == 0) {
             vx = 1.8;
-            m_hitsLeft = 0x63;
+            m_hitsLeft = 99;
         }
-        if (frame == 0x20 && timer == 0) {
-            m_playSound = 0x14;
+        if (frame == 32 && timer == 0) {
+            m_playSound = 20;
             m_hitsLeft = 1;
         }
         timer++;
         if (timer >= duration) {
             timer = 0;
             frame++;
-            if (m_hitsLeft > 0 || frame < 0x22 && frame > 0x1b) {
+            if (m_hitsLeft > 0 || frame < 34 && frame > 27) {
                 m_attackResult = 0;
             }
             if (frame == 2) {
-                m_invulTime = 0x3c;
+                m_invulTime = 60;
             }
             if (frame == 6) {
-                x = facing * 0xf + x;
+                x = facing * 15 + x;
             }
             if (frame == 7) {
-                x = facing * 0xf + x;
+                x = facing * 15 + x;
             }
             if (frame == 9) {
-                x = facing * 0xf + x;
+                x = facing * 15 + x;
             }
-            if (frame == 0xa) {
+            if (frame == 10) {
                 if (m_patternVar1 > 3) {
-                    frame = 0xc;
+                    frame = 12;
                     break;
                 }
-                x = facing * 0xf + x;
+                x = facing * 15 + x;
             }
-            if (frame == 0xc && m_patternVar1 < 3) {
+            if (frame == 12 && m_patternVar1 < 3) {
                 frame = 2;
                 m_patternVar1++;
             }
-            if (frame == 0x1c && m_patternVar1 < 8) {
+            if (frame == 28 && m_patternVar1 < 8) {
                 frame = frame - 4;
                 m_patternVar1++;
             }
@@ -5393,26 +5393,26 @@ void CMayu::UpdatePattern()
     case kLv4Grab:
         if (frame == 0 && timer == 0) {
             StopMoving();
-            m_freezeTime = 0x78;
-            m_gauge = m_gauge - 0xbb8;
-            FillBackground(0xb0, 3);
+            m_freezeTime = 120;
+            m_gauge = m_gauge - 3000;
+            FillBackground(176, 3);
             effect.type = 0x46;
-            effect.sound = 0x40;
+            effect.sound = 64;
             effect.x = (double)(int)x;
-            effect.y = (double)((int)y - 0x28);
+            effect.y = (double)((int)y - 40);
             effect.scale = 2;
             effect.keep = 1;
             effect.layer = 1;
             m_game->CreateEffect((EffectDesc*)&effect);
-            m_playSound = 0x25;
+            m_playSound = 37;
             effect.type = 0x47;
             m_game->CreateEffect((EffectDesc*)&effect);
         }
         if (frame > 1) {
-            m_game->FlashNegative(0xf);
+            m_game->FlashNegative(15);
         }
         if (frame >= 0 && frame < 3) {
-            FocusCameraY(0x32, 3);
+            FocusCameraY(50, 3);
         }
         if (frame == 6 && m_attackResult == 3) {
             (*m_opponent)->StartPattern();
@@ -5421,8 +5421,8 @@ void CMayu::UpdatePattern()
             StartPattern();
             StopMoving();
             pattern = kLv4Slam;
-            y = m_pointY[0] + 0x32;
-            x = (*m_opponent)->x + (-m_pointX[0] - 0x14) * facing;
+            y = m_pointY[0] + 50;
+            x = (*m_opponent)->x + (-m_pointX[0] - 20) * facing;
             effect.type = 0;
             effect.x = (double)((int)(*m_opponent)->x + m_pointX[0]);
             effect.y = (double)((int)(*m_opponent)->y + m_pointY[0]);
@@ -5466,24 +5466,24 @@ void CMayu::UpdatePattern()
     case kLv4GrabClose:
         if (frame == 0 && timer == 0) {
             StopMoving();
-            m_freezeTime = 0x78;
-            m_gauge = m_gauge - 0xbb8;
-            FillBackground(0xb0, 3);
+            m_freezeTime = 120;
+            m_gauge = m_gauge - 3000;
+            FillBackground(176, 3);
             effect.type = 0x46;
-            effect.sound = 0x40;
+            effect.sound = 64;
             effect.x = (double)(int)x;
-            effect.y = (double)((int)y - 0x28);
+            effect.y = (double)((int)y - 40);
             effect.scale = 2;
             effect.keep = 1;
             effect.layer = 1;
             m_game->CreateEffect((EffectDesc*)&effect);
-            m_playSound = 0x25;
+            m_playSound = 37;
             effect.type = 0x47;
             m_game->CreateEffect((EffectDesc*)&effect);
         }
-        m_game->FlashNegative(0xf);
+        m_game->FlashNegative(15);
         if (frame >= 0 && frame < 3) {
-            FocusCameraY(0x32, 3);
+            FocusCameraY(50, 3);
         }
         if (frame == 4 && m_attackResult == 3) {
             (*m_opponent)->StartPattern();
@@ -5492,10 +5492,10 @@ void CMayu::UpdatePattern()
             StartPattern();
             StopMoving();
             pattern = kLv4GrabCloseHold;
-            (*m_opponent)->m_hitstop = 0x78;
-            (*m_opponent)->x = facing * 0x1e + x;
+            (*m_opponent)->m_hitstop = 120;
+            (*m_opponent)->x = facing * 30 + x;
             effect.type = 0;
-            effect.x = (double)((int)x + facing * 0x2c);
+            effect.x = (double)((int)x + facing * 44);
             effect.y = (double)((int)y - 7);
             effect.scale = 2;
             effect.layer = 1;
@@ -5520,14 +5520,14 @@ void CMayu::UpdatePattern()
         }
         break;
     case kLv4Slam:
-        FocusCameraX(0x32, 3);
-        FocusCameraY(0x32, 3);
-        m_game->FlashNegative(0xf);
+        FocusCameraX(50, 3);
+        FocusCameraY(50, 3);
+        m_game->FlashNegative(15);
         if (frame > 3) {
             vy = vy + ay;
         }
         if (frame == 4) {
-            (*m_opponent)->m_koDelay = 0x7530;
+            (*m_opponent)->m_koDelay = 30000;
             (*m_opponent)->pattern = kThrownDoubledOver;
             (*m_opponent)->x = (23.0 + vx) * facing + x;
             (*m_opponent)->y = -52.0 + vy + y;
@@ -5555,7 +5555,7 @@ void CMayu::UpdatePattern()
             (*m_opponent)->y = -8.0 + vy + y;
             (*m_opponent)->facing = -facing;
         }
-        if (frame == 9 || frame == 0xa) {
+        if (frame == 9 || frame == 10) {
             (*m_opponent)->pattern = kThrownAirborne;
             (*m_opponent)->x = (-4.0 + vx) * facing + x;
             (*m_opponent)->y = -6.0 + vy + y;
@@ -5571,7 +5571,7 @@ void CMayu::UpdatePattern()
             (*m_opponent)->x = x;
             y = 0.0;
             pattern = kLv4Stomps;
-            DealDamage(0x3e8, 960.0);
+            DealDamage(1000, 960.0);
             effect.type = 0;
             effect.x = (double)(int)x;
             effect.y = (double)(int)y;
@@ -5597,9 +5597,9 @@ void CMayu::UpdatePattern()
         }
         break;
     case kLv4GrabCloseHold:
-        FocusCameraX(0x32, 3);
-        FocusCameraY(0x32, 3);
-        m_game->FlashNegative(0xf);
+        FocusCameraX(50, 3);
+        FocusCameraY(50, 3);
+        m_game->FlashNegative(15);
         timer++;
         if (timer >= duration) {
             timer = 0;
@@ -5617,16 +5617,16 @@ void CMayu::UpdatePattern()
         }
         break;
     case kLv4Stomps:
-        (*m_opponent)->FocusCameraY(0x32, 3);
-        m_game->FlashNegative(0xf);
+        (*m_opponent)->FocusCameraY(50, 3);
+        m_game->FlashNegative(15);
         m_hideOffscreenMarker = 2;
         if ((*m_opponent)->pattern == kLyingDown) {
             (*m_opponent)->timer = 0;
         }
-        if (m_patternVar1 > 0x78 && m_patternVar1 < 0x2d0 && frame > 5 && frame < 0xc && (WORD)Random(0, 0x64) < 5) {
+        if (m_patternVar1 > 120 && m_patternVar1 < 720 && frame > 5 && frame < 12 && (WORD)Random(0, 100) < 5) {
             effect.type = 0x195;
-            effect.x = x + 80.0 - (WORD)Random(0, 0xa0);
-            effect.y = (double)-(WORD)Random(0, 0x32);
+            effect.x = x + 80.0 - (WORD)Random(0, 160);
+            effect.y = (double)-(WORD)Random(0, 50);
             effect.scale = 0;
             effect.layer = 1;
             effect.facing = facing;
@@ -5638,9 +5638,9 @@ void CMayu::UpdatePattern()
         if (frame > 5) {
             m_patternVar1++;
         }
-        if (m_patternVar1 == 0x50) {
+        if (m_patternVar1 == 80) {
             effect.type = 0x191;
-            effect.x = (double)((int)x + facing * 0x1e);
+            effect.x = (double)((int)x + facing * 30);
             effect.y = -320.0;
             effect.scale = 0;
             effect.layer = 1;
@@ -5649,9 +5649,9 @@ void CMayu::UpdatePattern()
             effect.facing = facing;
             SpawnObject(&effect);
         }
-        if (m_patternVar1 == 0x78) {
+        if (m_patternVar1 == 120) {
             effect.type = 0x192;
-            effect.x = (double)((int)x - facing * 0x14);
+            effect.x = (double)((int)x - facing * 20);
             effect.y = -320.0;
             effect.scale = 0;
             effect.layer = 1;
@@ -5663,13 +5663,13 @@ void CMayu::UpdatePattern()
         if (frame == 9 && vy + y > 0.0) {
             StopMoving();
             timer = 0;
-            frame = 0xa;
+            frame = 10;
             (*m_opponent)->StopMoving();
             (*m_opponent)->StartPattern();
             (*m_opponent)->pattern = kKnockdown;
             y = 0.0;
-            (*m_opponent)->m_koDelay = 0x7530;
-            DealDamage(0x12c, 960.0);
+            (*m_opponent)->m_koDelay = 30000;
+            DealDamage(300, 960.0);
             effect.type = 0;
             effect.x = (double)(int)x;
             effect.y = (double)(int)y;
@@ -5679,38 +5679,38 @@ void CMayu::UpdatePattern()
             m_game->CreateEffect((EffectDesc*)&effect);
             break;
         }
-        if (frame == 0xf && vy + y > 0.0) {
+        if (frame == 15 && vy + y > 0.0) {
             StopMoving();
             timer = 0;
-            frame = 0x10;
+            frame = 16;
             (*m_opponent)->StopMoving();
             (*m_opponent)->StartPattern();
             (*m_opponent)->pattern = kKnockdown;
             y = 0.0;
-            DealDamage(0x578, 960.0);
+            DealDamage(1400, 960.0);
             (*m_opponent)->m_koDelay = 0;
-            ShakeScreen(0xa, 0xa);
-            (*m_opponent)->m_hitstop = 0x78;
+            ShakeScreen(10, 10);
+            (*m_opponent)->m_hitstop = 120;
             effect.type = 0;
             effect.x = (double)(int)x;
             effect.y = (double)(int)y;
-            effect.sound = 0x16;
+            effect.sound = 22;
             effect.scale = 2;
             effect.layer = 1;
             m_game->CreateEffect((EffectDesc*)&effect);
             break;
         }
-        if (frame == 0x14 && vy + y > 0.0) {
+        if (frame == 20 && vy + y > 0.0) {
             StopMoving();
             timer = 0;
-            frame = 0x15;
+            frame = 21;
             (*m_opponent)->StopMoving();
             (*m_opponent)->StartPattern();
             y = 0.0;
             break;
         }
-        if (frame == 0xb && m_patternVar1 > 0x334) {
-            frame = 0xc;
+        if (frame == 11 && m_patternVar1 > 820) {
+            frame = 12;
             timer = 0;
             vy = -5.0;
             ay = 0.06;
@@ -5726,22 +5726,22 @@ void CMayu::UpdatePattern()
                 vy = -3.9;
                 ay = 0.08;
             }
-            if (frame == 0xc) {
-                if (m_patternVar1 <= 0x2da) {
+            if (frame == 12) {
+                if (m_patternVar1 <= 730) {
                     frame = 6;
                     vx = 0.0;
                     vy = -3.9;
                     ay = 0.08;
                 } else {
-                    frame = 0xb;
+                    frame = 11;
                 }
             }
-            if (frame == 0x12) {
+            if (frame == 18) {
                 vx = -0.6;
                 vy = -1.5;
                 ay = 0.038;
             }
-            if (frame == 0x1f && m_patternVar2 < 4) {
+            if (frame == 31 && m_patternVar2 < 4) {
                 frame = frame - 2;
                 m_patternVar2++;
             }
@@ -5755,20 +5755,20 @@ void CMayu::UpdatePattern()
     case k641236Lv1:
         if (frame == 0 && timer == 0) {
             StopMoving();
-            m_freezeTime = 0x78;
-            m_gauge = m_gauge - 0x3e8;
-            FillBackground(0xb0, 3);
+            m_freezeTime = 120;
+            m_gauge = m_gauge - 1000;
+            FillBackground(176, 3);
             effect.type = 0x44;
-            effect.sound = 0x13;
+            effect.sound = 19;
             effect.x = (double)(int)x;
-            effect.y = (double)((int)y - 0x28);
+            effect.y = (double)((int)y - 40);
             effect.scale = 2;
             effect.keep = 1;
             effect.layer = 1;
             m_game->CreateEffect((EffectDesc*)&effect);
         }
         if (frame >= 0 && frame < 3) {
-            FocusCameraY(0x32, 3);
+            FocusCameraY(50, 3);
         }
         if ((frame == 3 || frame == 4) && m_attackResult == 3) {
             if (x > 580.0) {
@@ -5782,27 +5782,27 @@ void CMayu::UpdatePattern()
             (*m_opponent)->StartPattern();
             (*m_opponent)->StopMoving();
             (*m_opponent)->pattern = kThrownDoubledOver;
-            (*m_opponent)->x = facing * 0x16 + x;
+            (*m_opponent)->x = facing * 22 + x;
             (*m_opponent)->y = y - 52.0;
             StartPattern();
             ay = 0.025;
             pattern = k641236Lv1Throw;
             effect.type = 0;
-            effect.x = (double)((int)x + facing * 0x2c);
-            effect.y = (double)((int)y - 0x2c);
+            effect.x = (double)((int)x + facing * 44);
+            effect.y = (double)((int)y - 44);
             effect.scale = 2;
             effect.layer = 1;
             m_game->CreateEffect((EffectDesc*)&effect);
             break;
         }
-        if (frame > 4 && frame < 0x70) {
+        if (frame > 4 && frame < 112) {
             vy = vy + ay;
         }
-        if (frame < 0xc && y + vy > 0.0) {
+        if (frame < 12 && y + vy > 0.0) {
             StopMoving();
             y = 0.0;
             timer = 0;
-            frame = 0xc;
+            frame = 12;
             break;
         }
         if (frame > 6) {
@@ -5834,7 +5834,7 @@ void CMayu::UpdatePattern()
             if (frame == 6) {
                 vy *= 0.5;
             }
-            if (frame == 0xc) {
+            if (frame == 12) {
                 frame = frame - 4;
             }
             if (frame >= frameCount) {
@@ -5847,20 +5847,20 @@ void CMayu::UpdatePattern()
     case k641236Lv2:
         if (frame == 0 && timer == 0) {
             StopMoving();
-            m_freezeTime = 0x78;
-            m_gauge = m_gauge - 0x7d0;
-            FillBackground(0xb0, 3);
+            m_freezeTime = 120;
+            m_gauge = m_gauge - 2000;
+            FillBackground(176, 3);
             effect.type = 0x45;
             effect.sound = 5;
             effect.x = (double)(int)x;
-            effect.y = (double)((int)y - 0x28);
+            effect.y = (double)((int)y - 40);
             effect.scale = 2;
             effect.keep = 1;
             effect.layer = 1;
             m_game->CreateEffect((EffectDesc*)&effect);
         }
         if (frame >= 0 && frame < 3) {
-            FocusCameraY(0x32, 3);
+            FocusCameraY(50, 3);
         }
         if ((frame == 3 || frame == 4) && m_attackResult == 3) {
             if (x > 580.0) {
@@ -5874,27 +5874,27 @@ void CMayu::UpdatePattern()
             (*m_opponent)->StartPattern();
             (*m_opponent)->StopMoving();
             (*m_opponent)->pattern = kThrownDoubledOver;
-            (*m_opponent)->x = facing * 0x16 + x;
+            (*m_opponent)->x = facing * 22 + x;
             (*m_opponent)->y = y - 52.0;
             StartPattern();
             ay = 0.025;
             pattern = k641236Lv2Throw;
             effect.type = 0;
-            effect.x = (double)((int)x + facing * 0x2c);
-            effect.y = (double)((int)y - 0x2c);
+            effect.x = (double)((int)x + facing * 44);
+            effect.y = (double)((int)y - 44);
             effect.scale = 2;
             effect.layer = 1;
             m_game->CreateEffect((EffectDesc*)&effect);
             break;
         }
-        if (frame > 4 && frame < 0x70) {
+        if (frame > 4 && frame < 112) {
             vy = vy + ay;
         }
-        if (frame < 0xc && y + vy > 0.0) {
+        if (frame < 12 && y + vy > 0.0) {
             StopMoving();
             y = 0.0;
             timer = 0;
-            frame = 0xc;
+            frame = 12;
             break;
         }
         if (frame > 6) {
@@ -5917,7 +5917,7 @@ void CMayu::UpdatePattern()
                 vx = 2.0;
                 vy = -3.2;
                 ay = 0.035;
-                m_invulTime = 0xc;
+                m_invulTime = 12;
             }
             if (frame == 5 && m_patternVar1 < 3) {
                 frame = frame - 2;
@@ -5926,7 +5926,7 @@ void CMayu::UpdatePattern()
             if (frame == 6) {
                 vy *= 0.5;
             }
-            if (frame == 0xc) {
+            if (frame == 12) {
                 frame = frame - 4;
             }
             if (frame >= frameCount) {
@@ -5939,22 +5939,22 @@ void CMayu::UpdatePattern()
     case k641236Lv3:
         if (frame == 0 && timer == 0) {
             StopMoving();
-            m_freezeTime = 0x78;
-            m_gauge = m_gauge - 0xbb8;
-            FillBackground(0xb0, 3);
+            m_freezeTime = 120;
+            m_gauge = m_gauge - 3000;
+            FillBackground(176, 3);
             effect.type = 0x46;
-            effect.sound = 0x40;
+            effect.sound = 64;
             effect.x = (double)(int)x;
-            effect.y = (double)((int)y - 0x28);
+            effect.y = (double)((int)y - 40);
             effect.scale = 2;
             effect.keep = 1;
             effect.layer = 1;
             m_game->CreateEffect((EffectDesc*)&effect);
-            m_playSound = 0x25;
+            m_playSound = 37;
         }
-        m_game->FlashNegative(0xf);
+        m_game->FlashNegative(15);
         if (frame >= 0 && frame < 3) {
-            FocusCameraY(0x32, 3);
+            FocusCameraY(50, 3);
         }
         if ((frame == 3 || frame == 4) && m_attackResult == 3) {
             if (x > 580.0) {
@@ -5968,14 +5968,14 @@ void CMayu::UpdatePattern()
             (*m_opponent)->StartPattern();
             (*m_opponent)->StopMoving();
             (*m_opponent)->pattern = kThrownDoubledOver;
-            (*m_opponent)->x = facing * 0x16 + x;
+            (*m_opponent)->x = facing * 22 + x;
             (*m_opponent)->y = y - 52.0;
             StartPattern();
             ay = 0.025;
             pattern = k641236Lv3Throw;
             effect.type = 0;
-            effect.x = (double)((int)x + facing * 0x2c);
-            effect.y = (double)((int)y - 0x2c);
+            effect.x = (double)((int)x + facing * 44);
+            effect.y = (double)((int)y - 44);
             effect.scale = 2;
             effect.layer = 1;
             m_game->CreateEffect((EffectDesc*)&effect);
@@ -5987,14 +5987,14 @@ void CMayu::UpdatePattern()
         if (vx < 0.0) {
             vx = 0.0;
         }
-        if (frame > 4 && frame < 0x70) {
+        if (frame > 4 && frame < 112) {
             vy = vy + ay;
         }
-        if (frame < 0xc && y + vy > 0.0) {
+        if (frame < 12 && y + vy > 0.0) {
             StopMoving();
             y = 0.0;
             timer = 0;
-            frame = 0xc;
+            frame = 12;
             break;
         }
         if ((frame == 3 || frame == 4) && (*m_opponent)->y < 0.0) {
@@ -6011,7 +6011,7 @@ void CMayu::UpdatePattern()
                 vx = 2.0;
                 vy = -3.2;
                 ay = 0.035;
-                m_invulTime = 0x12;
+                m_invulTime = 18;
             }
             if (frame == 5 && m_patternVar1 < 5) {
                 frame = frame - 2;
@@ -6020,7 +6020,7 @@ void CMayu::UpdatePattern()
             if (frame == 6) {
                 vy *= 0.5;
             }
-            if (frame == 0xc) {
+            if (frame == 12) {
                 frame = frame - 4;
             }
             if (frame >= frameCount) {
@@ -6032,7 +6032,7 @@ void CMayu::UpdatePattern()
         break;
     case k641236Lv1Throw:
         m_hideOffscreenMarker = 2;
-        if (frame < 0xe) {
+        if (frame < 14) {
             if (x > 580.0) {
                 x = 580.0;
                 vx = 0.0;
@@ -6041,13 +6041,13 @@ void CMayu::UpdatePattern()
                 x = 60.0;
                 vx = 0.0;
             }
-            FocusCameraX(0x32, 3);
-            FocusCameraY(0x32, 3);
+            FocusCameraX(50, 3);
+            FocusCameraY(50, 3);
         }
-        if (frame < 0xd || frame > 0xe && frame < 0x12) {
+        if (frame < 13 || frame > 14 && frame < 18) {
             vy = vy + ay;
             if (vy + y > 0.0) {
-                if (frame < 0xd) {
+                if (frame < 13) {
                     y = 0.0;
                     StopMoving();
                     (*m_opponent)->StartPattern();
@@ -6056,24 +6056,24 @@ void CMayu::UpdatePattern()
                     (*m_opponent)->x = facing + x;
                     (*m_opponent)->facing = -facing;
                     (*m_opponent)->StopMoving();
-                    (*m_opponent)->m_hitstop = 0x7e;
-                    DealDamage(0x92e, 750.0);
-                    ShakeScreen(0xa, 0);
+                    (*m_opponent)->m_hitstop = 126;
+                    DealDamage(2350, 750.0);
+                    ShakeScreen(10, 0);
                     timer = 0;
-                    frame = 0xd;
-                    m_playSound = 0x16;
+                    frame = 13;
+                    m_playSound = 22;
                     break;
                 }
-                if (frame == 0x11) {
+                if (frame == 17) {
                     y = 0.0;
                     StopMoving();
                     timer = 0;
-                    frame = 0x12;
+                    frame = 18;
                     break;
                 }
             }
         }
-        if (frame < 0xd) {
+        if (frame < 13) {
             vx -= 0.025;
             if (vx < 0.0) {
                 vx = 0.0;
@@ -6081,7 +6081,7 @@ void CMayu::UpdatePattern()
         }
         if (frame < 4) {
             (*m_opponent)->pattern = kThrownDoubledOver;
-            (*m_opponent)->x = facing * 0x16 + x;
+            (*m_opponent)->x = facing * 22 + x;
             (*m_opponent)->y = y - 52.0;
         }
         if (frame == 4) {
@@ -6119,19 +6119,19 @@ void CMayu::UpdatePattern()
             (*m_opponent)->y = -36.0 + vy + y;
             (*m_opponent)->facing = -facing;
         }
-        if (frame == 0xa) {
+        if (frame == 10) {
             (*m_opponent)->pattern = kThrownDoubledOver;
             (*m_opponent)->x = (28.0 + vx) * facing + x;
             (*m_opponent)->y = -58.0 + vy + y;
             (*m_opponent)->facing = -facing;
         }
-        if (frame == 0xb) {
+        if (frame == 11) {
             (*m_opponent)->pattern = kThrownDoubledOver;
             (*m_opponent)->x = (14.0 + vx) * facing + x;
             (*m_opponent)->y = -73.0 + vy + y;
             (*m_opponent)->facing = -facing;
         }
-        if (frame == 0xc) {
+        if (frame == 12) {
             (*m_opponent)->pattern = kThrownAirborneInverted;
             (*m_opponent)->x = (-12.0 + vx) * facing + x;
             (*m_opponent)->y = -78.0 + vy + y;
@@ -6142,10 +6142,10 @@ void CMayu::UpdatePattern()
             timer = 0;
             frame++;
             m_attackResult = 0;
-            if (frame == 0xd) {
+            if (frame == 13) {
                 frame = frame - 8;
             }
-            if (frame == 0xf) {
+            if (frame == 15) {
                 (*m_opponent)->m_hitstop = 3;
                 vx = -1.2;
                 vy = -2.0;
@@ -6166,7 +6166,7 @@ void CMayu::UpdatePattern()
         break;
     case k641236Lv2Throw:
         m_hideOffscreenMarker = 2;
-        if (frame < 0x19) {
+        if (frame < 25) {
             if (x > 580.0) {
                 x = 580.0;
                 vx = 0.0;
@@ -6175,31 +6175,31 @@ void CMayu::UpdatePattern()
                 x = 60.0;
                 vx = 0.0;
             }
-            FocusCameraX(0x32, 3);
-            FocusCameraY(0x32, 3);
+            FocusCameraX(50, 3);
+            FocusCameraY(50, 3);
         }
-        if (frame < 0xd || frame > 0xe && frame < 0x19 || frame > 0x1a && frame < 0x1e) {
+        if (frame < 13 || frame > 14 && frame < 25 || frame > 26 && frame < 30) {
             vy = vy + ay;
             if (vy + y > 0.0) {
-                if (frame < 0xd) {
+                if (frame < 13) {
                     y = 0.0;
                     StopMoving();
                     (*m_opponent)->StartPattern();
                     (*m_opponent)->pattern = kKnockdown;
                     (*m_opponent)->y = 0.0;
                     (*m_opponent)->StopMoving();
-                    (*m_opponent)->m_hitstop = 0x96;
+                    (*m_opponent)->m_hitstop = 150;
                     (*m_opponent)->x = facing + x;
                     (*m_opponent)->facing = -facing;
-                    DealDamage(0x3e8, 980.0);
-                    ShakeScreen(0xa, 0);
-                    (*m_opponent)->m_koDelay = 0x7530;
+                    DealDamage(1000, 980.0);
+                    ShakeScreen(10, 0);
+                    (*m_opponent)->m_koDelay = 30000;
                     timer = 0;
-                    frame = 0xd;
-                    m_playSound = 0x16;
+                    frame = 13;
+                    m_playSound = 22;
                     break;
                 }
-                if (frame > 0xe && frame < 0x19) {
+                if (frame > 14 && frame < 25) {
                     y = 0.0;
                     StopMoving();
                     (*m_opponent)->StartPattern();
@@ -6208,31 +6208,31 @@ void CMayu::UpdatePattern()
                     (*m_opponent)->x = facing + x;
                     (*m_opponent)->facing = -facing;
                     (*m_opponent)->StopMoving();
-                    (*m_opponent)->m_hitstop = 0x7e;
-                    ShakeScreen(0xf, 0);
-                    DealDamage(0x834, 980.0);
+                    (*m_opponent)->m_hitstop = 126;
+                    ShakeScreen(15, 0);
+                    DealDamage(2100, 980.0);
                     (*m_opponent)->m_koDelay = 0;
                     timer = 0;
-                    frame = 0x19;
-                    m_playSound = 0x16;
+                    frame = 25;
+                    m_playSound = 22;
                     break;
                 }
-                if (frame == 0x1d) {
+                if (frame == 29) {
                     y = 0.0;
                     StopMoving();
                     timer = 0;
-                    frame = 0x1e;
+                    frame = 30;
                     break;
                 }
             }
         }
-        if (frame < 0xd) {
+        if (frame < 13) {
             vx -= 0.025;
             if (vx < 0.0) {
                 vx = 0.0;
             }
         }
-        if (frame > 0xe && frame < 0x19) {
+        if (frame > 14 && frame < 25) {
             vx += 0.025;
             if (vx > 0.0) {
                 vx = 0.0;
@@ -6240,57 +6240,57 @@ void CMayu::UpdatePattern()
         }
         if (frame < 4) {
             (*m_opponent)->pattern = kThrownDoubledOver;
-            (*m_opponent)->x = facing * 0x16 + x;
+            (*m_opponent)->x = facing * 22 + x;
             (*m_opponent)->y = y - 52.0;
         }
-        if (frame == 4 || frame == 0xf || frame == 0x10) {
+        if (frame == 4 || frame == 15 || frame == 16) {
             (*m_opponent)->pattern = kThrownDoubledOver;
             (*m_opponent)->x = (15.0 + vx) * facing + x;
             (*m_opponent)->y = -70.0 + vy + y;
         }
-        if (frame == 5 || frame == 0x11) {
+        if (frame == 5 || frame == 17) {
             (*m_opponent)->pattern = kThrownAirborneInverted;
             (*m_opponent)->x = (-25.0 + vx) * facing + x;
             (*m_opponent)->y = -65.0 + vy + y;
             (*m_opponent)->facing = facing;
         }
-        if (frame == 6 || frame == 0x12) {
+        if (frame == 6 || frame == 18) {
             (*m_opponent)->pattern = kThrownDoubledOverInverted;
             (*m_opponent)->x = (-28.0 + vx) * facing + x;
             (*m_opponent)->y = -43.0 + vy + y;
             (*m_opponent)->facing = facing;
         }
-        if (frame == 7 || frame == 0x13) {
+        if (frame == 7 || frame == 19) {
             (*m_opponent)->pattern = kThrownDoubledOverInverted;
             (*m_opponent)->x = (-12.0 + vx) * facing + x;
             (*m_opponent)->y = -29.0 + vy + y;
             (*m_opponent)->facing = facing;
         }
-        if (frame == 8 || frame == 0x14) {
+        if (frame == 8 || frame == 20) {
             (*m_opponent)->pattern = kThrownAirborne;
             (*m_opponent)->x = (12.0 + vx) * facing + x;
             (*m_opponent)->y = -23.0 + vy + y;
             (*m_opponent)->facing = -facing;
         }
-        if (frame == 9 || frame == 0x15) {
+        if (frame == 9 || frame == 21) {
             (*m_opponent)->pattern = kThrownAirborne;
             (*m_opponent)->x = (23.0 + vx) * facing + x;
             (*m_opponent)->y = -36.0 + vy + y;
             (*m_opponent)->facing = -facing;
         }
-        if (frame == 0xa || frame == 0x16) {
+        if (frame == 10 || frame == 22) {
             (*m_opponent)->pattern = kThrownDoubledOver;
             (*m_opponent)->x = (28.0 + vx) * facing + x;
             (*m_opponent)->y = -58.0 + vy + y;
             (*m_opponent)->facing = -facing;
         }
-        if (frame == 0xb || frame == 0x17) {
+        if (frame == 11 || frame == 23) {
             (*m_opponent)->pattern = kThrownDoubledOver;
             (*m_opponent)->x = (14.0 + vx) * facing + x;
             (*m_opponent)->y = -73.0 + vy + y;
             (*m_opponent)->facing = -facing;
         }
-        if (frame == 0xc || frame == 0x18) {
+        if (frame == 12 || frame == 24) {
             (*m_opponent)->pattern = kThrownAirborneInverted;
             (*m_opponent)->x = (-12.0 + vx) * facing + x;
             (*m_opponent)->y = -78.0 + vy + y;
@@ -6301,16 +6301,16 @@ void CMayu::UpdatePattern()
             timer = 0;
             frame++;
             m_attackResult = 0;
-            if (frame == 0xd || frame == 0x19) {
+            if (frame == 13 || frame == 25) {
                 frame = frame - 8;
             }
-            if (frame == 0xf) {
+            if (frame == 15) {
                 vx = -4.0;
                 vy = -4.0;
                 ay = 0.025;
                 (*m_opponent)->m_hitstop = 3;
             }
-            if (frame == 0x1b) {
+            if (frame == 27) {
                 vx = -1.8;
                 vy = -2.3;
                 ay = 0.035;
@@ -6329,8 +6329,8 @@ void CMayu::UpdatePattern()
         break;
     case k641236Lv3Throw:
         m_hideOffscreenMarker = 2;
-        m_game->FlashNegative(0xf);
-        if (frame < 0x19) {
+        m_game->FlashNegative(15);
+        if (frame < 25) {
             if (x > 580.0) {
                 x = 580.0;
                 vx = 0.0;
@@ -6339,31 +6339,31 @@ void CMayu::UpdatePattern()
                 x = 60.0;
                 vx = 0.0;
             }
-            FocusCameraX(0x32, 3);
-            FocusCameraY(0x32, 3);
+            FocusCameraX(50, 3);
+            FocusCameraY(50, 3);
         }
-        if (frame < 0xd || frame > 0xe && frame < 0x19 || frame > 0x1a && frame < 0x1e) {
+        if (frame < 13 || frame > 14 && frame < 25 || frame > 26 && frame < 30) {
             vy = vy + ay;
             if (vy + y > 0.0) {
-                if (frame < 0xd) {
+                if (frame < 13) {
                     y = 0.0;
                     StopMoving();
                     (*m_opponent)->StartPattern();
                     (*m_opponent)->pattern = kKnockdown;
                     (*m_opponent)->y = 0.0;
                     (*m_opponent)->StopMoving();
-                    (*m_opponent)->m_hitstop = 0x96;
+                    (*m_opponent)->m_hitstop = 150;
                     (*m_opponent)->x = facing + x;
                     (*m_opponent)->facing = -facing;
-                    DealDamage(0x3e8, 980.0);
-                    ShakeScreen(0xa, 0);
-                    (*m_opponent)->m_koDelay = 0x7530;
+                    DealDamage(1000, 980.0);
+                    ShakeScreen(10, 0);
+                    (*m_opponent)->m_koDelay = 30000;
                     timer = 0;
-                    frame = 0xd;
-                    m_playSound = 0x16;
+                    frame = 13;
+                    m_playSound = 22;
                     break;
                 }
-                if (frame > 0xe && frame < 0x19) {
+                if (frame > 14 && frame < 25) {
                     y = 0.0;
                     StopMoving();
                     (*m_opponent)->StartPattern();
@@ -6372,31 +6372,31 @@ void CMayu::UpdatePattern()
                     (*m_opponent)->x = facing + x;
                     (*m_opponent)->facing = -facing;
                     (*m_opponent)->StopMoving();
-                    (*m_opponent)->m_hitstop = 0xba;
-                    DealDamage(0xed8, 980.0);
+                    (*m_opponent)->m_hitstop = 186;
+                    DealDamage(3800, 980.0);
                     (*m_opponent)->m_koDelay = 0;
-                    ShakeScreen(0x14, 0x1e);
+                    ShakeScreen(20, 30);
                     timer = 0;
-                    frame = 0x19;
-                    m_playSound = 0x16;
+                    frame = 25;
+                    m_playSound = 22;
                     break;
                 }
-                if (frame == 0x1d) {
+                if (frame == 29) {
                     y = 0.0;
                     StopMoving();
                     timer = 0;
-                    frame = 0x1e;
+                    frame = 30;
                     break;
                 }
             }
         }
-        if (frame < 0xd) {
+        if (frame < 13) {
             vx -= 0.025;
             if (vx < 0.0) {
                 vx = 0.0;
             }
         }
-        if (frame > 0xe && frame < 0x19) {
+        if (frame > 14 && frame < 25) {
             vx += 0.025;
             if (vx > 0.0) {
                 vx = 0.0;
@@ -6404,57 +6404,57 @@ void CMayu::UpdatePattern()
         }
         if (frame < 4) {
             (*m_opponent)->pattern = kThrownDoubledOver;
-            (*m_opponent)->x = facing * 0x16 + x;
+            (*m_opponent)->x = facing * 22 + x;
             (*m_opponent)->y = y - 52.0;
         }
-        if (frame == 4 || frame == 0xf || frame == 0x10) {
+        if (frame == 4 || frame == 15 || frame == 16) {
             (*m_opponent)->pattern = kThrownDoubledOver;
             (*m_opponent)->x = (15.0 + vx) * facing + x;
             (*m_opponent)->y = -70.0 + vy + y;
         }
-        if (frame == 5 || frame == 0x11) {
+        if (frame == 5 || frame == 17) {
             (*m_opponent)->pattern = kThrownAirborneInverted;
             (*m_opponent)->x = (-25.0 + vx) * facing + x;
             (*m_opponent)->y = -65.0 + vy + y;
             (*m_opponent)->facing = facing;
         }
-        if (frame == 6 || frame == 0x12) {
+        if (frame == 6 || frame == 18) {
             (*m_opponent)->pattern = kThrownDoubledOverInverted;
             (*m_opponent)->x = (-28.0 + vx) * facing + x;
             (*m_opponent)->y = -43.0 + vy + y;
             (*m_opponent)->facing = facing;
         }
-        if (frame == 7 || frame == 0x13) {
+        if (frame == 7 || frame == 19) {
             (*m_opponent)->pattern = kThrownDoubledOverInverted;
             (*m_opponent)->x = (-12.0 + vx) * facing + x;
             (*m_opponent)->y = -29.0 + vy + y;
             (*m_opponent)->facing = facing;
         }
-        if (frame == 8 || frame == 0x14) {
+        if (frame == 8 || frame == 20) {
             (*m_opponent)->pattern = kThrownAirborne;
             (*m_opponent)->x = (12.0 + vx) * facing + x;
             (*m_opponent)->y = -23.0 + vy + y;
             (*m_opponent)->facing = -facing;
         }
-        if (frame == 9 || frame == 0x15) {
+        if (frame == 9 || frame == 21) {
             (*m_opponent)->pattern = kThrownAirborne;
             (*m_opponent)->x = (23.0 + vx) * facing + x;
             (*m_opponent)->y = -36.0 + vy + y;
             (*m_opponent)->facing = -facing;
         }
-        if (frame == 0xa || frame == 0x16) {
+        if (frame == 10 || frame == 22) {
             (*m_opponent)->pattern = kThrownDoubledOver;
             (*m_opponent)->x = (28.0 + vx) * facing + x;
             (*m_opponent)->y = -58.0 + vy + y;
             (*m_opponent)->facing = -facing;
         }
-        if (frame == 0xb || frame == 0x17) {
+        if (frame == 11 || frame == 23) {
             (*m_opponent)->pattern = kThrownDoubledOver;
             (*m_opponent)->x = (14.0 + vx) * facing + x;
             (*m_opponent)->y = -73.0 + vy + y;
             (*m_opponent)->facing = -facing;
         }
-        if (frame == 0xc || frame == 0x18) {
+        if (frame == 12 || frame == 24) {
             (*m_opponent)->pattern = kThrownAirborneInverted;
             (*m_opponent)->x = (-12.0 + vx) * facing + x;
             (*m_opponent)->y = -78.0 + vy + y;
@@ -6465,16 +6465,16 @@ void CMayu::UpdatePattern()
             timer = 0;
             frame++;
             m_attackResult = 0;
-            if (frame == 0xd || frame == 0x19) {
+            if (frame == 13 || frame == 25) {
                 frame = frame - 8;
             }
-            if (frame == 0xf) {
+            if (frame == 15) {
                 vx = -4.0;
                 vy = -7.0;
                 ay = 0.025;
                 (*m_opponent)->m_hitstop = 3;
             }
-            if (frame == 0x1b) {
+            if (frame == 27) {
                 vx = -1.8;
                 vy = -2.3;
                 ay = 0.035;
@@ -6498,24 +6498,24 @@ void CMayu::UpdatePattern()
             ay = 0.0;
         }
         if (frame == 1 && timer == 0) {
-            m_freezeTime = 0x78;
-            m_gauge = m_gauge - 0x3e8;
-            FillBackground(0xb0, 3);
+            m_freezeTime = 120;
+            m_gauge = m_gauge - 1000;
+            FillBackground(176, 3);
             effect.type = 0x44;
-            effect.sound = 0x13;
-            effect.x = (double)((int)x + facing * 0xf);
-            effect.y = (double)((int)y - 0x22);
+            effect.sound = 19;
+            effect.x = (double)((int)x + facing * 15);
+            effect.y = (double)((int)y - 34);
             effect.scale = 2;
             effect.keep = 1;
             effect.layer = 1;
             m_game->CreateEffect((EffectDesc*)&effect);
-            FocusCameraY(0x32, 0x78);
-            m_hitsLeft = 0xc;
+            FocusCameraY(50, 120);
+            m_hitsLeft = 12;
         }
-        if (timer == 0 && (frame == 9 || frame == 0xb || frame == 0xd || frame == 0xf)) {
-            m_playSound = 0x15;
+        if (timer == 0 && (frame == 9 || frame == 11 || frame == 13 || frame == 15)) {
+            m_playSound = 21;
         }
-        if (frame > 7 && frame < 0x10) {
+        if (frame > 7 && frame < 16) {
             if (m_inputX == facing) {
                 vx += 0.012;
             }
@@ -6528,7 +6528,7 @@ void CMayu::UpdatePattern()
                 vx = 1.2;
             }
         }
-        if (frame > 0xf) {
+        if (frame > 15) {
             if (vx > 0.0) {
                 vx -= 0.01;
                 if (vx < 0.0) {
@@ -6546,11 +6546,11 @@ void CMayu::UpdatePattern()
         if (timer >= duration) {
             timer = 0;
             frame++;
-            if (frame == 0x10 && m_patternVar1 < 3) {
+            if (frame == 16 && m_patternVar1 < 3) {
                 frame = frame - 4;
                 m_patternVar1++;
             }
-            if (frame == 1 || frame == 9 || frame == 0xb || frame == 0xd || frame == 0xf || frame == 0x10) {
+            if (frame == 1 || frame == 9 || frame == 11 || frame == 13 || frame == 15 || frame == 16) {
                 m_attackResult = 0;
             }
             if (frame >= frameCount) {
@@ -6566,24 +6566,24 @@ void CMayu::UpdatePattern()
             ay = 0.0;
         }
         if (frame == 1 && timer == 0) {
-            m_freezeTime = 0x78;
-            m_gauge = m_gauge - 0x7d0;
-            FillBackground(0xb0, 3);
+            m_freezeTime = 120;
+            m_gauge = m_gauge - 2000;
+            FillBackground(176, 3);
             effect.type = 0x45;
             effect.sound = 5;
-            effect.x = (double)((int)x + facing * 0xf);
-            effect.y = (double)((int)y - 0x22);
+            effect.x = (double)((int)x + facing * 15);
+            effect.y = (double)((int)y - 34);
             effect.scale = 2;
             effect.keep = 1;
             effect.layer = 1;
             m_game->CreateEffect((EffectDesc*)&effect);
-            FocusCameraY(0x32, 0x78);
-            m_hitsLeft = 0x63;
+            FocusCameraY(50, 120);
+            m_hitsLeft = 99;
         }
-        if (timer == 0 && (frame == 9 || frame == 0xb || frame == 0xd || frame == 0xf)) {
-            m_playSound = 0x15;
+        if (timer == 0 && (frame == 9 || frame == 11 || frame == 13 || frame == 15)) {
+            m_playSound = 21;
         }
-        if (frame > 7 && frame < 0x10) {
+        if (frame > 7 && frame < 16) {
             if (m_inputX == facing) {
                 vx += 0.012;
             }
@@ -6596,7 +6596,7 @@ void CMayu::UpdatePattern()
                 vx = 1.3;
             }
         }
-        if (frame > 0xf) {
+        if (frame > 15) {
             if (vx > 0.0) {
                 vx -= 0.01;
                 if (vx < 0.0) {
@@ -6614,11 +6614,11 @@ void CMayu::UpdatePattern()
         if (timer >= duration) {
             timer = 0;
             frame++;
-            if (frame == 0x10 && m_patternVar1 < 5) {
+            if (frame == 16 && m_patternVar1 < 5) {
                 frame = frame - 4;
                 m_patternVar1++;
             }
-            if (frame == 1 || frame == 9 || frame == 0xb || frame == 0xd || frame == 0xf || frame == 0x10) {
+            if (frame == 1 || frame == 9 || frame == 11 || frame == 13 || frame == 15 || frame == 16) {
                 m_attackResult = 0;
             }
             if (frame >= frameCount) {
@@ -6634,28 +6634,28 @@ void CMayu::UpdatePattern()
             ay = 0.0;
         }
         if (frame > 0) {
-            m_game->FlashNegative(0xf);
+            m_game->FlashNegative(15);
         }
         if (frame == 1 && timer == 0) {
-            m_freezeTime = 0x78;
-            m_gauge = m_gauge - 0xbb8;
-            FillBackground(0xb0, 3);
+            m_freezeTime = 120;
+            m_gauge = m_gauge - 3000;
+            FillBackground(176, 3);
             effect.type = 0x46;
-            effect.sound = 0x40;
-            effect.x = (double)((int)x + facing * 0xf);
-            effect.y = (double)((int)y - 0x22);
+            effect.sound = 64;
+            effect.x = (double)((int)x + facing * 15);
+            effect.y = (double)((int)y - 34);
             effect.scale = 2;
             effect.keep = 1;
             effect.layer = 1;
             m_game->CreateEffect((EffectDesc*)&effect);
-            FocusCameraY(0x32, 0x78);
-            m_hitsLeft = 0x63;
-            m_playSound = 0x25;
+            FocusCameraY(50, 120);
+            m_hitsLeft = 99;
+            m_playSound = 37;
         }
-        if (timer == 0 && (frame == 9 || frame == 0xb || frame == 0xd || frame == 0xf)) {
-            m_playSound = 0x15;
+        if (timer == 0 && (frame == 9 || frame == 11 || frame == 13 || frame == 15)) {
+            m_playSound = 21;
         }
-        if (frame > 7 && frame < 0x10) {
+        if (frame > 7 && frame < 16) {
             if (m_inputX == facing) {
                 vx += 0.012;
             }
@@ -6668,7 +6668,7 @@ void CMayu::UpdatePattern()
                 vx = 1.4;
             }
         }
-        if (frame > 0xf) {
+        if (frame > 15) {
             if (vx > 0.0) {
                 vx -= 0.01;
                 if (vx < 0.0) {
@@ -6686,11 +6686,11 @@ void CMayu::UpdatePattern()
         if (timer >= duration) {
             timer = 0;
             frame++;
-            if (frame == 0x10 && m_patternVar1 < 0xa) {
+            if (frame == 16 && m_patternVar1 < 10) {
                 frame = frame - 4;
                 m_patternVar1++;
             }
-            if (frame == 1 || frame == 9 || frame == 0xb || frame == 0xd || frame == 0xf || frame == 0x10) {
+            if (frame == 1 || frame == 9 || frame == 11 || frame == 13 || frame == 15 || frame == 16) {
                 m_attackResult = 0;
             }
             if (frame >= frameCount) {
@@ -6706,28 +6706,28 @@ void CMayu::UpdatePattern()
             ay = 0.0;
         }
         if (frame == 0 && timer == 0) {
-            m_freezeTime = 0x78;
-            m_gauge = m_gauge - 0x3e8;
-            FillBackground(0xb0, 3);
+            m_freezeTime = 120;
+            m_gauge = m_gauge - 1000;
+            FillBackground(176, 3);
             effect.type = 0x44;
-            effect.sound = 0x13;
+            effect.sound = 19;
             effect.x = (double)(int)x;
-            effect.y = (double)((int)y - 0x28);
+            effect.y = (double)((int)y - 40);
             effect.scale = 2;
             effect.keep = 1;
             effect.layer = 1;
             m_game->CreateEffect((EffectDesc*)&effect);
             m_hitsLeft = 1;
-            FocusCameraY(0x32, 0x78);
+            FocusCameraY(50, 120);
         }
-        if (frame > 0xd && frame < 0x12 && m_attackResult == 3) {
+        if (frame > 13 && frame < 18 && m_attackResult == 3) {
             StartPattern();
             StopMoving();
             (*m_opponent)->StopMoving();
-            (*m_opponent)->m_hitstop = 0xb4;
+            (*m_opponent)->m_hitstop = 180;
             (*m_opponent)->y = 0.0;
             (*m_opponent)->pattern = kHitStandLowHold;
-            (*m_opponent)->x = facing * 0x1e + x;
+            (*m_opponent)->x = facing * 30 + x;
             pattern = k21436Lv1Hit;
             (*m_opponent)->facing = -facing;
             break;
@@ -6738,19 +6738,19 @@ void CMayu::UpdatePattern()
         if (vx < 0.0) {
             vx = 0.0;
         }
-        if (m_attackResult > 0 && frame < 0x12 && frame > 0xd) {
+        if (m_attackResult > 0 && frame < 18 && frame > 13) {
             timer = 0;
-            frame = 0x12;
+            frame = 18;
             break;
         }
         timer++;
         if (timer >= duration) {
             timer = 0;
             frame++;
-            if (frame == 0xe) {
+            if (frame == 14) {
                 vx = 3.2;
             }
-            if (frame == 0x12 && m_patternVar1 < 2) {
+            if (frame == 18 && m_patternVar1 < 2) {
                 m_patternVar1++;
                 frame = frame - 4;
             }
@@ -6762,10 +6762,10 @@ void CMayu::UpdatePattern()
         break;
     case k21436Lv1Hit:
         if (frame == 0 && timer == 0) {
-            m_hitsLeft = 0x63;
+            m_hitsLeft = 99;
         }
-        if ((frame == 5 || frame == 0xa) && timer == 0) {
-            m_playSound = 0x15;
+        if ((frame == 5 || frame == 10) && timer == 0) {
+            m_playSound = 21;
         }
         if (vx > 0.0) {
             vx -= 0.035;
@@ -6777,9 +6777,9 @@ void CMayu::UpdatePattern()
             ay = 0.055;
             vy = vy + ay;
         }
-        if (frame > 0x12 && frame < 0x1f && y + vy > 0.0) {
+        if (frame > 18 && frame < 31 && y + vy > 0.0) {
             timer = 0;
-            frame = 0x1f;
+            frame = 31;
             y = 0.0;
             StopMoving();
             break;
@@ -6790,31 +6790,31 @@ void CMayu::UpdatePattern()
             frame++;
             m_attackResult = 0;
             if (frame == 9) {
-                x = facing * 0xf + x;
+                x = facing * 15 + x;
             }
-            if (frame == 0xa) {
-                x = facing * 0xf + x;
+            if (frame == 10) {
+                x = facing * 15 + x;
             }
-            if (frame == 0xc) {
-                x = facing * 0xf + x;
+            if (frame == 12) {
+                x = facing * 15 + x;
             }
-            if (frame == 0xd) {
+            if (frame == 13) {
                 if (m_patternVar1 > 1) {
-                    frame = 0xf;
+                    frame = 15;
                     break;
                 }
-                x = facing * 0xf + x;
+                x = facing * 15 + x;
             }
-            if (frame == 0xf && m_patternVar1 < 1) {
+            if (frame == 15 && m_patternVar1 < 1) {
                 frame = 5;
                 m_patternVar1++;
             }
-            if (frame == 0x13) {
+            if (frame == 19) {
                 vy = -3.3;
                 vx = 1.5;
                 m_hitsLeft = 3;
             }
-            if (frame == 0x1f) {
+            if (frame == 31) {
                 frame = frame - 4;
             }
             if (frame >= frameCount) {
@@ -6830,28 +6830,28 @@ void CMayu::UpdatePattern()
             ay = 0.0;
         }
         if (frame == 0 && timer == 0) {
-            m_freezeTime = 0x78;
-            m_gauge = m_gauge - 0x7d0;
-            FillBackground(0xb0, 3);
+            m_freezeTime = 120;
+            m_gauge = m_gauge - 2000;
+            FillBackground(176, 3);
             effect.type = 0x45;
             effect.sound = 5;
             effect.x = (double)(int)x;
-            effect.y = (double)((int)y - 0x28);
+            effect.y = (double)((int)y - 40);
             effect.scale = 2;
             effect.keep = 1;
             effect.layer = 1;
             m_game->CreateEffect((EffectDesc*)&effect);
             m_hitsLeft = 1;
-            FocusCameraY(0x32, 0x78);
+            FocusCameraY(50, 120);
         }
-        if (frame > 0xd && frame < 0x12 && m_attackResult == 3) {
+        if (frame > 13 && frame < 18 && m_attackResult == 3) {
             StartPattern();
             StopMoving();
             (*m_opponent)->StopMoving();
-            (*m_opponent)->m_hitstop = 0xb4;
+            (*m_opponent)->m_hitstop = 180;
             (*m_opponent)->y = 0.0;
             (*m_opponent)->pattern = kHitStandLowHold;
-            (*m_opponent)->x = facing * 0x1e + x;
+            (*m_opponent)->x = facing * 30 + x;
             pattern = k21436Lv2Hit;
             (*m_opponent)->facing = -facing;
             break;
@@ -6862,19 +6862,19 @@ void CMayu::UpdatePattern()
         if (vx < 0.0) {
             vx = 0.0;
         }
-        if (m_attackResult > 0 && frame < 0x12 && frame > 0xd) {
+        if (m_attackResult > 0 && frame < 18 && frame > 13) {
             timer = 0;
-            frame = 0x12;
+            frame = 18;
             break;
         }
         timer++;
         if (timer >= duration) {
             timer = 0;
             frame++;
-            if (frame == 0xe) {
+            if (frame == 14) {
                 vx = 4.0;
             }
-            if (frame == 0x12 && m_patternVar1 < 3) {
+            if (frame == 18 && m_patternVar1 < 3) {
                 m_patternVar1++;
                 frame = frame - 4;
             }
@@ -6886,10 +6886,10 @@ void CMayu::UpdatePattern()
         break;
     case k21436Lv2Hit:
         if (frame == 0 && timer == 0) {
-            m_hitsLeft = 0x63;
+            m_hitsLeft = 99;
         }
-        if ((frame == 5 || frame == 0xa) && timer == 0) {
-            m_playSound = 0x15;
+        if ((frame == 5 || frame == 10) && timer == 0) {
+            m_playSound = 21;
         }
         if (vx > 0.0) {
             vx -= 0.035;
@@ -6901,9 +6901,9 @@ void CMayu::UpdatePattern()
             ay = 0.055;
             vy = vy + ay;
         }
-        if (frame > 0x19 && frame < 0x26 && y + vy > 0.0) {
+        if (frame > 25 && frame < 38 && y + vy > 0.0) {
             timer = 0;
-            frame = 0x26;
+            frame = 38;
             y = 0.0;
             StopMoving();
             break;
@@ -6914,31 +6914,31 @@ void CMayu::UpdatePattern()
             frame++;
             m_attackResult = 0;
             if (frame == 9) {
-                x = facing * 0xf + x;
+                x = facing * 15 + x;
             }
-            if (frame == 0xa) {
-                x = facing * 0xf + x;
+            if (frame == 10) {
+                x = facing * 15 + x;
             }
-            if (frame == 0xc) {
-                x = facing * 0xf + x;
+            if (frame == 12) {
+                x = facing * 15 + x;
             }
-            if (frame == 0xd) {
+            if (frame == 13) {
                 if (m_patternVar1 > 1) {
-                    frame = 0xf;
+                    frame = 15;
                     break;
                 }
-                x = facing * 0xf + x;
+                x = facing * 15 + x;
             }
-            if (frame == 0xf && m_patternVar1 < 2) {
+            if (frame == 15 && m_patternVar1 < 2) {
                 frame = 5;
                 m_patternVar1++;
             }
-            if (frame == 0x19) {
+            if (frame == 25) {
                 vy = -4.0;
                 vx = 1.6;
                 m_hitsLeft = 4;
             }
-            if (frame == 0x26) {
+            if (frame == 38) {
                 frame = frame - 4;
             }
             if (frame >= frameCount) {
@@ -6953,31 +6953,31 @@ void CMayu::UpdatePattern()
             vy = 0.0;
             ay = 0.0;
         }
-        m_game->FlashNegative(0xf);
+        m_game->FlashNegative(15);
         if (frame == 0 && timer == 0) {
-            m_freezeTime = 0x78;
-            m_gauge = m_gauge - 0xbb8;
-            FillBackground(0xb0, 3);
+            m_freezeTime = 120;
+            m_gauge = m_gauge - 3000;
+            FillBackground(176, 3);
             effect.type = 0x46;
-            effect.sound = 0x40;
+            effect.sound = 64;
             effect.x = (double)(int)x;
-            effect.y = (double)((int)y - 0x28);
+            effect.y = (double)((int)y - 40);
             effect.scale = 2;
             effect.keep = 1;
             effect.layer = 1;
             m_game->CreateEffect((EffectDesc*)&effect);
             m_hitsLeft = 1;
-            FocusCameraY(0x32, 0x78);
-            m_playSound = 0x25;
+            FocusCameraY(50, 120);
+            m_playSound = 37;
         }
-        if (frame > 0xd && frame < 0x12 && m_attackResult == 3) {
+        if (frame > 13 && frame < 18 && m_attackResult == 3) {
             StartPattern();
             StopMoving();
             (*m_opponent)->StopMoving();
-            (*m_opponent)->m_hitstop = 0xb4;
+            (*m_opponent)->m_hitstop = 180;
             (*m_opponent)->y = 0.0;
             (*m_opponent)->pattern = kHitStandLowHold;
-            (*m_opponent)->x = facing * 0x1e + x;
+            (*m_opponent)->x = facing * 30 + x;
             pattern = k21436Lv3Hit;
             (*m_opponent)->facing = -facing;
             break;
@@ -6988,19 +6988,19 @@ void CMayu::UpdatePattern()
         if (vx < 0.0) {
             vx = 0.0;
         }
-        if (m_attackResult > 0 && frame < 0x12 && frame > 0xd) {
+        if (m_attackResult > 0 && frame < 18 && frame > 13) {
             timer = 0;
-            frame = 0x12;
+            frame = 18;
             break;
         }
         timer++;
         if (timer >= duration) {
             timer = 0;
             frame++;
-            if (frame == 0xe) {
+            if (frame == 14) {
                 vx = 4.5;
             }
-            if (frame == 0x12 && m_patternVar1 < 3) {
+            if (frame == 18 && m_patternVar1 < 3) {
                 m_patternVar1++;
                 frame = frame - 4;
             }
@@ -7012,10 +7012,10 @@ void CMayu::UpdatePattern()
         break;
     case k21436Lv3Hit:
         if (frame == 0 && timer == 0) {
-            m_hitsLeft = 0x63;
+            m_hitsLeft = 99;
         }
-        if ((frame == 5 || frame == 0xa) && timer == 0) {
-            m_playSound = 0x15;
+        if ((frame == 5 || frame == 10) && timer == 0) {
+            m_playSound = 21;
         }
         if (vx > 0.0) {
             vx -= 0.025;
@@ -7027,23 +7027,23 @@ void CMayu::UpdatePattern()
             ay = 0.045;
             vy = vy + ay;
         }
-        if (frame > 0x1b && frame < 0x21 && y + vy > 0.0) {
+        if (frame > 27 && frame < 33 && y + vy > 0.0) {
             timer = 0;
-            frame = 0x21;
+            frame = 33;
             y = 0.0;
             StopMoving();
             break;
         }
-        if (frame > 0x25 && frame < 0x2a && y + vy > 0.0) {
+        if (frame > 37 && frame < 42 && y + vy > 0.0) {
             timer = 0;
-            frame = 0x2a;
+            frame = 42;
             y = 0.0;
             StopMoving();
             break;
         }
-        if (frame > 0x2c && frame < 0x43 && y + vy > 0.0) {
+        if (frame > 44 && frame < 67 && y + vy > 0.0) {
             timer = 0;
-            frame = 0x43;
+            frame = 67;
             y = 0.0;
             StopMoving();
             break;
@@ -7054,50 +7054,50 @@ void CMayu::UpdatePattern()
             frame++;
             m_attackResult = 0;
             if (frame == 9) {
-                x = facing * 0xf + x;
+                x = facing * 15 + x;
             }
-            if (frame == 0xa) {
-                x = facing * 0xf + x;
+            if (frame == 10) {
+                x = facing * 15 + x;
             }
-            if (frame == 0xc) {
-                x = facing * 0xf + x;
+            if (frame == 12) {
+                x = facing * 15 + x;
             }
-            if (frame == 0xd) {
-                x = facing * 0xf + x;
+            if (frame == 13) {
+                x = facing * 15 + x;
             }
-            if (frame == 0xf && m_patternVar1 < 0xa) {
+            if (frame == 15 && m_patternVar1 < 10) {
                 m_patternVar1++;
                 frame = 5;
             }
-            if (frame == 0x13) {
-                x = facing * 0xf + x;
+            if (frame == 19) {
+                x = facing * 15 + x;
             }
-            if (frame == 0x14) {
-                x = facing * 0xf + x;
+            if (frame == 20) {
+                x = facing * 15 + x;
             }
-            if (frame == 0x16) {
-                x = facing * 0xf + x;
+            if (frame == 22) {
+                x = facing * 15 + x;
             }
-            if (frame == 0xf && m_patternVar1 < 8) {
+            if (frame == 15 && m_patternVar1 < 8) {
                 frame = 5;
                 m_patternVar1++;
             }
-            if (frame == 0x1c) {
+            if (frame == 28) {
                 vy = -1.8;
                 vx = 1.5;
                 m_hitsLeft = 1;
             }
-            if (frame == 0x25) {
+            if (frame == 37) {
                 vy = -2.6;
                 vx = 1.5;
                 m_hitsLeft = 1;
             }
-            if (frame == 0x2d) {
+            if (frame == 45) {
                 vy = -4.5;
                 vx = 2.2;
                 m_hitsLeft = 8;
             }
-            if (frame == 0x43) {
+            if (frame == 67) {
                 frame = frame - 4;
             }
             if (frame >= frameCount) {

@@ -13,32 +13,32 @@ CAyu::CAyu(PTR32(CPlayer)* opponent, CGame* game, CGraphics* graphics, CInput* i
     int i;
 
     strcpy(m_name, "ayu");
-    lastSurface = 0x2ca;
+    lastSurface = 714;
     m_patternVar1 = 0;
     m_patternVar2 = 0;
     m_patternVar3 = 0;
     m_encasedBreakOut = 0;
     unk3148 = 0;
     m_shotSpeed = 0;
-    m_pointX[0] = -0x11;
-    m_pointY[0] = -0x33;
-    m_pointX[1] = 0xd;
+    m_pointX[0] = -17;
+    m_pointY[0] = -51;
+    m_pointX[1] = 13;
     m_pointY[1] = 0;
-    m_pointX[2] = 0xc;
-    m_pointY[2] = -0xe;
-    m_pointX[3] = 0x16;
-    m_pointY[3] = -0x13;
-    m_pointX[4] = 0x1b;
-    m_pointY[4] = -0x29;
+    m_pointX[2] = 12;
+    m_pointY[2] = -14;
+    m_pointX[3] = 22;
+    m_pointY[3] = -19;
+    m_pointX[4] = 27;
+    m_pointY[4] = -41;
     m_resultPictures = 4;
     m_rivals[0] = 1;
     m_rivals[2] = 2;
     m_rivals[3] = 3;
     m_rivals[4] = 4;
-    m_rivals[5] = 0xa;
-    m_rivals[6] = 0x10;
+    m_rivals[5] = 10;
+    m_rivals[6] = 16;
     i = 0;
-    for (; i < 0x40; i++) {
+    for (; i < 64; i++) {
         m_objectVar1[i] = 0;
         m_objectVar2[i] = 0;
         m_objectVar3[i] = 0;
@@ -55,18 +55,18 @@ void CAyu::Reset()
     m_encasedBreakOut = 0;
     unk3148 = 0;
     m_shotSpeed = 0;
-    m_pointX[0] = -0x11;
-    m_pointY[0] = -0x33;
-    m_pointX[1] = 0xd;
+    m_pointX[0] = -17;
+    m_pointY[0] = -51;
+    m_pointX[1] = 13;
     m_pointY[1] = 0;
-    m_pointX[2] = 0xc;
-    m_pointY[2] = -0xe;
-    m_pointX[3] = 0x16;
-    m_pointY[3] = -0x13;
-    m_pointX[4] = 0x1b;
-    m_pointY[4] = -0x29;
+    m_pointX[2] = 12;
+    m_pointY[2] = -14;
+    m_pointX[3] = 22;
+    m_pointY[3] = -19;
+    m_pointX[4] = 27;
+    m_pointY[4] = -41;
     i = 0;
-    for (; i < 0x40; i++) {
+    for (; i < 64; i++) {
         m_objectVar1[i] = 0;
         m_objectVar2[i] = 0;
         m_objectVar3[i] = 0;
@@ -118,31 +118,31 @@ void CAyu::StartCommand()
         return;
     }
     if (m_sealLevel < 2) {
-        if (m_hp < 0xd05 && m_command == kCmdA5A4BC && m_gauge >= 0xbb8 && y == 0.0 && m_attackResult != 6 && (m_patterns[pattern].frames[frame].flagsB0 & kStateCancellable) > 0 && m_patterns[pattern].cancelLevel <= m_patterns[kLv4].level) {
+        if (m_hp < 3333 && m_command == kCmdA5A4BC && m_gauge >= 3000 && y == 0.0 && m_attackResult != 6 && (m_patterns[pattern].frames[frame].flagsB0 & kStateCancellable) > 0 && m_patterns[pattern].cancelLevel <= m_patterns[kLv4].level) {
             StartPattern();
             ClearBufferedPress();
             pattern = kLv4;
             return;
         }
-        if (m_command == kCmd641236C && m_gauge >= 0xbb8 && y == 0.0 && (m_patterns[pattern].frames[frame].flagsB0 & kStateCancellable) > 0 && (pattern >= kFirstCharacterAction && m_attackResult >= 2 && m_attackResult != 6 || pattern < kFirstCharacterAction) && m_patterns[pattern].cancelLevel <= m_patterns[k641236C].level) {
+        if (m_command == kCmd641236C && m_gauge >= 3000 && y == 0.0 && (m_patterns[pattern].frames[frame].flagsB0 & kStateCancellable) > 0 && (pattern >= kFirstCharacterAction && m_attackResult >= 2 && m_attackResult != 6 || pattern < kFirstCharacterAction) && m_patterns[pattern].cancelLevel <= m_patterns[k641236C].level) {
             StartPattern();
             ClearBufferedPress();
             pattern = k641236C;
             return;
         }
-        if ((m_command == kCmd641236B || m_command == kCmd641236C) && m_gauge >= 0x7d0 && y == 0.0 && (m_patterns[pattern].frames[frame].flagsB0 & kStateCancellable) > 0 && (pattern >= kFirstCharacterAction && m_attackResult >= 2 && m_attackResult != 6 || pattern < kFirstCharacterAction) && m_patterns[pattern].cancelLevel <= m_patterns[k641236B].level) {
+        if ((m_command == kCmd641236B || m_command == kCmd641236C) && m_gauge >= 2000 && y == 0.0 && (m_patterns[pattern].frames[frame].flagsB0 & kStateCancellable) > 0 && (pattern >= kFirstCharacterAction && m_attackResult >= 2 && m_attackResult != 6 || pattern < kFirstCharacterAction) && m_patterns[pattern].cancelLevel <= m_patterns[k641236B].level) {
             StartPattern();
             ClearBufferedPress();
             pattern = k641236B;
             return;
         }
-        if ((m_command == kCmd641236A || m_command == kCmd641236B || m_command == kCmd641236C) && m_gauge >= 0x3e8 && y == 0.0 && (m_patterns[pattern].frames[frame].flagsB0 & kStateCancellable) > 0 && (pattern >= kFirstCharacterAction && m_attackResult >= 2 && m_attackResult != 6 || pattern < kFirstCharacterAction) && m_patterns[pattern].cancelLevel <= m_patterns[k641236A].level) {
+        if ((m_command == kCmd641236A || m_command == kCmd641236B || m_command == kCmd641236C) && m_gauge >= 1000 && y == 0.0 && (m_patterns[pattern].frames[frame].flagsB0 & kStateCancellable) > 0 && (pattern >= kFirstCharacterAction && m_attackResult >= 2 && m_attackResult != 6 || pattern < kFirstCharacterAction) && m_patterns[pattern].cancelLevel <= m_patterns[k641236A].level) {
             StartPattern();
             ClearBufferedPress();
             pattern = k641236A;
             return;
         }
-        if (m_command == kCmd214214C && m_gauge >= 0xbb8 && (m_patterns[pattern].frames[frame].flagsB0 & kStateCancellable) > 0 && (pattern >= kFirstCharacterAction && m_attackResult >= 2 && m_attackResult != 6 || pattern < kFirstCharacterAction) && m_patterns[pattern].cancelLevel <= m_patterns[k214214C].level) {
+        if (m_command == kCmd214214C && m_gauge >= 3000 && (m_patterns[pattern].frames[frame].flagsB0 & kStateCancellable) > 0 && (pattern >= kFirstCharacterAction && m_attackResult >= 2 && m_attackResult != 6 || pattern < kFirstCharacterAction) && m_patterns[pattern].cancelLevel <= m_patterns[k214214C].level) {
             StartPattern();
             ClearBufferedPress();
             pattern = k214214C;
@@ -151,7 +151,7 @@ void CAyu::StartCommand()
             }
             return;
         }
-        if ((m_command == kCmd214214B || m_command == kCmd214214C) && m_gauge >= 0x7d0 && (m_patterns[pattern].frames[frame].flagsB0 & kStateCancellable) > 0 && (pattern >= kFirstCharacterAction && m_attackResult >= 2 && m_attackResult != 6 || pattern < kFirstCharacterAction) && m_patterns[pattern].cancelLevel <= m_patterns[k214214B].level) {
+        if ((m_command == kCmd214214B || m_command == kCmd214214C) && m_gauge >= 2000 && (m_patterns[pattern].frames[frame].flagsB0 & kStateCancellable) > 0 && (pattern >= kFirstCharacterAction && m_attackResult >= 2 && m_attackResult != 6 || pattern < kFirstCharacterAction) && m_patterns[pattern].cancelLevel <= m_patterns[k214214B].level) {
             StartPattern();
             ClearBufferedPress();
             pattern = k214214B;
@@ -160,7 +160,7 @@ void CAyu::StartCommand()
             }
             return;
         }
-        if ((m_command == kCmd214214A || m_command == kCmd214214B || m_command == kCmd214214C) && m_gauge >= 0x3e8 && (m_patterns[pattern].frames[frame].flagsB0 & kStateCancellable) > 0 && (pattern >= kFirstCharacterAction && m_attackResult >= 2 && m_attackResult != 6 || pattern < kFirstCharacterAction) && m_patterns[pattern].cancelLevel <= m_patterns[k214214A].level) {
+        if ((m_command == kCmd214214A || m_command == kCmd214214B || m_command == kCmd214214C) && m_gauge >= 1000 && (m_patterns[pattern].frames[frame].flagsB0 & kStateCancellable) > 0 && (pattern >= kFirstCharacterAction && m_attackResult >= 2 && m_attackResult != 6 || pattern < kFirstCharacterAction) && m_patterns[pattern].cancelLevel <= m_patterns[k214214A].level) {
             StartPattern();
             ClearBufferedPress();
             pattern = k214214A;
@@ -169,25 +169,25 @@ void CAyu::StartCommand()
             }
             return;
         }
-        if (m_command == kCmd236236C && m_gauge >= 0xbb8 && y == 0.0 && (m_patterns[pattern].frames[frame].flagsB0 & kStateCancellable) > 0 && (pattern >= kFirstCharacterAction && m_attackResult >= 2 && m_attackResult != 6 || pattern < kFirstCharacterAction) && m_patterns[pattern].cancelLevel <= m_patterns[k236236C].level) {
+        if (m_command == kCmd236236C && m_gauge >= 3000 && y == 0.0 && (m_patterns[pattern].frames[frame].flagsB0 & kStateCancellable) > 0 && (pattern >= kFirstCharacterAction && m_attackResult >= 2 && m_attackResult != 6 || pattern < kFirstCharacterAction) && m_patterns[pattern].cancelLevel <= m_patterns[k236236C].level) {
             StartPattern();
             ClearBufferedPress();
             pattern = k236236C;
             return;
         }
-        if ((m_command == kCmd236236B || m_command == kCmd236236C) && m_gauge >= 0x7d0 && y == 0.0 && (m_patterns[pattern].frames[frame].flagsB0 & kStateCancellable) > 0 && (pattern >= kFirstCharacterAction && m_attackResult >= 2 && m_attackResult != 6 || pattern < kFirstCharacterAction) && m_patterns[pattern].cancelLevel <= m_patterns[k236236B].level) {
+        if ((m_command == kCmd236236B || m_command == kCmd236236C) && m_gauge >= 2000 && y == 0.0 && (m_patterns[pattern].frames[frame].flagsB0 & kStateCancellable) > 0 && (pattern >= kFirstCharacterAction && m_attackResult >= 2 && m_attackResult != 6 || pattern < kFirstCharacterAction) && m_patterns[pattern].cancelLevel <= m_patterns[k236236B].level) {
             StartPattern();
             ClearBufferedPress();
             pattern = k236236B;
             return;
         }
-        if ((m_command == kCmd236236A || m_command == kCmd236236B || m_command == kCmd236236C) && m_gauge >= 0x3e8 && y == 0.0 && (m_patterns[pattern].frames[frame].flagsB0 & kStateCancellable) > 0 && (pattern >= kFirstCharacterAction && m_attackResult >= 2 && m_attackResult != 6 || pattern < kFirstCharacterAction) && m_patterns[pattern].cancelLevel <= m_patterns[k236236A].level) {
+        if ((m_command == kCmd236236A || m_command == kCmd236236B || m_command == kCmd236236C) && m_gauge >= 1000 && y == 0.0 && (m_patterns[pattern].frames[frame].flagsB0 & kStateCancellable) > 0 && (pattern >= kFirstCharacterAction && m_attackResult >= 2 && m_attackResult != 6 || pattern < kFirstCharacterAction) && m_patterns[pattern].cancelLevel <= m_patterns[k236236A].level) {
             StartPattern();
             ClearBufferedPress();
             pattern = k236236A;
             return;
         }
-        if (m_command == kCmd641236A && m_gauge >= 0xbb8 && y == 0.0 && (m_patterns[pattern].frames[frame].flagsB0 & kStateCancellable) > 0 && (pattern >= kFirstCharacterAction && m_attackResult >= 2 && m_attackResult != 6 || pattern < kFirstCharacterAction) && m_patterns[pattern].cancelLevel <= m_patterns[k641236A].level) {
+        if (m_command == kCmd641236A && m_gauge >= 3000 && y == 0.0 && (m_patterns[pattern].frames[frame].flagsB0 & kStateCancellable) > 0 && (pattern >= kFirstCharacterAction && m_attackResult >= 2 && m_attackResult != 6 || pattern < kFirstCharacterAction) && m_patterns[pattern].cancelLevel <= m_patterns[k641236A].level) {
             StartPattern();
             ClearBufferedPress();
             pattern = k641236A;
@@ -474,7 +474,7 @@ void CAyu::ReadCommand()
         if ((input & (kInputB | kInputC | kInputD)) != 0 && step == 1) {
             break;
         }
-        if ((input & kInputA) != 0 && step == 0 && m_gauge == 0xbb8) {
+        if ((input & kInputA) != 0 && step == 0 && m_gauge == 3000) {
             step = 1;
         }
     }
@@ -499,7 +499,7 @@ void CAyu::ReadCommand()
         if ((input & kInputDirections) == kInputLeft - (facing == -1) && step == 1) {
             step = 2;
         }
-        if ((input & kInputDirections) == (facing == -1) + 1 && step == 0 && m_gauge >= 0x3e8) {
+        if ((input & kInputDirections) == (facing == -1) + 1 && step == 0 && m_gauge >= 1000) {
             step = 1;
         }
     }
@@ -530,7 +530,7 @@ void CAyu::ReadCommand()
         if ((input & kInputDirections) == 6 - (facing == -1) && step == 1) {
             step = 2;
         }
-        if ((input & kInputDirections) == kInputDown && step == 0 && m_gauge >= 0x3e8) {
+        if ((input & kInputDirections) == kInputDown && step == 0 && m_gauge >= 1000) {
             step = 1;
         }
     }
@@ -561,7 +561,7 @@ void CAyu::ReadCommand()
         if ((input & kInputDirections) == (facing == -1) + 5 && step == 1) {
             step = 2;
         }
-        if ((input & kInputDirections) == kInputDown && step == 0 && m_gauge >= 0x3e8) {
+        if ((input & kInputDirections) == kInputDown && step == 0 && m_gauge >= 1000) {
             step = 1;
         }
     }
@@ -784,17 +784,17 @@ void CAyu::CpuInput()
     m_pressC = 0;
     m_pressD = 0;
     m_recoilGuardWindow = 0;
-    if ((WORD)Random(0, 0x3e8) < 25.0f * m_cpuSkill + (y < 0.0) * 0x1e * m_cpuSkill + (m_cpuAction == 3) * 0x190 + (pattern == kRecoilGuardAir) * 0x12c) {
-        m_recoilGuardWindow = 0x3c;
+    if ((WORD)Random(0, 1000) < 25.0f * m_cpuSkill + (y < 0.0) * 30 * m_cpuSkill + (m_cpuAction == 3) * 400 + (pattern == kRecoilGuardAir) * 300) {
+        m_recoilGuardWindow = 60;
     }
-    if ((WORD)Random(0, 0x7d0) < ((m_throwProtect > 0) * 4.0 + 1.0) * 8.0 * m_cpuSkill * ((pattern > kLastHitReaction && pattern < kAirRecoveryForward) * 0x7d0 + 1)) {
-        m_recoilGuardWindow = 0x3c;
+    if ((WORD)Random(0, 2000) < ((m_throwProtect > 0) * 4.0 + 1.0) * 8.0 * m_cpuSkill * ((pattern > kLastHitReaction && pattern < kAirRecoveryForward) * 2000 + 1)) {
+        m_recoilGuardWindow = 60;
     }
-    if ((WORD)Random(0, 0x3e8) < 4e+01f * m_cpuSkill && pattern > kLastSharedAction) {
-        m_recoilGuardWindow = 0x3c;
+    if ((WORD)Random(0, 1000) < 4e+01f * m_cpuSkill && pattern > kLastSharedAction) {
+        m_recoilGuardWindow = 60;
     }
     if (m_canRecoilCounter == 1 && m_cpuAction == 2) {
-        m_recoilGuardWindow = 0x1e;
+        m_recoilGuardWindow = 30;
         if (pattern < kFirstCharacterAction) {
             m_cpuAction = 0;
         }
@@ -806,14 +806,14 @@ void CAyu::CpuInput()
     dx = ((*m_opponent)->x - x) * facing;
     dy = fabs(y - (*m_opponent)->y);
     if (pattern >= kFirstHitReaction && pattern <= kFirstGuard && timer == 0) {
-        if ((WORD)Random(0, 0x64) < 8.0f * m_cpuSkill) {
+        if ((WORD)Random(0, 100) < 8.0f * m_cpuSkill) {
             m_cpuAction = 3;
         } else {
             m_cpuAction = 0;
         }
-        m_inputX = 1 - (((WORD)Random(0, 0x64) < 0x32) << 1);
-        m_pressD = (WORD)Random(0, 0xf0) < dy;
-        m_pressD = (WORD)Random(0, 0x140) < dx;
+        m_inputX = 1 - (((WORD)Random(0, 100) < 0x32) << 1);
+        m_pressD = (WORD)Random(0, 240) < dy;
+        m_pressD = (WORD)Random(0, 320) < dx;
         if ((*m_opponent)->pattern > kLastSharedAction && (*m_opponent)->pattern < 0xfa && (*m_opponent)->frame < 3 && dy < 100.0 && dx < 150.0) {
             m_pressD = 0;
         }
@@ -827,24 +827,24 @@ void CAyu::CpuInput()
     }
     if (pattern == kRecoilGuardStand && timer < 6) {
         if ((*m_opponent)->pattern != 0xc8 && (*m_opponent)->pattern != 0xcc && (*m_opponent)->pattern < 0xfa && (*m_opponent)->y == 0.0 && (*m_opponent)->m_hitsLeft == 0) {
-            if (dx < 40.0 && (WORD)Random(0, 0x64) < m_cpuSkill * 3.0f) {
+            if (dx < 40.0 && (WORD)Random(0, 100) < m_cpuSkill * 3.0f) {
                 m_pressA = 1;
                 m_inputY = 1;
                 return;
             }
-            if (dx < 60.0 && (WORD)Random(0, 0x64) < m_cpuSkill * 3.0f) {
+            if (dx < 60.0 && (WORD)Random(0, 100) < m_cpuSkill * 3.0f) {
                 m_pressA = 1;
                 m_inputY = 0;
                 return;
             }
         }
         if (((*m_opponent)->pattern == 0xc9 || (*m_opponent)->pattern == 0xca || (*m_opponent)->pattern == 0xcd) && (*m_opponent)->pattern < 0xfa && (*m_opponent)->y == 0.0 && (*m_opponent)->m_hitsLeft == 0) {
-            if (dx > 40.0 && dx < 80.0 && (WORD)Random(0, 0x64) < m_cpuSkill * 3.0f) {
+            if (dx > 40.0 && dx < 80.0 && (WORD)Random(0, 100) < m_cpuSkill * 3.0f) {
                 m_pressB = 1;
                 m_inputY = 0;
                 return;
             }
-            if (dx > 80.0 && dx < 140.0 && (WORD)Random(0, 0x64) < m_cpuSkill * 3.0f) {
+            if (dx > 80.0 && dx < 140.0 && (WORD)Random(0, 100) < m_cpuSkill * 3.0f) {
                 m_pressA = 2;
                 m_inputY = 0;
                 m_inputX = facing;
@@ -854,94 +854,94 @@ void CAyu::CpuInput()
     }
     if (pattern == kRecoilGuardStand || pattern == kRecoilGuardCrouch) {
         if (dx < 100.0) {
-            if ((WORD)Random(0, 0x64) < m_cpuSkill * 3.0f && m_rfGauge > 500.0) {
+            if ((WORD)Random(0, 100) < m_cpuSkill * 3.0f && m_rfGauge > 500.0) {
                 m_command = kCmd214C;
                 return;
             }
-            if ((WORD)Random(0, 0x64) < m_cpuSkill * 3.0f + ((m_rfGauge > 500.0) << 1)) {
+            if ((WORD)Random(0, 100) < m_cpuSkill * 3.0f + ((m_rfGauge > 500.0) << 1)) {
                 m_command = kCmd623C;
                 return;
             }
-            if ((WORD)Random(0, 0x64) < m_cpuSkill * 4.0f && m_gauge >= 0x3e8) {
+            if ((WORD)Random(0, 100) < m_cpuSkill * 4.0f && m_gauge >= 1000) {
                 m_command = (WORD)Random(0, 2) + kCmd641236A;
                 return;
             }
-            if ((WORD)Random(0, 0x64) < m_cpuSkill * 1.0f && m_gauge == 0xbb8) {
+            if ((WORD)Random(0, 100) < m_cpuSkill * 1.0f && m_gauge == 3000) {
                 m_command = kCmdA5A4BC;
                 return;
             }
         }
-        if (dx < 160.0 && (WORD)Random(0, 0x64) < m_cpuSkill * 3.0f && m_rfGauge > 500.0) {
+        if (dx < 160.0 && (WORD)Random(0, 100) < m_cpuSkill * 3.0f && m_rfGauge > 500.0) {
             m_command = kCmd236C;
             return;
         }
-        if (dx < 220.0 && (WORD)Random(0, 0x64) < m_cpuSkill * 2 && m_gauge >= 0x7d0) {
+        if (dx < 220.0 && (WORD)Random(0, 100) < m_cpuSkill * 2 && m_gauge >= 2000) {
             m_command = (WORD)Random(0, 1) + kCmd236236B;
             return;
         }
-        if (dx < 220.0 && (WORD)Random(0, 0x64) < m_cpuSkill * 5.0f && m_rfGauge > 500.0) {
+        if (dx < 220.0 && (WORD)Random(0, 100) < m_cpuSkill * 5.0f && m_rfGauge > 500.0) {
             m_command = kCmd623C;
             return;
         }
     }
     if (pattern == kRecoilGuardAir && frame == 1 && timer == 0) {
-        if ((WORD)Random(0, 0x64) < m_cpuSkill * 5.0f) {
+        if ((WORD)Random(0, 100) < m_cpuSkill * 5.0f) {
             m_cpuAction = 3;
             return;
         }
-        if (y - (*m_opponent)->y > 0.0 && y - (*m_opponent)->y < 40.0 && dx < 80.0 && (WORD)Random(0, 0x64) < m_cpuSkill * 5.0f) {
+        if (y - (*m_opponent)->y > 0.0 && y - (*m_opponent)->y < 40.0 && dx < 80.0 && (WORD)Random(0, 100) < m_cpuSkill * 5.0f) {
             m_pressA = 1;
             return;
         }
-        if (y - (*m_opponent)->y > -30.0 && y - (*m_opponent)->y < 0.0 && dx < 100.0 && (WORD)Random(0, 0x64) < m_cpuSkill * 5.0f) {
+        if (y - (*m_opponent)->y > -30.0 && y - (*m_opponent)->y < 0.0 && dx < 100.0 && (WORD)Random(0, 100) < m_cpuSkill * 5.0f) {
             m_pressB = 1;
             return;
         }
-        if (y - (*m_opponent)->y > -80.0 && y - (*m_opponent)->y < 30.0 && dy > 30.0 && dx < 100.0 && (WORD)Random(0, 0x64) < m_cpuSkill * 5.0f) {
+        if (y - (*m_opponent)->y > -80.0 && y - (*m_opponent)->y < 30.0 && dy > 30.0 && dx < 100.0 && (WORD)Random(0, 100) < m_cpuSkill * 5.0f) {
             m_pressC = 1;
             m_inputY = 0;
             return;
         }
-        if (dy < 50.0 && dx < 100.0 && (WORD)Random(0, 0x64) < m_cpuSkill * 2) {
+        if (dy < 50.0 && dx < 100.0 && (WORD)Random(0, 100) < m_cpuSkill * 2) {
             m_command = kCmd623C;
             return;
         }
     }
-    if (((*m_opponent)->pattern == kRecoilGuardStand || (*m_opponent)->pattern == kRecoilGuardCrouch || (*m_opponent)->pattern == kRecoilGuardAir) && y == 0.0 && (WORD)Random(0, 0x64) < 15.0f * m_cpuSkill && m_cpuAction != 2 && (*m_opponent)->m_freezeTime == 0) {
-        m_cpuRoll = (WORD)Random(0, 0x64);
+    if (((*m_opponent)->pattern == kRecoilGuardStand || (*m_opponent)->pattern == kRecoilGuardCrouch || (*m_opponent)->pattern == kRecoilGuardAir) && y == 0.0 && (WORD)Random(0, 100) < 15.0f * m_cpuSkill && m_cpuAction != 2 && (*m_opponent)->m_freezeTime == 0) {
+        m_cpuRoll = (WORD)Random(0, 100);
         if (m_cpuRoll < 4 && m_rfGauge > 500.0) {
             m_command = kCmd214C;
             return;
         }
-        if (m_cpuRoll < 0xa && m_rfGauge > 500.0) {
+        if (m_cpuRoll < 10 && m_rfGauge > 500.0) {
             m_command = kCmd623A;
             return;
         }
-        if (m_cpuRoll < 0xd && m_rfGauge > 500.0) {
+        if (m_cpuRoll < 13 && m_rfGauge > 500.0) {
             m_command = kCmd623C;
             return;
         }
-        if (m_cpuRoll < 0x11 && m_cpuRoll > 0xc && m_gauge >= 0x3e8) {
-            m_command = (WORD)Random(0, 2) * 0x78;
+        if (m_cpuRoll < 17 && m_cpuRoll > 12 && m_gauge >= 1000) {
+            m_command = (WORD)Random(0, 2) * 120;
             return;
         }
-        if (m_cpuRoll < 0x10 && m_cpuRoll > 0x12 && m_gauge == 0xbb8) {
+        if (m_cpuRoll < 16 && m_cpuRoll > 18 && m_gauge == 3000) {
             m_command = kCmdA5A4BC;
             return;
         }
     }
-    if (((*m_opponent)->pattern == kRecoilGuardStand || (*m_opponent)->pattern == kRecoilGuardCrouch || (*m_opponent)->pattern == kRecoilGuardAir) && y < 0.0 && (WORD)Random(0, 0x64) < 15.0f * m_cpuSkill && m_cpuAction != 2 && (*m_opponent)->m_freezeTime == 0) {
-        m_cpuRoll = (WORD)Random(0, 0x64);
-        if (m_cpuRoll < 0x14) {
+    if (((*m_opponent)->pattern == kRecoilGuardStand || (*m_opponent)->pattern == kRecoilGuardCrouch || (*m_opponent)->pattern == kRecoilGuardAir) && y < 0.0 && (WORD)Random(0, 100) < 15.0f * m_cpuSkill && m_cpuAction != 2 && (*m_opponent)->m_freezeTime == 0) {
+        m_cpuRoll = (WORD)Random(0, 100);
+        if (m_cpuRoll < 20) {
             m_cpuAction = 2;
             return;
         }
-        if (dx < 100.0 && m_cpuRoll < 0x16) {
+        if (dx < 100.0 && m_cpuRoll < 22) {
             m_command = kCmd623C;
             return;
         }
     }
-    if ((m_rfGauge > 500.0 || m_rfBlue > 0) && (WORD)Random(0, 0x64) < 8.0f * m_cpuSkill && (*m_opponent)->pattern > kLastHitReaction && (*m_opponent)->pattern < kAirRecoveryForward && (pattern == k623A || pattern == k623C || pattern == k236A || pattern == k236B || pattern == k236C || pattern == k641236A || pattern == k641236B || pattern == k641236C || pattern == k236236A || pattern == k236236B || pattern == k236236C)) {
+    if ((m_rfGauge > 500.0 || m_rfBlue > 0) && (WORD)Random(0, 100) < 8.0f * m_cpuSkill && (*m_opponent)->pattern > kLastHitReaction && (*m_opponent)->pattern < kAirRecoveryForward && (pattern == k623A || pattern == k623C || pattern == k236A || pattern == k236B || pattern == k236C || pattern == k641236A || pattern == k641236B || pattern == k641236C || pattern == k236236A || pattern == k236236B || pattern == k236236C)) {
         m_command = kCmd22C;
         return;
     }
@@ -977,40 +977,40 @@ void CAyu::CpuInput()
         m_pressB = 1;
         return;
     }
-    if (m_attackResult > 1 && m_hitstop == 0 && (WORD)Random(0, 0x64) < m_cpuSkill * 25.0f && m_cpuAction != 1 && m_cpuAction != 2) {
-        m_cpuRoll = (WORD)Random(0, 0x3e8);
+    if (m_attackResult > 1 && m_hitstop == 0 && (WORD)Random(0, 100) < m_cpuSkill * 25.0f && m_cpuAction != 1 && m_cpuAction != 2) {
+        m_cpuRoll = (WORD)Random(0, 1000);
         if (pattern == k5A) {
-            if ((*m_opponent)->y < 0.0 && m_cpuRoll < 0x12c) {
+            if ((*m_opponent)->y < 0.0 && m_cpuRoll < 300) {
                 m_pressB = 1;
                 m_inputY = 1;
                 return;
             }
-            if (dx < 60.0 && m_cpuRoll < 0x190) {
+            if (dx < 60.0 && m_cpuRoll < 400) {
                 m_pressA = 1;
                 m_inputY = 1;
                 return;
             }
-            if (dx < 80.0 && m_cpuRoll < 0x190) {
+            if (dx < 80.0 && m_cpuRoll < 400) {
                 m_pressA = 1;
                 m_inputY = 0;
-                if (m_attackResult == 2 && (WORD)Random(0, 0x64) < 0x14) {
+                if (m_attackResult == 2 && (WORD)Random(0, 100) < 20) {
                     m_pressC = 1;
                     m_inputY = 1;
                 }
                 return;
             }
-            if (dx < 125.0 && m_cpuRoll > 0x18f && m_cpuRoll < 0x2bc) {
+            if (dx < 125.0 && m_cpuRoll > 399 && m_cpuRoll < 700) {
                 m_pressB = 1;
                 m_inputY = 0;
                 return;
             }
-            if (m_cpuRoll > 0x3b6) {
+            if (m_cpuRoll > 950) {
                 m_cpuAction = 4;
                 m_inputY = -1;
                 m_inputX = (WORD)Random(0, 2) - 1;
                 return;
             }
-            if (m_cpuRoll > 0x2bb) {
+            if (m_cpuRoll > 699) {
                 m_cpuAction = 1;
                 if ((WORD)Random(0, 4) == 0) {
                     m_cpuAction = 5;
@@ -1019,47 +1019,47 @@ void CAyu::CpuInput()
             }
         }
         if (pattern == k5BClose) {
-            if ((*m_opponent)->y < 0.0 && m_cpuRoll < 0x12c && m_attackResult == 3) {
+            if ((*m_opponent)->y < 0.0 && m_cpuRoll < 300 && m_attackResult == 3) {
                 m_command = kCmd623A;
                 return;
             }
-            if ((*m_opponent)->y < 0.0 && m_cpuRoll > 0x12b && m_cpuRoll < 0x258) {
+            if ((*m_opponent)->y < 0.0 && m_cpuRoll > 299 && m_cpuRoll < 600) {
                 m_command = kCmd214B;
                 return;
             }
-            if ((*m_opponent)->y < 0.0 && m_cpuRoll > 0x257 && m_cpuRoll < 0x2bc && dx < 90.0) {
+            if ((*m_opponent)->y < 0.0 && m_cpuRoll > 599 && m_cpuRoll < 700 && dx < 90.0) {
                 m_pressC = 1;
                 m_inputX = facing;
                 return;
             }
-            if (m_cpuRoll < 0xc8) {
+            if (m_cpuRoll < 200) {
                 m_pressC = 1;
                 m_inputY = 1;
                 return;
             }
-            if (m_cpuRoll < 0x1f4 && m_attackResult == 3) {
+            if (m_cpuRoll < 500 && m_attackResult == 3) {
                 m_pressC = 1;
                 m_inputY = 0;
                 return;
             }
-            if (m_cpuRoll < 0x12c && m_attackResult == 2) {
+            if (m_cpuRoll < 300 && m_attackResult == 2) {
                 m_pressB = 1;
                 m_inputY = 0;
                 m_inputX = facing;
                 return;
             }
-            if (m_cpuRoll > 0x12b && m_cpuRoll < 0x1f4) {
+            if (m_cpuRoll > 299 && m_cpuRoll < 500) {
                 m_pressB = 1;
                 m_inputY = 0;
                 return;
             }
-            if (m_cpuRoll > 0x398) {
+            if (m_cpuRoll > 920) {
                 m_cpuAction = 4;
                 m_inputY = -1;
                 m_inputX = (WORD)Random(0, 2) - 1;
                 return;
             }
-            if (m_cpuRoll > 0x1f3) {
+            if (m_cpuRoll > 499) {
                 m_cpuAction = 1;
                 if ((WORD)Random(0, 3) == 0) {
                     m_cpuAction = 5;
@@ -1068,123 +1068,123 @@ void CAyu::CpuInput()
             }
         }
         if (pattern == k5BFar) {
-            if ((*m_opponent)->y < 0.0 && m_cpuRoll < 0xc8 && m_attackResult == 3) {
+            if ((*m_opponent)->y < 0.0 && m_cpuRoll < 200 && m_attackResult == 3) {
                 m_command = kCmd623A;
                 return;
             }
-            if ((*m_opponent)->y < 0.0 && m_cpuRoll > 0xc7 && m_cpuRoll < 0x190) {
+            if ((*m_opponent)->y < 0.0 && m_cpuRoll > 199 && m_cpuRoll < 400) {
                 m_command = kCmd214B;
                 return;
             }
-            if ((*m_opponent)->y < 0.0 && m_cpuRoll > 0x18f && m_cpuRoll < 0x1f4 && m_gauge >= 0x3e8) {
+            if ((*m_opponent)->y < 0.0 && m_cpuRoll > 399 && m_cpuRoll < 500 && m_gauge >= 1000) {
                 m_command = (WORD)Random(0, 2) + kCmd236236A;
                 return;
             }
-            if (m_cpuRoll < (m_attackResult == 3) * 0xc8 + 0xc8) {
+            if (m_cpuRoll < (m_attackResult == 3) * 200 + 200) {
                 m_pressC = 1;
                 m_inputY = 1;
                 return;
             }
-            if (m_cpuRoll < 0x1f4 && m_attackResult == 3 && dx < 100.0) {
+            if (m_cpuRoll < 500 && m_attackResult == 3 && dx < 100.0) {
                 m_pressC = 1;
                 m_inputY = 0;
                 return;
             }
-            if (m_cpuRoll > 0x1f3 && m_cpuRoll < 0x226 && m_rfGauge > 500.0) {
+            if (m_cpuRoll > 499 && m_cpuRoll < 550 && m_rfGauge > 500.0) {
                 m_command = kCmd236A;
                 return;
             }
-            if (m_cpuRoll > 0x225 && m_cpuRoll < 0x258) {
+            if (m_cpuRoll > 549 && m_cpuRoll < 600) {
                 m_command = kCmd214A;
                 return;
             }
-            if (m_cpuRoll > 0x257 && m_cpuRoll < 0x28a) {
+            if (m_cpuRoll > 599 && m_cpuRoll < 650) {
                 m_command = kCmd214B;
                 return;
             }
-            if (m_cpuRoll > 0x3b6) {
+            if (m_cpuRoll > 950) {
                 m_cpuAction = 4;
                 m_inputY = -1;
                 m_inputX = (WORD)Random(0, 2) - 1;
                 return;
             }
-            if (m_cpuRoll > 0x289) {
+            if (m_cpuRoll > 649) {
                 m_cpuAction = 1;
                 return;
             }
         }
         if (pattern == k5C) {
-            if ((*m_opponent)->y < 0.0 && m_cpuRoll < 0xc8 && m_attackResult == 3) {
+            if ((*m_opponent)->y < 0.0 && m_cpuRoll < 200 && m_attackResult == 3) {
                 m_command = kCmd623A;
                 return;
             }
-            if (m_cpuRoll > 0 && m_cpuRoll < (m_attackResult == 3) * 0xc8 + 0x64 && (m_rfGauge > 500.0 || m_attackResult == 3)) {
+            if (m_cpuRoll > 0 && m_cpuRoll < (m_attackResult == 3) * 200 + 100 && (m_rfGauge > 500.0 || m_attackResult == 3)) {
                 m_command = kCmd236A;
                 return;
             }
-            if (m_cpuRoll > 0x64 && m_cpuRoll < 0x96) {
+            if (m_cpuRoll > 100 && m_cpuRoll < 150) {
                 m_command = kCmd214A;
                 return;
             }
-            if (m_cpuRoll > 0x96 && m_cpuRoll < 0xc8) {
+            if (m_cpuRoll > 150 && m_cpuRoll < 200) {
                 m_command = kCmd214B;
                 return;
             }
-            if (m_cpuRoll > 0xc8 && m_cpuRoll < 0xfa && m_rfGauge > 500.0) {
+            if (m_cpuRoll > 200 && m_cpuRoll < 250 && m_rfGauge > 500.0) {
                 m_command = kCmd22C;
                 return;
             }
-            if (m_cpuRoll > 0xfa && m_cpuRoll < 0x190 && m_attackResult == 3 && m_gauge >= 0x3e8) {
+            if (m_cpuRoll > 250 && m_cpuRoll < 400 && m_attackResult == 3 && m_gauge >= 1000) {
                 m_command = (WORD)Random(0, 2) + kCmd236236A;
                 return;
             }
-            if (m_cpuRoll > 0x190 && m_cpuRoll < 0x1cc && m_gauge >= 0x3e8) {
+            if (m_cpuRoll > 400 && m_cpuRoll < 460 && m_gauge >= 1000) {
                 m_command = (WORD)Random(0, 2) + kCmd214214A;
                 return;
             }
-            if (m_cpuRoll > 0x38e) {
+            if (m_cpuRoll > 910) {
                 m_cpuAction = 4;
                 m_inputY = -1;
                 m_inputX = (WORD)Random(0, 2) - 1;
                 return;
             }
-            if (m_cpuRoll > 0x289) {
+            if (m_cpuRoll > 649) {
                 m_cpuAction = 1;
                 return;
             }
         }
         if (pattern == k2A) {
-            if ((*m_opponent)->y < 0.0 && m_cpuRoll < 0x12c) {
+            if ((*m_opponent)->y < 0.0 && m_cpuRoll < 300) {
                 m_pressB = 1;
                 m_inputY = 1;
                 return;
             }
-            if (dx < 60.0 && m_cpuRoll < 0x190) {
+            if (dx < 60.0 && m_cpuRoll < 400) {
                 m_pressA = 1;
                 m_inputY = 1;
                 return;
             }
-            if (dx < 80.0 && m_cpuRoll < 0x190) {
+            if (dx < 80.0 && m_cpuRoll < 400) {
                 m_pressA = 1;
                 m_inputY = 0;
-                if (m_attackResult == 2 && (WORD)Random(0, 0x64) < 0x14) {
+                if (m_attackResult == 2 && (WORD)Random(0, 100) < 20) {
                     m_pressC = 1;
                     m_inputY = 1;
                 }
                 return;
             }
-            if (dx < 125.0 && m_cpuRoll > 0x18f && m_cpuRoll < 0x2bc) {
+            if (dx < 125.0 && m_cpuRoll > 399 && m_cpuRoll < 700) {
                 m_pressB = 1;
                 m_inputY = 0;
                 return;
             }
-            if (m_cpuRoll > 0x3b6) {
+            if (m_cpuRoll > 950) {
                 m_cpuAction = 4;
                 m_inputY = -1;
                 m_inputX = (WORD)Random(0, 2) - 1;
                 return;
             }
-            if (m_cpuRoll > 0x2bb) {
+            if (m_cpuRoll > 699) {
                 m_cpuAction = 1;
                 if ((WORD)Random(0, 4) == 0) {
                     m_cpuAction = 5;
@@ -1193,100 +1193,100 @@ void CAyu::CpuInput()
             }
         }
         if (pattern == k2B) {
-            if ((*m_opponent)->y < 0.0 && m_cpuRoll < 0xc8 && m_attackResult == 3) {
+            if ((*m_opponent)->y < 0.0 && m_cpuRoll < 200 && m_attackResult == 3) {
                 m_command = kCmd623A;
                 return;
             }
-            if ((*m_opponent)->y < 0.0 && m_cpuRoll > 0xc7 && m_cpuRoll < 0x190) {
+            if ((*m_opponent)->y < 0.0 && m_cpuRoll > 199 && m_cpuRoll < 400) {
                 m_command = kCmd214B;
                 return;
             }
-            if ((*m_opponent)->y < 0.0 && m_cpuRoll > 0x18f && m_cpuRoll < 0x1f4 && m_gauge >= 0x3e8) {
+            if ((*m_opponent)->y < 0.0 && m_cpuRoll > 399 && m_cpuRoll < 500 && m_gauge >= 1000) {
                 m_command = (WORD)Random(0, 2) + kCmd236236A;
                 return;
             }
-            if (m_cpuRoll < (m_attackResult == 3) * 0xc8 + 0xc8) {
+            if (m_cpuRoll < (m_attackResult == 3) * 200 + 200) {
                 m_pressC = 1;
                 m_inputY = 1;
                 return;
             }
-            if (m_cpuRoll < 0x1f4 && m_attackResult == 3 && dx < 100.0) {
+            if (m_cpuRoll < 500 && m_attackResult == 3 && dx < 100.0) {
                 m_pressC = 1;
                 m_inputY = 0;
                 return;
             }
-            if (m_cpuRoll > 0x1f3 && m_cpuRoll < 0x226 && m_rfGauge > 500.0) {
+            if (m_cpuRoll > 499 && m_cpuRoll < 550 && m_rfGauge > 500.0) {
                 m_command = kCmd236A;
                 return;
             }
-            if (m_cpuRoll > 0x225 && m_cpuRoll < 0x258) {
+            if (m_cpuRoll > 549 && m_cpuRoll < 600) {
                 m_command = kCmd214A;
                 return;
             }
-            if (m_cpuRoll > 0x257 && m_cpuRoll < 0x28a) {
+            if (m_cpuRoll > 599 && m_cpuRoll < 650) {
                 m_command = kCmd214B;
                 return;
             }
-            if (m_cpuRoll > 0x3b6) {
+            if (m_cpuRoll > 950) {
                 m_cpuAction = 4;
                 m_inputY = -1;
                 m_inputX = (WORD)Random(0, 2) - 1;
                 return;
             }
-            if (m_cpuRoll > 0x289) {
+            if (m_cpuRoll > 649) {
                 m_cpuAction = 1;
                 return;
             }
         }
         if (pattern == k2C) {
-            if ((*m_opponent)->y < 0.0 && m_cpuRoll < 0xc8 && m_attackResult == 3) {
+            if ((*m_opponent)->y < 0.0 && m_cpuRoll < 200 && m_attackResult == 3) {
                 m_command = kCmd623A;
                 return;
             }
-            if (m_cpuRoll > 0 && m_cpuRoll < (m_attackResult == 3) * 0xc8 + 0x64 && (m_rfGauge > 500.0 || m_attackResult == 3)) {
+            if (m_cpuRoll > 0 && m_cpuRoll < (m_attackResult == 3) * 200 + 100 && (m_rfGauge > 500.0 || m_attackResult == 3)) {
                 m_command = kCmd236A;
                 return;
             }
-            if (m_cpuRoll > 0x64 && m_cpuRoll < 0x96) {
+            if (m_cpuRoll > 100 && m_cpuRoll < 150) {
                 m_command = kCmd214A;
                 return;
             }
-            if (m_cpuRoll > 0x96 && m_cpuRoll < 0xc8) {
+            if (m_cpuRoll > 150 && m_cpuRoll < 200) {
                 m_command = kCmd214B;
                 return;
             }
-            if (m_cpuRoll > 0xc8 && m_cpuRoll < 0xfa && m_rfGauge > 500.0) {
+            if (m_cpuRoll > 200 && m_cpuRoll < 250 && m_rfGauge > 500.0) {
                 m_command = kCmd22C;
                 return;
             }
-            if (m_cpuRoll > 0xfa && m_cpuRoll < 0x190 && m_attackResult == 3 && m_gauge >= 0x3e8) {
+            if (m_cpuRoll > 250 && m_cpuRoll < 400 && m_attackResult == 3 && m_gauge >= 1000) {
                 m_command = (WORD)Random(0, 2) + kCmd236236A;
                 return;
             }
-            if (m_cpuRoll > 0x190 && m_cpuRoll < 0x1cc && m_gauge >= 0x3e8) {
+            if (m_cpuRoll > 400 && m_cpuRoll < 460 && m_gauge >= 1000) {
                 m_command = (WORD)Random(0, 2) + kCmd214214A;
                 return;
             }
-            if (m_cpuRoll > 0x289) {
+            if (m_cpuRoll > 649) {
                 m_cpuAction = 1;
                 return;
             }
         }
         if (pattern == kJumpA) {
-            if ((*m_opponent)->y < 0.0 && m_cpuRoll < 0x12c) {
+            if ((*m_opponent)->y < 0.0 && m_cpuRoll < 300) {
                 m_pressB = 1;
                 return;
             }
-            if (dx < 60.0 && m_cpuRoll < 0x190) {
+            if (dx < 60.0 && m_cpuRoll < 400) {
                 m_pressA = 1;
                 return;
             }
-            if (dx < 125.0 && m_cpuRoll > 0x18f && m_cpuRoll < 0x2bc) {
+            if (dx < 125.0 && m_cpuRoll > 399 && m_cpuRoll < 700) {
                 m_pressC = 1;
                 m_inputY = 0;
                 return;
             }
-            if (m_cpuRoll > 0x2bb) {
+            if (m_cpuRoll > 699) {
                 m_cpuAction = 1;
                 if ((WORD)Random(0, 4) == 0) {
                     m_cpuAction = 3;
@@ -1295,38 +1295,38 @@ void CAyu::CpuInput()
             }
         }
         if (pattern == kJumpB) {
-            if (m_cpuRoll < 0x14 && m_attackResult == 3 && (*m_opponent)->y < 0.0) {
+            if (m_cpuRoll < 20 && m_attackResult == 3 && (*m_opponent)->y < 0.0) {
                 m_command = kCmd623A;
                 return;
             }
-            if (m_cpuRoll > 0x14 && m_cpuRoll < 0x32 && m_attackResult == 3 && (*m_opponent)->y < 0.0) {
+            if (m_cpuRoll > 20 && m_cpuRoll < 50 && m_attackResult == 3 && (*m_opponent)->y < 0.0) {
                 m_command = kCmd214B;
                 return;
             }
-            if (m_cpuRoll > 0x32 && m_cpuRoll < 0x3c && m_gauge >= 0x3e8 && (*m_opponent)->y < 0.0) {
+            if (m_cpuRoll > 50 && m_cpuRoll < 60 && m_gauge >= 1000 && (*m_opponent)->y < 0.0) {
                 m_command = (WORD)Random(0, 2) + kCmd214214A;
                 return;
             }
-            if (m_cpuRoll > 0x3c && m_cpuRoll < 0x12c) {
+            if (m_cpuRoll > 60 && m_cpuRoll < 300) {
                 m_pressC = 1;
                 return;
             }
-            if (m_cpuRoll > 0x3b6) {
+            if (m_cpuRoll > 950) {
                 m_inputX = (WORD)Random(0, 2) - 1;
                 return;
             }
-            if (m_cpuRoll > 0x289) {
+            if (m_cpuRoll > 649) {
                 m_cpuAction = 3;
                 return;
             }
         }
-        if (pattern == kJumpC && m_cpuRoll > 0x289) {
+        if (pattern == kJumpC && m_cpuRoll > 649) {
             m_cpuAction = 3;
             return;
         }
     }
-    if ((WORD)Random(0, 0x64) < 25.0f * m_cpuSkill) {
-        m_cpuRoll = (WORD)Random(0, 0x3e8);
+    if ((WORD)Random(0, 100) < 25.0f * m_cpuSkill) {
+        m_cpuRoll = (WORD)Random(0, 1000);
         if (y == 0.0) {
             if ((*m_opponent)->y == 0.0 && (*m_opponent)->pattern != kLyingDown) {
                 if (dx < 40.0 && (*m_opponent)->y == 0.0 && m_cpuRoll < 5) {
@@ -1335,41 +1335,41 @@ void CAyu::CpuInput()
                     m_inputY = 0;
                     return;
                 }
-                if (dx < 45.0 && m_cpuRoll < 0x14) {
+                if (dx < 45.0 && m_cpuRoll < 20) {
                     m_pressA = 1;
                     m_inputY = 1;
                     return;
                 }
-                if (dx < 60.0 && m_cpuRoll < 0x1e) {
+                if (dx < 60.0 && m_cpuRoll < 30) {
                     m_pressA = 1;
                     m_inputY = 0;
                     return;
                 }
-                if (dx < 140.0 && dx > 100.0 && m_cpuRoll < 0xf) {
+                if (dx < 140.0 && dx > 100.0 && m_cpuRoll < 15) {
                     m_pressB = 1;
                     m_inputY = 1;
                     return;
                 }
-                if (dx < 120.0 && m_cpuRoll < 0x14) {
+                if (dx < 120.0 && m_cpuRoll < 20) {
                     m_pressB = 1;
                     m_inputY = 0;
                     return;
                 }
-                if (dx < 120.0 && dx > 80.0 && m_cpuRoll < 0x28 && m_cpuRoll > 0x25) {
+                if (dx < 120.0 && dx > 80.0 && m_cpuRoll < 40 && m_cpuRoll > 37) {
                     m_pressC = 1;
                     m_inputY = 1;
                     return;
                 }
-                if (dx < 100.0 && dx > 80.0 && m_cpuRoll < 0x25) {
+                if (dx < 100.0 && dx > 80.0 && m_cpuRoll < 37) {
                     m_pressC = 1;
                     m_inputY = 1;
                     return;
                 }
-                if (dx < 150.0 && dx > 80.0 && m_cpuRoll < 0x2a && m_cpuRoll > 0x28) {
+                if (dx < 150.0 && dx > 80.0 && m_cpuRoll < 42 && m_cpuRoll > 40) {
                     m_command = kCmd214A;
                     return;
                 }
-                if (m_cpuRoll < 0x2a && m_cpuRoll > 0x2f) {
+                if (m_cpuRoll < 42 && m_cpuRoll > 47) {
                     m_command = facing;
                     m_cpuAction = 5;
                     return;
@@ -1377,17 +1377,17 @@ void CAyu::CpuInput()
             }
             if ((*m_opponent)->y < 0.0) {
                 if ((*m_opponent)->vy < 0.0) {
-                    if (dx < 80.0 && dy < 120.0 && m_cpuRoll < 0xa) {
+                    if (dx < 80.0 && dy < 120.0 && m_cpuRoll < 10) {
                         m_inputY = -1;
                         m_inputX = -facing;
                         return;
                     }
-                    if (dx < 120.0 && dy < 100.0 && m_cpuRoll < 0xf) {
+                    if (dx < 120.0 && dy < 100.0 && m_cpuRoll < 15) {
                         m_pressB = 1;
                         m_inputY = 1;
                         return;
                     }
-                    if (dx < 80.0 && dy < 120.0 && m_cpuRoll < 0x11 && m_gauge >= 0x7d0) {
+                    if (dx < 80.0 && dy < 120.0 && m_cpuRoll < 17 && m_gauge >= 2000) {
                         m_command = (WORD)Random(0, 1) + kCmd641236B;
                         return;
                     }
@@ -1399,12 +1399,12 @@ void CAyu::CpuInput()
                             return;
                         }
                     }
-                    if (dx < 140.0 && dx > 80.0 && dy < 120.0 && dy > 80.0 && m_cpuRoll < 0xf) {
+                    if (dx < 140.0 && dx > 80.0 && dy < 120.0 && dy > 80.0 && m_cpuRoll < 15) {
                         m_pressB = 1;
                         m_inputY = 1;
                         return;
                     }
-                    if (dx < 120.0 && dy < 150.0 && m_cpuRoll < 0x11 && m_gauge >= 0x7d0) {
+                    if (dx < 120.0 && dy < 150.0 && m_cpuRoll < 17 && m_gauge >= 2000) {
                         m_command = (WORD)Random(0, 1) + kCmd641236B;
                         return;
                     }
@@ -1414,16 +1414,16 @@ void CAyu::CpuInput()
         if (y < 0.0 && m_cpuAction != 3) {
             if ((*m_opponent)->y == 0.0) {
                 if (dx < 70.0 && dy < 100.0) {
-                    if (m_cpuRoll < ((*m_opponent)->y == 0.0) * 0x64 + 0x64) {
+                    if (m_cpuRoll < ((*m_opponent)->y == 0.0) * 100 + 100) {
                         m_pressB = 1;
                         return;
                     }
                 }
-                if (dx < 80.0 && dy > 60.0 && dy < 80.0 && vy > 0.0 && (*m_opponent)->y > y && m_cpuRoll > 0xc8 && m_cpuRoll < 0xdc) {
+                if (dx < 80.0 && dy > 60.0 && dy < 80.0 && vy > 0.0 && (*m_opponent)->y > y && m_cpuRoll > 200 && m_cpuRoll < 220) {
                     m_pressC = 1;
                     return;
                 }
-                if (dx < 80.0 && dy > 140.0 && (*m_opponent)->y > y && m_cpuRoll < 0xa) {
+                if (dx < 80.0 && dy > 140.0 && (*m_opponent)->y > y && m_cpuRoll < 10) {
                     m_pressC = 1;
                     m_inputY = 1;
                     m_inputX = 0;
@@ -1432,20 +1432,20 @@ void CAyu::CpuInput()
             }
             if ((*m_opponent)->y < 0.0) {
                 if (dx < 80.0 && dy < 80.0 && (*m_opponent)->y < y) {
-                    if (m_cpuRoll < (m_rfGauge > 500.0 || m_rfBlue > 0) * 0x14 + 6) {
+                    if (m_cpuRoll < (m_rfGauge > 500.0 || m_rfBlue > 0) * 20 + 6) {
                         m_command = kCmd623A;
                         return;
                     }
                 }
-                if (dx < 140.0 && dy > 60.0 && m_cpuRoll < 0x6e) {
+                if (dx < 140.0 && dy > 60.0 && m_cpuRoll < 110) {
                     m_pressB = 1;
                     return;
                 }
-                if (dx < 120.0 && dy < 90.0 && (*m_opponent)->y > y && m_cpuRoll < 0x78) {
+                if (dx < 120.0 && dy < 90.0 && (*m_opponent)->y > y && m_cpuRoll < 120) {
                     m_pressC = 1;
                     return;
                 }
-                if (dx < 80.0 && dy > 140.0 && (*m_opponent)->y > y && m_cpuRoll < 0x82) {
+                if (dx < 80.0 && dy > 140.0 && (*m_opponent)->y > y && m_cpuRoll < 130) {
                     m_pressC = 1;
                     m_inputY = 1;
                     m_inputX = 0;
@@ -1454,28 +1454,28 @@ void CAyu::CpuInput()
             }
         }
     }
-    if (pattern < kFirstHitReaction && ((*m_opponent)->pattern > kLastHitReaction && (*m_opponent)->pattern < kGuardAir || (*m_opponent)->pattern > kLastFreeAction && (*m_opponent)->pattern < kHitAir) && y == 0.0 && (WORD)Random(0, 0x64) < 1.0f * m_cpuSkill) {
+    if (pattern < kFirstHitReaction && ((*m_opponent)->pattern > kLastHitReaction && (*m_opponent)->pattern < kGuardAir || (*m_opponent)->pattern > kLastFreeAction && (*m_opponent)->pattern < kHitAir) && y == 0.0 && (WORD)Random(0, 100) < 1.0f * m_cpuSkill) {
         if (dx < 100.0) {
             m_command = facing == 1;
         }
         return;
     }
-    if ((WORD)Random(0, 0x3e8) < 2) {
+    if ((WORD)Random(0, 1000) < 2) {
         m_cpuAction = 4;
         return;
     }
-    if ((WORD)Random(0, 0x64) < 2) {
-        if ((WORD)Random(0, 0x64) < 8.0f * m_cpuSkill) {
+    if ((WORD)Random(0, 100) < 2) {
+        if ((WORD)Random(0, 100) < 8.0f * m_cpuSkill) {
             m_cpuAction = 3;
         } else {
             m_cpuAction = 0;
         }
-        if (dx > 240.0 && y == 0.0 && (WORD)Random(0, 0x64) < 2) {
+        if (dx > 240.0 && y == 0.0 && (WORD)Random(0, 100) < 2) {
             m_inputX = 0;
             m_inputY = -1;
             return;
         }
-        if (dx < 80.0 && y == 0.0 && (WORD)Random(0, 0x64) < 2) {
+        if (dx < 80.0 && y == 0.0 && (WORD)Random(0, 100) < 2) {
             m_inputX = 0;
             m_inputY = -1;
             return;
@@ -1487,39 +1487,39 @@ void CAyu::CpuInput()
         }
     }
     if (m_cpuWalkRight > 0) {
-        if ((char)AtScreenEdge() != 0 && m_cpuWalkRight > 0xf) {
-            m_cpuWalkRight = 0xf;
+        if ((char)AtScreenEdge() != 0 && m_cpuWalkRight > 15) {
+            m_cpuWalkRight = 15;
         }
         m_inputX = 1;
         return;
     }
     if (m_cpuWalkLeft > 0) {
-        if ((char)AtScreenEdge() != 0 && m_cpuWalkLeft > 0xf) {
-            m_cpuWalkLeft = 0xf;
+        if ((char)AtScreenEdge() != 0 && m_cpuWalkLeft > 15) {
+            m_cpuWalkLeft = 15;
         }
         m_inputX = -1;
         return;
     }
-    if ((WORD)Random(0, 0x64) < 0x28 && dx < 60.0) {
+    if ((WORD)Random(0, 100) < 40 && dx < 60.0) {
         if (facing == 1) {
-            m_cpuWalkLeft = (WORD)Random(0, 0xc8) + 0x1e;
+            m_cpuWalkLeft = (WORD)Random(0, 200) + 30;
         } else {
-            m_cpuWalkRight = (WORD)Random(0, 0xc8) + 0x1e;
+            m_cpuWalkRight = (WORD)Random(0, 200) + 30;
         }
     }
-    if ((WORD)Random(0, 0x64) < 0x50) {
+    if ((WORD)Random(0, 100) < 80) {
         if (facing == 1) {
-            m_cpuWalkRight = (WORD)Random(0, 0xc8) + 0x1e;
+            m_cpuWalkRight = (WORD)Random(0, 200) + 30;
         } else {
-            m_cpuWalkLeft = (WORD)Random(0, 0xc8) + 0x1e;
+            m_cpuWalkLeft = (WORD)Random(0, 200) + 30;
         }
         return;
     }
     if (facing == -1) {
-        m_cpuWalkRight = (WORD)Random(0, 0xc8) + 0x1e;
+        m_cpuWalkRight = (WORD)Random(0, 200) + 30;
         return;
     }
-    m_cpuWalkLeft = (WORD)Random(0, 0xc8) + 0x1e;
+    m_cpuWalkLeft = (WORD)Random(0, 200) + 30;
 }
 
 void CAyu::UpdateObjects()
@@ -1628,7 +1628,7 @@ void CAyu::UpdateObjects()
             case kObj214214AShot:
                 m_objects[slot].vy = 0.0;
                 if (m_objects[slot].frame == 0 && m_objects[slot].timer == 0) {
-                    m_objects[slot].hitsLeft = 0x63;
+                    m_objects[slot].hitsLeft = 99;
                     m_objects[slot].vx = 3.0;
                 }
                 m_objects[slot].vx -= 0.05;
@@ -1638,7 +1638,7 @@ void CAyu::UpdateObjects()
                 m_objects[slot].timer++;
                 if (m_objects[slot].timer >= duration) {
                     m_objects[slot].timer = 0;
-                    if (m_objects[slot].frame == 6 || m_objects[slot].frame == 0xc || m_objects[slot].frame == 0x12) {
+                    if (m_objects[slot].frame == 6 || m_objects[slot].frame == 12 || m_objects[slot].frame == 18) {
                         m_objects[slot].attackResult = 0;
                     }
                     m_objects[slot].frame++;
@@ -1654,14 +1654,14 @@ void CAyu::UpdateObjects()
                 break;
             case kObj641236Burst2:
                 if (pattern == k641236B || pattern == k641236C) {
-                    m_objects[slot].x = m_objects[slot].facing * 0xa + x + 0.0;
+                    m_objects[slot].x = m_objects[slot].facing * 10 + x + 0.0;
                 }
                 m_objects[slot].timer++;
                 if (m_objects[slot].timer >= duration) {
                     m_objects[slot].timer = 0;
                     m_objects[slot].frame++;
                     m_objects[slot].attackResult = 0;
-                    if (m_objects[slot].frame == 7 && (pattern == k641236B && frame < 0xd || pattern == k641236C && frame < 0x1d)) {
+                    if (m_objects[slot].frame == 7 && (pattern == k641236B && frame < 13 || pattern == k641236C && frame < 29)) {
                         m_objects[slot].frame = m_objects[slot].frame - 2;
                     }
                     if (m_objects[slot].frame >= frameCount) {
@@ -1671,14 +1671,14 @@ void CAyu::UpdateObjects()
                 break;
             case kObj641236Burst3:
                 if (pattern == k641236C) {
-                    m_objects[slot].x = m_objects[slot].facing * 0xa + x + 0.0;
+                    m_objects[slot].x = m_objects[slot].facing * 10 + x + 0.0;
                 }
                 m_objects[slot].timer++;
                 if (m_objects[slot].timer >= duration) {
                     m_objects[slot].timer = 0;
                     m_objects[slot].frame++;
                     m_objects[slot].attackResult = 0;
-                    if (m_objects[slot].frame == 7 && frame < 0x2d && pattern == k641236C) {
+                    if (m_objects[slot].frame == 7 && frame < 45 && pattern == k641236C) {
                         m_objects[slot].frame = m_objects[slot].frame - 2;
                     }
                     if (m_objects[slot].frame >= frameCount) {
@@ -1832,7 +1832,7 @@ void CAyu::UpdateObjects()
                     RemoveObject(slot);
                     break;
                 }
-                if (m_objects[slot].frame == 0xc && m_objects[slot].timer == 0) {
+                if (m_objects[slot].frame == 12 && m_objects[slot].timer == 0) {
                     effect.type = kObjLv4Burst;
                     effect.x = m_objects[slot].x;
                     effect.y = m_objects[slot].y;
@@ -1869,10 +1869,10 @@ void CAyu::UpdateObjects()
                 if (m_objectVar1[slot] == 0) {
                     m_objects[slot].hitsLeft = 1;
                     m_objectVar1[slot]++;
-                    m_objects[slot].vx = (WORD)Random(0, 0x64) * 0.01 + 2.5;
-                    m_objects[slot].ay = (WORD)Random(0, 0x64) * 0.00015;
+                    m_objects[slot].vx = (WORD)Random(0, 100) * 0.01 + 2.5;
+                    m_objects[slot].ay = (WORD)Random(0, 100) * 0.00015;
                     m_objects[slot].vy = 0.5;
-                    m_objects[slot].frame = Random(0, 0xf);
+                    m_objects[slot].frame = Random(0, 15);
                 }
                 m_objects[slot].vy = m_objects[slot].vy - m_objects[slot].ay;
                 m_objects[slot].timer++;
@@ -1893,10 +1893,10 @@ void CAyu::UpdateObjects()
                 if (m_objectVar1[slot] == 0) {
                     m_objects[slot].hitsLeft = 1;
                     m_objectVar1[slot]++;
-                    m_objects[slot].vx = (WORD)Random(0, 0x64) * 0.01 + 1.0;
-                    m_objects[slot].ay = (WORD)Random(0, 0x64) * 0.0002;
+                    m_objects[slot].vx = (WORD)Random(0, 100) * 0.01 + 1.0;
+                    m_objects[slot].ay = (WORD)Random(0, 100) * 0.0002;
                     m_objects[slot].vy = 0.5;
-                    m_objects[slot].frame = Random(0, 0xf);
+                    m_objects[slot].frame = Random(0, 15);
                 }
                 m_objects[slot].vy = m_objects[slot].vy - m_objects[slot].ay;
                 m_objects[slot].timer++;
@@ -1914,10 +1914,10 @@ void CAyu::UpdateObjects()
                 }
                 break;
             case kObj236236Front:
-                m_objects[slot].x = facing * 0x44 + x;
+                m_objects[slot].x = facing * 68 + x;
                 m_objects[slot].y = y - 63.0;
                 if (pattern == k236236C) {
-                    m_objects[slot].x = facing * 0x5c + x;
+                    m_objects[slot].x = facing * 92 + x;
                 }
                 if ((pattern == k236236A || pattern == k236236B || pattern == k236236C) && m_hitstop > 0) {
                     m_objects[slot].timer--;
@@ -1935,7 +1935,7 @@ void CAyu::UpdateObjects()
             case kObj214214BShot:
                 m_objects[slot].vy = 0.0;
                 if (m_objects[slot].frame == 0 && m_objects[slot].timer == 0) {
-                    m_objects[slot].hitsLeft = 0x63;
+                    m_objects[slot].hitsLeft = 99;
                     m_objects[slot].vx = 3.3;
                 }
                 m_objects[slot].vx -= 0.04;
@@ -1945,7 +1945,7 @@ void CAyu::UpdateObjects()
                 m_objects[slot].timer++;
                 if (m_objects[slot].timer >= duration) {
                     m_objects[slot].timer = 0;
-                    if (m_objects[slot].frame == 6 || m_objects[slot].frame == 0xc || m_objects[slot].frame == 0x12) {
+                    if (m_objects[slot].frame == 6 || m_objects[slot].frame == 12 || m_objects[slot].frame == 18) {
                         m_objects[slot].attackResult = 0;
                     }
                     m_objects[slot].frame++;
@@ -1962,7 +1962,7 @@ void CAyu::UpdateObjects()
             case kObj214214CShot:
                 m_objects[slot].vy = 0.0;
                 if (m_objects[slot].frame == 0 && m_objects[slot].timer == 0) {
-                    m_objects[slot].hitsLeft = 0x63;
+                    m_objects[slot].hitsLeft = 99;
                     m_objects[slot].vx = m_shotSpeed * 0.1;
                 }
                 m_objects[slot].vx -= 0.05;
@@ -1972,7 +1972,7 @@ void CAyu::UpdateObjects()
                 m_objects[slot].timer++;
                 if (m_objects[slot].timer >= duration) {
                     m_objects[slot].timer = 0;
-                    if (m_objects[slot].frame == 6 || m_objects[slot].frame == 0xc || m_objects[slot].frame == 0x12) {
+                    if (m_objects[slot].frame == 6 || m_objects[slot].frame == 12 || m_objects[slot].frame == 18) {
                         m_objects[slot].attackResult = 0;
                     }
                     m_objects[slot].frame++;
@@ -1988,14 +1988,14 @@ void CAyu::UpdateObjects()
                 break;
             case kObj641236Burst1:
                 if (pattern == k641236A || pattern == k641236C) {
-                    m_objects[slot].x = m_objects[slot].facing * 0xa + x + 0.0;
+                    m_objects[slot].x = m_objects[slot].facing * 10 + x + 0.0;
                 }
                 m_objects[slot].timer++;
                 if (m_objects[slot].timer >= duration) {
                     m_objects[slot].timer = 0;
                     m_objects[slot].frame++;
                     m_objects[slot].attackResult = 0;
-                    if (m_objects[slot].frame == 7 && (pattern == k641236A && frame < 0xd || pattern == k641236C && frame < 0xd)) {
+                    if (m_objects[slot].frame == 7 && (pattern == k641236A && frame < 13 || pattern == k641236C && frame < 13)) {
                         m_objects[slot].frame = m_objects[slot].frame - 2;
                     }
                     if (m_objects[slot].frame >= frameCount) {
@@ -2005,7 +2005,7 @@ void CAyu::UpdateObjects()
                 break;
             case kObjFallInDarkness:
                 m_objects[slot].vx = -0.02;
-                m_objects[slot].drawnWhileHidden = 0x7530;
+                m_objects[slot].drawnWhileHidden = 30000;
                 m_objects[slot].timer++;
                 if (pattern != kFallInDarkness) {
                     RemoveObject(slot);
@@ -2022,7 +2022,7 @@ void CAyu::UpdateObjects()
             case kObjEncasedBreak:
                 if (pattern != kEncased && pattern != kEncased2 && pattern != kEncasedAir && pattern != kEncasedSpin || pattern == kEncased && frame > 1 || pattern == kEncased2 && frame > 1) {
                     effect.type = kObjShardSmall;
-                    effect.x = (double)((int)x + facing * 0x17);
+                    effect.x = (double)((int)x + facing * 23);
                     effect.y = (double)((int)y - 4);
                     effect.scale = 0;
                     effect.layer = 1;
@@ -2036,8 +2036,8 @@ void CAyu::UpdateObjects()
                     effect.facing = facing;
                     SpawnObject(&effect);
                     effect.type = kObjShardSmall;
-                    effect.x = (double)((int)x - facing * 0xe);
-                    effect.y = (double)((int)y - 0x1a);
+                    effect.x = (double)((int)x - facing * 14);
+                    effect.y = (double)((int)y - 26);
                     effect.scale = 0;
                     effect.layer = 1;
                     effect.facing = facing;
@@ -2050,48 +2050,48 @@ void CAyu::UpdateObjects()
                     effect.facing = facing;
                     SpawnObject(&effect);
                     effect.type = kObjShardSmall;
-                    effect.x = (double)((int)x + facing * 0x1e);
-                    effect.y = (double)((int)y - 0x28);
+                    effect.x = (double)((int)x + facing * 30);
+                    effect.y = (double)((int)y - 40);
                     effect.scale = 0;
                     effect.layer = 1;
                     effect.facing = facing;
                     SpawnObject(&effect);
                     effect.type = kObjShardSmall;
-                    effect.x = (double)((int)x - facing * 0x19);
-                    effect.y = (double)((int)y - 0x50);
+                    effect.x = (double)((int)x - facing * 25);
+                    effect.y = (double)((int)y - 80);
                     effect.scale = 0;
                     effect.layer = 1;
                     effect.facing = facing;
                     SpawnObject(&effect);
                     effect.type = kObjShardLarge;
-                    effect.x = (double)((int)x - facing * 0x23);
-                    effect.y = (double)((int)y - 0x2a);
+                    effect.x = (double)((int)x - facing * 35);
+                    effect.y = (double)((int)y - 42);
                     effect.scale = 0;
                     effect.layer = 1;
                     effect.facing = facing;
                     SpawnObject(&effect);
                     effect.type = kObjShardLarge;
-                    effect.x = (double)((int)x - facing * 0x12);
-                    effect.y = (double)((int)y - 0x14);
+                    effect.x = (double)((int)x - facing * 18);
+                    effect.y = (double)((int)y - 20);
                     effect.scale = 0;
                     effect.layer = 1;
                     effect.facing = facing;
                     SpawnObject(&effect);
                     effect.type = kObjShardLarge;
                     effect.x = (double)((int)x + facing * 2);
-                    effect.y = (double)((int)y - 0x41);
+                    effect.y = (double)((int)y - 65);
                     effect.scale = 0;
                     effect.layer = 1;
                     effect.facing = facing;
                     SpawnObject(&effect);
                     effect.type = kObjShardLarge;
                     effect.x = (double)((int)x + (facing << 4));
-                    effect.y = (double)((int)y - 0x50);
+                    effect.y = (double)((int)y - 80);
                     effect.scale = 0;
                     effect.layer = 1;
                     effect.facing = facing;
                     SpawnObject(&effect);
-                    m_playSound = 0x22;
+                    m_playSound = 34;
                     RemoveObject(slot);
                     m_encasedBreakOut = 0;
                     break;
@@ -2108,16 +2108,16 @@ void CAyu::UpdateObjects()
                 break;
             case kObjShardSmall:
                 if (m_objects[slot].frame == 0 && m_objects[slot].timer == 0 && m_objectVar1[slot] == 0) {
-                    m_objectVar2[slot] = (rand() > 0x3e80) * 0x28 + 0x50 + (rand() > 0x3e80) * 0x14;
+                    m_objectVar2[slot] = (rand() > 16000) * 40 + 80 + (rand() > 16000) * 20;
                     m_objectVar1[slot]++;
-                    m_objects[slot].vx = (rand() > 0x3e80) * 1.2 + (rand() > 0x3e80) * 0.7 + (rand() > 0x3e80) * 1.7 + -1.8;
-                    m_objects[slot].vy = -1.2 - ((rand() > 0x3e80) * 0.6 + (rand() > 0x3e80) * 0.9 + (rand() > 0x3e80) * 1.4);
+                    m_objects[slot].vx = (rand() > 16000) * 1.2 + (rand() > 16000) * 0.7 + (rand() > 16000) * 1.7 + -1.8;
+                    m_objects[slot].vy = -1.2 - ((rand() > 16000) * 0.6 + (rand() > 16000) * 0.9 + (rand() > 16000) * 1.4);
                 }
                 m_objects[slot].vy += 0.05;
                 if (m_objects[slot].y > 0.0 && m_objects[slot].vy > 0.0) {
                     m_objects[slot].vy = -m_objects[slot].vy;
                 }
-                if (m_objectVar2[slot] < 0xa) {
+                if (m_objectVar2[slot] < 10) {
                     m_objects[slot].scale = 1;
                 }
                 if (m_objectVar2[slot] < 0) {
@@ -2137,16 +2137,16 @@ void CAyu::UpdateObjects()
                 break;
             case kObjShardLarge:
                 if (m_objects[slot].frame == 0 && m_objects[slot].timer == 0 && m_objectVar1[slot] == 0) {
-                    m_objectVar2[slot] = (rand() > 0x3e80) * 0x3c + 0x78 + (rand() > 0x3e80) * 0x28;
+                    m_objectVar2[slot] = (rand() > 16000) * 60 + 120 + (rand() > 16000) * 40;
                     m_objectVar1[slot]++;
-                    m_objects[slot].vx = (double)(rand() > 0x3e80) + (rand() > 0x3e80) * 0.5 + (rand() > 0x3e80) * 1.5 + -1.5;
-                    m_objects[slot].vy = -1.0 - ((rand() > 0x3e80) * 0.5 + (rand() > 0x3e80) * 0.8 + (rand() > 0x3e80) * 1.2);
+                    m_objects[slot].vx = (double)(rand() > 16000) + (rand() > 16000) * 0.5 + (rand() > 16000) * 1.5 + -1.5;
+                    m_objects[slot].vy = -1.0 - ((rand() > 16000) * 0.5 + (rand() > 16000) * 0.8 + (rand() > 16000) * 1.2);
                 }
                 m_objects[slot].vy += 0.03;
                 if (m_objects[slot].y > 0.0 && m_objects[slot].vy > 0.0) {
                     m_objects[slot].vy = -m_objects[slot].vy;
                 }
-                if (m_objectVar2[slot] < 0xa) {
+                if (m_objectVar2[slot] < 10) {
                     m_objects[slot].scale = 1;
                 }
                 if (m_objectVar2[slot] < 0) {
@@ -2179,7 +2179,7 @@ void CAyu::UpdateObjects()
             }
         }
         slot++;
-        if (slot >= 0x40) {
+        if (slot >= 64) {
             slot = 0;
         }
     }

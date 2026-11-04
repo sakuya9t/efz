@@ -24,13 +24,13 @@ CGame::CGame(CGraphics* graphics, CInput* input, CSound* sound)
     m_stage = 0;
     m_effectTail = 0;
     m_effectHead = 0;
-    for (i = 0; i < 0x41; i++)
-        m_sounds[i] = 0x96;
-    m_music = 0x96;
+    for (i = 0; i < 65; i++)
+        m_sounds[i] = 150;
+    m_music = 150;
     m_objectSurface = NULL;
     m_stageSurface = NULL;
     m_stageNegative = NULL;
-    for (i = 0; i < 0x398; i++)
+    for (i = 0; i < 920; i++)
         m_surfaces[i] = NULL;
     m_background = NULL;
     m_effectAnims = NULL;
@@ -58,7 +58,7 @@ CGame::~CGame()
 {
     int i;
 
-    for (i = 0; i < 0x398; i++) {
+    for (i = 0; i < 920; i++) {
         if (m_surfaces[i]) {
             m_surfaces[i]->Release();
             m_surfaces[i] = NULL;
@@ -76,11 +76,11 @@ CGame::~CGame()
         m_objectSurface->Release();
         m_objectSurface = NULL;
     }
-    for (i = 0; i < 0x41; i++) {
-        if (m_sounds[i] != 0x96)
+    for (i = 0; i < 65; i++) {
+        if (m_sounds[i] != 150)
             m_sound->Release(m_sounds[i]);
     }
-    if (m_music != 0x96)
+    if (m_music != 150)
         m_sound->Release(m_music);
     if (m_effectAnims)
         delete[] m_effectAnims;
@@ -173,7 +173,7 @@ void CGame::LoadSounds()
     char path[32];
     char num[8];
 
-    for (j = 0; j < 0x41; j++) {
+    for (j = 0; j < 65; j++) {
         strcpy(path, "wave\\se\\");
         if (j < 10)
             strcat(path, "0");
@@ -187,7 +187,7 @@ void CGame::LoadSounds()
 
 void CGame::PlaySE(WORD index)
 {
-    if (m_sounds[index] != 0x96)
+    if (m_sounds[index] != 150)
         m_sound->Play(m_sounds[index], FALSE);
 }
 
@@ -202,23 +202,23 @@ void CGame::PlayMusic(WORD track)
     _itoa(track, num, 10);
     strcat(path, num);
     strcat(path, ".wav");
-    if (m_music != 0x96) {
+    if (m_music != 150) {
         m_sound->Stop(m_music);
         m_sound->Release(m_music);
-        m_music = 0x96;
+        m_music = 150;
     }
     m_music = m_sound->Load(path);
     m_sound->LoadLoop(path);
-    if (m_music != 0x96)
+    if (m_music != 150)
         m_sound->Play(m_music, 1 - (track == 2 || track == 3 || track == 4 || track == 9));
 }
 
 void CGame::StopMusic()
 {
-    if (m_music != 0x96) {
+    if (m_music != 150) {
         m_sound->Stop(m_music);
         m_sound->Release(m_music);
-        m_music = 0x96;
+        m_music = 150;
     }
 }
 
@@ -250,8 +250,8 @@ void CGame::LoadEffects()
         data = new BYTE[size];
         ReadFile(hFile, data, size, &dwRead, NULL);
         offset = data[0] * 3 + 1;
-        for (j = 0; j <= 0x397; j++) {
-            len = m_graphics->LoadSurface(&m_surfaces[j], data + offset, 0x51, 0xaf);
+        for (j = 0; j <= 919; j++) {
+            len = m_graphics->LoadSurface(&m_surfaces[j], data + offset, 81, 175);
             if (len == 0) {
                 _itoa(j, str, 10);
                 MessageBox(NULL, str, NULL, MB_OK);
@@ -261,11 +261,11 @@ void CGame::LoadEffects()
         }
         CloseHandle(hFile);
         delete data;
-        LoadDat(&m_objectSurface, "system\\object.dat", 0, 0xaf);
-        m_graphics->LoadPaletteDat(m_palette, "system\\object.dat", 0, 0xaf, 0x50);
+        LoadDat(&m_objectSurface, "system\\object.dat", 0, 175);
+        m_graphics->LoadPaletteDat(m_palette, "system\\object.dat", 0, 175, 80);
     } else {
         // The development name: one bitmap per sprite.
-        for (m = 0; m <= 0x397; m++) {
+        for (m = 0; m <= 919; m++) {
             if (m >= 100)
                 strcpy(name, "system\\effect\\efe");
             else if (m >= 10)
@@ -275,10 +275,10 @@ void CGame::LoadEffects()
             _itoa(m, num, 10);
             strcat(name, num);
             strcat(name, ".bmp");
-            m_graphics->LoadBmp(&m_surfaces[m], name, 0xaf);
+            m_graphics->LoadBmp(&m_surfaces[m], name, 175);
         }
-        m_graphics->LoadBmp(&m_objectSurface, "system\\object.bmp", 0xaf);
-        m_graphics->LoadPaletteBmp(m_palette, "system\\object.bmp", 0, 0xaf, 0x50);
+        m_graphics->LoadBmp(&m_objectSurface, "system\\object.bmp", 175);
+        m_graphics->LoadPaletteBmp(m_palette, "system\\object.bmp", 0, 175, 80);
     }
     m_colorKey = m_graphics->GetColorKey(m_objectSurface);
 }
@@ -373,7 +373,7 @@ void CGame::RemoveEffect(short index)
         while (m_effectTail != m_effectHead && !m_effectActive[m_effectTail]) {
             m_effectKeep[m_effectTail] = 0;
             m_effectTail++;
-            if (m_effectTail >= 0x280)
+            if (m_effectTail >= 640)
                 m_effectTail = 0;
         }
     }
@@ -386,21 +386,21 @@ void CGame::AdvanceEffectHead()
     n = 0;
     do {
         m_effectHead++;
-        if (m_effectHead >= 0x280)
+        if (m_effectHead >= 640)
             m_effectHead = 0;
         if (m_effectHead == m_effectTail) {
             m_effectTail++;
-            if (m_effectTail >= 0x280)
+            if (m_effectTail >= 640)
                 m_effectTail = 0;
             while (m_effectTail != m_effectHead && !m_effectActive[m_effectTail]) {
                 m_effectKeep[m_effectTail] = 0;
                 m_effectTail++;
-                if (m_effectTail >= 0x280)
+                if (m_effectTail >= 640)
                     m_effectTail = 0;
             }
         }
         n++;
-    } while (m_effectKeep[m_effectHead] && n < 0x280);
+    } while (m_effectKeep[m_effectHead] && n < 640);
 }
 
 void CGame::RemoveEffectsOfType(int type)
@@ -412,16 +412,16 @@ void CGame::RemoveEffectsOfType(int type)
         if (m_effects[i].type == type && m_effectActive[i])
             RemoveEffect(i);
         i++;
-        if (i >= 0x280)
+        if (i >= 640)
             i = 0;
-    } while (i != m_effectHead + 1 - (m_effectHead == 0x27f) * 0x280);
+    } while (i != m_effectHead + 1 - (m_effectHead == 639) * 640);
 }
 
 void CGame::ClearEffects()
 {
     int i;
 
-    for (i = 0; i < 0x280; i++) {
+    for (i = 0; i < 640; i++) {
         m_effectActive[i] = 0;
         m_effectKeep[i] = 0;
     }
@@ -436,7 +436,7 @@ void CGame::UpdateEffects()
         if (m_effectActive[i])
             UpdateEffect(i);
         i++;
-        if (i >= 0x280)
+        if (i >= 640)
             i = 0;
     }
 }
@@ -475,7 +475,7 @@ void CGame::DrawEffects(int x, int y, BYTE layer)
                                  m_effects[i].side);
         }
         i++;
-        if (i >= 0x280)
+        if (i >= 640)
             i = 0;
     }
 }

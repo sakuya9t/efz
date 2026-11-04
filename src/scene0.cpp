@@ -10,14 +10,14 @@ CScene0::CScene0(HWND hwnd, PTR32(CPlayer)* player1Ref, PTR32(CPlayer)* player2R
 {
     if (1) {
         m_game->LoadDat((PTR32(IDirectDrawSurface)*)&m_titleSurface, "system\\title.dat", 0, 1);
-        m_game->LoadDat((PTR32(IDirectDrawSurface)*)&m_menuSurface, "system\\title_ob.dat", 0, 0xc1);
-        m_graphics->LoadPaletteDat(m_palette, "system\\title.dat", 0, 1, 0xc0);
-        m_graphics->LoadPaletteDat(m_palette, "system\\title_ob.dat", 0, 0xc1, 0x30);
+        m_game->LoadDat((PTR32(IDirectDrawSurface)*)&m_menuSurface, "system\\title_ob.dat", 0, 193);
+        m_graphics->LoadPaletteDat(m_palette, "system\\title.dat", 0, 1, 192);
+        m_graphics->LoadPaletteDat(m_palette, "system\\title_ob.dat", 0, 193, 48);
     } else {
         m_graphics->LoadBmp((PTR32(IDirectDrawSurface)*)&m_titleSurface, "system\\title.bmp", 1);
-        m_graphics->LoadBmp((PTR32(IDirectDrawSurface)*)&m_menuSurface, "system\\title_ob.bmp", 0xc1);
-        m_graphics->LoadPaletteBmp(m_palette, "system\\title.bmp", 0, 1, 0xc0);
-        m_graphics->LoadPaletteBmp(m_palette, "system\\title_ob.bmp", 0, 0xc1, 0x30);
+        m_graphics->LoadBmp((PTR32(IDirectDrawSurface)*)&m_menuSurface, "system\\title_ob.bmp", 193);
+        m_graphics->LoadPaletteBmp(m_palette, "system\\title.bmp", 0, 1, 192);
+        m_graphics->LoadPaletteBmp(m_palette, "system\\title_ob.bmp", 0, 193, 48);
     }
     m_colorKey = m_graphics->GetColorKey(TOPTR(IDirectDrawSurface*, m_menuSurface));
     m_cursor = 0;
@@ -59,7 +59,7 @@ BYTE CScene0::Update()
         CScene::FadeIn(m_palette, 1);
         m_enter = 0;
     }
-    if (m_idleTime > 0x708 && 1) {
+    if (m_idleTime > 1800 && 1) {
         m_idleTime = 0;
         m_game->m_gameMode = 6;
         CScene::FadeOut(m_palette, 1, 0, 0);
@@ -153,9 +153,9 @@ BYTE CScene0::Update()
 
 void CScene0::Draw()
 {
-    m_graphics->Blit(MakeRect(0, 0, 0x140, 0xf0), TOPTR(IDirectDrawSurface*, m_titleSurface), MakeRect(0, 0, 0x140, 0xf0), 0, 0);
-    m_graphics->Blit(MakeRect(0xc3, 0x82, 0x78, 0x62), TOPTR(IDirectDrawSurface*, m_menuSurface), MakeRect(0, 0, 0x78, 0x62), m_colorKey, 0);
-    m_graphics->Blit(MakeRect(0xc3, m_cursor * 0xe + 0x82, 0x78, 0xe), TOPTR(IDirectDrawSurface*, m_menuSurface), MakeRect(0, m_cursor * 0xe + 0x62, 0x78, 0xe), m_colorKey, 0);
+    m_graphics->Blit(MakeRect(0, 0, 320, 240), TOPTR(IDirectDrawSurface*, m_titleSurface), MakeRect(0, 0, 320, 240), 0, 0);
+    m_graphics->Blit(MakeRect(195, 130, 120, 98), TOPTR(IDirectDrawSurface*, m_menuSurface), MakeRect(0, 0, 120, 98), m_colorKey, 0);
+    m_graphics->Blit(MakeRect(195, m_cursor * 14 + 130, 120, 14), TOPTR(IDirectDrawSurface*, m_menuSurface), MakeRect(0, m_cursor * 14 + 98, 120, 14), m_colorKey, 0);
     m_graphics->Flip();
 }
 
@@ -182,11 +182,11 @@ void CScene0::DimTitle()
     frameStart = timeGetTime();
     shortFrame = 0;
     m_dimming = 1;
-    level = 0x14;
+    level = 20;
     for (; level >= 0; level--) {
         Draw();
         m_graphics->Darken(m_palette, 1, 0xc1, level * 3 + 0x28);
-        while ((DWORD)(timeGetTime() - frameStart) < (BYTE)(0x10 - shortFrame)) {
+        while ((DWORD)(timeGetTime() - frameStart) < (BYTE)(16 - shortFrame)) {
         }
         frameStart = timeGetTime();
         shortFrame = shortFrame == 0;
@@ -204,10 +204,10 @@ void CScene0::UndimTitle()
     shortFrame = 0;
     m_dimming = 1;
     level = 0;
-    for (; level <= 0x14; level++) {
+    for (; level <= 20; level++) {
         Draw();
         m_graphics->Darken(m_palette, 1, 0xc1, level * 3 + 0x28);
-        while ((DWORD)(timeGetTime() - frameStart) < (BYTE)(0x10 - shortFrame)) {
+        while ((DWORD)(timeGetTime() - frameStart) < (BYTE)(16 - shortFrame)) {
         }
         frameStart = timeGetTime();
         shortFrame = shortFrame == 0;

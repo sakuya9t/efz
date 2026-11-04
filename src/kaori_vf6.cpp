@@ -349,7 +349,7 @@ void CKaori::UpdatePattern()
         }
         m_dashMomentum = 0;
         if (frame == 0 && timer == 0) {
-            m_gauge = m_gauge + 0xa;
+            m_gauge = m_gauge + 10;
             vx = (2.0 - (*m_opponent)->m_proration / 10000.0) * -1.1;
             if (m_rfBlue != 0) {
                 m_rfGauge -= 10.0;
@@ -385,7 +385,7 @@ void CKaori::UpdatePattern()
         }
         m_dashMomentum = 0;
         if (frame == 0 && timer == 0) {
-            m_gauge = m_gauge + 0xf;
+            m_gauge = m_gauge + 15;
             vx = (2.0 - (*m_opponent)->m_proration / 10000.0) * -1.5;
             if (m_rfBlue != 0) {
                 m_rfGauge -= 20.0;
@@ -421,7 +421,7 @@ void CKaori::UpdatePattern()
         }
         m_dashMomentum = 0;
         if (frame == 0 && timer == 0) {
-            m_gauge = m_gauge + 0x14;
+            m_gauge = m_gauge + 20;
             vx = (2.0 - (*m_opponent)->m_proration / 10000.0) * -1.8;
             if (m_rfBlue != 0) {
                 m_rfGauge -= 30.0;
@@ -457,7 +457,7 @@ void CKaori::UpdatePattern()
         }
         m_dashMomentum = 0;
         if (frame == 0 && timer == 0) {
-            m_gauge = m_gauge + 0xa;
+            m_gauge = m_gauge + 10;
             vx = (2.0 - (*m_opponent)->m_proration / 10000.0) * -1.1;
             if (m_rfBlue != 0) {
                 m_rfGauge -= 10.0;
@@ -493,7 +493,7 @@ void CKaori::UpdatePattern()
         }
         m_dashMomentum = 0;
         if (frame == 0 && timer == 0) {
-            m_gauge = m_gauge + 0xf;
+            m_gauge = m_gauge + 15;
             vx = (2.0 - (*m_opponent)->m_proration / 10000.0) * -1.5;
             if (m_rfBlue != 0) {
                 m_rfGauge -= 20.0;
@@ -529,7 +529,7 @@ void CKaori::UpdatePattern()
         }
         m_dashMomentum = 0;
         if (frame == 0 && timer == 0) {
-            m_gauge = m_gauge + 0x14;
+            m_gauge = m_gauge + 20;
             vx = (2.0 - (*m_opponent)->m_proration / 10000.0) * -1.8;
             if (m_rfBlue != 0) {
                 m_rfGauge -= 30.0;
@@ -565,7 +565,7 @@ void CKaori::UpdatePattern()
         }
         m_dashMomentum = 0;
         if (frame == 0 && timer == 0) {
-            m_gauge = m_gauge + 0xa;
+            m_gauge = m_gauge + 10;
             vx = (2.0 - (*m_opponent)->m_proration / 10000.0) * -1.1;
             if (m_rfBlue != 0) {
                 m_rfGauge -= 10.0;
@@ -598,7 +598,7 @@ void CKaori::UpdatePattern()
         }
         m_dashMomentum = 0;
         if (frame == 0 && timer == 0) {
-            m_gauge = m_gauge + 0xf;
+            m_gauge = m_gauge + 15;
             vx = (2.0 - (*m_opponent)->m_proration / 10000.0) * -1.5;
             if (m_rfBlue != 0) {
                 m_rfGauge -= 20.0;
@@ -631,7 +631,7 @@ void CKaori::UpdatePattern()
         }
         m_dashMomentum = 0;
         if (frame == 0 && timer == 0) {
-            m_gauge = m_gauge + 0x14;
+            m_gauge = m_gauge + 20;
             vx = (2.0 - (*m_opponent)->m_proration / 10000.0) * -1.8;
             if (m_rfBlue != 0) {
                 m_rfGauge -= 30.0;
@@ -663,7 +663,7 @@ void CKaori::UpdatePattern()
             m_rfGauge -= 0.8;
         }
         if (frame == 0 && timer == 0) {
-            m_gauge = m_gauge + 0x1e;
+            m_gauge = m_gauge + 30;
             vx = m_hitVx;
             vy = vy * 0.75 + m_hitVy;
             if (vy < -2.0) {
@@ -706,7 +706,7 @@ void CKaori::UpdatePattern()
             m_rfGauge -= 0.8;
         }
         if (frame == 0 && timer == 0) {
-            m_gauge = m_gauge + 0x1e;
+            m_gauge = m_gauge + 30;
             vx = m_hitVx;
             vy = vy * 0.75 + m_hitVy;
             if (vy < -4.0) {
@@ -749,7 +749,7 @@ void CKaori::UpdatePattern()
             m_rfGauge -= 0.8;
         }
         if (frame == 0 && timer == 0) {
-            m_gauge = m_gauge + 0x1e;
+            m_gauge = m_gauge + 30;
             vx = m_hitVx;
             vy = vy * 0.75 + m_hitVy;
             if (vy < -6.0) {
@@ -792,7 +792,7 @@ void CKaori::UpdatePattern()
             m_rfGauge -= 0.8;
         }
         if (frame == 0 && timer == 0) {
-            m_gauge = m_gauge + 0x1e;
+            m_gauge = m_gauge + 30;
             vx = m_hitVx;
             vy = vy * 0.75 + m_hitVy;
             ay = 0.032;
@@ -830,7 +830,7 @@ void CKaori::UpdatePattern()
             m_rfGauge -= 0.8;
         }
         if (frame == 0 && timer == 0) {
-            m_gauge = m_gauge + 0x1e;
+            m_gauge = m_gauge + 30;
             vx = m_hitVx;
             vy = m_hitVy;
             ay = 0.032;
@@ -873,7 +873,7 @@ void CKaori::UpdatePattern()
             break;
         }
         if (frame == 0 && timer == 0) {
-            m_gauge = m_gauge + 0x1e;
+            m_gauge = m_gauge + 30;
             vx = m_hitVx;
             vy = vy * 0.75 + m_hitVy;
             if (vy < -2.0) {
@@ -921,7 +921,7 @@ void CKaori::UpdatePattern()
             break;
         }
         if (frame == 0 && timer == 0) {
-            m_gauge = m_gauge + 0x1e;
+            m_gauge = m_gauge + 30;
             vx = m_hitVx;
             vy = vy * 0.75 + m_hitVy;
             if (vy < -4.0) {
@@ -969,7 +969,7 @@ void CKaori::UpdatePattern()
             break;
         }
         if (frame == 0 && timer == 0) {
-            m_gauge = m_gauge + 0x1e;
+            m_gauge = m_gauge + 30;
             vx = m_hitVx;
             vy = vy * 0.75 + m_hitVy;
             ay = 0.032;
@@ -1012,7 +1012,7 @@ void CKaori::UpdatePattern()
             break;
         }
         if (frame == 0 && timer == 0) {
-            m_gauge = m_gauge + 0x1e;
+            m_gauge = m_gauge + 30;
             vx = m_hitVx;
             vy = m_hitVy;
             ay = 0.032;
@@ -1107,13 +1107,13 @@ void CKaori::UpdatePattern()
             m_rfGauge -= 0.8;
         }
         if (frame == 0 && timer == 0 && m_patternVar1 == 0) {
-            m_gauge = m_gauge + 0x1e;
+            m_gauge = m_gauge + 30;
             m_patternVar1++;
-            m_untechTime = m_untechTime + 0x78;
+            m_untechTime = m_untechTime + 120;
             vx = 0.5;
             vy = -2.5;
             ay = 0.025;
-            m_playSound = 0x1f;
+            m_playSound = 31;
             effect.type = 0;
             effect.x = (double)(int)x;
             effect.y = (double)(int)y;
@@ -1146,7 +1146,7 @@ void CKaori::UpdatePattern()
             m_rfGauge -= 0.8;
         }
         if (frame == 0 && timer == 0) {
-            m_gauge = m_gauge + 0x1e;
+            m_gauge = m_gauge + 30;
             vx = m_hitVx;
             vy = m_hitVy;
             ay = 0.072;
@@ -1257,7 +1257,7 @@ void CKaori::UpdatePattern()
         }
         m_dashMomentum = 0;
         if (frame == 0 && timer == 0) {
-            m_gauge = m_gauge + 0x1e;
+            m_gauge = m_gauge + 30;
             if (m_rfBlue != 0) {
                 m_rfGauge -= 30.0;
             }
@@ -1295,7 +1295,7 @@ void CKaori::UpdatePattern()
         }
         m_dashMomentum = 0;
         if (frame == 0 && timer == 0) {
-            m_gauge = m_gauge + 0x1e;
+            m_gauge = m_gauge + 30;
             if (m_rfBlue != 0) {
                 m_rfGauge -= 30.0;
             }
@@ -1333,7 +1333,7 @@ void CKaori::UpdatePattern()
         }
         m_dashMomentum = 0;
         if (frame == 0 && timer == 0) {
-            m_gauge = m_gauge + 0x1e;
+            m_gauge = m_gauge + 30;
             if (m_rfBlue != 0) {
                 m_rfGauge -= 30.0;
             }
@@ -1373,7 +1373,7 @@ void CKaori::UpdatePattern()
             effect.facing = facing;
             effect.layer = 1;
             SpawnObject(&effect);
-            m_gauge = m_gauge + 0x1e;
+            m_gauge = m_gauge + 30;
             vx = m_hitVx;
             vy = m_hitVy;
             ay = 0.032;
@@ -1407,11 +1407,11 @@ void CKaori::UpdatePattern()
             m_rfGauge -= 0.8;
         }
         if (frame == 0 && timer == 0 && m_patternVar1 == 0) {
-            m_playSound = 0x1e;
+            m_playSound = 30;
             vy = -0.45;
             vx = -0.1;
             m_patternVar1++;
-            m_gauge = m_gauge + 0x1e;
+            m_gauge = m_gauge + 30;
         }
         if (frame == 4 && timer == 0) {
             vx = m_hitVx;
@@ -1464,10 +1464,10 @@ void CKaori::UpdatePattern()
             if (m_rfBlue != 0) {
                 m_rfGauge -= 30.0;
             }
-            m_playSound = 0x21;
+            m_playSound = 33;
             vy = -1.5;
             vx = -0.8;
-            m_gauge = m_gauge + 0x1e;
+            m_gauge = m_gauge + 30;
         }
         vy += 0.04;
         if (frame == 0 && vy + y > 0.0) {
@@ -1516,10 +1516,10 @@ void CKaori::UpdatePattern()
             if (m_rfBlue != 0) {
                 m_rfGauge -= 30.0;
             }
-            m_playSound = 0x21;
+            m_playSound = 33;
             vy = -1.5;
             vx = -0.8;
-            m_gauge = m_gauge + 0x1e;
+            m_gauge = m_gauge + 30;
         }
         vy += 0.04;
         if (frame == 0 && vy + y > 0.0) {
@@ -1568,10 +1568,10 @@ void CKaori::UpdatePattern()
             if (m_rfBlue != 0) {
                 m_rfGauge -= 30.0;
             }
-            m_playSound = 0x21;
+            m_playSound = 33;
             vx = m_hitVx;
             vy = m_hitVy;
-            m_gauge = m_gauge + 0x1e;
+            m_gauge = m_gauge + 30;
         }
         vy += 0.04;
         timer++;
@@ -1612,10 +1612,10 @@ void CKaori::UpdatePattern()
                 if (m_rfBlue != 0) {
                     m_rfGauge -= 30.0;
                 }
-                m_playSound = 0x21;
+                m_playSound = 33;
                 vx = m_hitVx;
                 vy = m_hitVy;
-                m_gauge = m_gauge + 0x1e;
+                m_gauge = m_gauge + 30;
                 m_patternVar1++;
             }
         }
@@ -1725,7 +1725,7 @@ void CKaori::UpdatePattern()
         break;
     case kLyingDown:
         m_dashMomentum = 0;
-        if (m_hp > 0 && timer > 0x63) {
+        if (m_hp > 0 && timer > 99) {
             pattern = kWakeUp;
             StartPattern();
         }
@@ -1751,7 +1751,7 @@ void CKaori::UpdatePattern()
         }
         if (frame == 0 && timer == 0) {
             m_dashMomentum = 0;
-            m_gauge = m_gauge + 0xa;
+            m_gauge = m_gauge + 10;
             vx = -1.5;
             vy = 0.0;
             y = 0.0;
@@ -1791,7 +1791,7 @@ void CKaori::UpdatePattern()
         }
         if (frame == 0 && timer == 0) {
             m_dashMomentum = 0;
-            m_gauge = m_gauge + 0xf;
+            m_gauge = m_gauge + 15;
             vx = -1.8;
             vy = 0.0;
             y = 0.0;
@@ -1831,7 +1831,7 @@ void CKaori::UpdatePattern()
         }
         if (frame == 0 && timer == 0) {
             m_dashMomentum = 0;
-            m_gauge = m_gauge + 0x14;
+            m_gauge = m_gauge + 20;
             vx = -2.3;
             vy = 0.0;
             y = 0.0;
@@ -1871,7 +1871,7 @@ void CKaori::UpdatePattern()
         }
         if (frame == 0 && timer == 0) {
             m_dashMomentum = 0;
-            m_gauge = m_gauge + 0xa;
+            m_gauge = m_gauge + 10;
             vx = -1.5;
             vy = 0.0;
             y = 0.0;
@@ -1908,7 +1908,7 @@ void CKaori::UpdatePattern()
         }
         if (frame == 0 && timer == 0) {
             m_dashMomentum = 0;
-            m_gauge = m_gauge + 0xf;
+            m_gauge = m_gauge + 15;
             vx = -1.8;
             vy = 0.0;
             y = 0.0;
@@ -1945,7 +1945,7 @@ void CKaori::UpdatePattern()
         }
         if (frame == 0 && timer == 0) {
             m_dashMomentum = 0;
-            m_gauge = m_gauge + 0x14;
+            m_gauge = m_gauge + 20;
             vx = -2.3;
             vy = 0.0;
             y = 0.0;
@@ -1976,7 +1976,7 @@ void CKaori::UpdatePattern()
     case kGuardAir:
         if (frame == 0 && timer == 0) {
             vy = -2.6;
-            m_gauge = m_gauge + 0xf;
+            m_gauge = m_gauge + 15;
             ay = 0.06;
         }
         vx = -1.2;
@@ -2067,12 +2067,12 @@ void CKaori::UpdatePattern()
             StopMoving();
             effect.type = 9;
             effect.x = (double)(int)x;
-            effect.y = (double)((int)y - 0x46);
+            effect.y = (double)((int)y - 70);
             effect.scale = 2;
             effect.layer = 1;
             m_game->CreateEffect((EffectDesc*)&effect);
             m_hitsLeft = 1;
-            m_playSound = 0x3e;
+            m_playSound = 62;
             m_patternVar1++;
         }
         timer++;
@@ -2099,13 +2099,13 @@ void CKaori::UpdatePattern()
             StopMoving();
             effect.type = 9;
             effect.x = (double)(int)x;
-            effect.y = (double)((int)y - 0x46);
+            effect.y = (double)((int)y - 70);
             effect.scale = 2;
             effect.layer = 1;
             m_game->CreateEffect((EffectDesc*)&effect);
             m_hitsLeft = 1;
-            m_playSound = 0x3e;
-            m_gauge = m_gauge - 0x3e8;
+            m_playSound = 62;
+            m_gauge = m_gauge - 1000;
             m_patternVar1++;
         }
         vy = vy + ay;
@@ -2120,7 +2120,7 @@ void CKaori::UpdatePattern()
         if (timer >= duration) {
             timer = 0;
             frame++;
-            if (frame == 0x13) {
+            if (frame == 19) {
                 ay = 0.035;
             }
             if (frame >= frameCount) {
@@ -2156,11 +2156,11 @@ void CKaori::UpdatePattern()
                 break;
             }
         }
-        if (m_inputX == facing && m_patternVar1 >= 0x78) {
+        if (m_inputX == facing && m_patternVar1 >= 120) {
             pattern = kDashStop;
             StartPattern();
         }
-        if (m_inputX != facing && m_patternVar1 >= 0x3c) {
+        if (m_inputX != facing && m_patternVar1 >= 60) {
             pattern = kDashStop;
             StartPattern();
         }
@@ -2217,7 +2217,7 @@ void CKaori::UpdatePattern()
             StartAfterimages(3);
             vy = 0.0;
             ay = 0.0;
-            m_playSound = 0x11;
+            m_playSound = 17;
         }
         timer++;
         m_patternVar1++;
@@ -2228,7 +2228,7 @@ void CKaori::UpdatePattern()
                 frame = frame - 2;
             }
         }
-        if (m_inputX == facing && m_patternVar1 >= 0x78) {
+        if (m_inputX == facing && m_patternVar1 >= 120) {
             pattern = kFall;
             StartPattern();
             vx = 1.3;
@@ -2237,7 +2237,7 @@ void CKaori::UpdatePattern()
                 vx = -vx;
             }
         }
-        if (m_inputX != facing && m_patternVar1 >= 0x30) {
+        if (m_inputX != facing && m_patternVar1 >= 48) {
             pattern = kFall;
             StartPattern();
             vx = 1.3;
@@ -2253,7 +2253,7 @@ void CKaori::UpdatePattern()
             vy = 0.0;
             ay = 0.0;
             StartAfterimages(3);
-            m_playSound = 0x11;
+            m_playSound = 17;
         }
         timer++;
         m_patternVar1++;
@@ -2265,7 +2265,7 @@ void CKaori::UpdatePattern()
                 frame = frame - 2;
             }
         }
-        if (m_inputX == -facing && m_patternVar2 >= 0x78) {
+        if (m_inputX == -facing && m_patternVar2 >= 120) {
             pattern = kFall;
             StartPattern();
             vx = -0.9;
@@ -2274,7 +2274,7 @@ void CKaori::UpdatePattern()
                 vx = -vx;
             }
         }
-        if (m_inputX != -facing && m_patternVar1 >= 0x30) {
+        if (m_inputX != -facing && m_patternVar1 >= 48) {
             pattern = kFall;
             StartPattern();
             vx = -0.9;
@@ -2293,11 +2293,11 @@ void CKaori::UpdatePattern()
                 m_proration = m_rfGauge * 5.0 + m_proration;
             }
             m_rfGauge = 0.0;
-            m_freezeTime = 0x5a;
-            FillBackground(0xb0, 3);
+            m_freezeTime = 90;
+            FillBackground(176, 3);
         }
         if (frame == 1 && timer == 0) {
-            m_playSound = 0x12;
+            m_playSound = 18;
             effect.type = 1;
             effect.x = (double)(int)x;
             effect.y = (double)(int)y;
@@ -2396,7 +2396,7 @@ void CKaori::UpdatePattern()
             if (ay == 0.0) {
                 ay = 0.035;
             }
-            m_freezeTime = 0x3c;
+            m_freezeTime = 60;
         }
         if (m_freezeTime == 0 && m_patternVar3 == 0) {
             m_patternVar3++;
@@ -2432,11 +2432,11 @@ void CKaori::UpdatePattern()
                 m_proration = m_rfGauge * 5.0 + m_proration;
             }
             m_rfGauge = 0.0;
-            m_freezeTime = 0x5a;
-            FillBackground(0xb0, 3);
+            m_freezeTime = 90;
+            FillBackground(176, 3);
         }
         if (frame == 1 && timer == 0 && m_patternVar3 == 0) {
-            m_playSound = 0x12;
+            m_playSound = 18;
             effect.type = 1;
             effect.x = (double)(int)x;
             effect.y = (double)(int)y;
@@ -2559,7 +2559,7 @@ void CKaori::UpdatePattern()
         }
         if (frame == 1 && timer == 0) {
             m_gauge = m_gauge + 5;
-            m_playSound = 0x15;
+            m_playSound = 21;
             m_hitsLeft = 1;
         }
         timer++;
@@ -2600,8 +2600,8 @@ void CKaori::UpdatePattern()
             break;
         }
         if (frame == 1 && timer == 0) {
-            m_gauge = m_gauge + 0xf;
-            m_playSound = 0x14;
+            m_gauge = m_gauge + 15;
+            m_playSound = 20;
             m_hitsLeft = 1;
         }
         timer++;
@@ -2642,8 +2642,8 @@ void CKaori::UpdatePattern()
             m_dashMomentum = 0;
         }
         if (frame == 2 && timer == 0) {
-            m_gauge = m_gauge + 0xf;
-            m_playSound = 0x14;
+            m_gauge = m_gauge + 15;
+            m_playSound = 20;
             m_hitsLeft = 1;
         }
         timer++;
@@ -2672,8 +2672,8 @@ void CKaori::UpdatePattern()
             m_dashMomentum = 0;
         }
         if (frame == 4 && timer == 0) {
-            m_gauge = m_gauge + 0x23;
-            m_playSound = 0x14;
+            m_gauge = m_gauge + 35;
+            m_playSound = 20;
             m_hitsLeft = 1;
         }
         timer++;
@@ -2715,7 +2715,7 @@ void CKaori::UpdatePattern()
         }
         if (frame == 1 && timer == 0) {
             m_gauge = m_gauge + 5;
-            m_playSound = 0x15;
+            m_playSound = 21;
             m_hitsLeft = 1;
         }
         timer++;
@@ -2764,8 +2764,8 @@ void CKaori::UpdatePattern()
             break;
         }
         if (frame == 3 && timer == 0) {
-            m_gauge = m_gauge + 0xd;
-            m_playSound = 0x14;
+            m_gauge = m_gauge + 13;
+            m_playSound = 20;
             m_hitsLeft = 1;
             vx += 0.5;
         }
@@ -2814,8 +2814,8 @@ void CKaori::UpdatePattern()
             break;
         }
         if (frame == 3 && timer == 0) {
-            m_gauge = m_gauge + 0x19;
-            m_playSound = 0x14;
+            m_gauge = m_gauge + 25;
+            m_playSound = 20;
             m_hitsLeft = 1;
         }
         timer++;
@@ -2852,7 +2852,7 @@ void CKaori::UpdatePattern()
         }
         if (frame == 1 && timer == 0) {
             m_gauge = m_gauge + 5;
-            m_playSound = 0x15;
+            m_playSound = 21;
             m_hitsLeft = 1;
         }
         if (y + vy >= 0.0) {
@@ -2890,8 +2890,8 @@ void CKaori::UpdatePattern()
             break;
         }
         if (frame == 2 && timer == 0) {
-            m_gauge = m_gauge + 0xd;
-            m_playSound = 0x14;
+            m_gauge = m_gauge + 13;
+            m_playSound = 20;
             m_hitsLeft = 1;
         }
         if (y + vy >= 0.0) {
@@ -2929,8 +2929,8 @@ void CKaori::UpdatePattern()
             break;
         }
         if (frame == 2 && timer == 0) {
-            m_gauge = m_gauge + 0x1e;
-            m_playSound = 0x14;
+            m_gauge = m_gauge + 30;
+            m_playSound = 20;
             m_hitsLeft = 1;
         }
         if (y + vy >= 0.0) {
@@ -2960,8 +2960,8 @@ void CKaori::UpdatePattern()
             StopMoving();
         }
         if (frame == 6 && timer == 0) {
-            m_gauge = m_gauge + 0x1e;
-            m_playSound = 0x14;
+            m_gauge = m_gauge + 30;
+            m_playSound = 20;
             m_hitsLeft = 3;
             vx = 1.0;
             vy = 1.0;
@@ -2978,7 +2978,7 @@ void CKaori::UpdatePattern()
             timer = 0;
             frame++;
             m_attackResult = 0;
-            if (frame == 0xa) {
+            if (frame == 10) {
                 frame = 7;
             }
         }
@@ -2999,8 +2999,8 @@ void CKaori::UpdatePattern()
             break;
         }
         if (frame == 3 && timer == 0) {
-            m_gauge = m_gauge + 0x1e;
-            m_playSound = 0x14;
+            m_gauge = m_gauge + 30;
+            m_playSound = 20;
             m_hitsLeft = 1;
         }
         if (y + vy >= 0.0) {
@@ -3087,8 +3087,8 @@ void CKaori::UpdatePattern()
             pattern = kThrowHit;
             (*m_opponent)->pattern = kThrownStandHigh2;
             effect.type = 0;
-            effect.x = (double)((int)x + facing * 0x28);
-            effect.y = (double)((int)y - 0x3c);
+            effect.x = (double)((int)x + facing * 40);
+            effect.y = (double)((int)y - 60);
             effect.scale = 2;
             effect.layer = 1;
             m_game->CreateEffect((EffectDesc*)&effect);
@@ -3115,13 +3115,13 @@ void CKaori::UpdatePattern()
             m_attackResult = 0;
         }
         if (frame == 1 && timer == 0) {
-            (*m_opponent)->x = facing * 0x24 + x;
+            (*m_opponent)->x = facing * 36 + x;
         }
         if (frame == 2 && timer == 0) {
-            (*m_opponent)->x = facing * 0x22 + x;
+            (*m_opponent)->x = facing * 34 + x;
         }
         if (frame == 3 && timer == 0) {
-            (*m_opponent)->x = facing * 0x19 + x;
+            (*m_opponent)->x = facing * 25 + x;
         }
         if (frame == 4 && timer == 0) {
             (*m_opponent)->x = facing + x;
@@ -3132,37 +3132,37 @@ void CKaori::UpdatePattern()
         if (frame == 6 && timer == 0) {
             (*m_opponent)->StartPattern();
             (*m_opponent)->pattern = kHitBurn;
-            DealDamage(0x4b0, 750.0);
+            DealDamage(1200, 750.0);
             (*m_opponent)->m_hitVx = -2.5;
             (*m_opponent)->m_hitVy = -1.5;
             m_playSound = 2;
             effect.type = 0x191;
-            effect.x = (double)((int)x + facing * 0x14);
-            effect.y = (double)((int)y - 0x3c);
+            effect.x = (double)((int)x + facing * 20);
+            effect.y = (double)((int)y - 60);
             effect.facing = facing;
             effect.scale = 2;
             effect.layer = 1;
             SpawnObject(&effect);
-            effect.x = (double)((int)x + -0x32 + (WORD)Random(0, 0x64));
-            effect.y = (double)((int)y + -0x3c + (WORD)Random(0, 0x50));
+            effect.x = (double)((int)x + -50 + (WORD)Random(0, 100));
+            effect.y = (double)((int)y + -60 + (WORD)Random(0, 80));
             SpawnObject(&effect);
-            effect.x = (double)((int)x + -0x32 + (WORD)Random(0, 0x64));
-            effect.y = (double)((int)y + -0x3c + (WORD)Random(0, 0x50));
+            effect.x = (double)((int)x + -50 + (WORD)Random(0, 100));
+            effect.y = (double)((int)y + -60 + (WORD)Random(0, 80));
             SpawnObject(&effect);
-            effect.x = (double)((int)x + -0x32 + (WORD)Random(0, 0x64));
-            effect.y = (double)((int)y + -0x3c + (WORD)Random(0, 0x50));
+            effect.x = (double)((int)x + -50 + (WORD)Random(0, 100));
+            effect.y = (double)((int)y + -60 + (WORD)Random(0, 80));
             SpawnObject(&effect);
-            effect.x = (double)((int)x + -0x32 + (WORD)Random(0, 0x64));
-            effect.y = (double)((int)y + -0x3c + (WORD)Random(0, 0x50));
+            effect.x = (double)((int)x + -50 + (WORD)Random(0, 100));
+            effect.y = (double)((int)y + -60 + (WORD)Random(0, 80));
             SpawnObject(&effect);
-            effect.x = (double)((int)x + -0x32 + (WORD)Random(0, 0x64));
-            effect.y = (double)((int)y + -0x3c + (WORD)Random(0, 0x50));
+            effect.x = (double)((int)x + -50 + (WORD)Random(0, 100));
+            effect.y = (double)((int)y + -60 + (WORD)Random(0, 80));
             SpawnObject(&effect);
-            effect.x = (double)((int)x + -0x32 + (WORD)Random(0, 0x64));
-            effect.y = (double)((int)y + -0x3c + (WORD)Random(0, 0x50));
+            effect.x = (double)((int)x + -50 + (WORD)Random(0, 100));
+            effect.y = (double)((int)y + -60 + (WORD)Random(0, 80));
             SpawnObject(&effect);
-            effect.x = (double)((int)x + -0x32 + (WORD)Random(0, 0x64));
-            effect.y = (double)((int)y + -0x3c + (WORD)Random(0, 0x50));
+            effect.x = (double)((int)x + -50 + (WORD)Random(0, 100));
+            effect.y = (double)((int)y + -60 + (WORD)Random(0, 80));
             SpawnObject(&effect);
         }
         timer++;
@@ -3192,7 +3192,7 @@ void CKaori::UpdatePattern()
         }
         if (frame == 1 && timer == 0) {
             m_gauge = m_gauge + 5;
-            m_playSound = 0x15;
+            m_playSound = 21;
             m_hitsLeft = 1;
         }
         timer++;
@@ -3218,8 +3218,8 @@ void CKaori::UpdatePattern()
         }
         if (frame == 1 && timer == 0) {
             m_hitsLeft = 3;
-            m_playSound = 0x14;
-            m_gauge = m_gauge + 0x14;
+            m_playSound = 20;
+            m_gauge = m_gauge + 20;
         }
         if (vx < 0.0) {
             vx = 0.0;
@@ -3259,8 +3259,8 @@ void CKaori::UpdatePattern()
         }
         if (frame == 1 && timer == 0) {
             m_hitsLeft = 1;
-            m_playSound = 0x14;
-            m_gauge = m_gauge + 0x14;
+            m_playSound = 20;
+            m_gauge = m_gauge + 20;
         }
         if (vx < 0.0) {
             vx = 0.0;
@@ -3302,7 +3302,7 @@ void CKaori::UpdatePattern()
         }
         if (frame == 1 && timer == 0) {
             m_gauge = m_gauge + 5;
-            m_playSound = 0x15;
+            m_playSound = 21;
             m_hitsLeft = 1;
         }
         timer++;
@@ -3328,8 +3328,8 @@ void CKaori::UpdatePattern()
         }
         if (frame == 2 && timer == 0) {
             m_hitsLeft = 1;
-            m_playSound = 0x14;
-            m_gauge = m_gauge + 0x14;
+            m_playSound = 20;
+            m_gauge = m_gauge + 20;
             vx += 1.2;
         }
         if (vx < 0.0) {
@@ -3356,16 +3356,16 @@ void CKaori::UpdatePattern()
         } else {
             m_dashMomentum = 0;
         }
-        if (frame == 0xd && timer == 0) {
+        if (frame == 13 && timer == 0) {
             m_hitsLeft = 1;
-            m_playSound = 0x14;
-            m_gauge = m_gauge + 0x14;
+            m_playSound = 20;
+            m_gauge = m_gauge + 20;
         }
-        if (frame > 2 && frame < 0x11) {
+        if (frame > 2 && frame < 17) {
             vy = vy + ay;
             if (vy + y > 0.0) {
                 timer = 0;
-                frame = 0x12;
+                frame = 18;
                 y = 0.0;
                 StopMoving();
                 break;
@@ -3402,8 +3402,8 @@ void CKaori::UpdatePattern()
             pattern = kAirThrow2Hit;
             (*m_opponent)->pattern = kThrownStandHigh2;
             effect.type = 0;
-            effect.x = (double)((int)x + facing * 0x1d);
-            effect.y = (double)((int)y - 0x27);
+            effect.x = (double)((int)x + facing * 29);
+            effect.y = (double)((int)y - 39);
             effect.scale = 2;
             effect.layer = 1;
             m_game->CreateEffect((EffectDesc*)&effect);
@@ -3452,45 +3452,45 @@ void CKaori::UpdatePattern()
         }
         if (frame == 1) {
             (*m_opponent)->y = y - 55.0;
-            (*m_opponent)->x = x - facing * 0x15;
+            (*m_opponent)->x = x - facing * 21;
             (*m_opponent)->pattern = kThrownStandLowInverted;
         }
         if (frame == 2) {
             (*m_opponent)->y = y - 71.0;
-            (*m_opponent)->x = x - facing * 0x14;
+            (*m_opponent)->x = x - facing * 20;
             (*m_opponent)->pattern = kThrownAirborne;
         }
         if (frame == 3) {
             (*m_opponent)->y = y - 76.0;
-            (*m_opponent)->x = x - facing * 0xf;
+            (*m_opponent)->x = x - facing * 15;
             (*m_opponent)->pattern = kThrownAirborne;
         }
         if (frame == 4) {
             (*m_opponent)->y = y - 77.0;
-            (*m_opponent)->x = x - facing * 0xc;
+            (*m_opponent)->x = x - facing * 12;
             (*m_opponent)->pattern = kThrownAirborne;
         }
         if (frame == 5) {
             (*m_opponent)->y = y - 55.0;
-            (*m_opponent)->x = x - facing * 0x13;
+            (*m_opponent)->x = x - facing * 19;
             (*m_opponent)->pattern = kThrownDoubledOverInverted;
         }
         if (frame == 6 && timer == 0) {
             ShakeScreen(4, 0);
             effect.type = 3;
             effect.sound = 7;
-            effect.x = (double)((int)x + facing * 0xf);
+            effect.x = (double)((int)x + facing * 15);
             effect.y = (double)(int)y;
             effect.scale = 2;
             effect.layer = 1;
             m_game->CreateEffect((EffectDesc*)&effect);
-            (*m_opponent)->x = facing * 0xf + x;
+            (*m_opponent)->x = facing * 15 + x;
             (*m_opponent)->pattern = kHitAirLaunch;
             (*m_opponent)->m_hitVx = -2.0;
             (*m_opponent)->m_hitVy = -0.5;
             (*m_opponent)->ay = 0.035;
-            (*m_opponent)->x = facing * 0xf + x;
-            DealDamage(0x3e8, 790.0);
+            (*m_opponent)->x = facing * 15 + x;
+            DealDamage(1000, 790.0);
             (*m_opponent)->m_untechTime = (int)(200.0 * m_proration * 0.0001);
             (*m_opponent)->StartPattern();
         }
@@ -3516,12 +3516,12 @@ void CKaori::UpdatePattern()
             pattern = kAirThrowHit;
             (*m_opponent)->pattern = kThrownStandHigh;
             effect.type = 0;
-            effect.x = (double)((int)x + facing * 0x2e);
-            effect.y = (double)((int)y - 0x46);
+            effect.x = (double)((int)x + facing * 46);
+            effect.y = (double)((int)y - 70);
             effect.scale = 2;
             effect.layer = 1;
             m_game->CreateEffect((EffectDesc*)&effect);
-            (*m_opponent)->x = facing * 0x2e + x;
+            (*m_opponent)->x = facing * 46 + x;
             (*m_opponent)->y = y - 70.0;
         }
         timer++;
@@ -3542,10 +3542,10 @@ void CKaori::UpdatePattern()
         break;
     case kAirThrowHit:
         if (frame < 5) {
-            FocusCameraX(0x32, 3);
+            FocusCameraX(50, 3);
         }
         if (frame < 5) {
-            FocusCameraY(0x32, 3);
+            FocusCameraY(50, 3);
         }
         if (frame == 0 && timer == 1) {
             (*m_opponent)->facing = -facing;
@@ -3560,13 +3560,13 @@ void CKaori::UpdatePattern()
         }
         if (frame == 3 && timer == 0) {
             (*m_opponent)->y = y - 27.0;
-            (*m_opponent)->x = facing * 0x36 + x;
+            (*m_opponent)->x = facing * 54 + x;
             (*m_opponent)->pattern = kHitBlownAway;
-            DealDamage(0x578, 500.0);
+            DealDamage(1400, 500.0);
             (*m_opponent)->StartPattern();
             effect.type = 0;
-            effect.x = (double)((int)x + facing * 0x36);
-            effect.y = (double)((int)y - 0x1b);
+            effect.x = (double)((int)x + facing * 54);
+            effect.y = (double)((int)y - 27);
             effect.sound = 2;
             effect.scale = 2;
             effect.layer = 1;
@@ -3685,7 +3685,7 @@ void CKaori::UpdatePattern()
             StopMoving();
         }
         if (frame == 6 && timer == 0) {
-            m_gauge = m_gauge + 0x2d;
+            m_gauge = m_gauge + 45;
             m_hitsLeft = 1;
         }
         timer++;
@@ -3695,12 +3695,12 @@ void CKaori::UpdatePattern()
             if (frame < 6) {
                 m_attackResult = 0;
             }
-            if (frame == 0xb) {
+            if (frame == 11) {
                 if (m_attackResult == 3) {
                     m_hitsLeft = 1;
                     m_attackResult = 0;
                 } else {
-                    frame = 0xf;
+                    frame = 15;
                 }
             }
             if (frame >= frameCount) {
@@ -3725,7 +3725,7 @@ void CKaori::UpdatePattern()
             vx = 0.0;
         }
         if (frame == 6 && timer == 0) {
-            m_gauge = m_gauge + 0x2d;
+            m_gauge = m_gauge + 45;
             m_hitsLeft = 1;
         }
         timer++;
@@ -3735,7 +3735,7 @@ void CKaori::UpdatePattern()
             if (frame < 6) {
                 m_attackResult = 0;
             }
-            if (frame == 0xb) {
+            if (frame == 11) {
                 m_hitsLeft = 1;
                 m_attackResult = 0;
             }
@@ -3756,9 +3756,9 @@ void CKaori::UpdatePattern()
                 m_rfGauge -= 250.0;
             }
             effect.type = 0x21;
-            effect.sound = 0xb;
+            effect.sound = 11;
             effect.x = (double)(int)x;
-            effect.y = (double)((int)y - 0x32);
+            effect.y = (double)((int)y - 50);
             effect.scale = 2;
             effect.layer = 1;
             m_game->CreateEffect((EffectDesc*)&effect);
@@ -3773,7 +3773,7 @@ void CKaori::UpdatePattern()
             vx = 0.0;
         }
         if (frame == 6 && timer == 0) {
-            m_gauge = m_gauge + 0x2d;
+            m_gauge = m_gauge + 45;
             m_hitsLeft = 1;
         }
         timer++;
@@ -3783,12 +3783,12 @@ void CKaori::UpdatePattern()
             if (frame < 6) {
                 m_attackResult = 0;
             }
-            if (frame == 0xb) {
+            if (frame == 11) {
                 if (m_attackResult == 3) {
                     m_hitsLeft = 1;
                     m_attackResult = 0;
                 } else {
-                    frame = 0xf;
+                    frame = 15;
                 }
             }
             if (frame >= frameCount) {
@@ -3805,7 +3805,7 @@ void CKaori::UpdatePattern()
         }
         if (frame == 3 && timer == 0) {
             effect.type = 0x19a;
-            effect.x = (double)((int)x + facing * 0x28);
+            effect.x = (double)((int)x + facing * 40);
             effect.y = (double)(int)y;
             effect.scale = 2;
             effect.layer = 1;
@@ -3814,7 +3814,7 @@ void CKaori::UpdatePattern()
         }
         if (frame == 4 && timer == 0) {
             m_hitsLeft = 0;
-            m_gauge = m_gauge + 0x23;
+            m_gauge = m_gauge + 35;
         }
         timer++;
         if (timer >= duration) {
@@ -3839,7 +3839,7 @@ void CKaori::UpdatePattern()
         }
         if (frame == 3 && timer == 0) {
             effect.type = 0x190;
-            effect.x = (double)((int)x + facing * 0x28);
+            effect.x = (double)((int)x + facing * 40);
             effect.y = (double)(int)y;
             effect.scale = 2;
             effect.layer = 1;
@@ -3847,15 +3847,15 @@ void CKaori::UpdatePattern()
             SpawnObject(&effect);
         }
         if (frame == 4 && timer == 0) {
-            m_hitsLeft = 0xa;
-            m_gauge = m_gauge + 0x23;
+            m_hitsLeft = 10;
+            m_gauge = m_gauge + 35;
         }
         timer++;
         if (timer >= duration) {
             timer = 0;
             frame++;
             m_attackResult = 0;
-            if (frame == 8 && m_patternVar1 < 0xa) {
+            if (frame == 8 && m_patternVar1 < 10) {
                 frame--;
                 m_patternVar1++;
             }
@@ -3876,16 +3876,16 @@ void CKaori::UpdatePattern()
                 m_rfGauge -= 250.0;
             }
             effect.type = 0x21;
-            effect.sound = 0xb;
+            effect.sound = 11;
             effect.x = (double)(int)x;
-            effect.y = (double)((int)y - 0x32);
+            effect.y = (double)((int)y - 50);
             effect.scale = 2;
             effect.layer = 1;
             m_game->CreateEffect((EffectDesc*)&effect);
         }
         if (frame == 3 && timer == 0) {
             effect.type = 0x19b;
-            effect.x = (double)((int)x + facing * 0x28);
+            effect.x = (double)((int)x + facing * 40);
             effect.y = (double)(int)y;
             effect.scale = 2;
             effect.layer = 1;
@@ -3894,7 +3894,7 @@ void CKaori::UpdatePattern()
         }
         if (frame == 4 && timer == 0) {
             m_hitsLeft = 1;
-            m_gauge = m_gauge + 0x23;
+            m_gauge = m_gauge + 35;
         }
         timer++;
         if (timer >= duration) {
@@ -3918,7 +3918,7 @@ void CKaori::UpdatePattern()
             vx = 0.0;
         }
         if (frame == 2 && timer == 0) {
-            m_playSound = 0x15;
+            m_playSound = 21;
             m_hitsLeft = 1;
         }
         timer++;
@@ -3943,7 +3943,7 @@ void CKaori::UpdatePattern()
             vx = 0.0;
         }
         if (frame == 5 && timer == 0) {
-            m_playSound = 0x15;
+            m_playSound = 21;
             m_hitsLeft = 1;
             vx = 3.5;
         }
@@ -3970,7 +3970,7 @@ void CKaori::UpdatePattern()
             vx = 0.0;
         }
         if (frame == 5 && timer == 0) {
-            m_playSound = 0x15;
+            m_playSound = 21;
             m_hitsLeft = 1;
         }
         timer++;
@@ -3993,7 +3993,7 @@ void CKaori::UpdatePattern()
             vx = 0.0;
         }
         if (frame == 5 && timer == 0) {
-            m_playSound = 0x15;
+            m_playSound = 21;
             m_hitsLeft = 1;
         }
         timer++;
@@ -4016,11 +4016,11 @@ void CKaori::UpdatePattern()
             vx = 0.0;
         }
         if (frame == 2 && timer == 0) {
-            m_playSound = 0x15;
+            m_playSound = 21;
             m_hitsLeft = 1;
         }
         if (frame == 7 && timer == 0) {
-            m_playSound = 0x14;
+            m_playSound = 20;
             m_hitsLeft = 1;
         }
         timer++;
@@ -4048,13 +4048,13 @@ void CKaori::UpdatePattern()
         }
         if (frame == 0 && timer == 0) {
             StopMoving();
-            m_freezeTime = 0x78;
-            m_gauge = m_gauge - 0x3e8;
-            FillBackground(0xb0, 3);
+            m_freezeTime = 120;
+            m_gauge = m_gauge - 1000;
+            FillBackground(176, 3);
             effect.type = 0x44;
-            effect.sound = 0x13;
+            effect.sound = 19;
             effect.x = (double)((int)x + facing * 8);
-            effect.y = (double)((int)y - 0x1b);
+            effect.y = (double)((int)y - 27);
             effect.scale = 2;
             effect.keep = 1;
             effect.layer = 1;
@@ -4062,13 +4062,13 @@ void CKaori::UpdatePattern()
             m_hitsLeft = 1;
         }
         if (frame < 8) {
-            FocusCameraY(0x32, 0xa);
+            FocusCameraY(50, 10);
         }
         if (frame == 6 && m_attackResult == 3) {
-            m_game->FlashWhite(9, 0x24, 9);
+            m_game->FlashWhite(9, 36, 9);
             StartPattern();
             pattern = k236236Lv1Hit;
-            (*m_opponent)->m_hitstop = 0xb4;
+            (*m_opponent)->m_hitstop = 180;
             break;
         }
         timer++;
@@ -4084,7 +4084,7 @@ void CKaori::UpdatePattern()
         }
         break;
     case k236236Lv1Hit:
-        FocusCameraY(0x32, 0xa);
+        FocusCameraY(50, 10);
         if (frame == 0 && timer == 0) {
             m_hitsLeft = 2;
         }
@@ -4103,7 +4103,7 @@ void CKaori::UpdatePattern()
             effect.facing = facing;
             SpawnObject(&effect);
         }
-        if (frame == 0xa && timer == 0) {
+        if (frame == 10 && timer == 0) {
             effect.type = 0x193;
             effect.x = (double)(int)x;
             effect.y = (double)(int)y;
@@ -4112,7 +4112,7 @@ void CKaori::UpdatePattern()
             effect.facing = facing;
             SpawnObject(&effect);
         }
-        if (frame == 0x12 && timer == 0) {
+        if (frame == 18 && timer == 0) {
             effect.type = 0x194;
             effect.x = (double)(int)x;
             effect.y = (double)(int)y;
@@ -4144,13 +4144,13 @@ void CKaori::UpdatePattern()
         }
         if (frame == 0 && timer == 0) {
             StopMoving();
-            m_freezeTime = 0x78;
-            m_gauge = m_gauge - 0x7d0;
-            FillBackground(0xb0, 3);
+            m_freezeTime = 120;
+            m_gauge = m_gauge - 2000;
+            FillBackground(176, 3);
             effect.type = 0x45;
             effect.sound = 5;
             effect.x = (double)((int)x + facing * 8);
-            effect.y = (double)((int)y - 0x1b);
+            effect.y = (double)((int)y - 27);
             effect.scale = 2;
             effect.keep = 1;
             effect.layer = 1;
@@ -4158,13 +4158,13 @@ void CKaori::UpdatePattern()
             m_hitsLeft = 1;
         }
         if (frame < 8) {
-            FocusCameraY(0x32, 0xa);
+            FocusCameraY(50, 10);
         }
         if (frame == 6 && m_attackResult == 3) {
-            m_game->FlashWhite(9, 0x24, 9);
+            m_game->FlashWhite(9, 36, 9);
             StartPattern();
             pattern = k236236Lv2Hit;
-            (*m_opponent)->m_hitstop = 0xb4;
+            (*m_opponent)->m_hitstop = 180;
             break;
         }
         timer++;
@@ -4180,7 +4180,7 @@ void CKaori::UpdatePattern()
         }
         break;
     case k236236Lv2Hit:
-        FocusCameraY(0x32, 0xa);
+        FocusCameraY(50, 10);
         if (frame == 0 && timer == 0) {
             m_hitsLeft = 2;
         }
@@ -4199,7 +4199,7 @@ void CKaori::UpdatePattern()
             effect.facing = facing;
             SpawnObject(&effect);
         }
-        if (frame == 0xa && timer == 0) {
+        if (frame == 10 && timer == 0) {
             effect.type = 0x193;
             effect.x = (double)(int)x;
             effect.y = (double)(int)y;
@@ -4208,7 +4208,7 @@ void CKaori::UpdatePattern()
             effect.facing = facing;
             SpawnObject(&effect);
         }
-        if (frame == 0x12 && timer == 0) {
+        if (frame == 18 && timer == 0) {
             effect.type = 0x194;
             effect.x = (double)(int)x;
             effect.y = (double)(int)y;
@@ -4234,7 +4234,7 @@ void CKaori::UpdatePattern()
         vy = 0.0;
         m_dashMomentum = 0;
         if (frame > 0) {
-            m_game->FlashNegative(0xf);
+            m_game->FlashNegative(15);
         }
         if (frame == 0 && timer == 0) {
             vx = 0.0;
@@ -4243,13 +4243,13 @@ void CKaori::UpdatePattern()
         }
         if (frame == 0 && timer == 0) {
             StopMoving();
-            m_freezeTime = 0x78;
-            m_gauge = m_gauge - 0xbb8;
-            FillBackground(0xb0, 3);
+            m_freezeTime = 120;
+            m_gauge = m_gauge - 3000;
+            FillBackground(176, 3);
             effect.type = 0x46;
-            effect.sound = 0x40;
+            effect.sound = 64;
             effect.x = (double)((int)x + facing * 8);
-            effect.y = (double)((int)y - 0x1b);
+            effect.y = (double)((int)y - 27);
             effect.scale = 2;
             effect.keep = 1;
             effect.layer = 1;
@@ -4257,13 +4257,13 @@ void CKaori::UpdatePattern()
             m_hitsLeft = 1;
         }
         if (frame < 8) {
-            FocusCameraY(0x32, 0xa);
+            FocusCameraY(50, 10);
         }
         if (frame == 6 && m_attackResult == 3) {
-            m_game->FlashWhite(9, 0x24, 9);
+            m_game->FlashWhite(9, 36, 9);
             StartPattern();
             pattern = k236236Lv3Hit;
-            (*m_opponent)->m_hitstop = 0xb4;
+            (*m_opponent)->m_hitstop = 180;
             break;
         }
         timer++;
@@ -4279,8 +4279,8 @@ void CKaori::UpdatePattern()
         }
         break;
     case k236236Lv3Hit:
-        FocusCameraY(0x32, 0xa);
-        m_game->FlashNegative(0xf);
+        FocusCameraY(50, 10);
+        m_game->FlashNegative(15);
         if (frame == 0 && timer == 0) {
             m_hitsLeft = 3;
         }
@@ -4299,7 +4299,7 @@ void CKaori::UpdatePattern()
             effect.facing = facing;
             SpawnObject(&effect);
         }
-        if (frame == 0xa && timer == 0) {
+        if (frame == 10 && timer == 0) {
             effect.type = 0x196;
             effect.x = (double)(int)x;
             effect.y = (double)(int)y;
@@ -4308,7 +4308,7 @@ void CKaori::UpdatePattern()
             effect.facing = facing;
             SpawnObject(&effect);
         }
-        if (frame == 0x12 && timer == 0) {
+        if (frame == 18 && timer == 0) {
             effect.type = 0x197;
             effect.x = (double)(int)x;
             effect.y = (double)(int)y;
@@ -4338,20 +4338,20 @@ void CKaori::UpdatePattern()
         }
         if (frame == 0 && timer == 0) {
             StopMoving();
-            m_freezeTime = 0x78;
-            m_gauge = m_gauge - 0x3e8;
-            FillBackground(0xb0, 3);
+            m_freezeTime = 120;
+            m_gauge = m_gauge - 1000;
+            FillBackground(176, 3);
             effect.type = 0x44;
-            effect.sound = 0x13;
+            effect.sound = 19;
             effect.x = (double)(int)x;
-            effect.y = (double)((int)y - 0x28);
+            effect.y = (double)((int)y - 40);
             effect.scale = 2;
             effect.keep = 1;
             effect.layer = 1;
             m_game->CreateEffect((EffectDesc*)&effect);
             m_hitsLeft = 1;
         }
-        if (frame == 0xa && timer == 0) {
+        if (frame == 10 && timer == 0) {
             vx = 4.0;
         }
         if (vx > 0.0) {
@@ -4360,17 +4360,17 @@ void CKaori::UpdatePattern()
         if (vx < 0.0) {
             vx = 0.0;
         }
-        if (frame < 0xd) {
-            FocusCameraY(0x32, 0xa);
+        if (frame < 13) {
+            FocusCameraY(50, 10);
         }
-        if (frame == 0xc && m_attackResult == 3) {
+        if (frame == 12 && m_attackResult == 3) {
             (*m_opponent)->StartPattern();
             (*m_opponent)->pattern = kHitStandHighHold;
             (*m_opponent)->StopMoving();
             (*m_opponent)->y = 0.0;
             StartPattern();
             pattern = k214214Lv1Hit;
-            (*m_opponent)->m_hitstop = 0xb4;
+            (*m_opponent)->m_hitstop = 180;
             break;
         }
         timer++;
@@ -4396,8 +4396,8 @@ void CKaori::UpdatePattern()
             m_hitsLeft = 6;
             FaceOpponent();
         }
-        if (frame < 0x24) {
-            FocusCameraY(0x32, 0xa);
+        if (frame < 36) {
+            FocusCameraY(50, 10);
         }
         timer++;
         if (timer >= duration) {
@@ -4420,20 +4420,20 @@ void CKaori::UpdatePattern()
         }
         if (frame == 0 && timer == 0) {
             StopMoving();
-            m_freezeTime = 0x78;
-            m_gauge = m_gauge - 0x7d0;
-            FillBackground(0xb0, 3);
+            m_freezeTime = 120;
+            m_gauge = m_gauge - 2000;
+            FillBackground(176, 3);
             effect.type = 0x45;
             effect.sound = 5;
             effect.x = (double)(int)x;
-            effect.y = (double)((int)y - 0x28);
+            effect.y = (double)((int)y - 40);
             effect.scale = 2;
             effect.keep = 1;
             effect.layer = 1;
             m_game->CreateEffect((EffectDesc*)&effect);
             m_hitsLeft = 1;
         }
-        if (frame == 0xa && timer == 0) {
+        if (frame == 10 && timer == 0) {
             vx = 4.3;
         }
         if (vx > 0.0) {
@@ -4442,17 +4442,17 @@ void CKaori::UpdatePattern()
         if (vx < 0.0) {
             vx = 0.0;
         }
-        if (frame < 0xd) {
-            FocusCameraY(0x32, 0xa);
+        if (frame < 13) {
+            FocusCameraY(50, 10);
         }
-        if (frame == 0xc && m_attackResult == 3) {
+        if (frame == 12 && m_attackResult == 3) {
             (*m_opponent)->StartPattern();
             (*m_opponent)->pattern = kHitStandHighHold;
             (*m_opponent)->StopMoving();
             (*m_opponent)->y = 0.0;
             StartPattern();
             pattern = k214214Lv2Hit;
-            (*m_opponent)->m_hitstop = 0xb4;
+            (*m_opponent)->m_hitstop = 180;
             break;
         }
         timer++;
@@ -4475,11 +4475,11 @@ void CKaori::UpdatePattern()
         }
         if (frame == 0 && timer == 0) {
             (*m_opponent)->y = 0.0;
-            m_hitsLeft = 0xf;
+            m_hitsLeft = 15;
             FaceOpponent();
         }
-        if (frame < 0x24) {
-            FocusCameraY(0x32, 0xa);
+        if (frame < 36) {
+            FocusCameraY(50, 10);
         }
         timer++;
         if (timer >= duration) {
@@ -4495,7 +4495,7 @@ void CKaori::UpdatePattern()
         break;
     case k214214Lv3:
         m_dashMomentum = 0;
-        m_game->FlashNegative(0x3c);
+        m_game->FlashNegative(60);
         if (frame == 0 && timer == 0) {
             vx = 0.0;
             vy = 0.0;
@@ -4503,20 +4503,20 @@ void CKaori::UpdatePattern()
         }
         if (frame == 0 && timer == 0) {
             StopMoving();
-            m_freezeTime = 0x78;
-            m_gauge = m_gauge - 0xbb8;
-            FillBackground(0xb0, 3);
+            m_freezeTime = 120;
+            m_gauge = m_gauge - 3000;
+            FillBackground(176, 3);
             effect.type = 0x46;
-            effect.sound = 0x40;
+            effect.sound = 64;
             effect.x = (double)(int)x;
-            effect.y = (double)((int)y - 0x28);
+            effect.y = (double)((int)y - 40);
             effect.scale = 2;
             effect.keep = 1;
             effect.layer = 1;
             m_game->CreateEffect((EffectDesc*)&effect);
             m_hitsLeft = 1;
         }
-        if (frame == 0xa && timer == 0) {
+        if (frame == 10 && timer == 0) {
             vx = 4.6;
         }
         if (vx > 0.0) {
@@ -4525,17 +4525,17 @@ void CKaori::UpdatePattern()
         if (vx < 0.0) {
             vx = 0.0;
         }
-        if (frame < 0xd) {
-            FocusCameraY(0x32, 0xa);
+        if (frame < 13) {
+            FocusCameraY(50, 10);
         }
-        if (frame == 0xc && m_attackResult == 3) {
+        if (frame == 12 && m_attackResult == 3) {
             (*m_opponent)->StartPattern();
             (*m_opponent)->pattern = kHitStandHighHold;
             (*m_opponent)->StopMoving();
             (*m_opponent)->y = 0.0;
             StartPattern();
             pattern = k214214Lv3Hit;
-            (*m_opponent)->m_hitstop = 0xb4;
+            (*m_opponent)->m_hitstop = 180;
             break;
         }
         timer++;
@@ -4552,18 +4552,18 @@ void CKaori::UpdatePattern()
         break;
     case k214214Lv3Hit:
         m_dashMomentum = 0;
-        m_game->FlashNegative(0xf);
+        m_game->FlashNegative(15);
         vx -= 0.08;
         if (vx < 0.0) {
             vx = 0.0;
         }
         if (frame == 0 && timer == 0) {
             (*m_opponent)->y = 0.0;
-            m_hitsLeft = 0xf;
+            m_hitsLeft = 15;
             FaceOpponent();
         }
-        if (frame < 0x24) {
-            FocusCameraY(0x32, 0xa);
+        if (frame < 36) {
+            FocusCameraY(50, 10);
         }
         timer++;
         if (timer >= duration) {
@@ -4586,44 +4586,44 @@ void CKaori::UpdatePattern()
             m_patternVar1 = (int)(vx * 100.0);
             m_patternVar2 = (int)(vy * 100.0);
             StopMoving();
-            m_freezeTime = 0x78;
-            m_gauge = m_gauge - 0x3e8;
-            FillBackground(0xb0, 3);
+            m_freezeTime = 120;
+            m_gauge = m_gauge - 1000;
+            FillBackground(176, 3);
             effect.type = 0x44;
-            effect.sound = 0x13;
-            effect.x = (double)((int)x - facing * 0x1f);
-            effect.y = (double)((int)y - 0x48);
+            effect.sound = 19;
+            effect.x = (double)((int)x - facing * 31);
+            effect.y = (double)((int)y - 72);
             effect.scale = 2;
             effect.keep = 1;
             effect.layer = 1;
             m_game->CreateEffect((EffectDesc*)&effect);
             m_hitsLeft = 2;
         }
-        if (frame == 0xc && m_attackResult > 0 && m_patternVar3 == 0) {
-            (*m_opponent)->m_hitstop = 0xb4;
+        if (frame == 12 && m_attackResult > 0 && m_patternVar3 == 0) {
+            (*m_opponent)->m_hitstop = 180;
             StopMoving();
             m_patternVar3++;
         }
-        if (frame == 0x10 && m_attackResult > 0 && m_patternVar3 == 1) {
-            (*m_opponent)->m_hitstop = 0xb4;
+        if (frame == 16 && m_attackResult > 0 && m_patternVar3 == 1) {
+            (*m_opponent)->m_hitstop = 180;
             StopMoving();
             m_patternVar3++;
         }
         if (frame == 8) {
-            FocusCameraY(0x32, 3);
+            FocusCameraY(50, 3);
         }
-        if (frame == 0xd && y + vy > 0.0) {
+        if (frame == 13 && y + vy > 0.0) {
             y = 0.0;
             StopMoving();
             timer = 0;
-            frame = 0x20;
+            frame = 32;
             break;
         }
-        if ((frame == 0x1e || frame == 0x1f) && y + vy > 0.0) {
+        if ((frame == 30 || frame == 31) && y + vy > 0.0) {
             y = 0.0;
             StopMoving();
             timer = 0;
-            frame = 0x20;
+            frame = 32;
             break;
         }
         vy = vy + ay;
@@ -4631,7 +4631,7 @@ void CKaori::UpdatePattern()
         if (timer >= duration) {
             timer = 0;
             frame++;
-            if (frame == 1 || frame == 0xf) {
+            if (frame == 1 || frame == 15) {
                 m_attackResult = 0;
             }
             if (frame == 3) {
@@ -4644,26 +4644,26 @@ void CKaori::UpdatePattern()
                 vy = m_patternVar2 * 0.01;
                 ay = 0.025;
             }
-            if (frame == 0xe) {
-                frame = 0xd;
+            if (frame == 14) {
+                frame = 13;
             }
-            if (frame == 0xd && m_attackResult > 0) {
-                frame = 0xe;
+            if (frame == 13 && m_attackResult > 0) {
+                frame = 14;
             }
-            if (frame == 0xf) {
+            if (frame == 15) {
                 (*m_opponent)->m_hitstop = 0;
             }
-            if (frame == 0x11 && m_attackResult == 0) {
+            if (frame == 17 && m_attackResult == 0) {
                 ay = 0.035;
                 (*m_opponent)->m_hitstop = 0;
             }
-            if (frame == 0x12 && m_attackResult > 0) {
+            if (frame == 18 && m_attackResult > 0) {
                 (*m_opponent)->m_hitstop = 0;
                 vx = -2.5;
                 vy = -2.5;
                 ay = 0.035;
             }
-            if (frame == 0x20) {
+            if (frame == 32) {
                 frame = frame - 2;
             }
             if (frame >= frameCount) {
@@ -4682,44 +4682,44 @@ void CKaori::UpdatePattern()
             m_patternVar1 = (int)(vx * 100.0);
             m_patternVar2 = (int)(vy * 100.0);
             StopMoving();
-            m_freezeTime = 0x78;
-            m_gauge = m_gauge - 0x7d0;
-            FillBackground(0xb0, 3);
+            m_freezeTime = 120;
+            m_gauge = m_gauge - 2000;
+            FillBackground(176, 3);
             effect.type = 0x45;
             effect.sound = 5;
-            effect.x = (double)((int)x - facing * 0x1f);
-            effect.y = (double)((int)y - 0x48);
+            effect.x = (double)((int)x - facing * 31);
+            effect.y = (double)((int)y - 72);
             effect.scale = 2;
             effect.keep = 1;
             effect.layer = 1;
             m_game->CreateEffect((EffectDesc*)&effect);
             m_hitsLeft = 2;
         }
-        if (frame == 0xc && m_attackResult > 0 && m_patternVar3 == 0) {
-            (*m_opponent)->m_hitstop = 0xb4;
+        if (frame == 12 && m_attackResult > 0 && m_patternVar3 == 0) {
+            (*m_opponent)->m_hitstop = 180;
             StopMoving();
             m_patternVar3++;
         }
-        if (frame == 0x10 && m_attackResult > 0 && m_patternVar3 == 1) {
-            (*m_opponent)->m_hitstop = 0xb4;
+        if (frame == 16 && m_attackResult > 0 && m_patternVar3 == 1) {
+            (*m_opponent)->m_hitstop = 180;
             StopMoving();
             m_patternVar3++;
         }
         if (frame == 8) {
-            FocusCameraY(0x32, 3);
+            FocusCameraY(50, 3);
         }
-        if (frame == 0xd && y + vy > 0.0) {
+        if (frame == 13 && y + vy > 0.0) {
             y = 0.0;
             StopMoving();
             timer = 0;
-            frame = 0x20;
+            frame = 32;
             break;
         }
-        if ((frame == 0x1e || frame == 0x1f) && y + vy > 0.0) {
+        if ((frame == 30 || frame == 31) && y + vy > 0.0) {
             y = 0.0;
             StopMoving();
             timer = 0;
-            frame = 0x20;
+            frame = 32;
             break;
         }
         vy = vy + ay;
@@ -4727,7 +4727,7 @@ void CKaori::UpdatePattern()
         if (timer >= duration) {
             timer = 0;
             frame++;
-            if (frame == 1 || frame == 0xf) {
+            if (frame == 1 || frame == 15) {
                 m_attackResult = 0;
             }
             if (frame == 3) {
@@ -4740,26 +4740,26 @@ void CKaori::UpdatePattern()
                 vy = m_patternVar2 * 0.01;
                 ay = 0.025;
             }
-            if (frame == 0xe) {
-                frame = 0xd;
+            if (frame == 14) {
+                frame = 13;
             }
-            if (frame == 0xd && m_attackResult > 0) {
-                frame = 0xe;
+            if (frame == 13 && m_attackResult > 0) {
+                frame = 14;
             }
-            if (frame == 0xf) {
+            if (frame == 15) {
                 (*m_opponent)->m_hitstop = 0;
             }
-            if (frame == 0x11 && m_attackResult == 0) {
+            if (frame == 17 && m_attackResult == 0) {
                 ay = 0.035;
                 (*m_opponent)->m_hitstop = 0;
             }
-            if (frame == 0x12 && m_attackResult > 0) {
+            if (frame == 18 && m_attackResult > 0) {
                 (*m_opponent)->m_hitstop = 0;
                 vx = -2.5;
                 vy = -2.5;
                 ay = 0.035;
             }
-            if (frame == 0x20) {
+            if (frame == 32) {
                 frame = frame - 2;
             }
             if (frame >= frameCount) {
@@ -4778,13 +4778,13 @@ void CKaori::UpdatePattern()
             m_patternVar1 = (int)(vx * 100.0);
             m_patternVar2 = (int)(vy * 100.0);
             StopMoving();
-            m_freezeTime = 0x78;
-            m_gauge = m_gauge - 0xbb8;
-            FillBackground(0xb0, 3);
+            m_freezeTime = 120;
+            m_gauge = m_gauge - 3000;
+            FillBackground(176, 3);
             effect.type = 0x46;
-            effect.sound = 0x40;
-            effect.x = (double)((int)x - facing * 0x1f);
-            effect.y = (double)((int)y - 0x48);
+            effect.sound = 64;
+            effect.x = (double)((int)x - facing * 31);
+            effect.y = (double)((int)y - 72);
             effect.scale = 2;
             effect.keep = 1;
             effect.layer = 1;
@@ -4792,33 +4792,33 @@ void CKaori::UpdatePattern()
             m_hitsLeft = 2;
         }
         if (frame > 7) {
-            m_game->FlashNegative(0xf);
+            m_game->FlashNegative(15);
         }
-        if (frame == 0xc && m_attackResult > 0 && m_patternVar3 == 0) {
-            (*m_opponent)->m_hitstop = 0xb4;
+        if (frame == 12 && m_attackResult > 0 && m_patternVar3 == 0) {
+            (*m_opponent)->m_hitstop = 180;
             StopMoving();
             m_patternVar3++;
         }
-        if (frame == 0x10 && m_attackResult > 0 && m_patternVar3 == 1) {
-            (*m_opponent)->m_hitstop = 0xb4;
+        if (frame == 16 && m_attackResult > 0 && m_patternVar3 == 1) {
+            (*m_opponent)->m_hitstop = 180;
             StopMoving();
             m_patternVar3++;
         }
         if (frame == 8) {
-            FocusCameraY(0x32, 3);
+            FocusCameraY(50, 3);
         }
-        if (frame == 0xd && y + vy > 0.0) {
+        if (frame == 13 && y + vy > 0.0) {
             y = 0.0;
             StopMoving();
             timer = 0;
-            frame = 0x20;
+            frame = 32;
             break;
         }
-        if ((frame == 0x1e || frame == 0x1f) && y + vy > 0.0) {
+        if ((frame == 30 || frame == 31) && y + vy > 0.0) {
             y = 0.0;
             StopMoving();
             timer = 0;
-            frame = 0x20;
+            frame = 32;
             break;
         }
         vy = vy + ay;
@@ -4826,7 +4826,7 @@ void CKaori::UpdatePattern()
         if (timer >= duration) {
             timer = 0;
             frame++;
-            if (frame == 1 || frame == 0xf) {
+            if (frame == 1 || frame == 15) {
                 m_attackResult = 0;
             }
             if (frame == 3) {
@@ -4839,26 +4839,26 @@ void CKaori::UpdatePattern()
                 vy = m_patternVar2 * 0.01;
                 ay = 0.025;
             }
-            if (frame == 0xe) {
-                frame = 0xd;
+            if (frame == 14) {
+                frame = 13;
             }
-            if (frame == 0xd && m_attackResult > 0) {
-                frame = 0xe;
+            if (frame == 13 && m_attackResult > 0) {
+                frame = 14;
             }
-            if (frame == 0xf) {
+            if (frame == 15) {
                 (*m_opponent)->m_hitstop = 0;
             }
-            if (frame == 0x11 && m_attackResult == 0) {
+            if (frame == 17 && m_attackResult == 0) {
                 ay = 0.035;
                 (*m_opponent)->m_hitstop = 0;
             }
-            if (frame == 0x12 && m_attackResult > 0) {
+            if (frame == 18 && m_attackResult > 0) {
                 (*m_opponent)->m_hitstop = 0;
                 vx = -2.5;
                 vy = -2.5;
                 ay = 0.035;
             }
-            if (frame == 0x20) {
+            if (frame == 32) {
                 frame = frame - 2;
             }
             if (frame >= frameCount) {
@@ -4869,36 +4869,36 @@ void CKaori::UpdatePattern()
         }
         break;
     case kLv4:
-        m_game->FlashNegative(0xf);
+        m_game->FlashNegative(15);
         m_dashMomentum = 0;
         if (frame == 0 && timer == 0) {
             StopMoving();
-            FocusCameraY(0x32, 0x2d);
-            m_freezeTime = 0x78;
-            FillBackground(0xb0, 3);
-            m_gauge = m_gauge - 0xbb8;
+            FocusCameraY(50, 45);
+            m_freezeTime = 120;
+            FillBackground(176, 3);
+            m_gauge = m_gauge - 3000;
             effect.type = 0x46;
-            effect.sound = 0x40;
+            effect.sound = 64;
             effect.x = (double)((int)x - facing);
-            effect.y = (double)((int)y - 0x34);
+            effect.y = (double)((int)y - 52);
             effect.scale = 2;
             effect.keep = 1;
             effect.layer = 1;
             m_game->CreateEffect((EffectDesc*)&effect);
-            m_playSound = 0x25;
+            m_playSound = 37;
             effect.type = 0x47;
             m_game->CreateEffect((EffectDesc*)&effect);
         }
         if (m_attackResult == 6 && frame == 6) {
             StartPattern();
             m_attackResult = 0;
-            m_freezeTime = 0xa0;
+            m_freezeTime = 160;
             m_playSound = 3;
             pattern = kLv4Hit;
-            m_game->FlashWhite(0x14, 0x3c, 0x3c);
+            m_game->FlashWhite(20, 60, 60);
             effect.type = 0;
-            effect.x = (double)((int)x + facing * 0xa);
-            effect.y = (double)((int)y - 0x28);
+            effect.x = (double)((int)x + facing * 10);
+            effect.y = (double)((int)y - 40);
             effect.scale = 2;
             effect.layer = 1;
             m_game->CreateEffect((EffectDesc*)&effect);
@@ -4922,18 +4922,18 @@ void CKaori::UpdatePattern()
         }
         m_dashMomentum = 0;
         if (frame < 3) {
-            FillBackground(0xb1, 3);
+            FillBackground(177, 3);
         }
         if (frame == 1 && timer == 0) {
-            m_game->m_hideObjectsTime = 0x7530;
-            (*m_opponent)->m_game->m_hideObjectsTime = 0x7530;
-            m_game->m_hideHudTime = 0x7530;
-            DealDamage(0x1388, 1000.0);
+            m_game->m_hideObjectsTime = 30000;
+            (*m_opponent)->m_game->m_hideObjectsTime = 30000;
+            m_game->m_hideHudTime = 30000;
+            DealDamage(5000, 1000.0);
             (*m_opponent)->StartPattern();
             (*m_opponent)->StopMoving();
             (*m_opponent)->pattern = kFallInDarkness;
             (*m_opponent)->m_noAirRecovery = 1;
-            m_playSound = 0x24;
+            m_playSound = 36;
             effect.type = 0x198;
             effect.x = 0.0;
             effect.y = 0.0;
@@ -4952,10 +4952,10 @@ void CKaori::UpdatePattern()
             SpawnObject(&effect);
         }
         if (frame == 2 && timer == 0) {
-            m_game->FlashWhite(0x28, 0x32, 0x28);
+            m_game->FlashWhite(40, 50, 40);
         }
         if (frame == 3) {
-            FocusCameraY(0x32, 3);
+            FocusCameraY(50, 3);
         }
         if (frame == 3 && timer == 0) {
             m_game->m_hideObjectsTime = 0;
@@ -4968,7 +4968,7 @@ void CKaori::UpdatePattern()
             (*m_opponent)->ay = 0.035;
             (*m_opponent)->facing = facing;
             (*m_opponent)->y = -640.0;
-            (*m_opponent)->x = x - facing * 0x3c;
+            (*m_opponent)->x = x - facing * 60;
             (*m_opponent)->m_hitVx = 1.5;
         }
         timer++;

@@ -346,7 +346,7 @@ void CMinagi::UpdatePattern()
         }
         m_dashMomentum = 0;
         if (frame == 0 && timer == 0) {
-            m_gauge = m_gauge + 0xa;
+            m_gauge = m_gauge + 10;
             vx = (2.0 - (*m_opponent)->m_proration / 10000.0) * -1.1;
             if (m_rfBlue != 0) {
                 m_rfGauge -= 10.0;
@@ -382,7 +382,7 @@ void CMinagi::UpdatePattern()
         }
         m_dashMomentum = 0;
         if (frame == 0 && timer == 0) {
-            m_gauge = m_gauge + 0xf;
+            m_gauge = m_gauge + 15;
             vx = (2.0 - (*m_opponent)->m_proration / 10000.0) * -1.5;
             if (m_rfBlue != 0) {
                 m_rfGauge -= 20.0;
@@ -418,7 +418,7 @@ void CMinagi::UpdatePattern()
         }
         m_dashMomentum = 0;
         if (frame == 0 && timer == 0) {
-            m_gauge = m_gauge + 0x14;
+            m_gauge = m_gauge + 20;
             vx = (2.0 - (*m_opponent)->m_proration / 10000.0) * -1.8;
             if (m_rfBlue != 0) {
                 m_rfGauge -= 30.0;
@@ -454,7 +454,7 @@ void CMinagi::UpdatePattern()
         }
         m_dashMomentum = 0;
         if (frame == 0 && timer == 0) {
-            m_gauge = m_gauge + 0xa;
+            m_gauge = m_gauge + 10;
             vx = (2.0 - (*m_opponent)->m_proration / 10000.0) * -1.1;
             if (m_rfBlue != 0) {
                 m_rfGauge -= 10.0;
@@ -490,7 +490,7 @@ void CMinagi::UpdatePattern()
         }
         m_dashMomentum = 0;
         if (frame == 0 && timer == 0) {
-            m_gauge = m_gauge + 0xf;
+            m_gauge = m_gauge + 15;
             vx = (2.0 - (*m_opponent)->m_proration / 10000.0) * -1.5;
             if (m_rfBlue != 0) {
                 m_rfGauge -= 20.0;
@@ -526,7 +526,7 @@ void CMinagi::UpdatePattern()
         }
         m_dashMomentum = 0;
         if (frame == 0 && timer == 0) {
-            m_gauge = m_gauge + 0x14;
+            m_gauge = m_gauge + 20;
             vx = (2.0 - (*m_opponent)->m_proration / 10000.0) * -1.8;
             if (m_rfBlue != 0) {
                 m_rfGauge -= 30.0;
@@ -562,7 +562,7 @@ void CMinagi::UpdatePattern()
         }
         m_dashMomentum = 0;
         if (frame == 0 && timer == 0) {
-            m_gauge = m_gauge + 0xa;
+            m_gauge = m_gauge + 10;
             vx = (2.0 - (*m_opponent)->m_proration / 10000.0) * -1.1;
             if (m_rfBlue != 0) {
                 m_rfGauge -= 10.0;
@@ -595,7 +595,7 @@ void CMinagi::UpdatePattern()
         }
         m_dashMomentum = 0;
         if (frame == 0 && timer == 0) {
-            m_gauge = m_gauge + 0xf;
+            m_gauge = m_gauge + 15;
             vx = (2.0 - (*m_opponent)->m_proration / 10000.0) * -1.5;
             if (m_rfBlue != 0) {
                 m_rfGauge -= 20.0;
@@ -628,7 +628,7 @@ void CMinagi::UpdatePattern()
         }
         m_dashMomentum = 0;
         if (frame == 0 && timer == 0) {
-            m_gauge = m_gauge + 0x14;
+            m_gauge = m_gauge + 20;
             vx = (2.0 - (*m_opponent)->m_proration / 10000.0) * -1.8;
             if (m_rfBlue != 0) {
                 m_rfGauge -= 30.0;
@@ -660,7 +660,7 @@ void CMinagi::UpdatePattern()
             m_rfGauge -= 0.8;
         }
         if (frame == 0 && timer == 0) {
-            m_gauge = m_gauge + 0x1e;
+            m_gauge = m_gauge + 30;
             vx = m_hitVx;
             vy = vy * 0.75 + m_hitVy;
             if (vy < -2.0) {
@@ -703,7 +703,7 @@ void CMinagi::UpdatePattern()
             m_rfGauge -= 0.8;
         }
         if (frame == 0 && timer == 0) {
-            m_gauge = m_gauge + 0x1e;
+            m_gauge = m_gauge + 30;
             vx = m_hitVx;
             vy = vy * 0.75 + m_hitVy;
             if (vy < -4.0) {
@@ -746,7 +746,7 @@ void CMinagi::UpdatePattern()
             m_rfGauge -= 0.8;
         }
         if (frame == 0 && timer == 0) {
-            m_gauge = m_gauge + 0x1e;
+            m_gauge = m_gauge + 30;
             vx = m_hitVx;
             vy = vy * 0.75 + m_hitVy;
             if (vy < -6.0) {
@@ -789,7 +789,7 @@ void CMinagi::UpdatePattern()
             m_rfGauge -= 0.8;
         }
         if (frame == 0 && timer == 0) {
-            m_gauge = m_gauge + 0x1e;
+            m_gauge = m_gauge + 30;
             vx = m_hitVx;
             vy = vy * 0.75 + m_hitVy;
             ay = 0.032;
@@ -827,7 +827,7 @@ void CMinagi::UpdatePattern()
             m_rfGauge -= 0.8;
         }
         if (frame == 0 && timer == 0) {
-            m_gauge = m_gauge + 0x1e;
+            m_gauge = m_gauge + 30;
             vx = m_hitVx;
             vy = m_hitVy;
             ay = 0.032;
@@ -870,7 +870,7 @@ void CMinagi::UpdatePattern()
             break;
         }
         if (frame == 0 && timer == 0) {
-            m_gauge = m_gauge + 0x1e;
+            m_gauge = m_gauge + 30;
             vx = m_hitVx;
             vy = vy * 0.75 + m_hitVy;
             if (vy < -2.0) {
@@ -918,7 +918,7 @@ void CMinagi::UpdatePattern()
             break;
         }
         if (frame == 0 && timer == 0) {
-            m_gauge = m_gauge + 0x1e;
+            m_gauge = m_gauge + 30;
             vx = m_hitVx;
             vy = vy * 0.75 + m_hitVy;
             if (vy < -4.0) {
@@ -966,7 +966,7 @@ void CMinagi::UpdatePattern()
             break;
         }
         if (frame == 0 && timer == 0) {
-            m_gauge = m_gauge + 0x1e;
+            m_gauge = m_gauge + 30;
             vx = m_hitVx;
             vy = vy * 0.75 + m_hitVy;
             ay = 0.032;
@@ -1009,7 +1009,7 @@ void CMinagi::UpdatePattern()
             break;
         }
         if (frame == 0 && timer == 0) {
-            m_gauge = m_gauge + 0x1e;
+            m_gauge = m_gauge + 30;
             vx = m_hitVx;
             vy = m_hitVy;
             ay = 0.032;
@@ -1104,13 +1104,13 @@ void CMinagi::UpdatePattern()
             m_rfGauge -= 0.8;
         }
         if (frame == 0 && timer == 0 && m_patternVar1 == 0) {
-            m_gauge = m_gauge + 0x1e;
+            m_gauge = m_gauge + 30;
             m_patternVar1++;
-            m_untechTime = m_untechTime + 0x78;
+            m_untechTime = m_untechTime + 120;
             vx = 0.5;
             vy = -2.5;
             ay = 0.025;
-            m_playSound = 0x1f;
+            m_playSound = 31;
             effect.type = 0;
             effect.x = (double)(int)x;
             effect.y = (double)(int)y;
@@ -1143,7 +1143,7 @@ void CMinagi::UpdatePattern()
             m_rfGauge -= 0.8;
         }
         if (frame == 0 && timer == 0) {
-            m_gauge = m_gauge + 0x1e;
+            m_gauge = m_gauge + 30;
             vx = m_hitVx;
             vy = m_hitVy;
             ay = 0.072;
@@ -1254,7 +1254,7 @@ void CMinagi::UpdatePattern()
         }
         m_dashMomentum = 0;
         if (frame == 0 && timer == 0) {
-            m_gauge = m_gauge + 0x1e;
+            m_gauge = m_gauge + 30;
             if (m_rfBlue != 0) {
                 m_rfGauge -= 30.0;
             }
@@ -1292,7 +1292,7 @@ void CMinagi::UpdatePattern()
         }
         m_dashMomentum = 0;
         if (frame == 0 && timer == 0) {
-            m_gauge = m_gauge + 0x1e;
+            m_gauge = m_gauge + 30;
             if (m_rfBlue != 0) {
                 m_rfGauge -= 30.0;
             }
@@ -1330,7 +1330,7 @@ void CMinagi::UpdatePattern()
         }
         m_dashMomentum = 0;
         if (frame == 0 && timer == 0) {
-            m_gauge = m_gauge + 0x1e;
+            m_gauge = m_gauge + 30;
             if (m_rfBlue != 0) {
                 m_rfGauge -= 30.0;
             }
@@ -1370,7 +1370,7 @@ void CMinagi::UpdatePattern()
             effect.facing = facing;
             effect.layer = 1;
             SpawnObject(&effect);
-            m_gauge = m_gauge + 0x1e;
+            m_gauge = m_gauge + 30;
             vx = m_hitVx;
             vy = m_hitVy;
             ay = 0.032;
@@ -1404,11 +1404,11 @@ void CMinagi::UpdatePattern()
             m_rfGauge -= 0.8;
         }
         if (frame == 0 && timer == 0 && m_patternVar1 == 0) {
-            m_playSound = 0x1e;
+            m_playSound = 30;
             vy = -0.45;
             vx = -0.1;
             m_patternVar1++;
-            m_gauge = m_gauge + 0x1e;
+            m_gauge = m_gauge + 30;
         }
         if (frame == 4 && timer == 0) {
             vx = m_hitVx;
@@ -1461,10 +1461,10 @@ void CMinagi::UpdatePattern()
             if (m_rfBlue != 0) {
                 m_rfGauge -= 30.0;
             }
-            m_playSound = 0x21;
+            m_playSound = 33;
             vy = -1.5;
             vx = -0.8;
-            m_gauge = m_gauge + 0x1e;
+            m_gauge = m_gauge + 30;
         }
         vy += 0.04;
         if (frame == 0 && vy + y > 0.0) {
@@ -1513,10 +1513,10 @@ void CMinagi::UpdatePattern()
             if (m_rfBlue != 0) {
                 m_rfGauge -= 30.0;
             }
-            m_playSound = 0x21;
+            m_playSound = 33;
             vy = -1.5;
             vx = -0.8;
-            m_gauge = m_gauge + 0x1e;
+            m_gauge = m_gauge + 30;
         }
         vy += 0.04;
         if (frame == 0 && vy + y > 0.0) {
@@ -1565,10 +1565,10 @@ void CMinagi::UpdatePattern()
             if (m_rfBlue != 0) {
                 m_rfGauge -= 30.0;
             }
-            m_playSound = 0x21;
+            m_playSound = 33;
             vx = m_hitVx;
             vy = m_hitVy;
-            m_gauge = m_gauge + 0x1e;
+            m_gauge = m_gauge + 30;
         }
         vy += 0.04;
         timer++;
@@ -1609,10 +1609,10 @@ void CMinagi::UpdatePattern()
                 if (m_rfBlue != 0) {
                     m_rfGauge -= 30.0;
                 }
-                m_playSound = 0x21;
+                m_playSound = 33;
                 vx = m_hitVx;
                 vy = m_hitVy;
-                m_gauge = m_gauge + 0x1e;
+                m_gauge = m_gauge + 30;
                 m_patternVar1++;
             }
         }
@@ -1721,7 +1721,7 @@ void CMinagi::UpdatePattern()
         }
         break;
     case kLyingDown:
-        if (m_hp > 0 && timer > 0x63 && frame == 0) {
+        if (m_hp > 0 && timer > 99 && frame == 0) {
             pattern = kWakeUp;
             StartPattern();
             m_dashMomentum = 0;
@@ -1748,7 +1748,7 @@ void CMinagi::UpdatePattern()
         }
         if (frame == 0 && timer == 0) {
             m_dashMomentum = 0;
-            m_gauge = m_gauge + 0xa;
+            m_gauge = m_gauge + 10;
             vx = -1.5;
             vy = 0.0;
             y = 0.0;
@@ -1788,7 +1788,7 @@ void CMinagi::UpdatePattern()
         }
         if (frame == 0 && timer == 0) {
             m_dashMomentum = 0;
-            m_gauge = m_gauge + 0xf;
+            m_gauge = m_gauge + 15;
             vx = -1.8;
             vy = 0.0;
             y = 0.0;
@@ -1828,7 +1828,7 @@ void CMinagi::UpdatePattern()
         }
         if (frame == 0 && timer == 0) {
             m_dashMomentum = 0;
-            m_gauge = m_gauge + 0x14;
+            m_gauge = m_gauge + 20;
             vx = -2.3;
             vy = 0.0;
             y = 0.0;
@@ -1868,7 +1868,7 @@ void CMinagi::UpdatePattern()
         }
         if (frame == 0 && timer == 0) {
             m_dashMomentum = 0;
-            m_gauge = m_gauge + 0xa;
+            m_gauge = m_gauge + 10;
             vx = -1.5;
             vy = 0.0;
             y = 0.0;
@@ -1905,7 +1905,7 @@ void CMinagi::UpdatePattern()
         }
         if (frame == 0 && timer == 0) {
             m_dashMomentum = 0;
-            m_gauge = m_gauge + 0xf;
+            m_gauge = m_gauge + 15;
             vx = -1.8;
             vy = 0.0;
             y = 0.0;
@@ -1942,7 +1942,7 @@ void CMinagi::UpdatePattern()
         }
         if (frame == 0 && timer == 0) {
             m_dashMomentum = 0;
-            m_gauge = m_gauge + 0x14;
+            m_gauge = m_gauge + 20;
             vx = -2.3;
             vy = 0.0;
             y = 0.0;
@@ -1973,7 +1973,7 @@ void CMinagi::UpdatePattern()
     case kGuardAir:
         if (frame == 0 && timer == 0) {
             vy = -2.6;
-            m_gauge = m_gauge + 0xf;
+            m_gauge = m_gauge + 15;
             ay = 0.06;
         }
         vx = -1.2;
@@ -2064,12 +2064,12 @@ void CMinagi::UpdatePattern()
             StopMoving();
             effect.type = 9;
             effect.x = (double)(int)x;
-            effect.y = (double)((int)y - 0x46);
+            effect.y = (double)((int)y - 70);
             effect.scale = 2;
             effect.layer = 1;
             m_game->CreateEffect((EffectDesc*)&effect);
             m_hitsLeft = 1;
-            m_playSound = 0x3e;
+            m_playSound = 62;
             m_patternVar1++;
         }
         timer++;
@@ -2096,13 +2096,13 @@ void CMinagi::UpdatePattern()
             StopMoving();
             effect.type = 9;
             effect.x = (double)(int)x;
-            effect.y = (double)((int)y - 0x46);
+            effect.y = (double)((int)y - 70);
             effect.scale = 2;
             effect.layer = 1;
             m_game->CreateEffect((EffectDesc*)&effect);
             m_hitsLeft = 1;
-            m_playSound = 0x3e;
-            m_gauge = m_gauge - 0x3e8;
+            m_playSound = 62;
+            m_gauge = m_gauge - 1000;
             m_patternVar1++;
         }
         vy = vy + ay;
@@ -2117,7 +2117,7 @@ void CMinagi::UpdatePattern()
         if (timer >= duration) {
             timer = 0;
             frame++;
-            if (frame == 0xf) {
+            if (frame == 15) {
                 ay = 0.035;
             }
             if (frame >= frameCount) {
@@ -2145,7 +2145,7 @@ void CMinagi::UpdatePattern()
         if (frame < 5 && frame > 1) {
             vx = 1.6;
             if (m_patternVar1 == 0) {
-                m_playSound = 0x11;
+                m_playSound = 17;
             }
         }
         m_dashMomentum = 1;
@@ -2163,11 +2163,11 @@ void CMinagi::UpdatePattern()
                 break;
             }
         }
-        if (m_inputX == facing && m_patternVar1 >= 0x78 && frame < 5) {
+        if (m_inputX == facing && m_patternVar1 >= 120 && frame < 5) {
             pattern = kDashStop;
             StartPattern();
         }
-        if (m_inputX != facing && m_patternVar1 >= 0x3c && frame < 5) {
+        if (m_inputX != facing && m_patternVar1 >= 60 && frame < 5) {
             pattern = kDashStop;
             StartPattern();
         }
@@ -2217,7 +2217,7 @@ void CMinagi::UpdatePattern()
             StartAfterimages(3);
             vy = 0.0;
             ay = 0.0;
-            m_playSound = 0x11;
+            m_playSound = 17;
         }
         timer++;
         m_patternVar1++;
@@ -2229,7 +2229,7 @@ void CMinagi::UpdatePattern()
                 frame = frame - 2;
             }
         }
-        if (m_inputX == facing && m_patternVar2 >= 0x78) {
+        if (m_inputX == facing && m_patternVar2 >= 120) {
             pattern = kFall;
             StartPattern();
             vx = 1.3;
@@ -2238,7 +2238,7 @@ void CMinagi::UpdatePattern()
                 vx = -vx;
             }
         }
-        if (m_inputX != facing && m_patternVar1 >= 0x30) {
+        if (m_inputX != facing && m_patternVar1 >= 48) {
             pattern = kFall;
             StartPattern();
             vx = 1.3;
@@ -2254,7 +2254,7 @@ void CMinagi::UpdatePattern()
             vy = 0.0;
             ay = 0.0;
             StartAfterimages(3);
-            m_playSound = 0x11;
+            m_playSound = 17;
         }
         timer++;
         m_patternVar1++;
@@ -2266,7 +2266,7 @@ void CMinagi::UpdatePattern()
                 frame = frame - 2;
             }
         }
-        if (m_inputX == -facing && m_patternVar2 >= 0x78) {
+        if (m_inputX == -facing && m_patternVar2 >= 120) {
             pattern = kFall;
             StartPattern();
             vx = -0.9;
@@ -2275,7 +2275,7 @@ void CMinagi::UpdatePattern()
                 vx = -vx;
             }
         }
-        if (m_inputX != -facing && m_patternVar1 >= 0x30) {
+        if (m_inputX != -facing && m_patternVar1 >= 48) {
             pattern = kFall;
             StartPattern();
             vx = -0.9;
@@ -2294,11 +2294,11 @@ void CMinagi::UpdatePattern()
                 m_proration = m_rfGauge * 5.0 + m_proration;
             }
             m_rfGauge = 0.0;
-            m_freezeTime = 0x5a;
-            FillBackground(0xb0, 3);
+            m_freezeTime = 90;
+            FillBackground(176, 3);
         }
         if (frame == 1 && timer == 0) {
-            m_playSound = 0x12;
+            m_playSound = 18;
             effect.type = 1;
             effect.x = (double)(int)x;
             effect.y = (double)(int)y;
@@ -2397,7 +2397,7 @@ void CMinagi::UpdatePattern()
             }
             m_recoilGuardWindow = 0;
             m_cornerPushback = 0.0;
-            m_freezeTime = 0x3c;
+            m_freezeTime = 60;
         }
         if (m_freezeTime == 0 && m_patternVar3 == 0) {
             m_patternVar3++;
@@ -2433,11 +2433,11 @@ void CMinagi::UpdatePattern()
                 m_proration = m_rfGauge * 5.0 + m_proration;
             }
             m_rfGauge = 0.0;
-            m_freezeTime = 0x5a;
-            FillBackground(0xb0, 3);
+            m_freezeTime = 90;
+            FillBackground(176, 3);
         }
         if (frame == 1 && timer == 0) {
-            m_playSound = 0x12;
+            m_playSound = 18;
             effect.type = 1;
             effect.x = (double)(int)x;
             effect.y = (double)(int)y;
@@ -2557,7 +2557,7 @@ void CMinagi::UpdatePattern()
         }
         if (frame == 2 && timer == 0) {
             m_gauge = m_gauge + 5;
-            m_playSound = 0x15;
+            m_playSound = 21;
             m_hitsLeft = 1;
         }
         timer++;
@@ -2599,8 +2599,8 @@ void CMinagi::UpdatePattern()
         }
         if (frame == 2 && timer == 0) {
             vx = 0.2;
-            m_gauge = m_gauge + 0xf;
-            m_playSound = 0x14;
+            m_gauge = m_gauge + 15;
+            m_playSound = 20;
             m_hitsLeft = 1;
         }
         timer++;
@@ -2630,8 +2630,8 @@ void CMinagi::UpdatePattern()
         }
         if (frame == 2 && timer == 0) {
             vx = 0.2;
-            m_gauge = m_gauge + 0xf;
-            m_playSound = 0x14;
+            m_gauge = m_gauge + 15;
+            m_playSound = 20;
             m_hitsLeft = 1;
         }
         timer++;
@@ -2672,13 +2672,13 @@ void CMinagi::UpdatePattern()
             break;
         }
         if (frame == 6 && timer == 0) {
-            m_gauge = m_gauge + 0x19;
-            m_playSound = 0x14;
+            m_gauge = m_gauge + 25;
+            m_playSound = 20;
             m_hitsLeft = 1;
         }
-        if (frame == 0xc && timer == 0) {
-            m_gauge = m_gauge + 0x19;
-            m_playSound = 0x14;
+        if (frame == 12 && timer == 0) {
+            m_gauge = m_gauge + 25;
+            m_playSound = 20;
             m_hitsLeft = 1;
         }
         timer++;
@@ -2688,7 +2688,7 @@ void CMinagi::UpdatePattern()
             if (frame < 3) {
                 m_attackResult = 0;
             }
-            if (frame == 0xc) {
+            if (frame == 12) {
                 m_attackResult = 0;
             }
             if (frame >= frameCount) {
@@ -2723,7 +2723,7 @@ void CMinagi::UpdatePattern()
         }
         if (frame == 1 && timer == 0) {
             m_gauge = m_gauge + 5;
-            m_playSound = 0x15;
+            m_playSound = 21;
             m_hitsLeft = 1;
         }
         timer++;
@@ -2767,8 +2767,8 @@ void CMinagi::UpdatePattern()
             break;
         }
         if (frame == 2 && timer == 0) {
-            m_gauge = m_gauge + 0xd;
-            m_playSound = 0x14;
+            m_gauge = m_gauge + 13;
+            m_playSound = 20;
             m_hitsLeft = 1;
         }
         timer++;
@@ -2805,8 +2805,8 @@ void CMinagi::UpdatePattern()
             m_hitsLeft = 1;
         }
         if (frame == 3 && timer == 0 && m_patternVar1 == 0) {
-            m_gauge = m_gauge + 0x19;
-            m_playSound = 0x14;
+            m_gauge = m_gauge + 25;
+            m_playSound = 20;
             m_patternVar1++;
         }
         timer++;
@@ -2843,7 +2843,7 @@ void CMinagi::UpdatePattern()
         }
         if (frame == 2 && timer == 0) {
             m_gauge = m_gauge + 5;
-            m_playSound = 0x15;
+            m_playSound = 21;
             m_hitsLeft = 1;
         }
         if (y + vy >= 0.0) {
@@ -2881,8 +2881,8 @@ void CMinagi::UpdatePattern()
             break;
         }
         if (frame == 3 && timer == 0) {
-            m_gauge = m_gauge + 0xd;
-            m_playSound = 0x14;
+            m_gauge = m_gauge + 13;
+            m_playSound = 20;
             m_hitsLeft = 1;
         }
         if (y + vy >= 0.0) {
@@ -2920,8 +2920,8 @@ void CMinagi::UpdatePattern()
             break;
         }
         if (frame == 4 && timer == 0) {
-            m_gauge = m_gauge + 0x1e;
-            m_playSound = 0x14;
+            m_gauge = m_gauge + 30;
+            m_playSound = 20;
             m_hitsLeft = 1;
         }
         if (y + vy >= 0.0) {
@@ -2954,8 +2954,8 @@ void CMinagi::UpdatePattern()
             ay = 0.08;
         }
         if (frame == 2 && timer == 0) {
-            m_gauge = m_gauge + 0xf;
-            m_playSound = 0x14;
+            m_gauge = m_gauge + 15;
+            m_playSound = 20;
             m_hitsLeft = 1;
         }
         if (frame == 5 && timer == 0) {
@@ -3003,8 +3003,8 @@ void CMinagi::UpdatePattern()
             vy = 0.0;
         }
         if (frame == 3 && timer == 0) {
-            m_gauge = m_gauge + 0x1e;
-            m_playSound = 0x14;
+            m_gauge = m_gauge + 30;
+            m_playSound = 20;
             m_hitsLeft = 1;
         }
         timer++;
@@ -3022,8 +3022,8 @@ void CMinagi::UpdatePattern()
     case kUnusedAirDive:
         vy = vy + ay;
         if (frame == 0 && timer == 0) {
-            m_gauge = m_gauge + 0x1e;
-            m_playSound = 0x14;
+            m_gauge = m_gauge + 30;
+            m_playSound = 20;
             m_hitsLeft = 1;
             vx = vx / 2.0;
             ay = 0.07;
@@ -3141,7 +3141,7 @@ void CMinagi::UpdatePattern()
         break;
     case kThrowHit:
         if (frame == 4 && timer == 0) {
-            DealDamage(0x4e2, 750.0);
+            DealDamage(1250, 750.0);
         }
         timer++;
         if (timer >= duration) {
@@ -3171,7 +3171,7 @@ void CMinagi::UpdatePattern()
         }
         if (frame == 2 && timer == 0) {
             m_gauge = m_gauge + 5;
-            m_playSound = 0x15;
+            m_playSound = 21;
             m_hitsLeft = 1;
         }
         timer++;
@@ -3199,8 +3199,8 @@ void CMinagi::UpdatePattern()
             vx = 2.0;
         }
         if (frame == 2 && timer == 0) {
-            m_gauge = m_gauge + 0xa;
-            m_playSound = 0x14;
+            m_gauge = m_gauge + 10;
+            m_playSound = 20;
             m_hitsLeft = 1;
         }
         timer++;
@@ -3228,8 +3228,8 @@ void CMinagi::UpdatePattern()
             vx = 2.0;
         }
         if (frame == 2 && timer == 0) {
-            m_gauge = m_gauge + 0xa;
-            m_playSound = 0x14;
+            m_gauge = m_gauge + 10;
+            m_playSound = 20;
             m_hitsLeft = 1;
         }
         timer++;
@@ -3258,7 +3258,7 @@ void CMinagi::UpdatePattern()
         }
         if (frame == 1 && timer == 0) {
             m_gauge = m_gauge + 5;
-            m_playSound = 0x15;
+            m_playSound = 21;
             m_hitsLeft = 1;
         }
         timer++;
@@ -3286,8 +3286,8 @@ void CMinagi::UpdatePattern()
             vx = 2.0;
         }
         if (frame == 3 && timer == 0) {
-            m_gauge = m_gauge + 0xa;
-            m_playSound = 0x14;
+            m_gauge = m_gauge + 10;
+            m_playSound = 20;
             m_hitsLeft = 1;
         }
         timer++;
@@ -3327,8 +3327,8 @@ void CMinagi::UpdatePattern()
             vx = 2.0;
         }
         if (frame == 2 && timer == 0) {
-            m_gauge = m_gauge + 0xa;
-            m_playSound = 0x14;
+            m_gauge = m_gauge + 10;
+            m_playSound = 20;
             m_hitsLeft = 1;
         }
         timer++;
@@ -3355,7 +3355,7 @@ void CMinagi::UpdatePattern()
             (*m_opponent)->pattern = kThrownStandHigh;
             effect.type = 0;
             effect.x = (double)((int)x + (facing << 5));
-            effect.y = (double)((int)y - 0x3e);
+            effect.y = (double)((int)y - 62);
             effect.scale = 2;
             effect.layer = 1;
             m_game->CreateEffect((EffectDesc*)&effect);
@@ -3380,10 +3380,10 @@ void CMinagi::UpdatePattern()
         break;
     case kAirThrowHit:
         if (frame < 8) {
-            FocusCameraX(0x32, 3);
+            FocusCameraX(50, 3);
         }
         if (frame < 8) {
-            FocusCameraY(0x32, 3);
+            FocusCameraY(50, 3);
         }
         if (frame == 0 && timer == 1) {
             (*m_opponent)->facing = -facing;
@@ -3514,9 +3514,9 @@ void CMinagi::UpdatePattern()
             vx = 0.0;
             vy = 0.0;
             effect.type = 0x21;
-            effect.sound = 0xb;
-            effect.x = (double)((int)x - facing * 0x11);
-            effect.y = (double)((int)y - 0x38);
+            effect.sound = 11;
+            effect.x = (double)((int)x - facing * 17);
+            effect.y = (double)((int)y - 56);
             effect.scale = 2;
             effect.layer = 1;
             m_game->CreateEffect((EffectDesc*)&effect);
@@ -3577,9 +3577,9 @@ void CMinagi::UpdatePattern()
             vx = 0.0;
             vy = 0.0;
             effect.type = 0x21;
-            effect.sound = 0xb;
-            effect.x = (double)((int)x - facing * 0x11);
-            effect.y = (double)((int)y - 0x38);
+            effect.sound = 11;
+            effect.x = (double)((int)x - facing * 17);
+            effect.y = (double)((int)y - 56);
             effect.scale = 2;
             effect.layer = 1;
             m_game->CreateEffect((EffectDesc*)&effect);
@@ -3640,9 +3640,9 @@ void CMinagi::UpdatePattern()
             vx = 0.0;
             vy = 0.0;
             effect.type = 0x21;
-            effect.sound = 0xb;
-            effect.x = (double)((int)x - facing * 0x11);
-            effect.y = (double)((int)y - 0x38);
+            effect.sound = 11;
+            effect.x = (double)((int)x - facing * 17);
+            effect.y = (double)((int)y - 56);
             effect.scale = 2;
             effect.layer = 1;
             m_game->CreateEffect((EffectDesc*)&effect);
@@ -3673,9 +3673,9 @@ void CMinagi::UpdatePattern()
             timer = 0;
             frame++;
             if (frame == 5 && timer == 0) {
-                m_gauge = m_gauge + 0xf;
+                m_gauge = m_gauge + 15;
                 effect.type = 0x1ad;
-                effect.x = facing * 0x41 + x;
+                effect.x = facing * 65 + x;
                 effect.y = y - 54.0;
                 effect.facing = facing;
                 effect.layer = 1;
@@ -3699,9 +3699,9 @@ void CMinagi::UpdatePattern()
             timer = 0;
             frame++;
             if (frame == 5 && timer == 0) {
-                m_gauge = m_gauge + 0xf;
+                m_gauge = m_gauge + 15;
                 effect.type = 0x1ae;
-                effect.x = facing * 0x41 + x;
+                effect.x = facing * 65 + x;
                 effect.y = y - 54.0;
                 effect.facing = facing;
                 effect.layer = 1;
@@ -3721,9 +3721,9 @@ void CMinagi::UpdatePattern()
             vx = 0.0;
             vy = 0.0;
             effect.type = 0x21;
-            effect.sound = 0xb;
-            effect.x = (double)((int)x - facing * 0xa);
-            effect.y = (double)((int)y - 0x38);
+            effect.sound = 11;
+            effect.x = (double)((int)x - facing * 10);
+            effect.y = (double)((int)y - 56);
             effect.scale = 2;
             effect.layer = 1;
             m_game->CreateEffect((EffectDesc*)&effect);
@@ -3739,9 +3739,9 @@ void CMinagi::UpdatePattern()
             timer = 0;
             frame++;
             if (frame == 5 && timer == 0) {
-                m_gauge = m_gauge + 0xf;
+                m_gauge = m_gauge + 15;
                 effect.type = 0x1af;
-                effect.x = facing * 0x41 + x;
+                effect.x = facing * 65 + x;
                 effect.y = y - 54.0;
                 effect.facing = facing;
                 effect.layer = 1;
@@ -3799,9 +3799,9 @@ void CMinagi::UpdatePattern()
         if (frame == 0 && timer == 0) {
             StopMoving();
             effect.type = 0x21;
-            effect.sound = 0xb;
-            effect.x = (double)((int)x - facing * 0xa);
-            effect.y = (double)((int)y - 0x38);
+            effect.sound = 11;
+            effect.x = (double)((int)x - facing * 10);
+            effect.y = (double)((int)y - 56);
             effect.scale = 2;
             effect.layer = 1;
             m_game->CreateEffect((EffectDesc*)&effect);
@@ -3891,9 +3891,9 @@ void CMinagi::UpdatePattern()
         if (frame == 0 && timer == 0) {
             StopMoving();
             effect.type = 0x21;
-            effect.sound = 0xb;
-            effect.x = (double)((int)x - facing * 0xa);
-            effect.y = (double)((int)y - 0x38);
+            effect.sound = 11;
+            effect.x = (double)((int)x - facing * 10);
+            effect.y = (double)((int)y - 56);
             effect.scale = 2;
             effect.layer = 1;
             m_game->CreateEffect((EffectDesc*)&effect);
@@ -3957,9 +3957,9 @@ void CMinagi::UpdatePattern()
         if (frame == 0 && timer == 0) {
             StopMoving();
             effect.type = 0x21;
-            effect.sound = 0xb;
-            effect.x = (double)((int)x - facing * 0xa);
-            effect.y = (double)((int)y - 0x38);
+            effect.sound = 11;
+            effect.x = (double)((int)x - facing * 10);
+            effect.y = (double)((int)y - 56);
             effect.scale = 2;
             effect.layer = 1;
             m_game->CreateEffect((EffectDesc*)&effect);
@@ -4023,9 +4023,9 @@ void CMinagi::UpdatePattern()
             vx = 0.0;
             vy = 0.0;
             effect.type = 0x21;
-            effect.sound = 0xb;
-            effect.x = (double)((int)x - facing * 0x11);
-            effect.y = (double)((int)y - 0x38);
+            effect.sound = 11;
+            effect.x = (double)((int)x - facing * 17);
+            effect.y = (double)((int)y - 56);
             effect.scale = 2;
             effect.layer = 1;
             m_game->CreateEffect((EffectDesc*)&effect);
@@ -4052,13 +4052,13 @@ void CMinagi::UpdatePattern()
         }
         if (frame == 2 && timer == 3) {
             StopMoving();
-            m_freezeTime = 0x78;
-            m_gauge = m_gauge - 0x3e8;
-            FillBackground(0xb0, 3);
+            m_freezeTime = 120;
+            m_gauge = m_gauge - 1000;
+            FillBackground(176, 3);
             effect.type = 0x44;
-            effect.sound = 0x13;
+            effect.sound = 19;
             effect.x = (double)(int)x;
-            effect.y = (double)((int)y - 0x28);
+            effect.y = (double)((int)y - 40);
             effect.scale = 2;
             effect.keep = 1;
             effect.layer = 1;
@@ -4082,13 +4082,13 @@ void CMinagi::UpdatePattern()
         }
         if (frame == 2 && timer == 3) {
             StopMoving();
-            m_freezeTime = 0x78;
-            m_gauge = m_gauge - 0x7d0;
-            FillBackground(0xb0, 3);
+            m_freezeTime = 120;
+            m_gauge = m_gauge - 2000;
+            FillBackground(176, 3);
             effect.type = 0x45;
             effect.sound = 5;
             effect.x = (double)(int)x;
-            effect.y = (double)((int)y - 0x28);
+            effect.y = (double)((int)y - 40);
             effect.scale = 2;
             effect.keep = 1;
             effect.layer = 1;
@@ -4112,18 +4112,18 @@ void CMinagi::UpdatePattern()
         }
         if (frame == 2 && timer == 3) {
             StopMoving();
-            m_freezeTime = 0x78;
-            m_gauge = m_gauge - 0xbb8;
-            FillBackground(0xb0, 3);
+            m_freezeTime = 120;
+            m_gauge = m_gauge - 3000;
+            FillBackground(176, 3);
             effect.type = 0x46;
-            effect.sound = 0x40;
+            effect.sound = 64;
             effect.x = (double)(int)x;
-            effect.y = (double)((int)y - 0x28);
+            effect.y = (double)((int)y - 40);
             effect.scale = 2;
             effect.keep = 1;
             effect.layer = 1;
             m_game->CreateEffect((EffectDesc*)&effect);
-            m_playSound = 0x25;
+            m_playSound = 37;
         }
         timer++;
         if (timer >= duration) {
@@ -4143,13 +4143,13 @@ void CMinagi::UpdatePattern()
         }
         if (frame == 2 && timer == 0) {
             StopMoving();
-            m_freezeTime = 0x78;
-            m_gauge = m_gauge - 0x3e8;
-            FillBackground(0xb0, 3);
+            m_freezeTime = 120;
+            m_gauge = m_gauge - 1000;
+            FillBackground(176, 3);
             effect.type = 0x44;
-            effect.sound = 0x13;
+            effect.sound = 19;
             effect.x = (double)(int)x;
-            effect.y = (double)((int)y - 0x28);
+            effect.y = (double)((int)y - 40);
             effect.scale = 2;
             effect.keep = 1;
             effect.layer = 1;
@@ -4173,13 +4173,13 @@ void CMinagi::UpdatePattern()
         }
         if (frame == 2 && timer == 0) {
             StopMoving();
-            m_freezeTime = 0x78;
-            m_gauge = m_gauge - 0x7d0;
-            FillBackground(0xb0, 3);
+            m_freezeTime = 120;
+            m_gauge = m_gauge - 2000;
+            FillBackground(176, 3);
             effect.type = 0x45;
             effect.sound = 5;
             effect.x = (double)(int)x;
-            effect.y = (double)((int)y - 0x28);
+            effect.y = (double)((int)y - 40);
             effect.scale = 2;
             effect.keep = 1;
             effect.layer = 1;
@@ -4203,18 +4203,18 @@ void CMinagi::UpdatePattern()
         }
         if (frame == 2 && timer == 0) {
             StopMoving();
-            m_freezeTime = 0x78;
-            m_gauge = m_gauge - 0xbb8;
-            FillBackground(0xb0, 3);
+            m_freezeTime = 120;
+            m_gauge = m_gauge - 3000;
+            FillBackground(176, 3);
             effect.type = 0x46;
-            effect.sound = 0x40;
+            effect.sound = 64;
             effect.x = (double)(int)x;
-            effect.y = (double)((int)y - 0x28);
+            effect.y = (double)((int)y - 40);
             effect.scale = 2;
             effect.keep = 1;
             effect.layer = 1;
             m_game->CreateEffect((EffectDesc*)&effect);
-            m_playSound = 0x25;
+            m_playSound = 37;
         }
         timer++;
         if (timer >= duration) {
@@ -4234,13 +4234,13 @@ void CMinagi::UpdatePattern()
         }
         if (frame == 1 && timer == 3) {
             StopMoving();
-            m_freezeTime = 0x78;
-            m_gauge = m_gauge - 0x3e8;
-            FillBackground(0xb0, 3);
+            m_freezeTime = 120;
+            m_gauge = m_gauge - 1000;
+            FillBackground(176, 3);
             effect.type = 0x44;
-            effect.sound = 0x13;
-            effect.x = (double)((int)x - facing * 0x12);
-            effect.y = (double)((int)y - 0x57);
+            effect.sound = 19;
+            effect.x = (double)((int)x - facing * 18);
+            effect.y = (double)((int)y - 87);
             effect.scale = 2;
             effect.keep = 1;
             effect.layer = 1;
@@ -4266,13 +4266,13 @@ void CMinagi::UpdatePattern()
         }
         if (frame == 1 && timer == 3) {
             StopMoving();
-            m_freezeTime = 0x78;
-            m_gauge = m_gauge - 0x7d0;
-            FillBackground(0xb0, 3);
+            m_freezeTime = 120;
+            m_gauge = m_gauge - 2000;
+            FillBackground(176, 3);
             effect.type = 0x45;
             effect.sound = 5;
-            effect.x = (double)((int)x - facing * 0x12);
-            effect.y = (double)((int)y - 0x57);
+            effect.x = (double)((int)x - facing * 18);
+            effect.y = (double)((int)y - 87);
             effect.scale = 2;
             effect.keep = 1;
             effect.layer = 1;
@@ -4298,18 +4298,18 @@ void CMinagi::UpdatePattern()
         }
         if (frame == 1 && timer == 3) {
             StopMoving();
-            m_freezeTime = 0x78;
-            m_gauge = m_gauge - 0xbb8;
-            FillBackground(0xb0, 3);
+            m_freezeTime = 120;
+            m_gauge = m_gauge - 3000;
+            FillBackground(176, 3);
             effect.type = 0x46;
-            effect.sound = 0x40;
-            effect.x = (double)((int)x - facing * 0x12);
-            effect.y = (double)((int)y - 0x57);
+            effect.sound = 64;
+            effect.x = (double)((int)x - facing * 18);
+            effect.y = (double)((int)y - 87);
             effect.scale = 2;
             effect.keep = 1;
             effect.layer = 1;
             m_game->CreateEffect((EffectDesc*)&effect);
-            m_playSound = 0x25;
+            m_playSound = 37;
         }
         timer++;
         if (timer >= duration) {
@@ -4331,13 +4331,13 @@ void CMinagi::UpdatePattern()
         }
         if (frame == 1 && timer == 0) {
             StopMoving();
-            m_freezeTime = 0x78;
-            m_gauge = m_gauge - 0x3e8;
-            FillBackground(0xb0, 3);
+            m_freezeTime = 120;
+            m_gauge = m_gauge - 1000;
+            FillBackground(176, 3);
             effect.type = 0x44;
-            effect.sound = 0x13;
-            effect.x = (double)((int)x - facing * 0x12);
-            effect.y = (double)((int)y - 0x57);
+            effect.sound = 19;
+            effect.x = (double)((int)x - facing * 18);
+            effect.y = (double)((int)y - 87);
             effect.scale = 2;
             effect.keep = 1;
             effect.layer = 1;
@@ -4363,13 +4363,13 @@ void CMinagi::UpdatePattern()
         }
         if (frame == 1 && timer == 0) {
             StopMoving();
-            m_freezeTime = 0x78;
-            m_gauge = m_gauge - 0x7d0;
-            FillBackground(0xb0, 3);
+            m_freezeTime = 120;
+            m_gauge = m_gauge - 2000;
+            FillBackground(176, 3);
             effect.type = 0x45;
             effect.sound = 5;
-            effect.x = (double)((int)x - facing * 0x12);
-            effect.y = (double)((int)y - 0x57);
+            effect.x = (double)((int)x - facing * 18);
+            effect.y = (double)((int)y - 87);
             effect.scale = 2;
             effect.keep = 1;
             effect.layer = 1;
@@ -4395,18 +4395,18 @@ void CMinagi::UpdatePattern()
         }
         if (frame == 1 && timer == 0) {
             StopMoving();
-            m_freezeTime = 0x78;
-            m_gauge = m_gauge - 0xbb8;
-            FillBackground(0xb0, 3);
+            m_freezeTime = 120;
+            m_gauge = m_gauge - 3000;
+            FillBackground(176, 3);
             effect.type = 0x46;
-            effect.sound = 0x40;
-            effect.x = (double)((int)x - facing * 0x12);
-            effect.y = (double)((int)y - 0x57);
+            effect.sound = 64;
+            effect.x = (double)((int)x - facing * 18);
+            effect.y = (double)((int)y - 87);
             effect.scale = 2;
             effect.keep = 1;
             effect.layer = 1;
             m_game->CreateEffect((EffectDesc*)&effect);
-            m_playSound = 0x25;
+            m_playSound = 37;
         }
         timer++;
         if (timer >= duration) {
@@ -4428,13 +4428,13 @@ void CMinagi::UpdatePattern()
         }
         if (frame == 2 && timer == 3) {
             StopMoving();
-            m_freezeTime = 0x78;
-            m_gauge = m_gauge - 0x3e8;
-            FillBackground(0xb0, 3);
+            m_freezeTime = 120;
+            m_gauge = m_gauge - 1000;
+            FillBackground(176, 3);
             effect.type = 0x44;
-            effect.sound = 0x13;
+            effect.sound = 19;
             effect.x = (double)(int)x;
-            effect.y = (double)((int)y - 0x28);
+            effect.y = (double)((int)y - 40);
             effect.scale = 2;
             effect.keep = 1;
             effect.layer = 1;
@@ -4447,13 +4447,13 @@ void CMinagi::UpdatePattern()
             m_patternVar1--;
             if (m_patternVar1 <= 0) {
                 effect.type = 0x1b8;
-                effect.x = (double)((int)x + facing * 0x1e);
-                effect.y = (double)((int)y - 0x32);
+                effect.x = (double)((int)x + facing * 30);
+                effect.y = (double)((int)y - 50);
                 effect.scale = 2;
                 effect.facing = facing;
                 effect.layer = 1;
                 SpawnObject(&effect);
-                m_patternVar1 = 0x1e;
+                m_patternVar1 = 30;
             }
         }
         timer++;
@@ -4478,13 +4478,13 @@ void CMinagi::UpdatePattern()
         }
         if (frame == 2 && timer == 3) {
             StopMoving();
-            m_freezeTime = 0x78;
-            m_gauge = m_gauge - 0x7d0;
-            FillBackground(0xb0, 3);
+            m_freezeTime = 120;
+            m_gauge = m_gauge - 2000;
+            FillBackground(176, 3);
             effect.type = 0x45;
             effect.sound = 5;
             effect.x = (double)(int)x;
-            effect.y = (double)((int)y - 0x28);
+            effect.y = (double)((int)y - 40);
             effect.scale = 2;
             effect.keep = 1;
             effect.layer = 1;
@@ -4497,13 +4497,13 @@ void CMinagi::UpdatePattern()
             m_patternVar1--;
             if (m_patternVar1 <= 0) {
                 effect.type = 0x1b9;
-                effect.x = (double)((int)x + facing * 0x1e);
-                effect.y = (double)((int)y - 0x32);
+                effect.x = (double)((int)x + facing * 30);
+                effect.y = (double)((int)y - 50);
                 effect.scale = 2;
                 effect.facing = facing;
                 effect.layer = 1;
                 SpawnObject(&effect);
-                m_patternVar1 = 0x15;
+                m_patternVar1 = 21;
             }
         }
         timer++;
@@ -4527,22 +4527,22 @@ void CMinagi::UpdatePattern()
             StopMoving();
         }
         if (frame > 2) {
-            m_game->FlashNegative(0xf);
+            m_game->FlashNegative(15);
         }
         if (frame == 2 && timer == 3) {
             StopMoving();
-            m_freezeTime = 0x78;
-            m_gauge = m_gauge - 0xbb8;
-            FillBackground(0xb0, 3);
+            m_freezeTime = 120;
+            m_gauge = m_gauge - 3000;
+            FillBackground(176, 3);
             effect.type = 0x46;
-            effect.sound = 0x40;
+            effect.sound = 64;
             effect.x = (double)(int)x;
-            effect.y = (double)((int)y - 0x28);
+            effect.y = (double)((int)y - 40);
             effect.scale = 2;
             effect.keep = 1;
             effect.layer = 1;
             m_game->CreateEffect((EffectDesc*)&effect);
-            m_playSound = 0x25;
+            m_playSound = 37;
         }
         if (frame == 4 && timer == 0) {
             m_playVoice = 0;
@@ -4551,13 +4551,13 @@ void CMinagi::UpdatePattern()
             m_patternVar1--;
             if (m_patternVar1 <= 0) {
                 effect.type = 0x1ba;
-                effect.x = (double)((int)x + facing * 0x1e);
-                effect.y = (double)((int)y - 0x32);
+                effect.x = (double)((int)x + facing * 30);
+                effect.y = (double)((int)y - 50);
                 effect.scale = 2;
                 effect.facing = facing;
                 effect.layer = 1;
                 SpawnObject(&effect);
-                m_patternVar1 = 0xc;
+                m_patternVar1 = 12;
             }
         }
         timer++;
@@ -4579,25 +4579,25 @@ void CMinagi::UpdatePattern()
     case kLv4:
         m_dashMomentum = 0;
         if (frame > 3) {
-            m_game->FlashNegative(0xf);
+            m_game->FlashNegative(15);
         }
         if (frame == 3 && timer == 3) {
             StopMoving();
-            m_gauge = m_gauge - 0xbb8;
-            FocusCameraY(0x32, 0x2d);
-            m_freezeTime = 0x78;
-            FillBackground(0xb0, 3);
+            m_gauge = m_gauge - 3000;
+            FocusCameraY(50, 45);
+            m_freezeTime = 120;
+            FillBackground(176, 3);
             effect.type = 0x46;
-            effect.sound = 0x40;
-            effect.x = (double)((int)x - facing * 0xd);
-            effect.y = (double)((int)y - 0x43);
+            effect.sound = 64;
+            effect.x = (double)((int)x - facing * 13);
+            effect.y = (double)((int)y - 67);
             effect.scale = 2;
             effect.keep = 1;
             effect.layer = 1;
             m_game->CreateEffect((EffectDesc*)&effect);
             effect.type = 0x47;
             m_game->CreateEffect((EffectDesc*)&effect);
-            m_playSound = 0x25;
+            m_playSound = 37;
             m_hitsLeft = 1;
         }
         timer++;
@@ -4605,7 +4605,7 @@ void CMinagi::UpdatePattern()
             timer = 0;
             frame++;
             m_attackResult = 0;
-            if (frame == 0xb && m_patternVar1 < 2) {
+            if (frame == 11 && m_patternVar1 < 2) {
                 frame = frame - 4;
                 m_patternVar1++;
                 break;
@@ -4623,13 +4623,13 @@ void CMinagi::UpdatePattern()
         }
         if (frame == 2 && timer == 3) {
             StopMoving();
-            m_freezeTime = 0x78;
-            m_gauge = m_gauge - 0x3e8;
-            FillBackground(0xb0, 3);
+            m_freezeTime = 120;
+            m_gauge = m_gauge - 1000;
+            FillBackground(176, 3);
             effect.type = 0x44;
-            effect.sound = 0x13;
+            effect.sound = 19;
             effect.x = (double)(int)x;
-            effect.y = (double)((int)y - 0x28);
+            effect.y = (double)((int)y - 40);
             effect.scale = 2;
             effect.keep = 1;
             effect.layer = 1;
@@ -4653,13 +4653,13 @@ void CMinagi::UpdatePattern()
         }
         if (frame == 2 && timer == 3) {
             StopMoving();
-            m_freezeTime = 0x78;
-            m_gauge = m_gauge - 0x7d0;
-            FillBackground(0xb0, 3);
+            m_freezeTime = 120;
+            m_gauge = m_gauge - 2000;
+            FillBackground(176, 3);
             effect.type = 0x45;
             effect.sound = 5;
             effect.x = (double)(int)x;
-            effect.y = (double)((int)y - 0x28);
+            effect.y = (double)((int)y - 40);
             effect.scale = 2;
             effect.keep = 1;
             effect.layer = 1;
@@ -4683,18 +4683,18 @@ void CMinagi::UpdatePattern()
         }
         if (frame == 2 && timer == 3) {
             StopMoving();
-            m_freezeTime = 0x78;
-            m_gauge = m_gauge - 0xbb8;
-            FillBackground(0xb0, 3);
+            m_freezeTime = 120;
+            m_gauge = m_gauge - 3000;
+            FillBackground(176, 3);
             effect.type = 0x46;
-            effect.sound = 0x40;
+            effect.sound = 64;
             effect.x = (double)(int)x;
-            effect.y = (double)((int)y - 0x28);
+            effect.y = (double)((int)y - 40);
             effect.scale = 2;
             effect.keep = 1;
             effect.layer = 1;
             m_game->CreateEffect((EffectDesc*)&effect);
-            m_playSound = 0x25;
+            m_playSound = 37;
         }
         timer++;
         if (timer >= duration) {
@@ -4714,13 +4714,13 @@ void CMinagi::UpdatePattern()
         }
         if (frame == 1 && timer == 3) {
             StopMoving();
-            m_freezeTime = 0x78;
-            m_gauge = m_gauge - 0x3e8;
-            FillBackground(0xb0, 3);
+            m_freezeTime = 120;
+            m_gauge = m_gauge - 1000;
+            FillBackground(176, 3);
             effect.type = 0x44;
-            effect.sound = 0x13;
-            effect.x = (double)((int)x - facing * 0x12);
-            effect.y = (double)((int)y - 0x57);
+            effect.sound = 19;
+            effect.x = (double)((int)x - facing * 18);
+            effect.y = (double)((int)y - 87);
             effect.scale = 2;
             effect.keep = 1;
             effect.layer = 1;
@@ -4746,13 +4746,13 @@ void CMinagi::UpdatePattern()
         }
         if (frame == 1 && timer == 3) {
             StopMoving();
-            m_freezeTime = 0x78;
-            m_gauge = m_gauge - 0x7d0;
-            FillBackground(0xb0, 3);
+            m_freezeTime = 120;
+            m_gauge = m_gauge - 2000;
+            FillBackground(176, 3);
             effect.type = 0x45;
             effect.sound = 5;
-            effect.x = (double)((int)x - facing * 0x12);
-            effect.y = (double)((int)y - 0x57);
+            effect.x = (double)((int)x - facing * 18);
+            effect.y = (double)((int)y - 87);
             effect.scale = 2;
             effect.keep = 1;
             effect.layer = 1;
@@ -4778,18 +4778,18 @@ void CMinagi::UpdatePattern()
         }
         if (frame == 1 && timer == 3) {
             StopMoving();
-            m_freezeTime = 0x78;
-            m_gauge = m_gauge - 0xbb8;
-            FillBackground(0xb0, 3);
+            m_freezeTime = 120;
+            m_gauge = m_gauge - 3000;
+            FillBackground(176, 3);
             effect.type = 0x46;
-            effect.sound = 0x40;
-            effect.x = (double)((int)x - facing * 0x12);
-            effect.y = (double)((int)y - 0x57);
+            effect.sound = 64;
+            effect.x = (double)((int)x - facing * 18);
+            effect.y = (double)((int)y - 87);
             effect.scale = 2;
             effect.keep = 1;
             effect.layer = 1;
             m_game->CreateEffect((EffectDesc*)&effect);
-            m_playSound = 0x25;
+            m_playSound = 37;
         }
         timer++;
         if (timer >= duration) {

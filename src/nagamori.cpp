@@ -10,7 +10,7 @@ CNagamori::CNagamori(PTR32(CPlayer)* opponent, CGame* game, CGraphics* graphics,
     int i;
 
     strcpy(m_name, "nagamori");
-    lastSurface = 0x2d7;
+    lastSurface = 727;
     m_patternVar1 = 0;
     m_patternVar2 = 0;
     m_patternVar3 = 0;
@@ -24,23 +24,23 @@ CNagamori::CNagamori(PTR32(CPlayer)* opponent, CGame* game, CGraphics* graphics,
     m_bouncerDrops = 0;
     m_bouncerOut = 0;
     m_pointX[0] = -2;
-    m_pointY[0] = -0x3d;
-    m_pointX[1] = 0x15;
+    m_pointY[0] = -61;
+    m_pointX[1] = 21;
     m_pointY[1] = 0;
-    m_pointX[2] = 0xc;
+    m_pointX[2] = 12;
     m_pointY[2] = -5;
-    m_pointX[3] = 0x16;
-    m_pointY[3] = -0x12;
-    m_pointX[4] = 0x19;
-    m_pointY[4] = -0x17;
+    m_pointX[3] = 22;
+    m_pointY[3] = -18;
+    m_pointX[4] = 25;
+    m_pointY[4] = -23;
     m_resultPictures = 5;
     m_rivals[0] = 0;
     m_rivals[1] = 5;
-    m_rivals[2] = 0xa;
+    m_rivals[2] = 10;
     m_rivals[3] = 1;
-    m_rivals[0xa] = 6;
+    m_rivals[10] = 6;
     i = 0;
-    for (; i < 0x40; i++) {
+    for (; i < 64; i++) {
         m_objectTriggered[i] = 0;
         m_objectState[i] = 0;
         m_objectTimer[i] = 0;
@@ -65,17 +65,17 @@ void CNagamori::Reset()
     m_bouncerDrops = 0;
     m_bouncerOut = 0;
     m_pointX[0] = -2;
-    m_pointY[0] = -0x3d;
-    m_pointX[1] = 0x15;
+    m_pointY[0] = -61;
+    m_pointX[1] = 21;
     m_pointY[1] = 0;
-    m_pointX[2] = 0xc;
+    m_pointX[2] = 12;
     m_pointY[2] = -5;
-    m_pointX[3] = 0x16;
-    m_pointY[3] = -0x12;
-    m_pointX[4] = 0x19;
-    m_pointY[4] = -0x17;
+    m_pointX[3] = 22;
+    m_pointY[3] = -18;
+    m_pointX[4] = 25;
+    m_pointY[4] = -23;
     i = 0;
-    for (; i < 0x40; i++) {
+    for (; i < 64; i++) {
         m_objectTriggered[i] = 0;
         m_objectState[i] = 0;
         m_objectTimer[i] = 0;
@@ -111,7 +111,7 @@ void CNagamori::TriggerObjectsNear(short centerX, short centerY, short rangeX, s
             m_objectTriggered[slot] = 1;
         }
         slot++;
-        if (slot >= 0x40) {
+        if (slot >= 64) {
             slot = 0;
         }
     }
@@ -145,31 +145,31 @@ void CNagamori::StartCommand()
         return;
     }
     if (m_sealLevel < 2) {
-        if (m_hp < 0xd05 && m_command == kCmd6BA65A && m_gauge >= 0xbb8 && (m_patterns[pattern].frames[frame].flagsB0 & kStateCancellable) > 0 && y == 0.0 && m_attackResult != 6 && m_patterns[pattern].cancelLevel <= m_patterns[kLv4].level) {
+        if (m_hp < 3333 && m_command == kCmd6BA65A && m_gauge >= 3000 && (m_patterns[pattern].frames[frame].flagsB0 & kStateCancellable) > 0 && y == 0.0 && m_attackResult != 6 && m_patterns[pattern].cancelLevel <= m_patterns[kLv4].level) {
             StartPattern();
             ClearBufferedPress();
             pattern = kLv4;
             return;
         }
-        if (m_command == kCmd641236C && m_gauge >= 0xbb8 && m_shotState == 0 && y == 0.0 && (m_patterns[pattern].frames[frame].flagsB0 & kStateCancellable) > 0 && m_patterns[pattern].cancelLevel <= m_patterns[k6413Lv3].level && (pattern >= kFirstCharacterAction && m_attackResult >= 2 && m_attackResult != 6 || pattern < kFirstCharacterAction)) {
+        if (m_command == kCmd641236C && m_gauge >= 3000 && m_shotState == 0 && y == 0.0 && (m_patterns[pattern].frames[frame].flagsB0 & kStateCancellable) > 0 && m_patterns[pattern].cancelLevel <= m_patterns[k6413Lv3].level && (pattern >= kFirstCharacterAction && m_attackResult >= 2 && m_attackResult != 6 || pattern < kFirstCharacterAction)) {
             StartPattern();
             ClearBufferedPress();
             pattern = k6413Lv3;
             return;
         }
-        if ((m_command == kCmd641236B || m_command == kCmd641236C) && m_shotState == 0 && m_gauge >= 0x7d0 && y == 0.0 && (m_patterns[pattern].frames[frame].flagsB0 & kStateCancellable) > 0 && m_patterns[pattern].cancelLevel <= m_patterns[k6413Lv2].level && (pattern >= kFirstCharacterAction && m_attackResult >= 2 && m_attackResult != 6 || pattern < kFirstCharacterAction)) {
+        if ((m_command == kCmd641236B || m_command == kCmd641236C) && m_shotState == 0 && m_gauge >= 2000 && y == 0.0 && (m_patterns[pattern].frames[frame].flagsB0 & kStateCancellable) > 0 && m_patterns[pattern].cancelLevel <= m_patterns[k6413Lv2].level && (pattern >= kFirstCharacterAction && m_attackResult >= 2 && m_attackResult != 6 || pattern < kFirstCharacterAction)) {
             StartPattern();
             ClearBufferedPress();
             pattern = k6413Lv2;
             return;
         }
-        if ((m_command == kCmd641236A || m_command == kCmd641236B || m_command == kCmd641236C) && m_shotState == 0 && m_gauge >= 0x3e8 && y == 0.0 && (m_patterns[pattern].frames[frame].flagsB0 & kStateCancellable) > 0 && m_patterns[pattern].cancelLevel <= m_patterns[k6413Lv1].level && (pattern >= kFirstCharacterAction && m_attackResult >= 2 && m_attackResult != 6 || pattern < kFirstCharacterAction)) {
+        if ((m_command == kCmd641236A || m_command == kCmd641236B || m_command == kCmd641236C) && m_shotState == 0 && m_gauge >= 1000 && y == 0.0 && (m_patterns[pattern].frames[frame].flagsB0 & kStateCancellable) > 0 && m_patterns[pattern].cancelLevel <= m_patterns[k6413Lv1].level && (pattern >= kFirstCharacterAction && m_attackResult >= 2 && m_attackResult != 6 || pattern < kFirstCharacterAction)) {
             StartPattern();
             ClearBufferedPress();
             pattern = k6413Lv1;
             return;
         }
-        if (m_command == kCmd214214C && m_gauge >= 0x3e8 && (m_patterns[pattern].frames[frame].flagsB0 & kStateCancellable) > 0 && m_shotState == 0 && m_bouncerOut == 0 && y == 0.0 && m_patterns[pattern].cancelLevel <= m_patterns[k214214C].level && (pattern >= kFirstCharacterAction && m_attackResult >= 2 && m_attackResult != 6 || pattern < kFirstCharacterAction)) {
+        if (m_command == kCmd214214C && m_gauge >= 1000 && (m_patterns[pattern].frames[frame].flagsB0 & kStateCancellable) > 0 && m_shotState == 0 && m_bouncerOut == 0 && y == 0.0 && m_patterns[pattern].cancelLevel <= m_patterns[k214214C].level && (pattern >= kFirstCharacterAction && m_attackResult >= 2 && m_attackResult != 6 || pattern < kFirstCharacterAction)) {
             StartPattern();
             ClearBufferedPress();
             pattern = k214214C;
@@ -178,7 +178,7 @@ void CNagamori::StartCommand()
             }
             return;
         }
-        if (m_command == kCmd214214B && m_gauge >= 0x3e8 && (m_patterns[pattern].frames[frame].flagsB0 & kStateCancellable) > 0 && m_shotState == 0 && m_patterns[pattern].cancelLevel <= m_patterns[k214214B].level && (pattern >= kFirstCharacterAction && m_attackResult >= 2 && m_attackResult != 6 || pattern < kFirstCharacterAction)) {
+        if (m_command == kCmd214214B && m_gauge >= 1000 && (m_patterns[pattern].frames[frame].flagsB0 & kStateCancellable) > 0 && m_shotState == 0 && m_patterns[pattern].cancelLevel <= m_patterns[k214214B].level && (pattern >= kFirstCharacterAction && m_attackResult >= 2 && m_attackResult != 6 || pattern < kFirstCharacterAction)) {
             StartPattern();
             ClearBufferedPress();
             pattern = k214214B;
@@ -187,7 +187,7 @@ void CNagamori::StartCommand()
             }
             return;
         }
-        if (m_command == kCmd214214A && m_gauge >= 0x3e8 && (m_patterns[pattern].frames[frame].flagsB0 & kStateCancellable) > 0 && m_shotState == 0 && m_patterns[pattern].cancelLevel <= m_patterns[k214214A].level && (pattern >= kFirstCharacterAction && m_attackResult >= 2 && m_attackResult != 6 || pattern < kFirstCharacterAction)) {
+        if (m_command == kCmd214214A && m_gauge >= 1000 && (m_patterns[pattern].frames[frame].flagsB0 & kStateCancellable) > 0 && m_shotState == 0 && m_patterns[pattern].cancelLevel <= m_patterns[k214214A].level && (pattern >= kFirstCharacterAction && m_attackResult >= 2 && m_attackResult != 6 || pattern < kFirstCharacterAction)) {
             StartPattern();
             ClearBufferedPress();
             pattern = k214214A;
@@ -196,19 +196,19 @@ void CNagamori::StartCommand()
             }
             return;
         }
-        if (m_command == kCmd236236C && m_gauge >= 0xbb8 && y == 0.0 && (m_patterns[pattern].frames[frame].flagsB0 & kStateCancellable) > 0 && m_patterns[pattern].cancelLevel <= m_patterns[k236236Lv3].level && (pattern >= kFirstCharacterAction && m_attackResult >= 2 && m_attackResult != 6 || pattern < kFirstCharacterAction)) {
+        if (m_command == kCmd236236C && m_gauge >= 3000 && y == 0.0 && (m_patterns[pattern].frames[frame].flagsB0 & kStateCancellable) > 0 && m_patterns[pattern].cancelLevel <= m_patterns[k236236Lv3].level && (pattern >= kFirstCharacterAction && m_attackResult >= 2 && m_attackResult != 6 || pattern < kFirstCharacterAction)) {
             StartPattern();
             ClearBufferedPress();
             pattern = k236236Lv3;
             return;
         }
-        if ((m_command == kCmd236236B || m_command == kCmd236236C) && m_gauge >= 0x7d0 && y == 0.0 && (m_patterns[pattern].frames[frame].flagsB0 & kStateCancellable) > 0 && m_patterns[pattern].cancelLevel <= m_patterns[k236236Lv2].level && (pattern >= kFirstCharacterAction && m_attackResult >= 2 && m_attackResult != 6 || pattern < kFirstCharacterAction)) {
+        if ((m_command == kCmd236236B || m_command == kCmd236236C) && m_gauge >= 2000 && y == 0.0 && (m_patterns[pattern].frames[frame].flagsB0 & kStateCancellable) > 0 && m_patterns[pattern].cancelLevel <= m_patterns[k236236Lv2].level && (pattern >= kFirstCharacterAction && m_attackResult >= 2 && m_attackResult != 6 || pattern < kFirstCharacterAction)) {
             StartPattern();
             ClearBufferedPress();
             pattern = k236236Lv2;
             return;
         }
-        if ((m_command == kCmd236236A || m_command == kCmd236236B || m_command == kCmd236236C) && m_gauge >= 0x3e8 && y == 0.0 && (m_patterns[pattern].frames[frame].flagsB0 & kStateCancellable) > 0 && m_patterns[pattern].cancelLevel <= m_patterns[k236236Lv1].level && (pattern >= kFirstCharacterAction && m_attackResult >= 2 && m_attackResult != 6 || pattern < kFirstCharacterAction)) {
+        if ((m_command == kCmd236236A || m_command == kCmd236236B || m_command == kCmd236236C) && m_gauge >= 1000 && y == 0.0 && (m_patterns[pattern].frames[frame].flagsB0 & kStateCancellable) > 0 && m_patterns[pattern].cancelLevel <= m_patterns[k236236Lv1].level && (pattern >= kFirstCharacterAction && m_attackResult >= 2 && m_attackResult != 6 || pattern < kFirstCharacterAction)) {
             StartPattern();
             ClearBufferedPress();
             pattern = k236236Lv1;
@@ -250,7 +250,7 @@ void CNagamori::StartCommand()
             pattern = k623A;
             return;
         }
-        if (m_command == kCmd214C && (m_patterns[pattern].frames[frame].flagsB0 & kStateCancellable) > 0 && m_shotState == 0 && m_gauge > 0x32 && m_patterns[pattern].cancelLevel <= m_patterns[k214C].level && (pattern >= kFirstCharacterAction && m_attackResult >= 2 && m_attackResult != 6 || pattern < kFirstCharacterAction)) {
+        if (m_command == kCmd214C && (m_patterns[pattern].frames[frame].flagsB0 & kStateCancellable) > 0 && m_shotState == 0 && m_gauge > 50 && m_patterns[pattern].cancelLevel <= m_patterns[k214C].level && (pattern >= kFirstCharacterAction && m_attackResult >= 2 && m_attackResult != 6 || pattern < kFirstCharacterAction)) {
             StartPattern();
             ClearBufferedPress();
             pattern = k214C;
@@ -259,7 +259,7 @@ void CNagamori::StartCommand()
             }
             return;
         }
-        if (m_command == kCmd214B && (m_patterns[pattern].frames[frame].flagsB0 & kStateCancellable) > 0 && m_shotState == 0 && m_gauge > 0x32 && m_patterns[pattern].cancelLevel <= m_patterns[k214B].level && (pattern >= kFirstCharacterAction && m_attackResult >= 2 && m_attackResult != 6 || pattern < kFirstCharacterAction)) {
+        if (m_command == kCmd214B && (m_patterns[pattern].frames[frame].flagsB0 & kStateCancellable) > 0 && m_shotState == 0 && m_gauge > 50 && m_patterns[pattern].cancelLevel <= m_patterns[k214B].level && (pattern >= kFirstCharacterAction && m_attackResult >= 2 && m_attackResult != 6 || pattern < kFirstCharacterAction)) {
             StartPattern();
             ClearBufferedPress();
             pattern = k214B;
@@ -268,7 +268,7 @@ void CNagamori::StartCommand()
             }
             return;
         }
-        if (m_command == kCmd214A && (m_patterns[pattern].frames[frame].flagsB0 & kStateCancellable) > 0 && m_shotState == 0 && m_gauge > 0x32 && m_patterns[pattern].cancelLevel <= m_patterns[k214A].level && (pattern >= kFirstCharacterAction && m_attackResult >= 2 && m_attackResult != 6 || pattern < kFirstCharacterAction)) {
+        if (m_command == kCmd214A && (m_patterns[pattern].frames[frame].flagsB0 & kStateCancellable) > 0 && m_shotState == 0 && m_gauge > 50 && m_patterns[pattern].cancelLevel <= m_patterns[k214A].level && (pattern >= kFirstCharacterAction && m_attackResult >= 2 && m_attackResult != 6 || pattern < kFirstCharacterAction)) {
             StartPattern();
             ClearBufferedPress();
             pattern = k214A;
@@ -277,19 +277,19 @@ void CNagamori::StartCommand()
             }
             return;
         }
-        if (m_command == kCmd236C && (m_patterns[pattern].frames[frame].flagsB0 & kStateCancellable) > 0 && y < 0.0 && m_shotState == 0 && m_gauge > 0x32 && m_patterns[pattern].cancelLevel <= m_patterns[kAir236C].level && (pattern >= kFirstCharacterAction && m_attackResult >= 2 && m_attackResult != 6 || pattern < kFirstCharacterAction)) {
+        if (m_command == kCmd236C && (m_patterns[pattern].frames[frame].flagsB0 & kStateCancellable) > 0 && y < 0.0 && m_shotState == 0 && m_gauge > 50 && m_patterns[pattern].cancelLevel <= m_patterns[kAir236C].level && (pattern >= kFirstCharacterAction && m_attackResult >= 2 && m_attackResult != 6 || pattern < kFirstCharacterAction)) {
             StartPattern();
             ClearBufferedPress();
             pattern = kAir236C;
             return;
         }
-        if (m_command == kCmd236B && (m_patterns[pattern].frames[frame].flagsB0 & kStateCancellable) > 0 && y < 0.0 && m_shotState == 0 && m_gauge > 0x32 && m_patterns[pattern].cancelLevel <= m_patterns[kAir236B].level && (pattern >= kFirstCharacterAction && m_attackResult >= 2 && m_attackResult != 6 || pattern < kFirstCharacterAction)) {
+        if (m_command == kCmd236B && (m_patterns[pattern].frames[frame].flagsB0 & kStateCancellable) > 0 && y < 0.0 && m_shotState == 0 && m_gauge > 50 && m_patterns[pattern].cancelLevel <= m_patterns[kAir236B].level && (pattern >= kFirstCharacterAction && m_attackResult >= 2 && m_attackResult != 6 || pattern < kFirstCharacterAction)) {
             StartPattern();
             ClearBufferedPress();
             pattern = kAir236B;
             return;
         }
-        if (m_command == kCmd236A && (m_patterns[pattern].frames[frame].flagsB0 & kStateCancellable) > 0 && y < 0.0 && m_shotState == 0 && m_gauge > 0x32 && m_patterns[pattern].cancelLevel <= m_patterns[kAir236A].level && (pattern >= kFirstCharacterAction && m_attackResult >= 2 && m_attackResult != 6 || pattern < kFirstCharacterAction)) {
+        if (m_command == kCmd236A && (m_patterns[pattern].frames[frame].flagsB0 & kStateCancellable) > 0 && y < 0.0 && m_shotState == 0 && m_gauge > 50 && m_patterns[pattern].cancelLevel <= m_patterns[kAir236A].level && (pattern >= kFirstCharacterAction && m_attackResult >= 2 && m_attackResult != 6 || pattern < kFirstCharacterAction)) {
             StartPattern();
             ClearBufferedPress();
             pattern = kAir236A;
@@ -521,19 +521,19 @@ void CNagamori::DrawGauge()
         sprite = *anims[0x2b].frames;
         src = MakeRect(0, 0, sprite.width, sprite.height);
         if (m_side == 0) {
-            dst = MakeRect(0x31 - sprite.x, 0x1f - sprite.y, sprite.width, sprite.height);
+            dst = MakeRect(49 - sprite.x, 31 - sprite.y, sprite.width, sprite.height);
         } else {
-            dst = MakeRect(sprite.x + 0x10f - sprite.width, 0x1f - sprite.y, sprite.width, sprite.height);
+            dst = MakeRect(sprite.x + 271 - sprite.width, 31 - sprite.y, sprite.width, sprite.height);
         }
         m_graphics->Blit(dst, surfaces[sprite.surface], src, colorKey, 0);
     }
     if (m_lv4Time > 0) {
         sprite = *anims[0x2c].frames;
-        src = MakeRect(0, 0, m_lv4Time * sprite.width / 0x4b0, sprite.height);
+        src = MakeRect(0, 0, m_lv4Time * sprite.width / 1200, sprite.height);
         if (m_side == 0) {
-            dst = MakeRect(0x31 - sprite.x, 0x1f - sprite.y, m_lv4Time * sprite.width / 0x4b0, sprite.height);
+            dst = MakeRect(49 - sprite.x, 31 - sprite.y, m_lv4Time * sprite.width / 1200, sprite.height);
         } else {
-            dst = MakeRect(sprite.x + 0x10f - m_lv4Time * sprite.width / 0x4b0, 0x1f - sprite.y, m_lv4Time * sprite.width / 0x4b0, sprite.height);
+            dst = MakeRect(sprite.x + 271 - m_lv4Time * sprite.width / 1200, 31 - sprite.y, m_lv4Time * sprite.width / 1200, sprite.height);
         }
         m_graphics->Blit(dst, surfaces[sprite.surface], src, colorKey, 0);
     }
@@ -588,7 +588,7 @@ void CNagamori::ReadCommand()
         if ((input & kInputB) != 0 && step == 1) {
             step = 2;
         }
-        if ((input & kInputDirections) == (facing == -1) + 1 && step == 0 && m_gauge == 0xbb8 && y == 0.0) {
+        if ((input & kInputDirections) == (facing == -1) + 1 && step == 0 && m_gauge == 3000 && y == 0.0) {
             step = 1;
         }
     }
@@ -644,7 +644,7 @@ void CNagamori::ReadCommand()
         if ((input & kInputDirections) == 6 - (facing == -1) && step == 1) {
             step = 2;
         }
-        if ((input & kInputDirections) == kInputDown && step == 0 && m_gauge >= 0x3e8) {
+        if ((input & kInputDirections) == kInputDown && step == 0 && m_gauge >= 1000) {
             step = 1;
         }
     }
@@ -675,7 +675,7 @@ void CNagamori::ReadCommand()
         if ((input & kInputDirections) == (facing == -1) + 5 && step == 1) {
             step = 2;
         }
-        if ((input & kInputDirections) == kInputDown && step == 0 && m_gauge >= 0x3e8 && y == 0.0) {
+        if ((input & kInputDirections) == kInputDown && step == 0 && m_gauge >= 1000 && y == 0.0) {
             step = 1;
         }
     }
@@ -920,17 +920,17 @@ void CNagamori::CpuInput()
     m_pressC = 0;
     m_pressD = 0;
     m_recoilGuardWindow = 0;
-    if ((WORD)Random(0, 0x3e8) < 25.0f * m_cpuSkill + (y < 0.0) * 0x1e * m_cpuSkill + (m_cpuAction == 3) * 0x190 + (pattern == kRecoilGuardAir) * 0x12c) {
-        m_recoilGuardWindow = 0x3c;
+    if ((WORD)Random(0, 1000) < 25.0f * m_cpuSkill + (y < 0.0) * 30 * m_cpuSkill + (m_cpuAction == 3) * 400 + (pattern == kRecoilGuardAir) * 300) {
+        m_recoilGuardWindow = 60;
     }
-    if ((WORD)Random(0, 0x7d0) < ((m_throwProtect > 0) * 4.0 + 1.0) * 8.0 * m_cpuSkill * ((pattern > kLastHitReaction && pattern < kAirRecoveryForward) * 2 + 1)) {
-        m_recoilGuardWindow = 0x3c;
+    if ((WORD)Random(0, 2000) < ((m_throwProtect > 0) * 4.0 + 1.0) * 8.0 * m_cpuSkill * ((pattern > kLastHitReaction && pattern < kAirRecoveryForward) * 2 + 1)) {
+        m_recoilGuardWindow = 60;
     }
-    if ((WORD)Random(0, 0x3e8) < 4e+01f * m_cpuSkill && pattern > kLastSharedAction) {
-        m_recoilGuardWindow = 0x3c;
+    if ((WORD)Random(0, 1000) < 4e+01f * m_cpuSkill && pattern > kLastSharedAction) {
+        m_recoilGuardWindow = 60;
     }
     if (m_canRecoilCounter == 1 && m_cpuAction == 2) {
-        m_recoilGuardWindow = 0x1e;
+        m_recoilGuardWindow = 30;
         if (pattern < kFirstCharacterAction) {
             m_cpuAction = 0;
         }
@@ -942,14 +942,14 @@ void CNagamori::CpuInput()
     dx = ((*m_opponent)->x - x) * facing;
     dy = fabs(y - (*m_opponent)->y);
     if (pattern >= kFirstHitReaction && pattern <= kFirstGuard && timer == 0) {
-        if ((WORD)Random(0, 0x64) < 8.0f * m_cpuSkill) {
+        if ((WORD)Random(0, 100) < 8.0f * m_cpuSkill) {
             m_cpuAction = 3;
         } else {
             m_cpuAction = 0;
         }
-        m_inputX = 1 - (((WORD)Random(0, 0x64) < 0x32) << 1);
-        m_pressD = (WORD)Random(0, 0xf0) < dy;
-        m_pressD = (WORD)Random(0, 0x140) < dx;
+        m_inputX = 1 - (((WORD)Random(0, 100) < 0x32) << 1);
+        m_pressD = (WORD)Random(0, 240) < dy;
+        m_pressD = (WORD)Random(0, 320) < dx;
         if ((*m_opponent)->pattern > kLastSharedAction && (*m_opponent)->pattern < 0xfa && (*m_opponent)->frame < 3 && dy < 100.0 && dx < 150.0) {
             m_pressD = 0;
         }
@@ -963,25 +963,25 @@ void CNagamori::CpuInput()
     }
     if (pattern == kRecoilGuardStand && timer < 6) {
         if ((*m_opponent)->pattern != 0xc8 && (*m_opponent)->pattern != 0xcc && (*m_opponent)->pattern < 0xfa && (*m_opponent)->y == 0.0 && (*m_opponent)->m_hitsLeft == 0) {
-            if (dx < 40.0 && (WORD)Random(0, 0x64) < m_cpuSkill * 3.0f) {
+            if (dx < 40.0 && (WORD)Random(0, 100) < m_cpuSkill * 3.0f) {
                 m_pressA = 1;
                 m_inputY = 1;
                 return;
             }
-            if (dx < 60.0 && (WORD)Random(0, 0x64) < m_cpuSkill * 3.0f) {
+            if (dx < 60.0 && (WORD)Random(0, 100) < m_cpuSkill * 3.0f) {
                 m_pressA = 1;
                 m_inputY = 0;
                 return;
             }
         }
         if (((*m_opponent)->pattern == 0xc9 || (*m_opponent)->pattern == 0xca || (*m_opponent)->pattern == 0xcd) && (*m_opponent)->pattern < 0xfa && (*m_opponent)->y == 0.0 && (*m_opponent)->m_hitsLeft == 0) {
-            if (dx > 40.0 && dx < 80.0 && (WORD)Random(0, 0x64) < m_cpuSkill * 3.0f) {
+            if (dx > 40.0 && dx < 80.0 && (WORD)Random(0, 100) < m_cpuSkill * 3.0f) {
                 m_pressB = 1;
                 m_inputY = 1;
                 m_inputX = 0;
                 return;
             }
-            if (dx > 60.0 && dx < 120.0 && (WORD)Random(0, 0x64) < m_cpuSkill * 3.0f) {
+            if (dx > 60.0 && dx < 120.0 && (WORD)Random(0, 100) < m_cpuSkill * 3.0f) {
                 m_pressA = 3;
                 m_inputY = 1;
                 return;
@@ -990,65 +990,65 @@ void CNagamori::CpuInput()
     }
     if (pattern == kRecoilGuardStand || pattern == kRecoilGuardCrouch) {
         if (dx < 100.0) {
-            if ((WORD)Random(0, 0x64) < m_cpuSkill * 3.0f && m_rfGauge > 500.0) {
+            if ((WORD)Random(0, 100) < m_cpuSkill * 3.0f && m_rfGauge > 500.0) {
                 m_command = kCmd236C;
                 return;
             }
-            if ((WORD)Random(0, 0x64) < m_cpuSkill * 3.0f + ((m_rfGauge > 500.0) << 1)) {
+            if ((WORD)Random(0, 100) < m_cpuSkill * 3.0f + ((m_rfGauge > 500.0) << 1)) {
                 m_command = 0x48;
                 return;
             }
-            if ((WORD)Random(0, 0x64) < m_cpuSkill * 3.0f + ((m_rfGauge > 500.0) << 1)) {
+            if ((WORD)Random(0, 100) < m_cpuSkill * 3.0f + ((m_rfGauge > 500.0) << 1)) {
                 m_command = ((WORD)Random(0, 1) == 1) * 2 + kCmd623A;
                 return;
             }
-            if ((WORD)Random(0, 0x64) < m_cpuSkill * 3.0f && dx < 60.0 && m_gauge >= 0x7d0) {
+            if ((WORD)Random(0, 100) < m_cpuSkill * 3.0f && dx < 60.0 && m_gauge >= 2000) {
                 m_command = kCmd236236B;
                 return;
             }
-            if ((WORD)Random(0, 0x64) < m_cpuSkill * 3.0f && dx < 150.0 && m_gauge == 0xbb8) {
+            if ((WORD)Random(0, 100) < m_cpuSkill * 3.0f && dx < 150.0 && m_gauge == 3000) {
                 m_command = kCmd236236C;
                 return;
             }
         }
-        if (dx < 160.0 && (WORD)Random(0, 0x64) < m_cpuSkill * 3.0f && m_rfGauge > 500.0) {
+        if (dx < 160.0 && (WORD)Random(0, 100) < m_cpuSkill * 3.0f && m_rfGauge > 500.0) {
             m_command = kCmd236C;
             return;
         }
-        if (dx < 220.0 && dx > 160.0 && (WORD)Random(0, 0x64) < m_cpuSkill * 1.0f) {
-            m_command = (WORD)Random(0, 2) + 0x46;
+        if (dx < 220.0 && dx > 160.0 && (WORD)Random(0, 100) < m_cpuSkill * 1.0f) {
+            m_command = (WORD)Random(0, 2) + 70;
             return;
         }
-        if (dx > 220.0 && (WORD)Random(0, 0x64) < m_cpuSkill * 1.0f && m_rfGauge > 500.0) {
+        if (dx > 220.0 && (WORD)Random(0, 100) < m_cpuSkill * 1.0f && m_rfGauge > 500.0) {
             m_command = (WORD)Random(0, 2) + kCmd236A;
             return;
         }
     }
     if (pattern == kRecoilGuardAir && frame == 1 && timer == 0) {
-        if ((WORD)Random(0, 0x64) < m_cpuSkill * 5.0f) {
+        if ((WORD)Random(0, 100) < m_cpuSkill * 5.0f) {
             m_cpuAction = 3;
             return;
         }
-        if (y - (*m_opponent)->y < 0.0 && y - (*m_opponent)->y > -40.0 && dx < 80.0 && (WORD)Random(0, 0x64) < m_cpuSkill * 5.0f) {
+        if (y - (*m_opponent)->y < 0.0 && y - (*m_opponent)->y > -40.0 && dx < 80.0 && (WORD)Random(0, 100) < m_cpuSkill * 5.0f) {
             m_pressA = 1;
             return;
         }
-        if (y - (*m_opponent)->y > -30.0 && y - (*m_opponent)->y < 0.0 && dx < 100.0 && (WORD)Random(0, 0x64) < m_cpuSkill * 5.0f) {
+        if (y - (*m_opponent)->y > -30.0 && y - (*m_opponent)->y < 0.0 && dx < 100.0 && (WORD)Random(0, 100) < m_cpuSkill * 5.0f) {
             m_pressB = 1;
             return;
         }
-        if (y - (*m_opponent)->y > -50.0 && y - (*m_opponent)->y < 50.0 && dy < 60.0 && dx < 120.0 && (WORD)Random(0, 0x64) < m_cpuSkill * 5.0f) {
+        if (y - (*m_opponent)->y > -50.0 && y - (*m_opponent)->y < 50.0 && dy < 60.0 && dx < 120.0 && (WORD)Random(0, 100) < m_cpuSkill * 5.0f) {
             m_pressC = 1;
             m_inputY = 0;
             return;
         }
-        if (dy < 50.0 && dx < 100.0 && (WORD)Random(0, 0x64) < m_cpuSkill * 2) {
+        if (dy < 50.0 && dx < 100.0 && (WORD)Random(0, 100) < m_cpuSkill * 2) {
             m_command = kCmd623C;
             return;
         }
     }
-    if (((*m_opponent)->pattern == kRecoilGuardStand || (*m_opponent)->pattern == kRecoilGuardCrouch || (*m_opponent)->pattern == kRecoilGuardAir) && y == 0.0 && (WORD)Random(0, 0x64) < 15.0f * m_cpuSkill && m_cpuAction != 2 && (*m_opponent)->m_freezeTime == 0) {
-        m_cpuRoll = (WORD)Random(0, 0x64);
+    if (((*m_opponent)->pattern == kRecoilGuardStand || (*m_opponent)->pattern == kRecoilGuardCrouch || (*m_opponent)->pattern == kRecoilGuardAir) && y == 0.0 && (WORD)Random(0, 100) < 15.0f * m_cpuSkill && m_cpuAction != 2 && (*m_opponent)->m_freezeTime == 0) {
+        m_cpuRoll = (WORD)Random(0, 100);
         if (m_cpuRoll < 3 && m_rfGauge > 500.0) {
             m_command = 0x48;
             return;
@@ -1057,31 +1057,31 @@ void CNagamori::CpuInput()
             m_command = kCmd236C;
             return;
         }
-        if (m_cpuRoll < 0xa && m_rfGauge > 500.0) {
+        if (m_cpuRoll < 10 && m_rfGauge > 500.0) {
             m_command = kCmd623A;
             return;
         }
-        if (m_cpuRoll < 0xd && m_rfGauge > 500.0) {
+        if (m_cpuRoll < 13 && m_rfGauge > 500.0) {
             m_command = kCmd623C;
             return;
         }
-        if (m_cpuRoll < 0x11 && m_cpuRoll > 0xc && m_gauge >= 0x7d0) {
+        if (m_cpuRoll < 17 && m_cpuRoll > 12 && m_gauge >= 2000) {
             m_command = (WORD)Random(0, 1) + kCmd236236B;
             return;
         }
     }
-    if (((*m_opponent)->pattern == kRecoilGuardStand || (*m_opponent)->pattern == kRecoilGuardCrouch || (*m_opponent)->pattern == kRecoilGuardAir) && y < 0.0 && (WORD)Random(0, 0x64) < 15.0f * m_cpuSkill && m_cpuAction != 2 && (*m_opponent)->m_freezeTime == 0) {
-        m_cpuRoll = (WORD)Random(0, 0x64);
-        if (m_cpuRoll < 0x14) {
+    if (((*m_opponent)->pattern == kRecoilGuardStand || (*m_opponent)->pattern == kRecoilGuardCrouch || (*m_opponent)->pattern == kRecoilGuardAir) && y < 0.0 && (WORD)Random(0, 100) < 15.0f * m_cpuSkill && m_cpuAction != 2 && (*m_opponent)->m_freezeTime == 0) {
+        m_cpuRoll = (WORD)Random(0, 100);
+        if (m_cpuRoll < 20) {
             m_cpuAction = 2;
             return;
         }
-        if (dx < 100.0 && m_cpuRoll < 0x16) {
+        if (dx < 100.0 && m_cpuRoll < 22) {
             m_command = kCmd623C;
             return;
         }
     }
-    if ((m_rfGauge > 500.0 || m_rfBlue > 0) && (WORD)Random(0, 0x64) < 8.0f * m_cpuSkill && (*m_opponent)->pattern > kLastHitReaction && (*m_opponent)->pattern < kAirRecoveryForward && (pattern == k623A || pattern == k623B || pattern == k623C || pattern == k412A || pattern == k412B || pattern == k412C)) {
+    if ((m_rfGauge > 500.0 || m_rfBlue > 0) && (WORD)Random(0, 100) < 8.0f * m_cpuSkill && (*m_opponent)->pattern > kLastHitReaction && (*m_opponent)->pattern < kAirRecoveryForward && (pattern == k623A || pattern == k623B || pattern == k623C || pattern == k412A || pattern == k412B || pattern == k412C)) {
         m_command = kCmd22C;
         return;
     }
@@ -1157,46 +1157,46 @@ void CNagamori::CpuInput()
         }
         return;
     }
-    if (m_attackResult > 1 && m_hitstop == 0 && (WORD)Random(0, 0x64) < m_cpuSkill * 25.0f && m_cpuAction != 1 && m_cpuAction != 2) {
-        m_cpuRoll = (WORD)Random(0, 0x3e8);
+    if (m_attackResult > 1 && m_hitstop == 0 && (WORD)Random(0, 100) < m_cpuSkill * 25.0f && m_cpuAction != 1 && m_cpuAction != 2) {
+        m_cpuRoll = (WORD)Random(0, 1000);
         if (pattern == k5A) {
-            if ((*m_opponent)->y < 0.0 && m_cpuRoll < 0x12c) {
+            if ((*m_opponent)->y < 0.0 && m_cpuRoll < 300) {
                 m_pressB = 1;
                 m_inputY = 0;
                 return;
             }
-            if (dx < 40.0 && m_cpuRoll < 0x190) {
+            if (dx < 40.0 && m_cpuRoll < 400) {
                 m_pressA = 1;
                 m_inputY = 1;
                 return;
             }
-            if (dx < 50.0 && m_cpuRoll < 0x190) {
+            if (dx < 50.0 && m_cpuRoll < 400) {
                 m_pressA = 1;
                 m_inputY = 0;
-                if (m_attackResult == 2 && (WORD)Random(0, 0x64) < 0x1e) {
+                if (m_attackResult == 2 && (WORD)Random(0, 100) < 30) {
                     m_pressC = 1;
                     m_inputY = 1;
                 }
                 return;
             }
-            if (dx < 125.0 && m_cpuRoll > 0x18f && m_cpuRoll < 0x2bc) {
+            if (dx < 125.0 && m_cpuRoll > 399 && m_cpuRoll < 700) {
                 m_pressB = 1;
                 m_inputY = 0;
                 return;
             }
-            if (m_cpuRoll > 0x190 && m_cpuRoll < 0x1b8 && m_attackResult == 2) {
+            if (m_cpuRoll > 400 && m_cpuRoll < 440 && m_attackResult == 2) {
                 m_pressB = 1;
                 m_inputY = 0;
                 m_inputX = facing;
                 return;
             }
-            if (m_cpuRoll > 0x3b6) {
+            if (m_cpuRoll > 950) {
                 m_cpuAction = 4;
                 m_inputY = -1;
                 m_inputX = (WORD)Random(0, 2) - 1;
                 return;
             }
-            if (m_cpuRoll > 0x2bb) {
+            if (m_cpuRoll > 699) {
                 m_cpuAction = 1;
                 if ((WORD)Random(0, 1) == 0) {
                     m_cpuAction = 6;
@@ -1205,39 +1205,39 @@ void CNagamori::CpuInput()
             }
         }
         if (pattern == k5BClose) {
-            if ((*m_opponent)->y < 0.0 && m_cpuRoll < 0x12c && m_attackResult == 3) {
+            if ((*m_opponent)->y < 0.0 && m_cpuRoll < 300 && m_attackResult == 3) {
                 m_command = (WORD)Random(0, 2) + kCmd623A;
                 return;
             }
-            if ((*m_opponent)->y < 0.0 && m_cpuRoll > 0x12b && m_cpuRoll < 0x140) {
+            if ((*m_opponent)->y < 0.0 && m_cpuRoll > 299 && m_cpuRoll < 320) {
                 m_command = kCmd214B;
                 return;
             }
-            if ((*m_opponent)->y < 0.0 && m_cpuRoll > 0x140 && m_cpuRoll < 0x258 && dx < 100.0) {
+            if ((*m_opponent)->y < 0.0 && m_cpuRoll > 320 && m_cpuRoll < 600 && dx < 100.0) {
                 m_pressC = 1;
                 return;
             }
-            if (m_cpuRoll < 0xc8) {
+            if (m_cpuRoll < 200) {
                 m_pressC = 1;
                 m_inputY = 1;
                 return;
             }
-            if (m_cpuRoll > 0xc8 && m_cpuRoll < 0x1c2 && dx < 90.0) {
+            if (m_cpuRoll > 200 && m_cpuRoll < 450 && dx < 90.0) {
                 m_pressB = 1;
                 m_inputY = 0;
                 return;
             }
-            if ((*m_opponent)->y < 0.0 && m_cpuRoll > 0x1c2 && m_cpuRoll < 0x2bc) {
+            if ((*m_opponent)->y < 0.0 && m_cpuRoll > 450 && m_cpuRoll < 700) {
                 m_pressC = 1;
                 return;
             }
-            if (m_cpuRoll > 0x398) {
+            if (m_cpuRoll > 920) {
                 m_cpuAction = 4;
                 m_inputY = -1;
                 m_inputX = (WORD)Random(0, 2) - 1;
                 return;
             }
-            if (m_cpuRoll > 0x2bc) {
+            if (m_cpuRoll > 700) {
                 m_cpuAction = 1;
                 if ((WORD)Random(0, 1) == 0) {
                     m_cpuAction = 6;
@@ -1249,38 +1249,38 @@ void CNagamori::CpuInput()
             }
         }
         if (pattern == k5BFar) {
-            if ((*m_opponent)->y < 0.0 && m_cpuRoll < 0x12c && m_attackResult == 3) {
+            if ((*m_opponent)->y < 0.0 && m_cpuRoll < 300 && m_attackResult == 3) {
                 m_command = (WORD)Random(0, 2) + kCmd623A;
                 return;
             }
-            if ((*m_opponent)->y < 0.0 && m_cpuRoll > 0x12b && m_cpuRoll < 0x140) {
+            if ((*m_opponent)->y < 0.0 && m_cpuRoll > 299 && m_cpuRoll < 320) {
                 m_command = kCmd214B;
                 return;
             }
-            if ((*m_opponent)->y < 0.0 && m_cpuRoll > 0x140 && m_cpuRoll < 0x258 && dx < 100.0) {
+            if ((*m_opponent)->y < 0.0 && m_cpuRoll > 320 && m_cpuRoll < 600 && dx < 100.0) {
                 m_pressC = 1;
                 return;
             }
-            if (m_cpuRoll < 0x1f4 && m_attackResult == 3 && dx < 80.0) {
+            if (m_cpuRoll < 500 && m_attackResult == 3 && dx < 80.0) {
                 m_pressC = 1;
                 m_inputY = 0;
                 return;
             }
-            if (m_cpuRoll > 0x1f3 && m_cpuRoll < 0x226) {
+            if (m_cpuRoll > 499 && m_cpuRoll < 550) {
                 m_command = (((WORD)Random(0, 2) == 0) << 1) * (m_rfGauge > 500.0) + kCmd236A;
                 return;
             }
-            if (m_cpuRoll > 0x225 && m_cpuRoll < 0x2a8) {
+            if (m_cpuRoll > 549 && m_cpuRoll < 680) {
                 m_command = (WORD)Random(0, 2) + kCmd214A;
                 return;
             }
-            if (m_cpuRoll > 0x3b6) {
+            if (m_cpuRoll > 950) {
                 m_cpuAction = 4;
                 m_inputY = -1;
                 m_inputX = (WORD)Random(0, 2) - 1;
                 return;
             }
-            if (m_cpuRoll > 0x2bc) {
+            if (m_cpuRoll > 700) {
                 m_cpuAction = 1;
                 if ((WORD)Random(0, 1) == 0) {
                     m_cpuAction = 6;
@@ -1292,85 +1292,85 @@ void CNagamori::CpuInput()
             }
         }
         if (pattern == k5C) {
-            if ((*m_opponent)->y < 0.0 && m_cpuRoll < 0x12c && m_attackResult == 3) {
+            if ((*m_opponent)->y < 0.0 && m_cpuRoll < 300 && m_attackResult == 3) {
                 m_command = (WORD)Random(0, 2) + kCmd623A;
                 return;
             }
-            if ((*m_opponent)->y < 0.0 && m_cpuRoll > 0x12b && m_cpuRoll < 0x140) {
+            if ((*m_opponent)->y < 0.0 && m_cpuRoll > 299 && m_cpuRoll < 320) {
                 m_command = kCmd214B;
                 return;
             }
-            if (m_cpuRoll > 0 && m_cpuRoll < 0xc8) {
+            if (m_cpuRoll > 0 && m_cpuRoll < 200) {
                 m_command = (((WORD)Random(0, 3) == 0) << 1) * (m_rfGauge > 500.0) + kCmd236A;
                 return;
             }
-            if (m_cpuRoll > 0xc8 && m_cpuRoll < 0xfa && dx < 90.0 && m_attackResult == 3) {
+            if (m_cpuRoll > 200 && m_cpuRoll < 250 && dx < 90.0 && m_attackResult == 3) {
                 m_command = kCmd623A;
                 return;
             }
-            if (m_cpuRoll > 0xfa && m_cpuRoll < 0x15e && dx < 120.0 && m_rfGauge > 500.0) {
+            if (m_cpuRoll > 250 && m_cpuRoll < 350 && dx < 120.0 && m_rfGauge > 500.0) {
                 m_command = 0x48;
                 return;
             }
-            if (m_cpuRoll > 0x15e && m_cpuRoll < 0x190 && m_rfGauge > 500.0) {
+            if (m_cpuRoll > 350 && m_cpuRoll < 400 && m_rfGauge > 500.0) {
                 m_command = kCmd22C;
                 return;
             }
-            if (m_cpuRoll > 0x190 && m_cpuRoll < 0x1ae && m_attackResult == 3 && m_gauge >= 0x3e8 && dx < 90.0) {
+            if (m_cpuRoll > 400 && m_cpuRoll < 430 && m_attackResult == 3 && m_gauge >= 1000 && dx < 90.0) {
                 m_command = (WORD)Random(0, 2) + kCmd236236A;
                 return;
             }
-            if (m_cpuRoll > 0x1ae && m_cpuRoll < 0x21c) {
+            if (m_cpuRoll > 430 && m_cpuRoll < 540) {
                 m_command = (WORD)Random(0, 2) + kCmd214A;
                 return;
             }
-            if (m_cpuRoll > 0x21c && m_cpuRoll < 0x23a && m_gauge >= 0x3e8) {
+            if (m_cpuRoll > 540 && m_cpuRoll < 570 && m_gauge >= 1000) {
                 m_command = (WORD)Random(0, 2) + kCmd214214A;
                 return;
             }
-            if (m_cpuRoll > 0x38e && m_attackResult == 3) {
+            if (m_cpuRoll > 910 && m_attackResult == 3) {
                 m_cpuAction = 4;
                 m_inputY = -1;
                 m_inputX = (WORD)Random(0, 2) - 1;
                 return;
             }
-            if (m_cpuRoll > 0x289) {
+            if (m_cpuRoll > 649) {
                 m_cpuAction = 1;
                 return;
             }
         }
         if (pattern == k2A) {
-            if ((*m_opponent)->y < 0.0 && m_cpuRoll < 0x12c) {
+            if ((*m_opponent)->y < 0.0 && m_cpuRoll < 300) {
                 m_pressB = 1;
                 m_inputY = 1;
                 return;
             }
-            if (dx < 40.0 && m_cpuRoll < 0x190) {
+            if (dx < 40.0 && m_cpuRoll < 400) {
                 m_pressA = 1;
                 m_inputY = 1;
                 return;
             }
-            if (dx < 50.0 && m_cpuRoll < 0x190) {
+            if (dx < 50.0 && m_cpuRoll < 400) {
                 m_pressA = 1;
                 m_inputY = 0;
-                if (m_attackResult == 2 && (WORD)Random(0, 0x64) < 0x14) {
+                if (m_attackResult == 2 && (WORD)Random(0, 100) < 20) {
                     m_pressC = 1;
                     m_inputY = 1;
                 }
                 return;
             }
-            if (dx < 135.0 && m_cpuRoll < 0x258) {
+            if (dx < 135.0 && m_cpuRoll < 600) {
                 m_pressB = 1;
                 m_inputY = 0;
                 return;
             }
-            if (m_cpuRoll > 0x3b6) {
+            if (m_cpuRoll > 950) {
                 m_cpuAction = 4;
                 m_inputY = -1;
                 m_inputX = (WORD)Random(0, 2) - 1;
                 return;
             }
-            if (m_cpuRoll > 0x2bb) {
+            if (m_cpuRoll > 699) {
                 m_cpuAction = 1;
                 if ((WORD)Random(0, 1) == 0) {
                     m_cpuAction = 5;
@@ -1379,39 +1379,39 @@ void CNagamori::CpuInput()
             }
         }
         if (pattern == k2B) {
-            if ((*m_opponent)->y < 0.0 && m_cpuRoll < 0x12c && m_attackResult == 3) {
+            if ((*m_opponent)->y < 0.0 && m_cpuRoll < 300 && m_attackResult == 3) {
                 m_command = (WORD)Random(0, 2) + kCmd623A;
                 return;
             }
-            if ((*m_opponent)->y < 0.0 && m_cpuRoll > 0x12b && m_cpuRoll < 0x140) {
+            if ((*m_opponent)->y < 0.0 && m_cpuRoll > 299 && m_cpuRoll < 320) {
                 m_command = kCmd214B;
                 return;
             }
-            if ((*m_opponent)->y < 0.0 && m_cpuRoll > 0x140 && m_cpuRoll < 0x258 && dx < 100.0) {
+            if ((*m_opponent)->y < 0.0 && m_cpuRoll > 320 && m_cpuRoll < 600 && dx < 100.0) {
                 m_pressC = 1;
                 return;
             }
-            if (m_cpuRoll < 0x64) {
+            if (m_cpuRoll < 100) {
                 m_pressC = 1;
                 m_inputY = 1;
                 return;
             }
-            if (m_cpuRoll > 0x64 && m_cpuRoll < 0x12c && dx < 100.0) {
+            if (m_cpuRoll > 100 && m_cpuRoll < 300 && dx < 100.0) {
                 m_pressB = 1;
                 m_inputY = 0;
                 return;
             }
-            if ((*m_opponent)->y < 0.0 && m_cpuRoll > 0x12c && m_cpuRoll < 0x258) {
+            if ((*m_opponent)->y < 0.0 && m_cpuRoll > 300 && m_cpuRoll < 600) {
                 m_pressC = 1;
                 return;
             }
-            if (m_cpuRoll > 0x384) {
+            if (m_cpuRoll > 900) {
                 m_cpuAction = 4;
                 m_inputY = -1;
                 m_inputX = (WORD)Random(0, 2) - 1;
                 return;
             }
-            if (m_cpuRoll > 0x2bc) {
+            if (m_cpuRoll > 700) {
                 m_cpuAction = 1;
                 if ((WORD)Random(0, 1) == 0) {
                     m_cpuAction = 6;
@@ -1423,31 +1423,31 @@ void CNagamori::CpuInput()
             }
         }
         if (pattern == k2C) {
-            if (m_cpuRoll > 0 && m_cpuRoll < 0x96) {
+            if (m_cpuRoll > 0 && m_cpuRoll < 150) {
                 m_command = (((WORD)Random(0, 3) == 0) << 1) * (m_rfGauge > 500.0) + kCmd236A;
                 return;
             }
-            if (m_cpuRoll > 0x96 && m_cpuRoll < 0x15e && dx < 90.0 && m_attackResult == 3) {
+            if (m_cpuRoll > 150 && m_cpuRoll < 350 && dx < 90.0 && m_attackResult == 3) {
                 m_command = (WORD)Random(0, 2) + kCmd623A;
                 return;
             }
-            if (m_cpuRoll > 0x15e && m_cpuRoll < 0x190 && m_rfGauge > 500.0) {
+            if (m_cpuRoll > 350 && m_cpuRoll < 400 && m_rfGauge > 500.0) {
                 m_command = kCmd22C;
                 return;
             }
-            if (m_cpuRoll > 0x190 && m_cpuRoll < 0x1c2 && m_attackResult == 3 && m_gauge >= 0x3e8 && dx < 90.0) {
+            if (m_cpuRoll > 400 && m_cpuRoll < 450 && m_attackResult == 3 && m_gauge >= 1000 && dx < 90.0) {
                 m_command = (WORD)Random(0, 2) + kCmd236236A;
                 return;
             }
-            if (m_cpuRoll > 0x1c2 && m_cpuRoll < 0x280) {
+            if (m_cpuRoll > 450 && m_cpuRoll < 640) {
                 m_command = (WORD)Random(0, 2) + kCmd214A;
                 return;
             }
-            if (m_cpuRoll > 0x280 && m_cpuRoll < 0x2bc && m_gauge >= 0x3e8) {
+            if (m_cpuRoll > 640 && m_cpuRoll < 700 && m_gauge >= 1000) {
                 m_command = (WORD)Random(0, 2) + kCmd214214A;
                 return;
             }
-            if (m_cpuRoll > 0x2bc) {
+            if (m_cpuRoll > 700) {
                 m_cpuAction = 1;
                 if ((WORD)Random(0, 1) == 0) {
                     m_cpuAction = 6;
@@ -1459,20 +1459,20 @@ void CNagamori::CpuInput()
             }
         }
         if (pattern == kJumpA) {
-            if ((*m_opponent)->y < 0.0 && m_cpuRoll < 0x12c) {
+            if ((*m_opponent)->y < 0.0 && m_cpuRoll < 300) {
                 m_pressB = 1;
                 return;
             }
-            if (dx < 60.0 && m_cpuRoll < 0x190) {
+            if (dx < 60.0 && m_cpuRoll < 400) {
                 m_pressA = 1;
                 return;
             }
-            if (dx < 125.0 && m_cpuRoll > 0x18f && m_cpuRoll < 0x2bc) {
+            if (dx < 125.0 && m_cpuRoll > 399 && m_cpuRoll < 700) {
                 m_pressC = 1;
                 m_inputY = 0;
                 return;
             }
-            if (m_cpuRoll > 0x2bb) {
+            if (m_cpuRoll > 699) {
                 m_cpuAction = 1;
                 if ((WORD)Random(0, 4) == 0) {
                     m_cpuAction = 3;
@@ -1481,83 +1481,83 @@ void CNagamori::CpuInput()
             }
         }
         if (pattern == kJumpB) {
-            if (m_cpuRoll < 0x14 && m_attackResult == 3 && (*m_opponent)->y < 0.0) {
+            if (m_cpuRoll < 20 && m_attackResult == 3 && (*m_opponent)->y < 0.0) {
                 m_command = kCmd623A;
                 return;
             }
-            if (m_cpuRoll > 0x14 && m_cpuRoll < 0x3c && m_attackResult == 3 && (*m_opponent)->y < 0.0) {
+            if (m_cpuRoll > 20 && m_cpuRoll < 60 && m_attackResult == 3 && (*m_opponent)->y < 0.0) {
                 m_command = kCmd214B;
                 return;
             }
-            if (m_cpuRoll > 0x3c && m_cpuRoll < 0x50 && m_gauge >= 0x3e8 && (*m_opponent)->y < 0.0) {
+            if (m_cpuRoll > 60 && m_cpuRoll < 80 && m_gauge >= 1000 && (*m_opponent)->y < 0.0) {
                 m_command = (WORD)Random(0, 2) + kCmd214214A;
                 return;
             }
-            if (m_cpuRoll > 0x50 && m_cpuRoll < 0x12c) {
+            if (m_cpuRoll > 80 && m_cpuRoll < 300) {
                 m_pressC = 1;
                 return;
             }
-            if (m_cpuRoll > 0x3b6) {
+            if (m_cpuRoll > 950) {
                 m_inputX = (WORD)Random(0, 2) - 1;
                 return;
             }
-            if (m_cpuRoll > 0x289) {
+            if (m_cpuRoll > 649) {
                 m_cpuAction = 3;
                 return;
             }
         }
         if (pattern == kJumpC) {
-            if (m_cpuRoll < 0x14 && m_attackResult == 3 && (*m_opponent)->y < 0.0) {
+            if (m_cpuRoll < 20 && m_attackResult == 3 && (*m_opponent)->y < 0.0) {
                 m_command = kCmd623A;
                 return;
             }
-            if (m_cpuRoll > 0x14 && m_cpuRoll < 0x5a && m_attackResult == 3 && (*m_opponent)->y < 0.0) {
+            if (m_cpuRoll > 20 && m_cpuRoll < 90 && m_attackResult == 3 && (*m_opponent)->y < 0.0) {
                 m_command = kCmd214B;
                 return;
             }
-            if (m_cpuRoll > 0x3b6) {
+            if (m_cpuRoll > 950) {
                 m_inputX = (WORD)Random(0, 2) - 1;
                 return;
             }
-            if (m_cpuRoll > 0x289) {
+            if (m_cpuRoll > 649) {
                 m_cpuAction = 3;
                 return;
             }
         }
         if (pattern == kDashB) {
-            if ((*m_opponent)->y < 0.0 && m_cpuRoll < 0x12c && m_attackResult == 3) {
+            if ((*m_opponent)->y < 0.0 && m_cpuRoll < 300 && m_attackResult == 3) {
                 m_command = (WORD)Random(0, 2) + kCmd623A;
                 return;
             }
-            if ((*m_opponent)->y < 0.0 && m_cpuRoll > 0x12b && m_cpuRoll < 0x140) {
+            if ((*m_opponent)->y < 0.0 && m_cpuRoll > 299 && m_cpuRoll < 320) {
                 m_command = kCmd214B;
                 return;
             }
-            if (m_cpuRoll > 0 && m_cpuRoll < 0xc8) {
+            if (m_cpuRoll > 0 && m_cpuRoll < 200) {
                 m_command = (((WORD)Random(0, 3) == 0) << 1) * (m_rfGauge > 500.0) + kCmd236A;
                 return;
             }
-            if (m_cpuRoll > 0xc8 && m_cpuRoll < 0xfa && dx < 90.0 && m_attackResult == 3) {
+            if (m_cpuRoll > 200 && m_cpuRoll < 250 && dx < 90.0 && m_attackResult == 3) {
                 m_command = kCmd623A;
                 return;
             }
-            if (m_cpuRoll > 0xfa && m_cpuRoll < 0x15e && dx < 120.0 && m_rfGauge > 500.0) {
+            if (m_cpuRoll > 250 && m_cpuRoll < 350 && dx < 120.0 && m_rfGauge > 500.0) {
                 m_command = 0x48;
                 return;
             }
-            if (m_cpuRoll > 0x15e && m_cpuRoll < 0x190 && m_rfGauge > 500.0) {
+            if (m_cpuRoll > 350 && m_cpuRoll < 400 && m_rfGauge > 500.0) {
                 m_command = kCmd22C;
                 return;
             }
-            if (m_cpuRoll > 0x190 && m_cpuRoll < 0x2bc) {
+            if (m_cpuRoll > 400 && m_cpuRoll < 700) {
                 m_command = (WORD)Random(0, 2) + kCmd214A;
                 return;
             }
-            if (m_cpuRoll > 0x2bc && m_cpuRoll < 0x2da && m_gauge >= 0x3e8) {
+            if (m_cpuRoll > 700 && m_cpuRoll < 730 && m_gauge >= 1000) {
                 m_command = (WORD)Random(0, 2) + kCmd214214A;
                 return;
             }
-            if (m_cpuRoll > 0x289 && (WORD)Random(0, 3) == 0) {
+            if (m_cpuRoll > 649 && (WORD)Random(0, 3) == 0) {
                 m_cpuAction = 6;
                 if (dx > 110.0) {
                     m_cpuAction = 8;
@@ -1565,8 +1565,8 @@ void CNagamori::CpuInput()
             }
         }
     }
-    if ((WORD)Random(0, 0x64) < 25.0f * m_cpuSkill) {
-        m_cpuRoll = (WORD)Random(0, 0x3e8);
+    if ((WORD)Random(0, 100) < 25.0f * m_cpuSkill) {
+        m_cpuRoll = (WORD)Random(0, 1000);
         if (y == 0.0) {
             if ((*m_opponent)->y == 0.0 && (*m_opponent)->pattern != kLyingDown) {
                 if (dx < 40.0 && (*m_opponent)->y == 0.0 && m_cpuRoll < 5) {
@@ -1575,76 +1575,76 @@ void CNagamori::CpuInput()
                     m_inputY = 0;
                     return;
                 }
-                if (dx < 55.0 && m_cpuRoll < 0x14) {
+                if (dx < 55.0 && m_cpuRoll < 20) {
                     m_pressA = 1;
                     m_inputY = 1;
                     return;
                 }
-                if (dx < 70.0 && m_cpuRoll < 0x1e) {
+                if (dx < 70.0 && m_cpuRoll < 30) {
                     m_pressA = 1;
                     m_inputY = 0;
                     return;
                 }
-                if (dx < 100.0 && dx > 70.0 && m_cpuRoll < 0xf) {
+                if (dx < 100.0 && dx > 70.0 && m_cpuRoll < 15) {
                     m_pressB = 1;
                     m_inputY = 1;
                     return;
                 }
-                if (dx < 120.0 && m_cpuRoll < 0x14) {
+                if (dx < 120.0 && m_cpuRoll < 20) {
                     m_pressB = 1;
                     m_inputY = 0;
                     return;
                 }
-                if (dx > 120.0 && m_cpuRoll < 0x1e) {
+                if (dx > 120.0 && m_cpuRoll < 30) {
                     m_cpuAction = 8;
                     return;
                 }
-                if (dx < 80.0 && m_cpuRoll < 0x50 && m_cpuRoll > 0x25 && (*m_opponent)->pattern > kLastFreeAction && (*m_opponent)->pattern < kAirRecoveryForward) {
+                if (dx < 80.0 && m_cpuRoll < 80 && m_cpuRoll > 37 && (*m_opponent)->pattern > kLastFreeAction && (*m_opponent)->pattern < kAirRecoveryForward) {
                     m_pressC = 1;
                     m_inputY = 1;
                     return;
                 }
-                if (dx < 90.0 && dx > 60.0 && m_cpuRoll < 0x25) {
+                if (dx < 90.0 && dx > 60.0 && m_cpuRoll < 37) {
                     m_pressC = 1;
                     m_inputY = 1;
                     return;
                 }
-                if (dx < 100.0 && dx > 70.0 && m_cpuRoll < 0x28) {
+                if (dx < 100.0 && dx > 70.0 && m_cpuRoll < 40) {
                     m_pressC = 1;
                     m_inputY = 0;
                     return;
                 }
-                if (dx < 80.0 && m_cpuRoll < 0x2a && m_cpuRoll > 0x28) {
+                if (dx < 80.0 && m_cpuRoll < 42 && m_cpuRoll > 40) {
                     m_command = kCmd623A;
                     return;
                 }
-                if (m_cpuRoll < 0x2a && m_cpuRoll > 0x32) {
+                if (m_cpuRoll < 42 && m_cpuRoll > 50) {
                     m_command = facing;
                     m_cpuAction = 5;
                     return;
                 }
-                if ((WORD)Random(0, 0x140) < dx - 70.0 && vy > 0.0 && (*m_opponent)->y > y && m_cpuRoll > 0xeb && m_cpuRoll < 0xfa) {
+                if ((WORD)Random(0, 320) < dx - 70.0 && vy > 0.0 && (*m_opponent)->y > y && m_cpuRoll > 235 && m_cpuRoll < 250) {
                     m_command = (WORD)Random(0, 2) + kCmd214A;
                     return;
                 }
-                if (dx > 180.0 && m_cpuRoll > 0xfa && m_cpuRoll < 0xfc && m_gauge >= 0x3e8) {
+                if (dx > 180.0 && m_cpuRoll > 250 && m_cpuRoll < 252 && m_gauge >= 1000) {
                     m_command = (WORD)Random(0, 2) + kCmd214214A;
                     return;
                 }
             }
             if ((*m_opponent)->y < 0.0) {
                 if ((*m_opponent)->vy < 0.0) {
-                    if (dx < 80.0 && dy < 120.0 && m_cpuRoll < 0xa) {
+                    if (dx < 80.0 && dy < 120.0 && m_cpuRoll < 10) {
                         m_inputY = -1;
                         m_inputX = -facing;
                         return;
                     }
-                    if (dx < 80.0 && m_cpuRoll < 0xf) {
+                    if (dx < 80.0 && m_cpuRoll < 15) {
                         m_pressC = 1;
                         m_inputY = 0;
                         return;
                     }
-                    if (dx < 80.0 && dy < 120.0 && m_cpuRoll < 0x11) {
+                    if (dx < 80.0 && dy < 120.0 && m_cpuRoll < 17) {
                         m_command = kCmd623B;
                         return;
                     }
@@ -1656,12 +1656,12 @@ void CNagamori::CpuInput()
                             return;
                         }
                     }
-                    if (dx < 90.0 && dy < 120.0 && dy > 90.0 && m_cpuRoll < 0xf) {
+                    if (dx < 90.0 && dy < 120.0 && dy > 90.0 && m_cpuRoll < 15) {
                         m_pressC = 1;
                         m_inputY = 0;
                         return;
                     }
-                    if (dx < 120.0 && dy < 100.0 && m_cpuRoll < 0x11 && m_gauge >= 0x7d0) {
+                    if (dx < 120.0 && dy < 100.0 && m_cpuRoll < 17 && m_gauge >= 2000) {
                         m_command = (WORD)Random(0, 1) + kCmd236236B;
                         return;
                     }
@@ -1671,74 +1671,74 @@ void CNagamori::CpuInput()
         if (y < 0.0 && m_cpuAction != 3) {
             if ((*m_opponent)->y == 0.0) {
                 if (dx < 70.0 && dy < 100.0) {
-                    if (m_cpuRoll < ((*m_opponent)->y == 0.0) * 0x64 + 0x64) {
+                    if (m_cpuRoll < ((*m_opponent)->y == 0.0) * 100 + 100) {
                         m_pressA = 1;
                         return;
                     }
                 }
-                if (dx < 120.0 && dy > 50.0 && dy < 60.0 && m_cpuRoll > 0xc8 && m_cpuRoll < 0x104) {
+                if (dx < 120.0 && dy > 50.0 && dy < 60.0 && m_cpuRoll > 200 && m_cpuRoll < 260) {
                     m_pressB = 1;
                     return;
                 }
-                if (dx < 130.0 && dy > 40.0 && dy < 80.0 && m_cpuRoll > 0x104 && m_cpuRoll < 0x109) {
+                if (dx < 130.0 && dy > 40.0 && dy < 80.0 && m_cpuRoll > 260 && m_cpuRoll < 265) {
                     m_pressC = 1;
                     return;
                 }
-                if ((WORD)Random(0, 0x140) < dx - 70.0 && m_cpuRoll > 0x10e && m_cpuRoll < 0x15e) {
+                if ((WORD)Random(0, 320) < dx - 70.0 && m_cpuRoll > 270 && m_cpuRoll < 350) {
                     m_command = (WORD)Random(0, 2) + kCmd214A;
                     return;
                 }
-                if (dx > 180.0 && m_cpuRoll > 0x15e && m_cpuRoll < 0x160 && m_gauge >= 0x3e8) {
+                if (dx > 180.0 && m_cpuRoll > 350 && m_cpuRoll < 352 && m_gauge >= 1000) {
                     m_command = (WORD)Random(0, 2) + kCmd214214A;
                     return;
                 }
             }
             if ((*m_opponent)->y < 0.0) {
                 if (dx < 80.0 && dy < 80.0 && (*m_opponent)->y < y) {
-                    if (m_cpuRoll < (m_rfGauge > 500.0 || m_rfBlue > 0) * 0x14 + 6) {
+                    if (m_cpuRoll < (m_rfGauge > 500.0 || m_rfBlue > 0) * 20 + 6) {
                         m_command = kCmd623A;
                         return;
                     }
                 }
-                if (dx < 140.0 && dy > 90.0 && m_cpuRoll < 0x6e) {
+                if (dx < 140.0 && dy > 90.0 && m_cpuRoll < 110) {
                     m_pressB = 1;
                     return;
                 }
-                if (dx < 150.0 && dy < 90.0 && m_cpuRoll < 0xc8) {
+                if (dx < 150.0 && dy < 90.0 && m_cpuRoll < 200) {
                     m_pressC = 1;
                     return;
                 }
-                if (dx > 180.0 && m_cpuRoll > 0xeb && m_cpuRoll < 0xfa) {
+                if (dx > 180.0 && m_cpuRoll > 235 && m_cpuRoll < 250) {
                     m_command = (WORD)Random(0, 2) + kCmd214A;
                     return;
                 }
-                if (dx > 180.0 && m_cpuRoll > 0xfa && m_cpuRoll < 0xfc && m_gauge >= 0x3e8) {
+                if (dx > 180.0 && m_cpuRoll > 250 && m_cpuRoll < 252 && m_gauge >= 1000) {
                     m_command = (WORD)Random(0, 2) + kCmd214214A;
                     return;
                 }
             }
         }
     }
-    if (pattern < kFirstHitReaction && ((*m_opponent)->pattern > kLastHitReaction && (*m_opponent)->pattern < kGuardAir || (*m_opponent)->pattern > kLastFreeAction && (*m_opponent)->pattern < kHitAir) && y == 0.0 && (WORD)Random(0, 0x64) < 3.0f * m_cpuSkill) {
+    if (pattern < kFirstHitReaction && ((*m_opponent)->pattern > kLastHitReaction && (*m_opponent)->pattern < kGuardAir || (*m_opponent)->pattern > kLastFreeAction && (*m_opponent)->pattern < kHitAir) && y == 0.0 && (WORD)Random(0, 100) < 3.0f * m_cpuSkill) {
         m_command = facing == 1;
         return;
     }
-    if ((WORD)Random(0, 0x3e8) < 2) {
+    if ((WORD)Random(0, 1000) < 2) {
         m_cpuAction = 4;
         return;
     }
-    if ((WORD)Random(0, 0x64) < 2) {
-        if ((WORD)Random(0, 0x64) < 8.0f * m_cpuSkill) {
+    if ((WORD)Random(0, 100) < 2) {
+        if ((WORD)Random(0, 100) < 8.0f * m_cpuSkill) {
             m_cpuAction = 3;
         } else {
             m_cpuAction = 0;
         }
-        if (dx > 160.0 && y == 0.0 && (WORD)Random(0, 0x64) < 2) {
+        if (dx > 160.0 && y == 0.0 && (WORD)Random(0, 100) < 2) {
             m_inputX = 0;
             m_inputY = -1;
             return;
         }
-        if (dx < 100.0 && y == 0.0 && (WORD)Random(0, 0x64) < 2) {
+        if (dx < 100.0 && y == 0.0 && (WORD)Random(0, 100) < 2) {
             m_inputX = 0;
             m_inputY = -1;
             return;
@@ -1750,39 +1750,39 @@ void CNagamori::CpuInput()
         }
     }
     if (m_cpuWalkRight > 0) {
-        if ((char)AtScreenEdge() != 0 && m_cpuWalkRight > 0xf) {
-            m_cpuWalkRight = 0xf;
+        if ((char)AtScreenEdge() != 0 && m_cpuWalkRight > 15) {
+            m_cpuWalkRight = 15;
         }
         m_inputX = 1;
         return;
     }
     if (m_cpuWalkLeft > 0) {
-        if ((char)AtScreenEdge() != 0 && m_cpuWalkLeft > 0xf) {
-            m_cpuWalkLeft = 0xf;
+        if ((char)AtScreenEdge() != 0 && m_cpuWalkLeft > 15) {
+            m_cpuWalkLeft = 15;
         }
         m_inputX = -1;
         return;
     }
-    if ((WORD)Random(0, 0x64) < 0x32 && dx < 100.0) {
+    if ((WORD)Random(0, 100) < 50 && dx < 100.0) {
         if (facing == 1) {
-            m_cpuWalkLeft = (WORD)Random(0, 0xc8) + 0x1e;
+            m_cpuWalkLeft = (WORD)Random(0, 200) + 30;
         } else {
-            m_cpuWalkRight = (WORD)Random(0, 0xc8) + 0x1e;
+            m_cpuWalkRight = (WORD)Random(0, 200) + 30;
         }
     }
-    if ((WORD)Random(0, 0x64) < 0x3c) {
+    if ((WORD)Random(0, 100) < 60) {
         if (facing == 1) {
-            m_cpuWalkRight = (WORD)Random(0, 0xc8) + 0x1e;
+            m_cpuWalkRight = (WORD)Random(0, 200) + 30;
         } else {
-            m_cpuWalkLeft = (WORD)Random(0, 0xc8) + 0x1e;
+            m_cpuWalkLeft = (WORD)Random(0, 200) + 30;
         }
         return;
     }
     if (facing == -1) {
-        m_cpuWalkRight = (WORD)Random(0, 0xc8) + 0x1e;
+        m_cpuWalkRight = (WORD)Random(0, 200) + 30;
         return;
     }
-    m_cpuWalkLeft = (WORD)Random(0, 0xc8) + 0x1e;
+    m_cpuWalkLeft = (WORD)Random(0, 200) + 30;
 }
 
 void CNagamori::UpdateObjects()
@@ -1804,7 +1804,7 @@ void CNagamori::UpdateObjects()
             switch (m_objects[slot].pattern) {
             case kObjBomb:
                 if (m_objectPhase[slot] == 0) {
-                    m_objectPhase[slot] = unk3158 + 0xa;
+                    m_objectPhase[slot] = unk3158 + 10;
                 }
                 if (m_objects[slot].ay == 0.0) {
                     m_objects[slot].ay = -0.015;
@@ -1826,7 +1826,7 @@ void CNagamori::UpdateObjects()
                     effect.layer = 1;
                     SpawnObject(&effect);
                     m_objectTriggered[slot] = 0;
-                    m_objectTimer[slot] = 0x78;
+                    m_objectTimer[slot] = 120;
                     if (m_keepBombs == 0) {
                         RemoveObject(slot);
                     }
@@ -1840,7 +1840,7 @@ void CNagamori::UpdateObjects()
                     m_objects[slot].frame++;
                     m_objects[slot].attackResult = 0;
                     if (m_objects[slot].frame >= frameCount) {
-                        if (m_objectState[slot] < 0x10) {
+                        if (m_objectState[slot] < 16) {
                             m_objects[slot].frame = 0;
                             m_objectState[slot]++;
                         } else {
@@ -1861,7 +1861,7 @@ void CNagamori::UpdateObjects()
                     m_objects[slot].vy = -m_objects[slot].vy;
                     m_objects[slot].y = 0.0;
                 }
-                if (m_objects[slot].timer == 0 && m_objectPhase[slot] >= 0x14) {
+                if (m_objects[slot].timer == 0 && m_objectPhase[slot] >= 20) {
                     effect.keep = 0;
                     effect.type = kObjBouncerDrop;
                     effect.x = (double)(int)m_objects[slot].x;
@@ -1909,7 +1909,7 @@ void CNagamori::UpdateObjects()
                     effect.layer = 1;
                     SpawnObject(&effect);
                     m_objectTriggered[slot] = 0;
-                    m_objectTimer[slot] = 0x78;
+                    m_objectTimer[slot] = 120;
                     break;
                 }
                 m_objectTriggered[slot] = 0;
@@ -1919,7 +1919,7 @@ void CNagamori::UpdateObjects()
                     m_objects[slot].frame++;
                     m_objects[slot].attackResult = 0;
                     if (m_objects[slot].frame >= frameCount) {
-                        if (m_objectState[slot] < 0xc) {
+                        if (m_objectState[slot] < 12) {
                             m_objects[slot].frame = 0;
                             m_objectState[slot]++;
                         } else {
@@ -1930,7 +1930,7 @@ void CNagamori::UpdateObjects()
                 break;
             case kObjSuperBombBig:
                 if (m_objectPhase[slot] == 0) {
-                    m_objectPhase[slot] = unk3158 + 0xa;
+                    m_objectPhase[slot] = unk3158 + 10;
                 }
                 if (m_objects[slot].ay == 0.0) {
                     m_objects[slot].ay = -0.015;
@@ -1952,7 +1952,7 @@ void CNagamori::UpdateObjects()
                     effect.layer = 1;
                     SpawnObject(&effect);
                     m_objectTriggered[slot] = 0;
-                    m_objectTimer[slot] = 0x78;
+                    m_objectTimer[slot] = 120;
                     if (m_keepBombs == 0) {
                         RemoveObject(slot);
                     }
@@ -1966,7 +1966,7 @@ void CNagamori::UpdateObjects()
                     m_objects[slot].frame++;
                     m_objects[slot].attackResult = 0;
                     if (m_objects[slot].frame >= frameCount) {
-                        if (m_objectState[slot] < 0x10) {
+                        if (m_objectState[slot] < 16) {
                             m_objects[slot].frame = 0;
                             m_objectState[slot]++;
                         } else {
@@ -1992,9 +1992,9 @@ void CNagamori::UpdateObjects()
                 if (m_objects[slot].frame == 5 && m_objects[slot].timer == 0) {
                     m_playVoice = 1;
                 }
-                if (m_objects[slot].frame == 0xe && m_objects[slot].timer == 0) {
+                if (m_objects[slot].frame == 14 && m_objects[slot].timer == 0) {
                     m_objects[slot].hitsLeft = 1;
-                    TriggerObjectsNear((int)m_objects[slot].x, (int)m_objects[slot].y, 0x5a, 0x5a);
+                    TriggerObjectsNear((int)m_objects[slot].x, (int)m_objects[slot].y, 90, 90);
                     m_objectTriggered[slot] = 0;
                 }
                 if (m_objects[slot].attackResult == 3) {
@@ -2049,7 +2049,7 @@ void CNagamori::UpdateObjects()
                     effect.layer = 1;
                     SpawnObject(&effect);
                     m_objectTriggered[slot] = 0;
-                    m_objectTimer[slot] = 0x78;
+                    m_objectTimer[slot] = 120;
                     if (m_keepBombs == 0) {
                         RemoveObject(slot);
                     }
@@ -2063,7 +2063,7 @@ void CNagamori::UpdateObjects()
                     m_objects[slot].frame++;
                     m_objects[slot].attackResult = 0;
                     if (m_objects[slot].frame >= frameCount) {
-                        if (m_objectState[slot] < 0x10) {
+                        if (m_objectState[slot] < 16) {
                             m_objects[slot].frame = 0;
                             m_objectState[slot]++;
                         } else {
@@ -2109,7 +2109,7 @@ void CNagamori::UpdateObjects()
                     effect.layer = 1;
                     SpawnObject(&effect);
                     m_objectTriggered[slot] = 0;
-                    m_objectTimer[slot] = 0x78;
+                    m_objectTimer[slot] = 120;
                     if (m_keepBombs == 0) {
                         RemoveObject(slot);
                     }
@@ -2123,7 +2123,7 @@ void CNagamori::UpdateObjects()
                     m_objects[slot].frame++;
                     m_objects[slot].attackResult = 0;
                     if (m_objects[slot].frame >= frameCount) {
-                        if (m_objectState[slot] < 0x10) {
+                        if (m_objectState[slot] < 16) {
                             m_objects[slot].frame = 0;
                             m_objectState[slot]++;
                         } else {
@@ -2174,7 +2174,7 @@ void CNagamori::UpdateObjects()
                     effect.layer = 1;
                     SpawnObject(&effect);
                     m_objectTriggered[slot] = 0;
-                    m_objectTimer[slot] = 0x78;
+                    m_objectTimer[slot] = 120;
                     if (m_keepBombs == 0) {
                         RemoveObject(slot);
                     }
@@ -2188,7 +2188,7 @@ void CNagamori::UpdateObjects()
                     m_objects[slot].frame++;
                     m_objects[slot].attackResult = 0;
                     if (m_objects[slot].frame >= frameCount) {
-                        if (m_objectState[slot] < 0x10) {
+                        if (m_objectState[slot] < 16) {
                             m_objects[slot].frame = 0;
                             m_objectState[slot]++;
                         } else {
@@ -2236,7 +2236,7 @@ void CNagamori::UpdateObjects()
                     effect.layer = 1;
                     SpawnObject(&effect);
                     m_objectTriggered[slot] = 0;
-                    m_objectTimer[slot] = 0x78;
+                    m_objectTimer[slot] = 120;
                     if (m_keepBombs == 0) {
                         RemoveObject(slot);
                     }
@@ -2250,7 +2250,7 @@ void CNagamori::UpdateObjects()
                     m_objects[slot].frame++;
                     m_objects[slot].attackResult = 0;
                     if (m_objects[slot].frame >= frameCount) {
-                        if (m_objectState[slot] < 0xa) {
+                        if (m_objectState[slot] < 10) {
                             m_objects[slot].frame = 0;
                             m_objectState[slot]++;
                         } else {
@@ -2294,7 +2294,7 @@ void CNagamori::UpdateObjects()
                 }
                 break;
             case kObjShotA:
-                TriggerObjectsNear((int)m_objects[slot].x, (int)m_objects[slot].y, 0x1e, 0x1e);
+                TriggerObjectsNear((int)m_objects[slot].x, (int)m_objects[slot].y, 30, 30);
                 if (m_shotOrder == 1) {
                     m_objects[slot].vy -= 2.5;
                     if (m_objectState[slot] > 1) {
@@ -2361,7 +2361,7 @@ void CNagamori::UpdateObjects()
                     if (m_objects[slot].y > y - 70.0 && m_objects[slot].y < y - 20.0 && m_objects[slot].x > x - 10.0 && m_objects[slot].x < x + 10.0 && m_shotState >= 2) {
                         RemoveObject(slot);
                         m_shotState = 0;
-                        m_playSound = 0x1a;
+                        m_playSound = 26;
                         break;
                     }
                 }
@@ -2376,7 +2376,7 @@ void CNagamori::UpdateObjects()
                 }
                 break;
             case kObjShotB:
-                TriggerObjectsNear((int)m_objects[slot].x, (int)m_objects[slot].y, 0x1e, 0x1e);
+                TriggerObjectsNear((int)m_objects[slot].x, (int)m_objects[slot].y, 30, 30);
                 if (m_shotOrder == 1) {
                     m_objects[slot].vy -= 2.5;
                     if (m_objectState[slot] > 1) {
@@ -2443,7 +2443,7 @@ void CNagamori::UpdateObjects()
                     if (m_objects[slot].y > y - 70.0 && m_objects[slot].y < y - 20.0 && m_objects[slot].x > x - 10.0 && m_objects[slot].x < x + 10.0 && m_shotState >= 2) {
                         RemoveObject(slot);
                         m_shotState = 0;
-                        m_playSound = 0x1a;
+                        m_playSound = 26;
                         break;
                     }
                 }
@@ -2521,7 +2521,7 @@ void CNagamori::UpdateObjects()
                     } else if (m_objects[slot].vx > 2.0) {
                         m_objects[slot].vx = 2.0;
                     }
-                    if (m_objectState[slot] > 1 && m_objectTimer[slot] > 0x59 && m_objectPhase[slot] < 5) {
+                    if (m_objectState[slot] > 1 && m_objectTimer[slot] > 89 && m_objectPhase[slot] < 5) {
                         effect.keep = 0;
                         effect.type = kObjBomb;
                         effect.x = (double)(int)m_objects[slot].x;
@@ -2538,7 +2538,7 @@ void CNagamori::UpdateObjects()
                     if (m_objects[slot].y > y - 70.0 && m_objects[slot].y < y - 20.0 && m_objects[slot].x > x - 10.0 && m_objects[slot].x < x + 10.0 && m_shotState >= 2) {
                         RemoveObject(slot);
                         m_shotState = 0;
-                        m_playSound = 0x1a;
+                        m_playSound = 26;
                         break;
                     }
                 }
@@ -2611,7 +2611,7 @@ void CNagamori::UpdateObjects()
                     effect.layer = 1;
                     SpawnObject(&effect);
                     m_objectTriggered[slot] = 0;
-                    m_objectTimer[slot] = 0x78;
+                    m_objectTimer[slot] = 120;
                     if (m_keepBombs == 0) {
                         RemoveObject(slot);
                     }
@@ -2625,7 +2625,7 @@ void CNagamori::UpdateObjects()
                     m_objects[slot].frame++;
                     m_objects[slot].attackResult = 0;
                     if (m_objects[slot].frame >= frameCount) {
-                        if (m_objectState[slot] < 0xa) {
+                        if (m_objectState[slot] < 10) {
                             m_objects[slot].frame = 0;
                             m_objectState[slot]++;
                         } else {
@@ -2654,7 +2654,7 @@ void CNagamori::UpdateObjects()
                 break;
             case kObjLv4Director:
                 m_lv4Time--;
-                m_freezeTime = 0x4b0;
+                m_freezeTime = 1200;
                 (*m_opponent)->m_noGuardTime = 1;
                 m_invulTime = 1;
                 m_gauge = 0;
@@ -2663,7 +2663,7 @@ void CNagamori::UpdateObjects()
                     m_freezeTime = 0;
                     (*m_opponent)->m_noGuardTime = 0;
                     RemoveObject(slot);
-                    m_playSound = 0x16;
+                    m_playSound = 22;
                     (*m_opponent)->pattern = kHitAir;
                     (*m_opponent)->m_koDelay = 0;
                     m_invulTime = 0;
@@ -2675,7 +2675,7 @@ void CNagamori::UpdateObjects()
                     (*m_opponent)->m_hitVy = -1.0;
                     break;
                 }
-                if (m_lv4Time == 0x47e) {
+                if (m_lv4Time == 1150) {
                     effect.keep = 0;
                     effect.screen = 1;
                     effect.type = kObjLv4Scene01;
@@ -2687,7 +2687,7 @@ void CNagamori::UpdateObjects()
                     effect.movesInFreeze = 1;
                     SpawnObject(&effect);
                 }
-                if (m_lv4Time == 0x474) {
+                if (m_lv4Time == 1140) {
                     effect.keep = 0;
                     effect.screen = 1;
                     effect.type = kObjLv4Scene02;
@@ -2699,7 +2699,7 @@ void CNagamori::UpdateObjects()
                     effect.movesInFreeze = 1;
                     SpawnObject(&effect);
                 }
-                if (m_lv4Time == 0x46a) {
+                if (m_lv4Time == 1130) {
                     effect.keep = 0;
                     effect.screen = 1;
                     effect.type = kObjLv4Scene03;
@@ -2711,7 +2711,7 @@ void CNagamori::UpdateObjects()
                     effect.movesInFreeze = 1;
                     SpawnObject(&effect);
                 }
-                if (m_lv4Time == 0x460) {
+                if (m_lv4Time == 1120) {
                     effect.keep = 0;
                     effect.screen = 1;
                     effect.type = kObjLv4Scene04;
@@ -2723,7 +2723,7 @@ void CNagamori::UpdateObjects()
                     effect.movesInFreeze = 1;
                     SpawnObject(&effect);
                 }
-                if (m_lv4Time == 0x456) {
+                if (m_lv4Time == 1110) {
                     effect.keep = 0;
                     effect.screen = 1;
                     effect.type = kObjLv4Scene05;
@@ -2735,7 +2735,7 @@ void CNagamori::UpdateObjects()
                     effect.movesInFreeze = 1;
                     SpawnObject(&effect);
                 }
-                if (m_lv4Time == 0x44c) {
+                if (m_lv4Time == 1100) {
                     effect.keep = 0;
                     effect.screen = 1;
                     effect.type = kObjLv4Scene06;
@@ -2747,7 +2747,7 @@ void CNagamori::UpdateObjects()
                     effect.movesInFreeze = 1;
                     SpawnObject(&effect);
                 }
-                if (m_lv4Time == 0x438) {
+                if (m_lv4Time == 1080) {
                     effect.keep = 0;
                     effect.screen = 1;
                     effect.type = kObjLv4Scene07;
@@ -2759,7 +2759,7 @@ void CNagamori::UpdateObjects()
                     effect.movesInFreeze = 1;
                     SpawnObject(&effect);
                 }
-                if (m_lv4Time == 0x424) {
+                if (m_lv4Time == 1060) {
                     effect.keep = 0;
                     effect.screen = 1;
                     effect.type = kObjLv4Scene08;
@@ -2771,7 +2771,7 @@ void CNagamori::UpdateObjects()
                     effect.movesInFreeze = 1;
                     SpawnObject(&effect);
                 }
-                if (m_lv4Time == 0x410) {
+                if (m_lv4Time == 1040) {
                     effect.keep = 0;
                     effect.screen = 1;
                     effect.type = kObjLv4Scene09;
@@ -2783,7 +2783,7 @@ void CNagamori::UpdateObjects()
                     effect.movesInFreeze = 1;
                     SpawnObject(&effect);
                 }
-                if (m_lv4Time == 0x3fc) {
+                if (m_lv4Time == 1020) {
                     effect.keep = 0;
                     effect.screen = 1;
                     effect.type = kObjLv4Scene10;
@@ -2795,7 +2795,7 @@ void CNagamori::UpdateObjects()
                     effect.movesInFreeze = 1;
                     SpawnObject(&effect);
                 }
-                if (m_lv4Time == 0x3e8) {
+                if (m_lv4Time == 1000) {
                     effect.keep = 0;
                     effect.screen = 1;
                     effect.type = kObjLv4Scene11;
@@ -2807,7 +2807,7 @@ void CNagamori::UpdateObjects()
                     effect.movesInFreeze = 1;
                     SpawnObject(&effect);
                 }
-                if (m_lv4Time == 0x3d4) {
+                if (m_lv4Time == 980) {
                     effect.keep = 0;
                     effect.screen = 1;
                     effect.type = kObjLv4Scene12;
@@ -2819,7 +2819,7 @@ void CNagamori::UpdateObjects()
                     effect.movesInFreeze = 1;
                     SpawnObject(&effect);
                 }
-                if (m_lv4Time == 0x3ca) {
+                if (m_lv4Time == 970) {
                     effect.keep = 0;
                     effect.screen = 1;
                     effect.type = kObjLv4Scene13;
@@ -2831,7 +2831,7 @@ void CNagamori::UpdateObjects()
                     effect.movesInFreeze = 1;
                     SpawnObject(&effect);
                 }
-                if (m_lv4Time == 0x3b6) {
+                if (m_lv4Time == 950) {
                     effect.keep = 0;
                     effect.screen = 1;
                     effect.type = kObjLv4Scene14;
@@ -2843,7 +2843,7 @@ void CNagamori::UpdateObjects()
                     effect.movesInFreeze = 1;
                     SpawnObject(&effect);
                 }
-                if (m_lv4Time == 0x3a2) {
+                if (m_lv4Time == 930) {
                     effect.keep = 0;
                     effect.screen = 1;
                     effect.type = kObjLv4Scene15;
@@ -2855,7 +2855,7 @@ void CNagamori::UpdateObjects()
                     effect.movesInFreeze = 1;
                     SpawnObject(&effect);
                 }
-                if (m_lv4Time == 0x38e) {
+                if (m_lv4Time == 910) {
                     effect.keep = 0;
                     effect.screen = 1;
                     effect.type = kObjLv4Scene16;
@@ -2867,7 +2867,7 @@ void CNagamori::UpdateObjects()
                     effect.movesInFreeze = 1;
                     SpawnObject(&effect);
                 }
-                if (m_lv4Time == 0x37a) {
+                if (m_lv4Time == 890) {
                     effect.keep = 0;
                     effect.screen = 1;
                     effect.type = kObjLv4Scene17;
@@ -2879,7 +2879,7 @@ void CNagamori::UpdateObjects()
                     effect.movesInFreeze = 1;
                     SpawnObject(&effect);
                 }
-                if (m_lv4Time == 0x366) {
+                if (m_lv4Time == 870) {
                     effect.keep = 0;
                     effect.screen = 1;
                     effect.type = kObjLv4Scene18;
@@ -2891,7 +2891,7 @@ void CNagamori::UpdateObjects()
                     effect.movesInFreeze = 1;
                     SpawnObject(&effect);
                 }
-                if (m_lv4Time == 0x352) {
+                if (m_lv4Time == 850) {
                     effect.keep = 0;
                     effect.screen = 1;
                     effect.type = kObjLv4Scene19;
@@ -2903,7 +2903,7 @@ void CNagamori::UpdateObjects()
                     effect.movesInFreeze = 1;
                     SpawnObject(&effect);
                 }
-                if (m_lv4Time == 0x33e) {
+                if (m_lv4Time == 830) {
                     effect.keep = 0;
                     effect.screen = 1;
                     effect.type = kObjLv4Scene20;
@@ -2915,7 +2915,7 @@ void CNagamori::UpdateObjects()
                     effect.movesInFreeze = 1;
                     SpawnObject(&effect);
                 }
-                if (m_lv4Time == 0x32a) {
+                if (m_lv4Time == 810) {
                     effect.keep = 0;
                     effect.screen = 1;
                     effect.type = kObjLv4Scene21;
@@ -2927,7 +2927,7 @@ void CNagamori::UpdateObjects()
                     effect.movesInFreeze = 1;
                     SpawnObject(&effect);
                 }
-                if (m_lv4Time == 0x316) {
+                if (m_lv4Time == 790) {
                     effect.keep = 0;
                     effect.screen = 1;
                     effect.type = kObjLv4Scene22;
@@ -2939,7 +2939,7 @@ void CNagamori::UpdateObjects()
                     effect.movesInFreeze = 1;
                     SpawnObject(&effect);
                 }
-                if (m_lv4Time == 0x302) {
+                if (m_lv4Time == 770) {
                     effect.keep = 0;
                     effect.screen = 1;
                     effect.type = kObjLv4Scene23;
@@ -2951,7 +2951,7 @@ void CNagamori::UpdateObjects()
                     effect.movesInFreeze = 1;
                     SpawnObject(&effect);
                 }
-                if (m_lv4Time == 0x2ee) {
+                if (m_lv4Time == 750) {
                     effect.keep = 0;
                     effect.screen = 1;
                     effect.type = kObjLv4Scene24;
@@ -2963,7 +2963,7 @@ void CNagamori::UpdateObjects()
                     effect.movesInFreeze = 1;
                     SpawnObject(&effect);
                 }
-                if (m_lv4Time == 0x2da) {
+                if (m_lv4Time == 730) {
                     effect.keep = 0;
                     effect.screen = 1;
                     effect.type = kObjLv4Scene25;
@@ -2975,7 +2975,7 @@ void CNagamori::UpdateObjects()
                     effect.movesInFreeze = 1;
                     SpawnObject(&effect);
                 }
-                if (m_lv4Time == 0x2c6) {
+                if (m_lv4Time == 710) {
                     effect.keep = 0;
                     effect.screen = 1;
                     effect.type = kObjLv4Scene26;
@@ -2987,7 +2987,7 @@ void CNagamori::UpdateObjects()
                     effect.movesInFreeze = 1;
                     SpawnObject(&effect);
                 }
-                if (m_lv4Time == 0x2b2) {
+                if (m_lv4Time == 690) {
                     effect.keep = 0;
                     effect.screen = 1;
                     effect.type = kObjLv4Scene27;
@@ -2999,7 +2999,7 @@ void CNagamori::UpdateObjects()
                     effect.movesInFreeze = 1;
                     SpawnObject(&effect);
                 }
-                if (m_lv4Time == 0x21c) {
+                if (m_lv4Time == 540) {
                     effect.keep = 1;
                     effect.screen = 1;
                     effect.type = kObjLv4Scene28;
@@ -3011,7 +3011,7 @@ void CNagamori::UpdateObjects()
                     effect.movesInFreeze = 1;
                     SpawnObject(&effect);
                 }
-                if (m_lv4Time == 0x12c) {
+                if (m_lv4Time == 300) {
                     effect.keep = 1;
                     effect.screen = 1;
                     effect.type = kObjLv4Scene29;
@@ -3035,13 +3035,13 @@ void CNagamori::UpdateObjects()
                 break;
             case kObjLv4Scene01:
                 m_objects[slot].vx = 10.0;
-                if (m_objects[slot].timer > 0x1c) {
+                if (m_objects[slot].timer > 28) {
                     m_objects[slot].vx = 0.3;
                 }
-                if (m_objects[slot].timer > 0x5a) {
+                if (m_objects[slot].timer > 90) {
                     m_objects[slot].vx = 10.0;
                 }
-                if (m_objects[slot].timer > 0x82) {
+                if (m_objects[slot].timer > 130) {
                     RemoveObject(slot);
                 }
                 m_objects[slot].timer++;
@@ -3056,13 +3056,13 @@ void CNagamori::UpdateObjects()
                 break;
             case kObjLv4Scene02:
                 m_objects[slot].vy = -10.0;
-                if (m_objects[slot].timer > 0x1c) {
+                if (m_objects[slot].timer > 28) {
                     m_objects[slot].vy = -0.3;
                 }
-                if (m_objects[slot].timer > 0x5a) {
+                if (m_objects[slot].timer > 90) {
                     m_objects[slot].vy = -10.0;
                 }
-                if (m_objects[slot].timer > 0x82) {
+                if (m_objects[slot].timer > 130) {
                     RemoveObject(slot);
                 }
                 m_objects[slot].timer++;
@@ -3077,13 +3077,13 @@ void CNagamori::UpdateObjects()
                 break;
             case kObjLv4Scene03:
                 m_objects[slot].vx = -10.0;
-                if (m_objects[slot].timer > 0x1c) {
+                if (m_objects[slot].timer > 28) {
                     m_objects[slot].vx = -0.3;
                 }
-                if (m_objects[slot].timer > 0x5a) {
+                if (m_objects[slot].timer > 90) {
                     m_objects[slot].vx = -10.0;
                 }
-                if (m_objects[slot].timer > 0x82) {
+                if (m_objects[slot].timer > 130) {
                     RemoveObject(slot);
                 }
                 m_objects[slot].timer++;
@@ -3098,13 +3098,13 @@ void CNagamori::UpdateObjects()
                 break;
             case kObjLv4Scene04:
                 m_objects[slot].vx = 10.0;
-                if (m_objects[slot].timer > 0x1c) {
+                if (m_objects[slot].timer > 28) {
                     m_objects[slot].vx = 0.3;
                 }
-                if (m_objects[slot].timer > 0x5a) {
+                if (m_objects[slot].timer > 90) {
                     m_objects[slot].vx = 10.0;
                 }
-                if (m_objects[slot].timer > 0x82) {
+                if (m_objects[slot].timer > 130) {
                     RemoveObject(slot);
                 }
                 m_objects[slot].timer++;
@@ -3119,13 +3119,13 @@ void CNagamori::UpdateObjects()
                 break;
             case kObjLv4Scene05:
                 m_objects[slot].vy = 10.0;
-                if (m_objects[slot].timer > 0x1c) {
+                if (m_objects[slot].timer > 28) {
                     m_objects[slot].vy = 0.3;
                 }
-                if (m_objects[slot].timer > 0x5a) {
+                if (m_objects[slot].timer > 90) {
                     m_objects[slot].vy = 10.0;
                 }
-                if (m_objects[slot].timer > 0x82) {
+                if (m_objects[slot].timer > 130) {
                     RemoveObject(slot);
                 }
                 m_objects[slot].timer++;
@@ -3140,13 +3140,13 @@ void CNagamori::UpdateObjects()
                 break;
             case kObjLv4Scene06:
                 m_objects[slot].vx = -10.0;
-                if (m_objects[slot].timer > 0x1c) {
+                if (m_objects[slot].timer > 28) {
                     m_objects[slot].vx = -0.3;
                 }
-                if (m_objects[slot].timer > 0x5a) {
+                if (m_objects[slot].timer > 90) {
                     m_objects[slot].vx = -10.0;
                 }
-                if (m_objects[slot].timer > 0x82) {
+                if (m_objects[slot].timer > 130) {
                     RemoveObject(slot);
                 }
                 m_objects[slot].timer++;
@@ -3161,13 +3161,13 @@ void CNagamori::UpdateObjects()
                 break;
             case kObjLv4Scene07:
                 m_objects[slot].vy = -10.0;
-                if (m_objects[slot].timer > 0x1c) {
+                if (m_objects[slot].timer > 28) {
                     m_objects[slot].vy = 0.3;
                 }
-                if (m_objects[slot].timer > 0x5a) {
+                if (m_objects[slot].timer > 90) {
                     m_objects[slot].vy = 10.0;
                 }
-                if (m_objects[slot].timer > 0x82) {
+                if (m_objects[slot].timer > 130) {
                     RemoveObject(slot);
                 }
                 m_objects[slot].timer++;
@@ -3182,13 +3182,13 @@ void CNagamori::UpdateObjects()
                 break;
             case kObjLv4Scene08:
                 m_objects[slot].vy = 10.0;
-                if (m_objects[slot].timer > 0x1c) {
+                if (m_objects[slot].timer > 28) {
                     m_objects[slot].vy = 0.3;
                 }
-                if (m_objects[slot].timer > 0x5a) {
+                if (m_objects[slot].timer > 90) {
                     m_objects[slot].vy = 10.0;
                 }
-                if (m_objects[slot].timer > 0x82) {
+                if (m_objects[slot].timer > 130) {
                     RemoveObject(slot);
                 }
                 m_objects[slot].timer++;
@@ -3203,13 +3203,13 @@ void CNagamori::UpdateObjects()
                 break;
             case kObjLv4Scene09:
                 m_objects[slot].vx = 10.0;
-                if (m_objects[slot].timer > 0x1c) {
+                if (m_objects[slot].timer > 28) {
                     m_objects[slot].vx = 0.3;
                 }
-                if (m_objects[slot].timer > 0x5a) {
+                if (m_objects[slot].timer > 90) {
                     m_objects[slot].vx = 10.0;
                 }
-                if (m_objects[slot].timer > 0x82) {
+                if (m_objects[slot].timer > 130) {
                     RemoveObject(slot);
                 }
                 m_objects[slot].timer++;
@@ -3224,13 +3224,13 @@ void CNagamori::UpdateObjects()
                 break;
             case kObjLv4Scene10:
                 m_objects[slot].vy = 10.0;
-                if (m_objects[slot].timer > 0x1c) {
+                if (m_objects[slot].timer > 28) {
                     m_objects[slot].vy = 0.3;
                 }
-                if (m_objects[slot].timer > 0x5a) {
+                if (m_objects[slot].timer > 90) {
                     m_objects[slot].vy = 10.0;
                 }
-                if (m_objects[slot].timer > 0x82) {
+                if (m_objects[slot].timer > 130) {
                     RemoveObject(slot);
                 }
                 m_objects[slot].timer++;
@@ -3245,13 +3245,13 @@ void CNagamori::UpdateObjects()
                 break;
             case kObjLv4Scene11:
                 m_objects[slot].vx = -10.0;
-                if (m_objects[slot].timer > 0x1c) {
+                if (m_objects[slot].timer > 28) {
                     m_objects[slot].vx = -0.3;
                 }
-                if (m_objects[slot].timer > 0x5a) {
+                if (m_objects[slot].timer > 90) {
                     m_objects[slot].vx = -10.0;
                 }
-                if (m_objects[slot].timer > 0x82) {
+                if (m_objects[slot].timer > 130) {
                     RemoveObject(slot);
                 }
                 m_objects[slot].timer++;
@@ -3266,13 +3266,13 @@ void CNagamori::UpdateObjects()
                 break;
             case kObjLv4Scene12:
                 m_objects[slot].vy = -10.0;
-                if (m_objects[slot].timer > 0x1c) {
+                if (m_objects[slot].timer > 28) {
                     m_objects[slot].vy = -0.3;
                 }
-                if (m_objects[slot].timer > 0x5a) {
+                if (m_objects[slot].timer > 90) {
                     m_objects[slot].vy = -10.0;
                 }
-                if (m_objects[slot].timer > 0x82) {
+                if (m_objects[slot].timer > 130) {
                     RemoveObject(slot);
                 }
                 m_objects[slot].timer++;
@@ -3287,13 +3287,13 @@ void CNagamori::UpdateObjects()
                 break;
             case kObjLv4Scene13:
                 m_objects[slot].vy = -10.0;
-                if (m_objects[slot].timer > 0x1c) {
+                if (m_objects[slot].timer > 28) {
                     m_objects[slot].vy = -0.3;
                 }
-                if (m_objects[slot].timer > 0x5a) {
+                if (m_objects[slot].timer > 90) {
                     m_objects[slot].vy = -10.0;
                 }
-                if (m_objects[slot].timer > 0x82) {
+                if (m_objects[slot].timer > 130) {
                     RemoveObject(slot);
                 }
                 m_objects[slot].timer++;
@@ -3308,13 +3308,13 @@ void CNagamori::UpdateObjects()
                 break;
             case kObjLv4Scene14:
                 m_objects[slot].vx = 10.0;
-                if (m_objects[slot].timer > 0x1c) {
+                if (m_objects[slot].timer > 28) {
                     m_objects[slot].vx = 0.3;
                 }
-                if (m_objects[slot].timer > 0x5a) {
+                if (m_objects[slot].timer > 90) {
                     m_objects[slot].vx = 10.0;
                 }
-                if (m_objects[slot].timer > 0x82) {
+                if (m_objects[slot].timer > 130) {
                     RemoveObject(slot);
                 }
                 m_objects[slot].timer++;
@@ -3329,13 +3329,13 @@ void CNagamori::UpdateObjects()
                 break;
             case kObjLv4Scene15:
                 m_objects[slot].vy = 10.0;
-                if (m_objects[slot].timer > 0x1c) {
+                if (m_objects[slot].timer > 28) {
                     m_objects[slot].vy = 0.3;
                 }
-                if (m_objects[slot].timer > 0x5a) {
+                if (m_objects[slot].timer > 90) {
                     m_objects[slot].vy = 10.0;
                 }
-                if (m_objects[slot].timer > 0x82) {
+                if (m_objects[slot].timer > 130) {
                     RemoveObject(slot);
                 }
                 m_objects[slot].timer++;
@@ -3350,13 +3350,13 @@ void CNagamori::UpdateObjects()
                 break;
             case kObjLv4Scene16:
                 m_objects[slot].vx = -10.0;
-                if (m_objects[slot].timer > 0x1c) {
+                if (m_objects[slot].timer > 28) {
                     m_objects[slot].vx = -0.3;
                 }
-                if (m_objects[slot].timer > 0x5a) {
+                if (m_objects[slot].timer > 90) {
                     m_objects[slot].vx = -10.0;
                 }
-                if (m_objects[slot].timer > 0x82) {
+                if (m_objects[slot].timer > 130) {
                     RemoveObject(slot);
                 }
                 m_objects[slot].timer++;
@@ -3371,13 +3371,13 @@ void CNagamori::UpdateObjects()
                 break;
             case kObjLv4Scene17:
                 m_objects[slot].vy = -10.0;
-                if (m_objects[slot].timer > 0x1c) {
+                if (m_objects[slot].timer > 28) {
                     m_objects[slot].vy = -0.3;
                 }
-                if (m_objects[slot].timer > 0x5a) {
+                if (m_objects[slot].timer > 90) {
                     m_objects[slot].vy = -10.0;
                 }
-                if (m_objects[slot].timer > 0x82) {
+                if (m_objects[slot].timer > 130) {
                     RemoveObject(slot);
                 }
                 m_objects[slot].timer++;
@@ -3392,13 +3392,13 @@ void CNagamori::UpdateObjects()
                 break;
             case kObjLv4Scene18:
                 m_objects[slot].vx = 10.0;
-                if (m_objects[slot].timer > 0x1c) {
+                if (m_objects[slot].timer > 28) {
                     m_objects[slot].vx = 0.3;
                 }
-                if (m_objects[slot].timer > 0x5a) {
+                if (m_objects[slot].timer > 90) {
                     m_objects[slot].vx = 10.0;
                 }
-                if (m_objects[slot].timer > 0x82) {
+                if (m_objects[slot].timer > 130) {
                     RemoveObject(slot);
                 }
                 m_objects[slot].timer++;
@@ -3413,13 +3413,13 @@ void CNagamori::UpdateObjects()
                 break;
             case kObjLv4Scene19:
                 m_objects[slot].vy = 10.0;
-                if (m_objects[slot].timer > 0x1c) {
+                if (m_objects[slot].timer > 28) {
                     m_objects[slot].vy = 0.3;
                 }
-                if (m_objects[slot].timer > 0x5a) {
+                if (m_objects[slot].timer > 90) {
                     m_objects[slot].vy = 10.0;
                 }
-                if (m_objects[slot].timer > 0x82) {
+                if (m_objects[slot].timer > 130) {
                     RemoveObject(slot);
                 }
                 m_objects[slot].timer++;
@@ -3434,13 +3434,13 @@ void CNagamori::UpdateObjects()
                 break;
             case kObjLv4Scene20:
                 m_objects[slot].vx = -10.0;
-                if (m_objects[slot].timer > 0x1c) {
+                if (m_objects[slot].timer > 28) {
                     m_objects[slot].vx = -0.3;
                 }
-                if (m_objects[slot].timer > 0x5a) {
+                if (m_objects[slot].timer > 90) {
                     m_objects[slot].vx = -10.0;
                 }
-                if (m_objects[slot].timer > 0x82) {
+                if (m_objects[slot].timer > 130) {
                     RemoveObject(slot);
                 }
                 m_objects[slot].timer++;
@@ -3455,13 +3455,13 @@ void CNagamori::UpdateObjects()
                 break;
             case kObjLv4Scene21:
                 m_objects[slot].vx = 10.0;
-                if (m_objects[slot].timer > 0x1c) {
+                if (m_objects[slot].timer > 28) {
                     m_objects[slot].vx = 0.3;
                 }
-                if (m_objects[slot].timer > 0x5a) {
+                if (m_objects[slot].timer > 90) {
                     m_objects[slot].vx = 10.0;
                 }
-                if (m_objects[slot].timer > 0x82) {
+                if (m_objects[slot].timer > 130) {
                     RemoveObject(slot);
                 }
                 m_objects[slot].timer++;
@@ -3476,13 +3476,13 @@ void CNagamori::UpdateObjects()
                 break;
             case kObjLv4Scene22:
                 m_objects[slot].vx = -10.0;
-                if (m_objects[slot].timer > 0x1c) {
+                if (m_objects[slot].timer > 28) {
                     m_objects[slot].vx = -0.3;
                 }
-                if (m_objects[slot].timer > 0x5a) {
+                if (m_objects[slot].timer > 90) {
                     m_objects[slot].vx = -10.0;
                 }
-                if (m_objects[slot].timer > 0x82) {
+                if (m_objects[slot].timer > 130) {
                     RemoveObject(slot);
                 }
                 m_objects[slot].timer++;
@@ -3497,13 +3497,13 @@ void CNagamori::UpdateObjects()
                 break;
             case kObjLv4Scene23:
                 m_objects[slot].vy = -10.0;
-                if (m_objects[slot].timer > 0x1c) {
+                if (m_objects[slot].timer > 28) {
                     m_objects[slot].vy = -0.3;
                 }
-                if (m_objects[slot].timer > 0x5a) {
+                if (m_objects[slot].timer > 90) {
                     m_objects[slot].vy = -10.0;
                 }
-                if (m_objects[slot].timer > 0x82) {
+                if (m_objects[slot].timer > 130) {
                     RemoveObject(slot);
                 }
                 m_objects[slot].timer++;
@@ -3518,13 +3518,13 @@ void CNagamori::UpdateObjects()
                 break;
             case kObjLv4Scene24:
                 m_objects[slot].vy = 10.0;
-                if (m_objects[slot].timer > 0x1c) {
+                if (m_objects[slot].timer > 28) {
                     m_objects[slot].vy = 0.3;
                 }
-                if (m_objects[slot].timer > 0x5a) {
+                if (m_objects[slot].timer > 90) {
                     m_objects[slot].vy = 10.0;
                 }
-                if (m_objects[slot].timer > 0x82) {
+                if (m_objects[slot].timer > 130) {
                     RemoveObject(slot);
                 }
                 m_objects[slot].timer++;
@@ -3539,13 +3539,13 @@ void CNagamori::UpdateObjects()
                 break;
             case kObjLv4Scene25:
                 m_objects[slot].vx = 10.0;
-                if (m_objects[slot].timer > 0x1c) {
+                if (m_objects[slot].timer > 28) {
                     m_objects[slot].vx = 0.3;
                 }
-                if (m_objects[slot].timer > 0x5a) {
+                if (m_objects[slot].timer > 90) {
                     m_objects[slot].vx = 10.0;
                 }
-                if (m_objects[slot].timer > 0x82) {
+                if (m_objects[slot].timer > 130) {
                     RemoveObject(slot);
                 }
                 m_objects[slot].timer++;
@@ -3560,13 +3560,13 @@ void CNagamori::UpdateObjects()
                 break;
             case kObjLv4Scene26:
                 m_objects[slot].vy = -10.0;
-                if (m_objects[slot].timer > 0x1c) {
+                if (m_objects[slot].timer > 28) {
                     m_objects[slot].vy = -0.3;
                 }
-                if (m_objects[slot].timer > 0x96) {
+                if (m_objects[slot].timer > 150) {
                     m_objects[slot].vy = -10.0;
                 }
-                if (m_objects[slot].timer > 0xb4) {
+                if (m_objects[slot].timer > 180) {
                     RemoveObject(slot);
                 }
                 m_objects[slot].timer++;
@@ -3581,13 +3581,13 @@ void CNagamori::UpdateObjects()
                 break;
             case kObjLv4Scene27:
                 m_objects[slot].vy = 10.0;
-                if (m_objects[slot].timer > 0x1c) {
+                if (m_objects[slot].timer > 28) {
                     m_objects[slot].vy = 0.3;
                 }
-                if (m_objects[slot].timer > 0x96) {
+                if (m_objects[slot].timer > 150) {
                     m_objects[slot].vy = 10.0;
                 }
-                if (m_objects[slot].timer > 0xb4) {
+                if (m_objects[slot].timer > 180) {
                     RemoveObject(slot);
                 }
                 m_objects[slot].timer++;
@@ -3602,13 +3602,13 @@ void CNagamori::UpdateObjects()
                 break;
             case kObjLv4Scene28:
                 m_objects[slot].vx = 10.0;
-                if (m_objects[slot].timer > 0x17) {
+                if (m_objects[slot].timer > 23) {
                     m_objects[slot].vx = 0.3;
                 }
-                if (m_objects[slot].timer > 0x1fe) {
+                if (m_objects[slot].timer > 510) {
                     m_objects[slot].vx = 10.0;
                 }
-                if (m_objects[slot].timer > 0x21c) {
+                if (m_objects[slot].timer > 540) {
                     RemoveObject(slot);
                 }
                 m_objects[slot].timer++;
@@ -3623,13 +3623,13 @@ void CNagamori::UpdateObjects()
                 break;
             case kObjLv4Scene29:
                 m_objects[slot].vx = -10.0;
-                if (m_objects[slot].timer > 0x1a) {
+                if (m_objects[slot].timer > 26) {
                     m_objects[slot].vx = -0.3;
                 }
-                if (m_objects[slot].timer > 0x10e) {
+                if (m_objects[slot].timer > 270) {
                     m_objects[slot].vx = -10.0;
                 }
-                if (m_objects[slot].timer > 0x12c) {
+                if (m_objects[slot].timer > 300) {
                     RemoveObject(slot);
                 }
                 m_objects[slot].timer++;
@@ -3646,15 +3646,15 @@ void CNagamori::UpdateObjects()
                 if (pattern != kLv4) {
                     RemoveObject(slot);
                 }
-                if (m_objects[slot].frame == 0x19) {
+                if (m_objects[slot].frame == 25) {
                     if (m_patternVar1 == 0) {
                         m_playVoice = 3;
-                        TriggerObjectsNear((int)x, (int)y, 0x140, 0x140);
+                        TriggerObjectsNear((int)x, (int)y, 320, 320);
                         m_game->FlashWhite(3, 6, 9);
                     }
                     m_patternVar1 = 1;
                 }
-                if (m_objects[slot].frame == 0x28) {
+                if (m_objects[slot].frame == 40) {
                     if (m_patternVar1 == 1) {
                         m_playVoice = 4;
                     }
@@ -3727,7 +3727,7 @@ void CNagamori::UpdateObjects()
                     effect.layer = 1;
                     SpawnObject(&effect);
                     m_objectTriggered[slot] = 0;
-                    m_objectTimer[slot] = 0x78;
+                    m_objectTimer[slot] = 120;
                     if (m_keepBombs == 0) {
                         RemoveObject(slot);
                     }
@@ -3741,7 +3741,7 @@ void CNagamori::UpdateObjects()
                     m_objects[slot].frame++;
                     m_objects[slot].attackResult = 0;
                     if (m_objects[slot].frame >= frameCount) {
-                        if (m_objectState[slot] < 0xa) {
+                        if (m_objectState[slot] < 10) {
                             m_objects[slot].frame = 0;
                             m_objectState[slot]++;
                         } else {
@@ -3844,9 +3844,9 @@ void CNagamori::UpdateObjects()
                 if (m_objects[slot].frame == 5 && m_objects[slot].timer == 0) {
                     m_playVoice = 1;
                 }
-                if (m_objects[slot].frame == 0xd && m_objects[slot].timer == 0) {
+                if (m_objects[slot].frame == 13 && m_objects[slot].timer == 0) {
                     m_objects[slot].hitsLeft = 1;
-                    TriggerObjectsNear((int)m_objects[slot].x, (int)m_objects[slot].y, 0x78, 0x78);
+                    TriggerObjectsNear((int)m_objects[slot].x, (int)m_objects[slot].y, 120, 120);
                     m_objectTriggered[slot] = 0;
                 }
                 if (m_objects[slot].attackResult == 3) {
@@ -3869,7 +3869,7 @@ void CNagamori::UpdateObjects()
                 break;
             case kObjFallInDarkness:
                 m_objects[slot].vx = -0.02;
-                m_objects[slot].drawnWhileHidden = 0x7530;
+                m_objects[slot].drawnWhileHidden = 30000;
                 m_objects[slot].timer++;
                 if (pattern != kFallInDarkness) {
                     RemoveObject(slot);
@@ -3886,7 +3886,7 @@ void CNagamori::UpdateObjects()
             case kObjEncasedBreak:
                 if (pattern != kEncased && pattern != kEncased2 && pattern != kEncasedAir && pattern != kEncasedSpin || pattern == kEncased && frame > 1 || pattern == kEncased2 && frame > 1) {
                     effect.type = kObjShardSmall;
-                    effect.x = (double)((int)x + facing * 0x17);
+                    effect.x = (double)((int)x + facing * 23);
                     effect.y = (double)((int)y - 4);
                     effect.scale = 0;
                     effect.layer = 1;
@@ -3900,8 +3900,8 @@ void CNagamori::UpdateObjects()
                     effect.facing = facing;
                     SpawnObject(&effect);
                     effect.type = kObjShardSmall;
-                    effect.x = (double)((int)x - facing * 0xe);
-                    effect.y = (double)((int)y - 0x1a);
+                    effect.x = (double)((int)x - facing * 14);
+                    effect.y = (double)((int)y - 26);
                     effect.scale = 0;
                     effect.layer = 1;
                     effect.facing = facing;
@@ -3914,48 +3914,48 @@ void CNagamori::UpdateObjects()
                     effect.facing = facing;
                     SpawnObject(&effect);
                     effect.type = kObjShardSmall;
-                    effect.x = (double)((int)x + facing * 0x1e);
-                    effect.y = (double)((int)y - 0x28);
+                    effect.x = (double)((int)x + facing * 30);
+                    effect.y = (double)((int)y - 40);
                     effect.scale = 0;
                     effect.layer = 1;
                     effect.facing = facing;
                     SpawnObject(&effect);
                     effect.type = kObjShardSmall;
-                    effect.x = (double)((int)x - facing * 0x19);
-                    effect.y = (double)((int)y - 0x50);
+                    effect.x = (double)((int)x - facing * 25);
+                    effect.y = (double)((int)y - 80);
                     effect.scale = 0;
                     effect.layer = 1;
                     effect.facing = facing;
                     SpawnObject(&effect);
                     effect.type = kObjShardLarge;
-                    effect.x = (double)((int)x - facing * 0x23);
-                    effect.y = (double)((int)y - 0x2a);
+                    effect.x = (double)((int)x - facing * 35);
+                    effect.y = (double)((int)y - 42);
                     effect.scale = 0;
                     effect.layer = 1;
                     effect.facing = facing;
                     SpawnObject(&effect);
                     effect.type = kObjShardLarge;
-                    effect.x = (double)((int)x - facing * 0x12);
-                    effect.y = (double)((int)y - 0x14);
+                    effect.x = (double)((int)x - facing * 18);
+                    effect.y = (double)((int)y - 20);
                     effect.scale = 0;
                     effect.layer = 1;
                     effect.facing = facing;
                     SpawnObject(&effect);
                     effect.type = kObjShardLarge;
                     effect.x = (double)((int)x + facing * 2);
-                    effect.y = (double)((int)y - 0x41);
+                    effect.y = (double)((int)y - 65);
                     effect.scale = 0;
                     effect.layer = 1;
                     effect.facing = facing;
                     SpawnObject(&effect);
                     effect.type = kObjShardLarge;
                     effect.x = (double)((int)x + (facing << 4));
-                    effect.y = (double)((int)y - 0x50);
+                    effect.y = (double)((int)y - 80);
                     effect.scale = 0;
                     effect.layer = 1;
                     effect.facing = facing;
                     SpawnObject(&effect);
-                    m_playSound = 0x22;
+                    m_playSound = 34;
                     RemoveObject(slot);
                     m_encasedBreakOut = 0;
                     break;
@@ -3972,16 +3972,16 @@ void CNagamori::UpdateObjects()
                 break;
             case kObjShardSmall:
                 if (m_objects[slot].frame == 0 && m_objects[slot].timer == 0 && m_objectState[slot] == 0) {
-                    m_objectTimer[slot] = (rand() > 0x3e80) * 0x28 + 0x50 + (rand() > 0x3e80) * 0x14;
+                    m_objectTimer[slot] = (rand() > 16000) * 40 + 80 + (rand() > 16000) * 20;
                     m_objectState[slot]++;
-                    m_objects[slot].vx = (rand() > 0x3e80) * 1.2 + (rand() > 0x3e80) * 0.7 + (rand() > 0x3e80) * 1.7 + -1.8;
-                    m_objects[slot].vy = -1.2 - ((rand() > 0x3e80) * 0.6 + (rand() > 0x3e80) * 0.9 + (rand() > 0x3e80) * 1.4);
+                    m_objects[slot].vx = (rand() > 16000) * 1.2 + (rand() > 16000) * 0.7 + (rand() > 16000) * 1.7 + -1.8;
+                    m_objects[slot].vy = -1.2 - ((rand() > 16000) * 0.6 + (rand() > 16000) * 0.9 + (rand() > 16000) * 1.4);
                 }
                 m_objects[slot].vy += 0.05;
                 if (m_objects[slot].y > 0.0 && m_objects[slot].vy > 0.0) {
                     m_objects[slot].vy = -m_objects[slot].vy;
                 }
-                if (m_objectTimer[slot] < 0xa) {
+                if (m_objectTimer[slot] < 10) {
                     m_objects[slot].scale = 1;
                 }
                 if (m_objectTimer[slot] < 0) {
@@ -4001,16 +4001,16 @@ void CNagamori::UpdateObjects()
                 break;
             case kObjShardLarge:
                 if (m_objects[slot].frame == 0 && m_objects[slot].timer == 0 && m_objectState[slot] == 0) {
-                    m_objectTimer[slot] = (rand() > 0x3e80) * 0x3c + 0x78 + (rand() > 0x3e80) * 0x28;
+                    m_objectTimer[slot] = (rand() > 16000) * 60 + 120 + (rand() > 16000) * 40;
                     m_objectState[slot]++;
-                    m_objects[slot].vx = (double)(rand() > 0x3e80) + (rand() > 0x3e80) * 0.5 + (rand() > 0x3e80) * 1.5 + -1.5;
-                    m_objects[slot].vy = -1.0 - ((rand() > 0x3e80) * 0.5 + (rand() > 0x3e80) * 0.8 + (rand() > 0x3e80) * 1.2);
+                    m_objects[slot].vx = (double)(rand() > 16000) + (rand() > 16000) * 0.5 + (rand() > 16000) * 1.5 + -1.5;
+                    m_objects[slot].vy = -1.0 - ((rand() > 16000) * 0.5 + (rand() > 16000) * 0.8 + (rand() > 16000) * 1.2);
                 }
                 m_objects[slot].vy += 0.03;
                 if (m_objects[slot].y > 0.0 && m_objects[slot].vy > 0.0) {
                     m_objects[slot].vy = -m_objects[slot].vy;
                 }
-                if (m_objectTimer[slot] < 0xa) {
+                if (m_objectTimer[slot] < 10) {
                     m_objects[slot].scale = 1;
                 }
                 if (m_objectTimer[slot] < 0) {
@@ -4043,7 +4043,7 @@ void CNagamori::UpdateObjects()
             }
         }
         slot++;
-        if (slot >= 0x40) {
+        if (slot >= 64) {
             slot = 0;
         }
     }

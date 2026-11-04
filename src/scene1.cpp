@@ -12,13 +12,13 @@ CScene1::CScene1(HWND hwnd, PTR32(CPlayer)* player1Ref, PTR32(CPlayer)* player2R
     if (1) {
         m_game->LoadDat((PTR32(IDirectDrawSurface)*)&m_bgSurface, "system\\chr_sel_bg.dat", 0, 1);
         m_game->LoadDat((PTR32(IDirectDrawSurface)*)&m_obSurface, "system\\chr_sel_ob.dat", 0, 1);
-        m_game->LoadDat((PTR32(IDirectDrawSurface)*)&m_stageNames, "system\\stage\\all.dat", 0, 0xaf);
-        m_graphics->LoadPaletteDat(m_palette, "system\\chr_sel_ob.dat", 0, 1, 0xae);
+        m_game->LoadDat((PTR32(IDirectDrawSurface)*)&m_stageNames, "system\\stage\\all.dat", 0, 175);
+        m_graphics->LoadPaletteDat(m_palette, "system\\chr_sel_ob.dat", 0, 1, 174);
     } else {
         m_graphics->LoadBmp((PTR32(IDirectDrawSurface)*)&m_bgSurface, "system\\chr_sel_bg.bmp", 1);
         m_graphics->LoadBmp((PTR32(IDirectDrawSurface)*)&m_obSurface, "system\\chr_sel_ob.bmp", 1);
-        m_graphics->LoadBmp((PTR32(IDirectDrawSurface)*)&m_stageNames, "system\\stage\\all.bmp", 0xaf);
-        m_graphics->LoadPaletteBmp(m_palette, "system\\chr_sel_ob.bmp", 0, 1, 0xae);
+        m_graphics->LoadBmp((PTR32(IDirectDrawSurface)*)&m_stageNames, "system\\stage\\all.bmp", 175);
+        m_graphics->LoadPaletteBmp(m_palette, "system\\chr_sel_ob.bmp", 0, 1, 174);
     }
     m_colorKey = m_graphics->GetColorKey(TOPTR(IDirectDrawSurface*, m_obSurface));
     m_colorKeys[2] = m_graphics->GetColorKey(TOPTR(IDirectDrawSurface*, m_stageNames));
@@ -30,7 +30,7 @@ CScene1::CScene1(HWND hwnd, PTR32(CPlayer)* player1Ref, PTR32(CPlayer)* player2R
     m_held[0] = 0;
     m_held[1] = 0;
     m_bgScroll = 0.0;
-    m_bgSlideTime = 0x3c;
+    m_bgSlideTime = 60;
     m_p1BarOffset = 50.0;
     m_anim[0] = 0;
     m_p2BarOffset = 50.0;
@@ -38,13 +38,13 @@ CScene1::CScene1(HWND hwnd, PTR32(CPlayer)* player1Ref, PTR32(CPlayer)* player2R
     m_barScroll = 0.0;
     m_anim[2] = 0;
     m_gridY = -240.0;
-    m_anim[3] = 0x3c;
+    m_anim[3] = 60;
     m_anim[4] = 0;
     m_anim[5] = 0;
-    m_portraitOffset[0] = 0x12c;
-    m_portraitOffset[1] = 0x12c;
-    m_portraitAngle[0] = 0xb4;
-    m_portraitAngle[1] = 0xb4;
+    m_portraitOffset[0] = 300;
+    m_portraitOffset[1] = 300;
+    m_portraitAngle[0] = 180;
+    m_portraitAngle[1] = 180;
     m_state[0] = 5;
     m_state[1] = 5;
     m_charId[0] = 2;
@@ -62,74 +62,74 @@ CScene1::CScene1(HWND hwnd, PTR32(CPlayer)* player1Ref, PTR32(CPlayer)* player2R
     m_grid[2] = 4;
     m_grid[3] = 7;
     m_grid[4] = 5;
-    m_grid[5] = 0xb;
+    m_grid[5] = 11;
     m_grid[6] = 1;
-    m_grid[7] = 0xa;
+    m_grid[7] = 10;
     m_grid[8] = 3;
     m_grid[9] = 8;
-    m_grid[0xa] = 2;
-    m_grid[0xb] = 9;
-    m_grid[0xc] = 0x17;
-    m_grid[0xd] = 0x14;
-    m_grid[0xe] = 0x15;
-    m_grid[0xf] = 0xe;
-    m_grid[0x10] = 0xc;
-    m_grid[0x11] = 0x12;
-    m_grid[0x12] = 0x11;
-    m_grid[0x13] = 0xf;
-    m_grid[0x14] = 0xd;
-    m_grid[0x15] = 0x10;
-    m_grid[0x16] = -1;
-    m_grid[0x17] = 0x13;
-    m_portraitShift[0] = -0x28;
-    m_portraitShift[1] = -0xa;
+    m_grid[10] = 2;
+    m_grid[11] = 9;
+    m_grid[12] = 23;
+    m_grid[13] = 20;
+    m_grid[14] = 21;
+    m_grid[15] = 14;
+    m_grid[16] = 12;
+    m_grid[17] = 18;
+    m_grid[18] = 17;
+    m_grid[19] = 15;
+    m_grid[20] = 13;
+    m_grid[21] = 16;
+    m_grid[22] = -1;
+    m_grid[23] = 19;
+    m_portraitShift[0] = -40;
+    m_portraitShift[1] = -10;
     m_portraitShift[2] = -5;
     m_portraitShift[3] = 0;
     m_portraitShift[4] = -5;
     m_portraitShift[5] = -5;
-    m_portraitShift[6] = -0x1e;
-    m_portraitShift[7] = -0x1e;
-    m_portraitShift[8] = -0x14;
-    m_portraitShift[9] = -0xa;
-    m_portraitShift[0xa] = -0x28;
-    m_portraitShift[0xb] = -5;
-    m_portraitShift[0xc] = -0x32;
-    m_portraitShift[0xd] = 0;
-    m_portraitShift[0xe] = -0xf;
-    m_portraitShift[0xf] = -0xf;
-    m_portraitShift[0x10] = -0x14;
-    m_portraitShift[0x11] = -0x14;
-    m_portraitShift[0x12] = -0x2d;
-    m_portraitShift[0x13] = 0xa;
-    m_portraitShift[0x14] = -0x14;
-    m_portraitShift[0x15] = 0;
-    m_portraitShift[0x16] = 0;
-    m_portraitShift[0x17] = -0x14;
+    m_portraitShift[6] = -30;
+    m_portraitShift[7] = -30;
+    m_portraitShift[8] = -20;
+    m_portraitShift[9] = -10;
+    m_portraitShift[10] = -40;
+    m_portraitShift[11] = -5;
+    m_portraitShift[12] = -50;
+    m_portraitShift[13] = 0;
+    m_portraitShift[14] = -15;
+    m_portraitShift[15] = -15;
+    m_portraitShift[16] = -20;
+    m_portraitShift[17] = -20;
+    m_portraitShift[18] = -45;
+    m_portraitShift[19] = 10;
+    m_portraitShift[20] = -20;
+    m_portraitShift[21] = 0;
+    m_portraitShift[22] = 0;
+    m_portraitShift[23] = -20;
     m_namePlate[0] = 5;
     m_namePlate[1] = 7;
-    m_namePlate[2] = 0xb;
+    m_namePlate[2] = 11;
     m_namePlate[3] = 9;
     m_namePlate[4] = 0;
     m_namePlate[5] = 4;
     m_namePlate[6] = 2;
     m_namePlate[7] = 1;
-    m_namePlate[8] = 0xa;
-    m_namePlate[9] = 0xc;
-    m_namePlate[0xa] = 8;
-    m_namePlate[0xb] = 3;
-    m_namePlate[0xc] = 0x15;
-    m_namePlate[0xd] = 0xd;
-    m_namePlate[0xe] = 0x14;
-    m_namePlate[0xf] = 0xe;
-    m_namePlate[0x10] = 0xf;
-    m_namePlate[0x11] = 8;
-    m_namePlate[0x12] = 6;
-    m_namePlate[0x13] = 0x13;
-    m_namePlate[0x14] = 0x11;
-    m_namePlate[0x15] = 0x12;
-    m_namePlate[0x16] = -1;
-    m_namePlate[0x17] = 0x10;
-    m_namePlate[0x18] = 6;
+    m_namePlate[8] = 10;
+    m_namePlate[9] = 12;
+    m_namePlate[10] = 8;
+    m_namePlate[11] = 3;
+    m_namePlate[12] = 21;
+    m_namePlate[13] = 13;
+    m_namePlate[14] = 20;
+    m_namePlate[15] = 14;
+    m_namePlate[16] = 15;
+    m_namePlate[17] = 8;
+    m_namePlate[18] = 6;
+    m_namePlate[19] = 19;
+    m_namePlate[20] = 17;
+    m_namePlate[21] = 18;
+    m_namePlate[22] = -1;
+    m_namePlate[23] = 16;
+    m_namePlate[24] = 6;
 }
 
 CScene1::~CScene1()
@@ -170,7 +170,7 @@ BYTE CScene1::Update()
         Enter();
     }
     if (m_leave > 0) {
-        CScene::FadeOut(m_palette, 0, 0, 0x64);
+        CScene::FadeOut(m_palette, 0, 0, 100);
         m_enter = 1;
         m_game->m_stage = 0;
         m_leave = 0;
@@ -215,7 +215,7 @@ BYTE CScene1::Update()
             m_game->m_editColor[side] = 0;
             m_anim[side] = 2;
             if (m_game->m_pressC[side] != 0 && m_randomTime[side] == 0 || m_game->m_pressA[side] != 0 && m_cursorX[side] == 1 && m_cursorY[side] == 7) {
-                m_randomTime[side] = 0x3c;
+                m_randomTime[side] = 60;
             }
             if (m_randomTime[side] > 0) {
                 m_randomTime[side]--;
@@ -228,10 +228,10 @@ BYTE CScene1::Update()
                     if (m_charId[side] < 0) {
                         m_randomTime[side]++;
                     }
-                    if (m_game->m_extraChars == 0 && (m_charId[side] == 0x13 || m_charId[side] == 0x14 || m_charId[side] == 0x15 || m_charId[side] == 0x17)) {
+                    if (m_game->m_extraChars == 0 && (m_charId[side] == 19 || m_charId[side] == 20 || m_charId[side] == 21 || m_charId[side] == 23)) {
                         m_randomTime[side]++;
                     }
-                    if (m_game->m_extraChars == -1 && (m_charId[side] == 0xc || m_charId[side] == 0xd || m_charId[side] == 0xe || m_charId[side] == 0xf)) {
+                    if (m_game->m_extraChars == -1 && (m_charId[side] == 12 || m_charId[side] == 13 || m_charId[side] == 14 || m_charId[side] == 15)) {
                         m_randomTime[side]++;
                     }
                 }
@@ -249,27 +249,27 @@ BYTE CScene1::Update()
                 } else if (m_game->m_inputY[side] > 0) {
                     m_cursorY[side] = (m_cursorY[side] + 1) % 8;
                     m_game->PlaySE(8);
-                    m_portraitAngle[side] = 0x28;
+                    m_portraitAngle[side] = 40;
                     m_held[side] = 1;
                 } else if (m_game->m_inputX[side] < 0) {
                     m_cursorX[side] = (m_cursorX[side] + 2) % 3;
                     m_game->PlaySE(8);
-                    m_portraitAngle[side] = 0x28;
+                    m_portraitAngle[side] = 40;
                     m_held[side] = 1;
                 } else if (m_game->m_inputX[side] > 0) {
                     m_cursorX[side] = (m_cursorX[side] + 1) % 3;
                     m_game->PlaySE(8);
-                    m_portraitAngle[side] = 0x28;
+                    m_portraitAngle[side] = 40;
                     m_held[side] = 1;
                 }
                 m_charId[side] = m_grid[(m_cursorX[side] + m_cursorY[side] * 3)];
             } else if (m_game->m_inputX[side] == 0 && m_game->m_inputY[side] == 0) {
                 m_held[side] = 0;
             }
-            if (m_game->m_extraChars == 0 && (m_charId[side] == 0x13 || m_charId[side] == 0x14 || m_charId[side] == 0x15 || m_charId[side] == 0x17)) {
+            if (m_game->m_extraChars == 0 && (m_charId[side] == 19 || m_charId[side] == 20 || m_charId[side] == 21 || m_charId[side] == 23)) {
                 m_game->m_pressA[side] = 0;
             }
-            if (m_game->m_extraChars == -1 && (m_charId[side] == 0xc || m_charId[side] == 0xd || m_charId[side] == 0xe || m_charId[side] == 0xf)) {
+            if (m_game->m_extraChars == -1 && (m_charId[side] == 12 || m_charId[side] == 13 || m_charId[side] == 14 || m_charId[side] == 15)) {
                 m_game->m_pressA[side] = 0;
             }
             if (m_game->m_pressA[side] != 0 && m_game->m_inputY[side] == 0 && m_game->m_inputX[side] == 0) {
@@ -286,16 +286,16 @@ BYTE CScene1::Update()
                     CreateCharacter(m_player2Ref, m_player1Ref, 1);
                 }
                 m_state[side] = 1;
-                m_portraitAngle[side] = 0x5a;
+                m_portraitAngle[side] = 90;
             }
             break;
         case 1:
             m_anim[side] = -2;
             m_portraitOffset[side] = (int)((cos(m_portraitAngle[side] / 57.29579143313326) + 1.0) * 300.0);
             m_portraitAngle[side] = m_portraitAngle[side] + 5;
-            if (m_portraitAngle[side] > 0xb4) {
+            if (m_portraitAngle[side] > 180) {
                 m_state[side] = 3;
-                m_game->PlaySE(m_charId[side] + 0x28);
+                m_game->PlaySE(m_charId[side] + 40);
             }
             if (m_game->m_pressB[side] != 0) {
                 m_state[side] = 2;
@@ -303,7 +303,7 @@ BYTE CScene1::Update()
             }
             break;
         case 2:
-            if (m_portraitAngle[side] >= 0x5a) {
+            if (m_portraitAngle[side] >= 90) {
                 m_portraitOffset[side] = (int)((cos(m_portraitAngle[side] / 57.29579143313326) + 1.0) * 300.0);
                 m_portraitAngle[side] = m_portraitAngle[side] - 5;
             } else {
@@ -338,7 +338,7 @@ BYTE CScene1::Update()
                 m_game->PlaySE(6);
                 m_state[side] = 6;
                 if (m_game->m_gameMode == 0 || m_game->m_gameMode == 2) {
-                    CScene::FadeOut(m_palette, 0, 0, 0x32);
+                    CScene::FadeOut(m_palette, 0, 0, 50);
                     m_enter = 2;
                     m_game->m_arcadeMatch = 1;
                     m_game->m_beatenChars = 0;
@@ -355,17 +355,17 @@ BYTE CScene1::Update()
                 if (m_randomTime[0] > 0) {
                     m_randomTime[0]--;
                     if (m_randomTime[0] == 0) {
-                        if (m_game->m_extraChars == 0 && m_game->m_stage >= 0xd && m_game->m_stage <= 0x10) {
-                            m_randomTime[0] = rand() % 0x17 + 1;
+                        if (m_game->m_extraChars == 0 && m_game->m_stage >= 13 && m_game->m_stage <= 16) {
+                            m_randomTime[0] = rand() % 23 + 1;
                         }
-                        if (m_game->m_extraChars == -1 && m_game->m_stage >= 0x12 && m_game->m_stage <= 0x16) {
-                            m_randomTime[0] = rand() % 0x17 + 1;
+                        if (m_game->m_extraChars == -1 && m_game->m_stage >= 18 && m_game->m_stage <= 22) {
+                            m_randomTime[0] = rand() % 23 + 1;
                         }
                     }
                     if (m_randomTime[0] == 0) {
                         m_game->PlaySE(6);
                         LoadStagePicture();
-                        CScene::FadeOut(m_palette, 0, 0, 0x32);
+                        CScene::FadeOut(m_palette, 0, 0, 50);
                         m_enter = 2;
                         m_game->m_arcadeMatch = 1;
                         m_game->m_beatenChars = 0;
@@ -373,28 +373,28 @@ BYTE CScene1::Update()
                         return 2;
                     }
                     m_game->m_stage++;
-                    if (m_game->m_stage >= 0x17) {
+                    if (m_game->m_stage >= 23) {
                         m_game->m_stage = 0;
                     }
                 } else {
                     if (m_game->m_inputY[side] > 0 || m_game->m_inputX[side] > 0) {
                         m_game->PlaySE(8);
-                        m_state[0] = 0xa;
-                        m_state[1] = 0xa;
+                        m_state[0] = 10;
+                        m_state[1] = 10;
                     } else if (m_game->m_inputX[side] < 0 || m_game->m_inputY[side] < 0) {
                         m_game->PlaySE(8);
                         m_state[0] = 9;
                         m_state[1] = 9;
                     }
-                    if (m_game->m_extraChars == 0 && m_game->m_stage >= 0xd && m_game->m_stage <= 0x10) {
+                    if (m_game->m_extraChars == 0 && m_game->m_stage >= 13 && m_game->m_stage <= 16) {
                         m_game->m_pressA[side] = 0;
                     }
-                    if (m_game->m_extraChars == -1 && m_game->m_stage >= 0x12 && m_game->m_stage <= 0x16) {
+                    if (m_game->m_extraChars == -1 && m_game->m_stage >= 18 && m_game->m_stage <= 22) {
                         m_game->m_pressA[side] = 0;
                     }
                     if (m_game->m_pressA[side] != 0) {
                         m_game->PlaySE(6);
-                        CScene::FadeOut(m_palette, 0, 0, 0x32);
+                        CScene::FadeOut(m_palette, 0, 0, 50);
                         m_enter = 2;
                         m_game->m_arcadeMatch = 1;
                         m_game->m_beatenChars = 0;
@@ -403,7 +403,7 @@ BYTE CScene1::Update()
                     }
                 }
                 if (m_game->m_pressC[side] != 0 && m_randomTime[0] == 0 && 1) {
-                    m_randomTime[0] = rand() % 0x17 + 0x3c;
+                    m_randomTime[0] = rand() % 23 + 60;
                 }
             }
             if (m_game->m_pressB[side] != 0) {
@@ -419,34 +419,34 @@ BYTE CScene1::Update()
         *(char*)&m_held[side] = m_game->m_inputX[side] != 0 || m_game->m_inputY[side] != 0;
     }
     if (m_state[0] == 6 && m_state[1] == 6) {
-        if (m_portraitAngle[0] >= 0x5a) {
+        if (m_portraitAngle[0] >= 90) {
             m_portraitOffset[0] = (int)((cos(m_portraitAngle[0] / 57.29579143313326) + 1.0) * 300.0);
             m_portraitOffset[1] = (int)((cos(m_portraitAngle[1] / 57.29579143313326) + 1.0) * 300.0);
             m_portraitAngle[0] = m_portraitAngle[0] - 5;
             m_portraitAngle[1] = m_portraitAngle[1] - 5;
-        } else if (m_anim[3] < 0x3c) {
+        } else if (m_anim[3] < 60) {
             m_gridY = (int)(((cos(m_anim[3] / 57.29579143313326) - 0.5) * 2 - 1.0) * 240.0);
             m_anim[3] += 3;
         } else {
             m_state[0] = 7;
             m_state[1] = 7;
-            if (m_game->m_stage < 0xa) {
+            if (m_game->m_stage < 10) {
                 strcpy(path, "system\\stage\\0");
             } else {
                 strcpy(path, "system\\stage\\");
             }
-            _itoa(m_game->m_stage, digits, 0xa);
+            _itoa(m_game->m_stage, digits, 10);
             strcat(path, (const char*)digits);
             if (1) {
                 strcat(path, ".dat");
-                m_game->LoadDat((PTR32(IDirectDrawSurface)*)&m_stagePicture, (const char*)path, 0, 0xbf);
-                m_graphics->LoadPaletteDat(m_palette, "system\\stage\\all.dat", 0, 0xaf, 0x10);
-                m_graphics->LoadPaletteDat(m_palette, (const char*)path, 0, 0xbf, 0x40);
+                m_game->LoadDat((PTR32(IDirectDrawSurface)*)&m_stagePicture, (const char*)path, 0, 191);
+                m_graphics->LoadPaletteDat(m_palette, "system\\stage\\all.dat", 0, 175, 16);
+                m_graphics->LoadPaletteDat(m_palette, (const char*)path, 0, 191, 64);
             } else {
                 strcat(path, ".bmp");
-                m_graphics->LoadBmp((PTR32(IDirectDrawSurface)*)&m_stagePicture, (const char*)path, 0xbf);
-                m_graphics->LoadPaletteBmp(m_palette, "system\\stage\\all.bmp", 0, 0xaf, 0x50);
-                m_graphics->LoadPaletteBmp(m_palette, (const char*)path, 0, 0xbf, 0x40);
+                m_graphics->LoadBmp((PTR32(IDirectDrawSurface)*)&m_stagePicture, (const char*)path, 191);
+                m_graphics->LoadPaletteBmp(m_palette, "system\\stage\\all.bmp", 0, 175, 80);
+                m_graphics->LoadPaletteBmp(m_palette, (const char*)path, 0, 191, 64);
             }
             m_colorKeys[3] = m_graphics->GetColorKey(TOPTR(IDirectDrawSurface*, m_stagePicture));
             m_graphics->SetPaletteRange(m_palette, 0xaf, 0x50);
@@ -460,10 +460,10 @@ BYTE CScene1::Update()
             m_state[1] = 2;
         }
     } else if (m_state[0] == 7) {
-        if (m_anim[4] < 0x55) {
+        if (m_anim[4] < 85) {
             m_anim[4] += 5;
         } else {
-            m_anim[4] = 0x5a;
+            m_anim[4] = 90;
             m_state[0] = 4;
             m_state[1] = 4;
         }
@@ -512,40 +512,40 @@ BYTE CScene1::Update()
     }
     Draw();
     if (m_state[0] == 9) {
-        if (m_anim[5] < 0x5a) {
-            m_anim[5] += 0xa;
+        if (m_anim[5] < 90) {
+            m_anim[5] += 10;
         } else {
             m_anim[5] = 0;
             m_state[0] = 4;
             m_state[1] = 4;
             m_game->m_stage++;
-            if (m_game->m_extraChars == 0 && m_game->m_stage == 0xd) {
-                m_game->m_stage = 0x11;
+            if (m_game->m_extraChars == 0 && m_game->m_stage == 13) {
+                m_game->m_stage = 17;
             }
-            if (m_game->m_extraChars == -1 && m_game->m_stage == 0x12) {
+            if (m_game->m_extraChars == -1 && m_game->m_stage == 18) {
                 m_game->m_stage = 0;
             }
-            if (m_game->m_stage >= 0x17) {
+            if (m_game->m_stage >= 23) {
                 m_game->m_stage = 0;
             }
             LoadStagePicture();
         }
-    } else if (m_state[0] == 0xa) {
-        if (m_anim[5] < 0x5a) {
-            m_anim[5] += 0xa;
+    } else if (m_state[0] == 10) {
+        if (m_anim[5] < 90) {
+            m_anim[5] += 10;
         } else {
             m_anim[5] = 0;
             m_state[0] = 4;
             m_state[1] = 4;
             m_game->m_stage--;
             if (m_game->m_stage < 0) {
-                m_game->m_stage = 0x16;
+                m_game->m_stage = 22;
             }
-            if (m_game->m_extraChars == 0 && m_game->m_stage == 0x10) {
-                m_game->m_stage = 0xc;
+            if (m_game->m_extraChars == 0 && m_game->m_stage == 16) {
+                m_game->m_stage = 12;
             }
-            if (m_game->m_extraChars == -1 && m_game->m_stage == 0x16) {
-                m_game->m_stage = 0x11;
+            if (m_game->m_extraChars == -1 && m_game->m_stage == 22) {
+                m_game->m_stage = 17;
             }
             LoadStagePicture();
         }
@@ -566,97 +566,97 @@ void CScene1::Draw()
     RECT dst;
     RECT src;
 
-    src = MakeRect(0, (int)m_bgScroll, 0x140, 0xf0);
-    dst = MakeRect(0, 0, 0x140, 0xf0);
+    src = MakeRect(0, (int)m_bgScroll, 320, 240);
+    dst = MakeRect(0, 0, 320, 240);
     m_graphics->Blit(dst, TOPTR(IDirectDrawSurface*, m_bgSurface), src, 0, 0);
     if (m_game->m_isCpu[0] != 1 || m_game->m_gameMode != 0) {
-        src = MakeRect(0x85, 0x80, 0x16, 0xf0);
-        dst = MakeRect(5 - (int)m_p1BarOffset, (int)m_barScroll, 0x16, 0xf0);
+        src = MakeRect(133, 128, 22, 240);
+        dst = MakeRect(5 - (int)m_p1BarOffset, (int)m_barScroll, 22, 240);
         m_graphics->Blit(dst, TOPTR(IDirectDrawSurface*, m_obSurface), src, m_colorKey, 0);
-        dst = MakeRect(5 - (int)m_p1BarOffset, (int)m_barScroll - 0xf0, 0x16, 0xf0);
+        dst = MakeRect(5 - (int)m_p1BarOffset, (int)m_barScroll - 240, 22, 240);
         m_graphics->Blit(dst, TOPTR(IDirectDrawSurface*, m_obSurface), src, m_colorKey, 0);
     }
     if (m_game->m_isCpu[1] != 1 || m_game->m_gameMode != 0) {
-        src = MakeRect(0xa5, 0x80, 0x16, 0xf0);
-        dst = MakeRect((int)m_p2BarOffset + 0x124, 0 - (int)m_barScroll, 0x16, 0xf0);
+        src = MakeRect(165, 128, 22, 240);
+        dst = MakeRect((int)m_p2BarOffset + 292, 0 - (int)m_barScroll, 22, 240);
         m_graphics->Blit(dst, TOPTR(IDirectDrawSurface*, m_obSurface), src, m_colorKey, 0);
-        dst = MakeRect((int)m_p2BarOffset + 0x124, 0 - (int)m_barScroll + 0xf0, 0x16, 0xf0);
+        dst = MakeRect((int)m_p2BarOffset + 292, 0 - (int)m_barScroll + 240, 22, 240);
         m_graphics->Blit(dst, TOPTR(IDirectDrawSurface*, m_obSurface), src, m_colorKey, 0);
     }
     if (m_state[0] > 0) {
         if (m_game->m_gameMode != 0 && m_game->m_gameMode != 2 || m_game->m_isCpu[0] != 1) {
-            src = MakeRect(0, 0, 0x140, 0xf0);
-            dst = MakeRect(-0x50 - m_portraitOffset[0] + m_portraitShift[(m_cursorX[0] + m_cursorY[0] * 3)], 0, 0x140, 0xf0);
+            src = MakeRect(0, 0, 320, 240);
+            dst = MakeRect(-80 - m_portraitOffset[0] + m_portraitShift[(m_cursorX[0] + m_cursorY[0] * 3)], 0, 320, 240);
             m_graphics->Blit(dst, TOPTR(IDirectDrawSurface*, m_portraits[0]), src, m_colorKeys[0], 1);
-            src = MakeRect(0xc0, 9, 0x7a, 0x5f);
-            dst = MakeRect(0 - m_portraitOffset[0] / 2, 0x89, 0x7a, 0x5f);
+            src = MakeRect(192, 9, 122, 95);
+            dst = MakeRect(0 - m_portraitOffset[0] / 2, 137, 122, 95);
             m_graphics->Blit(dst, TOPTR(IDirectDrawSurface*, m_obSurface), src, m_colorKey, 0);
-            src = MakeRect(0, (m_namePlate[m_charId[0]] << 5) + 0x100, 0x7a, 0x20);
-            dst = MakeRect(0 - m_portraitOffset[0] / 2, 0xc0, 0x7a, 0x20);
+            src = MakeRect(0, (m_namePlate[m_charId[0]] << 5) + 256, 122, 32);
+            dst = MakeRect(0 - m_portraitOffset[0] / 2, 192, 122, 32);
             m_graphics->Blit(dst, TOPTR(IDirectDrawSurface*, m_obSurface), src, m_colorKey, 0);
         }
         if (m_game->m_editColor[0] != 0) {
-            src = MakeRect(0, 0xe0, 0x80, 0x20);
-            dst = MakeRect(-0x10 - m_portraitOffset[0] / 2, 5, 0x80, 0x20);
+            src = MakeRect(0, 224, 128, 32);
+            dst = MakeRect(-16 - m_portraitOffset[0] / 2, 5, 128, 32);
             m_graphics->Blit(dst, TOPTR(IDirectDrawSurface*, m_obSurface), src, m_colorKey, 0);
         }
     }
     if (m_state[1] > 0) {
         if (m_game->m_gameMode != 0 && m_game->m_gameMode != 2 || m_game->m_isCpu[1] != 1) {
-            src = MakeRect(0, 0, 0x140, 0xf0);
-            dst = MakeRect(m_portraitOffset[1] + 0x50 - m_portraitShift[(m_cursorX[1] + m_cursorY[1] * 3)], 0, 0x140, 0xf0);
+            src = MakeRect(0, 0, 320, 240);
+            dst = MakeRect(m_portraitOffset[1] + 80 - m_portraitShift[(m_cursorX[1] + m_cursorY[1] * 3)], 0, 320, 240);
             m_graphics->Blit(dst, TOPTR(IDirectDrawSurface*, m_portraits[1]), src, m_colorKeys[1], 0);
-            src = MakeRect(0xc6, 0x89, 0x7a, 0x5f);
-            dst = MakeRect(m_portraitOffset[1] / 2 + 0xc6, 0x89, 0x7a, 0x5f);
+            src = MakeRect(198, 137, 122, 95);
+            dst = MakeRect(m_portraitOffset[1] / 2 + 198, 137, 122, 95);
             m_graphics->Blit(dst, TOPTR(IDirectDrawSurface*, m_obSurface), src, m_colorKey, 0);
-            src = MakeRect(0xc6, (m_namePlate[m_charId[1]] << 5) + 0x100, 0x7a, 0x20);
-            dst = MakeRect(m_portraitOffset[1] / 2 + 0xc6, 0xc0, 0x7a, 0x20);
+            src = MakeRect(198, (m_namePlate[m_charId[1]] << 5) + 256, 122, 32);
+            dst = MakeRect(m_portraitOffset[1] / 2 + 198, 192, 122, 32);
             m_graphics->Blit(dst, TOPTR(IDirectDrawSurface*, m_obSurface), src, m_colorKey, 0);
         }
         if (m_game->m_editColor[1] != 0) {
-            src = MakeRect(0, 0xe0, 0x80, 0x20);
-            dst = MakeRect(m_portraitOffset[1] / 2 + 0xcf, 5, 0x80, 0x20);
+            src = MakeRect(0, 224, 128, 32);
+            dst = MakeRect(m_portraitOffset[1] / 2 + 207, 5, 128, 32);
             m_graphics->Blit(dst, TOPTR(IDirectDrawSurface*, m_obSurface), src, m_colorKey, 0);
         }
     }
-    src = MakeRect(0, 0, 0x80, 0xd9);
-    dst = MakeRect(0x60, (int)m_gridY, 0x80, 0xd9);
+    src = MakeRect(0, 0, 128, 217);
+    dst = MakeRect(96, (int)m_gridY, 128, 217);
     m_graphics->Blit(dst, TOPTR(IDirectDrawSurface*, m_obSurface), src, m_colorKey, 0);
-    src = MakeRect(0x8a, 0x60, 0x29, 0x19);
+    src = MakeRect(138, 96, 41, 25);
     if (m_game->m_extraChars == 0) {
-        dst = MakeRect(0x67, (int)m_gridY + 0x72, 0x29, 0x19);
+        dst = MakeRect(103, (int)m_gridY + 114, 41, 25);
         m_graphics->Blit(dst, TOPTR(IDirectDrawSurface*, m_obSurface), src, m_colorKey, 0);
-        dst = MakeRect(0x8f, (int)m_gridY + 0x72, 0x29, 0x19);
+        dst = MakeRect(143, (int)m_gridY + 114, 41, 25);
         m_graphics->Blit(dst, TOPTR(IDirectDrawSurface*, m_obSurface), src, m_colorKey, 0);
-        dst = MakeRect(0xb7, (int)m_gridY + 0x72, 0x29, 0x19);
+        dst = MakeRect(183, (int)m_gridY + 114, 41, 25);
         m_graphics->Blit(dst, TOPTR(IDirectDrawSurface*, m_obSurface), src, m_colorKey, 0);
-        dst = MakeRect(0xb1, (int)m_gridY + 0xc0, 0x29, 0x19);
+        dst = MakeRect(177, (int)m_gridY + 192, 41, 25);
         m_graphics->Blit(dst, TOPTR(IDirectDrawSurface*, m_obSurface), src, m_colorKey, 0);
     }
     if (m_game->m_extraChars == -1) {
-        dst = MakeRect(0x61, (int)m_gridY + 0x8c, 0x29, 0x19);
+        dst = MakeRect(97, (int)m_gridY + 140, 41, 25);
         m_graphics->Blit(dst, TOPTR(IDirectDrawSurface*, m_obSurface), src, m_colorKey, 0);
-        dst = MakeRect(0x89, (int)m_gridY + 0x8c, 0x29, 0x19);
+        dst = MakeRect(137, (int)m_gridY + 140, 41, 25);
         m_graphics->Blit(dst, TOPTR(IDirectDrawSurface*, m_obSurface), src, m_colorKey, 0);
-        dst = MakeRect(0x8f, (int)m_gridY + 0xa6, 0x29, 0x19);
+        dst = MakeRect(143, (int)m_gridY + 166, 41, 25);
         m_graphics->Blit(dst, TOPTR(IDirectDrawSurface*, m_obSurface), src, m_colorKey, 0);
-        dst = MakeRect(0xb7, (int)m_gridY + 0xa6, 0x29, 0x19);
+        dst = MakeRect(183, (int)m_gridY + 166, 41, 25);
         m_graphics->Blit(dst, TOPTR(IDirectDrawSurface*, m_obSurface), src, m_colorKey, 0);
     }
     if (m_gridY == 0.0) {
         if (m_charId[0] == m_charId[1] && (m_game->m_isCpu[0] != 1 || m_game->m_gameMode != 0) && (m_game->m_isCpu[1] != 1 || m_game->m_gameMode != 0)) {
-            src = MakeRect(0x81, 0x40, 0x3f, 0x18);
-            dst = MakeRect(m_cursorX[0] * 0x28 + 0x58 + (m_cursorY[0] % 2 == 0) * 6, m_cursorY[0] * 0x1a + 0xa, 0x3f, 0x18);
+            src = MakeRect(129, 64, 63, 24);
+            dst = MakeRect(m_cursorX[0] * 40 + 88 + (m_cursorY[0] % 2 == 0) * 6, m_cursorY[0] * 26 + 10, 63, 24);
             m_graphics->Blit(dst, TOPTR(IDirectDrawSurface*, m_obSurface), src, m_colorKey, 0);
         } else {
             if (m_game->m_isCpu[1] != 1 || m_game->m_gameMode != 0) {
-                src = MakeRect(0x81, 0x20, 0x3f, 0x18);
-                dst = MakeRect(m_cursorX[1] * 0x28 + 0x58 + (m_cursorY[1] % 2 == 0) * 6, m_cursorY[1] * 0x1a + 0xa, 0x3f, 0x18);
+                src = MakeRect(129, 32, 63, 24);
+                dst = MakeRect(m_cursorX[1] * 40 + 88 + (m_cursorY[1] % 2 == 0) * 6, m_cursorY[1] * 26 + 10, 63, 24);
                 m_graphics->Blit(dst, TOPTR(IDirectDrawSurface*, m_obSurface), src, m_colorKey, 0);
             }
             if (m_game->m_isCpu[0] != 1 || m_game->m_gameMode != 0) {
-                src = MakeRect(0x81, 0, 0x3f, 0x18);
-                dst = MakeRect(m_cursorX[0] * 0x28 + 0x58 + (m_cursorY[0] % 2 == 0) * 6, m_cursorY[0] * 0x1a + 0xa, 0x3f, 0x18);
+                src = MakeRect(129, 0, 63, 24);
+                dst = MakeRect(m_cursorX[0] * 40 + 88 + (m_cursorY[0] % 2 == 0) * 6, m_cursorY[0] * 26 + 10, 63, 24);
                 m_graphics->Blit(dst, TOPTR(IDirectDrawSurface*, m_obSurface), src, m_colorKey, 0);
             }
         }
@@ -666,69 +666,69 @@ void CScene1::Draw()
             skipped = 0;
             row = 1;
             for (; row <= 7; row++) {
-                while (m_stageHidden[(m_game->m_stage + row + skipped) % 0x17] != 0) {
+                while (m_stageHidden[(m_game->m_stage + row + skipped) % 23] != 0) {
                     skipped++;
                 }
-                src = MakeRect(0, (m_game->m_stage + row + skipped) % 0x17 << 5, 0xa0, 0x20);
-                dst = MakeRect(row * 0xb + 0xaa, 0xcd - row * 0x21 + (int)((double)(row * 0x21 + 0xbe) * cos(m_anim[4] / 57.29579143313326)), 0xa0, 0x20);
+                src = MakeRect(0, (m_game->m_stage + row + skipped) % 0x17 << 5, 160, 32);
+                dst = MakeRect(row * 11 + 170, 205 - row * 33 + (int)((double)(row * 33 + 190) * cos(m_anim[4] / 57.29579143313326)), 160, 32);
                 m_graphics->Blit(dst, TOPTR(IDirectDrawSurface*, m_stageNames), src, m_colorKeys[2], 0);
             }
-            src = MakeRect(0xa0, m_game->m_stage << 5, 0xa0, 0x20);
-            dst = MakeRect(0xaa, (int)(cos(m_anim[4] / 57.29579143313326) * 190.0) + 0xcd, 0xa0, 0x20);
+            src = MakeRect(160, m_game->m_stage << 5, 160, 32);
+            dst = MakeRect(170, (int)(cos(m_anim[4] / 57.29579143313326) * 190.0) + 205, 160, 32);
             m_graphics->Blit(dst, TOPTR(IDirectDrawSurface*, m_stageNames), src, m_colorKeys[2], 0);
-            src = MakeRect(1, 0, 0xc3, 0xde);
-            dst = MakeRect(0 - (int)(cos(m_anim[4] / 57.29579143313326) * 230.0), 0, 0xc3, 0xde);
+            src = MakeRect(1, 0, 195, 222);
+            dst = MakeRect(0 - (int)(cos(m_anim[4] / 57.29579143313326) * 230.0), 0, 195, 222);
             m_graphics->Blit(dst, TOPTR(IDirectDrawSurface*, m_stagePicture), src, m_colorKeys[3], 0);
         } else {
             randomSkipped = 0;
             randomRow = 0;
             for (; randomRow <= 8; randomRow++) {
-                while (m_stageHidden[(m_game->m_stage + randomRow + randomSkipped) % 0x17] != 0) {
+                while (m_stageHidden[(m_game->m_stage + randomRow + randomSkipped) % 23] != 0) {
                     randomSkipped++;
                 }
-                src = MakeRect(0, (m_game->m_stage + randomRow + randomSkipped) % 0x17 << 5, 0xa0, 0x20);
-                dst = MakeRect(randomRow * 0xb + 0xaa, 0xcd - randomRow * 0x21 + (int)((double)(randomRow * 0x21 + 0xbe) * cos(m_anim[4] / 57.29579143313326)), 0xa0, 0x20);
+                src = MakeRect(0, (m_game->m_stage + randomRow + randomSkipped) % 0x17 << 5, 160, 32);
+                dst = MakeRect(randomRow * 11 + 170, 205 - randomRow * 33 + (int)((double)(randomRow * 33 + 190) * cos(m_anim[4] / 57.29579143313326)), 160, 32);
                 m_graphics->Blit(dst, TOPTR(IDirectDrawSurface*, m_stageNames), src, m_colorKeys[2], 0);
             }
-            src = MakeRect(0, 0x3d9, 0xc3, 0xde);
-            dst = MakeRect(0 - (int)(cos(m_anim[4] / 57.29579143313326) * 230.0), 0, 0xc3, 0xde);
+            src = MakeRect(0, 985, 195, 222);
+            dst = MakeRect(0 - (int)(cos(m_anim[4] / 57.29579143313326) * 230.0), 0, 195, 222);
             m_graphics->Blit(dst, TOPTR(IDirectDrawSurface*, m_obSurface), src, m_colorKey, 0);
         }
     } else if (m_state[0] == 9) {
         nextSkipped = 0;
         nextRow = 0;
         for (; nextRow <= 8; nextRow++) {
-            while (m_stageHidden[(m_game->m_stage + nextRow + nextSkipped) % 0x17] != 0) {
+            while (m_stageHidden[(m_game->m_stage + nextRow + nextSkipped) % 23] != 0) {
                 nextSkipped++;
             }
-            src = MakeRect(0, (m_game->m_stage + nextRow + nextSkipped) % 0x17 << 5, 0xa0, 0x20);
-            dst = MakeRect(nextRow * 0xb + 0xaa - (int)(sin(m_anim[5] / 57.29579143313326) * 11.0), 0xcd - nextRow * 0x21 + (int)((double)(nextRow * 0x21 + 0xbe) * cos(m_anim[4] / 57.29579143313326)) + (int)(sin(m_anim[5] / 57.29579143313326) * 33.0), 0xa0, 0x20);
+            src = MakeRect(0, (m_game->m_stage + nextRow + nextSkipped) % 0x17 << 5, 160, 32);
+            dst = MakeRect(nextRow * 11 + 170 - (int)(sin(m_anim[5] / 57.29579143313326) * 11.0), 205 - nextRow * 33 + (int)((double)(nextRow * 33 + 190) * cos(m_anim[4] / 57.29579143313326)) + (int)(sin(m_anim[5] / 57.29579143313326) * 33.0), 160, 32);
             m_graphics->Blit(dst, TOPTR(IDirectDrawSurface*, m_stageNames), src, m_colorKeys[2], 0);
         }
-        src = MakeRect(1, 0, 0xc3, 0xde);
-        dst = MakeRect(0 - (int)(cos(m_anim[4] / 57.29579143313326) * 230.0), 0, 0xc3, 0xde);
+        src = MakeRect(1, 0, 195, 222);
+        dst = MakeRect(0 - (int)(cos(m_anim[4] / 57.29579143313326) * 230.0), 0, 195, 222);
         m_graphics->Blit(dst, TOPTR(IDirectDrawSurface*, m_stagePicture), src, m_colorKeys[3], 0);
-    } else if (m_state[0] == 0xa) {
+    } else if (m_state[0] == 10) {
         prevSkipped = 0;
         prevRow = 0;
         for (; prevRow <= 8; prevRow++) {
-            while (m_stageHidden[(m_game->m_stage + prevRow + 0x17 + prevSkipped) % 0x17] != 0) {
+            while (m_stageHidden[(m_game->m_stage + prevRow + 23 + prevSkipped) % 23] != 0) {
                 prevSkipped++;
             }
-            src = MakeRect(0, (m_game->m_stage + prevRow + 0x17 + prevSkipped) % 0x17 << 5, 0xa0, 0x20);
-            dst = MakeRect(prevRow * 0xb + 0xaa + (int)(sin(m_anim[5] / 57.29579143313326) * 11.0), 0xcd - prevRow * 0x21 + (int)((double)(prevRow * 0x21 + 0xbe) * cos(m_anim[4] / 57.29579143313326)) - (int)(sin(m_anim[5] / 57.29579143313326) * 33.0), 0xa0, 0x20);
+            src = MakeRect(0, (m_game->m_stage + prevRow + 23 + prevSkipped) % 0x17 << 5, 160, 32);
+            dst = MakeRect(prevRow * 11 + 170 + (int)(sin(m_anim[5] / 57.29579143313326) * 11.0), 205 - prevRow * 33 + (int)((double)(prevRow * 33 + 190) * cos(m_anim[4] / 57.29579143313326)) - (int)(sin(m_anim[5] / 57.29579143313326) * 33.0), 160, 32);
             m_graphics->Blit(dst, TOPTR(IDirectDrawSurface*, m_stageNames), src, m_colorKeys[2], 0);
         }
         prevRow = -1;
         prevSkipped = 0;
-        while (m_stageHidden[(m_game->m_stage + prevRow + 0x17 + prevSkipped) % 0x17] != 0) {
+        while (m_stageHidden[(m_game->m_stage + prevRow + 23 + prevSkipped) % 23] != 0) {
             prevSkipped--;
         }
-        src = MakeRect(0, (m_game->m_stage + prevRow + 0x17 + prevSkipped) % 0x17 << 5, 0xa0, 0x20);
-        dst = MakeRect(prevRow * 0xb + 0xaa + (int)(sin(m_anim[5] / 57.29579143313326) * 11.0), 0xcd - prevRow * 0x21 + (int)((double)(prevRow * 0x21 + 0xbe) * cos(m_anim[4] / 57.29579143313326)) - (int)(sin(m_anim[5] / 57.29579143313326) * 33.0), 0xa0, 0x20);
+        src = MakeRect(0, (m_game->m_stage + prevRow + 23 + prevSkipped) % 0x17 << 5, 160, 32);
+        dst = MakeRect(prevRow * 11 + 170 + (int)(sin(m_anim[5] / 57.29579143313326) * 11.0), 205 - prevRow * 33 + (int)((double)(prevRow * 33 + 190) * cos(m_anim[4] / 57.29579143313326)) - (int)(sin(m_anim[5] / 57.29579143313326) * 33.0), 160, 32);
         m_graphics->Blit(dst, TOPTR(IDirectDrawSurface*, m_stageNames), src, m_colorKeys[2], 0);
-        src = MakeRect(1, 0, 0xc3, 0xde);
-        dst = MakeRect(0 - (int)(cos(m_anim[4] / 57.29579143313326) * 230.0), 0, 0xc3, 0xde);
+        src = MakeRect(1, 0, 195, 222);
+        dst = MakeRect(0 - (int)(cos(m_anim[4] / 57.29579143313326) * 230.0), 0, 195, 222);
         m_graphics->Blit(dst, TOPTR(IDirectDrawSurface*, m_stagePicture), src, m_colorKeys[3], 0);
     }
     m_graphics->Flip();
@@ -820,16 +820,16 @@ void CScene1::CreateCharacter(PTR32(CPlayer)* player, PTR32(CPlayer)* opponent, 
         strcat(path, "\\");
         strcat(path, (*player)->m_name);
         strcat(path, ".dat");
-        m_game->LoadDat((PTR32(IDirectDrawSurface)*)&m_portraits[side], (const char*)path, 0, side * 0x28 + 0xaf);
-        m_graphics->LoadPaletteDat(m_palette, (const char*)path, m_paletteIndex[side] * 0x28, side * 0x28 + 0xaf, 0x28);
+        m_game->LoadDat((PTR32(IDirectDrawSurface)*)&m_portraits[side], (const char*)path, 0, side * 40 + 175);
+        m_graphics->LoadPaletteDat(m_palette, (const char*)path, m_paletteIndex[side] * 40, side * 40 + 175, 40);
     } else {
         strcpy(path, "system\\");
         strcat(path, (*player)->m_name);
         strcat(path, "\\");
         strcat(path, (*player)->m_name);
         strcat(path, ".bmp");
-        m_graphics->LoadBmp((PTR32(IDirectDrawSurface)*)&m_portraits[side], (const char*)path, side * 0x28 + 0xaf);
-        m_graphics->LoadPaletteBmp(m_palette, (const char*)path, m_paletteIndex[side] * 0x28, side * 0x28 + 0xaf, 0x28);
+        m_graphics->LoadBmp((PTR32(IDirectDrawSurface)*)&m_portraits[side], (const char*)path, side * 40 + 175);
+        m_graphics->LoadPaletteBmp(m_palette, (const char*)path, m_paletteIndex[side] * 40, side * 40 + 175, 40);
     }
     m_graphics->SetPalette(m_palette);
     m_colorKeys[side] = m_graphics->GetColorKey(TOPTR(IDirectDrawSurface*, m_portraits[side]));
@@ -840,21 +840,21 @@ void CScene1::LoadStagePicture()
     char digits[8];
     char path[40];
 
-    if (m_game->m_stage < 0xa) {
+    if (m_game->m_stage < 10) {
         strcpy(path, "system\\stage\\0");
     } else {
         strcpy(path, "system\\stage\\");
     }
-    _itoa(m_game->m_stage, digits, 0xa);
+    _itoa(m_game->m_stage, digits, 10);
     strcat(path, (const char*)digits);
     if (1) {
         strcat(path, ".dat");
-        m_game->LoadDat((PTR32(IDirectDrawSurface)*)&m_stagePicture, (const char*)path, 0, 0xbf);
-        m_graphics->LoadPaletteDat(m_palette, (const char*)path, 0, 0xbf, 0x40);
+        m_game->LoadDat((PTR32(IDirectDrawSurface)*)&m_stagePicture, (const char*)path, 0, 191);
+        m_graphics->LoadPaletteDat(m_palette, (const char*)path, 0, 191, 64);
     } else {
         strcat(path, ".bmp");
-        m_graphics->LoadBmp((PTR32(IDirectDrawSurface)*)&m_stagePicture, (const char*)path, 0xbf);
-        m_graphics->LoadPaletteBmp(m_palette, (const char*)path, 0, 0xbf, 0x40);
+        m_graphics->LoadBmp((PTR32(IDirectDrawSurface)*)&m_stagePicture, (const char*)path, 191);
+        m_graphics->LoadPaletteBmp(m_palette, (const char*)path, 0, 191, 64);
     }
     m_colorKeys[3] = m_graphics->GetColorKey(TOPTR(IDirectDrawSurface*, m_stagePicture));
     m_graphics->SetPaletteRange(m_palette, 0xaf, 0x50);
@@ -870,14 +870,14 @@ void CScene1::SetPortraitPalette(char side)
         strcat(path, "\\");
         strcat(path, m_players[side]->m_name);
         strcat(path, ".dat");
-        m_graphics->LoadPaletteDat(m_palette, (const char*)path, m_paletteIndex[side] * 0x28, side * 0x28 + 0xaf, 0x28);
+        m_graphics->LoadPaletteDat(m_palette, (const char*)path, m_paletteIndex[side] * 40, side * 40 + 175, 40);
     } else {
         strcpy(path, "system\\");
         strcat(path, m_players[side]->m_name);
         strcat(path, "\\");
         strcat(path, m_players[side]->m_name);
         strcat(path, ".bmp");
-        m_graphics->LoadPaletteBmp(m_palette, (const char*)path, m_paletteIndex[side] * 0x28, side * 0x28 + 0xaf, 0x28);
+        m_graphics->LoadPaletteBmp(m_palette, (const char*)path, m_paletteIndex[side] * 40, side * 40 + 175, 40);
     }
     m_graphics->SetPaletteRange(m_palette, side * 0x28 + 0xaf, 0x28);
 }
@@ -913,7 +913,7 @@ void CScene1::Enter()
     m_held[0] = 0;
     m_held[1] = 0;
     m_bgScroll = 0.0;
-    m_bgSlideTime = 0x3c;
+    m_bgSlideTime = 60;
     m_p1BarOffset = 50.0;
     m_anim[0] = 0;
     m_p2BarOffset = 50.0;
@@ -921,13 +921,13 @@ void CScene1::Enter()
     m_barScroll = 0.0;
     m_anim[2] = 0;
     m_gridY = -480.0;
-    m_anim[3] = 0x3c;
+    m_anim[3] = 60;
     m_anim[4] = 0;
     m_anim[5] = 0;
-    m_portraitOffset[0] = 0x12c;
-    m_portraitOffset[1] = 0x12c;
-    m_portraitAngle[0] = 0xb4;
-    m_portraitAngle[1] = 0xb4;
+    m_portraitOffset[0] = 300;
+    m_portraitOffset[1] = 300;
+    m_portraitAngle[0] = 180;
+    m_portraitAngle[1] = 180;
     m_state[0] = 5;
     m_state[1] = 5;
     m_randomTime[0] = 0;
@@ -940,9 +940,9 @@ void CScene1::Enter()
     m_game->m_editColor[1] = 0;
     if (m_game->m_gameMode < 5) {
         if (1) {
-            m_graphics->LoadPaletteDat(m_palette, "system\\chr_sel_bg.dat", 0, 1, 0x30);
+            m_graphics->LoadPaletteDat(m_palette, "system\\chr_sel_bg.dat", 0, 1, 48);
         } else {
-            m_graphics->LoadPaletteBmp(m_palette, "system\\chr_sel_bg.bmp", 0, 1, 0x30);
+            m_graphics->LoadPaletteBmp(m_palette, "system\\chr_sel_bg.bmp", 0, 1, 48);
         }
         if (m_game->m_gameMode == 0 || m_game->m_gameMode == 2) {
             if (m_game->m_isCpu[0] == 1) {
@@ -955,7 +955,7 @@ void CScene1::Enter()
         }
         m_game->m_replayMode = 0;
     }
-    memset((void*)&m_stageHidden[0], 0, 0x17);
+    memset((void*)&m_stageHidden[0], 0, 23);
     if (m_game->m_extraChars == 0) {
         m_stageHidden13 = 1;
         m_stageHidden14 = 1;

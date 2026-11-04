@@ -18,7 +18,7 @@ void CScene3::DrawNumber(int right, int top, int value, BYTE font, BYTE gap, int
     rest = value;
     x = right;
     do {
-        digit = rest % 0xa;
+        digit = rest % 10;
         src.top = m_digitFonts[font].top;
         src.bottom = m_digitFonts[font].bottom;
         src.left = m_digitFonts[font].right * digit;
@@ -33,7 +33,7 @@ void CScene3::DrawNumber(int right, int top, int value, BYTE font, BYTE gap, int
             m_graphics->Blit(dst, m_game->m_objectSurface, src, m_game->m_colorKey, 0);
         }
         x -= m_digitFonts[font].right + gap;
-        rest = rest / 0xa;
+        rest = rest / 10;
     } while (rest > 0);
 }
 
@@ -47,25 +47,25 @@ void CScene3::DrawBackground()
     int dstX; // where the stage's left edge lands on the screen
 
     srcX = (int)(-m_drawX * m_game->m_bgParallax + (160.0 - 160.0 * m_game->m_bgParallax));
-    srcY = (int)((0xf0 - m_drawY) * m_game->m_bgParallax + (120.0 - 120.0 * m_game->m_bgParallax));
+    srcY = (int)((240 - m_drawY) * m_game->m_bgParallax + (120.0 - 120.0 * m_game->m_bgParallax));
     dstX = 0;
     dstY = 0;
-    if (srcX > 0x140) {
-        dstX = 0x140 - srcX;
-        srcX = 0x140;
+    if (srcX > 320) {
+        dstX = 320 - srcX;
+        srcX = 320;
     } else if (srcX < 0) {
         dstX = -srcX;
         srcX = 0;
     }
-    if (srcY > 0xf0) {
-        dstY = 0xf0 - srcY;
-        srcY = 0xf0;
+    if (srcY > 240) {
+        dstY = 240 - srcY;
+        srcY = 240;
     } else if (srcY < 0) {
         dstY = -srcY;
         srcY = 0;
     }
-    src = MakeRect(srcX, srcY, 0x140, 0xf0);
-    dst = MakeRect(dstX, dstY, 0x140, 0xf0);
+    src = MakeRect(srcX, srcY, 320, 240);
+    dst = MakeRect(dstX, dstY, 320, 240);
     if (m_players[0]->m_fillTime > 0 && m_players[1]->m_fillTime > 0) {
         if ((char)m_game->m_fillSide == 0) {
             m_graphics->FillRect(dst, m_players[0]->m_fillColor);
@@ -112,37 +112,37 @@ void CScene3::DrawLifeBars()
     RECT dst;
 
     if (m_players[0]->m_shownHp > m_players[0]->m_hp) {
-        m_players[0]->m_shownHp -= 0xc8;
+        m_players[0]->m_shownHp -= 200;
         if (m_players[0]->m_shownHp < m_players[0]->m_hp) {
             m_players[0]->m_shownHp = m_players[0]->m_hp;
         }
     }
     if (m_players[0]->m_shownHp < m_players[0]->m_hp) {
-        m_players[0]->m_shownHp += 0xc8;
+        m_players[0]->m_shownHp += 200;
         if (m_players[0]->m_shownHp > m_players[0]->m_hp) {
             m_players[0]->m_shownHp = m_players[0]->m_hp;
         }
     }
     if (m_players[1]->m_comboHits == 0) {
-        m_players[0]->m_comboStartHp -= (m_players[0]->m_comboStartHp > m_players[0]->m_hp) * 0x64;
+        m_players[0]->m_comboStartHp -= (m_players[0]->m_comboStartHp > m_players[0]->m_hp) * 100;
         if (m_players[0]->m_comboStartHp < m_players[0]->m_hp) {
             m_players[0]->m_comboStartHp = m_players[0]->m_hp;
         }
     }
     if (m_players[1]->m_shownHp > m_players[1]->m_hp) {
-        m_players[1]->m_shownHp -= 0xc8;
+        m_players[1]->m_shownHp -= 200;
         if (m_players[1]->m_shownHp < m_players[1]->m_hp) {
             m_players[1]->m_shownHp = m_players[1]->m_hp;
         }
     }
     if (m_players[1]->m_shownHp < m_players[1]->m_hp) {
-        m_players[1]->m_shownHp += 0xc8;
+        m_players[1]->m_shownHp += 200;
         if (m_players[1]->m_shownHp > m_players[1]->m_hp) {
             m_players[1]->m_shownHp = m_players[1]->m_hp;
         }
     }
     if (m_players[0]->m_comboHits == 0) {
-        m_players[1]->m_comboStartHp -= (m_players[1]->m_comboStartHp > m_players[1]->m_hp) * 0x64;
+        m_players[1]->m_comboStartHp -= (m_players[1]->m_comboStartHp > m_players[1]->m_hp) * 100;
         if (m_players[1]->m_comboStartHp < m_players[1]->m_hp) {
             m_players[1]->m_comboStartHp = m_players[1]->m_hp;
         }
@@ -151,97 +151,97 @@ void CScene3::DrawLifeBars()
         return;
     }
     src = MakeRect(0, 0, m_players[0]->anims[kHudPortrait].frames->width, m_players[0]->anims[kHudPortrait].frames->height);
-    dst = MakeRect(0, 0xe, m_players[0]->anims[kHudPortrait].frames->width, m_players[0]->anims[kHudPortrait].frames->height);
+    dst = MakeRect(0, 14, m_players[0]->anims[kHudPortrait].frames->width, m_players[0]->anims[kHudPortrait].frames->height);
     m_graphics->Blit(dst, m_players[0]->surfaces[m_players[0]->anims[kHudPortrait].frames->surface], src, m_players[0]->colorKey, 0);
     src = MakeRect(0, 0, m_players[1]->anims[kHudPortrait].frames->width, m_players[1]->anims[kHudPortrait].frames->height);
-    dst = MakeRect(0x140 - m_players[1]->anims[kHudPortrait].frames->width, 0xe, m_players[1]->anims[kHudPortrait].frames->width, m_players[1]->anims[kHudPortrait].frames->height);
+    dst = MakeRect(320 - m_players[1]->anims[kHudPortrait].frames->width, 14, m_players[1]->anims[kHudPortrait].frames->width, m_players[1]->anims[kHudPortrait].frames->height);
     m_graphics->Blit(dst, m_players[1]->surfaces[m_players[1]->anims[kHudPortrait].frames->surface], src, m_players[1]->colorKey, 1);
-    src = MakeRect(0, 0, 0x140, 0x2c);
-    dst = MakeRect(0, 0, 0x140, 0x2c);
+    src = MakeRect(0, 0, 320, 44);
+    dst = MakeRect(0, 0, 320, 44);
     m_graphics->Blit(dst, m_game->m_objectSurface, src, m_game->m_colorKey, 0);
     src = MakeRect(0, 0, m_players[0]->anims[kHudName].frames->width, m_players[0]->anims[kHudName].frames->height);
-    dst = MakeRect(1, 0x28, m_players[0]->anims[kHudName].frames->width, m_players[0]->anims[kHudName].frames->height);
+    dst = MakeRect(1, 40, m_players[0]->anims[kHudName].frames->width, m_players[0]->anims[kHudName].frames->height);
     m_graphics->Blit(dst, m_players[0]->surfaces[m_players[0]->anims[kHudName].frames->surface], src, m_players[0]->colorKey, 0);
     src = MakeRect(0, 0, m_players[1]->anims[kHudName].frames->width, m_players[1]->anims[kHudName].frames->height);
-    dst = MakeRect(0x13f - m_players[1]->anims[kHudName].frames->width, 0x28, m_players[1]->anims[kHudName].frames->width, m_players[1]->anims[kHudName].frames->height);
+    dst = MakeRect(319 - m_players[1]->anims[kHudName].frames->width, 40, m_players[1]->anims[kHudName].frames->width, m_players[1]->anims[kHudName].frames->height);
     m_graphics->Blit(dst, m_players[1]->surfaces[m_players[1]->anims[kHudName].frames->surface], src, m_players[1]->colorKey, 0);
     length = (int)(m_players[0]->m_comboStartHp * 120.0 / 9999.0);
     if (length > 0) {
-        src = MakeRect(0x78 - length, 0x5b, length, 6);
-        dst = MakeRect(0x8a - length, 0x12, length, 6);
+        src = MakeRect(120 - length, 91, length, 6);
+        dst = MakeRect(138 - length, 18, length, 6);
         m_graphics->Blit(dst, m_game->m_objectSurface, src, m_game->m_colorKey, 0);
     }
     length = (int)(m_players[0]->m_shownHp * 120.0 / 9999.0);
-    if (length >= 0x28) {
-        src = MakeRect(0x78 - length, 0x49, length, 6);
-        dst = MakeRect(0x8a - length, 0x12, length, 6);
+    if (length >= 40) {
+        src = MakeRect(120 - length, 73, length, 6);
+        dst = MakeRect(138 - length, 18, length, 6);
         m_graphics->Blit(dst, m_game->m_objectSurface, src, m_game->m_colorKey, 0);
     } else if (length > 0) {
-        src = MakeRect(0x78 - length, m_players[0]->m_blinkTimer % 0x24 / 0x12 * 6 + 0x4f, length, 6);
-        dst = MakeRect(0x8a - length, 0x12, length, 6);
+        src = MakeRect(120 - length, m_players[0]->m_blinkTimer % 36 / 18 * 6 + 79, length, 6);
+        dst = MakeRect(138 - length, 18, length, 6);
         m_graphics->Blit(dst, m_game->m_objectSurface, src, m_game->m_colorKey, 0);
     }
     length = (int)(m_players[1]->m_comboStartHp * 120.0 / 9999.0);
     if (length > 0) {
-        src = MakeRect(0x78, 0x5b, length, 6);
-        dst = MakeRect(0xb6, 0x12, length, 6);
+        src = MakeRect(120, 91, length, 6);
+        dst = MakeRect(182, 18, length, 6);
         m_graphics->Blit(dst, m_game->m_objectSurface, src, m_game->m_colorKey, 0);
     }
     length = (int)(m_players[1]->m_shownHp * 120.0 / 9999.0);
-    if (length >= 0x28) {
-        src = MakeRect(0x78, 0x49, length, 6);
-        dst = MakeRect(0xb6, 0x12, length, 6);
+    if (length >= 40) {
+        src = MakeRect(120, 73, length, 6);
+        dst = MakeRect(182, 18, length, 6);
         m_graphics->Blit(dst, m_game->m_objectSurface, src, m_game->m_colorKey, 0);
     } else if (length > 0) {
-        src = MakeRect(0x78, m_players[1]->m_blinkTimer % 0x24 / 0x12 * 6 + 0x4f, length, 8);
-        dst = MakeRect(0xb6, 0x12, length, 6);
+        src = MakeRect(120, m_players[1]->m_blinkTimer % 36 / 18 * 6 + 79, length, 8);
+        dst = MakeRect(182, 18, length, 6);
         m_graphics->Blit(dst, m_game->m_objectSurface, src, m_game->m_colorKey, 0);
     }
-    src = MakeRect(0x53, 0x93, 7, 0xd);
+    src = MakeRect(83, 147, 7, 13);
     if (m_game->m_roundsToWin >= 1) {
-        dst = MakeRect(0x7b, 0x21, 7, 0xd);
+        dst = MakeRect(123, 33, 7, 13);
         m_graphics->Blit(dst, m_game->m_objectSurface, src, m_game->m_colorKey, 0);
-        dst = MakeRect(0xbe, 0x21, 7, 0xd);
+        dst = MakeRect(190, 33, 7, 13);
         m_graphics->Blit(dst, m_game->m_objectSurface, src, m_game->m_colorKey, 0);
     }
     if (m_game->m_roundsToWin >= 2) {
-        dst = MakeRect(0x83, 0x21, 7, 0xd);
+        dst = MakeRect(131, 33, 7, 13);
         m_graphics->Blit(dst, m_game->m_objectSurface, src, m_game->m_colorKey, 0);
-        dst = MakeRect(0xb6, 0x21, 7, 0xd);
+        dst = MakeRect(182, 33, 7, 13);
         m_graphics->Blit(dst, m_game->m_objectSurface, src, m_game->m_colorKey, 0);
     }
     if (m_game->m_roundsToWin >= 3) {
-        dst = MakeRect(0x8b, 0x21, 7, 0xd);
+        dst = MakeRect(139, 33, 7, 13);
         m_graphics->Blit(dst, m_game->m_objectSurface, src, m_game->m_colorKey, 0);
-        dst = MakeRect(0xae, 0x21, 7, 0xd);
+        dst = MakeRect(174, 33, 7, 13);
         m_graphics->Blit(dst, m_game->m_objectSurface, src, m_game->m_colorKey, 0);
     }
-    src = MakeRect(0x4c, 0x93, 7, 0xd);
+    src = MakeRect(76, 147, 7, 13);
     if (m_players[0]->m_roundsWon >= 1) {
-        dst = MakeRect(0x7b, 0x21, 7, 0xd);
+        dst = MakeRect(123, 33, 7, 13);
         m_graphics->Blit(dst, m_game->m_objectSurface, src, m_game->m_colorKey, 0);
     }
     if (m_players[0]->m_roundsWon >= 2) {
-        dst = MakeRect(0x83, 0x21, 7, 0xd);
+        dst = MakeRect(131, 33, 7, 13);
         m_graphics->Blit(dst, m_game->m_objectSurface, src, m_game->m_colorKey, 0);
     }
     if (m_players[0]->m_roundsWon >= 3) {
-        dst = MakeRect(0x8b, 0x21, 7, 0xd);
+        dst = MakeRect(139, 33, 7, 13);
         m_graphics->Blit(dst, m_game->m_objectSurface, src, m_game->m_colorKey, 0);
     }
     if (m_players[1]->m_roundsWon >= 1) {
-        dst = MakeRect(0xbe, 0x21, 7, 0xd);
+        dst = MakeRect(190, 33, 7, 13);
         m_graphics->Blit(dst, m_game->m_objectSurface, src, m_game->m_colorKey, 0);
     }
     if (m_players[1]->m_roundsWon >= 2) {
-        dst = MakeRect(0xb6, 0x21, 7, 0xd);
+        dst = MakeRect(182, 33, 7, 13);
         m_graphics->Blit(dst, m_game->m_objectSurface, src, m_game->m_colorKey, 0);
     }
     if (m_players[1]->m_roundsWon >= 3) {
-        dst = MakeRect(0xae, 0x21, 7, 0xd);
+        dst = MakeRect(174, 33, 7, 13);
         m_graphics->Blit(dst, m_game->m_objectSurface, src, m_game->m_colorKey, 0);
     }
-    DrawNumber(0xa9, 9, m_fps, 0, 2, 0);
+    DrawNumber(169, 9, m_fps, 0, 2, 0);
 }
 
 void CScene3::DrawGauges()
@@ -255,96 +255,96 @@ void CScene3::DrawGauges()
     if (m_game->m_hideHudTime > 0) {
         return;
     }
-    src = MakeRect(0, 0x28, 0x140, 0x21);
-    dst = MakeRect(0, 0xce, 0x140, 0x21);
+    src = MakeRect(0, 40, 320, 33);
+    dst = MakeRect(0, 206, 320, 33);
     m_graphics->Blit(dst, m_game->m_objectSurface, src, m_game->m_colorKey, 0);
-    length = m_players[0]->m_gauge * 0x6c / 0xbb8;
-    if (m_players[0]->m_gauge < 0x3e8) {
-        src = MakeRect(0x6c - length, 0x73, length, 4);
-        dst = MakeRect(0x8c - length, 0xe0, length, 4);
+    length = m_players[0]->m_gauge * 108 / 3000;
+    if (m_players[0]->m_gauge < 1000) {
+        src = MakeRect(108 - length, 115, length, 4);
+        dst = MakeRect(140 - length, 224, length, 4);
         m_graphics->Blit(dst, m_game->m_objectSurface, src, m_game->m_colorKey, 0);
-    } else if (m_players[0]->m_gauge < 0x7d0) {
-        src = MakeRect(0, 0x94, 0x18, 0x18);
-        dst = MakeRect(6, 0xd1, 0x18, 0x18);
+    } else if (m_players[0]->m_gauge < 2000) {
+        src = MakeRect(0, 148, 24, 24);
+        dst = MakeRect(6, 209, 24, 24);
         m_graphics->Blit(dst, m_game->m_objectSurface, src, m_game->m_colorKey, 0);
-        src = MakeRect(0x6c - length, 0x77, length, 4);
-        dst = MakeRect(0x8c - length, 0xe0, length, 4);
+        src = MakeRect(108 - length, 119, length, 4);
+        dst = MakeRect(140 - length, 224, length, 4);
         m_graphics->Blit(dst, m_game->m_objectSurface, src, m_game->m_colorKey, 0);
-    } else if (m_players[0]->m_gauge < 0xbb8) {
-        src = MakeRect(0x18, 0x94, 0x18, 0x18);
-        dst = MakeRect(6, 0xd1, 0x18, 0x18);
+    } else if (m_players[0]->m_gauge < 3000) {
+        src = MakeRect(24, 148, 24, 24);
+        dst = MakeRect(6, 209, 24, 24);
         m_graphics->Blit(dst, m_game->m_objectSurface, src, m_game->m_colorKey, 0);
-        src = MakeRect(0x6c - length, 0x7b, length, 4);
-        dst = MakeRect(0x8c - length, 0xe0, length, 4);
+        src = MakeRect(108 - length, 123, length, 4);
+        dst = MakeRect(140 - length, 224, length, 4);
         m_graphics->Blit(dst, m_game->m_objectSurface, src, m_game->m_colorKey, 0);
     } else {
-        src = MakeRect(0x30, 0x94, 0x18, 0x18);
-        dst = MakeRect(6, 0xd1, 0x18, 0x18);
+        src = MakeRect(48, 148, 24, 24);
+        dst = MakeRect(6, 209, 24, 24);
         m_graphics->Blit(dst, m_game->m_objectSurface, src, m_game->m_colorKey, 0);
-        src = MakeRect(0x6c - length, m_players[0]->m_blinkTimer % 0x5a / 0x12 * 4 + 0x7f, length, 4);
-        dst = MakeRect(0x8c - length, 0xe0, length, 4);
+        src = MakeRect(108 - length, m_players[0]->m_blinkTimer % 90 / 18 * 4 + 127, length, 4);
+        dst = MakeRect(140 - length, 224, length, 4);
         m_graphics->Blit(dst, m_game->m_objectSurface, src, m_game->m_colorKey, 0);
     }
-    length = m_players[1]->m_gauge * 0x6c / 0xbb8;
-    if (m_players[1]->m_gauge < 0x3e8) {
-        src = MakeRect(0x6c, 0x73, length, 4);
-        dst = MakeRect(0xb4, 0xe0, length, 4);
+    length = m_players[1]->m_gauge * 108 / 3000;
+    if (m_players[1]->m_gauge < 1000) {
+        src = MakeRect(108, 115, length, 4);
+        dst = MakeRect(180, 224, length, 4);
         m_graphics->Blit(dst, m_game->m_objectSurface, src, m_game->m_colorKey, 0);
-    } else if (m_players[1]->m_gauge < 0x7d0) {
-        src = MakeRect(0, 0x94, 0x18, 0x18);
-        dst = MakeRect(0x122, 0xd1, 0x18, 0x18);
+    } else if (m_players[1]->m_gauge < 2000) {
+        src = MakeRect(0, 148, 24, 24);
+        dst = MakeRect(290, 209, 24, 24);
         m_graphics->Blit(dst, m_game->m_objectSurface, src, m_game->m_colorKey, 0);
-        src = MakeRect(0x6c, 0x77, length, 4);
-        dst = MakeRect(0xb4, 0xe0, length, 4);
+        src = MakeRect(108, 119, length, 4);
+        dst = MakeRect(180, 224, length, 4);
         m_graphics->Blit(dst, m_game->m_objectSurface, src, m_game->m_colorKey, 0);
-    } else if (m_players[1]->m_gauge < 0xbb8) {
-        src = MakeRect(0x18, 0x94, 0x18, 0x18);
-        dst = MakeRect(0x122, 0xd1, 0x18, 0x18);
+    } else if (m_players[1]->m_gauge < 3000) {
+        src = MakeRect(24, 148, 24, 24);
+        dst = MakeRect(290, 209, 24, 24);
         m_graphics->Blit(dst, m_game->m_objectSurface, src, m_game->m_colorKey, 0);
-        src = MakeRect(0x6c, 0x7b, length, 4);
-        dst = MakeRect(0xb4, 0xe0, length, 4);
+        src = MakeRect(108, 123, length, 4);
+        dst = MakeRect(180, 224, length, 4);
         m_graphics->Blit(dst, m_game->m_objectSurface, src, m_game->m_colorKey, 0);
     } else {
-        src = MakeRect(0x30, 0x94, 0x18, 0x18);
-        dst = MakeRect(0x122, 0xd1, 0x18, 0x18);
+        src = MakeRect(48, 148, 24, 24);
+        dst = MakeRect(290, 209, 24, 24);
         m_graphics->Blit(dst, m_game->m_objectSurface, src, m_game->m_colorKey, 0);
-        src = MakeRect(0x6c, m_players[1]->m_blinkTimer % 0x5a / 0x12 * 4 + 0x7f, length, 4);
-        dst = MakeRect(0xb4, 0xe0, length, 4);
+        src = MakeRect(108, m_players[1]->m_blinkTimer % 90 / 18 * 4 + 127, length, 4);
+        dst = MakeRect(180, 224, length, 4);
         m_graphics->Blit(dst, m_game->m_objectSurface, src, m_game->m_colorKey, 0);
     }
     if (m_players[0]->m_rfBlue == 0) {
         if (m_players[0]->m_rfGauge < 500.0) {
             length = (int)(60.0 * m_players[0]->m_rfGauge * 2 / 1000.0);
-            src = MakeRect(0x3c - length, 0x66, length, 2);
+            src = MakeRect(60 - length, 102, length, 2);
         } else {
-            src = MakeRect(0, 0x66, 0x3c, 2);
-            dst = MakeRect(0x4f, 0xe8, 0x3c, 2);
+            src = MakeRect(0, 102, 60, 2);
+            dst = MakeRect(79, 232, 60, 2);
             m_graphics->Blit(dst, m_game->m_objectSurface, src, m_game->m_colorKey, 0);
             length = (int)((m_players[0]->m_rfGauge - 500.0) * 60.0 * 2 / 1000.0);
-            src = MakeRect(0x3c - length, 0x64, length, 2);
+            src = MakeRect(60 - length, 100, length, 2);
         }
     } else {
         length = (int)(60.0 * m_players[0]->m_rfGauge / 1000.0);
-        src = MakeRect(0x3c - length, m_players[0]->m_blinkTimer % 0x5a / 0x12 * 2 + 0x68, length, 2);
+        src = MakeRect(60 - length, m_players[0]->m_blinkTimer % 90 / 18 * 2 + 104, length, 2);
     }
-    dst = MakeRect(0x8b - length, 0xe8, length, 2);
+    dst = MakeRect(139 - length, 232, length, 2);
     m_graphics->Blit(dst, m_game->m_objectSurface, src, m_game->m_colorKey, 0);
     if (m_players[1]->m_rfBlue == 0) {
         if (m_players[1]->m_rfGauge < 500.0) {
             length = (int)(60.0 * m_players[1]->m_rfGauge * 2 / 1000.0);
-            src = MakeRect(0x3c, 0x66, length, 2);
+            src = MakeRect(60, 102, length, 2);
         } else {
-            src = MakeRect(0x3c, 0x66, 0x3c, 2);
-            dst = MakeRect(0xb5, 0xe8, 0x3c, 2);
+            src = MakeRect(60, 102, 60, 2);
+            dst = MakeRect(181, 232, 60, 2);
             m_graphics->Blit(dst, m_game->m_objectSurface, src, m_game->m_colorKey, 0);
             length = (int)((m_players[1]->m_rfGauge - 500.0) * 60.0 * 2 / 1000.0);
-            src = MakeRect(0x3c, 0x64, length, 2);
+            src = MakeRect(60, 100, length, 2);
         }
     } else {
         length = (int)(60.0 * m_players[1]->m_rfGauge / 1000.0);
-        src = MakeRect(0x3c, m_players[1]->m_blinkTimer % 0x5a / 0x12 * 2 + 0x68, length, 2);
+        src = MakeRect(60, m_players[1]->m_blinkTimer % 90 / 18 * 2 + 104, length, 2);
     }
-    dst = MakeRect(0xb5, 0xe8, length, 2);
+    dst = MakeRect(181, 232, length, 2);
     m_graphics->Blit(dst, m_game->m_objectSurface, src, m_game->m_colorKey, 0);
     if (m_game->m_roundOver == 0) {
         side = 0;
@@ -354,25 +354,25 @@ void CScene3::DrawGauges()
                     i = 0;
                     for (; i < 3; i++) {
                         dst.left = (int)m_players[side]->x + m_drawX + i;
-                        dst.top = m_drawY + 0xd2 + (int)m_players[side]->y - (m_players[side]->y < 0.0) + i;
-                        dst.right = m_players[side]->m_untechTime * (m_players[side]->m_untechTime < 0x64) + dst.left + (m_players[side]->m_untechTime >= 0x64) * 0x64;
+                        dst.top = m_drawY + 210 + (int)m_players[side]->y - (m_players[side]->y < 0.0) + i;
+                        dst.right = m_players[side]->m_untechTime * (m_players[side]->m_untechTime < 100) + dst.left + (m_players[side]->m_untechTime >= 100) * 100;
                         dst.bottom = dst.top + 1;
-                        m_graphics->FillRect(dst, 0xd3 - (m_players[side]->m_untechTime > 0x1e) * 3 - (m_players[side]->m_untechTime > 0x3c) * 7);
+                        m_graphics->FillRect(dst, 211 - (m_players[side]->m_untechTime > 30) * 3 - (m_players[side]->m_untechTime > 60) * 7);
                         dst.top += 2;
                         dst.bottom = dst.top + 1;
-                        m_graphics->FillRect(dst, 0xc2);
+                        m_graphics->FillRect(dst, 194);
                     }
                 } else {
                     i = 0;
                     for (; i < 3; i++) {
-                        dst.left = (int)m_players[side]->x + m_drawX - (m_players[side]->m_untechTime * (m_players[side]->m_untechTime < 0x64) + (m_players[side]->m_untechTime >= 0x64) * 0x64) - i;
-                        dst.top = m_drawY + 0xd2 + (int)m_players[side]->y - (m_players[side]->y < 0.0) + i;
-                        dst.right = m_players[side]->m_untechTime * (m_players[side]->m_untechTime < 0x64) + dst.left + (m_players[side]->m_untechTime >= 0x64) * 0x64;
+                        dst.left = (int)m_players[side]->x + m_drawX - (m_players[side]->m_untechTime * (m_players[side]->m_untechTime < 100) + (m_players[side]->m_untechTime >= 100) * 100) - i;
+                        dst.top = m_drawY + 210 + (int)m_players[side]->y - (m_players[side]->y < 0.0) + i;
+                        dst.right = m_players[side]->m_untechTime * (m_players[side]->m_untechTime < 100) + dst.left + (m_players[side]->m_untechTime >= 100) * 100;
                         dst.bottom = dst.top + 1;
-                        m_graphics->FillRect(dst, 0xd3 - (m_players[side]->m_untechTime > 0x1e) * 3 - (m_players[side]->m_untechTime > 0x3c) * 7);
+                        m_graphics->FillRect(dst, 211 - (m_players[side]->m_untechTime > 30) * 3 - (m_players[side]->m_untechTime > 60) * 7);
                         dst.top += 2;
                         dst.bottom = dst.top + 1;
-                        m_graphics->FillRect(dst, 0xc2);
+                        m_graphics->FillRect(dst, 194);
                     }
                 }
             }
@@ -381,25 +381,25 @@ void CScene3::DrawGauges()
                     i = 0;
                     for (; i < 3; i++) {
                         dst.left = (int)m_players[side]->x + m_drawX + i;
-                        dst.top = m_drawY + 0xd2 + (int)m_players[side]->y - (m_players[side]->y < 0.0) + i;
+                        dst.top = m_drawY + 210 + (int)m_players[side]->y - (m_players[side]->y < 0.0) + i;
                         dst.right = (int)(dst.left + m_players[side]->m_guardGauge * 1e+02f / 3.6e+02f);
                         dst.bottom = dst.top + 1;
-                        m_graphics->FillRect(dst, 0xdc);
+                        m_graphics->FillRect(dst, 220);
                         dst.top += 2;
                         dst.bottom = dst.top + 1;
-                        m_graphics->FillRect(dst, 0xc2);
+                        m_graphics->FillRect(dst, 194);
                     }
                 } else {
                     i = 0;
                     for (; i < 3; i++) {
                         dst.left = (int)((int)m_players[side]->x + m_drawX - m_players[side]->m_guardGauge * 1e+02f / 3.6e+02f - i);
-                        dst.top = m_drawY + 0xd2 + (int)m_players[side]->y - (m_players[side]->y < 0.0) + i;
+                        dst.top = m_drawY + 210 + (int)m_players[side]->y - (m_players[side]->y < 0.0) + i;
                         dst.right = (int)(dst.left + m_players[side]->m_guardGauge * 1e+02f / 3.6e+02f);
                         dst.bottom = dst.top + 1;
-                        m_graphics->FillRect(dst, 0xdc);
+                        m_graphics->FillRect(dst, 220);
                         dst.top += 2;
                         dst.bottom = dst.top + 1;
-                        m_graphics->FillRect(dst, 0xc2);
+                        m_graphics->FillRect(dst, 194);
                     }
                 }
             }
@@ -414,27 +414,27 @@ void CScene3::DrawComboCount(CPlayer* attacker)
     RECT dst;
 
     hits = attacker->m_shownHits;
-    if (hits > 0x63) {
-        hits = 0x63;
+    if (hits > 99) {
+        hits = 99;
     }
     if (attacker->m_side > 0) {
-        src = MakeRect(0, 0xac, 0x3d, 0x26);
-        dst = MakeRect(0x102, 0x3f, 0x3d, 0x26);
+        src = MakeRect(0, 172, 61, 38);
+        dst = MakeRect(258, 63, 61, 38);
         if (attacker->m_comboTimer <= 6) {
             m_graphics->BlitEx(dst, m_game->m_objectSurface, src, m_game->m_colorKey, 0, 0);
         } else {
             m_graphics->Blit(dst, m_game->m_objectSurface, src, m_game->m_colorKey, 0);
         }
         if (hits > 9) {
-            DrawNumber(0x11e, 0x3b, hits, 1, 0, attacker->m_comboTimer <= 6);
+            DrawNumber(286, 59, hits, 1, 0, attacker->m_comboTimer <= 6);
         } else {
-            DrawNumber(0x11e, 0x3b, hits, 1, 0, attacker->m_comboTimer <= 6);
+            DrawNumber(286, 59, hits, 1, 0, attacker->m_comboTimer <= 6);
         }
-        DrawNumber(0x11d, 0x52, attacker->m_comboDamage, 2, 0, attacker->m_comboTimer <= 6);
-        DrawNumber(0x113, 0x5c, (int)attacker->m_shownProration, 2, 0, attacker->m_comboTimer <= 6);
-        DrawNumber(0x11d, 0x5c, (int)(attacker->m_shownProration * 10.0) % 0xa, 2, 0, attacker->m_comboTimer <= 6);
-        src = MakeRect(0x46, 0xe1, 3, 9);
-        dst = MakeRect(0x113, 0x5c, 3, 9);
+        DrawNumber(285, 82, attacker->m_comboDamage, 2, 0, attacker->m_comboTimer <= 6);
+        DrawNumber(275, 92, (int)attacker->m_shownProration, 2, 0, attacker->m_comboTimer <= 6);
+        DrawNumber(285, 92, (int)(attacker->m_shownProration * 10.0) % 10, 2, 0, attacker->m_comboTimer <= 6);
+        src = MakeRect(70, 225, 3, 9);
+        dst = MakeRect(275, 92, 3, 9);
         if (attacker->m_comboTimer <= 6) {
             m_graphics->BlitEx(dst, m_game->m_objectSurface, src, m_game->m_colorKey, 0, 0);
         } else {
@@ -442,23 +442,23 @@ void CScene3::DrawComboCount(CPlayer* attacker)
         }
         return;
     }
-    src = MakeRect(0, 0xac, 0x3d, 0x26);
-    dst = MakeRect(6, 0x3f, 0x3d, 0x26);
+    src = MakeRect(0, 172, 61, 38);
+    dst = MakeRect(6, 63, 61, 38);
     if (attacker->m_comboTimer <= 6) {
         m_graphics->BlitEx(dst, m_game->m_objectSurface, src, m_game->m_colorKey, 0, 0);
     } else {
         m_graphics->Blit(dst, m_game->m_objectSurface, src, m_game->m_colorKey, 0);
     }
     if (hits > 9) {
-        DrawNumber(0x22, 0x3b, hits, 1, 0, attacker->m_comboTimer <= 6);
+        DrawNumber(34, 59, hits, 1, 0, attacker->m_comboTimer <= 6);
     } else {
-        DrawNumber(0x22, 0x3b, hits, 1, 0, attacker->m_comboTimer <= 6);
+        DrawNumber(34, 59, hits, 1, 0, attacker->m_comboTimer <= 6);
     }
-    DrawNumber(0x21, 0x52, attacker->m_comboDamage, 2, 0, attacker->m_comboTimer <= 6);
-    DrawNumber(0x17, 0x5c, (int)attacker->m_shownProration, 2, 0, attacker->m_comboTimer <= 6);
-    DrawNumber(0x21, 0x5c, (int)(attacker->m_shownProration * 10.0) % 0xa, 2, 0, attacker->m_comboTimer <= 6);
-    src = MakeRect(0x46, 0xe1, 3, 9);
-    dst = MakeRect(0x17, 0x5c, 3, 9);
+    DrawNumber(33, 82, attacker->m_comboDamage, 2, 0, attacker->m_comboTimer <= 6);
+    DrawNumber(23, 92, (int)attacker->m_shownProration, 2, 0, attacker->m_comboTimer <= 6);
+    DrawNumber(33, 92, (int)(attacker->m_shownProration * 10.0) % 10, 2, 0, attacker->m_comboTimer <= 6);
+    src = MakeRect(70, 225, 3, 9);
+    dst = MakeRect(23, 92, 3, 9);
     if (attacker->m_comboTimer <= 6) {
         m_graphics->BlitEx(dst, m_game->m_objectSurface, src, m_game->m_colorKey, 0, 0);
         return;
@@ -492,11 +492,11 @@ void CScene3::DrawShadows()
             src.right = sprite->width;
             src.bottom = rows;
             dst.left = (int)m_players[side]->x + m_drawX - sprite->x * (m_players[side]->facing == 1) - (sprite->width - sprite->x) * (m_players[side]->facing == -1);
-            dst.top = 0xd2 - ((int)m_players[side]->y - (m_players[side]->y < 0.0)) + m_drawY + gap;
+            dst.top = 210 - ((int)m_players[side]->y - (m_players[side]->y < 0.0)) + m_drawY + gap;
             dst.right = sprite->width + dst.left;
             dst.bottom = rows / 3 + dst.top;
-            if (dst.top < 0xf0 && dst.bottom > 0) {
-                m_graphics->BlitShadow(dst, m_players[side]->surfaces[sprite->surface], src, m_players[side]->colorKey, m_players[side]->facing == -1, 0xb0);
+            if (dst.top < 240 && dst.bottom > 0) {
+                m_graphics->BlitShadow(dst, m_players[side]->surfaces[sprite->surface], src, m_players[side]->colorKey, m_players[side]->facing == -1, 176);
             }
         }
         slot = m_players[side]->m_objectTail;
@@ -516,21 +516,21 @@ void CScene3::DrawShadows()
                 src.bottom = rows;
                 if (m_players[side]->m_objects[slot].facing == -1) {
                     dst.left = (int)m_players[side]->m_objects[slot].x + m_drawX - (sprite->width - sprite->x);
-                    dst.top = m_drawY + 0xd2 - (int)m_players[side]->m_objects[slot].y + gap;
+                    dst.top = m_drawY + 210 - (int)m_players[side]->m_objects[slot].y + gap;
                     dst.right = sprite->width + dst.left;
                     dst.bottom = rows / 3 + dst.top;
                 } else {
                     dst.left = (int)m_players[side]->m_objects[slot].x + m_drawX - sprite->x;
-                    dst.top = m_drawY + 0xd2 - (int)m_players[side]->m_objects[slot].y + gap;
+                    dst.top = m_drawY + 210 - (int)m_players[side]->m_objects[slot].y + gap;
                     dst.right = sprite->width + dst.left;
                     dst.bottom = rows / 3 + dst.top;
                 }
-                if (dst.top < 0xf0 && dst.bottom > 0) {
-                    m_graphics->BlitShadow(dst, m_players[side]->surfaces[sprite->surface], src, m_players[side]->colorKey, m_players[side]->m_objects[slot].facing == -1, 0xb0);
+                if (dst.top < 240 && dst.bottom > 0) {
+                    m_graphics->BlitShadow(dst, m_players[side]->surfaces[sprite->surface], src, m_players[side]->colorKey, m_players[side]->m_objects[slot].facing == -1, 176);
                 }
             }
             slot++;
-            if (slot >= 0x40) {
+            if (slot >= 64) {
                 slot = 0;
             }
         }
@@ -545,24 +545,24 @@ void CScene3::DrawBordersAndFlip()
     int dstX; // where the stage's left edge lands; the columns it leaves are filled black
 
     srcX = -m_drawX;
-    srcY = 0xf0 - m_drawY;
+    srcY = 240 - m_drawY;
     dstX = 0;
     dstY = 0;
-    if (srcX > 0x140) {
-        dstX = 0x140 - srcX;
-        srcX = 0x140;
+    if (srcX > 320) {
+        dstX = 320 - srcX;
+        srcX = 320;
     } else if (srcX < 0) {
         dstX = -srcX;
         srcX = 0;
     }
-    if (srcY > 0xf0) {
-        dstY = 0xf0 - srcY;
-        srcY = 0xf0;
+    if (srcY > 240) {
+        dstY = 240 - srcY;
+        srcY = 240;
     } else if (srcY < 0) {
         dstY = -srcY;
         srcY = 0;
     }
-    m_graphics->FillRect(MakeRect(0, (dstY + 0xf0) * (dstY < 0), 0x140, abs(dstY)), 0);
-    m_graphics->FillRect(MakeRect((dstX + 0x140) * (dstX < 0), (dstY >= 0) * dstY, abs(dstX), 0xf0 - abs(dstY)), 0);
+    m_graphics->FillRect(MakeRect(0, (dstY + 240) * (dstY < 0), 320, abs(dstY)), 0);
+    m_graphics->FillRect(MakeRect((dstX + 320) * (dstX < 0), (dstY >= 0) * dstY, abs(dstX), 240 - abs(dstY)), 0);
     m_graphics->Flip();
 }
