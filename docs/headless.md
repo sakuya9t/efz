@@ -206,7 +206,8 @@ checks each with the framework's own tests where it has them (with `EFZ_DATA` se
 | Module | What |
 |---|---|
 | `efz_env.gym` | Gymnasium: `EfzVsCpu`, the batch as a vector environment (player 1 against the CPU; `autoreset_mode` NEXT_STEP by default, so Gymnasium's vector wrappers work; SAME_STEP and DISABLED too), and `EfzVsCpuEnv`, one match as a `gymnasium.Env` (passes `check_env`). Registered as `efz/VsCpu-v0`: `gym.make` gives the one match, `gym.make_vec(..., vectorization_mode='vector_entry_point')` the batch. TorchRL's `GymWrapper` takes `EfzVsCpu` made with `autoreset_mode='disabled'` or `'same_step'` (it refuses NEXT_STEP) |
-| `efz_env.sb3` | Stable-Baselines3: `EfzSB3VecEnv`, the batch as SB3's `VecEnv`. `opponent='cpu'`; `'self'`: both players are agents of the policy being trained (2 × `num_envs` agents); or a callable for player 2, e.g. `frozen(model)`, a copy of a policy as it is now |
+| `efz_env.sb3` | Stable-Baselines3: `EfzSB3VecEnv`, the batch as SB3's `VecEnv`. `opponent='cpu'`; `'self'`: both players are agents of the policy being trained (2 × `num_envs` agents); or a callable for player 2, e.g. `frozen(model)`, a copy of a policy as it is now, or `mixture([...], assignment)`, several each in its own matches, with `cpu_envs` giving some matches to the CPU |
+| `efz_env.pbt` | Population-based training with a league: `Population` (below) |
 | `efz_env.pettingzoo` | PettingZoo's Parallel API: `EfzParallelEnv`, one match, both players agents (a batch of one: PettingZoo has no batched form) |
 | `efz_env.human` | Playing it yourself: `HumanMatch` shows a match in a window (pygame-ce) at the game's speed and takes your keyboard or gamepad for one side; the other is an agent or the CPU. Every match is recorded. `HumanVecEnv` makes those matches an SB3 environment, so an agent learns from them as they are played |
 
@@ -222,6 +223,9 @@ python python/examples/play.py --data "$EFZ_DIR" --agent runs/self/model.zip
 python python/examples/play.py --data "$EFZ_DIR" --cpu --cpu-level 4      # the game's CPU
 # Play it while it learns from your matches (start from a trained agent):
 python python/examples/train.py --data "$EFZ_DIR" --opponent human --load runs/self/model.zip --out runs/human
+# Population-based training: 6 agents in a league, 20 generations (run again to continue):
+python python/examples/pbt.py --data "$EFZ_DIR" --out runs/pbt --population 6 --generations 20
+python python/examples/play.py --data "$EFZ_DIR" --agent runs/pbt/best.zip
 ```
 
 `train.py` writes the run's folder: `model.zip` and checkpoints, `config.json` (the
@@ -234,6 +238,45 @@ Learning from your matches is slow (one match at the game's speed, against thous
 second headless): it is for adapting a trained agent to people, and for collecting their
 play.
 
+### Population-based training
+
+`efz_env.pbt.Population` evolves a population of PPO agents (Jaderberg et al., 2017) in
+a league. Each generation:
+
+1. **Train.** Each member in turn learns for `steps_per_generation` steps against a mix:
+   the CPU in `cpu_share` of the matches (a quarter), and in the rest up to three of the
+   other members (as they were when the generation began), itself and older versions
+   from the archive. Opponents it scored badly against are picked more often (weight
+   (1 − score)², as AlphaStar's prioritized fictitious self-play).
+2. **Rate.** Every pair of members, and each against the CPU, play `eval_matches`
+   matches (half on each side); a Bradley-Terry fit gives Elo ratings with the CPU at
+   1000. A match that runs out of time counts for whoever dealt more damage.
+3. **Select.** The bottom quarter by rating take the weights and settings of a random
+   member of the top quarter.
+4. **Vary.** Those settings are multiplied by 0.8 or 1.25 (kept in bounds), or drawn
+   again one time in five.
+
+What evolves (`SEARCH_SPACE`): PPO's learning rate (1e-4 to 1e-3) and entropy bonus
+(0.001 to 0.03), and the reward's weights for rounds (0 to 0.5) and the match (0.5 to
+2; damage stays 1). Selection is by Elo, so the rewards are free to change: they only
+shape how a member learns to win. The run's folder: `state.json` (resumed by running
+again), `members/`, `archive/` (the last 12 versions), `best.zip` and `config.json` for
+`play.py`, and `log.jsonl` (a line per generation: ratings, scores, settings, who
+replaced whom). Members train one after another, each on every core.
+
+A member's turn starts its matches afresh, so a turn must give each match more than a
+whole match's steps (`steps_per_generation / num_envs` against `max_frames /
+frame_skip`), or no match ends in training and the reward for winning one is never
+seen: `Population` warns when it doesn't. The defaults (200,000 steps over 32 matches,
+4-minute matches at 4 frames a step) give each match 6,250 steps against 3,840. Rating
+costs grow with the square of the population: 6 members play 21 pairings of 32 matches.
+
+**Measured** (3-4 November 2026, the laptop above, Ayu against Ayu, the CPU at level 2):
+4 members, 100,000 steps each a generation over 64 matches (too few steps per match: no
+match ended in training, so only damage taught them), 4 generations in 16 minutes, half
+of it rating. The best member's rating went 767, 941, 1105, 1345 (it scored 81% against
+the CPU in the last), and a member that took the leader's weights after generation 1
+led generation 2.
 ### Observations
 
 Each player's view, 168 floats: 8 about the match, 32 about the viewer, 32 about the

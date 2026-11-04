@@ -199,6 +199,53 @@ class StableBaselines3(unittest.TestCase):
         venv.close()
 
 
+@unittest.skipIf(stable_baselines3 is None, 'stable-baselines3 is not installed')
+class PopulationBasedTraining(unittest.TestCase):
+    def test_bradley_terry(self):
+        from efz_env.pbt import bradley_terry
+        results = [('a', 'cpu', 1.0)] * 30 + [('a', 'cpu', 0.0)] * 10 + \
+                  [('b', 'cpu', 0.5)] * 40 + [('a', 'b', 1.0)] * 20
+        elo = bradley_terry(results, ['a', 'b', 'cpu'])
+        self.assertEqual(elo['cpu'], 1000.0)
+        self.assertGreater(elo['a'], elo['b'])
+        self.assertAlmostEqual(elo['b'], 1000.0, delta=60)
+
+    def test_perturb_stays_in_bounds(self):
+        from efz_env.pbt import SEARCH_SPACE, perturb, sample
+        rng = np.random.default_rng(0)
+        settings = sample(rng)
+        for _ in range(200):
+            settings = perturb(rng, settings)
+            for name, (lo, hi, _) in SEARCH_SPACE.items():
+                self.assertTrue(lo <= settings[name] <= hi, (name, settings[name]))
+
+    def test_generations_and_resume(self):
+        import json
+        from efz_env.pbt import Population
+        with tempfile.TemporaryDirectory() as out:
+            def population():
+                return Population(out, DATA, size=2, steps_per_generation=128, num_envs=4,
+                                  num_threads=2, chars=('ayu', 'mai'), max_frames=40,
+                                  eval_matches=4, eval_max_frames=60, verbose=0,
+                                  ppo=dict(n_steps=16, batch_size=32, n_epochs=1,
+                                           policy_kwargs=dict(net_arch=[32])))
+            pop = population()
+            pop.run(1)
+            members = pop.state['members']
+            self.assertEqual(len(members[0]['elo']), 1)
+            self.assertEqual(sum(m['parent'] is not None for m in members), 1)  # one replaced
+            for name in ('state.json', 'best.zip', 'config.json', 'log.jsonl'):
+                self.assertTrue(os.path.exists(os.path.join(out, name)), name)
+            self.assertEqual(len(pop.state['archive']), 2)
+            pop = population()  # resumes
+            self.assertEqual(pop.state['generation'], 1)
+            pop.run(2)
+            with open(os.path.join(out, 'state.json')) as f:
+                state = json.load(f)
+            self.assertEqual(state['generation'], 2)
+            self.assertEqual(len(state['members'][0]['elo']), 2)
+
+
 class ScriptedHuman:
     """A 'human' for tests: walks forward and presses A every 8 frames."""
 

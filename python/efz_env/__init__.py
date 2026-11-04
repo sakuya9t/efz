@@ -12,9 +12,10 @@ run in C++ on every core without a window or sound. See docs/headless.md.
 For the training frameworks (each imported on its own, needing only its framework):
 efz_env.gym (Gymnasium: EfzVsCpu, EfzVsCpuEnv, registered as efz/VsCpu-v0),
 efz_env.sb3 (Stable-Baselines3: against the CPU, in self-play or against a frozen
-policy), efz_env.pettingzoo (one match, both players agents) and efz_env.human (playing
-it yourself in a window, recorded; an agent can learn from those matches). Scripts:
-python/examples/train.py and play.py.
+policy), efz_env.pettingzoo (one match, both players agents), efz_env.human (playing
+it yourself in a window, recorded; an agent can learn from those matches), and
+efz_env.pbt (population-based training of PPO agents in a league). Scripts:
+python/examples/train.py, play.py and pbt.py.
 """
 
 from . import actions

@@ -189,6 +189,9 @@ attacks during its moves, guard crush; mixups never pay.
 2. **Measure strength with ratings, not the CPU.** Use the CPU as the first rung of a
    curriculum; rate agents against frozen snapshots and exploiters, and against people
    through netplay with EfzRevival ([compat.md](compat.md), "The network layer").
+   `efz_env.pbt` does the first part: a league of PPO agents rated by Elo (the CPU at
+   1000), the weakest replaced by perturbed copies of the strongest
+   ([headless.md](headless.md), "Population-based training").
 3. **Keep the reward sparse.** `efz_env`'s (damage, rounds, match) already is. Any shaping
    potential-based; watch behaviour (attacks that miss, the share of jumps, time-outs),
    not only return; unit-test reward code.

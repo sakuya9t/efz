@@ -11,7 +11,9 @@ opponent:
             match m's players are agents 2m and 2m+1); relative_actions makes one policy
             play either side.
     a callable: player 2 plays what it returns for player 2's observations, (n, obs_dim)
-            -> n action indices; e.g. frozen(model) for a copy of a policy as it was.
+            -> n action indices; e.g. frozen(model) for a copy of a policy as it was, or
+            mixture([...], assignment) for several, each in its own matches. With
+            cpu_envs (a mask of the matches), the game's CPU plays player 2 in those.
 
 Matches that end restart in the same step, as SB3 expects: infos[i] then holds
 'terminal_observation', 'TimeLimit.truncated' and 'episode' ({'r', 'l', 't'}, as SB3's
@@ -41,10 +43,25 @@ def frozen(model, deterministic=False):
     return act
 
 
+def mixture(policies, assignment):
+    """An opponent of several policies: match i is played by policies[assignment[i]]
+    (each a callable as EfzSB3VecEnv's opponent; None for matches the CPU plays)."""
+    assignment = np.asarray(assignment)
+    groups = [(p, np.flatnonzero(assignment == k)) for k, p in enumerate(policies)]
+
+    def act(obs):
+        actions = np.zeros(len(obs), dtype=np.int64)
+        for policy, idx in groups:
+            if policy is not None and len(idx):
+                actions[idx] = policy(obs[idx])
+        return actions
+    return act
+
+
 class EfzSB3VecEnv(VecEnv):
-    def __init__(self, data_dir=None, num_envs=64, *, opponent='cpu', action_table=None,
-                 chars=(None, None), stage=None, char_pool=None, stage_pool=None,
-                 **config):
+    def __init__(self, data_dir=None, num_envs=64, *, opponent='cpu', cpu_envs=None,
+                 action_table=None, chars=(None, None), stage=None, char_pool=None,
+                 stage_pool=None, **config):
         if 'autoreset' in config and config['autoreset'] != 'same_step':
             raise ValueError("SB3 VecEnvs reset in the same step: leave autoreset alone")
         self.env = EfzVecEnv(data_dir, num_envs, autoreset='same_step', **config)
@@ -56,8 +73,14 @@ class EfzSB3VecEnv(VecEnv):
             self.opponent = opponent
         elif opponent not in ('cpu', 'self'):
             raise ValueError("opponent: 'cpu', 'self' or a callable")
-        self.env.set_matches(chars=chars, stage=stage, cpu=(False, opponent == 'cpu'),
-                             char_pool=char_pool, stage_pool=stage_pool)
+        cpu = (False, opponent == 'cpu')
+        if cpu_envs is not None:
+            if self.opponent is None:
+                raise ValueError('cpu_envs mixes the CPU in with a callable opponent')
+            mask = np.broadcast_to(np.asarray(cpu_envs, dtype=bool), (num_envs,))
+            cpu = [(False, bool(c)) for c in mask]
+        self.env.set_matches(chars=chars, stage=stage, cpu=cpu, char_pool=char_pool,
+                             stage_pool=stage_pool)
         self.k = 2 if self.selfplay else 1
         self._controls = np.zeros((num_envs, 2), dtype=np.uint8)
         self._length = np.zeros(num_envs, dtype=np.int64)
