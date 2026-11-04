@@ -321,7 +321,9 @@ See [docs/recon.md](docs/recon.md). In short:
      ([docs/native.md](docs/native.md)), checked against the original by replays.
    - replace DirectDraw, DirectInput and DirectSound with SDL3. *Done* (`port/`).
    - separate the deterministic 64 FPS simulation from the platform layer
-   - reach parity with EfzRevival: rollback netplay, spectating, replays, training tools
+   - reach parity with EfzRevival: rollback netplay, spectating, replays, training tools.
+     Netplay is tested against the original game running EfzRevival 1.02h, over the network
+     ([docs/compat.md](docs/compat.md), "The network layer")
    - add widescreen and HD output, in-game input binding and controller hot-plug
    - add mod support for characters, stages and palettes
 7. **UE5.** Host the simulation core as a UE5 C++ module and render it with new assets.

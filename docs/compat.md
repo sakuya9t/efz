@@ -1,9 +1,12 @@
 # Backward compatibility
 
 The modern fork has to play the same game as the original 4.02 `efz.exe`. This document
-records how that is tested (decided 28 October 2026; the whole game state and a fixed
-reference since 31 October 2026), what the original's replays can and cannot reproduce,
-and the rules a change has to follow so the test keeps working.
+records how that is tested, in two layers: replays and CPU fights against a fixed
+reference (decided 28 October 2026; the whole game state and a fixed reference since
+31 October 2026), and, once the fork has netplay of its own, a netplay match against the
+original game with EfzRevival (decided 3 November 2026). It also records what the
+original's replays can and cannot reproduce, and the rules a change has to follow so the
+tests keep working.
 
 Statements about the game are **observed** (read from the matched source) or **inferred**.
 
@@ -20,6 +23,12 @@ Statements about the game are **observed** (read from the matched source) or **i
   the test's harness and run under wine; `tests/compat/reference.txt` holds the digest
   of its log for every case. A change passes when every case's log is the reference's,
   byte for byte.
+- **Two layers: replays and the network.** The suite (the replay layer) checks the
+  fork's simulation against the reference. A version with built-in netplay must also
+  pass the network layer ("The network layer" below): a match over the network against
+  the original game itself (`efz.exe` 4.02 with EfzRevival 1.02h, the files players
+  have), where the state recorded on both ends must be the same. Neither layer replaces
+  the other.
 - **Compare the whole game state.** After every tick the harness hashes both players
   (all of CPlayer and the character class, the 64 objects of each), the fight scene, the
   game object and the effects, pointers left out. Visual effects are compared too: they
@@ -132,6 +141,71 @@ lines the suite runs and how many of its functions it never runs, then the actio
 character reached. `build/coverage/gcov/*.gcov` has each line with its count. A change
 to code the suite never runs is not tested by it: add a case that runs it.
 
+## The network layer
+
+**Decided 3 November 2026. Not runnable yet: the fork has no netplay of its own.** From
+the first version with netplay built in, every version also has to pass this test. The
+two ends of the match:
+
+| End | What runs |
+|---|---|
+| (a) | The version under test, with its own netplay |
+| (b) | The original game, as players have it: `$EFZ_DIR/efz.exe` 4.02 (SHA-256 `3a1616d6…6dd66481`) and EfzRevival 1.02h's `EfzRevival.exe`, `EfzRevival.dll` and `DDRAW.dll` from `$REVIVAL_DIR`, all unchanged. Not the reference and not the rebuilt Revival: this layer is there to check the fork against what people actually play on |
+
+The test:
+
+1. The two ends connect over the local network (one machine, or two on one LAN): one
+   hosts and the other joins, through EfzRevival's protocol ([revival.md](revival.md),
+   "The launcher's protocol").
+2. They play a match, both players human (no CPU). A player is either a person or, for
+   an unattended run, scripted input. On end (b) the scripted input arrives as key
+   presses, so the game reads its keyboard as it always does.
+3. Both ends record both players' inputs and the game's state for every confirmed frame
+   (a frame whose inputs both ends have).
+4. When the match is over, the two records must be the same, frame for frame.
+
+The test runs each way round: (a) hosts and (b) joins, then the reverse. That way each
+end has played P1 and P2, and each end's seed has been used. It also runs with latency
+added to the link (50-100 ms each way). On a local network the remote input nearly
+always arrives before a frame needs it, so the rollback would hardly run.
+
+**What is recorded.** End (b) can't be rebuilt with the harness, so its state is read
+without changing anything the game or Revival computes:
+
+- **Revival's sync records.** Each record holds the frame, the scene, the FPU control
+  word, both players' actions, inputs and positions, and Revival's random state.
+  **Observed:** EfzRevival.dll makes one for every confirmed frame, just before the
+  frame runs (`OnlineSession::runFrame`, DLL `0x10070e70`). With `Debug=1` in
+  `EfzRevival.ini`, the 1.02h launcher asks the other end for its records, compares
+  them with its own, and logs `Checked <frame>` or `ERROR:` with both records to
+  `logNet.txt` (`ProtocolStatePlay::handleResendTimer`, `ProtocolContext::checkSync`).
+  End (a) therefore has to make and answer these records exactly as Revival does
+  (`MessageSync`), and end (b)'s log must show no `ERROR:`.
+- **The whole state.** These are the blocks of "What is compared", hashed at that same
+  point of every confirmed frame. On end (b) a reader loaded into the game beside
+  Revival does the hashing, hooked where Revival makes the sync record. The reader only
+  reads. On end (a) the harness does the same.
+
+**What end (b) computes differently from the reference.** **Observed** in Revival's
+source, and what each difference means for the comparison and for end (a):
+
+| What | On end (b) | So |
+|---|---|---|
+| `rand()` | Revival replaces the CRT's (`0x777d61`) with `std::uniform_int_distribution<int>(0, 0x7fff)` over a `std::minstd_rand` seeded with the host's seed (MessageInit field 6), saved and restored with each save state | In netplay, end (a) draws its random numbers the same way, including Visual C++ 2012's distribution |
+| `sin`, `cos`, `atan2` | The CPU's `fsin`, `fcos`, `fpatan` | End (a) takes them from the CPU too (`EFZ_HOST_X87`, [native.md](native.md)). Both ends run on one machine, or on CPUs that agree: two copies of the original game on different CPUs part as well ("Answered") |
+| Memory from `new` | The heap's garbage | Bytes the original reads before ever setting them are left out of the comparison: the bytes on which two runs of the original game disagree when playing the same replay, such as `m_comboDamage` before the first combo. Where the garbage decides a hit (`m_hitsLeft`, "Answered"), the match parts for real. The original parts from itself the same way, so such a run is reported as that and played again, not counted as a failure of the fork |
+| The rectangle a throw's hit spark is placed at | Stack garbage | The spark's position is left out of `fx` |
+| x87 precision | 53 bits, as in the original: Revival's `DDRAW.dll` creates its Direct3D 9 device with `D3DCREATE_FPU_PRESERVE` | Nothing to change |
+
+Pointers are left out as in the first layer. Anything else that is left out has to be
+named here with its reason.
+
+**When the records differ,** the first frame on which they part is where to look. If
+the two ends disagree on that frame's inputs, the fault is in the netplay. If the inputs
+agree and the state differs, the fault is in the simulation. End (a) also writes the
+match as a replay: added to the suite, it shows whether the fork parts from the
+reference on those inputs alone, or only in netplay.
+
 ## The replay format
 
 **Observed.** `replay\dataN-M.rep` (N, M = 1-9, 81 slots, `src/scene8.cpp`) is a stream
@@ -194,6 +268,10 @@ earlier versions.
   (`tools/compat.py check`). This covers renames and other readability work, SDL3,
   widescreen, input rebinding and the like. Code the suite doesn't run (`coverage`)
   isn't tested by it: add a case that does before changing it.
+- **Netplay keeps EfzRevival 1.02h's protocol and its rules.** Against a 1.02h peer, the
+  fork speaks that peer's protocol (version `0x66`, the messages of `EfzPackets.proto`).
+  It also computes what the original game with Revival computes (the table in "The
+  network layer"). A version with netplay passes both layers.
 
 ## The status line
 
